@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Book, CheckCircle, Code, FileText, Shield, Zap, ArrowRight, Layers, Ban, ToggleLeft, Hash, Ruler, ShieldAlert, ShieldCheck } from "lucide-react";
+import { Book, CheckCircle, Code, FileText, Shield, Zap, ArrowRight, Layers, Ban, ToggleLeft, Hash, Ruler, ShieldAlert, ShieldCheck, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import versionInfo from "../../version.json";
@@ -61,6 +61,9 @@ function HeroButtons() {
       </Button>
       <Button asChild variant="outline" size="lg">
         <Link to="/checklist"><CheckCircle className="mr-2 h-4 w-4" /> Code Review Checklist</Link>
+      </Button>
+      <Button asChild variant="outline" size="lg">
+        <Link to="/dashboard"><Activity className="mr-2 h-4 w-4" /> CI Dashboard</Link>
       </Button>
       <Button asChild variant="outline" size="lg">
         <a href="#quick-reference">Quick Reference</a>
