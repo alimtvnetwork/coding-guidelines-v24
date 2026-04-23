@@ -1,7 +1,7 @@
 # Prompt Index
 
-**Version:** 3.5.0  
-**Updated:** 2026-04-23
+**Version:** 3.6.0
+**Updated:** 2026-04-23 (session 3)
 
 ---
 
@@ -15,7 +15,7 @@ Central index of all AI prompts available in this project. Reference this file t
 
 | # | File | Trigger | Purpose |
 |---|------|---------|---------|
-| 01 | [01-read-prompt.md](prompts/01-read-prompt.md) | "read memory" | Full AI onboarding — read all specs, memory, and guidelines |
+| 01 | [01-read-prompt.md](prompts/01-read-prompt.md) | "read memory" | **Canonical v1.0.0** — Full AI onboarding (Phases 1–4 + CI/CD lessons). Self-contained protocol. |
 | 02 | [02-write-prompt.md](prompts/02-write-prompt.md) | "write memory" / "end memory" *(legacy v3.3 protocol)* | Earlier end-of-session memory persistence prompt — kept for reference |
 | 03 | [03-write-prompt.md](prompts/03-write-prompt.md) | "write memory" / "end memory" / "update memory" | **Canonical** end-of-session memory persistence protocol (v1.0.0, 2026-04-19) |
 | 04 | [04-write-prompt.md](prompts/04-write-prompt.md) | "write memory" / "end memory" / "update memory" | **Canonical v2.0.0** — adds CI/CD issues tracking + cicd-index, supersedes 03 (2026-04-23) |
@@ -30,4 +30,4 @@ Central index of all AI prompts available in this project. Reference this file t
 
 ---
 
-*Prompt index — v3.5.0 — 2026-04-23*
+*Prompt index — v3.6.0 — 2026-04-23*
