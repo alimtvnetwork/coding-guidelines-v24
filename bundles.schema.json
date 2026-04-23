@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bundle Manifest",
+  "description": "Single source of truth for named install bundles. Consumed by scripts/generate-bundle-installers.mjs, the release workflow, the bundle install scripts, and AI agents that pick a bundle from a user's natural-language intent.",
+  "type": "object",
+  "required": ["repo", "rawBase", "releaseBase", "bundles"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema":     { "type": "string" },
+    "repo":        { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+    "rawBase":     { "type": "string", "format": "uri" },
+    "releaseBase": { "type": "string", "format": "uri" },
+    "bundles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "title", "description", "folders", "archive"],
+        "additionalProperties": false,
+        "properties": {
+          "name":        { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "title":       { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "intent": {
+            "description": "OPTIONAL natural-language keywords an AI agent can match against a user's request to pick this bundle (e.g. ['error handling', 'apperror', 'response envelope']). Lowercase, deduped.",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 2, "pattern": "^[a-z0-9 +/.-]+$" }
+          },
+          "audience": {
+            "description": "OPTIONAL audience tag — helps AI agents match by role.",
+            "type": "string",
+            "enum": ["backend", "frontend", "fullstack", "devops", "wp-plugin", "trainer", "ai-agent", "any"]
+          },
+          "folders": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["src", "dest"],
+              "additionalProperties": false,
+              "properties": {
+                "src":  { "type": "string", "minLength": 1 },
+                "dest": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "archive": {
+            "type": "object",
+            "required": ["stableName", "versionedPrefix"],
+            "additionalProperties": false,
+            "properties": {
+              "stableName":      { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+              "versionedPrefix": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+            }
+          },
+          "prebuilt": {
+            "description": "OPTIONAL pre-built artifact baked into the bundle archive. The release workflow runs the build command and includes the output folder under the declared `dest` path. Used for bundles that ship a compiled deliverable (e.g. slides-app dist/).",
+            "type": "object",
+            "required": ["src", "dest"],
+            "additionalProperties": false,
+            "properties": {
+              "src":   { "type": "string", "minLength": 1, "description": "Output folder produced by the build (relative to repo root)." },
+              "dest":  { "type": "string", "minLength": 1, "description": "Where the built folder lands inside the install target." },
+              "build": { "type": "string", "minLength": 1, "description": "Shell command run from repo root to produce src/." }
+            }
+          },
+          "autoOpen": {
+            "description": "OPTIONAL HTML entry the installer opens in the user's default browser after a successful install. Path is resolved relative to the install target. When omitted, no auto-open occurs.",
+            "type": "object",
+            "required": ["entry"],
+            "additionalProperties": false,
+            "properties": {
+              "entry": { "type": "string", "minLength": 1, "description": "Relative path to an HTML file to open (e.g. slides-app/dist/index.html)." }
+            }
+          },
+          "verify": {
+            "description": "OPTIONAL post-install verification probes. After extracting the archive into the install target the installer asserts that every entry exists with the declared kind. If any probe fails the installer prints the missing list and exits with code 3 (install NOT treated as successful). Use this to guarantee critical artifacts (e.g. prebuilt dist/index.html, source decks) actually landed.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["path", "kind"],
+              "additionalProperties": false,
+              "properties": {
+                "path": { "type": "string", "minLength": 1, "description": "Path relative to the install target." },
+                "kind": { "type": "string", "enum": ["file", "dir"], "description": "Whether the path must be a regular file or a directory." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

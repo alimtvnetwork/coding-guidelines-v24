@@ -1,0 +1,103 @@
+# Composite action: run the unified CI guards via ci-runner.sh.
+#
+# Designed to be referenced from a calling workflow with one line:
+#
+#   - uses: ./.github/workflow-templates           # local copy
+#   - uses: <org>/<repo>/.github/workflow-templates@v1   # remote
+#
+# All inputs are optional; defaults match the canonical ci-guards.yaml
+# layout described in spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/.
+
+name: "Reusable CI Guards"
+description: "Run forbidden-name, naming-baseline, collision, lint-diff, lint-suggest, and test-summary guards."
+author: "Md. Alim Ul Karim · Riseup Asia LLC"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  phase:
+    description: "Which phase to run: check | lint | test | all"
+    required: false
+    default: "all"
+  guard:
+    description: "Optional single guard name (overrides phase)"
+    required: false
+    default: ""
+  config:
+    description: "Path to ci-guards.yaml (or .json). Empty = no config file."
+    required: false
+    default: "ci-guards.yaml"
+  source-dir:
+    description: "Override source directory (check phase)"
+    required: false
+    default: ""
+  baseline:
+    description: "Override baseline file (naming-baseline / lint-diff)"
+    required: false
+    default: ""
+  results-dir:
+    description: "Override matrix results directory (test phase)"
+    required: false
+    default: ""
+  scripts-dir:
+    description: "Where guard scripts live"
+    required: false
+    default: ".github/scripts"
+  json-summary:
+    description: "Path to write the JSON summary (empty = skip)"
+    required: false
+    default: ""
+  fail-on-violation:
+    description: "Fail the job when any guard reports a violation (true/false)"
+    required: false
+    default: "true"
+  node-version:
+    description: "Node version used to run the config loader"
+    required: false
+    default: "20"
+
+outputs:
+  exit-code:
+    description: "Aggregated exit code from ci-runner.sh"
+    value: ${{ steps.run.outputs.code }}
+  summary-path:
+    description: "Path to the JSON summary (if requested)"
+    value: ${{ inputs.json-summary }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node (config loader)
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Run CI guards
+      id: run
+      shell: bash
+      run: |
+        set +e
+        ARGS=(--phase "${{ inputs.phase }}" --scripts-dir "${{ inputs.scripts-dir }}")
+        [ -n "${{ inputs.guard }}" ]        && ARGS+=(--guard       "${{ inputs.guard }}")
+        [ -n "${{ inputs.config }}" ] && [ -f "${{ inputs.config }}" ] \
+                                             && ARGS+=(--config      "${{ inputs.config }}")
+        [ -n "${{ inputs.source-dir }}" ]   && ARGS+=(--source-dir  "${{ inputs.source-dir }}")
+        [ -n "${{ inputs.baseline }}" ]     && ARGS+=(--baseline    "${{ inputs.baseline }}")
+        [ -n "${{ inputs.results-dir }}" ]  && ARGS+=(--results-dir "${{ inputs.results-dir }}")
+        [ -n "${{ inputs.json-summary }}" ] && ARGS+=(--json        "${{ inputs.json-summary }}")
+        bash scripts/ci-runner.sh "${ARGS[@]}"
+        rc=$?
+        echo "code=$rc" >> "$GITHUB_OUTPUT"
+        if [ "${{ inputs.fail-on-violation }}" != "true" ] && [ "$rc" -eq 1 ]; then
+          rc=0
+        fi
+        exit "$rc"
+
+    - name: Upload JSON summary
+      if: ${{ always() && inputs.json-summary != '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ci-guards-summary
+        path: ${{ inputs.json-summary }}
+        if-no-files-found: ignore

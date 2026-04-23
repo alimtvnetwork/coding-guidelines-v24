@@ -1,0 +1,88 @@
+# ci-guards.yaml — Unified configuration for the 6 reusable CI guards.
+#
+# Every key is OPTIONAL; omitted sections fall back to documented defaults.
+# Schema reference:
+#   spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md
+#
+# This file is consumed by:
+#   scripts/ci-config.mjs       -> validates + emits env vars
+#   scripts/ci-runner.sh --config <path>
+
+# ---------------------------------------------------------------------------
+# Top-level metadata
+# ---------------------------------------------------------------------------
+version: 1                    # config schema version (integer)
+language: go                  # one of: go | node | python | rust | polyglot
+scripts_dir: .github/scripts  # where guard scripts live
+
+# ---------------------------------------------------------------------------
+# Pattern 01 — Forbidden-name guard
+# ---------------------------------------------------------------------------
+forbidden_names:
+  enabled: true
+  source_dir: gitmap/cmd
+  file_glob: "*.go"
+  patterns:
+    - "^func +(invoke|persist) *\\("
+    - "^func +runOne *\\("
+    - "^func +(invoke|persist|runOne)(Release|Task|Job|Item|All|One|Cmd) *\\("
+  remediation_examples:
+    - "invokeRelease       -> invokeAliasRelease"
+    - "runOne              -> runOnePullJob"
+    - "persistAll          -> persistReleaseToDB"
+
+# ---------------------------------------------------------------------------
+# Pattern 02 — Grandfather-baseline naming
+# ---------------------------------------------------------------------------
+naming_baseline:
+  enabled: true
+  source_dir: gitmap/constants
+  baseline_file: .github/scripts/constants-baseline.txt
+  allowed_prefix_regex: "^(Cmd|Msg|Err|Flag|Default)"
+  rename_examples:
+    - "ScanTimeout      -> DefaultScanTimeout"
+    - "HelpReleaseFlags -> MsgHelpReleaseFlags"
+
+# ---------------------------------------------------------------------------
+# Pattern 03 — Cross-file collision audit
+# ---------------------------------------------------------------------------
+collisions:
+  enabled: true
+  file_glob: "gitmap/constants/constants*.go"
+  ident_regex: "^[A-Z][A-Za-z0-9_]*"
+  rawstring_delim: "`"
+  block_open_regex: "^\\s*const\\s*\\("
+  block_close_regex: "^\\s*\\)"
+
+# ---------------------------------------------------------------------------
+# Pattern 04 — Baseline-diff lint gate
+# ---------------------------------------------------------------------------
+lint_diff:
+  enabled: true
+  current_report: golangci.json
+  baseline_report: .cache/lint-baseline.json
+  normalizer: golangci   # one of: golangci | eslint | ruff | clippy
+  cap_seeding_findings: 50
+
+# ---------------------------------------------------------------------------
+# Pattern 05 — Actionable lint suggestions
+# ---------------------------------------------------------------------------
+lint_suggest:
+  enabled: true
+  current_report: golangci.json
+  baseline_report: .cache/lint-baseline.json
+  comment_marker: "<!-- repo-lint-suggestions -->"
+  suggester_table: golangci   # which built-in suggester table to use
+
+# ---------------------------------------------------------------------------
+# Pattern 06 — Matrix test aggregator
+# ---------------------------------------------------------------------------
+test_summary:
+  enabled: true
+  results_dir: ./test-artifacts
+  shard_pattern: "test-results-*"
+  output_filename: test-output.txt
+  pass_marker: "^--- PASS:"
+  fail_marker: "^--- FAIL:"
+  reason_keywords: "expected|got|Error|FAIL|panic|undefined|mismatch"
+  reason_max_lines: 10

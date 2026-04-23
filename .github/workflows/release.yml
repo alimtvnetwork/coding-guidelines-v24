@@ -1,0 +1,299 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Resolve version
+        id: version
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
+
+      - name: Run release script
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: bash release.sh
+
+      - name: Verify release artifacts
+        run: |
+          test -d release-artifacts || { echo "::error::release-artifacts directory missing"; exit 1; }
+          test -f release-artifacts/checksums.txt || { echo "::error::checksums.txt missing"; exit 1; }
+
+      # ── Slides app build (separate Vite app under slides-app/) ──────
+      - name: Setup Bun (for slides-app)
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Build slides-app
+        working-directory: slides-app
+        run: |
+          bun install --frozen-lockfile || bun install
+          bun run build
+          bun run package
+
+      - name: Verify slides-app artifact
+        run: |
+          test -f slides-app/dist.zip || { echo "::error::slides-app/dist.zip missing"; exit 1; }
+          ls -lh slides-app/dist.zip
+
+      - name: Rename slides-app zip with version
+        run: |
+          cp slides-app/dist.zip "slides-app/coding-guidelines-slides-${{ steps.version.outputs.version }}.zip"
+
+      # ── Linters CI/CD pack (linters-cicd/) ──────────────────────────
+      - name: Package linters-cicd
+        run: |
+          ZIP_NAME="coding-guidelines-linters-${{ steps.version.outputs.version }}.zip"
+          zip -rq "$ZIP_NAME" linters-cicd \
+            -x "linters-cicd/**/__pycache__/*" \
+            -x "linters-cicd/**/*.pyc"
+          ls -lh "$ZIP_NAME"
+          sha256sum "$ZIP_NAME" >> release-artifacts/checksums.txt
+          mv "$ZIP_NAME" release-artifacts/
+
+      - name: Verify linters-cicd artifact
+        run: |
+          test -f "release-artifacts/coding-guidelines-linters-${{ steps.version.outputs.version }}.zip" \
+            || { echo "::error::linters-cicd zip missing"; exit 1; }
+
+      # ── Manifest-driven bundle packaging (bundles.json) ──────────────
+      # For every bundle in bundles.json we publish FOUR archive assets:
+      #   • <stableName>.zip                       (Windows, version-agnostic)
+      #   • <stableName>.tar.gz                    (Unix, version-agnostic)
+      #   • <versionedPrefix>-<version>.zip        (Windows, pinned)
+      #   • <versionedPrefix>-<version>.tar.gz     (Unix, pinned)
+      # plus the matching <name>-install.{sh,ps1} bundle scripts.
+      #
+      # The stable-named archives let bundle install scripts download a
+      # specific version directly without git-cloning the whole repo.
+      - name: Setup Node (for manifest reader)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Package bundles from manifest
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p release-artifacts
+
+          BUNDLE_NAMES=$(node scripts/read-bundles.mjs names)
+          for bundle in $BUNDLE_NAMES; do
+            FOLDERS=$(node scripts/read-bundles.mjs folders "$bundle")
+            STABLE=$(node scripts/read-bundles.mjs stable-name "$bundle")
+            VERSIONED=$(node scripts/read-bundles.mjs versioned-prefix "$bundle")
+            PREBUILT_SRC=$(node scripts/read-bundles.mjs prebuilt-src "$bundle")
+            PREBUILT_BUILD=$(node scripts/read-bundles.mjs prebuilt-build "$bundle")
+
+            echo "▸ packaging bundle: $bundle  [folders: $FOLDERS]"
+
+            for src in $FOLDERS; do
+              test -d "$src" || { echo "::error::missing source folder $src for bundle $bundle"; exit 1; }
+            done
+
+            # If the bundle declares a prebuilt artifact, ensure it exists
+            # on disk before packaging. The slides-app build runs in an
+            # earlier step; this guard catches drift if that step is moved
+            # or skipped. Falls back to running the declared build command.
+            if [[ -n "$PREBUILT_SRC" ]]; then
+              if [[ ! -d "$PREBUILT_SRC" ]]; then
+                if [[ -n "$PREBUILT_BUILD" ]]; then
+                  echo "  ▸ prebuilt $PREBUILT_SRC missing — running: $PREBUILT_BUILD"
+                  bash -c "$PREBUILT_BUILD"
+                fi
+              fi
+              test -d "$PREBUILT_SRC" || { echo "::error::prebuilt folder $PREBUILT_SRC missing for bundle $bundle"; exit 1; }
+              echo "  ✓ prebuilt artifact present: $PREBUILT_SRC"
+            fi
+
+            STABLE_ZIP="${STABLE}.zip"
+            STABLE_TGZ="${STABLE}.tar.gz"
+            VERSIONED_ZIP="${VERSIONED}-${VERSION}.zip"
+            VERSIONED_TGZ="${VERSIONED}-${VERSION}.tar.gz"
+
+            # shellcheck disable=SC2086
+            zip -rq "$STABLE_ZIP" $FOLDERS
+            # shellcheck disable=SC2086
+            tar czf "$STABLE_TGZ" $FOLDERS
+            cp "$STABLE_ZIP" "$VERSIONED_ZIP"
+            cp "$STABLE_TGZ" "$VERSIONED_TGZ"
+
+            for f in "$STABLE_ZIP" "$STABLE_TGZ" "$VERSIONED_ZIP" "$VERSIONED_TGZ"; do
+              sha256sum "$f" >> release-artifacts/checksums.txt
+              mv "$f" release-artifacts/
+              echo "  ✓ $f"
+            done
+
+            cp "${bundle}-install.sh"  "release-artifacts/${bundle}-install.sh"
+            cp "${bundle}-install.ps1" "release-artifacts/${bundle}-install.ps1"
+            chmod +x "release-artifacts/${bundle}-install.sh"
+            sha256sum "release-artifacts/${bundle}-install.sh"  >> release-artifacts/checksums.txt
+            sha256sum "release-artifacts/${bundle}-install.ps1" >> release-artifacts/checksums.txt
+          done
+
+      - name: Verify bundle archives
+        run: |
+          set -euo pipefail
+          BUNDLE_NAMES=$(node scripts/read-bundles.mjs names)
+          for bundle in $BUNDLE_NAMES; do
+            STABLE=$(node scripts/read-bundles.mjs stable-name "$bundle")
+            FOLDERS=$(node scripts/read-bundles.mjs folders "$bundle")
+            ZIP="release-artifacts/${STABLE}.zip"
+            TGZ="release-artifacts/${STABLE}.tar.gz"
+            test -f "$ZIP" || { echo "::error::$ZIP missing"; exit 1; }
+            test -f "$TGZ" || { echo "::error::$TGZ missing"; exit 1; }
+            for src in $FOLDERS; do
+              unzip -l "$ZIP" | grep -q "${src}/" || { echo "::error::$ZIP missing $src"; exit 1; }
+              tar tzf "$TGZ" | grep -q "${src}/" || { echo "::error::$TGZ missing $src"; exit 1; }
+            done
+            echo "  ✓ $bundle archives validated"
+          done
+
+      # ── Pinned-version installers (release-install.{sh,ps1}) ────────
+      # Substitute `__VERSION_PLACEHOLDER__` with the concrete tag and
+      # stage the baked copies as release assets. The originals in the
+      # repo keep the placeholder verbatim so future releases re-bake
+      # cleanly. Spec: spec/14-update/25-release-pinned-installer.md
+      - name: Bake version into release-install scripts
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          test -f release-install.sh  || { echo "::error::release-install.sh missing";  exit 1; }
+          test -f release-install.ps1 || { echo "::error::release-install.ps1 missing"; exit 1; }
+
+          mkdir -p release-artifacts
+          cp release-install.sh  release-artifacts/release-install.sh
+          cp release-install.ps1 release-artifacts/release-install.ps1
+
+          # Use a delimiter that cannot appear in a semver tag.
+          sed -i "s|__VERSION_PLACEHOLDER__|${VERSION}|g" release-artifacts/release-install.sh
+          sed -i "s|__VERSION_PLACEHOLDER__|${VERSION}|g" release-artifacts/release-install.ps1
+
+          chmod +x release-artifacts/release-install.sh
+
+          # Fail fast if any placeholder slipped through.
+          if grep -q "__VERSION_PLACEHOLDER__" release-artifacts/release-install.sh release-artifacts/release-install.ps1; then
+            echo "::error::__VERSION_PLACEHOLDER__ still present after substitution"
+            exit 1
+          fi
+
+          # Confirm the concrete tag is actually baked in.
+          grep -q "BAKED_VERSION=\"${VERSION}\""  release-artifacts/release-install.sh  \
+            || { echo "::error::bash baked version mismatch";       exit 1; }
+          grep -q "\$BakedVersion = \"${VERSION}\"" release-artifacts/release-install.ps1 \
+            || { echo "::error::powershell baked version mismatch"; exit 1; }
+
+          sha256sum release-artifacts/release-install.sh  >> release-artifacts/checksums.txt
+          sha256sum release-artifacts/release-install.ps1 >> release-artifacts/checksums.txt
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-artifacts/*.zip
+            release-artifacts/*.tar.gz
+            release-artifacts/checksums.txt
+            install.sh
+            install.ps1
+            install-config.json
+            slides-app/coding-guidelines-slides-*.zip
+            release-artifacts/error-manage-install.sh
+            release-artifacts/error-manage-install.ps1
+            release-artifacts/splitdb-install.sh
+            release-artifacts/splitdb-install.ps1
+            release-artifacts/slides-install.sh
+            release-artifacts/slides-install.ps1
+            release-artifacts/linters-install.sh
+            release-artifacts/linters-install.ps1
+            release-artifacts/cli-install.sh
+            release-artifacts/cli-install.ps1
+            release-artifacts/wp-install.sh
+            release-artifacts/wp-install.ps1
+            release-artifacts/consolidated-install.sh
+            release-artifacts/consolidated-install.ps1
+            release-artifacts/release-install.sh
+            release-artifacts/release-install.ps1
+          body: |
+            ## Installation
+
+            **Windows (PowerShell)**
+            ```powershell
+            irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.ps1 | iex
+            ```
+
+            **Linux / macOS**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.sh | bash
+            ```
+
+            ## Slide Deck
+
+            Download `coding-guidelines-slides-${{ steps.version.outputs.version }}.zip`,
+            unzip it, and double-click `index.html` to launch the offline training deck.
+
+            ## CI/CD Linter Pack (NEW)
+
+            GitHub composite Action one-liner:
+            ```yaml
+            - uses: alimtvnetwork/coding-guidelines-v15/linters-cicd@${{ steps.version.outputs.version }}
+              with: { path: . }
+            ```
+            Any other CI:
+            ```bash
+            curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v15/releases/download/${{ steps.version.outputs.version }}/linters-install.sh | bash
+            bash ./linters-cicd/run-all.sh --path .
+            ```
+
+            ## Named Bundle Installers (NEW)
+
+            Install just the spec folders you need with a single one-liner.
+            All bundles forward `install.sh` / `install.ps1` flags
+            (`--version`, `--dest`, `--dry-run`, `--prompt`, `--force`).
+
+            | Bundle | Spec folders |
+            |---|---|
+            | `error-manage` | spec/01-spec-authoring-guide, spec/03-error-manage |
+            | `splitdb` | spec/04-database-conventions, spec/05-split-db-architecture, spec/06-seedable-config-architecture |
+            | `slides` | spec-slides, slides-app |
+            | `linters` | linters, linters-cicd |
+            | `cli` | spec/11 → spec/16 |
+            | `wp` | spec/18-wp-plugin-how-to |
+            | `consolidated` | spec/01, spec/03, spec/17 |
+
+            **Bash example (error-manage):**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.sh | bash
+            ```
+            **PowerShell example (splitdb):**
+            ```powershell
+            irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/splitdb-install.ps1 | iex
+            ```
+            Offline zips are also published per bundle:
+            `coding-guidelines-<bundle>-${{ steps.version.outputs.version }}.zip`.
+
+            ## Checksums
+            See `checksums.txt` for SHA-256 verification hashes.
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+          make_latest: ${{ !contains(steps.version.outputs.version, '-') }}

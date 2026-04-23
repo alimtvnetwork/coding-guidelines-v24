@@ -1,0 +1,95 @@
+# Reusable workflow: invoke from any repo via `workflow_call`.
+#
+# Caller usage:
+#
+#   jobs:
+#     guards:
+#       uses: <org>/<repo>/.github/workflow-templates/ci-guards.reusable.yml@v1
+#       with:
+#         phase: all
+#         config: ci-guards.yaml
+#         languages: "go,typescript"
+
+name: CI Guards (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      phase:
+        description: "check | lint | test | all"
+        type: string
+        required: false
+        default: "all"
+      config:
+        description: "Path to ci-guards.yaml"
+        type: string
+        required: false
+        default: "ci-guards.yaml"
+      languages:
+        description: "Comma-separated language hints (informational; consumed by linters-cicd)"
+        type: string
+        required: false
+        default: ""
+      source-dir:
+        type: string
+        required: false
+        default: ""
+      baseline:
+        type: string
+        required: false
+        default: ""
+      results-dir:
+        type: string
+        required: false
+        default: ""
+      file-glob:
+        description: "Override file glob for check-phase guards"
+        type: string
+        required: false
+        default: ""
+      rule-set:
+        description: "Rule-set tag (forwarded as CI_GUARDS_RULESET env var)"
+        type: string
+        required: false
+        default: ""
+      scripts-dir:
+        type: string
+        required: false
+        default: ".github/scripts"
+      fail-on-violation:
+        type: boolean
+        required: false
+        default: true
+      runs-on:
+        type: string
+        required: false
+        default: "ubuntu-latest"
+      node-version:
+        type: string
+        required: false
+        default: "20"
+
+jobs:
+  guards:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
+    env:
+      CI_GUARDS_LANGUAGES: ${{ inputs.languages }}
+      CI_GUARDS_FILE_GLOB: ${{ inputs.file-glob }}
+      CI_GUARDS_RULESET:   ${{ inputs.rule-set }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run reusable CI guards
+        uses: ./.github/workflow-templates
+        with:
+          phase:             ${{ inputs.phase }}
+          config:            ${{ inputs.config }}
+          source-dir:        ${{ inputs.source-dir }}
+          baseline:          ${{ inputs.baseline }}
+          results-dir:       ${{ inputs.results-dir }}
+          scripts-dir:       ${{ inputs.scripts-dir }}
+          json-summary:      ${{ runner.temp }}/ci-guards.json
+          fail-on-violation: ${{ inputs.fail-on-violation }}
+          node-version:      ${{ inputs.node-version }}

@@ -1,0 +1,88 @@
+name: Spec Verification Coverage
+
+# Runs the spec verification coverage report in 'overview-only' mode and,
+# on pull requests, posts/updates a sticky comment listing any expected
+# files that are missing a `## Verification` block. The job fails (exit
+# code 3 from the script) when files are missing — gating merges keeps
+# the spec tree honest.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: spec-verification-coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write   # required to post/update the sticky PR comment
+
+jobs:
+  coverage:
+    name: Spec Verification Coverage (overview-only)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Verify report script present
+        run: |
+          test -f scripts/spec-verification/generate-coverage-report.mjs \
+            || { echo "::error::generate-coverage-report.mjs missing"; exit 1; }
+
+      # Run WITHOUT --strict first so we always get a report file written
+      # even when the strict gate would otherwise fail. The strict gate
+      # runs as a separate step at the end so the PR comment + artifact
+      # upload happen regardless of pass/fail.
+      - name: Generate coverage report (Markdown)
+        run: |
+          mkdir -p reports/spec-verification
+          node scripts/spec-verification/generate-coverage-report.mjs \
+            --mode overview-only \
+            --out reports/spec-verification/coverage.md
+
+      - name: Generate coverage report (JSON)
+        run: |
+          node scripts/spec-verification/generate-coverage-report.mjs \
+            --mode overview-only \
+            --json \
+            --out reports/spec-verification/coverage.json
+
+      - name: Build PR comment body
+        if: github.event_name == 'pull_request'
+        run: node scripts/spec-verification/build-pr-comment.mjs reports/spec-verification/coverage.json /tmp/pr-comment.md
+
+      - name: Post or update sticky PR comment
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: spec-verification-coverage
+          path: /tmp/pr-comment.md
+
+      - name: Upload coverage report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spec-verification-coverage
+          path: |
+            reports/spec-verification/coverage.md
+            reports/spec-verification/coverage.json
+          if-no-files-found: warn
+
+      # Final gate — fails the job (exit code 3) when expected files are
+      # missing a `## Verification` block. Runs LAST so the PR comment
+      # and artifact upload above always execute first.
+      - name: Strict gate — fail if any expected file is missing
+        run: |
+          node scripts/spec-verification/generate-coverage-report.mjs \
+            --mode overview-only \
+            --strict

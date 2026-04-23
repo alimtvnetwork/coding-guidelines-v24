@@ -1,0 +1,20 @@
+# Starter workflow for Node / TypeScript repos.
+# Copy to .github/workflows/ci-guards.yml and adjust as needed.
+
+name: CI Guards (Node)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  guards:
+    uses: ./.github/workflow-templates/ci-guards.reusable.yml
+    with:
+      phase: all
+      config: ci-guards.yaml
+      languages: "typescript,javascript"
+      file-glob: "*.{ts,tsx,js,jsx}"
+      rule-set: "node-default"
+      fail-on-violation: true

@@ -1,0 +1,69 @@
+// ────────────────────────────────────────────────────────────────────────
+//  Coding-Guidelines Linter Pack — Jenkins starter for external repos
+//  Pack version targeted: v3.79.0
+//
+//  Prerequisites (see ./README.md):
+//    - Docker Pipeline plugin
+//    - Warnings Next Generation plugin
+//    - Agent with Docker available (or swap to `agent any`, see README Step 4)
+// ────────────────────────────────────────────────────────────────────────
+
+pipeline {
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args  '-u root:root'
+        }
+    }
+
+    options {
+        timestamps()
+        timeout(time: 15, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+    }
+
+    environment {
+        SARIF_FILE = 'coding-guidelines.sarif'
+    }
+
+    stages {
+        stage('Install linter pack') {
+            steps {
+                sh '''
+                    set -eu
+                    apt-get update
+                    apt-get install -y --no-install-recommends curl unzip
+                    curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v15/releases/latest/download/install.sh | bash
+                '''
+            }
+        }
+
+        stage('Run coding-guidelines') {
+            steps {
+                sh '''
+                    set -eu
+                    bash ./linters-cicd/run-all.sh \
+                        --path . \
+                        --format sarif \
+                        --output "${SARIF_FILE}"
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: "${SARIF_FILE}", allowEmptyArchive: true, fingerprint: true
+
+            // Render findings in the Warnings-NG sidebar.
+            // Quality gate: any CODE RED (level=error) fails the build.
+            recordIssues(
+                enabledForFailure: true,
+                tools: [sarif(pattern: "${SARIF_FILE}", id: 'coding-guidelines', name: 'Coding Guidelines')],
+                qualityGates: [
+                    [threshold: 1, type: 'TOTAL_ERROR', unstable: false]
+                ]
+            )
+        }
+    }
+}

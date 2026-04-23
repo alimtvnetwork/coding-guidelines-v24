@@ -1,0 +1,50 @@
+# ────────────────────────────────────────────────────────────────────────
+#  Coding-Guidelines Linter Pack — Azure DevOps starter for external repos
+#  Pack version targeted: v3.79.0
+#
+#  Prerequisite: install the SARIF SAST Scans Tab extension once per org
+#  (see ./README.md Step 1).
+# ────────────────────────────────────────────────────────────────────────
+
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  SARIF_FILE: "$(Build.ArtifactStagingDirectory)/coding-guidelines.sarif"
+
+steps:
+  - task: UsePythonVersion@0
+    displayName: "Use Python 3.11"
+    inputs:
+      versionSpec: "3.11"
+
+  - bash: |
+      set -euo pipefail
+      curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v15/releases/latest/download/install.sh | bash
+    displayName: "Install coding-guidelines linter pack"
+
+  - bash: |
+      set -euo pipefail
+      bash ./linters-cicd/run-all.sh \
+        --path . \
+        --format sarif \
+        --output "$(SARIF_FILE)"
+    displayName: "Run coding-guidelines checks"
+    continueOnError: false
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish SARIF artifact"
+    condition: always()
+    inputs:
+      pathToPublish: "$(SARIF_FILE)"
+      artifactName: "CodeAnalysisLogs"

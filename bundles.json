@@ -1,0 +1,130 @@
+{
+  "$schema": "./bundles.schema.json",
+  "repo": "alimtvnetwork/coding-guidelines-v15",
+  "rawBase": "https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main",
+  "releaseBase": "https://github.com/alimtvnetwork/coding-guidelines-v15/releases",
+  "bundles": [
+    {
+      "name": "error-manage",
+      "title": "Error Management Spec",
+      "description": "Installs the error-management guidance plus the spec-authoring guide.",
+      "intent": ["error handling", "apperror", "response envelope", "error codes", "typed query", "exception", "panic", "stack trace"],
+      "audience": "backend",
+      "folders": [
+        { "src": "spec/01-spec-authoring-guide", "dest": "spec/01-spec-authoring-guide" },
+        { "src": "spec/03-error-manage", "dest": "spec/03-error-manage" }
+      ],
+      "archive": {
+        "stableName": "error-manage",
+        "versionedPrefix": "coding-guidelines-error-manage"
+      }
+    },
+    {
+      "name": "splitdb",
+      "title": "Split-DB Architecture Spec",
+      "description": "Installs the database conventions, split-DB architecture, and seedable config specs.",
+      "intent": ["database", "sqlite", "split db", "root app session", "rbac", "casbin", "seedable config", "schema", "migration", "wal"],
+      "audience": "backend",
+      "folders": [
+        { "src": "spec/04-database-conventions", "dest": "spec/04-database-conventions" },
+        { "src": "spec/05-split-db-architecture", "dest": "spec/05-split-db-architecture" },
+        { "src": "spec/06-seedable-config-architecture", "dest": "spec/06-seedable-config-architecture" }
+      ],
+      "archive": {
+        "stableName": "splitdb",
+        "versionedPrefix": "coding-guidelines-splitdb"
+      }
+    },
+    {
+      "name": "slides",
+      "title": "Slides App + Decks",
+      "description": "Installs the slides Vite app, the source decks (spec-slides/), and the pre-built dist/ so index.html opens directly in the browser — no Node/build step required.",
+      "intent": ["slides", "presentation", "training", "deck", "teach", "workshop", "onboarding"],
+      "audience": "trainer",
+      "folders": [
+        { "src": "spec-slides", "dest": "spec-slides" },
+        { "src": "slides-app", "dest": "slides-app" }
+      ],
+      "archive": {
+        "stableName": "slides",
+        "versionedPrefix": "coding-guidelines-slides"
+      },
+      "prebuilt": {
+        "src": "slides-app/dist",
+        "dest": "slides-app/dist",
+        "build": "cd slides-app && bun install --frozen-lockfile && bun run build"
+      },
+      "autoOpen": {
+        "entry": "slides-app/dist/index.html"
+      },
+      "verify": [
+        { "path": "slides-app/dist/index.html", "kind": "file" },
+        { "path": "spec-slides",                "kind": "dir"  }
+      ]
+    },
+    {
+      "name": "linters",
+      "title": "Linters + CI/CD Linter Pack",
+      "description": "Installs the project linters and the CI/CD linter runner pack.",
+      "intent": ["lint", "linter", "static analysis", "golangci-lint", "phpcs", "sonarqube", "stylecop", "ci checks", "code quality"],
+      "audience": "devops",
+      "folders": [
+        { "src": "linters", "dest": "linters" },
+        { "src": "linters-cicd", "dest": "linters-cicd" }
+      ],
+      "archive": {
+        "stableName": "linters",
+        "versionedPrefix": "coding-guidelines-linters"
+      }
+    },
+    {
+      "name": "cli",
+      "title": "CLI Toolchain Spec",
+      "description": "Installs the CLI-related spec folders (PowerShell, CI/CD, generic CLI, update, distribution, generic release).",
+      "intent": ["cli", "command line", "powershell", "self update", "release pipeline", "install script", "cross platform", "distribution", "binary"],
+      "audience": "devops",
+      "folders": [
+        { "src": "spec/11-powershell-integration", "dest": "spec/11-powershell-integration" },
+        { "src": "spec/12-cicd-pipeline-workflows", "dest": "spec/12-cicd-pipeline-workflows" },
+        { "src": "spec/13-generic-cli", "dest": "spec/13-generic-cli" },
+        { "src": "spec/14-update", "dest": "spec/14-update" },
+        { "src": "spec/15-distribution-and-runner", "dest": "spec/15-distribution-and-runner" },
+        { "src": "spec/16-generic-release", "dest": "spec/16-generic-release" }
+      ],
+      "archive": {
+        "stableName": "cli",
+        "versionedPrefix": "coding-guidelines-cli"
+      }
+    },
+    {
+      "name": "wp",
+      "title": "WordPress Plugin How-To Spec",
+      "description": "Installs the WordPress plugin authoring spec into spec/18-wp-plugin-how-to.",
+      "intent": ["wordpress", "wp plugin", "rest api", "php traits", "gold standard", "enums", "wp rest"],
+      "audience": "wp-plugin",
+      "folders": [
+        { "src": "spec/18-wp-plugin-how-to", "dest": "spec/18-wp-plugin-how-to" }
+      ],
+      "archive": {
+        "stableName": "wp",
+        "versionedPrefix": "coding-guidelines-wp"
+      }
+    },
+    {
+      "name": "consolidated",
+      "title": "Consolidated Guidelines",
+      "description": "Installs the spec-authoring guide, error-manage spec, and consolidated guidelines bundle.",
+      "intent": ["everything", "all rules", "consolidated", "master reference", "ai onboarding", "complete spec"],
+      "audience": "ai-agent",
+      "folders": [
+        { "src": "spec/01-spec-authoring-guide", "dest": "spec/01-spec-authoring-guide" },
+        { "src": "spec/03-error-manage", "dest": "spec/03-error-manage" },
+        { "src": "spec/17-consolidated-guidelines", "dest": "spec/17-consolidated-guidelines" }
+      ],
+      "archive": {
+        "stableName": "consolidated",
+        "versionedPrefix": "coding-guidelines-consolidated"
+      }
+    }
+  ]
+}
