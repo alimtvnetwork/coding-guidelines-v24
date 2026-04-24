@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "4.11.0",
+  "version": "4.12.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -40,7 +40,8 @@
     "test:installer:acceptance": "bash tests/installer/check-release-install-acceptance.sh",
     "test:installer:bundles": "bash tests/installer/check-bundle-installers.sh",
     "test:release:bake": "bash tests/installer/check-release-bake.sh",
-    "test:installer:root": "bash tests/installer/check-root-install-acceptance.sh"
+    "test:installer:root": "bash tests/installer/check-root-install-acceptance.sh",
+    "test:linters": "python3 linters-cicd/tests/run.py"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
