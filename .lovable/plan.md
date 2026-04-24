@@ -1,26 +1,29 @@
 # Current Plan
 
-**Version:** 4.11.0
+**Version:** 4.12.0
 **Updated:** 2026-04-24
 
 ---
 
-## v4.11.0 — BOOL-NEG-001 Pipeline Smoke Test (Pending Issue #01)
+## v4.12.0 — BOOL-NEG-001 Unit Tests (Task #03)
 
-**Scope:** Validate that the `BOOL-NEG-001` SQL check works end-to-end through `linters-cicd/run-all.sh` (closes pending-issue #01).
+**Scope:** Lock in the BOOL-NEG-001 v1 contract with a stdlib unittest suite so future regex extensions (task #07) cannot silently regress behavior verified end-to-end in v4.11.0.
 
 ### Done
-- **#01**: Built fixture (`/tmp/bool-neg-pipeline-test/schema.sql`) with 4 forbidden Not/No-prefixed columns (`IsNotActive`, `HasNoAccess`, `IsNotVerified`, `HasNoLicense`) and 10 allow-listed columns (`IsActive`, `HasAccess`, `IsDisabled`, `IsInvalid`, `IsHidden`, `IsLocked`, `IsUnpublished`, `IsUnverified`, `IsUnread`, `IsBroken`).
-- Verified: single-rule run (`--rules BOOL-NEG-001`) → 4 findings, exit 1, SARIF merged correctly.
-- Verified: full-pipeline run (`--languages sql`, all 4 SQL checks) → BOOL-NEG-001 still 4 findings, no rule-id collisions with `DB-FREETEXT-001` / `MISSING-DESC-001` / `STYLE-099`, all other rules clean.
-- Verified: parallel determinism — 3 consecutive `--jobs auto` runs produced identical SARIF hashes (`31d61479edab` × 3).
-- Verified: `--check-timeout 20` honored, registry entry loaded correctly.
-- Moved `.lovable/pending-issues/01-bool-neg-001-pipeline-untested.md` → `.lovable/resolved-issues/`.
+- **#03**: Added `linters-cicd/tests/test_boolean_column_negative.py` — 13 tests across 5 suites:
+  - `TestForbiddenPrefixes` — every Is/Has + Not/No combination flagged (5 tests)
+  - `TestAllowList` — 10 approved single-negative roots never flagged (2 tests, parametrized via subTest)
+  - `TestPositiveForms` — IsActive/HasAccess/IsVerified/HasLicense/IsEnabled clean (1 test, parametrized)
+  - `TestOutOfScope` — Cannot/Disabled/Un-/In- not flagged in v1 (documents task #07 boundary)
+  - `TestStructural` — line numbers, multiple tables, empty input, no-CREATE-TABLE
+- Added `linters-cicd/checks/boolean_column_negative_shim.py` — stdlib `importlib.util` loader to make the hyphenated check folder importable from tests.
+- Added `linters-cicd/tests/run.py` — stdlib `unittest.TestLoader.discover` runner.
+- Wired into `package.json` as `npm run test:linters` and into `.github/workflows/ci.yml` (lint job).
 
 ### Verification
-- All 3 installer harnesses still green (126 + 22 + 5 = 153 assertions).
-- Pipeline produces deterministic SARIF across parallel runs.
-- v1 scope confirmed: `Cannot*` and `Disabled*Flag` are out-of-scope and remain task #07 territory.
+- 13/13 tests pass in 0.001s (no pytest dependency added).
+- All 3 installer harnesses still green (153 assertions).
+- Sync clean.
 
 ---
 
