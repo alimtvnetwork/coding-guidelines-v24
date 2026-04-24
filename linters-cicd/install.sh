@@ -10,6 +10,7 @@
 #   -d <dir>      install destination (default: ./linters-cicd)
 #   -v <version>  install a specific version (PINNED MODE, §4) (default: latest)
 #   -n            skip checksum verification (NOT recommended)
+#   -h, --help    show this help and exit
 #
 # EXIT CODES (spec §8):
 #   0  success
@@ -21,16 +22,29 @@
 
 set -euo pipefail
 
+usage() {
+    sed -n '2,21p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+}
+
+# Pre-parse long-form help (getopts only supports short flags).
+for arg in "$@"; do
+    case "$arg" in
+        -h|--help) usage ;;
+    esac
+done
+
 REPO="alimtvnetwork/coding-guidelines-v16"
 DEST="./linters-cicd"
 VERSION="latest"
 VERIFY=1
 
-while getopts "d:v:n" opt; do
+while getopts "d:v:nh" opt; do
     case "$opt" in
         d) DEST="$OPTARG" ;;
         v) VERSION="$OPTARG" ;;
         n) VERIFY=0 ;;
+        h) usage ;;
         *) echo "Unknown flag" >&2; exit 2 ;;
     esac
 done
