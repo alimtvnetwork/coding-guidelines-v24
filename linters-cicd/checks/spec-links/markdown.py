@@ -61,7 +61,7 @@ def main() -> int:
     args = build_parser("SPEC-LINK-001 spec-links (markdown)").parse_args()
     run = SarifRun(
         tool_name="coding-guidelines-spec-links",
-        tool_version="1.0.0",
+        tool_version="1.1.0",
         rules=[RULE],
     )
     slug_cache: dict[Path, set[str]] = {}
