@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v15/releases"><img alt="Version" src="https://img.shields.io/badge/version-3.98.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-612-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-131%2C967-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--24-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v15/releases"><img alt="Version" src="https://img.shields.io/badge/version-3.99.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-612-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-131%2C967-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--24-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -27,7 +27,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->612<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->131,967<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->3.98.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-24<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES -->612<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->131,967<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->3.99.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-24<!-- /STAMP:UPDATED -->
 </p>
 
 ---
@@ -36,6 +36,7 @@
 
 <p align="center">
   <a href="#-table-of-contents">Table of Contents</a> ·
+  <a href="#-run-commands">Run Commands</a> ·
   <a href="#-core-development-principles">Core Development Principles</a> ·
   <a href="#-code-red-rules">CODE-RED Rules</a> ·
   <a href="#-real-world-example-code-red-violations">Real-world Code Red Violations</a> ·
@@ -50,6 +51,86 @@
   <a href="#-contributing">Contributing</a> ·
   <a href="#-author">Author</a>
 </p>
+
+---
+
+<h2 align="center">🚀 Run Commands</h2>
+
+<p align="center">
+  Every command you need — copy, paste, ship.<br/>
+  Full workflow reference: <a href="docs/architecture.md"><code>docs/architecture.md</code></a>.
+</p>
+
+### Setup
+
+```bash
+# Clone and install
+git clone https://github.com/alimtvnetwork/coding-guidelines-v16.git
+cd coding-guidelines-v16
+npm install
+```
+
+### Daily Workflow
+
+```bash
+# Start the docs viewer (Vite dev server, hot reload)
+npm run dev
+
+# Production build of the docs viewer
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+### Sync & Stamping
+
+```bash
+# Regenerate version.json, specTree.json, health-score.json, README stamps
+npm run sync
+
+# Individual sync targets
+npm run sync:version    # version.json only
+npm run sync:specs      # src/data/specTree.json only
+npm run sync:health     # public/health-score.json only
+npm run sync:readme     # README badge + stat stamps only
+```
+
+### Linters (what CI runs)
+
+```bash
+# Code-style validators (Go + Python) — target the spec/ tree
+go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
+python3 linter-scripts/validate-guidelines.py spec
+
+# Cross-link, folder-ref, forbidden-string, axios-pin guards
+python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
+python3 linter-scripts/check-spec-folder-refs.py
+python3 linter-scripts/check-forbidden-strings.py
+bash    linter-scripts/check-forbidden-spec-paths.sh
+bash    linter-scripts/check-axios-version.sh
+
+# README-specific lints
+npm run lint:readme
+npm run lint:readme:canonicals
+```
+
+> **Markdown is intentionally not linted for code-style.** CI lints code in `spec/` and source files only — example snippets in `readme.md` and `docs/` are validated by hand against [`spec/02-coding-guidelines/01-cross-language/04-code-style/`](spec/02-coding-guidelines/01-cross-language/04-code-style/).
+
+### Release & Migration
+
+```bash
+# Dry-run the v15 → v16 repo migrator (see spec/14-update/26-...)
+npm run migrate:repo:dry
+
+# One-shot installers (no clone required)
+#   PowerShell:
+iwr https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/install.ps1 | iex
+#   Bash:
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/install.sh | bash
+```
+
+
 
 ---
 
