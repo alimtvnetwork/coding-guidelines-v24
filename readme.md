@@ -317,11 +317,51 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/downl
 ### 🪟 Windows · PowerShell
 
 ```powershell
+# Install latest (downloads & runs install.ps1 in one line)
 irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+
+# Install a pinned version (recommended for CI)
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1))) -Version v3.79.0
+
+# Run the linter pack (use WSL / Git-Bash for the bash runner on Windows)
 bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
 ```
 
-**Flags** (`linters-cicd/install.sh`): `-d <dir>` install destination · `-v <version>` pin a release · `-n` skip checksum · `-h` / `--help` show usage. SHA-256 verified, idempotent, releases-only — see [`linters-cicd/install.sh`](linters-cicd/install.sh).
+#### 💡 Get help without installing anything
+
+`install.ps1` recognizes `-Help`, the alias `-h`, and the bash-style `--help` long-form. Help is handled **before any network probe** — so you can safely inspect the flags offline, behind a firewall, or in a sandboxed CI runner without triggering a single request to GitHub.
+
+```powershell
+# After downloading the installer locally:
+.\install.ps1 -Help        # canonical PowerShell switch
+.\install.ps1 -h           # short alias
+.\install.ps1 --help       # bash-style long form
+
+# Or pipe-to-iex with explicit -Help (zero network beyond fetching the script itself):
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1))) -Help
+```
+
+All three variants exit with code `0`, print the same usage text, and make **zero** network calls during help output. This is regression-tested by [`tests/installer/check-install-ps1-help.sh`](tests/installer/check-install-ps1-help.sh) (T5 in the installer suite).
+
+#### 🚩 Flags (PowerShell · `linters-cicd/install.ps1`)
+
+| Flag                  | Purpose                                              |
+|-----------------------|------------------------------------------------------|
+| `-Dest <dir>`         | Install destination (default: `./linters-cicd`)      |
+| `-Version <vX.Y.Z>`   | Pin to a specific release tag (PINNED MODE, spec §4) |
+| `-NoVerify`           | Skip SHA-256 checksum verification (not recommended) |
+| `-Help`, `-h`, `--help` | Show usage and exit `0` — **no network probe**     |
+
+#### 🚩 Flags (Bash · `linters-cicd/install.sh`)
+
+| Flag           | Purpose                                              |
+|----------------|------------------------------------------------------|
+| `-d <dir>`     | Install destination (default: `./linters-cicd`)      |
+| `-v <version>` | Pin to a specific release tag (PINNED MODE, spec §4) |
+| `-n`           | Skip SHA-256 checksum verification (not recommended) |
+| `-h`, `--help` | Show usage and exit `0` — no network probe           |
+
+SHA-256 verified, idempotent, releases-only — see [`linters-cicd/install.sh`](linters-cicd/install.sh) and [`linters-cicd/install.ps1`](linters-cicd/install.ps1).
 
 <h2 align="center">📑 Table of Contents</h2>
 
