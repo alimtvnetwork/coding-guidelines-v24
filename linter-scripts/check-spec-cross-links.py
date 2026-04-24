@@ -44,7 +44,10 @@ def slugify(text: str) -> str:
     # between two spaces leaves the spaces intact, which is what
     # produces the doubled ``--`` in GitHub's slugs.
     text = re.sub(r"[^\w\s-]", "", text, flags=re.UNICODE)
-    text = re.sub(r"[ \t]+", "-", text)
+    # Replace each whitespace char individually (not runs) so adjacent
+    # spaces — typically left over from stripped em-dashes like
+    # ``A — B`` -> ``A  B`` -> ``a--b`` — survive as ``--``.
+    text = re.sub(r"[ \t]", "-", text)
     return text.strip("-")
 
 
