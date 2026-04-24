@@ -66,6 +66,8 @@ const TRACKED = [
   },
   {
     path: "public/health-score.json",
+    normalise: stripVolatileHealthScoreFields,
+    note: "the `generated` ISO timestamp is ignored.",
   },
   {
     path: "readme.md",
@@ -102,6 +104,20 @@ function stripVolatileVersionFields(content) {
   }
   delete parsed.git;
   delete parsed.updated;
+  return JSON.stringify(parsed, null, 2) + "\n";
+}
+
+function stripVolatileHealthScoreFields(content) {
+  // sync-health-score writes a fresh `generated` ISO timestamp on every
+  // run. Drop it before comparing so a no-op regeneration doesn't look
+  // like drift.
+  let parsed;
+  try {
+    parsed = JSON.parse(content);
+  } catch {
+    return content;
+  }
+  delete parsed.generated;
   return JSON.stringify(parsed, null, 2) + "\n";
 }
 
