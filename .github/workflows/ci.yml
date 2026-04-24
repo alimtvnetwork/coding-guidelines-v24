@@ -79,6 +79,15 @@ jobs:
       - name: Check forbidden strings (TOML-driven rename guards)
         run: python3 linter-scripts/check-forbidden-strings.py
 
+      - name: Check README install section (position + one-line fences)
+        # Enforces:
+        #   1. "Install in One Line" is the FIRST H2 after the platform badges.
+        #   2. Every install/bundle code fence (powershell|bash|sh|pwsh) holds
+        #      exactly one bare command — no `#` comments, no blank lines,
+        #      no `\` line continuations.
+        # Spec: .lovable/memory/constraints/install-command-formatting.md
+        run: python3 linter-scripts/check-readme-install-section.py
+
   cross-links:
     name: Spec Cross-Reference Validation
     runs-on: ubuntu-latest
