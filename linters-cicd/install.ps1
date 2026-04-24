@@ -63,7 +63,13 @@ Examples:
 if ($Help) { Show-Usage }
 
 # Bash-style long flag (`--help`) is not a valid PowerShell parameter name,
-# so it lands in $MyInvocation.UnboundArguments. Catch it here too.
+# so PowerShell may try to bind it as a positional value. Catch it by
+# scanning the raw invocation line and the unbound-args list.
+$rawLine = ''
+if ($MyInvocation -and $MyInvocation.Line) { $rawLine = $MyInvocation.Line }
+if ($rawLine -match '(^|\s)(--help|-\?|/\?)(\s|$)') { Show-Usage }
+if ($Dest -in @('--help', '-?', '/?')) { Show-Usage }
+if ($Version -in @('--help', '-?', '/?')) { Show-Usage }
 if ($MyInvocation.UnboundArguments) {
     foreach ($a in $MyInvocation.UnboundArguments) {
         if ($a -in @('--help', '-?', '/?')) { Show-Usage }
