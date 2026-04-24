@@ -225,50 +225,14 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
         continue-on-error: true
 
-      - name: Snapshot committed version.json (volatile fields stripped)
-        # Strip `git` and `updated` from version.json before comparing —
-        # those fields legitimately differ between local and CI checkouts
-        # (different SHA, branch, day) and would cause false drift failures.
-        # Structural content (version, stats, folders[]) must still match.
-        run: |
-          node -e "
-            const fs = require('fs');
-            const v = JSON.parse(fs.readFileSync('version.json', 'utf8'));
-            delete v.git; delete v.updated;
-            fs.writeFileSync('/tmp/version.head.json', JSON.stringify(v, null, 2) + '\n');
-          "
-
-      - name: Run sync scripts
-        run: npm run sync
-
-      - name: Snapshot regenerated version.json (volatile fields stripped)
-        run: |
-          node -e "
-            const fs = require('fs');
-            const v = JSON.parse(fs.readFileSync('version.json', 'utf8'));
-            delete v.git; delete v.updated;
-            fs.writeFileSync('/tmp/version.work.json', JSON.stringify(v, null, 2) + '\n');
-          "
-
-      - name: Fail if version.json structural content drifted
-        run: |
-          if ! diff -u /tmp/version.head.json /tmp/version.work.json; then
-            echo ""
-            echo "::error::Drift detected in version.json (git/updated fields ignored)."
-            echo "::error::Fix: run 'npm run sync' locally and commit the resulting changes."
-            exit 1
-          fi
-          echo " OK version.json structural content is in sync."
-
-      - name: Fail if specTree.json drifted
-        run: |
-          if ! git diff --exit-code --stat -- src/data/specTree.json; then
-            echo ""
-            echo "::error::Drift detected — src/data/specTree.json is out of sync with spec/ source files."
-            echo "::error::Fix: run 'npm run sync' locally and commit the resulting changes."
-            echo ""
-            echo "--- Full diff ---"
-            git diff -- src/data/specTree.json
-            exit 1
-          fi
-          echo " OK specTree.json is in sync with spec/ source files."
+      - name: Check sync drift (all generated files)
+        # Single source of truth for drift detection. The script itself
+        # documents which files it watches, normalises volatile fields
+        # (version.json git/updated, health-score.json generated,
+        # readme UPDATED stamp), and prints the exact `npm run sync`
+        # command operators must run on failure.
+        #
+        # Local fix workflow:
+        #   npm run sync:fix      # regenerate everything in place
+        #   git add -A && git commit -m "chore: sync generated files"
+        run: npm run sync:check
