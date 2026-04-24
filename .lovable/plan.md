@@ -1,22 +1,26 @@
 # Current Plan
 
-**Version:** 4.10.0
+**Version:** 4.11.0
 **Updated:** 2026-04-24
 
 ---
 
-## v4.10.0 — Installer Behavior Rollout Phase 5 (Docs)
+## v4.11.0 — BOOL-NEG-001 Pipeline Smoke Test (Pending Issue #01)
 
-**Scope:** Cross-link the §27 generic-installer-behavior contract from user-facing surfaces (R-5a/b/c).
+**Scope:** Validate that the `BOOL-NEG-001` SQL check works end-to-end through `linters-cicd/run-all.sh` (closes pending-issue #01).
 
 ### Done
-- **R-5a**: Added §27 cross-ref blockquote to `readme.md` between Verify section and Table of Contents — names all flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 banner, and the §8 exit codes (0–5). Links to `docs/slides-installer.md` for the slides-specific extension.
-- **R-5b**: Added §27 spec blockquote at the top of `docs/slides-installer.md` clarifying that slides flags layer on top of the cross-bundle contract.
-- **R-5c**: Updated `mem://features/release-pinned-installer` with §27 conformance section listing all 18 installers, the 3 CI guards, and the 153 total assertions (126 + 22 + 5).
+- **#01**: Built fixture (`/tmp/bool-neg-pipeline-test/schema.sql`) with 4 forbidden Not/No-prefixed columns (`IsNotActive`, `HasNoAccess`, `IsNotVerified`, `HasNoLicense`) and 10 allow-listed columns (`IsActive`, `HasAccess`, `IsDisabled`, `IsInvalid`, `IsHidden`, `IsLocked`, `IsUnpublished`, `IsUnverified`, `IsUnread`, `IsBroken`).
+- Verified: single-rule run (`--rules BOOL-NEG-001`) → 4 findings, exit 1, SARIF merged correctly.
+- Verified: full-pipeline run (`--languages sql`, all 4 SQL checks) → BOOL-NEG-001 still 4 findings, no rule-id collisions with `DB-FREETEXT-001` / `MISSING-DESC-001` / `STYLE-099`, all other rules clean.
+- Verified: parallel determinism — 3 consecutive `--jobs auto` runs produced identical SARIF hashes (`31d61479edab` × 3).
+- Verified: `--check-timeout 20` honored, registry entry loaded correctly.
+- Moved `.lovable/pending-issues/01-bool-neg-001-pipeline-untested.md` → `.lovable/resolved-issues/`.
 
 ### Verification
 - All 3 installer harnesses still green (126 + 22 + 5 = 153 assertions).
-- Sync clean: 612 files, 22 folders, 131,969 lines.
+- Pipeline produces deterministic SARIF across parallel runs.
+- v1 scope confirmed: `Cannot*` and `Disabled*Flag` are out-of-scope and remain task #07 territory.
 
 ---
 
