@@ -19,6 +19,7 @@
 #                [--total-timeout SECONDS]  (default: 0 = unlimited)
 #                [--split-by severity]      (also write per-severity SARIF)
 #                [--strict]                 (fail on unknown TOML keys)
+#                [--debug-timeout]          (log watchdog outcome: armed/canceled/fired)
 #                [--output coding-guidelines.sarif] [--format sarif|text]
 #
 # Exit codes:
