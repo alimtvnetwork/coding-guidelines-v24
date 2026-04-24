@@ -1,12 +1,12 @@
 {
-  "version": "4.3.0",
+  "version": "4.4.0",
   "updated": "2026-04-24",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "0494f98f9f465d52c94f0ea903648d89b7b3b07a",
-    "shortSha": "0494f98",
-    "branch": "edit/edt-1ab7f155-1504-41e8-999e-929c82190d57"
+    "sha": "36a9f75cff89669548a6100d005af5e6c93e4f2d",
+    "shortSha": "36a9f75",
+    "branch": "edit/edt-0e50e9a0-3a42-4eda-8d14-13907e696932"
   },
   "stats": {
     "totalFiles": 612,
