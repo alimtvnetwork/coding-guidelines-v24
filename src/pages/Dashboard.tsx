@@ -26,7 +26,7 @@ export default function Dashboard() {
     <main className="min-h-screen bg-background">
       <DashboardHeader version={version.version} generatedAt={ci.generated} />
       <div className="container space-y-6 py-8">
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <section className="stagger-children grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             icon={CheckCircle2}
             label="Last validator run"
@@ -55,7 +55,7 @@ export default function Dashboard() {
           />
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-3">
+        <section className="grid animate-fade-in-up gap-6 lg:grid-cols-3 [animation-delay:200ms]">
           <div className="lg:col-span-1">
             <HealthTrendCard
               score={health.overallScore}
@@ -69,7 +69,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-2">
+        <section className="grid animate-fade-in-up gap-6 lg:grid-cols-2 [animation-delay:300ms]">
           <RuleStatusGrid rules={ci.rules} />
           <IssueLogCard issues={ci.issues} />
         </section>
