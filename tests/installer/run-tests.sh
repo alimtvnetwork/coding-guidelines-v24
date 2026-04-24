@@ -169,6 +169,15 @@ else
     fail "run.sh slides sub-command not wired"
 fi
 
+printf '\nT5: linters-cicd/install.ps1 -h/--help exits 0 with no network calls\n'
+if bash "$HERE/check-install-ps1-help.sh" >/dev/null 2>&1; then
+    pass "install.ps1 -Help / -h / --help exit 0 and never probe the network"
+else
+    # Treat as soft-skip when pwsh is unavailable — the check itself returns 0
+    # in that case, so reaching this branch means a real failure.
+    fail "install.ps1 help variants either non-zero, missing usage, or made network calls"
+fi
+
 # =====================================================================
 printf '\n────────────────────────────────────────────\n'
 printf '  PASS: %d   FAIL: %d\n' "$PASS" "$FAIL"
