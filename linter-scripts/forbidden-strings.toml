@@ -57,6 +57,8 @@ exclude_dirs = ["release-artifacts"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py"]
 allowlist = [
   "spec/14-update/23-install-script-version-probe.md",
+  # Historical changelog entry that documents this very rule's introduction.
+  "CHANGELOG.md",
 ]
 
 # --- Rule: legacy CDN domain references ---
