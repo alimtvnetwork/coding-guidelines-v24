@@ -40,7 +40,17 @@ verify_one() {
 
     python3 "$TOOL" --input "$input" --lang "$lang" --output "$actual_out" >/dev/null
 
-    if ! diff -u "$expected_out" "$actual_out"; then
+    if ! python3 -c "
+import sys, difflib, pathlib
+a = pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
+b = pathlib.Path(sys.argv[2]).read_text(encoding='utf-8')
+if a == b:
+    sys.exit(0)
+sys.stdout.writelines(difflib.unified_diff(
+    a.splitlines(keepends=True), b.splitlines(keepends=True),
+    fromfile=sys.argv[1], tofile=sys.argv[2]))
+sys.exit(1)
+" "$expected_out" "$actual_out"; then
         echo "::error::Codegen drift detected for lang=$lang"
         echo "         Expected: $expected_out"
         echo "         Actual:   $actual_out"
