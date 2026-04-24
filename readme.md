@@ -365,7 +365,7 @@ SHA-256 verified, idempotent, releases-only — see [`linters-cicd/install.sh`](
 
 #### ⚠️ `-NoVerify` / `-n` Risks & Exit-Code Contract
 
-Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The text below is **byte-identical** to what the installer emits — keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
+Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The loud-warning behavior is mandated by **[spec §9 — Security Considerations](spec/14-update/27-generic-installer-behavior.md#9-security-considerations)**, and the exit-code contract is normative under **[spec §8 — Exit Codes (Normative)](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)**. The text below is **byte-identical** to what the installer emits — keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
 
 **PowerShell** — exact runtime output of `install.ps1 -NoVerify`:
 
@@ -407,7 +407,7 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
     ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-##### Exit-code contract (spec §8)
+##### Exit-code contract — see [spec §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)
 
 | Exit | Meaning                                                    | With `-NoVerify` / `-n`                |
 |-----:|------------------------------------------------------------|----------------------------------------|
@@ -416,6 +416,8 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
 | `2`  | Unknown flag                                               | Same                                   |
 | `3`  | Pinned release / asset not found (PINNED MODE)             | Same                                   |
 | `4`  | **Verification failed (checksum mismatch)**                | **Never raised** — verification is off |
+
+> Source of truth: [`spec/14-update/27-generic-installer-behavior.md` §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative). Codes `0–5` are reserved by the spec and MUST NOT be redefined.
 
 ##### ✅ Recommended: re-run WITH verification
 
