@@ -110,15 +110,12 @@ class TestReplacementHints(unittest.TestCase):
         self.assertEqual(replacement_hint("CannotEdit"), "CanEdit")
         self.assertEqual(replacement_hint("CannotDelete"), "CanDelete")
 
-    def test_useless_double_negative_hint_suppressed(self) -> None:
-        # Names that aren't recognised and would fallback to a Not/No
-        # double-negative produce None instead of a confusing suggestion.
+    def test_unknown_root_returns_none(self) -> None:
+        # Names with no Is/Has/Cannot prefix and no table entry — no
+        # safe rename to suggest, so None is the contract.
         self.assertIsNone(replacement_hint("Active"))
         self.assertIsNone(replacement_hint("RandomThing"))
 
-    def test_unknown_root_returns_none(self) -> None:
-        self.assertIsNone(replacement_hint("Active"))
-        self.assertIsNone(replacement_hint("RandomThing"))
 
 
 class TestFormatMessage(unittest.TestCase):
