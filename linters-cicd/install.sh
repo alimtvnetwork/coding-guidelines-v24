@@ -64,47 +64,6 @@ echo "       source:  $SOURCE_KIND"
 echo "       dest:    $DEST"
 echo ""
 
-# =====================================================================
-# -n (NoVerify) warning banner
-#
-# When checksum verification is disabled, print a prominent multi-line
-# banner so the operator can never miss it — including in piped
-# `curl | bash` flows where stdout scrolls quickly. This mirrors the
-# spec §8 exit-code contract:
-#   - With verification ON  → mismatch exits 4 (verification failed).
-#   - With -n (NoVerify)    → no integrity check is performed; corrupted
-#                             or tampered archives will install silently
-#                             and the script will exit 0 on success.
-# Kept in sync with the equivalent block in linters-cicd/install.ps1.
-# =====================================================================
-if [ "$VERIFY" -eq 0 ]; then
-    # ANSI yellow if stderr is a TTY; plain text otherwise (CI logs).
-    if [ -t 2 ]; then
-        Y=$'\033[33m'; R=$'\033[0m'
-    else
-        Y=""; R=""
-    fi
-    {
-        echo ""
-        echo "${Y}    ╔══════════════════════════════════════════════════════════════════╗${R}"
-        echo "${Y}    ║  ⚠️  WARNING: -n (NoVerify) — SHA-256 verification is DISABLED   ║${R}"
-        echo "${Y}    ╠══════════════════════════════════════════════════════════════════╣${R}"
-        echo "${Y}    ║  The downloaded archive will NOT be checked against              ║${R}"
-        echo "${Y}    ║  checksums.txt. Corrupted or tampered files will install         ║${R}"
-        echo "${Y}    ║  silently. This is NOT recommended for CI or production use.     ║${R}"
-        echo "${Y}    ║                                                                  ║${R}"
-        echo "${Y}    ║  Exit-code impact (spec §8):                                     ║${R}"
-        echo "${Y}    ║    • verification ON   →  checksum mismatch exits 4              ║${R}"
-        echo "${Y}    ║    • verification OFF  →  no exit 4 is ever raised               ║${R}"
-        echo "${Y}    ║                           (script exits 0 on download success,  ║${R}"
-        echo "${Y}    ║                            even for a tampered archive)         ║${R}"
-        echo "${Y}    ║                                                                  ║${R}"
-        echo "${Y}    ║  Re-run WITHOUT -n to restore integrity checking.                ║${R}"
-        echo "${Y}    ╚══════════════════════════════════════════════════════════════════╝${R}"
-        echo ""
-    } >&2
-fi
-
 if [ "$VERSION" = "latest" ]; then
     URL_BASE="https://github.com/$REPO/releases/latest/download"
 else

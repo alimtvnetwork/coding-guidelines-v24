@@ -298,7 +298,7 @@ Installs: `spec/17-consolidated-guidelines`.
 
 <p align="center">
   Drop the runnable <code>linters-cicd/</code> SARIF tool into any repo from a signed GitHub Release — no clone, no spec files.<br/>
-  Pairs with <a href="QUICKSTART.md">QUICKSTART.md</a> and the <a href="linters-cicd/readme.md"><code>linters-cicd/readme.md</code></a>.
+  Pairs with <a href="QUICKSTART.md">QUICKSTART.md</a> and the <a href="linters-cicd/README.md"><code>linters-cicd/README.md</code></a>.
 </p>
 
 ### 🐧 macOS · Linux · Bash (latest)
@@ -363,38 +363,75 @@ All three variants exit with code `0`, print the same usage text, and make **zer
 
 SHA-256 verified, idempotent, releases-only — see [`linters-cicd/install.sh`](linters-cicd/install.sh) and [`linters-cicd/install.ps1`](linters-cicd/install.ps1).
 
-#### ⚠️ `-NoVerify` Risks & Exit-Code Contract
+#### ⚠️ `-NoVerify` / `-n` Risks & Exit-Code Contract
 
-`-NoVerify` (PowerShell) and `-n` (bash) **disable SHA-256 checksum verification of the downloaded release archive**. The installer will accept any bytes the network returns — corrupted, truncated, or tampered — and write them to disk **without alerting the operator**. Use this flag **only** in offline disaster-recovery scenarios where verification is already performed out-of-band.
+Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The text below is **byte-identical** to what the installer emits — keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
 
-Concretely, the spec §8 exit-code contract changes as follows when `-NoVerify` is set:
+**PowerShell** — exact runtime output of `install.ps1 -NoVerify`:
 
-| Scenario                              | Verification ON (default)     | Verification OFF (`-NoVerify`)                   |
-|---------------------------------------|-------------------------------|--------------------------------------------------|
-| Archive bytes match `checksums.txt`   | exit `0` (success)            | exit `0` (success — but *not* checked)           |
-| Archive bytes do **not** match        | exit `4` (verification failed)| exit `0` ⚠️ — **corrupted archive installs silently** |
-| Download / extract failure            | exit `1`                      | exit `1`                                         |
-| Pinned release / asset not found      | exit `3`                      | exit `3`                                         |
-| Unknown flag                          | exit `2`                      | exit `2`                                         |
+```text
+    ╔══════════════════════════════════════════════════════════════════╗
+    ║  ⚠️  WARNING: -NoVerify — SHA-256 verification is DISABLED       ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  The downloaded archive will NOT be checked against              ║
+    ║  checksums.txt. Corrupted or tampered files will install         ║
+    ║  silently. This is NOT recommended for CI or production use.     ║
+    ║                                                                  ║
+    ║  Exit-code impact (spec §8):                                     ║
+    ║    • verification ON   →  checksum mismatch exits 4              ║
+    ║    • verification OFF  →  no exit 4 is ever raised               ║
+    ║                           (script exits 0 on download success,  ║
+    ║                            even for a tampered archive)         ║
+    ║                                                                  ║
+    ║  Re-run WITHOUT -NoVerify to restore integrity checking.         ║
+    ╚══════════════════════════════════════════════════════════════════╝
+```
 
-Because exit `4` is the *only* signal that integrity was checked and rejected, **operators MUST treat any `-NoVerify` install as unverified provenance** until they re-run with verification enabled.
+**Bash** — exact runtime output of `install.sh -n` (yellow ANSI on a TTY, plain text in CI logs):
 
-**📋 Operator recommendation — copy-paste this to re-run with verification enabled:**
+```text
+    ╔══════════════════════════════════════════════════════════════════╗
+    ║  ⚠️  WARNING: -n (NoVerify) — SHA-256 verification is DISABLED   ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║  The downloaded archive will NOT be checked against              ║
+    ║  checksums.txt. Corrupted or tampered files will install         ║
+    ║  silently. This is NOT recommended for CI or production use.     ║
+    ║                                                                  ║
+    ║  Exit-code impact (spec §8):                                     ║
+    ║    • verification ON   →  checksum mismatch exits 4              ║
+    ║    • verification OFF  →  no exit 4 is ever raised               ║
+    ║                           (script exits 0 on download success,  ║
+    ║                            even for a tampered archive)         ║
+    ║                                                                  ║
+    ║  Re-run WITHOUT -n to restore integrity checking.                ║
+    ╚══════════════════════════════════════════════════════════════════╝
+```
+
+##### Exit-code contract (spec §8)
+
+| Exit | Meaning                                                    | With `-NoVerify` / `-n`                |
+|-----:|------------------------------------------------------------|----------------------------------------|
+| `0`  | Success                                                    | Returned even for a **tampered** archive — no integrity check ran |
+| `1`  | Generic failure (download / extract)                       | Same                                   |
+| `2`  | Unknown flag                                               | Same                                   |
+| `3`  | Pinned release / asset not found (PINNED MODE)             | Same                                   |
+| `4`  | **Verification failed (checksum mismatch)**                | **Never raised** — verification is off |
+
+##### ✅ Recommended: re-run WITH verification
+
+If you ran an installer with `-NoVerify` / `-n`, re-run it **without** the flag to restore SHA-256 checksum verification. Copy-paste the matching command:
 
 ```powershell
-# Windows · PowerShell — re-run the installer WITH checksum verification.
-# Pin the same version you originally installed; omit -Version for "latest".
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1))) -Version v3.79.0
-# Expected exit codes: 0 = OK, 4 = checksum mismatch (DO NOT use the install).
+# PowerShell (Windows) — re-run with verification ON
+irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
 ```
 
 ```bash
-# macOS · Linux · Bash — re-run the installer WITH checksum verification.
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/download/v3.79.0/install.sh | bash -s -- -v v3.79.0
-# Expected exit codes: 0 = OK, 4 = checksum mismatch (DO NOT use the install).
+# Bash (macOS / Linux) — re-run with verification ON
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.sh | bash
 ```
 
-If the verified re-run exits `4`, **delete the install destination and do not run any of the linter binaries** — the previous `-NoVerify` install was tampered with or corrupted in transit. File a security incident before retrying. The same banner is printed at runtime by `install.ps1` when `-NoVerify` is detected; this README section is the durable, copy-pastable companion to that warning.
+Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning banner, even when combined with `-NoVerify`. This is regression-tested by [`tests/installer/check-install-ps1-noverify-help.sh`](tests/installer/check-install-ps1-noverify-help.sh) (T6 in the installer suite).
 
 <h2 align="center">📑 Table of Contents</h2>
 
