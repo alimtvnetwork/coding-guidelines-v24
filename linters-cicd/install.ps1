@@ -15,10 +15,12 @@
 
     EXIT CODES (spec §8):
       0  success
-      1  generic failure (download / extract / checksum mismatch)
+      1  generic failure (download / extract)
       2  unknown flag
       3  pinned release / asset not found (PINNED MODE only)
-      4  verification failed (checksum)
+      4  verification failed (checksum mismatch) — ONLY raised when
+         verification is ON (default). With -NoVerify, exit 4 is NEVER
+         raised, even if the downloaded zip is corrupted or tampered.
 
 .EXAMPLE
     .\install.ps1
@@ -57,10 +59,12 @@ Flags:
 
 EXIT CODES (spec §8):
   0  success
-  1  generic failure (download / extract / checksum mismatch)
+  1  generic failure (download / extract)
   2  unknown flag
   3  pinned release / asset not found (PINNED MODE only)
-  4  verification failed (checksum)
+  4  verification failed (checksum mismatch) — ONLY raised when verification
+     is ON (default). With -NoVerify, exit 4 is NEVER raised, even if the
+     downloaded zip is corrupted or tampered.
 ============================================================
 "@ | Write-Host
     exit 0
