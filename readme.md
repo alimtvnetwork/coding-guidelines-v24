@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v15/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.9.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-612-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-131%2C969-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--24-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v15/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.10.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-612-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-131%2C969-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--24-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -27,7 +27,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->612<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->131,969<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.9.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-24<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES -->612<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->131,969<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.10.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-24<!-- /STAMP:UPDATED -->
 </p>
 
 ---
@@ -174,6 +174,8 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
 ### Verify & Uninstall
 
 **Verify**: `sha256sum -c checksums.txt --ignore-missing` (Unix) · `Get-FileHash … -Algorithm SHA256` (Windows). **Uninstall**: delete the folders listed under each bundle's `folders[].dest` in [`bundles.json`](bundles.json). **Windows SmartScreen**: use `-ExecutionPolicy Bypass` for a single session if `irm | iex` is flagged.
+
+> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)** — flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior, flags, and full troubleshooting matrix see **[docs/slides-installer.md](docs/slides-installer.md)**.
 
 <h2 align="center">📑 Table of Contents</h2>
 
