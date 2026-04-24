@@ -5,7 +5,8 @@
     "spec": "01-cross-language/04-code-style/00-overview.md",
     "languages": {
       "go": "checks/nested-if/go.py",
-      "typescript": "checks/nested-if/typescript.py"
+      "typescript": "checks/nested-if/typescript.py",
+      "php": "checks/nested-if/php.py"
     }
   },
   "CODE-RED-002": {
@@ -14,7 +15,8 @@
     "spec": "01-cross-language/02-boolean-principles/00-overview.md",
     "languages": {
       "go": "checks/boolean-naming/go.py",
-      "typescript": "checks/boolean-naming/typescript.py"
+      "typescript": "checks/boolean-naming/typescript.py",
+      "php": "checks/boolean-naming/php.py"
     }
   },
   "CODE-RED-003": {
@@ -23,7 +25,8 @@
     "spec": "01-cross-language/04-code-style/00-overview.md",
     "languages": {
       "go": "checks/magic-strings/go.py",
-      "typescript": "checks/magic-strings/typescript.py"
+      "typescript": "checks/magic-strings/typescript.py",
+      "php": "checks/magic-strings/php.py"
     }
   },
   "CODE-RED-004": {
@@ -32,7 +35,8 @@
     "spec": "01-cross-language/04-code-style/00-overview.md",
     "languages": {
       "go": "checks/function-length/go.py",
-      "typescript": "checks/function-length/typescript.py"
+      "typescript": "checks/function-length/typescript.py",
+      "php": "checks/function-length/php.py"
     }
   },
   "CODE-RED-006": {
