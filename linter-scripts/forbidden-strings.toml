@@ -45,6 +45,8 @@ allowlist = [
   # that directory is a frozen snapshot of v1.4.0 (already excluded from
   # the scan); the prose reference to its path must be allowlisted too.
   ".lovable/memory/constraints/standalone-script-standards.md",
+  # Tooling README that documents these rules; literal stale forms are required for accurate examples.
+  "linter-scripts/README-forbidden-strings.md",
 ]
 # --- Rule: stale module path (movie-cli v1 references) ---
 [[rule]]
@@ -59,6 +61,8 @@ allowlist = [
   "spec/14-update/23-install-script-version-probe.md",
   # Historical changelog entry that documents this very rule's introduction.
   "CHANGELOG.md",
+  # Tooling README that documents these rules; literal stale forms are required for accurate examples.
+  "linter-scripts/README-forbidden-strings.md",
 ]
 
 # --- Rule: legacy CDN domain references ---
