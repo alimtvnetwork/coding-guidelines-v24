@@ -1237,3 +1237,161 @@
 .h1-dropdown-item:hover {
   background: hsl(var(--accent));
 }
+
+/* ─── Modern UI utilities (CSS3 effects) ─── */
+@layer utilities {
+  /* Hero gradient mesh background */
+  .bg-mesh-hero {
+    background-image:
+      radial-gradient(at 18% 22%, hsl(var(--primary) / 0.18) 0, transparent 50%),
+      radial-gradient(at 82% 18%, hsl(var(--accent) / 0.18) 0, transparent 55%),
+      radial-gradient(at 60% 88%, hsl(var(--brand-accent) / 0.15) 0, transparent 50%);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+  }
+
+  /* Animated brand gradient text */
+  .text-gradient-brand {
+    background-image: linear-gradient(
+      120deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 50%,
+      hsl(var(--brand-accent)) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Frosted-glass card surface */
+  .glass-surface {
+    background: hsl(var(--card) / 0.65);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    border: 1px solid hsl(var(--border) / 0.7);
+  }
+
+  /* Lift-on-hover (cards / buttons) */
+  .lift-hover {
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s ease;
+    will-change: transform;
+  }
+  .lift-hover:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 12px 32px -12px hsl(var(--primary) / 0.28),
+      0 0 0 1px hsl(var(--primary) / 0.18);
+    border-color: hsl(var(--primary) / 0.4);
+  }
+
+  /* Animated gradient ring around interactive cards */
+  .ring-gradient {
+    position: relative;
+    isolation: isolate;
+  }
+  .ring-gradient::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary) / 0.5),
+      hsl(var(--accent) / 0.5),
+      hsl(var(--brand-accent) / 0.5)
+    );
+    background-size: 200% 200%;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: gradient-pan 8s ease infinite;
+    z-index: -1;
+  }
+  .ring-gradient:hover::before {
+    opacity: 1;
+  }
+
+  /* Shine sweep across an element on hover */
+  .shine-on-hover {
+    position: relative;
+    overflow: hidden;
+  }
+  .shine-on-hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      hsl(0 0% 100% / 0.18) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .shine-on-hover:hover::after {
+    transform: translateX(100%);
+  }
+
+  /* Staggered entry — apply to a parent, children fade-in-up in sequence */
+  .stagger-children > * {
+    opacity: 0;
+    animation: fade-in-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.15s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.25s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.35s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.45s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.55s; }
+
+  /* Animated SVG line draw */
+  .draw-stroke {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: draw-line 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+  }
+
+  /* Soft pulsing dot (status indicator) */
+  .status-dot {
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: hsl(var(--success));
+  }
+  .status-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    background: hsl(var(--success) / 0.4);
+    animation: pulse-glow 2.4s ease-in-out infinite;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .stagger-children > *,
+    .draw-stroke,
+    .status-dot::after,
+    .bg-mesh-hero,
+    .ring-gradient::before,
+    .shine-on-hover::after,
+    .lift-hover {
+      animation: none !important;
+      transition: none !important;
+    }
+    .stagger-children > * { opacity: 1; }
+  }
+}
