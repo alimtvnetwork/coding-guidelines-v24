@@ -76,6 +76,8 @@ def extract_links(text: str) -> list[LinkRef]:
             if _is_external(target):
                 continue
             path_part, anchor = _split_anchor(target)
+            if _looks_like_inline_identifier(path_part, anchor):
+                continue
             out.append(
                 LinkRef(line=lineno, text=m.group(1), target_path=path_part, anchor=anchor)
             )
