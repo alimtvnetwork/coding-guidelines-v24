@@ -8,6 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _lib.cli import build_parser, parse_exclude_paths
+from _lib.per_file_timeout import PerFileTimeout, per_file_timeout
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
 
@@ -26,8 +27,18 @@ EXTENSIONS = [
 
 
 def scan(path: Path, root: str) -> Finding | None:
-    text = path.read_text(encoding="utf-8", errors="replace")
-    n = text.count("\n") + (0 if text.endswith("\n") else 1)
+    try:
+        with per_file_timeout(seconds=2):
+            text = path.read_text(encoding="utf-8", errors="replace")
+            n = text.count("\n") + (0 if text.endswith("\n") else 1)
+    except PerFileTimeout:
+        return Finding(
+            rule_id=RULE.id,
+            level="warning",
+            message="Skipped — read exceeded per-file 2s timeout.",
+            file_path=relpath(path, root),
+            start_line=1,
+        )
     if n <= MAX_LINES:
         return None
     return Finding(
