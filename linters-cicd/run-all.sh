@@ -167,7 +167,7 @@ run_check() {
     echo "$rc" > "$status_path"
 }
 export -f run_check
-export PATH_ARG SCRIPT_DIR CHECK_TIMEOUT TIMEOUT_BIN VERSION
+export PATH_ARG SCRIPT_DIR CHECK_TIMEOUT TIMEOUT_BIN VERSION EXCLUDE_PATHS
 
 # ---- Build the work list ----
 WORK_LIST="$TMP_DIR/_worklist.txt"
