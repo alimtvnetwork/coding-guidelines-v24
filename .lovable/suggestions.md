@@ -1,6 +1,6 @@
 # Suggestions
 
-**Version:** 3.10.0
+**Version:** 3.11.0
 **Updated:** 2026-04-24
 
 ---
@@ -90,6 +90,9 @@
 
 ## Implemented Suggestions
 
+### SPEC-LINK-001 wired into run-all.sh + regression-locked (linters-cicd v3.19.0) — 2026-04-24
+- Confirmed orchestrator already dispatches SPEC-LINK-001 via registry-driven loop. Added 2 integration tests (test_runall_spec_link_wiring.py) so the wiring cannot silently regress. 91/91 tests pass.
+
 ### SPEC-LINK-001 zero baseline + promoted to error level (linters-cicd v3.18.0) — 2026-04-24
 - 17 → 0 findings. Fixed 17 anchor mismatches across 9 files (all em-dash/ampersand collapse cases). Linter promoted from warning → error; new broken cross-links now fail CI.
 
@@ -168,4 +171,4 @@
 
 ---
 
-*Suggestions — v3.10.0 — 2026-04-24*
+*Suggestions — v3.11.0 — 2026-04-24*
