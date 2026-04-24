@@ -155,6 +155,21 @@ else
 fi
 
 # =====================================================================
+printf '\nT3: install-config.json declares 4 canonical folders (Task 10)\n'
+if bash "$HERE/check-install-folders-config.sh" >/dev/null 2>&1; then
+    pass "install-config.json declares spec/linters/linter-scripts/linters-cicd"
+else
+    fail "install-config.json missing one of the 4 canonical folders"
+fi
+
+printf '\nT4: ./run.sh slides sub-command wired (Task 09)\n'
+if bash "$HERE/check-run-slides-help.sh" >/dev/null 2>&1; then
+    pass "run.sh advertises and dispatches the slides sub-command"
+else
+    fail "run.sh slides sub-command not wired"
+fi
+
+# =====================================================================
 printf '\n────────────────────────────────────────────\n'
 printf '  PASS: %d   FAIL: %d\n' "$PASS" "$FAIL"
 printf '────────────────────────────────────────────\n'
