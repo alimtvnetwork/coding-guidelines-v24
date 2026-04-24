@@ -25,8 +25,8 @@ class TestExcludeGlobs(unittest.TestCase):
         self.root = Path(self._tmp.name)
         _touch(self.root, "src/app.go")
         _touch(self.root, "src/util.go")
-        _touch(self.root, "vendor/lib1/big.go")
-        _touch(self.root, "vendor/lib2/small.go")
+        _touch(self.root, "thirdparty/lib1/big.go")
+        _touch(self.root, "thirdparty/lib2/small.go")
         _touch(self.root, "internal/gen/types.gen.go")
         _touch(self.root, "internal/handler.go")
 
@@ -41,10 +41,10 @@ class TestExcludeGlobs(unittest.TestCase):
         self.assertEqual(len(files), 6)
 
     def test_excludes_directory_subtree(self) -> None:
-        files = walk_files(str(self.root), [".go"], exclude_globs=["vendor/**"])
+        files = walk_files(str(self.root), [".go"], exclude_globs=["thirdparty/**"])
         names = self._names(files)
-        self.assertNotIn("vendor/lib1/big.go", names)
-        self.assertNotIn("vendor/lib2/small.go", names)
+        self.assertNotIn("thirdparty/lib1/big.go", names)
+        self.assertNotIn("thirdparty/lib2/small.go", names)
         self.assertIn("src/app.go", names)
 
     def test_excludes_by_filename_glob(self) -> None:
@@ -57,7 +57,7 @@ class TestExcludeGlobs(unittest.TestCase):
         files = walk_files(
             str(self.root),
             [".go"],
-            exclude_globs=["vendor/**", "**/*.gen.go"],
+            exclude_globs=["thirdparty/**", "**/*.gen.go"],
         )
         names = self._names(files)
         self.assertEqual(
@@ -71,7 +71,7 @@ class TestExcludeGlobs(unittest.TestCase):
 
     def test_extension_filter_still_applies(self) -> None:
         _touch(self.root, "src/readme.md")
-        files = walk_files(str(self.root), [".go"], exclude_globs=["vendor/**"])
+        files = walk_files(str(self.root), [".go"], exclude_globs=["thirdparty/**"])
         names = self._names(files)
         self.assertNotIn("src/readme.md", names)
 
@@ -79,10 +79,10 @@ class TestExcludeGlobs(unittest.TestCase):
         files = walk_files_middle_out(
             str(self.root),
             [".go"],
-            exclude_globs=["vendor/**"],
+            exclude_globs=["thirdparty/**"],
         )
         names = self._names(files)
-        self.assertNotIn("vendor/lib1/big.go", names)
+        self.assertNotIn("thirdparty/lib1/big.go", names)
         self.assertEqual(len(files), 4)
 
 
