@@ -220,6 +220,8 @@ Every database schema MUST be documented with:
 
 ## 6. Mandatory Descriptive Free-Text Columns
 
+> **Aligned with:** Naming Conventions **v3.5.0** — Rules 10, 11, and 12.
+
 This section is the **schema-design counterpart** of [Naming Conventions Rules 10, 11, and 12](./01-naming-conventions.md#descriptive-free-text-column-naming). Naming conventions define **what the columns are called**; this section defines **which tables must include them and how they are placed in the schema**. The two documents MUST stay aligned — if Rule 10/11/12 changes, this section changes.
 
 Every table (except pure join/pivot tables) MUST reserve at least one nullable free-text column to absorb future context that the schema did not anticipate. The exact column depends on the **table category**:
