@@ -26,6 +26,17 @@
 #   0  no findings (or refresh-baseline mode)
 #   1  one or more checks emitted findings
 #   2  tool error (including check timeouts)
+#
+# Examples:
+#   # Fast run with watchdog tracing — expect "watchdog: canceled"
+#   ./run-all.sh --path . --total-timeout 60 --debug-timeout
+#
+#   # Forced timeout — expect "watchdog: fired" plus a timeout error
+#   ./run-all.sh --path . --total-timeout 1 --debug-timeout
+#
+#   # Combine with strict config + per-severity SARIF split
+#   ./run-all.sh --path . --strict --total-timeout 60 \
+#                --split-by severity --debug-timeout
 # ============================================================
 
 set -uo pipefail
@@ -67,7 +78,7 @@ while [ $# -gt 0 ]; do
         --output)            OUTPUT="$2"; shift 2 ;;
         --format)            FORMAT="$2"; shift 2 ;;
         -h|--help)
-            sed -n '2,30p' "$0"; exit 0 ;;
+            sed -n '2,42p' "$0"; exit 0 ;;
         *)
             echo "Unknown arg: $1" >&2; exit 2 ;;
     esac
