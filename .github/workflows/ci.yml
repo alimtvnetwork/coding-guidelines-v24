@@ -135,6 +135,13 @@ jobs:
         # comments, empty input).
         run: python3 linters-cicd/tests/run.py
 
+      - name: Verify codegen determinism (Rule 9 inverted-fields)
+        # Re-runs the inverted-field codegen on committed fixtures and
+        # diffs against expected/. Backs up the round-trip + bijection
+        # guarantees proven in test_codegen_inversion_table.py (#04).
+        # On drift: regen + commit (see script header).
+        run: bash linters-cicd/codegen/scripts/verify-codegen-determinism.sh
+
   cross-links:
     name: Spec Cross-Reference Validation
     runs-on: ubuntu-latest
