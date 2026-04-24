@@ -45,6 +45,7 @@ CHECK_TIMEOUT="20"
 TOTAL_TIMEOUT="0"
 SPLIT_BY=""
 STRICT_FLAG=""
+DEBUG_TIMEOUT="0"
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -61,6 +62,7 @@ while [ $# -gt 0 ]; do
         --total-timeout)     TOTAL_TIMEOUT="$2"; shift 2 ;;
         --split-by)          SPLIT_BY="$2"; shift 2 ;;
         --strict)            STRICT_FLAG="--strict"; shift 1 ;;
+        --debug-timeout)     DEBUG_TIMEOUT="1"; shift 1 ;;
         --output)            OUTPUT="$2"; shift 2 ;;
         --format)            FORMAT="$2"; shift 2 ;;
         -h|--help)
@@ -132,14 +134,28 @@ TMP_DIR="$(mktemp -d)"
 STATUS_DIR="$TMP_DIR/_status"
 mkdir -p "$STATUS_DIR"
 WATCHDOG_PID=""
+# Watchdog lifecycle status: not-started | armed | canceled | fired
+WATCHDOG_STATUS_FILE="$TMP_DIR/_watchdog.status"
+echo "not-started" > "$WATCHDOG_STATUS_FILE"
 
 cleanup() {
     # Stop the watchdog first so it can't print a stale "exceeded" line
     # after a fast/early completion. Suppress all signal noise.
     if [ -n "$WATCHDOG_PID" ]; then
+        # If watchdog hasn't already recorded "fired", mark as canceled.
+        if [ -f "$WATCHDOG_STATUS_FILE" ]; then
+            current=$(cat "$WATCHDOG_STATUS_FILE" 2>/dev/null || echo "")
+            if [ "$current" != "fired" ]; then
+                echo "canceled" > "$WATCHDOG_STATUS_FILE"
+            fi
+        fi
         kill -TERM "$WATCHDOG_PID" 2>/dev/null || true
         # Reap silently so bash doesn't print "Terminated".
         wait "$WATCHDOG_PID" 2>/dev/null || true
+    fi
+    if [ "$DEBUG_TIMEOUT" = "1" ]; then
+        final_status=$(cat "$WATCHDOG_STATUS_FILE" 2>/dev/null || echo "unknown")
+        echo "    🐛 watchdog: ${final_status} (total-timeout=${TOTAL_TIMEOUT}s)" >&2
     fi
     rm -rf "$TMP_DIR"
 }
@@ -153,6 +169,8 @@ if [ "$TOTAL_TIMEOUT" -gt 0 ]; then
     # "exceeded" message never prints for a fast run. The subshell uses
     # short sleep slices so SIGTERM from cleanup() takes effect promptly,
     # and exits silently (rc=0) when interrupted.
+    echo "armed" > "$WATCHDOG_STATUS_FILE"
+    WATCHDOG_STATUS_FILE_EXPORT="$WATCHDOG_STATUS_FILE"
     (
         trap 'exit 0' TERM INT
         remaining="$TOTAL_TIMEOUT"
@@ -160,6 +178,7 @@ if [ "$TOTAL_TIMEOUT" -gt 0 ]; then
             sleep 1
             remaining=$(( remaining - 1 ))
         done
+        echo "fired" > "$WATCHDOG_STATUS_FILE_EXPORT"
         echo "::error::--total-timeout (${TOTAL_TIMEOUT}s) exceeded — terminating run" >&2
         kill -TERM -$$ 2>/dev/null || true
     ) &
