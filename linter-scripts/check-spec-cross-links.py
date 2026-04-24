@@ -25,13 +25,26 @@ MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+?)(?:\s+\"[^\"]*\")?\)")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "ftp://", "#")
 SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://")
+# Same schemes may appear after a relative-path prefix like ``../mem://...``
+# when authors quote a memory URI in prose. Detect those as well.
+SKIP_SCHEME_SUBSTRINGS = tuple(SKIP_SCHEMES)
 
 
 def slugify(text: str) -> str:
-    """GitHub-flavored markdown heading slug (subset)."""
+    """GitHub-flavored markdown heading slug.
+
+    Mirrors GitHub's behavior: punctuation (including em/en dashes) is
+    *removed in place* (not replaced with a space), and only whitespace
+    runs collapse into ``-``. A heading like ``2.8 — No Inline``
+    therefore becomes ``28--no-inline`` because the spaces *around* the
+    em-dash survive as two adjacent separators.
+    """
     text = text.strip().lower()
+    # Strip punctuation but keep whitespace and hyphens. Punctuation
+    # between two spaces leaves the spaces intact, which is what
+    # produces the doubled ``--`` in GitHub's slugs.
     text = re.sub(r"[^\w\s-]", "", text, flags=re.UNICODE)
-    text = re.sub(r"\s+", "-", text)
+    text = re.sub(r"[ \t]+", "-", text)
     return text.strip("-")
 
 
@@ -85,7 +98,11 @@ def collect_headings(path: Path) -> set[str]:
 
 
 def is_external(target: str) -> bool:
-    return target.startswith(EXTERNAL_PREFIXES) or target.startswith(SKIP_SCHEMES)
+    if target.startswith(EXTERNAL_PREFIXES) or target.startswith(SKIP_SCHEMES):
+        return True
+    # Relative-prefixed memory/upload URIs e.g. ``../mem://foo`` — these
+    # are prose references, not real file paths.
+    return any(scheme in target for scheme in SKIP_SCHEME_SUBSTRINGS)
 
 
 def resolve_target(source: Path, target: str, repo_root: Path) -> Path:
