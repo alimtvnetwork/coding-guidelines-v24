@@ -5,6 +5,101 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [4.24.0] - 2026-04-24
+
+### Changed — Naming migration `coding-guidelines-v15` / `coding-guidelines-v16` → `coding-guidelines-v17`
+
+Repo-wide rename of the canonical project slug. The pattern
+`coding-guidelines-v1[56]` was replaced with `coding-guidelines-v17` in
+every tracked text file. **522 string replacements** were applied across
+**172 files**; verified zero leftover `v15`/`v16` references remain.
+Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-v17.md)
+(companions: `.csv`, `.json`).
+
+#### What was migrated (by area)
+
+| Area | Files | Replacements | Notes |
+|---|---:|---:|---|
+| `release-artifacts/` (v1.4.0 / v4.6.0 / v4.7.0 / v4.8.0 snapshots) | 84 | 247 | Historical release bundles updated for consistency |
+| Repo root | 27 | 123 | Including `readme.md`, `QUICKSTART.md`, `bundles.json`, `install-config.json`, `install.{sh,ps1}`, `release-install.{sh,ps1}`, `release.{sh,ps1}`, `run.{sh,ps1}`, all 7 `<bundle>-install.{sh,ps1}` pairs |
+| `linters-cicd/` | 13 | 52 | `README.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
+| `src/` | 2 | 47 | `src/components/landing/InstallSection.tsx`, `src/data/specTree.json` |
+| `spec/` | 19 | 44 | Spec docs referencing the slug (sarif-contract, ci-templates, distribution, install-contract, install-config, version-pinned-release-installers, install-script-version-probe, repo-major-version-migrator, generic-installer-behavior, distribution-and-runner, lovable-folder-structure, readme-improvement-suggestions, root-readme-conventions, etc.) |
+| `.lovable/` | 8 | 16 | `memory/index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `plan.md`, `strictly-avoid.md`, `suggestions.md` |
+| `docs/` | 2 | 14 | `docs/github-repo-metadata.md`, `docs/slides-installer.md` |
+| `examples/other-repo-integration/` | 7 | 10 | `azure-devops/`, `gitlab/`, `jenkins/` integration recipes and READMEs |
+| `slides-app/` & `spec-slides/` | 4 | 9 | `slides-app/package.json`, `slides-app/scripts/package-zip.mjs`, `slides-app/src/slides/12-closing.tsx`, `spec-slides/05-curriculum.md`, `spec-slides/06-build-and-zip-pipeline.md` |
+| `.github/workflows/` | 1 | 6 | `release.yml` |
+| `linter-scripts/` | 3 | — | `check-memory-mirror-drift.py`, `check-readme-canonicals.py`, `forbidden-strings.toml` |
+| `scripts/` | 1 | — | `sync-readme-stats.mjs` |
+
+#### Scripts & installers affected
+
+- **Root installers**: `install.sh`, `install.ps1`, `release-install.{sh,ps1}`, `release.{sh,ps1}`, `run.{sh,ps1}`.
+- **Bundle installers** (all 7 × 2 = 14 scripts): `error-manage-`, `splitdb-`, `slides-`, `linters-`, `cli-`, `wp-`, `consolidated-` × `{install.sh, install.ps1}`.
+- **CLI Linter Pack installers**: `linters-cicd/install.sh`, `linters-cicd/install.ps1`.
+- **CI templates** (`linters-cicd/ci/`): `Jenkinsfile`, `azure-pipelines.yml`, `bitbucket-pipelines.yml`, `github-actions.yml`, `gitlab-ci.yml`, `pre-commit-hook.sh`.
+- **Workflow**: `.github/workflows/release.yml`.
+- **Cross-repo CI examples**: `examples/other-repo-integration/{azure-devops,gitlab,jenkins}/`.
+
+#### Memory & overlay files affected
+
+- `.lovable/memory/index.md`
+- `.lovable/memory/sessions/2026-04-24-batch-cleanup-and-rebrand.md`
+- `.lovable/memory/constraints/install-command-formatting.md`
+- `.lovable/memory/suggestions/01-suggestions-tracker.md`
+- `.lovable/memory/workflow/01-plan-tracker.md`
+- `.lovable/plan.md`, `.lovable/strictly-avoid.md`, `.lovable/suggestions.md`
+
+#### Skipped (intentional)
+
+- `linters-cicd/checks/_lib/__pycache__/sarif.cpython-313.pyc` — Python
+  bytecode cache; regenerates automatically on next interpreter run.
+- Lockfiles, `node_modules/`, `.git/`, `dist/`, `build/`, and binary
+  assets — not text content.
+
+#### Verification
+
+- `grep -rE "coding-guidelines-v1[56]"` (with the standard exclusions)
+  returns **0** matches across the entire repo.
+- `grep -rE "coding-guidelines-v17"` returns **522+** matches across
+  the 172 changed files (the live count is now higher because
+  subsequent edits added new `v17` URLs in the README install section,
+  the new `linters-cicd/install.ps1`, and the per-bundle install
+  blocks — see the audit report for the breakdown).
+
+### Added
+
+- **`linters-cicd/install.ps1`** — new PowerShell installer mirroring
+  `linters-cicd/install.sh`. Supports `-Help` / `-h` / `--help` (all
+  three handled before any network probe), `-Dest <dir>`, `-Version <ver>`,
+  `-NoVerify`. Help output is now **byte-aligned** with the bash
+  installer's `--help` output (same banner rule, same Flags section,
+  same EXIT CODES block).
+- **`-NoVerify` warning banner** — prominent yellow multi-line banner in
+  `linters-cicd/install.ps1` documenting the spec §8 exit-code impact
+  (verification ON → exit 4 on mismatch; OFF → no exit 4 ever raised).
+- **`tests/installer/check-install-ps1-help.sh`** — new test
+  (T5 in the installer suite) asserting all three help variants exit 0,
+  print usage, and make **zero** network calls. Wired into
+  `tests/installer/run-tests.sh`.
+- **README "📋 Per-Bundle Install Reference"** — collapsible section
+  with copy-paste install commands (Bash latest/pinned + PowerShell
+  latest/pinned) and exact script paths for all 7 bundles.
+- **README "💡 Get help without installing anything"** — documents the
+  `install.ps1` help behavior alongside flag tables for both bash and
+  PowerShell installers.
+
+### Fixed
+
+- **`linters-cicd/run-all.sh --total-timeout`** no longer prints a stale
+  "exceeded" error after an early/fast completion. New `--debug-timeout`
+  flag exposes whether the watchdog was canceled vs. fired.
+- **`install.sh` & `linters-cicd/install.sh`** — `-h` / `--help` now
+  bypass the version probe and never make network calls.
+
+---
+
 ---
 
 ## [3.23.0] - 2026-04-21
