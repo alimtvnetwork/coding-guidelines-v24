@@ -169,12 +169,25 @@ def _cached_slugs(path: Path, text: str, cache: dict[Path, set[str]]) -> set[str
     return cache[key]
 
 
-def _safe_resolve(base: Path, target: str, root: Path) -> Path | None:
-    candidate = (base / target).resolve()
-    root_resolved = root.resolve()
-    if root_resolved not in candidate.parents and candidate != root_resolved:
-        return None
-    return candidate
+def _looks_like_inline_identifier(path_part: str, anchor: str | None) -> bool:
+    """Return True for `[name](type)` prose patterns (not real links).
+
+    Heuristic: target has no path separator, no extension, no anchor, and
+    matches an identifier-ish shape. These appear in spec prose like
+    `assign [val](apperror.AppError)` and would otherwise produce a flood
+    of false positives. Real file links almost always contain `/`, `.`, or
+    a fragment.
+    """
+    if anchor is not None:
+        return False
+    if "/" in path_part or "\\" in path_part:
+        return False
+    if "." in path_part and not path_part.endswith("."):
+        # Allow `foo.md`, `foo.png`, etc. as real file references.
+        suffix = path_part.rsplit(".", 1)[-1].lower()
+        if suffix.isalpha() and 1 <= len(suffix) <= 5:
+            return False
+    return bool(_IDENT_LIKE_RE.match(path_part))
 
 
 def _split_anchor(target: str) -> tuple[str, str | None]:
