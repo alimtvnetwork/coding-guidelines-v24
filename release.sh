@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO="alimtvnetwork/coding-guidelines-v15"
 RELEASE_VERSION_INPUT="${RELEASE_VERSION:-}"
-REQUIRED_PATHS=("spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "README.md")
+REQUIRED_PATHS=("spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1")
 
 step() { printf '\033[0;36m▸ %s\033[0m\n' "$1"; }
 ok() { printf '\033[0;32m✅ %s\033[0m\n' "$1"; }
@@ -61,7 +61,7 @@ copy_release_files() {
   cp install.sh "$STAGING_DIR/install.sh"
   cp install.ps1 "$STAGING_DIR/install.ps1"
   cp install-config.json "$STAGING_DIR/install-config.json"
-  cp README.md "$STAGING_DIR/README.md"
+  cp readme.md "$STAGING_DIR/readme.md"
 }
 
 create_archives() {

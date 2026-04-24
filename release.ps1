@@ -14,7 +14,7 @@ $version = $packageJson.version
 $distDir = Join-Path $PSScriptRoot "release-artifacts"
 $releaseName = "coding-guidelines-v$version"
 $stagingDir = Join-Path $distDir $releaseName
-$requiredPaths = @("spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "README.md")
+$requiredPaths = @("spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1")
 
 function Test-RequiredPaths {
     $isMissing = $false
@@ -48,7 +48,7 @@ function Copy-ReleaseFiles {
     Copy-Item -Path (Join-Path $PSScriptRoot "install.sh") -Destination (Join-Path $stagingDir "install.sh") -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "install.ps1") -Destination (Join-Path $stagingDir "install.ps1") -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "install-config.json") -Destination (Join-Path $stagingDir "install-config.json") -Force
-    Copy-Item -Path (Join-Path $PSScriptRoot "README.md") -Destination (Join-Path $stagingDir "README.md") -Force
+    Copy-Item -Path (Join-Path $PSScriptRoot "readme.md") -Destination (Join-Path $stagingDir "readme.md") -Force
 }
 
 function New-ReleaseArchives {
