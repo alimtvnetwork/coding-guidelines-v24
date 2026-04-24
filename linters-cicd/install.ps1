@@ -1,18 +1,17 @@
 <#
 .SYNOPSIS
-    linters-cicd installer (PowerShell, one-liner)
+    linters-cicd installer (one-liner)
 
 .DESCRIPTION
     Conforms to: spec/14-update/27-generic-installer-behavior.md
 
-    Example one-liner:
-      iwr -useb https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+      irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
 
     Flags:
-      -Dest <dir>         Install destination (default: ./linters-cicd)
-      -Version <vX.Y.Z>   Install a specific version (PINNED MODE, §4) (default: latest)
-      -NoVerify           Skip checksum verification (NOT recommended)
-      -Help (-h, --help)  Show this help and exit (no network probe)
+      -Dest <dir>      install destination (default: ./linters-cicd)
+      -Version <ver>   install a specific version (PINNED MODE, §4) (default: latest)
+      -NoVerify        skip checksum verification (NOT recommended)
+      -Help, -h, --help  show this help and exit
 
     EXIT CODES (spec §8):
       0  success
@@ -22,9 +21,11 @@
       4  verification failed (checksum)
 
 .EXAMPLE
-    .\install.ps1 -Help
+    .\install.ps1
     .\install.ps1 -Dest .\linters-cicd
     .\install.ps1 -Version v1.22.0
+    .\install.ps1 -NoVerify
+    .\install.ps1 -Help
 #>
 
 param(
@@ -35,24 +36,32 @@ param(
     [switch]$Help
 )
 
+# Show-Usage prints text aligned to bash `install.sh --help` so output is
+# identical line-for-line (modulo the PowerShell-cased flag names). The
+# bash installer is the canonical reference; if you change one, change the
+# other in the same patch.
 function Show-Usage {
     @"
-linters-cicd installer (PowerShell)
+============================================================
+linters-cicd installer (one-liner)
 
-Usage:
-  install.ps1 [-Dest <dir>] [-Version <vX.Y.Z>] [-NoVerify] [-Help]
+Conforms to: spec/14-update/27-generic-installer-behavior.md
+
+  irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
 
 Flags:
-  -Dest <dir>         Install destination (default: ./linters-cicd)
-  -Version <vX.Y.Z>   Install a specific version (default: latest)
-  -NoVerify           Skip checksum verification (NOT recommended)
-  -Help, -h, --help   Show this help and exit
+  -Dest <dir>      install destination (default: ./linters-cicd)
+  -Version <ver>   install a specific version (PINNED MODE, §4) (default: latest)
+  -NoVerify        skip checksum verification (NOT recommended)
+  -Help, -h, --help  show this help and exit
 
-Examples:
-  .\install.ps1 -Help
-  .\install.ps1
-  .\install.ps1 -Version v1.22.0
-  .\install.ps1 -Dest .\linters-cicd -NoVerify
+EXIT CODES (spec §8):
+  0  success
+  1  generic failure (download / extract / checksum mismatch)
+  2  unknown flag
+  3  pinned release / asset not found (PINNED MODE only)
+  4  verification failed (checksum)
+============================================================
 "@ | Write-Host
     exit 0
 }
