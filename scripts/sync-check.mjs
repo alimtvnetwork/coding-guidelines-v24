@@ -270,6 +270,22 @@ function main() {
     process.exit(0);
   }
 
+  // --fix mode: the regenerated files are already on disk (we skipped
+  // the restore step), so the drift IS the fix. Report what changed
+  // and exit 0 so callers can chain `git add` / commit.
+  if (FIX) {
+    process.stdout.write(
+      `\nFixed ${result.drifted.length} of ${TRACKED.length} sync-managed file(s):\n\n`,
+    );
+    for (const item of result.drifted) {
+      process.stdout.write(`  • ${item.file.path}  (regenerated)\n`);
+    }
+    process.stdout.write(
+      "\nNext: review with `git diff`, then `git add` + commit.\n",
+    );
+    process.exit(0);
+  }
+
   process.stdout.write(
     `\nDrift detected in ${result.drifted.length} of ${TRACKED.length} sync-managed file(s):\n\n`,
   );
