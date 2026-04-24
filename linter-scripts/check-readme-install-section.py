@@ -38,7 +38,9 @@ EXIT_ERROR = 2
 
 INSTALL_HEADING_PATTERN = re.compile(r"install\s+in\s+one\s+line", re.IGNORECASE)
 BUNDLE_HEADING_PATTERN = re.compile(r"bundle\s+installers?", re.IGNORECASE)
-HEADING_PATTERN = re.compile(r"^\s*(?:##\s+|<h2\b)(.+?)(?:</h2>)?\s*$")
+HEADING_PATTERN = re.compile(
+    r"^\s*(?:##\s+(?P<md>.+?)|<h2\b[^>]*>(?P<html>.+?)</h2>)\s*$"
+)
 PLATFORM_BADGES_END = "<!-- /STAMP:PLATFORM_BADGES -->"
 INSTALL_FENCE_LANGS = {"powershell", "pwsh", "bash", "sh", "shell", "console"}
 
