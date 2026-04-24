@@ -125,6 +125,16 @@ jobs:
         # Spec: spec/14-update/27-generic-installer-behavior.md
         run: bash tests/installer/check-root-install-acceptance.sh
 
+      - name: BOOL-NEG-001 unit tests (linters-cicd)
+        # Stdlib unittest suite that locks in the BOOL-NEG-001 v1
+        # contract verified end-to-end through run-all.sh in v4.11.0
+        # (closes pending-issue #01). Covers forbidden Is/Has + Not/No
+        # combinations, the 10-name allow-list, positive forms, v1
+        # out-of-scope boundary (Cannot/Disabled/Un-/In-/Dis- — task
+        # #07 territory), and structural edge cases (multiple tables,
+        # comments, empty input).
+        run: python3 linters-cicd/tests/run.py
+
   cross-links:
     name: Spec Cross-Reference Validation
     runs-on: ubuntu-latest
