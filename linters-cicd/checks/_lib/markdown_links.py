@@ -140,9 +140,7 @@ def _resolve(
 ) -> str | None:
     if link.target_path == "":
         return _check_anchor_self(link, self_slugs)
-    target = _safe_resolve(source.parent, link.target_path, root)
-    if target is None:
-        return f"Broken link: target escapes repo root: '{link.target_path}'"
+    target = (source.parent / link.target_path).resolve()
     if not target.exists():
         return f"Broken link: target file not found: '{link.target_path}'"
     if link.anchor is None:
