@@ -67,6 +67,50 @@ in [`01-sarif-contract.md`](../spec/02-coding-guidelines/06-cicd-integration/01-
 
 ---
 
+## Installer exit codes
+
+Both `install.sh` (`-n` flag) and `install.ps1` (`-NoVerify` switch) follow
+the same exit-code contract from
+[spec §8 — Exit Codes (Normative)](../spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative).
+
+| Code | Meaning | Raised when verification is **ON** (default) | Raised when verification is **OFF** (`-n` / `-NoVerify`) |
+|------|---------|----------------------------------------------|-----------------------------------------------------------|
+| `0`  | Success | ✅ install completed and checksum matched     | ✅ install completed (checksum **not** validated)          |
+| `1`  | Generic failure (download / extract) | ✅ | ✅ |
+| `2`  | Unknown / invalid flag | ✅ | ✅ |
+| `3`  | Pinned release or asset not found (PINNED MODE only) | ✅ | ✅ |
+| `4`  | **Checksum mismatch** — downloaded zip does not match `checksums.txt` | ✅ exits `4` and aborts | ❌ **never raised** — corrupted or tampered files install silently |
+
+### Verification ON (default, recommended)
+
+```bash
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.sh | bash
+# checksum mismatch → exit 4
+```
+
+```powershell
+irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+# checksum mismatch → exit 4
+```
+
+### Verification OFF (`-n` / `-NoVerify`, NOT recommended)
+
+```bash
+curl -fsSL .../install.sh | bash -s -- -n
+# checksum mismatch → NO exit 4 — install proceeds even on tampered zip
+```
+
+```powershell
+& ([scriptblock]::Create((irm .../install.ps1))) -NoVerify
+# checksum mismatch → NO exit 4 — install proceeds even on tampered zip
+```
+
+The PowerShell installer additionally prints a loud multi-line warning
+banner on every `-NoVerify` run — see
+[spec §9 — Security Considerations](../spec/14-update/27-generic-installer-behavior.md#9-security-considerations).
+
+---
+
 ## CI templates
 
 Copy-paste workflows for every major platform live under
