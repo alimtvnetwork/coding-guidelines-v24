@@ -175,6 +175,123 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16
 
 **Verify**: `sha256sum -c checksums.txt --ignore-missing` (Unix) · `Get-FileHash … -Algorithm SHA256` (Windows). **Uninstall**: delete the folders listed under each bundle's `folders[].dest` in [`bundles.json`](bundles.json). **Windows SmartScreen**: use `-ExecutionPolicy Bypass` for a single session if `irm | iex` is flagged.
 
+### 📋 Per-Bundle Install Reference
+
+Copy-paste commands for every supported bundle. Each block lists the **exact script path** in this repo and the **flags** the script accepts. All bundle installers conform to [spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md) — no flags are *required* (defaults install to the current directory in IMPLICIT mode), but `--version <tag>` is the recommended flag for CI use to pin the install.
+
+**Common flags** (all bundle installers): `--version <tag>` (pin to a release), `--target <dir>` / `--dest <dir>` (install destination, default cwd), `--use-local-archive <path>` (offline install), `--offline` (refuse network), `--no-main-fallback` (refuse main-branch fallback in PINNED mode), `--no-discovery` (forbid V→V+N discovery), `--no-open` (skip auto-open of entry file, slides only), `-h` / `--help` (show full reference and exit). Run any installer with `--help` for the full scope-tagged matrix.
+
+<details>
+<summary><strong>error-manage</strong> — Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
+
+```bash
+# Bash · latest
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/error-manage-install.sh | bash
+# Bash · pinned
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/error-manage-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+```
+```powershell
+# PowerShell · latest
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/error-manage-install.ps1 | iex
+# PowerShell · pinned
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/error-manage-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+```
+Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
+
+</details>
+
+<details>
+<summary><strong>splitdb</strong> — Split-DB Architecture Spec · script: <a href="splitdb-install.sh"><code>splitdb-install.sh</code></a> / <a href="splitdb-install.ps1"><code>splitdb-install.ps1</code></a></summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/splitdb-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/splitdb-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+```
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/splitdb-install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/splitdb-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+```
+Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec/06-seedable-config-architecture`.
+
+</details>
+
+<details>
+<summary><strong>slides</strong> — Slides App + Decks · script: <a href="slides-install.sh"><code>slides-install.sh</code></a> / <a href="slides-install.ps1"><code>slides-install.ps1</code></a></summary>
+
+```bash
+# Bash · latest (auto-opens slides-app/dist/index.html)
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/slides-install.sh | bash
+# Bash · pinned, no auto-open (CI)
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/slides-install.sh | bash -s -- --version v3.85.0 --target ./vendor/slides --no-open
+```
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/slides-install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/slides-install.ps1))) -Version v3.85.0 -Dest .\vendor\slides -NoOpen
+```
+Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
+
+</details>
+
+<details>
+<summary><strong>linters</strong> — Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/linters-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/linters-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+```
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/linters-install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/linters-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+```
+Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below — it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
+
+</details>
+
+<details>
+<summary><strong>cli</strong> — CLI Toolchain Spec · script: <a href="cli-install.sh"><code>cli-install.sh</code></a> / <a href="cli-install.ps1"><code>cli-install.ps1</code></a></summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/cli-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/cli-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+```
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/cli-install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/cli-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+```
+Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `spec/13-generic-cli`, `spec/14-update`, `spec/15-distribution-and-runner`, `spec/16-generic-release`.
+
+</details>
+
+<details>
+<summary><strong>wp</strong> — WordPress Plugin How-To Spec · script: <a href="wp-install.sh"><code>wp-install.sh</code></a> / <a href="wp-install.ps1"><code>wp-install.ps1</code></a></summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/wp-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/wp-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+```
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/wp-install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/wp-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+```
+Installs: `spec/18-wp-plugin-how-to`.
+
+</details>
+
+<details>
+<summary><strong>consolidated</strong> — Consolidated Guidelines · script: <a href="consolidated-install.sh"><code>consolidated-install.sh</code></a> / <a href="consolidated-install.ps1"><code>consolidated-install.ps1</code></a></summary>
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/consolidated-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/consolidated-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+```
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/consolidated-install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/consolidated-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+```
+Installs: `spec/17-consolidated-guidelines`.
+
+</details>
+
 > **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)** — flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior, flags, and full troubleshooting matrix see **[docs/slides-installer.md](docs/slides-installer.md)**.
 
 <h2 align="center">🧪 CLI Linter Pack (release-asset installer)</h2>
