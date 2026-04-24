@@ -50,7 +50,7 @@ allowlist = [
 [[rule]]
 id = "STALE-MODULE-PATH"
 description = "Stale module path reference (movie-cli-v1). Current canonical namespace is movie-cli-v2."
-pattern = 'movie-cli-v1\\b'
+pattern = 'movie-cli-v1\b'
 replacement = "movie-cli-v2"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-MODULE-PATH --emit-fix-command | bash"
 exclude_dirs = ["release-artifacts"]
