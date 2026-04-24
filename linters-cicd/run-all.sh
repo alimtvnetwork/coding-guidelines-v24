@@ -16,6 +16,9 @@
 #                [--config .codeguidelines.toml]
 #                [--jobs N|auto]            (default: 1, sequential)
 #                [--check-timeout SECONDS]  (default: 20)
+#                [--total-timeout SECONDS]  (default: 0 = unlimited)
+#                [--split-by severity]      (also write per-severity SARIF)
+#                [--strict]                 (fail on unknown TOML keys)
 #                [--output coding-guidelines.sarif] [--format sarif|text]
 #
 # Exit codes:
@@ -39,6 +42,9 @@ OUTPUT="coding-guidelines.sarif"
 FORMAT="sarif"
 JOBS="${LINTERS_JOBS:-1}"
 CHECK_TIMEOUT="20"
+TOTAL_TIMEOUT="0"
+SPLIT_BY=""
+STRICT_FLAG=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -52,10 +58,13 @@ while [ $# -gt 0 ]; do
         --config)            CONFIG_FILE="$2"; shift 2 ;;
         --jobs)              JOBS="$2"; shift 2 ;;
         --check-timeout)     CHECK_TIMEOUT="$2"; shift 2 ;;
+        --total-timeout)     TOTAL_TIMEOUT="$2"; shift 2 ;;
+        --split-by)          SPLIT_BY="$2"; shift 2 ;;
+        --strict)            STRICT_FLAG="--strict"; shift 1 ;;
         --output)            OUTPUT="$2"; shift 2 ;;
         --format)            FORMAT="$2"; shift 2 ;;
         -h|--help)
-            sed -n '2,26p' "$0"; exit 0 ;;
+            sed -n '2,29p' "$0"; exit 0 ;;
         *)
             echo "Unknown arg: $1" >&2; exit 2 ;;
     esac
@@ -86,6 +95,15 @@ case "$JOBS" in
 esac
 [ "$JOBS" -lt 1 ] && JOBS=1
 
+# ---- Validate --total-timeout and --split-by ----
+case "$TOTAL_TIMEOUT" in
+    ''|*[!0-9]*) echo "::error::--total-timeout must be a non-negative integer, got '$TOTAL_TIMEOUT'" >&2; exit 2 ;;
+esac
+if [ -n "$SPLIT_BY" ] && [ "$SPLIT_BY" != "severity" ]; then
+    echo "::error::--split-by only supports 'severity', got '$SPLIT_BY'" >&2
+    exit 2
+fi
+
 # ---- Detect timeout binary (BSD/macOS may lack it) ----
 TIMEOUT_BIN=""
 if command -v timeout >/dev/null 2>&1; then
@@ -101,8 +119,26 @@ CONFIG_OUT=$(python3 "$SCRIPT_DIR/scripts/load-config.py" \
     --languages "$LANGUAGES" \
     --rules "$RULES" \
     --exclude-rules "$EXCLUDE_RULES" \
-    --exclude-paths "$EXCLUDE_PATHS")
+    --exclude-paths "$EXCLUDE_PATHS" $STRICT_FLAG)
+CONFIG_RC=$?
+if [ "$CONFIG_RC" -ne 0 ]; then
+    echo "::error::config load failed (rc=$CONFIG_RC)" >&2
+    exit "$CONFIG_RC"
+fi
 eval "$CONFIG_OUT"
+
+# ---- Wall-clock total timeout (B8) ----
+START_EPOCH=$(date +%s)
+if [ "$TOTAL_TIMEOUT" -gt 0 ]; then
+    # Background watchdog: kill the orchestrator's process group on overrun.
+    (
+        sleep "$TOTAL_TIMEOUT"
+        echo "::error::--total-timeout (${TOTAL_TIMEOUT}s) exceeded — terminating run" >&2
+        kill -TERM -$$ 2>/dev/null || true
+    ) &
+    WATCHDOG_PID=$!
+    trap 'kill "$WATCHDOG_PID" 2>/dev/null; rm -rf "$TMP_DIR"' EXIT
+fi
 
 TMP_DIR="$(mktemp -d)"
 STATUS_DIR="$TMP_DIR/_status"
