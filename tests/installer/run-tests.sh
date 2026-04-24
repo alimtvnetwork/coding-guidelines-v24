@@ -178,6 +178,15 @@ else
     fail "install.ps1 help variants either non-zero, missing usage, or made network calls"
 fi
 
+printf '\nT6: install.ps1 -NoVerify + help flags suppress the warning banner\n'
+if bash "$HERE/check-install-ps1-noverify-help.sh" >/dev/null 2>&1; then
+    pass "install.ps1 -NoVerify + (-Help|-h|--help) → exit 0, no network, no banner"
+else
+    # Soft-skip handled inside the check (exit 0 when pwsh missing); reaching
+    # this branch means a real failure.
+    fail "install.ps1 -NoVerify + help printed banner, made network calls, or exited non-zero"
+fi
+
 # =====================================================================
 printf '\n────────────────────────────────────────────\n'
 printf '  PASS: %d   FAIL: %d\n' "$PASS" "$FAIL"
