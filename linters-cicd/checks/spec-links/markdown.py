@@ -65,7 +65,7 @@ def main() -> int:
         rules=[RULE],
     )
     slug_cache: dict[Path, set[str]] = {}
-    for f in walk_files(args.path, list(EXTENSIONS, exclude_globs=_globs)):
+    for f in walk_files(args.path, list(EXTENSIONS), exclude_globs=_globs):
         if not is_in_scope(f):
             continue
         for finding in scan(f, args.path, slug_cache):

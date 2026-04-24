@@ -64,7 +64,7 @@ def main() -> int:
         tool_version="1.2.0",
         rules=[RULE],
     )
-    for f in walk_files(args.path, list(EXTENSIONS, exclude_globs=_globs)):
+    for f in walk_files(args.path, list(EXTENSIONS), exclude_globs=_globs):
         if not is_in_scope(f):
             continue
         for finding in scan(f, args.path):
