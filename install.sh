@@ -142,7 +142,7 @@ invoke_latest_version_probe() {
 should_skip_probe() {
   for arg in "$@"; do
     case "$arg" in
-      --version|--list-versions|--list-folders|--no-probe|--no-latest|-n|--pinned-by-release-install) return 0 ;;
+      --version|--list-versions|--list-folders|--no-probe|--no-latest|-n|--pinned-by-release-install|-h|--help) return 0 ;;
     esac
   done
   [[ -n "${INSTALL_NO_PROBE:-}" ]] && return 0
