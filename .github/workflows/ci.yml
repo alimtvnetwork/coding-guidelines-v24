@@ -118,6 +118,13 @@ jobs:
         # Spec: spec/14-update/27-generic-installer-behavior.md
         run: bash tests/installer/check-bundle-installers.sh
 
+      - name: Root installer §27 conformance (install.sh / install.ps1 / linters-cicd)
+        # Asserts root + linters-cicd installers expose --no-discovery,
+        # --no-main-fallback, --offline (--use-local-archive), the §7
+        # banner with mode:/source: lines, and the §8 EXIT CODES header.
+        # Spec: spec/14-update/27-generic-installer-behavior.md
+        run: bash tests/installer/check-root-install-acceptance.sh
+
   cross-links:
     name: Spec Cross-Reference Validation
     runs-on: ubuntu-latest
