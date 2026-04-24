@@ -3,10 +3,12 @@
     Download spec/linters/scripts from a GitHub repo with rich install controls.
 
 .DESCRIPTION
+    Conforms to: spec/14-update/27-generic-installer-behavior.md
+
     Power-user flags:
       -Repo owner/repo            Override source repo
       -Branch main                Override branch (ignored if -Version given)
-      -Version vX.Y.Z             Install a specific release tag
+      -Version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
       -Folders spec,linters       Explicit folder list (subpaths OK: spec/14-update)
       -Dest C:\path               Install destination (default: cwd)
       -ConfigFile my-config.json  Use custom config file
@@ -15,6 +17,18 @@
       -DryRun                     Show what would change; write nothing
       -ListVersions               List available release tags and exit
       -ListFolders                List available top-level folders for the chosen ref and exit
+      -NoProbe (-n,-NoLatest)     Skip the latest-version probe
+      -NoDiscovery                Skip V→V+N parallel discovery (spec §5.3)
+      -NoMainFallback             Skip main-branch fallback (spec §5.3)
+      -Offline (-UseLocalArchive) Skip all network ops; require local archive
+
+    EXIT CODES (spec §8):
+      0  success
+      1  generic failure
+      2  offline mode required a network operation (or handshake mismatch)
+      3  pinned release / asset not found (PINNED MODE only)
+      4  verification failed (checksum / required-paths)
+      5  inner installer / handoff rejected
 
 .EXAMPLE
     .\install.ps1
@@ -37,8 +51,18 @@ param(
     [switch]$ListFolders,
     [Alias('n','NoLatest')]
     [switch]$NoProbe,
+    [switch]$NoDiscovery,
+    [switch]$NoMainFallback,
+    [Alias('UseLocalArchive')]
+    [switch]$Offline,
     [string]$PinnedByReleaseInstall = ""
 )
+
+# Offline mode forbids any network operation (spec §5.3, §8 exit 2).
+if ($Offline) {
+    Write-Host "    ❌ Offline mode is not yet supported by install.ps1. Exit 2 per spec §8." -ForegroundColor Red
+    exit 2
+}
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
@@ -202,17 +226,23 @@ function Show-TopFolders {
 if ($ListVersions) { Show-ReleaseVersions }
 if ($ListFolders)  { Show-TopFolders }
 
-# ── Banner ────────────────────────────────────────────────────────
+# ── Banner (spec §7) ──────────────────────────────────────────────
+$installMode = if ($Version) { "pinned" } else { "implicit" }
+$sourceKind  = if ($Version) { "tag-tarball" } else { "branch-tarball" }
+$versionLabel = if ($Version) { $Version } else { "$Branch (implicit)" }
 Write-Host ""
-Write-Plain "════════════════════════════════════════════════════════"
-Write-Plain "  Spec & Scripts Installer"
-Write-Plain "  Source:  $Repo @ $ref"
-Write-Plain "  Folders: $($Folders -join ', ')"
-Write-Plain "  Dest:    $Dest"
-if ($DryRun) { Write-Plain "  Mode:    DRY-RUN (no writes)" }
-if ($Prompt) { Write-Plain "  Mode:    Interactive prompts (y/n/a/s)" }
-if ($Force)  { Write-Plain "  Mode:    Force overwrite" }
-Write-Plain "════════════════════════════════════════════════════════"
+Write-Plain "    📦 Spec & Scripts Installer"
+Write-Plain "       mode:    $installMode"
+Write-Plain "       repo:    $Repo"
+Write-Plain "       version: $versionLabel"
+Write-Plain "       source:  $sourceKind"
+Write-Plain "       folders: $($Folders -join ', ')"
+Write-Plain "       dest:    $Dest"
+if ($DryRun)         { Write-Plain "       opts:    DRY-RUN (no writes)" }
+if ($Prompt)         { Write-Plain "       opts:    Interactive prompts (y/n/a/s)" }
+if ($Force)          { Write-Plain "       opts:    Force overwrite" }
+if ($NoDiscovery)    { Write-Plain "       opts:    -NoDiscovery (V→V+N forbidden)" }
+if ($NoMainFallback) { Write-Plain "       opts:    -NoMainFallback" }
 Write-Host ""
 
 # ── Download archive at ref ───────────────────────────────────────
