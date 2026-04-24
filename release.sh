@@ -73,8 +73,39 @@ create_archives() {
   tar -C "$DIST_DIR" -czf "$tar_path" "$ARCHIVE_BASENAME"
 }
 
+bake_release_installers() {
+  # Spec: spec/14-update/25-release-pinned-installer.md §Release-Time Build Step
+  # Take the canonical release-install.{sh,ps1} from repo root, substitute
+  # __VERSION_PLACEHOLDER__ with the resolved tag (prefixed with `v`), and
+  # write standalone copies to $DIST_DIR for upload as release assets.
+  local tag="v$VERSION"
+  local out_sh="$DIST_DIR/release-install.sh"
+  local out_ps1="$DIST_DIR/release-install.ps1"
+
+  if [[ ! -f release-install.sh || ! -f release-install.ps1 ]]; then
+    err "Canonical release-install scripts missing at repo root"
+    exit 1
+  fi
+
+  sed "s/__VERSION_PLACEHOLDER__/$tag/g" release-install.sh  > "$out_sh"
+  sed "s/__VERSION_PLACEHOLDER__/$tag/g" release-install.ps1 > "$out_ps1"
+  chmod +x "$out_sh"
+
+  if grep -q '__VERSION_PLACEHOLDER__' "$out_sh" "$out_ps1"; then
+    err "Baking failed — placeholder still present in baked installers"
+    exit 1
+  fi
+  if ! grep -q "BAKED_VERSION=\"$tag\""    "$out_sh";  then err "release-install.sh did not bake to $tag";  exit 1; fi
+  if ! grep -q "BakedVersion = \"$tag\""   "$out_ps1"; then err "release-install.ps1 did not bake to $tag"; exit 1; fi
+}
+
 generate_checksums() {
-  (cd "$DIST_DIR" && sha256sum "$ARCHIVE_BASENAME.zip" "$ARCHIVE_BASENAME.tar.gz" > checksums.txt)
+  (cd "$DIST_DIR" && sha256sum \
+    "$ARCHIVE_BASENAME.zip" \
+    "$ARCHIVE_BASENAME.tar.gz" \
+    "release-install.sh" \
+    "release-install.ps1" \
+    > checksums.txt)
 }
 
 print_summary() {
@@ -99,6 +130,8 @@ step "Copying release files"
 copy_release_files
 step "Creating archives"
 create_archives
+step "Baking release-install.{sh,ps1} with VERSION_PLACEHOLDER → v$VERSION"
+bake_release_installers
 step "Generating checksums"
 generate_checksums
 ok "Release artifacts created"
