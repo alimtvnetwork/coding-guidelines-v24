@@ -22,10 +22,27 @@ try:
 except ModuleNotFoundError:
     tomllib = None  # type: ignore
 
+# Allow-list of recognised TOML keys under [run]. Anything else is treated
+# as a typo/unknown when --strict is supplied (B10).
+KNOWN_RUN_KEYS = frozenset({
+    "languages",
+    "rules",
+    "exclude-rules",
+    "exclude-paths",
+    "fail-on-warning",
+    "total-timeout",
+    "split-by",
+})
+KNOWN_TOP_KEYS = frozenset({"run"})
+
 
 def main() -> int:
     args = _parse_args()
     config = _load_toml(Path(args.config))
+    if args.strict:
+        rc = _validate_strict(config)
+        if rc != 0:
+            return rc
     run_section = config.get("run", {})
     print(f"LANGUAGES={_pick_csv(args.languages, run_section.get('languages'))}")
     print(f"RULES={_pick_csv(args.rules, run_section.get('rules'))}")
@@ -43,7 +60,25 @@ def _parse_args() -> argparse.Namespace:
     p.add_argument("--exclude-rules", default="")
     p.add_argument("--exclude-paths", default="")
     p.add_argument("--fail-on-warning", default="")
+    p.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail with rc=2 if the TOML file contains unknown sections or keys.",
+    )
     return p.parse_args()
+
+
+def _validate_strict(config: dict) -> int:
+    unknown_top = sorted(k for k in config if k not in KNOWN_TOP_KEYS)
+    if unknown_top:
+        print(f"::error::unknown top-level key(s): {', '.join(unknown_top)}", file=sys.stderr)
+        return 2
+    run_section = config.get("run", {})
+    unknown_run = sorted(k for k in run_section if k not in KNOWN_RUN_KEYS)
+    if unknown_run:
+        print(f"::error::unknown key(s) under [run]: {', '.join(unknown_run)}", file=sys.stderr)
+        return 2
+    return 0
 
 
 def _load_toml(path: Path) -> dict:

@@ -1,18 +1,18 @@
 {
-  "version": "4.23.0",
+  "version": "4.24.0",
   "updated": "2026-04-24",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "8e8f24d53627530adf663921d45ec071115545ce",
-    "shortSha": "8e8f24d",
-    "branch": "edit/edt-47ba84a7-81b6-4de0-8958-26c46aa07175"
+    "sha": "8762b00740ce73a267330d7ee2856959aba1ffb9",
+    "shortSha": "8762b00",
+    "branch": "edit/edt-cf2e4b94-c9e9-403d-b97c-ad1a37acc90e"
   },
   "stats": {
     "totalFiles": 612,
-    "totalLines": 131968,
+    "totalLines": 131978,
     "totalFolders": 22,
-    "totalBytes": 4477460,
+    "totalBytes": 4478091,
     "rootFiles": 5
   },
   "folders": [
@@ -65,8 +65,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 9,
-      "lineCount": 2743,
-      "byteCount": 101862
+      "lineCount": 2745,
+      "byteCount": 101939
     },
     {
       "path": "05-split-db-architecture",
