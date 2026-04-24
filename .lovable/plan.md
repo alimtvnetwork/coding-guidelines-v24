@@ -71,7 +71,7 @@ Reinforce `mem://constraints/install-command-formatting` and add the reminder to
 | 12 | Implement `release-install.sh` per spec `14-update/25-release-pinned-installer.md` (v1.0.0) | ⏳ Pending | High |
 | 13 | Wire release-install.* into `release.sh` / `release.ps1` (sed VERSION/REPO, ship as release assets) | ⏳ Pending | High |
 | 14 | Add release-pinned one-liner block to GitHub Release body template | ⏳ Pending | Medium |
-| 15 | Test harness asserting NO call to `api.github.com/.../releases/latest` from release-install.* | ⏳ Pending | Medium |
+| 15 | Test harness asserting NO call to `api.github.com/.../releases/latest` from release-install.* | ✅ Done (4.5.0) | Medium |
 
 ---
 
@@ -133,6 +133,9 @@ Reinforce `mem://constraints/install-command-formatting` and add the reminder to
 | 52 | README markdown hierarchy fix (h4 → h3 promotion, balanced fences verified) | 2026-04-23 |
 | 53 | README Spec References index (9-row navigation table, all paths verified) | 2026-04-23 |
 | 54 | Folded `.lovable/plans/installer-behavior-rollout.md` back into `plan.md` (single-file convention) | 2026-04-23 |
+| 55 | README install section is first after badges; CI validator + memory rule (4.2.0–4.3.0) | 2026-04-24 |
+| 56 | Standalone-script standards memory + payment-banner-hider RCA + reference rewrite (4.4.0) | 2026-04-24 |
+| 57 | `tests/installer/check-no-latest-api.sh` + CI step + `npm run test:installer:no-latest` (4.5.0) | 2026-04-24 |
 
 ---
 

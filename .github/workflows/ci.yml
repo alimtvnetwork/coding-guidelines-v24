@@ -88,6 +88,14 @@ jobs:
         # Spec: .lovable/memory/constraints/install-command-formatting.md
         run: python3 linter-scripts/check-readme-install-section.py
 
+      - name: Guard release-install.* against /releases/latest calls
+        # Static guard: release-install.sh and release-install.ps1 MUST NOT
+        # invoke api.github.com or releases/latest. Per
+        # spec/14-update/25-release-pinned-installer.md they always run in
+        # PINNED MODE and resolve the version from CLI / env / baked-in
+        # placeholder only.
+        run: bash tests/installer/check-no-latest-api.sh
+
   cross-links:
     name: Spec Cross-Reference Validation
     runs-on: ubuntu-latest
