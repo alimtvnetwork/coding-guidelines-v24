@@ -98,7 +98,7 @@ if [ "$VERIFY" -eq 1 ]; then
         ACTUAL=$(sha256sum "$TMP/$ZIP_NAME" | awk '{print $1}')
         if [ -n "$EXPECTED" ] && [ "$EXPECTED" != "$ACTUAL" ]; then
             echo "    ❌ checksum mismatch! expected=$EXPECTED actual=$ACTUAL" >&2
-            exit 1
+            exit 4
         fi
         echo "    ✅ checksum OK"
     else
