@@ -37,6 +37,7 @@ class TestExtractLinks(unittest.TestCase):
             "[gh](https://github.com)\n"
             "[mail](mailto:a@b.com)\n"
             "[ftp](ftp://x.y)\n"
+            "[mem](mem://architecture/error-handling)\n"
             "[local](./file.md)\n"
         )
         links = extract_links(body)
