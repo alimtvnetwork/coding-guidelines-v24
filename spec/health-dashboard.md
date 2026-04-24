@@ -18,6 +18,14 @@
 | Deduction | 0 missing consistency reports (0) |
 | Deduction | 0 missing overviews (0) |
 
+### Effective (Waived) Score
+
+| Metric | Value |
+|--------|-------|
+| Effective Score | **100/100 (A+) after waiver** |
+| Waiver | All 32 deductions point at gitmap-v3 sibling repos covered by the [folder-ref allowlist](#audit-status). Per [`mem://constraints/avoid-app-sync`](../mem://constraints/avoid-app-sync) those siblings are intentionally **not** synced into this repo, so the references will never resolve locally. They are valid in the published umbrella site. |
+| Audit guard | `python3 linter-scripts/check-spec-folder-refs.py` — passes |
+
 ---
 
 ## Cross-Reference Integrity
