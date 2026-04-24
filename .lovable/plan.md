@@ -1,11 +1,39 @@
 # Current Plan
 
-**Version:** 4.19.0
+**Version:** 4.20.0
 **Updated:** 2026-04-24
 
 ---
 
+## v4.20.0 — SPEC-LINK-001 Wired into `run-all.sh` + Regression Lock (Task: orchestrator wiring)
+
+**Scope:** Confirm SPEC-LINK-001 is dispatched by the central orchestrator (`linters-cicd/run-all.sh`), verify it runs in the full CI sweep, and add a dedicated integration test so the wiring cannot silently regress.
+
+### Investigation
+- Read `run-all.sh` end-to-end. Discovered it is **already fully registry-driven** (lines 127–142): the dispatch loop iterates every `(rule_id, lang, script)` triple from `checks/registry.json` with no hardcoded rule list. SPEC-LINK-001 was therefore implicitly wired since v4.17.0.
+- Verified empirically:
+  - `bash run-all.sh --path spec --rules SPEC-LINK-001` → `✅ clean`, exit 0.
+  - Full sweep (no rule filter) shows SPEC-LINK-001/markdown listed alongside the other 17 (rule, lang) pairs and exits clean for that rule.
+- TS findings on `spec/` are unrelated noise (TS rules running on a markdown-only path) — not in scope.
+
+### Done
+- Created `linters-cicd/tests/test_runall_spec_link_wiring.py` — 2 regression tests:
+  1. `test_registry_lists_spec_link_markdown` — asserts `registry.json` carries SPEC-LINK-001/markdown at error level.
+  2. `test_runall_dispatches_spec_link_and_exits_clean` — invokes `run-all.sh --rules SPEC-LINK-001 --path spec` as a subprocess and asserts `✅ clean` + exit 0.
+- Both tests guard against three failure modes: registry deletion, script removal, dispatch-loop regression (rule filter, language gate).
+- Test count: **91/91 pass** (was 89/89). Codegen determinism still green.
+- Bumped `linters-cicd/VERSION` 3.18.0 → 3.19.0.
+
+### Why this matters
+The error-level promotion in v4.19.0 only has teeth if SPEC-LINK-001 actually runs in CI. v4.20.0 makes that contract testable and self-healing — if anyone accidentally deletes the registry entry or breaks the dispatch loop, CI now fails loudly.
+
+---
+
 ## v4.19.0 — SPEC-LINK-001 Zero Baseline + Promotion to Error Level (Task #11b)
+
+**Scope:** Drive SPEC-LINK-001 baseline from 17 → 0, then promote the rule from `warning` → `error` so future broken cross-links fail CI.
+
+### Done
 
 **Scope:** Drive SPEC-LINK-001 baseline from 17 → 0, then promote the rule from `warning` → `error` so future broken cross-links fail CI.
 
