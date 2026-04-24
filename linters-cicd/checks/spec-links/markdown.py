@@ -48,7 +48,7 @@ def scan(path: Path, root: str, slug_cache: dict[Path, set[str]]) -> list[Findin
         out.append(
             Finding(
                 rule_id=RULE.id,
-                level="warning",
+                level="error",
                 message=broken.message,
                 file_path=relpath(path, root),
                 start_line=broken.line,
