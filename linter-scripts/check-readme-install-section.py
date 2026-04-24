@@ -122,7 +122,7 @@ def find_first_h2_after(lines: list[str], start_line: int) -> tuple[int, str] | 
         match = HEADING_PATTERN.match(lines[index])
         if match is None:
             continue
-        return index + 1, strip_heading_decoration(match.group(1))
+        return index + 1, strip_heading_decoration(heading_text_from(match))
     return None
 
 
@@ -130,6 +130,10 @@ def strip_heading_decoration(text: str) -> str:
     cleaned = re.sub(r"<[^>]+>", "", text)
     cleaned = re.sub(r"[\u2600-\u27BF\U0001F300-\U0001FAFF]", "", cleaned)
     return cleaned.strip()
+
+
+def heading_text_from(match: re.Match[str]) -> str:
+    return match.group("md") or match.group("html") or ""
 
 
 def check_install_fences(lines: list[str]) -> list[Violation]:
@@ -166,7 +170,7 @@ def update_zone(raw: str, in_install_zone: bool) -> bool:
     match = HEADING_PATTERN.match(raw)
     if match is None:
         return in_install_zone
-    heading = strip_heading_decoration(match.group(1))
+    heading = strip_heading_decoration(heading_text_from(match))
     if INSTALL_HEADING_PATTERN.search(heading):
         return True
     if BUNDLE_HEADING_PATTERN.search(heading):
