@@ -4,7 +4,7 @@
 #
 # Conforms to: spec/14-update/27-generic-installer-behavior.md
 #
-#   curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v15/releases/latest/download/install.sh | bash
+#   curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v16/releases/latest/download/install.sh | bash
 #
 # Flags:
 #   -d <dir>      install destination (default: ./linters-cicd)
@@ -21,7 +21,7 @@
 
 set -euo pipefail
 
-REPO="alimtvnetwork/coding-guidelines-v15"
+REPO="alimtvnetwork/coding-guidelines-v16"
 DEST="./linters-cicd"
 VERSION="latest"
 VERIFY=1
