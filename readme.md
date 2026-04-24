@@ -36,6 +36,7 @@
 
 <p align="center">
   <a href="#-table-of-contents">Table of Contents</a> ·
+  <a href="#-run-commands">Run Commands</a> ·
   <a href="#-core-development-principles">Core Development Principles</a> ·
   <a href="#-code-red-rules">CODE-RED Rules</a> ·
   <a href="#-real-world-example-code-red-violations">Real-world Code Red Violations</a> ·
@@ -50,6 +51,86 @@
   <a href="#-contributing">Contributing</a> ·
   <a href="#-author">Author</a>
 </p>
+
+---
+
+<h2 align="center">🚀 Run Commands</h2>
+
+<p align="center">
+  Every command you need — copy, paste, ship.<br/>
+  Full workflow reference: <a href="docs/architecture.md"><code>docs/architecture.md</code></a>.
+</p>
+
+### Setup
+
+```bash
+# Clone and install
+git clone https://github.com/alimtvnetwork/coding-guidelines-v16.git
+cd coding-guidelines-v16
+npm install
+```
+
+### Daily Workflow
+
+```bash
+# Start the docs viewer (Vite dev server, hot reload)
+npm run dev
+
+# Production build of the docs viewer
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+### Sync & Stamping
+
+```bash
+# Regenerate version.json, specTree.json, health-score.json, README stamps
+npm run sync
+
+# Individual sync targets
+npm run sync:version    # version.json only
+npm run sync:specs      # src/data/specTree.json only
+npm run sync:health     # public/health-score.json only
+npm run sync:readme     # README badge + stat stamps only
+```
+
+### Linters (what CI runs)
+
+```bash
+# Code-style validators (Go + Python) — target the spec/ tree
+go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
+python3 linter-scripts/validate-guidelines.py spec
+
+# Cross-link, folder-ref, forbidden-string, axios-pin guards
+python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
+python3 linter-scripts/check-spec-folder-refs.py
+python3 linter-scripts/check-forbidden-strings.py
+bash    linter-scripts/check-forbidden-spec-paths.sh
+bash    linter-scripts/check-axios-version.sh
+
+# README-specific lints
+npm run lint:readme
+npm run lint:readme:canonicals
+```
+
+> **Markdown is intentionally not linted for code-style.** CI lints code in `spec/` and source files only — example snippets in `readme.md` and `docs/` are validated by hand against [`spec/02-coding-guidelines/01-cross-language/04-code-style/`](spec/02-coding-guidelines/01-cross-language/04-code-style/).
+
+### Release & Migration
+
+```bash
+# Dry-run the v15 → v16 repo migrator (see spec/14-update/26-...)
+npm run migrate:repo:dry
+
+# One-shot installers (no clone required)
+#   PowerShell:
+iwr https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/install.ps1 | iex
+#   Bash:
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/install.sh | bash
+```
+
+
 
 ---
 
