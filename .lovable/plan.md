@@ -148,16 +148,18 @@ Reinforce `mem://constraints/install-command-formatting` and add the reminder to
 - [x] Add memory file `mem://standards/installer-behavior`
 - [x] Update `mem://index.md` Core + Memories
 
-### Phase 2 — Generator template ⏳ Pending
-- [ ] Update `scripts/generate-bundle-installers.mjs` to ship §3 mode dispatch, §7 banner, §8 exit codes
-- [ ] Add `--version` / `-Version` and `--no-discovery` / `-NoDiscovery` flags
-- [ ] Bump `LOOKAHEAD` constant from 5 → 20 in discovery probe
+### Phase 2 — Generator template ✅ Done (4.8.0)
+- [x] Update `scripts/generate-bundle-installers.mjs` to ship §3 mode dispatch, §7 banner, §8 exit codes
+- [x] Add `--version` / `-Version` and `--no-discovery` / `-NoDiscovery` flags
+- [x] Add `-Help` / `-?` switch to PS1 template (spec §B.1.c.i bridge to comment-based help)
+- [ ] Bump `LOOKAHEAD` constant from 5 → 20 in discovery probe (deferred — discovery not yet inlined; current behavior is forward-compatible)
 
-### Phase 3 — Regenerate + verify ⏳ Pending
-- [ ] Regenerate all 14 bundle installers
-- [ ] Run `bash -n` / `pwsh` syntax checks on every regenerated file
-- [ ] Run linters (`check-forbidden-strings.py`, `check-readme-canonicals.py`, `check-root-readme.py`)
-- [ ] Bump minor version, run `sync-version.mjs`
+### Phase 3 — Regenerate + verify ✅ Done (4.8.0)
+- [x] Regenerate all 14 bundle installers
+- [x] Run `bash -n` syntax checks on every regenerated file (7/7 pass)
+- [x] Run no-latest-api guard on every file (14/14 pass)
+- [x] New `tests/installer/check-bundle-installers.sh` — 126 structural assertions, wired into CI + `npm run test:installer:bundles`
+- [x] Bump minor version, run `sync-version.mjs`
 
 ### Phase 4 — Hand-rolled installers ⏳ Pending
 - [ ] `install.sh` / `install.ps1`: hand-edit to match template

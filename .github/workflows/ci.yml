@@ -109,6 +109,15 @@ jobs:
         # Spec: spec/14-update/25-release-pinned-installer.md
         run: bash tests/installer/check-release-bake.sh
 
+      - name: Bundle installer conformance (14 files, spec §3/§7/§8)
+        # For every bundle in bundles.json, asserts the .sh/.ps1 pair
+        # exists at repo root, parses, has --version/--no-discovery/
+        # --no-main-fallback/--use-local-archive/-h/--help (PS1: -Help
+        # bridge) plus EXIT CODES doc and the §7 mode banner, and that
+        # no line invokes a network client against /releases/latest.
+        # Spec: spec/14-update/27-generic-installer-behavior.md
+        run: bash tests/installer/check-bundle-installers.sh
+
   cross-links:
     name: Spec Cross-Reference Validation
     runs-on: ubuntu-latest

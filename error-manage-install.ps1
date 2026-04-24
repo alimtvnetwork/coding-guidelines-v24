@@ -69,7 +69,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.ps1))) -Version v3.77.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.ps1))) -Version v4.7.0 -Target .\vendor
 #>
 
 param(
@@ -79,8 +79,19 @@ param(
     [switch]$Offline,
     [string]$UseLocalArchive = "",
     [switch]$NoDiscovery,
-    [switch]$NoMainFallback
+    [switch]$NoMainFallback,
+    [Alias("?")]
+    [switch]$Help
 )
+
+# ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
+# Surfaces the comment-based help block above without requiring the user
+# to know about Get-Help. Print to stdout and exit 0 BEFORE any side
+# effects (no folder creation, no banner, no download).
+if ($Help) {
+    Get-Help $PSCommandPath -Full
+    exit 0
+}
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
@@ -122,7 +133,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 error-manage-install v3.77.0" -ForegroundColor Cyan
+Write-Host "  📦 error-manage-install v4.7.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan

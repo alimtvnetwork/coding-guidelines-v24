@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "4.7.0",
+  "version": "4.8.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -38,6 +38,7 @@
     "test:installer": "bash tests/installer/run-tests.sh",
     "test:installer:no-latest": "bash tests/installer/check-no-latest-api.sh",
     "test:installer:acceptance": "bash tests/installer/check-release-install-acceptance.sh",
+    "test:installer:bundles": "bash tests/installer/check-bundle-installers.sh",
     "test:release:bake": "bash tests/installer/check-release-bake.sh"
   },
   "dependencies": {
