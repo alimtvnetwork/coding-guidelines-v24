@@ -1,11 +1,28 @@
 # Current Plan
 
-**Version:** 3.98.0
+**Version:** 4.10.0
 **Updated:** 2026-04-24
 
 ---
 
-## Latest Session — Lock README Install Order to UI
+## v4.10.0 — Installer Behavior Rollout Phase 5 (Docs)
+
+**Scope:** Cross-link the §27 generic-installer-behavior contract from user-facing surfaces (R-5a/b/c).
+
+### Done
+- **R-5a**: Added §27 cross-ref blockquote to `readme.md` between Verify section and Table of Contents — names all flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 banner, and the §8 exit codes (0–5). Links to `docs/slides-installer.md` for the slides-specific extension.
+- **R-5b**: Added §27 spec blockquote at the top of `docs/slides-installer.md` clarifying that slides flags layer on top of the cross-bundle contract.
+- **R-5c**: Updated `mem://features/release-pinned-installer` with §27 conformance section listing all 18 installers, the 3 CI guards, and the 153 total assertions (126 + 22 + 5).
+
+### Verification
+- All 3 installer harnesses still green (126 + 22 + 5 = 153 assertions).
+- Sync clean: 612 files, 22 folders, 131,969 lines.
+
+---
+
+## v3.98.0 — Lock README Install Order to UI
+
+**Scope:** Root README install experience only. Keep install commands as single-line copy/paste commands and mirror the on-site install UI order exactly.
 
 **Scope:** Root README install experience only. Keep install commands as single-line copy/paste commands and mirror the on-site install UI order exactly.
 
