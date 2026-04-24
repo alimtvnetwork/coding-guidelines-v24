@@ -149,27 +149,21 @@ trap cleanup EXIT
 START_EPOCH=$(date +%s)
 if [ "$TOTAL_TIMEOUT" -gt 0 ]; then
     # Background watchdog: only fires if it survives past TOTAL_TIMEOUT.
-    # The EXIT trap above kills it on early/normal completion, so the
-    # "exceeded" message never prints for a fast run.
+    # The EXIT trap (cleanup) kills it on early/normal completion, so the
+    # "exceeded" message never prints for a fast run. The subshell uses
+    # short sleep slices so SIGTERM from cleanup() takes effect promptly,
+    # and exits silently (rc=0) when interrupted.
     (
-        # Detach from the parent's signal-noise reporting.
-        trap '' TERM
-        trap 'exit 0' USR1
-        # Use small sleeps so SIGTERM from cleanup() takes effect quickly.
+        trap 'exit 0' TERM INT
         remaining="$TOTAL_TIMEOUT"
         while [ "$remaining" -gt 0 ]; do
-            step=1
-            [ "$remaining" -lt 1 ] && step="$remaining"
-            sleep "$step"
-            remaining=$(( remaining - step ))
+            sleep 1
+            remaining=$(( remaining - 1 ))
         done
         echo "::error::--total-timeout (${TOTAL_TIMEOUT}s) exceeded — terminating run" >&2
         kill -TERM -$$ 2>/dev/null || true
     ) &
     WATCHDOG_PID=$!
-    # Replace the EXIT trap so it now also signals the watchdog via USR1
-    # (graceful) before falling back to TERM.
-    trap 'kill -USR1 "$WATCHDOG_PID" 2>/dev/null || true; cleanup' EXIT
 fi
 
 EXIT=0
