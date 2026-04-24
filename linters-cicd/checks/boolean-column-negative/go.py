@@ -41,7 +41,7 @@ from _lib.boolean_naming import (  # noqa: E402
     ALLOWLIST, NEG_PREFIX_RE, SUSPECT_ROOT_RE, format_message,
     is_forbidden, is_suspect,
 )
-from _lib.cli import build_parser
+from _lib.cli import build_parser, parse_exclude_paths
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
 
@@ -208,7 +208,7 @@ def main() -> int:
         tool_version="2.0.0",
         rules=[RULE],
     )
-    for f in walk_files(args.path, EXTENSIONS):
+    for f in walk_files(args.path, EXTENSIONS, exclude_globs=_globs):
         for finding in scan(f, args.path):
             run.add(finding)
     return emit(run, args.format, args.output)

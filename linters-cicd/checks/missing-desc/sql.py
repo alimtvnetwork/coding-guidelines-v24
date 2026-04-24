@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from _lib.cli import build_parser
+from _lib.cli import build_parser, parse_exclude_paths
 from _lib.free_text_columns import EXTENSIONS, is_in_scope, scan_text
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
@@ -64,7 +64,7 @@ def main() -> int:
         tool_version="1.2.0",
         rules=[RULE],
     )
-    for f in walk_files(args.path, list(EXTENSIONS)):
+    for f in walk_files(args.path, list(EXTENSIONS, exclude_globs=_globs)):
         if not is_in_scope(f):
             continue
         for finding in scan(f, args.path):

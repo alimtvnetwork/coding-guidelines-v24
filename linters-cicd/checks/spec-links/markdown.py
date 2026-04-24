@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from _lib.cli import build_parser
+from _lib.cli import build_parser, parse_exclude_paths
 from _lib.markdown_links import EXTENSIONS, check_file, is_in_scope
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
@@ -65,7 +65,7 @@ def main() -> int:
         rules=[RULE],
     )
     slug_cache: dict[Path, set[str]] = {}
-    for f in walk_files(args.path, list(EXTENSIONS)):
+    for f in walk_files(args.path, list(EXTENSIONS, exclude_globs=_globs)):
         if not is_in_scope(f):
             continue
         for finding in scan(f, args.path, slug_cache):
