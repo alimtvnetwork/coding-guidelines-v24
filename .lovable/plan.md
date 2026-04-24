@@ -1,9 +1,51 @@
 # Current Plan
 
-**Version:** 3.98.0
+**Version:** 4.0.0
 **Updated:** 2026-04-24
 
 ---
+
+## Latest Session — Auto-fix Script for readme.md Code Blocks
+
+**Goal:** Reformat fenced code samples in `readme.md` to comply with the
+blank-line rules from `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md` **before** `npm run sync` runs.
+
+### Rules Implemented
+
+| Rule | What the formatter does |
+|------|-------------------------|
+| **R4** | Insert blank line before `return` / `throw` when preceded by other statements in the same block. Skip when `return`/`throw` is the only statement. |
+| **R5** | Insert blank line after a closing `}` when followed by more code. Skip when next token is `}`, `else`, `catch`, `finally`, end-of-block. |
+| **R10** | Insert blank line before `if`/`for`/`foreach`/`while` when preceded by a non-brace statement. |
+| **R12** | Strip leading blank line at the start of a function/method body. |
+| **R13** | Collapse 2+ consecutive blank lines down to 1 inside code blocks. |
+
+### Scope
+
+- **Targets:** ` ```ts ` / ` ```typescript ` / ` ```js ` / ` ```javascript ` /
+  ` ```go ` / ` ```php ` fenced blocks inside `readme.md` only.
+- **Skipped fences:** ` ```bash ` / ` ```sh ` / ` ```powershell ` / ` ```json `
+  / ` ```text ` / no-language fences (markdown not lint-able as code).
+- **Skipped blocks:** any fence whose first comment line contains
+  `// ❌` or `// FORBIDDEN` — those are intentional violations.
+
+### Integration
+
+- New: `scripts/fix-readme-code-blocks.mjs` (Node, no deps).
+- Wired into `npm run sync` and `prebuild` chain so it runs **before**
+  the README stamping pass.
+- Idempotent — running twice produces zero diff.
+- Pure stdlib, brace-depth tokenizer (not a full parser) — operates only
+  on whole-line patterns to stay safe.
+
+### Files Touched
+
+- `scripts/fix-readme-code-blocks.mjs` — new
+- `package.json` — add `lint:readme:fix-code` and prepend to `sync` + `prebuild`
+- `.lovable/plan.md` — this entry
+- Bump 3.99.0 → 4.0.0
+
+
 
 ## Latest Session — Fix `processUser` Blank-Line Style in readme.md
 
