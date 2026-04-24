@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v15/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.0.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-612-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-131%2C967-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--24-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v15/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.1.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-612-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-131%2C967-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--24-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -27,8 +27,43 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->612<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->131,967<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.0.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-24<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES -->612<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->131,967<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.1.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-24<!-- /STAMP:UPDATED -->
 </p>
+
+---
+
+<h2 align="center">⚡ Install in One Line</h2>
+
+<p align="center">
+  Pick your platform. Copy the line. Paste it. Done — no clone, no <code>npm install</code>.<br/>
+  Need just one bundle? Jump to <a href="#-bundle-installers">Named Bundle Installers</a>.
+</p>
+
+### 🪟 Windows · PowerShell
+
+```powershell
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.ps1 | iex
+```
+
+### 🪟 Windows · PowerShell · skip latest-version probe
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.ps1))) -n
+```
+
+### 🐧 macOS · Linux · Bash
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.sh | bash
+```
+
+### 🐧 macOS · Linux · Bash · skip latest-version probe
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.sh | bash -s -- -n
+```
+
+<p align="center"><sub>Version-pinned · SHA-256 verified · idempotent · temp-clean. Power-user flags (<code>--repo</code>, <code>--branch</code>, <code>--version</code>, <code>--folders</code>, <code>--dest</code>, <code>--config</code>, <code>--prompt</code>, <code>--force</code>, <code>--dry-run</code>) live in <a href="#%EF%B8%8F-full-repo-install-scripts">Full-Repo Install Scripts</a>.</sub></p>
 
 ---
 
@@ -36,6 +71,8 @@
 
 <p align="center">
   <a href="#-table-of-contents">Table of Contents</a> ·
+  <a href="#-install-in-one-line">Install</a> ·
+  <a href="#-bundle-installers">Bundle Installers</a> ·
   <a href="#-run-commands">Run Commands</a> ·
   <a href="#-core-development-principles">Core Development Principles</a> ·
   <a href="#-code-red-rules">CODE-RED Rules</a> ·
@@ -44,7 +81,6 @@
   <a href="#-error-management-summary">Error Management Summary</a> ·
   <a href="#-type-aliases-for-common-generic-results">Type Aliases for Generic Results</a> ·
   <a href="#-for-ai-agents">For AI Agents</a> ·
-  <a href="#-bundle-installers">Bundle Installers</a> ·
   <a href="#%EF%B8%8F-full-repo-install-scripts">Full-Repo Install Scripts</a> ·
   <a href="#-documentation">Documentation</a> ·
   <a href="#-neutral-ai-assessment">Neutral AI Assessment</a> ·
@@ -57,80 +93,101 @@
 <h2 align="center">🚀 Run Commands</h2>
 
 <p align="center">
-  Every command you need — copy, paste, ship.<br/>
-  Full workflow reference: <a href="docs/architecture.md"><code>docs/architecture.md</code></a>.
+  Local developer workflow — for contributors who clone the repo.<br/>
+  End-users do <strong>not</strong> need this section; the one-line installers above handle everything.
 </p>
 
 ### Setup
 
 ```bash
-# Clone and install
-git clone https://github.com/alimtvnetwork/coding-guidelines-v16.git
-cd coding-guidelines-v16
-npm install
+git clone https://github.com/alimtvnetwork/coding-guidelines-v15.git
+```
+
+```bash
+cd coding-guidelines-v15 && npm install
 ```
 
 ### Daily Workflow
 
 ```bash
-# Start the docs viewer (Vite dev server, hot reload)
 npm run dev
+```
 
-# Production build of the docs viewer
+```bash
 npm run build
+```
 
-# Preview the production build locally
+```bash
 npm run preview
 ```
 
 ### Sync & Stamping
 
 ```bash
-# Regenerate version.json, specTree.json, health-score.json, README stamps
 npm run sync
+```
 
-# Individual sync targets
-npm run sync:version    # version.json only
-npm run sync:specs      # src/data/specTree.json only
-npm run sync:health     # public/health-score.json only
-npm run sync:readme     # README badge + stat stamps only
+```bash
+npm run sync:version
+```
+
+```bash
+npm run sync:specs
+```
+
+```bash
+npm run sync:health
+```
+
+```bash
+npm run sync:readme
 ```
 
 ### Linters (what CI runs)
 
 ```bash
-# Code-style validators (Go + Python) — target the spec/ tree
 go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
+```
+
+```bash
 python3 linter-scripts/validate-guidelines.py spec
+```
 
-# Cross-link, folder-ref, forbidden-string, axios-pin guards
+```bash
 python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
-python3 linter-scripts/check-spec-folder-refs.py
-python3 linter-scripts/check-forbidden-strings.py
-bash    linter-scripts/check-forbidden-spec-paths.sh
-bash    linter-scripts/check-axios-version.sh
+```
 
-# README-specific lints
+```bash
+python3 linter-scripts/check-spec-folder-refs.py
+```
+
+```bash
+python3 linter-scripts/check-forbidden-strings.py
+```
+
+```bash
+bash linter-scripts/check-forbidden-spec-paths.sh
+```
+
+```bash
+bash linter-scripts/check-axios-version.sh
+```
+
+```bash
 npm run lint:readme
+```
+
+```bash
 npm run lint:readme:canonicals
 ```
 
 > **Markdown is intentionally not linted for code-style.** CI lints code in `spec/` and source files only — example snippets in `readme.md` and `docs/` are validated by hand against [`spec/02-coding-guidelines/01-cross-language/04-code-style/`](spec/02-coding-guidelines/01-cross-language/04-code-style/).
 
-### Release & Migration
+### Repo migration (v15 → v16)
 
 ```bash
-# Dry-run the v15 → v16 repo migrator (see spec/14-update/26-...)
 npm run migrate:repo:dry
-
-# One-shot installers (no clone required)
-#   PowerShell:
-iwr https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/install.ps1 | iex
-#   Bash:
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v16/main/install.sh | bash
 ```
-
-
 
 ---
 
@@ -441,7 +498,6 @@ Auto-set diagnostic fields so examples do not forget context and do not rely on 
 
 ```go
 pathValidation := validation.ValidatePath(configPath)
-
 if pathValidation.IsInvalid {
     return apperror.FailSettings(
         apperror.PathError(apperrtype.PathInvalid, configPath),
@@ -449,7 +505,6 @@ if pathValidation.IsInvalid {
 }
 
 data, readFileError := os.ReadFile(configPath)
-
 if readFileError != nil {
     return apperror.FailBytes(
         apperror.WrapPathError(readFileError, apperrtype.PathFailedToRead, configPath),
@@ -457,7 +512,6 @@ if readFileError != nil {
 }
 
 response, requestError := http.Get(siteURL)
-
 if requestError != nil {
     return apperror.FailSettings(
         apperror.WrapUrlError(requestError, apperrtype.WPConnectionFailed, siteURL),
@@ -738,11 +792,16 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <img alt="Error Management" src="https://img.shields.io/badge/error--manage-included-EF4444?style=flat-square"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/error-manage-install.sh | bash
 ```
 
 <h3 align="center">🗄️ <code>splitdb</code> — Root · App · Session Database Bundle</h3>
@@ -752,11 +811,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
   <img alt="Seedable Config" src="https://img.shields.io/badge/seedable--config-included-10B981?style=flat-square"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/splitdb-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/splitdb-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/splitdb-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/splitdb-install.sh | bash
 ```
 
 <h3 align="center">🎬 <code>slides</code> — Teach-a-Team Bundle</h3>
@@ -765,11 +829,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
   <img alt="Slides App" src="https://img.shields.io/badge/slides--app-included-F59E0B?style=flat-square"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/slides-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/slides-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/slides-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/slides-install.sh | bash
 ```
 
 <p align="center"><sub>Ships a pre-built <code>slides-app/dist/</code> (no build step) and auto-opens it in your browser. Falls back to the <code>main</code> branch tarball when no version is pinned. Flags: <code>--no-open</code> / <code>-NoOpen</code>, <code>--offline</code> / <code>-Offline</code>. → <a href="docs/slides-installer.md">Full slides installer docs</a></sub></p>
@@ -780,11 +849,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
   <img alt="Linters CI/CD" src="https://img.shields.io/badge/linters--cicd-included-22C55E?style=flat-square"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/linters-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/linters-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/linters-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/linters-install.sh | bash
 ```
 
 <h3 align="center">⚙️ <code>cli</code> — Cross-Platform CLI Bundle</h3>
@@ -797,11 +871,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
   <img alt="Release" src="https://img.shields.io/badge/release-included-22C55E?style=flat-square"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/cli-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/cli-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/cli-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/cli-install.sh | bash
 ```
 
 <h3 align="center">🐘 <code>wp</code> — WordPress Plugin Bundle</h3>
@@ -809,11 +888,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
   <img alt="WordPress Plugin How-To" src="https://img.shields.io/badge/wp--plugin--how--to-included-21759B?style=flat-square&logo=wordpress&logoColor=white"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/wp-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/wp-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/wp-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/wp-install.sh | bash
 ```
 
 <h3 align="center">📚 <code>consolidated</code> — Everything-in-One Bundle</h3>
@@ -823,11 +907,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
   <img alt="Consolidated Guidelines" src="https://img.shields.io/badge/consolidated--guidelines-included-F59E0B?style=flat-square"/>
 </p>
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/consolidated-install.ps1 | iex   # 🪟 Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/consolidated-install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/consolidated-install.sh | bash   # 🐧 Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/consolidated-install.sh | bash
 ```
 
 ### Verify & Uninstall
@@ -840,11 +929,16 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15
 
 Use the generic installer for **everything** (specs + linters + scripts):
 
+**🪟 Windows · PowerShell**
+
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.ps1 | iex   # Windows
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.ps1 | iex
 ```
+
+**🐧 macOS · Linux · Bash**
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.sh | bash   # Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v15/main/install.sh | bash
 ```
 
 Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& ([scriptblock]::Create(...)) -n`; Bash: `... | bash -s -- -n`). Local re-runs: `.\install.ps1` or `./install.sh`.
