@@ -67,7 +67,7 @@ while [ $# -gt 0 ]; do
         --output)            OUTPUT="$2"; shift 2 ;;
         --format)            FORMAT="$2"; shift 2 ;;
         -h|--help)
-            sed -n '2,29p' "$0"; exit 0 ;;
+            sed -n '2,30p' "$0"; exit 0 ;;
         *)
             echo "Unknown arg: $1" >&2; exit 2 ;;
     esac
