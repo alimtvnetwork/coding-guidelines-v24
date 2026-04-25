@@ -85,10 +85,19 @@ for run in doc.get("runs", []):
     for r in run.get("results", []):
         if r.get("ruleId") == "BOOL-NEG-001":
             loc = r["locations"][0]["physicalLocation"]
+            msg = r["message"]["text"]
+            # The linter's message format is:
+            #   "Boolean column 'X' uses a forbidden ... Suggestion: rename to 'Y'."
+            # We assert against the *flagged* identifier (X), not the
+            # suggested replacement (Y) which legitimately contains
+            # allow-listed names like 'IsActive'.
+            m = re.search(r"Boolean column '([^']+)'", msg)
+            flagged = m.group(1) if m else ""
             findings.append({
                 "uri": loc["artifactLocation"]["uri"],
                 "line": loc["region"]["startLine"],
-                "msg": r["message"]["text"],
+                "msg": msg,
+                "flagged": flagged,
             })
 
 EXPECTED = 4
@@ -98,28 +107,19 @@ if len(findings) != EXPECTED:
         print(f"   - {f['uri']}:{f['line']} :: {f['msg']}", file=sys.stderr)
     sys.exit(1)
 
-# Allow-list assertion: IsActive / IsDisabled must never appear as
-# the flagged identifier. Use word boundaries so substrings like
-# "IsActive" inside "IsNotActive" are not falsely matched.
-def name_in_msg(name: str, msg: str) -> bool:
-    return re.search(rf"\b{re.escape(name)}\b", msg) is not None
-
-joined_msgs = [f["msg"] for f in findings]
+# Allow-list assertion: IsActive / IsDisabled must never be the
+# *flagged* identifier (they may appear in suggestions).
+flagged_set = {f["flagged"] for f in findings}
 for name in ("IsActive", "IsDisabled"):
-    hits = [m for m in joined_msgs if name_in_msg(name, m)
-            and not any(name_in_msg(forb, m) for forb in
-                        ("IsNotActive", "HasNoLicense", "IsNotVerified", "HasNoSubscription"))]
-    if hits:
+    if name in flagged_set:
         print(f"::error::allow-listed name '{name}' was incorrectly flagged", file=sys.stderr)
-        for h in hits:
-            print(f"   - {h}", file=sys.stderr)
         sys.exit(1)
 
-# Forbidden names must each appear exactly once.
+# Forbidden names must each appear exactly once as the flagged identifier.
 for name in ("IsNotActive", "HasNoLicense", "IsNotVerified", "HasNoSubscription"):
-    hits = sum(1 for f in findings if name_in_msg(name, f["msg"]))
+    hits = sum(1 for f in findings if f["flagged"] == name)
     if hits != 1:
-        print(f"::error::forbidden name '{name}' appeared {hits} times (want 1)", file=sys.stderr)
+        print(f"::error::forbidden name '{name}' appeared {hits} times as flagged identifier (want 1)", file=sys.stderr)
         sys.exit(1)
 
 print(f"  OK BOOL-NEG-001 produced {len(findings)} finding(s) end-to-end")
