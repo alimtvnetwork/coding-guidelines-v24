@@ -1090,6 +1090,7 @@ def main(argv: list[str] | None = None) -> int:
                 with_similarity=args.with_similarity,
                 with_labels=args.similarity_labels,
                 legend_mode=args.similarity_legend,
+                verbose=args.list_changed_files_verbose,
             )
             # CSV export mirrors the same dedupe + filter pipeline so
             # the spreadsheet always matches what the operator just
