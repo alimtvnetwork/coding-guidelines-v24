@@ -1243,7 +1243,10 @@ def _parse_name_status(
 _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>.+?)\s*=>\s*(?P<new>.+?)\s*$")
 
 
-def _normalise_changed_lines(lines: list[str]) -> list[str]:
+def _normalise_changed_lines(
+    lines: list[str],
+    intake: list[_DiffIntakeRow] | None = None,
+) -> list[str]:
     """Collapse rename-bearing rows in a ``--changed-files`` payload
     down to their post-rename path.
 
@@ -1270,6 +1273,13 @@ def _normalise_changed_lines(lines: list[str]) -> list[str]:
       Windows input) is passed through verbatim so the caller's
       blank/comment filter can still discard it on the same line
       number.
+
+    Optional ``intake`` out-param: when a list is provided, every
+    rename-shaped row (tab-separated triple OR arrow form) is
+    appended as a :class:`_DiffIntakeRow`. Plain paths (no tab, no
+    arrow) are NOT captured — we have no way to know whether they
+    were originally R/C rows that the upstream CI already collapsed.
+    The hot path stays free when ``intake is None``.
     """
     out: list[str] = []
     for line in lines:
@@ -1294,7 +1304,37 @@ def _normalise_changed_lines(lines: list[str]) -> list[str]:
                     new_col = c
                     break
             if new_col:
-                out.append(_unquote_git_path(new_col))
+                new_path = _unquote_git_path(new_col)
+                out.append(new_path)
+                if intake is not None:
+                    # Recover OLD + R/C score from the leading status
+                    # token when present. Mirrors the logic in
+                    # ``_parse_name_status`` so both intake sources
+                    # produce identically-shaped rows.
+                    status_match = (_NAME_STATUS_RE.match(cols[0])
+                                    if cols and cols[0] else None)
+                    if (status_match
+                            and status_match.group(1) in ("R", "C")
+                            and len(cols) >= 3):
+                        score_raw = status_match.group(2)
+                        intake.append(_DiffIntakeRow(
+                            kind=status_match.group(1),
+                            score=int(score_raw) if score_raw else None,
+                            old=_unquote_git_path(cols[1]),
+                            new=new_path,
+                        ))
+                    elif (len(cols) >= 2 and cols[0]
+                          and cols[0] != new_col):
+                        # Tabbed but no R/C status token (e.g. a
+                        # hand-written ``OLD\tNEW`` shorthand). The
+                        # most useful interpretation for an audit
+                        # table is "rename, unknown score" — A/M
+                        # paths from git never carry a tab.
+                        intake.append(_DiffIntakeRow(
+                            kind="R", score=None,
+                            old=_unquote_git_path(cols[0]),
+                            new=new_path,
+                        ))
             continue
         # Arrow form: `OLD => NEW`.
         m = _RENAME_ARROW_RE.match(line)
@@ -1303,7 +1343,17 @@ def _normalise_changed_lines(lines: list[str]) -> list[str]:
             # Trim at boundaries (regex already did greedy-min) but
             # don't touch interior whitespace. Then unquote in case
             # the user pasted a C-quoted form from ``git status``.
-            out.append(_unquote_git_path(new_path.strip()))
+            new_unq = _unquote_git_path(new_path.strip())
+            out.append(new_unq)
+            if intake is not None:
+                # ``git status -s`` arrow form has no similarity
+                # score — record as ``None`` so the renderer omits
+                # the score column for these rows.
+                intake.append(_DiffIntakeRow(
+                    kind="R", score=None,
+                    old=_unquote_git_path(m.group("old").strip()),
+                    new=new_unq,
+                ))
             continue
         out.append(line)
     return out
