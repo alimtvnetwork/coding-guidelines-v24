@@ -437,7 +437,7 @@ function tryRenderPdf(htmlPath, pdfPath) {
 // 7. Main
 // ---------------------------------------------------------------------
 function main() {
-  const scope = listChangedSpecFiles();
+  const { scope, label: scopeLabel } = listChangedSpecFiles();
   const v = runValidator();
   const c = runCrossLinkChecker();
 
@@ -453,6 +453,7 @@ function main() {
 
   const html = buildHtml({
     scope,
+    scopeLabel,
     validator,
     crossLink,
     validatorRaw: v.stdout,
@@ -470,13 +471,15 @@ function main() {
   const findings = validator.length + crossLink.length;
 
   console.log(`[spec-change-report] HTML: ${relative(REPO_ROOT, htmlPath)}`);
-  if (pdfRenderer) {
+  if (pdfRenderer === "skipped") {
+    console.log(`[spec-change-report]  PDF: skipped (--html-only)`);
+  } else if (pdfRenderer) {
     console.log(`[spec-change-report]  PDF: ${relative(REPO_ROOT, pdfPath)} (via ${pdfRenderer})`);
   } else {
     console.log(`[spec-change-report]  PDF: skipped (no wkhtmltopdf / chromium found)`);
   }
   console.log(
-    `[spec-change-report] Scope: ${scope ? scope.size + " changed file(s)" : "all"} · ` +
+    `[spec-change-report] Scope: ${scope === null ? "all" : scope.size + " file(s) — " + scopeLabel} · ` +
       `Findings: ${findings} (${validator.filter((f) => f.severity === "code-red").length} code-red, ` +
       `${validator.filter((f) => f.severity === "style").length} style, ${crossLink.length} link)`
   );
