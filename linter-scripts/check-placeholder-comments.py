@@ -147,8 +147,13 @@ def strip_inline_code(text: str) -> str:
 
 
 def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
-                   out: list[Violation]) -> int:
-    """Apply P-002/P-003/P-005 to a body and return valid bullet count."""
+                   out: list[Violation],
+                   bullets: list[tuple[int, str]] | None = None) -> int:
+    """Apply P-002/P-003/P-005 to a body and return valid bullet count.
+
+    When ``bullets`` is provided, every valid bullet is appended as
+    ``(line, target)`` for later cross-block duplicate analysis (P-007).
+    """
     bullet_count = 0
     for ln, content in body:
         if not content.strip():
@@ -172,6 +177,8 @@ def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
                 f"Placeholder link `{target}` must point at a `.md` file."))
             continue
         bullet_count += 1
+        if bullets is not None:
+            bullets.append((ln, target))
     return bullet_count
 
 
