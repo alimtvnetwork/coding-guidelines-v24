@@ -159,6 +159,38 @@ It is the single source of truth for fixture filenames, the
 `Finding` shape, the text/SARIF output format, and the four
 unit-test contracts every rule must satisfy.
 
+#### One-shot verification: `--smoke`
+
+Once your new rule has fixtures and a test, verify it end-to-end
+with a single command:
+
+```bash
+# Verify ONLY the rules whose checks/<slug>/ folder you just edited.
+# Runs them against their own fixtures/ dir, never the whole pack.
+bash linters-cicd/run-all.sh --smoke --format text
+
+# Same, plus the canonical TEMPLATE-001 starter-kit pass — useful
+# the very first time you copy _template/ before you have any
+# git-tracked changes yet.
+bash linters-cicd/run-all.sh --smoke --include-template --format text
+
+# Compare against a different ref (default is HEAD = uncommitted +
+# staged). Useful in CI to scope to changes vs main.
+bash linters-cicd/run-all.sh --smoke --smoke-base origin/main --format text
+```
+
+Selection rules:
+
+| Source of selection | Effect |
+|---|---|
+| `git diff` against `--smoke-base` (default `HEAD`) | Every rule whose registry entry points at the changed `checks/<slug>/` is selected. |
+| `--include-template` | Adds `TEMPLATE-001` against `checks/_template/fixtures/`. |
+| Edits under `checks/_lib/` or `checks/_template/` only | Reported as `slugs skipped` and do NOT auto-select rules — pass `--include-template` to opt in. |
+| Edits under a brand-new `checks/<slug>/` not in `registry.json` | Surfaced as `<slug> (unregistered)` in the skipped list — register the rule first. |
+| No changes and no `--include-template` | Exits `0` with a friendly hint, runs nothing. |
+
+Exit codes mirror the full run: `0` clean, `1` findings, `2` tool error.
+
 ---
 
 ## Supported languages matrix
