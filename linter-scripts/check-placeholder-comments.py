@@ -622,6 +622,22 @@ def main(argv: list[str] | None = None) -> int:
              "schema `{\"path\":str, \"status\":str, \"reason\":str}` "
              "so dashboards can ingest it without scraping the text "
              "table. No-op outside diff mode.")
+    ap.add_argument("--dedupe-changed-files", action="store_true",
+        help="With --list-changed-files, collapse repeated `path` "
+             "values in the audit so each repo-relative path appears "
+             "at most once. The FIRST occurrence wins — its `status` "
+             "and `reason` are preserved verbatim and later rows for "
+             "the same path are dropped (no merging, no \"...and 2 "
+             "more\" annotations). Useful when the upstream intake "
+             "feeds the same path from multiple sources (e.g. a "
+             "`--changed-files` file concatenated from several "
+             "`paths-filter` jobs, or a rebase that touched the same "
+             "file in two commits and the diff surfaced it twice). "
+             "The dedupe footer reports how many duplicates were "
+             "collapsed so the count is auditable. No-op without "
+             "--list-changed-files; the underlying linted-file set "
+             "is unaffected (it's already a `set[Path]`, so "
+             "duplicates can never reach the scan).")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
