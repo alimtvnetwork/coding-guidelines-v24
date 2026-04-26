@@ -141,6 +141,37 @@ INTENT_PREFIXES: tuple[str, ...] = ("please ",)
 BULLET_LINK_RE = re.compile(r"^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*$")
 
 
+# --- Suggested-patch fix hints ----------------------------------------
+# Per-rule one-line replacement scaffold inserted into the suggested
+# `git apply` patch in place of the offending post-state line. The
+# linter cannot infer the author's correct fix — these are TODO
+# markers labelled with the rule code so a reviewer doing a copy-
+# paste apply immediately sees what kind of edit is required.
+#
+# Rules NOT in this table (e.g. the structural P-006 "missing closer"
+# where the violation line is the *opener*, not a wrong line in
+# place) fall back to ``_RULE_FIX_FALLBACK``. Adding a more specific
+# hint later is purely additive and does not break the schema.
+_RULE_FIX_HINTS: dict[str, str] = {
+    "P-001": '<!-- TODO(P-001): replace with a complete imperative '
+             'reason="…" (e.g. reason="Document RAG eviction policy"). -->',
+    "P-002": "- [TODO(P-002): describe target](relative/path/to/spec.md)",
+    "P-003": "- [TODO(P-003): use a relative .md path](relative/path/to/spec.md)",
+    "P-004": "- [TODO(P-004): add at least one bullet](relative/path/to/spec.md)",
+    "P-005": "<!-- TODO(P-005): remove the blank line above; "
+             "placeholder bodies must be contiguous. -->",
+    "P-006": "<!-- TODO(P-006): add a matching closing marker "
+             "(--> or </spec-placeholder>) below this opener. -->",
+    "P-007": "- [TODO(P-007): point at a different target — "
+             "duplicate of an earlier placeholder](relative/path/to/different-spec.md)",
+    "P-008": "<!-- TODO(P-008): see linter rule docs for the exact fix. -->",
+}
+_RULE_FIX_FALLBACK = (
+    "<!-- TODO: see linter-scripts/check-placeholder-comments.py "
+    "for the rule's required fix. -->"
+)
+
+
 @dataclass(frozen=True)
 class Violation:
     file: str
@@ -516,6 +547,27 @@ def main(argv: list[str] | None = None) -> int:
              "with no available excerpt simply omit the key, so "
              "parsers that don't know about it are unaffected. "
              "Window size is governed by --diff-context.")
+    ap.add_argument("--suggest-patch", action="store_true",
+        help="Under each human-readable diff excerpt, append a "
+             "`git apply`-style unified-diff scaffold that removes "
+             "the offending line and inserts a rule-specific TODO "
+             "marker in its place. Designed for copy-paste: pipe the "
+             "block (between the `--- BEGIN SUGGESTED PATCH ---` and "
+             "`--- END SUGGESTED PATCH ---` fences) into "
+             "`git apply -p0` and the file is staged with a clearly "
+             "marked spot to fix. The replacement text is a TODO "
+             "hint, not a real fix — the linter cannot infer the "
+             "author's intent. No-op without --diff-base (no post-"
+             "state line numbers available outside diff mode).")
+    ap.add_argument("--json-suggest-patch", action="store_true",
+        help="Only meaningful with --json + --diff-base. Adds a "
+             "`suggested_patch` string field to each violation row "
+             "containing the same `git apply`-ready unified diff as "
+             "--suggest-patch. The schema is strictly additive: "
+             "violations the linter can't generate a patch for "
+             "(e.g. line not in any captured hunk) simply omit the "
+             "key, so legacy parsers keying off `file`/`line`/`code`/"
+             "`message` keep working unchanged.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -660,12 +712,33 @@ def main(argv: list[str] | None = None) -> int:
         and changed_md is not None
         and (not args.json or args.json_excerpts)
     )
-    if want_excerpts:
+    # Suggested patches reuse the same ``_DiffExcerpts`` data (post-
+    # state line index + hunk windows) so we widen the fetch trigger
+    # to also cover --suggest-patch / --json-suggest-patch when
+    # excerpts themselves are off (e.g. --diff-context=0 but the
+    # author still wants a copy-paste fix scaffold).
+    want_patches = (
+        violations
+        and args.diff_base
+        and changed_md is not None
+        and ((not args.json and args.suggest_patch)
+             or (args.json and args.json_suggest_patch))
+    )
+    if want_excerpts or want_patches:
         affected = sorted({v.file for v in violations
                            if (repo_root / v.file).resolve() in changed_md})
         for rel in affected:
+            # When only patches are requested, fetch a minimal
+            # 1-line context so suggest_patch() still has the
+            # above/below anchor rows it uses for hunk math. The
+            # excerpt renderer would emit a tiny window in that
+            # case, but we already gate human/JSON excerpt output
+            # on ``want_excerpts`` separately so nothing leaks.
+            ctx = args.diff_context if want_excerpts else max(
+                1, args.diff_context,
+            )
             excerpt = _fetch_diff_excerpts(
-                repo_root, args.diff_base, rel, args.diff_context,
+                repo_root, args.diff_base, rel, ctx,
             )
             if excerpt is not None:
                 diff_excerpts[rel] = excerpt
@@ -678,19 +751,23 @@ def main(argv: list[str] | None = None) -> int:
         # ``null`` or ``[]``, so legacy parsers that key only off
         # ``file``/``line``/``code``/``message`` keep working
         # without seeing a new always-present field.
-        if not args.json_excerpts:
+        if not args.json_excerpts and not args.json_suggest_patch:
             print(json.dumps([asdict(v) for v in violations], indent=2))
         else:
             payload: list[dict[str, object]] = []
             for v in violations:
                 row = asdict(v)
                 excerpt = diff_excerpts.get(v.file)
-                if excerpt is not None:
+                if excerpt is not None and args.json_excerpts:
                     snippet = excerpt.render_structured(
                         v.line, args.diff_context,
                     )
                     if snippet:
                         row["excerpt"] = snippet
+                if excerpt is not None and args.json_suggest_patch:
+                    patch_text = excerpt.suggest_patch(v.file, v.line, v.code)
+                    if patch_text:
+                        row["suggested_patch"] = patch_text
                 payload.append(row)
             # ``ensure_ascii=False`` so non-ASCII spec content
             # (e.g. quoted UTF-8 paths from the rename hardening)
@@ -706,7 +783,7 @@ def main(argv: list[str] | None = None) -> int:
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
                 excerpt = diff_excerpts.get(v.file)
-                if excerpt is not None:
+                if excerpt is not None and args.diff_context > 0:
                     snippet = excerpt.render(v.line, args.diff_context)
                     if snippet:
                         # Two-space indent under the violation line
@@ -715,6 +792,21 @@ def main(argv: list[str] | None = None) -> int:
                         # leading `<file>:<line>` shape.
                         for sline in snippet:
                             print(f"    {sline}")
+                if excerpt is not None and args.suggest_patch:
+                    patch_text = excerpt.suggest_patch(v.file, v.line, v.code)
+                    if patch_text:
+                        # Wrap the patch in clear fences so authors
+                        # can mouse-select the body and pipe it
+                        # straight into ``git apply -p0 --recount``.
+                        # Indented to nest visually under the
+                        # violation, but the fences themselves stay
+                        # at column 4 so awk/sed extraction is
+                        # trivial (look for the literal sentinel).
+                        print("    --- BEGIN SUGGESTED PATCH "
+                              "(git apply -p0 --recount) ---")
+                        for pline in patch_text.rstrip("\n").split("\n"):
+                            print(f"    {pline}")
+                        print("    --- END SUGGESTED PATCH ---")
             print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
 
     # ---- GitHub Actions annotations (always after the human summary)
@@ -1299,6 +1391,95 @@ class _DiffExcerpts:
                                           # the violation's own
             })
         return out
+
+
+    def suggest_patch(self, file: str, line: int,
+                      rule_code: str) -> str:
+        """Return a ``git apply``-ready unified-diff scaffold that
+        replaces the violation line with a TODO marker keyed off
+        ``rule_code``.
+
+        Returns ``""`` (empty string — *not* ``None``) when no
+        post-state line for ``line`` was captured (violation outside
+        every hunk, or pure-removal file). Callers treat ``""`` as
+        "no patch available" and simply omit the suggestion.
+
+        The emitted diff is intentionally minimal: at most one line
+        of pre-existing context above and below the violation line
+        (whatever the captured hunk has — the patch is shorter at
+        hunk boundaries). Headers use ``a/<path>`` / ``b/<path>``
+        and post-state line numbers on both sides; downstream users
+        run ``git apply -p0 --recount`` (documented in the human
+        renderer's fence) so any pre/post line drift is reconciled
+        automatically.
+
+        For a context line (``kind == " "``) the patch *swaps* the
+        bad line for the TODO. For an added line (``kind == "+"``)
+        the patch keeps the bad addition and inserts the TODO
+        immediately after — the linter cannot safely delete an
+        added line because the surrounding pre-state coordinates
+        would shift; the author then manually removes the bad
+        addition once they've written the real fix.
+        """
+        entry = self.lines.get(line)
+        if entry is None:
+            return ""
+        kind, text = entry
+        # Pre-existing context (one line above + below if available
+        # in the captured hunk; the parser only stores ``+`` and
+        # `` `` rows so anything we get back is safe to render).
+        above = self.lines.get(line - 1)
+        below = self.lines.get(line + 1)
+        replacement = _RULE_FIX_HINTS.get(rule_code, _RULE_FIX_FALLBACK)
+
+        body: list[str] = []
+        # Anchor lines must use a leading single space — git's
+        # tolerance for missing-space context lines is undefined
+        # across versions; we always emit the canonical form.
+        if above is not None:
+            body.append(f" {above[1]}")
+        if kind == "+":
+            # Pure insertion: keep the bad ``+`` line, then add the
+            # TODO immediately after it. The author removes the bad
+            # line manually once they write the real fix.
+            body.append(f" {text}")
+            body.append(f"+{replacement}")
+        else:
+            # Context line in the post-state ⇒ it exists in the
+            # pre-state too, so a swap (`-bad` / `+todo`) lands
+            # cleanly with ``git apply --recount``.
+            body.append(f"-{text}")
+            body.append(f"+{replacement}")
+        if below is not None:
+            body.append(f" {below[1]}")
+
+        # Hunk math: pre-state and post-state both span ``hunk_len``
+        # lines starting at ``hunk_start`` (the row above the
+        # violation, or the violation itself when it's the first
+        # line of the file). For a swap, pre and post counts match.
+        # For an insertion (`+` violation), post is one larger than
+        # pre — git accepts mismatched counts and ``--recount``
+        # would fix them anyway, but we emit the precise numbers so
+        # vanilla ``git apply -p0`` works without the flag.
+        hunk_start = line if above is None else line - 1
+        ctx_above = 0 if above is None else 1
+        ctx_below = 0 if below is None else 1
+        if kind == "+":
+            pre_len = ctx_above + 1 + ctx_below          # bad + ctx
+            post_len = ctx_above + 2 + ctx_below         # bad + TODO + ctx
+        else:
+            pre_len = ctx_above + 1 + ctx_below          # bad + ctx
+            post_len = ctx_above + 1 + ctx_below         # TODO + ctx
+
+        header = (f"@@ -{hunk_start},{pre_len} "
+                  f"+{hunk_start},{post_len} @@")
+        return (
+            f"--- a/{file}\n"
+            f"+++ b/{file}\n"
+            f"{header}\n"
+            + "\n".join(body)
+            + "\n"
+        )
 
 
 def _parse_unified_diff_post(stdout: str) -> _DiffExcerpts:
