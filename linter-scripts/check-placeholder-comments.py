@@ -1354,6 +1354,23 @@ _SIMILARITY_BLANK = "-"
 #                            shaped exactly ``D\tpath`` (the verbatim
 #                            git wire format some CI runners
 #                            forward).
+#   * ``rename-source``    — synthesised post-collection: the path
+#                            was captured as a delete (``diff-D`` or
+#                            ``changed-files-D``) but ALSO appears
+#                            as the OLD side of a rename or copy in
+#                            the same intake. The file isn't really
+#                            gone — it's been renamed — and the NEW
+#                            path is being linted as a normal
+#                            change. The reason text names the new
+#                            path so the audit reader can follow
+#                            the trail without cross-referencing
+#                            the rename row by hand. Surfaces in
+#                            both git-diff and ``--changed-files``
+#                            intake: a tooling pipeline that
+#                            forwards both ``D\told`` and a
+#                            separate ``R\told\tnew`` (perfectly
+#                            legal, just redundant) used to land on
+#                            the misleading "file removed" reason.
 #
 # ``_DELETED_REASON_FALLBACK`` covers any future provenance the
 # parsers add before this map catches up — keeps the audit
@@ -1367,6 +1384,65 @@ _DELETED_REASON: dict[str, str] = {
 _DELETED_REASON_FALLBACK = ("path captured as a delete by the diff "
                             "intake but provenance is unknown — "
                             "treated as `ignored-deleted` for safety")
+
+# Template for the ``rename-source`` reason. The new-path lookup is
+# done at audit-emit time (rather than baked into a static string)
+# because the same provenance tag has to name a different new path
+# per old path. Centralised so the wording is uniform across the
+# text table, JSON payload, and CSV export.
+_DELETED_REASON_RENAME_SOURCE = (
+    "path is the OLD side of a rename/copy in the same intake "
+    "(new path: {new_path!r}) — recorded as `ignored-deleted` "
+    "because the OLD file no longer exists; the NEW path is "
+    "linted as a normal change"
+)
+
+
+def _resolve_deleted_reason(
+    path: str,
+    source: str,
+    similarities: "dict[str, _RenameSimilarity] | None",
+) -> str:
+    """Pick the most informative ``reason`` for an ``ignored-deleted`` row.
+
+    Rules (most-specific first):
+
+    1. If ``path`` matches the ``old_path`` of any ``_RenameSimilarity``
+       record in ``similarities``, return the ``rename-source``
+       reason naming the NEW path. The deleted entry is the
+       *source* of a rename, not a true removal — the file lives
+       on under a different name and that NEW path is what the
+       linter is actually scanning. Naming the new path inline
+       saves the audit reader from cross-referencing the rename
+       row by hand.
+    2. Otherwise fall back to the per-provenance reason from
+       :data:`_DELETED_REASON` keyed on ``source`` (``diff-D`` or
+       ``changed-files-D``), preserving the legacy wording for
+       every row that ISN'T a rename source.
+    3. If ``source`` is unknown to :data:`_DELETED_REASON` (a future
+       parser landed before the map caught up), return
+       :data:`_DELETED_REASON_FALLBACK` — same safety net the
+       audit emitter has always had.
+
+    The cross-check is a constant-time scan over the similarities
+    map's values; for the realistic intake sizes (≤ a few hundred
+    rename rows) this is trivially cheap. We intentionally do NOT
+    pre-build a reverse ``old_path → new_path`` index: keeping the
+    helper stateless avoids a second invariant for callers to
+    maintain and the linter's audit pass already runs at most once
+    per invocation.
+    """
+    if similarities:
+        for new_path, sim in similarities.items():
+            # ``old_path`` may legitimately be empty in pathological
+            # hand-rolled inputs (see _parse_name_status's R/C
+            # tolerance) — skip those so a blank string can't match
+            # an unrelated blank-path delete.
+            if sim.old_path and sim.old_path == path:
+                return _DELETED_REASON_RENAME_SOURCE.format(
+                    new_path=new_path,
+                )
+    return _DELETED_REASON.get(source, _DELETED_REASON_FALLBACK)
 
 
 # Stable header for the ``--similarity-csv`` export. Frozen at module
