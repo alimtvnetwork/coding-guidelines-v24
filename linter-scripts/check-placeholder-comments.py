@@ -1280,6 +1280,56 @@ _SIMILARITY_CSV_HEADER: tuple[str, ...] = (
     "path", "status", "reason", "kind", "score", "old_path",
 )
 
+# Extended header used when ``--similarity-labels`` is on. The extra
+# trailing column is appended (rather than inserted) so consumers that
+# read positionally can keep using indices 0–5 unchanged and only need
+# to opt into index 6 when they care about the per-kind label.
+_SIMILARITY_CSV_HEADER_LABELED: tuple[str, ...] = (
+    *_SIMILARITY_CSV_HEADER, "score_kind",
+)
+
+# Canonical labels for the ``score_kind`` discriminator. Centralised so
+# the JSON serializer, the text-table renderer, the CSV exporter, and
+# the tests all agree on the exact spelling. The vocabulary is
+# deliberately tiny and hyphenated so downstream grep / jq pipelines
+# can pattern-match without ambiguity.
+#
+# Semantics:
+#   * ``rename-similarity`` — kind ``R``, score = how similar the two
+#     paths are (100 = byte-identical move, lower = more edits during
+#     the rename).
+#   * ``copy-similarity``   — kind ``C``, score = how much of the
+#     source survived in the copy (100 = verbatim duplicate).
+#   * ``unscored``          — kind ``R`` / ``C`` row whose score is
+#     ``None`` (authored ``--changed-files`` payload that omitted the
+#     percentage, or arrow-form rename). The kind is still meaningful;
+#     the magnitude isn't.
+_SCORE_KIND_RENAME = "rename-similarity"
+_SCORE_KIND_COPY = "copy-similarity"
+_SCORE_KIND_UNSCORED = "unscored"
+
+
+def _score_kind_for(sim: "_RenameSimilarity | None") -> str | None:
+    """Map a ``_RenameSimilarity`` to its canonical ``score_kind`` label.
+
+    Returns ``None`` for plain A/M/D rows (no rename provenance at
+    all) so callers can distinguish "no label applies" from "label is
+    ``unscored``" — the latter still carries a kind letter and an
+    old-side path, only the magnitude is missing.
+    """
+    if sim is None:
+        return None
+    if sim.score is None:
+        return _SCORE_KIND_UNSCORED
+    if sim.kind == "R":
+        return _SCORE_KIND_RENAME
+    if sim.kind == "C":
+        return _SCORE_KIND_COPY
+    # Defensive: an unknown kind letter shouldn't reach here (the
+    # parsers only emit R/C), but if a future git format adds one we
+    # surface it as unscored rather than crashing.
+    return _SCORE_KIND_UNSCORED
+
 
 def _write_similarity_csv(rows: list[_ChangedFileAudit],
                           target: str) -> None:
