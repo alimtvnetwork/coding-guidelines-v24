@@ -252,10 +252,151 @@ trait RouteRegistrationTrait
 |------|--------|
 | Every route uses `EndpointType` for path | No string literals |
 | Every route uses `HttpMethodType` for method | `HttpMethodType::Get->value`, not `'GET'` |
-| Every route has a `permission_callback` | Never `__return_true` for authenticated endpoints |
+| Every route has a `permission_callback` | **Never `__return_true`** — full rules in §14.5.1 |
+| Every mutating route verifies a nonce | See §14.5.2 — applies to POST/PUT/PATCH/DELETE |
 | Routes are grouped by domain | Comment separators between groups |
 | Each group is wrapped in `$safeRegister` | Failure in one group does not block others |
 | Callback points to a public trait method | `[$this, 'handleMethodName']` |
+
+---
+
+## 14.5.1 Security — Permission Callbacks (🔴 CODE RED)
+
+> **Severity:** 🔴 CODE RED — non-negotiable. Linter rule
+> [`WP-PERM-001`](../02-coding-guidelines/06-cicd-integration/06-rules-mapping.md)
+> blocks merge on any violation.
+
+### Hard rules
+
+| # | Rule | Rationale |
+|---|------|-----------|
+| 1 | **`permission_callback` is mandatory on every route.** Omitting it is a fatal error, not a warning. | WordPress allows registration without one but emits a `_doing_it_wrong` notice and still serves the route — silent public exposure. |
+| 2 | **`__return_true` is forbidden as the value of `permission_callback`.** No exceptions, no "but it's only a read endpoint", no "ping is harmless". | A public-by-default callback turns every future change to that route into an unaudited public endpoint. Public routes must declare intent **explicitly** (rule 3). |
+| 3 | **Public routes MUST use a named, documented callback** — not an anonymous closure, not `__return_true`, not a string literal. The callback's docblock MUST state *why* the route is public. | Forces an audit trail; greppable by reviewers. |
+| 4 | **Authenticated routes MUST call `current_user_can( $cap )` with a specific capability** (e.g. `manage_options`, `edit_posts`). Never `is_user_logged_in()` alone for mutating routes. | A logged-in subscriber is not authorized to flush caches. |
+| 5 | **Capability strings MUST come from a `CapabilityType` enum**, never inline strings. | Same rule as `EndpointType` / `HttpMethodType` — no magic strings. |
+| 6 | **The callback MUST return `bool` or `WP_Error`**, never `int`, `string`, or `null`. | Truthy non-bool values (e.g. `1`, `'allow'`) are silently coerced and bypass intent checks in custom guards. |
+
+### Canonical patterns
+
+**❌ Forbidden:**
+
+```php
+'permission_callback' => '__return_true',                    // rule 2
+'permission_callback' => fn() => true,                       // rule 3 (closure, no audit)
+'permission_callback' => 'is_user_logged_in',                // rule 4 (no capability)
+'permission_callback' => [$this, 'isLoggedIn'],              // rule 4 (no capability)
+// missing 'permission_callback' entirely                    // rule 1
+```
+
+**✅ Required — public route:**
+
+```php
+/**
+ * Public on purpose: the /ping route exposes only static metadata
+ * (author, company, version) declared in PluginConfigType. Approved
+ * by security review YYYY-MM-DD, ticket SEC-123.
+ */
+public function allowPublicPing(): bool
+{
+    return true;
+}
+```
+
+**✅ Required — authenticated route:**
+
+```php
+public function checkSettingsPermission(): bool|WP_Error
+{
+    if (!current_user_can(CapabilityType::ManagePluginSettings->value)) {
+        return new WP_Error(
+            'rest_forbidden',
+            __('You are not allowed to manage these settings.', $pluginSlug),
+            ['status' => 403]
+        );
+    }
+    return true;
+}
+```
+
+### Lint enforcement
+
+The CI linter pack ships rule `WP-PERM-001` (PHP) which fails the
+build on any of the forbidden patterns above. See
+[`linters-cicd/checks/wp-permission-callback/php.py`](../../linters-cicd/checks/).
+
+---
+
+## 14.5.2 Security — Nonce Verification for Mutating Routes (🔴 CODE RED)
+
+> **Severity:** 🔴 CODE RED — non-negotiable. Linter rule
+> [`WP-NONCE-001`](../02-coding-guidelines/06-cicd-integration/06-rules-mapping.md)
+> blocks merge on any violation.
+
+REST authentication via cookies is vulnerable to CSRF unless the
+request also presents a valid nonce. WordPress core ships
+`wp_rest` for the REST API and `check_admin_referer()` /
+`check_ajax_referer()` for `admin-post.php` and `admin-ajax.php`.
+
+### Hard rules
+
+| # | Rule | Surface |
+|---|------|---------|
+| 1 | Every `POST`, `PUT`, `PATCH`, `DELETE` route MUST verify a nonce **before** any side-effect runs. | REST + admin-post + admin-ajax |
+| 2 | REST mutating routes MUST require the `X-WP-Nonce` header (issued via `wp_create_nonce('wp_rest')`). The permission callback MUST call `wp_verify_nonce()` or rely on WordPress's built-in cookie+nonce auth and reject requests without a valid nonce. | REST |
+| 3 | `admin-post.php` handlers MUST call `check_admin_referer( $action, $field )` as the **first executable line** of the handler. | Admin form POST |
+| 4 | `admin-ajax.php` handlers MUST call `check_ajax_referer( $action, 'nonce' )` as the **first executable line**. | Admin AJAX |
+| 5 | Nonce action strings MUST come from an `AjaxActionType::nonceAction()` / `EndpointType::nonceAction()` enum method — never inline literals. | All |
+| 6 | Nonces are **in addition to**, never a replacement for, the permission callback / capability check from §14.5.1. | All |
+| 7 | A failed nonce check MUST short-circuit with HTTP `403` and a structured `WP_Error('rest_cookie_invalid_nonce', …)` — never a redirect, never a silent pass. | All |
+
+### Canonical pattern — REST mutating route
+
+```php
+public function checkSettingsPermission(WP_REST_Request $request): bool|WP_Error
+{
+    // Rule 4 — capability first.
+    if (!current_user_can(CapabilityType::ManagePluginSettings->value)) {
+        return new WP_Error('rest_forbidden', __('Forbidden.', $slug), ['status' => 403]);
+    }
+    // Rule 2 — nonce second.
+    $nonce = $request->get_header('x_wp_nonce');
+    if (!wp_verify_nonce($nonce, 'wp_rest')) {
+        return new WP_Error(
+            'rest_cookie_invalid_nonce',
+            __('Cookie nonce is invalid.', $slug),
+            ['status' => 403]
+        );
+    }
+    return true;
+}
+```
+
+### Canonical pattern — admin-post.php handler
+
+```php
+public function handleSaveSettings(): void
+{
+    // Rule 3 — first executable line.
+    check_admin_referer(
+        AdminActionType::SaveSettings->nonceAction(),
+        AdminActionType::SaveSettings->nonceField()
+    );
+    // Rule 6 — capability check still required.
+    if (!current_user_can(CapabilityType::ManagePluginSettings->value)) {
+        wp_die(__('Forbidden.', $slug), 403);
+    }
+    // … sanitize + persist …
+}
+```
+
+### Lint enforcement
+
+The CI linter pack ships rule `WP-NONCE-001` (PHP) which scans every
+`register_rest_route()` with a non-GET method, every
+`add_action('admin_post_*')`, and every `add_action('wp_ajax_*')`,
+and asserts a nonce verification call appears in the handler. See
+[`linters-cicd/checks/wp-nonce-verification/php.py`](../../linters-cicd/checks/).
 
 ---
 
@@ -835,6 +976,8 @@ private function executeOpenapi(WP_REST_Request $request): WP_REST_Response
 | Route paths | Resource-based, kebab-case, defined in `EndpointType` | §14.2, §14.4 |
 | HTTP methods | Via `HttpMethodType` enum; GET=read, POST=action/create, DELETE=remove | §14.3 |
 | Route registration | Grouped, fault-tolerant `$safeRegister` closure | §14.5 |
+| Permission callbacks | Mandatory; `__return_true` forbidden; capability via `CapabilityType` enum | §14.5.1 |
+| Nonce verification | Required on every POST/PUT/PATCH/DELETE; `wp_rest` for REST, `check_admin_referer`/`check_ajax_referer` for admin | §14.5.2 |
 | Pagination | `limit`/`offset` or `page` params; `PaginationConfigType` defaults | §14.6 |
 | Filters | `FilterKeyType` enum; camelCase query params | §14.7 |
 | Request body fields | `RequestFieldType` enum; snake_case | §14.8 |
