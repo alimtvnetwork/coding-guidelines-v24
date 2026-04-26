@@ -516,6 +516,27 @@ def main(argv: list[str] | None = None) -> int:
              "with no available excerpt simply omit the key, so "
              "parsers that don't know about it are unaffected. "
              "Window size is governed by --diff-context.")
+    ap.add_argument("--suggest-patch", action="store_true",
+        help="Under each human-readable diff excerpt, append a "
+             "`git apply`-style unified-diff scaffold that removes "
+             "the offending line and inserts a rule-specific TODO "
+             "marker in its place. Designed for copy-paste: pipe the "
+             "block (between the `--- BEGIN SUGGESTED PATCH ---` and "
+             "`--- END SUGGESTED PATCH ---` fences) into "
+             "`git apply -p0` and the file is staged with a clearly "
+             "marked spot to fix. The replacement text is a TODO "
+             "hint, not a real fix — the linter cannot infer the "
+             "author's intent. No-op without --diff-base (no post-"
+             "state line numbers available outside diff mode).")
+    ap.add_argument("--json-suggest-patch", action="store_true",
+        help="Only meaningful with --json + --diff-base. Adds a "
+             "`suggested_patch` string field to each violation row "
+             "containing the same `git apply`-ready unified diff as "
+             "--suggest-patch. The schema is strictly additive: "
+             "violations the linter can't generate a patch for "
+             "(e.g. line not in any captured hunk) simply omit the "
+             "key, so legacy parsers keying off `file`/`line`/`code`/"
+             "`message` keep working unchanged.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
