@@ -444,6 +444,10 @@ def main(argv: list[str] | None = None) -> int:
         help="Repository root for relative path reporting (default: cwd).")
     ap.add_argument("--json", action="store_true",
         help="Emit findings as JSON instead of human text.")
+    ap.add_argument("--allow-verb", action="append", default=[],
+        metavar="VERB",
+        help="Add an extra imperative verb to the P-001 allowlist "
+             "(repeatable). Use lowercase, hyphens allowed.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -452,10 +456,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: --root {args.root!r} is not a directory", file=sys.stderr)
         return 2
 
+    intent_verbs = DEFAULT_INTENT_VERBS | {v.lower() for v in args.allow_verb}
+
     violations: list[Violation] = []
     cross_file_bullets: list[tuple[str, int, str]] = []
     for md in iter_markdown_files(root):
-        violations.extend(lint_file(md, repo_root, cross_file_bullets))
+        violations.extend(lint_file(md, repo_root, cross_file_bullets, intent_verbs))
 
     # ---- P-007 cross-file duplicates -------------------------------
     # Group every valid bullet across the scan by canonical target.
