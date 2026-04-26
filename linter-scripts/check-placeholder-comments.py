@@ -1432,6 +1432,7 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 dedupe: bool = False,
                                 only_statuses: frozenset[str] | None = None,
                                 with_similarity: bool = False,
+                                with_labels: bool = False,
                                 ) -> None:
     """Print the diff-mode changed-file audit table to ``stream``.
 
@@ -1479,6 +1480,16 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     :func:`dataclasses.asdict` so the schema is regular for downstream
     consumers. Off by default to keep the legacy 3-column shape and
     avoid widening logs that don't care about provenance.
+
+    When ``with_labels`` is True (driven by ``--similarity-labels`` and
+    only meaningful in combination with ``with_similarity``) one more
+    column — ``meaning`` — is appended to the text table, carrying the
+    canonical ``rename-similarity`` / ``copy-similarity`` / ``unscored``
+    discriminator (or ``-`` for plain A/M/D rows). In JSON mode the
+    same value is added to the nested ``similarity`` object as a
+    ``score_kind`` field; for plain rows where ``similarity`` itself
+    is ``null`` the discriminator is naturally absent. The legacy
+    schema is preserved byte-for-byte when the flag is off.
     """
     dropped = 0
     if dedupe:
@@ -1500,6 +1511,15 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
             obj = asdict(r)
             if not with_similarity:
                 obj.pop("similarity", None)
+            elif with_labels:
+                # Inject the discriminator alongside the existing
+                # ``kind``/``score``/``old_path`` triple. Skip the
+                # injection on plain rows whose ``similarity`` is
+                # ``null`` — there's no sub-object to extend, and
+                # absence already means "no provenance".
+                sim_obj = obj.get("similarity")
+                if isinstance(sim_obj, dict):
+                    sim_obj["score_kind"] = _score_kind_for(r.similarity)
             payload.append(obj)
         print(json.dumps(payload, indent=2, ensure_ascii=False),
               file=stream)
@@ -1517,6 +1537,8 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         # Surface the extra columns in the header so a reviewer
         # scanning the log knows the wider table isn't a layout bug.
         suffix += "; +similarity columns"
+        if with_labels:
+            suffix += " +meaning"
     print("── placeholder-comments: changed-file audit "
           f"({len(full_rows)} row(s){suffix}) ──", file=stream)
     if not rows:
@@ -1543,23 +1565,55 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
             kind_w = max(len("kind"), max(len(c[0]) for c in cells))
             score_w = max(len("score"), max(len(c[1]) for c in cells))
             old_w = max(len("old"), max(len(c[2]) for c in cells))
-            header = (
-                f"  {'status'.ljust(status_w)}  "
-                f"{'path'.ljust(path_w)}  "
-                f"{'kind'.ljust(kind_w)}  "
-                f"{'score'.ljust(score_w)}  "
-                f"{'old'.ljust(old_w)}  reason"
-            )
-            print(header, file=stream)
-            rule_w = (status_w + path_w + kind_w + score_w
-                      + old_w + len("reason") + 5 * 2)
-            print("  " + "-" * rule_w, file=stream)
-            for r, (k, sc, op) in zip(rows, cells):
-                print(f"  {r.status.ljust(status_w)}  "
-                      f"{r.path.ljust(path_w)}  "
-                      f"{k.ljust(kind_w)}  "
-                      f"{sc.ljust(score_w)}  "
-                      f"{op.ljust(old_w)}  {r.reason}", file=stream)
+            if with_labels:
+                # Compute the meaning column up front so its width
+                # participates in the same ``ljust`` math as the rest.
+                # Plain rows render as ``-`` to match the surrounding
+                # blank-cell convention.
+                meanings = [
+                    (_score_kind_for(r.similarity) or _SIMILARITY_BLANK)
+                    for r in rows
+                ]
+                meaning_w = max(len("meaning"),
+                                max(len(m) for m in meanings))
+                header = (
+                    f"  {'status'.ljust(status_w)}  "
+                    f"{'path'.ljust(path_w)}  "
+                    f"{'kind'.ljust(kind_w)}  "
+                    f"{'score'.ljust(score_w)}  "
+                    f"{'old'.ljust(old_w)}  "
+                    f"{'meaning'.ljust(meaning_w)}  reason"
+                )
+                print(header, file=stream)
+                rule_w = (status_w + path_w + kind_w + score_w
+                          + old_w + meaning_w + len("reason") + 6 * 2)
+                print("  " + "-" * rule_w, file=stream)
+                for r, (k, sc, op), meaning in zip(rows, cells, meanings):
+                    print(f"  {r.status.ljust(status_w)}  "
+                          f"{r.path.ljust(path_w)}  "
+                          f"{k.ljust(kind_w)}  "
+                          f"{sc.ljust(score_w)}  "
+                          f"{op.ljust(old_w)}  "
+                          f"{meaning.ljust(meaning_w)}  {r.reason}",
+                          file=stream)
+            else:
+                header = (
+                    f"  {'status'.ljust(status_w)}  "
+                    f"{'path'.ljust(path_w)}  "
+                    f"{'kind'.ljust(kind_w)}  "
+                    f"{'score'.ljust(score_w)}  "
+                    f"{'old'.ljust(old_w)}  reason"
+                )
+                print(header, file=stream)
+                rule_w = (status_w + path_w + kind_w + score_w
+                          + old_w + len("reason") + 5 * 2)
+                print("  " + "-" * rule_w, file=stream)
+                for r, (k, sc, op) in zip(rows, cells):
+                    print(f"  {r.status.ljust(status_w)}  "
+                          f"{r.path.ljust(path_w)}  "
+                          f"{k.ljust(kind_w)}  "
+                          f"{sc.ljust(score_w)}  "
+                          f"{op.ljust(old_w)}  {r.reason}", file=stream)
         else:
             print(f"  {'status'.ljust(status_w)}  "
                   f"{'path'.ljust(path_w)}  reason", file=stream)
