@@ -70,6 +70,10 @@ def is_safe_identifier_arg(arg: str) -> bool:
     arg = arg.strip()
     if not arg:
         return False
+    low = arg.lower()
+    for prefix in TAINTED_PREFIXES:
+        if low.startswith(prefix):
+            return False
     if STRING_LITERAL_RE.match(arg):
         return True
     if ALLOWLIST_LOOKUP_RE.match(arg):
