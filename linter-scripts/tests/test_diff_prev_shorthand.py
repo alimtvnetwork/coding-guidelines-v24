@@ -110,7 +110,8 @@ class DiffPrevCliWiring(unittest.TestCase):
         # want git to receive `HEAD~abc` and produce a confusing
         # "unknown revision" error several frames later.
         with tempfile.TemporaryDirectory() as td:
-            code, _, err = _run("--diff-prev", "abc", cwd=Path(td))
+            code, _, err = _run("--diff-prev", "abc",
+                                "--root", td, cwd=Path(td))
         self.assertEqual(code, 2)
         self.assertIn("--diff-prev", err)
         self.assertIn("non-negative integer", err)
@@ -120,7 +121,8 @@ class DiffPrevCliWiring(unittest.TestCase):
         # known flag); our own validator catches it. Keeps the error
         # surface single-sourced.
         with tempfile.TemporaryDirectory() as td:
-            code, _, err = _run("--diff-prev", "-1", cwd=Path(td))
+            code, _, err = _run("--diff-prev", "-1",
+                                "--root", td, cwd=Path(td))
         self.assertEqual(code, 2)
         # Either argparse rejects "-1" as an unknown option OR our
         # validator catches it; both are acceptable hard-fails. We
@@ -134,6 +136,7 @@ class DiffPrevCliWiring(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             code, _, err = _run("--diff-prev", "1",
                                 "--diff-base", "origin/main",
+                                "--root", td,
                                 cwd=Path(td))
         self.assertEqual(code, 2)
         self.assertIn("--diff-prev", err)
@@ -144,6 +147,7 @@ class DiffPrevCliWiring(unittest.TestCase):
             (Path(td) / "list.txt").write_text("")
             code, _, err = _run("--diff-prev", "1",
                                 "--changed-files", "list.txt",
+                                "--root", td,
                                 cwd=Path(td))
         self.assertEqual(code, 2)
         self.assertIn("--diff-prev", err)
