@@ -4,14 +4,23 @@
 SPEC-PLACEHOLDER-001 — Lint placeholder HTML comment blocks in spec files.
 
 The cross-link checker (``check-spec-cross-links.py``) ignores links inside
-``<!-- ... -->`` comments so that authors can stash pending references
-without breaking CI. The trade-off is that *malformed* placeholder blocks
-(missing markers, broken bullet rows, stray text) silently slip through —
-the very rot the comment was supposed to prevent.
+``<spec-placeholder>...</spec-placeholder>`` blocks (and, for backward
+compatibility, the older ``<!-- TODO|FIXME ... -->`` HTML-comment form)
+so authors can stash pending references without breaking CI. The
+trade-off is that *malformed* placeholder blocks (missing markers,
+broken bullet rows, stray text) silently slip through — the very rot
+the placeholder was supposed to prevent.
 
-This script validates every placeholder block matching the convention
-documented in ``spec/_template.md`` §"Placeholder cross-references":
+This script validates every placeholder block of either supported
+format, per the conventions in ``spec/_template.md``
+§"Placeholder cross-references":
 
+    <spec-placeholder reason="activate when target is created">
+    - [Target Title](../NN-module-name/00-overview.md)
+    - [Target Title](../NN-module-name/01-file-name.md#section-anchor)
+    </spec-placeholder>
+
+    <!-- legacy form, still supported -->
     <!-- TODO: activate when target is created
     - [Target Title](../NN-module-name/00-overview.md)
     - [Target Title](../NN-module-name/01-file-name.md#section-anchor)
@@ -19,22 +28,27 @@ documented in ``spec/_template.md`` §"Placeholder cross-references":
 
 Rules enforced (lightweight, no AST):
 
-  P-001  Opening ``<!--`` line must include a ``TODO:`` (or ``FIXME:``)
-         marker so reviewers can grep pending work.
+  P-001  HTML-comment placeholders must include a ``TODO:`` (or
+         ``FIXME:``) marker on the opening line so reviewers can grep
+         pending work. The ``<spec-placeholder>`` form is self-marking.
   P-002  Every non-blank body line must be a markdown bullet
          (``- [text](link)``) — no stray prose, no orphan list markers.
   P-003  Bullet links must be relative paths ending in ``.md``
          (optionally with ``#anchor``); ``http(s)://`` and bare anchors
-         are rejected because the comment is meant for *future* internal
-         targets, not external references.
+         are rejected because placeholders are meant for *future*
+         internal targets, not external references.
   P-004  Block must contain at least one bullet (empty placeholders are
          dead code).
-  P-005  Block must not contain blank lines (keeps the snippet contiguous
-         per template guidance).
+  P-005  Block must not contain blank lines (keeps the snippet
+         contiguous per template guidance).
+  P-006  Every opening marker must have a matching closer
+         (``-->`` or ``</spec-placeholder>``).
 
 Only multi-line comment blocks that start with the ``TODO:``/``FIXME:``
 marker on the opening line are linted. Single-line comments and
-non-placeholder comments (e.g. licence headers) are left alone.
+non-placeholder comments (e.g. licence headers) are left alone. The
+``<spec-placeholder>`` form is *always* linted because the tag itself
+declares intent.
 
 Exit codes:
   0  = no malformed placeholder blocks
@@ -55,11 +69,22 @@ from pathlib import Path
 from typing import Iterable
 
 
+# --- HTML-comment placeholder (legacy form) ---------------------------
 # Opening marker must be on the same line as ``<!--`` so we can detect
 # placeholder intent without scanning the whole comment first.
 PLACEHOLDER_OPEN_RE = re.compile(r"<!--\s*(TODO|FIXME)\b[^\n]*$")
+COMMENT_CLOSE = "-->"
+
+# --- Custom-tag placeholder (preferred form) --------------------------
+# Single-line opener pattern: ``<spec-placeholder ...>`` (attributes
+# optional). The closer is ``</spec-placeholder>`` on its own line or
+# at end-of-line. Self-closing ``<spec-placeholder/>`` is rejected as
+# P-004 (empty block).
+TAG_OPEN_RE = re.compile(r"<spec-placeholder\b[^>]*>")
+TAG_SELF_CLOSE_RE = re.compile(r"<spec-placeholder\b[^>]*/\s*>")
+TAG_CLOSE = "</spec-placeholder>"
+
 BULLET_LINK_RE = re.compile(r"^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*$")
-CLOSE_MARKER = "-->"
 
 
 @dataclass(frozen=True)
@@ -117,6 +142,35 @@ def strip_inline_code(text: str) -> str:
                      for line in text.splitlines())
 
 
+def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
+                   out: list[Violation]) -> int:
+    """Apply P-002/P-003/P-005 to a body and return valid bullet count."""
+    bullet_count = 0
+    for ln, content in body:
+        if not content.strip():
+            out.append(Violation(rel, ln, "P-005",
+                "Blank line inside placeholder block; keep it contiguous."))
+            continue
+        bm = BULLET_LINK_RE.match(content)
+        if not bm:
+            out.append(Violation(rel, ln, "P-002",
+                "Placeholder body line is not a `- [text](link)` bullet."))
+            continue
+        target = bm.group(1)
+        if target.startswith(("http://", "https://", "mailto:", "#")):
+            out.append(Violation(rel, ln, "P-003",
+                f"Placeholder link `{target}` must be a relative `.md` path, "
+                "not external/anchor-only."))
+            continue
+        path_part = target.split("#", 1)[0]
+        if not path_part.endswith(".md"):
+            out.append(Violation(rel, ln, "P-003",
+                f"Placeholder link `{target}` must point at a `.md` file."))
+            continue
+        bullet_count += 1
+    return bullet_count
+
+
 def lint_file(path: Path, repo_root: Path) -> list[Violation]:
     rel = str(path.relative_to(repo_root))
     text = path.read_text(encoding="utf-8")
@@ -127,72 +181,80 @@ def lint_file(path: Path, repo_root: Path) -> list[Violation]:
     n = len(lines)
     while i < n:
         line = lines[i]
+
+        # ---- Custom-tag placeholder (preferred) ---------------------
+        tag_self = TAG_SELF_CLOSE_RE.search(line)
+        if tag_self:
+            out.append(Violation(rel, i + 1, "P-004",
+                "Self-closing `<spec-placeholder/>` has no bullet rows; remove or expand it."))
+            i += 1
+            continue
+        tag_open = TAG_OPEN_RE.search(line)
+        if tag_open:
+            open_line = i + 1
+            # Same-line open+close — degenerate empty block.
+            if TAG_CLOSE in line[tag_open.end():]:
+                out.append(Violation(rel, open_line, "P-004",
+                    "`<spec-placeholder>` block is empty (no bullet rows)."))
+                i += 1
+                continue
+            body, i, closed = _consume_block(lines, i + 1, TAG_CLOSE)
+            if not closed:
+                out.append(Violation(rel, open_line, "P-006",
+                    "`<spec-placeholder>` opened but never closed "
+                    "(missing `</spec-placeholder>`)."))
+                continue
+            bullet_count = _validate_body(rel, open_line, body, out)
+            if bullet_count == 0:
+                out.append(Violation(rel, open_line, "P-004",
+                    "`<spec-placeholder>` block contains no valid bullet rows."))
+            continue
+
+        # ---- HTML-comment placeholder (legacy) ----------------------
         m = PLACEHOLDER_OPEN_RE.search(line)
         if not m:
             i += 1
             continue
-
-        # Single-line ``<!-- TODO ... -->`` — opening + closing on same line.
-        # Strip the opener text we already matched and look past it.
-        if CLOSE_MARKER in line[m.end():] or CLOSE_MARKER in line[m.start():]:
-            # Same-line placeholder is degenerate (no bullets possible).
+        if COMMENT_CLOSE in line[m.end():] or COMMENT_CLOSE in line[m.start():]:
             out.append(Violation(rel, i + 1, "P-004",
                 "Placeholder comment has no bullet rows; remove or expand it."))
             i += 1
             continue
-
         open_line = i + 1
-        body: list[tuple[int, str]] = []
-        i += 1
-        closed = False
-        while i < n:
-            cur = lines[i]
-            if CLOSE_MARKER in cur:
-                # Anything before --> on the close line is body.
-                pre = cur.split(CLOSE_MARKER, 1)[0]
-                if pre.strip():
-                    body.append((i + 1, pre.rstrip()))
-                closed = True
-                i += 1
-                break
-            body.append((i + 1, cur.rstrip()))
-            i += 1
-
+        body, i, closed = _consume_block(lines, i + 1, COMMENT_CLOSE)
         if not closed:
             out.append(Violation(rel, open_line, "P-006",
                 "Placeholder comment opened but never closed (missing `-->`)."))
             continue
-
-        bullet_count = 0
-        for ln, content in body:
-            if not content.strip():
-                out.append(Violation(rel, ln, "P-005",
-                    "Blank line inside placeholder block; keep it contiguous."))
-                continue
-            bm = BULLET_LINK_RE.match(content)
-            if not bm:
-                out.append(Violation(rel, ln, "P-002",
-                    "Placeholder body line is not a `- [text](link)` bullet."))
-                continue
-            target = bm.group(1)
-            if target.startswith(("http://", "https://", "mailto:", "#")):
-                out.append(Violation(rel, ln, "P-003",
-                    f"Placeholder link `{target}` must be a relative `.md` path, "
-                    "not external/anchor-only."))
-                continue
-            # Strip anchor for extension check.
-            path_part = target.split("#", 1)[0]
-            if not path_part.endswith(".md"):
-                out.append(Violation(rel, ln, "P-003",
-                    f"Placeholder link `{target}` must point at a `.md` file."))
-                continue
-            bullet_count += 1
-
+        bullet_count = _validate_body(rel, open_line, body, out)
         if bullet_count == 0:
             out.append(Violation(rel, open_line, "P-004",
                 "Placeholder block contains no valid bullet rows."))
 
     return out
+
+
+def _consume_block(lines: list[str], start: int, close_marker: str
+                   ) -> tuple[list[tuple[int, str]], int, bool]:
+    """Walk ``lines[start:]`` collecting body rows until ``close_marker``.
+
+    Returns ``(body, next_index, closed)`` where ``body`` is a list of
+    ``(line_number, content)`` tuples (1-indexed line numbers) and
+    ``next_index`` is the position to resume scanning from.
+    """
+    body: list[tuple[int, str]] = []
+    n = len(lines)
+    i = start
+    while i < n:
+        cur = lines[i]
+        if close_marker in cur:
+            pre = cur.split(close_marker, 1)[0]
+            if pre.strip():
+                body.append((i + 1, pre.rstrip()))
+            return body, i + 1, True
+        body.append((i + 1, cur.rstrip()))
+        i += 1
+    return body, i, False
 
 
 def main(argv: list[str] | None = None) -> int:
