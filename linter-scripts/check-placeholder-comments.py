@@ -180,6 +180,46 @@ class Violation:
     message: str
 
 
+# --- Diff-mode audit trail --------------------------------------------
+# A ``--list-changed-files`` row classifying one path that the diff-
+# mode intake considered. Statuses are a closed set so downstream
+# consumers (CI dashboards, JSON parsers) can switch on the literal
+# value:
+#
+#   matched              — picked up for linting (under --root,
+#                          extension is in the allowlist, file exists)
+#   ignored-extension    — under --root but extension not allowed
+#                          (e.g. a `.txt` change when the allowlist
+#                          is `md`/`mdx`)
+#   ignored-out-of-root  — repo path outside --root (e.g. a README
+#                          change while linting `spec/`)
+#   ignored-missing      — A/M/R/C row whose post-state path no
+#                          longer exists on disk (reverted in a later
+#                          commit of the same push)
+#   ignored-deleted      — git emitted a D-status row, or a rename's
+#                          OLD side that the linter intentionally
+#                          drops because there's no post-state file
+#                          to scan
+#
+# ``reason`` is a one-line human-readable explanation safe to print
+# in a CI log; never None. Rows are emitted in stable input order so
+# diffs against a previous run are reviewable.
+_AUDIT_STATUSES: tuple[str, ...] = (
+    "matched",
+    "ignored-extension",
+    "ignored-out-of-root",
+    "ignored-missing",
+    "ignored-deleted",
+)
+
+
+@dataclass(frozen=True)
+class _ChangedFileAudit:
+    path: str
+    status: str
+    reason: str
+
+
 # Default extension allowlist for spec discovery. Kept as a tuple so
 # the value is hashable + cache-segment-friendly. Extending this set
 # at runtime is exposed via ``--extension`` (repeatable) and feeds
