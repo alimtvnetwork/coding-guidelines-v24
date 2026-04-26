@@ -8,9 +8,13 @@
 > (`run-all.sh`) skips it. Copy it, rename it, then register.
 
 This kit contains a **complete, working rule** (`TEMPLATE-001` — flag
-leftover `var_dump()` / `print_r()` / `error_log()` debug calls in
-PHP) plus its fixtures and unit tests. Every file is the minimum
-viable shape for a real production rule. Copy → rename → adapt.
+leftover debug output: `var_dump()` / `print_r()` / `error_log()`
+in PHP, and `console.log` / `console.debug` / `debugger` in
+TypeScript) plus its fixtures and unit tests. Every file is the
+minimum viable shape for a real production rule, and the kit
+demonstrates the **multi-language pattern** — same rule id, same
+help URI, one scanner per language. Copy → rename → adapt; delete
+the language(s) you do not need.
 
 > **Before you copy:** read
 > [`../../docs/fixture-and-diagnostics-format.md`](../../docs/fixture-and-diagnostics-format.md)
@@ -26,11 +30,21 @@ viable shape for a real production rule. Copy → rename → adapt.
 
 | File | Purpose | When you copy, rename to… |
 |---|---|---|
-| `php.py` | The check itself — CLI entry, regex/AST scan, SARIF emit | `<your-slug>/php.py` (or `typescript.py`, `go.py`, etc.) |
-| `fixtures/dirty.php` | Source that MUST trigger findings | `fixtures/dirty.<ext>` |
-| `fixtures/clean.php` | Source that MUST stay silent | `fixtures/clean.<ext>` |
-| `test_template.py` | Unit + end-to-end test — locks the contract | move to `linters-cicd/tests/test_<your_rule>.py` |
+| `php.py` | PHP scanner — CLI entry, regex scan, SARIF emit | `<your-slug>/php.py` |
+| `typescript.py` | TS/JS scanner — parallel implementation of the same rule | `<your-slug>/typescript.py` |
+| `fixtures/dirty.php` | PHP source that MUST trigger 3 findings | `fixtures/dirty.php` |
+| `fixtures/clean.php` | PHP source that MUST stay silent | `fixtures/clean.php` |
+| `fixtures/dirty.ts` | TS source that MUST trigger 4 findings | `fixtures/dirty.ts` |
+| `fixtures/clean.ts` | TS source that MUST stay silent | `fixtures/clean.ts` |
+| `test_template.py` | Unit + end-to-end tests for both languages, plus a cross-language metadata contract | move to `linters-cicd/tests/test_<your_rule>.py` |
 | `README.md` | This file | leave behind in `_template/`; do NOT copy |
+
+**Multi-language note:** the two scanners share `RULE.id`,
+`RULE.name`, and `RULE.help_uri_relative` so SARIF consumers treat
+them as one logical rule with two implementations. They differ only
+in `tool_name` (`-php` vs `-ts` suffix) and the file extensions
+passed to `walk_files`. If your rule is single-language, delete the
+sibling and its fixture pair.
 
 ---
 

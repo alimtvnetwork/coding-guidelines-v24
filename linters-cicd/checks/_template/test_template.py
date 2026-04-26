@@ -6,6 +6,12 @@ Copy this file alongside your new check (rename to
 rule folder. The test runner discovers files matching
 ``test_*.py`` under ``linters-cicd/tests/`` — move it there once
 you go live.
+
+The rule ships in two languages (PHP via ``php.py``, TypeScript via
+``typescript.py``). The tests exercise both implementations against
+parallel ``dirty.<ext>`` / ``clean.<ext>`` fixtures so the contract
+is identical across languages — same rule id, same level, same
+message shape.
 """
 from __future__ import annotations
 
@@ -27,7 +33,7 @@ def _load(name: str, path: Path):
     return mod
 
 
-class TestTemplateRule(unittest.TestCase):
+class TestTemplateRulePhp(unittest.TestCase):
     def test_dirty_fixture_produces_three_findings(self) -> None:
         mod = _load("template_php", TEMPLATE_DIR / "php.py")
         findings = mod.scan(TEMPLATE_DIR / "fixtures" / "dirty.php",
@@ -65,6 +71,68 @@ class TestTemplateRule(unittest.TestCase):
         finally:
             if out.exists():
                 out.unlink()
+
+
+class TestTemplateRuleTypescript(unittest.TestCase):
+    """Parallel suite for the TS sibling — same contract as PHP."""
+
+    def test_dirty_fixture_produces_four_findings(self) -> None:
+        mod = _load("template_ts", TEMPLATE_DIR / "typescript.py")
+        findings = mod.scan(TEMPLATE_DIR / "fixtures" / "dirty.ts",
+                            str(TEMPLATE_DIR / "fixtures"))
+        # console.log + console.debug + debugger; + console.error
+        self.assertEqual(len(findings), 4)
+        self.assertEqual({f.rule_id for f in findings}, {"TEMPLATE-001"})
+        self.assertEqual({f.level for f in findings}, {"warning"})
+        # Findings come back ordered by line number.
+        lines = [f.start_line for f in findings]
+        self.assertEqual(lines, sorted(lines))
+
+    def test_clean_fixture_is_silent(self) -> None:
+        mod = _load("template_ts", TEMPLATE_DIR / "typescript.py")
+        findings = mod.scan(TEMPLATE_DIR / "fixtures" / "clean.ts",
+                            str(TEMPLATE_DIR / "fixtures"))
+        self.assertEqual(findings, [])
+
+    def test_negative_controls_are_not_flagged(self) -> None:
+        """Comment-only call (line 15), in-string call (line 18), and
+        the similarly-named function definition (lines 21-22) MUST NOT
+        appear in the findings list."""
+        mod = _load("template_ts", TEMPLATE_DIR / "typescript.py")
+        findings = mod.scan(TEMPLATE_DIR / "fixtures" / "dirty.ts",
+                            str(TEMPLATE_DIR / "fixtures"))
+        flagged_lines = {f.start_line for f in findings}
+        for negative in (15, 18, 21, 22):
+            self.assertNotIn(negative, flagged_lines,
+                             f"line {negative} is a negative control and "
+                             f"must not be flagged")
+
+    def test_typescript_file_runs_end_to_end_via_cli(self) -> None:
+        out = TEMPLATE_DIR / "fixtures" / "_out.sarif"
+        rc = subprocess.call([
+            sys.executable, str(TEMPLATE_DIR / "typescript.py"),
+            "--path", str(TEMPLATE_DIR / "fixtures"),
+            "--format", "sarif",
+            "--output", str(out),
+        ])
+        try:
+            self.assertEqual(rc, 1)
+            self.assertTrue(out.exists() and out.stat().st_size > 0)
+        finally:
+            if out.exists():
+                out.unlink()
+
+
+class TestTemplateCrossLanguageContract(unittest.TestCase):
+    """Both implementations expose the same rule metadata so SARIF
+    consumers treat them as one logical rule."""
+
+    def test_rule_id_and_help_uri_match_across_languages(self) -> None:
+        php = _load("template_php_meta", TEMPLATE_DIR / "php.py")
+        ts = _load("template_ts_meta", TEMPLATE_DIR / "typescript.py")
+        self.assertEqual(php.RULE.id, ts.RULE.id)
+        self.assertEqual(php.RULE.name, ts.RULE.name)
+        self.assertEqual(php.RULE.help_uri_relative, ts.RULE.help_uri_relative)
 
 
 if __name__ == "__main__":
