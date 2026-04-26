@@ -1203,12 +1203,20 @@ def _unquote_git_path(field: str) -> str:
     return "".join(out)
 
 
-def _parse_name_status(stdout: str) -> list[str]:
+def _parse_name_status(stdout: str,
+                       *,
+                       deleted: list[str] | None = None,
+                       ) -> list[str]:
     """Extract the post-state path from each ``git diff --name-status``
     row, mapping renames + copies to their NEW side.
 
     Unknown / malformed rows are skipped silently — the linter's job
     is to lint placeholders, not to police git plumbing output.
+
+    When ``deleted`` is provided, every ``D``-status row's path is
+    appended to it (in input order, after :func:`_unquote_git_path`).
+    The audit trail uses this to surface ``ignored-deleted`` rows
+    without re-parsing the diff.
 
     Hardened against git's path-quoting and whitespace edge cases:
 
@@ -1253,7 +1261,13 @@ def _parse_name_status(stdout: str) -> list[str]:
             # Add / modify: cols = [A|M, path]. Take path.
             if cols[1] != "":
                 out.append(_unquote_git_path(cols[1]))
-        # D / T / U / X intentionally dropped — see docstring.
+        elif kind == "D" and deleted is not None:
+            # Delete: cols = [D, path]. Path is captured for the
+            # audit trail only — never returned for linting because
+            # there is no post-state file to scan.
+            if cols[1] != "":
+                deleted.append(_unquote_git_path(cols[1]))
+        # T / U / X intentionally dropped — see docstring.
     return out
 
 
