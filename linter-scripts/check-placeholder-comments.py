@@ -692,6 +692,40 @@ def main(argv: list[str] | None = None) -> int:
              "objects so CI scripts can parse it directly. Useful "
              "for debugging \"why didn't the linter check this "
              "file?\" without running the full scan.")
+    ap.add_argument("--extension", action="append", default=None,
+        metavar="EXT",
+        help="Bare extension name (no leading dot) to discover under "
+             "--root. Repeatable. Defaults to `md` (preserves "
+             "historical behaviour). Pass e.g. "
+             "`--extension md --extension mdx --extension txt` to "
+             "widen the scan to MDX docs and plain-text spec stubs. "
+             "Each extension is matched as `*.<ext>`; case-sensitive "
+             "on POSIX. The cache key includes the resolved "
+             "extension list so a narrower or wider scope can never "
+             "satisfy a PASS sentinel from a different scope.")
+    ap.add_argument("--include", action="append", default=[],
+        metavar="GLOB",
+        help="Glob pattern (matched against the repo-relative POSIX "
+             "path) that a file MUST match to be discovered. "
+             "Repeatable: a file passes if it matches ANY pattern. "
+             "Supports `**` for recursive matching, e.g. "
+             "`--include 'spec/**/*.md'`. A pattern without a "
+             "separator (e.g. `--include 'README.md'`) is matched "
+             "against the basename too, so the common single-file "
+             "case works without `**/`. Empty by default (every "
+             "discovered file passes the include stage). The "
+             "hidden-directory exclusion (anything under `.foo/`) "
+             "is unconditional and not affected by --include.")
+    ap.add_argument("--exclude", action="append", default=[],
+        metavar="GLOB",
+        help="Glob pattern that drops a file from discovery. "
+             "Repeatable: a file is dropped if it matches ANY "
+             "pattern. Same syntax as --include (full-path or "
+             "basename match, `**` supported). Applied AFTER "
+             "--include so an excluded file can never re-enter via "
+             "a broader include. Use to skip vendored docs, "
+             "auto-generated changelogs, etc.: "
+             "`--exclude 'vendor/**' --exclude 'CHANGELOG.md'`.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
