@@ -547,6 +547,31 @@ def main(argv: list[str] | None = None) -> int:
              "with no available excerpt simply omit the key, so "
              "parsers that don't know about it are unaffected. "
              "Window size is governed by --diff-context.")
+    # Tri-state excerpt switch — see resolution table after argparse.
+    # Default ``None`` preserves the historical auto behaviour:
+    #   * human  → excerpts iff --diff-context > 0
+    #   * JSON   → excerpts iff --json-excerpts
+    # ``--show-diff-excerpts``    forces ON  (even with --diff-context=0)
+    # ``--no-show-diff-excerpts`` forces OFF (even with --json-excerpts)
+    ap.add_argument("--show-diff-excerpts",
+        dest="show_diff_excerpts", action="store_true", default=None,
+        help="Force diff excerpts ON, decoupled from --diff-context. "
+             "Useful when you want a copy-paste excerpt under each "
+             "violation but have set --diff-context=0 (e.g. to keep "
+             "git invocations minimal). When the requested context is "
+             "0, the renderer falls back to a single line above and "
+             "below so the excerpt isn't a bare focus row. Applies "
+             "to both human and JSON output (in JSON mode this also "
+             "implies --json-excerpts so the field appears).")
+    ap.add_argument("--no-show-diff-excerpts",
+        dest="show_diff_excerpts", action="store_false",
+        help="Force diff excerpts OFF, even when --diff-context > 0 "
+             "(human) or --json-excerpts is set (JSON). Use this "
+             "with --suggest-patch when you want the copy-paste fix "
+             "scaffold but not the surrounding diff window — keeps "
+             "logs short on PRs with many violations. Does not "
+             "affect --suggest-patch / --json-suggest-patch, which "
+             "remain governed by their own flags.")
     ap.add_argument("--suggest-patch", action="store_true",
         help="Under each human-readable diff excerpt, append a "
              "`git apply`-style unified-diff scaffold that removes "
@@ -585,6 +610,41 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: --diff-context must be >= 0 (got {args.diff_context})",
               file=sys.stderr)
         return 2
+
+    # ---- Resolve the tri-state --show-diff-excerpts flag ----------
+    # ``show_excerpts_human`` / ``show_excerpts_json`` are the single
+    # source of truth used by every later excerpt gate; raw arg
+    # values are NOT consulted past this block. Centralising the
+    # resolution keeps the CLI matrix testable and ensures human
+    # and JSON modes stay consistent under the same override.
+    #
+    # Resolution table:
+    #
+    #   show_diff_excerpts | human render? | json render?
+    #   -------------------+---------------+--------------
+    #   None  (auto)       | ctx > 0       | --json-excerpts
+    #   True  (force on)   | always*       | always*
+    #   False (force off)  | never         | never
+    #
+    #   * subject to the universal "have a diff base + violations"
+    #     prerequisites — the flag can't conjure a diff out of
+    #     thin air when --diff-base wasn't given.
+    if args.show_diff_excerpts is None:
+        show_excerpts_human = args.diff_context > 0
+        show_excerpts_json = args.json_excerpts
+    else:
+        show_excerpts_human = args.show_diff_excerpts
+        show_excerpts_json = args.show_diff_excerpts
+
+    # When excerpts are forced ON but the user kept --diff-context=0,
+    # render with one line of context on each side. Anything less
+    # would be a bare focus row, which defeats the point of the
+    # override. We don't mutate ``args.diff_context`` so the rest of
+    # the program sees the user's literal request; the effective
+    # window lives in ``effective_context`` instead.
+    effective_context = args.diff_context
+    if (show_excerpts_human or show_excerpts_json) and effective_context == 0:
+        effective_context = 1
 
     # Tri-state: --github → True, --no-github → False, neither → auto.
     if args.github is None:
