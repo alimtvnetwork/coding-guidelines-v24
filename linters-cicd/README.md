@@ -143,6 +143,41 @@ plugin model documented in
 
 ---
 
+## Supported languages matrix
+
+The orchestrator (`run-all.sh`) auto-detects which language plug-ins to
+invoke from the file extensions present in `--path`. Use this matrix
+to confirm whether your repo will produce findings before wiring the
+pack into CI.
+
+| Language slug (`--languages`) | Detected extensions | Status | Rules covered |
+|---|---|---|---|
+| `go` | `.go` | ✅ shipping | RED-001, RED-002, RED-003, RED-004, RED-006, RED-008, STYLE-002 |
+| `typescript` | `.ts`, `.tsx` | ✅ shipping | RED-001, RED-002, RED-003, RED-004, RED-006, RED-008, STYLE-002 |
+| `php` | `.php` | 🟡 partial (Phase 2) | RED-001, RED-002, RED-003, RED-004, RED-006 |
+| `sql` | `.sql` | ✅ shipping | BOOL-NEG-001 |
+| `universal` | any text file | ✅ shipping | RED-006 (file length) |
+| `python` | `.py` | ⏳ planned (Phase 3) | — |
+| `rust` | `.rs` | ⏳ planned (Phase 3) | — |
+| `csharp` | `.cs` | ⏳ planned (Phase 3) | — |
+| `java` | `.java` | ⏳ planned (Phase 3) | — |
+
+If `run-all.sh` finds **no** files matching any shipping language under
+`--path` (after applying `--exclude-paths`), it now prints:
+
+```
+    ⚠️  no supported source files detected under '<path>'
+       supported extensions: .go, .ts, .tsx, .php, .sql
+       (the universal file-length check will still run on all text files)
+```
+
+This is a warning, not a hard failure — the universal check still
+executes and the run can still exit `0`. If you see the warning in CI,
+either point `--path` at the source root, drop unused entries from
+`--languages`, or relax `--exclude-paths`.
+
+---
+
 ## Output
 
 SARIF 2.1.0 by default, plain text via `--format text`. The contract is
