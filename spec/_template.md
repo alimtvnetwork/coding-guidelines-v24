@@ -77,8 +77,26 @@ Add file-relative links here. Always include `.md`. Examples (replace before com
 
 ### Placeholder cross-references (copy-paste snippet)
 
-Use this when you need to reserve a link before the target file exists.
-The checker ignores links inside HTML comments, so these won't fail CI.
+Use one of two formats when you need to reserve a link before its
+target file exists. The cross-link checker ignores both, so neither
+will fail CI.
+
+**Preferred — custom tag** (`<spec-placeholder>`). Self-documenting,
+greppable, and the only block format the cross-link checker actively
+ignores:
+
+```markdown
+<spec-placeholder reason="activate when target is created">
+- [Target Title](../NN-module-name/00-overview.md)
+- [Target Title](../NN-module-name/01-file-name.md#section-anchor)
+</spec-placeholder>
+```
+
+**Legacy — HTML comment**. Still accepted by the placeholder linter,
+but **not** stripped by the cross-link checker — the only reason links
+inside it pass today is that they happen to resolve, or they live
+inside a fenced code block. New placeholders should use the tag form
+above.
 
 ```markdown
 <!-- TODO: activate when target is created
@@ -87,11 +105,12 @@ The checker ignores links inside HTML comments, so these won't fail CI.
 -->
 ```
 
-Guidelines for placeholders:
+Guidelines for placeholders (both formats):
 - Keep the comment block contiguous (no blank lines inside).
 - Replace `NN-module-name` and `01-file-name.md` with real paths before removing the comment markers.
-- Remove the `<!--` and `-->` wrappers (and the `TODO:` prefix) once the target exists.
+- Remove the `<spec-placeholder>` / `</spec-placeholder>` wrappers (or `<!--`/`-->` for the legacy form) once the target exists.
 - If the anchor (`#section-anchor`) is unknown, omit it and add it later.
+- Prefer `<spec-placeholder>` for new authoring — only it is recognised by the cross-link checker's selective ignore.
 
 ### How to activate placeholders
 
