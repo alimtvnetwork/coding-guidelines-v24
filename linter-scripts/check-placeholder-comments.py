@@ -1169,13 +1169,13 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         path_w = max(len("path"), max(len(r.path) for r in rows))
         status_w = max(len("status"), max(len(r.status) for r in rows))
     if rows:
-    print(f"  {'status'.ljust(status_w)}  "
-          f"{'path'.ljust(path_w)}  reason", file=stream)
-    print("  " + "-" * (status_w + path_w + len("reason") + 4),
-          file=stream)
-    for r in rows:
-        print(f"  {r.status.ljust(status_w)}  "
-              f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
+        print(f"  {'status'.ljust(status_w)}  "
+              f"{'path'.ljust(path_w)}  reason", file=stream)
+        print("  " + "-" * (status_w + path_w + len("reason") + 4),
+              file=stream)
+        for r in rows:
+            print(f"  {r.status.ljust(status_w)}  "
+                  f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
     # Counts-by-status footer in the canonical status order so the
     # eye lands on the same column positions run-to-run. Counts
     # against ``full_rows`` (post-dedupe, pre-filter) so the totals
