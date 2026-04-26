@@ -218,6 +218,34 @@ class _ChangedFileAudit:
     path: str
     status: str
     reason: str
+    # Optional rename/copy provenance. Populated only when the diff-
+    # mode intake observed an ``R``/``C`` row that resolved to this
+    # ``path`` (the post-rename / post-copy "new" side). ``None`` for
+    # plain ``A``/``M``/``D`` rows AND for ``R``/``C`` rows that
+    # failed earlier filters before reaching the audit constructor.
+    # The audit *renderer* (``--with-similarity``) substitutes a
+    # dash ("-") wherever this is None or a sub-field is missing — we
+    # don't bake the dash into the data so JSON consumers see real
+    # ``null``s rather than a sentinel string.
+    similarity: "_RenameSimilarity | None" = None
+
+
+@dataclass(frozen=True)
+class _RenameSimilarity:
+    """Rename/copy provenance for one ``_ChangedFileAudit`` row.
+
+    Captures the three pieces of metadata git emits on an ``R`` / ``C``
+    name-status row: the kind letter (``"R"`` or ``"C"``), the
+    similarity score (0–100, or ``None`` when the row was scoreless —
+    e.g. an authored ``--changed-files`` payload that wrote ``R\\told\\tnew``
+    without a percentage), and the OLD-side path.
+
+    Frozen + slot-free so it's hashable and round-trips through
+    :func:`dataclasses.asdict` without surprises.
+    """
+    kind: str
+    score: int | None
+    old_path: str
 
 
 # Default extension allowlist for spec discovery. Kept as a tuple so
@@ -689,6 +717,25 @@ def main(argv: list[str] | None = None) -> int:
              "`--only-changed-status ignored-extension` to debug why a "
              "PR's docs aren't being checked. No-op without "
              "--list-changed-files.")
+    ap.add_argument("--with-similarity", action="store_true",
+        help="With --list-changed-files, include the rename/copy "
+             "similarity metadata in the printed audit. Three extra "
+             "columns are appended: `kind` (`R` for rename, `C` for "
+             "copy, `-` for plain A/M/D rows), `score` (git's 0–100 "
+             "similarity percentage, `-` when absent — e.g. plain "
+             "rows or arrow-form `--changed-files` payloads that "
+             "don't carry a percentage, `?` is reserved for future "
+             "use), and `old` (the OLD-side path on R/C rows, `-` "
+             "otherwise). With --json the metadata is emitted as a "
+             "nested object `{\"kind\":str, \"score\":int|null, "
+             "\"old_path\":str}` under the `similarity` key (or "
+             "`null` when no rename/copy was observed) so dashboards "
+             "can reason about provenance without parsing the text "
+             "table. No-op without --list-changed-files; safe to "
+             "combine with --dedupe-changed-files (first-seen "
+             "semantics also apply to the similarity record) and "
+             "--only-changed-status (filtering runs after the "
+             "metadata is attached).")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
@@ -864,6 +911,7 @@ def main(argv: list[str] | None = None) -> int:
                 dedupe=args.dedupe_changed_files,
                 only_statuses=(frozenset(args.only_changed_status)
                                if args.only_changed_status else None),
+                with_similarity=args.with_similarity,
             )
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
@@ -1129,12 +1177,46 @@ def _dedupe_audit_rows(
     return out, dropped
 
 
+# Sentinel substituted for blank/unknown similarity cells in the
+# text-mode renderer. Single dash so the column stays narrow and the
+# eye picks out "no rename here" at a glance. JSON consumers see real
+# ``null`` instead.
+_SIMILARITY_BLANK = "-"
+
+
+def _fmt_similarity(
+    sim: "_RenameSimilarity | None",
+) -> tuple[str, str, str]:
+    """Stringify a similarity record for the text audit table.
+
+    Returns ``(kind, score, old_path)`` as already-padded-friendly
+    strings (no internal whitespace, only column-width-friendly tokens
+    so :meth:`str.ljust` stays predictable). Each cell falls back to
+    ``_SIMILARITY_BLANK`` independently so a partial record (R/C row
+    with no numeric score, or an arrow-form rename whose old path
+    survived but score didn't) is still maximally informative.
+
+    The cell vocabulary is intentionally tiny so downstream grep
+    pipelines can match on it:
+      * ``kind`` ∈ {``R``, ``C``, ``-``}
+      * ``score`` ∈ {``0`` … ``100``, ``-``}
+      * ``old`` is a path or ``-``
+    """
+    if sim is None:
+        return (_SIMILARITY_BLANK, _SIMILARITY_BLANK, _SIMILARITY_BLANK)
+    kind = sim.kind or _SIMILARITY_BLANK
+    score = str(sim.score) if sim.score is not None else _SIMILARITY_BLANK
+    old = sim.old_path or _SIMILARITY_BLANK
+    return (kind, score, old)
+
+
 def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 stream,  # type: ignore[no-untyped-def]
                                 *,
                                 as_json: bool,
                                 dedupe: bool = False,
                                 only_statuses: frozenset[str] | None = None,
+                                with_similarity: bool = False,
                                 ) -> None:
     """Print the diff-mode changed-file audit table to ``stream``.
 
@@ -1170,6 +1252,18 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     hides everything is obvious (``0 of 12 row(s) shown``); the
     totals line still counts every status in the canonical order so
     the operator can see exactly what was filtered out.
+
+    When ``with_similarity`` is True the rendered table grows three
+    extra columns — ``kind``, ``score``, ``old`` — populated from each
+    row's ``similarity`` field. ``None`` similarities (plain A/M rows
+    + every ``ignored-deleted`` row, which carries no rename
+    provenance) render as ``-`` in all three columns. R/C rows whose
+    score is ``None`` (scoreless authored payloads) render the score
+    cell as ``-`` while still showing the kind and old-path. JSON
+    mode emits a nested ``similarity`` object (or ``null``) using
+    :func:`dataclasses.asdict` so the schema is regular for downstream
+    consumers. Off by default to keep the legacy 3-column shape and
+    avoid widening logs that don't care about provenance.
     """
     dropped = 0
     if dedupe:
@@ -1178,7 +1272,20 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     if only_statuses is not None:
         rows = [r for r in rows if r.status in only_statuses]
     if as_json:
-        payload = [asdict(r) for r in rows]
+        # ``asdict`` recurses into nested dataclasses so the
+        # ``similarity`` field becomes a sub-object automatically. When
+        # the operator didn't ask for similarity, drop the field
+        # entirely from the payload so the legacy schema is preserved
+        # byte-for-byte. (Stripping a key is intentional rather than
+        # emitting ``"similarity": null``: dashboards parsing the
+        # historical schema with a strict object validator must keep
+        # working unchanged.)
+        payload = []
+        for r in rows:
+            obj = asdict(r)
+            if not with_similarity:
+                obj.pop("similarity", None)
+            payload.append(obj)
         print(json.dumps(payload, indent=2, ensure_ascii=False),
               file=stream)
         return
@@ -1191,6 +1298,10 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         # reports the full breakdown.
         suffix += (f"; filtered, {len(rows)} of {len(full_rows)} "
                    f"row(s) shown ({'+'.join(sorted(only_statuses))})")
+    if with_similarity:
+        # Surface the extra columns in the header so a reviewer
+        # scanning the log knows the wider table isn't a layout bug.
+        suffix += "; +similarity columns"
     print("── placeholder-comments: changed-file audit "
           f"({len(full_rows)} row(s){suffix}) ──", file=stream)
     if not rows:
@@ -1208,13 +1319,40 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         path_w = max(len("path"), max(len(r.path) for r in rows))
         status_w = max(len("status"), max(len(r.status) for r in rows))
     if rows:
-        print(f"  {'status'.ljust(status_w)}  "
-              f"{'path'.ljust(path_w)}  reason", file=stream)
-        print("  " + "-" * (status_w + path_w + len("reason") + 4),
-              file=stream)
-        for r in rows:
-            print(f"  {r.status.ljust(status_w)}  "
-                  f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
+        if with_similarity:
+            # Pre-compute every cell so the column widths bake in the
+            # widest dash-substituted value. ``_fmt_similarity`` returns
+            # the (kind, score, old) triple as already-stringified
+            # cells (with `-` substituted for None / non-rename rows).
+            cells = [_fmt_similarity(r.similarity) for r in rows]
+            kind_w = max(len("kind"), max(len(c[0]) for c in cells))
+            score_w = max(len("score"), max(len(c[1]) for c in cells))
+            old_w = max(len("old"), max(len(c[2]) for c in cells))
+            header = (
+                f"  {'status'.ljust(status_w)}  "
+                f"{'path'.ljust(path_w)}  "
+                f"{'kind'.ljust(kind_w)}  "
+                f"{'score'.ljust(score_w)}  "
+                f"{'old'.ljust(old_w)}  reason"
+            )
+            print(header, file=stream)
+            rule_w = (status_w + path_w + kind_w + score_w
+                      + old_w + len("reason") + 5 * 2)
+            print("  " + "-" * rule_w, file=stream)
+            for r, (k, sc, op) in zip(rows, cells):
+                print(f"  {r.status.ljust(status_w)}  "
+                      f"{r.path.ljust(path_w)}  "
+                      f"{k.ljust(kind_w)}  "
+                      f"{sc.ljust(score_w)}  "
+                      f"{op.ljust(old_w)}  {r.reason}", file=stream)
+        else:
+            print(f"  {'status'.ljust(status_w)}  "
+                  f"{'path'.ljust(path_w)}  reason", file=stream)
+            print("  " + "-" * (status_w + path_w + len("reason") + 4),
+                  file=stream)
+            for r in rows:
+                print(f"  {r.status.ljust(status_w)}  "
+                      f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
     # Counts-by-status footer in the canonical status order so the
     # eye lands on the same column positions run-to-run. Counts
     # against ``full_rows`` (post-dedupe, pre-filter) so the totals
@@ -1308,6 +1446,15 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
     # mark them ``ignored-deleted`` without re-parsing the diff.
     raw: list[str] = []
     deleted_paths: list[str] = []
+    # When the caller asked for an audit trail, also collect rename/
+    # copy provenance per new-path so the audit constructor below can
+    # attach a ``_RenameSimilarity`` to every row whose path came from
+    # an R/C diff entry. The map is keyed on the *unquoted* new-path
+    # string exactly as it appears in ``raw`` so the lookup is a
+    # constant-time dict hit per row.
+    similarities: dict[str, _RenameSimilarity] | None = (
+        {} if audit is not None else None
+    )
     if diff_base:
         try:
             proc = subprocess.run(
@@ -1323,7 +1470,8 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 f"git diff vs. {diff_base!r} failed (exit {e.returncode}): "
                 f"{e.stderr.strip() or '(no stderr)'}"
             ) from e
-        raw = _parse_name_status(proc.stdout, deleted=deleted_paths)
+        raw = _parse_name_status(proc.stdout, deleted=deleted_paths,
+                                 similarities=similarities)
     else:
         assert changed_files is not None
         if changed_files == "-":
@@ -1335,13 +1483,23 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 raise RuntimeError(
                     f"--changed-files {changed_files!r} unreadable: {e}"
                 ) from e
-        raw = _normalise_changed_lines(lines, deleted=deleted_paths)
+        raw = _normalise_changed_lines(lines, deleted=deleted_paths,
+                                       similarities=similarities)
     allowed_exts = {("." + e.lstrip(".").lower()) for e in extensions}
     out: set[Path] = set()
     for line in raw:
         s = line.strip()
         if not s or s.startswith("#"):
             continue
+        # Pull the rename/copy provenance (if any) for this path. We
+        # look up against the unstripped ``line`` first (which is what
+        # ``similarities`` was keyed on) and fall back to the stripped
+        # form for symmetry with how ``out.add`` resolves the path.
+        # ``None`` means "no rename signal observed" — the renderer
+        # will substitute dashes when --with-similarity is on.
+        sim = None
+        if similarities is not None:
+            sim = similarities.get(line) or similarities.get(s)
         ext = Path(s).suffix.lower()
         if ext not in allowed_exts:
             if audit is not None:
@@ -1349,6 +1507,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                     path=s, status="ignored-extension",
                     reason=(f"extension {ext or '(none)'!r} not in "
                             f"allowlist {sorted(allowed_exts)}"),
+                    similarity=sim,
                 ))
             continue
         p = (repo_root / s).resolve()
@@ -1359,6 +1518,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 audit.append(_ChangedFileAudit(
                     path=s, status="ignored-out-of-root",
                     reason=f"path is outside --root {root}",
+                    similarity=sim,
                 ))
             continue
         if not p.is_file():
@@ -1368,6 +1528,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                     reason="post-state path is not on disk "
                            "(reverted later in the push, or "
                            "filtered by .gitignore on checkout)",
+                    similarity=sim,
                 ))
             continue
         out.add(p)
@@ -1376,6 +1537,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 path=s, status="matched",
                 reason="under --root, extension allowed, "
                        "file present on disk",
+                similarity=sim,
             ))
     if audit is not None:
         for d in deleted_paths:
@@ -1481,6 +1643,7 @@ def _unquote_git_path(field: str) -> str:
 def _parse_name_status(stdout: str,
                        *,
                        deleted: list[str] | None = None,
+                       similarities: "dict[str, _RenameSimilarity] | None" = None,
                        ) -> list[str]:
     """Extract the post-state path from each ``git diff --name-status``
     row, mapping renames + copies to their NEW side.
@@ -1492,6 +1655,15 @@ def _parse_name_status(stdout: str,
     appended to it (in input order, after :func:`_unquote_git_path`).
     The audit trail uses this to surface ``ignored-deleted`` rows
     without re-parsing the diff.
+
+    When ``similarities`` is provided, every ``R``/``C`` row contributes
+    one ``new_path → _RenameSimilarity`` entry. The mapping key is the
+    *unquoted* new path (so it matches what ``raw`` carries downstream)
+    and the value records ``kind`` (``R``/``C``), ``score`` (0–100, or
+    ``None`` when git emitted no digits — pathological but cheap to
+    tolerate), and the unquoted ``old_path``. Plain A/M/D/T rows are
+    not recorded — the renderer treats their absence as "no similarity
+    metadata" and prints the dash sentinel.
 
     Hardened against git's path-quoting and whitespace edge cases:
 
@@ -1531,7 +1703,16 @@ def _parse_name_status(stdout: str,
             # ``cols[2]`` is required; ``cols[1]`` (old) may be empty
             # in pathological inputs — we don't need it for linting.
             if len(cols) >= 3 and cols[2] != "":
-                out.append(_unquote_git_path(cols[2]))
+                new_path = _unquote_git_path(cols[2])
+                out.append(new_path)
+                if similarities is not None:
+                    score_raw = m.group(2)
+                    score = int(score_raw) if score_raw else None
+                    similarities[new_path] = _RenameSimilarity(
+                        kind=kind,
+                        score=score,
+                        old_path=_unquote_git_path(cols[1]) if cols[1] else "",
+                    )
         elif kind in ("A", "M"):
             # Add / modify: cols = [A|M, path]. Take path.
             if cols[1] != "":
@@ -1568,6 +1749,7 @@ _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>.+?)\s*=>\s*(?P<new>.+?)\s*$")
 def _normalise_changed_lines(lines: list[str],
                              *,
                              deleted: list[str] | None = None,
+                             similarities: "dict[str, _RenameSimilarity] | None" = None,
                              ) -> list[str]:
     """Collapse rename-bearing rows in a ``--changed-files`` payload
     down to their post-rename path.
@@ -1603,6 +1785,16 @@ def _normalise_changed_lines(lines: list[str],
       Windows input) is passed through verbatim so the caller's
       blank/comment filter can still discard it on the same line
       number.
+
+    When ``similarities`` is provided, R/C-shaped tab rows AND arrow
+    rows contribute one ``new_path → _RenameSimilarity`` entry. Tab
+    rows whose first column matches ``R<digits>?`` / ``C<digits>?``
+    record both the kind letter and (when present) the numeric score;
+    a kind letter without digits records ``score=None``. Arrow rows
+    (``OLD => NEW``) are recorded as ``kind="R", score=None`` because
+    git status doesn't emit a similarity percentage in short form —
+    we know it's a rename, but not how close. Plain paths (no
+    rename signal at all) are not recorded.
     """
     out: list[str] = []
     for line in lines:
@@ -1638,16 +1830,48 @@ def _normalise_changed_lines(lines: list[str],
                     new_col = c
                     break
             if new_col:
-                out.append(_unquote_git_path(new_col))
+                new_path = _unquote_git_path(new_col)
+                out.append(new_path)
+                # Recover similarity metadata when the leading column
+                # is an R/C marker. We tolerate the same scoreless and
+                # scored shapes ``_NAME_STATUS_RE`` accepts; anything
+                # else (a bare tab-padded path, e.g. ``\tspec/x.md``)
+                # is left without a similarity record so the renderer
+                # falls back to dashes.
+                if similarities is not None and cols and cols[0]:
+                    head = _NAME_STATUS_RE.match(cols[0])
+                    if head and head.group(1) in ("R", "C"):
+                        # Find the OLD-side path: it's the
+                        # *first* non-empty column after cols[0],
+                        # excluding the new path we just consumed.
+                        old_path = ""
+                        for c in cols[1:]:
+                            if c != "" and _unquote_git_path(c) != new_path:
+                                old_path = _unquote_git_path(c)
+                                break
+                        score_raw = head.group(2)
+                        similarities[new_path] = _RenameSimilarity(
+                            kind=head.group(1),
+                            score=int(score_raw) if score_raw else None,
+                            old_path=old_path,
+                        )
             continue
         # Arrow form: `OLD => NEW`.
         m = _RENAME_ARROW_RE.match(line)
         if m:
-            new_path = m.group("new")
+            new_path_raw = m.group("new")
             # Trim at boundaries (regex already did greedy-min) but
             # don't touch interior whitespace. Then unquote in case
             # the user pasted a C-quoted form from ``git status``.
-            out.append(_unquote_git_path(new_path.strip()))
+            unquoted_new = _unquote_git_path(new_path_raw.strip())
+            out.append(unquoted_new)
+            if similarities is not None:
+                old_path_raw = m.group("old")
+                similarities[unquoted_new] = _RenameSimilarity(
+                    kind="R",
+                    score=None,
+                    old_path=_unquote_git_path(old_path_raw.strip()),
+                )
             continue
         out.append(line)
     return out
