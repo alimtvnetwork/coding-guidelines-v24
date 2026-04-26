@@ -1113,6 +1113,9 @@ def main(argv: list[str] | None = None) -> int:
                 dedupe=args.dedupe_changed_files,
                 only_statuses=(frozenset(args.only_changed_status)
                                if args.only_changed_status else None),
+                only_deleted_sources=(
+                    frozenset(args.only_deleted_source)
+                    if args.only_deleted_source else None),
                 with_similarity=args.with_similarity,
                 with_labels=args.similarity_labels,
                 legend_mode=args.similarity_legend,
@@ -1132,6 +1135,20 @@ def main(argv: list[str] | None = None) -> int:
                 if args.only_changed_status:
                     only = frozenset(args.only_changed_status)
                     csv_rows = [r for r in csv_rows if r.status in only]
+                if args.only_deleted_source:
+                    # Mirror the renderer's scalpel semantics:
+                    # non-``ignored-deleted`` rows pass through, and
+                    # only ``ignored-deleted`` rows whose ``source``
+                    # is in the allowed set survive. Keeps the CSV
+                    # export aligned byte-for-byte with what STDERR
+                    # just printed (modulo column dialect).
+                    only_src = frozenset(args.only_deleted_source)
+                    csv_rows = [
+                        r for r in csv_rows
+                        if r.status != "ignored-deleted"
+                        or (r.source is not None
+                            and r.source in only_src)
+                    ]
                 _write_similarity_csv(
                     csv_rows, args.similarity_csv,
                     with_labels=args.similarity_labels,
