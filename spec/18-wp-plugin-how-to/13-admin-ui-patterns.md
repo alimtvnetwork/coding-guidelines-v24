@@ -859,6 +859,121 @@ When a form has multiple logical sections, use an `<h3>` with border-top:
 
 ---
 
+### 13.6 Security — Admin POST Endpoints (🔴 CODE RED)
+
+> **Severity:** 🔴 CODE RED — non-negotiable. Mirrors and extends
+> [Phase 14 §14.5.2](./14-rest-api-conventions.md#1452-security--nonce-verification-for-mutating-routes--code-red)
+> for non-REST admin surfaces (`admin-post.php`, `admin-ajax.php`,
+> Settings API, custom `<form>` POSTs).
+
+Every admin form that POSTs to WordPress MUST satisfy **all** of the
+following before any side effect runs (writing options, deleting rows,
+enqueuing background jobs, calling external APIs, etc.). Each
+requirement is enforced by a CI linter rule.
+
+| # | Requirement | Linter rule |
+|---|-------------|-------------|
+| 1 | The form template MUST emit a nonce field via `wp_nonce_field( $action, $field )` — never a hand-rolled hidden input. The `$action` MUST come from an `AdminActionType::nonceAction()` enum method. | `WP-NONCE-002` |
+| 2 | The handler MUST call `check_admin_referer( $action, $field )` (or `check_ajax_referer()` for AJAX) as its **first executable line**, before any DB write, option update, or external call. | `WP-NONCE-001` |
+| 3 | The handler MUST verify capability with `current_user_can( CapabilityType::… )` after the nonce check. `is_user_logged_in()` alone is insufficient. | `WP-PERM-001` |
+| 4 | All `$_POST` / `$_GET` reads MUST be wrapped in `wp_unslash()` then a typed sanitizer (`sanitize_text_field`, `absint`, `sanitize_email`, `wp_kses_post`, …). Raw `$_POST['x']` is forbidden. | `WP-INPUT-001` |
+| 5 | The form MUST POST to `admin-post.php` (or `admin-ajax.php`) with a hidden `action` field whose value is an `AdminActionType` enum case — never an inline string. | `WP-ACTION-001` |
+| 6 | A failed nonce MUST short-circuit with `wp_die( __( 'Security check failed.', $slug ), 403 )`. Never redirect on a failed nonce — that masks tampering. | `WP-NONCE-001` |
+| 7 | After a successful save, the handler MUST `wp_safe_redirect()` to a whitelisted admin URL with a `_wpnonce`-protected query arg, then `exit;`. Bare `header( "Location: …" )` is forbidden. | `WP-REDIRECT-001` |
+
+#### Canonical form template
+
+```php
+<form method="post" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
+    <input type="hidden" name="action"
+           value="<?php echo esc_attr( AdminActionType::SaveSettings->value ); ?>">
+    <?php
+    // Rule 1 — enum-driven nonce field.
+    wp_nonce_field(
+        AdminActionType::SaveSettings->nonceAction(),
+        AdminActionType::SaveSettings->nonceField()
+    );
+    ?>
+    <table class="form-table">
+        <!-- … fields … -->
+    </table>
+    <?php submit_button( __( 'Save', $pluginSlug ) ); ?>
+</form>
+```
+
+#### Canonical handler
+
+```php
+add_action(
+    'admin_post_' . AdminActionType::SaveSettings->value,
+    [ $this, 'handleSaveSettings' ]
+);
+
+public function handleSaveSettings(): void
+{
+    // Rule 2 — nonce FIRST.
+    check_admin_referer(
+        AdminActionType::SaveSettings->nonceAction(),
+        AdminActionType::SaveSettings->nonceField()
+    );
+
+    // Rule 3 — capability SECOND.
+    if ( ! current_user_can( CapabilityType::ManagePluginSettings->value ) ) {
+        wp_die( __( 'Forbidden.', $pluginSlug ), 403 );
+    }
+
+    // Rule 4 — sanitize every input.
+    $email = sanitize_email( wp_unslash( $_POST['admin_email'] ?? '' ) );
+    $limit = absint( wp_unslash( $_POST['daily_limit'] ?? 0 ) );
+
+    // … persist via Options API or micro-ORM …
+
+    // Rule 7 — safe redirect with success flag.
+    wp_safe_redirect( add_query_arg(
+        [ 'page' => $pluginSlug, 'updated' => 'true' ],
+        admin_url( 'admin.php' )
+    ) );
+    exit;
+}
+```
+
+#### Forbidden patterns (will fail CI)
+
+```php
+// ❌ Rule 1 — hand-rolled hidden input instead of wp_nonce_field()
+<input type="hidden" name="my_nonce" value="<?php echo wp_create_nonce('save'); ?>">
+
+// ❌ Rule 2 — DB write before nonce check
+update_option( 'my_setting', $_POST['value'] );
+check_admin_referer( 'save_settings' );
+
+// ❌ Rule 3 — logged-in is not authorized
+if ( ! is_user_logged_in() ) { wp_die(); }
+
+// ❌ Rule 4 — raw superglobal
+$email = $_POST['admin_email'];
+
+// ❌ Rule 5 — inline action string
+<input type="hidden" name="action" value="save_my_settings">
+
+// ❌ Rule 6 — silent redirect on failed nonce
+if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'save' ) ) {
+    wp_redirect( admin_url() ); exit;
+}
+
+// ❌ Rule 7 — bare Location header bypasses safe-redirect allow-list
+header( 'Location: ' . $_POST['return_to'] ); exit;
+```
+
+#### Cross-references
+
+- Phase 14 §14.5.1 — REST permission callbacks (forbids `__return_true`).
+- Phase 14 §14.5.2 — REST nonce verification (`wp_rest`).
+- Phase 8 — WordPress integration patterns (`wp_nonce_field` examples).
+- Phase 16 — Error handling extraction (AJAX nonce action enum pattern).
+
+---
+
 ## 14. Tab System
 
 ### 14.1 Page-Level Tabs
