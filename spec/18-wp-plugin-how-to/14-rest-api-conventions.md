@@ -976,6 +976,8 @@ private function executeOpenapi(WP_REST_Request $request): WP_REST_Response
 | Route paths | Resource-based, kebab-case, defined in `EndpointType` | §14.2, §14.4 |
 | HTTP methods | Via `HttpMethodType` enum; GET=read, POST=action/create, DELETE=remove | §14.3 |
 | Route registration | Grouped, fault-tolerant `$safeRegister` closure | §14.5 |
+| Permission callbacks | Mandatory; `__return_true` forbidden; capability via `CapabilityType` enum | §14.5.1 |
+| Nonce verification | Required on every POST/PUT/PATCH/DELETE; `wp_rest` for REST, `check_admin_referer`/`check_ajax_referer` for admin | §14.5.2 |
 | Pagination | `limit`/`offset` or `page` params; `PaginationConfigType` defaults | §14.6 |
 | Filters | `FilterKeyType` enum; camelCase query params | §14.7 |
 | Request body fields | `RequestFieldType` enum; snake_case | §14.8 |
