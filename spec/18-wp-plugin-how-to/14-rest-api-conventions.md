@@ -252,7 +252,8 @@ trait RouteRegistrationTrait
 |------|--------|
 | Every route uses `EndpointType` for path | No string literals |
 | Every route uses `HttpMethodType` for method | `HttpMethodType::Get->value`, not `'GET'` |
-| Every route has a `permission_callback` | Never `__return_true` for authenticated endpoints |
+| Every route has a `permission_callback` | **Never `__return_true`** — full rules in §14.5.1 |
+| Every mutating route verifies a nonce | See §14.5.2 — applies to POST/PUT/PATCH/DELETE |
 | Routes are grouped by domain | Comment separators between groups |
 | Each group is wrapped in `$safeRegister` | Failure in one group does not block others |
 | Callback points to a public trait method | `[$this, 'handleMethodName']` |
