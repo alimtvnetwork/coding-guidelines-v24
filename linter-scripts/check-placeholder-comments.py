@@ -281,12 +281,25 @@ def _validate_intent(rel: str, line_no: int, marker: str, text: str,
 
 def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
                    out: list[Violation],
-                   bullets: list[tuple[int, str]] | None = None) -> int:
+                   bullets: list[tuple[int, str]] | None = None,
+                   exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                   ) -> int:
     """Apply P-002/P-003/P-005 to a body and return valid bullet count.
 
     When ``bullets`` is provided, every valid bullet is appended as
     ``(line, target)`` for later cross-block duplicate analysis (P-007).
+
+    ``exts`` is the source-file allowlist (default ``{".md"}``);
+    P-003 accepts placeholder bullet links whose path component ends
+    in any of these. Widened automatically when the CLI passes
+    ``--ext .mdx`` so a `.mdx` doc can link to another `.mdx` block.
     """
+    # Pre-build the human-readable hint once per body so the per-
+    # bullet loop doesn't re-stringify it on every miss.
+    if exts == DEFAULT_SOURCE_EXTS:
+        ext_hint = "`.md`"
+    else:
+        ext_hint = "/".join(f"`{e}`" for e in sorted(exts))
     bullet_count = 0
     for ln, content in body:
         if not content.strip():
@@ -301,13 +314,15 @@ def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
         target = bm.group(1)
         if target.startswith(("http://", "https://", "mailto:", "#")):
             out.append(Violation(rel, ln, "P-003",
-                f"Placeholder link `{target}` must be a relative `.md` path, "
-                "not external/anchor-only."))
+                f"Placeholder link `{target}` must be a relative {ext_hint} "
+                "path, not external/anchor-only."))
             continue
         path_part = target.split("#", 1)[0]
-        if not path_part.endswith(".md"):
+        path_lower = path_part.lower()
+        if not any(path_lower.endswith(e) for e in exts):
             out.append(Violation(rel, ln, "P-003",
-                f"Placeholder link `{target}` must point at a `.md` file."))
+                f"Placeholder link `{target}` must point at a "
+                f"{ext_hint} file."))
             continue
         bullet_count += 1
         if bullets is not None:
@@ -318,8 +333,9 @@ def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
 def lint_file(path: Path, repo_root: Path,
               valid_bullets: list[tuple[str, int, str]] | None = None,
               intent_verbs: frozenset[str] = DEFAULT_INTENT_VERBS,
+              exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
               ) -> list[Violation]:
-    """Lint one markdown file.
+    """Lint one spec source file (any extension in ``exts``).
 
     When ``valid_bullets`` is provided, every successfully-validated
     bullet is appended as ``(rel_file, line, target)`` so the caller
@@ -328,6 +344,10 @@ def lint_file(path: Path, repo_root: Path,
     ``intent_verbs`` controls the imperative-verb allowlist for P-001;
     defaults to ``DEFAULT_INTENT_VERBS`` and can be widened from the
     CLI via ``--allow-verb``.
+
+    ``exts`` is the source-file allowlist; P-003 accepts placeholder
+    bullet links pointing at any of these. Defaults to
+    ``{".md"}`` so historical callers stay unchanged.
     """
     rel = str(path.relative_to(repo_root))
     text = path.read_text(encoding="utf-8")
