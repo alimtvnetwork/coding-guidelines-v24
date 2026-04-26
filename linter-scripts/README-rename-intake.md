@@ -48,7 +48,183 @@ Without `--with-similarity` the `similarity` key is **explicitly
 removed** from every record so dashboards parsing the legacy schema
 continue to work unchanged. The flag is purely additive.
 
+## Status reference
+
+Every `--list-changed-files` row carries a `status` drawn from a
+**closed five-value vocabulary**. This section is the single
+canonical reference: it lists each status, the exact `reason`
+wording the linter emits, the conditions that trigger it, and what
+the row looks like in all three output surfaces (JSON audit, text
+table, CSV export). Use it when wiring a dashboard, writing a
+`grep` rule for CI logs, or sanity-checking a new test fixture.
+
+| `status` | When it fires | Exact `reason` text |
+|---|---|---|
+| `matched` | Path is under `--root`, has an allow-listed extension, and the post-state file exists on disk. Counted in the linted set. | `under --root, extension allowed, file present on disk` |
+| `ignored-extension` | Path is under `--root` but its suffix isn't in the allowlist (e.g. a `.txt` change while linting `.md`). | `extension '<.ext or (none)>' not in allowlist <sorted list>` |
+| `ignored-out-of-root` | Path resolves outside `--root` (e.g. a top-level `README.md` change while linting `spec/`). | `path is outside --root <resolved-abs-path>` |
+| `ignored-missing` | Post-state path no longer exists on disk — typically reverted in a later commit of the same push, or filtered out by `.gitignore` on checkout. | `post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)` |
+| `ignored-deleted` | A `D`-status row, **or** the OLD side of a rename/copy: there is no post-state file to scan. `reason` is per-source — see [next sub-section](#ignored-deleted-reason-format). | (per-source — see below) |
+
+The five values are **the only ones the renderer will ever emit**;
+adding a new status is a major-version contract change announced in
+`CHANGELOG.md`. Field-order, casing, and dash hyphenation are part
+of the contract — `Matched`, `ignored_deleted`, etc. will never be
+emitted.
+
+### `ignored-deleted` reason format
+
+`ignored-deleted` is the only status whose `reason` text varies by
+intake source. Each delete is tagged at parse time with one of the
+provenance keys below, and the audit emitter looks the key up in a
+per-source reason table (centralised at `_DELETED_REASON` in
+`check-placeholder-comments.py`). All four surfaces (text table,
+JSON payload, CSV export, dedupe footer) use the same wording for
+a given source.
+
+| Source tag | Triggered by | Full `reason` text | Stable substring (CI-grep safe) |
+|---|---|---|---|
+| `diff-D` | A real `D`-status row from `git diff --name-status` | `git diff reported D (deleted): file removed in the diff range, no post-state to lint` | `git diff reported D (deleted)` |
+| `changed-files-D` | An authored `--changed-files` payload row shaped exactly `` `D\tpath` `` | `` --changed-files payload row shaped `D\tpath`: explicit delete marker, no post-state to lint `` | `` --changed-files payload row shaped `` |
+| *(unknown future tag)* | Captured as a delete by a parser this map hasn't caught up with | `path captured as a delete by the diff intake but provenance is unknown — treated as ignored-deleted for safety` | `provenance is unknown` |
+
+The full sentence may be re-worded for clarity in a future minor
+release; the **substring column** is what's safe to grep for in CI
+log scrapers. To switch on the machine-readable tag instead of the
+wording, pass `--list-changed-files-verbose` and read the `source`
+field — see [Verbose mode](#verbose-mode---list-changed-files-verbose)
+below.
+
+### Examples in every output surface
+
+The samples below come from one invocation against a fixture that
+exercises all five statuses. The `--changed-files` payload is:
+
+```text
+M	spec/keep.md
+D	spec/gone.md
+R090	spec/old.md	spec/new.md
+A	spec/notes.txt
+A	outside/x.md
+A	spec/missing.md
+```
+
+Disk state: `spec/keep.md` exists, the rename's `spec/new.md` and
+the new `spec/missing.md` do **not** (simulating a revert-on-push),
+and the linter is invoked with `--root spec` from a working
+directory whose absolute path is `/repo` (the linter resolves
+`--root` to an absolute path before printing it in the
+`ignored-out-of-root` reason — your `<resolved-abs-path>` will of
+course differ).
+
+#### JSON (`--json --with-similarity`)
+
+```json
+[
+  {
+    "path": "spec/keep.md",
+    "status": "matched",
+    "reason": "under --root, extension allowed, file present on disk",
+    "similarity": null
+  },
+  {
+    "path": "spec/new.md",
+    "status": "ignored-missing",
+    "reason": "post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",
+    "similarity": {"kind": "R", "score": 90, "old_path": "spec/old.md"}
+  },
+  {
+    "path": "spec/notes.txt",
+    "status": "ignored-extension",
+    "reason": "extension '.txt' not in allowlist ['.md']",
+    "similarity": null
+  },
+  {
+    "path": "outside/x.md",
+    "status": "ignored-out-of-root",
+    "reason": "path is outside --root /repo/spec",
+    "similarity": null
+  },
+  {
+    "path": "spec/missing.md",
+    "status": "ignored-missing",
+    "reason": "post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",
+    "similarity": null
+  },
+  {
+    "path": "spec/gone.md",
+    "status": "ignored-deleted",
+    "reason": "--changed-files payload row shaped `D\\tpath`: explicit delete marker, no post-state to lint",
+    "similarity": null
+  }
+]
+```
+
+#### Text table (default `--list-changed-files`, `--with-similarity`)
+
+```text
+── placeholder-comments: changed-file audit (6 row(s); +similarity columns) ──
+  status               path             kind  score  old          reason
+  ----------------------------------------------------------------------
+  matched              spec/keep.md     -     -      -            under --root, extension allowed, file present on disk
+  ignored-missing      spec/new.md      R     90     spec/old.md  post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)
+  ignored-extension    spec/notes.txt   -     -      -            extension '.txt' not in allowlist ['.md']
+  ignored-out-of-root  outside/x.md     -     -      -            path is outside --root /repo/spec
+  ignored-missing      spec/missing.md  -     -      -            post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)
+  ignored-deleted      spec/gone.md     -     -      -            --changed-files payload row shaped `D\tpath`: explicit delete marker, no post-state to lint
+  totals: matched=1  ignored-extension=1  ignored-out-of-root=1  ignored-missing=2  ignored-deleted=1
+```
+
+With `--list-changed-files-verbose` the same run grows a `source`
+column that holds the raw provenance tag for every
+`ignored-deleted` row (and `-` everywhere else):
+
+```text
+  status               path             source           reason
+  -------------------------------------------------------------
+  ignored-deleted      spec/gone.md     changed-files-D  --changed-files payload row shaped `D\tpath`: explicit delete marker, no post-state to lint
+```
+
+#### CSV export (`--similarity-csv -`)
+
+```text
+path,status,reason,kind,score,old_path
+spec/keep.md,matched,"under --root, extension allowed, file present on disk",,,
+spec/new.md,ignored-missing,"post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",R,90,spec/old.md
+spec/notes.txt,ignored-extension,extension '.txt' not in allowlist ['.md'],,,
+outside/x.md,ignored-out-of-root,path is outside --root /repo/spec,,,
+spec/missing.md,ignored-missing,"post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",,,
+spec/gone.md,ignored-deleted,"--changed-files payload row shaped `D\tpath`: explicit delete marker, no post-state to lint",,,
+```
+
+Cross-surface invariants — true for every status, every output:
+
+- **Row count parity**: the JSON array, the text table body, and
+  the CSV body always have the **same number of rows** for the same
+  invocation (after dedupe / `--only-changed-status` filtering).
+- **Reason wording parity**: the `reason` cell is identical
+  byte-for-byte across JSON, text, and CSV — including the
+  per-source variation on `ignored-deleted`.
+- **Similarity columns** stay empty for any row whose `similarity`
+  is `null` (plain rows AND every `ignored-deleted` row); the
+  `kind`/`score`/`old_path` cells are only populated on R/C rows.
+- **`--with-similarity` is purely additive** for non-deleted
+  statuses — toggling it doesn't change which rows appear or what
+  `status`/`reason` they carry.
+
+The reason-substring guarantees in the table above are exercised
+by `linter-scripts/tests/test_rename_intake_emission_gating.py` and
+`linter-scripts/tests/test_ignored_deleted_*.py`, so a re-wording
+would break CI before it could surprise a downstream log scraper.
+
 ### `reason` for `ignored-deleted` rows
+
+> **Canonical reference:** see [`ignored-deleted` reason
+> format](#ignored-deleted-reason-format) under
+> [Status reference](#status-reference) for the full per-source
+> table, the `--list-changed-files-verbose` source-tag contract,
+> and worked examples in JSON / text / CSV. The summary below is
+> kept for backwards-compatible deep-links.
 
 The `reason` field on `ignored-deleted` rows is per-source so a
 reviewer can see *why* a path was classified as deleted. Two source
