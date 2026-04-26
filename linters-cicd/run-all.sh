@@ -139,12 +139,12 @@ if [ "$SMOKE" = "1" ]; then
         'import json,sys; print(",".join(json.load(sys.stdin)["rule_ids"]))')
     SMOKE_DIRS=$(echo "$SMOKE_PAYLOAD" | python3 -c \
         'import json,sys; print(chr(10).join(json.load(sys.stdin)["fixture_dirs"]))')
-    SMOKE_REASONS=$(echo "$SMOKE_PAYLOAD" | python3 <<'PYEOF'
-import json, sys
-d = json.load(sys.stdin)
+    SMOKE_REASONS=$(SMOKE_PAYLOAD="$SMOKE_PAYLOAD" python3 <<'PYEOF'
+import json, os
+d = json.loads(os.environ["SMOKE_PAYLOAD"])
 for rid in d["rule_ids"]:
     reason = d["reasons"].get(rid, "?")
-    print(f"         · {rid}  — {reason}")
+    print(f"         . {rid}  -- {reason}")
 PYEOF
     )
     SMOKE_SKIPPED=$(echo "$SMOKE_PAYLOAD" | python3 -c \
