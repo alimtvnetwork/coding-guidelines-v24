@@ -17,7 +17,6 @@ the column contract trips immediately.
 from __future__ import annotations
 
 import csv
-import importlib.util
 import io
 import sys
 import tempfile
@@ -25,14 +24,10 @@ import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
 
-_HERE = Path(__file__).resolve().parent
-_SPEC = importlib.util.spec_from_file_location(
-    "check_placeholder_comments_csv",
-    _HERE.parent / "check-placeholder-comments.py",
-)
-assert _SPEC is not None and _SPEC.loader is not None
-_MOD = importlib.util.module_from_spec(_SPEC)
-_SPEC.loader.exec_module(_MOD)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest_shim import load_placeholder_linter  # noqa: E402
+
+_MOD = load_placeholder_linter()
 
 _ChangedFileAudit = _MOD._ChangedFileAudit
 _RenameSimilarity = _MOD._RenameSimilarity
