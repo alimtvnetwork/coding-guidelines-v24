@@ -713,15 +713,46 @@ def main(argv: list[str] | None = None) -> int:
     # unchanged target is reported.
     changed_md: set[Path] | None = None
     if args.diff_base or args.changed_files:
+        # Decide upfront whether to allocate the intake list. Force-
+        # OFF (``--no-diff-rename-log``) skips the allocation entirely
+        # so a PR with thousands of renames doesn't pay any memory
+        # cost. Auto (None) and force-ON (True) both collect, so the
+        # auto branch can decide-to-print based on row count.
+        rename_intake: list[_DiffIntakeRow] | None = (
+            None if args.diff_rename_log is False else []
+        )
         try:
             changed_md = _resolve_changed_md(
                 repo_root, root,
                 diff_base=args.diff_base,
                 changed_files=args.changed_files,
+                intake=rename_intake,
             )
         except RuntimeError as e:
             print(f"error: {e}", file=sys.stderr)
             return 2
+        # ---- Rename/copy intake table render ---------------------
+        # Resolution table for the tri-state ``--diff-rename-log``:
+        #
+        #   flag value | render?
+        #   -----------+--------------------------------------------
+        #   None       | only if ``rename_intake`` is non-empty AND
+        #              | --json is OFF (auto-quiet on empty / JSON)
+        #   True       | always (force ON; useful for CI banners)
+        #   False      | never (force OFF; intake list is None)
+        #
+        # Always rendered to STDERR so --json STDOUT stays a single
+        # parseable document under every override. The table itself
+        # is purely diagnostic — verdicts never depend on it.
+        if rename_intake is not None:
+            should_render = (
+                args.diff_rename_log is True
+                or (args.diff_rename_log is None
+                    and rename_intake
+                    and not args.json)
+            )
+            if should_render:
+                _render_rename_intake_table(rename_intake, sys.stderr)
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
                   f"{len(changed_md)} changed `.md` file(s) under {args.root}/")
