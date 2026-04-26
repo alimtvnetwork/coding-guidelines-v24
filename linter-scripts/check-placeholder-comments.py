@@ -483,6 +483,18 @@ def main(argv: list[str] | None = None) -> int:
              "changed-file set has no `.md` under --root, exit 0 "
              "without scanning. Default behaviour is the same; this "
              "flag is accepted for explicitness in CI configs.")
+    ap.add_argument("--github", dest="github", action="store_true",
+        default=None,
+        help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
+             "workflow command per violation in addition to the human-"
+             "readable summary, so each finding lights up inline on "
+             "the PR diff with its rule code (P-001 … P-008). Auto-"
+             "enabled when the `GITHUB_ACTIONS` env var is `true` "
+             "(i.e. inside any GitHub Actions runner). Use "
+             "`--no-github` to force-disable.")
+    ap.add_argument("--no-github", dest="github", action="store_false",
+        help="Disable GitHub Actions annotations even when the "
+             "`GITHUB_ACTIONS` env var would auto-enable them.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -495,6 +507,12 @@ def main(argv: list[str] | None = None) -> int:
         print("error: --diff-base and --changed-files are mutually exclusive",
               file=sys.stderr)
         return 2
+
+    # Tri-state: --github → True, --no-github → False, neither → auto.
+    if args.github is None:
+        github_annotations = os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+    else:
+        github_annotations = args.github
 
     intent_verbs = DEFAULT_INTENT_VERBS | {v.lower() for v in args.allow_verb}
 
@@ -613,6 +631,16 @@ def main(argv: list[str] | None = None) -> int:
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
             print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
+
+    # ---- GitHub Actions annotations (always after the human summary)
+    # so a reviewer scrolling the log sees the digest first, then the
+    # auto-attached inline annotations on the PR diff. Workflow
+    # commands go to STDOUT regardless of --json so JSON consumers
+    # still get clean output on a separate channel (the annotations
+    # stream is interleaved but parseable by the runner, not by us).
+    if github_annotations and violations:
+        for line in _format_github_annotations(violations):
+            print(line)
 
     # ---- Persist sentinel on clean runs only ----------------------
     # Failed runs MUST NOT poison the cache: a future "fix" might
