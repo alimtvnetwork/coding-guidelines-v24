@@ -75,6 +75,24 @@ Add file-relative links here. Always include `.md`. Examples (replace before com
 - [Strictly-avoid quick reference](../17-consolidated-guidelines/00-strictly-avoid-quickref.md)
 ```
 
+### Placeholder cross-references (copy-paste snippet)
+
+Use this when you need to reserve a link before the target file exists.
+The checker ignores links inside HTML comments, so these won't fail CI.
+
+```markdown
+<!-- TODO: activate when target is created
+- [Target Title](../NN-module-name/00-overview.md)
+- [Target Title](../NN-module-name/01-file-name.md#section-anchor)
+-->
+```
+
+Guidelines for placeholders:
+- Keep the comment block contiguous (no blank lines inside).
+- Replace `NN-module-name` and `01-file-name.md` with real paths before removing the comment markers.
+- Remove the `<!--` and `-->` wrappers (and the `TODO:` prefix) once the target exists.
+- If the anchor (`#section-anchor`) is unknown, omit it and add it later.
+
 ---
 
 ## Pre-flight checklist (delete before committing)
