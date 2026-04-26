@@ -747,6 +747,70 @@ def _collect_bullets_only(path: Path, repo_root: Path,
     lint_file(path, repo_root, bullets_out, DEFAULT_INTENT_VERBS)
 
 
+# Per-rule one-liner shown in the annotation title so reviewers see
+# *why* the line is flagged without opening the linter docs. Keep
+# each entry ≤ ~50 chars — GitHub truncates long titles in the diff
+# gutter tooltip.
+RULE_TITLES: dict[str, str] = {
+    "P-001": "Placeholder intent must be an imperative sentence",
+    "P-002": "Placeholder body must be `- [text](link)` bullets",
+    "P-003": "Placeholder link must be a relative `.md` path",
+    "P-004": "Placeholder block must contain ≥1 valid bullet",
+    "P-005": "Placeholder block must not contain blank lines",
+    "P-006": "Placeholder opener has no matching closer",
+    "P-007": "Duplicate placeholder target",
+    "P-008": "Placeholder opener missing `@path:line` back-pointer",
+}
+
+# GitHub Actions workflow commands use `,` and `:` as field separators
+# and `\n` / `\r` as line terminators. Any of these in the message
+# corrupt the annotation, so we URL-style escape them per the
+# documented contract:
+# https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions
+_ANNOTATION_ESCAPES: tuple[tuple[str, str], ...] = (
+    ("%", "%25"),  # MUST be first — every other replacement uses %.
+    ("\r", "%0D"),
+    ("\n", "%0A"),
+    (":", "%3A"),
+    (",", "%2C"),
+)
+
+
+def _escape_annotation(value: str) -> str:
+    out = value
+    for src, dst in _ANNOTATION_ESCAPES:
+        out = out.replace(src, dst)
+    return out
+
+
+def _format_github_annotations(violations: list[Violation]) -> Iterable[str]:
+    """Yield one ``::error file=…,line=…,col=1,title=…::message`` per
+    violation, preserving input order.
+
+    * ``file`` is the repo-relative path stored on ``Violation`` —
+      matches GitHub's checkout layout so the gutter pin lands on the
+      right file in the PR diff.
+    * ``line`` is the 1-indexed source line of the offending opener.
+    * ``col=1`` is included so the annotation pins to the gutter
+      rather than column 0 (some renderers hide col=0 entirely).
+    * ``title`` is ``"<P-NNN> <one-liner>"`` so the rule code is the
+      first thing reviewers see in the diff tooltip; unknown codes
+      degrade to just the bare code (forward-compatible with future
+      P-009+ rules added before this map is updated).
+    * The message body is the full ``Violation.message`` so the
+      remediation hint stays visible when the user clicks through.
+    """
+    for v in violations:
+        title = RULE_TITLES.get(v.code)
+        head = f"{v.code} {title}" if title else v.code
+        yield (
+            f"::error file={_escape_annotation(v.file)},"
+            f"line={v.line},col=1,"
+            f"title={_escape_annotation(head)}::"
+            f"{_escape_annotation(v.message)}"
+        )
+
+
 def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> str:
     """Build a SHA-256 fingerprint of every input that affects the verdict.
 
