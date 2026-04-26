@@ -647,30 +647,62 @@ def main(argv: list[str] | None = None) -> int:
                 f"`{first_rel}:L{first_ln}` as `{first_target}` "
                 "(anchor differences are ignored)."))
 
+    # ---- Pre-fetch diff excerpts once for both human + JSON modes
+    # (only when the user actually wants them). Excerpts are bounded
+    # by changed-file count, not violation count — a single bad
+    # block tripping P-001 + P-002 + P-004 still costs one git
+    # invocation per file, not three.
+    diff_excerpts: dict[str, _DiffExcerpts] = {}
+    want_excerpts = (
+        violations
+        and args.diff_base
+        and args.diff_context > 0
+        and changed_md is not None
+        and (not args.json or args.json_excerpts)
+    )
+    if want_excerpts:
+        affected = sorted({v.file for v in violations
+                           if (repo_root / v.file).resolve() in changed_md})
+        for rel in affected:
+            excerpt = _fetch_diff_excerpts(
+                repo_root, args.diff_base, rel, args.diff_context,
+            )
+            if excerpt is not None:
+                diff_excerpts[rel] = excerpt
+
     if args.json:
-        print(json.dumps([asdict(v) for v in violations], indent=2))
+        # Backward-compatible: when --json-excerpts is OFF the
+        # payload is byte-identical to the legacy schema (only the
+        # four Violation fields). When ON, an ``excerpt`` array is
+        # appended to violations that have one — never present as
+        # ``null`` or ``[]``, so legacy parsers that key only off
+        # ``file``/``line``/``code``/``message`` keep working
+        # without seeing a new always-present field.
+        if not args.json_excerpts:
+            print(json.dumps([asdict(v) for v in violations], indent=2))
+        else:
+            payload: list[dict[str, object]] = []
+            for v in violations:
+                row = asdict(v)
+                excerpt = diff_excerpts.get(v.file)
+                if excerpt is not None:
+                    snippet = excerpt.render_structured(
+                        v.line, args.diff_context,
+                    )
+                    if snippet:
+                        row["excerpt"] = snippet
+                payload.append(row)
+            # ``ensure_ascii=False`` so non-ASCII spec content
+            # (e.g. quoted UTF-8 paths from the rename hardening)
+            # round-trips as readable characters instead of
+            # ``\uXXXX`` escapes. Still valid JSON; downstream
+            # parsers don't care.
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
     else:
         if not violations:
             print(f"✅ placeholder-comments: no malformed blocks under {args.root}/")
         else:
             print(f"❌ placeholder-comments: {len(violations)} violation(s):\n")
-            # Pre-fetch one diff per touched file (only in --diff-base
-            # mode with non-zero context). Fetching once per file
-            # rather than once per violation keeps git invocations
-            # bounded by the changed-file count, not the violation
-            # count — important when a single bad block trips P-001
-            # + P-002 + P-004 simultaneously.
-            diff_excerpts: dict[str, _DiffExcerpts] = {}
-            if (args.diff_base and args.diff_context > 0
-                    and changed_md is not None):
-                affected = sorted({v.file for v in violations
-                                   if (repo_root / v.file).resolve() in changed_md})
-                for rel in affected:
-                    excerpt = _fetch_diff_excerpts(
-                        repo_root, args.diff_base, rel, args.diff_context,
-                    )
-                    if excerpt is not None:
-                        diff_excerpts[rel] = excerpt
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
                 excerpt = diff_excerpts.get(v.file)
