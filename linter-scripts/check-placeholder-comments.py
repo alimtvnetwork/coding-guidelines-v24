@@ -987,6 +987,21 @@ def main(argv: list[str] | None = None) -> int:
                                if args.only_changed_status else None),
                 with_similarity=args.with_similarity,
             )
+            # CSV export mirrors the same dedupe + filter pipeline so
+            # the spreadsheet always matches what the operator just
+            # saw on STDERR — no surprise extra rows. Independently
+            # computed (rather than threaded through the renderer) to
+            # keep the renderer's signature stable and to allow CSV
+            # without --with-similarity (the export carries all four
+            # similarity columns regardless; they just stay empty).
+            if args.similarity_csv:
+                csv_rows = changed_audit
+                if args.dedupe_changed_files:
+                    csv_rows, _ = _dedupe_audit_rows(csv_rows)
+                if args.only_changed_status:
+                    only = frozenset(args.only_changed_status)
+                    csv_rows = [r for r in csv_rows if r.status in only]
+                _write_similarity_csv(csv_rows, args.similarity_csv)
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
                   f"{len(changed_md)} changed `.md` file(s) under {args.root}/")
