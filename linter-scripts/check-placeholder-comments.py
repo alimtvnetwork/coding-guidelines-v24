@@ -140,6 +140,14 @@ INTENT_PREFIXES: tuple[str, ...] = ("please ",)
 
 BULLET_LINK_RE = re.compile(r"^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*$")
 
+# Default source-file extension allowlist. Widened via the CLI
+# ``--ext`` flag (or by passing ``exts=`` to ``iter_source_files``).
+# Lowercase, dot-prefixed, deduplicated. Picked deliberately small —
+# spec authors who keep ``.mdx`` / ``.txt`` siblings (e.g. for embed
+# pipelines) extend it explicitly rather than the linter silently
+# pulling in arbitrary text files.
+DEFAULT_SOURCE_EXTS: frozenset[str] = frozenset({".md"})
+
 
 @dataclass(frozen=True)
 class Violation:
@@ -149,11 +157,39 @@ class Violation:
     message: str
 
 
-def iter_markdown_files(root: Path) -> Iterable[Path]:
-    for p in sorted(root.rglob("*.md")):
+def iter_source_files(root: Path,
+                      exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                      ) -> Iterable[Path]:
+    """Yield every file under ``root`` whose suffix is in ``exts``.
+
+    ``exts`` entries MUST be lowercase, dot-prefixed (``".md"``,
+    ``".mdx"``, ``".txt"``). Dotfile / dotted-directory entries
+    (``.git``, ``.lovable``) are skipped — the linter is for spec
+    text, not VCS / tooling caches. Output is sorted by path so
+    cache keys and reports are deterministic across runs.
+
+    Files are matched on ``suffix.lower()`` so a stray ``README.MD``
+    is still picked up when ``.md`` is in the allowlist.
+    """
+    # Single rglob('*') walk filtered in-process is faster than one
+    # rglob('*.ext') per extension on large trees and keeps the sort
+    # order globally consistent (rglob returns insertion order).
+    for p in sorted(root.rglob("*")):
+        if not p.is_file():
+            continue
+        if p.suffix.lower() not in exts:
+            continue
         if any(part.startswith(".") for part in p.relative_to(root).parts):
             continue
         yield p
+
+
+def iter_markdown_files(root: Path) -> Iterable[Path]:
+    """Back-compat shim — equivalent to ``iter_source_files(root)``
+    with the default ``.md``-only allowlist. Kept so external
+    callers (pre-commit hooks, ad-hoc scripts) don't break.
+    """
+    return iter_source_files(root, DEFAULT_SOURCE_EXTS)
 
 
 def strip_code_fences(text: str) -> str:
