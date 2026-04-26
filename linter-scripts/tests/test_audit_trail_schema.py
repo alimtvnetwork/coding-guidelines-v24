@@ -312,25 +312,64 @@ class JsonAuditSchema(unittest.TestCase):
                         f"`source: null`",
                     )
 
-    def test_diff_mode_ignored_deleted_reasons_match_vocabulary(
-        self,
-    ) -> None:
-        # Drives the `diff-*` provenance tags via
-        # `--diff-from-stdin`. Same reason-vocabulary contract
-        # applies — the canonical template set already includes
-        # them via `_VALID_DELETED_REASONS`.
-        with _Sandbox() as box:
-            proc = box.run_diff_mode("--json")
-        self.assertEqual(proc.returncode, 0, msg=proc.stderr)
-        rows = json.loads(proc.stdout)
-        deleted = [r for r in rows
-                   if r["status"] == "ignored-deleted"]
-        self.assertGreater(len(deleted), 0,
-                           "diff-mode fixture must produce at "
-                           "least one ignored-deleted row")
-        for i, row in enumerate(deleted):
-            with self.subTest(row_index=i, reason=row["reason"]):
-                self.assertIn(row["reason"], _VALID_DELETED_REASONS)
+
+# ---------------------------------------------------------------------
+# Parser-level coverage for `diff-*` provenance tags.
+#
+# The shipped CLI only emits `diff-*` tags when it runs `git diff`
+# itself, which would force every test to stand up a real
+# repository fixture. Instead we drive the same code path that the
+# end-to-end JSON / CSV / text tests rely on by feeding a synthetic
+# `git diff --name-status -M -C` payload straight into
+# `_parse_name_status`, then resolving each captured tuple through
+# the shared `resolve_deleted_reason()`. The resulting reason
+# strings must satisfy the SAME closed-vocabulary contract the
+# end-to-end tests assert on JSON/CSV/text — proving the schema
+# guarantee holds independently of which intake produced the
+# `ignored-deleted` row.
+# ---------------------------------------------------------------------
+
+_DIFF_NAME_STATUS_PAYLOAD = (
+    "D\tspec/diff_gone.md\n"
+    "R087\tspec/diff_old.md\tspec/diff_new.md\n"
+    "C063\tspec/diff_src.md\tspec/diff_copy.md\n"
+)
+
+
+class DiffParserDeletedReasonVocabulary(unittest.TestCase):
+    """`diff-*` reasons resolved by the parser must satisfy the
+    same closed-vocabulary contract as `changed-files-*` reasons
+    resolved by the renderer."""
+
+    def test_diff_d_r_c_old_reasons_are_in_canonical_set(self) -> None:
+        deleted: list[tuple[str, str, "str | None"]] = []
+        # Drive the same parser the production CLI uses on a real
+        # `git diff --name-status` payload. The parser populates
+        # `deleted` with `(path, source, new_path | None)` tuples.
+        _MOD._parse_name_status(_DIFF_NAME_STATUS_PAYLOAD,
+                                deleted=deleted)
+        # Pre-condition: at least one tuple per `diff-*` tag the
+        # fixture exercises (D, R-old, C-old). Without this, the
+        # vocabulary assertion below could pass vacuously.
+        observed_sources = {src for _, src, _ in deleted}
+        self.assertEqual(observed_sources,
+                         {"diff-D", "diff-R-old", "diff-C-old"})
+
+        # Every resolved reason must land in the canonical set,
+        # exactly as the JSON/CSV/text schema tests demand on the
+        # end-to-end surfaces.
+        for path, source, new_path in deleted:
+            with self.subTest(path=path, source=source):
+                reason = _VOCAB.resolve_deleted_reason(
+                    source, new_path=new_path)
+                self.assertIn(reason, _VALID_DELETED_REASONS,
+                              f"`diff-*` reason for `{path}` "
+                              f"({source}) outside vocabulary: "
+                              f"{reason!r}")
+                self.assertNotEqual(
+                    reason, _VOCAB.DELETED_REASON_FALLBACK,
+                    "parser must never produce a tag that drops "
+                    "to the fallback message")
 
 
 # ---------------------------------------------------------------------
