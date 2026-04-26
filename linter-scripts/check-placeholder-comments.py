@@ -83,6 +83,7 @@ import json
 import hashlib
 import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, asdict
 from pathlib import Path
