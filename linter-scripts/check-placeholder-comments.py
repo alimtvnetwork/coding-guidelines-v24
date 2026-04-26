@@ -890,7 +890,12 @@ def main(argv: list[str] | None = None) -> int:
     # running the full lint.
     if args.list_files:
         rows: list[dict[str, str]] = []
-        for md in iter_markdown_files(root):
+        for md in iter_markdown_files(
+            root,
+            extensions=extensions,
+            include=include_globs,
+            exclude=exclude_globs,
+        ):
             rel = str(md.relative_to(repo_root))
             if changed_md is None:
                 # Full-tree mode: every discovered file is linted.
@@ -921,7 +926,8 @@ def main(argv: list[str] | None = None) -> int:
             n_cross = sum(1 for r in rows
                           if r["status"] == "cross-file-only")
             mode = "diff" if changed_md is not None else "full-tree"
-            print(f"ℹ️  placeholder-comments: {len(rows)} `.md` "
+            ext_blurb = "/".join(f".{e}" for e in extensions)
+            print(f"ℹ️  placeholder-comments: {len(rows)} {ext_blurb} "
                   f"file(s) discovered under {args.root}/ "
                   f"({mode} mode) — {n_linted} linted, "
                   f"{n_cross} cross-file-only")
@@ -949,7 +955,12 @@ def main(argv: list[str] | None = None) -> int:
     cache_key: str | None = None
     sentinel: Path | None = None
     if args.cache_dir and changed_md is None:
-        cache_key = _compute_cache_key(root, intent_verbs)
+        cache_key = _compute_cache_key(
+            root, intent_verbs,
+            extensions=extensions,
+            include=include_globs,
+            exclude=exclude_globs,
+        )
         sentinel = Path(args.cache_dir) / f"{cache_key}.pass"
         if sentinel.is_file():
             if not args.json:
@@ -961,7 +972,12 @@ def main(argv: list[str] | None = None) -> int:
 
     violations: list[Violation] = []
     cross_file_bullets: list[tuple[str, int, str]] = []
-    for md in iter_markdown_files(root):
+    for md in iter_markdown_files(
+        root,
+        extensions=extensions,
+        include=include_globs,
+        exclude=exclude_globs,
+    ):
         if changed_md is not None and md.resolve() not in changed_md:
             # Unchanged file: still collect its bullets so cross-file
             # P-007 can detect a new collision introduced by a
