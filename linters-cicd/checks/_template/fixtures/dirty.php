@@ -9,4 +9,4 @@ function debugMe(array $rows): void {
 }
 
 // The next call is in a comment — must NOT be flagged.
-// var_dump('not a real call');
+// var_dump('not a real call');  ← NO-FINDING
