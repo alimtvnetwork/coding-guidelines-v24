@@ -1397,19 +1397,83 @@ _SIMILARITY_BLANK = "-"
 #                            shaped exactly ``D\tpath`` (the verbatim
 #                            git wire format some CI runners
 #                            forward).
+#   * ``diff-R-old``       — OLD side of an ``R``-status row from
+#                            ``git diff --name-status -M -C``. The
+#                            file was renamed; we lint the NEW side
+#                            and audit-record the OLD side as
+#                            deleted (no post-state at the OLD path).
+#   * ``diff-C-old``       — OLD (source) side of a ``C``-status
+#                            (copy) row. Strictly speaking the
+#                            source still exists on disk, but from
+#                            the diff range's perspective there is
+#                            no *modification* under the OLD path
+#                            to lint — we record it as
+#                            ``ignored-deleted`` for symmetry with
+#                            the rename case so an audit reviewer
+#                            can see every path the diff mentioned.
+#   * ``changed-files-R-old`` / ``changed-files-C-old``
+#                          — OLD side of an authored
+#                            ``--changed-files`` rename / copy row
+#                            (tab form ``R<score>?\told\tnew`` /
+#                            ``C<score>?\told\tnew``, OR arrow form
+#                            ``old => new`` which is always
+#                            classified as ``R``-old).
 #
 # ``_DELETED_REASON_FALLBACK`` covers any future provenance the
 # parsers add before this map catches up — keeps the audit
 # self-explanatory rather than crashing on a missing key.
+#
+# The R/C-old reasons embed a ``{new_path}`` placeholder so the
+# audit row can name the destination — without it, a reviewer
+# scanning the table would see "old path of a rename" with no clue
+# *which* rename. :func:`_resolve_deleted_reason` performs the
+# substitution; tags without a placeholder are returned verbatim,
+# so adding a new flat tag in the future stays a one-line change.
 _DELETED_REASON: dict[str, str] = {
     "diff-D": ("git diff reported D (deleted): file removed in the "
                "diff range, no post-state to lint"),
     "changed-files-D": ("--changed-files payload row shaped `D\\tpath`: "
                         "explicit delete marker, no post-state to lint"),
+    "diff-R-old": ("OLD side of a git rename (`R` row): file moved "
+                   "to `{new_path}` in the diff range, no post-state "
+                   "at this path to lint"),
+    "diff-C-old": ("OLD (source) side of a git copy (`C` row): "
+                   "duplicated to `{new_path}` in the diff range, "
+                   "no modification at this path to lint"),
+    "changed-files-R-old": ("OLD side of a `--changed-files` rename "
+                            "row: file moved to `{new_path}`, no "
+                            "post-state at this path to lint"),
+    "changed-files-C-old": ("OLD (source) side of a `--changed-files` "
+                            "copy row: duplicated to `{new_path}`, no "
+                            "modification at this path to lint"),
 }
 _DELETED_REASON_FALLBACK = ("path captured as a delete by the diff "
                             "intake but provenance is unknown — "
                             "treated as `ignored-deleted` for safety")
+
+
+def _resolve_deleted_reason(source: str,
+                            new_path: "str | None" = None) -> str:
+    """Look up the human-readable ``reason`` for an ``ignored-deleted``
+    row given its provenance ``source`` tag.
+
+    Tags whose template embeds ``{new_path}`` (today: ``diff-R-old``,
+    ``diff-C-old``, ``changed-files-R-old``, ``changed-files-C-old``)
+    are formatted with the supplied destination path so the reviewer
+    sees where the file went. If ``new_path`` is missing on such a
+    tag (defensive — parsers always supply it today), the literal
+    ``"<unknown>"`` is substituted so the row stays scannable
+    instead of raising a ``KeyError`` mid-render.
+
+    Tags without a placeholder (``diff-D``, ``changed-files-D``)
+    return their template verbatim. Unknown tags fall back to
+    :data:`_DELETED_REASON_FALLBACK` so a future parser change
+    can't crash the audit emitter.
+    """
+    template = _DELETED_REASON.get(source, _DELETED_REASON_FALLBACK)
+    if "{new_path}" in template:
+        return template.format(new_path=new_path or "<unknown>")
+    return template
 
 
 # Stable header for the ``--similarity-csv`` export. Frozen at module
@@ -2053,7 +2117,16 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
     # ``_DELETED_REASON``'s keys. The audit emitter below maps
     # ``source`` → human-readable ``reason`` so each
     # ``ignored-deleted`` row explains *why* it was classified.
-    deleted_paths: list[tuple[str, str]] = []
+    # Each entry is ``(path, source, new_path | None)``:
+    #   * ``path``     — the OLD-side / deleted repo-relative path.
+    #   * ``source``   — provenance tag, one of ``_DELETED_REASON``'s
+    #                    keys.
+    #   * ``new_path`` — the rename/copy destination when ``source``
+    #                    is an R/C-old tag, else ``None``. Used by
+    #                    :func:`_resolve_deleted_reason` to format the
+    #                    `{new_path}` placeholder so the audit row
+    #                    names where the file went.
+    deleted_paths: list[tuple[str, str, "str | None"]] = []
     # When the caller asked for an audit trail, also collect rename/
     # copy provenance per new-path so the audit constructor below can
     # attach a ``_RenameSimilarity`` to every row whose path came from
@@ -2148,11 +2221,10 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 similarity=sim,
             ))
     if audit is not None:
-        for d, src in deleted_paths:
+        for d, src, new_path in deleted_paths:
             audit.append(_ChangedFileAudit(
                 path=d, status="ignored-deleted",
-                reason=_DELETED_REASON.get(
-                    src, _DELETED_REASON_FALLBACK),
+                reason=_resolve_deleted_reason(src, new_path),
                 # Carry the raw provenance tag onto the audit row so
                 # ``--list-changed-files-verbose`` can surface it
                 # alongside the human-readable reason. Non-deleted
@@ -2255,7 +2327,7 @@ def _unquote_git_path(field: str) -> str:
 
 def _parse_name_status(stdout: str,
                        *,
-                       deleted: "list[tuple[str, str]] | None" = None,
+                       deleted: "list[tuple[str, str, str | None]] | None" = None,
                        similarities: "dict[str, _RenameSimilarity] | None" = None,
                        ) -> list[str]:
     """Extract the post-state path from each ``git diff --name-status``
@@ -2264,14 +2336,28 @@ def _parse_name_status(stdout: str,
     Unknown / malformed rows are skipped silently — the linter's job
     is to lint placeholders, not to police git plumbing output.
 
-    When ``deleted`` is provided, every ``D``-status row contributes
-    a ``(path, source)`` tuple — in input order, after
-    :func:`_unquote_git_path`. The ``source`` is always ``"diff-D"``
-    for this parser (rows come straight from
-    ``git diff --name-status``); the audit-trail emitter uses the
-    tag to look up the per-provenance ``reason`` string in
-    :data:`_DELETED_REASON` so each ``ignored-deleted`` row explains
-    *why* it was classified that way.
+    When ``deleted`` is provided, three row classes contribute
+    ``(path, source, new_path | None)`` tuples — in input order, after
+    :func:`_unquote_git_path`:
+
+    * ``D`` rows → ``(deleted_path, "diff-D", None)``.
+    * ``R`` rows → ``(old_path, "diff-R-old", new_path)`` *in addition*
+      to the NEW path being returned for linting. The OLD path no
+      longer has a post-state file under the diff range, so the audit
+      emitter classifies it ``ignored-deleted`` and names the
+      destination in the row's ``reason``.
+    * ``C`` rows → ``(old_path, "diff-C-old", new_path)`` for the
+      same audit-completeness reason. (The source file still exists
+      on disk, but the diff range introduced no *modification* at
+      the OLD path; recording it as ``ignored-deleted`` keeps the
+      audit symmetric with the rename case so reviewers see every
+      path the diff mentioned.)
+
+    The audit-trail emitter uses the tag to look up the per-
+    provenance ``reason`` string via
+    :func:`_resolve_deleted_reason` so each ``ignored-deleted`` row
+    explains *why* it was classified that way and (for R/C-old rows)
+    where the file went.
 
     When ``similarities`` is provided, every ``R``/``C`` row contributes
     one ``new_path → _RenameSimilarity`` entry. The mapping key is the
@@ -2330,6 +2416,18 @@ def _parse_name_status(stdout: str,
                         score=score,
                         old_path=_unquote_git_path(cols[1]) if cols[1] else "",
                     )
+                # Capture the OLD-side path as an ``ignored-deleted``
+                # audit row when the caller asked for the audit trail.
+                # Skip empty-old-path defensive case (hand-rolled
+                # inputs only — git never emits one) so we don't
+                # synthesise a blank-path row.
+                if deleted is not None and cols[1] != "":
+                    old_path = _unquote_git_path(cols[1])
+                    deleted.append((
+                        old_path,
+                        f"diff-{kind}-old",
+                        new_path,
+                    ))
         elif kind in ("A", "M"):
             # Add / modify: cols = [A|M, path]. Take path.
             if cols[1] != "":
@@ -2339,7 +2437,8 @@ def _parse_name_status(stdout: str,
             # audit trail only — never returned for linting because
             # there is no post-state file to scan.
             if cols[1] != "":
-                deleted.append((_unquote_git_path(cols[1]), "diff-D"))
+                deleted.append((_unquote_git_path(cols[1]),
+                                "diff-D", None))
         # T / U / X intentionally dropped — see docstring.
     return out
 
@@ -2365,22 +2464,36 @@ _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>.+?)\s*=>\s*(?P<new>.+?)\s*$")
 
 def _normalise_changed_lines(lines: list[str],
                              *,
-                             deleted: "list[tuple[str, str]] | None" = None,
+                             deleted: "list[tuple[str, str, str | None]] | None" = None,
                              similarities: "dict[str, _RenameSimilarity] | None" = None,
                              ) -> list[str]:
     """Collapse rename-bearing rows in a ``--changed-files`` payload
     down to their post-rename path.
 
-    When ``deleted`` is provided and a row is recognisable as a
-    delete (``D\\tpath`` — the exact shape ``git diff --name-status``
-    emits), the path is captured into ``deleted`` as a
-    ``(path, "changed-files-D")`` tuple and the row is NOT forwarded
-    to the caller. The provenance tag distinguishes it from true
-    diff ``D`` rows so the audit emitter can surface a different
-    ``reason`` string per source. Without ``deleted`` (the default),
-    such a row falls through to the generic tab-form branch and the
-    bare path travels downstream to be filtered by extension/root
-    checks — same end result as before this audit-trail addition.
+    When ``deleted`` is provided three row classes contribute
+    ``(path, source, new_path | None)`` tuples:
+
+    * Pure delete rows (``D\\tpath`` — the exact shape
+      ``git diff --name-status`` emits) → ``(path, "changed-files-D",
+      None)``. The row is NOT forwarded to the caller.
+    * Tab-form rename / copy rows (``R<score>?\\told\\tnew`` or
+      ``C<score>?\\told\\tnew``) → an additional ``(old_path,
+      "changed-files-R-old"|"changed-files-C-old", new_path)`` tuple
+      *alongside* the NEW path that's still forwarded for linting.
+    * Arrow-form rename rows (``old => new``) → an additional
+      ``(old_path, "changed-files-R-old", new_path)`` tuple. There is
+      no copy variant in arrow form (``git status -s`` doesn't emit
+      one), so every arrow row is classified as a rename.
+
+    The provenance tags distinguish authored-payload deletes from
+    true diff ``D`` rows, and rename/copy OLD sides from plain
+    deletes — so the audit emitter can surface a different ``reason``
+    string per source via :func:`_resolve_deleted_reason`. Without
+    ``deleted`` (the default), all three row classes degrade
+    gracefully: the pure-delete row falls through to the generic
+    tab-form branch and its path travels downstream to be filtered
+    by extension/root checks, while R/C OLD-side capture is simply
+    skipped — same end result as before this audit-trail addition.
 
     Plain paths (no tab, no ``=>``) pass through unchanged. Comments
     and blanks are *not* stripped here — the caller does that on the
@@ -2443,7 +2556,7 @@ def _normalise_changed_lines(lines: list[str],
                     and cols[0] == "D"
                     and cols[1] != ""):
                 deleted.append((_unquote_git_path(cols[1]),
-                                "changed-files-D"))
+                                "changed-files-D", None))
                 continue
             new_col = ""
             for c in reversed(cols):
@@ -2476,6 +2589,28 @@ def _normalise_changed_lines(lines: list[str],
                             score=int(score_raw) if score_raw else None,
                             old_path=old_path,
                         )
+                # Capture the OLD-side path as an ``ignored-deleted``
+                # audit row even when ``similarities`` wasn't asked
+                # for (the audit trail and the similarity column are
+                # independent flags; OLD-side bookkeeping belongs to
+                # the audit, not the similarity, surface). We re-
+                # parse the leading column for the kind letter to
+                # avoid coupling the two passes.
+                if deleted is not None and cols and cols[0]:
+                    head_d = _NAME_STATUS_RE.match(cols[0])
+                    if head_d and head_d.group(1) in ("R", "C"):
+                        kind_d = head_d.group(1)
+                        old_for_audit = ""
+                        for c in cols[1:]:
+                            if c != "" and _unquote_git_path(c) != new_path:
+                                old_for_audit = _unquote_git_path(c)
+                                break
+                        if old_for_audit:
+                            deleted.append((
+                                old_for_audit,
+                                f"changed-files-{kind_d}-old",
+                                new_path,
+                            ))
             continue
         # Arrow form: `OLD => NEW`.
         m = _RENAME_ARROW_RE.match(line)
@@ -2486,13 +2621,24 @@ def _normalise_changed_lines(lines: list[str],
             # the user pasted a C-quoted form from ``git status``.
             unquoted_new = _unquote_git_path(new_path_raw.strip())
             out.append(unquoted_new)
+            old_path_for_audit = _unquote_git_path(
+                m.group("old").strip())
             if similarities is not None:
-                old_path_raw = m.group("old")
                 similarities[unquoted_new] = _RenameSimilarity(
                     kind="R",
                     score=None,
-                    old_path=_unquote_git_path(old_path_raw.strip()),
+                    old_path=old_path_for_audit,
                 )
+            # Arrow form is always a rename (git status -s has no
+            # copy variant). Capture the OLD side as an
+            # ``ignored-deleted`` audit row when the audit trail is
+            # being collected.
+            if deleted is not None and old_path_for_audit:
+                deleted.append((
+                    old_path_for_audit,
+                    "changed-files-R-old",
+                    unquoted_new,
+                ))
             continue
         out.append(line)
     return out
