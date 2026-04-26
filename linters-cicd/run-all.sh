@@ -21,6 +21,13 @@
 #                [--strict]                 (fail on unknown TOML keys)
 #                [--debug-timeout]          (log watchdog outcome: armed/canceled/fired)
 #                [--output coding-guidelines.sarif] [--format sarif|text]
+#                [--smoke]                  (run only rules whose check folder
+#                                            changed vs HEAD, against their own
+#                                            fixtures/ — see --smoke-base /
+#                                            --include-template)
+#                [--smoke-base REF]         (git ref for --smoke diff; default HEAD)
+#                [--include-template]       (smoke-mode: also run TEMPLATE-001
+#                                            against checks/_template/fixtures)
 #
 # Exit codes:
 #   0  no findings (or refresh-baseline mode)
@@ -58,6 +65,9 @@ TOTAL_TIMEOUT="0"
 SPLIT_BY=""
 STRICT_FLAG=""
 DEBUG_TIMEOUT="0"
+SMOKE="0"
+SMOKE_BASE="HEAD"
+INCLUDE_TEMPLATE="0"
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -77,6 +87,9 @@ while [ $# -gt 0 ]; do
         --debug-timeout)     DEBUG_TIMEOUT="1"; shift 1 ;;
         --output)            OUTPUT="$2"; shift 2 ;;
         --format)            FORMAT="$2"; shift 2 ;;
+        --smoke)             SMOKE="1"; shift 1 ;;
+        --smoke-base)        SMOKE_BASE="$2"; shift 2 ;;
+        --include-template)  INCLUDE_TEMPLATE="1"; shift 1 ;;
         -h|--help)
             sed -n '2,42p' "$0"; exit 0 ;;
         *)
@@ -93,6 +106,92 @@ REGISTRY="$SCRIPT_DIR/checks/registry.json"
 if [ ! -f "$REGISTRY" ]; then
     echo "::error::registry not found at $REGISTRY" >&2
     exit 2
+fi
+
+# ---- --smoke: derive rule + fixture set, then re-invoke ourselves ----
+# Smoke mode is a one-shot convenience for verifying a single rule
+# you just edited. It scans only the changed/template rules against
+# their own fixtures/ folders — no spec/, no src/, no full pack.
+# Exit codes mirror the orchestrator (0 clean, 1 findings, 2 tool error).
+if [ "$SMOKE" = "1" ]; then
+    REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+    SMOKE_FLAGS=()
+    [ "$INCLUDE_TEMPLATE" = "1" ] && SMOKE_FLAGS+=(--include-template)
+    SMOKE_PAYLOAD=$(python3 "$SCRIPT_DIR/scripts/smoke-select.py" \
+        --repo-root "$REPO_ROOT" \
+        --registry  "$REGISTRY" \
+        --base      "$SMOKE_BASE" \
+        "${SMOKE_FLAGS[@]}")
+    SMOKE_RC=$?
+    if [ "$SMOKE_RC" -eq 3 ]; then
+        echo "    🚭 smoke: nothing to verify"
+        echo "       no checks/<slug>/ folder changed vs '$SMOKE_BASE',"
+        echo "       and --include-template was not passed."
+        echo "       Edit a check or rerun with: $0 --smoke --include-template"
+        exit 0
+    fi
+    if [ "$SMOKE_RC" -ne 0 ]; then
+        echo "::error::smoke selector failed (rc=$SMOKE_RC)" >&2
+        exit "$SMOKE_RC"
+    fi
+
+    SMOKE_RULES=$(echo "$SMOKE_PAYLOAD" | python3 -c \
+        'import json,sys; print(",".join(json.load(sys.stdin)["rule_ids"]))')
+    SMOKE_DIRS=$(echo "$SMOKE_PAYLOAD" | python3 -c \
+        'import json,sys; print("\n".join(json.load(sys.stdin)["fixture_dirs"]))')
+    SMOKE_REASONS=$(echo "$SMOKE_PAYLOAD" | python3 -c \
+        'import json,sys
+d=json.load(sys.stdin)
+for rid in d["rule_ids"]:
+    print(f"         · {rid}  — {d[\"reasons\"][rid]}")')
+    SMOKE_SKIPPED=$(echo "$SMOKE_PAYLOAD" | python3 -c \
+        'import json,sys; print(",".join(json.load(sys.stdin)["skipped_slugs"]))')
+
+    echo "    🚬 smoke mode — verifying recently changed rule(s) only"
+    echo "       base ref:        $SMOKE_BASE"
+    echo "       rules selected:  ${SMOKE_RULES:-<none>}"
+    echo "$SMOKE_REASONS"
+    [ -n "$SMOKE_SKIPPED" ] && \
+        echo "       slugs skipped:   $SMOKE_SKIPPED  (use --include-template to opt in)"
+    echo ""
+
+    if [ -z "$SMOKE_DIRS" ]; then
+        echo "    ⚠️  smoke: rules selected but no fixtures/ folders found"
+        echo "       create checks/<slug>/fixtures/dirty.<ext> and clean.<ext>"
+        echo "       (see linters-cicd/docs/fixture-and-diagnostics-format.md)"
+        exit 0
+    fi
+
+    SMOKE_EXIT=0
+    SMOKE_INDEX=0
+    while IFS= read -r FDIR; do
+        [ -z "$FDIR" ] && continue
+        SMOKE_INDEX=$((SMOKE_INDEX + 1))
+        SMOKE_OUT="${OUTPUT%.sarif}.smoke-${SMOKE_INDEX}.sarif"
+        echo "    ── smoke pass $SMOKE_INDEX: $FDIR"
+        # Recursive call with the resolved scope. Drop --smoke* flags
+        # so we do not loop, and propagate user-visible knobs.
+        bash "$0" \
+            --path           "$REPO_ROOT/$FDIR" \
+            --rules          "$SMOKE_RULES" \
+            --output         "$SMOKE_OUT" \
+            --format         "$FORMAT" \
+            --jobs           "$JOBS" \
+            --check-timeout  "$CHECK_TIMEOUT" \
+            --total-timeout  "$TOTAL_TIMEOUT" \
+            --exclude-paths  "$EXCLUDE_PATHS"
+        PASS_RC=$?
+        if [ "$PASS_RC" -eq 2 ]; then
+            SMOKE_EXIT=2
+        elif [ "$PASS_RC" -eq 1 ] && [ "$SMOKE_EXIT" -ne 2 ]; then
+            SMOKE_EXIT=1
+        fi
+        echo ""
+    done <<< "$SMOKE_DIRS"
+
+    echo "    ────────────────────────────────────────────────"
+    echo "    🏁 smoke complete — exit $SMOKE_EXIT"
+    exit "$SMOKE_EXIT"
 fi
 
 # ---- Resolve --jobs auto → max(1, nproc - 1) ----
