@@ -483,6 +483,18 @@ def main(argv: list[str] | None = None) -> int:
              "changed-file set has no `.md` under --root, exit 0 "
              "without scanning. Default behaviour is the same; this "
              "flag is accepted for explicitness in CI configs.")
+    ap.add_argument("--github", dest="github", action="store_true",
+        default=None,
+        help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
+             "workflow command per violation in addition to the human-"
+             "readable summary, so each finding lights up inline on "
+             "the PR diff with its rule code (P-001 … P-008). Auto-"
+             "enabled when the `GITHUB_ACTIONS` env var is `true` "
+             "(i.e. inside any GitHub Actions runner). Use "
+             "`--no-github` to force-disable.")
+    ap.add_argument("--no-github", dest="github", action="store_false",
+        help="Disable GitHub Actions annotations even when the "
+             "`GITHUB_ACTIONS` env var would auto-enable them.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -495,6 +507,12 @@ def main(argv: list[str] | None = None) -> int:
         print("error: --diff-base and --changed-files are mutually exclusive",
               file=sys.stderr)
         return 2
+
+    # Tri-state: --github → True, --no-github → False, neither → auto.
+    if args.github is None:
+        github_annotations = os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+    else:
+        github_annotations = args.github
 
     intent_verbs = DEFAULT_INTENT_VERBS | {v.lower() for v in args.allow_verb}
 
@@ -614,6 +632,16 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
             print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
 
+    # ---- GitHub Actions annotations (always after the human summary)
+    # so a reviewer scrolling the log sees the digest first, then the
+    # auto-attached inline annotations on the PR diff. Workflow
+    # commands go to STDOUT regardless of --json so JSON consumers
+    # still get clean output on a separate channel (the annotations
+    # stream is interleaved but parseable by the runner, not by us).
+    if github_annotations and violations:
+        for line in _format_github_annotations(violations):
+            print(line)
+
     # ---- Persist sentinel on clean runs only ----------------------
     # Failed runs MUST NOT poison the cache: a future "fix" might
     # re-introduce the same hash via revert, and we'd then skip the
@@ -717,6 +745,70 @@ def _collect_bullets_only(path: Path, repo_root: Path,
     # ``lint_file`` already appends to ``bullets_out`` via its
     # ``valid_bullets`` parameter; we drop the violations list.
     lint_file(path, repo_root, bullets_out, DEFAULT_INTENT_VERBS)
+
+
+# Per-rule one-liner shown in the annotation title so reviewers see
+# *why* the line is flagged without opening the linter docs. Keep
+# each entry ≤ ~50 chars — GitHub truncates long titles in the diff
+# gutter tooltip.
+RULE_TITLES: dict[str, str] = {
+    "P-001": "Placeholder intent must be an imperative sentence",
+    "P-002": "Placeholder body must be `- [text](link)` bullets",
+    "P-003": "Placeholder link must be a relative `.md` path",
+    "P-004": "Placeholder block must contain ≥1 valid bullet",
+    "P-005": "Placeholder block must not contain blank lines",
+    "P-006": "Placeholder opener has no matching closer",
+    "P-007": "Duplicate placeholder target",
+    "P-008": "Placeholder opener missing `@path:line` back-pointer",
+}
+
+# GitHub Actions workflow commands use `,` and `:` as field separators
+# and `\n` / `\r` as line terminators. Any of these in the message
+# corrupt the annotation, so we URL-style escape them per the
+# documented contract:
+# https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions
+_ANNOTATION_ESCAPES: tuple[tuple[str, str], ...] = (
+    ("%", "%25"),  # MUST be first — every other replacement uses %.
+    ("\r", "%0D"),
+    ("\n", "%0A"),
+    (":", "%3A"),
+    (",", "%2C"),
+)
+
+
+def _escape_annotation(value: str) -> str:
+    out = value
+    for src, dst in _ANNOTATION_ESCAPES:
+        out = out.replace(src, dst)
+    return out
+
+
+def _format_github_annotations(violations: list[Violation]) -> Iterable[str]:
+    """Yield one ``::error file=…,line=…,col=1,title=…::message`` per
+    violation, preserving input order.
+
+    * ``file`` is the repo-relative path stored on ``Violation`` —
+      matches GitHub's checkout layout so the gutter pin lands on the
+      right file in the PR diff.
+    * ``line`` is the 1-indexed source line of the offending opener.
+    * ``col=1`` is included so the annotation pins to the gutter
+      rather than column 0 (some renderers hide col=0 entirely).
+    * ``title`` is ``"<P-NNN> <one-liner>"`` so the rule code is the
+      first thing reviewers see in the diff tooltip; unknown codes
+      degrade to just the bare code (forward-compatible with future
+      P-009+ rules added before this map is updated).
+    * The message body is the full ``Violation.message`` so the
+      remediation hint stays visible when the user clicks through.
+    """
+    for v in violations:
+        title = RULE_TITLES.get(v.code)
+        head = f"{v.code} {title}" if title else v.code
+        yield (
+            f"::error file={_escape_annotation(v.file)},"
+            f"line={v.line},col=1,"
+            f"title={_escape_annotation(head)}::"
+            f"{_escape_annotation(v.message)}"
+        )
 
 
 def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> str:
