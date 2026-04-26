@@ -1336,6 +1336,15 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
     # mark them ``ignored-deleted`` without re-parsing the diff.
     raw: list[str] = []
     deleted_paths: list[str] = []
+    # When the caller asked for an audit trail, also collect rename/
+    # copy provenance per new-path so the audit constructor below can
+    # attach a ``_RenameSimilarity`` to every row whose path came from
+    # an R/C diff entry. The map is keyed on the *unquoted* new-path
+    # string exactly as it appears in ``raw`` so the lookup is a
+    # constant-time dict hit per row.
+    similarities: dict[str, _RenameSimilarity] | None = (
+        {} if audit is not None else None
+    )
     if diff_base:
         try:
             proc = subprocess.run(
@@ -1351,7 +1360,8 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 f"git diff vs. {diff_base!r} failed (exit {e.returncode}): "
                 f"{e.stderr.strip() or '(no stderr)'}"
             ) from e
-        raw = _parse_name_status(proc.stdout, deleted=deleted_paths)
+        raw = _parse_name_status(proc.stdout, deleted=deleted_paths,
+                                 similarities=similarities)
     else:
         assert changed_files is not None
         if changed_files == "-":
@@ -1363,13 +1373,23 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 raise RuntimeError(
                     f"--changed-files {changed_files!r} unreadable: {e}"
                 ) from e
-        raw = _normalise_changed_lines(lines, deleted=deleted_paths)
+        raw = _normalise_changed_lines(lines, deleted=deleted_paths,
+                                       similarities=similarities)
     allowed_exts = {("." + e.lstrip(".").lower()) for e in extensions}
     out: set[Path] = set()
     for line in raw:
         s = line.strip()
         if not s or s.startswith("#"):
             continue
+        # Pull the rename/copy provenance (if any) for this path. We
+        # look up against the unstripped ``line`` first (which is what
+        # ``similarities`` was keyed on) and fall back to the stripped
+        # form for symmetry with how ``out.add`` resolves the path.
+        # ``None`` means "no rename signal observed" — the renderer
+        # will substitute dashes when --with-similarity is on.
+        sim = None
+        if similarities is not None:
+            sim = similarities.get(line) or similarities.get(s)
         ext = Path(s).suffix.lower()
         if ext not in allowed_exts:
             if audit is not None:
@@ -1377,6 +1397,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                     path=s, status="ignored-extension",
                     reason=(f"extension {ext or '(none)'!r} not in "
                             f"allowlist {sorted(allowed_exts)}"),
+                    similarity=sim,
                 ))
             continue
         p = (repo_root / s).resolve()
@@ -1387,6 +1408,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 audit.append(_ChangedFileAudit(
                     path=s, status="ignored-out-of-root",
                     reason=f"path is outside --root {root}",
+                    similarity=sim,
                 ))
             continue
         if not p.is_file():
@@ -1396,6 +1418,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                     reason="post-state path is not on disk "
                            "(reverted later in the push, or "
                            "filtered by .gitignore on checkout)",
+                    similarity=sim,
                 ))
             continue
         out.add(p)
@@ -1404,6 +1427,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 path=s, status="matched",
                 reason="under --root, extension allowed, "
                        "file present on disk",
+                similarity=sim,
             ))
     if audit is not None:
         for d in deleted_paths:
