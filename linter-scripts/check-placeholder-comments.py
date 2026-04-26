@@ -1178,12 +1178,29 @@ class _DiffExcerpts:
         hunk = self._select_hunk(line)
         if hunk is None:
             return ["(line not in current diff hunks — view file directly)"]
-        # Clamp the ±context window to the *selected hunk's* range,
-        # not the global min/max. This is what makes multi-hunk
-        # files render correctly: the gap between two hunks no
-        # longer leaks into the iteration with no payload to print.
-        lo = max(hunk.start, line - context)
-        hi = min(hunk.end, line + context)
+        # Window selection:
+        #   * Violation INSIDE the hunk → ±context around the
+        #     violation line, clamped to hunk bounds. Mirrors the
+        #     classic single-hunk behaviour.
+        #   * Violation OUTSIDE every hunk → render the *entire*
+        #     selected hunk (capped at 2*context+1 lines so we
+        #     don't blow up output for a huge nearby hunk). This
+        #     is what "best matching hunk context" means: the user
+        #     gets to actually see the changed region near their
+        #     violation, not just a breadcrumb.
+        if hunk.contains(line):
+            lo = max(hunk.start, line - context)
+            hi = min(hunk.end, line + context)
+        else:
+            cap = 2 * context + 1
+            if hunk.end - hunk.start + 1 <= cap:
+                lo, hi = hunk.start, hunk.end
+            elif line < hunk.start:
+                # Hunk is below the violation: take its leading edge.
+                lo, hi = hunk.start, hunk.start + cap - 1
+            else:
+                # Hunk is above the violation: take its trailing edge.
+                lo, hi = hunk.end - cap + 1, hunk.end
         out: list[str] = []
         if not hunk.contains(line):
             # Violation is between hunks (or outside the whole diff
@@ -1250,11 +1267,21 @@ class _DiffExcerpts:
         hunk = self._select_hunk(line)
         if hunk is None:
             return []
-        # Clamp to the selected hunk so a between-hunks violation
-        # gets the nearest hunk's contents instead of an empty
-        # iteration through the gap.
-        lo = max(hunk.start, line - context)
-        hi = min(hunk.end, line + context)
+        # Same window logic as the human renderer — see render()
+        # for the rationale. The ``cap`` keeps the JSON payload
+        # bounded for consumers when a giant nearby hunk would
+        # otherwise dump hundreds of rows per violation.
+        if hunk.contains(line):
+            lo = max(hunk.start, line - context)
+            hi = min(hunk.end, line + context)
+        else:
+            cap = 2 * context + 1
+            if hunk.end - hunk.start + 1 <= cap:
+                lo, hi = hunk.start, hunk.end
+            elif line < hunk.start:
+                lo, hi = hunk.start, hunk.start + cap - 1
+            else:
+                lo, hi = hunk.end - cap + 1, hunk.end
         is_nearest = not hunk.contains(line)
         out: list[dict[str, object]] = []
         for ln in range(lo, hi + 1):
