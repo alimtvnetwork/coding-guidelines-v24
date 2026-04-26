@@ -622,6 +622,22 @@ def main(argv: list[str] | None = None) -> int:
              "schema `{\"path\":str, \"status\":str, \"reason\":str}` "
              "so dashboards can ingest it without scraping the text "
              "table. No-op outside diff mode.")
+    ap.add_argument("--dedupe-changed-files", action="store_true",
+        help="With --list-changed-files, collapse repeated `path` "
+             "values in the audit so each repo-relative path appears "
+             "at most once. The FIRST occurrence wins — its `status` "
+             "and `reason` are preserved verbatim and later rows for "
+             "the same path are dropped (no merging, no \"...and 2 "
+             "more\" annotations). Useful when the upstream intake "
+             "feeds the same path from multiple sources (e.g. a "
+             "`--changed-files` file concatenated from several "
+             "`paths-filter` jobs, or a rebase that touched the same "
+             "file in two commits and the diff surfaced it twice). "
+             "The dedupe footer reports how many duplicates were "
+             "collapsed so the count is auditable. No-op without "
+             "--list-changed-files; the underlying linted-file set "
+             "is unaffected (it's already a `set[Path]`, so "
+             "duplicates can never reach the scan).")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
@@ -764,7 +780,9 @@ def main(argv: list[str] | None = None) -> int:
         # untouched in --json mode.
         if changed_audit is not None:
             _render_changed_files_audit(
-                changed_audit, sys.stderr, as_json=args.json,
+                changed_audit, sys.stderr,
+                as_json=args.json,
+                dedupe=args.dedupe_changed_files,
             )
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
@@ -1004,10 +1022,37 @@ def main(argv: list[str] | None = None) -> int:
     return 1 if violations else 0
 
 
+def _dedupe_audit_rows(
+    rows: list[_ChangedFileAudit],
+) -> tuple[list[_ChangedFileAudit], int]:
+    """Collapse repeated ``path`` values, keeping the FIRST row.
+
+    Returns ``(deduped_rows, dropped_count)``. Order of the surviving
+    rows matches their first-occurrence order in ``rows`` so the
+    rendered table stays stable + reviewable. The dropped rows'
+    ``status``/``reason`` are *not* merged into the survivor — first-
+    seen wins, full stop. This matches the documented contract on
+    ``--dedupe-changed-files`` and keeps the function trivially
+    idempotent (running it twice returns the same list with
+    ``dropped_count == 0`` on the second pass).
+    """
+    seen: set[str] = set()
+    out: list[_ChangedFileAudit] = []
+    dropped = 0
+    for r in rows:
+        if r.path in seen:
+            dropped += 1
+            continue
+        seen.add(r.path)
+        out.append(r)
+    return out, dropped
+
+
 def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 stream,  # type: ignore[no-untyped-def]
                                 *,
-                                as_json: bool) -> None:
+                                as_json: bool,
+                                dedupe: bool = False) -> None:
     """Print the diff-mode changed-file audit table to ``stream``.
 
     Always writes to STDERR (the caller passes ``sys.stderr``) so
@@ -1024,15 +1069,27 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     * ``as_json=True``  — JSON array of ``{"path", "status",
       "reason"}`` objects, one per row, in stable input order.
       ``ensure_ascii=False`` so non-ASCII paths round-trip readably.
+
+    When ``dedupe=True`` the rows are passed through
+    :func:`_dedupe_audit_rows` first: each repo-relative ``path``
+    appears at most once, with the FIRST seen ``status`` + ``reason``
+    preserved verbatim. The text-mode header is annotated with the
+    drop count so the collapse is auditable; JSON consumers can
+    diff the array length against the upstream intake size.
     """
+    dropped = 0
+    if dedupe:
+        rows, dropped = _dedupe_audit_rows(rows)
     if as_json:
         payload = [asdict(r) for r in rows]
         print(json.dumps(payload, indent=2, ensure_ascii=False),
               file=stream)
         return
 
+    suffix = (f"; deduped, {dropped} duplicate(s) dropped"
+              if dedupe else "")
     print("── placeholder-comments: changed-file audit "
-          f"({len(rows)} row(s)) ──", file=stream)
+          f"({len(rows)} row(s){suffix}) ──", file=stream)
     if not rows:
         print("  (no changed files considered)", file=stream)
         return
