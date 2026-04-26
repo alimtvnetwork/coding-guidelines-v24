@@ -180,8 +180,36 @@ class Violation:
     message: str
 
 
-def iter_markdown_files(root: Path) -> Iterable[Path]:
-    for p in sorted(root.rglob("*.md")):
+# Default extension allowlist for spec discovery. Kept as a tuple so
+# the value is hashable + cache-segment-friendly. Extending this set
+# at runtime is exposed via ``--extension`` (repeatable) and feeds
+# both the file iterator and the cache-segment naming below.
+DEFAULT_EXTENSIONS: tuple[str, ...] = ("md",)
+
+
+def iter_markdown_files(
+    root: Path,
+    *,
+    extensions: tuple[str, ...] = DEFAULT_EXTENSIONS,
+) -> Iterable[Path]:
+    """Yield every file under ``root`` matching one of ``extensions``,
+    sorted by path with hidden directories (``.foo/``) excluded.
+
+    ``extensions`` is a tuple of bare extension strings without the
+    leading dot (e.g. ``("md", "mdx")``). The function unions the
+    per-extension globs into a single sorted, deduplicated stream so
+    a future ``--extension md --extension mdx`` run can't yield the
+    same path twice (e.g. on a case-insensitive filesystem).
+    """
+    seen: set[Path] = set()
+    candidates: list[Path] = []
+    for ext in extensions:
+        for p in root.rglob(f"*.{ext}"):
+            if p in seen:
+                continue
+            seen.add(p)
+            candidates.append(p)
+    for p in sorted(candidates):
         if any(part.startswith(".") for part in p.relative_to(root).parts):
             continue
         yield p
