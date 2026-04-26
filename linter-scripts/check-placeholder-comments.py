@@ -562,6 +562,16 @@ def main(argv: list[str] | None = None) -> int:
              "--changed-files mode (no diff-base to query) and in "
              "--json mode (excerpts would corrupt structured output; "
              "JSON consumers can render their own from the file/line).")
+    ap.add_argument("--ext", action="append", default=[], metavar="EXT",
+        help="Add a source-file extension to the discovery + diff-mode "
+             "allowlist (repeatable). Accepts `.mdx`, `mdx`, or `MDX` "
+             "— normalised to a lowercase, dot-prefixed form. Defaults "
+             "to `.md` only. Affects: (1) which files under --root are "
+             "scanned, (2) which paths in --changed-files / `git diff` "
+             "output qualify as relevant, (3) which extensions P-003 "
+             "accepts as valid placeholder bullet targets, and (4) the "
+             "cache fingerprint (so adding/removing an extension "
+             "invalidates every prior PASS sentinel).")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -578,6 +588,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.diff_context < 0:
         print(f"error: --diff-context must be >= 0 (got {args.diff_context})",
               file=sys.stderr)
+        return 2
+
+    # ---- Normalise + validate the source-file extension allowlist
+    # We canonicalise to lowercase + leading dot so callers don't
+    # have to remember the exact form. An empty extension or one
+    # containing path separators is rejected — both would cause
+    # surprising rglob behaviour and false positives in P-003.
+    try:
+        source_exts = _normalise_extensions(args.ext) if args.ext else DEFAULT_SOURCE_EXTS
+    except ValueError as e:
+        print(f"error: --ext: {e}", file=sys.stderr)
         return 2
 
     # Tri-state: --github → True, --no-github → False, neither → auto.
@@ -601,13 +622,15 @@ def main(argv: list[str] | None = None) -> int:
                 repo_root, root,
                 diff_base=args.diff_base,
                 changed_files=args.changed_files,
+                exts=source_exts,
             )
         except RuntimeError as e:
             print(f"error: {e}", file=sys.stderr)
             return 2
         if not args.json:
+            ext_label = "/".join(sorted(source_exts))
             print(f"ℹ️  placeholder-comments: diff-mode active — "
-                  f"{len(changed_md)} changed `.md` file(s) under {args.root}/")
+                  f"{len(changed_md)} changed {ext_label} file(s) under {args.root}/")
         if not changed_md:
             # Nothing under --root changed → fast PASS. Cross-file P-007
             # has nothing new to report by definition (no new bullets).
@@ -635,7 +658,7 @@ def main(argv: list[str] | None = None) -> int:
     cache_key: str | None = None
     sentinel: Path | None = None
     if args.cache_dir and changed_md is None:
-        cache_key = _compute_cache_key(root, intent_verbs)
+        cache_key = _compute_cache_key(root, intent_verbs, source_exts)
         sentinel = Path(args.cache_dir) / f"{cache_key}.pass"
         if sentinel.is_file():
             if not args.json:
@@ -647,14 +670,15 @@ def main(argv: list[str] | None = None) -> int:
 
     violations: list[Violation] = []
     cross_file_bullets: list[tuple[str, int, str]] = []
-    for md in iter_markdown_files(root):
+    for md in iter_source_files(root, source_exts):
         if changed_md is not None and md.resolve() not in changed_md:
             # Unchanged file: still collect its bullets so cross-file
             # P-007 can detect a new collision introduced by a
             # changed file, but suppress its per-file violations.
-            _collect_bullets_only(md, repo_root, cross_file_bullets)
+            _collect_bullets_only(md, repo_root, cross_file_bullets, source_exts)
             continue
-        violations.extend(lint_file(md, repo_root, cross_file_bullets, intent_verbs))
+        violations.extend(lint_file(md, repo_root, cross_file_bullets,
+                                    intent_verbs, source_exts))
 
     # ---- P-007 cross-file duplicates -------------------------------
     # Group every valid bullet across the scan by canonical target.
