@@ -2464,22 +2464,36 @@ _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>.+?)\s*=>\s*(?P<new>.+?)\s*$")
 
 def _normalise_changed_lines(lines: list[str],
                              *,
-                             deleted: "list[tuple[str, str]] | None" = None,
+                             deleted: "list[tuple[str, str, str | None]] | None" = None,
                              similarities: "dict[str, _RenameSimilarity] | None" = None,
                              ) -> list[str]:
     """Collapse rename-bearing rows in a ``--changed-files`` payload
     down to their post-rename path.
 
-    When ``deleted`` is provided and a row is recognisable as a
-    delete (``D\\tpath`` — the exact shape ``git diff --name-status``
-    emits), the path is captured into ``deleted`` as a
-    ``(path, "changed-files-D")`` tuple and the row is NOT forwarded
-    to the caller. The provenance tag distinguishes it from true
-    diff ``D`` rows so the audit emitter can surface a different
-    ``reason`` string per source. Without ``deleted`` (the default),
-    such a row falls through to the generic tab-form branch and the
-    bare path travels downstream to be filtered by extension/root
-    checks — same end result as before this audit-trail addition.
+    When ``deleted`` is provided three row classes contribute
+    ``(path, source, new_path | None)`` tuples:
+
+    * Pure delete rows (``D\\tpath`` — the exact shape
+      ``git diff --name-status`` emits) → ``(path, "changed-files-D",
+      None)``. The row is NOT forwarded to the caller.
+    * Tab-form rename / copy rows (``R<score>?\\told\\tnew`` or
+      ``C<score>?\\told\\tnew``) → an additional ``(old_path,
+      "changed-files-R-old"|"changed-files-C-old", new_path)`` tuple
+      *alongside* the NEW path that's still forwarded for linting.
+    * Arrow-form rename rows (``old => new``) → an additional
+      ``(old_path, "changed-files-R-old", new_path)`` tuple. There is
+      no copy variant in arrow form (``git status -s`` doesn't emit
+      one), so every arrow row is classified as a rename.
+
+    The provenance tags distinguish authored-payload deletes from
+    true diff ``D`` rows, and rename/copy OLD sides from plain
+    deletes — so the audit emitter can surface a different ``reason``
+    string per source via :func:`_resolve_deleted_reason`. Without
+    ``deleted`` (the default), all three row classes degrade
+    gracefully: the pure-delete row falls through to the generic
+    tab-form branch and its path travels downstream to be filtered
+    by extension/root checks, while R/C OLD-side capture is simply
+    skipped — same end result as before this audit-trail addition.
 
     Plain paths (no tab, no ``=>``) pass through unchanged. Comments
     and blanks are *not* stripped here — the caller does that on the
@@ -2542,7 +2556,7 @@ def _normalise_changed_lines(lines: list[str],
                     and cols[0] == "D"
                     and cols[1] != ""):
                 deleted.append((_unquote_git_path(cols[1]),
-                                "changed-files-D"))
+                                "changed-files-D", None))
                 continue
             new_col = ""
             for c in reversed(cols):
@@ -2575,6 +2589,28 @@ def _normalise_changed_lines(lines: list[str],
                             score=int(score_raw) if score_raw else None,
                             old_path=old_path,
                         )
+                # Capture the OLD-side path as an ``ignored-deleted``
+                # audit row even when ``similarities`` wasn't asked
+                # for (the audit trail and the similarity column are
+                # independent flags; OLD-side bookkeeping belongs to
+                # the audit, not the similarity, surface). We re-
+                # parse the leading column for the kind letter to
+                # avoid coupling the two passes.
+                if deleted is not None and cols and cols[0]:
+                    head_d = _NAME_STATUS_RE.match(cols[0])
+                    if head_d and head_d.group(1) in ("R", "C"):
+                        kind_d = head_d.group(1)
+                        old_for_audit = ""
+                        for c in cols[1:]:
+                            if c != "" and _unquote_git_path(c) != new_path:
+                                old_for_audit = _unquote_git_path(c)
+                                break
+                        if old_for_audit:
+                            deleted.append((
+                                old_for_audit,
+                                f"changed-files-{kind_d}-old",
+                                new_path,
+                            ))
             continue
         # Arrow form: `OLD => NEW`.
         m = _RENAME_ARROW_RE.match(line)
@@ -2585,13 +2621,24 @@ def _normalise_changed_lines(lines: list[str],
             # the user pasted a C-quoted form from ``git status``.
             unquoted_new = _unquote_git_path(new_path_raw.strip())
             out.append(unquoted_new)
+            old_path_for_audit = _unquote_git_path(
+                m.group("old").strip())
             if similarities is not None:
-                old_path_raw = m.group("old")
                 similarities[unquoted_new] = _RenameSimilarity(
                     kind="R",
                     score=None,
-                    old_path=_unquote_git_path(old_path_raw.strip()),
+                    old_path=old_path_for_audit,
                 )
+            # Arrow form is always a rename (git status -s has no
+            # copy variant). Capture the OLD side as an
+            # ``ignored-deleted`` audit row when the audit trail is
+            # being collected.
+            if deleted is not None and old_path_for_audit:
+                deleted.append((
+                    old_path_for_audit,
+                    "changed-files-R-old",
+                    unquoted_new,
+                ))
             continue
         out.append(line)
     return out
