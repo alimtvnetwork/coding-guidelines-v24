@@ -3,8 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import versionData from "@/../version.json";
 import bundlesManifest from "@/../bundles.json";
-import { CopyButton } from "./install/CopyButton";
-import { HighlightedCommand } from "./install/HighlightedCommand";
+import { CommandRow } from "./install/CommandRow";
 import { BundleCard, type BundleCommand } from "./install/BundleCard";
 
 interface InstallCommand {
@@ -48,13 +47,12 @@ function InstallCard({ item }: { item: InstallCommand }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-2 rounded-md border border-border bg-secondary/60 px-3 py-2.5 font-mono text-foreground/90">
-          <span className="mr-1 select-none text-muted-foreground/60">$</span>
-          <code className="flex-1 break-all text-[11px] leading-relaxed sm:text-xs md:text-sm md:break-normal md:whitespace-nowrap">
-            <HighlightedCommand command={item.command} />
-          </code>
-          <CopyButton command={item.command} />
-        </div>
+        <CommandRow
+          label="$"
+          command={item.command}
+          expandTitle={item.platform}
+          expandShell={item.shell}
+        />
       </CardContent>
     </Card>
   );
