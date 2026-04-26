@@ -101,16 +101,6 @@ _CHANGED_FILES_PAYLOAD = (
     "spec/ghost.md\n"
 )
 
-# `git diff --name-status -M -C` shape — exercises the `diff-*`
-# tags that `--changed-files` cannot reach. Used by
-# `_run_audit_diff_mode` below to drive the second fixture.
-_DIFF_NAME_STATUS = (
-    "D\tspec/diff_gone.md\n"
-    "R087\tspec/diff_old.md\tspec/diff_new.md\n"
-    "C063\tspec/diff_src.md\tspec/diff_copy.md\n"
-)
-
-
 class _Sandbox:
     """Tempdir with the on-disk files the fixture's NEW-side rows
     need to resolve to `matched` (rather than `ignored-missing`)."""
