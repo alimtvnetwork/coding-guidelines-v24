@@ -75,6 +75,40 @@ def strip_code_fences(text: str) -> str:
     return "\n".join(out_lines)
 
 
+# Custom placeholder tag — content is intentionally hidden from link
+# validation while authors wait for target files to land. Regular HTML
+# comments (``<!-- ... -->``) are *not* stripped: a broken link inside
+# a normal comment is still a real bug, and stripping all comments would
+# also hide license headers / TODOs that should remain visible to the
+# checker. To opt a block out of validation, wrap it in:
+#
+#     <spec-placeholder reason="...">
+#     - [Future Title](../path/to/file.md#anchor)
+#     </spec-placeholder>
+#
+# DOTALL so the block can span multiple lines; non-greedy so adjacent
+# blocks don't collapse into one match.
+SPEC_PLACEHOLDER_RE = re.compile(
+    r"<spec-placeholder\b[^>]*>.*?</spec-placeholder>",
+    re.DOTALL,
+)
+
+
+def strip_spec_placeholders(text: str) -> str:
+    """Blank out ``<spec-placeholder>`` blocks while preserving line numbers.
+
+    Only this single tag is stripped — regular HTML comments are left
+    intact so the checker still validates links that authors forgot
+    inside a `<!-- ... -->` block.
+    """
+    def _blank(match: re.Match[str]) -> str:
+        body = match.group(0)
+        # Preserve newlines so line numbers in surrounding prose stay
+        # accurate; replace every other char with a space.
+        return "".join(ch if ch == "\n" else " " for ch in body)
+    return SPEC_PLACEHOLDER_RE.sub(_blank, text)
+
+
 def load_allowlist(repo_root: Path) -> set[str]:
     """Load waived broken links from linter-scripts/spec-cross-links.allowlist.
     Format: one `relpath:line:target` entry per line. Lines starting with `#`
@@ -154,7 +188,7 @@ def scan(root: Path, repo_root: Path) -> list[dict]:
         except OSError as exc:
             failures.append({"file": str(md), "kind": "read-error", "detail": str(exc)})
             continue
-        scan_text = strip_code_fences(text)
+        scan_text = strip_spec_placeholders(strip_code_fences(text))
         for match in MD_LINK_RE.finditer(scan_text):
             target = match.group(2).strip()
             if is_external(target):
