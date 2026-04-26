@@ -443,6 +443,9 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
         overflow-x: auto; font-size: 0.78rem; line-height: 1.45; }
   .empty { background: #f0fff4; border: 1px solid #9ae6b4; padding: 1.25rem;
            border-radius: 8px; color: #22543d; font-weight: 500; }
+  .editor-badge { font-size: 0.78rem; color: #2c5282; background: #ebf8ff;
+                  border: 1px solid #bee3f8; padding: 0.1rem 0.45rem;
+                  border-radius: 999px; }
   footer { margin-top: 2rem; color: #718096; font-size: 0.78rem; text-align: center; }
 </style>
 </head>
