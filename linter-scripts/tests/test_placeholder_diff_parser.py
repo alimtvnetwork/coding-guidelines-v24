@@ -359,5 +359,128 @@ class RenderInteractsWithParser(unittest.TestCase):
         self.assertIn("not in current diff hunks", out[0])
 
 
+class SuggestPatch(unittest.TestCase):
+    """Pure-function checks on ``_DiffExcerpts.suggest_patch``.
+
+    The patch text must:
+    * carry the rule-specific TODO marker for known codes,
+    * fall back to the generic TODO for unknown codes,
+    * use ``a/<file>`` / ``b/<file>`` headers and a ``@@`` hunk
+      header whose pre/post counts match the body line counts,
+    * swap a context line (``-bad`` / ``+todo``) but only INSERT
+      after an added line (``+`` violation) so the surrounding
+      pre-state coordinates stay valid,
+    * return the empty string when the violation line wasn't
+      captured by any hunk (so the caller cleanly omits the field).
+    """
+
+    def _hunk_counts(self, patch: str) -> tuple[int, int, int, int]:
+        """Extract ``(pre_start, pre_len, post_start, post_len)``
+        from the patch's ``@@`` header so we can assert hunk math
+        without re-parsing the entire diff."""
+        import re
+        m = re.search(r"^@@ -(\d+),(\d+) \+(\d+),(\d+) @@",
+                      patch, re.MULTILINE)
+        assert m, f"missing canonical @@ header in:\n{patch}"
+        return tuple(int(g) for g in m.groups())  # type: ignore[return-value]
+
+    def _body_lines(self, patch: str) -> list[str]:
+        """Return the patch body (everything after the ``@@`` line)
+        as a list, for counting `` ``/``+``/``-`` rows."""
+        body = patch.split("\n@@", 1)[1].split("@@\n", 1)[1]
+        return [l for l in body.splitlines() if l != ""]
+
+    def test_swap_for_context_line_violation(self) -> None:
+        ex = _parse(_diff(
+            "@@ -1,3 +1,3 @@",
+            " above",
+            " bad-line",
+            " below",
+        ))
+        patch = ex.suggest_patch("spec/x.md", 2, "P-001")
+        self.assertTrue(patch.startswith(
+            "--- a/spec/x.md\n+++ b/spec/x.md\n@@ "))
+        self.assertIn("TODO(P-001)", patch)
+        # Swap form: one ``-bad-line`` and one ``+TODO`` row, with
+        # one context above and below.
+        body = self._body_lines(patch)
+        self.assertEqual([l[0] for l in body],
+                         [" ", "-", "+", " "],
+                         f"unexpected body shape:\n{body}")
+        # Hunk math: 3 pre lines (above + bad + below), 3 post
+        # lines (above + todo + below).
+        ps, pl, qs, ql = self._hunk_counts(patch)
+        self.assertEqual((pl, ql), (3, 3))
+        self.assertEqual(ps, 1)  # context starts one line above L2
+        self.assertEqual(qs, 1)
+
+    def test_insert_after_added_line_violation(self) -> None:
+        # Violation lands on a ``+`` (added) line: the patch must
+        # KEEP the bad addition (we have no pre-state coordinate
+        # for it) and add the TODO immediately after.
+        ex = _parse(_diff(
+            "@@ -5,1 +5,3 @@",
+            " above",
+            "+bad-add",
+            " below",
+        ))
+        patch = ex.suggest_patch("spec/y.md", 6, "P-002")
+        self.assertIn("TODO(P-002)", patch)
+        body = self._body_lines(patch)
+        # Insertion form: bad line stays as ``+``/`` `` (here `` ``
+        # because the parser stores the kind as ``+``, but the patch
+        # rewrites it as a context line so git apply doesn't try to
+        # add it twice). The TODO is the only ``+`` row.
+        kinds = [l[0] for l in body]
+        self.assertEqual(kinds.count("+"), 1,
+                         f"insertion patch should add exactly one line: {body}")
+        self.assertEqual(kinds.count("-"), 0,
+                         f"insertion patch must not delete: {body}")
+        # Post-state grew by one row vs. pre-state.
+        ps, pl, qs, ql = self._hunk_counts(patch)
+        self.assertEqual(ql - pl, 1,
+                         f"post should be one larger than pre: pre={pl} post={ql}")
+
+    def test_unknown_rule_falls_back_to_generic_todo(self) -> None:
+        ex = _parse(_diff("@@ -1,1 +1,1 @@", " line"))
+        patch = ex.suggest_patch("spec/z.md", 1, "P-999")
+        self.assertIn("TODO", patch)
+        # No rule-coded marker for unknown codes — the fallback is
+        # the generic ``<!-- TODO: see linter-scripts ... -->``.
+        self.assertNotIn("TODO(P-999)", patch)
+        self.assertIn("see linter-scripts", patch)
+
+    def test_violation_outside_any_hunk_returns_empty(self) -> None:
+        ex = _parse(_diff("@@ -1,1 +1,1 @@", " only"))
+        # Line 50 was never captured ⇒ no patch we could honestly
+        # suggest. Caller will simply omit ``suggested_patch``.
+        self.assertEqual(ex.suggest_patch("spec/q.md", 50, "P-001"), "")
+
+    def test_no_above_context_at_file_start(self) -> None:
+        # Violation on line 1: there's no L0 to use as upstream
+        # context. The patch must still be self-consistent.
+        ex = _parse(_diff("@@ -1,2 +1,2 @@", " bad", " below"))
+        patch = ex.suggest_patch("spec/h.md", 1, "P-001")
+        ps, pl, qs, ql = self._hunk_counts(patch)
+        self.assertEqual(ps, 1, "hunk must start at line 1, not 0")
+        # Body: bad swap + below context = 3 rows; pre/post both 2.
+        body = self._body_lines(patch)
+        self.assertEqual(len(body), 3)
+        self.assertEqual(pl, 2)
+        self.assertEqual(ql, 2)
+
+    def test_no_below_context_at_hunk_end(self) -> None:
+        # Violation on the last captured line: no L(n+1) to use as
+        # downstream context. Symmetric to the file-start case.
+        ex = _parse(_diff("@@ -1,2 +1,2 @@", " above", " bad"))
+        patch = ex.suggest_patch("spec/h.md", 2, "P-001")
+        body = self._body_lines(patch)
+        # above (context) + bad (-) + todo (+) = 3 rows.
+        self.assertEqual(len(body), 3)
+        ps, pl, qs, ql = self._hunk_counts(patch)
+        self.assertEqual((pl, ql), (2, 2))
+        self.assertEqual(ps, 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
