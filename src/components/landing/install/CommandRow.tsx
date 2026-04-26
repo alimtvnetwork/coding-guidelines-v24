@@ -92,7 +92,7 @@ export function CommandRow({ label, command, expandTitle, expandShell }: Command
         <div className="relative min-w-0 flex-1">
           <div
             ref={scrollRef}
-            className="overflow-x-auto whitespace-nowrap text-[11px] leading-relaxed sm:text-xs"
+            className="scrollbar-none overflow-x-auto whitespace-nowrap text-[11px] leading-relaxed sm:text-xs"
           >
             <code className="text-foreground/90">
               <HighlightedCommand command={command} />
