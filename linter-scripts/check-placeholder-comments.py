@@ -788,7 +788,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                         diff_base: str | None,
                         changed_files: str | None,
                         exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
-                        ) -> set[Path]:
+                        ) -> tuple[set[Path], dict[Path, "_DiffEntry"]]:
     """Resolve the set of source files under ``root`` that are changed.
 
     ``exts`` is the source-file extension allowlist (default
@@ -828,11 +828,21 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         spec scan)
       * actually present on disk (a Modified path that was reverted
         in a later commit of the same push won't exist)
+
+    Returns a 2-tuple ``(paths, rename_map)`` where ``rename_map``
+    keys are the *same absolute, resolved post-state Paths* that
+    appear in ``paths`` and the value is the originating
+    :class:`_DiffEntry` (kind, similarity score, old path, new path).
+    Only ``R`` and ``C`` rows are recorded — ``A``/``M`` paths have
+    no interesting provenance to log and are omitted from the map to
+    keep diff-mode logs short. The map is consumed downstream to
+    annotate intake logs and per-violation lines so a reviewer can
+    immediately see *why* a given path is in the lint set.
     """
     # Each entry is the post-state repo-relative path. Rename/copy
     # rows contribute only their NEW side; deletes contribute nothing
     # (the diff-filter / parser drops them upstream).
-    raw: list[str] = []
+    entries: list[_DiffEntry] = []
     if diff_base:
         try:
             proc = subprocess.run(
@@ -848,7 +858,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 f"git diff vs. {diff_base!r} failed (exit {e.returncode}): "
                 f"{e.stderr.strip() or '(no stderr)'}"
             ) from e
-        raw = _parse_name_status(proc.stdout)
+        entries = _parse_name_status(proc.stdout)
     else:
         assert changed_files is not None
         if changed_files == "-":
@@ -860,10 +870,11 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 raise RuntimeError(
                     f"--changed-files {changed_files!r} unreadable: {e}"
                 ) from e
-        raw = _normalise_changed_lines(lines)
+        entries = _normalise_changed_lines(lines)
     out: set[Path] = set()
-    for line in raw:
-        s = line.strip()
+    rename_map: dict[Path, _DiffEntry] = {}
+    for ent in entries:
+        s = ent.new_path.strip()
         if not s or s.startswith("#"):
             continue
         s_lower = s.lower()
@@ -877,7 +888,9 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         if not p.is_file():
             continue
         out.add(p)
-    return out
+        if ent.kind in ("R", "C"):
+            rename_map[p] = ent
+    return out, rename_map
 
 
 # `git diff --name-status -M` emits one of:
@@ -892,14 +905,35 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
 _NAME_STATUS_RE = re.compile(r"^([AMDRCTUX])(\d{0,3})$")
 
 
-def _parse_name_status(stdout: str) -> list[str]:
-    """Extract the post-state path from each ``git diff --name-status``
-    row, mapping renames + copies to their NEW side.
+@dataclass(frozen=True)
+class _DiffEntry:
+    """A single intake row from ``git diff --name-status`` (or its
+    ``--changed-files`` text equivalent).
+
+    ``kind`` is one of ``"A"`` / ``"M"`` / ``"R"`` / ``"C"``. For
+    ``A``/``M`` the ``old_path`` mirrors ``new_path`` and ``score``
+    is ``None`` — these rows have no rename provenance to log. For
+    ``R``/``C``, ``old_path`` is the pre-rename path, ``new_path`` is
+    the post-rename path that gets linted, and ``score`` is the
+    git-reported similarity percentage (0–100) when available.
+    Hand-edited ``--changed-files`` payloads may omit the score, in
+    which case ``score`` stays ``None`` and intake logs print
+    ``(unscored)`` instead of a percentage.
+    """
+    kind: str
+    new_path: str
+    old_path: str
+    score: int | None = None
+
+
+def _parse_name_status(stdout: str) -> list[_DiffEntry]:
+    """Extract a typed entry from each ``git diff --name-status`` row,
+    preserving rename/copy provenance for downstream logging.
 
     Unknown / malformed rows are skipped silently — the linter's job
     is to lint placeholders, not to police git plumbing output.
     """
-    out: list[str] = []
+    out: list[_DiffEntry] = []
     for line in stdout.splitlines():
         if not line:
             continue
@@ -910,14 +944,18 @@ def _parse_name_status(stdout: str) -> list[str]:
         if not m:
             continue
         kind = m.group(1)
+        score_raw = m.group(2)
+        score = int(score_raw) if score_raw else None
         if kind in ("R", "C"):
             # Rename / copy: cols = [R<score>, old, new]. Take new.
-            if len(cols) >= 3 and cols[2]:
-                out.append(cols[2])
+            if len(cols) >= 3 and cols[2] and cols[1]:
+                out.append(_DiffEntry(kind=kind, new_path=cols[2],
+                                      old_path=cols[1], score=score))
         elif kind in ("A", "M"):
             # Add / modify: cols = [A|M, path]. Take path.
             if cols[1]:
-                out.append(cols[1])
+                out.append(_DiffEntry(kind=kind, new_path=cols[1],
+                                      old_path=cols[1], score=None))
         # D / T / U / X intentionally dropped — see docstring.
     return out
 
@@ -933,31 +971,63 @@ def _parse_name_status(stdout: str) -> list[str]:
 _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>\S.*?)\s*=>\s*(?P<new>\S.*?)\s*$")
 
 
-def _normalise_changed_lines(lines: list[str]) -> list[str]:
-    """Collapse rename-bearing rows in a ``--changed-files`` payload
-    down to their post-rename path.
+def _normalise_changed_lines(lines: list[str]) -> list[_DiffEntry]:
+    """Parse a ``--changed-files`` payload into typed :class:`_DiffEntry`
+    rows so rename/copy provenance survives into the lint logs.
 
     Plain paths (no tab, no ``=>``) pass through unchanged. Comments
     and blanks are *not* stripped here — the caller does that on the
     normalised output so we don't lose alignment with the source line
     numbers in error messages.
+
+    Tab rows starting with a recognised ``A``/``M``/``R``/``C`` token
+    record their kind and (for R/C) similarity score. Tab rows with
+    no leading status token are treated as plain Modified entries —
+    that's the conservative choice when an upstream tool emits
+    ``old\\tnew`` without a status prefix; the file is still linted,
+    we just can't claim it's a rename in the intake log.
     """
-    out: list[str] = []
+    out: list[_DiffEntry] = []
     for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            out.append(_DiffEntry(kind="M", new_path=line,
+                                  old_path=line, score=None))
+            continue
         # Tab form: take the last tab-separated column. Works for
         # both `R<score>\told\tnew` (3 cols) and unscored `R\told\tnew`
         # (rare, e.g. when authors hand-edit the file).
         if "\t" in line:
             cols = [c for c in line.split("\t") if c]
-            if cols:
-                out.append(cols[-1])
+            if not cols:
+                continue
+            head = cols[0]
+            m = _NAME_STATUS_RE.match(head) if head else None
+            if m and m.group(1) in ("R", "C") and len(cols) >= 3:
+                score_raw = m.group(2)
+                out.append(_DiffEntry(
+                    kind=m.group(1), new_path=cols[-1], old_path=cols[1],
+                    score=int(score_raw) if score_raw else None,
+                ))
+                continue
+            if m and m.group(1) in ("A", "M") and len(cols) >= 2:
+                out.append(_DiffEntry(kind=m.group(1), new_path=cols[-1],
+                                      old_path=cols[-1], score=None))
+                continue
+            # No recognised status prefix — fall back: treat the last
+            # column as a plain Modified path. (Old behaviour.)
+            out.append(_DiffEntry(kind="M", new_path=cols[-1],
+                                  old_path=cols[-1], score=None))
             continue
         # Arrow form: `OLD => NEW`.
         m = _RENAME_ARROW_RE.match(line)
         if m:
-            out.append(m.group("new"))
+            out.append(_DiffEntry(kind="R", new_path=m.group("new"),
+                                  old_path=m.group("old"), score=None))
             continue
-        out.append(line)
+        out.append(_DiffEntry(kind="M", new_path=line,
+                              old_path=line, score=None))
+    return out
     return out
 
 
