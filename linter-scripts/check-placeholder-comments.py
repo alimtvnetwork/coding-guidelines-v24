@@ -1199,6 +1199,30 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     print(f"  totals: {summary}", file=stream)
 
 
+def _normalize_diff_base(ref: str) -> str:
+    """Expand bare-numeric / ``~N`` / ``^N`` shorthands to ``HEAD~N`` / ``HEAD^N``.
+
+    Rules (applied to the trimmed input):
+      * ``"N"`` where N is a positive int  → ``"HEAD~N"``
+      * ``"~N"`` (N a positive int)        → ``"HEAD~N"``
+      * ``"^N"`` (N a positive int)        → ``"HEAD^N"``
+      * Anything else (including refs that already start with a name
+        like ``HEAD``, ``main``, ``origin/main``, a SHA, etc.) is
+        returned verbatim so we never second-guess git's own ref
+        grammar. ``"0"`` / ``"~0"`` resolve to ``HEAD`` itself which
+        git accepts and which yields an empty diff — useful for
+        smoke-testing the diff plumbing without changing scope.
+    """
+    s = ref.strip()
+    if not s:
+        return ref
+    if s.isdigit():
+        return f"HEAD~{s}"
+    if len(s) >= 2 and s[0] in ("~", "^") and s[1:].isdigit():
+        return f"HEAD{s}"
+    return ref
+
+
 def _resolve_changed_md(repo_root: Path, root: Path, *,
                         diff_base: str | None,
                         changed_files: str | None,
