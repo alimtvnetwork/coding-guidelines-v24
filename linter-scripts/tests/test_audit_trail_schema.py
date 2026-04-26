@@ -549,22 +549,35 @@ class CrossSurfaceReasonParity(unittest.TestCase):
         for proc in (json_proc, csv_proc, text_proc):
             self.assertEqual(proc.returncode, 0, msg=proc.stderr)
 
-        # JSON.
+        # JSON — audit lands on STDERR (see `JsonAuditSchema._load`
+        # for the full rationale). Slice between the first `[` and
+        # last `]` on their own lines.
+        stderr = json_proc.stderr
+        start = stderr.find("\n[")
+        start = start + 1 if start != -1 else stderr.find("[")
+        end = stderr.rfind("\n]")
         json_rows = [
-            r for r in json.loads(json_proc.stdout)
+            r for r in json.loads(stderr[start:end + 2])
             if r["status"] == "ignored-deleted"
         ]
         json_reasons = {(r["path"], r["reason"]) for r in json_rows}
 
-        # CSV — same parser as `CsvAuditSchema._load`, inlined to
-        # keep this test self-contained.
+        # CSV — header to first non-data line. Mirror the parser
+        # in `CsvAuditSchema._load` so the cross-surface check
+        # uses the same byte boundaries.
         csv_lines = csv_proc.stdout.splitlines()
         header_idx = next(
             i for i, line in enumerate(csv_lines)
             if line.startswith("path,status,reason,")
         )
+        end_idx = header_idx + 1
+        while end_idx < len(csv_lines) and any(
+            f",{s}," in csv_lines[end_idx]
+            for s in _MOD._AUDIT_STATUSES
+        ):
+            end_idx += 1
         csv_reader = _csv.DictReader(
-            io.StringIO("\n".join(csv_lines[header_idx:])))
+            io.StringIO("\n".join(csv_lines[header_idx:end_idx])))
         csv_reasons = {
             (r["path"], r["reason"]) for r in csv_reader
             if r["status"] == "ignored-deleted"
