@@ -195,33 +195,51 @@ class JsonArrayIncludesDeletedRows(unittest.TestCase):
 
 
 class DedupeInteractionWithDeletes(unittest.TestCase):
-    """`--dedupe-changed-files` first-seen-wins applies to deletes.
+    """`--dedupe-changed-files` first-seen-wins applies across the
+    audit's *emit* order (not the payload's input order).
 
-    A path that appears once as `ignored-deleted` and once as
-    `matched` must keep ONLY the first row (the delete) — the
-    dedupe contract is `path` → first row, no merging.
+    The audit pipeline appends matched / extension / missing /
+    out-of-root rows as it walks the post-state intake, then
+    appends every captured deleted row in a final batch. So a path
+    that appears as both `M` and `D` in the same payload always
+    surfaces with the M-row FIRST in the audit — and dedupe keeps
+    that first row regardless of payload order.
+
+    This test pins that contract explicitly so a future refactor
+    that re-orders the audit emit (e.g. interleaving deletes
+    inline) doesn't silently change which row wins dedupe.
     """
 
-    def test_delete_then_modify_keeps_delete(self) -> None:
-        # ``spec/x.md`` appears first as a delete, then as a modify;
-        # the second row would normally lint as `matched` (file
-        # exists on disk) but dedupe drops it.
-        with _Sandbox("D\tspec/x.md\nM\tspec/x.md\n") as box:
-            (box.spec / "x.md").write_text("# x", encoding="utf-8")
-            proc = box.run("--dedupe-changed-files")
-        self.assertIn("ignored-deleted", proc.stderr)
-        self.assertIn("deduped", proc.stderr)
-        # Only one row visible in the totals (the surviving delete).
-        self.assertIn("ignored-deleted=1", proc.stderr)
-        self.assertIn("matched=0", proc.stderr)
+    def test_matched_always_wins_over_delete_under_dedupe(self) -> None:
+        # Both row orderings collapse to the same result because
+        # deletes are appended to the audit AFTER the in-order
+        # matched/extension/missing/out-of-root rows.
+        for payload_label, payload in [
+            ("delete-then-modify", "D\tspec/x.md\nM\tspec/x.md\n"),
+            ("modify-then-delete", "M\tspec/x.md\nD\tspec/x.md\n"),
+        ]:
+            with self.subTest(payload=payload_label):
+                with _Sandbox(payload) as box:
+                    (box.spec / "x.md").write_text("# x",
+                                                   encoding="utf-8")
+                    proc = box.run("--dedupe-changed-files")
+                # The matched row is the survivor; the deleted row
+                # was dropped as a duplicate.
+                self.assertIn("matched=1", proc.stderr,
+                              msg=f"payload={payload_label}\n"
+                                  f"stderr:\n{proc.stderr}")
+                self.assertIn("ignored-deleted=0", proc.stderr)
+                self.assertIn("deduped, 1 duplicate(s) dropped",
+                              proc.stderr)
 
-    def test_modify_then_delete_keeps_modify(self) -> None:
-        # Same path in opposite order: matched wins, delete is dropped.
-        with _Sandbox("M\tspec/x.md\nD\tspec/x.md\n") as box:
-            (box.spec / "x.md").write_text("# x", encoding="utf-8")
+    def test_two_deletes_for_same_path_collapse_to_one(self) -> None:
+        # Pure-delete dedupe — both rows are emitted at the end of
+        # the audit, in payload order, so dedupe keeps the first
+        # delete and drops the second.
+        with _Sandbox("D\tspec/gone.md\nD\tspec/gone.md\n") as box:
             proc = box.run("--dedupe-changed-files")
-        self.assertIn("matched=1", proc.stderr)
-        self.assertIn("ignored-deleted=0", proc.stderr)
+        self.assertIn("ignored-deleted=1", proc.stderr)
+        self.assertIn("deduped, 1 duplicate(s) dropped", proc.stderr)
 
 
 class OnlyStatusFilterCanIsolateDeletes(unittest.TestCase):
