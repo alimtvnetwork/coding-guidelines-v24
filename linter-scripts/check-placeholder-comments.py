@@ -495,6 +495,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-github", dest="github", action="store_false",
         help="Disable GitHub Actions annotations even when the "
              "`GITHUB_ACTIONS` env var would auto-enable them.")
+    ap.add_argument("--diff-context", type=int, default=3, metavar="N",
+        help="When --diff-base is set, fetch N lines of unified-diff "
+             "context around each violation (via `git diff -UN <base> "
+             "-- <file>`) and print the post-state excerpt under the "
+             "human-readable summary so authors can patch without "
+             "switching to git. Default 3; 0 disables. Ignored in "
+             "--changed-files mode (no diff-base to query) and in "
+             "--json mode (excerpts would corrupt structured output; "
+             "JSON consumers can render their own from the file/line).")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -505,6 +514,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.diff_base and args.changed_files:
         print("error: --diff-base and --changed-files are mutually exclusive",
+              file=sys.stderr)
+        return 2
+
+    if args.diff_context < 0:
+        print(f"error: --diff-context must be >= 0 (got {args.diff_context})",
               file=sys.stderr)
         return 2
 
@@ -628,8 +642,35 @@ def main(argv: list[str] | None = None) -> int:
             print(f"✅ placeholder-comments: no malformed blocks under {args.root}/")
         else:
             print(f"❌ placeholder-comments: {len(violations)} violation(s):\n")
+            # Pre-fetch one diff per touched file (only in --diff-base
+            # mode with non-zero context). Fetching once per file
+            # rather than once per violation keeps git invocations
+            # bounded by the changed-file count, not the violation
+            # count — important when a single bad block trips P-001
+            # + P-002 + P-004 simultaneously.
+            diff_excerpts: dict[str, _DiffExcerpts] = {}
+            if (args.diff_base and args.diff_context > 0
+                    and changed_md is not None):
+                affected = sorted({v.file for v in violations
+                                   if (repo_root / v.file).resolve() in changed_md})
+                for rel in affected:
+                    excerpt = _fetch_diff_excerpts(
+                        repo_root, args.diff_base, rel, args.diff_context,
+                    )
+                    if excerpt is not None:
+                        diff_excerpts[rel] = excerpt
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
+                excerpt = diff_excerpts.get(v.file)
+                if excerpt is not None:
+                    snippet = excerpt.render(v.line, args.diff_context)
+                    if snippet:
+                        # Two-space indent under the violation line
+                        # so the excerpt is visually attached to it
+                        # in the log without breaking grep on the
+                        # leading `<file>:<line>` shape.
+                        for sline in snippet:
+                            print(f"    {sline}")
             print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
 
     # ---- GitHub Actions annotations (always after the human summary)
@@ -829,6 +870,157 @@ def _normalise_changed_lines(lines: list[str]) -> list[str]:
             continue
         out.append(line)
     return out
+
+
+# ---- Diff-excerpt rendering (used by the human summary in diff mode)
+#
+# We keep the parser tiny and tolerant: only the post-state side of a
+# unified diff matters (that's where line numbers in violations come
+# from), and any malformed hunk gracefully degrades to "no excerpt"
+# rather than failing the run. The shape captured per file is:
+#
+#     {post_line_no: (kind, text)}
+#
+# where ``kind`` is one of:
+#     "+"   line added in the post-state (highlighted in the snippet)
+#     " "   context line carried over from both sides
+# Removed lines (``-``) are dropped because they don't have a
+# post-state line number a violation could reference. The renderer
+# slices a ±context window around the violation line, falling back
+# to "no diff context available" if the line isn't part of the
+# fetched hunks (e.g. a P-007 collision pointing at a hunk that
+# wasn't included in the unified diff).
+
+_HUNK_HEADER_RE = re.compile(
+    r"^@@\s*-\d+(?:,\d+)?\s+\+(?P<start>\d+)(?:,(?P<count>\d+))?\s*@@"
+)
+
+
+@dataclass(frozen=True)
+class _DiffExcerpts:
+    """Post-state line index for one file's `git diff -UN` output.
+
+    ``lines[N]`` is ``(kind, text)`` for post-state line ``N`` (1-
+    indexed). ``min_line`` / ``max_line`` describe the union of all
+    hunk windows so the renderer can detect "violation outside any
+    hunk" cleanly.
+    """
+    lines: dict[int, tuple[str, str]]
+    min_line: int
+    max_line: int
+
+    def render(self, line: int, context: int) -> list[str]:
+        """Return a list of human-readable excerpt lines centered on
+        ``line`` with up to ``context`` lines on each side, or [] if
+        no relevant excerpt is available.
+        """
+        if not self.lines:
+            return []
+        lo = max(self.min_line, line - context)
+        hi = min(self.max_line, line + context)
+        if line < self.min_line - context or line > self.max_line + context:
+            # Violation falls outside every fetched hunk — happens
+            # when a P-007 collision points at a pre-existing block
+            # that wasn't part of the diff. The CLI message already
+            # carries the file/line; we just don't have a snippet.
+            return ["(line not in current diff hunks — view file directly)"]
+        out: list[str] = []
+        for ln in range(lo, hi + 1):
+            entry = self.lines.get(ln)
+            if entry is None:
+                continue
+            kind, text = entry
+            marker = "►" if ln == line else " "
+            sigil = "+" if kind == "+" else " "
+            # ``ln:5`` keeps gutter widths aligned for files up to
+            # 99,999 lines — well past anything we'll encounter in
+            # spec/.
+            out.append(f"{marker} {ln:5d} {sigil} {text}")
+        return out
+
+
+def _parse_unified_diff_post(stdout: str) -> _DiffExcerpts:
+    """Parse `git diff -UN` output and index post-state lines only.
+
+    File-header / index / mode lines are ignored — we already know
+    which file we asked about. Hunk headers (``@@ -a,b +c,d @@``)
+    reset the post-state line counter; ``+`` and `` `` rows advance
+    it; ``-`` rows are skipped (no post-state coordinate).
+    """
+    lines: dict[int, tuple[str, str]] = {}
+    cur_post = 0
+    in_hunk = False
+    min_line = 10**9
+    max_line = 0
+    for raw in stdout.splitlines():
+        if raw.startswith("@@"):
+            m = _HUNK_HEADER_RE.match(raw)
+            if not m:
+                in_hunk = False
+                continue
+            cur_post = int(m.group("start"))
+            in_hunk = True
+            continue
+        if not in_hunk:
+            continue
+        if not raw:
+            # Blank line inside a hunk = a context line whose payload
+            # is empty. Treat as " " (context) to keep the line
+            # counter honest.
+            lines[cur_post] = (" ", "")
+            min_line = min(min_line, cur_post)
+            max_line = max(max_line, cur_post)
+            cur_post += 1
+            continue
+        kind = raw[0]
+        body = raw[1:]
+        if kind == "+":
+            lines[cur_post] = ("+", body)
+            min_line = min(min_line, cur_post)
+            max_line = max(max_line, cur_post)
+            cur_post += 1
+        elif kind == " ":
+            lines[cur_post] = (" ", body)
+            min_line = min(min_line, cur_post)
+            max_line = max(max_line, cur_post)
+            cur_post += 1
+        elif kind == "-":
+            # Removed line — no post-state coordinate. Skip silently.
+            pass
+        elif kind == "\\":
+            # `\ No newline at end of file` marker — ignore.
+            pass
+        else:
+            # Unknown row inside a hunk (extra header from combined
+            # diff, etc.). Be defensive: bail out of this hunk so we
+            # don't desync the line counter.
+            in_hunk = False
+    if max_line == 0:
+        return _DiffExcerpts(lines={}, min_line=0, max_line=0)
+    return _DiffExcerpts(lines=lines, min_line=min_line, max_line=max_line)
+
+
+def _fetch_diff_excerpts(repo_root: Path, diff_base: str, rel_path: str,
+                         context: int) -> _DiffExcerpts | None:
+    """Run `git diff -U<context> <base>...HEAD -- <rel_path>` and
+    return the parsed post-state excerpt, or ``None`` if git fails
+    (missing binary, unreachable base, file not in diff, etc.).
+
+    Failures are silent on purpose: the violation summary is still
+    printed without an excerpt — we never want a missing snippet to
+    fail the lint run, only to degrade gracefully.
+    """
+    try:
+        proc = subprocess.run(
+            ["git", "diff", f"-U{context}", f"{diff_base}...HEAD",
+             "--", rel_path],
+            cwd=repo_root, check=True, capture_output=True, text=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return None
+    if not proc.stdout.strip():
+        return None
+    return _parse_unified_diff_post(proc.stdout)
 
 
 def _collect_bullets_only(path: Path, repo_root: Path,
