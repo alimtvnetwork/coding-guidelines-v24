@@ -823,6 +823,8 @@ def main(argv: list[str] | None = None) -> int:
                 changed_audit, sys.stderr,
                 as_json=args.json,
                 dedupe=args.dedupe_changed_files,
+                only_statuses=(frozenset(args.only_changed_status)
+                               if args.only_changed_status else None),
             )
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
