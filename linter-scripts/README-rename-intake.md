@@ -219,6 +219,13 @@ would break CI before it could surprise a downstream log scraper.
 
 ### `reason` for `ignored-deleted` rows
 
+> **Canonical reference:** see [`ignored-deleted` reason
+> format](#ignored-deleted-reason-format) under
+> [Status reference](#status-reference) for the full per-source
+> table, the `--list-changed-files-verbose` source-tag contract,
+> and worked examples in JSON / text / CSV. The summary below is
+> kept for backwards-compatible deep-links.
+
 The `reason` field on `ignored-deleted` rows is per-source so a
 reviewer can see *why* a path was classified as deleted. Two source
 vocabularies are emitted today:
