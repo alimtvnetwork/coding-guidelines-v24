@@ -2111,6 +2111,34 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         counts[r.status] = counts.get(r.status, 0) + 1
     summary = "  ".join(f"{s}={counts[s]}" for s in _AUDIT_STATUSES)
     print(f"  totals: {summary}", file=stream)
+    # Deleted-source breakdown — emitted only when the operator
+    # opted into the source filter OR there's at least one
+    # ``ignored-deleted`` row in the (post-dedupe, pre-filter)
+    # intake. Keeping the line conditional preserves the legacy
+    # footer for invocations that have no deletes at all.
+    has_any_deleted = counts.get("ignored-deleted", 0) > 0
+    if only_deleted_sources is not None or has_any_deleted:
+        src_counts = {s: 0 for s in _DELETED_SOURCES}
+        unknown_src = 0
+        for r in full_rows:
+            if r.status != "ignored-deleted":
+                continue
+            if r.source in src_counts:
+                src_counts[r.source] += 1
+            else:
+                # Captures both ``None`` (defensive) and any future
+                # tag the parsers added before ``_DELETED_SOURCES``
+                # caught up. Surfaces under a synthetic ``unknown``
+                # bucket so the breakdown still sums to the
+                # ``ignored-deleted`` total — visible accounting is
+                # the whole point of this line.
+                unknown_src += 1
+        breakdown = "  ".join(
+            f"{s}={src_counts[s]}" for s in _DELETED_SOURCES
+        )
+        if unknown_src:
+            breakdown += f"  unknown={unknown_src}"
+        print(f"  deleted-by-source: {breakdown}", file=stream)
     # Optional legend — only meaningful when the similarity columns
     # are actually in the table. Resolver decides on/off given the
     # operator's ``--similarity-legend`` choice and the stream's TTY
