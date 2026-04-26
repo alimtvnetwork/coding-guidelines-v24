@@ -744,6 +744,53 @@ def main(argv: list[str] | None = None) -> int:
               file=sys.stderr)
         return 2
 
+    # ---- Resolve discovery filters: --extension / --include / --exclude
+    # Centralised here so every call site (main scan loop,
+    # ``--list-files``, cache-key fingerprint) sees the SAME tuple.
+    # If extensions is None the user didn't pass --extension at all
+    # ⇒ historical default of (.md only). An explicit empty list
+    # (``--extension ""``) is rejected because it would discover
+    # nothing — almost certainly user error.
+    if args.extension is None:
+        extensions = DEFAULT_EXTENSIONS
+    else:
+        cleaned = tuple(e.lstrip(".").strip() for e in args.extension)
+        if any(not e for e in cleaned):
+            print("error: --extension values must be non-empty "
+                  "(remove blank entries)", file=sys.stderr)
+            return 2
+        # De-duplicate while preserving first-seen order so the
+        # cache key stays stable across redundant CLI invocations
+        # (``--extension md --extension md`` ⇒ same key as one).
+        seen: set[str] = set()
+        deduped: list[str] = []
+        for e in cleaned:
+            if e not in seen:
+                seen.add(e)
+                deduped.append(e)
+        extensions = tuple(deduped)
+    include_globs = tuple(args.include)
+    exclude_globs = tuple(args.exclude)
+
+    # Validate every glob eagerly so a typo surfaces with a clean
+    # error rather than ``re.error`` deep inside the iterator.
+    # ``PurePosixPath.full_match`` raises ``ValueError`` on a
+    # malformed pattern; we wrap that to a friendlier message.
+    from pathlib import PurePosixPath
+    for label, pats in (("--include", include_globs),
+                        ("--exclude", exclude_globs)):
+        for pat in pats:
+            if not pat.strip():
+                print(f"error: {label} patterns must be non-empty",
+                      file=sys.stderr)
+                return 2
+            try:
+                PurePosixPath("probe").full_match(pat)
+            except ValueError as e:
+                print(f"error: {label} {pat!r} is not a valid glob: {e}",
+                      file=sys.stderr)
+                return 2
+
     # ---- Resolve the tri-state --show-diff-excerpts flag ----------
     # ``show_excerpts_human`` / ``show_excerpts_json`` are the single
     # source of truth used by every later excerpt gate; raw arg
