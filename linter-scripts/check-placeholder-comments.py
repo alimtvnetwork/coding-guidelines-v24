@@ -742,16 +742,30 @@ def main(argv: list[str] | None = None) -> int:
     # walks every `.md` so a changed file colliding with an
     # unchanged target is reported.
     changed_md: set[Path] | None = None
+    changed_audit: list[_ChangedFileAudit] | None = (
+        [] if args.list_changed_files else None
+    )
     if args.diff_base or args.changed_files:
         try:
             changed_md = _resolve_changed_md(
                 repo_root, root,
                 diff_base=args.diff_base,
                 changed_files=args.changed_files,
+                extensions=extensions,
+                audit=changed_audit,
             )
         except RuntimeError as e:
             print(f"error: {e}", file=sys.stderr)
             return 2
+        # Emit the audit trail BEFORE the fast-empty-PASS branch so
+        # the user always sees why their diff resolved to zero linted
+        # files (e.g. the only changes were deletes, or all hits
+        # were filtered as out-of-root). Goes to STDERR so STDOUT is
+        # untouched in --json mode.
+        if changed_audit is not None:
+            _render_changed_files_audit(
+                changed_audit, sys.stderr, as_json=args.json,
+            )
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
                   f"{len(changed_md)} changed `.md` file(s) under {args.root}/")
