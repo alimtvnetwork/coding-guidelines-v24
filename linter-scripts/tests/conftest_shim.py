@@ -79,3 +79,15 @@ def load_placeholder_linter() -> ModuleType:
     """Return the loaded ``check-placeholder-comments.py`` module."""
     return _load("check-placeholder-comments.py",
                  "check_placeholder_comments")
+
+
+def load_audit_reason_vocab() -> ModuleType:
+    """Return the shared ``audit_reason_vocab`` module — the single
+    source of truth for the ``ignored-deleted`` provenance tags and
+    per-source reason templates. Use this in tests when you want to
+    assert directly against the canonical vocabulary instead of
+    going through the linter's underscored re-exports.
+    """
+    import audit_reason_vocab  # imported lazily so the sys.path
+    # tweak above has already taken effect when tests call this.
+    return audit_reason_vocab
