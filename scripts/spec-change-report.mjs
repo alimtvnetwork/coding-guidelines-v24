@@ -424,6 +424,14 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
   tr.sev-code-red td.kind { color: #c53030; }
   tr.sev-style td.kind { color: #b7791f; }
   tr.sev-link td.kind { color: #2b6cb0; }
+  a.line-link, a.file-link, a.target-link {
+    color: #2b6cb0; text-decoration: none; border-bottom: 1px dotted #90cdf4;
+  }
+  a.line-link:hover, a.file-link:hover, a.target-link:hover {
+    color: #2c5282; border-bottom-color: #2b6cb0;
+  }
+  a.file-link { font-family: inherit; }
+  a.target-link { font-size: 0.82rem; }
   .dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%;
          margin-right: 0.35rem; vertical-align: middle; }
   .dot-red { background: #e53e3e; }
@@ -442,7 +450,11 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
   <h1>Spec Change Report</h1>
   <p class="meta">
     Generated <strong>${escapeHtml(generatedAt)}</strong> · Scope: ${escapeHtml(scopeBadge)} ·
-    <span class="status ${statusClass}">${status}</span>
+    <span class="status ${statusClass}">${status}</span>${
+      FLAGS.editor === "none"
+        ? ""
+        : ` · <span class="editor-badge">deep links → ${escapeHtml(FLAGS.editor)}</span>`
+    }
   </p>
 
   <div class="summary">
