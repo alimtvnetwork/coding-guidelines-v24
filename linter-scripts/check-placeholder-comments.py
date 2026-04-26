@@ -501,9 +501,21 @@ def main(argv: list[str] | None = None) -> int:
              "-- <file>`) and print the post-state excerpt under the "
              "human-readable summary so authors can patch without "
              "switching to git. Default 3; 0 disables. Ignored in "
-             "--changed-files mode (no diff-base to query) and in "
-             "--json mode (excerpts would corrupt structured output; "
-             "JSON consumers can render their own from the file/line).")
+             "--changed-files mode (no diff-base to query). In --json "
+             "mode, excerpts are suppressed by default to keep the "
+             "schema byte-identical for legacy consumers; pass "
+             "`--json-excerpts` to emit them as a structured array.")
+    ap.add_argument("--json-excerpts", action="store_true",
+        help="Only meaningful with --json + --diff-base. Adds an "
+             "`excerpt` array to each violation row containing the "
+             "post-state diff window around the violation line. Each "
+             "element is `{\"line\": int, \"kind\": \"+\"|\" \", "
+             "\"text\": str, \"focus\": bool}` — `focus` marks the "
+             "exact violation line so consumers don't need to re-do "
+             "the centering math. The schema is additive: violations "
+             "with no available excerpt simply omit the key, so "
+             "parsers that don't know about it are unaffected. "
+             "Window size is governed by --diff-context.")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -635,30 +647,62 @@ def main(argv: list[str] | None = None) -> int:
                 f"`{first_rel}:L{first_ln}` as `{first_target}` "
                 "(anchor differences are ignored)."))
 
+    # ---- Pre-fetch diff excerpts once for both human + JSON modes
+    # (only when the user actually wants them). Excerpts are bounded
+    # by changed-file count, not violation count — a single bad
+    # block tripping P-001 + P-002 + P-004 still costs one git
+    # invocation per file, not three.
+    diff_excerpts: dict[str, _DiffExcerpts] = {}
+    want_excerpts = (
+        violations
+        and args.diff_base
+        and args.diff_context > 0
+        and changed_md is not None
+        and (not args.json or args.json_excerpts)
+    )
+    if want_excerpts:
+        affected = sorted({v.file for v in violations
+                           if (repo_root / v.file).resolve() in changed_md})
+        for rel in affected:
+            excerpt = _fetch_diff_excerpts(
+                repo_root, args.diff_base, rel, args.diff_context,
+            )
+            if excerpt is not None:
+                diff_excerpts[rel] = excerpt
+
     if args.json:
-        print(json.dumps([asdict(v) for v in violations], indent=2))
+        # Backward-compatible: when --json-excerpts is OFF the
+        # payload is byte-identical to the legacy schema (only the
+        # four Violation fields). When ON, an ``excerpt`` array is
+        # appended to violations that have one — never present as
+        # ``null`` or ``[]``, so legacy parsers that key only off
+        # ``file``/``line``/``code``/``message`` keep working
+        # without seeing a new always-present field.
+        if not args.json_excerpts:
+            print(json.dumps([asdict(v) for v in violations], indent=2))
+        else:
+            payload: list[dict[str, object]] = []
+            for v in violations:
+                row = asdict(v)
+                excerpt = diff_excerpts.get(v.file)
+                if excerpt is not None:
+                    snippet = excerpt.render_structured(
+                        v.line, args.diff_context,
+                    )
+                    if snippet:
+                        row["excerpt"] = snippet
+                payload.append(row)
+            # ``ensure_ascii=False`` so non-ASCII spec content
+            # (e.g. quoted UTF-8 paths from the rename hardening)
+            # round-trips as readable characters instead of
+            # ``\uXXXX`` escapes. Still valid JSON; downstream
+            # parsers don't care.
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
     else:
         if not violations:
             print(f"✅ placeholder-comments: no malformed blocks under {args.root}/")
         else:
             print(f"❌ placeholder-comments: {len(violations)} violation(s):\n")
-            # Pre-fetch one diff per touched file (only in --diff-base
-            # mode with non-zero context). Fetching once per file
-            # rather than once per violation keeps git invocations
-            # bounded by the changed-file count, not the violation
-            # count — important when a single bad block trips P-001
-            # + P-002 + P-004 simultaneously.
-            diff_excerpts: dict[str, _DiffExcerpts] = {}
-            if (args.diff_base and args.diff_context > 0
-                    and changed_md is not None):
-                affected = sorted({v.file for v in violations
-                                   if (repo_root / v.file).resolve() in changed_md})
-                for rel in affected:
-                    excerpt = _fetch_diff_excerpts(
-                        repo_root, args.diff_base, rel, args.diff_context,
-                    )
-                    if excerpt is not None:
-                        diff_excerpts[rel] = excerpt
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
                 excerpt = diff_excerpts.get(v.file)
@@ -1085,6 +1129,52 @@ class _DiffExcerpts:
             # 99,999 lines — well past anything we'll encounter in
             # spec/.
             out.append(f"{marker} {ln:5d} {sigil} {text}")
+        return out
+
+    def render_structured(self, line: int,
+                          context: int) -> list[dict[str, object]]:
+        """Return a JSON-friendly window around ``line``.
+
+        Each element is ``{"line": <int>, "kind": "+"|" ", "text":
+        <str>, "focus": <bool>}`` for one post-state line in the
+        ±``context`` window. Pure data — no Unicode markers, no
+        gutter padding, no truncation. The text payload is the raw
+        post-state line content (no leading ``+``/`` `` sigil); the
+        sigil is moved to the typed ``kind`` field so a JSON
+        consumer doesn't have to strip it.
+
+        Returns ``[]`` (not a sentinel string like the human
+        renderer) when:
+
+        * no hunks were captured for this file, OR
+        * the violation line falls outside every captured hunk
+          window (P-007 cross-file collision pointing at a pre-
+          existing block).
+
+        Returning ``[]`` rather than a "no data" object means the
+        caller can simply omit the ``excerpt`` key when the list is
+        empty — keeping the JSON schema strictly additive (legacy
+        consumers see no new keys on violations the linter has no
+        excerpt for).
+        """
+        if not self.lines:
+            return []
+        if line < self.min_line - context or line > self.max_line + context:
+            return []
+        lo = max(self.min_line, line - context)
+        hi = min(self.max_line, line + context)
+        out: list[dict[str, object]] = []
+        for ln in range(lo, hi + 1):
+            entry = self.lines.get(ln)
+            if entry is None:
+                continue
+            kind, text = entry
+            out.append({
+                "line": ln,
+                "kind": kind,             # "+" (added) or " " (context)
+                "text": text,
+                "focus": ln == line,      # exact violation line
+            })
         return out
 
 
