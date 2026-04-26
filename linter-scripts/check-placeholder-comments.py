@@ -219,7 +219,8 @@ def lint_file(path: Path, repo_root: Path,
         tag_self = TAG_SELF_CLOSE_RE.search(line)
         if tag_self:
             out.append(Violation(rel, i + 1, "P-004",
-                "Self-closing `<spec-placeholder/>` has no bullet rows; remove or expand it."))
+                "Self-closing `<spec-placeholder/>` has no bullet rows; remove or expand it.",
+                i + 1, i + 1))
             i += 1
             continue
         tag_open = TAG_OPEN_RE.search(line)
@@ -228,19 +229,23 @@ def lint_file(path: Path, repo_root: Path,
             # Same-line open+close — degenerate empty block.
             if TAG_CLOSE in line[tag_open.end():]:
                 out.append(Violation(rel, open_line, "P-004",
-                    "`<spec-placeholder>` block is empty (no bullet rows)."))
+                    "`<spec-placeholder>` block is empty (no bullet rows).",
+                    open_line, open_line))
                 i += 1
                 continue
             body, i, closed = _consume_block(lines, i + 1, TAG_CLOSE)
             if not closed:
                 out.append(Violation(rel, open_line, "P-006",
                     "`<spec-placeholder>` opened but never closed "
-                    "(missing `</spec-placeholder>`)."))
+                    "(missing `</spec-placeholder>`).",
+                    open_line, min(len(lines), open_line + max(1, len(body)))))
                 continue
-            bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
+            block_end = i  # `i` is now 1 past the close-marker line (1-indexed line == i)
+            bullet_count = _validate_body(rel, open_line, body, out, file_bullets, block_end)
             if bullet_count == 0:
                 out.append(Violation(rel, open_line, "P-004",
-                    "`<spec-placeholder>` block contains no valid bullet rows."))
+                    "`<spec-placeholder>` block contains no valid bullet rows.",
+                    open_line, block_end))
             continue
 
         # ---- HTML-comment placeholder (legacy) ----------------------
@@ -250,19 +255,23 @@ def lint_file(path: Path, repo_root: Path,
             continue
         if COMMENT_CLOSE in line[m.end():] or COMMENT_CLOSE in line[m.start():]:
             out.append(Violation(rel, i + 1, "P-004",
-                "Placeholder comment has no bullet rows; remove or expand it."))
+                "Placeholder comment has no bullet rows; remove or expand it.",
+                i + 1, i + 1))
             i += 1
             continue
         open_line = i + 1
         body, i, closed = _consume_block(lines, i + 1, COMMENT_CLOSE)
         if not closed:
             out.append(Violation(rel, open_line, "P-006",
-                "Placeholder comment opened but never closed (missing `-->`)."))
+                "Placeholder comment opened but never closed (missing `-->`).",
+                open_line, min(len(lines), open_line + max(1, len(body)))))
             continue
-        bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
+        block_end = i
+        bullet_count = _validate_body(rel, open_line, body, out, file_bullets, block_end)
         if bullet_count == 0:
             out.append(Violation(rel, open_line, "P-004",
-                "Placeholder block contains no valid bullet rows."))
+                "Placeholder block contains no valid bullet rows.",
+                open_line, block_end))
 
     # ---- P-007 within-file duplicates ------------------------------
     # Resolve each bullet to a canonical (file, target_path) key. We
@@ -277,7 +286,8 @@ def lint_file(path: Path, repo_root: Path,
             out.append(Violation(rel, ln, "P-007",
                 f"Duplicate placeholder target `{target}` — already "
                 f"declared at L{first_ln} as `{first_target}` "
-                "(anchor differences are ignored)."))
+                "(anchor differences are ignored).",
+                ln, ln))
         else:
             seen[key] = (ln, target)
 
