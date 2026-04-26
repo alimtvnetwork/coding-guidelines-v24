@@ -1066,6 +1066,7 @@ def main(argv: list[str] | None = None) -> int:
                 _write_similarity_csv(
                     csv_rows, args.similarity_csv,
                     with_labels=args.similarity_labels,
+                    dialect=args.similarity_csv_format,
                 )
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
