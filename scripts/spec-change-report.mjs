@@ -21,9 +21,10 @@
 // =====================================================================
 
 import { execSync, spawnSync } from "node:child_process";
-import { mkdirSync, writeFileSync, existsSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, copyFileSync, renameSync, unlinkSync } from "node:fs";
 import { resolve, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { tmpdir } from "node:os";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ARGS = new Set(process.argv.slice(2));
@@ -304,19 +305,40 @@ function buildHtml({ scope, validator, crossLink, validatorRaw, crossLinkRaw, ge
 // 6. Optional PDF rendering
 // ---------------------------------------------------------------------
 function tryRenderPdf(htmlPath, pdfPath) {
-  // Try wkhtmltopdf first (lightweight). Fall back to chromium headless.
+  // Chromium's headless renderer cannot serve files from FUSE-mounted
+  // paths (e.g. /mnt/documents) — it falls back to "view source" mode
+  // and prints raw HTML. Copy the HTML to a real tmp dir, render there,
+  // then move the PDF back.
+  const tmpHtml = resolve(tmpdir(), `spec-change-report-${process.pid}.html`);
+  const tmpPdf = resolve(tmpdir(), `spec-change-report-${process.pid}.pdf`);
+  try {
+    copyFileSync(htmlPath, tmpHtml);
+  } catch (err) {
+    return null;
+  }
+
   const candidates = [
-    ["wkhtmltopdf", ["--quiet", "--enable-local-file-access", htmlPath, pdfPath]],
-    ["chromium", ["--headless", "--disable-gpu", "--no-sandbox", `--print-to-pdf=${pdfPath}`, `file://${htmlPath}`]],
-    ["google-chrome", ["--headless", "--disable-gpu", "--no-sandbox", `--print-to-pdf=${pdfPath}`, `file://${htmlPath}`]],
+    ["wkhtmltopdf", ["--quiet", "--enable-local-file-access", tmpHtml, tmpPdf]],
+    ["chromium", ["--headless", "--disable-gpu", "--no-sandbox",
+        "--no-pdf-header-footer", `--print-to-pdf=${tmpPdf}`, `file://${tmpHtml}`]],
+    ["google-chrome", ["--headless", "--disable-gpu", "--no-sandbox",
+        "--no-pdf-header-footer", `--print-to-pdf=${tmpPdf}`, `file://${tmpHtml}`]],
   ];
+  let renderer = null;
   for (const [bin, args] of candidates) {
     const which = spawnSync("which", [bin], { encoding: "utf8" });
     if (which.status !== 0) continue;
     const r = spawnSync(bin, args, { encoding: "utf8" });
-    if (r.status === 0 && existsSync(pdfPath)) return bin;
+    if (r.status === 0 && existsSync(tmpPdf)) { renderer = bin; break; }
   }
-  return null;
+
+  if (renderer) {
+    try { copyFileSync(tmpPdf, pdfPath); } catch { renderer = null; }
+  }
+  for (const p of [tmpHtml, tmpPdf]) {
+    try { if (existsSync(p)) unlinkSync(p); } catch { /* ignore */ }
+  }
+  return renderer;
 }
 
 // ---------------------------------------------------------------------
