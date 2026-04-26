@@ -768,9 +768,9 @@ def main(argv: list[str] | None = None) -> int:
     want_excerpts = (
         violations
         and args.diff_base
-        and args.diff_context > 0
         and changed_md is not None
-        and (not args.json or args.json_excerpts)
+        and ((not args.json and show_excerpts_human)
+             or (args.json and show_excerpts_json))
     )
     # Suggested patches reuse the same ``_DiffExcerpts`` data (post-
     # state line index + hunk windows) so we widen the fetch trigger
@@ -794,7 +794,7 @@ def main(argv: list[str] | None = None) -> int:
             # excerpt renderer would emit a tiny window in that
             # case, but we already gate human/JSON excerpt output
             # on ``want_excerpts`` separately so nothing leaks.
-            ctx = args.diff_context if want_excerpts else max(
+            ctx = effective_context if want_excerpts else max(
                 1, args.diff_context,
             )
             excerpt = _fetch_diff_excerpts(
@@ -811,16 +811,16 @@ def main(argv: list[str] | None = None) -> int:
         # ``null`` or ``[]``, so legacy parsers that key only off
         # ``file``/``line``/``code``/``message`` keep working
         # without seeing a new always-present field.
-        if not args.json_excerpts and not args.json_suggest_patch:
+        if not show_excerpts_json and not args.json_suggest_patch:
             print(json.dumps([asdict(v) for v in violations], indent=2))
         else:
             payload: list[dict[str, object]] = []
             for v in violations:
                 row = asdict(v)
                 excerpt = diff_excerpts.get(v.file)
-                if excerpt is not None and args.json_excerpts:
+                if excerpt is not None and show_excerpts_json:
                     snippet = excerpt.render_structured(
-                        v.line, args.diff_context,
+                        v.line, effective_context,
                     )
                     if snippet:
                         row["excerpt"] = snippet
@@ -843,8 +843,8 @@ def main(argv: list[str] | None = None) -> int:
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
                 excerpt = diff_excerpts.get(v.file)
-                if excerpt is not None and args.diff_context > 0:
-                    snippet = excerpt.render(v.line, args.diff_context)
+                if excerpt is not None and show_excerpts_human:
+                    snippet = excerpt.render(v.line, effective_context)
                     if snippet:
                         # Two-space indent under the violation line
                         # so the excerpt is visually attached to it
