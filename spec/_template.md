@@ -68,14 +68,30 @@ Tables for rule comparisons:
 
 ## Cross-References
 
-Add file-relative links here. Always include `.md`. The block below is
-wrapped in an HTML comment so the cross-link checker auto-skips its
-placeholder targets — replace it with real links before committing.
+Add file-relative links here. Always include `.md`. Examples (replace before committing):
 
-<!-- placeholder cross-references — auto-skipped by check-spec-cross-links.py
+```
 - [Related module](../NN-related-module/00-overview.md)
 - [Strictly-avoid quick reference](../17-consolidated-guidelines/00-strictly-avoid-quickref.md)
+```
+
+### Placeholder cross-references (copy-paste snippet)
+
+Use this when you need to reserve a link before the target file exists.
+The checker ignores links inside HTML comments, so these won't fail CI.
+
+```markdown
+<!-- TODO: activate when target is created
+- [Target Title](../NN-module-name/00-overview.md)
+- [Target Title](../NN-module-name/01-file-name.md#section-anchor)
 -->
+```
+
+Guidelines for placeholders:
+- Keep the comment block contiguous (no blank lines inside).
+- Replace `NN-module-name` and `01-file-name.md` with real paths before removing the comment markers.
+- Remove the `<!--` and `-->` wrappers (and the `TODO:` prefix) once the target exists.
+- If the anchor (`#section-anchor`) is unknown, omit it and add it later.
 
 ---
 
