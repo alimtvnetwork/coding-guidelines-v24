@@ -392,11 +392,94 @@ def main(argv: list[str] | None = None) -> int:
             print(f"✅ placeholder-comments: no malformed blocks under {args.root}/")
         else:
             print(f"❌ placeholder-comments: {len(violations)} violation(s):\n")
+            file_cache: dict[str, list[str]] = {}
             for v in violations:
-                print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
-            print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
+                _render_violation(v, repo_root, file_cache)
+            print("  See linter-scripts/check-placeholder-comments.py for rule docs.")
 
     return 1 if violations else 0
+
+
+# --- Suggested-fix templates per rule code ----------------------------
+# Each entry shows a *minimal* corrected example so authors can see
+# exactly what shape the linter expects. We intentionally keep these
+# inline strings rather than reading from `_template.md` so the
+# suggestion is self-contained even if the template moves.
+_SUGGESTIONS: dict[str, str] = {
+    "P-001": (
+        "<!-- TODO: activate when target file is created\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "-->"
+    ),
+    "P-002": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "</spec-placeholder>"
+    ),
+    "P-003": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/01-file-name.md#section-anchor)\n"
+        "</spec-placeholder>"
+    ),
+    "P-004": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "</spec-placeholder>"
+    ),
+    "P-005": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [First Target](../NN-module-name/00-overview.md)\n"
+        "- [Second Target](../NN-module-name/01-file-name.md)\n"
+        "</spec-placeholder>"
+    ),
+    "P-006": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "</spec-placeholder>   ← don't forget the closing tag"
+    ),
+    "P-007": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md#one-section)\n"
+        "</spec-placeholder>\n"
+        "# Remove the second placeholder pointing at the same .md file,\n"
+        "# or merge both anchors into a single bullet group."
+    ),
+}
+
+
+def _render_violation(v: Violation, repo_root: Path,
+                      cache: dict[str, list[str]]) -> None:
+    """Pretty-print one violation: header, numbered snippet, suggestion."""
+    print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
+    src = cache.get(v.file)
+    if src is None:
+        try:
+            src = (repo_root / v.file).read_text(encoding="utf-8").splitlines()
+        except OSError:
+            src = []
+        cache[v.file] = src
+
+    # Determine the snippet window. Prefer the recorded block range;
+    # fall back to ±1 line around the offending line so we always
+    # print *something* useful even for malformed-range edge cases.
+    if src:
+        start = v.block_start or v.line
+        end = v.block_end or v.line
+        if start < 1: start = 1
+        if end < start: end = start
+        if end > len(src): end = len(src)
+        if start > len(src): start = len(src)
+        width = len(str(end))
+        print("    --- offending block ---")
+        for ln in range(start, end + 1):
+            marker = ">" if ln == v.line else " "
+            print(f"    {marker} {ln:>{width}} | {src[ln - 1]}")
+    suggestion = _SUGGESTIONS.get(v.code)
+    if suggestion:
+        print("    --- suggested fix ---")
+        for sline in suggestion.splitlines():
+            print(f"      {sline}")
+    print()
 
 
 if __name__ == "__main__":
