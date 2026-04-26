@@ -105,8 +105,12 @@ class IncludeMdxComposition(unittest.TestCase):
             self.assertEqual(_segments(cache), {"ext-mdx+txt"})
 
     def test_idempotent_with_explicit_mdx(self) -> None:
-        """``--include-mdx --extension mdx`` is the same as either
-        flag alone — mdx must be deduped, no phantom segment."""
+        """When the operator passes ``--extension mdx`` they have
+        explicitly scoped the baseline AWAY from ``md``; the
+        ``--include-mdx`` flag then collapses to a no-op (mdx is
+        already in the allowlist). Result: ``ext-mdx``, not
+        ``ext-md+mdx`` — the flag never silently re-introduces ``md``
+        when the operator opted out of it."""
         with tempfile.TemporaryDirectory() as td:
             spec, cache = _make_repo(Path(td))
             rc, _, _ = _run(
@@ -116,9 +120,9 @@ class IncludeMdxComposition(unittest.TestCase):
                 cwd=Path(td),
             )
             self.assertEqual(rc, 0)
-            # md (default baseline) + mdx (one of two equivalent
-            # sources) → ext-md+mdx, NOT ext-md+mdx+mdx or ext-mdx.
-            self.assertEqual(_segments(cache), {"ext-md+mdx"})
+            # mdx (explicit, replaces the default ``md`` baseline)
+            # + mdx (the convenience flag, deduped) → ext-mdx.
+            self.assertEqual(_segments(cache), {"ext-mdx"})
 
 
 class IncludeMdxCanonicalEquivalence(unittest.TestCase):
