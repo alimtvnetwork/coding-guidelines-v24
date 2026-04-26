@@ -224,7 +224,7 @@ def lint_file(path: Path, repo_root: Path,
                     "`<spec-placeholder>` opened but never closed "
                     "(missing `</spec-placeholder>`)."))
                 continue
-            bullet_count = _validate_body(rel, open_line, body, out)
+            bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
             if bullet_count == 0:
                 out.append(Violation(rel, open_line, "P-004",
                     "`<spec-placeholder>` block contains no valid bullet rows."))
@@ -246,10 +246,31 @@ def lint_file(path: Path, repo_root: Path,
             out.append(Violation(rel, open_line, "P-006",
                 "Placeholder comment opened but never closed (missing `-->`)."))
             continue
-        bullet_count = _validate_body(rel, open_line, body, out)
+        bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
         if bullet_count == 0:
             out.append(Violation(rel, open_line, "P-004",
                 "Placeholder block contains no valid bullet rows."))
+
+    # ---- P-007 within-file duplicates ------------------------------
+    # Resolve each bullet to a canonical (file, target_path) key. We
+    # strip the anchor because two placeholders pointing at different
+    # sections of the same target file still collapse to a single
+    # activation step, which is what P-007 is designed to surface.
+    seen: dict[str, tuple[int, str]] = {}
+    for ln, target in file_bullets:
+        key = _canonical_target(rel, target, repo_root)
+        if key in seen:
+            first_ln, first_target = seen[key]
+            out.append(Violation(rel, ln, "P-007",
+                f"Duplicate placeholder target `{target}` — already "
+                f"declared at L{first_ln} as `{first_target}` "
+                "(anchor differences are ignored)."))
+        else:
+            seen[key] = (ln, target)
+
+    if valid_bullets is not None:
+        for ln, target in file_bullets:
+            valid_bullets.append((rel, ln, target))
 
     return out
 
