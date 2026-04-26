@@ -7,6 +7,13 @@
 // the spec files the author actually touched, and emit a concise HTML
 // report (and, when wkhtmltopdf / Chromium is available, a PDF too).
 //
+// In addition to validator findings, the report surfaces *pending
+// placeholders* — `- [text](path.md)` bullets stashed inside HTML
+// comment blocks (`<!-- TODO: ... -->`). These are deliberately ignored
+// by check-spec-cross-links.py so they never fail CI; the report shows
+// them as ⏳ Pending so authors remember to activate them once the
+// target files exist.
+//
 // Usage:
 //   node scripts/spec-change-report.mjs                # staged+unstaged+untracked
 //   node scripts/spec-change-report.mjs --all          # full repo, no scoping
