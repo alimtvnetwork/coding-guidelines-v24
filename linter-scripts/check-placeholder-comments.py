@@ -144,6 +144,13 @@ class Violation:
     line: int
     code: str
     message: str
+    # 1-indexed inclusive [start, end] line range of the enclosing
+    # placeholder block. Used by the human-readable renderer to print
+    # the exact offending snippet. Defaults to (line, line) for
+    # standalone errors that have no block context (e.g. P-004
+    # self-closing tag).
+    block_start: int = 0
+    block_end: int = 0
 
 
 def iter_markdown_files(root: Path) -> Iterable[Path]:
@@ -242,33 +249,39 @@ def _validate_intent(rel: str, line_no: int, marker: str, text: str,
 
 def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
                    out: list[Violation],
-                   bullets: list[tuple[int, str]] | None = None) -> int:
+                   bullets: list[tuple[int, str]] | None = None,
+                   block_end: int = 0) -> int:
     """Apply P-002/P-003/P-005 to a body and return valid bullet count.
 
     When ``bullets`` is provided, every valid bullet is appended as
     ``(line, target)`` for later cross-block duplicate analysis (P-007).
     """
     bullet_count = 0
+    be = block_end or (body[-1][0] if body else open_line)
     for ln, content in body:
         if not content.strip():
             out.append(Violation(rel, ln, "P-005",
-                "Blank line inside placeholder block; keep it contiguous."))
+                "Blank line inside placeholder block; keep it contiguous.",
+                open_line, be))
             continue
         bm = BULLET_LINK_RE.match(content)
         if not bm:
             out.append(Violation(rel, ln, "P-002",
-                "Placeholder body line is not a `- [text](link)` bullet."))
+                "Placeholder body line is not a `- [text](link)` bullet.",
+                open_line, be))
             continue
         target = bm.group(1)
         if target.startswith(("http://", "https://", "mailto:", "#")):
             out.append(Violation(rel, ln, "P-003",
                 f"Placeholder link `{target}` must be a relative `.md` path, "
-                "not external/anchor-only."))
+                "not external/anchor-only.",
+                open_line, be))
             continue
         path_part = target.split("#", 1)[0]
         if not path_part.endswith(".md"):
             out.append(Violation(rel, ln, "P-003",
-                f"Placeholder link `{target}` must point at a `.md` file."))
+                f"Placeholder link `{target}` must point at a `.md` file.",
+                open_line, be))
             continue
         bullet_count += 1
         if bullets is not None:
@@ -305,7 +318,8 @@ def lint_file(path: Path, repo_root: Path,
         tag_self = TAG_SELF_CLOSE_RE.search(line)
         if tag_self:
             out.append(Violation(rel, i + 1, "P-004",
-                "Self-closing `<spec-placeholder/>` has no bullet rows; remove or expand it."))
+                "Self-closing `<spec-placeholder/>` has no bullet rows; remove or expand it.",
+                i + 1, i + 1))
             i += 1
             continue
         tag_open = TAG_OPEN_RE.search(line)
@@ -324,19 +338,23 @@ def lint_file(path: Path, repo_root: Path,
             # Same-line open+close — degenerate empty block.
             if TAG_CLOSE in line[tag_open.end():]:
                 out.append(Violation(rel, open_line, "P-004",
-                    "`<spec-placeholder>` block is empty (no bullet rows)."))
+                    "`<spec-placeholder>` block is empty (no bullet rows).",
+                    open_line, open_line))
                 i += 1
                 continue
             body, i, closed = _consume_block(lines, i + 1, TAG_CLOSE)
             if not closed:
                 out.append(Violation(rel, open_line, "P-006",
                     "`<spec-placeholder>` opened but never closed "
-                    "(missing `</spec-placeholder>`)."))
+                    "(missing `</spec-placeholder>`).",
+                    open_line, min(len(lines), open_line + max(1, len(body)))))
                 continue
-            bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
+            block_end = i  # `i` is now 1 past the close-marker line (1-indexed line == i)
+            bullet_count = _validate_body(rel, open_line, body, out, file_bullets, block_end)
             if bullet_count == 0:
                 out.append(Violation(rel, open_line, "P-004",
-                    "`<spec-placeholder>` block contains no valid bullet rows."))
+                    "`<spec-placeholder>` block contains no valid bullet rows.",
+                    open_line, block_end))
             continue
 
         # ---- HTML-comment placeholder (legacy) ----------------------
@@ -357,19 +375,23 @@ def lint_file(path: Path, repo_root: Path,
             _validate_intent(rel, i + 1, marker, intent_text, out, intent_verbs)
         if COMMENT_CLOSE in line[m.end():] or COMMENT_CLOSE in line[m.start():]:
             out.append(Violation(rel, i + 1, "P-004",
-                "Placeholder comment has no bullet rows; remove or expand it."))
+                "Placeholder comment has no bullet rows; remove or expand it.",
+                i + 1, i + 1))
             i += 1
             continue
         open_line = i + 1
         body, i, closed = _consume_block(lines, i + 1, COMMENT_CLOSE)
         if not closed:
             out.append(Violation(rel, open_line, "P-006",
-                "Placeholder comment opened but never closed (missing `-->`)."))
+                "Placeholder comment opened but never closed (missing `-->`).",
+                open_line, min(len(lines), open_line + max(1, len(body)))))
             continue
-        bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
+        block_end = i
+        bullet_count = _validate_body(rel, open_line, body, out, file_bullets, block_end)
         if bullet_count == 0:
             out.append(Violation(rel, open_line, "P-004",
-                "Placeholder block contains no valid bullet rows."))
+                "Placeholder block contains no valid bullet rows.",
+                open_line, block_end))
 
     # ---- P-007 within-file duplicates ------------------------------
     # Resolve each bullet to a canonical (file, target_path) key. We
@@ -384,7 +406,8 @@ def lint_file(path: Path, repo_root: Path,
             out.append(Violation(rel, ln, "P-007",
                 f"Duplicate placeholder target `{target}` — already "
                 f"declared at L{first_ln} as `{first_target}` "
-                "(anchor differences are ignored)."))
+                "(anchor differences are ignored).",
+                ln, ln))
         else:
             seen[key] = (ln, target)
 
@@ -485,7 +508,8 @@ def main(argv: list[str] | None = None) -> int:
             violations.append(Violation(rel, ln, "P-007",
                 f"Duplicate placeholder target `{target}` — also declared at "
                 f"`{first_rel}:L{first_ln}` as `{first_target}` "
-                "(anchor differences are ignored)."))
+                "(anchor differences are ignored).",
+                ln, ln))
 
     if args.json:
         print(json.dumps([asdict(v) for v in violations], indent=2))
@@ -494,11 +518,94 @@ def main(argv: list[str] | None = None) -> int:
             print(f"✅ placeholder-comments: no malformed blocks under {args.root}/")
         else:
             print(f"❌ placeholder-comments: {len(violations)} violation(s):\n")
+            file_cache: dict[str, list[str]] = {}
             for v in violations:
-                print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
-            print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
+                _render_violation(v, repo_root, file_cache)
+            print("  See linter-scripts/check-placeholder-comments.py for rule docs.")
 
     return 1 if violations else 0
+
+
+# --- Suggested-fix templates per rule code ----------------------------
+# Each entry shows a *minimal* corrected example so authors can see
+# exactly what shape the linter expects. We intentionally keep these
+# inline strings rather than reading from `_template.md` so the
+# suggestion is self-contained even if the template moves.
+_SUGGESTIONS: dict[str, str] = {
+    "P-001": (
+        "<!-- TODO: activate when target file is created\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "-->"
+    ),
+    "P-002": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "</spec-placeholder>"
+    ),
+    "P-003": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/01-file-name.md#section-anchor)\n"
+        "</spec-placeholder>"
+    ),
+    "P-004": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "</spec-placeholder>"
+    ),
+    "P-005": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [First Target](../NN-module-name/00-overview.md)\n"
+        "- [Second Target](../NN-module-name/01-file-name.md)\n"
+        "</spec-placeholder>"
+    ),
+    "P-006": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md)\n"
+        "</spec-placeholder>   ← don't forget the closing tag"
+    ),
+    "P-007": (
+        "<spec-placeholder reason=\"activate when target file is created\">\n"
+        "- [Target Title](../NN-module-name/00-overview.md#one-section)\n"
+        "</spec-placeholder>\n"
+        "# Remove the second placeholder pointing at the same .md file,\n"
+        "# or merge both anchors into a single bullet group."
+    ),
+}
+
+
+def _render_violation(v: Violation, repo_root: Path,
+                      cache: dict[str, list[str]]) -> None:
+    """Pretty-print one violation: header, numbered snippet, suggestion."""
+    print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
+    src = cache.get(v.file)
+    if src is None:
+        try:
+            src = (repo_root / v.file).read_text(encoding="utf-8").splitlines()
+        except OSError:
+            src = []
+        cache[v.file] = src
+
+    # Determine the snippet window. Prefer the recorded block range;
+    # fall back to ±1 line around the offending line so we always
+    # print *something* useful even for malformed-range edge cases.
+    if src:
+        start = v.block_start or v.line
+        end = v.block_end or v.line
+        if start < 1: start = 1
+        if end < start: end = start
+        if end > len(src): end = len(src)
+        if start > len(src): start = len(src)
+        width = len(str(end))
+        print("    --- offending block ---")
+        for ln in range(start, end + 1):
+            marker = ">" if ln == v.line else " "
+            print(f"    {marker} {ln:>{width}} | {src[ln - 1]}")
+    suggestion = _SUGGESTIONS.get(v.code)
+    if suggestion:
+        print("    --- suggested fix ---")
+        for sline in suggestion.splitlines():
+            print(f"      {sline}")
+    print()
 
 
 if __name__ == "__main__":
