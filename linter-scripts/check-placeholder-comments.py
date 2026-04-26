@@ -1183,6 +1183,7 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 as_json: bool,
                                 dedupe: bool = False,
                                 only_statuses: frozenset[str] | None = None,
+                                with_similarity: bool = False,
                                 ) -> None:
     """Print the diff-mode changed-file audit table to ``stream``.
 
@@ -1218,6 +1219,18 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     hides everything is obvious (``0 of 12 row(s) shown``); the
     totals line still counts every status in the canonical order so
     the operator can see exactly what was filtered out.
+
+    When ``with_similarity`` is True the rendered table grows three
+    extra columns — ``kind``, ``score``, ``old`` — populated from each
+    row's ``similarity`` field. ``None`` similarities (plain A/M rows
+    + every ``ignored-deleted`` row, which carries no rename
+    provenance) render as ``-`` in all three columns. R/C rows whose
+    score is ``None`` (scoreless authored payloads) render the score
+    cell as ``-`` while still showing the kind and old-path. JSON
+    mode emits a nested ``similarity`` object (or ``null``) using
+    :func:`dataclasses.asdict` so the schema is regular for downstream
+    consumers. Off by default to keep the legacy 3-column shape and
+    avoid widening logs that don't care about provenance.
     """
     dropped = 0
     if dedupe:
@@ -1226,7 +1239,20 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     if only_statuses is not None:
         rows = [r for r in rows if r.status in only_statuses]
     if as_json:
-        payload = [asdict(r) for r in rows]
+        # ``asdict`` recurses into nested dataclasses so the
+        # ``similarity`` field becomes a sub-object automatically. When
+        # the operator didn't ask for similarity, drop the field
+        # entirely from the payload so the legacy schema is preserved
+        # byte-for-byte. (Stripping a key is intentional rather than
+        # emitting ``"similarity": null``: dashboards parsing the
+        # historical schema with a strict object validator must keep
+        # working unchanged.)
+        payload = []
+        for r in rows:
+            obj = asdict(r)
+            if not with_similarity:
+                obj.pop("similarity", None)
+            payload.append(obj)
         print(json.dumps(payload, indent=2, ensure_ascii=False),
               file=stream)
         return
@@ -1239,6 +1265,10 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         # reports the full breakdown.
         suffix += (f"; filtered, {len(rows)} of {len(full_rows)} "
                    f"row(s) shown ({'+'.join(sorted(only_statuses))})")
+    if with_similarity:
+        # Surface the extra columns in the header so a reviewer
+        # scanning the log knows the wider table isn't a layout bug.
+        suffix += "; +similarity columns"
     print("── placeholder-comments: changed-file audit "
           f"({len(full_rows)} row(s){suffix}) ──", file=stream)
     if not rows:
@@ -1256,13 +1286,40 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         path_w = max(len("path"), max(len(r.path) for r in rows))
         status_w = max(len("status"), max(len(r.status) for r in rows))
     if rows:
-        print(f"  {'status'.ljust(status_w)}  "
-              f"{'path'.ljust(path_w)}  reason", file=stream)
-        print("  " + "-" * (status_w + path_w + len("reason") + 4),
-              file=stream)
-        for r in rows:
-            print(f"  {r.status.ljust(status_w)}  "
-                  f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
+        if with_similarity:
+            # Pre-compute every cell so the column widths bake in the
+            # widest dash-substituted value. ``_fmt_similarity`` returns
+            # the (kind, score, old) triple as already-stringified
+            # cells (with `-` substituted for None / non-rename rows).
+            cells = [_fmt_similarity(r.similarity) for r in rows]
+            kind_w = max(len("kind"), max(len(c[0]) for c in cells))
+            score_w = max(len("score"), max(len(c[1]) for c in cells))
+            old_w = max(len("old"), max(len(c[2]) for c in cells))
+            header = (
+                f"  {'status'.ljust(status_w)}  "
+                f"{'path'.ljust(path_w)}  "
+                f"{'kind'.ljust(kind_w)}  "
+                f"{'score'.ljust(score_w)}  "
+                f"{'old'.ljust(old_w)}  reason"
+            )
+            print(header, file=stream)
+            rule_w = (status_w + path_w + kind_w + score_w
+                      + old_w + len("reason") + 5 * 2)
+            print("  " + "-" * rule_w, file=stream)
+            for r, (k, sc, op) in zip(rows, cells):
+                print(f"  {r.status.ljust(status_w)}  "
+                      f"{r.path.ljust(path_w)}  "
+                      f"{k.ljust(kind_w)}  "
+                      f"{sc.ljust(score_w)}  "
+                      f"{op.ljust(old_w)}  {r.reason}", file=stream)
+        else:
+            print(f"  {'status'.ljust(status_w)}  "
+                  f"{'path'.ljust(path_w)}  reason", file=stream)
+            print("  " + "-" * (status_w + path_w + len("reason") + 4),
+                  file=stream)
+            for r in rows:
+                print(f"  {r.status.ljust(status_w)}  "
+                      f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
     # Counts-by-status footer in the canonical status order so the
     # eye lands on the same column positions run-to-run. Counts
     # against ``full_rows`` (post-dedupe, pre-filter) so the totals
