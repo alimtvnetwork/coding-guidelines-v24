@@ -608,6 +608,20 @@ def main(argv: list[str] | None = None) -> int:
              "changed-file set has no `.md` under --root, exit 0 "
              "without scanning. Default behaviour is the same; this "
              "flag is accepted for explicitness in CI configs.")
+    ap.add_argument("--list-changed-files", action="store_true",
+        help="Diff-mode audit: after resolving the changed-file set "
+             "from --diff-base or --changed-files, print one row per "
+             "considered path showing whether the linter picked it "
+             "up and, if not, why. Status values are `matched`, "
+             "`ignored-extension`, `ignored-out-of-root`, "
+             "`ignored-missing`, and `ignored-deleted`. The table is "
+             "always written to STDERR so STDOUT remains a clean, "
+             "single-document JSON payload (when --json is set) or "
+             "the usual human summary. With --json the audit is "
+             "serialised as a JSON array (still on STDERR) using the "
+             "schema `{\"path\":str, \"status\":str, \"reason\":str}` "
+             "so dashboards can ingest it without scraping the text "
+             "table. No-op outside diff mode.")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
