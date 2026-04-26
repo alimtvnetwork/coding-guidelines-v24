@@ -141,6 +141,37 @@ INTENT_PREFIXES: tuple[str, ...] = ("please ",)
 BULLET_LINK_RE = re.compile(r"^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*$")
 
 
+# --- Suggested-patch fix hints ----------------------------------------
+# Per-rule one-line replacement scaffold inserted into the suggested
+# `git apply` patch in place of the offending post-state line. The
+# linter cannot infer the author's correct fix — these are TODO
+# markers labelled with the rule code so a reviewer doing a copy-
+# paste apply immediately sees what kind of edit is required.
+#
+# Rules NOT in this table (e.g. the structural P-006 "missing closer"
+# where the violation line is the *opener*, not a wrong line in
+# place) fall back to ``_RULE_FIX_FALLBACK``. Adding a more specific
+# hint later is purely additive and does not break the schema.
+_RULE_FIX_HINTS: dict[str, str] = {
+    "P-001": '<!-- TODO(P-001): replace with a complete imperative '
+             'reason="…" (e.g. reason="Document RAG eviction policy"). -->',
+    "P-002": "- [TODO(P-002): describe target](relative/path/to/spec.md)",
+    "P-003": "- [TODO(P-003): use a relative .md path](relative/path/to/spec.md)",
+    "P-004": "- [TODO(P-004): add at least one bullet](relative/path/to/spec.md)",
+    "P-005": "<!-- TODO(P-005): remove the blank line above; "
+             "placeholder bodies must be contiguous. -->",
+    "P-006": "<!-- TODO(P-006): add a matching closing marker "
+             "(--> or </spec-placeholder>) below this opener. -->",
+    "P-007": "- [TODO(P-007): point at a different target — "
+             "duplicate of an earlier placeholder](relative/path/to/different-spec.md)",
+    "P-008": "<!-- TODO(P-008): see linter rule docs for the exact fix. -->",
+}
+_RULE_FIX_FALLBACK = (
+    "<!-- TODO: see linter-scripts/check-placeholder-comments.py "
+    "for the rule's required fix. -->"
+)
+
+
 @dataclass(frozen=True)
 class Violation:
     file: str
