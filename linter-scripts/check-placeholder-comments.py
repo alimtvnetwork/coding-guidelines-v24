@@ -799,6 +799,23 @@ def main(argv: list[str] | None = None) -> int:
              "BEFORE the export, so the CSV contains exactly the rows "
              "you'd see in the text/JSON audit. No-op without "
              "--list-changed-files.")
+    ap.add_argument("--similarity-csv-format", default="csv",
+        choices=("csv", "tsv"),
+        help="Field-separator dialect for the --similarity-csv export. "
+             "`csv` (default) writes RFC 4180 with comma separators "
+             "and double-quote quoting (the legacy behaviour, "
+             "byte-for-byte unchanged when the flag is absent). `tsv` "
+             "writes tab-separated values using the stdlib "
+             "`csv.excel_tab` dialect — handy when your paths or "
+             "reasons contain commas (avoids needing quoted cells in "
+             "the spreadsheet) or when piping into tools that prefer "
+             "tabs (`cut -f`, `awk -F'\\t'`, `column -t -s$'\\t'`, "
+             "`q -t`). The header row, column order, and the empty-"
+             "vs-`0` score-cell convention are identical across both "
+             "dialects — only the separator changes. The output file "
+             "extension is NOT auto-rewritten: pass an explicit "
+             "`.tsv` path if you want one. No-op without "
+             "--similarity-csv.")
     ap.add_argument("--similarity-labels", action="store_true",
         help="With --with-similarity, attach a per-kind discriminator "
              "to every rename/copy row so the score's *meaning* is "
@@ -1049,6 +1066,7 @@ def main(argv: list[str] | None = None) -> int:
                 _write_similarity_csv(
                     csv_rows, args.similarity_csv,
                     with_labels=args.similarity_labels,
+                    dialect=args.similarity_csv_format,
                 )
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
@@ -1366,6 +1384,19 @@ _SIMILARITY_CSV_HEADER_LABELED: tuple[str, ...] = (
     *_SIMILARITY_CSV_HEADER, "score_kind",
 )
 
+# Recognised values for ``--similarity-csv-format``. Centralised so
+# the argparse ``choices=`` list, the writer's dispatch, and the
+# tests all agree on the exact spelling. ``csv`` is the legacy
+# default (RFC 4180 with comma separators); ``tsv`` switches to
+# the stdlib ``csv.excel_tab`` dialect (tab separators) for
+# spreadsheets / pipelines where commas are inconvenient.
+_SIMILARITY_CSV_FORMAT_CSV = "csv"
+_SIMILARITY_CSV_FORMAT_TSV = "tsv"
+_SIMILARITY_CSV_FORMATS: tuple[str, ...] = (
+    _SIMILARITY_CSV_FORMAT_CSV,
+    _SIMILARITY_CSV_FORMAT_TSV,
+)
+
 # Canonical labels for the ``score_kind`` discriminator. Centralised so
 # the JSON serializer, the text-table renderer, the CSV exporter, and
 # the tests all agree on the exact spelling. The vocabulary is
@@ -1412,7 +1443,8 @@ def _score_kind_for(sim: "_RenameSimilarity | None") -> str | None:
 def _write_similarity_csv(rows: list[_ChangedFileAudit],
                           target: str,
                           *,
-                          with_labels: bool = False) -> None:
+                          with_labels: bool = False,
+                          dialect: str = _SIMILARITY_CSV_FORMAT_CSV) -> None:
     """Export the audit rows as RFC 4180 CSV for spreadsheet review.
 
     ``target`` is either a filesystem path or the literal ``"-"`` to
@@ -1442,9 +1474,33 @@ def _write_similarity_csv(rows: list[_ChangedFileAudit],
     escaped per RFC 4180 and round-trip through every mainstream CSV
     reader. ``newline=""`` on the file handle is mandatory per the
     ``csv`` module docs to avoid stray blank lines on Windows.
+
+    ``dialect`` selects the field separator and quoting rules:
+
+    * ``"csv"`` (default) — stdlib default dialect: comma separator,
+      double-quote quoting, RFC 4180 escapes. Byte-for-byte
+      unchanged from the legacy behaviour when the caller doesn't
+      pass the kwarg.
+    * ``"tsv"`` — stdlib ``csv.excel_tab`` dialect: tab separator,
+      same double-quote quoting rules. Use when commas inside
+      paths/reasons would force quoted cells, or when piping into
+      ``cut -f`` / ``awk -F'\\t'`` style tools. Tabs and newlines
+      inside cell values still get quoted via the underlying
+      ``csv`` writer, so the round-trip is lossless.
+
+    Header row, column order, and the empty-vs-``0`` score
+    convention are identical across both dialects — only the
+    separator changes.
     """
     def _emit(handle) -> None:  # type: ignore[no-untyped-def]
-        writer = _csv.writer(handle)
+        # ``excel_tab`` is the stdlib's canonical TSV dialect: tab
+        # delimiter, same quoting rules as the default ``excel``
+        # dialect, so cells containing tabs/newlines/quotes still
+        # round-trip safely.
+        if dialect == _SIMILARITY_CSV_FORMAT_TSV:
+            writer = _csv.writer(handle, dialect="excel-tab")
+        else:
+            writer = _csv.writer(handle)
         header = (_SIMILARITY_CSV_HEADER_LABELED if with_labels
                   else _SIMILARITY_CSV_HEADER)
         writer.writerow(header)
