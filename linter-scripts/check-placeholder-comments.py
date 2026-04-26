@@ -1687,6 +1687,7 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 with_similarity: bool = False,
                                 with_labels: bool = False,
                                 legend_mode: str = _SIMILARITY_LEGEND_AUTO,
+                                verbose: bool = False,
                                 ) -> None:
     """Print the diff-mode changed-file audit table to ``stream``.
 
@@ -1744,6 +1745,25 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     ``score_kind`` field; for plain rows where ``similarity`` itself
     is ``null`` the discriminator is naturally absent. The legacy
     schema is preserved byte-for-byte when the flag is off.
+
+    When ``verbose`` is True (driven by ``--list-changed-files-verbose``)
+    the audit exposes the per-row intake provenance for every
+    ``ignored-deleted`` row:
+
+    * **Text mode** appends a trailing ``source`` column whose
+      cell is the raw provenance tag (``diff-D`` /
+      ``changed-files-D``) on ``ignored-deleted`` rows and the
+      blank-cell sentinel (``-``) on every other row.
+    * **JSON mode** adds a top-level ``"source"`` key to EVERY
+      row in the array — ``str`` on ``ignored-deleted`` rows and
+      ``null`` everywhere else — so the schema stays regular and
+      downstream JSON consumers can ``.get("source")`` without
+      branching on status.
+
+    Off by default (``verbose=False``) the ``source`` field is
+    stripped entirely from the JSON payload (legacy 3-key schema
+    preserved byte-for-byte) and the text table renders without
+    the trailing column.
     """
     dropped = 0
     if dedupe:
@@ -1774,6 +1794,17 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                 sim_obj = obj.get("similarity")
                 if isinstance(sim_obj, dict):
                     sim_obj["score_kind"] = _score_kind_for(r.similarity)
+            if not verbose:
+                # Legacy schema preservation: strip the new ``source``
+                # key entirely when the operator didn't opt in. Same
+                # rationale as the ``similarity`` strip above —
+                # downstream validators that close on the historical
+                # 3-key shape (``path``/``status``/``reason``) keep
+                # working unchanged. Absent ≠ null: callers MUST
+                # distinguish "field omitted" (legacy mode) from
+                # "field present but null" (verbose mode + non-
+                # deleted row).
+                obj.pop("source", None)
             payload.append(obj)
         print(json.dumps(payload, indent=2, ensure_ascii=False),
               file=stream)
