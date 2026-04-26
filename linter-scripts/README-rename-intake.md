@@ -327,6 +327,39 @@ stay empty when no `_RenameSimilarity` is attached.
 distinct when filtering. Dedupe and `--only-changed-status` run
 BEFORE the export, so the CSV mirrors what you saw on STDERR.
 
+### Field-separator dialect — `--similarity-csv-format {csv,tsv}`
+
+By default the export uses RFC 4180 CSV (comma-separated, double-
+quote quoting). When commas are inconvenient — paths or reasons
+contain commas, your spreadsheet imports cleaner from tabs, or
+you're piping into `cut -f` / `awk -F'\t'` / `column -t -s$'\t'` /
+`q -t` — pass `--similarity-csv-format tsv` to switch to the
+stdlib `csv.excel_tab` dialect:
+
+```bash
+python3 linter-scripts/check-placeholder-comments.py \
+  --list-changed-files --similarity-csv audit.tsv \
+  --similarity-csv-format tsv
+```
+
+Contract:
+
+| | `csv` (default) | `tsv` |
+|---|---|---|
+| Separator | `,` | `\t` |
+| Quoting | RFC 4180 (double-quote) | Same rules; kicks in only for cells with embedded tabs / newlines / quotes |
+| Header row | Identical column names + order | Identical column names + order |
+| Score-cell convention | Empty = unscored, `"0"` = observed dissimilar | Same |
+| `--similarity-labels` append | 7th `score_kind` column | Same |
+
+Only the separator changes — the column order, header row, and
+empty-vs-`0` score convention are identical across both dialects.
+The output file extension is **not** auto-rewritten: pass an
+explicit `.tsv` path when you want one. Cells containing tabs,
+newlines, or quotes still round-trip safely under TSV — the
+stdlib dialect quotes them — so the export is lossless either
+way.
+
 ## Per-kind score labels (`--similarity-labels`)
 
 `score` is an integer, but its *meaning* depends on the row's kind:
