@@ -1290,9 +1290,20 @@ def _parse_name_status(stdout: str,
 _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>.+?)\s*=>\s*(?P<new>.+?)\s*$")
 
 
-def _normalise_changed_lines(lines: list[str]) -> list[str]:
+def _normalise_changed_lines(lines: list[str],
+                             *,
+                             deleted: list[str] | None = None,
+                             ) -> list[str]:
     """Collapse rename-bearing rows in a ``--changed-files`` payload
     down to their post-rename path.
+
+    When ``deleted`` is provided and a row is recognisable as a
+    delete (``D\\tpath`` — the exact shape ``git diff --name-status``
+    emits), the path is captured into ``deleted`` and the row is
+    NOT forwarded to the caller. Without ``deleted`` (the default),
+    such a row falls through to the generic tab-form branch and the
+    bare path travels downstream to be filtered by extension/root
+    checks — same end result as before this audit-trail addition.
 
     Plain paths (no tab, no ``=>``) pass through unchanged. Comments
     and blanks are *not* stripped here — the caller does that on the
@@ -1335,6 +1346,17 @@ def _normalise_changed_lines(lines: list[str]) -> list[str]:
             # don't shift our column index. Then pick the last
             # *non-empty* field as the post-rename path.
             cols = line.split("\t")
+            # Recognise the exact ``D\tpath`` delete shape so we can
+            # divert it into the audit trail instead of letting the
+            # path pretend it was modified. Only fires when the
+            # caller asked for delete capture; otherwise behaviour is
+            # byte-identical to the historical implementation.
+            if (deleted is not None
+                    and len(cols) == 2
+                    and cols[0] == "D"
+                    and cols[1] != ""):
+                deleted.append(_unquote_git_path(cols[1]))
+                continue
             new_col = ""
             for c in reversed(cols):
                 if c != "":
