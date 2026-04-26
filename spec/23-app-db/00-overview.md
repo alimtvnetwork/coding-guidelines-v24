@@ -54,7 +54,7 @@ Application-specific database specifications. Covers the app's data model, table
 
 ## Verification
 
-_Auto-generated section — see `spec/23-app-database/97-acceptance-criteria.md` for the full criteria index._
+_Auto-generated section — see `spec/23-app-db/97-acceptance-criteria.md` for the full criteria index._
 
 ### AC-ADB-000: App-database conformance: Overview
 

@@ -53,7 +53,7 @@ Application-specific design system and UI specifications. Covers component patte
 
 ## Verification
 
-_Auto-generated section — see `spec/24-app-design-system-and-ui/97-acceptance-criteria.md` for the full criteria index._
+_Auto-generated section — see `spec/24-app-ui-design-system/97-acceptance-criteria.md` for the full criteria index._
 
 ### AC-ADS-000: App design-system conformance: Overview
 
