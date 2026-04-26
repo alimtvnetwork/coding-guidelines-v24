@@ -534,6 +534,30 @@ def main(argv: list[str] | None = None) -> int:
              "Docusaurus site) and you want the linter to cover "
              "both with a single short flag instead of repeating "
              "`--extension md --extension mdx` in every CI invocation.")
+    ap.add_argument("--diff-rename-log",
+        dest="diff_rename_log", action="store_true", default=None,
+        help="Diff mode only: emit a compact rename/copy intake table "
+             "to STDERR listing every R/C row produced by `git diff "
+             "--name-status -M -C` (or by rename rows in "
+             "--changed-files). Columns: kind (R/C), similarity "
+             "score (0-100, blank for unscored input), old path, new "
+             "path. Useful for auditing PRs that move spec files "
+             "around — you can confirm the linter saw the rename and "
+             "is now scanning the post-rename location. Tri-state: "
+             "auto (default) prints the table only when at least one "
+             "R/C row is seen AND output isn't --json (so machine "
+             "consumers stay clean); --diff-rename-log forces it ON "
+             "even on empty intake (useful for CI logs that want a "
+             "consistent header); --no-diff-rename-log forces it "
+             "OFF. Always written to STDERR so --json STDOUT remains "
+             "a single parseable document regardless of mode. No-op "
+             "in full-tree mode (no diff to report on).")
+    ap.add_argument("--no-diff-rename-log",
+        dest="diff_rename_log", action="store_false",
+        help="Force the rename/copy intake table OFF, even when R/C "
+             "rows would otherwise trigger the auto-print. Use on "
+             "PRs with hundreds of renames where the table would "
+             "drown the violation summary.")
     ap.add_argument("--cache-dir", default=None, metavar="DIR",
         help="Enable a content-addressed PASS cache. On a hit (the linter "
              "script + every scanned `.md` hash to the same key as a "
