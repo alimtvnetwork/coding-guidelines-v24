@@ -84,11 +84,13 @@ class IncludeTxtBaseline(unittest.TestCase):
                 "--include-txt",
                 "--cache-dir", str(cache),
                 cwd=tdp)
-        self.assertEqual(code, 0)
-        # The cache segment encodes the allowlist; ``md+txt`` proves
-        # both extensions reached the iterator (a missing baseline
-        # would have produced ``ext-txt``).
-        self.assertEqual(_segments(cache), {"ext-md+txt"})
+            self.assertEqual(code, 0)
+            # The cache segment encodes the allowlist; ``md+txt``
+            # proves both extensions reached the iterator (a missing
+            # baseline would have produced ``ext-txt``). Asserted
+            # INSIDE the ``with`` so the TemporaryDirectory hasn't
+            # been cleaned up by the time ``_segments`` walks it.
+            self.assertEqual(_segments(cache), {"ext-md+txt"})
 
     def test_off_by_default_keeps_md_only_baseline(self) -> None:
         # Without the flag, the .txt fixture must NOT be scanned —
@@ -103,8 +105,8 @@ class IncludeTxtBaseline(unittest.TestCase):
                 "--repo-root", str(tdp),
                 "--cache-dir", str(cache),
                 cwd=tdp)
-        self.assertEqual(code, 0)
-        self.assertEqual(_segments(cache), {"ext-md"})
+            self.assertEqual(code, 0)
+            self.assertEqual(_segments(cache), {"ext-md"})
 
 
 class IncludeTxtUnionSemantics(unittest.TestCase):
@@ -126,9 +128,9 @@ class IncludeTxtUnionSemantics(unittest.TestCase):
                 "--include-txt",
                 "--cache-dir", str(cache),
                 cwd=tdp)
-        self.assertEqual(code, 0)
-        # Sorted canonicalisation in the segment: ``rst+txt`` (no md).
-        self.assertEqual(_segments(cache), {"ext-rst+txt"})
+            self.assertEqual(code, 0)
+            # Sorted canonicalisation in segment: ``rst+txt`` (no md).
+            self.assertEqual(_segments(cache), {"ext-rst+txt"})
 
     def test_idempotent_with_explicit_txt_extension(self) -> None:
         # ``--include-txt`` + ``--extension md --extension txt`` must
@@ -147,8 +149,8 @@ class IncludeTxtUnionSemantics(unittest.TestCase):
                 "--include-txt",
                 "--cache-dir", str(cache),
                 cwd=tdp)
-        self.assertEqual(code, 0)
-        self.assertEqual(_segments(cache), {"ext-md+txt"})
+            self.assertEqual(code, 0)
+            self.assertEqual(_segments(cache), {"ext-md+txt"})
 
     def test_composes_with_include_mdx(self) -> None:
         # Both flags + default baseline → (md, mdx, txt). The segment
@@ -173,14 +175,14 @@ class IncludeTxtUnionSemantics(unittest.TestCase):
                 "--include-txt", "--include-mdx",
                 "--cache-dir", str(cache),
                 cwd=tdp)
-        self.assertEqual(code1, 0)
-        self.assertEqual(code2, 0)
-        # Single canonical segment after both runs — proves the flag
-        # order didn't fork the cache.
-        self.assertEqual(_segments(cache), {"ext-md+mdx+txt"})
-        # Second run hit the cache (sentinel from run 1). The cache-
-        # hit log line is the documented black-box signal.
-        self.assertIn("cache hit", err2.lower())
+            self.assertEqual(code1, 0)
+            self.assertEqual(code2, 0)
+            # Single canonical segment after both runs — proves the
+            # flag order didn't fork the cache.
+            self.assertEqual(_segments(cache), {"ext-md+mdx+txt"})
+            # Second run hit the cache (sentinel from run 1). The
+            # cache-hit log line is the documented black-box signal.
+            self.assertIn("cache hit", err2.lower())
 
 
 if __name__ == "__main__":  # pragma: no cover - manual runner
