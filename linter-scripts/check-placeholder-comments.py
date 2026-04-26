@@ -1824,6 +1824,11 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         suffix += "; +similarity columns"
         if with_labels:
             suffix += " +meaning"
+    if verbose:
+        # Mention the verbose `source` column in the header banner
+        # so a reviewer scanning the log notices the schema change
+        # without comparing against a non-verbose run.
+        suffix += "; +source"
     print("── placeholder-comments: changed-file audit "
           f"({len(full_rows)} row(s){suffix}) ──", file=stream)
     if not rows:
@@ -1841,6 +1846,18 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         path_w = max(len("path"), max(len(r.path) for r in rows))
         status_w = max(len("status"), max(len(r.status) for r in rows))
     if rows:
+        # Pre-compute the verbose ``source`` column when needed so
+        # its width participates in the same ``ljust`` math as
+        # every other fixed-width cell. ``-`` is the blank-cell
+        # sentinel — same convention as the similarity columns —
+        # so non-``ignored-deleted`` rows keep the column aligned
+        # without leaking a stray ``None`` literal into the table.
+        if verbose:
+            sources = [(r.source if r.source else "-") for r in rows]
+            source_w = max(len("source"), max(len(s) for s in sources))
+        else:
+            sources = []
+            source_w = 0
         if with_similarity:
             # Pre-compute every cell so the column widths bake in the
             # widest dash-substituted value. ``_fmt_similarity`` returns
@@ -1867,19 +1884,27 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                     f"{'kind'.ljust(kind_w)}  "
                     f"{'score'.ljust(score_w)}  "
                     f"{'old'.ljust(old_w)}  "
-                    f"{'meaning'.ljust(meaning_w)}  reason"
+                    f"{'meaning'.ljust(meaning_w)}  "
+                    + (f"{'source'.ljust(source_w)}  " if verbose else "")
+                    + "reason"
                 )
                 print(header, file=stream)
                 rule_w = (status_w + path_w + kind_w + score_w
                           + old_w + meaning_w + len("reason") + 6 * 2)
+                if verbose:
+                    rule_w += source_w + 2
                 print("  " + "-" * rule_w, file=stream)
-                for r, (k, sc, op), meaning in zip(rows, cells, meanings):
+                for i, (r, (k, sc, op), meaning) in enumerate(
+                        zip(rows, cells, meanings)):
+                    src_cell = (f"{sources[i].ljust(source_w)}  "
+                                if verbose else "")
                     print(f"  {r.status.ljust(status_w)}  "
                           f"{r.path.ljust(path_w)}  "
                           f"{k.ljust(kind_w)}  "
                           f"{sc.ljust(score_w)}  "
                           f"{op.ljust(old_w)}  "
-                          f"{meaning.ljust(meaning_w)}  {r.reason}",
+                          f"{meaning.ljust(meaning_w)}  "
+                          f"{src_cell}{r.reason}",
                           file=stream)
             else:
                 header = (
@@ -1887,26 +1912,43 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                     f"{'path'.ljust(path_w)}  "
                     f"{'kind'.ljust(kind_w)}  "
                     f"{'score'.ljust(score_w)}  "
-                    f"{'old'.ljust(old_w)}  reason"
+                    f"{'old'.ljust(old_w)}  "
+                    + (f"{'source'.ljust(source_w)}  " if verbose else "")
+                    + "reason"
                 )
                 print(header, file=stream)
                 rule_w = (status_w + path_w + kind_w + score_w
                           + old_w + len("reason") + 5 * 2)
+                if verbose:
+                    rule_w += source_w + 2
                 print("  " + "-" * rule_w, file=stream)
-                for r, (k, sc, op) in zip(rows, cells):
+                for i, (r, (k, sc, op)) in enumerate(zip(rows, cells)):
+                    src_cell = (f"{sources[i].ljust(source_w)}  "
+                                if verbose else "")
                     print(f"  {r.status.ljust(status_w)}  "
                           f"{r.path.ljust(path_w)}  "
                           f"{k.ljust(kind_w)}  "
                           f"{sc.ljust(score_w)}  "
-                          f"{op.ljust(old_w)}  {r.reason}", file=stream)
+                          f"{op.ljust(old_w)}  "
+                          f"{src_cell}{r.reason}", file=stream)
         else:
-            print(f"  {'status'.ljust(status_w)}  "
-                  f"{'path'.ljust(path_w)}  reason", file=stream)
-            print("  " + "-" * (status_w + path_w + len("reason") + 4),
-                  file=stream)
-            for r in rows:
+            header = (
+                f"  {'status'.ljust(status_w)}  "
+                f"{'path'.ljust(path_w)}  "
+                + (f"{'source'.ljust(source_w)}  " if verbose else "")
+                + "reason"
+            )
+            print(header, file=stream)
+            rule_w = status_w + path_w + len("reason") + 4
+            if verbose:
+                rule_w += source_w + 2
+            print("  " + "-" * rule_w, file=stream)
+            for i, r in enumerate(rows):
+                src_cell = (f"{sources[i].ljust(source_w)}  "
+                            if verbose else "")
                 print(f"  {r.status.ljust(status_w)}  "
-                      f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
+                      f"{r.path.ljust(path_w)}  "
+                      f"{src_cell}{r.reason}", file=stream)
     # Counts-by-status footer in the canonical status order so the
     # eye lands on the same column positions run-to-run. Counts
     # against ``full_rows`` (post-dedupe, pre-filter) so the totals
