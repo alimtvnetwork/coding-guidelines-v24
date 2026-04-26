@@ -1961,6 +1961,15 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         # reports the full breakdown.
         suffix += (f"; filtered, {len(rows)} of {len(full_rows)} "
                    f"row(s) shown ({'+'.join(sorted(only_statuses))})")
+    if only_deleted_sources is not None:
+        # Surface the deleted-source filter alongside the status
+        # filter so the header line tells the whole story. The
+        # ``deleted-by-source:`` breakdown emitted below the totals
+        # line carries the per-source numbers.
+        suffix += (
+            f"; deleted-source filter "
+            f"({'+'.join(sorted(only_deleted_sources))})"
+        )
     if with_similarity:
         # Surface the extra columns in the header so a reviewer
         # scanning the log knows the wider table isn't a layout bug.
