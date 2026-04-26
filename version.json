@@ -1,19 +1,19 @@
 {
   "version": "4.24.0",
-  "updated": "2026-04-25",
+  "updated": "2026-04-26",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "869b5afe1a8c94b3755f0b40602f325acaec343f",
-    "shortSha": "869b5af",
-    "branch": "edit/edt-e2092ca5-e3c8-4bd8-8706-781160cb3202"
+    "sha": "d3908f1b182141b7fd3ab0ee09adf8f75c52d7cf",
+    "shortSha": "d3908f1",
+    "branch": "edit/edt-0d1b4883-efb7-4585-9649-0c02c3b8765e"
   },
   "stats": {
-    "totalFiles": 612,
-    "totalLines": 131978,
+    "totalFiles": 614,
+    "totalLines": 132471,
     "totalFolders": 22,
-    "totalBytes": 4478091,
-    "rootFiles": 5
+    "totalBytes": 4500297,
+    "rootFiles": 6
   },
   "folders": [
     {
@@ -27,7 +27,7 @@
       "ambiguity": "None",
       "fileCount": 16,
       "lineCount": 3064,
-      "byteCount": 115751
+      "byteCount": 115741
     },
     {
       "path": "02-coding-guidelines",
@@ -39,8 +39,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 191,
-      "lineCount": 32528,
-      "byteCount": 1016570
+      "lineCount": 32530,
+      "byteCount": 1016882
     },
     {
       "path": "03-error-manage",
@@ -233,9 +233,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 32,
-      "lineCount": 14771,
-      "byteCount": 547158
+      "fileCount": 33,
+      "lineCount": 14891,
+      "byteCount": 553236
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -247,8 +247,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 31,
-      "lineCount": 17288,
-      "byteCount": 572505
+      "lineCount": 17560,
+      "byteCount": 585079
     },
     {
       "path": "21-app",
@@ -260,8 +260,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 56,
-      "byteCount": 1564
+      "lineCount": 64,
+      "byteCount": 2200
     },
     {
       "path": "22-app-issues",
@@ -273,13 +273,13 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 56,
-      "byteCount": 1653
+      "lineCount": 58,
+      "byteCount": 1873
     },
     {
-      "path": "23-app-database",
-      "name": "App Database",
-      "title": "App Database",
+      "path": "23-app-db",
+      "name": "App DB",
+      "title": "App DB",
       "version": "3.2.0",
       "updated": "2026-04-16",
       "status": null,
@@ -287,12 +287,12 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 74,
-      "byteCount": 2069
+      "byteCount": 2202
     },
     {
-      "path": "24-app-design-system-and-ui",
-      "name": "App Design System And UI",
-      "title": "App Design System & UI",
+      "path": "24-app-ui-design-system",
+      "name": "App UI Design System",
+      "title": "App UI — Design System",
       "version": "3.2.0",
       "updated": "2026-04-16",
       "status": null,
@@ -300,7 +300,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 73,
-      "byteCount": 1800
+      "byteCount": 1990
     }
   ]
 }
