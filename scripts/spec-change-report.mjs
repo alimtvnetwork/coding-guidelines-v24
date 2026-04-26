@@ -7,6 +7,13 @@
 // the spec files the author actually touched, and emit a concise HTML
 // report (and, when wkhtmltopdf / Chromium is available, a PDF too).
 //
+// In addition to validator findings, the report surfaces *pending
+// placeholders* — `- [text](path.md)` bullets stashed inside HTML
+// comment blocks (`<!-- TODO: ... -->`). These are deliberately ignored
+// by check-spec-cross-links.py so they never fail CI; the report shows
+// them as ⏳ Pending so authors remember to activate them once the
+// target files exist.
+//
 // Usage:
 //   node scripts/spec-change-report.mjs                # staged+unstaged+untracked
 //   node scripts/spec-change-report.mjs --all          # full repo, no scoping
@@ -27,7 +34,7 @@
 // =====================================================================
 
 import { execSync, spawnSync } from "node:child_process";
-import { mkdirSync, writeFileSync, existsSync, copyFileSync, renameSync, unlinkSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, copyFileSync, renameSync, unlinkSync, readFileSync } from "node:fs";
 import { resolve, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
@@ -227,6 +234,106 @@ function parseCrossLink(stdout) {
 }
 
 // ---------------------------------------------------------------------
+// 3b. Scan placeholder cross-references (pending links)
+//
+// Authors stash future links inside HTML comment blocks of the shape:
+//   <!-- TODO: activate when target is created
+//   - [Title](../path/to/file.md#anchor)
+//   -->
+// These are deliberately ignored by check-spec-cross-links.py. Surface
+// them in the report so reviewers can see what's queued for activation.
+//
+// Output shape mirrors validator/crossLink findings:
+//   { file, line, label, target, anchor }
+// ---------------------------------------------------------------------
+const PLACEHOLDER_OPEN_RE = /<!--\s*(TODO|FIXME)\b[^\n]*$/;
+const PLACEHOLDER_BULLET_RE = /^-\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/;
+const CLOSE_MARKER = "-->";
+
+function scanPendingPlaceholders(scope) {
+  // When scope is null (--all), walk every spec markdown file.
+  let files;
+  if (scope === null) {
+    const blob = readGit("git ls-files spec/**/*.md spec/*.md");
+    files = blob.split("\n").map((s) => s.trim()).filter((s) => s.endsWith(".md"));
+  } else {
+    files = [...scope];
+  }
+  const pending = [];
+  for (const rel of files) {
+    const abs = resolve(REPO_ROOT, rel);
+    let text;
+    try {
+      text = readFileSync(abs, "utf8");
+    } catch {
+      continue;
+    }
+    const lines = text.split("\n");
+    let inFence = false;
+    let fenceMarker = "";
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      const stripped = line.trimStart();
+      // Skip fenced code blocks — placeholder examples in docs aren't real.
+      if (!inFence && (stripped.startsWith("```") || stripped.startsWith("~~~"))) {
+        inFence = true;
+        fenceMarker = stripped.slice(0, 3);
+        i += 1;
+        continue;
+      }
+      if (inFence) {
+        if (stripped.startsWith(fenceMarker)) inFence = false;
+        i += 1;
+        continue;
+      }
+      if (!PLACEHOLDER_OPEN_RE.test(line)) {
+        i += 1;
+        continue;
+      }
+      // Same-line `<!-- TODO ... -->` has no bullets; skip.
+      if (line.includes(CLOSE_MARKER)) {
+        i += 1;
+        continue;
+      }
+      const openLine = i + 1;
+      i += 1;
+      const bullets = [];
+      while (i < lines.length) {
+        const cur = lines[i];
+        if (cur.includes(CLOSE_MARKER)) {
+          const pre = cur.split(CLOSE_MARKER, 1)[0].trim();
+          if (pre) {
+            const bm = pre.match(PLACEHOLDER_BULLET_RE);
+            if (bm) bullets.push({ line: i + 1, label: bm[1], target: bm[2] });
+          }
+          i += 1;
+          break;
+        }
+        const trimmed = cur.trim();
+        if (trimmed) {
+          const bm = trimmed.match(PLACEHOLDER_BULLET_RE);
+          if (bm) bullets.push({ line: i + 1, label: bm[1], target: bm[2] });
+        }
+        i += 1;
+      }
+      for (const b of bullets) {
+        const [path, anchor = ""] = b.target.split("#", 2);
+        pending.push({
+          file: rel,
+          line: b.line,
+          openLine,
+          label: b.label,
+          target: path,
+          anchor,
+        });
+      }
+    }
+  }
+  return pending;
+}
+
+// ---------------------------------------------------------------------
 // 4. Scope to changed files
 // ---------------------------------------------------------------------
 function scopeToFiles(findings, scope) {
@@ -255,7 +362,7 @@ function groupBy(arr, keyFn) {
   return m;
 }
 
-function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, crossLinkRaw, generatedAt }) {
+function buildHtml({ scope, scopeLabel, validator, crossLink, pending, validatorRaw, crossLinkRaw, generatedAt }) {
   const scopedFileCount = scope ? scope.size : null;
   const scopeBadge = scope === null
     ? scopeLabel
@@ -263,19 +370,29 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
   const totalCodeRed = validator.filter((f) => f.severity === "code-red").length;
   const totalStyle = validator.filter((f) => f.severity === "style").length;
   const totalLink = crossLink.length;
+  const totalPending = pending.length;
+  // Pending placeholders are informational, not failures — keep them out
+  // of the grand total so a "Clean" report stays clean when all that
+  // remains is queued work.
   const grandTotal = totalCodeRed + totalStyle + totalLink;
   const status = grandTotal === 0 ? "Clean" : "Findings present";
   const statusClass = grandTotal === 0 ? "ok" : "fail";
 
   const validatorByFile = groupBy(validator, (f) => f.file);
   const linkByFile = groupBy(crossLink, (f) => f.file);
-  const allFiles = new Set([...validatorByFile.keys(), ...linkByFile.keys()]);
+  const pendingByFile = groupBy(pending, (f) => f.file);
+  const allFiles = new Set([
+    ...validatorByFile.keys(),
+    ...linkByFile.keys(),
+    ...pendingByFile.keys(),
+  ]);
 
   const fileSections = [...allFiles]
     .sort()
     .map((file) => {
       const v = validatorByFile.get(file) || [];
       const l = linkByFile.get(file) || [];
+      const p = pendingByFile.get(file) || [];
       const rows = [
         ...v.map(
           (f) => `
@@ -295,10 +412,23 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
             <td class="msg">${escapeHtml(f.detail)}</td>
           </tr>`
         ),
+        ...p.map(
+          (f) => `
+          <tr class="sev-pending">
+            <td class="num">L${f.line}</td>
+            <td class="rule"><code>placeholder</code></td>
+            <td class="kind"><span class='dot dot-grey'></span> Pending</td>
+            <td class="msg">
+              <strong>${escapeHtml(f.label)}</strong>
+              → <code>${escapeHtml(f.target)}${f.anchor ? "#" + escapeHtml(f.anchor) : ""}</code>
+              <span class="hint">(ignored by checker until <code>&lt;!--</code> markers are removed)</span>
+            </td>
+          </tr>`
+        ),
       ].join("");
       return `
         <section class="file-block">
-          <h3>${escapeHtml(file)} <span class="count">(${v.length + l.length})</span></h3>
+          <h3>${escapeHtml(file)} <span class="count">(${v.length + l.length} findings · ${p.length} pending)</span></h3>
           <table>
             <thead><tr><th>Line</th><th>Rule</th><th>Kind</th><th>Detail</th></tr></thead>
             <tbody>${rows}</tbody>
@@ -307,8 +437,11 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
     })
     .join("\n");
 
-  const emptyState = grandTotal === 0
+  const emptyState = (grandTotal === 0 && totalPending === 0)
     ? `<p class="empty">No findings in scope (${escapeHtml(scopeBadge)}).</p>`
+    : "";
+  const pendingBanner = (grandTotal === 0 && totalPending > 0)
+    ? `<p class="empty">No failing findings in scope — but <strong>${totalPending}</strong> placeholder link${totalPending === 1 ? "" : "s"} ${totalPending === 1 ? "is" : "are"} pending activation. See file blocks below.</p>`
     : "";
 
   return `<!doctype html>
@@ -323,13 +456,15 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
          line-height: 1.5; }
   h1 { margin: 0 0 0.25rem; font-size: 1.6rem; }
   .meta { color: #4a5568; font-size: 0.9rem; margin-bottom: 1.5rem; }
-  .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+  .summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem;
              margin: 1rem 0 2rem; }
   .summary div { background: #f7fafc; border-radius: 8px; padding: 0.9rem 1rem;
                  border: 1px solid #e2e8f0; }
   .summary strong { display: block; font-size: 1.4rem; }
   .summary span { color: #4a5568; font-size: 0.8rem; text-transform: uppercase;
                   letter-spacing: 0.04em; }
+  .summary div.pending { background: #f7f7f9; border-color: #d6d6dd; }
+  .summary div.pending strong { color: #525866; }
   .status { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 999px;
             font-weight: 600; font-size: 0.85rem; }
   .status.ok { background: #c6f6d5; color: #22543d; }
@@ -348,11 +483,15 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
   tr.sev-code-red td.kind { color: #c53030; }
   tr.sev-style td.kind { color: #b7791f; }
   tr.sev-link td.kind { color: #2b6cb0; }
+  tr.sev-pending td.kind { color: #525866; }
+  tr.sev-pending td.msg { color: #4a5568; }
+  tr.sev-pending td.msg .hint { display: block; color: #718096; font-size: 0.78rem; margin-top: 0.15rem; }
   .dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%;
          margin-right: 0.35rem; vertical-align: middle; }
   .dot-red { background: #e53e3e; }
   .dot-amber { background: #d69e2e; }
   .dot-blue { background: #3182ce; }
+  .dot-grey { background: #a0aec0; }
   details.raw { margin-top: 2rem; }
   details.raw summary { cursor: pointer; color: #4a5568; font-size: 0.85rem; }
   pre { background: #1a202c; color: #e2e8f0; padding: 0.9rem 1rem; border-radius: 6px;
@@ -374,8 +513,10 @@ function buildHtml({ scope, scopeLabel, validator, crossLink, validatorRaw, cros
     <div><strong>${totalCodeRed}</strong><span>Code Red</span></div>
     <div><strong>${totalStyle}</strong><span>Style</span></div>
     <div><strong>${totalLink}</strong><span>Cross-link</span></div>
+    <div class="pending"><strong>${totalPending}</strong><span>Pending placeholders</span></div>
   </div>
 
+  ${pendingBanner}
   ${emptyState || fileSections}
 
   <details class="raw">
@@ -449,6 +590,7 @@ function main() {
 
   const validator = scopeToFiles(parseValidator(v.stdout), scope);
   const crossLink = scopeToFiles(parseCrossLink(c.stdout), scope);
+  const pending   = scanPendingPlaceholders(scope);
   const generatedAt = new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC";
 
   const html = buildHtml({
@@ -456,6 +598,7 @@ function main() {
     scopeLabel,
     validator,
     crossLink,
+    pending,
     validatorRaw: v.stdout,
     crossLinkRaw: c.stdout,
     generatedAt,
@@ -481,7 +624,8 @@ function main() {
   console.log(
     `[spec-change-report] Scope: ${scope === null ? "all" : scope.size + " file(s) — " + scopeLabel} · ` +
       `Findings: ${findings} (${validator.filter((f) => f.severity === "code-red").length} code-red, ` +
-      `${validator.filter((f) => f.severity === "style").length} style, ${crossLink.length} link)`
+      `${validator.filter((f) => f.severity === "style").length} style, ${crossLink.length} link) · ` +
+      `Pending: ${pending.length} placeholder${pending.length === 1 ? "" : "s"}`
   );
 
   process.exit(findings === 0 ? 0 : 1);
