@@ -208,10 +208,33 @@ class JsonAuditSchema(unittest.TestCase):
         with _Sandbox() as box:
             proc = box.run_changed_files("--json", *extra)
         self.assertEqual(proc.returncode, 0, msg=proc.stderr)
-        # The audit JSON lands on STDOUT as a single array
-        # document. Parse strictly — a malformed payload is itself
-        # a schema violation.
-        data = json.loads(proc.stdout)
+        # With `--list-changed-files --json`, the placeholder-
+        # violation array lands on STDOUT and the changed-file
+        # AUDIT JSON lands on STDERR (the audit is the human
+        # summary; STDOUT stays reserved for the violations the
+        # caller is normally piping into another tool). Parse
+        # strictly — a malformed payload is itself a schema
+        # violation. The audit JSON is a top-level array starting
+        # with `[` on its own line; everything before that is
+        # diagnostic text we ignore.
+        stderr = proc.stderr
+        start = stderr.find("\n[")
+        if start == -1 and stderr.lstrip().startswith("["):
+            start = stderr.find("[")
+        else:
+            start = start + 1 if start != -1 else -1
+        self.assertNotEqual(
+            start, -1,
+            f"audit JSON not found on stderr:\n{stderr}",
+        )
+        # Find the matching closing bracket by scanning to the
+        # last `]` on its own line (the array is pretty-printed).
+        end = stderr.rfind("\n]")
+        self.assertNotEqual(
+            end, -1,
+            f"audit JSON closing `]` not found on stderr:\n{stderr}",
+        )
+        data = json.loads(stderr[start:end + 2])
         self.assertIsInstance(data, list)
         return data
 
