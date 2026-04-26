@@ -32,3 +32,6 @@ export const isDragIdle: boolean = false;
 
 export const isCollapsed: boolean = true;
 export const isExpanded: boolean = false;
+
+export const isOverflowing: boolean = true;
+export const isOverflowFit: boolean = false;
