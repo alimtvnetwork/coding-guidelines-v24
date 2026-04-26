@@ -255,6 +255,10 @@ class TestEndToEndChangedFiles(unittest.TestCase):
         # text must be preserved byte-for-byte.
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
+            # ``--root spec`` requires the directory to exist even
+            # when nothing under it is being linted, so create an
+            # empty spec/ tree before invoking the linter.
+            (root / "spec").mkdir()
             rc, _out, err = _run_changed_files(
                 root,
                 "D\tspec/genuinely-gone.md\n",
