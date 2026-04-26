@@ -269,23 +269,29 @@ class ParserProvenanceTagSurvivesWhitespace(unittest.TestCase):
         # CRLF-pasted authored payloads (Windows runner copy-paste)
         # must still classify as `changed-files-D`, not fall through
         # to the generic plain-path branch.
-        deleted: list[tuple[str, str]] = []
+        deleted: list[tuple[str, str, "str | None"]] = []
         out = _MOD._normalise_changed_lines(
             ["D\tspec/gone.md\r"], deleted=deleted,
         )
         self.assertEqual(out, [])
-        self.assertEqual(deleted, [("spec/gone.md", "changed-files-D")])
+        # New 3-tuple shape: ``new_path`` is ``None`` for plain
+        # deletes (no rename destination to record).
+        self.assertEqual(deleted, [
+            ("spec/gone.md", "changed-files-D", None),
+        ])
 
     def test_blank_lines_and_comments_do_not_pollute_deleted_list(
             self) -> None:
         # Comments / blanks are filtered downstream of the parser by
         # `_resolve_changed_md`, but the parser itself should pass
         # them through untouched and never inject them into `deleted`.
-        deleted: list[tuple[str, str]] = []
+        deleted: list[tuple[str, str, "str | None"]] = []
         _MOD._normalise_changed_lines(
             ["", "# comment", "D\tspec/x.md", ""], deleted=deleted,
         )
-        self.assertEqual(deleted, [("spec/x.md", "changed-files-D")])
+        self.assertEqual(deleted, [
+            ("spec/x.md", "changed-files-D", None),
+        ])
 
 
 if __name__ == "__main__":
