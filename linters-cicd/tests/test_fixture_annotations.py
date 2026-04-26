@@ -59,6 +59,10 @@ ANNOTATION_RE = re.compile(
     r"line\s+(?P<line>\d+)\s*\)"
 )
 NO_FINDING_RE = re.compile(r"←\s*NO-FINDING\b")
+# Any `←` that is not a NO-FINDING tag is treated as a finding
+# annotation; if it fails to parse against ANNOTATION_RE we fail
+# loudly instead of silently dropping it.
+ARROW_RE = re.compile(r"←")
 
 VALID_LEVELS = {"error", "warning", "note"}
 
@@ -128,6 +132,14 @@ def _parse_annotations(fixture: Path) -> tuple[list[_Expectation], set[int]]:
             continue
         if NO_FINDING_RE.search(raw):
             silent_lines.add(idx)
+            continue
+        if ARROW_RE.search(raw):
+            raise AssertionError(
+                f"{fixture}:{idx}: line contains '←' but does not "
+                f"match any annotation grammar. Use either "
+                f"'← <RULE-ID> (error|warning|note, line {idx})' or "
+                f"'← NO-FINDING'. Raw: {raw.strip()!r}"
+            )
     return expectations, silent_lines
 
 
