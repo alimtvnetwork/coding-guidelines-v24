@@ -201,6 +201,32 @@ is intentional, then review the JSON diff in code review.
 
 ---
 
+## Fixture annotation validator (drift guard)
+
+Every `← <RULE-ID> (level, line N)` and `← NO-FINDING` comment in a
+fixture is **machine-checked** by
+`linters-cicd/tests/test_fixture_annotations.py`. The grammar is
+documented in `linters-cicd/docs/fixture-and-diagnostics-format.md`
+§1.6.
+
+To opt a new fixture in:
+
+1. Add `← <RULE-ID> (warning|error|note, line N)` on each line
+   that should be flagged. `N` must equal the line the comment
+   sits on.
+2. Add `← NO-FINDING` on each negative-control line (e.g. the
+   forbidden call inside a comment or string literal).
+3. Append a tuple to `ANNOTATED_FIXTURES` in the test file.
+
+The test then asserts: every annotated finding fires, no
+un-annotated findings appear, every `NO-FINDING` line stays
+silent, and stale "line N" literals are caught the moment a
+fixture line moves. This is the fastest way to detect regressions
+in `strip_comments()` / `strip_comments_and_strings()` — exactly
+the kind of change that silently shifts which lines a regex sees.
+
+---
+
 ## What the template intentionally does NOT show
 
 These are deliberate omissions. Reach for them only when your
