@@ -1177,6 +1177,39 @@ def _dedupe_audit_rows(
     return out, dropped
 
 
+# Sentinel substituted for blank/unknown similarity cells in the
+# text-mode renderer. Single dash so the column stays narrow and the
+# eye picks out "no rename here" at a glance. JSON consumers see real
+# ``null`` instead.
+_SIMILARITY_BLANK = "-"
+
+
+def _fmt_similarity(
+    sim: "_RenameSimilarity | None",
+) -> tuple[str, str, str]:
+    """Stringify a similarity record for the text audit table.
+
+    Returns ``(kind, score, old_path)`` as already-padded-friendly
+    strings (no internal whitespace, only column-width-friendly tokens
+    so :meth:`str.ljust` stays predictable). Each cell falls back to
+    ``_SIMILARITY_BLANK`` independently so a partial record (R/C row
+    with no numeric score, or an arrow-form rename whose old path
+    survived but score didn't) is still maximally informative.
+
+    The cell vocabulary is intentionally tiny so downstream grep
+    pipelines can match on it:
+      * ``kind`` ∈ {``R``, ``C``, ``-``}
+      * ``score`` ∈ {``0`` … ``100``, ``-``}
+      * ``old`` is a path or ``-``
+    """
+    if sim is None:
+        return (_SIMILARITY_BLANK, _SIMILARITY_BLANK, _SIMILARITY_BLANK)
+    kind = sim.kind or _SIMILARITY_BLANK
+    score = str(sim.score) if sim.score is not None else _SIMILARITY_BLANK
+    old = sim.old_path or _SIMILARITY_BLANK
+    return (kind, score, old)
+
+
 def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 stream,  # type: ignore[no-untyped-def]
                                 *,
