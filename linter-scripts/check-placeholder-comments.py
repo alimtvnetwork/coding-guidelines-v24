@@ -1090,6 +1090,33 @@ _HUNK_HEADER_RE = re.compile(
 
 
 @dataclass(frozen=True)
+class _Hunk:
+    """One post-state hunk window inside a parsed unified diff.
+
+    ``start`` / ``end`` are inclusive 1-indexed post-state line
+    numbers covering every ``+`` and `` `` row this hunk emitted.
+    A single-line hunk has ``start == end``. A diff with no
+    post-state coverage (rare: pure-deletion file, an empty added
+    file) yields zero hunks; the parent ``_DiffExcerpts.hunks``
+    list is empty in that case and the renderer returns ``[]``.
+    """
+    start: int
+    end: int
+
+    def contains(self, line: int) -> bool:
+        return self.start <= line <= self.end
+
+    def distance_to(self, line: int) -> int:
+        """Minimum line-count distance from ``line`` to this hunk
+        window. Returns 0 when the line is inside the hunk."""
+        if line < self.start:
+            return self.start - line
+        if line > self.end:
+            return line - self.end
+        return 0
+
+
+@dataclass(frozen=True)
 class _DiffExcerpts:
     """Post-state line index for one file's `git diff -UN` output.
 
@@ -1097,27 +1124,96 @@ class _DiffExcerpts:
     indexed). ``min_line`` / ``max_line`` describe the union of all
     hunk windows so the renderer can detect "violation outside any
     hunk" cleanly.
+
+    ``hunks`` lists each hunk as a discrete ``_Hunk`` range so the
+    renderer can pick the best match for a violation that lives
+    between hunks (e.g. a P-007 cross-file collision that points at
+    a placeholder block far away from the changed lines). Without
+    this list the old renderer would silently emit an empty excerpt
+    when the violation fell in the *gap* between two hunks but
+    inside the global ``[min_line, max_line]`` bounds — visible to
+    the bounds check but not to the line-by-line lookup.
     """
     lines: dict[int, tuple[str, str]]
     min_line: int
     max_line: int
+    hunks: tuple[_Hunk, ...] = ()
+
+    def _select_hunk(self, line: int) -> _Hunk | None:
+        """Pick the best hunk to use as context for ``line``.
+
+        Selection rules, in order:
+
+        1. If a hunk *contains* ``line``, return it (zero distance).
+        2. Otherwise return the hunk with the smallest distance to
+           ``line``. Ties are broken in *post-state line order* —
+           the earlier hunk wins, which keeps output deterministic
+           and matches how a human reads a file top-to-bottom.
+        3. No hunks → ``None`` (caller emits "no excerpt").
+        """
+        if not self.hunks:
+            return None
+        # Single pass: find the minimum distance and earliest hunk
+        # at that distance. ``min(..., key=...)`` over an empty
+        # iterable would raise; the early ``not self.hunks`` guard
+        # above prevents that.
+        return min(self.hunks,
+                   key=lambda h: (h.distance_to(line), h.start))
 
     def render(self, line: int, context: int) -> list[str]:
         """Return a list of human-readable excerpt lines centered on
         ``line`` with up to ``context`` lines on each side, or [] if
         no relevant excerpt is available.
+
+        When the violation line falls between hunks, the renderer
+        selects the *nearest* hunk (see :meth:`_select_hunk`) and
+        prepends a one-line breadcrumb so the reader knows the
+        excerpt is not centered on the violation line itself but on
+        the closest changed region. This is far more useful than the
+        old behaviour of returning an empty list, which made the
+        violation line look like it had no diff context at all.
         """
         if not self.lines:
             return []
-        lo = max(self.min_line, line - context)
-        hi = min(self.max_line, line + context)
-        if line < self.min_line - context or line > self.max_line + context:
-            # Violation falls outside every fetched hunk — happens
-            # when a P-007 collision points at a pre-existing block
-            # that wasn't part of the diff. The CLI message already
-            # carries the file/line; we just don't have a snippet.
+        hunk = self._select_hunk(line)
+        if hunk is None:
             return ["(line not in current diff hunks — view file directly)"]
+        # Window selection:
+        #   * Violation INSIDE the hunk → ±context around the
+        #     violation line, clamped to hunk bounds. Mirrors the
+        #     classic single-hunk behaviour.
+        #   * Violation OUTSIDE every hunk → render the *entire*
+        #     selected hunk (capped at 2*context+1 lines so we
+        #     don't blow up output for a huge nearby hunk). This
+        #     is what "best matching hunk context" means: the user
+        #     gets to actually see the changed region near their
+        #     violation, not just a breadcrumb.
+        if hunk.contains(line):
+            lo = max(hunk.start, line - context)
+            hi = min(hunk.end, line + context)
+        else:
+            cap = 2 * context + 1
+            if hunk.end - hunk.start + 1 <= cap:
+                lo, hi = hunk.start, hunk.end
+            elif line < hunk.start:
+                # Hunk is below the violation: take its leading edge.
+                lo, hi = hunk.start, hunk.start + cap - 1
+            else:
+                # Hunk is above the violation: take its trailing edge.
+                lo, hi = hunk.end - cap + 1, hunk.end
         out: list[str] = []
+        if not hunk.contains(line):
+            # Violation is between hunks (or outside the whole diff
+            # but still within the global ±context tolerance). Tell
+            # the reader we're showing the *nearest* changed region
+            # so they don't assume the excerpt is centered on the
+            # violation line itself.
+            delta = hunk.distance_to(line)
+            out.append(
+                f"  ℹ︎ violation at L{line}; nearest changed hunk "
+                f"@ L{hunk.start}-{hunk.end} (Δ {delta} line"
+                f"{'s' if delta != 1 else ''})"
+            )
         for ln in range(lo, hi + 1):
             entry = self.lines.get(ln)
             if entry is None:
@@ -1136,20 +1232,29 @@ class _DiffExcerpts:
         """Return a JSON-friendly window around ``line``.
 
         Each element is ``{"line": <int>, "kind": "+"|" ", "text":
-        <str>, "focus": <bool>}`` for one post-state line in the
-        ±``context`` window. Pure data — no Unicode markers, no
-        gutter padding, no truncation. The text payload is the raw
-        post-state line content (no leading ``+``/`` `` sigil); the
-        sigil is moved to the typed ``kind`` field so a JSON
-        consumer doesn't have to strip it.
+        <str>, "focus": <bool>, "nearest": <bool>}`` for one post-
+        state line in the ±``context`` window. Pure data — no
+        Unicode markers, no gutter padding, no truncation. The
+        text payload is the raw post-state line content (no
+        leading ``+``/`` `` sigil); the sigil is moved to the
+        typed ``kind`` field so a JSON consumer doesn't have to
+        strip it.
+
+        ``focus`` is ``True`` only on the row whose ``line`` equals
+        the violation line, regardless of whether that row is in
+        the same hunk as the excerpt (it usually is; for a between-
+        hunks violation the focus row simply doesn't appear in the
+        excerpt). ``nearest`` is ``True`` on every row of the
+        excerpt when the violation is *not* in this hunk — flagging
+        the whole window as a fallback to the nearest changed
+        region rather than the violation site itself.
 
         Returns ``[]`` (not a sentinel string like the human
         renderer) when:
 
         * no hunks were captured for this file, OR
-        * the violation line falls outside every captured hunk
-          window (P-007 cross-file collision pointing at a pre-
-          existing block).
+        * no hunk is reachable as nearest (only happens when
+          ``hunks`` is empty — see above).
 
         Returning ``[]`` rather than a "no data" object means the
         caller can simply omit the ``excerpt`` key when the list is
@@ -1159,10 +1264,25 @@ class _DiffExcerpts:
         """
         if not self.lines:
             return []
-        if line < self.min_line - context or line > self.max_line + context:
+        hunk = self._select_hunk(line)
+        if hunk is None:
             return []
-        lo = max(self.min_line, line - context)
-        hi = min(self.max_line, line + context)
+        # Same window logic as the human renderer — see render()
+        # for the rationale. The ``cap`` keeps the JSON payload
+        # bounded for consumers when a giant nearby hunk would
+        # otherwise dump hundreds of rows per violation.
+        if hunk.contains(line):
+            lo = max(hunk.start, line - context)
+            hi = min(hunk.end, line + context)
+        else:
+            cap = 2 * context + 1
+            if hunk.end - hunk.start + 1 <= cap:
+                lo, hi = hunk.start, hunk.end
+            elif line < hunk.start:
+                lo, hi = hunk.start, hunk.start + cap - 1
+            else:
+                lo, hi = hunk.end - cap + 1, hunk.end
+        is_nearest = not hunk.contains(line)
         out: list[dict[str, object]] = []
         for ln in range(lo, hi + 1):
             entry = self.lines.get(ln)
@@ -1174,6 +1294,9 @@ class _DiffExcerpts:
                 "kind": kind,             # "+" (added) or " " (context)
                 "text": text,
                 "focus": ln == line,      # exact violation line
+                "nearest": is_nearest,    # True ⇒ this row is from
+                                          # the *nearest* hunk, not
+                                          # the violation's own
             })
         return out
 
@@ -1185,14 +1308,38 @@ def _parse_unified_diff_post(stdout: str) -> _DiffExcerpts:
     which file we asked about. Hunk headers (``@@ -a,b +c,d @@``)
     reset the post-state line counter; ``+`` and `` `` rows advance
     it; ``-`` rows are skipped (no post-state coordinate).
+
+    In addition to the flat ``lines`` index, we record each hunk
+    as a discrete ``_Hunk(start, end)`` range so a multi-hunk file
+    can route a violation to the *nearest* hunk's window rather
+    than blindly slicing the global min/max range. A hunk that
+    covers no post-state lines (e.g. pure removals — ``+`` count
+    of 0 in the header) is dropped from the list because it has no
+    coordinate a violation could land on.
     """
     lines: dict[int, tuple[str, str]] = {}
     cur_post = 0
     in_hunk = False
     min_line = 10**9
     max_line = 0
+    hunks: list[_Hunk] = []
+    cur_hunk_start: int | None = None
+    cur_hunk_last: int | None = None
+
+    def _flush_hunk() -> None:
+        # Capture the in-progress hunk's [start, end] range. We
+        # use the ``last`` post-line we actually wrote to (rather
+        # than ``cur_post``, which has already been incremented
+        # past it) so single-line hunks get start == end.
+        nonlocal cur_hunk_start, cur_hunk_last
+        if cur_hunk_start is not None and cur_hunk_last is not None:
+            hunks.append(_Hunk(start=cur_hunk_start, end=cur_hunk_last))
+        cur_hunk_start = None
+        cur_hunk_last = None
+
     for raw in stdout.splitlines():
         if raw.startswith("@@"):
+            _flush_hunk()
             m = _HUNK_HEADER_RE.match(raw)
             if not m:
                 in_hunk = False
@@ -1209,6 +1356,9 @@ def _parse_unified_diff_post(stdout: str) -> _DiffExcerpts:
             lines[cur_post] = (" ", "")
             min_line = min(min_line, cur_post)
             max_line = max(max_line, cur_post)
+            if cur_hunk_start is None:
+                cur_hunk_start = cur_post
+            cur_hunk_last = cur_post
             cur_post += 1
             continue
         kind = raw[0]
@@ -1217,11 +1367,17 @@ def _parse_unified_diff_post(stdout: str) -> _DiffExcerpts:
             lines[cur_post] = ("+", body)
             min_line = min(min_line, cur_post)
             max_line = max(max_line, cur_post)
+            if cur_hunk_start is None:
+                cur_hunk_start = cur_post
+            cur_hunk_last = cur_post
             cur_post += 1
         elif kind == " ":
             lines[cur_post] = (" ", body)
             min_line = min(min_line, cur_post)
             max_line = max(max_line, cur_post)
+            if cur_hunk_start is None:
+                cur_hunk_start = cur_post
+            cur_hunk_last = cur_post
             cur_post += 1
         elif kind == "-":
             # Removed line — no post-state coordinate. Skip silently.
@@ -1233,10 +1389,16 @@ def _parse_unified_diff_post(stdout: str) -> _DiffExcerpts:
             # Unknown row inside a hunk (extra header from combined
             # diff, etc.). Be defensive: bail out of this hunk so we
             # don't desync the line counter.
+            _flush_hunk()
             in_hunk = False
+    # Capture the final hunk (the last ``@@`` block has no
+    # successor header to trigger a flush).
+    _flush_hunk()
+
     if max_line == 0:
-        return _DiffExcerpts(lines={}, min_line=0, max_line=0)
-    return _DiffExcerpts(lines=lines, min_line=min_line, max_line=max_line)
+        return _DiffExcerpts(lines={}, min_line=0, max_line=0, hunks=())
+    return _DiffExcerpts(lines=lines, min_line=min_line,
+                         max_line=max_line, hunks=tuple(hunks))
 
 
 def _fetch_diff_excerpts(repo_root: Path, diff_base: str, rel_path: str,
