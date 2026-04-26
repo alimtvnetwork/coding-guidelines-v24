@@ -1332,7 +1332,9 @@ def _score_kind_for(sim: "_RenameSimilarity | None") -> str | None:
 
 
 def _write_similarity_csv(rows: list[_ChangedFileAudit],
-                          target: str) -> None:
+                          target: str,
+                          *,
+                          with_labels: bool = False) -> None:
     """Export the audit rows as RFC 4180 CSV for spreadsheet review.
 
     ``target`` is either a filesystem path or the literal ``"-"`` to
@@ -1340,6 +1342,15 @@ def _write_similarity_csv(rows: list[_ChangedFileAudit],
     ``path,status,reason,kind,score,old_path`` regardless of whether
     ``--with-similarity`` was passed — the four similarity columns
     just stay empty when no ``_RenameSimilarity`` is attached.
+
+    When ``with_labels=True`` (driven by ``--similarity-labels``) a
+    seventh ``score_kind`` column is APPENDED — never inserted — so
+    positional readers that already hard-code indices 0–5 keep
+    working unchanged and only need to opt into index 6 when they
+    care about the per-kind discriminator. The cell vocabulary is
+    ``rename-similarity`` / ``copy-similarity`` / ``unscored`` (R or
+    C rows) and empty for plain A/M/D rows, mirroring the JSON
+    ``score_kind`` field exactly.
 
     Empty `score` cells are *intentional* and meaningful: they mark
     *unscored* rename/copy rows (authored ``--changed-files`` payloads
@@ -1356,7 +1367,9 @@ def _write_similarity_csv(rows: list[_ChangedFileAudit],
     """
     def _emit(handle) -> None:  # type: ignore[no-untyped-def]
         writer = _csv.writer(handle)
-        writer.writerow(_SIMILARITY_CSV_HEADER)
+        header = (_SIMILARITY_CSV_HEADER_LABELED if with_labels
+                  else _SIMILARITY_CSV_HEADER)
+        writer.writerow(header)
         for r in rows:
             sim = r.similarity
             if sim is None:
@@ -1368,8 +1381,14 @@ def _write_similarity_csv(rows: list[_ChangedFileAudit],
                 # distinguishable in the spreadsheet.
                 score = "" if sim.score is None else str(sim.score)
                 old_path = sim.old_path
-            writer.writerow([r.path, r.status, r.reason,
-                             kind, score, old_path])
+            row = [r.path, r.status, r.reason, kind, score, old_path]
+            if with_labels:
+                # Empty cell for plain A/M/D rows — same convention as
+                # the other similarity columns — so the "no rename
+                # provenance" case is uniform across all four/five
+                # similarity-related fields.
+                row.append(_score_kind_for(sim) or "")
+            writer.writerow(row)
 
     if target == "-":
         _emit(sys.stdout)
