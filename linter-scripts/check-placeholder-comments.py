@@ -1452,6 +1452,30 @@ _DELETED_REASON_FALLBACK = ("path captured as a delete by the diff "
                             "treated as `ignored-deleted` for safety")
 
 
+# Closed source vocabulary surfaced by ``--list-changed-files-verbose``
+# and accepted by ``--only-deleted-source``. Frozen at module scope so
+# the CLI's argparse ``choices`` list, the renderer's footer-breakdown
+# code, and the README's documented contract all reference one source
+# of truth — adding a new tag is a one-line dict update above plus
+# (optionally) a deliberate vocabulary bump here. The order is the
+# canonical render order: ``D``-style tags first, then R/C-old tags
+# grouped by intake (``diff-`` then ``changed-files-``) so a per-tag
+# breakdown footer prints consistently across runs.
+#
+# The fallback message (returned by :func:`_resolve_deleted_reason`
+# for unknown tags) is intentionally NOT in this tuple — it's a
+# safety net for parser changes that haven't propagated, not a value
+# the operator can target with ``--only-deleted-source``.
+_DELETED_SOURCES: tuple[str, ...] = (
+    "diff-D",
+    "changed-files-D",
+    "diff-R-old",
+    "changed-files-R-old",
+    "diff-C-old",
+    "changed-files-C-old",
+)
+
+
 def _resolve_deleted_reason(source: str,
                             new_path: "str | None" = None) -> str:
     """Look up the human-readable ``reason`` for an ``ignored-deleted``
