@@ -162,14 +162,18 @@ class DeletedPathParserUnit(unittest.TestCase):
     """
 
     def setUp(self) -> None:
-        # Add the linter-scripts dir to sys.path so we can import
-        # the module by its hyphenated filename via importlib.
+        # The linter file uses a hyphen so a normal ``import`` won't
+        # work. Load via importlib + register in ``sys.modules`` BEFORE
+        # exec so dataclass introspection (which looks the module up
+        # by name to resolve forward references) can find it.
         import importlib.util
         spec = importlib.util.spec_from_file_location(
             "_pc_under_test", LINTER)
         assert spec is not None and spec.loader is not None
-        self.mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(self.mod)
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules["_pc_under_test"] = mod
+        spec.loader.exec_module(mod)
+        self.mod = mod
 
     def test_parse_name_status_captures_d_rows(self) -> None:
         deleted: list[str] = []
