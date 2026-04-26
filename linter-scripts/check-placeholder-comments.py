@@ -155,33 +155,39 @@ def strip_inline_code(text: str) -> str:
 
 def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
                    out: list[Violation],
-                   bullets: list[tuple[int, str]] | None = None) -> int:
+                   bullets: list[tuple[int, str]] | None = None,
+                   block_end: int = 0) -> int:
     """Apply P-002/P-003/P-005 to a body and return valid bullet count.
 
     When ``bullets`` is provided, every valid bullet is appended as
     ``(line, target)`` for later cross-block duplicate analysis (P-007).
     """
     bullet_count = 0
+    be = block_end or (body[-1][0] if body else open_line)
     for ln, content in body:
         if not content.strip():
             out.append(Violation(rel, ln, "P-005",
-                "Blank line inside placeholder block; keep it contiguous."))
+                "Blank line inside placeholder block; keep it contiguous.",
+                open_line, be))
             continue
         bm = BULLET_LINK_RE.match(content)
         if not bm:
             out.append(Violation(rel, ln, "P-002",
-                "Placeholder body line is not a `- [text](link)` bullet."))
+                "Placeholder body line is not a `- [text](link)` bullet.",
+                open_line, be))
             continue
         target = bm.group(1)
         if target.startswith(("http://", "https://", "mailto:", "#")):
             out.append(Violation(rel, ln, "P-003",
                 f"Placeholder link `{target}` must be a relative `.md` path, "
-                "not external/anchor-only."))
+                "not external/anchor-only.",
+                open_line, be))
             continue
         path_part = target.split("#", 1)[0]
         if not path_part.endswith(".md"):
             out.append(Violation(rel, ln, "P-003",
-                f"Placeholder link `{target}` must point at a `.md` file."))
+                f"Placeholder link `{target}` must point at a `.md` file.",
+                open_line, be))
             continue
         bullet_count += 1
         if bullets is not None:
