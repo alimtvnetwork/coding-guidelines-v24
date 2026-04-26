@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 # ============================================================
 # pre-commit hook — runs all linter-scripts/check-*.sh and
-# check-*.py guards before allowing a commit.
+# check-*.py guards before allowing a commit, plus three extra
+# phases so derived artifacts can never drift from spec/ edits:
+#
+#   1. Existing check-*.sh / check-*.py guards
+#   2. Spec-only guards (validate-guidelines + cross-link check)
+#      — run when staged paths touch spec/ or .lovable/
+#   3. Sync scripts (sync-spec-tree + sync-version) — always run;
+#      if they produce a diff, the changed artifacts are
+#      re-staged automatically so the commit stays consistent.
 #
 # Install (one-time, per clone):
 #   bash scripts/hooks/install-hooks.sh
@@ -42,6 +50,85 @@ for script in linter-scripts/check-*.py; do
   run_guard "$script" "python3"
 done
 shopt -u nullglob
+
+# ------------------------------------------------------------
+# Phase 2 — spec-only guards (skip when no spec/.lovable change)
+# ------------------------------------------------------------
+STAGED="$(git diff --cached --name-only --diff-filter=ACMR || true)"
+touched_specs=0
+if echo "$STAGED" | grep -qE '^(spec/|\.lovable/)'; then
+  touched_specs=1
+fi
+
+if [[ "$touched_specs" -eq 1 ]]; then
+  echo ""
+  echo "📚 pre-commit: spec/.lovable changes detected — running spec guards..."
+  if [[ -f linter-scripts/validate-guidelines.py ]]; then
+    run_guard "linter-scripts/validate-guidelines.py" "python3"
+  fi
+  if [[ -f linter-scripts/check-spec-cross-links.py ]]; then
+    RAN=$((RAN + 1))
+    echo ""
+    echo "── linter-scripts/check-spec-cross-links.py ──"
+    if python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .; then
+      echo "✅ pass"
+    else
+      echo "❌ fail: linter-scripts/check-spec-cross-links.py"
+      FAILED=$((FAILED + 1))
+    fi
+  fi
+fi
+
+# ------------------------------------------------------------
+# Phase 3 — sync derived artifacts and re-stage any drift
+# ------------------------------------------------------------
+SYNC_TARGETS=("src/data/specTree.json" "version.json")
+SYNC_BEFORE_DIFF=""
+for target in "${SYNC_TARGETS[@]}"; do
+  if [[ -f "$target" ]]; then
+    SYNC_BEFORE_DIFF+="$(sha1sum "$target")"$'\n'
+  fi
+done
+
+echo ""
+echo "🔄 pre-commit: syncing derived artifacts (specTree.json, version.json)..."
+SYNC_OK=1
+if [[ -f scripts/sync-spec-tree.mjs ]]; then
+  if ! node scripts/sync-spec-tree.mjs >/dev/null 2>&1; then
+    SYNC_OK=0
+    echo "❌ sync-spec-tree.mjs failed"
+    FAILED=$((FAILED + 1))
+    RAN=$((RAN + 1))
+  fi
+fi
+if [[ -f scripts/sync-version.mjs ]]; then
+  if ! node scripts/sync-version.mjs >/dev/null 2>&1; then
+    SYNC_OK=0
+    echo "❌ sync-version.mjs failed"
+    FAILED=$((FAILED + 1))
+    RAN=$((RAN + 1))
+  fi
+fi
+
+if [[ "$SYNC_OK" -eq 1 ]]; then
+  SYNC_AFTER_DIFF=""
+  for target in "${SYNC_TARGETS[@]}"; do
+    if [[ -f "$target" ]]; then
+      SYNC_AFTER_DIFF+="$(sha1sum "$target")"$'\n'
+    fi
+  done
+  if [[ "$SYNC_BEFORE_DIFF" != "$SYNC_AFTER_DIFF" ]]; then
+    echo "ℹ️  Derived artifacts changed during sync — re-staging:"
+    for target in "${SYNC_TARGETS[@]}"; do
+      if [[ -f "$target" ]]; then
+        git add "$target"
+        echo "   + $target"
+      fi
+    done
+  else
+    echo "✅ derived artifacts already in sync"
+  fi
+fi
 
 echo ""
 echo "════════════════════════════════════════════════════════════"
