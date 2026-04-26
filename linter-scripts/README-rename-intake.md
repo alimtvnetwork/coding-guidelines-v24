@@ -62,7 +62,7 @@ table, CSV export). Use it when wiring a dashboard, writing a
 |---|---|---|
 | `matched` | Path is under `--root`, has an allow-listed extension, and the post-state file exists on disk. Counted in the linted set. | `under --root, extension allowed, file present on disk` |
 | `ignored-extension` | Path is under `--root` but its suffix isn't in the allowlist (e.g. a `.txt` change while linting `.md`). | `extension '<.ext or (none)>' not in allowlist <sorted list>` |
-| `ignored-out-of-root` | Path resolves outside `--root` (e.g. a top-level `README.md` change while linting `spec/`). | `path is outside --root <abs path>` |
+| `ignored-out-of-root` | Path resolves outside `--root` (e.g. a top-level `README.md` change while linting `spec/`). | `path is outside --root <resolved-abs-path>` |
 | `ignored-missing` | Post-state path no longer exists on disk — typically reverted in a later commit of the same push, or filtered out by `.gitignore` on checkout. | `post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)` |
 | `ignored-deleted` | A `D`-status row, **or** the OLD side of a rename/copy: there is no post-state file to scan. `reason` is per-source — see [next sub-section](#ignored-deleted-reason-format). | (per-source — see below) |
 
@@ -111,7 +111,11 @@ A	spec/missing.md
 
 Disk state: `spec/keep.md` exists, the rename's `spec/new.md` and
 the new `spec/missing.md` do **not** (simulating a revert-on-push),
-and the linter is invoked with `--root spec`.
+and the linter is invoked with `--root spec` from a working
+directory whose absolute path is `/repo` (the linter resolves
+`--root` to an absolute path before printing it in the
+`ignored-out-of-root` reason — your `<resolved-abs-path>` will of
+course differ).
 
 #### JSON (`--json --with-similarity`)
 
@@ -138,7 +142,7 @@ and the linter is invoked with `--root spec`.
   {
     "path": "outside/x.md",
     "status": "ignored-out-of-root",
-    "reason": "path is outside --root spec",
+    "reason": "path is outside --root /repo/spec",
     "similarity": null
   },
   {
@@ -165,7 +169,7 @@ and the linter is invoked with `--root spec`.
   matched              spec/keep.md     -     -      -            under --root, extension allowed, file present on disk
   ignored-missing      spec/new.md      R     90     spec/old.md  post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)
   ignored-extension    spec/notes.txt   -     -      -            extension '.txt' not in allowlist ['.md']
-  ignored-out-of-root  outside/x.md     -     -      -            path is outside --root spec
+  ignored-out-of-root  outside/x.md     -     -      -            path is outside --root /repo/spec
   ignored-missing      spec/missing.md  -     -      -            post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)
   ignored-deleted      spec/gone.md     -     -      -            --changed-files payload row shaped `D\tpath`: explicit delete marker, no post-state to lint
   totals: matched=1  ignored-extension=1  ignored-out-of-root=1  ignored-missing=2  ignored-deleted=1
@@ -188,7 +192,7 @@ path,status,reason,kind,score,old_path
 spec/keep.md,matched,"under --root, extension allowed, file present on disk",,,
 spec/new.md,ignored-missing,"post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",R,90,spec/old.md
 spec/notes.txt,ignored-extension,extension '.txt' not in allowlist ['.md'],,,
-outside/x.md,ignored-out-of-root,path is outside --root spec,,,
+outside/x.md,ignored-out-of-root,path is outside --root /repo/spec,,,
 spec/missing.md,ignored-missing,"post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",,,
 spec/gone.md,ignored-deleted,"--changed-files payload row shaped `D\tpath`: explicit delete marker, no post-state to lint",,,
 ```
