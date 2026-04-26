@@ -272,6 +272,59 @@ done <<< "$SCRIPTS"
 
 TOTAL=$(wc -l < "$WORK_LIST" | tr -d ' ')
 
+# ---- Detect whether any supported source files exist under --path ----
+# Warn (don't fail) when no files match the shipping language extensions.
+# The universal file-length check still runs, so this is informational.
+SUPPORTED_EXTS_MAP="go:.go typescript:.ts,.tsx php:.php sql:.sql"
+# Build the list of extensions actually in scope: respect --languages
+# when provided, otherwise check every shipping language.
+SCOPE_EXTS=""
+for pair in $SUPPORTED_EXTS_MAP; do
+    lang="${pair%%:*}"
+    exts="${pair##*:}"
+    if [ -n "$LANGUAGES" ]; then
+        case ",$LANGUAGES," in
+            *",$lang,"*) ;;
+            *) continue ;;
+        esac
+    fi
+    SCOPE_EXTS="$SCOPE_EXTS,$exts"
+done
+SCOPE_EXTS="${SCOPE_EXTS#,}"
+
+if [ -n "$SCOPE_EXTS" ] && [ -d "$PATH_ARG" ]; then
+    FOUND_ANY=$(python3 - "$PATH_ARG" "$SCOPE_EXTS" "$EXCLUDE_PATHS" <<'PY'
+import os, sys, fnmatch
+root, exts_csv, excl_csv = sys.argv[1], sys.argv[2], sys.argv[3]
+exts = tuple(e.strip() for e in exts_csv.split(",") if e.strip())
+excludes = [p.strip() for p in excl_csv.split(",") if p.strip()]
+def is_excluded(rel):
+    for pat in excludes:
+        if fnmatch.fnmatch(rel, pat) or rel.startswith(pat.rstrip("/*") + "/"):
+            return True
+    return False
+for dirpath, dirnames, filenames in os.walk(root):
+    # Skip VCS/dependency dirs cheaply
+    dirnames[:] = [d for d in dirnames if d not in (".git", "node_modules", "vendor", ".venv", "__pycache__")]
+    for fn in filenames:
+        if not fn.endswith(exts):
+            continue
+        rel = os.path.relpath(os.path.join(dirpath, fn), root)
+        if is_excluded(rel):
+            continue
+        print("yes")
+        sys.exit(0)
+print("no")
+PY
+)
+    if [ "$FOUND_ANY" = "no" ]; then
+        echo "    ⚠️  no supported source files detected under '$PATH_ARG'"
+        echo "       supported extensions: $(echo "$SCOPE_EXTS" | tr ',' ' ' | sed 's/  */, /g')"
+        echo "       (the universal file-length check will still run on all text files)"
+        echo ""
+    fi
+fi
+
 # ---- Sequential vs parallel dispatch ----
 if [ "$JOBS" -eq 1 ]; then
     while IFS='|' read -r RULE_ID LANG SCRIPT_PATH; do
