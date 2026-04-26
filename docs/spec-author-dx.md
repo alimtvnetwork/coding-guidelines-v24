@@ -106,6 +106,20 @@ Output (default `/mnt/documents/`):
 
 Exit codes: `0` clean · `1` findings · `2` validator crash · `3` invalid CLI flags.
 
+#### Pending placeholders
+
+The report also lists **placeholder cross-references** queued for activation
+— `- [text](path.md)` bullets stashed inside `<!-- TODO: ... -->` HTML
+comment blocks. The cross-link checker deliberately ignores these so they
+never fail CI, but the report surfaces them under a grey ⏳ **Pending**
+badge with a per-file count and a summary card.
+
+Pending entries are **informational** — they do not affect the exit code
+or the "Clean / Findings present" status. Use them as a reviewer-visible
+TODO list of links waiting for their target files. See
+`spec/_template.md` §"How to activate placeholders" for the activation
+procedure.
+
 
 ### 5. Live preview wired into the docs viewer
 The viewer already reads `src/data/specTree.json`. Add a dev-mode watch (or `bun run sync:watch`) that re-runs `sync-spec-tree.mjs` on `spec/**/*.md` save. Authors see their doc render in the live preview within ~1 s.
