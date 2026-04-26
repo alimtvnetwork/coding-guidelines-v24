@@ -193,6 +193,53 @@ def strip_inline_code(text: str) -> str:
                      for line in text.splitlines())
 
 
+def _validate_intent(rel: str, line_no: int, marker: str, text: str,
+                     out: list[Violation], verbs: frozenset[str]) -> None:
+    """Apply P-001 to a placeholder's intent text.
+
+    ``marker`` is shown verbatim in the message ("TODO:", "FIXME:",
+    or "reason"). ``text`` is the wording that follows it (already
+    stripped of surrounding whitespace). ``verbs`` is the active
+    imperative-verb allowlist for this run.
+    """
+    if not text:
+        out.append(Violation(rel, line_no, "P-001",
+            f"Placeholder `{marker}` is empty — describe the pending action "
+            "(e.g. `Activate when target is created.`)."))
+        return
+
+    # Strip soft prefixes (e.g. "please ") so they don't shadow the verb.
+    lowered = text.lower()
+    for prefix in INTENT_PREFIXES:
+        if lowered.startswith(prefix):
+            text = text[len(prefix):]
+            lowered = text.lower()
+            break
+
+    if not text:
+        out.append(Violation(rel, line_no, "P-001",
+            f"Placeholder `{marker}` has no actionable wording after `please`."))
+        return
+
+    # Extract the leading word (or hyphenated compound like
+    # ``cross-reference``). Compare case-insensitively.
+    head_match = re.match(r"[A-Za-z][A-Za-z-]*", text)
+    head = head_match.group(0).lower() if head_match else ""
+    if head not in verbs:
+        sample = ", ".join(sorted(list(verbs))[:6])
+        out.append(Violation(rel, line_no, "P-001",
+            f"Placeholder `{marker}` must start with an imperative verb "
+            f"(got `{head or text[:20]}`). Allowed verbs include: {sample}…. "
+            "Extend with `--allow-verb <verb>` if needed."))
+        return
+
+    if not text.rstrip().endswith("."):
+        out.append(Violation(rel, line_no, "P-001",
+            f"Placeholder `{marker}` wording must end with a period "
+            f"(got `{text.rstrip()[-30:]}`)."))
+        return
+
+
 def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
                    out: list[Violation],
                    bullets: list[tuple[int, str]] | None = None) -> int:
@@ -231,12 +278,17 @@ def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
 
 def lint_file(path: Path, repo_root: Path,
               valid_bullets: list[tuple[str, int, str]] | None = None,
+              intent_verbs: frozenset[str] = DEFAULT_INTENT_VERBS,
               ) -> list[Violation]:
     """Lint one markdown file.
 
     When ``valid_bullets`` is provided, every successfully-validated
     bullet is appended as ``(rel_file, line, target)`` so the caller
     can run cross-file duplicate detection (P-007).
+
+    ``intent_verbs`` controls the imperative-verb allowlist for P-001;
+    defaults to ``DEFAULT_INTENT_VERBS`` and can be widened from the
+    CLI via ``--allow-verb``.
     """
     rel = str(path.relative_to(repo_root))
     text = path.read_text(encoding="utf-8")
@@ -259,6 +311,16 @@ def lint_file(path: Path, repo_root: Path,
         tag_open = TAG_OPEN_RE.search(line)
         if tag_open:
             open_line = i + 1
+            # P-001: validate `reason="…"` wording. A missing attribute
+            # is itself a P-001 ("placeholder has no documented intent").
+            reason_match = TAG_REASON_RE.search(line)
+            reason_text = reason_match.group("text").strip() if reason_match else ""
+            if not reason_match:
+                out.append(Violation(rel, open_line, "P-001",
+                    "`<spec-placeholder>` is missing a `reason=\"…\"` attribute "
+                    "describing why the link is pending."))
+            else:
+                _validate_intent(rel, open_line, "reason", reason_text, out, intent_verbs)
             # Same-line open+close — degenerate empty block.
             if TAG_CLOSE in line[tag_open.end():]:
                 out.append(Violation(rel, open_line, "P-004",
@@ -282,6 +344,17 @@ def lint_file(path: Path, repo_root: Path,
         if not m:
             i += 1
             continue
+        # P-001: lint the wording that follows the marker.
+        intent_match = PLACEHOLDER_INTENT_RE.search(line)
+        if intent_match:
+            marker = intent_match.group("marker") + ":"
+            intent_text = intent_match.group("text").strip()
+            # Trim a trailing ``-->`` if the open + close share a line —
+            # P-004 below will catch the structural problem; here we
+            # just need clean intent text.
+            if intent_text.endswith(COMMENT_CLOSE):
+                intent_text = intent_text[: -len(COMMENT_CLOSE)].rstrip()
+            _validate_intent(rel, i + 1, marker, intent_text, out, intent_verbs)
         if COMMENT_CLOSE in line[m.end():] or COMMENT_CLOSE in line[m.start():]:
             out.append(Violation(rel, i + 1, "P-004",
                 "Placeholder comment has no bullet rows; remove or expand it."))
