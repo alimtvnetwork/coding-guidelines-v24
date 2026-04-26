@@ -403,9 +403,13 @@ class CsvAuditSchema(unittest.TestCase):
                 "--with-similarity",
             )
         self.assertEqual(proc.returncode, 0, msg=proc.stderr)
-        # The CSV is appended to STDOUT after the human summary.
-        # Find the header row by scanning for the canonical first
-        # column name; everything from there to EOF is the CSV.
+        # The CSV lands on STDOUT followed by trailing
+        # diagnostic lines (e.g. `ℹ️ ...`, `✅ ...`) that the
+        # human summary appends. Slice from the header row to the
+        # first line that's neither the header nor a CSV data
+        # row — anything starting with one of the closed audit
+        # statuses is a data row; everything else terminates the
+        # CSV block.
         lines = proc.stdout.splitlines()
         header_idx = next(
             (i for i, line in enumerate(lines)
@@ -416,7 +420,18 @@ class CsvAuditSchema(unittest.TestCase):
             header_idx,
             f"CSV header not found in stdout:\n{proc.stdout}",
         )
-        csv_text = "\n".join(lines[header_idx:])
+        end_idx = header_idx + 1
+        while end_idx < len(lines):
+            line = lines[end_idx]
+            # A data row always begins with `<path>,<status>,...`
+            # where `<status>` is one of the closed vocabulary.
+            # Anything else (blank, emoji-prefixed summary, etc.)
+            # marks the end of the CSV block.
+            if any(f",{s}," in line for s in _MOD._AUDIT_STATUSES):
+                end_idx += 1
+                continue
+            break
+        csv_text = "\n".join(lines[header_idx:end_idx])
         reader = _csv.DictReader(io.StringIO(csv_text))
         rows = list(reader)
         self.assertGreater(len(rows), 0,
