@@ -140,6 +140,14 @@ INTENT_PREFIXES: tuple[str, ...] = ("please ",)
 
 BULLET_LINK_RE = re.compile(r"^-\s+\[[^\]]+\]\(([^)\s]+)\)\s*$")
 
+# Default source-file extension allowlist. Widened via the CLI
+# ``--ext`` flag (or by passing ``exts=`` to ``iter_source_files``).
+# Lowercase, dot-prefixed, deduplicated. Picked deliberately small —
+# spec authors who keep ``.mdx`` / ``.txt`` siblings (e.g. for embed
+# pipelines) extend it explicitly rather than the linter silently
+# pulling in arbitrary text files.
+DEFAULT_SOURCE_EXTS: frozenset[str] = frozenset({".md"})
+
 
 @dataclass(frozen=True)
 class Violation:
@@ -149,11 +157,39 @@ class Violation:
     message: str
 
 
-def iter_markdown_files(root: Path) -> Iterable[Path]:
-    for p in sorted(root.rglob("*.md")):
+def iter_source_files(root: Path,
+                      exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                      ) -> Iterable[Path]:
+    """Yield every file under ``root`` whose suffix is in ``exts``.
+
+    ``exts`` entries MUST be lowercase, dot-prefixed (``".md"``,
+    ``".mdx"``, ``".txt"``). Dotfile / dotted-directory entries
+    (``.git``, ``.lovable``) are skipped — the linter is for spec
+    text, not VCS / tooling caches. Output is sorted by path so
+    cache keys and reports are deterministic across runs.
+
+    Files are matched on ``suffix.lower()`` so a stray ``README.MD``
+    is still picked up when ``.md`` is in the allowlist.
+    """
+    # Single rglob('*') walk filtered in-process is faster than one
+    # rglob('*.ext') per extension on large trees and keeps the sort
+    # order globally consistent (rglob returns insertion order).
+    for p in sorted(root.rglob("*")):
+        if not p.is_file():
+            continue
+        if p.suffix.lower() not in exts:
+            continue
         if any(part.startswith(".") for part in p.relative_to(root).parts):
             continue
         yield p
+
+
+def iter_markdown_files(root: Path) -> Iterable[Path]:
+    """Back-compat shim — equivalent to ``iter_source_files(root)``
+    with the default ``.md``-only allowlist. Kept so external
+    callers (pre-commit hooks, ad-hoc scripts) don't break.
+    """
+    return iter_source_files(root, DEFAULT_SOURCE_EXTS)
 
 
 def strip_code_fences(text: str) -> str:
@@ -245,12 +281,25 @@ def _validate_intent(rel: str, line_no: int, marker: str, text: str,
 
 def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
                    out: list[Violation],
-                   bullets: list[tuple[int, str]] | None = None) -> int:
+                   bullets: list[tuple[int, str]] | None = None,
+                   exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                   ) -> int:
     """Apply P-002/P-003/P-005 to a body and return valid bullet count.
 
     When ``bullets`` is provided, every valid bullet is appended as
     ``(line, target)`` for later cross-block duplicate analysis (P-007).
+
+    ``exts`` is the source-file allowlist (default ``{".md"}``);
+    P-003 accepts placeholder bullet links whose path component ends
+    in any of these. Widened automatically when the CLI passes
+    ``--ext .mdx`` so a `.mdx` doc can link to another `.mdx` block.
     """
+    # Pre-build the human-readable hint once per body so the per-
+    # bullet loop doesn't re-stringify it on every miss.
+    if exts == DEFAULT_SOURCE_EXTS:
+        ext_hint = "`.md`"
+    else:
+        ext_hint = "/".join(f"`{e}`" for e in sorted(exts))
     bullet_count = 0
     for ln, content in body:
         if not content.strip():
@@ -265,13 +314,15 @@ def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
         target = bm.group(1)
         if target.startswith(("http://", "https://", "mailto:", "#")):
             out.append(Violation(rel, ln, "P-003",
-                f"Placeholder link `{target}` must be a relative `.md` path, "
-                "not external/anchor-only."))
+                f"Placeholder link `{target}` must be a relative {ext_hint} "
+                "path, not external/anchor-only."))
             continue
         path_part = target.split("#", 1)[0]
-        if not path_part.endswith(".md"):
+        path_lower = path_part.lower()
+        if not any(path_lower.endswith(e) for e in exts):
             out.append(Violation(rel, ln, "P-003",
-                f"Placeholder link `{target}` must point at a `.md` file."))
+                f"Placeholder link `{target}` must point at a "
+                f"{ext_hint} file."))
             continue
         bullet_count += 1
         if bullets is not None:
@@ -282,8 +333,9 @@ def _validate_body(rel: str, open_line: int, body: list[tuple[int, str]],
 def lint_file(path: Path, repo_root: Path,
               valid_bullets: list[tuple[str, int, str]] | None = None,
               intent_verbs: frozenset[str] = DEFAULT_INTENT_VERBS,
+              exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
               ) -> list[Violation]:
-    """Lint one markdown file.
+    """Lint one spec source file (any extension in ``exts``).
 
     When ``valid_bullets`` is provided, every successfully-validated
     bullet is appended as ``(rel_file, line, target)`` so the caller
@@ -292,6 +344,10 @@ def lint_file(path: Path, repo_root: Path,
     ``intent_verbs`` controls the imperative-verb allowlist for P-001;
     defaults to ``DEFAULT_INTENT_VERBS`` and can be widened from the
     CLI via ``--allow-verb``.
+
+    ``exts`` is the source-file allowlist; P-003 accepts placeholder
+    bullet links pointing at any of these. Defaults to
+    ``{".md"}`` so historical callers stay unchanged.
     """
     rel = str(path.relative_to(repo_root))
     text = path.read_text(encoding="utf-8")
@@ -336,7 +392,8 @@ def lint_file(path: Path, repo_root: Path,
                     "`<spec-placeholder>` opened but never closed "
                     "(missing `</spec-placeholder>`)."))
                 continue
-            bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
+            bullet_count = _validate_body(rel, open_line, body, out,
+                                          file_bullets, exts)
             if bullet_count == 0:
                 out.append(Violation(rel, open_line, "P-004",
                     "`<spec-placeholder>` block contains no valid bullet rows."))
@@ -369,7 +426,8 @@ def lint_file(path: Path, repo_root: Path,
             out.append(Violation(rel, open_line, "P-006",
                 "Placeholder comment opened but never closed (missing `-->`)."))
             continue
-        bullet_count = _validate_body(rel, open_line, body, out, file_bullets)
+        bullet_count = _validate_body(rel, open_line, body, out,
+                                      file_bullets, exts)
         if bullet_count == 0:
             out.append(Violation(rel, open_line, "P-004",
                 "Placeholder block contains no valid bullet rows."))
@@ -504,6 +562,16 @@ def main(argv: list[str] | None = None) -> int:
              "--changed-files mode (no diff-base to query) and in "
              "--json mode (excerpts would corrupt structured output; "
              "JSON consumers can render their own from the file/line).")
+    ap.add_argument("--ext", action="append", default=[], metavar="EXT",
+        help="Add a source-file extension to the discovery + diff-mode "
+             "allowlist (repeatable). Accepts `.mdx`, `mdx`, or `MDX` "
+             "— normalised to a lowercase, dot-prefixed form. Defaults "
+             "to `.md` only. Affects: (1) which files under --root are "
+             "scanned, (2) which paths in --changed-files / `git diff` "
+             "output qualify as relevant, (3) which extensions P-003 "
+             "accepts as valid placeholder bullet targets, and (4) the "
+             "cache fingerprint (so adding/removing an extension "
+             "invalidates every prior PASS sentinel).")
     args = ap.parse_args(argv)
 
     root = Path(args.root).resolve()
@@ -520,6 +588,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.diff_context < 0:
         print(f"error: --diff-context must be >= 0 (got {args.diff_context})",
               file=sys.stderr)
+        return 2
+
+    # ---- Normalise + validate the source-file extension allowlist
+    # We canonicalise to lowercase + leading dot so callers don't
+    # have to remember the exact form. An empty extension or one
+    # containing path separators is rejected — both would cause
+    # surprising rglob behaviour and false positives in P-003.
+    try:
+        source_exts = _normalise_extensions(args.ext) if args.ext else DEFAULT_SOURCE_EXTS
+    except ValueError as e:
+        print(f"error: --ext: {e}", file=sys.stderr)
         return 2
 
     # Tri-state: --github → True, --no-github → False, neither → auto.
@@ -543,13 +622,15 @@ def main(argv: list[str] | None = None) -> int:
                 repo_root, root,
                 diff_base=args.diff_base,
                 changed_files=args.changed_files,
+                exts=source_exts,
             )
         except RuntimeError as e:
             print(f"error: {e}", file=sys.stderr)
             return 2
         if not args.json:
+            ext_label = "/".join(sorted(source_exts))
             print(f"ℹ️  placeholder-comments: diff-mode active — "
-                  f"{len(changed_md)} changed `.md` file(s) under {args.root}/")
+                  f"{len(changed_md)} changed {ext_label} file(s) under {args.root}/")
         if not changed_md:
             # Nothing under --root changed → fast PASS. Cross-file P-007
             # has nothing new to report by definition (no new bullets).
@@ -577,7 +658,7 @@ def main(argv: list[str] | None = None) -> int:
     cache_key: str | None = None
     sentinel: Path | None = None
     if args.cache_dir and changed_md is None:
-        cache_key = _compute_cache_key(root, intent_verbs)
+        cache_key = _compute_cache_key(root, intent_verbs, source_exts)
         sentinel = Path(args.cache_dir) / f"{cache_key}.pass"
         if sentinel.is_file():
             if not args.json:
@@ -589,14 +670,15 @@ def main(argv: list[str] | None = None) -> int:
 
     violations: list[Violation] = []
     cross_file_bullets: list[tuple[str, int, str]] = []
-    for md in iter_markdown_files(root):
+    for md in iter_source_files(root, source_exts):
         if changed_md is not None and md.resolve() not in changed_md:
             # Unchanged file: still collect its bullets so cross-file
             # P-007 can detect a new collision introduced by a
             # changed file, but suppress its per-file violations.
-            _collect_bullets_only(md, repo_root, cross_file_bullets)
+            _collect_bullets_only(md, repo_root, cross_file_bullets, source_exts)
             continue
-        violations.extend(lint_file(md, repo_root, cross_file_bullets, intent_verbs))
+        violations.extend(lint_file(md, repo_root, cross_file_bullets,
+                                    intent_verbs, source_exts))
 
     # ---- P-007 cross-file duplicates -------------------------------
     # Group every valid bullet across the scan by canonical target.
@@ -704,8 +786,14 @@ def main(argv: list[str] | None = None) -> int:
 
 def _resolve_changed_md(repo_root: Path, root: Path, *,
                         diff_base: str | None,
-                        changed_files: str | None) -> set[Path]:
-    """Resolve the set of `.md` files under ``root`` that are changed.
+                        changed_files: str | None,
+                        exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                        ) -> set[Path]:
+    """Resolve the set of source files under ``root`` that are changed.
+
+    ``exts`` is the source-file extension allowlist (default
+    ``{".md"}``). Anything else in the diff (config, code, images)
+    is dropped — the linter only cares about its own source format.
 
     Two input modes:
       * ``diff_base`` → invoke
@@ -735,7 +823,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         linted as a normal change.
 
     Returned paths are absolute + resolved and filtered to:
-      * extension ``.md``
+      * suffix in ``exts`` (compared lowercase)
       * residing under ``root`` (so a README change doesn't trigger a
         spec scan)
       * actually present on disk (a Modified path that was reverted
@@ -778,7 +866,8 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         s = line.strip()
         if not s or s.startswith("#"):
             continue
-        if not s.endswith(".md"):
+        s_lower = s.lower()
+        if not any(s_lower.endswith(e) for e in exts):
             continue
         p = (repo_root / s).resolve()
         try:
@@ -1024,17 +1113,24 @@ def _fetch_diff_excerpts(repo_root: Path, diff_base: str, rel_path: str,
 
 
 def _collect_bullets_only(path: Path, repo_root: Path,
-                          bullets_out: list[tuple[str, int, str]]) -> None:
+                          bullets_out: list[tuple[str, int, str]],
+                          exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                          ) -> None:
     """Cross-file P-007 helper for diff mode.
 
     Re-uses ``lint_file`` to extract every valid bullet from an
     unchanged file but discards the per-file violations. The bullets
     are needed so a *changed* file's new bullet can collide with a
     pre-existing target in an unchanged file and still trip P-007.
+
+    ``exts`` is forwarded to ``lint_file`` so P-003's target-
+    extension check uses the same allowlist when collecting bullets
+    from an unchanged file (otherwise a `.mdx` link in a `.md` file
+    would be silently dropped from the duplicate-detection pool).
     """
     # ``lint_file`` already appends to ``bullets_out`` via its
     # ``valid_bullets`` parameter; we drop the violations list.
-    lint_file(path, repo_root, bullets_out, DEFAULT_INTENT_VERBS)
+    lint_file(path, repo_root, bullets_out, DEFAULT_INTENT_VERBS, exts)
 
 
 # Per-rule one-liner shown in the annotation title so reviewers see
@@ -1101,16 +1197,21 @@ def _format_github_annotations(violations: list[Violation]) -> Iterable[str]:
         )
 
 
-def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> str:
+def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str],
+                       exts: frozenset[str] | set[str] = DEFAULT_SOURCE_EXTS,
+                       ) -> str:
     """Build a SHA-256 fingerprint of every input that affects the verdict.
 
     Inputs (in deterministic order):
       1. The absolute, resolved scan root.
       2. The sorted, canonicalised imperative-verb allowlist.
-      3. The SHA-256 of the linter script itself (so a logic change
+      3. The sorted, canonicalised source-file extension allowlist
+         (adding/removing an extension widens or narrows the scan,
+         so it must invalidate every prior PASS sentinel).
+      4. The SHA-256 of the linter script itself (so a logic change
          invalidates every cached PASS automatically).
-      4. For every `.md` under the root (sorted by path, dotfiles
-         excluded — same filter as ``iter_markdown_files``):
+      5. For every source file under the root (sorted by path,
+         dotfiles excluded — same filter as ``iter_source_files``):
          ``<repo-relative-path>\\0<sha256-of-bytes>\\n``
 
     Anything outside this set (mtimes, permissions, sibling files,
@@ -1118,9 +1219,13 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
     reproducible across machines and CI shards.
     """
     h = hashlib.sha256()
-    h.update(b"placeholder-comments-cache-v1\n")
+    # Bumped to v2 because the key shape changed (added `exts=`).
+    # A v1 sentinel under the same name would now describe a
+    # different scan, so the version tag forces a clean miss.
+    h.update(b"placeholder-comments-cache-v2\n")
     h.update(f"root={root}\n".encode("utf-8"))
     h.update(("verbs=" + ",".join(sorted(intent_verbs)) + "\n").encode("utf-8"))
+    h.update(("exts=" + ",".join(sorted(exts)) + "\n").encode("utf-8"))
     try:
         script_bytes = Path(__file__).resolve().read_bytes()
         h.update(b"script=" + hashlib.sha256(script_bytes).hexdigest().encode() + b"\n")
@@ -1128,7 +1233,7 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
         # __file__ unreadable (zipapp / frozen). Fall back to a stable
         # tag so the cache still works, just with coarser invalidation.
         h.update(b"script=unknown\n")
-    for md in iter_markdown_files(root):
+    for md in iter_source_files(root, exts):
         try:
             data = md.read_bytes()
         except OSError:
@@ -1136,6 +1241,37 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
         rel = str(md.relative_to(root)).encode("utf-8")
         h.update(rel + b"\0" + hashlib.sha256(data).hexdigest().encode() + b"\n")
     return h.hexdigest()
+
+
+def _normalise_extensions(raw: list[str]) -> frozenset[str]:
+    """Canonicalise a list of ``--ext`` values to a lowercase,
+    dot-prefixed, deduplicated frozenset.
+
+    Accepts ``mdx`` / ``.mdx`` / ``MDX`` / ``  .MdX  `` and yields
+    ``.mdx``. Rejects empty entries, entries containing path
+    separators, and entries that don't match a tame extension
+    grammar — those would cause surprising rglob behaviour and
+    would be silently accepted as valid P-003 targets, masking
+    typos like ``--ext "md "`` (trailing space).
+    """
+    cleaned: set[str] = set()
+    for entry in raw:
+        s = entry.strip().lower()
+        if not s:
+            raise ValueError("empty extension in allowlist")
+        if not s.startswith("."):
+            s = "." + s
+        # `.<alnum, dot, hyphen>+` covers `.md`, `.mdx`, `.txt`,
+        # `.markdown`, `.tmpl.md` if anyone ever wants compound
+        # extensions. Rejects path separators (`/`, `\`) and shell
+        # metacharacters that would corrupt rglob globs.
+        if not re.fullmatch(r"\.[a-z0-9][a-z0-9.\-]*", s):
+            raise ValueError(
+                f"invalid extension {entry!r} — expected a tame "
+                "suffix like `.md`, `.mdx`, `.txt`"
+            )
+        cleaned.add(s)
+    return frozenset(cleaned)
 
 
 if __name__ == "__main__":
