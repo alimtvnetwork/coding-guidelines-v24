@@ -349,14 +349,39 @@ class RenderInteractsWithParser(unittest.TestCase):
     def test_render_empty_when_no_hunks(self) -> None:
         self.assertEqual(_parse("").render(line=1, context=3), [])
 
-    def test_render_far_outside_returns_sentinel(self) -> None:
+    def test_render_far_outside_falls_back_to_nearest_hunk(self) -> None:
+        # When the violation line is outside every hunk, the renderer
+        # was upgraded to fall back to the *nearest* hunk: it now
+        # prepends a one-line breadcrumb (`ℹ︎ violation at L… nearest
+        # changed hunk @ L…`) AND emits the hunk's own lines so the
+        # reader still sees real diff context — strictly more useful
+        # than the legacy "no excerpt" sentinel.
         ex = _parse(_diff(
             "@@ -1,1 +1,1 @@",
             "+only",
         ))
         out = ex.render(line=999, context=2)
-        self.assertEqual(len(out), 1)
-        self.assertIn("not in current diff hunks", out[0])
+        # Output is the breadcrumb plus the single nearby line.
+        self.assertEqual(len(out), 2)
+        self.assertIn("nearest changed hunk", out[0])
+        # The breadcrumb must surface both the violation line and
+        # the nearest hunk's bounds so the reader can orient.
+        self.assertIn("L999", out[0])
+        self.assertIn("L1-1", out[0])
+        # The hunk content is the second line, prefixed with the
+        # standard non-focus marker (space) and the `+` sigil.
+        self.assertIn("only", out[1])
+        self.assertNotIn("►", out[1])  # not the focus line
+
+    def test_render_no_hunks_emits_legacy_sentinel(self) -> None:
+        # The legacy "no excerpt" sentinel still applies when there
+        # are zero hunks at all (empty diff with file headers only).
+        # ``_select_hunk`` returns ``None`` in that case and the
+        # renderer short-circuits before any context window math.
+        ex = _parse("")
+        # Force a manual hunk-less excerpt by parsing an empty diff.
+        out = ex.render(line=42, context=2)
+        self.assertEqual(out, [])
 
 
 class SuggestPatch(unittest.TestCase):
