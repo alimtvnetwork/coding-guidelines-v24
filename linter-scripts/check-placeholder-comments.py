@@ -1798,6 +1798,7 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 as_json: bool,
                                 dedupe: bool = False,
                                 only_statuses: frozenset[str] | None = None,
+                                only_deleted_sources: frozenset[str] | None = None,
                                 with_similarity: bool = False,
                                 with_labels: bool = False,
                                 legend_mode: str = _SIMILARITY_LEGEND_AUTO,
@@ -1837,6 +1838,20 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     hides everything is obvious (``0 of 12 row(s) shown``); the
     totals line still counts every status in the canonical order so
     the operator can see exactly what was filtered out.
+
+    When ``only_deleted_sources`` is a non-None frozenset, the filter
+    runs AFTER ``only_statuses`` and applies ONLY to
+    ``ignored-deleted`` rows: each such row whose ``source`` tag is
+    *not* in the set is dropped. Non-deleted rows pass through
+    unchanged — the source filter is a scalpel on the deleted bucket,
+    not a second copy of ``only_statuses``. The text-mode footer
+    grows a ``deleted-by-source:`` breakdown line counting every
+    source in :data:`_DELETED_SOURCES` against ``full_rows`` (post-
+    dedupe, pre-filter) so the breakdown describes the underlying
+    intake even when most of it was filtered out. The line is only
+    emitted when the source filter is active OR at least one
+    ``ignored-deleted`` row is present, so legacy invocations without
+    deletes don't gain a noisy zero line.
 
     When ``with_similarity`` is True the rendered table grows three
     extra columns — ``kind``, ``score``, ``old`` — populated from each
@@ -1885,6 +1900,20 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     full_rows = rows
     if only_statuses is not None:
         rows = [r for r in rows if r.status in only_statuses]
+    if only_deleted_sources is not None:
+        # Scalpel filter: kept rows are either non-``ignored-deleted``
+        # (untouched) or ``ignored-deleted`` rows whose ``source`` is
+        # in the allowed set. Defensive on ``r.source`` being ``None``
+        # — that should never happen for an ``ignored-deleted`` row
+        # the parser produced today, but a hand-built audit list
+        # passed straight to this renderer would land here, and the
+        # ``in`` test would otherwise raise ``TypeError``.
+        rows = [
+            r for r in rows
+            if r.status != "ignored-deleted"
+            or (r.source is not None
+                and r.source in only_deleted_sources)
+        ]
     if as_json:
         # ``asdict`` recurses into nested dataclasses so the
         # ``similarity`` field becomes a sub-object automatically. When
