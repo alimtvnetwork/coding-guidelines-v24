@@ -2051,6 +2051,11 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 path=d, status="ignored-deleted",
                 reason=_DELETED_REASON.get(
                     src, _DELETED_REASON_FALLBACK),
+                # Carry the raw provenance tag onto the audit row so
+                # ``--list-changed-files-verbose`` can surface it
+                # alongside the human-readable reason. Non-deleted
+                # rows leave ``source`` at its ``None`` default.
+                source=src,
             ))
     return out
 
