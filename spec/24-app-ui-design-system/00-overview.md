@@ -1,4 +1,4 @@
-# App Design System & UI
+# App UI — Design System
 
 **Version:** 3.2.0  
 **Updated:** 2026-04-16  
@@ -9,7 +9,7 @@
 
 ## Keywords
 
-`app-design-system` · `app-ui` · `theming` · `components` · `layout`
+`app-ui` · `app-design-system` · `theming` · `components` · `layout`
 
 ---
 
@@ -27,7 +27,7 @@
 
 ## Purpose
 
-Application-specific design system and UI specifications. Covers component patterns, theming decisions, layout conventions, and visual standards specific to this application.
+Application-specific UI and design-system specifications for whatever project this repo ships — web app, Chrome extension, CLI, plugin, mobile app, etc. Covers component patterns, theming decisions, layout conventions, and visual standards specific to this application.
 
 ---
 
@@ -47,7 +47,7 @@ Application-specific design system and UI specifications. Covers component patte
 
 ---
 
-*App design system & UI — created 2026-04-10, renumbered 23→24 on 2026-04-16*
+*App UI — Design System — created 2026-04-10, renumbered 23→24 on 2026-04-16, slug renamed `24-app-design-system-and-ui` → `24-app-ui-design-system` on 2026-04-26*
 
 ---
 
@@ -55,7 +55,7 @@ Application-specific design system and UI specifications. Covers component patte
 
 _Auto-generated section — see `spec/24-app-ui-design-system/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-ADS-000: App design-system conformance: Overview
+### AC-ADS-000: App UI / design-system conformance: Overview
 
 **Given** Scan app UI for raw colors and untokenized spacing; render Storybook (or equivalent) snapshot suite.  
 **When** Run the verification command shown below.  

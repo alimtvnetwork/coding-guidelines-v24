@@ -1,4 +1,4 @@
-# App Database
+# App DB
 
 **Version:** 3.2.0  
 **Updated:** 2026-04-16  
@@ -9,7 +9,7 @@
 
 ## Keywords
 
-`app-database` · `schema` · `migrations` · `queries` · `data-model`
+`app-db` · `schema` · `migrations` · `queries` · `data-model`
 
 ---
 
@@ -27,7 +27,7 @@
 
 ## Purpose
 
-Application-specific database specifications. Covers the app's data model, table designs, migration strategies, query patterns, and any database decisions unique to this application. This complements the core `04-database-conventions/` (general naming/schema rules) and `05-split-db-architecture/` (SQLite partitioning) with app-specific schema details.
+Application-specific database (App DB) specifications for whatever project this repo ships — web app, Chrome extension, CLI, plugin, mobile app, etc. Covers the app's data model, table designs, migration strategies, query patterns, and any database decisions unique to this application. Complements the core `04-database-conventions/` (general naming/schema rules) and `05-split-db-architecture/` (SQLite partitioning) with app-specific schema details.
 
 ---
 
@@ -48,7 +48,7 @@ Application-specific database specifications. Covers the app's data model, table
 
 ---
 
-*App database — created 2026-04-16*
+*App DB — created 2026-04-16, slug renamed `23-app-database` → `23-app-db` on 2026-04-26*
 
 ---
 
@@ -56,7 +56,7 @@ Application-specific database specifications. Covers the app's data model, table
 
 _Auto-generated section — see `spec/23-app-db/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-ADB-000: App-database conformance: Overview
+### AC-ADB-000: App DB conformance: Overview
 
 **Given** Validate app database migrations against the schema-design rules.  
 **When** Run the verification command shown below.  
