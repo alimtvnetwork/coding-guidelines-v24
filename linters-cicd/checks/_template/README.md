@@ -162,6 +162,31 @@ existing test, do not edit `_lib/`, do not touch other checks.
 
 ---
 
+## SARIF snapshot tests (drift guard)
+
+The `_template/` rules themselves are pinned by SARIF snapshot tests
+in `linters-cicd/tests/test_template_sarif_snapshot.py`. Snapshots
+live under `linters-cicd/tests/snapshots/` and lock down rule
+metadata (`id`, `name`, `shortDescription`, `helpUri`) plus per-finding
+line numbers, columns, and messages. See
+`linters-cicd/tests/snapshots/README.md` for the format.
+
+If you add a sibling-language template (e.g. `typescript.py` next to
+`php.py`):
+
+1. Drop the new `fixtures/dirty.<ext>` and `fixtures/clean.<ext>`.
+2. Add a tuple to `SNAPSHOT_CASES` in
+   `tests/test_template_sarif_snapshot.py`.
+3. Run `UPDATE_SNAPSHOTS=1 python3 linters-cicd/tests/run.py` once
+   to write the baseline; commit the new JSON file.
+4. Re-run without the env var and confirm green.
+
+If a future edit changes a rule's message or shifts a fixture line,
+the snapshot test fails loudly. Regenerate **only** when the change
+is intentional, then review the JSON diff in code review.
+
+---
+
 ## What the template intentionally does NOT show
 
 These are deliberate omissions. Reach for them only when your
