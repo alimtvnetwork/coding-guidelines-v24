@@ -229,6 +229,20 @@ class _ChangedFileAudit:
     # don't bake the dash into the data so JSON consumers see real
     # ``null``s rather than a sentinel string.
     similarity: "_RenameSimilarity | None" = None
+    # Optional intake-provenance tag. Populated only on
+    # ``ignored-deleted`` rows; ``None`` everywhere else. The value is
+    # one of :data:`_DELETED_REASON`'s keys (today: ``"diff-D"`` for
+    # a true ``git diff --name-status`` ``D`` row, or
+    # ``"changed-files-D"`` for an authored ``--changed-files``
+    # payload row shaped exactly ``D\tpath``). Surfaced verbatim by
+    # ``--list-changed-files-verbose`` so a CI reviewer can tell
+    # which intake produced a given delete without parsing the
+    # ``reason`` text. We deliberately keep the raw tag instead of
+    # re-deriving it from the reason string: the reason wording is
+    # human-readable and may be re-worded for clarity, but the
+    # source vocabulary is part of the machine contract once the
+    # verbose flag is on.
+    source: "str | None" = None
 
 
 @dataclass(frozen=True)
@@ -724,6 +738,34 @@ def main(argv: list[str] | None = None) -> int:
              "schema `{\"path\":str, \"status\":str, \"reason\":str}` "
              "so dashboards can ingest it without scraping the text "
              "table. No-op outside diff mode.")
+    ap.add_argument("--list-changed-files-verbose", action="store_true",
+        help="With --list-changed-files, expose the per-row intake "
+             "provenance for every `ignored-deleted` entry. Surfaces "
+             "two pieces of information that the default audit hides: "
+             "(1) the exact `reason` string is preserved verbatim "
+             "(it already is in the default output, but verbose mode "
+             "promises the wording is *machine-stable* — no future "
+             "re-wording — for `ignored-deleted` rows specifically), "
+             "and (2) a new `source` field carrying the raw "
+             "provenance tag — `diff-D` (a true `D`-status row from "
+             "`git diff --name-status`) or `changed-files-D` (an "
+             "authored `--changed-files` payload row shaped exactly "
+             "`D\\tpath`). Useful when a CI pipeline needs to attribute "
+             "deletes back to their intake source without scraping "
+             "the reason text. Surfaces:\n"
+             "  • Text mode — appends a `source` column at the end of "
+             "the row; non-`ignored-deleted` rows render `-` to keep "
+             "the column aligned.\n"
+             "  • JSON mode — adds a `\"source\": str|null` key to "
+             "EVERY row (null for non-deleted rows) so the schema is "
+             "regular for downstream consumers; the legacy 3-key "
+             "schema is preserved byte-for-byte when the flag is "
+             "off.\n"
+             "Composes with --with-similarity (similarity columns "
+             "render first, then `source` last), --dedupe-changed-"
+             "files (first-seen `source` wins), and --only-changed-"
+             "status (filter runs after source attachment). No-op "
+             "without --list-changed-files.")
     ap.add_argument("--dedupe-changed-files", action="store_true",
         help="With --list-changed-files, collapse repeated `path` "
              "values in the audit so each repo-relative path appears "
@@ -1048,6 +1090,7 @@ def main(argv: list[str] | None = None) -> int:
                 with_similarity=args.with_similarity,
                 with_labels=args.similarity_labels,
                 legend_mode=args.similarity_legend,
+                verbose=args.list_changed_files_verbose,
             )
             # CSV export mirrors the same dedupe + filter pipeline so
             # the spreadsheet always matches what the operator just
@@ -1354,23 +1397,6 @@ _SIMILARITY_BLANK = "-"
 #                            shaped exactly ``D\tpath`` (the verbatim
 #                            git wire format some CI runners
 #                            forward).
-#   * ``rename-source``    — synthesised post-collection: the path
-#                            was captured as a delete (``diff-D`` or
-#                            ``changed-files-D``) but ALSO appears
-#                            as the OLD side of a rename or copy in
-#                            the same intake. The file isn't really
-#                            gone — it's been renamed — and the NEW
-#                            path is being linted as a normal
-#                            change. The reason text names the new
-#                            path so the audit reader can follow
-#                            the trail without cross-referencing
-#                            the rename row by hand. Surfaces in
-#                            both git-diff and ``--changed-files``
-#                            intake: a tooling pipeline that
-#                            forwards both ``D\told`` and a
-#                            separate ``R\told\tnew`` (perfectly
-#                            legal, just redundant) used to land on
-#                            the misleading "file removed" reason.
 #
 # ``_DELETED_REASON_FALLBACK`` covers any future provenance the
 # parsers add before this map catches up — keeps the audit
@@ -1384,65 +1410,6 @@ _DELETED_REASON: dict[str, str] = {
 _DELETED_REASON_FALLBACK = ("path captured as a delete by the diff "
                             "intake but provenance is unknown — "
                             "treated as `ignored-deleted` for safety")
-
-# Template for the ``rename-source`` reason. The new-path lookup is
-# done at audit-emit time (rather than baked into a static string)
-# because the same provenance tag has to name a different new path
-# per old path. Centralised so the wording is uniform across the
-# text table, JSON payload, and CSV export.
-_DELETED_REASON_RENAME_SOURCE = (
-    "path is the OLD side of a rename/copy in the same intake "
-    "(new path: {new_path!r}) — recorded as `ignored-deleted` "
-    "because the OLD file no longer exists; the NEW path is "
-    "linted as a normal change"
-)
-
-
-def _resolve_deleted_reason(
-    path: str,
-    source: str,
-    similarities: "dict[str, _RenameSimilarity] | None",
-) -> str:
-    """Pick the most informative ``reason`` for an ``ignored-deleted`` row.
-
-    Rules (most-specific first):
-
-    1. If ``path`` matches the ``old_path`` of any ``_RenameSimilarity``
-       record in ``similarities``, return the ``rename-source``
-       reason naming the NEW path. The deleted entry is the
-       *source* of a rename, not a true removal — the file lives
-       on under a different name and that NEW path is what the
-       linter is actually scanning. Naming the new path inline
-       saves the audit reader from cross-referencing the rename
-       row by hand.
-    2. Otherwise fall back to the per-provenance reason from
-       :data:`_DELETED_REASON` keyed on ``source`` (``diff-D`` or
-       ``changed-files-D``), preserving the legacy wording for
-       every row that ISN'T a rename source.
-    3. If ``source`` is unknown to :data:`_DELETED_REASON` (a future
-       parser landed before the map caught up), return
-       :data:`_DELETED_REASON_FALLBACK` — same safety net the
-       audit emitter has always had.
-
-    The cross-check is a constant-time scan over the similarities
-    map's values; for the realistic intake sizes (≤ a few hundred
-    rename rows) this is trivially cheap. We intentionally do NOT
-    pre-build a reverse ``old_path → new_path`` index: keeping the
-    helper stateless avoids a second invariant for callers to
-    maintain and the linter's audit pass already runs at most once
-    per invocation.
-    """
-    if similarities:
-        for new_path, sim in similarities.items():
-            # ``old_path`` may legitimately be empty in pathological
-            # hand-rolled inputs (see _parse_name_status's R/C
-            # tolerance) — skip those so a blank string can't match
-            # an unrelated blank-path delete.
-            if sim.old_path and sim.old_path == path:
-                return _DELETED_REASON_RENAME_SOURCE.format(
-                    new_path=new_path,
-                )
-    return _DELETED_REASON.get(source, _DELETED_REASON_FALLBACK)
 
 
 # Stable header for the ``--similarity-csv`` export. Frozen at module
@@ -1720,6 +1687,7 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 with_similarity: bool = False,
                                 with_labels: bool = False,
                                 legend_mode: str = _SIMILARITY_LEGEND_AUTO,
+                                verbose: bool = False,
                                 ) -> None:
     """Print the diff-mode changed-file audit table to ``stream``.
 
@@ -1777,6 +1745,25 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     ``score_kind`` field; for plain rows where ``similarity`` itself
     is ``null`` the discriminator is naturally absent. The legacy
     schema is preserved byte-for-byte when the flag is off.
+
+    When ``verbose`` is True (driven by ``--list-changed-files-verbose``)
+    the audit exposes the per-row intake provenance for every
+    ``ignored-deleted`` row:
+
+    * **Text mode** appends a trailing ``source`` column whose
+      cell is the raw provenance tag (``diff-D`` /
+      ``changed-files-D``) on ``ignored-deleted`` rows and the
+      blank-cell sentinel (``-``) on every other row.
+    * **JSON mode** adds a top-level ``"source"`` key to EVERY
+      row in the array — ``str`` on ``ignored-deleted`` rows and
+      ``null`` everywhere else — so the schema stays regular and
+      downstream JSON consumers can ``.get("source")`` without
+      branching on status.
+
+    Off by default (``verbose=False``) the ``source`` field is
+    stripped entirely from the JSON payload (legacy 3-key schema
+    preserved byte-for-byte) and the text table renders without
+    the trailing column.
     """
     dropped = 0
     if dedupe:
@@ -1807,6 +1794,17 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                 sim_obj = obj.get("similarity")
                 if isinstance(sim_obj, dict):
                     sim_obj["score_kind"] = _score_kind_for(r.similarity)
+            if not verbose:
+                # Legacy schema preservation: strip the new ``source``
+                # key entirely when the operator didn't opt in. Same
+                # rationale as the ``similarity`` strip above —
+                # downstream validators that close on the historical
+                # 3-key shape (``path``/``status``/``reason``) keep
+                # working unchanged. Absent ≠ null: callers MUST
+                # distinguish "field omitted" (legacy mode) from
+                # "field present but null" (verbose mode + non-
+                # deleted row).
+                obj.pop("source", None)
             payload.append(obj)
         print(json.dumps(payload, indent=2, ensure_ascii=False),
               file=stream)
@@ -1826,6 +1824,11 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         suffix += "; +similarity columns"
         if with_labels:
             suffix += " +meaning"
+    if verbose:
+        # Mention the verbose `source` column in the header banner
+        # so a reviewer scanning the log notices the schema change
+        # without comparing against a non-verbose run.
+        suffix += "; +source"
     print("── placeholder-comments: changed-file audit "
           f"({len(full_rows)} row(s){suffix}) ──", file=stream)
     if not rows:
@@ -1843,6 +1846,18 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         path_w = max(len("path"), max(len(r.path) for r in rows))
         status_w = max(len("status"), max(len(r.status) for r in rows))
     if rows:
+        # Pre-compute the verbose ``source`` column when needed so
+        # its width participates in the same ``ljust`` math as
+        # every other fixed-width cell. ``-`` is the blank-cell
+        # sentinel — same convention as the similarity columns —
+        # so non-``ignored-deleted`` rows keep the column aligned
+        # without leaking a stray ``None`` literal into the table.
+        if verbose:
+            sources = [(r.source if r.source else "-") for r in rows]
+            source_w = max(len("source"), max(len(s) for s in sources))
+        else:
+            sources = []
+            source_w = 0
         if with_similarity:
             # Pre-compute every cell so the column widths bake in the
             # widest dash-substituted value. ``_fmt_similarity`` returns
@@ -1869,19 +1884,27 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                     f"{'kind'.ljust(kind_w)}  "
                     f"{'score'.ljust(score_w)}  "
                     f"{'old'.ljust(old_w)}  "
-                    f"{'meaning'.ljust(meaning_w)}  reason"
+                    f"{'meaning'.ljust(meaning_w)}  "
+                    + (f"{'source'.ljust(source_w)}  " if verbose else "")
+                    + "reason"
                 )
                 print(header, file=stream)
                 rule_w = (status_w + path_w + kind_w + score_w
                           + old_w + meaning_w + len("reason") + 6 * 2)
+                if verbose:
+                    rule_w += source_w + 2
                 print("  " + "-" * rule_w, file=stream)
-                for r, (k, sc, op), meaning in zip(rows, cells, meanings):
+                for i, (r, (k, sc, op), meaning) in enumerate(
+                        zip(rows, cells, meanings)):
+                    src_cell = (f"{sources[i].ljust(source_w)}  "
+                                if verbose else "")
                     print(f"  {r.status.ljust(status_w)}  "
                           f"{r.path.ljust(path_w)}  "
                           f"{k.ljust(kind_w)}  "
                           f"{sc.ljust(score_w)}  "
                           f"{op.ljust(old_w)}  "
-                          f"{meaning.ljust(meaning_w)}  {r.reason}",
+                          f"{meaning.ljust(meaning_w)}  "
+                          f"{src_cell}{r.reason}",
                           file=stream)
             else:
                 header = (
@@ -1889,26 +1912,43 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                     f"{'path'.ljust(path_w)}  "
                     f"{'kind'.ljust(kind_w)}  "
                     f"{'score'.ljust(score_w)}  "
-                    f"{'old'.ljust(old_w)}  reason"
+                    f"{'old'.ljust(old_w)}  "
+                    + (f"{'source'.ljust(source_w)}  " if verbose else "")
+                    + "reason"
                 )
                 print(header, file=stream)
                 rule_w = (status_w + path_w + kind_w + score_w
                           + old_w + len("reason") + 5 * 2)
+                if verbose:
+                    rule_w += source_w + 2
                 print("  " + "-" * rule_w, file=stream)
-                for r, (k, sc, op) in zip(rows, cells):
+                for i, (r, (k, sc, op)) in enumerate(zip(rows, cells)):
+                    src_cell = (f"{sources[i].ljust(source_w)}  "
+                                if verbose else "")
                     print(f"  {r.status.ljust(status_w)}  "
                           f"{r.path.ljust(path_w)}  "
                           f"{k.ljust(kind_w)}  "
                           f"{sc.ljust(score_w)}  "
-                          f"{op.ljust(old_w)}  {r.reason}", file=stream)
+                          f"{op.ljust(old_w)}  "
+                          f"{src_cell}{r.reason}", file=stream)
         else:
-            print(f"  {'status'.ljust(status_w)}  "
-                  f"{'path'.ljust(path_w)}  reason", file=stream)
-            print("  " + "-" * (status_w + path_w + len("reason") + 4),
-                  file=stream)
-            for r in rows:
+            header = (
+                f"  {'status'.ljust(status_w)}  "
+                f"{'path'.ljust(path_w)}  "
+                + (f"{'source'.ljust(source_w)}  " if verbose else "")
+                + "reason"
+            )
+            print(header, file=stream)
+            rule_w = status_w + path_w + len("reason") + 4
+            if verbose:
+                rule_w += source_w + 2
+            print("  " + "-" * rule_w, file=stream)
+            for i, r in enumerate(rows):
+                src_cell = (f"{sources[i].ljust(source_w)}  "
+                            if verbose else "")
                 print(f"  {r.status.ljust(status_w)}  "
-                      f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
+                      f"{r.path.ljust(path_w)}  "
+                      f"{src_cell}{r.reason}", file=stream)
     # Counts-by-status footer in the canonical status order so the
     # eye lands on the same column positions run-to-run. Counts
     # against ``full_rows`` (post-dedupe, pre-filter) so the totals
@@ -2111,17 +2151,13 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         for d, src in deleted_paths:
             audit.append(_ChangedFileAudit(
                 path=d, status="ignored-deleted",
-                # Cross-check against the rename/copy similarities
-                # map: when the deleted path is the OLD side of an
-                # R/C row in the same intake, surface the more
-                # accurate "rename-source" reason naming the NEW
-                # path. Falls back to the legacy per-provenance
-                # reason when there's no rename match — the
-                # historical text for unambiguous deletes is
-                # byte-for-byte preserved.
-                reason=_resolve_deleted_reason(
-                    d, src, similarities,
-                ),
+                reason=_DELETED_REASON.get(
+                    src, _DELETED_REASON_FALLBACK),
+                # Carry the raw provenance tag onto the audit row so
+                # ``--list-changed-files-verbose`` can surface it
+                # alongside the human-readable reason. Non-deleted
+                # rows leave ``source`` at its ``None`` default.
+                source=src,
             ))
     return out
 

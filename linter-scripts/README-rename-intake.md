@@ -51,41 +51,43 @@ continue to work unchanged. The flag is purely additive.
 ### `reason` for `ignored-deleted` rows
 
 The `reason` field on `ignored-deleted` rows is per-source so a
-reviewer can see *why* a path was classified as deleted. Three
-source vocabularies are emitted today:
+reviewer can see *why* a path was classified as deleted. Two source
+vocabularies are emitted today:
 
 | Source | Triggered by | `reason` substring (stable for log-grep) |
 |---|---|---|
 | `diff-D` | A real `D`-status row from `git diff --name-status` | `git diff reported D (deleted)` |
 | `changed-files-D` | An authored `--changed-files` payload row shaped exactly `D\tpath` | `--changed-files payload row shaped` |
-| `rename-source` | A captured delete (either provenance above) whose path is *also* the OLD side of a rename or copy in the same intake | `OLD side of a rename/copy in the same intake (new path: '…')` |
-
-The `rename-source` reason is **synthesised post-collection**: the
-resolver cross-checks every captured delete against the rename /
-copy similarity map and, on match, replaces the generic "file
-removed" wording with one that names the NEW path inline. This
-matters whenever a tooling pipeline forwards both shapes for the
-same path — perfectly legal, just redundant — e.g.:
-
-```text
-D\tspec/old.md            # captured as ignored-deleted
-R\tspec/old.md\tspec/new.md   # OLD-side path matches the delete above
-```
-
-The audit row for `spec/old.md` now reads
-`…OLD side of a rename/copy… (new path: 'spec/new.md')` instead
-of the misleading `git diff reported D (deleted)`. The NEW path
-is still linted as a normal `matched` row — only the OLD-side
-row's `reason` text changes. The match is path-equality on the
-similarity record's `old_path`; arrow-form renames
-(`OLD => NEW`) and scored / unscored / score-`0` `R`/`C` rows all
-participate.
 
 The full `reason` text is intentionally not part of the machine
 contract (it may be re-worded for clarity), but the substrings above
 are stable and safe to grep in CI logs. New provenance tags will be
 added alongside their parser changes; an unknown tag falls back to
 a clearly labelled "provenance unknown" reason rather than crashing.
+
+### Verbose mode (`--list-changed-files-verbose`)
+
+Pass `--list-changed-files-verbose` (alongside `--list-changed-files`)
+to expose the raw provenance tag for every `ignored-deleted` row.
+Two surfaces, two contracts:
+
+- **JSON** — adds a `"source": str|null` key to **every** row
+  (`str` on `ignored-deleted` rows, `null` everywhere else) so the
+  schema stays regular for downstream consumers. Off (the default),
+  the key is **omitted entirely** — legacy 3-key schema preserved
+  byte-for-byte.
+- **Text** — appends a `source` column at the end of the fixed-
+  width cells (just before the variable-width `reason`). Non-
+  deleted rows render `-` to match the surrounding blank-cell
+  convention.
+
+Verbose mode also promises the `reason` wording is **machine-stable**
+for `ignored-deleted` rows — no future re-wording — so CI scripts
+can match on the full string instead of the substring guarantee
+above. Composes cleanly with `--with-similarity` (similarity
+columns first, then `source` last), `--dedupe-changed-files`
+(first-seen `source` wins), and `--only-changed-status` (filter
+runs after source attachment).
 
 ### `similarity` sub-object
 
