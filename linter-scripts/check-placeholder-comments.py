@@ -712,12 +712,33 @@ def main(argv: list[str] | None = None) -> int:
         and changed_md is not None
         and (not args.json or args.json_excerpts)
     )
-    if want_excerpts:
+    # Suggested patches reuse the same ``_DiffExcerpts`` data (post-
+    # state line index + hunk windows) so we widen the fetch trigger
+    # to also cover --suggest-patch / --json-suggest-patch when
+    # excerpts themselves are off (e.g. --diff-context=0 but the
+    # author still wants a copy-paste fix scaffold).
+    want_patches = (
+        violations
+        and args.diff_base
+        and changed_md is not None
+        and ((not args.json and args.suggest_patch)
+             or (args.json and args.json_suggest_patch))
+    )
+    if want_excerpts or want_patches:
         affected = sorted({v.file for v in violations
                            if (repo_root / v.file).resolve() in changed_md})
         for rel in affected:
+            # When only patches are requested, fetch a minimal
+            # 1-line context so suggest_patch() still has the
+            # above/below anchor rows it uses for hunk math. The
+            # excerpt renderer would emit a tiny window in that
+            # case, but we already gate human/JSON excerpt output
+            # on ``want_excerpts`` separately so nothing leaks.
+            ctx = args.diff_context if want_excerpts else max(
+                1, args.diff_context,
+            )
             excerpt = _fetch_diff_excerpts(
-                repo_root, args.diff_base, rel, args.diff_context,
+                repo_root, args.diff_base, rel, ctx,
             )
             if excerpt is not None:
                 diff_excerpts[rel] = excerpt
@@ -730,19 +751,23 @@ def main(argv: list[str] | None = None) -> int:
         # ``null`` or ``[]``, so legacy parsers that key only off
         # ``file``/``line``/``code``/``message`` keep working
         # without seeing a new always-present field.
-        if not args.json_excerpts:
+        if not args.json_excerpts and not args.json_suggest_patch:
             print(json.dumps([asdict(v) for v in violations], indent=2))
         else:
             payload: list[dict[str, object]] = []
             for v in violations:
                 row = asdict(v)
                 excerpt = diff_excerpts.get(v.file)
-                if excerpt is not None:
+                if excerpt is not None and args.json_excerpts:
                     snippet = excerpt.render_structured(
                         v.line, args.diff_context,
                     )
                     if snippet:
                         row["excerpt"] = snippet
+                if excerpt is not None and args.json_suggest_patch:
+                    patch_text = excerpt.suggest_patch(v.file, v.line, v.code)
+                    if patch_text:
+                        row["suggested_patch"] = patch_text
                 payload.append(row)
             # ``ensure_ascii=False`` so non-ASCII spec content
             # (e.g. quoted UTF-8 paths from the rename hardening)
@@ -758,7 +783,7 @@ def main(argv: list[str] | None = None) -> int:
             for v in violations:
                 print(f"  {v.file}:{v.line}  [{v.code}] {v.message}")
                 excerpt = diff_excerpts.get(v.file)
-                if excerpt is not None:
+                if excerpt is not None and args.diff_context > 0:
                     snippet = excerpt.render(v.line, args.diff_context)
                     if snippet:
                         # Two-space indent under the violation line
@@ -767,6 +792,21 @@ def main(argv: list[str] | None = None) -> int:
                         # leading `<file>:<line>` shape.
                         for sline in snippet:
                             print(f"    {sline}")
+                if excerpt is not None and args.suggest_patch:
+                    patch_text = excerpt.suggest_patch(v.file, v.line, v.code)
+                    if patch_text:
+                        # Wrap the patch in clear fences so authors
+                        # can mouse-select the body and pipe it
+                        # straight into ``git apply -p0 --recount``.
+                        # Indented to nest visually under the
+                        # violation, but the fences themselves stay
+                        # at column 4 so awk/sed extraction is
+                        # trivial (look for the literal sentinel).
+                        print("    --- BEGIN SUGGESTED PATCH "
+                              "(git apply -p0 --recount) ---")
+                        for pline in patch_text.rstrip("\n").split("\n"):
+                            print(f"    {pline}")
+                        print("    --- END SUGGESTED PATCH ---")
             print("\n  See linter-scripts/check-placeholder-comments.py for rule docs.")
 
     # ---- GitHub Actions annotations (always after the human summary)
