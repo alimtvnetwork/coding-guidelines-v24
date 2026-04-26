@@ -31,6 +31,19 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --github
 - Links inside HTML comments (`<!-- … -->`) are ignored — they are placeholder cross-references that authors activate later. See `spec/_template.md` §Cross-References for the copy-paste snippet.
 - External URLs (`http://`, `https://`, `mailto:`, etc.) and project schemes (`mem://`, `user-uploads://`, `knowledge://`) are skipped.
 
+## Companion check: placeholder block formatting
+
+Because comment-wrapped links are skipped here, malformed placeholder
+blocks (missing `-->`, stray prose, external links pretending to be
+placeholders) would otherwise rot silently. Run the companion linter to
+validate placeholder syntax before commit:
+
+```bash
+python3 linter-scripts/check-placeholder-comments.py --root spec --repo-root .
+```
+
+It enforces the snippet shape documented in `spec/_template.md` §Placeholder cross-references and runs automatically in the pre-commit hook alongside the cross-link checker.
+
 ## Allowlist (waivers)
 
 Known-broken links live in `linter-scripts/spec-cross-links.allowlist`,
