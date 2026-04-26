@@ -80,6 +80,7 @@ class IncludeTxtBaseline(unittest.TestCase):
             spec, cache = _make_repo(tdp)
             code, _, _ = _run(
                 "--root", str(spec),
+                "--repo-root", str(tdp),
                 "--include-txt",
                 "--cache-dir", str(cache),
                 cwd=tdp)
@@ -99,6 +100,7 @@ class IncludeTxtBaseline(unittest.TestCase):
             spec, cache = _make_repo(tdp)
             code, _, _ = _run(
                 "--root", str(spec),
+                "--repo-root", str(tdp),
                 "--cache-dir", str(cache),
                 cwd=tdp)
         self.assertEqual(code, 0)
@@ -119,6 +121,7 @@ class IncludeTxtUnionSemantics(unittest.TestCase):
             spec, cache = _make_repo(tdp)
             code, _, _ = _run(
                 "--root", str(spec),
+                "--repo-root", str(tdp),
                 "--extension", "rst",
                 "--include-txt",
                 "--cache-dir", str(cache),
@@ -138,6 +141,7 @@ class IncludeTxtUnionSemantics(unittest.TestCase):
             spec, cache = _make_repo(tdp)
             code, _, _ = _run(
                 "--root", str(spec),
+                "--repo-root", str(tdp),
                 "--extension", "md",
                 "--extension", "txt",
                 "--include-txt",
@@ -159,11 +163,13 @@ class IncludeTxtUnionSemantics(unittest.TestCase):
             (spec / "extra.mdx").write_text("# spec\nplain prose.\n")
             code1, _, err1 = _run(
                 "--root", str(spec),
+                "--repo-root", str(tdp),
                 "--include-mdx", "--include-txt",
                 "--cache-dir", str(cache),
                 cwd=tdp)
             code2, _, err2 = _run(
                 "--root", str(spec),
+                "--repo-root", str(tdp),
                 "--include-txt", "--include-mdx",
                 "--cache-dir", str(cache),
                 cwd=tdp)
