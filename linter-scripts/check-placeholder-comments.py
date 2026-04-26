@@ -229,6 +229,20 @@ class _ChangedFileAudit:
     # don't bake the dash into the data so JSON consumers see real
     # ``null``s rather than a sentinel string.
     similarity: "_RenameSimilarity | None" = None
+    # Optional intake-provenance tag. Populated only on
+    # ``ignored-deleted`` rows; ``None`` everywhere else. The value is
+    # one of :data:`_DELETED_REASON`'s keys (today: ``"diff-D"`` for
+    # a true ``git diff --name-status`` ``D`` row, or
+    # ``"changed-files-D"`` for an authored ``--changed-files``
+    # payload row shaped exactly ``D\tpath``). Surfaced verbatim by
+    # ``--list-changed-files-verbose`` so a CI reviewer can tell
+    # which intake produced a given delete without parsing the
+    # ``reason`` text. We deliberately keep the raw tag instead of
+    # re-deriving it from the reason string: the reason wording is
+    # human-readable and may be re-worded for clarity, but the
+    # source vocabulary is part of the machine contract once the
+    # verbose flag is on.
+    source: "str | None" = None
 
 
 @dataclass(frozen=True)
