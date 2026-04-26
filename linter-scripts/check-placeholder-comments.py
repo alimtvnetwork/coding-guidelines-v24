@@ -668,18 +668,30 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
 
     Two input modes:
       * ``diff_base`` → invoke
-        ``git diff --name-only --diff-filter=AM <base>...HEAD`` from
-        ``repo_root``. The triple-dot syntax compares HEAD against the
-        merge-base with ``<base>``, which matches GitHub's PR diff and
-        survives force-pushes / rebases on the base branch. The
-        ``AM`` filter keeps Added + Modified paths and drops deletes,
-        renames, and type changes — none of which can introduce a
-        new placeholder violation in the post-state.
+        ``git diff --name-status -M -C --diff-filter=AMRC
+        <base>...HEAD`` from ``repo_root``. The triple-dot syntax
+        compares HEAD against the merge-base with ``<base>``, which
+        matches GitHub's PR diff and survives force-pushes / rebases
+        on the base branch. The ``AMRC`` filter keeps Added,
+        Modified, Renamed, and Copied paths and drops deletes + type
+        changes (a deleted file can't carry a new violation in the
+        post-state). For ``R``/``C`` rows we take the *new* path so
+        the linter re-checks the file under its post-rename location
+        — that's where the placeholder block lives now, and a rename
+        commit often touches it (e.g. updated back-pointer hints).
+        ``-M`` enables rename detection (default 50 % similarity)
+        and ``-C`` enables copy detection so the new sibling of a
+        copy is also linted.
       * ``changed_files`` → read newline-delimited paths from the
         given file (``-`` = stdin). Blank lines and ``#`` comments are
         ignored. Useful for CI runners that compute the diff
         themselves (e.g. ``dorny/paths-filter``) or for local testing
-        without a git invocation.
+        without a git invocation. Renames may be expressed on a
+        single line as either ``OLD\\tNEW`` (tab-separated, matches
+        ``git diff --name-status`` output verbatim) or
+        ``OLD => NEW`` (matches ``git status -s`` rename arrows). In
+        both forms the OLD path is discarded and the NEW path is
+        linted as a normal change.
 
     Returned paths are absolute + resolved and filtered to:
       * extension ``.md``
@@ -688,11 +700,15 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
       * actually present on disk (a Modified path that was reverted
         in a later commit of the same push won't exist)
     """
+    # Each entry is the post-state repo-relative path. Rename/copy
+    # rows contribute only their NEW side; deletes contribute nothing
+    # (the diff-filter / parser drops them upstream).
     raw: list[str] = []
     if diff_base:
         try:
             proc = subprocess.run(
-                ["git", "diff", "--name-only", "--diff-filter=AM",
+                ["git", "diff", "--name-status", "-M", "-C",
+                 "--diff-filter=AMRC",
                  f"{diff_base}...HEAD"],
                 cwd=repo_root, check=True, capture_output=True, text=True,
             )
@@ -703,18 +719,19 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 f"git diff vs. {diff_base!r} failed (exit {e.returncode}): "
                 f"{e.stderr.strip() or '(no stderr)'}"
             ) from e
-        raw = proc.stdout.splitlines()
+        raw = _parse_name_status(proc.stdout)
     else:
         assert changed_files is not None
         if changed_files == "-":
-            raw = sys.stdin.read().splitlines()
+            lines = sys.stdin.read().splitlines()
         else:
             try:
-                raw = Path(changed_files).read_text(encoding="utf-8").splitlines()
+                lines = Path(changed_files).read_text(encoding="utf-8").splitlines()
             except OSError as e:
                 raise RuntimeError(
                     f"--changed-files {changed_files!r} unreadable: {e}"
                 ) from e
+        raw = _normalise_changed_lines(lines)
     out: set[Path] = set()
     for line in raw:
         s = line.strip()
@@ -730,6 +747,87 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         if not p.is_file():
             continue
         out.add(p)
+    return out
+
+
+# `git diff --name-status -M` emits one of:
+#   A\tpath          (added)
+#   M\tpath          (modified)
+#   D\tpath          (deleted)              — pre-filtered, never seen here
+#   R<score>\told\tnew  (renamed, score 0–100)
+#   C<score>\told\tnew  (copied,  score 0–100)
+#   T\tpath          (type change)          — pre-filtered, never seen here
+# Tabs are the field separator; we split on tab and key off the first
+# character of column 0 to decide which column carries the new path.
+_NAME_STATUS_RE = re.compile(r"^([AMDRCTUX])(\d{0,3})$")
+
+
+def _parse_name_status(stdout: str) -> list[str]:
+    """Extract the post-state path from each ``git diff --name-status``
+    row, mapping renames + copies to their NEW side.
+
+    Unknown / malformed rows are skipped silently — the linter's job
+    is to lint placeholders, not to police git plumbing output.
+    """
+    out: list[str] = []
+    for line in stdout.splitlines():
+        if not line:
+            continue
+        cols = line.split("\t")
+        if len(cols) < 2:
+            continue
+        m = _NAME_STATUS_RE.match(cols[0])
+        if not m:
+            continue
+        kind = m.group(1)
+        if kind in ("R", "C"):
+            # Rename / copy: cols = [R<score>, old, new]. Take new.
+            if len(cols) >= 3 and cols[2]:
+                out.append(cols[2])
+        elif kind in ("A", "M"):
+            # Add / modify: cols = [A|M, path]. Take path.
+            if cols[1]:
+                out.append(cols[1])
+        # D / T / U / X intentionally dropped — see docstring.
+    return out
+
+
+# Two textual rename conventions accepted in `--changed-files` input:
+#   1. Tab-separated, matches `git diff --name-status` verbatim:
+#        R087\tspec/old.md\tspec/new.md
+#      Any leading status token is tolerated (we just take the last
+#      tab-separated column as the new path).
+#   2. Arrow-separated, matches `git status -s` short output:
+#        spec/old.md => spec/new.md
+#      Whitespace around the arrow is ignored.
+_RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>\S.*?)\s*=>\s*(?P<new>\S.*?)\s*$")
+
+
+def _normalise_changed_lines(lines: list[str]) -> list[str]:
+    """Collapse rename-bearing rows in a ``--changed-files`` payload
+    down to their post-rename path.
+
+    Plain paths (no tab, no ``=>``) pass through unchanged. Comments
+    and blanks are *not* stripped here — the caller does that on the
+    normalised output so we don't lose alignment with the source line
+    numbers in error messages.
+    """
+    out: list[str] = []
+    for line in lines:
+        # Tab form: take the last tab-separated column. Works for
+        # both `R<score>\told\tnew` (3 cols) and unscored `R\told\tnew`
+        # (rare, e.g. when authors hand-edit the file).
+        if "\t" in line:
+            cols = [c for c in line.split("\t") if c]
+            if cols:
+                out.append(cols[-1])
+            continue
+        # Arrow form: `OLD => NEW`.
+        m = _RENAME_ARROW_RE.match(line)
+        if m:
+            out.append(m.group("new"))
+            continue
+        out.append(line)
     return out
 
 
