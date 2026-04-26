@@ -816,7 +816,14 @@ _NAME_STATUS_RE = re.compile(r"^([AMDRCTUX])(\d{0,3})$")
 #
 # Reference: ``git help config`` → ``core.quotePath``;
 # ``quote.c::quote_c_style_counted`` in git's source.
-_C_OCT_RE = re.compile(r"\\([0-7]{1,3})")
+# Match a *run* of consecutive ``\NNN`` octal escapes so we can
+# decode them as a single UTF-8 byte sequence. Decoding triplet-by-
+# triplet would split a multi-byte character (e.g. ``é`` =
+# ``\303\251``) across two ``bytes.decode`` calls and each half
+# would emit a U+FFFD replacement char. A single ``re.sub`` over
+# the whole run hands the bytes to the codec atomically, which is
+# the only way to get correct round-trips for non-ASCII paths.
+_C_OCT_RUN_RE = re.compile(r"(?:\\[0-7]{1,3})+")
 _C_ESC_TBL = {
     "a": "\a", "b": "\b", "t": "\t", "n": "\n",
     "v": "\v", "f": "\f", "r": "\r",
@@ -845,13 +852,21 @@ def _unquote_git_path(field: str) -> str:
     if not (len(s) >= 2 and s.startswith('"') and s.endswith('"')):
         return s
     inner = s[1:-1]
-    # First expand ``\NNN`` octal byte escapes (UTF-8-encoded).
-    def _oct_sub(m: "re.Match[str]") -> str:
+    # First expand ``\NNN`` octal byte escapes. We decode each
+    # *run* of escapes as one UTF-8 byte string so a multi-byte
+    # character split across triplets (``\303\251`` = ``é``)
+    # round-trips correctly. ``errors="replace"`` keeps malformed
+    # input visible (U+FFFD) rather than raising — same posture as
+    # the rest of the linter, which never crashes on weird git
+    # output, only logs the violation site.
+    def _oct_run_sub(m: "re.Match[str]") -> str:
+        run = m.group(0)
         try:
-            return bytes([int(m.group(1), 8)]).decode("utf-8", "replace")
-        except (ValueError, UnicodeDecodeError):
-            return m.group(0)
-    inner = _C_OCT_RE.sub(_oct_sub, inner)
+            buf = bytes(int(t, 8) for t in run.split("\\")[1:])
+        except ValueError:
+            return run
+        return buf.decode("utf-8", "replace")
+    inner = _C_OCT_RUN_RE.sub(_oct_run_sub, inner)
     # Then expand single-char escapes.
     out: list[str] = []
     i = 0
