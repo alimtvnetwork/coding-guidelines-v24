@@ -616,9 +616,10 @@ def main(argv: list[str] | None = None) -> int:
     # walks every `.md` so a changed file colliding with an
     # unchanged target is reported.
     changed_md: set[Path] | None = None
+    rename_map: dict[Path, _DiffEntry] = {}
     if args.diff_base or args.changed_files:
         try:
-            changed_md = _resolve_changed_md(
+            changed_md, rename_map = _resolve_changed_md(
                 repo_root, root,
                 diff_base=args.diff_base,
                 changed_files=args.changed_files,
@@ -631,6 +632,32 @@ def main(argv: list[str] | None = None) -> int:
             ext_label = "/".join(sorted(source_exts))
             print(f"ℹ️  placeholder-comments: diff-mode active — "
                   f"{len(changed_md)} changed {ext_label} file(s) under {args.root}/")
+            # Itemise rename/copy intake so a reviewer can see which
+            # rows were folded onto a NEW path before the lint runs.
+            # Kept conditional: zero R/C rows ⇒ silent (the common
+            # case for ordinary push diffs).
+            if rename_map:
+                renames = sum(1 for e in rename_map.values() if e.kind == "R")
+                copies = sum(1 for e in rename_map.values() if e.kind == "C")
+                bits: list[str] = []
+                if renames:
+                    bits.append(f"{renames} rename(s)")
+                if copies:
+                    bits.append(f"{copies} copy(ies)")
+                print(f"   ↪ rename/copy intake: {', '.join(bits)} "
+                      "— linting the post-rename path:")
+                # Sort by new_path so the table is stable across runs
+                # and easy to diff between two CI logs.
+                for p in sorted(rename_map, key=lambda q: str(q)):
+                    ent = rename_map[p]
+                    score = (f"{ent.score:>3d}%" if ent.score is not None
+                             else " ?? ")
+                    try:
+                        new_rel = str(p.relative_to(repo_root))
+                    except ValueError:
+                        new_rel = str(p)
+                    print(f"     {ent.kind}{score}  {ent.old_path}  →  "
+                          f"{new_rel}  (linted)")
         if not changed_md:
             # Nothing under --root changed → fast PASS. Cross-file P-007
             # has nothing new to report by definition (no new bullets).
