@@ -2007,26 +2007,48 @@ def _format_github_annotations(violations: list[Violation]) -> Iterable[str]:
         )
 
 
-def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> str:
+def _compute_cache_key(
+    root: Path,
+    intent_verbs: frozenset[str] | set[str],
+    *,
+    extensions: tuple[str, ...] = DEFAULT_EXTENSIONS,
+    include: tuple[str, ...] = (),
+    exclude: tuple[str, ...] = (),
+) -> str:
     """Build a SHA-256 fingerprint of every input that affects the verdict.
 
     Inputs (in deterministic order):
       1. The absolute, resolved scan root.
       2. The sorted, canonicalised imperative-verb allowlist.
-      3. The SHA-256 of the linter script itself (so a logic change
+      3. The discovery filter triple — extensions (sorted), include
+         globs (sorted), exclude globs (sorted). These narrow or
+         widen the file set so a PASS sentinel from one filter
+         configuration MUST NOT satisfy a different one. Sorting
+         here is what makes ``--include a --include b`` and
+         ``--include b --include a`` produce the same key (CLI order
+         doesn't change the file set).
+      4. The SHA-256 of the linter script itself (so a logic change
          invalidates every cached PASS automatically).
-      4. For every `.md` under the root (sorted by path, dotfiles
+      5. For every discovered file (sorted by path, dotfiles
          excluded — same filter as ``iter_markdown_files``):
          ``<repo-relative-path>\\0<sha256-of-bytes>\\n``
 
     Anything outside this set (mtimes, permissions, sibling files,
     environment variables) is intentionally excluded so the key is
     reproducible across machines and CI shards.
+
+    The cache key version tag is bumped from ``v1`` to ``v2``
+    because the discovery-filter inputs change the schema. Old
+    ``*.pass`` sentinels will simply miss (extra disk space, never
+    a wrong verdict) and the next clean run rewrites them.
     """
     h = hashlib.sha256()
-    h.update(b"placeholder-comments-cache-v1\n")
+    h.update(b"placeholder-comments-cache-v2\n")
     h.update(f"root={root}\n".encode("utf-8"))
     h.update(("verbs=" + ",".join(sorted(intent_verbs)) + "\n").encode("utf-8"))
+    h.update(("exts=" + ",".join(sorted(extensions)) + "\n").encode("utf-8"))
+    h.update(("include=" + ",".join(sorted(include)) + "\n").encode("utf-8"))
+    h.update(("exclude=" + ",".join(sorted(exclude)) + "\n").encode("utf-8"))
     try:
         script_bytes = Path(__file__).resolve().read_bytes()
         h.update(b"script=" + hashlib.sha256(script_bytes).hexdigest().encode() + b"\n")
@@ -2034,7 +2056,12 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
         # __file__ unreadable (zipapp / frozen). Fall back to a stable
         # tag so the cache still works, just with coarser invalidation.
         h.update(b"script=unknown\n")
-    for md in iter_markdown_files(root):
+    for md in iter_markdown_files(
+        root,
+        extensions=extensions,
+        include=include,
+        exclude=exclude,
+    ):
         try:
             data = md.read_bytes()
         except OSError:
