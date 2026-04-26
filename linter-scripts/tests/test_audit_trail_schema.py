@@ -159,21 +159,6 @@ class _Sandbox:
         return subprocess.run(cmd, capture_output=True, text=True,
                               check=False, cwd=str(self.root))
 
-    def run_diff_mode(self, *extra: str) -> subprocess.CompletedProcess:
-        """Drive diff-mode via `--diff-from-stdin` so we exercise the
-        `diff-*` provenance tags. The script reads the
-        ``git diff --name-status`` payload from STDIN."""
-        cmd = [
-            sys.executable, str(_LINTER),
-            "--root", str(self.root / "spec"),
-            "--diff-from-stdin",
-            "--list-changed-files",
-            *extra,
-        ]
-        return subprocess.run(cmd, capture_output=True, text=True,
-                              check=False, cwd=str(self.root),
-                              input=_DIFF_NAME_STATUS)
-
 
 # ---------------------------------------------------------------------
 # Pre-compute the canonical set of valid `ignored-deleted` reason
