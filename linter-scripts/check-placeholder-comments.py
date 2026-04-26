@@ -1258,6 +1258,63 @@ def _dedupe_audit_rows(
 _SIMILARITY_BLANK = "-"
 
 
+# Stable header for the ``--similarity-csv`` export. Frozen at module
+# scope so the column order is part of the contract — downstream
+# spreadsheets / pandas readers can hard-code positions if they want.
+_SIMILARITY_CSV_HEADER: tuple[str, ...] = (
+    "path", "status", "reason", "kind", "score", "old_path",
+)
+
+
+def _write_similarity_csv(rows: list[_ChangedFileAudit],
+                          target: str) -> None:
+    """Export the audit rows as RFC 4180 CSV for spreadsheet review.
+
+    ``target`` is either a filesystem path or the literal ``"-"`` to
+    write to STDOUT. The header is always
+    ``path,status,reason,kind,score,old_path`` regardless of whether
+    ``--with-similarity`` was passed — the four similarity columns
+    just stay empty when no ``_RenameSimilarity`` is attached.
+
+    Empty `score` cells are *intentional* and meaningful: they mark
+    *unscored* rename/copy rows (authored ``--changed-files`` payloads
+    that omitted the percentage) and distinguish them from
+    ``score=0`` (git observed the pair and rated them entirely
+    dissimilar). Keep that distinction when filtering in Excel —
+    ``ISBLANK`` vs ``=0`` are not the same condition.
+
+    Quoting is delegated to the stdlib ``csv`` writer with the default
+    dialect, so paths containing commas, quotes, or newlines are
+    escaped per RFC 4180 and round-trip through every mainstream CSV
+    reader. ``newline=""`` on the file handle is mandatory per the
+    ``csv`` module docs to avoid stray blank lines on Windows.
+    """
+    def _emit(handle) -> None:  # type: ignore[no-untyped-def]
+        writer = _csv.writer(handle)
+        writer.writerow(_SIMILARITY_CSV_HEADER)
+        for r in rows:
+            sim = r.similarity
+            if sim is None:
+                kind = score = old_path = ""
+            else:
+                kind = sim.kind
+                # Empty cell for unscored rows; ``str(0)`` for the
+                # legitimate zero-similarity case so the two stay
+                # distinguishable in the spreadsheet.
+                score = "" if sim.score is None else str(sim.score)
+                old_path = sim.old_path
+            writer.writerow([r.path, r.status, r.reason,
+                             kind, score, old_path])
+
+    if target == "-":
+        _emit(sys.stdout)
+    else:
+        # ``newline=""`` per the csv module's documented contract; the
+        # writer inserts the platform-correct line terminator itself.
+        with open(target, "w", encoding="utf-8", newline="") as fh:
+            _emit(fh)
+
+
 def _fmt_similarity(
     sim: "_RenameSimilarity | None",
 ) -> tuple[str, str, str]:
