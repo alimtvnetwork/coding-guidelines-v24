@@ -556,6 +556,7 @@ npm run lint:readme:canonicals
 Topic-specific reference for the scripts above:
 
 - [`linter-scripts/README-rename-intake.md`](linter-scripts/README-rename-intake.md) — **Rename/copy intake schema** for `check-placeholder-comments.py --list-changed-files --with-similarity`. Documents the JSON audit shape (`path`, `status`, `reason`, `similarity`), the closed `status` vocabulary, the scored vs unscored `similarity.score: null` distinction, the `--similarity-legend={auto,on,off}` toggle, the CSV export, and a [ready-to-copy example payload](linter-scripts/examples/rename-intake-audit.json) covering every status × similarity-shape combination.
+- [`linter-scripts/validate-rename-intake.py`](linter-scripts/validate-rename-intake.py) — **Stdlib-only schema validator** for `rename_intake` JSON. Zero external dependencies, exits non-zero on schema drift, and can `--print-schema` a Draft 2020-12 document for external tooling like `check-jsonschema` / `ajv`. Drop-in CI snippets for GitHub Actions / GitLab / pre-commit live in the [README-rename-intake](linter-scripts/README-rename-intake.md#validating-rename_intake-output-in-ci) doc.
 - [`linter-scripts/README-cross-links.md`](linter-scripts/README-cross-links.md) — `check-spec-cross-links.py` reference.
 - [`linter-scripts/README-forbidden-strings.md`](linter-scripts/README-forbidden-strings.md) — `check-forbidden-strings.py` reference (rules, waivers, summary report).
 - [`linter-scripts/README-allowlist-cli.md`](linter-scripts/README-allowlist-cli.md) — extension allowlist CLI reference.

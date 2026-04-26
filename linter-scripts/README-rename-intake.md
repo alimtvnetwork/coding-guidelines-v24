@@ -33,97 +33,6 @@ The audit array is a single JSON document — it is emitted in one write
 after all rows are collected, so partial / streaming readers see either
 the complete array or nothing.
 
-## CLI flags that gate `rename_intake` JSON emission
-
-`rename_intake` is the doc-name for the JSON array described in this
-file. **Two flags together** decide whether it is emitted at all, and
-a third flag decides whether each record carries a `similarity` key.
-Everything else either filters which rows appear or layers an
-additive sub-field — none of those other flags can produce or
-suppress the array on their own.
-
-### The two-flag emission gate
-
-| `--list-changed-files` | `--json` | What lands on **STDERR** |
-|---|---|---|
-| ✗ off | ✗ off | _(nothing — no audit is built)_ |
-| ✗ off | ✓ on | _(nothing — `--json` only changes STDOUT formatting; without `--list-changed-files` no audit is collected)_ |
-| ✓ on | ✗ off | **Aligned text table** + counts-by-status footer (the legacy human view). Not JSON. |
-| ✓ on | ✓ on | **`rename_intake` JSON array** — one well-formed document, written in a single STDERR `print`. |
-
-So the canonical incantation to get `rename_intake` JSON is:
-
-```bash
-python3 linter-scripts/check-placeholder-comments.py \
-  --diff-base main --list-changed-files --json
-```
-
-(Or substitute `--changed-files <PATH>` for `--diff-base` to feed an
-authored payload instead of asking git.)
-
-### The `similarity` key per record — controlled by `--with-similarity`
-
-Whether each record carries a `similarity` field is governed by a
-**single flag**, `--with-similarity`. The flag is purely additive: it
-is OFF by default so the legacy three-key schema (`path`, `status`,
-`reason`) is preserved byte-for-byte for existing dashboards.
-
-| `--with-similarity` | Per-record JSON shape | Notes |
-|---|---|---|
-| ✗ off (default) | `{"path", "status", "reason"}` — **`similarity` key omitted entirely** | The renderer calls `obj.pop("similarity", None)` after `dataclasses.asdict()`, so the key is **absent**, not `null`. Strict object validators that don't know about `similarity` keep working unchanged. |
-| ✓ on | `{"path", "status", "reason", "similarity": <object \| null>}` — `similarity` always present | Value is a `{kind, score, old_path}` object when the row carries rename/copy provenance, or `null` when it doesn't (plain A/M rows + every `ignored-deleted` row). The `score` is `int` when git provided a percentage, `null` when the row is unscored. See the [scored-vs-unscored section](#score--scored-vs-unscored). |
-
-`--with-similarity` is a **no-op without `--list-changed-files`** —
-there is no audit to enrich.
-
-### Sub-fields layered on top of `similarity`
-
-These flags only matter once `--with-similarity` is on; they are
-strictly additive to the per-record `similarity` sub-object. They do
-not affect whether `rename_intake` is emitted or whether records carry
-a `similarity` key in the first place.
-
-| Flag | Effect on a record's `similarity` sub-object | Required combo |
-|---|---|---|
-| `--similarity-labels` | Adds a `score_kind` field (`"rename-similarity"` / `"copy-similarity"` / `"unscored"`) to **non-null** `similarity` objects. Plain rows whose `similarity` is `null` get nothing — there's no sub-object to extend. | Requires `--with-similarity` (no-op otherwise). |
-| `--similarity-legend={auto,on,off}` | **No effect on JSON.** The legend is human prose, suppressed unconditionally in `--json` mode regardless of the flag value. Only controls the trailing legend block in text-mode output. | No-op in `--json` mode. |
-
-### Filters / row-set modifiers
-
-These flags change *which rows* end up in the `rename_intake` array
-but never change a record's key set. The schema per record is identical
-to the matrix above.
-
-| Flag | Effect on the array | Per-record schema impact |
-|---|---|---|
-| `--dedupe-changed-files` | Collapses repeated `path` rows; first-seen `status` + `reason` (and `similarity`) wins. | None — keys unchanged. |
-| `--only-changed-status A[,B,…]` | Restricts the array to rows whose `status` is in the given set. Runs **after** dedupe. | None — keys unchanged. Empty array is still valid `rename_intake`. |
-
-### Sibling output channel — `--similarity-csv`
-
-`--similarity-csv PATH` writes a **separate** CSV file (or `-` for
-STDOUT) alongside whatever JSON / text the audit emits. It is **not**
-`rename_intake` JSON — it's a distinct, stable schema documented in
-the [CSV export section below](#csv-export---similarity-csv-path). The
-CSV's column set does NOT depend on `--with-similarity`; only its
-cell population does. Use it for spreadsheet review; use
-`rename_intake` JSON for programmatic ingest.
-
-### Worked truth-table
-
-Concrete invocations and what each one produces on STDERR:
-
-| Invocation | STDERR contents |
-|---|---|
-| `--diff-base main` | _(no audit — `--list-changed-files` is required)_ |
-| `--diff-base main --json` | _(still no audit — `--json` only re-shapes STDOUT)_ |
-| `--diff-base main --list-changed-files` | Text table, 3 columns (`path`, `status`, `reason`). |
-| `--diff-base main --list-changed-files --json` | `rename_intake` JSON, 3 keys per record (no `similarity`). |
-| `--diff-base main --list-changed-files --with-similarity` | Text table, 6 columns (legacy 3 + `kind`, `score`, `old`). |
-| `--diff-base main --list-changed-files --with-similarity --json` | `rename_intake` JSON, **4 keys** per record — `similarity` is `{kind, score, old_path}` object or `null`. |
-| `--diff-base main --list-changed-files --with-similarity --similarity-labels --json` | Same as above + each non-null `similarity` object gains `score_kind`. |
-| `--diff-base main --list-changed-files --with-similarity --similarity-legend on --json` | Same as the 4-key row above. `--similarity-legend` is a no-op in `--json` mode. |
-
 ## Record schema
 
 Each row is a JSON object with the following fields:
@@ -387,12 +296,152 @@ recorded. Treat `score: 0` as "git observed and rated 0% similar"
   attachment, so filtered-out rows are absent from the array but their
   totals still appear in the human footer on STDERR.
 
+## Validating `rename_intake` output in CI
+
+The repo ships a stdlib-only validator at
+[`linter-scripts/validate-rename-intake.py`](./validate-rename-intake.py)
+that enforces every rule documented above (key set, closed `status`
+vocabulary, scored/unscored/`null` similarity trichotomy, plus the
+cross-field invariant that `ignored-deleted` rows always carry
+`similarity: null`). It has **zero external dependencies** so CI
+doesn't need an extra `pip install` step — Python 3.10+ is
+enough.
+
+### Quick reference
+
+```text
+usage: validate-rename-intake.py [INPUT] [--with-similarity]
+                                 [--with-labels] [--allow-empty]
+                                 [--print-schema] [--quiet]
+```
+
+| Flag | When to use it |
+|---|---|
+| `--with-similarity` | The upstream linter was invoked with `--with-similarity`. Validates the enriched 4-key schema (per-record `similarity` object/null required). |
+| `--with-labels` | The upstream linter was invoked with `--similarity-labels`. Implies `--with-similarity`. Requires `score_kind` on every non-null `similarity` object. |
+| `--allow-empty` | Treat `[]` as valid. Off by default because an empty array almost always means a misconfigured invocation. |
+| `--print-schema` | Print the formal JSON Schema (Draft 2020-12) for the requested mode and exit. Pipe into `check-jsonschema` / `ajv` if you want a richer validator. |
+| `--quiet` | Suppress the success line; failures still print. |
+
+`INPUT` is a file path, or `-` (the default) to read from stdin.
+
+Exit codes: **`0`** on success, **`1`** on schema violations (details on STDERR), **`2`** on invalid JSON or a CLI usage error. CI gates can rely on these without parsing output.
+
+### Capturing the audit on STDERR
+
+`rename_intake` JSON is emitted on **STDERR** (see the
+[stream contract](#stream-contract--stderr-vs-stdout)), so a CI step
+typically redirects STDERR into a file and STDOUT into `/dev/null`
+(or a separate sink for the violation summary):
+
+```bash
+python3 linter-scripts/check-placeholder-comments.py \
+  --diff-base origin/main \
+  --list-changed-files --with-similarity --json \
+  > /dev/null 2> rename-intake.json
+
+python3 linter-scripts/validate-rename-intake.py \
+  rename-intake.json --with-similarity
+```
+
+If you don't want a temp file, pipe STDERR straight into stdin:
+
+```bash
+python3 linter-scripts/check-placeholder-comments.py \
+  --diff-base origin/main \
+  --list-changed-files --with-similarity --json \
+  2>&1 >/dev/null | \
+python3 linter-scripts/validate-rename-intake.py - --with-similarity
+```
+
+(The `2>&1 >/dev/null` order is deliberate: it sends STDERR to the
+pipe and discards STDOUT.)
+
+### Drop-in CI snippets
+
+**GitHub Actions:**
+
+```yaml
+- name: Validate rename_intake JSON
+  run: |
+    python3 linter-scripts/check-placeholder-comments.py \
+      --diff-base origin/${{ github.base_ref || 'main' }} \
+      --list-changed-files --with-similarity --json \
+      > /dev/null 2> rename-intake.json
+    python3 linter-scripts/validate-rename-intake.py \
+      rename-intake.json --with-similarity
+
+- name: Upload audit artifact
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: rename-intake-${{ github.run_id }}
+    path: rename-intake.json
+```
+
+**GitLab CI:**
+
+```yaml
+validate_rename_intake:
+  image: python:3.12-slim
+  script:
+    - python3 linter-scripts/check-placeholder-comments.py
+        --diff-base "$CI_MERGE_REQUEST_DIFF_BASE_SHA"
+        --list-changed-files --with-similarity --json
+        > /dev/null 2> rename-intake.json
+    - python3 linter-scripts/validate-rename-intake.py
+        rename-intake.json --with-similarity
+  artifacts:
+    when: always
+    paths: [rename-intake.json]
+```
+
+**Pre-commit hook (local sanity check):**
+
+```yaml
+- repo: local
+  hooks:
+    - id: validate-rename-intake
+      name: Validate rename_intake JSON
+      language: system
+      pass_filenames: false
+      entry: bash -c '
+        python3 linter-scripts/check-placeholder-comments.py
+          --diff-base HEAD --list-changed-files --with-similarity
+          --json > /dev/null 2> /tmp/rename-intake.json &&
+        python3 linter-scripts/validate-rename-intake.py
+          /tmp/rename-intake.json --with-similarity'
+```
+
+### Using the formal JSON Schema with external tooling
+
+If your CI already runs a richer JSON-Schema validator (for cross-
+language schema gating, registry-backed schemas, etc.) you can
+export the equivalent Draft 2020-12 schema and feed it in:
+
+```bash
+python3 linter-scripts/validate-rename-intake.py \
+  --print-schema --with-similarity > rename-intake.schema.json
+
+# Example: check-jsonschema (pipx install check-jsonschema)
+check-jsonschema --schemafile rename-intake.schema.json \
+  rename-intake.json
+```
+
+The bundled validator and the printed schema are kept in lock-step
+by the test suite (`test_validate_rename_intake.py`), so either gate
+can be used interchangeably.
+
 ## See also
 
 - [`check-placeholder-comments.py --help`](./check-placeholder-comments.py)
   — full flag reference for `--list-changed-files`,
   `--with-similarity`, `--dedupe-changed-files`,
   `--only-changed-status`, `--similarity-csv`.
+- [`validate-rename-intake.py --help`](./validate-rename-intake.py)
+  — stdlib-only schema validator for `rename_intake` JSON, suitable
+  for CI gating; see *"Validating `rename_intake` output in CI"*
+  above for ready-to-paste pipeline snippets.
 - `linter-scripts/tests/test_with_similarity_flag.py` — executable
   examples of every shape documented above.
 - `linter-scripts/tests/test_similarity_csv_export.py` — schema
