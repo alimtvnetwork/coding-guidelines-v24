@@ -180,11 +180,93 @@ class Violation:
     message: str
 
 
-def iter_markdown_files(root: Path) -> Iterable[Path]:
-    for p in sorted(root.rglob("*.md")):
-        if any(part.startswith(".") for part in p.relative_to(root).parts):
+# Default file extensions discovered when --extension is not given.
+# Historical behaviour was ``.md``-only; widening the set is opt-in
+# via the CLI so existing callers see no change.
+DEFAULT_EXTENSIONS: tuple[str, ...] = ("md",)
+
+
+def iter_markdown_files(
+    root: Path,
+    *,
+    extensions: tuple[str, ...] = DEFAULT_EXTENSIONS,
+    include: tuple[str, ...] = (),
+    exclude: tuple[str, ...] = (),
+) -> Iterable[Path]:
+    """Yield spec source files under ``root`` for the linter to scan.
+
+    ``extensions``  is a tuple of bare extension names (no leading
+                    dot) — e.g. ``("md", "mdx", "txt")``. Each is
+                    glob-matched as ``*.<ext>`` under ``root``.
+    ``include``     is a tuple of glob patterns evaluated against the
+                    file's repo-relative POSIX path. If non-empty, a
+                    file must match at least one pattern to be
+                    yielded (whitelist). An empty tuple disables the
+                    whitelist (everything passes that stage).
+    ``exclude``     is a tuple of glob patterns evaluated against the
+                    same path. A file matching any pattern is
+                    dropped (blacklist).
+
+    Hidden directories (``.foo/``) are always excluded — that filter
+    pre-dates --include/--exclude and stays unconditional so a stray
+    ``--include "**/*.md"`` can't accidentally pull in ``node_modules``-
+    style hidden caches. Authors who genuinely want a hidden file
+    must use a different layout; the linter will not budge here.
+
+    The yielded order is deterministic (sorted by path) so cache
+    keys, ``--list-files`` output, and violation ordering stay
+    stable across runs and across machines.
+    """
+    # Walk each extension separately so the per-extension
+    # ``rglob("*.ext")`` filter avoids the cost of listing
+    # everything and post-filtering. The combined sort below
+    # restores total order across extensions.
+    candidates: list[Path] = []
+    for ext in extensions:
+        # Strip a stray leading dot so ``--extension .md`` works the
+        # same as ``--extension md``. Empty / whitespace-only entries
+        # are silently dropped (CLI validation rejects them earlier
+        # but defending here keeps the helper safe to call directly).
+        ext_clean = ext.lstrip(".").strip()
+        if not ext_clean:
+            continue
+        candidates.extend(root.rglob(f"*.{ext_clean}"))
+    for p in sorted(set(candidates)):
+        rel = p.relative_to(root)
+        # Hidden-directory guard — see docstring.
+        if any(part.startswith(".") for part in rel.parts):
+            continue
+        # Pattern matching uses POSIX-style separators so authors can
+        # write the same patterns on Windows + Linux + macOS.
+        rel_posix = rel.as_posix()
+        if include and not any(_match_glob(rel_posix, pat) for pat in include):
+            continue
+        if any(_match_glob(rel_posix, pat) for pat in exclude):
             continue
         yield p
+
+
+def _match_glob(rel_posix: str, pattern: str) -> bool:
+    """Match ``rel_posix`` against ``pattern`` using shell-style globs.
+
+    Supports ``**`` for recursive matching (Python 3.13's
+    ``PurePosixPath.full_match`` is the canonical implementation —
+    it understands ``**`` natively and uses POSIX-style anchoring,
+    which is what authors expect from ``.gitignore``-flavoured
+    patterns).
+
+    A pattern without any path separator (``*.md``) is matched
+    against the file's basename in addition to its full path so
+    the common case ``--exclude "CHANGELOG.md"`` works without
+    forcing the user to write ``**/CHANGELOG.md``.
+    """
+    from pathlib import PurePosixPath
+    p = PurePosixPath(rel_posix)
+    if p.full_match(pattern):
+        return True
+    if "/" not in pattern and PurePosixPath(p.name).full_match(pattern):
+        return True
+    return False
 
 
 def strip_code_fences(text: str) -> str:
