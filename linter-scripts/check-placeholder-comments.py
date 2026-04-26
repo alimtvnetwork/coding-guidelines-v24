@@ -2111,8 +2111,17 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         for d, src in deleted_paths:
             audit.append(_ChangedFileAudit(
                 path=d, status="ignored-deleted",
-                reason=_DELETED_REASON.get(
-                    src, _DELETED_REASON_FALLBACK),
+                # Cross-check against the rename/copy similarities
+                # map: when the deleted path is the OLD side of an
+                # R/C row in the same intake, surface the more
+                # accurate "rename-source" reason naming the NEW
+                # path. Falls back to the legacy per-provenance
+                # reason when there's no rename match — the
+                # historical text for unambiguous deletes is
+                # byte-for-byte preserved.
+                reason=_resolve_deleted_reason(
+                    d, src, similarities,
+                ),
             ))
     return out
 
