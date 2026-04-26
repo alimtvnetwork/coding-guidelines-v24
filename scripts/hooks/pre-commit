@@ -77,6 +77,17 @@ if [[ "$touched_specs" -eq 1 ]]; then
       FAILED=$((FAILED + 1))
     fi
   fi
+  if [[ -f linter-scripts/check-placeholder-comments.py ]]; then
+    RAN=$((RAN + 1))
+    echo ""
+    echo "── linter-scripts/check-placeholder-comments.py ──"
+    if python3 linter-scripts/check-placeholder-comments.py --root spec --repo-root .; then
+      echo "✅ pass"
+    else
+      echo "❌ fail: linter-scripts/check-placeholder-comments.py"
+      FAILED=$((FAILED + 1))
+    fi
+  fi
 fi
 
 # ------------------------------------------------------------
