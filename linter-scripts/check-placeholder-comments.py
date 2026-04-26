@@ -1755,16 +1755,26 @@ def _format_github_annotations(violations: list[Violation]) -> Iterable[str]:
         )
 
 
-def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> str:
+def _compute_cache_key(
+    root: Path,
+    intent_verbs: frozenset[str] | set[str],
+    *,
+    extensions: tuple[str, ...] = DEFAULT_EXTENSIONS,
+) -> str:
     """Build a SHA-256 fingerprint of every input that affects the verdict.
 
     Inputs (in deterministic order):
       1. The absolute, resolved scan root.
       2. The sorted, canonicalised imperative-verb allowlist.
-      3. The SHA-256 of the linter script itself (so a logic change
+      3. The sorted, canonicalised extension allowlist (so a future
+         ``--extension mdx`` run can never collide with the default
+         ``--extension md`` set, even before the cache-segment
+         directory split would catch it on disk).
+      4. The SHA-256 of the linter script itself (so a logic change
          invalidates every cached PASS automatically).
-      4. For every `.md` under the root (sorted by path, dotfiles
-         excluded — same filter as ``iter_markdown_files``):
+      5. For every file matching ``extensions`` under the root
+         (sorted by path, dotfiles excluded — same filter as
+         ``iter_markdown_files``):
          ``<repo-relative-path>\\0<sha256-of-bytes>\\n``
 
     Anything outside this set (mtimes, permissions, sibling files,
@@ -1772,9 +1782,15 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
     reproducible across machines and CI shards.
     """
     h = hashlib.sha256()
-    h.update(b"placeholder-comments-cache-v1\n")
+    # Schema tag bumped to v2 when the extension allowlist became
+    # part of the key. A v1 sentinel would have been written without
+    # the ``exts=`` line, so its hash domain is disjoint from v2 —
+    # old sentinels are inert (never collide with new lookups) rather
+    # than dangerous, but the explicit version tag documents intent.
+    h.update(b"placeholder-comments-cache-v2\n")
     h.update(f"root={root}\n".encode("utf-8"))
     h.update(("verbs=" + ",".join(sorted(intent_verbs)) + "\n").encode("utf-8"))
+    h.update(("exts=" + ",".join(sorted(extensions)) + "\n").encode("utf-8"))
     try:
         script_bytes = Path(__file__).resolve().read_bytes()
         h.update(b"script=" + hashlib.sha256(script_bytes).hexdigest().encode() + b"\n")
@@ -1782,7 +1798,7 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
         # __file__ unreadable (zipapp / frozen). Fall back to a stable
         # tag so the cache still works, just with coarser invalidation.
         h.update(b"script=unknown\n")
-    for md in iter_markdown_files(root):
+    for md in iter_markdown_files(root, extensions=extensions):
         try:
             data = md.read_bytes()
         except OSError:
@@ -1790,6 +1806,60 @@ def _compute_cache_key(root: Path, intent_verbs: frozenset[str] | set[str]) -> s
         rel = str(md.relative_to(root)).encode("utf-8")
         h.update(rel + b"\0" + hashlib.sha256(data).hexdigest().encode() + b"\n")
     return h.hexdigest()
+
+
+# Filesystem-safe extension chars: lowercase ASCII letters + digits.
+# Anything outside this set (dots in compound extensions like
+# ``tar.gz``, unicode, slashes) forces the segment name into the
+# hash-suffix form so we never produce a path that would explode on
+# Windows, NTFS, or a tarball extracted on a case-insensitive FS.
+_SAFE_EXT_RE = re.compile(r"^[a-z0-9]+$")
+
+# Cap the readable form before we fall back to a hash. NTFS' 255-char
+# filename limit is the binding constraint, but we want headroom for
+# the surrounding ``ext-`` prefix, ``+`` joiners, AND the eventual
+# ``<key>.pass`` filename inside the segment directory. 64 chars
+# leaves the segment well under any practical limit while still
+# accommodating ~10 typical extensions joined by ``+``.
+_MAX_SEGMENT_BODY_LEN = 64
+
+
+def _cache_segment(extensions: tuple[str, ...]) -> str:
+    """Derive a filesystem-safe, deterministic cache subdirectory
+    name from the active extension allowlist.
+
+    Format::
+
+        ext-<sorted-extensions-joined-by-plus>           (readable form)
+        ext-h<10-char-sha256>                            (hash fallback)
+
+    The readable form is preferred because it makes cache contents
+    self-describing (``ls cache/`` shows ``ext-md/``, ``ext-md+mdx/``
+    at a glance). We fall back to the hash form when ANY extension
+    contains a character outside ``[a-z0-9]`` (so we never emit a
+    Windows-illegal path), or when the joined name would exceed
+    :data:`_MAX_SEGMENT_BODY_LEN`. The fallback is keyed on the same
+    sorted-and-joined string the readable form would have used, so
+    two runs with identical allowlists always land in the same
+    bucket regardless of which branch they took.
+
+    The function is pure: same input → same output, no I/O. That
+    matters because the segment is consulted both on read (cache
+    fast-path) and write (sentinel persistence), and any drift would
+    silently bypass the cache.
+    """
+    # Sort to canonicalise: ``("mdx", "md")`` and ``("md", "mdx")``
+    # MUST share a segment. Empty input is defensive — the CLI
+    # validator rejects it earlier, but a programmatic caller might
+    # not. Treat it as "default" so we still produce a stable name.
+    if not extensions:
+        return "ext-default"
+    body = "+".join(sorted(extensions))
+    if (len(body) <= _MAX_SEGMENT_BODY_LEN
+            and all(_SAFE_EXT_RE.match(e) for e in extensions)):
+        return f"ext-{body}"
+    digest = hashlib.sha256(body.encode("utf-8")).hexdigest()[:10]
+    return f"ext-h{digest}"
 
 
 if __name__ == "__main__":
