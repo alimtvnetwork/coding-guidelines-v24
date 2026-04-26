@@ -97,6 +97,13 @@ class Violation:
     line: int
     code: str
     message: str
+    # 1-indexed inclusive [start, end] line range of the enclosing
+    # placeholder block. Used by the human-readable renderer to print
+    # the exact offending snippet. Defaults to (line, line) for
+    # standalone errors that have no block context (e.g. P-004
+    # self-closing tag).
+    block_start: int = 0
+    block_end: int = 0
 
 
 def iter_markdown_files(root: Path) -> Iterable[Path]:
