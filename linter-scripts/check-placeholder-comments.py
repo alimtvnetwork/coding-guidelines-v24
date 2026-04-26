@@ -79,6 +79,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv as _csv
 import json
 import hashlib
 import os
@@ -777,6 +778,27 @@ def main(argv: list[str] | None = None) -> int:
              "semantics also apply to the similarity record) and "
              "--only-changed-status (filtering runs after the "
              "metadata is attached).")
+    ap.add_argument("--similarity-csv", default=None, metavar="PATH",
+        help="With --list-changed-files, ALSO export the audit rows "
+             "as CSV to PATH for spreadsheet review (Excel, Numbers, "
+             "LibreOffice, `csvkit`, etc.). Use `-` to write the CSV "
+             "to STDOUT instead — only safe when STDOUT isn't already "
+             "carrying the violation summary or `--json` payload, so "
+             "the recommended pattern is a real file path. The header "
+             "row is always `path,status,reason,kind,score,old_path` "
+             "(stable column order regardless of `--with-similarity`); "
+             "the four similarity columns are populated when the "
+             "underlying row carries a `_RenameSimilarity` and left "
+             "EMPTY otherwise — empty `score` cells distinguish "
+             "*unscored* rename/copy rows (authored `--changed-files` "
+             "payloads without a percentage) from `score=0` (git rated "
+             "the pair entirely dissimilar). Plain A/M/D rows have "
+             "all four similarity cells empty. RFC 4180 quoting via "
+             "the stdlib `csv` module so paths with commas, quotes, "
+             "or newlines round-trip safely. Dedupe + filter run "
+             "BEFORE the export, so the CSV contains exactly the rows "
+             "you'd see in the text/JSON audit. No-op without "
+             "--list-changed-files.")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
@@ -965,6 +987,21 @@ def main(argv: list[str] | None = None) -> int:
                                if args.only_changed_status else None),
                 with_similarity=args.with_similarity,
             )
+            # CSV export mirrors the same dedupe + filter pipeline so
+            # the spreadsheet always matches what the operator just
+            # saw on STDERR — no surprise extra rows. Independently
+            # computed (rather than threaded through the renderer) to
+            # keep the renderer's signature stable and to allow CSV
+            # without --with-similarity (the export carries all four
+            # similarity columns regardless; they just stay empty).
+            if args.similarity_csv:
+                csv_rows = changed_audit
+                if args.dedupe_changed_files:
+                    csv_rows, _ = _dedupe_audit_rows(csv_rows)
+                if args.only_changed_status:
+                    only = frozenset(args.only_changed_status)
+                    csv_rows = [r for r in csv_rows if r.status in only]
+                _write_similarity_csv(csv_rows, args.similarity_csv)
         if not args.json:
             print(f"ℹ️  placeholder-comments: diff-mode active — "
                   f"{len(changed_md)} changed `.md` file(s) under {args.root}/")
@@ -1234,6 +1271,63 @@ def _dedupe_audit_rows(
 # eye picks out "no rename here" at a glance. JSON consumers see real
 # ``null`` instead.
 _SIMILARITY_BLANK = "-"
+
+
+# Stable header for the ``--similarity-csv`` export. Frozen at module
+# scope so the column order is part of the contract — downstream
+# spreadsheets / pandas readers can hard-code positions if they want.
+_SIMILARITY_CSV_HEADER: tuple[str, ...] = (
+    "path", "status", "reason", "kind", "score", "old_path",
+)
+
+
+def _write_similarity_csv(rows: list[_ChangedFileAudit],
+                          target: str) -> None:
+    """Export the audit rows as RFC 4180 CSV for spreadsheet review.
+
+    ``target`` is either a filesystem path or the literal ``"-"`` to
+    write to STDOUT. The header is always
+    ``path,status,reason,kind,score,old_path`` regardless of whether
+    ``--with-similarity`` was passed — the four similarity columns
+    just stay empty when no ``_RenameSimilarity`` is attached.
+
+    Empty `score` cells are *intentional* and meaningful: they mark
+    *unscored* rename/copy rows (authored ``--changed-files`` payloads
+    that omitted the percentage) and distinguish them from
+    ``score=0`` (git observed the pair and rated them entirely
+    dissimilar). Keep that distinction when filtering in Excel —
+    ``ISBLANK`` vs ``=0`` are not the same condition.
+
+    Quoting is delegated to the stdlib ``csv`` writer with the default
+    dialect, so paths containing commas, quotes, or newlines are
+    escaped per RFC 4180 and round-trip through every mainstream CSV
+    reader. ``newline=""`` on the file handle is mandatory per the
+    ``csv`` module docs to avoid stray blank lines on Windows.
+    """
+    def _emit(handle) -> None:  # type: ignore[no-untyped-def]
+        writer = _csv.writer(handle)
+        writer.writerow(_SIMILARITY_CSV_HEADER)
+        for r in rows:
+            sim = r.similarity
+            if sim is None:
+                kind = score = old_path = ""
+            else:
+                kind = sim.kind
+                # Empty cell for unscored rows; ``str(0)`` for the
+                # legitimate zero-similarity case so the two stay
+                # distinguishable in the spreadsheet.
+                score = "" if sim.score is None else str(sim.score)
+                old_path = sim.old_path
+            writer.writerow([r.path, r.status, r.reason,
+                             kind, score, old_path])
+
+    if target == "-":
+        _emit(sys.stdout)
+    else:
+        # ``newline=""`` per the csv module's documented contract; the
+        # writer inserts the platform-correct line terminator itself.
+        with open(target, "w", encoding="utf-8", newline="") as fh:
+            _emit(fh)
 
 
 def _fmt_similarity(

@@ -153,6 +153,28 @@ entirely (legacy schema).
 - [`check-placeholder-comments.py --help`](./check-placeholder-comments.py)
   — full flag reference for `--list-changed-files`,
   `--with-similarity`, `--dedupe-changed-files`,
-  `--only-changed-status`.
+  `--only-changed-status`, `--similarity-csv`.
 - `linter-scripts/tests/test_with_similarity_flag.py` — executable
   examples of every shape documented above.
+- `linter-scripts/tests/test_similarity_csv_export.py` — schema
+  examples for the `--similarity-csv` export, including the
+  scored-vs-unscored distinction.
+
+## CSV export (`--similarity-csv PATH`)
+
+For spreadsheet review (Excel, Numbers, LibreOffice, `csvkit`,
+pandas), the same audit can be exported as RFC 4180 CSV to a file
+path or to STDOUT (`-`). The header is **always**
+`path,status,reason,kind,score,old_path` regardless of whether
+`--with-similarity` was passed; the four similarity columns simply
+stay empty when no `_RenameSimilarity` is attached.
+
+| `score` cell | Meaning |
+|---|---|
+| Empty (`""`) | **Unscored** — plain A/M/D row, OR an authored `--changed-files` payload that omitted the percentage. |
+| `"0"` | Git observed the rename/copy and rated the pair entirely dissimilar. |
+| `"1"` … `"100"` | Git's similarity percentage. |
+
+`ISBLANK(E2)` and `E2=0` are **not** the same condition — keep them
+distinct when filtering. Dedupe and `--only-changed-status` run
+BEFORE the export, so the CSV mirrors what you saw on STDERR.
