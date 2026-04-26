@@ -103,12 +103,27 @@ class TestTemplateIsolation(unittest.TestCase):
             "leaking into the production rule pack. Either it was added "
             "to registry.json, or run-all.sh stopped skipping the folder.",
         )
-        self.assertNotIn(
-            "checks/_template/",
-            haystack.replace("\\", "/"),
-            "Orchestrator referenced checks/_template/ in its output; "
-            "the starter kit must remain dormant.",
+        # The `--path` argument echoes back into the orchestrator banner,
+        # so we cannot reject the literal substring `checks/_template/`.
+        # Instead, look for evidence of a *dispatch* into the template:
+        # a job-name suffix or a dispatch arrow that references the
+        # template's own scripts.
+        normalized = haystack.replace("\\", "/")
+        forbidden_markers = (
+            "coding-guidelines-_template",   # job-name shape used by run-all.sh
+            "checks/_template/php.py",
+            "checks/_template/typescript.py",
+            "checks/_template/go.py",
+            "checks/_template/universal.py",
         )
+        for marker in forbidden_markers:
+            self.assertNotIn(
+                marker,
+                normalized,
+                f"Orchestrator referenced `{marker}` — the starter kit "
+                "must remain dormant. Either registry.json wired it up "
+                "or run-all.sh stopped skipping checks/_template/.",
+            )
 
 
 if __name__ == "__main__":
