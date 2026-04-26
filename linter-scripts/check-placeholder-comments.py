@@ -1397,19 +1397,83 @@ _SIMILARITY_BLANK = "-"
 #                            shaped exactly ``D\tpath`` (the verbatim
 #                            git wire format some CI runners
 #                            forward).
+#   * ``diff-R-old``       — OLD side of an ``R``-status row from
+#                            ``git diff --name-status -M -C``. The
+#                            file was renamed; we lint the NEW side
+#                            and audit-record the OLD side as
+#                            deleted (no post-state at the OLD path).
+#   * ``diff-C-old``       — OLD (source) side of a ``C``-status
+#                            (copy) row. Strictly speaking the
+#                            source still exists on disk, but from
+#                            the diff range's perspective there is
+#                            no *modification* under the OLD path
+#                            to lint — we record it as
+#                            ``ignored-deleted`` for symmetry with
+#                            the rename case so an audit reviewer
+#                            can see every path the diff mentioned.
+#   * ``changed-files-R-old`` / ``changed-files-C-old``
+#                          — OLD side of an authored
+#                            ``--changed-files`` rename / copy row
+#                            (tab form ``R<score>?\told\tnew`` /
+#                            ``C<score>?\told\tnew``, OR arrow form
+#                            ``old => new`` which is always
+#                            classified as ``R``-old).
 #
 # ``_DELETED_REASON_FALLBACK`` covers any future provenance the
 # parsers add before this map catches up — keeps the audit
 # self-explanatory rather than crashing on a missing key.
+#
+# The R/C-old reasons embed a ``{new_path}`` placeholder so the
+# audit row can name the destination — without it, a reviewer
+# scanning the table would see "old path of a rename" with no clue
+# *which* rename. :func:`_resolve_deleted_reason` performs the
+# substitution; tags without a placeholder are returned verbatim,
+# so adding a new flat tag in the future stays a one-line change.
 _DELETED_REASON: dict[str, str] = {
     "diff-D": ("git diff reported D (deleted): file removed in the "
                "diff range, no post-state to lint"),
     "changed-files-D": ("--changed-files payload row shaped `D\\tpath`: "
                         "explicit delete marker, no post-state to lint"),
+    "diff-R-old": ("OLD side of a git rename (`R` row): file moved "
+                   "to `{new_path}` in the diff range, no post-state "
+                   "at this path to lint"),
+    "diff-C-old": ("OLD (source) side of a git copy (`C` row): "
+                   "duplicated to `{new_path}` in the diff range, "
+                   "no modification at this path to lint"),
+    "changed-files-R-old": ("OLD side of a `--changed-files` rename "
+                            "row: file moved to `{new_path}`, no "
+                            "post-state at this path to lint"),
+    "changed-files-C-old": ("OLD (source) side of a `--changed-files` "
+                            "copy row: duplicated to `{new_path}`, no "
+                            "modification at this path to lint"),
 }
 _DELETED_REASON_FALLBACK = ("path captured as a delete by the diff "
                             "intake but provenance is unknown — "
                             "treated as `ignored-deleted` for safety")
+
+
+def _resolve_deleted_reason(source: str,
+                            new_path: "str | None" = None) -> str:
+    """Look up the human-readable ``reason`` for an ``ignored-deleted``
+    row given its provenance ``source`` tag.
+
+    Tags whose template embeds ``{new_path}`` (today: ``diff-R-old``,
+    ``diff-C-old``, ``changed-files-R-old``, ``changed-files-C-old``)
+    are formatted with the supplied destination path so the reviewer
+    sees where the file went. If ``new_path`` is missing on such a
+    tag (defensive — parsers always supply it today), the literal
+    ``"<unknown>"`` is substituted so the row stays scannable
+    instead of raising a ``KeyError`` mid-render.
+
+    Tags without a placeholder (``diff-D``, ``changed-files-D``)
+    return their template verbatim. Unknown tags fall back to
+    :data:`_DELETED_REASON_FALLBACK` so a future parser change
+    can't crash the audit emitter.
+    """
+    template = _DELETED_REASON.get(source, _DELETED_REASON_FALLBACK)
+    if "{new_path}" in template:
+        return template.format(new_path=new_path or "<unknown>")
+    return template
 
 
 # Stable header for the ``--similarity-csv`` export. Frozen at module
