@@ -819,6 +819,29 @@ def main(argv: list[str] | None = None) -> int:
              "hard-code indices 0–5 keep working unchanged. Opt-in "
              "to preserve the legacy schema byte-for-byte for "
              "downstream consumers; no-op without --with-similarity.")
+    ap.add_argument("--similarity-legend",
+        choices=("auto", "on", "off"), default="auto",
+        help="Control whether the audit table is followed by a short "
+             "human-readable legend explaining the similarity columns "
+             "(`kind`, `score`, `old`, and — when --similarity-labels "
+             "is on — `meaning`). Three modes: `auto` (default) emits "
+             "the legend only when the audit stream (STDERR) is "
+             "attached to an interactive terminal, so a human reading "
+             "the run live gets the cheat-sheet but a CI log capture / "
+             "pipe / file redirect stays byte-for-byte identical to "
+             "the legacy output (no surprise prose for log scrapers); "
+             "`on` forces the legend regardless of TTY (useful when "
+             "rendering to a paged-pretty wrapper that strips TTY "
+             "detection but a human is still reading); `off` "
+             "suppresses the legend even on a live terminal (useful "
+             "when streaming straight into clipboard / paste-into-"
+             "ticket flows where the prose is noise). The legend is "
+             "always printed AFTER the totals footer so consumers "
+             "parsing column-aligned rows see the same byte sequence "
+             "they always have up to the totals line. No-op without "
+             "--with-similarity (the columns being explained simply "
+             "aren't there) and no-op in --json mode (machine "
+             "consumers don't need prose).")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
