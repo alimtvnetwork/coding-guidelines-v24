@@ -1148,7 +1148,10 @@ def _unquote_git_path(field: str) -> str:
     return "".join(out)
 
 
-def _parse_name_status(stdout: str) -> list[str]:
+def _parse_name_status(
+    stdout: str,
+    intake: list[_DiffIntakeRow] | None = None,
+) -> list[str]:
     """Extract the post-state path from each ``git diff --name-status``
     row, mapping renames + copies to their NEW side.
 
@@ -1170,6 +1173,12 @@ def _parse_name_status(stdout: str) -> list[str]:
     * Whitespace-only paths (``"   "``) are kept as-is — POSIX
       permits them, and ``Path.is_file()`` downstream will resolve
       whether the file actually exists.
+    Optional ``intake`` out-param: when a list is provided, every R/C
+    row (and ONLY R/C rows) is appended as a :class:`_DiffIntakeRow`
+    so the caller can render a rename/copy intake table later. A/M
+    rows are not captured — they aren't renames. Passing ``None``
+    (the default) preserves the legacy behaviour and the hot path
+    pays nothing for the diagnostic.
     """
     out: list[str] = []
     for line in stdout.splitlines():
@@ -1188,12 +1197,25 @@ def _parse_name_status(stdout: str) -> list[str]:
         if not m:
             continue
         kind = m.group(1)
+        score_raw = m.group(2)
         if kind in ("R", "C"):
             # Rename / copy: cols = [R<score>, old, new]. Take new.
             # ``cols[2]`` is required; ``cols[1]`` (old) may be empty
             # in pathological inputs — we don't need it for linting.
             if len(cols) >= 3 and cols[2] != "":
-                out.append(_unquote_git_path(cols[2]))
+                new_path = _unquote_git_path(cols[2])
+                out.append(new_path)
+                if intake is not None:
+                    # ``cols[1]`` may be empty in malformed input;
+                    # propagate as empty string and let the renderer
+                    # decide how to display it (``"(unknown)"``).
+                    old_path = (_unquote_git_path(cols[1])
+                                if len(cols) >= 2 else "")
+                    score = int(score_raw) if score_raw else None
+                    intake.append(_DiffIntakeRow(
+                        kind=kind, score=score,
+                        old=old_path, new=new_path,
+                    ))
         elif kind in ("A", "M"):
             # Add / modify: cols = [A|M, path]. Take path.
             if cols[1] != "":
