@@ -1442,7 +1442,8 @@ def _score_kind_for(sim: "_RenameSimilarity | None") -> str | None:
 def _write_similarity_csv(rows: list[_ChangedFileAudit],
                           target: str,
                           *,
-                          with_labels: bool = False) -> None:
+                          with_labels: bool = False,
+                          dialect: str = _SIMILARITY_CSV_FORMAT_CSV) -> None:
     """Export the audit rows as RFC 4180 CSV for spreadsheet review.
 
     ``target`` is either a filesystem path or the literal ``"-"`` to
@@ -1472,9 +1473,33 @@ def _write_similarity_csv(rows: list[_ChangedFileAudit],
     escaped per RFC 4180 and round-trip through every mainstream CSV
     reader. ``newline=""`` on the file handle is mandatory per the
     ``csv`` module docs to avoid stray blank lines on Windows.
+
+    ``dialect`` selects the field separator and quoting rules:
+
+    * ``"csv"`` (default) — stdlib default dialect: comma separator,
+      double-quote quoting, RFC 4180 escapes. Byte-for-byte
+      unchanged from the legacy behaviour when the caller doesn't
+      pass the kwarg.
+    * ``"tsv"`` — stdlib ``csv.excel_tab`` dialect: tab separator,
+      same double-quote quoting rules. Use when commas inside
+      paths/reasons would force quoted cells, or when piping into
+      ``cut -f`` / ``awk -F'\\t'`` style tools. Tabs and newlines
+      inside cell values still get quoted via the underlying
+      ``csv`` writer, so the round-trip is lossless.
+
+    Header row, column order, and the empty-vs-``0`` score
+    convention are identical across both dialects — only the
+    separator changes.
     """
     def _emit(handle) -> None:  # type: ignore[no-untyped-def]
-        writer = _csv.writer(handle)
+        # ``excel_tab`` is the stdlib's canonical TSV dialect: tab
+        # delimiter, same quoting rules as the default ``excel``
+        # dialect, so cells containing tabs/newlines/quotes still
+        # round-trip safely.
+        if dialect == _SIMILARITY_CSV_FORMAT_TSV:
+            writer = _csv.writer(handle, dialect="excel-tab")
+        else:
+            writer = _csv.writer(handle)
         header = (_SIMILARITY_CSV_HEADER_LABELED if with_labels
                   else _SIMILARITY_CSV_HEADER)
         writer.writerow(header)
