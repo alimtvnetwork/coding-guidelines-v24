@@ -218,6 +218,34 @@ class _ChangedFileAudit:
     path: str
     status: str
     reason: str
+    # Optional rename/copy provenance. Populated only when the diff-
+    # mode intake observed an ``R``/``C`` row that resolved to this
+    # ``path`` (the post-rename / post-copy "new" side). ``None`` for
+    # plain ``A``/``M``/``D`` rows AND for ``R``/``C`` rows that
+    # failed earlier filters before reaching the audit constructor.
+    # The audit *renderer* (``--with-similarity``) substitutes a
+    # dash ("-") wherever this is None or a sub-field is missing — we
+    # don't bake the dash into the data so JSON consumers see real
+    # ``null``s rather than a sentinel string.
+    similarity: "_RenameSimilarity | None" = None
+
+
+@dataclass(frozen=True)
+class _RenameSimilarity:
+    """Rename/copy provenance for one ``_ChangedFileAudit`` row.
+
+    Captures the three pieces of metadata git emits on an ``R`` / ``C``
+    name-status row: the kind letter (``"R"`` or ``"C"``), the
+    similarity score (0–100, or ``None`` when the row was scoreless —
+    e.g. an authored ``--changed-files`` payload that wrote ``R\\told\\tnew``
+    without a percentage), and the OLD-side path.
+
+    Frozen + slot-free so it's hashable and round-trips through
+    :func:`dataclasses.asdict` without surprises.
+    """
+    kind: str
+    score: int | None
+    old_path: str
 
 
 # Default extension allowlist for spec discovery. Kept as a tuple so
