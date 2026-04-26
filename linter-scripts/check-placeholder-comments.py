@@ -659,6 +659,25 @@ def main(argv: list[str] | None = None) -> int:
              "--list-changed-files; the underlying linted-file set "
              "is unaffected (it's already a `set[Path]`, so "
              "duplicates can never reach the scan).")
+    ap.add_argument("--only-changed-status", action="append",
+        default=None, choices=list(_AUDIT_STATUSES), metavar="STATUS",
+        help="With --list-changed-files, restrict the printed audit "
+             "to rows whose `status` is in this set (repeatable). "
+             "Valid values match the closed audit vocabulary: "
+             "`matched`, `ignored-extension`, `ignored-out-of-root`, "
+             "`ignored-missing`, `ignored-deleted`. Filtering happens "
+             "AFTER `--dedupe-changed-files` collapses duplicates, so "
+             "first-seen semantics are evaluated against the full "
+             "intake (a `matched` row that lost the dedupe race to an "
+             "earlier `ignored-extension` for the same path stays "
+             "hidden, same as without the filter). The footer's "
+             "totals line still counts EVERY status in the canonical "
+             "order so you can see what was filtered out. Common "
+             "uses: `--only-changed-status matched` to feed a downstream "
+             "tool the exact list the linter scanned, or "
+             "`--only-changed-status ignored-extension` to debug why a "
+             "PR's docs aren't being checked. No-op without "
+             "--list-changed-files.")
     ap.add_argument("--github", dest="github", action="store_true",
         default=None,
         help="Emit one GitHub Actions `::error file=…,line=…,title=…::` "
