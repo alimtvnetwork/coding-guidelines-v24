@@ -58,7 +58,7 @@ the end.
 
 | # | Title | Task summary | Status |
 |---|---|---|---|
-| _(none yet)_ | | | |
+| [01](./01-ignored-deleted-reason-scope.md) | `ignored-deleted` reason enrichment scope | Diversify reason text per provenance vs. also emit rename OLD-side rows. Chose **Option A** (text only — preserves row contract). | Pending review |
 
 ---
 
