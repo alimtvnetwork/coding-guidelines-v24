@@ -1004,6 +1004,56 @@ def main(argv: list[str] | None = None) -> int:
     return 1 if violations else 0
 
 
+def _render_changed_files_audit(rows: list[_ChangedFileAudit],
+                                stream,  # type: ignore[no-untyped-def]
+                                *,
+                                as_json: bool) -> None:
+    """Print the diff-mode changed-file audit table to ``stream``.
+
+    Always writes to STDERR (the caller passes ``sys.stderr``) so
+    STDOUT remains a clean single-document JSON payload (or the
+    usual human summary) regardless of this flag.
+
+    Two output modes:
+
+    * ``as_json=False`` — aligned text table with a header row, a
+      counts-by-status footer, and stable input ordering. Empty
+      input prints a single ``(no changed files considered)`` line
+      so the operator never wonders whether the flag silently
+      no-op'd.
+    * ``as_json=True``  — JSON array of ``{"path", "status",
+      "reason"}`` objects, one per row, in stable input order.
+      ``ensure_ascii=False`` so non-ASCII paths round-trip readably.
+    """
+    if as_json:
+        payload = [asdict(r) for r in rows]
+        print(json.dumps(payload, indent=2, ensure_ascii=False),
+              file=stream)
+        return
+
+    print("── placeholder-comments: changed-file audit "
+          f"({len(rows)} row(s)) ──", file=stream)
+    if not rows:
+        print("  (no changed files considered)", file=stream)
+        return
+    path_w = max(len("path"), max(len(r.path) for r in rows))
+    status_w = max(len("status"), max(len(r.status) for r in rows))
+    print(f"  {'status'.ljust(status_w)}  "
+          f"{'path'.ljust(path_w)}  reason", file=stream)
+    print("  " + "-" * (status_w + path_w + len("reason") + 4),
+          file=stream)
+    for r in rows:
+        print(f"  {r.status.ljust(status_w)}  "
+              f"{r.path.ljust(path_w)}  {r.reason}", file=stream)
+    # Counts-by-status footer in the canonical status order so the
+    # eye lands on the same column positions run-to-run.
+    counts = {s: 0 for s in _AUDIT_STATUSES}
+    for r in rows:
+        counts[r.status] = counts.get(r.status, 0) + 1
+    summary = "  ".join(f"{s}={counts[s]}" for s in _AUDIT_STATUSES)
+    print(f"  totals: {summary}", file=stream)
+
+
 def _resolve_changed_md(repo_root: Path, root: Path, *,
                         diff_base: str | None,
                         changed_files: str | None,
