@@ -658,14 +658,28 @@ def main(argv: list[str] | None = None) -> int:
     # flow through ``iter_markdown_files`` and the cache key as a
     # hashable, append-safe value.
     if args.extension is None:
-        extensions = DEFAULT_EXTENSIONS
+        # No explicit --extension flags → start from the historical
+        # default. ``--include-mdx`` may augment this below; without
+        # it we behave exactly like the legacy ``.md``-only baseline.
+        cleaned: list[str] = list(DEFAULT_EXTENSIONS)
     else:
         cleaned = [e.lstrip(".").lower() for e in args.extension if e.strip()]
         if not cleaned:
             print("error: --extension requires at least one non-empty value",
                   file=sys.stderr)
             return 2
-        extensions = tuple(dict.fromkeys(cleaned))
+    # ``--include-mdx`` is a convenience union, NOT a replacement: it
+    # adds ``mdx`` to whatever allowlist the previous block built so
+    # the user keeps their baseline (default ``md`` or any explicit
+    # ``--extension`` set) AND picks up ``.mdx`` in one short flag.
+    # Implemented as a list-append + dedupe so the resulting tuple
+    # is order-stable for diagnostics, while ``_cache_segment`` and
+    # ``_compute_cache_key`` both sort independently — that means
+    # ``--include-mdx`` and ``--extension mdx`` (with default ``md``
+    # baseline) collapse to the same canonical segment + cache key.
+    if args.include_mdx and "mdx" not in cleaned:
+        cleaned.append("mdx")
+    extensions = tuple(dict.fromkeys(cleaned))
 
     # ---- Resolve diff-mode changed-file allowlist (if any) -------
     # ``changed_md`` is None ⇒ full-tree mode (legacy behaviour).
