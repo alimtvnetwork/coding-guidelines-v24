@@ -138,14 +138,19 @@ if [ "$SMOKE" = "1" ]; then
     SMOKE_RULES=$(echo "$SMOKE_PAYLOAD" | python3 -c \
         'import json,sys; print(",".join(json.load(sys.stdin)["rule_ids"]))')
     SMOKE_DIRS=$(echo "$SMOKE_PAYLOAD" | python3 -c \
-        'import json,sys; print("\n".join(json.load(sys.stdin)["fixture_dirs"]))')
-    SMOKE_REASONS=$(echo "$SMOKE_PAYLOAD" | python3 -c \
-        'import json,sys
-d=json.load(sys.stdin)
+        'import json,sys; print(chr(10).join(json.load(sys.stdin)["fixture_dirs"]))')
+    SMOKE_REASONS=$(echo "$SMOKE_PAYLOAD" | python3 <<'PYEOF'
+import json, sys
+d = json.load(sys.stdin)
 for rid in d["rule_ids"]:
-    print(f"         · {rid}  — {d[\"reasons\"][rid]}")')
+    reason = d["reasons"].get(rid, "?")
+    print(f"         · {rid}  — {reason}")
+PYEOF
+    )
     SMOKE_SKIPPED=$(echo "$SMOKE_PAYLOAD" | python3 -c \
         'import json,sys; print(",".join(json.load(sys.stdin)["skipped_slugs"]))')
+    SMOKE_INCLUDES_TEMPLATE=$(echo "$SMOKE_PAYLOAD" | python3 -c \
+        'import json,sys; print("yes" if "TEMPLATE-001" in json.load(sys.stdin)["rule_ids"] else "no")')
 
     echo "    🚬 smoke mode — verifying recently changed rule(s) only"
     echo "       base ref:        $SMOKE_BASE"
@@ -169,18 +174,35 @@ for rid in d["rule_ids"]:
         SMOKE_INDEX=$((SMOKE_INDEX + 1))
         SMOKE_OUT="${OUTPUT%.sarif}.smoke-${SMOKE_INDEX}.sarif"
         echo "    ── smoke pass $SMOKE_INDEX: $FDIR"
-        # Recursive call with the resolved scope. Drop --smoke* flags
-        # so we do not loop, and propagate user-visible knobs.
-        bash "$0" \
-            --path           "$REPO_ROOT/$FDIR" \
-            --rules          "$SMOKE_RULES" \
-            --output         "$SMOKE_OUT" \
-            --format         "$FORMAT" \
-            --jobs           "$JOBS" \
-            --check-timeout  "$CHECK_TIMEOUT" \
-            --total-timeout  "$TOTAL_TIMEOUT" \
-            --exclude-paths  "$EXCLUDE_PATHS"
-        PASS_RC=$?
+        # Special case: the canonical _template/ pass runs the
+        # starter-kit script directly because TEMPLATE-001 is
+        # intentionally NOT in registry.json (the isolation guard
+        # in tests/test_template_isolation.py enforces this).
+        if [ "$FDIR" = "linters-cicd/checks/_template/fixtures" ] && \
+           [ "$SMOKE_INCLUDES_TEMPLATE" = "yes" ]; then
+            python3 "$SCRIPT_DIR/checks/_template/php.py" \
+                --path "$REPO_ROOT/$FDIR" \
+                --format "$FORMAT" \
+                --output "$SMOKE_OUT"
+            PASS_RC=$?
+            if [ "$FORMAT" = "text" ] && [ -f "$SMOKE_OUT" ]; then
+                cat "$SMOKE_OUT"
+                echo ""
+            fi
+        else
+            # Recursive call with the resolved scope. Drop --smoke*
+            # flags so we do not loop, and propagate user knobs.
+            bash "$0" \
+                --path           "$REPO_ROOT/$FDIR" \
+                --rules          "$SMOKE_RULES" \
+                --output         "$SMOKE_OUT" \
+                --format         "$FORMAT" \
+                --jobs           "$JOBS" \
+                --check-timeout  "$CHECK_TIMEOUT" \
+                --total-timeout  "$TOTAL_TIMEOUT" \
+                --exclude-paths  "$EXCLUDE_PATHS"
+            PASS_RC=$?
+        fi
         if [ "$PASS_RC" -eq 2 ]; then
             SMOKE_EXIT=2
         elif [ "$PASS_RC" -eq 1 ] && [ "$SMOKE_EXIT" -ne 2 ]; then
