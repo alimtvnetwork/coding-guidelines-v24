@@ -14,6 +14,7 @@
 //   node scripts/spec-change-report.mjs --unstaged     # only unstaged + untracked
 //   node scripts/spec-change-report.mjs --html-only    # skip PDF rendering
 //   node scripts/spec-change-report.mjs --no-pdf       # alias for --html-only
+//   node scripts/spec-change-report.mjs --editor <id>  # vscode|cursor|none
 //   node scripts/spec-change-report.mjs --out <dir>    # custom out dir
 //   node scripts/spec-change-report.mjs --help         # show usage
 //
@@ -47,6 +48,8 @@ Scoping (mutually exclusive — pick at most one):
 
 Output:
   --html-only    Skip PDF rendering (alias: --no-pdf)
+  --editor <id>  Deep-link scheme for finding rows.
+                 vscode (default), cursor, or none for plain text.
   --out <dir>    Output directory (default: /mnt/documents)
 
 Other:
@@ -60,6 +63,7 @@ function parseArgs(argv) {
     scopeStaged: false,
     scopeUnstaged: false,
     htmlOnly: false,
+    editor: detectDefaultEditor(),
     outDir: "/mnt/documents",
     help: false,
   };
@@ -71,6 +75,20 @@ function parseArgs(argv) {
       case "--unstaged": flags.scopeUnstaged = true; break;
       case "--html-only":
       case "--no-pdf":   flags.htmlOnly = true; break;
+      case "--editor": {
+        const next = argv[i + 1];
+        if (!next || next.startsWith("--")) {
+          console.error(`[spec-change-report] --editor requires one of: vscode, cursor, none`);
+          process.exit(3);
+        }
+        if (!["vscode", "cursor", "none"].includes(next)) {
+          console.error(`[spec-change-report] unknown --editor value: ${next} (expected vscode|cursor|none)`);
+          process.exit(3);
+        }
+        flags.editor = next;
+        i += 1;
+        break;
+      }
       case "--out": {
         const next = argv[i + 1];
         if (!next || next.startsWith("--")) {
@@ -96,6 +114,27 @@ function parseArgs(argv) {
     process.exit(3);
   }
   return flags;
+}
+
+// ---------------------------------------------------------------------
+// Editor / deep-link helpers
+// ---------------------------------------------------------------------
+function detectDefaultEditor() {
+  const term = (process.env.TERM_PROGRAM || "").toLowerCase();
+  const editor = (process.env.EDITOR || "").toLowerCase();
+  if (term.includes("cursor") || editor.includes("cursor")) return "cursor";
+  // vscode is the safe default — both VS Code and Cursor handle vscode://
+  return "vscode";
+}
+
+function buildDeepLink(file, line) {
+  if (FLAGS.editor === "none") return null;
+  // vscode:// works in VS Code, Cursor, and most VS Code forks.
+  // cursor:// is Cursor's native scheme.
+  const scheme = FLAGS.editor === "cursor" ? "cursor" : "vscode";
+  const abs = resolve(REPO_ROOT, file);
+  // Browsers leave `:` alone in path segments, which is what VS Code wants.
+  return `${scheme}://file${abs}:${Math.max(1, line || 1)}`;
 }
 
 const FLAGS = parseArgs(process.argv.slice(2));
