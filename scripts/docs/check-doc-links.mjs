@@ -62,34 +62,68 @@ function checkFile(filePath) {
   return { filePath, total: links.length, broken };
 }
 
+function loadAllowlist(allowlistPath) {
+  // Returns Map<sourceFile, Set<rawTarget>>. Empty map when file missing.
+  const out = new Map();
+  if (!existsSync(allowlistPath)) return out;
+  const lines = readFileSync(allowlistPath, "utf8").split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === "" || trimmed.startsWith("#")) continue;
+    const [src, target] = trimmed.split(/\t+/);
+    if (!src || !target) continue;
+    if (!out.has(src)) out.set(src, new Set());
+    out.get(src).add(target);
+  }
+  return out;
+}
+
+function reportFile(t, allowedForFile, broken, total) {
+  const allowed = broken.filter((b) => allowedForFile.has(b.raw));
+  const real = broken.filter((b) => !allowedForFile.has(b.raw));
+  const allowedResolved = [];
+  for (const target of allowedForFile) {
+    const stillBroken = broken.some((b) => b.raw === target);
+    if (!stillBroken) allowedResolved.push(target);
+  }
+  if (real.length === 0 && allowedResolved.length === 0) {
+    const note = allowed.length > 0 ? ` (${allowed.length} allow-listed)` : "";
+    console.log(`✅ ${t}: ${total} link(s) OK${note}`);
+    return 0;
+  }
+  if (real.length > 0) {
+    console.log(`❌ ${t}: ${real.length} broken link(s)`);
+    for (const b of real) console.log(`     ↳ ${b.raw}  →  ${b.resolved}`);
+  }
+  if (allowedResolved.length > 0) {
+    console.log(`❌ ${t}: ${allowedResolved.length} allow-listed link(s) now resolve — remove from allowlist:`);
+    for (const a of allowedResolved) console.log(`     ↳ ${a}`);
+  }
+  return real.length + allowedResolved.length;
+}
+
 function main() {
   const targets = process.argv.slice(2);
   if (targets.length === 0) {
     console.error("usage: check-doc-links.mjs <file> [<file> …]");
     process.exit(2);
   }
-  let totalBroken = 0;
+  const allowlist = loadAllowlist(resolve(REPO_ROOT, "scripts/docs/doc-links.allowlist"));
+  let totalFailures = 0;
   for (const t of targets) {
     const abs = resolve(REPO_ROOT, t);
     if (!existsSync(abs)) {
       console.error(`❌ ${t}: file not found`);
-      totalBroken++;
+      totalFailures++;
       continue;
     }
     const { total, broken } = checkFile(abs);
-    if (broken.length === 0) {
-      console.log(`✅ ${t}: ${total} link(s) OK`);
-      continue;
-    }
-    console.log(`❌ ${t}: ${broken.length} of ${total} link(s) broken`);
-    for (const b of broken) {
-      console.log(`     ↳ ${b.raw}  →  ${b.resolved}`);
-    }
-    totalBroken += broken.length;
+    const allowedForFile = allowlist.get(t) ?? new Set();
+    totalFailures += reportFile(t, allowedForFile, broken, total);
   }
   console.log("");
-  console.log(totalBroken === 0 ? "✅ all links resolve" : `❌ ${totalBroken} broken link(s)`);
-  process.exit(totalBroken === 0 ? 0 : 1);
+  console.log(totalFailures === 0 ? "✅ all links resolve (allowlist respected)" : `❌ ${totalFailures} link issue(s)`);
+  process.exit(totalFailures === 0 ? 0 : 1);
 }
 
 main();
