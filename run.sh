@@ -139,13 +139,10 @@ invoke_visibility() {
   exec bash "$inner" "$@"
 }
 
-invoke_fix_repo() {
-  local inner="$SCRIPT_DIR/fix-repo.sh"
-  if [ ! -f "$inner" ]; then
-    echo "❌ Cannot find $inner" >&2
-    exit 1
-  fi
-  exec bash "$inner" "$@"
+_assert_fix_repo_present() {
+  [ -f "$SCRIPT_DIR/fix-repo.sh" ] && return 0
+  echo "❌ Cannot find $SCRIPT_DIR/fix-repo.sh" >&2
+  exit 1
 }
 
 # ── Dispatch ──────────────────────────────────────────────────────────
