@@ -57,6 +57,8 @@ NO_MAIN_FALLBACK=false
 OFFLINE=false
 RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
 case "$RUN_FIX_REPO" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
+ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
+case "$ASSUME_YES" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -176,6 +178,7 @@ while [[ $# -gt 0 ]]; do
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --offline|--use-local-archive) OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
+    -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
