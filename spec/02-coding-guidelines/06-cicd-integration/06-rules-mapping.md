@@ -1,7 +1,7 @@
 # Rules Mapping — Spec → Check → Severity
 
-> **Version:** 1.0.0
-> **Updated:** 2026-04-19
+> **Version:** 2.0.0
+> **Updated:** 2026-04-27
 
 Single source of truth: every CODE RED / STYLE rule, where it is defined
 in the spec, which check script enforces it, and what severity each
@@ -16,22 +16,35 @@ emits.
 | CODE-RED-001 | No nested `if` | `01-cross-language/04-code-style/` | `checks/nested-if/<lang>.py` | go, ts |
 | CODE-RED-002 | Boolean naming (Is/Has/Can/Should/Was/Will) | `01-cross-language/02-boolean-principles/` | `checks/boolean-naming/<lang>.py` | go, ts |
 | CODE-RED-003 | No magic strings | `01-cross-language/04-code-style/` | `checks/magic-strings/<lang>.py` | go, ts |
-| CODE-RED-004 | Function length 8–15 lines | `01-cross-language/04-code-style/` | `checks/function-length/<lang>.py` | go, ts |
+| CODE-RED-004 | **Function length hard cap — ≤ 15 lines** (redundant safety net under CODE-RED-005) | `01-cross-language/04-code-style/` | `checks/function-length/<lang>.py` | go, ts, php |
+| CODE-RED-005 | **Function length strict — ≤ 8 lines** (binding cap per coding-guidelines.md rule #1) | `01-cross-language/04-code-style/` | `checks/function-length-prefer8/<lang>.py` + `eslint-plugins/coding-guidelines/index.js#preferFunctionLines` | go, ts, php, python, rust, eslint |
 | CODE-RED-006 | File length ≤ 300 lines | `01-cross-language/04-code-style/` | `checks/file-length/<lang>.py` | universal |
 | CODE-RED-008 | No raw negations in conditions | `01-cross-language/12-no-negatives.md` | `checks/positive-conditions/<lang>.py` | go, ts |
+
+### How CODE-RED-004 and CODE-RED-005 relate (no contradiction)
+
+The two function-length rules form a **coordinated tier** at the same
+`error` severity, not competing limits. Effective body line counts map
+to outcomes as follows:
+
+| Effective lines | CODE-RED-005 (strict 8) | CODE-RED-004 (hard 15) |
+|-----------------|-------------------------|------------------------|
+| 0–8             | silent                  | silent                 |
+| 9–15            | **error** (build fails) | silent                 |
+| 16+             | **error** (build fails) | **error** (redundant)  |
+
+CODE-RED-005 is the **binding** rule — it owns the build-failing
+decision for any function over 8 lines. CODE-RED-004 is retained as a
+defence-in-depth net so the registry still flags >15-line bodies even
+if CODE-RED-005 is ever disabled by a per-file override.
 
 ---
 
 ## Soft preferences (annotate — SARIF `warning`)
 
-These rules surface code smells that violate a stated preference but
-stay below a hard CODE RED cap. They never block a merge on their own,
-but every warning should be addressed before review unless explicitly
-waived.
-
-| ID | Rule | Spec source | Check script | Languages |
-|----|------|-------------|--------------|-----------|
-| CODE-RED-005 | Prefer function bodies ≤ 8 effective lines (hard cap 15 enforced by CODE-RED-004) | `01-cross-language/04-code-style/` | `checks/function-length-prefer8/<lang>.py` + `eslint-plugins/coding-guidelines/index.js#preferFunctionLines` | go, ts, php, python, rust, eslint |
+*(none currently — CODE-RED-005 was promoted to `error` in v2.0.0 of
+this mapping per the strict-8 enforcement decision; this section is
+reserved for future soft rules.)*
 
 ---
 
@@ -63,6 +76,16 @@ waived.
 Added to this table as they ship. Removing a rule requires a major
 version bump of the linter pack and a deprecation note in
 [`03-language-roadmap.md`](./03-language-roadmap.md).
+
+---
+
+## Changelog
+
+- **v2.0.0** (2026-04-27) — CODE-RED-005 promoted from `warning` to
+  `error` per the strict-8 enforcement decision. CODE-RED-004 reframed
+  as a redundant >15-line safety net. Added the "How CODE-RED-004 and
+  CODE-RED-005 relate" table to make the coordination explicit.
+- **v1.0.0** (2026-04-19) — Initial mapping.
 
 ---
 
