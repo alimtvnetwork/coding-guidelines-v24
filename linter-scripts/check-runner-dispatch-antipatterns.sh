@@ -149,11 +149,11 @@ write_markdown_report() {
   local out="$1" status="$2" count="$3"
   {
     printf '# Runner Dispatch Guard Report\n\n'
-    printf '- **Status:** %s\n' "$status"
-    printf '- **Violations:** %s\n' "$count"
-    printf '- **Generated:** %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-    printf '- **Guard:** `linter-scripts/check-runner-dispatch-antipatterns.sh`\n'
-    printf '- **Spec:** `spec/15-distribution-and-runner/06-fix-repo-forwarding.md` §7\n\n'
+    printf '%s\n' "- **Status:** $status"
+    printf '%s\n' "- **Violations:** $count"
+    printf '%s\n' "- **Generated:** $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+    printf '%s\n' "- **Guard:** \`linter-scripts/check-runner-dispatch-antipatterns.sh\`"
+    printf '%s\n\n' "- **Spec:** \`spec/15-distribution-and-runner/06-fix-repo-forwarding.md\` §7"
     if [ "$count" -eq 0 ]; then
       printf '✅ No anti-patterns found in `run.sh` or `run.ps1` `fix-repo` dispatch arms.\n'
       return 0
