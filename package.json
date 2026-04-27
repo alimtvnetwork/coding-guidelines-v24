@@ -20,6 +20,7 @@
     "lint:strings": "python3 linter-scripts/check-forbidden-strings.py",
     "lint:strings:report": "python3 linter-scripts/forbidden-strings-summary.py",
     "lint:strings:report:md": "python3 linter-scripts/forbidden-strings-summary.py --markdown",
+    "lint:fnlen": "python3 linter-scripts/check-function-lengths.py",
     "lint:ci": "bash scripts/lint-ci.sh",
     "lint:ci:list": "bash scripts/lint-ci.sh --list",
     "lint:ci:no-cache": "bash scripts/lint-ci.sh --no-cache",
