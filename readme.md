@@ -1210,6 +1210,28 @@ Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& (
 
 **Power-user flags** (both installers): `--repo`, `--branch`, `--version`, `--folders`, `--dest`, `--config`, `--prompt`, `--force`, `--dry-run`, `--list-versions`, `--list-folders`, `-n`. `--prompt` and `--force` are mutually exclusive. Defaults via `install-config.json`. **CI/CD repo migration** (v15 → v16): `npm run migrate:repo:dry` — see [`spec/14-update/26-repo-major-version-migrator.md`](spec/14-update/26-repo-major-version-migrator.md).
 
+### Repo version migration — `fix-repo`
+
+When this repo bumps its major version (e.g. `coding-guidelines-v17` → `coding-guidelines-v18`), use `fix-repo` to rewrite prior versioned-repo-name tokens across all tracked text files. The script auto-detects the base name and current version from `git remote get-url origin` — nothing is hardcoded.
+
+**🪟 Windows · PowerShell**
+
+```powershell
+.\fix-repo.ps1                  # default: replace last 2 prior versions
+.\fix-repo.ps1 -3 -DryRun       # preview last 3
+.\fix-repo.ps1 -all -Verbose    # full sweep, list every modified file
+```
+
+**🐧 macOS · Linux · Bash**
+
+```bash
+./fix-repo.sh                   # default: replace last 2 prior versions
+./fix-repo.sh --3 --dry-run     # preview last 3
+./fix-repo.sh --all --verbose   # full sweep, list every modified file
+```
+
+Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v17`). URLs are preserved automatically — only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v17` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
+
 ---
 
 ## 📚 Documentation
