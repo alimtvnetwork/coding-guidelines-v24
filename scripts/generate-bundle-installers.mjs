@@ -559,7 +559,7 @@ run_fix_repo() {
 
 echo "✅ \${BUNDLE_NAME} installed."
 open_entry
-\`;
+`;
 }
 
 // ── PowerShell installer ──────────────────────────────────────────
