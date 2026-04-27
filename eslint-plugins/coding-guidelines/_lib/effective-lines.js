@@ -49,4 +49,4 @@ function countEffective(bodyLines, language) {
   return count;
 }
 
-module.exports = { countEffective, SYNTAX };
+export { countEffective, SYNTAX };
