@@ -184,16 +184,20 @@ Copy-paste commands for every supported bundle. Each block lists the **exact scr
 <details>
 <summary><strong>error-manage</strong> — Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
-# Bash · latest
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash
-# Bash · pinned
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
-# PowerShell · latest
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1 | iex
-# PowerShell · pinned
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
@@ -203,12 +207,20 @@ Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
 <details>
 <summary><strong>splitdb</strong> — Split-DB Architecture Spec · script: <a href="splitdb-install.sh"><code>splitdb-install.sh</code></a> / <a href="splitdb-install.ps1"><code>splitdb-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec/06-seedable-config-architecture`.
@@ -218,14 +230,20 @@ Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec
 <details>
 <summary><strong>slides</strong> — Slides App + Decks · script: <a href="slides-install.sh"><code>slides-install.sh</code></a> / <a href="slides-install.ps1"><code>slides-install.ps1</code></a></summary>
 
+Bash · latest (auto-opens `slides-app/dist/index.html`):
 ```bash
-# Bash · latest (auto-opens slides-app/dist/index.html)
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash
-# Bash · pinned, no auto-open (CI)
+```
+Bash · pinned, no auto-open (CI):
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash -s -- --version v3.85.0 --target ./vendor/slides --no-open
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1 | iex
+```
+PowerShell · pinned, no auto-open:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1))) -Version v3.85.0 -Dest .\vendor\slides -NoOpen
 ```
 Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
@@ -235,12 +253,20 @@ Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `-
 <details>
 <summary><strong>linters</strong> — Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below — it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
@@ -250,12 +276,20 @@ Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no
 <details>
 <summary><strong>cli</strong> — CLI Toolchain Spec · script: <a href="cli-install.sh"><code>cli-install.sh</code></a> / <a href="cli-install.ps1"><code>cli-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `spec/13-generic-cli`, `spec/14-update`, `spec/15-distribution-and-runner`, `spec/16-generic-release`.
@@ -265,12 +299,20 @@ Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `
 <details>
 <summary><strong>wp</strong> — WordPress Plugin How-To Spec · script: <a href="wp-install.sh"><code>wp-install.sh</code></a> / <a href="wp-install.ps1"><code>wp-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/18-wp-plugin-how-to`.
@@ -280,12 +322,20 @@ Installs: `spec/18-wp-plugin-how-to`.
 <details>
 <summary><strong>consolidated</strong> — Consolidated Guidelines · script: <a href="consolidated-install.sh"><code>consolidated-install.sh</code></a> / <a href="consolidated-install.ps1"><code>consolidated-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/17-consolidated-guidelines`.
