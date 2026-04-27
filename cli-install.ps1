@@ -111,7 +111,7 @@ $RepoSlug = "alimtvnetwork/coding-guidelines-v18"
 $AutoOpenEntry = ""
 $PrebuiltSrc = ""
 $PrebuiltDest = ""
-$VerifyPairs = ""
+$VerifyPairs = "fix-repo.sh|file,fix-repo.ps1|file"
 
 if ($UseLocalArchive) { $Offline = $true }
 

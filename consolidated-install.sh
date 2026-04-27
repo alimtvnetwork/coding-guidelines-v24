@@ -40,7 +40,7 @@ REPO_SLUG="alimtvnetwork/coding-guidelines-v18"
 AUTO_OPEN_ENTRY=""
 PREBUILT_SRC=""
 PREBUILT_DEST=""
-VERIFY_PAIRS=""
+VERIFY_PAIRS="fix-repo.sh|file fix-repo.ps1|file"
 
 VERSION=""
 TARGET="$(pwd)"
