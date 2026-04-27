@@ -777,6 +777,10 @@ if (-not $ShowFixRepoLog) {
     $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
     if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
 }
+if ($MaxFixRepoLogs -lt 0) {
+    $envMax = $env:INSTALL_MAX_FIX_REPO_LOGS
+    if ($envMax -and ($envMax -match '^\d+$')) { $MaxFixRepoLogs = [int]$envMax } else { $MaxFixRepoLogs = 0 }
+}
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
