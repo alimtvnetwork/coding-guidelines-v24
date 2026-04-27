@@ -27,12 +27,18 @@ show_help() {
     lint         same as no-args, but explicit
     slides       build & preview slides-app/, open browser
     visibility   toggle GitHub/GitLab repo visibility (pub|pri)
+    fix-repo     rewrite prior versioned-repo-name tokens to current
     help         this table
 
   Visibility flags forwarded to visibility-change.sh:
     --visible <pub|pri>   target visibility (required)
     --yes                 skip private→public confirmation
     --dry-run             print intended action; no API call
+
+  Fix-repo flags forwarded to fix-repo.sh:
+    --2 | --3 | --5 | --all   how many prior versions to rewrite (default: --2)
+    --dry-run                 report changes; do not write
+    --verbose                 list every modified file
 
   Lint flags forwarded to linter-scripts/run.sh:
     --path <dir>      Directory to scan (default: src)
@@ -133,6 +139,15 @@ invoke_visibility() {
   exec bash "$inner" "$@"
 }
 
+invoke_fix_repo() {
+  local inner="$SCRIPT_DIR/fix-repo.sh"
+  if [ ! -f "$inner" ]; then
+    echo "❌ Cannot find $inner" >&2
+    exit 1
+  fi
+  exec bash "$inner" "$@"
+}
+
 # ── Dispatch ──────────────────────────────────────────────────────────
 cmd="${1:-}"
 case "$cmd" in
@@ -140,6 +155,7 @@ case "$cmd" in
   lint)          shift; invoke_lint "$@" ;;
   slides)        shift; invoke_slides ;;
   visibility)    shift; invoke_visibility "$@" ;;
+  fix-repo)      shift; invoke_fix_repo "$@" ;;
   help|-h|--help|-\?) show_help; exit 0 ;;
   -*)            invoke_lint "$@" ;;   # legacy flag form
   *)
