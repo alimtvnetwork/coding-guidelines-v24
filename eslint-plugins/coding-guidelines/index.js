@@ -14,7 +14,7 @@
  *   coding-guidelines/no-else-after-return  — No else after return (R7)
  */
 
-const { countEffective } = require("./_lib/effective-lines");
+import { countEffective } from "./_lib/effective-lines.js";
 
 // ═══════════════════════════════════════════════════════════════
 // Rule: no-nested-if (CODE RED)
