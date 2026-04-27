@@ -86,6 +86,7 @@ param(
     [switch]$Yes,
     [string]$LogDir = "",
     [switch]$ShowFixRepoLog,
+    [int]$MaxFixRepoLogs = -1,
     [Alias("?")]
     [switch]$Help
 )
@@ -105,6 +106,10 @@ if (-not $LogDir) { $LogDir = "" }
 if (-not $ShowFixRepoLog) {
     $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
     if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
+}
+if ($MaxFixRepoLogs -lt 0) {
+    $envMax = $env:INSTALL_MAX_FIX_REPO_LOGS
+    if ($envMax -and ($envMax -match '^d+$')) { $MaxFixRepoLogs = [int]$envMax } else { $MaxFixRepoLogs = 0 }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
@@ -461,6 +466,14 @@ function Invoke-FixRepo {
     & $script 2>&1 | Tee-Object -FilePath $logFile -Append
     $rc = $LASTEXITCODE
     Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($MaxFixRepoLogs -gt 0) {
+        $stale = Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -Skip $MaxFixRepoLogs
+        $removedCount = 0
+        foreach ($s in $stale) { Remove-Item -LiteralPath $s.FullName -Force -ErrorAction SilentlyContinue; $removedCount++ }
+        if ($removedCount -gt 0) { Write-Host "  ▸ pruned $removedCount old fix-repo log(s); kept newest $MaxFixRepoLogs in $logDir" -ForegroundColor Cyan }
+    }
     if ($ShowFixRepoLog) {
         Write-Host ""
         Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
