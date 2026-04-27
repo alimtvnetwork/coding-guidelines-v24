@@ -117,34 +117,39 @@ maybe_confirm() {
   exit $EXIT_CONFIRM_REQ
 }
 
+_validate_forced() {
+  local forced="$1"
+  [ "$forced" = "INVALID" ] || return 0
+  err "visibility-change: ERROR bad --visible value '$VISIBLE_RAW' (use pub|public|pri|private)"
+  exit $EXIT_BAD_FLAG
+}
+
+_read_current_or_die() {
+  local cur; cur="$(get_current_visibility "$PROVIDER" "$SLUG")"
+  [ -n "$cur" ] || { err "visibility-change: ERROR cannot read current visibility (auth?)"; exit $EXIT_AUTH_FAILED; }
+  printf '%s' "$cur"
+}
+
+_apply_and_verify() {
+  local current="$1" target="$2"
+  apply_visibility "$PROVIDER" "$SLUG" "$target" \
+    || { err "visibility-change: ERROR apply failed"; exit $EXIT_AUTH_FAILED; }
+  visibility_matches "$PROVIDER" "$SLUG" "$target" \
+    || { err "visibility-change: ERROR verification failed (visibility did not change)"; exit $EXIT_VERIFY_FAILED; }
+}
+
 main() {
   parse_args "$@"
   local forced; forced="$(resolve_target_value "$VISIBLE_RAW")"
-  if [ "$forced" = "INVALID" ]; then
-    err "visibility-change: ERROR bad --visible value '$VISIBLE_RAW' (use pub|public|pri|private)"
-    exit $EXIT_BAD_FLAG
-  fi
+  _validate_forced "$forced"
   resolve_context
   assert_cli_ready "$(required_cli_for "$PROVIDER")"
-  local current; current="$(get_current_visibility "$PROVIDER" "$SLUG")"
-  if [ -z "$current" ]; then
-    err "visibility-change: ERROR cannot read current visibility (auth?)"; exit $EXIT_AUTH_FAILED
-  fi
+  local current; current="$(_read_current_or_die)"
   local target; target="$(resolve_next_target "$forced" "$current")"
-  if [ "$current" = "$target" ]; then
-    echo "visibility: already $current ($PROVIDER)"; exit $EXIT_OK
-  fi
+  [ "$current" != "$target" ] || { echo "visibility: already $current ($PROVIDER)"; exit $EXIT_OK; }
   maybe_confirm "$current" "$target"
-  if [ "$DRY_RUN" = "1" ]; then
-    echo "[dry-run] visibility: $current → $target ($PROVIDER)"; exit $EXIT_OK
-  fi
-  if ! apply_visibility "$PROVIDER" "$SLUG" "$target"; then
-    err "visibility-change: ERROR apply failed"; exit $EXIT_AUTH_FAILED
-  fi
-  if ! visibility_matches "$PROVIDER" "$SLUG" "$target"; then
-    err "visibility-change: ERROR verification failed (visibility did not change)"
-    exit $EXIT_VERIFY_FAILED
-  fi
+  [ "$DRY_RUN" != "1" ] || { echo "[dry-run] visibility: $current → $target ($PROVIDER)"; exit $EXIT_OK; }
+  _apply_and_verify "$current" "$target"
   echo "visibility: $current → $target ($PROVIDER)"
 }
 
