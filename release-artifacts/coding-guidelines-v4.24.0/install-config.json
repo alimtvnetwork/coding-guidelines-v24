@@ -1,0 +1,12 @@
+{
+  "repo": "alimtvnetwork/coding-guidelines-v18",
+  "branch": "main",
+  "folders": [
+    "spec",
+    "linters",
+    "linter-scripts",
+    "linters-cicd",
+    ".lovable/coding-guidelines",
+    ".lovable/prompts"
+  ]
+}
