@@ -243,6 +243,12 @@ const maxFunctionLines = {
 // ═══════════════════════════════════════════════════════════════
 // Rule: prefer-function-lines (CODE-RED-005 — STRICT 8-line cap)
 //
+// Canonical spec (threshold + counting rules + per-language scope):
+//   linters-cicd/checks/function-length-prefer8/README.md
+// That README is the single source of truth. If this rule's behavior
+// drifts from it, the README wins — fix the README first then bring
+// this code into alignment.
+//
 // Per coding-guidelines.md (rule #1: "Keep functions under 8 lines"),
 // this rule fires as an ERROR on ANY function body whose effective
 // line count exceeds `prefer` (default 8). The legacy `hard` option
