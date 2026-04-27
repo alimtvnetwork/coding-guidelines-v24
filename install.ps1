@@ -61,6 +61,8 @@ param(
     [switch]$RunFixRepo,
     [Alias('y','AssumeYes')]
     [switch]$Yes,
+    [switch]$RollbackOnFixRepoFailure,
+    [switch]$FullRollback,
     [string]$PinnedByReleaseInstall = ""
 )
 
@@ -73,6 +75,21 @@ if (-not $Yes) {
     $envYes = $env:INSTALL_FIX_REPO_YES
     if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
+if (-not $RollbackOnFixRepoFailure) {
+    $envRb = $env:INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE
+    if ($envRb -and @("1","true","TRUE","yes","YES") -contains $envRb) { $RollbackOnFixRepoFailure = $true }
+}
+if (-not $FullRollback) {
+    $envFR = $env:INSTALL_FULL_ROLLBACK
+    if ($envFR -and @("1","true","TRUE","yes","YES") -contains $envFR) { $FullRollback = $true }
+}
+if ($FullRollback) { $RollbackOnFixRepoFailure = $true }
+
+# Bookkeeping for rollback.
+$Script:InstalledNew = New-Object System.Collections.Generic.List[string]
+$Script:InstalledBackups = New-Object System.Collections.Generic.List[object]
+$Script:RollbackDir = $null
+$Script:PreFixRepoHead = $null
 
 # Offline mode forbids any network operation (spec §5.3, §8 exit 2).
 if ($Offline) {
