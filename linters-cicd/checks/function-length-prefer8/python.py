@@ -15,6 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _lib.cli import build_parser, parse_exclude_paths
+from _lib.effective_lines import count_effective as _count_effective_shared
 from _lib.sarif import Finding, SarifRun, emit
 from _lib.walker import walk_files
 from _shared import RULE, exceeds_strict_cap, make_finding
