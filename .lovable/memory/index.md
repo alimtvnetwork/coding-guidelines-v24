@@ -54,3 +54,26 @@ Updated: 2026-04-27
 - [No-Questions Mode](mem://workflow/no-questions-mode) — 40-task no-questions run; ambiguity logging template, sequencing, and resume trigger.
 - [Avoid Time Suggestions in readme.txt](mem://avoid/02-no-time-suggestions-in-readme-txt) — Strictly Prohibited #01: zero time-related chatter, suggestions, or auto-updates around readme.txt; persist across sessions.
 - [2026-04-27 Docs Viewer Quick-Jump + Sync Banner](mem://sessions/2026-04-27-docs-viewer-quick-jump-and-sync-banner) — Cmd/Ctrl+J command palette with Open-Spec-Overview pinned, GithubSyncBanner reading version.json, .gitmap/ removed, spec/ visibility incident diagnosed.
+
+## Memories — Backfilled (orphans recovered 2026-04-27)
+
+- [Avoid Per-Task Folders](mem://avoid/01-avoid-per-task-folders) — Folder-shape prohibitions for one-off task files.
+- [Skip Stub Spec Folders](mem://constraints/skip-stub-spec-folders) — Do not generate placeholder/stub spec subfolders.
+- [Coding-Guidelines Consolidation Plan (DONE)](mem://done/coding-guidelines-consolidation-plan) — Archived plan kept for historical reference.
+- [Exclude-Paths Glob Support](mem://features/exclude-paths-glob-support) — `.codeguidelines.toml` exclusion globs (B9).
+- [Release-Pinned Installer](mem://features/release-pinned-installer) — Pinned-version install flow.
+- [Spec Link Checker](mem://features/spec-link-checker) — Cross-spec link validation rules.
+- [Visual Rendering System](mem://features/visual-rendering-system) — Markdown viewer rendering pipeline.
+- [Nested Code Fence Rendering](mem://issues/nested-code-fence-rendering) — Companion to nested-code-fence-data-corruption; renderer specifics.
+- [README Bundle Installers](mem://project/03-readme-bundle-installers) — Bundle install matrix synced with `InstallSection.tsx`.
+- [Naming Compliance Issues](mem://project/naming-compliance-issues) — Tracker for renames + compliance fixes.
+- [Phase 2 Content-Overlap Audit](mem://project/phase2-content-overlap-audit) — Spec consolidation audit notes.
+- [Phase 3 Consolidated Structure Design](mem://project/phase3-consolidated-structure-design) — Target consolidated structure.
+- [v2.2 Error-Spec Changes](mem://project/v2.2-error-spec-changes) — Error spec migration notes.
+- [2026-04-19 Distribution Runner + Slides](mem://sessions/2026-04-19-distribution-runner-slides) — Session log.
+- [2026-04-19 Perf + Boolean Naming + Schema](mem://sessions/2026-04-19-perf-boolean-naming-schema) — Session log.
+- [2026-04-23 Quickstart + Zero Violations](mem://sessions/2026-04-23-quickstart-and-zero-violations) — Session log.
+- [2026-04-23 README Code-Red Walkthrough](mem://sessions/2026-04-23-readme-code-red-walkthrough) — Session log.
+- [Installer Behavior Standards](mem://standards/installer-behavior) — Canonical installer UX rules.
+- [Suggestions Tracker (memory mirror)](mem://suggestions/01-suggestions-tracker) — Mirrors `.lovable/suggestions.md` highlights.
+- [Plan Tracker (workflow)](mem://workflow/01-plan-tracker) — Workflow-state mirror of `.lovable/plan.md`.
