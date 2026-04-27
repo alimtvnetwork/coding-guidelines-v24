@@ -39,6 +39,16 @@
       "php": "checks/function-length/php.py"
     }
   },
+  "CODE-RED-005": {
+    "name": "FunctionLengthPrefer8",
+    "level": "warning",
+    "spec": "01-cross-language/04-code-style/00-overview.md",
+    "languages": {
+      "go": "checks/function-length-prefer8/go.py",
+      "typescript": "checks/function-length-prefer8/typescript.py",
+      "php": "checks/function-length-prefer8/php.py"
+    }
+  },
   "CODE-RED-006": {
     "name": "FileLength",
     "level": "error",
