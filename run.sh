@@ -107,10 +107,21 @@ invoke_visibility() {
   exec bash "$inner" "$@"
 }
 
+EXIT_FIX_REPO_MISSING=4
+
 _assert_fix_repo_present() {
-  [ -f "$SCRIPT_DIR/fix-repo.sh" ] && return 0
-  echo "❌ Cannot find $SCRIPT_DIR/fix-repo.sh" >&2
-  exit 1
+  local target="$SCRIPT_DIR/fix-repo.sh"
+  [ -f "$target" ] && return 0
+  {
+    echo "❌ fix-repo: inner script is missing"
+    echo "   attempted path : $target"
+    echo "   runner script  : ${BASH_SOURCE[0]:-run.sh}"
+    echo "   SCRIPT_DIR     : $SCRIPT_DIR"
+    echo "   working dir    : $PWD"
+    echo "   hint           : re-run from a clean checkout, or restore fix-repo.sh"
+    echo "                    (see spec-authoring/22-fix-repo/01-spec.md)"
+  } >&2
+  exit $EXIT_FIX_REPO_MISSING
 }
 
 # ── Dispatch ──────────────────────────────────────────────────────────

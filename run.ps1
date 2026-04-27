@@ -129,11 +129,19 @@ function Invoke-Visibility {
     exit $LASTEXITCODE
 }
 
+$Script:ExitFixRepoMissing = 4
+
 function Assert-FixRepoPresent {
     $inner = Join-Path $PSScriptRoot "fix-repo.ps1"
     if (Test-Path $inner) { return $inner }
-    Write-Host "❌ Cannot find $inner" -ForegroundColor Red
-    exit 1
+    Write-Host "❌ fix-repo: inner script is missing" -ForegroundColor Red
+    Write-Host "   attempted path : $inner" -ForegroundColor Yellow
+    Write-Host "   runner script  : $PSCommandPath" -ForegroundColor Yellow
+    Write-Host "   PSScriptRoot   : $PSScriptRoot" -ForegroundColor Yellow
+    Write-Host "   working dir    : $((Get-Location).Path)" -ForegroundColor Yellow
+    Write-Host "   hint           : re-run from a clean checkout, or restore fix-repo.ps1" -ForegroundColor Yellow
+    Write-Host "                    (see spec-authoring/22-fix-repo/01-spec.md)" -ForegroundColor Yellow
+    exit $Script:ExitFixRepoMissing
 }
 
 switch ($Command.ToLower()) {
