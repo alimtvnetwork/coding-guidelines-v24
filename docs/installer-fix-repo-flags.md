@@ -510,7 +510,53 @@ if ! $DRY_RUN && $RUN_FIX_REPO; then run_fix_repo; fi
 
 ---
 
-### 5.4 Quick-grep cheat sheet
+### 5.4 `INSTALL_LOG_DIR=""` (empty string) is treated as **unset**
+
+**Trigger:** you `export INSTALL_LOG_DIR=""` (or in PowerShell `$env:INSTALL_LOG_DIR = ''`) — typically by accident in a shell script that does `INSTALL_LOG_DIR="$SOME_VAR"` where `$SOME_VAR` is empty — and then run the installer **without** passing `--log-dir` on the CLI.
+
+**How the installer interprets it:** an empty-string env var is **not** the same as "use the current directory". Per §1a rule 3, the installer treats an empty `INSTALL_LOG_DIR` as **unset** and falls back to the default `<DEST>/.install-logs`. This is intentional — it prevents a stray empty assignment from silently scattering log files into the user's `$PWD` or the filesystem root.
+
+| You exported           | CLI flag           | Resolved log dir                                  | Source reported       |
+|------------------------|--------------------|---------------------------------------------------|-----------------------|
+| `INSTALL_LOG_DIR=""`   | *(none)*           | `<DEST>/.install-logs` (default)                  | `default`             |
+| `INSTALL_LOG_DIR=""`   | `--log-dir ""`     | `<DEST>/` (literal empty path → relative to dest) | `CLI --log-dir`       |
+| `INSTALL_LOG_DIR=/x`   | *(none)*           | `/x`                                              | `env INSTALL_LOG_DIR` |
+| `INSTALL_LOG_DIR=/x`   | `--log-dir /y`     | `/y`                                              | `CLI --log-dir`       |
+
+**Confirmation log line:** every install run — dry-run included — emits a single banner line near the top of stdout (and into `fix-repo-*.log` when `--run-fix-repo` is used) naming the resolved directory **and** the source it came from:
+
+```
+▸ log dir: /home/me/coding-guidelines/.install-logs   (source: default)
+```
+
+The `(source: …)` suffix is one of `default`, `env INSTALL_LOG_DIR`, or `CLI --log-dir` — matching the precedence chain in §1a. If you see `source: default` when you expected `source: env INSTALL_LOG_DIR`, your env var is empty (or unset), not the path you thought it was.
+
+**Quick grep on a captured log:**
+
+```bash
+grep -E '^▸ log dir:' install-stdout.log
+# → ▸ log dir: ./coding-guidelines/.install-logs   (source: default)
+```
+
+**Diagnose in one line:**
+
+```bash
+printf 'INSTALL_LOG_DIR=[%s] (len=%d)\n' "$INSTALL_LOG_DIR" "${#INSTALL_LOG_DIR}"
+# len=0  → installer will treat it as unset
+# len>0  → installer will use it (assuming --log-dir is not also passed)
+```
+
+PowerShell equivalent:
+
+```powershell
+"INSTALL_LOG_DIR=[{0}] (len={1})" -f $env:INSTALL_LOG_DIR, ($env:INSTALL_LOG_DIR ?? '').Length
+```
+
+**Fix:** either unset the variable cleanly (`unset INSTALL_LOG_DIR` / `Remove-Item Env:INSTALL_LOG_DIR`) so the intent is unambiguous, or assign it a real path. If you genuinely want logs written into `<DEST>/` itself (not the `.install-logs` subdir), pass `--log-dir ""` explicitly on the CLI — that bypasses the unset-vs-empty rule because CLI flags are taken at face value.
+
+---
+
+### 5.5 Quick-grep cheat sheet
 
 When you have an uploaded `fix-repo-*.log` artifact, these greps answer "what happened?" in one pass:
 
