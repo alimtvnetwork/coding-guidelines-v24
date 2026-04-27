@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Search, Library, FileText, Download, MoreVertical, ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,6 @@ import { SpecNodeType, type SpecNode } from "@/types/spec";
 import { cn } from "@/lib/utils";
 import { isLoading, isIdle, isOpen, isClosed } from "@/constants/boolFlags";
 import { treeDiagDebug, treeDiagWarn, TreeDiagCategory } from "@/lib/treeDiagnostics";
-import { useEffect } from "react";
 import {
   Sidebar, SidebarContent, SidebarHeader,
   SidebarGroup, SidebarGroupLabel, SidebarGroupContent,
