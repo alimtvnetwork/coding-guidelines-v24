@@ -425,6 +425,28 @@ for tlf in "${TOP_LEVEL_FILES[@]}"; do
   merge_file "$src" "$DEST/$tlf"
 done
 
+# ── Verify required files (spec §8: exit 4 on missing required path) ──
+# Required files MUST exist in DEST after install. Skipped under --dry-run
+# since no files were actually written.
+REQUIRED_FILES=("fix-repo.sh" "fix-repo.ps1")
+verify_required_files() {
+  local missing=()
+  local f
+  for f in "${REQUIRED_FILES[@]}"; do
+    [[ -f "$DEST/$f" ]] || missing+=("$f")
+  done
+  [[ ${#missing[@]} -eq 0 ]] && { ok "Verified ${#REQUIRED_FILES[@]} required file(s) present"; return 0; }
+  err "Install verification FAILED — ${#missing[@]} required file(s) missing in $DEST:"
+  local m
+  for m in "${missing[@]}"; do echo "     • $m" >&2; done
+  echo "" >&2
+  echo "   The archive was downloaded but did NOT contain the expected" >&2
+  echo "   top-level scripts. Re-run without --version to fetch main, or" >&2
+  echo "   pin to a release that includes fix-repo.{sh,ps1}." >&2
+  exit 4
+}
+$DRY_RUN || verify_required_files
+
 # ── Summary ───────────────────────────────────────────────────────
 echo ""
 echo "════════════════════════════════════════════════════════"
