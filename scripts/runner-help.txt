@@ -1,0 +1,29 @@
+
+  coding-guidelines-v18 — root runner
+
+  Usage: ./run.sh [<command>] [<flags>]
+
+  Commands:
+    (none)   git pull + run Go validator on src/   (legacy default)
+    lint         same as no-args, but explicit
+    slides       build & preview slides-app/, open browser
+    visibility   toggle GitHub/GitLab repo visibility (pub|pri)
+    fix-repo     rewrite prior versioned-repo-name tokens to current
+    help         this table
+
+  Visibility flags forwarded to visibility-change.sh:
+    --visible <pub|pri>   target visibility (required)
+    --yes                 skip private→public confirmation
+    --dry-run             print intended action; no API call
+
+  Fix-repo flags forwarded to fix-repo.sh:
+    --2 | --3 | --5 | --all   how many prior versions to rewrite (default: --2)
+    --dry-run                 report changes; do not write
+    --verbose                 list every modified file
+
+  Lint flags forwarded to linter-scripts/run.sh:
+    --path <dir>      Directory to scan (default: src)
+    --max-lines <n>   Max function body lines (default: 15)
+    --json            JSON output
+    -d                Skip validation, only git pull
+

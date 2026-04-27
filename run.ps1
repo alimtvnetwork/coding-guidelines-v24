@@ -31,35 +31,8 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Show-Help {
-    Write-Host ""
-    Write-Host "  coding-guidelines-v18 — root runner" -ForegroundColor Cyan
-    Write-Host ""
-    Write-Host "  Usage: .\run.ps1 [<command>] [<flags>]"
-    Write-Host ""
-    Write-Host "  Commands:"
-    Write-Host "    (none)   git pull + run Go validator on src/   (legacy default)"
-    Write-Host "    lint        same as no-args, but explicit"
-    Write-Host "    slides      build & preview slides-app/, open browser"
-    Write-Host "    visibility  toggle GitHub/GitLab repo visibility (pub|pri)"
-    Write-Host "    fix-repo    rewrite prior versioned-repo-name tokens to current"
-    Write-Host "    help        this table"
-    Write-Host ""
-    Write-Host "  Visibility flags forwarded to visibility-change.ps1:"
-    Write-Host "    -Visible <pub|pri>   target visibility (required)"
-    Write-Host "    -Yes                 skip private→public confirmation"
-    Write-Host "    -DryRun              print intended action; no API call"
-    Write-Host ""
-    Write-Host "  Fix-repo flags forwarded to fix-repo.ps1:"
-    Write-Host "    -2 | -3 | -5 | -All  how many prior versions to rewrite (default: -2)"
-    Write-Host "    -DryRun              report changes; do not write"
-    Write-Host "    -Verbose             list every modified file"
-    Write-Host ""
-    Write-Host "  Lint flags forwarded to linter-scripts/run.ps1:"
-    Write-Host "    -Path <dir>      Directory to scan (default: src)"
-    Write-Host "    -MaxLines <n>    Max function body lines (default: 15)"
-    Write-Host "    -Json            JSON output"
-    Write-Host "    -d               Skip validation, only git pull"
-    Write-Host ""
+    $helpFile = Join-Path $PSScriptRoot "scripts" "runner-help.ps.txt"
+    Get-Content -LiteralPath $helpFile | ForEach-Object { Write-Host $_ }
 }
 
 function Invoke-Lint {
@@ -80,68 +53,67 @@ function Test-Command {
     return [bool](Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
-function Invoke-Slides {
-    Write-Host ""
-    Write-Host "▸ slides — building offline deck and opening in browser" -ForegroundColor Cyan
-    Write-Host ""
+function Assert-SlidesDir {
+    param([string]$Dir)
+    if (Test-Path $Dir) { return }
+    Write-Host "❌ slides-app/ not found at $Dir" -ForegroundColor Red
+    Write-Host "   See spec-slides/00-overview.md for the slides spec." -ForegroundColor Yellow
+    exit 1
+}
 
-    $slidesDir = Join-Path $PSScriptRoot "slides-app"
-    if (-not (Test-Path $slidesDir)) {
-        Write-Host "❌ slides-app/ not found at $slidesDir" -ForegroundColor Red
-        Write-Host "   See spec-slides/00-overview.md for the slides spec." -ForegroundColor Yellow
-        exit 1
+function Resolve-SlidesRunner {
+    if (Test-Command "bun")  { return "bun" }
+    if (Test-Command "pnpm") { return "pnpm" }
+    Write-Host "❌ Need 'bun' or 'pnpm' on PATH to build slides-app." -ForegroundColor Red
+    Write-Host "   Install bun:  irm bun.sh/install.ps1 | iex" -ForegroundColor Yellow
+    exit 1
+}
+
+function Invoke-SlidesBuild {
+    param([string]$Runner)
+    Write-Host "▸ install dependencies..." -ForegroundColor Cyan
+    & $Runner install
+    if ($LASTEXITCODE -ne 0) { Write-Host "❌ install failed" -ForegroundColor Red; exit 1 }
+    Write-Host "▸ build..." -ForegroundColor Cyan
+    & $Runner run build
+    if ($LASTEXITCODE -ne 0) { Write-Host "❌ build failed" -ForegroundColor Red; exit 1 }
+}
+
+function Wait-SlidesReady {
+    param([string]$Url)
+    for ($i = 0; $i -lt 20; $i++) {
+        Start-Sleep -Milliseconds 500
+        try {
+            $r = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop
+            if ($r.StatusCode -lt 500) { return $true }
+        } catch { }
     }
+    return $false
+}
 
+function Start-SlidesPreview {
+    param([string]$Runner)
+    $url = "http://localhost:4173/"
+    Write-Host "▸ start preview server (background)..." -ForegroundColor Cyan
+    $preview = Start-Process -FilePath $Runner -ArgumentList @("run", "preview") -PassThru -NoNewWindow
+    $ready = Wait-SlidesReady -Url $url
+    if (-not $ready) { Write-Host "⚠️  preview not reachable at $url — opening browser anyway" -ForegroundColor Yellow }
+    Write-Host "▸ opening $url" -ForegroundColor Cyan; Start-Process $url
+    Write-Host ""; Write-Host "▸ slides — preview running. Press Ctrl-C to stop." -ForegroundColor Green; Write-Host ""
+    Wait-Process -Id $preview.Id
+}
+
+function Invoke-Slides {
+    Write-Host ""; Write-Host "▸ slides — building offline deck and opening in browser" -ForegroundColor Cyan; Write-Host ""
+    $slidesDir = Join-Path $PSScriptRoot "slides-app"
+    Assert-SlidesDir -Dir $slidesDir
     Write-Host "▸ git pull (best effort)..." -ForegroundColor Cyan
     try { git pull | Out-Host } catch { Write-Host "⚠️  git pull failed — continuing with local state" -ForegroundColor Yellow }
-
-    $runner = $null
-    if (Test-Command "bun")  { $runner = "bun" }
-    elseif (Test-Command "pnpm") { $runner = "pnpm" }
-    else {
-        Write-Host "❌ Need 'bun' or 'pnpm' on PATH to build slides-app." -ForegroundColor Red
-        Write-Host "   Install bun:  irm bun.sh/install.ps1 | iex" -ForegroundColor Yellow
-        exit 1
-    }
+    $runner = Resolve-SlidesRunner
     Write-Host "▸ using package runner: $runner" -ForegroundColor Cyan
-
     Push-Location $slidesDir
-    try {
-        Write-Host "▸ install dependencies..." -ForegroundColor Cyan
-        & $runner install
-        if ($LASTEXITCODE -ne 0) { Write-Host "❌ install failed" -ForegroundColor Red; exit 1 }
-
-        Write-Host "▸ build..." -ForegroundColor Cyan
-        & $runner run build
-        if ($LASTEXITCODE -ne 0) { Write-Host "❌ build failed" -ForegroundColor Red; exit 1 }
-
-        Write-Host "▸ start preview server (background)..." -ForegroundColor Cyan
-        $preview = Start-Process -FilePath $runner -ArgumentList @("run", "preview") -PassThru -NoNewWindow
-
-        $url = "http://localhost:4173/"
-        $ready = $false
-        for ($i = 0; $i -lt 20; $i++) {
-            Start-Sleep -Milliseconds 500
-            try {
-                $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop
-                if ($r.StatusCode -lt 500) { $ready = $true; break }
-            } catch { }
-        }
-        if (-not $ready) {
-            Write-Host "⚠️  preview not reachable at $url — opening browser anyway" -ForegroundColor Yellow
-        }
-
-        Write-Host "▸ opening $url" -ForegroundColor Cyan
-        Start-Process $url
-
-        Write-Host ""
-        Write-Host "▸ slides — preview running. Press Ctrl-C to stop." -ForegroundColor Green
-        Write-Host ""
-        Wait-Process -Id $preview.Id
-    }
-    finally {
-        Pop-Location
-    }
+    try { Invoke-SlidesBuild -Runner $runner; Start-SlidesPreview -Runner $runner }
+    finally { Pop-Location }
 }
 
 function Invoke-Visibility {

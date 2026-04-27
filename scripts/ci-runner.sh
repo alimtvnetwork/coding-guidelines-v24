@@ -66,34 +66,7 @@ log_section() {
 # ---------------------------------------------------------------------------
 
 print_usage() {
-  cat <<'EOF'
-Usage: ci-runner.sh --phase <check|lint|test|all> [--guard <name>] [options]
-
-Phases group related guards from spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/:
-  check  -> forbidden-names, naming-baseline, collisions  (Patterns 01, 02, 03)
-  lint   -> lint-diff, lint-suggest                       (Patterns 04, 05)
-  test   -> test-summary                                  (Pattern 06)
-  all    -> every guard above, in declared order
-
-Options:
-  --phase <name>          Required. One of: check, lint, test, all.
-  --guard <name>          Optional. Run a single guard by name.
-  --config <path>         Optional. Load ci-guards.yaml/.json (Pattern 08).
-  --source-dir <path>     Source directory for check-phase guards.
-  --baseline <path>       Baseline file (naming-baseline, lint-diff).
-  --results-dir <path>    Matrix results directory (test-summary).
-  --json <path>           Emit machine-readable summary to <path>.
-  --fix                   Regenerate baseline (naming-baseline only).
-  --scripts-dir <path>    Where guard scripts live (default: .github/scripts).
-  --verbose               Print diagnostic messages to stderr.
-  --help                  Show this message.
-
-Exit codes:
-   0  All selected guards passed.
-   1  At least one guard reported a violation.
-   2  Tool error (missing dependency, unreadable input).
-  64  Usage error (bad flags).
-EOF
+  cat "$(dirname "$0")/ci-runner-usage.txt"
 }
 
 # ---------------------------------------------------------------------------
@@ -107,46 +80,66 @@ is_known_phase() {
   esac
 }
 
+_parse_value_flag() {
+  # Returns 0 if $1 is a recognized value flag; sets the global and echoes 2.
+  case "$1" in
+    --phase)        PHASE="${2:-}" ;;
+    --guard)        GUARD="${2:-}" ;;
+    --config)       CONFIG_FILE="${2:-}" ;;
+    --json)         JSON_OUT="${2:-}" ;;
+    --baseline)     BASELINE_FILE="${2:-}" ;;
+    --source-dir)   SOURCE_DIR="${2:-}" ;;
+    --results-dir)  RESULTS_DIR="${2:-}" ;;
+    --scripts-dir)  SCRIPTS_DIR="${2:-}" ;;
+    *) return 1 ;;
+  esac
+  echo 2
+}
+
+_parse_bool_or_meta_flag() {
+  case "$1" in
+    --verbose) VERBOSE=1;  echo 1 ;;
+    --fix)     FIX_MODE=1; echo 1 ;;
+    --help|-h) print_usage; exit "$EXIT_OK" ;;
+    *) log_error "unknown flag: $1"; print_usage; exit "$EXIT_USAGE_ERROR" ;;
+  esac
+}
+
+_parse_one_flag() {
+  local n
+  n="$(_parse_value_flag "$@")" && { echo "$n"; return; }
+  _parse_bool_or_meta_flag "$@"
+}
+
 parse_flags() {
+  local consumed
   while [ $# -gt 0 ]; do
-    case "$1" in
-      --phase)        PHASE="${2:-}";        shift 2 ;;
-      --guard)        GUARD="${2:-}";        shift 2 ;;
-      --config)       CONFIG_FILE="${2:-}";  shift 2 ;;
-      --json)         JSON_OUT="${2:-}";     shift 2 ;;
-      --baseline)     BASELINE_FILE="${2:-}"; shift 2 ;;
-      --source-dir)   SOURCE_DIR="${2:-}";   shift 2 ;;
-      --results-dir)  RESULTS_DIR="${2:-}";  shift 2 ;;
-      --scripts-dir)  SCRIPTS_DIR="${2:-}";  shift 2 ;;
-      --verbose)      VERBOSE=1;             shift ;;
-      --fix)          FIX_MODE=1;            shift ;;
-      --help|-h)      print_usage; exit "$EXIT_OK" ;;
-      *)              log_error "unknown flag: $1"; print_usage; exit "$EXIT_USAGE_ERROR" ;;
-    esac
+    consumed="$(_parse_one_flag "$@")"
+    shift "$consumed"
   done
 }
 
 # Load config file (if provided) and apply its values as defaults.
 # Explicit CLI flags take precedence over config-file values.
-apply_config_file() {
-  if [ -z "$CONFIG_FILE" ]; then
-    return "$EXIT_OK"
-  fi
-  if [ ! -f "$CONFIG_FILE" ]; then
-    log_error "config file not found: $CONFIG_FILE"
-    return "$EXIT_TOOL_ERROR"
-  fi
-  log_info "loading config from $CONFIG_FILE"
-  local env_lines
-  if ! env_lines=$(node "$(dirname "$0")/ci-config.mjs" --config "$CONFIG_FILE" --emit env); then
-    log_error "config loader failed for $CONFIG_FILE"
-    return "$EXIT_TOOL_ERROR"
-  fi
+_load_config_env() {
+  local out
+  out=$(node "$(dirname "$0")/ci-config.mjs" --config "$CONFIG_FILE" --emit env) || return 1
   # shellcheck disable=SC2086
-  eval "$env_lines"
-  # Apply config defaults only when CLI flag is empty.
+  eval "$out"
+  return 0
+}
+
+_apply_scripts_dir_default() {
   [ -z "$SCRIPTS_DIR" ] || [ "$SCRIPTS_DIR" = ".github/scripts" ] && \
     SCRIPTS_DIR="${CI_GUARDS_SCRIPTS_DIR:-$SCRIPTS_DIR}"
+}
+
+apply_config_file() {
+  [ -z "$CONFIG_FILE" ] && return "$EXIT_OK"
+  [ -f "$CONFIG_FILE" ] || { log_error "config file not found: $CONFIG_FILE"; return "$EXIT_TOOL_ERROR"; }
+  log_info "loading config from $CONFIG_FILE"
+  _load_config_env || { log_error "config loader failed for $CONFIG_FILE"; return "$EXIT_TOOL_ERROR"; }
+  _apply_scripts_dir_default
   return "$EXIT_OK"
 }
 
@@ -281,44 +274,40 @@ emit_json_summary() {
   printf '%s\n' "$1" > "$JSON_OUT"
 }
 
-run_phase() {
-  local phase="$1"
-  local overall="$EXIT_OK"
-  local results_json="["
-  local separator=""
-  while IFS= read -r guard; do
-    [ -z "$guard" ] && continue
-    log_section "guard: $guard"
-    dispatch_guard "$guard"
-    local code=$?
-    overall=$(aggregate_exit "$overall" "$code")
-    results_json="${results_json}${separator}{\"guard\":\"${guard}\",\"exit\":${code}}"
-    separator=","
-  done < <(guards_for_phase "$phase")
-  results_json="${results_json}]"
-  emit_json_summary "{\"phase\":\"${phase}\",\"overall\":${overall},\"guards\":${results_json}}"
-  return "$overall"
+_run_one_guard_in_phase() {
+  local guard="$1"
+  log_section "guard: $guard"
+  dispatch_guard "$guard"
+  local code=$?
+  PHASE_OVERALL=$(aggregate_exit "$PHASE_OVERALL" "$code")
+  PHASE_RESULTS_JSON="${PHASE_RESULTS_JSON}${PHASE_SEP}{\"guard\":\"${guard}\",\"exit\":${code}}"
+  PHASE_SEP=","
 }
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+run_phase() {
+  local phase="$1" guard
+  PHASE_OVERALL="$EXIT_OK"; PHASE_RESULTS_JSON="["; PHASE_SEP=""
+  while IFS= read -r guard; do
+    [ -n "$guard" ] && _run_one_guard_in_phase "$guard"
+  done < <(guards_for_phase "$phase")
+  PHASE_RESULTS_JSON="${PHASE_RESULTS_JSON}]"
+  emit_json_summary "{\"phase\":\"${phase}\",\"overall\":${PHASE_OVERALL},\"guards\":${PHASE_RESULTS_JSON}}"
+  return "$PHASE_OVERALL"
+}
+
+_run_single_guard_mode() {
+  log_section "single-guard mode: $GUARD"
+  dispatch_guard "$GUARD"
+  local code=$?
+  emit_json_summary "{\"guard\":\"${GUARD}\",\"exit\":${code}}"
+  exit "$code"
+}
 
 main() {
   parse_flags "$@"
-  if ! validate_flags; then
-    exit "$EXIT_USAGE_ERROR"
-  fi
-  if ! apply_config_file; then
-    exit "$EXIT_TOOL_ERROR"
-  fi
-  if [ -n "$GUARD" ]; then
-    log_section "single-guard mode: $GUARD"
-    dispatch_guard "$GUARD"
-    local code=$?
-    emit_json_summary "{\"guard\":\"${GUARD}\",\"exit\":${code}}"
-    exit "$code"
-  fi
+  validate_flags    || exit "$EXIT_USAGE_ERROR"
+  apply_config_file || exit "$EXIT_TOOL_ERROR"
+  [ -n "$GUARD" ] && _run_single_guard_mode
   run_phase "$PHASE"
   exit $?
 }

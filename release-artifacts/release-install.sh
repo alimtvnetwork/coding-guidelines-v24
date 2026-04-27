@@ -32,10 +32,10 @@
 set -euo pipefail
 
 # ── Build-time substitution target ────────────────────────────────
-# The release workflow replaces the literal string `v4.8.0`
+# The release workflow replaces the literal string `v4.24.0`
 # with the concrete tag (e.g. v3.21.0) when uploading this file as a
 # release asset. Unbaked checkouts keep the placeholder verbatim.
-BAKED_VERSION="v4.8.0"
+BAKED_VERSION="v4.24.0"
 
 REPO="alimtvnetwork/coding-guidelines-v18"
 SEMVER_RE='^v?[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.]+)?$'
@@ -70,7 +70,7 @@ MODE DISPATCH (spec §3)
 RESOLUTION ORDER (highest precedence first, spec §4.3)
   1. --version <tag>    (CLI flag)
   2. $INSTALLER_VERSION (env var, if set)
-  3. v4.8.0 baked at release-asset build time
+  3. v4.24.0 baked at release-asset build time
   If two sources disagree, a warning is emitted and the higher-precedence
   value wins.
 
@@ -112,10 +112,10 @@ done
 # Precedence (spec §B.2 + ratified env-var extension §B.2.b'):
 #   1. --version flag
 #   2. $INSTALLER_VERSION env var
-#   3. Baked v4.8.0
+#   3. Baked v4.24.0
 resolve_version() {
   if [[ -n "$ARG_VERSION" ]]; then
-    if [[ "$BAKED_VERSION" != "v4.8.0" \
+    if [[ "$BAKED_VERSION" != "v4.24.0" \
           && "$BAKED_VERSION" != "$ARG_VERSION" ]]; then
       warn "Argument version ($ARG_VERSION) overrides baked-in ($BAKED_VERSION)."
     fi
@@ -123,14 +123,14 @@ resolve_version() {
     return 0
   fi
   if [[ -n "${INSTALLER_VERSION:-}" ]]; then
-    if [[ "$BAKED_VERSION" != "v4.8.0" \
+    if [[ "$BAKED_VERSION" != "v4.24.0" \
           && "$BAKED_VERSION" != "$INSTALLER_VERSION" ]]; then
       warn "Env INSTALLER_VERSION ($INSTALLER_VERSION) overrides baked-in ($BAKED_VERSION)."
     fi
     echo "$INSTALLER_VERSION"
     return 0
   fi
-  if [[ "$BAKED_VERSION" != "v4.8.0" ]]; then
+  if [[ "$BAKED_VERSION" != "v4.24.0" ]]; then
     echo "$BAKED_VERSION"
     return 0
   fi
