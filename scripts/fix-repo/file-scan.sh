@@ -25,7 +25,13 @@ is_oversized_file() {
 
 has_null_byte() {
   local path="$1"
-  head -c 8192 "$path" 2>/dev/null | LC_ALL=C grep -q $'\x00'
+  LC_ALL=C head -c 8192 "$path" 2>/dev/null | LC_ALL=C tr -d '\000' | LC_ALL=C wc -c | {
+    read -r kept
+    local total
+    total="$(LC_ALL=C head -c 8192 "$path" 2>/dev/null | LC_ALL=C wc -c | tr -d ' ')"
+    kept="$(echo "$kept" | tr -d ' ')"
+    [ "$kept" -lt "$total" ]
+  }
 }
 
 is_scannable_file() {
