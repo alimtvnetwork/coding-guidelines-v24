@@ -79,22 +79,19 @@ function Resolve-RequiredCli {
 
 function Write-Err { param([string]$Msg) [Console]::Error.WriteLine($Msg) }
 
-function Resolve-Context {
-    if (-not (Test-IsRepoRoot)) {
-        Write-Err 'visibility-change: ERROR not a git repository'; exit $Script:ExitNotARepo
-    }
+function Get-OriginUrlOrDie {
+    if (-not (Test-IsRepoRoot)) { Write-Err 'visibility-change: ERROR not a git repository'; exit $Script:ExitNotARepo }
     $url = Get-OriginUrl
-    if (-not $url) {
-        Write-Err 'visibility-change: ERROR no origin remote'; exit $Script:ExitNoOrigin
-    }
+    if (-not $url) { Write-Err 'visibility-change: ERROR no origin remote'; exit $Script:ExitNoOrigin }
+    return $url
+}
+
+function Resolve-Context {
+    $url      = Get-OriginUrlOrDie
     $provider = Resolve-Provider -Url $url
-    if (-not $provider) {
-        Write-Err ("visibility-change: ERROR unsupported host in '{0}'" -f $url); exit $Script:ExitBadProvider
-    }
+    if (-not $provider) { Write-Err ("visibility-change: ERROR unsupported host in '{0}'" -f $url); exit $Script:ExitBadProvider }
     $slug = Resolve-OwnerRepo -Url $url
-    if (-not $slug) {
-        Write-Err ("visibility-change: ERROR cannot parse owner/repo from '{0}'" -f $url); exit $Script:ExitBadProvider
-    }
+    if (-not $slug) { Write-Err ("visibility-change: ERROR cannot parse owner/repo from '{0}'" -f $url); exit $Script:ExitBadProvider }
     return [pscustomobject]@{ Url=$url; Provider=$provider; Slug=$slug }
 }
 

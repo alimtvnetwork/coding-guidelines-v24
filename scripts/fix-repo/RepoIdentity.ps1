@@ -20,6 +20,17 @@ function Get-RemoteUrl {
     return $parts[1]
 }
 
+function _Try-MatchRemoteUrl {
+    param([string]$Trimmed, [string]$Pattern)
+    $m = [regex]::Match($Trimmed, $Pattern)
+    if (-not $m.Success) { return $null }
+    return [pscustomobject]@{
+        Host  = $m.Groups['host'].Value
+        Owner = $m.Groups['owner'].Value
+        Repo  = $m.Groups['repo'].Value
+    }
+}
+
 function ConvertFrom-RemoteUrl {
     param([string]$Url)
     if (-not $Url) { return $null }
@@ -31,14 +42,8 @@ function ConvertFrom-RemoteUrl {
         '^ssh://git@(?<host>[^/:]+)(?::\d+)?/(?<owner>[^/]+)/(?<repo>[^/]+)$'
     )
     foreach ($pat in $patterns) {
-        $m = [regex]::Match($trimmed, $pat)
-        if ($m.Success) {
-            return [pscustomobject]@{
-                Host  = $m.Groups['host'].Value
-                Owner = $m.Groups['owner'].Value
-                Repo  = $m.Groups['repo'].Value
-            }
-        }
+        $r = _Try-MatchRemoteUrl -Trimmed $trimmed -Pattern $pat
+        if ($r) { return $r }
     }
     return $null
 }
