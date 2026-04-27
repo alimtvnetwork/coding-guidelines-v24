@@ -78,25 +78,30 @@ get_span_from_mode() {
   esac
 }
 
-resolve_identity() {
+_assert_repo_root_resolved() {
   REPO_ROOT="$(get_repo_root || true)"
-  if [ -z "$REPO_ROOT" ]; then
-    echo "fix-repo: ERROR not a git repository (E_NOT_A_REPO)" >&2; exit $EXIT_NOT_A_REPO
-  fi
+  [ -n "$REPO_ROOT" ] && return 0
+  echo "fix-repo: ERROR not a git repository (E_NOT_A_REPO)" >&2; exit $EXIT_NOT_A_REPO
+}
+
+_assert_remote_parsed() {
   local url; url="$(get_remote_url || true)"
-  if [ -z "$url" ]; then
-    echo "fix-repo: ERROR no remote URL found (E_NO_REMOTE)" >&2; exit $EXIT_NO_REMOTE
-  fi
-  if ! parse_remote_url "$url"; then
-    echo "fix-repo: ERROR cannot parse remote URL '$url'" >&2; exit $EXIT_NO_REMOTE
-  fi
-  if ! split_repo_version "$PARSED_REPO"; then
-    echo "fix-repo: ERROR no -vN suffix on repo name '$PARSED_REPO' (E_NO_VERSION_SUFFIX)" >&2
-    exit $EXIT_NO_VERSION_SUFFIX
-  fi
-  if [ "$SPLIT_VERSION" -lt 1 ]; then
-    echo "fix-repo: ERROR version <= 0 (E_BAD_VERSION)" >&2; exit $EXIT_BAD_VERSION
-  fi
+  [ -n "$url" ] || { echo "fix-repo: ERROR no remote URL found (E_NO_REMOTE)" >&2; exit $EXIT_NO_REMOTE; }
+  parse_remote_url "$url" \
+    || { echo "fix-repo: ERROR cannot parse remote URL '$url'" >&2; exit $EXIT_NO_REMOTE; }
+}
+
+_assert_version_suffix() {
+  split_repo_version "$PARSED_REPO" \
+    || { echo "fix-repo: ERROR no -vN suffix on repo name '$PARSED_REPO' (E_NO_VERSION_SUFFIX)" >&2; exit $EXIT_NO_VERSION_SUFFIX; }
+  [ "$SPLIT_VERSION" -ge 1 ] \
+    || { echo "fix-repo: ERROR version <= 0 (E_BAD_VERSION)" >&2; exit $EXIT_BAD_VERSION; }
+}
+
+resolve_identity() {
+  _assert_repo_root_resolved
+  _assert_remote_parsed
+  _assert_version_suffix
 }
 
 print_header() {
