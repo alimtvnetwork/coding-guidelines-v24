@@ -110,6 +110,8 @@ NO_DISCOVERY=false
 NO_MAIN_FALLBACK=false
 RUN_FIX_REPO="\${INSTALL_RUN_FIX_REPO:-false}"
 case "\${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
+ASSUME_YES="\${INSTALL_FIX_REPO_YES:-false}"
+case "\${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
 
 usage() {
   cat <<HELP
@@ -189,6 +191,7 @@ while [[ $# -gt 0 ]]; do
     --no-open)        DO_OPEN=false; shift ;;
     --offline)        OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
+    -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
@@ -682,6 +685,8 @@ param(
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
     [switch]$RunFixRepo,
+    [Alias("y","AssumeYes")]
+    [switch]$Yes,
     [Alias("?")]
     [switch]$Help
 )
@@ -691,6 +696,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
