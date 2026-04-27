@@ -520,9 +520,46 @@ fi
 
 echo ""
 verify_install
+
+run_fix_repo() {
+  # Auto-execute the freshly installed fix-repo script so the repo is
+  # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
+  # Cygwin, MINGW), .sh elsewhere. Failures propagate as exit 5
+  # (spec §8: "inner installer / handoff rejected").
+  local script
+  case "$(uname -s 2>/dev/null || echo unknown)" in
+    MINGW*|MSYS*|CYGWIN*) script="\${TARGET}/fix-repo.ps1" ;;
+    *)                    script="\${TARGET}/fix-repo.sh"  ;;
+  esac
+  if [[ ! -f "\${script}" ]]; then
+    echo "❌ --run-fix-repo: \${script} not found after install." >&2
+    exit 5
+  fi
+  echo ""
+  echo "  ▸ running fix-repo: \${script}"
+  case "\${script}" in
+    *.ps1)
+      if command -v pwsh >/dev/null 2>&1; then
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "\${script}" || { echo "❌ fix-repo.ps1 failed (exit $?)" >&2; exit 5; }
+      elif command -v powershell >/dev/null 2>&1; then
+        powershell -NoProfile -ExecutionPolicy Bypass -File "\${script}" || { echo "❌ fix-repo.ps1 failed (exit $?)" >&2; exit 5; }
+      else
+        echo "❌ --run-fix-repo: neither pwsh nor powershell found in PATH." >&2
+        exit 5
+      fi
+      ;;
+    *)
+      bash "\${script}" || { echo "❌ fix-repo.sh failed (exit $?)" >&2; exit 5; }
+      ;;
+  esac
+  echo "  ✓ fix-repo completed"
+}
+
+\${RUN_FIX_REPO} && run_fix_repo
+
 echo "✅ \${BUNDLE_NAME} installed."
 open_entry
-`;
+\`;
 }
 
 // ── PowerShell installer ──────────────────────────────────────────
@@ -933,6 +970,28 @@ function Verify-Install {
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
 Verify-Install
+
+function Invoke-FixRepo {
+    # Auto-execute the freshly installed fix-repo.ps1 so the repo is
+    # patched in the same invocation. Failures propagate as exit 5
+    # (spec §8: "inner installer / handoff rejected").
+    $script = Join-Path $Target "fix-repo.ps1"
+    if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
+        Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
+        exit 5
+    }
+    Write-Host ""
+    Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
+    & $script
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "❌ fix-repo.ps1 failed (exit $LASTEXITCODE)" -ForegroundColor Red
+        exit 5
+    }
+    Write-Host "  ✓ fix-repo completed" -ForegroundColor Green
+}
+
+if ($RunFixRepo) { Invoke-FixRepo }
+
 Write-Host "✅ $BundleName installed." -ForegroundColor Green
 Open-Entry
 `;
