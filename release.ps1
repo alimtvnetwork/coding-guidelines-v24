@@ -49,6 +49,9 @@ function Copy-ReleaseFiles {
     Copy-Item -Path (Join-Path $PSScriptRoot "install.ps1") -Destination (Join-Path $stagingDir "install.ps1") -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "install-config.json") -Destination (Join-Path $stagingDir "install-config.json") -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "readme.md") -Destination (Join-Path $stagingDir "readme.md") -Force
+    New-Item -ItemType Directory -Path (Join-Path $stagingDir ".lovable") -Force | Out-Null
+    Copy-Item -Path (Join-Path $PSScriptRoot ".lovable/coding-guidelines") -Destination (Join-Path $stagingDir ".lovable/coding-guidelines") -Recurse -Force
+    Copy-Item -Path (Join-Path $PSScriptRoot ".lovable/prompts") -Destination (Join-Path $stagingDir ".lovable/prompts") -Recurse -Force
 }
 
 function New-ReleaseArchives {
