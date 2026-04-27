@@ -178,15 +178,54 @@ the dynamic `check-*.sh` discovery loop.
 ## 7. Forbidden patterns
 
 The following are **bugs** if found in either runner's `fix-repo`
-dispatch path:
+dispatch path. The CI guard
+(`linter-scripts/check-runner-dispatch-antipatterns.sh`, wired as
+step 13 of `scripts/lint-ci.sh`) enforces every entry below.
 
-- ❌ `exec bash "$inner" $*` — unquoted `$*` re-splits on `IFS`.
-- ❌ `eval bash "$inner" "$@"` — re-parses every argument.
-- ❌ `bash "$inner" "$(printf '%s ' "$@")"` — joins then re-splits.
-- ❌ Building a single string in PowerShell: `& $inner ($args -join ' ')`.
-- ❌ Conditional flag rewriting (e.g. mapping `-DryRun` → `--dry-run`
-  inside the runner). Such mapping belongs in the inner script if
-  needed at all.
+### 7.1 Bash (`run.sh`) — forbidden in the `fix-repo)` arm
+
+| # | Pattern                                                     | Why it's a bug                                                |
+|---|-------------------------------------------------------------|---------------------------------------------------------------|
+| 1 | `"$*"` or bare `$*`                                         | Joins argv on `IFS`; collapses N args into one.               |
+| 2 | bare `$@` (outside double quotes)                           | Re-splits each arg on `IFS`.                                  |
+| 3 | `eval ... fix-repo.sh ...`                                  | Re-parses every argument; quote-unsafe.                       |
+| 4 | `bash -c "..."` / `sh -c "..."` wrapper                     | Loses argv boundaries; needs manual re-quoting.               |
+| 5 | `${@:N}` slicing                                            | Drops original argv; forward `"$@"` verbatim.                 |
+| 6 | `printf '%q ' "$@"` / `printf '%s ' "$@"`                   | Rebuilds argv from a joined string; quote drift.              |
+| 7 | `IFS=…` mutation in the dispatch arm                        | Alters how subsequent expansions split argv.                  |
+| 8 | Command substitution that contains `"$@"` (`$(... "$@" ...)`) | Stringifies argv via subshell stdout.                       |
+| 9 | `xargs` in the dispatch path                                | Reformats argv via stdin; loses quoting.                      |
+|10 | Trailing `&` (background dispatch)                          | Detaches the child; runner cannot propagate the exit code.    |
+|11 | `fix-repo.sh ... \| ...` (pipe after inner call)            | Masks inner exit code (last pipe stage wins by default).      |
+
+**Required:** the arm MUST contain `exec ... fix-repo.sh "$@"`.
+
+### 7.2 PowerShell (`run.ps1`) — forbidden in the `"fix-repo"` arm
+
+| # | Pattern                                                     | Why it's a bug                                                |
+|---|-------------------------------------------------------------|---------------------------------------------------------------|
+| 1 | `$args -join …` / `-join $args`                             | Collapses argv array into a single string.                    |
+| 2 | `"$args"` (interpolation in a double-quoted string)         | Flattens argv via `$OFS`; lossy. Use `@args` splatting.       |
+| 3 | `[string]::Join(...)` on `$args`                            | Same array-to-string flattening.                              |
+| 4 | `$args.ToString()` / `$args -as [string]` / `[string]$args` | Implicit array-to-string conversions; flatten argv.           |
+| 5 | `$args[N..M]` slicing                                       | Drops original argv; forward `@args` verbatim.                |
+| 6 | `Invoke-Expression …` (or alias `iex`) on argv              | Re-parses argv as a script; unsafe and quote-lossy.           |
+| 7 | `cmd /c "..."` wrapper                                      | Re-parses argv under cmd.exe quoting rules.                   |
+| 8 | `Start-Process …` for the inner script                      | Detaches the child; cannot propagate `$LASTEXITCODE`.         |
+| 9 | `Start-Job …` for the inner script                          | Same — runs out of process; exit code lost.                   |
+
+**Required:** the arm MUST invoke the inner script with `@args`
+splatting AND end with `exit $LASTEXITCODE`.
+
+### 7.3 Out-of-scope (intentionally NOT flagged)
+
+- `eval`, `Invoke-Expression`, `Start-Process` etc. in **other**
+  branches or helper functions. The guard scans only the `fix-repo`
+  dispatch arm. False positives in unrelated code are by design out of
+  scope; if those locations need rules, add a separate guard.
+- Conditional flag rewriting (e.g. mapping `-DryRun` → `--dry-run`
+  inside the runner). Not lint-checked, but still a spec violation
+  per §4.2 — such mapping belongs in the inner script.
 
 ---
 

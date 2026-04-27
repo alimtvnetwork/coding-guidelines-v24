@@ -21,6 +21,9 @@
       -NoDiscovery                Skip V→V+N parallel discovery (spec §5.3)
       -NoMainFallback             Skip main-branch fallback (spec §5.3)
       -Offline (-UseLocalArchive) Skip all network ops; require local archive
+      -RunFixRepo                 After verify, execute fix-repo.ps1 so the repo
+                                  is patched before the installer exits
+                                  (env: INSTALL_RUN_FIX_REPO=1)
 
     EXIT CODES (spec §8):
       0  success
@@ -55,8 +58,51 @@ param(
     [switch]$NoMainFallback,
     [Alias('UseLocalArchive')]
     [switch]$Offline,
+    [switch]$RunFixRepo,
+    [Alias('y','AssumeYes')]
+    [switch]$Yes,
+    [switch]$RollbackOnFixRepoFailure,
+    [switch]$FullRollback,
+    [string]$LogDir = "",
+    [switch]$ShowFixRepoLog,
+    [int]$MaxFixRepoLogs = -1,
     [string]$PinnedByReleaseInstall = ""
 )
+
+# Env-var equivalent so wrapper scripts can opt in without threading the flag.
+if (-not $RunFixRepo) {
+    $envFlag = $env:INSTALL_RUN_FIX_REPO
+    if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
+}
+if (-not $RollbackOnFixRepoFailure) {
+    $envRb = $env:INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE
+    if ($envRb -and @("1","true","TRUE","yes","YES") -contains $envRb) { $RollbackOnFixRepoFailure = $true }
+}
+if (-not $FullRollback) {
+    $envFR = $env:INSTALL_FULL_ROLLBACK
+    if ($envFR -and @("1","true","TRUE","yes","YES") -contains $envFR) { $FullRollback = $true }
+}
+if ($FullRollback) { $RollbackOnFixRepoFailure = $true }
+if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
+if (-not $LogDir) { $LogDir = "" }
+if (-not $ShowFixRepoLog) {
+    $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
+    if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
+}
+if ($MaxFixRepoLogs -lt 0) {
+    $envMax = $env:INSTALL_MAX_FIX_REPO_LOGS
+    if ($envMax -and ($envMax -match '^\d+$')) { $MaxFixRepoLogs = [int]$envMax } else { $MaxFixRepoLogs = 0 }
+}
+
+# Bookkeeping for rollback.
+$Script:InstalledNew = New-Object System.Collections.Generic.List[string]
+$Script:InstalledBackups = New-Object System.Collections.Generic.List[object]
+$Script:RollbackDir = $null
+$Script:PreFixRepoHead = $null
 
 # Offline mode forbids any network operation (spec §5.3, §8 exit 2).
 if ($Offline) {
@@ -189,7 +235,7 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", ".lovable/coding-guidelines", ".lovable/prompts") }
+    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", ".lovable/coding-guidelines") }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }
@@ -294,6 +340,30 @@ try {
         }
     }
 
+    function Initialize-RollbackDir {
+        if ($Script:RollbackDir) { return }
+        $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+        $Script:RollbackDir = Join-Path $Dest ".install-rollback/$ts"
+        New-Item -ItemType Directory -Path (Join-Path $Script:RollbackDir "backups") -Force | Out-Null
+    }
+
+    function Save-OverwriteBackup {
+        param([string]$Target)
+        Initialize-RollbackDir
+        $rel = $Target.Replace($Dest, '').TrimStart('\','/')
+        $backup = Join-Path $Script:RollbackDir "backups/$rel"
+        New-Item -ItemType Directory -Path (Split-Path $backup -Parent) -Force | Out-Null
+        Copy-Item -LiteralPath $Target -Destination $backup -Force
+        $Script:InstalledBackups.Add([pscustomobject]@{ Target = $Target; Backup = $backup })
+    }
+
+    function Add-NewPath {
+        param([string]$Target)
+        Initialize-RollbackDir
+        $Script:InstalledNew.Add($Target)
+        Add-Content -LiteralPath (Join-Path $Script:RollbackDir "new-paths.txt") -Value $Target
+    }
+
     function Merge-File {
         param([string]$Src, [string]$Target)
         $targetDir = Split-Path $Target -Parent
@@ -301,14 +371,22 @@ try {
         if (Test-Path $Target) {
             if (Test-ShouldOverwrite -Target $Target) {
                 if ($DryRun) { Write-Dim "  ~ would overwrite $rel" }
-                else { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null; Copy-Item $Src $Target -Force }
+                else {
+                    if ($FullRollback) { Save-OverwriteBackup -Target $Target }
+                    New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+                    Copy-Item $Src $Target -Force
+                }
                 $script:overwrote++
             } else {
                 Write-Dim "  - skip $rel"; $script:skippedFiles++
             }
         } else {
             if ($DryRun) { Write-Dim "  + would create $rel" }
-            else { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null; Copy-Item $Src $Target -Force }
+            else {
+                New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+                Copy-Item $Src $Target -Force
+                if ($FullRollback) { Add-NewPath -Target $Target }
+            }
             $script:wroteNew++
         }
     }
@@ -326,6 +404,144 @@ try {
             Merge-File -Src $_.FullName -Target $targetFile
         }
         $copied++
+    }
+
+    # Top-level files: copy each from archive root into Dest. Missing files
+    # are warned (not fatal) so installer remains forward-compatible.
+    $topLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1")
+    foreach ($tlf in $topLevelFiles) {
+        $srcFile = Join-Path $archiveRoot.FullName $tlf
+        if (-not (Test-Path $srcFile)) {
+            Write-Warn "Top-level file '$tlf' not found in $Repo@$ref — skipping"
+            continue
+        }
+        Write-Step "Merging file: $tlf"
+        Merge-File -Src $srcFile -Target (Join-Path $Dest $tlf)
+    }
+
+    # ── Verify required files (spec §8: exit 4 on missing required path) ──
+    # Required files MUST exist in Dest after install. Skipped under -DryRun.
+    if (-not $DryRun) {
+        $requiredFiles = @("fix-repo.sh", "fix-repo.ps1")
+        $missing = @()
+        foreach ($rf in $requiredFiles) {
+            if (-not (Test-Path (Join-Path $Dest $rf))) { $missing += $rf }
+        }
+        if ($missing.Count -gt 0) {
+            Write-Err "Install verification FAILED — $($missing.Count) required file(s) missing in $Dest:"
+            foreach ($m in $missing) { Write-Host "     • $m" -ForegroundColor Red }
+            Write-Host ""
+            Write-Host "   The archive was downloaded but did NOT contain the expected" -ForegroundColor Red
+            Write-Host "   top-level scripts. Re-run without -Version to fetch main, or" -ForegroundColor Red
+            Write-Host "   pin to a release that includes fix-repo.{sh,ps1}." -ForegroundColor Red
+            exit 4
+        }
+        Write-OK "Verified $($requiredFiles.Count) required file(s) present"
+    }
+
+    # ── Optional: auto-run fix-repo.ps1 so the repo is patched before exit ──
+    # Gated by -RunFixRepo or INSTALL_RUN_FIX_REPO=1. Skipped under -DryRun.
+    # Failures propagate as exit 5 per spec §8.
+    if ((-not $DryRun) -and $RunFixRepo) {
+        $fixScript = Join-Path $Dest "fix-repo.ps1"
+        if (-not (Test-Path -LiteralPath $fixScript -PathType Leaf)) {
+            Write-Err "-RunFixRepo: $fixScript not found after install."
+            exit 5
+        }
+        if ($Yes) {
+            Write-Host "  ▸ Auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
+        } elseif ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+            Write-Host ""
+            Write-Host "⚠️  About to run $fixScript" -ForegroundColor Yellow
+            Write-Host "   This will rewrite versioned-repo-name tokens across tracked text files." -ForegroundColor Yellow
+            $reply = Read-Host "Proceed? [y/N]"
+            if ($reply -notmatch '^(y|Y|yes|YES)$') {
+                Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
+                exit 5
+            }
+        } else {
+            Write-Err "-RunFixRepo requires confirmation but session is non-interactive."
+            Write-Err "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
+            exit 5
+        }
+        if ($RollbackOnFixRepoFailure) {
+            $isGitRepo = $false
+            try { & git -C $Dest rev-parse --git-dir 2>$null | Out-Null; if ($LASTEXITCODE -eq 0) { $isGitRepo = $true } } catch {}
+            if (-not $isGitRepo) {
+                Write-Warn "-RollbackOnFixRepoFailure: $Dest is not a git repo; rollback disabled."
+                $RollbackOnFixRepoFailure = $false
+            } else {
+                $Script:PreFixRepoHead = (& git -C $Dest rev-parse HEAD 2>$null).Trim()
+                Write-Step ("Rollback armed: HEAD={0}{1}" -f $Script:PreFixRepoHead, $(if ($FullRollback) { ', full-rollback=on' } else { '' }))
+            }
+        }
+        if ($LogDir) {
+            if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
+            else { $logDir = Join-Path $Dest $LogDir }
+        } else {
+            $logDir = Join-Path $Dest ".install-logs"
+        }
+        if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+        $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+        $logFile = Join-Path $logDir "fix-repo-$ts.log"
+        @(
+            "# fix-repo log",
+            "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
+            "# script:   $fixScript",
+            "# dest:     $Dest",
+            "# os:       $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)",
+            "# shell:    PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)",
+            "# uname:    $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription) / $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)",
+            "# cwd:      $((Get-Location).Path)",
+            "# rollback: on-failure=$RollbackOnFixRepoFailure  full=$FullRollback",
+            "# ──────────────────────────────────────────────────────────"
+        ) | Set-Content -LiteralPath $logFile -Encoding UTF8
+        Write-Host ""
+        Write-Step "Running fix-repo: $fixScript"
+        Write-Step "Log: $logFile"
+        & $fixScript 2>&1 | Tee-Object -FilePath $logFile -Append
+        $rc = $LASTEXITCODE
+        Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+        if ($MaxFixRepoLogs -gt 0) {
+            $stale = Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
+                Sort-Object LastWriteTime -Descending |
+                Select-Object -Skip $MaxFixRepoLogs
+            $removedCount = 0
+            foreach ($s in $stale) { Remove-Item -LiteralPath $s.FullName -Force -ErrorAction SilentlyContinue; $removedCount++ }
+            if ($removedCount -gt 0) { Write-Step "Pruned $removedCount old fix-repo log(s); kept newest $MaxFixRepoLogs in $logDir" }
+        }
+        if ($ShowFixRepoLog) {
+            Write-Host ""
+            Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
+            Get-Content -LiteralPath $logFile | ForEach-Object { Write-Host $_ }
+            Write-Host "─── end of log ──────────────────────────────────────────"
+        }
+        if ($rc -ne 0) {
+            Write-Err "fix-repo.ps1 failed (exit $rc) — see $logFile"
+            if ($RollbackOnFixRepoFailure) {
+                Write-Host ""
+                Write-Warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+                Write-Step "Restoring tracked files from HEAD..."
+                & git -C $Dest checkout -- . 2>&1 | Tee-Object -FilePath $logFile -Append
+                Write-OK "fix-repo edits reverted"
+                if ($FullRollback) {
+                    Write-Step "Removing files created by this install run..."
+                    $removed = 0
+                    foreach ($p in $Script:InstalledNew) {
+                        if (Test-Path -LiteralPath $p) { Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue; $removed++ }
+                    }
+                    Write-Step "Restoring overwritten files from backups..."
+                    $restored = 0
+                    foreach ($b in $Script:InstalledBackups) {
+                        if (Test-Path -LiteralPath $b.Backup) { Copy-Item -LiteralPath $b.Backup -Destination $b.Target -Force; $restored++ }
+                    }
+                    Write-OK "Removed $removed new file(s); restored $restored overwritten file(s)"
+                }
+                Write-Warn "Rollback complete. Snapshot kept at: $($Script:RollbackDir)"
+            }
+            exit 5
+        }
+        Write-OK "fix-repo completed (log: $logFile)"
     }
 
     # ── Summary ───────────────────────────────────────────────────

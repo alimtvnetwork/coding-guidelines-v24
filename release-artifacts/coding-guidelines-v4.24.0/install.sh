@@ -14,6 +14,12 @@
 #   --version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
 #   --folders spec,linters       Comma-separated folder list (subpaths OK: spec/14-update)
 #   --dest /path/to/dir          Install destination (default: cwd)
+#   --log-dir /path or rel       Where to write fix-repo logs (default: <dest>/.install-logs;
+#                                env: INSTALL_LOG_DIR)
+#   --show-fix-repo-log          Print the latest fix-repo log to stdout after run_fix_repo
+#                                completes (env: INSTALL_SHOW_FIX_REPO_LOG=1)
+#   --max-fix-repo-logs N        Keep only the newest N fix-repo-*.log files in the log
+#                                directory (0 = keep all; env: INSTALL_MAX_FIX_REPO_LOGS)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
@@ -24,6 +30,8 @@
 #   --no-discovery               Skip V→V+N parallel discovery (spec §5.3)
 #   --no-main-fallback           Skip main-branch fallback (spec §5.3)
 #   --offline                    Skip all network ops; require local archive (alias: --use-local-archive)
+#   --run-fix-repo               After verify, execute fix-repo.{sh,ps1} so the repo is patched
+#                                before the installer exits (env: INSTALL_RUN_FIX_REPO=1)
 #   -h | --help                  Show this help
 #
 # EXIT CODES (spec §8):
@@ -53,6 +61,20 @@ PINNED_BY_RELEASE_INSTALL=""
 NO_DISCOVERY=false
 NO_MAIN_FALLBACK=false
 OFFLINE=false
+RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
+case "$RUN_FIX_REPO" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
+ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
+case "$ASSUME_YES" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
+ROLLBACK_ON_FIX_FAIL="${INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE:-false}"
+case "$ROLLBACK_ON_FIX_FAIL" in 1|true|TRUE|yes|YES) ROLLBACK_ON_FIX_FAIL=true ;; *) ROLLBACK_ON_FIX_FAIL=false ;; esac
+FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
+case "$FULL_ROLLBACK" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
+$FULL_ROLLBACK && ROLLBACK_ON_FIX_FAIL=true   # full implies edits
+LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → $DEST/.install-logs (default)
+SHOW_FIX_REPO_LOG="${INSTALL_SHOW_FIX_REPO_LOG:-false}"
+case "$SHOW_FIX_REPO_LOG" in 1|true|TRUE|yes|YES) SHOW_FIX_REPO_LOG=true ;; *) SHOW_FIX_REPO_LOG=false ;; esac
+MAX_FIX_REPO_LOGS="${INSTALL_MAX_FIX_REPO_LOGS:-0}"
+[[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || MAX_FIX_REPO_LOGS=0
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -69,7 +91,7 @@ err()   { echo -e "${RED}❌ $1${NC}" >&2; }
 dim()   { echo -e "${DIM}$1${NC}"; }
 
 usage() {
-  sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'
   exit 0
 }
 
@@ -142,7 +164,7 @@ invoke_latest_version_probe() {
 should_skip_probe() {
   for arg in "$@"; do
     case "$arg" in
-      --version|--list-versions|--list-folders|--no-probe|--no-latest|-n|--pinned-by-release-install|-h|--help) return 0 ;;
+      --version|--list-versions|--list-folders|--no-probe|--no-latest|-n|--pinned-by-release-install|--run-fix-repo|-h|--help) return 0 ;;
     esac
   done
   [[ -n "${INSTALL_NO_PROBE:-}" ]] && return 0
@@ -171,6 +193,16 @@ while [[ $# -gt 0 ]]; do
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --offline|--use-local-archive) OFFLINE=true; shift ;;
+    --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
+    -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
+    --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
+    --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
+    --log-dir)        LOG_DIR="$2"; shift 2 ;;
+    --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
+    --max-fix-repo-logs)
+      MAX_FIX_REPO_LOGS="$2"
+      [[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || { err "--max-fix-repo-logs requires a non-negative integer (got: $2)"; exit 1; }
+      shift 2 ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -233,7 +265,12 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v18}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines" ".lovable/prompts")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines")
+
+# Top-level files always pulled alongside the folders. These are repo-root
+# scripts (not contained in any installed folder) that users need locally to
+# run repository hygiene tasks (fix-repo) and visibility toggles.
+TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1")
 
 # Ref = tag if --version, else branch
 REF="$BRANCH"
@@ -348,6 +385,36 @@ OVERWROTE=0
 WROTE_NEW=0
 SKIPPED_FOLDERS=0
 
+# ── Rollback bookkeeping ──────────────────────────────────────────
+# Populated by merge_file when not in --dry-run. Used by full rollback.
+ROLLBACK_DIR=""           # set lazily by ensure_rollback_dir
+INSTALLED_NEW=()          # paths created by this run (full path)
+INSTALLED_BACKUPS=()      # "target|backup" pairs for overwritten files
+
+ensure_rollback_dir() {
+  [[ -n "$ROLLBACK_DIR" ]] && return 0
+  local ts; ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  ROLLBACK_DIR="$DEST/.install-rollback/$ts"
+  mkdir -p "$ROLLBACK_DIR/backups"
+}
+
+record_new_path() {
+  ensure_rollback_dir
+  INSTALLED_NEW+=("$1")
+  echo "$1" >> "$ROLLBACK_DIR/new-paths.txt"
+}
+
+record_overwrite_backup() {
+  local target="$1" rel
+  ensure_rollback_dir
+  rel="${target#$DEST/}"
+  local backup="$ROLLBACK_DIR/backups/$rel"
+  mkdir -p "$(dirname "$backup")"
+  cp -f "$target" "$backup"
+  INSTALLED_BACKUPS+=("$target|$backup")
+  printf '%s\t%s\n' "$target" "$backup" >> "$ROLLBACK_DIR/backups.tsv"
+}
+
 decide_overwrite() {
   # Returns 0 to write, 1 to skip
   local target="$1"
@@ -373,16 +440,24 @@ merge_file() {
   local target_dir; target_dir="$(dirname "$target")"
   if [[ -e "$target" ]]; then
     if decide_overwrite "$target"; then
-      if $DRY_RUN; then dim "  ~ would overwrite ${target#$DEST/}"
-      else mkdir -p "$target_dir"; cp -f "$src" "$target"; fi
+      if $DRY_RUN; then
+        dim "  ~ would overwrite ${target#$DEST/}"
+      else
+        $FULL_ROLLBACK && record_overwrite_backup "$target"
+        mkdir -p "$target_dir"; cp -f "$src" "$target"
+      fi
       ((OVERWROTE++))
     else
       dim "  - skip ${target#$DEST/}"
       ((SKIPPED_FILES++))
     fi
   else
-    if $DRY_RUN; then dim "  + would create ${target#$DEST/}"
-    else mkdir -p "$target_dir"; cp -f "$src" "$target"; fi
+    if $DRY_RUN; then
+      dim "  + would create ${target#$DEST/}"
+    else
+      mkdir -p "$target_dir"; cp -f "$src" "$target"
+      $FULL_ROLLBACK && record_new_path "$target"
+    fi
     ((WROTE_NEW++))
   fi
 }
@@ -406,6 +481,192 @@ merge_folder() {
 for folder in "${FOLDERS[@]}"; do
   merge_folder "$folder"
 done
+
+# Top-level files: copy each from the archive root into DEST (same name).
+# Missing files are warned (not fatal) so installer remains forward-compatible
+# with repos that omit a script.
+for tlf in "${TOP_LEVEL_FILES[@]}"; do
+  src="$ARCHIVE_ROOT/$tlf"
+  if [[ ! -f "$src" ]]; then
+    warn "Top-level file '$tlf' not found in $REPO@$REF — skipping"
+    continue
+  fi
+  step "Merging file: $tlf"
+  merge_file "$src" "$DEST/$tlf"
+done
+
+# ── Verify required files (spec §8: exit 4 on missing required path) ──
+# Required files MUST exist in DEST after install. Skipped under --dry-run
+# since no files were actually written.
+REQUIRED_FILES=("fix-repo.sh" "fix-repo.ps1")
+verify_required_files() {
+  local missing=()
+  local f
+  for f in "${REQUIRED_FILES[@]}"; do
+    [[ -f "$DEST/$f" ]] || missing+=("$f")
+  done
+  [[ ${#missing[@]} -eq 0 ]] && { ok "Verified ${#REQUIRED_FILES[@]} required file(s) present"; return 0; }
+  err "Install verification FAILED — ${#missing[@]} required file(s) missing in $DEST:"
+  local m
+  for m in "${missing[@]}"; do echo "     • $m" >&2; done
+  echo "" >&2
+  echo "   The archive was downloaded but did NOT contain the expected" >&2
+  echo "   top-level scripts. Re-run without --version to fetch main, or" >&2
+  echo "   pin to a release that includes fix-repo.{sh,ps1}." >&2
+  exit 4
+}
+$DRY_RUN || verify_required_files
+
+# ── Optional: auto-run fix-repo so the repo is patched before exit ──
+# Gated by --run-fix-repo or INSTALL_RUN_FIX_REPO=1. Picks .ps1 on
+# Windows shells, .sh elsewhere. Skipped under --dry-run (nothing was
+# actually written). Failures propagate as exit 5 per spec §8.
+confirm_fix_repo() {
+  $ASSUME_YES && { dim "Auto-confirmed (--yes / INSTALL_FIX_REPO_YES=1)"; return 0; }
+  if [[ ! -t 0 ]]; then
+    err "--run-fix-repo requires confirmation but stdin is not a TTY."
+    err "   Re-run with --yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
+    exit 5
+  fi
+  local reply=""
+  warn "About to run $1"
+  warn "This will rewrite versioned-repo-name tokens across tracked text files in this repo."
+  printf "Proceed? [y/N] " >&2
+  IFS= read -r reply </dev/tty || reply=""
+  case "$reply" in y|Y|yes|YES) return 0 ;; esac
+  warn "fix-repo skipped by user — exiting with code 5."
+  exit 5
+}
+snapshot_pre_fix_repo() {
+  # Capture HEAD ref of the destination repo so we can restore tracked
+  # files via `git checkout HEAD -- .` if fix-repo fails.
+  PRE_FIX_REPO_HEAD=""
+  $ROLLBACK_ON_FIX_FAIL || return 0
+  if ! git -C "$DEST" rev-parse --git-dir >/dev/null 2>&1; then
+    warn "--rollback-on-fix-repo-failure: $DEST is not a git repo; rollback disabled."
+    ROLLBACK_ON_FIX_FAIL=false
+    return 0
+  fi
+  PRE_FIX_REPO_HEAD="$(git -C "$DEST" rev-parse HEAD 2>/dev/null || true)"
+  step "Rollback armed: HEAD=$PRE_FIX_REPO_HEAD${FULL_ROLLBACK:+, full-rollback=on}"
+}
+
+restore_fix_repo_edits() {
+  step "Restoring tracked files from HEAD..."
+  git -C "$DEST" checkout -- . 2>&1 | tee -a "$1" || warn "git checkout reported issues"
+  ok "fix-repo edits reverted"
+}
+
+restore_installed_paths() {
+  local target backup pair removed=0 restored=0
+  step "Removing files created by this install run..."
+  for target in "${INSTALLED_NEW[@]:-}"; do
+    [[ -e "$target" ]] || continue
+    rm -f "$target" && ((removed++)) || warn "could not remove $target"
+  done
+  step "Restoring overwritten files from backups..."
+  for pair in "${INSTALLED_BACKUPS[@]:-}"; do
+    target="${pair%%|*}"; backup="${pair##*|}"
+    [[ -f "$backup" ]] || continue
+    cp -f "$backup" "$target" && ((restored++)) || warn "could not restore $target"
+  done
+  ok "Removed $removed new file(s); restored $restored overwritten file(s)"
+}
+
+perform_rollback() {
+  local log="$1"
+  echo ""
+  warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+  restore_fix_repo_edits "$log"
+  $FULL_ROLLBACK && restore_installed_paths
+  warn "Rollback complete. Snapshot kept at: ${ROLLBACK_DIR:-<none>}"
+}
+
+prune_fix_repo_logs() {
+  # Keep newest $2 fix-repo-*.log files in $1; 0 disables.
+  local dir="$1" keep="$2" file count=0 removed=0
+  [[ "$keep" =~ ^[0-9]+$ ]] || return 0
+  [[ "$keep" -le 0 ]] && return 0
+  [[ -d "$dir" ]] || return 0
+  while IFS= read -r file; do
+    count=$((count+1))
+    [[ $count -le $keep ]] && continue
+    rm -f -- "$file" && removed=$((removed+1))
+  done < <(ls -1t "$dir"/fix-repo-*.log 2>/dev/null)
+  [[ $removed -gt 0 ]] && step "Pruned $removed old fix-repo log(s); kept newest $keep in $dir"
+  return 0
+}
+
+run_fix_repo() {
+  local script log_dir log_file ts rc
+  case "$(uname -s 2>/dev/null || echo unknown)" in
+    MINGW*|MSYS*|CYGWIN*) script="$DEST/fix-repo.ps1" ;;
+    *)                    script="$DEST/fix-repo.sh"  ;;
+  esac
+  if [[ ! -f "$script" ]]; then
+    err "--run-fix-repo: $script not found after install."
+    exit 5
+  fi
+  confirm_fix_repo "$script"
+  snapshot_pre_fix_repo
+  log_dir="$LOG_DIR"
+  [[ -z "$log_dir" ]] && log_dir="$DEST/.install-logs"
+  case "$log_dir" in /*) ;; *) log_dir="$DEST/$log_dir" ;; esac
+  mkdir -p "$log_dir"
+  ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  log_file="$log_dir/fix-repo-$ts.log"
+  echo ""
+  step "Running fix-repo: $script"
+  step "Log: $log_file"
+  {
+    echo "# fix-repo log"
+    echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "# script:   $script"
+    echo "# dest:     $DEST"
+    echo "# os:       $(uname -s 2>/dev/null || echo unknown)"
+    echo "# shell:    bash ${BASH_VERSION:-unknown}"
+    echo "# uname:    $(uname -a 2>/dev/null || echo unknown)"
+    echo "# cwd:      $(pwd)"
+    echo "# rollback: on-failure=$ROLLBACK_ON_FIX_FAIL  full=$FULL_ROLLBACK"
+    echo "# ──────────────────────────────────────────────────────────"
+  } > "$log_file"
+  set +e
+  case "$script" in
+    *.ps1)
+      if command -v pwsh >/dev/null 2>&1; then
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "$script" 2>&1 | tee -a "$log_file"
+        rc=${PIPESTATUS[0]}
+      elif command -v powershell >/dev/null 2>&1; then
+        powershell -NoProfile -ExecutionPolicy Bypass -File "$script" 2>&1 | tee -a "$log_file"
+        rc=${PIPESTATUS[0]}
+      else
+        set -e
+        err "--run-fix-repo: neither pwsh nor powershell found in PATH."
+        exit 5
+      fi
+      ;;
+    *)
+      bash "$script" 2>&1 | tee -a "$log_file"
+      rc=${PIPESTATUS[0]}
+      ;;
+  esac
+  set -e
+  echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
+  prune_fix_repo_logs "$log_dir" "$MAX_FIX_REPO_LOGS"
+  if $SHOW_FIX_REPO_LOG; then
+    echo ""
+    echo "─── fix-repo log: $log_file ─────────────────────────────"
+    cat "$log_file"
+    echo "─── end of log ──────────────────────────────────────────"
+  fi
+  if [[ "$rc" -ne 0 ]]; then
+    err "fix-repo failed (exit $rc) — see $log_file"
+    $ROLLBACK_ON_FIX_FAIL && perform_rollback "$log_file"
+    exit 5
+  fi
+  ok "fix-repo completed (log: $log_file)"
+}
+if ! $DRY_RUN && $RUN_FIX_REPO; then run_fix_repo; fi
 
 # ── Summary ───────────────────────────────────────────────────────
 echo ""
