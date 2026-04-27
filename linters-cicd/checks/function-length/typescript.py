@@ -9,6 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _lib.cli import build_parser, parse_exclude_paths
+from _lib.effective_lines import count_effective as _count_effective_shared
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
 
@@ -28,23 +29,10 @@ PATTERNS = [
 
 
 def count_effective(lines: list[str]) -> int:
-    n = 0
-    in_block = False
-    for raw in lines:
-        s = raw.strip()
-        if not s:
-            continue
-        if in_block:
-            if "*/" in s:
-                in_block = False
-            continue
-        if s.startswith("/*"):
-            in_block = "*/" not in s
-            continue
-        if s.startswith("//"):
-            continue
-        n += 1
-    return n
+    """Thin wrapper kept for backwards-compat with CODE-RED-005's
+    ``load_sibling`` callers. The single source of truth lives in
+    ``linters-cicd/checks/_lib/effective_lines.py``."""
+    return _count_effective_shared(lines, "typescript")
 
 
 def match_function(line: str) -> str | None:
