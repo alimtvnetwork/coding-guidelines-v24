@@ -730,6 +730,7 @@ param(
     [Alias("y","AssumeYes")]
     [switch]$Yes,
     [string]$LogDir = "",
+    [switch]$ShowFixRepoLog,
     [Alias("?")]
     [switch]$Help
 )
