@@ -459,6 +459,22 @@ $DRY_RUN || verify_required_files
 # Gated by --run-fix-repo or INSTALL_RUN_FIX_REPO=1. Picks .ps1 on
 # Windows shells, .sh elsewhere. Skipped under --dry-run (nothing was
 # actually written). Failures propagate as exit 5 per spec §8.
+confirm_fix_repo() {
+  $ASSUME_YES && { dim "Auto-confirmed (--yes / INSTALL_FIX_REPO_YES=1)"; return 0; }
+  if [[ ! -t 0 ]]; then
+    err "--run-fix-repo requires confirmation but stdin is not a TTY."
+    err "   Re-run with --yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
+    exit 5
+  fi
+  local reply=""
+  warn "About to run $1"
+  warn "This will rewrite versioned-repo-name tokens across tracked text files in this repo."
+  printf "Proceed? [y/N] " >&2
+  IFS= read -r reply </dev/tty || reply=""
+  case "$reply" in y|Y|yes|YES) return 0 ;; esac
+  warn "fix-repo skipped by user — exiting with code 5."
+  exit 5
+}
 run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
@@ -469,6 +485,7 @@ run_fix_repo() {
     err "--run-fix-repo: $script not found after install."
     exit 5
   fi
+  confirm_fix_repo "$script"
   log_dir="$DEST/.install-logs"
   mkdir -p "$log_dir"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
