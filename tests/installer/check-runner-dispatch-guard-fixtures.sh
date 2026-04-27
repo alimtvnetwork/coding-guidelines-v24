@@ -232,6 +232,102 @@ out="$(run_guard "$D9")" && rc=0 || rc=$?
 assert_exit "case9" 1 "$rc" "$out"
 assert_contains "case9" '$args.ToString() flattens' "$out"
 assert_contains "case9" 'Start-Job detaches' "$out"
+# ── CASE 10: whitespace/indent variants in run.sh fix-repo arm
+echo "── CASE 10: SH whitespace + tab indentation should remain clean"
+D10="$TMP/case10"
+write_sh_tabs_and_extra_spaces() {
+  printf '%s\n' \
+    '#!/usr/bin/env bash' \
+    'case "${1:-}" in' \
+    $'\t  fix-repo)\t   shift   ;     exec   bash    "./fix-repo.sh"     "$@"   ;;' \
+    'esac' > "$1"
+}
+build_fixture "$D10" write_sh_tabs_and_extra_spaces write_clean_ps
+out="$(run_guard "$D10")" && rc=0 || rc=$?
+assert_exit "case10" 0 "$rc" "$out"
+assert_contains "case10" 'no anti-patterns found' "$out"
+
+# ── CASE 11: many args with quotes/spaces in inner invocation comments
+echo "── CASE 11: SH with rich preflight + many helper calls should remain clean"
+D11="$TMP/case11"
+write_sh_rich_preflight() {
+  cat > "$1" <<'SH'
+#!/usr/bin/env bash
+case "${1:-}" in
+  fix-repo)  _assert; shift; _preflight "$@"; _trace "arg1 arg2 arg3"; exec bash "./fix-repo.sh" "$@" ;;
+esac
+SH
+}
+build_fixture "$D11" write_sh_rich_preflight write_clean_ps
+out="$(run_guard "$D11")" && rc=0 || rc=$?
+assert_exit "case11" 0 "$rc" "$out"
+assert_contains "case11" 'no anti-patterns found' "$out"
+
+# ── CASE 12: PS arm with extra whitespace + multiple statements should pass
+echo "── CASE 12: PS arm with extra whitespace and statements should remain clean"
+D12="$TMP/case12"
+write_ps_extra_ws() {
+  printf '%s\n' \
+    'param([string]$Command = "")' \
+    'switch ($Command.ToLower()) {' \
+    $'  "fix-repo"     {   $inner = "x" ;  Write-Host "go" ;   & $inner   @args  ;   exit   $LASTEXITCODE   }' \
+    '}' > "$1"
+}
+build_fixture "$D12" write_clean_sh write_ps_extra_ws
+out="$(run_guard "$D12")" && rc=0 || rc=$?
+assert_exit "case12" 0 "$rc" "$out"
+assert_contains "case12" 'no anti-patterns found' "$out"
+
+# ── CASE 13: SH arm preceded by leading-spaces-only (no tabs) and trailing comment
+echo "── CASE 13: SH with trailing comment after dispatch should remain clean"
+D13="$TMP/case13"
+write_sh_trailing_comment() {
+  cat > "$1" <<'SH'
+#!/usr/bin/env bash
+case "${1:-}" in
+    fix-repo)  shift; exec bash "./fix-repo.sh" "$@" ;;   # forward verbatim
+esac
+SH
+}
+build_fixture "$D13" write_sh_trailing_comment write_clean_ps
+out="$(run_guard "$D13")" && rc=0 || rc=$?
+assert_exit "case13" 0 "$rc" "$out"
+assert_contains "case13" 'no anti-patterns found' "$out"
+
+# ── CASE 14: PS arm with ToLower() switch case + many helper calls
+echo "── CASE 14: PS arm with multiple helper calls should remain clean"
+D14="$TMP/case14"
+write_ps_many_helpers() {
+  cat > "$1" <<'PS'
+param([string]$Command = "")
+switch ($Command.ToLower()) {
+  "fix-repo"   { $i = Resolve-Inner; Write-Preflight $args; Write-Trace "x y z"; & $i @args; exit $LASTEXITCODE }
+}
+PS
+}
+build_fixture "$D14" write_clean_sh write_ps_many_helpers
+out="$(run_guard "$D14")" && rc=0 || rc=$?
+assert_exit "case14" 0 "$rc" "$out"
+assert_contains "case14" 'no anti-patterns found' "$out"
+
+# ── CASE 15: stable region detection — line numbers reported correctly
+echo "── CASE 15: dispatch arm at non-trivial line number should report that line"
+D15="$TMP/case15"
+write_sh_with_padding() {
+  {
+    printf '#!/usr/bin/env bash\n'
+    for i in $(seq 1 20); do printf '# pad line %d\n' "$i"; done
+    printf 'case "${1:-}" in\n'
+    printf '  fix-repo)  shift; exec bash "./fix-repo.sh" "$@" ;;\n'
+    printf 'esac\n'
+  } > "$1"
+}
+build_fixture "$D15" write_sh_with_padding write_clean_ps
+out="$(run_guard "$D15")" && rc=0 || rc=$?
+assert_exit "case15" 0 "$rc" "$out"
+# fix-repo arm sits at line 23 (1 shebang + 20 pad + 1 case + 1)
+assert_contains "case15" 'run.sh:23' "$out"
+
 
 echo
 echo "════════════════════════════════════════════════════════════"
