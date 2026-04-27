@@ -1059,7 +1059,12 @@ function Invoke-FixRepo {
         Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
         exit 5
     }
-    $logDir = Join-Path $Target ".install-logs"
+    if ($LogDir) {
+        if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
+        else { $logDir = Join-Path $Target $LogDir }
+    } else {
+        $logDir = Join-Path $Target ".install-logs"
+    }
     if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
     $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
     $logFile = Join-Path $logDir "fix-repo-$ts.log"
