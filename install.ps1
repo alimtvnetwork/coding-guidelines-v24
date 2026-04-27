@@ -64,6 +64,7 @@ param(
     [switch]$RollbackOnFixRepoFailure,
     [switch]$FullRollback,
     [string]$LogDir = "",
+    [switch]$ShowFixRepoLog,
     [string]$PinnedByReleaseInstall = ""
 )
 
