@@ -193,10 +193,7 @@ class VerboseJsonShapeIncludesReasonAndSource(unittest.TestCase):
             cls.audit = box.run_json("--list-changed-files-verbose")
 
     def test_audit_covers_every_known_status(self) -> None:
-        observed = {r["status"] for r in cls := self.audit}  # noqa: F841
-        # `cls := …` is a local alias for readability; the walrus
-        # keeps the comprehension a single expression so the
-        # assertion message references the same value.
+        observed = {r["status"] for r in self.audit}
         self.assertEqual(observed, _KNOWN_STATUSES,
                          msg=f"verbose audit missed statuses "
                              f"{_KNOWN_STATUSES - observed}")
