@@ -95,37 +95,31 @@ function Test-IsScannableFile {
     return $true
 }
 
+function _Process-OneFile {
+    param([string]$RepoRoot, [string]$Rel, [string]$Base, [int]$Current, [int[]]$Targets, [bool]$DryRun, [bool]$Verbose)
+    $full = Join-Path $RepoRoot $Rel
+    if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { return $null }
+    if (-not (Test-IsScannableFile -FullPath $full))        { return $null }
+    try {
+        $reps = Invoke-FileRewrite -FullPath $full -Base $Base -Targets $Targets -Current $Current -DryRun $DryRun
+    } catch {
+        Write-Host ("fix-repo: ERROR write failed for {0}: {1}" -f $Rel, $_.Exception.Message)
+        return [pscustomobject]@{ Reps=0; Failed=$true }
+    }
+    if ($reps -gt 0 -and $Verbose) { Write-Host ("modified: {0} ({1} replacements)" -f $Rel, $reps) }
+    return [pscustomobject]@{ Reps=$reps; Failed=$false }
+}
+
 function Invoke-RewriteSweep {
-    param(
-        [string]$RepoRoot,
-        [string]$Base,
-        [int]$Current,
-        [int[]]$Targets,
-        [bool]$DryRun,
-        [bool]$Verbose
-    )
-    $files     = Get-TrackedFiles -RepoRoot $RepoRoot
-    $scanned   = 0
-    $changed   = 0
-    $totalReps = 0
-    $failed    = $false
+    param([string]$RepoRoot, [string]$Base, [int]$Current, [int[]]$Targets, [bool]$DryRun, [bool]$Verbose)
+    $files = Get-TrackedFiles -RepoRoot $RepoRoot
+    $scanned = 0; $changed = 0; $totalReps = 0; $failed = $false
     foreach ($rel in $files) {
-        $full = Join-Path $RepoRoot $rel
-        if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
-        if (-not (Test-IsScannableFile -FullPath $full))        { continue }
+        $r = _Process-OneFile -RepoRoot $RepoRoot -Rel $rel -Base $Base -Current $Current -Targets $Targets -DryRun $DryRun -Verbose $Verbose
+        if (-not $r) { continue }
         $scanned++
-        try {
-            $reps = Invoke-FileRewrite -FullPath $full -Base $Base -Targets $Targets -Current $Current -DryRun $DryRun
-        } catch {
-            Write-Host ("fix-repo: ERROR write failed for {0}: {1}" -f $rel, $_.Exception.Message)
-            $failed = $true
-            continue
-        }
-        if ($reps -gt 0) {
-            $changed++
-            $totalReps += $reps
-            if ($Verbose) { Write-Host ("modified: {0} ({1} replacements)" -f $rel, $reps) }
-        }
+        if ($r.Failed) { $failed = $true; continue }
+        if ($r.Reps -gt 0) { $changed++; $totalReps += $r.Reps }
     }
     return [pscustomobject]@{ Scanned=$scanned; Changed=$changed; Reps=$totalReps; Failed=$failed }
 }
