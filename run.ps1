@@ -129,14 +129,11 @@ function Invoke-Visibility {
     exit $LASTEXITCODE
 }
 
-function Invoke-FixRepo {
+function Assert-FixRepoPresent {
     $inner = Join-Path $PSScriptRoot "fix-repo.ps1"
-    if (-not (Test-Path $inner)) {
-        Write-Host "❌ Cannot find $inner" -ForegroundColor Red
-        exit 1
-    }
-    & $inner @args
-    exit $LASTEXITCODE
+    if (Test-Path $inner) { return $inner }
+    Write-Host "❌ Cannot find $inner" -ForegroundColor Red
+    exit 1
 }
 
 switch ($Command.ToLower()) {
@@ -144,7 +141,7 @@ switch ($Command.ToLower()) {
     "lint"       { Invoke-Lint }
     "slides"     { Invoke-Slides }
     "visibility" { Invoke-Visibility @args }
-    "fix-repo"   { Invoke-FixRepo @args }
+    "fix-repo"   { & (Assert-FixRepoPresent) @args; exit $LASTEXITCODE }
     "help"       { Show-Help; exit 0 }
     "-h"      { Show-Help; exit 0 }
     "--help"  { Show-Help; exit 0 }
