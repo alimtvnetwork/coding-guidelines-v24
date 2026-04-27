@@ -5,25 +5,31 @@ get_origin_url() {
   git remote get-url origin 2>/dev/null || true
 }
 
+# Returns 0 if $1 is in the comma-separated VISIBILITY_GITLAB_HOSTS allow-list.
+host_is_allowlisted_gitlab() {
+  local host="$1" allow="${VISIBILITY_GITLAB_HOSTS:-}" h
+  IFS=',' read -ra _ALLOWED <<<"$allow"
+  for h in "${_ALLOWED[@]}"; do
+    h="${h// /}"
+    [ -n "$h" ] && [ "$h" = "$host" ] && return 0
+  done
+  return 1
+}
+
 # Sets PROVIDER ('github'|'gitlab') or empty
 resolve_provider() {
   local url="$1"
   PROVIDER=""
   [ -n "$url" ] || return 0
   local re='^(https?://|ssh://[^@]+@|[^@]+@)([^/:]+)'
-  if [[ ! "$url" =~ $re ]]; then return 0; fi
+  [[ "$url" =~ $re ]] || return 0
   local host="${BASH_REMATCH[2]}"
-  if [ "$host" = "github.com" ] || [ "$host" = "ssh.github.com" ]; then
-    PROVIDER="github"; return 0
-  fi
-  if [ "$host" = "gitlab.com" ]; then PROVIDER="gitlab"; return 0; fi
-  local allow="${VISIBILITY_GITLAB_HOSTS:-}"
-  local h
-  IFS=',' read -ra ALLOWED <<<"$allow"
-  for h in "${ALLOWED[@]}"; do
-    h="${h// /}"
-    if [ -n "$h" ] && [ "$h" = "$host" ]; then PROVIDER="gitlab"; return 0; fi
-  done
+  case "$host" in
+    github.com|ssh.github.com) PROVIDER="github"; return 0 ;;
+    gitlab.com)                PROVIDER="gitlab"; return 0 ;;
+  esac
+  host_is_allowlisted_gitlab "$host" && PROVIDER="gitlab"
+  return 0
 }
 
 # Sets SLUG to "owner/repo" or empty
