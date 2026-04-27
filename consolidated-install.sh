@@ -55,6 +55,7 @@ case "${ROLLBACK_ON_FIX_FAIL}" in 1|true|TRUE|yes|YES) ROLLBACK_ON_FIX_FAIL=true
 FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
 case "${FULL_ROLLBACK}" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
 ${FULL_ROLLBACK} && ROLLBACK_ON_FIX_FAIL=true
+LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → ${TARGET}/.install-logs (default)
 
 usage() {
   cat <<HELP
