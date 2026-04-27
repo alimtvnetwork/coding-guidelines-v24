@@ -143,11 +143,51 @@ print_summary_table() {
   echo "❌ runner dispatch guard: $count violation(s)"
 }
 
+md_escape() { printf '%s' "$1" | sed -e 's/|/\\|/g' -e 's/`/\\`/g'; }
+
+write_markdown_report() {
+  local out="$1" status="$2" count="$3"
+  {
+    printf '# Runner Dispatch Guard Report\n\n'
+    printf '%s\n' "- **Status:** $status"
+    printf '%s\n' "- **Violations:** $count"
+    printf '%s\n' "- **Generated:** $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+    printf '%s\n' "- **Guard:** \`linter-scripts/check-runner-dispatch-antipatterns.sh\`"
+    printf '%s\n\n' "- **Spec:** \`spec/15-distribution-and-runner/06-fix-repo-forwarding.md\` §7"
+    if [ "$count" -eq 0 ]; then
+      printf '✅ No anti-patterns found in `run.sh` or `run.ps1` `fix-repo` dispatch arms.\n'
+      return 0
+    fi
+    printf '## Violations\n\n'
+    printf '| # | File:Line | Kind | Reason | Regex | Match |\n'
+    printf '|---|-----------|------|--------|-------|-------|\n'
+    local n=0
+    while IFS=$'\t' read -r file line kind reason pattern match _snippet; do
+      n=$((n + 1))
+      printf '| %d | `%s:%s` | %s | %s | `%s` | `%s` |\n' \
+        "$n" "$file" "$line" "$kind" "$(md_escape "$reason")" \
+        "$(md_escape "$pattern")" "$(md_escape "$match")"
+    done < "$FINDINGS_FILE"
+    printf '\n## Snippets\n\n'
+    n=0
+    while IFS=$'\t' read -r file line _kind _reason _pattern _match snippet; do
+      n=$((n + 1))
+      printf '### %d. `%s:%s`\n\n```\n%s\n```\n\n' "$n" "$file" "$line" "$snippet"
+    done < "$FINDINGS_FILE"
+  } > "$out"
+  echo "📝 markdown report written: $out" >&2
+}
+
+REPORT_PATH="${RUNNER_GUARD_REPORT:-$REPO_ROOT/reports/runner-guard-report.md}"
+mkdir -p "$(dirname "$REPORT_PATH")"
+
 count="$(wc -l < "$FINDINGS_FILE" | tr -d ' ')"
 if [ "$count" -eq 0 ]; then
   echo
   echo "✅ runner dispatch guard: no anti-patterns found"
+  write_markdown_report "$REPORT_PATH" "PASS" 0
   exit 0
 fi
 print_summary_table "$count"
+write_markdown_report "$REPORT_PATH" "FAIL" "$count"
 exit 1
