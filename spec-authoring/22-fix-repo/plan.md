@@ -53,12 +53,14 @@ Outputs are documents only. No source code touched yet.
 - [x] Cross-linked to `spec-authoring/22-fix-repo/01-spec.md`.
 - [x] `npm run sync` skipped — readme is a source file, no derived mirrors affected.
 
-## Phase 6 — Verification + dry-run capture
+## Phase 6 — Verification + dry-run capture  ✅
 
-- [ ] Synthesize a fixture under `linters-cicd/tests/fixtures/fix-repo/` containing tokens v1, v15, v17, v170, plus URL forms.
-- [ ] Run both scripts in `--dry-run --verbose` against the fixture; capture stdout into `04-examples.md` if it differs from the synthetic example already there.
-- [ ] Run full project test suite (`python3 -m pytest linters-cicd/tests/`); ensure no regressions vs the baseline (151 pass + 1 pre-existing unrelated failure).
-- [ ] Mark all phases ✅ in this file and close the in-memory tasks.
+- [x] Fixture created at `linters-cicd/tests/fixtures/fix-repo/README.md`.
+- [x] Functional matrix passed: default / `--3` / `--all` / dry-run all behave per spec.
+- [x] Error matrix passed: `--bogus` → exit 6, no-git-repo → exit 2.
+- [x] Three real bugs found and fixed (`.git` strip, null-byte detector, perl dependency); details in `05-verification-log.md`.
+- [x] Test suite: 151 passed + 1 pre-existing baseline failure — no regressions.
+- [x] All phases ✅ in this file.
 
 ## Notes / risks
 
