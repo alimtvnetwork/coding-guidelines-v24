@@ -109,7 +109,7 @@ if (-not $ShowFixRepoLog) {
 }
 if ($MaxFixRepoLogs -lt 0) {
     $envMax = $env:INSTALL_MAX_FIX_REPO_LOGS
-    if ($envMax -and ($envMax -match '^d+$')) { $MaxFixRepoLogs = [int]$envMax } else { $MaxFixRepoLogs = 0 }
+    if ($envMax -and ($envMax -match '^\d+$')) { $MaxFixRepoLogs = [int]$envMax } else { $MaxFixRepoLogs = 0 }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
