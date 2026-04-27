@@ -1,7 +1,30 @@
 # Current Plan
 
-**Version:** 4.25.0
+**Version:** 4.26.0
 **Updated:** 2026-04-27
+
+---
+
+## v4.26.0 — Docs sidebar tree diagnostic logging (2026-04-27)
+
+**Scope:** Frontend-only observability. No spec/backend touched.
+
+### Done
+- **TD1** Ring-buffer diagnostics module — `src/lib/treeDiagnostics.ts` (bounded, opt-in via `localStorage["lovable.tree-diagnostics.enabled"]="1"`, exposes read-only `window.__treeDiagnostics`).
+- **TD2** Instrumentation in `src/hooks/useSpecData.ts` (load lifecycle), `src/components/docs/DocsSidebar.tsx` (render + refresh), `src/components/SpecTreeNav.tsx` (node renders + expansion changes). All entries prefixed `[tree:<category>]`.
+- **TD3** Floating `TreeDiagnosticsPanel` mounted from `DocsViewer.tsx` with Copy / Clear / Disable.
+- **CLAR** Documented in user-facing reply: Lovable IDE file tree is platform UI and NOT instrumentable from project code; this work targets the in-app docs sidebar only.
+
+### Verification
+- TypeScript clean.
+- Vite build success.
+- Diagnostics off by default; production users see no change.
+
+### Locks (do not regress)
+1. Diagnostics MUST stay opt-in. Do not enable by default.
+2. Ring buffer bound stays in place.
+3. Never log secrets, file contents, or user input — categories are render/load/state only.
+4. Do not conflate the Lovable IDE file tree with the in-app docs sidebar in user-facing replies.
 
 ---
 
