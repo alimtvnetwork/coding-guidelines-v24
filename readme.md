@@ -1250,6 +1250,21 @@ When this repo bumps its major version (e.g. `coding-guidelines-v17` → `coding
 
 Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v17`). URLs are preserved automatically — only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v17` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
 
+### Auto-running `fix-repo` from the installer (logs · pruning · rollback)
+
+When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the freshly installed `fix-repo` script and writes a timestamped log to `<DEST>/.install-logs/fix-repo-*.log` (overridable with `--log-dir` / `INSTALL_LOG_DIR`).
+
+| Flag (Bash) | Flag (PowerShell) | Env var | Purpose |
+|---|---|---|---|
+| `--max-fix-repo-logs N` | `-MaxFixRepoLogs N` | `INSTALL_MAX_FIX_REPO_LOGS` | Keep only the newest **N** `fix-repo-*.log` files. `0`/unset = keep all; negative = invalid (skipped with warning). CLI flag wins over env var. |
+| `--rollback-on-fix-repo-failure` | `-RollbackOnFixRepoFailure` | — | On non-zero exit: `git -C <DEST> checkout -- .` reverts edits made by `fix-repo`. Requires `<DEST>` to be a git repo. |
+| `--full-rollback` | `-FullRollback` | — | **Superset** of the above — also removes files this install run created and restores overwritten files from backup. |
+| `--show-fix-repo-log` | `-ShowFixRepoLog` | — | Dump the log to stdout after the run (useful in CI). |
+
+**Pruning happens after `fix-repo` runs but before the rollback decision**, so the failing run's log is always preserved (it's the newest). The installer prints an explicit decision line naming every flag value, e.g. `Rollback: NOT TRIGGERED (--rollback-on-fix-repo-failure=false  --full-rollback=false)` or `Log pruning: --max-fix-repo-logs=5 | found=8 kept=5 pruned=3 dir=…`.
+
+Full reference (decision matrix, CI recipe, edge cases): [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md).
+
 ---
 
 ## 📚 Documentation
