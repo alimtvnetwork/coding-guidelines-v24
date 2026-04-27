@@ -577,6 +577,7 @@ perform_rollback() {
   local log="$1"
   echo ""
   warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+  warn "Rollback flags: --rollback-on-fix-repo-failure=$ROLLBACK_ON_FIX_FAIL  --full-rollback=$FULL_ROLLBACK"
   restore_fix_repo_edits "$log"
   $FULL_ROLLBACK && restore_installed_paths
   warn "Rollback complete. Snapshot kept at: ${ROLLBACK_DIR:-<none>}"
