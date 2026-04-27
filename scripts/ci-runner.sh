@@ -80,22 +80,29 @@ is_known_phase() {
   esac
 }
 
+_parse_one_flag() {
+  # Echoes number of args consumed (1 or 2). Exits on bad/help.
+  case "$1" in
+    --phase)        PHASE="${2:-}";         echo 2 ;;
+    --guard)        GUARD="${2:-}";         echo 2 ;;
+    --config)       CONFIG_FILE="${2:-}";   echo 2 ;;
+    --json)         JSON_OUT="${2:-}";      echo 2 ;;
+    --baseline)     BASELINE_FILE="${2:-}"; echo 2 ;;
+    --source-dir)   SOURCE_DIR="${2:-}";    echo 2 ;;
+    --results-dir)  RESULTS_DIR="${2:-}";   echo 2 ;;
+    --scripts-dir)  SCRIPTS_DIR="${2:-}";   echo 2 ;;
+    --verbose)      VERBOSE=1;              echo 1 ;;
+    --fix)          FIX_MODE=1;             echo 1 ;;
+    --help|-h)      print_usage; exit "$EXIT_OK" ;;
+    *)  log_error "unknown flag: $1"; print_usage; exit "$EXIT_USAGE_ERROR" ;;
+  esac
+}
+
 parse_flags() {
+  local consumed
   while [ $# -gt 0 ]; do
-    case "$1" in
-      --phase)        PHASE="${2:-}";        shift 2 ;;
-      --guard)        GUARD="${2:-}";        shift 2 ;;
-      --config)       CONFIG_FILE="${2:-}";  shift 2 ;;
-      --json)         JSON_OUT="${2:-}";     shift 2 ;;
-      --baseline)     BASELINE_FILE="${2:-}"; shift 2 ;;
-      --source-dir)   SOURCE_DIR="${2:-}";   shift 2 ;;
-      --results-dir)  RESULTS_DIR="${2:-}";  shift 2 ;;
-      --scripts-dir)  SCRIPTS_DIR="${2:-}";  shift 2 ;;
-      --verbose)      VERBOSE=1;             shift ;;
-      --fix)          FIX_MODE=1;            shift ;;
-      --help|-h)      print_usage; exit "$EXIT_OK" ;;
-      *)              log_error "unknown flag: $1"; print_usage; exit "$EXIT_USAGE_ERROR" ;;
-    esac
+    consumed="$(_parse_one_flag "$@")"
+    shift "$consumed"
   done
 }
 
