@@ -183,7 +183,35 @@ const noMagicStrings = {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// Rule: max-function-lines (CODE RED)
+// Shared: count effective body lines (skip blanks + comments)
+// ═══════════════════════════════════════════════════════════════
+
+function countEffectiveBodyLines(node, src) {
+  const body = node.body;
+  if (!body || body.type !== "BlockStatement") return null;
+  const start = body.loc.start.line + 1;
+  const end = body.loc.end.line;
+  const lines = src.lines.slice(start - 1, end - 1);
+  let count = 0;
+  for (const l of lines) {
+    const t = l.trim();
+    if (t === "" || t.startsWith("//") || t.startsWith("*") || t === "/*" || t === "*/") continue;
+    count++;
+  }
+  return count;
+}
+
+function resolveFunctionName(node) {
+  return (
+    node.id?.name ||
+    node.parent?.key?.name ||
+    (node.parent?.type === "VariableDeclarator" ? node.parent.id?.name : null) ||
+    "(anonymous)"
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Rule: max-function-lines (CODE RED — hard cap, 15)
 // ═══════════════════════════════════════════════════════════════
 
 const maxFunctionLines = {
@@ -200,21 +228,53 @@ const maxFunctionLines = {
     const src = context.getSourceCode();
 
     function check(node) {
-      const body = node.body;
-      if (!body || body.type !== "BlockStatement") return;
-      const start = body.loc.start.line + 1;
-      const end = body.loc.end.line;
-      const lines = src.lines.slice(start - 1, end - 1);
-      let count = 0;
-      for (const l of lines) {
-        const t = l.trim();
-        if (t === "" || t.startsWith("//") || t.startsWith("*") || t === "/*" || t === "*/") continue;
-        count++;
-      }
+      const count = countEffectiveBodyLines(node, src);
+      if (count === null) return;
       if (count > maxL) {
-        let name = node.id?.name || node.parent?.key?.name || (node.parent?.type === "VariableDeclarator" ? node.parent.id?.name : null) || "(anonymous)";
+        const name = resolveFunctionName(node);
         context.report({ node, messageId: "tooLong", data: { name, actual: count, max: maxL } });
       }
+    }
+
+    return { FunctionDeclaration: check, FunctionExpression: check, ArrowFunctionExpression: check };
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════
+// Rule: prefer-function-lines (CODE-RED-005 — soft preference, 8)
+// Warns when a function exceeds the preferred 8-line limit but is
+// still under the hard cap (15). Pair with max-function-lines.
+// ═══════════════════════════════════════════════════════════════
+
+const preferFunctionLines = {
+  meta: {
+    type: "suggestion",
+    docs: { description: "Prefer function bodies under 8 lines (CODE-RED-005)" },
+    messages: {
+      tooLong: '⚠️ CODE-RED-005: Function "{{name}}" has {{actual}} effective lines (prefer ≤ {{prefer}}, hard cap {{hard}}). Consider extracting helpers.',
+    },
+    schema: [{
+      type: "object",
+      properties: {
+        prefer: { type: "integer", minimum: 1, default: 8 },
+        hard: { type: "integer", minimum: 1, default: 15 },
+      },
+      additionalProperties: false,
+    }],
+  },
+  create(context) {
+    const opts = context.options[0] || {};
+    const prefer = opts.prefer || 8;
+    const hard = opts.hard || 15;
+    const src = context.getSourceCode();
+
+    function check(node) {
+      const count = countEffectiveBodyLines(node, src);
+      if (count === null) return;
+      if (count <= prefer) return;
+      if (count > hard) return;
+      const name = resolveFunctionName(node);
+      context.report({ node, messageId: "tooLong", data: { name, actual: count, prefer, hard } });
     }
 
     return { FunctionDeclaration: check, FunctionExpression: check, ArrowFunctionExpression: check };
