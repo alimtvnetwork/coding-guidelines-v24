@@ -144,12 +144,34 @@ function Assert-FixRepoPresent {
     exit $Script:ExitFixRepoMissing
 }
 
+function Test-FixRepoDebugFlag {
+    param([object[]]$Argv)
+    foreach ($a in $Argv) { if ($a -eq "--debug") { return $true } }
+    return $false
+}
+
+function Write-FixRepoDebugPreflight {
+    param([string]$Inner, [object[]]$Argv)
+    if (-not (Test-FixRepoDebugFlag -Argv $Argv)) { return }
+    $msg = @()
+    $msg += "▸ fix-repo preflight (--debug detected; argv forwarded unchanged)"
+    $msg += "   runner script  : $PSCommandPath"
+    $msg += "   PSScriptRoot   : $PSScriptRoot"
+    $msg += "   working dir    : $((Get-Location).Path)"
+    $msg += "   inner script   : $Inner"
+    $msg += ("   ARGC={0}" -f $Argv.Count)
+    for ($i = 0; $i -lt $Argv.Count; $i++) {
+        $msg += ("   ARG[{0}]<<{1}>>" -f $i, $Argv[$i])
+    }
+    [Console]::Error.WriteLine(($msg -join [Environment]::NewLine))
+}
+
 switch ($Command.ToLower()) {
     ""           { Invoke-Lint }
     "lint"       { Invoke-Lint }
     "slides"     { Invoke-Slides }
     "visibility" { Invoke-Visibility @args }
-    "fix-repo"   { & (Assert-FixRepoPresent) @args; exit $LASTEXITCODE }
+    "fix-repo"   { $inner = Assert-FixRepoPresent; Write-FixRepoDebugPreflight -Inner $inner -Argv $args; & $inner @args; exit $LASTEXITCODE }
     "help"       { Show-Help; exit 0 }
     "-h"      { Show-Help; exit 0 }
     "--help"  { Show-Help; exit 0 }
