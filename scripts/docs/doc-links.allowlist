@@ -1,0 +1,17 @@
+# Pre-existing broken links in readme.md, allow-listed so the doc link
+# checker (scripts/docs/check-doc-links.mjs) can run in CI today without
+# blocking on legacy debt.
+#
+# Format: one entry per line, "<source-file>\t<broken-target>" (TAB-separated).
+# Lines starting with '#' and blank lines are ignored.
+#
+# To remove an entry: fix the link in the source file, then delete its
+# row here. The checker FAILS if an allow-listed link is found resolved
+# (no longer broken), forcing this file to stay in sync with reality.
+readme.md	tests/installer/check-install-ps1-noverify-help.sh
+readme.md	spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/
+readme.md	spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md
+readme.md	spec/02-coding-guidelines/03-error-handling/
+readme.md	spec/02-coding-guidelines/03-error-handling/04-result-types.md
+readme.md	changelog.md
+readme.md	spec/01-spec-authoring-guide/05-non-cli-module-template.md

@@ -1263,6 +1263,42 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 
 **Pruning happens after `fix-repo` runs but before the rollback decision**, so the failing run's log is always preserved (it's the newest). The installer prints an explicit decision line naming every flag value, e.g. `Rollback: NOT TRIGGERED (--rollback-on-fix-repo-failure=false  --full-rollback=false)` or `Log pruning: --max-fix-repo-logs=5 | found=8 kept=5 pruned=3 dir=…`.
 
+#### Full example — install + auto-run `fix-repo` with pruning, rollback & inline log
+
+**🐧 macOS · Linux · Bash**
+
+```bash
+./install.sh \
+  --dest ./coding-guidelines \
+  --run-fix-repo \
+  --max-fix-repo-logs 10 \
+  --rollback-on-fix-repo-failure \
+  --show-fix-repo-log \
+  --log-dir ./.install-logs
+```
+
+**🪟 Windows · PowerShell**
+
+```powershell
+.\install.ps1 `
+  -Dest .\coding-guidelines `
+  -RunFixRepo `
+  -MaxFixRepoLogs 10 `
+  -RollbackOnFixRepoFailure `
+  -ShowFixRepoLog `
+  -LogDir .\.install-logs
+```
+
+What this run does, in order:
+
+1. Installs into `./coding-guidelines` (snapshotting overwritten files for potential rollback).
+2. Arms rollback against the destination's git `HEAD`.
+3. Auto-runs the freshly installed `fix-repo` script, streaming output to `./.install-logs/fix-repo-<UTC-timestamp>.log`.
+4. Prunes the log directory to the **newest 10** `fix-repo-*.log` files (older ones are deleted; the run that just finished is always kept).
+5. Prints the full log to stdout (`--show-fix-repo-log`).
+6. **On `fix-repo` exit 0** → prints `Rollback: not needed (fix-repo succeeded; flags: …)` and exits 0.
+   **On `fix-repo` non-zero** → prints `═══ ROLLBACK TRIGGERED (fix-repo failed) ═══`, runs `git -C ./coding-guidelines checkout -- .` to revert tracked-file edits, then exits 5. Add `--full-rollback` (PS: `-FullRollback`) to also delete files this install run created and restore overwritten files from backup.
+
 Full reference (decision matrix, CI recipe, edge cases): [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md).
 
 ---

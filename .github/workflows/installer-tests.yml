@@ -34,6 +34,13 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Check documentation links
+        # Fast guard: verifies every relative link in the README and the
+        # installer-flags reference doc resolves. Allow-list lives at
+        # scripts/docs/doc-links.allowlist (entries that ever resolve
+        # again automatically fail to keep the list honest).
+        run: node scripts/docs/check-doc-links.mjs readme.md docs/installer-fix-repo-flags.md
+
       - name: Regenerate bundle installers
         # Ensures we test the canonical generator output, not stale files.
         run: node scripts/generate-bundle-installers.mjs
