@@ -8,12 +8,9 @@
 #
 # Strategy: extract ONLY the fix-repo dispatch region from each runner,
 # then assert presence of required patterns and absence of forbidden
-# patterns within that region. This avoids false positives from
-# unrelated code (e.g. `eval` in helpers, or `exit $LASTEXITCODE` in
-# the visibility branch).
-#
-# run.sh region        : the single `fix-repo)` case-arm line.
-# run.ps1 region       : the `"fix-repo"` switch arm line.
+# patterns within that region. Findings are accumulated into a structured
+# summary printed at the end, plus GitHub Actions `::error file=,line=::`
+# annotations so violations surface inline on PRs.
 #
 # Exit codes:
 #   0 — clean
@@ -22,92 +19,99 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SH="$REPO_ROOT/run.sh"
-PS="$REPO_ROOT/run.ps1"
+SH_PATH="$REPO_ROOT/run.sh"
+PS_PATH="$REPO_ROOT/run.ps1"
+SH_REL="run.sh"
+PS_REL="run.ps1"
 
-violations=0
+# Findings format (TSV): file<TAB>line<TAB>kind<TAB>reason<TAB>snippet
+FINDINGS_FILE="$(mktemp)"
+trap 'rm -f "$FINDINGS_FILE"' EXIT
 
-# ── region extractors ───────────────────────────────────────────────
-# run.sh: the case dispatch is a single line beginning with `fix-repo)`.
-extract_sh_region() {
-  grep -nE '^[[:space:]]*fix-repo\)' "$SH" || true
+record_finding() {
+  local file="$1" line="$2" kind="$3" reason="$4" snippet="$5"
+  printf '%s\t%s\t%s\t%s\t%s\n' "$file" "$line" "$kind" "$reason" "$snippet" >> "$FINDINGS_FILE"
+  printf '::error file=%s,line=%s::[%s] %s\n' "$file" "$line" "$kind" "$reason" >&2
 }
 
-# run.ps1: the switch arm is a single line beginning with `"fix-repo"`.
-extract_ps_region() {
-  grep -nE '^[[:space:]]*"fix-repo"[[:space:]]*\{' "$PS" || true
-}
+extract_region_sh() { grep -nE '^[[:space:]]*fix-repo\)' "$SH_PATH" || true; }
+extract_region_ps() { grep -nE '^[[:space:]]*"fix-repo"[[:space:]]*\{' "$PS_PATH" || true; }
+
+region_line_no() { printf '%s' "$1" | head -n1 | cut -d: -f1; }
+region_text()    { printf '%s' "$1" | head -n1 | cut -d: -f2-; }
 
 forbid_in_region() {
-  local label="$1" region="$2" pattern="$3" reason="$4"
-  local hits
-  hits="$(printf '%s\n' "$region" | grep -nE "$pattern" || true)"
-  [ -z "$hits" ] && return 0
-  echo "❌ $label: forbidden pattern in fix-repo dispatch — $reason"
-  echo "   regex : $pattern"
-  printf '   hit   : %s\n' "$hits"
-  violations=$((violations + 1))
+  local file="$1" region="$2" pattern="$3" reason="$4"
+  local line text
+  line="$(region_line_no "$region")"
+  text="$(region_text "$region")"
+  printf '%s' "$text" | grep -qE "$pattern" || return 0
+  record_finding "$file" "$line" "FORBIDDEN" "$reason" "$text"
 }
 
 require_in_region() {
-  local label="$1" region="$2" pattern="$3" reason="$4"
-  printf '%s\n' "$region" | grep -qE "$pattern" && return 0
-  echo "❌ $label: missing required pattern in fix-repo dispatch — $reason"
-  echo "   regex : $pattern"
-  violations=$((violations + 1))
+  local file="$1" region="$2" pattern="$3" reason="$4"
+  local line text
+  line="$(region_line_no "$region")"
+  text="$(region_text "$region")"
+  printf '%s' "$text" | grep -qE "$pattern" && return 0
+  record_finding "$file" "$line" "MISSING" "$reason" "$text"
 }
 
-[ -f "$SH" ] || { echo "::error::run.sh missing at $SH" >&2; exit 2; }
-[ -f "$PS" ] || { echo "::error::run.ps1 missing at $PS" >&2; exit 2; }
+[ -f "$SH_PATH" ] || { echo "::error file=$SH_REL::run.sh missing" >&2; exit 2; }
+[ -f "$PS_PATH" ] || { echo "::error file=$PS_REL::run.ps1 missing" >&2; exit 2; }
 
-SH_REGION="$(extract_sh_region)"
-PS_REGION="$(extract_ps_region)"
+SH_REGION="$(extract_region_sh)"
+PS_REGION="$(extract_region_ps)"
 
-[ -n "$SH_REGION" ] || { echo "::error::run.sh: no 'fix-repo)' case arm found" >&2; exit 2; }
-[ -n "$PS_REGION" ] || { echo "::error::run.ps1: no '\"fix-repo\"' switch arm found" >&2; exit 2; }
+[ -n "$SH_REGION" ] || { echo "::error file=$SH_REL::no 'fix-repo)' case arm found" >&2; exit 2; }
+[ -n "$PS_REGION" ] || { echo "::error file=$PS_REL::no '\"fix-repo\"' switch arm found" >&2; exit 2; }
 
-echo "── run.sh fix-repo dispatch guard ──────────────────────"
-echo "   region: $SH_REGION"
+echo "── scanning fix-repo dispatch arms ─────────────────────"
+echo "   $SH_REL:$(region_line_no "$SH_REGION")"
+echo "   $PS_REL:$(region_line_no "$PS_REGION")"
 
-# Forbidden inside the fix-repo arm:
-forbid_in_region "run.sh" "$SH_REGION" '"\$\*"' \
-  '"$*" collapses argv into one string; use "$@"'
-forbid_in_region "run.sh" "$SH_REGION" '\beval\b' \
-  'eval-based dispatch breaks argv quoting'
-forbid_in_region "run.sh" "$SH_REGION" '\bbash[[:space:]]+-c\b' \
-  '`bash -c "..."` wrapper loses argv boundaries and may mask exit codes'
-forbid_in_region "run.sh" "$SH_REGION" 'fix-repo\.sh[^|]*\|[^|&]' \
-  'piping fix-repo.sh output masks its exit code'
-forbid_in_region "run.sh" "$SH_REGION" '\$\{@:[0-9]+\}' \
-  '${@:N} slicing drops original argv; forward "$@" verbatim'
-
-# Required inside the fix-repo arm:
-require_in_region "run.sh" "$SH_REGION" '\bexec\b[^#]*fix-repo\.sh[^#]*"\$@"' \
+# run.sh — forbidden
+forbid_in_region "$SH_REL" "$SH_REGION" '"\$\*"'                      '"$*" collapses argv into one string; use "$@"'
+forbid_in_region "$SH_REL" "$SH_REGION" '\beval\b'                    'eval-based dispatch breaks argv quoting'
+forbid_in_region "$SH_REL" "$SH_REGION" '\bbash[[:space:]]+-c\b'      '`bash -c "..."` wrapper loses argv boundaries'
+forbid_in_region "$SH_REL" "$SH_REGION" 'fix-repo\.sh[^|]*\|[^|&]'    'piping fix-repo.sh output masks its exit code'
+forbid_in_region "$SH_REL" "$SH_REGION" '\$\{@:[0-9]+\}'              '${@:N} slicing drops original argv; forward "$@" verbatim'
+# run.sh — required
+require_in_region "$SH_REL" "$SH_REGION" '\bexec\b[^#]*fix-repo\.sh[^#]*"\$@"' \
   'must use `exec ... fix-repo.sh "$@"` to forward argv and exit code'
 
-echo "── run.ps1 fix-repo dispatch guard ─────────────────────"
-echo "   region: $PS_REGION"
-
-# Forbidden inside the fix-repo arm:
-forbid_in_region "run.ps1" "$PS_REGION" '\$args[[:space:]]*-join' \
-  '$args -join collapses argv into a single string'
-forbid_in_region "run.ps1" "$PS_REGION" '"\$args"' \
-  '"$args" interpolation flattens argv; use @args splatting'
-forbid_in_region "run.ps1" "$PS_REGION" '\bInvoke-Expression\b' \
-  'Invoke-Expression on argv breaks quoting and is unsafe'
-forbid_in_region "run.ps1" "$PS_REGION" 'Start-Process\b' \
-  'Start-Process detaches the child; cannot propagate $LASTEXITCODE'
-
-# Required inside the fix-repo arm:
-require_in_region "run.ps1" "$PS_REGION" '@args' \
-  'must invoke inner with @args splatting (preserves argv)'
-require_in_region "run.ps1" "$PS_REGION" 'exit[[:space:]]+\$LASTEXITCODE' \
+# run.ps1 — forbidden
+forbid_in_region "$PS_REL" "$PS_REGION" '\$args[[:space:]]*-join'     '$args -join collapses argv into a single string'
+forbid_in_region "$PS_REL" "$PS_REGION" '"\$args"'                    '"$args" interpolation flattens argv; use @args splatting'
+forbid_in_region "$PS_REL" "$PS_REGION" '\bInvoke-Expression\b'       'Invoke-Expression on argv breaks quoting and is unsafe'
+forbid_in_region "$PS_REL" "$PS_REGION" 'Start-Process\b'             'Start-Process detaches the child; cannot propagate $LASTEXITCODE'
+# run.ps1 — required
+require_in_region "$PS_REL" "$PS_REGION" '@args'                       'must invoke inner with @args splatting (preserves argv)'
+require_in_region "$PS_REL" "$PS_REGION" 'exit[[:space:]]+\$LASTEXITCODE' \
   'must end with `exit $LASTEXITCODE` to propagate exit code'
 
-echo
-if [ "$violations" -eq 0 ]; then
+print_summary_table() {
+  local count="$1"
+  echo
+  echo "════════════════════ violation summary ════════════════════"
+  printf '  %-3s  %-12s  %-10s  %s\n' "#" "FILE:LINE" "KIND" "REASON"
+  printf '  %-3s  %-12s  %-10s  %s\n' "---" "------------" "----------" "------"
+  local n=0
+  while IFS=$'\t' read -r file line kind reason snippet; do
+    n=$((n + 1))
+    printf '  %-3s  %-12s  %-10s  %s\n' "$n" "$file:$line" "$kind" "$reason"
+    printf '       └─ %s\n' "$snippet"
+  done < "$FINDINGS_FILE"
+  echo "═══════════════════════════════════════════════════════════"
+  echo "❌ runner dispatch guard: $count violation(s)"
+}
+
+count="$(wc -l < "$FINDINGS_FILE" | tr -d ' ')"
+if [ "$count" -eq 0 ]; then
+  echo
   echo "✅ runner dispatch guard: no anti-patterns found"
   exit 0
 fi
-echo "❌ runner dispatch guard: $violations violation(s)"
+print_summary_table "$count"
 exit 1
