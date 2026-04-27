@@ -55,6 +55,29 @@ extract_region_ps() { grep -nE '^[[:space:]]*"fix-repo"[[:space:]]*\{' "$PS_PATH
 region_line_no() { printf '%s' "$1" | head -n1 | cut -d: -f1; }
 region_text()    { printf '%s' "$1" | head -n1 | cut -d: -f2-; }
 
+# Print ±2 lines of context around $line in $file, prefixed with line numbers
+# and a `>` marker on the offending line. Output is plain text, suitable
+# for direct inclusion in the terminal summary and markdown fenced blocks.
+CONTEXT_RADIUS="${RUNNER_GUARD_CONTEXT:-2}"
+fetch_context() {
+  local rel="$1" line="$2" abs
+  case "$rel" in
+    run.sh)  abs="$SH_PATH" ;;
+    run.ps1) abs="$PS_PATH" ;;
+    *)       return 0 ;;
+  esac
+  [ -f "$abs" ] || return 0
+  local start=$((line - CONTEXT_RADIUS))
+  local end=$((line + CONTEXT_RADIUS))
+  [ "$start" -lt 1 ] && start=1
+  awk -v s="$start" -v e="$end" -v hit="$line" '
+    NR < s { next }
+    NR > e { exit }
+    { marker = (NR == hit) ? ">" : " "
+      printf "    %s %4d | %s\n", marker, NR, $0 }
+  ' "$abs"
+}
+
 forbid_in_region() {
   local file="$1" region="$2" pattern="$3" reason="$4"
   local line text match
