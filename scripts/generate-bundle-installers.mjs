@@ -620,6 +620,7 @@ run_fix_repo() {
   esac
   set -e
   echo "# exit: \${rc}  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "\${log_file}"
+  prune_fix_repo_logs "\${log_dir}" "\${MAX_FIX_REPO_LOGS}"
   if \${SHOW_FIX_REPO_LOG}; then
     echo ""
     echo "─── fix-repo log: \${log_file} ─────────────────────────────"
