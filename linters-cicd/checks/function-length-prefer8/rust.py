@@ -67,23 +67,11 @@ def _find_body_end(lines: list[str], brace_line: int) -> int:
 
 
 def _count_effective(body: list[str]) -> int:
-    count = 0
-    in_block = False
-    for raw in body:
-        stripped = raw.strip()
-        if stripped == "":
-            continue
-        if in_block:
-            if "*/" in stripped:
-                in_block = False
-            continue
-        if stripped.startswith("/*"):
-            in_block = "*/" not in stripped
-            continue
-        if stripped.startswith("//"):
-            continue
-        count += 1
-    return count
+    """Delegates to the unified counter in
+    ``linters-cicd/checks/_lib/effective_lines.py``. Kept as a thin
+    local wrapper so the scan loop reads cleanly and so any future
+    test that imports this symbol keeps working."""
+    return _count_effective_shared(body, "rust")
 
 
 def main() -> int:
