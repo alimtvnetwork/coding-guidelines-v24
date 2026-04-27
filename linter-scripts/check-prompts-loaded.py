@@ -66,17 +66,13 @@ def find_orphans(prompt_files: list[str], index_body: str) -> list[str]:
     return [f for f in prompt_files if f not in index_body]
 
 
+PROMPT_REF_RE = __import__("re").compile(r"\b(\d{2,}-[A-Za-z0-9._-]+\.[A-Za-z0-9]+)\b")
+
+
 def find_dangling(prompt_files: list[str], index_body: str) -> list[str]:
     """Filenames the index mentions that don't exist on disk."""
     on_disk = set(prompt_files)
-    mentioned: set[str] = set()
-    for token in index_body.split():
-        cleaned = token.strip("`()[],.;:\"'<>")
-        base = cleaned.rsplit("/", 1)[-1]
-        is_prompt_ref = base.startswith(("0", "1", "2", "3", "4", "5",
-                                         "6", "7", "8", "9"))
-        if is_prompt_ref and "." in base:
-            mentioned.add(base)
+    mentioned = {m.group(1) for m in PROMPT_REF_RE.finditer(index_body)}
     return sorted(m for m in mentioned if m not in on_disk)
 
 
