@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO="alimtvnetwork/coding-guidelines-v17"
 RELEASE_VERSION_INPUT="${RELEASE_VERSION:-}"
-REQUIRED_PATHS=("spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1")
+REQUIRED_PATHS=("spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1" ".lovable/coding-guidelines" ".lovable/prompts")
 
 step() { printf '\033[0;36m▸ %s\033[0m\n' "$1"; }
 ok() { printf '\033[0;32m✅ %s\033[0m\n' "$1"; }
@@ -62,6 +62,9 @@ copy_release_files() {
   cp install.ps1 "$STAGING_DIR/install.ps1"
   cp install-config.json "$STAGING_DIR/install-config.json"
   cp readme.md "$STAGING_DIR/readme.md"
+  mkdir -p "$STAGING_DIR/.lovable"
+  cp -R .lovable/coding-guidelines "$STAGING_DIR/.lovable/coding-guidelines"
+  cp -R .lovable/prompts "$STAGING_DIR/.lovable/prompts"
 }
 
 create_archives() {
