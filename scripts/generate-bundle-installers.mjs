@@ -108,6 +108,8 @@ OFFLINE=false
 LOCAL_ARCHIVE=""
 NO_DISCOVERY=false
 NO_MAIN_FALLBACK=false
+RUN_FIX_REPO="\${INSTALL_RUN_FIX_REPO:-false}"
+case "\${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 
 usage() {
   cat <<HELP
@@ -139,6 +141,10 @@ SOURCE-SELECTION FLAGS (which mode each one forces)
 TARGET / OUTPUT FLAGS (any mode)
   --target <dir>, --dest <dir>   Install destination (default: cwd).
   --no-open                      Skip auto-opening the entry file.
+  --run-fix-repo                 After verification, execute fix-repo.sh
+                                 (or fix-repo.ps1 on Windows) so the repo
+                                 is patched before this installer exits.
+                                 Also enabled by INSTALL_RUN_FIX_REPO=1.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
@@ -182,6 +188,7 @@ while [[ $# -gt 0 ]]; do
     --target|--dest)  TARGET="$2";  shift 2 ;;
     --no-open)        DO_OPEN=false; shift ;;
     --offline)        OFFLINE=true; shift ;;
+    --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
@@ -613,9 +620,17 @@ param(
     [string]$UseLocalArchive = "",
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
+    [switch]$RunFixRepo,
     [Alias("?")]
     [switch]$Help
 )
+
+# Env-var equivalent: INSTALL_RUN_FIX_REPO=1 enables -RunFixRepo without
+# requiring callers to thread the flag through wrapper scripts.
+if (-not $RunFixRepo) {
+    $envFlag = $env:INSTALL_RUN_FIX_REPO
+    if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
