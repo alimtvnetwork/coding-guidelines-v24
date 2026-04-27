@@ -579,7 +579,9 @@ run_fix_repo() {
   fi
   confirm_fix_repo "$script"
   snapshot_pre_fix_repo
-  log_dir="$DEST/.install-logs"
+  log_dir="$LOG_DIR"
+  [[ -z "$log_dir" ]] && log_dir="$DEST/.install-logs"
+  case "$log_dir" in /*) ;; *) log_dir="$DEST/$log_dir" ;; esac
   mkdir -p "$log_dir"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
   log_file="$log_dir/fix-repo-$ts.log"
