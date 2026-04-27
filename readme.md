@@ -184,16 +184,20 @@ Copy-paste commands for every supported bundle. Each block lists the **exact scr
 <details>
 <summary><strong>error-manage</strong> — Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
-# Bash · latest
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash
-# Bash · pinned
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
-# PowerShell · latest
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1 | iex
-# PowerShell · pinned
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
