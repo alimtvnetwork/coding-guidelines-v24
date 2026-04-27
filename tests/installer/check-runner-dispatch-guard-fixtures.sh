@@ -180,6 +180,59 @@ assert_exit "case6" 0 "$rc" "$out"
 assert_not_contains "case6" 'FORBIDDEN' "$out"
 assert_not_contains "case6" 'MISSING' "$out"
 
+# ── CASE 7: PS [string]::Join + [string]$args + cmd /c → all caught
+echo "── CASE 7: PS array-to-string conversions should fail"
+D7="$TMP/case7"
+write_dirty_ps_join() {
+  cat > "$1" <<'PS'
+param([string]$Command = "")
+switch ($Command.ToLower()) {
+  "fix-repo"   { $s = [string]::Join(' ', $args); cmd /c "x $s"; & $inner @args; exit $LASTEXITCODE }
+}
+PS
+}
+build_fixture "$D7" write_clean_sh write_dirty_ps_join
+out="$(run_guard "$D7")" && rc=0 || rc=$?
+assert_exit "case7" 1 "$rc" "$out"
+assert_contains "case7" '[string]::Join on $args' "$out"
+assert_contains "case7" '`cmd /c` wrapper re-parses argv' "$out"
+
+# ── CASE 8: SH printf %q join, IFS mutation, sh -c → all caught
+echo "── CASE 8: SH printf/IFS/sh -c anti-patterns should fail"
+D8="$TMP/case8"
+write_dirty_sh_more() {
+  cat > "$1" <<'SH'
+#!/usr/bin/env bash
+case "${1:-}" in
+  fix-repo)  shift; IFS=, ; sh -c "./fix-repo.sh $(printf '%q ' "$@")" ;;
+esac
+SH
+}
+build_fixture "$D8" write_dirty_sh_more write_clean_ps
+out="$(run_guard "$D8")" && rc=0 || rc=$?
+assert_exit "case8" 1 "$rc" "$out"
+assert_contains "case8" "sh -c" "$out"
+assert_contains "case8" "printf %q/%s rebuilds argv" "$out"
+assert_contains "case8" "mutating IFS" "$out"
+assert_contains "case8" 'command substitution on "$@"' "$out"
+
+# ── CASE 9: PS $args.ToString() + Start-Job → caught
+echo "── CASE 9: PS \$args.ToString and Start-Job should fail"
+D9="$TMP/case9"
+write_dirty_ps_tostring() {
+  cat > "$1" <<'PS'
+param([string]$Command = "")
+switch ($Command.ToLower()) {
+  "fix-repo"   { $s = $args.ToString(); Start-Job { & "x" $using:s } | Out-Null; & $inner @args; exit $LASTEXITCODE }
+}
+PS
+}
+build_fixture "$D9" write_clean_sh write_dirty_ps_tostring
+out="$(run_guard "$D9")" && rc=0 || rc=$?
+assert_exit "case9" 1 "$rc" "$out"
+assert_contains "case9" '$args.ToString() flattens' "$out"
+assert_contains "case9" 'Start-Job detaches' "$out"
+
 echo
 echo "════════════════════════════════════════════════════════════"
 echo "  fixture suite: $pass passed, $fail failed"
