@@ -492,6 +492,38 @@ run_fix_repo() {
   # Cygwin, MINGW), .sh elsewhere. Streams stdout+stderr to a
   # timestamped log under <TARGET>/.install-logs/. Failures propagate
   # as exit 5 (spec §8: "inner installer / handoff rejected").
+snapshot_pre_fix_repo() {
+  PRE_FIX_REPO_HEAD=""
+  ${ROLLBACK_ON_FIX_FAIL} || return 0
+  if ! git -C "${TARGET}" rev-parse --git-dir >/dev/null 2>&1; then
+    echo "  ⚠ --rollback-on-fix-repo-failure: ${TARGET} is not a git repo; rollback disabled." >&2
+    ROLLBACK_ON_FIX_FAIL=false
+    return 0
+  fi
+  PRE_FIX_REPO_HEAD="$(git -C "${TARGET}" rev-parse HEAD 2>/dev/null || true)"
+  echo "  ▸ rollback armed: HEAD=${PRE_FIX_REPO_HEAD}$(${FULL_ROLLBACK} && echo ', full-rollback=on')"
+}
+
+perform_rollback() {
+  local log="$1" pair dest f
+  echo ""
+  echo "  ⚠ ═══ ROLLBACK TRIGGERED (fix-repo failed) ═══" >&2
+  echo "  ▸ restoring tracked files from HEAD..." >&2
+  git -C "${TARGET}" checkout -- . 2>&1 | tee -a "${log}" || echo "  ⚠ git checkout reported issues" >&2
+  echo "  ✓ fix-repo edits reverted" >&2
+  if ${FULL_ROLLBACK}; then
+    echo "  ▸ removing bundle artifacts created by this install run..." >&2
+    for pair in ${BUNDLE_MAPPING}; do
+      dest="${pair##*|}"
+      [[ -e "${TARGET}/${dest}" ]] && rm -rf "${TARGET}/${dest}" && echo "    - removed ${dest}" >&2
+    done
+    [[ -n "${BUNDLE_TOP_LEVEL_FILES:-}" ]] && for f in ${BUNDLE_TOP_LEVEL_FILES}; do
+      [[ -e "${TARGET}/${f}" ]] && rm -f "${TARGET}/${f}" && echo "    - removed ${f}" >&2
+    done
+    echo "  ✓ full-rollback complete" >&2
+  fi
+}
+
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
     MINGW*|MSYS*|CYGWIN*) script="${TARGET}/fix-repo.ps1" ;;
@@ -502,6 +534,7 @@ run_fix_repo() {
     exit 5
   fi
   confirm_fix_repo "${script}"
+  snapshot_pre_fix_repo
   log_dir="${TARGET}/.install-logs"
   mkdir -p "${log_dir}"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -511,6 +544,7 @@ run_fix_repo() {
     echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "# script:   ${script}"
     echo "# target:   ${TARGET}"
+    echo "# rollback: on-failure=${ROLLBACK_ON_FIX_FAIL}  full=${FULL_ROLLBACK}"
     echo "# ──────────────────────────────────────────────────────────"
   } > "${log_file}"
   echo ""
@@ -540,6 +574,7 @@ run_fix_repo() {
   echo "# exit: ${rc}  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "${log_file}"
   if [[ "${rc}" -ne 0 ]]; then
     echo "❌ fix-repo failed (exit ${rc}) — see ${log_file}" >&2
+    ${ROLLBACK_ON_FIX_FAIL} && perform_rollback "${log_file}"
     exit 5
   fi
   echo "  ✓ fix-repo completed (log: ${log_file})"
