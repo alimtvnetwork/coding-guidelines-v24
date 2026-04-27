@@ -24,14 +24,29 @@ PS_PATH="$REPO_ROOT/run.ps1"
 SH_REL="run.sh"
 PS_REL="run.ps1"
 
-# Findings format (TSV): file<TAB>line<TAB>kind<TAB>reason<TAB>snippet
+# Findings format (TSV): file<TAB>line<TAB>kind<TAB>reason<TAB>pattern<TAB>match<TAB>snippet
 FINDINGS_FILE="$(mktemp)"
 trap 'rm -f "$FINDINGS_FILE"' EXIT
 
+# GitHub Actions annotation values must escape %, \r, \n, : and ,
+# See: https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions
+gha_escape() {
+  printf '%s' "$1" \
+    | sed -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/,/%2C/g' -e 's/:/%3A/g' \
+    | tr '\n' ' '
+}
+
 record_finding() {
-  local file="$1" line="$2" kind="$3" reason="$4" snippet="$5"
-  printf '%s\t%s\t%s\t%s\t%s\n' "$file" "$line" "$kind" "$reason" "$snippet" >> "$FINDINGS_FILE"
-  printf '::error file=%s,line=%s::[%s] %s\n' "$file" "$line" "$kind" "$reason" >&2
+  local file="$1" line="$2" kind="$3" reason="$4" pattern="$5" match="$6" snippet="$7"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+    "$file" "$line" "$kind" "$reason" "$pattern" "$match" "$snippet" >> "$FINDINGS_FILE"
+  # GitHub annotation: title carries the kind+reason; message body carries
+  # the regex and matched substring so the developer can pinpoint the hit
+  # without re-scanning the file by hand.
+  local title body
+  title="$(gha_escape "[$kind] $reason")"
+  body="$(gha_escape "regex=$pattern  match=<<$match>>")"
+  printf '::error file=%s,line=%s,title=%s::%s\n' "$file" "$line" "$title" "$body" >&2
 }
 
 extract_region_sh() { grep -nE '^[[:space:]]*fix-repo\)' "$SH_PATH" || true; }
@@ -42,11 +57,12 @@ region_text()    { printf '%s' "$1" | head -n1 | cut -d: -f2-; }
 
 forbid_in_region() {
   local file="$1" region="$2" pattern="$3" reason="$4"
-  local line text
+  local line text match
   line="$(region_line_no "$region")"
   text="$(region_text "$region")"
-  printf '%s' "$text" | grep -qE -e "$pattern" || return 0
-  record_finding "$file" "$line" "FORBIDDEN" "$reason" "$text"
+  match="$(printf '%s' "$text" | { grep -oE -e "$pattern" || true; } | head -n1)"
+  [ -n "$match" ] || return 0
+  record_finding "$file" "$line" "FORBIDDEN" "$reason" "$pattern" "$match" "$text"
 }
 
 require_in_region() {
@@ -55,7 +71,7 @@ require_in_region() {
   line="$(region_line_no "$region")"
   text="$(region_text "$region")"
   printf '%s' "$text" | grep -qE -e "$pattern" && return 0
-  record_finding "$file" "$line" "MISSING" "$reason" "$text"
+  record_finding "$file" "$line" "MISSING" "$reason" "$pattern" "(no match — required pattern absent)" "$text"
 }
 
 [ -f "$SH_PATH" ] || { echo "::error file=$SH_REL::run.sh missing" >&2; exit 2; }
@@ -113,13 +129,15 @@ print_summary_table() {
   local count="$1"
   echo
   echo "════════════════════ violation summary ════════════════════"
-  printf '  %-3s  %-12s  %-10s  %s\n' "#" "FILE:LINE" "KIND" "REASON"
-  printf '  %-3s  %-12s  %-10s  %s\n' "---" "------------" "----------" "------"
+  printf '  %-3s  %-13s  %-10s  %s\n' "#" "FILE:LINE" "KIND" "REASON"
+  printf '  %-3s  %-13s  %-10s  %s\n' "---" "-------------" "----------" "------"
   local n=0
-  while IFS=$'\t' read -r file line kind reason snippet; do
+  while IFS=$'\t' read -r file line kind reason pattern match snippet; do
     n=$((n + 1))
-    printf '  %-3s  %-12s  %-10s  %s\n' "$n" "$file:$line" "$kind" "$reason"
-    printf '       └─ %s\n' "$snippet"
+    printf '  %-3s  %-13s  %-10s  %s\n' "$n" "$file:$line" "$kind" "$reason"
+    printf '       │ regex   : %s\n' "$pattern"
+    printf '       │ match   : <<%s>>\n' "$match"
+    printf '       └ snippet : %s\n' "$snippet"
   done < "$FINDINGS_FILE"
   echo "═══════════════════════════════════════════════════════════"
   echo "❌ runner dispatch guard: $count violation(s)"
