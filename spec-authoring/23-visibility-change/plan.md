@@ -39,10 +39,12 @@ Outputs are documents only. No source code touched yet.
 - [x] `run.sh`:  added `visibility` case; forwards `"$@"` to `./visibility-change.sh` via `invoke_visibility`.
 - [x] Updated help tables in both runners (visibility command + flag forwarding block).
 
-## Phase 5 — Tests + sync
+## Phase 5 — Tests + sync ✅
 
-- [ ] Unit tests: arg parsing, provider detection (mock `git remote`),
-      visibility resolution table, exit codes for bad flags.
-- [ ] `npm run sync` to refresh managed mirrors.
-- [ ] Verify `node scripts/sync-spec-tree.mjs` picks up the new folder.
-- [ ] Run linter + full test suite.
+- [x] Unit tests added under `tests/installer/`:
+      - `check-visibility-runner-wiring.sh` — help advertises sub-command, dispatch branches present in both runners.
+      - `check-visibility-arg-parsing.sh` — exit codes 0/2/6 across 6 cases (help, unknown flag, bad `--visible`, no-repo with/without forced target).
+      - `check-visibility-provider-detect.sh` — `resolve_provider` / `resolve_owner_repo` across 10 URL shapes (HTTPS, SCP-SSH, SSH-URL, with/without `.git`, GitHub, gitlab.com, self-hosted allow-listed via `VISIBILITY_GITLAB_HOSTS`, denied self-hosted, Bitbucket rejected, empty URL).
+- [x] All 3 test scripts pass locally.
+- [x] `npm run sync` clean (version 4.24.0, spec tree 614 files / 85 folders / 28 top-level entries).
+- [x] `node scripts/sync-spec-tree.mjs` regenerated `src/data/specTree.json`; `spec-authoring/` is tracked as a top-level node (consistent with `22-fix-repo`; leaf folders are not individually indexed by design).
