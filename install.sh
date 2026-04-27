@@ -233,7 +233,7 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v17}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines" ".lovable/prompts")
 
 # Ref = tag if --version, else branch
 REF="$BRANCH"
