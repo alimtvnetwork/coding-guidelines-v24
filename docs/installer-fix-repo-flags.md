@@ -36,6 +36,51 @@ records the exit code and finish time.
 
 ---
 
+## 1a. Glossary — flag ↔ env-var ↔ precedence
+
+The table below is the **single source of truth** for how each setting is named in Bash, in PowerShell, and as an environment variable — plus what wins when more than one is set. Read this first; the rest of the doc assumes these mappings.
+
+| Setting (semantic)                  | Bash flag                          | PowerShell flag               | Env var                       | Type / accepted values                | Default     | Precedence (highest → lowest) |
+|-------------------------------------|------------------------------------|-------------------------------|-------------------------------|----------------------------------------|-------------|-------------------------------|
+| Log directory                       | `--log-dir DIR`                    | `-LogDir DIR`                 | `INSTALL_LOG_DIR`             | path (absolute or relative to `<DEST>`) | `<DEST>/.install-logs` | CLI flag → env var → default |
+| Max retained `fix-repo` logs        | `--max-fix-repo-logs N`            | `-MaxFixRepoLogs N`           | `INSTALL_MAX_FIX_REPO_LOGS`   | non-negative integer (`0` = disabled)  | `0` (keep all) | CLI flag → env var → default |
+| Auto-run `fix-repo` after install   | `--run-fix-repo`                   | `-RunFixRepo`                 | —                             | boolean switch                         | `false`     | CLI flag only                 |
+| Print log to stdout after run       | `--show-fix-repo-log`              | `-ShowFixRepoLog`             | —                             | boolean switch                         | `false`     | CLI flag only                 |
+| Revert `fix-repo` edits on failure  | `--rollback-on-fix-repo-failure`   | `-RollbackOnFixRepoFailure`   | —                             | boolean switch                         | `false`     | CLI flag only                 |
+| Full rollback (edits + new files)   | `--full-rollback`                  | `-FullRollback`               | —                             | boolean switch (implies the row above) | `false`     | CLI flag only                 |
+| Install destination                 | `--dest DIR`                       | `-Dest DIR`                   | —                             | path                                   | `./` or per-bundle | CLI flag only           |
+
+### Precedence rules in plain English
+
+1. **CLI flag always wins.** If you pass `--max-fix-repo-logs 10` *and* export `INSTALL_MAX_FIX_REPO_LOGS=99`, the installer uses `10`. The env var is consulted **only when the CLI flag is absent**.
+2. **Env vars only exist for the two value-typed settings** above (`INSTALL_LOG_DIR`, `INSTALL_MAX_FIX_REPO_LOGS`). Boolean switches like `--run-fix-repo` or `--rollback-on-fix-repo-failure` have **no env-var fallback** — pass them on the command line every time. This is intentional: a stale exported env var should never silently arm rollback or auto-execute `fix-repo`.
+3. **Empty string ≠ unset.** `INSTALL_LOG_DIR=""` is treated as unset (the installer falls back to the default). To force an empty value, you must explicitly pass `--log-dir ""` (which is then treated as relative path → `<DEST>/`).
+4. **Negative or non-integer `--max-fix-repo-logs` values do not crash the run.** They produce a `Log pruning: SKIPPED (… is not a non-negative integer)` line and pruning is bypassed for that run (see §5.2).
+5. **Naming convention** — env var names are derived mechanically: `INSTALL_` + the flag in `SCREAMING_SNAKE_CASE` with hyphens replaced by underscores. This makes them grep-able and predictable, e.g. `--max-fix-repo-logs` ↔ `INSTALL_MAX_FIX_REPO_LOGS`.
+
+### Worked precedence example
+
+```bash
+export INSTALL_LOG_DIR=/var/log/install
+export INSTALL_MAX_FIX_REPO_LOGS=50
+
+./install.sh \
+  --run-fix-repo \
+  --max-fix-repo-logs 10           # CLI wins → keep 10, ignore env's 50
+                                   # --log-dir not passed → env wins → /var/log/install
+```
+
+Effective settings for that run:
+
+```
+log dir:               /var/log/install        (source: env INSTALL_LOG_DIR)
+max-fix-repo-logs:     10                      (source: CLI --max-fix-repo-logs)
+run-fix-repo:          true                    (source: CLI --run-fix-repo)
+rollback-on-failure:   false                   (source: default — no env fallback exists)
+```
+
+---
+
 ## 2. `--max-fix-repo-logs N` (log retention)
 
 After each `fix-repo` run, the installer prunes
