@@ -563,7 +563,9 @@ run_fix_repo() {
     exit 5
   fi
   confirm_fix_repo "\${script}"
-  log_dir="\${TARGET}/.install-logs"
+  log_dir="\${LOG_DIR}"
+  [[ -z "\${log_dir}" ]] && log_dir="\${TARGET}/.install-logs"
+  case "\${log_dir}" in /*) ;; *) log_dir="\${TARGET}/\${log_dir}" ;; esac
   mkdir -p "\${log_dir}"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
   log_file="\${log_dir}/fix-repo-\${ts}.log"
