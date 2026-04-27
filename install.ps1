@@ -65,6 +65,7 @@ param(
     [switch]$FullRollback,
     [string]$LogDir = "",
     [switch]$ShowFixRepoLog,
+    [int]$MaxFixRepoLogs = -1,
     [string]$PinnedByReleaseInstall = ""
 )
 
