@@ -1,11 +1,23 @@
 # Suggestions
 
-**Version:** 3.14.0
+**Version:** 3.15.0
 **Updated:** 2026-04-27
 
 ---
 
 ## Active Suggestions
+
+### Tree diagnostics: structured-event export
+- **Status:** Pending **Priority:** Low **Added:** 2026-04-27
+- Add a "Download JSON" button to `TreeDiagnosticsPanel` so the user can attach a full structured event log (not just copied console text) when reporting tree-rendering issues. Source: `src/lib/treeDiagnostics.ts`.
+
+### Tree diagnostics: auto-enable on `?debug=tree` query param
+- **Status:** Pending **Priority:** Low **Added:** 2026-04-27
+- Convenience: read `URLSearchParams.get("debug")==="tree"` on first load and flip the localStorage toggle on. Easier to share a debug URL than to ask users to run a console command.
+
+### Unit tests for `treeDiagnostics` ring buffer
+- **Status:** Pending **Priority:** Low **Added:** 2026-04-27
+- Cover: bound enforcement, category filter, snapshot immutability, disabled-state no-op behaviour.
 
 ### Playwright spec for Cmd/Ctrl+J → Spec Overview
 - **Status:** Pending **Priority:** Low **Added:** 2026-04-27
