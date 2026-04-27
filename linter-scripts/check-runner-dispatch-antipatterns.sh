@@ -160,6 +160,8 @@ print_summary_table() {
     printf '  %-3s  %-13s  %-10s  %s\n' "$n" "$file:$line" "$kind" "$reason"
     printf '       │ regex   : %s\n' "$pattern"
     printf '       │ match   : <<%s>>\n' "$match"
+    printf '       │ context (±%s lines):\n' "$CONTEXT_RADIUS"
+    fetch_context "$file" "$line" | sed 's/^/       │/'
     printf '       └ snippet : %s\n' "$snippet"
   done < "$FINDINGS_FILE"
   echo "═══════════════════════════════════════════════════════════"
