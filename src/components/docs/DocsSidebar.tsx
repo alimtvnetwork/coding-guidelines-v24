@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Search, Library, FileText, Download, MoreVertical, ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { downloadFolderAsZip } from "@/lib/downloadUtils";
 import { SpecNodeType, type SpecNode } from "@/types/spec";
 import { cn } from "@/lib/utils";
 import { isLoading, isIdle, isOpen, isClosed } from "@/constants/boolFlags";
+import { treeDiagDebug, treeDiagWarn, TreeDiagCategory } from "@/lib/treeDiagnostics";
 import {
   Sidebar, SidebarContent, SidebarHeader,
   SidebarGroup, SidebarGroupLabel, SidebarGroupContent,
@@ -181,8 +182,40 @@ export function DocsSidebar({ tree, activePath, onSelect, searchQuery, setSearch
   const searchResults = useSpecSearch(allFiles, searchQuery);
   const [folderSignal, setFolderSignal] = useState(0);
 
-  const handleExpandAll = useCallback(() => setFolderSignal(prev => Math.abs(prev) + 1), []);
-  const handleCollapseAll = useCallback(() => setFolderSignal(prev => -(Math.abs(prev) + 1)), []);
+  const handleExpandAll = useCallback(() => {
+    setFolderSignal(prev => {
+      const next = Math.abs(prev) + 1;
+      treeDiagDebug(TreeDiagCategory.Refresh, "Expand all folders", { prev, next });
+
+      return next;
+    });
+  }, []);
+
+  const handleCollapseAll = useCallback(() => {
+    setFolderSignal(prev => {
+      const next = -(Math.abs(prev) + 1);
+      treeDiagDebug(TreeDiagCategory.Refresh, "Collapse all folders", { prev, next });
+
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (tree.length === 0) {
+      treeDiagWarn(TreeDiagCategory.DocsSidebar, "Sidebar received an empty `tree` prop — nothing to render.", { activePath, searchQuery, allFilesCount: allFiles.length });
+
+      return;
+    }
+
+    treeDiagDebug(TreeDiagCategory.DocsSidebar, "Sidebar render", {
+      rootCount: tree.length,
+      rootNames: tree.map((n) => n.name),
+      activePath,
+      searchQuery,
+      searchResultsCount: searchResults.length,
+      folderSignal,
+    });
+  }, [tree, activePath, searchQuery, searchResults.length, folderSignal, allFiles.length]);
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">

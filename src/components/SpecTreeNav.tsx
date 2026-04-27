@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import type { SpecNode } from "@/types/spec";
 import { downloadFolderAsZip } from "@/lib/downloadUtils";
 import { isLoading, isIdle } from "@/constants/boolFlags";
+import { treeDiagDebug, TreeDiagCategory } from "@/lib/treeDiagnostics";
 import {
   SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuSub,
 } from "@/components/ui/sidebar";
@@ -21,6 +22,16 @@ interface SpecTreeNavProps {
 }
 
 export function SpecTreeNav({ nodes, activePath, onSelect, depth = 0, folderSignal = 0 }: SpecTreeNavProps) {
+  useEffect(() => {
+    if (depth !== 0) return;
+
+    treeDiagDebug(TreeDiagCategory.SpecTreeNav, "Root list render", {
+      nodeCount: nodes.length,
+      rootNames: nodes.map((n) => n.name),
+      folderSignal,
+    });
+  }, [nodes, depth, folderSignal]);
+
   return (
     <SidebarMenu>
       {nodes.map((node) => (
