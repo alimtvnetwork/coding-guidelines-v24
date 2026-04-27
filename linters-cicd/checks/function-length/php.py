@@ -13,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _lib.cli import build_parser, parse_exclude_paths
+from _lib.effective_lines import count_effective as _count_effective_shared
 from _lib.per_file_timeout import PerFileTimeout, per_file_timeout
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
@@ -64,15 +65,10 @@ def scan(path: Path, root: str) -> list[Finding]:
 
 
 def _count_effective(body: list[str]) -> int:
-    count = 0
-    for line in body:
-        stripped = line.strip()
-        if not stripped:
-            continue
-        if stripped.startswith("//") or stripped.startswith("#") or stripped.startswith("*"):
-            continue
-        count += 1
-    return count
+    """Thin wrapper kept for backwards-compat with CODE-RED-005's
+    ``load_sibling`` callers. The single source of truth lives in
+    ``linters-cicd/checks/_lib/effective_lines.py``."""
+    return _count_effective_shared(body, "php")
 
 
 def main() -> int:
