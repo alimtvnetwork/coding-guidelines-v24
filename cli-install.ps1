@@ -400,21 +400,36 @@ Verify-Install
 
 function Invoke-FixRepo {
     # Auto-execute the freshly installed fix-repo.ps1 so the repo is
-    # patched in the same invocation. Failures propagate as exit 5
-    # (spec §8: "inner installer / handoff rejected").
+    # patched in the same invocation. Streams stdout+stderr to a
+    # timestamped log under <Target>/.install-logs/. Failures
+    # propagate as exit 5 (spec §8: "inner installer / handoff rejected").
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
         exit 5
     }
+    $logDir = Join-Path $Target ".install-logs"
+    if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+    $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+    $logFile = Join-Path $logDir "fix-repo-$ts.log"
+    @(
+        "# fix-repo log",
+        "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
+        "# script:   $script",
+        "# target:   $Target",
+        "# ──────────────────────────────────────────────────────────"
+    ) | Set-Content -LiteralPath $logFile -Encoding UTF8
     Write-Host ""
     Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
-    & $script
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ fix-repo.ps1 failed (exit $LASTEXITCODE)" -ForegroundColor Red
+    Write-Host "  ▸ log: $logFile" -ForegroundColor Cyan
+    & $script 2>&1 | Tee-Object -FilePath $logFile -Append
+    $rc = $LASTEXITCODE
+    Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($rc -ne 0) {
+        Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
         exit 5
     }
-    Write-Host "  ✓ fix-repo completed" -ForegroundColor Green
+    Write-Host "  ✓ fix-repo completed (log: $logFile)" -ForegroundColor Green
 }
 
 if ($RunFixRepo) { Invoke-FixRepo }

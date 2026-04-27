@@ -380,14 +380,28 @@ try {
             Write-Err "-RunFixRepo: $fixScript not found after install."
             exit 5
         }
+        $logDir = Join-Path $Dest ".install-logs"
+        if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+        $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+        $logFile = Join-Path $logDir "fix-repo-$ts.log"
+        @(
+            "# fix-repo log",
+            "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
+            "# script:   $fixScript",
+            "# dest:     $Dest",
+            "# ──────────────────────────────────────────────────────────"
+        ) | Set-Content -LiteralPath $logFile -Encoding UTF8
         Write-Host ""
         Write-Step "Running fix-repo: $fixScript"
-        & $fixScript
-        if ($LASTEXITCODE -ne 0) {
-            Write-Err "fix-repo.ps1 failed (exit $LASTEXITCODE)"
+        Write-Step "Log: $logFile"
+        & $fixScript 2>&1 | Tee-Object -FilePath $logFile -Append
+        $rc = $LASTEXITCODE
+        Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+        if ($rc -ne 0) {
+            Write-Err "fix-repo.ps1 failed (exit $rc) — see $logFile"
             exit 5
         }
-        Write-OK "fix-repo completed"
+        Write-OK "fix-repo completed (log: $logFile)"
     }
 
     # ── Summary ───────────────────────────────────────────────────

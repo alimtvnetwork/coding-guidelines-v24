@@ -524,9 +524,10 @@ verify_install
 run_fix_repo() {
   # Auto-execute the freshly installed fix-repo script so the repo is
   # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
-  # Cygwin, MINGW), .sh elsewhere. Failures propagate as exit 5
-  # (spec §8: "inner installer / handoff rejected").
-  local script
+  # Cygwin, MINGW), .sh elsewhere. Streams stdout+stderr to a
+  # timestamped log under <TARGET>/.install-logs/. Failures propagate
+  # as exit 5 (spec §8: "inner installer / handoff rejected").
+  local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
     MINGW*|MSYS*|CYGWIN*) script="\${TARGET}/fix-repo.ps1" ;;
     *)                    script="\${TARGET}/fix-repo.sh"  ;;
@@ -535,24 +536,47 @@ run_fix_repo() {
     echo "❌ --run-fix-repo: \${script} not found after install." >&2
     exit 5
   fi
+  log_dir="\${TARGET}/.install-logs"
+  mkdir -p "\${log_dir}"
+  ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  log_file="\${log_dir}/fix-repo-\${ts}.log"
+  {
+    echo "# fix-repo log"
+    echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "# script:   \${script}"
+    echo "# target:   \${TARGET}"
+    echo "# ──────────────────────────────────────────────────────────"
+  } > "\${log_file}"
   echo ""
   echo "  ▸ running fix-repo: \${script}"
+  echo "  ▸ log: \${log_file}"
+  set +e
   case "\${script}" in
     *.ps1)
       if command -v pwsh >/dev/null 2>&1; then
-        pwsh -NoProfile -ExecutionPolicy Bypass -File "\${script}" || { echo "❌ fix-repo.ps1 failed (exit $?)" >&2; exit 5; }
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "\${script}" 2>&1 | tee -a "\${log_file}"
+        rc=\${PIPESTATUS[0]}
       elif command -v powershell >/dev/null 2>&1; then
-        powershell -NoProfile -ExecutionPolicy Bypass -File "\${script}" || { echo "❌ fix-repo.ps1 failed (exit $?)" >&2; exit 5; }
+        powershell -NoProfile -ExecutionPolicy Bypass -File "\${script}" 2>&1 | tee -a "\${log_file}"
+        rc=\${PIPESTATUS[0]}
       else
+        set -e
         echo "❌ --run-fix-repo: neither pwsh nor powershell found in PATH." >&2
         exit 5
       fi
       ;;
     *)
-      bash "\${script}" || { echo "❌ fix-repo.sh failed (exit $?)" >&2; exit 5; }
+      bash "\${script}" 2>&1 | tee -a "\${log_file}"
+      rc=\${PIPESTATUS[0]}
       ;;
   esac
-  echo "  ✓ fix-repo completed"
+  set -e
+  echo "# exit: \${rc}  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "\${log_file}"
+  if [[ "\${rc}" -ne 0 ]]; then
+    echo "❌ fix-repo failed (exit \${rc}) — see \${log_file}" >&2
+    exit 5
+  fi
+  echo "  ✓ fix-repo completed (log: \${log_file})"
 }
 
 \${RUN_FIX_REPO} && run_fix_repo
@@ -973,21 +997,36 @@ Verify-Install
 
 function Invoke-FixRepo {
     # Auto-execute the freshly installed fix-repo.ps1 so the repo is
-    # patched in the same invocation. Failures propagate as exit 5
-    # (spec §8: "inner installer / handoff rejected").
+    # patched in the same invocation. Streams stdout+stderr to a
+    # timestamped log under <Target>/.install-logs/. Failures
+    # propagate as exit 5 (spec §8: "inner installer / handoff rejected").
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
         exit 5
     }
+    $logDir = Join-Path $Target ".install-logs"
+    if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+    $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+    $logFile = Join-Path $logDir "fix-repo-$ts.log"
+    @(
+        "# fix-repo log",
+        "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
+        "# script:   $script",
+        "# target:   $Target",
+        "# ──────────────────────────────────────────────────────────"
+    ) | Set-Content -LiteralPath $logFile -Encoding UTF8
     Write-Host ""
     Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
-    & $script
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ fix-repo.ps1 failed (exit $LASTEXITCODE)" -ForegroundColor Red
+    Write-Host "  ▸ log: $logFile" -ForegroundColor Cyan
+    & $script 2>&1 | Tee-Object -FilePath $logFile -Append
+    $rc = $LASTEXITCODE
+    Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($rc -ne 0) {
+        Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
         exit 5
     }
-    Write-Host "  ✓ fix-repo completed" -ForegroundColor Green
+    Write-Host "  ✓ fix-repo completed (log: $logFile)" -ForegroundColor Green
 }
 
 if ($RunFixRepo) { Invoke-FixRepo }
