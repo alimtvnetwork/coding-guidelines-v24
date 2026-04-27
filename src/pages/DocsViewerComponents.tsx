@@ -2,7 +2,7 @@
  * Sub-components extracted from DocsViewer for file-size compliance.
  */
 import React, { useEffect } from "react";
-import { Search } from "lucide-react";
+import { Search, BookOpen } from "lucide-react";
 import { HtmlTag } from "@/constants/htmlTags";
 import { KeyboardKeyType } from "@/constants/enums";
 import { MonacoMarkdownEditor } from "@/components/MonacoMarkdownEditor";
@@ -45,6 +45,23 @@ function SearchButton({ onClick }: { onClick: () => void }) {
       <Search className="h-4 w-4 shrink-0" />
       <span className="truncate">Search docs…</span>
       <kbd className="ml-auto hidden sm:inline-flex items-center gap-0.5 rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground shrink-0">{shortcut}</kbd>
+    </button>
+  );
+}
+
+function SpecOverviewButton({ onClick }: { onClick: () => void }) {
+  const isMac = navigator.platform.toUpperCase().includes("MAC");
+  const shortcut = isMac ? "⌘J" : "Ctrl+J";
+
+  return (
+    <button
+      onClick={onClick}
+      title="Jump to spec/00-overview.md (works even if the sidebar tree is stale)"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary transition-colors text-sm font-medium shrink-0"
+    >
+      <BookOpen className="h-4 w-4 shrink-0" />
+      <span className="hidden md:inline truncate">Spec Overview</span>
+      <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-primary/40 bg-background/60 px-1.5 py-0.5 text-[10px] font-mono shrink-0">{shortcut}</kbd>
     </button>
   );
 }
