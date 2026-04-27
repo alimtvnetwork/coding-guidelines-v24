@@ -88,6 +88,10 @@ if (-not $FullRollback) {
 if ($FullRollback) { $RollbackOnFixRepoFailure = $true }
 if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
 if (-not $LogDir) { $LogDir = "" }
+if (-not $ShowFixRepoLog) {
+    $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
+    if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
+}
 
 # Bookkeeping for rollback.
 $Script:InstalledNew = New-Object System.Collections.Generic.List[string]
