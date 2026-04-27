@@ -465,7 +465,12 @@ try {
                 Write-Step ("Rollback armed: HEAD={0}{1}" -f $Script:PreFixRepoHead, $(if ($FullRollback) { ', full-rollback=on' } else { '' }))
             }
         }
-        $logDir = Join-Path $Dest ".install-logs"
+        if ($LogDir) {
+            if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
+            else { $logDir = Join-Path $Dest $LogDir }
+        } else {
+            $logDir = Join-Path $Dest ".install-logs"
+        }
         if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
         $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
         $logFile = Join-Path $logDir "fix-repo-$ts.log"
