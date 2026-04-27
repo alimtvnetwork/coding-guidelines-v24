@@ -70,7 +70,7 @@ assert_absent "$RUN_PS1" '$args -join' "no @args join-then-split in run.ps1"
 for token in '--2' '--3' '--5' '--all' '--dry-run' '--verbose'; do
   assert_contains "$HELP_SH" "$token" "runner-help.txt lists Bash token $token"
 done
-for token in '-2' '-3' '-5' '-all' '-DryRun' '-Verbose'; do
+for token in '-2' '-3' '-5' '-All' '-DryRun' '-Verbose'; do
   assert_contains "$HELP_PS" "$token" "runner-help.ps.txt lists PS token $token"
 done
 
