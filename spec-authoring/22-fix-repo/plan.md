@@ -46,12 +46,12 @@ Outputs are documents only. No source code touched yet.
 - [x] Confirmed zero remaining `coding-guidelines-v(16|17)` matches via `rg`.
 - [x] No `npm run sync` needed — no derived files changed (zero rewrites this phase).
 
-## Phase 5 — Install / setup docs
+## Phase 5 — Install / setup docs  ✅
 
-- [ ] Add a "Repo version migration" subsection to `readme.md` install area (or wherever the existing install scripts are documented).
-- [ ] Show 4 examples: default, `-3`, `-all`, `--dry-run`.
-- [ ] Cross-link to `spec-authoring/22-fix-repo/01-spec.md`.
-- [ ] Re-run `npm run sync` after edits.
+- [x] Added "Repo version migration — fix-repo" subsection to `readme.md` under Full-Repo Install Scripts.
+- [x] 6 examples shown across both shells (default, `-3`/`--3` dry-run, `-all`/`--all` verbose).
+- [x] Cross-linked to `spec-authoring/22-fix-repo/01-spec.md`.
+- [x] `npm run sync` skipped — readme is a source file, no derived mirrors affected.
 
 ## Phase 6 — Verification + dry-run capture
 
