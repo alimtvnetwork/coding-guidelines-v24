@@ -155,63 +155,26 @@ else
 fi
 
 # =====================================================================
-printf '\nT3: install-config.json declares 4 canonical folders (Task 10)\n'
-if bash "$HERE/check-install-folders-config.sh" >/dev/null 2>&1; then
-    pass "install-config.json declares spec/linters/linter-scripts/linters-cicd"
-else
-    fail "install-config.json missing one of the 4 canonical folders"
-fi
+# =====================================================================
+# T3+ — every check-*.sh in this directory, discovered dynamically.
+# Each script is self-contained: exit 0 = pass, non-zero = fail.
+# To add a new check, just drop a `check-<name>.sh` here.
+# =====================================================================
+shopt -s nullglob
+checks=("$HERE"/check-*.sh)
+shopt -u nullglob
 
-printf '\nT4: ./run.sh slides sub-command wired (Task 09)\n'
-if bash "$HERE/check-run-slides-help.sh" >/dev/null 2>&1; then
-    pass "run.sh advertises and dispatches the slides sub-command"
-else
-    fail "run.sh slides sub-command not wired"
-fi
-
-printf '\nT5: linters-cicd/install.ps1 -h/--help exits 0 with no network calls\n'
-if bash "$HERE/check-install-ps1-help.sh" >/dev/null 2>&1; then
-    pass "install.ps1 -Help / -h / --help exit 0 and never probe the network"
-else
-    # Treat as soft-skip when pwsh is unavailable — the check itself returns 0
-    # in that case, so reaching this branch means a real failure.
-    fail "install.ps1 help variants either non-zero, missing usage, or made network calls"
-fi
-
-printf '\nT6: ./run.sh visibility sub-command wired (Phase 4 of 23-visibility-change)\n'
-if bash "$HERE/check-visibility-runner-wiring.sh" >/dev/null 2>&1; then
-    pass "run.sh + run.ps1 advertise and dispatch the visibility sub-command"
-else
-    fail "visibility sub-command not wired in both runners"
-fi
-
-printf '\nT7: visibility-change.sh argument-parsing exit codes (Phase 5)\n'
-if bash "$HERE/check-visibility-arg-parsing.sh" >/dev/null 2>&1; then
-    pass "visibility-change.sh exits 0/2/6 across 6 arg-parse cases"
-else
-    fail "visibility-change.sh arg-parse exit codes regressed"
-fi
-
-printf '\nT8: visibility-change provider/slug detection (Phase 5)\n'
-if bash "$HERE/check-visibility-provider-detect.sh" >/dev/null 2>&1; then
-    pass "resolve_provider/resolve_owner_repo correct across 10 URL shapes"
-else
-    fail "provider/slug resolution regressed"
-fi
-
-printf '\nT9: ./run.sh fix-repo sub-command wired (carry-over Phase 7 of 22-fix-repo)\n'
-if bash "$HERE/check-fix-repo-runner-wiring.sh" >/dev/null 2>&1; then
-    pass "run.sh + run.ps1 advertise and dispatch the fix-repo sub-command"
-else
-    fail "fix-repo sub-command not wired in both runners"
-fi
-
-printf '\nT10: fix-repo rewrites tokens inside URLs; hosts preserved (mem://features/fix-repo-url-handling)\n'
-if bash "$HERE/check-fix-repo-url-rewrite.sh" >/dev/null 2>&1; then
-    pass "URL-embedded tokens rewritten; hosts preserved; -v10 numeric guard holds"
-else
-    fail "fix-repo URL-rewrite or numeric guard regressed"
-fi
+n=2
+for check in "${checks[@]}"; do
+  n=$((n + 1))
+  name="$(basename "$check" .sh)"
+  printf '\nT%d: %s\n' "$n" "$name"
+  if bash "$check" >/dev/null 2>&1; then
+    pass "$name"
+  else
+    fail "$name (see: bash $check)"
+  fi
+done
 
 # =====================================================================
 printf '\n────────────────────────────────────────────\n'
