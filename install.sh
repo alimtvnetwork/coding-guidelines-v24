@@ -73,6 +73,8 @@ $FULL_ROLLBACK && ROLLBACK_ON_FIX_FAIL=true   # full implies edits
 LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → $DEST/.install-logs (default)
 SHOW_FIX_REPO_LOG="${INSTALL_SHOW_FIX_REPO_LOG:-false}"
 case "$SHOW_FIX_REPO_LOG" in 1|true|TRUE|yes|YES) SHOW_FIX_REPO_LOG=true ;; *) SHOW_FIX_REPO_LOG=false ;; esac
+MAX_FIX_REPO_LOGS="${INSTALL_MAX_FIX_REPO_LOGS:-0}"
+[[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || MAX_FIX_REPO_LOGS=0
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
