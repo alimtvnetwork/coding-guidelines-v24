@@ -8,8 +8,10 @@ These guidelines apply to all code generated or modified in this project. Read t
    *Enforcement:* **CODE-RED-005** (build-failing `error`). Any function
    body whose effective line count exceeds 8 fails CI. CODE-RED-004
    remains as a redundant >15-line safety net at the same severity.
-   See [`spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`](../../spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md)
-   for the coordinated tier table.
+   **Canonical thresholds, counting rules, and per-language detector
+   behavior:** [`linters-cicd/checks/function-length-prefer8/README.md`](../../linters-cicd/checks/function-length-prefer8/README.md)
+   (single source of truth). Coordinated tier table also lives in
+   [`spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`](../../spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md).
 
 2. No nested `if` statements.
 
