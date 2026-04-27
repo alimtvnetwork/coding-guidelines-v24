@@ -112,6 +112,7 @@ RUN_FIX_REPO="\${INSTALL_RUN_FIX_REPO:-false}"
 case "\${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 ASSUME_YES="\${INSTALL_FIX_REPO_YES:-false}"
 case "\${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
+LOG_DIR="\${INSTALL_LOG_DIR:-}"   # empty → \${TARGET}/.install-logs (default)
 
 usage() {
   cat <<HELP
