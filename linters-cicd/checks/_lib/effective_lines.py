@@ -37,6 +37,12 @@ class CommentSyntax:
     docstring_tokens: tuple[str, ...] = ()  # Python only
 
 
+# Python docstring delimiters — kept as a module-level constant so the
+# string-literal tokens don't appear inline inside SYNTAX (which would
+# trip up tokenizers that get confused by adjacent triple-quote runs).
+_PY_DOCSTRING = (chr(34) * 3, chr(39) * 3)
+
+
 # Single registry — every supported language goes through here.
 SYNTAX: dict[str, CommentSyntax] = {
     "go":         CommentSyntax(line_tokens=("//",),         block_open="/*", block_close="*/"),
@@ -45,7 +51,7 @@ SYNTAX: dict[str, CommentSyntax] = {
     "rust":       CommentSyntax(line_tokens=("//", "///"),   block_open="/*", block_close="*/"),
     "php":        CommentSyntax(line_tokens=("//", "#"),     block_open="/*", block_close="*/"),
     "python":     CommentSyntax(line_tokens=("#",),          block_open=None, block_close=None,
-                                docstring_tokens=('"""', "'''")),
+                                docstring_tokens=_PY_DOCSTRING),
 }
 
 
