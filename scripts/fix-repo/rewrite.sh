@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Rewrite engine for fix-repo.sh
+# Rewrite engine for fix-repo.sh — pure POSIX (awk/sed), no perl dependency.
 
 # Echoes space-separated target versions
 get_target_versions() {
@@ -11,35 +11,61 @@ get_target_versions() {
   seq "$start" "$end" | tr '\n' ' '
 }
 
-# Echoes a Perl regex matching {base}-v{n} not followed by a digit
-build_pattern() {
-  local base="$1" n="$2"
-  local escaped
-  escaped="$(printf '%s' "$base-v$n" | perl -pe 's/([\\\.\^\$\*\+\?\(\)\[\]\{\}\|])/\\\1/g')"
-  printf '%s(?!\\d)' "$escaped"
+# Counts literal-token occurrences NOT followed by a digit, in $1.
+# Args: file base n
+count_token_occurrences() {
+  local file="$1" base="$2" n="$3"
+  local token="$base-v$n"
+  awk -v tok="$token" '
+    BEGIN { tlen = length(tok); total = 0 }
+    {
+      line = $0
+      while ((p = index(line, tok)) > 0) {
+        next_char = substr(line, p + tlen, 1)
+        if (next_char !~ /[0-9]/) { total++ }
+        line = substr(line, p + tlen)
+      }
+    }
+    END { print total }
+  ' "$file"
 }
 
-# Echoes the number of replacements made; writes file unless DRY=1
+# Rewrites $1 in place via a temp file. Args: file base n current
+substitute_token_in_file() {
+  local file="$1" base="$2" n="$3" current="$4"
+  local token="$base-v$n"
+  local replacement="$base-v$current"
+  local tmp; tmp="$(mktemp)"
+  awk -v tok="$token" -v rep="$replacement" '
+    BEGIN { tlen = length(tok) }
+    {
+      out = ""; line = $0
+      while ((p = index(line, tok)) > 0) {
+        next_char = substr(line, p + tlen, 1)
+        if (next_char !~ /[0-9]/) {
+          out = out substr(line, 1, p - 1) rep
+        } else {
+          out = out substr(line, 1, p + tlen - 1)
+        }
+        line = substr(line, p + tlen)
+      }
+      print out line
+    }
+  ' "$file" > "$tmp"
+  mv "$tmp" "$file"
+}
+
+# Rewrites all targets in $1, echoes total replacement count.
+# Args: path base current dry n1 [n2 ...]
 rewrite_file() {
   local path="$1" base="$2" current="$3" dry="$4"; shift 4
-  local targets=("$@")
-  local total=0
-  local tmp
-  tmp="$(mktemp)"
-  cp "$path" "$tmp"
-  local n pattern replacement count
-  replacement="$base-v$current"
-  for n in "${targets[@]}"; do
-    pattern="$(build_pattern "$base" "$n")"
-    count="$(perl -ne "while(/$pattern/g){print qq(x\n)}" "$tmp" | wc -l | tr -d ' ')"
-    if [ "$count" -gt 0 ]; then
-      perl -i -pe "s/$pattern/$replacement/g" "$tmp"
-      total=$((total + count))
+  local total=0 n count
+  for n in "$@"; do
+    count="$(count_token_occurrences "$path" "$base" "$n")"
+    if [ "$count" -gt 0 ] && [ "$dry" != "1" ]; then
+      substitute_token_in_file "$path" "$base" "$n" "$current"
     fi
+    total=$((total + count))
   done
-  if [ "$total" -gt 0 ] && [ "$dry" != "1" ]; then
-    cp "$tmp" "$path"
-  fi
-  rm -f "$tmp"
   printf '%s' "$total"
 }
