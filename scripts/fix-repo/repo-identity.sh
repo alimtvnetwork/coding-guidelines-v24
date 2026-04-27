@@ -15,16 +15,18 @@ get_remote_url() {
 # Sets globals: PARSED_HOST, PARSED_OWNER, PARSED_REPO
 parse_remote_url() {
   local url="$1"
-  local re_https='^https?://([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+?)(\.git)?(/.*)?$'
-  local re_scp='^git@([^:]+):([^/]+)/([^/]+?)(\.git)?$'
-  local re_ssh='^ssh://git@([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+?)(\.git)?$'
-  if [[ "$url" =~ $re_https ]]; then
+  local re_https='^https?://([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+)$'
+  local re_scp='^git@([^:]+):([^/]+)/([^/]+)$'
+  local re_ssh='^ssh://git@([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+)$'
+  local trimmed="${url%/}"
+  trimmed="${trimmed%.git}"
+  if [[ "$trimmed" =~ $re_https ]]; then
     PARSED_HOST="${BASH_REMATCH[1]}"; PARSED_OWNER="${BASH_REMATCH[3]}"; PARSED_REPO="${BASH_REMATCH[4]}"; return 0
   fi
-  if [[ "$url" =~ $re_scp ]]; then
+  if [[ "$trimmed" =~ $re_scp ]]; then
     PARSED_HOST="${BASH_REMATCH[1]}"; PARSED_OWNER="${BASH_REMATCH[2]}"; PARSED_REPO="${BASH_REMATCH[3]}"; return 0
   fi
-  if [[ "$url" =~ $re_ssh ]]; then
+  if [[ "$trimmed" =~ $re_ssh ]]; then
     PARSED_HOST="${BASH_REMATCH[1]}"; PARSED_OWNER="${BASH_REMATCH[3]}"; PARSED_REPO="${BASH_REMATCH[4]}"; return 0
   fi
   return 1
