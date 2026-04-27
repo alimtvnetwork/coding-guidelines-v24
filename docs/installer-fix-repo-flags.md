@@ -156,6 +156,78 @@ A safe CI recipe:
 
 ---
 
+## 4a. GitHub Actions snippet (drop-in)
+
+Runs the installer with `--run-fix-repo`, prunes to the newest 20 logs, and uploads the entire log directory as a build artifact named `fix-repo-logs-*` — even when the job fails, so you can post-mortem the failing run.
+
+````yaml
+# .github/workflows/install-and-fix-repo.yml
+name: Install + fix-repo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install-and-fix-repo:
+    name: Install and run fix-repo (with log pruning)
+    runs-on: ubuntu-latest
+    env:
+      INSTALL_LOG_DIR: ${{ runner.temp }}/install-logs
+      INSTALL_MAX_FIX_REPO_LOGS: '20'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Run installer + fix-repo (Bash)
+        if: runner.os != 'Windows'
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh \
+            | bash -s -- \
+                --run-fix-repo \
+                --rollback-on-fix-repo-failure \
+                --max-fix-repo-logs "$INSTALL_MAX_FIX_REPO_LOGS" \
+                --show-fix-repo-log \
+                --log-dir "$INSTALL_LOG_DIR"
+
+      - name: Run installer + fix-repo (PowerShell)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.ps1 `
+            -OutFile install.ps1
+          .\install.ps1 `
+            -RunFixRepo `
+            -RollbackOnFixRepoFailure `
+            -MaxFixRepoLogs ([int]$env:INSTALL_MAX_FIX_REPO_LOGS) `
+            -ShowFixRepoLog `
+            -LogDir $env:INSTALL_LOG_DIR
+
+      - name: Upload fix-repo logs
+        if: always()        # capture logs on success AND failure
+        uses: actions/upload-artifact@v4
+        with:
+          name: fix-repo-logs-${{ runner.os }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/install-logs/fix-repo-*.log
+          if-no-files-found: warn
+          retention-days: 14
+````
+
+### What this snippet guarantees
+
+- **Reproducible log location** — `INSTALL_LOG_DIR` is set once and reused by both the installer and the upload step, so the artifact path can never drift.
+- **Bounded disk use** — `--max-fix-repo-logs 20` keeps history short on long-running self-hosted runners; on hosted runners (fresh VM each run) only the current run's log exists, which still uploads cleanly.
+- **Always-uploaded forensics** — `if: always()` runs the upload step even after a non-zero installer exit, and pruning runs **before** rollback (see §4) so the failing run's log is guaranteed to survive into the artifact.
+- **Cross-platform parity** — same flag semantics in Bash and PowerShell; add `windows-latest` to a matrix without changing anything else.
+
+---
+
 ## 5. Related references
 
 - Installer behavior contract:
