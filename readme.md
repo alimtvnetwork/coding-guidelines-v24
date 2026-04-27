@@ -299,12 +299,20 @@ Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `
 <details>
 <summary><strong>wp</strong> — WordPress Plugin How-To Spec · script: <a href="wp-install.sh"><code>wp-install.sh</code></a> / <a href="wp-install.ps1"><code>wp-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/18-wp-plugin-how-to`.
