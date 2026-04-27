@@ -1,0 +1,26 @@
+Usage: ci-runner.sh --phase <check|lint|test|all> [--guard <name>] [options]
+
+Phases group related guards from spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/:
+  check  -> forbidden-names, naming-baseline, collisions  (Patterns 01, 02, 03)
+  lint   -> lint-diff, lint-suggest                       (Patterns 04, 05)
+  test   -> test-summary                                  (Pattern 06)
+  all    -> every guard above, in declared order
+
+Options:
+  --phase <name>          Required. One of: check, lint, test, all.
+  --guard <name>          Optional. Run a single guard by name.
+  --config <path>         Optional. Load ci-guards.yaml/.json (Pattern 08).
+  --source-dir <path>     Source directory for check-phase guards.
+  --baseline <path>       Baseline file (naming-baseline, lint-diff).
+  --results-dir <path>    Matrix results directory (test-summary).
+  --json <path>           Emit machine-readable summary to <path>.
+  --fix                   Regenerate baseline (naming-baseline only).
+  --scripts-dir <path>    Where guard scripts live (default: .github/scripts).
+  --verbose               Print diagnostic messages to stderr.
+  --help                  Show this message.
+
+Exit codes:
+   0  All selected guards passed.
+   1  At least one guard reported a violation.
+   2  Tool error (missing dependency, unreadable input).
+  64  Usage error (bad flags).
