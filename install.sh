@@ -520,6 +520,51 @@ confirm_fix_repo() {
   warn "fix-repo skipped by user — exiting with code 5."
   exit 5
 }
+snapshot_pre_fix_repo() {
+  # Capture HEAD ref of the destination repo so we can restore tracked
+  # files via `git checkout HEAD -- .` if fix-repo fails.
+  PRE_FIX_REPO_HEAD=""
+  $ROLLBACK_ON_FIX_FAIL || return 0
+  if ! git -C "$DEST" rev-parse --git-dir >/dev/null 2>&1; then
+    warn "--rollback-on-fix-repo-failure: $DEST is not a git repo; rollback disabled."
+    ROLLBACK_ON_FIX_FAIL=false
+    return 0
+  fi
+  PRE_FIX_REPO_HEAD="$(git -C "$DEST" rev-parse HEAD 2>/dev/null || true)"
+  step "Rollback armed: HEAD=$PRE_FIX_REPO_HEAD${FULL_ROLLBACK:+, full-rollback=on}"
+}
+
+restore_fix_repo_edits() {
+  step "Restoring tracked files from HEAD..."
+  git -C "$DEST" checkout -- . 2>&1 | tee -a "$1" || warn "git checkout reported issues"
+  ok "fix-repo edits reverted"
+}
+
+restore_installed_paths() {
+  local target backup pair removed=0 restored=0
+  step "Removing files created by this install run..."
+  for target in "${INSTALLED_NEW[@]}"; do
+    [[ -e "$target" ]] || continue
+    rm -f "$target" && ((removed++)) || warn "could not remove $target"
+  done
+  step "Restoring overwritten files from backups..."
+  for pair in "${INSTALLED_BACKUPS[@]}"; do
+    target="${pair%%|*}"; backup="${pair##*|}"
+    [[ -f "$backup" ]] || continue
+    cp -f "$backup" "$target" && ((restored++)) || warn "could not restore $target"
+  done
+  ok "Removed $removed new file(s); restored $restored overwritten file(s)"
+}
+
+perform_rollback() {
+  local log="$1"
+  echo ""
+  warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+  restore_fix_repo_edits "$log"
+  $FULL_ROLLBACK && restore_installed_paths
+  warn "Rollback complete. Snapshot kept at: ${ROLLBACK_DIR:-<none>}"
+}
+
 run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
@@ -531,6 +576,7 @@ run_fix_repo() {
     exit 5
   fi
   confirm_fix_repo "$script"
+  snapshot_pre_fix_repo
   log_dir="$DEST/.install-logs"
   mkdir -p "$log_dir"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -543,6 +589,7 @@ run_fix_repo() {
     echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "# script:   $script"
     echo "# dest:     $DEST"
+    echo "# rollback: on-failure=$ROLLBACK_ON_FIX_FAIL  full=$FULL_ROLLBACK"
     echo "# ──────────────────────────────────────────────────────────"
   } > "$log_file"
   set +e
@@ -569,6 +616,7 @@ run_fix_repo() {
   echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
   if [[ "$rc" -ne 0 ]]; then
     err "fix-repo failed (exit $rc) — see $log_file"
+    $ROLLBACK_ON_FIX_FAIL && perform_rollback "$log_file"
     exit 5
   fi
   ok "fix-repo completed (log: $log_file)"
