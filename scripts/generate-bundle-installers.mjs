@@ -209,6 +209,10 @@ while [[ $# -gt 0 ]]; do
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
+    --max-fix-repo-logs)
+      MAX_FIX_REPO_LOGS="$2"
+      [[ "\${MAX_FIX_REPO_LOGS}" =~ ^[0-9]+$ ]] || { echo "❌ --max-fix-repo-logs requires a non-negative integer (got: $2)" >&2; exit 1; }
+      shift 2 ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
