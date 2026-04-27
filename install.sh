@@ -233,7 +233,12 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v18}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines" ".lovable/prompts")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines")
+
+# Top-level files always pulled alongside the folders. These are repo-root
+# scripts (not contained in any installed folder) that users need locally to
+# run repository hygiene tasks (fix-repo) and visibility toggles.
+TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1")
 
 # Ref = tag if --version, else branch
 REF="$BRANCH"
@@ -405,6 +410,19 @@ merge_folder() {
 
 for folder in "${FOLDERS[@]}"; do
   merge_folder "$folder"
+done
+
+# Top-level files: copy each from the archive root into DEST (same name).
+# Missing files are warned (not fatal) so installer remains forward-compatible
+# with repos that omit a script.
+for tlf in "${TOP_LEVEL_FILES[@]}"; do
+  src="$ARCHIVE_ROOT/$tlf"
+  if [[ ! -f "$src" ]]; then
+    warn "Top-level file '$tlf' not found in $REPO@$REF — skipping"
+    continue
+  fi
+  step "Merging file: $tlf"
+  merge_file "$src" "$DEST/$tlf"
 done
 
 # ── Summary ───────────────────────────────────────────────────────

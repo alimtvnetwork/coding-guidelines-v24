@@ -98,7 +98,10 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
 $BundleName = "consolidated"
-$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines"
+$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines,.lovable/coding-guidelines|.lovable/coding-guidelines"
+# Top-level files copied verbatim from archive root → Target. Repo hygiene
+# scripts (fix-repo) and visibility toggles must ship with every bundle.
+$BundleTopLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1")
 $ArchiveStableName = "consolidated"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v18/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v18"
@@ -203,6 +206,17 @@ function Copy-Mapping {
         New-Item -ItemType Directory -Path $destPath -Force | Out-Null
         Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
         Write-Host "  ✓ $($pair.Src) → $destPath" -ForegroundColor Green
+    }
+    # Top-level files: copy each from archive root → Target. Missing files
+    # are warned (not fatal) so the bundle stays forward-compatible.
+    foreach ($tlf in $BundleTopLevelFiles) {
+        $srcFile = Join-Path $root $tlf
+        if (-not (Test-Path $srcFile)) {
+            Write-Warning "  archive missing top-level file $tlf — skipping"
+            continue
+        }
+        Copy-Item -Path $srcFile -Destination (Join-Path $Target $tlf) -Force
+        Write-Host "  ✓ $tlf → $(Join-Path $Target $tlf)" -ForegroundColor Green
     }
 }
 

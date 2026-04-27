@@ -6,7 +6,12 @@
     "linters",
     "linter-scripts",
     "linters-cicd",
-    ".lovable/coding-guidelines",
-    ".lovable/prompts"
+    ".lovable/coding-guidelines"
+  ],
+  "files": [
+    "fix-repo.sh",
+    "fix-repo.ps1",
+    "visibility-change.sh",
+    "visibility-change.ps1"
   ]
 }
