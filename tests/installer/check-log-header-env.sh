@@ -132,6 +132,7 @@ DRIVER="${TMP}/driver.sh"
   echo 'PRE_FIX_REPO_HEAD=""'
   echo 'LOG_DIR=""'
   echo 'SHOW_FIX_REPO_LOG=false'
+  echo 'MAX_FIX_REPO_LOGS=0'
   awk '
     /^confirm_fix_repo\(\)/      {capture=1}
     /^snapshot_pre_fix_repo\(\)/ {capture=1}
