@@ -673,9 +673,14 @@ run_fix_repo() {
   fi
   if [[ "$rc" -ne 0 ]]; then
     err "fix-repo failed (exit $rc) — see $log_file"
-    $ROLLBACK_ON_FIX_FAIL && perform_rollback "$log_file"
+    if $ROLLBACK_ON_FIX_FAIL; then
+      perform_rollback "$log_file"
+    else
+      warn "Rollback: NOT TRIGGERED (--rollback-on-fix-repo-failure=$ROLLBACK_ON_FIX_FAIL  --full-rollback=$FULL_ROLLBACK)"
+    fi
     exit 5
   fi
+  step "Rollback: not needed (fix-repo succeeded; flags: --rollback-on-fix-repo-failure=$ROLLBACK_ON_FIX_FAIL --full-rollback=$FULL_ROLLBACK)"
   ok "fix-repo completed (log: $log_file)"
 }
 if ! $DRY_RUN && $RUN_FIX_REPO; then run_fix_repo; fi
