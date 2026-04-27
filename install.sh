@@ -368,6 +368,36 @@ OVERWROTE=0
 WROTE_NEW=0
 SKIPPED_FOLDERS=0
 
+# ── Rollback bookkeeping ──────────────────────────────────────────
+# Populated by merge_file when not in --dry-run. Used by full rollback.
+ROLLBACK_DIR=""           # set lazily by ensure_rollback_dir
+INSTALLED_NEW=()          # paths created by this run (full path)
+INSTALLED_BACKUPS=()      # "target|backup" pairs for overwritten files
+
+ensure_rollback_dir() {
+  [[ -n "$ROLLBACK_DIR" ]] && return 0
+  local ts; ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  ROLLBACK_DIR="$DEST/.install-rollback/$ts"
+  mkdir -p "$ROLLBACK_DIR/backups"
+}
+
+record_new_path() {
+  ensure_rollback_dir
+  INSTALLED_NEW+=("$1")
+  echo "$1" >> "$ROLLBACK_DIR/new-paths.txt"
+}
+
+record_overwrite_backup() {
+  local target="$1" rel
+  ensure_rollback_dir
+  rel="${target#$DEST/}"
+  local backup="$ROLLBACK_DIR/backups/$rel"
+  mkdir -p "$(dirname "$backup")"
+  cp -f "$target" "$backup"
+  INSTALLED_BACKUPS+=("$target|$backup")
+  printf '%s\t%s\n' "$target" "$backup" >> "$ROLLBACK_DIR/backups.tsv"
+}
+
 decide_overwrite() {
   # Returns 0 to write, 1 to skip
   local target="$1"
@@ -393,16 +423,24 @@ merge_file() {
   local target_dir; target_dir="$(dirname "$target")"
   if [[ -e "$target" ]]; then
     if decide_overwrite "$target"; then
-      if $DRY_RUN; then dim "  ~ would overwrite ${target#$DEST/}"
-      else mkdir -p "$target_dir"; cp -f "$src" "$target"; fi
+      if $DRY_RUN; then
+        dim "  ~ would overwrite ${target#$DEST/}"
+      else
+        $FULL_ROLLBACK && record_overwrite_backup "$target"
+        mkdir -p "$target_dir"; cp -f "$src" "$target"
+      fi
       ((OVERWROTE++))
     else
       dim "  - skip ${target#$DEST/}"
       ((SKIPPED_FILES++))
     fi
   else
-    if $DRY_RUN; then dim "  + would create ${target#$DEST/}"
-    else mkdir -p "$target_dir"; cp -f "$src" "$target"; fi
+    if $DRY_RUN; then
+      dim "  + would create ${target#$DEST/}"
+    else
+      mkdir -p "$target_dir"; cp -f "$src" "$target"
+      $FULL_ROLLBACK && record_new_path "$target"
+    fi
     ((WROTE_NEW++))
   fi
 }
