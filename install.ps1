@@ -63,6 +63,7 @@ param(
     [switch]$Yes,
     [switch]$RollbackOnFixRepoFailure,
     [switch]$FullRollback,
+    [string]$LogDir = "",
     [string]$PinnedByReleaseInstall = ""
 )
 
