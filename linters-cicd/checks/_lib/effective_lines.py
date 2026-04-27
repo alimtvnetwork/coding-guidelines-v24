@@ -34,7 +34,7 @@ class CommentSyntax:
     line_tokens: tuple[str, ...]          # e.g. ("//",) or ("#",) or ("//", "///")
     block_open: str | None                # e.g. "/*"
     block_close: str | None               # e.g. "*/"
-    docstring_tokens: tuple[str, ...] = ()  # Python only: ('"""', "'''")
+    docstring_tokens: tuple[str, ...] = ()  # Python only
 
 
 # Single registry — every supported language goes through here.
