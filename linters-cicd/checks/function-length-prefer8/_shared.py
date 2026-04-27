@@ -1,5 +1,12 @@
 """CODE-RED-005 — shared helpers for the STRICT 8-line function-length check.
 
+**Canonical specification (threshold + counting rules):**
+``linters-cicd/checks/function-length-prefer8/README.md``
+
+That README is the single source of truth. This module is the
+**executable** mirror — if the two ever disagree it is a P1 bug; fix
+the README first, then bring this module into alignment.
+
 Per ``.lovable/coding-guidelines/coding-guidelines.md`` rule #1
 ("Keep functions under 8 lines"), this rule emits SARIF ``error``
 findings on ANY function body whose effective line count exceeds 8.
