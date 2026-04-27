@@ -77,3 +77,10 @@ Outputs are documents only. No source code touched yet.
   `release-artifacts/` to `.gitattributes` with an `export-ignore`-style
   marker and teach the script to honor it; out of scope for this
   initial delivery.
+
+## Phase 7 — Runner wiring (carry-over) ✅
+
+- [x] `run.sh`: added `fix-repo)` case + `invoke_fix_repo()` helper; forwards `"$@"` to `./fix-repo.sh`.
+- [x] `run.ps1`: added `"fix-repo"` switch case + `Invoke-FixRepo` function; forwards `$args` to `.\fix-repo.ps1`.
+- [x] Updated help tables in both runners (sub-command line + flag forwarding block).
+- [x] Added `tests/installer/check-fix-repo-runner-wiring.sh` (parity with the visibility wiring test); passes locally.
