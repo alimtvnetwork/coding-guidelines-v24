@@ -23,13 +23,15 @@ function Get-RemoteUrl {
 function ConvertFrom-RemoteUrl {
     param([string]$Url)
     if (-not $Url) { return $null }
+    $trimmed = $Url.TrimEnd('/')
+    if ($trimmed.EndsWith('.git')) { $trimmed = $trimmed.Substring(0, $trimmed.Length - 4) }
     $patterns = @(
-        '^https?://(?<host>[^/:]+)(?::\d+)?/(?<owner>[^/]+)/(?<repo>[^/]+?)(?:\.git)?(?:/.*)?$',
-        '^git@(?<host>[^:]+):(?<owner>[^/]+)/(?<repo>[^/]+?)(?:\.git)?$',
-        '^ssh://git@(?<host>[^/:]+)(?::\d+)?/(?<owner>[^/]+)/(?<repo>[^/]+?)(?:\.git)?$'
+        '^https?://(?<host>[^/:]+)(?::\d+)?/(?<owner>[^/]+)/(?<repo>[^/]+)$',
+        '^git@(?<host>[^:]+):(?<owner>[^/]+)/(?<repo>[^/]+)$',
+        '^ssh://git@(?<host>[^/:]+)(?::\d+)?/(?<owner>[^/]+)/(?<repo>[^/]+)$'
     )
     foreach ($pat in $patterns) {
-        $m = [regex]::Match($Url, $pat)
+        $m = [regex]::Match($trimmed, $pat)
         if ($m.Success) {
             return [pscustomobject]@{
                 Host  = $m.Groups['host'].Value
