@@ -81,8 +81,8 @@ for f in "${PS_INSTALLERS[@]}"; do
   [[ -f "${path}" ]] || { fail "${f}: missing"; continue; }
 
   grep -qE '\[int\]\$MaxFixRepoLogs' "${path}" \
-    && pass "${f}: P1 declares [int]$MaxFixRepoLogs param" \
-    || fail "${f}: P1 missing [int]$MaxFixRepoLogs parameter"
+    && pass "${f}: P1 declares [int]\$MaxFixRepoLogs param" \
+    || fail "${f}: P1 missing [int]\$MaxFixRepoLogs parameter"
 
   grep -q 'INSTALL_MAX_FIX_REPO_LOGS' "${path}" \
     && pass "${f}: P2 reads INSTALL_MAX_FIX_REPO_LOGS env fallback" \
