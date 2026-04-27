@@ -121,25 +121,25 @@ parse_flags() {
 
 # Load config file (if provided) and apply its values as defaults.
 # Explicit CLI flags take precedence over config-file values.
-apply_config_file() {
-  if [ -z "$CONFIG_FILE" ]; then
-    return "$EXIT_OK"
-  fi
-  if [ ! -f "$CONFIG_FILE" ]; then
-    log_error "config file not found: $CONFIG_FILE"
-    return "$EXIT_TOOL_ERROR"
-  fi
-  log_info "loading config from $CONFIG_FILE"
-  local env_lines
-  if ! env_lines=$(node "$(dirname "$0")/ci-config.mjs" --config "$CONFIG_FILE" --emit env); then
-    log_error "config loader failed for $CONFIG_FILE"
-    return "$EXIT_TOOL_ERROR"
-  fi
+_load_config_env() {
+  local out
+  out=$(node "$(dirname "$0")/ci-config.mjs" --config "$CONFIG_FILE" --emit env) || return 1
   # shellcheck disable=SC2086
-  eval "$env_lines"
-  # Apply config defaults only when CLI flag is empty.
+  eval "$out"
+  return 0
+}
+
+_apply_scripts_dir_default() {
   [ -z "$SCRIPTS_DIR" ] || [ "$SCRIPTS_DIR" = ".github/scripts" ] && \
     SCRIPTS_DIR="${CI_GUARDS_SCRIPTS_DIR:-$SCRIPTS_DIR}"
+}
+
+apply_config_file() {
+  [ -z "$CONFIG_FILE" ] && return "$EXIT_OK"
+  [ -f "$CONFIG_FILE" ] || { log_error "config file not found: $CONFIG_FILE"; return "$EXIT_TOOL_ERROR"; }
+  log_info "loading config from $CONFIG_FILE"
+  _load_config_env || { log_error "config loader failed for $CONFIG_FILE"; return "$EXIT_TOOL_ERROR"; }
+  _apply_scripts_dir_default
   return "$EXIT_OK"
 }
 
