@@ -98,7 +98,10 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
 $BundleName = "consolidated"
-$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines"
+$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines,.lovable/coding-guidelines|.lovable/coding-guidelines"
+# Top-level files copied verbatim from archive root → Target. Repo hygiene
+# scripts (fix-repo) and visibility toggles must ship with every bundle.
+$BundleTopLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1")
 $ArchiveStableName = "consolidated"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v18/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v18"
