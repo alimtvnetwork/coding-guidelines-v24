@@ -38,6 +38,15 @@ decision for any function over 8 lines. CODE-RED-004 is retained as a
 defence-in-depth net so the registry still flags >15-line bodies even
 if CODE-RED-005 is ever disabled by a per-file override.
 
+> **Canonical specification of the threshold and counting rules** —
+> including what counts as an "effective body line", per-language
+> detector scope, deliberate counter divergences, and the verification
+> procedure for any future change — lives in
+> [`linters-cicd/checks/function-length-prefer8/README.md`](../../../linters-cicd/checks/function-length-prefer8/README.md).
+> If this table and that README ever disagree, **the README wins** and
+> this table is the bug.
+
+
 ---
 
 ## Soft preferences (annotate — SARIF `warning`)
