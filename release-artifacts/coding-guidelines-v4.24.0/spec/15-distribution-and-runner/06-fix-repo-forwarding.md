@@ -88,6 +88,7 @@ script. Specifically:
 fix-repo)
   _assert_fix_repo_present
   shift
+  _fix_repo_debug_preflight "$@"
   exec bash "$SCRIPT_DIR/fix-repo.sh" "$@"
   ;;
 ```
@@ -107,15 +108,34 @@ function Assert-FixRepoPresent {
 }
 
 # dispatch (inlined — no wrapper Invoke-FixRepo function):
-"fix-repo" { & (Assert-FixRepoPresent) @args; exit $LASTEXITCODE }
+"fix-repo" {
+    $inner = Assert-FixRepoPresent
+    Write-FixRepoDebugPreflight -Inner $inner -Argv $args
+    & $inner @args; exit $LASTEXITCODE
+}
 ```
 
 `@args` (splatting) preserves argv as an array — equivalent to Bash's
 `"$@"`. The dispatch is a single statement on the original `$args`:
 the guard helper only resolves and validates the inner-script path,
-it never touches the argument array. This mirrors the Bash
-implementation's `exec bash "$SCRIPT_DIR/fix-repo.sh" "$@"` end-to-end
-forwarding.
+and the preflight helper only writes diagnostics to stderr — neither
+mutates the argument array. This mirrors the Bash implementation's
+`exec bash "$SCRIPT_DIR/fix-repo.sh" "$@"` end-to-end forwarding.
+
+### 4.3 `--debug` preflight
+
+When the forwarded argv contains the literal token `--debug`, both
+runners MUST emit a diagnostic block to **stderr** before invoking
+the inner script. The block MUST include:
+
+- the runner script path, script directory, and current working dir;
+- the resolved inner-script path;
+- `ARGC=<n>` (count of forwarded args);
+- one `ARG[i]<<value>>` line per arg, in order.
+
+The `--debug` token MUST NOT be consumed: the inner script MUST still
+receive byte-identical argv (same count, same order, same values).
+Runs without `--debug` MUST NOT print any preflight output.
 
 ---
 
