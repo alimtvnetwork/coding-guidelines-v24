@@ -177,6 +177,7 @@ DRIVER="${TMP}/driver.sh"
   echo 'BUNDLE_TOP_LEVEL_FILES=""'
   echo 'PRE_FIX_REPO_HEAD=""'
   echo 'LOG_DIR=""'
+  echo 'SHOW_FIX_REPO_LOG=false'
   # Extract the four helper functions from cli-install.sh.
   awk '
     /^confirm_fix_repo\(\)/      {capture=1}

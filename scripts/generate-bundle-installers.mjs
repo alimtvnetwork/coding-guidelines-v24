@@ -113,6 +113,8 @@ case "\${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_
 ASSUME_YES="\${INSTALL_FIX_REPO_YES:-false}"
 case "\${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
 LOG_DIR="\${INSTALL_LOG_DIR:-}"   # empty → \${TARGET}/.install-logs (default)
+SHOW_FIX_REPO_LOG="\${INSTALL_SHOW_FIX_REPO_LOG:-false}"
+case "\${SHOW_FIX_REPO_LOG}" in 1|true|TRUE|yes|YES) SHOW_FIX_REPO_LOG=true ;; *) SHOW_FIX_REPO_LOG=false ;; esac
 
 usage() {
   cat <<HELP
@@ -152,6 +154,9 @@ TARGET / OUTPUT FLAGS (any mode)
                                  paths used as-is; relative paths joined
                                  to --target. Default: <target>/.install-logs.
                                  Also via env: INSTALL_LOG_DIR.
+  --show-fix-repo-log            Print the latest fix-repo log to stdout
+                                 after run_fix_repo finishes (success or
+                                 failure). Env: INSTALL_SHOW_FIX_REPO_LOG=1.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
@@ -198,6 +203,7 @@ while [[ $# -gt 0 ]]; do
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
+    --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
@@ -605,6 +611,12 @@ run_fix_repo() {
   esac
   set -e
   echo "# exit: \${rc}  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "\${log_file}"
+  if \${SHOW_FIX_REPO_LOG}; then
+    echo ""
+    echo "─── fix-repo log: \${log_file} ─────────────────────────────"
+    cat "\${log_file}"
+    echo "─── end of log ──────────────────────────────────────────"
+  fi
   if [[ "\${rc}" -ne 0 ]]; then
     echo "❌ fix-repo failed (exit \${rc}) — see \${log_file}" >&2
     exit 5
@@ -718,6 +730,7 @@ param(
     [Alias("y","AssumeYes")]
     [switch]$Yes,
     [string]$LogDir = "",
+    [switch]$ShowFixRepoLog,
     [Alias("?")]
     [switch]$Help
 )
@@ -734,6 +747,10 @@ if (-not $Yes) {
 }
 if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
 if (-not $LogDir) { $LogDir = "" }
+if (-not $ShowFixRepoLog) {
+    $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
+    if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
+}
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
@@ -1089,6 +1106,12 @@ function Invoke-FixRepo {
     & $script 2>&1 | Tee-Object -FilePath $logFile -Append
     $rc = $LASTEXITCODE
     Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($ShowFixRepoLog) {
+        Write-Host ""
+        Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
+        Get-Content -LiteralPath $logFile | ForEach-Object { Write-Host $_ }
+        Write-Host "─── end of log ──────────────────────────────────────────"
+    }
     if ($rc -ne 0) {
         Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
         exit 5

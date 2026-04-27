@@ -64,6 +64,7 @@ param(
     [switch]$RollbackOnFixRepoFailure,
     [switch]$FullRollback,
     [string]$LogDir = "",
+    [switch]$ShowFixRepoLog,
     [string]$PinnedByReleaseInstall = ""
 )
 
@@ -87,6 +88,10 @@ if (-not $FullRollback) {
 if ($FullRollback) { $RollbackOnFixRepoFailure = $true }
 if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
 if (-not $LogDir) { $LogDir = "" }
+if (-not $ShowFixRepoLog) {
+    $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
+    if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
+}
 
 # Bookkeeping for rollback.
 $Script:InstalledNew = New-Object System.Collections.Generic.List[string]
@@ -492,6 +497,12 @@ try {
         & $fixScript 2>&1 | Tee-Object -FilePath $logFile -Append
         $rc = $LASTEXITCODE
         Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+        if ($ShowFixRepoLog) {
+            Write-Host ""
+            Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
+            Get-Content -LiteralPath $logFile | ForEach-Object { Write-Host $_ }
+            Write-Host "─── end of log ──────────────────────────────────────────"
+        }
         if ($rc -ne 0) {
             Write-Err "fix-repo.ps1 failed (exit $rc) — see $logFile"
             if ($RollbackOnFixRepoFailure) {

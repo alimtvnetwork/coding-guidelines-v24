@@ -16,6 +16,8 @@
 #   --dest /path/to/dir          Install destination (default: cwd)
 #   --log-dir /path or rel       Where to write fix-repo logs (default: <dest>/.install-logs;
 #                                env: INSTALL_LOG_DIR)
+#   --show-fix-repo-log          Print the latest fix-repo log to stdout after run_fix_repo
+#                                completes (env: INSTALL_SHOW_FIX_REPO_LOG=1)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
@@ -67,6 +69,8 @@ FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
 case "$FULL_ROLLBACK" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
 $FULL_ROLLBACK && ROLLBACK_ON_FIX_FAIL=true   # full implies edits
 LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → $DEST/.install-logs (default)
+SHOW_FIX_REPO_LOG="${INSTALL_SHOW_FIX_REPO_LOG:-false}"
+case "$SHOW_FIX_REPO_LOG" in 1|true|TRUE|yes|YES) SHOW_FIX_REPO_LOG=true ;; *) SHOW_FIX_REPO_LOG=false ;; esac
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -83,7 +87,7 @@ err()   { echo -e "${RED}❌ $1${NC}" >&2; }
 dim()   { echo -e "${DIM}$1${NC}"; }
 
 usage() {
-  sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'
   exit 0
 }
 
@@ -190,6 +194,7 @@ while [[ $# -gt 0 ]]; do
     --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
+    --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -624,6 +629,12 @@ run_fix_repo() {
   esac
   set -e
   echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
+  if $SHOW_FIX_REPO_LOG; then
+    echo ""
+    echo "─── fix-repo log: $log_file ─────────────────────────────"
+    cat "$log_file"
+    echo "─── end of log ──────────────────────────────────────────"
+  fi
   if [[ "$rc" -ne 0 ]]; then
     err "fix-repo failed (exit $rc) — see $log_file"
     $ROLLBACK_ON_FIX_FAIL && perform_rollback "$log_file"

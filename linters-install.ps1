@@ -84,6 +84,7 @@ param(
     [Alias("y","AssumeYes")]
     [switch]$Yes,
     [string]$LogDir = "",
+    [switch]$ShowFixRepoLog,
     [Alias("?")]
     [switch]$Help
 )
@@ -100,6 +101,10 @@ if (-not $Yes) {
 }
 if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
 if (-not $LogDir) { $LogDir = "" }
+if (-not $ShowFixRepoLog) {
+    $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
+    if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
+}
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
@@ -455,6 +460,12 @@ function Invoke-FixRepo {
     & $script 2>&1 | Tee-Object -FilePath $logFile -Append
     $rc = $LASTEXITCODE
     Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($ShowFixRepoLog) {
+        Write-Host ""
+        Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
+        Get-Content -LiteralPath $logFile | ForEach-Object { Write-Host $_ }
+        Write-Host "─── end of log ──────────────────────────────────────────"
+    }
     if ($rc -ne 0) {
         Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
         exit 5
