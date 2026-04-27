@@ -132,7 +132,7 @@ GEN="${ROOT}/scripts/generate-bundle-installers.mjs"
 if [[ -f "${GEN}" ]]; then
   for needle in \
     'INSTALL_RUN_FIX_REPO' \
-    '\-\-run-fix-repo' \
+    '\-\-run-fix-repo|--run-fix-repo' \
     'RUN_FIX_REPO=true' \
     '\${RUN_FIX_REPO} && run_fix_repo' \
     '\[switch\]\$RunFixRepo' \
