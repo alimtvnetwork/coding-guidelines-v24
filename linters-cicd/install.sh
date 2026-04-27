@@ -4,7 +4,7 @@
 #
 # Conforms to: spec/14-update/27-generic-installer-behavior.md
 #
-#   curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.sh | bash
+#   curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.sh | bash
 #
 # Flags:
 #   -d <dir>      install destination (default: ./linters-cicd)
@@ -36,7 +36,7 @@ for arg in "$@"; do
     esac
 done
 
-REPO="alimtvnetwork/coding-guidelines-v17"
+REPO="alimtvnetwork/coding-guidelines-v18"
 DEST="./linters-cicd"
 VERSION="latest"
 VERIFY=1

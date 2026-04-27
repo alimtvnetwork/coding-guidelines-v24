@@ -1,8 +1,8 @@
 {
   "$schema": "./bundles.schema.json",
-  "repo": "alimtvnetwork/coding-guidelines-v17",
-  "rawBase": "https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main",
-  "releaseBase": "https://github.com/alimtvnetwork/coding-guidelines-v17/releases",
+  "repo": "alimtvnetwork/coding-guidelines-v18",
+  "rawBase": "https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main",
+  "releaseBase": "https://github.com/alimtvnetwork/coding-guidelines-v18/releases",
   "bundles": [
     {
       "name": "error-manage",

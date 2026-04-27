@@ -5,7 +5,7 @@
 .DESCRIPTION
     Conforms to: spec/14-update/27-generic-installer-behavior.md
 
-      irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+      irm https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.ps1 | iex
 
     Flags:
       -Dest <dir>      install destination (default: ./linters-cicd)
@@ -49,7 +49,7 @@ linters-cicd installer (one-liner)
 
 Conforms to: spec/14-update/27-generic-installer-behavior.md
 
-  irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+  irm https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.ps1 | iex
 
 Flags:
   -Dest <dir>      install destination (default: ./linters-cicd)
@@ -91,7 +91,7 @@ if ($MyInvocation.UnboundArguments) {
 
 $ErrorActionPreference = 'Stop'
 
-$Repo = "alimtvnetwork/coding-guidelines-v17"
+$Repo = "alimtvnetwork/coding-guidelines-v18"
 $Verify = -not $NoVerify
 
 # Banner (spec §7)
