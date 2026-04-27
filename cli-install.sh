@@ -497,6 +497,7 @@ run_fix_repo() {
     echo "❌ --run-fix-repo: ${script} not found after install." >&2
     exit 5
   fi
+  confirm_fix_repo "${script}"
   log_dir="${TARGET}/.install-logs"
   mkdir -p "${log_dir}"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
