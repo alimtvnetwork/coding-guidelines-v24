@@ -65,9 +65,13 @@ assert_absent "$RUN_SH" '$inner $*'  "no unquoted \$* in run.sh"
 assert_absent "$RUN_PS1" '$args -join' "no @args join-then-split in run.ps1"
 
 # 5. Help-text parity — both files must list every fix-repo flag token
+# 5. Help-text dialect parity — each shell's help file lists its own
+#    native flag tokens (per §3 of the contract).
 for token in '--2' '--3' '--5' '--all' '--dry-run' '--verbose'; do
-  assert_contains "$HELP_SH" "$token" "runner-help.txt lists $token"
-  assert_contains "$HELP_PS" "$token" "runner-help.ps.txt lists $token"
+  assert_contains "$HELP_SH" "$token" "runner-help.txt lists Bash token $token"
+done
+for token in '-2' '-3' '-5' '-all' '-DryRun' '-Verbose'; do
+  assert_contains "$HELP_PS" "$token" "runner-help.ps.txt lists PS token $token"
 done
 
 printf '\n  Total: PASS=%d FAIL=%d\n' "$PASS" "$FAIL"
