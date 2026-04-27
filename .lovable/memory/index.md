@@ -1,5 +1,5 @@
 # Memory: index.md
-Updated: 2026-04-26
+Updated: 2026-04-27
 
 # Project Memory
 
@@ -21,6 +21,8 @@ Updated: 2026-04-26
 - Version sync: bump package.json → `node scripts/sync-version.mjs` → `node scripts/sync-spec-tree.mjs`.
 - Execution: Break complex requests into discrete tasks. Wait for "next" prompt to continue.
 - 🔴 NO-QUESTIONS MODE active (40-task batch from 2026-04-26): never call ask_questions; log ambiguities to `.lovable/question-and-ambiguity/xx-title.md` and update its README index. Resume on explicit "ask questions" signal.
+- 🔴 Docs Viewer keybinds: `Cmd/Ctrl+K` = search dialog, `Cmd/Ctrl+J` = command palette ("Open Spec Overview" pinned). Do not rebind. See mem://sessions/2026-04-27-docs-viewer-quick-jump-and-sync-banner.
+- 🔴 GitHub Sync Banner reads `version.json` (`git.shortSha`, `git.branch`, `updated`). Per-SHA dismiss via `localStorage["lovable.github-sync-banner.dismissed-sha"]` — never make it permanently dismissable.
 
 ## Memories
 - [Install Command Formatting](mem://constraints/install-command-formatting) — One-line installs, no inline comments, per-platform headers, mirror InstallSection.tsx order.
@@ -51,3 +53,4 @@ Updated: 2026-04-26
 - [Payment Banner Hider RCA](mem://issues/payment-banner-hider-rca) — Root cause for the macro-ahk-v23 regression and the mandatory pre-write checklist that prevents repeats.
 - [No-Questions Mode](mem://workflow/no-questions-mode) — 40-task no-questions run; ambiguity logging template, sequencing, and resume trigger.
 - [Avoid Time Suggestions in readme.txt](mem://avoid/02-no-time-suggestions-in-readme-txt) — Strictly Prohibited #01: zero time-related chatter, suggestions, or auto-updates around readme.txt; persist across sessions.
+- [2026-04-27 Docs Viewer Quick-Jump + Sync Banner](mem://sessions/2026-04-27-docs-viewer-quick-jump-and-sync-banner) — Cmd/Ctrl+J command palette with Open-Spec-Overview pinned, GithubSyncBanner reading version.json, .gitmap/ removed, spec/ visibility incident diagnosed.
