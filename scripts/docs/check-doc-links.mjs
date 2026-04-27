@@ -32,19 +32,26 @@ function stripAnchor(target) {
   return hashAt === -1 ? target : target.slice(0, hashAt);
 }
 
+function stripCodeBlocks(text) {
+  // Remove fenced code blocks (``` … ```` etc.) so links inside code
+  // samples are not validated as filesystem paths.
+  return text.replace(/(`{3,})[\s\S]*?\1/g, "");
+}
+
 function collectLinks(filePath) {
-  const text = readFileSync(filePath, "utf8");
+  const raw = readFileSync(filePath, "utf8");
+  const text = stripCodeBlocks(raw);
   const fileDir = dirname(filePath);
   const results = [];
   for (const match of text.matchAll(LINK_RE)) {
-    const raw = match[1];
-    if (isExternal(raw)) continue;
-    const path = stripAnchor(raw);
+    const target = match[1];
+    if (isExternal(target)) continue;
+    const path = stripAnchor(target);
     if (path === "" || path === ".") continue;
     const base = isAbsolute(path) ? REPO_ROOT : fileDir;
     const cleaned = isAbsolute(path) ? path.replace(/^\/+/, "") : path;
     const resolved = resolve(base, cleaned);
-    results.push({ raw, resolved });
+    results.push({ raw: target, resolved });
   }
   return results;
 }
