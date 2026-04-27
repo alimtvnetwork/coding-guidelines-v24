@@ -6,7 +6,7 @@ import tseslint from "typescript-eslint";
 import codingGuidelines from "./eslint-plugins/coding-guidelines/index.js";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", "linters-cicd/tests/fixtures/**"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
