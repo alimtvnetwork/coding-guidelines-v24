@@ -1,11 +1,23 @@
 # Suggestions
 
-**Version:** 3.13.0
-**Updated:** 2026-04-24 (session 2)
+**Version:** 3.14.0
+**Updated:** 2026-04-27
 
 ---
 
 ## Active Suggestions
+
+### Playwright spec for Cmd/Ctrl+J → Spec Overview
+- **Status:** Pending **Priority:** Low **Added:** 2026-04-27
+- Add an E2E test that opens the Docs Viewer, presses `Cmd+J`, selects the pinned "Open Spec Overview" item, and asserts `spec/00-overview.md` becomes the active file. Guards the resilience-to-stale-tree guarantee.
+
+### Unit test for `findSpecOverviewFile` fallback
+- **Status:** Pending **Priority:** Low **Added:** 2026-04-27
+- Cover the exact-path hit, the name-based fallback, and the null path. Located at `src/components/docs/specOverviewJump.ts`.
+
+### GitHub Sync Banner: surface drift between live HEAD and built SHA
+- **Status:** Pending **Priority:** Medium **Added:** 2026-04-27
+- Optional: hit GitHub's `/repos/{owner}/{repo}/commits/{branch}` to compare upstream SHA with `version.json.git.sha`. If different, switch banner tone to amber and surface "X commits behind". Requires `Cloud → secrets` for an unauthenticated rate-limit-friendly PAT or a public-repo unauthenticated call.
 
 ### Mobile responsive testing
 - **Status:** Pending **Priority:** Low **Added:** 2026-04-16
