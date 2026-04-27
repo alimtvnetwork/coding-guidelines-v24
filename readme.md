@@ -181,6 +181,24 @@ Copy-paste commands for every supported bundle. Each block lists the **exact scr
 
 **Common flags** (all bundle installers): `--version <tag>` (pin to a release), `--target <dir>` / `--dest <dir>` (install destination, default cwd), `--use-local-archive <path>` (offline install), `--offline` (refuse network), `--no-main-fallback` (refuse main-branch fallback in PINNED mode), `--no-discovery` (forbid V→V+N discovery), `--no-open` (skip auto-open of entry file, slides only), `-h` / `--help` (show full reference and exit). Run any installer with `--help` for the full scope-tagged matrix.
 
+#### 📦 What each installer copies
+
+Every installer below copies the listed **folders** (recursively, preserving structure) and the **top-level files** (verbatim into the target root) from the source archive into your `--target` / `--dest` directory.
+
+| Installer | Folders copied | Top-level files copied |
+|---|---|---|
+| **`install.{sh,ps1}`** (generic / "s-installer") | `spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`cli-install.{sh,ps1}`** | `spec/11-powershell-integration/`, `spec/12-cicd-pipeline-workflows/`, `spec/13-generic-cli/`, `spec/14-update/`, `spec/15-distribution-and-runner/`, `spec/16-generic-release/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`consolidated-install.{sh,ps1}`** | `spec/01-spec-authoring-guide/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+
+> Notes:
+> - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs) — host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
+> - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
+> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped — other Lovable folders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
+> - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
+
+
 <details>
 <summary><strong>error-manage</strong> — Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
 
