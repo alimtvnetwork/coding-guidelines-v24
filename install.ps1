@@ -93,6 +93,10 @@ if (-not $ShowFixRepoLog) {
     $envShow = $env:INSTALL_SHOW_FIX_REPO_LOG
     if ($envShow -and @("1","true","TRUE","yes","YES") -contains $envShow) { $ShowFixRepoLog = $true }
 }
+if ($MaxFixRepoLogs -lt 0) {
+    $envMax = $env:INSTALL_MAX_FIX_REPO_LOGS
+    if ($envMax -and ($envMax -match '^\d+$')) { $MaxFixRepoLogs = [int]$envMax } else { $MaxFixRepoLogs = 0 }
+}
 
 # Bookkeeping for rollback.
 $Script:InstalledNew = New-Object System.Collections.Generic.List[string]
