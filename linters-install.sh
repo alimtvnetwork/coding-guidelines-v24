@@ -501,16 +501,27 @@ confirm_fix_repo() {
 }
 prune_fix_repo_logs() {
   # Keep newest $2 fix-repo-*.log files in $1; 0 disables.
-  local dir="$1" keep="$2" file count=0 removed=0
-  [[ "${keep}" =~ ^[0-9]+$ ]] || return 0
-  [[ "${keep}" -le 0 ]] && return 0
-  [[ -d "${dir}" ]] || return 0
+  local dir="$1" keep="$2" file count=0 removed=0 total=0
+  if ! [[ "${keep}" =~ ^[0-9]+$ ]]; then
+    echo "  ▸ log pruning: SKIPPED (--max-fix-repo-logs=${keep} is not a non-negative integer)"
+    return 0
+  fi
+  if [[ "${keep}" -le 0 ]]; then
+    echo "  ▸ log pruning: DISABLED (--max-fix-repo-logs=0)"
+    return 0
+  fi
+  if [[ ! -d "${dir}" ]]; then
+    echo "  ▸ log pruning: SKIPPED (log dir not found: ${dir}; --max-fix-repo-logs=${keep})"
+    return 0
+  fi
   while IFS= read -r file; do
+    total=$((total+1))
     count=$((count+1))
     [[ $count -le ${keep} ]] && continue
     rm -f -- "${file}" && removed=$((removed+1))
   done < <(ls -1t "${dir}"/fix-repo-*.log 2>/dev/null)
-  [[ ${removed} -gt 0 ]] && echo "  ▸ pruned ${removed} old fix-repo log(s); kept newest ${keep} in ${dir}"
+  local kept=$(( total - removed ))
+  echo "  ▸ log pruning: --max-fix-repo-logs=${keep} | found=${total} kept=${kept} pruned=${removed} dir=${dir}"
   return 0
 }
 

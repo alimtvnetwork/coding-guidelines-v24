@@ -502,13 +502,18 @@ try {
         & $fixScript 2>&1 | Tee-Object -FilePath $logFile -Append
         $rc = $LASTEXITCODE
         Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-        if ($MaxFixRepoLogs -gt 0) {
-            $stale = Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
-                Sort-Object LastWriteTime -Descending |
-                Select-Object -Skip $MaxFixRepoLogs
+        if ($MaxFixRepoLogs -lt 0 -or -not ($MaxFixRepoLogs -is [int])) {
+            Write-Step "Log pruning: SKIPPED (--max-fix-repo-logs=$MaxFixRepoLogs is not a non-negative integer)"
+        } elseif ($MaxFixRepoLogs -eq 0) {
+            Write-Step "Log pruning: DISABLED (--max-fix-repo-logs=0)"
+        } else {
+            $allLogs = @(Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
+                Sort-Object LastWriteTime -Descending)
+            $stale = $allLogs | Select-Object -Skip $MaxFixRepoLogs
             $removedCount = 0
             foreach ($s in $stale) { Remove-Item -LiteralPath $s.FullName -Force -ErrorAction SilentlyContinue; $removedCount++ }
-            if ($removedCount -gt 0) { Write-Step "Pruned $removedCount old fix-repo log(s); kept newest $MaxFixRepoLogs in $logDir" }
+            $kept = $allLogs.Count - $removedCount
+            Write-Step "Log pruning: --max-fix-repo-logs=$MaxFixRepoLogs | found=$($allLogs.Count) kept=$kept pruned=$removedCount dir=$logDir"
         }
         if ($ShowFixRepoLog) {
             Write-Host ""
@@ -521,6 +526,7 @@ try {
             if ($RollbackOnFixRepoFailure) {
                 Write-Host ""
                 Write-Warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+                Write-Warn "Rollback flags: -RollbackOnFixRepoFailure=$RollbackOnFixRepoFailure  -FullRollback=$FullRollback"
                 Write-Step "Restoring tracked files from HEAD..."
                 & git -C $Dest checkout -- . 2>&1 | Tee-Object -FilePath $logFile -Append
                 Write-OK "fix-repo edits reverted"
@@ -538,9 +544,12 @@ try {
                     Write-OK "Removed $removed new file(s); restored $restored overwritten file(s)"
                 }
                 Write-Warn "Rollback complete. Snapshot kept at: $($Script:RollbackDir)"
+            } else {
+                Write-Warn "Rollback: NOT TRIGGERED (-RollbackOnFixRepoFailure=$RollbackOnFixRepoFailure  -FullRollback=$FullRollback)"
             }
             exit 5
         }
+        Write-Step "Rollback: not needed (fix-repo succeeded; flags: -RollbackOnFixRepoFailure=$RollbackOnFixRepoFailure -FullRollback=$FullRollback)"
         Write-OK "fix-repo completed (log: $logFile)"
     }
 
