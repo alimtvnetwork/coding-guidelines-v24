@@ -233,7 +233,12 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v18}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines" ".lovable/prompts")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines")
+
+# Top-level files always pulled alongside the folders. These are repo-root
+# scripts (not contained in any installed folder) that users need locally to
+# run repository hygiene tasks (fix-repo) and visibility toggles.
+TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1")
 
 # Ref = tag if --version, else branch
 REF="$BRANCH"
