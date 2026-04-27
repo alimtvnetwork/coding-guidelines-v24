@@ -124,6 +124,25 @@ _assert_fix_repo_present() {
   exit $EXIT_FIX_REPO_MISSING
 }
 
+_fix_repo_has_debug() {
+  for a in "$@"; do [ "$a" = "--debug" ] && return 0; done
+  return 1
+}
+
+_fix_repo_debug_preflight() {
+  _fix_repo_has_debug "$@" || return 0
+  {
+    echo "▸ fix-repo preflight (--debug detected; argv forwarded unchanged)"
+    echo "   runner script  : ${BASH_SOURCE[0]:-run.sh}"
+    echo "   SCRIPT_DIR     : $SCRIPT_DIR"
+    echo "   working dir    : $PWD"
+    echo "   inner script   : $SCRIPT_DIR/fix-repo.sh"
+    printf '   ARGC=%d\n' "$#"
+    local i=0
+    for a in "$@"; do printf '   ARG[%d]<<%s>>\n' "$i" "$a"; i=$((i+1)); done
+  } >&2
+}
+
 # ── Dispatch ──────────────────────────────────────────────────────────
 cmd="${1:-}"
 case "$cmd" in
