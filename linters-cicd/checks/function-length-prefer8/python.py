@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _lib.cli import build_parser, parse_exclude_paths
 from _lib.sarif import Finding, SarifRun, emit
 from _lib.walker import walk_files
-from _shared import RULE, is_in_prefer_band, make_finding
+from _shared import RULE, exceeds_strict_cap, make_finding
 
 
 DEF_RE = re.compile(r"^(\s*)(?:async\s+)?def\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(")
@@ -36,7 +36,7 @@ def scan(path: Path, root: str) -> list[Finding]:
         end_idx = _find_body_end(lines, i + 1, indent)
         body = lines[i + 1:end_idx]
         effective = _count_effective(body)
-        if is_in_prefer_band(effective):
+        if exceeds_strict_cap(effective):
             findings.append(make_finding(match.group(2), effective, path, root, i + 1))
         i = end_idx
     return findings

@@ -12,7 +12,7 @@ from _lib.cli import build_parser, parse_exclude_paths
 from _lib.sarif import Finding, SarifRun, emit
 from _lib.walker import walk_files
 
-from _shared import RULE, is_in_prefer_band, load_sibling, make_finding
+from _shared import RULE, exceeds_strict_cap, load_sibling, make_finding
 
 _sibling = load_sibling("typescript")
 count_effective = _sibling.count_effective
@@ -31,7 +31,7 @@ def scan(path: Path, root: str) -> list[Finding]:
         end_idx = _find_body_end(lines, i)
         body_lines = lines[i + 1:end_idx - 1]
         effective = count_effective(body_lines)
-        if is_in_prefer_band(effective):
+        if exceeds_strict_cap(effective):
             findings.append(make_finding(name, effective, path, root, i + 1))
         i = max(end_idx, i + 1)
     return findings
