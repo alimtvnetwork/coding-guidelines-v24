@@ -18,6 +18,8 @@
 #                                env: INSTALL_LOG_DIR)
 #   --show-fix-repo-log          Print the latest fix-repo log to stdout after run_fix_repo
 #                                completes (env: INSTALL_SHOW_FIX_REPO_LOG=1)
+#   --max-fix-repo-logs N        Keep only the newest N fix-repo-*.log files in the log
+#                                directory (0 = keep all; env: INSTALL_MAX_FIX_REPO_LOGS)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
