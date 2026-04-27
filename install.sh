@@ -14,6 +14,8 @@
 #   --version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
 #   --folders spec,linters       Comma-separated folder list (subpaths OK: spec/14-update)
 #   --dest /path/to/dir          Install destination (default: cwd)
+#   --log-dir /path or rel       Where to write fix-repo logs (default: <dest>/.install-logs;
+#                                env: INSTALL_LOG_DIR)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
@@ -64,6 +66,7 @@ case "$ROLLBACK_ON_FIX_FAIL" in 1|true|TRUE|yes|YES) ROLLBACK_ON_FIX_FAIL=true ;
 FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
 case "$FULL_ROLLBACK" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
 $FULL_ROLLBACK && ROLLBACK_ON_FIX_FAIL=true   # full implies edits
+LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → $DEST/.install-logs (default)
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -80,7 +83,7 @@ err()   { echo -e "${RED}❌ $1${NC}" >&2; }
 dim()   { echo -e "${DIM}$1${NC}"; }
 
 usage() {
-  sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'
   exit 0
 }
 
@@ -186,6 +189,7 @@ while [[ $# -gt 0 ]]; do
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
+    --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -577,7 +581,9 @@ run_fix_repo() {
   fi
   confirm_fix_repo "$script"
   snapshot_pre_fix_repo
-  log_dir="$DEST/.install-logs"
+  log_dir="$LOG_DIR"
+  [[ -z "$log_dir" ]] && log_dir="$DEST/.install-logs"
+  case "$log_dir" in /*) ;; *) log_dir="$DEST/$log_dir" ;; esac
   mkdir -p "$log_dir"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
   log_file="$log_dir/fix-repo-$ts.log"

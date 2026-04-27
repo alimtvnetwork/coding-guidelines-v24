@@ -63,6 +63,7 @@ param(
     [switch]$Yes,
     [switch]$RollbackOnFixRepoFailure,
     [switch]$FullRollback,
+    [string]$LogDir = "",
     [string]$PinnedByReleaseInstall = ""
 )
 
@@ -84,6 +85,8 @@ if (-not $FullRollback) {
     if ($envFR -and @("1","true","TRUE","yes","YES") -contains $envFR) { $FullRollback = $true }
 }
 if ($FullRollback) { $RollbackOnFixRepoFailure = $true }
+if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
+if (-not $LogDir) { $LogDir = "" }
 
 # Bookkeeping for rollback.
 $Script:InstalledNew = New-Object System.Collections.Generic.List[string]
@@ -462,7 +465,12 @@ try {
                 Write-Step ("Rollback armed: HEAD={0}{1}" -f $Script:PreFixRepoHead, $(if ($FullRollback) { ', full-rollback=on' } else { '' }))
             }
         }
-        $logDir = Join-Path $Dest ".install-logs"
+        if ($LogDir) {
+            if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
+            else { $logDir = Join-Path $Dest $LogDir }
+        } else {
+            $logDir = Join-Path $Dest ".install-logs"
+        }
         if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
         $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
         $logFile = Join-Path $logDir "fix-repo-$ts.log"
