@@ -276,12 +276,20 @@ Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no
 <details>
 <summary><strong>cli</strong> — CLI Toolchain Spec · script: <a href="cli-install.sh"><code>cli-install.sh</code></a> / <a href="cli-install.ps1"><code>cli-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `spec/13-generic-cli`, `spec/14-update`, `spec/15-distribution-and-runner`, `spec/16-generic-release`.
