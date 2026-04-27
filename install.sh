@@ -14,6 +14,8 @@
 #   --version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
 #   --folders spec,linters       Comma-separated folder list (subpaths OK: spec/14-update)
 #   --dest /path/to/dir          Install destination (default: cwd)
+#   --log-dir /path or rel       Where to write fix-repo logs (default: <dest>/.install-logs;
+#                                env: INSTALL_LOG_DIR)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
