@@ -8,6 +8,7 @@ import CodeReviewChecklist from "./pages/CodeReviewChecklist";
 import Dashboard from "./pages/Dashboard";
 import DocsViewer from "./pages/DocsViewer";
 import LandingPage from "./pages/LandingPage";
+import ReadmeEditor from "./pages/ReadmeEditor";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/docs" element={<DocsViewer />} />
             <Route path="/checklist" element={<CodeReviewChecklist />} />
+            <Route path="/readme" element={<ReadmeEditor />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
