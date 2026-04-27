@@ -457,7 +457,7 @@ $DRY_RUN || verify_required_files
 # Windows shells, .sh elsewhere. Skipped under --dry-run (nothing was
 # actually written). Failures propagate as exit 5 per spec §8.
 run_fix_repo() {
-  local script
+  local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
     MINGW*|MSYS*|CYGWIN*) script="$DEST/fix-repo.ps1" ;;
     *)                    script="$DEST/fix-repo.sh"  ;;
@@ -466,24 +466,47 @@ run_fix_repo() {
     err "--run-fix-repo: $script not found after install."
     exit 5
   fi
+  log_dir="$DEST/.install-logs"
+  mkdir -p "$log_dir"
+  ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  log_file="$log_dir/fix-repo-$ts.log"
   echo ""
   step "Running fix-repo: $script"
+  step "Log: $log_file"
+  {
+    echo "# fix-repo log"
+    echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "# script:   $script"
+    echo "# dest:     $DEST"
+    echo "# ──────────────────────────────────────────────────────────"
+  } > "$log_file"
+  set +e
   case "$script" in
     *.ps1)
       if command -v pwsh >/dev/null 2>&1; then
-        pwsh -NoProfile -ExecutionPolicy Bypass -File "$script" || { err "fix-repo.ps1 failed (exit $?)"; exit 5; }
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "$script" 2>&1 | tee -a "$log_file"
+        rc=${PIPESTATUS[0]}
       elif command -v powershell >/dev/null 2>&1; then
-        powershell -NoProfile -ExecutionPolicy Bypass -File "$script" || { err "fix-repo.ps1 failed (exit $?)"; exit 5; }
+        powershell -NoProfile -ExecutionPolicy Bypass -File "$script" 2>&1 | tee -a "$log_file"
+        rc=${PIPESTATUS[0]}
       else
+        set -e
         err "--run-fix-repo: neither pwsh nor powershell found in PATH."
         exit 5
       fi
       ;;
     *)
-      bash "$script" || { err "fix-repo.sh failed (exit $?)"; exit 5; }
+      bash "$script" 2>&1 | tee -a "$log_file"
+      rc=${PIPESTATUS[0]}
       ;;
   esac
-  ok "fix-repo completed"
+  set -e
+  echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
+  if [[ "$rc" -ne 0 ]]; then
+    err "fix-repo failed (exit $rc) — see $log_file"
+    exit 5
+  fi
+  ok "fix-repo completed (log: $log_file)"
 }
 if ! $DRY_RUN && $RUN_FIX_REPO; then run_fix_repo; fi
 
