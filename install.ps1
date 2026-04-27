@@ -327,6 +327,30 @@ try {
         }
     }
 
+    function Initialize-RollbackDir {
+        if ($Script:RollbackDir) { return }
+        $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+        $Script:RollbackDir = Join-Path $Dest ".install-rollback/$ts"
+        New-Item -ItemType Directory -Path (Join-Path $Script:RollbackDir "backups") -Force | Out-Null
+    }
+
+    function Save-OverwriteBackup {
+        param([string]$Target)
+        Initialize-RollbackDir
+        $rel = $Target.Replace($Dest, '').TrimStart('\','/')
+        $backup = Join-Path $Script:RollbackDir "backups/$rel"
+        New-Item -ItemType Directory -Path (Split-Path $backup -Parent) -Force | Out-Null
+        Copy-Item -LiteralPath $Target -Destination $backup -Force
+        $Script:InstalledBackups.Add([pscustomobject]@{ Target = $Target; Backup = $backup })
+    }
+
+    function Add-NewPath {
+        param([string]$Target)
+        Initialize-RollbackDir
+        $Script:InstalledNew.Add($Target)
+        Add-Content -LiteralPath (Join-Path $Script:RollbackDir "new-paths.txt") -Value $Target
+    }
+
     function Merge-File {
         param([string]$Src, [string]$Target)
         $targetDir = Split-Path $Target -Parent
@@ -334,14 +358,22 @@ try {
         if (Test-Path $Target) {
             if (Test-ShouldOverwrite -Target $Target) {
                 if ($DryRun) { Write-Dim "  ~ would overwrite $rel" }
-                else { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null; Copy-Item $Src $Target -Force }
+                else {
+                    if ($FullRollback) { Save-OverwriteBackup -Target $Target }
+                    New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+                    Copy-Item $Src $Target -Force
+                }
                 $script:overwrote++
             } else {
                 Write-Dim "  - skip $rel"; $script:skippedFiles++
             }
         } else {
             if ($DryRun) { Write-Dim "  + would create $rel" }
-            else { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null; Copy-Item $Src $Target -Force }
+            else {
+                New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+                Copy-Item $Src $Target -Force
+                if ($FullRollback) { Add-NewPath -Target $Target }
+            }
             $script:wroteNew++
         }
     }
