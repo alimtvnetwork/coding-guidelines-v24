@@ -412,6 +412,19 @@ for folder in "${FOLDERS[@]}"; do
   merge_folder "$folder"
 done
 
+# Top-level files: copy each from the archive root into DEST (same name).
+# Missing files are warned (not fatal) so installer remains forward-compatible
+# with repos that omit a script.
+for tlf in "${TOP_LEVEL_FILES[@]}"; do
+  src="$ARCHIVE_ROOT/$tlf"
+  if [[ ! -f "$src" ]]; then
+    warn "Top-level file '$tlf' not found in $REPO@$REF — skipping"
+    continue
+  fi
+  step "Merging file: $tlf"
+  merge_file "$src" "$DEST/$tlf"
+done
+
 # ── Summary ───────────────────────────────────────────────────────
 echo ""
 echo "════════════════════════════════════════════════════════"
