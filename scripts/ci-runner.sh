@@ -274,44 +274,40 @@ emit_json_summary() {
   printf '%s\n' "$1" > "$JSON_OUT"
 }
 
-run_phase() {
-  local phase="$1"
-  local overall="$EXIT_OK"
-  local results_json="["
-  local separator=""
-  while IFS= read -r guard; do
-    [ -z "$guard" ] && continue
-    log_section "guard: $guard"
-    dispatch_guard "$guard"
-    local code=$?
-    overall=$(aggregate_exit "$overall" "$code")
-    results_json="${results_json}${separator}{\"guard\":\"${guard}\",\"exit\":${code}}"
-    separator=","
-  done < <(guards_for_phase "$phase")
-  results_json="${results_json}]"
-  emit_json_summary "{\"phase\":\"${phase}\",\"overall\":${overall},\"guards\":${results_json}}"
-  return "$overall"
+_run_one_guard_in_phase() {
+  local guard="$1"
+  log_section "guard: $guard"
+  dispatch_guard "$guard"
+  local code=$?
+  PHASE_OVERALL=$(aggregate_exit "$PHASE_OVERALL" "$code")
+  PHASE_RESULTS_JSON="${PHASE_RESULTS_JSON}${PHASE_SEP}{\"guard\":\"${guard}\",\"exit\":${code}}"
+  PHASE_SEP=","
 }
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+run_phase() {
+  local phase="$1" guard
+  PHASE_OVERALL="$EXIT_OK"; PHASE_RESULTS_JSON="["; PHASE_SEP=""
+  while IFS= read -r guard; do
+    [ -n "$guard" ] && _run_one_guard_in_phase "$guard"
+  done < <(guards_for_phase "$phase")
+  PHASE_RESULTS_JSON="${PHASE_RESULTS_JSON}]"
+  emit_json_summary "{\"phase\":\"${phase}\",\"overall\":${PHASE_OVERALL},\"guards\":${PHASE_RESULTS_JSON}}"
+  return "$PHASE_OVERALL"
+}
+
+_run_single_guard_mode() {
+  log_section "single-guard mode: $GUARD"
+  dispatch_guard "$GUARD"
+  local code=$?
+  emit_json_summary "{\"guard\":\"${GUARD}\",\"exit\":${code}}"
+  exit "$code"
+}
 
 main() {
   parse_flags "$@"
-  if ! validate_flags; then
-    exit "$EXIT_USAGE_ERROR"
-  fi
-  if ! apply_config_file; then
-    exit "$EXIT_TOOL_ERROR"
-  fi
-  if [ -n "$GUARD" ]; then
-    log_section "single-guard mode: $GUARD"
-    dispatch_guard "$GUARD"
-    local code=$?
-    emit_json_summary "{\"guard\":\"${GUARD}\",\"exit\":${code}}"
-    exit "$code"
-  fi
+  validate_flags    || exit "$EXIT_USAGE_ERROR"
+  apply_config_file || exit "$EXIT_TOOL_ERROR"
+  [ -n "$GUARD" ] && _run_single_guard_mode
   run_phase "$PHASE"
   exit $?
 }
