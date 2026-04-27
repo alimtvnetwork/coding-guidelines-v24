@@ -59,6 +59,11 @@ RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
 case "$RUN_FIX_REPO" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
 case "$ASSUME_YES" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
+ROLLBACK_ON_FIX_FAIL="${INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE:-false}"
+case "$ROLLBACK_ON_FIX_FAIL" in 1|true|TRUE|yes|YES) ROLLBACK_ON_FIX_FAIL=true ;; *) ROLLBACK_ON_FIX_FAIL=false ;; esac
+FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
+case "$FULL_ROLLBACK" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
+$FULL_ROLLBACK && ROLLBACK_ON_FIX_FAIL=true   # full implies edits
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -179,6 +184,8 @@ while [[ $# -gt 0 ]]; do
     --offline|--use-local-archive) OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
+    --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
+    --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -361,6 +368,36 @@ OVERWROTE=0
 WROTE_NEW=0
 SKIPPED_FOLDERS=0
 
+# ── Rollback bookkeeping ──────────────────────────────────────────
+# Populated by merge_file when not in --dry-run. Used by full rollback.
+ROLLBACK_DIR=""           # set lazily by ensure_rollback_dir
+INSTALLED_NEW=()          # paths created by this run (full path)
+INSTALLED_BACKUPS=()      # "target|backup" pairs for overwritten files
+
+ensure_rollback_dir() {
+  [[ -n "$ROLLBACK_DIR" ]] && return 0
+  local ts; ts="$(date -u +%Y%m%dT%H%M%SZ)"
+  ROLLBACK_DIR="$DEST/.install-rollback/$ts"
+  mkdir -p "$ROLLBACK_DIR/backups"
+}
+
+record_new_path() {
+  ensure_rollback_dir
+  INSTALLED_NEW+=("$1")
+  echo "$1" >> "$ROLLBACK_DIR/new-paths.txt"
+}
+
+record_overwrite_backup() {
+  local target="$1" rel
+  ensure_rollback_dir
+  rel="${target#$DEST/}"
+  local backup="$ROLLBACK_DIR/backups/$rel"
+  mkdir -p "$(dirname "$backup")"
+  cp -f "$target" "$backup"
+  INSTALLED_BACKUPS+=("$target|$backup")
+  printf '%s\t%s\n' "$target" "$backup" >> "$ROLLBACK_DIR/backups.tsv"
+}
+
 decide_overwrite() {
   # Returns 0 to write, 1 to skip
   local target="$1"
@@ -386,16 +423,24 @@ merge_file() {
   local target_dir; target_dir="$(dirname "$target")"
   if [[ -e "$target" ]]; then
     if decide_overwrite "$target"; then
-      if $DRY_RUN; then dim "  ~ would overwrite ${target#$DEST/}"
-      else mkdir -p "$target_dir"; cp -f "$src" "$target"; fi
+      if $DRY_RUN; then
+        dim "  ~ would overwrite ${target#$DEST/}"
+      else
+        $FULL_ROLLBACK && record_overwrite_backup "$target"
+        mkdir -p "$target_dir"; cp -f "$src" "$target"
+      fi
       ((OVERWROTE++))
     else
       dim "  - skip ${target#$DEST/}"
       ((SKIPPED_FILES++))
     fi
   else
-    if $DRY_RUN; then dim "  + would create ${target#$DEST/}"
-    else mkdir -p "$target_dir"; cp -f "$src" "$target"; fi
+    if $DRY_RUN; then
+      dim "  + would create ${target#$DEST/}"
+    else
+      mkdir -p "$target_dir"; cp -f "$src" "$target"
+      $FULL_ROLLBACK && record_new_path "$target"
+    fi
     ((WROTE_NEW++))
   fi
 }
@@ -475,6 +520,51 @@ confirm_fix_repo() {
   warn "fix-repo skipped by user — exiting with code 5."
   exit 5
 }
+snapshot_pre_fix_repo() {
+  # Capture HEAD ref of the destination repo so we can restore tracked
+  # files via `git checkout HEAD -- .` if fix-repo fails.
+  PRE_FIX_REPO_HEAD=""
+  $ROLLBACK_ON_FIX_FAIL || return 0
+  if ! git -C "$DEST" rev-parse --git-dir >/dev/null 2>&1; then
+    warn "--rollback-on-fix-repo-failure: $DEST is not a git repo; rollback disabled."
+    ROLLBACK_ON_FIX_FAIL=false
+    return 0
+  fi
+  PRE_FIX_REPO_HEAD="$(git -C "$DEST" rev-parse HEAD 2>/dev/null || true)"
+  step "Rollback armed: HEAD=$PRE_FIX_REPO_HEAD${FULL_ROLLBACK:+, full-rollback=on}"
+}
+
+restore_fix_repo_edits() {
+  step "Restoring tracked files from HEAD..."
+  git -C "$DEST" checkout -- . 2>&1 | tee -a "$1" || warn "git checkout reported issues"
+  ok "fix-repo edits reverted"
+}
+
+restore_installed_paths() {
+  local target backup pair removed=0 restored=0
+  step "Removing files created by this install run..."
+  for target in "${INSTALLED_NEW[@]:-}"; do
+    [[ -e "$target" ]] || continue
+    rm -f "$target" && ((removed++)) || warn "could not remove $target"
+  done
+  step "Restoring overwritten files from backups..."
+  for pair in "${INSTALLED_BACKUPS[@]:-}"; do
+    target="${pair%%|*}"; backup="${pair##*|}"
+    [[ -f "$backup" ]] || continue
+    cp -f "$backup" "$target" && ((restored++)) || warn "could not restore $target"
+  done
+  ok "Removed $removed new file(s); restored $restored overwritten file(s)"
+}
+
+perform_rollback() {
+  local log="$1"
+  echo ""
+  warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+  restore_fix_repo_edits "$log"
+  $FULL_ROLLBACK && restore_installed_paths
+  warn "Rollback complete. Snapshot kept at: ${ROLLBACK_DIR:-<none>}"
+}
+
 run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
@@ -486,6 +576,7 @@ run_fix_repo() {
     exit 5
   fi
   confirm_fix_repo "$script"
+  snapshot_pre_fix_repo
   log_dir="$DEST/.install-logs"
   mkdir -p "$log_dir"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -498,6 +589,7 @@ run_fix_repo() {
     echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "# script:   $script"
     echo "# dest:     $DEST"
+    echo "# rollback: on-failure=$ROLLBACK_ON_FIX_FAIL  full=$FULL_ROLLBACK"
     echo "# ──────────────────────────────────────────────────────────"
   } > "$log_file"
   set +e
@@ -524,6 +616,7 @@ run_fix_repo() {
   echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
   if [[ "$rc" -ne 0 ]]; then
     err "fix-repo failed (exit $rc) — see $log_file"
+    $ROLLBACK_ON_FIX_FAIL && perform_rollback "$log_file"
     exit 5
   fi
   ok "fix-repo completed (log: $log_file)"
