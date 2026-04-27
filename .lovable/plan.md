@@ -1,7 +1,32 @@
 # Current Plan
 
-**Version:** 4.24.0
-**Updated:** 2026-04-24 (session 2)
+**Version:** 4.25.0
+**Updated:** 2026-04-27
+
+---
+
+## v4.25.0 — Docs Viewer quick-jump + GitHub sync banner (2026-04-27)
+
+**Scope:** Frontend-only UX hardening for the Docs Viewer. No spec/backend touched.
+
+### Done
+- **DV1** Command Palette (`Cmd/Ctrl+J`) with pinned "Open Spec Overview" item — `src/components/docs/CommandPalette.tsx`.
+- **DV2** `findSpecOverviewFile` helper resolves `spec/00-overview.md` from the flat `allFiles` list independent of sidebar tree state — `src/components/docs/specOverviewJump.ts`.
+- **DV3** Prominent header button "Spec Overview" with platform-aware kbd hint — `src/pages/DocsViewerComponents.tsx`.
+- **DV4** GitHub Sync Banner at top of `DocsViewerLayout` showing branch + short SHA + repo updated date + session "Loaded" timestamp; per-SHA dismiss in localStorage; reload button — `src/components/docs/GithubSyncBanner.tsx`.
+- **DV5** Threaded `onJumpToOverview?: () => void` through `ContentPanelInput` → `DocsHeader` → `ContentPanelMain` → `DocsContentPanel` → `DocsContent`.
+- **DV6** Added `KeyboardKeyType.J = "j"` to `src/constants/enums.ts`.
+- **CLEAN** Removed `/dev-server/.gitmap/` (3 release JSON snapshots) — no source code referenced it.
+- **DIAG** `spec/` folder visibility incident — verified intact, diagnosed as file-tree caching artifact.
+
+### Verification
+- `bunx tsc --noEmit -p tsconfig.app.json` → 0 errors.
+- `bunx vite build` → success (1830 modules).
+
+### Locks (do not regress)
+1. `Cmd/Ctrl+K` stays bound to the search dialog. `Cmd/Ctrl+J` stays bound to the command palette.
+2. GitHub Sync Banner dismiss is **per-SHA only** — never make it permanently dismissable.
+3. `findSpecOverviewFile` must remain decoupled from the sidebar tree (the resilience-to-stale-tree guarantee is the whole point).
 
 ---
 
