@@ -87,7 +87,7 @@ err()   { echo -e "${RED}❌ $1${NC}" >&2; }
 dim()   { echo -e "${DIM}$1${NC}"; }
 
 usage() {
-  sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'
   exit 0
 }
 
