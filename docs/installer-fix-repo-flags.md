@@ -228,7 +228,107 @@ jobs:
 
 ---
 
-## 5. Related references
+## 5. Troubleshooting
+
+Each failure case below lists the **trigger**, the **exact log line(s) to grep for**, and the **fix**. All log lines are emitted on stdout *and* written into the per-run `fix-repo-*.log` header — so a failed CI run's uploaded artifact is enough to diagnose every case.
+
+### 5.1 Destination is not a git repo (rollback silently disabled)
+
+**Trigger:** you passed `--rollback-on-fix-repo-failure` (or `--full-rollback`) but `<DEST>` has no `.git/` directory — e.g. you installed into a fresh folder created by `--dest ./pristine`.
+
+**What you'll see:**
+
+```
+⚠️  --rollback-on-fix-repo-failure: ./pristine is not a git repo; rollback disabled.
+```
+
+The installer **does not fail** — rollback is the opt-in safety net, and the absence of git means there's nothing to revert to. You will *not* see `Rollback armed: HEAD=…` later in the log; instead, on a `fix-repo` failure you'll see:
+
+```
+Rollback: NOT TRIGGERED (--rollback-on-fix-repo-failure=false  --full-rollback=false)
+```
+
+(Both flags read `false` because the installer flipped them internally after the git-repo check failed.)
+
+**Fix — pick one:**
+
+- Run the installer against an already-cloned repo (`git clone … && ./install.sh --dest <repo>`).
+- `git init && git add -A && git commit -m baseline` inside `<DEST>` *before* the install so there's a `HEAD` to roll back to.
+- Drop the rollback flags if you genuinely want a non-git install (e.g. extracting into a Docker image layer).
+
+---
+
+### 5.2 Invalid `--max-fix-repo-logs` value
+
+**Trigger:** you passed a non-integer (`--max-fix-repo-logs abc`) or a negative number (`--max-fix-repo-logs -1`), or set `INSTALL_MAX_FIX_REPO_LOGS` to such a value.
+
+**What you'll see (Bash):**
+
+```
+  ▸ Log pruning: SKIPPED (--max-fix-repo-logs=-1 is not a non-negative integer)
+```
+
+For non-numeric input, the Bash installer rejects it at flag-parse time with:
+
+```
+❌ --max-fix-repo-logs requires a non-negative integer (got: abc)
+```
+
+— and exits 1 *before* installing anything. PowerShell's `[int]` parameter binding rejects non-numeric input with PS's standard `ParameterBindingException`; negative ints reach the installer body and produce the same `SKIPPED` line.
+
+**Important:** even when pruning is skipped, the `fix-repo` step still runs normally. The only consequence is that **no logs are deleted** — older `fix-repo-*.log` files accumulate.
+
+**Fix:** pass a non-negative integer (`0` to disable, `N ≥ 1` to keep that many). The CLI flag overrides any env var, so `--max-fix-repo-logs 10` will win over a stale `INSTALL_MAX_FIX_REPO_LOGS=-1` in your shell.
+
+---
+
+### 5.3 `--full-rollback` combined with `--dry-run` (no-op rollback)
+
+**Trigger:** you passed `--dry-run` (PS: `-DryRun`) **and** `--full-rollback`. Because `--dry-run` short-circuits every file mutation, the install bookkeeping arrays (`INSTALLED_NEW`, `INSTALLED_BACKUPS`) stay empty, and the `fix-repo` auto-run step is skipped entirely:
+
+```
+if ! $DRY_RUN && $RUN_FIX_REPO; then run_fix_repo; fi
+```
+
+**What you'll see:** the dry-run summary at the bottom prints
+
+```
+⚠️  DRY-RUN — no changes written
+```
+
+…and there is **no** `Rollback armed: HEAD=…` line, **no** `fix-repo-*.log` file, and **no** `═══ ROLLBACK TRIGGERED ═══` line, no matter what fails. If you were expecting rollback to "preview" what it would restore, you won't get it — by design, dry-run never writes the snapshot a rollback would need.
+
+**Fix — pick one based on what you actually want:**
+
+| You want…                                         | Run this                                                                                  |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------|
+| Preview which files the install would touch       | `./install.sh --dry-run` (drop `--full-rollback`; it's irrelevant here)                    |
+| Real install + rollback safety net                | `./install.sh --run-fix-repo --full-rollback` (omit `--dry-run`)                           |
+| Smoke-test rollback end-to-end before production  | Run the real install into a throwaway dir: `./install.sh --dest /tmp/smoke --run-fix-repo --full-rollback` |
+
+---
+
+### 5.4 Quick-grep cheat sheet
+
+When you have an uploaded `fix-repo-*.log` artifact, these greps answer "what happened?" in one pass:
+
+```bash
+# Did rollback fire? Which mode?
+grep -E '^(═══ ROLLBACK TRIGGERED|Rollback: (NOT TRIGGERED|not needed|armed|complete))' fix-repo-*.log
+
+# Did pruning run? Which mode? How many removed?
+grep -E '^  ▸ Log pruning:' fix-repo-*.log
+
+# Why was rollback disabled?
+grep -E 'is not a git repo; rollback disabled' fix-repo-*.log
+
+# fix-repo final exit code
+grep -E '^# exit:' fix-repo-*.log
+```
+
+---
+
+## 6. Related references
 
 - Installer behavior contract:
   [`spec/14-update/27-generic-installer-behavior.md`](../spec/14-update/27-generic-installer-behavior.md)
