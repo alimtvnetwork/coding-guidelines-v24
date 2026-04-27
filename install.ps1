@@ -386,6 +386,22 @@ try {
             Write-Err "-RunFixRepo: $fixScript not found after install."
             exit 5
         }
+        if ($Yes) {
+            Write-Host "  ▸ Auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
+        } elseif ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+            Write-Host ""
+            Write-Host "⚠️  About to run $fixScript" -ForegroundColor Yellow
+            Write-Host "   This will rewrite versioned-repo-name tokens across tracked text files." -ForegroundColor Yellow
+            $reply = Read-Host "Proceed? [y/N]"
+            if ($reply -notmatch '^(y|Y|yes|YES)$') {
+                Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
+                exit 5
+            }
+        } else {
+            Write-Err "-RunFixRepo requires confirmation but session is non-interactive."
+            Write-Err "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
+            exit 5
+        }
         $logDir = Join-Path $Dest ".install-logs"
         if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
         $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
