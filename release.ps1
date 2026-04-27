@@ -14,7 +14,7 @@ $version = $packageJson.version
 $distDir = Join-Path $PSScriptRoot "release-artifacts"
 $releaseName = "coding-guidelines-v$version"
 $stagingDir = Join-Path $distDir $releaseName
-$requiredPaths = @("spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1")
+$requiredPaths = @("spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1", ".lovable/coding-guidelines", ".lovable/prompts")
 
 function Test-RequiredPaths {
     $isMissing = $false
