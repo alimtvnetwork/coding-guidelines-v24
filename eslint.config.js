@@ -38,8 +38,11 @@ export default tseslint.config(
       // No raw string literals in comparisons — use enum/typed constants
       "coding-guidelines/no-magic-strings": "warn",
 
-      // Max 15 lines per function body (non-blank, non-comment)
+      // Max 15 lines per function body (non-blank, non-comment) — hard cap
       "coding-guidelines/max-function-lines": ["error", { max: 15 }],
+
+      // Prefer ≤ 8 lines per function body — soft preference (CODE-RED-005)
+      "coding-guidelines/prefer-function-lines": ["warn", { prefer: 8, hard: 15 }],
 
       // Promise.all for independent async calls — no sequential await
       "coding-guidelines/promise-all-independent": "error",
