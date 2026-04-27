@@ -45,6 +45,8 @@ OFFLINE=false
 LOCAL_ARCHIVE=""
 NO_DISCOVERY=false
 NO_MAIN_FALLBACK=false
+RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
+case "${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 
 usage() {
   cat <<HELP
@@ -76,6 +78,10 @@ SOURCE-SELECTION FLAGS (which mode each one forces)
 TARGET / OUTPUT FLAGS (any mode)
   --target <dir>, --dest <dir>   Install destination (default: cwd).
   --no-open                      Skip auto-opening the entry file.
+  --run-fix-repo                 After verification, execute fix-repo.sh
+                                 (or fix-repo.ps1 on Windows) so the repo
+                                 is patched before this installer exits.
+                                 Also enabled by INSTALL_RUN_FIX_REPO=1.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
@@ -119,6 +125,7 @@ while [[ $# -gt 0 ]]; do
     --target|--dest)  TARGET="$2";  shift 2 ;;
     --no-open)        DO_OPEN=false; shift ;;
     --offline)        OFFLINE=true; shift ;;
+    --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
@@ -154,7 +161,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 linters-install v4.7.0"
+echo "  📦 linters-install v4.24.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then
@@ -450,5 +457,42 @@ fi
 
 echo ""
 verify_install
+
+run_fix_repo() {
+  # Auto-execute the freshly installed fix-repo script so the repo is
+  # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
+  # Cygwin, MINGW), .sh elsewhere. Failures propagate as exit 5
+  # (spec §8: "inner installer / handoff rejected").
+  local script
+  case "$(uname -s 2>/dev/null || echo unknown)" in
+    MINGW*|MSYS*|CYGWIN*) script="${TARGET}/fix-repo.ps1" ;;
+    *)                    script="${TARGET}/fix-repo.sh"  ;;
+  esac
+  if [[ ! -f "${script}" ]]; then
+    echo "❌ --run-fix-repo: ${script} not found after install." >&2
+    exit 5
+  fi
+  echo ""
+  echo "  ▸ running fix-repo: ${script}"
+  case "${script}" in
+    *.ps1)
+      if command -v pwsh >/dev/null 2>&1; then
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "${script}" || { echo "❌ fix-repo.ps1 failed (exit $?)" >&2; exit 5; }
+      elif command -v powershell >/dev/null 2>&1; then
+        powershell -NoProfile -ExecutionPolicy Bypass -File "${script}" || { echo "❌ fix-repo.ps1 failed (exit $?)" >&2; exit 5; }
+      else
+        echo "❌ --run-fix-repo: neither pwsh nor powershell found in PATH." >&2
+        exit 5
+      fi
+      ;;
+    *)
+      bash "${script}" || { echo "❌ fix-repo.sh failed (exit $?)" >&2; exit 5; }
+      ;;
+  esac
+  echo "  ✓ fix-repo completed"
+}
+
+${RUN_FIX_REPO} && run_fix_repo
+
 echo "✅ ${BUNDLE_NAME} installed."
 open_entry

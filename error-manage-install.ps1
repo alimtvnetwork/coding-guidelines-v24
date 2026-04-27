@@ -69,7 +69,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.ps1))) -Version v4.7.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.ps1))) -Version v4.24.0 -Target .\vendor
 #>
 
 param(
@@ -80,9 +80,17 @@ param(
     [string]$UseLocalArchive = "",
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
+    [switch]$RunFixRepo,
     [Alias("?")]
     [switch]$Help
 )
+
+# Env-var equivalent: INSTALL_RUN_FIX_REPO=1 enables -RunFixRepo without
+# requiring callers to thread the flag through wrapper scripts.
+if (-not $RunFixRepo) {
+    $envFlag = $env:INSTALL_RUN_FIX_REPO
+    if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
@@ -133,7 +141,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 error-manage-install v4.7.0" -ForegroundColor Cyan
+Write-Host "  📦 error-manage-install v4.24.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
@@ -385,5 +393,27 @@ function Verify-Install {
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
 Verify-Install
+
+function Invoke-FixRepo {
+    # Auto-execute the freshly installed fix-repo.ps1 so the repo is
+    # patched in the same invocation. Failures propagate as exit 5
+    # (spec §8: "inner installer / handoff rejected").
+    $script = Join-Path $Target "fix-repo.ps1"
+    if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
+        Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
+        exit 5
+    }
+    Write-Host ""
+    Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
+    & $script
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "❌ fix-repo.ps1 failed (exit $LASTEXITCODE)" -ForegroundColor Red
+        exit 5
+    }
+    Write-Host "  ✓ fix-repo completed" -ForegroundColor Green
+}
+
+if ($RunFixRepo) { Invoke-FixRepo }
+
 Write-Host "✅ $BundleName installed." -ForegroundColor Green
 Open-Entry

@@ -70,7 +70,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.ps1))) -Version v4.7.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.ps1))) -Version v4.24.0 -Target .\vendor
 #>
 
 param(
@@ -81,9 +81,17 @@ param(
     [string]$UseLocalArchive = "",
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
+    [switch]$RunFixRepo,
     [Alias("?")]
     [switch]$Help
 )
+
+# Env-var equivalent: INSTALL_RUN_FIX_REPO=1 enables -RunFixRepo without
+# requiring callers to thread the flag through wrapper scripts.
+if (-not $RunFixRepo) {
+    $envFlag = $env:INSTALL_RUN_FIX_REPO
+    if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
@@ -98,17 +106,14 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
 $BundleName = "consolidated"
-$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines,.lovable/coding-guidelines|.lovable/coding-guidelines"
-# Top-level files copied verbatim from archive root → Target. Repo hygiene
-# scripts (fix-repo) and visibility toggles must ship with every bundle.
-$BundleTopLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1")
+$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines"
 $ArchiveStableName = "consolidated"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v18/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v18"
 $AutoOpenEntry = ""
 $PrebuiltSrc = ""
 $PrebuiltDest = ""
-$VerifyPairs = "fix-repo.sh|file,fix-repo.ps1|file"
+$VerifyPairs = ""
 
 if ($UseLocalArchive) { $Offline = $true }
 
@@ -137,7 +142,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 consolidated-install v4.7.0" -ForegroundColor Cyan
+Write-Host "  📦 consolidated-install v4.24.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
@@ -206,17 +211,6 @@ function Copy-Mapping {
         New-Item -ItemType Directory -Path $destPath -Force | Out-Null
         Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
         Write-Host "  ✓ $($pair.Src) → $destPath" -ForegroundColor Green
-    }
-    # Top-level files: copy each from archive root → Target. Missing files
-    # are warned (not fatal) so the bundle stays forward-compatible.
-    foreach ($tlf in $BundleTopLevelFiles) {
-        $srcFile = Join-Path $root $tlf
-        if (-not (Test-Path $srcFile)) {
-            Write-Warning "  archive missing top-level file $tlf — skipping"
-            continue
-        }
-        Copy-Item -Path $srcFile -Destination (Join-Path $Target $tlf) -Force
-        Write-Host "  ✓ $tlf → $(Join-Path $Target $tlf)" -ForegroundColor Green
     }
 }
 
@@ -400,5 +394,27 @@ function Verify-Install {
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
 Verify-Install
+
+function Invoke-FixRepo {
+    # Auto-execute the freshly installed fix-repo.ps1 so the repo is
+    # patched in the same invocation. Failures propagate as exit 5
+    # (spec §8: "inner installer / handoff rejected").
+    $script = Join-Path $Target "fix-repo.ps1"
+    if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
+        Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
+        exit 5
+    }
+    Write-Host ""
+    Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
+    & $script
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "❌ fix-repo.ps1 failed (exit $LASTEXITCODE)" -ForegroundColor Red
+        exit 5
+    }
+    Write-Host "  ✓ fix-repo completed" -ForegroundColor Green
+}
+
+if ($RunFixRepo) { Invoke-FixRepo }
+
 Write-Host "✅ $BundleName installed." -ForegroundColor Green
 Open-Entry
