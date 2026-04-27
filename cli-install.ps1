@@ -85,6 +85,8 @@ param(
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
     [switch]$RunFixRepo,
+    [Alias("y","AssumeYes")]
+    [switch]$Yes,
     [Alias("?")]
     [switch]$Help
 )
@@ -94,6 +96,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
