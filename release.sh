@@ -62,6 +62,9 @@ copy_release_files() {
   cp install.ps1 "$STAGING_DIR/install.ps1"
   cp install-config.json "$STAGING_DIR/install-config.json"
   cp readme.md "$STAGING_DIR/readme.md"
+  mkdir -p "$STAGING_DIR/.lovable"
+  cp -R .lovable/coding-guidelines "$STAGING_DIR/.lovable/coding-guidelines"
+  cp -R .lovable/prompts "$STAGING_DIR/.lovable/prompts"
 }
 
 create_archives() {
