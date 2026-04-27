@@ -48,8 +48,8 @@ Current (no-op):    widget-cli-v3 should stay.
 Numeric guard:      widget-cli-v10 must NOT be rewritten.
 EOF
 
-git add README.md
-git commit -q -m seed
+hash="$(git hash-object -w README.md)"
+git update-index --add --cacheinfo "100644,$hash,README.md"
 
 bash "$FR_SH" --3 >/dev/null 2>&1
 exit_code=$?
