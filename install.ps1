@@ -451,6 +451,17 @@ try {
             Write-Err "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
             exit 5
         }
+        if ($RollbackOnFixRepoFailure) {
+            $isGitRepo = $false
+            try { & git -C $Dest rev-parse --git-dir 2>$null | Out-Null; if ($LASTEXITCODE -eq 0) { $isGitRepo = $true } } catch {}
+            if (-not $isGitRepo) {
+                Write-Warn "-RollbackOnFixRepoFailure: $Dest is not a git repo; rollback disabled."
+                $RollbackOnFixRepoFailure = $false
+            } else {
+                $Script:PreFixRepoHead = (& git -C $Dest rev-parse HEAD 2>$null).Trim()
+                Write-Step ("Rollback armed: HEAD={0}{1}" -f $Script:PreFixRepoHead, $(if ($FullRollback) { ', full-rollback=on' } else { '' }))
+            }
+        }
         $logDir = Join-Path $Dest ".install-logs"
         if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
         $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
@@ -460,6 +471,7 @@ try {
             "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
             "# script:   $fixScript",
             "# dest:     $Dest",
+            "# rollback: on-failure=$RollbackOnFixRepoFailure  full=$FullRollback",
             "# ──────────────────────────────────────────────────────────"
         ) | Set-Content -LiteralPath $logFile -Encoding UTF8
         Write-Host ""
@@ -470,6 +482,27 @@ try {
         Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
         if ($rc -ne 0) {
             Write-Err "fix-repo.ps1 failed (exit $rc) — see $logFile"
+            if ($RollbackOnFixRepoFailure) {
+                Write-Host ""
+                Write-Warn "═══ ROLLBACK TRIGGERED (fix-repo failed) ═══"
+                Write-Step "Restoring tracked files from HEAD..."
+                & git -C $Dest checkout -- . 2>&1 | Tee-Object -FilePath $logFile -Append
+                Write-OK "fix-repo edits reverted"
+                if ($FullRollback) {
+                    Write-Step "Removing files created by this install run..."
+                    $removed = 0
+                    foreach ($p in $Script:InstalledNew) {
+                        if (Test-Path -LiteralPath $p) { Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue; $removed++ }
+                    }
+                    Write-Step "Restoring overwritten files from backups..."
+                    $restored = 0
+                    foreach ($b in $Script:InstalledBackups) {
+                        if (Test-Path -LiteralPath $b.Backup) { Copy-Item -LiteralPath $b.Backup -Destination $b.Target -Force; $restored++ }
+                    }
+                    Write-OK "Removed $removed new file(s); restored $restored overwritten file(s)"
+                }
+                Write-Warn "Rollback complete. Snapshot kept at: $($Script:RollbackDir)"
+            }
             exit 5
         }
         Write-OK "fix-repo completed (log: $logFile)"
