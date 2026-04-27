@@ -81,6 +81,122 @@ rollback-on-failure:   false                   (source: default — no env fallb
 
 ---
 
+## 1b. Verifying CLI-vs-env precedence (copy-paste recipes)
+
+These recipes are **assertion-style smoke tests** — each one sets a deliberately conflicting env var, runs the installer in `--dry-run` mode, and `grep`s the output to confirm the CLI flag won. Safe to run in any working directory; nothing is installed (`--dry-run` short-circuits all writes), and `--run-fix-repo` is **not** passed, so no `fix-repo` execution or rollback can occur.
+
+> ✅ Each block exits **0** when the precedence rule holds; non-zero means the installer regressed and would silently honour the env var.
+
+### A. `--log-dir` overrides `INSTALL_LOG_DIR`
+
+**🐧 macOS · Linux · Bash**
+
+```bash
+INSTALL_LOG_DIR=/tmp/from-env \
+  ./install.sh --dry-run --log-dir /tmp/from-cli 2>&1 \
+  | tee /tmp/precedence-log-dir.out \
+  | grep -E 'log[- ]dir.*=.*from-cli' \
+  && ! grep -q 'from-env' /tmp/precedence-log-dir.out \
+  && echo "✅ --log-dir wins over INSTALL_LOG_DIR" \
+  || { echo "❌ precedence regressed"; exit 1; }
+```
+
+**🪟 Windows · PowerShell**
+
+```powershell
+$env:INSTALL_LOG_DIR = 'C:\Temp\from-env'
+$out = .\install.ps1 -DryRun -LogDir 'C:\Temp\from-cli' 2>&1 | Out-String
+$cliWon = $out -match 'from-cli'
+$envLeaked = $out -match 'from-env'
+if ($cliWon -and -not $envLeaked) {
+    Write-Host '✅ -LogDir wins over $env:INSTALL_LOG_DIR' -ForegroundColor Green
+} else {
+    Write-Host '❌ precedence regressed' -ForegroundColor Red; exit 1
+}
+Remove-Item Env:INSTALL_LOG_DIR
+```
+
+### B. `--max-fix-repo-logs` overrides `INSTALL_MAX_FIX_REPO_LOGS`
+
+This one runs the installer for real (otherwise the pruning step is skipped) but in a **throwaway temp directory** so nothing on your machine is touched. The log line we grep is the deterministic `Log pruning: --max-fix-repo-logs=…` summary added in §2.
+
+**🐧 macOS · Linux · Bash**
+
+```bash
+TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+( cd "$TMP" && git init -q && git commit --allow-empty -m baseline -q )
+
+INSTALL_MAX_FIX_REPO_LOGS=99 \
+  ./install.sh \
+    --dest "$TMP" \
+    --run-fix-repo \
+    --max-fix-repo-logs 7 \
+    --log-dir "$TMP/.install-logs" \
+    2>&1 \
+  | tee "$TMP/precedence-max.out" \
+  | grep -E 'Log pruning:.*--max-fix-repo-logs=7\b' \
+  && ! grep -qE 'max-fix-repo-logs=99\b' "$TMP/precedence-max.out" \
+  && echo "✅ --max-fix-repo-logs wins over INSTALL_MAX_FIX_REPO_LOGS" \
+  || { echo "❌ precedence regressed"; exit 1; }
+```
+
+**🪟 Windows · PowerShell**
+
+```powershell
+$tmp = Join-Path $env:TEMP ("install-precedence-" + [guid]::NewGuid())
+New-Item -ItemType Directory -Path $tmp | Out-Null
+Push-Location $tmp; git init -q; git commit --allow-empty -m baseline -q; Pop-Location
+
+$env:INSTALL_MAX_FIX_REPO_LOGS = '99'
+$out = .\install.ps1 `
+  -Dest $tmp `
+  -RunFixRepo `
+  -MaxFixRepoLogs 7 `
+  -LogDir (Join-Path $tmp '.install-logs') 2>&1 | Out-String
+
+$cliWon    = $out -match 'Log pruning:.*-MaxFixRepoLogs=7\b|--max-fix-repo-logs=7\b'
+$envLeaked = $out -match 'max-fix-repo-logs=99\b|MaxFixRepoLogs=99\b'
+Remove-Item Env:INSTALL_MAX_FIX_REPO_LOGS
+Remove-Item -LiteralPath $tmp -Recurse -Force
+
+if ($cliWon -and -not $envLeaked) {
+    Write-Host '✅ -MaxFixRepoLogs wins over $env:INSTALL_MAX_FIX_REPO_LOGS' -ForegroundColor Green
+} else {
+    Write-Host '❌ precedence regressed' -ForegroundColor Red; exit 1
+}
+```
+
+### C. Sanity-check the env-var fallback (no CLI flag passed)
+
+When the CLI flag is **absent**, the env var must be picked up. This confirms the fallback half of the precedence chain.
+
+**🐧 macOS · Linux · Bash**
+
+```bash
+INSTALL_LOG_DIR=/tmp/from-env \
+  ./install.sh --dry-run 2>&1 \
+  | grep -E 'log[- ]dir.*=.*from-env' \
+  && echo "✅ INSTALL_LOG_DIR honoured when --log-dir omitted" \
+  || { echo "❌ env fallback broken"; exit 1; }
+```
+
+**🪟 Windows · PowerShell**
+
+```powershell
+$env:INSTALL_LOG_DIR = 'C:\Temp\from-env'
+$out = .\install.ps1 -DryRun 2>&1 | Out-String
+Remove-Item Env:INSTALL_LOG_DIR
+if ($out -match 'from-env') {
+    Write-Host '✅ $env:INSTALL_LOG_DIR honoured when -LogDir omitted' -ForegroundColor Green
+} else {
+    Write-Host '❌ env fallback broken' -ForegroundColor Red; exit 1
+}
+```
+
+> 💡 If any recipe fails, the installer is no longer honouring the precedence rules from §1a. File an issue and attach the captured `*.out` file (Bash) or `$out` (PowerShell) — both contain the full installer banner that names the source of every effective setting.
+
+---
+
 ## 2. `--max-fix-repo-logs N` (log retention)
 
 After each `fix-repo` run, the installer prunes
