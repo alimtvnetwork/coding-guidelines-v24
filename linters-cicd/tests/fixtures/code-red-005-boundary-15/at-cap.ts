@@ -21,7 +21,6 @@ export function fixtureAtCap15(items: number[]): number {
   let negative = 0;
   let zeroes = 0;
   let evens = 0;
-  let odds = 0;
   let maxSeen = 0;
   for (const value of items) {
     total += value;
@@ -29,8 +28,7 @@ export function fixtureAtCap15(items: number[]): number {
     if (value < 0) negative += 1;
     if (value === 0) zeroes += 1;
     if (value % 2 === 0) evens += 1;
-    else odds += 1;
     if (value > maxSeen) maxSeen = value;
   }
-  return total + positive - negative + zeroes + evens - odds + maxSeen;
+  return total + positive - negative + zeroes + evens + maxSeen;
 }
