@@ -70,7 +70,7 @@ class Prefer8FiresOnFixtureTests(unittest.TestCase):
         code, payload = run_scanner(HARDCAP)
         findings = collect_findings(payload)
         self.assertEqual(findings, [],
-                         msg="CODE-RED-004 must not double-report on prefer-band fixture")
+                         msg="CODE-RED-004 (>15-line safety net) must stay silent on a 9–15 line body")
         self.assertEqual(code, 0)
 
 
