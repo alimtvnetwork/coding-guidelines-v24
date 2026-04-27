@@ -54,7 +54,7 @@ require_in_region() {
   local line text
   line="$(region_line_no "$region")"
   text="$(region_text "$region")"
-  printf '%s' "$text" | grep -qE "$pattern" && return 0
+  printf '%s' "$text" | grep -qE -e "$pattern" && return 0
   record_finding "$file" "$line" "MISSING" "$reason" "$text"
 }
 
