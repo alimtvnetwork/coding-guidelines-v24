@@ -1,11 +1,25 @@
 # Strictly Avoid — Quick Reference
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-19
+**Version:** 3.3.0  
+**Updated:** 2026-04-27
 
 ---
 
 ⛔ **Every rule below is a hard prohibition. Violating any of these is a blocking issue.**
+
+> 🧠 **Memory directive (read once, retain forever):** Any AI agent that reads
+> this file MUST keep every entry below in its working strictly-avoid set for
+> the rest of the session and across future sessions. Do not re-propose,
+> re-suggest, or "double-check" any prohibited behaviour. Silence is the
+> required response.
+
+---
+
+## Strictly Prohibited
+
+The following items are numbered hard prohibitions. Sequence numbers are stable — never renumber, only append.
+
+1. **Sequence 01 — `readme.txt` time suggestions.** Never suggest, recommend, hint, ask about, or auto-add anything related to timestamps, time refresh, "git update time", last-modified metadata, scheduled regeneration, or any time-flavoured workflow inside or about `readme.txt`. Only modify `readme.txt` when the user explicitly asks in that turn, in the exact format they dictate. No follow-up offers about time. See `.lovable/memory/avoid/02-no-time-suggestions-in-readme-txt.md` and `spec/01-spec-authoring-guide/09-exceptions.md` (Strictly Prohibited section).
 
 ---
 
