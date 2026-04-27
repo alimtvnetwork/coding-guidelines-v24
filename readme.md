@@ -230,14 +230,20 @@ Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec
 <details>
 <summary><strong>slides</strong> — Slides App + Decks · script: <a href="slides-install.sh"><code>slides-install.sh</code></a> / <a href="slides-install.ps1"><code>slides-install.ps1</code></a></summary>
 
+Bash · latest (auto-opens `slides-app/dist/index.html`):
 ```bash
-# Bash · latest (auto-opens slides-app/dist/index.html)
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash
-# Bash · pinned, no auto-open (CI)
+```
+Bash · pinned, no auto-open (CI):
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash -s -- --version v3.85.0 --target ./vendor/slides --no-open
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1 | iex
+```
+PowerShell · pinned, no auto-open:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1))) -Version v3.85.0 -Dest .\vendor\slides -NoOpen
 ```
 Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
