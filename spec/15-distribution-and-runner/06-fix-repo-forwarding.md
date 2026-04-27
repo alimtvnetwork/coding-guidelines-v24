@@ -27,38 +27,37 @@ Any drift between this document and the actual code is a **bug**.
 
 ## 2. Sub-command surface
 
-| Invocation                              | Effect                                                       |
-|-----------------------------------------|--------------------------------------------------------------|
-| `./run.sh fix-repo` / `./run.ps1 fix-repo` | Default mode (`--2` / `-2`). Rewrite last 2 prior versions. |
-| `./run.sh fix-repo --3`                 | Rewrite last 3 prior versions.                              |
-| `./run.sh fix-repo --5`                 | Rewrite last 5 prior versions.                              |
-| `./run.sh fix-repo --all`               | Rewrite every prior version (`v1`..`v(current-1)`).         |
-| `./run.sh fix-repo --dry-run`           | Report changes; do not write.                                |
-| `./run.sh fix-repo --verbose`           | List every modified file.                                    |
+| Bash invocation                  | PowerShell invocation             | Effect                                                |
+|----------------------------------|-----------------------------------|-------------------------------------------------------|
+| `./run.sh fix-repo`              | `./run.ps1 fix-repo`              | Default mode. Rewrite last 2 prior versions.          |
+| `./run.sh fix-repo --3`          | `./run.ps1 fix-repo -3`           | Rewrite last 3 prior versions.                        |
+| `./run.sh fix-repo --5`          | `./run.ps1 fix-repo -5`           | Rewrite last 5 prior versions.                        |
+| `./run.sh fix-repo --all`        | `./run.ps1 fix-repo -all`         | Rewrite every prior version (`v1`..`v(current-1)`).   |
+| `./run.sh fix-repo --dry-run`    | `./run.ps1 fix-repo -DryRun`      | Report changes; do not write.                         |
+| `./run.sh fix-repo --verbose`    | `./run.ps1 fix-repo -Verbose`     | List every modified file.                             |
 
-PowerShell uses the same flag tokens (`--2`, `--3`, `--5`, `--all`,
-`--dry-run`, `--verbose`). Long-form `--` flags MUST be accepted on both
-shells. Single-dash short forms (`-2`, `-DryRun`, etc.) are **not** part
-of the contract — `fix-repo.ps1` parses the same `--`-prefixed tokens
-as `fix-repo.sh`.
+Each shell uses its own native flag dialect. The runners are **transparent
+dispatchers** — they pass the user's exact tokens to the inner script,
+which is the only place that parses flags.
 
 ---
 
-## 3. Flag mapping (Bash ↔ PowerShell)
+## 3. Flag dialect (per shell)
 
-| User types (Bash)   | User types (PowerShell) | Forwarded to inner script as |
-|---------------------|-------------------------|------------------------------|
-| `--2`               | `--2`                   | `--2`                        |
-| `--3`               | `--3`                   | `--3`                        |
-| `--5`               | `--5`                   | `--5`                        |
-| `--all`             | `--all`                 | `--all`                      |
-| `--dry-run`         | `--dry-run`             | `--dry-run`                  |
-| `--verbose`         | `--verbose`             | `--verbose`                  |
-| (none)              | (none)                  | (none — inner script defaults to `--2`) |
+| Semantic     | Bash token (`fix-repo.sh`) | PowerShell token (`fix-repo.ps1`) |
+|--------------|----------------------------|-----------------------------------|
+| Mode: 2      | `--2`                      | `-2`                              |
+| Mode: 3      | `--3`                      | `-3`                              |
+| Mode: 5      | `--5`                      | `-5`                              |
+| Mode: all    | `--all`                    | `-all` / `-All`                   |
+| Dry run      | `--dry-run`                | `-DryRun`                         |
+| Verbose      | `--verbose`                | `-Verbose`                        |
+| (none)       | (defaults to `--2`)        | (defaults to `-2`)                |
 
-There is **no flag translation**. The runner is a transparent dispatcher.
-If a flag is not recognized by the inner script, the inner script emits
-the error — never the runner.
+There is **no flag translation** in the runners. The Bash runner forwards
+Bash-dialect tokens; the PowerShell runner forwards PowerShell-dialect
+tokens. If a token is not recognized by the inner script, the inner
+script emits the error — never the runner.
 
 ---
 
