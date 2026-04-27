@@ -79,6 +79,47 @@ run-fix-repo:          true                    (source: CLI --run-fix-repo)
 rollback-on-failure:   false                   (source: default — no env fallback exists)
 ```
 
+### Boolean flags have **no** environment-variable override
+
+The four boolean switches in §1a (`--run-fix-repo`, `--show-fix-repo-log`, `--rollback-on-fix-repo-failure`, `--full-rollback`) are **CLI-only by design**. There is no `INSTALL_RUN_FIX_REPO`, no `INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE`, no `INSTALL_FULL_ROLLBACK`, and no `INSTALL_SHOW_FIX_REPO_LOG`. The installer never reads them, even if you export them.
+
+**Why:** booleans control destructive or auto-executing behaviour (running `fix-repo` against your tree, reverting edits, deleting newly-created files). A stale `export` lingering in a developer's shell rc — or inherited into a CI job — must never silently arm those actions. Forcing them onto the command line keeps the intent explicit and visible in shell history / CI logs.
+
+**What happens if you set one anyway:** nothing. The variable is simply ignored and the flag stays at its default (`false`). The installer does **not** warn, because the name is not in its known-flag list — to the installer it is just an unrelated environment variable.
+
+#### Worked example — exported env var is silently ignored
+
+```bash
+# A user *guesses* there is an env-var fallback. There isn't.
+export INSTALL_RUN_FIX_REPO=true
+export INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE=1
+export INSTALL_FULL_ROLLBACK=yes
+
+./install.sh --dest ./coding-guidelines      # no boolean flags passed
+```
+
+Effective settings for that run:
+
+```
+run-fix-repo:          false                   (source: default — env var INSTALL_RUN_FIX_REPO is not read)
+show-fix-repo-log:     false                   (source: default)
+rollback-on-failure:   false                   (source: default — env var INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE is not read)
+full-rollback:         false                   (source: default — env var INSTALL_FULL_ROLLBACK is not read)
+```
+
+`fix-repo` is **not** executed, no rollback is armed, and no log is printed — exactly as if the env vars were never set. To actually opt in, pass the flags:
+
+```bash
+./install.sh --dest ./coding-guidelines \
+  --run-fix-repo \
+  --rollback-on-fix-repo-failure \
+  --show-fix-repo-log
+```
+
+The PowerShell equivalent behaves identically — `$env:INSTALL_RUN_FIX_REPO = 'true'` is ignored; you must pass `-RunFixRepo` on the command line.
+
+> 🔍 **Quick self-check:** if you are unsure whether a setting honours an env var, look it up in the §1a table. Any row whose **Env var** column shows `—` is CLI-only, full stop.
+
 ---
 
 ## 1b. Verifying CLI-vs-env precedence (copy-paste recipes)
