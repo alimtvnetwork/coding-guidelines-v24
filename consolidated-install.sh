@@ -249,6 +249,19 @@ extract_mapping() {
     cp -R "${archive_root}/${src}/." "${TARGET}/${dest}/"
     echo "  ✓ ${src} → ${TARGET}/${dest}"
   done
+
+  # Top-level files: copy each from archive root → TARGET. Missing files are
+  # warned (not fatal) so the bundle stays forward-compatible with repos that
+  # legitimately omit a script.
+  local tlf
+  for tlf in ${BUNDLE_TOP_LEVEL_FILES}; do
+    if [[ ! -f "${archive_root}/${tlf}" ]]; then
+      echo "  ⚠️  archive missing top-level file ${tlf} — skipping" >&2
+      continue
+    fi
+    cp -f "${archive_root}/${tlf}" "${TARGET}/${tlf}"
+    echo "  ✓ ${tlf} → ${TARGET}/${tlf}"
+  done
 }
 
 open_entry() {
