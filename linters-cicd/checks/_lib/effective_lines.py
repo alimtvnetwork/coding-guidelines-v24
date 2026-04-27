@@ -13,9 +13,10 @@ Definition (applies to ALL languages):
       * empty / whitespace-only
       * a single-line comment (per-language token, see SYNTAX below)
       * a block-comment open / continuation / close (state-tracked)
-      * a docstring opener/closer line (Python only — single-line ``"""``
-        or ``'''`` opener/closer; prose lines INSIDE a multi-line docstring
-        DO count, matching prior CODE-RED-005 Python scanner behavior)
+      * a docstring opener/closer line (Python only — single-line
+        triple-quote opener/closer; prose lines INSIDE a multi-line
+        docstring DO count, matching prior CODE-RED-005 Python scanner
+        behavior)
 
 The function signature line and the closing brace/dedent are NEVER
 passed to this counter — callers extract the body slice themselves.
