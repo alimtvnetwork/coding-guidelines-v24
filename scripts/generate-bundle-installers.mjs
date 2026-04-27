@@ -756,6 +756,7 @@ param(
     [switch]$Yes,
     [string]$LogDir = "",
     [switch]$ShowFixRepoLog,
+    [int]$MaxFixRepoLogs = -1,
     [Alias("?")]
     [switch]$Help
 )
