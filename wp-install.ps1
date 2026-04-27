@@ -80,6 +80,8 @@ param(
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
     [switch]$RunFixRepo,
+    [Alias("y","AssumeYes")]
+    [switch]$Yes,
     [Alias("?")]
     [switch]$Help
 )
@@ -89,6 +91,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
@@ -395,21 +401,52 @@ Verify-Install
 
 function Invoke-FixRepo {
     # Auto-execute the freshly installed fix-repo.ps1 so the repo is
-    # patched in the same invocation. Failures propagate as exit 5
-    # (spec §8: "inner installer / handoff rejected").
+    # patched in the same invocation. Streams stdout+stderr to a
+    # timestamped log under <Target>/.install-logs/. Failures
+    # propagate as exit 5 (spec §8: "inner installer / handoff rejected").
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
         exit 5
     }
-    Write-Host ""
-    Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
-    & $script
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ fix-repo.ps1 failed (exit $LASTEXITCODE)" -ForegroundColor Red
+    if ($Yes) {
+        Write-Host "  ▸ auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
+    } elseif ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+        Write-Host ""
+        Write-Host "⚠️  About to run $script" -ForegroundColor Yellow
+        Write-Host "   This will rewrite versioned-repo-name tokens across tracked text files." -ForegroundColor Yellow
+        $reply = Read-Host "Proceed? [y/N]"
+        if ($reply -notmatch '^(y|Y|yes|YES)$') {
+            Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
+            exit 5
+        }
+    } else {
+        Write-Host "❌ -RunFixRepo requires confirmation but session is non-interactive." -ForegroundColor Red
+        Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
         exit 5
     }
-    Write-Host "  ✓ fix-repo completed" -ForegroundColor Green
+    $logDir = Join-Path $Target ".install-logs"
+    if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+    $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+    $logFile = Join-Path $logDir "fix-repo-$ts.log"
+    @(
+        "# fix-repo log",
+        "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
+        "# script:   $script",
+        "# target:   $Target",
+        "# ──────────────────────────────────────────────────────────"
+    ) | Set-Content -LiteralPath $logFile -Encoding UTF8
+    Write-Host ""
+    Write-Host "  ▸ running fix-repo: $script" -ForegroundColor Cyan
+    Write-Host "  ▸ log: $logFile" -ForegroundColor Cyan
+    & $script 2>&1 | Tee-Object -FilePath $logFile -Append
+    $rc = $LASTEXITCODE
+    Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($rc -ne 0) {
+        Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
+        exit 5
+    }
+    Write-Host "  ✓ fix-repo completed (log: $logFile)" -ForegroundColor Green
 }
 
 if ($RunFixRepo) { Invoke-FixRepo }
