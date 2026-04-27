@@ -2,26 +2,23 @@
 # linter-scripts/check-runner-dispatch-antipatterns.sh
 #
 # Grep-based guard. Fails CI if run.sh or run.ps1 reintroduce forbidden
-# dispatch anti-patterns that historically broke argv forwarding or exit
-# code propagation for sub-commands like `fix-repo`.
+# dispatch anti-patterns in the `fix-repo` branch specifically.
 #
 # Spec: spec/15-distribution-and-runner/06-fix-repo-forwarding.md
 #
-# Forbidden in run.sh fix-repo dispatch:
-#   - "$@" expanded into a quoted string (loses argv boundaries)
-#   - eval-based dispatch
-#   - "${@:2}" / shift-then-rebuild patterns that drop the original argv
-#   - missing `exec` (would leave a wrapper shell that can mask exit codes)
+# Strategy: extract ONLY the fix-repo dispatch region from each runner,
+# then assert presence of required patterns and absence of forbidden
+# patterns within that region. This avoids false positives from
+# unrelated code (e.g. `eval` in helpers, or `exit $LASTEXITCODE` in
+# the visibility branch).
 #
-# Forbidden in run.ps1 fix-repo dispatch:
-#   - String-joined argv (-join, "$args" interpolation)
-#   - Invoke-Expression on argv
-#   - Missing `exit $LASTEXITCODE` after the inner call
+# run.sh region        : the single `fix-repo)` case-arm line.
+# run.ps1 region       : the `"fix-repo"` switch arm line.
 #
 # Exit codes:
 #   0 — clean
-#   1 — at least one anti-pattern found
-#   2 — a required runner file is missing
+#   1 — at least one anti-pattern found (or required pattern missing)
+#   2 — a required runner file is missing, or region not extractable
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -29,21 +26,33 @@ SH="$REPO_ROOT/run.sh"
 PS="$REPO_ROOT/run.ps1"
 
 violations=0
-report() {
-  local file="$1" pattern="$2" reason="$3"
+
+# ── region extractors ───────────────────────────────────────────────
+# run.sh: the case dispatch is a single line beginning with `fix-repo)`.
+extract_sh_region() {
+  grep -nE '^[[:space:]]*fix-repo\)' "$SH" || true
+}
+
+# run.ps1: the switch arm is a single line beginning with `"fix-repo"`.
+extract_ps_region() {
+  grep -nE '^[[:space:]]*"fix-repo"[[:space:]]*\{' "$PS" || true
+}
+
+forbid_in_region() {
+  local label="$1" region="$2" pattern="$3" reason="$4"
   local hits
-  hits="$(grep -nE "$pattern" "$file" || true)"
+  hits="$(printf '%s\n' "$region" | grep -nE "$pattern" || true)"
   [ -z "$hits" ] && return 0
-  echo "❌ $(basename "$file"): forbidden pattern — $reason"
+  echo "❌ $label: forbidden pattern in fix-repo dispatch — $reason"
   echo "   regex : $pattern"
   printf '   hit   : %s\n' "$hits"
   violations=$((violations + 1))
 }
 
-assert_present() {
-  local file="$1" pattern="$2" reason="$3"
-  grep -qE "$pattern" "$file" && return 0
-  echo "❌ $(basename "$file"): missing required pattern — $reason"
+require_in_region() {
+  local label="$1" region="$2" pattern="$3" reason="$4"
+  printf '%s\n' "$region" | grep -qE "$pattern" && return 0
+  echo "❌ $label: missing required pattern in fix-repo dispatch — $reason"
   echo "   regex : $pattern"
   violations=$((violations + 1))
 }
@@ -51,47 +60,49 @@ assert_present() {
 [ -f "$SH" ] || { echo "::error::run.sh missing at $SH" >&2; exit 2; }
 [ -f "$PS" ] || { echo "::error::run.ps1 missing at $PS" >&2; exit 2; }
 
-echo "── run.sh dispatch guard ───────────────────────────────"
+SH_REGION="$(extract_sh_region)"
+PS_REGION="$(extract_ps_region)"
 
-# 1. Quoted string expansion of "$@" inside fix-repo dispatch line
-report "$SH" '\bfix-repo\b.*"\$\*"' \
+[ -n "$SH_REGION" ] || { echo "::error::run.sh: no 'fix-repo)' case arm found" >&2; exit 2; }
+[ -n "$PS_REGION" ] || { echo "::error::run.ps1: no '\"fix-repo\"' switch arm found" >&2; exit 2; }
+
+echo "── run.sh fix-repo dispatch guard ──────────────────────"
+echo "   region: $SH_REGION"
+
+# Forbidden inside the fix-repo arm:
+forbid_in_region "run.sh" "$SH_REGION" '"\$\*"' \
   '"$*" collapses argv into one string; use "$@"'
-
-# 2. eval / Invoke-Expression style dispatch
-report "$SH" '\beval\b.*fix-repo' \
+forbid_in_region "run.sh" "$SH_REGION" '\beval\b' \
   'eval-based dispatch breaks argv quoting'
-
-# 3. Sub-shell wrapping that swallows the exit code (e.g. `(...)` or `bash -c "..."`)
-report "$SH" 'fix-repo\).*bash -c[[:space:]]+"' \
+forbid_in_region "run.sh" "$SH_REGION" '\bbash[[:space:]]+-c\b' \
   '`bash -c "..."` wrapper loses argv boundaries and may mask exit codes'
-
-# 4. Pipe after the inner call (would mask exit code via PIPESTATUS handling)
-report "$SH" 'fix-repo\.sh.*\|[^|]' \
+forbid_in_region "run.sh" "$SH_REGION" 'fix-repo\.sh[^|]*\|[^|&]' \
   'piping fix-repo.sh output masks its exit code'
+forbid_in_region "run.sh" "$SH_REGION" '\$\{@:[0-9]+\}' \
+  '${@:N} slicing drops original argv; forward "$@" verbatim'
 
-# 5. Required: exec-style invocation present in fix-repo dispatch
-assert_present "$SH" '\bfix-repo\)[^#]*\bexec\b[^#]*fix-repo\.sh[^#]*"\$@"' \
-  'fix-repo dispatch must use `exec ... fix-repo.sh "$@"` to forward argv and exit code'
+# Required inside the fix-repo arm:
+require_in_region "run.sh" "$SH_REGION" '\bexec\b[^#]*fix-repo\.sh[^#]*"\$@"' \
+  'must use `exec ... fix-repo.sh "$@"` to forward argv and exit code'
 
-echo "── run.ps1 dispatch guard ──────────────────────────────"
+echo "── run.ps1 fix-repo dispatch guard ─────────────────────"
+echo "   region: $PS_REGION"
 
-# 1. -join on $args
-report "$PS" '\$args[[:space:]]*-join' \
+# Forbidden inside the fix-repo arm:
+forbid_in_region "run.ps1" "$PS_REGION" '\$args[[:space:]]*-join' \
   '$args -join collapses argv into a single string'
-
-# 2. Interpolated "$args" (treats argv as one string)
-report "$PS" '"\$args"' \
+forbid_in_region "run.ps1" "$PS_REGION" '"\$args"' \
   '"$args" interpolation flattens argv; use @args splatting'
-
-# 3. Invoke-Expression on argv
-report "$PS" 'Invoke-Expression[[:space:]]+.*\$args' \
+forbid_in_region "run.ps1" "$PS_REGION" '\bInvoke-Expression\b' \
   'Invoke-Expression on argv breaks quoting and is unsafe'
+forbid_in_region "run.ps1" "$PS_REGION" 'Start-Process\b' \
+  'Start-Process detaches the child; cannot propagate $LASTEXITCODE'
 
-# 4. Required: splatted call AND exit propagation in fix-repo branch
-assert_present "$PS" '"fix-repo".*@args' \
-  'fix-repo branch must invoke inner with @args splatting (preserves argv)'
-assert_present "$PS" '"fix-repo".*exit[[:space:]]+\$LASTEXITCODE' \
-  'fix-repo branch must end with `exit $LASTEXITCODE` to propagate exit code'
+# Required inside the fix-repo arm:
+require_in_region "run.ps1" "$PS_REGION" '@args' \
+  'must invoke inner with @args splatting (preserves argv)'
+require_in_region "run.ps1" "$PS_REGION" 'exit[[:space:]]+\$LASTEXITCODE' \
+  'must end with `exit $LASTEXITCODE` to propagate exit code'
 
 echo
 if [ "$violations" -eq 0 ]; then
