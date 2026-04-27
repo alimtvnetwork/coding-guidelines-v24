@@ -33,7 +33,10 @@
 set -euo pipefail
 
 BUNDLE_NAME="cli"
-BUNDLE_MAPPING="spec/11-powershell-integration|spec/11-powershell-integration spec/12-cicd-pipeline-workflows|spec/12-cicd-pipeline-workflows spec/13-generic-cli|spec/13-generic-cli spec/14-update|spec/14-update spec/15-distribution-and-runner|spec/15-distribution-and-runner spec/16-generic-release|spec/16-generic-release"
+BUNDLE_MAPPING="spec/11-powershell-integration|spec/11-powershell-integration spec/12-cicd-pipeline-workflows|spec/12-cicd-pipeline-workflows spec/13-generic-cli|spec/13-generic-cli spec/14-update|spec/14-update spec/15-distribution-and-runner|spec/15-distribution-and-runner spec/16-generic-release|spec/16-generic-release .lovable/coding-guidelines|.lovable/coding-guidelines"
+# Top-level files copied verbatim from archive root → TARGET. Repo hygiene
+# scripts (fix-repo) and visibility toggles must ship with every bundle.
+BUNDLE_TOP_LEVEL_FILES="fix-repo.sh fix-repo.ps1 visibility-change.sh visibility-change.ps1"
 ARCHIVE_STABLE_NAME="cli"
 RELEASE_BASE="https://github.com/alimtvnetwork/coding-guidelines-v18/releases"
 REPO_SLUG="alimtvnetwork/coding-guidelines-v18"
