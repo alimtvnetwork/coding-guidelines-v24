@@ -59,6 +59,8 @@ param(
     [Alias('UseLocalArchive')]
     [switch]$Offline,
     [switch]$RunFixRepo,
+    [Alias('y','AssumeYes')]
+    [switch]$Yes,
     [string]$PinnedByReleaseInstall = ""
 )
 
@@ -66,6 +68,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # Offline mode forbids any network operation (spec §5.3, §8 exit 2).
