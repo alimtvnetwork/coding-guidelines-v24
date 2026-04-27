@@ -36,47 +36,69 @@ just as hard as `9000`.
 
 ## 2. What counts as an "effective body line"
 
-Every scanner counts lines **inside the function body** — i.e. **between**
-(not including) the opening `{` / `def:` and the matching close. The
-function signature line, the closing brace/dedent, and lines outside the
-body are **never** counted.
+> **Single executable source of truth:**
+> [`linters-cicd/checks/_lib/effective_lines.py`](../_lib/effective_lines.py)
+> (function `count_effective(body_lines, language)`).
+> JS mirror: [`eslint-plugins/coding-guidelines/_lib/effective-lines.js`](../../../eslint-plugins/coding-guidelines/_lib/effective-lines.js).
+> The two implementations are pinned together by
+> [`linters-cicd/tests/test_effective_lines_parity.py`](../../tests/test_effective_lines_parity.py),
+> which feeds the same fixtures through both and asserts identical
+> output. **Both CODE-RED-004 and CODE-RED-005 — across every language
+> and across both ESLint and the Python SARIF scanners — call the same
+> counter.** There is exactly one definition.
 
-A line in the body **is counted** iff, after `.strip()`, it is **not** one
-of the following:
+Every scanner counts lines **inside the function body** — i.e.
+**strictly between** the line containing the opening `{` (or `def …:`)
+and the line containing the matching close. The function signature
+line, the closing brace/dedent, and lines outside the body are
+**never** counted; callers do that body slicing themselves before
+calling the counter.
 
-| Skip rule              | TS / JS / Go / PHP / Rust | Python |
-|------------------------|:-------------------------:|:------:|
-| Empty / whitespace-only| ✅ skip                   | ✅ skip |
-| Single-line comment    | `//` line                 | `#` line |
-| Block comment open     | line starting with `/*`   | n/a    |
-| Inside open `/* … */`  | every line until `*/`     | n/a    |
-| JSDoc continuation     | line starting with `*`, or exactly `/*` / `*/` (ESLint counter only) | n/a |
-| Pure docstring line    | n/a                       | line starting with `"""` or `'''` |
+A line in the body **is counted** iff, after `.strip()`, it is **not**
+one of the following:
+
+| Skip rule                       | Go / TS / JS / Rust / PHP | Python |
+|---------------------------------|:-------------------------:|:------:|
+| Empty / whitespace-only         | ✅ skip                   | ✅ skip |
+| Single-line comment             | line starts with `//` (also `///` for Rust; also `#` for PHP) | line starts with `#` |
+| Block-comment opener            | line starts with `/*`     | n/a    |
+| Block-comment continuation/close | every line until the closing `*/` is matched (state-tracked) | n/a |
+| Single-line block comment       | `/* foo */` on one line — skipped, state stays clean | n/a |
+| Docstring opener / closer line  | n/a                       | line starts with `"""` or `'''` |
 
 **Everything else counts as one line — including:**
 
 - A statement spread across multiple physical lines (each physical
-  line counts; the rule is line-based, not statement-based, by design —
-  this discourages "hide-the-statement" reformatting to dodge the cap).
+  line counts; the rule is line-based, not statement-based, by design
+  — this discourages "hide-the-statement" reformatting to dodge the
+  cap).
 - Lines that are *only* a `}` or `)` or `];` if they sit on their own.
 - `return` statements, `await` lines, decorators inside the body.
 - Lines inside nested functions / closures (the outer function carries
   the cost of bodies it lexically contains).
+- Prose lines in the **middle** of a multi-line Python docstring. Only
+  the opener and closer lines are skipped; everything between them
+  counts. This is intentional — docstrings belong on the function, not
+  buried mid-body. If you want to suppress them, use `#` comments.
 
-**Caveats and known counter divergence** (intentional, do not "fix"
-without bumping this doc):
+**Edge cases the counter deliberately handles uniformly across all
+C-family languages** (this matters because previous per-language
+counters disagreed; the unified module ends that drift):
 
-- The ESLint counter (`countEffectiveBodyLines` in
-  `eslint-plugins/coding-guidelines/index.js`) skips lines starting
-  with `*` to keep JSDoc continuations free. The Go/PHP Python
-  counters track block-comment state instead. Both converge on the
-  same answer for ordinary code; they only differ for hand-rolled
-  banner comments inside a body, which is a non-goal.
-- The Python scanner skips a line that *starts with* `"""` or `'''`,
-  not full multi-line docstring tracking. Multi-line docstrings whose
-  middle lines are plain prose **will count**. This is acceptable
-  because docstrings belong on the function, not buried mid-body.
-- Rust handles `//`, `///`, and `/* … */` the same way as Go.
+- Multi-line `/* … */` block comments: middle lines are skipped via
+  state tracking, not by surface-pattern matching `*`. (PHP's old
+  CODE-RED-004 counter got this wrong — it only skipped lines
+  *starting with* `*`, so middle lines without that prefix were
+  counted. Fixed.)
+- Single-line `/* foo */`: skipped without entering block-comment
+  state, so the next line is evaluated normally.
+- A bare `*` line **outside** any block comment is now counted (it
+  would be a syntax error in any C-family language anyway, so this is
+  not a behavior change for valid code).
+
+If you need to add a language, add it to the `SYNTAX` registry in the
+Python module and the JS mirror — do **not** introduce a new local
+counter.
 
 ---
 

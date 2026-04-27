@@ -14,6 +14,8 @@
  *   coding-guidelines/no-else-after-return  — No else after return (R7)
  */
 
+import { countEffective } from "./_lib/effective-lines.js";
+
 // ═══════════════════════════════════════════════════════════════
 // Rule: no-nested-if (CODE RED)
 // ═══════════════════════════════════════════════════════════════
@@ -184,6 +186,11 @@ const noMagicStrings = {
 
 // ═══════════════════════════════════════════════════════════════
 // Shared: count effective body lines (skip blanks + comments)
+//
+// Delegates to ./_lib/effective-lines.js — the JS mirror of
+// linters-cicd/checks/_lib/effective_lines.py. The two implementations
+// are kept in sync by the cross-impl parity test
+// linters-cicd/tests/test_effective_lines_parity.py.
 // ═══════════════════════════════════════════════════════════════
 
 function countEffectiveBodyLines(node, src) {
@@ -191,14 +198,12 @@ function countEffectiveBodyLines(node, src) {
   if (!body || body.type !== "BlockStatement") return null;
   const start = body.loc.start.line + 1;
   const end = body.loc.end.line;
+  // Body slice STRICTLY BETWEEN the opening { and closing } lines —
+  // matching the Python scanners' body extraction.
   const lines = src.lines.slice(start - 1, end - 1);
-  let count = 0;
-  for (const l of lines) {
-    const t = l.trim();
-    if (t === "" || t.startsWith("//") || t.startsWith("*") || t === "/*" || t === "*/") continue;
-    count++;
-  }
-  return count;
+  // ESLint operates on TS/JS source; both share the "typescript" entry
+  // in the unified counter (// + /* */ tokens, no docstrings).
+  return countEffective(lines, "typescript");
 }
 
 function resolveFunctionName(node) {
