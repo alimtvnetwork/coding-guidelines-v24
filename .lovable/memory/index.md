@@ -12,7 +12,7 @@ Updated: 2026-04-27
 - 🔴 Release & Migration UI: exactly TWO cards (Windows PowerShell + macOS/Linux Bash), one-liner each. NEVER add "skip latest probe" variants. User locked this 2026-04-24.
 - 🔴 Canonical repo slug: `alimtvnetwork/coding-guidelines-v18`. Any v14/v15 reference is a bug — run repo-wide `grep -rn` after every rebrand.
 - 🔴 NEVER sync 01-app, 02-app-issues, 03-general, 03-tasks, or 12-consolidated-guidelines from gitmap-v3. All maintained locally.
-- 🔴 STRICTLY PROHIBITED #01 — `readme.txt` time suggestions: never suggest/mention timestamps, "git update time", auto-refresh, or time-related workflows in or about readme.txt. Only edit readme.txt when explicitly asked that turn. No follow-up time offers. ALSO: never generate, suggest, or offer an "instructions" / "how it works" / "how to run" / "how to test" section explaining the Malaysia date/time computation or the readme.txt generator workflow — no docs, no README blocks, no comment blocks, no chat explainers. See mem://avoid/02-no-time-suggestions-in-readme-txt and mem://constraints/no-readme-time-instructions.
+- 🔴 STRICTLY PROHIBITED #01 — readme.txt timestamp/date/time generator: TOTAL BAN. Never build, suggest, propose, spec, document, or ask about any feature that writes a timestamp, date, time, "Malaysia-formatted" content, prefix phrase, or auto-refresh into readme.txt — no scripts, no sub-commands, no npm tasks, no sync hooks, no docs, no instructions, no clarifying questions, no follow-up offers. Only acceptable readme.txt action: one-shot manual edit of the exact text the user types that turn. See mem://constraints/readme-txt-timestamp-total-ban and `.lovable/strictly-avoid.md`.
 - Naming: PascalCase for all internal IDs, DB, JSON, Types. Exceptions: Rust uses snake_case identifiers.
 - DB Schema: PascalCase naming. PKs are `{TableName}Id` (INTEGER PRIMARY KEY AUTOINCREMENT). No UUIDs.
 - DB Schema Rules 10/11/12: Entity/ref tables need `Description TEXT NULL`; transactional need `Notes`+`Comments TEXT NULL`; all must be nullable, no DEFAULT. Join tables exempt.
@@ -27,6 +27,7 @@ Updated: 2026-04-27
 
 ## Memories
 - [Install Command Formatting](mem://constraints/install-command-formatting) — One-line installs, no inline comments, per-platform headers, mirror InstallSection.tsx order.
+- [readme.txt Timestamp TOTAL BAN](mem://constraints/readme-txt-timestamp-total-ban) — No script/spec/doc/suggestion of any timestamp generator for readme.txt. Hard prohibition.
 - [No readme.txt Time Instructions](mem://constraints/no-readme-time-instructions) — Never produce instructions/docs/how-to-run for the readme.txt Malaysia date-time generator.
 - [2026-04-24 Batch Cleanup + Rebrand](mem://sessions/2026-04-24-batch-cleanup-and-rebrand) — Slug rebrand to v16, Release & Migration UI lock, 11 plan items closed (B5/B6/B7/B8/B10/B11/09/10/12/B2 + UI).
 - [Blank Line Between If Guards](mem://constraints/blank-line-between-if-guards) — Rule 5 applied to all markdown snippets and source code.
