@@ -1250,6 +1250,21 @@ When this repo bumps its major version (e.g. `coding-guidelines-v17` → `coding
 
 Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v17`). URLs are preserved automatically — only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v17` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
 
+### Auto-running `fix-repo` from the installer (logs · pruning · rollback)
+
+When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the freshly installed `fix-repo` script and writes a timestamped log to `<DEST>/.install-logs/fix-repo-*.log` (overridable with `--log-dir` / `INSTALL_LOG_DIR`).
+
+| Flag (Bash) | Flag (PowerShell) | Env var | Purpose |
+|---|---|---|---|
+| `--max-fix-repo-logs N` | `-MaxFixRepoLogs N` | `INSTALL_MAX_FIX_REPO_LOGS` | Keep only the newest **N** `fix-repo-*.log` files. `0`/unset = keep all; negative = invalid (skipped with warning). CLI flag wins over env var. |
+| `--rollback-on-fix-repo-failure` | `-RollbackOnFixRepoFailure` | — | On non-zero exit: `git -C <DEST> checkout -- .` reverts edits made by `fix-repo`. Requires `<DEST>` to be a git repo. |
+| `--full-rollback` | `-FullRollback` | — | **Superset** of the above — also removes files this install run created and restores overwritten files from backup. |
+| `--show-fix-repo-log` | `-ShowFixRepoLog` | — | Dump the log to stdout after the run (useful in CI). |
+
+**Pruning happens after `fix-repo` runs but before the rollback decision**, so the failing run's log is always preserved (it's the newest). The installer prints an explicit decision line naming every flag value, e.g. `Rollback: NOT TRIGGERED (--rollback-on-fix-repo-failure=false  --full-rollback=false)` or `Log pruning: --max-fix-repo-logs=5 | found=8 kept=5 pruned=3 dir=…`.
+
+Full reference (decision matrix, CI recipe, edge cases): [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md).
+
 ---
 
 ## 📚 Documentation
@@ -1261,6 +1276,7 @@ Deep-dives live in `docs/` (README stays under 400 lines):
 | [`docs/principles.md`](docs/principles.md) | 9 core principles · 10 CODE RED rules · cross-language rule index · AI optimization suite |
 | [`docs/architecture.md`](docs/architecture.md) | Spec authoring conventions · folder structure · architecture decisions · error management summary |
 | [`docs/author.md`](docs/author.md) | Author bio · Riseup Asia LLC · AI assessments · FAQ · design philosophy |
+| [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md) | `--max-fix-repo-logs` · `INSTALL_MAX_FIX_REPO_LOGS` · `--rollback-on-fix-repo-failure` · `--full-rollback` · interaction matrix |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
