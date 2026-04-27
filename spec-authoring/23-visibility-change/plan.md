@@ -33,11 +33,11 @@ Outputs are documents only. No source code touched yet.
 - [ ] Same flag surface, same exit codes, same one-line success output.
 - [ ] Bash helpers (≤ 15 lines each), parity with PS function names.
 
-## Phase 4 — Runner wiring
+## Phase 4 — Runner wiring ✅
 
-- [ ] `run.ps1`: add `visibility` to switch dispatch; forward `$args` to `.\visibility-change.ps1`.
-- [ ] `run.sh`:  add `visibility` case; forward `"$@"` to `./visibility-change.sh`.
-- [ ] Update help tables in both runners.
+- [x] `run.ps1`: added `visibility` to switch dispatch; forwards `$args` to `.\visibility-change.ps1` via `Invoke-Visibility`.
+- [x] `run.sh`:  added `visibility` case; forwards `"$@"` to `./visibility-change.sh` via `invoke_visibility`.
+- [x] Updated help tables in both runners (visibility command + flag forwarding block).
 
 ## Phase 5 — Tests + sync
 

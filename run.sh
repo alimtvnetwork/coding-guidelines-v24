@@ -24,9 +24,15 @@ show_help() {
 
   Commands:
     (none)   git pull + run Go validator on src/   (legacy default)
-    lint     same as no-args, but explicit
-    slides   build & preview slides-app/, open browser
-    help     this table
+    lint         same as no-args, but explicit
+    slides       build & preview slides-app/, open browser
+    visibility   toggle GitHub/GitLab repo visibility (pub|pri)
+    help         this table
+
+  Visibility flags forwarded to visibility-change.sh:
+    --visible <pub|pri>   target visibility (required)
+    --yes                 skip private→public confirmation
+    --dry-run             print intended action; no API call
 
   Lint flags forwarded to linter-scripts/run.sh:
     --path <dir>      Directory to scan (default: src)
@@ -118,12 +124,22 @@ invoke_slides() {
   wait "$preview_pid"
 }
 
+invoke_visibility() {
+  local inner="$SCRIPT_DIR/visibility-change.sh"
+  if [ ! -f "$inner" ]; then
+    echo "❌ Cannot find $inner" >&2
+    exit 1
+  fi
+  exec bash "$inner" "$@"
+}
+
 # ── Dispatch ──────────────────────────────────────────────────────────
 cmd="${1:-}"
 case "$cmd" in
   "")            invoke_lint ;;
   lint)          shift; invoke_lint "$@" ;;
   slides)        shift; invoke_slides ;;
+  visibility)    shift; invoke_visibility "$@" ;;
   help|-h|--help|-\?) show_help; exit 0 ;;
   -*)            invoke_lint "$@" ;;   # legacy flag form
   *)
