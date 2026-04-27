@@ -22,6 +22,19 @@ emits.
 
 ---
 
+## Soft preferences (annotate — SARIF `warning`)
+
+These rules surface code smells that violate a stated preference but
+stay below a hard CODE RED cap. They never block a merge on their own,
+but every warning should be addressed before review unless explicitly
+waived.
+
+| ID | Rule | Spec source | Check script | Languages |
+|----|------|-------------|--------------|-----------|
+| CODE-RED-005 | Prefer function bodies ≤ 8 effective lines (hard cap 15 enforced by CODE-RED-004) | `01-cross-language/04-code-style/` | `checks/function-length-prefer8/<lang>.py` + `eslint-plugins/coding-guidelines/index.js#preferFunctionLines` | go, ts, php, python, rust, eslint |
+
+---
+
 ## STYLE rules (annotate — SARIF `warning`)
 
 | ID | Rule | Spec source | Check script | Phase 1 langs |
