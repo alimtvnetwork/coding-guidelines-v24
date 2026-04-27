@@ -1,18 +1,18 @@
 {
   "version": "4.24.0",
-  "updated": "2026-04-26",
+  "updated": "2026-04-27",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "d3908f1b182141b7fd3ab0ee09adf8f75c52d7cf",
-    "shortSha": "d3908f1",
-    "branch": "edit/edt-0d1b4883-efb7-4585-9649-0c02c3b8765e"
+    "sha": "da06d0b04552a8bd2151b291d796ad9c10658db0",
+    "shortSha": "da06d0b",
+    "branch": "edit/edt-231d3773-7c7f-49ee-b2d0-f8041fb46d62"
   },
   "stats": {
     "totalFiles": 614,
-    "totalLines": 132471,
+    "totalLines": 132679,
     "totalFolders": 22,
-    "totalBytes": 4500297,
+    "totalBytes": 4509507,
     "rootFiles": 6
   },
   "folders": [
@@ -26,8 +26,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 16,
-      "lineCount": 3064,
-      "byteCount": 115741
+      "lineCount": 3093,
+      "byteCount": 117085
     },
     {
       "path": "02-coding-guidelines",
@@ -39,8 +39,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 191,
-      "lineCount": 32530,
-      "byteCount": 1016882
+      "lineCount": 32575,
+      "byteCount": 1019145
     },
     {
       "path": "03-error-manage",
@@ -234,8 +234,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 33,
-      "lineCount": 14891,
-      "byteCount": 553236
+      "lineCount": 14907,
+      "byteCount": 554242
     },
     {
       "path": "18-wp-plugin-how-to",
