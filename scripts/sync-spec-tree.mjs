@@ -20,6 +20,10 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const SPEC_ROOT = resolve(ROOT, "spec");
+const AUTHORING_ROOT = resolve(ROOT, "spec-authoring");
+// Authoring sub-folders surfaced as proper folder nodes under a synthetic
+// "spec-authoring" parent. Add new authoring modules here as they ship.
+const AUTHORING_INCLUDED_FOLDERS = ["22-fix-repo", "23-visibility-change"];
 const OUT_PATH = resolve(ROOT, "src/data/specTree.json");
 
 const IGNORED = new Set([".DS_Store", "Thumbs.db", ".git"]);
@@ -113,8 +117,40 @@ function listChildren(absDir, relDir) {
   return nodes;
 }
 
+function authoringFolderExists(slug) {
+  const abs = join(AUTHORING_ROOT, slug);
+  try {
+    return statSync(abs).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+function buildAuthoringChildren() {
+  const present = AUTHORING_INCLUDED_FOLDERS.filter(authoringFolderExists);
+  return present.sort(naturalSort).map((slug) => {
+    const abs = join(AUTHORING_ROOT, slug);
+    const rel = `spec-authoring/${slug}`;
+    return buildNode(abs, rel, deriveName(slug));
+  });
+}
+
+function buildAuthoringNode() {
+  const children = buildAuthoringChildren();
+  if (children.length === 0) return null;
+  return {
+    name: "Spec Authoring",
+    type: "folder",
+    path: "spec-authoring",
+    children,
+  };
+}
+
 function buildSpecTree() {
-  return listChildren(SPEC_ROOT, "");
+  const tree = listChildren(SPEC_ROOT, "");
+  const authoring = buildAuthoringNode();
+  if (authoring) tree.push(authoring);
+  return tree;
 }
 
 function countNodes(nodes) {
