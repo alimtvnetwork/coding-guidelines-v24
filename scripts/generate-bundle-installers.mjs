@@ -1136,6 +1136,14 @@ function Invoke-FixRepo {
     & $script 2>&1 | Tee-Object -FilePath $logFile -Append
     $rc = $LASTEXITCODE
     Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($MaxFixRepoLogs -gt 0) {
+        $stale = Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -Skip $MaxFixRepoLogs
+        $removedCount = 0
+        foreach ($s in $stale) { Remove-Item -LiteralPath $s.FullName -Force -ErrorAction SilentlyContinue; $removedCount++ }
+        if ($removedCount -gt 0) { Write-Host "  ▸ pruned $removedCount old fix-repo log(s); kept newest $MaxFixRepoLogs in $logDir" -ForegroundColor Cyan }
+    }
     if ($ShowFixRepoLog) {
         Write-Host ""
         Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
