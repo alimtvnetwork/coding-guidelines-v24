@@ -489,12 +489,6 @@ confirm_fix_repo() {
   echo "fix-repo skipped by user — exiting with code 5." >&2
   exit 5
 }
-run_fix_repo() {
-  # Auto-execute the freshly installed fix-repo script so the repo is
-  # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
-  # Cygwin, MINGW), .sh elsewhere. Streams stdout+stderr to a
-  # timestamped log under <TARGET>/.install-logs/. Failures propagate
-  # as exit 5 (spec §8: "inner installer / handoff rejected").
 snapshot_pre_fix_repo() {
   PRE_FIX_REPO_HEAD=""
   ${ROLLBACK_ON_FIX_FAIL} || return 0
