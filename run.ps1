@@ -31,35 +31,8 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Show-Help {
-    Write-Host ""
-    Write-Host "  coding-guidelines-v18 — root runner" -ForegroundColor Cyan
-    Write-Host ""
-    Write-Host "  Usage: .\run.ps1 [<command>] [<flags>]"
-    Write-Host ""
-    Write-Host "  Commands:"
-    Write-Host "    (none)   git pull + run Go validator on src/   (legacy default)"
-    Write-Host "    lint        same as no-args, but explicit"
-    Write-Host "    slides      build & preview slides-app/, open browser"
-    Write-Host "    visibility  toggle GitHub/GitLab repo visibility (pub|pri)"
-    Write-Host "    fix-repo    rewrite prior versioned-repo-name tokens to current"
-    Write-Host "    help        this table"
-    Write-Host ""
-    Write-Host "  Visibility flags forwarded to visibility-change.ps1:"
-    Write-Host "    -Visible <pub|pri>   target visibility (required)"
-    Write-Host "    -Yes                 skip private→public confirmation"
-    Write-Host "    -DryRun              print intended action; no API call"
-    Write-Host ""
-    Write-Host "  Fix-repo flags forwarded to fix-repo.ps1:"
-    Write-Host "    -2 | -3 | -5 | -All  how many prior versions to rewrite (default: -2)"
-    Write-Host "    -DryRun              report changes; do not write"
-    Write-Host "    -Verbose             list every modified file"
-    Write-Host ""
-    Write-Host "  Lint flags forwarded to linter-scripts/run.ps1:"
-    Write-Host "    -Path <dir>      Directory to scan (default: src)"
-    Write-Host "    -MaxLines <n>    Max function body lines (default: 15)"
-    Write-Host "    -Json            JSON output"
-    Write-Host "    -d               Skip validation, only git pull"
-    Write-Host ""
+    $helpFile = Join-Path $PSScriptRoot "scripts" "runner-help.ps.txt"
+    Get-Content -LiteralPath $helpFile | ForEach-Object { Write-Host $_ }
 }
 
 function Invoke-Lint {
