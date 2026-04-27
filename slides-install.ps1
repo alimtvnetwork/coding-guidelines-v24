@@ -449,6 +449,10 @@ function Invoke-FixRepo {
         "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
         "# script:   $script",
         "# target:   $Target",
+        "# os:       $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)",
+        "# shell:    PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)",
+        "# uname:    $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription) / $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)",
+        "# cwd:      $((Get-Location).Path)",
         "# ──────────────────────────────────────────────────────────"
     ) | Set-Content -LiteralPath $logFile -Encoding UTF8
     Write-Host ""

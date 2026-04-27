@@ -574,6 +574,10 @@ run_fix_repo() {
     echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "# script:   \${script}"
     echo "# target:   \${TARGET}"
+    echo "# os:       $(uname -s 2>/dev/null || echo unknown)"
+    echo "# shell:    bash \${BASH_VERSION:-unknown}"
+    echo "# uname:    $(uname -a 2>/dev/null || echo unknown)"
+    echo "# cwd:      $(pwd)"
     echo "# ──────────────────────────────────────────────────────────"
   } > "\${log_file}"
   echo ""
@@ -1073,6 +1077,10 @@ function Invoke-FixRepo {
         "# started:  $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
         "# script:   $script",
         "# target:   $Target",
+        "# os:       $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)",
+        "# shell:    PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)",
+        "# uname:    $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription) / $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)",
+        "# cwd:      $((Get-Location).Path)",
         "# ──────────────────────────────────────────────────────────"
     ) | Set-Content -LiteralPath $logFile -Encoding UTF8
     Write-Host ""
