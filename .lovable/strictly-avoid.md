@@ -9,5 +9,6 @@ Items in this file MUST NEVER be suggested, recommended, or asked about again.
 - ❌ NEVER suggest "skip if same day", "write only if missing", or any idempotency variant. The script ALWAYS rewrites on every invocation.
 - ❌ NEVER suggest local-machine time or any timezone other than `Asia/Kuala_Lumpur`. Timestamp is ALWAYS Malaysia time.
 - ❌ NEVER ask the user to re-confirm any of the above.
+- ❌ NEVER generate, suggest, or offer an "instructions" / "how it works" / "how to run" / "how to test" section explaining the Malaysia date/time computation or the generator workflow. No docs, no README blocks, no comment blocks, no chat explainers, no follow-up offers.
 
 Locked behavior: prefix `let's start now`, timestamp in `Asia/Kuala_Lumpur` formatted `dd-MMM-yyyy hh:mm:ss tt`, unconditional overwrite of `readme.txt` at repo root.
