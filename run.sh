@@ -42,62 +42,60 @@ open_url() {
   fi
 }
 
-invoke_slides() {
-  echo ""
-  echo "▸ slides — building offline deck and opening in browser"
-  echo ""
+_slides_assert_dir() {
+  local d="$1"
+  [ -d "$d" ] && return 0
+  echo "❌ slides-app/ not found at $d" >&2
+  echo "   See spec-slides/00-overview.md for the slides spec." >&2
+  exit 1
+}
 
-  local slides_dir="$SCRIPT_DIR/slides-app"
-  if [ ! -d "$slides_dir" ]; then
-    echo "❌ slides-app/ not found at $slides_dir" >&2
-    echo "   See spec-slides/00-overview.md for the slides spec." >&2
-    exit 1
-  fi
+_slides_pick_runner() {
+  has_command bun  && { echo "bun";  return 0; }
+  has_command pnpm && { echo "pnpm"; return 0; }
+  echo "❌ Need 'bun' or 'pnpm' on PATH to build slides-app." >&2
+  echo "   Install bun:  curl -fsSL https://bun.sh/install | bash" >&2
+  exit 1
+}
 
-  echo "▸ git pull (best effort)..."
-  git pull || echo "⚠️  git pull failed — continuing with local state"
+_slides_wait_ready() {
+  local url="$1" i=0
+  while [ "$i" -lt 20 ]; do
+    sleep 0.5
+    curl -fsSL --max-time 1 "$url" >/dev/null 2>&1 && return 0
+    i=$((i + 1))
+  done
+}
 
-  local runner=""
-  if   has_command bun;  then runner="bun"
-  elif has_command pnpm; then runner="pnpm"
-  else
-    echo "❌ Need 'bun' or 'pnpm' on PATH to build slides-app." >&2
-    echo "   Install bun:  curl -fsSL https://bun.sh/install | bash" >&2
-    exit 1
-  fi
-  echo "▸ using package runner: $runner"
+_slides_build() {
+  local runner="$1"
+  echo "▸ install dependencies..."; "$runner" install
+  echo "▸ build...";                "$runner" run build
+}
 
-  cd "$slides_dir"
-
-  echo "▸ install dependencies..."
-  "$runner" install
-
-  echo "▸ build..."
-  "$runner" run build
-
+_slides_serve_and_open() {
+  local runner="$1" url="http://localhost:4173/"
   echo "▸ start preview server (background)..."
   "$runner" run preview &
   local preview_pid=$!
-
   trap 'kill "$preview_pid" 2>/dev/null || true' EXIT INT TERM
-
-  local url="http://localhost:4173/"
-  local i=0
-  while [ "$i" -lt 20 ]; do
-    sleep 0.5
-    if curl -fsSL --max-time 1 "$url" >/dev/null 2>&1; then
-      break
-    fi
-    i=$((i + 1))
-  done
-
-  echo "▸ opening $url"
-  open_url "$url"
-
-  echo ""
-  echo "▸ slides — preview running. Press Ctrl-C to stop."
-  echo ""
+  _slides_wait_ready "$url"
+  echo "▸ opening $url"; open_url "$url"
+  echo ""; echo "▸ slides — preview running. Press Ctrl-C to stop."; echo ""
   wait "$preview_pid"
+}
+
+invoke_slides() {
+  echo ""; echo "▸ slides — building offline deck and opening in browser"; echo ""
+  local slides_dir="$SCRIPT_DIR/slides-app"
+  _slides_assert_dir "$slides_dir"
+  echo "▸ git pull (best effort)..."
+  git pull || echo "⚠️  git pull failed — continuing with local state"
+  local runner; runner="$(_slides_pick_runner)"
+  echo "▸ using package runner: $runner"
+  cd "$slides_dir"
+  _slides_build "$runner"
+  _slides_serve_and_open "$runner"
 }
 
 invoke_visibility() {
