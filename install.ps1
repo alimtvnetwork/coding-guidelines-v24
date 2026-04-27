@@ -328,6 +328,19 @@ try {
         $copied++
     }
 
+    # Top-level files: copy each from archive root into Dest. Missing files
+    # are warned (not fatal) so installer remains forward-compatible.
+    $topLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1")
+    foreach ($tlf in $topLevelFiles) {
+        $srcFile = Join-Path $archiveRoot.FullName $tlf
+        if (-not (Test-Path $srcFile)) {
+            Write-Warn "Top-level file '$tlf' not found in $Repo@$ref — skipping"
+            continue
+        }
+        Write-Step "Merging file: $tlf"
+        Merge-File -Src $srcFile -Target (Join-Path $Dest $tlf)
+    }
+
     # ── Summary ───────────────────────────────────────────────────
     Write-Host ""
     Write-Plain "════════════════════════════════════════════════════════"
