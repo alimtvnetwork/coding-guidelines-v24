@@ -75,17 +75,35 @@ echo "   $PS_REL:$(region_line_no "$PS_REGION")"
 forbid_in_region "$SH_REL" "$SH_REGION" '"\$\*"'                      '"$*" collapses argv into one string; use "$@"'
 forbid_in_region "$SH_REL" "$SH_REGION" '\beval\b'                    'eval-based dispatch breaks argv quoting'
 forbid_in_region "$SH_REL" "$SH_REGION" '\bbash[[:space:]]+-c\b'      '`bash -c "..."` wrapper loses argv boundaries'
+forbid_in_region "$SH_REL" "$SH_REGION" '\bsh[[:space:]]+-c\b'        '`sh -c "..."` wrapper loses argv boundaries'
 forbid_in_region "$SH_REL" "$SH_REGION" 'fix-repo\.sh[^|]*\|[^|&]'    'piping fix-repo.sh output masks its exit code'
 forbid_in_region "$SH_REL" "$SH_REGION" '\$\{@:[0-9]+\}'              '${@:N} slicing drops original argv; forward "$@" verbatim'
+forbid_in_region "$SH_REL" "$SH_REGION" 'printf[[:space:]]+["%]+[qs]' 'printf %q/%s rebuilds argv from a joined string'
+forbid_in_region "$SH_REL" "$SH_REGION" '\bIFS=[^[:space:]]'          'mutating IFS in dispatch alters argv splitting'
+forbid_in_region "$SH_REL" "$SH_REGION" '\$\([^)]*"\$@"[^)]*\)'       'command substitution on "$@" stringifies argv'
+forbid_in_region "$SH_REL" "$SH_REGION" '\bxargs\b'                   'xargs reformats argv via stdin and loses quoting'
+forbid_in_region "$SH_REL" "$SH_REGION" 'fix-repo\.sh[^&]*&[[:space:]]*$' \
+                                                                       'background dispatch (&) detaches child; loses exit code'
 # run.sh — required
 require_in_region "$SH_REL" "$SH_REGION" '\bexec\b[^#]*fix-repo\.sh[^#]*"\$@"' \
   'must use `exec ... fix-repo.sh "$@"` to forward argv and exit code'
 
 # run.ps1 — forbidden
 forbid_in_region "$PS_REL" "$PS_REGION" '\$args[[:space:]]*-join'     '$args -join collapses argv into a single string'
+forbid_in_region "$PS_REL" "$PS_REGION" '-join[[:space:]]+\$args'     '-join $args collapses argv into a single string'
 forbid_in_region "$PS_REL" "$PS_REGION" '"\$args"'                    '"$args" interpolation flattens argv; use @args splatting'
+forbid_in_region "$PS_REL" "$PS_REGION" '\[string\]::Join'            '[string]::Join on $args collapses argv into one string'
+forbid_in_region "$PS_REL" "$PS_REGION" '\$args[[:space:]]*\.ToString\(' \
+                                                                       '$args.ToString() flattens argv to a single string'
+forbid_in_region "$PS_REL" "$PS_REGION" '\$args[[:space:]]+-as[[:space:]]+\[string\]' \
+                                                                       '$args -as [string] flattens argv to a single string'
+forbid_in_region "$PS_REL" "$PS_REGION" '\[string\]\$args'            '[string]$args casts argv array to a single joined string'
 forbid_in_region "$PS_REL" "$PS_REGION" '\bInvoke-Expression\b'       'Invoke-Expression on argv breaks quoting and is unsafe'
+forbid_in_region "$PS_REL" "$PS_REGION" '[[:space:]]iex[[:space:]]'   '`iex` (Invoke-Expression alias) on argv is unsafe'
 forbid_in_region "$PS_REL" "$PS_REGION" 'Start-Process\b'             'Start-Process detaches the child; cannot propagate $LASTEXITCODE'
+forbid_in_region "$PS_REL" "$PS_REGION" 'Start-Job\b'                 'Start-Job detaches the child; cannot propagate $LASTEXITCODE'
+forbid_in_region "$PS_REL" "$PS_REGION" '\bcmd[[:space:]]+/c\b'       '`cmd /c` wrapper re-parses argv and loses quoting'
+forbid_in_region "$PS_REL" "$PS_REGION" '\$args\[[0-9]+\.\.'          '$args[N..M] slicing drops original argv; forward @args verbatim'
 # run.ps1 — required
 require_in_region "$PS_REL" "$PS_REGION" '@args'                       'must invoke inner with @args splatting (preserves argv)'
 require_in_region "$PS_REL" "$PS_REGION" 'exit[[:space:]]+\$LASTEXITCODE' \
