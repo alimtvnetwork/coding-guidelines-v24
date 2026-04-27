@@ -464,13 +464,18 @@ function Invoke-FixRepo {
     & $script 2>&1 | Tee-Object -FilePath $logFile -Append
     $rc = $LASTEXITCODE
     Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-    if ($MaxFixRepoLogs -gt 0) {
-        $stale = Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
-            Sort-Object LastWriteTime -Descending |
-            Select-Object -Skip $MaxFixRepoLogs
+    if ($MaxFixRepoLogs -lt 0) {
+        Write-Host "  ▸ log pruning: SKIPPED (--max-fix-repo-logs=$MaxFixRepoLogs is not a non-negative integer)" -ForegroundColor Yellow
+    } elseif ($MaxFixRepoLogs -eq 0) {
+        Write-Host "  ▸ log pruning: DISABLED (--max-fix-repo-logs=0)" -ForegroundColor Cyan
+    } else {
+        $allLogs = @(Get-ChildItem -LiteralPath $logDir -Filter 'fix-repo-*.log' -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending)
+        $stale = $allLogs | Select-Object -Skip $MaxFixRepoLogs
         $removedCount = 0
         foreach ($s in $stale) { Remove-Item -LiteralPath $s.FullName -Force -ErrorAction SilentlyContinue; $removedCount++ }
-        if ($removedCount -gt 0) { Write-Host "  ▸ pruned $removedCount old fix-repo log(s); kept newest $MaxFixRepoLogs in $logDir" -ForegroundColor Cyan }
+        $kept = $allLogs.Count - $removedCount
+        Write-Host "  ▸ log pruning: --max-fix-repo-logs=$MaxFixRepoLogs | found=$($allLogs.Count) kept=$kept pruned=$removedCount dir=$logDir" -ForegroundColor Cyan
     }
     if ($ShowFixRepoLog) {
         Write-Host ""
