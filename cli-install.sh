@@ -53,6 +53,11 @@ RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
 case "${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
 case "${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
+ROLLBACK_ON_FIX_FAIL="${INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE:-false}"
+case "${ROLLBACK_ON_FIX_FAIL}" in 1|true|TRUE|yes|YES) ROLLBACK_ON_FIX_FAIL=true ;; *) ROLLBACK_ON_FIX_FAIL=false ;; esac
+FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
+case "${FULL_ROLLBACK}" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
+${FULL_ROLLBACK} && ROLLBACK_ON_FIX_FAIL=true
 
 usage() {
   cat <<HELP
@@ -133,6 +138,8 @@ while [[ $# -gt 0 ]]; do
     --offline)        OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
+    --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
+    --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
