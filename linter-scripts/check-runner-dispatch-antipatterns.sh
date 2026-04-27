@@ -129,13 +129,15 @@ print_summary_table() {
   local count="$1"
   echo
   echo "════════════════════ violation summary ════════════════════"
-  printf '  %-3s  %-12s  %-10s  %s\n' "#" "FILE:LINE" "KIND" "REASON"
-  printf '  %-3s  %-12s  %-10s  %s\n' "---" "------------" "----------" "------"
+  printf '  %-3s  %-13s  %-10s  %s\n' "#" "FILE:LINE" "KIND" "REASON"
+  printf '  %-3s  %-13s  %-10s  %s\n' "---" "-------------" "----------" "------"
   local n=0
-  while IFS=$'\t' read -r file line kind reason snippet; do
+  while IFS=$'\t' read -r file line kind reason pattern match snippet; do
     n=$((n + 1))
-    printf '  %-3s  %-12s  %-10s  %s\n' "$n" "$file:$line" "$kind" "$reason"
-    printf '       └─ %s\n' "$snippet"
+    printf '  %-3s  %-13s  %-10s  %s\n' "$n" "$file:$line" "$kind" "$reason"
+    printf '       │ regex   : %s\n' "$pattern"
+    printf '       │ match   : <<%s>>\n' "$match"
+    printf '       └ snippet : %s\n' "$snippet"
   done < "$FINDINGS_FILE"
   echo "═══════════════════════════════════════════════════════════"
   echo "❌ runner dispatch guard: $count violation(s)"
