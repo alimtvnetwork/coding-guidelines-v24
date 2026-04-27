@@ -582,6 +582,21 @@ perform_rollback() {
   warn "Rollback complete. Snapshot kept at: ${ROLLBACK_DIR:-<none>}"
 }
 
+prune_fix_repo_logs() {
+  # Keep newest $2 fix-repo-*.log files in $1; 0 disables.
+  local dir="$1" keep="$2" file count=0 removed=0
+  [[ "$keep" =~ ^[0-9]+$ ]] || return 0
+  [[ "$keep" -le 0 ]] && return 0
+  [[ -d "$dir" ]] || return 0
+  while IFS= read -r file; do
+    count=$((count+1))
+    [[ $count -le $keep ]] && continue
+    rm -f -- "$file" && removed=$((removed+1))
+  done < <(ls -1t "$dir"/fix-repo-*.log 2>/dev/null)
+  [[ $removed -gt 0 ]] && step "Pruned $removed old fix-repo log(s); kept newest $keep in $dir"
+  return 0
+}
+
 run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
