@@ -7,6 +7,7 @@ import { useDeepLinkFile, useFileSelection } from "@/pages/DocsViewerHelpers";
 import { SearchDialog, useSearchShortcut } from "@/components/docs/SearchDialog";
 import { CommandPalette, useCommandPaletteShortcut } from "@/components/docs/CommandPalette";
 import { findSpecOverviewFile } from "@/components/docs/specOverviewJump";
+import { GithubSyncBanner } from "@/components/docs/GithubSyncBanner";
 import { isOpen, isClosed } from "@/constants/boolFlags";
 
 function useDocsViewerState(allFiles: SpecNode[]) {
@@ -54,6 +55,7 @@ function useDocsViewerState(allFiles: SpecNode[]) {
 function DocsViewerLayout({ tree, allFiles, state }: { tree: SpecNode[]; allFiles: SpecNode[]; state: ReturnType<typeof useDocsViewerState> }) {
   return (
     <div className="min-h-screen flex flex-col w-full">
+      <GithubSyncBanner />
       <div className="flex-1 flex w-full">
         <DocsContent activeFile={state.activeFile} allFiles={allFiles} tree={tree} onSelect={state.handleSelect} searchQuery={state.searchQuery} setSearchQuery={state.setSearchQuery} onSearchOpen={state.openSearch} onJumpToOverview={state.jumpToOverview} />
       </div>
