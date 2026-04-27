@@ -394,6 +394,7 @@ export default {
     "boolean-naming": booleanNaming,
     "no-magic-strings": noMagicStrings,
     "max-function-lines": maxFunctionLines,
+    "prefer-function-lines": preferFunctionLines,
     "promise-all-independent": promiseAllIndependent,
     "blank-line-before-return": blankLineBeforeReturn,
     "no-else-after-return": noElseAfterReturn,
