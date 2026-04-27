@@ -199,6 +199,10 @@ while [[ $# -gt 0 ]]; do
     --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
+    --max-fix-repo-logs)
+      MAX_FIX_REPO_LOGS="$2"
+      [[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || { err "--max-fix-repo-logs requires a non-negative integer (got: $2)"; exit 1; }
+      shift 2 ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
