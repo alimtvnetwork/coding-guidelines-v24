@@ -23,6 +23,7 @@ Updated: 2026-04-27
 - 🔴 NO-QUESTIONS MODE active (40-task batch from 2026-04-26): never call ask_questions; log ambiguities to `.lovable/question-and-ambiguity/xx-title.md` and update its README index. Resume on explicit "ask questions" signal.
 - 🔴 Docs Viewer keybinds: `Cmd/Ctrl+K` = search dialog, `Cmd/Ctrl+J` = command palette ("Open Spec Overview" pinned). Do not rebind. See mem://sessions/2026-04-27-docs-viewer-quick-jump-and-sync-banner.
 - 🔴 GitHub Sync Banner reads `version.json` (`git.shortSha`, `git.branch`, `updated`). Per-SHA dismiss via `localStorage["lovable.github-sync-banner.dismissed-sha"]` — never make it permanently dismissable.
+- 🔴 Docs sidebar tree diagnostics: opt-in via `localStorage["lovable.tree-diagnostics.enabled"]="1"`. Logs prefixed `[tree:<category>]`. Off by default. Never enable by default. The Lovable IDE file tree is platform UI — NOT instrumentable from project code; do not conflate it with the in-app docs sidebar. See mem://sessions/2026-04-27-tree-diagnostics-logging.
 
 ## Memories
 - [Install Command Formatting](mem://constraints/install-command-formatting) — One-line installs, no inline comments, per-platform headers, mirror InstallSection.tsx order.
@@ -54,6 +55,7 @@ Updated: 2026-04-27
 - [No-Questions Mode](mem://workflow/no-questions-mode) — 40-task no-questions run; ambiguity logging template, sequencing, and resume trigger.
 - [Avoid Time Suggestions in readme.txt](mem://avoid/02-no-time-suggestions-in-readme-txt) — Strictly Prohibited #01: zero time-related chatter, suggestions, or auto-updates around readme.txt; persist across sessions.
 - [2026-04-27 Docs Viewer Quick-Jump + Sync Banner](mem://sessions/2026-04-27-docs-viewer-quick-jump-and-sync-banner) — Cmd/Ctrl+J command palette with Open-Spec-Overview pinned, GithubSyncBanner reading version.json, .gitmap/ removed, spec/ visibility incident diagnosed.
+- [2026-04-27 Tree Diagnostics Logging](mem://sessions/2026-04-27-tree-diagnostics-logging) — Opt-in `[tree:*]` ring-buffer logging, floating TreeDiagnosticsPanel, instrumentation in useSpecData/DocsSidebar/SpecTreeNav. Clarified IDE-tree vs in-app-tree.
 
 ## Memories — Backfilled (orphans recovered 2026-04-27)
 
