@@ -148,6 +148,10 @@ TARGET / OUTPUT FLAGS (any mode)
                                  (or fix-repo.ps1 on Windows) so the repo
                                  is patched before this installer exits.
                                  Also enabled by INSTALL_RUN_FIX_REPO=1.
+  --log-dir <dir>                Directory for fix-repo logs. Absolute
+                                 paths used as-is; relative paths joined
+                                 to --target. Default: <target>/.install-logs.
+                                 Also via env: INSTALL_LOG_DIR.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
