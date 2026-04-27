@@ -79,14 +79,17 @@ function rebuildRow(cells) {
 }
 
 function rebuildSeparator() {
-  // Preserve any alignment colons (`:---`, `---:`, `:---:`) the author chose.
+  // Match the data-row width *exactly*: each segment is `maxWidths[i] + 2`
+  // dashes (the +2 accounts for the leading/trailing space inside data cells),
+  // with optional `:` for alignment carried over from the source.
   const segments = separatorCells.map((sep, i) => {
-    const left = sep.startsWith(':') ? ':' : '-';
-    const right = sep.endsWith(':') ? ':' : '-';
-    const dashCount = Math.max(maxWidths[i] - (left === ':' ? 1 : 0) - (right === ':' ? 1 : 0), 3);
+    const left = sep.startsWith(':') ? ':' : '';
+    const right = sep.endsWith(':') ? ':' : '';
+    const totalDashes = maxWidths[i] + 2 - left.length - right.length;
+    const dashCount = Math.max(totalDashes, 3);
     return `${left}${'-'.repeat(dashCount)}${right}`;
   });
-  return `| ${segments.join(' | ')} |`;
+  return `|${segments.join('|')}|`;
 }
 
 const rebuilt = [
