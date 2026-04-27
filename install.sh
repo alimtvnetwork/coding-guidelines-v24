@@ -187,6 +187,7 @@ while [[ $# -gt 0 ]]; do
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
+    --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
