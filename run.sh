@@ -150,7 +150,7 @@ case "$cmd" in
   lint)          shift; invoke_lint "$@" ;;
   slides)        shift; invoke_slides ;;
   visibility)    shift; invoke_visibility "$@" ;;
-  fix-repo)      _assert_fix_repo_present; shift; exec bash "$SCRIPT_DIR/fix-repo.sh" "$@" ;;
+  fix-repo)      _assert_fix_repo_present; shift; _fix_repo_debug_preflight "$@"; exec bash "$SCRIPT_DIR/fix-repo.sh" "$@" ;;
   help|-h|--help|-\?) show_help; exit 0 ;;
   -*)            invoke_lint "$@" ;;   # legacy flag form
   *)
