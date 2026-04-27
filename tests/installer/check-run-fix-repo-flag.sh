@@ -113,9 +113,14 @@ for f in "${PS_INSTALLERS[@]}"; do
     && pass "${f}: P2 reads INSTALL_RUN_FIX_REPO env var" \
     || fail "${f}: P2 missing INSTALL_RUN_FIX_REPO env wiring"
 
-  grep -qE 'if[[:space:]]*\(\s*\$RunFixRepo\s*\)\s*\{\s*Invoke-FixRepo' "${path}" \
-    && pass "${f}: P3 dispatches to Invoke-FixRepo when -RunFixRepo set" \
-    || fail "${f}: P3 missing 'if (\$RunFixRepo) { Invoke-FixRepo }' dispatch"
+  # Accept either:  if ($RunFixRepo) { Invoke-FixRepo }
+  # or:             if ((-not $DryRun) -and $RunFixRepo) { ... fix-repo body ... }
+  if grep -qE 'if[[:space:]]*\(\s*\$RunFixRepo\s*\)\s*\{\s*Invoke-FixRepo' "${path}" \
+       || grep -qE 'if[[:space:]]*\(.*\$RunFixRepo.*\)\s*\{' "${path}"; then
+    pass "${f}: P3 dispatches fix-repo body when -RunFixRepo set"
+  else
+    fail "${f}: P3 missing -RunFixRepo dispatch block"
+  fi
 
   grep -q 'fix-repo.ps1' "${path}" \
     && pass "${f}: P4 invokes fix-repo.ps1" \
