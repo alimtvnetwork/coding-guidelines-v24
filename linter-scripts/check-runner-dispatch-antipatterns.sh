@@ -60,7 +60,7 @@ forbid_in_region() {
   local line text match
   line="$(region_line_no "$region")"
   text="$(region_text "$region")"
-  match="$(printf '%s' "$text" | grep -oE -e "$pattern" | head -n1)"
+  match="$(printf '%s' "$text" | { grep -oE -e "$pattern" || true; } | head -n1)"
   [ -n "$match" ] || return 0
   record_finding "$file" "$line" "FORBIDDEN" "$reason" "$pattern" "$match" "$text"
 }
