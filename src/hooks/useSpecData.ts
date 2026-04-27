@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import type { SpecNode } from "@/types/spec";
 import specData from "@/data/specTree.json";
 import { SpecEntryType } from "@/constants/enums";
+import { treeDiagDebug, treeDiagWarn, TreeDiagCategory } from "@/lib/treeDiagnostics";
 
 const flattenFiles = (nodes: SpecNode[]): SpecNode[] => {
   const result: SpecNode[] = [];
@@ -15,9 +16,25 @@ const flattenFiles = (nodes: SpecNode[]): SpecNode[] => {
   return result;
 };
 
+function summarizeTree(tree: SpecNode[]) {
+  const topLevel = tree.map((n) => ({ name: n.name, type: n.type, childCount: n.children?.length ?? 0 }));
+  const folderCount = tree.filter((n) => n.type === SpecEntryType.Folder).length;
+  const fileCount = tree.filter((n) => n.type === SpecEntryType.File).length;
+
+  return { topLevel, folderCount, fileCount, totalRoots: tree.length };
+}
+
 export function useSpecData() {
   const tree = specData.specTree as SpecNode[];
   const allFiles = useMemo(() => flattenFiles(tree), [tree]);
+
+  const summary = useMemo(() => summarizeTree(tree), [tree]);
+
+  if (summary.totalRoots === 0) {
+    treeDiagWarn(TreeDiagCategory.UseSpecData, "specTree.json produced ZERO root nodes — spec sidebar will be empty.", summary);
+  } else {
+    treeDiagDebug(TreeDiagCategory.UseSpecData, "Loaded specTree.json", { ...summary, allFilesCount: allFiles.length });
+  }
 
   return { tree, allFiles };
 }

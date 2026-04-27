@@ -8,6 +8,7 @@ import { SearchDialog, useSearchShortcut } from "@/components/docs/SearchDialog"
 import { CommandPalette, useCommandPaletteShortcut } from "@/components/docs/CommandPalette";
 import { findSpecOverviewFile } from "@/components/docs/specOverviewJump";
 import { GithubSyncBanner } from "@/components/docs/GithubSyncBanner";
+import { TreeDiagnosticsPanel } from "@/components/docs/TreeDiagnosticsPanel";
 import { isOpen, isClosed } from "@/constants/boolFlags";
 
 function useDocsViewerState(allFiles: SpecNode[]) {
@@ -86,6 +87,7 @@ export default function DocsViewer() {
       <DocsViewerLayout tree={tree} allFiles={allFiles} state={state} />
       <SearchDialog open={state.searchOpen} onOpenChange={state.setSearchOpen} allFiles={allFiles} onSelect={state.handleSearchSelect} />
       <CommandPalette open={state.paletteOpen} onOpenChange={state.setPaletteOpen} allFiles={allFiles} onSelect={state.handlePaletteSelect} />
+      <TreeDiagnosticsPanel />
     </SidebarProvider>
   );
 }
