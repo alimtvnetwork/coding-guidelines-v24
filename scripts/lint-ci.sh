@@ -138,6 +138,7 @@ STEPS=(
   "Check spec placeholder comments (P-001 … P-008)|python3 linter-scripts/check-placeholder-comments.py ${DIFF_FLAG} ${CACHE_FLAG}"
   "Validate spec internal cross-references|python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root ."
   "Check shell/PowerShell function lengths (CODE RED ≤15)|python3 linter-scripts/check-function-lengths.py"
+  "Check runner dispatch anti-patterns (run.sh / run.ps1)|bash linter-scripts/check-runner-dispatch-antipatterns.sh"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then
