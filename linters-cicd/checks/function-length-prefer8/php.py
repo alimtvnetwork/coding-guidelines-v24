@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _lib.cli import build_parser, parse_exclude_paths
 from _lib.per_file_timeout import PerFileTimeout, per_file_timeout
 from _lib.sarif import Finding, SarifRun, emit
