@@ -1,17 +1,19 @@
 """End-to-end check that CODE-RED-005 (FunctionLengthPrefer8) actually
-fires against the committed fixture.
+fires against the committed fixture under the **strict-8** contract.
 
 Two assertions, mirroring the two enforcement surfaces:
 
   1. The linters-cicd ``function-length-prefer8/typescript.py`` scanner
-     emits a SARIF ``warning`` for the fixture and exits non-zero.
+     emits a SARIF ``error`` for the 11-line fixture and exits non-zero.
+     This is the binding build-failing rule.
   2. The sibling ``function-length/typescript.py`` (CODE-RED-004 hard
-     cap) stays silent on the same fixture, proving the prefer-band
-     boundary (9–15 lines) holds and the two rules don't double-report.
+     cap, 15) stays silent on the same fixture, proving the redundant
+     safety net only kicks in for >15-line bodies and the two rules
+     don't double-report.
 
 If a future refactor either drops CODE-RED-005 or moves the fixture out
-of the prefer band, this test fails loudly — exactly the regression
-guard the user asked for.
+of the 9–15 band (where only CODE-RED-005 fires), this test fails
+loudly — exactly the regression guard we want.
 """
 from __future__ import annotations
 
