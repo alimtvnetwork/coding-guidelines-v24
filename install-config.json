@@ -5,6 +5,8 @@
     "spec",
     "linters",
     "linter-scripts",
-    "linters-cicd"
+    "linters-cicd",
+    ".lovable/coding-guidelines",
+    ".lovable/prompts"
   ]
 }
