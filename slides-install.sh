@@ -53,6 +53,7 @@ RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
 case "${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
 case "${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
+LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → ${TARGET}/.install-logs (default)
 
 usage() {
   cat <<HELP
@@ -88,6 +89,10 @@ TARGET / OUTPUT FLAGS (any mode)
                                  (or fix-repo.ps1 on Windows) so the repo
                                  is patched before this installer exits.
                                  Also enabled by INSTALL_RUN_FIX_REPO=1.
+  --log-dir <dir>                Directory for fix-repo logs. Absolute
+                                 paths used as-is; relative paths joined
+                                 to --target. Default: <target>/.install-logs.
+                                 Also via env: INSTALL_LOG_DIR.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
@@ -133,6 +138,7 @@ while [[ $# -gt 0 ]]; do
     --offline)        OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
+    --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
@@ -498,7 +504,9 @@ run_fix_repo() {
     exit 5
   fi
   confirm_fix_repo "${script}"
-  log_dir="${TARGET}/.install-logs"
+  log_dir="${LOG_DIR}"
+  [[ -z "${log_dir}" ]] && log_dir="${TARGET}/.install-logs"
+  case "${log_dir}" in /*) ;; *) log_dir="${TARGET}/${log_dir}" ;; esac
   mkdir -p "${log_dir}"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
   log_file="${log_dir}/fix-repo-${ts}.log"

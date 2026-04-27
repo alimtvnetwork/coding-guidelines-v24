@@ -89,6 +89,7 @@ param(
     [switch]$RunFixRepo,
     [Alias("y","AssumeYes")]
     [switch]$Yes,
+    [string]$LogDir = "",
     [Alias("?")]
     [switch]$Help
 )
@@ -103,6 +104,8 @@ if (-not $Yes) {
     $envYes = $env:INSTALL_FIX_REPO_YES
     if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
+if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
+if (-not $LogDir) { $LogDir = "" }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
@@ -432,7 +435,12 @@ function Invoke-FixRepo {
         Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
         exit 5
     }
-    $logDir = Join-Path $Target ".install-logs"
+    if ($LogDir) {
+        if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
+        else { $logDir = Join-Path $Target $LogDir }
+    } else {
+        $logDir = Join-Path $Target ".install-logs"
+    }
     if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
     $ts = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
     $logFile = Join-Path $logDir "fix-repo-$ts.log"

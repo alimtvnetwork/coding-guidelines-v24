@@ -50,11 +50,6 @@ RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
 case "${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
 case "${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
-ROLLBACK_ON_FIX_FAIL="${INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE:-false}"
-case "${ROLLBACK_ON_FIX_FAIL}" in 1|true|TRUE|yes|YES) ROLLBACK_ON_FIX_FAIL=true ;; *) ROLLBACK_ON_FIX_FAIL=false ;; esac
-FULL_ROLLBACK="${INSTALL_FULL_ROLLBACK:-false}"
-case "${FULL_ROLLBACK}" in 1|true|TRUE|yes|YES) FULL_ROLLBACK=true ;; *) FULL_ROLLBACK=false ;; esac
-${FULL_ROLLBACK} && ROLLBACK_ON_FIX_FAIL=true
 LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → ${TARGET}/.install-logs (default)
 
 usage() {
@@ -140,8 +135,6 @@ while [[ $# -gt 0 ]]; do
     --offline)        OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
-    --rollback-on-fix-repo-failure) ROLLBACK_ON_FIX_FAIL=true; shift ;;
-    --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
@@ -492,39 +485,12 @@ confirm_fix_repo() {
   echo "fix-repo skipped by user — exiting with code 5." >&2
   exit 5
 }
-snapshot_pre_fix_repo() {
-  PRE_FIX_REPO_HEAD=""
-  ${ROLLBACK_ON_FIX_FAIL} || return 0
-  if ! git -C "${TARGET}" rev-parse --git-dir >/dev/null 2>&1; then
-    echo "  ⚠ --rollback-on-fix-repo-failure: ${TARGET} is not a git repo; rollback disabled." >&2
-    ROLLBACK_ON_FIX_FAIL=false
-    return 0
-  fi
-  PRE_FIX_REPO_HEAD="$(git -C "${TARGET}" rev-parse HEAD 2>/dev/null || true)"
-  echo "  ▸ rollback armed: HEAD=${PRE_FIX_REPO_HEAD}$(${FULL_ROLLBACK} && echo ', full-rollback=on')"
-}
-
-perform_rollback() {
-  local log="$1" pair dest f
-  echo ""
-  echo "  ⚠ ═══ ROLLBACK TRIGGERED (fix-repo failed) ═══" >&2
-  echo "  ▸ restoring tracked files from HEAD..." >&2
-  git -C "${TARGET}" checkout -- . 2>&1 | tee -a "${log}" || echo "  ⚠ git checkout reported issues" >&2
-  echo "  ✓ fix-repo edits reverted" >&2
-  if ${FULL_ROLLBACK}; then
-    echo "  ▸ removing bundle artifacts created by this install run..." >&2
-    for pair in ${BUNDLE_MAPPING}; do
-      dest="${pair##*|}"
-      [[ -e "${TARGET}/${dest}" ]] && rm -rf "${TARGET}/${dest}" && echo "    - removed ${dest}" >&2
-    done
-    [[ -n "${BUNDLE_TOP_LEVEL_FILES:-}" ]] && for f in ${BUNDLE_TOP_LEVEL_FILES}; do
-      [[ -e "${TARGET}/${f}" ]] && rm -f "${TARGET}/${f}" && echo "    - removed ${f}" >&2
-    done
-    echo "  ✓ full-rollback complete" >&2
-  fi
-}
-
 run_fix_repo() {
+  # Auto-execute the freshly installed fix-repo script so the repo is
+  # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
+  # Cygwin, MINGW), .sh elsewhere. Streams stdout+stderr to a
+  # timestamped log under <TARGET>/.install-logs/. Failures propagate
+  # as exit 5 (spec §8: "inner installer / handoff rejected").
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
     MINGW*|MSYS*|CYGWIN*) script="${TARGET}/fix-repo.ps1" ;;
@@ -535,7 +501,6 @@ run_fix_repo() {
     exit 5
   fi
   confirm_fix_repo "${script}"
-  snapshot_pre_fix_repo
   log_dir="${LOG_DIR}"
   [[ -z "${log_dir}" ]] && log_dir="${TARGET}/.install-logs"
   case "${log_dir}" in /*) ;; *) log_dir="${TARGET}/${log_dir}" ;; esac
@@ -547,7 +512,6 @@ run_fix_repo() {
     echo "# started:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
     echo "# script:   ${script}"
     echo "# target:   ${TARGET}"
-    echo "# rollback: on-failure=${ROLLBACK_ON_FIX_FAIL}  full=${FULL_ROLLBACK}"
     echo "# ──────────────────────────────────────────────────────────"
   } > "${log_file}"
   echo ""
@@ -577,7 +541,6 @@ run_fix_repo() {
   echo "# exit: ${rc}  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "${log_file}"
   if [[ "${rc}" -ne 0 ]]; then
     echo "❌ fix-repo failed (exit ${rc}) — see ${log_file}" >&2
-    ${ROLLBACK_ON_FIX_FAIL} && perform_rollback "${log_file}"
     exit 5
   fi
   echo "  ✓ fix-repo completed (log: ${log_file})"
