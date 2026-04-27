@@ -154,6 +154,9 @@ TARGET / OUTPUT FLAGS (any mode)
                                  paths used as-is; relative paths joined
                                  to --target. Default: <target>/.install-logs.
                                  Also via env: INSTALL_LOG_DIR.
+  --show-fix-repo-log            Print the latest fix-repo log to stdout
+                                 after run_fix_repo finishes (success or
+                                 failure). Env: INSTALL_SHOW_FIX_REPO_LOG=1.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
