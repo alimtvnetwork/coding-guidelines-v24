@@ -550,3 +550,32 @@ jobs:
         #   npm run sync:fix      # regenerate everything in place
         #   git add -A && git commit -m "chore: sync generated files"
         run: npm run sync:check
+
+  runner-dispatch-guard:
+    name: Runner Dispatch Guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run guard fixture suite (positive + negative)
+        run: bash tests/installer/check-runner-dispatch-guard-fixtures.sh
+
+      - name: Run guard against real run.sh / run.ps1 (emit report)
+        env:
+          RUNNER_GUARD_REPORT: ${{ github.workspace }}/reports/runner-guard-report.md
+        run: bash linter-scripts/check-runner-dispatch-antipatterns.sh
+
+      - name: Publish report to GitHub Step Summary
+        if: always()
+        run: |
+          if [ -f reports/runner-guard-report.md ]; then
+            cat reports/runner-guard-report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload runner-guard-report.md
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runner-guard-report
+          path: reports/runner-guard-report.md
+          if-no-files-found: warn
