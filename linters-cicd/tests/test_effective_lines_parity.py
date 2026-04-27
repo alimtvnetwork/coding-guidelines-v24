@@ -66,9 +66,9 @@ def test_python_counter(label, lang, body, expected):
 def test_js_counter_matches_python(tmp_path):
     js_lib = ROOT / "eslint-plugins" / "coding-guidelines" / "_lib" / "effective-lines.js"
     assert js_lib.exists(), f"missing JS mirror: {js_lib}"
-    runner = tmp_path / "run.js"
+    runner = tmp_path / "run.mjs"
     runner.write_text(
-        "const {countEffective} = require(" + json.dumps(str(js_lib)) + ");\n"
+        "import {countEffective} from " + json.dumps(str(js_lib)) + ";\n"
         "const cases = JSON.parse(process.argv[2]);\n"
         "const out = cases.map(c => countEffective(c.body, c.lang));\n"
         "process.stdout.write(JSON.stringify(out));\n",
