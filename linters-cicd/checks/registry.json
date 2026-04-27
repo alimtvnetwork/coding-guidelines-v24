@@ -46,7 +46,9 @@
     "languages": {
       "go": "checks/function-length-prefer8/go.py",
       "typescript": "checks/function-length-prefer8/typescript.py",
-      "php": "checks/function-length-prefer8/php.py"
+      "php": "checks/function-length-prefer8/php.py",
+      "python": "checks/function-length-prefer8/python.py",
+      "rust": "checks/function-length-prefer8/rust.py"
     }
   },
   "CODE-RED-006": {
