@@ -629,6 +629,12 @@ run_fix_repo() {
   esac
   set -e
   echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
+  if $SHOW_FIX_REPO_LOG; then
+    echo ""
+    echo "─── fix-repo log: $log_file ─────────────────────────────"
+    cat "$log_file"
+    echo "─── end of log ──────────────────────────────────────────"
+  fi
   if [[ "$rc" -ne 0 ]]; then
     err "fix-repo failed (exit $rc) — see $log_file"
     $ROLLBACK_ON_FIX_FAIL && perform_rollback "$log_file"
