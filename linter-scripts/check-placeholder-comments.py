@@ -90,26 +90,6 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Iterable
 
-# --- Shared reason vocabulary import ---------------------------------
-# The closed ``ignored-deleted`` source vocabulary and the per-source
-# reason templates live in a sibling, snake-cased module
-# (``audit_reason_vocab.py``) so the test suite can import the exact
-# same constants the audit emitter uses — guaranteeing tag spellings
-# never drift between production code and assertions.
-#
-# When this file is invoked directly (``python check-placeholder-
-# comments.py``), Python prepends the script's directory to
-# ``sys.path[0]`` and ``import audit_reason_vocab`` resolves
-# naturally. When the file is loaded through ``importlib.util.
-# spec_from_file_location`` (the test ``conftest_shim``), ``sys.path``
-# is NOT auto-augmented, so we defensively prepend the script's
-# directory if and only if it isn't already on the path. This is a
-# no-op in the common direct-invocation case.
-_SCRIPT_DIR = str(Path(__file__).resolve().parent)
-if _SCRIPT_DIR not in sys.path:
-    sys.path.insert(0, _SCRIPT_DIR)
-import audit_reason_vocab as _vocab  # noqa: E402
-
 
 # --- HTML-comment placeholder (legacy form) ---------------------------
 # Opening marker must be on the same line as ``<!--`` so we can detect
@@ -821,32 +801,6 @@ def main(argv: list[str] | None = None) -> int:
              "`--only-changed-status ignored-extension` to debug why a "
              "PR's docs aren't being checked. No-op without "
              "--list-changed-files.")
-    ap.add_argument("--only-deleted-source", action="append",
-        default=None, choices=list(_DELETED_SOURCES), metavar="SOURCE",
-        help="With --list-changed-files, restrict the printed audit's "
-             "`ignored-deleted` rows to those whose intake provenance "
-             "is in this set (repeatable). Valid values match the "
-             "closed deleted-source vocabulary: `diff-D`, "
-             "`changed-files-D`, `diff-R-old`, `changed-files-R-old`, "
-             "`diff-C-old`, `changed-files-C-old`. Non-deleted rows "
-             "(`matched`, `ignored-extension`, `ignored-out-of-root`, "
-             "`ignored-missing`) pass through unchanged — this filter "
-             "is a SCALPEL on the deleted-rows bucket only, NOT a "
-             "second copy of `--only-changed-status`. To see ONLY "
-             "rename-source deletes, combine: "
-             "`--only-changed-status ignored-deleted "
-             "--only-deleted-source diff-R-old "
-             "--only-deleted-source changed-files-R-old`. Filtering "
-             "runs AFTER `--dedupe-changed-files` and AFTER "
-             "`--only-changed-status` so first-seen + status filters "
-             "still apply. The text-mode footer adds a `deleted-by-"
-             "source:` breakdown line counting EVERY source in the "
-             "canonical order (against the post-dedupe / pre-filter "
-             "rows) so the operator can see what was filtered out. "
-             "JSON mode strips non-matching `ignored-deleted` rows "
-             "from the array; the CSV export mirrors the same "
-             "filtered set. No-op without --list-changed-files; "
-             "no-op when no `ignored-deleted` rows are present.")
     ap.add_argument("--with-similarity", action="store_true",
         help="With --list-changed-files, include the rename/copy "
              "similarity metadata in the printed audit. Three extra "
@@ -1133,9 +1087,6 @@ def main(argv: list[str] | None = None) -> int:
                 dedupe=args.dedupe_changed_files,
                 only_statuses=(frozenset(args.only_changed_status)
                                if args.only_changed_status else None),
-                only_deleted_sources=(
-                    frozenset(args.only_deleted_source)
-                    if args.only_deleted_source else None),
                 with_similarity=args.with_similarity,
                 with_labels=args.similarity_labels,
                 legend_mode=args.similarity_legend,
@@ -1155,20 +1106,6 @@ def main(argv: list[str] | None = None) -> int:
                 if args.only_changed_status:
                     only = frozenset(args.only_changed_status)
                     csv_rows = [r for r in csv_rows if r.status in only]
-                if args.only_deleted_source:
-                    # Mirror the renderer's scalpel semantics:
-                    # non-``ignored-deleted`` rows pass through, and
-                    # only ``ignored-deleted`` rows whose ``source``
-                    # is in the allowed set survive. Keeps the CSV
-                    # export aligned byte-for-byte with what STDERR
-                    # just printed (modulo column dialect).
-                    only_src = frozenset(args.only_deleted_source)
-                    csv_rows = [
-                        r for r in csv_rows
-                        if r.status != "ignored-deleted"
-                        or (r.source is not None
-                            and r.source in only_src)
-                    ]
                 _write_similarity_csv(
                     csv_rows, args.similarity_csv,
                     with_labels=args.similarity_labels,
@@ -1460,50 +1397,19 @@ _SIMILARITY_BLANK = "-"
 #                            shaped exactly ``D\tpath`` (the verbatim
 #                            git wire format some CI runners
 #                            forward).
-#   * ``diff-R-old``       — OLD side of an ``R``-status row from
-#                            ``git diff --name-status -M -C``. The
-#                            file was renamed; we lint the NEW side
-#                            and audit-record the OLD side as
-#                            deleted (no post-state at the OLD path).
-#   * ``diff-C-old``       — OLD (source) side of a ``C``-status
-#                            (copy) row. Strictly speaking the
-#                            source still exists on disk, but from
-#                            the diff range's perspective there is
-#                            no *modification* under the OLD path
-#                            to lint — we record it as
-#                            ``ignored-deleted`` for symmetry with
-#                            the rename case so an audit reviewer
-#                            can see every path the diff mentioned.
-#   * ``changed-files-R-old`` / ``changed-files-C-old``
-#                          — OLD side of an authored
-#                            ``--changed-files`` rename / copy row
-#                            (tab form ``R<score>?\told\tnew`` /
-#                            ``C<score>?\told\tnew``, OR arrow form
-#                            ``old => new`` which is always
-#                            classified as ``R``-old).
 #
 # ``_DELETED_REASON_FALLBACK`` covers any future provenance the
 # parsers add before this map catches up — keeps the audit
 # self-explanatory rather than crashing on a missing key.
-#
-# The R/C-old reasons embed a ``{new_path}`` placeholder so the
-# audit row can name the destination — without it, a reviewer
-# scanning the table would see "old path of a rename" with no clue
-# *which* rename. :func:`_resolve_deleted_reason` performs the
-# substitution; tags without a placeholder are returned verbatim,
-# so adding a new flat tag in the future stays a one-line change.
-#
-# The actual constants live in the sibling ``audit_reason_vocab``
-# module so the test suite can import the *same* objects the audit
-# emitter uses (identity, not equality) — that guarantee is what
-# makes a tag-spelling drift between production code and tests
-# impossible. The underscored aliases below are kept as the
-# in-module public surface so every existing call site (renderers,
-# parsers, footer builder) stays unchanged.
-_DELETED_REASON = _vocab.DELETED_REASON
-_DELETED_REASON_FALLBACK = _vocab.DELETED_REASON_FALLBACK
-_DELETED_SOURCES = _vocab.DELETED_SOURCES
-_resolve_deleted_reason = _vocab.resolve_deleted_reason
+_DELETED_REASON: dict[str, str] = {
+    "diff-D": ("git diff reported D (deleted): file removed in the "
+               "diff range, no post-state to lint"),
+    "changed-files-D": ("--changed-files payload row shaped `D\\tpath`: "
+                        "explicit delete marker, no post-state to lint"),
+}
+_DELETED_REASON_FALLBACK = ("path captured as a delete by the diff "
+                            "intake but provenance is unknown — "
+                            "treated as `ignored-deleted` for safety")
 
 
 # Stable header for the ``--similarity-csv`` export. Frozen at module
@@ -1778,7 +1684,6 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
                                 as_json: bool,
                                 dedupe: bool = False,
                                 only_statuses: frozenset[str] | None = None,
-                                only_deleted_sources: frozenset[str] | None = None,
                                 with_similarity: bool = False,
                                 with_labels: bool = False,
                                 legend_mode: str = _SIMILARITY_LEGEND_AUTO,
@@ -1818,20 +1723,6 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     hides everything is obvious (``0 of 12 row(s) shown``); the
     totals line still counts every status in the canonical order so
     the operator can see exactly what was filtered out.
-
-    When ``only_deleted_sources`` is a non-None frozenset, the filter
-    runs AFTER ``only_statuses`` and applies ONLY to
-    ``ignored-deleted`` rows: each such row whose ``source`` tag is
-    *not* in the set is dropped. Non-deleted rows pass through
-    unchanged — the source filter is a scalpel on the deleted bucket,
-    not a second copy of ``only_statuses``. The text-mode footer
-    grows a ``deleted-by-source:`` breakdown line counting every
-    source in :data:`_DELETED_SOURCES` against ``full_rows`` (post-
-    dedupe, pre-filter) so the breakdown describes the underlying
-    intake even when most of it was filtered out. The line is only
-    emitted when the source filter is active OR at least one
-    ``ignored-deleted`` row is present, so legacy invocations without
-    deletes don't gain a noisy zero line.
 
     When ``with_similarity`` is True the rendered table grows three
     extra columns — ``kind``, ``score``, ``old`` — populated from each
@@ -1880,20 +1771,6 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
     full_rows = rows
     if only_statuses is not None:
         rows = [r for r in rows if r.status in only_statuses]
-    if only_deleted_sources is not None:
-        # Scalpel filter: kept rows are either non-``ignored-deleted``
-        # (untouched) or ``ignored-deleted`` rows whose ``source`` is
-        # in the allowed set. Defensive on ``r.source`` being ``None``
-        # — that should never happen for an ``ignored-deleted`` row
-        # the parser produced today, but a hand-built audit list
-        # passed straight to this renderer would land here, and the
-        # ``in`` test would otherwise raise ``TypeError``.
-        rows = [
-            r for r in rows
-            if r.status != "ignored-deleted"
-            or (r.source is not None
-                and r.source in only_deleted_sources)
-        ]
     if as_json:
         # ``asdict`` recurses into nested dataclasses so the
         # ``similarity`` field becomes a sub-object automatically. When
@@ -1941,15 +1818,6 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         # reports the full breakdown.
         suffix += (f"; filtered, {len(rows)} of {len(full_rows)} "
                    f"row(s) shown ({'+'.join(sorted(only_statuses))})")
-    if only_deleted_sources is not None:
-        # Surface the deleted-source filter alongside the status
-        # filter so the header line tells the whole story. The
-        # ``deleted-by-source:`` breakdown emitted below the totals
-        # line carries the per-source numbers.
-        suffix += (
-            f"; deleted-source filter "
-            f"({'+'.join(sorted(only_deleted_sources))})"
-        )
     if with_similarity:
         # Surface the extra columns in the header so a reviewer
         # scanning the log knows the wider table isn't a layout bug.
@@ -2091,34 +1959,6 @@ def _render_changed_files_audit(rows: list[_ChangedFileAudit],
         counts[r.status] = counts.get(r.status, 0) + 1
     summary = "  ".join(f"{s}={counts[s]}" for s in _AUDIT_STATUSES)
     print(f"  totals: {summary}", file=stream)
-    # Deleted-source breakdown — emitted only when the operator
-    # opted into the source filter OR there's at least one
-    # ``ignored-deleted`` row in the (post-dedupe, pre-filter)
-    # intake. Keeping the line conditional preserves the legacy
-    # footer for invocations that have no deletes at all.
-    has_any_deleted = counts.get("ignored-deleted", 0) > 0
-    if only_deleted_sources is not None or has_any_deleted:
-        src_counts = {s: 0 for s in _DELETED_SOURCES}
-        unknown_src = 0
-        for r in full_rows:
-            if r.status != "ignored-deleted":
-                continue
-            if r.source in src_counts:
-                src_counts[r.source] += 1
-            else:
-                # Captures both ``None`` (defensive) and any future
-                # tag the parsers added before ``_DELETED_SOURCES``
-                # caught up. Surfaces under a synthetic ``unknown``
-                # bucket so the breakdown still sums to the
-                # ``ignored-deleted`` total — visible accounting is
-                # the whole point of this line.
-                unknown_src += 1
-        breakdown = "  ".join(
-            f"{s}={src_counts[s]}" for s in _DELETED_SOURCES
-        )
-        if unknown_src:
-            breakdown += f"  unknown={unknown_src}"
-        print(f"  deleted-by-source: {breakdown}", file=stream)
     # Optional legend — only meaningful when the similarity columns
     # are actually in the table. Resolver decides on/off given the
     # operator's ``--similarity-legend`` choice and the stream's TTY
@@ -2213,16 +2053,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
     # ``_DELETED_REASON``'s keys. The audit emitter below maps
     # ``source`` → human-readable ``reason`` so each
     # ``ignored-deleted`` row explains *why* it was classified.
-    # Each entry is ``(path, source, new_path | None)``:
-    #   * ``path``     — the OLD-side / deleted repo-relative path.
-    #   * ``source``   — provenance tag, one of ``_DELETED_REASON``'s
-    #                    keys.
-    #   * ``new_path`` — the rename/copy destination when ``source``
-    #                    is an R/C-old tag, else ``None``. Used by
-    #                    :func:`_resolve_deleted_reason` to format the
-    #                    `{new_path}` placeholder so the audit row
-    #                    names where the file went.
-    deleted_paths: list[tuple[str, str, "str | None"]] = []
+    deleted_paths: list[tuple[str, str]] = []
     # When the caller asked for an audit trail, also collect rename/
     # copy provenance per new-path so the audit constructor below can
     # attach a ``_RenameSimilarity`` to every row whose path came from
@@ -2317,10 +2148,11 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 similarity=sim,
             ))
     if audit is not None:
-        for d, src, new_path in deleted_paths:
+        for d, src in deleted_paths:
             audit.append(_ChangedFileAudit(
                 path=d, status="ignored-deleted",
-                reason=_resolve_deleted_reason(src, new_path),
+                reason=_DELETED_REASON.get(
+                    src, _DELETED_REASON_FALLBACK),
                 # Carry the raw provenance tag onto the audit row so
                 # ``--list-changed-files-verbose`` can surface it
                 # alongside the human-readable reason. Non-deleted
@@ -2423,7 +2255,7 @@ def _unquote_git_path(field: str) -> str:
 
 def _parse_name_status(stdout: str,
                        *,
-                       deleted: "list[tuple[str, str, str | None]] | None" = None,
+                       deleted: "list[tuple[str, str]] | None" = None,
                        similarities: "dict[str, _RenameSimilarity] | None" = None,
                        ) -> list[str]:
     """Extract the post-state path from each ``git diff --name-status``
@@ -2432,28 +2264,14 @@ def _parse_name_status(stdout: str,
     Unknown / malformed rows are skipped silently — the linter's job
     is to lint placeholders, not to police git plumbing output.
 
-    When ``deleted`` is provided, three row classes contribute
-    ``(path, source, new_path | None)`` tuples — in input order, after
-    :func:`_unquote_git_path`:
-
-    * ``D`` rows → ``(deleted_path, "diff-D", None)``.
-    * ``R`` rows → ``(old_path, "diff-R-old", new_path)`` *in addition*
-      to the NEW path being returned for linting. The OLD path no
-      longer has a post-state file under the diff range, so the audit
-      emitter classifies it ``ignored-deleted`` and names the
-      destination in the row's ``reason``.
-    * ``C`` rows → ``(old_path, "diff-C-old", new_path)`` for the
-      same audit-completeness reason. (The source file still exists
-      on disk, but the diff range introduced no *modification* at
-      the OLD path; recording it as ``ignored-deleted`` keeps the
-      audit symmetric with the rename case so reviewers see every
-      path the diff mentioned.)
-
-    The audit-trail emitter uses the tag to look up the per-
-    provenance ``reason`` string via
-    :func:`_resolve_deleted_reason` so each ``ignored-deleted`` row
-    explains *why* it was classified that way and (for R/C-old rows)
-    where the file went.
+    When ``deleted`` is provided, every ``D``-status row contributes
+    a ``(path, source)`` tuple — in input order, after
+    :func:`_unquote_git_path`. The ``source`` is always ``"diff-D"``
+    for this parser (rows come straight from
+    ``git diff --name-status``); the audit-trail emitter uses the
+    tag to look up the per-provenance ``reason`` string in
+    :data:`_DELETED_REASON` so each ``ignored-deleted`` row explains
+    *why* it was classified that way.
 
     When ``similarities`` is provided, every ``R``/``C`` row contributes
     one ``new_path → _RenameSimilarity`` entry. The mapping key is the
@@ -2512,18 +2330,6 @@ def _parse_name_status(stdout: str,
                         score=score,
                         old_path=_unquote_git_path(cols[1]) if cols[1] else "",
                     )
-                # Capture the OLD-side path as an ``ignored-deleted``
-                # audit row when the caller asked for the audit trail.
-                # Skip empty-old-path defensive case (hand-rolled
-                # inputs only — git never emits one) so we don't
-                # synthesise a blank-path row.
-                if deleted is not None and cols[1] != "":
-                    old_path = _unquote_git_path(cols[1])
-                    deleted.append((
-                        old_path,
-                        f"diff-{kind}-old",
-                        new_path,
-                    ))
         elif kind in ("A", "M"):
             # Add / modify: cols = [A|M, path]. Take path.
             if cols[1] != "":
@@ -2533,8 +2339,7 @@ def _parse_name_status(stdout: str,
             # audit trail only — never returned for linting because
             # there is no post-state file to scan.
             if cols[1] != "":
-                deleted.append((_unquote_git_path(cols[1]),
-                                "diff-D", None))
+                deleted.append((_unquote_git_path(cols[1]), "diff-D"))
         # T / U / X intentionally dropped — see docstring.
     return out
 
@@ -2560,36 +2365,22 @@ _RENAME_ARROW_RE = re.compile(r"^\s*(?P<old>.+?)\s*=>\s*(?P<new>.+?)\s*$")
 
 def _normalise_changed_lines(lines: list[str],
                              *,
-                             deleted: "list[tuple[str, str, str | None]] | None" = None,
+                             deleted: "list[tuple[str, str]] | None" = None,
                              similarities: "dict[str, _RenameSimilarity] | None" = None,
                              ) -> list[str]:
     """Collapse rename-bearing rows in a ``--changed-files`` payload
     down to their post-rename path.
 
-    When ``deleted`` is provided three row classes contribute
-    ``(path, source, new_path | None)`` tuples:
-
-    * Pure delete rows (``D\\tpath`` — the exact shape
-      ``git diff --name-status`` emits) → ``(path, "changed-files-D",
-      None)``. The row is NOT forwarded to the caller.
-    * Tab-form rename / copy rows (``R<score>?\\told\\tnew`` or
-      ``C<score>?\\told\\tnew``) → an additional ``(old_path,
-      "changed-files-R-old"|"changed-files-C-old", new_path)`` tuple
-      *alongside* the NEW path that's still forwarded for linting.
-    * Arrow-form rename rows (``old => new``) → an additional
-      ``(old_path, "changed-files-R-old", new_path)`` tuple. There is
-      no copy variant in arrow form (``git status -s`` doesn't emit
-      one), so every arrow row is classified as a rename.
-
-    The provenance tags distinguish authored-payload deletes from
-    true diff ``D`` rows, and rename/copy OLD sides from plain
-    deletes — so the audit emitter can surface a different ``reason``
-    string per source via :func:`_resolve_deleted_reason`. Without
-    ``deleted`` (the default), all three row classes degrade
-    gracefully: the pure-delete row falls through to the generic
-    tab-form branch and its path travels downstream to be filtered
-    by extension/root checks, while R/C OLD-side capture is simply
-    skipped — same end result as before this audit-trail addition.
+    When ``deleted`` is provided and a row is recognisable as a
+    delete (``D\\tpath`` — the exact shape ``git diff --name-status``
+    emits), the path is captured into ``deleted`` as a
+    ``(path, "changed-files-D")`` tuple and the row is NOT forwarded
+    to the caller. The provenance tag distinguishes it from true
+    diff ``D`` rows so the audit emitter can surface a different
+    ``reason`` string per source. Without ``deleted`` (the default),
+    such a row falls through to the generic tab-form branch and the
+    bare path travels downstream to be filtered by extension/root
+    checks — same end result as before this audit-trail addition.
 
     Plain paths (no tab, no ``=>``) pass through unchanged. Comments
     and blanks are *not* stripped here — the caller does that on the
@@ -2652,7 +2443,7 @@ def _normalise_changed_lines(lines: list[str],
                     and cols[0] == "D"
                     and cols[1] != ""):
                 deleted.append((_unquote_git_path(cols[1]),
-                                "changed-files-D", None))
+                                "changed-files-D"))
                 continue
             new_col = ""
             for c in reversed(cols):
@@ -2685,28 +2476,6 @@ def _normalise_changed_lines(lines: list[str],
                             score=int(score_raw) if score_raw else None,
                             old_path=old_path,
                         )
-                # Capture the OLD-side path as an ``ignored-deleted``
-                # audit row even when ``similarities`` wasn't asked
-                # for (the audit trail and the similarity column are
-                # independent flags; OLD-side bookkeeping belongs to
-                # the audit, not the similarity, surface). We re-
-                # parse the leading column for the kind letter to
-                # avoid coupling the two passes.
-                if deleted is not None and cols and cols[0]:
-                    head_d = _NAME_STATUS_RE.match(cols[0])
-                    if head_d and head_d.group(1) in ("R", "C"):
-                        kind_d = head_d.group(1)
-                        old_for_audit = ""
-                        for c in cols[1:]:
-                            if c != "" and _unquote_git_path(c) != new_path:
-                                old_for_audit = _unquote_git_path(c)
-                                break
-                        if old_for_audit:
-                            deleted.append((
-                                old_for_audit,
-                                f"changed-files-{kind_d}-old",
-                                new_path,
-                            ))
             continue
         # Arrow form: `OLD => NEW`.
         m = _RENAME_ARROW_RE.match(line)
@@ -2717,24 +2486,13 @@ def _normalise_changed_lines(lines: list[str],
             # the user pasted a C-quoted form from ``git status``.
             unquoted_new = _unquote_git_path(new_path_raw.strip())
             out.append(unquoted_new)
-            old_path_for_audit = _unquote_git_path(
-                m.group("old").strip())
             if similarities is not None:
+                old_path_raw = m.group("old")
                 similarities[unquoted_new] = _RenameSimilarity(
                     kind="R",
                     score=None,
-                    old_path=old_path_for_audit,
+                    old_path=_unquote_git_path(old_path_raw.strip()),
                 )
-            # Arrow form is always a rename (git status -s has no
-            # copy variant). Capture the OLD side as an
-            # ``ignored-deleted`` audit row when the audit trail is
-            # being collected.
-            if deleted is not None and old_path_for_audit:
-                deleted.append((
-                    old_path_for_audit,
-                    "changed-files-R-old",
-                    unquoted_new,
-                ))
             continue
         out.append(line)
     return out

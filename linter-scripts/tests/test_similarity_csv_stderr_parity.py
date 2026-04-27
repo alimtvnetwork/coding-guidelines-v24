@@ -10,11 +10,6 @@ to the CSV's score-cell semantics:
   literal string ``"0"``, **not** an empty cell).
 * Unscored rename ``R\\told\\tnew`` (score=None → an EMPTY cell).
 * Ignored-deleted row ``D\\tpath`` (no post-state → empty cells).
-* Implicit ``ignored-deleted`` rows for every rename's OLD side
-  (the audit captures them as ``changed-files-R-old`` so the audit
-  is complete; CSV cells for kind / score / old_path are all empty
-  on those rows because the OLD side has no post-state similarity
-  attached — the score lives on the NEW-side ``matched`` row).
 
 It then re-reads the generated CSV with the stdlib ``csv`` module
 and asserts:
@@ -117,16 +112,8 @@ class TestCsvStderrParity(unittest.TestCase):
             self.assertEqual(rc, 0, msg=f"stderr={err!r}")
 
             audit = json.loads(err)
-            # 4 matched + 1 explicit `D`-row ignored-deleted +
-            # 3 implicit OLD-side ignored-deleted (one per rename) =
-            # 8 audit rows. Each rename contributes a NEW-side
-            # `matched` row AND an OLD-side `ignored-deleted` row
-            # so the audit names every path the intake mentioned.
-            self.assertEqual(len(audit), 8)
-            # Sanity: bucket breakdown.
-            statuses = [r["status"] for r in audit]
-            self.assertEqual(statuses.count("matched"), 4)
-            self.assertEqual(statuses.count("ignored-deleted"), 4)
+            # 4 matched + 1 ignored-deleted = 5 audit rows.
+            self.assertEqual(len(audit), 5)
 
             with csv_path.open(encoding="utf-8", newline="") as fh:
                 grid = list(csv.reader(fh))
@@ -257,8 +244,7 @@ class TestCsvStderrParity(unittest.TestCase):
                 "--only-changed-status", "matched",
             )
             audit = json.loads(err)
-            # Filter drops the explicit + 3 OLD-side ignored-deleted
-            # rows, leaving the 4 matched NEW-side / plain rows.
+            # Filter drops the ignored-deleted row.
             self.assertEqual({r["status"] for r in audit}, {"matched"})
             self.assertEqual(len(audit), 4)
 
