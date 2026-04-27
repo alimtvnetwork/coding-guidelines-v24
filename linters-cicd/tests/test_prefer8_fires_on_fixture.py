@@ -57,11 +57,12 @@ class Prefer8FiresOnFixtureTests(unittest.TestCase):
         code, payload = run_scanner(PREFER8)
         findings = collect_findings(payload)
         self.assertEqual(len(findings), 1,
-                         msg=f"expected 1 prefer-8 finding, got {findings}")
+                         msg=f"expected 1 strict-8 finding, got {findings}")
         rule_id = findings[0].get("ruleId")
         self.assertEqual(rule_id, "CODE-RED-005")
         level = findings[0].get("level")
-        self.assertEqual(level, "warning")
+        self.assertEqual(level, "error",
+                         msg="CODE-RED-005 must emit `error`-level findings under strict-8")
         self.assertNotEqual(code, 0,
                             "scanner must exit non-zero when findings exist")
 
