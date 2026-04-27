@@ -341,6 +341,26 @@ try {
         Merge-File -Src $srcFile -Target (Join-Path $Dest $tlf)
     }
 
+    # ── Verify required files (spec §8: exit 4 on missing required path) ──
+    # Required files MUST exist in Dest after install. Skipped under -DryRun.
+    if (-not $DryRun) {
+        $requiredFiles = @("fix-repo.sh", "fix-repo.ps1")
+        $missing = @()
+        foreach ($rf in $requiredFiles) {
+            if (-not (Test-Path (Join-Path $Dest $rf))) { $missing += $rf }
+        }
+        if ($missing.Count -gt 0) {
+            Write-Err "Install verification FAILED — $($missing.Count) required file(s) missing in $Dest:"
+            foreach ($m in $missing) { Write-Host "     • $m" -ForegroundColor Red }
+            Write-Host ""
+            Write-Host "   The archive was downloaded but did NOT contain the expected" -ForegroundColor Red
+            Write-Host "   top-level scripts. Re-run without -Version to fetch main, or" -ForegroundColor Red
+            Write-Host "   pin to a release that includes fix-repo.{sh,ps1}." -ForegroundColor Red
+            exit 4
+        }
+        Write-OK "Verified $($requiredFiles.Count) required file(s) present"
+    }
+
     # ── Summary ───────────────────────────────────────────────────
     Write-Host ""
     Write-Plain "════════════════════════════════════════════════════════"
