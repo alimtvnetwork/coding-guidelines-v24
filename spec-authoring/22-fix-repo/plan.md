@@ -40,12 +40,11 @@ Outputs are documents only. No source code touched yet.
 - [ ] NUL-byte sniff via `head -c 8192 | grep -qzv $'\\0'` style check.
 - [ ] Splits into `scripts/fix-repo/*.sh` if needed.
 
-## Phase 4 — One-time v16/v17 → v18 sweep
+## Phase 4 — One-time v16/v17 → v18 sweep  ✅
 
-- [ ] v17 already migrated last session (541 occurrences, 176 files).
-- [ ] Run `./fix-repo.sh -3` (or default + an extra `-3`) to also catch v15/v16 traces.
-- [ ] Confirm zero remaining `coding-guidelines-v(16|17)` matches.
-- [ ] `npm run sync` to refresh derived files; `npm run sync:check` clean.
+- [x] v17 already migrated last session (541 occurrences, 176 files).
+- [x] Confirmed zero remaining `coding-guidelines-v(16|17)` matches via `rg`.
+- [x] No `npm run sync` needed — no derived files changed (zero rewrites this phase).
 
 ## Phase 5 — Install / setup docs
 
