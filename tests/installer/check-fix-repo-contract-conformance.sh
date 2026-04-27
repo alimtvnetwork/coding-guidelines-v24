@@ -56,7 +56,7 @@ assert_contains "$RUN_SH" 'exec bash "$SCRIPT_DIR/fix-repo.sh" "$@"' \
 # 3. run.ps1 reference dispatch
 # 3. run.ps1 reference dispatch — inlined `& <inner> @args; exit $LASTEXITCODE`
 #    on the original $args, no Invoke-FixRepo wrapper function.
-assert_contains "$RUN_PS1" '"fix-repo"   { & (Assert-FixRepoPresent) @args; exit $LASTEXITCODE }' \
+assert_contains "$RUN_PS1" '& $inner @args; exit $LASTEXITCODE' \
   "run.ps1 inlines fix-repo dispatch (single splatted call on \$args)"
 assert_absent  "$RUN_PS1" 'function Invoke-FixRepo' \
   "no Invoke-FixRepo wrapper function (dispatch is inlined)"
