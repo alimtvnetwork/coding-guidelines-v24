@@ -253,12 +253,20 @@ Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `-
 <details>
 <summary><strong>linters</strong> — Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below — it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
