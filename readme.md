@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/alimtvnetwork/coding-guidelines-v17">
+  <a href="https://github.com/alimtvnetwork/coding-guidelines-v18">
     <img
       src="public/images/coding-guidelines-icon.png"
       alt="Coding Guidelines v17 brand icon — gradient shield with code-bracket symbol"
@@ -17,17 +17,17 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v17/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.24.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-614-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-132%2C679-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--27-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v18/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.24.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-614-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-132%2C679-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--28-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
-  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="bundles.json"><img alt="Bundles" src="https://img.shields.io/badge/bundles-7-14B8A6?style=flat-square"/></a> <a href="public/health-score.json"><img alt="Health Score" src="https://img.shields.io/badge/health-80%2F100%20(B)-F59E0B?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a> <a href="https://lovable.dev"><img alt="Made With Lovable" src="https://img.shields.io/badge/made%20with-Lovable-FF6E3C?style=flat-square"/></a> <a href="https://github.com/alimtvnetwork/coding-guidelines-v17/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/alimtvnetwork/coding-guidelines-v17?style=flat-square&color=F59E0B"/></a> <a href="https://github.com/alimtvnetwork/coding-guidelines-v17/issues"><img alt="Issues" src="https://img.shields.io/github/issues/alimtvnetwork/coding-guidelines-v17?style=flat-square&color=EF4444"/></a><!-- /STAMP:PLATFORM_BADGES -->
+  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="bundles.json"><img alt="Bundles" src="https://img.shields.io/badge/bundles-7-14B8A6?style=flat-square"/></a> <a href="public/health-score.json"><img alt="Health Score" src="https://img.shields.io/badge/health-80%2F100%20(B)-F59E0B?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a> <a href="https://lovable.dev"><img alt="Made With Lovable" src="https://img.shields.io/badge/made%20with-Lovable-FF6E3C?style=flat-square"/></a> <a href="https://github.com/alimtvnetwork/coding-guidelines-v18/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/alimtvnetwork/coding-guidelines-v18?style=flat-square&color=F59E0B"/></a> <a href="https://github.com/alimtvnetwork/coding-guidelines-v18/issues"><img alt="Issues" src="https://img.shields.io/github/issues/alimtvnetwork/coding-guidelines-v18?style=flat-square&color=EF4444"/></a><!-- /STAMP:PLATFORM_BADGES -->
 </p>
 
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->614<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->132,679<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.24.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-27<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES -->614<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->132,679<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.24.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-28<!-- /STAMP:UPDATED -->
 </p>
 
 ---
@@ -42,25 +42,25 @@
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.ps1 | iex
 ```
 
 ### 🪟 Windows · PowerShell · skip latest-version probe
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.ps1))) -n
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.ps1))) -n
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh | bash
 ```
 
 ### 🐧 macOS · Linux · Bash · skip latest-version probe
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.sh | bash -s -- -n
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh | bash -s -- -n
 ```
 
 <p align="center"><sub>Version-pinned · SHA-256 verified · idempotent · temp-clean. Power-user flags (<code>--repo</code>, <code>--branch</code>, <code>--version</code>, <code>--folders</code>, <code>--dest</code>, <code>--config</code>, <code>--prompt</code>, <code>--force</code>, <code>--dry-run</code>) live in <a href="#%EF%B8%8F-full-repo-install-scripts">Full-Repo Install Scripts</a>.</sub></p>
@@ -78,13 +78,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.sh | bash
 ```
 
 ### <code>splitdb</code> — Split-DB Architecture Spec
@@ -92,13 +92,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/splitdb-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/splitdb-install.sh | bash
 ```
 
 ### <code>slides</code> — Slides App + Decks
@@ -106,13 +106,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.sh | bash
 ```
 
 ### <code>linters</code> — Linters + CI/CD Linter Pack
@@ -120,13 +120,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/linters-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/linters-install.sh | bash
 ```
 
 ### <code>cli</code> — CLI Toolchain Spec
@@ -134,13 +134,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/cli-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/cli-install.sh | bash
 ```
 
 ### <code>wp</code> — WordPress Plugin How-To Spec
@@ -148,13 +148,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/wp-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/wp-install.sh | bash
 ```
 
 ### <code>consolidated</code> — Consolidated Guidelines
@@ -162,13 +162,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.sh | bash
 ```
 
 ### Verify & Uninstall
@@ -186,19 +186,19 @@ Copy-paste commands for every supported bundle. Each block lists the **exact scr
 
 Bash · latest:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.sh | bash
 ```
 Bash · pinned:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.ps1 | iex
 ```
 PowerShell · pinned:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/error-manage-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/error-manage-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
 
@@ -209,19 +209,19 @@ Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
 
 Bash · latest:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/splitdb-install.sh | bash
 ```
 Bash · pinned:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/splitdb-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/splitdb-install.ps1 | iex
 ```
 PowerShell · pinned:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/splitdb-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec/06-seedable-config-architecture`.
 
@@ -232,19 +232,19 @@ Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec
 
 Bash · latest (auto-opens `slides-app/dist/index.html`):
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.sh | bash
 ```
 Bash · pinned, no auto-open (CI):
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.sh | bash -s -- --version v3.85.0 --target ./vendor/slides --no-open
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.sh | bash -s -- --version v3.85.0 --target ./vendor/slides --no-open
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.ps1 | iex
 ```
 PowerShell · pinned, no auto-open:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/slides-install.ps1))) -Version v3.85.0 -Dest .\vendor\slides -NoOpen
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.ps1))) -Version v3.85.0 -Dest .\vendor\slides -NoOpen
 ```
 Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
 
@@ -255,19 +255,19 @@ Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Unique flag: `-
 
 Bash · latest:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/linters-install.sh | bash
 ```
 Bash · pinned:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/linters-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/linters-install.ps1 | iex
 ```
 PowerShell · pinned:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/linters-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/linters-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below — it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
 
@@ -278,19 +278,19 @@ Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no
 
 Bash · latest:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/cli-install.sh | bash
 ```
 Bash · pinned:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/cli-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/cli-install.ps1 | iex
 ```
 PowerShell · pinned:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/cli-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/cli-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `spec/13-generic-cli`, `spec/14-update`, `spec/15-distribution-and-runner`, `spec/16-generic-release`.
 
@@ -301,19 +301,19 @@ Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `
 
 Bash · latest:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/wp-install.sh | bash
 ```
 Bash · pinned:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/wp-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/wp-install.ps1 | iex
 ```
 PowerShell · pinned:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/wp-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/wp-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/18-wp-plugin-how-to`.
 
@@ -324,19 +324,19 @@ Installs: `spec/18-wp-plugin-how-to`.
 
 Bash · latest:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.sh | bash
 ```
 Bash · pinned:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
 PowerShell · latest:
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.ps1 | iex
 ```
 PowerShell · pinned:
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/consolidated-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/consolidated-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/17-consolidated-guidelines`.
 
@@ -354,24 +354,24 @@ Installs: `spec/17-consolidated-guidelines`.
 ### 🐧 macOS · Linux · Bash (latest)
 
 ```bash
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.sh | bash
 bash ./linters-cicd/run-all.sh --path . --format text
 ```
 
 ### 🐧 Pinned version (recommended for CI)
 
 ```bash
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/download/v3.79.0/install.sh | bash -s -- -v v3.79.0
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v18/releases/download/v3.79.0/install.sh | bash -s -- -v v3.79.0
 ```
 
 ### 🪟 Windows · PowerShell
 
 ```powershell
 # Install latest (downloads & runs install.ps1 in one line)
-irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+irm https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.ps1 | iex
 
 # Install a pinned version (recommended for CI)
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1))) -Version v3.79.0
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.ps1))) -Version v3.79.0
 
 # Run the linter pack (use WSL / Git-Bash for the bash runner on Windows)
 bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
@@ -388,7 +388,7 @@ bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
 .\install.ps1 --help       # bash-style long form
 
 # Or pipe-to-iex with explicit -Help (zero network beyond fetching the script itself):
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1))) -Help
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.ps1))) -Help
 ```
 
 All three variants exit with code `0`, print the same usage text, and make **zero** network calls during help output. This is regression-tested by [`tests/installer/check-install-ps1-help.sh`](tests/installer/check-install-ps1-help.sh) (T5 in the installer suite).
@@ -475,12 +475,12 @@ If you ran an installer with `-NoVerify` / `-n`, re-run it **without** the flag 
 
 ```powershell
 # PowerShell (Windows) — re-run with verification ON
-irm https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.ps1 | iex
+irm https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.ps1 | iex
 ```
 
 ```bash
 # Bash (macOS / Linux) — re-run with verification ON
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v17/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v18/releases/latest/download/install.sh | bash
 ```
 
 Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning banner, even when combined with `-NoVerify`. This is regression-tested by [`tests/installer/check-install-ps1-noverify-help.sh`](tests/installer/check-install-ps1-noverify-help.sh) (T6 in the installer suite).
@@ -518,11 +518,11 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 ### Setup
 
 ```bash
-git clone https://github.com/alimtvnetwork/coding-guidelines-v17.git
+git clone https://github.com/alimtvnetwork/coding-guidelines-v18.git
 ```
 
 ```bash
-cd coding-guidelines-v17 && npm install
+cd coding-guidelines-v18 && npm install
 ```
 
 ### Daily Workflow
@@ -1197,13 +1197,13 @@ Use the generic installer for **everything** (specs + linters + scripts):
 **🪟 Windows · PowerShell**
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.ps1 | iex
 ```
 
 **🐧 macOS · Linux · Bash**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh | bash
 ```
 
 Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& ([scriptblock]::Create(...)) -n`; Bash: `... | bash -s -- -n`). Local re-runs: `.\install.ps1` or `./install.sh`.

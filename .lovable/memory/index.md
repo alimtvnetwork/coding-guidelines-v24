@@ -10,7 +10,7 @@ Updated: 2026-04-27
 - 🔴 PRE-WRITE: Before producing any standalone-script code, read the target repo's coding-guideline spec AND the sibling `standalone-scripts/*/src/` files first. See mem://issues/payment-banner-hider-rca.
 - 🔴 README install commands: ONE line per command, NEVER `#` comments inside install code fences. Platform shown by header above the block. Install section comes FIRST after badges, before TOC. Match on-site `InstallSection.tsx` order (4 full-repo + 7 named bundles).
 - 🔴 Release & Migration UI: exactly TWO cards (Windows PowerShell + macOS/Linux Bash), one-liner each. NEVER add "skip latest probe" variants. User locked this 2026-04-24.
-- 🔴 Canonical repo slug: `alimtvnetwork/coding-guidelines-v17`. Any v14/v15 reference is a bug — run repo-wide `grep -rn` after every rebrand.
+- 🔴 Canonical repo slug: `alimtvnetwork/coding-guidelines-v18`. Any v14/v15 reference is a bug — run repo-wide `grep -rn` after every rebrand.
 - 🔴 NEVER sync 01-app, 02-app-issues, 03-general, 03-tasks, or 12-consolidated-guidelines from gitmap-v3. All maintained locally.
 - 🔴 STRICTLY PROHIBITED #01 — `readme.txt` time suggestions: never suggest/mention timestamps, "git update time", auto-refresh, or time-related workflows in or about readme.txt. Only edit readme.txt when explicitly asked that turn. No follow-up time offers. See mem://avoid/02-no-time-suggestions-in-readme-txt.
 - Naming: PascalCase for all internal IDs, DB, JSON, Types. Exceptions: Rust uses snake_case identifiers.

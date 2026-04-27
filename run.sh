@@ -18,7 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 show_help() {
   cat <<'EOF'
 
-  coding-guidelines-v17 — root runner
+  coding-guidelines-v18 — root runner
 
   Usage: ./run.sh [<command>] [<flags>]
 

@@ -42,7 +42,7 @@ Sequence numbers are stable — never renumber, only append.
 |---------|------|--------|
 | Create `.lovable/memories/` | Use `.lovable/memory/` (no trailing `s`) | `01-spec-authoring.md` §`.lovable/` |
 | Create per-task folders under `.lovable/` (`completed-tasks/`, `pending-tasks/`, free-form `suggestions/`) | One file per kind: `plan.md`, `suggestions.md`, with `## Completed` / `## Implemented` sections | `.lovable/memory/avoid/01-avoid-per-task-folders.md` |
-| Reference `coding-guidelines-v1` / any `v1` namespace | Use `alimtvnetwork/coding-guidelines-v17` | `mem://constraints/avoid-app-sync` |
+| Reference `coding-guidelines-v1` / any `v1` namespace | Use `alimtvnetwork/coding-guidelines-v18` | `mem://constraints/avoid-app-sync` |
 | Touch `.release/` | Externally managed | repo policy |
 | Sync `01-app`, `02-app-issues`, `03-general`, `03-tasks`, `12-consolidated-guidelines` from sibling repos | Maintain locally | `mem://constraints/avoid-app-sync` |
 | Hand-edit `version.json` auto fields | Run `node scripts/sync-version.mjs` | `01-spec-authoring.md` §X.3 |
