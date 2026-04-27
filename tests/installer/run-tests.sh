@@ -178,6 +178,41 @@ else
     fail "install.ps1 help variants either non-zero, missing usage, or made network calls"
 fi
 
+printf '\nT6: ./run.sh visibility sub-command wired (Phase 4 of 23-visibility-change)\n'
+if bash "$HERE/check-visibility-runner-wiring.sh" >/dev/null 2>&1; then
+    pass "run.sh + run.ps1 advertise and dispatch the visibility sub-command"
+else
+    fail "visibility sub-command not wired in both runners"
+fi
+
+printf '\nT7: visibility-change.sh argument-parsing exit codes (Phase 5)\n'
+if bash "$HERE/check-visibility-arg-parsing.sh" >/dev/null 2>&1; then
+    pass "visibility-change.sh exits 0/2/6 across 6 arg-parse cases"
+else
+    fail "visibility-change.sh arg-parse exit codes regressed"
+fi
+
+printf '\nT8: visibility-change provider/slug detection (Phase 5)\n'
+if bash "$HERE/check-visibility-provider-detect.sh" >/dev/null 2>&1; then
+    pass "resolve_provider/resolve_owner_repo correct across 10 URL shapes"
+else
+    fail "provider/slug resolution regressed"
+fi
+
+printf '\nT9: ./run.sh fix-repo sub-command wired (carry-over Phase 7 of 22-fix-repo)\n'
+if bash "$HERE/check-fix-repo-runner-wiring.sh" >/dev/null 2>&1; then
+    pass "run.sh + run.ps1 advertise and dispatch the fix-repo sub-command"
+else
+    fail "fix-repo sub-command not wired in both runners"
+fi
+
+printf '\nT10: fix-repo rewrites tokens inside URLs; hosts preserved (mem://features/fix-repo-url-handling)\n'
+if bash "$HERE/check-fix-repo-url-rewrite.sh" >/dev/null 2>&1; then
+    pass "URL-embedded tokens rewritten; hosts preserved; -v10 numeric guard holds"
+else
+    fail "fix-repo URL-rewrite or numeric guard regressed"
+fi
+
 # =====================================================================
 printf '\n────────────────────────────────────────────\n'
 printf '  PASS: %d   FAIL: %d\n' "$PASS" "$FAIL"
