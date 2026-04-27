@@ -99,20 +99,23 @@ that no further re-quoting can occur.
 ### 4.2 PowerShell reference implementation
 
 ```powershell
-function Invoke-FixRepo {
+function Assert-FixRepoPresent {
     $inner = Join-Path $PSScriptRoot "fix-repo.ps1"
-    if (-not (Test-Path $inner)) { Write-Host "❌ Cannot find $inner" -ForegroundColor Red; exit 1 }
-    & $inner @args
-    exit $LASTEXITCODE
+    if (Test-Path $inner) { return $inner }
+    Write-Host "❌ Cannot find $inner" -ForegroundColor Red
+    exit 1
 }
 
-# dispatch:
-"fix-repo" { Invoke-FixRepo @args }
+# dispatch (inlined — no wrapper Invoke-FixRepo function):
+"fix-repo" { & (Assert-FixRepoPresent) @args; exit $LASTEXITCODE }
 ```
 
 `@args` (splatting) preserves argv as an array — equivalent to Bash's
-`"$@"`. Both `Invoke-FixRepo @args` (call site) and `& $inner @args`
-(inside the function) MUST splat — never interpolate into a string.
+`"$@"`. The dispatch is a single statement on the original `$args`:
+the guard helper only resolves and validates the inner-script path,
+it never touches the argument array. This mirrors the Bash
+implementation's `exec bash "$SCRIPT_DIR/fix-repo.sh" "$@"` end-to-end
+forwarding.
 
 ---
 
