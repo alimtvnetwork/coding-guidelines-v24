@@ -16,6 +16,8 @@
 #   --dest /path/to/dir          Install destination (default: cwd)
 #   --log-dir /path or rel       Where to write fix-repo logs (default: <dest>/.install-logs;
 #                                env: INSTALL_LOG_DIR)
+#   --show-fix-repo-log          Print the latest fix-repo log to stdout after run_fix_repo
+#                                completes (env: INSTALL_SHOW_FIX_REPO_LOG=1)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
