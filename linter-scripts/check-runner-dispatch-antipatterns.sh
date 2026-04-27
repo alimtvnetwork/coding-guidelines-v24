@@ -193,11 +193,15 @@ write_markdown_report() {
         "$n" "$file" "$line" "$kind" "$(md_escape "$reason")" \
         "$(md_escape "$pattern")" "$(md_escape "$match")"
     done < "$FINDINGS_FILE"
-    printf '\n## Snippets\n\n'
+    printf '\n## Context (±%s lines)\n\n' "$CONTEXT_RADIUS"
     n=0
     while IFS=$'\t' read -r file line _kind _reason _pattern _match snippet; do
       n=$((n + 1))
-      printf '### %d. `%s:%s`\n\n```\n%s\n```\n\n' "$n" "$file" "$line" "$snippet"
+      printf '### %d. `%s:%s`\n\n' "$n" "$file" "$line"
+      printf '```\n'
+      fetch_context "$file" "$line"
+      printf '```\n\n'
+      printf '_Matched line snippet:_ `%s`\n\n' "$(md_escape "$snippet")"
     done < "$FINDINGS_FILE"
   } > "$out"
   echo "📝 markdown report written: $out" >&2
