@@ -25,14 +25,15 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 FIXTURE_DIR = REPO_ROOT / "linters-cicd" / "tests" / "fixtures" / "code-red-005"
+BOUNDARY_DIR = REPO_ROOT / "linters-cicd" / "tests" / "fixtures" / "code-red-005-boundary-15"
 SCANNER_DIR = REPO_ROOT / "linters-cicd" / "checks"
 PREFER8 = SCANNER_DIR / "function-length-prefer8" / "typescript.py"
 HARDCAP = SCANNER_DIR / "function-length" / "typescript.py"
 
 
-def run_scanner(scanner: Path) -> tuple[int, dict]:
+def run_scanner(scanner: Path, path: Path | None = None) -> tuple[int, dict]:
     cmd = [sys.executable, str(scanner),
-           "--path", str(FIXTURE_DIR),
+           "--path", str(path or FIXTURE_DIR),
            "--format", "sarif"]
     result = subprocess.run(cmd, capture_output=True, text=True,
                             check=False, timeout=30)
