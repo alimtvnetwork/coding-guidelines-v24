@@ -78,7 +78,7 @@ forbid_in_region "$SH_REL" "$SH_REGION" '\bbash[[:space:]]+-c\b'      '`bash -c 
 forbid_in_region "$SH_REL" "$SH_REGION" '\bsh[[:space:]]+-c\b'        '`sh -c "..."` wrapper loses argv boundaries'
 forbid_in_region "$SH_REL" "$SH_REGION" 'fix-repo\.sh[^|]*\|[^|&]'    'piping fix-repo.sh output masks its exit code'
 forbid_in_region "$SH_REL" "$SH_REGION" '\$\{@:[0-9]+\}'              '${@:N} slicing drops original argv; forward "$@" verbatim'
-forbid_in_region "$SH_REL" "$SH_REGION" 'printf[[:space:]]+["%]+[qs]' 'printf %q/%s rebuilds argv from a joined string'
+forbid_in_region "$SH_REL" "$SH_REGION" "printf[[:space:]]+['\"]?%[qs]" 'printf %q/%s rebuilds argv from a joined string'
 forbid_in_region "$SH_REL" "$SH_REGION" '\bIFS=[^[:space:]]'          'mutating IFS in dispatch alters argv splitting'
 forbid_in_region "$SH_REL" "$SH_REGION" '\$\([^)]*"\$@"[^)]*\)'       'command substitution on "$@" stringifies argv'
 forbid_in_region "$SH_REL" "$SH_REGION" '\bxargs\b'                   'xargs reformats argv via stdin and loses quoting'
