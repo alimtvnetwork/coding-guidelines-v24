@@ -87,6 +87,7 @@ param(
     [switch]$RunFixRepo,
     [Alias("y","AssumeYes")]
     [switch]$Yes,
+    [string]$LogDir = "",
     [Alias("?")]
     [switch]$Help
 )
