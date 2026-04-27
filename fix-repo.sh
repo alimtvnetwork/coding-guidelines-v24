@@ -128,27 +128,32 @@ print_summary() {
   echo "mode:    $label"
 }
 
+# Process one file. Updates: SWEEP_SCANNED, SWEEP_CHANGED, SWEEP_REPS, SWEEP_FAILED.
+# Args: rel current target_arr_var_name
+_process_one_file() {
+  local rel="$1" current="$2"
+  local full="$REPO_ROOT/$rel"
+  [ -f "$full" ] || return 0
+  is_scannable_file "$full" || return 0
+  SWEEP_SCANNED=$((SWEEP_SCANNED + 1))
+  local reps
+  reps="$(rewrite_file "$full" "$SPLIT_BASE" "$current" "$DRY_RUN" "${_TARGET_ARR[@]}")" \
+    || { echo "fix-repo: ERROR write failed for $rel" >&2; SWEEP_FAILED=1; return 0; }
+  [ "$reps" -gt 0 ] || return 0
+  SWEEP_CHANGED=$((SWEEP_CHANGED + 1))
+  SWEEP_REPS=$((SWEEP_REPS + reps))
+  [ "$VERBOSE_FLAG" = "1" ] && echo "modified: $rel ($reps replacements)"
+  return 0
+}
+
 run_sweep() {
-  local current="$1" targets_str="$2"
-  local scanned=0 changed=0 total=0 failed=0
-  local rel full reps
-  local -a target_arr=()
-  for n in $targets_str; do target_arr+=("$n"); done
+  local current="$1" targets_str="$2" rel n
+  SWEEP_SCANNED=0; SWEEP_CHANGED=0; SWEEP_REPS=0; SWEEP_FAILED=0
+  _TARGET_ARR=()
+  for n in $targets_str; do _TARGET_ARR+=("$n"); done
   while IFS= read -r -d '' rel; do
-    full="$REPO_ROOT/$rel"
-    [ -f "$full" ] || continue
-    if ! is_scannable_file "$full"; then continue; fi
-    scanned=$((scanned + 1))
-    if ! reps="$(rewrite_file "$full" "$SPLIT_BASE" "$current" "$DRY_RUN" "${target_arr[@]}")"; then
-      echo "fix-repo: ERROR write failed for $rel" >&2
-      failed=1; continue
-    fi
-    if [ "$reps" -gt 0 ]; then
-      changed=$((changed + 1)); total=$((total + reps))
-      if [ "$VERBOSE_FLAG" = "1" ]; then echo "modified: $rel ($reps replacements)"; fi
-    fi
+    _process_one_file "$rel" "$current"
   done < <(cd "$REPO_ROOT" && git ls-files -z)
-  SWEEP_SCANNED=$scanned; SWEEP_CHANGED=$changed; SWEEP_REPS=$total; SWEEP_FAILED=$failed
 }
 
 main() {
