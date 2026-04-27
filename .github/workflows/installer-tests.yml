@@ -41,6 +41,13 @@ jobs:
         # again automatically fail to keep the list honest).
         run: node scripts/docs/check-doc-links.mjs readme.md docs/installer-fix-repo-flags.md
 
+      - name: Check glossary table column alignment
+        # Fast guard: asserts the §1a glossary table in the installer-flags doc
+        # keeps the "Env var" and "Precedence" columns width-aligned across
+        # every row, so the boolean-only "—" entries stack visibly under the
+        # value-typed env-var names in raw markdown viewers.
+        run: node scripts/docs/check-glossary-alignment.mjs
+
       - name: Regenerate bundle installers
         # Ensures we test the canonical generator output, not stale files.
         run: node scripts/generate-bundle-installers.mjs
