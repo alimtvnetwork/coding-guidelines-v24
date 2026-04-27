@@ -99,6 +99,8 @@ if (-not $Yes) {
     $envYes = $env:INSTALL_FIX_REPO_YES
     if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
+if (-not $LogDir) { $LogDir = $env:INSTALL_LOG_DIR }
+if (-not $LogDir) { $LogDir = "" }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 # Surfaces the comment-based help block above without requiring the user
