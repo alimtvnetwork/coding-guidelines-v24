@@ -543,12 +543,12 @@ restore_fix_repo_edits() {
 restore_installed_paths() {
   local target backup pair removed=0 restored=0
   step "Removing files created by this install run..."
-  for target in "${INSTALLED_NEW[@]}"; do
+  for target in "${INSTALLED_NEW[@]:-}"; do
     [[ -e "$target" ]] || continue
     rm -f "$target" && ((removed++)) || warn "could not remove $target"
   done
   step "Restoring overwritten files from backups..."
-  for pair in "${INSTALLED_BACKUPS[@]}"; do
+  for pair in "${INSTALLED_BACKUPS[@]:-}"; do
     target="${pair%%|*}"; backup="${pair##*|}"
     [[ -f "$backup" ]] || continue
     cp -f "$backup" "$target" && ((restored++)) || warn "could not restore $target"
