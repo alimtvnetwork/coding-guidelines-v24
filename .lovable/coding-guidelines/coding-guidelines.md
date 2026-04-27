@@ -5,6 +5,11 @@ These guidelines apply to all code generated or modified in this project. Read t
 ## Function & Control Flow
 
 1. Keep functions under 8 lines.
+   *Enforcement:* **CODE-RED-005** (build-failing `error`). Any function
+   body whose effective line count exceeds 8 fails CI. CODE-RED-004
+   remains as a redundant >15-line safety net at the same severity.
+   See [`spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`](../../spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md)
+   for the coordinated tier table.
 
 2. No nested `if` statements.
 

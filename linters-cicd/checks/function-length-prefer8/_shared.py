@@ -1,11 +1,24 @@
-"""CODE-RED-005 — shared helpers for the prefer-8 function-length check.
+"""CODE-RED-005 — shared helpers for the STRICT 8-line function-length check.
 
-Pairs with CODE-RED-004 (hard cap, 15 lines). Emits SARIF `warning`
-findings when a function body has >PREFER and <=HARD effective lines.
+Per ``.lovable/coding-guidelines/coding-guidelines.md`` rule #1
+("Keep functions under 8 lines"), this rule emits SARIF ``error``
+findings on ANY function body whose effective line count exceeds 8.
+
+CODE-RED-004 (``checks/function-length/``) remains as a redundant
+>15-line safety net at the same severity. The two rules form a
+coordinated tier and do not contradict:
+
+  * 0–8 effective lines  → both rules silent
+  * 9–15 effective lines → CODE-RED-005 errors  (CODE-RED-004 silent)
+  * 16+ effective lines  → both rules error
 
 Sibling CODE-RED-004 modules live in ``checks/function-length/`` whose
 hyphenated path is not importable directly; ``load_sibling`` loads them
 by file path so we can reuse their regex patterns and counters.
+
+The historical ``is_in_prefer_band`` helper (returned True only for the
+9–15 band) is kept for backwards-compat with any external callers, but
+the in-tree scanners now use ``exceeds_strict_cap`` instead.
 """
 
 from __future__ import annotations
@@ -18,13 +31,13 @@ from _lib.sarif import Finding, Rule
 from _lib.walker import relpath
 
 
-PREFER_LINES = 8
-HARD_LINES = 15
+STRICT_LINES = 8
+LEGACY_HARD_LINES = 15  # owned by CODE-RED-004; kept here for docs only.
 
 RULE = Rule(
     id="CODE-RED-005",
     name="FunctionLengthPrefer8",
-    short_description="Prefer function bodies <= 8 effective lines (hard cap 15).",
+    short_description="Functions must not exceed 8 effective lines (strict).",
     help_uri_relative="01-cross-language/04-code-style/00-overview.md",
 )
 
@@ -40,18 +53,23 @@ def load_sibling(language: str) -> ModuleType:
     return module
 
 
+def exceeds_strict_cap(effective: int) -> bool:
+    return effective > STRICT_LINES
+
+
 def is_in_prefer_band(effective: int) -> bool:
-    return effective > PREFER_LINES and effective <= HARD_LINES
+    """Deprecated. Retained for backwards-compat; prefer ``exceeds_strict_cap``."""
+    return effective > STRICT_LINES and effective <= LEGACY_HARD_LINES
 
 
 def make_finding(name: str, effective: int, path: Path, root: str, start_line: int) -> Finding:
     msg = (
         f"Function '{name}' has {effective} effective lines "
-        f"(prefer <= {PREFER_LINES}, hard cap {HARD_LINES})."
+        f"(strict cap {STRICT_LINES})."
     )
     return Finding(
         rule_id=RULE.id,
-        level="warning",
+        level="error",
         message=msg,
         file_path=relpath(path, root),
         start_line=start_line,

@@ -13,7 +13,7 @@ from _lib.per_file_timeout import PerFileTimeout, per_file_timeout
 from _lib.sarif import Finding, SarifRun, emit
 from _lib.walker import walk_files
 
-from _shared import RULE, is_in_prefer_band, load_sibling, make_finding
+from _shared import RULE, exceeds_strict_cap, load_sibling, make_finding
 
 _sibling = load_sibling("php")
 EXTENSIONS = _sibling.EXTENSIONS
@@ -38,7 +38,7 @@ def scan(path: Path, root: str) -> list[Finding]:
             continue
         end = _find_body_end(lines, i)
         effective = _count_effective(lines[i + 1:end])
-        if is_in_prefer_band(effective):
+        if exceeds_strict_cap(effective):
             findings.append(make_finding(match.group(1), effective, path, root, i + 1))
         i = end + 1
     return findings

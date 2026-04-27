@@ -1,17 +1,19 @@
 """End-to-end check that CODE-RED-005 (FunctionLengthPrefer8) actually
-fires against the committed fixture.
+fires against the committed fixture under the **strict-8** contract.
 
 Two assertions, mirroring the two enforcement surfaces:
 
   1. The linters-cicd ``function-length-prefer8/typescript.py`` scanner
-     emits a SARIF ``warning`` for the fixture and exits non-zero.
+     emits a SARIF ``error`` for the 11-line fixture and exits non-zero.
+     This is the binding build-failing rule.
   2. The sibling ``function-length/typescript.py`` (CODE-RED-004 hard
-     cap) stays silent on the same fixture, proving the prefer-band
-     boundary (9–15 lines) holds and the two rules don't double-report.
+     cap, 15) stays silent on the same fixture, proving the redundant
+     safety net only kicks in for >15-line bodies and the two rules
+     don't double-report.
 
 If a future refactor either drops CODE-RED-005 or moves the fixture out
-of the prefer band, this test fails loudly — exactly the regression
-guard the user asked for.
+of the 9–15 band (where only CODE-RED-005 fires), this test fails
+loudly — exactly the regression guard we want.
 """
 from __future__ import annotations
 
@@ -55,11 +57,12 @@ class Prefer8FiresOnFixtureTests(unittest.TestCase):
         code, payload = run_scanner(PREFER8)
         findings = collect_findings(payload)
         self.assertEqual(len(findings), 1,
-                         msg=f"expected 1 prefer-8 finding, got {findings}")
+                         msg=f"expected 1 strict-8 finding, got {findings}")
         rule_id = findings[0].get("ruleId")
         self.assertEqual(rule_id, "CODE-RED-005")
         level = findings[0].get("level")
-        self.assertEqual(level, "warning")
+        self.assertEqual(level, "error",
+                         msg="CODE-RED-005 must emit `error`-level findings under strict-8")
         self.assertNotEqual(code, 0,
                             "scanner must exit non-zero when findings exist")
 
@@ -67,7 +70,7 @@ class Prefer8FiresOnFixtureTests(unittest.TestCase):
         code, payload = run_scanner(HARDCAP)
         findings = collect_findings(payload)
         self.assertEqual(findings, [],
-                         msg="CODE-RED-004 must not double-report on prefer-band fixture")
+                         msg="CODE-RED-004 (>15-line safety net) must stay silent on a 9–15 line body")
         self.assertEqual(code, 0)
 
 

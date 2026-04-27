@@ -39,10 +39,12 @@ export default tseslint.config(
       "coding-guidelines/no-magic-strings": "warn",
 
       // Max 15 lines per function body (non-blank, non-comment) — hard cap
+      // Hard 15-line cap — CODE-RED-004 (redundant safety net under the strict-8 rule below).
       "coding-guidelines/max-function-lines": ["error", { max: 15 }],
 
-      // Prefer ≤ 8 lines per function body — soft preference (CODE-RED-005)
-      "coding-guidelines/prefer-function-lines": ["warn", { prefer: 8, hard: 15 }],
+      // STRICT 8-line cap — CODE-RED-005. Build-failing per coding-guidelines.md rule #1.
+      // Was previously a `warn` in the prefer-band (9–15); now an `error` on any body >8.
+      "coding-guidelines/prefer-function-lines": ["error", { prefer: 8 }],
 
       // Promise.all for independent async calls — no sequential await
       "coding-guidelines/promise-all-independent": "error",

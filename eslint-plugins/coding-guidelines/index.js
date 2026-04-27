@@ -241,17 +241,24 @@ const maxFunctionLines = {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// Rule: prefer-function-lines (CODE-RED-005 — soft preference, 8)
-// Warns when a function exceeds the preferred 8-line limit but is
-// still under the hard cap (15). Pair with max-function-lines.
+// Rule: prefer-function-lines (CODE-RED-005 — STRICT 8-line cap)
+//
+// Per coding-guidelines.md (rule #1: "Keep functions under 8 lines"),
+// this rule fires as an ERROR on ANY function body whose effective
+// line count exceeds `prefer` (default 8). The legacy `hard` option
+// is accepted for backwards-compat with old configs but no longer
+// gates reporting — strict-8 means strict-8.
+//
+// Pair with max-function-lines (CODE-RED-004) which remains as a
+// redundant >15 safety net at the same severity.
 // ═══════════════════════════════════════════════════════════════
 
 const preferFunctionLines = {
   meta: {
-    type: "suggestion",
-    docs: { description: "Prefer function bodies under 8 lines (CODE-RED-005)" },
+    type: "problem",
+    docs: { description: "Function bodies must not exceed 8 lines (CODE-RED-005, strict)" },
     messages: {
-      tooLong: '⚠️ CODE-RED-005: Function "{{name}}" has {{actual}} effective lines (prefer ≤ {{prefer}}, hard cap {{hard}}). Consider extracting helpers.',
+      tooLong: '🔴 CODE-RED-005: Function "{{name}}" has {{actual}} effective lines (max {{prefer}}). Extract helpers — strict 8-line cap per .lovable/coding-guidelines/coding-guidelines.md rule #1.',
     },
     schema: [{
       type: "object",
@@ -265,16 +272,14 @@ const preferFunctionLines = {
   create(context) {
     const opts = context.options[0] || {};
     const prefer = opts.prefer || 8;
-    const hard = opts.hard || 15;
     const src = context.getSourceCode();
 
     function check(node) {
       const count = countEffectiveBodyLines(node, src);
       if (count === null) return;
       if (count <= prefer) return;
-      if (count > hard) return;
       const name = resolveFunctionName(node);
-      context.report({ node, messageId: "tooLong", data: { name, actual: count, prefer, hard } });
+      context.report({ node, messageId: "tooLong", data: { name, actual: count, prefer } });
     }
 
     return { FunctionDeclaration: check, FunctionExpression: check, ArrowFunctionExpression: check };
