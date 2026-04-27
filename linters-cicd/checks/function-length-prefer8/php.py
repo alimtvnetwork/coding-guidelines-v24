@@ -12,8 +12,13 @@ from _lib.per_file_timeout import PerFileTimeout, per_file_timeout
 from _lib.sarif import Finding, SarifRun, emit
 from _lib.walker import walk_files
 
-from function_length.php import EXTENSIONS, PLAIN_RE, SIG_RE, _count_effective
-from function_length_prefer8._shared import RULE, is_in_prefer_band, make_finding
+from _shared import RULE, is_in_prefer_band, load_sibling, make_finding
+
+_sibling = load_sibling("php")
+EXTENSIONS = _sibling.EXTENSIONS
+SIG_RE = _sibling.SIG_RE
+PLAIN_RE = _sibling.PLAIN_RE
+_count_effective = _sibling._count_effective
 
 
 def scan(path: Path, root: str) -> list[Finding]:

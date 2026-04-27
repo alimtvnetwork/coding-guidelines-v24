@@ -11,8 +11,11 @@ from _lib.cli import build_parser, parse_exclude_paths
 from _lib.sarif import Finding, SarifRun, emit
 from _lib.walker import walk_files
 
-from function_length.go import FUNC_RE, count_effective
-from function_length_prefer8._shared import RULE, is_in_prefer_band, make_finding
+from _shared import RULE, is_in_prefer_band, load_sibling, make_finding
+
+_sibling = load_sibling("go")
+FUNC_RE = _sibling.FUNC_RE
+count_effective = _sibling.count_effective
 
 
 def scan(path: Path, root: str) -> list[Finding]:
