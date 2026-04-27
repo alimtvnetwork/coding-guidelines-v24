@@ -163,6 +163,13 @@ jobs:
         # Spec: .lovable/memory/constraints/install-command-formatting.md
         run: python3 linter-scripts/check-readme-install-section.py
 
+      - name: Check Lovable prompts loaded (index ↔ .lovable/prompts/* sync)
+        # Enforces the "read all prompts before generating code" contract
+        # from .lovable/coding-guidelines/coding-guidelines.md by
+        # verifying .lovable/prompts.md exists and references every
+        # prompt file on disk. Catches orphans + dangling references.
+        run: python3 linter-scripts/check-prompts-loaded.py
+
       - name: Restore placeholder-linter PASS cache
         # Two-layer safety:
         #   1. The cache key is content-derived from the linter script
