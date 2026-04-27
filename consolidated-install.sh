@@ -462,6 +462,23 @@ fi
 echo ""
 verify_install
 
+confirm_fix_repo() {
+  ${ASSUME_YES} && { echo "  ▸ auto-confirmed (--yes / INSTALL_FIX_REPO_YES=1)"; return 0; }
+  if [[ ! -t 0 ]]; then
+    echo "❌ --run-fix-repo requires confirmation but stdin is not a TTY." >&2
+    echo "   Re-run with --yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." >&2
+    exit 5
+  fi
+  local reply=""
+  echo ""
+  echo "⚠️  About to run $1"
+  echo "   This will rewrite versioned-repo-name tokens across tracked text files."
+  printf "Proceed? [y/N] " >&2
+  IFS= read -r reply </dev/tty || reply=""
+  case "${reply}" in y|Y|yes|YES) return 0 ;; esac
+  echo "fix-repo skipped by user — exiting with code 5." >&2
+  exit 5
+}
 run_fix_repo() {
   # Auto-execute the freshly installed fix-repo script so the repo is
   # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
