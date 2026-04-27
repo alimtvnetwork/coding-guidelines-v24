@@ -40,15 +40,19 @@ records the exit code and finish time.
 
 The table below is the **single source of truth** for how each setting is named in Bash, in PowerShell, and as an environment variable — plus what wins when more than one is set. Read this first; the rest of the doc assumes these mappings.
 
-| Setting (semantic)                  | Bash flag                          | PowerShell flag               | Env var                       | Type / accepted values                | Default     | Precedence (highest → lowest) |
-|-------------------------------------|------------------------------------|-------------------------------|-------------------------------|----------------------------------------|-------------|-------------------------------|
-| Log directory                       | `--log-dir DIR`                    | `-LogDir DIR`                 | `INSTALL_LOG_DIR`             | path (absolute or relative to `<DEST>`) | `<DEST>/.install-logs` | CLI flag → env var → default |
-| Max retained `fix-repo` logs        | `--max-fix-repo-logs N`            | `-MaxFixRepoLogs N`           | `INSTALL_MAX_FIX_REPO_LOGS`   | non-negative integer (`0` = disabled)  | `0` (keep all) | CLI flag → env var → default |
-| Auto-run `fix-repo` after install   | `--run-fix-repo`                   | `-RunFixRepo`                 | —                             | boolean switch                         | `false`     | CLI flag only                 |
-| Print log to stdout after run       | `--show-fix-repo-log`              | `-ShowFixRepoLog`             | —                             | boolean switch                         | `false`     | CLI flag only                 |
-| Revert `fix-repo` edits on failure  | `--rollback-on-fix-repo-failure`   | `-RollbackOnFixRepoFailure`   | —                             | boolean switch                         | `false`     | CLI flag only                 |
-| Full rollback (edits + new files)   | `--full-rollback`                  | `-FullRollback`               | —                             | boolean switch (implies the row above) | `false`     | CLI flag only                 |
-| Install destination                 | `--dest DIR`                       | `-Dest DIR`                   | —                             | path                                   | `./` or per-bundle | CLI flag only           |
+> 📐 **Layout note:** the columns below are width-padded so the **Env var** and **Precedence** columns stack vertically in any monospaced viewer (terminal `cat`, `less`, GitHub raw view, IDE preview). When rendered as a Markdown table the alignment is cosmetic, but in raw form the `—` markers and `CLI flag only` cells line up under their value-typed counterparts so the boolean-only rows are visually obvious at a glance.
+
+| Setting (semantic)                  | Bash flag                          | PowerShell flag               | Env var                            | Type / accepted values                  | Default                | Precedence (highest → lowest) |
+|-------------------------------------|------------------------------------|-------------------------------|------------------------------------|-----------------------------------------|------------------------|-------------------------------|
+| Log directory                       | `--log-dir DIR`                    | `-LogDir DIR`                 | `INSTALL_LOG_DIR`                  | path (absolute or relative to `<DEST>`) | `<DEST>/.install-logs` | CLI flag → env var → default  |
+| Max retained `fix-repo` logs        | `--max-fix-repo-logs N`            | `-MaxFixRepoLogs N`           | `INSTALL_MAX_FIX_REPO_LOGS`        | non-negative integer (`0` = disabled)   | `0` (keep all)         | CLI flag → env var → default  |
+| Auto-run `fix-repo` after install   | `--run-fix-repo`                   | `-RunFixRepo`                 | — *(none — CLI only)*              | boolean switch                          | `false`                | CLI flag only                 |
+| Print log to stdout after run       | `--show-fix-repo-log`              | `-ShowFixRepoLog`             | — *(none — CLI only)*              | boolean switch                          | `false`                | CLI flag only                 |
+| Revert `fix-repo` edits on failure  | `--rollback-on-fix-repo-failure`   | `-RollbackOnFixRepoFailure`   | — *(none — CLI only)*              | boolean switch                          | `false`                | CLI flag only                 |
+| Full rollback (edits + new files)   | `--full-rollback`                  | `-FullRollback`               | — *(none — CLI only)*              | boolean switch (implies the row above)  | `false`                | CLI flag only                 |
+| Install destination                 | `--dest DIR`                       | `-Dest DIR`                   | — *(none — CLI only)*              | path                                    | `./` or per-bundle     | CLI flag only                 |
+
+**Legend for the `— *(none — CLI only)*` cells:** the em-dash means *no environment variable exists for this setting*. The parenthetical is a deliberate, short reminder so a reader skimming just the **Env var** column never has to cross-reference the **Precedence** column to confirm the rule. Every row whose **Env var** cell starts with `—` has `CLI flag only` in **Precedence** — the two columns are guaranteed to agree, by design.
 
 #### Reading the **Precedence** column
 
