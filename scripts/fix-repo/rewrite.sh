@@ -30,28 +30,31 @@ count_token_occurrences() {
   ' "$file"
 }
 
+# awk program: replace literal $tok with $rep, but only when the char
+# immediately following $tok is not a digit (numeric overflow guard).
+read -r -d '' _SUBSTITUTE_AWK <<'AWK' || true
+BEGIN { tlen = length(tok) }
+{
+  out = ""; line = $0
+  while ((p = index(line, tok)) > 0) {
+    next_char = substr(line, p + tlen, 1)
+    if (next_char !~ /[0-9]/) {
+      out = out substr(line, 1, p - 1) rep
+    } else {
+      out = out substr(line, 1, p + tlen - 1)
+    }
+    line = substr(line, p + tlen)
+  }
+  print out line
+}
+AWK
+
 # Rewrites $1 in place via a temp file. Args: file base n current
 substitute_token_in_file() {
   local file="$1" base="$2" n="$3" current="$4"
-  local token="$base-v$n"
-  local replacement="$base-v$current"
+  local token="$base-v$n" replacement="$base-v$current"
   local tmp; tmp="$(mktemp)"
-  awk -v tok="$token" -v rep="$replacement" '
-    BEGIN { tlen = length(tok) }
-    {
-      out = ""; line = $0
-      while ((p = index(line, tok)) > 0) {
-        next_char = substr(line, p + tlen, 1)
-        if (next_char !~ /[0-9]/) {
-          out = out substr(line, 1, p - 1) rep
-        } else {
-          out = out substr(line, 1, p + tlen - 1)
-        }
-        line = substr(line, p + tlen)
-      }
-      print out line
-    }
-  ' "$file" > "$tmp"
+  awk -v tok="$token" -v rep="$replacement" "$_SUBSTITUTE_AWK" "$file" > "$tmp"
   mv "$tmp" "$file"
 }
 
