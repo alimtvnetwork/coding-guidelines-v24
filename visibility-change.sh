@@ -29,7 +29,6 @@ DRY_RUN=0
 print_help() {
   cat <<'EOF'
 visibility-change.sh — toggle/set GitHub/GitLab repo visibility.
-
 Usage:
   ./visibility-change.sh                   # toggle current visibility
   ./visibility-change.sh --visible pub     # force public
@@ -37,10 +36,8 @@ Usage:
   ./visibility-change.sh --yes             # skip private->public prompt
   ./visibility-change.sh --dry-run         # preview, no API call
   ./visibility-change.sh -h | --help
-
 Env:
   VISIBILITY_GITLAB_HOSTS   comma-separated allow-list of self-hosted GitLab hosts
-
 Spec: spec-authoring/23-visibility-change/01-spec.md
 EOF
 }
