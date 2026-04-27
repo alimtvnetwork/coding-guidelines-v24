@@ -79,9 +79,14 @@ for f in "${SH_INSTALLERS[@]}"; do
     && pass "${f}: B3 documents --run-fix-repo in help" \
     || fail "${f}: B3 --run-fix-repo not mentioned in help text"
 
-  grep -qE '\$\{RUN_FIX_REPO\}[[:space:]]*&&[[:space:]]*run_fix_repo' "${path}" \
-    && pass "${f}: B4 dispatches to run_fix_repo when flag set" \
-    || fail "${f}: B4 missing '\${RUN_FIX_REPO} && run_fix_repo' dispatch"
+  # Accept either:  ${RUN_FIX_REPO} && run_fix_repo
+  # or:             if ... $RUN_FIX_REPO; then run_fix_repo; fi
+  if grep -qE '\$\{?RUN_FIX_REPO\}?[[:space:]]*&&[[:space:]]*run_fix_repo' "${path}" \
+       || grep -qE '\$RUN_FIX_REPO[^A-Z_].*run_fix_repo' "${path}"; then
+    pass "${f}: B4 dispatches to run_fix_repo when flag set"
+  else
+    fail "${f}: B4 missing run_fix_repo dispatch gated by \$RUN_FIX_REPO"
+  fi
 
   # B5: function picks the OS-correct script.
   if grep -q 'fix-repo.ps1' "${path}" && grep -q 'fix-repo.sh' "${path}" \
