@@ -123,6 +123,8 @@ DRIVER="${TMP}/driver.sh"
   echo 'PRE_FIX_REPO_HEAD=""'
   echo 'LOG_DIR="my-custom-logs"'   # relative → joined to TARGET
   echo 'SHOW_FIX_REPO_LOG=false'
+  echo 'MAX_FIX_REPO_LOGS=0'
+    echo 'prune_fix_repo_logs() { :; }'
   awk '
     /^confirm_fix_repo\(\)/      {capture=1}
     /^snapshot_pre_fix_repo\(\)/ {capture=1}
@@ -166,6 +168,8 @@ DRIVER2="${TMP}/driver2.sh"
   echo 'PRE_FIX_REPO_HEAD=""'
   echo "LOG_DIR='${ABS}'"
   echo 'SHOW_FIX_REPO_LOG=false'
+  echo 'MAX_FIX_REPO_LOGS=0'
+    echo 'prune_fix_repo_logs() { :; }'
   awk '
     /^confirm_fix_repo\(\)/      {capture=1}
     /^snapshot_pre_fix_repo\(\)/ {capture=1}

@@ -18,6 +18,8 @@
 #                                env: INSTALL_LOG_DIR)
 #   --show-fix-repo-log          Print the latest fix-repo log to stdout after run_fix_repo
 #                                completes (env: INSTALL_SHOW_FIX_REPO_LOG=1)
+#   --max-fix-repo-logs N        Keep only the newest N fix-repo-*.log files in the log
+#                                directory (0 = keep all; env: INSTALL_MAX_FIX_REPO_LOGS)
 #   --config my-config.json      Use custom config file
 #   --prompt                     Ask before overwriting each existing file (y/n/a/s)
 #   --force                      Overwrite all existing files without prompting
@@ -71,6 +73,8 @@ $FULL_ROLLBACK && ROLLBACK_ON_FIX_FAIL=true   # full implies edits
 LOG_DIR="${INSTALL_LOG_DIR:-}"   # empty → $DEST/.install-logs (default)
 SHOW_FIX_REPO_LOG="${INSTALL_SHOW_FIX_REPO_LOG:-false}"
 case "$SHOW_FIX_REPO_LOG" in 1|true|TRUE|yes|YES) SHOW_FIX_REPO_LOG=true ;; *) SHOW_FIX_REPO_LOG=false ;; esac
+MAX_FIX_REPO_LOGS="${INSTALL_MAX_FIX_REPO_LOGS:-0}"
+[[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || MAX_FIX_REPO_LOGS=0
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -195,6 +199,10 @@ while [[ $# -gt 0 ]]; do
     --full-rollback)  FULL_ROLLBACK=true; ROLLBACK_ON_FIX_FAIL=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
     --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
+    --max-fix-repo-logs)
+      MAX_FIX_REPO_LOGS="$2"
+      [[ "$MAX_FIX_REPO_LOGS" =~ ^[0-9]+$ ]] || { err "--max-fix-repo-logs requires a non-negative integer (got: $2)"; exit 1; }
+      shift 2 ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -574,6 +582,21 @@ perform_rollback() {
   warn "Rollback complete. Snapshot kept at: ${ROLLBACK_DIR:-<none>}"
 }
 
+prune_fix_repo_logs() {
+  # Keep newest $2 fix-repo-*.log files in $1; 0 disables.
+  local dir="$1" keep="$2" file count=0 removed=0
+  [[ "$keep" =~ ^[0-9]+$ ]] || return 0
+  [[ "$keep" -le 0 ]] && return 0
+  [[ -d "$dir" ]] || return 0
+  while IFS= read -r file; do
+    count=$((count+1))
+    [[ $count -le $keep ]] && continue
+    rm -f -- "$file" && removed=$((removed+1))
+  done < <(ls -1t "$dir"/fix-repo-*.log 2>/dev/null)
+  [[ $removed -gt 0 ]] && step "Pruned $removed old fix-repo log(s); kept newest $keep in $dir"
+  return 0
+}
+
 run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
@@ -629,6 +652,7 @@ run_fix_repo() {
   esac
   set -e
   echo "# exit: $rc  finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log_file"
+  prune_fix_repo_logs "$log_dir" "$MAX_FIX_REPO_LOGS"
   if $SHOW_FIX_REPO_LOG; then
     echo ""
     echo "─── fix-repo log: $log_file ─────────────────────────────"
