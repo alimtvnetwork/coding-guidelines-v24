@@ -207,6 +207,17 @@ function Copy-Mapping {
         Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
         Write-Host "  ✓ $($pair.Src) → $destPath" -ForegroundColor Green
     }
+    # Top-level files: copy each from archive root → Target. Missing files
+    # are warned (not fatal) so the bundle stays forward-compatible.
+    foreach ($tlf in $BundleTopLevelFiles) {
+        $srcFile = Join-Path $root $tlf
+        if (-not (Test-Path $srcFile)) {
+            Write-Warning "  archive missing top-level file $tlf — skipping"
+            continue
+        }
+        Copy-Item -Path $srcFile -Destination (Join-Path $Target $tlf) -Force
+        Write-Host "  ✓ $tlf → $(Join-Path $Target $tlf)" -ForegroundColor Green
+    }
 }
 
 function Open-Entry {
