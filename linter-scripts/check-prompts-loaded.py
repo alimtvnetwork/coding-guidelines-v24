@@ -67,7 +67,7 @@ def find_orphans(prompt_files: list[str], index_body: str) -> list[str]:
     return [f for f in prompt_files if f not in index_body]
 
 
-PROMPT_REF_RE = __import__("re").compile(r"\b(\d{2,}-[A-Za-z0-9._-]+\.[A-Za-z0-9]+)\b")
+PROMPT_REF_RE = re.compile(r"\b(\d{2,}-[A-Za-z0-9._-]+\.[A-Za-z0-9]+)\b")
 
 
 def find_dangling(prompt_files: list[str], index_body: str) -> list[str]:
