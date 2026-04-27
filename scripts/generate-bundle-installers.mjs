@@ -1106,6 +1106,12 @@ function Invoke-FixRepo {
     & $script 2>&1 | Tee-Object -FilePath $logFile -Append
     $rc = $LASTEXITCODE
     Add-Content -LiteralPath $logFile -Value "# exit: $rc  finished: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
+    if ($ShowFixRepoLog) {
+        Write-Host ""
+        Write-Host "─── fix-repo log: $logFile ─────────────────────────────"
+        Get-Content -LiteralPath $logFile | ForEach-Object { Write-Host $_ }
+        Write-Host "─── end of log ──────────────────────────────────────────"
+    }
     if ($rc -ne 0) {
         Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
         exit 5
