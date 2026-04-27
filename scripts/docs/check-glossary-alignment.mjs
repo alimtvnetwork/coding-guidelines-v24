@@ -73,6 +73,7 @@ if (misaligned.length > 0) {
   console.error('❌ Glossary table columns are not width-aligned:');
   for (const m of misaligned) console.error(m);
   console.error(`\nFix: re-pad the affected cells in ${DOC} §1a so every row matches.`);
+  console.error(`     Auto-fix: \`node scripts/docs/fix-glossary-alignment.mjs --fix\``);
   process.exit(1);
 }
 
