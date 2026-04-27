@@ -21,6 +21,9 @@
       -NoDiscovery                Skip V→V+N parallel discovery (spec §5.3)
       -NoMainFallback             Skip main-branch fallback (spec §5.3)
       -Offline (-UseLocalArchive) Skip all network ops; require local archive
+      -RunFixRepo                 After verify, execute fix-repo.ps1 so the repo
+                                  is patched before the installer exits
+                                  (env: INSTALL_RUN_FIX_REPO=1)
 
     EXIT CODES (spec §8):
       0  success
@@ -55,8 +58,15 @@ param(
     [switch]$NoMainFallback,
     [Alias('UseLocalArchive')]
     [switch]$Offline,
+    [switch]$RunFixRepo,
     [string]$PinnedByReleaseInstall = ""
 )
+
+# Env-var equivalent so wrapper scripts can opt in without threading the flag.
+if (-not $RunFixRepo) {
+    $envFlag = $env:INSTALL_RUN_FIX_REPO
+    if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
 
 # Offline mode forbids any network operation (spec §5.3, §8 exit 2).
 if ($Offline) {
@@ -359,6 +369,25 @@ try {
             exit 4
         }
         Write-OK "Verified $($requiredFiles.Count) required file(s) present"
+    }
+
+    # ── Optional: auto-run fix-repo.ps1 so the repo is patched before exit ──
+    # Gated by -RunFixRepo or INSTALL_RUN_FIX_REPO=1. Skipped under -DryRun.
+    # Failures propagate as exit 5 per spec §8.
+    if ((-not $DryRun) -and $RunFixRepo) {
+        $fixScript = Join-Path $Dest "fix-repo.ps1"
+        if (-not (Test-Path -LiteralPath $fixScript -PathType Leaf)) {
+            Write-Err "-RunFixRepo: $fixScript not found after install."
+            exit 5
+        }
+        Write-Host ""
+        Write-Step "Running fix-repo: $fixScript"
+        & $fixScript
+        if ($LASTEXITCODE -ne 0) {
+            Write-Err "fix-repo.ps1 failed (exit $LASTEXITCODE)"
+            exit 5
+        }
+        Write-OK "fix-repo completed"
     }
 
     # ── Summary ───────────────────────────────────────────────────

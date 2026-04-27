@@ -24,6 +24,8 @@
 #   --no-discovery               Skip V→V+N parallel discovery (spec §5.3)
 #   --no-main-fallback           Skip main-branch fallback (spec §5.3)
 #   --offline                    Skip all network ops; require local archive (alias: --use-local-archive)
+#   --run-fix-repo               After verify, execute fix-repo.{sh,ps1} so the repo is patched
+#                                before the installer exits (env: INSTALL_RUN_FIX_REPO=1)
 #   -h | --help                  Show this help
 #
 # EXIT CODES (spec §8):
@@ -53,6 +55,8 @@ PINNED_BY_RELEASE_INSTALL=""
 NO_DISCOVERY=false
 NO_MAIN_FALLBACK=false
 OFFLINE=false
+RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
+case "$RUN_FIX_REPO" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -142,7 +146,7 @@ invoke_latest_version_probe() {
 should_skip_probe() {
   for arg in "$@"; do
     case "$arg" in
-      --version|--list-versions|--list-folders|--no-probe|--no-latest|-n|--pinned-by-release-install|-h|--help) return 0 ;;
+      --version|--list-versions|--list-folders|--no-probe|--no-latest|-n|--pinned-by-release-install|--run-fix-repo|-h|--help) return 0 ;;
     esac
   done
   [[ -n "${INSTALL_NO_PROBE:-}" ]] && return 0
@@ -171,6 +175,7 @@ while [[ $# -gt 0 ]]; do
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --offline|--use-local-archive) OFFLINE=true; shift ;;
+    --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -446,6 +451,41 @@ verify_required_files() {
   exit 4
 }
 $DRY_RUN || verify_required_files
+
+# ── Optional: auto-run fix-repo so the repo is patched before exit ──
+# Gated by --run-fix-repo or INSTALL_RUN_FIX_REPO=1. Picks .ps1 on
+# Windows shells, .sh elsewhere. Skipped under --dry-run (nothing was
+# actually written). Failures propagate as exit 5 per spec §8.
+run_fix_repo() {
+  local script
+  case "$(uname -s 2>/dev/null || echo unknown)" in
+    MINGW*|MSYS*|CYGWIN*) script="$DEST/fix-repo.ps1" ;;
+    *)                    script="$DEST/fix-repo.sh"  ;;
+  esac
+  if [[ ! -f "$script" ]]; then
+    err "--run-fix-repo: $script not found after install."
+    exit 5
+  fi
+  echo ""
+  step "Running fix-repo: $script"
+  case "$script" in
+    *.ps1)
+      if command -v pwsh >/dev/null 2>&1; then
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "$script" || { err "fix-repo.ps1 failed (exit $?)"; exit 5; }
+      elif command -v powershell >/dev/null 2>&1; then
+        powershell -NoProfile -ExecutionPolicy Bypass -File "$script" || { err "fix-repo.ps1 failed (exit $?)"; exit 5; }
+      else
+        err "--run-fix-repo: neither pwsh nor powershell found in PATH."
+        exit 5
+      fi
+      ;;
+    *)
+      bash "$script" || { err "fix-repo.sh failed (exit $?)"; exit 5; }
+      ;;
+  esac
+  ok "fix-repo completed"
+}
+if ! $DRY_RUN && $RUN_FIX_REPO; then run_fix_repo; fi
 
 # ── Summary ───────────────────────────────────────────────────────
 echo ""
