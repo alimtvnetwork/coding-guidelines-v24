@@ -2,7 +2,7 @@
  * Sub-components extracted from DocsViewer for file-size compliance.
  */
 import React, { useEffect } from "react";
-import { Search } from "lucide-react";
+import { Search, BookOpen } from "lucide-react";
 import { HtmlTag } from "@/constants/htmlTags";
 import { KeyboardKeyType } from "@/constants/enums";
 import { MonacoMarkdownEditor } from "@/components/MonacoMarkdownEditor";
@@ -45,6 +45,23 @@ function SearchButton({ onClick }: { onClick: () => void }) {
       <Search className="h-4 w-4 shrink-0" />
       <span className="truncate">Search docs…</span>
       <kbd className="ml-auto hidden sm:inline-flex items-center gap-0.5 rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground shrink-0">{shortcut}</kbd>
+    </button>
+  );
+}
+
+function SpecOverviewButton({ onClick }: { onClick: () => void }) {
+  const isMac = navigator.platform.toUpperCase().includes("MAC");
+  const shortcut = isMac ? "⌘J" : "Ctrl+J";
+
+  return (
+    <button
+      onClick={onClick}
+      title="Jump to spec/00-overview.md (works even if the sidebar tree is stale)"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary transition-colors text-sm font-medium shrink-0"
+    >
+      <BookOpen className="h-4 w-4 shrink-0" />
+      <span className="hidden md:inline truncate">Spec Overview</span>
+      <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-primary/40 bg-background/60 px-1.5 py-0.5 text-[10px] font-mono shrink-0">{shortcut}</kbd>
     </button>
   );
 }
@@ -168,6 +185,7 @@ interface DocsHeaderProps {
   setShowShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
   toggleAllSections: () => void;
   onSearchOpen?: () => void;
+  onJumpToOverview?: () => void;
 }
 
 export function DocsHeader(props: DocsHeaderProps) {
@@ -175,6 +193,7 @@ export function DocsHeader(props: DocsHeaderProps) {
     <header className="h-12 flex items-center gap-3 border-b border-border px-4 bg-background shrink-0">
       {!props.isFullscreen && <SidebarTrigger />}
       <BreadcrumbNav breadcrumb={props.breadcrumb} />
+      {props.onJumpToOverview && <SpecOverviewButton onClick={props.onJumpToOverview} />}
       {props.onSearchOpen && <SearchButton onClick={props.onSearchOpen} />}
       <div className="flex items-center gap-0.5 shrink-0">
         {props.activeFile && <ViewModeToggle viewMode={props.viewMode} activeFile={props.activeFile} setViewMode={props.setViewMode} setEditContent={props.setEditContent} />}
@@ -195,12 +214,13 @@ interface ContentPanelMainProps {
   allCollapsed: boolean | null;
   toggleAllSections: () => void;
   onSearchOpen?: () => void;
+  onJumpToOverview?: () => void;
 }
 
-function ContentPanelMain({ deps, state, split, activeFile, allFiles, tree, onSelect, allCollapsed, toggleAllSections, onSearchOpen }: ContentPanelMainProps) {
+function ContentPanelMain({ deps, state, split, activeFile, allFiles, tree, onSelect, allCollapsed, toggleAllSections, onSearchOpen, onJumpToOverview }: ContentPanelMainProps) {
   return (
     <div className="flex-1 flex flex-col min-w-0">
-      <DocsHeader isFullscreen={state.isFullscreen} breadcrumb={deps.breadcrumb} activeFile={activeFile} viewMode={state.viewMode} setViewMode={state.setViewMode} setEditContent={state.setEditContent} copied={state.copied} theme={deps.theme} tree={tree} allCollapsed={allCollapsed} handleCopyMarkdown={deps.handleCopyMarkdown} setIsFullscreen={state.setIsFullscreen} toggleTheme={deps.toggleTheme} setShowShortcuts={state.setShowShortcuts} toggleAllSections={toggleAllSections} onSearchOpen={onSearchOpen} />
+      <DocsHeader isFullscreen={state.isFullscreen} breadcrumb={deps.breadcrumb} activeFile={activeFile} viewMode={state.viewMode} setViewMode={state.setViewMode} setEditContent={state.setEditContent} copied={state.copied} theme={deps.theme} tree={tree} allCollapsed={allCollapsed} handleCopyMarkdown={deps.handleCopyMarkdown} setIsFullscreen={state.setIsFullscreen} toggleTheme={deps.toggleTheme} setShowShortcuts={state.setShowShortcuts} toggleAllSections={toggleAllSections} onSearchOpen={onSearchOpen} onJumpToOverview={onJumpToOverview} />
       {activeFile && <ProgressBar progress={deps.readingProgress} />}
       <main ref={deps.mainRef} className="flex-1 overflow-auto">
         <DocsMainContent activeFile={activeFile} viewMode={state.viewMode} editContent={state.editContent} setEditContent={state.setEditContent} splitRatio={split.splitRatio} isFullscreen={state.isFullscreen} splitContainerRef={split.splitContainerRef} handleDividerMouseDown={deps.handleDividerMouseDown} handleScrollTo={deps.handleScrollTo} activeHeadingId={deps.activeHeadingId} allFiles={allFiles} onSelect={onSelect} allCollapsed={allCollapsed} />
@@ -247,7 +267,7 @@ export function DocsContentPanel(props: ContentPanelInput) {
   return (
     <>
       {!props.state.isFullscreen && <DocsSidebar tree={props.tree} activePath={props.activeFile?.path ?? null} onSelect={props.onSelect} searchQuery={props.searchQuery} setSearchQuery={props.setSearchQuery} allFiles={props.allFiles} />}
-      <ContentPanelMain deps={deps} state={props.state} split={props.split} activeFile={props.activeFile} allFiles={props.allFiles} tree={props.tree} onSelect={props.onSelect} allCollapsed={allCollapsed} toggleAllSections={toggleAll} onSearchOpen={props.onSearchOpen} />
+      <ContentPanelMain deps={deps} state={props.state} split={props.split} activeFile={props.activeFile} allFiles={props.allFiles} tree={props.tree} onSelect={props.onSelect} allCollapsed={allCollapsed} toggleAllSections={toggleAll} onSearchOpen={props.onSearchOpen} onJumpToOverview={props.onJumpToOverview} />
       {props.state.showShortcuts && <ShortcutsOverlay onClose={() => props.state.setShowShortcuts(isHidden)} />}
     </>
   );
@@ -261,11 +281,12 @@ export interface DocsContentProps {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   onSearchOpen?: () => void;
+  onJumpToOverview?: () => void;
 }
 
-export function DocsContent({ activeFile, allFiles, tree, onSelect, searchQuery, setSearchQuery, onSearchOpen }: DocsContentProps) {
+export function DocsContent({ activeFile, allFiles, tree, onSelect, searchQuery, setSearchQuery, onSearchOpen, onJumpToOverview }: DocsContentProps) {
   const state = useViewState();
   const split = useSplitState();
 
-  return <DocsContentPanel state={state} split={split} activeFile={activeFile} allFiles={allFiles} tree={tree} onSelect={onSelect} searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchOpen={onSearchOpen} />;
+  return <DocsContentPanel state={state} split={split} activeFile={activeFile} allFiles={allFiles} tree={tree} onSelect={onSelect} searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearchOpen={onSearchOpen} onJumpToOverview={onJumpToOverview} />;
 }

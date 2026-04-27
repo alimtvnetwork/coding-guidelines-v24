@@ -23,6 +23,7 @@ export const KeyboardKeyType = {
   K: "k",
   C: "c",
   ShiftC: "C",
+  J: "j",
 } as const;
 
 export const SpecEntryType = {

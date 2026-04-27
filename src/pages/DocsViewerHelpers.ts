@@ -150,6 +150,7 @@ export interface ContentPanelInput {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   onSearchOpen?: () => void;
+  onJumpToOverview?: () => void;
 }
 
 export interface ContentPanelDeps {
