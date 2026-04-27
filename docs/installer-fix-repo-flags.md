@@ -50,6 +50,19 @@ The table below is the **single source of truth** for how each setting is named 
 | Full rollback (edits + new files)   | `--full-rollback`                  | `-FullRollback`               | —                             | boolean switch (implies the row above) | `false`     | CLI flag only                 |
 | Install destination                 | `--dest DIR`                       | `-Dest DIR`                   | —                             | path                                   | `./` or per-bundle | CLI flag only           |
 
+#### Reading the **Precedence** column
+
+The right-most column uses exactly two values — pick the right mental model based on which one you see:
+
+| Value in column                   | What it means                                                                                                                                  | Applies to                                                       |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
+| `CLI flag → env var → default`    | Three-tier resolution. The installer reads the CLI flag first; if absent, it reads the env var; if that is also unset/empty, it uses the default. | Value-typed settings only (`--log-dir`, `--max-fix-repo-logs`).  |
+| `CLI flag only`                   | **One-tier resolution — CLI is the only input.** No env var is read, ever. If the flag is absent, the default applies. A `—` in the **Env var** column always pairs with this value. | All boolean switches and `--dest`.                               |
+
+> ⚠️ **Common confusion to avoid:** seeing `CLI flag only` does **not** mean "the CLI flag overrides the env var" — it means **there is no env var at all**. Exporting a guessed name like `INSTALL_RUN_FIX_REPO=true`, `INSTALL_FULL_ROLLBACK=1`, or `INSTALL_DEST=/opt/app` has **zero effect** on the installer. The variable is simply not in its known-flag list, so it is ignored without warning. See the "Boolean flags have **no** environment-variable override" subsection below for a worked example, and §5.4 for the empty-string case on the value-typed side.
+
+**Quick rule of thumb:** if the **Env var** column shows `—`, the **Precedence** column will always show `CLI flag only`, and the setting can only be changed by passing the flag on the command line — never via the environment.
+
 ### Precedence rules in plain English
 
 1. **CLI flag always wins.** If you pass `--max-fix-repo-logs 10` *and* export `INSTALL_MAX_FIX_REPO_LOGS=99`, the installer uses `10`. The env var is consulted **only when the CLI flag is absent**.
