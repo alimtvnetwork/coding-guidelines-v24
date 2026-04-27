@@ -134,6 +134,7 @@ STEPS=(
   "Check forbidden spec paths (re-split + merge-proposal guard)|bash linter-scripts/check-forbidden-spec-paths.sh"
   "Check forbidden strings (TOML-driven rename guards)|python3 linter-scripts/check-forbidden-strings.py"
   "Check README install section (position + one-line fences)|python3 linter-scripts/check-readme-install-section.py"
+  "Check Lovable prompts loaded (index ↔ .lovable/prompts/* sync)|python3 linter-scripts/check-prompts-loaded.py"
   "Check spec placeholder comments (P-001 … P-008)|python3 linter-scripts/check-placeholder-comments.py ${DIFF_FLAG} ${CACHE_FLAG}"
   "Validate spec internal cross-references|python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root ."
 )

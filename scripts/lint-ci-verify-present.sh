@@ -15,6 +15,7 @@ required=(
   linter-scripts/check-forbidden-strings.py
   linter-scripts/check-readme-install-section.py
   linter-scripts/check-placeholder-comments.py
+  linter-scripts/check-prompts-loaded.py
   linter-scripts/check-spec-cross-links.py
   linter-scripts/forbidden-strings.toml
 )
