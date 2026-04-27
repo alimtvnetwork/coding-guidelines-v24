@@ -12,23 +12,24 @@ get_remote_url() {
   git remote -v 2>/dev/null | awk '$3=="(fetch)"{print $2; exit}'
 }
 
+# Tries each regex in order; on first match sets PARSED_* via given group indices.
+# Args: trimmed_url regex host_idx owner_idx repo_idx
+_try_match_url() {
+  local url="$1" re="$2" hi="$3" oi="$4" ri="$5"
+  [[ "$url" =~ $re ]] || return 1
+  PARSED_HOST="${BASH_REMATCH[$hi]}"
+  PARSED_OWNER="${BASH_REMATCH[$oi]}"
+  PARSED_REPO="${BASH_REMATCH[$ri]}"
+  return 0
+}
+
 # Sets globals: PARSED_HOST, PARSED_OWNER, PARSED_REPO
 parse_remote_url() {
   local url="$1"
-  local re_https='^https?://([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+)$'
-  local re_scp='^git@([^:]+):([^/]+)/([^/]+)$'
-  local re_ssh='^ssh://git@([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+)$'
-  local trimmed="${url%/}"
-  trimmed="${trimmed%.git}"
-  if [[ "$trimmed" =~ $re_https ]]; then
-    PARSED_HOST="${BASH_REMATCH[1]}"; PARSED_OWNER="${BASH_REMATCH[3]}"; PARSED_REPO="${BASH_REMATCH[4]}"; return 0
-  fi
-  if [[ "$trimmed" =~ $re_scp ]]; then
-    PARSED_HOST="${BASH_REMATCH[1]}"; PARSED_OWNER="${BASH_REMATCH[2]}"; PARSED_REPO="${BASH_REMATCH[3]}"; return 0
-  fi
-  if [[ "$trimmed" =~ $re_ssh ]]; then
-    PARSED_HOST="${BASH_REMATCH[1]}"; PARSED_OWNER="${BASH_REMATCH[3]}"; PARSED_REPO="${BASH_REMATCH[4]}"; return 0
-  fi
+  local trimmed="${url%/}"; trimmed="${trimmed%.git}"
+  _try_match_url "$trimmed" '^https?://([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+)$' 1 3 4 && return 0
+  _try_match_url "$trimmed" '^git@([^:]+):([^/]+)/([^/]+)$'                 1 2 3 && return 0
+  _try_match_url "$trimmed" '^ssh://git@([^/:]+)(:[0-9]+)?/([^/]+)/([^/]+)$' 1 3 4 && return 0
   return 1
 }
 
