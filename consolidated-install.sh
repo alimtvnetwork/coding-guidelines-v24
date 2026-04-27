@@ -518,6 +518,7 @@ perform_rollback() {
   fi
 }
 
+run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
     MINGW*|MSYS*|CYGWIN*) script="${TARGET}/fix-repo.ps1" ;;
