@@ -74,6 +74,35 @@ class Prefer8FiresOnFixtureTests(unittest.TestCase):
                          msg="CODE-RED-004 (>15-line safety net) must stay silent on a 9–15 line body")
         self.assertEqual(code, 0)
 
+    def test_boundary_15_fixture_exists(self) -> None:
+        self.assertTrue((BOUNDARY_DIR / "at-cap.ts").is_file(),
+                        "CODE-RED-005 boundary-15 fixture missing — test cannot run.")
+
+    def test_boundary_15_prefer8_errors(self) -> None:
+        """A body with EXACTLY 15 effective lines is the upper edge of the
+        prefer-band. Per policy (see _shared.py), CODE-RED-005 must error
+        at strict cap 8 and report '15 effective lines'."""
+        code, payload = run_scanner(PREFER8, BOUNDARY_DIR)
+        findings = collect_findings(payload)
+        self.assertEqual(len(findings), 1,
+                         msg=f"expected 1 strict-8 finding at boundary 15, got {findings}")
+        self.assertEqual(findings[0].get("ruleId"), "CODE-RED-005")
+        self.assertEqual(findings[0].get("level"), "error")
+        msg_text = findings[0].get("message", {}).get("text", "")
+        self.assertIn("15 effective lines", msg_text,
+                      msg=f"message must report 15 effective lines, got: {msg_text!r}")
+        self.assertNotEqual(code, 0)
+
+    def test_boundary_15_hardcap_silent(self) -> None:
+        """CODE-RED-004's hard cap is 15 *exclusive* (>15 fires). At the
+        boundary value 15 the redundant safety net must stay silent — only
+        CODE-RED-005 reports, preventing double-counting."""
+        code, payload = run_scanner(HARDCAP, BOUNDARY_DIR)
+        findings = collect_findings(payload)
+        self.assertEqual(findings, [],
+                         msg=f"CODE-RED-004 must be silent at exactly 15 effective lines, got {findings}")
+        self.assertEqual(code, 0)
+
 
 if __name__ == "__main__":
     unittest.main()
