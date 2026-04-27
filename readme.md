@@ -207,12 +207,20 @@ Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
 <details>
 <summary><strong>splitdb</strong> — Split-DB Architecture Spec · script: <a href="splitdb-install.sh"><code>splitdb-install.sh</code></a> / <a href="splitdb-install.ps1"><code>splitdb-install.ps1</code></a></summary>
 
+Bash · latest:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash
+```
+Bash · pinned:
+```bash
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.sh | bash -s -- --version v3.85.0 --target ./vendor/coding-guidelines
 ```
+PowerShell · latest:
 ```powershell
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1 | iex
+```
+PowerShell · pinned:
+```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/splitdb-install.ps1))) -Version v3.85.0 -Dest .\vendor\coding-guidelines
 ```
 Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec/06-seedable-config-architecture`.
