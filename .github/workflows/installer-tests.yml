@@ -1,0 +1,98 @@
+name: Installer Tests
+
+# Runs the full installer behavior test suite (tests/installer/run-tests.sh)
+# on every push and pull request. On failure, parses the output to surface
+# which flag-related assertions failed (--max-fix-repo-logs,
+# --rollback-on-fix-repo-failure, --full-rollback, --show-fix-repo-log,
+# --log-dir, --run-fix-repo, etc.) into the GitHub job summary and — for
+# pull requests — into a sticky PR comment.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: installer-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  installer-tests:
+    name: Installer test suite (flag assertions)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Regenerate bundle installers
+        # Ensures we test the canonical generator output, not stale files.
+        run: node scripts/generate-bundle-installers.mjs
+
+      - name: Run installer test suite
+        id: run_tests
+        run: |
+          set +e
+          mkdir -p .ci-out
+          bash tests/installer/run-tests.sh \
+            > .ci-out/installer-tests.log 2>&1
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          echo "----- installer-tests.log -----"
+          cat .ci-out/installer-tests.log
+          exit 0
+
+      - name: Parse flag-related failures
+        id: parse
+        run: |
+          bash scripts/installer-tests/parse-flag-failures.sh \
+            .ci-out/installer-tests.log \
+            > .ci-out/flag-failures.md
+          cat .ci-out/flag-failures.md
+
+      - name: Write GitHub job summary
+        run: |
+          {
+            echo "# 🧪 Installer Test Suite"
+            echo ""
+            echo "Exit code: \`${{ steps.run_tests.outputs.exit_code }}\`"
+            echo ""
+            cat .ci-out/flag-failures.md
+            echo ""
+            echo "<details><summary>Full test output</summary>"
+            echo ""
+            echo '```'
+            cat .ci-out/installer-tests.log
+            echo '```'
+            echo ""
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-tests-output
+          path: .ci-out/
+
+      - name: Post sticky PR comment
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: installer-tests
+          path: .ci-out/flag-failures.md
+
+      - name: Fail job if test suite failed
+        if: steps.run_tests.outputs.exit_code != '0'
+        run: |
+          echo "::error::Installer test suite failed (exit ${{ steps.run_tests.outputs.exit_code }}). See job summary for flag-related failures."
+          exit 1
