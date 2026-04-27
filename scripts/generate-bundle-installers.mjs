@@ -159,6 +159,9 @@ TARGET / OUTPUT FLAGS (any mode)
   --show-fix-repo-log            Print the latest fix-repo log to stdout
                                  after run_fix_repo finishes (success or
                                  failure). Env: INSTALL_SHOW_FIX_REPO_LOG=1.
+  --max-fix-repo-logs N          Keep only the newest N fix-repo-*.log
+                                 files in the log directory. 0 = keep all
+                                 (default). Env: INSTALL_MAX_FIX_REPO_LOGS.
 
 NETWORK FLAGS
   --offline                   [any mode]   Refuse all network access.
