@@ -85,6 +85,8 @@ param(
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
     [switch]$RunFixRepo,
+    [Alias("y","AssumeYes")]
+    [switch]$Yes,
     [Alias("?")]
     [switch]$Help
 )
@@ -94,6 +96,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
@@ -406,6 +412,22 @@ function Invoke-FixRepo {
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
+        exit 5
+    }
+    if ($Yes) {
+        Write-Host "  ▸ auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
+    } elseif ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+        Write-Host ""
+        Write-Host "⚠️  About to run $script" -ForegroundColor Yellow
+        Write-Host "   This will rewrite versioned-repo-name tokens across tracked text files." -ForegroundColor Yellow
+        $reply = Read-Host "Proceed? [y/N]"
+        if ($reply -notmatch '^(y|Y|yes|YES)$') {
+            Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
+            exit 5
+        }
+    } else {
+        Write-Host "❌ -RunFixRepo requires confirmation but session is non-interactive." -ForegroundColor Red
+        Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
         exit 5
     }
     $logDir = Join-Path $Target ".install-logs"

@@ -110,6 +110,8 @@ NO_DISCOVERY=false
 NO_MAIN_FALLBACK=false
 RUN_FIX_REPO="\${INSTALL_RUN_FIX_REPO:-false}"
 case "\${RUN_FIX_REPO}" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
+ASSUME_YES="\${INSTALL_FIX_REPO_YES:-false}"
+case "\${ASSUME_YES}" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
 
 usage() {
   cat <<HELP
@@ -189,6 +191,7 @@ while [[ $# -gt 0 ]]; do
     --no-open)        DO_OPEN=false; shift ;;
     --offline)        OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
+    -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
@@ -521,6 +524,23 @@ fi
 echo ""
 verify_install
 
+confirm_fix_repo() {
+  \${ASSUME_YES} && { echo "  ▸ auto-confirmed (--yes / INSTALL_FIX_REPO_YES=1)"; return 0; }
+  if [[ ! -t 0 ]]; then
+    echo "❌ --run-fix-repo requires confirmation but stdin is not a TTY." >&2
+    echo "   Re-run with --yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." >&2
+    exit 5
+  fi
+  local reply=""
+  echo ""
+  echo "⚠️  About to run \$1"
+  echo "   This will rewrite versioned-repo-name tokens across tracked text files."
+  printf "Proceed? [y/N] " >&2
+  IFS= read -r reply </dev/tty || reply=""
+  case "\${reply}" in y|Y|yes|YES) return 0 ;; esac
+  echo "fix-repo skipped by user — exiting with code 5." >&2
+  exit 5
+}
 run_fix_repo() {
   # Auto-execute the freshly installed fix-repo script so the repo is
   # patched in the same invocation. Pick .ps1 on Windows shells (MSYS,
@@ -536,6 +556,7 @@ run_fix_repo() {
     echo "❌ --run-fix-repo: \${script} not found after install." >&2
     exit 5
   fi
+  confirm_fix_repo "\${script}"
   log_dir="\${TARGET}/.install-logs"
   mkdir -p "\${log_dir}"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -682,6 +703,8 @@ param(
     [switch]$NoDiscovery,
     [switch]$NoMainFallback,
     [switch]$RunFixRepo,
+    [Alias("y","AssumeYes")]
+    [switch]$Yes,
     [Alias("?")]
     [switch]$Help
 )
@@ -691,6 +714,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
@@ -1003,6 +1030,22 @@ function Invoke-FixRepo {
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
+        exit 5
+    }
+    if ($Yes) {
+        Write-Host "  ▸ auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
+    } elseif ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+        Write-Host ""
+        Write-Host "⚠️  About to run $script" -ForegroundColor Yellow
+        Write-Host "   This will rewrite versioned-repo-name tokens across tracked text files." -ForegroundColor Yellow
+        $reply = Read-Host "Proceed? [y/N]"
+        if ($reply -notmatch '^(y|Y|yes|YES)$') {
+            Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
+            exit 5
+        }
+    } else {
+        Write-Host "❌ -RunFixRepo requires confirmation but session is non-interactive." -ForegroundColor Red
+        Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
         exit 5
     }
     $logDir = Join-Path $Target ".install-logs"

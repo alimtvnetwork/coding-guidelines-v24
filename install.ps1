@@ -59,6 +59,8 @@ param(
     [Alias('UseLocalArchive')]
     [switch]$Offline,
     [switch]$RunFixRepo,
+    [Alias('y','AssumeYes')]
+    [switch]$Yes,
     [string]$PinnedByReleaseInstall = ""
 )
 
@@ -66,6 +68,10 @@ param(
 if (-not $RunFixRepo) {
     $envFlag = $env:INSTALL_RUN_FIX_REPO
     if ($envFlag -and @("1","true","TRUE","yes","YES") -contains $envFlag) { $RunFixRepo = $true }
+}
+if (-not $Yes) {
+    $envYes = $env:INSTALL_FIX_REPO_YES
+    if ($envYes -and @("1","true","TRUE","yes","YES") -contains $envYes) { $Yes = $true }
 }
 
 # Offline mode forbids any network operation (spec §5.3, §8 exit 2).
@@ -378,6 +384,22 @@ try {
         $fixScript = Join-Path $Dest "fix-repo.ps1"
         if (-not (Test-Path -LiteralPath $fixScript -PathType Leaf)) {
             Write-Err "-RunFixRepo: $fixScript not found after install."
+            exit 5
+        }
+        if ($Yes) {
+            Write-Host "  ▸ Auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
+        } elseif ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+            Write-Host ""
+            Write-Host "⚠️  About to run $fixScript" -ForegroundColor Yellow
+            Write-Host "   This will rewrite versioned-repo-name tokens across tracked text files." -ForegroundColor Yellow
+            $reply = Read-Host "Proceed? [y/N]"
+            if ($reply -notmatch '^(y|Y|yes|YES)$') {
+                Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
+                exit 5
+            }
+        } else {
+            Write-Err "-RunFixRepo requires confirmation but session is non-interactive."
+            Write-Err "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
             exit 5
         }
         $logDir = Join-Path $Dest ".install-logs"

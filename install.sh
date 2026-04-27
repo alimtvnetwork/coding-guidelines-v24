@@ -57,6 +57,8 @@ NO_MAIN_FALLBACK=false
 OFFLINE=false
 RUN_FIX_REPO="${INSTALL_RUN_FIX_REPO:-false}"
 case "$RUN_FIX_REPO" in 1|true|TRUE|yes|YES) RUN_FIX_REPO=true ;; *) RUN_FIX_REPO=false ;; esac
+ASSUME_YES="${INSTALL_FIX_REPO_YES:-false}"
+case "$ASSUME_YES" in 1|true|TRUE|yes|YES) ASSUME_YES=true ;; *) ASSUME_YES=false ;; esac
 
 # ── Colors ────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -176,6 +178,7 @@ while [[ $# -gt 0 ]]; do
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --offline|--use-local-archive) OFFLINE=true; shift ;;
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
+    -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --pinned-by-release-install) PINNED_BY_RELEASE_INSTALL="$2"; shift 2 ;;
     -h|--help)        usage ;;
     *) err "Unknown option: $1"; exit 1 ;;
@@ -456,6 +459,22 @@ $DRY_RUN || verify_required_files
 # Gated by --run-fix-repo or INSTALL_RUN_FIX_REPO=1. Picks .ps1 on
 # Windows shells, .sh elsewhere. Skipped under --dry-run (nothing was
 # actually written). Failures propagate as exit 5 per spec §8.
+confirm_fix_repo() {
+  $ASSUME_YES && { dim "Auto-confirmed (--yes / INSTALL_FIX_REPO_YES=1)"; return 0; }
+  if [[ ! -t 0 ]]; then
+    err "--run-fix-repo requires confirmation but stdin is not a TTY."
+    err "   Re-run with --yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt."
+    exit 5
+  fi
+  local reply=""
+  warn "About to run $1"
+  warn "This will rewrite versioned-repo-name tokens across tracked text files in this repo."
+  printf "Proceed? [y/N] " >&2
+  IFS= read -r reply </dev/tty || reply=""
+  case "$reply" in y|Y|yes|YES) return 0 ;; esac
+  warn "fix-repo skipped by user — exiting with code 5."
+  exit 5
+}
 run_fix_repo() {
   local script log_dir log_file ts rc
   case "$(uname -s 2>/dev/null || echo unknown)" in
@@ -466,6 +485,7 @@ run_fix_repo() {
     err "--run-fix-repo: $script not found after install."
     exit 5
   fi
+  confirm_fix_repo "$script"
   log_dir="$DEST/.install-logs"
   mkdir -p "$log_dir"
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
