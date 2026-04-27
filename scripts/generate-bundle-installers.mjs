@@ -200,6 +200,7 @@ while [[ $# -gt 0 ]]; do
     --run-fix-repo)   RUN_FIX_REPO=true; shift ;;
     -y|--yes|--assume-yes) ASSUME_YES=true; shift ;;
     --log-dir)        LOG_DIR="$2"; shift 2 ;;
+    --show-fix-repo-log) SHOW_FIX_REPO_LOG=true; shift ;;
     --no-discovery)   NO_DISCOVERY=true; shift ;;
     --no-main-fallback) NO_MAIN_FALLBACK=true; shift ;;
     --use-local-archive)
