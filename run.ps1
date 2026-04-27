@@ -135,9 +135,7 @@ function Invoke-FixRepo {
         Write-Host "❌ Cannot find $inner" -ForegroundColor Red
         exit 1
     }
-    $forward = @()
-    if ($args.Count -gt 0) { $forward = $args }
-    & $inner @forward
+    & $inner @args
     exit $LASTEXITCODE
 }
 
