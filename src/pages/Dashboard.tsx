@@ -27,6 +27,12 @@ export default function Dashboard() {
     <main className="min-h-screen bg-background">
       <DashboardHeader version={version.version} generatedAt={ci.generated} />
       <div className="container space-y-6 py-8">
+        <RepositoryInfoCard
+          version={version.Version}
+          title={version.Title}
+          repoSlug={version.RepoSlug}
+          lastCommitSha={version.LastCommitSha}
+        />
         <section className="stagger-children grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             icon={CheckCircle2}
