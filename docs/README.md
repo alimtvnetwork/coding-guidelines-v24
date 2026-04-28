@@ -17,6 +17,7 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
   - [installer fix-repo flags](#installer-fix-repo-flags)
   - [slides installer](#slides-installer)
   - [github repo metadata](#github-repo-metadata)
+  - [reading version.json](#reading-versionjson)
 - [Process & quality](#process--quality)
   - [spec-author DX](#spec-author-dx)
   - [guidelines audit](#guidelines-audit)
@@ -67,6 +68,12 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
 - **Path:** [`github-repo-metadata.md`](github-repo-metadata.md)
 - **Summary:** Canonical GitHub repo description, topics, and About-section sourcing rules (manual action required when changed).
 - **Start here if:** you're updating the GitHub About section or topics.
+
+### reading version.json
+
+- **Path:** [`reading-version-json.md`](reading-version-json.md)
+- **Summary:** How apps and scripts (TypeScript, Node, Bash, PowerShell) should read the canonical PascalCase `version.json`, including the safe-fallback contract when the file is missing or unparseable.
+- **Start here if:** you're consuming `Version`, `RepoSlug`, or `LastCommitSha` from any tool.
 
 ---
 
