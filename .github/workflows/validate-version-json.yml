@@ -1,0 +1,35 @@
+name: Validate version.json
+
+# Enforces the PascalCase schema in
+# spec/01-spec-authoring-guide/17-version-schema.md.
+# Fails the build when version.json is missing required keys, has an
+# invalid Author.Role, or is otherwise out of contract.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: validate-version-json-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate version.json schema
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run validator
+        run: node scripts/validate-version-json.mjs
