@@ -11,6 +11,7 @@
     "sync:readme": "node scripts/sync-readme-stats.mjs",
     "sync:health": "node scripts/sync-health-score.mjs",
     "sync:check": "node scripts/sync-check.mjs",
+    "validate:version": "node scripts/validate-version-json.mjs",
     "sync:check:verbose": "node scripts/sync-check.mjs --verbose",
     "sync:fix": "node scripts/sync-check.mjs --fix",
     "lint:readme": "python3 linter-scripts/check-root-readme.py",
