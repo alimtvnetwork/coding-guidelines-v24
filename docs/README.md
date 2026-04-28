@@ -7,6 +7,16 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
 
 ---
 
+## Table of contents
+
+- [Core references](#core-references) — [principles](principles.md) · [architecture](architecture.md) · [author](author.md)
+- [Installers & tooling](#installers--tooling) — [fix-repo flags](installer-fix-repo-flags.md) · [slides installer](slides-installer.md) · [GitHub metadata](github-repo-metadata.md)
+- [Process & quality](#process--quality) — [spec-author DX](spec-author-dx.md) · [guidelines audit](guidelines-audit.md)
+- [Refactor case studies](#refactor-case-studies) — [payment-banner hider](refactors/payment-banner-hider.md)
+- [Related entry points](#related-entry-points)
+
+---
+
 ## Core references
 
 | Page | What's inside |
