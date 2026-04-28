@@ -505,6 +505,8 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <h2 align="center">📑 Table of Contents</h2>
 
+<p align="center"><strong>In this README</strong></p>
+
 <p align="center">
   <a href="#-table-of-contents">Table of Contents</a> ·
   <a href="#-install-in-one-line">Install</a> ·
@@ -522,6 +524,19 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-neutral-ai-assessment">Neutral AI Assessment</a> ·
   <a href="#-contributing">Contributing</a> ·
   <a href="#-author">Author</a>
+</p>
+
+<p align="center"><strong>Docs Pages</strong> (deep-dives in <a href="docs/"><code>docs/</code></a>)</p>
+
+<p align="center">
+  <a href="docs/principles.md">Principles</a> ·
+  <a href="docs/architecture.md">Architecture</a> ·
+  <a href="docs/author.md">Author</a> ·
+  <a href="docs/installer-fix-repo-flags.md">Installer fix-repo Flags</a> ·
+  <a href="docs/slides-installer.md">Slides Installer</a> ·
+  <a href="docs/spec-author-dx.md">Spec Author DX</a> ·
+  <a href="docs/guidelines-audit.md">Guidelines Audit</a> ·
+  <a href="docs/github-repo-metadata.md">GitHub Repo Metadata</a>
 </p>
 
 ---
@@ -1374,6 +1389,10 @@ Deep-dives live in `docs/` (README stays under 400 lines):
 | [`docs/architecture.md`](docs/architecture.md) | Spec authoring conventions · folder structure · architecture decisions · error management summary |
 | [`docs/author.md`](docs/author.md) | Author bio · Riseup Asia LLC · AI assessments · FAQ · design philosophy |
 | [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md) | `--max-fix-repo-logs` · `INSTALL_MAX_FIX_REPO_LOGS` · `--rollback-on-fix-repo-failure` · `--full-rollback` · interaction matrix |
+| [`docs/slides-installer.md`](docs/slides-installer.md) | Slides app installer flags · packaging pipeline · offline behavior |
+| [`docs/spec-author-dx.md`](docs/spec-author-dx.md) | Spec author developer experience · tooling · workflow ergonomics |
+| [`docs/guidelines-audit.md`](docs/guidelines-audit.md) | Guidelines audit findings · drift detection · remediation log |
+| [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
