@@ -5,6 +5,7 @@ import { HealthTrendCard } from "@/components/dashboard/HealthTrendCard";
 import { RuleStatusGrid } from "@/components/dashboard/RuleStatusGrid";
 import { RecentRunsTimeline } from "@/components/dashboard/RecentRunsTimeline";
 import { IssueLogCard } from "@/components/dashboard/IssueLogCard";
+import { RepositoryInfoCard } from "@/components/dashboard/RepositoryInfoCard";
 import { CheckCircle2, FileCode2, ScrollText, AlertTriangle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
