@@ -7,6 +7,25 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
 
 ---
 
+## Table of contents
+
+- [Core references](#core-references)
+  - [`principles.md`](#principlesmd) — 9 principles, 10 CODE RED rules, AI optimization suite
+  - [`architecture.md`](#architecturemd) — Spec authoring, folder structure, error management
+  - [`author.md`](#authormd) — Author bio, Riseup Asia LLC, design philosophy
+- [Installers & tooling](#installers--tooling)
+  - [`installer-fix-repo-flags.md`](#installer-fix-repo-flagsmd) — Log retention & rollback flags
+  - [`slides-installer.md`](#slides-installermd) — Slides bundle installer
+  - [`github-repo-metadata.md`](#github-repo-metadatamd) — GitHub About-section sourcing
+- [Process & quality](#process--quality)
+  - [`spec-author-dx.md`](#spec-author-dxmd) — Spec-author developer experience
+  - [`guidelines-audit.md`](#guidelines-auditmd) — Independent audit & remediation log
+- [Refactor case studies](#refactor-case-studies)
+  - [`refactors/payment-banner-hider.md`](#refactorspayment-banner-hidermd) — CODE RED metrics worked example
+- [Related entry points](#related-entry-points)
+
+---
+
 ## Core references
 
 | Page | What's inside |
