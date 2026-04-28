@@ -1381,7 +1381,7 @@ node scripts/generate-readme-txt.mjs                              # Node, writes
 
 ## 📚 Documentation
 
-Deep-dives live in `docs/` (README stays under 400 lines):
+Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/README.md`](docs/README.md).
 
 | Doc | What's inside |
 |---|---|
