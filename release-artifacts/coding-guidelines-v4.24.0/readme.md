@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v18/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.24.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-614-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-132%2C679-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--28-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v18/releases"><img alt="Version" src="https://img.shields.io/badge/version-4.24.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-615-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-132%2C923-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--04--28-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -27,7 +27,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->614<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->132,679<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.24.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-28<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES -->615<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->132,923<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->4.24.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-04-28<!-- /STAMP:UPDATED -->
 </p>
 
 ---
@@ -505,6 +505,8 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <h2 align="center">📑 Table of Contents</h2>
 
+<p align="center"><strong>In this README</strong></p>
+
 <p align="center">
   <a href="#-table-of-contents">Table of Contents</a> ·
   <a href="#-install-in-one-line">Install</a> ·
@@ -522,6 +524,19 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-neutral-ai-assessment">Neutral AI Assessment</a> ·
   <a href="#-contributing">Contributing</a> ·
   <a href="#-author">Author</a>
+</p>
+
+<p align="center"><strong>Docs Pages</strong> — full index: <a href="docs/README.md"><code>docs/README.md</code></a></p>
+
+<p align="center">
+  <a href="docs/principles.md">Principles</a> ·
+  <a href="docs/architecture.md">Architecture</a> ·
+  <a href="docs/author.md">Author</a> ·
+  <a href="docs/installer-fix-repo-flags.md">Installer fix-repo Flags</a> ·
+  <a href="docs/slides-installer.md">Slides Installer</a> ·
+  <a href="docs/spec-author-dx.md">Spec Author DX</a> ·
+  <a href="docs/guidelines-audit.md">Guidelines Audit</a> ·
+  <a href="docs/github-repo-metadata.md">GitHub Repo Metadata</a>
 </p>
 
 ---
@@ -1301,11 +1316,72 @@ What this run does, in order:
 
 Full reference (decision matrix, CI recipe, edge cases): [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md).
 
+### Install + write timestamped `readme.txt` (Malaysia time)
+
+This recipe runs the full installer **and** regenerates `readme.txt` with the canonical Malaysia-time greeting line:
+
+```
+let's start now DD-MMM-YYYY HH:MM:SS AM/PM
+```
+
+— where the date uses zero-padded day + 3-letter English month + 4-digit year (e.g. `09-Jan-2026`) and the time is a 12-hour clock with `AM`/`PM` (e.g. `03:07:42 PM`), always rendered in the `Asia/Kuala_Lumpur` (UTC+08:00) timezone regardless of the host's local clock.
+
+**🐧 macOS · Linux · Bash**
+
+```bash
+# Install + auto-fix-repo + write timestamped readme.txt in MYT
+./install.sh \
+  --dest ./coding-guidelines \
+  --run-fix-repo \
+  --max-fix-repo-logs 10 \
+  --rollback-on-fix-repo-failure \
+  --show-fix-repo-log \
+  --log-dir ./.install-logs \
+  && TZ="Asia/Kuala_Lumpur" \
+       date +"let's start now %d-%b-%Y %I:%M:%S %p" \
+       > ./coding-guidelines/readme.txt \
+  && cat ./coding-guidelines/readme.txt
+```
+
+**🪟 Windows · PowerShell**
+
+```powershell
+# Install + auto-fix-repo + write timestamped readme.txt in MYT
+.\install.ps1 `
+  -Dest .\coding-guidelines `
+  -RunFixRepo `
+  -MaxFixRepoLogs 10 `
+  -RollbackOnFixRepoFailure `
+  -ShowFixRepoLog `
+  -LogDir .\.install-logs
+
+$myt   = [System.TimeZoneInfo]::FindSystemTimeZoneById('Singapore Standard Time')   # MYT == SGT (UTC+8)
+$nowMy = [System.TimeZoneInfo]::ConvertTimeFromUtc([DateTime]::UtcNow, $myt)
+$line  = "let's start now {0:dd}-{0:MMM}-{0:yyyy} {0:hh}:{0:mm}:{0:ss} {0:tt}" -f $nowMy
+Set-Content -LiteralPath .\coding-guidelines\readme.txt -Value $line -Encoding UTF8
+Get-Content  .\coding-guidelines\readme.txt
+```
+
+**Sample output** (both shells produce the same line shape):
+
+```
+let's start now 27-Apr-2026 11:32:08 PM
+```
+
+> ℹ️ Windows ships the `Singapore Standard Time` ID for UTC+08:00 — Malaysia (`MYT`) uses the same offset year-round (no DST), so the line is identical to Asia/Kuala_Lumpur time. The Bash variant uses the IANA name `Asia/Kuala_Lumpur` directly.
+
+If you prefer a scripted version without inlining the format string, the repo ships two helpers that emit the exact same line:
+
+```bash
+bash scripts/write-readme-txt.sh ./coding-guidelines/readme.txt   # Bash, system date + MYT
+node scripts/generate-readme-txt.mjs                              # Node, writes ./readme.txt
+```
+
 ---
 
 ## 📚 Documentation
 
-Deep-dives live in `docs/` (README stays under 400 lines):
+Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/README.md`](docs/README.md).
 
 | Doc | What's inside |
 |---|---|
@@ -1313,6 +1389,10 @@ Deep-dives live in `docs/` (README stays under 400 lines):
 | [`docs/architecture.md`](docs/architecture.md) | Spec authoring conventions · folder structure · architecture decisions · error management summary |
 | [`docs/author.md`](docs/author.md) | Author bio · Riseup Asia LLC · AI assessments · FAQ · design philosophy |
 | [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md) | `--max-fix-repo-logs` · `INSTALL_MAX_FIX_REPO_LOGS` · `--rollback-on-fix-repo-failure` · `--full-rollback` · interaction matrix |
+| [`docs/slides-installer.md`](docs/slides-installer.md) | Slides app installer flags · packaging pipeline · offline behavior |
+| [`docs/spec-author-dx.md`](docs/spec-author-dx.md) | Spec author developer experience · tooling · workflow ergonomics |
+| [`docs/guidelines-audit.md`](docs/guidelines-audit.md) | Guidelines audit findings · drift detection · remediation log |
+| [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 

@@ -1,4 +1,6 @@
-✅ coding-guidelines-boolean-column-negative: clean
+✅ coding-guidelines-boolean-column-negative-go: clean
+❌ coding-guidelines-boolean-column-negative: 1 finding(s)
+   [warning] linters-cicd/checks/missing-desc/fixtures/waived-block.sql:9  BOOL-NEG-001  Boolean column 'UnwaivedEntityId' uses a suspect single-negative root (Cannot/Dis/Un). Prefer the positive form unless the name describes a recognized domain state (see allow-list). Rule 2 + Rule 8 in 04-database-conventions/01-naming-conventions.md.
 ❌ coding-guidelines-nested-if-go: 71 finding(s)
    [error] linter-scripts/validate-guidelines.go:104  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] linter-scripts/validate-guidelines.go:122  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
@@ -71,13 +73,15 @@
    [error] linter-scripts/validate-guidelines.go:1005  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] linter-scripts/validate-guidelines.go:1010  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] linter-scripts/validate-guidelines.go:1018  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-❌ coding-guidelines-nested-if-ts: 221 finding(s)
-   [error] eslint-plugins/coding-guidelines/index.js:10  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] eslint-plugins/coding-guidelines/index.js:33  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
-   [error] eslint-plugins/coding-guidelines/index.js:48  CODE-RED-001  Nested if at depth 7 — extract guard clauses.
-   [error] eslint-plugins/coding-guidelines/index.js:110  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
-   [error] eslint-plugins/coding-guidelines/index.js:200  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
-   [error] eslint-plugins/coding-guidelines/index.js:276  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+✅ coding-guidelines-nested-if-php: clean
+❌ coding-guidelines-nested-if-ts: 275 finding(s)
+   [error] eslint-plugins/coding-guidelines/index.js:12  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] eslint-plugins/coding-guidelines/index.js:35  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
+   [error] eslint-plugins/coding-guidelines/index.js:50  CODE-RED-001  Nested if at depth 7 — extract guard clauses.
+   [error] eslint-plugins/coding-guidelines/index.js:112  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
+   [error] eslint-plugins/coding-guidelines/index.js:224  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] eslint-plugins/coding-guidelines/index.js:352  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:24  CODE-RED-001  Nested if at depth 8 — extract guard clauses.
    [error] linter-scripts/generate-dashboard-data.cjs:135  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] linter-scripts/generate-dashboard-data.cjs:139  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] linter-scripts/generate-dashboard-data.cjs:183  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -89,6 +93,7 @@
    [error] linter-scripts/generate-dashboard-data.cjs:273  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] linter-scripts/generate-dashboard-data.cjs:281  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] linter-scripts/generate-dashboard-data.cjs:288  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] linters-cicd/checks/_template/fixtures/dirty.ts:8  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/ci-config.mjs:61  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] scripts/ci-config.mjs:141  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/ci-config.mjs:154  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -97,32 +102,70 @@
    [error] scripts/ci-config.mjs:240  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] scripts/ci-config.mjs:320  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/ci-config.mjs:335  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:631  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:638  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:671  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:674  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:675  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:681  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:684  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:687  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:704  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:731  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:743  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:749  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:750  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:757  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:764  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:786  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:798  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:816  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:843  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:865  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:870  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:879  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/generate-bundle-installers.mjs:892  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:777  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:781  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:785  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:786  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:787  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:791  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:800  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:818  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:825  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:858  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:861  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:862  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:868  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:871  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:874  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:891  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:918  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:930  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:936  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:937  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:944  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:951  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:973  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:985  CODE-RED-001  Nested if at depth 5 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1003  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1030  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1052  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1057  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1066  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1079  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1108  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1124  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1150  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1163  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1169  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/generate-bundle-installers.mjs:1176  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/read-bundles.mjs:38  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] scripts/sync-spec-tree.mjs:122  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] scripts/sync-version.mjs:313  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:100  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:143  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:146  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:192  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:199  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:256  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:270  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:302  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/spec-change-report.mjs:304  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/sync-check.mjs:163  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-check.mjs:180  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/sync-check.mjs:222  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-check.mjs:237  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/sync-check.mjs:250  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-check.mjs:259  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-check.mjs:266  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-check.mjs:276  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-check.mjs:302  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/sync-check.mjs:305  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/sync-check.mjs:325  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/sync-spec-tree.mjs:160  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] scripts/sync-version.mjs:316  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/docs/check-doc-links.mjs:89  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/docs/check-doc-links.mjs:94  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/docs/check-doc-links.mjs:98  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/docs/check-doc-links.mjs:107  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] scripts/docs/fix-glossary-alignment.mjs:54  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/spec-audit/run-audit.mjs:83  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/spec-audit/run-audit.mjs:187  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] scripts/spec-verification/build-pr-comment.mjs:11  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -167,15 +210,20 @@
    [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:220  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:231  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:242  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/SpecTreeNav.tsx:42  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/SpecTreeNav.tsx:77  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] src/components/SpecTreeNav.tsx:148  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/SourceView.tsx:185  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/DocsSidebar.tsx:150  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/SpecTreeNav.tsx:53  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/SpecTreeNav.tsx:88  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/SpecTreeNav.tsx:159  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/dashboard/HealthTrendCard.tsx:46  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/dashboard/MetricCard.tsx:53  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/dashboard/MetricCard.tsx:57  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/dashboard/MetricCard.tsx:67  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/docs/DocsSidebar.tsx:151  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/DocsSidebar.tsx:204  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/components/docs/DocsToolbar.tsx:185  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/components/docs/SearchDialog.tsx:25  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/components/docs/SearchDialog.tsx:58  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/components/docs/SearchDialog.tsx:115  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/SourceView.tsx:185  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/components/docs/search/HighlightedText.tsx:20  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/components/docs/search/HighlightedText.tsx:32  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/components/docs/search/HighlightedText.tsx:54  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
@@ -188,21 +236,19 @@
    [error] src/components/docs/search/SearchResultItem.tsx:24  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/components/docs/search/SearchResultItem.tsx:55  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/components/docs/search/fuzzyMatch.ts:23  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:44  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:50  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:68  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:82  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:91  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:97  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:149  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:169  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/fuzzyMatch.ts:200  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/useSearchKeyboard.ts:41  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/useSearchKeyboard.ts:48  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/useSearchKeyboard.ts:55  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/useSearchKeyboard.ts:62  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/components/docs/search/useSearchKeyboard.ts:76  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
-   [error] src/components/docs/search/useSearchKeyboard.ts:82  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:41  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:64  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:78  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:87  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:93  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:145  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/docs/search/fuzzyMatch.ts:215  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/useSearchKeyboard.ts:44  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/useSearchKeyboard.ts:51  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/useSearchKeyboard.ts:58  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/useSearchKeyboard.ts:65  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/components/docs/search/useSearchKeyboard.ts:79  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/components/docs/search/useSearchKeyboard.ts:85  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/components/markdown/checklistBuilder.ts:82  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/components/markdown/codeBlockDomHelpers.ts:40  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/components/markdown/codeBlockDomHelpers.ts:46  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -239,12 +285,15 @@
    [error] src/hooks/use-toast.ts:81  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/use-toast.ts:102  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/use-toast.ts:193  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
-   [error] src/hooks/useScrollSpy.ts:62  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/useCollapsibleSections.ts:16  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/useCollapsibleSections.ts:29  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/useCollapsibleSections.ts:46  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/useCollapsibleSections.ts:52  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/useCollapsibleSections.ts:56  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/hooks/useCountUp.ts:25  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/hooks/useCountUp.ts:33  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/hooks/useCountUp.ts:48  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] src/hooks/useCountUp.ts:59  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
    [error] src/hooks/useDocsKeyboard.ts:62  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/useDocsKeyboard.ts:113  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/useDocsKeyboard.ts:119  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -258,6 +307,8 @@
    [error] src/hooks/useDocsKeyboard.ts:195  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/useDocsKeyboard.ts:227  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
    [error] src/hooks/useDocsKeyboard.ts:231  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] src/hooks/useScrollSpy.ts:62  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/hooks/useSpecData.ts:33  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/collapsible/collapsibleState.ts:11  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/collapsible/collapsibleState.ts:19  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/collapsible/collapsibleState.ts:29  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -272,6 +323,8 @@
    [error] src/hooks/collapsible/extractFormattedText.ts:105  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/collapsible/extractFormattedText.ts:116  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/collapsible/extractFormattedText.ts:126  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/hooks/collapsible/h1ActionsMenu.ts:19  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/hooks/collapsible/h1ActionsMenu.ts:79  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/collapsible/sectionActions.ts:36  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/hooks/collapsible/sectionActions.ts:52  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/collapsible/wrapSections.ts:21  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
@@ -281,21 +334,27 @@
    [error] src/hooks/collapsible/wrapSections.ts:75  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/collapsible/wrapSections.ts:81  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/hooks/collapsible/wrapSections.ts:131  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/hooks/collapsible/h1ActionsMenu.ts:19  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/hooks/collapsible/h1ActionsMenu.ts:79  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/lib/clipboard.ts:4  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/lib/clipboard.ts:15  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/lib/clipboard.ts:43  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
    [error] src/lib/clipboard.ts:49  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/pages/DocsViewerComponents.tsx:137  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/pages/DocsViewerComponents.tsx:145  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
-   [error] src/pages/DocsViewerComponents.tsx:224  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
-   [error] src/pages/DocsViewerComponents.tsx:228  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] src/lib/treeDiagnostics.ts:72  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/lib/treeDiagnostics.ts:93  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/lib/treeDiagnostics.ts:99  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/pages/Dashboard.tsx:17  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/pages/DocsViewer.tsx:40  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/pages/DocsViewerComponents.tsx:154  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/pages/DocsViewerComponents.tsx:162  CODE-RED-001  Nested if at depth 2 — extract guard clauses.
+   [error] src/pages/DocsViewerComponents.tsx:244  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
+   [error] src/pages/DocsViewerComponents.tsx:248  CODE-RED-001  Nested if at depth 4 — extract guard clauses.
    [error] src/pages/DocsViewerHelpers.ts:65  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
    [error] src/pages/DocsViewerHelpers.ts:78  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
+   [error] src/pages/ReadmeEditor.tsx:57  CODE-RED-001  Nested if at depth 3 — extract guard clauses.
 ✅ coding-guidelines-boolean-naming-go: clean
-❌ coding-guidelines-boolean-naming-ts: 6 finding(s)
-   [error] eslint-plugins/coding-guidelines/index.js:28  CODE-RED-002  Boolean 'passedLoop' must start with is/has/can/should/was/will.
+✅ coding-guidelines-boolean-naming-php: clean
+❌ coding-guidelines-boolean-naming-ts: 7 finding(s)
+   [error] eslint-plugins/coding-guidelines/index.js:30  CODE-RED-002  Boolean 'passedLoop' must start with is/has/can/should/was/will.
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:20  CODE-RED-002  Boolean 'inBlock' must start with is/has/can/should/was/will.
    [error] linter-scripts/generate-dashboard-data.cjs:61  CODE-RED-002  Boolean 'inCodeBlock' must start with is/has/can/should/was/will.
    [error] scripts/ci-config.mjs:122  CODE-RED-002  Boolean 'inSingle' must start with is/has/can/should/was/will.
    [error] scripts/ci-config.mjs:123  CODE-RED-002  Boolean 'inDouble' must start with is/has/can/should/was/will.
@@ -326,40 +385,58 @@
    [error] linter-scripts/validate-guidelines.go:641  CODE-RED-003  Magic string " && !strings.HasPrefix(nextStripped, " appears 2 times — promote to constant.
    [error] linter-scripts/validate-guidelines.go:659  CODE-RED-003  Magic string " && prev != " appears 2 times — promote to constant.
    [error] linter-scripts/validate-guidelines.go:682  CODE-RED-003  Magic string ", " appears 2 times — promote to constant.
-❌ coding-guidelines-magic-strings-ts: 146 finding(s)
-   [error] eslint.config.js:24  CODE-RED-003  Magic string "warn" appears 3 times — promote to enum or const.
-   [error] eslint.config.js:33  CODE-RED-003  Magic string "error" appears 5 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:9  CODE-RED-003  Magic string "IfStatement" appears 5 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:10  CODE-RED-003  Magic string "BlockStatement" appears 5 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:18  CODE-RED-003  Magic string "problem" appears 3 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:73  CODE-RED-003  Magic string "suggestion" appears 3 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:78  CODE-RED-003  Magic string "object" appears 4 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:78  CODE-RED-003  Magic string "string" appears 5 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:89  CODE-RED-003  Magic string "Literal" appears 5 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:90  CODE-RED-003  Magic string ", " appears 3 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:102  CODE-RED-003  Magic string "Identifier" appears 3 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:228  CODE-RED-003  Magic string "ExpressionStatement" appears 3 times — promote to enum or const.
-   [error] eslint-plugins/coding-guidelines/index.js:233  CODE-RED-003  Magic string "AwaitExpression" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:180  CODE-RED-003  Magic string "$1" appears 4 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:181  CODE-RED-003  Magic string "$2" appears 4 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:203  CODE-RED-003  Magic string "\${LOCAL_ARCHIVE}" appears 7 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:204  CODE-RED-003  Magic string "pinned" appears 4 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:207  CODE-RED-003  Magic string "\${VERSION}" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:219  CODE-RED-003  Magic string "════════════════════════════════════════════════════════" appears 4 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:231  CODE-RED-003  Magic string "  ────────────────────────────────────────────────────" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:237  CODE-RED-003  Magic string "\${pair%|*}" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:238  CODE-RED-003  Magic string "\${pair#*|}" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:322  CODE-RED-003  Magic string "\${entry_path}" appears 4 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:340  CODE-RED-003  Magic string "     Open the path above manually in your browser." appears 7 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:419  CODE-RED-003  Magic string "   URL: \${archive_url}" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:423  CODE-RED-003  Magic string "$(mktemp -d)" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:424  CODE-RED-003  Magic string "rm -rf "" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:424  CODE-RED-003  Magic string "\${tmp}" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:438  CODE-RED-003  Magic string "\${tmp}/extract" appears 9 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:790  CODE-RED-003  Magic string "bundle-" appears 3 times — promote to enum or const.
-   [error] scripts/generate-bundle-installers.mjs:806  CODE-RED-003  Magic string "extract" appears 3 times — promote to enum or const.
+✅ coding-guidelines-magic-strings-php: clean
+❌ coding-guidelines-magic-strings-ts: 171 finding(s)
+   [error] eslint.config.js:21  CODE-RED-003  Magic string "warn" appears 3 times — promote to enum or const.
+   [error] eslint.config.js:30  CODE-RED-003  Magic string "error" appears 6 times — promote to enum or const.
+   [error] tailwind.config.ts:92  CODE-RED-003  Magic string "0%" appears 5 times — promote to enum or const.
+   [error] tailwind.config.ts:92  CODE-RED-003  Magic string ", transform: " appears 4 times — promote to enum or const.
+   [error] tailwind.config.ts:93  CODE-RED-003  Magic string "100%" appears 5 times — promote to enum or const.
+   [error] tailwind.config.ts:104  CODE-RED-003  Magic string "0%, 100%" appears 3 times — promote to enum or const.
+   [error] tailwind.config.ts:105  CODE-RED-003  Magic string "50%" appears 3 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:11  CODE-RED-003  Magic string "IfStatement" appears 5 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:12  CODE-RED-003  Magic string "BlockStatement" appears 5 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:20  CODE-RED-003  Magic string "problem" appears 4 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:75  CODE-RED-003  Magic string "suggestion" appears 3 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:80  CODE-RED-003  Magic string "object" appears 5 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:80  CODE-RED-003  Magic string "string" appears 5 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:91  CODE-RED-003  Magic string "Literal" appears 5 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:92  CODE-RED-003  Magic string ", " appears 3 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:104  CODE-RED-003  Magic string "Identifier" appears 3 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:215  CODE-RED-003  Magic string "integer" appears 3 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:304  CODE-RED-003  Magic string "ExpressionStatement" appears 3 times — promote to enum or const.
+   [error] eslint-plugins/coding-guidelines/index.js:309  CODE-RED-003  Magic string "AwaitExpression" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:119  CODE-RED-003  Magic string "\${MAX_FIX_REPO_LOGS}" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:203  CODE-RED-003  Magic string "$1" appears 4 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:204  CODE-RED-003  Magic string "$2" appears 6 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:234  CODE-RED-003  Magic string "\${LOCAL_ARCHIVE}" appears 7 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:235  CODE-RED-003  Magic string "pinned" appears 4 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:238  CODE-RED-003  Magic string "\${VERSION}" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:250  CODE-RED-003  Magic string "════════════════════════════════════════════════════════" appears 4 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:262  CODE-RED-003  Magic string "  ────────────────────────────────────────────────────" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:268  CODE-RED-003  Magic string "\${pair%|*}" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:269  CODE-RED-003  Magic string "\${pair#*|}" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:353  CODE-RED-003  Magic string "\${entry_path}" appears 4 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:371  CODE-RED-003  Magic string "     Open the path above manually in your browser." appears 7 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:450  CODE-RED-003  Magic string "   URL: \${archive_url}" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:454  CODE-RED-003  Magic string "$(mktemp -d)" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:455  CODE-RED-003  Magic string "rm -rf "" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:455  CODE-RED-003  Magic string "\${tmp}" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:469  CODE-RED-003  Magic string "\${tmp}/extract" appears 9 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:602  CODE-RED-003  Magic string "\${script}" appears 6 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:608  CODE-RED-003  Magic string "\${log_dir}" appears 4 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:623  CODE-RED-003  Magic string "\${log_file}" appears 6 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:779  CODE-RED-003  Magic string "TRUE" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:779  CODE-RED-003  Magic string "yes" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:779  CODE-RED-003  Magic string "YES" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:977  CODE-RED-003  Magic string "bundle-" appears 3 times — promote to enum or const.
+   [error] scripts/generate-bundle-installers.mjs:993  CODE-RED-003  Magic string "extract" appears 3 times — promote to enum or const.
+   [error] scripts/spec-change-report.mjs:120  CODE-RED-003  Magic string "utf8" appears 4 times — promote to enum or const.
+   [error] scripts/sync-check.mjs:75  CODE-RED-003  Magic string "the `<!-- UPDATED -->` date stamp is ignored." appears 4 times — promote to enum or const.
+   [error] scripts/sync-check.mjs:139  CODE-RED-003  Magic string "utf8" appears 3 times — promote to enum or const.
    [error] scripts/sync-health-score.mjs:31  CODE-RED-003  Magic string "utf8" appears 3 times — promote to enum or const.
    [error] scripts/sync-readme-stats.mjs:24  CODE-RED-003  Magic string "utf8" appears 3 times — promote to enum or const.
+   [error] scripts/sync-spec-tree.mjs:89  CODE-RED-003  Magic string "folder" appears 3 times — promote to enum or const.
    [error] scripts/spec-audit/run-audit.mjs:47  CODE-RED-003  Magic string "completeness" appears 3 times — promote to enum or const.
    [error] scripts/spec-audit/run-audit.mjs:47  CODE-RED-003  Magic string "specificity" appears 3 times — promote to enum or const.
    [error] scripts/spec-audit/run-audit.mjs:47  CODE-RED-003  Magic string "testability" appears 3 times — promote to enum or const.
@@ -406,16 +483,22 @@
    [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/generate-utilization-report.mjs:25  CODE-RED-003  Magic string ", " appears 3 times — promote to enum or const.
    [error] src/components/MonacoMarkdownEditor.tsx:14  CODE-RED-003  Magic string "on" appears 3 times — promote to enum or const.
    [error] src/components/ThemeProvider.tsx:3  CODE-RED-003  Magic string "light" appears 3 times — promote to enum or const.
-   [error] src/components/docs/ShortcutsOverlay.tsx:8  CODE-RED-003  Magic string ", action: " appears 6 times — promote to enum or const.
-   [error] src/components/docs/DocsSidebar.tsx:95  CODE-RED-003  Magic string "h-4 w-4" appears 4 times — promote to enum or const.
+   [error] src/components/dashboard/HealthTrendCard.tsx:77  CODE-RED-003  Magic string "hsl(var(--primary))" appears 3 times — promote to enum or const.
+   [error] src/components/docs/CommandPalette.tsx:84  CODE-RED-003  Magic string "gap-2" appears 3 times — promote to enum or const.
+   [error] src/components/docs/DocsSidebar.tsx:96  CODE-RED-003  Magic string "h-4 w-4" appears 4 times — promote to enum or const.
    [error] src/components/docs/DocsToolbar.tsx:33  CODE-RED-003  Magic string "ghost" appears 7 times — promote to enum or const.
    [error] src/components/docs/DocsToolbar.tsx:74  CODE-RED-003  Magic string "icon" appears 6 times — promote to enum or const.
    [error] src/components/docs/DocsToolbar.tsx:75  CODE-RED-003  Magic string "h-3.5 w-3.5" appears 8 times — promote to enum or const.
+   [error] src/components/docs/GithubSyncBanner.tsx:85  CODE-RED-003  Magic string "inline-flex items-center gap-1.5" appears 3 times — promote to enum or const.
+   [error] src/components/docs/GithubSyncBanner.tsx:86  CODE-RED-003  Magic string "h-3.5 w-3.5" appears 3 times — promote to enum or const.
+   [error] src/components/docs/GithubSyncBanner.tsx:128  CODE-RED-003  Magic string "unknown" appears 3 times — promote to enum or const.
+   [error] src/components/docs/ShortcutsOverlay.tsx:8  CODE-RED-003  Magic string ", action: " appears 6 times — promote to enum or const.
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:55  CODE-RED-003  Magic string "button" appears 3 times — promote to enum or const.
    [error] src/components/docs/search/SearchParts.tsx:55  CODE-RED-003  Magic string "h-3 w-3" appears 3 times — promote to enum or const.
    [error] src/components/docs/search/fuzzyMatch.ts:20  CODE-RED-003  Magic string ", " appears 4 times — promote to enum or const.
-   [error] src/components/docs/search/fuzzyMatch.ts:126  CODE-RED-003  Magic string " : " appears 4 times — promote to enum or const.
-   [error] src/components/landing/InstallSection.tsx:98  CODE-RED-003  Magic string "h-4 w-4 text-primary" appears 3 times — promote to enum or const.
+   [error] src/components/docs/search/fuzzyMatch.ts:122  CODE-RED-003  Magic string " : " appears 4 times — promote to enum or const.
    [error] src/components/markdown/checklistBuilder.ts:39  CODE-RED-003  Magic string "13" appears 4 times — promote to enum or const.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:19  CODE-RED-003  Magic string "none" appears 4 times — promote to enum or const.
    [error] src/components/markdown/codeBlockBuilder.ts:31  CODE-RED-003  Magic string "${id}" appears 5 times — promote to enum or const.
    [error] src/components/markdown/codeBlockBuilder.ts:39  CODE-RED-003  Magic string "14" appears 12 times — promote to enum or const.
    [error] src/components/markdown/codeBlockBuilder.ts:39  CODE-RED-003  Magic string "0 0 24 24" appears 6 times — promote to enum or const.
@@ -438,7 +521,6 @@
    [error] src/components/markdown/constants.ts:75  CODE-RED-003  Magic string "md" appears 3 times — promote to enum or const.
    [error] src/components/markdown/constants.ts:77  CODE-RED-003  Magic string "txt" appears 3 times — promote to enum or const.
    [error] src/components/markdown/useCodeBlockEvents.ts:109  CODE-RED-003  Magic string "click" appears 18 times — promote to enum or const.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:19  CODE-RED-003  Magic string "none" appears 4 times — promote to enum or const.
    [error] src/components/ui/carousel.tsx:16  CODE-RED-003  Magic string "horizontal" appears 7 times — promote to enum or const.
    [error] src/components/ui/chart.tsx:34  CODE-RED-003  Magic string "div" appears 3 times — promote to enum or const.
    [error] src/components/ui/chart.tsx:101  CODE-RED-003  Magic string "dot" appears 5 times — promote to enum or const.
@@ -463,16 +545,19 @@
    [error] src/components/ui/sidebar.tsx:439  CODE-RED-003  Magic string "default" appears 4 times — promote to enum or const.
    [error] src/components/ui/sidebar.tsx:598  CODE-RED-003  Magic string "md" appears 3 times — promote to enum or const.
    [error] src/hooks/collapsible/extractFormattedText.ts:26  CODE-RED-003  Magic string ", " appears 4 times — promote to enum or const.
-   [error] src/hooks/collapsible/wrapSections.ts:63  CODE-RED-003  Magic string "div" appears 5 times — promote to enum or const.
    [error] src/hooks/collapsible/h1ActionsMenu.ts:29  CODE-RED-003  Magic string "click" appears 3 times — promote to enum or const.
    [error] src/hooks/collapsible/h1ActionsMenu.ts:32  CODE-RED-003  Magic string "none" appears 5 times — promote to enum or const.
+   [error] src/hooks/collapsible/wrapSections.ts:63  CODE-RED-003  Magic string "div" appears 5 times — promote to enum or const.
    [error] src/pages/CodeReviewChecklist.tsx:81  CODE-RED-003  Magic string "ghost" appears 3 times — promote to enum or const.
    [error] src/pages/CodeReviewChecklist.tsx:86  CODE-RED-003  Magic string "sm" appears 3 times — promote to enum or const.
    [error] src/pages/CodeReviewChecklist.tsx:144  CODE-RED-003  Magic string "text-xs" appears 3 times — promote to enum or const.
-   [error] src/pages/LandingPage.tsx:59  CODE-RED-003  Magic string "lg" appears 3 times — promote to enum or const.
-   [error] src/pages/LandingPage.tsx:114  CODE-RED-003  Magic string "mb-12 text-center" appears 3 times — promote to enum or const.
-   [error] src/pages/LandingPage.tsx:115  CODE-RED-003  Magic string "mb-3 text-3xl font-bold text-foreground" appears 3 times — promote to enum or const.
-   [error] src/pages/LandingPage.tsx:116  CODE-RED-003  Magic string "text-muted-foreground" appears 3 times — promote to enum or const.
+   [error] src/pages/LandingPage.tsx:59  CODE-RED-003  Magic string "lg" appears 4 times — promote to enum or const.
+   [error] src/pages/LandingPage.tsx:62  CODE-RED-003  Magic string "outline" appears 3 times — promote to enum or const.
+   [error] src/pages/LandingPage.tsx:117  CODE-RED-003  Magic string "mb-12 text-center" appears 3 times — promote to enum or const.
+   [error] src/pages/LandingPage.tsx:118  CODE-RED-003  Magic string "mb-3 text-3xl font-bold text-foreground" appears 3 times — promote to enum or const.
+   [error] src/pages/LandingPage.tsx:119  CODE-RED-003  Magic string "text-muted-foreground" appears 3 times — promote to enum or const.
+   [error] src/pages/ReadmeEditor.tsx:16  CODE-RED-003  Magic string "2-digit" appears 4 times — promote to enum or const.
+   [error] src/pages/ReadmeEditor.tsx:81  CODE-RED-003  Magic string "space-y-2" appears 4 times — promote to enum or const.
 ❌ coding-guidelines-function-length-go: 15 finding(s)
    [error] linter-scripts/validate-guidelines.go:136  CODE-RED-004  Function 'checkNestedIf' has 35 effective lines (max 15).
    [error] linter-scripts/validate-guidelines.go:188  CODE-RED-004  Function 'checkBooleanNaming' has 30 effective lines (max 15).
@@ -489,12 +574,13 @@
    [error] linter-scripts/validate-guidelines.go:853  CODE-RED-004  Function 'validateFile' has 25 effective lines (max 15).
    [error] linter-scripts/validate-guidelines.go:892  CODE-RED-004  Function 'printReport' has 53 effective lines (max 15).
    [error] linter-scripts/validate-guidelines.go:963  CODE-RED-004  Function 'main' has 49 effective lines (max 15).
-❌ coding-guidelines-function-length-ts: 58 finding(s)
-   [error] eslint-plugins/coding-guidelines/index.js:39  CODE-RED-004  Function 'create' has 34 effective lines (max 15).
-   [error] eslint-plugins/coding-guidelines/index.js:94  CODE-RED-004  Function 'create' has 33 effective lines (max 15).
-   [error] eslint-plugins/coding-guidelines/index.js:150  CODE-RED-004  Function 'create' has 28 effective lines (max 15).
-   [error] eslint-plugins/coding-guidelines/index.js:198  CODE-RED-004  Function 'create' has 20 effective lines (max 15).
-   [error] eslint-plugins/coding-guidelines/index.js:237  CODE-RED-004  Function 'create' has 25 effective lines (max 15).
+✅ coding-guidelines-function-length-php: clean
+❌ coding-guidelines-function-length-ts: 99 finding(s)
+   [error] eslint-plugins/coding-guidelines/index.js:41  CODE-RED-004  Function 'create' has 34 effective lines (max 15).
+   [error] eslint-plugins/coding-guidelines/index.js:96  CODE-RED-004  Function 'create' has 33 effective lines (max 15).
+   [error] eslint-plugins/coding-guidelines/index.js:152  CODE-RED-004  Function 'create' has 28 effective lines (max 15).
+   [error] eslint-plugins/coding-guidelines/index.js:313  CODE-RED-004  Function 'create' has 25 effective lines (max 15).
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:28  CODE-RED-004  Function 'countEffective' has 21 effective lines (max 15).
    [error] linter-scripts/generate-dashboard-data.cjs:68  CODE-RED-004  Function 'extractLinks' has 25 effective lines (max 15).
    [error] linter-scripts/generate-dashboard-data.cjs:100  CODE-RED-004  Function 'validateLinks' has 23 effective lines (max 15).
    [error] linter-scripts/generate-dashboard-data.cjs:132  CODE-RED-004  Function 'checkRequiredFiles' has 16 effective lines (max 15).
@@ -505,13 +591,25 @@
    [error] scripts/ci-config.mjs:152  CODE-RED-004  Function 'handleMapEntry' has 21 effective lines (max 15).
    [error] scripts/ci-config.mjs:223  CODE-RED-004  Function 'validateConfig' has 21 effective lines (max 15).
    [error] scripts/ci-config.mjs:318  CODE-RED-004  Function 'main' has 28 effective lines (max 15).
-   [error] scripts/generate-bundle-installers.mjs:51  CODE-RED-004  Function 'bashScript' has 435 effective lines (max 15).
-   [error] scripts/generate-bundle-installers.mjs:522  CODE-RED-004  Function 'powershellScript' has 361 effective lines (max 15).
+   [error] scripts/generate-bundle-installers.mjs:51  CODE-RED-004  Function 'bashScript' has 580 effective lines (max 15).
+   [error] scripts/generate-bundle-installers.mjs:671  CODE-RED-004  Function 'powershellScript' has 475 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:64  CODE-RED-004  Function 'parseArgs' has 41 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:134  CODE-RED-004  Function 'listChangedSpecFiles' has 21 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:187  CODE-RED-004  Function 'parseValidator' has 22 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:214  CODE-RED-004  Function 'parseCrossLink' has 19 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:253  CODE-RED-004  Function 'scanPendingPlaceholders' has 77 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:365  CODE-RED-004  Function 'buildHtml' has 157 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:539  CODE-RED-004  Function 'tryRenderPdf' has 29 effective lines (max 15).
+   [error] scripts/spec-change-report.mjs:580  CODE-RED-004  Function 'main' has 44 effective lines (max 15).
+   [error] scripts/sync-check.mjs:203  CODE-RED-004  Function 'detectDrift' has 38 effective lines (max 15).
+   [error] scripts/sync-check.mjs:257  CODE-RED-004  Function 'main' has 66 effective lines (max 15).
    [error] scripts/sync-health-score.mjs:55  CODE-RED-004  Function 'buildPayload' has 21 effective lines (max 15).
    [error] scripts/sync-readme-stats.mjs:64  CODE-RED-004  Function 'buildPlatformBadges' has 19 effective lines (max 15).
    [error] scripts/sync-version.mjs:134  CODE-RED-004  Function 'walkStats' has 24 effective lines (max 15).
-   [error] scripts/sync-version.mjs:189  CODE-RED-004  Function 'listSpecFolders' has 16 effective lines (max 15).
-   [error] scripts/sync-version.mjs:300  CODE-RED-004  Function 'logSummary' has 17 effective lines (max 15).
+   [error] scripts/sync-version.mjs:189  CODE-RED-004  Function 'listSpecFolders' has 17 effective lines (max 15).
+   [error] scripts/sync-version.mjs:303  CODE-RED-004  Function 'logSummary' has 17 effective lines (max 15).
+   [error] scripts/docs/check-doc-links.mjs:81  CODE-RED-004  Function 'reportFile' has 21 effective lines (max 15).
+   [error] scripts/docs/check-doc-links.mjs:105  CODE-RED-004  Function 'main' has 21 effective lines (max 15).
    [error] scripts/spec-audit/run-audit.mjs:34  CODE-RED-004  Function 'buildPrompt' has 20 effective lines (max 15).
    [error] scripts/spec-audit/run-audit.mjs:100  CODE-RED-004  Function 'summarize' has 21 effective lines (max 15).
    [error] scripts/spec-audit/run-audit.mjs:138  CODE-RED-004  Function 'writeMarkdown' has 45 effective lines (max 15).
@@ -533,8 +631,30 @@
    [error] slides-app/src/components/ScaledSlide.tsx:9  CODE-RED-004  Function 'ScaledSlide' has 30 effective lines (max 15).
    [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:27  CODE-RED-004  Function 'extractEcosystemCodes' has 16 effective lines (max 15).
    [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:51  CODE-RED-004  Function 'main' has 165 effective lines (max 15).
+   [error] src/components/dashboard/DashboardHeader.tsx:10  CODE-RED-004  Function 'DashboardHeader' has 25 effective lines (max 15).
+   [error] src/components/dashboard/HealthTrendCard.tsx:33  CODE-RED-004  Function 'HealthTrendCard' has 62 effective lines (max 15).
+   [error] src/components/dashboard/IssueLogCard.tsx:12  CODE-RED-004  Function 'IssueLogCard' has 25 effective lines (max 15).
+   [error] src/components/dashboard/IssueLogCard.tsx:41  CODE-RED-004  Function 'IssueRow' has 22 effective lines (max 15).
+   [error] src/components/dashboard/RecentRunsTimeline.tsx:12  CODE-RED-004  Function 'RecentRunsTimeline' has 25 effective lines (max 15).
+   [error] src/components/dashboard/RecentRunsTimeline.tsx:41  CODE-RED-004  Function 'RunRow' has 24 effective lines (max 15).
+   [error] src/components/dashboard/RuleStatusGrid.tsx:12  CODE-RED-004  Function 'RuleStatusGrid' has 25 effective lines (max 15).
+   [error] src/components/dashboard/RuleStatusGrid.tsx:41  CODE-RED-004  Function 'RuleRow' has 16 effective lines (max 15).
+   [error] src/components/docs/CommandPalette.tsx:83  CODE-RED-004  Function 'QuickJumpGroup' has 17 effective lines (max 15).
+   [error] src/components/docs/CommandPalette.tsx:108  CODE-RED-004  Function 'FolderOverviewsGroup' has 22 effective lines (max 15).
+   [error] src/components/docs/CommandPalette.tsx:142  CODE-RED-004  Function 'AllFilesGroup' has 17 effective lines (max 15).
+   [error] src/components/docs/CommandPalette.tsx:163  CODE-RED-004  Function 'CommandPalette' has 21 effective lines (max 15).
+   [error] src/components/docs/DocsSidebar.tsx:181  CODE-RED-004  Function 'DocsSidebar' has 35 effective lines (max 15).
+   [error] src/components/docs/GithubSyncBanner.tsx:94  CODE-RED-004  Function 'SyncDetails' has 18 effective lines (max 15).
+   [error] src/components/docs/GithubSyncBanner.tsx:115  CODE-RED-004  Function 'BannerActions' has 21 effective lines (max 15).
+   [error] src/components/docs/GithubSyncBanner.tsx:139  CODE-RED-004  Function 'GithubSyncBanner' has 23 effective lines (max 15).
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:53  CODE-RED-004  Function 'PanelHeader' has 16 effective lines (max 15).
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:90  CODE-RED-004  Function 'PanelActions' has 27 effective lines (max 15).
    [error] src/components/docs/search/HighlightedText.tsx:49  CODE-RED-004  Function 'renderHighlightedRanges' has 17 effective lines (max 15).
-   [error] src/components/docs/search/useSearchKeyboard.ts:40  CODE-RED-004  Function 'handleSearchKeyDown' has 18 effective lines (max 15).
+   [error] src/components/docs/search/useSearchKeyboard.ts:43  CODE-RED-004  Function 'handleSearchKeyDown' has 18 effective lines (max 15).
+   [error] src/components/landing/InstallSection.tsx:37  CODE-RED-004  Function 'InstallCard' has 21 effective lines (max 15).
+   [error] src/components/landing/InstallSection.tsx:61  CODE-RED-004  Function 'InstallSection' has 35 effective lines (max 15).
+   [error] src/components/landing/install/BundleCard.tsx:46  CODE-RED-004  Function 'BundleCard' has 20 effective lines (max 15).
+   [error] src/components/landing/install/CommandRow.tsx:83  CODE-RED-004  Function 'CommandRow' has 35 effective lines (max 15).
    [error] src/components/markdown/codeBlockLineHandlers.ts:150  CODE-RED-004  Function 'createLineKeyHandler' has 16 effective lines (max 15).
    [error] src/components/ui/calendar.tsx:10  CODE-RED-004  Function 'Calendar' has 40 effective lines (max 15).
    [error] src/components/ui/chart.tsx:62  CODE-RED-004  Function 'ChartStyle' has 24 effective lines (max 15).
@@ -543,21 +663,759 @@
    [error] src/components/ui/sonner.tsx:6  CODE-RED-004  Function 'Toaster' has 17 effective lines (max 15).
    [error] src/components/ui/toaster.tsx:4  CODE-RED-004  Function 'Toaster' has 18 effective lines (max 15).
    [error] src/hooks/use-toast.ts:112  CODE-RED-004  Function 'reducer' has 19 effective lines (max 15).
+   [error] src/hooks/useCountUp.ts:15  CODE-RED-004  Function 'useCountUp' has 39 effective lines (max 15).
    [error] src/hooks/useDocsKeyboard.ts:145  CODE-RED-004  Function 'handleViewModeKeys' has 17 effective lines (max 15).
    [error] src/hooks/collapsible/extractFormattedText.ts:84  CODE-RED-004  Function 'extractByTag' has 19 effective lines (max 15).
    [error] src/hooks/collapsible/wrapSections.ts:28  CODE-RED-004  Function 'groupChildrenByH2' has 16 effective lines (max 15).
    [error] src/lib/clipboard.ts:3  CODE-RED-004  Function 'copyTextToClipboard' has 19 effective lines (max 15).
-   [error] src/pages/DocsViewerComponents.tsx:219  CODE-RED-004  Function 'useCollapseShortcut' has 16 effective lines (max 15).
-❌ coding-guidelines-file-length: 11 finding(s)
-   [error] eslint-plugins/coding-guidelines/index.js:301  CODE-RED-006  File has 341 lines (max 300) — split by responsibility.
+   [error] src/pages/DocsViewer.tsx:14  CODE-RED-004  Function 'useDocsViewerState' has 31 effective lines (max 15).
+   [error] src/pages/DocsViewerComponents.tsx:239  CODE-RED-004  Function 'useCollapseShortcut' has 16 effective lines (max 15).
+   [error] src/pages/Index.tsx:56  CODE-RED-004  Function 'IndexHero' has 29 effective lines (max 15).
+   [error] src/pages/Index.tsx:88  CODE-RED-004  Function 'IndexHighlights' has 19 effective lines (max 15).
+   [error] src/pages/Index.tsx:123  CODE-RED-004  Function 'PillarCardView' has 20 effective lines (max 15).
+   [error] src/pages/LandingPage.tsx:56  CODE-RED-004  Function 'HeroButtons' has 16 effective lines (max 15).
+   [error] src/pages/ReadmeEditor.tsx:45  CODE-RED-004  Function 'ReadmeEditor' has 61 effective lines (max 15).
+❌ coding-guidelines-function-length-prefer8-go: 18 finding(s)
+   [error] linter-scripts/validate-guidelines.go:81  CODE-RED-005  Function 'detectLanguage' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:119  CODE-RED-005  Function 'hasBoolPrefix' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:136  CODE-RED-005  Function 'checkNestedIf' has 35 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:188  CODE-RED-005  Function 'checkBooleanNaming' has 30 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:231  CODE-RED-005  Function 'checkMagicStrings' has 48 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:295  CODE-RED-005  Function 'checkFunctionLength' has 57 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:370  CODE-RED-005  Function 'checkGoSpecific' has 50 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:441  CODE-RED-005  Function 'checkMagicNumbers' has 47 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:509  CODE-RED-005  Function 'checkVariableMutation' has 64 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:591  CODE-RED-005  Function 'checkStyleRules' has 41 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:681  CODE-RED-005  Function 'shouldSkip' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:717  CODE-RED-005  Function 'checkNegativeWords' has 20 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:746  CODE-RED-005  Function 'checkBangOnCall' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:789  CODE-RED-005  Function 'checkBareBoolArgs' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:822  CODE-RED-005  Function 'checkAssignInCondition' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:853  CODE-RED-005  Function 'validateFile' has 25 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:892  CODE-RED-005  Function 'printReport' has 53 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.go:963  CODE-RED-005  Function 'main' has 49 effective lines (strict cap 8).
+✅ coding-guidelines-function-length-prefer8-php: clean
+❌ coding-guidelines-function-length-prefer8-py: 389 finding(s)
+   [error] linter-scripts/allowlist-forbidden-string.py:118  CODE-RED-005  Function 'find_matching_paths' has 41 effective lines (strict cap 8).
+   [error] linter-scripts/allowlist-forbidden-string.py:171  CODE-RED-005  Function 'validate_paths' has 26 effective lines (strict cap 8).
+   [error] linter-scripts/allowlist-forbidden-string.py:214  CODE-RED-005  Function 'locate_rule_block' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/allowlist-forbidden-string.py:313  CODE-RED-005  Function 'parse_args' has 43 effective lines (strict cap 8).
+   [error] linter-scripts/allowlist-forbidden-string.py:359  CODE-RED-005  Function 'main' has 79 effective lines (strict cap 8).
+   [error] linter-scripts/check-forbidden-strings.py:60  CODE-RED-005  Function 'scan_rule' has 32 effective lines (strict cap 8).
+   [error] linter-scripts/check-forbidden-strings.py:103  CODE-RED-005  Function 'main' has 27 effective lines (strict cap 8).
+   [error] linter-scripts/check-function-lengths.py:49  CODE-RED-005  Function 'measure_braced_block' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/check-function-lengths.py:69  CODE-RED-005  Function 'scan_file' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/check-function-lengths.py:88  CODE-RED-005  Function 'discover_targets' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/check-function-lengths.py:100  CODE-RED-005  Function 'main' has 27 effective lines (strict cap 8).
+   [error] linter-scripts/check-memory-mirror-drift.py:60  CODE-RED-005  Function 'main' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:322  CODE-RED-005  Function 'strip_code_fences' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:362  CODE-RED-005  Function '_validate_intent' has 34 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:409  CODE-RED-005  Function '_validate_body' has 30 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:445  CODE-RED-005  Function 'lint_file' has 92 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:564  CODE-RED-005  Function '_consume_block' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:587  CODE-RED-005  Function '_canonical_target' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:605  CODE-RED-005  Function 'main' has 581 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:1464  CODE-RED-005  Function '_score_kind_for' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:1486  CODE-RED-005  Function '_write_similarity_csv' has 67 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:1627  CODE-RED-005  Function '_render_similarity_legend' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:1681  CODE-RED-005  Function '_render_changed_files_audit' has 217 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:1972  CODE-RED-005  Function '_normalize_diff_base' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:1996  CODE-RED-005  Function '_resolve_changed_md' has 137 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2205  CODE-RED-005  Function '_unquote_git_path' has 34 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2256  CODE-RED-005  Function '_parse_name_status' has 69 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2366  CODE-RED-005  Function '_normalise_changed_lines' has 96 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2575  CODE-RED-005  Function '_select_hunk' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2596  CODE-RED-005  Function 'render' has 42 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2663  CODE-RED-005  Function 'render_structured' has 58 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2737  CODE-RED-005  Function 'suggest_patch' has 58 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2826  CODE-RED-005  Function '_parse_unified_diff_post' has 76 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2926  CODE-RED-005  Function '_fetch_diff_excerpts' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:2999  CODE-RED-005  Function '_format_github_annotations' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/check-placeholder-comments.py:3096  CODE-RED-005  Function '_cache_segment' has 25 effective lines (strict cap 8).
+   [error] linter-scripts/check-prompts-loaded.py:80  CODE-RED-005  Function 'report' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/check-prompts-loaded.py:105  CODE-RED-005  Function 'main' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-canonicals.py:54  CODE-RED-005  Function 'find_github_violations' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-canonicals.py:89  CODE-RED-005  Function 'main' has 36 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:58  CODE-RED-005  Function 'main' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:93  CODE-RED-005  Function 'check_section_position' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:143  CODE-RED-005  Function 'check_bundle_section_position' has 27 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:195  CODE-RED-005  Function 'check_install_fences' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:225  CODE-RED-005  Function 'update_zone' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:237  CODE-RED-005  Function 'try_open_fence' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/check-readme-install-section.py:254  CODE-RED-005  Function 'validate_fence_body' has 32 effective lines (strict cap 8).
+   [error] linter-scripts/check-root-readme.py:64  CODE-RED-005  Function 'count_badges' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/check-root-readme.py:97  CODE-RED-005  Function 'collect_violations' has 24 effective lines (strict cap 8).
+   [error] linter-scripts/check-root-readme.py:138  CODE-RED-005  Function 'main' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:33  CODE-RED-005  Function 'slugify' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:54  CODE-RED-005  Function 'strip_code_fences' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:112  CODE-RED-005  Function 'load_allowlist' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:164  CODE-RED-005  Function 'check_link' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:182  CODE-RED-005  Function 'scan' has 32 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:217  CODE-RED-005  Function 'emit_human' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-cross-links.py:246  CODE-RED-005  Function 'main' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-folder-refs.py:102  CODE-RED-005  Function 'load_allowlist' has 24 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-folder-refs.py:149  CODE-RED-005  Function 'collect_relative_refs' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/check-spec-folder-refs.py:194  CODE-RED-005  Function 'render_guidance' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:108  CODE-RED-005  Function 'scan_rule' has 31 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:148  CODE-RED-005  Function 'collect_unique_matches' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:197  CODE-RED-005  Function 'render_text' has 43 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:243  CODE-RED-005  Function 'render_markdown' has 46 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:296  CODE-RED-005  Function 'parse_args' has 20 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:319  CODE-RED-005  Function 'select_rules' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/forbidden-strings-summary.py:331  CODE-RED-005  Function 'main' has 34 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:63  CODE-RED-005  Function 'strip_code_fences' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:98  CODE-RED-005  Function 'load_allowlist' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:121  CODE-RED-005  Function 'best_file_match' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:141  CODE-RED-005  Function 'best_heading_match' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:156  CODE-RED-005  Function 'relativize' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:173  CODE-RED-005  Function 'find_link_failures' has 45 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:222  CODE-RED-005  Function 'build_suggestions' has 26 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:259  CODE-RED-005  Function 'emit_human' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:284  CODE-RED-005  Function 'apply_fixes' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/suggest-spec-cross-link-fixes.py:318  CODE-RED-005  Function 'main' has 25 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:84  CODE-RED-005  Function 'detect_language' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:100  CODE-RED-005  Function 'check_nested_if' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:135  CODE-RED-005  Function 'check_boolean_naming' has 29 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:173  CODE-RED-005  Function 'check_magic_strings' has 36 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:222  CODE-RED-005  Function 'check_function_length' has 42 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:284  CODE-RED-005  Function 'check_go_specific' has 34 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:331  CODE-RED-005  Function 'check_magic_numbers' has 65 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:426  CODE-RED-005  Function 'check_variable_mutation' has 55 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:524  CODE-RED-005  Function 'check_parameter_count' has 30 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:570  CODE-RED-005  Function 'check_no_any_type' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:601  CODE-RED-005  Function 'check_error_swallowing' has 36 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:653  CODE-RED-005  Function 'check_php_throwable' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:669  CODE-RED-005  Function 'check_sequential_async' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:691  CODE-RED-005  Function 'check_sql_injection' has 27 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:734  CODE-RED-005  Function 'check_go_raw_errors' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:755  CODE-RED-005  Function 'check_mixed_operators' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:781  CODE-RED-005  Function 'check_style_rules' has 57 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:863  CODE-RED-005  Function 'check_generic_file_errors' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:922  CODE-RED-005  Function 'check_negative_words' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:950  CODE-RED-005  Function 'check_bang_on_call' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:980  CODE-RED-005  Function 'check_bare_bool_args' has 20 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:1011  CODE-RED-005  Function 'check_assignment_in_condition' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:1067  CODE-RED-005  Function 'validate_file' has 44 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:1127  CODE-RED-005  Function 'main' has 33 effective lines (strict cap 8).
+   [error] linter-scripts/validate-guidelines.py:1171  CODE-RED-005  Function 'print_report' has 31 effective lines (strict cap 8).
+   [error] linter-scripts/validate-rename-intake.py:67  CODE-RED-005  Function '_build_json_schema' has 52 effective lines (strict cap 8).
+   [error] linter-scripts/validate-rename-intake.py:146  CODE-RED-005  Function '_validate_similarity' has 50 effective lines (strict cap 8).
+   [error] linter-scripts/validate-rename-intake.py:204  CODE-RED-005  Function '_validate' has 53 effective lines (strict cap 8).
+   [error] linter-scripts/validate-rename-intake.py:265  CODE-RED-005  Function '_read_input' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/validate-rename-intake.py:280  CODE-RED-005  Function 'main' has 85 effective lines (strict cap 8).
+   [error] linter-scripts/tests/_audit_parse_helpers.py:76  CODE-RED-005  Function 'parse_text_audit_rows' has 26 effective lines (strict cap 8).
+   [error] linter-scripts/tests/_audit_parse_helpers.py:116  CODE-RED-005  Function 'parse_json_audit_rows' has 27 effective lines (strict cap 8).
+   [error] linter-scripts/tests/_audit_parse_helpers.py:150  CODE-RED-005  Function '_find_matching_bracket' has 28 effective lines (strict cap 8).
+   [error] linter-scripts/tests/_audit_parse_helpers.py:184  CODE-RED-005  Function 'parse_csv_audit_rows' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/conftest_shim.py:46  CODE-RED-005  Function '_load' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_parse_helpers_trailing_summary.py:242  CODE-RED-005  Function 'test_path_status_pairs_agree' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:110  CODE-RED-005  Function 'run' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:122  CODE-RED-005  Function '_audit_in_process' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:165  CODE-RED-005  Function 'test_every_row_has_non_empty_reason' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:245  CODE-RED-005  Function '_rows' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:259  CODE-RED-005  Function 'test_every_text_row_has_visible_reason_cell' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:294  CODE-RED-005  Function 'test_every_csv_row_has_non_empty_reason_cell' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:318  CODE-RED-005  Function 'test_csv_audit_covers_every_known_status' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:74  CODE-RED-005  Function 'test_default_extension_writes_under_ext_md' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:85  CODE-RED-005  Function 'test_alternate_extension_writes_under_ext_mdx' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:96  CODE-RED-005  Function 'test_combined_extensions_sort_into_canonical_segment' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:115  CODE-RED-005  Function 'test_extensions_strip_leading_dot_and_lowercase' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:132  CODE-RED-005  Function 'test_md_sentinel_does_not_satisfy_mdx_lookup' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:153  CODE-RED-005  Function 'test_repeat_default_run_hits_ext_md_segment' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_cache_segregation.py:168  CODE-RED-005  Function 'test_no_cache_write_does_not_create_segment' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_case_insensitive_extensions.py:59  CODE-RED-005  Function 'test_yields_uppercase_and_mixed_case_md' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_case_insensitive_extensions.py:92  CODE-RED-005  Function 'test_uppercase_md_path_is_matched_and_linted' has 24 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_case_insensitive_extensions.py:121  CODE-RED-005  Function 'test_uppercase_txt_still_ignored_extension' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_check_prompts_loaded.py:37  CODE-RED-005  Function 'make_layout' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_dedupe_changed_files_flag.py:58  CODE-RED-005  Function 'test_text_mode_collapses_duplicates_and_reports_count' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_dedupe_changed_files_flag.py:84  CODE-RED-005  Function 'test_json_mode_reflects_collapse_in_array_length' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_dedupe_changed_files_flag.py:111  CODE-RED-005  Function 'test_idempotent_when_no_duplicates' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_dedupe_changed_files_flag.py:129  CODE-RED-005  Function 'test_flag_without_list_changed_files_is_noop' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_dedupe_changed_files_flag.py:152  CODE-RED-005  Function 'test_first_seen_status_wins_across_mixed_statuses' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_dedupe_changed_files_flag.py:174  CODE-RED-005  Function 'test_idempotent_on_already_unique_input' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_diff_prev_shorthand.py:144  CODE-RED-005  Function 'test_diff_prev_mutex_with_changed_files' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_example_payload_coverage.py:78  CODE-RED-005  Function 'test_similarity_object_shape_is_canonical' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_example_payload_coverage.py:97  CODE-RED-005  Function 'test_each_status_covers_scored_and_null_when_meaningful' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_audit_coverage.py:68  CODE-RED-005  Function 'run' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_audit_coverage.py:133  CODE-RED-005  Function 'test_mixed_intake_keeps_buckets_separate' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_audit_coverage.py:183  CODE-RED-005  Function 'test_input_order_preserved_across_mixed_intake' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_audit_coverage.py:213  CODE-RED-005  Function 'test_matched_always_wins_over_delete_under_dedupe' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason.py:29  CODE-RED-005  Function '_audit_for' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_cross_surface_parity.py:105  CODE-RED-005  Function 'run' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_cross_surface_parity.py:117  CODE-RED-005  Function '_text_deleted_pairs' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_cross_surface_parity.py:160  CODE-RED-005  Function 'setUpClass' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_cross_surface_parity.py:228  CODE-RED-005  Function 'test_reason_matches_text_vs_json_per_pair' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_cross_surface_parity.py:244  CODE-RED-005  Function 'test_reason_matches_json_vs_csv_per_pair' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_cross_surface_parity.py:257  CODE-RED-005  Function 'test_reason_matches_text_vs_csv_per_pair' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:65  CODE-RED-005  Function '_audit_via_changed_files' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:152  CODE-RED-005  Function 'test_no_deleted_row_uses_the_fallback_string' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:224  CODE-RED-005  Function 'run' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:252  CODE-RED-005  Function 'test_every_deleted_row_in_json_has_allowed_reason' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:297  CODE-RED-005  Function 'test_text_table_reasons_in_allow_list' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:316  CODE-RED-005  Function 'test_csv_deleted_rows_have_allowed_reason' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:354  CODE-RED-005  Function 'test_text_json_csv_emit_identical_path_reason_pairs' has 25 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:43  CODE-RED-005  Function '_make_repo' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:62  CODE-RED-005  Function 'test_flag_off_keeps_md_only_baseline' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:76  CODE-RED-005  Function 'test_flag_on_unions_with_default' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:92  CODE-RED-005  Function 'test_explicit_baseline_is_preserved' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:107  CODE-RED-005  Function 'test_idempotent_with_explicit_mdx' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:133  CODE-RED-005  Function 'test_flag_form_hits_sentinel_from_long_form' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:155  CODE-RED-005  Function 'test_long_form_hits_sentinel_from_flag_form' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_mdx_flag.py:180  CODE-RED-005  Function 'test_mdx_violation_is_reported_with_flag' has 20 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_txt_flag.py:47  CODE-RED-005  Function '_make_repo' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_txt_flag.py:74  CODE-RED-005  Function 'test_default_baseline_unioned_with_txt' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_txt_flag.py:95  CODE-RED-005  Function 'test_off_by_default_keeps_md_only_baseline' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_txt_flag.py:115  CODE-RED-005  Function 'test_explicit_extension_drops_md_baseline' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_txt_flag.py:135  CODE-RED-005  Function 'test_idempotent_with_explicit_txt_extension' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_include_txt_flag.py:155  CODE-RED-005  Function 'test_composes_with_include_mdx' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_flag.py:51  CODE-RED-005  Function 'test_all_five_statuses_via_changed_files' has 34 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_flag.py:94  CODE-RED-005  Function 'test_json_audit_goes_to_stderr_stdout_stays_parseable' has 28 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_flag.py:127  CODE-RED-005  Function 'test_flag_omitted_means_no_audit_output' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_flag.py:144  CODE-RED-005  Function 'test_flag_outside_diff_mode_is_noop' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_flag.py:178  CODE-RED-005  Function 'test_parse_name_status_captures_d_rows' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_json_reason_schema.py:95  CODE-RED-005  Function 'run_json' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_json_reason_schema.py:207  CODE-RED-005  Function 'test_every_verbose_row_reason_is_non_empty_string' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_json_reason_schema.py:229  CODE-RED-005  Function 'test_verbose_source_is_string_on_deleted_rows' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:54  CODE-RED-005  Function '_audit_fixture' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:97  CODE-RED-005  Function 'test_verbose_source_is_null_on_non_deleted_rows' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:108  CODE-RED-005  Function 'test_verbose_source_carries_raw_provenance_tag' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:153  CODE-RED-005  Function 'test_verbose_renders_dash_for_non_deleted_rows' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:169  CODE-RED-005  Function 'test_verbose_renders_raw_tag_for_deleted_rows' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:180  CODE-RED-005  Function 'test_verbose_with_similarity_keeps_columns_in_order' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:209  CODE-RED-005  Function '_run_changed_files' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:231  CODE-RED-005  Function 'test_changed_files_payload_d_row_surfaces_changed_files_d' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:254  CODE-RED-005  Function 'test_legacy_schema_unchanged_when_flag_off' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:276  CODE-RED-005  Function 'test_verbose_composes_with_with_similarity' has 20 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:304  CODE-RED-005  Function 'test_verbose_composes_with_only_changed_status_filter' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:323  CODE-RED-005  Function 'test_verbose_no_op_outside_diff_mode' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:48  CODE-RED-005  Function '_setup_mixed_intake' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:70  CODE-RED-005  Function 'test_single_status_filters_to_matched_only' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:88  CODE-RED-005  Function 'test_repeatable_acts_as_union' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:109  CODE-RED-005  Function 'test_filter_does_not_change_totals_footer' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:132  CODE-RED-005  Function 'test_filter_hiding_everything_shows_explicit_message' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:155  CODE-RED-005  Function 'test_dedupe_runs_before_filter' has 20 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:186  CODE-RED-005  Function 'test_unknown_status_rejected_by_argparse' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_only_changed_status_flag.py:200  CODE-RED-005  Function 'test_noop_without_list_flag' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:72  CODE-RED-005  Function 'test_file_headers_only_no_hunk' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:125  CODE-RED-005  Function 'test_blank_context_line_advances_counter' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:139  CODE-RED-005  Function 'test_two_consecutive_blank_lines' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:152  CODE-RED-005  Function 'test_blank_added_line_via_plus_space' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:192  CODE-RED-005  Function 'test_single_removal_does_not_shift_counter' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:205  CODE-RED-005  Function 'test_multiple_removals_then_addition' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:250  CODE-RED-005  Function 'test_no_newline_marker_does_not_advance_counter' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:268  CODE-RED-005  Function 'test_two_hunks_record_independent_line_numbers' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:291  CODE-RED-005  Function 'test_unknown_intra_hunk_row_aborts_current_hunk' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:331  CODE-RED-005  Function 'test_render_centers_on_violation_line' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:352  CODE-RED-005  Function 'test_render_far_outside_falls_back_to_nearest_hunk' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:418  CODE-RED-005  Function 'test_swap_for_context_line_violation' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:442  CODE-RED-005  Function 'test_insert_after_added_line_violation' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_export.py:65  CODE-RED-005  Function 'test_scored_rename_writes_integer_score' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_export.py:76  CODE-RED-005  Function 'test_unscored_rename_leaves_score_cell_empty' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_export.py:89  CODE-RED-005  Function 'test_zero_score_is_distinct_from_unscored' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_export.py:109  CODE-RED-005  Function 'test_paths_with_commas_and_quotes_roundtrip' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_export.py:122  CODE-RED-005  Function 'test_dash_target_writes_to_stdout' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_export.py:138  CODE-RED-005  Function 'test_mixed_batch_preserves_input_order' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_format.py:52  CODE-RED-005  Function '_sample_rows' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:51  CODE-RED-005  Function '_setup_intake' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:84  CODE-RED-005  Function '_run' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:107  CODE-RED-005  Function 'test_csv_row_count_matches_stderr_audit' has 22 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:134  CODE-RED-005  Function 'test_csv_path_status_pairs_match_stderr' has 14 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:156  CODE-RED-005  Function 'test_score_empty_vs_zero_semantics_match_stderr' has 39 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:213  CODE-RED-005  Function 'test_csv_contains_both_empty_and_zero_score_cells' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_csv_stderr_parity.py:238  CODE-RED-005  Function 'test_parity_holds_under_only_changed_status_filter' has 17 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_labels_flag.py:41  CODE-RED-005  Function '_sample_rows' has 26 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_labels_flag.py:122  CODE-RED-005  Function 'test_label_added_to_each_kind_when_on' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:103  CODE-RED-005  Function 'test_auto_on_when_stream_is_a_pty' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:143  CODE-RED-005  Function '_render' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:218  CODE-RED-005  Function 'test_default_auto_quiet_under_subprocess_pipe' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:242  CODE-RED-005  Function 'test_explicit_on_emits_legend_under_pipe' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:262  CODE-RED-005  Function 'test_explicit_off_suppresses_legend' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:284  CODE-RED-005  Function 'test_legend_noop_without_with_similarity' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:303  CODE-RED-005  Function 'test_legend_noop_in_json_mode' has 18 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:326  CODE-RED-005  Function 'test_invalid_choice_rejected_by_argparse' has 15 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_symlinked_uppercase_md.py:47  CODE-RED-005  Function '_symlinks_supported' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_symlinked_uppercase_md.py:95  CODE-RED-005  Function 'test_uppercase_md_via_file_symlink_is_yielded' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_symlinked_uppercase_md.py:144  CODE-RED-005  Function 'test_directory_symlink_is_not_recursed_into' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_symlinked_uppercase_md.py:196  CODE-RED-005  Function 'test_violation_in_symlinked_md_is_reported' has 27 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_symlinked_uppercase_md.py:235  CODE-RED-005  Function 'test_clean_symlinked_md_exits_zero' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_validate_rename_intake.py:69  CODE-RED-005  Function 'test_enriched_with_object_and_null_similarity' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_validate_rename_intake.py:84  CODE-RED-005  Function 'test_labels_mode_with_score_kind' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_validate_rename_intake.py:212  CODE-RED-005  Function 'test_print_schema_legacy_is_valid_draft_2020_12' has 12 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_validate_rename_intake.py:234  CODE-RED-005  Function 'test_print_schema_labels_requires_score_kind' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_validate_rename_intake.py:269  CODE-RED-005  Function '_run_linter' has 13 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_with_similarity_flag.py:101  CODE-RED-005  Function 'test_rename_row_records_kind_score_old' has 9 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_with_similarity_flag.py:165  CODE-RED-005  Function 'test_text_table_shows_extra_columns_and_dashes' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_with_similarity_flag.py:195  CODE-RED-005  Function 'test_off_by_default_keeps_legacy_three_columns' has 19 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_with_similarity_flag.py:223  CODE-RED-005  Function 'test_json_includes_similarity_object_when_flag_set' has 31 effective lines (strict cap 8).
+   [error] linter-scripts/tests/test_with_similarity_flag.py:259  CODE-RED-005  Function 'test_json_omits_similarity_key_without_flag' has 23 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean_column_negative_go_shim.py:25  CODE-RED-005  Function 'scan_text' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean_column_negative_shim.py:28  CODE-RED-005  Function 'scan_text' has 38 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/boolean_naming.py:79  CODE-RED-005  Function 'replacement_hint' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/boolean_naming.py:106  CODE-RED-005  Function 'format_message' has 18 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/cli.py:21  CODE-RED-005  Function 'build_parser' has 16 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/effective_lines.py:59  CODE-RED-005  Function 'count_effective' has 27 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/free_text_columns.py:109  CODE-RED-005  Function 'is_block_waived' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/markdown_links.py:61  CODE-RED-005  Function 'extract_links' has 26 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/markdown_links.py:91  CODE-RED-005  Function 'extract_heading_slugs' has 25 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/markdown_links.py:176  CODE-RED-005  Function '_looks_like_inline_identifier' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/markdown_links.py:209  CODE-RED-005  Function '_slugify' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/per_file_timeout.py:28  CODE-RED-005  Function 'per_file_timeout' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/sarif.py:57  CODE-RED-005  Function 'to_sarif' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/sarif.py:76  CODE-RED-005  Function '_result' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/sarif.py:92  CODE-RED-005  Function 'emit' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/suppressions.py:58  CODE-RED-005  Function 'parse_file_full' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_lib/walker.py:105  CODE-RED-005  Function '_middle_out' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/php.py:65  CODE-RED-005  Function 'scan' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/php.py:88  CODE-RED-005  Function 'main' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/test_template.py:59  CODE-RED-005  Function 'test_php_file_runs_end_to_end_via_cli' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/test_template.py:97  CODE-RED-005  Function 'test_negative_controls_are_not_flagged' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/test_template.py:110  CODE-RED-005  Function 'test_typescript_file_runs_end_to_end_via_cli' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/typescript.py:84  CODE-RED-005  Function 'scan' has 32 effective lines (strict cap 8).
+   [error] linters-cicd/checks/_template/typescript.py:122  CODE-RED-005  Function 'main' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/go.py:130  CODE-RED-005  Function 'scan_struct_tags_v2' has 23 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/go.py:164  CODE-RED-005  Function 'scan_embedded_sql_v2' has 21 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/go.py:189  CODE-RED-005  Function 'scan' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/go.py:204  CODE-RED-005  Function 'main' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/sql.py:78  CODE-RED-005  Function '_scan_tier1' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/sql.py:95  CODE-RED-005  Function '_scan_tier2' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-column-negative/sql.py:112  CODE-RED-005  Function 'main' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-naming/go.py:32  CODE-RED-005  Function 'scan' has 18 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-naming/php.py:33  CODE-RED-005  Function 'scan' has 16 effective lines (strict cap 8).
+   [error] linters-cicd/checks/boolean-naming/typescript.py:38  CODE-RED-005  Function 'scan' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/checks/file-length/universal.py:29  CODE-RED-005  Function 'scan' has 21 effective lines (strict cap 8).
+   [error] linters-cicd/checks/free-text-columns/sql.py:40  CODE-RED-005  Function 'scan' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/free-text-columns/sql.py:54  CODE-RED-005  Function 'main' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/_shared.py:72  CODE-RED-005  Function 'make_finding' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/go.py:22  CODE-RED-005  Function 'scan' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/php.py:25  CODE-RED-005  Function 'scan' has 19 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/python.py:27  CODE-RED-005  Function 'scan' has 16 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/python.py:46  CODE-RED-005  Function '_find_body_end' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/rust.py:30  CODE-RED-005  Function 'scan' has 16 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length-prefer8/typescript.py:22  CODE-RED-005  Function 'scan' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length/go.py:34  CODE-RED-005  Function 'scan' has 29 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length/php.py:34  CODE-RED-005  Function 'scan' has 30 effective lines (strict cap 8).
+   [error] linters-cicd/checks/function-length/typescript.py:46  CODE-RED-005  Function 'scan' has 28 effective lines (strict cap 8).
+   [error] linters-cicd/checks/magic-strings/go.py:28  CODE-RED-005  Function 'scan_file' has 22 effective lines (strict cap 8).
+   [error] linters-cicd/checks/magic-strings/php.py:34  CODE-RED-005  Function 'scan' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/checks/magic-strings/typescript.py:36  CODE-RED-005  Function 'scan_file' has 23 effective lines (strict cap 8).
+   [error] linters-cicd/checks/missing-desc/sql.py:42  CODE-RED-005  Function 'scan' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/checks/missing-desc/sql.py:60  CODE-RED-005  Function 'main' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/checks/nested-if/go.py:25  CODE-RED-005  Function 'scan' has 22 effective lines (strict cap 8).
+   [error] linters-cicd/checks/nested-if/php.py:33  CODE-RED-005  Function 'scan' has 33 effective lines (strict cap 8).
+   [error] linters-cicd/checks/nested-if/typescript.py:31  CODE-RED-005  Function 'scan' has 20 effective lines (strict cap 8).
+   [error] linters-cicd/checks/no-else-after-return/go.py:26  CODE-RED-005  Function 'scan' has 20 effective lines (strict cap 8).
+   [error] linters-cicd/checks/no-else-after-return/typescript.py:32  CODE-RED-005  Function 'scan' has 20 effective lines (strict cap 8).
+   [error] linters-cicd/checks/positive-conditions/go.py:25  CODE-RED-005  Function 'scan' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/checks/positive-conditions/typescript.py:31  CODE-RED-005  Function 'scan' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/spec-links/markdown.py:45  CODE-RED-005  Function 'scan' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/checks/spec-links/markdown.py:60  CODE-RED-005  Function 'main' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-order-group-by/_shared.py:41  CODE-RED-005  Function 'first_arg_span' has 25 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-order-group-by/_shared.py:69  CODE-RED-005  Function 'is_safe_identifier_arg' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-order-group-by/php.py:43  CODE-RED-005  Function 'scan' has 22 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-order-group-by/php.py:68  CODE-RED-005  Function 'main' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-order-group-by/typescript.py:34  CODE-RED-005  Function 'scan' has 22 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-order-group-by/typescript.py:59  CODE-RED-005  Function 'main' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-raw-execute/_shared.py:25  CODE-RED-005  Function 'first_arg_span' has 25 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-raw-execute/_shared.py:54  CODE-RED-005  Function 'is_unsafe_first_arg' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-raw-execute/php.py:44  CODE-RED-005  Function 'scan' has 24 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-raw-execute/php.py:71  CODE-RED-005  Function 'main' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-raw-execute/typescript.py:43  CODE-RED-005  Function 'scan' has 24 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-raw-execute/typescript.py:70  CODE-RED-005  Function 'main' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/_shared.py:20  CODE-RED-005  Function 'first_arg_span' has 25 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/_shared.py:48  CODE-RED-005  Function 'diagnose_where_raw' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/_shared.py:70  CODE-RED-005  Function 'second_arg_present' has 29 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/php.py:43  CODE-RED-005  Function 'scan' has 28 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/php.py:74  CODE-RED-005  Function 'main' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/typescript.py:35  CODE-RED-005  Function 'scan' has 28 effective lines (strict cap 8).
+   [error] linters-cicd/checks/sqli-where-raw/typescript.py:66  CODE-RED-005  Function 'main' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/codegen/inverted_fields.py:60  CODE-RED-005  Function 'parse_args' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/codegen/inverted_fields.py:73  CODE-RED-005  Function 'discover_blocks' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/codegen/inverted_fields.py:99  CODE-RED-005  Function 'main' has 18 effective lines (strict cap 8).
+   [error] linters-cicd/codegen/emitters/php_emitter.py:29  CODE-RED-005  Function '_render_trait' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/codegen/emitters/ts_emitter.py:26  CODE-RED-005  Function '_render_block' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/emit-timeout.py:33  CODE-RED-005  Function '_build' has 36 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/load-config.py:39  CODE-RED-005  Function 'main' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/load-config.py:55  CODE-RED-005  Function '_parse_args' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/load-config.py:71  CODE-RED-005  Function '_validate_strict' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/merge-sarif.py:11  CODE-RED-005  Function 'merge' has 31 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/post-process.py:34  CODE-RED-005  Function 'main' has 14 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/post-process.py:123  CODE-RED-005  Function '_style_099_result' has 18 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/post-process.py:144  CODE-RED-005  Function '_ensure_style_099_run' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/post-process.py:195  CODE-RED-005  Function '_load_fingerprints' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/smoke-select.py:60  CODE-RED-005  Function 'main' has 63 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/smoke-select.py:154  CODE-RED-005  Function '_changed_slugs' has 32 effective lines (strict cap 8).
+   [error] linters-cicd/scripts/validate-sarif.py:16  CODE-RED-005  Function 'validate' has 16 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative.py:54  CODE-RED-005  Function 'test_multiple_violations_in_one_table' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative.py:133  CODE-RED-005  Function 'test_findings_carry_correct_line_number' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative_go.py:48  CODE-RED-005  Function 'test_bool_field_with_forbidden_name_flagged' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative_go.py:82  CODE-RED-005  Function 'test_db_tag_with_forbidden_snake_case_flagged' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative_go.py:106  CODE-RED-005  Function 'test_gorm_column_with_forbidden_name_flagged' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative_go.py:151  CODE-RED-005  Function 'test_embedded_create_table_flagged' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative_go.py:168  CODE-RED-005  Function 'test_embedded_sql_allowlist_respected' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_column_negative_go.py:183  CODE-RED-005  Function 'test_struct_and_embedded_sql_combined' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_boolean_naming_lib.py:84  CODE-RED-005  Function 'test_no_overlap' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_codegen_determinism_harness.py:65  CODE-RED-005  Function 'test_mutated_expected_go_fails' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_codegen_determinism_harness.py:86  CODE-RED-005  Function 'test_regen_is_idempotent' has 18 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_effective_lines_parity.py:66  CODE-RED-005  Function 'test_js_counter_matches_python' has 23 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_fixture_annotations.py:98  CODE-RED-005  Function '_load_check' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_fixture_annotations.py:111  CODE-RED-005  Function '_parse_annotations' has 31 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_fixture_annotations.py:165  CODE-RED-005  Function '_verify_one' has 50 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_load_config_exclude_paths.py:14  CODE-RED-005  Function '_run' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_load_config_exclude_paths.py:45  CODE-RED-005  Function 'test_cli_overrides_toml' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_markdown_links_lib.py:35  CODE-RED-005  Function 'test_external_links_skipped' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_markdown_links_lib.py:47  CODE-RED-005  Function 'test_links_in_fenced_code_skipped' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_prefer8_fires_on_fixture.py:57  CODE-RED-005  Function 'test_prefer8_scanner_flags_fixture' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_prefer8_fires_on_fixture.py:81  CODE-RED-005  Function 'test_boundary_15_prefer8_errors' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_runall_spec_link_wiring.py:34  CODE-RED-005  Function 'test_runall_dispatches_spec_link_and_exits_clean' has 24 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:28  CODE-RED-005  Function '_git_add_allowed' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:46  CODE-RED-005  Function '_run' has 16 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:65  CODE-RED-005  Function '_make_repo' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:97  CODE-RED-005  Function 'test_include_template_selects_template_rule' has 17 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:116  CODE-RED-005  Function 'test_changed_check_folder_selects_its_rules' has 29 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:150  CODE-RED-005  Function 'test_underscore_slug_is_skipped_not_selected' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_smoke_select.py:170  CODE-RED-005  Function 'test_unregistered_slug_surfaces_in_skipped' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_sqli_rules.py:126  CODE-RED-005  Function 'test_clean_code_passes' has 10 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_isolation.py:39  CODE-RED-005  Function 'test_registry_has_no_template_rule_id' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_isolation.py:50  CODE-RED-005  Function 'test_no_registry_entry_points_into_template_folder' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_isolation.py:75  CODE-RED-005  Function 'test_runall_does_not_dispatch_template_against_its_fixtures' has 46 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_sarif_snapshot.py:67  CODE-RED-005  Function '_load_check' has 12 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_sarif_snapshot.py:83  CODE-RED-005  Function '_project_findings' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_sarif_snapshot.py:106  CODE-RED-005  Function '_build_snapshot' has 9 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_sarif_snapshot.py:121  CODE-RED-005  Function '_extract_tool_identity' has 13 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_sarif_snapshot.py:140  CODE-RED-005  Function '_grab' has 11 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_template_sarif_snapshot.py:177  CODE-RED-005  Function 'test_snapshots_match' has 22 effective lines (strict cap 8).
+   [error] linters-cicd/tests/test_walker_exclude_globs.py:56  CODE-RED-005  Function 'test_multiple_globs_combine' has 10 effective lines (strict cap 8).
+✅ coding-guidelines-function-length-prefer8-rs: clean
+❌ coding-guidelines-function-length-prefer8-ts: 308 finding(s)
+   [error] eslint-plugins/coding-guidelines/index.js:41  CODE-RED-005  Function 'create' has 34 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:96  CODE-RED-005  Function 'create' has 33 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:152  CODE-RED-005  Function 'create' has 28 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:231  CODE-RED-005  Function 'create' has 11 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:283  CODE-RED-005  Function 'create' has 11 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:313  CODE-RED-005  Function 'create' has 25 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:357  CODE-RED-005  Function 'create' has 13 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/index.js:385  CODE-RED-005  Function 'create' has 14 effective lines (strict cap 8).
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:28  CODE-RED-005  Function 'countEffective' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:33  CODE-RED-005  Function 'walkMarkdown' has 11 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:49  CODE-RED-005  Function 'walkDirs' has 10 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:68  CODE-RED-005  Function 'extractLinks' has 25 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:100  CODE-RED-005  Function 'validateLinks' has 23 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:132  CODE-RED-005  Function 'checkRequiredFiles' has 16 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:159  CODE-RED-005  Function 'buildInventory' has 21 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:189  CODE-RED-005  Function 'computeHealth' has 31 effective lines (strict cap 8).
+   [error] linter-scripts/generate-dashboard-data.cjs:230  CODE-RED-005  Function 'main' has 66 effective lines (strict cap 8).
+   [error] linters-cicd/tests/fixtures/code-red-005-boundary-15/at-cap.ts:18  CODE-RED-005  Function 'fixtureAtCap15' has 15 effective lines (strict cap 8).
+   [error] linters-cicd/tests/fixtures/code-red-005/too-long.ts:14  CODE-RED-005  Function 'fixtureTooLongPrefer8' has 11 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:37  CODE-RED-005  Function 'printUsage' has 12 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:55  CODE-RED-005  Function 'parseFlags' has 15 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:88  CODE-RED-005  Function 'parseYamlSubset' has 19 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:120  CODE-RED-005  Function 'stripComment' has 9 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:139  CODE-RED-005  Function 'handleListItem' has 9 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:152  CODE-RED-005  Function 'handleMapEntry' has 21 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:190  CODE-RED-005  Function 'parseScalar' has 11 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:223  CODE-RED-005  Function 'validateConfig' has 21 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:251  CODE-RED-005  Function 'flattenForEnv' has 14 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:291  CODE-RED-005  Function 'emitSummary' has 9 effective lines (strict cap 8).
+   [error] scripts/ci-config.mjs:318  CODE-RED-005  Function 'main' has 28 effective lines (strict cap 8).
+   [error] scripts/generate-bundle-installers.mjs:51  CODE-RED-005  Function 'bashScript' has 580 effective lines (strict cap 8).
+   [error] scripts/generate-bundle-installers.mjs:671  CODE-RED-005  Function 'powershellScript' has 475 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:64  CODE-RED-005  Function 'parseArgs' has 41 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:134  CODE-RED-005  Function 'listChangedSpecFiles' has 21 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:187  CODE-RED-005  Function 'parseValidator' has 22 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:214  CODE-RED-005  Function 'parseCrossLink' has 19 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:253  CODE-RED-005  Function 'scanPendingPlaceholders' has 77 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:365  CODE-RED-005  Function 'buildHtml' has 157 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:539  CODE-RED-005  Function 'tryRenderPdf' has 29 effective lines (strict cap 8).
+   [error] scripts/spec-change-report.mjs:580  CODE-RED-005  Function 'main' has 44 effective lines (strict cap 8).
+   [error] scripts/sync-check.mjs:96  CODE-RED-005  Function 'stripVolatileVersionFields' has 9 effective lines (strict cap 8).
+   [error] scripts/sync-check.mjs:157  CODE-RED-005  Function 'runSyncPipeline' has 11 effective lines (strict cap 8).
+   [error] scripts/sync-check.mjs:171  CODE-RED-005  Function 'diffSummary' has 14 effective lines (strict cap 8).
+   [error] scripts/sync-check.mjs:203  CODE-RED-005  Function 'detectDrift' has 38 effective lines (strict cap 8).
+   [error] scripts/sync-check.mjs:257  CODE-RED-005  Function 'main' has 66 effective lines (strict cap 8).
+   [error] scripts/sync-health-score.mjs:39  CODE-RED-005  Function 'readAuditScores' has 9 effective lines (strict cap 8).
+   [error] scripts/sync-health-score.mjs:55  CODE-RED-005  Function 'buildPayload' has 21 effective lines (strict cap 8).
+   [error] scripts/sync-readme-stats.mjs:48  CODE-RED-005  Function 'buildBadges' has 12 effective lines (strict cap 8).
+   [error] scripts/sync-readme-stats.mjs:64  CODE-RED-005  Function 'buildPlatformBadges' has 19 effective lines (strict cap 8).
+   [error] scripts/sync-readme-stats.mjs:92  CODE-RED-005  Function 'stampFile' has 14 effective lines (strict cap 8).
+   [error] scripts/sync-spec-tree.mjs:85  CODE-RED-005  Function 'buildNode' has 11 effective lines (strict cap 8).
+   [error] scripts/sync-spec-tree.mjs:99  CODE-RED-005  Function 'listChildren' has 15 effective lines (strict cap 8).
+   [error] scripts/sync-spec-tree.mjs:156  CODE-RED-005  Function 'countNodes' has 13 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:112  CODE-RED-005  Function 'parseOverview' has 10 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:134  CODE-RED-005  Function 'walkStats' has 24 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:189  CODE-RED-005  Function 'listSpecFolders' has 17 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:214  CODE-RED-005  Function 'buildFolderEntry' has 15 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:238  CODE-RED-005  Function 'rootFileStats' has 15 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:260  CODE-RED-005  Function 'sumStats' has 10 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:284  CODE-RED-005  Function 'buildManifest' has 15 effective lines (strict cap 8).
+   [error] scripts/sync-version.mjs:303  CODE-RED-005  Function 'logSummary' has 17 effective lines (strict cap 8).
+   [error] scripts/docs/check-doc-links.mjs:41  CODE-RED-005  Function 'collectLinks' has 15 effective lines (strict cap 8).
+   [error] scripts/docs/check-doc-links.mjs:65  CODE-RED-005  Function 'loadAllowlist' has 12 effective lines (strict cap 8).
+   [error] scripts/docs/check-doc-links.mjs:81  CODE-RED-005  Function 'reportFile' has 21 effective lines (strict cap 8).
+   [error] scripts/docs/check-doc-links.mjs:105  CODE-RED-005  Function 'main' has 21 effective lines (strict cap 8).
+   [error] scripts/spec-audit/run-audit.mjs:34  CODE-RED-005  Function 'buildPrompt' has 20 effective lines (strict cap 8).
+   [error] scripts/spec-audit/run-audit.mjs:61  CODE-RED-005  Function 'callGateway' has 13 effective lines (strict cap 8).
+   [error] scripts/spec-audit/run-audit.mjs:77  CODE-RED-005  Function 'auditFolder' has 9 effective lines (strict cap 8).
+   [error] scripts/spec-audit/run-audit.mjs:100  CODE-RED-005  Function 'summarize' has 21 effective lines (strict cap 8).
+   [error] scripts/spec-audit/run-audit.mjs:138  CODE-RED-005  Function 'writeMarkdown' has 45 effective lines (strict cap 8).
+   [error] scripts/spec-audit/run-audit.mjs:186  CODE-RED-005  Function 'main' has 29 effective lines (strict cap 8).
+   [error] scripts/spec-verification/build-pr-comment.mjs:50  CODE-RED-005  Function 'renderHeader' has 13 effective lines (strict cap 8).
+   [error] scripts/spec-verification/build-pr-comment.mjs:66  CODE-RED-005  Function 'renderMissingSection' has 15 effective lines (strict cap 8).
+   [error] scripts/spec-verification/build-pr-comment.mjs:84  CODE-RED-005  Function 'renderStraySection' has 12 effective lines (strict cap 8).
+   [error] scripts/spec-verification/build-pr-comment.mjs:115  CODE-RED-005  Function 'main' has 9 effective lines (strict cap 8).
+   [error] scripts/spec-verification/generate-coverage-report.mjs:46  CODE-RED-005  Function 'parseArgs' has 22 effective lines (strict cap 8).
+   [error] scripts/spec-verification/generate-coverage-report.mjs:117  CODE-RED-005  Function 'buildReport' has 30 effective lines (strict cap 8).
+   [error] scripts/spec-verification/generate-coverage-report.mjs:155  CODE-RED-005  Function 'buildSummary' has 18 effective lines (strict cap 8).
+   [error] scripts/spec-verification/generate-coverage-report.mjs:176  CODE-RED-005  Function 'renderMarkdown' has 48 effective lines (strict cap 8).
+   [error] scripts/spec-verification/generate-coverage-report.mjs:231  CODE-RED-005  Function 'main' has 29 effective lines (strict cap 8).
+   [error] scripts/spec-verification/generate-templates-doc.mjs:26  CODE-RED-005  Function 'templatesSection' has 16 effective lines (strict cap 8).
+   [error] scripts/spec-verification/inject-verification-sections.mjs:52  CODE-RED-005  Function 'parseArgs' has 17 effective lines (strict cap 8).
+   [error] scripts/spec-verification/inject-verification-sections.mjs:72  CODE-RED-005  Function 'printHelp' has 9 effective lines (strict cap 8).
+   [error] scripts/spec-verification/inject-verification-sections.mjs:116  CODE-RED-005  Function 'buildSection' has 33 effective lines (strict cap 8).
+   [error] scripts/spec-verification/inject-verification-sections.mjs:152  CODE-RED-005  Function 'replaceOrAppend' has 10 effective lines (strict cap 8).
+   [error] scripts/spec-verification/inject-verification-sections.mjs:191  CODE-RED-005  Function 'main' has 62 effective lines (strict cap 8).
+   [error] slides-app/scripts/package-zip.mjs:24  CODE-RED-005  Function 'verifyOfflineContract' has 27 effective lines (strict cap 8).
+   [error] slides-app/scripts/package-zip.mjs:59  CODE-RED-005  Function 'writeReadme' has 19 effective lines (strict cap 8).
+   [error] slides-app/scripts/package-zip.mjs:84  CODE-RED-005  Function 'makeZip' has 11 effective lines (strict cap 8).
+   [error] slides-app/src/App.tsx:58  CODE-RED-005  Function 'useEffect' has 41 effective lines (strict cap 8).
+   [error] slides-app/src/components/BulletList.tsx:16  CODE-RED-005  Function 'BulletList' has 40 effective lines (strict cap 8).
+   [error] slides-app/src/components/CodeDiff.tsx:34  CODE-RED-005  Function 'useEffect' has 12 effective lines (strict cap 8).
+   [error] slides-app/src/components/CodeDiff.tsx:84  CODE-RED-005  Function 'DiffPanel' has 33 effective lines (strict cap 8).
+   [error] slides-app/src/components/ScaledSlide.tsx:9  CODE-RED-005  Function 'ScaledSlide' has 30 effective lines (strict cap 8).
+   [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:27  CODE-RED-005  Function 'extractEcosystemCodes' has 16 effective lines (strict cap 8).
+   [error] spec/03-error-manage/03-error-code-registry/08-linter-scripts/detect-collisions.mjs:51  CODE-RED-005  Function 'main' has 165 effective lines (strict cap 8).
+   [error] src/components/MarkdownRenderer.tsx:47  CODE-RED-005  Function 'MarkdownRenderer' has 13 effective lines (strict cap 8).
+   [error] src/components/SpecTreeNav.tsx:24  CODE-RED-005  Function 'SpecTreeNav' has 15 effective lines (strict cap 8).
+   [error] src/components/SpecTreeNav.tsx:60  CODE-RED-005  Function 'useDownloadFolder' has 11 effective lines (strict cap 8).
+   [error] src/components/SpecTreeNav.tsx:96  CODE-RED-005  Function 'FolderDownloadButton' has 10 effective lines (strict cap 8).
+   [error] src/components/SpecTreeNav.tsx:110  CODE-RED-005  Function 'FolderTrigger' has 9 effective lines (strict cap 8).
+   [error] src/components/SpecTreeNav.tsx:122  CODE-RED-005  Function 'FolderItem' has 14 effective lines (strict cap 8).
+   [error] src/components/SpecTreeNav.tsx:140  CODE-RED-005  Function 'FileItem' has 9 effective lines (strict cap 8).
+   [error] src/components/TableOfContents.tsx:56  CODE-RED-005  Function 'TocButton' has 14 effective lines (strict cap 8).
+   [error] src/components/TableOfContents.tsx:83  CODE-RED-005  Function 'TocNavList' has 12 effective lines (strict cap 8).
+   [error] src/components/TableOfContents.tsx:101  CODE-RED-005  Function 'TableOfContents' has 11 effective lines (strict cap 8).
+   [error] src/components/ThemeProvider.tsx:39  CODE-RED-005  Function 'ThemeProvider' has 10 effective lines (strict cap 8).
+   [error] src/components/dashboard/DashboardHeader.tsx:10  CODE-RED-005  Function 'DashboardHeader' has 25 effective lines (strict cap 8).
+   [error] src/components/dashboard/HealthTrendCard.tsx:16  CODE-RED-005  Function 'trendPath' has 12 effective lines (strict cap 8).
+   [error] src/components/dashboard/HealthTrendCard.tsx:33  CODE-RED-005  Function 'HealthTrendCard' has 62 effective lines (strict cap 8).
+   [error] src/components/dashboard/IssueLogCard.tsx:12  CODE-RED-005  Function 'IssueLogCard' has 25 effective lines (strict cap 8).
+   [error] src/components/dashboard/IssueLogCard.tsx:41  CODE-RED-005  Function 'IssueRow' has 22 effective lines (strict cap 8).
+   [error] src/components/dashboard/MetricCard.tsx:47  CODE-RED-005  Function 'useEffect' has 13 effective lines (strict cap 8).
+   [error] src/components/dashboard/RecentRunsTimeline.tsx:12  CODE-RED-005  Function 'RecentRunsTimeline' has 25 effective lines (strict cap 8).
+   [error] src/components/dashboard/RecentRunsTimeline.tsx:41  CODE-RED-005  Function 'RunRow' has 24 effective lines (strict cap 8).
+   [error] src/components/dashboard/RuleStatusGrid.tsx:12  CODE-RED-005  Function 'RuleStatusGrid' has 25 effective lines (strict cap 8).
+   [error] src/components/dashboard/RuleStatusGrid.tsx:41  CODE-RED-005  Function 'RuleRow' has 16 effective lines (strict cap 8).
+   [error] src/components/docs/CommandPalette.tsx:41  CODE-RED-005  Function 'useCommandPaletteShortcut' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/CommandPalette.tsx:83  CODE-RED-005  Function 'QuickJumpGroup' has 17 effective lines (strict cap 8).
+   [error] src/components/docs/CommandPalette.tsx:108  CODE-RED-005  Function 'FolderOverviewsGroup' has 22 effective lines (strict cap 8).
+   [error] src/components/docs/CommandPalette.tsx:142  CODE-RED-005  Function 'AllFilesGroup' has 17 effective lines (strict cap 8).
+   [error] src/components/docs/CommandPalette.tsx:163  CODE-RED-005  Function 'CommandPalette' has 21 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:19  CODE-RED-005  Function 'SearchResultItem' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:33  CODE-RED-005  Function 'SidebarSearchResults' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:58  CODE-RED-005  Function 'SidebarSearchInput' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:70  CODE-RED-005  Function 'useDownloadAll' has 12 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:87  CODE-RED-005  Function 'DownloadAllButton' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:103  CODE-RED-005  Function 'FolderActionsDropdown' has 15 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:121  CODE-RED-005  Function 'FolderActionsMenu' has 14 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:150  CODE-RED-005  Function 'SidebarBody' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:165  CODE-RED-005  Function 'DocsSidebarContent' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/DocsSidebar.tsx:181  CODE-RED-005  Function 'DocsSidebar' has 35 effective lines (strict cap 8).
+   [error] src/components/docs/DocsToolbar.tsx:39  CODE-RED-005  Function 'ViewModeToggle' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/DocsToolbar.tsx:101  CODE-RED-005  Function 'DownloadFileItem' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/DocsToolbar.tsx:118  CODE-RED-005  Function 'DownloadFolderItem' has 14 effective lines (strict cap 8).
+   [error] src/components/docs/DocsToolbar.tsx:149  CODE-RED-005  Function 'DownloadDropdown' has 12 effective lines (strict cap 8).
+   [error] src/components/docs/DocsToolbar.tsx:184  CODE-RED-005  Function 'ActiveFileButtons' has 12 effective lines (strict cap 8).
+   [error] src/components/docs/DocsToolbar.tsx:200  CODE-RED-005  Function 'ToolbarButtons' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/GithubSyncBanner.tsx:68  CODE-RED-005  Function 'useDismissalState' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/GithubSyncBanner.tsx:94  CODE-RED-005  Function 'SyncDetails' has 18 effective lines (strict cap 8).
+   [error] src/components/docs/GithubSyncBanner.tsx:115  CODE-RED-005  Function 'BannerActions' has 21 effective lines (strict cap 8).
+   [error] src/components/docs/GithubSyncBanner.tsx:139  CODE-RED-005  Function 'GithubSyncBanner' has 23 effective lines (strict cap 8).
+   [error] src/components/docs/SearchDialog.tsx:23  CODE-RED-005  Function 'useResetOnOpen' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/SearchDialog.tsx:54  CODE-RED-005  Function 'useSelectHandler' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/SearchDialog.tsx:92  CODE-RED-005  Function 'useSearchDialogState' has 14 effective lines (strict cap 8).
+   [error] src/components/docs/SearchDialog.tsx:112  CODE-RED-005  Function 'SearchDialog' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/ShortcutsOverlay.tsx:48  CODE-RED-005  Function 'ShortcutsOverlay' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/SourceView.tsx:153  CODE-RED-005  Function 'useSyntaxTheme' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/SourceView.tsx:170  CODE-RED-005  Function 'SyntaxThemeToggle' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/SourceView.tsx:194  CODE-RED-005  Function 'SourceLine' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/SourceView.tsx:207  CODE-RED-005  Function 'SourceCodeBlock' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/SourceView.tsx:219  CODE-RED-005  Function 'SourceView' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:53  CODE-RED-005  Function 'PanelHeader' has 16 effective lines (strict cap 8).
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:72  CODE-RED-005  Function 'PanelBody' has 15 effective lines (strict cap 8).
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:90  CODE-RED-005  Function 'PanelActions' has 27 effective lines (strict cap 8).
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:122  CODE-RED-005  Function 'TreeDiagnosticsPanel' has 14 effective lines (strict cap 8).
+   [error] src/components/docs/WelcomeScreen.tsx:3  CODE-RED-005  Function 'WelcomeScreen' has 12 effective lines (strict cap 8).
+   [error] src/components/docs/WelcomeScreen.tsx:18  CODE-RED-005  Function 'WelcomeDescription' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/search/HighlightedText.tsx:31  CODE-RED-005  Function 'buildHighlightRanges' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/search/HighlightedText.tsx:49  CODE-RED-005  Function 'renderHighlightedRanges' has 17 effective lines (strict cap 8).
+   [error] src/components/docs/search/HighlightedText.tsx:73  CODE-RED-005  Function 'HighlightedText' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/search/RecentSearches.tsx:13  CODE-RED-005  Function 'RecentSearchHeader' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/search/RecentSearches.tsx:48  CODE-RED-005  Function 'RecentItemButton' has 14 effective lines (strict cap 8).
+   [error] src/components/docs/search/RecentSearches.tsx:75  CODE-RED-005  Function 'RecentSearches' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/search/SearchParts.tsx:13  CODE-RED-005  Function 'InputActions' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/search/SearchParts.tsx:29  CODE-RED-005  Function 'SearchInputBar' has 14 effective lines (strict cap 8).
+   [error] src/components/docs/search/SearchParts.tsx:51  CODE-RED-005  Function 'FooterContent' has 13 effective lines (strict cap 8).
+   [error] src/components/docs/search/SearchResultItem.tsx:23  CODE-RED-005  Function 'SnippetList' has 12 effective lines (strict cap 8).
+   [error] src/components/docs/search/SearchResultItem.tsx:39  CODE-RED-005  Function 'ResultContent' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/search/SearchResultItem.tsx:85  CODE-RED-005  Function 'SearchResultItem' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/search/fuzzyMatch.ts:37  CODE-RED-005  Function 'scoreCharacterMatch' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/search/fuzzyMatch.ts:60  CODE-RED-005  Function 'runFuzzyScan' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/search/fuzzyMatch.ts:77  CODE-RED-005  Function 'fuzzyMatch' has 15 effective lines (strict cap 8).
+   [error] src/components/docs/search/fuzzyMatch.ts:163  CODE-RED-005  Function 'buildPreviewWindow' has 10 effective lines (strict cap 8).
+   [error] src/components/docs/search/searchFiles.ts:18  CODE-RED-005  Function 'mapFileToResult' has 9 effective lines (strict cap 8).
+   [error] src/components/docs/search/useSearchKeyboard.ts:18  CODE-RED-005  Function 'useSearchShortcut' has 11 effective lines (strict cap 8).
+   [error] src/components/docs/search/useSearchKeyboard.ts:43  CODE-RED-005  Function 'handleSearchKeyDown' has 18 effective lines (strict cap 8).
+   [error] src/components/landing/InstallSection.tsx:37  CODE-RED-005  Function 'InstallCard' has 21 effective lines (strict cap 8).
+   [error] src/components/landing/InstallSection.tsx:61  CODE-RED-005  Function 'InstallSection' has 35 effective lines (strict cap 8).
+   [error] src/components/landing/install/BundleCard.tsx:14  CODE-RED-005  Function 'BundleCardHeader' has 13 effective lines (strict cap 8).
+   [error] src/components/landing/install/BundleCard.tsx:31  CODE-RED-005  Function 'BundleFoldersList' has 12 effective lines (strict cap 8).
+   [error] src/components/landing/install/BundleCard.tsx:46  CODE-RED-005  Function 'BundleCard' has 20 effective lines (strict cap 8).
+   [error] src/components/landing/install/CommandRow.tsx:31  CODE-RED-005  Function 'useLayoutEffect' has 12 effective lines (strict cap 8).
+   [error] src/components/landing/install/CommandRow.tsx:61  CODE-RED-005  Function 'ExpandButton' has 11 effective lines (strict cap 8).
+   [error] src/components/landing/install/CommandRow.tsx:83  CODE-RED-005  Function 'CommandRow' has 35 effective lines (strict cap 8).
+   [error] src/components/landing/install/CopyButton.tsx:16  CODE-RED-005  Function 'CopyButtonView' has 11 effective lines (strict cap 8).
+   [error] src/components/landing/install/HighlightedCommand.tsx:37  CODE-RED-005  Function 'classifyToken' has 13 effective lines (strict cap 8).
+   [error] src/components/landing/install/HighlightedCommand.tsx:67  CODE-RED-005  Function 'HighlightedCommand' has 13 effective lines (strict cap 8).
+   [error] src/components/markdown/checklistBuilder.ts:17  CODE-RED-005  Function 'buildChecklistItemHtml' has 10 effective lines (strict cap 8).
+   [error] src/components/markdown/checklistBuilder.ts:70  CODE-RED-005  Function 'extractChecklistBlocks' has 14 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockActionHandlers.ts:42  CODE-RED-005  Function 'showCopyFeedback' has 10 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockActionHandlers.ts:75  CODE-RED-005  Function 'createDownloadHandler' has 13 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockActionHandlers.ts:114  CODE-RED-005  Function 'createChecklistCopyHandler' has 11 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockActionHandlers.ts:141  CODE-RED-005  Function 'createChecklistExportHandler' has 10 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockActionHandlers.ts:157  CODE-RED-005  Function 'createCopySelectedHandler' has 9 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockBuilder.ts:71  CODE-RED-005  Function 'buildHeaderRight' has 11 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockBuilder.ts:93  CODE-RED-005  Function 'buildSelectionBarHtml' has 9 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockBuilder.ts:128  CODE-RED-005  Function 'buildCodeBlockHtml' has 13 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockDomHelpers.ts:39  CODE-RED-005  Function 'getLineIndex' has 9 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockDragHandlers.ts:41  CODE-RED-005  Function 'resolveDragIdx' has 9 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockDragHandlers.ts:111  CODE-RED-005  Function 'createFontHandler' has 14 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockExtractor.ts:23  CODE-RED-005  Function 'createInitialContext' has 11 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockExtractor.ts:52  CODE-RED-005  Function 'handleClosingFence' has 9 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockLineHandlers.ts:39  CODE-RED-005  Function 'updateSelectedBar' has 13 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockLineHandlers.ts:111  CODE-RED-005  Function 'createLineClickHandler' has 12 effective lines (strict cap 8).
+   [error] src/components/markdown/codeBlockLineHandlers.ts:150  CODE-RED-005  Function 'createLineKeyHandler' has 16 effective lines (strict cap 8).
+   [error] src/components/markdown/highlighter.ts:80  CODE-RED-005  Function 'highlightTreeLine' has 11 effective lines (strict cap 8).
+   [error] src/components/markdown/highlighter.ts:109  CODE-RED-005  Function 'tryAutoHighlight' has 9 effective lines (strict cap 8).
+   [error] src/components/markdown/markdownParser.ts:55  CODE-RED-005  Function 'convertInlineFormatting' has 11 effective lines (strict cap 8).
+   [error] src/components/markdown/useCodeBlockEvents.ts:111  CODE-RED-005  Function 'attachListeners' has 15 effective lines (strict cap 8).
+   [error] src/components/markdown/useCodeBlockEvents.ts:129  CODE-RED-005  Function 'detachListeners' has 15 effective lines (strict cap 8).
+   [error] src/components/ui/calendar.tsx:10  CODE-RED-005  Function 'Calendar' has 40 effective lines (strict cap 8).
+   [error] src/components/ui/chart.tsx:62  CODE-RED-005  Function 'ChartStyle' has 24 effective lines (strict cap 8).
+   [error] src/components/ui/chart.tsx:285  CODE-RED-005  Function 'getPayloadConfigFromPayload' has 18 effective lines (strict cap 8).
+   [error] src/components/ui/command.tsx:26  CODE-RED-005  Function 'CommandDialog' has 9 effective lines (strict cap 8).
+   [error] src/components/ui/form.tsx:33  CODE-RED-005  Function 'useFormField' has 16 effective lines (strict cap 8).
+   [error] src/components/ui/sonner.tsx:6  CODE-RED-005  Function 'Toaster' has 17 effective lines (strict cap 8).
+   [error] src/components/ui/toaster.tsx:4  CODE-RED-005  Function 'Toaster' has 18 effective lines (strict cap 8).
+   [error] src/hooks/use-mobile.tsx:5  CODE-RED-005  Function 'useIsMobile' has 11 effective lines (strict cap 8).
+   [error] src/hooks/use-toast.ts:62  CODE-RED-005  Function 'addToRemoveQueue' has 11 effective lines (strict cap 8).
+   [error] src/hooks/use-toast.ts:112  CODE-RED-005  Function 'reducer' has 19 effective lines (strict cap 8).
+   [error] src/hooks/use-toast.ts:155  CODE-RED-005  Function 'createToastEntry' has 13 effective lines (strict cap 8).
+   [error] src/hooks/use-toast.ts:184  CODE-RED-005  Function 'useToast' has 15 effective lines (strict cap 8).
+   [error] src/hooks/useCollapsibleSections.ts:46  CODE-RED-005  Function 'useEffect' has 15 effective lines (strict cap 8).
+   [error] src/hooks/useCountUp.ts:15  CODE-RED-005  Function 'useCountUp' has 39 effective lines (strict cap 8).
+   [error] src/hooks/useDocsKeyboard.ts:126  CODE-RED-005  Function 'handleToggleKeys' has 11 effective lines (strict cap 8).
+   [error] src/hooks/useDocsKeyboard.ts:145  CODE-RED-005  Function 'handleViewModeKeys' has 17 effective lines (strict cap 8).
+   [error] src/hooks/useDocsKeyboard.ts:173  CODE-RED-005  Function 'handleArrowKeys' has 11 effective lines (strict cap 8).
+   [error] src/hooks/useDocsKeyboard.ts:206  CODE-RED-005  Function 'useDocsKeyboard' has 9 effective lines (strict cap 8).
+   [error] src/hooks/useDocsKeyboard.ts:223  CODE-RED-005  Function 'flattenFilesOrdered' has 13 effective lines (strict cap 8).
+   [error] src/hooks/useScrollSpy.ts:38  CODE-RED-005  Function 'createHeadingObserver' has 9 effective lines (strict cap 8).
+   [error] src/hooks/useScrollSpy.ts:59  CODE-RED-005  Function 'useEffect' has 9 effective lines (strict cap 8).
+   [error] src/hooks/useSpecData.ts:27  CODE-RED-005  Function 'useSpecData' has 9 effective lines (strict cap 8).
+   [error] src/hooks/useSpecData.ts:46  CODE-RED-005  Function 'useSpecSearch' has 13 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/collapsibleState.ts:8  CODE-RED-005  Function 'saveCurrentState' has 12 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/extractFormattedText.ts:56  CODE-RED-005  Function 'extractDivOrParagraph' has 13 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/extractFormattedText.ts:84  CODE-RED-005  Function 'extractByTag' has 19 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/extractFormattedText.ts:112  CODE-RED-005  Function 'extractChildLines' has 14 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/h1ActionsMenu.ts:24  CODE-RED-005  Function 'createDropdownItem' has 9 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/h1ActionsMenu.ts:38  CODE-RED-005  Function 'createMenuButton' has 9 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/h1ActionsMenu.ts:66  CODE-RED-005  Function 'addH1ActionsMenu' has 15 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/sectionActions.ts:60  CODE-RED-005  Function 'createCopyButton' has 14 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/sectionActions.ts:79  CODE-RED-005  Function 'triggerDownload' has 9 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/sectionActions.ts:91  CODE-RED-005  Function 'createDownloadButton' has 10 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/wrapSections.ts:28  CODE-RED-005  Function 'groupChildrenByH2' has 16 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/wrapSections.ts:71  CODE-RED-005  Function 'attachHeaderClick' has 10 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/wrapSections.ts:87  CODE-RED-005  Function 'createSectionHeader' has 11 effective lines (strict cap 8).
+   [error] src/hooks/collapsible/wrapSections.ts:127  CODE-RED-005  Function 'wrapSections' has 14 effective lines (strict cap 8).
+   [error] src/lib/clipboard.ts:3  CODE-RED-005  Function 'copyTextToClipboard' has 19 effective lines (strict cap 8).
+   [error] src/lib/clipboard.ts:29  CODE-RED-005  Function 'createHiddenTextarea' has 9 effective lines (strict cap 8).
+   [error] src/lib/clipboard.ts:56  CODE-RED-005  Function 'fallbackCopyText' has 13 effective lines (strict cap 8).
+   [error] src/lib/downloadUtils.ts:24  CODE-RED-005  Function 'downloadFile' has 10 effective lines (strict cap 8).
+   [error] src/lib/downloadUtils.ts:51  CODE-RED-005  Function 'downloadFolderAsZip' has 15 effective lines (strict cap 8).
+   [error] src/lib/treeDiagnostics.ts:106  CODE-RED-005  Function 'emitConsole' has 10 effective lines (strict cap 8).
+   [error] src/lib/treeDiagnostics.ts:124  CODE-RED-005  Function 'record' has 10 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:24  CODE-RED-005  Function 'useToggleSet' has 10 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:51  CODE-RED-005  Function 'useFilteredCategories' has 13 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:77  CODE-RED-005  Function 'HeaderNav' has 13 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:101  CODE-RED-005  Function 'ProgressStats' has 10 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:124  CODE-RED-005  Function 'ProgressCard' has 12 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:140  CODE-RED-005  Function 'FilterModeButtons' has 11 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:154  CODE-RED-005  Function 'LanguageButtons' has 9 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:175  CODE-RED-005  Function 'ChecklistItemRow' has 11 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:189  CODE-RED-005  Function 'CategoryCardHeader' has 13 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:205  CODE-RED-005  Function 'CategoryCardBody' has 9 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:217  CODE-RED-005  Function 'CategoryCard' has 10 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:231  CODE-RED-005  Function 'ChecklistBody' has 13 effective lines (strict cap 8).
+   [error] src/pages/CodeReviewChecklist.tsx:248  CODE-RED-005  Function 'CodeReviewChecklist' has 9 effective lines (strict cap 8).
+   [error] src/pages/Dashboard.tsx:86  CODE-RED-005  Function 'DashboardFallback' has 12 effective lines (strict cap 8).
+   [error] src/pages/DocsViewer.tsx:14  CODE-RED-005  Function 'useDocsViewerState' has 31 effective lines (strict cap 8).
+   [error] src/pages/DocsViewer.tsx:56  CODE-RED-005  Function 'DocsViewerLayout' has 9 effective lines (strict cap 8).
+   [error] src/pages/DocsViewer.tsx:68  CODE-RED-005  Function 'DocsViewerFooter' has 10 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:24  CODE-RED-005  Function 'BreadcrumbNav' has 11 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:39  CODE-RED-005  Function 'SearchButton' has 9 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:52  CODE-RED-005  Function 'SpecOverviewButton' has 13 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:96  CODE-RED-005  Function 'SplitView' has 13 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:153  CODE-RED-005  Function 'DocsMainContent' has 10 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:191  CODE-RED-005  Function 'DocsHeader' has 12 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:220  CODE-RED-005  Function 'ContentPanelMain' has 9 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:239  CODE-RED-005  Function 'useCollapseShortcut' has 16 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerComponents.tsx:262  CODE-RED-005  Function 'DocsContentPanel' has 10 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerHelpers.ts:17  CODE-RED-005  Function 'createDragHandlers' has 14 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerHelpers.ts:38  CODE-RED-005  Function 'useSplitDivider' has 10 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerHelpers.ts:74  CODE-RED-005  Function 'useReadingProgress' has 14 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerHelpers.ts:127  CODE-RED-005  Function 'useCopyMarkdown' has 11 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerHelpers.ts:178  CODE-RED-005  Function 'useContentPanelDeps' has 12 effective lines (strict cap 8).
+   [error] src/pages/DocsViewerHelpers.ts:195  CODE-RED-005  Function 'useDeepLinkFile' has 9 effective lines (strict cap 8).
+   [error] src/pages/Index.tsx:56  CODE-RED-005  Function 'IndexHero' has 29 effective lines (strict cap 8).
+   [error] src/pages/Index.tsx:88  CODE-RED-005  Function 'IndexHighlights' has 19 effective lines (strict cap 8).
+   [error] src/pages/Index.tsx:110  CODE-RED-005  Function 'IndexPillars' has 10 effective lines (strict cap 8).
+   [error] src/pages/Index.tsx:123  CODE-RED-005  Function 'PillarCardView' has 20 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:42  CODE-RED-005  Function 'HeroHeading' has 11 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:56  CODE-RED-005  Function 'HeroButtons' has 16 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:75  CODE-RED-005  Function 'HeroSection' has 10 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:99  CODE-RED-005  Function 'CodeRedCard' has 12 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:133  CODE-RED-005  Function 'CodeRedSection' has 11 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:156  CODE-RED-005  Function 'QuickReferenceCard' has 12 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:182  CODE-RED-005  Function 'QuickReferenceSection' has 13 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:198  CODE-RED-005  Function 'SpecSectionCard' has 13 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:214  CODE-RED-005  Function 'SpecSectionsGrid' has 11 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:235  CODE-RED-005  Function 'StatsSection' has 12 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:250  CODE-RED-005  Function 'LandingFooter' has 11 effective lines (strict cap 8).
+   [error] src/pages/LandingPage.tsx:264  CODE-RED-005  Function 'LandingPage' has 11 effective lines (strict cap 8).
+   [error] src/pages/NotFound.tsx:14  CODE-RED-005  Function 'NotFound' has 9 effective lines (strict cap 8).
+   [error] src/pages/ReadmeEditor.tsx:10  CODE-RED-005  Function 'formatMalaysiaDateTime' has 15 effective lines (strict cap 8).
+   [error] src/pages/ReadmeEditor.tsx:33  CODE-RED-005  Function 'downloadReadme' has 9 effective lines (strict cap 8).
+   [error] src/pages/ReadmeEditor.tsx:45  CODE-RED-005  Function 'ReadmeEditor' has 61 effective lines (strict cap 8).
+   [error] tests/e2e/landing.spec.ts:7  CODE-RED-005  Function 'test' has 10 effective lines (strict cap 8).
+❌ coding-guidelines-file-length: 22 finding(s)
+   [error] eslint-plugins/coding-guidelines/index.js:301  CODE-RED-006  File has 418 lines (max 300) — split by responsibility.
+   [error] linter-scripts/allowlist-forbidden-string.py:301  CODE-RED-006  File has 457 lines (max 300) — split by responsibility.
+   [error] linter-scripts/check-placeholder-comments.py:301  CODE-RED-006  File has 3135 lines (max 300) — split by responsibility.
+   [error] linter-scripts/forbidden-strings-summary.py:301  CODE-RED-006  File has 376 lines (max 300) — split by responsibility.
    [error] linter-scripts/generate-dashboard-data.cjs:301  CODE-RED-006  File has 311 lines (max 300) — split by responsibility.
    [error] linter-scripts/suggest-spec-cross-link-fixes.py:301  CODE-RED-006  File has 347 lines (max 300) — split by responsibility.
    [error] linter-scripts/validate-guidelines.go:301  CODE-RED-006  File has 1021 lines (max 300) — split by responsibility.
    [error] linter-scripts/validate-guidelines.py:301  CODE-RED-006  File has 1217 lines (max 300) — split by responsibility.
+   [error] linter-scripts/validate-rename-intake.py:301  CODE-RED-006  File has 376 lines (max 300) — split by responsibility.
+   [error] linter-scripts/tests/test_audit_reason_field_present.py:301  CODE-RED-006  File has 331 lines (max 300) — split by responsibility.
+   [error] linter-scripts/tests/test_ignored_deleted_reason_exact_match.py:301  CODE-RED-006  File has 393 lines (max 300) — split by responsibility.
+   [error] linter-scripts/tests/test_list_changed_files_verbose.py:301  CODE-RED-006  File has 344 lines (max 300) — split by responsibility.
+   [error] linter-scripts/tests/test_placeholder_diff_parser.py:301  CODE-RED-006  File has 511 lines (max 300) — split by responsibility.
+   [error] linter-scripts/tests/test_similarity_legend_flag.py:301  CODE-RED-006  File has 348 lines (max 300) — split by responsibility.
+   [error] linter-scripts/tests/test_validate_rename_intake.py:301  CODE-RED-006  File has 311 lines (max 300) — split by responsibility.
    [error] scripts/ci-config.mjs:301  CODE-RED-006  File has 353 lines (max 300) — split by responsibility.
-   [error] scripts/generate-bundle-installers.mjs:301  CODE-RED-006  File has 930 lines (max 300) — split by responsibility.
-   [error] scripts/sync-version.mjs:301  CODE-RED-006  File has 326 lines (max 300) — split by responsibility.
-   [error] src/components/landing/InstallSection.tsx:301  CODE-RED-006  File has 336 lines (max 300) — split by responsibility.
+   [error] scripts/generate-bundle-installers.mjs:301  CODE-RED-006  File has 1198 lines (max 300) — split by responsibility.
+   [error] scripts/spec-change-report.mjs:301  CODE-RED-006  File has 634 lines (max 300) — split by responsibility.
+   [error] scripts/sync-check.mjs:301  CODE-RED-006  File has 335 lines (max 300) — split by responsibility.
+   [error] scripts/sync-version.mjs:301  CODE-RED-006  File has 329 lines (max 300) — split by responsibility.
    [error] src/components/ui/chart.tsx:301  CODE-RED-006  File has 311 lines (max 300) — split by responsibility.
    [error] src/components/ui/sidebar.tsx:301  CODE-RED-006  File has 650 lines (max 300) — split by responsibility.
 ❌ coding-guidelines-positive-conditions-go: 18 finding(s)
@@ -579,23 +1437,26 @@
    [error] linter-scripts/validate-guidelines.go:977  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] linter-scripts/validate-guidelines.go:984  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] linter-scripts/validate-guidelines.go:1005  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-❌ coding-guidelines-positive-conditions-ts: 181 finding(s)
-   [error] eslint-plugins/coding-guidelines/index.js:8  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:46  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:55  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:90  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:104  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:112  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:149  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:158  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:163  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:190  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:243  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:246  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:270  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:297  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:299  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] eslint-plugins/coding-guidelines/index.js:305  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+❌ coding-guidelines-positive-conditions-ts: 216 finding(s)
+   [error] eslint-plugins/coding-guidelines/index.js:10  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:48  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:57  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:92  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:106  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:114  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:151  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:160  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:165  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:184  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:319  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:322  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:346  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:373  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:375  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/index.js:381  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:18  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:23  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] eslint-plugins/coding-guidelines/_lib/effective-lines.js:30  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] linter-scripts/generate-dashboard-data.cjs:25  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] linter-scripts/generate-dashboard-data.cjs:41  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] linter-scripts/generate-dashboard-data.cjs:76  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
@@ -617,21 +1478,40 @@
    [error] scripts/ci-config.mjs:304  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/ci-config.mjs:320  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/read-bundles.mjs:38  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/spec-change-report.mjs:83  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/spec-change-report.mjs:219  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:138  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:163  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:180  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:222  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:236  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:237  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-check.mjs:250  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-health-score.mjs:30  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-health-score.mjs:35  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-health-score.mjs:40  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-health-score.mjs:81  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-readme-stats.mjs:36  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-readme-stats.mjs:94  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] scripts/sync-spec-tree.mjs:108  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-spec-tree.mjs:114  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-version.mjs:105  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-version.mjs:146  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-version.mjs:152  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/sync-version.mjs:195  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] scripts/sync-version.mjs:200  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] scripts/sync-version.mjs:243  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] scripts/sync-version.mjs:244  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] scripts/sync-version.mjs:248  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-version.mjs:203  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-version.mjs:246  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-version.mjs:247  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/sync-version.mjs:251  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/check-doc-links.mjs:68  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/check-doc-links.mjs:74  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/check-doc-links.mjs:75  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/check-doc-links.mjs:87  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/check-doc-links.mjs:115  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/check-glossary-alignment.mjs:31  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/fix-glossary-alignment.mjs:34  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/fix-glossary-alignment.mjs:54  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/fix-glossary-alignment.mjs:102  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] scripts/docs/fix-glossary-alignment.mjs:115  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/spec-audit/run-audit.mjs:71  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/spec-audit/run-audit.mjs:94  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] scripts/spec-audit/run-audit.mjs:187  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
@@ -676,21 +1556,44 @@
    [error] src/components/MarkdownRenderer.tsx:14  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/MarkdownRenderer.tsx:23  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/MarkdownRenderer.tsx:37  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/SpecTreeNav.tsx:26  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/TableOfContents.tsx:13  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/TableOfContents.tsx:87  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/CommandPalette.tsx:38  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/CommandPalette.tsx:54  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/CommandPalette.tsx:112  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/DocsToolbar.tsx:20  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/DocsToolbar.tsx:92  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/DocsToolbar.tsx:185  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/GithubSyncBanner.tsx:60  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/SearchDialog.tsx:25  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/SearchDialog.tsx:58  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/SearchDialog.tsx:115  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:42  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/TreeDiagnosticsPanel.tsx:120  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/specOverviewJump.ts:17  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/search/SearchParts.tsx:70  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/docs/search/SearchParts.tsx:108  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/docs/search/fuzzyMatch.ts:68  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/docs/search/fuzzyMatch.ts:82  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/docs/search/fuzzyMatch.ts:91  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/docs/search/fuzzyMatch.ts:169  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/search/fuzzyMatch.ts:64  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/search/fuzzyMatch.ts:78  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/docs/search/fuzzyMatch.ts:87  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/landing/install/CommandRow.tsx:34  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/landing/install/CommandRow.tsx:41  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/landing/install/CommandRow.tsx:50  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/markdown/checklistBuilder.ts:18  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:17  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:25  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:35  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:66  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:77  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:97  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:107  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:116  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:143  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:159  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:163  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:178  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/components/markdown/codeBlockActionHandlers.ts:182  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/markdown/codeBlockDragHandlers.ts:21  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/markdown/codeBlockDragHandlers.ts:25  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/markdown/codeBlockDragHandlers.ts:61  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
@@ -708,19 +1611,6 @@
    [error] src/components/markdown/highlighter.ts:124  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/markdown/highlighter.ts:138  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/markdown/useCodeBlockEvents.ts:33  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:17  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:25  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:35  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:66  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:77  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:97  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:107  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:116  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:143  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:159  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:163  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:178  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/components/markdown/codeBlockActionHandlers.ts:182  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/ui/carousel.tsx:34  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/ui/carousel.tsx:55  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/ui/carousel.tsx:88  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
@@ -737,13 +1627,14 @@
    [error] src/components/ui/sidebar.tsx:37  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/components/ui/sidebar.tsx:467  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/use-toast.ts:166  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/hooks/useScrollSpy.ts:27  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/hooks/useScrollSpy.ts:62  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/useCollapsibleSections.ts:46  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/useCollapsibleSections.ts:56  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/hooks/useCountUp.ts:59  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/useDocsKeyboard.ts:62  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/useDocsKeyboard.ts:87  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/useDocsKeyboard.ts:145  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/hooks/useScrollSpy.ts:27  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/hooks/useScrollSpy.ts:62  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/collapsible/collapsibleState.ts:29  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/hooks/collapsible/wrapSections.ts:21  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/lib/clipboard.ts:4  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
@@ -753,14 +1644,16 @@
    [error] src/lib/downloadUtils.ts:18  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/lib/downloadUtils.ts:41  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/lib/downloadUtils.ts:74  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/pages/DocsViewerComponents.tsx:137  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/lib/treeDiagnostics.ts:109  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/pages/DocsViewerComponents.tsx:154  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/pages/DocsViewerHelpers.ts:18  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/pages/DocsViewerHelpers.ts:78  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/pages/DocsViewerHelpers.ts:116  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
    [error] src/pages/DocsViewerHelpers.ts:128  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/pages/DocsViewerHelpers.ts:197  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/pages/DocsViewerHelpers.ts:201  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
-   [error] src/pages/DocsViewerHelpers.ts:211  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/pages/DocsViewerHelpers.ts:198  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/pages/DocsViewerHelpers.ts:202  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/pages/DocsViewerHelpers.ts:212  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
+   [error] src/pages/ReadmeEditor.tsx:57  CODE-RED-008  Negated `if` — invert by naming a positive guard helper.
 ❌ coding-guidelines-free-text-columns: 12 finding(s)
    [error] linters-cicd/checks/free-text-columns/fixtures/bad.sql:2  DB-FREETEXT-001  Entity/reference table 'AgentSite' is missing required nullable column 'Description TEXT NULL' (Rule 10 — see §6 of 02-schema-design.md).
    [error] linters-cicd/checks/free-text-columns/fixtures/bad.sql:8  DB-FREETEXT-001  Transactional table 'Transaction' is missing required nullable column 'Notes TEXT NULL' (Rule 11 — see §6 of 02-schema-design.md).
@@ -787,7 +1680,40 @@
    [error] linters-cicd/checks/missing-desc/fixtures/bad.sql:22  MISSING-DESC-001  Audit/log table 'CommandHistory' is missing required nullable column 'Notes TEXT NULL' (Rule 11 — see §6 of 02-schema-design.md).
    [error] linters-cicd/checks/missing-desc/fixtures/bad.sql:22  MISSING-DESC-001  Reserved free-text column 'Comments' on table 'CommandHistory' violates Rule 12: must be nullable with no DEFAULT. Found: 'Comments         TEXT NOT NULL'.
    [error] linters-cicd/checks/missing-desc/fixtures/waived-block.sql:8  MISSING-DESC-001  Entity/reference table 'UnwaivedEntity' is missing required nullable column 'Description TEXT NULL' (Rule 10 — see §6 of 02-schema-design.md).
+❌ coding-guidelines-spec-links: 26 finding(s)
+   [error] CHANGELOG.md:16  SPEC-LINK-001  Broken link: target file not found: 'rename-audit-v15-v16-to-v17.md'
+   [error] readme.md:290  SPEC-LINK-001  Broken anchor: '#-cli-linter-pack-release-asset-installer' not found in this file
+   [error] readme.md:504  SPEC-LINK-001  Broken link: target file not found: 'tests/installer/check-install-ps1-noverify-help.sh'
+   [error] readme.md:698  SPEC-LINK-001  Broken anchor: '#-real-world-example-code-red-violations' not found in this file
+   [error] readme.md:701  SPEC-LINK-001  Broken link: target file not found: 'spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/'
+   [error] readme.md:702  SPEC-LINK-001  Broken link: target file not found: 'spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md'
+   [error] readme.md:768  SPEC-LINK-001  Broken anchor: '#real-world-violations' not found in 'docs/principles.md'
+   [error] readme.md:1156  SPEC-LINK-001  Broken anchor: '#error-management' not found in 'docs/architecture.md'
+   [error] readme.md:1156  SPEC-LINK-001  Broken link: target file not found: 'spec/02-coding-guidelines/03-error-handling/'
+   [error] readme.md:1179  SPEC-LINK-001  Broken link: target file not found: 'spec/02-coding-guidelines/03-error-handling/04-result-types.md'
+   [error] readme.md:1397  SPEC-LINK-001  Broken link: target file not found: 'changelog.md'
+   [error] readme.md:1418  SPEC-LINK-001  Broken link: target file not found: 'spec/01-spec-authoring-guide/05-non-cli-module-template.md'
+   [error] docs/README.md:13  SPEC-LINK-001  Broken anchor: '#principles' not found in this file
+   [error] docs/README.md:14  SPEC-LINK-001  Broken anchor: '#architecture' not found in this file
+   [error] docs/README.md:15  SPEC-LINK-001  Broken anchor: '#author' not found in this file
+   [error] docs/README.md:17  SPEC-LINK-001  Broken anchor: '#installer-fix-repo-flags' not found in this file
+   [error] docs/README.md:18  SPEC-LINK-001  Broken anchor: '#slides-installer' not found in this file
+   [error] docs/README.md:19  SPEC-LINK-001  Broken anchor: '#github-repo-metadata' not found in this file
+   [error] docs/README.md:21  SPEC-LINK-001  Broken anchor: '#spec-author-dx' not found in this file
+   [error] docs/README.md:22  SPEC-LINK-001  Broken anchor: '#guidelines-audit' not found in this file
+   [error] docs/README.md:24  SPEC-LINK-001  Broken anchor: '#payment-banner-hider' not found in this file
+   [error] docs/README.md:104  SPEC-LINK-001  Broken link: target file not found: '../changelog.md'
+   [error] docs/spec-author-dx.md:112  SPEC-LINK-001  Broken link: target file not found: 'path.md'
+   [error] linter-scripts/README-cross-links.md:27  SPEC-LINK-001  Broken link: target file not found: 'path'
+   [error] spec/health-dashboard.md:26  SPEC-LINK-001  Broken link: target file not found: '../mem://constraints/avoid-app-sync'
+   [error] spec/02-coding-guidelines/06-cicd-integration/08-fix-repo-and-installers/00-overview.md:79  SPEC-LINK-001  Broken link: target file not found: '../../17-consolidated-guidelines/00-overview.md'
+✅ coding-guidelines-sqli-order-group-by-php: clean
+✅ coding-guidelines-sqli-order-group-by-ts: clean
+✅ coding-guidelines-sqli-raw-execute-php: clean
+✅ coding-guidelines-sqli-raw-execute-ts: clean
+✅ coding-guidelines-sqli-where-raw-php: clean
+✅ coding-guidelines-sqli-where-raw-ts: clean
 ✅ coding-guidelines-no-else-after-return-go: clean
 ✅ coding-guidelines-no-else-after-return-ts: clean
 
-Total: 775 finding(s)
+Total: 1684 finding(s)
