@@ -25,6 +25,12 @@ export interface VersionInfo {
   updated: string;
   stats: VersionTotals;
   folders: VersionFolderStats[];
+  Version: string;
+  Title: string;
+  RepoSlug: string;
+  RepoUrl: string;
+  LastCommitSha: string;
+  Description: string;
 }
 
 export interface HealthScore {
