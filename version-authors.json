@@ -1,0 +1,16 @@
+{
+  "RepoUrl": "https://github.com/mahin/coding-guidelines",
+  "Title": "Coding Guidelines",
+  "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
+  "Authors": [
+    {
+      "Name": "Md. Alim Ul Karim",
+      "Urls": [
+        "https://riseup.asia",
+        "https://github.com/alim-ul-karim"
+      ],
+      "Role": "PrimaryAuthor",
+      "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
+    }
+  ]
+}
