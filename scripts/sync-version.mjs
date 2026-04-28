@@ -348,19 +348,15 @@ function loadExistingMeta() {
   }
 }
 
-function buildManifest() {
-  const pkg = readJson(PKG_PATH);
-  const existing = loadExistingMeta();
-  const folders = buildFolderEntries();
-  const rootStats = rootFileStats();
-  const gitInfo = readGitInfo();
-  const identity = buildPascalIdentity(pkg, gitInfo);
+function shouldEmitLegacy() {
+  const flag = process.argv.includes("--no-legacy");
+  const env = process.env.SYNC_VERSION_NO_LEGACY === "1";
+  return flag === false && env === false;
+}
 
-  // Ordering: PascalCase identity first (per spec/01-spec-authoring-guide/
-  // 17-version-schema.md §4), then transitional legacy camelCase fields
-  // (§10) for downstream readers not yet migrated.
+function buildPascalSection(identity) {
+  // §4 PascalCase identity (canonical, always emitted).
   return {
-    // ---- §4 PascalCase identity (canonical) ----
     Version:       identity.Version,
     Title:         identity.Title,
     RepoSlug:      identity.RepoSlug,
@@ -368,7 +364,13 @@ function buildManifest() {
     LastCommitSha: identity.LastCommitSha,
     Description:   identity.Description,
     Authors:       identity.Authors,
-    // ---- legacy camelCase (deprecated, transitional) ----
+  };
+}
+
+function buildLegacySection(pkg, existing, gitInfo, folders, rootStats) {
+  // §10 transitional camelCase block — emitted only while legacy
+  // readers (installer, sync-check, dashboard) still consume it.
+  return {
     version:     pkg.version,
     updated:     todayUtc8(),
     name:        existing.name || "coding-guidelines",
@@ -381,23 +383,38 @@ function buildManifest() {
   };
 }
 
+function buildManifest() {
+  const pkg = readJson(PKG_PATH);
+  const existing = loadExistingMeta();
+  const folders = buildFolderEntries();
+  const rootStats = rootFileStats();
+  const gitInfo = readGitInfo();
+  const identity = buildPascalIdentity(pkg, gitInfo);
+
+  const pascal = buildPascalSection(identity);
+  if (shouldEmitLegacy() === false) return pascal;
+
+  const legacy = buildLegacySection(pkg, existing, gitInfo, folders, rootStats);
+  return { ...pascal, ...legacy };
+}
+
 function logSummary(manifest) {
-  const v = manifest.version;
-  const u = manifest.updated;
-  const sha = manifest.git.shortSha || "no-git";
-  const s = manifest.stats;
-  console.log(
-    `  OK version.json synced -> v${v} (${u}, git ${sha})`,
-  );
-  console.log(
-    `     ${s.totalFolders} folders, ${s.totalFiles} files, ${s.totalLines.toLocaleString()} lines, ${(s.totalBytes / 1024).toFixed(1)} KB`,
-  );
-  const versioned = manifest.folders.filter((f) => f.version).length;
-  const missing = manifest.folders.length - versioned;
-  if (missing > 0) {
+  const v = manifest.Version;
+  const sha = manifest.LastCommitSha ? manifest.LastCommitSha.slice(0, 7) : "no-git";
+  const legacy = manifest.folders ? "with-legacy" : "pascal-only";
+  console.log(`  OK version.json synced -> v${v} (git ${sha}, ${legacy})`);
+  if (manifest.stats) {
+    const s = manifest.stats;
     console.log(
-      `     !! ${missing} folder(s) missing **Version:** in 00-overview.md`,
+      `     ${s.totalFolders} folders, ${s.totalFiles} files, ${s.totalLines.toLocaleString()} lines, ${(s.totalBytes / 1024).toFixed(1)} KB`,
     );
+  }
+  if (manifest.folders) {
+    const versioned = manifest.folders.filter((f) => f.version).length;
+    const missing = manifest.folders.length - versioned;
+    if (missing > 0) {
+      console.log(`     !! ${missing} folder(s) missing **Version:** in 00-overview.md`);
+    }
   }
 }
 
