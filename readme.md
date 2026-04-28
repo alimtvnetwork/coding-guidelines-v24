@@ -505,6 +505,8 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <h2 align="center">📑 Table of Contents</h2>
 
+<p align="center"><strong>In this README</strong></p>
+
 <p align="center">
   <a href="#-table-of-contents">Table of Contents</a> ·
   <a href="#-install-in-one-line">Install</a> ·
@@ -522,6 +524,19 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-neutral-ai-assessment">Neutral AI Assessment</a> ·
   <a href="#-contributing">Contributing</a> ·
   <a href="#-author">Author</a>
+</p>
+
+<p align="center"><strong>Docs Pages</strong> (deep-dives in <a href="docs/"><code>docs/</code></a>)</p>
+
+<p align="center">
+  <a href="docs/principles.md">Principles</a> ·
+  <a href="docs/architecture.md">Architecture</a> ·
+  <a href="docs/author.md">Author</a> ·
+  <a href="docs/installer-fix-repo-flags.md">Installer fix-repo Flags</a> ·
+  <a href="docs/slides-installer.md">Slides Installer</a> ·
+  <a href="docs/spec-author-dx.md">Spec Author DX</a> ·
+  <a href="docs/guidelines-audit.md">Guidelines Audit</a> ·
+  <a href="docs/github-repo-metadata.md">GitHub Repo Metadata</a>
 </p>
 
 ---
