@@ -526,7 +526,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-author">Author</a>
 </p>
 
-<p align="center"><strong>Docs Pages</strong> (deep-dives in <a href="docs/"><code>docs/</code></a>)</p>
+<p align="center"><strong>Docs Pages</strong> — full index: <a href="docs/README.md"><code>docs/README.md</code></a></p>
 
 <p align="center">
   <a href="docs/principles.md">Principles</a> ·
