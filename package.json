@@ -12,6 +12,7 @@
     "sync:health": "node scripts/sync-health-score.mjs",
     "sync:check": "node scripts/sync-check.mjs",
     "validate:version": "node scripts/validate-version-json.mjs",
+    "gen:role-enum": "node scripts/generate-role-enum.mjs",
     "sync:check:verbose": "node scripts/sync-check.mjs --verbose",
     "sync:fix": "node scripts/sync-check.mjs --fix",
     "lint:readme": "python3 linter-scripts/check-root-readme.py",
