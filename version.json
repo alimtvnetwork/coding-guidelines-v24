@@ -1,18 +1,35 @@
 {
+  "Version": "4.24.0",
+  "Title": "Coding Guidelines",
+  "RepoSlug": "coding-guidelines",
+  "RepoUrl": "https://github.com/mahin/coding-guidelines",
+  "LastCommitSha": "8dc2161da12441992726ccc0e7788f60527bced1",
+  "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
+  "Authors": [
+    {
+      "Name": "Md. Alim Ul Karim",
+      "Urls": [
+        "https://riseup.asia",
+        "https://github.com/alim-ul-karim"
+      ],
+      "Role": "PrimaryAuthor",
+      "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
+    }
+  ],
   "version": "4.24.0",
   "updated": "2026-04-28",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "f92b209fefc25e0ec55572c79430bde7ba501a43",
-    "shortSha": "f92b209",
-    "branch": "edit/edt-a0e64455-b301-41a7-a880-54886f82086c"
+    "sha": "8dc2161da12441992726ccc0e7788f60527bced1",
+    "shortSha": "8dc2161",
+    "branch": "edit/edt-5c01b177-feb3-4ddf-a6d3-0682276dcbb7"
   },
   "stats": {
-    "totalFiles": 615,
-    "totalLines": 132923,
+    "totalFiles": 622,
+    "totalLines": 133853,
     "totalFolders": 22,
-    "totalBytes": 4521890,
+    "totalBytes": 4559034,
     "rootFiles": 6
   },
   "folders": [
@@ -25,9 +42,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 16,
-      "lineCount": 3093,
-      "byteCount": 117085
+      "fileCount": 17,
+      "lineCount": 3333,
+      "byteCount": 128079
     },
     {
       "path": "02-coding-guidelines",
@@ -38,9 +55,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 191,
-      "lineCount": 32575,
-      "byteCount": 1019145
+      "fileCount": 197,
+      "lineCount": 33265,
+      "byteCount": 1045295
     },
     {
       "path": "03-error-manage",

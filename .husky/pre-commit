@@ -1,1 +1,20 @@
+#!/usr/bin/env sh
+# ============================================================
+# Husky pre-commit
+#
+# 1. Refresh PascalCase identity + LastCommitSha in version.json
+#    (per spec/01-spec-authoring-guide/17-version-schema.md §7.1)
+#    and re-stage if changed.
+# 2. Run the test suite.
+# ============================================================
+
+set -e
+
+node scripts/sync-version.mjs
+
+if ! git diff --quiet -- version.json; then
+  git add version.json
+  echo "  pre-commit: re-staged version.json (LastCommitSha refreshed)"
+fi
+
 npm test
