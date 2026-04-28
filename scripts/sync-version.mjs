@@ -37,6 +37,17 @@ const ROOT = resolve(__dirname, "..");
 const SPEC_ROOT = resolve(ROOT, "spec");
 const VERSION_PATH = resolve(ROOT, "version.json");
 const PKG_PATH = resolve(ROOT, "package.json");
+const AUTHORS_PATH = resolve(ROOT, "version-authors.json");
+
+// ---------- canonical Role enum (spec/01-spec-authoring-guide/17-version-schema.md §6) ----------
+
+const VALID_ROLES = new Set([
+  "PrimaryAuthor",
+  "Contributor",
+  "Maintainer",
+  "Reviewer",
+  "Sponsor",
+]);
 
 // ---------- file IO ----------
 
@@ -77,6 +88,62 @@ function readGitInfo() {
     sha: sha,
     shortSha: sha ? sha.slice(0, 7) : null,
     branch: tryGit("rev-parse --abbrev-ref HEAD"),
+  };
+}
+
+// ---------- repo identity (PascalCase schema) ----------
+
+// Strip embedded credentials (https://user:token@host/...) — never write
+// secrets into version.json.
+function stripUrlCredentials(url) {
+  if (!url) return null;
+  return url.replace(/^(https?:\/\/)[^@/]+@/, "$1");
+}
+
+function deriveRepoSlug(repoUrl, fallbackName) {
+  if (!repoUrl) return fallbackName;
+  const m = repoUrl.match(/\/([^/]+?)(?:\.git)?\/?$/);
+  if (!m) return fallbackName;
+  return m[1];
+}
+
+function loadAuthorsConfig() {
+  try {
+    return readJson(AUTHORS_PATH);
+  } catch {
+    return {};
+  }
+}
+
+function validateAuthors(authors) {
+  if (!Array.isArray(authors) || authors.length === 0) return [];
+  const primaryCount = authors.filter((a) => a.Role === "PrimaryAuthor").length;
+  if (primaryCount !== 1) {
+    console.warn(
+      `  WARN version-authors.json: expected exactly one PrimaryAuthor, found ${primaryCount}`,
+    );
+  }
+  for (const a of authors) {
+    if (!VALID_ROLES.has(a.Role)) {
+      console.warn(`  WARN version-authors.json: invalid Role '${a.Role}' for '${a.Name}'`);
+    }
+  }
+  return authors;
+}
+
+function buildPascalIdentity(pkg, gitInfo) {
+  const cfg = loadAuthorsConfig();
+  const remoteUrlRaw = tryGit("config --get remote.origin.url");
+  const repoUrl = cfg.RepoUrl || stripUrlCredentials(remoteUrlRaw) || "";
+  const slug = deriveRepoSlug(repoUrl, pkg.name || "unknown-repo");
+  return {
+    Version:       pkg.version,
+    Title:         cfg.Title || pkg.name || slug,
+    RepoSlug:      slug,
+    RepoUrl:       repoUrl,
+    LastCommitSha: gitInfo.sha || "",
+    Description:   cfg.Description || pkg.description || "",
+    Authors:       validateAuthors(cfg.Authors || []),
   };
 }
 
@@ -286,15 +353,29 @@ function buildManifest() {
   const existing = loadExistingMeta();
   const folders = buildFolderEntries();
   const rootStats = rootFileStats();
+  const gitInfo = readGitInfo();
+  const identity = buildPascalIdentity(pkg, gitInfo);
 
+  // Ordering: PascalCase identity first (per spec/01-spec-authoring-guide/
+  // 17-version-schema.md §4), then transitional legacy camelCase fields
+  // (§10) for downstream readers not yet migrated.
   return {
+    // ---- §4 PascalCase identity (canonical) ----
+    Version:       identity.Version,
+    Title:         identity.Title,
+    RepoSlug:      identity.RepoSlug,
+    RepoUrl:       identity.RepoUrl,
+    LastCommitSha: identity.LastCommitSha,
+    Description:   identity.Description,
+    Authors:       identity.Authors,
+    // ---- legacy camelCase (deprecated, transitional) ----
     version:     pkg.version,
     updated:     todayUtc8(),
     name:        existing.name || "coding-guidelines",
     description:
       existing.description ||
       "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
-    git:         readGitInfo(),
+    git:         gitInfo,
     stats:       sumStats(folders, rootStats),
     folders:     folders,
   };
