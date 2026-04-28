@@ -1389,6 +1389,10 @@ Deep-dives live in `docs/` (README stays under 400 lines):
 | [`docs/architecture.md`](docs/architecture.md) | Spec authoring conventions · folder structure · architecture decisions · error management summary |
 | [`docs/author.md`](docs/author.md) | Author bio · Riseup Asia LLC · AI assessments · FAQ · design philosophy |
 | [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md) | `--max-fix-repo-logs` · `INSTALL_MAX_FIX_REPO_LOGS` · `--rollback-on-fix-repo-failure` · `--full-rollback` · interaction matrix |
+| [`docs/slides-installer.md`](docs/slides-installer.md) | Slides app installer flags · packaging pipeline · offline behavior |
+| [`docs/spec-author-dx.md`](docs/spec-author-dx.md) | Spec author developer experience · tooling · workflow ergonomics |
+| [`docs/guidelines-audit.md`](docs/guidelines-audit.md) | Guidelines audit findings · drift detection · remediation log |
+| [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
