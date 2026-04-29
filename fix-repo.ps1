@@ -48,16 +48,30 @@ function Test-IsModeFlag { param([string]$A) return $A -in '-2','-3','-5','-all'
 
 function Resolve-Mode {
     param([string[]]$Args)
-    $modes   = @($Args | Where-Object { Test-IsModeFlag $_ })
-    $dryRun  = ($Args -contains '-DryRun') -or ($Args -contains '-dryrun')
-    $verbose = ($Args -contains '-Verbose') -or ($Args -contains '-verbose')
-    $unknown = $Args | Where-Object {
-        -not (Test-IsModeFlag $_) -and $_ -notin '-DryRun','-dryrun','-Verbose','-verbose'
+    $modes      = @()
+    $dryRun     = $false
+    $verbose    = $false
+    $configPath = $null
+    $unknown    = @()
+    $i = 0
+    while ($i -lt $Args.Count) {
+        $a = $Args[$i]
+        if (Test-IsModeFlag $a) { $modes += $a; $i++; continue }
+        if ($a -in '-DryRun','-dryrun')   { $dryRun  = $true;  $i++; continue }
+        if ($a -in '-Verbose','-verbose') { $verbose = $true;  $i++; continue }
+        if ($a -in '-Config','-config') {
+            if ($i + 1 -ge $Args.Count) { return @{ Error = "-Config requires a path" } }
+            $configPath = $Args[$i+1]; $i += 2; continue
+        }
+        if ($a -like '-Config=*' -or $a -like '-config=*') {
+            $configPath = $a.Substring($a.IndexOf('=') + 1); $i++; continue
+        }
+        $unknown += $a; $i++
     }
     if ($modes.Count -gt 1) { return @{ Error = "multiple mode flags: $($modes -join ' ')" } }
     if ($unknown)           { return @{ Error = "unknown flag(s): $($unknown -join ' ')" } }
     $mode = if ($modes.Count -eq 1) { $modes[0].ToLowerInvariant() } else { '-2' }
-    return @{ Mode = $mode; DryRun = $dryRun; Verbose = $verbose }
+    return @{ Mode = $mode; DryRun = $dryRun; Verbose = $verbose; ConfigPath = $configPath }
 }
 
 function Get-SpanFromMode {
