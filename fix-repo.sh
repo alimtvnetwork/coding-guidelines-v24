@@ -23,6 +23,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/scripts/fix-repo/file-scan.sh"
 # shellcheck source=scripts/fix-repo/rewrite.sh
 . "$SCRIPT_DIR/scripts/fix-repo/rewrite.sh"
+# shellcheck source=scripts/fix-repo/config.sh
+. "$SCRIPT_DIR/scripts/fix-repo/config.sh"
 
 EXIT_OK=0
 EXIT_NOT_A_REPO=2
@@ -31,10 +33,12 @@ EXIT_NO_VERSION_SUFFIX=4
 EXIT_BAD_VERSION=5
 EXIT_BAD_FLAG=6
 EXIT_WRITE_FAILED=7
+EXIT_BAD_CONFIG=8
 
 MODE="--2"
 DRY_RUN=0
 VERBOSE_FLAG=0
+CONFIG_PATH=""
 
 is_mode_flag() {
   case "$1" in --2|--3|--5|--all) return 0 ;; *) return 1 ;; esac
