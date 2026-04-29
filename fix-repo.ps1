@@ -33,6 +33,7 @@ $Script:HereDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $Script:HereDir 'scripts/fix-repo/RepoIdentity.ps1')
 . (Join-Path $Script:HereDir 'scripts/fix-repo/FileScan.ps1')
 . (Join-Path $Script:HereDir 'scripts/fix-repo/Rewrite.ps1')
+. (Join-Path $Script:HereDir 'scripts/fix-repo/Config.ps1')
 
 $Script:ExitOk              = 0
 $Script:ExitNotARepo        = 2
@@ -41,6 +42,7 @@ $Script:ExitNoVersionSuffix = 4
 $Script:ExitBadVersion      = 5
 $Script:ExitBadFlag         = 6
 $Script:ExitWriteFailed     = 7
+$Script:ExitBadConfig       = 8
 
 function Test-IsModeFlag { param([string]$A) return $A -in '-2','-3','-5','-all','-All','-ALL' }
 
