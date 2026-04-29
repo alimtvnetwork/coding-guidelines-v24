@@ -178,7 +178,7 @@ heading visually anchors above its cards. The README linter
 
 ## §7 — Length & Modularity
 
-- The root README MUST stay **≤ 400 lines**.
+- The root README MUST stay **≤ 600 lines**.
 - Anything longer MUST be extracted into `docs/`:
   - `docs/principles.md` — coding principles, CODE RED rules
   - `docs/architecture.md` — folder structure, conventions
@@ -217,7 +217,7 @@ Before tagging a release, verify **all** of the following on the root
 - [ ] Centered auto-stamped stats line.
 - [ ] Hero block ends with `---` before any left-aligned content.
 - [ ] All §6 sections present, in order, with emoji prefixes.
-- [ ] Root README is ≤ 400 lines (long-form lives in `docs/`).
+- [ ] Root README is ≤ 600 lines (long-form lives in `docs/`).
 - [ ] Every `<img>` has `alt`, `width` (and `height` for icons).
 - [ ] `npm run sync` was run and committed (badges + stats are current).
 
