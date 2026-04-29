@@ -149,6 +149,7 @@ mode:    <write|dry-run>
 | `5` | E_BAD_VERSION | `N <= 0` or non-integer |
 | `6` | E_BAD_FLAG | Unknown / conflicting flags |
 | `7` | E_WRITE_FAILED | At least one file failed to write |
+| `8` | E_BAD_CONFIG | `--config` path missing or JSON failed to parse |
 
 ## 9. Non-goals
 
@@ -159,3 +160,22 @@ mode:    <write|dry-run>
 - Migrating away from non-`-vN` naming schemes.
 - Creating `.bak` files or auto-staging changes — the user's
   rollback path is `git checkout -- .` (confirmed in design review).
+
+## 10. Configuration file (`fix-repo.config.json`)
+
+Optional JSON file (default lookup: `<repo-root>/fix-repo.config.json`)
+that lets a repo exclude paths from the sweep without code changes.
+Override the location with `--config <path>` (bash) or `-Config <path>`
+(PowerShell). A missing default file is **not** an error; a missing
+explicit file exits `E_BAD_CONFIG` (`8`).
+
+| Key | Type | Semantics |
+|-----|------|-----------|
+| `ignoreDirs` | `string[]` | Repo-relative directory prefixes to skip entirely. A path is excluded iff it equals one of the entries or starts with `<entry>/`. |
+| `ignorePatterns` | `string[]` | Glob patterns (`**` = any depth, `*` = within a path segment, `?` = single non-`/` char). All other regex metacharacters are escaped. |
+
+Matching runs **before** binary/size/null-byte detection, so excluded
+directories incur no I/O for size or null-byte probing.
+
+Exit code: `8` = `E_BAD_CONFIG` (config path passed via flag does not
+exist, or JSON failed to parse).

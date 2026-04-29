@@ -23,6 +23,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/scripts/fix-repo/file-scan.sh"
 # shellcheck source=scripts/fix-repo/rewrite.sh
 . "$SCRIPT_DIR/scripts/fix-repo/rewrite.sh"
+# shellcheck source=scripts/fix-repo/config.sh
+. "$SCRIPT_DIR/scripts/fix-repo/config.sh"
 
 EXIT_OK=0
 EXIT_NOT_A_REPO=2
@@ -31,28 +33,36 @@ EXIT_NO_VERSION_SUFFIX=4
 EXIT_BAD_VERSION=5
 EXIT_BAD_FLAG=6
 EXIT_WRITE_FAILED=7
+EXIT_BAD_CONFIG=8
 
 MODE="--2"
 DRY_RUN=0
 VERBOSE_FLAG=0
+CONFIG_PATH=""
 
 is_mode_flag() {
   case "$1" in --2|--3|--5|--all) return 0 ;; *) return 1 ;; esac
 }
 
 parse_args() {
-  local mode_count=0 a
+  local mode_count=0 a expect_config=0
   for a in "$@"; do
+    if [ "$expect_config" = "1" ]; then CONFIG_PATH="$a"; expect_config=0; continue; fi
     if is_mode_flag "$a"; then
       MODE="$a"; mode_count=$((mode_count + 1)); continue
     fi
     case "$a" in
       --dry-run) DRY_RUN=1 ;;
       --verbose) VERBOSE_FLAG=1 ;;
+      --config)  expect_config=1 ;;
+      --config=*) CONFIG_PATH="${a#--config=}" ;;
       -h|--help) print_help; exit 0 ;;
       *) echo "fix-repo: ERROR unknown flag '$a' (E_BAD_FLAG)" >&2; exit $EXIT_BAD_FLAG ;;
     esac
   done
+  if [ "$expect_config" = "1" ]; then
+    echo "fix-repo: ERROR --config requires a path (E_BAD_FLAG)" >&2; exit $EXIT_BAD_FLAG
+  fi
   if [ "$mode_count" -gt 1 ]; then
     echo "fix-repo: ERROR multiple mode flags (E_BAD_FLAG)" >&2; exit $EXIT_BAD_FLAG
   fi
@@ -62,7 +72,11 @@ print_help() {
   cat <<'EOF'
 fix-repo.sh — rewrite prior versioned-repo-name tokens to current.
 
-Usage: ./fix-repo.sh [--2|--3|--5|--all] [--dry-run] [--verbose]
+Usage: ./fix-repo.sh [--2|--3|--5|--all] [--dry-run] [--verbose] [--config <path>]
+
+Config file (default: ./fix-repo.config.json) supports:
+  ignoreDirs:     repo-relative directory prefixes to skip
+  ignorePatterns: glob patterns (** = any depth, * = within segment)
 
 Spec: spec-authoring/22-fix-repo/01-spec.md
 EOF
@@ -134,6 +148,7 @@ _process_one_file() {
   local rel="$1" current="$2"
   local full="$REPO_ROOT/$rel"
   [ -f "$full" ] || return 0
+  is_ignored_path "$rel" && return 0
   is_scannable_file "$full" || return 0
   SWEEP_SCANNED=$((SWEEP_SCANNED + 1))
   local reps
@@ -159,6 +174,8 @@ run_sweep() {
 main() {
   parse_args "$@"
   resolve_identity
+  load_fixrepo_config "$CONFIG_PATH" "$REPO_ROOT" \
+    || exit $EXIT_BAD_CONFIG
   local current="$SPLIT_VERSION"
   local span; span="$(get_span_from_mode "$MODE" "$current")"
   local targets_str; targets_str="$(get_target_versions "$current" "$span" | sed 's/ *$//')"

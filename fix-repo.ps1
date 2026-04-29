@@ -12,6 +12,8 @@
     -All:         replace every prior version (1..Current-1).
     -DryRun:      report changes; do not write.
     -Verbose:     print every modified file path.
+    -Config <p>:  path to JSON config (default: ./fix-repo.config.json) with
+                  ignoreDirs and ignorePatterns arrays.
 
     Full normative spec: spec-authoring/22-fix-repo/01-spec.md
 
@@ -33,6 +35,7 @@ $Script:HereDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $Script:HereDir 'scripts/fix-repo/RepoIdentity.ps1')
 . (Join-Path $Script:HereDir 'scripts/fix-repo/FileScan.ps1')
 . (Join-Path $Script:HereDir 'scripts/fix-repo/Rewrite.ps1')
+. (Join-Path $Script:HereDir 'scripts/fix-repo/Config.ps1')
 
 $Script:ExitOk              = 0
 $Script:ExitNotARepo        = 2
@@ -41,21 +44,36 @@ $Script:ExitNoVersionSuffix = 4
 $Script:ExitBadVersion      = 5
 $Script:ExitBadFlag         = 6
 $Script:ExitWriteFailed     = 7
+$Script:ExitBadConfig       = 8
 
 function Test-IsModeFlag { param([string]$A) return $A -in '-2','-3','-5','-all','-All','-ALL' }
 
 function Resolve-Mode {
     param([string[]]$Args)
-    $modes   = @($Args | Where-Object { Test-IsModeFlag $_ })
-    $dryRun  = ($Args -contains '-DryRun') -or ($Args -contains '-dryrun')
-    $verbose = ($Args -contains '-Verbose') -or ($Args -contains '-verbose')
-    $unknown = $Args | Where-Object {
-        -not (Test-IsModeFlag $_) -and $_ -notin '-DryRun','-dryrun','-Verbose','-verbose'
+    $modes      = @()
+    $dryRun     = $false
+    $verbose    = $false
+    $configPath = $null
+    $unknown    = @()
+    $i = 0
+    while ($i -lt $Args.Count) {
+        $a = $Args[$i]
+        if (Test-IsModeFlag $a) { $modes += $a; $i++; continue }
+        if ($a -in '-DryRun','-dryrun')   { $dryRun  = $true;  $i++; continue }
+        if ($a -in '-Verbose','-verbose') { $verbose = $true;  $i++; continue }
+        if ($a -in '-Config','-config') {
+            if ($i + 1 -ge $Args.Count) { return @{ Error = "-Config requires a path" } }
+            $configPath = $Args[$i+1]; $i += 2; continue
+        }
+        if ($a -like '-Config=*' -or $a -like '-config=*') {
+            $configPath = $a.Substring($a.IndexOf('=') + 1); $i++; continue
+        }
+        $unknown += $a; $i++
     }
     if ($modes.Count -gt 1) { return @{ Error = "multiple mode flags: $($modes -join ' ')" } }
     if ($unknown)           { return @{ Error = "unknown flag(s): $($unknown -join ' ')" } }
     $mode = if ($modes.Count -eq 1) { $modes[0].ToLowerInvariant() } else { '-2' }
-    return @{ Mode = $mode; DryRun = $dryRun; Verbose = $verbose }
+    return @{ Mode = $mode; DryRun = $dryRun; Verbose = $verbose; ConfigPath = $configPath }
 }
 
 function Get-SpanFromMode {
@@ -99,6 +117,7 @@ function _Process-OneFile {
     param([string]$RepoRoot, [string]$Rel, [string]$Base, [int]$Current, [int[]]$Targets, [bool]$DryRun, [bool]$Verbose)
     $full = Join-Path $RepoRoot $Rel
     if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { return $null }
+    if (Test-IsIgnoredPath -RelPath $Rel)                   { return $null }
     if (-not (Test-IsScannableFile -FullPath $full))        { return $null }
     try {
         $reps = Invoke-FileRewrite -FullPath $full -Base $Base -Targets $Targets -Current $Current -DryRun $DryRun
@@ -149,6 +168,12 @@ if ($parsed.Error) {
 }
 
 $identity = Resolve-Identity
+try {
+    Import-FixRepoConfig -ConfigPath $parsed.ConfigPath -RepoRoot $identity.Root
+} catch {
+    Write-Host ("fix-repo: ERROR {0} (E_BAD_CONFIG)" -f $_.Exception.Message)
+    exit $Script:ExitBadConfig
+}
 $span     = Get-SpanFromMode -Mode $parsed.Mode -Current $identity.Current
 $targets  = @(Get-TargetVersions -Current $identity.Current -Span $span)
 
