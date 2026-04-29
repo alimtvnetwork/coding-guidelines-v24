@@ -1,76 +1,51 @@
 # Coding Guidelines
 
-These guidelines apply to all code generated or modified in this project. Read this file fully before writing any code. Also read all prompt files under `.lovable/prompts/*.*` and the index `.lovable/prompts.md`.
+These rules are mandatory for all code generated in this project. The AI MUST read this file (and all referenced guideline files) before writing or modifying code.
 
-## Function & Control Flow
+## Files To Read Before Coding
 
-1. Keep functions under 8 lines.
-   *Enforcement:* **CODE-RED-005** (build-failing `error`). Any function
-   body whose effective line count exceeds 8 fails CI. CODE-RED-004
-   remains as a redundant >15-line safety net at the same severity.
-   **Canonical thresholds, counting rules, and per-language detector
-   behavior:** [`linters-cicd/checks/function-length-prefer8/README.md`](../../linters-cicd/checks/function-length-prefer8/README.md)
-   (single source of truth). Coordinated tier table also lives in
-   [`spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`](../../spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md).
+1. This file: `.lovable/coding-guidelines.md`
+2. All prompts: `.lovable/prompts/*.*`
+3. All specs: `spec/01-app/*.md`
+4. Master prompt: `spec/02-master-prompts/04-master-prompt-v4.md`
+5. Memory protocol: `.lovable/memory/protocol/01-workflow-rules.md`
+6. Decision log: `.lovable/memory/history/01-decisions.md`
+7. Plan: `.lovable/memory/workflow/01-plan.md`
 
+## Hard Rules
+
+1. Functions ≤ 8 lines (hard cap; split otherwise).
 2. No nested `if` statements.
+3. `if` conditions must be positive and simple — no negations, no `!`.
+4. Follow Boolean naming guidelines: prefix with `is` or `has`. Never use negative booleans.
+5. Use proper, narrow types. Never `any`, `unknown`, `interface{}`, or any wide-range catch-all type. `Generic<T>` is the only exception.
+6. No swallowed errors. Every `catch` must log per the project logging guidelines.
+7. Files / classes ≤ 80–100 lines max.
+8. No magic strings or numbers — use Enums or Constants.
+9. Definitions live in their own dedicated files, not inline.
+10. Keep code DRY — reusability is the highest-priority concern.
+11. React/TypeScript components must be as small and reusable as possible. For multi-component features, plan first and produce a Mermaid component diagram.
+12. Use Enums (typed) for any `Type`, `Kind`, `Status`, `Category` field.
+13. If a `spec/**/error-manage/` folder exists, every error handler MUST follow those guidelines exactly. No exceptions.
 
-3. Keep `if` conditions simple — avoid negative conditions; prefer positive, simple terms.
+## Data & Schema Rules
 
-4. Follow the Boolean guidelines below.
+1. Tables, types, entities → **PascalCase**.
+2. Fields/columns → **camelCase**.
+3. JSON keys and values (when project uses JSON) → **PascalCase**.
+4. Every primary key: `int auto-increment`, named `{PascalCaseTableName}Id`.
+5. `Type` / `Status` / `Category` / `Kind` columns → 1-N or N-M join tables (never inline strings/enums in the row).
+6. Use the smallest appropriate integer type for category IDs.
+7. Default DB: SQLite. Prefer ORM. Define joins, PK/FK explicitly.
+8. Any DB discussion must include a Mermaid ERD.
 
-## Boolean Guidelines
+## Error & Logging
 
-1. Boolean variables and functions must be prefixed with `is` or `has` (e.g., `isActive`, `hasExpired`).
+1. Catch → log → rethrow or handle. Never silent.
+2. Log level appropriate to severity.
+3. Include context (operation name, key inputs) in log messages.
 
-2. Do not use negative boolean names (e.g., avoid `isNotReady`; use `isReady` instead).
+## Important
 
-3. Do not use negative conditions in `if` statements when a positive equivalent exists.
-
-## Types
-
-1. Use proper, specific types — never use `any`, `unknown`, `interface{}`, or any wide-range type.
-
-2. Generics (`Generic<T>`) are the only allowed open type form.
-
-3. Define types and interfaces in separate dedicated files, not inline at usage site.
-
-## Enums & Constants
-
-1. No magic strings or numbers — use Enums or Constants.
-
-2. `Type`, `Status`, `Category`, `Kind`, and similar classification fields must be Enums.
-
-3. Define enums and constants in separate files.
-
-## Error Handling
-
-1. Never swallow errors.
-
-2. Every `catch` block must log the error properly per the language-specific logging guidelines.
-
-3. Follow language-specific error management rules.
-
-## File & Class Size
-
-1. No file or class may exceed 80–100 lines maximum.
-
-2. Split larger files into smaller, focused modules.
-
-## Definitions
-
-1. Do not define types, enums, constants, or schemas inline.
-
-2. Place each definition in its own dedicated file, separated by concern.
-
-## Required Reads Before Coding
-
-1. `.lovable/coding-guidelines.md` (this file)
-
-2. `.lovable/prompts.md` (prompt index)
-
-3. All files under `.lovable/prompts/*.*`
-
-4. The relevant spec folder for the current task (e.g., `/spec/YY-app/`, `/spec/xx-app-issues/`)
-
-5. Language-specific guidelines, boolean guidelines, enum guidelines, and error management guidelines referenced in this file.
+- These guidelines override convenience. If a rule conflicts with a quick fix, follow the rule.
+- When in doubt, ask before writing code.
