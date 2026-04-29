@@ -148,6 +148,7 @@ _process_one_file() {
   local rel="$1" current="$2"
   local full="$REPO_ROOT/$rel"
   [ -f "$full" ] || return 0
+  is_ignored_path "$rel" && return 0
   is_scannable_file "$full" || return 0
   SWEEP_SCANNED=$((SWEEP_SCANNED + 1))
   local reps
