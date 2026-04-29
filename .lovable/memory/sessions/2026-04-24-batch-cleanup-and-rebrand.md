@@ -10,7 +10,7 @@
 
 Three sequential user requests, executed in one session:
 
-1. **Slug rebrand** — replaced `coding-guidelines-v14` → `coding-guidelines-v18` → `coding-guidelines-v18` across the repo. Final canonical slug: **`alimtvnetwork/coding-guidelines-v18`**.
+1. **Slug rebrand** — replaced `coding-guidelines-v14` → `coding-guidelines-v19` → `coding-guidelines-v19` across the repo. Final canonical slug: **`alimtvnetwork/coding-guidelines-v19`**.
 2. **InstallSection redesign** — collapsed the legacy "Install in One Line" list into a clean two-card **"Release & Migration"** section: Windows (PowerShell) + macOS/Linux (Bash). Removed the "skip latest probe" variants per direct user instruction ("this section is stupidity").
 3. **Batch task completion** — closed 11 outstanding plan/suggestion items in a single pass.
 
@@ -41,7 +41,7 @@ Three sequential user requests, executed in one session:
 ## Key decisions / user instructions
 
 1. 🔴 **Release & Migration UI shape is locked** — exactly two cards (Windows PS / Unix Bash), one-liner each, header above. **Never** restore "skip latest probe" variants. User words: *"I don't want to discuss this ever again."*
-2. 🔴 **Slug must be `alimtvnetwork/coding-guidelines-v18` everywhere** — when doing repo-wide rebrand, run a full `grep -rn` sweep across **all** non-`.release` files. The user explicitly called out that the previous replacement was incomplete: *"you didn't do all replace in the repo"*.
+2. 🔴 **Slug must be `alimtvnetwork/coding-guidelines-v19` everywhere** — when doing repo-wide rebrand, run a full `grep -rn` sweep across **all** non-`.release` files. The user explicitly called out that the previous replacement was incomplete: *"you didn't do all replace in the repo"*.
 3. **Version bump rule still applies** — every code change bumps at least minor.
 
 ## Pending after session
@@ -75,7 +75,7 @@ blocks the old slug everywhere else in the repo.
    legitimately needs to mention the old slug, add it explicitly with a
    one-line comment justifying why.
 3. The canonical, current slug remains
-   **`alimtvnetwork/coding-guidelines-v18`** (see §Key decisions item 2)
+   **`alimtvnetwork/coding-guidelines-v19`** (see §Key decisions item 2)
    — that is the only slug allowed in code, configs, install scripts,
    release artifacts, and live documentation.
 

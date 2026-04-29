@@ -1,7 +1,7 @@
 # 04 — Worked Examples
 
 All examples assume `git remote get-url origin` returns
-`https://github.com/alimtvnetwork/coding-guidelines-v18.git`.
+`https://github.com/alimtvnetwork/coding-guidelines-v19.git`.
 
 ## Default mode (last 2)
 
@@ -74,17 +74,17 @@ $ echo $?
 
 Input file `docs/install.md`:
 ```
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v17/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.sh | bash
 ```
 
 After `./fix-repo.sh`:
 ```
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.sh | bash
 ```
 
 Host (`raw.githubusercontent.com`), owner (`alimtvnetwork`), and the
 rest of the path (`/main/install.sh`) are preserved automatically —
-only the `coding-guidelines-v17` segment changes because that
+only the `coding-guidelines-v19` segment changes because that
 segment is the literal token.
 
 ## Numeric-overflow guard in action
@@ -92,13 +92,13 @@ segment is the literal token.
 Input:
 ```
 The legacy coding-guidelines-v170 channel is unrelated.
-See coding-guidelines-v17/spec.md for details.
+See coding-guidelines-v19/spec.md for details.
 ```
 
 After `./fix-repo.sh`:
 ```
 The legacy coding-guidelines-v170 channel is unrelated.
-See coding-guidelines-v18/spec.md for details.
+See coding-guidelines-v19/spec.md for details.
 ```
 
 `v170` is left alone; `v17` is rewritten.

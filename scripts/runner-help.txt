@@ -1,5 +1,5 @@
 
-  coding-guidelines-v18 — root runner
+  coding-guidelines-v19 — root runner
 
   Usage: ./run.sh [<command>] [<flags>]
 

@@ -16,12 +16,12 @@ const installCommands: InstallCommand[] = [
   {
     platform: "Windows",
     shell: "PowerShell",
-    command: "irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.ps1 | iex",
+    command: "irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.ps1 | iex",
   },
   {
     platform: "macOS / Linux",
     shell: "Bash",
-    command: "curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh | bash",
+    command: "curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.sh | bash",
   },
 ];
 
@@ -84,7 +84,7 @@ export function InstallSection() {
           <div className="mb-6 text-center">
             <h3 className="text-2xl font-bold text-foreground">Named Bundle Installers</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Install just the spec folders you need — each bundle points at coding-guidelines-v18.
+              Install just the spec folders you need — each bundle points at coding-guidelines-v19.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">

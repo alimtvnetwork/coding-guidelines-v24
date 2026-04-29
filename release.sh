@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="alimtvnetwork/coding-guidelines-v18"
+REPO="alimtvnetwork/coding-guidelines-v19"
 RELEASE_VERSION_INPUT="${RELEASE_VERSION:-}"
 REQUIRED_PATHS=("spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1" ".lovable/coding-guidelines" ".lovable/prompts")
 

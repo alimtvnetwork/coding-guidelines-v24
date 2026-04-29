@@ -24,9 +24,9 @@
 # --- Rule: stale repo slug (pre-renumber references) ---
 [[rule]]
 id = "STALE-REPO-SLUG"
-description = "Pre-renumber repo slug (coding-guidelines-v1..v14). Current canonical slug is coding-guidelines-v18."
+description = "Pre-renumber repo slug (coding-guidelines-v1..v14). Current canonical slug is coding-guidelines-v19."
 pattern = 'coding-guidelines-v(1[0-4]|[1-9])\b'
-replacement = "coding-guidelines-v18"
+replacement = "coding-guidelines-v19"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-REPO-SLUG --emit-fix-command | bash"
 exclude_dirs = ["release-artifacts"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py"]

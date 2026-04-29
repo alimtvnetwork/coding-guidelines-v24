@@ -1,7 +1,7 @@
 # 22-fix-repo — Versioned Repo-Name Replacer
 
 Cross-platform tooling that rewrites prior versioned-repo-name tokens
-(e.g. `coding-guidelines-v17`) to the **current** version detected
+(e.g. `coding-guidelines-v19`) to the **current** version detected
 from the configured git remote. Two interchangeable implementations:
 
 - `fix-repo.ps1` (PowerShell, Windows / pwsh-on-anything)

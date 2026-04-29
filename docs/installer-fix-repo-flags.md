@@ -406,7 +406,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           set -euo pipefail
-          curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.sh \
+          curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.sh \
             | bash -s -- \
                 --run-fix-repo \
                 --rollback-on-fix-repo-failure \
@@ -419,7 +419,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/install.ps1 `
+          irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.ps1 `
             -OutFile install.ps1
           .\install.ps1 `
             -RunFixRepo `

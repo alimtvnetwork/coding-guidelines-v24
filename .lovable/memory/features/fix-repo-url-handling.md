@@ -12,8 +12,8 @@ occurrence in EVERY tracked text file — including inside URLs.
 **Why:** The host (`github.com`, `gitlab.com`, …) is never touched
 because the host string is not the token. Only the path segment that
 literally equals `{RepoBase}-v{N}` is rewritten to
-`{RepoBase}-v{Current}`. So `https://github.com/owner/coding-guidelines-v17/blob/...`
-becomes `https://github.com/owner/coding-guidelines-v18/blob/...` —
+`{RepoBase}-v{Current}`. So `https://github.com/owner/coding-guidelines-v19/blob/...`
+becomes `https://github.com/owner/coding-guidelines-v19/blob/...` —
 the host and the rest of the path are preserved automatically.
 
 **How to apply:** No URL detection, no `https?://` skipping, no

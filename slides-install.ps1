@@ -72,10 +72,10 @@
     editing the manifest.
 
 .EXAMPLE
-    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.ps1 | iex
+    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/slides-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v18/main/slides-install.ps1))) -Version v4.24.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/slides-install.ps1))) -Version v4.24.0 -Target .\vendor
 #>
 
 param(
@@ -132,8 +132,8 @@ $ProgressPreference = "SilentlyContinue"
 $BundleName = "slides"
 $BundleMapping = "spec-slides|spec-slides,slides-app|slides-app"
 $ArchiveStableName = "slides"
-$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v18/releases"
-$RepoSlug = "alimtvnetwork/coding-guidelines-v18"
+$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v19/releases"
+$RepoSlug = "alimtvnetwork/coding-guidelines-v19"
 $AutoOpenEntry = "slides-app/dist/index.html"
 $PrebuiltSrc = "slides-app/dist"
 $PrebuiltDest = "slides-app/dist"

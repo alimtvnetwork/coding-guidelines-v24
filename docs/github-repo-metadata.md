@@ -12,7 +12,7 @@ checklist so any maintainer can apply it in 60 seconds.
 
 ## §1 — Repository Description
 
-**Where:** `https://github.com/alimtvnetwork/coding-guidelines-v18` →
+**Where:** `https://github.com/alimtvnetwork/coding-guidelines-v19` →
 gear icon next to "About" → **Description**.
 
 **Set to (exact text):**
@@ -45,7 +45,7 @@ https://alimkarim.com/
 
 ```
 coding-guidelines
-coding-guidelines-v18
+coding-guidelines-v19
 coding-standards
 spec-driven-development
 ai-friendly
