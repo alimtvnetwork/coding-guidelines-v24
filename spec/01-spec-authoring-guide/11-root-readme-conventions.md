@@ -151,38 +151,64 @@ badge values is allowed but will be overwritten on the next `npm run sync`.
 ## §6 — Required Sections (after the hero)
 
 After the hero `---`, the README MUST contain these sections, **in this
-order**:
+exact order**. This sequence is designed for the typical reader journey:
+*"What does it look like? → How do I install it? → What is it really? →
+How do I use it? → Who made it?"*
 
-| # | Section | Purpose |
-|---|---------|---------|
-| 1 | What is this? Who is it for? | 30-second pitch + role-based "start here" table |
-| 2 | Animated walkthrough (GIF) | Visual proof of concept — centered `<img>` |
-| 3 | 🤖 For AI Agents | Canonical entry-point table |
-| 4 | 📦 Bundle Installers | Per-bundle one-liner matrix |
-| 5 | 🛠️ Full-Repo Install Scripts | Generic installer + flag table |
-| 6 | 📚 Documentation | Links to `docs/*` deep-dives |
-| 7 | 🔄 What's New | Last 3 versions; full history in `changelog.md` |
-| 8 | 🤝 Contributing | Adding specs, modifying rules, health checks |
-| 9 | Auto-stamp footer | Italic note explaining the sync script |
+| # | Section | Centered? | Purpose |
+|---|---------|-----------|---------|
+| 1 | Title (H1 wordmark) | ✅ | Already rendered in the hero (§3) — repeated here only conceptually as the anchor |
+| 2 | Badges (primary + platform rows) | ✅ | Already rendered in the hero (§3) |
+| 3 | 📸 Screenshot or animated walkthrough (GIF/PNG) | ✅ | Visual proof of concept — single centered `<img>`. GIF preferred; static PNG fallback allowed |
+| 4 | 🛠️ Install Scripts | ❌ | One-liner installers FIRST (curl/iwr commands), THEN the per-bundle matrix, THEN the flag table. Readers want to *try it* before reading prose |
+| 5 | 📖 About this Repo | ✅ (heading + intro) | Centered `<h2 align="center">` heading and a centered intro paragraph, then left-aligned long-form prose telling the **story**: origin, motivation, problem it solves, references to related repos/docs. This is the narrative heart of the README |
+| 6 | 🤖 For AI Agents | ❌ | Canonical entry-point table for AI tooling |
+| 7 | 📦 Bundle Installers | ❌ | Per-bundle one-liner matrix (deeper than §4's headline installer) |
+| 8 | 🚀 Usage / Commands | ❌ | Common commands, scripts, and workflows beyond install |
+| 9 | 📚 Documentation | ❌ | Links to `docs/*` deep-dives |
+| 10 | 🔄 What's New | ❌ | Last 3 versions; full history in `changelog.md` |
+| 11 | 🤝 Contributing | ❌ | How to add specs, modify rules, run health checks |
+| 12 | 👤 Author & Company | ✅ | Re-state the §4 author block (or a fuller variant) at the bottom for readers who scrolled past the hero. Centered |
+| 13 | Auto-stamp footer | ✅ | Italic note explaining the sync script |
 
-Section emoji prefixes (📦 🛠️ 📚 🔄 🤝) are **mandatory** — they aid
-visual scanning and AI section-detection.
+### §6.1 — Section ordering rationale
+
+1. **Visual first** — a screenshot/GIF immediately after the hero proves the
+   project is real and working before the reader commits to reading prose.
+2. **Install before explanation** — most readers arrive wanting to *try*
+   the tool. Putting installers above the long About section respects
+   their time. The deeper Bundle Installers matrix (§6 row 7) can repeat
+   and expand on the headline installer from row 4.
+3. **About in the middle** — once the reader has seen it work and knows
+   how to install it, they're ready to invest in the *why* and the
+   *story*. The About heading and intro paragraph MUST be centered;
+   long-form prose underneath is left-aligned for readability.
+4. **Author at the end (and the top)** — the hero has the compact author
+   line (§4); the bottom Author section is a fuller, centered re-statement
+   so the README closes on attribution.
+
+### §6.2 — Section heading format
+
+Section emoji prefixes (📸 🛠️ 📖 🤖 📦 🚀 📚 🔄 🤝 👤) are **mandatory** —
+they aid visual scanning and AI section-detection.
 
 Section headings MAY use either Markdown (`## …`) or centered HTML
-(`<h2 align="center">…</h2>`). The HTML form is preferred when the
-section opens with a card grid or other centered visual block, so the
-heading visually anchors above its cards. The README linter
+(`<h2 align="center">…</h2>`). Sections marked ✅ in the table above
+MUST use the centered HTML form for the heading (and centered intro
+content where noted). The README linter
 (`linter-scripts/check-root-readme.py`) accepts both forms.
 
 ---
 
 ## §7 — Length & Modularity
 
-- The root README MUST stay **≤ 600 lines**.
-- Anything longer MUST be extracted into `docs/`:
+- The root README has **no hard line limit** — it can be as long as the
+  story and content require.
+- That said, prefer extracting deep-dive content into `docs/` to keep the
+  root README scannable:
   - `docs/principles.md` — coding principles, CODE RED rules
   - `docs/architecture.md` — folder structure, conventions
-  - `docs/author.md` — author bio, company background, FAQ
+  - `docs/author.md` — extended author bio, company background, FAQ
 - Cross-reference extracted docs from the §6 "Documentation" section.
 
 ---
@@ -216,8 +242,9 @@ Before tagging a release, verify **all** of the following on the root
 - [ ] Author/company each link to their canonical URL.
 - [ ] Centered auto-stamped stats line.
 - [ ] Hero block ends with `---` before any left-aligned content.
-- [ ] All §6 sections present, in order, with emoji prefixes.
-- [ ] Root README is ≤ 600 lines (long-form lives in `docs/`).
+- [ ] All §6 sections present, in the §6 order, with emoji prefixes.
+- [ ] §6 ordering: screenshot/GIF → install scripts → centered About (with story) → AI agents → bundle installers → usage → docs → what's new → contributing → centered author block → auto-stamp footer.
+- [ ] Centered sections (screenshot, About heading + intro, bottom Author block, footer) use `<p align="center">` / `<h2 align="center">`.
 - [ ] Every `<img>` has `alt`, `width` (and `height` for icons).
 - [ ] `npm run sync` was run and committed (badges + stats are current).
 
