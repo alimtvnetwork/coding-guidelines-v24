@@ -76,7 +76,7 @@ honor.
 - [Distribution](../05-distribution.md) — how installers are packaged
 - [Generic installer behavior](../../../14-update/27-generic-installer-behavior.md)
 - [Release pinned installer](../../../14-update/25-release-pinned-installer.md)
-- [Code Red Guidelines](../../../../17-consolidated-guidelines/00-overview.md)
+- [Code Red Guidelines](../../../17-consolidated-guidelines/00-overview.md)
 - [`tests/installer/`](../../../../tests/installer/) — executable AC
 
 ---
