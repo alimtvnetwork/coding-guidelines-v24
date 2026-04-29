@@ -115,6 +115,7 @@ function _Process-OneFile {
     param([string]$RepoRoot, [string]$Rel, [string]$Base, [int]$Current, [int[]]$Targets, [bool]$DryRun, [bool]$Verbose)
     $full = Join-Path $RepoRoot $Rel
     if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { return $null }
+    if (Test-IsIgnoredPath -RelPath $Rel)                   { return $null }
     if (-not (Test-IsScannableFile -FullPath $full))        { return $null }
     try {
         $reps = Invoke-FileRewrite -FullPath $full -Base $Base -Targets $Targets -Current $Current -DryRun $DryRun
