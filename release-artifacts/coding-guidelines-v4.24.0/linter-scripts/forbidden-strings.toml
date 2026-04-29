@@ -24,9 +24,9 @@
 # --- Rule: stale repo slug (pre-renumber references) ---
 [[rule]]
 id = "STALE-REPO-SLUG"
-description = "Pre-renumber repo slug (coding-guidelines-v1..v14). Current canonical slug is coding-guidelines-v18."
+description = "Pre-renumber repo slug (coding-guidelines-v1..v14). Current canonical slug is coding-guidelines-v19."
 pattern = 'coding-guidelines-v(1[0-4]|[1-9])\b'
-replacement = "coding-guidelines-v18"
+replacement = "coding-guidelines-v19"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-REPO-SLUG --emit-fix-command | bash"
 exclude_dirs = ["release-artifacts"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py"]
@@ -49,6 +49,9 @@ allowlist = [
   "linter-scripts/README-forbidden-strings.md",
   # Quickref 'Don't' table cell legitimately demonstrates the forbidden v1 slug to teach the rename; the literal stale form is required for the example to make sense.
   "spec/17-consolidated-guidelines/00-strictly-avoid-quickref.md",
+  # fix-repo test fixture: intentionally contains stale slugs (v1, v15, v16, v19, v170)
+  # as synthetic input to verify default vs --all rewrite behavior. Must remain literal.
+  "linters-cicd/tests/fixtures/fix-repo/README.md",
 ]
 # --- Rule: stale module path (movie-cli v1 references) ---
 [[rule]]

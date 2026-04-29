@@ -98,7 +98,7 @@ The release workflow ran `npm ci` to bootstrap a Node environment so it could ca
 
 **Symptom:**
 ```
-Error: No file in /home/runner/work/coding-guidelines-v18/coding-guidelines-v18
+Error: No file in /home/runner/work/coding-guidelines-v19/coding-guidelines-v19
 matched to [**/requirements.txt or **/pyproject.toml], make sure you have
 checked out the target repository
 ```

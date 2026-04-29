@@ -23,7 +23,7 @@ EXIT_PASS = 0
 EXIT_FAIL = 1
 EXIT_ERROR = 2
 
-MAX_LINES = 400
+MAX_LINES = None  # Root README has no length limit (per writing guideline §7).
 MIN_BADGES = 12
 MAX_BADGES = 16
 REQUIRED_AUTHOR = "Md. Alim Ul Karim"
@@ -98,9 +98,10 @@ def collect_violations(readme: Path) -> list[str]:
     body = readme.read_text(encoding="utf-8")
     violations: list[str] = []
 
-    line_count = body.count("\n") + 1
-    if line_count > MAX_LINES:
-        violations.append(f"length: {line_count} lines exceeds max {MAX_LINES} (extract to docs/)")
+    if MAX_LINES is not None:
+        line_count = body.count("\n") + 1
+        if line_count > MAX_LINES:
+            violations.append(f"length: {line_count} lines exceeds max {MAX_LINES} (extract to docs/)")
 
     if not has_centered_icon(body):
         violations.append("missing centered brand icon (<p align=\"center\"> + 160px <img>)")

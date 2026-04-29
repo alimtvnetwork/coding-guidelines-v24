@@ -45,6 +45,7 @@ The pack must:
 | `05-distribution.md` | ZIP, composite Action, install.sh contract |
 | `06-rules-mapping.md` | Each rule → spec source → check script → severity |
 | `07-performance.md` | Middle-out probe order, parallel jobs, timeout budgets |
+| [`08-fix-repo-and-installers/`](./08-fix-repo-and-installers/00-overview.md) | Canonical contract for `install.*`, `release-install.*`, `fix-repo.*`, `visibility-change.*` |
 | `97-acceptance-criteria.md` | Testable AC for every public artifact |
 | `98-faq.md` | Suppression, baselining, single-rule runs, version pinning |
 | `99-troubleshooting.md` | python3 missing, tree-sitter wheel issues, SARIF >10 MB, false-positive triage, TOML parse errors |
