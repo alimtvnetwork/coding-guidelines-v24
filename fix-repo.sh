@@ -72,7 +72,11 @@ print_help() {
   cat <<'EOF'
 fix-repo.sh — rewrite prior versioned-repo-name tokens to current.
 
-Usage: ./fix-repo.sh [--2|--3|--5|--all] [--dry-run] [--verbose]
+Usage: ./fix-repo.sh [--2|--3|--5|--all] [--dry-run] [--verbose] [--config <path>]
+
+Config file (default: ./fix-repo.config.json) supports:
+  ignoreDirs:     repo-relative directory prefixes to skip
+  ignorePatterns: glob patterns (** = any depth, * = within segment)
 
 Spec: spec-authoring/22-fix-repo/01-spec.md
 EOF
