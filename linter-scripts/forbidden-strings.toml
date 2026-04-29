@@ -49,6 +49,9 @@ allowlist = [
   "linter-scripts/README-forbidden-strings.md",
   # Quickref 'Don't' table cell legitimately demonstrates the forbidden v1 slug to teach the rename; the literal stale form is required for the example to make sense.
   "spec/17-consolidated-guidelines/00-strictly-avoid-quickref.md",
+  # fix-repo test fixture: intentionally contains stale slugs (v1, v15, v16, v19, v170)
+  # as synthetic input to verify default vs --all rewrite behavior. Must remain literal.
+  "linters-cicd/tests/fixtures/fix-repo/README.md",
 ]
 # --- Rule: stale module path (movie-cli v1 references) ---
 [[rule]]
