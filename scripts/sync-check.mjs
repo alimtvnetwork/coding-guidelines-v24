@@ -59,7 +59,7 @@ const TRACKED = [
   {
     path: "version.json",
     normalise: stripVolatileVersionFields,
-    note: "structural fields only — `git` + `updated` ignored (legitimately differ per checkout / day).",
+    note: "structural fields only — commit/date provenance ignored (legitimately differs per checkout / day).",
   },
   {
     path: "src/data/specTree.json",
@@ -102,6 +102,7 @@ function stripVolatileVersionFields(content) {
   } catch {
     return content;
   }
+  delete parsed.LastCommitSha;
   delete parsed.git;
   delete parsed.updated;
   return JSON.stringify(parsed, null, 2) + "\n";

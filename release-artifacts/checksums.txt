@@ -1,4 +1,4 @@
-ec601496932e6078290bdbdcaf00cefd1417b3db83e787bb4fdfe3ea71256ca4  coding-guidelines-v4.24.0.zip
-f6b298402381579c6c55a95820fe09b714266f42c02d1936dd531df2dcdee023  coding-guidelines-v4.24.0.tar.gz
+f4b8dce6d8d1a24d1c0773298f4ca7296a7586af3bb985545a59e0ac9e5a75b9  coding-guidelines-v4.24.0.zip
+230fdcbaf1b3fe927dffd67fc0f67bba70e9da5f19b69d1a527a4dad1cab9329  coding-guidelines-v4.24.0.tar.gz
 b2bd3a5ffc128703d1ff0db003f6338716074d31a93c2384ccea6009c556437e  release-install.sh
 2ce73283c097a95ebf34c413ba9f29ed9797ea76c2d21e909f9085b6dea72c10  release-install.ps1

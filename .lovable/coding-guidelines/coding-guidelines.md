@@ -7,7 +7,7 @@ These rules are mandatory for all code generated in this project. The AI MUST re
 1. This file: `.lovable/coding-guidelines.md`
 2. All prompts: `.lovable/prompts/*.*`
 3. All specs: `spec/01-app/*.md`
-4. Master prompt: `spec/02-master-prompts/04-master-prompt-v4.md`
+4. Master coding guidelines: `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines.md`
 5. Memory protocol: `.lovable/memory/protocol/01-workflow-rules.md`
 6. Decision log: `.lovable/memory/history/01-decisions.md`
 7. Plan: `.lovable/memory/workflow/01-plan.md`
