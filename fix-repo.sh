@@ -45,18 +45,24 @@ is_mode_flag() {
 }
 
 parse_args() {
-  local mode_count=0 a
+  local mode_count=0 a expect_config=0
   for a in "$@"; do
+    if [ "$expect_config" = "1" ]; then CONFIG_PATH="$a"; expect_config=0; continue; fi
     if is_mode_flag "$a"; then
       MODE="$a"; mode_count=$((mode_count + 1)); continue
     fi
     case "$a" in
       --dry-run) DRY_RUN=1 ;;
       --verbose) VERBOSE_FLAG=1 ;;
+      --config)  expect_config=1 ;;
+      --config=*) CONFIG_PATH="${a#--config=}" ;;
       -h|--help) print_help; exit 0 ;;
       *) echo "fix-repo: ERROR unknown flag '$a' (E_BAD_FLAG)" >&2; exit $EXIT_BAD_FLAG ;;
     esac
   done
+  if [ "$expect_config" = "1" ]; then
+    echo "fix-repo: ERROR --config requires a path (E_BAD_FLAG)" >&2; exit $EXIT_BAD_FLAG
+  fi
   if [ "$mode_count" -gt 1 ]; then
     echo "fix-repo: ERROR multiple mode flags (E_BAD_FLAG)" >&2; exit $EXIT_BAD_FLAG
   fi
