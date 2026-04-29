@@ -1188,11 +1188,19 @@ function writeFile(relPath, contents, executable = false) {
   console.log(`  ✓ wrote ${relPath}`);
 }
 
-console.log(`Generating bundle installers from ${MANIFEST_PATH}...`);
-for (const bundle of BUNDLES) {
-  writeFile(`${bundle.name}-install.sh`, bashScript(bundle), true);
-  writeFile(`${bundle.name}-install.ps1`, powershellScript(bundle), false);
+// Skip side-effect generation when imported by another module
+// (e.g. the drift checker). Run only when invoked as a CLI.
+const INVOKED_DIRECTLY =
+  import.meta.url === `file://${process.argv[1]}` ||
+  import.meta.url.endsWith(process.argv[1] || "");
+if (INVOKED_DIRECTLY) {
+  console.log(`Generating bundle installers from ${MANIFEST_PATH}...`);
+  for (const bundle of BUNDLES) {
+    writeFile(`${bundle.name}-install.sh`, bashScript(bundle), true);
+    writeFile(`${bundle.name}-install.ps1`, powershellScript(bundle), false);
+  }
+  console.log(`\nDone. Generated ${BUNDLES.length * 2} files for ${BUNDLES.length} bundles.`);
 }
-console.log(`\nDone. Generated ${BUNDLES.length * 2} files for ${BUNDLES.length} bundles.`);
 
-export { BUNDLES, MANIFEST };
+export { BUNDLES, MANIFEST, bashScript, powershellScript };
+
