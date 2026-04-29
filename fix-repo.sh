@@ -174,6 +174,8 @@ run_sweep() {
 main() {
   parse_args "$@"
   resolve_identity
+  load_fixrepo_config "$CONFIG_PATH" "$REPO_ROOT" \
+    || exit $EXIT_BAD_CONFIG
   local current="$SPLIT_VERSION"
   local span; span="$(get_span_from_mode "$MODE" "$current")"
   local targets_str; targets_str="$(get_target_versions "$current" "$span" | sed 's/ *$//')"
