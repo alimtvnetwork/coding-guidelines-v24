@@ -149,6 +149,7 @@ mode:    <write|dry-run>
 | `5` | E_BAD_VERSION | `N <= 0` or non-integer |
 | `6` | E_BAD_FLAG | Unknown / conflicting flags |
 | `7` | E_WRITE_FAILED | At least one file failed to write |
+| `8` | E_BAD_CONFIG | `--config` path missing or JSON failed to parse |
 
 ## 9. Non-goals
 
