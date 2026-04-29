@@ -166,6 +166,12 @@ if ($parsed.Error) {
 }
 
 $identity = Resolve-Identity
+try {
+    Import-FixRepoConfig -ConfigPath $parsed.ConfigPath -RepoRoot $identity.Root
+} catch {
+    Write-Host ("fix-repo: ERROR {0} (E_BAD_CONFIG)" -f $_.Exception.Message)
+    exit $Script:ExitBadConfig
+}
 $span     = Get-SpanFromMode -Mode $parsed.Mode -Current $identity.Current
 $targets  = @(Get-TargetVersions -Current $identity.Current -Span $span)
 
