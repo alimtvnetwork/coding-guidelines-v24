@@ -12,6 +12,8 @@
     -All:         replace every prior version (1..Current-1).
     -DryRun:      report changes; do not write.
     -Verbose:     print every modified file path.
+    -Config <p>:  path to JSON config (default: ./fix-repo.config.json) with
+                  ignoreDirs and ignorePatterns arrays.
 
     Full normative spec: spec-authoring/22-fix-repo/01-spec.md
 
