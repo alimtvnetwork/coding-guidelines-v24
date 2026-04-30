@@ -592,6 +592,27 @@ try {
     Write-Host ""
     Write-Plain "════════════════════════════════════════════════════════"
 }
+catch {
+    Write-InstallFailure -ErrorRecord $_
+    if ($_.Exception.StackTrace) {
+        Write-Host ""
+        Write-Host ".NET stack trace:" -ForegroundColor Red
+        Write-Host $_.Exception.StackTrace -ForegroundColor DarkGray
+    }
+    if ($_.Exception.InnerException) {
+        Write-Host ""
+        Write-Host "Inner exception: $($_.Exception.InnerException.Message)" -ForegroundColor Red
+    }
+    Write-Host ""
+    Write-Host "Context:" -ForegroundColor Yellow
+    Write-Host "  Repo    : $Repo" -ForegroundColor DarkGray
+    Write-Host "  Ref     : $ref" -ForegroundColor DarkGray
+    Write-Host "  Dest    : $Dest" -ForegroundColor DarkGray
+    Write-Host "  Folders : $($Folders -join ', ')" -ForegroundColor DarkGray
+    Write-Host "  TmpDir  : $tmpDir" -ForegroundColor DarkGray
+    Write-Host ""
+    exit 1
+}
 finally {
     if (Test-Path $tmpDir) {
         Remove-Item -Path $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
