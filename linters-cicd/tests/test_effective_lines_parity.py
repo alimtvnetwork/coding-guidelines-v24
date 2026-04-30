@@ -18,7 +18,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
+try:
+    import pytest
+except ImportError:  # pragma: no cover - environment guard
+    import unittest
+    raise unittest.SkipTest("pytest not installed; skipping parity suite")
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "linters-cicd" / "checks"))
