@@ -290,7 +290,7 @@ function Invoke-LatestVersionProbe {
 # Maintainer-supplied fallback constants (used when URL parse fails)
 $script:ProbeOwner   = "alimtvnetwork"
 $script:ProbeBase    = "coding-guidelines"
-$script:ProbeVersion = 14
+$script:ProbeVersion = 19
 
 Invoke-LatestVersionProbe
 # ── End probe ─────────────────────────────────────────────────────
@@ -304,7 +304,7 @@ Invoke-LatestVersionProbe
 # ── Version probe ─────────────────────────────────────────────────
 PROBE_OWNER_FALLBACK="alimtvnetwork"
 PROBE_BASE_FALLBACK="coding-guidelines"
-PROBE_VERSION_FALLBACK=14
+PROBE_VERSION_FALLBACK=19
 
 invoke_latest_version_probe() {
     # 1. Self-identify
