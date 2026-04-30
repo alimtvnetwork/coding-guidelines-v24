@@ -5,7 +5,9 @@
 # 1. Refresh PascalCase identity + LastCommitSha in version.json
 #    (per spec/01-spec-authoring-guide/17-version-schema.md §7.1)
 #    and re-stage if changed.
-# 2. Run the test suite.
+# 2. Verify generated/sync-managed files are up to date.
+#    Blocks the commit if `npm run sync:check` fails.
+# 3. Run the test suite.
 # ============================================================
 
 set -e
@@ -15,6 +17,13 @@ node scripts/sync-version.mjs
 if ! git diff --quiet -- version.json; then
   git add version.json
   echo "  pre-commit: re-staged version.json (LastCommitSha refreshed)"
+fi
+
+if ! npm run --silent sync:check; then
+  echo ""
+  echo "  pre-commit: sync:check failed — generated files are out of date."
+  echo "  Run \`npm run sync\` and stage the regenerated files, then retry the commit."
+  exit 1
 fi
 
 npm test
