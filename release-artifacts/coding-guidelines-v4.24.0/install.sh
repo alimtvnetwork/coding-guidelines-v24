@@ -283,7 +283,7 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v19}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" ".lovable/coding-guidelines")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines")
 
 # Top-level files always pulled alongside the folders. These are repo-root
 # scripts (not contained in any installed folder) that users need locally to

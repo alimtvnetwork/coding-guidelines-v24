@@ -258,7 +258,7 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", ".lovable/coding-guidelines") }
+    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines") }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }
@@ -594,7 +594,7 @@ try {
 }
 catch {
     Write-InstallFailure -ErrorRecord $_
-    if ($_.Exception.StackTrace) {
+    if ($_.ScriptStackTrace) {
         Write-Host ""
         Write-Host ".NET stack trace:" -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor DarkGray
@@ -614,12 +614,12 @@ catch {
     exit 1
 }
 finally {
-    if (Test-Path $tmpDir) {
+    if ($tmpDir -and (Test-Path $tmpDir)) {
         Remove-Item -Path $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
     }
-    if (-not (Test-Path $tmpDir)) {
+    if ($tmpDir -and -not (Test-Path $tmpDir)) {
         Write-OK "Temp cleaned: $tmpDir"
-    } else {
+    } elseif ($tmpDir) {
         Write-Warn "Temp NOT fully removed: $tmpDir (manual cleanup recommended)"
     }
 }
