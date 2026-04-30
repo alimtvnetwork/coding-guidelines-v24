@@ -258,7 +258,7 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", ".lovable/coding-guidelines") }
+    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines") }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }
