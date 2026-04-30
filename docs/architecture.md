@@ -1,6 +1,6 @@
 # Architecture, Folder Structure & Decisions
 
-> **Version:** <!-- STAMP:VERSION -->5.1.0<!-- /STAMP:VERSION -->
+> **Version:** <!-- STAMP:VERSION -->5.2.0<!-- /STAMP:VERSION -->
 > **Updated:** <!-- STAMP:UPDATED -->2026-04-30<!-- /STAMP:UPDATED -->
 > **Stats:** <!-- STAMP:FILES -->622<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->133,880<!-- /STAMP:LINES --> lines).
 
