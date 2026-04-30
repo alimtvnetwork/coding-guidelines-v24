@@ -593,25 +593,8 @@ try {
     Write-Plain "════════════════════════════════════════════════════════"
 }
 catch {
-    Write-Host ""
-    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
-    Write-Host "❌ INSTALLER CRASHED — uncaught exception" -ForegroundColor Red
-    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Message  : $($_.Exception.Message)" -ForegroundColor Red
-    if ($_.Exception.GetType()) {
-        Write-Host "Type     : $($_.Exception.GetType().FullName)" -ForegroundColor Red
-    }
-    if ($_.InvocationInfo -and $_.InvocationInfo.PositionMessage) {
-        Write-Host "Location :" -ForegroundColor Red
-        Write-Host $_.InvocationInfo.PositionMessage -ForegroundColor DarkGray
-    }
+    Write-InstallFailure -ErrorRecord $_
     if ($_.ScriptStackTrace) {
-        Write-Host ""
-        Write-Host "Script stack trace:" -ForegroundColor Red
-        Write-Host $_.ScriptStackTrace -ForegroundColor DarkGray
-    }
-    if ($_.Exception.StackTrace) {
         Write-Host ""
         Write-Host ".NET stack trace:" -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor DarkGray
