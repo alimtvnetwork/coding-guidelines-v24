@@ -108,5 +108,12 @@ jobs:
       - name: Fail job if test suite failed
         if: steps.run_tests.outputs.exit_code != '0'
         run: |
-          echo "::error::Installer test suite failed (exit ${{ steps.run_tests.outputs.exit_code }}). See job summary for flag-related failures."
+          echo "::group::Installer failure summary"
+          cat .ci-out/flag-failures.md
+          echo "::endgroup::"
+          first_failure=$(grep -E '^- ' .ci-out/flag-failures.md | head -1 | sed 's/^[-] //')
+          if [ -z "$first_failure" ]; then
+            first_failure="See the Installer failure summary group above."
+          fi
+          echo "::error::Installer test suite failed (exit ${{ steps.run_tests.outputs.exit_code }}): ${first_failure}"
           exit 1
