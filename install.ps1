@@ -414,6 +414,8 @@ try {
         }
     }
 
+    $script:fetchedPaths = New-Object System.Collections.ArrayList
+
     foreach ($folder in $Folders) {
         $srcPath = Join-Path $archiveRoot.FullName $folder
         if (-not (Test-Path $srcPath)) {
@@ -425,6 +427,9 @@ try {
             $relativePath = $_.FullName.Substring($srcPath.Length).TrimStart('\','/')
             $targetFile = Join-Path (Join-Path $Dest $folder) $relativePath
             Merge-File -Src $_.FullName -Target $targetFile
+            $rel = "$folder/$($relativePath -replace '\\','/')"
+            [void]$script:fetchedPaths.Add($rel)
+            Write-Host "    ↳ fetched: $rel" -ForegroundColor DarkGray
         }
         $copied++
     }
@@ -440,7 +445,14 @@ try {
         }
         Write-Step "Merging file: $tlf"
         Merge-File -Src $srcFile -Target (Join-Path $Dest $tlf)
+        [void]$script:fetchedPaths.Add($tlf)
+        Write-Host "    ↳ fetched: $tlf" -ForegroundColor DarkGray
     }
+
+    Write-Host ""
+    Write-Host ("═══ Fetched {0} file(s) from {1}@{2} ═══" -f $script:fetchedPaths.Count, $Repo, $ref) -ForegroundColor Cyan
+    foreach ($p in $script:fetchedPaths) { Write-Host "  • $p" }
+    Write-Host ""
 
     # ── Verify required files (spec §8: exit 4 on missing required path) ──
     # Required files MUST exist in Dest after install. Skipped under -DryRun.

@@ -480,6 +480,8 @@ merge_file() {
   fi
 }
 
+FETCHED_PATHS=()
+
 merge_folder() {
   local folder="$1"
   local src="$ARCHIVE_ROOT/$folder"
@@ -491,7 +493,10 @@ merge_folder() {
   step "Merging: $folder"
   while IFS= read -r -d '' f; do
     local rel="${f#$src/}"
-    merge_file "$f" "$DEST/$folder/$rel"
+    local dst="$DEST/$folder/$rel"
+    merge_file "$f" "$dst"
+    FETCHED_PATHS+=("$folder/$rel")
+    echo "    ↳ fetched: $folder/$rel"
   done < <(find "$src" -type f -print0)
   ((COPIED++))
 }
@@ -511,7 +516,14 @@ for tlf in "${TOP_LEVEL_FILES[@]}"; do
   fi
   step "Merging file: $tlf"
   merge_file "$src" "$DEST/$tlf"
+  FETCHED_PATHS+=("$tlf")
+  echo "    ↳ fetched: $tlf"
 done
+
+echo ""
+echo "═══ Fetched ${#FETCHED_PATHS[@]} file(s) from $REPO@$REF ═══"
+for p in "${FETCHED_PATHS[@]}"; do echo "  • $p"; done
+echo ""
 
 # ── Verify required files (spec §8: exit 4 on missing required path) ──
 # Required files MUST exist in DEST after install. Skipped under --dry-run
