@@ -6,6 +6,8 @@
     "linters",
     "linter-scripts",
     "linters-cicd",
+    "scripts/fix-repo",
+    "scripts/visibility-change",
     ".lovable/coding-guidelines"
   ],
   "files": [
