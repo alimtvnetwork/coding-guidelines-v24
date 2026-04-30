@@ -520,9 +520,23 @@ jobs:
   sync-drift:
     name: Sync Drift Check (all generated files)
     runs-on: ubuntu-latest
+    # Need write access on push-to-main and same-repo PRs so we can push
+    # the regenerated files back. Forks have no write access; the auto-
+    # commit step is skipped for them and the job falls back to failing
+    # with a diff (operator must run `npm run sync` locally).
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          # On PRs, check out the PR head branch (not the merge ref) so
+          # `git push` targets the contributor's branch. Use a token with
+          # write scope so the push is allowed.
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -539,17 +553,57 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
         continue-on-error: true
 
-      - name: Check sync drift (all generated files)
-        # Single source of truth for drift detection. The script itself
+      - name: Detect fork PR (read-only context)
+        id: ctx
+        # Fork PRs run with a read-only GITHUB_TOKEN regardless of the
+        # `permissions:` block above, so we can never push back to them.
+        # Flag that here and use it to gate the auto-commit step.
+        run: |
+          is_fork="false"
+          if [ "${{ github.event_name }}" = "pull_request" ] && \
+             [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            is_fork="true"
+          fi
+          echo "is_fork=$is_fork" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate sync-managed files (--fix)
+        # Single source of truth for drift detection. The script
         # documents which files it watches, normalises volatile fields
         # (version.json git/updated, health-score.json generated,
-        # readme UPDATED stamp), and prints the exact `npm run sync`
-        # command operators must run on failure.
-        #
-        # Local fix workflow:
-        #   npm run sync:fix      # regenerate everything in place
-        #   git add -A && git commit -m "chore: sync generated files"
-        run: npm run sync:check
+        # readme UPDATED stamp), and rewrites any drifted file in place.
+        run: node scripts/sync-check.mjs --fix
+
+      - name: Stage drift and detect changes
+        id: drift
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "✅ No sync drift detected."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "⚠️  Sync drift detected — staged regenerated files:"
+            git diff --cached --stat
+          fi
+
+      - name: Commit and push regenerated files
+        # Runs on push-to-main and same-repo PRs (skipped for forks).
+        # Commits with [skip ci] so the push doesn't re-trigger CI in a loop.
+        if: steps.drift.outputs.changed == 'true' && steps.ctx.outputs.is_fork == 'false'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync generated files [skip ci]"
+          git push
+
+      - name: Fail with diff (fork PRs only)
+        # Forks can't be pushed to — surface the regenerated diff and
+        # fail so the contributor knows to run `npm run sync` locally.
+        if: steps.drift.outputs.changed == 'true' && steps.ctx.outputs.is_fork == 'true'
+        run: |
+          echo "::error::Sync drift detected on a fork PR. Run \`npm run sync\` locally and push the regenerated files."
+          git diff --cached
+          exit 1
 
   runner-dispatch-guard:
     name: Runner Dispatch Guard
