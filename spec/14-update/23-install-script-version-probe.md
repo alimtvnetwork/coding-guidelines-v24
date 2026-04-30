@@ -410,9 +410,9 @@ invoke_latest_version_probe
 
 | Scenario | Expected |
 |----------|----------|
-| `irm .../coding-guidelines-v5/main/install.ps1 \| iex`, v14 exists | Hands off to v14, exits 0. |
-| `irm .../coding-guidelines-v19/main/install.ps1 \| iex`, no v15..v34 | Falls through to local install. |
-| Local dev: `.\install.ps1` (no URL context), constants point to v14 | If running script claims v14 and no v15..v34 exists, falls through. |
+| `irm .../coding-guidelines-v5/main/install.ps1 \| iex`, v19 exists | Hands off to v19, exits 0. |
+| `irm .../coding-guidelines-v19/main/install.ps1 \| iex`, no v20..v39 | Falls through to local install. |
+| Local dev: `.\install.ps1` (no URL context), constants point to v19 | If running script claims v19 and no v20..v39 exists, falls through. |
 | Network down | Logs `⚠ network unreachable`, falls through. |
 | GitHub returns 429 for all probes | Falls through. |
 | Hand-off child exits 1 | Parent exits 1, no local fallback. |
