@@ -45,6 +45,24 @@
 
 set -euo pipefail
 
+report_installer_failure() {
+  local rc="$?" line="${BASH_LINENO[0]:-unknown}" cmd="${BASH_COMMAND:-unknown}"
+  echo "" >&2
+  echo "════════════════════════════════════════════════════════" >&2
+  echo "❌ INSTALLER FAILED — diagnostic report" >&2
+  echo "════════════════════════════════════════════════════════" >&2
+  echo "Exit code : $rc" >&2
+  echo "Line      : $line" >&2
+  echo "Command   : $cmd" >&2
+  echo "Repo      : ${REPO:-<unset>}" >&2
+  echo "Ref       : ${REF:-${VERSION:-${BRANCH:-<unset>}}}" >&2
+  echo "Dest      : ${DEST:-<unset>}" >&2
+  echo "Temp      : ${TMP_DIR:-<unset>}" >&2
+  exit "$rc"
+}
+
+trap report_installer_failure ERR
+
 # ── Defaults ──────────────────────────────────────────────────────
 CONFIG_FILE="install-config.json"
 REPO=""
@@ -98,7 +116,7 @@ usage() {
 # ── Latest-version probe (unchanged) ──────────────────────────────
 PROBE_OWNER_FALLBACK="alimtvnetwork"
 PROBE_BASE_FALLBACK="coding-guidelines"
-PROBE_VERSION_FALLBACK=14
+PROBE_VERSION_FALLBACK=19
 
 invoke_latest_version_probe() {
     step "Detecting installer identity..."

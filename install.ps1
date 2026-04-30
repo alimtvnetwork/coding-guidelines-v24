@@ -121,6 +121,29 @@ function Write-Err   { param([string]$Msg) Write-Host "$script:Indent❌ $Msg" -
 function Write-Dim   { param([string]$Msg) Write-Host "$script:Indent$Msg" -ForegroundColor DarkGray }
 function Write-Plain { param([string]$Msg) Write-Host "$script:Indent$Msg" -ForegroundColor White }
 
+function Write-InstallFailure {
+    param([System.Management.Automation.ErrorRecord]$ErrorRecord)
+    Write-Host ""
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host "❌ INSTALLER FAILED — diagnostic report" -ForegroundColor Red
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host "Message  : $($ErrorRecord.Exception.Message)" -ForegroundColor Red
+    Write-Host "Type     : $($ErrorRecord.Exception.GetType().FullName)" -ForegroundColor Red
+    if ($ErrorRecord.InvocationInfo -and $ErrorRecord.InvocationInfo.PositionMessage) {
+        Write-Host "Location :" -ForegroundColor Red
+        Write-Host $ErrorRecord.InvocationInfo.PositionMessage -ForegroundColor DarkGray
+    }
+    if ($ErrorRecord.ScriptStackTrace) {
+        Write-Host "Script stack trace:" -ForegroundColor Red
+        Write-Host $ErrorRecord.ScriptStackTrace -ForegroundColor DarkGray
+    }
+}
+
+trap {
+    Write-InstallFailure -ErrorRecord $_
+    exit 1
+}
+
 if ($Prompt -and $Force) {
     Write-Err "-Prompt and -Force are mutually exclusive"
     exit 1
@@ -129,7 +152,7 @@ if ($Prompt -and $Force) {
 # ── Latest-version probe (skipped for -Version / listings / -NoProbe) ──
 $script:ProbeOwner   = "alimtvnetwork"
 $script:ProbeBase    = "coding-guidelines"
-$script:ProbeVersion = 14
+$script:ProbeVersion = 19
 
 function Invoke-LatestVersionProbe {
     Write-Step "Detecting installer identity..."
@@ -570,25 +593,8 @@ try {
     Write-Plain "════════════════════════════════════════════════════════"
 }
 catch {
-    Write-Host ""
-    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
-    Write-Host "❌ INSTALLER CRASHED — uncaught exception" -ForegroundColor Red
-    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Message  : $($_.Exception.Message)" -ForegroundColor Red
-    if ($_.Exception.GetType()) {
-        Write-Host "Type     : $($_.Exception.GetType().FullName)" -ForegroundColor Red
-    }
-    if ($_.InvocationInfo -and $_.InvocationInfo.PositionMessage) {
-        Write-Host "Location :" -ForegroundColor Red
-        Write-Host $_.InvocationInfo.PositionMessage -ForegroundColor DarkGray
-    }
+    Write-InstallFailure -ErrorRecord $_
     if ($_.ScriptStackTrace) {
-        Write-Host ""
-        Write-Host "Script stack trace:" -ForegroundColor Red
-        Write-Host $_.ScriptStackTrace -ForegroundColor DarkGray
-    }
-    if ($_.Exception.StackTrace) {
         Write-Host ""
         Write-Host ".NET stack trace:" -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor DarkGray

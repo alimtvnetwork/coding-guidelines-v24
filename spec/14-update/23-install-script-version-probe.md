@@ -163,7 +163,7 @@ can recognise the probe phase in support logs:
 ▸ Detecting installer identity...
 ✓ Identity: alimtvnetwork/coding-guidelines-v5  (probing v6..v25)
 ▸ Probing 20 candidate versions in parallel (timeout 2s)...
-✓ Newer version found: v14 (was v5). Handing off to v14 installer...
+✓ Newer version found: v19 (was v5). Handing off to v19 installer...
 ─────────────────────────────────────────
 [child installer output begins here]
 ```
@@ -172,9 +172,9 @@ Or, when nothing newer is found:
 
 ```
 ▸ Detecting installer identity...
-✓ Identity: alimtvnetwork/coding-guidelines-v19  (probing v15..v34)
+✓ Identity: alimtvnetwork/coding-guidelines-v19  (probing v20..v39)
 ▸ Probing 20 candidate versions in parallel (timeout 2s)...
-✓ Already on latest (v14). Continuing local install...
+✓ Already on latest (v19). Continuing local install...
 ```
 
 Or, when the probe is skipped:
@@ -290,7 +290,7 @@ function Invoke-LatestVersionProbe {
 # Maintainer-supplied fallback constants (used when URL parse fails)
 $script:ProbeOwner   = "alimtvnetwork"
 $script:ProbeBase    = "coding-guidelines"
-$script:ProbeVersion = 14
+$script:ProbeVersion = 19
 
 Invoke-LatestVersionProbe
 # ── End probe ─────────────────────────────────────────────────────
@@ -304,7 +304,7 @@ Invoke-LatestVersionProbe
 # ── Version probe ─────────────────────────────────────────────────
 PROBE_OWNER_FALLBACK="alimtvnetwork"
 PROBE_BASE_FALLBACK="coding-guidelines"
-PROBE_VERSION_FALLBACK=14
+PROBE_VERSION_FALLBACK=19
 
 invoke_latest_version_probe() {
     # 1. Self-identify
@@ -410,9 +410,9 @@ invoke_latest_version_probe
 
 | Scenario | Expected |
 |----------|----------|
-| `irm .../coding-guidelines-v5/main/install.ps1 \| iex`, v14 exists | Hands off to v14, exits 0. |
-| `irm .../coding-guidelines-v19/main/install.ps1 \| iex`, no v15..v34 | Falls through to local install. |
-| Local dev: `.\install.ps1` (no URL context), constants point to v14 | If running script claims v14 and no v15..v34 exists, falls through. |
+| `irm .../coding-guidelines-v5/main/install.ps1 \| iex`, v19 exists | Hands off to v19, exits 0. |
+| `irm .../coding-guidelines-v19/main/install.ps1 \| iex`, no v20..v39 | Falls through to local install. |
+| Local dev: `.\install.ps1` (no URL context), constants point to v19 | If running script claims v19 and no v20..v39 exists, falls through. |
 | Network down | Logs `⚠ network unreachable`, falls through. |
 | GitHub returns 429 for all probes | Falls through. |
 | Hand-off child exits 1 | Parent exits 1, no local fallback. |
