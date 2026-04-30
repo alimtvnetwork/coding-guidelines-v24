@@ -68,7 +68,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/wp-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/wp-install.ps1))) -Version v5.1.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/wp-install.ps1))) -Version v5.2.0 -Target .\vendor
 #>
 
 param(
@@ -159,7 +159,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 wp-install v5.1.0" -ForegroundColor Cyan
+Write-Host "  📦 wp-install v5.2.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
