@@ -2,14 +2,14 @@
   <a href="https://github.com/alimtvnetwork/coding-guidelines-v19">
     <img
       src="public/images/coding-guidelines-icon.png"
-      alt="Coding Guidelines v17 brand icon — gradient shield with code-bracket symbol"
+      alt="Coding Guidelines by Alim brand icon — gradient shield with code-bracket symbol"
       width="160"
       height="160"
     />
   </a>
 </p>
 
-<h1 align="center">Coding Guidelines v17</h1>
+<h1 align="center">Coding Guidelines by Alim</h1>
 
 <p align="center">
   <strong>Production-grade coding standards with zero-nesting enforcement and AI-optimized spec architecture<br/>
