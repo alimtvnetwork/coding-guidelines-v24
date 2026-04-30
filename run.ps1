@@ -19,16 +19,17 @@
 #>
 
 param(
-    [Parameter(Position = 0)]
-    [string]$Command = "",
-
-    [string]$Path = "src",
-    [switch]$Json,
-    [int]$MaxLines = 15,
-    [switch]$d
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [object[]]$Argv = @()
 )
 
 $ErrorActionPreference = "Stop"
+
+$Command = ""
+$ForwardArgs = @()
+if ($Argv.Count -gt 0) { $Command = [string]$Argv[0] }
+if ($Argv.Count -gt 1) { $ForwardArgs = @($Argv[1..($Argv.Count - 1)]) }
+$args = $ForwardArgs
 
 function Show-Help {
     $helpFile = Join-Path $PSScriptRoot "scripts" "runner-help.ps.txt"
@@ -41,10 +42,7 @@ function Invoke-Lint {
         Write-Host "❌ Cannot find $inner" -ForegroundColor Red
         exit 1
     }
-    $splat = @{ Path = $Path; MaxLines = $MaxLines }
-    if ($Json) { $splat["Json"] = $true }
-    if ($d)    { $splat["d"]    = $true }
-    & $inner @splat
+    & $inner @args
     exit $LASTEXITCODE
 }
 
