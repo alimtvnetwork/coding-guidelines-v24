@@ -569,13 +569,51 @@ try {
     Write-Host ""
     Write-Plain "════════════════════════════════════════════════════════"
 }
+catch {
+    Write-Host ""
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host "❌ INSTALLER CRASHED — uncaught exception" -ForegroundColor Red
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Message  : $($_.Exception.Message)" -ForegroundColor Red
+    if ($_.Exception.GetType()) {
+        Write-Host "Type     : $($_.Exception.GetType().FullName)" -ForegroundColor Red
+    }
+    if ($_.InvocationInfo -and $_.InvocationInfo.PositionMessage) {
+        Write-Host "Location :" -ForegroundColor Red
+        Write-Host $_.InvocationInfo.PositionMessage -ForegroundColor DarkGray
+    }
+    if ($_.ScriptStackTrace) {
+        Write-Host ""
+        Write-Host "Script stack trace:" -ForegroundColor Red
+        Write-Host $_.ScriptStackTrace -ForegroundColor DarkGray
+    }
+    if ($_.Exception.StackTrace) {
+        Write-Host ""
+        Write-Host ".NET stack trace:" -ForegroundColor Red
+        Write-Host $_.Exception.StackTrace -ForegroundColor DarkGray
+    }
+    if ($_.Exception.InnerException) {
+        Write-Host ""
+        Write-Host "Inner exception: $($_.Exception.InnerException.Message)" -ForegroundColor Red
+    }
+    Write-Host ""
+    Write-Host "Context:" -ForegroundColor Yellow
+    Write-Host "  Repo    : $Repo" -ForegroundColor DarkGray
+    Write-Host "  Ref     : $ref" -ForegroundColor DarkGray
+    Write-Host "  Dest    : $Dest" -ForegroundColor DarkGray
+    Write-Host "  Folders : $($Folders -join ', ')" -ForegroundColor DarkGray
+    Write-Host "  TmpDir  : $tmpDir" -ForegroundColor DarkGray
+    Write-Host ""
+    exit 1
+}
 finally {
-    if (Test-Path $tmpDir) {
+    if ($tmpDir -and (Test-Path $tmpDir)) {
         Remove-Item -Path $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
     }
-    if (-not (Test-Path $tmpDir)) {
+    if ($tmpDir -and -not (Test-Path $tmpDir)) {
         Write-OK "Temp cleaned: $tmpDir"
-    } else {
+    } elseif ($tmpDir) {
         Write-Warn "Temp NOT fully removed: $tmpDir (manual cleanup recommended)"
     }
 }
