@@ -111,7 +111,10 @@ jobs:
           echo "::group::Installer failure summary"
           cat .ci-out/flag-failures.md
           echo "::endgroup::"
-          first_failure=$(grep -E '^- ' .ci-out/flag-failures.md | head -1 | sed 's/^[-] //')
+          first_failure=$(awk '
+            found && /^- / { sub(/^- /, ""); print; exit }
+            /^### 🚩 Flag-related failures/ { found=1 }
+          ' .ci-out/flag-failures.md)
           if [ -z "$first_failure" ]; then
             first_failure="See the Installer failure summary group above."
           fi
