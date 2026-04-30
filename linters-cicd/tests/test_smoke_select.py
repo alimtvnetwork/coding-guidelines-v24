@@ -77,6 +77,10 @@ def _make_repo(root: Path, registry_obj: dict, *,
                "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
         subprocess.run(["git", "init", "-q", "-b", "main", str(root)],
                        check=True, env=env)
+        # Persist identity in the repo so later commits in the test
+        # body work even without env propagation.
+        subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
+        subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True, env=env)
         subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "init"],
                        check=True, env=env)
