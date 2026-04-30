@@ -52,6 +52,8 @@ allowlist = [
   # fix-repo test fixture: intentionally contains stale slugs (v1, v15, v16, v19, v170)
   # as synthetic input to verify default vs --all rewrite behavior. Must remain literal.
   "linters-cicd/tests/fixtures/fix-repo/README.md",
+  # Documentation file that explains the rule itself; must cite stale slugs verbatim as examples.
+  "linter-scripts/readme-forbidden-strings.md",
 ]
 # --- Rule: stale module path (movie-cli v1 references) ---
 [[rule]]
@@ -68,6 +70,8 @@ allowlist = [
   "CHANGELOG.md",
   # Tooling README that documents these rules; literal stale forms are required for accurate examples.
   "linter-scripts/README-forbidden-strings.md",
+  # Documentation file that explains the rule itself; must cite stale module path verbatim as an example.
+  "linter-scripts/readme-forbidden-strings.md",
 ]
 
 # --- Rule: legacy CDN domain references ---
