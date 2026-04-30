@@ -1,4 +1,4 @@
-4fda17b902df6947ab4b318cf4dc6b50913f9b3f7125dd90a7bc859aee023dba  coding-guidelines-v5.2.0.zip
-6227398cad80300192276c9b659f852f6bfe886656477f0e164470707ff0f645  coding-guidelines-v5.2.0.tar.gz
+ce33de74a73b34141561f15b41cccd32dd2a99debdcda0829d0d407d94dcd4f5  coding-guidelines-v5.2.0.zip
+0f91b3154fda27339069a250fb8f92d2190d0b51ef7aee1e443835d193f09707  coding-guidelines-v5.2.0.tar.gz
 4fc96108cf6bc2e2bec50eb1d925182b5511c0e1c46abff062602ed596c79c1e  release-install.sh
 b42ca81ffc09a8ae9fd9fead408d928c6769534bf770ac1eaf3b1e69570cb918  release-install.ps1
