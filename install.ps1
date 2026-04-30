@@ -428,7 +428,7 @@ try {
             if (-not (Test-Path (Join-Path $Dest $rf))) { $missing += $rf }
         }
         if ($missing.Count -gt 0) {
-            Write-Err "Install verification FAILED — $($missing.Count) required file(s) missing in $Dest:"
+            Write-Err "Install verification FAILED — $($missing.Count) required file(s) missing in ${Dest}:"
             foreach ($m in $missing) { Write-Host "     • $m" -ForegroundColor Red }
             Write-Host ""
             Write-Host "   The archive was downloaded but did NOT contain the expected" -ForegroundColor Red
