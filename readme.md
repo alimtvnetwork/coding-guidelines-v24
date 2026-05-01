@@ -683,7 +683,7 @@ npm run migrate:repo:dry
 <p align="center">
   Want the <strong>absolute minimum</strong>? The entire ruleset is distilled into one file:<br/>
   <a href="./.lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
-  Drop it into Lovable, Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
+  Drop it into Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
 </p>
 
 <p align="center">
