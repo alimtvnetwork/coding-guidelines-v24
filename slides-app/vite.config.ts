@@ -16,11 +16,17 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsInlineLimit: 0,
+    // IIFE format so the bundle runs from file:// (ES modules are blocked
+    // by browser CORS over file://, leaving a blank page).
     rollupOptions: {
+      input: path.resolve(__dirname, "index.html"),
       output: {
         manualChunks: undefined,
-        format: "es",
+        format: "iife",
+        inlineDynamicImports: true,
+        entryFileNames: "assets/index-[hash].js",
       },
     },
+    modulePreload: { polyfill: false },
   },
 });
