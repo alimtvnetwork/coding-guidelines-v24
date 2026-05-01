@@ -644,7 +644,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | 2 | **Two-Operand Maximum** | Boolean expressions take ≤ 2 operands; extract the third. |
 | 3 | **Positively Named Booleans** | `isReady`, `hasError`, `canPublish`, never `!isNotReady`. |
 | 4 | **Structured Error Wrapping** | Every error crosses a boundary as `AppError` with stack + context. |
-| 5 | **Strict Function & File Metrics** | Functions 8-15 lines · files < 300 · React components < 100. |
+| 5 | **Tiered Function & File Metrics** | Functions: ≤8 best, ≤15 max, ≤25 framework-only · files < 300 · React components < 100. |
 | 6 | **PascalCase Everywhere** | Identifiers, DB columns, JSON keys, types. Acronyms stay full-caps. |
 | 7 | **No Magic Strings** | Constants, enums, or typed action discriminators, never inline strings. |
 | 8 | **Spec-First Workflow** | Spec the change in `spec/` before writing code. |
