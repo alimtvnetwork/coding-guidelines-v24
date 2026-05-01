@@ -54,7 +54,7 @@
   <tr>
     <td valign="top">
       <ul>
-        <li>Teams using <strong>AI coding agents</strong> (Cursor, Claude Code, Copilot, Lovable) that need deterministic, machine-checkable rules.</li>
+       <li>Teams using <strong>AI coding agents</strong> (Cursor, Claude Code, Copilot) that need deterministic, machine-checkable rules.</li>
         <li>Polyglot codebases (<em>Go · TS · PHP · Rust · C#</em>) that want one shared standard.</li>
         <li>Junior–mid teams struggling with inconsistent style, weak error handling, or messy specs.</li>
         <li>Repos that want enforceable CI guards, not just prose conventions.</li>
