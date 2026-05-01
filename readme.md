@@ -487,6 +487,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-run-commands">Run Commands</a> ·
   <a href="#-core-development-principles">Core Development Principles</a> ·
   <a href="#-code-red-rules">CODE-RED Rules</a> ·
+  <a href="#-compact-rule-set-13-hard-rules">Compact Rule Set</a> ·
   <a href="#-real-world-example-code-red-violations">Real-world Code Red Violations</a> ·
   <a href="#spec-references">Spec References</a> ·
   <a href="#-error-management-summary">Error Management Summary</a> ·
