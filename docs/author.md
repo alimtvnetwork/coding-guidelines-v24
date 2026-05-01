@@ -15,7 +15,9 @@ His published writings on [clean function design](https://www.linkedin.com/pulse
 | Channel | Link |
 |---|---|
 | Website | [alimkarim.com](https://alimkarim.com/) · [my.alimkarim.com](https://my.alimkarim.com/) |
-| LinkedIn | [linkedin.com/in/alimkarim](https://linkedin.com/in/alimkarim) |
+| LinkedIn | [linkedin.com/in/alimkarim](https://www.linkedin.com/in/alimkarim/) |
+| GitHub | [github.com/aukgit](https://github.com/aukgit) |
+| GitLab | [gitlab.com/aukgit.evatix](https://gitlab.com/aukgit.evatix) · [gitlab.com/aukgitlab](https://gitlab.com/aukgitlab) |
 | Stack Overflow | [stackoverflow.com/users/513511/md-alim-ul-karim](https://stackoverflow.com/users/513511/md-alim-ul-karim) |
 | Google | [Alim Ul Karim](https://www.google.com/search?q=Alim+Ul+Karim) |
 | Role | Chief Software Engineer, [Riseup Asia LLC](https://riseup-asia.com) |
