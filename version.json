@@ -1,9 +1,9 @@
 {
-  "Version": "5.6.0",
+  "Version": "5.7.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "dd5c3a0e6669654006f00b80ce5b8fb8d46e19d1",
+  "LastCommitSha": "1c06d301fd3cb5977c2b17ba6d6f3cbb5cbba49d",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,14 +20,14 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "5.6.0",
+  "version": "5.7.0",
   "updated": "2026-05-01",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "dd5c3a0e6669654006f00b80ce5b8fb8d46e19d1",
-    "shortSha": "dd5c3a0",
-    "branch": "edit/edt-983df4cb-4c76-4b03-b093-2725c0618092"
+    "sha": "1c06d301fd3cb5977c2b17ba6d6f3cbb5cbba49d",
+    "shortSha": "1c06d30",
+    "branch": "edit/edt-58e8a508-6e4c-4f85-aad9-f981bdc8d582"
   },
   "stats": {
     "totalFiles": 622,

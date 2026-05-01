@@ -1,11 +1,26 @@
 # Quickstart — Coding-Guidelines Linter Pack
 
-> **Pack version:** v3.79.0
+> **Pack version:** v3.79.0 (independent of the repo version — see [Two version tracks](#-two-version-tracks))
 > **Updated:** 2026-04-23
 > **Goal:** get from zero to a green/red SARIF report in under 2 minutes.
 
 The pack is the script `linters-cicd/run-all.sh`. It scans your repo,
 emits **SARIF 2.1.0**, and exits non-zero on CODE RED findings.
+
+---
+
+## 🔢 Two version tracks
+
+This project ships **two independently versioned artifacts**. They are **not** expected to match, and that is by design:
+
+| Track | Where it shows | Current | What it covers | Cadence |
+|-------|---------------|---------|----------------|---------|
+| **Repo / spec version** | Root `readme.md` badge, `package.json`, `version.json` | **v5.7.0** (updated 2026-05-01) | The full repo: 22 spec folders, docs, bundles, installers, prompts | Bumped on any repo-level change |
+| **Linter pack version** | `QUICKSTART.md`, `linters-cicd/VERSION`, install URLs | **v3.79.0** (updated 2026-04-23) | Only the standalone CI/CD linter pack under `linters-cicd/` | Bumped only when linter logic, rules, or SARIF output change |
+
+**Why decoupled?** The linter pack is consumed as a pinned dependency by external repos (`...@v3.79.0`). Bumping it on every spec-only edit would force every downstream pipeline to re-pin for a no-op change. The repo version moves freely; the pack version moves only when its surface actually changes.
+
+**Rule of thumb:** pin the **pack version** in CI (`...@v3.79.0`); reference the **repo version** when discussing spec coverage or rule sets.
 
 ---
 
