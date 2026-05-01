@@ -1401,6 +1401,12 @@ Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](
 
 <p align="center">Software architect, <strong>20+ years</strong> across enterprise, fintech, and distributed systems. Stack: <strong>.NET/C# (18+ yrs)</strong>, <strong>JavaScript (10+ yrs)</strong>, <strong>TypeScript (6+ yrs)</strong>, <strong>Golang (4+ yrs)</strong>. <strong>Top 1% at Crossover</strong> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">Stack Overflow</a> 2,452+ rep · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> 12,500+ followers.</p>
 
+> [Alim](https://alimkarim.com/) started programming in **2004** — but instead of writing "Hello, World," he wrote his own **database engine**. By **2005**, [Alim](https://www.linkedin.com/in/alimkarim/) had built his own **ORM**, convinced that hand-writing 30 lines of SQL where 3 would do was, in his words, *"stupid."* That conviction became a lifelong thesis: **coding should not exist** — software should write itself.
+>
+> That thesis pushed [Alim](https://github.com/aukgit) into framework design. Rather than build apps, [Alim](https://gitlab.com/aukgit.evatix) builds the **frameworks that build apps** — spec-first systems, code generators, AI-driven scaffolds, and the cross-language standards you're reading right now. As a **Top 1% Crossover** engineer and CEO of [Riseup Asia LLC](https://riseup-asia.com/), [Alim](https://gitlab.com/aukgitlab) now leads developer-tooling and AI-workflow research designed to make repetitive engineering obsolete.
+>
+> Connect: [Personal site](https://alimkarim.com/) · [LinkedIn](https://www.linkedin.com/in/alimkarim/) · [GitHub `aukgit`](https://github.com/aukgit) · [GitLab `aukgit.evatix`](https://gitlab.com/aukgit.evatix) · [GitLab `aukgitlab`](https://gitlab.com/aukgitlab) · [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) · [Full bio →](docs/author-bio.md)
+
 | | Md. Alim Ul Karim | Riseup Asia LLC |
 |---|---|---|
 | **Website** | [alimkarim.com](https://alimkarim.com/) · [my.alimkarim.com](https://my.alimkarim.com/) | [riseup-asia.com](https://riseup-asia.com/) |
