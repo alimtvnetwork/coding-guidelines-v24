@@ -32,6 +32,44 @@
 
 set -euo pipefail
 
+# ── Crash logging (curl | bash safe) ──────────────────────────────
+# When invoked via `curl <url> | bash`, stderr scrolls past quickly
+# and the user has no easy way to see what went wrong. We always
+# write a timestamped crash log to a stable, predictable location so
+# the user can grep it after the fact.
+__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/lovable-installer-logs"
+mkdir -p "$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
+__INSTALLER_LOG_FILE="$__INSTALLER_LOG_DIR/cli-install-$(date -u +%Y%m%dT%H%M%SZ).log"
+{
+    echo "# cli-install crash log"
+    echo "# started: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "# bash:    ${BASH_VERSION:-unknown}"
+    echo "# uname:   $(uname -a 2>/dev/null || echo unknown)"
+    echo "# cwd:     $(pwd)"
+    echo "# argv:    $0 $*"
+    echo "# ────────────────────────────────────────────────"
+} >"$__INSTALLER_LOG_FILE" 2>/dev/null || true
+
+__installer_log() { echo "$*" >>"$__INSTALLER_LOG_FILE" 2>/dev/null || true; }
+
+__installer_on_err() {
+    local rc=$?
+    local line=${1:-?}
+    local cmd=${2:-?}
+    {
+        echo ""
+        echo "════════════════════════════════════════════════════════"
+        echo "  ❌ cli-install FAILED (exit $rc) at line $line"
+        echo "     command: $cmd"
+        echo "  ────────────────────────────────────────────────────"
+        echo "  Crash log: $__INSTALLER_LOG_FILE"
+        echo "════════════════════════════════════════════════════════"
+    } | tee -a "$__INSTALLER_LOG_FILE" >&2
+    exit "$rc"
+}
+trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
+trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
+
 BUNDLE_NAME="cli"
 BUNDLE_MAPPING="spec/11-powershell-integration|spec/11-powershell-integration spec/12-cicd-pipeline-workflows|spec/12-cicd-pipeline-workflows spec/13-generic-cli|spec/13-generic-cli spec/14-update|spec/14-update spec/15-distribution-and-runner|spec/15-distribution-and-runner spec/16-generic-release|spec/16-generic-release"
 ARCHIVE_STABLE_NAME="cli"
@@ -189,7 +227,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 cli-install v5.2.0"
+echo "  📦 cli-install v5.4.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then
