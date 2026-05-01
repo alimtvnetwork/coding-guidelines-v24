@@ -30,6 +30,13 @@ async function verifyOfflineContract() {
   if (/(?:src|href)=["']\//.test(indexHtml)) {
     throw new Error("index.html references absolute paths — Vite base must be './'.");
   }
+  // 1b. No type="module" / crossorigin (both blocked over file://)
+  if (/type=["']module["']/.test(indexHtml)) {
+    throw new Error("index.html still contains type=\"module\" — file-protocol-html plugin failed. Deck will be blank over file://.");
+  }
+  if (/<script[^>]*\scrossorigin/.test(indexHtml)) {
+    throw new Error("index.html still contains crossorigin on a <script> — file-protocol-html plugin failed.");
+  }
   // 2. No external preconnect / Google Fonts
   if (/preconnect[^>]*fonts\.googleapis|fonts\.gstatic/.test(indexHtml)) {
     throw new Error("index.html preconnects to Google Fonts — must be fully offline.");
