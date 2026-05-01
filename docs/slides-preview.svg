@@ -12,7 +12,7 @@
   <desc>Four representative slides from the Code-Red Review training deck cycle every three seconds: title, nested-if-else refactor, function metrics, and zero-nesting closing.</desc>
 
   <defs>
-    <!-- Backdrop gradient mirrors the deck's --bg / --bg-raised tokens. -->
+    <!-- Backdrop gradient mirrors the deck bg / bg-raised tokens. -->
     <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0b0f17"/>
       <stop offset="100%" stop-color="#11182b"/>
