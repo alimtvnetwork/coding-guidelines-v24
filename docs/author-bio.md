@@ -13,7 +13,7 @@
 | | |
 |---|---|
 | **Name** | Md. Alim Ul Karim |
-| **Role** | Chief Software Engineer & CEO, [Riseup Asia LLC](https://riseup-asia.com/) |
+| **Role** | Chief Software Engineer, [Riseup Asia LLC](https://riseup-asia.com/) |
 | **Experience** | 20+ years (since 2004) |
 | **Recognition** | Top 1% talent, [Crossover](https://www.crossover.com/) |
 | **Primary Stack** | .NET/C# · TypeScript · Go · PHP · Rust |
@@ -54,7 +54,7 @@ Today, <a href="https://www.google.com/search?q=Alim+Ul+Karim" title="Top engine
 | **2010** | Joined [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim), active contributor with 2,452+ reputation. |
 | **2010s** | Recognized as a **top 1% talent at [Crossover](https://www.crossover.com/)**, working across AdTech and enterprise platforms. |
 | **20+ yrs** | Deep specialization in **.NET/C# (18+ yrs)**, **JavaScript (10+ yrs)**, **TypeScript (6+ yrs)**, **Golang (4+ yrs)**. |
-| **Today** | **CEO of [Riseup Asia LLC](https://riseup-asia.com/)**, author of this cross-language coding-standards system. |
+| **Today** | **Chief Software Engineer at [Riseup Asia LLC](https://riseup-asia.com/)**, author of this cross-language coding-standards system. |
 
 ---
 
@@ -106,7 +106,7 @@ Both pieces are required reading for anyone trying to understand *why* this spec
 
 ## Riseup Asia LLC
 
-<a href="https://alimkarim.com/" title="Pioneer of .NET in Bangladesh (2005). Now leading software engineering from Malaysia.">Alim</a> is the founder and CEO of **[Riseup Asia LLC](https://riseup-asia.com/)**, recognized as a *Top Leading Software Company in WY (2026)*. The company focuses on developer tooling, spec-first AI workflows, and cross-language engineering standards.
+<a href="https://alimkarim.com/" title="Pioneer of .NET in Bangladesh (2005). Now leading software engineering from Malaysia.">Alim</a> is the founder and Chief Software Engineer of **[Riseup Asia LLC](https://riseup-asia.com/)**, recognized as a *Top Leading Software Company in WY (2026)*. The company focuses on developer tooling, spec-first AI workflows, and cross-language engineering standards.
 
 | Channel | Link |
 |---|---|
