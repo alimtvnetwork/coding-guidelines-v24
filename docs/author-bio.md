@@ -53,7 +53,7 @@ Today, <a href="https://www.google.com/search?q=Alim+Ul+Karim" title="Top engine
 | **2005** | Built his first ORM, motivated by the belief that SQL boilerplate is unnecessary. |
 | **2010** | Joined [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim), active contributor with 2,452+ reputation. |
 | **2010s** | Recognized as a **top 1% talent at [Crossover](https://www.crossover.com/)**, working across AdTech and enterprise platforms. |
-| **20+ yrs** | Deep specialization in **.NET/C# (18+ yrs)**, **JavaScript (10+ yrs)**, **TypeScript (6+ yrs)**, **Golang (4+ yrs)**. |
+| **20+ yrs** | Deep specialization in **.NET/C# (13+ yrs)**, **JavaScript (12+ yrs)**, **VB.NET (8+ yrs)**, **TypeScript (7+ yrs)**, **Golang (6+ yrs and continuing)**. |
 | **Today** | **Chief Software Engineer at [Riseup Asia LLC](https://riseup-asia.com/)**, author of this cross-language coding-standards system. |
 
 ---
