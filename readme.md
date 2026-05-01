@@ -1485,7 +1485,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
 This spec system is **purpose-built for the AI-coding era**:
 
-- **Deterministic rules beat prose.** "Functions ≤ 15 lines" is enforceable; "keep functions short" is not. AI agents (GPT-5, Claude, Gemini, Cursor, Lovable) produce dramatically more consistent code when rules are numeric and binary.
+- **Deterministic rules beat prose.** "Functions ≤ 15 lines" is enforceable; "keep functions short" is not. AI agents (GPT-5, Claude, Gemini, Cursor) produce dramatically more consistent code when rules are numeric and binary.
 - **Standalone consolidated files** fit in a single LLM context window, an agent can load one rule pack and enforce it across a polyglot codebase.
 - **❌/✅ paired examples** are the format LLMs learn from most reliably; every spec file uses them.
 - **Naming determinism (PascalCase everywhere)** means an AI never has to guess whether a field is `userId`, `user_id`, or `UserId`, eliminating an entire class of hallucinations.
