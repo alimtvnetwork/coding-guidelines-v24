@@ -677,6 +677,29 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 ---
 
+<h2 align="center">🛑 When You May Break a Rule</h2>
+
+<p align="center"><sub>Every rule here exists to make code clearer, safer, or more predictable for the next reader (human or AI). When following a rule would make the code <em>less</em> clear, less safe, or less maintainable, the rule loses. The standard is not above its own purpose.</sub></p>
+
+**A rule may be broken only when following it would make the code:**
+
+- harder to understand for the next reader, or
+- less safe (data loss, security regression, race condition), or
+- less maintainable (forces duplication, violates a stronger rule, blocks a fix).
+
+**When breaking a rule, the PR or commit message must record:**
+
+| # | Field | Example |
+|---|---|---|
+| 1 | **Which rule was skipped** | `CODE-RED-001 (zero nested if)` |
+| 2 | **Why the exception is needed** | `Three-level state machine; flattening hides the transition table.` |
+| 3 | **Why the alternative is safer or clearer** | `Nested form mirrors the formal spec in /docs/state-machine.md.` |
+| 4 | **Temporary or permanent** | `Permanent — tied to upstream protocol shape.` |
+
+<p align="center"><sub>Documented exceptions are tracked in <code>.lovable/exceptions/</code> (or your team's equivalent) and surfaced during audits. An undocumented skip is itself a CODE-RED violation. The goal is not zero exceptions — it is zero <em>silent</em> exceptions.</sub></p>
+
+---
+
 <h2 align="center">📦 Compact Rule Set, 13 Hard Rules</h2>
 
 <p align="center">
