@@ -780,9 +780,9 @@ if (user) {
 }
 
 // 🟢 Good — early-return guards, one reason per line
-if (!user) return;
-if (!user.isActive) return;
-if (!user.email) return;
+if (!user) return; // okay only for JS and TS not other lang.
+if (user.isInactive) return;
+if (user.hasEmail) return;
 sendEmail(user);
 ````
 
