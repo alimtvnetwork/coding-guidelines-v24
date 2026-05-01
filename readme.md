@@ -71,6 +71,25 @@
 
 ---
 
+<h2 align="center">🎯 Start Here: 10 Practical Rules</h2>
+
+<p align="center"><sub>The daily behavior expected from any developer or AI assistant. Read this first — the deeper spec system, installers, and CI tooling below build on these ten habits, but you do not need to understand them to start applying the rules.</sub></p>
+
+1. **Write small functions with one clear responsibility.** If a function needs a paragraph to explain, split it.
+2. **Return structured errors instead of hiding failures.** Every failure should carry context, not just a boolean.
+3. **Add context when wrapping errors.** Wrap with the operation name and key inputs so logs explain *what* failed and *why*.
+4. **Do not silently ignore errors.** Every `catch` / `Result` must log or rethrow — never swallow.
+5. **Prefer readable names over clever names.** Optimize for the next reader, not the original author.
+6. **Avoid negative boolean names.** Use `isReady`, not `isNotReady`. Negations compound badly under nesting.
+7. **Keep control flow shallow.** Use early returns and guard clauses; avoid nested `if` and deep ternaries.
+8. **Use logs that explain what failed and why.** Include operation, inputs, and the underlying cause.
+9. **Add tests for success, failure, and edge cases.** A test that only covers the happy path is not a test of behavior.
+10. **When a rule feels harmful, document the exception clearly.** See [When You May Break a Rule](#-when-you-may-break-a-rule) for the format.
+
+<p align="center"><sub>These 10 rules are the surface of the full standard. The <a href="#-code-red-non-negotiable-rules">CODE-RED rules</a>, <a href="#-compact-rule-set-13-hard-rules">13 Hard Rules</a>, and the per-language specs in <a href="spec/"><code>spec/</code></a> formalize and enforce them.</sub></p>
+
+---
+
 
 <h2 align="center">⚡ Install in One Line</h2>
 
