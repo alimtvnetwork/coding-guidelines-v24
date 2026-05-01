@@ -1512,4 +1512,3 @@ Full bio, design philosophy, and FAQ: [`docs/author.md`](docs/author.md).
 
 ---
 
-<p align="center"><sub><strong>v5.3.0</strong></sub></p>
