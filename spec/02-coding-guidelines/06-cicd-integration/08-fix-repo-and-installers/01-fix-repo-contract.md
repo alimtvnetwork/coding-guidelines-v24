@@ -74,7 +74,7 @@ Examples (Current = 3): `--3` → `{1,2}` (clamped, never below 1).
 2. **Replacement:** literal `{RepoBase}-v{CurrentVersion}`.
 3. **Match:** plain substring, case-sensitive, with a numeric-overflow
    guard — token MUST NOT be immediately followed by a digit.
-   - Matches inside `https://github.com/x/coding-guidelines-v19`
+   - Matches inside `https://github.com/x/coding-guidelines-v20`
    - Does NOT match inside `coding-guidelines-v170`
 4. **URL handling:** plain substring everywhere; host is preserved
    automatically because it is not part of the token.

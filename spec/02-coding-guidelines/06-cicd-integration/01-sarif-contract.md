@@ -20,13 +20,13 @@ conforming to this contract when run with `--format sarif`.
         "driver": {
           "name": "coding-guidelines-<check-id>",
           "version": "1.0.0",
-          "informationUri": "https://github.com/alimtvnetwork/coding-guidelines-v19",
+          "informationUri": "https://github.com/alimtvnetwork/coding-guidelines-v20",
           "rules": [
             {
               "id": "CODE-RED-001",
               "name": "NoNestedIf",
               "shortDescription": { "text": "Nested if statements are forbidden" },
-              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v19/blob/main/spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md"
+              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v20/blob/main/spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md"
             }
           ]
         }

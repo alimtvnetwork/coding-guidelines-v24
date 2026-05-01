@@ -13,7 +13,7 @@
 Define a generic, language-agnostic prologue that every CLI's
 `install.ps1` and `install.sh` MUST run before doing any local install
 work. The prologue probes for a newer numbered fork of the same
-repository (e.g. `coding-guidelines-v5` → `coding-guidelines-v19`) and,
+repository (e.g. `coding-guidelines-v5` → `coding-guidelines-v20`) and,
 if a higher version exists, **hands off** to that repo's installer
 instead of installing the older copy.
 
@@ -172,7 +172,7 @@ Or, when nothing newer is found:
 
 ```
 ▸ Detecting installer identity...
-✓ Identity: alimtvnetwork/coding-guidelines-v19  (probing v20..v39)
+✓ Identity: alimtvnetwork/coding-guidelines-v20  (probing v20..v39)
 ▸ Probing 20 candidate versions in parallel (timeout 2s)...
 ✓ Already on latest (v19). Continuing local install...
 ```
@@ -411,7 +411,7 @@ invoke_latest_version_probe
 | Scenario | Expected |
 |----------|----------|
 | `irm .../coding-guidelines-v5/main/install.ps1 \| iex`, v19 exists | Hands off to v19, exits 0. |
-| `irm .../coding-guidelines-v19/main/install.ps1 \| iex`, no v20..v39 | Falls through to local install. |
+| `irm .../coding-guidelines-v20/main/install.ps1 \| iex`, no v20..v39 | Falls through to local install. |
 | Local dev: `.\install.ps1` (no URL context), constants point to v19 | If running script claims v19 and no v20..v39 exists, falls through. |
 | Network down | Logs `⚠ network unreachable`, falls through. |
 | GitHub returns 429 for all probes | Falls through. |

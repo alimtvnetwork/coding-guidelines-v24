@@ -2,7 +2,7 @@
 # ──────────────────────────────────────────────────────────────────────
 # get-fixrepo.sh — installer for the fix-repo toolkit.
 #
-# Downloads from: github.com/alimtvnetwork/coding-guidelines-v19 (branch: main)
+# Downloads from: github.com/alimtvnetwork/coding-guidelines-v20 (branch: main)
 #
 # Installs into the current working directory:
 #   - fix-repo.sh, fix-repo.ps1
@@ -15,7 +15,7 @@
 # as a safe preview. If not a git repo, skips the run and exits 0.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/get-fixrepo.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/get-fixrepo.sh | bash
 #   ./get-fixrepo.sh                      # install + dry-run preview
 #   ./get-fixrepo.sh --no-run             # install only
 #   ./get-fixrepo.sh --branch <name>      # install from a different branch
@@ -23,7 +23,7 @@
 
 set -euo pipefail
 
-REPO="alimtvnetwork/coding-guidelines-v19"
+REPO="alimtvnetwork/coding-guidelines-v20"
 BRANCH="main"
 NO_RUN=0
 RAW_BASE=""

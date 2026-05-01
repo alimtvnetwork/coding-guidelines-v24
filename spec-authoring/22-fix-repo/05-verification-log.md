@@ -6,7 +6,7 @@ tokens `v1`, `v15`, `v16`×2, `v17`×3, `v170` plus HTTPS/SSH/scp URL forms.
 
 ## Sandbox
 `/tmp/fix-repo-sandbox/` — minimal git repo, remote
-`https://github.com/alimtvnetwork/coding-guidelines-v19.git`, populated via
+`https://github.com/alimtvnetwork/coding-guidelines-v20.git`, populated via
 `git hash-object -w` + `git update-index --add --cacheinfo` (sandbox
 constraint: `git add` is blocked).
 

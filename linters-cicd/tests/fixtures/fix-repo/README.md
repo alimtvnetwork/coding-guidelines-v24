@@ -3,7 +3,7 @@
 Synthetic input for `fix-repo.sh` / `fix-repo.ps1` verification.
 
 Tokens that MUST be rewritten by default mode (last 2) when current = v18:
-- coding-guidelines-v19
+- coding-guidelines-v20
 - coding-guidelines-v16
 
 Tokens that MUST stay unchanged in default mode:
@@ -12,6 +12,6 @@ Tokens that MUST stay unchanged in default mode:
 - coding-guidelines-v170 (numeric-overflow guard)
 
 URL forms (token must be rewritten, host/owner preserved):
-- https://github.com/alimtvnetwork/coding-guidelines-v19/install.sh
+- https://github.com/alimtvnetwork/coding-guidelines-v20/install.sh
 - git@github.com:alimtvnetwork/coding-guidelines-v16.git
-- ssh://git@github.com/alimtvnetwork/coding-guidelines-v19.git
+- ssh://git@github.com/alimtvnetwork/coding-guidelines-v20.git

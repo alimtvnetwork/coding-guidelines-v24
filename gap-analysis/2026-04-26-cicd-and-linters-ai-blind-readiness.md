@@ -65,7 +65,7 @@ The shipped `run-all.sh` writes `coding-guidelines.sarif` into the CWD by defaul
 
 An AI integrating the pack into a long-lived repo needs a story for "how do I keep the pack up to date without breaking my build". The repo's own self-update story (Renovate/Dependabot config, version-bump PR template) is invisible to consumers.
 
-**Fix:** Add `examples/other-repo-integration/renovate.json` (a Renovate config that watches the `coding-guidelines-v19` GitHub release tag and opens PRs to bump the pinned version in the consumer's CI file).
+**Fix:** Add `examples/other-repo-integration/renovate.json` (a Renovate config that watches the `coding-guidelines-v20` GitHub release tag and opens PRs to bump the pinned version in the consumer's CI file).
 
 ### 2.4 Custom-rule onboarding is buried
 
@@ -103,7 +103,7 @@ The shipped `linters-cicd/ci/github-actions.yml` uploads SARIF to the Security t
 
 > **"Can the AI implement the CI/CD?"**
 
-**Yes for GitHub Actions — 9.5 / 10.** The composite action `uses: alimtvnetwork/coding-guidelines-v19/linters-cicd@v3.9.0` is one line.
+**Yes for GitHub Actions — 9.5 / 10.** The composite action `uses: alimtvnetwork/coding-guidelines-v20/linters-cicd@v3.9.0` is one line.
 
 **Yes for GitLab / Azure / Jenkins — 8.0 / 10.** Working pipelines exist in `examples/other-repo-integration/` but they are version-stamped at v3.79.0 in the README header (out of sync with the v3.9.0 referenced elsewhere), which will confuse a blind AI.
 

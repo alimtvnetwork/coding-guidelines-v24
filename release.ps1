@@ -1,5 +1,5 @@
 param(
-    [string]$Repo = "alimtvnetwork/coding-guidelines-v19"
+    [string]$Repo = "alimtvnetwork/coding-guidelines-v20"
 )
 
 $ErrorActionPreference = "Stop"

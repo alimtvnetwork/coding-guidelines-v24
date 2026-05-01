@@ -65,7 +65,7 @@ one.
 
 ### 2.2 Conflicting one-liner URLs
 
-- spec 15: `…/raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.sh`
+- spec 15: `…/raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.sh`
   (i.e. fetched from the **branch tip**)
 - README & shipped script: `…/releases/latest/download/install.sh`
   (i.e. fetched from a **release asset**)
@@ -94,7 +94,7 @@ short-named alias.
 
 Spec 27 §6 mandates V→V+N parallel discovery with a default
 `LOOKAHEAD = 20`. Neither `install.sh` nor `install.ps1` performs any
-discovery — they hard-code the repo `alimtvnetwork/coding-guidelines-v19`.
+discovery — they hard-code the repo `alimtvnetwork/coding-guidelines-v20`.
 
 This is a **conformance gap in the implementation**, not in the spec.
 A blind AI following spec 27 would actually produce a *more* compliant

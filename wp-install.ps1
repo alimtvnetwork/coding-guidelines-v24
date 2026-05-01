@@ -65,10 +65,10 @@
     editing the manifest.
 
 .EXAMPLE
-    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/wp-install.ps1 | iex
+    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/wp-install.ps1))) -Version v5.2.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.ps1))) -Version v5.2.0 -Target .\vendor
 #>
 
 param(
@@ -125,8 +125,8 @@ $ProgressPreference = "SilentlyContinue"
 $BundleName = "wp"
 $BundleMapping = "spec/18-wp-plugin-how-to|spec/18-wp-plugin-how-to"
 $ArchiveStableName = "wp"
-$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v19/releases"
-$RepoSlug = "alimtvnetwork/coding-guidelines-v19"
+$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v20/releases"
+$RepoSlug = "alimtvnetwork/coding-guidelines-v20"
 $AutoOpenEntry = ""
 $PrebuiltSrc = ""
 $PrebuiltDest = ""

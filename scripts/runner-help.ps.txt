@@ -1,5 +1,5 @@
 
-  coding-guidelines-v19 — root runner
+  coding-guidelines-v20 — root runner
 
   Usage: .\run.ps1 [<command>] [<flags>]
 

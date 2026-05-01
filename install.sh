@@ -6,7 +6,7 @@
 #
 # Quick start (defaults from install-config.json):
 #   ./install.sh
-#   curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v19/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.sh | bash
 #
 # Power-user flags:
 #   --repo owner/repo            Override source repo
@@ -280,7 +280,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
   read_config "$CONFIG_FILE"
 fi
 
-REPO="${REPO:-alimtvnetwork/coding-guidelines-v19}"
+REPO="${REPO:-alimtvnetwork/coding-guidelines-v20}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
 [[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines")

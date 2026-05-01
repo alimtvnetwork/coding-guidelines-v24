@@ -117,8 +117,8 @@
 ### Release & Migration UI lock-in — 2026-04-24
 - Replaced "Install in One Line" + skip-probe variants with two cards (Windows PowerShell, macOS/Linux Bash). User-locked: never restore the removed variants.
 
-### Repo slug rebrand to `coding-guidelines-v19` — 2026-04-24
-- Full sweep of `release-artifacts/release-install.{ps1,sh}` and downstream docs. Canonical slug now `alimtvnetwork/coding-guidelines-v19`.
+### Repo slug rebrand to `coding-guidelines-v20` — 2026-04-24
+- Full sweep of `release-artifacts/release-install.{ps1,sh}` and downstream docs. Canonical slug now `alimtvnetwork/coding-guidelines-v20`.
 
 ### Published the app — 2026-04-24
 - Suggestion B1 closed by user via remix flow (live preview deployable; publish click pending).

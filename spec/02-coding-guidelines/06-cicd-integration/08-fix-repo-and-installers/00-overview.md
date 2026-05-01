@@ -39,7 +39,7 @@ one-liner installer in `linters-cicd/install.sh`.
 
 These scripts are how a downstream pipeline **bootstraps** the linter
 pack and **keeps a fork's branding consistent** between repo renames
-(`coding-guidelines-v19` → `coding-guidelines-v19`). They are CI/CD
+(`coding-guidelines-v20` → `coding-guidelines-v20`). They are CI/CD
 infrastructure, not application code. Sibling docs in this folder
 (SARIF contract, plugin model, distribution) all assume the install
 contract defined here.

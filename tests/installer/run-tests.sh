@@ -113,7 +113,7 @@ t2_manifest="$t2_dir/manifest.tsv"
 # Successor repos exist at V+3, V+7, V+19. Highest must win → 19.
 # All probes 200 a HEAD; nothing else.
 cat > "$t2_manifest" <<'EOF'
-coding-guidelines-v19	200	/dev/null
+coding-guidelines-v20	200	/dev/null
 coding-guidelines-v22	200	/dev/null
 coding-guidelines-v34	200	/dev/null
 EOF

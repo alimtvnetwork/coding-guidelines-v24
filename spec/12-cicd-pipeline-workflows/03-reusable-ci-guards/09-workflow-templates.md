@@ -81,7 +81,7 @@ jobs:
 ```yaml
 jobs:
   guards:
-    uses: alimtvnetwork/coding-guidelines-v19/.github/workflow-templates/ci-guards.reusable.yml@v3.44.0
+    uses: alimtvnetwork/coding-guidelines-v20/.github/workflow-templates/ci-guards.reusable.yml@v3.44.0
     with:
       phase: all
       languages: "go"
