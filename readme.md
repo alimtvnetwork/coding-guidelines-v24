@@ -108,6 +108,23 @@
 ---
 
 
+<h2 align="center">📈 Adoption Levels</h2>
+
+<p align="center"><sub>You do not need to adopt the full standard on day one. Treat the levels below as a roadmap — each level pays off on its own and prepares the ground for the next. Most teams settle at Level 3 or 4; Level 5 is for production systems with high cost-of-bug.</sub></p>
+
+| Level | Name | What you adopt | Payoff |
+|---|---|---|---|
+| **1** | **Readable Code** | Naming, small functions, shallow control flow (the [10 Practical Rules](#-start-here-10-practical-rules)). | Code reviews shrink. New contributors ramp faster. |
+| **2** | **Safer Errors** | Structured errors, explicit wrapping, no silent failure (the [Error Management spec](#%EF%B8%8F-error-management-summary)). | Production failures become debuggable from logs alone. |
+| **3** | **Team Consistency** | Shared lint rules, the [PR Review Checklist](#-pr-review-checklist), bad-vs-good examples in onboarding. | Style debates end. AI-generated diffs match house style. |
+| **4** | **AI-Assisted Development** | The [AI Agent Checklist](#-for-ai-agents), condensed prompts, anti-hallucination rules in every system prompt. | AI tools stop inventing APIs and start matching repo conventions. |
+| **5** | **Production Enforcement** | CI integration via [`ci-guards.example.yaml`](ci-guards.example.yaml), validation scripts, monitored exception tracking. | CODE-RED violations cannot reach `main`. Exceptions are auditable. |
+
+<p align="center"><sub>The level numbers map to the severity gates in <a href="#%EF%B8%8F-rule-severity">Rule Severity</a>: Levels 1-2 cover STYLE/BEST PRACTICE, Level 3 adds WARN, Levels 4-5 enforce CODE RED.</sub></p>
+
+---
+
+
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
