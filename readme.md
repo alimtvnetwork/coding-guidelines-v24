@@ -1225,6 +1225,7 @@ type SettingsResult = apperror.Result[*Settings]
 func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) apperror.BoolResult {
     return apperror.FailBool(apperror.SiteError(apperrtype.SiteNotFound, siteId))
 }
+
 func (handler *PluginHandler) DisablePlugin(siteId string, pluginSlug string) apperror.BoolResult {
     return apperror.FailBool(apperror.SlugError(apperrtype.PluginNotFound, pluginSlug))
 }
