@@ -319,7 +319,29 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 
 Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
 
+<details>
+<summary>⚠️ <strong>Troubleshooting:</strong> banner shows an older version, or "Install verification FAILED"</summary>
+
+Two symptoms come from the same root cause — the cached / fetched copy of the installer is **out of sync** with the repo's current state.
+
+| Symptom you see | Why it happens | One-line fix |
+|---|---|---|
+| Banner prints e.g. `slides-install v5.4.0` even though `package.json` is `5.8.0` | The version label in the installer is **baked at generation time** by `scripts/generate-bundle-installers.mjs`. After bumping `package.json`, the bundle installers must be regenerated and committed — otherwise `irm`/`curl` keep serving the stale banner. | `node scripts/generate-bundle-installers.mjs && git add -A && git commit -m "chore: regenerate bundle installers"` |
+| `❌ Install verification FAILED (code 4)` and the crash log mentions a missing `slides-app/dist/index.html` | The installer downloads the `main` branch zip and expects the **prebuilt** `slides-app/dist/` to exist. If `dist/` was gitignored or never committed, the zip ships without it. | `cd slides-app && bun install && bun run build` then ensure `.gitignore` keeps `!slides-app/dist/` and `!slides-app/dist/**` un-ignored, commit `slides-app/dist/`, push. |
+| Both at once after a release | Forgot to run `npm run sync` after the version bump. | `npm run sync && npm run sync:check` (CI will block the merge if either drifts — see the `sync-drift` job). |
+
+**Prevention checklist** when bumping the project version:
+
+1. Edit `package.json` `version`.
+2. `npm run sync` — refreshes `version.json`, `specTree.json`, health score, README stamps.
+3. `node scripts/generate-bundle-installers.mjs` — re-bakes the `vX.Y.Z` banner into all 14 bundle installers.
+4. `npm run sync:check` — must print `OK All 7 sync-managed file(s) are up to date.`
+5. Commit everything in one chore commit so `irm`/`curl` users immediately get the matching banner + artifacts.
+
 </details>
+
+</details>
+
 
 <details>
 <summary><strong>linters</strong>, Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
