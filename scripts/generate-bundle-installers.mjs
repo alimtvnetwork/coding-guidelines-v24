@@ -1225,6 +1225,40 @@ if ($RunFixRepo) { Invoke-FixRepo }
 
 Write-Host "✅ $BundleName installed." -ForegroundColor Green
 Open-Entry
+Write-InstallLog "[ok] install completed cleanly"
+Restore-CallerPreferences
+
+} catch {
+    # Single, friendly tail for ANY failure path. Never \`exit\` — that
+    # would terminate the host PowerShell when the script is invoked
+    # via \`irm <url> | iex\`. Instead we log, print, restore prefs,
+    # and \`return\` from the script scope.
+    $err = $_
+    $msg = $err.Exception.Message
+    $code = 1
+    if ($msg -match '^__INSTALL_STOP__\\|(\\d+)\\|(.*)$') {
+        $code = [int]$Matches[1]
+        $msg  = $Matches[2]
+    }
+    Write-Host ""
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host "  ❌ ${bundle.name}-install failed (code $code)" -ForegroundColor Red
+    if ($msg) { Write-Host "     $msg" -ForegroundColor Red }
+    Write-Host "  ────────────────────────────────────────────────────" -ForegroundColor Red
+    Write-Host "  Crash log: $Script:__InstallCrashLogFile" -ForegroundColor Yellow
+    Write-Host "  Stack trace (also written to log):" -ForegroundColor DarkGray
+    Write-Host ("     " + $err.ScriptStackTrace) -ForegroundColor DarkGray
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-InstallLog ("[crash] code=" + $code + " message=" + $msg)
+    Write-InstallLog ("[crash] " + ($err | Out-String))
+    Restore-CallerPreferences
+    # Set $LASTEXITCODE so callers that inspect it still see the failure,
+    # but DO NOT call \`exit\` — that would close the user's terminal
+    # when running via \`irm | iex\`.
+    $global:LASTEXITCODE = $code
+    return
+}
+
 `;
 }
 
