@@ -12,8 +12,12 @@
 <h1 align="center">Coding Guidelines by Alim</h1>
 
 <p align="center">
-  <strong>Production-grade coding standards with zero-nesting enforcement and AI-optimized spec architecture<br/>
-  for <em>Go, TypeScript, PHP, Rust, and C#</em>, drop-in conventions for elite engineering teams.</strong>
+  <strong>An opinionated, AI-first engineering standards framework<br/>
+  for <em>Go, TypeScript, PHP, Rust, and C#</em>, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development.</strong>
+</p>
+
+<p align="center">
+  <sub><strong>Honest positioning:</strong> this is a strict, opinionated standard, not a universal style guide. It is built for teams that want heavy standardization and AI-leveraged workflows. Adopt it <em>gradually and selectively</em>, and adapt rules to your language, product, and team context. Some trade-offs (PascalCase JSON, 15-line functions, no nested <code>if</code>) are deliberate but won't fit every codebase, treat them as defaults to evaluate, not commandments.</sub>
 </p>
 
 <p align="center">
