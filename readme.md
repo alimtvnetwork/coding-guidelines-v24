@@ -678,6 +678,38 @@ npm run migrate:repo:dry
 
 ---
 
+<h2 align="center">📦 Compact Rule Set, 13 Hard Rules</h2>
+
+<p align="center">
+  Want the <strong>absolute minimum</strong>? The entire ruleset is distilled into one file:<br/>
+  <a href="./.lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
+  Drop it into Lovable, Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
+</p>
+
+<p align="center">
+  <em>The consolidated layer is intentionally compact, only <strong>33 files</strong> in <a href="spec/17-consolidated-guidelines/"><code>spec/17-consolidated-guidelines/</code></a>, ~5% of the repo, covering 100% of the enforceable rule classes.</em>
+</p>
+
+**Hard Rules (verbatim from the compact file):**
+
+1. Functions ≤ 8 lines (hard cap; split otherwise).
+2. No nested `if` statements.
+3. `if` conditions must be positive and simple, no negations, no `!`.
+4. Follow Boolean naming guidelines: prefix with `is` or `has`. Never use negative booleans.
+5. Use proper, narrow types. Never `any`, `unknown`, `interface{}`, or any wide-range catch-all type. `Generic<T>` is the only exception.
+6. No swallowed errors. Every `catch` must log per the project logging guidelines.
+7. Files / classes ≤ 80 to 100 lines max.
+8. No magic strings or numbers, use Enums or Constants.
+9. Definitions live in their own dedicated files, not inline.
+10. Keep code DRY, reusability is the highest-priority concern.
+11. React/TypeScript components must be as small and reusable as possible. For multi-component features, plan first and produce a Mermaid component diagram.
+12. Use Enums (typed) for any `Type`, `Kind`, `Status`, `Category` field.
+13. If a `spec/**/error-manage/` folder exists, every error handler MUST follow those guidelines exactly. No exceptions.
+
+**Plus a Data & Schema layer (8 rules)** and an **Error & Logging layer (3 rules)** in the same file. Total surface area: one file, three sections, full coverage for any AI agent's system prompt.
+
+---
+
 <h2 align="center">🚨 Real-world Example, Code Red Violations</h2>
 
 <p align="center">
