@@ -753,6 +753,43 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 ---
 
+<h3 align="center">📏 Function Length Tiers</h3>
+
+<p align="center"><sub>Function length is graded, not binary. The linter (<a href="linter-scripts/check-function-lengths.py"><code>linter-scripts/check-function-lengths.py</code></a>) enforces the same tiers automatically.</sub></p>
+
+| Tier | Body lines | Linter behaviour | When it applies |
+|------|------------|------------------|-----------------|
+| 🟢 **Best practice** | **≤ 8** | Silent OK | Default target for all new code. Forces single-responsibility and trivial unit tests. |
+| 🟡 **Acceptable** | **9–15** | `::warning` (non-blocking; `--strict` flips it to fail) | Normal upper bound. Anything bigger should usually be split. |
+| 🔴 **CODE RED** | **16–25** | `::error` — fails CI | Allowed only with `# lint-allow: function-length reason="..." max=N` waiver. Use for cohesive blocks that genuinely lose clarity if split (e.g. a long `match`/`switch`, a config-table builder). |
+| ⛔ **Hard fail** | **> 25** | `::error` — fails CI | Allowed only with `# lint-allow: function-length reason="..." framework=true` and only for framework-imposed signatures (e.g. a generated handler, a registered hook with mandatory wiring). Absolute ceiling: 60 lines. |
+
+**Waiver example (Bash):**
+
+```bash
+# lint-allow: function-length reason="WordPress hook signature" framework=true
+function register_settings_page() {
+    # ... 28 lines required by add_options_page() + register_setting() wiring ...
+}
+```
+
+**`unknown` / `any` exception (TypeScript):** these types are normally banned by Hard Rule 5, but are explicitly **permitted** inside `catch` blocks, at trust boundaries (e.g. parsing third-party JSON), or when receiving an untyped value from an external library. **Narrow immediately** with a type guard — the point of the rule is to catch errors at compile time, not to forbid the escape hatch where it is genuinely the safest option.
+
+```ts
+try {
+  doRiskyThing();
+} catch (caught: unknown) {              // ✅ unknown allowed in catch
+  if (caught instanceof DomainError) {   // narrow immediately
+    logger.warn(caught.code, caught.context);
+    return;
+  }
+  logger.error("unexpected", { error: String(caught) });
+}
+```
+
+---
+
+
 <h2 align="center">🟢🔴 Bad vs Good — Quick Examples</h2>
 
 <p align="center"><sub>Five of the most-broken rules, with the smallest possible before/after. The full real-world walkthrough is in the next section; this block is the fastest way for a human or AI to internalize the style in 60 seconds.</sub></p>
