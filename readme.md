@@ -922,10 +922,12 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
     if siteWasFound {
         if site.IsReadyForPluginEnable() {
             if slug.IsPresent(pluginSlug) {
+
                 return handler.uploader.Enable(site, pluginSlug)
             }
         }
     }
+
     return apperror.FailBool(apperror.NewType(apperrtype.PluginEnablePreconditionFailed))
 }
 
