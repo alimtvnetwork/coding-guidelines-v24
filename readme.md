@@ -1236,6 +1236,32 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 
 <p align="center"><strong>"Which bundle?"</strong>, fetch <code>bundles.json</code>, match <code>intent</code>+<code>audience</code> to a bundle <code>name</code>, return its one-liner.</p>
 
+### ✅ AI Agent Checklist
+
+<sub>Run through this checklist on <strong>every</strong> code-writing turn. It is a hard execution contract for Cursor, Copilot, Claude Code, OpenAI Codex-style agents — and it doubles as a self-review checklist for human developers using AI assistance.</sub>
+
+**Before writing code:**
+
+1. **Identify** the language, framework, and target file path. State them explicitly before editing.
+2. **Read nearby code** in the same file (and 1-2 sibling files) before editing. Match existing naming and structure.
+3. **Follow existing conventions** — naming, folder layout, import style — over your defaults. The repo's style wins.
+4. **Do not invent** APIs, folders, config keys, file names, environment variables, or library functions. If unsure, search or ask.
+
+**While writing code:**
+
+5. **Use structured errors** with explicit failure handling. Wrap with operation name + key inputs. Never swallow.
+6. **Keep functions small** (≤15 lines) and **control flow shallow** (zero nested `if`). Use early-return guards.
+7. **Add or update tests** when behavior changes. Cover success, failure, and at least one edge case.
+
+**After writing code:**
+
+8. **Document any exception** to the guidelines per the [Exception Policy](#-when-you-may-break-a-rule). One sentence is enough.
+9. **Run available checks** — lint, test, type-check, validation scripts — and report the actual exit codes.
+10. **Summarize** what changed, what was tested, and what was *not* verified. Be explicit about uncertainty.
+
+<sub>Skipping any step silently is itself a CODE-RED violation. The full anti-hallucination rule set lives in <a href="spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><code>spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md</code></a> (34 rules, 5 language categories).</sub>
+
+
 ## 🛠️ Full-Repo Install Scripts
 
 Use the generic installer for **everything** (specs + linters + scripts):
