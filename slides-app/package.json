@@ -6,10 +6,10 @@
   "description": "Standalone training slide deck for the coding-guidelines-v20 review curriculum. Builds to a portable HTML/CSS/JS bundle (dist.zip) that runs offline by double-clicking index.html.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/package-zip.mjs",
     "preview": "vite preview",
     "package": "node scripts/package-zip.mjs",
-    "ship": "bun run build && bun run package"
+    "ship": "bun run build"
   },
   "dependencies": {
     "@fontsource/ubuntu": "5.1.0",
