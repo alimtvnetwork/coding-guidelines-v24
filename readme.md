@@ -1570,6 +1570,25 @@ The result: when an AI agent operates inside a repo following these rules, the g
 
 ---
 
+<h2 align="center">✅ PR Review Checklist</h2>
+
+<p align="center"><sub>Run through this list before approving any pull request — whether the code was written by a human or an AI assistant. Each item maps directly to a rule in the standard, so a reviewer can stay objective without quoting line numbers.</sub></p>
+
+1. **Errors handled explicitly?** No swallowed `catch`, no bare `if err != nil { return err }`. Wrapped with operation + inputs.
+2. **Error messages useful for debugging?** A production on-call could find the failing operation, file, and inputs from logs alone.
+3. **Control flow shallow?** No nested `if`. Early-return guards used. One reason per branch.
+4. **Functions focused?** Each function does one thing. None exceed ~15 lines without strong justification.
+5. **Names clear and positive?** No `isNotX`, `hasNoY`, `disableNotZ`. Domain language preferred over clever abstractions.
+6. **Edge cases tested?** At least one success, one failure, and one boundary case per behavior change.
+7. **Logs structured enough to debug production?** Operation name, key inputs, and root cause present. No bare `"failed"` or `"error"` strings.
+8. **No invented abstractions?** AI or human did not add a "framework" or wrapper that the codebase did not ask for. Match the existing pattern.
+9. **Exceptions documented?** Any rule-skip follows the [Exception Policy](#-when-you-may-break-a-rule) 4-field format.
+10. **Readable in one pass?** Another developer (or AI) can understand the change without context outside the diff.
+
+<p align="center"><sub>Reject the PR if 3+ items fail. Request changes for any single CODE-RED failure. STYLE/BEST-PRACTICE failures may be approved with comments per the <a href="#%EF%B8%8F-rule-severity">Rule Severity</a> table.</sub></p>
+
+---
+
 ## 🤝 Contributing
 
 1. Pick the correct parent folder (numeric prefix decides position).
