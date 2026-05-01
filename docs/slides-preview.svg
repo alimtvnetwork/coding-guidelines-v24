@@ -166,7 +166,7 @@
 
   <!-- ========== Slide 3: Function metrics ========== -->
   <g class="slide slide-3">
-    <text x="80" y="110" class="eyebrow">07 · Function & file metrics</text>
+    <text x="80" y="110" class="eyebrow">07 · Function &amp; file metrics</text>
     <text x="80" y="170" class="h2">8–15 lines per function. Max 300 per file.</text>
 
     <g transform="translate(80,230)">
