@@ -644,7 +644,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | 2 | **Two-Operand Maximum** | Boolean expressions take ≤ 2 operands; extract the third. |
 | 3 | **Positively Named Booleans** | `isReady`, `hasError`, `canPublish`, never `!isNotReady`. |
 | 4 | **Structured Error Wrapping** | Every error crosses a boundary as `AppError` with stack + context. |
-| 5 | **Strict Function & File Metrics** | Functions 8-15 lines · files < 300 · React components < 100. |
+| 5 | **Tiered Function & File Metrics** | Functions: ≤8 best, ≤15 max, ≤25 framework-only · files < 300 · React components < 100. |
 | 6 | **PascalCase Everywhere** | Identifiers, DB columns, JSON keys, types. Acronyms stay full-caps. |
 | 7 | **No Magic Strings** | Constants, enums, or typed action discriminators, never inline strings. |
 | 8 | **Spec-First Workflow** | Spec the change in `spec/` before writing code. |
@@ -735,11 +735,11 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 **Hard Rules (verbatim from the compact file):**
 
-1. Functions ≤ 8 lines (hard cap; split otherwise).
+1. **Function length is tiered, not absolute:** ≤ **8 lines** is the best-practice target, ≤ **15 lines** is the hard cap for normal code (linter CODE-RED past this), and **16–25 lines** is allowed only as an exception with a `# lint-allow: function-length reason="..." max=N` waiver. Anything > 25 requires `framework=true` and is reserved for language/framework-imposed signatures or large `switch`/`match` blocks. See [Function Length Tiers](#-function-length-tiers).
 2. No nested `if` statements.
 3. `if` conditions must be positive and simple, no negations, no `!`.
 4. Follow Boolean naming guidelines: prefix with `is` or `has`. Never use negative booleans.
-5. Use proper, narrow types. Never `any`, `unknown`, `interface{}`, or any wide-range catch-all type. `Generic<T>` is the only exception.
+5. Use proper, narrow types. Avoid `any`, `unknown`, `interface{}`, or any wide-range catch-all type. **Exception:** `unknown` (TS) and `any` are acceptable inside a `catch` block, at trust boundaries (deserializing untrusted JSON), or when interfacing with an external library that returns an untyped value — narrow it immediately with a type guard. The point is to catch type errors at compile time, not to forbid the escape hatch where it is genuinely safer than a forced cast. `Generic<T>` remains the standard tool for parametric types.
 6. No swallowed errors. Every `catch` must log per the project logging guidelines.
 7. Files / classes ≤ 80 to 100 lines max.
 8. No magic strings or numbers, use Enums or Constants.
@@ -752,6 +752,43 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 **Plus a Data & Schema layer (8 rules)** and an **Error & Logging layer (3 rules)** in the same file. Total surface area: one file, three sections, full coverage for any AI agent's system prompt.
 
 ---
+
+<h3 align="center">📏 Function Length Tiers</h3>
+
+<p align="center"><sub>Function length is graded, not binary. The linter (<a href="linter-scripts/check-function-lengths.py"><code>linter-scripts/check-function-lengths.py</code></a>) enforces the same tiers automatically.</sub></p>
+
+| Tier | Body lines | Linter behaviour | When it applies |
+|------|------------|------------------|-----------------|
+| 🟢 **Best practice** | **≤ 8** | Silent OK | Default target for all new code. Forces single-responsibility and trivial unit tests. |
+| 🟡 **Acceptable** | **9–15** | `::warning` (non-blocking; `--strict` flips it to fail) | Normal upper bound. Anything bigger should usually be split. |
+| 🔴 **CODE RED** | **16–25** | `::error` — fails CI | Allowed only with `# lint-allow: function-length reason="..." max=N` waiver. Use for cohesive blocks that genuinely lose clarity if split (e.g. a long `match`/`switch`, a config-table builder). |
+| ⛔ **Hard fail** | **> 25** | `::error` — fails CI | Allowed only with `# lint-allow: function-length reason="..." framework=true` and only for framework-imposed signatures (e.g. a generated handler, a registered hook with mandatory wiring). Absolute ceiling: 60 lines. |
+
+**Waiver example (Bash):**
+
+```bash
+# lint-allow: function-length reason="WordPress hook signature" framework=true
+function register_settings_page() {
+    # ... 28 lines required by add_options_page() + register_setting() wiring ...
+}
+```
+
+**`unknown` / `any` exception (TypeScript):** these types are normally banned by Hard Rule 5, but are explicitly **permitted** inside `catch` blocks, at trust boundaries (e.g. parsing third-party JSON), or when receiving an untyped value from an external library. **Narrow immediately** with a type guard — the point of the rule is to catch errors at compile time, not to forbid the escape hatch where it is genuinely the safest option.
+
+```ts
+try {
+  doRiskyThing();
+} catch (caught: unknown) {              // ✅ unknown allowed in catch
+  if (caught instanceof DomainError) {   // narrow immediately
+    logger.warn(caught.code, caught.context);
+    return;
+  }
+  logger.error("unexpected", { error: String(caught) });
+}
+```
+
+---
+
 
 <h2 align="center">🟢🔴 Bad vs Good — Quick Examples</h2>
 
