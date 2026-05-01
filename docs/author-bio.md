@@ -62,10 +62,11 @@ Today, <a href="https://www.google.com/search?q=Alim+Ul+Karim" title="Top engine
 
 | Language / Platform | Years | Where it shows up |
 |---|---|---|
-| **.NET / C#** | 18+ | Enterprise systems, framework authoring, StyleCop ruleset in this repo. |
-| **JavaScript** | 10+ | Frontend tooling, ESLint plugin authoring. |
-| **TypeScript** | 6+ | This repo's UI, design system, and TS standards reference. |
-| **Golang** | 4+ | `apperror` package design, Result[T] patterns, cross-language enum spec. |
+| **.NET / C#** | 13+ | Enterprise systems, framework authoring, StyleCop ruleset in this repo. |
+| **JavaScript** | 12+ | Frontend tooling, ESLint plugin authoring. |
+| **VB.NET** | 8+ | Legacy enterprise modernization, interop with C# frameworks. |
+| **TypeScript** | 7+ | This repo's UI, design system, and TS standards reference. |
+| **Golang** | 6+ (and continuing) | `apperror` package design, Result[T] patterns, cross-language enum spec. |
 | **PHP** |, | WordPress plugin spec, PHPCS ruleset, PHP-Go consistency audits. |
 | **Rust** |, | Cross-language naming + error-handling spec coverage. |
 
