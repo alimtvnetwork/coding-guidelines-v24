@@ -38,6 +38,40 @@
 
 ---
 
+<h3 align="center">📌 At a glance, who this is for</h3>
+
+<table align="center">
+  <tr>
+    <th align="left">✅ Good fit</th>
+    <th align="left">⚠️ Probably not for you</th>
+  </tr>
+  <tr>
+    <td valign="top">
+      <ul>
+        <li>Teams using <strong>AI coding agents</strong> (Cursor, Claude Code, Copilot, Lovable) that need deterministic, machine-checkable rules.</li>
+        <li>Polyglot codebases (<em>Go · TS · PHP · Rust · C#</em>) that want one shared standard.</li>
+        <li>Junior–mid teams struggling with inconsistent style, weak error handling, or messy specs.</li>
+        <li>Repos that want enforceable CI guards, not just prose conventions.</li>
+      </ul>
+    </td>
+    <td valign="top">
+      <ul>
+        <li>Senior teams with mature, working in-house conventions, the cost of switching may exceed the gain.</li>
+        <li>Small scripts, prototypes, or one-off projects where strict CI overhead isn't justified.</li>
+        <li>Stacks where PascalCase JSON or 15-line function caps clash with ecosystem norms you can't change.</li>
+        <li>Anyone looking for a light, neutral style guide, this one is opinionated by design.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<p align="center"><sub><strong>Problem it solves:</strong> inconsistent code, swallowed errors, and AI-generated diffs that drift from house style. <strong>How:</strong> explicit numeric rules + standalone spec files + ready-to-run installers and CI checks. <strong>Tradeoffs:</strong> opinionated defaults, real adoption cost, best rolled out in waves (see <a href="ci-guards.example.yaml">CI guards example</a>).</sub></p>
+
+<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="QUICKSTART.md">QUICKSTART.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
+
+---
+
+
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
@@ -1484,6 +1518,19 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
+- **Install just that compact layer** (skip the other 95%) with the dedicated bundle installer:
+
+  ```powershell
+  # Windows · PowerShell
+  irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.ps1 | iex
+  ```
+
+  ```bash
+  # macOS · Linux · Bash
+  curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.sh | bash
+  ```
+
+  Full bundle reference: [`consolidated`, Consolidated Guidelines](#-bundle-installers).
 - Adoption is gradual. No team turns on every linter on day one. The **[CI guards example](ci-guards.example.yaml)** shows how to enable rules in waves.
 
 #### 5. *"Why this matters for AI-assisted development specifically"*
@@ -1507,7 +1554,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 | PascalCase JSON is opinionated | Required by [C#](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions)/[Go](https://go.dev/ref/spec#Exported_identifiers) reality; eliminates serialization boilerplate ([System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonnamingpolicy), [encoding/json tags](https://pkg.go.dev/encoding/json#Marshal)) and magic strings |
 | 15-line function limit is strict | Backed by [*Clean Code*](https://www.oreilly.com/library/view/clean-code-a/9780136083238/) (Martin, ch. 3), [*Code Complete 2*](https://www.microsoftpressstore.com/store/code-complete-9780735619678) (McConnell, ch. 7), [*Refactoring*](https://martinfowler.com/books/refactoring.html) (Fowler, "Extract Function"), and the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Function_Length) |
 | No nested `if` / no raw `!` | Documented anti-patterns: [McCabe cyclomatic complexity (1976)](https://www.computer.org/csdl/journal/ts/1976/04/01702388/13rRUxYIN5N), [Fowler "Replace Nested Conditional with Guard Clauses"](https://refactoring.com/catalog/replaceNestedConditionalWithGuardClauses.html), [Clean Code G28/G29](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29) |
-| 622 files is overwhelming | Two audiences (humans + AI); [QUICKSTART](./QUICKSTART.md) + [10 CODE-RED rules](#-code-red-non-negotiable-rules) are the human entry point |
+| 622 files is overwhelming | Two audiences (humans + AI); [QUICKSTART](./QUICKSTART.md) + [10 CODE-RED rules](#-code-red-non-negotiable-rules) for humans, or install only the 33-file compact layer via [`consolidated-install.{sh,ps1}`](#-bundle-installers) |
 | Too strict for general use | This is an **AI-first engineering standard**, not a generic style guide, see [*For AI Agents*](#-for-ai-agents-this-repo-is-built-for-you), that is the point |
 
 ---
