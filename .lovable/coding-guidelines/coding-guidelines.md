@@ -14,11 +14,11 @@ These rules are mandatory for all code generated in this project. The AI MUST re
 
 ## Hard Rules
 
-1. Functions ≤ 8 lines (hard cap; split otherwise).
+1. Function length is **tiered**: ≤ **8 lines** best practice · ≤ **15 lines** hard cap for normal code (linter CODE-RED past this) · **16–25 lines** allowed only with `# lint-allow: function-length reason="..." max=N` waiver · **> 25 lines** only with `framework=true` for language/framework-imposed signatures or large `switch`/`match` blocks (absolute ceiling 60).
 2. No nested `if` statements.
 3. `if` conditions must be positive and simple — no negations, no `!`.
 4. Follow Boolean naming guidelines: prefix with `is` or `has`. Never use negative booleans.
-5. Use proper, narrow types. Never `any`, `unknown`, `interface{}`, or any wide-range catch-all type. `Generic<T>` is the only exception.
+5. Use proper, narrow types. Avoid `any`, `unknown`, `interface{}`, or any wide-range catch-all type. **Exception:** `unknown` (TS) and `any` are acceptable inside a `catch` block, at trust boundaries (e.g. deserializing untrusted JSON), or when interfacing with an external library that returns an untyped value — narrow immediately with a type guard. The goal is compile-time safety, not banning the escape hatch where it is genuinely safer than a forced cast. `Generic<T>` remains the standard tool for parametric types.
 6. No swallowed errors. Every `catch` must log per the project logging guidelines.
 7. Files / classes ≤ 80–100 lines max.
 8. No magic strings or numbers — use Enums or Constants.
