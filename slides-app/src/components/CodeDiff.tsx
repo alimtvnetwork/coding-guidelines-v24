@@ -1,6 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { codeToHtml } from "shiki";
+import { createHighlighterCore } from "shiki/core";
+import { createOnigurumaEngine } from "shiki/engine/oniguruma";
+import githubDark from "shiki/themes/github-dark.mjs";
+import typescript from "shiki/langs/typescript.mjs";
+
+// Singleton highlighter — only TypeScript is bundled. The full `codeToHtml`
+// import pulls every language (~9 MB after build); restricting languages here
+// keeps dist under the 8 MB offline-contract ceiling.
+let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
+function getHighlighter() {
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighterCore({
+      themes: [githubDark],
+      langs: [typescript],
+      engine: createOnigurumaEngine(import("shiki/wasm")),
+    });
+  }
+  return highlighterPromise;
+}
 
 export interface CodeDiffProps {
   language: string;
