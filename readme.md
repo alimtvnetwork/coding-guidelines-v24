@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.3.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-622-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-133%2C880-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--05--01-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.3.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--05--01-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
