@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Maximize, Grid3x3, Presentation, Sun, Moon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ScaledSlide } from "./components/ScaledSlide";
 import { DECK } from "./deck";
 
@@ -25,6 +26,11 @@ export default function App() {
   const [index, setIndex] = useState(readSlideFromHash);
   const [view, setView] = useState<View>("deck");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const prevIndexRef = useRef(index);
+  const direction = index >= prevIndexRef.current ? 1 : -1;
+  useEffect(() => {
+    prevIndexRef.current = index;
+  }, [index]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
