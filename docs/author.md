@@ -8,9 +8,17 @@
 **Md. Alim Ul Karim**
 **Designation:** Chief Software Engineer, [Riseup Asia LLC](https://riseup-asia.com/)
 
-A Software Architect and Chief Software Engineer with **20+ years** of professional experience across enterprise-scale systems. His technology stack spans **.NET/C# (18+ years), JavaScript (10+ years), TypeScript (6+ years), and Golang (4+ years)**. Recognized as a **top 1% talent at Crossover**, he has worked across AdTech, staff augmentation platforms, and full-stack enterprise architecture. He is also the CEO of [Riseup Asia LLC](https://riseup-asia.com/) and maintains an active presence on [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) (2,452+ reputation, member since 2010) and [LinkedIn](https://www.linkedin.com/in/alimkarim) (12,500+ followers).
+> 📖 **Looking for the full story?** See the dedicated [Author Bio & Profile →](./author-bio.md)
 
-His published writings on [clean function design](https://www.linkedin.com/pulse/writing-clean-concise-functions-practical-approach-alim-mohammad-ktcqc) and [meaningful naming](https://www.linkedin.com/pulse/key-takeaways-meaningful-names-software-development-alim-mohammad-sxqcc) directly inform the coding principles encoded in this specification system.
+[Alim](https://alimkarim.com/) is a Software Architect and Chief Software Engineer with **20+ years** of professional experience across enterprise-scale systems. His stack spans **.NET/C# (18+ years), JavaScript (10+ years), TypeScript (6+ years), and Golang (4+ years)**.
+
+His journey began in **2004** — and unlike most beginners, [Alim](https://www.linkedin.com/in/alimkarim/) did **not** start with `Hello, World`. His very first program was an attempt to build his **own database engine** from scratch. By **2005**, frustrated that "writing 30 lines of SQL for what could be 3 lines of automation felt stupid," [Alim](https://github.com/aukgit) wrote his **own ORM** — years before ORMs were a household concept in his region.
+
+That obsession crystallized into a single belief: *coding, in its current verbose form, should not have to exist.* [Alim](https://gitlab.com/aukgitlab) wanted to invent something that could **write its own code**. He failed — *miserably*, by his own admission — and that failure became the turning point. Instead of giving up, [Alim](https://stackoverflow.com/users/513511/md-alim-ul-karim) pivoted: if a machine couldn't yet write code for him, he would build the **frameworks** that made humans write *less* of it.
+
+Those frameworks are how [Alim](https://www.google.com/search?q=Alim+Ul+Karim) eventually earned recognition as a **top 1% talent at Crossover**, working across AdTech, staff augmentation platforms, and full-stack enterprise architecture. Today he is the **CEO of [Riseup Asia LLC](https://riseup-asia.com/)** and is known for authoring multiple production frameworks used in real systems. He maintains an active presence on [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) (2,452+ reputation, member since 2010) and [LinkedIn](https://www.linkedin.com/in/alimkarim/) (12,500+ followers).
+
+His published writings on [clean function design](https://www.linkedin.com/pulse/writing-clean-concise-functions-practical-approach-alim-mohammad-ktcqc) and [meaningful naming](https://www.linkedin.com/pulse/key-takeaways-meaningful-names-software-development-alim-mohammad-sxqcc) directly inform the coding principles encoded in this specification system — every rule here exists because [Alim](https://github.com/aukgit) personally debugged the failure it prevents.
 
 | Channel | Link |
 |---|---|
