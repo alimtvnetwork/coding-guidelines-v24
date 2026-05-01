@@ -1017,8 +1017,7 @@ function Open-Entry {
 function Install-ViaArchive {
     $archiveUrl = "$ReleaseBase/download/$Version/$ArchiveStableName.zip"
     if ($Offline) {
-        Write-Error "❌ -Offline set but versioned archive requires network download.\`n   URL: $archiveUrl\`n   Re-run without -Offline, or pre-stage the archive locally."
-        exit 2
+        Stop-Install -Code 2 -Message "❌ -Offline set but versioned archive requires network download.\`n   URL: $archiveUrl\`n   Re-run without -Offline, or pre-stage the archive locally."
     }
     $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("bundle-" + [guid]::NewGuid().ToString("N").Substring(0,8))
     New-Item -ItemType Directory -Path $tmp -Force | Out-Null
@@ -1029,8 +1028,7 @@ function Install-ViaArchive {
             Invoke-WebRequest -Uri $archiveUrl -OutFile $zipPath -UseBasicParsing
         } catch {
             if ($NoMainFallback) {
-                Write-Error "❌ release archive not found for $Version and -NoMainFallback set.\`n   URL: $archiveUrl\`n   Refusing to fall back to the main-branch zip. ($($_.Exception.Message))"
-                exit 3
+                Stop-Install -Code 3 -Message "❌ release archive not found for $Version and -NoMainFallback set.\`n   URL: $archiveUrl\`n   Refusing to fall back to the main-branch zip. ($($_.Exception.Message))"
             }
             Write-Warning "  release archive not found for $Version — falling back to main branch: $($_.Exception.Message)"
             Install-ViaMainBranch
@@ -1047,8 +1045,7 @@ function Install-ViaArchive {
 function Install-ViaMainBranch {
     $archiveUrl = "https://codeload.github.com/$RepoSlug/zip/refs/heads/main"
     if ($Offline) {
-        Write-Error "❌ -Offline set but main-branch zip is required.\`n   URL: $archiveUrl\`n   Re-run without -Offline (network access needed to fetch the bundle)."
-        exit 2
+        Stop-Install -Code 2 -Message "❌ -Offline set but main-branch zip is required.\`n   URL: $archiveUrl\`n   Re-run without -Offline (network access needed to fetch the bundle)."
     }
     $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("bundle-" + [guid]::NewGuid().ToString("N").Substring(0,8))
     New-Item -ItemType Directory -Path $tmp -Force | Out-Null
@@ -1070,12 +1067,10 @@ function Install-ViaLocalArchive {
     # for .tar.gz / .tgz pre-staged archives use the Bash installer
     # (--use-local-archive) — Expand-Archive only handles zip.
     if (-not (Test-Path -LiteralPath $UseLocalArchive -PathType Leaf)) {
-        Write-Error "❌ -UseLocalArchive: file not found: $UseLocalArchive\`n   Provide an absolute or relative path to a .zip file."
-        exit 1
+        Stop-Install -Code 1 -Message "❌ -UseLocalArchive: file not found: $UseLocalArchive\`n   Provide an absolute or relative path to a .zip file."
     }
     if ($UseLocalArchive -notmatch '\\.zip$') {
-        Write-Error "❌ -UseLocalArchive: expected .zip, got: $UseLocalArchive\`n   The PowerShell installer extracts zip archives only. For .tar.gz\`n   archives use the Bash installer (--use-local-archive)."
-        exit 1
+        Stop-Install -Code 1 -Message "❌ -UseLocalArchive: expected .zip, got: $UseLocalArchive\`n   The PowerShell installer extracts zip archives only. For .tar.gz\`n   archives use the Bash installer (--use-local-archive)."
     }
     $absArchive = (Resolve-Path -LiteralPath $UseLocalArchive).Path
     $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("bundle-" + [guid]::NewGuid().ToString("N").Substring(0,8))
@@ -1086,8 +1081,7 @@ function Install-ViaLocalArchive {
         try {
             Expand-Archive -LiteralPath $absArchive -DestinationPath $extractDir -Force
         } catch {
-            Write-Error "❌ failed to extract local archive: $absArchive\`n   The file is not a valid zip, or it is corrupt. ($($_.Exception.Message))"
-            exit 1
+            Stop-Install -Code 1 -Message "❌ failed to extract local archive: $absArchive\`n   The file is not a valid zip, or it is corrupt. ($($_.Exception.Message))"
         }
         Copy-Mapping -ExtractDir $extractDir
     } finally {
@@ -1136,7 +1130,7 @@ function Verify-Install {
         Write-Host "       to fetch the main-branch zip."
         Write-Host "     • The release workflow failed to build the prebuilt artifact."
         Write-Host "     • A previous -Target run partially overwrote the install."
-        exit 4
+        Stop-Install -Code 4 -Message ""
     }
     $count = $VerifyPairs.Split(",").Count
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
@@ -1151,7 +1145,7 @@ function Invoke-FixRepo {
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     if ($Yes) {
         Write-Host "  ▸ auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
@@ -1162,12 +1156,12 @@ function Invoke-FixRepo {
         $reply = Read-Host "Proceed? [y/N]"
         if ($reply -notmatch '^(y|Y|yes|YES)$') {
             Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
-            exit 5
+            Stop-Install -Code 5 -Message ""
         }
     } else {
         Write-Host "❌ -RunFixRepo requires confirmation but session is non-interactive." -ForegroundColor Red
         Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     if ($LogDir) {
         if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
@@ -1216,7 +1210,7 @@ function Invoke-FixRepo {
     }
     if ($rc -ne 0) {
         Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     Write-Host "  ✓ fix-repo completed (log: $logFile)" -ForegroundColor Green
 }
