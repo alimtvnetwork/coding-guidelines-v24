@@ -1389,6 +1389,15 @@ Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](
 
 External AI reviewers consistently flag the same handful of "concerns." Here is the reasoning, with references, so future reviewers (human or AI) understand **why** these rules exist and stop re-litigating them.
 
+> **Reference review:** [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
+
+<p align="center">
+  <a href="https://gemini.google.com/share/775a9b85bbb8">
+    <img src="public/images/gemini-review.png" alt="Gemini neutral review excerpt: Impact on Developers and Impact on AI Development" width="720"/>
+  </a>
+</p>
+
+
 #### 1. *"PascalCase JSON keys are opinionated."*
 
 **Reasoning, this rule exists because of language reality, not preference:**
