@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Maximize, Grid3x3, Presentation, Sun, Moon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ScaledSlide } from "./components/ScaledSlide";
 import { DECK } from "./deck";
 
@@ -25,6 +26,11 @@ export default function App() {
   const [index, setIndex] = useState(readSlideFromHash);
   const [view, setView] = useState<View>("deck");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const prevIndexRef = useRef(index);
+  const direction = index >= prevIndexRef.current ? 1 : -1;
+  useEffect(() => {
+    prevIndexRef.current = index;
+  }, [index]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -130,9 +136,26 @@ export default function App() {
   return (
     <div className="deck-root">
       <div className="scaled-stage">
-        <ScaledSlide key={index}>
-          <Current />
-        </ScaledSlide>
+        <AnimatePresence mode="wait" custom={direction} initial={false}>
+          <motion.div
+            key={index}
+            custom={direction}
+            variants={{
+              enter: (dir: number) => ({ opacity: 0, x: dir * 80, scale: 0.985 }),
+              center: { opacity: 1, x: 0, scale: 1 },
+              exit: (dir: number) => ({ opacity: 0, x: dir * -80, scale: 0.985 }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <ScaledSlide>
+              <Current />
+            </ScaledSlide>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div className="toolbar">
