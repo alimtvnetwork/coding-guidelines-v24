@@ -14,7 +14,7 @@
 |---|---|
 | **Name** | Md. Alim Ul Karim |
 | **Role** | Chief Software Engineer, [Riseup Asia LLC](https://riseup-asia.com/) |
-| **Experience** | 20+ years (since 2004) |
+| **Experience** | **20 years writing code (since 2004)** · **15 years of professional engineering experience** |
 | **Recognition** | Top 1% talent, [Crossover](https://www.crossover.com/) |
 | **Primary Stack** | .NET/C# · TypeScript · Go · PHP · Rust |
 | **Based** | Founder of [Riseup Asia LLC](https://riseup-asia.com/), a top-leading software company in WY (2026) |
