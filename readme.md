@@ -677,6 +677,29 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 ---
 
+<h2 align="center">🛑 When You May Break a Rule</h2>
+
+<p align="center"><sub>Every rule here exists to make code clearer, safer, or more predictable for the next reader (human or AI). When following a rule would make the code <em>less</em> clear, less safe, or less maintainable, the rule loses. The standard is not above its own purpose.</sub></p>
+
+**A rule may be broken only when following it would make the code:**
+
+- harder to understand for the next reader, or
+- less safe (data loss, security regression, race condition), or
+- less maintainable (forces duplication, violates a stronger rule, blocks a fix).
+
+**When breaking a rule, the PR or commit message must record:**
+
+| # | Field | Example |
+|---|---|---|
+| 1 | **Which rule was skipped** | `CODE-RED-001 (zero nested if)` |
+| 2 | **Why the exception is needed** | `Three-level state machine; flattening hides the transition table.` |
+| 3 | **Why the alternative is safer or clearer** | `Nested form mirrors the formal spec in /docs/state-machine.md.` |
+| 4 | **Temporary or permanent** | `Permanent — tied to upstream protocol shape.` |
+
+<p align="center"><sub>Documented exceptions are tracked in <code>.lovable/exceptions/</code> (or your team's equivalent) and surfaced during audits. An undocumented skip is itself a CODE-RED violation. The goal is not zero exceptions — it is zero <em>silent</em> exceptions.</sub></p>
+
+---
+
 <h2 align="center">📦 Compact Rule Set, 13 Hard Rules</h2>
 
 <p align="center">
@@ -706,6 +729,82 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 13. If a `spec/**/error-manage/` folder exists, every error handler MUST follow those guidelines exactly. No exceptions.
 
 **Plus a Data & Schema layer (8 rules)** and an **Error & Logging layer (3 rules)** in the same file. Total surface area: one file, three sections, full coverage for any AI agent's system prompt.
+
+---
+
+<h2 align="center">🟢🔴 Bad vs Good — Quick Examples</h2>
+
+<p align="center"><sub>Five of the most-broken rules, with the smallest possible before/after. The full real-world walkthrough is in the next section; this block is the fastest way for a human or AI to internalize the style in 60 seconds.</sub></p>
+
+### 1. Boolean Naming
+
+````ts
+// 🔴 Bad — negation hides intent and compounds badly under nesting
+const isNotReady = !user.hasNoAccess;
+if (!isNotReady) { /* ... */ }
+
+// 🟢 Good — positive, domain-named, reads as English
+const isReady = user.hasAccess;
+if (isReady) { /* ... */ }
+````
+
+### 2. Nested Control Flow
+
+````ts
+// 🔴 Bad — nested ifs, multiple reasons per branch
+if (user) {
+  if (user.isActive) {
+    if (user.email) { sendEmail(user); }
+  }
+}
+
+// 🟢 Good — early-return guards, one reason per line
+if (!user) return;
+if (!user.isActive) return;
+if (!user.email) return;
+sendEmail(user);
+````
+
+### 3. Error Handling
+
+````go
+// 🔴 Bad — swallowed error, no context, generic name
+data, err := readFile(path)
+if err != nil { return nil, err }
+
+// 🟢 Good — wrapped with operation + input, typed error
+data, readErr := readFile(path)
+if readErr != nil {
+    return apperror.WrapTypeMsg(readErr, apperrtype.ReadFile, "path", path)
+}
+````
+
+### 4. Function Size
+
+````ts
+// 🔴 Bad — 40-line function doing parse + validate + persist + notify
+function handleSignup(req) { /* 40 lines */ }
+
+// 🟢 Good — one responsibility each, composed at the top
+function handleSignup(req) {
+  const data = parseSignup(req);
+  const valid = validateSignup(data);
+  const user = persistUser(valid);
+  return notifyUser(user);
+}
+````
+
+### 5. Logging
+
+````ts
+// 🔴 Bad — useless in production
+log.error("failed");
+
+// 🟢 Good — operation, inputs, underlying cause
+log.error("uploadAvatar failed", { userId, fileSize, cause: err.message });
+````
+
+<p align="center"><sub>More examples per language live in <a href="spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md"><code>03-common-ai-mistakes.md</code></a> (top-15 mistakes with before/after).</sub></p>
 
 ---
 
