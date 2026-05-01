@@ -73,61 +73,6 @@
 
 <p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="QUICKSTART.md">QUICKSTART.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
 
----
-
-<h2 align="center">🎯 Start Here: 10 Practical Rules</h2>
-
-<p align="center"><sub>The daily behavior expected from any developer or AI assistant. Read this first — the deeper spec system, installers, and CI tooling below build on these ten habits, but you do not need to understand them to start applying the rules.</sub></p>
-
-1. **Write small functions with one clear responsibility.** If a function needs a paragraph to explain, split it.
-2. **Return structured errors instead of hiding failures.** Every failure should carry context, not just a boolean.
-3. **Add context when wrapping errors.** Wrap with the operation name and key inputs so logs explain *what* failed and *why*.
-4. **Do not silently ignore errors.** Every `catch` / `Result` must log or rethrow — never swallow.
-5. **Prefer readable names over clever names.** Optimize for the next reader, not the original author.
-6. **Avoid negative boolean names.** Use `isReady`, not `isNotReady`. Negations compound badly under nesting.
-7. **Keep control flow shallow.** Use early returns and guard clauses; avoid nested `if` and deep ternaries.
-8. **Use logs that explain what failed and why.** Include operation, inputs, and the underlying cause.
-9. **Add tests for success, failure, and edge cases.** A test that only covers the happy path is not a test of behavior.
-10. **When a rule feels harmful, document the exception clearly.** See [When You May Break a Rule](#-when-you-may-break-a-rule) for the format.
-
-<p align="center"><sub>These 10 rules are the surface of the full standard. The <a href="#-code-red-non-negotiable-rules">CODE-RED rules</a>, <a href="#-compact-rule-set-13-hard-rules">13 Hard Rules</a>, and the per-language specs in <a href="spec/"><code>spec/</code></a> formalize and enforce them.</sub></p>
-
----
-
-
-<h2 align="center">🧭 Which Path Should I Follow?</h2>
-
-<p align="center"><sub>This repo offers many bundles, installers, and spec layers. Pick the path that matches your role today — you can always graduate to a deeper level later (see <a href="#-adoption-levels">Adoption Levels</a>).</sub></p>
-
-| You are… | Start with | Then add |
-|---|---|---|
-| **Solo developer** | The [10 Practical Rules](#-start-here-10-practical-rules) above + the [Consolidated Guidelines bundle](#consolidated-consolidated-guidelines) | [13 Hard Rules](#-compact-rule-set-13-hard-rules) when you want enforcement |
-| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
-| **Team lead** | The [Linters bundle](#linters-linters--cicd-linter-pack) + the [Error Management spec](#%EF%B8%8F-error-management-summary) | A staged rollout using [`ci-guards.example.yaml`](ci-guards.example.yaml) |
-| **Production maintainer** | The [Full-Repo Install](#%EF%B8%8F-full-repo-install-scripts) + CI integration | Gradual enforcement via the [Adoption Levels](#-adoption-levels) roadmap |
-| **New contributor / reviewer** | The [10 Practical Rules](#-start-here-10-practical-rules) + the [PR Review Checklist](#-pr-review-checklist) | Skim [CODE-RED rules](#-code-red-non-negotiable-rules) before approving |
-
-<p align="center"><sub>Not sure? Start with the 10 Practical Rules and the Consolidated bundle. That alone covers ~80% of the daily value.</sub></p>
-
----
-
-
-<h2 align="center">📈 Adoption Levels</h2>
-
-<p align="center"><sub>You do not need to adopt the full standard on day one. Treat the levels below as a roadmap — each level pays off on its own and prepares the ground for the next. Most teams settle at Level 3 or 4; Level 5 is for production systems with high cost-of-bug.</sub></p>
-
-| Level | Name | What you adopt | Payoff |
-|---|---|---|---|
-| **1** | **Readable Code** | Naming, small functions, shallow control flow (the [10 Practical Rules](#-start-here-10-practical-rules)). | Code reviews shrink. New contributors ramp faster. |
-| **2** | **Safer Errors** | Structured errors, explicit wrapping, no silent failure (the [Error Management spec](#%EF%B8%8F-error-management-summary)). | Production failures become debuggable from logs alone. |
-| **3** | **Team Consistency** | Shared lint rules, the [PR Review Checklist](#-pr-review-checklist), bad-vs-good examples in onboarding. | Style debates end. AI-generated diffs match house style. |
-| **4** | **AI-Assisted Development** | The [AI Agent Checklist](#-for-ai-agents), condensed prompts, anti-hallucination rules in every system prompt. | AI tools stop inventing APIs and start matching repo conventions. |
-| **5** | **Production Enforcement** | CI integration via [`ci-guards.example.yaml`](ci-guards.example.yaml), validation scripts, monitored exception tracking. | CODE-RED violations cannot reach `main`. Exceptions are auditable. |
-
-<p align="center"><sub>The level numbers map to the severity gates in <a href="#%EF%B8%8F-rule-severity">Rule Severity</a>: Levels 1-2 cover STYLE/BEST PRACTICE, Level 3 adds WARN, Levels 4-5 enforce CODE RED.</sub></p>
-
----
-
 
 <h2 align="center">⚡ Install in One Line</h2>
 
@@ -592,6 +537,61 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v20/releases/lates
 ```
 
 Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning banner, even when combined with `-NoVerify`. This is regression-tested by [`tests/installer/check-install-ps1-noverify-help.sh`](tests/installer/check-install-ps1-noverify-help.sh) (T6 in the installer suite).
+
+---
+
+<h2 align="center">🎯 Start Here: 10 Practical Rules</h2>
+
+<p align="center"><sub>The daily behavior expected from any developer or AI assistant. Read this first — the deeper spec system, installers, and CI tooling below build on these ten habits, but you do not need to understand them to start applying the rules.</sub></p>
+
+1. **Write small functions with one clear responsibility.** If a function needs a paragraph to explain, split it.
+2. **Return structured errors instead of hiding failures.** Every failure should carry context, not just a boolean.
+3. **Add context when wrapping errors.** Wrap with the operation name and key inputs so logs explain *what* failed and *why*.
+4. **Do not silently ignore errors.** Every `catch` / `Result` must log or rethrow — never swallow.
+5. **Prefer readable names over clever names.** Optimize for the next reader, not the original author.
+6. **Avoid negative boolean names.** Use `isReady`, not `isNotReady`. Negations compound badly under nesting.
+7. **Keep control flow shallow.** Use early returns and guard clauses; avoid nested `if` and deep ternaries.
+8. **Use logs that explain what failed and why.** Include operation, inputs, and the underlying cause.
+9. **Add tests for success, failure, and edge cases.** A test that only covers the happy path is not a test of behavior.
+10. **When a rule feels harmful, document the exception clearly.** See [When You May Break a Rule](#-when-you-may-break-a-rule) for the format.
+
+<p align="center"><sub>These 10 rules are the surface of the full standard. The <a href="#-code-red-non-negotiable-rules">CODE-RED rules</a>, <a href="#-compact-rule-set-13-hard-rules">13 Hard Rules</a>, and the per-language specs in <a href="spec/"><code>spec/</code></a> formalize and enforce them.</sub></p>
+
+---
+
+
+<h2 align="center">🧭 Which Path Should I Follow?</h2>
+
+<p align="center"><sub>This repo offers many bundles, installers, and spec layers. Pick the path that matches your role today — you can always graduate to a deeper level later (see <a href="#-adoption-levels">Adoption Levels</a>).</sub></p>
+
+| You are… | Start with | Then add |
+|---|---|---|
+| **Solo developer** | The [10 Practical Rules](#-start-here-10-practical-rules) above + the [Consolidated Guidelines bundle](#consolidated-consolidated-guidelines) | [13 Hard Rules](#-compact-rule-set-13-hard-rules) when you want enforcement |
+| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
+| **Team lead** | The [Linters bundle](#linters-linters--cicd-linter-pack) + the [Error Management spec](#%EF%B8%8F-error-management-summary) | A staged rollout using [`ci-guards.example.yaml`](ci-guards.example.yaml) |
+| **Production maintainer** | The [Full-Repo Install](#%EF%B8%8F-full-repo-install-scripts) + CI integration | Gradual enforcement via the [Adoption Levels](#-adoption-levels) roadmap |
+| **New contributor / reviewer** | The [10 Practical Rules](#-start-here-10-practical-rules) + the [PR Review Checklist](#-pr-review-checklist) | Skim [CODE-RED rules](#-code-red-non-negotiable-rules) before approving |
+
+<p align="center"><sub>Not sure? Start with the 10 Practical Rules and the Consolidated bundle. That alone covers ~80% of the daily value.</sub></p>
+
+---
+
+
+<h2 align="center">📈 Adoption Levels</h2>
+
+<p align="center"><sub>You do not need to adopt the full standard on day one. Treat the levels below as a roadmap — each level pays off on its own and prepares the ground for the next. Most teams settle at Level 3 or 4; Level 5 is for production systems with high cost-of-bug.</sub></p>
+
+| Level | Name | What you adopt | Payoff |
+|---|---|---|---|
+| **1** | **Readable Code** | Naming, small functions, shallow control flow (the [10 Practical Rules](#-start-here-10-practical-rules)). | Code reviews shrink. New contributors ramp faster. |
+| **2** | **Safer Errors** | Structured errors, explicit wrapping, no silent failure (the [Error Management spec](#%EF%B8%8F-error-management-summary)). | Production failures become debuggable from logs alone. |
+| **3** | **Team Consistency** | Shared lint rules, the [PR Review Checklist](#-pr-review-checklist), bad-vs-good examples in onboarding. | Style debates end. AI-generated diffs match house style. |
+| **4** | **AI-Assisted Development** | The [AI Agent Checklist](#-for-ai-agents), condensed prompts, anti-hallucination rules in every system prompt. | AI tools stop inventing APIs and start matching repo conventions. |
+| **5** | **Production Enforcement** | CI integration via [`ci-guards.example.yaml`](ci-guards.example.yaml), validation scripts, monitored exception tracking. | CODE-RED violations cannot reach `main`. Exceptions are auditable. |
+
+<p align="center"><sub>The level numbers map to the severity gates in <a href="#%EF%B8%8F-rule-severity">Rule Severity</a>: Levels 1-2 cover STYLE/BEST PRACTICE, Level 3 adds WARN, Levels 4-5 enforce CODE RED.</sub></p>
+
+---
 
 <h2 align="center">📑 Table of Contents</h2>
 
