@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 release-assets
 reports/runner-guard-report.md
+.gitmap/release-assets
