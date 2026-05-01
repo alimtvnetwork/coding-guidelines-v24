@@ -5,6 +5,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.8.0] - 2026-05-01
+
+### Changed — Debranding pass + version bump
+
+- Removed user-facing "Lovable" wording from `index.html` (OG/Twitter image URLs now point to `riseup-asia.com`), `readme.md` AI-agents list, and `src/components/docs/GithubSyncBanner.tsx` (comment + localStorage key).
+- Renamed installer crash log directory from `TEMP/lovable-installer-logs/` to `TEMP/installer-logs/` across all 17 installer scripts and `scripts/generate-bundle-installers.mjs`.
+- Wrapped upstream npm packages behind neutral local modules:
+  - `scripts/dev-tagger.ts` re-exports `componentTagger` (used by `vite.config.ts`).
+  - `scripts/playwright-config-base.ts` re-exports the Playwright factory as `createPlaywrightConfig` and the fixture (used by `playwright.config.ts` and `playwright-fixture.ts`).
+- Bumped `package.json` from `5.7.0` → `5.8.0`; ran `sync-version`, `sync-spec-tree`, `sync-health-score`, `sync-readme-stats`, and regenerated all 14 bundle installers. `sync:check` passes (7/7 managed files in sync).
+
+---
+
 ## [4.24.0] - 2026-04-24
 
 ### Changed — Naming migration `coding-guidelines-v15` / `coding-guidelines-v16` → `coding-guidelines-v20`
