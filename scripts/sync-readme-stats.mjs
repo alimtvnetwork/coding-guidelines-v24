@@ -47,15 +47,12 @@ function htmlBadge({ alt, src, href }) {
 
 function buildBadges(s) {
   const repo = "alimtvnetwork/coding-guidelines-v20";
-  // shields.io uses `--` to render a literal dash in the value segment.
   const escDash = (v) => String(v).replace(/-/g, "--");
   const enc = (v) => encodeURIComponent(escDash(v));
   return [
     htmlBadge({ alt: "Version", src: `https://img.shields.io/badge/version-${enc(s.version)}-3B82F6?style=flat-square`, href: `https://github.com/${repo}/releases` }),
-    htmlBadge({ alt: "Folders", src: `https://img.shields.io/badge/folders-${enc(s.folders)}-8B5CF6?style=flat-square`, href: "spec/" }),
     htmlBadge({ alt: "License", src: "https://img.shields.io/badge/license-MIT-22C55E?style=flat-square", href: "LICENSE" }),
     htmlBadge({ alt: "AI Ready", src: "https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square", href: "llm.md" }),
-    htmlBadge({ alt: "Updated", src: `https://img.shields.io/badge/updated-${enc(s.updated)}-0EA5E9?style=flat-square`, href: "version.json" }),
   ].join(" ");
 }
 
