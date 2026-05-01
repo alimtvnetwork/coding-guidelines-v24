@@ -544,7 +544,6 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-table-of-contents">Table of Contents</a> ·
   <a href="#-install-in-one-line">Install</a> ·
   <a href="#-bundle-installers">Bundle Installers</a> ·
-  <a href="#-run-commands">Run Commands</a> ·
   <a href="#-core-development-principles">Core Development Principles</a> ·
   <a href="#-code-red-rules">CODE-RED Rules</a> ·
   <a href="#-compact-rule-set-13-hard-rules">Compact Rule Set</a> ·
@@ -572,117 +571,6 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="docs/guidelines-audit.md">Guidelines Audit</a> ·
   <a href="docs/github-repo-metadata.md">GitHub Repo Metadata</a>
 </p>
-
----
-
-<h2 align="center">🚀 Run Commands</h2>
-
-<p align="center">
-  Local developer workflow, for contributors who clone the repo.<br/>
-  End-users do <strong>not</strong> need this section; the one-line installers above handle everything.
-</p>
-
-### Setup
-
-```bash
-git clone https://github.com/alimtvnetwork/coding-guidelines-v20.git
-```
-
-```bash
-cd coding-guidelines-v20 && npm install
-```
-
-### Daily Workflow
-
-```bash
-npm run dev
-```
-
-```bash
-npm run build
-```
-
-```bash
-npm run preview
-```
-
-### Sync & Stamping
-
-```bash
-npm run sync
-```
-
-```bash
-npm run sync:version
-```
-
-```bash
-npm run sync:specs
-```
-
-```bash
-npm run sync:health
-```
-
-```bash
-npm run sync:readme
-```
-
-### Linters (what CI runs)
-
-```bash
-go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
-```
-
-```bash
-python3 linter-scripts/validate-guidelines.py spec
-```
-
-```bash
-python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
-```
-
-```bash
-python3 linter-scripts/check-spec-folder-refs.py
-```
-
-```bash
-python3 linter-scripts/check-forbidden-strings.py
-```
-
-```bash
-bash linter-scripts/check-forbidden-spec-paths.sh
-```
-
-```bash
-bash linter-scripts/check-axios-version.sh
-```
-
-```bash
-npm run lint:readme
-```
-
-```bash
-npm run lint:readme:canonicals
-```
-
-> **Markdown is intentionally not linted for code-style.** CI lints code in `spec/` and source files only, example snippets in `readme.md` and `docs/` are validated by hand against [`spec/02-coding-guidelines/01-cross-language/04-code-style/`](spec/02-coding-guidelines/01-cross-language/04-code-style/).
-
-#### Linter docs
-
-Topic-specific reference for the scripts above:
-
-- [`linter-scripts/readme-rename-intake.md`](linter-scripts/readme-rename-intake.md), **Rename/copy intake schema** for `check-placeholder-comments.py --list-changed-files --with-similarity`. Documents the JSON audit shape (`path`, `status`, `reason`, `similarity`), the closed `status` vocabulary, the scored vs unscored `similarity.score: null` distinction, the `--similarity-legend={auto,on,off}` toggle, the CSV export, and a [ready-to-copy example payload](linter-scripts/examples/rename-intake-audit.json) covering every status × similarity-shape combination.
-- [`linter-scripts/validate-rename-intake.py`](linter-scripts/validate-rename-intake.py), **Stdlib-only schema validator** for `rename_intake` JSON. Zero external dependencies, exits non-zero on schema drift, and can `--print-schema` a Draft 2020-12 document for external tooling like `check-jsonschema` / `ajv`. Drop-in CI snippets for GitHub Actions / GitLab / pre-commit live in the [readme-rename-intake](linter-scripts/readme-rename-intake.md#validating-rename_intake-output-in-ci) doc.
-- [`linter-scripts/readme-cross-links.md`](linter-scripts/readme-cross-links.md), `check-spec-cross-links.py` reference.
-- [`linter-scripts/readme-forbidden-strings.md`](linter-scripts/readme-forbidden-strings.md), `check-forbidden-strings.py` reference (rules, waivers, summary report).
-- [`linter-scripts/readme-allowlist-cli.md`](linter-scripts/readme-allowlist-cli.md), extension allowlist CLI reference.
-
-### Repo migration (v15 → v16)
-
-```bash
-npm run migrate:repo:dry
-```
 
 ---
 
