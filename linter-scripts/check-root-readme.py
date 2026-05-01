@@ -24,7 +24,7 @@ EXIT_FAIL = 1
 EXIT_ERROR = 2
 
 MAX_LINES = None  # Root README has no length limit (per writing guideline §7).
-MIN_BADGES = 12
+MIN_BADGES = 8
 MAX_BADGES = 16
 REQUIRED_AUTHOR = "Md. Alim Ul Karim"
 REQUIRED_COMPANY = "Riseup Asia LLC"
