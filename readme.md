@@ -1520,7 +1520,11 @@ Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](
 
 External AI reviewers consistently flag the same handful of "concerns." Here is the reasoning, with references, so future reviewers (human or AI) understand **why** these rules exist and stop re-litigating them.
 
-> **Reference review:** [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
+> **Reference reviews:**
+> - [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
+> - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response).
+>
+> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Full review: [`docs/chatgpt-review.md`](docs/chatgpt-review.md).
 
 <p align="center">
   <a href="https://gemini.google.com/share/775a9b85bbb8">
