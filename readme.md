@@ -38,6 +38,40 @@
 
 ---
 
+<h3 align="center">📌 At a glance, who this is for</h3>
+
+<table align="center">
+  <tr>
+    <th align="left">✅ Good fit</th>
+    <th align="left">⚠️ Probably not for you</th>
+  </tr>
+  <tr>
+    <td valign="top">
+      <ul>
+        <li>Teams using <strong>AI coding agents</strong> (Cursor, Claude Code, Copilot, Lovable) that need deterministic, machine-checkable rules.</li>
+        <li>Polyglot codebases (<em>Go · TS · PHP · Rust · C#</em>) that want one shared standard.</li>
+        <li>Junior–mid teams struggling with inconsistent style, weak error handling, or messy specs.</li>
+        <li>Repos that want enforceable CI guards, not just prose conventions.</li>
+      </ul>
+    </td>
+    <td valign="top">
+      <ul>
+        <li>Senior teams with mature, working in-house conventions, the cost of switching may exceed the gain.</li>
+        <li>Small scripts, prototypes, or one-off projects where strict CI overhead isn't justified.</li>
+        <li>Stacks where PascalCase JSON or 15-line function caps clash with ecosystem norms you can't change.</li>
+        <li>Anyone looking for a light, neutral style guide, this one is opinionated by design.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<p align="center"><sub><strong>Problem it solves:</strong> inconsistent code, swallowed errors, and AI-generated diffs that drift from house style. <strong>How:</strong> explicit numeric rules + standalone spec files + ready-to-run installers and CI checks. <strong>Tradeoffs:</strong> opinionated defaults, real adoption cost, best rolled out in waves (see <a href="ci-guards.example.yaml">CI guards example</a>).</sub></p>
+
+<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="QUICKSTART.md">QUICKSTART.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
+
+---
+
+
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
