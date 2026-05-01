@@ -876,14 +876,17 @@ function isUserSuspended(user: User): boolean {
 
 function processUser(user: User | null): Result<void> {
   if (isUserMissing(user)) {
+
     return Failure(AppError.create(AppErrorCode.UserMissing));
   }
 
   if (isUserSuspended(user)) {
+
     return Failure(AppError.create(AppErrorCode.UserSuspended));
   }
 
   if (isUserAdmin(user)) {
+
     return TryDo(() => doWork(user));
   }
 
