@@ -811,6 +811,7 @@ function handleSignup(req) {
   const data = parseSignup(req);
   const valid = validateSignup(data);
   const user = persistUser(valid);
+
   return notifyUser(user);
 }
 ````
@@ -922,6 +923,7 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
             }
         }
     }
+
     return apperror.FailBool(apperror.NewType(apperrtype.PluginEnablePreconditionFailed))
 }
 
@@ -938,6 +940,7 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
     if slug.IsMissing(pluginSlug) {
         return apperror.FailBool(apperror.SlugError(apperrtype.PluginSlugMissing, pluginSlug))
     }
+
     return handler.uploader.Enable(site, pluginSlug)
 }
 ```
@@ -1052,6 +1055,7 @@ func (service *SnapshotService) GetSettings(endpoint string) (*Settings, error) 
     if requestError != nil {
         return nil, fmt.Errorf("get snapshot settings (GET %s): %w", endpoint, requestError)
     }
+
     return parseSettings(response)
 }
 
@@ -1067,6 +1071,7 @@ func (service *SnapshotService) GetSettings(endpoint string) apperror.SettingsRe
             ).WithValue("endpoint", endpoint),
         )
     }
+
     return apperror.Ok(parseSettings(response))
 }
 ```
