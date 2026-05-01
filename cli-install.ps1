@@ -73,7 +73,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.ps1))) -Version v5.8.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.ps1))) -Version v5.9.0 -Target .\vendor
 #>
 
 param(
@@ -210,7 +210,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 cli-install v5.8.0" -ForegroundColor Cyan
+Write-Host "  📦 cli-install v5.9.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
