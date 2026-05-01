@@ -918,7 +918,6 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
     if siteWasFound {
         if site.IsReadyForPluginEnable() {
             if slug.IsPresent(pluginSlug) {
-
                 return handler.uploader.Enable(site, pluginSlug)
             }
         }
@@ -932,15 +931,12 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
     site := handler.siteRepo.FindById(siteId)
     siteWasNotFound := site == nil
     if siteWasNotFound {
-
         return apperror.FailBool(apperror.SiteError(apperrtype.SiteNotFound, siteId))
     }
     if site.IsBlocked {
-
         return apperror.FailBool(apperror.SiteError(apperrtype.SiteBlocked, siteId))
     }
     if slug.IsMissing(pluginSlug) {
-
         return apperror.FailBool(apperror.SlugError(apperrtype.PluginSlugMissing, pluginSlug))
     }
 
