@@ -56,8 +56,41 @@ param(
     [switch]$Help
 )
 
+# ── Crash-safe execution wrapper (iex-friendly) ───────────────────
+# release-install is commonly invoked as:  irm <url> | iex
+# In that mode `exit <n>` would terminate the host PowerShell. We
+# route fatal conditions through Stop-Install (writes a crash log
+# and throws a tagged exception) and swallow at the outer catch so
+# the user's terminal stays alive.
+$Script:__PriorErrorActionPreference = $ErrorActionPreference
+$Script:__PriorProgressPreference    = $ProgressPreference
 $ErrorActionPreference = "Stop"
-$ProgressPreference = "SilentlyContinue"
+$ProgressPreference    = "SilentlyContinue"
+
+$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "lovable-installer-logs"
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+$Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("release-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
+
+function Write-InstallLog {
+    param([string]$Line)
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+}
+Write-InstallLog "# release-install crash log"
+Write-InstallLog ("# started: " + (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))
+Write-InstallLog ("# pwsh:    " + $PSVersionTable.PSEdition + " " + $PSVersionTable.PSVersion)
+Write-InstallLog ("# os:      " + [System.Runtime.InteropServices.RuntimeInformation]::OSDescription)
+
+function Restore-CallerPreferences {
+    if ($null -ne $Script:__PriorErrorActionPreference) { $ErrorActionPreference = $Script:__PriorErrorActionPreference }
+    if ($null -ne $Script:__PriorProgressPreference)    { $ProgressPreference    = $Script:__PriorProgressPreference }
+}
+function Stop-Install {
+    param([int]$Code = 1, [string]$Message = "")
+    Write-InstallLog ("[stop-install] code=" + $Code + " message=" + $Message)
+    if ($Message) { Write-Host $Message -ForegroundColor Red }
+    throw [System.Management.Automation.RuntimeException]::new("__INSTALL_STOP__|$Code|$Message")
+}
+
 
 # ── Build-time substitution target ────────────────────────────────
 # The release workflow replaces __VERSION_PLACEHOLDER__ with the concrete
