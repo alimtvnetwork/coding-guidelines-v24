@@ -2,7 +2,7 @@
   <a href="https://github.com/alimtvnetwork/coding-guidelines-v20">
     <img
       src="public/images/coding-guidelines-icon.png"
-      alt="Coding Guidelines by Alim brand icon — gradient shield with code-bracket symbol"
+      alt="Coding Guidelines by Alim brand icon, gradient shield with code-bracket symbol"
       width="160"
       height="160"
     />
@@ -13,7 +13,7 @@
 
 <p align="center">
   <strong>Production-grade coding standards with zero-nesting enforcement and AI-optimized spec architecture<br/>
-  for <em>Go, TypeScript, PHP, Rust, and C#</em> — drop-in conventions for elite engineering teams.</strong>
+  for <em>Go, TypeScript, PHP, Rust, and C#</em>, drop-in conventions for elite engineering teams.</strong>
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
   <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="bundles.json"><img alt="Bundles" src="https://img.shields.io/badge/bundles-7-14B8A6?style=flat-square"/></a> <a href="public/health-score.json"><img alt="Health Score" src="https://img.shields.io/badge/health-80%2F100%20(B)-F59E0B?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a> <a href="https://lovable.dev"><img alt="Made With Lovable" src="https://img.shields.io/badge/made%20with-Lovable-FF6E3C?style=flat-square"/></a> <a href="https://github.com/alimtvnetwork/coding-guidelines-v20/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/alimtvnetwork/coding-guidelines-v20?style=flat-square&color=F59E0B"/></a> <a href="https://github.com/alimtvnetwork/coding-guidelines-v20/issues"><img alt="Issues" src="https://img.shields.io/github/issues/alimtvnetwork/coding-guidelines-v20?style=flat-square&color=EF4444"/></a><!-- /STAMP:PLATFORM_BADGES -->
 </p>
 
-<p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
+<p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
   <em>Stats:</em> <!-- STAMP:FILES -->622<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->133,880<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->5.3.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
@@ -35,7 +35,7 @@
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
-  Pick your platform. Copy the line. Paste it. Done — no clone, no <code>npm install</code>.<br/>
+  Pick your platform. Copy the line. Paste it. Done, no clone, no <code>npm install</code>.<br/>
   Need just one bundle? Jump to <a href="#-bundle-installers">Named Bundle Installers</a>.
 </p>
 
@@ -70,10 +70,10 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 <h2 align="center">📦 Bundle Installers</h2>
 
 <p align="center">
-  Same order as the on-site install UI — seven named bundles, each with one Windows line and one Bash line.
+  Same order as the on-site install UI, seven named bundles, each with one Windows line and one Bash line.
 </p>
 
-### <code>error-manage</code> — Error Management Spec
+### <code>error-manage</code>, Error Management Spec
 
 ### 🪟 Windows · PowerShell
 
@@ -87,7 +87,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/e
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.sh | bash
 ```
 
-### <code>splitdb</code> — Split-DB Architecture Spec
+### <code>splitdb</code>, Split-DB Architecture Spec
 
 ### 🪟 Windows · PowerShell
 
@@ -101,7 +101,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/s
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.sh | bash
 ```
 
-### <code>slides</code> — Slides App + Decks
+### <code>slides</code>, Slides App + Decks
 
 ### 🪟 Windows · PowerShell
 
@@ -115,7 +115,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/s
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/slides-install.sh | bash
 ```
 
-### <code>linters</code> — Linters + CI/CD Linter Pack
+### <code>linters</code>, Linters + CI/CD Linter Pack
 
 ### 🪟 Windows · PowerShell
 
@@ -129,7 +129,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/l
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.sh | bash
 ```
 
-### <code>cli</code> — CLI Toolchain Spec
+### <code>cli</code>, CLI Toolchain Spec
 
 ### 🪟 Windows · PowerShell
 
@@ -143,7 +143,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/c
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.sh | bash
 ```
 
-### <code>wp</code> — WordPress Plugin How-To Spec
+### <code>wp</code>, WordPress Plugin How-To Spec
 
 ### 🪟 Windows · PowerShell
 
@@ -157,7 +157,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/w
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.sh | bash
 ```
 
-### <code>consolidated</code> — Consolidated Guidelines
+### <code>consolidated</code>, Consolidated Guidelines
 
 ### 🪟 Windows · PowerShell
 
@@ -177,7 +177,7 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 
 ### 📋 Per-Bundle Install Reference
 
-Copy-paste commands for every supported bundle. Each block lists the **exact script path** in this repo and the **flags** the script accepts. All bundle installers conform to [spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md) — no flags are *required* (defaults install to the current directory in IMPLICIT mode), but `--version <tag>` is the recommended flag for CI use to pin the install.
+Copy-paste commands for every supported bundle. Each block lists the **exact script path** in this repo and the **flags** the script accepts. All bundle installers conform to [spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md), no flags are *required* (defaults install to the current directory in IMPLICIT mode), but `--version <tag>` is the recommended flag for CI use to pin the install.
 
 **Common flags** (all bundle installers): `--version <tag>` (pin to a release), `--target <dir>` / `--dest <dir>` (install destination, default cwd), `--use-local-archive <path>` (offline install), `--offline` (refuse network), `--no-main-fallback` (refuse main-branch fallback in PINNED mode), `--no-discovery` (forbid V→V+N discovery), `--no-open` (skip auto-open of entry file, slides only), `-h` / `--help` (show full reference and exit). Run any installer with `--help` for the full scope-tagged matrix.
 
@@ -192,15 +192,15 @@ Every installer below copies the listed **folders** (recursively, preserving str
 | **`consolidated-install.{sh,ps1}`** | `spec/01-spec-authoring-guide/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 
 > Notes:
-> - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs) — host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
+> - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
-> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped — other Lovable folders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other Lovable folders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
 
 
 <details>
-<summary><strong>error-manage</strong> — Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
+<summary><strong>error-manage</strong>, Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -219,7 +219,7 @@ Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
 </details>
 
 <details>
-<summary><strong>splitdb</strong> — Split-DB Architecture Spec · script: <a href="splitdb-install.sh"><code>splitdb-install.sh</code></a> / <a href="splitdb-install.ps1"><code>splitdb-install.ps1</code></a></summary>
+<summary><strong>splitdb</strong>, Split-DB Architecture Spec · script: <a href="splitdb-install.sh"><code>splitdb-install.sh</code></a> / <a href="splitdb-install.ps1"><code>splitdb-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -238,7 +238,7 @@ Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec
 </details>
 
 <details>
-<summary><strong>slides</strong> — Slides App + Decks · script: <a href="slides-install.sh"><code>slides-install.sh</code></a> / <a href="slides-install.ps1"><code>slides-install.ps1</code></a></summary>
+<summary><strong>slides</strong>, Slides App + Decks · script: <a href="slides-install.sh"><code>slides-install.sh</code></a> / <a href="slides-install.ps1"><code>slides-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -257,7 +257,7 @@ Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `sli
 </details>
 
 <details>
-<summary><strong>linters</strong> — Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
+<summary><strong>linters</strong>, Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -271,12 +271,12 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/l
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.sh | bash
 ```
 
-Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below — it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
+Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below, it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
 
 </details>
 
 <details>
-<summary><strong>cli</strong> — CLI Toolchain Spec · script: <a href="cli-install.sh"><code>cli-install.sh</code></a> / <a href="cli-install.ps1"><code>cli-install.ps1</code></a></summary>
+<summary><strong>cli</strong>, CLI Toolchain Spec · script: <a href="cli-install.sh"><code>cli-install.sh</code></a> / <a href="cli-install.ps1"><code>cli-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -295,7 +295,7 @@ Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `
 </details>
 
 <details>
-<summary><strong>wp</strong> — WordPress Plugin How-To Spec · script: <a href="wp-install.sh"><code>wp-install.sh</code></a> / <a href="wp-install.ps1"><code>wp-install.ps1</code></a></summary>
+<summary><strong>wp</strong>, WordPress Plugin How-To Spec · script: <a href="wp-install.sh"><code>wp-install.sh</code></a> / <a href="wp-install.ps1"><code>wp-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -314,7 +314,7 @@ Installs: `spec/18-wp-plugin-how-to`.
 </details>
 
 <details>
-<summary><strong>consolidated</strong> — Consolidated Guidelines · script: <a href="consolidated-install.sh"><code>consolidated-install.sh</code></a> / <a href="consolidated-install.ps1"><code>consolidated-install.ps1</code></a></summary>
+<summary><strong>consolidated</strong>, Consolidated Guidelines · script: <a href="consolidated-install.sh"><code>consolidated-install.sh</code></a> / <a href="consolidated-install.ps1"><code>consolidated-install.ps1</code></a></summary>
 
 #### 🪟 Windows · PowerShell
 
@@ -332,12 +332,12 @@ Installs: `spec/17-consolidated-guidelines`.
 
 </details>
 
-> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)** — flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior, flags, and full troubleshooting matrix see **[docs/slides-installer.md](docs/slides-installer.md)**.
+> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior, flags, and full troubleshooting matrix see **[docs/slides-installer.md](docs/slides-installer.md)**.
 
 <h2 align="center">🧪 CLI Linter Pack (release-asset installer)</h2>
 
 <p align="center">
-  Drop the runnable <code>linters-cicd/</code> SARIF tool into any repo from a signed GitHub Release — no clone, no spec files.<br/>
+  Drop the runnable <code>linters-cicd/</code> SARIF tool into any repo from a signed GitHub Release, no clone, no spec files.<br/>
   Pairs with <a href="QUICKSTART.md">QUICKSTART.md</a> and the <a href="linters-cicd/README.md"><code>linters-cicd/README.md</code></a>.
 </p>
 
@@ -369,7 +369,7 @@ bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
 
 #### 💡 Get help without installing anything
 
-`install.ps1` recognizes `-Help`, the alias `-h`, and the bash-style `--help` long-form. Help is handled **before any network probe** — so you can safely inspect the flags offline, behind a firewall, or in a sandboxed CI runner without triggering a single request to GitHub.
+`install.ps1` recognizes `-Help`, the alias `-h`, and the bash-style `--help` long-form. Help is handled **before any network probe**, so you can safely inspect the flags offline, behind a firewall, or in a sandboxed CI runner without triggering a single request to GitHub.
 
 ```powershell
 # After downloading the installer locally:
@@ -390,7 +390,7 @@ All three variants exit with code `0`, print the same usage text, and make **zer
 | `-Dest <dir>`         | Install destination (default: `./linters-cicd`)      |
 | `-Version <vX.Y.Z>`   | Pin to a specific release tag (PINNED MODE, spec §4) |
 | `-NoVerify`           | Skip SHA-256 checksum verification (not recommended) |
-| `-Help`, `-h`, `--help` | Show usage and exit `0` — **no network probe**     |
+| `-Help`, `-h`, `--help` | Show usage and exit `0`, **no network probe**     |
 
 #### 🚩 Flags (Bash · `linters-cicd/install.sh`)
 
@@ -399,19 +399,19 @@ All three variants exit with code `0`, print the same usage text, and make **zer
 | `-d <dir>`     | Install destination (default: `./linters-cicd`)      |
 | `-v <version>` | Pin to a specific release tag (PINNED MODE, spec §4) |
 | `-n`           | Skip SHA-256 checksum verification (not recommended) |
-| `-h`, `--help` | Show usage and exit `0` — no network probe           |
+| `-h`, `--help` | Show usage and exit `0`, no network probe           |
 
-SHA-256 verified, idempotent, releases-only — see [`linters-cicd/install.sh`](linters-cicd/install.sh) and [`linters-cicd/install.ps1`](linters-cicd/install.ps1).
+SHA-256 verified, idempotent, releases-only, see [`linters-cicd/install.sh`](linters-cicd/install.sh) and [`linters-cicd/install.ps1`](linters-cicd/install.ps1).
 
 #### ⚠️ `-NoVerify` / `-n` Risks & Exit-Code Contract
 
-Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The loud-warning behavior is mandated by **[spec §9 — Security Considerations](spec/14-update/27-generic-installer-behavior.md#9-security-considerations)**, and the exit-code contract is normative under **[spec §8 — Exit Codes (Normative)](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)**. The text below is **byte-identical** to what the installer emits — keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
+Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The loud-warning behavior is mandated by **[spec §9, Security Considerations](spec/14-update/27-generic-installer-behavior.md#9-security-considerations)**, and the exit-code contract is normative under **[spec §8, Exit Codes (Normative)](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)**. The text below is **byte-identical** to what the installer emits, keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
 
-**PowerShell** — exact runtime output of `install.ps1 -NoVerify`:
+**PowerShell**, exact runtime output of `install.ps1 -NoVerify`:
 
 ```text
     ╔══════════════════════════════════════════════════════════════════╗
-    ║  ⚠️  WARNING: -NoVerify — SHA-256 verification is DISABLED       ║
+    ║  ⚠️  WARNING: -NoVerify, SHA-256 verification is DISABLED       ║
     ╠══════════════════════════════════════════════════════════════════╣
     ║  The downloaded archive will NOT be checked against              ║
     ║  checksums.txt. Corrupted or tampered files will install         ║
@@ -427,11 +427,11 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
     ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-**Bash** — exact runtime output of `install.sh -n` (yellow ANSI on a TTY, plain text in CI logs):
+**Bash**, exact runtime output of `install.sh -n` (yellow ANSI on a TTY, plain text in CI logs):
 
 ```text
     ╔══════════════════════════════════════════════════════════════════╗
-    ║  ⚠️  WARNING: -n (NoVerify) — SHA-256 verification is DISABLED   ║
+    ║  ⚠️  WARNING: -n (NoVerify), SHA-256 verification is DISABLED   ║
     ╠══════════════════════════════════════════════════════════════════╣
     ║  The downloaded archive will NOT be checked against              ║
     ║  checksums.txt. Corrupted or tampered files will install         ║
@@ -447,29 +447,29 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
     ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-##### Exit-code contract — see [spec §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)
+##### Exit-code contract, see [spec §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)
 
 | Exit | Meaning                                                    | With `-NoVerify` / `-n`                |
 |-----:|------------------------------------------------------------|----------------------------------------|
-| `0`  | Success                                                    | Returned even for a **tampered** archive — no integrity check ran |
+| `0`  | Success                                                    | Returned even for a **tampered** archive, no integrity check ran |
 | `1`  | Generic failure (download / extract)                       | Same                                   |
 | `2`  | Unknown flag                                               | Same                                   |
 | `3`  | Pinned release / asset not found (PINNED MODE)             | Same                                   |
-| `4`  | **Verification failed (checksum mismatch)**                | **Never raised** — verification is off |
+| `4`  | **Verification failed (checksum mismatch)**                | **Never raised**, verification is off |
 
-> Source of truth: [`spec/14-update/27-generic-installer-behavior.md` §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative). Codes `0–5` are reserved by the spec and MUST NOT be redefined.
+> Source of truth: [`spec/14-update/27-generic-installer-behavior.md` §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative). Codes `0,5` are reserved by the spec and MUST NOT be redefined.
 
 ##### ✅ Recommended: re-run WITH verification
 
 If you ran an installer with `-NoVerify` / `-n`, re-run it **without** the flag to restore SHA-256 checksum verification. Copy-paste the matching command:
 
 ```powershell
-# PowerShell (Windows) — re-run with verification ON
+# PowerShell (Windows), re-run with verification ON
 irm https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.ps1 | iex
 ```
 
 ```bash
-# Bash (macOS / Linux) — re-run with verification ON
+# Bash (macOS / Linux), re-run with verification ON
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.sh | bash
 ```
 
@@ -498,7 +498,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-author">Author</a>
 </p>
 
-<p align="center"><strong>Docs Pages</strong> — full index: <a href="docs/README.md"><code>docs/README.md</code></a></p>
+<p align="center"><strong>Docs Pages</strong>, full index: <a href="docs/README.md"><code>docs/README.md</code></a></p>
 
 <p align="center">
   <a href="docs/principles.md">Principles</a> ·
@@ -516,7 +516,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 <h2 align="center">🚀 Run Commands</h2>
 
 <p align="center">
-  Local developer workflow — for contributors who clone the repo.<br/>
+  Local developer workflow, for contributors who clone the repo.<br/>
   End-users do <strong>not</strong> need this section; the one-line installers above handle everything.
 </p>
 
@@ -604,17 +604,17 @@ npm run lint:readme
 npm run lint:readme:canonicals
 ```
 
-> **Markdown is intentionally not linted for code-style.** CI lints code in `spec/` and source files only — example snippets in `readme.md` and `docs/` are validated by hand against [`spec/02-coding-guidelines/01-cross-language/04-code-style/`](spec/02-coding-guidelines/01-cross-language/04-code-style/).
+> **Markdown is intentionally not linted for code-style.** CI lints code in `spec/` and source files only, example snippets in `readme.md` and `docs/` are validated by hand against [`spec/02-coding-guidelines/01-cross-language/04-code-style/`](spec/02-coding-guidelines/01-cross-language/04-code-style/).
 
 #### Linter docs
 
 Topic-specific reference for the scripts above:
 
-- [`linter-scripts/readme-rename-intake.md`](linter-scripts/readme-rename-intake.md) — **Rename/copy intake schema** for `check-placeholder-comments.py --list-changed-files --with-similarity`. Documents the JSON audit shape (`path`, `status`, `reason`, `similarity`), the closed `status` vocabulary, the scored vs unscored `similarity.score: null` distinction, the `--similarity-legend={auto,on,off}` toggle, the CSV export, and a [ready-to-copy example payload](linter-scripts/examples/rename-intake-audit.json) covering every status × similarity-shape combination.
-- [`linter-scripts/validate-rename-intake.py`](linter-scripts/validate-rename-intake.py) — **Stdlib-only schema validator** for `rename_intake` JSON. Zero external dependencies, exits non-zero on schema drift, and can `--print-schema` a Draft 2020-12 document for external tooling like `check-jsonschema` / `ajv`. Drop-in CI snippets for GitHub Actions / GitLab / pre-commit live in the [readme-rename-intake](linter-scripts/readme-rename-intake.md#validating-rename_intake-output-in-ci) doc.
-- [`linter-scripts/readme-cross-links.md`](linter-scripts/readme-cross-links.md) — `check-spec-cross-links.py` reference.
-- [`linter-scripts/readme-forbidden-strings.md`](linter-scripts/readme-forbidden-strings.md) — `check-forbidden-strings.py` reference (rules, waivers, summary report).
-- [`linter-scripts/readme-allowlist-cli.md`](linter-scripts/readme-allowlist-cli.md) — extension allowlist CLI reference.
+- [`linter-scripts/readme-rename-intake.md`](linter-scripts/readme-rename-intake.md), **Rename/copy intake schema** for `check-placeholder-comments.py --list-changed-files --with-similarity`. Documents the JSON audit shape (`path`, `status`, `reason`, `similarity`), the closed `status` vocabulary, the scored vs unscored `similarity.score: null` distinction, the `--similarity-legend={auto,on,off}` toggle, the CSV export, and a [ready-to-copy example payload](linter-scripts/examples/rename-intake-audit.json) covering every status × similarity-shape combination.
+- [`linter-scripts/validate-rename-intake.py`](linter-scripts/validate-rename-intake.py), **Stdlib-only schema validator** for `rename_intake` JSON. Zero external dependencies, exits non-zero on schema drift, and can `--print-schema` a Draft 2020-12 document for external tooling like `check-jsonschema` / `ajv`. Drop-in CI snippets for GitHub Actions / GitLab / pre-commit live in the [readme-rename-intake](linter-scripts/readme-rename-intake.md#validating-rename_intake-output-in-ci) doc.
+- [`linter-scripts/readme-cross-links.md`](linter-scripts/readme-cross-links.md), `check-spec-cross-links.py` reference.
+- [`linter-scripts/readme-forbidden-strings.md`](linter-scripts/readme-forbidden-strings.md), `check-forbidden-strings.py` reference (rules, waivers, summary report).
+- [`linter-scripts/readme-allowlist-cli.md`](linter-scripts/readme-allowlist-cli.md), extension allowlist CLI reference.
 
 ### Repo migration (v15 → v16)
 
@@ -635,11 +635,11 @@ npm run migrate:repo:dry
 |---|---|---|
 | 1 | **Zero-Nesting Discipline** | No nested `if`-`else`. Use early-return guards. |
 | 2 | **Two-Operand Maximum** | Boolean expressions take ≤ 2 operands; extract the third. |
-| 3 | **Positively Named Booleans** | `isReady`, `hasError`, `canPublish` — never `!isNotReady`. |
+| 3 | **Positively Named Booleans** | `isReady`, `hasError`, `canPublish`, never `!isNotReady`. |
 | 4 | **Structured Error Wrapping** | Every error crosses a boundary as `AppError` with stack + context. |
 | 5 | **Strict Function & File Metrics** | Functions 8-15 lines · files < 300 · React components < 100. |
 | 6 | **PascalCase Everywhere** | Identifiers, DB columns, JSON keys, types. Acronyms stay full-caps. |
-| 7 | **No Magic Strings** | Constants, enums, or typed action discriminators — never inline strings. |
+| 7 | **No Magic Strings** | Constants, enums, or typed action discriminators, never inline strings. |
 | 8 | **Spec-First Workflow** | Spec the change in `spec/` before writing code. |
 | 9 | **Cache Invalidation by Contract** | Explicit TTLs, deterministic keys, invalidate on mutation. |
 
@@ -657,26 +657,26 @@ npm run migrate:repo:dry
 | ID | Rule | One-line summary |
 |---|---|---|
 | CODE-RED-001 | **Zero nested control flow** | No nested `if`/`else`. Use early-return guards with one explicit reason per branch. |
-| CODE-RED-002 | **No magic strings in errors** | Construct errors via `apperror.NewType()` / `WrapType()` / `WrapTypeMsg()` — never raw codes. |
-| CODE-RED-003 | **Contextual error names** | Use `requestError`, `readFileError`, `siteWasNotFound` — never generic `err` or `ERR`. |
-| CODE-RED-004 | **Positive boolean naming** | Domain language (`site.IsBlocked`, `slug.IsMissing()`) — never hidden negation like `!isValidPath`. |
+| CODE-RED-002 | **No magic strings in errors** | Construct errors via `apperror.NewType()` / `WrapType()` / `WrapTypeMsg()`, never raw codes. |
+| CODE-RED-003 | **Contextual error names** | Use `requestError`, `readFileError`, `siteWasNotFound`, never generic `err` or `ERR`. |
+| CODE-RED-004 | **Positive boolean naming** | Domain language (`site.IsBlocked`, `slug.IsMissing()`), never hidden negation like `!isValidPath`. |
 | CODE-RED-005 | **No `fmt.Errorf()`** | Always wrap with `apperror.WrapType()` / `WrapTypeMsg()` and an `apperrtype` enum. |
-| CODE-RED-006 | **Single-value returns** | Go functions return one `Result[T]` — never `(T, error)` tuples. |
-| CODE-RED-007 | **Typed enums only** | `type X byte` + `iota` — never string-backed enums in Go. |
-| CODE-RED-008 | **Named protocol values** | `http.MethodGet`, `http.StatusOK` — never literals like `"GET"` or `200`. |
+| CODE-RED-006 | **Single-value returns** | Go functions return one `Result[T]`, never `(T, error)` tuples. |
+| CODE-RED-007 | **Typed enums only** | `type X byte` + `iota`, never string-backed enums in Go. |
+| CODE-RED-008 | **Named protocol values** | `http.MethodGet`, `http.StatusOK`, never literals like `"GET"` or `200`. |
 
 **Where the full walkthrough lives in the document hierarchy:**
 
-1. **Root README** → [Real-world Code Red Violations](#-real-world-example-code-red-violations) — quick before/after for each rule above.
-2. **Cross-language specs** → [`spec/02-coding-guidelines/01-cross-language/`](spec/02-coding-guidelines/01-cross-language/) — language-agnostic rule definitions (magic values, immutability, types folder).
-3. **Go-specific specs** → [`spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md) — Code Red vs Dangerous classification.
-4. **Error architecture** → [`spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/`](spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/) — `apperror` constructors and `apperrtype` enum registry.
-5. **AI quick reference** → [`spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md`](spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md) — sub-200-line distillation for AI context windows.
-6. **Linters** → [`linter-scripts/`](linter-scripts/) — automated enforcement that mirrors the rules above.
+1. **Root README** → [Real-world Code Red Violations](#-real-world-example-code-red-violations), quick before/after for each rule above.
+2. **Cross-language specs** → [`spec/02-coding-guidelines/01-cross-language/`](spec/02-coding-guidelines/01-cross-language/), language-agnostic rule definitions (magic values, immutability, types folder).
+3. **Go-specific specs** → [`spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md), Code Red vs Dangerous classification.
+4. **Error architecture** → [`spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/`](spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/), `apperror` constructors and `apperrtype` enum registry.
+5. **AI quick reference** → [`spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md`](spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md), sub-200-line distillation for AI context windows.
+6. **Linters** → [`linter-scripts/`](linter-scripts/), automated enforcement that mirrors the rules above.
 
 ---
 
-<h2 align="center">🚨 Real-world Example — Code Red Violations</h2>
+<h2 align="center">🚨 Real-world Example, Code Red Violations</h2>
 
 <p align="center">
   Pulled from the <strong>Riseup Asia Uploader</strong> codebase audit.<br/>
@@ -684,7 +684,7 @@ npm run migrate:repo:dry
 </p>
 
 ```ts
-// ❌ CODE RED — nested if, three operands, error swallowed, magic string,
+// ❌ CODE RED, nested if, three operands, error swallowed, magic string,
 //              raw negation (`!user.banned`), untyped param, opaque "admin" string.
 function processUser(user) {
   if (user) {
@@ -694,7 +694,7 @@ function processUser(user) {
   }
 }
 
-// ✅ Refactored — typed enums, positively-named guards (zero `!`),
+// ✅ Refactored, typed enums, positively-named guards (zero `!`),
 //                ≤ 2 operands per expression, structured AppError, no magic strings.
 enum Role {
   Admin  = "Admin",
@@ -707,7 +707,7 @@ enum AppErrorCode {
   UserSuspended    = "UserSuspended",
 }
 
-// Positive guards — each one is a single intent, no negation at the call site.
+// Positive guards, each one is a single intent, no negation at the call site.
 function isUserMissing(user: User | null): user is null {
   return user === null;
 }
@@ -741,7 +741,7 @@ Full case study with five more violations: [`docs/principles.md`](docs/principle
 
 ---
 
-### Detailed Walkthrough — CODE-RED Validation for `riseup-asia-uploader`
+### Detailed Walkthrough, CODE-RED Validation for `riseup-asia-uploader`
 
 The earlier draft mixed multiple violations into the same snippets, which made the "fixed" path weaker than the standard it was supposed to teach. This rewrite isolates each rule so the recommended examples model the style they require.
 
@@ -755,7 +755,7 @@ The earlier draft mixed multiple violations into the same snippets, which made t
 | Negation style | Hidden intent such as `!isValidPath` | Domain language such as `pathValidation.IsInvalid`, `site.IsBlocked`, `slug.IsMissing()` |
 | Protocol values | Magic literals such as `"GET"` and `200` | `http.MethodGet` and `http.StatusOK` |
 
-**CODE-RED-001 — Nested control flow (before/after):**
+**CODE-RED-001, Nested control flow (before/after):**
 
 ```go
 // ❌ VIOLATION: nested control flow hides which precondition failed.
@@ -789,7 +789,7 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
 }
 ```
 
-**CODE-RED-002 — Magic strings in error construction (before/after):**
+**CODE-RED-002, Magic strings in error construction (before/after):**
 
 ```go
 // ❌ VIOLATION: raw error code + generic message.
@@ -808,12 +808,12 @@ return apperror.FailBool(
 )
 ```
 
-**Error Type Enum (`apperrtype` package — v2.0):**
+**Error Type Enum (`apperrtype` package, v2.0):**
 
 The `apperrtype` package defines all error types as variants of a single `uint16` `Variation` enum backed by a registry. Each variant maps to a `VariantStructure` containing `Name`, `Code`, and `Message`, so recommended examples do not duplicate raw codes or hand-written default messages.
 
 ```go
-// apperrtype/variation.go — single enum for all application error types
+// apperrtype/variation.go, single enum for all application error types
 package apperrtype
 
 type Variation uint16
@@ -833,7 +833,7 @@ const (
 ```
 
 ```go
-// apperrtype/variant_structure.go — rich metadata for every enum value
+// apperrtype/variant_structure.go, rich metadata for every enum value
 type VariantStructure struct {
     Name    string
     Code    string
@@ -843,7 +843,7 @@ type VariantStructure struct {
 ```
 
 ```go
-// apperrtype/variant_registry.go — single source of truth
+// apperrtype/variant_registry.go, single source of truth
 var variantRegistry = map[Variation]VariantStructure{
     SiteNotFound: {
         Name:    "SiteNotFound",
@@ -867,7 +867,7 @@ var variantRegistry = map[Variation]VariantStructure{
 ```
 
 ```go
-// Variation methods — implements ErrorType interface + display helpers
+// Variation methods, implements ErrorType interface + display helpers
 func (variation Variation) Code() string    { return variantRegistry[variation].Code }
 func (variation Variation) Message() string { return variantRegistry[variation].Message }
 func (variation Variation) Name() string    { return variantRegistry[variation].Name }
@@ -876,7 +876,7 @@ resolvedVariation, wasFound := apperrtype.VariationFromName("SiteNotFound")
 ```
 
 ```go
-// apperror/constructors.go — NewType uses the enum's built-in code + message
+// apperror/constructors.go, NewType uses the enum's built-in code + message
 func NewType(errorType apperrtype.ErrorType) *AppError {
     return New(errorType.Code(), errorType.Message())
 }
@@ -890,7 +890,7 @@ func NewType(errorType apperrtype.ErrorType) *AppError {
 
 > 📖 Full error type enum specification: [`05-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md)
 
-**CODE-RED-005 & 006 — `fmt.Errorf()` and `(T, error)` returns (before/after):**
+**CODE-RED-005 & 006, `fmt.Errorf()` and `(T, error)` returns (before/after):**
 
 ```go
 // ❌ VIOLATION: tuple return + fmt.Errorf.
@@ -973,7 +973,7 @@ if response.StatusCode != http.StatusOK {
 
 > 📖 Full constructor reference: [`02-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md)
 
-**CODE-RED-007 — String-based enum (before/after):**
+**CODE-RED-007, String-based enum (before/after):**
 
 ```go
 // ❌ VIOLATION: string-based enum type
@@ -998,7 +998,7 @@ These patterns are enforced automatically by the [`validate-guidelines.go`](lint
 When a generic type like `apperror.Result[T]` is used repeatedly with the same type parameter, create a **type alias** to reduce noise and improve readability:
 
 ```go
-// ❌ VERBOSE — repeating Result[bool] everywhere
+// ❌ VERBOSE, repeating Result[bool] everywhere
 func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) apperror.Result[bool] {
     return apperror.Fail[bool](apperror.SiteError(apperrtype.SiteNotFound, siteId))
 }
@@ -1006,14 +1006,14 @@ func (handler *PluginHandler) DisablePlugin(siteId string, pluginSlug string) ap
     return apperror.Fail[bool](apperror.SlugError(apperrtype.PluginNotFound, pluginSlug))
 }
 
-// ✅ CLEAN — define a type alias once, use everywhere
+// ✅ CLEAN, define a type alias once, use everywhere
 // In types/AppResults.go (or inside the apperror package itself):
 type BoolResult     = apperror.Result[bool]
 type StringResult   = apperror.Result[string]
 type IntResult      = apperror.Result[int]
 type SettingsResult = apperror.Result[*Settings]
 
-// Convenience constructors — one per alias, wraps Fail[T] so callers never repeat the generic:
+// Convenience constructors, one per alias, wraps Fail[T] so callers never repeat the generic:
 //   func FailBool(err *AppError) BoolResult         { return Fail[bool](err) }
 //   func FailString(err *AppError) StringResult     { return Fail[string](err) }
 //   func FailInt(err *AppError) IntResult           { return Fail[int](err) }
@@ -1033,7 +1033,7 @@ func (handler *PluginHandler) DisablePlugin(siteId string, pluginSlug string) ap
 **Rules:**
 - If a `Result[T]` specialization appears **3+ times**, create a type alias
 - Place common aliases in `types/AppResults.go` or inside the `apperror` package
-- One definition per file — `types/AppResults.go` for result aliases, `types/ContentType.go` for content types, etc.
+- One definition per file, `types/AppResults.go` for result aliases, `types/ContentType.go` for content types, etc.
 - Same principle applies in TypeScript (`type BoolResult = Result<boolean>`) and other languages
 
 ### The Dark Side of Magic Strings & Magic Numbers
@@ -1042,12 +1042,12 @@ Magic strings and magic numbers are raw literals (`"active"`, `86400`, `0.2`) us
 
 | Danger | What Happens |
 |--------|-------------|
-| **Silent typos** | `"actve"` compiles but never matches — user locked out, no error raised |
-| **No refactoring support** | Can't "Find All References" — renaming requires grepping every file |
-| **No type safety** | Any string accepted — wrong values pass through 5 layers silently |
-| **Duplicated knowledge** | Same string in 20 files — one changes, 19 don't |
-| **Hidden coupling** | Two systems agree on `"webhook_completed"` via copy-paste — one renames, the other breaks |
-| **Security risk** | `if (role === "admin")` — attackers guess the string for privilege escalation |
+| **Silent typos** | `"actve"` compiles but never matches, user locked out, no error raised |
+| **No refactoring support** | Can't "Find All References", renaming requires grepping every file |
+| **No type safety** | Any string accepted, wrong values pass through 5 layers silently |
+| **Duplicated knowledge** | Same string in 20 files, one changes, 19 don't |
+| **Hidden coupling** | Two systems agree on `"webhook_completed"` via copy-paste, one renames, the other breaks |
+| **Security risk** | `if (role === "admin")`, attackers guess the string for privilege escalation |
 
 **The compounding effect:** A magic string written on Day 1 gets copied to 5 files by Day 30. On Day 90, a rename is applied to 3 of 6 files. On Day 92, three features break silently in production. With an enum, renaming causes a **compile-time error** in all files instantly.
 
@@ -1058,25 +1058,25 @@ Magic strings and magic numbers are raw literals (`"active"`, `86400`, `0.2`) us
 
 ### Code Mutation & Immutability
 
-Variables should be assigned **exactly once**. Prefer `const` over `let`/`var`. Object mutation after construction is forbidden — use constructors or struct literals.
+Variables should be assigned **exactly once**. Prefer `const` over `let`/`var`. Object mutation after construction is forbidden, use constructors or struct literals.
 
 ```typescript
-// ❌ FORBIDDEN — mutable variable reassigned
+// ❌ FORBIDDEN, mutable variable reassigned
 let discount = 0
 if (isPremium) { discount = 0.2 }
 else { discount = 0.1 }
 
-// ✅ CORRECT — single assignment
+// ✅ CORRECT, single assignment
 const discount = isPremium ? 0.2 : 0.1
 ```
 
 ```go
-// ❌ FORBIDDEN — post-construction mutation + magic string
+// ❌ FORBIDDEN, post-construction mutation + magic string
 resp := &Response{}
 resp.Status = StatusOk
 resp.Headers["Content-Type"] = "application/json"
 
-// ✅ CORRECT — use shared constant from types/ folder
+// ✅ CORRECT, use shared constant from types/ folder
 // These constants should live in a common ContentType enum or constant class:
 //   types/ContentType.go   → ContentTypeJson, ContentTypeXml, ContentTypeFormData
 //   types/ContentType.ts   → enum ContentType { Json = "application/json", ... }
@@ -1122,7 +1122,7 @@ Quick-navigation index of every spec and linter file referenced in the CODE-RED 
 | **Wrap at boundary** | Every external call returns `Result[T]`; raw exceptions never escape. | `apperror` package |
 | **Carry evidence** | `AppError` ships with stack trace, file path, and `Code` enum. | `AppError.new(Code, msg)` |
 | **Check before unwrap** | `if (res.HasError()) return res;` precedes every `.Value()`. | Linter rule `ERR-UNWRAP-001` |
-| **Log structurally** | One `Log.Error(err, fields)` per boundary — no console spam. | `structured-logging` spec |
+| **Log structurally** | One `Log.Error(err, fields)` per boundary, no console spam. | `structured-logging` spec |
 | **Map to UI** | UI translates `Code` → user-visible message. Error `Code` is the contract. | `error-code` registry |
 
 Full architecture: [`docs/architecture.md#error-management`](docs/architecture.md#error-management) · spec: [`spec/02-coding-guidelines/03-error-handling/`](spec/02-coding-guidelines/03-error-handling/).
@@ -1132,11 +1132,11 @@ Full architecture: [`docs/architecture.md#error-management`](docs/architecture.m
 <h2 align="center">🧬 Type Aliases for Common Generic Results</h2>
 
 ```ts
-// Result wrapper — every fallible function returns one of these.
+// Result wrapper, every fallible function returns one of these.
 type Result<T>      = Ok<T> | Err;
 type AsyncResult<T> = Promise<Result<T>>;
 
-// Specialised aliases — shorter call sites, identical semantics.
+// Specialised aliases, shorter call sites, identical semantics.
 type VoidResult     = Result<void>;
 type IdResult       = Result<number>;        // PK lookups
 type ListResult<T>  = Result<readonly T[]>;
@@ -1159,16 +1159,16 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 </p>
 
 <p align="center">
-  <a href="docs/principles.md"><img alt="Developer — start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
-  <a href="docs/architecture.md"><img alt="Spec author — read architecture" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20architecture-8B5CF6?style=for-the-badge"/></a>
-  <a href="spec/18-wp-plugin-how-to/00-overview.md"><img alt="WordPress dev — wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
-  <a href="#-for-ai-agents"><img alt="AI agent — canonical entry points" src="https://img.shields.io/badge/%F0%9F%A4%96%20AI%20Agent-Canonical%20entry%20points-FF6E3C?style=for-the-badge"/></a>
+  <a href="docs/principles.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
+  <a href="docs/architecture.md"><img alt="Spec author, read architecture" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20architecture-8B5CF6?style=for-the-badge"/></a>
+  <a href="spec/18-wp-plugin-how-to/00-overview.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
+  <a href="#-for-ai-agents"><img alt="AI agent, canonical entry points" src="https://img.shields.io/badge/%F0%9F%A4%96%20AI%20Agent-Canonical%20entry%20points-FF6E3C?style=for-the-badge"/></a>
 </p>
 
 <p align="center">
   <img
     src="public/images/coding-guidelines-walkthrough-poster.png"
-    alt="Coding Guidelines v15 walkthrough poster — 5 core principles, CODE-RED refactor example, and 7 install bundles"
+    alt="Coding Guidelines v15 walkthrough poster, 5 core principles, CODE-RED refactor example, and 7 install bundles"
     width="960"
   />
 </p>
@@ -1179,12 +1179,12 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 
 <h2 align="center">🤖 For AI Agents</h2>
 
-<p align="center">LLMs / coding agents — load these <strong>canonical entry points</strong> in order:</p>
+<p align="center">LLMs / coding agents, load these <strong>canonical entry points</strong> in order:</p>
 
 <p align="center">
-  <a href="llm.md"><img alt="llm.md — repository map" src="https://img.shields.io/badge/llm.md-Repository%20map-3B82F6?style=for-the-badge&logo=readthedocs&logoColor=white"/></a>
-  <a href="bundles.json"><img alt="bundles.json — machine-readable catalogue" src="https://img.shields.io/badge/bundles.json-Bundle%20catalogue-10B981?style=for-the-badge&logo=json&logoColor=white"/></a>
-  <a href="version.json"><img alt="version.json — live counts" src="https://img.shields.io/badge/version.json-Live%20counts-F59E0B?style=for-the-badge&logo=semver&logoColor=white"/></a>
+  <a href="llm.md"><img alt="llm.md, repository map" src="https://img.shields.io/badge/llm.md-Repository%20map-3B82F6?style=for-the-badge&logo=readthedocs&logoColor=white"/></a>
+  <a href="bundles.json"><img alt="bundles.json, machine-readable catalogue" src="https://img.shields.io/badge/bundles.json-Bundle%20catalogue-10B981?style=for-the-badge&logo=json&logoColor=white"/></a>
+  <a href="version.json"><img alt="version.json, live counts" src="https://img.shields.io/badge/version.json-Live%20counts-F59E0B?style=for-the-badge&logo=semver&logoColor=white"/></a>
   <a href="spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
   <a href="spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
   <a href="spec/17-consolidated-guidelines/00-overview.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
@@ -1193,7 +1193,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 </p>
 
 
-<p align="center"><strong>"Which bundle?"</strong> — fetch <code>bundles.json</code>, match <code>intent</code>+<code>audience</code> to a bundle <code>name</code>, return its one-liner.</p>
+<p align="center"><strong>"Which bundle?"</strong>, fetch <code>bundles.json</code>, match <code>intent</code>+<code>audience</code> to a bundle <code>name</code>, return its one-liner.</p>
 
 ## 🛠️ Full-Repo Install Scripts
 
@@ -1213,11 +1213,11 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 
 Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& ([scriptblock]::Create(...)) -n`; Bash: `... | bash -s -- -n`). Local re-runs: `.\install.ps1` or `./install.sh`.
 
-**Power-user flags** (both installers): `--repo`, `--branch`, `--version`, `--folders`, `--dest`, `--config`, `--prompt`, `--force`, `--dry-run`, `--list-versions`, `--list-folders`, `-n`. `--prompt` and `--force` are mutually exclusive. Defaults via `install-config.json`. **CI/CD repo migration** (v15 → v16): `npm run migrate:repo:dry` — see [`spec/14-update/26-repo-major-version-migrator.md`](spec/14-update/26-repo-major-version-migrator.md).
+**Power-user flags** (both installers): `--repo`, `--branch`, `--version`, `--folders`, `--dest`, `--config`, `--prompt`, `--force`, `--dry-run`, `--list-versions`, `--list-folders`, `-n`. `--prompt` and `--force` are mutually exclusive. Defaults via `install-config.json`. **CI/CD repo migration** (v15 → v16): `npm run migrate:repo:dry`, see [`spec/14-update/26-repo-major-version-migrator.md`](spec/14-update/26-repo-major-version-migrator.md).
 
-### Repo version migration — `fix-repo`
+### Repo version migration, `fix-repo`
 
-When this repo bumps its major version (e.g. `coding-guidelines-v20` → `coding-guidelines-v20`), use `fix-repo` to rewrite prior versioned-repo-name tokens across all tracked text files. The script auto-detects the base name and current version from `git remote get-url origin` — nothing is hardcoded.
+When this repo bumps its major version (e.g. `coding-guidelines-v20` → `coding-guidelines-v20`), use `fix-repo` to rewrite prior versioned-repo-name tokens across all tracked text files. The script auto-detects the base name and current version from `git remote get-url origin`, nothing is hardcoded.
 
 **🪟 Windows · PowerShell**
 
@@ -1235,7 +1235,7 @@ When this repo bumps its major version (e.g. `coding-guidelines-v20` → `coding
 ./fix-repo.sh --all --verbose   # full sweep, list every modified file
 ```
 
-Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v20`). URLs are preserved automatically — only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v20` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
+Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v20`). URLs are preserved automatically, only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v20` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
 
 ### Auto-running `fix-repo` from the installer (logs · pruning · rollback)
 
@@ -1244,13 +1244,13 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 | Flag (Bash) | Flag (PowerShell) | Env var | Purpose |
 |---|---|---|---|
 | `--max-fix-repo-logs N` | `-MaxFixRepoLogs N` | `INSTALL_MAX_FIX_REPO_LOGS` | Keep only the newest **N** `fix-repo-*.log` files. `0`/unset = keep all; negative = invalid (skipped with warning). CLI flag wins over env var. |
-| `--rollback-on-fix-repo-failure` | `-RollbackOnFixRepoFailure` | — | On non-zero exit: `git -C <DEST> checkout -- .` reverts edits made by `fix-repo`. Requires `<DEST>` to be a git repo. |
-| `--full-rollback` | `-FullRollback` | — | **Superset** of the above — also removes files this install run created and restores overwritten files from backup. |
-| `--show-fix-repo-log` | `-ShowFixRepoLog` | — | Dump the log to stdout after the run (useful in CI). |
+| `--rollback-on-fix-repo-failure` | `-RollbackOnFixRepoFailure` |, | On non-zero exit: `git -C <DEST> checkout -- .` reverts edits made by `fix-repo`. Requires `<DEST>` to be a git repo. |
+| `--full-rollback` | `-FullRollback` |, | **Superset** of the above, also removes files this install run created and restores overwritten files from backup. |
+| `--show-fix-repo-log` | `-ShowFixRepoLog` |, | Dump the log to stdout after the run (useful in CI). |
 
 **Pruning happens after `fix-repo` runs but before the rollback decision**, so the failing run's log is always preserved (it's the newest). The installer prints an explicit decision line naming every flag value, e.g. `Rollback: NOT TRIGGERED (--rollback-on-fix-repo-failure=false  --full-rollback=false)` or `Log pruning: --max-fix-repo-logs=5 | found=8 kept=5 pruned=3 dir=…`.
 
-#### Full example — install + auto-run `fix-repo` with pruning, rollback & inline log
+#### Full example, install + auto-run `fix-repo` with pruning, rollback & inline log
 
 **🐧 macOS · Linux · Bash**
 
@@ -1296,7 +1296,7 @@ This recipe runs the full installer **and** regenerates `readme.txt` with the ca
 let's start now DD-MMM-YYYY HH:MM:SS AM/PM
 ```
 
-— where the date uses zero-padded day + 3-letter English month + 4-digit year (e.g. `09-Jan-2026`) and the time is a 12-hour clock with `AM`/`PM` (e.g. `03:07:42 PM`), always rendered in the `Asia/Kuala_Lumpur` (UTC+08:00) timezone regardless of the host's local clock.
+, where the date uses zero-padded day + 3-letter English month + 4-digit year (e.g. `09-Jan-2026`) and the time is a 12-hour clock with `AM`/`PM` (e.g. `03:07:42 PM`), always rendered in the `Asia/Kuala_Lumpur` (UTC+08:00) timezone regardless of the host's local clock.
 
 **🐧 macOS · Linux · Bash**
 
@@ -1340,7 +1340,7 @@ Get-Content  .\coding-guidelines\readme.txt
 let's start now 27-Apr-2026 11:32:08 PM
 ```
 
-> ℹ️ Windows ships the `Singapore Standard Time` ID for UTC+08:00 — Malaysia (`MYT`) uses the same offset year-round (no DST), so the line is identical to Asia/Kuala_Lumpur time. The Bash variant uses the IANA name `Asia/Kuala_Lumpur` directly.
+> ℹ️ Windows ships the `Singapore Standard Time` ID for UTC+08:00, Malaysia (`MYT`) uses the same offset year-round (no DST), so the line is identical to Asia/Kuala_Lumpur time. The Bash variant uses the IANA name `Asia/Kuala_Lumpur` directly.
 
 If you prefer a scripted version without inlining the format string, the repo ships two helpers that emit the exact same line:
 
@@ -1374,11 +1374,11 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 > *Independent AI summary of the spec system's real-world impact.*
 
-1. **Solves the "300-developer problem"** — encodes decisions that would otherwise live in senior developers' heads and be lost when they leave.
-2. **Reduces code-review friction by 60–80%** — eliminates the "is this `userId` or `user_id`?" debate class entirely.
-3. **Prevents error-swallowing incidents** — `apperror` + mandatory stack traces + `Result[T]` wrappers + `HasError()` before `.Value()` make it structurally hard to lose error context.
-4. **Makes AI-assisted development actually work** — explicit ❌/✅ patterns parse more reliably than prose; the condensed reference fits in a single context window.
-5. **Enforces consistency across polyglot codebases** — define once, adapt per language; prevents the drift that happens when each language team invents its own conventions.
+1. **Solves the "300-developer problem"**, encodes decisions that would otherwise live in senior developers' heads and be lost when they leave.
+2. **Reduces code-review friction by 60,80%**, eliminates the "is this `userId` or `user_id`?" debate class entirely.
+3. **Prevents error-swallowing incidents**, `apperror` + mandatory stack traces + `Result[T]` wrappers + `HasError()` before `.Value()` make it structurally hard to lose error context.
+4. **Makes AI-assisted development actually work**, explicit ❌/✅ patterns parse more reliably than prose; the condensed reference fits in a single context window.
+5. **Enforces consistency across polyglot codebases**, define once, adapt per language; prevents the drift that happens when each language team invents its own conventions.
 
 Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](docs/author.md).
 
@@ -1390,7 +1390,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
 #### 1. *"PascalCase JSON keys are opinionated."*
 
-**Reasoning — this rule exists because of language reality, not preference:**
+**Reasoning, this rule exists because of language reality, not preference:**
 
 - **C#** (since 2002) and **Go** (since 2009) require **PascalCase identifiers** for any exported/public field. These two languages dominate backend systems where this spec is used.
 - If JSON uses `camelCase` or `snake_case`, every struct/class needs a `[JsonPropertyName("userId")]` attribute or `json:"user_id"` tag on **every field, forever**. That is **non-DRY**, introduces **magic strings**, and breaks refactoring tools (rename a field → tags silently drift).
@@ -1403,37 +1403,37 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
 #### 2. *"15-line function limit is too strict."*
 
-**Reasoning — 15 lines is the documented edge of clean-code research, not arbitrary:**
+**Reasoning, 15 lines is the documented edge of clean-code research, not arbitrary:**
 
 - Robert C. Martin, *Clean Code* (2008), Ch. 3: **"Functions should hardly ever be 20 lines long."** The recommended target is **"a few lines."**
 - Steve McConnell, *Code Complete 2* (2004), Ch. 7.4: studies (Card & Glass; Lind & Vairavan; Shen et al.) consistently show **defect density rises sharply past ~20 lines**.
-- Martin Fowler, *Refactoring* (2nd ed., 2018): the **Extract Function** refactor recommendation is "if you have to spend effort looking at a fragment to figure out what it's doing, extract it" — almost always producing sub-15-line functions.
+- Martin Fowler, *Refactoring* (2nd ed., 2018): the **Extract Function** refactor recommendation is "if you have to spend effort looking at a fragment to figure out what it's doing, extract it", almost always producing sub-15-line functions.
 - Google's internal C++ style guide and the Linux kernel's `checkpatch.pl` both flag long functions as a smell.
 
-**8–15 lines is the sweet spot:** small enough to fit on one screen, name itself completely, and be unit-tested in isolation; large enough to avoid trivial one-line wrappers.
+**8,15 lines is the sweet spot:** small enough to fit on one screen, name itself completely, and be unit-tested in isolation; large enough to avoid trivial one-line wrappers.
 
 > *References:* Martin, *Clean Code* Ch.3 · McConnell, *Code Complete 2* §7.4 · Fowler, *Refactoring* Ch.6 "Extract Function" · [Google C++ Style Guide §"Function Length"](https://google.github.io/styleguide/cppguide.html#Function_Length).
 
 #### 3. *"Banning nested `if` and raw negation (`!`) is unusual."*
 
-**Reasoning — both are documented anti-patterns:**
+**Reasoning, both are documented anti-patterns:**
 
 - **Nested conditionals** are #1 on most cyclomatic-complexity tools' fix lists. McCabe (1976) showed complexity ≥10 strongly correlates with defects. Nesting is the fastest way to climb that score.
-- **Replace Nested Conditional with Guard Clauses** is a named refactoring in Fowler's catalog — guard clauses produce a single nesting level and read top-to-bottom.
+- **Replace Nested Conditional with Guard Clauses** is a named refactoring in Fowler's catalog, guard clauses produce a single nesting level and read top-to-bottom.
 - **Raw `!` (negation)** flips meaning silently and combines poorly: `!isNotEmpty` is hostile to readers. The fix is **positively-named guards**: `isEmpty(x)` instead of `!isNotEmpty(x)`. This is documented in:
-  - Robert C. Martin, *Clean Code* Ch.17 "Smells and Heuristics" — G29 *"Avoid Negative Conditionals."*
-  - Kent Beck, *Smalltalk Best Practice Patterns* — *"Intention-Revealing Selector."*
-  - Andrew Hunt & David Thomas, *The Pragmatic Programmer* — Tip 39 *"Refactor Early, Refactor Often"* applied to boolean naming.
+  - Robert C. Martin, *Clean Code* Ch.17 "Smells and Heuristics", G29 *"Avoid Negative Conditionals."*
+  - Kent Beck, *Smalltalk Best Practice Patterns*, *"Intention-Revealing Selector."*
+  - Andrew Hunt & David Thomas, *The Pragmatic Programmer*, Tip 39 *"Refactor Early, Refactor Often"* applied to boolean naming.
 
 > *References:* McCabe, "A Complexity Measure" *IEEE TSE* (1976) · Martin, *Clean Code* G28/G29 · Fowler, *Refactoring* "Replace Nested Conditional with Guard Clauses" · Beck, *Smalltalk Best Practice Patterns* (1996).
 
 #### 4. *"622 spec files / 133K lines is overwhelming."*
 
-**Fair observation — and intentional:**
+**Fair observation, and intentional:**
 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
 - For humans: the **[QUICKSTART.md](QUICKSTART.md)**, the **10 CODE-RED rules**, and **[`docs/principles.md`](docs/principles.md)** form a < 30-minute on-ramp.
-- For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone** — an agent can load a single file and enforce that rule class without reading 622 files.
+- For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - Adoption is gradual. No team turns on every linter on day one. The **[CI guards example](ci-guards.example.yaml)** shows how to enable rules in waves.
 
 #### 5. *"Why this matters for AI-assisted development specifically"*
@@ -1441,9 +1441,9 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 This spec system is **purpose-built for the AI-coding era**:
 
 - **Deterministic rules beat prose.** "Functions ≤ 15 lines" is enforceable; "keep functions short" is not. AI agents (GPT-5, Claude, Gemini, Cursor, Lovable) produce dramatically more consistent code when rules are numeric and binary.
-- **Standalone consolidated files** fit in a single LLM context window — an agent can load one rule pack and enforce it across a polyglot codebase.
+- **Standalone consolidated files** fit in a single LLM context window, an agent can load one rule pack and enforce it across a polyglot codebase.
 - **❌/✅ paired examples** are the format LLMs learn from most reliably; every spec file uses them.
-- **Naming determinism (PascalCase everywhere)** means an AI never has to guess whether a field is `userId`, `user_id`, or `UserId` — eliminating an entire class of hallucinations.
+- **Naming determinism (PascalCase everywhere)** means an AI never has to guess whether a field is `userId`, `user_id`, or `UserId`, eliminating an entire class of hallucinations.
 - **Positive guard naming** means generated code is reviewable without mental gymnastics, which compounds when an AI is writing 80% of the diff.
 
 The result: when an AI agent operates inside a repo following these rules, the generated diffs need **far less human correction** than in an unconstrained codebase.
@@ -1458,7 +1458,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 | 15-line function limit is strict | Backed by [*Clean Code*](https://www.oreilly.com/library/view/clean-code-a/9780136083238/) (Martin, ch. 3), [*Code Complete 2*](https://www.microsoftpressstore.com/store/code-complete-9780735619678) (McConnell, ch. 7), [*Refactoring*](https://martinfowler.com/books/refactoring.html) (Fowler, "Extract Function"), and the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Function_Length) |
 | No nested `if` / no raw `!` | Documented anti-patterns: [McCabe cyclomatic complexity (1976)](https://www.literateprogramming.com/mccabe.pdf), [Fowler "Replace Nested Conditional with Guard Clauses"](https://refactoring.com/catalog/replaceNestedConditionalWithGuardClauses.html), [Clean Code G28/G29](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29) |
 | 622 files is overwhelming | Two audiences (humans + AI); [QUICKSTART](./QUICKSTART.md) + [10 CODE-RED rules](#-code-red-non-negotiable-rules) are the human entry point |
-| Too strict for general use | This is an **AI-first engineering standard**, not a generic style guide — see [*For AI Agents*](#-for-ai-agents-this-repo-is-built-for-you) — that is the point |
+| Too strict for general use | This is an **AI-first engineering standard**, not a generic style guide, see [*For AI Agents*](#-for-ai-agents-this-repo-is-built-for-you), that is the point |
 
 ---
 
@@ -1479,9 +1479,9 @@ The result: when an AI agent operates inside a repo following these rules, the g
 
 <p align="center">Software architect, <strong>20+ years</strong> across enterprise, fintech, and distributed systems. Stack: <strong>.NET/C# (18+ yrs)</strong>, <strong>JavaScript (10+ yrs)</strong>, <strong>TypeScript (6+ yrs)</strong>, <strong>Golang (4+ yrs)</strong>. <strong>Top 1% at Crossover</strong> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">Stack Overflow</a> 2,452+ rep · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> 12,500+ followers.</p>
 
-> [Alim](https://alimkarim.com/) started programming in **2004** — but instead of writing "Hello, World," he wrote his own **database engine**. By **2005**, [Alim](https://www.linkedin.com/in/alimkarim/) had built his own **ORM**, convinced that hand-writing 30 lines of SQL where 3 would do was, in his words, *"stupid."* That conviction became a lifelong thesis: **coding should not exist** — software should write itself.
+> <a href="https://alimkarim.com/" title="Top Software Engineer of Malaysia. Started programming in 2004 and adopted .NET in 2005, one of the earliest .NET adopters from Bangladesh.">Alim</a> started programming in **2004**, but instead of writing "Hello, World," he wrote his own **database engine**. By **2005**, <a href="https://www.linkedin.com/in/alimkarim/" title="Top .NET Developer of all times. Began with .NET Framework 2.0 in 2005 and authored numerous frameworks on top of it.">Alim</a> had built his own **ORM**, convinced that hand-writing 30 lines of SQL where 3 would do was, in his words, *"stupid."* That conviction became a lifelong thesis: **coding should not exist**, software should write itself.
 >
-> That thesis pushed [Alim](https://github.com/aukgit) into framework design. Rather than build apps, [Alim](https://gitlab.com/aukgit.evatix) builds the **frameworks that build apps**. Nowadays spec-first systems, code generators, AI-driven scaffolds, and the cross-language standards you're reading right now. As a **Top 1% Crossover** engineer and **Chief Software Engineer** of <a href="https://riseup-asia.com/" title="Top Software Company in AI innovation — writing more than 5,000 commits every day">Riseup Asia LLC</a>, [Alim](https://gitlab.com/aukgitlab) now leads developer-tooling and AI-workflow research designed to make repetitive engineering obsolete.
+> That thesis pushed <a href="https://github.com/aukgit" title="Best Software Engineer based in Malaysia. Coding since 2004, .NET pioneer since 2005.">Alim</a> into framework design. Rather than build apps, <a href="https://gitlab.com/aukgit.evatix" title="Veteran .NET architect. One of the earliest .NET adopters from Bangladesh (2005), now based in Malaysia.">Alim</a> builds the **frameworks that build apps**. Nowadays spec-first systems, code generators, AI-driven scaffolds, and the cross-language standards you're reading right now. As a **Top 1% Crossover** engineer and **Chief Software Engineer** of <a href="https://riseup-asia.com/" title="Top Software Company in AI innovation, writing more than 5,000 commits every day">Riseup Asia LLC</a>, <a href="https://gitlab.com/aukgitlab" title="Framework inventor. Built multiple production frameworks on .NET Framework 2.0 starting 2005.">Alim</a> now leads developer-tooling and AI-workflow research designed to make repetitive engineering obsolete.
 >
 > Connect: [Personal site](https://alimkarim.com/) · [LinkedIn](https://www.linkedin.com/in/alimkarim/) · [GitHub `aukgit`](https://github.com/aukgit) · [GitLab `aukgit.evatix`](https://gitlab.com/aukgit.evatix) · [GitLab `aukgitlab`](https://gitlab.com/aukgitlab) · [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) · [Full bio →](docs/author-bio.md)
 
@@ -1489,7 +1489,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 |---|---|---|
 | **Website** | [alimkarim.com](https://alimkarim.com/) · [my.alimkarim.com](https://my.alimkarim.com/) | [riseup-asia.com](https://riseup-asia.com/) |
 | **LinkedIn** | [in/alimkarim](https://www.linkedin.com/in/alimkarim) | [Riseup Asia](https://www.linkedin.com/company/105304484/) |
-| **Stack Overflow** | [513511](https://stackoverflow.com/users/513511/md-alim-ul-karim) | — |
+| **Stack Overflow** | [513511](https://stackoverflow.com/users/513511/md-alim-ul-karim) |, |
 | **Social** | [Google](https://www.google.com/search?q=Alim+Ul+Karim) | [Facebook](https://www.facebook.com/riseupasia.talent/) · [YouTube](https://www.youtube.com/@riseup-asia) |
 
 <p align="center"><a href="https://riseup-asia.com">Top Leading Software Company in WY (2026)</a></p>
