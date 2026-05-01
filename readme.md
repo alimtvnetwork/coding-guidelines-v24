@@ -195,7 +195,7 @@ Every installer below copies the listed **folders** (recursively, preserving str
 > Notes:
 > - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
-> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other Lovable folders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
 
