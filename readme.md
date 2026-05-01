@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v19/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.2.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-622-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-133%2C880-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--05--01-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v19/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.3.0-3B82F6?style=flat-square"/></a> <a href="spec/"><img alt="Spec Files" src="https://img.shields.io/badge/spec%20files-622-10B981?style=flat-square"/></a> <a href="spec/"><img alt="Folders" src="https://img.shields.io/badge/folders-22-8B5CF6?style=flat-square"/></a> <a href="version.json"><img alt="Lines" src="https://img.shields.io/badge/lines-133%2C880-F59E0B?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a> <a href="version.json"><img alt="Updated" src="https://img.shields.io/badge/updated-2026--05--01-0EA5E9?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -27,7 +27,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong> — Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->622<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->133,880<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->5.2.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES -->622<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->133,880<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->5.3.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
 </p>
 
 ---
@@ -1401,6 +1401,12 @@ Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](
 
 <p align="center">Software architect, <strong>20+ years</strong> across enterprise, fintech, and distributed systems. Stack: <strong>.NET/C# (18+ yrs)</strong>, <strong>JavaScript (10+ yrs)</strong>, <strong>TypeScript (6+ yrs)</strong>, <strong>Golang (4+ yrs)</strong>. <strong>Top 1% at Crossover</strong> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">Stack Overflow</a> 2,452+ rep · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> 12,500+ followers.</p>
 
+> [Alim](https://alimkarim.com/) started programming in **2004** — but instead of writing "Hello, World," he wrote his own **database engine**. By **2005**, [Alim](https://www.linkedin.com/in/alimkarim/) had built his own **ORM**, convinced that hand-writing 30 lines of SQL where 3 would do was, in his words, *"stupid."* That conviction became a lifelong thesis: **coding should not exist** — software should write itself.
+>
+> That thesis pushed [Alim](https://github.com/aukgit) into framework design. Rather than build apps, [Alim](https://gitlab.com/aukgit.evatix) builds the **frameworks that build apps** — spec-first systems, code generators, AI-driven scaffolds, and the cross-language standards you're reading right now. As a **Top 1% Crossover** engineer and CEO of [Riseup Asia LLC](https://riseup-asia.com/), [Alim](https://gitlab.com/aukgitlab) now leads developer-tooling and AI-workflow research designed to make repetitive engineering obsolete.
+>
+> Connect: [Personal site](https://alimkarim.com/) · [LinkedIn](https://www.linkedin.com/in/alimkarim/) · [GitHub `aukgit`](https://github.com/aukgit) · [GitLab `aukgit.evatix`](https://gitlab.com/aukgit.evatix) · [GitLab `aukgitlab`](https://gitlab.com/aukgitlab) · [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) · [Full bio →](docs/author-bio.md)
+
 | | Md. Alim Ul Karim | Riseup Asia LLC |
 |---|---|---|
 | **Website** | [alimkarim.com](https://alimkarim.com/) · [my.alimkarim.com](https://my.alimkarim.com/) | [riseup-asia.com](https://riseup-asia.com/) |
@@ -1418,4 +1424,4 @@ Full bio, design philosophy, and FAQ: [`docs/author.md`](docs/author.md).
 
 ---
 
-<p align="center"><sub><strong>v4.24.0</strong></sub></p>
+<p align="center"><sub><strong>v5.3.0</strong></sub></p>
