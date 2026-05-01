@@ -96,7 +96,7 @@ set -euo pipefail
 # and the user has no easy way to see what went wrong. We always
 # write a timestamped crash log to a stable, predictable location so
 # the user can grep it after the fact.
-__INSTALLER_LOG_DIR="\${TMPDIR:-/tmp}/lovable-installer-logs"
+__INSTALLER_LOG_DIR="\${TMPDIR:-/tmp}/installer-logs"
 mkdir -p "\$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
 __INSTALLER_LOG_FILE="\$__INSTALLER_LOG_DIR/${bundle.name}-install-\$(date -u +%Y%m%dT%H%M%SZ).log"
 {
@@ -848,7 +848,7 @@ if ($Help) {
 # no log trail. We:
 #   1. Save the caller's $ErrorActionPreference and restore it on exit.
 #   2. Route every fatal condition through Stop-Install, which writes
-#      a crash log under \$env:TEMP\\lovable-installer-logs\\ and
+#      a crash log under \$env:TEMP\\installer-logs\\ and
 #      throws a tagged exception we can swallow at the outer catch.
 #   3. Wrap the entire main body in a single try/catch that prints a
 #      friendly summary + log path and \`return\`s without killing the
@@ -858,7 +858,7 @@ $Script:__PriorProgressPreference    = $ProgressPreference
 $ErrorActionPreference = "Stop"
 $ProgressPreference    = "SilentlyContinue"
 
-$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "lovable-installer-logs"
+$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "installer-logs"
 try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
 $Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("${bundle.name}-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
 

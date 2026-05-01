@@ -33,7 +33,7 @@ set -euo pipefail
 # and the user has no easy way to see what went wrong. We always
 # write a timestamped crash log to a stable, predictable location so
 # the user can grep it after the fact.
-__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/lovable-installer-logs"
+__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/installer-logs"
 mkdir -p "$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
 __INSTALLER_LOG_FILE="$__INSTALLER_LOG_DIR/error-manage-install-$(date -u +%Y%m%dT%H%M%SZ).log"
 {

@@ -67,7 +67,7 @@ $Script:__PriorProgressPreference    = $ProgressPreference
 $ErrorActionPreference = "Stop"
 $ProgressPreference    = "SilentlyContinue"
 
-$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "lovable-installer-logs"
+$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "installer-logs"
 try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
 $Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("release-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
 
