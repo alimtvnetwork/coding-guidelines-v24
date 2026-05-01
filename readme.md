@@ -1140,6 +1140,14 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   A specification system trusted by production engineering teams. Drop these folders into any codebase for consistent naming, structured error handling, zero-nesting rules, and AI-friendly docs. <strong>Pick a bundle, run one command, ship compliant code.</strong>
 </p>
 
+<p align="center"><em>📣 Originally written as an internal closed-culture standard for <a href="https://alimkarim.com/">Alim</a>'s engineering team at <a href="https://riseup-asia.com/">Riseup Asia LLC</a> — open-sourced so anyone outside the team can benefit too.</em></p>
+
+> **Why this exists, and who it's really for**
+>
+> This repository is, first and foremost, the **internal engineering playbook** for <a href="https://alimkarim.com/">Md. Alim Ul Karim</a>'s engineering team at <a href="https://riseup-asia.com/">Riseup Asia LLC</a>. It encodes the conventions, CODE RED rules, error-handling patterns, and spec-first workflow that the team uses every day as a **closed-culture standard** — meaning every engineer on the team is expected to follow it without negotiation.
+>
+> It is published openly **not** as a general-purpose framework recommendation, but because the same rules that keep Alim's team shipping reliably can help **any team or solo developer** who wants the same discipline. If something here saves you a production incident or a debugging night, that's the bonus — the primary audience is still the team it was written for.
+
 <p align="center">
   <a href="docs/principles.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
   <a href="docs/architecture.md"><img alt="Spec author, read architecture" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20architecture-8B5CF6?style=for-the-badge"/></a>
@@ -1382,13 +1390,13 @@ The result: when an AI agent operates inside a repo following these rules, the g
 
 <h3 align="center">Who is <a href="https://alimkarim.com/">Md. Alim Ul Karim</a>?</h3>
 
-<p align="center"><em>Software architect, framework inventor, and Chief Software Engineer of <a href="https://riseup-asia.com/">Riseup Asia LLC</a>, with 20+ years building the systems that other engineers build on top of.</em></p>
+<p align="center"><em>Software architect, framework inventor, and Chief Software Engineer of <a href="https://riseup-asia.com/">Riseup Asia LLC</a> — <strong>20 years writing code (since 2004)</strong> and <strong>15 years of professional engineering experience</strong>, building the systems that other engineers build on top of.</em></p>
 
 <h3 align="center"><a href="https://alimkarim.com/">Md. Alim Ul Karim</a></h3>
 
 <p align="center"><strong><a href="https://alimkarim.com">Creator & Lead Architect</a></strong> · Chief Software Engineer, <a href="https://riseup-asia.com">Riseup Asia LLC</a></p>
 
-<p align="center"><a href="https://alimkarim.com/">Md. Alim Ul Karim</a> is a software architect with <strong>20+ years</strong> across enterprise, fintech, and distributed systems. Stack: <strong>.NET/C# (13+ yrs)</strong>, <strong>JavaScript (12+ yrs)</strong>, <strong>VB.NET (8+ yrs)</strong>, <strong>TypeScript (7+ yrs)</strong>, <strong>Golang (6+ yrs and continuing)</strong>. <strong>Top 1% at Crossover</strong> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">Stack Overflow</a> 2,452+ rep · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> 12,500+ followers.</p>
+<p align="center"><a href="https://alimkarim.com/">Md. Alim Ul Karim</a> is a software architect with <strong>20 years writing code (since 2004)</strong> and <strong>15 years of professional engineering experience</strong> across enterprise, fintech, and distributed systems. Stack: <strong>.NET/C# (13+ yrs)</strong>, <strong>JavaScript (12+ yrs)</strong>, <strong>VB.NET (8+ yrs)</strong>, <strong>TypeScript (7+ yrs)</strong>, <strong>Golang (6+ yrs and continuing)</strong>. <strong>Top 1% at Crossover</strong> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">Stack Overflow</a> 2,452+ rep · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> 12,500+ followers.</p>
 
 > <a href="https://alimkarim.com/" title="Top Software Engineer of Malaysia. Started programming in 2004 and adopted .NET in 2005, one of the earliest .NET adopters from Bangladesh.">Alim</a> started programming in **2004**, but instead of writing "Hello, World," he wrote his own **database engine**. By **2005**, <a href="https://www.linkedin.com/in/alimkarim/" title="Top .NET Developer of all times. Began with .NET Framework 2.0 in 2005 and authored numerous frameworks on top of it.">Alim</a> had built his own **ORM**, convinced that hand-writing 30 lines of SQL where 3 would do was, in his words, *"stupid."* That conviction became a lifelong thesis: **coding should not exist**, software should write itself.
 >
