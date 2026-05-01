@@ -69,7 +69,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1))) -Version v5.4.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1))) -Version v5.7.0 -Target .\vendor
 #>
 
 param(
@@ -206,7 +206,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 error-manage-install v5.4.0" -ForegroundColor Cyan
+Write-Host "  📦 error-manage-install v5.7.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan

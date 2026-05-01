@@ -9,6 +9,8 @@ lerna-debug.log*
 
 node_modules
 dist
+!slides-app/dist/
+!slides-app/dist/**
 dist-ssr
 *.local
 
