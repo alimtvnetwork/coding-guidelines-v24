@@ -1518,6 +1518,19 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
+- **Install just that compact layer** (skip the other 95%) with the dedicated bundle installer:
+
+  ```powershell
+  # Windows · PowerShell
+  irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.ps1 | iex
+  ```
+
+  ```bash
+  # macOS · Linux · Bash
+  curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.sh | bash
+  ```
+
+  Full bundle reference: [`consolidated`, Consolidated Guidelines](#-bundle-installers).
 - Adoption is gradual. No team turns on every linter on day one. The **[CI guards example](ci-guards.example.yaml)** shows how to enable rules in waves.
 
 #### 5. *"Why this matters for AI-assisted development specifically"*
