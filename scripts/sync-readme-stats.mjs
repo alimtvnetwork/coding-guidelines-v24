@@ -12,6 +12,15 @@
 //   <!-- STAMP:FOLDERS -->...<!-- /STAMP:FOLDERS -->
 //   <!-- STAMP:LINES -->...<!-- /STAMP:LINES -->
 //   <!-- STAMP:BADGES -->...<!-- /STAMP:BADGES -->
+//   <!-- STAMP:PLATFORM_BADGES -->...<!-- /STAMP:PLATFORM_BADGES -->
+//
+// SINGLE-SOURCE BADGE REGISTRY
+// ----------------------------
+// All badge visibility (enabled true/false) AND placement (row + order)
+// is controlled by the BADGE_REGISTRY array below. To hide a badge, set
+// enabled:false. To move a badge between rows, change `row`. Order in
+// the array determines render order within each row. This is the only
+// place either concept is configured — no parallel lists, no overrides.
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -19,6 +28,10 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const VERSION_PATH = resolve(ROOT, "version.json");
+const HEALTH_PATH = resolve(ROOT, "public/health-score.json");
+const REPO = "alimtvnetwork/coding-guidelines-v20";
+
+// ---------- data loaders ----------
 
 function loadStats() {
   const raw = JSON.parse(readFileSync(VERSION_PATH, "utf8"));
@@ -31,11 +44,15 @@ function loadStats() {
   };
 }
 
-const HEALTH_PATH = resolve(ROOT, "public/health-score.json");
 function loadHealth() {
   if (!existsSync(HEALTH_PATH)) return { overallScore: null, grade: null, blindAiAudit: { score: null } };
   return JSON.parse(readFileSync(HEALTH_PATH, "utf8"));
 }
+
+// ---------- shared rendering primitive ----------
+
+const escDash = (v) => String(v).replace(/-/g, "--");
+const enc = (v) => encodeURIComponent(escDash(v));
 
 // GitHub disables markdown processing inside block-level HTML (e.g. our
 // centered <p align="center"> hero blocks). We therefore emit raw HTML
@@ -45,42 +62,69 @@ function htmlBadge({ alt, src, href }) {
   return `<a href="${href}"><img alt="${alt}" src="${src}"/></a>`;
 }
 
-function buildBadges(s) {
-  const repo = "alimtvnetwork/coding-guidelines-v20";
-  const escDash = (v) => String(v).replace(/-/g, "--");
-  const enc = (v) => encodeURIComponent(escDash(v));
-  return [
-    htmlBadge({ alt: "Version", src: `https://img.shields.io/badge/version-${enc(s.version)}-3B82F6?style=flat-square`, href: `https://github.com/${repo}/releases` }),
-    htmlBadge({ alt: "License", src: "https://img.shields.io/badge/license-MIT-22C55E?style=flat-square", href: "LICENSE" }),
-    htmlBadge({ alt: "AI Ready", src: "https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square", href: "llm.md" }),
-  ].join(" ");
+function healthColor(score) {
+  if (score == null) return "EF4444";
+  if (score >= 90) return "22C55E";
+  if (score >= 75) return "F59E0B";
+  return "EF4444";
 }
 
-function buildPlatformBadges() {
-  const repo = "alimtvnetwork/coding-guidelines-v20";
-  const health = loadHealth();
+// ---------- single-source badge registry ----------
+// Every badge — visibility AND placement — is declared here.
+// `row`: "hero" (STAMP:BADGES) | "platform" (STAMP:PLATFORM_BADGES)
+// `enabled`: false hides the badge from the README entirely
+// Order in the array = render order within its row.
+
+function buildRegistry(stats, health) {
+  const auditScore = health.blindAiAudit?.score != null
+    ? `${health.blindAiAudit.score}%2F100`
+    : "unknown";
   const healthLabel = health.overallScore != null
     ? `${health.overallScore}%2F100%20(${health.grade})`
     : "unknown";
-  const healthColor = (health.overallScore ?? 0) >= 90 ? "22C55E"
-    : (health.overallScore ?? 0) >= 75 ? "F59E0B" : "EF4444";
-  const auditScore = health.blindAiAudit?.score != null ? `${health.blindAiAudit.score}%2F100` : "unknown";
   return [
-    htmlBadge({ alt: "Languages", src: "https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square", href: "spec/02-coding-guidelines/" }),
-    htmlBadge({ alt: "Platform", src: "https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square", href: "#-bundle-installers" }),
-    htmlBadge({ alt: "Health Score", src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor}?style=flat-square`, href: "public/health-score.json" }),
-    htmlBadge({ alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`, href: "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md" }),
-    htmlBadge({ alt: "PRs Welcome", src: "https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square", href: "#-contributing" }),
-  ].join(" ");
+    { id: "version", row: "hero", enabled: true,
+      alt: "Version", src: `https://img.shields.io/badge/version-${enc(stats.version)}-3B82F6?style=flat-square`,
+      href: `https://github.com/${REPO}/releases` },
+    { id: "license", row: "hero", enabled: true,
+      alt: "License", src: "https://img.shields.io/badge/license-MIT-22C55E?style=flat-square",
+      href: "LICENSE" },
+    { id: "ai-ready", row: "hero", enabled: true,
+      alt: "AI Ready", src: "https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square",
+      href: "llm.md" },
+    { id: "languages", row: "platform", enabled: true,
+      alt: "Languages", src: "https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square",
+      href: "spec/02-coding-guidelines/" },
+    { id: "platform", row: "platform", enabled: true,
+      alt: "Platform", src: "https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square",
+      href: "#-bundle-installers" },
+    { id: "health", row: "platform", enabled: true,
+      alt: "Health Score", src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor(health.overallScore)}?style=flat-square`,
+      href: "public/health-score.json" },
+    { id: "blind-audit", row: "platform", enabled: true,
+      alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`,
+      href: "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md" },
+    { id: "prs", row: "platform", enabled: true,
+      alt: "PRs Welcome", src: "https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square",
+      href: "#-contributing" },
+  ];
 }
+
+function renderRow(registry, rowName) {
+  return registry
+    .filter((b) => b.enabled && b.row === rowName)
+    .map((b) => htmlBadge({ alt: b.alt, src: b.src, href: b.href }))
+    .join(" ");
+}
+
+// ---------- stamp replacement ----------
 
 function replaceMarker(body, key, value) {
   const re = new RegExp(`<!-- STAMP:${key} -->[\\s\\S]*?<!-- /STAMP:${key} -->`, "g");
-  const replacement = `<!-- STAMP:${key} -->${value}<!-- /STAMP:${key} -->`;
-  return body.replace(re, replacement);
+  return body.replace(re, `<!-- STAMP:${key} -->${value}<!-- /STAMP:${key} -->`);
 }
 
-function stampFile(relPath, stats) {
+function stampFile(relPath, stats, registry) {
   const path = resolve(ROOT, relPath);
   if (!existsSync(path)) return false;
   const before = readFileSync(path, "utf8");
@@ -90,17 +134,27 @@ function stampFile(relPath, stats) {
   after = replaceMarker(after, "FILES", String(stats.files));
   after = replaceMarker(after, "FOLDERS", String(stats.folders));
   after = replaceMarker(after, "LINES", stats.lines.toLocaleString());
-  after = replaceMarker(after, "BADGES", buildBadges(stats));
-  after = replaceMarker(after, "PLATFORM_BADGES", buildPlatformBadges());
+  after = replaceMarker(after, "BADGES", renderRow(registry, "hero"));
+  after = replaceMarker(after, "PLATFORM_BADGES", renderRow(registry, "platform"));
   if (after === before) return false;
   writeFileSync(path, after);
   return true;
 }
 
+function logRegistry(registry) {
+  const visible = registry.filter((b) => b.enabled);
+  const hidden = registry.filter((b) => !b.enabled);
+  const heroCount = visible.filter((b) => b.row === "hero").length;
+  const platformCount = visible.filter((b) => b.row === "platform").length;
+  console.log(`[sync-readme-stats] badges visible=${visible.length} (hero=${heroCount}, platform=${platformCount}) hidden=${hidden.length}`);
+}
+
 function main() {
   const stats = loadStats();
+  const registry = buildRegistry(stats, loadHealth());
+  logRegistry(registry);
   const targets = ["readme.md", "docs/architecture.md", "docs/principles.md", "docs/author.md"];
-  const changed = targets.filter((t) => stampFile(t, stats));
+  const changed = targets.filter((t) => stampFile(t, stats, registry));
   console.log(`[sync-readme-stats] v${stats.version} files=${stats.files} folders=${stats.folders} lines=${stats.lines.toLocaleString()}`);
   console.log(`[sync-readme-stats] stamped: ${changed.length ? changed.join(", ") : "(none — markers absent or already current)"}`);
 }
