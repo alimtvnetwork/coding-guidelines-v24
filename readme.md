@@ -487,6 +487,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-run-commands">Run Commands</a> ·
   <a href="#-core-development-principles">Core Development Principles</a> ·
   <a href="#-code-red-rules">CODE-RED Rules</a> ·
+  <a href="#-compact-rule-set-13-hard-rules">Compact Rule Set</a> ·
   <a href="#-real-world-example-code-red-violations">Real-world Code Red Violations</a> ·
   <a href="#spec-references">Spec References</a> ·
   <a href="#-error-management-summary">Error Management Summary</a> ·
@@ -674,6 +675,38 @@ npm run migrate:repo:dry
 4. **Error architecture** → [`spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/`](spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/), `apperror` constructors and `apperrtype` enum registry.
 5. **AI quick reference** → [`spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md`](spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md), sub-200-line distillation for AI context windows.
 6. **Linters** → [`linter-scripts/`](linter-scripts/), automated enforcement that mirrors the rules above.
+
+---
+
+<h2 align="center">📦 Compact Rule Set, 13 Hard Rules</h2>
+
+<p align="center">
+  Want the <strong>absolute minimum</strong>? The entire ruleset is distilled into one file:<br/>
+  <a href="./.lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
+  Drop it into Lovable, Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
+</p>
+
+<p align="center">
+  <em>The consolidated layer is intentionally compact, only <strong>33 files</strong> in <a href="spec/17-consolidated-guidelines/"><code>spec/17-consolidated-guidelines/</code></a>, ~5% of the repo, covering 100% of the enforceable rule classes.</em>
+</p>
+
+**Hard Rules (verbatim from the compact file):**
+
+1. Functions ≤ 8 lines (hard cap; split otherwise).
+2. No nested `if` statements.
+3. `if` conditions must be positive and simple, no negations, no `!`.
+4. Follow Boolean naming guidelines: prefix with `is` or `has`. Never use negative booleans.
+5. Use proper, narrow types. Never `any`, `unknown`, `interface{}`, or any wide-range catch-all type. `Generic<T>` is the only exception.
+6. No swallowed errors. Every `catch` must log per the project logging guidelines.
+7. Files / classes ≤ 80 to 100 lines max.
+8. No magic strings or numbers, use Enums or Constants.
+9. Definitions live in their own dedicated files, not inline.
+10. Keep code DRY, reusability is the highest-priority concern.
+11. React/TypeScript components must be as small and reusable as possible. For multi-component features, plan first and produce a Mermaid component diagram.
+12. Use Enums (typed) for any `Type`, `Kind`, `Status`, `Category` field.
+13. If a `spec/**/error-manage/` folder exists, every error handler MUST follow those guidelines exactly. No exceptions.
+
+**Plus a Data & Schema layer (8 rules)** and an **Error & Logging layer (3 rules)** in the same file. Total surface area: one file, three sections, full coverage for any AI agent's system prompt.
 
 ---
 
@@ -1444,6 +1477,8 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
 - For humans: the **[QUICKSTART.md](QUICKSTART.md)**, the **10 CODE-RED rules**, and **[`docs/principles.md`](docs/principles.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
+- **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
+- **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
 - Adoption is gradual. No team turns on every linter on day one. The **[CI guards example](ci-guards.example.yaml)** shows how to enable rules in waves.
 
 #### 5. *"Why this matters for AI-assisted development specifically"*
