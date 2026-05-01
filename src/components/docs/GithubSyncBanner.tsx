@@ -7,7 +7,7 @@
  *  - The "last updated" date from `version.json`.
  *  - The local "last loaded" timestamp for the current session.
  *
- * Lovable's GitHub integration is bidirectional and automatic, so any commit
+ * The GitHub integration is bidirectional and automatic, so any commit
  * that reaches the connected repo is reflected in the next build. This banner
  * surfaces that state instead of leaving the user guessing.
  */
@@ -16,7 +16,7 @@ import { CheckCircle2, GitBranch, X, RefreshCw } from "lucide-react";
 import versionData from "../../../version.json";
 import { isClosed, isOpen } from "@/constants/boolFlags";
 
-const DISMISS_STORAGE_KEY = "lovable.github-sync-banner.dismissed-sha";
+const DISMISS_STORAGE_KEY = "github-sync-banner.dismissed-sha";
 const RELOAD_DELAY_MS = 100;
 
 interface VersionGit {
