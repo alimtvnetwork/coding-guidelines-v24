@@ -1444,6 +1444,8 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
 - For humans: the **[QUICKSTART.md](QUICKSTART.md)**, the **10 CODE-RED rules**, and **[`docs/principles.md`](docs/principles.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
+- **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
+- **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
 - Adoption is gradual. No team turns on every linter on day one. The **[CI guards example](ci-guards.example.yaml)** shows how to enable rules in waves.
 
 #### 5. *"Why this matters for AI-assisted development specifically"*
