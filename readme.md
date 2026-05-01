@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.5.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.7.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.7.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.7.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-02<!-- /STAMP:UPDATED -->
 </p>
 <!-- STAMP:FILES -->622<!-- /STAMP:FILES -->
 <!-- STAMP:LINES -->133,880<!-- /STAMP:LINES -->
@@ -1524,9 +1524,9 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
 > **Reference reviews:**
 > - [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
-> - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response).
+> - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response). Original ChatGPT share link: [chatgpt.com/s/t_69f4edc897d481918482893df897c9da](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da). Repository under review: [github.com/alimtvnetwork/coding-guidelines-v20](https://github.com/alimtvnetwork/coding-guidelines-v20).
 >
-> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Full review: [`docs/chatgpt-review.md`](docs/chatgpt-review.md).
+> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Full review: [`docs/chatgpt-review.md`](docs/chatgpt-review.md) · Original share: [ChatGPT link](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da) · Repo: [coding-guidelines-v20](https://github.com/alimtvnetwork/coding-guidelines-v20).
 
 <p align="center">
   <a href="https://gemini.google.com/share/775a9b85bbb8">

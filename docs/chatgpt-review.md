@@ -2,6 +2,7 @@
 
 > **Reviewer:** ChatGPT (OpenAI)
 > **Subject:** [`alimtvnetwork/coding-guidelines-v20`](https://github.com/alimtvnetwork/coding-guidelines-v20)
+> **Original ChatGPT share link:** <https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da>
 > **Type:** Independent, neutral third-party AI assessment of the repository, the author's apparent experience, and the system's fitness for AI-assisted code writing.
 
 This page reproduces the prompt sent to ChatGPT and ChatGPT's full unedited response, so future reviewers (human or AI) can audit the assessment against the live repository.
