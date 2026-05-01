@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Animated preview of the Code-Red Review slide deck.
+  Renders inline on github.com (SVG <style> with @keyframes is supported).
+  Each "slide" is a layered <g>; opacity cycles via staggered keyframe
+  timing so visitors see the deck rotating without leaving the README.
+  Source-of-truth deck: ../slides-app/  (built via `bun run ship`).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img"
+     aria-label="Animated preview of the Code-Red Review slide deck — cycling through four slides">
+  <title>Code-Red Review Slide Deck — Animated Preview</title>
+  <desc>Four representative slides from the Code-Red Review training deck cycle every three seconds: title, nested-if-else refactor, function metrics, and zero-nesting closing.</desc>
+
+  <defs>
+    <!-- Backdrop gradient mirrors the deck's --bg / --bg-raised tokens. -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f17"/>
+      <stop offset="100%" stop-color="#11182b"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <style><![CDATA[
+      :root {
+        --fg: #e6edf7;
+        --muted: #94a3b8;
+        --primary: #3b82f6;
+        --accent: #22d3ee;
+        --good: #4ade80;
+        --bad: #f87171;
+        --code-bg: #0d1117;
+        --border: #1f2a44;
+      }
+      .frame { fill: url(#bgGrad); stroke: #1f2a44; stroke-width: 2; rx: 18; }
+      .panel { fill: #0d1117; stroke: #1f2a44; stroke-width: 1.5; rx: 12; }
+      .pill  { fill: #1e293b; rx: 14; }
+      .eyebrow { font: 700 18px ui-sans-serif, system-ui, sans-serif;
+                 fill: #3b82f6; letter-spacing: 0.32em; text-transform: uppercase; }
+      .h1     { font: 700 56px ui-sans-serif, system-ui, sans-serif; fill: #e6edf7; }
+      .h2     { font: 700 42px ui-sans-serif, system-ui, sans-serif; fill: #e6edf7; }
+      .body   { font: 500 22px ui-sans-serif, system-ui, sans-serif; fill: #94a3b8; }
+      .code   { font: 500 20px ui-monospace, "SF Mono", Menlo, monospace; fill: #cbd5e1; }
+      .codeKw { fill: #c084fc; }
+      .codeStr{ fill: #4ade80; }
+      .codeFn { fill: #22d3ee; }
+      .label  { font: 700 18px ui-sans-serif, system-ui, sans-serif; }
+      .labelBad  { fill: #f87171; }
+      .labelGood { fill: #4ade80; }
+      .accent-bar { fill: url(#accentGrad); }
+      .progress { fill: #1f2a44; rx: 4; }
+      .progressFill { fill: url(#accentGrad); rx: 4; }
+
+      /* Cycle: 4 slides × 3s on-screen each + 0.4s crossfade = 12s loop. */
+      @keyframes slide-cycle {
+        0%, 22%   { opacity: 1; transform: translateY(0); }
+        25%, 97%  { opacity: 0; transform: translateY(-8px); }
+        100%      { opacity: 1; transform: translateY(0); }
+      }
+      .slide { opacity: 0; transform-origin: center; transform-box: fill-box;
+               animation: slide-cycle 12s ease-in-out infinite; }
+      .slide-1 { animation-delay:  0s; opacity: 1; }
+      .slide-2 { animation-delay:  3s; }
+      .slide-3 { animation-delay:  6s; }
+      .slide-4 { animation-delay:  9s; }
+
+      /* Subtle pulse on the accent bar so the frame feels alive between slide swaps. */
+      @keyframes barPulse {
+        0%, 100% { opacity: 0.85; }
+        50%      { opacity: 1; }
+      }
+      .accent-bar { animation: barPulse 2.4s ease-in-out infinite; }
+
+      /* Per-word stagger on the title slide headline. */
+      @keyframes wordRise {
+        0%   { opacity: 0; transform: translateY(14px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      .word { transform-box: fill-box; transform-origin: center;
+              animation: wordRise 12s ease-out infinite both; }
+      .word-1 { animation-delay: 0.10s; }
+      .word-2 { animation-delay: 0.22s; }
+      .word-3 { animation-delay: 0.34s; }
+      .word-4 { animation-delay: 0.46s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slide, .word, .accent-bar { animation: none !important; }
+        .slide-1 { opacity: 1 !important; }
+        .slide-2, .slide-3, .slide-4 { opacity: 0 !important; }
+      }
+    ]]></style>
+  </defs>
+
+  <!-- Frame -->
+  <rect class="frame" x="8" y="8" width="1184" height="604"/>
+  <rect class="accent-bar" x="8" y="8" width="1184" height="4" rx="2"/>
+
+  <!-- Browser-like window dots, just for vibes. -->
+  <g transform="translate(40,40)">
+    <circle cx="0"  cy="0" r="7" fill="#f87171"/>
+    <circle cx="22" cy="0" r="7" fill="#fbbf24"/>
+    <circle cx="44" cy="0" r="7" fill="#4ade80"/>
+  </g>
+  <text x="600" y="46" text-anchor="middle" class="body" style="font-size:16px;">
+    coding-guidelines · slide deck preview
+  </text>
+
+  <!-- ========== Slide 1: Title ========== -->
+  <g class="slide slide-1">
+    <text x="600" y="180" text-anchor="middle" class="eyebrow">Code-Red Review Guide</text>
+    <g>
+      <text x="600" y="290" text-anchor="middle" class="h1">
+        <tspan class="word word-1" dx="0">10</tspan>
+        <tspan class="word word-2" dx="18">transformations</tspan>
+      </text>
+      <text x="600" y="360" text-anchor="middle" class="h1" fill="#22d3ee">
+        <tspan class="word word-3" dx="0">that make</tspan>
+        <tspan class="word word-4" dx="14">code reviewable</tspan>
+      </text>
+    </g>
+    <text x="600" y="450" text-anchor="middle" class="body">
+      Md. Alim Ul Karim · Riseup Asia LLC
+    </text>
+    <text x="600" y="500" text-anchor="middle" class="body" style="font-size:18px;opacity:0.7;">
+      Press → to begin
+    </text>
+  </g>
+
+  <!-- ========== Slide 2: Nested-if-else refactor ========== -->
+  <g class="slide slide-2">
+    <text x="80" y="110" class="eyebrow">02 · Nested if/else</text>
+    <text x="80" y="170" class="h2">Zero-nesting refactor</text>
+
+    <!-- Before panel -->
+    <rect class="panel" x="80" y="210" width="510" height="340" stroke="#f87171" stroke-opacity="0.5"/>
+    <text x="100" y="245" class="label labelBad">❌ Before</text>
+    <g transform="translate(100,280)">
+      <text class="code"><tspan class="codeKw">if</tspan> (user) {</text>
+      <text y="32" class="code">  <tspan class="codeKw">if</tspan> (user.active) {</text>
+      <text y="64" class="code">    <tspan class="codeKw">if</tspan> (user.role === <tspan class="codeStr">"admin"</tspan>) {</text>
+      <text y="96" class="code">      <tspan class="codeFn">grant</tspan>(user)</text>
+      <text y="128" class="code">    }</text>
+      <text y="160" class="code">  }</text>
+      <text y="192" class="code">}</text>
+    </g>
+
+    <!-- After panel -->
+    <rect class="panel" x="610" y="210" width="510" height="340" stroke="#4ade80" stroke-opacity="0.6"/>
+    <text x="630" y="245" class="label labelGood">✅ After</text>
+    <g transform="translate(630,280)">
+      <text class="code"><tspan class="codeKw">if</tspan> (!user) <tspan class="codeKw">return</tspan></text>
+      <text y="32" class="code"><tspan class="codeKw">if</tspan> (!user.active) <tspan class="codeKw">return</tspan></text>
+      <text y="64" class="code"><tspan class="codeKw">if</tspan> (user.role !== <tspan class="codeStr">"admin"</tspan>) <tspan class="codeKw">return</tspan></text>
+      <text y="96" class="code"></text>
+      <text y="128" class="code"><tspan class="codeFn">grant</tspan>(user)</text>
+    </g>
+  </g>
+
+  <!-- ========== Slide 3: Function metrics ========== -->
+  <g class="slide slide-3">
+    <text x="80" y="110" class="eyebrow">07 · Function & file metrics</text>
+    <text x="80" y="170" class="h2">8–15 lines per function. Max 300 per file.</text>
+
+    <g transform="translate(80,230)">
+      <!-- Function-length bars -->
+      <text x="0" y="0" class="body" fill="#e6edf7" style="font-weight:700;">Function length</text>
+      <rect x="0"   y="20" width="900" height="14" class="progress"/>
+      <rect x="0"   y="20" width="180" height="14" class="progressFill"/>
+      <text x="920" y="32" class="body">15 lines · ✅</text>
+
+      <rect x="0"   y="60" width="900" height="14" class="progress"/>
+      <rect x="0"   y="60" width="540" height="14" fill="#fbbf24"/>
+      <text x="920" y="72" class="body">45 lines · ⚠️</text>
+
+      <rect x="0"   y="100" width="900" height="14" class="progress"/>
+      <rect x="0"   y="100" width="900" height="14" fill="#f87171"/>
+      <text x="920" y="112" class="body">120 lines · ❌</text>
+
+      <text x="0" y="170" class="body" fill="#e6edf7" style="font-weight:700;">File length (target: &lt; 300)</text>
+      <rect x="0"   y="190" width="900" height="14" class="progress"/>
+      <rect x="0"   y="190" width="270" height="14" class="progressFill"/>
+      <text x="920" y="202" class="body">285 lines · ✅</text>
+
+      <rect x="0"   y="230" width="900" height="14" class="progress"/>
+      <rect x="0"   y="230" width="900" height="14" fill="#f87171"/>
+      <text x="920" y="242" class="body">812 lines · ❌</text>
+    </g>
+  </g>
+
+  <!-- ========== Slide 4: Closing / call to read ========== -->
+  <g class="slide slide-4">
+    <text x="600" y="200" text-anchor="middle" class="eyebrow">12 · Closing</text>
+    <text x="600" y="300" text-anchor="middle" class="h1">Ship code that</text>
+    <text x="600" y="370" text-anchor="middle" class="h1" fill="#22d3ee">reviews itself.</text>
+    <text x="600" y="450" text-anchor="middle" class="body">
+      17 slides · ~12 min read · MIT licensed
+    </text>
+    <g transform="translate(525,490)">
+      <rect class="pill" width="150" height="36"/>
+      <text x="75" y="24" text-anchor="middle" class="body" fill="#e6edf7" style="font-weight:700;">
+        Download ↓
+      </text>
+    </g>
+  </g>
+
+  <!-- Slide indicator dots -->
+  <g transform="translate(600,580)">
+    <circle cx="-30" cy="0" r="4" fill="#3b82f6"/>
+    <circle cx="-10" cy="0" r="4" fill="#1f2a44"/>
+    <circle cx="10"  cy="0" r="4" fill="#1f2a44"/>
+    <circle cx="30"  cy="0" r="4" fill="#1f2a44"/>
+  </g>
+</svg>
