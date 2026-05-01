@@ -735,11 +735,11 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 **Hard Rules (verbatim from the compact file):**
 
-1. Functions ≤ 8 lines (hard cap; split otherwise).
+1. **Function length is tiered, not absolute:** ≤ **8 lines** is the best-practice target, ≤ **15 lines** is the hard cap for normal code (linter CODE-RED past this), and **16–25 lines** is allowed only as an exception with a `# lint-allow: function-length reason="..." max=N` waiver. Anything > 25 requires `framework=true` and is reserved for language/framework-imposed signatures or large `switch`/`match` blocks. See [Function Length Tiers](#-function-length-tiers).
 2. No nested `if` statements.
 3. `if` conditions must be positive and simple, no negations, no `!`.
 4. Follow Boolean naming guidelines: prefix with `is` or `has`. Never use negative booleans.
-5. Use proper, narrow types. Never `any`, `unknown`, `interface{}`, or any wide-range catch-all type. `Generic<T>` is the only exception.
+5. Use proper, narrow types. Avoid `any`, `unknown`, `interface{}`, or any wide-range catch-all type. **Exception:** `unknown` (TS) and `any` are acceptable inside a `catch` block, at trust boundaries (deserializing untrusted JSON), or when interfacing with an external library that returns an untyped value — narrow it immediately with a type guard. The point is to catch type errors at compile time, not to forbid the escape hatch where it is genuinely safer than a forced cast. `Generic<T>` remains the standard tool for parametric types.
 6. No swallowed errors. Every `catch` must log per the project logging guidelines.
 7. Files / classes ≤ 80 to 100 lines max.
 8. No magic strings or numbers, use Enums or Constants.
