@@ -143,6 +143,27 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 
 ### <code>slides</code>, Slides App + Decks
 
+<p align="center">
+  <a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest">
+    <img src="docs/slides-preview.svg" alt="Animated preview of the Code-Red Review slide deck — cycling through four slides" width="720"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest">
+    <img alt="Download the latest deck (zip)" src="https://img.shields.io/badge/download-deck%20.zip%20%28latest%20release%29-3B82F6?style=for-the-badge&logo=files&logoColor=white"/>
+  </a>
+  &nbsp;
+  <a href="slides-app/">
+    <img alt="Build deck from source" src="https://img.shields.io/badge/build%20from%20source-bun%20run%20ship-22D3EE?style=for-the-badge&logo=vite&logoColor=white"/>
+  </a>
+</p>
+
+<p align="center">
+  <sub>17 slides · runs offline by double-clicking <code>index.html</code> · MIT licensed · source under <a href="slides-app/"><code>slides-app/</code></a></sub>
+</p>
+
+
 ### 🪟 Windows · PowerShell
 
 ```powershell
