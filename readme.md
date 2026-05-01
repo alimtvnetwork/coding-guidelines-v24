@@ -91,6 +91,23 @@
 ---
 
 
+<h2 align="center">🧭 Which Path Should I Follow?</h2>
+
+<p align="center"><sub>This repo offers many bundles, installers, and spec layers. Pick the path that matches your role today — you can always graduate to a deeper level later (see <a href="#-adoption-levels">Adoption Levels</a>).</sub></p>
+
+| You are… | Start with | Then add |
+|---|---|---|
+| **Solo developer** | The [10 Practical Rules](#-start-here-10-practical-rules) above + the [Consolidated Guidelines bundle](#consolidated-consolidated-guidelines) | [13 Hard Rules](#-compact-rule-set-13-hard-rules) when you want enforcement |
+| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
+| **Team lead** | The [Linters bundle](#linters-linters--cicd-linter-pack) + the [Error Management spec](#%EF%B8%8F-error-management-summary) | A staged rollout using [`ci-guards.example.yaml`](ci-guards.example.yaml) |
+| **Production maintainer** | The [Full-Repo Install](#%EF%B8%8F-full-repo-install-scripts) + CI integration | Gradual enforcement via the [Adoption Levels](#-adoption-levels) roadmap |
+| **New contributor / reviewer** | The [10 Practical Rules](#-start-here-10-practical-rules) + the [PR Review Checklist](#-pr-review-checklist) | Skim [CODE-RED rules](#-code-red-non-negotiable-rules) before approving |
+
+<p align="center"><sub>Not sure? Start with the 10 Practical Rules and the Consolidated bundle. That alone covers ~80% of the daily value.</sub></p>
+
+---
+
+
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
@@ -642,6 +659,21 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 4. **Error architecture** → [`spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/`](spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/), `apperror` constructors and `apperrtype` enum registry.
 5. **AI quick reference** → [`spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md`](spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md), sub-200-line distillation for AI context windows.
 6. **Linters** → [`linter-scripts/`](linter-scripts/), automated enforcement that mirrors the rules above.
+
+---
+
+<h2 align="center">⚖️ Rule Severity</h2>
+
+<p align="center"><sub>Not every rule is a hard fail. The standard uses four severity levels so teams can adopt strict rules where they matter most and stay flexible elsewhere. Linters and CI exits are mapped to these levels.</sub></p>
+
+| Level | Meaning | Enforcement | Exception allowed? |
+|---|---|---|---|
+| 🔴 **CODE RED** | **Must follow.** Breaking this can create bugs, swallowed errors, hallucinated AI output, or hidden production failures. | Fails CI. Blocks merge. | No, except via the documented [Exception Policy](#-when-you-may-break-a-rule). |
+| 🟠 **WARN** | **Should follow.** Skipping it is usually a smell, but reasonable exceptions exist. | Lints with warning. Reviewer may block. | Yes, with a one-line justification in the PR. |
+| 🟡 **STYLE** | **Improves consistency** across files, teams, and AI output. Teams may adapt. | Lints; non-blocking. | Yes, team-level decision. |
+| 🟢 **BEST PRACTICE** | **Recommended pattern.** Not a strict law — a default that pays off long-term. | Documented; not linted. | Yes, freely. |
+
+<p align="center"><sub>The full taxonomy lives in <a href="spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md"><code>spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md</code></a>. The PR template asks reviewers to label any guideline-skip with the severity above.</sub></p>
 
 ---
 
