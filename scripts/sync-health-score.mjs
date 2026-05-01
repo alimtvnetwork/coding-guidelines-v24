@@ -27,13 +27,22 @@ const AUDIT_PATH = resolve(ROOT, "spec/17-consolidated-guidelines/29-blind-ai-au
 const OUT_PATH = resolve(ROOT, "public/health-score.json");
 
 function readDashboardScore() {
-  if (!existsSync(DASHBOARD_PATH)) return { score: null, grade: null };
+  if (!existsSync(DASHBOARD_PATH)) {
+    return { score: null, grade: null, effectiveScore: null, effectiveGrade: null };
+  }
   const body = readFileSync(DASHBOARD_PATH, "utf8");
-  // Matches both "Overall Health:** 80/100 (B)" and "**Overall Health:** 80/100 (B)"
-  const match = body.match(/Overall Health:\*\*\s*(\d+)\s*\/\s*100\s*\(([A-F][+-]?)\)/i)
+  // Raw "Overall Health: 80/100 (B)"
+  const raw = body.match(/Overall Health:\*\*\s*(\d+)\s*\/\s*100\s*\(([A-F][+-]?)\)/i)
     || body.match(/Overall Health:\s*(\d+)\s*\/\s*100\s*\(([A-F][+-]?)\)/i);
-  if (!match) return { score: null, grade: null };
-  return { score: Number(match[1]), grade: match[2] };
+  // Effective (waived) "Effective Score | **100/100 (A+) after waiver**"
+  const eff = body.match(/Effective Score\s*\|\s*\*\*\s*(\d+)\s*\/\s*100\s*\(([A-F][+-]?)\)/i)
+    || body.match(/Effective Score[^|]*\|\s*(\d+)\s*\/\s*100\s*\(([A-F][+-]?)\)/i);
+  return {
+    score: raw ? Number(raw[1]) : null,
+    grade: raw ? raw[2] : null,
+    effectiveScore: eff ? Number(eff[1]) : null,
+    effectiveGrade: eff ? eff[2] : null,
+  };
 }
 
 function readAuditScores() {
@@ -62,6 +71,8 @@ function buildPayload() {
     version: v.version,
     overallScore: dash.score ?? 100,
     grade: dash.grade ?? "A+",
+    effectiveScore: dash.effectiveScore ?? dash.score ?? 100,
+    effectiveGrade: dash.effectiveGrade ?? dash.grade ?? "A+",
     totals: {
       files: v.stats?.totalFiles ?? 0,
       folders: v.stats?.totalFolders ?? 0,
@@ -86,7 +97,8 @@ function main() {
   const payload = buildPayload();
   writeOutput(payload);
   console.log(
-    `[sync-health-score] v${payload.version} dashboard=${payload.overallScore}/100 (${payload.grade}) ` +
+    `[sync-health-score] v${payload.version} raw=${payload.overallScore}/100 (${payload.grade}) ` +
+    `effective=${payload.effectiveScore}/100 (${payload.effectiveGrade}) ` +
     `audit=${payload.blindAiAudit.score}/100 → public/health-score.json`,
   );
 }

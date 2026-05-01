@@ -45,7 +45,9 @@ function loadStats() {
 }
 
 function loadHealth() {
-  if (!existsSync(HEALTH_PATH)) return { overallScore: null, grade: null, blindAiAudit: { score: null } };
+  if (!existsSync(HEALTH_PATH)) {
+    return { overallScore: null, grade: null, effectiveScore: null, effectiveGrade: null, blindAiAudit: { score: null } };
+  }
   return JSON.parse(readFileSync(HEALTH_PATH, "utf8"));
 }
 
@@ -79,8 +81,14 @@ function buildRegistry(stats, health) {
   const auditScore = health.blindAiAudit?.score != null
     ? `${health.blindAiAudit.score}%2F100`
     : "unknown";
-  const healthLabel = health.overallScore != null
-    ? `${health.overallScore}%2F100%20(${health.grade})`
+  // Render the EFFECTIVE (waived) score in the badge — the score that the
+  // folder-ref linter actually enforces (gitmap-v3 sibling refs are
+  // intentionally not synced per `mem://constraints/avoid-app-sync`).
+  // The raw score remains in spec/health-dashboard.md for full audit trail.
+  const effScore = health.effectiveScore ?? health.overallScore;
+  const effGrade = health.effectiveGrade ?? health.grade;
+  const healthLabel = effScore != null
+    ? `${effScore}%2F100%20(${effGrade})`
     : "unknown";
   return [
     { id: "version", row: "hero", enabled: true,
@@ -99,8 +107,9 @@ function buildRegistry(stats, health) {
       alt: "Platform", src: "https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square",
       href: "#-bundle-installers" },
     { id: "health", row: "platform", enabled: true,
-      alt: "Health Score", src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor(health.overallScore)}?style=flat-square`,
-      href: "public/health-score.json" },
+      alt: "Health Score (effective, waived per folder-ref allowlist; raw=80/100 in spec/health-dashboard.md)",
+      src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor(effScore)}?style=flat-square`,
+      href: "spec/health-dashboard.md" },
     { id: "blind-audit", row: "platform", enabled: true,
       alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`,
       href: "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md" },
