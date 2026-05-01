@@ -811,6 +811,7 @@ function handleSignup(req) {
   const data = parseSignup(req);
   const valid = validateSignup(data);
   const user = persistUser(valid);
+
   return notifyUser(user);
 }
 ````
