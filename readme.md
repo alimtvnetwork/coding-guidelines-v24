@@ -796,7 +796,6 @@ if err != nil { return nil, err }
 // 🟢 Good — wrapped with operation + input, typed error
 data, readErr := readFile(path)
 if readErr != nil {
-
     return apperror.WrapTypeMsg(readErr, apperrtype.ReadFile, "path", path)
 }
 ````
