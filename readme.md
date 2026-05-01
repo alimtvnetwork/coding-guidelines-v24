@@ -27,7 +27,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FILES -->622<!-- /STAMP:FILES --> spec files · <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · <!-- STAMP:LINES -->133,880<!-- /STAMP:LINES --> lines · v<!-- STAMP:VERSION -->5.3.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FILES --><!-- /STAMP:FILES --><!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders <!-- STAMP:LINES --><!-- /STAMP:LINES --> · v<!-- STAMP:VERSION -->5.3.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
 </p>
 
 ---
