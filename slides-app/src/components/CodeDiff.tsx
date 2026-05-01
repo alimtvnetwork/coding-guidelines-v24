@@ -53,17 +53,16 @@ export function CodeDiff({
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      codeToHtml(before, { lang: language, theme: "github-dark" }),
-      codeToHtml(after, { lang: language, theme: "github-dark" }),
-    ]).then(([b, a]) => {
+    getHighlighter().then((hl) => {
       if (cancelled) return;
-      setBeforeHtml(b);
-      setAfterHtml(a);
+      const opts = { lang: "typescript", theme: "github-dark" };
+      setBeforeHtml(hl.codeToHtml(before, opts));
+      setAfterHtml(hl.codeToHtml(after, opts));
     });
     return () => {
       cancelled = true;
     };
+    // `language` is intentionally not used: only TypeScript is bundled to keep dist <8 MB.
   }, [before, after, language]);
 
   const isStacked = layout === "stacked";
