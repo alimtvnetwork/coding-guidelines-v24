@@ -21,6 +21,10 @@
 </p>
 
 <p align="center">
+  <sub><strong>In plain words:</strong> a practical coding standard for teams and AI coding tools. It focuses on clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development. Pick the level that fits you (see <a href="#-adoption-levels">Adoption Levels</a>) and grow from there.</sub>
+</p>
+
+<p align="center">
   <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.5.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
