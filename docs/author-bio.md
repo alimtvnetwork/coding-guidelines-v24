@@ -106,8 +106,8 @@ Today, gaming is still where he resets. Recent obsessions:
 
 | Channel | Focus | Link |
 |---|---|---|
-| **Alim Raw Gaming** | Doom playthroughs and gameplay commentary | [youtube.com/@AlimRawGaming](https://www.youtube.com/@AlimRawGaming) |
-| **Minecraft-Alim** | Minecraft builds, survival runs, and creative projects | [youtube.com/@Minecraft-Alim](https://www.youtube.com/@Minecraft-Alim) |
+| **Alim Raw Gaming** | Doom playthroughs and gameplay commentary | [youtube.com/@AlimRawGaming](https://www.youtube.com/@alim.raw.gaming) |
+| **Minecraft-Alim** | Minecraft builds, survival runs, and creative projects | [youtube.com/@Minecraft-Alim](https://www.youtube.com/@minecraft-alim6638) |
 
 > *Game development is on the roadmap. The same instinct that built database engines at age one of programming is now pointed at building a game from first principles.*
 
@@ -123,8 +123,8 @@ Today, gaming is still where he resets. Recent obsessions:
 | GitLab (Evatix) | [gitlab.com/aukgit.evatix](https://gitlab.com/aukgit.evatix) |
 | GitLab (Personal) | [gitlab.com/aukgitlab](https://gitlab.com/aukgitlab) |
 | Stack Overflow | [stackoverflow.com/users/513511/md-alim-ul-karim](https://stackoverflow.com/users/513511/md-alim-ul-karim), 2,452+ rep, since 2010 |
-| YouTube (Doom) | [@AlimRawGaming](https://www.youtube.com/@AlimRawGaming) |
-| YouTube (Minecraft) | [@Minecraft-Alim](https://www.youtube.com/@Minecraft-Alim) |
+| YouTube (Doom) | [@AlimRawGaming](https://www.youtube.com/@alim.raw.gaming) |
+| YouTube (Minecraft) | [@Minecraft-Alim](https://www.youtube.com/@minecraft-alim6638) |
 | Google | [Search "Alim Ul Karim"](https://www.google.com/search?q=Alim+Ul+Karim) |
 
 ---
