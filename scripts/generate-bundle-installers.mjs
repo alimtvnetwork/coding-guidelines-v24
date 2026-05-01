@@ -798,12 +798,58 @@ if ($MaxFixRepoLogs -lt 0) {
 # to know about Get-Help. Print to stdout and exit 0 BEFORE any side
 # effects (no folder creation, no banner, no download).
 if ($Help) {
-    Get-Help $PSCommandPath -Full
-    exit 0
+    try { Get-Help $PSCommandPath -Full } catch { Write-Host (Get-Content -LiteralPath $PSCommandPath -ErrorAction SilentlyContinue | Select-Object -First 100) }
+    return
 }
 
+# ── Crash-safe execution wrapper (iex-friendly) ───────────────────
+# The script is commonly invoked as:  irm <url> | iex
+# In that mode the script body runs INSIDE the caller's PowerShell
+# session, so any \`exit <n>\` would terminate the host terminal and
+# any uncaught exception would surface as a red wall of text with
+# no log trail. We:
+#   1. Save the caller's $ErrorActionPreference and restore it on exit.
+#   2. Route every fatal condition through Stop-Install, which writes
+#      a crash log under \$env:TEMP\\lovable-installer-logs\\ and
+#      throws a tagged exception we can swallow at the outer catch.
+#   3. Wrap the entire main body in a single try/catch that prints a
+#      friendly summary + log path and \`return\`s without killing the
+#      host (no \`exit\` calls reach the caller's session).
+$Script:__PriorErrorActionPreference = $ErrorActionPreference
+$Script:__PriorProgressPreference    = $ProgressPreference
 $ErrorActionPreference = "Stop"
-$ProgressPreference = "SilentlyContinue"
+$ProgressPreference    = "SilentlyContinue"
+
+$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "lovable-installer-logs"
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+$Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("${bundle.name}-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
+
+function Write-InstallLog {
+    param([string]$Line)
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+}
+
+# Header always written so the log is useful even on early failures.
+Write-InstallLog "# ${bundle.name}-install crash log"
+Write-InstallLog ("# started: " + (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))
+Write-InstallLog ("# pwsh:    " + $PSVersionTable.PSEdition + " " + $PSVersionTable.PSVersion)
+Write-InstallLog ("# os:      " + [System.Runtime.InteropServices.RuntimeInformation]::OSDescription)
+Write-InstallLog ("# cwd:     " + (Get-Location).Path)
+Write-InstallLog "# ────────────────────────────────────────────────"
+
+function Restore-CallerPreferences {
+    if ($null -ne $Script:__PriorErrorActionPreference) { $ErrorActionPreference = $Script:__PriorErrorActionPreference }
+    if ($null -ne $Script:__PriorProgressPreference)    { $ProgressPreference    = $Script:__PriorProgressPreference }
+}
+
+function Stop-Install {
+    param([int]$Code = 1, [string]$Message = "")
+    Write-InstallLog ("[stop-install] code=" + $Code + " message=" + $Message)
+    if ($Message) { Write-Host $Message -ForegroundColor Red }
+    # Tagged exception so the outer catch can format a single, friendly tail.
+    throw [System.Management.Automation.RuntimeException]::new("__INSTALL_STOP__|$Code|$Message")
+}
+
 
 $BundleName = "${bundle.name}"
 $BundleMapping = "${mappingPairs}"
