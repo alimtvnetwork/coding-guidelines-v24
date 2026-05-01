@@ -91,6 +91,23 @@
 ---
 
 
+<h2 align="center">🧭 Which Path Should I Follow?</h2>
+
+<p align="center"><sub>This repo offers many bundles, installers, and spec layers. Pick the path that matches your role today — you can always graduate to a deeper level later (see <a href="#-adoption-levels">Adoption Levels</a>).</sub></p>
+
+| You are… | Start with | Then add |
+|---|---|---|
+| **Solo developer** | The [10 Practical Rules](#-start-here-10-practical-rules) above + the [Consolidated Guidelines bundle](#consolidated-consolidated-guidelines) | [13 Hard Rules](#-compact-rule-set-13-hard-rules) when you want enforcement |
+| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
+| **Team lead** | The [Linters bundle](#linters-linters--cicd-linter-pack) + the [Error Management spec](#%EF%B8%8F-error-management-summary) | A staged rollout using [`ci-guards.example.yaml`](ci-guards.example.yaml) |
+| **Production maintainer** | The [Full-Repo Install](#%EF%B8%8F-full-repo-install-scripts) + CI integration | Gradual enforcement via the [Adoption Levels](#-adoption-levels) roadmap |
+| **New contributor / reviewer** | The [10 Practical Rules](#-start-here-10-practical-rules) + the [PR Review Checklist](#-pr-review-checklist) | Skim [CODE-RED rules](#-code-red-non-negotiable-rules) before approving |
+
+<p align="center"><sub>Not sure? Start with the 10 Practical Rules and the Consolidated bundle. That alone covers ~80% of the daily value.</sub></p>
+
+---
+
+
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
