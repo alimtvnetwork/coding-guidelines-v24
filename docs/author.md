@@ -5,6 +5,10 @@
 
 ## About the Author
 
+### Who is [Md. Alim Ul Karim](https://alimkarim.com/)?
+
+[Md. Alim Ul Karim](https://alimkarim.com/) is a Software Architect and framework inventor with **20+ years** of professional experience across enterprise-scale systems. He is currently **Chief Software Engineer at [Riseup Asia LLC](https://riseup-asia.com/)**, where he leads developer-tooling and AI-workflow research designed to make repetitive engineering obsolete. His stack spans **.NET/C# (18+ years), JavaScript (10+ years), TypeScript (6+ years), and Golang (4+ years)**, and he is recognized as a **Top 1% talent at Crossover**, one of the earliest .NET adopters from Bangladesh (2005), and today a leading software engineer based in Malaysia.
+
 **Md. Alim Ul Karim**
 **Designation:** Chief Software Engineer, [Riseup Asia LLC](https://riseup-asia.com/)
 
