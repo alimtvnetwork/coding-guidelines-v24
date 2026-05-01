@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="public/health-score.json"><img alt="Health Score" src="https://img.shields.io/badge/health-80%2F100%20(B)-F59E0B?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a> <a href="https://lovable.dev"><img alt="Made With Lovable" src="https://img.shields.io/badge/made%20with-Lovable-FF6E3C?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
+  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="public/health-score.json"><img alt="Health Score" src="https://img.shields.io/badge/health-80%2F100%20(B)-F59E0B?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
 </p>
 
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
@@ -195,7 +195,7 @@ Every installer below copies the listed **folders** (recursively, preserving str
 > Notes:
 > - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
-> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other Lovable folders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
 
