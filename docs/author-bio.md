@@ -41,7 +41,7 @@ But the failure mattered more than the attempt. <a href="https://gitlab.com/aukg
 
 Those frameworks, and the discipline behind them, are what eventually earned <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim" title="Framework inventor. Built multiple production frameworks on .NET Framework 2.0 starting 2005.">Alim</a> recognition as a **top 1% talent at [Crossover](https://www.crossover.com/)**, the global staff-augmentation platform that vets engineers against a worldwide candidate pool.
 
-Today, <a href="https://www.google.com/search?q=Alim+Ul+Karim" title="Top engineer in Malaysia. 20+ years writing code, 20+ years writing .NET.">Alim</a> is known across his network for authoring **several production frameworks** used in AdTech, enterprise SaaS, and developer tooling, and for maintaining the cross-language coding standards encoded in this very repository.
+Today, <a href="https://www.google.com/search?q=Alim+Ul+Karim" title="Top engineer in Malaysia. 20 years writing code, 15 years of professional engineering experience.">Alim</a> is known across his network for authoring **several production frameworks** used in AdTech, enterprise SaaS, and developer tooling, and for maintaining the cross-language coding standards encoded in this very repository.
 
 ---
 
@@ -53,7 +53,7 @@ Today, <a href="https://www.google.com/search?q=Alim+Ul+Karim" title="Top engine
 | **2005** | Built his first ORM, motivated by the belief that SQL boilerplate is unnecessary. |
 | **2010** | Joined [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim), active contributor with 2,452+ reputation. |
 | **2010s** | Recognized as a **top 1% talent at [Crossover](https://www.crossover.com/)**, working across AdTech and enterprise platforms. |
-| **20+ yrs** | Deep specialization in **.NET/C# (13+ yrs)**, **JavaScript (12+ yrs)**, **VB.NET (8+ yrs)**, **TypeScript (7+ yrs)**, **Golang (6+ yrs and continuing)**. |
+| **20 yrs coding · 15 yrs pro** | Deep specialization in **.NET/C# (13+ yrs)**, **JavaScript (12+ yrs)**, **VB.NET (8+ yrs)**, **TypeScript (7+ yrs)**, **Golang (6+ yrs and continuing)**. |
 | **Today** | **Chief Software Engineer at [Riseup Asia LLC](https://riseup-asia.com/)**, author of this cross-language coding-standards system. |
 
 ---
