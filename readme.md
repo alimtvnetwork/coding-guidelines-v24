@@ -970,12 +970,15 @@ func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) app
 func (handler *PluginHandler) EnablePlugin(siteId string, pluginSlug string) apperror.BoolResult {
     site := handler.siteRepo.FindById(siteId)
     siteWasNotFound := site == nil
+
     if siteWasNotFound {
         return apperror.FailBool(apperror.SiteError(apperrtype.SiteNotFound, siteId))
     }
+
     if site.IsBlocked {
         return apperror.FailBool(apperror.SiteError(apperrtype.SiteBlocked, siteId))
     }
+
     if slug.IsMissing(pluginSlug) {
         return apperror.FailBool(apperror.SlugError(apperrtype.PluginSlugMissing, pluginSlug))
     }
