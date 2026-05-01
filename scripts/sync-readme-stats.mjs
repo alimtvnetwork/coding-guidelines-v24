@@ -71,7 +71,6 @@ function buildPlatformBadges() {
     htmlBadge({ alt: "Health Score", src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor}?style=flat-square`, href: "public/health-score.json" }),
     htmlBadge({ alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`, href: "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md" }),
     htmlBadge({ alt: "PRs Welcome", src: "https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square", href: "#-contributing" }),
-    htmlBadge({ alt: "Made With Lovable", src: "https://img.shields.io/badge/made%20with-Lovable-FF6E3C?style=flat-square", href: "https://lovable.dev" }),
   ].join(" ");
 }
 

@@ -683,7 +683,7 @@ npm run migrate:repo:dry
 <p align="center">
   Want the <strong>absolute minimum</strong>? The entire ruleset is distilled into one file:<br/>
   <a href="./.lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
-  Drop it into Lovable, Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
+  Drop it into Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
 </p>
 
 <p align="center">
@@ -1485,7 +1485,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
 This spec system is **purpose-built for the AI-coding era**:
 
-- **Deterministic rules beat prose.** "Functions ≤ 15 lines" is enforceable; "keep functions short" is not. AI agents (GPT-5, Claude, Gemini, Cursor, Lovable) produce dramatically more consistent code when rules are numeric and binary.
+- **Deterministic rules beat prose.** "Functions ≤ 15 lines" is enforceable; "keep functions short" is not. AI agents (GPT-5, Claude, Gemini, Cursor) produce dramatically more consistent code when rules are numeric and binary.
 - **Standalone consolidated files** fit in a single LLM context window, an agent can load one rule pack and enforce it across a polyglot codebase.
 - **❌/✅ paired examples** are the format LLMs learn from most reliably; every spec file uses them.
 - **Naming determinism (PascalCase everywhere)** means an AI never has to guess whether a field is `userId`, `user_id`, or `UserId`, eliminating an entire class of hallucinations.
