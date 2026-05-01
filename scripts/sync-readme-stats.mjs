@@ -68,13 +68,10 @@ function buildPlatformBadges() {
   return [
     htmlBadge({ alt: "Languages", src: "https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square", href: "spec/02-coding-guidelines/" }),
     htmlBadge({ alt: "Platform", src: "https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square", href: "#-bundle-installers" }),
-    htmlBadge({ alt: "Bundles", src: "https://img.shields.io/badge/bundles-7-14B8A6?style=flat-square", href: "bundles.json" }),
     htmlBadge({ alt: "Health Score", src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor}?style=flat-square`, href: "public/health-score.json" }),
     htmlBadge({ alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`, href: "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md" }),
     htmlBadge({ alt: "PRs Welcome", src: "https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square", href: "#-contributing" }),
     htmlBadge({ alt: "Made With Lovable", src: "https://img.shields.io/badge/made%20with-Lovable-FF6E3C?style=flat-square", href: "https://lovable.dev" }),
-    htmlBadge({ alt: "Stars", src: `https://img.shields.io/github/stars/${repo}?style=flat-square&color=F59E0B`, href: `https://github.com/${repo}/stargazers` }),
-    htmlBadge({ alt: "Issues", src: `https://img.shields.io/github/issues/${repo}?style=flat-square&color=EF4444`, href: `https://github.com/${repo}/issues` }),
   ].join(" ");
 }
 
