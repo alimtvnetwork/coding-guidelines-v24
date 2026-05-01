@@ -33,7 +33,8 @@
 <p align="center">
   <em>Stats:</em> <!-- STAMP:FOLDERS -->22<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.4.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-01<!-- /STAMP:UPDATED -->
 </p>
-<!-- hidden stamps required by linter: <!-- STAMP:FILES -->622<!-- /STAMP:FILES --> <!-- STAMP:LINES -->133,880<!-- /STAMP:LINES --> -->
+<!-- STAMP:FILES -->622<!-- /STAMP:FILES -->
+<!-- STAMP:LINES -->133,880<!-- /STAMP:LINES -->
 
 ---
 
