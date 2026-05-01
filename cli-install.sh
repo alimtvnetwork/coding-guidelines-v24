@@ -37,7 +37,7 @@ set -euo pipefail
 # and the user has no easy way to see what went wrong. We always
 # write a timestamped crash log to a stable, predictable location so
 # the user can grep it after the fact.
-__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/lovable-installer-logs"
+__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/installer-logs"
 mkdir -p "$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
 __INSTALLER_LOG_FILE="$__INSTALLER_LOG_DIR/cli-install-$(date -u +%Y%m%dT%H%M%SZ).log"
 {
@@ -227,7 +227,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 cli-install v5.7.0"
+echo "  📦 cli-install v5.8.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then

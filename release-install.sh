@@ -32,7 +32,7 @@
 set -euo pipefail
 
 # ── Crash logging (curl | bash safe) ──────────────────────────────
-__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/lovable-installer-logs"
+__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/installer-logs"
 mkdir -p "$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
 __INSTALLER_LOG_FILE="$__INSTALLER_LOG_DIR/release-install-$(date -u +%Y%m%dT%H%M%SZ).log"
 {
