@@ -1095,17 +1095,19 @@ function Install-ViaLocalArchive {
     }
 }
 
+try {
+
 if ($UseLocalArchive) {
     Install-ViaLocalArchive
 } elseif ($Version) {
     Install-ViaArchive
 } else {
     if ($NoMainFallback) {
-        Write-Error "❌ implicit mode (no -Version) requires the main-branch zip, but -NoMainFallback was set.\`n   Re-run with -Version <tag>, -UseLocalArchive <path>, or omit -NoMainFallback."
-        exit 1
+        Stop-Install -Code 1 -Message "❌ implicit mode (no -Version) requires the main-branch zip, but -NoMainFallback was set.\`n   Re-run with -Version <tag>, -UseLocalArchive <path>, or omit -NoMainFallback."
     }
     Install-ViaMainBranch
 }
+
 
 Write-Host ""
 function Verify-Install {
