@@ -56,8 +56,44 @@ param(
     [switch]$Help
 )
 
+# ── Crash-safe execution wrapper (iex-friendly) ───────────────────
+# release-install is commonly invoked as:  irm <url> | iex
+# In that mode `exit <n>` would terminate the host PowerShell. We
+# route fatal conditions through Stop-Install (writes a crash log
+# and throws a tagged exception) and swallow at the outer catch so
+# the user's terminal stays alive.
+$Script:__PriorErrorActionPreference = $ErrorActionPreference
+$Script:__PriorProgressPreference    = $ProgressPreference
 $ErrorActionPreference = "Stop"
-$ProgressPreference = "SilentlyContinue"
+$ProgressPreference    = "SilentlyContinue"
+
+$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "lovable-installer-logs"
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+$Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("release-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
+
+function Write-InstallLog {
+    param([string]$Line)
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+}
+Write-InstallLog "# release-install crash log"
+Write-InstallLog ("# started: " + (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))
+Write-InstallLog ("# pwsh:    " + $PSVersionTable.PSEdition + " " + $PSVersionTable.PSVersion)
+Write-InstallLog ("# os:      " + [System.Runtime.InteropServices.RuntimeInformation]::OSDescription)
+
+function Restore-CallerPreferences {
+    if ($null -ne $Script:__PriorErrorActionPreference) { $ErrorActionPreference = $Script:__PriorErrorActionPreference }
+    if ($null -ne $Script:__PriorProgressPreference)    { $ProgressPreference    = $Script:__PriorProgressPreference }
+}
+function Stop-Install {
+    param([int]$Code = 1, [string]$Message = "")
+    Write-InstallLog ("[stop-install] code=" + $Code + " message=" + $Message)
+    if ($Message) { Write-Host $Message -ForegroundColor Red }
+    throw [System.Management.Automation.RuntimeException]::new("__INSTALL_STOP__|$Code|$Message")
+}
+
+try {
+
+
 
 # ── Build-time substitution target ────────────────────────────────
 # The release workflow replaces __VERSION_PLACEHOLDER__ with the concrete
@@ -77,7 +113,7 @@ function Write-Dim  { param([string]$Msg) Write-Host "$script:Indent$Msg"   -For
 # ── -Help / -? short-circuit (spec §B.1.c.i) ──────────────────────
 if ($Help) {
     Get-Help $PSCommandPath -Full
-    exit 0
+    return
 }
 
 # ── Resolve pinned version (spec §Resolution Algorithm) ───────────
@@ -108,14 +144,14 @@ $Resolved = Resolve-PinnedVersion
 if (-not $Resolved) {
     Write-Err "release-install requires a pinned version."
     Write-Err "Pass -Version <tag> or run the baked copy from a Release page."
-    exit 1
+    Stop-Install -Code 1 -Message ""
 }
 
 # ── Validate (spec §Validation) ───────────────────────────────────
 if ($Resolved -notmatch $SemverRe) {
     Write-Err "Invalid version format: '$Resolved'"
     Write-Err "Expected semver, e.g. v3.21.0 or 3.21.0-beta.1"
-    exit 2
+    Stop-Install -Code 2 -Message ""
 }
 
 Write-OK "Installing pinned version: $Resolved"
@@ -168,7 +204,7 @@ if (Test-UrlExists -Url $PrimaryUrl) {
         Write-Err "  tag zip:    $TagZipUrl"
         Write-Err "Verify the tag exists at https://github.com/$Repo/releases"
         Write-Err "Per spec §4.2, this installer will NOT fall back to main or other tags."
-        exit 3
+        Stop-Install -Code 3 -Message ""
     }
 }
 
@@ -182,7 +218,7 @@ try {
     $script = Invoke-RestMethod -Uri $InstallUrl -UseBasicParsing
 } catch {
     Write-Err "Could not download inner installer: $($_.Exception.Message)"
-    exit 3
+    Stop-Install -Code 3 -Message ""
 }
 
 # Build a script block that invokes install.ps1 with pinning handshake.
@@ -197,16 +233,41 @@ try {
     $exit = $LASTEXITCODE
 } catch {
     Write-Err "Inner installer error: $($_.Exception.Message)"
-    exit 5
+    Stop-Install -Code 5 -Message ""
 }
 
 if ($exit -and $exit -ne 0) {
     Write-Err "Inner installer exited with code $exit"
     if ($exit -eq 2) {
         Write-Err "Pinning handshake may have been rejected (version skew?)"
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     exit $exit
 }
 
 Write-OK "Pinned install complete: $Resolved"
+
+Write-InstallLog "[ok] release-install completed cleanly"
+Restore-CallerPreferences
+} catch {
+    $err = $_
+    $msg = $err.Exception.Message
+    $code = 1
+    if ($msg -match '^__INSTALL_STOP__\|(\d+)\|(.*)$') {
+        $code = [int]$Matches[1]
+        $msg  = $Matches[2]
+    }
+    Write-Host ""
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host "  ❌ release-install failed (code $code)" -ForegroundColor Red
+    if ($msg) { Write-Host "     $msg" -ForegroundColor Red }
+    Write-Host "  ────────────────────────────────────────────────────" -ForegroundColor Red
+    Write-Host "  Crash log: $Script:__InstallCrashLogFile" -ForegroundColor Yellow
+    Write-Host "  Stack trace: $($err.ScriptStackTrace)" -ForegroundColor DarkGray
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-InstallLog ("[crash] code=" + $code + " message=" + $msg)
+    Write-InstallLog ("[crash] " + ($err | Out-String))
+    Restore-CallerPreferences
+    $global:LASTEXITCODE = $code
+    return
+}

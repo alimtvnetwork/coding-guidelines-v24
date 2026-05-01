@@ -28,6 +28,44 @@
 
 set -euo pipefail
 
+# ── Crash logging (curl | bash safe) ──────────────────────────────
+# When invoked via `curl <url> | bash`, stderr scrolls past quickly
+# and the user has no easy way to see what went wrong. We always
+# write a timestamped crash log to a stable, predictable location so
+# the user can grep it after the fact.
+__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/lovable-installer-logs"
+mkdir -p "$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
+__INSTALLER_LOG_FILE="$__INSTALLER_LOG_DIR/error-manage-install-$(date -u +%Y%m%dT%H%M%SZ).log"
+{
+    echo "# error-manage-install crash log"
+    echo "# started: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "# bash:    ${BASH_VERSION:-unknown}"
+    echo "# uname:   $(uname -a 2>/dev/null || echo unknown)"
+    echo "# cwd:     $(pwd)"
+    echo "# argv:    $0 $*"
+    echo "# ────────────────────────────────────────────────"
+} >"$__INSTALLER_LOG_FILE" 2>/dev/null || true
+
+__installer_log() { echo "$*" >>"$__INSTALLER_LOG_FILE" 2>/dev/null || true; }
+
+__installer_on_err() {
+    local rc=$?
+    local line=${1:-?}
+    local cmd=${2:-?}
+    {
+        echo ""
+        echo "════════════════════════════════════════════════════════"
+        echo "  ❌ error-manage-install FAILED (exit $rc) at line $line"
+        echo "     command: $cmd"
+        echo "  ────────────────────────────────────────────────────"
+        echo "  Crash log: $__INSTALLER_LOG_FILE"
+        echo "════════════════════════════════════════════════════════"
+    } | tee -a "$__INSTALLER_LOG_FILE" >&2
+    exit "$rc"
+}
+trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
+trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
+
 BUNDLE_NAME="error-manage"
 BUNDLE_MAPPING="spec/01-spec-authoring-guide|spec/01-spec-authoring-guide spec/03-error-manage|spec/03-error-manage"
 ARCHIVE_STABLE_NAME="error-manage"
@@ -185,7 +223,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 error-manage-install v5.2.0"
+echo "  📦 error-manage-install v5.4.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then

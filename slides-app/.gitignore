@@ -1,4 +1,8 @@
 node_modules
-dist
+# NOTE: slides-app/dist is intentionally NOT ignored.
+# The prebuilt deck ships in the main-branch zip so that
+#   `irm .../slides-install.ps1 | iex`
+# can install + open slides-app/dist/index.html with no Node/build step.
+# If you regenerate dist locally, commit it.
 dist.zip
 *.tsbuildinfo

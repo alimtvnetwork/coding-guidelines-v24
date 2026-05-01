@@ -69,7 +69,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1))) -Version v5.2.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1))) -Version v5.4.0 -Target .\vendor
 #>
 
 param(
@@ -116,12 +116,58 @@ if ($MaxFixRepoLogs -lt 0) {
 # to know about Get-Help. Print to stdout and exit 0 BEFORE any side
 # effects (no folder creation, no banner, no download).
 if ($Help) {
-    Get-Help $PSCommandPath -Full
-    exit 0
+    try { Get-Help $PSCommandPath -Full } catch { Write-Host (Get-Content -LiteralPath $PSCommandPath -ErrorAction SilentlyContinue | Select-Object -First 100) }
+    return
 }
 
+# ── Crash-safe execution wrapper (iex-friendly) ───────────────────
+# The script is commonly invoked as:  irm <url> | iex
+# In that mode the script body runs INSIDE the caller's PowerShell
+# session, so any `exit <n>` would terminate the host terminal and
+# any uncaught exception would surface as a red wall of text with
+# no log trail. We:
+#   1. Save the caller's $ErrorActionPreference and restore it on exit.
+#   2. Route every fatal condition through Stop-Install, which writes
+#      a crash log under $env:TEMP\lovable-installer-logs\ and
+#      throws a tagged exception we can swallow at the outer catch.
+#   3. Wrap the entire main body in a single try/catch that prints a
+#      friendly summary + log path and `return`s without killing the
+#      host (no `exit` calls reach the caller's session).
+$Script:__PriorErrorActionPreference = $ErrorActionPreference
+$Script:__PriorProgressPreference    = $ProgressPreference
 $ErrorActionPreference = "Stop"
-$ProgressPreference = "SilentlyContinue"
+$ProgressPreference    = "SilentlyContinue"
+
+$Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "lovable-installer-logs"
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+$Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("linters-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
+
+function Write-InstallLog {
+    param([string]$Line)
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+}
+
+# Header always written so the log is useful even on early failures.
+Write-InstallLog "# linters-install crash log"
+Write-InstallLog ("# started: " + (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))
+Write-InstallLog ("# pwsh:    " + $PSVersionTable.PSEdition + " " + $PSVersionTable.PSVersion)
+Write-InstallLog ("# os:      " + [System.Runtime.InteropServices.RuntimeInformation]::OSDescription)
+Write-InstallLog ("# cwd:     " + (Get-Location).Path)
+Write-InstallLog "# ────────────────────────────────────────────────"
+
+function Restore-CallerPreferences {
+    if ($null -ne $Script:__PriorErrorActionPreference) { $ErrorActionPreference = $Script:__PriorErrorActionPreference }
+    if ($null -ne $Script:__PriorProgressPreference)    { $ProgressPreference    = $Script:__PriorProgressPreference }
+}
+
+function Stop-Install {
+    param([int]$Code = 1, [string]$Message = "")
+    Write-InstallLog ("[stop-install] code=" + $Code + " message=" + $Message)
+    if ($Message) { Write-Host $Message -ForegroundColor Red }
+    # Tagged exception so the outer catch can format a single, friendly tail.
+    throw [System.Management.Automation.RuntimeException]::new("__INSTALL_STOP__|$Code|$Message")
+}
+
 
 $BundleName = "linters"
 $BundleMapping = "linters|linters,linters-cicd|linters-cicd"
@@ -160,7 +206,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 linters-install v5.2.0" -ForegroundColor Cyan
+Write-Host "  📦 linters-install v5.4.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
@@ -289,8 +335,7 @@ function Open-Entry {
 function Install-ViaArchive {
     $archiveUrl = "$ReleaseBase/download/$Version/$ArchiveStableName.zip"
     if ($Offline) {
-        Write-Error "❌ -Offline set but versioned archive requires network download.`n   URL: $archiveUrl`n   Re-run without -Offline, or pre-stage the archive locally."
-        exit 2
+        Stop-Install -Code 2 -Message "❌ -Offline set but versioned archive requires network download.`n   URL: $archiveUrl`n   Re-run without -Offline, or pre-stage the archive locally."
     }
     $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("bundle-" + [guid]::NewGuid().ToString("N").Substring(0,8))
     New-Item -ItemType Directory -Path $tmp -Force | Out-Null
@@ -301,8 +346,7 @@ function Install-ViaArchive {
             Invoke-WebRequest -Uri $archiveUrl -OutFile $zipPath -UseBasicParsing
         } catch {
             if ($NoMainFallback) {
-                Write-Error "❌ release archive not found for $Version and -NoMainFallback set.`n   URL: $archiveUrl`n   Refusing to fall back to the main-branch zip. ($($_.Exception.Message))"
-                exit 3
+                Stop-Install -Code 3 -Message "❌ release archive not found for $Version and -NoMainFallback set.`n   URL: $archiveUrl`n   Refusing to fall back to the main-branch zip. ($($_.Exception.Message))"
             }
             Write-Warning "  release archive not found for $Version — falling back to main branch: $($_.Exception.Message)"
             Install-ViaMainBranch
@@ -319,8 +363,7 @@ function Install-ViaArchive {
 function Install-ViaMainBranch {
     $archiveUrl = "https://codeload.github.com/$RepoSlug/zip/refs/heads/main"
     if ($Offline) {
-        Write-Error "❌ -Offline set but main-branch zip is required.`n   URL: $archiveUrl`n   Re-run without -Offline (network access needed to fetch the bundle)."
-        exit 2
+        Stop-Install -Code 2 -Message "❌ -Offline set but main-branch zip is required.`n   URL: $archiveUrl`n   Re-run without -Offline (network access needed to fetch the bundle)."
     }
     $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("bundle-" + [guid]::NewGuid().ToString("N").Substring(0,8))
     New-Item -ItemType Directory -Path $tmp -Force | Out-Null
@@ -342,12 +385,10 @@ function Install-ViaLocalArchive {
     # for .tar.gz / .tgz pre-staged archives use the Bash installer
     # (--use-local-archive) — Expand-Archive only handles zip.
     if (-not (Test-Path -LiteralPath $UseLocalArchive -PathType Leaf)) {
-        Write-Error "❌ -UseLocalArchive: file not found: $UseLocalArchive`n   Provide an absolute or relative path to a .zip file."
-        exit 1
+        Stop-Install -Code 1 -Message "❌ -UseLocalArchive: file not found: $UseLocalArchive`n   Provide an absolute or relative path to a .zip file."
     }
     if ($UseLocalArchive -notmatch '\.zip$') {
-        Write-Error "❌ -UseLocalArchive: expected .zip, got: $UseLocalArchive`n   The PowerShell installer extracts zip archives only. For .tar.gz`n   archives use the Bash installer (--use-local-archive)."
-        exit 1
+        Stop-Install -Code 1 -Message "❌ -UseLocalArchive: expected .zip, got: $UseLocalArchive`n   The PowerShell installer extracts zip archives only. For .tar.gz`n   archives use the Bash installer (--use-local-archive)."
     }
     $absArchive = (Resolve-Path -LiteralPath $UseLocalArchive).Path
     $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ("bundle-" + [guid]::NewGuid().ToString("N").Substring(0,8))
@@ -358,8 +399,7 @@ function Install-ViaLocalArchive {
         try {
             Expand-Archive -LiteralPath $absArchive -DestinationPath $extractDir -Force
         } catch {
-            Write-Error "❌ failed to extract local archive: $absArchive`n   The file is not a valid zip, or it is corrupt. ($($_.Exception.Message))"
-            exit 1
+            Stop-Install -Code 1 -Message "❌ failed to extract local archive: $absArchive`n   The file is not a valid zip, or it is corrupt. ($($_.Exception.Message))"
         }
         Copy-Mapping -ExtractDir $extractDir
     } finally {
@@ -367,17 +407,19 @@ function Install-ViaLocalArchive {
     }
 }
 
+try {
+
 if ($UseLocalArchive) {
     Install-ViaLocalArchive
 } elseif ($Version) {
     Install-ViaArchive
 } else {
     if ($NoMainFallback) {
-        Write-Error "❌ implicit mode (no -Version) requires the main-branch zip, but -NoMainFallback was set.`n   Re-run with -Version <tag>, -UseLocalArchive <path>, or omit -NoMainFallback."
-        exit 1
+        Stop-Install -Code 1 -Message "❌ implicit mode (no -Version) requires the main-branch zip, but -NoMainFallback was set.`n   Re-run with -Version <tag>, -UseLocalArchive <path>, or omit -NoMainFallback."
     }
     Install-ViaMainBranch
 }
+
 
 Write-Host ""
 function Verify-Install {
@@ -406,7 +448,7 @@ function Verify-Install {
         Write-Host "       to fetch the main-branch zip."
         Write-Host "     • The release workflow failed to build the prebuilt artifact."
         Write-Host "     • A previous -Target run partially overwrote the install."
-        exit 4
+        Stop-Install -Code 4 -Message ""
     }
     $count = $VerifyPairs.Split(",").Count
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
@@ -421,7 +463,7 @@ function Invoke-FixRepo {
     $script = Join-Path $Target "fix-repo.ps1"
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) {
         Write-Host "❌ -RunFixRepo: $script not found after install." -ForegroundColor Red
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     if ($Yes) {
         Write-Host "  ▸ auto-confirmed (-Yes / INSTALL_FIX_REPO_YES=1)" -ForegroundColor DarkGray
@@ -432,12 +474,12 @@ function Invoke-FixRepo {
         $reply = Read-Host "Proceed? [y/N]"
         if ($reply -notmatch '^(y|Y|yes|YES)$') {
             Write-Host "fix-repo skipped by user — exiting with code 5." -ForegroundColor Yellow
-            exit 5
+            Stop-Install -Code 5 -Message ""
         }
     } else {
         Write-Host "❌ -RunFixRepo requires confirmation but session is non-interactive." -ForegroundColor Red
         Write-Host "   Re-run with -Yes (or INSTALL_FIX_REPO_YES=1) to bypass the prompt." -ForegroundColor Red
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     if ($LogDir) {
         if ([System.IO.Path]::IsPathRooted($LogDir)) { $logDir = $LogDir }
@@ -486,7 +528,7 @@ function Invoke-FixRepo {
     }
     if ($rc -ne 0) {
         Write-Host "❌ fix-repo.ps1 failed (exit $rc) — see $logFile" -ForegroundColor Red
-        exit 5
+        Stop-Install -Code 5 -Message ""
     }
     Write-Host "  ✓ fix-repo completed (log: $logFile)" -ForegroundColor Green
 }
@@ -495,3 +537,37 @@ if ($RunFixRepo) { Invoke-FixRepo }
 
 Write-Host "✅ $BundleName installed." -ForegroundColor Green
 Open-Entry
+Write-InstallLog "[ok] install completed cleanly"
+Restore-CallerPreferences
+
+} catch {
+    # Single, friendly tail for ANY failure path. Never `exit` — that
+    # would terminate the host PowerShell when the script is invoked
+    # via `irm <url> | iex`. Instead we log, print, restore prefs,
+    # and `return` from the script scope.
+    $err = $_
+    $msg = $err.Exception.Message
+    $code = 1
+    if ($msg -match '^__INSTALL_STOP__\|(\d+)\|(.*)$') {
+        $code = [int]$Matches[1]
+        $msg  = $Matches[2]
+    }
+    Write-Host ""
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-Host "  ❌ linters-install failed (code $code)" -ForegroundColor Red
+    if ($msg) { Write-Host "     $msg" -ForegroundColor Red }
+    Write-Host "  ────────────────────────────────────────────────────" -ForegroundColor Red
+    Write-Host "  Crash log: $Script:__InstallCrashLogFile" -ForegroundColor Yellow
+    Write-Host "  Stack trace (also written to log):" -ForegroundColor DarkGray
+    Write-Host ("     " + $err.ScriptStackTrace) -ForegroundColor DarkGray
+    Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Red
+    Write-InstallLog ("[crash] code=" + $code + " message=" + $msg)
+    Write-InstallLog ("[crash] " + ($err | Out-String))
+    Restore-CallerPreferences
+    # Set $LASTEXITCODE so callers that inspect it still see the failure,
+    # but DO NOT call `exit` — that would close the user's terminal
+    # when running via `irm | iex`.
+    $global:LASTEXITCODE = $code
+    return
+}
+
