@@ -781,11 +781,9 @@ function register_settings_page() {
 try {
   doRiskyThing();
 } catch (caught: unknown) {              // ✅ unknown allowed in catch
-  if (caught instanceof DomainError) {   // narrow immediately
-    logger.warn(caught.code, caught.context);
-    return;
-  }
-  logger.error("unexpected", { error: String(caught) });
+  // Pass the raw value through — never stringify or drop it.
+  // String(caught) loses the stack trace and nested cause chain.
+  logger.error("unexpected", { error: caught });
 }
 ```
 
