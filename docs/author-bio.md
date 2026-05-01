@@ -91,6 +91,28 @@ Both pieces are required reading for anyone trying to understand *why* this spec
 
 ---
 
+## Beyond the Keyboard, Gaming Roots
+
+Long before the frameworks and the spec systems, there was a kid with a game controller.
+
+<a href="https://alimkarim.com/" title="Software engineer who got into computers because of gaming.">Alim</a>'s entire programming career traces back to **gaming**. Games were the first thing that made computers feel *alive*, not appliances, but worlds. That curiosity, *"how is this even possible?"*, is what pushed him toward writing his first program in 2004 and never stopping.
+
+Today, gaming is still where he resets. Recent obsessions:
+
+- **Doom** — Long-time fan and active player. Drawn to the craftsmanship of id Software's level design and the raw, no-nonsense gameplay loop. Recently exploring what it would take to build a Doom-style engine from scratch as a side project.
+- **Minecraft** — The other half of his gaming life. Building, surviving, and the quiet satisfaction of a well-organized base.
+
+### YouTube Channels
+
+| Channel | Focus | Link |
+|---|---|---|
+| **Alim Raw Gaming** | Doom playthroughs and gameplay commentary | [youtube.com/@AlimRawGaming](https://www.youtube.com/@AlimRawGaming) |
+| **Minecraft-Alim** | Minecraft builds, survival runs, and creative projects | [youtube.com/@Minecraft-Alim](https://www.youtube.com/@Minecraft-Alim) |
+
+> *Game development is on the roadmap. The same instinct that built database engines at age one of programming is now pointed at building a game from first principles.*
+
+---
+
 ## Connect with Alim
 
 | Channel | Link |
@@ -101,6 +123,8 @@ Both pieces are required reading for anyone trying to understand *why* this spec
 | GitLab (Evatix) | [gitlab.com/aukgit.evatix](https://gitlab.com/aukgit.evatix) |
 | GitLab (Personal) | [gitlab.com/aukgitlab](https://gitlab.com/aukgitlab) |
 | Stack Overflow | [stackoverflow.com/users/513511/md-alim-ul-karim](https://stackoverflow.com/users/513511/md-alim-ul-karim), 2,452+ rep, since 2010 |
+| YouTube (Doom) | [@AlimRawGaming](https://www.youtube.com/@AlimRawGaming) |
+| YouTube (Minecraft) | [@Minecraft-Alim](https://www.youtube.com/@Minecraft-Alim) |
 | Google | [Search "Alim Ul Karim"](https://www.google.com/search?q=Alim+Ul+Karim) |
 
 ---
