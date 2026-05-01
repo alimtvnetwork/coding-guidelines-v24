@@ -10,14 +10,35 @@ export interface SlideLayoutProps {
   children: ReactNode;
 }
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: (delay: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.5, delay, ease: EASE },
   }),
 };
+
+// Per-word reveal so headlines feel composed, not pasted in.
+const wordParent = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+};
+
+const wordChild = {
+  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.55, ease: EASE } },
+};
+
+function isStringTruthy(value?: string): boolean {
+  return typeof value === "string" && value.length > 0;
+}
+
+function splitIntoWords(text: string): string[] {
+  return text.split(/\s+/);
+}
 
 export function SlideLayout({
   eyebrow,
@@ -26,9 +47,12 @@ export function SlideLayout({
   footer,
   children,
 }: SlideLayoutProps) {
+  const hasEyebrow = isStringTruthy(eyebrow);
+  const hasSubtitle = isStringTruthy(subtitle);
+  const words = splitIntoWords(title);
   return (
     <>
-      {eyebrow && (
+      {hasEyebrow && (
         <motion.div
           className="eyebrow"
           variants={fadeUp}
@@ -41,20 +65,28 @@ export function SlideLayout({
       )}
       <motion.h1
         className="slide-title"
-        variants={fadeUp}
+        variants={wordParent}
         initial="hidden"
         animate="show"
-        custom={0.15}
+        style={{ display: "flex", flexWrap: "wrap", gap: "0.25em" }}
       >
-        {title}
+        {words.map((word, i) => (
+          <motion.span
+            key={`${word}-${i}`}
+            variants={wordChild}
+            style={{ display: "inline-block" }}
+          >
+            {word}
+          </motion.span>
+        ))}
       </motion.h1>
-      {subtitle && (
+      {hasSubtitle && (
         <motion.div
           className="slide-subtitle"
           variants={fadeUp}
           initial="hidden"
           animate="show"
-          custom={0.25}
+          custom={0.35}
         >
           {subtitle}
         </motion.div>
@@ -64,7 +96,7 @@ export function SlideLayout({
         variants={fadeUp}
         initial="hidden"
         animate="show"
-        custom={0.4}
+        custom={0.5}
       >
         {children}
       </motion.div>

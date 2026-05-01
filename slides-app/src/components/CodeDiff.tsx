@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { codeToHtml } from "shiki";
 
@@ -11,12 +11,14 @@ export interface CodeDiffProps {
   layout?: "side-by-side" | "stacked";
 }
 
-const fade = {
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const panelEntrance = {
   hidden: { opacity: 0, x: -16 },
   show: (delay: number) => ({
     opacity: 1,
     x: 0,
-    transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.5, delay, ease: EASE },
   }),
 };
 
@@ -62,13 +64,15 @@ export function CodeDiff({
         label={beforeLabel}
         html={beforeHtml}
         accent="destructive"
-        delay={0.1}
+        delay={0.6}
+        lineDelayStart={0.85}
       />
       <DiffPanel
         label={afterLabel}
         html={afterHtml}
         accent="accent"
-        delay={0.25}
+        delay={0.75}
+        lineDelayStart={1.05}
       />
     </div>
   );
@@ -79,12 +83,34 @@ interface DiffPanelProps {
   html: string;
   accent: "destructive" | "accent";
   delay: number;
+  lineDelayStart: number;
 }
 
-function DiffPanel({ label, html, accent, delay }: DiffPanelProps) {
+function DiffPanel({ label, html, accent, delay, lineDelayStart }: DiffPanelProps) {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+
+  // Stagger-reveal each Shiki `.line` once HTML is rendered. Pure DOM
+  // animation keeps Shiki's syntax highlighting intact and avoids re-parsing.
+  useEffect(() => {
+    if (!html) return;
+    const host = hostRef.current;
+    if (!host) return;
+    const lines = host.querySelectorAll<HTMLElement>(".line");
+    lines.forEach((line, i) => {
+      line.style.opacity = "0";
+      line.style.transform = "translateX(-8px)";
+      line.style.transition = "opacity 380ms ease-out, transform 380ms ease-out";
+      const delayMs = lineDelayStart * 1000 + i * 70;
+      window.setTimeout(() => {
+        line.style.opacity = "1";
+        line.style.transform = "translateX(0)";
+      }, delayMs);
+    });
+  }, [html, lineDelayStart]);
+
   return (
     <motion.div
-      variants={fade}
+      variants={panelEntrance}
       initial="hidden"
       animate="show"
       custom={delay}
@@ -109,6 +135,7 @@ function DiffPanel({ label, html, accent, delay }: DiffPanelProps) {
         {label}
       </div>
       <div
+        ref={hostRef}
         className="shiki-host"
         style={{ fontSize: 26, lineHeight: 1.5, overflow: "auto", flex: 1 }}
         dangerouslySetInnerHTML={{ __html: html }}
