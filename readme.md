@@ -1060,8 +1060,10 @@ func NewType(errorType apperrtype.ErrorType) *AppError {
 func (service *SnapshotService) GetSettings(endpoint string) (*Settings, error) {
     response, requestError := service.client.Get(endpoint)
     if requestError != nil {
+
         return nil, fmt.Errorf("get snapshot settings (GET %s): %w", endpoint, requestError)
     }
+
     return parseSettings(response)
 }
 
@@ -1069,6 +1071,7 @@ func (service *SnapshotService) GetSettings(endpoint string) (*Settings, error) 
 func (service *SnapshotService) GetSettings(endpoint string) apperror.SettingsResult {
     response, requestError := service.client.Get(endpoint)
     if requestError != nil {
+
         return apperror.Fail[*Settings](
             apperror.WrapTypeMsg(
                 requestError,
@@ -1077,6 +1080,7 @@ func (service *SnapshotService) GetSettings(endpoint string) apperror.SettingsRe
             ).WithValue("endpoint", endpoint),
         )
     }
+
     return apperror.Ok(parseSettings(response))
 }
 ```
