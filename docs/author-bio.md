@@ -106,8 +106,9 @@ Today, gaming is still where he resets. Recent obsessions:
 
 | Channel | Focus | Link |
 |---|---|---|
-| **Alim Raw Gaming** | Doom playthroughs and gameplay commentary | [youtube.com/@AlimRawGaming](https://www.youtube.com/@alim.raw.gaming) |
-| **Minecraft-Alim** | Minecraft builds, survival runs, and creative projects | [youtube.com/@Minecraft-Alim](https://www.youtube.com/@minecraft-alim6638) |
+| **Alim Raw Gaming** | Doom playthroughs and gameplay commentary | [youtube.com/@alim.raw.gaming](https://www.youtube.com/@alim.raw.gaming) |
+| **Minecraft-Alim** | Minecraft builds, survival runs, and creative projects | [youtube.com/@minecraft-alim6638](https://www.youtube.com/@minecraft-alim6638) |
+| **Alim Karim** (personal) | Personal channel | [youtube.com/@alim.karim.](https://www.youtube.com/@alim.karim.) |
 
 > *Game development is on the roadmap. The same instinct that built database engines at age one of programming is now pointed at building a game from first principles.*
 
