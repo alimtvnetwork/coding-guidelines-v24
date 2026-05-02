@@ -805,7 +805,10 @@ try {
 } catch (caught: unknown) {              // ✅ unknown allowed in catch
   // Pass the raw value through — never stringify or drop it.
   // String(caught) loses the stack trace and nested cause chain.
-  logger.error("unexpected", { error: caught });
+  // Describe what failed and the contributing factors (x, y, z can be variables
+  // or any other relevant context). The logger will append the caught error's
+  // own message to this string — so write the *operation context*, not the error text.
+  logger.error("doRiskyThing failed due to x, y, z factors", { error: caught });
 }
 ```
 
