@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import Author from "./pages/Author";
 import CodeReviewChecklist from "./pages/CodeReviewChecklist";
 import Dashboard from "./pages/Dashboard";
 import DocsViewer from "./pages/DocsViewer";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/docs" element={<DocsViewer />} />
             <Route path="/checklist" element={<CodeReviewChecklist />} />
             <Route path="/readme" element={<ReadmeEditor />} />
+            <Route path="/author" element={<Author />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
