@@ -48,7 +48,7 @@ Each phase is one user `next` cycle.
 - `diagrams/seq-company-creation.mmd` — POST `/API/V1/Company` end-to-end
 - `diagrams/seq-login-routing.mmd` — first-request resolution + caching
 - `diagrams/seq-push-update.mmd` — main → worker push update
-- `diagrams/README.md` — index of diagrams
+- `diagrams/readme.md` — index of diagrams
 
 ### Phase 4 — Error-manage integration + consistency (on `next`)
 - `08-error-contract.md` — main↔worker correlation IDs, retry semantics, failure taxonomy (worker-unreachable / version-mismatch / split-DB-write-fail / auth-handshake-fail). References `spec/03-error-manage/`, does not duplicate.
