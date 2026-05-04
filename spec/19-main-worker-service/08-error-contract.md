@@ -1,7 +1,7 @@
 # 08 — Main↔Worker Error Contract
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 This file defines **only** the error patterns specific to Main↔Worker communication. Generic error rules (catch-log-rethrow, log levels, never-swallow) live in `spec/03-error-manage/` and are inherited verbatim — do NOT duplicate them here.
 
@@ -26,6 +26,7 @@ Every Main↔Worker error response uses this JSON shape:
 
 ```json
 {
+  "EnvelopeVersion": "1.1.0",
   "Error": {
     "ErrorCode": "WorkerUnreachable",
     "ErrorMessage": "Worker w3.example.com did not respond within 30s",
@@ -36,18 +37,27 @@ Every Main↔Worker error response uses this JSON shape:
     "OperationName": "Company.Create",
     "OccurredAt": "2026-05-04T10:22:14Z",
     "Retryable": true,
-    "RetryAfterSeconds": 5
+    "RetryAfterSeconds": 5,
+    "OperationId": null,
+    "SubCode": null,
+    "FieldErrors": null
   }
 }
 ```
 
-Field rules:
+Field rules (core):
+- `EnvelopeVersion` — SemVer of the envelope schema itself. Bump on additive change. Consumers MUST tolerate unknown fields and MUST refuse to parse a major-version mismatch.
 - `ErrorCode` — values from §3 catalog only. PascalCase.
 - `ErrorCategory` — `Transport` | `Auth` | `Validation` | `Business` | `Storage` | `Configuration`.
 - `ErrorSeverity` — `Warn` | `Error` | `Fatal`.
 - `CorrelationId` — echo of inbound `X-Correlation-Id`.
 - `Retryable` — boolean. Drives Main's retry decision.
 - `RetryAfterSeconds` — present only when `Retryable=true`.
+
+Extension fields (always present in the JSON shape, `null` when not applicable):
+- `OperationId` (string, nullable) — set by `IdempotencyConflict` (§3.7) so the caller can reconcile against the original successful response. PascalCase UUID v4 string. (Resolves F-A-12.)
+- `SubCode` (string, nullable) — set by `SplitDBWriteFail` (§3.3) and any future error that needs a discriminator under a single `ErrorCode`. PascalCase enum from the per-code sub-code list. (Resolves F-A-15.)
+- `FieldErrors` (array, nullable) — set by `ValidationFail` (§3.8); each item `{FieldName: string, FailureReason: string}`. (Resolves F-A-16.)
 
 ---
 
@@ -77,7 +87,7 @@ Field rules:
 - **Category:** Auth. **Severity:** Error. **Retryable:** false.
 - **When:** JWT signature invalid, claims mismatch, OAuth client-credentials rejected, expired token Main thought was fresh.
 - **Worker does:** return 401 with this envelope. NEVER 500.
-- **Main does:** if Main initiated the call, refresh credentials and retry **once**. If still fails, surface to caller. If user-initiated, force re-login.
+- **Main does:** if Main initiated the call, refresh credentials and retry **once**. If still fails, surface to caller. If user-initiated, force re-login by setting response header `X-Auth-Action: Reauthenticate` per `spec/04-database-conventions/06-rest-api-format.md` (X-headers section). The frontend MUST treat this header as the sole "force re-login" signal — no inference from status codes alone. (Resolves F-A-26.)
 
 ### 3.5 `AccessDenied`
 - **Category:** Auth. **Severity:** Warn. **Retryable:** false.
@@ -188,15 +198,84 @@ Per `mem://architecture/error-handling`: explicit file path + operation name MAN
 
 ---
 
-## 8. Cross-References
+## 8. ErrorCode → HTTP Status Mapping
+
+Single source of truth for which HTTP status code Main returns to React (and which Worker returns to Main) for each catalog entry. Implementations MUST NOT pick a different status. (Resolves F-A-31.)
+
+| ErrorCode | Worker → Main | Main → React | Why |
+|-----------|---------------|--------------|-----|
+| `WorkerUnreachable` | _N/A (Main-observed)_ | 502 Bad Gateway | Upstream worker did not respond; never 500. |
+| `WorkerVersionMismatch` | _N/A_ | 503 Service Unavailable | Quarantine state; client should back off. |
+| `SplitDBWriteFail` (`SplitDBLocked`) | 503 | 503 | Transient contention; honor `RetryAfterSeconds`. |
+| `SplitDBWriteFail` (`SplitDBDiskFull`) | 507 Insufficient Storage | 503 | Hide internal cause from React. |
+| `SplitDBWriteFail` (`SplitDBSchemaDrift`) | 503 | 503 | Quarantine; do not leak schema state. |
+| `AuthHandshakeFail` | 401 | 401 (+ `X-Auth-Action: Reauthenticate` if user-initiated) | Per §3.4. |
+| `AccessDenied` | 403 | 403 | Per §3.5. |
+| `WorkerOverloaded` | 429 Too Many Requests | 503 (+ `Retry-After` header) | Worker rate-limit; Main hides which worker. |
+| `IdempotencyConflict` | 409 Conflict | 409 | Per §3.7; envelope carries `OperationId`. |
+| `ValidationFail` | 422 Unprocessable Entity | 422 | Envelope carries `FieldErrors`. |
+
+Rules:
+- Main MUST set `Retry-After` (seconds) whenever it returns 429/503/504 and the envelope's `RetryAfterSeconds` is set.
+- Main MUST NOT return 500 for any catalogued ErrorCode. 500 is reserved for un-categorised exceptions (which themselves MUST be wrapped in a `WorkerVersionMismatch`-equivalent envelope before the next deploy).
+
+---
+
+## 9. Worker → Main Error Envelope (Heartbeat / Register / Push)
+
+The envelope shape from §2 is **bidirectional**. Workers also use it when reporting failures back to Main on Worker-initiated calls — namely Heartbeat (`POST /Workers/Heartbeat`), Register (`POST /Workers/Register`, see `10-worker-bootstrap-protocol.md`), and Push-Update acknowledgement (`POST /Workers/PushAck`, see `spec/14-update/28-worker-push-instruction.md`). (Resolves F-A-32.)
+
+Direction-specific overrides:
+- `WorkerNodeId` — set to the Worker's own ID (or `null` for `Register` first-call).
+- `OperationName` — uses Worker-initiated op names: `Worker.Heartbeat`, `Worker.Register`, `Worker.PushAck`.
+- `CorrelationId` — Worker generates a UUID v4 ONLY for Worker-initiated calls (overrides §4 rule which forbids Worker-side ID generation for Main-initiated calls). Main echoes it back.
+
+Worker → Main specific ErrorCodes (added to the §3 catalog by reference; full definitions in `13-error-codes.md`):
+- `WorkerRegisterRejected` — Main refused the registration (version pin mismatch, IP not in allow-list, duplicate `WorkerNodeName`).
+- `WorkerHeartbeatRejected` — Main accepted the request but the Worker is `Quarantined` or `Offline`; Worker MUST stop sending heartbeats until restart.
+- `WorkerPushAckUnknownJid` — Main received an ack for an unknown Job-Id (replay / late-arriving ack); Worker logs and discards.
+
+HTTP status mapping for Worker-initiated calls:
+
+| ErrorCode | Main → Worker |
+|-----------|---------------|
+| `WorkerRegisterRejected` | 409 Conflict |
+| `WorkerHeartbeatRejected` | 410 Gone |
+| `WorkerPushAckUnknownJid` | 404 Not Found |
+
+---
+
+## 10. Resolved Ambiguities (audit closure log)
+
+| Audit ID | Finding | Resolution |
+|----------|---------|------------|
+| F-A-07 / F-A-08 / F-A-10 / F-A-21 | Retry caps disagreed across `01-`, `04-`, `08-§3.3`, `08-§5` | All citations now point at `15-tunable-constants.md` §2.1; the `SplitDBLocked` 50ms/5-attempt window in §3.3 is explicitly waivered as a SQLite-WAL local micro-retry distinct from cross-tier HTTP retry. |
+| F-A-12 | `OperationId` referenced but not in envelope | Added to §2 extension fields. |
+| F-A-15 | `SubCode` referenced but not in envelope | Added to §2 extension fields. |
+| F-A-16 | `FieldErrors` referenced but not in envelope | Added to §2 extension fields. |
+| F-A-22 | JWT in JSON body vs "not in localStorage" | Resolved by `12-jwt-delivery-contract.md` (in-memory only; CSP mandatory). |
+| F-A-26 | "Force re-login" had no signal for the frontend | Added `X-Auth-Action: Reauthenticate` header in §3.4. |
+| F-A-28 | Envelope had no version field | Added `EnvelopeVersion` in §2. |
+| F-A-31 | No ErrorCode → HTTP status mapping | Added §8. |
+| F-A-32 | No Worker → Main error envelope spec | Added §9. |
+
+---
+
+## 11. Cross-References
 
 - `spec/03-error-manage/` — generic error rules (this file extends, never overrides)
+- `spec/04-database-conventions/06-rest-api-format.md` — `X-Correlation-Id`, `X-Idempotency-Key`, `X-Auth-Action` header conventions (single source of truth)
 - `01-architecture.md` §4 — Comms contract (transport, auth, headers)
 - `04-worker-routing.md` §3 — Failover behavior on `WorkerUnreachable`
 - `05-auth-and-2fa.md` §7 — Worker JWT validation (source of `AuthHandshakeFail`)
 - `07-role-based-dashboards.md` §8 — `AccessDenialEvent` audit table
+- `10-worker-bootstrap-protocol.md` — Worker-initiated Register / Heartbeat
+- `12-jwt-delivery-contract.md` — JWT delivery (resolves F-A-22)
+- `13-error-codes.md` — full WORKER-* / MAIN-* code catalog with prefixed↔flat mapping
+- `15-tunable-constants.md` §2.1 — retry caps single source of truth
+- `spec/14-update/28-worker-push-instruction.md` — Push ack flow (`WorkerPushAckUnknownJid`)
 - `mem://architecture/error-handling` — `apperror` package + explicit file/path logging
 
 ---
 
-*Error contract v1.0.0 — 2026-05-04*
+*Error contract v1.1.0 — 2026-05-04 (audit batch close: F-A-07/08/10/12/15/16/21/22/26/28/31/32)*
