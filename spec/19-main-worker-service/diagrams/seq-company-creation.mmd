@@ -1,0 +1,24 @@
+sequenceDiagram
+    autonumber
+    participant React as React Frontend
+    participant Main as Main Server
+    participant DB as Main SQLite
+    participant Strat as WorkerSelectionStrategy
+    participant Worker as Chosen Worker
+    participant SplitDB as Worker Split-DB
+
+    React->>Main: POST /API/V1/Company (CompanyName, Slug, ...)
+    Main->>Main: Validate session + payload
+    Main->>DB: SELECT eligible WorkerNode rows
+    DB-->>Main: candidates
+    Main->>Strat: pick(candidates, strategyCode)
+    Strat-->>Main: WorkerNode (id=3)
+    Main->>DB: INSERT Company (minimal identity, WorkerNodeId=3)
+    Main->>DB: INSERT WorkerSelectionEvent
+    Main->>Worker: POST /Internal/Company (full payload, X-Correlation-Id)
+    Worker->>SplitDB: Create RootCompany + AppCompanyShard
+    SplitDB-->>Worker: ok
+    Worker-->>Main: 201 Created (CompanyId)
+    Main-->>React: 201 Created (CompanyId, CompanySlug)
+
+    Note over Main,Worker: Failure path: if Worker returns 5xx,<br/>Main retries (max 3, exp backoff)<br/>then surfaces WorkerUnreachable per 08-error-contract.md
