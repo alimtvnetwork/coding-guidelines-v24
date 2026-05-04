@@ -2,7 +2,7 @@
   "Title": "MWS \u2014 Main / Worker Service Error Code Index",
   "Project": "MWS",
   "Name": "Main / Worker Service",
-  "Version": "1.0.0",
+  "Version": "1.1.0",
   "Generated": "2026-05-04",
   "Source": "spec/19-main-worker-service/13-error-codes.md",
   "Range": {
@@ -21,7 +21,7 @@
       "Max": 21199
     }
   ],
-  "TotalCodes": 41,
+  "TotalCodes": 48,
   "RetryableCodes": 7,
   "Codes": [
     {
@@ -375,6 +375,36 @@
       "Retryable": false
     },
     {
+      "Code": "MAIN-300-01",
+      "Flat": 21130,
+      "Name": "CorrelationIdMissing",
+      "HttpStatus": 400,
+      "Tier": "Main",
+      "Message": "Required `X-Correlation-Id` header absent.",
+      "Source": "`04-worker-routing.md` \u00a77.4 + `spec/04-database-conventions/06-rest-api-format.md`",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-300-04",
+      "Flat": 21131,
+      "Name": "IdempotencyBodyMismatch",
+      "HttpStatus": 409,
+      "Tier": "Main",
+      "Message": "Replay with different request body for same `X-Idempotency-Key`.",
+      "Source": "`04-worker-routing.md` \u00a77.3",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-300-05",
+      "Flat": 21132,
+      "Name": "RoutingResolveFail",
+      "HttpStatus": 404,
+      "Tier": "Main",
+      "Message": "Could not resolve `(CompanyId) -> WorkerNode` mapping.",
+      "Source": "`04-worker-routing.md` \u00a77.2",
+      "Retryable": false
+    },
+    {
       "Code": "MAIN-400-01",
       "Flat": 21140,
       "Name": "TenantNotFound",
@@ -402,6 +432,46 @@
       "Tier": "Main",
       "Message": "No worker matches placement strategy.",
       "Source": "`04`",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-400-05",
+      "Flat": 21143,
+      "Name": "TwoFactorChallengeUnknown",
+      "HttpStatus": 401,
+      "Tier": "Main",
+      "Message": "TOTP submitted for unknown / expired challenge id.",
+      "Source": "`04-worker-routing.md` \u00a77.2 (`/Auth/TwoFactor/Verify`)",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-400-08",
+      "Flat": 21144,
+      "Name": "RefreshNotEligible",
+      "HttpStatus": 401,
+      "Tier": "Main",
+      "Message": "JWT not within refresh window or already rotated.",
+      "Source": "`04-worker-routing.md` \u00a77.2 (`/Auth/Refresh`)",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-400-09",
+      "Flat": 21145,
+      "Name": "RefreshReplay",
+      "HttpStatus": 401,
+      "Tier": "Main",
+      "Message": "Single-use refresh JWT replayed after rotation.",
+      "Source": "`04-worker-routing.md` \u00a77.2 + diagrams/seq-login-routing",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-400-11",
+      "Flat": 21146,
+      "Name": "AuthActionMissing",
+      "HttpStatus": 400,
+      "Tier": "Main",
+      "Message": "Required `X-Auth-Action` header absent on multi-step auth flow.",
+      "Source": "`04-worker-routing.md` \u00a77.4",
       "Retryable": false
     },
     {
