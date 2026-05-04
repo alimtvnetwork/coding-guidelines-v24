@@ -36,7 +36,7 @@ Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStra
 A worker is eligible only if **all** are true (positive guards, per CODE RED):
 - `IsWorkerActive(node)` → `WorkerNodeStatusCode = 'Active'`
 - `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Heartbeat.IntervalSeconds × MissedThreshold` per `15-tunable-constants.md` §2.3 <!-- TUNABLE-WAIVER: derived product, not a literal -->.
-- `HasCapacity(node)` → assigned company count below `MainWorker.Routing.MaxCompaniesPerWorker` (0 = unlimited)
+- `HasCapacity(node)` → assigned company count strictly less than `MainWorker.Routing.MaxCompaniesPerWorker`. **NULL = unlimited** (resolves F-A-06; the legacy `0` magic value is rejected — Main MUST refuse to start if the configured value is `0` or negative). When `NULL`, the guard returns `true` unconditionally.
 
 If no eligible worker exists → return `WorkerUnavailable` error per `08-error-contract.md`.
 
