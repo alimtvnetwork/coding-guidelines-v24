@@ -50,6 +50,7 @@ RANGE_SOURCE=""  # "step" or "from-to"; tracked for the mutual-exclusion check.
 # Parse a step token: either "N" or "N-M". Echoes "<from> <to>" on
 # success, exits 2 on malformed input. Bounds are validated against
 # the step total in a second pass once STEPS is known.
+# lint-allow: function-length reason="flat range-spec parser"
 _parse_step_range() {
   local token="$1" flag="$2"
   if [[ "$token" =~ ^([0-9]+)$ ]]; then

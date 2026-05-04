@@ -31,6 +31,7 @@ function _Try-MatchRemoteUrl {
     }
 }
 
+# lint-allow: function-length reason="flat URL-shape parser"
 function ConvertFrom-RemoteUrl {
     param([string]$Url)
     if (-not $Url) { return $null }

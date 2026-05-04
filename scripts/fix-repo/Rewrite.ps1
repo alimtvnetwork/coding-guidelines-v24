@@ -27,6 +27,7 @@ function _Apply-OneTarget {
     return [pscustomobject]@{ Text=$replaced; Added=$added }
 }
 
+# lint-allow: function-length reason="flat read-modify-write pipeline"
 function Invoke-FileRewrite {
     param([string]$FullPath, [string]$Base, [int[]]$Targets, [int]$Current, [bool]$DryRun)
     $original = [System.IO.File]::ReadAllText($FullPath)

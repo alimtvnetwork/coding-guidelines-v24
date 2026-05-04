@@ -23,6 +23,7 @@ or as the first body line):
   - `reason=...`     required (free text, must be quoted)
   - `max=N`          required for the 16–25 tier (N must be ≤ 25)
   - `framework=true` required for the >25 tier (caps at 60)
+  - For the warn tier (9–15 lines, within hard max), `reason=...` alone suffices.
 
 Discovery:
   - Walks `scripts/` (override with --root).
@@ -136,6 +137,9 @@ def is_waiver_valid(tier: str, length: int, waiver: dict | None) -> bool:
         return False
     if not waiver["reason"]:
         return False
+    if tier == "warn":
+        # 9–15 tier (best-practice exceedance, still within max=15) only needs reason.
+        return True
     if tier == "fail":
         # 16–25 tier requires explicit max >= length
         return waiver["max"] is not None and length <= waiver["max"] <= HARD_MAX_LINES
@@ -227,7 +231,7 @@ def main() -> int:
                 if args.verbose:
                     print(f"OK   {rel}:{lineno} {name} ({length})")
                 continue
-            if tier in ("fail", "hard-fail") and is_waiver_valid(tier, length, waiver):
+            if tier in ("warn", "fail", "hard-fail") and is_waiver_valid(tier, length, waiver):
                 waived += 1
                 if args.verbose:
                     print(f"WAIV {rel}:{lineno} {name} ({length}, tier={tier})")

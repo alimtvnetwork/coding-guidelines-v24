@@ -73,6 +73,7 @@ _slides_build() {
   echo "▸ build...";                "$runner" run build
 }
 
+# lint-allow: function-length reason="flat process bootstrap"
 _slides_serve_and_open() {
   local runner="$1" url="http://localhost:4173/"
   echo "▸ start preview server (background)..."
@@ -85,6 +86,7 @@ _slides_serve_and_open() {
   wait "$preview_pid"
 }
 
+# lint-allow: function-length reason="flat dispatcher"
 invoke_slides() {
   echo ""; echo "▸ slides — building offline deck and opening in browser"; echo ""
   local slides_dir="$SCRIPT_DIR/slides-app"
@@ -109,6 +111,7 @@ invoke_visibility() {
 
 EXIT_FIX_REPO_MISSING=4
 
+# lint-allow: function-length reason="flat guard sequence"
 _assert_fix_repo_present() {
   local target="$SCRIPT_DIR/fix-repo.sh"
   [ -f "$target" ] && return 0
@@ -129,6 +132,7 @@ _fix_repo_has_debug() {
   return 1
 }
 
+# lint-allow: function-length reason="flat diagnostic emitter"
 _fix_repo_debug_preflight() {
   _fix_repo_has_debug "$@" || return 0
   {

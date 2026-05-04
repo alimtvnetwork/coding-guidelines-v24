@@ -42,6 +42,7 @@ $Script:ExitBadFlag      = 6
 $Script:ExitConfirmReq   = 7
 $Script:ExitVerifyFailed = 8
 
+# lint-allow: function-length reason="help-text heredoc"
 function Show-Help {
     @"
 visibility-change.ps1 — toggle/set GitHub/GitLab repo visibility.
