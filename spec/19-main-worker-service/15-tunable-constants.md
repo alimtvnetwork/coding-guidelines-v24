@@ -243,4 +243,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.1.0 — 2026-05-04*
+*Tunable constants v1.2.0 — 2026-05-04 (resolved OQ-15-1: explicit array; resolved OQ-15-2: sliding TTL with absolute cap; +2 new auth tunables)*
