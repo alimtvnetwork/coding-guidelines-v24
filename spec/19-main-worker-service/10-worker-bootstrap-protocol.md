@@ -88,7 +88,7 @@ Headers: `Authorization: Bearer <oauth-token>`, `X-Correlation-Id`, `X-Idempoten
   "JwtPublicKeyPem":           "-----BEGIN PUBLIC KEY-----\nMIIB...\n-----END PUBLIC KEY-----",
   "JwtSigningKeyId":           "main-jwt-2026-q2",
   "AcceptedVersionRange":      ">=1.4.0 <2.0.0",
-  "HeartbeatIntervalSeconds":  30,
+  "HeartbeatIntervalSeconds":  30,                                              // default per `15-tunable-constants.md` §2.3 (`MainWorker.Heartbeat.IntervalSeconds`)
   "ServerTimeUtc":             "2026-05-04T12:00:00Z",
   "Description":               null
 }
