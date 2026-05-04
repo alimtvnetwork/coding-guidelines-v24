@@ -59,7 +59,7 @@ Cache backend: Laravel cache driver (file/redis/memcached) — implementer's cho
 ## 3. Failover
 
 ### 3.1 Worker becomes unreachable mid-request
-1. Main retries per `01-architecture.md` §4 (max 3 attempts, exponential backoff).
+1. Main retries per `15-tunable-constants.md` §2.1 (`RetryMaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`).
 2. On final failure: surface `WorkerUnreachable` to caller. Do NOT silently reroute — the user's data lives on that specific worker.
 3. Log event with `X-Correlation-Id`. Per `spec/03-error-manage/`, never swallow.
 
