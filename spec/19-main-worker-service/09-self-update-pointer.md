@@ -10,6 +10,7 @@ The author's mindmap shows self-update as a sibling branch to `main`, with the f
 
 ---
 
+## 1. Why this file exists
 
 Per verbatim §Self-Update Mechanism:
 
