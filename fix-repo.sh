@@ -44,6 +44,7 @@ is_mode_flag() {
   case "$1" in --2|--3|--5|--all) return 0 ;; *) return 1 ;; esac
 }
 
+# lint-allow: function-length reason="flat CLI flag-parser dispatch; further split harms readability" max=25
 parse_args() {
   local mode_count=0 a expect_config=0
   for a in "$@"; do
@@ -171,6 +172,7 @@ run_sweep() {
   done < <(cd "$REPO_ROOT" && git ls-files -z)
 }
 
+# lint-allow: function-length reason="top-level orchestrator; sequential pipeline" max=25
 main() {
   parse_args "$@"
   resolve_identity

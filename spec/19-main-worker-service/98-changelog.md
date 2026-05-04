@@ -23,7 +23,7 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 - `97-acceptance-criteria.md` — verbatim AC-1..AC-9 mapped to deliverables
 - `diagrams/erd-main-db.mmd`, `erd-worker-split-db.mmd`, `erd-seedable-config.mmd`
 - `diagrams/seq-company-creation.mmd`, `seq-login-routing.mmd`, `seq-push-update.mmd`
-- `diagrams/README.md`
+- `diagrams/readme.md`
 
 ### Decisions locked
 - Tenant root: **Company-as-root** (multi-tenant; user-as-root is degenerate 1:1).
