@@ -147,4 +147,4 @@ All 9 verbatim acceptance criteria mapped in `97-acceptance-criteria.md`. Covera
 
 ---
 
-*Consistency report v1.0.0 — 2026-05-04*
+*Consistency report v1.1.0 — 2026-05-04 (added §4 reproducible grep commands closing audit F-N-03)*
