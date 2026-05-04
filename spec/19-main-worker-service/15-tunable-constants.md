@@ -1,7 +1,7 @@
 # 15 — Tunable Constants (Single-Value Pins)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-15, F-A-16, F-B-12 (top-10 fix #7). Closes AC-7, partially AC-6.
@@ -51,7 +51,9 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 |---|---:|---|---|---|
 | `MainWorker.Auth.WorkerJwtTtlSeconds` | **900** (15m) | seconds | `12-jwt-delivery-contract.md` §6 | Already pinned there; mirrored here for the single-table view. |
 | `MainWorker.Auth.JwtRefreshLeadSeconds` | **60** | seconds | `12` §6 | React refreshes when within this window of `exp`. |
-| `MainWorker.Auth.MainSessionTtlSeconds` | **28800** (8h) | seconds | Main session cookie | Sliding window: each request extends. |
+| `MainWorker.Auth.MainSessionTtlSeconds` | **28800** (8h) | seconds | Main session cookie | Sliding window: each qualifying request extends. See §7.2. |
+| `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` | **86400** (24h) | seconds | Main session cookie | Hard ceiling from initial login regardless of activity. Forces `Reauthenticate`. MUST be ≥ `MainSessionTtlSeconds` (T4 linter invariant). Decided in §7.2. |
+| `MainWorker.Auth.SessionSlidingExtendOnReadOnly` | **true** | bool | Main session cookie | If `false`, only state-changing requests extend the sliding window. Decided in §7.2. |
 | `MainWorker.Auth.ClockSkewToleranceSeconds` | **60** | seconds | `12` §7, `10` §3 | Same value across both contexts. |
 
 ### 2.5 Routing & pool
@@ -132,7 +134,9 @@ Add (or merge with) the following category at SemVer `1.4.0` of `config.seed.jso
 
     "WorkerJwtTtlSeconds":         { "Type": "number",  "Default": 900,       "Min": 60,   "Max": 3600 },
     "JwtRefreshLeadSeconds":       { "Type": "number",  "Default": 60,        "Min": 10 },
-    "MainSessionTtlSeconds":       { "Type": "number",  "Default": 28800,     "Min": 300 },
+    "MainSessionTtlSeconds":         { "Type": "number",  "Default": 28800,     "Min": 300 },
+    "MainSessionAbsoluteMaxSeconds": { "Type": "number",  "Default": 86400,     "Min": 300 },
+    "SessionSlidingExtendOnRead":    { "Type": "boolean", "Default": true },
     "ClockSkewToleranceSeconds":   { "Type": "number",  "Default": 60,        "Min": 0,    "Max": 300 },
 
     "RoutingHttpTimeoutSeconds":   { "Type": "number",  "Default": 15,        "Min": 1 },
@@ -187,10 +191,44 @@ Failure = build break.
 
 ---
 
-## 7. Open Questions (logged, non-blocking)
+## 7. Resolved Decisions (formerly Open Questions)
 
-- **OQ-15-1** Should retry backoff be true exponential (`base^n`) instead of explicit array? Inferred: explicit array is dumb-AI-friendlier and bounds the worst case.
-- **OQ-15-2** Should `MainSessionTtlSeconds` be sliding or absolute? Inferred: sliding, matches Laravel Sanctum default; absolute reserved for v2.0 if compliance demands.
+### 7.1 OQ-15-1 — Retry backoff shape: **explicit array** ✅ RESOLVED 2026-05-04
+
+**Decision:** Keep explicit `[2, 8, 30]` array (`MainWorker.Retry.BackoffSeconds`). **Reject** `base^n` exponential.
+
+**Why:**
+- **Dumb-AI friendly** — every value is visible; no implementer needs to compute `2^n` mentally and re-derive a ceiling clamp.
+- **Bounded worst case** — explicit ceiling at element `[N-1]`; exponential needs an extra `Min(base^n, Cap)` rule which is a second tunable AND a second source of disagreement (audit F-A-15 root cause was exactly this kind of derived value).
+- **Operationally tweakable** — ops can paste `[5, 30, 120]` into Seedable-Config without re-reading any formula doc. Exponential requires editing `Base` AND `Cap` AND mentally reconciling.
+- **Length contract** — `len(BackoffSeconds) == MaxAttempts - 1` is a single-line linter check (already in `check-tunable-constants.py`); `base^n` would need range validation per attempt index.
+
+**Trade-off accepted:** Cannot smoothly extend to N=10+ attempts without ugly arrays. Tolerated — `MainWorker.Retry.MaxAttempts=3` is pinned and any move to N≥6 requires a v2.0 design review anyway.
+
+**No values change.** This decision codifies the existing `[2, 8, 30]` / `[30, 120, 300]` defaults already shipped in §2.1 and `spec/14-update/28-…md` §3.1.
+
+### 7.2 OQ-15-2 — Session TTL semantics: **sliding with absolute cap** ✅ RESOLVED 2026-05-04
+
+**Decision:** Adopt **sliding** TTL by default (matches Laravel Sanctum / Express-Session / ASP.NET Core), bounded by an **absolute** maximum-lifetime ceiling.
+
+**Why:**
+- **Sliding** matches every default-stack target (Laravel/.NET/Express) — zero surprise for implementers.
+- **Pure sliding is unbounded** — a user keeping a tab open for 90 days never re-authenticates. Compliance frameworks (SOC 2, ISO 27001 §9.4.2) require periodic re-authentication.
+- **Sliding + absolute cap** is the industry compromise (used by Auth0, Okta, AWS Cognito) — refresh on activity, but force re-login at the absolute boundary regardless of activity.
+
+**Existing tunable retained, two new ones added in §2.4 above + §4** (not re-tabled here to avoid catalogue duplication; this section explains the contract):
+
+- `MainWorker.Auth.MainSessionTtlSeconds` (existing, **28800s/8h**) — sliding window; reset on every qualifying authenticated request.
+- `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` (NEW, **86400s/24h**) — hard ceiling from initial login regardless of activity; forces `Reauthenticate`. MUST be ≥ sliding TTL.
+- `MainWorker.Auth.SessionSlidingExtendOnReadOnly` (NEW, **true**) — if `false`, only state-changing requests (POST/PUT/PATCH/DELETE) extend the window — mitigates background-poll abuse.
+
+**Implementation contract (consumed by `05-auth-and-2fa.md` §6):**
+1. On each authenticated request: if `(now - SessionStartedAt) >= MainSessionAbsoluteMaxSeconds` → `401 + X-Auth-Action: Reauthenticate`.
+2. Else if request qualifies (write request, OR sliding-extend-on-read flag true): `SessionLastSeenAt = now`; cookie `Max-Age` reset to sliding TTL.
+3. Else: leave `SessionLastSeenAt` and cookie `Max-Age` untouched.
+
+**Linter follow-up (FU-16):** `check-tunable-constants.py` to assert sliding TTL ≤ absolute max (T4 invariant).
+
 
 ---
 
@@ -205,4 +243,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.1.0 — 2026-05-04*
+*Tunable constants v1.2.0 — 2026-05-04 (resolved OQ-15-1: explicit array; resolved OQ-15-2: sliding TTL with absolute cap; +2 new auth tunables)*
