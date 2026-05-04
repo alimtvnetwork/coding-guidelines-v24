@@ -47,7 +47,7 @@ After page reload, React calls `/API/V1/Company/{CompanySlug}/Resolve` again (ch
 | Re-issue cost | Sticky until expiry ⚠️ | Trivial (refetch on resolve) ✅ |
 | Survives page reload | Yes ⚠️ | No ✅ (forces re-resolve, re-checks tenant→worker mapping) |
 
-**Trade-off accepted:** XSS risk is mitigated by (a) strict CSP per §5, (b) short TTL (15 min default per `05-auth-and-2fa.md` §5), and (c) JWT being scoped to one `WorkerNodeId` + one company. CSRF is the larger systemic risk for cookie-borne API tokens, so we eliminate it.
+**Trade-off accepted:** XSS risk is mitigated by (a) strict CSP per §5, (b) short TTL (15 min default per `15-tunable-constants.md` §2.4 `MainWorker.Auth.WorkerJwtTtlSeconds`), and (c) JWT being scoped to one `WorkerNodeId` + one company. CSRF is the larger systemic risk for cookie-borne API tokens, so we eliminate it.
 
 ---
 
