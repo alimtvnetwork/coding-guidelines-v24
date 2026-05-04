@@ -135,7 +135,7 @@ Failure → 401 with `08-error-contract.md` envelope. NEVER 500 on auth failure.
 
 - ❌ `if user.role === 'admin'` — use `User has access to EnumPage.X` (`07-role-based-dashboards.md`).
 - ❌ Storing JWTs in `localStorage` (XSS exposure).
-- ❌ Long-lived worker JWTs (> 1 hour).
+- ❌ Long-lived worker JWTs (> 1 hour) <!-- TUNABLE-WAIVER: anti-pattern threshold, not a tunable; canonical TTL is MainWorker.Auth.WorkerJwtTtlSeconds in 15-tunable-constants.md §2.4 -->.
 - ❌ Symmetric JWT signing across tiers (key sharing risk).
 - ❌ Returning 500 on bad credentials (info leak; use 401 + neutral message).
 - ❌ `if (!isAuthenticated)` — invert to `if (isAuthenticated)` and use early-return guards.
