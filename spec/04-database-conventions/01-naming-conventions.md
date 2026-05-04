@@ -196,6 +196,40 @@ ExpiresAt  TEXT NULL    -- NULL = never expires, non-NULL = expires at this time
 
 > **Rule of thumb:** If the business logic ever asks "when did this happen?", use a timestamp. If it only asks "is this the case?", use a boolean.
 
+### Rule 7.1: ISO-8601 Timestamp Precision (canonical format)
+
+All `TEXT` timestamp columns MUST store values in this exact format:
+
+```
+YYYY-MM-DDTHH:MM:SS.sssZ
+```
+
+| Segment | Rule | Rationale |
+|---------|------|-----------|
+| Date `YYYY-MM-DD` | Mandatory, zero-padded | Lexicographic sort = chronological sort |
+| Separator `T` | Mandatory uppercase `T` (not space) | RFC 3339 §5.6 strict |
+| Time `HH:MM:SS` | Mandatory, 24-hour, zero-padded | Same sort guarantee |
+| Fractional `.sss` | **Mandatory milliseconds** (3 digits, zero-padded) | Disambiguates events within the same second; required for correlation/ordering across logs |
+| Timezone `Z` | **Mandatory UTC suffix** (`Z`, never `+00:00`, never naïve) | Eliminates locale ambiguity; `Z` sorts before any `+HH:MM` offset |
+
+**Examples:**
+
+```
+✅ 2026-05-04T14:23:07.451Z
+❌ 2026-05-04T14:23:07Z          (missing ms)
+❌ 2026-05-04T14:23:07.451+00:00 (use Z, not numeric offset)
+❌ 2026-05-04 14:23:07.451Z      (space instead of T)
+❌ 2026-05-04T14:23:07.4Z        (1-digit ms, must be 3)
+```
+
+**SQLite default**: `datetime('now')` produces second-precision in local TZ — **DO NOT use raw**. Use `strftime('%Y-%m-%dT%H:%M:%fZ', 'now')` (the `%f` token emits `SS.sss`) for compliant defaults:
+
+```sql
+CreatedAt TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+```
+
+> **Rule of thumb:** Every timestamp on the wire, in the DB, and in logs is ms-precision UTC. No exceptions, no per-table overrides.
+
 ### Rule 8: Negative-to-Positive Conversion + Approved Inverses
 
 This is the canonical reference table for boolean column naming. Every candidate name lands in **one of three buckets**:
