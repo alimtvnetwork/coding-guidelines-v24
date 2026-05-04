@@ -10,7 +10,7 @@
 ## 0. Author Mindmaps (source of intent)
 
 The architecture in this folder formalizes these author-drawn mindmaps.
-The single best one-page summary is image 04. See [`images/README.md`](./images/README.md) for the full index.
+The single best one-page summary is image 04. See [`images/readme.md`](./images/readme.md) for the full index.
 
 ![Top-level main / self-update split](./images/01-main-worker-topology.png)
 
