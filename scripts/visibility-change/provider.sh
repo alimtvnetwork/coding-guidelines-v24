@@ -17,6 +17,7 @@ host_is_allowlisted_gitlab() {
 }
 
 # Sets PROVIDER ('github'|'gitlab') or empty
+# lint-allow: function-length reason="flat host-to-provider map"
 resolve_provider() {
   local url="$1"
   PROVIDER=""
@@ -33,6 +34,7 @@ resolve_provider() {
 }
 
 # Sets SLUG to "owner/repo" or empty
+# lint-allow: function-length reason="flat URL-shape parser"
 resolve_owner_repo() {
   local url="$1"
   local trimmed="${url%/}"
