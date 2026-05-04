@@ -1,7 +1,7 @@
 # 15 — Tunable Constants (Single-Value Pins)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-15, F-A-16, F-B-12 (top-10 fix #7). Closes AC-7, partially AC-6.
@@ -77,6 +77,20 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `WorkerPushUpdate.MaxRunDurationSeconds` | **600** (10m) | seconds | Hard cap before self-abort + rollback. |
 | `WorkerPushUpdate.HandoffTimeoutSeconds` | **60** | seconds | Per `spec/14-update/28` §5 step 8. |
 | `WorkerPushUpdate.InstructionRetentionDays` | **14** | days | Per `spec/14-update/28` §7. |
+| `WorkerPushUpdate.IssuedSkewSeconds` | **300** (5m) | seconds | Per `spec/14-update/28` §3 — Worker rejects an instruction whose `IssuedAtUtc` is older than this. Distinct from JWT clock-skew (§2.4). Bumped to v1.1.0 to retire the §28 line-82 TUNABLE-WAIVER. |
+
+### 2.8 Self-update pointer (consumer: `09-self-update-pointer.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.SelfUpdate.RedirectStaleHours` | **36** | hours | `09-self-update-pointer.md` §1 step 5 | If the cached redirect URL is older than this OR unreachable, re-resolve via the original endpoint. Bumped to v1.1.0 to retire the §09 line-41 TUNABLE-WAIVER. |
+
+### 2.9 Worker bootstrap (consumer: `10-worker-bootstrap-protocol.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Bootstrap.RetryBackoffSeconds` | `[10, 30, 90, 300]` | seconds[] | `10-worker-bootstrap-protocol.md` §6 (`WORKER-100-01 OAUTH_HANDSHAKE_FAIL`) | Cold-bootstrap retry ladder for Worker→Main OAuth handshake; distinct from the steady-state `MainWorker.Retry.BackoffSeconds` of §2.1. After exhaustion the Worker exits and is restarted by its supervisor. Bumped to v1.1.0 to retire the §10 line-137 TUNABLE-WAIVER. |
+| `MainWorker.Bootstrap.RetryMaxAttempts` | **4** | count | Same | MUST equal `len(RetryBackoffSeconds)`. |
 
 ---
 
@@ -131,7 +145,13 @@ Add (or merge with) the following category at SemVer `1.3.0` of `config.seed.jso
 
     "PushUpdateMaxRunSeconds":     { "Type": "number",  "Default": 600,       "Min": 30 },
     "PushUpdateHandoffTimeoutSec": { "Type": "number",  "Default": 60,        "Min": 5 },
-    "PushUpdateRetentionDays":     { "Type": "number",  "Default": 14,        "Min": 1 }
+    "PushUpdateRetentionDays":     { "Type": "number",  "Default": 14,        "Min": 1 },
+    "PushUpdateIssuedSkewSec":     { "Type": "number",  "Default": 300,       "Min": 30,   "Max": 3600 },
+
+    "SelfUpdateRedirectStaleHours":{ "Type": "number",  "Default": 36,        "Min": 1,    "Max": 720 },
+
+    "BootstrapRetryBackoffSec":    { "Type": "string",  "Default": "10,30,90,300", "Description": "Comma-separated; length = BootstrapRetryMaxAttempts." },
+    "BootstrapRetryMaxAttempts":   { "Type": "number",  "Default": 4,         "Min": 1,    "Max": 10 }
 
   }
 }
@@ -185,4 +205,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.0.0 — 2026-05-04*
+*Tunable constants v1.1.0 — 2026-05-04*
