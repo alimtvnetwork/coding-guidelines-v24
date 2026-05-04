@@ -152,7 +152,9 @@ All codes MUST be registered in `spec/03-error-manage/03-error-code-registry/` u
 
 ## 7. Worker-side persistence
 
-Worker stores each JID in the **App tier** DB (per `spec/05-split-db-architecture/`):
+> **Tier correction (FU-5, applied 2026-05-04):** `WorkerUpdateInstruction` is **worker-wide**, not company-scoped, so it lives in the **Settings tier** — NOT the App tier. Authority: [`spec/19-main-worker-service/11-split-db-tier-reconciliation.md`](../19-main-worker-service/11-split-db-tier-reconciliation.md) §5. Earlier drafts of this file placed it in the App tier; that placement is now retracted.
+
+Worker stores each JID in the **Settings tier** DB (per `spec/05-split-db-architecture/`; concrete tier mapping in `spec/19/11-split-db-tier-reconciliation.md` §5):
 
 ```sql
 CREATE TABLE WorkerUpdateInstruction (
@@ -223,7 +225,8 @@ Power Admin           Main Server                   Worker
 - `spec/14-update/05-handoff-mechanism.md` — post-swap handoff.
 - `spec/14-update/22-update-command-workflow.md` — analogous CLI flow (sibling, not authoritative for workers).
 - `spec/03-error-manage/03-error-code-registry/` — MUST register `WORKER-*` codes from §6.
-- `spec/05-split-db-architecture/` — App-tier table placement.
+- `spec/05-split-db-architecture/` — tier-semantic source of truth.
+- `spec/19-main-worker-service/11-split-db-tier-reconciliation.md` — `WorkerUpdateInstruction` placement: **Settings tier** (FU-5).
 - `spec/06-seedable-config-architecture/` — `WorkerUpdateInstructionRetentionDays` and `SigningKeyId` trust store.
 
 ---
