@@ -136,6 +136,9 @@ def is_waiver_valid(tier: str, length: int, waiver: dict | None) -> bool:
         return False
     if not waiver["reason"]:
         return False
+    if tier == "warn":
+        # 9–15 tier (best-practice exceedance, still within max=15) only needs reason.
+        return True
     if tier == "fail":
         # 16–25 tier requires explicit max >= length
         return waiver["max"] is not None and length <= waiver["max"] <= HARD_MAX_LINES
