@@ -105,6 +105,50 @@ Unique: `(UserId, RoleId)`.
 
 Seeded via Seedable-Config.
 
+### 2.6.1 `EnumPage` (ref)
+
+Defines the closed set of dashboard pages governed by RBAC. Single source of truth for the `EnumPage` enum referenced in `07-role-based-dashboards.md` §3 and `05-§8`.
+
+| Column | Type | Null |
+|--------|------|------|
+| `EnumPageId` | INTEGER | NO (PK) |
+| `EnumPageCode` | TEXT | NO (unique PascalCase, e.g. `WorkerListPage`, `PushUpdatePage`, `UserManagementPage`) |
+| `EnumPageLabel` | TEXT | NO |
+| `Description` | TEXT | YES |
+
+Seeded via Seedable-Config (9 rows enumerated in `14-rbac-and-status-seed.md`).
+
+### 2.6.2 `RolePageAccess` (join, exempt from Description rule)
+
+Per-role access grant for each page. Defined originally in `07-§4.1`; canonicalised here so the schema document is self-contained. (Resolves F-A-23 / F-B-10.)
+
+| Column | Type | Null |
+|--------|------|------|
+| `RolePageAccessId` | INTEGER | NO (PK) |
+| `RoleId` | INTEGER | NO (FK → `Role`) |
+| `EnumPageId` | INTEGER | NO (FK → `EnumPage`) |
+| `CanRead` | INTEGER | NO (0/1) |
+| `CanWrite` | INTEGER | NO (0/1) |
+
+Unique: `(RoleId, EnumPageId)`. Seeded with 19 rows per `14-rbac-and-status-seed.md`.
+
+### 2.6.3 `AccessDenialEvent` (transactional, audit)
+
+Audit row written by Workers on every 403 returned for an `AccessDenied` envelope (per `08-error-contract.md` §3.5 and `07-§8`). Canonicalised here so the schema document covers every table referenced cross-spec. (Resolves F-A-17.)
+
+| Column | Type | Null |
+|--------|------|------|
+| `AccessDenialEventId` | INTEGER | NO (PK) |
+| `UserId` | INTEGER | NO (FK) |
+| `EnumPageId` | INTEGER | NO (FK) |
+| `WorkerNodeId` | INTEGER | YES (FK; NULL when denied at Main edge) |
+| `CorrelationId` | TEXT | NO |
+| `OccurredAt` | TEXT | NO (ISO-8601) |
+| `Notes` | TEXT | YES |
+| `Comments` | TEXT | YES |
+
+Indexed on `(UserId, OccurredAt)` and `(EnumPageId, OccurredAt)` for audit queries.
+
 ### 2.7 `WorkerVersion` (transactional)
 
 Tracks which version each Worker is currently running.
