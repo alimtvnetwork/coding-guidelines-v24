@@ -204,6 +204,10 @@ SEED_TO_KEY = {
     "PushUpdateMaxRunSeconds": "WorkerPushUpdate.MaxRunDurationSeconds",
     "PushUpdateHandoffTimeoutSec": "WorkerPushUpdate.HandoffTimeoutSeconds",
     "PushUpdateRetentionDays": "WorkerPushUpdate.InstructionRetentionDays",
+    "PushUpdateIssuedSkewSec": "WorkerPushUpdate.IssuedSkewSeconds",
+    "SelfUpdateRedirectStaleHours": "MainWorker.SelfUpdate.RedirectStaleHours",
+    "BootstrapRetryBackoffSec": "MainWorker.Bootstrap.RetryBackoffSeconds",
+    "BootstrapRetryMaxAttempts": "MainWorker.Bootstrap.RetryMaxAttempts",
 }
 
 
@@ -259,7 +263,11 @@ def diff_seed_row(
 def values_match(seed_val: str, cat_val: str) -> bool:
     if seed_val == cat_val:
         return True
-    return seed_val.replace(",", "") == cat_val.replace("[", "").replace("]", "").replace(" ", "")
+    return _strip_array_chars(seed_val) == _strip_array_chars(cat_val)
+
+
+def _strip_array_chars(value: str) -> str:
+    return value.replace("[", "").replace("]", "").replace(" ", "").replace(",", "")
 
 
 def main() -> int:
