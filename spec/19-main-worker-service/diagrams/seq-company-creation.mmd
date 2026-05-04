@@ -17,18 +17,19 @@ sequenceDiagram
     participant Worker as Chosen Worker
     participant SplitDB as Worker Split-DB
 
-    React->>Main: POST /API/V1/Company (CompanyName, Slug, ...)
-    Main->>Main: Validate session + payload
+    React->>Main: POST /API/V1/Companies<br/>Authorization: Bearer <WorkerJwt-or-MainJwt><br/>X-Correlation-Id, X-Idempotency-Key (ULID)<br/>{ CompanyCode, CompanyName, OwnerUserId, ... }
+    Main->>Main: Validate session + payload<br/>Idempotency cache lookup (TTL=86400s per spec/19/15)
     Main->>DB: SELECT eligible WorkerNode rows
     DB-->>Main: candidates
     Main->>Strat: pick(candidates, strategyCode)
     Strat-->>Main: WorkerNode (id=3)
     Main->>DB: INSERT Company (minimal identity, WorkerNodeId=3)
     Main->>DB: INSERT WorkerSelectionEvent
-    Main->>Worker: POST /Internal/Company (full payload, X-Correlation-Id)
+    Main->>Worker: POST /Internal/Company<br/>Authorization: Bearer <internal-JWT><br/>X-Correlation-Id, X-Idempotency-Key
     Worker->>SplitDB: Create RootCompany + AppCompanyShard
     SplitDB-->>Worker: ok
     Worker-->>Main: 201 Created (CompanyId)
-    Main-->>React: 201 Created (CompanyId, CompanySlug)
+    Main-->>React: 201 JSON { Data: { CompanyId, WorkerNodeId, AssignedSubdomain }, Meta: { CorrelationId, IdempotencyReplay: false } }
+    Note over React: NO new WorkerJwt is minted by this flow.<br/>React continues using the existing in-memory JWT<br/>(spec/19/12-jwt-delivery-contract.md §2).<br/>For the new tenant React calls /Company/{slug}/Resolve to obtain a JWT scoped to it.
 
-    Note over Main,Worker: Failure path: if Worker returns 5xx,<br/>Main retries (max 3, exp backoff)<br/>then surfaces WorkerUnreachable per 08-error-contract.md
+    Note over Main,Worker: Failure path: if Worker returns 5xx, Main retries<br/>(MaxAttempts=3, backoff [2,8,30]s per spec/19/15-tunable-constants.md)<br/>then surfaces WorkerUnreachable (WORKER-300-02) per spec/19/13-error-codes.md.<br/>Idempotency replay returns the original response with X-Idempotency-Replay: true.

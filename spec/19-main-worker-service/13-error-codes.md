@@ -120,21 +120,33 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-200-01` | `21120` | `PowerAdminRequired` | "Endpoint requires PowerAdmin role." | 403 | `06` §2.5/§2.7 |
 | `MAIN-200-02` | `21121` | `RoleMissingForPage` | "Caller role lacks `RolePageAccess` for requested page." | 403 | `07` |
 
-### 3.3 Routing (400-499 → 21140-21149)
+### 3.3 Validation (300-399 → 21130-21139)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-300-01` | `21130` | `CorrelationIdMissing` | "Required `X-Correlation-Id` header absent." | 400 | `04-worker-routing.md` §7.4 + `spec/04-database-conventions/06-rest-api-format.md` |
+| `MAIN-300-04` | `21131` | `IdempotencyBodyMismatch` | "Replay with different request body for same `X-Idempotency-Key`." | 409 | `04-worker-routing.md` §7.3 |
+| `MAIN-300-05` | `21132` | `RoutingResolveFail` | "Could not resolve `(CompanyId) -> WorkerNode` mapping." | 404 | `04-worker-routing.md` §7.2 |
+
+### 3.4 Routing (400-499 → 21140-21149)
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
 | `MAIN-400-01` | `21140` | `TenantNotFound` | "No `Tenant` row for given `CompanySlug`." | 404 | `04-worker-routing.md` |
 | `MAIN-400-02` | `21141` | `WorkerQuarantined` | "Resolved worker is quarantined; routing refused." | 503 | `04` + `10` §7 |
 | `MAIN-400-03` | `21142` | `NoEligibleWorker` | "No worker matches placement strategy." | 503 | `04` |
+| `MAIN-400-05` | `21143` | `TwoFactorChallengeUnknown` | "TOTP submitted for unknown / expired challenge id." | 401 | `04-worker-routing.md` §7.2 (`/Auth/TwoFactor/Verify`) |
+| `MAIN-400-08` | `21144` | `RefreshNotEligible` | "JWT not within refresh window or already rotated." | 401 | `04-worker-routing.md` §7.2 (`/Auth/Refresh`) |
+| `MAIN-400-09` | `21145` | `RefreshReplay` | "Single-use refresh JWT replayed after rotation." | 401 | `04-worker-routing.md` §7.2 + diagrams/seq-login-routing |
+| `MAIN-400-11` | `21146` | `AuthActionMissing` | "Required `X-Auth-Action` header absent on multi-step auth flow." | 400 | `04-worker-routing.md` §7.4 |
 
-### 3.4 Database (500-599 → 21150-21159)
+### 3.5 Database (500-599 → 21150-21159)
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
 | `MAIN-500-01` | `21150` | `MainDbWriteFail` | "Write to Main Root tier DB failed." | 500 | `03-main-db-schema.md` |
 
-### 3.5 External Services (600-699 → 21160-21169)
+### 3.6 External Services (600-699 → 21160-21169)
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
@@ -148,7 +160,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | Sub-range | Reserved for |
 |---|---|
 | `WORKER-21090-21099` | Worker future expansion |
-| `MAIN-21130-21139` | Main validation (300-399) — none needed in v1.0 |
+| `MAIN-21133-21139` | Main validation future expansion |
+| `MAIN-21147-21149` | Main routing future expansion |
 | `MAIN-21170-21199` | Main future expansion (file-system, network) |
 
 ---
@@ -193,15 +206,38 @@ All three formats route to the same JSON error envelope per `08-error-contract.m
 
 ---
 
-## 7. Linter assertions (CI)
+## 7. Linter assertions (CI) — implemented as `linter-scripts/check-mws-error-codes.py`
 
-The repo's `linter-scripts/` MUST add a check (file `check-mws-error-codes.py`):
+Implemented 2026-05-04 (FU-9 closed). Rules enforced:
 
-1. Every `MWS-` / `WORKER-` / `MAIN-` literal in `spec/19/`, `spec/14-update/28-*`, and source code MUST appear in this file's tables.
-2. Every code in this file's tables MUST be referenced from at least one source location (no orphans).
-3. Flat integer ↔ prefixed mapping MUST be bijective.
+1. **R1 Presence** — every `WORKER-XYY-ZZ` / `MAIN-XYY-ZZ` literal in `spec/19/`, `spec/14-update/`, `src/`, and `linter-scripts/tests/` MUST appear in this file's tables.
+2. **R2 No orphans** — every code catalogued here MUST be referenced from ≥1 source location outside the catalogue files (`13-error-codes.md`, `error-codes.json`, `error-codes-master.json`). Codes documented only by range-notation cross-reference (e.g. "`WORKER-100-01..05`") may be waived in §7.1.
+3. **R3 Bijection** — prefixed ↔ flat mapping MUST be one-to-one.
+4. **R4 Range** — `WORKER-*` flats in 21000-21099, `MAIN-*` flats in 21100-21199.
 
-Failure = build break. Tracked as follow-up FU-9.
+### 7.1 Orphan waivers (Rule R2 exemptions)
+
+Codes referenced only via prose range-notation. Each waiver names the file + range expression.
+
+| Code | Waiver source | Notation |
+|---|---|---|
+| `WORKER-100-04`, `WORKER-100-05`, `WORKER-100-06` | `12-jwt-delivery-contract.md` §7 | "verification failure → registered error code" |
+| `WORKER-200-02` | `07-role-based-dashboards.md` | "RolePageAccess denial" |
+| `WORKER-300-02` | `04-database-conventions/06-rest-api-format.md` §Validation | "Missing X-Correlation-Id" |
+| `WORKER-400-04` | `spec/14-update/28-worker-push-instruction.md` §4 | "PayloadKind not supported" |
+| `WORKER-500-02`, `WORKER-500-03` | `spec/14-update/28` §6 + `11-split-db-tier-reconciliation.md` | range mention |
+| `WORKER-600-04` | `spec/14-update/28` §3 | "PayloadDownloadFail" referenced as table heading only |
+| `WORKER-700-03` | `spec/14-update/28` §6 | "Disk-IO failure" |
+| `WORKER-800-02` | `04-worker-routing.md` §3.1 | "WorkerUnreachable" referenced by name |
+| `MAIN-100-01..04` | `05-auth-and-2fa.md` | catalogue-only sub-range |
+| `MAIN-200-01`, `MAIN-200-02` | `06-core-api-endpoints.md` §2.5/§2.7, `07-role-based-dashboards.md` | catalogue-only |
+| `MAIN-400-02`, `MAIN-400-03` | `04-worker-routing.md` §3.1 | range "WorkerUnreachable / quarantine" |
+| `MAIN-500-01` | `03-main-db-schema.md` | catalogue-only |
+| `MAIN-600-02` | `10-worker-bootstrap-protocol.md` §7 | "missed ≥3 heartbeats" |
+
+Waivers are loaded from `linter-scripts/check-mws-error-codes.waivers.txt` (one prefixed code per line, `#` for comments). Adding a waiver requires a row in the table above + a same-PR change to the waiver file. Removing a waiver after its referencing code is added to source MUST be done in the same PR that adds the reference.
+
+Failure = build break.
 
 ---
 
