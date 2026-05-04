@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""
+check-tunable-constants.py — Tunable-constants linter (FU-15).
+
+Enforces the contract in `spec/19-main-worker-service/15-tunable-constants.md` §6:
+
+  Rule T1 — Presence: every numeric literal in spec/19/ prose and
+            spec/14-update/28-worker-push-instruction.md that is followed
+            by a time/count unit (s, sec, seconds, min, minutes, h, hours,
+            attempts, retries, times) MUST be either:
+              (a) named in §2 of 15-tunable-constants.md (the catalogue
+                  table — its key appears in `2.x` rows), OR
+              (b) explicitly waivered by `<!-- TUNABLE-WAIVER: ... -->`
+                  on the same line.
+  Rule T2 — Unique keys: no two §2 rows share the same Key.
+  Rule T3 — Seed parity: every §4 `config.seed.json` Settings.<Name>
+            `Default` value matches the §2 row for the same logical key.
+
+Exit codes:
+  0   all rules pass
+  1   one or more rules failed
+  2   linter setup error
+
+CODE RED compliance:
+  - Functions <=15 lines, zero nested ifs, positive guards.
+  - Errors are surfaced with file/line context; never swallowed.
+"""
+
+from __future__ import annotations
+import re
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+TUNABLES_FILE = REPO_ROOT / "spec/19-main-worker-service/15-tunable-constants.md"
+SCAN_GLOBS = (
+    "spec/19-main-worker-service/*.md",
+    "spec/14-update/28-worker-push-instruction.md",
+)
+# Files exempt from T1 scanning (catalogue + diagrams + JSON snippets).
+EXEMPT_NAMES = {"15-tunable-constants.md"}
+
+# A numeric followed by a unit token. Unit list mirrors §6.
+UNIT_RE = re.compile(
+    r"\b(\d+(?:\.\d+)?)\s*"
+    r"(s|sec|secs|second|seconds|min|mins|minute|minutes|"
+    r"h|hr|hrs|hour|hours|attempts?|retries|times)\b",
+    re.IGNORECASE,
+)
+WAIVER_RE = re.compile(r"<!--\s*TUNABLE-WAIVER:")
+# Headings/code-fence detection for narrowing prose scan.
+CODE_FENCE_RE = re.compile(r"^\s*```")
+# §2 row: starts with `| `, has a backticked `Key` and a numeric default.
+ROW_RE = re.compile(
+    r"^\|\s*`([A-Za-z][A-Za-z0-9_.]+)`\s*\|\s*"
+    r"(?:\*\*)?(`?[^|*`]+`?)(?:\*\*)?\s*\|"
+)
+# §4 Settings.<Name> with Default.
+SEED_RE = re.compile(
+    r"\"([A-Za-z][A-Za-z0-9_]+)\"\s*:\s*\{\s*"
+    r"\"Type\"\s*:\s*\"[^\"]+\"\s*,\s*\"Default\"\s*:\s*"
+    r"(\"[^\"]*\"|[0-9.]+)"
+)
+
+
+def fail(msg: str) -> None:
+    print(f"ERROR: {msg}", file=sys.stderr)
+
+
+def file_must_exist(path: Path) -> None:
+    if path.is_file():
+        return
+    fail(f"required file missing: {path}")
+    sys.exit(2)
+
+
+def read_lines(path: Path) -> list[str]:
+    return path.read_text(encoding="utf-8").splitlines()
+
+
+def is_prose_line(line: str, in_fence: bool) -> bool:
+    return not in_fence and not line.lstrip().startswith("|")
+
+
+def toggle_fence(line: str, in_fence: bool) -> bool:
+    if CODE_FENCE_RE.match(line):
+        return not in_fence
+    return in_fence
+
+
+def collect_catalogue_keys() -> set[str]:
+    keys: set[str] = set()
+    in_fence = False
+    for raw in read_lines(TUNABLES_FILE):
+        in_fence = toggle_fence(raw, in_fence)
+        if in_fence:
+            continue
+        match = ROW_RE.match(raw)
+        if match:
+            keys.add(match.group(1))
+    return keys
+
+
+def find_unit_hits(line: str) -> list[tuple[str, str]]:
+    return [(m.group(1), m.group(2)) for m in UNIT_RE.finditer(line)]
+
+
+def line_is_waivered(line: str) -> bool:
+    return bool(WAIVER_RE.search(line))
+
+
+def referenced_keys_in_line(line: str, keys: set[str]) -> bool:
+    return any(key in line for key in keys)
+
+
+def scan_file_for_t1(path: Path, keys: set[str]) -> list[str]:
+    violations: list[str] = []
+    in_fence = False
+    for idx, raw in enumerate(read_lines(path), start=1):
+        in_fence = toggle_fence(raw, in_fence)
+        violation = check_line_t1(path, idx, raw, in_fence, keys)
+        if violation:
+            violations.append(violation)
+    return violations
+
+
+def check_line_t1(
+    path: Path, idx: int, raw: str, in_fence: bool, keys: set[str]
+) -> str | None:
+    if in_fence:
+        return None
+    hits = find_unit_hits(raw)
+    if not hits:
+        return None
+    if line_is_waivered(raw):
+        return None
+    if referenced_keys_in_line(raw, keys):
+        return None
+    sample = hits[0]
+    return f"{path}:{idx}: untracked tunable `{sample[0]} {sample[1]}` — cite 15-tunable-constants.md §2 or add TUNABLE-WAIVER"
+
+
+def expand_scan_targets() -> list[Path]:
+    out: list[Path] = []
+    for pattern in SCAN_GLOBS:
+        out.extend(sorted(REPO_ROOT.glob(pattern)))
+    return [p for p in out if p.name not in EXEMPT_NAMES]
+
+
+def rule_t1() -> list[str]:
+    keys = collect_catalogue_keys()
+    if not keys:
+        return ["15-tunable-constants.md §2: no catalogue rows parsed"]
+    out: list[str] = []
+    for path in expand_scan_targets():
+        out.extend(scan_file_for_t1(path, keys))
+    return out
+
+
+def rule_t2() -> list[str]:
+    seen: dict[str, int] = {}
+    in_fence = False
+    for idx, raw in enumerate(read_lines(TUNABLES_FILE), start=1):
+        in_fence = toggle_fence(raw, in_fence)
+        if in_fence:
+            continue
+        match = ROW_RE.match(raw)
+        if not match:
+            continue
+        seen[match.group(1)] = seen.get(match.group(1), 0) + 1
+    return [f"duplicate key `{k}` in §2" for k, n in seen.items() if n > 1]
+
+
+def collect_seed_defaults() -> dict[str, str]:
+    text = TUNABLES_FILE.read_text(encoding="utf-8")
+    return {m.group(1): m.group(2).strip('"') for m in SEED_RE.finditer(text)}
+
+
+# Mapping §4 short-name -> §2 catalogue key. Pinned for explicitness.
+SEED_TO_KEY = {
+    "RetryMaxAttempts": "MainWorker.Retry.MaxAttempts",
+    "RetryJitterPct": "MainWorker.Retry.JitterPct",
+    "IdempotencyKeyTtlSeconds": "MainWorker.Idempotency.KeyTtlSeconds",
+    "IdempotencyKeyMaxLength": "MainWorker.Idempotency.KeyMaxLength",
+    "IdempotencyStoreCleanupSec": "MainWorker.Idempotency.StoreCleanupSeconds",
+    "HeartbeatIntervalSeconds": "MainWorker.Heartbeat.IntervalSeconds",
+    "HeartbeatMissedThreshold": "MainWorker.Heartbeat.MissedThreshold",
+    "HeartbeatQuarantineCooldown": "MainWorker.Heartbeat.QuarantineCooldownSeconds",
+    "HeartbeatGraceWindowSeconds": "MainWorker.Heartbeat.GraceWindowSeconds",
+    "WorkerJwtTtlSeconds": "MainWorker.Auth.WorkerJwtTtlSeconds",
+    "JwtRefreshLeadSeconds": "MainWorker.Auth.JwtRefreshLeadSeconds",
+    "MainSessionTtlSeconds": "MainWorker.Auth.MainSessionTtlSeconds",
+    "ClockSkewToleranceSeconds": "MainWorker.Auth.ClockSkewToleranceSeconds",
+    "RoutingHttpTimeoutSeconds": "MainWorker.Routing.HttpTimeoutSeconds",
+    "RoutingHandshakeTimeoutSec": "MainWorker.Routing.HttpHandshakeTimeoutSeconds",
+    "RoutingMaxConcurrentPerNode": "MainWorker.Routing.MaxConcurrentPerWorker",
+    "RateAuthPerMinutePerIp": "MainWorker.RateLimit.AuthEndpointsPerMinutePerIp",
+    "RateWorkerPerMinutePerToken": "MainWorker.RateLimit.WorkerEndpointsPerMinutePerToken",
+    "RateOtherPerMinutePerUser": "MainWorker.RateLimit.OtherAuthenticatedPerMinutePerUser",
+    "PushUpdateMaxRunSeconds": "WorkerPushUpdate.MaxRunDurationSeconds",
+    "PushUpdateHandoffTimeoutSec": "WorkerPushUpdate.HandoffTimeoutSeconds",
+    "PushUpdateRetentionDays": "WorkerPushUpdate.InstructionRetentionDays",
+}
+
+
+def collect_catalogue_defaults() -> dict[str, str]:
+    out: dict[str, str] = {}
+    in_fence = False
+    for raw in read_lines(TUNABLES_FILE):
+        in_fence = toggle_fence(raw, in_fence)
+        if in_fence:
+            continue
+        match = ROW_RE.match(raw)
+        if not match:
+            continue
+        out[match.group(1)] = normalize_default(match.group(2))
+    return out
+
+
+def normalize_default(raw: str) -> str:
+    return raw.strip().strip("`").strip("*").split()[0]
+
+
+def rule_t3() -> list[str]:
+    seed = collect_seed_defaults()
+    cat = collect_catalogue_defaults()
+    out: list[str] = []
+    for short, key in SEED_TO_KEY.items():
+        out.extend(diff_seed_row(short, key, seed, cat))
+    return out
+
+
+def diff_seed_row(
+    short: str, key: str, seed: dict[str, str], cat: dict[str, str]
+) -> list[str]:
+    seed_val = seed.get(short)
+    cat_val = cat.get(key)
+    if seed_val is None:
+        return [f"§4 missing seed entry `{short}` (expected for `{key}`)"]
+    if cat_val is None:
+        return [f"§2 missing catalogue row `{key}` (referenced by §4 `{short}`)"]
+    if values_match(seed_val, cat_val):
+        return []
+    return [f"default mismatch: §4 `{short}`={seed_val!r} vs §2 `{key}`={cat_val!r}"]
+
+
+def values_match(seed_val: str, cat_val: str) -> bool:
+    if seed_val == cat_val:
+        return True
+    return seed_val.replace(",", "") == cat_val.replace("[", "").replace("]", "").replace(" ", "")
+
+
+def main() -> int:
+    file_must_exist(TUNABLES_FILE)
+    failures: list[str] = []
+    failures.extend(prefix_each("T1", rule_t1()))
+    failures.extend(prefix_each("T2", rule_t2()))
+    failures.extend(prefix_each("T3", rule_t3()))
+    return report(failures)
+
+
+def prefix_each(rule: str, items: list[str]) -> list[str]:
+    return [f"[{rule}] {item}" for item in items]
+
+
+def report(failures: list[str]) -> int:
+    if not failures:
+        print("check-tunable-constants: OK")
+        return 0
+    for line in failures:
+        print(line, file=sys.stderr)
+    print(f"check-tunable-constants: {len(failures)} violation(s)", file=sys.stderr)
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
