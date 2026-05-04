@@ -114,6 +114,7 @@ function Test-IsScannableFile {
     return $true
 }
 
+# lint-allow: function-length reason="flat per-file IO pipeline"
 function _Process-OneFile {
     param([string]$RepoRoot, [string]$Rel, [string]$Base, [int]$Current, [int[]]$Targets, [bool]$DryRun, [bool]$Verbose)
     $full = Join-Path $RepoRoot $Rel
@@ -130,6 +131,7 @@ function _Process-OneFile {
     return [pscustomobject]@{ Reps=$reps; Failed=$false }
 }
 
+# lint-allow: function-length reason="flat sweep dispatcher"
 function Invoke-RewriteSweep {
     param([string]$RepoRoot, [string]$Base, [int]$Current, [int[]]$Targets, [bool]$DryRun, [bool]$Verbose)
     $files = Get-TrackedFiles -RepoRoot $RepoRoot
@@ -144,6 +146,7 @@ function Invoke-RewriteSweep {
     return [pscustomobject]@{ Scanned=$scanned; Changed=$changed; Reps=$totalReps; Failed=$failed }
 }
 
+# lint-allow: function-length reason="flat identity-source fallback chain"
 function Resolve-Identity {
     $root = Get-RepoRoot
     if (-not $root) { Write-Host "fix-repo: ERROR not a git repository (E_NOT_A_REPO)"; exit $Script:ExitNotARepo }

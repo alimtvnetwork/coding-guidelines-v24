@@ -80,6 +80,7 @@ is_known_phase() {
   esac
 }
 
+# lint-allow: function-length reason="flat CLI flag-parser dispatch"
 _parse_value_flag() {
   # Returns 0 if $1 is a recognized value flag; sets the global and echoes 2.
   case "$1" in
@@ -143,6 +144,7 @@ apply_config_file() {
   return "$EXIT_OK"
 }
 
+# lint-allow: function-length reason="flat validation guard sequence"
 validate_flags() {
   if [ -z "$PHASE" ]; then
     log_error "--phase is required"
@@ -170,6 +172,7 @@ run_forbidden_names() {
   bash "$script" "${SOURCE_DIR:-}"
 }
 
+# lint-allow: function-length reason="flat orchestrator"
 run_naming_baseline() {
   local script="$SCRIPTS_DIR/check-naming.sh"
   if [ ! -f "$script" ]; then
@@ -215,6 +218,7 @@ run_lint_suggest() {
     --out "${GITHUB_STEP_SUMMARY:-/dev/stdout}"
 }
 
+# lint-allow: function-length reason="flat orchestrator"
 run_test_summary() {
   local script="$SCRIPTS_DIR/test-summary.sh"
   if [ -z "$RESULTS_DIR" ]; then
@@ -232,6 +236,7 @@ run_test_summary() {
 # Phase orchestration
 # ---------------------------------------------------------------------------
 
+# lint-allow: function-length reason="flat dispatcher"
 dispatch_guard() {
   case "$1" in
     forbidden-names)  run_forbidden_names ;;

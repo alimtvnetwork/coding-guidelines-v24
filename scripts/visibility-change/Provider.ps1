@@ -21,6 +21,7 @@ function Resolve-Provider {
     return $null
 }
 
+# lint-allow: function-length reason="flat URL-shape parser"
 function Resolve-OwnerRepo {
     param([string]$Url)
     $trimmed = ($Url.TrimEnd('/'))
@@ -42,6 +43,7 @@ function Test-CliAvailable {
     return (Get-Command $Name -ErrorAction SilentlyContinue) -ne $null
 }
 
+# lint-allow: function-length reason="flat REST GET + parse"
 function Get-CurrentVisibility {
     param([string]$Provider, [string]$Slug)
     if ($Provider -eq 'github') {

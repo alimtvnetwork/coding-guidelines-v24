@@ -69,6 +69,7 @@ parse_args() {
   fi
 }
 
+# lint-allow: function-length reason="help-text heredoc"
 print_help() {
   cat <<'EOF'
 fix-repo.sh — rewrite prior versioned-repo-name tokens to current.
@@ -119,6 +120,7 @@ resolve_identity() {
   _assert_version_suffix
 }
 
+# lint-allow: function-length reason="header-banner heredoc"
 print_header() {
   local current="$1" mode="$2" targets_str="$3"
   echo "fix-repo  base=$SPLIT_BASE  current=v$current  mode=$mode"
@@ -145,6 +147,7 @@ print_summary() {
 
 # Process one file. Updates: SWEEP_SCANNED, SWEEP_CHANGED, SWEEP_REPS, SWEEP_FAILED.
 # Args: rel current target_arr_var_name
+# lint-allow: function-length reason="flat per-file IO pipeline"
 _process_one_file() {
   local rel="$1" current="$2"
   local full="$REPO_ROOT/$rel"
