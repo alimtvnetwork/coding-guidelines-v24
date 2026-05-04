@@ -164,7 +164,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|
 | `WORKER-21090-21099` | Worker future expansion |
 | `MAIN-21133-21139` | Main validation future expansion |
-| `MAIN-21147-21149` | Main routing future expansion |
+| _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | `MAIN-21170-21199` | Main future expansion (file-system, network) |
 
 ---
