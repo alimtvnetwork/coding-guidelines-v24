@@ -1,7 +1,7 @@
 # 08 — Main↔Worker Error Contract
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 This file defines **only** the error patterns specific to Main↔Worker communication. Generic error rules (catch-log-rethrow, log levels, never-swallow) live in `spec/03-error-manage/` and are inherited verbatim — do NOT duplicate them here.
 
