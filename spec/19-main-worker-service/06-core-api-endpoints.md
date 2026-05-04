@@ -109,7 +109,21 @@ Authoritative REST surface for both tiers. All paths are `/API/V1/...`. JSON req
 }
 ```
 
-Most fields Non-Nullable per verbatim §Company Creation Flow.3. `PreferredWorkerNodeId` only honored when strategy is `Manual` and caller has PowerAdmin access.
+Field nullability (resolves F-A-01 — replaces prior "Most fields Non-Nullable"):
+
+| Field | Nullable | Notes |
+|-------|----------|-------|
+| `CompanyName` | NO | |
+| `CompanyWebsite` | YES | |
+| `CompanySlug` | NO | Unique. |
+| `Address` | YES | |
+| `PhoneNumber` | NO | E.164 preferred. |
+| `NumberOfPeople` | YES | Integer ≥ 1 when set. |
+| `Calendar` | YES | |
+| `WhatsApp` | YES | |
+| `Facebook` | YES | |
+| `LinkedIn` | YES | |
+| `PreferredWorkerNodeId` | YES | Only honored when worker-selection strategy is `Manual` AND caller has `PowerAdmin` access; ignored otherwise (no error). |
 
 ### 3.2 `GET /API/V1/Company/{CompanySlug}/Resolve` response
 
