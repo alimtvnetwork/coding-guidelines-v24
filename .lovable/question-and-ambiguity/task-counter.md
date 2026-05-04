@@ -9,7 +9,7 @@
 
 ## Counter
 
-`11 / 40` tasks completed.
+`12 / 40` tasks completed.
 
 ## Log
 
@@ -24,3 +24,4 @@
 09. 2026-05-04 Authored spec/19-main-worker-service/11-split-db-tier-reconciliation.md — pins Main=3 tiers (Root/Settings/Session), Worker=4 tiers (Root/Settings/App/Session) per spec/05's 6-tier model. Per-tier table allocation for both sides. 6 follow-up edits catalogued (FU-1..FU-6). Resolves audit F-X-01/04, F-D-09 (top-10 fix #2). Unblocks AC-2.
 10. 2026-05-04 Authored spec/19-main-worker-service/12-jwt-delivery-contract.md — pins Worker JWT to JSON-body + in-memory storage (NOT cookie/localStorage), mandatory CSP, claim contract, 9 CI test cases, 2 diagram-correction follow-ups (FU-7/FU-8). Resolves audit F-A-12, F-D-04, F-B-05 (top-10 fix #3). Closes AC-4.
 11. 2026-05-04 Registered MWS prefix (21000-21199) in spec/03-error-manage/03-error-code-registry/01-registry.md and authored spec/19-main-worker-service/13-error-codes.md cataloguing 30 codes (22 WORKER-* + 8 MAIN-*) with prefixed↔flat mapping, JSON envelope, linter assertion plan (FU-9), master.json regen (FU-10). Resolves audit F-X-08, F-A-21, F-B-08 (top-10 fix #4). Unblocks AC-6, AC-1.
+12. 2026-05-04 Authored spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md (new Tables-block schema, UpsertByLogicalKey/AppendOnly strategies, TableSeedMeta+TableSeedChangelog bookkeeping) AND spec/19-main-worker-service/14-rbac-and-status-seed.md (concrete row sets: 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism, @Role.Code logical-key syntax). Resolves audit F-B-09/10, F-X-06 (top-10 fix #6). Closes AC-5. Added FU-11 (config.schema.json), FU-12 (seed bump to 1.3.0), FU-13 (@-ref resolver).
