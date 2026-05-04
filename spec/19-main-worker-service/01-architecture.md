@@ -32,7 +32,11 @@
        └──────────────────┘  └──────────────────┘
 ```
 
-ASCII above is a quick reference. Authoritative diagram: `diagrams/seq-login-routing.mmd` and `diagrams/erd-main-db.mmd`.
+ASCII above is a quick reference. Authoritative diagram: `diagrams/seq-login-routing.mmd` and `diagrams/erd-main-db.mmd`. The author's full mindmap is below; per-tenant subdomain layout is in image 03.
+
+![EndPointService — full overview](./images/04-endpoint-service-full-overview.png)
+
+![Per-tenant `wN.<domain>` subdomain routing](./images/03-worker-subdomain-routing.png)
 
 ---
 
