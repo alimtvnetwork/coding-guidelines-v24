@@ -60,6 +60,7 @@ function Test-IsIgnoredDir {
     return $false
 }
 
+# lint-allow: function-length reason="glob→regex char-by-char converter; flat dispatch is the clearest form" max=25
 function ConvertTo-FixRepoRegex {
     param([string]$Pattern)
     $sb = New-Object System.Text.StringBuilder
