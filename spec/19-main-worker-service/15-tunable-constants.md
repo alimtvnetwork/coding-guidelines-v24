@@ -1,7 +1,7 @@
 # 15 — Tunable Constants (Single-Value Pins)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-15, F-A-16, F-B-12 (top-10 fix #7). Closes AC-7, partially AC-6.
@@ -187,10 +187,46 @@ Failure = build break.
 
 ---
 
-## 7. Open Questions (logged, non-blocking)
+## 7. Resolved Decisions (formerly Open Questions)
 
-- **OQ-15-1** Should retry backoff be true exponential (`base^n`) instead of explicit array? Inferred: explicit array is dumb-AI-friendlier and bounds the worst case.
-- **OQ-15-2** Should `MainSessionTtlSeconds` be sliding or absolute? Inferred: sliding, matches Laravel Sanctum default; absolute reserved for v2.0 if compliance demands.
+### 7.1 OQ-15-1 — Retry backoff shape: **explicit array** ✅ RESOLVED 2026-05-04
+
+**Decision:** Keep explicit `[2, 8, 30]` array (`MainWorker.Retry.BackoffSeconds`). **Reject** `base^n` exponential.
+
+**Why:**
+- **Dumb-AI friendly** — every value is visible; no implementer needs to compute `2^n` mentally and re-derive a ceiling clamp.
+- **Bounded worst case** — explicit ceiling at element `[N-1]`; exponential needs an extra `Min(base^n, Cap)` rule which is a second tunable AND a second source of disagreement (audit F-A-15 root cause was exactly this kind of derived value).
+- **Operationally tweakable** — ops can paste `[5, 30, 120]` into Seedable-Config without re-reading any formula doc. Exponential requires editing `Base` AND `Cap` AND mentally reconciling.
+- **Length contract** — `len(BackoffSeconds) == MaxAttempts - 1` is a single-line linter check (already in `check-tunable-constants.py`); `base^n` would need range validation per attempt index.
+
+**Trade-off accepted:** Cannot smoothly extend to N=10+ attempts without ugly arrays. Tolerated — `MainWorker.Retry.MaxAttempts=3` is pinned and any move to N≥6 requires a v2.0 design review anyway.
+
+**No values change.** This decision codifies the existing `[2, 8, 30]` / `[30, 120, 300]` defaults already shipped in §2.1 and `spec/14-update/28-…md` §3.1.
+
+### 7.2 OQ-15-2 — Session TTL semantics: **sliding with absolute cap** ✅ RESOLVED 2026-05-04
+
+**Decision:** Adopt **sliding** TTL by default (matches Laravel Sanctum / Express-Session / ASP.NET Core), bounded by an **absolute** maximum-lifetime ceiling.
+
+**Why:**
+- **Sliding** matches every default-stack target (Laravel/.NET/Express) — zero surprise for implementers.
+- **Pure sliding is unbounded** — a user keeping a tab open for 90 days never re-authenticates. Compliance frameworks (SOC 2, ISO 27001 §9.4.2) require periodic re-authentication.
+- **Sliding + absolute cap** is the industry compromise (used by Auth0, Okta, AWS Cognito) — refresh on activity, but force re-login at the absolute boundary regardless of activity.
+
+**New tunables (added to §2.5 below):**
+
+| Key | Default | Unit | Notes |
+|---|---:|---|---|
+| `MainWorker.Auth.SessionTtlSeconds` | **3600** | seconds | Sliding window. Reset to this value on every authenticated request. |
+| `MainWorker.Auth.SessionAbsoluteMaxSeconds` | **86400** | seconds | Hard ceiling from initial login regardless of activity. After this, `Reauthenticate` is forced. |
+| `MainWorker.Auth.SessionSlidingExtendOnReadOnly` | **true** | bool | If false, only state-changing requests extend the sliding window (mitigates background-poll abuse). |
+
+**Implementation contract (consumed by `05-auth-and-2fa.md` §6):**
+1. On each authenticated request: `if (now - SessionStartedAt) >= SessionAbsoluteMaxSeconds → 401 + X-Auth-Action: Reauthenticate`.
+2. Else: `SessionLastSeenAt = now`; cookie `Max-Age` reset to `SessionTtlSeconds`.
+3. Background polls (GET requests) extend window only when `SessionSlidingExtendOnReadOnly=true`.
+
+**Linter follow-up (FU-16):** `check-tunable-constants.py` to assert `SessionTtlSeconds <= SessionAbsoluteMaxSeconds` (T4 invariant).
+
 
 ---
 
