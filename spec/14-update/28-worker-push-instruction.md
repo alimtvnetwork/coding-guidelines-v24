@@ -128,7 +128,7 @@ The worker MUST execute the standard rename-first flow defined in `spec/14-updat
 5. Rename `staging/<TargetVersion>/` → `current/`.
 6. Spawn `current/<binary> --post-update-handoff` (per `spec/14-update/05-handoff-mechanism.md`).
 7. On successful handoff: write `current/latest.json` with `TargetVersion`; report success to Main via `POST /API/V1/Workers/{Id}/Heartbeat` with `LastUpdateInstructionId = InstructionId`.
-8. On handoff failure within 60 s: revert (rename `current/` → `failed-<TargetVersion>/`, `previous/` → `current/`), report `HANDOFF_FAILED`.
+8. On handoff failure within `WorkerPushUpdate.HandoffTimeoutSeconds` (default 60 s per `spec/19-main-worker-service/15-tunable-constants.md` §2.7): revert (rename `current/` → `failed-<TargetVersion>/`, `previous/` → `current/`), report `HANDOFF_FAILED`.
 
 ---
 
