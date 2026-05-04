@@ -9,7 +9,7 @@
 
 ## Counter
 
-`6 / 40` tasks completed.
+`7 / 40` tasks completed.
 
 ## Log
 
