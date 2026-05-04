@@ -216,20 +216,18 @@ Failure = build break.
 - **Pure sliding is unbounded** — a user keeping a tab open for 90 days never re-authenticates. Compliance frameworks (SOC 2, ISO 27001 §9.4.2) require periodic re-authentication.
 - **Sliding + absolute cap** is the industry compromise (used by Auth0, Okta, AWS Cognito) — refresh on activity, but force re-login at the absolute boundary regardless of activity.
 
-**Existing tunable retained, two new ones added** (mirrored into §2.4 below + §4):
+**Existing tunable retained, two new ones added in §2.4 above + §4** (not re-tabled here to avoid catalogue duplication; this section explains the contract):
 
-| Key | Default | Unit | Notes |
-|---|---:|---|---|
-| `MainWorker.Auth.MainSessionTtlSeconds` | **28800** (8h) | seconds | **Existing.** Sliding window. Reset on every authenticated request that qualifies (see read-only flag). |
-| `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` | **86400** (24h) | seconds | **NEW.** Hard ceiling from initial login regardless of activity. After this, `Reauthenticate` is forced. MUST be ≥ `MainSessionTtlSeconds`. |
-| `MainWorker.Auth.SessionSlidingExtendOnReadOnly` | **true** | bool | **NEW.** If `false`, only state-changing requests (POST/PUT/PATCH/DELETE) extend the sliding window — mitigates background-poll abuse. |
+- `MainWorker.Auth.MainSessionTtlSeconds` (existing, **28800s/8h**) — sliding window; reset on every qualifying authenticated request.
+- `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` (NEW, **86400s/24h**) — hard ceiling from initial login regardless of activity; forces `Reauthenticate`. MUST be ≥ sliding TTL.
+- `MainWorker.Auth.SessionSlidingExtendOnReadOnly` (NEW, **true**) — if `false`, only state-changing requests (POST/PUT/PATCH/DELETE) extend the window — mitigates background-poll abuse.
 
 **Implementation contract (consumed by `05-auth-and-2fa.md` §6):**
-1. On each authenticated request: `if (now - SessionStartedAt) >= MainSessionAbsoluteMaxSeconds → 401 + X-Auth-Action: Reauthenticate`.
-2. Else if request qualifies (write request, OR `SessionSlidingExtendOnReadOnly=true`): `SessionLastSeenAt = now`; cookie `Max-Age` reset to `MainSessionTtlSeconds`.
+1. On each authenticated request: if `(now - SessionStartedAt) >= MainSessionAbsoluteMaxSeconds` → `401 + X-Auth-Action: Reauthenticate`.
+2. Else if request qualifies (write request, OR sliding-extend-on-read flag true): `SessionLastSeenAt = now`; cookie `Max-Age` reset to sliding TTL.
 3. Else: leave `SessionLastSeenAt` and cookie `Max-Age` untouched.
 
-**Linter follow-up (FU-16):** `check-tunable-constants.py` to assert `MainSessionTtlSeconds <= MainSessionAbsoluteMaxSeconds` (T4 invariant).
+**Linter follow-up (FU-16):** `check-tunable-constants.py` to assert sliding TTL ≤ absolute max (T4 invariant).
 
 
 ---
