@@ -104,6 +104,7 @@ function Start-SlidesPreview {
     Wait-Process -Id $preview.Id
 }
 
+# lint-allow: function-length reason="flat dispatcher"
 function Invoke-Slides {
     Write-Host ""; Write-Host "▸ slides — building offline deck and opening in browser" -ForegroundColor Cyan; Write-Host ""
     $slidesDir = Join-Path $PSScriptRoot "slides-app"
