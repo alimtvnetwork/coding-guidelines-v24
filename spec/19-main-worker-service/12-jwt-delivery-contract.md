@@ -103,7 +103,7 @@ This is non-negotiable — without CSP, in-memory storage gives no real XSS adva
 
 | Event | React behavior |
 |---|---|
-| JWT within 60 s of `JwtExpiresAt` | Call `POST /API/V1/Auth/RefreshWorkerToken` (uses Main session cookie); replace in-memory token. |
+| JWT within `MainWorker.Auth.JwtRefreshLeadSeconds` (default 60 s per `15-tunable-constants.md` §2.4) of `JwtExpiresAt` | Call `POST /API/V1/Auth/RefreshWorkerToken` (uses Main session cookie); replace in-memory token. |
 | Page reload / new tab | In-memory token is gone; React calls `/Company/{slug}/Resolve` to get a fresh one. |
 | Main session cookie expires | All Worker JWTs become unrefreshable; React redirects to `/sign-in`. |
 | Worker `kid` mismatch (signing key rotated) | Worker returns `WORKER-100-02 KID_UNKNOWN`; React calls `/Resolve` to get a JWT signed by the new key. |
