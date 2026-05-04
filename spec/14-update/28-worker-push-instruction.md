@@ -33,7 +33,7 @@ The JID is the **contract** between Main (issuer) and Worker (executor). It MUST
 | Mandatory Headers | `X-Correlation-Id`, `X-Idempotency-Key` (= `InstructionId`), `X-Auth-Action: SelfUpdate` |
 | Body | A single JID object (see §3) |
 | Max body size | 16 KB |
-| Timeout | 30 s (Main → Worker handshake only; the actual download happens worker-side) |
+| Timeout | 30 s handshake (Main → Worker); pinned in `spec/19-main-worker-service/15-tunable-constants.md` §2.5 (`MainWorker.Routing.HttpHandshakeTimeoutSeconds`). |
 
 ---
 
