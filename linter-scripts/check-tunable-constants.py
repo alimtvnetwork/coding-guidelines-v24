@@ -51,10 +51,11 @@ WAIVER_RE = re.compile(r"<!--\s*TUNABLE-WAIVER:")
 # Headings/code-fence detection for narrowing prose scan.
 CODE_FENCE_RE = re.compile(r"^\s*```")
 # §2 row: starts with `| `, has a backticked `Key` and a numeric default.
-ROW_RE = re.compile(
-    r"^\|\s*`([A-Za-z][A-Za-z0-9_.]+)`\s*\|\s*"
-    r"(?:\*\*)?(`?[^|*`]+`?)(?:\*\*)?\s*\|"
-)
+# §2 row: starts with `| `, has a backticked `Key` in col 1.
+ROW_RE = re.compile(r"^\|\s*`([A-Za-z][A-Za-z0-9_.]+)`\s*\|(.*)$")
+# Default in col-2: prefer **bold** number; else first backticked token; else first token.
+DEFAULT_BOLD_RE = re.compile(r"\*\*([^*|]+?)\*\*")
+DEFAULT_TICK_RE = re.compile(r"`([^`|]+?)`")
 # §4 Settings.<Name> with Default.
 SEED_RE = re.compile(
     r"\"([A-Za-z][A-Za-z0-9_]+)\"\s*:\s*\{\s*"
