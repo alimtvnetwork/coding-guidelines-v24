@@ -4,6 +4,10 @@
 **Version:** 1.0.0
 **Status:** 🚧 POINTER ONLY — do NOT implement from this file. Authoritative implementation spec lives elsewhere.
 
+The author's mindmap shows self-update as a sibling branch to `main`, with the flow `endpoint → JSON → instructions → file (10 parts)`. The per-worker channel is shown in image 03 (`wN.<domain>/self-update`).
+
+![Main / self-update split](./images/01-main-worker-topology.png)
+
 ---
 
 ## 1. Why this file exists

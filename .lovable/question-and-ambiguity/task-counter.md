@@ -9,12 +9,8 @@
 
 ## Counter
 
-`0 / 40` tasks completed.
+`1 / 40` tasks completed.
 
 ## Log
 
-_(Append `NN. <YYYY-MM-DD> <summary>` per completed task.)_
-
-<!-- Example:
-01. 2026-05-04 Cross-link 19-main-worker-service ↔ 05-split-db-architecture
--->
+01. 2026-05-04 Imported 4 author mindmaps into `spec/19-main-worker-service/images/`, wrote images README, embedded refs in `00-overview.md`, `01-architecture.md`, `04-worker-routing.md`, `09-self-update-pointer.md`. Bumped 5.10.0 → 5.11.0.

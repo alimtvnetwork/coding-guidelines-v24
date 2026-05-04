@@ -5,6 +5,12 @@
 
 How the Main Server picks which Worker handles a new tenant, caches that decision, and recovers when a Worker fails.
 
+The author's mindmap below frames routing as two questions the Main Server keeps asking: **"Give me new"** (which worker is most free, what's the endpoint of communication) and **"Knowledge"** (total workers, machine/website inventory, who is free). The strategies in §1 are the formal answers.
+
+![EndPointService → WorkerPattern](./images/02-endpoint-service-worker-pattern.png)
+
+See also [`images/03-worker-subdomain-routing.png`](./images/03-worker-subdomain-routing.png) for the per-tenant `wN.<domain>` subdomain layout this routing produces.
+
 ---
 
 ## 1. Selection Strategies
