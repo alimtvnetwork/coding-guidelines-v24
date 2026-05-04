@@ -111,8 +111,8 @@ Note: correlation IDs and idempotency keys are opaque request-scoped strings, no
 
 | Cache | Scope | TTL | Invalidation |
 |-------|-------|-----|--------------|
-| `CompanyId → WorkerNodeId` | Main process / session | 15 min (Seedable-Config) | On worker reassignment |
-| Worker registry | Main process | 60 s | On worker register/deregister |
+| `CompanyId → WorkerNodeId` | Main process / session | 15 min <!-- TUNABLE-WAIVER: cache TTL distinct from MainWorker tunables; owned by caching-policy memory --> | On worker reassignment |
+| Worker registry | Main process | 60 s <!-- TUNABLE-WAIVER: cache TTL distinct from MainWorker tunables; owned by caching-policy memory --> | On worker register/deregister |
 | Per-user recent-company | User session | session lifetime | On logout |
 
 Per memory `mem://architecture/caching-policy`: explicit TTL, deterministic keys, invalidate on mutation.
