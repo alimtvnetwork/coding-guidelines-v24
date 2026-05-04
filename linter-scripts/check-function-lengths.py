@@ -230,7 +230,7 @@ def main() -> int:
                 if args.verbose:
                     print(f"OK   {rel}:{lineno} {name} ({length})")
                 continue
-            if tier in ("fail", "hard-fail") and is_waiver_valid(tier, length, waiver):
+            if tier in ("warn", "fail", "hard-fail") and is_waiver_valid(tier, length, waiver):
                 waived += 1
                 if args.verbose:
                     print(f"WAIV {rel}:{lineno} {name} ({length}, tier={tier})")
