@@ -140,13 +140,13 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-400-09` | `21145` | `RefreshReplay` | "Single-use refresh JWT replayed after rotation." | 401 | `04-worker-routing.md` §7.2 + diagrams/seq-login-routing |
 | `MAIN-400-11` | `21146` | `AuthActionMissing` | "Required `X-Auth-Action` header absent on multi-step auth flow." | 400 | `04-worker-routing.md` §7.4 |
 
-### 3.4 Database (500-599 → 21150-21159)
+### 3.5 Database (500-599 → 21150-21159)
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
 | `MAIN-500-01` | `21150` | `MainDbWriteFail` | "Write to Main Root tier DB failed." | 500 | `03-main-db-schema.md` |
 
-### 3.5 External Services (600-699 → 21160-21169)
+### 3.6 External Services (600-699 → 21160-21169)
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
