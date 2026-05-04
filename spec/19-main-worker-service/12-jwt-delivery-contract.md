@@ -156,7 +156,7 @@ No PII beyond `UserId`. No password hashes. No 2FA secrets.
 | T-2 | Worker JWT in cookie | Lint/test fail (no `Set-Cookie` from Main carries `WorkerJwt`) |
 | T-3 | Page reload retains in-memory JWT | Fail (must be gone) |
 | T-4 | CSP missing or contains `unsafe-inline` | Fail |
-| T-5 | JWT TTL > 900 s | Fail |
+| T-5 | JWT TTL > `MainWorker.Auth.WorkerJwtTtlSeconds` (default 900 s per `15-tunable-constants.md` §2.4) | Fail |
 | T-6 | Worker accepts JWT with wrong `wnk` | Fail (must return 403) |
 | T-7 | Worker accepts JWT with expired `exp` | Fail (must return 401) |
 | T-8 | URL contains `?token=` or `?jwt=` | Fail |
