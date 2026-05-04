@@ -59,8 +59,8 @@
 ### Deferred (post-v1.1.0)
 
 - OQ-1: per-endpoint auth-mechanism overrides (F-M-10) — design awaits user resolution.
-- OQ-15-1 / OQ-15-2: retry-backoff array vs exponential; session TTL sliding vs absolute.
-- `seq-login-routing.mmd` sync for `X-Auth-Action: Reauthenticate` and `X-Auth-Action: RegenerateBackupCodes` signals.
+- OQ-15-1 / OQ-15-2: ✅ resolved in task #37 (`15-tunable-constants.md` v1.2.0).
+- `seq-login-routing.mmd` sync for `X-Auth-Action: Reauthenticate` and `X-Auth-Action: RegenerateBackupCodes` signals: ✅ resolved in task #38 (banner v1.1.0).
 - F-N-07: OpenAPI/Swagger artifact generation.
 
 ---
