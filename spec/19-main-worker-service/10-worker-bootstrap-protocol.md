@@ -177,7 +177,7 @@ Response MAY signal:
 }
 ```
 
-Missed-heartbeat policy is owned by Main (per `04-worker-routing.md`). After **3 consecutive** missed heartbeats Main marks the worker `Quarantined` and stops routing new tenants.
+Missed-heartbeat policy is owned by Main (per `04-worker-routing.md`). The threshold (`MainWorker.Heartbeat.MissedThreshold`, default **3**), grace window, and quarantine cooldown are pinned in `15-tunable-constants.md` §2.3.
 
 ---
 
