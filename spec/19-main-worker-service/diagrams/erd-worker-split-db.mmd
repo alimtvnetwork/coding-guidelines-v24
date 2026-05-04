@@ -1,0 +1,73 @@
+erDiagram
+    %% Worker-side split-DB ERD (Root / App / Session tiers)
+    %% Authoritative split-DB rules: spec/05-split-db-architecture/
+    %% This is the worker-tier projection for the Main/Worker spec.
+
+    %% ---- Root tier (one DB per worker) ----
+    RootCompany ||--o{ AppCompanyShard : "shards into"
+    RootCompany ||--o{ RootCompanyContact : "has contacts"
+    RootCompanyStatus ||--o{ RootCompany : "classifies"
+
+    RootCompany {
+        INTEGER RootCompanyId PK
+        TEXT CompanySlug UK
+        TEXT CompanyName
+        TEXT CompanyWebsite
+        TEXT Address
+        TEXT PhoneNumber
+        INTEGER NumberOfPeople
+        INTEGER RootCompanyStatusId FK
+        TEXT Description
+    }
+    RootCompanyStatus {
+        INTEGER RootCompanyStatusId PK
+        TEXT RootCompanyStatusCode UK
+        TEXT RootCompanyStatusLabel
+        TEXT Description
+    }
+    RootCompanyContact {
+        INTEGER RootCompanyContactId PK
+        INTEGER RootCompanyId FK
+        TEXT ContactKind
+        TEXT ContactValue
+        TEXT Description
+    }
+
+    %% ---- App tier (one DB per company shard) ----
+    AppCompanyShard ||--o{ AppUser : "houses"
+    AppCompanyShard ||--o{ AppBusinessEntity : "owns"
+    AppUser ||--o{ AppSession : "opens"
+
+    AppCompanyShard {
+        INTEGER AppCompanyShardId PK
+        INTEGER RootCompanyId FK
+        TEXT AppDbPath
+        TEXT AppCreatedAt
+        TEXT Description
+    }
+    AppUser {
+        INTEGER AppUserId PK
+        INTEGER AppCompanyShardId FK
+        TEXT AppUserEmail
+        TEXT AppUserDisplayName
+        TEXT Description
+    }
+    AppBusinessEntity {
+        INTEGER AppBusinessEntityId PK
+        INTEGER AppCompanyShardId FK
+        TEXT EntityKind
+        TEXT EntityPayload
+        TEXT Notes
+        TEXT Comments
+    }
+
+    %% ---- Session tier (one DB per logical session window) ----
+    AppSession {
+        INTEGER AppSessionId PK
+        INTEGER AppUserId FK
+        TEXT SessionToken UK
+        TEXT SessionStartedAt
+        TEXT SessionLastSeenAt
+        TEXT Notes
+        TEXT Comments
+    }
