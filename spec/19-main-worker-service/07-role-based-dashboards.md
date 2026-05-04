@@ -100,11 +100,28 @@ public function handle(Request $request, Closure $next, string $pageCode): Respo
 
 `guardUserHasAccess` throws `AccessDenied` (per `08-error-contract.md`) when access is missing.
 
-Route declaration:
+Route declaration (resolves F-A-34 — stack-agnostic contract first, Laravel example second):
+
+**Stack-agnostic contract.** Every route that mutates or reads a governed page MUST be wrapped by an access guard that:
+1. Resolves the route to its `EnumPageCode` (PascalCase, from `EnumPage` ref table per `03-` §2.6.1).
+2. Calls `guardUserHasAccess(userId, pageCode)` BEFORE the controller body.
+3. On denial, returns the `AccessDenied` envelope per `08-error-contract.md` §3.5 with HTTP 403.
+
+The wiring mechanism is implementation-defined: Laravel middleware, Express middleware, Go HTTP middleware chain, ASP.NET filter, etc. The contract is the same.
+
+Laravel example (one valid binding of the contract above):
 
 ```php
 Route::post('/API/V1/Workers/All/Update', UpdateAllController::class)
     ->middleware('access:PushUpdatePage');
+```
+
+Express example (equivalent contract):
+
+```ts
+app.post('/API/V1/Workers/All/Update',
+    requireAccess('PushUpdatePage'),
+    updateAllController);
 ```
 
 ---
