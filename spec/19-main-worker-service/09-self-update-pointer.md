@@ -1,7 +1,7 @@
 # 09 — Self-Update (Pointer Only)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Status:** 🚧 POINTER ONLY — do NOT implement from this file. Authoritative implementation spec lives elsewhere.
 
 > **Split-DB tier note (FU-3):** Worker bootstrap config and the `WorkerUpdateInstruction` registry both live in the **Settings tier** (worker-wide, not company-scoped) per [`10-worker-bootstrap-protocol.md`](./10-worker-bootstrap-protocol.md) §2 and [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md) §5. Older drafts that placed `WorkerUpdateInstruction` in the App tier are stale — see FU-5 in `11-…` §8.
@@ -19,6 +19,13 @@ Per verbatim §Self-Update Mechanism:
 > Keep self-update on pause for now. Add a pointer note describing how it will work.
 
 This file is that pointer note. It captures the intent so future implementers (AI or human) know **what** to build, **where** the real spec lives, and **what NOT to do today**.
+
+**Pause expiration (resolves F-A-09 — "for now" had no expiry):** the pause is bounded — this pointer file MUST be deleted (or promoted to a full spec) on whichever comes first:
+1. Spec/19-main-worker-service reaches **v2.0.0**, OR
+2. The first production deploy of `spec/14-update/` self-update lands and is observed green for 14 consecutive days, OR
+3. Calendar date **2026-12-31** (hard sunset).
+
+When any condition fires, follow the deletion checklist in §9.
 
 ---
 
@@ -114,4 +121,15 @@ Implementer wires this to a scheduler (Laravel scheduler / cron / systemd timer)
 
 ---
 
-*Self-update pointer v1.0.0 — 2026-05-04*
+## 9. Deletion Checklist (when the pause expires per §1)
+
+When any of §1's three conditions fire, the implementer (or AI agent following this file) MUST:
+
+1. Confirm `spec/14-update/` covers every behaviour summarised in §3 of this file. Diff §3 against `spec/14-update/00-overview.md` — any remaining gap blocks deletion.
+2. Migrate any inbound links pointing at this file (search: `09-self-update-pointer.md`) to the equivalent anchor in `spec/14-update/`. Update `00-overview.md`, `plan.md`, `99-consistency-report.md`, `98-changelog.md`, and the diagrams' authority footers.
+3. Delete this file. Record the deletion in `98-changelog.md` with the triggering condition (`v2.0.0` / `prod-green-14d` / `2026-12-31-sunset`).
+4. Re-run the full Step-3 linter pipeline. The `check-spec-cross-links.py` linter will fail if any inbound link was missed; that is the safety net.
+
+---
+
+*Self-update pointer v1.1.0 — 2026-05-04 (F-A-09 closed: pause now bounded with 3-way expiry + deletion checklist)*

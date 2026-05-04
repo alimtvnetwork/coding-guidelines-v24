@@ -56,12 +56,12 @@ Worker has these even though it has no UI — they're required for service-to-se
 
 Per verbatim §Login 3:
 
-- **Hash:** Argon2id (preferred) or bcrypt with cost ≥ 12.
+- **Hash:** Argon2id (preferred) or bcrypt. Bcrypt cost is **environment-pinned** to remove ambiguity (resolves F-A-03): `MainWorker.Auth.BcryptCost` defaults to `12` when `Env=dev|test`, `14` when `Env=prod|staging`. Implementations MUST refuse cost < 12 and MUST NOT exceed 14 unless overridden by Power Admin via Seedable-Config (caps at 16).
 - **Salt:** unique per user, stored alongside hash in `UserPasswordSalt`. The chosen hash function may also embed a salt; storing it explicitly keeps the contract stack-portable.
-- **Pepper:** optional global pepper from Seedable-Config secret `MainWorker.Auth.PasswordPepper` — if set, mixed in before hashing.
+- **Pepper:** global pepper from Seedable-Config secret `MainWorker.Auth.PasswordPepper`. **MUST be set when `Env=prod|staging`** (resolves F-A-04 — was previously "optional"). In `dev|test` MAY be empty; if empty, Main MUST log a one-shot WARN at startup so drift is visible. When present, mixed in before hashing.
 - **No plaintext anywhere.** Logs MUST scrub `password`, `confirmPassword`, `currentPassword`.
 - **No retrieval.** Reset is replace-only.
-- **Breach check (recommended):** verify against a HIBP-style API on sign-up and password change. Configurable via `MainWorker.Auth.EnableBreachCheck`.
+- **Breach check:** Implementations MUST verify against a HIBP-style API on sign-up and password change when `MainWorker.Auth.EnableBreachCheck=true` (default `true` in prod, `false` in dev).
 
 ---
 
@@ -69,7 +69,7 @@ Per verbatim §Login 3:
 
 - **Standard:** TOTP (RFC 6238), 30s window <!-- TUNABLE-WAIVER: RFC 6238 mandates 30s; not a MainWorker tunable -->, 6 digits.
 - **Enrollment:** Main shows QR (otpauth URI), user scans, submits one TOTP to confirm. On success, store `User.TotpSecret` (encrypted at rest with key from Seedable-Config).
-- **Backup codes:** generate 10 single-use codes at enrollment. Store hashed.
+- **Backup codes:** generate 10 single-use codes at enrollment (stored as bcrypt hashes in `User.UserTotpBackupCodesHash` per `03-main-db-schema.md` §2.4). When the count of unused codes reaches **0**, the user MUST be forced to regenerate at next sign-in: Main returns `Error.SubCode = TotpBackupExhausted` with HTTP 403 and `X-Auth-Action: RegenerateBackupCodes` header (resolves F-A-05). Regeneration invalidates the prior batch. Power Admin override path: `POST /API/V1/Auth/2FA/RegenerateBackupCodes` (audit logged).
 - **Verification points:** sign-in, password change, 2FA disable, role escalation.
 - **Recovery:** Power Admin can reset 2FA for any user (audit logged).
 
