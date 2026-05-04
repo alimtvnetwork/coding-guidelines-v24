@@ -14,6 +14,7 @@ FIXREPO_IGNORE_DIRS=""
 FIXREPO_IGNORE_PATTERNS=""
 FIXREPO_CONFIG_PATH=""
 
+# lint-allow: function-length reason="embedded python heredoc + bash glue; one logical operation" max=25
 _extract_json_array() {
   # Args: <file> <key>. Emits one element per line. Pure-bash, no jq.
   local file="$1" key="$2"
