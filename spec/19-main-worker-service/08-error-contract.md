@@ -233,9 +233,9 @@ Direction-specific overrides:
 - `CorrelationId` — Worker generates a UUID v4 ONLY for Worker-initiated calls (overrides §4 rule which forbids Worker-side ID generation for Main-initiated calls). Main echoes it back.
 
 Worker → Main specific ErrorCodes (added to the §3 catalog by reference; full definitions in `13-error-codes.md`):
-- `WorkerRegisterRejected` — Main refused the registration (version pin mismatch, IP not in allow-list, duplicate `WorkerNodeName`).
-- `WorkerHeartbeatRejected` — Main accepted the request but the Worker is `Quarantined` or `Offline`; Worker MUST stop sending heartbeats until restart.
-- `WorkerPushAckUnknownJid` — Main received an ack for an unknown Job-Id (replay / late-arriving ack); Worker logs and discards.
+- `WorkerRegisterRejected` (`MAIN-400-04`) — Main refused the registration (version pin mismatch, IP not in allow-list, duplicate `WorkerNodeName`).
+- `WorkerHeartbeatRejected` (`MAIN-400-06`) — Main accepted the request but the Worker is `Quarantined` or `Offline`; Worker MUST stop sending heartbeats until restart.
+- `WorkerPushAckUnknownJid` (`MAIN-400-07`) — Main received an ack for an unknown Job-Id (replay / late-arriving ack); Worker logs and discards.
 
 HTTP status mapping for Worker-initiated calls:
 
