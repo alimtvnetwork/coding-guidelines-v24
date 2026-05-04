@@ -67,7 +67,7 @@ Per verbatim §Login 3:
 
 ## 4. Two-Factor Authentication (2FA)
 
-- **Standard:** TOTP (RFC 6238), 30s window, 6 digits.
+- **Standard:** TOTP (RFC 6238), 30s window <!-- TUNABLE-WAIVER: RFC 6238 mandates 30s; not a MainWorker tunable -->, 6 digits.
 - **Enrollment:** Main shows QR (otpauth URI), user scans, submits one TOTP to confirm. On success, store `User.TotpSecret` (encrypted at rest with key from Seedable-Config).
 - **Backup codes:** generate 10 single-use codes at enrollment. Store hashed.
 - **Verification points:** sign-in, password change, 2FA disable, role escalation.
