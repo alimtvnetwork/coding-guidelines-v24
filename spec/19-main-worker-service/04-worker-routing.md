@@ -35,7 +35,7 @@ Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStra
 ### 1.4 Eligibility filter (applies to all strategies)
 A worker is eligible only if **all** are true (positive guards, per CODE RED):
 - `IsWorkerActive(node)` → `WorkerNodeStatusCode = 'Active'`
-- `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Routing.HeartbeatWindowSeconds` (default 60s)
+- `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Heartbeat.IntervalSeconds × MissedThreshold` per `15-tunable-constants.md` §2.3 <!-- TUNABLE-WAIVER: derived product, not a literal -->.
 - `HasCapacity(node)` → assigned company count below `MainWorker.Routing.MaxCompaniesPerWorker` (0 = unlimited)
 
 If no eligible worker exists → return `WorkerUnavailable` error per `08-error-contract.md`.
