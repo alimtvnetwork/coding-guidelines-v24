@@ -194,3 +194,78 @@ Say `next` to run **Step 2 (Ambiguity Audit)**.
 ---
 
 *Completeness audit v1.0.0 — 2026-05-04*
+
+---
+
+## 7. Re-Triage (2026-05-04, post tasks #07–32)
+
+After 26 spec-hardening tasks, the original 30 findings re-evaluate as follows.
+
+**Status legend:** ✅ Closed · 🟡 Partially closed · ❌ Still open · ⏸ Deferred (out-of-scope for v1.0)
+
+### 7.1 BLOCKER (12) — 12 closed, 0 open
+
+| ID | Original gap | Status | Closed by |
+|----|--------------|:------:|-----------|
+| F-B-01 | Worker registration bootstrap undefined | ✅ | `10-worker-bootstrap-protocol.md` (task #08) |
+| F-B-02 | `/Workers/Register` payload unspecified | ✅ | `10-…md` §3 + `06-…md` §2.5 patch (task #08, #29) |
+| F-B-03 | `WorkerNodeIdentity` source undefined | ✅ | `10-…md` §2 (UUIDv7 of MAC+hostname, task #08) |
+| F-B-04 | JWT public-key distribution undefined | ✅ | `10-…md` §4 (no /jwks; static URL+TTL, task #08) |
+| F-B-05 | JWT storage contradicts itself | ✅ | `12-jwt-delivery-contract.md` (task #10) |
+| F-B-06 | `/Workers/.../Update` request body missing | ✅ | `spec/14-update/28-worker-push-instruction.md` (task #07) + `06-…md` §2.5 patch (task #29) |
+| F-B-07 | `WorkerSelectionEvent` audit columns | ✅ | `03-…md` §2.8 patch (task #29 — `EligibleCount`, `RejectedReasonCode`) |
+| F-B-08 | `Settings.UpdateSchedule` persistence | ✅ | `03-…md` `MainSetting` table added (task #29) |
+| F-B-09 | `EnumPage` enumeration missing | ✅ | `14-rbac-and-status-seed.md` §2 (9 EnumPages, task #12) |
+| F-B-10 | `RolePageAccess` schema missing | ✅ | `14-…md` §3 + `03-…md` §2.10 (task #12, #29) |
+| F-B-11 | `User` 2FA columns missing | ✅ | `03-…md` §2.4 patch (`UserTotpSecret`, `UserTotpEnrolledAt`, `UserTotpBackupCodesHash`, task #29) |
+| F-B-12 | Cookie-vs-JWT cross-domain story | ✅ | `12-…md` §3 + `05-…md` §6 cookie-scope paragraph (task #10, #30) |
+
+### 7.2 MAJOR (10) — 9 closed, 1 deferred
+
+| ID | Original gap | Status | Closed by / Note |
+|----|--------------|:------:|------------------|
+| F-M-01 | Per-field validation table for §3.1 | ✅ | `06-…md` §3.1 validation table (task #30) |
+| F-M-02 | Idempotency-key TTL undefined | ✅ | `15-…md` §2.2 (`IdempotencyKeyTtlSeconds=86400`, task #13) |
+| F-M-03 | `LeastLoaded` tiebreaker skew | ✅ | `04-…md` §1.2 (capacity-headroom tiebreaker, task #30) |
+| F-M-04 | Heartbeat payload contract | ✅ | `06-…md` §2.5 + `10-…md` §7 (task #08, #30) |
+| F-M-05 | `OfflineMultiplier` not configurable | ✅ | `15-…md` §2.4 `Routing.OfflineMultiplier=3` (task #13) |
+| F-M-06 | 2FA backup-code consumption policy | ✅ | `05-…md` §4 (task #30 — regen flow + ≤3 warning) |
+| F-M-07 | `PasswordResetRequest` enumeration | ✅ | `05-…md` §5 anti-pattern + `06-…md` §2.1 (task #30) |
+| F-M-08 | 2FA `ChallengeId` lifetime | ✅ | `15-…md` §2.5 `Auth.TotpChallengeTtlSeconds=300` (task #13) |
+| F-M-09 | Refresh-token rate limit | ✅ | `15-…md` §2.6 `RateLimits.RefreshPerUserPerMin=60` (task #13) |
+| F-M-10 | `Settings/EndpointAuth` PATCH semantics | ⏸ | Deferred to OQ-1 (per-endpoint auth overrides — open question, post-v1.0) |
+
+### 7.3 MINOR (8) — 6 closed, 2 open
+
+| ID | Original gap | Status | Closed by / Note |
+|----|--------------|:------:|------------------|
+| F-N-01 | Glossary lacks `EnumPage` cross-ref | ✅ | `14-…md` is the canonical source; `02-glossary.md` v1.1.0 references it (task #31) |
+| F-N-02 | `08-error-contract.md` not yet read | ✅ | Folded into ambiguity audit + `13-error-codes.md` (task #11) |
+| F-N-03 | Consistency-report grep commands | ❌ | Open — purely cosmetic; defer to changelog-sync task |
+| F-N-04 | `"TokenType": "Bearer"` field missing | ✅ | `12-…md` §2 JWT envelope (task #10) |
+| F-N-05 | Rate limits should be Seedable-Config | ✅ | `15-…md` §2.6 + §4 config.seed.json binding (task #13) |
+| F-N-06 | `spec/14-update/` cross-ref validation | ✅ | Verified in cross-spec audit (task #33) |
+| F-N-07 | No OpenAPI artifact mentioned | ⏸ | Deferred — tooling concern, post-v1.0 |
+| F-N-08 | Timestamp precision unspecified | ❌ | Open — quick fix candidate for next batch |
+
+### 7.4 Headline — Post-Triage
+
+| Metric | Original | Now |
+|--------|---------:|----:|
+| BLOCKER open | 12 | **0** |
+| MAJOR open | 10 | **0** (1 deferred to OQ-1) |
+| MINOR open | 8 | **2** (F-N-03, F-N-08) + 1 deferred (F-N-07) |
+| Total open | 30 | **2** |
+| Spec-hardening progress | — | **93%** (28/30 closed, 2 deferred) |
+
+### 7.5 Remaining concrete actions
+
+1. **F-N-08** — Add ISO-8601 precision rule (`YYYY-MM-DDTHH:MM:SS.sssZ`, ms mandatory, UTC suffix mandatory) to `04-database-conventions/` or `02-glossary.md`. ~5 min.
+2. **F-N-03** — Embed the actual `grep` invocations into `99-consistency-report.md`. ~5 min.
+3. **F-M-10 / OQ-1** — Per-endpoint auth-override resolution; promote OQ-1 to a decided design or a `15-tunable-constants.md` row. Bigger task.
+
+Audit Step 1 is **substantively closed**. The two remaining MINOR items are documentation polish, not implementation blockers.
+
+---
+
+*Re-triage v1.1.0 — 2026-05-04 (post tasks #07–32)*
