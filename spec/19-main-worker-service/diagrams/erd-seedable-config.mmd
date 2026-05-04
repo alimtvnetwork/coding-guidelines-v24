@@ -1,0 +1,39 @@
+erDiagram
+    %% Seedable-Config layout shared by Main and Worker tiers.
+    %% Authoritative rules: spec/06-seedable-config-architecture/
+    %% This diagram shows how the seed file (config.seed.json) is materialized.
+
+    SeedableConfigFile ||--o{ SeedableConfigEntry : "contains"
+    SeedableConfigEntry ||--o{ SeedableConfigVersion : "history"
+    SeedableConfigNamespace ||--o{ SeedableConfigEntry : "groups"
+
+    SeedableConfigFile {
+        INTEGER SeedableConfigFileId PK
+        TEXT SeedableConfigFilePath UK
+        TEXT SeedableConfigFileSemver
+        TEXT SeedableConfigFileLoadedAt
+        TEXT Description
+    }
+    SeedableConfigNamespace {
+        INTEGER SeedableConfigNamespaceId PK
+        TEXT SeedableConfigNamespaceCode UK
+        TEXT SeedableConfigNamespaceLabel
+        TEXT Description
+    }
+    SeedableConfigEntry {
+        INTEGER SeedableConfigEntryId PK
+        INTEGER SeedableConfigFileId FK
+        INTEGER SeedableConfigNamespaceId FK
+        TEXT SeedableConfigEntryKey
+        TEXT SeedableConfigEntryValue
+        INTEGER IsSecret
+        TEXT Description
+    }
+    SeedableConfigVersion {
+        INTEGER SeedableConfigVersionId PK
+        INTEGER SeedableConfigEntryId FK
+        TEXT SeedableConfigVersionSemver
+        TEXT SeedableConfigVersionAppliedAt
+        TEXT Notes
+        TEXT Comments
+    }
