@@ -35,6 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SPEC_FILE = REPO_ROOT / "spec/19-main-worker-service/13-error-codes.md"
 INDEX_FILE = REPO_ROOT / "spec/19-main-worker-service/error-codes.json"
 MASTER_FILE = REPO_ROOT / "spec/03-error-manage/03-error-code-registry/error-codes-master.json"
+WAIVER_FILE = REPO_ROOT / "linter-scripts/check-mws-error-codes.waivers.txt"
 
 # Files that contain catalogue entries — references inside them do NOT
 # count for orphan detection (Rule R2).
@@ -99,10 +100,17 @@ def has_no_unknown_refs(refs: dict[str, set[Path]], catalogue: set[str], errors:
     return not unknown
 
 
-def has_no_orphans(refs: dict[str, set[Path]], catalogue: set[str], errors: list[str]) -> bool:
-    orphans = sorted(catalogue - set(refs))
+def load_waivers() -> set[str]:
+    if not WAIVER_FILE.is_file():
+        return set()
+    lines = WAIVER_FILE.read_text(encoding="utf-8").splitlines()
+    return {ln.strip() for ln in lines if ln.strip() and not ln.lstrip().startswith("#")}
+
+
+def has_no_orphans(refs: dict[str, set[Path]], catalogue: set[str], waivers: set[str], errors: list[str]) -> bool:
+    orphans = sorted((catalogue - set(refs)) - waivers)
     for code in orphans:
-        errors.append(f"R2 orphan {code} catalogued in 13-error-codes.md but never referenced elsewhere")
+        errors.append(f"R2 orphan {code} catalogued in 13-error-codes.md but never referenced elsewhere (and not waived)")
     return not orphans
 
 
@@ -141,17 +149,18 @@ def main() -> int:
         print(f"[setup] no codes parsed from {SPEC_FILE}", file=sys.stderr)
         return 2
     refs = collect_references(iter_scan_files())
+    waivers = load_waivers()
     errors: list[str] = []
     has_no_unknown_refs(refs, set(catalogue), errors)
-    has_no_orphans(refs, set(catalogue), errors)
+    has_no_orphans(refs, set(catalogue), waivers, errors)
     is_bijective(catalogue, errors)
     is_in_range(catalogue, errors)
-    return report(errors, catalogue)
+    return report(errors, catalogue, waivers)
 
 
-def report(errors: list[str], catalogue: dict[str, int]) -> int:
+def report(errors: list[str], catalogue: dict[str, int], waivers: set[str]) -> int:
     if not errors:
-        print(f"[ok] check-mws-error-codes: {len(catalogue)} codes verified (R1-R4)")
+        print(f"[ok] check-mws-error-codes: {len(catalogue)} codes verified (R1-R4); {len(waivers)} R2 waiver(s) loaded")
         return 0
     for e in errors:
         print(f"[fail] {e}", file=sys.stderr)
