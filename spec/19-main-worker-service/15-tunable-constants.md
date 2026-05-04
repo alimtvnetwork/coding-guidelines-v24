@@ -77,6 +77,20 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `WorkerPushUpdate.MaxRunDurationSeconds` | **600** (10m) | seconds | Hard cap before self-abort + rollback. |
 | `WorkerPushUpdate.HandoffTimeoutSeconds` | **60** | seconds | Per `spec/14-update/28` §5 step 8. |
 | `WorkerPushUpdate.InstructionRetentionDays` | **14** | days | Per `spec/14-update/28` §7. |
+| `WorkerPushUpdate.IssuedSkewSeconds` | **300** (5m) | seconds | Per `spec/14-update/28` §3 — Worker rejects an instruction whose `IssuedAtUtc` is older than this. Distinct from JWT clock-skew (§2.4). Bumped to v1.1.0 to retire the §28 line-82 TUNABLE-WAIVER. |
+
+### 2.8 Self-update pointer (consumer: `09-self-update-pointer.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.SelfUpdate.RedirectStaleHours` | **36** | hours | `09-self-update-pointer.md` §1 step 5 | If the cached redirect URL is older than this OR unreachable, re-resolve via the original endpoint. Bumped to v1.1.0 to retire the §09 line-41 TUNABLE-WAIVER. |
+
+### 2.9 Worker bootstrap (consumer: `10-worker-bootstrap-protocol.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Bootstrap.RetryBackoffSeconds` | `[10, 30, 90, 300]` | seconds[] | `10-worker-bootstrap-protocol.md` §6 (`WORKER-100-01 OAUTH_HANDSHAKE_FAIL`) | Cold-bootstrap retry ladder for Worker→Main OAuth handshake; distinct from the steady-state `MainWorker.Retry.BackoffSeconds` of §2.1. After exhaustion the Worker exits and is restarted by its supervisor. Bumped to v1.1.0 to retire the §10 line-137 TUNABLE-WAIVER. |
+| `MainWorker.Bootstrap.RetryMaxAttempts` | **4** | count | Same | MUST equal `len(RetryBackoffSeconds)`. |
 
 ---
 
