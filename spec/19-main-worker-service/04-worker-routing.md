@@ -96,13 +96,39 @@ public function pickWorker(int $companyId, string $strategyCode): WorkerNode
 {
     $eligible = $this->getEligibleWorkers();
     $this->guardAtLeastOneEligible($eligible);
-    $worker  = $this->strategyResolver->resolve($strategyCode)->pick($eligible);
+    $strategy = $this->strategyResolver->resolve($strategyCode);
+    $worker   = $strategy->pick($eligible);
     $this->recordSelectionEvent($companyId, $worker, $strategyCode);
     return $worker;
 }
 ```
 
 Each helper (`getEligibleWorkers`, `guardAtLeastOneEligible`, `recordSelectionEvent`) is its own ≤8-line function. `guardAtLeastOneEligible` throws `WorkerUnavailable` when the list is empty.
+
+### 5.1 Required interfaces (resolves F-A-33)
+
+The pseudocode above relies on two types that implementations MUST define so the contract is portable across PHP, Go, Rust, and TypeScript stacks:
+
+```php
+interface WorkerSelectionStrategyInterface {
+    /** Returns one WorkerNode from the supplied eligible candidates.
+     *  MUST be deterministic given identical input. MUST throw
+     *  `WorkerUnavailable` if the input is empty. */
+    public function pick(array $candidates): WorkerNode;
+
+    /** Returns the PascalCase code this strategy is registered under
+     *  in `WorkerSelectionStrategy` (ref table, see `03-` §2.9). */
+    public function code(): string;
+}
+
+interface WorkerSelectionStrategyResolverInterface {
+    /** Resolves a strategy code to its concrete strategy. MUST throw
+     *  `ConfigurationError` if the code is unknown. */
+    public function resolve(string $strategyCode): WorkerSelectionStrategyInterface;
+}
+```
+
+Allowed concrete strategies in v1.0 (one class each, registered by code): `RoundRobin`, `LeastLoaded`, `Manual`. Adding a new strategy = new class + new ref-table row + Seedable-Config bump (per `15-tunable-constants.md` rules); no existing class changes.
 
 ---
 
