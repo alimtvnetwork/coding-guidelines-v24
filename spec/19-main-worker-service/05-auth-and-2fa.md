@@ -69,7 +69,7 @@ Per verbatim §Login 3:
 
 - **Standard:** TOTP (RFC 6238), 30s window <!-- TUNABLE-WAIVER: RFC 6238 mandates 30s; not a MainWorker tunable -->, 6 digits.
 - **Enrollment:** Main shows QR (otpauth URI), user scans, submits one TOTP to confirm. On success, store `User.TotpSecret` (encrypted at rest with key from Seedable-Config).
-- **Backup codes:** generate 10 single-use codes at enrollment. Store hashed.
+- **Backup codes:** generate 10 single-use codes at enrollment (stored as bcrypt hashes in `User.UserTotpBackupCodesHash` per `03-main-db-schema.md` §2.4). When the count of unused codes reaches **0**, the user MUST be forced to regenerate at next sign-in: Main returns `Error.SubCode = TotpBackupExhausted` with HTTP 403 and `X-Auth-Action: RegenerateBackupCodes` header (resolves F-A-05). Regeneration invalidates the prior batch. Power Admin override path: `POST /API/V1/Auth/2FA/RegenerateBackupCodes` (audit logged).
 - **Verification points:** sign-in, password change, 2FA disable, role escalation.
 - **Recovery:** Power Admin can reset 2FA for any user (audit logged).
 
