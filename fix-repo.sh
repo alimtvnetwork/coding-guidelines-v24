@@ -172,6 +172,7 @@ run_sweep() {
   done < <(cd "$REPO_ROOT" && git ls-files -z)
 }
 
+# lint-allow: function-length reason="top-level orchestrator; sequential pipeline" max=25
 main() {
   parse_args "$@"
   resolve_identity
