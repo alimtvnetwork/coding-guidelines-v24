@@ -35,7 +35,7 @@ Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStra
 ### 1.4 Eligibility filter (applies to all strategies)
 A worker is eligible only if **all** are true (positive guards, per CODE RED):
 - `IsWorkerActive(node)` → `WorkerNodeStatusCode = 'Active'`
-- `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Routing.HeartbeatWindowSeconds` (default 60s)
+- `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Heartbeat.IntervalSeconds × MissedThreshold` per `15-tunable-constants.md` §2.3 <!-- TUNABLE-WAIVER: derived product, not a literal -->.
 - `HasCapacity(node)` → assigned company count below `MainWorker.Routing.MaxCompaniesPerWorker` (0 = unlimited)
 
 If no eligible worker exists → return `WorkerUnavailable` error per `08-error-contract.md`.
@@ -59,12 +59,12 @@ Cache backend: Laravel cache driver (file/redis/memcached) — implementer's cho
 ## 3. Failover
 
 ### 3.1 Worker becomes unreachable mid-request
-1. Main retries per `01-architecture.md` §4 (max 3 attempts, exponential backoff).
+1. Main retries per `15-tunable-constants.md` §2.1 (`RetryMaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`).
 2. On final failure: surface `WorkerUnreachable` to caller. Do NOT silently reroute — the user's data lives on that specific worker.
 3. Log event with `X-Correlation-Id`. Per `spec/03-error-manage/`, never swallow.
 
 ### 3.2 Worker marked offline
-- Background heartbeat checker flips status to `Offline` after `HeartbeatWindowSeconds × 3`.
+- Background heartbeat checker flips status to `Quarantined` after `MainWorker.Heartbeat.MissedThreshold` consecutive misses (per `15-tunable-constants.md` §2.3); cooldown before re-eligibility = `MainWorker.Heartbeat.QuarantineCooldownSeconds`.
 - Existing `Company → Worker` mappings are NOT reassigned automatically. Tenant data is on that worker.
 - Power Admin can trigger manual reassignment via `POST /API/V1/Workers/{From}/Migrate/{To}` (deferred — not in initial endpoint set).
 

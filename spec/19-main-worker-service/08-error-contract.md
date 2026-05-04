@@ -56,7 +56,7 @@ Field rules:
 ### 3.1 `WorkerUnreachable`
 - **Category:** Transport. **Severity:** Error. **Retryable:** true.
 - **When:** TCP connect fail, TLS fail, request timeout, DNS fail.
-- **Main does:** retry up to 3 (exp backoff: 1s, 2s, 4s). Log each attempt. Final failure → return envelope to caller, mark Worker `LastSeenAt` stale.
+- **Main does:** retry per `15-tunable-constants.md` §2.1 (`RetryMaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`). Log each attempt. Final failure → return envelope to caller, mark Worker `LastSeenAt` stale.
 - **Worker does:** N/A (Worker never sees it; it's a Main-side observation).
 
 ### 3.2 `WorkerVersionMismatch`
@@ -134,7 +134,7 @@ Main applies retries ONLY when the response is `Retryable=true` AND the request 
 | POST | only if `X-Idempotency-Key` present |
 | PATCH | only if `X-Idempotency-Key` present |
 
-Backoff: exponential with jitter (`base × 2^attempt × rand(0.5, 1.5)`), `base=1s`, `max attempts=3`.
+Backoff and attempt budget: see `15-tunable-constants.md` §2.1 (`RetryMaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`). Implementations MUST NOT hard-code different defaults.
 
 Pseudocode (CODE RED compliant):
 
