@@ -20,6 +20,13 @@ Per verbatim §Self-Update Mechanism:
 
 This file is that pointer note. It captures the intent so future implementers (AI or human) know **what** to build, **where** the real spec lives, and **what NOT to do today**.
 
+**Pause expiration (resolves F-A-09 — "for now" had no expiry):** the pause is bounded — this pointer file MUST be deleted (or promoted to a full spec) on whichever comes first:
+1. Spec/19-main-worker-service reaches **v2.0.0**, OR
+2. The first production deploy of `spec/14-update/` self-update lands and is observed green for 14 consecutive days, OR
+3. Calendar date **2026-12-31** (hard sunset).
+
+When any condition fires, follow the deletion checklist in §6.
+
 ---
 
 ## 2. Authoritative Source
