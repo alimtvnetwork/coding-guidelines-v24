@@ -9,7 +9,7 @@
 
 ## Counter
 
-`10 / 40` tasks completed.
+`11 / 40` tasks completed.
 
 ## Log
 
@@ -23,3 +23,4 @@
 08. 2026-05-04 Authored spec/19-main-worker-service/10-worker-bootstrap-protocol.md — 8-step deterministic boot, /Workers/Register contract, JWT public-key fetch (no /jwks), version pinning rules, WorkerNode + WorkerBootstrapState schemas, 9 WORKER-* error codes. Resolves audit F-B-01/02/03, F-X-08 (top-10 fix #1). Unblocks AC-1, AC-3, AC-4.
 09. 2026-05-04 Authored spec/19-main-worker-service/11-split-db-tier-reconciliation.md — pins Main=3 tiers (Root/Settings/Session), Worker=4 tiers (Root/Settings/App/Session) per spec/05's 6-tier model. Per-tier table allocation for both sides. 6 follow-up edits catalogued (FU-1..FU-6). Resolves audit F-X-01/04, F-D-09 (top-10 fix #2). Unblocks AC-2.
 10. 2026-05-04 Authored spec/19-main-worker-service/12-jwt-delivery-contract.md — pins Worker JWT to JSON-body + in-memory storage (NOT cookie/localStorage), mandatory CSP, claim contract, 9 CI test cases, 2 diagram-correction follow-ups (FU-7/FU-8). Resolves audit F-A-12, F-D-04, F-B-05 (top-10 fix #3). Closes AC-4.
+11. 2026-05-04 Registered MWS prefix (21000-21199) in spec/03-error-manage/03-error-code-registry/01-registry.md and authored spec/19-main-worker-service/13-error-codes.md cataloguing 30 codes (22 WORKER-* + 8 MAIN-*) with prefixed↔flat mapping, JSON envelope, linter assertion plan (FU-9), master.json regen (FU-10). Resolves audit F-X-08, F-A-21, F-B-08 (top-10 fix #4). Unblocks AC-6, AC-1.
