@@ -26,6 +26,7 @@ Every Main↔Worker error response uses this JSON shape:
 
 ```json
 {
+  "EnvelopeVersion": "1.1.0",
   "Error": {
     "ErrorCode": "WorkerUnreachable",
     "ErrorMessage": "Worker w3.example.com did not respond within 30s",
@@ -36,18 +37,27 @@ Every Main↔Worker error response uses this JSON shape:
     "OperationName": "Company.Create",
     "OccurredAt": "2026-05-04T10:22:14Z",
     "Retryable": true,
-    "RetryAfterSeconds": 5
+    "RetryAfterSeconds": 5,
+    "OperationId": null,
+    "SubCode": null,
+    "FieldErrors": null
   }
 }
 ```
 
-Field rules:
+Field rules (core):
+- `EnvelopeVersion` — SemVer of the envelope schema itself. Bump on additive change. Consumers MUST tolerate unknown fields and MUST refuse to parse a major-version mismatch.
 - `ErrorCode` — values from §3 catalog only. PascalCase.
 - `ErrorCategory` — `Transport` | `Auth` | `Validation` | `Business` | `Storage` | `Configuration`.
 - `ErrorSeverity` — `Warn` | `Error` | `Fatal`.
 - `CorrelationId` — echo of inbound `X-Correlation-Id`.
 - `Retryable` — boolean. Drives Main's retry decision.
 - `RetryAfterSeconds` — present only when `Retryable=true`.
+
+Extension fields (always present in the JSON shape, `null` when not applicable):
+- `OperationId` (string, nullable) — set by `IdempotencyConflict` (§3.7) so the caller can reconcile against the original successful response. PascalCase UUID v4 string. (Resolves F-A-12.)
+- `SubCode` (string, nullable) — set by `SplitDBWriteFail` (§3.3) and any future error that needs a discriminator under a single `ErrorCode`. PascalCase enum from the per-code sub-code list. (Resolves F-A-15.)
+- `FieldErrors` (array, nullable) — set by `ValidationFail` (§3.8); each item `{FieldName: string, FailureReason: string}`. (Resolves F-A-16.)
 
 ---
 
