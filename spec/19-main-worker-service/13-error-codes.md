@@ -41,7 +41,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-100-02` | `21011` | `KidUnknown` | "JWT signing key id not in trust store." | 401 | `12-jwt-delivery-contract.md` §7 |
 | `WORKER-100-03` | `21012` | `WrongWorker` | "JWT `wnk` claim does not match this worker." | 403 | `12` §7 |
 | `WORKER-100-04` | `21013` | `JwtSignatureInvalid` | "JWT RS256 signature failed verification." | 401 | `12` §7 |
-| `WORKER-100-05` | `21014` | `JwtExpired` | "JWT `exp` is in the past (allowing 60s skew)." | 401 | `12` §7 |
+| `WORKER-100-05` | `21014` | `JwtExpired` | "JWT `exp` is in the past (allowing `ClockSkewToleranceSeconds` per `15-tunable-constants.md` §2.4 — default 60 s)." | 401 | `12` §7 |
 | `WORKER-100-06` | `21015` | `JwtIssuerMismatch` | "JWT `iss` claim does not match configured Main host." | 401 | `12` §7 |
 
 ### 2.3 Authorization (200-299 → 21020-21029)
