@@ -33,7 +33,7 @@ The JID is the **contract** between Main (issuer) and Worker (executor). It MUST
 | Mandatory Headers | `X-Correlation-Id`, `X-Idempotency-Key` (= `InstructionId`), `X-Auth-Action: SelfUpdate` |
 | Body | A single JID object (see §3) |
 | Max body size | 16 KB |
-| Timeout | 30 s (Main → Worker handshake only; the actual download happens worker-side) |
+| Timeout | 30 s handshake (Main → Worker); pinned in `spec/19-main-worker-service/15-tunable-constants.md` §2.5 (`MainWorker.Routing.HttpHandshakeTimeoutSeconds`). |
 
 ---
 
@@ -98,8 +98,8 @@ The JID is the **contract** between Main (issuer) and Worker (executor). It MUST
 | `ExecutionWindow.LatestStartUtc` | TEXT (RFC3339) | No | Worker drops the JID and reports `INSTRUCTION_EXPIRED` if started after. |
 | `ExecutionWindow.MaxRunDurationSeconds` | INTEGER | No | Worker self-aborts if exceeded; triggers rollback. |
 | `OnFailure.RollbackPolicy` | ENUM | No | `AutoRevertOnHandoffFailure` \| `ManualOnly` \| `RetryOnly`. |
-| `OnFailure.MaxRetries` | INTEGER | No | Single canonical value. (Resolves audit F-A-15 contradiction: pinned to **3**.) |
-| `OnFailure.RetryBackoffSeconds` | INTEGER[] | No | Length MUST equal `MaxRetries`. |
+| `OnFailure.MaxRetries` | INTEGER | No | Single canonical value, default **3**. Pinned in `spec/19-main-worker-service/15-tunable-constants.md` §2.1 (`WorkerPushUpdate.MaxRetries`). Resolves audit F-A-15. |
+| `OnFailure.RetryBackoffSeconds` | INTEGER[] | No | Length MUST equal `MaxRetries`. Defaults `[30, 120, 300]` per `spec/19-main-worker-service/15-tunable-constants.md` §2.1. |
 | `Notes` | TEXT | No | Free text shown in worker logs. (Per Code Red Rule 11 — transactional table.) |
 | `Description` | TEXT | Yes | Optional per Code Red Rule 10. |
 
@@ -182,7 +182,7 @@ CREATE INDEX IxWorkerUpdateInstructionUlid
 
 Compliant with Code Red Schema Rules 10/11/12: `Notes`, `Comments`, `Description` all NULL-able with no DEFAULT; no UUIDs; PK is `{TableName}Id`.
 
-Retention: minimum 14 days; configurable via Seedable-Config key `WorkerUpdateInstructionRetentionDays`.
+Retention: minimum **14 days** (`WorkerPushUpdate.InstructionRetentionDays`); pinned in `spec/19-main-worker-service/15-tunable-constants.md` §2.7 and overridable via Seedable-Config key `WorkerUpdateInstructionRetentionDays`.
 
 ---
 
