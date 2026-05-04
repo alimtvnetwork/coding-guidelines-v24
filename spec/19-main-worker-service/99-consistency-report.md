@@ -79,6 +79,25 @@ Total: 21 files.
 | `Master/Slave` | `Main/Worker` | NO ✅ |
 | `CEO` for Md. Alim Ul Karim | `Chief Software Engineer` | N/A — author not referenced in this spec |
 
+**Reproducible verification commands** (closes audit finding F-N-03; run from repo root):
+
+```bash
+# 4.1 — forbidden literals (case-insensitive, exclude this report itself)
+rg -i -n --glob '!99-consistency-report.md' \
+   -e 'CW configuration' -e 'git map' \
+   -e '\bmaster/slave\b' -e '\bmaster-slave\b' \
+   spec/19-main-worker-service/
+
+# 4.2 — author title compliance (must NOT appear)
+rg -n -e '\bCEO\b' -e 'Chief Executive Officer' \
+   spec/19-main-worker-service/
+
+# 4.3 — global enforcement (delegated)
+python3 linter-scripts/check-forbidden-strings.py
+```
+
+Last verified: 2026-05-04 — all three commands exit 0 / zero matches.
+
 ---
 
 ## 5. CODE RED compliance (rules applied to spec content)
