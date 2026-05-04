@@ -152,8 +152,10 @@ Pseudocode (CODE RED compliant):
 public function callWorkerWithRetry(WorkerCall $call): WorkerResponse
 {
     $attempt = 0;
+    $this->lastResponse = $this->makeNullResponse($call);
     while ($this->canRetry($attempt, $call)) {
         $response = $this->tryOnce($call);
+        $this->lastResponse = $response;
         if ($this->isSuccessful($response)) { return $response; }
         if ($this->isPermanentFailure($response)) { return $response; }
         $this->sleepBackoff($attempt);
@@ -163,7 +165,7 @@ public function callWorkerWithRetry(WorkerCall $call): WorkerResponse
 }
 ```
 
-Each helper is its own ≤8-line function. `canRetry`, `isSuccessful`, `isPermanentFailure` are positively named guards (no `!`).
+Each helper is its own ≤8-line function. `canRetry`, `isSuccessful`, `isPermanentFailure` are positively named guards (no `!`). `makeNullResponse(call)` returns a synthetic `WorkerUnreachable` envelope so `lastResponse` is always a valid object — never `null` — even if the loop body never executes (resolves F-A-35; no UB on zero-attempt budgets).
 
 ---
 
