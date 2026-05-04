@@ -87,7 +87,7 @@ Extension fields (always present in the JSON shape, `null` when not applicable):
 - **Category:** Auth. **Severity:** Error. **Retryable:** false.
 - **When:** JWT signature invalid, claims mismatch, OAuth client-credentials rejected, expired token Main thought was fresh.
 - **Worker does:** return 401 with this envelope. NEVER 500.
-- **Main does:** if Main initiated the call, refresh credentials and retry **once**. If still fails, surface to caller. If user-initiated, force re-login.
+- **Main does:** if Main initiated the call, refresh credentials and retry **once**. If still fails, surface to caller. If user-initiated, force re-login by setting response header `X-Auth-Action: Reauthenticate` per `spec/04-database-conventions/06-rest-api-format.md` (X-headers section). The frontend MUST treat this header as the sole "force re-login" signal — no inference from status codes alone. (Resolves F-A-26.)
 
 ### 3.5 `AccessDenied`
 - **Category:** Auth. **Severity:** Warn. **Retryable:** false.
