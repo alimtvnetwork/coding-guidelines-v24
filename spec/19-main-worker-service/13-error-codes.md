@@ -72,8 +72,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
-| `WORKER-500-01` | `21050` | `ClockSkewTooLarge` | "Local clock differs from Main `ServerTimeUtc` by >60s." | 500 | `10` §6 |
-| `WORKER-500-02` | `21051` | `HandoffFailed` | "Post-update handoff did not confirm within 60s; rolled back." | 500 | `spec/14-update/28` §6 |
+| `WORKER-500-01` | `21050` | `ClockSkewTooLarge` | "Local clock differs from Main `ServerTimeUtc` beyond `MainWorker.Auth.ClockSkewToleranceSeconds` (per `15-tunable-constants.md` §2.4, default 60 s)." | 500 | `10` §6 |
+| `WORKER-500-02` | `21051` | `HandoffFailed` | "Post-update handoff did not confirm within `WorkerPushUpdate.HandoffTimeoutSeconds` (per `15-tunable-constants.md` §2.7, default 60 s); rolled back." | 500 | `spec/14-update/28` §6 |
 | `WORKER-500-03` | `21052` | `SplitDbWriteFail` | "Write to App or Session tier DB failed." | 500 | `11-split-db-tier-reconciliation.md` |
 
 ### 2.7 External Services / Payload (600-699 → 21060-21069)
