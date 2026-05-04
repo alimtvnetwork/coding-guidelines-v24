@@ -1,7 +1,7 @@
 # 99 — Consistency Report
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Verified:** 2026-05-04
 
 Cross-link integrity, naming-convention compliance, and rule-inheritance audit for this spec folder.
