@@ -64,7 +64,7 @@ Cache backend: Laravel cache driver (file/redis/memcached) — implementer's cho
 3. Log event with `X-Correlation-Id`. Per `spec/03-error-manage/`, never swallow.
 
 ### 3.2 Worker marked offline
-- Background heartbeat checker flips status to `Offline` after `HeartbeatWindowSeconds × 3`.
+- Background heartbeat checker flips status to `Quarantined` after `MainWorker.Heartbeat.MissedThreshold` consecutive misses (per `15-tunable-constants.md` §2.3); cooldown before re-eligibility = `MainWorker.Heartbeat.QuarantineCooldownSeconds`.
 - Existing `Company → Worker` mappings are NOT reassigned automatically. Tenant data is on that worker.
 - Power Admin can trigger manual reassignment via `POST /API/V1/Workers/{From}/Migrate/{To}` (deferred — not in initial endpoint set).
 
