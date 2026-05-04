@@ -32,7 +32,7 @@ Cross-link integrity, naming-convention compliance, and rule-inheritance audit f
 | `diagrams/seq-company-creation.mmd` | Sequence | ✅ |
 | `diagrams/seq-login-routing.mmd` | Sequence | ✅ |
 | `diagrams/seq-push-update.mmd` | Sequence | ✅ |
-| `diagrams/README.md` | Diagrams index | ✅ |
+| `diagrams/readme.md` | Diagrams index | ✅ |
 
 Total: 21 files.
 
