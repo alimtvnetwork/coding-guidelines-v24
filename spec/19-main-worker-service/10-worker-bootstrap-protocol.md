@@ -134,7 +134,7 @@ All codes registered in `spec/03-error-manage/03-error-code-registry/` under pre
 |---|---|---|---|
 | `WORKER-000-01` | `BOOTSTRAP_CONFIG_MISSING` | Step 1 | Exit, do NOT listen. |
 | `WORKER-000-02` | `SPLIT_DB_TIER_MISSING` | Step 2 | Exit. |
-| `WORKER-100-01` | `OAUTH_HANDSHAKE_FAIL` | Step 3 | Exit, retry with exponential backoff (10s, 30s, 90s, 300s; then exit). |
+| `WORKER-100-01` | `OAUTH_HANDSHAKE_FAIL` | Step 3 | Exit, retry with exponential backoff (10s, 30s, 90s, 300s; then exit) <!-- TUNABLE-WAIVER: cold-bootstrap retry ladder distinct from steady-state Main↔Worker retries (15-tunable-constants.md §2.1); tracked as future MainWorker.Bootstrap.* category --> . |
 | `WORKER-400-01` | `WORKER_VERSION_TOO_OLD` | Step 3 | Exit, log loudly. |
 | `WORKER-400-02` | `VERSION_MISMATCH` | Step 3 | Exit, log loudly. |
 | `WORKER-500-01` | `CLOCK_SKEW_TOO_LARGE` | Step 4 | Exit. |
