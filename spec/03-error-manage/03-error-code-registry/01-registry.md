@@ -58,6 +58,8 @@
 | `SM-RT` | SM Realtime | 2800-2849 | `spec/02-spec-management-software/05-features/18-realtime/` | ✅ Active |
 | `SM-RV` | SM Registry Validator | 2850-2859 | `spec/03-error-manage/03-error-code-registry/08-overlap-validator.md` | ✅ Active |
 | `CAST` | Type Casting (Cross-Cutting) | GEN-600-01 to GEN-600-10 | `spec/02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md` | ✅ Active |
+| `MWS` | Main/Worker Service (Worker tier) | 21000-21099 | `spec/19-main-worker-service/13-error-codes.md` | ✅ Active |
+| `MWS` | Main/Worker Service (Main tier) | 21100-21199 | `spec/19-main-worker-service/13-error-codes.md` | ✅ Active |
 
 ---
 
