@@ -1,7 +1,9 @@
 # 01 — Architecture
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
+
+> **Split-DB tier authority (FU-1):** Per [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md), Main uses **3 tiers** (Root / Settings / Session); Worker uses **4 tiers** (Root / Settings / App / Session). Both are subsets of `spec/05-split-db-architecture/`'s 6-tier model. Cache + Document tiers are unused in v1.0. Any "3-tier (Root/App/Session)" wording in older docs is stale — the reconciliation file wins.
 
 ---
 
