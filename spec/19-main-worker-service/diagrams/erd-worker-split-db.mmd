@@ -9,9 +9,11 @@
 %% Banner version: 1.0.0 (2026-05-04, audit fix #9)
 %% ==========================================================
 erDiagram
-    %% Worker-side split-DB ERD (Root / App / Session tiers)
-    %% Authoritative split-DB rules: spec/05-split-db-architecture/
-    %% This is the worker-tier projection for the Main/Worker spec.
+    %% Worker-side split-DB ERD — projection of spec/05's 6-tier model.
+    %% Worker uses 4 of 6: Root / Settings / App / Session (Cache + Document unused in v1.0).
+    %% Authoritative tier mapping: spec/19/11-split-db-tier-reconciliation.md §5.
+    %% NOTE (FU-4): Settings-tier tables (WorkerBootstrapState, WorkerUpdateInstruction)
+    %%              are catalogued in 11-…md §5 but not redrawn here to keep the ERD readable.
 
     %% ---- Root tier (one DB per worker) ----
     RootCompany ||--o{ AppCompanyShard : "shards into"
