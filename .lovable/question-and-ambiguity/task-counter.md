@@ -9,7 +9,7 @@
 
 ## Counter
 
-`9 / 40` tasks completed.
+`10 / 40` tasks completed.
 
 ## Log
 
@@ -22,3 +22,4 @@
 07. 2026-05-04 Authored spec/14-update/28-worker-push-instruction.md — JID schema, transport, RenameFirst flow, error codes, worker-side WorkerUpdateInstruction table. Resolves spec/19 audit F-X-14/15/17 (top-10 fix #5). Pins MaxRetries=3, fixes F-A-15.
 08. 2026-05-04 Authored spec/19-main-worker-service/10-worker-bootstrap-protocol.md — 8-step deterministic boot, /Workers/Register contract, JWT public-key fetch (no /jwks), version pinning rules, WorkerNode + WorkerBootstrapState schemas, 9 WORKER-* error codes. Resolves audit F-B-01/02/03, F-X-08 (top-10 fix #1). Unblocks AC-1, AC-3, AC-4.
 09. 2026-05-04 Authored spec/19-main-worker-service/11-split-db-tier-reconciliation.md — pins Main=3 tiers (Root/Settings/Session), Worker=4 tiers (Root/Settings/App/Session) per spec/05's 6-tier model. Per-tier table allocation for both sides. 6 follow-up edits catalogued (FU-1..FU-6). Resolves audit F-X-01/04, F-D-09 (top-10 fix #2). Unblocks AC-2.
+10. 2026-05-04 Authored spec/19-main-worker-service/12-jwt-delivery-contract.md — pins Worker JWT to JSON-body + in-memory storage (NOT cookie/localStorage), mandatory CSP, claim contract, 9 CI test cases, 2 diagram-correction follow-ups (FU-7/FU-8). Resolves audit F-A-12, F-D-04, F-B-05 (top-10 fix #3). Closes AC-4.
