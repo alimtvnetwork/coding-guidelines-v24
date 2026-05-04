@@ -138,6 +138,9 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-400-05` | `21143` | `TwoFactorChallengeUnknown` | "TOTP submitted for unknown / expired challenge id." | 401 | `04-worker-routing.md` §7.2 (`/Auth/TwoFactor/Verify`) |
 | `MAIN-400-08` | `21144` | `RefreshNotEligible` | "JWT not within refresh window or already rotated." | 401 | `04-worker-routing.md` §7.2 (`/Auth/Refresh`) |
 | `MAIN-400-09` | `21145` | `RefreshReplay` | "Single-use refresh JWT replayed after rotation." | 401 | `04-worker-routing.md` §7.2 + diagrams/seq-login-routing |
+| `MAIN-400-04` | `21147` | `WorkerRegisterRejected` | "Main refused Worker registration (version pin mismatch, IP not in allow-list, or duplicate `WorkerNodeName`)." | 409 | `08-error-contract.md` §9 + `10-worker-bootstrap-protocol.md` |
+| `MAIN-400-06` | `21148` | `WorkerHeartbeatRejected` | "Worker is `Quarantined` or `Offline`; Worker MUST stop sending heartbeats until restart." | 410 | `08-error-contract.md` §9 + `10` §7 |
+| `MAIN-400-07` | `21149` | `WorkerPushAckUnknownJid` | "PushAck received for unknown / expired Job-Id; Worker logs and discards." | 404 | `08-error-contract.md` §9 + `spec/14-update/28-worker-push-instruction.md` |
 | `MAIN-400-11` | `21146` | `AuthActionMissing` | "Required `X-Auth-Action` header absent on multi-step auth flow." | 400 | `04-worker-routing.md` §7.4 |
 
 ### 3.5 Database (500-599 → 21150-21159)
