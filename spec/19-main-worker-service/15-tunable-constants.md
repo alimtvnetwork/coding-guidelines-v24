@@ -145,7 +145,13 @@ Add (or merge with) the following category at SemVer `1.3.0` of `config.seed.jso
 
     "PushUpdateMaxRunSeconds":     { "Type": "number",  "Default": 600,       "Min": 30 },
     "PushUpdateHandoffTimeoutSec": { "Type": "number",  "Default": 60,        "Min": 5 },
-    "PushUpdateRetentionDays":     { "Type": "number",  "Default": 14,        "Min": 1 }
+    "PushUpdateRetentionDays":     { "Type": "number",  "Default": 14,        "Min": 1 },
+    "PushUpdateIssuedSkewSec":     { "Type": "number",  "Default": 300,       "Min": 30,   "Max": 3600 },
+
+    "SelfUpdateRedirectStaleHours":{ "Type": "number",  "Default": 36,        "Min": 1,    "Max": 720 },
+
+    "BootstrapRetryBackoffSec":    { "Type": "string",  "Default": "10,30,90,300", "Description": "Comma-separated; length = BootstrapRetryMaxAttempts." },
+    "BootstrapRetryMaxAttempts":   { "Type": "number",  "Default": 4,         "Min": 1,    "Max": 10 }
 
   }
 }
