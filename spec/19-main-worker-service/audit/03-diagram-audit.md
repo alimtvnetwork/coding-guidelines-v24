@@ -96,7 +96,7 @@
 | F-D-31 | `par` block shows 3 fixed workers (W1, W2, Wn). For 50 workers, the AI will literally hand-roll 50 `par` branches. Need a "for each Worker" abstraction note. | MAJOR |
 | F-D-32 | `Wn` returns 503, Main retries, then surfaces partial failure — but `09-§5` references `latest.json` and a 10-part zip; the diagram skips that. The push-update happy path shown here (just POST `/SelfUpdate`) ignores zip preparation entirely. | BLOCKER |
 | F-D-33 | `Main--xAdmin: Surface partial failure for Wn` and `Main-->>Admin: 207 Multi-Status` — two replies to one request. Sequence allows it visually, but real HTTP is one response. | MAJOR |
-| F-D-34 | Last line in file (`{ su...`) is **truncated** — the diagram is incomplete. | BLOCKER |
+| F-D-34 | ~~File truncated at last line.~~ **WITHDRAWN** — file is complete; preview tooling truncated. Diagram does end with `207 Multi-Status` plus two `Note` blocks for single-worker variant and PublishZip fan-out. | — |
 
 ---
 
@@ -132,19 +132,19 @@ These are author-source intent. Where the prose drops author intent it's a real 
 
 ## 9. Headline Numbers After Step 3
 
-- **New diagram findings:** 41 (8 D1, 8 D2, 4 D3, 5 D4, 5 D5, 4 D6, 7 mindmaps).
-- **Cumulative findings (Steps 1+2+3):** 69 + 41 = **110**.
-- **Severity recount:** 18 BLOCKER, 22 MAJOR, 70 MINOR.
-- **Diagram with most BLOCKERs:** D2 worker split-DB (3) and D6 push-update (2).
-- **Single most dangerous diagram:** **D6** — truncated file + skipped zip flow + double-reply pattern.
+- **New diagram findings:** 40 (8 D1, 8 D2, 4 D3, 5 D4, 5 D5, 3 D6, 7 mindmaps; F-D-34 withdrawn).
+- **Cumulative findings (Steps 1+2+3):** 69 + 40 = **109**.
+- **Severity recount:** 17 BLOCKER, 22 MAJOR, 70 MINOR.
+- **Diagram with most BLOCKERs:** D2 worker split-DB (3) and D5 login routing (2).
+- **Single most dangerous diagram:** **D5** — codifies XSS-prone JWT-in-body and omits Set-Cookie.
 
 ---
 
 ## 10. Top-3 Diagram Fixes Before Code
 
-1. **F-D-34** — `seq-push-update.mmd` is truncated. Repair the file before any AI reads it.
-2. **F-D-30 / F-D-21** — `seq-login-routing.mmd` and `seq-company-creation.mmd` codify XSS-prone JWT delivery and an undefined `/Internal/*` namespace. Both are diagrams a dumb AI will transcribe directly into code.
-3. **F-D-09** — `erd-worker-split-db.mmd` claims to be a projection but is missing a banner saying so and contradicts `spec/05-split-db-architecture/` in detail.
+1. **F-D-30 / F-D-21** — `seq-login-routing.mmd` and `seq-company-creation.mmd` codify XSS-prone JWT delivery and an undefined `/Internal/*` namespace. Both are diagrams a dumb AI will transcribe directly into code.
+2. **F-D-09** — `erd-worker-split-db.mmd` claims to be a projection but is missing a banner saying so and contradicts `spec/05-split-db-architecture/` in detail.
+3. **F-D-32** — `seq-push-update.mmd` skips the actual zip-fanout flow described in `09-§5`. Diagram and prose disagree on what "push update" means.
 
 ---
 
