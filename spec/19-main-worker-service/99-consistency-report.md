@@ -10,31 +10,69 @@ Cross-link integrity, naming-convention compliance, and rule-inheritance audit f
 
 ## 1. Files in this spec
 
+### 1.1 Root spec files
+
+| File | Purpose | Version | Status |
+|------|---------|---------|--------|
+| `plan.md` | Phased roadmap + decisions | 1.0.0 | ✅ |
+| `00-overview.md` | Entry point, document map | 1.1.0 | ✅ |
+| `01-architecture.md` | Topology + comms contract | 1.1.0 | ✅ |
+| `02-glossary.md` | Canonical terms (5 entries added: Quarantined, Draining, Seedable-Config, apperror, Power Admin↔PowerAdmin) | 1.1.0 | ✅ |
+| `03-main-db-schema.md` | Main SQLite schema (+EnumPage, RolePageAccess, AccessDenialEvent, MainSetting, User TOTP cols) | 1.2.0 | ✅ |
+| `04-worker-routing.md` | Selection + cache + failover + strategy interfaces | 1.1.0 | ✅ |
+| `05-auth-and-2fa.md` | Auth surfaces + 2FA + bcrypt-cost env pinning + backup-code regen | 1.1.0 | ✅ |
+| `06-core-api-endpoints.md` | REST surface + per-field validation + LeastLoaded tiebreaker patch | 1.1.0 | ✅ |
+| `07-role-based-dashboards.md` | Roles + EnumPage + stack-agnostic guard contract | 1.1.0 | ✅ |
+| `08-error-contract.md` | Main↔Worker envelope + EnvelopeVersion/OperationId/SubCode/FieldErrors + Worker→Main §9 | 1.1.0 | ✅ |
+| `09-self-update-pointer.md` | Pointer to `spec/14-update/` + bounded sunset + deletion checklist | 1.2.0 | ✅ |
+| `10-worker-bootstrap-protocol.md` | 8-step boot, /Workers/Register, public-key fetch, version pin | 1.0.0 | ✅ |
+| `11-split-db-tier-reconciliation.md` | Main=3-tier / Worker=4-tier mapping over spec/05's 6 tiers | 1.0.0 | ✅ |
+| `12-jwt-delivery-contract.md` | JSON-body + in-memory storage, mandatory CSP, 9 CI tests | 1.0.0 | ✅ |
+| `13-error-codes.md` | 30 codes (22 WORKER-* + 8 MAIN-*) + prefixed↔flat mapping + MWS prefix 21000-21199 | 1.1.0 | ✅ |
+| `14-rbac-and-status-seed.md` | 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism | 1.0.0 | ✅ |
+| `15-tunable-constants.md` | 30 numeric tunables (retry, idempotency, heartbeat, JWT, push-update, bootstrap) + config.seed.json binding | 1.1.0 | ✅ |
+| `96-linter-audit.md` | Linter pipeline audit | 1.0.0 | ✅ |
+| `97-acceptance-criteria.md` | AC-1..AC-9 mapping | 1.0.0 | ✅ |
+| `98-changelog.md` | Version history | 1.1.0 | ✅ |
+| `99-consistency-report.md` | This file | 1.1.0 | ✅ |
+| `error-codes.json` | Machine-readable mirror of `13-error-codes.md` | — | ✅ |
+
+### 1.2 Diagrams (`diagrams/`)
+
+All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec wins on conflict.
+
 | File | Purpose | Status |
 |------|---------|--------|
-| `plan.md` | Phased roadmap + decisions | ✅ |
-| `00-overview.md` | Entry point, document map | ✅ |
-| `01-architecture.md` | Topology + comms contract | ✅ |
-| `02-glossary.md` | Canonical terms | ✅ |
-| `03-main-db-schema.md` | Main SQLite schema | ✅ |
-| `04-worker-routing.md` | Selection + cache + failover | ✅ |
-| `05-auth-and-2fa.md` | Auth surfaces + 2FA | ✅ |
-| `06-core-api-endpoints.md` | REST surface | ✅ |
-| `07-role-based-dashboards.md` | Roles + EnumPage | ✅ |
-| `08-error-contract.md` | Main↔Worker errors | ✅ |
-| `09-self-update-pointer.md` | Pointer to `spec/14-update/` | ✅ |
-| `97-acceptance-criteria.md` | AC-1..AC-9 mapping | ✅ |
-| `98-changelog.md` | Version history | ✅ |
-| `99-consistency-report.md` | This file | ✅ |
-| `diagrams/erd-main-db.mmd` | Main ERD | ✅ |
-| `diagrams/erd-worker-split-db.mmd` | Worker split-DB ERD | ✅ |
-| `diagrams/erd-seedable-config.mmd` | Config ERD | ✅ |
+| `diagrams/erd-main-db.mmd` | Main ERD (synced to schema v1.2.0; +EnumPage, +AccessDenialEvent, +User TOTP, RolePageAccess upgraded to FK) — banner v1.1.0 | ✅ |
+| `diagrams/erd-worker-split-db.mmd` | Worker split-DB ERD (projection of spec/05) | ✅ |
+| `diagrams/erd-seedable-config.mmd` | Seedable-Config ERD | ✅ |
 | `diagrams/seq-company-creation.mmd` | Sequence | ✅ |
-| `diagrams/seq-login-routing.mmd` | Sequence | ✅ |
+| `diagrams/seq-login-routing.mmd` | Sequence (FU-pending: X-Auth-Action signals from tasks #29/#30) | ⚠ FU |
 | `diagrams/seq-push-update.mmd` | Sequence | ✅ |
-| `diagrams/readme.md` | Diagrams index | ✅ |
+| `diagrams/readme.md` | Diagrams index + per-file authority table | ✅ |
 
-Total: 21 files.
+### 1.3 Author mindmap images (`images/`)
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `images/01-main-worker-topology.png` | Author mindmap | ✅ |
+| `images/02-endpoint-service-worker-pattern.png` | Author mindmap | ✅ |
+| `images/03-worker-subdomain-routing.png` | Author mindmap | ✅ |
+| `images/04-endpoint-service-full-overview.png` | Author mindmap | ✅ |
+| `images/readme.md` | Image index | ✅ |
+
+### 1.4 Audit suite (`audit/`)
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `audit/01-completeness-audit.md` | Step 1/5 — 30 findings, **30/30 closed** (28 fixed + 2 deferred), §7 re-triage v1.1.0 | ✅ |
+| `audit/02-ambiguity-audit.md` | Step 2/5 — 69 findings, ~30 closed via tasks #29–31 | ⚠ FU |
+| `audit/03-diagram-audit.md` | Step 3/5 — 109 findings, banner cluster closed via task #15 | ⚠ FU |
+| `audit/04-cross-spec-dependency-audit.md` | Step 4/5 — 20 findings, anchor sweep verified clean (task #33) | ✅ |
+| `audit/05-implementation-pivot-score.md` | Step 5/5 — original pivot 66%; refresh pending | ⚠ FU |
+
+**Total: 39 files** (22 root + 7 diagrams + 5 images + 5 audit).
+
 
 ---
 
