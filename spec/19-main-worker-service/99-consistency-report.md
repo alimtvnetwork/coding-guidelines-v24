@@ -47,7 +47,7 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 | `diagrams/erd-worker-split-db.mmd` | Worker split-DB ERD (projection of spec/05) | ✅ |
 | `diagrams/erd-seedable-config.mmd` | Seedable-Config ERD | ✅ |
 | `diagrams/seq-company-creation.mmd` | Sequence | ✅ |
-| `diagrams/seq-login-routing.mmd` | Sequence (FU-pending: X-Auth-Action signals from tasks #29/#30) | ⚠ FU |
+| `diagrams/seq-login-routing.mmd` | Sequence (banner v1.1.0 — synced X-Auth-Action: Reauthenticate + RegenerateBackupCodes per tasks #29/#30/#38) | ✅ |
 | `diagrams/seq-push-update.mmd` | Sequence | ✅ |
 | `diagrams/readme.md` | Diagrams index + per-file authority table | ✅ |
 
