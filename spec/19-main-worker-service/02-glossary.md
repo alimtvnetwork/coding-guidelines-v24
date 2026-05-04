@@ -47,4 +47,4 @@ Canonical terms. When this spec or any sibling spec uses these words, this is wh
 
 ---
 
-*Glossary v1.0.0 — 2026-05-04*
+*Glossary v1.1.0 — 2026-05-04 (added Quarantined, Draining, Seedable-Config link, apperror, Power Admin/PowerAdmin distinction; closes F-A-36/37/38/39/40)*
