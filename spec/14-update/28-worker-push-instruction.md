@@ -79,7 +79,7 @@ The JID is the **contract** between Main (issuer) and Worker (executor). It MUST
 |---|---|---|---|
 | `InstructionId` | TEXT (ULID 26 chars) | No | Idempotency key. Worker MUST persist + dedupe for ≥ 14 days. |
 | `InstructionVersion` | TEXT (SemVer) | No | Worker rejects `Major` mismatch. |
-| `IssuedAtUtc` | TEXT (RFC3339 UTC) | No | Worker rejects skew > 5 min. |
+| `IssuedAtUtc` | TEXT (RFC3339 UTC) | No | Worker rejects skew > 5 min <!-- TUNABLE-WAIVER: instruction-freshness skew distinct from JWT clock-skew (15-tunable-constants.md §2.4); tracked as future WorkerPushUpdate.IssuedSkewSeconds -->. |
 | `IssuedByUserId` | INTEGER | No | FK in Main; opaque to Worker (audit only). |
 | `IssuedByUserDisplayName` | TEXT | No | Display only. |
 | `TargetWorkerNodeId` | INTEGER | No | `0` = fan-out (worker still verifies own id matches OR is `0`). |
