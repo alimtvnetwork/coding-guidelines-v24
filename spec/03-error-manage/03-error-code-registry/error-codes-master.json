@@ -360,7 +360,7 @@
         }
       ],
       "IndexFile": "spec/19-main-worker-service/error-codes.json",
-      "TotalCodes": 41,
+      "TotalCodes": 48,
       "RetryableCodes": 7,
       "Categories": [
         "Bootstrap",
@@ -462,7 +462,7 @@
       "BR",
       "SRC"
     ],
-    "TotalIndexedCodes": 974,
+    "TotalIndexedCodes": 981,
     "TotalRetryableCodes": 166,
     "AllocatedRange": "2000-21199",
     "CollisionResolutions": 13,
