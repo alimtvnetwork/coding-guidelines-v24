@@ -218,8 +218,16 @@ def collect_catalogue_defaults() -> dict[str, str]:
     return out
 
 
-def normalize_default(raw: str) -> str:
-    return raw.strip().strip("`").strip("*").split()[0]
+def normalize_default(rest_of_row: str) -> str:
+    cells = rest_of_row.split("|")
+    cell = cells[0] if cells else ""
+    bold = DEFAULT_BOLD_RE.search(cell)
+    if bold:
+        return bold.group(1).strip()
+    tick = DEFAULT_TICK_RE.search(cell)
+    if tick:
+        return tick.group(1).strip()
+    return cell.strip().split()[0] if cell.strip() else ""
 
 
 def rule_t3() -> list[str]:
