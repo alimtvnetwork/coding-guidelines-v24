@@ -118,7 +118,7 @@ Worker MUST verify, in order:
 
 1. RS256 signature against `JwtPublicKeyPem` from bootstrap (`10-worker-bootstrap-protocol.md` §3.2).
 2. `kid` matches stored `JwtSigningKeyId`. Mismatch → `WORKER-100-02 KID_UNKNOWN` (401).
-3. `exp` is in the future, allowing 60 s clock skew.
+3. `exp` is in the future, allowing `MainWorker.Auth.ClockSkewToleranceSeconds` (default 60 s per `15-tunable-constants.md` §2.4) of clock skew.
 4. `wnk` claim equals this worker's `WorkerNodeId`. Mismatch → `WORKER-100-03 WRONG_WORKER` (403).
 5. `iss` claim equals the configured `MainBaseUrl` host.
 6. `aud` claim equals `worker`.
