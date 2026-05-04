@@ -26,6 +26,7 @@ VISIBLE_RAW=""
 YES_FLAG=0
 DRY_RUN=0
 
+# lint-allow: function-length reason="help-text heredoc"
 print_help() {
   cat <<'EOF'
 visibility-change.sh — toggle/set GitHub/GitLab repo visibility.
@@ -44,6 +45,7 @@ EOF
 
 err() { echo "$@" >&2; }
 
+# lint-allow: function-length reason="flat CLI flag-parser dispatch"
 parse_args() {
   while [ $# -gt 0 ]; do
     case "$1" in
@@ -76,6 +78,7 @@ required_cli_for() {
   if [ "$1" = "github" ]; then echo "gh"; else echo "glab"; fi
 }
 
+# lint-allow: function-length reason="flat context-resolution chain"
 resolve_context() {
   if ! is_repo_root; then
     err "visibility-change: ERROR not a git repository"; exit $EXIT_NOT_A_REPO
@@ -138,6 +141,7 @@ _apply_and_verify() {
     || { err "visibility-change: ERROR verification failed (visibility did not change)"; exit $EXIT_VERIFY_FAILED; }
 }
 
+# lint-allow: function-length reason="top-level orchestrator"
 main() {
   parse_args "$@"
   local forced; forced="$(resolve_target_value "$VISIBLE_RAW")"

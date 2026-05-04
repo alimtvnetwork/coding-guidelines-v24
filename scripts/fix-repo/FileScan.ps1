@@ -30,6 +30,7 @@ function Test-IsBinaryExtension {
     return $Script:BinaryExtensions -contains $ext
 }
 
+# lint-allow: function-length reason="flat binary-detection guard"
 function Test-HasNullByte {
     param([string]$FullPath)
     $stream = [System.IO.File]::OpenRead($FullPath)

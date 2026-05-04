@@ -17,6 +17,7 @@ $Script:FixRepoIgnoreDirs     = @()
 $Script:FixRepoIgnorePatterns = @()
 $Script:FixRepoConfigPath     = $null
 
+# lint-allow: function-length reason="flat path-fallback chain"
 function Resolve-FixRepoConfigPath {
     param([string]$ExplicitPath, [string]$RepoRoot)
     if ($ExplicitPath) {
@@ -30,6 +31,7 @@ function Resolve-FixRepoConfigPath {
     return $null
 }
 
+# lint-allow: function-length reason="flat JSON load + validate"
 function Import-FixRepoConfig {
     param([string]$ConfigPath, [string]$RepoRoot)
     $resolved = Resolve-FixRepoConfigPath -ExplicitPath $ConfigPath -RepoRoot $RepoRoot
