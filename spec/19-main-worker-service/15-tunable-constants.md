@@ -205,4 +205,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.0.0 — 2026-05-04*
+*Tunable constants v1.1.0 — 2026-05-04*
