@@ -38,7 +38,7 @@ If `spec/14-update/` and this pointer ever conflict, `spec/14-update/` wins.
 2. Endpoint redirects to a download URL.
 3. App **saves the redirect URL** to its local DB.
 4. Next update cycle: skip the original endpoint, hit the saved URL directly.
-5. If saved URL is unreachable OR older than `MainWorker.SelfUpdate.RedirectStaleHours` (default 36h), re-resolve via the original endpoint.
+5. If saved URL is unreachable OR older than `MainWorker.SelfUpdate.RedirectStaleHours` (default 36h) <!-- TUNABLE-WAIVER: SelfUpdate-pointer category not yet folded into 15-tunable-constants.md §2; tracked as future addition -->, re-resolve via the original endpoint.
 
 ### Step 2 — Download + apply
 1. Hit redirect URL with auth.
