@@ -1,7 +1,7 @@
 # 02 — Glossary
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 Canonical terms. When this spec or any sibling spec uses these words, this is what they mean.
 
@@ -28,6 +28,11 @@ Canonical terms. When this spec or any sibling spec uses these words, this is wh
 | **Edge Endpoint** | A REST endpoint hosted on Main that the React frontend hits first. |
 | **Worker Endpoint** | A REST endpoint hosted on a Worker that React hits directly after Main resolves the worker. |
 | **gitmap** | Replaces the term `git map`. The repo→snapshot system used elsewhere. |
+| **Quarantined** | A `WorkerNodeStatus` value (per `03-` §2.2). Set by Main when a Worker reports `WorkerVersionMismatch`, fails repeated handshakes, or is administratively isolated. Quarantined Workers receive **no new routing** and **no heartbeat-driven recovery**; restart + clean Register call required to leave the state. (F-A-36) |
+| **Draining** | A `WorkerNodeStatus` value (per `03-` §2.2). Set when a Worker is being gracefully removed (push-update, decommission). Existing tenants keep being served; new tenants are routed elsewhere. The Worker leaves the state by transitioning to `Offline` after its last in-flight request completes. (F-A-37) |
+| **Seedable-Config** | The config-seeding mechanism defined in [`spec/06-seedable-config-architecture/`](../06-seedable-config-architecture/). SemVer-merged via GORM at boot; Categories block holds tunables, Tables block holds reference rows. See also `mem://architecture/seedable-configuration`. (F-A-38; superset of the row 8 lines above which is retained for backward search.) |
+| **`apperror` package** | The error-wrapping convention defined in [`spec/03-error-manage/`](../03-error-manage/) and `mem://architecture/error-handling`. Every error crossing a layer boundary MUST be wrapped with explicit file path + operation name; raw `String(err)` is forbidden. (F-A-39) |
+| **Power Admin** vs **`PowerAdmin`** | **`Power Admin`** (with space) is the human-facing label — use in UI strings, dashboard names, and prose. **`PowerAdmin`** (PascalCase, no space) is the code identifier — use in `RoleCode` rows, enum values, route middleware tokens, and any machine-parsed string. The two are NEVER interchangeable; linters MAY enforce the distinction. (F-A-40) |
 
 ---
 
@@ -42,4 +47,4 @@ Canonical terms. When this spec or any sibling spec uses these words, this is wh
 
 ---
 
-*Glossary v1.0.0 — 2026-05-04*
+*Glossary v1.1.0 — 2026-05-04 (added Quarantined, Draining, Seedable-Config link, apperror, Power Admin/PowerAdmin distinction; closes F-A-36/37/38/39/40)*
