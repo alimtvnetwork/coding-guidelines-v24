@@ -120,13 +120,25 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-200-01` | `21120` | `PowerAdminRequired` | "Endpoint requires PowerAdmin role." | 403 | `06` §2.5/§2.7 |
 | `MAIN-200-02` | `21121` | `RoleMissingForPage` | "Caller role lacks `RolePageAccess` for requested page." | 403 | `07` |
 
-### 3.3 Routing (400-499 → 21140-21149)
+### 3.3 Validation (300-399 → 21130-21139)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-300-01` | `21130` | `CorrelationIdMissing` | "Required `X-Correlation-Id` header absent." | 400 | `04-worker-routing.md` §7.4 + `spec/04-database-conventions/06-rest-api-format.md` |
+| `MAIN-300-04` | `21131` | `IdempotencyBodyMismatch` | "Replay with different request body for same `X-Idempotency-Key`." | 409 | `04-worker-routing.md` §7.3 |
+| `MAIN-300-05` | `21132` | `RoutingResolveFail` | "Could not resolve `(CompanyId) -> WorkerNode` mapping." | 404 | `04-worker-routing.md` §7.2 |
+
+### 3.4 Routing (400-499 → 21140-21149)
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
 | `MAIN-400-01` | `21140` | `TenantNotFound` | "No `Tenant` row for given `CompanySlug`." | 404 | `04-worker-routing.md` |
 | `MAIN-400-02` | `21141` | `WorkerQuarantined` | "Resolved worker is quarantined; routing refused." | 503 | `04` + `10` §7 |
 | `MAIN-400-03` | `21142` | `NoEligibleWorker` | "No worker matches placement strategy." | 503 | `04` |
+| `MAIN-400-05` | `21143` | `TwoFactorChallengeUnknown` | "TOTP submitted for unknown / expired challenge id." | 401 | `04-worker-routing.md` §7.2 (`/Auth/TwoFactor/Verify`) |
+| `MAIN-400-08` | `21144` | `RefreshNotEligible` | "JWT not within refresh window or already rotated." | 401 | `04-worker-routing.md` §7.2 (`/Auth/Refresh`) |
+| `MAIN-400-09` | `21145` | `RefreshReplay` | "Single-use refresh JWT replayed after rotation." | 401 | `04-worker-routing.md` §7.2 + diagrams/seq-login-routing |
+| `MAIN-400-11` | `21146` | `AuthActionMissing` | "Required `X-Auth-Action` header absent on multi-step auth flow." | 400 | `04-worker-routing.md` §7.4 |
 
 ### 3.4 Database (500-599 → 21150-21159)
 
