@@ -104,4 +104,4 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 
 ---
 
-*Changelog v1.0.0 — 2026-05-04*
+*Changelog v1.1.0 — 2026-05-04*
