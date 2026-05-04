@@ -25,7 +25,7 @@ This file is that pointer note. It captures the intent so future implementers (A
 2. The first production deploy of `spec/14-update/` self-update lands and is observed green for 14 consecutive days, OR
 3. Calendar date **2026-12-31** (hard sunset).
 
-When any condition fires, follow the deletion checklist in §6.
+When any condition fires, follow the deletion checklist in §9.
 
 ---
 
