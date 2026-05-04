@@ -60,7 +60,7 @@ DEFAULT_TICK_RE = re.compile(r"`([^`|]+?)`")
 SEED_RE = re.compile(
     r"\"([A-Za-z][A-Za-z0-9_]+)\"\s*:\s*\{\s*"
     r"\"Type\"\s*:\s*\"[^\"]+\"\s*,\s*\"Default\"\s*:\s*"
-    r"(\"[^\"]*\"|[0-9.]+)"
+    r"(\"[^\"]*\"|true|false|[0-9.]+)"
 )
 
 
@@ -194,6 +194,8 @@ SEED_TO_KEY = {
     "WorkerJwtTtlSeconds": "MainWorker.Auth.WorkerJwtTtlSeconds",
     "JwtRefreshLeadSeconds": "MainWorker.Auth.JwtRefreshLeadSeconds",
     "MainSessionTtlSeconds": "MainWorker.Auth.MainSessionTtlSeconds",
+    "MainSessionAbsoluteMaxSeconds": "MainWorker.Auth.MainSessionAbsoluteMaxSeconds",
+    "SessionSlidingExtendOnRead": "MainWorker.Auth.SessionSlidingExtendOnReadOnly",
     "ClockSkewToleranceSeconds": "MainWorker.Auth.ClockSkewToleranceSeconds",
     "RoutingHttpTimeoutSeconds": "MainWorker.Routing.HttpTimeoutSeconds",
     "RoutingHandshakeTimeoutSec": "MainWorker.Routing.HttpHandshakeTimeoutSeconds",
