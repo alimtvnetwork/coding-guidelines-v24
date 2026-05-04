@@ -23,6 +23,7 @@ or as the first body line):
   - `reason=...`     required (free text, must be quoted)
   - `max=N`          required for the 16–25 tier (N must be ≤ 25)
   - `framework=true` required for the >25 tier (caps at 60)
+  - For the warn tier (9–15 lines, within hard max), `reason=...` alone suffices.
 
 Discovery:
   - Walks `scripts/` (override with --root).
