@@ -160,7 +160,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | Sub-range | Reserved for |
 |---|---|
 | `WORKER-21090-21099` | Worker future expansion |
-| `MAIN-21130-21139` | Main validation (300-399) — none needed in v1.0 |
+| `MAIN-21133-21139` | Main validation future expansion |
+| `MAIN-21147-21149` | Main routing future expansion |
 | `MAIN-21170-21199` | Main future expansion (file-system, network) |
 
 ---
