@@ -39,11 +39,11 @@ Worker has these even though it has no UI — they're required for service-to-se
   - `wnk` = `WorkerNodeId` (so Worker rejects misrouted tokens)
   - `iss` = Main's URL
   - `aud` = Worker's URL
-  - `exp` = issued + `MainWorker.Auth.WorkerJwtTtlSeconds` (default 900s = 15 min)
+  - `exp` = issued + `MainWorker.Auth.WorkerJwtTtlSeconds` (default per `15-tunable-constants.md` §2.4 = 15 min)
   - `iat` = epoch
   - `roles` = array of `RoleCode` strings
 - **Signing:** asymmetric (RS256). Main holds private key; each Worker holds Main's public key (rotatable via Seedable-Config).
-- **Refresh:** React calls Main `/API/V1/Auth/RefreshWorkerToken` when JWT is within 60s of expiry.
+- **Refresh:** React calls Main `/API/V1/Auth/RefreshWorkerToken` when JWT is within `MainWorker.Auth.JwtRefreshLeadSeconds` of expiry (default per `15-tunable-constants.md` §2.4 = 60 s).
 
 ### 2.3 Main → Worker (orchestration: push-update, registry sync)
 - **Mechanism:** OAuth 2.0 client-credentials grant OR pre-shared API key (configurable).
