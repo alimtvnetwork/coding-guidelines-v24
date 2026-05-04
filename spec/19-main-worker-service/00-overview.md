@@ -7,7 +7,17 @@
 
 ---
 
-## 1. Purpose
+## 0. Author Mindmaps (source of intent)
+
+The architecture in this folder formalizes these author-drawn mindmaps.
+The single best one-page summary is image 04. See [`images/README.md`](./images/README.md) for the full index.
+
+![Top-level main / self-update split](./images/01-main-worker-topology.png)
+
+![Full EndPointService overview](./images/04-endpoint-service-full-overview.png)
+
+---
+
 
 Define a two-tier server topology where a **Main Server** acts as a coordinator (Kubernetes-master analogy) and one or more **Worker Servers** hold all business logic. The Main serves the UI and the React frontend's edge endpoints; Workers do the heavy lifting under their own split-DB.
 
