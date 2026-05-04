@@ -47,7 +47,7 @@ After page reload, React calls `/API/V1/Company/{CompanySlug}/Resolve` again (ch
 | Re-issue cost | Sticky until expiry ⚠️ | Trivial (refetch on resolve) ✅ |
 | Survives page reload | Yes ⚠️ | No ✅ (forces re-resolve, re-checks tenant→worker mapping) |
 
-**Trade-off accepted:** XSS risk is mitigated by (a) strict CSP per §5, (b) short TTL (15 min default per `05-auth-and-2fa.md` §5), and (c) JWT being scoped to one `WorkerNodeId` + one company. CSRF is the larger systemic risk for cookie-borne API tokens, so we eliminate it.
+**Trade-off accepted:** XSS risk is mitigated by (a) strict CSP per §5, (b) short TTL (15 min default per `15-tunable-constants.md` §2.4 `MainWorker.Auth.WorkerJwtTtlSeconds`), and (c) JWT being scoped to one `WorkerNodeId` + one company. CSRF is the larger systemic risk for cookie-borne API tokens, so we eliminate it.
 
 ---
 
@@ -103,7 +103,7 @@ This is non-negotiable — without CSP, in-memory storage gives no real XSS adva
 
 | Event | React behavior |
 |---|---|
-| JWT within 60 s of `JwtExpiresAt` | Call `POST /API/V1/Auth/RefreshWorkerToken` (uses Main session cookie); replace in-memory token. |
+| JWT within `MainWorker.Auth.JwtRefreshLeadSeconds` (default 60 s per `15-tunable-constants.md` §2.4) of `JwtExpiresAt` | Call `POST /API/V1/Auth/RefreshWorkerToken` (uses Main session cookie); replace in-memory token. |
 | Page reload / new tab | In-memory token is gone; React calls `/Company/{slug}/Resolve` to get a fresh one. |
 | Main session cookie expires | All Worker JWTs become unrefreshable; React redirects to `/sign-in`. |
 | Worker `kid` mismatch (signing key rotated) | Worker returns `WORKER-100-02 KID_UNKNOWN`; React calls `/Resolve` to get a JWT signed by the new key. |
@@ -118,7 +118,7 @@ Worker MUST verify, in order:
 
 1. RS256 signature against `JwtPublicKeyPem` from bootstrap (`10-worker-bootstrap-protocol.md` §3.2).
 2. `kid` matches stored `JwtSigningKeyId`. Mismatch → `WORKER-100-02 KID_UNKNOWN` (401).
-3. `exp` is in the future, allowing 60 s clock skew.
+3. `exp` is in the future, allowing `MainWorker.Auth.ClockSkewToleranceSeconds` (default 60 s per `15-tunable-constants.md` §2.4) of clock skew.
 4. `wnk` claim equals this worker's `WorkerNodeId`. Mismatch → `WORKER-100-03 WRONG_WORKER` (403).
 5. `iss` claim equals the configured `MainBaseUrl` host.
 6. `aud` claim equals `worker`.
@@ -156,7 +156,7 @@ No PII beyond `UserId`. No password hashes. No 2FA secrets.
 | T-2 | Worker JWT in cookie | Lint/test fail (no `Set-Cookie` from Main carries `WorkerJwt`) |
 | T-3 | Page reload retains in-memory JWT | Fail (must be gone) |
 | T-4 | CSP missing or contains `unsafe-inline` | Fail |
-| T-5 | JWT TTL > 900 s | Fail |
+| T-5 | JWT TTL > `MainWorker.Auth.WorkerJwtTtlSeconds` (default 900 s per `15-tunable-constants.md` §2.4) | Fail |
 | T-6 | Worker accepts JWT with wrong `wnk` | Fail (must return 403) |
 | T-7 | Worker accepts JWT with expired `exp` | Fail (must return 401) |
 | T-8 | URL contains `?token=` or `?jwt=` | Fail |

@@ -68,7 +68,7 @@ Field rules:
 ### 3.3 `SplitDBWriteFail`
 - **Category:** Storage. **Severity:** Error. **Retryable:** depends on `SubCode`.
 - **Sub-codes** (in `Error.SubCode` extension field):
-  - `SplitDBLocked` — retryable (SQLite WAL contention). Backoff 50ms, max 5 attempts.
+  - `SplitDBLocked` — retryable (SQLite WAL contention). Backoff 50ms, max 5 attempts <!-- TUNABLE-WAIVER: SQLite-WAL-local micro-retry; distinct from Main↔Worker HTTP retries pinned in 15-tunable-constants.md §2.1 -->.
   - `SplitDBDiskFull` — NOT retryable. Page Power Admin.
   - `SplitDBSchemaDrift` — NOT retryable. Worker is on an older schema; quarantine.
 - **Worker does:** wrap the underlying `apperror` per `spec/03-error-manage/`, then map to this envelope at the API boundary. Never expose raw SQLite errors over the wire.

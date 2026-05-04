@@ -111,7 +111,10 @@ def line_is_waivered(line: str) -> bool:
 
 
 def referenced_keys_in_line(line: str, keys: set[str]) -> bool:
-    return any(key in line for key in keys)
+    if any(key in line for key in keys):
+        return True
+    tails = {key.rsplit(".", 1)[-1] for key in keys if "." in key}
+    return any(tail in line for tail in tails)
 
 
 def scan_file_for_t1(path: Path, keys: set[str]) -> list[str]:

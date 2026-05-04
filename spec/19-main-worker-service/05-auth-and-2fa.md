@@ -39,11 +39,11 @@ Worker has these even though it has no UI — they're required for service-to-se
   - `wnk` = `WorkerNodeId` (so Worker rejects misrouted tokens)
   - `iss` = Main's URL
   - `aud` = Worker's URL
-  - `exp` = issued + `MainWorker.Auth.WorkerJwtTtlSeconds` (default 900s = 15 min)
+  - `exp` = issued + `MainWorker.Auth.WorkerJwtTtlSeconds` (default per `15-tunable-constants.md` §2.4 = 15 min)
   - `iat` = epoch
   - `roles` = array of `RoleCode` strings
 - **Signing:** asymmetric (RS256). Main holds private key; each Worker holds Main's public key (rotatable via Seedable-Config).
-- **Refresh:** React calls Main `/API/V1/Auth/RefreshWorkerToken` when JWT is within 60s of expiry.
+- **Refresh:** React calls Main `/API/V1/Auth/RefreshWorkerToken` when JWT is within `MainWorker.Auth.JwtRefreshLeadSeconds` of expiry (default per `15-tunable-constants.md` §2.4 = 60 s).
 
 ### 2.3 Main → Worker (orchestration: push-update, registry sync)
 - **Mechanism:** OAuth 2.0 client-credentials grant OR pre-shared API key (configurable).
@@ -67,7 +67,7 @@ Per verbatim §Login 3:
 
 ## 4. Two-Factor Authentication (2FA)
 
-- **Standard:** TOTP (RFC 6238), 30s window, 6 digits.
+- **Standard:** TOTP (RFC 6238), 30s window <!-- TUNABLE-WAIVER: RFC 6238 mandates 30s; not a MainWorker tunable -->, 6 digits.
 - **Enrollment:** Main shows QR (otpauth URI), user scans, submits one TOTP to confirm. On success, store `User.TotpSecret` (encrypted at rest with key from Seedable-Config).
 - **Backup codes:** generate 10 single-use codes at enrollment. Store hashed.
 - **Verification points:** sign-in, password change, 2FA disable, role escalation.
@@ -135,7 +135,7 @@ Failure → 401 with `08-error-contract.md` envelope. NEVER 500 on auth failure.
 
 - ❌ `if user.role === 'admin'` — use `User has access to EnumPage.X` (`07-role-based-dashboards.md`).
 - ❌ Storing JWTs in `localStorage` (XSS exposure).
-- ❌ Long-lived worker JWTs (> 1 hour).
+- ❌ Long-lived worker JWTs (> 1 hour) <!-- TUNABLE-WAIVER: anti-pattern threshold, not a tunable; canonical TTL is MainWorker.Auth.WorkerJwtTtlSeconds in 15-tunable-constants.md §2.4 -->.
 - ❌ Symmetric JWT signing across tiers (key sharing risk).
 - ❌ Returning 500 on bad credentials (info leak; use 401 + neutral message).
 - ❌ `if (!isAuthenticated)` — invert to `if (isAuthenticated)` and use early-return guards.
