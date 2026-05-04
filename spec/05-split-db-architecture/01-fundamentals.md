@@ -1,8 +1,11 @@
 # Split Database Architecture — Fundamentals
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
+**Version:** 3.3.0  
+**Updated:** 2026-05-04  
 **Parent:** [00-overview.md](./00-overview.md)
+
+> **Downstream tier consumers (FU-6 back-link, added 2026-05-04):** This file defines the canonical 6-tier model (Root / Settings / App / Session / Cache / Document). Service-level specs that consume only a subset MUST publish a reconciliation file naming which tiers they use. Current consumers:
+> - **Main / Worker service** — see [`spec/19-main-worker-service/11-split-db-tier-reconciliation.md`](../19-main-worker-service/11-split-db-tier-reconciliation.md). Main = 3 tiers (Root/Settings/Session); Worker = 4 tiers (Root/Settings/App/Session). Cache + Document unused in v1.0.
 
 ---
 

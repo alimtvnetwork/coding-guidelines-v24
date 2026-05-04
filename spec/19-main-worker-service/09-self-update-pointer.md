@@ -1,8 +1,10 @@
 # 09 — Self-Update (Pointer Only)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Status:** 🚧 POINTER ONLY — do NOT implement from this file. Authoritative implementation spec lives elsewhere.
+
+> **Split-DB tier note (FU-3):** Worker bootstrap config and the `WorkerUpdateInstruction` registry both live in the **Settings tier** (worker-wide, not company-scoped) per [`10-worker-bootstrap-protocol.md`](./10-worker-bootstrap-protocol.md) §2 and [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md) §5. Older drafts that placed `WorkerUpdateInstruction` in the App tier are stale — see FU-5 in `11-…` §8.
 
 The author's mindmap shows self-update as a sibling branch to `main`, with the flow `endpoint → JSON → instructions → file (10 parts)`. The per-worker channel is shown in image 03 (`wN.<domain>/self-update`).
 
