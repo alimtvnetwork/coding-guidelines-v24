@@ -29,6 +29,7 @@ Read these in order before writing or modifying code:
 | 03 | [`prompts/03-write-prompt.md`](./prompts/03-write-prompt.md) | Write Memory | Intermediate write-memory revision (v1.0.0). |
 | 04 | [`prompts/04-write-prompt.md`](./prompts/04-write-prompt.md) | Write Memory (v2.0.0) | Superseded write-memory revision; retained for diff history. |
 | 05 | [`prompts/05-write-prompt.md`](./prompts/05-write-prompt.md) | Write Memory — Canonical v3.0.0 | **Active** write/end/update memory procedure. |
+| 06 | [`prompts/06-no-questions.md`](./prompts/06-no-questions.md) | No-Questions Mode (`no question`, `not ques for 40`) | **Active** — suspends user-facing questions for 40 tasks; ambiguity logged to `.lovable/question-and-ambiguity/`. |
 
 ## Maintenance
 
