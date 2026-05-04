@@ -132,13 +132,4 @@ When any of §1's three conditions fire, the implementer (or AI agent following 
 
 ---
 
-## 10. Cross-References
-
-- `spec/14-update/` — authoritative self-update spec
-- `mem://features/self-update-architecture` — rename-first + `latest.json` rule
-- `06-core-api-endpoints.md` §2.5, §2.6, §4 — endpoints + schedule
-- `diagrams/seq-push-update.mmd` — push-update sequence (which calls `/SelfUpdate`)
-
----
-
 *Self-update pointer v1.1.0 — 2026-05-04 (F-A-09 closed: pause now bounded with 3-way expiry + deletion checklist)*
