@@ -109,7 +109,21 @@ Authoritative REST surface for both tiers. All paths are `/API/V1/...`. JSON req
 }
 ```
 
-Most fields Non-Nullable per verbatim §Company Creation Flow.3. `PreferredWorkerNodeId` only honored when strategy is `Manual` and caller has PowerAdmin access.
+Field nullability (resolves F-A-01 — replaces prior "Most fields Non-Nullable"):
+
+| Field | Nullable | Notes |
+|-------|----------|-------|
+| `CompanyName` | NO | |
+| `CompanyWebsite` | YES | |
+| `CompanySlug` | NO | Unique. |
+| `Address` | YES | |
+| `PhoneNumber` | NO | E.164 preferred. |
+| `NumberOfPeople` | YES | Integer ≥ 1 when set. |
+| `Calendar` | YES | |
+| `WhatsApp` | YES | |
+| `Facebook` | YES | |
+| `LinkedIn` | YES | |
+| `PreferredWorkerNodeId` | YES | Only honored when worker-selection strategy is `Manual` AND caller has `PowerAdmin` access; ignored otherwise (no error). |
 
 ### 3.2 `GET /API/V1/Company/{CompanySlug}/Resolve` response
 
@@ -179,15 +193,17 @@ Final design awaits OQ-1 resolution.
 
 ---
 
-## 6. Rate Limiting (recommended defaults)
+## 6. Rate Limiting (defaults — MUST apply unless overridden via Seedable-Config)
 
-| Endpoint group | Limit |
-|----------------|-------|
-| `/API/V1/Auth/*` | 10 / minute / IP |
-| `/API/V1/Workers/*` | 60 / minute / token |
-| Other authenticated | 600 / minute / user |
+Defaults below are MANDATORY out-of-the-box. Implementations MUST apply them unless explicitly overridden via Seedable-Config keys per `15-tunable-constants.md` §2.6 (resolves F-A-02 — replaces prior "recommended defaults" softening).
 
-Configurable via Seedable-Config. Implementer uses framework-native middleware (Laravel `throttle`).
+| Endpoint group | Default | Seedable-Config key |
+|----------------|---------|---------------------|
+| `/API/V1/Auth/*` | 10 / minute / IP | `MainWorker.RateAuthPerMinutePerIp` |
+| `/API/V1/Workers/*` | 60 / minute / token | `MainWorker.RateWorkerPerMinutePerToken` |
+| Other authenticated | 600 / minute / user | `MainWorker.RateOtherPerMinutePerUser` |
+
+Implementer uses framework-native middleware (e.g. Laravel `throttle`). On limit-exceeded, return `WorkerOverloaded` envelope per `08-error-contract.md` §3.6 with HTTP 429 + `Retry-After` header.
 
 ---
 
