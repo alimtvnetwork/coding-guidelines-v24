@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    participant React as React Frontend
+    participant Main as Main Server
+    participant Cache as Main Cache
+    participant DB as Main SQLite
+    participant Worker as Worker Node
+
+    React->>Main: POST /API/V1/Auth/SignIn (email, password)
+    Main->>DB: Verify hash, load User
+    Main->>Main: Check Has2FAEnabled
+    alt 2FA on
+        Main-->>React: 200 { Step: AwaitTotp, ChallengeId }
+        React->>Main: POST /API/V1/Auth/Verify2FA (totp, ChallengeId)
+        Main->>Main: Validate TOTP
+    end
+    Main->>Cache: GET MainWorker:Company:{id}:WorkerNodeId
+    alt cache hit
+        Cache-->>Main: WorkerNodeId
+    else cache miss
+        Main->>DB: SELECT WorkerNodeId FROM Company
+        DB-->>Main: WorkerNodeId
+        Main->>Cache: SET (TTL 15m)
+    end
+    Main->>Main: Mint RS256 worker JWT (sub, cmp, wnk, aud, exp, roles)
+    Main-->>React: 200 { WorkerEndpoint, WorkerJwt, JwtExpiresAt }
+
+    Note over React,Worker: All subsequent business calls bypass Main
+    React->>Worker: GET /API/V1/Company/{slug} (Authorization: Bearer JWT)
+    Worker->>Worker: Validate signature, exp, aud, wnk, cmp claims
+    Worker-->>React: 200 (data)
+
+    Note over React,Main: Token refresh near expiry
+    React->>Main: POST /API/V1/Auth/RefreshWorkerToken
+    Main-->>React: 200 { WorkerJwt, JwtExpiresAt }

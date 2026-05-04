@@ -1,0 +1,92 @@
+erDiagram
+    WorkerNode ||--o{ Company : "hosts"
+    WorkerNode ||--o{ WorkerVersion : "has versions"
+    WorkerNode ||--o{ WorkerSelectionEvent : "selected in"
+    WorkerNodeStatus ||--o{ WorkerNode : "classifies"
+    WorkerNodeKind ||--o{ WorkerNode : "classifies"
+    Company ||--o{ User : "employs"
+    Company ||--o{ WorkerSelectionEvent : "routed in"
+    User ||--o{ UserRole : "has"
+    Role ||--o{ UserRole : "granted via"
+    Role ||--o{ RolePageAccess : "grants"
+    WorkerSelectionStrategy ||--o{ WorkerSelectionEvent : "used by"
+
+    WorkerNode {
+        INTEGER WorkerNodeId PK
+        TEXT WorkerNodeTitle
+        TEXT WorkerNodeIdentity UK
+        TEXT WorkerNodeEndpoint
+        INTEGER WorkerNodeStatusId FK
+        INTEGER WorkerNodeKindId FK
+        TEXT WorkerNodeRegisteredAt
+        TEXT WorkerNodeLastSeenAt
+        TEXT Description
+    }
+    WorkerNodeStatus {
+        INTEGER WorkerNodeStatusId PK
+        TEXT WorkerNodeStatusCode UK
+        TEXT WorkerNodeStatusLabel
+        TEXT Description
+    }
+    WorkerNodeKind {
+        INTEGER WorkerNodeKindId PK
+        TEXT WorkerNodeKindCode UK
+        TEXT WorkerNodeKindLabel
+        TEXT Description
+    }
+    Company {
+        INTEGER CompanyId PK
+        TEXT CompanySlug UK
+        TEXT CompanyName
+        INTEGER WorkerNodeId FK
+        TEXT CompanyAssignedAt
+        TEXT Description
+    }
+    User {
+        INTEGER UserId PK
+        TEXT UserEmail UK
+        TEXT UserPasswordHash
+        TEXT UserPasswordSalt
+        INTEGER CompanyId FK
+        TEXT UserCreatedAt
+        TEXT Description
+    }
+    Role {
+        INTEGER RoleId PK
+        TEXT RoleCode UK
+        TEXT RoleLabel
+        TEXT Description
+    }
+    UserRole {
+        INTEGER UserRoleId PK
+        INTEGER UserId FK
+        INTEGER RoleId FK
+    }
+    RolePageAccess {
+        INTEGER RolePageAccessId PK
+        INTEGER RoleId FK
+        TEXT EnumPageCode
+    }
+    WorkerVersion {
+        INTEGER WorkerVersionId PK
+        INTEGER WorkerNodeId FK
+        TEXT WorkerVersionSemver
+        TEXT WorkerVersionRecordedAt
+        TEXT Notes
+        TEXT Comments
+    }
+    WorkerSelectionEvent {
+        INTEGER WorkerSelectionEventId PK
+        INTEGER CompanyId FK
+        INTEGER WorkerNodeId FK
+        INTEGER WorkerSelectionStrategyId FK
+        TEXT WorkerSelectionEventAt
+        TEXT Notes
+        TEXT Comments
+    }
+    WorkerSelectionStrategy {
+        INTEGER WorkerSelectionStrategyId PK
+        TEXT WorkerSelectionStrategyCode UK
+        TEXT WorkerSelectionStrategyLabel
+        TEXT Description
+    }
