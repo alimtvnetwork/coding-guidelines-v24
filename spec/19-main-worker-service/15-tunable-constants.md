@@ -107,13 +107,13 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 
 ## 4. `config.seed.json` Categories binding (paste-ready)
 
-Add (or merge with) the following category at SemVer `1.3.0` of `config.seed.json` (folded into FU-12 from task 12):
+Add (or merge with) the following category at SemVer `1.4.0` of `config.seed.json` (bumped from `1.3.0` to materialize the four new settings added in §2.7–2.9: `PushUpdateIssuedSkewSec`, `SelfUpdateRedirectStaleHours`, `BootstrapRetryBackoffSec`, `BootstrapRetryMaxAttempts`):
 
 ```jsonc
 "MainWorker": {
   "DisplayName": "Main / Worker tunables",
   "Description": "Single-value tunables for spec/19. See 15-tunable-constants.md.",
-  "Version": "1.3.0",
+  "Version": "1.4.0",
   "AddedIn":  "1.3.0",
   "Settings": {
 
