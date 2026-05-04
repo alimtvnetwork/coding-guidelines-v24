@@ -6,7 +6,7 @@
 %% Status:         Illustrative only. If this diagram disagrees
 %%                 with the authoritative spec(s) above, the
 %%                 spec wins and this file is the bug.
-%% Banner version: 1.0.0 (2026-05-04, audit fix #9)
+%% Banner version: 1.1.0 (2026-05-04, task #38 — added Reauthenticate + RegenerateBackupCodes signals)
 %% ==========================================================
 sequenceDiagram
     autonumber
@@ -22,7 +22,13 @@ sequenceDiagram
     alt 2FA on
         Main-->>React: 200 JSON { Step: AwaitTotp, ChallengeId, PartialAuthJwt }
         React->>Main: POST /API/V1/Auth/TwoFactor/Verify<br/>X-Auth-Action: TwoFactorVerify<br/>{ Code, ChallengeId }
-        Main->>Main: Validate TOTP
+        Main->>Main: Validate TOTP, count unused backup codes
+        alt UnusedBackupCodes == 0
+            Main-->>React: 403 JSON { Error.SubCode: TotpBackupExhausted }<br/>X-Auth-Action: RegenerateBackupCodes
+            Note over React: Frontend MUST route to backup-code regeneration flow<br/>per spec/19/05-auth-and-2fa.md §4 (F-A-05).
+            React->>Main: POST /API/V1/Auth/2FA/RegenerateBackupCodes<br/>X-Auth-Action: RegenerateBackupCodes
+            Main-->>React: 200 JSON { BackupCodes: [10 single-use] }
+        end
     end
     Main->>Cache: GET MainWorker:Company:{id}:WorkerNodeId
     alt cache hit
@@ -43,5 +49,11 @@ sequenceDiagram
 
     Note over React,Main: Token refresh — single-use rotation (replay -> MAIN-400-09)
     React->>Main: POST /API/V1/Auth/Refresh (Main session cookie attached)
-    Main-->>React: 200 JSON { WorkerJwt, JwtExpiresAt }
+    Main->>Main: Check (now - SessionStartedAt) vs MainSessionAbsoluteMaxSeconds
+    alt absolute cap exceeded OR AuthHandshakeFail (user-initiated)
+        Main-->>React: 401 JSON { Error.Code: AuthHandshakeFail }<br/>X-Auth-Action: Reauthenticate
+        Note over React: Frontend MUST treat X-Auth-Action: Reauthenticate as the SOLE<br/>"force re-login" signal — never infer from status code alone.<br/>Per spec/19/08-error-contract.md §3.4 (F-A-26).<br/>Clear in-memory JWT + redirect to /Login.
+    else within cap
+        Main-->>React: 200 JSON { WorkerJwt, JwtExpiresAt }
+    end
     Note over React: After page reload the in-memory JWT is gone;<br/>React must re-call /Company/{slug}/Resolve to obtain a fresh one.
