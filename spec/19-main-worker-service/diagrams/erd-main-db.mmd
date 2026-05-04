@@ -1,3 +1,13 @@
+%% ==========================================================
+%% NON-AUTHORITATIVE PROJECTION
+%% ==========================================================
+%% Subject:        Main Server SQLite catalog
+%% Authoritative:  spec/19-main-worker-service/02-main-server.md + spec/04-database-conventions/
+%% Status:         Illustrative only. If this diagram disagrees
+%%                 with the authoritative spec(s) above, the
+%%                 spec wins and this file is the bug.
+%% Banner version: 1.0.0 (2026-05-04, audit fix #9)
+%% ==========================================================
 erDiagram
     WorkerNode ||--o{ Company : "hosts"
     WorkerNode ||--o{ WorkerVersion : "has versions"
