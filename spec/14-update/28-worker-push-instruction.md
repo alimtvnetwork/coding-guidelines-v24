@@ -182,7 +182,7 @@ CREATE INDEX IxWorkerUpdateInstructionUlid
 
 Compliant with Code Red Schema Rules 10/11/12: `Notes`, `Comments`, `Description` all NULL-able with no DEFAULT; no UUIDs; PK is `{TableName}Id`.
 
-Retention: minimum 14 days; configurable via Seedable-Config key `WorkerUpdateInstructionRetentionDays`.
+Retention: minimum **14 days** (`WorkerPushUpdate.InstructionRetentionDays`); pinned in `spec/19-main-worker-service/15-tunable-constants.md` §2.7 and overridable via Seedable-Config key `WorkerUpdateInstructionRetentionDays`.
 
 ---
 
