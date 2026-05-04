@@ -9,7 +9,7 @@
 
 ## Counter
 
-`14 / 40` tasks completed.
+`15 / 40` tasks completed.
 
 ## Log
 
@@ -27,3 +27,4 @@
 12. 2026-05-04 Authored spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md (new Tables-block schema, UpsertByLogicalKey/AppendOnly strategies, TableSeedMeta+TableSeedChangelog bookkeeping) AND spec/19-main-worker-service/14-rbac-and-status-seed.md (concrete row sets: 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism, @Role.Code logical-key syntax). Resolves audit F-B-09/10, F-X-06 (top-10 fix #6). Closes AC-5. Added FU-11 (config.schema.json), FU-12 (seed bump to 1.3.0), FU-13 (@-ref resolver).
 13. 2026-05-04 Authored spec/19-main-worker-service/15-tunable-constants.md — 27 numeric tunables pinned (retry, idempotency TTL=86400s, heartbeat 30s/3-miss, JWT 900s, routing timeouts, rate limits, push-update windows). Resolves F-A-15 (3-vs-5 contradiction), F-A-16, F-B-12 (top-10 fix #7). config.seed.json MainWorker category included verbatim. Closes AC-7. FU-14 (cite-this-file edits in 04/08/10/spec14-28), FU-15 (linter check-tunable-constants.py).
 14. 2026-05-04 Promoted X-Correlation-Id / X-Idempotency-Key / X-Auth-Action header conventions into spec/04-database-conventions/06-rest-api-format.md as authoritative cross-spec section. Includes inbound + outbound table, validation rules, rationale, cross-refs to spec/19/06, /13, /15. Resolves audit F-X-10, F-A-22 (top-10 fix #8). Strengthens AC-7 + AC-4.
+15. 2026-05-04 Added "NON-AUTHORITATIVE PROJECTION" banners (Mermaid `%%` comment block, banner v1.0.0) to all 6 diagrams in spec/19/diagrams/ (3 ERDs + 3 sequence diagrams), each citing its authoritative source(s). Rewrote diagrams/README.md with conflict-resolution rule (spec wins) + per-file authority table. Resolves audit F-D-01..F-D-12 (diagram-authority cluster) — last BLOCKER from audit/03-diagram-audit.md (top-10 fix #9).
