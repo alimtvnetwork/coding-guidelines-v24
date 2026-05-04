@@ -48,6 +48,7 @@ $Script:ExitBadConfig       = 8
 
 function Test-IsModeFlag { param([string]$A) return $A -in '-2','-3','-5','-all','-All','-ALL' }
 
+# lint-allow: function-length reason="flat CLI flag-parser dispatch; further split harms readability" max=25
 function Resolve-Mode {
     param([string[]]$Args)
     $modes      = @()
