@@ -2,23 +2,30 @@
 %% NON-AUTHORITATIVE PROJECTION
 %% ==========================================================
 %% Subject:        Main Server SQLite catalog
-%% Authoritative:  spec/19-main-worker-service/02-main-server.md + spec/04-database-conventions/
+%% Authoritative:  spec/19-main-worker-service/03-main-db-schema.md (v1.2.0+)
+%%                 + spec/04-database-conventions/
 %% Status:         Illustrative only. If this diagram disagrees
 %%                 with the authoritative spec(s) above, the
 %%                 spec wins and this file is the bug.
-%% Banner version: 1.0.0 (2026-05-04, audit fix #9)
+%% Banner version: 1.1.0 (2026-05-04, sync to 03-main-db-schema.md v1.2.0:
+%%                 added EnumPage, AccessDenialEvent, RolePageAccess FK to
+%%                 EnumPage, User TOTP columns; per audit task #29 + #32)
 %% ==========================================================
 erDiagram
     WorkerNode ||--o{ Company : "hosts"
     WorkerNode ||--o{ WorkerVersion : "has versions"
     WorkerNode ||--o{ WorkerSelectionEvent : "selected in"
+    WorkerNode ||--o{ AccessDenialEvent : "denied at"
     WorkerNodeStatus ||--o{ WorkerNode : "classifies"
     WorkerNodeKind ||--o{ WorkerNode : "classifies"
     Company ||--o{ User : "employs"
     Company ||--o{ WorkerSelectionEvent : "routed in"
     User ||--o{ UserRole : "has"
+    User ||--o{ AccessDenialEvent : "triggered by"
     Role ||--o{ UserRole : "granted via"
     Role ||--o{ RolePageAccess : "grants"
+    EnumPage ||--o{ RolePageAccess : "governed by"
+    EnumPage ||--o{ AccessDenialEvent : "denied for"
     WorkerSelectionStrategy ||--o{ WorkerSelectionEvent : "used by"
 
     WorkerNode {
@@ -59,6 +66,9 @@ erDiagram
         TEXT UserPasswordSalt
         INTEGER CompanyId FK
         TEXT UserCreatedAt
+        TEXT UserTotpSecret
+        TEXT UserTotpEnrolledAt
+        TEXT UserTotpBackupCodesHash
         TEXT Description
     }
     Role {
@@ -72,10 +82,28 @@ erDiagram
         INTEGER UserId FK
         INTEGER RoleId FK
     }
+    EnumPage {
+        INTEGER EnumPageId PK
+        TEXT EnumPageCode UK
+        TEXT EnumPageLabel
+        TEXT Description
+    }
     RolePageAccess {
         INTEGER RolePageAccessId PK
         INTEGER RoleId FK
-        TEXT EnumPageCode
+        INTEGER EnumPageId FK
+        INTEGER CanRead
+        INTEGER CanWrite
+    }
+    AccessDenialEvent {
+        INTEGER AccessDenialEventId PK
+        INTEGER UserId FK
+        INTEGER EnumPageId FK
+        INTEGER WorkerNodeId FK
+        TEXT CorrelationId
+        TEXT OccurredAt
+        TEXT Notes
+        TEXT Comments
     }
     WorkerVersion {
         INTEGER WorkerVersionId PK
