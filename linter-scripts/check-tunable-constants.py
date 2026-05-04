@@ -204,6 +204,10 @@ SEED_TO_KEY = {
     "PushUpdateMaxRunSeconds": "WorkerPushUpdate.MaxRunDurationSeconds",
     "PushUpdateHandoffTimeoutSec": "WorkerPushUpdate.HandoffTimeoutSeconds",
     "PushUpdateRetentionDays": "WorkerPushUpdate.InstructionRetentionDays",
+    "PushUpdateIssuedSkewSec": "WorkerPushUpdate.IssuedSkewSeconds",
+    "SelfUpdateRedirectStaleHours": "MainWorker.SelfUpdate.RedirectStaleHours",
+    "BootstrapRetryBackoffSec": "MainWorker.Bootstrap.RetryBackoffSeconds",
+    "BootstrapRetryMaxAttempts": "MainWorker.Bootstrap.RetryMaxAttempts",
 }
 
 
