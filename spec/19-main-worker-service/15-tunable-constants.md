@@ -51,7 +51,9 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 |---|---:|---|---|---|
 | `MainWorker.Auth.WorkerJwtTtlSeconds` | **900** (15m) | seconds | `12-jwt-delivery-contract.md` §6 | Already pinned there; mirrored here for the single-table view. |
 | `MainWorker.Auth.JwtRefreshLeadSeconds` | **60** | seconds | `12` §6 | React refreshes when within this window of `exp`. |
-| `MainWorker.Auth.MainSessionTtlSeconds` | **28800** (8h) | seconds | Main session cookie | Sliding window: each request extends. |
+| `MainWorker.Auth.MainSessionTtlSeconds` | **28800** (8h) | seconds | Main session cookie | Sliding window: each qualifying request extends. See §7.2. |
+| `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` | **86400** (24h) | seconds | Main session cookie | Hard ceiling from initial login regardless of activity. Forces `Reauthenticate`. MUST be ≥ `MainSessionTtlSeconds` (T4 linter invariant). Decided in §7.2. |
+| `MainWorker.Auth.SessionSlidingExtendOnReadOnly` | **true** | bool | Main session cookie | If `false`, only state-changing requests extend the sliding window. Decided in §7.2. |
 | `MainWorker.Auth.ClockSkewToleranceSeconds` | **60** | seconds | `12` §7, `10` §3 | Same value across both contexts. |
 
 ### 2.5 Routing & pool
@@ -132,7 +134,9 @@ Add (or merge with) the following category at SemVer `1.4.0` of `config.seed.jso
 
     "WorkerJwtTtlSeconds":         { "Type": "number",  "Default": 900,       "Min": 60,   "Max": 3600 },
     "JwtRefreshLeadSeconds":       { "Type": "number",  "Default": 60,        "Min": 10 },
-    "MainSessionTtlSeconds":       { "Type": "number",  "Default": 28800,     "Min": 300 },
+    "MainSessionTtlSeconds":         { "Type": "number",  "Default": 28800,     "Min": 300 },
+    "MainSessionAbsoluteMaxSeconds": { "Type": "number",  "Default": 86400,     "Min": 300 },
+    "SessionSlidingExtendOnRead":    { "Type": "boolean", "Default": true },
     "ClockSkewToleranceSeconds":   { "Type": "number",  "Default": 60,        "Min": 0,    "Max": 300 },
 
     "RoutingHttpTimeoutSeconds":   { "Type": "number",  "Default": 15,        "Min": 1 },
@@ -212,20 +216,20 @@ Failure = build break.
 - **Pure sliding is unbounded** — a user keeping a tab open for 90 days never re-authenticates. Compliance frameworks (SOC 2, ISO 27001 §9.4.2) require periodic re-authentication.
 - **Sliding + absolute cap** is the industry compromise (used by Auth0, Okta, AWS Cognito) — refresh on activity, but force re-login at the absolute boundary regardless of activity.
 
-**New tunables (added to §2.5 below):**
+**Existing tunable retained, two new ones added** (mirrored into §2.4 below + §4):
 
 | Key | Default | Unit | Notes |
 |---|---:|---|---|
-| `MainWorker.Auth.SessionTtlSeconds` | **3600** | seconds | Sliding window. Reset to this value on every authenticated request. |
-| `MainWorker.Auth.SessionAbsoluteMaxSeconds` | **86400** | seconds | Hard ceiling from initial login regardless of activity. After this, `Reauthenticate` is forced. |
-| `MainWorker.Auth.SessionSlidingExtendOnReadOnly` | **true** | bool | If false, only state-changing requests extend the sliding window (mitigates background-poll abuse). |
+| `MainWorker.Auth.MainSessionTtlSeconds` | **28800** (8h) | seconds | **Existing.** Sliding window. Reset on every authenticated request that qualifies (see read-only flag). |
+| `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` | **86400** (24h) | seconds | **NEW.** Hard ceiling from initial login regardless of activity. After this, `Reauthenticate` is forced. MUST be ≥ `MainSessionTtlSeconds`. |
+| `MainWorker.Auth.SessionSlidingExtendOnReadOnly` | **true** | bool | **NEW.** If `false`, only state-changing requests (POST/PUT/PATCH/DELETE) extend the sliding window — mitigates background-poll abuse. |
 
 **Implementation contract (consumed by `05-auth-and-2fa.md` §6):**
-1. On each authenticated request: `if (now - SessionStartedAt) >= SessionAbsoluteMaxSeconds → 401 + X-Auth-Action: Reauthenticate`.
-2. Else: `SessionLastSeenAt = now`; cookie `Max-Age` reset to `SessionTtlSeconds`.
-3. Background polls (GET requests) extend window only when `SessionSlidingExtendOnReadOnly=true`.
+1. On each authenticated request: `if (now - SessionStartedAt) >= MainSessionAbsoluteMaxSeconds → 401 + X-Auth-Action: Reauthenticate`.
+2. Else if request qualifies (write request, OR `SessionSlidingExtendOnReadOnly=true`): `SessionLastSeenAt = now`; cookie `Max-Age` reset to `MainSessionTtlSeconds`.
+3. Else: leave `SessionLastSeenAt` and cookie `Max-Age` untouched.
 
-**Linter follow-up (FU-16):** `check-tunable-constants.py` to assert `SessionTtlSeconds <= SessionAbsoluteMaxSeconds` (T4 invariant).
+**Linter follow-up (FU-16):** `check-tunable-constants.py` to assert `MainSessionTtlSeconds <= MainSessionAbsoluteMaxSeconds` (T4 invariant).
 
 
 ---
