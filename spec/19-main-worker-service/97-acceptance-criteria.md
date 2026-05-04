@@ -39,7 +39,7 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Sub-criterion | Defined in | Test |
 |---------------|-----------|------|
 | First request resolves the worker via Main | `05-auth-and-2fa.md` §6, `diagrams/seq-login-routing.mmd` | E2E: SignIn response includes `WorkerEndpoint` |
-| Cache used when available | `04-worker-routing.md` §2 | Unit: second resolve within 15min skips DB |
+| Cache used when available | `04-worker-routing.md` §2 | Unit: second resolve within 15min <!-- TUNABLE-WAIVER: cache TTL — owned by caching-policy memory --> skips DB |
 | All subsequent calls go directly to Worker | `01-architecture.md` §3.2 | Network trace: no Main hop after resolve |
 | Worker authentication uses JWT, OAuth, or configured method | `05-auth-and-2fa.md` §2.2 | RS256 JWT validated by Worker per `05-auth-and-2fa.md` §7 |
 

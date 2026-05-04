@@ -99,8 +99,8 @@ Authoritative: `diagrams/seq-push-update.mmd`.
 | Auth | JWT or OAuth (configurable). See `05-auth-and-2fa.md` |
 | Correlation | Every cross-tier request carries `X-Correlation-Id` header (UUID v4 string used as opaque ID — NOT a DB key) |
 | Idempotency | Mutating cross-tier calls carry `X-Idempotency-Key` |
-| Timeout | Default 30s; configurable per endpoint via Seedable-Config |
-| Retry | Main retries Worker calls on 5xx with exponential backoff (max 3 attempts). NEVER retry on 4xx |
+| Timeout | Default per `15-tunable-constants.md` §2.5 (`MainWorker.Routing.HttpTimeoutSeconds`); per-endpoint overrides via Seedable-Config |
+| Retry | Main retries Worker calls on 5xx per `15-tunable-constants.md` §2.1 (`MainWorker.Retry.MaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`). NEVER retry on 4xx |
 | Failure surfacing | See `08-error-contract.md` |
 
 Note: correlation IDs and idempotency keys are opaque request-scoped strings, not database primary keys. The "no UUIDs" rule in `spec/04-database-conventions/` applies to PKs only.
@@ -111,8 +111,8 @@ Note: correlation IDs and idempotency keys are opaque request-scoped strings, no
 
 | Cache | Scope | TTL | Invalidation |
 |-------|-------|-----|--------------|
-| `CompanyId → WorkerNodeId` | Main process / session | 15 min (Seedable-Config) | On worker reassignment |
-| Worker registry | Main process | 60 s | On worker register/deregister |
+| `CompanyId → WorkerNodeId` | Main process / session | 15 min <!-- TUNABLE-WAIVER: cache TTL distinct from MainWorker tunables; owned by caching-policy memory --> | On worker reassignment |
+| Worker registry | Main process | 60 s <!-- TUNABLE-WAIVER: cache TTL distinct from MainWorker tunables; owned by caching-policy memory --> | On worker register/deregister |
 | Per-user recent-company | User session | session lifetime | On logout |
 
 Per memory `mem://architecture/caching-policy`: explicit TTL, deterministic keys, invalidate on mutation.

@@ -48,8 +48,8 @@ Per memory `mem://architecture/caching-policy`: explicit TTL, deterministic keys
 
 | Cache key | Value | TTL | Invalidate when |
 |-----------|-------|-----|-----------------|
-| `MainWorker:Company:{CompanyId}:WorkerNodeId` | INTEGER | 15 min | Worker reassignment, worker offline |
-| `MainWorker:Registry:Active` | List of `WorkerNode` | 60 s | Worker register/deregister/status change |
+| `MainWorker:Company:{CompanyId}:WorkerNodeId` | INTEGER | 15 min <!-- TUNABLE-WAIVER: cache TTL — owned by caching-policy memory, not MainWorker tunables --> | Worker reassignment, worker offline |
+| `MainWorker:Registry:Active` | List of `WorkerNode` | 60 s <!-- TUNABLE-WAIVER: cache TTL — owned by caching-policy memory, not MainWorker tunables --> | Worker register/deregister/status change |
 | `MainWorker:Session:{SessionId}:RecentCompanyId` | INTEGER | session lifetime | Logout |
 
 Cache backend: Laravel cache driver (file/redis/memcached) — implementer's choice. The contract is the keys and TTLs above.
