@@ -194,6 +194,8 @@ SEED_TO_KEY = {
     "WorkerJwtTtlSeconds": "MainWorker.Auth.WorkerJwtTtlSeconds",
     "JwtRefreshLeadSeconds": "MainWorker.Auth.JwtRefreshLeadSeconds",
     "MainSessionTtlSeconds": "MainWorker.Auth.MainSessionTtlSeconds",
+    "MainSessionAbsoluteMaxSeconds": "MainWorker.Auth.MainSessionAbsoluteMaxSeconds",
+    "SessionSlidingExtendOnRead": "MainWorker.Auth.SessionSlidingExtendOnReadOnly",
     "ClockSkewToleranceSeconds": "MainWorker.Auth.ClockSkewToleranceSeconds",
     "RoutingHttpTimeoutSeconds": "MainWorker.Routing.HttpTimeoutSeconds",
     "RoutingHandshakeTimeoutSec": "MainWorker.Routing.HttpHandshakeTimeoutSeconds",
