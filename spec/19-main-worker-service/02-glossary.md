@@ -1,7 +1,7 @@
 # 02 — Glossary
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 Canonical terms. When this spec or any sibling spec uses these words, this is what they mean.
 
