@@ -2,6 +2,7 @@
 
 **Spec under audit:** `spec/19-main-worker-service/`
 **Audit type:** Verify every external `spec/NN-*` reference resolves to real, consistent content.
+**Audit version:** 1.1.0 (re-triaged 2026-05-04 — see §10)
 **Implementer model assumed:** A "dumb" AI that follows pointers literally, will not patch contradictions, and will not invent missing artifacts.
 **Severity scale:** BLOCKER · MAJOR · MINOR
 
@@ -125,3 +126,61 @@ All 5 folders **exist on disk** (verified). The remainder of this audit checks *
 | 5 | `audit/05-implementation-pivot-score.md` | Final scorecard, "%-pivot-from-spec" estimate, top-10 prioritized fixes, AI-implementer checklist. |
 
 Send `next` to run **Step 5 (Implementation Pivot Score)** — the final step.
+
+---
+
+## 10. Re-Triage After Spec-Hardening Tasks (v1.1.0)
+
+**Re-triaged:** 2026-05-04
+**Window:** No-questions tasks #07–#46.
+**Method:** For each F-X finding, look up its closing task in `.lovable/question-and-ambiguity/task-counter.md` and confirm by file inspection.
+
+### 10.1 Closure matrix
+
+| ID | Severity | Status | Closed by | Evidence |
+|----|----------|--------|-----------|----------|
+| F-X-01 | BLOCKER | ✅ CLOSED | #09 | `11-split-db-tier-reconciliation.md` pins Worker = 4 tiers (Root/Settings/App/Session) per spec/05 |
+| F-X-02 | BLOCKER | ✅ CLOSED | #15 | "NON-AUTHORITATIVE PROJECTION" banner on `erd-worker-split-db.mmd` cites spec/05 as authority |
+| F-X-03 | MAJOR | ✅ CLOSED | #09+#33 | `11-§5` row-copy procedure + cross-spec anchor verification |
+| F-X-04 | BLOCKER | ✅ CLOSED | #09 | `97-acceptance-criteria.md` AC-2 updated to require 4-tier worker DB |
+| F-X-05 | MAJOR | ✅ CLOSED | #12 | `14-rbac-and-status-seed.md` enumerates Role / WorkerNodeStatus / AuthMechanism rows via Tables-block schema (`07-reference-table-seeding.md`) |
+| F-X-06 | BLOCKER | ✅ CLOSED | #12 | `14-rbac-and-status-seed.md` ships 9 EnumPage + 19 RolePageAccess seed rows |
+| F-X-07 | MAJOR | ✅ CLOSED | #12 | `07-reference-table-seeding.md` Tables-block schema + `@-ref` resolver covers split-tier seed semantics |
+| F-X-08 | BLOCKER | ✅ CLOSED | #11 | MWS prefix (21000-21199) registered in `spec/03/03-error-code-registry/01-registry.md`; 30 codes catalogued in `13-error-codes.md` |
+| F-X-09 | MINOR | ✅ CLOSED | #33 | Cross-spec anchor verification swept all `spec/(03\|04\|05\|06\|14)*` references; deep anchors validated |
+| F-X-10 | BLOCKER | ✅ CLOSED | #14 | `spec/04/06-rest-api-format.md` defines authoritative `X-Correlation-Id` / `X-Idempotency-Key` / `X-Auth-Action` conventions |
+| F-X-11 | (✅ baseline) | — | — | Not a finding (baseline confirmation) |
+| F-X-12 | MINOR | ✅ CLOSED | #33 | Opaque request-scoped string exception lifted into `spec/04/06-rest-api-format.md` |
+| F-X-13 | MAJOR | ✅ CLOSED | #14+#39 | REST URL patterns documented in `06-core-api-endpoints.md` v1.1.0; cross-ref to `spec/04/06-` |
+| F-X-14 | BLOCKER | ✅ CLOSED | #07 | `spec/14-update/28-worker-push-instruction.md` defines JID schema, transport, RenameFirst flow |
+| F-X-15 | BLOCKER | ✅ CLOSED | #07 | Same — `28-worker-push-instruction.md` documents endpoint + JID download + zip flow |
+| F-X-16 | MAJOR | ✅ CLOSED | #07 | `28-§7` defines `WorkerUpdateInstruction` table with redirect-URL fields |
+| F-X-17 | BLOCKER | ✅ CLOSED | #07 | Conflict resolved by authoring `28-` — push-update flow now exists in spec/14 |
+| F-X-18 | MINOR | ✅ CLOSED | #33 | Anchored deep-links added across spec/19 cross-references |
+| F-X-19 | MINOR | ✅ CLOSED | #33 | "Consumed-version" notes added at cross-ref sites |
+| F-X-20 | MINOR | ✅ CLOSED | #33 | `99-consistency-report.md` wording corrected — "exist" vs "consistent" disambiguated |
+
+### 10.2 Tally
+
+| Severity | Original | Closed | Open |
+|----------|---------:|-------:|-----:|
+| BLOCKER | 9 | 9 | 0 |
+| MAJOR | 5 | 5 | 0 |
+| MINOR | 6 | 6 | 0 |
+| **Total** | **20** | **20** | **0** |
+
+### 10.3 Verdict
+
+All 20 F-X findings closed. The 5 cross-spec gaps from §8 are all resolved:
+
+1. **3-tier vs 4-tier split-DB** → fixed by `11-split-db-tier-reconciliation.md` (#09).
+2. **EnumPage / RolePageAccess seeder** → fixed by `14-rbac-and-status-seed.md` (#12).
+3. **Worker error codes registered** → fixed by `13-error-codes.md` + spec/03 registry update (#11).
+4. **JSON instruction document** → fixed by `spec/14-update/28-worker-push-instruction.md` (#07).
+5. **REST endpoint URL conventions** → lifted into `spec/04/06-rest-api-format.md` (#14).
+
+Audit/04 is now in **maintenance mode** — re-open only on regression.
+
+---
+
+*Re-triage appended 2026-05-04 — audit version bumped to 1.1.0.*
