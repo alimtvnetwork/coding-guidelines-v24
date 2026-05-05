@@ -2,6 +2,28 @@
 
 Items in this file MUST NEVER be suggested, recommended, asked about, or built again.
 
+## spec/19-main-worker-service implementation — TOTAL BAN
+
+🔴 **NEVER write, scaffold, propose, or suggest implementation code for `spec/19-main-worker-service/` (the Main-Worker Service).**
+
+This repo is **spec-only** for Spec/19. Allowed work:
+- ✅ Authoring / editing markdown under `spec/19-main-worker-service/**`
+- ✅ Audits, consistency reports, changelogs, diagrams, glossary
+- ✅ Cross-spec references that *describe* the worker
+
+Forbidden:
+- ❌ Any Go / Rust / TypeScript / PowerShell / shell source files implementing the worker
+- ❌ Scaffolding service binaries, DB migrations, REST handlers, JWT/JID flows, push update logic for Spec/19
+- ❌ "Phase 1 implementation", "begin coding", "ship the service", "starter skeleton" suggestions
+- ❌ Asking the user whether they want to start implementing Spec/19
+- ❌ Listing Spec/19 implementation as an "optional next-phase candidate" or follow-up
+
+**If a `next` command would otherwise land on Spec/19 implementation, skip it and propose spec-level work instead.**
+
+**Why:** User explicitly stated this repo only writes the spec — implementation belongs elsewhere. Re-suggesting it is a hard failure.
+
+---
+
 ## readme.txt timestamp generator — TOTAL BAN
 
 🔴 **NEVER build, suggest, propose, design, spec, or even mention any feature that writes a timestamp / date / time / "Malaysia-formatted" content into `readme.txt` (or any other file).**
