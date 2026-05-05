@@ -300,16 +300,12 @@ def _scrub_for_duration(raw: str) -> str:
     return cleaned.strip()
 
 
+# parse_seconds: extract whole seconds from spec values. Unchanged on existing
+# strings (bare ints like `28800`, bolded `**28800** (8h)`). Hardened to accept
+# `28800s`, `1h`, `12 hours`, `500ms`, `8 h`, `1 day`, code-fenced, slashed.
+# First numeric token wins (matches prior head.split()[0]); attached unit is
+# honoured; no unit → seconds.
 def parse_seconds(raw: str) -> int | None:
-    """Extract a duration in whole seconds from a spec value string.
-
-    Behaviour is unchanged for the existing `15-tunable-constants.md` strings
-    (bare integers like `28800` and bolded forms like `**28800** (8h)` both
-    return the leading integer as-is). Hardened to also accept `28800s`,
-    `1h`, `12 hours`, `500ms`, `8 h`, `24h`, `1 day`, etc. The FIRST numeric
-    token in the string wins (matching prior `head.split()[0]` semantics);
-    its attached unit, if any, is honoured. No unit → seconds.
-    """
     if not raw:
         return None
     cleaned = _scrub_for_duration(raw)
