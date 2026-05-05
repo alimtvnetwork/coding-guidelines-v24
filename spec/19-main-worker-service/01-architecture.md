@@ -121,7 +121,7 @@ Per memory `mem://architecture/caching-policy`: explicit TTL, deterministic keys
 
 ## 6. Configuration
 
-Both Main and Worker consume **Seedable-Config** (per `spec/06-seedable-config-architecture/`). Replaces the legacy term `CW configuration`.
+Both Main and Worker consume **Seedable-Config** (per `spec/06-seedable-config-architecture/`). For terminology mapping (including replaced legacy terms), see `02-glossary.md` §Reserved.
 
 Config keys consumed by this spec live under namespace `MainWorker.*`. Full key list in `06-core-api-endpoints.md` §Config.
 
