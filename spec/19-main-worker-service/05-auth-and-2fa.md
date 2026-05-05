@@ -126,8 +126,8 @@ Failure → 401 with `08-error-contract.md` envelope. NEVER 500 on auth failure.
 | `/API/V1/Workers/*` | Session + `User has access to EnumPage.PowerAdminPage` | No (always protected) |
 | `/API/V1/SelfUpdate` | OAuth client-credentials | No (always protected) |
 
-> ❓ **Open Question OQ-1 (from verbatim §Main Server Concept 3c):**
-> Whether and how to allow per-endpoint auth-mechanism overrides (e.g., let one endpoint accept basic auth while another requires JWT). Settings table sketch is in `06-core-api-endpoints.md` §Settings; final design deferred to a follow-up spec revision.
+> ✅ **Open Question OQ-1 — RESOLVED 2026-05-04 (task #39).**
+> Per-endpoint auth-mechanism overrides ARE supported. Contract: single-row whole-replace `PATCH /API/V1/Settings/EndpointAuth` keyed by `EndpointPathPattern`, with `AcceptedMechanisms[]` allow-list, 7 validation rules, lock-list for `Workers/*` + `SelfUpdate`, and idempotent re-application. Full schema + semantics in `06-core-api-endpoints.md` §5. Closes audit finding F-M-10.
 
 ---
 

@@ -167,7 +167,7 @@ Last verified: 2026-05-04 — all three commands exit 0 / zero matches.
 
 | ID | Topic | Location | Status |
 |----|-------|----------|--------|
-| OQ-1 | Per-endpoint auth-mechanism overrides | `05-auth-and-2fa.md` §8, `06-core-api-endpoints.md` §5 | OPEN — awaits user decision |
+| OQ-1 | Per-endpoint auth-mechanism overrides | `05-auth-and-2fa.md` §8, `06-core-api-endpoints.md` §5 | ✅ RESOLVED 2026-05-04 (task #39) — single-row whole-replace PATCH; 06 → v1.1.0 |
 | OQ-2 | Default selection strategy (RoundRobin vs LeastLoaded) | `04-worker-routing.md` §1 | RESOLVED — default `LeastLoaded`; user can change via Settings |
 
 ---
