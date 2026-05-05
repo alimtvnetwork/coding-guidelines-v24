@@ -2,7 +2,7 @@
 
 **Spec audited:** `spec/19-main-worker-service/`
 **Audited at:** 2026-05-04
-**Audit version:** 1.0.0
+**Audit version:** 1.1.0 (re-triaged 2026-05-04 — see §10)
 **Mode:** Sentence-level adversarial reading. Flag every modal verb, undefined noun, dangling pronoun, missing default, and contradictory pair across files.
 
 ---
