@@ -4,6 +4,16 @@
 
 ---
 
+## v1.2.0 — 2026-05-05 (FU-17 audit-trail wiring)
+
+- `03-main-db-schema.md` → **v1.3.0**: +§2.6.4 `EndpointAuthAuditEvent` (transactional audit; PK `EndpointAuthAuditEventId`, FK `EndpointAuthSettingId`, snapshotted `EndpointPathPattern`, before/after columns for `HttpMethodMask`/`IsEnabled`/`AcceptedMechanisms` (`OldMechanismsJson`/`NewMechanismsJson` sorted-ascending), `ChangeKindId` FK, `UpdatedByUserId`, `CorrelationId`, `IdempotencyKey` UNIQUE, `OccurredAt`, `Notes`/`Comments`); +§2.6.5 `EndpointAuthChangeKind` (4 ref rows: `Create`/`Replace`/`SoftDisable`/`Reenable` with deterministic resolution rules); +3 §3 indexes (`UX_EndpointAuthAuditEvent_IdempotencyKey`, `IX_…_Setting_At`, `IX_…_Actor_At`).
+- `06-core-api-endpoints.md` → **v1.2.0**: §5.6 rewritten — was "deferred to FU-17 + interim INFO log", now wires the audit insert into the same SQLite transaction as the `EndpointAuthSetting` upsert + `EndpointAuthSettingMechanism` set-replacement (atomicity boundary; failed audit insert rolls back the entire PATCH). Added field-stamping table sourcing every audit column. Idempotent-replay path MUST skip the audit insert (the unique index on `IdempotencyKey` is the belt-and-braces enforcement). `apperror` INFO log retained as a sibling of the audit row, not a substitute.
+- `05-auth-and-2fa.md` §8 OQ-1 callout: appended one sentence pointing at `EndpointAuthAuditEvent` (`03-…` §2.6.4) and marking FU-17 RESOLVED.
+
+Closes FU-17. Cleanly orthogonal to FU-18 (`EndpointAuthLocked` MAIN-4xx-xx code) which remains open.
+
+---
+
 ## v1.1.0 — 2026-05-04 (spec hardening; tasks #07–35)
 
 26 spec-hardening tasks executed against the 5-step audit suite (`audit/01..05`). Headline: **all 26 BLOCKERs → 0**, **all 27 MAJORs → 0** (1 deferred to OQ-1), 76 MINORs → small residual. No breaking schema or contract changes; all additions are clarifications or codifications of previously implicit rules.

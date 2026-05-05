@@ -9,7 +9,7 @@
 
 ## Counter
 
-`40 / 40` tasks completed.
+`41 / 40` tasks completed (window overrun: continuing follow-ups under `06-no-questions.md` extension).
 
 ## Log
 

@@ -127,7 +127,7 @@ Failure → 401 with `08-error-contract.md` envelope. NEVER 500 on auth failure.
 | `/API/V1/SelfUpdate` | OAuth client-credentials | No (always protected) |
 
 > ✅ **Open Question OQ-1 — RESOLVED 2026-05-04 (task #39).**
-> Per-endpoint auth-mechanism overrides ARE supported. Contract: single-row whole-replace `PATCH /API/V1/Settings/EndpointAuth` keyed by `EndpointPathPattern`, with `AcceptedMechanisms[]` allow-list, 7 validation rules, lock-list for `Workers/*` + `SelfUpdate`, and idempotent re-application. Full schema + semantics in `06-core-api-endpoints.md` §5. Closes audit finding F-M-10.
+> Per-endpoint auth-mechanism overrides ARE supported. Contract: single-row whole-replace `PATCH /API/V1/Settings/EndpointAuth` keyed by `EndpointPathPattern`, with `AcceptedMechanisms[]` allow-list, 7 validation rules, lock-list for `Workers/*` + `SelfUpdate`, and idempotent re-application. Full schema + semantics in `06-core-api-endpoints.md` §5. Every successful PATCH writes one `EndpointAuthAuditEvent` row (`03-main-db-schema.md` §2.6.4) inside the same transaction (FU-17 — RESOLVED 2026-05-05). Closes audit finding F-M-10.
 
 ---
 
