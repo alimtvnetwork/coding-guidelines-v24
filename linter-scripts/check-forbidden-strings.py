@@ -122,11 +122,20 @@ def main() -> int:
 
         if findings:
             total_failures += len(findings)
-            print(f"❌ FAIL: {len(findings)} finding(s):")
+            print(f"❌ FAIL [{rule_id}]: {len(findings)} forbidden phrase(s) blocked:")
             print("")
             for f in findings:
-                print(f)
-            print("")
+                # GitHub Actions error annotation — surfaces in PR checks UI.
+                print(
+                    f"::error file={f['path']},line={f['line']},title=Forbidden phrase blocked [{rule_id}]"
+                    f"::[{rule_id}] matched forbidden phrase \"{f['matched']}\" "
+                    f"at {f['path']}:{f['line']}"
+                )
+                # Human-readable line for local terminal use.
+                print(f"  ⛔ [{rule_id}] {f['path']}:{f['line']}")
+                print(f"     matched phrase : \"{f['matched']}\"")
+                print(f"     line content   : {f['content']}")
+                print("")
             if fix_hint:
                 print(f"   Fix hint: {fix_hint}")
             print("")
