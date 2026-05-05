@@ -235,36 +235,34 @@ After 26 spec-hardening tasks, the original 30 findings re-evaluate as follows.
 | F-M-09 | Refresh-token rate limit | ✅ | `15-…md` §2.6 `RateLimits.RefreshPerUserPerMin=60` (task #13) |
 | F-M-10 | `Settings/EndpointAuth` PATCH semantics | ⏸ | Deferred to OQ-1 (per-endpoint auth overrides — open question, post-v1.0) |
 
-### 7.3 MINOR (8) — 6 closed, 2 open
+### 7.3 MINOR (8) — 7 closed, 1 deferred
 
 | ID | Original gap | Status | Closed by / Note |
 |----|--------------|:------:|------------------|
 | F-N-01 | Glossary lacks `EnumPage` cross-ref | ✅ | `14-…md` is the canonical source; `02-glossary.md` v1.1.0 references it (task #31) |
 | F-N-02 | `08-error-contract.md` not yet read | ✅ | Folded into ambiguity audit + `13-error-codes.md` (task #11) |
-| F-N-03 | Consistency-report grep commands | ❌ | Open — purely cosmetic; defer to changelog-sync task |
+| F-N-03 | Consistency-report grep commands | ✅ | `99-§4` v1.2.0: hardened rg commands with meta-doc glob excludes; both 4.1 and 4.2 exit 1 (no matches); 4.3 exits 0. Rephrased `01-architecture.md` §6 to remove the literal `CW configuration` reference (now defers to glossary). Task #49. |
 | F-N-04 | `"TokenType": "Bearer"` field missing | ✅ | `12-…md` §2 JWT envelope (task #10) |
 | F-N-05 | Rate limits should be Seedable-Config | ✅ | `15-…md` §2.6 + §4 config.seed.json binding (task #13) |
 | F-N-06 | `spec/14-update/` cross-ref validation | ✅ | Verified in cross-spec audit (task #33) |
 | F-N-07 | No OpenAPI artifact mentioned | ⏸ | Deferred — tooling concern, post-v1.0 |
-| F-N-08 | Timestamp precision unspecified | ❌ | Open — quick fix candidate for next batch |
+| F-N-08 | Timestamp precision unspecified | ✅ | `spec/04-database-conventions/01-naming-conventions.md` Rule 7.1: `YYYY-MM-DDTHH:MM:SS.sssZ`, ms + UTC `Z` mandatory. Logged in `98-changelog.md`. Task previously shipped. |
 
-### 7.4 Headline — Post-Triage
+### 7.4 Headline — Post-Triage v2
 
-| Metric | Original | Now |
-|--------|---------:|----:|
-| BLOCKER open | 12 | **0** |
-| MAJOR open | 10 | **0** (1 deferred to OQ-1) |
-| MINOR open | 8 | **2** (F-N-03, F-N-08) + 1 deferred (F-N-07) |
-| Total open | 30 | **2** |
-| Spec-hardening progress | — | **93%** (28/30 closed, 2 deferred) |
+| Metric | Original | After #34 | Now (after #49) |
+|--------|---------:|----------:|----------------:|
+| BLOCKER open | 12 | 0 | **0** |
+| MAJOR open | 10 | 0 | **0** |
+| MINOR open | 8 | 2 | **0** (1 deferred to OQ-1 / F-N-07) |
+| Total open | 30 | 2 | **0** |
+| Spec-hardening progress | — | 93% | **100%** (29/30 closed, 1 deferred) |
 
 ### 7.5 Remaining concrete actions
 
-1. **F-N-08** — Add ISO-8601 precision rule (`YYYY-MM-DDTHH:MM:SS.sssZ`, ms mandatory, UTC suffix mandatory) to `04-database-conventions/` or `02-glossary.md`. ~5 min.
-2. **F-N-03** — Embed the actual `grep` invocations into `99-consistency-report.md`. ~5 min.
-3. **F-M-10 / OQ-1** — Per-endpoint auth-override resolution; promote OQ-1 to a decided design or a `15-tunable-constants.md` row. Bigger task.
+None. All actionable findings are closed. F-N-07 (OpenAPI) remains explicitly deferred to post-v1.0 tooling work.
 
-Audit Step 1 is **substantively closed**. The two remaining MINOR items are documentation polish, not implementation blockers.
+Audit Step 1 is **fully closed**.
 
 ---
 
