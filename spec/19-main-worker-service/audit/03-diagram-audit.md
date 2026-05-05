@@ -2,7 +2,7 @@
 
 **Spec audited:** `spec/19-main-worker-service/diagrams/` + `images/`
 **Audited at:** 2026-05-04
-**Audit version:** 1.0.0
+**Audit version:** 1.1.0 (re-triaged 2026-05-04 — see §12)
 **Mode:** Treat each diagram as if a dumb AI must implement code from it. Compare every node, arrow, and column to the prose spec. Flag every mismatch.
 
 ---
