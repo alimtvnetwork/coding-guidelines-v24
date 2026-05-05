@@ -2,6 +2,7 @@
 
 **Spec under audit:** `spec/19-main-worker-service/`
 **Audit type:** Final scorecard. Estimates how far a "dumb AI" implementation will pivot from the spec author's intent.
+**Audit version:** 1.1.0 (re-triaged 2026-05-04 — see §10; pivot dropped from ~66% → ~0.2%)
 **Implementer model assumed:** Literal-minded AI, no clarification questions, no patching of contradictions.
 
 ---
