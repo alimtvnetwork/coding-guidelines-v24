@@ -145,3 +145,75 @@ Say `next` to run **Step 3 (Diagram Audit)**.
 ---
 
 *Ambiguity audit v1.0.0 — 2026-05-04*
+
+---
+
+## 10. Re-Triage After Spec-Hardening Tasks (v1.1.0)
+
+**Re-triaged:** 2026-05-04
+**Window:** No-questions tasks #07–#44.
+**Method:** For each finding, look up the closing task in `.lovable/question-and-ambiguity/task-counter.md` and verify by file inspection.
+
+### 10.1 Closure matrix
+
+| ID | Severity | Status | Closed by | Evidence |
+|----|----------|--------|-----------|----------|
+| F-A-01 | MAJOR | ✅ CLOSED | #30 | `06-§3.1` 11-row Nullable column |
+| F-A-02 | MAJOR | ✅ CLOSED | #30 | `06-§6` MANDATORY rate-limit defaults + Seedable keys |
+| F-A-03 | MINOR | ✅ CLOSED | #30 | `05-§3` env-pinned bcrypt cost (12 dev / 14 prod) |
+| F-A-04 | MAJOR | ✅ CLOSED | #30 | `05-§3` pepper MUST when Env=prod\|staging |
+| F-A-05 | MINOR | ✅ CLOSED | #38 | `seq-login-routing.mmd` v1.1.0 + `06-§5` regenerate-codes flow |
+| F-A-06 | MINOR | ✅ CLOSED | #30 | `04-§1.4` `MaxCompaniesPerWorker NULL` = unlimited; 0 rejected |
+| F-A-07 | MAJOR | ✅ CLOSED | #21+#29 | Single retry source = `15-tunable-constants.md` §2.1; `08-§10` audit row |
+| F-A-08 | MAJOR | ✅ CLOSED | #21+#29 | Same as F-A-07 |
+| F-A-09 | MINOR | ✅ CLOSED | #30 | `09-self-update-pointer.md` removal target tied to `15-§2.8` |
+| F-A-10 | MINOR | ✅ CLOSED | #21+#29 | Single source of truth pinned via tunable-constants |
+| F-A-11 | MINOR | ✅ CLOSED | #13 | `EligibleCount` enumerated in `15-§2.6` ratelimit / dropped from suggestion |
+| F-A-12 | BLOCKER | ✅ CLOSED | #29 | `08-§2` envelope `OperationId` field |
+| F-A-13 | MINOR | ✅ CLOSED | #32 | `WorkerNodeLastSeenAt` used uniformly (`03-§2.1`, `08-§3.1`) |
+| F-A-14 | MAJOR | ✅ CLOSED | #32 | `WorkerNodeStatus` ref table + state transitions in `03-§2.2` |
+| F-A-15 | MAJOR | ✅ CLOSED | #29 | `08-§2` envelope `SubCode TEXT NULL` |
+| F-A-16 | MAJOR | ✅ CLOSED | #29 | `08-§2` envelope `FieldErrors` extension |
+| F-A-17 | MAJOR | ✅ CLOSED | #29 | `03-§2.6.3` `AccessDenialEvent` table |
+| F-A-18 | MINOR | ✅ CLOSED | #12+#13 | `MainSetting` delegated to Seedable-Config (`14-rbac-and-status-seed.md` + `15-tunable-constants.md`) |
+| F-A-19 | MINOR | ✅ CLOSED | #13 | `MaxCompaniesPerWorker` listed in `15-§2.x` config-keys appendix |
+| F-A-20 | MINOR | ✅ CLOSED | #11 | `05-§2.3` Main is OAuth issuer; scopes catalogued in `13-error-codes.md` cross-ref |
+| F-A-21 | MAJOR | ✅ CLOSED | #11+#29 | Per-error override mechanism documented in `13-` + `08-§5` |
+| F-A-22 | BLOCKER | ✅ CLOSED | #14 | `spec/04-database-conventions/06-rest-api-format.md` X-Auth-Action authoritative |
+| F-A-23 | MAJOR | ✅ CLOSED | #29 | `03-§2.6.2` `RolePageAccess` canonical |
+| F-A-24 | MAJOR | ✅ CLOSED | #29 | `03-§2.4` `UserTotpSecret`/`*EnrolledAt`/`*BackupCodesHash` |
+| F-A-25 | MINOR | ✅ CLOSED | #29 | `AccessDenialEvent` carries `CorrelationId`; assertion now consistent |
+| F-A-26 | BLOCKER | ✅ CLOSED | #29 | `08-§3.4` sets `X-Auth-Action: Reauthenticate` |
+| F-A-27 | MAJOR | ✅ CLOSED | #39 | `06-§5` Settings authoritative + curl/PowerShell examples |
+| F-A-28 | MAJOR | ✅ CLOSED | #29 | `08-§2` `EnvelopeVersion` field |
+| F-A-29 | MAJOR | ✅ CLOSED | #29 | `08-§5` retry table reconciled with §6 PATCH-merge note |
+| F-A-30 | MINOR | ✅ CLOSED | #23 | Logging fields documented in linter-orchestration spec |
+| F-A-31 | MAJOR | ✅ CLOSED | #29 | `08-§8` ErrorCode→HTTP-status mapping table |
+| F-A-32 | MAJOR | ✅ CLOSED | #29 | `08-§9` Worker→Main envelope spec + 3 new error codes |
+| F-A-33 | MAJOR | ✅ CLOSED | #31 | `04-§5.1` `WorkerSelectionStrategyInterface` defined |
+| F-A-34 | MINOR | ✅ CLOSED | #31 | Stack-agnostic description + Laravel example |
+| F-A-35 | MINOR | ✅ CLOSED | #31 | `08-§5` `lastResponse` initialised in pseudocode |
+| F-A-36 | MINOR | ✅ CLOSED | #31 | `02-glossary.md` `Quarantined` |
+| F-A-37 | MINOR | ✅ CLOSED | #31 | `02-glossary.md` `Draining` |
+| F-A-38 | MINOR | ✅ CLOSED | #31 | `02-glossary.md` `Seedable-Config` link |
+| F-A-39 | MINOR | ✅ CLOSED | #31 | `02-glossary.md` `apperror` link |
+| F-A-40 | MINOR | ✅ CLOSED | #31 | `02-glossary.md` `Power Admin` (label) vs `PowerAdmin` (code) |
+
+### 10.2 Tally
+
+| Severity | Original | Closed | Open |
+|----------|---------:|-------:|-----:|
+| BLOCKER | 3 (F-A-12/22/26) | 3 | 0 |
+| MAJOR | 17 | 17 | 0 |
+| MINOR | 20 | 20 | 0 |
+| **Total** | **40** | **40** | **0** |
+
+### 10.3 Verdict
+
+All 40 audit/02 findings closed. The Step-1 corrections (F-B-09 demotion, F-B-10 downgrade) remain valid; both downstream items (`07-§3` enumeration, `03-§2.6.1/2.6.2` schema) ship in the canonical schema.
+
+Audit/02 is now in **maintenance mode** — re-open only on regression.
+
+---
+
+*Re-triage appended 2026-05-04 — audit version bumped to 1.1.0.*
