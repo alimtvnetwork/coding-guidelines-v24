@@ -1,7 +1,7 @@
 # 13 — Error Codes (Main/Worker Service)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Project Prefix:** `MWS`
@@ -21,6 +21,8 @@ Both formats are valid (per `spec/03-error-manage/03-error-code-registry/01-regi
 - **Flat integer:** `21001` — used in Go internals and DB columns.
 
 The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{XYY}-{ZZ}` ↔ `211{YY}` for main. Both columns appear below.
+
+> **Slot-overflow rule (added v1.1.0).** When a sub-range's strict `211{YY}` slot is exhausted, the next code is assigned the lowest free flat from the same tier's reserved expansion range (§4) and the §3 sub-range table is annotated. This preserves the prefixed↔flat bijection (Rule R3) without renumbering existing codes. First instance: `MAIN-400-10 EndpointAuthLocked` → `21170` (4xx routing flats `21140-21149` were exhausted by tasks #32 + #39; allocated from `MAIN-21170-21199` reserved range per FU-18).
 
 ---
 
@@ -142,6 +144,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-400-06` | `21148` | `WorkerHeartbeatRejected` | "Worker is `Quarantined` or `Offline`; Worker MUST stop sending heartbeats until restart." | 410 | `08-error-contract.md` §9 + `10` §7 |
 | `MAIN-400-07` | `21149` | `WorkerPushAckUnknownJid` | "PushAck received for unknown / expired Job-Id; Worker logs and discards." | 404 | `08-error-contract.md` §9 + `spec/14-update/28-worker-push-instruction.md` |
 | `MAIN-400-11` | `21146` | `AuthActionMissing` | "Required `X-Auth-Action` header absent on multi-step auth flow." | 400 | `04-worker-routing.md` §7.4 |
+| `MAIN-400-10` | `21170` | `EndpointAuthLocked` | "Endpoint pattern matches the lock-list (`/API/V1/Workers/*` or `/API/V1/SelfUpdate`) and cannot be reconfigured via `PATCH /API/V1/Settings/EndpointAuth`." | 403 | `06-core-api-endpoints.md` §5.4 R-5 + `05-auth-and-2fa.md` §8 (always-protected rows) |
 
 ### 3.5 Database (500-599 → 21150-21159)
 
@@ -165,7 +168,9 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-21090-21099` | Worker future expansion |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
-| `MAIN-21170-21199` | Main future expansion (file-system, network) |
+| _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
+| `MAIN-21162-21169` | Main external-services future expansion |
+| `MAIN-21171-21199` | Main future expansion (file-system, network, additional routing overflow) |
 
 ---
 
@@ -262,4 +267,4 @@ Failure = build break.
 
 ---
 
-*Error codes (Main/Worker Service) v1.0.0 — 2026-05-04*
+*Error codes (Main/Worker Service) v1.1.0 — 2026-05-05 (FU-18: +`MAIN-400-10 EndpointAuthLocked`/`21170`; §1 slot-overflow rule; §4 reserved-range refresh)*
