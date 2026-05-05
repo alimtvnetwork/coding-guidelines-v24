@@ -68,3 +68,9 @@ def load_placeholder_linter() -> ModuleType:
     """Return the loaded ``check-placeholder-comments.py`` module."""
     return _load("check-placeholder-comments.py",
                  "check_placeholder_comments")
+
+
+def load_tunable_constants_linter() -> ModuleType:
+    """Return the loaded ``check-tunable-constants.py`` module."""
+    return _load("check-tunable-constants.py",
+                 "check_tunable_constants")
