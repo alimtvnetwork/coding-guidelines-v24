@@ -290,9 +290,27 @@ The server MUST reject the PATCH with `400 ValidationFailed` envelope (per `08-e
 
 Defaults are derived from `05-auth-and-2fa.md` §8 at runtime (NOT stored), so spec edits there propagate without a migration.
 
-### 5.6 Audit trail
+### 5.6 Audit trail (FU-17 — RESOLVED)
 
-Every successful PATCH MUST emit one `AccessDenialEvent`-sibling row in a new audit table `EndpointAuthAuditEvent` (deferred to FU-17 — table shape mirrors `AccessDenialEvent` from `03-main-db-schema.md` §2.6.3 with columns `OldMechanismsJson`, `NewMechanismsJson`). Until FU-17 lands, implementations MUST log the diff at `INFO` level via `apperror` package with `OperationId=EndpointAuthChange` and the `X-Correlation-Id` of the PATCH request.
+Every successful PATCH MUST emit exactly one `EndpointAuthAuditEvent` row (table canonicalised in `03-main-db-schema.md` §2.6.4) inside the same SQLite transaction as the `EndpointAuthSetting` upsert + `EndpointAuthSettingMechanism` set-replacement (per §5.3 *Atomicity*). The transaction is the audit boundary — partial commits are forbidden, and a failed audit insert MUST roll back the entire PATCH.
+
+Field stamping rules:
+
+| Audit column | Source |
+|--------------|--------|
+| `EndpointAuthSettingId` | The post-upsert PK of the parent row. |
+| `EndpointPathPattern` | Snapshotted from the request body (NOT a join) so audit survives parent-row deletion. |
+| `HttpMethodMaskOld` / `IsEnabledOld` / `OldMechanismsJson` | Read from the prior row inside the same transaction (`SELECT … FOR UPDATE` semantics; SQLite uses `BEGIN IMMEDIATE`). NULL when `ChangeKind=Create`. |
+| `HttpMethodMaskNew` / `IsEnabledNew` / `NewMechanismsJson` | Post-write values. `NewMechanismsJson` MUST be a JSON array sorted ascending by `AuthMechanismCode` so diffs are stable. |
+| `ChangeKindId` | Resolved per the rules in `03-main-db-schema.md` §2.6.5 (`Create` / `Replace` / `SoftDisable` / `Reenable`). |
+| `UpdatedByUserId` | The authenticated Power Admin (same value stamped on the parent row's `UpdatedByUserId`). |
+| `CorrelationId` | The inbound `X-Correlation-Id` header. The middleware MUST reject the PATCH if absent (per `spec/04-database-conventions/06-rest-api-format.md`). |
+| `IdempotencyKey` | The inbound `X-Idempotency-Key` header. Unique-indexed (per §2.6.4) — guarantees idempotent replays do not double-write the audit row. |
+| `OccurredAt` | Server clock, equals the parent row's `UpdatedAt`. |
+
+Idempotent replay: when the idempotency-cache hit returns the prior response (per §5.3 *Idempotency*), the audit insert MUST be skipped — the existing audit row already records the original write. The unique index on `IdempotencyKey` is the belt-and-braces enforcement.
+
+Observability hook: implementations MUST also log the diff at `INFO` level via the `apperror` package with `OperationId=EndpointAuthChange`, the resolved `ChangeKindCode`, and the `X-Correlation-Id` — for log-pipeline consumers that do not query the DB. The log is a sibling of the audit row, not a substitute.
 
 ### 5.7 Cross-references
 
@@ -318,4 +336,4 @@ Implementer uses framework-native middleware (e.g. Laravel `throttle`). On limit
 
 ---
 
-*Core API endpoints v1.1.0 — 2026-05-04 (resolved OQ-1 / F-M-10: per-endpoint auth-mechanism overrides — single-row whole-replace PATCH, 7 validation rules, lock-list, audit-trail hook FU-17)*
+*Core API endpoints v1.2.0 — 2026-05-05 (FU-17: §5.6 Audit trail wired to `EndpointAuthAuditEvent` (`03-main-db-schema.md` §2.6.4) — same-transaction insert, idempotent-replay skip, ChangeKind resolution, `apperror` sibling log)*

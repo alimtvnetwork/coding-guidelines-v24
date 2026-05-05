@@ -1,7 +1,7 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.2.0
+**Version:** 1.3.0
 **DB:** SQLite (default). Same schema portable to PostgreSQL/MySQL.
 
 > **Split-DB tier authority (FU-2):** Main uses only **3 tiers** — Root, Settings, Session — per [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md) §4. **Main has no App tier** (it owns no business data). Any prior reference placing Main tables in an App tier is a bug; per the reconciliation file, such tables belong in Root or Settings. Tier assignments per table are listed in `11-…` §4.
@@ -149,6 +149,47 @@ Audit row written by Workers on every 403 returned for an `AccessDenied` envelop
 
 Indexed on `(UserId, OccurredAt)` and `(EnumPageId, OccurredAt)` for audit queries.
 
+### 2.6.4 `EndpointAuthAuditEvent` (transactional, audit) — FU-17
+
+Audit row written on every successful `PATCH /API/V1/Settings/EndpointAuth` (per `06-core-api-endpoints.md` §5.6). Sibling shape to `AccessDenialEvent` (§2.6.3). One row per accepted PATCH; idempotent replays (same `X-Idempotency-Key`, same body within `MainWorker.Idempotency.KeyTtlSeconds`) MUST NOT emit a duplicate row. Resolves audit follow-up FU-17.
+
+| Column | Type | Null | Notes |
+|--------|------|------|-------|
+| `EndpointAuthAuditEventId` | INTEGER | NO | PK, AUTOINCREMENT |
+| `EndpointAuthSettingId` | INTEGER | NO | FK → `EndpointAuthSetting.EndpointAuthSettingId` (the row that was written; created or replaced) |
+| `EndpointPathPattern` | TEXT | NO | Snapshotted at write time so audit survives later row deletion |
+| `HttpMethodMaskOld` | TEXT | YES | NULL when the row was newly created (no prior state) |
+| `HttpMethodMaskNew` | TEXT | NO | Post-PATCH value |
+| `IsEnabledOld` | INTEGER | YES | NULL on create; `0`/`1` on replace |
+| `IsEnabledNew` | INTEGER | NO | Post-PATCH value |
+| `OldMechanismsJson` | TEXT | YES | JSON array of prior `AuthMechanismCode[]`; NULL on create |
+| `NewMechanismsJson` | TEXT | NO | JSON array of post-PATCH `AuthMechanismCode[]` (sorted ascending for diffability) |
+| `ChangeKindId` | INTEGER | NO | FK → `EndpointAuthChangeKind.EndpointAuthChangeKindId` (`Create`, `Replace`, `SoftDisable`, `Reenable`) |
+| `UpdatedByUserId` | INTEGER | NO | FK → `User`. Same actor stamped on the parent row's `UpdatedByUserId`. |
+| `CorrelationId` | TEXT | NO | Echoes the inbound `X-Correlation-Id` header per `spec/04-database-conventions/06-rest-api-format.md` |
+| `IdempotencyKey` | TEXT | NO | The `X-Idempotency-Key` that produced the write. Index supports replay-detection joins. |
+| `OccurredAt` | TEXT | NO | ISO-8601 UTC; server-stamped, equals the parent row's `UpdatedAt` |
+| `Notes` | TEXT | YES | Per Rule 12 |
+| `Comments` | TEXT | YES | Per Rule 12 |
+
+Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant above. Indexed on `(EndpointAuthSettingId, OccurredAt DESC)` and `(UpdatedByUserId, OccurredAt DESC)` for audit queries.
+
+### 2.6.5 `EndpointAuthChangeKind` (ref)
+
+| Column | Type | Null |
+|--------|------|------|
+| `EndpointAuthChangeKindId` | INTEGER | NO (PK) |
+| `EndpointAuthChangeKindCode` | TEXT | NO (unique: `Create`, `Replace`, `SoftDisable`, `Reenable`) |
+| `EndpointAuthChangeKindLabel` | TEXT | NO |
+| `Description` | TEXT | YES |
+
+Seeded via Seedable-Config — 4 rows. Resolution rules:
+
+- `Create` — no prior `EndpointAuthSetting` row for the pattern existed.
+- `Replace` — prior row existed AND (`HttpMethodMask` changed OR `AcceptedMechanisms` set changed) AND `IsEnabled` did not transition.
+- `SoftDisable` — `IsEnabled` transitioned `1 → 0`.
+- `Reenable` — `IsEnabled` transitioned `0 → 1`.
+
 ### 2.7 `WorkerVersion` (transactional)
 
 Tracks which version each Worker is currently running.
@@ -195,6 +236,9 @@ Records every routing decision. Useful for debugging load distribution.
 | `IX_User_CompanyId` | `User(CompanyId)` |
 | `IX_WorkerVersion_WorkerNodeId_RecordedAt` | `WorkerVersion(WorkerNodeId, WorkerVersionRecordedAt DESC)` |
 | `IX_WorkerSelectionEvent_At` | `WorkerSelectionEvent(WorkerSelectionEventAt DESC)` |
+| `UX_EndpointAuthAuditEvent_IdempotencyKey` | `EndpointAuthAuditEvent(IdempotencyKey)` UNIQUE |
+| `IX_EndpointAuthAuditEvent_Setting_At` | `EndpointAuthAuditEvent(EndpointAuthSettingId, OccurredAt DESC)` |
+| `IX_EndpointAuthAuditEvent_Actor_At` | `EndpointAuthAuditEvent(UpdatedByUserId, OccurredAt DESC)` |
 
 ---
 
