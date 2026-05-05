@@ -92,8 +92,15 @@ def scan_rule(rule: dict, root: str) -> list[str]:
             try:
                 with open(full, "r", encoding="utf-8", errors="ignore") as fh:
                     for lineno, line in enumerate(fh, 1):
-                        if pattern.search(line):
-                            findings.append(f"  {rel}:{lineno}: {line.rstrip()}")
+                        match = pattern.search(line)
+                        if not match:
+                            continue
+                        findings.append({
+                            "path": rel,
+                            "line": lineno,
+                            "matched": match.group(0),
+                            "content": line.rstrip(),
+                        })
             except (OSError, UnicodeDecodeError):
                 continue
 
@@ -115,11 +122,20 @@ def main() -> int:
 
         if findings:
             total_failures += len(findings)
-            print(f"❌ FAIL: {len(findings)} finding(s):")
+            print(f"❌ FAIL [{rule_id}]: {len(findings)} forbidden phrase(s) blocked:")
             print("")
             for f in findings:
-                print(f)
-            print("")
+                # GitHub Actions error annotation — surfaces in PR checks UI.
+                print(
+                    f"::error file={f['path']},line={f['line']},title=Forbidden phrase blocked [{rule_id}]"
+                    f"::[{rule_id}] matched forbidden phrase \"{f['matched']}\" "
+                    f"at {f['path']}:{f['line']}"
+                )
+                # Human-readable line for local terminal use.
+                print(f"  ⛔ [{rule_id}] {f['path']}:{f['line']}")
+                print(f"     matched phrase : \"{f['matched']}\"")
+                print(f"     line content   : {f['content']}")
+                print("")
             if fix_hint:
                 print(f"   Fix hint: {fix_hint}")
             print("")
