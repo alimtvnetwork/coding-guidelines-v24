@@ -84,3 +84,24 @@ fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule LEGACY-CD
 exclude_dirs = ["release-artifacts"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py", "CHANGELOG.md"]
 allowlist = []
+
+# --- Rule: Spec/19 implementation suggestions (TOTAL BAN) ---
+# This repo is spec-only for spec/19-main-worker-service. Any phrase that
+# proposes coding, scaffolding, or shipping the worker service is forbidden.
+# See `.lovable/strictly-avoid.md` and `mem://constraints/spec19-no-implementation`.
+[[rule]]
+id = "SPEC19-NO-IMPL"
+description = "Forbidden Spec/19 implementation phrases (phase 1 implementation, begin coding, ship the service, starter skeleton, etc.). spec/19-main-worker-service is spec-only."
+pattern = '(?i)\b(phase\s*1\s*implementation|begin\s*coding|ship\s*the\s*service|starter\s*skeleton|begin\s*spec[/\s-]*19\s*phase\s*1|start\s*implementing\s*spec[/\s-]*19)\b'
+fix_hint = "Remove the phrase. spec/19-main-worker-service is spec-only — no implementation work is permitted in this repo. See .lovable/strictly-avoid.md."
+exclude_dirs = ["release-artifacts"]
+exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py", "CHANGELOG.md"]
+allowlist = [
+  # Canonical ban definitions must cite the forbidden phrases verbatim.
+  ".lovable/strictly-avoid.md",
+  ".lovable/memory/constraints/spec19-no-implementation.md",
+  "spec/17-consolidated-guidelines/00-strictly-avoid-quickref.md",
+  # Tooling README documenting the rule itself.
+  "linter-scripts/readme-forbidden-strings.md",
+  "linter-scripts/README-forbidden-strings.md",
+]
