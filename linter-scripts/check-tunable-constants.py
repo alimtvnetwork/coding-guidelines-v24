@@ -282,13 +282,53 @@ SESSION_TTL_SEED = "MainSessionTtlSeconds"
 SESSION_ABS_SEED = "MainSessionAbsoluteMaxSeconds"
 
 
+_DURATION_PATTERN = re.compile(r"(\d+(?:\.\d+)?)\s*([a-zA-Z]*)")
+_UNIT_TO_SECONDS = {
+    "": 1, "s": 1, "sec": 1, "secs": 1, "second": 1, "seconds": 1,
+    "ms": 0.001,
+    "m": 60, "min": 60, "mins": 60, "minute": 60, "minutes": 60,
+    "h": 3600, "hr": 3600, "hrs": 3600, "hour": 3600, "hours": 3600,
+    "d": 86400, "day": 86400, "days": 86400,
+}
+
+
+def _scrub_for_duration(raw: str) -> str:
+    # Strip markdown bold/italic and grouping punctuation that hugs digits/units.
+    cleaned = raw
+    for ch in ("*", "`", "(", ")", "[", "]", ","):
+        cleaned = cleaned.replace(ch, " ")
+    return cleaned.strip()
+
+
 def parse_seconds(raw: str) -> int | None:
+    """Extract a duration in whole seconds from a spec value string.
+
+    Behaviour is unchanged for the existing `15-tunable-constants.md` strings
+    (bare integers like `28800` and bolded forms like `**28800** (8h)` both
+    return the leading integer as-is). Hardened to also accept `28800s`,
+    `1h`, `12 hours`, `500ms`, `8 h`, `24h`, `1 day`, etc. The FIRST numeric
+    token in the string wins (matching prior `head.split()[0]` semantics);
+    its attached unit, if any, is honoured. No unit → seconds.
+    """
     if not raw:
         return None
-    head = raw.strip().split()[0]
-    if not head.isdigit():
+    cleaned = _scrub_for_duration(raw)
+    if not cleaned:
         return None
-    return int(head)
+    match = _DURATION_PATTERN.search(cleaned)
+    if match is None:
+        return None
+    return _coerce_to_whole_seconds(match.group(1), match.group(2).lower())
+
+
+def _coerce_to_whole_seconds(number_text: str, unit_text: str) -> int | None:
+    if unit_text not in _UNIT_TO_SECONDS:
+        return None
+    multiplier = _UNIT_TO_SECONDS[unit_text]
+    seconds_float = float(number_text) * multiplier
+    if seconds_float < 0:
+        return None
+    return int(seconds_float)
 
 
 def rule_t4_pair(label: str, ttl_raw: str | None, abs_raw: str | None) -> list[str]:
