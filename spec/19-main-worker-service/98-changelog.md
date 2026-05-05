@@ -4,13 +4,17 @@
 
 ---
 
+## v1.3.0 — 2026-05-05 (FU-18 EndpointAuthLocked error code)
+
+- `13-error-codes.md` → **v1.1.0**: +§3.4 row `MAIN-400-10 EndpointAuthLocked` / flat `21170` / HTTP 403, message "Endpoint pattern matches the lock-list (`/API/V1/Workers/*` or `/API/V1/SelfUpdate`) and cannot be reconfigured via `PATCH /API/V1/Settings/EndpointAuth`." Source: `06-core-api-endpoints.md` §5.4 R-5 + `05-auth-and-2fa.md` §8. Added §1 *Slot-overflow rule* documenting the first allocation that breaks strict `211{YY}` mapping (4xx routing flats `21140-21149` were exhausted by tasks #32 + #39, so the new code took `21170` from the `MAIN-21170-21199` reserved range). §4 reserved-range table refreshed: `21170` marked consumed, residual reserve narrowed to `MAIN-21171-21199` plus a new `MAIN-21162-21169` external-services band.
+- `error-codes.json` → **v1.2.0**: +entry for `MAIN-400-10` with all 8 fields (Code/Flat/Name/HttpStatus/Tier/Message/Source/Retryable=false). `TotalCodes` 48 → 49. `Generated` 2026-05-04 → 2026-05-05.
+- `06-core-api-endpoints.md` §5.4 R-5 + §5.7 cross-refs: dropped "to be catalogued / to be assigned" hedging; both now cite the assigned `MAIN-400-10` / `21170` slot directly. (No version bump — text-only refinement to v1.2.0 of the same file.)
+
+Linter verification (4/4 green): `check-mws-error-codes` (R1-R4 — 52 codes verified, 21 R2 waivers loaded; new code has 2 source references so no waiver needed), `check-spec-cross-links`, `check-spec-folder-refs`, `check-tunable-constants`. Closes FU-18.
+
+---
+
 ## v1.2.0 — 2026-05-05 (FU-17 audit-trail wiring)
-
-- `03-main-db-schema.md` → **v1.3.0**: +§2.6.4 `EndpointAuthAuditEvent` (transactional audit; PK `EndpointAuthAuditEventId`, FK `EndpointAuthSettingId`, snapshotted `EndpointPathPattern`, before/after columns for `HttpMethodMask`/`IsEnabled`/`AcceptedMechanisms` (`OldMechanismsJson`/`NewMechanismsJson` sorted-ascending), `ChangeKindId` FK, `UpdatedByUserId`, `CorrelationId`, `IdempotencyKey` UNIQUE, `OccurredAt`, `Notes`/`Comments`); +§2.6.5 `EndpointAuthChangeKind` (4 ref rows: `Create`/`Replace`/`SoftDisable`/`Reenable` with deterministic resolution rules); +3 §3 indexes (`UX_EndpointAuthAuditEvent_IdempotencyKey`, `IX_…_Setting_At`, `IX_…_Actor_At`).
-- `06-core-api-endpoints.md` → **v1.2.0**: §5.6 rewritten — was "deferred to FU-17 + interim INFO log", now wires the audit insert into the same SQLite transaction as the `EndpointAuthSetting` upsert + `EndpointAuthSettingMechanism` set-replacement (atomicity boundary; failed audit insert rolls back the entire PATCH). Added field-stamping table sourcing every audit column. Idempotent-replay path MUST skip the audit insert (the unique index on `IdempotencyKey` is the belt-and-braces enforcement). `apperror` INFO log retained as a sibling of the audit row, not a substitute.
-- `05-auth-and-2fa.md` §8 OQ-1 callout: appended one sentence pointing at `EndpointAuthAuditEvent` (`03-…` §2.6.4) and marking FU-17 RESOLVED.
-
-Closes FU-17. Cleanly orthogonal to FU-18 (`EndpointAuthLocked` MAIN-4xx-xx code) which remains open.
 
 ---
 
