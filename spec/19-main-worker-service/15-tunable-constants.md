@@ -177,15 +177,16 @@ The following docs cite tunables inline. Each MUST be edited to cite this file i
 
 ---
 
-## 6. Linter assertion (FU-15)
+## 6. Linter assertion (FU-15 + FU-16)
 
 `linter-scripts/check-tunable-constants.py` MUST verify:
 
-1. Every numeric literal in spec/19 prose that ends with `s`, `sec`, `seconds`, `min`, `minutes`, `h`, `hours`, `attempts`, `times`, or `retries` is either
+1. **T1 (presence)** — every numeric literal in spec/19 prose that ends with `s`, `sec`, `seconds`, `min`, `minutes`, `h`, `hours`, `attempts`, `times`, or `retries` is either
    (a) named in §2 of this file, or
    (b) explicitly waivered via `<!-- TUNABLE-WAIVER: rationale -->` comment.
-2. No two §2 rows share the same Key.
-3. `config.seed.json` `Categories.MainWorker.Settings.*.Default` matches §4 verbatim.
+2. **T2 (unique keys)** — no two §2 rows share the same Key.
+3. **T3 (seed parity)** — `config.seed.json` `Categories.MainWorker.Settings.*.Default` matches §4 verbatim.
+4. **T4 (session-TTL invariant — FU-16)** — `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` >= `MainWorker.Auth.MainSessionTtlSeconds` in BOTH §2 catalogue defaults AND §4 seed defaults. Sliding TTL must never exceed the absolute cap (otherwise the cap is unreachable). Resolves FU-16; cited in §7.2.
 
 Failure = build break.
 
