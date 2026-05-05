@@ -259,7 +259,7 @@ The server MUST reject the PATCH with `400 ValidationFailed` envelope (per `08-e
 | R-2 | `HttpMethodMask` MUST be `*` OR a CSV subset of `{GET,POST,PATCH,PUT,DELETE}` with no duplicates. | `HttpMethodMask` |
 | R-3 | `AcceptedMechanisms` MUST be non-empty when `IsEnabled=true`. (Empty + enabled would lock the endpoint out entirely — refused.) | `AcceptedMechanisms` |
 | R-4 | Every `AcceptedMechanisms` entry MUST resolve to a row in `AuthMechanism`. | `AcceptedMechanisms` |
-| R-5 | Patterns matching `/API/V1/Workers/*` or `/API/V1/SelfUpdate` are LOCKED — PATCH returns `403 EndpointAuthLocked` (to be catalogued as a new MAIN-4xx-xx code in `13-error-codes.md` per FU-18). These endpoints are always-protected per §8. | `EndpointPathPattern` |
+| R-5 | Patterns matching `/API/V1/Workers/*` or `/API/V1/SelfUpdate` are LOCKED — PATCH returns `403 EndpointAuthLocked` (`MAIN-400-10` / flat `21170`, catalogued in `13-error-codes.md` §3.4 — FU-18 RESOLVED 2026-05-05). These endpoints are always-protected per §8. | `EndpointPathPattern` |
 | R-6 | Combining `None` with any other mechanism in the same `AcceptedMechanisms` set is forbidden — `None` is mutually exclusive (otherwise it silently bypasses the others). | `AcceptedMechanisms` |
 | R-7 | Caller MUST hold `EnumPage.PowerAdminPage` access; otherwise `403 AccessDenied`. | session |
 
@@ -316,7 +316,7 @@ Observability hook: implementations MUST also log the diff at `INFO` level via t
 
 - Default mechanisms: `05-auth-and-2fa.md` §8
 - Lock-list rationale: `05-auth-and-2fa.md` §8 (rows marked "No / always protected")
-- ErrorCodes: `13-error-codes.md` (`EndpointAuthLocked` — to be assigned a MAIN-4xx-xx slot in §3.4 per FU-18)
+- ErrorCodes: `13-error-codes.md` §3.4 — `MAIN-400-10 EndpointAuthLocked` (flat `21170`, HTTP 403; FU-18 RESOLVED)
 - Header conventions: `spec/04-database-conventions/06-rest-api-format.md` §X-Auth-Action
 - Idempotency TTL: `15-tunable-constants.md` §2.3
 

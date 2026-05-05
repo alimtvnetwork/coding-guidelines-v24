@@ -2,8 +2,8 @@
   "Title": "MWS \u2014 Main / Worker Service Error Code Index",
   "Project": "MWS",
   "Name": "Main / Worker Service",
-  "Version": "1.1.0",
-  "Generated": "2026-05-04",
+  "Version": "1.2.0",
+  "Generated": "2026-05-05",
   "Source": "spec/19-main-worker-service/13-error-codes.md",
   "Range": {
     "Min": 21000,
@@ -21,7 +21,7 @@
       "Max": 21199
     }
   ],
-  "TotalCodes": 48,
+  "TotalCodes": 49,
   "RetryableCodes": 7,
   "Codes": [
     {
@@ -502,6 +502,16 @@
       "Tier": "Main",
       "Message": "Worker missed \u22653 heartbeats; quarantining.",
       "Source": "`10` \u00a77",
+      "Retryable": false
+    },
+    {
+      "Code": "MAIN-400-10",
+      "Flat": 21170,
+      "Name": "EndpointAuthLocked",
+      "HttpStatus": 403,
+      "Tier": "Main",
+      "Message": "Endpoint pattern matches the lock-list (`/API/V1/Workers/*` or `/API/V1/SelfUpdate`) and cannot be reconfigured via `PATCH /API/V1/Settings/EndpointAuth`.",
+      "Source": "`06-core-api-endpoints.md` \u00a75.4 R-5 + `05-auth-and-2fa.md` \u00a78",
       "Retryable": false
     }
   ]

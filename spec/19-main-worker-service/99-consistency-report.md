@@ -28,7 +28,7 @@ Cross-link integrity, naming-convention compliance, and rule-inheritance audit f
 | `10-worker-bootstrap-protocol.md` | 8-step boot, /Workers/Register, public-key fetch, version pin | 1.0.0 | ✅ |
 | `11-split-db-tier-reconciliation.md` | Main=3-tier / Worker=4-tier mapping over spec/05's 6 tiers | 1.0.0 | ✅ |
 | `12-jwt-delivery-contract.md` | JSON-body + in-memory storage, mandatory CSP, 9 CI tests | 1.0.0 | ✅ |
-| `13-error-codes.md` | 30 codes (22 WORKER-* + 8 MAIN-*) + prefixed↔flat mapping + MWS prefix 21000-21199 | 1.1.0 | ✅ |
+| `13-error-codes.md` | 31 codes (22 WORKER-* + 9 MAIN-*) + prefixed↔flat mapping + MWS prefix 21000-21199 + slot-overflow rule (`MAIN-400-10 EndpointAuthLocked` / `21170` per FU-18) | 1.1.0 | ✅ |
 | `14-rbac-and-status-seed.md` | 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism | 1.0.0 | ✅ |
 | `15-tunable-constants.md` | 30 numeric tunables (retry, idempotency, heartbeat, JWT, push-update, bootstrap) + config.seed.json binding | 1.1.0 | ✅ |
 | `96-linter-audit.md` | Linter pipeline audit | 1.0.0 | ✅ |
