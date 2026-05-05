@@ -1,7 +1,7 @@
 # 15 — Tunable Constants (Single-Value Pins)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-15, F-A-16, F-B-12 (top-10 fix #7). Closes AC-7, partially AC-6.
@@ -244,4 +244,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.2.0 — 2026-05-04 (resolved OQ-15-1: explicit array; resolved OQ-15-2: sliding TTL with absolute cap; +2 new auth tunables)*
+*Tunable constants v1.3.0 — 2026-05-04 (FU-16: T4 session-TTL invariant added — AbsoluteMax >= Ttl in §2 + §4)*
