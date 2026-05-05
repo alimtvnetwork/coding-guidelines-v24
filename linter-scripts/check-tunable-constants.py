@@ -15,6 +15,10 @@ Enforces the contract in `spec/19-main-worker-service/15-tunable-constants.md` �
   Rule T2 — Unique keys: no two §2 rows share the same Key.
   Rule T3 — Seed parity: every §4 `config.seed.json` Settings.<Name>
             `Default` value matches the §2 row for the same logical key.
+  Rule T4 — Session-TTL invariant (FU-16):
+            MainWorker.Auth.MainSessionAbsoluteMaxSeconds
+              >= MainWorker.Auth.MainSessionTtlSeconds
+            in BOTH §2 catalogue defaults and §4 seed defaults.
 
 Exit codes:
   0   all rules pass
@@ -272,12 +276,51 @@ def _strip_array_chars(value: str) -> str:
     return value.replace("[", "").replace("]", "").replace(" ", "").replace(",", "")
 
 
+SESSION_TTL_KEY = "MainWorker.Auth.MainSessionTtlSeconds"
+SESSION_ABS_KEY = "MainWorker.Auth.MainSessionAbsoluteMaxSeconds"
+SESSION_TTL_SEED = "MainSessionTtlSeconds"
+SESSION_ABS_SEED = "MainSessionAbsoluteMaxSeconds"
+
+
+def parse_seconds(raw: str) -> int | None:
+    if not raw:
+        return None
+    head = raw.strip().split()[0]
+    if not head.isdigit():
+        return None
+    return int(head)
+
+
+def rule_t4_pair(label: str, ttl_raw: str | None, abs_raw: str | None) -> list[str]:
+    if ttl_raw is None:
+        return [f"{label} missing `{SESSION_TTL_KEY}` value"]
+    if abs_raw is None:
+        return [f"{label} missing `{SESSION_ABS_KEY}` value"]
+    ttl = parse_seconds(ttl_raw)
+    cap = parse_seconds(abs_raw)
+    if ttl is None or cap is None:
+        return [f"{label} non-numeric session TTL: ttl={ttl_raw!r} cap={abs_raw!r}"]
+    if cap >= ttl:
+        return []
+    return [f"{label} invariant violated: AbsoluteMax({cap}) < Ttl({ttl})"]
+
+
+def rule_t4() -> list[str]:
+    cat = collect_catalogue_defaults()
+    seed = collect_seed_defaults()
+    out: list[str] = []
+    out.extend(rule_t4_pair("§2", cat.get(SESSION_TTL_KEY), cat.get(SESSION_ABS_KEY)))
+    out.extend(rule_t4_pair("§4", seed.get(SESSION_TTL_SEED), seed.get(SESSION_ABS_SEED)))
+    return out
+
+
 def main() -> int:
     file_must_exist(TUNABLES_FILE)
     failures: list[str] = []
     failures.extend(prefix_each("T1", rule_t1()))
     failures.extend(prefix_each("T2", rule_t2()))
     failures.extend(prefix_each("T3", rule_t3()))
+    failures.extend(prefix_each("T4", rule_t4()))
     return report(failures)
 
 
