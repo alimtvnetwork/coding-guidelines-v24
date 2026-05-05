@@ -1,7 +1,7 @@
 # 06 — Core API Endpoints
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 Authoritative REST surface for both tiers. All paths are `/API/V1/...`. JSON request/response with PascalCase keys.
 
@@ -82,8 +82,8 @@ Authoritative REST surface for both tiers. All paths are `/API/V1/...`. JSON req
 
 | Method | Path | Auth | Purpose |
 |--------|------|------|---------|
-| GET | `/API/V1/Settings/EndpointAuth` | Session + PowerAdmin | Per-endpoint auth toggles |
-| PATCH | `/API/V1/Settings/EndpointAuth` | Session + PowerAdmin | Update toggles (see OQ-1 in `05-auth-and-2fa.md`) |
+| GET | `/API/V1/Settings/EndpointAuth` | Session + PowerAdmin | List per-endpoint auth-mechanism overrides (see §5) |
+| PATCH | `/API/V1/Settings/EndpointAuth` | Session + PowerAdmin | Replace one row's mechanism set + IsEnabled (see §5) |
 | GET | `/API/V1/Settings/UpdateSchedule` | Session + PowerAdmin | Read schedule |
 | PATCH | `/API/V1/Settings/UpdateSchedule` | Session + PowerAdmin | Update schedule (see §4) |
 
@@ -170,26 +170,137 @@ Field nullability (resolves F-A-01 — replaces prior "Most fields Non-Nullable"
 
 ---
 
-## 5. Settings Schema Sketch (for OQ-1)
+## 5. Per-Endpoint Auth-Mechanism Overrides (OQ-1 — RESOLVED 2026-05-04)
+
+Resolves OQ-1 (`05-auth-and-2fa.md` §8) and audit finding F-M-10. The Settings.EndpointAuth surface lets a Power Admin tighten or loosen the default auth mechanism on a per-endpoint-pattern basis, within a fixed allow-list. Defaults from §2 always apply when no override row matches.
+
+### 5.1 Schema (canonical — Main DB, Settings tier per `11-split-db-tier-reconciliation.md`)
 
 ```sql
+CREATE TABLE AuthMechanism (
+    AuthMechanismId    INTEGER PRIMARY KEY AUTOINCREMENT,
+    AuthMechanismCode  TEXT NOT NULL UNIQUE,   -- Session | Jwt | OAuth | None
+    AuthMechanismLabel TEXT NOT NULL,
+    Description        TEXT NULL
+);
+
 CREATE TABLE EndpointAuthSetting (
     EndpointAuthSettingId INTEGER PRIMARY KEY AUTOINCREMENT,
-    EndpointPathPattern   TEXT NOT NULL,
-    AuthMechanismId       INTEGER NOT NULL REFERENCES AuthMechanism(AuthMechanismId),
-    IsEnabled             INTEGER NOT NULL,
+    EndpointPathPattern   TEXT NOT NULL UNIQUE,           -- e.g. "/API/V1/Status", "/API/V1/Company/*"
+    HttpMethodMask        TEXT NOT NULL,                  -- CSV of GET|POST|PATCH|PUT|DELETE or "*"
+    IsEnabled             INTEGER NOT NULL,               -- 1 = override active, 0 = ignore (fallback to default)
+    UpdatedByUserId       INTEGER NOT NULL REFERENCES User(UserId),
+    UpdatedAt             TEXT NOT NULL,                  -- ISO-8601 UTC per spec/04 Rule 7.1
+    Notes                 TEXT NULL,
+    Comments              TEXT NULL,
     Description           TEXT NULL
 );
 
-CREATE TABLE AuthMechanism (
-    AuthMechanismId   INTEGER PRIMARY KEY AUTOINCREMENT,
-    AuthMechanismCode TEXT NOT NULL UNIQUE,  -- Session | Jwt | OAuth | None
-    AuthMechanismLabel TEXT NOT NULL,
-    Description       TEXT NULL
+CREATE TABLE EndpointAuthSettingMechanism (
+    EndpointAuthSettingId INTEGER NOT NULL REFERENCES EndpointAuthSetting(EndpointAuthSettingId) ON DELETE CASCADE,
+    AuthMechanismId       INTEGER NOT NULL REFERENCES AuthMechanism(AuthMechanismId),
+    PRIMARY KEY (EndpointAuthSettingId, AuthMechanismId)
 );
 ```
 
-Final design awaits OQ-1 resolution.
+Seed rows for `AuthMechanism` come from `14-rbac-and-status-seed.md` §AuthMechanism (4 rows: `Session`, `Jwt`, `OAuth`, `None`).
+
+### 5.2 Resolution algorithm (deterministic)
+
+For each inbound request `(Method, Path)` the auth middleware MUST execute, in order:
+
+1. Look up the FIRST `EndpointAuthSetting` row where `IsEnabled=1` AND `EndpointPathPattern` matches `Path` (longest-prefix wins; exact `/API/V1/Status` beats `/API/V1/*`) AND `HttpMethodMask` contains `Method` (or `*`).
+2. If found, build `AcceptedMechanisms` = JOIN through `EndpointAuthSettingMechanism`. Request is authorized when its presented credential matches ANY entry. Empty set is REJECTED at PATCH time (see §5.4 R-3).
+3. If no row matches, apply the default from `05-auth-and-2fa.md` §8 table.
+
+A request that fails resolution returns the `AccessDenied` envelope per `08-error-contract.md` §3.4 with `X-Auth-Action: Reauthenticate`.
+
+### 5.3 PATCH semantics
+
+`PATCH /API/V1/Settings/EndpointAuth` is a **whole-row replace, single-row scope** (NOT JSON-Patch RFC 6902, NOT bulk). Each request mutates exactly ONE `EndpointAuthSetting` row, identified by `EndpointPathPattern` (its natural key). This avoids the partial-merge ambiguity flagged in F-M-10.
+
+Request body:
+
+```json
+{
+  "EndpointPathPattern": "/API/V1/Company/*",
+  "HttpMethodMask": "GET,PATCH",
+  "IsEnabled": true,
+  "AcceptedMechanisms": ["Session", "Jwt"],
+  "Notes": "Allow direct React→Worker calls during migration window.",
+  "Description": "Tightened from default (Session-only on Main side)."
+}
+```
+
+Semantics:
+
+| Field | Required | Effect |
+|-------|----------|--------|
+| `EndpointPathPattern` | YES | Upsert key. Created if absent, replaced if present. |
+| `HttpMethodMask` | YES | Replaces stored value verbatim. CSV of `GET|POST|PATCH|PUT|DELETE` or literal `"*"`. |
+| `IsEnabled` | YES | `false` retains the row but reverts the endpoint to its §8 default (audit-friendly soft-disable). |
+| `AcceptedMechanisms` | YES | Array of `AuthMechanismCode` strings. The set REPLACES the prior `EndpointAuthSettingMechanism` rows transactionally. |
+| `Notes` | optional | Free-text. Nullable. |
+| `Description` | optional | Free-text. Nullable. |
+
+Response: `200 OK` with the resolved row (post-write) including `EndpointAuthSettingId`, `UpdatedByUserId`, `UpdatedAt` (server-stamped). 
+
+**Idempotency:** mandatory `X-Idempotency-Key` per §1. Two PATCHes with the same key + identical body within the TTL window (`MainWorker.Idempotency.KeyTtlSeconds`, see `15-tunable-constants.md`) return the original response without re-writing.
+
+**Atomicity:** the `EndpointAuthSetting` upsert and the `EndpointAuthSettingMechanism` set-replacement MUST execute in a single SQLite transaction. Partial application is forbidden.
+
+### 5.4 Validation rules (server-side, fail-closed)
+
+The server MUST reject the PATCH with `400 ValidationFailed` envelope (per `08-error-contract.md` §3.2) and `Error.FieldErrors[]` populated when ANY of:
+
+| ID | Rule | Field |
+|----|------|-------|
+| R-1 | `EndpointPathPattern` MUST start with `/API/V1/` and contain only `[A-Za-z0-9/_*{}-]`. | `EndpointPathPattern` |
+| R-2 | `HttpMethodMask` MUST be `*` OR a CSV subset of `{GET,POST,PATCH,PUT,DELETE}` with no duplicates. | `HttpMethodMask` |
+| R-3 | `AcceptedMechanisms` MUST be non-empty when `IsEnabled=true`. (Empty + enabled would lock the endpoint out entirely — refused.) | `AcceptedMechanisms` |
+| R-4 | Every `AcceptedMechanisms` entry MUST resolve to a row in `AuthMechanism`. | `AcceptedMechanisms` |
+| R-5 | Patterns matching `/API/V1/Workers/*` or `/API/V1/SelfUpdate` are LOCKED — PATCH returns `403 EndpointAuthLocked` (catalogued as `MAIN-403-02` in `13-error-codes.md`). These endpoints are always-protected per §8. | `EndpointPathPattern` |
+| R-6 | Combining `None` with any other mechanism in the same `AcceptedMechanisms` set is forbidden — `None` is mutually exclusive (otherwise it silently bypasses the others). | `AcceptedMechanisms` |
+| R-7 | Caller MUST hold `EnumPage.PowerAdminPage` access; otherwise `403 AccessDenied`. | session |
+
+### 5.5 GET shape
+
+`GET /API/V1/Settings/EndpointAuth` returns:
+
+```json
+{
+  "Defaults": [
+    { "EndpointPathPattern": "/API/V1/Status", "AcceptedMechanisms": ["None"], "Source": "Default" }
+  ],
+  "Overrides": [
+    {
+      "EndpointAuthSettingId": 7,
+      "EndpointPathPattern": "/API/V1/Company/*",
+      "HttpMethodMask": "GET,PATCH",
+      "IsEnabled": true,
+      "AcceptedMechanisms": ["Session", "Jwt"],
+      "UpdatedByUserId": 1,
+      "UpdatedAt": "2026-05-04T08:15:00Z",
+      "Notes": null,
+      "Description": "Tightened from default."
+    }
+  ]
+}
+```
+
+Defaults are derived from `05-auth-and-2fa.md` §8 at runtime (NOT stored), so spec edits there propagate without a migration.
+
+### 5.6 Audit trail
+
+Every successful PATCH MUST emit one `AccessDenialEvent`-sibling row in a new audit table `EndpointAuthAuditEvent` (deferred to FU-17 — table shape mirrors `AccessDenialEvent` from `03-main-db-schema.md` §2.6.3 with columns `OldMechanismsJson`, `NewMechanismsJson`). Until FU-17 lands, implementations MUST log the diff at `INFO` level via `apperror` package with `OperationId=EndpointAuthChange` and the `X-Correlation-Id` of the PATCH request.
+
+### 5.7 Cross-references
+
+- Default mechanisms: `05-auth-and-2fa.md` §8
+- Lock-list rationale: `05-auth-and-2fa.md` §8 (rows marked "No / always protected")
+- ErrorCodes: `13-error-codes.md` (`MAIN-403-02 EndpointAuthLocked` — registered in §3.4 follow-up FU-18)
+- Header conventions: `spec/04-database-conventions/06-rest-api-format.md` §X-Auth-Action
+- Idempotency TTL: `15-tunable-constants.md` §2.3
 
 ---
 
@@ -207,4 +318,4 @@ Implementer uses framework-native middleware (e.g. Laravel `throttle`). On limit
 
 ---
 
-*Core API endpoints v1.0.0 — 2026-05-04*
+*Core API endpoints v1.1.0 — 2026-05-04 (resolved OQ-1 / F-M-10: per-endpoint auth-mechanism overrides — single-row whole-replace PATCH, 7 validation rules, lock-list, audit-trail hook FU-17)*
