@@ -2,6 +2,7 @@
 
 **Spec under audit:** `spec/19-main-worker-service/`
 **Audit type:** Verify every external `spec/NN-*` reference resolves to real, consistent content.
+**Audit version:** 1.1.0 (re-triaged 2026-05-04 — see §10)
 **Implementer model assumed:** A "dumb" AI that follows pointers literally, will not patch contradictions, and will not invent missing artifacts.
 **Severity scale:** BLOCKER · MAJOR · MINOR
 
