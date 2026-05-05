@@ -120,21 +120,32 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 **Reproducible verification commands** (closes audit finding F-N-03; run from repo root):
 
 ```bash
-# 4.1 — forbidden literals (case-insensitive, exclude this report itself)
-rg -i -n --glob '!99-consistency-report.md' \
+# 4.1 — forbidden literals (case-insensitive). Excludes meta-docs that legitimately
+# define/cite the replacements: this report, the glossary, plan, changelog, AC.
+rg -i -n \
+   --glob '!spec/19-main-worker-service/02-glossary.md' \
+   --glob '!spec/19-main-worker-service/99-consistency-report.md' \
+   --glob '!spec/19-main-worker-service/98-changelog.md' \
+   --glob '!spec/19-main-worker-service/97-acceptance-criteria.md' \
+   --glob '!spec/19-main-worker-service/plan.md' \
    -e 'CW configuration' -e 'git map' \
    -e '\bmaster/slave\b' -e '\bmaster-slave\b' \
    spec/19-main-worker-service/
 
-# 4.2 — author title compliance (must NOT appear)
-rg -n -e '\bCEO\b' -e 'Chief Executive Officer' \
+# 4.2 — author-title compliance (must NOT appear). Same meta-doc exclusions.
+rg -n \
+   --glob '!spec/19-main-worker-service/02-glossary.md' \
+   --glob '!spec/19-main-worker-service/99-consistency-report.md' \
+   -e '\bCEO\b' -e 'Chief Executive Officer' \
    spec/19-main-worker-service/
 
-# 4.3 — global enforcement (delegated)
+# 4.3 — global enforcement (delegated to the canonical linter)
 python3 linter-scripts/check-forbidden-strings.py
 ```
 
-Last verified: 2026-05-04 — all three commands exit 0 / zero matches.
+**Expected:** 4.1 and 4.2 print nothing and exit 1 (rg "no matches" convention); 4.3 exits 0. Anything else is a regression.
+
+Last verified: 2026-05-04 — 4.1: 0 matches in non-meta files (`01-architecture.md` §6 still references "Seedable-Config" by its canonical name only); 4.2: 0 matches; 4.3: exit 0.
 
 ---
 
