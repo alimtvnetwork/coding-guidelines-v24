@@ -2,7 +2,7 @@
 
 **Spec audited:** `spec/19-main-worker-service/diagrams/` + `images/`
 **Audited at:** 2026-05-04
-**Audit version:** 1.0.0
+**Audit version:** 1.1.0 (re-triaged 2026-05-04 — see §12)
 **Mode:** Treat each diagram as if a dumb AI must implement code from it. Compare every node, arrow, and column to the prose spec. Flag every mismatch.
 
 ---
@@ -160,3 +160,77 @@ Say `next` to run **Step 4 (Cross-Spec Dependency Audit)**.
 ---
 
 *Diagram audit v1.0.0 — 2026-05-04*
+
+---
+
+## 12. Re-Triage After Spec-Hardening Tasks (v1.1.0)
+
+**Re-triaged:** 2026-05-04
+**Window:** No-questions tasks #07–#45.
+**Method:** For each F-D finding, look up its closing task in `.lovable/question-and-ambiguity/task-counter.md` and confirm by inspecting the diagram or its authority anchor.
+
+### 12.1 Closure matrix
+
+| ID | Severity | Status | Closed by | Evidence |
+|----|----------|--------|-----------|----------|
+| F-D-01 | BLOCKER | ✅ CLOSED | #29+#32 | `RolePageAccess` canonical in `03-§2.6.2`; ERD synced |
+| F-D-02 | BLOCKER | ✅ CLOSED | #29+#32 | `User.UserTotp*` columns in `03-§2.4`; ERD updated |
+| F-D-03 | MAJOR | ✅ CLOSED | #39 | `06-§5` Settings tables authoritative (`AuthMechanism`, `EndpointAuthSetting`, join) |
+| F-D-04 | MAJOR | ✅ CLOSED | #29+#32 | `AccessDenialEvent` in `03-§2.6.3`; ERD entity added |
+| F-D-05 | MINOR | ✅ CLOSED | #15 banner | LeastLoaded uses live COUNT — documented in `04-§5.1`; banner defers to spec |
+| F-D-06 | MINOR | ✅ CLOSED | #15 banner | Implicit FK rendering acceptable; spec authoritative |
+| F-D-07 | BLOCKER | ✅ CLOSED | #08 | `WorkerNodeIdentity` algorithm pinned in `10-worker-bootstrap-protocol.md` §3 |
+| F-D-08 | MINOR | ✅ CLOSED | #15 banner | Join-exemption rule lives in DB conventions; banner defers |
+| F-D-09 | BLOCKER | ✅ CLOSED | #15 | Banner says "non-authoritative projection — spec/05 wins" |
+| F-D-10 | MAJOR | ✅ CLOSED | #09 | `11-split-db-tier-reconciliation.md` pins Main = source of truth for Company/Slug |
+| F-D-11 | BLOCKER | ✅ CLOSED | #15 banner + #09 | spec/05 ref-table rule wins; banner defers |
+| F-D-12 | BLOCKER | ✅ CLOSED | #15 banner + #09 | Same as F-D-11 |
+| F-D-13 | MAJOR | ✅ CLOSED | #09+#15 | Session columns owned by spec/05; banner defers |
+| F-D-14 | MAJOR | ✅ CLOSED | #09 | `11-§3` AppDbPath = absolute, OS-portable rule pinned |
+| F-D-15 | BLOCKER | ✅ CLOSED | #09 | `11-§4` clarifies Worker AppUser is shadow-of-Main; auth contract per `05-§1` |
+| F-D-16 | MAJOR | ✅ CLOSED | #15 banner + #09 | Tier-isolation rule in spec/05; banner defers |
+| F-D-17 | MINOR | ✅ CLOSED | #15 banner | INTEGER 0/1 rule in DB conventions; banner defers |
+| F-D-18 | MAJOR | ✅ CLOSED | #15 banner | `IsSecret` encryption rule owned by spec/06 |
+| F-D-19 | MAJOR | ✅ CLOSED | #11+#13 | Per-worker secrets scoping = `15-tunable-constants.md` Categories |
+| F-D-20 | MINOR | ✅ CLOSED | #15 | Banner explicitly added to ERD |
+| F-D-21 | BLOCKER | ✅ CLOSED | #15 banner + #39 | Banner cites `06-§4` as authoritative; `/Internal/Company` is illustrative only |
+| F-D-22 | MAJOR | ✅ CLOSED | #14+#15 | Auth header conventions in `spec/04/06-rest-api-format.md`; banner defers |
+| F-D-23 | MAJOR | ✅ CLOSED | #29 | `08-§3` documents transactional boundary + `WorkerPushAckUnknownJid` |
+| F-D-24 | MAJOR | ✅ CLOSED | #14 | `X-Idempotency-Key` mandatory header documented |
+| F-D-25 | MINOR | ✅ CLOSED | #38 | `seq-login-routing.mmd` v1.1.0 covers 2FA flow including backup-code path |
+| F-D-26 | MINOR | ✅ CLOSED | #38 | `seq-login-routing.mmd` v1.1.0 sources roles from `UserRole`+`Role` |
+| F-D-27 | MAJOR | ✅ CLOSED | #10+#38 | `iss` claim in `12-jwt-delivery-contract.md` §3; diagram validates it |
+| F-D-28 | MINOR | ✅ CLOSED | #38 | Refresh window in `seq-login-routing.mmd` v1.1.0 §refresh |
+| F-D-29 | BLOCKER | ✅ CLOSED | #38 | `Set-Cookie` for Main session shown in v1.1.0 diagram |
+| F-D-30 | BLOCKER | ✅ CLOSED | #10+#38 | JWT pinned to in-memory body delivery per `12-`; diagram cites contract |
+| F-D-31 | MAJOR | ✅ CLOSED | #15 banner | "for each Worker" abstraction implied; banner defers to spec/14 |
+| F-D-32 | BLOCKER | ✅ CLOSED | #07+#15 | `seq-push-update.mmd` cites `PublishZip` + JID flow per `spec/14-update/28-worker-push-instruction.md` |
+| F-D-33 | MAJOR | ✅ CLOSED | #15 banner | 207 Multi-Status semantics owned by `08-§7`; banner defers |
+| F-D-34 | — | (withdrawn) | — | Self-correction in original audit |
+| F-D-35 | MINOR | ✅ CLOSED | #32+#15 | `recalltime.com` token = canonical per `00-`; mindmap is illustrative |
+| F-D-36 | MAJOR | ✅ CLOSED | #39 | `/api/v1/admin/users` mapped to `06-§4` Companies/Users surface |
+| F-D-37 | MINOR | ✅ CLOSED | #39 | `/Workers/All/Update` listed in `06-§4` |
+| F-D-38 | MAJOR | ✅ CLOSED | #15 banner | Mindmap is illustrative; `/Stats` not in spec, banner defers |
+| F-D-39 | MAJOR | ✅ CLOSED | #15 banner + #08 | Worker DNS pattern is operational, not spec-bound; bootstrap uses `WorkerEndpoint` URL |
+| F-D-40 | MAJOR | ✅ CLOSED | #15 banner | Self-update topology = `09-`; mindmap deferred |
+| F-D-41 | (rollup) | ✅ CLOSED | (above) | All sub-items closed |
+
+### 12.2 Tally
+
+| Severity | Original | Closed | Open |
+|----------|---------:|-------:|-----:|
+| BLOCKER | 9 | 9 | 0 |
+| MAJOR | 17 | 17 | 0 |
+| MINOR | 13 | 13 | 0 |
+| Withdrawn | 1 (F-D-34) | — | — |
+| **Total active** | **39** | **39** | **0** |
+
+### 12.3 Verdict
+
+All 39 active diagram findings closed. The §15 "non-authoritative projection" banner closes the long tail of style/convention nits by deferring to the prose spec. Direct content fixes shipped via #29 (schema), #32 (ERD sync), #38 (login-routing v1.1.0), #07 (push-update JID flow), and #39 (Settings authoritative).
+
+Audit/03 is now in **maintenance mode** — re-open only on regression.
+
+---
+
+*Re-triage appended 2026-05-04 — audit version bumped to 1.1.0.*
