@@ -42,11 +42,37 @@ run_guard() {
 
 echo "🪝 pre-commit: running linter-scripts guards..."
 
+# ------------------------------------------------------------
+# Phase 0 — fail-fast forbidden-strings gate
+# Spec writers see violations (e.g. SPEC19-NO-IMPL) BEFORE any
+# other guard noise, with the rule id and matched phrase.
+# ------------------------------------------------------------
+if [[ -f linter-scripts/check-forbidden-strings.py ]]; then
+  echo ""
+  echo "🚫 pre-commit: forbidden-strings gate (fail-fast)..."
+  if ! python3 linter-scripts/check-forbidden-strings.py; then
+    echo ""
+    echo "❌ pre-commit BLOCKED: forbidden phrase detected."
+    echo "   The rule id and matched phrase are shown above."
+    echo "   Fix the offending line, or — if the citation is legitimate —"
+    echo "   add an allowlist entry via:"
+    echo "     python3 linter-scripts/allowlist-forbidden-string.py \\"
+    echo "       --rule <RULE-ID> --reason \"<why>\" <path>"
+    echo "   Bypass (NOT recommended): git commit --no-verify"
+    exit 1
+  fi
+  echo "✅ forbidden-strings gate clean."
+fi
+
 shopt -s nullglob
 for script in linter-scripts/check-*.sh; do
   run_guard "$script" "bash"
 done
 for script in linter-scripts/check-*.py; do
+  # Already ran fail-fast above; skip the duplicate in the generic loop.
+  if [[ "$script" == "linter-scripts/check-forbidden-strings.py" ]]; then
+    continue
+  fi
   run_guard "$script" "python3"
 done
 shopt -u nullglob
