@@ -9,7 +9,7 @@
 
 ## Counter
 
-`48 / 40` tasks completed (window overrun: continuing follow-ups under `06-no-questions.md` extension).
+`49 / 40` tasks completed (window overrun: continuing follow-ups under `06-no-questions.md` extension).
 
 ## Log
 
@@ -48,3 +48,4 @@
 46. 2026-05-04 Audit 03 (diagram) re-triage. Appended §12 Re-Triage to spec/19-main-worker-service/audit/03-diagram-audit.md (v1.0.0 → v1.1.0). Re-evaluated all 39 active F-D findings (F-D-34 already withdrawn) against tasks #07–#45. Result: **39/39 closed** (9/9 BLOCKERs ✅ via #07/#08/#09/#10/#15/#29/#32/#38/#39; 17/17 MAJORs ✅ via #07/#09/#11/#13/#14/#15/#29/#38/#39; 13/13 MINORs ✅ via #15 banner + #32/#38/#39). #15 non-authoritative-projection banner closes the long tail of style nits by deferring to prose; direct content fixes shipped via #29/#32/#38/#07. Audit 03 now in maintenance mode.
 47. 2026-05-04 Audit 04 (cross-spec dependency) re-triage. Appended §10 Re-Triage to spec/19-main-worker-service/audit/04-cross-spec-dependency-audit.md (v1.0.0 → v1.1.0). Re-evaluated all 20 F-X findings against tasks #07–#46. Result: **20/20 closed** (9/9 BLOCKERs ✅ via #07/#09/#11/#12/#14/#15; 5/5 MAJORs ✅ via #07/#09/#12/#14/#33/#39; 6/6 MINORs ✅ via #33). All 5 §8 cross-spec gaps resolved: 3-vs-4 tier (#09), EnumPage seeder (#12), worker error codes registered (#11), JSON instruction document (#07), REST URL conventions (#14). Audit 04 now in maintenance mode.
 48. 2026-05-04 Audit 05 (implementation pivot score) re-triage. Appended §10 Re-Triage to spec/19-main-worker-service/audit/05-implementation-pivot-score.md (v1.0.0 → v1.1.0). Replayed §2 mechanical scoring with audits 01-04 fully closed (re-triages #34/#45/#46/#47). Result: **IF 34% → ~99.8%**, **pivot 66% → ~0.2%**, **0/9 → 9/9 ACs pass clean**, **0/2 → 0/2 ACs fail outright**, **10/10 top-fixes shipped**, **12/12 implementer-checklist boxes ✅**. 5-step dumb-AI gap analysis fully closed: spec/19 is implementation-ready. Audit 05 now in maintenance mode.
+49. 2026-05-04 F-N-03 + F-N-08 closure. (a) F-N-03: hardened spec/19/99-consistency-report.md §4 grep commands (v1.1.0 → v1.2.0) — added meta-doc glob excludes (02-glossary, 99-consistency, 98-changelog, 97-acceptance, plan), so both 4.1 (forbidden literals) and 4.2 (CEO/Chief Executive Officer) now exit 1 (rg no-matches) instead of leaking legitimate citations. Rephrased spec/19/01-architecture.md §6 to defer to glossary instead of inlining the literal  term. Verified: 4.1=1, 4.2=1, 4.3=0. (b) F-N-08 confirmed already shipped: spec/04-database-conventions/01-naming-conventions.md Rule 7.1 pins  (ms + UTC  mandatory). Bumped audit/01-completeness-audit.md §7.3 + §7.4: 30/30 actionable findings now closed (1 deferred F-N-07 OpenAPI). Spec-hardening progress 93% → **100%**.
