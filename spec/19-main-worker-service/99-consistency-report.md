@@ -18,10 +18,10 @@ Cross-link integrity, naming-convention compliance, and rule-inheritance audit f
 | `00-overview.md` | Entry point, document map | 1.1.0 | ✅ |
 | `01-architecture.md` | Topology + comms contract | 1.1.0 | ✅ |
 | `02-glossary.md` | Canonical terms (5 entries added: Quarantined, Draining, Seedable-Config, apperror, Power Admin↔PowerAdmin) | 1.1.0 | ✅ |
-| `03-main-db-schema.md` | Main SQLite schema (+EnumPage, RolePageAccess, AccessDenialEvent, MainSetting, User TOTP cols) | 1.2.0 | ✅ |
+| `03-main-db-schema.md` | Main SQLite schema (+EnumPage, RolePageAccess, AccessDenialEvent, MainSetting, User TOTP cols, **+EndpointAuthAuditEvent §2.6.4 / EndpointAuthChangeKind §2.6.5 — FU-17**) | 1.3.0 | ✅ |
 | `04-worker-routing.md` | Selection + cache + failover + strategy interfaces | 1.1.0 | ✅ |
-| `05-auth-and-2fa.md` | Auth surfaces + 2FA + bcrypt-cost env pinning + backup-code regen | 1.1.0 | ✅ |
-| `06-core-api-endpoints.md` | REST surface + per-field validation + LeastLoaded tiebreaker patch | 1.1.0 | ✅ |
+| `05-auth-and-2fa.md` | Auth surfaces + 2FA + bcrypt-cost env pinning + backup-code regen + EndpointAuth audit cite | 1.1.0 | ✅ |
+| `06-core-api-endpoints.md` | REST surface + per-field validation + LeastLoaded tiebreaker patch + §5.6 audit wired to `EndpointAuthAuditEvent` (FU-17) | 1.2.0 | ✅ |
 | `07-role-based-dashboards.md` | Roles + EnumPage + stack-agnostic guard contract | 1.1.0 | ✅ |
 | `08-error-contract.md` | Main↔Worker envelope + EnvelopeVersion/OperationId/SubCode/FieldErrors + Worker→Main §9 | 1.1.0 | ✅ |
 | `09-self-update-pointer.md` | Pointer to `spec/14-update/` + bounded sunset + deletion checklist | 1.2.0 | ✅ |
