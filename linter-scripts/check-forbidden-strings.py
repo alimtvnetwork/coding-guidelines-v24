@@ -92,8 +92,15 @@ def scan_rule(rule: dict, root: str) -> list[str]:
             try:
                 with open(full, "r", encoding="utf-8", errors="ignore") as fh:
                     for lineno, line in enumerate(fh, 1):
-                        if pattern.search(line):
-                            findings.append(f"  {rel}:{lineno}: {line.rstrip()}")
+                        match = pattern.search(line)
+                        if not match:
+                            continue
+                        findings.append({
+                            "path": rel,
+                            "line": lineno,
+                            "matched": match.group(0),
+                            "content": line.rstrip(),
+                        })
             except (OSError, UnicodeDecodeError):
                 continue
 
