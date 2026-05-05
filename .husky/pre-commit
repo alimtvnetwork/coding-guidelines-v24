@@ -26,4 +26,10 @@ if ! npm run --silent sync:check; then
   exit 1
 fi
 
+# Forbidden-strings gate + linter-scripts guards. Surfaces the rule id
+# and exact matched phrase (e.g. SPEC19-NO-IMPL) before any test noise.
+if [ -x scripts/hooks/pre-commit ]; then
+  bash scripts/hooks/pre-commit
+fi
+
 npm test
