@@ -237,8 +237,8 @@ Records every routing decision. Useful for debugging load distribution.
 | Column | Type | Null |
 |--------|------|------|
 | `WorkerSelectionStrategyId` | INTEGER | NO (PK) |
-| `WorkerSelectionStrategyCode` | TEXT | NO (`RoundRobin`, `LeastLoaded`, `Manual`) |
-| `WorkerSelectionStrategyLabel` | TEXT | NO |
+| `Code` | TEXT | NO (`RoundRobin`, `LeastLoaded`, `Manual`) |
+| `Label` | TEXT | NO |
 | `Description` | TEXT | YES |
 
 ---
