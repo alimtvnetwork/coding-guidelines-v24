@@ -244,7 +244,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | 21186-21188 consumed by `MAIN-820-01..03` Backup Encryption rotation per Phase 8 (`20-backup-encryption-and-keys.md`) |
 | _(consumed)_ | 21189-21190 consumed by `MAIN-830-01..02` Backup Endpoints wire per Phase 9 (`21-backup-endpoints.md`); rows 21191-21199 reserved for Phase 11 snapshot/restore |
 | _(consumed)_ | 21191 consumed by `MAIN-840-01 BackupApplyExhausted` per Phase 10 (`22-backup-apply-logic.md`) |
-| `MAIN-21192-21199` | Main future expansion (Phase 11 snapshot/restore + additional wire overflow) |
+| _(consumed)_ | 21192 consumed by `MAIN-840-02 SnapshotCorrupt` per Phase 11 (`23-snapshot-storage-and-restore.md`) |
+| `MAIN-21193-21199` | Main future expansion (additional snapshot/restore + wire overflow) |
 
 ---
 
@@ -341,4 +342,4 @@ Failure = build break.
 
 ---
 
-*Error codes (Main/Worker Service) v1.4.0 — 2026-05-06 (Phase 10: +`WORKER-930-01..04` Backup Apply Pipeline opening overflow window `WORKER-21200-21299`; +`MAIN-840-01 BackupApplyExhausted` consuming first slot of Phase-11-reserved `MAIN-21191`; §4 reserved-range refresh — `MAIN-21192-21199` now reserved for snapshot/restore)*
+*Error codes (Main/Worker Service) v1.5.0 — 2026-05-06 (Phase 11: +`WORKER-940-01..04` Backup Snapshot/Restore consuming `WORKER-21204-21207`; +`MAIN-840-02 SnapshotCorrupt` consuming `MAIN-21192`; §4 reserved-range refresh — `MAIN-21193-21199` reserved for future overflow)*
