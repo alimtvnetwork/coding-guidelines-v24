@@ -108,8 +108,13 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Backup.MaxBackupsPerPrimary` | **3** | count | `18-…` §2 R2 / §3.2 `AssertCapacityForBackup` | Hard ceiling enforced at backup registration. |
 | `MainWorker.Backup.LagWarningSeconds` | **900** (15m) | seconds | `18-…` §4.3 — heartbeat watcher flips `BackupAttached` → `BackupLagging`. | No auto-failover; Power Admin acts on the warning. |
 | `MainWorker.Backup.HeartbeatIntervalSeconds` | **60** | seconds | Backup → Main heartbeat cadence | Slower than primary heartbeat (`MainWorker.Heartbeat.IntervalSeconds = 30`) because backups never serve traffic. |
+| `MainWorker.Backup.SyncIntervalSeconds` | **60** | seconds | `19-…` §3.1 cron driver on the primary | Per-backup pass cadence. Lower = lower lag, higher = lower CPU/IO. |
+| `MainWorker.Backup.MaxRowsPerEnvelope` | **5000** | count | `19-…` §3.2 read query | Hard ceiling per envelope; prevents oversized blobs on bulk writes. |
+| `MainWorker.Backup.TombstoneRetentionSeconds` | **604800** (7 d) | seconds | `19-…` §4 (Shape A compaction) | Minimum age before a delivered tombstone row is reclaimed. |
+| `MainWorker.Backup.LogRetentionSeconds` | **604800** (7 d) | seconds | `19-…` §4 (Shape B compaction) | Minimum age before a delivered `BackupSyncLog` row is truncated. |
+| `MainWorker.Backup.QuarantineCompactionOverrideSeconds` | **86400** (24 h) | seconds | `19-…` §4 stall guard | When a single lagging backup blocks compaction past this, Main raises `MAIN-810-01 BackupCompactionStalled`. Operator decides next step; never auto-detaches. |
 
-Phase 7 will add `MainWorker.Backup.SyncIntervalSeconds`; Phase 8 adds key-rotation tunables; Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
+Phase 8 will add encryption / key-rotation tunables; Phase 9 adds endpoint timeouts; Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
 
 ---
 
