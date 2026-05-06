@@ -4,6 +4,18 @@
 
 ---
 
+## v2.11.0 — 2026-05-06 (Phase 12.1 — Cross-spec Backup stubs landed)
+
+**Scope:** Executes the deferred cross-spec stubs from Phase 12. No new behavior — purely wires the Backup-tier audience and endpoint catalogue into the three home specs that operators read first. Project version bump to `5.14.0`.
+
+- **`05-auth-and-2fa.md` → v2.1.0** — added §11 *Backup S2S Audience*: codifies `aud="Backup"`, mandatory `PairingId` claim, four `Backup.*` scopes, HTTP 421 + `MAIN-800-04` enforcement at the proxy layer (CODE RED — no audience downgrade). Cross-references `21-backup-endpoints.md` §3 and `12-jwt-delivery-contract.md` §13.
+- **`12-jwt-delivery-contract.md` → v1.1.0** — added §13 *Backup-tier S2S tokens*: canonical claim shape (with `sub="PairingId:..."`), 5-step verification order, comparison table vs. UI Worker JWT, and four new test cases T-10..T-13 covering audience confusion, missing `PairingId`, wrong scope, and pairing mismatch.
+- **`06-core-api-endpoints.md` → v1.3.0** — added §6 *Backup-Tier Endpoint Catalogue*: directory pointer for BE-1..BE-6 with method, path, direction, scope, and auth surface. Codifies audience isolation (BE-* MUST NOT be satisfied by `aud=worker`/`aud=main-orchestration`), 421 misroute rule, BE-1/BE-2 rate-limit override via `MainWorker.Backup.PerPairingEnvelopesPerMinute`, and `EndpointAuthAuditEvent` wiring for BE-3/BE-6.
+- **Authority chain unchanged.** `21-backup-endpoints.md` remains the single authoritative file for Backup endpoint payloads, error envelopes, and idempotency contracts; the three new sections are pointer-stubs only — they MUST NOT redefine shapes.
+- **Project version** bumped from `5.13.0` to `5.14.0` (minor — additive cross-spec wiring, no breaking changes).
+
+---
+
 ## v2.10.0 — 2026-05-06 (Phase 12 — Final consolidation)
 
 **Scope:** Closes the Backup System spec arc (Phases 7–11). No new feature surface; this phase is wiring, diagrams, acceptance criteria, and cross-spec stubs. Final version bump to `5.13.0`.
