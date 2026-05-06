@@ -217,11 +217,66 @@ Add (or merge with) the following category at SemVer `1.4.0` of `config.seed.jso
     "SelfUpdateRedirectStaleHours":{ "Type": "number",  "Default": 36,        "Min": 1,    "Max": 720 },
 
     "BootstrapRetryBackoffSec":    { "Type": "string",  "Default": "10,30,90,300", "Description": "Comma-separated; length = BootstrapRetryMaxAttempts." },
-    "BootstrapRetryMaxAttempts":   { "Type": "number",  "Default": 4,         "Min": 1,    "Max": 10 }
+    "BootstrapRetryMaxAttempts":   { "Type": "number",  "Default": 4,         "Min": 1,    "Max": 10 },
+
+    "CacheCompanyToWorkerTtlSeconds": { "Type": "number", "Default": 900, "Min": 30 },
+    "CacheWorkerRegistryTtlSeconds":  { "Type": "number", "Default": 60,  "Min": 5  }
 
   }
 }
 ```
+
+---
+
+## 4.1 Prose↔seed key alias map (Phase 13.2 — closes audit C-4)
+
+The §2 prose uses full dotted keys (e.g. `MainWorker.RateLimit.AuthEndpointsPerMinutePerIp`); the §4 JSON seed flattens them under `Categories.MainWorker.Settings` (e.g. `RateAuthPerMinutePerIp`). Both are canonical; the runtime resolver MUST treat them as the same setting via this table. A literal AI MUST NOT invent its own short forms — only the aliases below are valid.
+
+| Prose key (§2)                                            | Seed key (§4 `Settings.<key>`)   |
+|-----------------------------------------------------------|----------------------------------|
+| `MainWorker.Retry.MaxAttempts`                            | `RetryMaxAttempts`               |
+| `MainWorker.Retry.BackoffSeconds`                         | `RetryBackoffSeconds`            |
+| `MainWorker.Retry.JitterPct`                              | `RetryJitterPct`                 |
+| `MainWorker.Idempotency.KeyTtlSeconds`                    | `IdempotencyKeyTtlSeconds`       |
+| `MainWorker.Idempotency.KeyMaxLength`                     | `IdempotencyKeyMaxLength`        |
+| `MainWorker.Idempotency.StoreCleanupSeconds`              | `IdempotencyStoreCleanupSec`     |
+| `MainWorker.Heartbeat.IntervalSeconds`                    | `HeartbeatIntervalSeconds`       |
+| `MainWorker.Heartbeat.MissedThreshold`                    | `HeartbeatMissedThreshold`       |
+| `MainWorker.Heartbeat.QuarantineCooldownSeconds`          | `HeartbeatQuarantineCooldown`    |
+| `MainWorker.Heartbeat.GraceWindowSeconds`                 | `HeartbeatGraceWindowSeconds`    |
+| `MainWorker.Auth.WorkerJwtTtlSeconds`                     | `WorkerJwtTtlSeconds`            |
+| `MainWorker.Auth.JwtRefreshLeadSeconds`                   | `JwtRefreshLeadSeconds`          |
+| `MainWorker.Auth.MainSessionTtlSeconds`                   | `MainSessionTtlSeconds`          |
+| `MainWorker.Auth.MainSessionAbsoluteMaxSeconds`           | `MainSessionAbsoluteMaxSeconds`  |
+| `MainWorker.Auth.SessionSlidingExtendOnReadOnly`          | `SessionSlidingExtendOnRead`     |
+| `MainWorker.Auth.ClockSkewToleranceSeconds`               | `ClockSkewToleranceSeconds`      |
+| `MainWorker.Routing.HttpTimeoutSeconds`                   | `RoutingHttpTimeoutSeconds`      |
+| `MainWorker.Routing.HttpHandshakeTimeoutSeconds`          | `RoutingHandshakeTimeoutSec`     |
+| `MainWorker.Routing.MaxConcurrentPerWorker`               | `RoutingMaxConcurrentPerNode`    |
+| `MainWorker.RateLimit.AuthEndpointsPerMinutePerIp`        | `RateAuthPerMinutePerIp`         |
+| `MainWorker.RateLimit.WorkerEndpointsPerMinutePerToken`   | `RateWorkerPerMinutePerToken`    |
+| `MainWorker.RateLimit.OtherAuthenticatedPerMinutePerUser` | `RateOtherPerMinutePerUser`      |
+| `WorkerPushUpdate.MaxRunDurationSeconds`                  | `PushUpdateMaxRunSeconds`        |
+| `WorkerPushUpdate.HandoffTimeoutSeconds`                  | `PushUpdateHandoffTimeoutSec`    |
+| `WorkerPushUpdate.InstructionRetentionDays`               | `PushUpdateRetentionDays`        |
+| `WorkerPushUpdate.IssuedSkewSeconds`                      | `PushUpdateIssuedSkewSec`        |
+| `MainWorker.SelfUpdate.RedirectStaleHours`                | `SelfUpdateRedirectStaleHours`   |
+| `MainWorker.Bootstrap.RetryBackoffSeconds`                | `BootstrapRetryBackoffSec`       |
+| `MainWorker.Bootstrap.RetryMaxAttempts`                   | `BootstrapRetryMaxAttempts`      |
+| `MainWorker.Cache.CompanyToWorkerTtlSeconds`              | `CacheCompanyToWorkerTtlSeconds` |
+| `MainWorker.Cache.WorkerRegistryTtlSeconds`               | `CacheWorkerRegistryTtlSeconds`  |
+
+Linter T3 (§6) MUST validate this alias table is exhaustive — every §2 prose row appears here and every §4 settings key appears here. Adding a tunable means updating §2, §4, and §4.1 in the same commit.
+
+## 4.2 Caching tunables (Phase 13.2 — closes audit M-2 / M-3)
+
+The Main-side caches that previously hard-coded TTLs in `01-architecture.md` §5 are pinned here so a literal AI does not invent values. These govern in-process caches (distinct from the cross-tier protocol budgets above) but live under the same `MainWorker` category for single-source-of-truth.
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Cache.CompanyToWorkerTtlSeconds`      | **900** (15 m) | seconds | `01-architecture.md` §5 — `CompanyId → WorkerNodeId` cache | Invalidate on worker reassignment. |
+| `MainWorker.Cache.WorkerRegistryTtlSeconds`       | **60**         | seconds | `01-architecture.md` §5 — Worker registry | Invalidate on worker register/deregister. |
+| `MainWorker.Cache.RecentCompanyPerUserTtlSeconds` | **= `MainWorker.Auth.MainSessionTtlSeconds`** | seconds | `01-architecture.md` §5 — Per-user recent-company | Invalidate on logout. Tied to session TTL by definition. |
 
 ---
 

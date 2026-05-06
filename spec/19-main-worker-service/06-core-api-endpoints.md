@@ -185,15 +185,16 @@ CREATE TABLE AuthMechanism (
 );
 
 CREATE TABLE EndpointAuthSetting (
-    EndpointAuthSettingId INTEGER PRIMARY KEY AUTOINCREMENT,
-    EndpointPathPattern   TEXT NOT NULL UNIQUE,           -- e.g. "/API/V1/Status", "/API/V1/Company/*"
-    HttpMethodMask        TEXT NOT NULL,                  -- CSV of GET|POST|PATCH|PUT|DELETE or "*"
-    IsEnabled             INTEGER NOT NULL,               -- 1 = override active, 0 = ignore (fallback to default)
-    UpdatedByUserId       INTEGER NOT NULL REFERENCES User(UserId),
-    UpdatedAt             TEXT NOT NULL,                  -- ISO-8601 UTC per spec/04 Rule 7.1
-    Notes                 TEXT NULL,
-    Comments              TEXT NULL,
-    Description           TEXT NULL
+    EndpointAuthSettingId       INTEGER PRIMARY KEY AUTOINCREMENT,
+    EndpointPathPattern         TEXT NOT NULL UNIQUE,           -- e.g. "/API/V1/Status", "/API/V1/Company/*"
+    HttpMethodMask              TEXT NOT NULL,                  -- CSV of GET|POST|PATCH|PUT|DELETE or "*"
+    IsEnabled                   INTEGER NOT NULL,               -- 1 = override active, 0 = ignore (fallback to default)
+    UpdatedByUserDirectoryId    INTEGER NOT NULL REFERENCES UserDirectory(UserDirectoryId),  -- v2.1.0: legacy `User` table removed; routing index is the canonical actor reference (see `03-main-db-schema.md` §2.4)
+    UpdatedByUserEmail          TEXT NOT NULL,                  -- snapshotted at write time so audit/listing survives `UserDirectory` deletion
+    UpdatedAt                   INTEGER NOT NULL,               -- Epoch seconds, UTC (Rule 7.1 v2)
+    Notes                       TEXT NULL,
+    Comments                    TEXT NULL,
+    Description                 TEXT NULL
 );
 
 CREATE TABLE EndpointAuthSettingMechanism (
@@ -243,7 +244,7 @@ Semantics:
 | `Notes` | optional | Free-text. Nullable. |
 | `Description` | optional | Free-text. Nullable. |
 
-Response: `200 OK` with the resolved row (post-write) including `EndpointAuthSettingId`, `UpdatedByUserId`, `UpdatedAt` (server-stamped). 
+Response: `200 OK` with the resolved row (post-write) including `EndpointAuthSettingId`, `UpdatedByUserDirectoryId`, `UpdatedByUserEmail`, `UpdatedAt` (server-stamped, epoch seconds UTC). 
 
 **Idempotency:** mandatory `X-Idempotency-Key` per §1. Two PATCHes with the same key + identical body within the TTL window (`MainWorker.Idempotency.KeyTtlSeconds`, see `15-tunable-constants.md`) return the original response without re-writing.
 
@@ -279,7 +280,8 @@ The server MUST reject the PATCH with `400 ValidationFailed` envelope (per `08-e
       "HttpMethodMask": "GET,PATCH",
       "IsEnabled": true,
       "AcceptedMechanisms": ["Session", "Jwt"],
-      "UpdatedByUserId": 1,
+      "UpdatedByUserDirectoryId": 1,
+      "UpdatedByUserEmail": "admin@example.com",
       "UpdatedAt": "2026-05-04T08:15:00Z",
       "Notes": null,
       "Description": "Tightened from default."
@@ -303,7 +305,8 @@ Field stamping rules:
 | `HttpMethodMaskOld` / `IsEnabledOld` / `OldMechanismsJson` | Read from the prior row inside the same transaction (`SELECT … FOR UPDATE` semantics; SQLite uses `BEGIN IMMEDIATE`). NULL when `ChangeKind=Create`. |
 | `HttpMethodMaskNew` / `IsEnabledNew` / `NewMechanismsJson` | Post-write values. `NewMechanismsJson` MUST be a JSON array sorted ascending by `AuthMechanismCode` so diffs are stable. |
 | `ChangeKindId` | Resolved per the rules in `03-main-db-schema.md` §2.6.5 (`Create` / `Replace` / `SoftDisable` / `Reenable`). |
-| `UpdatedByUserId` | The authenticated Power Admin (same value stamped on the parent row's `UpdatedByUserId`). |
+| `UpdatedByUserDirectoryId` | The authenticated Power Admin (same `UserDirectoryId` stamped on the parent row's `UpdatedByUserDirectoryId`). |
+| `UpdatedByUserEmail` | Snapshot of the actor's email (same value stamped on the parent row). Survives later `UserDirectory` deletion. |
 | `CorrelationId` | The inbound `X-Correlation-Id` header. The middleware MUST reject the PATCH if absent (per `spec/04-database-conventions/06-rest-api-format.md`). |
 | `IdempotencyKey` | The inbound `X-Idempotency-Key` header. Unique-indexed (per §2.6.4) — guarantees idempotent replays do not double-write the audit row. |
 | `OccurredAt` | Server clock, equals the parent row's `UpdatedAt`. |
