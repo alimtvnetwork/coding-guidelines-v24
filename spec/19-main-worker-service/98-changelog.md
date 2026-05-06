@@ -4,6 +4,31 @@
 
 ---
 
+## v2.1.0 — 2026-05-06 (Phase 3 — Move Users off Main)
+
+**Scope:** Per locked decision D5, Main becomes credential-blind. All identity, password, and 2FA state moves to the assigned Worker's split-DB App tier. Spec-only; no runtime code touched.
+
+- `03-main-db-schema.md` → **v2.1.0**:
+  - **REMOVED** `User` table and all auth columns (`UserPasswordHash`, `UserPasswordSalt`, `UserTotpSecret`, `UserTotpEnrolledAt`, `UserTotpBackupCodesHash`).
+  - **REMOVED** `UserRole` join table (assignments now live on Worker as `AppUserRole`).
+  - **ADDED** `UserDirectory` (§2.4) — routing-only index `(UserDirectoryId, UserEmail, CompanyId, WorkerNodeId, CreatedAt, LastSeenAt, Description)`. Carries no secrets and no PII beyond email.
+  - `AccessDenialEvent` (§2.6.3): `UserId` FK replaced by `UserDirectoryId` (nullable) + snapshotted `ActorEmail`. `AccessItemId` FK retained (catalog stays on Main).
+  - `EndpointAuthAuditEvent` (§2.6.4): `UpdatedByUserId` FK replaced by `UpdatedByUserDirectoryId` + snapshotted `UpdatedByUserEmail`.
+  - Indexes: `IX_User_CompanyId` removed; new `IX_UserDirectory_CompanyId`, `IX_UserDirectory_WorkerNodeId`, `UX_UserDirectory_UserEmail`. `IX_EndpointAuthAuditEvent_Actor_At` re-pointed to `UpdatedByUserDirectoryId`.
+  - §4 "What Main DB does NOT store" — added explicit invariant that Main carries no password/TOTP/role-assignment material; grep over Main for `password|totp|secret|hash` MUST return zero column hits.
+  - §5 "Migration Notes" — added v2.1.0 forward-only migration script that backfills `UserDirectory`, forwards credentials to each Worker via `MigrateLegacyUsers` bootstrap instruction, and deletes Main `User`/`UserRole` rows only after Worker ACK.
+- `05-auth-and-2fa.md` → **v2.0.0**: Main rewritten as credential-blind reverse proxy. New §2.1 (proxy flow with constant-time email-miss handling and post-forward buffer-zero), §2.2 (Worker mints JWT; `iss` flips to Worker URL), §3 (password storage moved to Worker `AppUser`), §4 (TOTP storage moved to Worker), §5–§6 (sign-up/sign-in flows reframed as Main → `Worker /Auth/InternalSignUp` / `/Auth/InternalSignIn` over the credential-proxy channel). `JwtExpiresAt` example flipped to epoch seconds per Rule 7.1 v2.
+- `11-split-db-tier-reconciliation.md` → **v1.1.0**: Main §4 — `User` and `UserRole` struck through with the v2.1.0 removal note; `UserDirectory` added to Root tier; `Role`, `AccessItem`, `RoleAccessItem` reaffirmed as Settings-tier **catalogs** (kept on Main, mirrored read-only to each Worker). Worker §5 — `AppUser` annotated as authoritative identity store, `AppUserRole` added as the user→role join.
+
+**Cross-spec impact:**
+- Any service reading `MainDB.User.*` MUST switch to either (a) `MainDB.UserDirectory` (routing only) or (b) `WorkerDB.AppUser` (credentials, identity).
+- The `/API/V1/Auth/RefreshWorkerToken` endpoint on Main is **deprecated**; React MUST refresh JWTs by calling Worker `/API/V1/Auth/RefreshToken` directly.
+- Audit consumers joining `EndpointAuthAuditEvent` on `User.UserId` MUST switch to `UserDirectory.UserDirectoryId` (or fall back to `UpdatedByUserEmail` for hard-deleted directory rows).
+
+**Open questions carried into Phase 4:** OQ-A1 (cascading semantics — union vs hierarchy), OQ-A2 (cache-bin tech), OQ-A3 (zip password derivation), OQ-A4 (snapshot retention).
+
+---
+
 ## v2.0.0 — 2026-05-06 (Phase 2 — DB convention overhaul)
 
 **Scope:** Apply the global DB convention upgrades from `spec/04-database-conventions/` v2 to the Main schema. Spec-only; no runtime code touched.
