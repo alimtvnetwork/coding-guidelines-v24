@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.15.0 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
+**Version:** 5.17.0 (Phase 12.4 — OQ-12-1 / OQ-12-2 dispositions formalised in `12-jwt-delivery-contract.md` §11)
 **Updated:** 2026-05-06
 
 ---

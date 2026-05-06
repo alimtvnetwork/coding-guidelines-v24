@@ -1,7 +1,7 @@
 # 12 — JWT Delivery Contract (XSS-Safe)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-12, F-D-04, F-B-05 (top-10 fix #3). Closes AC-4.
@@ -177,10 +177,73 @@ Tracked as follow-up FU-7 / FU-8 (extends §8 list of `11-split-db-tier-reconcil
 
 ---
 
-## 11. Open Questions (logged, non-blocking)
+## 11. Open Questions — formalised dispositions
 
-- **OQ-12-1** Should refresh use a separate `RefreshToken` cookie (rotation pattern) instead of relying on Main session cookie? Inferred: defer to v2.0; current model is simpler and the Main session cookie already has all the necessary properties.
-- **OQ-12-2** Service-worker assisted token storage (off-thread)? Inferred: out of scope for v1.0 — adds attack surface.
+This section formalises the dispositions of v1.0 open questions so dumb-AI implementers do not re-litigate them mid-implementation. Each disposition is **binding** for v1.0; the Future-Work block at the bottom names what a v2.0 spec MUST cover if a disposition is reopened.
+
+### 11.1 OQ-12-1 — Separate `RefreshToken` cookie (rotation pattern)
+
+**Question.** Should the Worker-JWT refresh path issue a dedicated `RefreshToken` cookie (rotated on every refresh) instead of relying on the long-lived Main session cookie?
+
+**Disposition for v1.0:** ❌ **Deferred to v2.0. Implementers MUST NOT introduce a `RefreshToken` cookie in v1.0.**
+
+**Rationale.**
+
+| Concern | Main session cookie (chosen for v1.0) | `RefreshToken` cookie (deferred) |
+|---|---|---|
+| Refresh authority | Main session cookie already proves the user is signed in; refresh is a one-line lookup | Adds a parallel auth surface — cookie + DB row + rotation table |
+| Theft window | Cookie carries the same risk profile already accepted in §3 | Adds a second long-lived secret with a different lifetime — twice the rotation surface to audit |
+| Server state | Zero new tables | Requires `RefreshTokenRotation` table with `(TokenHash, IssuedAtEpoch, RotatedFromHash, RevokedAtEpoch)`, sweeper, and replay-detection family of error codes |
+| Sign-out-everywhere | Already works via `/Auth/SignOutAll` invalidating the session row | Requires cascading revocation across rotation chain |
+| CODE RED footprint | Adds 0 functions | Adds ≥4 functions (issue / rotate / revoke / detect-replay), each must obey the 8–15 line + 0-nesting + ≤2-operand caps |
+| What it would actually buy | nothing in the current threat model — the Main session cookie's TTL is already the controlling factor | Defence against a stolen refresh token being usable for the full session lifetime; only matters once we ship long-lived "remember me" sessions |
+
+**Trigger conditions that would force OQ-12-1 to be reopened in v2.0** (any one is sufficient):
+
+1. The product introduces opt-in **"remember me"** sessions whose lifetime exceeds `MainWorker.Auth.MaxSessionLifetimeSeconds` (currently uncapped — see §11.3 future-work).
+2. A formal threat model adopts **session-hijack containment** as a v2.0 requirement (currently it is not — XSS containment per §3 + CSP per §5 is the chosen mitigation).
+3. Compliance regime (e.g. SOC2 control change) requires **per-refresh credential rotation evidence** in the audit log.
+
+**Forbidden v1.0 implementations** (any of these is a CODE RED violation):
+
+- ❌ Adding a `Set-Cookie: RefreshToken=…` header anywhere in the codebase.
+- ❌ Persisting refresh tokens in any storage (DB row, KV, or file).
+- ❌ Rotating the Main session cookie value on `/Auth/RefreshWorkerToken` (the cookie value MUST be stable for the session's lifetime; only the in-memory Worker JWT rotates).
+- ❌ Inventing a `WORKER-100-04 REFRESH_REPLAY` style error code "for future use" — error codes are added when the feature ships, not before.
+
+### 11.2 OQ-12-2 — Service-worker-assisted token storage (off-thread)
+
+**Question.** Should the Worker JWT live in a Service Worker's memory (off-main-thread, inaccessible to page scripts) instead of in React state?
+
+**Disposition for v1.0:** ❌ **Rejected. Out of scope for v1.0 and not on the v2.0 roadmap.**
+
+**Rationale.**
+
+| Concern | React state (chosen) | Service Worker storage (rejected) |
+|---|---|---|
+| XSS access path | `window.tokenRef.current` reachable from any same-origin script | `postMessage` to SW is reachable from any same-origin script — same blast radius |
+| Reload survival | None (forces re-resolve — a feature, per §3) | Survives reload (re-introduces the persistence we explicitly chose against) |
+| Browser support matrix | 100% | SW lifecycle and termination behavior varies across browsers; non-trivial debugging surface |
+| Network interception | None | SW intercepts `fetch` — every API call now traverses an extra worker boundary |
+| What it would actually buy | nothing in the current threat model — the SW is not a privilege boundary against same-origin XSS | A perceived "off-thread" benefit that the spec authors of `12` consider security theatre absent a cross-origin isolation story |
+
+**Trigger conditions that would force OQ-12-2 to be reopened:**
+
+1. Adoption of a formal **cross-origin-isolated** delivery model (`Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy: require-corp`) where the SW can be promoted to a privilege boundary.
+2. Browser standards landing a **"trusted SW token store"** primitive that is genuinely unreachable from page script (does not currently exist).
+
+Until **both** trigger conditions hold, this OQ stays rejected — re-opening it without them is a CODE RED violation of "no swallowed reasons" (the swallowed reason being "it sounds more secure").
+
+### 11.3 Future-work catalogue (v2.0 prerequisites)
+
+If/when the product reopens §11.1 or §11.2, the v2.0 spec MUST specify, in this order:
+
+1. **`MainWorker.Auth.MaxSessionLifetimeSeconds`** tunable in `15-tunable-constants.md` §2.4 (currently uncapped — adding a cap is the precondition for "remember me").
+2. **Threat-model document** at `spec/19-main-worker-service/24-threat-model.md` (does not yet exist — placeholder slot 24 is reserved by this clause).
+3. Net-new error-code family in `13-error-codes.md` for the chosen rotation/revocation flow.
+4. Acceptance-criterion row in `97-acceptance-criteria.md` proving the new path is actually exercised in CI.
+
+**Until that v2.0 spec lands, the four "Forbidden v1.0 implementations" in §11.1 and the two "trigger conditions" in §11.2 are the binding contract.**
 
 ---
 
@@ -193,7 +256,7 @@ Tracked as follow-up FU-7 / FU-8 (extends §8 list of `11-split-db-tier-reconcil
 
 ---
 
-*JWT delivery contract v1.0.0 — 2026-05-04*
+*JWT delivery contract v1.2.0 — 2026-05-06 (Phase 12.4 — §11 OQ-12-1 / OQ-12-2 dispositions formalised: forbidden v1.0 patterns + v2.0 trigger conditions + future-work catalogue).*
 
 ---
 
