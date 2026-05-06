@@ -1,7 +1,7 @@
 # 23 — Snapshot Storage and Restore Flow
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-06
 **Status:** Authoritative (spec-only, per plan §Mode)
 **Resolves:** Locked decision **D14** (date-by-date full snapshot storage on backup; main-controlled restore by date). Closes open question **OQ-A4** — default snapshot retention adopted at **30 days rolling**.
