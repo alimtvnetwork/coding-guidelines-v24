@@ -121,6 +121,10 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-930-02` | `21201` | `UntrackedSourceTable` | "`SourceTable` not in `AppBackupTrackedTable` allowlist (V5)." | 422 | `22-backup-apply-logic.md` §3 |
 | `WORKER-930-03` | `21202` | `UnknownSyncOpCode` | "`SyncOpCode` not in {`Insert`,`Update`,`Delete`} (Stage-4 guard)." | 422 | `22-backup-apply-logic.md` §4 |
 | `WORKER-930-04` | `21203` | `ApplyTransactionTimeout` | "Stage-4 TX exceeded `MainWorker.Backup.Apply.TransactionTimeoutSeconds`." | 504 | `22-backup-apply-logic.md` §4 |
+| `WORKER-940-01` | `21204` | `SnapshotQuiesceTimeout` | "B2 quiesce wait exceeded `Snapshot.QuiesceTimeoutSeconds`." | 504 | `23-snapshot-storage-and-restore.md` §3 |
+| `WORKER-940-02` | `21205` | `RestoreImportFailed` | "BE-6 R7 offline import write failed." | 500 | `23-snapshot-storage-and-restore.md` §8 |
+| `WORKER-940-03` | `21206` | `SnapshotBuildTimeout` | "B3 `sqlite3_backup_step` exceeded `Snapshot.MaxBuildSeconds`." | 504 | `23-snapshot-storage-and-restore.md` §3 |
+| `WORKER-940-04` | `21207` | `SnapshotSealFailed` | "B4 AES-256-zip seal raised IO/crypto error." | 500 | `23-snapshot-storage-and-restore.md` §3 |
 
 ---
 
@@ -215,6 +219,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
 | `MAIN-840-01` | `21191` | `BackupApplyExhausted` | "`MaxRetriesPerEnvelope` exceeded for one `EnvelopeId`; surfaced via BE-5 Health." | n/a | `22-backup-apply-logic.md` §6.2 |
+| `MAIN-840-02` | `21192` | `SnapshotCorrupt` | "Restore R3 SHA-256 mismatch against `BackupSnapshotCatalog.Sha256Hex`; surfaced via BE-5." | n/a | `23-snapshot-storage-and-restore.md` §7 |
 
 ---
 
@@ -225,8 +230,9 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | `WORKER-21090-21091` consumed by `WORKER-900-01 RoleCacheRecompileFailed` and `WORKER-900-02 EmptyEffectiveAccessSet` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | _(consumed)_ | `WORKER-21092-21094` consumed by `WORKER-910-01..03` Backup Sync per Phase 7 (`19-incremental-backup-sync.md`) |
 | _(consumed)_ | `WORKER-21095-21099` consumed by `WORKER-920-01..05` Backup Encryption per Phase 8 (`20-backup-encryption-and-keys.md`) |
-| _(consumed)_ | `WORKER-21200-21203` consumed by `WORKER-930-01..04` Backup Apply per Phase 10 (`22-backup-apply-logic.md`); `WORKER-21204-21299` reserved for apply-pipeline overflow |
-| `WORKER-21204-21299` | Worker future expansion (apply-pipeline overflow + future overflow windows per §1 Slot-overflow rule) |
+| _(consumed)_ | `WORKER-21200-21203` consumed by `WORKER-930-01..04` Backup Apply per Phase 10 (`22-backup-apply-logic.md`) |
+| _(consumed)_ | `WORKER-21204-21207` consumed by `WORKER-940-01..04` Backup Snapshot/Restore per Phase 11 (`23-snapshot-storage-and-restore.md`) |
+| `WORKER-21208-21299` | Worker future expansion (snapshot/restore overflow + future overflow windows per §1 Slot-overflow rule) |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
@@ -238,7 +244,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | 21186-21188 consumed by `MAIN-820-01..03` Backup Encryption rotation per Phase 8 (`20-backup-encryption-and-keys.md`) |
 | _(consumed)_ | 21189-21190 consumed by `MAIN-830-01..02` Backup Endpoints wire per Phase 9 (`21-backup-endpoints.md`); rows 21191-21199 reserved for Phase 11 snapshot/restore |
 | _(consumed)_ | 21191 consumed by `MAIN-840-01 BackupApplyExhausted` per Phase 10 (`22-backup-apply-logic.md`) |
-| `MAIN-21192-21199` | Main future expansion (Phase 11 snapshot/restore + additional wire overflow) |
+| _(consumed)_ | 21192 consumed by `MAIN-840-02 SnapshotCorrupt` per Phase 11 (`23-snapshot-storage-and-restore.md`) |
+| `MAIN-21193-21199` | Main future expansion (additional snapshot/restore + wire overflow) |
 
 ---
 
@@ -335,4 +342,4 @@ Failure = build break.
 
 ---
 
-*Error codes (Main/Worker Service) v1.4.0 — 2026-05-06 (Phase 10: +`WORKER-930-01..04` Backup Apply Pipeline opening overflow window `WORKER-21200-21299`; +`MAIN-840-01 BackupApplyExhausted` consuming first slot of Phase-11-reserved `MAIN-21191`; §4 reserved-range refresh — `MAIN-21192-21199` now reserved for snapshot/restore)*
+*Error codes (Main/Worker Service) v1.5.0 — 2026-05-06 (Phase 11: +`WORKER-940-01..04` Backup Snapshot/Restore consuming `WORKER-21204-21207`; +`MAIN-840-02 SnapshotCorrupt` consuming `MAIN-21192`; §4 reserved-range refresh — `MAIN-21193-21199` reserved for future overflow)*
