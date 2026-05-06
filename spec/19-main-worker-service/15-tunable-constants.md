@@ -266,4 +266,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.5.0 — 2026-05-06 (Phase 6: §2.11 Backup tunables — MaxBackupsPerPrimary, LagWarningSeconds, HeartbeatIntervalSeconds)*
+*Tunable constants v1.6.0 — 2026-05-06 (Phase 7: §2.11 extended — SyncIntervalSeconds, MaxRowsPerEnvelope, TombstoneRetentionSeconds, LogRetentionSeconds, QuarantineCompactionOverrideSeconds)*
