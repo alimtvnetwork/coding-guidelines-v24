@@ -112,6 +112,9 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Linter rules `BACKUP-*` and `DB-SYNCOP-*` enforced in CI | `96-linter-audit.md` (Phase-12 promotion) | CI test: linter-scripts run as part of standards enforcement; failure blocks merge |
 | Pinned snapshots carry mandatory audit trail | `23-snapshot-storage-and-restore.md` §6.1 + `BACKUP-SNAP-005` | Negative test: any `BackupSnapshotCatalog` row with `Status='Pinned'` AND (`PinReason` NULL/empty OR `PinnedAtEpoch` NULL OR `PinnedByActor` NULL) MUST fail linter; positive test: pin via BE-3 sub-route writes a paired `EndpointAuthAuditEvent` row in the same transaction. |
 
+| Refresh path uses Main session cookie only — no `RefreshToken` cookie in v1.0 | `12-jwt-delivery-contract.md` §11.1 | Negative test: grep for `Set-Cookie:.*RefreshToken` across the codebase MUST return zero matches; positive test: `/Auth/RefreshWorkerToken` succeeds when only the Main session cookie is present and fails (401) when it is absent. |
+| Worker JWT never reaches a Service Worker in v1.0 | `12-jwt-delivery-contract.md` §11.2 | Negative test: no `navigator.serviceWorker.controller.postMessage(*token*)` call sites; SW registrations (if any) MUST be inert for token traffic. |
+
 ---
 
-*Acceptance criteria v1.3.0 — 2026-05-06 (Phase 12.3 — AC-3 worker-selection row tightened: default pinned + allow-list startup guard per OQ-2).*
+*Acceptance criteria v1.4.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 disposition tests added).*

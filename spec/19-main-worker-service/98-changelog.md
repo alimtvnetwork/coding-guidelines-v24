@@ -4,6 +4,20 @@
 
 ---
 
+## v2.14.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 dispositions formalised)
+
+**Scope:** Promotes the two open questions in `12-jwt-delivery-contract.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Project version bump to `5.17.0`.
+
+- **`12-jwt-delivery-contract.md` → v1.2.0**
+  - §11 retitled *Open Questions — formalised dispositions* (was *logged, non-blocking*).
+  - §11.1 OQ-12-1: rationale matrix (refresh authority, theft window, server state, sign-out-everywhere, CODE RED footprint, what-it-buys), 3 trigger conditions for v2.0 reopen, 4 forbidden v1.0 patterns (`Set-Cookie: RefreshToken`, refresh-token persistence, Main-cookie-value rotation on refresh, premature error-code allocation).
+  - §11.2 OQ-12-2: same matrix shape, 2 trigger conditions (cross-origin isolation + browser primitive), CODE RED reasoning ("sounds more secure" is a swallowed reason).
+  - §11.3 Future-work catalogue: 4 ordered prerequisites for any v2.0 reopen — `MainWorker.Auth.MaxSessionLifetimeSeconds` cap, threat-model spec slot 24 reserved, error-code family allocation, AC row.
+- **`97-acceptance-criteria.md` → v1.4.0** — Two new criteria: (a) grep-test for forbidden `Set-Cookie: RefreshToken`, (b) grep-test for SW token postMessage call sites. Both negative tests + positive counterparts.
+- **No new tables, no schema migrations, no error codes.** Per the formalised disposition itself, allocating "WORKER-100-04 REFRESH_REPLAY for future use" is itself a CODE RED violation — error codes are added when the feature ships.
+
+---
+
 ## v2.13.0 — 2026-05-06 (Phase 12.3 — OQ-2 resolved: default worker-selection strategy)
 
 **Scope:** Resolves Phase-1 OQ-2 by promoting `LeastLoaded` from "recommended" to authoritative default with a full rationale block. Project version bump to `5.16.0`.
