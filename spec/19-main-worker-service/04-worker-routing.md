@@ -1,7 +1,9 @@
 # 04 — Worker Routing
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
+
+> **v1.2.0 (Phase 4 — Backup nodes excluded; "Region" UI label):** The eligibility filter (§1.4) gains a positive guard `IsPrimary(node)` which requires `WorkerNode.IsBackup = 0`. Backup nodes (D8/D9) MUST NEVER appear in any selection strategy's candidate set, including `Manual` (a Power Admin attempting to route to a backup gets `WORKER-300-04 BackupNotRoutable`). RoundRobin cursor walks `WorkerNode.Sequence ASC` over `IsBackup = 0` rows only. The dashboard column previously labelled "Worker" is renamed to **"Region"** in UI copy; the underlying field name stays `WorkerNode` everywhere in code and APIs.
 
 How the Main Server picks which Worker handles a new tenant, caches that decision, and recovers when a Worker fails.
 
