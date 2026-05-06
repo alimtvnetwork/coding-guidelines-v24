@@ -4,6 +4,13 @@
 
 ---
 
+## v5.24.0 — 2026-05-06 (Phase 13.3 — golden-file fixtures (endpoints, errors, JWT) + 06-/08- authority pointers)
+
+**Scope:** Version bump (`5.23.0` → `5.24.0`). Phase 13.3 — golden-file fixtures (endpoints, errors, JWT) + 06-/08- authority pointers.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.23.0 — 2026-05-06 (Phase 13.3 — diagrams refresh (4-tier framing, UserDirectory/AppUser split, backup-node lane in routing seq, EndpointAuthSetting FK))
 
 **Scope:** Version bump (`5.22.0` → `5.23.0`). Phase 13.3 — diagrams refresh (4-tier framing, UserDirectory/AppUser split, backup-node lane in routing seq, EndpointAuthSetting FK).
