@@ -4,6 +4,13 @@
 
 ---
 
+## v5.22.0 — 2026-05-06 (spec)
+
+**Scope:** Version bump (`5.21.0` → `5.22.0`). spec.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.21.0 — 2026-05-06 (Phase 13.1 — Blind-AI prose hardening (4 fixes; 92→100); linter-pack VERSION reconciled to 3.79.0; cross-link audit + memory scan green)
 
 **Scope:** Version bump (`5.20.0` → `5.21.0`). Phase 13.1 — Blind-AI prose hardening (4 fixes; 92→100); linter-pack VERSION reconciled to 3.79.0; cross-link audit + memory scan green.

@@ -69,20 +69,17 @@ Backup registration extends the existing Worker bootstrap protocol (`10-worker-b
 
 ### 3.1 Request additions
 
-```json
+The base bootstrap request body is **canonically defined in `10-worker-bootstrap-protocol.md` §3.1** (fields `WorkerNodeDisplayName`, `WorkerEndpointPublic`, `WorkerVersionPin`, `BootInstanceUlid`, `Description`). A backup node MUST send the same body and append exactly two extra fields:
+
+```jsonc
 {
-  "WorkerNodeCode": "w7-eu-west-1b-backup",
-  "WorkerNodeName": "EU-West Backup of w7",
-  "AdvertisedHost": "10.20.30.41",
-  "AdvertisedPort": 8443,
-  "WorkerVersionCode": "5.13.0",
-  "Capabilities": ["BackupReceiver"],
-  "IsBackup": true,
-  "BackupOfWorkerIdentity": "w7-eu-west-1a"
+  // ... all base fields per `10-worker-bootstrap-protocol.md` §3.1 ...
+  "IsBackup":                true,
+  "BackupOfWorkerIdentity":  "<WorkerNodeIdentity of the primary>"
 }
 ```
 
-`BackupOfWorkerIdentity` is the **`WorkerNodeIdentity`** of the primary, not the numeric ID — the booting backup does not yet know Main's PKs. Main resolves it server-side.
+`BackupOfWorkerIdentity` is the **`WorkerNodeIdentity`** of the primary (per `03-main-db-schema.md` §2.1), not the numeric ID — the booting backup does not yet know Main's PKs. Main resolves it server-side. Field names from earlier drafts (`WorkerNodeCode`, `WorkerNodeName`, `AdvertisedHost`, `AdvertisedPort`, `WorkerVersionCode`, `Capabilities[]`) are obsolete; use the `10-` §3.1 names verbatim.
 
 ### 3.2 Main-side acceptance procedure (CODE RED, ≤15 lines, positive guards)
 
