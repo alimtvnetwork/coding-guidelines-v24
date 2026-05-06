@@ -24,7 +24,10 @@
 # --- Rule: stale repo slug (pre-renumber references) ---
 [[rule]]
 id = "STALE-REPO-SLUG"
-description = "Pre-renumber repo slug (coding-guidelines-v1..v14). Current canonical slug is coding-guidelines-v20."
+description = "Pre-renumber repo slug (pre-renumber major versions). Current canonical slug is the latest major version."
+summary_description = "Pre-renumber repo slug references. See TOML for exact pattern."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
+summary_replacement = "<redacted: current canonical slug>"
 pattern = 'coding-guidelines-v(1[0-4]|[1-9])(?!\.\d)\b'
 replacement = "coding-guidelines-v20"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-REPO-SLUG --emit-fix-command | bash"
@@ -58,7 +61,10 @@ allowlist = [
 # --- Rule: stale module path (movie-cli v1 references) ---
 [[rule]]
 id = "STALE-MODULE-PATH"
-description = "Stale module path reference (movie-cli-v1). Current canonical namespace is movie-cli-v2."
+description = "Stale module path reference (legacy v1 namespace). Current canonical namespace is the v2 module path."
+summary_description = "Stale module path reference. See TOML for exact pattern."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
+summary_replacement = "<redacted: current canonical module path>"
 pattern = 'movie-cli-v1\b'
 replacement = "movie-cli-v2"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-MODULE-PATH --emit-fix-command | bash"
@@ -77,7 +83,10 @@ allowlist = [
 # --- Rule: legacy CDN domain references ---
 [[rule]]
 id = "LEGACY-CDN-DOMAIN"
-description = "Legacy CDN domain (cdn.riseup-asia.com). Current canonical domain is cdn.riseup.asia."
+description = "Legacy CDN domain reference. Current canonical CDN domain is the renamed host."
+summary_description = "Legacy CDN domain reference. See TOML for exact pattern."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
+summary_replacement = "<redacted: current canonical CDN domain>"
 pattern = 'cdn\.riseup-asia\.com'
 replacement = "cdn.riseup.asia"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule LEGACY-CDN-DOMAIN --emit-fix-command | bash"
