@@ -228,7 +228,7 @@ Records every routing decision. Useful for debugging load distribution.
 | `CompanyId` | INTEGER | NO (FK) |
 | `WorkerNodeId` | INTEGER | NO (FK) |
 | `WorkerSelectionStrategyId` | INTEGER | NO (FK → `WorkerSelectionStrategy`) |
-| `WorkerSelectionEventAt` | TEXT | NO |
+| `WorkerSelectionEventAt` | INTEGER | NO | Epoch seconds, UTC |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
