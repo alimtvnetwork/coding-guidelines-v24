@@ -67,13 +67,13 @@ Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Qua
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
 | `CompanyId` | INTEGER | NO | PK |
-| `CompanySlug` | TEXT | NO | Unique, URL-safe |
-| `CompanyName` | TEXT | NO | Display name |
+| `Slug` | TEXT | NO | Unique, URL-safe (renamed from `CompanySlug` in v2.0.0) |
+| `Name` | TEXT | NO | Display name (renamed from `CompanyName` in v2.0.0) |
 | `WorkerNodeId` | INTEGER | NO | FK → `WorkerNode` |
-| `CompanyAssignedAt` | TEXT | NO | ISO-8601 |
+| `CompanyAssignedAt` | INTEGER | NO | Epoch seconds, UTC |
 | `Description` | TEXT | YES |
 
-Unique: `(CompanySlug)`.
+Unique: `(Slug)`. Seedable-Config aliases `CompanySlug → Slug` / `CompanyName → Name` accepted through v2.1.0 then removed.
 
 ### 2.4 `User` (entity, MINIMAL identity only)
 
