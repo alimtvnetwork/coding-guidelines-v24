@@ -8,6 +8,8 @@
 
 **Scope:** Apply the global DB convention upgrades from `spec/04-database-conventions/` v2 to the Main schema. Spec-only; no runtime code touched.
 
+> **Clarification (post-edit):** Naming **Rule 1** is universal and is **not** relaxed by Rule 13 — every PK on every table is still `{TableName}Id` (e.g. `WorkerNodeStatusId`, `RoleId`, `EndpointAuthChangeKindId`, `WorkerSelectionStrategyId`). Rule 13's "simplification" applies **only** to the descriptive columns `Code`, `Label`, and `Description`, which drop the `{Table}` prefix because those columns never travel as FKs. `02-schema-design.md` §6.5 was rewritten to make this explicit, and the `WorkerNodeStatus` / `WorkerNodeKind` example in `03-main-db-schema.md` §2.2 was expanded to show the full PK names rather than a `{TableName}Id` placeholder.
+
 - `03-main-db-schema.md` → **v2.0.0**:
   - All `*At` columns flipped from `TEXT` (ISO-8601) to `INTEGER` (epoch seconds, UTC) per Naming Rule 7.1 v2: `WorkerNodeRegisteredAt`, `WorkerNodeLastSeenAt`, `CompanyAssignedAt`, `UserCreatedAt`, `UserTotpEnrolledAt`, `AccessDenialEvent.OccurredAt`, `EndpointAuthAuditEvent.OccurredAt`, `WorkerVersionRecordedAt`, `WorkerSelectionEventAt`. (Removes the temporary "TEXT or INTEGER" wording introduced in v1.4.0 on `AccessDenialEvent.OccurredAt`.)
   - All ref / enum-like tables flattened to canonical `(Id, Code, Label)` per Rule 13: `WorkerNodeStatus`, `WorkerNodeKind`, `Role`, `EndpointAuthChangeKind`, `WorkerSelectionStrategy`. Old `{Table}Code` / `{Table}Label` column names are removed in this spec.
