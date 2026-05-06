@@ -214,6 +214,42 @@ SEED_TO_KEY = {
     "SelfUpdateRedirectStaleHours": "MainWorker.SelfUpdate.RedirectStaleHours",
     "BootstrapRetryBackoffSec": "MainWorker.Bootstrap.RetryBackoffSeconds",
     "BootstrapRetryMaxAttempts": "MainWorker.Bootstrap.RetryMaxAttempts",
+    "CacheCompanyToWorkerTtlSeconds": "MainWorker.Cache.CompanyToWorkerTtlSeconds",
+    "CacheWorkerRegistryTtlSeconds": "MainWorker.Cache.WorkerRegistryTtlSeconds",
+    # CacheRecentCompanyPerUserTtlSeconds intentionally omitted from T3
+    # parity: §2.16 binds its default to MainSessionTtlSeconds (not a
+    # numeric literal), so seed-vs-prose equality is undefined. §4.1
+    # alias map still requires the row.
+    # ── v2.0.0 backup-tier materialization (lifts the prior
+    # MainWorker.Backup.* T3 waiver per §4 line 272 / audit-09 §2.1) ──
+    "Backup.Enabled": "MainWorker.Backup.Enabled",
+    "Backup.MaxBackupsPerPrimary": "MainWorker.Backup.MaxBackupsPerPrimary",
+    "Backup.LagWarningSeconds": "MainWorker.Backup.LagWarningSeconds",
+    "Backup.HeartbeatIntervalSeconds": "MainWorker.Backup.HeartbeatIntervalSeconds",
+    "Backup.SyncIntervalSeconds": "MainWorker.Backup.SyncIntervalSeconds",
+    "Backup.MaxRowsPerEnvelope": "MainWorker.Backup.MaxRowsPerEnvelope",
+    "Backup.TombstoneRetentionSeconds": "MainWorker.Backup.TombstoneRetentionSeconds",
+    "Backup.LogRetentionSeconds": "MainWorker.Backup.LogRetentionSeconds",
+    "Backup.QuarantineCompactionOverrideSeconds": "MainWorker.Backup.QuarantineCompactionOverrideSeconds",
+    "Backup.MaxKeyAgeSeconds": "MainWorker.Backup.MaxKeyAgeSeconds",
+    "Backup.RotationAckTimeoutSeconds": "MainWorker.Backup.RotationAckTimeoutSeconds",
+    "Backup.RotationActivationDelaySeconds": "MainWorker.Backup.RotationActivationDelaySeconds",
+    "Backup.RetiredKeyGraceSeconds": "MainWorker.Backup.RetiredKeyGraceSeconds",
+    "Backup.RsaKeySizeBits": "MainWorker.Backup.RsaKeySizeBits",
+    "Backup.Endpoint.IncrementalDiffTimeoutSeconds": "MainWorker.Backup.Endpoint.IncrementalDiffTimeoutSeconds",
+    "Backup.Endpoint.RotateKeysTimeoutSeconds": "MainWorker.Backup.Endpoint.RotateKeysTimeoutSeconds",
+    "Backup.Endpoint.RestoreByDateTimeoutSeconds": "MainWorker.Backup.Endpoint.RestoreByDateTimeoutSeconds",
+    "Backup.Endpoint.SnapshotsTimeoutSeconds": "MainWorker.Backup.Endpoint.SnapshotsTimeoutSeconds",
+    "Backup.Endpoint.HealthTimeoutSeconds": "MainWorker.Backup.Endpoint.HealthTimeoutSeconds",
+    "Backup.Apply.MaxRetriesPerEnvelope": "MainWorker.Backup.Apply.MaxRetriesPerEnvelope",
+    "Backup.Apply.TransactionTimeoutSeconds": "MainWorker.Backup.Apply.TransactionTimeoutSeconds",
+    "Backup.Apply.DeadLetterRetentionDays": "MainWorker.Backup.Apply.DeadLetterRetentionDays",
+    "Backup.Apply.IdempotencyRowRetentionDays": "MainWorker.Backup.Apply.IdempotencyRowRetentionDays",
+    "Backup.SnapshotRetentionDays": "MainWorker.Backup.SnapshotRetentionDays",
+    "Backup.Snapshot.BuildHourUtc": "MainWorker.Backup.Snapshot.BuildHourUtc",
+    "Backup.Snapshot.QuiesceTimeoutSeconds": "MainWorker.Backup.Snapshot.QuiesceTimeoutSeconds",
+    "Backup.Snapshot.MaxBuildSeconds": "MainWorker.Backup.Snapshot.MaxBuildSeconds",
+    "Backup.Restore.PrimaryAckTimeoutSeconds": "MainWorker.Backup.Restore.PrimaryAckTimeoutSeconds",
 }
 
 
