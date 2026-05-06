@@ -4,6 +4,13 @@
 
 ---
 
+## v5.33.0 — 2026-05-06 (CI wiring)
+
+**Scope:** Version bump (`5.32.0` → `5.33.0`). CI wiring.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.32.0 — 2026-05-06 (Diagrams pipeline)
 
 **Scope:** Version bump (`5.31.0` → `5.32.0`). Diagrams pipeline.
