@@ -348,7 +348,7 @@ The following docs cite tunables inline. Each MUST be edited to cite this file i
    (a) named in §2 of this file, or
    (b) explicitly waivered via `<!-- TUNABLE-WAIVER: rationale -->` comment.
 2. **T2 (unique keys)** — no two §2 rows share the same Key.
-3. **T3 (seed parity)** — `config.seed.json` `Categories.MainWorker.Settings.*.Default` matches §4 verbatim.
+3. **T3 (seed parity)** — `config.seed.json` `Categories.MainWorker.Settings.*.Default` matches §4 verbatim. **As of seed v2.0.0**, this includes the full `MainWorker.Backup.*` namespace (the previous Phase-13.4 waiver is lifted). The only suppression remaining: `Backup.RetiredKeyGraceSeconds=0` may be substituted at request time when rotation `Reason="Compromise"` — this is a runtime override, not a seed default change, and T3 ignores it.
 4. **T4 (session-TTL invariant — FU-16)** — `MainWorker.Auth.MainSessionAbsoluteMaxSeconds` >= `MainWorker.Auth.MainSessionTtlSeconds` in BOTH §2 catalogue defaults AND §4 seed defaults. Sliding TTL must never exceed the absolute cap (otherwise the cap is unreachable). Resolves FU-16; cited in §7.2.
 
 Failure = build break.
