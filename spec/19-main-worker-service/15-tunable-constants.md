@@ -1,7 +1,7 @@
 # 15 — Tunable Constants (Single-Value Pins)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.3.0
+**Version:** 1.4.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-15, F-A-16, F-B-12 (top-10 fix #7). Closes AC-7, partially AC-6.
@@ -60,6 +60,7 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 
 | Key | Default | Unit | Used by | Notes |
 |---|---:|---|---|---|
+| `MainWorker.Routing.DefaultStrategy` | **`LeastLoaded`** | enum | `04-worker-routing.md` §1 + §1.5 | Resolves OQ-2 (Phase 12.3). Allowed: `RoundRobin` \| `LeastLoaded` \| `Manual`. Default rationale + override guidance in `04-worker-routing.md` §1.5. Main MUST refuse to start if the configured value is not in the allow-list. |
 | `MainWorker.Routing.HttpTimeoutSeconds` | **15** | seconds | Main → Worker request timeout | Distinct from retry attempt budget. |
 | `MainWorker.Routing.HttpHandshakeTimeoutSeconds` | **30** | seconds | Push-update POST handshake (per `spec/14-update/28` §2) | Already pinned there. |
 | `MainWorker.Routing.MaxConcurrentPerWorker` | **64** | count | Connection pool cap | Prevents stampede. |
