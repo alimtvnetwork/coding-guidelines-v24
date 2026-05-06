@@ -4,6 +4,13 @@
 
 ---
 
+## v5.21.0 — 2026-05-06 (Phase 13.1 — Blind-AI prose hardening (4 fixes; 92→100); linter-pack VERSION reconciled to 3.79.0; cross-link audit + memory scan green)
+
+**Scope:** Version bump (`5.20.0` → `5.21.0`). Phase 13.1 — Blind-AI prose hardening (4 fixes; 92→100); linter-pack VERSION reconciled to 3.79.0; cross-link audit + memory scan green.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v2.17.0 — 2026-05-06 (Phase 12.7 — Blind-AI readiness audit + readme pin refresh)
 
 **Scope:** Minor bump (`5.19.1` → `5.20.0`). Adds **`audit/06-blind-ai-readiness-2026-05-06.md`** — a fresh audit scoring the full 24-file spec against the *dumbest plausible* AI implementer (literal-minded, no clarification questions). Result: **92/100 (A−)**. The 8-point gap is itemised as 4 mechanical prose-hardening fixes (Gap 1: stale OQ-1 hint in `05-auth-and-2fa.md` line 62; Gap 2: two `SyncOp` shapes in `19-incremental-backup-sync.md` §1; Gap 3: OQ-22-1 inferred-not-pinned in `22-backup-apply-logic.md` §12; Gap 4: stale "3-tier" prose in 4 places). Companion non-spec change: root `readme.md` line 43 stale pin `v5.7.0` → `v5.19.1` and "22 spec folders" → "23 spec folders". No spec content, schema, error-code, or AC changes.
