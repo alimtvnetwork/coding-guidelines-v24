@@ -210,7 +210,7 @@ These remain overridable by the user. The spec ships with the defaults below so 
 - `03-main-db-schema.md` §2.6 — `Role`, `AccessItem`, `RoleAccessItem` (catalog).
 - `07-role-based-dashboards.md` §5 — access check implementation flow.
 - `11-split-db-tier-reconciliation.md` §4 (Main Settings tier) and §5 (Worker App tier).
-- `13-error-codes.md` — new MAIN-700 / WORKER-700 series.
+- `13-error-codes.md` — new MAIN-700 / WORKER-900 series.
 - `14-rbac-and-status-seed.md` §3 — concrete row sets the cache compiles from.
 - `15-tunable-constants.md` — `MainWorker.RoleCache.TtlSeconds` (new tunable, default 600 s), `MainWorker.RoleCache.RequireReauthOnCatalogBump` (new tunable, default `false`).
 
