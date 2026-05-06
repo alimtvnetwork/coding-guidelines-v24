@@ -169,4 +169,4 @@ Failure → 401 with `08-error-contract.md` envelope. NEVER 500 on auth failure.
 
 ---
 
-*Auth and 2FA v1.0.0 — 2026-05-04*
+*Auth and 2FA v2.0.0 — 2026-05-06 (Phase 3: Main is credential-blind proxy; auth authority moved to Worker)*
