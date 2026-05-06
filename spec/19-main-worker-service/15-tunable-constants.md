@@ -106,6 +106,7 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 
 | Key | Default | Unit | Used by | Notes |
 |---|---:|---|---|---|
+| `MainWorker.Backup.Enabled` | **false** | bool | All `MainWorker.Backup.*` consumers | Master feature flag (added v2.0.0). When `false`, backup endpoints reject with `MAIN-800-01 BackupSubsystemDisabled`, the sync cron does not run, and every other `MainWorker.Backup.*` tunable is inert. Default `false` until the operator opts in (per D9 — no auto-failover). |
 | `MainWorker.Backup.MaxBackupsPerPrimary` | **3** | count | `18-…` §2 R2 / §3.2 `AssertCapacityForBackup` | Hard ceiling enforced at backup registration. |
 | `MainWorker.Backup.LagWarningSeconds` | **900** (15m) | seconds | `18-…` §4.3 — heartbeat watcher flips `BackupAttached` → `BackupLagging`. | No auto-failover; Power Admin acts on the warning. |
 | `MainWorker.Backup.HeartbeatIntervalSeconds` | **60** | seconds | Backup → Main heartbeat cadence | Slower than primary heartbeat (`MainWorker.Heartbeat.IntervalSeconds = 30`) because backups never serve traffic. |
