@@ -109,6 +109,9 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|---|---|---|---|
 | `WORKER-900-01` | `21090` | `RoleCacheRecompileFailed` | "Worker failed to recompile `RoleAccessCache` after invalidation." | 500 | `17-cascading-roles-and-cache-bin.md` §4 |
 | `WORKER-900-02` | `21091` | `EmptyEffectiveAccessSet` | "User has zero `AppUserRole` rows; access denied to gated route." | 403 | `17-cascading-roles-and-cache-bin.md` §1 |
+| `WORKER-910-01` | `21092` | `BackupSyncWatermarkInconsistent` | "`BackupSyncWatermark.LastAckedSyncOpSeq > LastShippedSyncOpSeq` (impossible state)." | 500 | `19-incremental-backup-sync.md` §3.1 |
+| `WORKER-910-02` | `21093` | `BackupEnvelopeBuildFailed` | "Diff envelope SQLite file could not be created." | 500 | `19-incremental-backup-sync.md` §3.3 |
+| `WORKER-910-03` | `21094` | `BackupChangeLogQueryFailed` | "Read-after-watermark query failed." | 500 | `19-incremental-backup-sync.md` §3.2 |
 
 ---
 
@@ -181,6 +184,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-800-02` | `21182` | `PrimaryNotFound` | "`BackupOfWorkerIdentity` does not resolve to any registered Worker." | 404 | `18-backup-nodes.md` §3.2 |
 | `MAIN-800-03` | `21183` | `BackupCapacityExceeded` | "Primary already has `MainWorker.Backup.MaxBackupsPerPrimary` backups." | 409 | `18-backup-nodes.md` §2 R2 |
 | `MAIN-800-04` | `21184` | `TrafficOnBackupRejected` | "Backup node rejected an inbound user-facing request (D9 invariant)." | 421 | `18-backup-nodes.md` §1, §8 |
+| `MAIN-810-01` | `21185` | `BackupCompactionStalled` | "Backup acknowledgement lag exceeds `QuarantineCompactionOverrideSeconds`; compaction blocked." | n/a | `19-incremental-backup-sync.md` §4 |
 
 ---
 
@@ -189,15 +193,17 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | Sub-range | Reserved for |
 |---|---|
 | _(consumed)_ | `WORKER-21090-21091` consumed by `WORKER-900-01 RoleCacheRecompileFailed` and `WORKER-900-02 EmptyEffectiveAccessSet` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
-| `WORKER-21092-21099` | Worker future expansion |
+| _(consumed)_ | `WORKER-21092-21094` consumed by `WORKER-910-01..03` Backup Sync per Phase 7 (`19-incremental-backup-sync.md`) |
+| `WORKER-21095-21099` | Worker future expansion |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
 | _(consumed)_ | 21171 consumed by `MAIN-700-01 CacheInvalidationDeliveryFailed` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | _(consumed)_ | 21181-21184 consumed by `MAIN-800-01..04` Backup Lifecycle per Phase 6 (`18-backup-nodes.md`) |
+| _(consumed)_ | 21185 consumed by `MAIN-810-01 BackupCompactionStalled` per Phase 7 (`19-incremental-backup-sync.md`) |
 | `MAIN-21162-21169` | Main external-services future expansion |
 | `MAIN-21172-21180` | Main future expansion (file-system, network, additional cache-coherence overflow) |
-| `MAIN-21185-21199` | Main future expansion (additional backup-lifecycle overflow, etc.) |
+| `MAIN-21186-21199` | Main future expansion (additional backup-lifecycle / sync overflow, etc.) |
 
 ---
 

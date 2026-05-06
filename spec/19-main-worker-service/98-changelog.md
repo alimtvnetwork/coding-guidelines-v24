@@ -4,6 +4,25 @@
 
 ---
 
+## v2.5.0 — 2026-05-06 (Phase 7 — Incremental backup sync, CDC)
+
+**Scope:** Per locked decision D10 (`SyncOp` flag on synced rows). Defines the change-data-capture mechanic that lets a primary Worker ship deterministic, replayable diffs to each attached backup. Encryption / wire / apply / restore remain Phases 8–11.
+
+- New file **`19-incremental-backup-sync.md` v1.0.0** — two `SyncOp` shapes (inline column vs. `BackupSyncLog` side table), `SyncOp` ref catalog, per-database monotonic `BackupSyncSequence` allocator, `BackupSyncWatermark` per-attached-backup pointer, CODE-RED-compliant diff-generation driver (resume from `LastAcked`, not `LastShipped`), envelope as a SQLite file with two tables (`Envelope`, `EnvelopeRow`), compaction policies for both shapes with the safety rule "reclaim only past `MIN(LastAckedSyncOpSeq)`", linter hooks `DB-SYNCOP-001/002` queued for Phase 12.
+- `13-error-codes.md` — three new Worker codes (`WORKER-910-01..03`, 21092-21094) and one Main code (`MAIN-810-01 BackupCompactionStalled`, 21185). Reserved-range table updated; future-expansion ranges are now `WORKER-21095-21099` and `MAIN-21186-21199`.
+- `15-tunable-constants.md` → **v1.6.0**: §2.11 extended with five new keys — `SyncIntervalSeconds=60`, `MaxRowsPerEnvelope=5000`, `TombstoneRetentionSeconds=604800`, `LogRetentionSeconds=604800`, `QuarantineCompactionOverrideSeconds=86400`.
+
+**Cross-spec impact:**
+- App-tier tables that participate in backup mirroring will need either Shape A columns (`SyncOpCode`, `SyncOpSeq`, `SyncOpAt`) or a write-side hook into `BackupSyncLog`. The concrete tracked-table list is a Phase-12 follow-up (seed file + `DB-SYNCOP-001` linter).
+- `KnownBackupNode.LastSyncWatermark` (Phase 6) is reframed as a denormalized view of `BackupSyncWatermark.LastAckedSyncOpSeq` for human dashboards; the authoritative pointer is the new `BackupSyncWatermark` table.
+- ER diagram regen deferred to Phase 12 — Worker ER must show `SyncOp`, `BackupSyncLog`, `BackupSyncWatermark`, `BackupSyncSequence`.
+
+**Open questions still pending:**
+- **OQ-A3** — Backup zip password derivation (Phase 8).
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+
+---
+
 ## v2.4.0 — 2026-05-06 (Phase 6 — Backup nodes concept)
 
 **Scope:** Per locked decisions D8 / D9 / D10 (CDC referenced; defined in Phase 7). Defines what a backup node is, how it registers (extends `10-worker-bootstrap-protocol.md`), how Main propagates the pairing to both ends, and the three independent enforcement points for the "backups never serve traffic" invariant. Wire format / encryption / endpoints / restore are explicitly deferred to Phases 7–11.
