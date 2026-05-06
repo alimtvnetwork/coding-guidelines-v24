@@ -4,6 +4,23 @@
 
 ---
 
+## v2.12.0 — 2026-05-06 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
+
+**Scope:** Resolves OQ-23-3 from `23-snapshot-storage-and-restore.md`. Adds the audit-trail column trio that operators need when reviewing why a snapshot escaped retention. Project version bump to `5.15.0`.
+
+- **`23-snapshot-storage-and-restore.md` → v1.1.0**
+  - Expanded `BackupSnapshotCatalog` with three new nullable columns (Rule 12 compliant): `PinReason TEXT NULL`, `PinnedAtEpoch INTEGER NULL`, `PinnedByActor TEXT NULL`.
+  - Expanded the `Status` enum comment to include `Pinned` (formal addition; previously footnoted in §6).
+  - Added §6.1 *Pin / unpin protocol*: required column contract on every `Available → Pinned` transition; unpin clears all four pin columns; forbidden transitions enumerated (no direct `Pinned → Reaped`, no NULL `PinReason`, no raw-SQL pinning bypassing audit).
+  - Replaced "manual UPDATE" pin mechanism with BE-3 sub-route `POST /API/V1/Backup/Snapshot/Pin` (per §6 override table) so every pin emits an `EndpointAuthAuditEvent` row in the same transaction.
+  - Added linter rule `BACKUP-SNAP-005` enforcing the audit-trail invariant.
+  - Marked OQ-23-3 ✅ Resolved with cross-reference to §6.1.
+- **`diagrams/erd-backup-tier.mmd` → v1.1.0** — `BackupSnapshotCatalog` entity gains the three new columns; banner version bumped.
+- **`97-acceptance-criteria.md` → v1.2.0** — New criterion *Pinned snapshots carry mandatory audit trail* with positive (BE-3 writes paired audit row) and negative (linter fails on missing trio) tests.
+- **No table-renames, no destructive migrations.** All three columns are NULL-safe additions per Rule 12; existing `Available`/`Reaped`/`Corrupt` rows untouched.
+
+---
+
 ## v2.11.0 — 2026-05-06 (Phase 12.1 — Cross-spec Backup stubs landed)
 
 **Scope:** Executes the deferred cross-spec stubs from Phase 12. No new behavior — purely wires the Backup-tier audience and endpoint catalogue into the three home specs that operators read first. Project version bump to `5.14.0`.
