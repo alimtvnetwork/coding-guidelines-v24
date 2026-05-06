@@ -2,7 +2,7 @@
 // render-diagrams.mjs — Render Mermaid (.mmd) → PNG across the spec/ tree.
 //
 // Audit-09 §2.2 / Phase-13.5 closure.
-// • Discovers every `spec/**/diagrams/*.mmd` file.
+// • Discovers every `spec/**/{diagrams,images}/*.mmd` file.
 // • Renders to a sibling `*.png` using @mermaid-js/mermaid-cli (`mmdc`).
 // • Honours `--check` mode: exits non-zero if any PNG is missing or older
 //   than its `.mmd` source (CI drift guard, no rendering attempted).
@@ -28,8 +28,10 @@ const CHECK_ONLY = ARGS.includes('--check');
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
 
+const DIAGRAM_DIR_NAMES = new Set(['diagrams', 'images']);
+
 function isDiagramsDir(name) {
-  return name === 'diagrams';
+  return DIAGRAM_DIR_NAMES.has(name);
 }
 
 async function findMmdFiles(dir, acc = []) {
@@ -59,11 +61,12 @@ function isPngFresh(mmd, png) {
 }
 
 function renderOne(mmd, png) {
-  const result = spawnSync(
-    'npx',
-    ['--yes', '@mermaid-js/mermaid-cli', '-i', mmd, '-o', png, '-b', 'transparent'],
-    { stdio: 'inherit' },
-  );
+  const args = ['--yes', '@mermaid-js/mermaid-cli', '-i', mmd, '-o', png, '-b', 'transparent'];
+  const puppeteerCfg = join(ROOT, 'scripts', 'puppeteer-ci.json');
+  if (existsSync(puppeteerCfg)) {
+    args.push('-p', puppeteerCfg);
+  }
+  const result = spawnSync('npx', args, { stdio: 'inherit' });
   return result.status === 0;
 }
 
