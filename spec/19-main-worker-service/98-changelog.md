@@ -4,6 +4,27 @@
 
 ---
 
+## v2.8.0 — 2026-05-06 (Phase 10 — Backup apply pipeline)
+
+**Scope:** Server-side processing pipeline that runs on the backup node once BE-1 (`21-backup-endpoints.md` §4) accepts a sealed envelope. Wire is owned by Phase 9, encryption by Phase 8, CDC source-side by Phase 7. Snapshot/restore remains Phase 11.
+
+- New file **`22-backup-apply-logic.md` v1.0.0** — five-stage strictly-sequential pipeline (Decrypt → Open → Validate → Dispatch → Persist ACK), seven validation rules V1–V7, single-TX `BEGIN IMMEDIATE` per envelope with idempotent dispatch (`Insert`/`Update` = upsert, `Delete` = absent-row tolerated), explicit DLQ on any failure (no silent skips per CODE RED), V7 idempotency short-circuit using a `UNIQUE` constraint as the lock (no advisory mutexes). Two new App-tier tables on the backup: `BackupApplyIdempotency` and `BackupApplyDeadLetter`, both with `{TableName}Id` PK + `Notes`/`Comments TEXT NULL` (transactional Rule 11) + INTEGER `*At` (D2). CODE-RED-compliant per-row pseudocode with positively-named guards (`AssertKnownSyncOp`, `AssertKnownTable`, `AssertNonEmptyPk`).
+- `13-error-codes.md` → **v1.4.0**: §2.10 extended with four new Worker apply codes `WORKER-930-01..04` opening a fresh overflow window `WORKER-21200-21299` (per §1 Slot-overflow rule, since `WORKER-21095-21099` was fully consumed by Phase 8). §3.11 added with `MAIN-840-01 BackupApplyExhausted` consuming the first slot of the Phase-11-reserved window (`MAIN-21191`); reserved-range table refreshed — `MAIN-21192-21199` now reserved for snapshot/restore.
+- `15-tunable-constants.md` → **v1.9.0**: new §2.14 with four apply-pipeline keys — `MaxRetriesPerEnvelope=5`, `TransactionTimeoutSeconds=30`, `DeadLetterRetentionDays=30`, `IdempotencyRowRetentionDays=14`.
+
+**Cross-spec impact:**
+- `BackupApplyIdempotency` + `BackupApplyDeadLetter` are App-tier-local on the backup; the cross-tier reconciliation file (`11-…`) does not need an entry.
+- BE-1's idempotency short-circuit (V7) tightens the contract referenced in `21-…` §4.4 — replay returns the **stored** `OriginalResponseJson`, not a freshly-recomputed body.
+- Tracked-table allowlist (`AppBackupTrackedTable` ref) is reserved for the Phase 12 seed; `BACKUP-APPLY-003` linter will enforce membership.
+- `MAIN-840-01` is surfaced via BE-5 Health (`21-…` §8) — no new endpoint surface in Phase 10.
+- ER diagram regen deferred to Phase 12 — Worker ER must show `BackupApplyIdempotency` + `BackupApplyDeadLetter`.
+
+**Open questions still pending:**
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+- OQ-22-1 (per-envelope WAL pragma), OQ-22-2 (DLQ auto-sweep semantics), OQ-22-3 (tracked-table allowlist seeding strategy) logged in `22-…` §12, non-blocking.
+
+---
+
 ## v2.7.0 — 2026-05-06 (Phase 9 — Backup endpoints contract)
 
 **Scope:** Wire surface for Phases 6–8. Five S2S OAuth-protected HTTP endpoints hosted on the backup node, all Main-triggered. Apply logic remains Phase 10; snapshot storage / retention remains Phase 11.
