@@ -115,6 +115,9 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Refresh path uses Main session cookie only — no `RefreshToken` cookie in v1.0 | `12-jwt-delivery-contract.md` §11.1 | Negative test: grep for `Set-Cookie:.*RefreshToken` across the codebase MUST return zero matches; positive test: `/Auth/RefreshWorkerToken` succeeds when only the Main session cookie is present and fails (401) when it is absent. |
 | Worker JWT never reaches a Service Worker in v1.0 | `12-jwt-delivery-contract.md` §11.2 | Negative test: no `navigator.serviceWorker.controller.postMessage(*token*)` call sites; SW registrations (if any) MUST be inert for token traffic. |
 
+| Snapshots are flat full zips, never diff-chains in v1.0 | `23-snapshot-storage-and-restore.md` §14.1 | Negative test: schema check that `BackupSnapshotCatalog` has no `BasedOnSnapshotCatalogId` column; sweep test that every scheduled `Build` day produces exactly one row even when zero `SyncOpLedger` mutations occurred. |
+| Restore flow has no partial-tenant scope in v1.0 | `23-snapshot-storage-and-restore.md` §14.2 | Negative test: BE-3 rejects (`400` `MAIN-830-04 RestoreScopeUnsupported`) any request body carrying `TenantId` or `RestoreScope` keys; schema check that `BackupRestoreJob` has no `RestoreScope` column. |
+
 ---
 
-*Acceptance criteria v1.4.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 disposition tests added).*
+*Acceptance criteria v1.5.0 — 2026-05-06 (Phase 12.5 — OQ-23-1 / OQ-23-2 disposition tests added).*
