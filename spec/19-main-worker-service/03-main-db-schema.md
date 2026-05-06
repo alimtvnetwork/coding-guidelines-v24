@@ -1,7 +1,9 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.3.0
+**Version:** 1.4.0
+
+> **v1.4.0 rename (Phase 1):** `EnumPage` → `AccessItem`, `RolePageAccess` → `RoleAccessItem`. New column `AccessItem.PageUrlSuffix` becomes the route-matcher source of truth. Deprecation aliases accepted for one release; full removal in v1.5.0 per `98-changelog.md`.
 **DB:** SQLite (default). Same schema portable to PostgreSQL/MySQL.
 
 > **Split-DB tier authority (FU-2):** Main uses only **3 tiers** — Root, Settings, Session — per [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md) §4. **Main has no App tier** (it owns no business data). Any prior reference placing Main tables in an App tier is a bug; per the reconciliation file, such tables belong in Root or Settings. Tier assignments per table are listed in `11-…` §4.
@@ -105,49 +107,54 @@ Unique: `(UserId, RoleId)`.
 
 Seeded via Seedable-Config.
 
-### 2.6.1 `EnumPage` (ref)
+### 2.6.1 `AccessItem` (ref) — renamed from `EnumPage` in v1.4.0
 
-Defines the closed set of dashboard pages governed by RBAC. Single source of truth for the `EnumPage` enum referenced in `07-role-based-dashboards.md` §3 and `05-§8`.
+Defines the closed set of access-controlled dashboard surfaces. Single source of truth for what RBAC governs. Replaces the older name `EnumPage`; old name is **deprecated** but accepted for one release as an alias in seed loaders.
 
-| Column | Type | Null |
-|--------|------|------|
-| `EnumPageId` | INTEGER | NO (PK) |
-| `EnumPageCode` | TEXT | NO (unique PascalCase, e.g. `WorkerListPage`, `PushUpdatePage`, `UserManagementPage`) |
-| `EnumPageLabel` | TEXT | NO |
-| `Description` | TEXT | YES |
+| Column | Type | Null | Notes |
+|--------|------|------|-------|
+| `AccessItemId` | INTEGER | NO | PK, AUTOINCREMENT |
+| `Code` | TEXT | NO | Unique PascalCase identifier (e.g. `WorkerRegistry`, `PushUpdate`, `UserManagement`). Used by code as a stable enum value. |
+| `Label` | TEXT | NO | Human-readable UI string (e.g. `Worker Registry`). |
+| `PageUrlSuffix` | TEXT | YES | Route matcher — the trailing path fragment used to associate a request with this AccessItem (e.g. `/admin/workers`, `/billing`). NULL for non-route capabilities (e.g. background actions). |
+| `Description` | TEXT | YES | Per Rule 11. |
+
+Unique: `(Code)`. Indexed on `(PageUrlSuffix)` for matcher lookups.
+
+> **Matcher rule.** A request path matches an `AccessItem` when its normalized path **ends with** `PageUrlSuffix`. Suffix matching keeps the table portable across deployments mounted under different base paths. Multiple AccessItems sharing the same suffix is a seed error.
 
 Seeded via Seedable-Config (9 rows enumerated in `14-rbac-and-status-seed.md`).
 
-### 2.6.2 `RolePageAccess` (join, exempt from Description rule)
+### 2.6.2 `RoleAccessItem` (join, exempt from Description rule) — renamed from `RolePageAccess` in v1.4.0
 
-Per-role access grant for each page. Defined originally in `07-§4.1`; canonicalised here so the schema document is self-contained. (Resolves F-A-23 / F-B-10.)
+Per-role access grant for each `AccessItem`. (Resolves F-A-23 / F-B-10.)
 
 | Column | Type | Null |
 |--------|------|------|
-| `RolePageAccessId` | INTEGER | NO (PK) |
+| `RoleAccessItemId` | INTEGER | NO (PK) |
 | `RoleId` | INTEGER | NO (FK → `Role`) |
-| `EnumPageId` | INTEGER | NO (FK → `EnumPage`) |
+| `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
 | `CanRead` | INTEGER | NO (0/1) |
 | `CanWrite` | INTEGER | NO (0/1) |
 
-Unique: `(RoleId, EnumPageId)`. Seeded with 19 rows per `14-rbac-and-status-seed.md`.
+Unique: `(RoleId, AccessItemId)`. Seeded with 19 rows per `14-rbac-and-status-seed.md`.
 
 ### 2.6.3 `AccessDenialEvent` (transactional, audit)
 
-Audit row written by Workers on every 403 returned for an `AccessDenied` envelope (per `08-error-contract.md` §3.5 and `07-§8`). Canonicalised here so the schema document covers every table referenced cross-spec. (Resolves F-A-17.)
+Audit row written by Workers on every 403 returned for an `AccessDenied` envelope (per `08-error-contract.md` §3.5 and `07-§8`). (Resolves F-A-17.)
 
 | Column | Type | Null |
 |--------|------|------|
 | `AccessDenialEventId` | INTEGER | NO (PK) |
 | `UserId` | INTEGER | NO (FK) |
-| `EnumPageId` | INTEGER | NO (FK) |
+| `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
 | `WorkerNodeId` | INTEGER | YES (FK; NULL when denied at Main edge) |
 | `CorrelationId` | TEXT | NO |
-| `OccurredAt` | TEXT | NO (ISO-8601) |
+| `OccurredAt` | INTEGER | NO (epoch seconds UTC — see Phase 2; legacy TEXT readers must accept either during the v1.4 → v1.5 transition) |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
-Indexed on `(UserId, OccurredAt)` and `(EnumPageId, OccurredAt)` for audit queries.
+Indexed on `(UserId, OccurredAt)` and `(AccessItemId, OccurredAt)` for audit queries.
 
 ### 2.6.4 `EndpointAuthAuditEvent` (transactional, audit) — FU-17
 
@@ -261,4 +268,4 @@ All of the above belong in the Worker's split-DB per `spec/05-split-db-architect
 
 ---
 
-*Main DB schema v1.0.0 — 2026-05-04*
+*Main DB schema v1.4.0 — 2026-05-06 (Phase 1: AccessItem rename)*

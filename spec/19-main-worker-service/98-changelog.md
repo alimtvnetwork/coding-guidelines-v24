@@ -4,6 +4,20 @@
 
 ---
 
+## v1.4.0 — 2026-05-06 (Phase 1 — `EnumPage` → `AccessItem` rename)
+
+**Scope:** Schema + seed + dashboard rename only. No runtime code touched (per memory rule "Spec/19 is SPEC-ONLY").
+
+- `03-main-db-schema.md` → **v1.4.0**: §2.6.1 renamed `EnumPage` → `AccessItem`; columns flattened from `EnumPageId/EnumPageCode/EnumPageLabel/Description` to `AccessItemId/Code/Label/PageUrlSuffix/Description`. New `PageUrlSuffix TEXT NULL` column is the route matcher (suffix match against normalized request path). §2.6.2 renamed `RolePageAccess` → `RoleAccessItem` with FK column `AccessItemId`. §2.6.3 `AccessDenialEvent.EnumPageId` → `AccessItemId`; `OccurredAt` flagged for INTEGER conversion in Phase 2.
+- `14-rbac-and-status-seed.md` → **v2.0.0**: full seed JSON rewritten for `AccessItem` + `RoleAccessItem`. Each AccessItem row carries `Code`, `Label`, `PageUrlSuffix` (e.g. `/admin`, `/billing`, `/regions`). 19 `RoleAccessItem` grant rows now include explicit `CanRead`/`CanWrite`. Verification SQL counts updated.
+- `07-role-based-dashboards.md` → **v2.0.0**: PHP `enum AccessItem` cases shortened to bare codes (`PowerAdmin`, `Admin`, `Billing`, …) — no `Page` suffix. Access-check function renamed `userHasAccessToPage` → `userHasAccessToItem`. Middleware param `$pageCode` → `$accessItemCode`. §4 deduplicated (no longer redefines columns; refers to `03-…` §2.6).
+- **Deprecation contract:** Old names `EnumPage` / `RolePageAccess` accepted as seed-loader aliases through v1.4.x; removal scheduled for v1.5.0.
+- **Cross-spec impact:** None outside `19-…`. Phase 2 will propagate INTEGER DateTime convention which removes the temporary "TEXT or INTEGER" wording on `AccessDenialEvent.OccurredAt`.
+
+Linter status: structural rename only — seed `Tables` block validates against `06-seedable-config-architecture/02-features/07-reference-table-seeding.md`. No error-code changes.
+
+---
+
 ## v1.3.0 — 2026-05-05 (FU-18 EndpointAuthLocked error code)
 
 - `13-error-codes.md` → **v1.1.0**: +§3.4 row `MAIN-400-10 EndpointAuthLocked` / flat `21170` / HTTP 403, message "Endpoint pattern matches the lock-list (`/API/V1/Workers/*` or `/API/V1/SelfUpdate`) and cannot be reconfigured via `PATCH /API/V1/Settings/EndpointAuth`." Source: `06-core-api-endpoints.md` §5.4 R-5 + `05-auth-and-2fa.md` §8. Added §1 *Slot-overflow rule* documenting the first allocation that breaks strict `211{YY}` mapping (4xx routing flats `21140-21149` were exhausted by tasks #32 + #39, so the new code took `21170` from the `MAIN-21170-21199` reserved range). §4 reserved-range table refreshed: `21170` marked consumed, residual reserve narrowed to `MAIN-21171-21199` plus a new `MAIN-21162-21169` external-services band.
