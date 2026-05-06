@@ -22,6 +22,8 @@ If a rule conflicts with this file, **`spec/03-error-manage/` wins**.
 
 ## 2. Error Envelope (cross-tier wire format)
 
+> **Wire-format authority (Phase 13.3):** Canonical golden-file fixtures for one error per family in §3 live in [`fixtures/errors/`](./fixtures/errors/) and JWT examples for `12-` live in [`fixtures/jwt/`](./fixtures/jwt/). When this prose and a fixture disagree on **field name, ordering, casing, null-vs-omitted, or timestamp encoding**, the **fixture wins**. Encoding rules: [`fixtures/conventions.md`](./fixtures/conventions.md).
+
 Every Main↔Worker error response uses this JSON shape:
 
 ```json
