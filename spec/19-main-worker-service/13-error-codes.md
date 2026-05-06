@@ -103,6 +103,13 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-800-01` | `21080` | `ListenerBindFail` | "Failed to bind public listener." | 500 | `10` §6 |
 | `WORKER-800-02` | `21081` | `WorkerUnreachable` | "Main could not reach worker on `WorkerEndpointPublic`." | 502 | `04-worker-routing.md` |
 
+### 2.10 Cache Coherence (900-999 → 21090-21099)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `WORKER-900-01` | `21090` | `RoleCacheRecompileFailed` | "Worker failed to recompile `RoleAccessCache` after invalidation." | 500 | `17-cascading-roles-and-cache-bin.md` §4 |
+| `WORKER-900-02` | `21091` | `EmptyEffectiveAccessSet` | "User has zero `AppUserRole` rows; access denied to gated route." | 403 | `17-cascading-roles-and-cache-bin.md` §1 |
+
 ---
 
 ## 3. Main tier — `MAIN-*` (21100-21199)
@@ -160,18 +167,26 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-600-01` | `21160` | `WorkerUnreachable` | "Main could not reach worker on `WorkerEndpointPublic`." | 502 | `04` |
 | `MAIN-600-02` | `21161` | `WorkerHeartbeatStale` | "Worker missed ≥3 heartbeats; quarantining." | n/a | `10` §7 |
 
+### 3.7 Cache Coherence (700-799 → 21170-21179)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-700-01` | `21171` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
+
 ---
 
 ## 4. Reserved sub-ranges
 
 | Sub-range | Reserved for |
 |---|---|
-| `WORKER-21090-21099` | Worker future expansion |
+| _(consumed)_ | `WORKER-21090-21091` consumed by `WORKER-900-01 RoleCacheRecompileFailed` and `WORKER-900-02 EmptyEffectiveAccessSet` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
+| `WORKER-21092-21099` | Worker future expansion |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
+| _(consumed)_ | 21171 consumed by `MAIN-700-01 CacheInvalidationDeliveryFailed` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | `MAIN-21162-21169` | Main external-services future expansion |
-| `MAIN-21171-21199` | Main future expansion (file-system, network, additional routing overflow) |
+| `MAIN-21172-21199` | Main future expansion (file-system, network, additional cache-coherence overflow) |
 
 ---
 
