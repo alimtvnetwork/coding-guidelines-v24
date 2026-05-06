@@ -1,7 +1,7 @@
 # 11 — Split-DB Tier Reconciliation (Main + Worker)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-X-01, F-X-04, F-D-09 (top-10 fix #2). Unblocks AC-2.
@@ -150,4 +150,4 @@ These are catalogued in `audit/05-implementation-pivot-score.md` Top-10 — Fix 
 
 ---
 
-*Split-DB tier reconciliation v1.0.0 — 2026-05-04*
+*Split-DB tier reconciliation v1.1.0 — 2026-05-06 (Phase 3: User → Worker.AppUser, UserDirectory routing index added on Main)*
