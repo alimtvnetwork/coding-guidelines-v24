@@ -74,6 +74,8 @@ These edits are tracked as follow-up tasks (see §8) — this doc establishes th
 
 ## 5. Per-tier table allocation (Worker)
 
+> **v2.1.0 (Phase 3) update.** Worker is now the authoritative identity store. `AppUser` carries `PasswordHash`, `PasswordSalt`, `TotpSecret`, `TotpEnrolledAt`, `TotpBackupCodesHash`. `AppUserRole` carries the user-to-role assignments that Main used to hold.
+
 | Table | Tier | Source spec |
 |---|---|---|
 | `RootCompany` | Root | `19/diagrams/erd-worker-split-db.mmd` |
@@ -82,7 +84,8 @@ These edits are tracked as follow-up tasks (see §8) — this doc establishes th
 | `AppCompanyShard` | Root | (registry of App-tier DBs) |
 | `WorkerBootstrapState` | Settings | `19/10-worker-bootstrap-protocol.md` §9 |
 | `WorkerUpdateInstruction` | Settings | `spec/14-update/28-worker-push-instruction.md` §7 |
-| `AppUser` | App | `19/diagrams/erd-worker-split-db.mmd` |
+| `AppUser` (authoritative identity, v2.1.0) | App | `19/05-auth-and-2fa.md` §3, `19/diagrams/erd-worker-split-db.mmd` |
+| `AppUserRole` (user→role assignments, v2.1.0) | App | `19/14-rbac-and-status-seed.md` §6 |
 | `AppBusinessEntity` | App | same |
 | `AppSession` | Session | same |
 
