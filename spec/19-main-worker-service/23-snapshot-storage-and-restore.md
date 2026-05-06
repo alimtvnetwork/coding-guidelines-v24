@@ -330,6 +330,7 @@ Main tier (snapshot integrity, slot `21192` — first free in Phase-11-reserved 
 | `BACKUP-SNAP-002` | `MainWorker.Backup.SnapshotRetentionDays` MUST be ≥ 7. Compliance floor. |
 | `BACKUP-SNAP-003` | `BackupSnapshotJob` rows older than 90 days with `Status='Failed'` MUST be either reaped or have a paired `BackupApplyDeadLetter` row — orphaned failures fail CI. |
 | `BACKUP-SNAP-004` | Build pipeline functions MUST be ≤15 lines, zero nested `if`, ≤2 operands per boolean (CODE RED). |
+| `BACKUP-SNAP-005` | Every `BackupSnapshotCatalog.Status='Pinned'` row MUST have NON-empty `PinReason`, NON-NULL `PinnedAtEpoch`, and NON-NULL `PinnedByActor` matching `^(S2S:|User:).+`. Silent pins fail CI. |
 
 ---
 
@@ -352,8 +353,8 @@ Main tier (snapshot integrity, slot `21192` — first free in Phase-11-reserved 
 
 - **OQ-23-1** Should snapshots be deduplicated across days (rolling diff zip pyramid) to save disk for low-write-rate primaries? Inferred: defer to v2.0 — flat date-named files are dumb-AI friendliest and disk is cheap at 30-day default.
 - **OQ-23-2** Should the restore flow support partial-table restore (e.g., one tenant)? Inferred: no — out of scope; full App-tier replacement only. Tenant-level recovery is owned by the application data model, not the backup tier.
-- **OQ-23-3** Should `Pinned` status (§6) require a `PinReason` column? Inferred: yes — Phase 12 migration will add `PinReason TEXT NULL`.
+- **OQ-23-3** ✅ **Resolved Phase 12.2.** `Pinned` status now requires `PinReason TEXT NULL` (NOT NULL on insert), `PinnedAtEpoch INTEGER NULL`, and `PinnedByActor TEXT NULL`. Pin/unpin contract codified in §6.1; enforced by linter `BACKUP-SNAP-005`.
 
 ---
 
-*Snapshot storage + restore flow v1.0.0 — 2026-05-06 (Phase 11). Resolves D14 + OQ-A4 (30 days rolling).*
+*Snapshot storage + restore flow v1.1.0 — 2026-05-06 (Phase 12.2 — OQ-23-3 resolved: `PinReason` + `PinnedAtEpoch` + `PinnedByActor` columns + §6.1 pin/unpin protocol + `BACKUP-SNAP-005`).*
