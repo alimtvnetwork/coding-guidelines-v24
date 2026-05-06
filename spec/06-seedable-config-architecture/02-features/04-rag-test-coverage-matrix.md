@@ -248,7 +248,7 @@ go test -bench=. ./internal/rag/...
 |--------|--------|---------|
 | Line Coverage | ≥90% | 100% |
 | Branch Coverage | ≥85% | 100% |
-| Mutation Score | ≥80% | TBD |
+| Mutation Score | ≥80% | Not measured (deferred to v2.0.0; line+branch coverage at 100% is the active gate) |
 
 ---
 
