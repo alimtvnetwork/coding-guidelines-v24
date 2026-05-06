@@ -322,6 +322,34 @@ The §2 prose uses full dotted keys (e.g. `MainWorker.RateLimit.AuthEndpointsPer
 | `MainWorker.Cache.CompanyToWorkerTtlSeconds`              | `CacheCompanyToWorkerTtlSeconds` |
 | `MainWorker.Cache.WorkerRegistryTtlSeconds`               | `CacheWorkerRegistryTtlSeconds`  |
 | `MainWorker.Cache.RecentCompanyPerUserTtlSeconds`         | `CacheRecentCompanyPerUserTtlSeconds` |
+| `MainWorker.Backup.Enabled`                               | `Backup.Enabled`                              |
+| `MainWorker.Backup.MaxBackupsPerPrimary`                  | `Backup.MaxBackupsPerPrimary`                 |
+| `MainWorker.Backup.LagWarningSeconds`                     | `Backup.LagWarningSeconds`                    |
+| `MainWorker.Backup.HeartbeatIntervalSeconds`              | `Backup.HeartbeatIntervalSeconds`             |
+| `MainWorker.Backup.SyncIntervalSeconds`                   | `Backup.SyncIntervalSeconds`                  |
+| `MainWorker.Backup.MaxRowsPerEnvelope`                    | `Backup.MaxRowsPerEnvelope`                   |
+| `MainWorker.Backup.TombstoneRetentionSeconds`             | `Backup.TombstoneRetentionSeconds`            |
+| `MainWorker.Backup.LogRetentionSeconds`                   | `Backup.LogRetentionSeconds`                  |
+| `MainWorker.Backup.QuarantineCompactionOverrideSeconds`   | `Backup.QuarantineCompactionOverrideSeconds`  |
+| `MainWorker.Backup.MaxKeyAgeSeconds`                      | `Backup.MaxKeyAgeSeconds`                     |
+| `MainWorker.Backup.RotationAckTimeoutSeconds`             | `Backup.RotationAckTimeoutSeconds`            |
+| `MainWorker.Backup.RotationActivationDelaySeconds`        | `Backup.RotationActivationDelaySeconds`       |
+| `MainWorker.Backup.RetiredKeyGraceSeconds`                | `Backup.RetiredKeyGraceSeconds`               |
+| `MainWorker.Backup.RsaKeySizeBits`                        | `Backup.RsaKeySizeBits`                       |
+| `MainWorker.Backup.Endpoint.IncrementalDiffTimeoutSeconds`| `Backup.Endpoint.IncrementalDiffTimeoutSeconds` |
+| `MainWorker.Backup.Endpoint.RotateKeysTimeoutSeconds`     | `Backup.Endpoint.RotateKeysTimeoutSeconds`    |
+| `MainWorker.Backup.Endpoint.RestoreByDateTimeoutSeconds`  | `Backup.Endpoint.RestoreByDateTimeoutSeconds` |
+| `MainWorker.Backup.Endpoint.SnapshotsTimeoutSeconds`      | `Backup.Endpoint.SnapshotsTimeoutSeconds`     |
+| `MainWorker.Backup.Endpoint.HealthTimeoutSeconds`         | `Backup.Endpoint.HealthTimeoutSeconds`        |
+| `MainWorker.Backup.Apply.MaxRetriesPerEnvelope`           | `Backup.Apply.MaxRetriesPerEnvelope`          |
+| `MainWorker.Backup.Apply.TransactionTimeoutSeconds`       | `Backup.Apply.TransactionTimeoutSeconds`      |
+| `MainWorker.Backup.Apply.DeadLetterRetentionDays`         | `Backup.Apply.DeadLetterRetentionDays`        |
+| `MainWorker.Backup.Apply.IdempotencyRowRetentionDays`     | `Backup.Apply.IdempotencyRowRetentionDays`    |
+| `MainWorker.Backup.SnapshotRetentionDays`                 | `Backup.SnapshotRetentionDays`                |
+| `MainWorker.Backup.Snapshot.BuildHourUtc`                 | `Backup.Snapshot.BuildHourUtc`                |
+| `MainWorker.Backup.Snapshot.QuiesceTimeoutSeconds`        | `Backup.Snapshot.QuiesceTimeoutSeconds`       |
+| `MainWorker.Backup.Snapshot.MaxBuildSeconds`              | `Backup.Snapshot.MaxBuildSeconds`             |
+| `MainWorker.Backup.Restore.PrimaryAckTimeoutSeconds`      | `Backup.Restore.PrimaryAckTimeoutSeconds`     |
 
 Linter T3 (§6) MUST validate this alias table is exhaustive — every §2 prose row appears here and every §4 settings key appears here. Adding a tunable means updating §2, §4, and §4.1 in the same commit.
 
