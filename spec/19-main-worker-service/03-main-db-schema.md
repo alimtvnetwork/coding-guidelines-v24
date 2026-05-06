@@ -194,8 +194,8 @@ Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant a
 | Column | Type | Null |
 |--------|------|------|
 | `EndpointAuthChangeKindId` | INTEGER | NO (PK) |
-| `EndpointAuthChangeKindCode` | TEXT | NO (unique: `Create`, `Replace`, `SoftDisable`, `Reenable`) |
-| `EndpointAuthChangeKindLabel` | TEXT | NO |
+| `Code` | TEXT | NO (unique: `Create`, `Replace`, `SoftDisable`, `Reenable`) |
+| `Label` | TEXT | NO |
 | `Description` | TEXT | YES |
 
 Seeded via Seedable-Config — 4 rows. Resolution rules:
