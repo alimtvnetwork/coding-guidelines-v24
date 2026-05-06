@@ -130,6 +130,7 @@ A literal AI MUST read every numbered file 00→24 before scoping work. The map 
 | `22-backup-apply-logic.md` | Backup apply pipeline (stages, transactions, DLQ) |
 | `23-snapshot-storage-and-restore.md` | Snapshot build + restore flow |
 | `24-threat-model.md` | Threat-model pointer (no implementation) |
+| `25-inherited-rules.md` | Inline blind-AI reference for rules inherited from `spec/03-`, `04-`, `05-`, `06-` (Phase 13.3) |
 | `96-linter-audit.md` | ⚠ Historical linter snapshot — see banner at top |
 | `97-acceptance-criteria.md` | Verbatim acceptance criteria mapping |
 | `98-changelog.md` | Spec version history |
