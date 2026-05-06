@@ -213,4 +213,4 @@ Any count below expected → exit `MWS-21002 SplitDbTierMissing`.
 
 ---
 
-*RBAC + status seed v1.0.0 — 2026-05-04*
+*RBAC + status seed v2.0.0 — 2026-05-06 (Phase 1: AccessItem rename)*
