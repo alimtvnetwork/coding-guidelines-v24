@@ -66,8 +66,12 @@ erDiagram
     AppUser {
         INTEGER AppUserId PK
         INTEGER AppCompanyShardId FK
-        TEXT AppUserEmail
+        TEXT AppUserEmail UK
         TEXT AppUserDisplayName
+        TEXT PasswordHash "authoritative — never on Main"
+        TEXT TotpSecret
+        INTEGER TotpEnrolledAt
+        TEXT BackupCodesHash
         TEXT Description
     }
     AppBusinessEntity {
