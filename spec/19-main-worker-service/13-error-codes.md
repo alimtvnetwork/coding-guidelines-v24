@@ -103,6 +103,13 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-800-01` | `21080` | `ListenerBindFail` | "Failed to bind public listener." | 500 | `10` §6 |
 | `WORKER-800-02` | `21081` | `WorkerUnreachable` | "Main could not reach worker on `WorkerEndpointPublic`." | 502 | `04-worker-routing.md` |
 
+### 2.10 Cache Coherence (900-999 → 21090-21099)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `WORKER-900-01` | `21090` | `RoleCacheRecompileFailed` | "Worker failed to recompile `RoleAccessCache` after invalidation." | 500 | `17-cascading-roles-and-cache-bin.md` §4 |
+| `WORKER-900-02` | `21091` | `EmptyEffectiveAccessSet` | "User has zero `AppUserRole` rows; access denied to gated route." | 403 | `17-cascading-roles-and-cache-bin.md` §1 |
+
 ---
 
 ## 3. Main tier — `MAIN-*` (21100-21199)
