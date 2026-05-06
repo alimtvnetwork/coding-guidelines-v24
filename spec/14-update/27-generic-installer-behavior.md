@@ -148,7 +148,7 @@ At each step, log which source was tried and the outcome
 
 ### 5.3 Opt-outs
 
-Implementations SHOULD offer flags to disable individual sources:
+Implementations MUST offer the following flags to disable individual sources (exact names; no synonyms):
 
 | Flag (Bash / PowerShell) | Effect |
 |--------------------------|--------|
@@ -178,9 +178,10 @@ installer proceeds to main-branch fallback.
 1. Parse current `{N}` from the repo name.
 2. Build candidate names for `{N+1}` through `{N+LOOKAHEAD}`.
    - **Default `LOOKAHEAD = 20`** (per user requirement; was 5 in the
-     older `24-update-check-mechanism/01-fundamentals.md`. Implementations
-     SHOULD adopt 20 going forward; 5 remains acceptable for legacy
-     callers but the user-facing default is 20).
+     older `24-update-check-mechanism/01-fundamentals.md`). New
+     installers MUST adopt `LOOKAHEAD = 20`. Installers explicitly
+     tagged `legacy` in their manifest MAY retain `LOOKAHEAD = 5`;
+     all other implementations MUST use 20.
 3. Fire all `LOOKAHEAD + 1` probes (V plus V+1..V+LOOKAHEAD)
    **in parallel**:
    - Bash: `&` + `wait`, or GNU `parallel`.

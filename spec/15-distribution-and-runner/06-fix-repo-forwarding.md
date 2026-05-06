@@ -72,7 +72,7 @@ script. Specifically:
 2. **No mutation.** The runner MUST NOT inject, drop, reorder, or
    transform any argument the user typed after the `fix-repo`
    sub-command token.
-3. **No intermediate copies.** The dispatch path SHOULD be a single
+3. **No intermediate copies.** The dispatch path MUST be a single
    `exec` (Bash) or `&` invocation (PowerShell) on the original argv.
    Function indirection is allowed only when the function does not
    touch the argv (i.e. it just forwards `"$@"` / `@args` unchanged).

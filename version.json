@@ -1,9 +1,9 @@
 {
-  "Version": "5.29.0",
+  "Version": "5.30.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "812497f69cfdcc3065e6a6cc17c45935df140183",
+  "LastCommitSha": "26df1bd13b90b09ff0cf1df0c274fd1fa64b1a1f",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "5.29.0",
+  "version": "5.30.0",
   "updated": "2026-05-07",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "812497f69cfdcc3065e6a6cc17c45935df140183",
-    "shortSha": "812497f",
-    "branch": "edit/edt-0725487e-ce7c-4efd-a016-783299ce1297"
+    "sha": "26df1bd13b90b09ff0cf1df0c274fd1fa64b1a1f",
+    "shortSha": "26df1bd",
+    "branch": "edit/edt-4a23252a-baa3-4bbb-a3d9-d65e3e2e9868"
   },
   "stats": {
     "totalFiles": 672,
-    "totalLines": 144338,
+    "totalLines": 144346,
     "totalFolders": 23,
-    "totalBytes": 5193648,
+    "totalBytes": 5194072,
     "rootFiles": 6
   },
   "folders": [
@@ -74,7 +74,7 @@
       "ambiguity": "None",
       "fileCount": 118,
       "lineCount": 18503,
-      "byteCount": 678096
+      "byteCount": 678090
     },
     {
       "path": "04-database-conventions",
@@ -216,8 +216,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 44,
-      "lineCount": 8912,
-      "byteCount": 294212
+      "lineCount": 8913,
+      "byteCount": 294347
     },
     {
       "path": "15-distribution-and-runner",
@@ -230,7 +230,7 @@
       "ambiguity": null,
       "fileCount": 7,
       "lineCount": 894,
-      "byteCount": 35360
+      "byteCount": 35358
     },
     {
       "path": "16-generic-release",
@@ -281,8 +281,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 45,
-      "lineCount": 9285,
-      "byteCount": 577551
+      "lineCount": 9292,
+      "byteCount": 577848
     },
     {
       "path": "21-app",
