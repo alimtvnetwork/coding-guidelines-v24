@@ -49,14 +49,25 @@ Unique: `(WorkerNodeIdentity)`.
 
 ### 2.2 `WorkerNodeStatus` (ref) and `WorkerNodeKind` (ref)
 
-Both follow the canonical `(Id, Code, Label)` ref shape (Rule 13):
+Both follow the canonical Rule 13 ref shape — PK keeps the full `{TableName}Id` form (Rule 1, universal); only `Code` / `Label` / `Description` drop the prefix:
 
-| Column | Type | Null |
-|--------|------|------|
-| `{TableName}Id` | INTEGER | NO (PK) |
-| `Code` | TEXT | NO (unique, e.g. `Active`, `Draining`, `Offline`) |
-| `Label` | TEXT | NO (human-readable) |
-| `Description` | TEXT | YES |
+**`WorkerNodeStatus`:**
+
+| Column | Type | Null | Notes |
+|--------|------|------|-------|
+| `WorkerNodeStatusId` | INTEGER | NO | PK, AUTOINCREMENT (Rule 1) |
+| `Code` | TEXT | NO | Unique, e.g. `Active`, `Draining`, `Offline` |
+| `Label` | TEXT | NO | Human-readable |
+| `Description` | TEXT | YES | Per Rule 10 |
+
+**`WorkerNodeKind`:**
+
+| Column | Type | Null | Notes |
+|--------|------|------|-------|
+| `WorkerNodeKindId` | INTEGER | NO | PK, AUTOINCREMENT (Rule 1) |
+| `Code` | TEXT | NO | Unique, e.g. `Standard`, `HighMemory`, `Reserved` |
+| `Label` | TEXT | NO | Human-readable |
+| `Description` | TEXT | YES | Per Rule 10 |
 
 Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Quarantined`. Kinds: `Standard`, `HighMemory`, `Reserved` (extensible).
 
