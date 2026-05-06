@@ -1,8 +1,13 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 2.1.0
+**Version:** 2.2.0
 
+> **v2.2.0 (Phase 4 — WorkerNode backup & ordering fields):**
+> - `WorkerNode` gains three columns: `Sequence INTEGER NOT NULL` (registry display + RoundRobin order), `IsBackup INTEGER NOT NULL DEFAULT 0` (boolean flag), `BackupOfWorkerNodeId INTEGER NULL` (self-FK → primary worker this node mirrors).
+> - **UI label rule:** the user-facing label for a `WorkerNode` row is **"Region"**. The internal code, table name, columns, and API contracts keep the name `Worker` / `WorkerNode` unchanged. Only the rendered string in dashboards, forms, and copy says "Region". See `07-role-based-dashboards.md` §UI labels.
+> - **Backup invariant (locked decision D9):** when `IsBackup = 1`, `BackupOfWorkerNodeId` MUST be NOT NULL and MUST reference a row where `IsBackup = 0`. Backup nodes are excluded from every routing strategy (`04-worker-routing.md` §1.4). Backup chains (backup-of-a-backup) are forbidden.
+>
 > **v2.1.0 (Phase 3 — Move Users off Main):**
 > - The legacy Main `User` table is **REMOVED**. Replaced by `UserDirectory` — a routing-only index containing `(UserEmail, CompanyId, WorkerNodeId)` and **no secrets**. Authoritative `AppUser` rows (with `PasswordHash`, `TotpSecret`, `BackupCodesHash`, etc.) now live exclusively in the assigned Worker's split-DB App tier per `11-split-db-tier-reconciliation.md` §5.
 > - The legacy Main `UserRole` table is **REMOVED**. Role assignments live on the Worker as `AppUserRole`. Cascading-roles union is computed per-request on the Worker (Phase 5).
