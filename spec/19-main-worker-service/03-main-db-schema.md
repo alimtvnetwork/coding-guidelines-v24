@@ -214,7 +214,7 @@ Tracks which version each Worker is currently running.
 | `WorkerVersionId` | INTEGER | NO | PK |
 | `WorkerNodeId` | INTEGER | NO | FK |
 | `WorkerVersionSemver` | TEXT | NO | e.g. `1.4.2` |
-| `WorkerVersionRecordedAt` | TEXT | NO | ISO-8601 |
+| `WorkerVersionRecordedAt` | INTEGER | NO | Epoch seconds, UTC |
 | `Notes` | TEXT | YES | Per Rule 12 |
 | `Comments` | TEXT | YES | Per Rule 12 |
 
