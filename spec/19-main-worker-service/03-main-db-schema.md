@@ -277,6 +277,8 @@ Records every routing decision. Useful for debugging load distribution.
 | Index | Columns |
 |-------|---------|
 | `IX_Company_WorkerNodeId` | `Company(WorkerNodeId)` |
+| `IX_WorkerNode_BackupOf` | `WorkerNode(BackupOfWorkerNodeId)` WHERE `BackupOfWorkerNodeId IS NOT NULL` |
+| `IX_WorkerNode_PrimaryEligible` | `WorkerNode(WorkerNodeStatusId, Sequence)` WHERE `IsBackup = 0` (covers routing eligibility scans) |
 | `IX_UserDirectory_CompanyId` | `UserDirectory(CompanyId)` |
 | `IX_UserDirectory_WorkerNodeId` | `UserDirectory(WorkerNodeId)` |
 | `UX_UserDirectory_UserEmail` | `UserDirectory(UserEmail)` UNIQUE |
