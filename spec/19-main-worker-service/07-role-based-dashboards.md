@@ -39,40 +39,34 @@ Role assignment happens from the Power Admin dashboard (verbatim §Roles.4).
 ```php
 enum AccessItem: string
 {
-    case PowerAdminPage     = 'PowerAdminPage';
-    case AdminPage          = 'AdminPage';
-    case BillingPage        = 'BillingPage';
-    case CompanySettingsPage = 'CompanySettingsPage';
-    case UserManagementPage = 'UserManagementPage';
-    case WorkerRegistryPage = 'WorkerRegistryPage';
-    case PushUpdatePage     = 'PushUpdatePage';
-    case AuditLogPage       = 'AuditLogPage';
-    case DashboardPage      = 'DashboardPage';
+    case PowerAdmin      = 'PowerAdmin';
+    case Admin           = 'Admin';
+    case Billing         = 'Billing';
+    case CompanySettings = 'CompanySettings';
+    case UserManagement  = 'UserManagement';
+    case WorkerRegistry  = 'WorkerRegistry';   // UI label: "Region Registry"
+    case PushUpdate      = 'PushUpdate';
+    case AuditLog        = 'AuditLog';
+    case Dashboard       = 'Dashboard';
 }
 ```
 
-Extensible. Adding a page = add an enum case + a row in `RoleAccessItem` join table seed.
+Code values match the `AccessItem.Code` column (see `03-main-db-schema.md` §2.6.1). Each `AccessItem` row also carries a `PageUrlSuffix` used as a route-matcher fallback when callers do not pass an explicit `Code`.
+
+Extensible. Adding a capability = add an enum case + a row in the `AccessItem` seed (`14-rbac-and-status-seed.md`) + a row in the `RoleAccessItem` seed for each role that should hold it.
 
 ---
 
 ## 4. Schema Additions for Access (Main DB)
 
-### 4.1 `RoleAccessItem` (join, exempt from Description rule)
+`AccessItem`, `RoleAccessItem`, and `AccessDenialEvent` are defined authoritatively in `03-main-db-schema.md` §2.6.1–§2.6.3. This file does not duplicate columns — refer there for the exact shape.
 
-| Column | Type | Null |
-|--------|------|------|
-| `RoleAccessItemId` | INTEGER | NO (PK) |
-| `RoleId` | INTEGER | NO (FK) |
-| `Code` | TEXT | NO (matches `AccessItem` value) |
+### 4.1 Default seed summary (full row set in `14-rbac-and-status-seed.md`)
 
-Unique: `(RoleId, Code)`.
-
-### 4.2 Default seed (via Seedable-Config)
-
-| Role | Pages |
-|------|-------|
-| `PowerAdmin` | All `AccessItem` values |
-| `AdminUser` | `AdminPage`, `BillingPage`, `CompanySettingsPage`, `UserManagementPage`, `DashboardPage` |
+| Role | AccessItems granted |
+|------|---------------------|
+| `PowerAdmin` | All 9 `AccessItem` values |
+| `AdminUser` | `Admin`, `Billing`, `CompanySettings`, `UserManagement`, `AuditLog` (read-only), `Dashboard` |
 | `Member` | `DashboardPage` |
 
 ---
