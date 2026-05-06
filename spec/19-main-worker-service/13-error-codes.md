@@ -9,6 +9,8 @@
 **Resolves:** audit findings F-X-08, F-A-21, F-B-08 (top-10 fix #4). Unblocks AC-6, AC-1.
 **Registered in:** `spec/03-error-manage/03-error-code-registry/01-registry.md` (line 61–62 entries).
 
+> **Envelope authority (Phase 13.2 — closes audit C-5):** the JSON error envelope shape is owned exclusively by **`08-error-contract.md` §2**. This file (`13-`) is a **code catalogue only** — its rows define `ErrorCode`, `Flat`, `Name`, `Message`, `HTTP`, and `Source` for use *inside* the envelope, not envelope fields themselves. Implementations MUST emit the envelope from `08-` §2 verbatim and populate `Error.ErrorCode` with the prefixed string (e.g. `WORKER-100-01`) from §2/§3 below. The **flat integer is for Go internals and DB columns only** and MUST NOT appear as a JSON envelope field. There is no `ErrorCodeFlat` or `ErrorName` JSON field on the wire; if older drafts mention them, ignore.
+
 ---
 
 ## 1. Overview
