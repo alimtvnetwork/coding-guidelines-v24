@@ -197,7 +197,7 @@ Audit row written on every successful `PATCH /API/V1/Settings/EndpointAuth` (per
 | `Notes` | TEXT | YES | Per Rule 12 |
 | `Comments` | TEXT | YES | Per Rule 12 |
 
-Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant above. Indexed on `(EndpointAuthSettingId, OccurredAt DESC)` and `(UpdatedByUserId, OccurredAt DESC)` for audit queries.
+Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant above. Indexed on `(EndpointAuthSettingId, OccurredAt DESC)` and `(UpdatedByUserDirectoryId, OccurredAt DESC)` for audit queries.
 
 ### 2.6.5 `EndpointAuthChangeKind` (ref)
 
