@@ -4,6 +4,12 @@
 
 ---
 
+## v2.16.1 — 2026-05-06 (Phase 12.6.1 — Sync-managed file drift fix)
+
+**Scope:** Patch bump (`5.19.0` → `5.19.1`). Re-ran `npm run sync` to regenerate the 5 sync-managed artifacts that drifted in CI (`public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`). No spec content, schema, error-code, or AC changes — generated stamps + spec-tree counts only (664 files / 23 folders / 143,353 lines). Unblocks the `sync:check` pre-commit / CI gate.
+
+---
+
 ## v2.16.0 — 2026-05-06 (Phase 12.6 — Spec slot 24 reserved with `24-threat-model.md` stub)
 
 **Scope:** Closes the last unresolved item in the Backup System initiative. Creates a stub `24-threat-model.md` (v0.1.0) that visibly reserves spec slot 24 inside `19-main-worker-service/` so a future spec author cannot grab it for an unrelated topic. The stub is the **shared prerequisite** declared by `12-jwt-delivery-contract.md` §11.3 (OQ-12-1 / OQ-12-2) and `23-snapshot-storage-and-restore.md` §14.4 (OQ-23-1 / OQ-23-2). Project version bump to `5.19.0`.
