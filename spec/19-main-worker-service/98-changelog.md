@@ -4,6 +4,13 @@
 
 ---
 
+## v5.31.0 — 2026-05-06 (Backup-tier seed v2.0.0)
+
+**Scope:** Version bump (`5.30.0` → `5.31.0`). Backup-tier seed v2.0.0.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.30.0 — 2026-05-06 (Patches A-D)
 
 **Scope:** Version bump (`5.29.0` → `5.30.0`). Patches A-D.
