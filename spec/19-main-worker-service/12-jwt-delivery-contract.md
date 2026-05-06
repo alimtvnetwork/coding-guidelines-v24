@@ -298,7 +298,7 @@ Any failure → **HTTP 421 Misdirected Request** with error code `MAIN-800-04 Ba
 |---------|------------------------------|------------------------------|
 | Carrier | JSON body, in-memory React | OAuth `Authorization: Bearer`, S2S only |
 | Principal | End user (`sub=AppUserId`) | Pairing (`sub=PairingId:...`) |
-| TTL | 15 min (UI refreshable) | 15 min (machine refreshable via client-creds) |
+| TTL | 15 min (UI refreshable) | 15 min (machine refreshable via client-creds) | <!-- TUNABLE-WAIVER: 15 min = MainWorker.Auth.WorkerJwtTtlSeconds (900s); table cell, key cited in body §2.4 -->
 | XSS exposure | Designed-around per §3 | None — never reaches a browser |
 | Cross-node misroute | Detected by `wnk` claim | Detected by `PairingId` claim → 421 |
 
