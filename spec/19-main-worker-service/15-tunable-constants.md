@@ -171,13 +171,13 @@ All Backup-tier tunables now allocated. Phase 12 closes the backup work with dia
 
 ## 4. `config.seed.json` Categories binding (paste-ready)
 
-Add (or merge with) the following category at SemVer `1.4.0` of `config.seed.json` (bumped from `1.3.0` to materialize the four new settings added in §2.7–2.9: `PushUpdateIssuedSkewSec`, `SelfUpdateRedirectStaleHours`, `BootstrapRetryBackoffSec`, `BootstrapRetryMaxAttempts`):
+Add (or merge with) the following category at SemVer `1.5.0` of `config.seed.json` (bumped from `1.4.0` to materialize the third caching key added in Phase 13.3 — `CacheRecentCompanyPerUserTtlSeconds` — closing the §4↔§4.2 gap flagged by audit-08 §2.3; the four §2.7–2.9 keys (`PushUpdateIssuedSkewSec`, `SelfUpdateRedirectStaleHours`, `BootstrapRetryBackoffSec`, `BootstrapRetryMaxAttempts`) and the two cache keys (`CacheCompanyToWorkerTtlSeconds`, `CacheWorkerRegistryTtlSeconds`) carry over from the v1.3.0→v1.4.0 bump):
 
 ```jsonc
 "MainWorker": {
   "DisplayName": "Main / Worker tunables",
   "Description": "Single-value tunables for spec/19. See 15-tunable-constants.md.",
-  "Version": "1.4.0",
+  "Version": "1.5.0",
   "AddedIn":  "1.3.0",
   "Settings": {
 
@@ -219,12 +219,15 @@ Add (or merge with) the following category at SemVer `1.4.0` of `config.seed.jso
     "BootstrapRetryBackoffSec":    { "Type": "string",  "Default": "10,30,90,300", "Description": "Comma-separated; length = BootstrapRetryMaxAttempts." },
     "BootstrapRetryMaxAttempts":   { "Type": "number",  "Default": 4,         "Min": 1,    "Max": 10 },
 
-    "CacheCompanyToWorkerTtlSeconds": { "Type": "number", "Default": 900, "Min": 30 },
-    "CacheWorkerRegistryTtlSeconds":  { "Type": "number", "Default": 60,  "Min": 5  }
+    "CacheCompanyToWorkerTtlSeconds":     { "Type": "number", "Default": 900,   "Min": 30 },
+    "CacheWorkerRegistryTtlSeconds":      { "Type": "number", "Default": 60,    "Min": 5  },
+    "CacheRecentCompanyPerUserTtlSeconds":{ "Type": "number", "Default": 28800, "Min": 300, "Description": "Default mirrors MainSessionTtlSeconds; runtime resolver MAY substitute the live MainSessionTtlSeconds value to honour §4.2 binding." }
 
   }
 }
 ```
+
+> **Backup-tier seed (Phase 13.4 follow-up):** §2.11–2.15 define ~28 backup-tier tunables (`MainWorker.Backup.*`) that are NOT yet materialized in the JSON payload above. They are intentionally deferred to a `config.seed.json` v2.0.0 bump because the backup subsystem ships behind a feature flag (`MainWorker.Backup.Enabled`, default false). Until that bump, implementers MUST read backup tunables from §2.11–2.15 prose defaults verbatim. Linter T3 (§6) is waived for the `MainWorker.Backup.*` namespace until v2.0.0.
 
 ---
 
