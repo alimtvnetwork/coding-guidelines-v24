@@ -1,7 +1,7 @@
 # 06 — Core API Endpoints
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.3.0
 
 Authoritative REST surface for both tiers. All paths are `/API/V1/...`. JSON request/response with PascalCase keys.
 

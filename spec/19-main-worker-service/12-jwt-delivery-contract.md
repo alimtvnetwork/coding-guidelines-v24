@@ -1,7 +1,7 @@
 # 12 — JWT Delivery Contract (XSS-Safe)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-12, F-D-04, F-B-05 (top-10 fix #3). Closes AC-4.
