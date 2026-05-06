@@ -286,4 +286,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.7.0 — 2026-05-06 (Phase 8: §2.12 added — MaxKeyAgeSeconds, RotationAckTimeoutSeconds, RotationActivationDelaySeconds, RetiredKeyGraceSeconds, RsaKeySizeBits)*
+*Tunable constants v1.8.0 — 2026-05-06 (Phase 9: §2.13 added — five Backup-endpoint timeouts: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health)*
