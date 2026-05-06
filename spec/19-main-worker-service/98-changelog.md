@@ -4,6 +4,22 @@
 
 ---
 
+## v2.15.0 — 2026-05-06 (Phase 12.5 — OQ-23-1 / OQ-23-2 dispositions formalised)
+
+**Scope:** Promotes the two remaining open questions in `23-snapshot-storage-and-restore.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Mirrors the Phase 12.4 pattern. Project version bump to `5.18.0`.
+
+- **`23-snapshot-storage-and-restore.md` → v1.2.0**
+  - §14 retitled *Open Questions — formalised dispositions* (was *logged, non-blocking*).
+  - §14.1 OQ-23-1 (snapshot dedup pyramid): rationale matrix (restore complexity, failure modes, retention sweep, operator mental model, disk savings, CODE RED footprint, forward-secrecy interaction), 3 v2.0 reopen triggers (retention >180d AND p95 size >5GB; >90% no-change days + paid feature ask; per-byte tier crossover), 4 forbidden v1.0 patterns (no non-flat storage; no `BasedOnSnapshotCatalogId` FK; no skip-empty-day optimisation; no premature error-code allocation).
+  - §14.2 OQ-23-2 (partial-table / per-tenant restore): rationale matrix (ownership, cross-row consistency, re-seal, watermark realignment, mental model, forward-secrecy), 2 reopen triggers (schema-level tenant isolation contract + per-tenant PITR regulatory regime), 3 forbidden patterns (no `TenantId` filter on BE-3; no `RestoreScope` column "leaving room"; no manual SQL bypass of BE-6 audit path), CODE RED reasoning against "operators sometimes ask for it".
+  - §14.3 OQ-23-3 resolution preserved.
+  - §14.4 Future-work catalogue: 4 ordered v2.0 prerequisites including reservation of `24-threat-model.md` (shared with `12-jwt-delivery-contract.md` §11.3) and the `WORKER-940-05+` / `WORKER-940-10+` error-code ranges left explicitly unallocated.
+- **`97-acceptance-criteria.md` → v1.5.0** — Two new criteria: (a) flat-snapshot guarantee (no `BasedOnSnapshotCatalogId` column + every-day-produces-row test), (b) no-partial-restore guarantee (BE-3 rejects `TenantId`/`RestoreScope` with `MAIN-830-04 RestoreScopeUnsupported`; no `RestoreScope` column on `BackupRestoreJob`).
+- **No new tables, no new error codes** — per the formalised dispositions, allocating `WORKER-940-05+` or `MAIN-830-04` "for future use" is itself a CODE RED violation. `MAIN-830-04` referenced in the AC test is allocated **only when partial-restore actually ships**.
+- **Spec slot 24** remains reserved for `24-threat-model.md` (shared trigger of §14.4 and `12-jwt-delivery-contract.md` §11.3).
+
+---
+
 ## v2.14.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 dispositions formalised)
 
 **Scope:** Promotes the two open questions in `12-jwt-delivery-contract.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Project version bump to `5.17.0`.
