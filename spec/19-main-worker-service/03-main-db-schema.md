@@ -258,12 +258,14 @@ Records every routing decision. Useful for debugging load distribution.
 | Index | Columns |
 |-------|---------|
 | `IX_Company_WorkerNodeId` | `Company(WorkerNodeId)` |
-| `IX_User_CompanyId` | `User(CompanyId)` |
+| `IX_UserDirectory_CompanyId` | `UserDirectory(CompanyId)` |
+| `IX_UserDirectory_WorkerNodeId` | `UserDirectory(WorkerNodeId)` |
+| `UX_UserDirectory_UserEmail` | `UserDirectory(UserEmail)` UNIQUE |
 | `IX_WorkerVersion_WorkerNodeId_RecordedAt` | `WorkerVersion(WorkerNodeId, WorkerVersionRecordedAt DESC)` |
 | `IX_WorkerSelectionEvent_At` | `WorkerSelectionEvent(WorkerSelectionEventAt DESC)` |
 | `UX_EndpointAuthAuditEvent_IdempotencyKey` | `EndpointAuthAuditEvent(IdempotencyKey)` UNIQUE |
 | `IX_EndpointAuthAuditEvent_Setting_At` | `EndpointAuthAuditEvent(EndpointAuthSettingId, OccurredAt DESC)` |
-| `IX_EndpointAuthAuditEvent_Actor_At` | `EndpointAuthAuditEvent(UpdatedByUserId, OccurredAt DESC)` |
+| `IX_EndpointAuthAuditEvent_Actor_At` | `EndpointAuthAuditEvent(UpdatedByUserDirectoryId, OccurredAt DESC)` |
 
 ---
 
