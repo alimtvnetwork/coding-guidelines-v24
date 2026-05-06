@@ -1,8 +1,13 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 2.1.0
+**Version:** 2.2.0
 
+> **v2.2.0 (Phase 4 — WorkerNode backup & ordering fields):**
+> - `WorkerNode` gains three columns: `Sequence INTEGER NOT NULL` (registry display + RoundRobin order), `IsBackup INTEGER NOT NULL DEFAULT 0` (boolean flag), `BackupOfWorkerNodeId INTEGER NULL` (self-FK → primary worker this node mirrors).
+> - **UI label rule:** the user-facing label for a `WorkerNode` row is **"Region"**. The internal code, table name, columns, and API contracts keep the name `Worker` / `WorkerNode` unchanged. Only the rendered string in dashboards, forms, and copy says "Region". See `07-role-based-dashboards.md` §UI labels.
+> - **Backup invariant (locked decision D9):** when `IsBackup = 1`, `BackupOfWorkerNodeId` MUST be NOT NULL and MUST reference a row where `IsBackup = 0`. Backup nodes are excluded from every routing strategy (`04-worker-routing.md` §1.4). Backup chains (backup-of-a-backup) are forbidden.
+>
 > **v2.1.0 (Phase 3 — Move Users off Main):**
 > - The legacy Main `User` table is **REMOVED**. Replaced by `UserDirectory` — a routing-only index containing `(UserEmail, CompanyId, WorkerNodeId)` and **no secrets**. Authoritative `AppUser` rows (with `PasswordHash`, `TotpSecret`, `BackupCodesHash`, etc.) now live exclusively in the assigned Worker's split-DB App tier per `11-split-db-tier-reconciliation.md` §5.
 > - The legacy Main `UserRole` table is **REMOVED**. Role assignments live on the Worker as `AppUserRole`. Cascading-roles union is computed per-request on the Worker (Phase 5).
@@ -43,16 +48,23 @@ ERD: `diagrams/erd-main-db.mmd`.
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
 | `WorkerNodeId` | INTEGER | NO | PK, AUTOINCREMENT |
-| `WorkerNodeTitle` | TEXT | NO | Human label, may repeat across nodes |
+| `WorkerNodeTitle` | TEXT | NO | Human label, may repeat across nodes. **UI renders this under the column header "Region"** (D7). |
 | `WorkerNodeIdentity` | TEXT | NO | Unique stable identifier (e.g. machine fingerprint) |
 | `WorkerNodeEndpoint` | TEXT | NO | Base URL, e.g. `https://w1.example.com` |
 | `WorkerNodeStatusId` | INTEGER | NO | FK → `WorkerNodeStatus.WorkerNodeStatusId` |
 | `WorkerNodeKindId` | INTEGER | NO | FK → `WorkerNodeKind.WorkerNodeKindId` |
+| `Sequence` | INTEGER | NO | Monotonic display + RoundRobin order. Unique among non-backup peers. Backups inherit their primary's `Sequence` for grouping but never participate in RoundRobin (Phase 4, D6). |
+| `IsBackup` | INTEGER | NO | Boolean (0/1). `1` ⇒ this row is a backup mirror of `BackupOfWorkerNodeId`. Backup rows MUST NOT serve traffic (D9). DEFAULT 0 (Phase 4, D8). |
+| `BackupOfWorkerNodeId` | INTEGER | YES | Self-FK → `WorkerNode.WorkerNodeId`. NOT NULL when `IsBackup = 1`; MUST be NULL when `IsBackup = 0`. The referenced row MUST have `IsBackup = 0` (no chains). |
 | `WorkerNodeRegisteredAt` | INTEGER | NO | Epoch seconds, UTC |
 | `WorkerNodeLastSeenAt` | INTEGER | NO | Epoch seconds, UTC; updated on heartbeat |
 | `Description` | TEXT | YES | Per Rule 11 |
 
-Unique: `(WorkerNodeIdentity)`.
+Unique: `(WorkerNodeIdentity)`, `(Sequence) WHERE IsBackup = 0`.
+
+CHECK constraints (enforced at migration time):
+- `(IsBackup = 0 AND BackupOfWorkerNodeId IS NULL) OR (IsBackup = 1 AND BackupOfWorkerNodeId IS NOT NULL)`
+- A row referenced by `BackupOfWorkerNodeId` MUST itself have `IsBackup = 0` (validated by trigger; SQLite cannot express this in pure CHECK).
 
 ### 2.2 `WorkerNodeStatus` (ref) and `WorkerNodeKind` (ref)
 
@@ -265,6 +277,8 @@ Records every routing decision. Useful for debugging load distribution.
 | Index | Columns |
 |-------|---------|
 | `IX_Company_WorkerNodeId` | `Company(WorkerNodeId)` |
+| `IX_WorkerNode_BackupOf` | `WorkerNode(BackupOfWorkerNodeId)` WHERE `BackupOfWorkerNodeId IS NOT NULL` |
+| `IX_WorkerNode_PrimaryEligible` | `WorkerNode(WorkerNodeStatusId, Sequence)` WHERE `IsBackup = 0` (covers routing eligibility scans) |
 | `IX_UserDirectory_CompanyId` | `UserDirectory(CompanyId)` |
 | `IX_UserDirectory_WorkerNodeId` | `UserDirectory(WorkerNodeId)` |
 | `UX_UserDirectory_UserEmail` | `UserDirectory(UserEmail)` UNIQUE |

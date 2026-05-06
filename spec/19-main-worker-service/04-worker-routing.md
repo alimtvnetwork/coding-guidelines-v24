@@ -1,7 +1,9 @@
 # 04 — Worker Routing
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
+
+> **v1.2.0 (Phase 4 — Backup nodes excluded; "Region" UI label):** The eligibility filter (§1.4) gains a positive guard `IsPrimary(node)` which requires `WorkerNode.IsBackup = 0`. Backup nodes (D8/D9) MUST NEVER appear in any selection strategy's candidate set, including `Manual` (a Power Admin attempting to route to a backup gets `WORKER-300-04 BackupNotRoutable`). RoundRobin cursor walks `WorkerNode.Sequence ASC` over `IsBackup = 0` rows only. The dashboard column previously labelled "Worker" is renamed to **"Region"** in UI copy; the underlying field name stays `WorkerNode` everywhere in code and APIs.
 
 How the Main Server picks which Worker handles a new tenant, caches that decision, and recovers when a Worker fails.
 
@@ -18,9 +20,9 @@ See also [`images/03-worker-subdomain-routing.png`](./images/03-worker-subdomain
 Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStrategy`. Stored in `WorkerSelectionStrategy` table.
 
 ### 1.1 `RoundRobin`
-- Pick next `Active` worker in registry order.
+- Pick next eligible worker ordered by `WorkerNode.Sequence ASC` (ties broken by `WorkerNodeRegisteredAt ASC`).
 - Cursor persisted in main DB (single-row config table or `WorkerSelectionEvent` last-row lookup).
-- Pros: trivially predictable. Cons: ignores load.
+- Pros: trivially predictable, deterministic across restarts. Cons: ignores load.
 
 ### 1.2 `LeastLoaded` (recommended default)
 - Pick `Active` worker with fewest assigned `Company` rows.
@@ -34,6 +36,7 @@ Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStra
 
 ### 1.4 Eligibility filter (applies to all strategies)
 A worker is eligible only if **all** are true (positive guards, per CODE RED):
+- `IsPrimary(node)` → `WorkerNode.IsBackup = 0` (Phase 4, D9 — backups never serve traffic).
 - `IsWorkerActive(node)` → `WorkerNodeStatusCode = 'Active'`
 - `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Heartbeat.IntervalSeconds × MissedThreshold` per `15-tunable-constants.md` §2.3 <!-- TUNABLE-WAIVER: derived product, not a literal -->.
 - `HasCapacity(node)` → assigned company count strictly less than `MainWorker.Routing.MaxCompaniesPerWorker`. **NULL = unlimited** (resolves F-A-06; the legacy `0` magic value is rejected — Main MUST refuse to start if the configured value is `0` or negative). When `NULL`, the guard returns `true` unconditionally.
