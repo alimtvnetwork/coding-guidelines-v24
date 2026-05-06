@@ -175,53 +175,21 @@ ORDER  BY Picked DESC;
 
 ---
 
-## 7. Endpoint Schema (authoritative)
+## 7. Endpoint Schema — see canonical catalogue
 
-All endpoints below MUST honour the cross-spec header rules in `spec/04-database-conventions/06-rest-api-format.md` (`X-Correlation-Id`, `X-Idempotency-Key`, `X-Auth-Action`) and the tunables in `15-tunable-constants.md`.
+The single source of truth for every routing-related endpoint (paths, methods, request/response bodies, auth, idempotency, error codes) is **`06-core-api-endpoints.md`**. This file MUST NOT redefine them. A literal AI implementer MUST read `06-` and ignore any earlier draft of an endpoint catalogue here.
 
-### 7.1 Common envelope
+| Concern | Authoritative location |
+|---|---|
+| Endpoint paths + auth column | `06-` §2 (Endpoint Catalog) |
+| Request / response payload shapes | `06-` §3 (Reference Payloads) and the `21-backup-endpoints.md` family for Backup-tier |
+| Per-endpoint idempotency rules | `06-` §1 + `15-tunable-constants.md` §2.2 |
+| Header contract (`X-Correlation-Id`, `X-Idempotency-Key`, `X-Auth-Action`) | `spec/04-database-conventions/06-rest-api-format.md` |
+| Error envelope used by every endpoint | `08-error-contract.md` §2 (single envelope) |
+| Error codes referenced from endpoints | `13-error-codes.md` §3 |
 
-| Field | Rule |
-|-------|------|
-| Request body | `application/json; charset=utf-8`. PascalCase keys. |
-| Response body | `{ "Data": <T> | null, "Error": <ErrorEnvelope> | null, "Meta": { "CorrelationId": "<ULID>", "IdempotencyReplay": <bool> } }`. Exactly one of `Data` / `Error` is non-null. |
-| Error envelope | Per `13-error-codes.md` §3 (`Code`, `Message`, `HttpStatus`, `Details`, `CorrelationId`). |
-| Auth | Bearer JWT per `12-jwt-delivery-contract.md`. Unauthenticated endpoints explicitly noted. |
-| Idempotency | `POST` / `PUT` / `PATCH` REQUIRE `X-Idempotency-Key` (ULID, 26 chars). Cached for `IdempotencyKeyTtlSeconds = 86400` per `15-tunable-constants.md`. Replay returns the original response with `X-Idempotency-Replay: true` and `Meta.IdempotencyReplay = true`. |
-
-### 7.2 Endpoint catalogue
-
-| # | Method + Path | Purpose | Auth | Idempotent | Request body | Success status | Error codes (subset) |
-|---|---------------|---------|------|------------|--------------|----------------|----------------------|
-| 1 | `POST /API/V1/Workers/Register` | Worker boot — register node, fetch JWT pubkey. Per `10-worker-bootstrap-protocol.md`. | mTLS or shared bootstrap secret | Yes (key = `WorkerNodeCode`) | `{ WorkerNodeCode, WorkerNodeName, AdvertisedHost, AdvertisedPort, WorkerVersionCode, Capabilities[] }` | `201 Created` → `{ WorkerNodeId, JwtPublicKeyPem, AssignedSubdomain, HeartbeatIntervalSeconds }` | `WORKER-100-01..05` |
-| 2 | `POST /API/V1/Workers/{WorkerNodeId}/Heartbeat` | Liveness ping. | Worker JWT | Yes (natural — last-write-wins) | `{ LoadFactor (0..1), AssignedCompanyCount, FreeDiskBytes, UptimeSeconds }` | `200 OK` → `{ NextHeartbeatInSeconds }` | `WORKER-200-01..03` |
-| 3 | `POST /API/V1/Companies` | Create tenant; routing picks worker per §1. | User JWT (role: PowerAdmin or CompanyAdmin) | Yes (key = client ULID) | `{ CompanyCode, CompanyName, OwnerUserId, RequestedWorkerNodeId? (Manual only), Notes?, Comments? }` | `201 Created` → `{ CompanyId, WorkerNodeId, AssignedSubdomain, SplitDbProvisionState }` | `MAIN-300-01..04`, `WORKER-300-01..02` |
-| 4 | `GET /API/V1/Companies/{CompanyId}/Routing` | Resolve worker for tenant (cache-first). | User JWT | n/a (GET) | — | `200 OK` → `{ WorkerNodeId, AdvertisedHost, AdvertisedPort, CacheHit (bool), TtlRemainingSeconds }` | `MAIN-300-05`, `WORKER-300-03` |
-| 5 | `POST /API/V1/Auth/Login` | Email + password → user session + worker JWT. Per `12-jwt-delivery-contract.md`. | none | Yes (key = client ULID; replay returns same JWT only if not yet expired) | `{ Email, Password, X-Auth-Action: "Login" header }` | `200 OK` → `{ UserId, WorkerJwt, WorkerJwtExpiresAt, RequiresTwoFactor (bool) }` | `MAIN-400-01..04` |
-| 6 | `POST /API/V1/Auth/TwoFactor/Verify` | Complete 2FA, mint final worker JWT. | partial-auth JWT from §5 | Yes (key = client ULID) | `{ Code, X-Auth-Action: "TwoFactorVerify" header }` | `200 OK` → `{ WorkerJwt, WorkerJwtExpiresAt }` | `MAIN-400-05..07` |
-| 7 | `POST /API/V1/Auth/Refresh` | Rotate worker JWT before expiry. | expiring worker JWT | No (rotation is single-use; replay → `MAIN-400-09`) | `{}` (auth from header) | `200 OK` → `{ WorkerJwt, WorkerJwtExpiresAt }` | `MAIN-400-08..10` |
-| 8 | `POST /API/V1/Workers/{WorkerNodeId}/PushUpdate` | Power-Admin push-update fan-out. Per `spec/14-update/28-worker-push-instruction.md`. | User JWT (role: PowerAdmin) | Yes (key = `WorkerUpdateInstructionId`) | `{ TargetVersionCode, RolloutMode ("Immediate" | "Scheduled"), ScheduledAt?, Notes }` | `202 Accepted` → `{ WorkerUpdateInstructionId, EstimatedCompletionAt }` | `WORKER-500-01..06` |
-| 9 | `GET /API/V1/Workers` | List registry (cached, see §2). | User JWT (role: PowerAdmin) | n/a | — | `200 OK` → `{ Workers[]: { WorkerNodeId, Status, LoadFactor, AssignedCompanyCount, LastHeartbeatAt } }` | `MAIN-600-01` |
-| 10 | `POST /API/V1/Workers/{From}/Migrate/{To}` | **Deferred** (see §4). Documented for contract stability. | User JWT (role: PowerAdmin) | Yes (key = client ULID) | `{ CompanyIds[], Reason }` | `202 Accepted` → `{ MigrationId }` | `WORKER-700-01..03` |
-
-### 7.3 Idempotency rules (normative)
-
-1. **Key scope.** Cached per `(EndpointPath, AuthenticatedSubjectId, IdempotencyKey)`. Reusing a key across users is a `400 IdempotencyKeyConflict`.
-2. **Window.** `IdempotencyKeyTtlSeconds = 86400` (`15-tunable-constants.md`). Late replays past the window are treated as fresh requests.
-3. **Body invariance.** Replay with a different request body for the same key → `409 IdempotencyBodyMismatch` (`MAIN-300-04`).
-4. **Replay surface.** Replays return the original `HttpStatus`, body, `X-Correlation-Id` of the original request, AND `X-Idempotency-Replay: true`.
-5. **Failure caching.** Only `2xx` and deterministic `4xx` (validation) responses are cached. `5xx` and `429` MUST NOT be cached.
-6. **GET / non-mutating.** `GET` endpoints ignore `X-Idempotency-Key` (no caching contract).
-
-### 7.4 Validation contract
-
-- Missing `X-Correlation-Id` on any request → `400 BadRequest` (`MAIN-300-01`).
-- Missing `X-Idempotency-Key` on `POST`/`PUT`/`PATCH` → `400 BadRequest` (`WORKER-300-01`).
-- Missing `X-Auth-Action` on multi-step auth (§5, §6) → `400 BadRequest` (`MAIN-400-11`).
-- Body schema violations → `422 UnprocessableEntity` with per-field `Details[]`.
-
-Resolves audit findings F-X-11..F-X-15 (endpoint contract gaps) and closes the original top-10 fix list.
+Routing-specific behaviour that is NOT an endpoint contract (selection strategies, cache TTLs, failover rules) lives in §1–§6 above.
 
 ---
 
-*Worker routing v1.1.0 — 2026-05-04 (added §7 endpoint schema; audit fix #10)*
+*Worker routing v1.2.0 — 2026-05-06 (Phase 13.2: §7 endpoint catalogue removed; 06- is the single source of truth)*
