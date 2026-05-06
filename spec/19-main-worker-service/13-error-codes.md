@@ -184,6 +184,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-800-02` | `21182` | `PrimaryNotFound` | "`BackupOfWorkerIdentity` does not resolve to any registered Worker." | 404 | `18-backup-nodes.md` §3.2 |
 | `MAIN-800-03` | `21183` | `BackupCapacityExceeded` | "Primary already has `MainWorker.Backup.MaxBackupsPerPrimary` backups." | 409 | `18-backup-nodes.md` §2 R2 |
 | `MAIN-800-04` | `21184` | `TrafficOnBackupRejected` | "Backup node rejected an inbound user-facing request (D9 invariant)." | 421 | `18-backup-nodes.md` §1, §8 |
+| `MAIN-810-01` | `21185` | `BackupCompactionStalled` | "Backup acknowledgement lag exceeds `QuarantineCompactionOverrideSeconds`; compaction blocked." | n/a | `19-incremental-backup-sync.md` §4 |
 
 ---
 
