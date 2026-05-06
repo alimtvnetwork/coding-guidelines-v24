@@ -186,9 +186,9 @@ A JWT minted before the invalidation still embeds the old AccessItem list. Two c
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
-| `MAIN-700-01` | `21070` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
-| `WORKER-700-01` | `21071` | `RoleCacheRecompileFailed` | "Worker failed to recompile `RoleAccessCache` after invalidation." | 500 | `17` §4 |
-| `WORKER-700-02` | `21072` | `EmptyEffectiveAccessSet` | "User has zero `AppUserRole` rows; access denied to gated route." | 403 | `17` §1 |
+| `MAIN-700-01` | `21171` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
+| `WORKER-900-01` | `21090` | `RoleCacheRecompileFailed` | "Worker failed to recompile `RoleAccessCache` after invalidation." | 500 | `17` §4 |
+| `WORKER-900-02` | `21091` | `EmptyEffectiveAccessSet` | "User has zero `AppUserRole` rows; access denied to gated route." | 403 | `17` §1 |
 
 These rows MUST be added to `13-error-codes.md` and `error-codes.json` in the Phase 5 commit.
 
