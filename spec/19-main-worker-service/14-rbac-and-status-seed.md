@@ -1,7 +1,9 @@
 # 14 — RBAC + Status Seed (Concrete Row Sets)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 2.0.0
+
+> **v2.0.0 rename (Phase 1):** `EnumPage` → `AccessItem`, `RolePageAccess` → `RoleAccessItem`. New column `AccessItem.PageUrlSuffix` (route matcher). Old table names accepted as aliases for one release per `03-main-db-schema.md` §2.6.1 deprecation notice.
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-B-09, F-B-10, F-X-06 (top-10 fix #6). Closes AC-5.
