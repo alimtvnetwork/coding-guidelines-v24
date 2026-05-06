@@ -173,6 +173,15 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|---|---|---|---|
 | `MAIN-700-01` | `21171` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
 
+### 3.8 Backup Lifecycle (800-899 → 21180-21189)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-800-01` | `21181` | `BackupChainNotAllowed` | "Cannot register a backup whose primary is itself a backup." | 422 | `18-backup-nodes.md` §1, §3.2 |
+| `MAIN-800-02` | `21182` | `PrimaryNotFound` | "`BackupOfWorkerIdentity` does not resolve to any registered Worker." | 404 | `18-backup-nodes.md` §3.2 |
+| `MAIN-800-03` | `21183` | `BackupCapacityExceeded` | "Primary already has `MainWorker.Backup.MaxBackupsPerPrimary` backups." | 409 | `18-backup-nodes.md` §2 R2 |
+| `MAIN-800-04` | `21184` | `TrafficOnBackupRejected` | "Backup node rejected an inbound user-facing request (D9 invariant)." | 421 | `18-backup-nodes.md` §1, §8 |
+
 ---
 
 ## 4. Reserved sub-ranges
@@ -185,8 +194,10 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
 | _(consumed)_ | 21171 consumed by `MAIN-700-01 CacheInvalidationDeliveryFailed` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
+| _(consumed)_ | 21181-21184 consumed by `MAIN-800-01..04` Backup Lifecycle per Phase 6 (`18-backup-nodes.md`) |
 | `MAIN-21162-21169` | Main external-services future expansion |
-| `MAIN-21172-21199` | Main future expansion (file-system, network, additional cache-coherence overflow) |
+| `MAIN-21172-21180` | Main future expansion (file-system, network, additional cache-coherence overflow) |
+| `MAIN-21185-21199` | Main future expansion (additional backup-lifecycle overflow, etc.) |
 
 ---
 
