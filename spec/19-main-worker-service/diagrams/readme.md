@@ -62,4 +62,18 @@ Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last 
 
 ---
 
-*Diagrams index v1.1.0 — 2026-05-06 (Phase 12: Backup-tier ERD + 2 sequence diagrams added).*
+## Rendering pipeline (closes audit-09 §2.2)
+
+`scripts/render-diagrams.mjs` discovers every `spec/**/diagrams/*.mmd` file and renders sibling `*.png` outputs.
+
+| Command | Purpose |
+|---------|---------|
+| `npm run diagrams:render` | Render every `.mmd` whose `.png` is missing or older than the source. Requires `npx @mermaid-js/mermaid-cli` available locally. |
+| `npm run diagrams:render -- --only spec/19` | Scope to one spec folder (substring match). |
+| `npm run diagrams:check` | Drift guard: passes when every existing `.png` is fresh, or when no `.png` files exist yet (adoption is opt-in). Fails only when a `.png` is present but **older** than its `.mmd`. Safe to wire into CI without forcing PNG adoption. |
+
+**Adoption policy.** Per the diagrams readme banner (top of file), `.mmd` is the authoritative source and PNGs are convenience renders only. CI runs `diagrams:check` (drift-only), never `diagrams:render` (which needs a Mermaid runtime). Authors choose when to commit PNGs; once committed, `diagrams:check` keeps them honest.
+
+---
+
+*Diagrams index v1.2.0 — 2026-05-07 (Phase 13.5: render-diagrams.mjs + npm scripts wired; closes audit-09 §2.2).*
