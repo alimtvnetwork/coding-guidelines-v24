@@ -135,11 +135,12 @@
 ## Status
 
 - [x] **Phase 0** — Plan written.
-- [x] **Phase 1** — `EnumPage` → `AccessItem` rename. Authoritative files updated; stale cross-refs deferred to Phase 12.
-- [x] **Phase 2** — DB convention overhaul. Epoch INTEGER + `(Id, Code, Label)` ref shape; PK Rule 1 universal-truth clarification.
-- [x] **Phase 3** — Users moved off Main; `UserDirectory` routing index; `05-auth-and-2fa.md` v2.0.0 credential-blind proxy.
-- [x] **Phase 4** — `WorkerNode` gains `Sequence`, `IsBackup`, `BackupOfWorkerNodeId` with CHECK constraints + partial indexes; routing eligibility excludes backups (`WORKER-300-04 BackupNotRoutable`); RoundRobin walks `Sequence ASC`; UI label "Region" defined in `07-role-based-dashboards.md` §9 without renaming any code identifier.
-- [ ] Phases 5–12 — pending.
+- [x] **Phase 1** — `EnumPage` → `AccessItem` rename.
+- [x] **Phase 2** — DB convention overhaul (epoch INTEGER, `(Id, Code, Label)` ref shape).
+- [x] **Phase 3** — Users moved off Main; `UserDirectory` routing index; credential-blind proxy.
+- [x] **Phase 4** — `WorkerNode` `Sequence` / `IsBackup` / `BackupOfWorkerNodeId`; routing excludes backups; "Region" UI label.
+- [x] **Phase 5** — `17-cascading-roles-and-cache-bin.md` v1.0.0 (union semantics, per-role `RoleAccessCache` in Worker `:memory:`, `POST /API/V1/Cache/InvalidateRoleAccess`); tunables §2.10; new error codes `WORKER-900-01/02`, `MAIN-700-01`. OQ-A1 adopted **simple union**, OQ-A2 adopted **SQLite `:memory:`** as defaults.
+- [ ] Phases 6–12 — pending.
 
 ---
 
