@@ -134,6 +134,15 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Backup.Endpoint.SnapshotsTimeoutSeconds` | **15** | seconds | BE-4 (`21-…` §7) | Catalogue read. |
 | `MainWorker.Backup.Endpoint.HealthTimeoutSeconds` | **5** | seconds | BE-5 (`21-…` §8) | Tight on purpose so dashboard polling surfaces real outages. |
 
+### 2.14 Backup apply pipeline (consumer: `22-backup-apply-logic.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Backup.Apply.MaxRetriesPerEnvelope` | **5** | count | `22-…` §6.2 | Exceeding = `MAIN-840-01 BackupApplyExhausted` surfaced via BE-5. |
+| `MainWorker.Backup.Apply.TransactionTimeoutSeconds` | **30** | seconds | `22-…` §4 Stage-4 TX | Exceeding = `WORKER-930-04 ApplyTransactionTimeout`. |
+| `MainWorker.Backup.Apply.DeadLetterRetentionDays` | **30** | days | DLQ sweeper (`22-…` §6) | Symmetric with snapshot retention default; finalised in Phase 11 with OQ-A4. |
+| `MainWorker.Backup.Apply.IdempotencyRowRetentionDays` | **14** | days | DLQ sweeper (`22-…` §7) | `BackupApplyIdempotency.Status='Applied'` rows reaped after this; replay-protection window. |
+
 Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
 
 ---
