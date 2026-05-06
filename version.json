@@ -3,7 +3,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "94e057350b2f7043165e646ce4b0c187fc42f4f7",
+  "LastCommitSha": "ffc6332451f9f14628dcbd4d213506b9f7184b86",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -25,15 +25,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "94e057350b2f7043165e646ce4b0c187fc42f4f7",
-    "shortSha": "94e0573",
-    "branch": "edit/edt-8983ce67-caf0-412b-858c-3a982c386bcc"
+    "sha": "ffc6332451f9f14628dcbd4d213506b9f7184b86",
+    "shortSha": "ffc6332",
+    "branch": "edit/edt-e6199fa5-a1a6-4e69-afc3-1bcf4dd238c8"
   },
   "stats": {
     "totalFiles": 655,
     "totalLines": 140014,
     "totalFolders": 23,
-    "totalBytes": 4888588,
+    "totalBytes": 4888593,
     "rootFiles": 6
   },
   "folders": [
@@ -217,7 +217,7 @@
       "ambiguity": "None",
       "fileCount": 44,
       "lineCount": 8912,
-      "byteCount": 294208
+      "byteCount": 294212
     },
     {
       "path": "15-distribution-and-runner",
@@ -256,7 +256,7 @@
       "ambiguity": "None",
       "fileCount": 33,
       "lineCount": 14907,
-      "byteCount": 554242
+      "byteCount": 554243
     },
     {
       "path": "18-wp-plugin-how-to",
