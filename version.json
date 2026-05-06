@@ -3,7 +3,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "c1ce8298ee9d5616cf6fa313cd6fa02442f8bfa7",
+  "LastCommitSha": "94e057350b2f7043165e646ce4b0c187fc42f4f7",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -21,19 +21,19 @@
     }
   ],
   "version": "5.11.0",
-  "updated": "2026-05-04",
+  "updated": "2026-05-06",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "c1ce8298ee9d5616cf6fa313cd6fa02442f8bfa7",
-    "shortSha": "c1ce829",
-    "branch": "edit/edt-08b98bfa-c5ff-4b1f-83e7-073c246410b4"
+    "sha": "94e057350b2f7043165e646ce4b0c187fc42f4f7",
+    "shortSha": "94e0573",
+    "branch": "edit/edt-8983ce67-caf0-412b-858c-3a982c386bcc"
   },
   "stats": {
-    "totalFiles": 639,
-    "totalLines": 135796,
+    "totalFiles": 655,
+    "totalLines": 140014,
     "totalFolders": 23,
-    "totalBytes": 4641560,
+    "totalBytes": 4888588,
     "rootFiles": 6
   },
   "folders": [
@@ -73,8 +73,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 118,
-      "lineCount": 18501,
-      "byteCount": 677852
+      "lineCount": 18503,
+      "byteCount": 678096
     },
     {
       "path": "04-database-conventions",
@@ -86,8 +86,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 9,
-      "lineCount": 2745,
-      "byteCount": 101939
+      "lineCount": 2824,
+      "byteCount": 106299
     },
     {
       "path": "05-split-db-architecture",
@@ -99,8 +99,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 14,
-      "lineCount": 4101,
-      "byteCount": 169938
+      "lineCount": 4104,
+      "byteCount": 170523
     },
     {
       "path": "06-seedable-config-architecture",
@@ -111,9 +111,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
-      "fileCount": 15,
-      "lineCount": 3977,
-      "byteCount": 122745
+      "fileCount": 19,
+      "lineCount": 4771,
+      "byteCount": 153683
     },
     {
       "path": "07-design-system",
@@ -215,9 +215,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 43,
-      "lineCount": 8677,
-      "byteCount": 280796
+      "fileCount": 44,
+      "lineCount": 8912,
+      "byteCount": 294208
     },
     {
       "path": "15-distribution-and-runner",
@@ -280,9 +280,9 @@
       "status": null,
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 17,
-      "lineCount": 1916,
-      "byteCount": 79981
+      "fileCount": 28,
+      "lineCount": 5021,
+      "byteCount": 277470
     },
     {
       "path": "21-app",
