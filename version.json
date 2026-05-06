@@ -1,9 +1,9 @@
 {
-  "Version": "5.35.0",
+  "Version": "5.36.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "7569a6effcc74d3609795cfe13019b8ddbdb8737",
+  "LastCommitSha": "f9d573c7e8f80c1056c8816bfe15381f13b8442b",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "5.35.0",
+  "version": "5.36.0",
   "updated": "2026-05-07",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "7569a6effcc74d3609795cfe13019b8ddbdb8737",
-    "shortSha": "7569a6e",
-    "branch": "edit/edt-2f1c2524-b9a3-46fd-8b77-518442a2676b"
+    "sha": "f9d573c7e8f80c1056c8816bfe15381f13b8442b",
+    "shortSha": "f9d573c",
+    "branch": "edit/edt-6d5d85f6-979d-40c6-b12c-9b3b608a5617"
   },
   "stats": {
     "totalFiles": 673,
-    "totalLines": 144539,
+    "totalLines": 144546,
     "totalFolders": 23,
-    "totalBytes": 5207945,
+    "totalBytes": 5208938,
     "rootFiles": 6
   },
   "folders": [
@@ -48,7 +48,7 @@
       "ambiguity": "None",
       "fileCount": 17,
       "lineCount": 3360,
-      "byteCount": 130624
+      "byteCount": 130876
     },
     {
       "path": "02-coding-guidelines",
@@ -87,7 +87,7 @@
       "ambiguity": "None",
       "fileCount": 9,
       "lineCount": 2879,
-      "byteCount": 110498
+      "byteCount": 110599
     },
     {
       "path": "05-split-db-architecture",
@@ -191,7 +191,7 @@
       "ambiguity": "None",
       "fileCount": 39,
       "lineCount": 8378,
-      "byteCount": 272246
+      "byteCount": 272605
     },
     {
       "path": "13-generic-cli",
@@ -281,8 +281,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 46,
-      "lineCount": 9485,
-      "byteCount": 591642
+      "lineCount": 9492,
+      "byteCount": 591923
     },
     {
       "path": "21-app",

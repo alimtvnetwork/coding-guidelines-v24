@@ -138,8 +138,8 @@ real integration-branch HEAD.
 2. If `version.json` is missing or unparseable, log a clear warning and
    fall back to safe defaults (`Version = "0.0.0"`, `Title = RepoSlug`).
    Never crash solely because the manifest is missing.
-3. Readers SHOULD treat the file as **read-only**. Only `sync-version.mjs`
-   writes to it.
+3. Readers MUST treat the file as **read-only**. Only `sync-version.mjs`
+   writes to it. Multiple writers cause non-deterministic merge corruption — the linter `validate-version-json` MUST fail the build if any non-`sync-version.mjs` source mutates `version.json`.
 
 ---
 
