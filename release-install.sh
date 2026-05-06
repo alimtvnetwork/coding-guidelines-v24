@@ -71,7 +71,7 @@ trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
 # release asset. Unbaked checkouts keep the placeholder verbatim.
 BAKED_VERSION="__VERSION_PLACEHOLDER__"
 
-REPO="alimtvnetwork/coding-guidelines-v20"
+REPO="alimtvnetwork/coding-guidelines-v22"
 SEMVER_RE='^v?[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.]+)?$'
 
 # ── Colors / output ───────────────────────────────────────────────

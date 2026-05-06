@@ -5,8 +5,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 FILES=(
   "$ROOT/install.ps1"
   "$ROOT/install.sh"
-  "$ROOT/release-artifacts/coding-guidelines-v4.24.0/install.ps1"
-  "$ROOT/release-artifacts/coding-guidelines-v4.24.0/install.sh"
+  "$ROOT/release-artifacts/coding-guidelines-v22.24.0/install.ps1"
+  "$ROOT/release-artifacts/coding-guidelines-v22.24.0/install.sh"
 )
 
 grep -q 'ProbeVersion = 19' "${FILES[0]}"

@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/alimtvnetwork/coding-guidelines-v20">
+  <a href="https://github.com/alimtvnetwork/coding-guidelines-v22">
     <img
       src="public/images/coding-guidelines-icon.png"
       alt="Coding Guidelines by Alim brand icon, gradient shield with code-bracket symbol"
@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.11.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v22/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.11.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -86,25 +86,25 @@
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.ps1 | iex
 ```
 
 ### 🪟 Windows · PowerShell · skip latest-version probe
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.ps1))) -n
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.ps1))) -n
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.sh | bash
 ```
 
 ### 🐧 macOS · Linux · Bash · skip latest-version probe
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.sh | bash -s -- -n
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.sh | bash -s -- -n
 ```
 
 <p align="center"><sub>Version-pinned · SHA-256 verified · idempotent · temp-clean. Power-user flags (<code>--repo</code>, <code>--branch</code>, <code>--version</code>, <code>--folders</code>, <code>--dest</code>, <code>--config</code>, <code>--prompt</code>, <code>--force</code>, <code>--dry-run</code>) live in <a href="#%EF%B8%8F-full-repo-install-scripts">Full-Repo Install Scripts</a>.</sub></p>
@@ -122,13 +122,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/error-manage-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/error-manage-install.sh | bash
 ```
 
 ### <code>splitdb</code>, Split-DB Architecture Spec
@@ -136,25 +136,25 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/splitdb-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/splitdb-install.sh | bash
 ```
 
 ### <code>slides</code>, Slides App + Decks
 
 <p align="center">
-  <a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest">
+  <a href="https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest">
     <img src="docs/slides-preview.svg" alt="Animated preview of the Code-Red Review slide deck — cycling through four slides" width="720"/>
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest">
+  <a href="https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest">
     <img alt="Download the latest deck (zip)" src="https://img.shields.io/badge/download-deck%20.zip%20%28latest%20release%29-3B82F6?style=for-the-badge&logo=files&logoColor=white"/>
   </a>
   &nbsp;
@@ -171,13 +171,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/slides-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/slides-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/slides-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/slides-install.sh | bash
 ```
 
 ### <code>linters</code>, Linters + CI/CD Linter Pack
@@ -185,13 +185,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/linters-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/linters-install.sh | bash
 ```
 
 ### <code>cli</code>, CLI Toolchain Spec
@@ -199,13 +199,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/cli-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/cli-install.sh | bash
 ```
 
 ### <code>wp</code>, WordPress Plugin How-To Spec
@@ -213,13 +213,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/wp-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/wp-install.sh | bash
 ```
 
 ### <code>consolidated</code>, Consolidated Guidelines
@@ -227,13 +227,13 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20
 ### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/consolidated-install.ps1 | iex
 ```
 
 ### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/consolidated-install.sh | bash
 ```
 
 ### Verify & Uninstall
@@ -270,13 +270,13 @@ Every installer below copies the listed **folders** (recursively, preserving str
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/error-manage-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/error-manage-install.sh | bash
 ```
 
 Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
@@ -289,13 +289,13 @@ Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/splitdb-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/splitdb-install.sh | bash
 ```
 
 Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec/06-seedable-config-architecture`.
@@ -308,13 +308,13 @@ Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/slides-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/slides-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/slides-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/slides-install.sh | bash
 ```
 
 Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
@@ -349,13 +349,13 @@ Two symptoms come from the same root cause — the cached / fetched copy of the 
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/linters-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/linters-install.sh | bash
 ```
 
 Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no spec files), see [🧪 CLI Linter Pack](#-cli-linter-pack-release-asset-installer) below, it uses [`linters-cicd/install.sh`](linters-cicd/install.sh) / [`linters-cicd/install.ps1`](linters-cicd/install.ps1) with short flags `-d` / `-v` / `-n` / `-h`.
@@ -368,13 +368,13 @@ Installs: `linters/`, `linters-cicd/`. For the **release-asset only** runner (no
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/cli-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/cli-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/cli-install.sh | bash
 ```
 
 Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `spec/13-generic-cli`, `spec/14-update`, `spec/15-distribution-and-runner`, `spec/16-generic-release`.
@@ -387,13 +387,13 @@ Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/wp-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/wp-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/wp-install.sh | bash
 ```
 
 Installs: `spec/18-wp-plugin-how-to`.
@@ -406,13 +406,13 @@ Installs: `spec/18-wp-plugin-how-to`.
 #### 🪟 Windows · PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/consolidated-install.ps1 | iex
 ```
 
 #### 🐧 macOS · Linux · Bash
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/consolidated-install.sh | bash
 ```
 
 Installs: `spec/17-consolidated-guidelines`.
@@ -431,24 +431,24 @@ Installs: `spec/17-consolidated-guidelines`.
 ### 🐧 macOS · Linux · Bash (latest)
 
 ```bash
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest/download/install.sh | bash
 bash ./linters-cicd/run-all.sh --path . --format text
 ```
 
 ### 🐧 Pinned version (recommended for CI)
 
 ```bash
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v20/releases/download/v3.79.0/install.sh | bash -s -- -v v3.79.0
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v22/releases/download/v3.79.0/install.sh | bash -s -- -v v3.79.0
 ```
 
 ### 🪟 Windows · PowerShell
 
 ```powershell
 # Install latest (downloads & runs install.ps1 in one line)
-irm https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.ps1 | iex
+irm https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest/download/install.ps1 | iex
 
 # Install a pinned version (recommended for CI)
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.ps1))) -Version v3.79.0
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest/download/install.ps1))) -Version v3.79.0
 
 # Run the linter pack (use WSL / Git-Bash for the bash runner on Windows)
 bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
@@ -465,7 +465,7 @@ bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
 .\install.ps1 --help       # bash-style long form
 
 # Or pipe-to-iex with explicit -Help (zero network beyond fetching the script itself):
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.ps1))) -Help
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest/download/install.ps1))) -Help
 ```
 
 All three variants exit with code `0`, print the same usage text, and make **zero** network calls during help output. This is regression-tested by [`tests/installer/check-install-ps1-help.sh`](tests/installer/check-install-ps1-help.sh) (T5 in the installer suite).
@@ -552,12 +552,12 @@ If you ran an installer with `-NoVerify` / `-n`, re-run it **without** the flag 
 
 ```powershell
 # PowerShell (Windows), re-run with verification ON
-irm https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.ps1 | iex
+irm https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest/download/install.ps1 | iex
 ```
 
 ```bash
 # Bash (macOS / Linux), re-run with verification ON
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v20/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v22/releases/latest/download/install.sh | bash
 ```
 
 Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning banner, even when combined with `-NoVerify`. This is regression-tested by [`tests/installer/check-install-ps1-noverify-help.sh`](tests/installer/check-install-ps1-noverify-help.sh) (T6 in the installer suite).
@@ -1460,13 +1460,13 @@ Use the generic installer for **everything** (specs + linters + scripts):
 **🪟 Windows · PowerShell**
 
 ```powershell
-irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.ps1 | iex
 ```
 
 **🐧 macOS · Linux · Bash**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.sh | bash
 ```
 
 Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& ([scriptblock]::Create(...)) -n`; Bash: `... | bash -s -- -n`). Local re-runs: `.\install.ps1` or `./install.sh`.
@@ -1475,7 +1475,7 @@ Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& (
 
 ### Repo version migration, `fix-repo`
 
-When this repo bumps its major version (e.g. `coding-guidelines-v20` → `coding-guidelines-v20`), use `fix-repo` to rewrite prior versioned-repo-name tokens across all tracked text files. The script auto-detects the base name and current version from `git remote get-url origin`, nothing is hardcoded.
+When this repo bumps its major version (e.g. `coding-guidelines-v22` → `coding-guidelines-v22`), use `fix-repo` to rewrite prior versioned-repo-name tokens across all tracked text files. The script auto-detects the base name and current version from `git remote get-url origin`, nothing is hardcoded.
 
 **🪟 Windows · PowerShell**
 
@@ -1493,7 +1493,7 @@ When this repo bumps its major version (e.g. `coding-guidelines-v20` → `coding
 ./fix-repo.sh --all --verbose   # full sweep, list every modified file
 ```
 
-Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v20`). URLs are preserved automatically, only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v20` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
+Token form: `{RepoBase}-v{N}` (e.g. `coding-guidelines-v22`). URLs are preserved automatically, only the token segment changes. A numeric-overflow guard prevents `coding-guidelines-v22` from matching inside `coding-guidelines-v170`. Full normative spec: [`spec-authoring/22-fix-repo/01-spec.md`](spec-authoring/22-fix-repo/01-spec.md).
 
 ### Auto-running `fix-repo` from the installer (logs · pruning · rollback)
 
@@ -1549,9 +1549,9 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
 > **Reference reviews:**
 > - [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
-> - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response). Original ChatGPT share link: [chatgpt.com/s/t_69f4edc897d481918482893df897c9da](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da). Repository under review: [github.com/alimtvnetwork/coding-guidelines-v20](https://github.com/alimtvnetwork/coding-guidelines-v20).
+> - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response). Original ChatGPT share link: [chatgpt.com/s/t_69f4edc897d481918482893df897c9da](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da). Repository under review: [github.com/alimtvnetwork/coding-guidelines-v22](https://github.com/alimtvnetwork/coding-guidelines-v22).
 >
-> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Full review: [`docs/chatgpt-review.md`](docs/chatgpt-review.md) · Original share: [ChatGPT link](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da) · Repo: [coding-guidelines-v20](https://github.com/alimtvnetwork/coding-guidelines-v20).
+> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Full review: [`docs/chatgpt-review.md`](docs/chatgpt-review.md) · Original share: [ChatGPT link](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da) · Repo: [coding-guidelines-v22](https://github.com/alimtvnetwork/coding-guidelines-v22).
 
 <p align="center">
   <a href="https://gemini.google.com/share/775a9b85bbb8">
@@ -1612,12 +1612,12 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 
   ```powershell
   # Windows · PowerShell
-  irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.ps1 | iex
+  irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/consolidated-install.ps1 | iex
   ```
 
   ```bash
   # macOS · Linux · Bash
-  curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/consolidated-install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/consolidated-install.sh | bash
   ```
 
   Full bundle reference: [`consolidated`, Consolidated Guidelines](#-bundle-installers).

@@ -66,10 +66,10 @@
     editing the manifest.
 
 .EXAMPLE
-    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1 | iex
+    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/linters-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/linters-install.ps1))) -Version v5.9.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/linters-install.ps1))) -Version v5.9.0 -Target .\vendor
 #>
 
 param(
@@ -172,8 +172,8 @@ function Stop-Install {
 $BundleName = "linters"
 $BundleMapping = "linters|linters,linters-cicd|linters-cicd"
 $ArchiveStableName = "linters"
-$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v20/releases"
-$RepoSlug = "alimtvnetwork/coding-guidelines-v20"
+$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v22/releases"
+$RepoSlug = "alimtvnetwork/coding-guidelines-v22"
 $AutoOpenEntry = ""
 $PrebuiltSrc = ""
 $PrebuiltDest = ""

@@ -20,10 +20,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [4.24.0] - 2026-04-24
 
-### Changed — Naming migration `coding-guidelines-v15` / `coding-guidelines-v16` → `coding-guidelines-v20`
+### Changed — Naming migration `coding-guidelines-v22` / `coding-guidelines-v22` → `coding-guidelines-v22`
 
 Repo-wide rename of the canonical project slug. The pattern
-`coding-guidelines-v1[56]` was replaced with `coding-guidelines-v20` in
+`coding-guidelines-v22[56]` was replaced with `coding-guidelines-v22` in
 every tracked text file. **522 string replacements** were applied across
 **172 files**; verified zero leftover `v15`/`v16` references remain.
 Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-v17.md)
@@ -73,9 +73,9 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 #### Verification
 
-- `grep -rE "coding-guidelines-v1[56]"` (with the standard exclusions)
+- `grep -rE "coding-guidelines-v22[56]"` (with the standard exclusions)
   returns **0** matches across the entire repo.
-- `grep -rE "coding-guidelines-v20"` returns **522+** matches across
+- `grep -rE "coding-guidelines-v22"` returns **522+** matches across
   the 172 changed files (the live count is now higher because
   subsequent edits added new `v17` URLs in the README install section,
   the new `linters-cicd/install.ps1`, and the per-bundle install
@@ -255,8 +255,8 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 ### Added
 - **`check-stale-repo-slug.sh` linter safeguard.** Scans repository for pre-renumber
-  repo slug references (`coding-guidelines-v1` through `v14`). The current canonical
-  slug is `coding-guidelines-v20`; any older slug is a bug from incomplete bulk rename.
+  repo slug references (`coding-guidelines-v22` through `v14`). The current canonical
+  slug is `coding-guidelines-v22`; any older slug is a bug from incomplete bulk rename.
 - **Allowlist-driven filtering** via `linter-scripts/stale-repo-slug.allowlist` --
   permits legitimate historical references in changelogs, migration docs, and
   install-script version-probe specs (v5→v15 is the canonical worked example).
@@ -354,7 +354,7 @@ the canonical superset.
   - `run-all.sh` orchestrator with text + SARIF formats and proper exit codes
     (0 clean / 1 findings / 2 tool error).
   - **GitHub composite Action** at `linters-cicd/action.yml`:
-    `uses: alimtvnetwork/coding-guidelines-v20/linters-cicd@v3.9.0`.
+    `uses: alimtvnetwork/coding-guidelines-v22/linters-cicd@v3.9.0`.
   - **`install.sh` one-liner** with SHA-256 verification and `-d`/`-v`/`-n` flags.
   - Ready-to-paste CI templates for GitHub Actions, GitLab CI, Azure DevOps,
     Bitbucket Pipelines, Jenkins, plus a pre-commit hook.

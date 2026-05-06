@@ -66,10 +66,10 @@
     editing the manifest.
 
 .EXAMPLE
-    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1 | iex
+    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/error-manage-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/error-manage-install.ps1))) -Version v5.9.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/error-manage-install.ps1))) -Version v5.9.0 -Target .\vendor
 #>
 
 param(
@@ -172,8 +172,8 @@ function Stop-Install {
 $BundleName = "error-manage"
 $BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage"
 $ArchiveStableName = "error-manage"
-$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v20/releases"
-$RepoSlug = "alimtvnetwork/coding-guidelines-v20"
+$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v22/releases"
+$RepoSlug = "alimtvnetwork/coding-guidelines-v22"
 $AutoOpenEntry = ""
 $PrebuiltSrc = ""
 $PrebuiltDest = ""

@@ -102,7 +102,7 @@ If the value comes from `document.evaluate`, narrow with a **user-defined type g
 
 ## 7. Blank line before every `return`
 
-When a `return` statement is preceded by other statements in the same block, insert exactly **one** blank line before it. (This matches `release-artifacts/coding-guidelines-v1.4.0/spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`, Rule 4.)
+When a `return` statement is preceded by other statements in the same block, insert exactly **one** blank line before it. (This matches `release-artifacts/coding-guidelines-v22.4.0/spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`, Rule 4.)
 
 ## 8. Hiding pattern — class toggle + CSS transition only
 
