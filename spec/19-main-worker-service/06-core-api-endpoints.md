@@ -91,6 +91,8 @@ Authoritative REST surface for both tiers. All paths are `/API/V1/...`. JSON req
 
 ## 3. Reference Payloads
 
+> **Wire-format authority (Phase 13.3):** Canonical golden-file fixtures for every endpoint listed in §2 live in [`fixtures/endpoints/`](./fixtures/endpoints/). When this prose and a fixture disagree on **field name, ordering, casing, null-vs-omitted, or timestamp encoding**, the **fixture wins**. Encoding rules are defined once in [`fixtures/conventions.md`](./fixtures/conventions.md). Behavior (algorithm, validation rule, retry policy) remains owned by this file.
+
 ### 3.1 `POST /API/V1/Company` request
 
 ```json
