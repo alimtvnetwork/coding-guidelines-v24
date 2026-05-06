@@ -4,6 +4,20 @@
 
 ---
 
+## v2.13.0 — 2026-05-06 (Phase 12.3 — OQ-2 resolved: default worker-selection strategy)
+
+**Scope:** Resolves Phase-1 OQ-2 by promoting `LeastLoaded` from "recommended" to authoritative default with a full rationale block. Project version bump to `5.16.0`.
+
+- **`15-tunable-constants.md` → v1.4.0** — added `MainWorker.Routing.DefaultStrategy = "LeastLoaded"` to §2.5 with allow-list (`RoundRobin | LeastLoaded | Manual`) and start-up enforcement note (Main MUST refuse to start on out-of-list values — CODE RED, no silent fallback).
+- **`04-worker-routing.md` → v1.3.0**
+  - §1 prose: replaced "configurable via Seedable-Config" with explicit cross-reference to canonical default + allow-list start-up rule.
+  - §1.2: re-titled `LeastLoaded` from *(recommended default)* → ***default* — resolves OQ-2**.
+  - New §1.5 *Default selection rationale*: 6-criterion decision matrix (cold-cluster fairness, recovery after quarantine, long-running fairness, predictability, query cost, ties), explicit override guidance (`RoundRobin` for tests, `Manual` for reserved capacity / canaries), explicit non-reasons, and migration path (existing `Company → Worker` mappings are NOT rebalanced — only new creates observe a strategy change).
+- **`97-acceptance-criteria.md` → v1.3.0** — AC-3 worker-selection row extended with the start-up allow-list guard test in addition to the existing ±10% distribution test.
+- **`plan.md`** — OQ-2 marked ✅ Resolved Phase 12.3 with cross-references.
+
+---
+
 ## v2.12.0 — 2026-05-06 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
 
 **Scope:** Resolves OQ-23-3 from `23-snapshot-storage-and-restore.md`. Adds the audit-trail column trio that operators need when reviewing why a snapshot escaped retention. Project version bump to `5.15.0`.

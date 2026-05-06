@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.15.0 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
+**Version:** 5.16.0 (Phase 12.3 — OQ-2 resolved: `LeastLoaded` pinned as default worker-selection strategy)
 **Updated:** 2026-05-06
 
 ---
