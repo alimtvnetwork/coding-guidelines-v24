@@ -4,6 +4,26 @@
 
 ---
 
+## v2.4.0 — 2026-05-06 (Phase 6 — Backup nodes concept)
+
+**Scope:** Per locked decisions D8 / D9 / D10 (CDC referenced; defined in Phase 7). Defines what a backup node is, how it registers (extends `10-worker-bootstrap-protocol.md`), how Main propagates the pairing to both ends, and the three independent enforcement points for the "backups never serve traffic" invariant. Wire format / encryption / endpoints / restore are explicitly deferred to Phases 7–11.
+
+- New file **`18-backup-nodes.md` v1.0.0** — Kubernetes-style replica framing, three-tier relationship model (R1/R2/R3 facts), registration request/response additions, Main-side acceptance procedure (CODE RED ≤15 lines), `KnownBackupNode` Worker App-tier mirror table, defence-in-depth `421 Misdirected Request` rule for the no-traffic invariant.
+- `13-error-codes.md` — new §3.8 "Backup Lifecycle" series: `MAIN-800-01 BackupChainNotAllowed` (21181, 422), `MAIN-800-02 PrimaryNotFound` (21182, 404), `MAIN-800-03 BackupCapacityExceeded` (21183, 409), `MAIN-800-04 TrafficOnBackupRejected` (21184, 421). Reserved-range table updated; future-expansion ranges narrowed to `MAIN-21172-21180` and `MAIN-21185-21199`.
+- `15-tunable-constants.md` → **v1.5.0**: new §2.11 "Backup nodes" with `MainWorker.Backup.MaxBackupsPerPrimary=3`, `MainWorker.Backup.LagWarningSeconds=900`, `MainWorker.Backup.HeartbeatIntervalSeconds=60`.
+- `14-rbac-and-status-seed.md` — `WorkerNodeStatus` seed bumped to v1.5.0; row count 4 → 7. Added `Provisioning` (backup just registered, awaiting first diff), `BackupAttached` (healthy backup), `BackupLagging` (backup lag exceeds tunable). Existing primary-only codes annotated as never-assigned-to-backups.
+
+**Cross-spec impact:**
+- `WorkerNode` schema (Phase 4) is the structural enabler — no further DB changes in Phase 6.
+- `KnownBackupNode` is added to the Worker App tier; the cross-tier reconciliation file (`11-…`) does not need a new entry because App-tier additions are local to the Worker.
+- ER diagram regeneration deferred to Phase 12 — Worker ER must show `KnownBackupNode`.
+
+**Open questions still pending:**
+- **OQ-A3** — Backup zip password derivation (Phase 8).
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+
+---
+
 ## v2.3.0 — 2026-05-06 (Phase 5 — Cascading roles + Role-Access cache bin)
 
 **Scope:** Per locked decisions D11 (cascading = union) and D12 (cache-bin in ER). Adopts default proposals for OQ-A1 (simple union, no inheritance) and OQ-A2 (per-process SQLite `:memory:` storage with TTL + Main-broadcast invalidation) until the user overrides.
