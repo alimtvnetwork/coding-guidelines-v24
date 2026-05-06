@@ -4,6 +4,13 @@
 
 ---
 
+## v5.25.0 — 2026-05-06 (Phase 13.3 — seed parity: add CacheRecentCompanyPerUserTtlSeconds to §4 (config.seed.json v1.5.0), extend §4.1 alias map, document Backup-tier seed deferral to v2.0.0)
+
+**Scope:** Version bump (`5.24.0` → `5.25.0`). Phase 13.3 — seed parity: add CacheRecentCompanyPerUserTtlSeconds to §4 (config.seed.json v1.5.0), extend §4.1 alias map, document Backup-tier seed deferral to v2.0.0.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.24.0 — 2026-05-06 (Phase 13.3 — golden-file fixtures (endpoints, errors, JWT) + 06-/08- authority pointers)
 
 **Scope:** Version bump (`5.23.0` → `5.24.0`). Phase 13.3 — golden-file fixtures (endpoints, errors, JWT) + 06-/08- authority pointers.
