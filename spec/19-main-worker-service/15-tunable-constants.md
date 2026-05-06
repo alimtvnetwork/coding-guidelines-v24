@@ -251,4 +251,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.3.0 — 2026-05-04 (FU-16: T4 session-TTL invariant added — AbsoluteMax >= Ttl in §2 + §4)*
+*Tunable constants v1.4.0 — 2026-05-06 (Phase 5: §2.10 RoleCache TTL + RequireReauthOnCatalogBump)*
