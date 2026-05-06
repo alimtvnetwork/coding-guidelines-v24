@@ -17,14 +17,14 @@ See also [`images/03-worker-subdomain-routing.png`](./images/03-worker-subdomain
 
 ## 1. Selection Strategies
 
-Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStrategy`. Stored in `WorkerSelectionStrategy` table.
+Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStrategy` (canonical default in `15-tunable-constants.md` §2.5). Stored in `WorkerSelectionStrategy` table. Allowed values: `RoundRobin`, `LeastLoaded`, `Manual`. Main MUST refuse to start when the configured value is outside this allow-list (no silent fallback — CODE RED).
 
 ### 1.1 `RoundRobin`
 - Pick next eligible worker ordered by `WorkerNode.Sequence ASC` (ties broken by `WorkerNodeRegisteredAt ASC`).
 - Cursor persisted in main DB (single-row config table or `WorkerSelectionEvent` last-row lookup).
 - Pros: trivially predictable, deterministic across restarts. Cons: ignores load.
 
-### 1.2 `LeastLoaded` (recommended default)
+### 1.2 `LeastLoaded` (**default** — resolves OQ-2)
 - Pick `Active` worker with fewest assigned `Company` rows.
 - Tiebreaker: oldest `WorkerNodeRegisteredAt`.
 - Pros: balances over time. Cons: slightly more expensive query (still O(N) on workers, N is small).
@@ -42,6 +42,32 @@ A worker is eligible only if **all** are true (positive guards, per CODE RED):
 - `HasCapacity(node)` → assigned company count strictly less than `MainWorker.Routing.MaxCompaniesPerWorker`. **NULL = unlimited** (resolves F-A-06; the legacy `0` magic value is rejected — Main MUST refuse to start if the configured value is `0` or negative). When `NULL`, the guard returns `true` unconditionally.
 
 If no eligible worker exists → return `WorkerUnavailable` error per `08-error-contract.md`.
+
+### 1.5 Default selection rationale (resolves OQ-2)
+
+**Decision (Phase 12.3):** `MainWorker.Routing.DefaultStrategy = LeastLoaded`. Pinned in `15-tunable-constants.md` §2.5.
+
+**Why `LeastLoaded` over `RoundRobin`:**
+
+| Criterion | `RoundRobin` | `LeastLoaded` (chosen) | `Manual` |
+|---|---|---|---|
+| Cold-cluster fairness (workers added at different times) | ❌ Newly added workers stay near-empty until the cursor wraps a full cycle | ✅ New workers get traffic immediately because their company-count starts at zero | n/a |
+| Recovery after a worker is quarantined and returns | ❌ Returned worker is one cursor-step behind, gets ~1/N of new tenants | ✅ Returned worker is the most-empty by definition, gets the next assignments | n/a |
+| Long-running fairness on uneven tenant lifetimes | ❌ Drifts unboundedly when tenant churn is asymmetric | ✅ Self-correcting — each new assignment compensates for prior imbalance | n/a |
+| Predictability for tests & runbooks | ✅ Strictly deterministic order | ⚠️ Deterministic given (counts, tiebreaker) but counts shift | ✅ Operator-pinned |
+| Query cost per assignment | O(1) cursor read | O(N) `COUNT(*) GROUP BY WorkerNodeId` over a tiny `WorkerNode` table | O(1) explicit pick |
+| Behavior when all workers tied (cold start, same age) | ✅ Walks `Sequence` | ✅ Falls back to `WorkerNodeRegisteredAt ASC` tiebreaker — equivalent to `RoundRobin` first pass | n/a |
+
+**When to override the default:**
+
+| Override to | Use case |
+|---|---|
+| `RoundRobin` | Synthetic test environments where deterministic assignment ordering is required for replay; benchmark suites that must isolate routing variance from load variance. |
+| `Manual` | Reserved-capacity tenants (enterprise contracts pinning to a dedicated worker); incident-response routing during a partial outage; canary-tenant pinning to a worker on a new release channel. |
+
+**What is NOT a reason to override:** "we have only one worker" (any strategy works), "we want fairness" (already optimal), "we want speed" (the O(N) cost on a worker registry of typically 5–50 rows is sub-millisecond and dwarfed by the HTTP round trip).
+
+**Migration path away from the default:** flip `MainWorker.Routing.DefaultStrategy` via Seedable-Config; existing `Company → Worker` mappings are NOT rebalanced (per §3.2 — tenant data lives on the assigned worker). Only **new** company creations observe the new strategy.
 
 ---
 
