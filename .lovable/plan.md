@@ -139,8 +139,11 @@
 - [x] **Phase 2** — DB convention overhaul (epoch INTEGER, `(Id, Code, Label)` ref shape).
 - [x] **Phase 3** — Users moved off Main; `UserDirectory` routing index; credential-blind proxy.
 - [x] **Phase 4** — `WorkerNode` `Sequence` / `IsBackup` / `BackupOfWorkerNodeId`; routing excludes backups; "Region" UI label.
-- [x] **Phase 5** — `17-cascading-roles-and-cache-bin.md` v1.0.0 (union semantics, per-role `RoleAccessCache` in Worker `:memory:`, `POST /API/V1/Cache/InvalidateRoleAccess`); tunables §2.10; new error codes `WORKER-900-01/02`, `MAIN-700-01`. OQ-A1 adopted **simple union**, OQ-A2 adopted **SQLite `:memory:`** as defaults.
-- [ ] Phases 6–12 — pending.
+- [x] **Phase 5** — `17-cascading-roles-and-cache-bin.md` v1.0.0; OQ-A1/OQ-A2 default proposals adopted.
+- [x] **Phase 6** — `18-backup-nodes.md` v1.0.0 (registration extends `10-…`, `KnownBackupNode` Worker mirror, defence-in-depth no-traffic invariant); `MAIN-800-01..04` Backup Lifecycle codes; tunables §2.11; status seed extended with `Provisioning`/`BackupAttached`/`BackupLagging`.
+- [ ] Phases 7–12 — pending.
+
+> **File numbering note:** Phase 5 took the `17-…` slot, so the original plan's `17-…`/`18-…`/`19-…`/`20-…`/`21-…`/`22-…` shifts by one — backup-nodes is `18-…`, incremental sync becomes `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
 
 ---
 
