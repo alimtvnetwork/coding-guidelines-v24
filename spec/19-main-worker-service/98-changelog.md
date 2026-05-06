@@ -4,6 +4,26 @@
 
 ---
 
+## v2.6.0 — 2026-05-06 (Phase 8 — Backup encryption and Pair-RSA key rotation)
+
+**Scope:** Per locked decision **D13** (RSA pair shared between Worker and its Backups; Main issues rotation; zip password follows known pattern). Resolves open question **OQ-A3** (zip password derivation = `HMAC-SHA256(SharedSecret, EnvelopeTimestampEpoch)` truncated to 32 hex chars). Endpoints / apply / restore remain Phases 9–11.
+
+- New file **`20-backup-encryption-and-keys.md` v1.0.0** — three-artefact key inventory (Pair-RSA / Envelope-AES / Zip-Password), envelope sealing pipeline (AES-256-GCM body + RSA-OAEP wrap + RSA-PSS sign + AES-256-ZIP outer), HKDF-derived deterministic zip password resolving OQ-A3, four-state `Pending → Active → Retired → Discarded` rotation state machine, eight-step Main-orchestrated rotation flow with split-brain alerting, `BackupKeyEpoch` table on both primary and backup (Memory: PascalCase + `{TableName}Id` PK + nullable `Description`, INTEGER `*At` per D2), defence-in-depth verification path on the backup (epoch lookup + cipher refusal + signature verify + GCM decrypt).
+- `13-error-codes.md` → **v1.2.0**: §2.10 extended with five new Worker decrypt codes `WORKER-920-01..05` (21095-21099 — fully consuming the Worker future-expansion range), §3.9 added with three new Main rotation-orchestration codes `MAIN-820-01..03` (21186-21188). Reserved-range table refreshed; future-expansion `MAIN-21186-21199` narrows to `MAIN-21189-21199`.
+- `15-tunable-constants.md` → **v1.7.0**: new §2.12 with five backup-encryption keys — `MaxKeyAgeSeconds=7776000` (90 d), `RotationAckTimeoutSeconds=120`, `RotationActivationDelaySeconds=60`, `RetiredKeyGraceSeconds=86400` (24 h), `RsaKeySizeBits=4096`.
+
+**Cross-spec impact:**
+- App-tier mirror: `BackupKeyEpoch` is added on both primary and backup Worker App tiers; the cross-tier reconciliation file (`11-…`) does not need a new entry because App-tier additions are local. Main holds the row too but with `PrivateKeyPem` always NULL (public halves only).
+- ER diagram regen deferred to Phase 12 — Worker ER must show `BackupKeyEpoch` with the four-state lifecycle.
+- `19-incremental-backup-sync.md` §6 envelope SQLite is now the input artefact to `20-…` §4 step 1 — no schema change.
+- Phase 9 (endpoints) will surface `POST /API/V1/Backup/RotateKeys` as the operator-forced rotation trigger named in `20-…` §7.1.
+
+**Open questions still pending:**
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+- OQ-20-1 (split-brain pager routing) and OQ-20-2 (RSA-4096 vs Ed25519+X25519) logged in `20-…` §14, non-blocking.
+
+---
+
 ## v2.5.0 — 2026-05-06 (Phase 7 — Incremental backup sync, CDC)
 
 **Scope:** Per locked decision D10 (`SyncOp` flag on synced rows). Defines the change-data-capture mechanic that lets a primary Worker ship deterministic, replayable diffs to each attached backup. Encryption / wire / apply / restore remain Phases 8–11.

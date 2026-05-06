@@ -112,6 +112,11 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-910-01` | `21092` | `BackupSyncWatermarkInconsistent` | "`BackupSyncWatermark.LastAckedSyncOpSeq > LastShippedSyncOpSeq` (impossible state)." | 500 | `19-incremental-backup-sync.md` §3.1 |
 | `WORKER-910-02` | `21093` | `BackupEnvelopeBuildFailed` | "Diff envelope SQLite file could not be created." | 500 | `19-incremental-backup-sync.md` §3.3 |
 | `WORKER-910-03` | `21094` | `BackupChangeLogQueryFailed` | "Read-after-watermark query failed." | 500 | `19-incremental-backup-sync.md` §3.2 |
+| `WORKER-920-01` | `21095` | `KeyEpochNotYetActive` | "Envelope received under a `Pending` `KeyEpoch`; cannot decrypt." | 409 | `20-backup-encryption-and-keys.md` §9 |
+| `WORKER-920-02` | `21096` | `KeyEpochDiscarded` | "`KeyEpoch` past `RetiredKeyGraceSeconds`; private material wiped." | 410 | `20-backup-encryption-and-keys.md` §6, §9 |
+| `WORKER-920-03` | `21097` | `UnknownKeyEpoch` | "No `BackupKeyEpoch` row for the supplied epoch." | 404 | `20-backup-encryption-and-keys.md` §9 |
+| `WORKER-920-04` | `21098` | `ZipCipherTooWeak` | "Outer zip used ZipCrypto / non-AES; refused." | 415 | `20-backup-encryption-and-keys.md` §5 |
+| `WORKER-920-05` | `21099` | `EnvelopeSignatureInvalid` | "RSA-PSS signature failed verification." | 422 | `20-backup-encryption-and-keys.md` §9 |
 
 ---
 
@@ -186,6 +191,14 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-800-04` | `21184` | `TrafficOnBackupRejected` | "Backup node rejected an inbound user-facing request (D9 invariant)." | 421 | `18-backup-nodes.md` §1, §8 |
 | `MAIN-810-01` | `21185` | `BackupCompactionStalled` | "Backup acknowledgement lag exceeds `QuarantineCompactionOverrideSeconds`; compaction blocked." | n/a | `19-incremental-backup-sync.md` §4 |
 
+### 3.9 Backup Encryption / Rotation (820-899 → 21186-21188)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-820-01` | `21186` | `RotationStepTimeout` | "Pair-RSA rotation step (S2/S3/S6) ACK missed within `RotationAckTimeoutSeconds`." | 504 | `20-backup-encryption-and-keys.md` §7.2 |
+| `MAIN-820-02` | `21187` | `RotationAlreadyInProgress` | "A `Pending` `BackupKeyEpoch` already exists for this pairing." | 409 | `20-backup-encryption-and-keys.md` §6 |
+| `MAIN-820-03` | `21188` | `RotationActivationSplitBrain` | "One side activated, counterpart did not; manual recovery required." | 500 | `20-backup-encryption-and-keys.md` §7.2 |
+
 ---
 
 ## 4. Reserved sub-ranges
@@ -194,7 +207,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|
 | _(consumed)_ | `WORKER-21090-21091` consumed by `WORKER-900-01 RoleCacheRecompileFailed` and `WORKER-900-02 EmptyEffectiveAccessSet` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | _(consumed)_ | `WORKER-21092-21094` consumed by `WORKER-910-01..03` Backup Sync per Phase 7 (`19-incremental-backup-sync.md`) |
-| `WORKER-21095-21099` | Worker future expansion |
+| _(consumed)_ | `WORKER-21095-21099` consumed by `WORKER-920-01..05` Backup Encryption per Phase 8 (`20-backup-encryption-and-keys.md`) |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
@@ -203,7 +216,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | 21185 consumed by `MAIN-810-01 BackupCompactionStalled` per Phase 7 (`19-incremental-backup-sync.md`) |
 | `MAIN-21162-21169` | Main external-services future expansion |
 | `MAIN-21172-21180` | Main future expansion (file-system, network, additional cache-coherence overflow) |
-| `MAIN-21186-21199` | Main future expansion (additional backup-lifecycle / sync overflow, etc.) |
+| _(consumed)_ | 21186-21188 consumed by `MAIN-820-01..03` Backup Encryption rotation per Phase 8 (`20-backup-encryption-and-keys.md`) |
+| `MAIN-21189-21199` | Main future expansion (additional backup-lifecycle / endpoint overflow, etc.) |
 
 ---
 
@@ -300,4 +314,4 @@ Failure = build break.
 
 ---
 
-*Error codes (Main/Worker Service) v1.1.0 — 2026-05-05 (FU-18: +`MAIN-400-10 EndpointAuthLocked`/`21170`; §1 slot-overflow rule; §4 reserved-range refresh)*
+*Error codes (Main/Worker Service) v1.2.0 — 2026-05-06 (Phase 8: +`WORKER-920-01..05` Backup Encryption decrypt failures; +`MAIN-820-01..03` Pair-RSA rotation orchestration; §4 reserved-range refresh — `WORKER-21095-21099` and `MAIN-21186-21188` now consumed)*
