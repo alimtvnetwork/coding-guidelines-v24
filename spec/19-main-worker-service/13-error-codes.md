@@ -109,6 +109,9 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|---|---|---|---|
 | `WORKER-900-01` | `21090` | `RoleCacheRecompileFailed` | "Worker failed to recompile `RoleAccessCache` after invalidation." | 500 | `17-cascading-roles-and-cache-bin.md` §4 |
 | `WORKER-900-02` | `21091` | `EmptyEffectiveAccessSet` | "User has zero `AppUserRole` rows; access denied to gated route." | 403 | `17-cascading-roles-and-cache-bin.md` §1 |
+| `WORKER-910-01` | `21092` | `BackupSyncWatermarkInconsistent` | "`BackupSyncWatermark.LastAckedSyncOpSeq > LastShippedSyncOpSeq` (impossible state)." | 500 | `19-incremental-backup-sync.md` §3.1 |
+| `WORKER-910-02` | `21093` | `BackupEnvelopeBuildFailed` | "Diff envelope SQLite file could not be created." | 500 | `19-incremental-backup-sync.md` §3.3 |
+| `WORKER-910-03` | `21094` | `BackupChangeLogQueryFailed` | "Read-after-watermark query failed." | 500 | `19-incremental-backup-sync.md` §3.2 |
 
 ---
 
