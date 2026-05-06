@@ -110,7 +110,8 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | `Backup` audience tokens carry mandatory `PairingId` claim | `21-backup-endpoints.md` §3 + `12-jwt-delivery-contract.md` (Phase-12 stub) | Wire test: missing or mismatched `PairingId` → `MAIN-800-04` |
 | All Backup-tier tables comply with DB Schema Rules 10/11/12 | `04-database-conventions/` + `erd-backup-tier.mmd` | Linter test: `MISSING-DESC-001` and `DB-FREETEXT-001` pass against the new tables |
 | Linter rules `BACKUP-*` and `DB-SYNCOP-*` enforced in CI | `96-linter-audit.md` (Phase-12 promotion) | CI test: linter-scripts run as part of standards enforcement; failure blocks merge |
+| Pinned snapshots carry mandatory audit trail | `23-snapshot-storage-and-restore.md` §6.1 + `BACKUP-SNAP-005` | Negative test: any `BackupSnapshotCatalog` row with `Status='Pinned'` AND (`PinReason` NULL/empty OR `PinnedAtEpoch` NULL OR `PinnedByActor` NULL) MUST fail linter; positive test: pin via BE-3 sub-route writes a paired `EndpointAuthAuditEvent` row in the same transaction. |
 
 ---
 
-*Acceptance criteria v1.1.0 — 2026-05-06 (Phase 12 — Backup-tier acceptance added).*
+*Acceptance criteria v1.2.0 — 2026-05-06 (Phase 12.2 — Pinned-snapshot audit-trail criterion added per OQ-23-3).*
