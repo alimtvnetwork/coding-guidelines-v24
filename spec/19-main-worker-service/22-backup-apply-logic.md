@@ -156,6 +156,10 @@ Memory compliance:
 
 CODE-RED rule: never swallow errors. A row that cannot be applied because the backup mirror lacks a target column = **dead-letter the envelope**, not skip the row. Schema drift is an operational issue, not an apply-time recoverable.
 
+### 6.4 Journal mode (binding — RESOLVED 2026-05-06, was OQ-22-1)
+
+Stage 4 MUST NOT issue per-envelope `PRAGMA journal_mode=WAL`. The App tier's session-wide WAL mode (pinned in `spec/05-split-db-architecture/`) is **authoritative**. A per-envelope override would defeat the App tier's shared cache and is forbidden. A blind-AI implementer MUST treat this as an unconditional MUST.
+
 ---
 
 ## 7. Idempotency (V7 short-circuit)
@@ -244,7 +248,7 @@ Phase 11 reserves `MAIN-21191-21199` for snapshot/restore. `MAIN-840-01` consume
 
 ## 12. Open Questions (logged, non-blocking)
 
-- **OQ-22-1** Should Stage 4 run with `PRAGMA journal_mode=WAL` per envelope, or rely on the App tier's session-wide WAL? Inferred: rely on session-wide WAL (already pinned in `05-split-db-architecture/`); per-envelope override would defeat the shared cache.
+- ✅ **OQ-22-1 RESOLVED 2026-05-06.** Per-envelope `PRAGMA journal_mode=WAL` is forbidden — see §6.4 (binding MUST). Rely on the App tier's session-wide WAL.
 - **OQ-22-2** Should `BackupApplyDeadLetter` rows older than `DeadLetterRetentionDays` be reaped automatically, or require operator action? Inferred: automatic sweep, but emit a `MAIN-840-01` summary metric on every sweep so dashboards never go silent.
 - **OQ-22-3** Should the tracked-table allowlist (`AppBackupTrackedTable`) be hard-coded in the seed or derived dynamically from rows that carry Shape A `SyncOpCode` columns? Inferred: hard-coded seed wins (dumb-AI friendly + audit-trail friendly); Phase 12 owns the seed.
 
