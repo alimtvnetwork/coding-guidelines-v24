@@ -86,34 +86,29 @@ Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Qua
 
 Unique: `(Slug)`. Seedable-Config aliases `CompanySlug → Slug` / `CompanyName → Name` accepted through v2.1.0 then removed.
 
-### 2.4 `User` (entity, MINIMAL identity only)
+### 2.4 `UserDirectory` (lookup index — auth credentials live on Worker)
 
-> ⚠ **Phase 3 (planned, v2.1.0): the `User`, `UserRole`, and TOTP columns will be removed from Main.** Per locked decision D5, Users live exclusively in the assigned Worker's split-DB; Main only needs `Company → Worker` mapping to route an inbound login to the correct Worker. The schema below is the v2.0.0 transitional shape (epoch timestamps applied so the rows remain readable until the move).
+> 🔒 **Phase 3 — v2.1.0 (REMOVED from Main):** Per locked decision D5, the legacy Main `User`, `UserRole`, and all TOTP columns are **deleted from Main**. All identity, password, and 2FA state now live in the assigned **Worker's split-DB App tier** (table `AppUser` per `11-split-db-tier-reconciliation.md` §5; full schema in `spec/05-split-db-architecture/`). Main retains **only the routing pointer** below so an inbound `/Auth/SignIn` POST can be forwarded to the correct Worker without leaking credentials through Main.
+
+`UserDirectory` is a **routing-only index**. It contains no secrets and no PII beyond email. The Worker — not Main — is the authoritative identity store.
 
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
-| `UserId` | INTEGER | NO | PK |
-| `UserEmail` | TEXT | NO | Unique |
-| `UserPasswordHash` | TEXT | NO | Salted, see `05-auth-and-2fa.md` §3 |
-| `UserPasswordSalt` | TEXT | NO | |
-| `CompanyId` | INTEGER | NO | FK |
-| `UserCreatedAt` | INTEGER | NO | Epoch seconds, UTC |
-| `UserTotpSecret` | TEXT | YES | Base32-encoded RFC-6238 shared secret. NULL = TOTP not enrolled. Encrypted-at-rest per `05-auth-and-2fa.md` §4. (Resolves F-A-24.) |
-| `UserTotpEnrolledAt` | INTEGER | YES | Epoch seconds, UTC; NULL until first successful TOTP verification. |
-| `UserTotpBackupCodesHash` | TEXT | YES | JSON array of bcrypt hashes of 10 single-use backup codes per `05-§4`. NULL until enrollment. |
-| `Description` | TEXT | YES |
+| `UserDirectoryId` | INTEGER | NO | PK, AUTOINCREMENT |
+| `UserEmail` | TEXT | NO | Unique. Lower-cased before insert. |
+| `CompanyId` | INTEGER | NO | FK → `Company`. Used to look up the assigned WorkerNode. |
+| `WorkerNodeId` | INTEGER | NO | FK → `WorkerNode`. Denormalized from `Company.WorkerNodeId` so a sign-in lookup is a single-row read. Updated whenever `Company.WorkerNodeId` changes (cascade per §5). |
+| `CreatedAt` | INTEGER | NO | Epoch seconds, UTC. |
+| `LastSeenAt` | INTEGER | YES | Epoch seconds, UTC. Updated by Main on each successful forward. NULL before first sign-in. |
+| `Description` | TEXT | YES | Per Rule 11. |
 
-Unique: `(UserEmail)`.
+Unique: `(UserEmail)`. Indexed on `(CompanyId)` and `(WorkerNodeId)`.
 
-### 2.5 `UserRole` (join, exempt from Description rule)
+> **What is NOT here (deliberately):** no `UserPasswordHash`, no `UserPasswordSalt`, no `UserTotpSecret`, no `UserTotpEnrolledAt`, no `UserTotpBackupCodesHash`, no role assignments. **Main MUST NOT verify passwords or TOTP codes.** It only resolves `email → WorkerNode` and proxies the credentialed body to the Worker. See `05-auth-and-2fa.md` §2.1 for the new flow.
 
-| Column | Type | Null |
-|--------|------|------|
-| `UserRoleId` | INTEGER | NO (PK) |
-| `UserId` | INTEGER | NO (FK) |
-| `RoleId` | INTEGER | NO (FK → `Role`) |
+### 2.5 `UserRole` — REMOVED in v2.1.0
 
-Unique: `(UserId, RoleId)`.
+Removed. Role assignments now live on the Worker as `AppUserRole` (Worker App tier). Cascading-roles union semantics defined in Phase 5 (`14-rbac-and-status-seed.md` §6) and remain a Worker-side computation. Main never reads role assignments.
 
 ### 2.6 `Role` (ref)
 
