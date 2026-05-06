@@ -4,6 +4,25 @@
 
 ---
 
+## v2.0.0 — 2026-05-06 (Phase 2 — DB convention overhaul)
+
+**Scope:** Apply the global DB convention upgrades from `spec/04-database-conventions/` v2 to the Main schema. Spec-only; no runtime code touched.
+
+- `03-main-db-schema.md` → **v2.0.0**:
+  - All `*At` columns flipped from `TEXT` (ISO-8601) to `INTEGER` (epoch seconds, UTC) per Naming Rule 7.1 v2: `WorkerNodeRegisteredAt`, `WorkerNodeLastSeenAt`, `CompanyAssignedAt`, `UserCreatedAt`, `UserTotpEnrolledAt`, `AccessDenialEvent.OccurredAt`, `EndpointAuthAuditEvent.OccurredAt`, `WorkerVersionRecordedAt`, `WorkerSelectionEventAt`. (Removes the temporary "TEXT or INTEGER" wording introduced in v1.4.0 on `AccessDenialEvent.OccurredAt`.)
+  - All ref / enum-like tables flattened to canonical `(Id, Code, Label)` per Rule 13: `WorkerNodeStatus`, `WorkerNodeKind`, `Role`, `EndpointAuthChangeKind`, `WorkerSelectionStrategy`. Old `{Table}Code` / `{Table}Label` column names are removed in this spec.
+  - `Company.CompanySlug` → `Company.Slug`; `Company.CompanyName` → `Company.Name`. Unique index updated to `(Slug)`. Seedable-Config inbound-name aliases accepted through v2.1.0 then removed.
+  - Added Phase-3 banner over §2.4 `User`: `User`, `UserRole`, and TOTP columns will move off Main entirely in v2.1.0 (D5).
+- `spec/04-database-conventions/01-naming-conventions.md` → **Rule 7.1 rewritten as v2** ("Epoch-INTEGER Timestamp"). Old TEXT/ISO-8601 storage rule deprecated and forbidden for new schemas. Examples table and "Complete Example" code block updated to `INTEGER NOT NULL DEFAULT (unixepoch())`.
+- `spec/04-database-conventions/02-schema-design.md` → §6.4 examples updated to epoch defaults; new **§6.5 Rule 13 — Enum / Lookup Table Canonical Shape `(Id, Code, Label)`** with column table, rationale, lookup pattern, and forbidden alternatives. Template row in §5 updated.
+- `spec/05-split-db-architecture/01-fundamentals.md` → **v3.4.0**: convention-propagation banner added stating that every tier (Root / Settings / App / Session / Cache / Document) inherits Rule 7.1 v2 + Rule 13.
+
+**Cross-spec impact:** Any consumer reading `WorkerNodeStatusCode` / `RoleCode` / `RoleLabel` / `CompanySlug` / `CompanyName` / ISO-8601 `*At` strings MUST migrate. Suggested migration: `unixepoch(<OldName>)` for backfill, then drop the old columns in the next minor.
+
+Linter status: column renames are structural; existing R2 / R3 waivers in `13-error-codes.md` unaffected.
+
+---
+
 ## v1.4.0 — 2026-05-06 (Phase 1 — `EnumPage` → `AccessItem` rename)
 
 **Scope:** Schema + seed + dashboard rename only. No runtime code touched (per memory rule "Spec/19 is SPEC-ONLY").
