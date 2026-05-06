@@ -1,7 +1,9 @@
 # 07 — Role-Based Dashboards
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 2.0.0
+
+> **v2.0.0 rename (Phase 1):** all references to `EnumPage` are now `AccessItem`. Access checks resolve by `Code` or by `PageUrlSuffix` matcher. See `03-main-db-schema.md` §2.6.1 and `14-rbac-and-status-seed.md`.
 
 Roles, dashboards, and the **non-negotiable** access-check pattern.
 
@@ -12,7 +14,7 @@ Roles, dashboards, and the **non-negotiable** access-check pattern.
 Per verbatim §Roles.3:
 
 > ❌ **NEVER** check `if (user.role === 'PowerAdmin')`.
-> ✅ **ALWAYS** check `User has access to {EnumPage}`.
+> ✅ **ALWAYS** check `User has access to {AccessItem}`.
 
 Why: roles change. Capabilities don't. Tomorrow a new role (`SupportAgent`) needs to see the billing page — with the role-based check you change every site of the check; with the page-based check you grant `SupportAgent → BillingPage` once.
 
