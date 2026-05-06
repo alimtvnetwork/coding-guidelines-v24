@@ -158,7 +158,7 @@ Audit row written by Workers on every 403 returned for an `AccessDenied` envelop
 | `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
 | `WorkerNodeId` | INTEGER | YES (FK; NULL when denied at Main edge) |
 | `CorrelationId` | TEXT | NO |
-| `OccurredAt` | INTEGER | NO (epoch seconds UTC — see Phase 2; legacy TEXT readers must accept either during the v1.4 → v1.5 transition) |
+| `OccurredAt` | INTEGER | NO | Epoch seconds, UTC (Rule 7.1 v2). |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
