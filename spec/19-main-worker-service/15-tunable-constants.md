@@ -124,7 +124,17 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Backup.RetiredKeyGraceSeconds` | **86400** (24 h) | seconds | `20-…` §6 background sweeper | How long `Retired` private material survives in-flight envelopes; after this, `WORKER-920-02 KeyEpochDiscarded`. Override = 0 when `Reason="Compromise"`. |
 | `MainWorker.Backup.RsaKeySizeBits` | **4096** | bits | `20-…` §3 K1 | RSA-OAEP wrap + RSA-PSS sign modulus. Bumping requires v2.0 review. |
 
-Phase 9 adds endpoint timeouts; Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
+### 2.13 Backup endpoints (consumer: `21-backup-endpoints.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Backup.Endpoint.IncrementalDiffTimeoutSeconds` | **120** | seconds | BE-1 (`21-…` §4) | Larger than routing default — envelope upload may be MB-scale. |
+| `MainWorker.Backup.Endpoint.RotateKeysTimeoutSeconds` | **30** | seconds | BE-2 (`21-…` §5) | Below `RotationAckTimeoutSeconds=120` so step retries fit inside the budget. |
+| `MainWorker.Backup.Endpoint.RestoreByDateTimeoutSeconds` | **60** | seconds | BE-3 (`21-…` §6) | Accepts the job; restore itself runs as a long-running worker job. |
+| `MainWorker.Backup.Endpoint.SnapshotsTimeoutSeconds` | **15** | seconds | BE-4 (`21-…` §7) | Catalogue read. |
+| `MainWorker.Backup.Endpoint.HealthTimeoutSeconds` | **5** | seconds | BE-5 (`21-…` §8) | Tight on purpose so dashboard polling surfaces real outages. |
+
+Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
 
 ---
 
