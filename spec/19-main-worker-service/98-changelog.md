@@ -4,6 +4,13 @@
 
 ---
 
+## v5.35.0 — 2026-05-06 (Audit 11)
+
+**Scope:** Version bump (`5.34.0` → `5.35.0`). Audit 11.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.34.0 — 2026-05-06 (CI parity)
 
 **Scope:** Version bump (`5.33.0` → `5.34.0`). CI parity.
