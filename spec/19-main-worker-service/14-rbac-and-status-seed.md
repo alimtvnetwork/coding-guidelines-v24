@@ -19,7 +19,7 @@
 | `Role` | Settings | 3 | Top-level roles |
 | `AccessItem` | Settings | 9 | Capability catalog (renamed from `EnumPage` in v2.0.0) |
 | `RoleAccessItem` | Settings | 19 | Role↔AccessItem grants (renamed from `RolePageAccess`) |
-| `WorkerNodeStatus` | Root | 4 | Worker lifecycle states |
+| `WorkerNodeStatus` | Root | 7 | Worker lifecycle states (5 primary + 2 backup, Phase 6) |
 | `AuthMechanism` | Settings | 4 | Endpoint auth toggles |
 
 All five seeds ship together at SemVer `1.4.0` of `config.seed.json`.
