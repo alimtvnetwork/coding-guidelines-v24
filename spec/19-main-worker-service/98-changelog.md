@@ -4,6 +4,13 @@
 
 ---
 
+## v5.30.0 — 2026-05-06 (Patches A-D)
+
+**Scope:** Version bump (`5.29.0` → `5.30.0`). Patches A-D.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.29.0 — 2026-05-06 (Cross-spec sweep)
 
 **Scope:** Version bump (`5.28.0` → `5.29.0`). Cross-spec sweep.
