@@ -180,55 +180,64 @@ If you need to know **when** something happened (not just whether it happened), 
 
 | Boolean | Timestamp Alternative | When to Use Timestamp |
 |---------|----------------------|----------------------|
-| `IsDeleted` | `DeletedAt TEXT NULL` | Soft deletes — need to know when |
-| `IsExpired` | `ExpiresAt TEXT NULL` | Expiration tracking |
-| `IsBanned` | `BannedAt TEXT NULL` | Audit trail needed |
-| `IsCompleted` | `CompletedAt TEXT NULL` | Duration tracking |
+| `IsDeleted` | `DeletedAt INTEGER NULL` | Soft deletes — need to know when |
+| `IsExpired` | `ExpiresAt INTEGER NULL` | Expiration tracking |
+| `IsBanned`  | `BannedAt  INTEGER NULL` | Audit trail needed |
+| `IsCompleted` | `CompletedAt INTEGER NULL` | Duration tracking |
 
 ```sql
 -- Boolean is fine when you only need true/false
-IsActive   BOOLEAN NOT NULL DEFAULT 1
+IsActive   INTEGER NOT NULL DEFAULT 1   -- SQLite boolean = INTEGER 0/1
 
--- Timestamp is better when "when" matters
-DeletedAt  TEXT NULL    -- NULL = not deleted, non-NULL = deleted at this time
-ExpiresAt  TEXT NULL    -- NULL = never expires, non-NULL = expires at this time
+-- Timestamp is better when "when" matters (epoch seconds, UTC)
+DeletedAt  INTEGER NULL    -- NULL = not deleted, non-NULL = epoch seconds
+ExpiresAt  INTEGER NULL    -- NULL = never expires, non-NULL = epoch seconds
 ```
 
 > **Rule of thumb:** If the business logic ever asks "when did this happen?", use a timestamp. If it only asks "is this the case?", use a boolean.
 
-### Rule 7.1: ISO-8601 Timestamp Precision (canonical format)
+### Rule 7.1: Epoch-INTEGER Timestamp (canonical storage format) — v2.0
 
-All `TEXT` timestamp columns MUST store values in this exact format:
+**Effective v5.13.0**, all timestamp columns MUST be stored as `INTEGER` representing **Unix epoch seconds in UTC** (signed 64-bit). TEXT/ISO-8601 storage is **deprecated and forbidden** for new schemas.
 
+| Property | Rule | Rationale |
+|----------|------|-----------|
+| Type | `INTEGER` (SQLite) / `BIGINT` (Postgres/MySQL) | Compact, no parsing, native arithmetic, range-query friendly |
+| Unit | **Seconds** since 1970-01-01T00:00:00Z | Matches Unix `time()`, language stdlibs, JWT `iat`/`exp` |
+| Range | Signed 64-bit (effectively unbounded) | Y2038-safe |
+| Timezone | Always UTC; no offset stored | Single source of truth |
+| NULL semantics | NULL = "never / not yet" | Same as before |
+| Sub-second precision | **Not stored at column level**. If sub-second ordering matters, add a separate `SeqNo INTEGER` companion column. | Avoids float drift, keeps integer comparisons exact |
+
+**Naming suffix unchanged:** the `*At` suffix still indicates a point-in-time column.
+
+**Defaults (SQLite):**
+
+```sql
+CreatedAt INTEGER NOT NULL DEFAULT (unixepoch())
+UpdatedAt INTEGER NOT NULL DEFAULT (unixepoch())
+DeletedAt INTEGER NULL
 ```
-YYYY-MM-DDTHH:MM:SS.sssZ
+
+**Defaults (Postgres):**
+
+```sql
+CreatedAt BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW())::BIGINT
 ```
 
-| Segment | Rule | Rationale |
-|---------|------|-----------|
-| Date `YYYY-MM-DD` | Mandatory, zero-padded | Lexicographic sort = chronological sort |
-| Separator `T` | Mandatory uppercase `T` (not space) | RFC 3339 §5.6 strict |
-| Time `HH:MM:SS` | Mandatory, 24-hour, zero-padded | Same sort guarantee |
-| Fractional `.sss` | **Mandatory milliseconds** (3 digits, zero-padded) | Disambiguates events within the same second; required for correlation/ordering across logs |
-| Timezone `Z` | **Mandatory UTC suffix** (`Z`, never `+00:00`, never naïve) | Eliminates locale ambiguity; `Z` sorts before any `+HH:MM` offset |
+**Wire format (JSON / API):** transmit as JSON `number` (integer epoch seconds). Frontend converts to `Date` using `new Date(epoch * 1000)`. Do **not** emit ISO strings on the wire for `*At` fields.
 
 **Examples:**
 
 ```
-✅ 2026-05-04T14:23:07.451Z
-❌ 2026-05-04T14:23:07Z          (missing ms)
-❌ 2026-05-04T14:23:07.451+00:00 (use Z, not numeric offset)
-❌ 2026-05-04 14:23:07.451Z      (space instead of T)
-❌ 2026-05-04T14:23:07.4Z        (1-digit ms, must be 3)
+✅ "CreatedAt": 1735689600
+❌ "CreatedAt": "2025-01-01T00:00:00.000Z"   (TEXT format — deprecated)
+❌ "CreatedAt": 1735689600000                 (milliseconds — wrong unit)
 ```
 
-**SQLite default**: `datetime('now')` produces second-precision in local TZ — **DO NOT use raw**. Use `strftime('%Y-%m-%dT%H:%M:%fZ', 'now')` (the `%f` token emits `SS.sss`) for compliant defaults:
+**Migration note (v5.12.0 → v5.13.0):** existing TEXT timestamp columns must be migrated via `ALTER TABLE ... ADD COLUMN <Name>Epoch INTEGER` + backfill `unixepoch(<Name>)` + drop old column in a follow-up migration. Track in `98-changelog.md`.
 
-```sql
-CreatedAt TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
-```
-
-> **Rule of thumb:** Every timestamp on the wire, in the DB, and in logs is ms-precision UTC. No exceptions, no per-table overrides.
+> **Rule of thumb:** Every `*At` column on the wire, in the DB, and in logs is **epoch seconds (INTEGER, UTC)**. No exceptions, no per-table overrides.
 
 ### Rule 8: Negative-to-Positive Conversion + Approved Inverses
 
