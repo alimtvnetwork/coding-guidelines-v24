@@ -4,6 +4,13 @@
 
 ---
 
+## v5.38.0 — 2026-05-06 (v2.0.0 backup-tier seed materialization: 28 MainWorker.Backup.* keys + Backup.Enabled flag fully checked by T3 parity (silent waiver lifted); §2.16 cache catalogue added; check-tunable-constants linter parser fixed (§2-only scope) and wired into CI.)
+
+**Scope:** Version bump (`5.37.0` → `5.38.0`). v2.0.0 backup-tier seed materialization: 28 MainWorker.Backup.* keys + Backup.Enabled flag fully checked by T3 parity (silent waiver lifted); §2.16 cache catalogue added; check-tunable-constants linter parser fixed (§2-only scope) and wired into CI..
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.37.0 — 2026-05-06 (CI/docs build step renders all spec/**/{diagrams,images}/*.mmd to PNG via mermaid-cli, uploads as artifact (Phase 13 closure).)
 
 **Scope:** Version bump (`5.36.0` → `5.37.0`). CI/docs build step renders all spec/**/{diagrams,images}/*.mmd to PNG via mermaid-cli, uploads as artifact (Phase 13 closure)..

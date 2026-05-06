@@ -106,6 +106,7 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 
 | Key | Default | Unit | Used by | Notes |
 |---|---:|---|---|---|
+| `MainWorker.Backup.Enabled` | **false** | bool | All `MainWorker.Backup.*` consumers | Master feature flag (added v2.0.0). When `false`, backup endpoints reject with `MAIN-800-01 BackupSubsystemDisabled`, the sync cron does not run, and every other `MainWorker.Backup.*` tunable is inert. Default `false` until the operator opts in (per D9 — no auto-failover). |
 | `MainWorker.Backup.MaxBackupsPerPrimary` | **3** | count | `18-…` §2 R2 / §3.2 `AssertCapacityForBackup` | Hard ceiling enforced at backup registration. |
 | `MainWorker.Backup.LagWarningSeconds` | **900** (15m) | seconds | `18-…` §4.3 — heartbeat watcher flips `BackupAttached` → `BackupLagging`. | No auto-failover; Power Admin acts on the warning. |
 | `MainWorker.Backup.HeartbeatIntervalSeconds` | **60** | seconds | Backup → Main heartbeat cadence | Slower than primary heartbeat (`MainWorker.Heartbeat.IntervalSeconds = 30`) because backups never serve traffic. |
@@ -155,6 +156,16 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Backup.Restore.PrimaryAckTimeoutSeconds` | **600** (10 m) | seconds | `23-…` §7 R8 | Backup waits this long for primary's BE-6 200 before flipping job to `Failed`. |
 
 All Backup-tier tunables now allocated. Phase 12 closes the backup work with diagrams + acceptance criteria.
+
+### 2.16 In-process Main caches (consumer: `01-architecture.md` §5)
+
+Promoted from §4.2 to a first-class catalogue entry so T3 (seed parity) covers them. Defaults match §4.2 verbatim; §4.2 retains the prose discussion.
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Cache.CompanyToWorkerTtlSeconds` | **900** (15 m) | seconds | `01-architecture.md` §5 — `CompanyId → WorkerNodeId` cache | Invalidate on worker reassignment. |
+| `MainWorker.Cache.WorkerRegistryTtlSeconds` | **60** | seconds | `01-architecture.md` §5 — Worker registry | Invalidate on worker register/deregister. |
+| `MainWorker.Cache.RecentCompanyPerUserTtlSeconds` | **`= MainWorker.Auth.MainSessionTtlSeconds`** | seconds | `01-architecture.md` §5 — Per-user recent-company | Bound to session TTL by definition; T3 omits parity check (non-numeric default). |
 
 ---
 
@@ -311,6 +322,34 @@ The §2 prose uses full dotted keys (e.g. `MainWorker.RateLimit.AuthEndpointsPer
 | `MainWorker.Cache.CompanyToWorkerTtlSeconds`              | `CacheCompanyToWorkerTtlSeconds` |
 | `MainWorker.Cache.WorkerRegistryTtlSeconds`               | `CacheWorkerRegistryTtlSeconds`  |
 | `MainWorker.Cache.RecentCompanyPerUserTtlSeconds`         | `CacheRecentCompanyPerUserTtlSeconds` |
+| `MainWorker.Backup.Enabled`                               | `Backup.Enabled`                              |
+| `MainWorker.Backup.MaxBackupsPerPrimary`                  | `Backup.MaxBackupsPerPrimary`                 |
+| `MainWorker.Backup.LagWarningSeconds`                     | `Backup.LagWarningSeconds`                    |
+| `MainWorker.Backup.HeartbeatIntervalSeconds`              | `Backup.HeartbeatIntervalSeconds`             |
+| `MainWorker.Backup.SyncIntervalSeconds`                   | `Backup.SyncIntervalSeconds`                  |
+| `MainWorker.Backup.MaxRowsPerEnvelope`                    | `Backup.MaxRowsPerEnvelope`                   |
+| `MainWorker.Backup.TombstoneRetentionSeconds`             | `Backup.TombstoneRetentionSeconds`            |
+| `MainWorker.Backup.LogRetentionSeconds`                   | `Backup.LogRetentionSeconds`                  |
+| `MainWorker.Backup.QuarantineCompactionOverrideSeconds`   | `Backup.QuarantineCompactionOverrideSeconds`  |
+| `MainWorker.Backup.MaxKeyAgeSeconds`                      | `Backup.MaxKeyAgeSeconds`                     |
+| `MainWorker.Backup.RotationAckTimeoutSeconds`             | `Backup.RotationAckTimeoutSeconds`            |
+| `MainWorker.Backup.RotationActivationDelaySeconds`        | `Backup.RotationActivationDelaySeconds`       |
+| `MainWorker.Backup.RetiredKeyGraceSeconds`                | `Backup.RetiredKeyGraceSeconds`               |
+| `MainWorker.Backup.RsaKeySizeBits`                        | `Backup.RsaKeySizeBits`                       |
+| `MainWorker.Backup.Endpoint.IncrementalDiffTimeoutSeconds`| `Backup.Endpoint.IncrementalDiffTimeoutSeconds` |
+| `MainWorker.Backup.Endpoint.RotateKeysTimeoutSeconds`     | `Backup.Endpoint.RotateKeysTimeoutSeconds`    |
+| `MainWorker.Backup.Endpoint.RestoreByDateTimeoutSeconds`  | `Backup.Endpoint.RestoreByDateTimeoutSeconds` |
+| `MainWorker.Backup.Endpoint.SnapshotsTimeoutSeconds`      | `Backup.Endpoint.SnapshotsTimeoutSeconds`     |
+| `MainWorker.Backup.Endpoint.HealthTimeoutSeconds`         | `Backup.Endpoint.HealthTimeoutSeconds`        |
+| `MainWorker.Backup.Apply.MaxRetriesPerEnvelope`           | `Backup.Apply.MaxRetriesPerEnvelope`          |
+| `MainWorker.Backup.Apply.TransactionTimeoutSeconds`       | `Backup.Apply.TransactionTimeoutSeconds`      |
+| `MainWorker.Backup.Apply.DeadLetterRetentionDays`         | `Backup.Apply.DeadLetterRetentionDays`        |
+| `MainWorker.Backup.Apply.IdempotencyRowRetentionDays`     | `Backup.Apply.IdempotencyRowRetentionDays`    |
+| `MainWorker.Backup.SnapshotRetentionDays`                 | `Backup.SnapshotRetentionDays`                |
+| `MainWorker.Backup.Snapshot.BuildHourUtc`                 | `Backup.Snapshot.BuildHourUtc`                |
+| `MainWorker.Backup.Snapshot.QuiesceTimeoutSeconds`        | `Backup.Snapshot.QuiesceTimeoutSeconds`       |
+| `MainWorker.Backup.Snapshot.MaxBuildSeconds`              | `Backup.Snapshot.MaxBuildSeconds`             |
+| `MainWorker.Backup.Restore.PrimaryAckTimeoutSeconds`      | `Backup.Restore.PrimaryAckTimeoutSeconds`     |
 
 Linter T3 (§6) MUST validate this alias table is exhaustive — every §2 prose row appears here and every §4 settings key appears here. Adding a tunable means updating §2, §4, and §4.1 in the same commit.
 
