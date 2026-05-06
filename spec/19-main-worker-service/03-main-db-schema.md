@@ -233,8 +233,8 @@ Tracks which version each Worker is currently running.
 
 Records every routing decision. Useful for debugging load distribution.
 
-| Column | Type | Null |
-|--------|------|------|
+| Column | Type | Null | Notes |
+|--------|------|------|------|
 | `WorkerSelectionEventId` | INTEGER | NO (PK) |
 | `CompanyId` | INTEGER | NO (FK) |
 | `WorkerNodeId` | INTEGER | NO (FK) |
