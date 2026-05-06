@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generated": "2026-05-06T09:19:00.636Z",
-  "version": "5.12.0",
+  "generated": "2026-05-06T09:27:41.842Z",
+  "version": "5.13.0-phase3",
   "overallScore": 80,
   "grade": "B",
   "effectiveScore": 100,
@@ -9,7 +9,7 @@
   "totals": {
     "files": 656,
     "folders": 23,
-    "lines": 140405
+    "lines": 140479
   },
   "blindAiAudit": {
     "version": "v3",
