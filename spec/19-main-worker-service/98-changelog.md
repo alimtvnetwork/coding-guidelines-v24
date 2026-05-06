@@ -4,6 +4,13 @@
 
 ---
 
+## v5.37.0 — 2026-05-06 (CI/docs build step renders all spec/**/{diagrams,images}/*.mmd to PNG via mermaid-cli, uploads as artifact (Phase 13 closure).)
+
+**Scope:** Version bump (`5.36.0` → `5.37.0`). CI/docs build step renders all spec/**/{diagrams,images}/*.mmd to PNG via mermaid-cli, uploads as artifact (Phase 13 closure)..
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.36.0 — 2026-05-06 (Patches E-H)
 
 **Scope:** Version bump (`5.35.0` → `5.36.0`). Patches E-H.
