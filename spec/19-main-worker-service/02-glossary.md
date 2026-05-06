@@ -17,7 +17,7 @@ Canonical terms. When this spec or any sibling spec uses these words, this is wh
 | **Admin User** | Paying customer admin. Has an admin panel scoped to their `Company`. Cannot configure system-wide settings. |
 | **EnumPage** | Compile-time enum identifying a logical "page" or capability gate (e.g., `EnumPage.AdminPage`, `EnumPage.PowerAdminPage`, `EnumPage.BillingPage`). Used in access checks. |
 | **Access Check** | The authorization pattern `User has access to {EnumPage}`. Never `if user.role == X`. See `07-role-based-dashboards.md`. |
-| **Split-DB** | The Root/App/Session SQLite layering defined in `spec/05-split-db-architecture/`. Lives on each Worker. |
+| **Split-DB** | The hierarchical SQLite layering defined in `spec/05-split-db-architecture/` (6 tiers total). Per FU-1 in [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md): **Worker uses 4 tiers** (Root / Settings / App / Session); **Main uses 3 tiers** (Root / Settings / Session, no App). Cache + Document tiers are unused in v1.0. Older "Root/App/Session" wording is stale. |
 | **Seedable-Config** | The config-seeding mechanism in `spec/06-seedable-config-architecture/`. Replaces the legacy term `CW configuration`. |
 | **Worker Registry** | Table on Main Server listing every known Worker (endpoint, identity, title, version). |
 | **Worker Selection Strategy** | The algorithm Main uses to pick a Worker for a new tenant (round-robin, least-loaded, etc.). See `04-worker-routing.md`. |
