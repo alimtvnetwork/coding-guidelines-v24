@@ -62,7 +62,7 @@ DEFAULT_BOLD_RE = re.compile(r"\*\*([^*|]+?)\*\*")
 DEFAULT_TICK_RE = re.compile(r"`([^`|]+?)`")
 # §4 Settings.<Name> with Default.
 SEED_RE = re.compile(
-    r"\"([A-Za-z][A-Za-z0-9_]+)\"\s*:\s*\{\s*"
+    r"\"([A-Za-z][A-Za-z0-9_.]+)\"\s*:\s*\{\s*"
     r"\"Type\"\s*:\s*\"[^\"]+\"\s*,\s*\"Default\"\s*:\s*"
     r"(\"[^\"]*\"|true|false|[0-9.]+)"
 )
