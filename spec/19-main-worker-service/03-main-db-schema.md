@@ -160,15 +160,18 @@ Audit row written by Workers on every 403 returned for an `AccessDenied` envelop
 | Column | Type | Null | Notes |
 |--------|------|------|------|
 | `AccessDenialEventId` | INTEGER | NO (PK) |
-| `UserId` | INTEGER | NO (FK) |
-| `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
-| `WorkerNodeId` | INTEGER | YES (FK; NULL when denied at Main edge) |
+| `UserDirectoryId` | INTEGER | YES (FK → `UserDirectory`; NULL when actor is unknown / pre-auth) |
+| `ActorEmail` | TEXT | NO | Snapshotted email at time of denial. Survives `UserDirectory` deletion for audit. |
+| `WorkerNodeId` | INTEGER | YES (FK; the Worker that authoritatively denied. NULL when denied at Main edge) |
+| `AccessItemCode` | TEXT | NO | Snapshotted `AccessItem.Code`. Main does not store the `AccessItem` table (it lives on Worker); the Worker stamps the code into the audit row when forwarding the denial event. |
 | `CorrelationId` | TEXT | NO |
 | `OccurredAt` | INTEGER | NO | Epoch seconds, UTC (Rule 7.1 v2). |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
-Indexed on `(UserId, OccurredAt)` and `(AccessItemId, OccurredAt)` for audit queries.
+Indexed on `(UserDirectoryId, OccurredAt)` and `(AccessItemCode, OccurredAt)` for audit queries.
+
+> **v2.1.0 change.** The `UserId` and `AccessItemId` FKs were dropped because both target tables now live on the Worker. The Worker forwards a denial event to Main with the snapshotted code/email; Main stores it for cross-Worker audit aggregation only.
 
 ### 2.6.4 `EndpointAuthAuditEvent` (transactional, audit) — FU-17
 
