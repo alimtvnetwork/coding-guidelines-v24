@@ -1,9 +1,9 @@
 {
-  "Version": "5.16.0",
+  "Version": "5.17.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "411a43fec0cd43dda734ed4fe39e172e7f120379",
+  "LastCommitSha": "f796a31604cfac1f4e9303458bf7474f43ac2b51",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "5.16.0",
+  "version": "5.17.0",
   "updated": "2026-05-06",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "411a43fec0cd43dda734ed4fe39e172e7f120379",
-    "shortSha": "411a43f",
-    "branch": "edit/edt-0b11697b-60af-4b9e-a7c8-b82249a47cd0"
+    "sha": "f796a31604cfac1f4e9303458bf7474f43ac2b51",
+    "shortSha": "f796a31",
+    "branch": "edit/edt-2822418d-e100-43fa-bf01-b0872d13eca6"
   },
   "stats": {
     "totalFiles": 663,
-    "totalLines": 143069,
+    "totalLines": 143146,
     "totalFolders": 23,
-    "totalBytes": 5097179,
+    "totalBytes": 5104425,
     "rootFiles": 6
   },
   "folders": [
@@ -281,8 +281,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 36,
-      "lineCount": 8016,
-      "byteCount": 481082
+      "lineCount": 8093,
+      "byteCount": 488328
     },
     {
       "path": "21-app",
