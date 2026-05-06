@@ -173,7 +173,7 @@ CREATE TABLE AuthMechanism (
 
 The `@<Table>.<Code>` syntax tells the seeder to substitute the AUTOINCREMENT id of the row whose unique-code column equals `Code`. Resolved at apply time. If the referenced row is missing, fail with `MWS-21002 SplitDbTierMissing` (closest fit) and abort the merge for that table.
 
-Implementer note: this is a seeder feature (FU-13 — extend `01-fundamentals.md` `mergeSeed` to honor `@`-references). Until shipped, use a two-pass approach: seed `Role` first, then `RolePageAccess` with literal IDs derived from a SELECT.
+Implementer note: this is a seeder feature (FU-13 — extend `01-fundamentals.md` `mergeSeed` to honor `@`-references). Until shipped, use a two-pass approach: seed `Role` first, then `RoleAccessItem` with literal IDs derived from a SELECT.
 
 ---
 
@@ -197,7 +197,7 @@ Any count below expected → exit `MWS-21002 SplitDbTierMissing`.
 
 ## 5. Re-seeding rules (when authoring `1.4.0`)
 
-- **Adding a new page:** add to `EnumPage.Rows`, add corresponding `RolePageAccess` rows, bump both blocks' `Version` to `1.4.0`. Keep `AddedIn` as the original.
+- **Adding a new page:** add to `AccessItem.Rows`, add corresponding `RoleAccessItem` rows, bump both blocks' `Version` to `1.4.0`. Keep `AddedIn` as the original.
 - **Revoking a default grant:** Per spec/06 §SeedWithVersionCheck, `UpsertByLogicalKey` does NOT delete. Operators clear via UI; seed cannot rescind. (Documented as expected behavior — defaults are floors, not ceilings.)
 - **Renaming a page:** add new code, keep the old (deprecate via `Description` text), migrate in code over one release.
 
@@ -206,7 +206,7 @@ Any count below expected → exit `MWS-21002 SplitDbTierMissing`.
 ## 6. Cross-references
 
 - `spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md` — the `Tables` block mechanism.
-- `spec/19-main-worker-service/07-role-based-dashboards.md` — consumer of `Role`/`EnumPage`/`RolePageAccess`.
+- `spec/19-main-worker-service/07-role-based-dashboards.md` — consumer of `Role`/`AccessItem`/`RoleAccessItem`.
 - `spec/19-main-worker-service/10-worker-bootstrap-protocol.md` §8 — consumer of `WorkerNodeStatus`.
 - `spec/19-main-worker-service/06-core-api-endpoints.md` §5 — consumer of `AuthMechanism`.
 - `spec/19-main-worker-service/11-split-db-tier-reconciliation.md` §4 — tier placement.
