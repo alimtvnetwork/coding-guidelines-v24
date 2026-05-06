@@ -268,6 +268,7 @@ The §2 prose uses full dotted keys (e.g. `MainWorker.RateLimit.AuthEndpointsPer
 | `MainWorker.Bootstrap.RetryMaxAttempts`                   | `BootstrapRetryMaxAttempts`      |
 | `MainWorker.Cache.CompanyToWorkerTtlSeconds`              | `CacheCompanyToWorkerTtlSeconds` |
 | `MainWorker.Cache.WorkerRegistryTtlSeconds`               | `CacheWorkerRegistryTtlSeconds`  |
+| `MainWorker.Cache.RecentCompanyPerUserTtlSeconds`         | `CacheRecentCompanyPerUserTtlSeconds` |
 
 Linter T3 (§6) MUST validate this alias table is exhaustive — every §2 prose row appears here and every §4 settings key appears here. Adding a tunable means updating §2, §4, and §4.1 in the same commit.
 
