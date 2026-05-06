@@ -67,7 +67,7 @@ Extensible. Adding a capability = add an enum case + a row in the `AccessItem` s
 |------|---------------------|
 | `PowerAdmin` | All 9 `AccessItem` values |
 | `AdminUser` | `Admin`, `Billing`, `CompanySettings`, `UserManagement`, `AuditLog` (read-only), `Dashboard` |
-| `Member` | `DashboardPage` |
+| `Member` | `Dashboard` |
 
 ---
 
@@ -109,14 +109,14 @@ Laravel example (one valid binding of the contract above):
 
 ```php
 Route::post('/API/V1/Workers/All/Update', UpdateAllController::class)
-    ->middleware('access:PushUpdatePage');
+    ->middleware('access:PushUpdate');
 ```
 
 Express example (equivalent contract):
 
 ```ts
 app.post('/API/V1/Workers/All/Update',
-    requireAccess('PushUpdatePage'),
+    requireAccess('PushUpdate'),
     updateAllController);
 ```
 
@@ -132,7 +132,7 @@ app.post('/API/V1/Workers/All/Update',
 - Audit log viewer
 - Role/access matrix editor
 
-Required pages: `PowerAdmin`, `WorkerRegistryPage`, `PushUpdatePage`, `AuditLogPage`.
+Required pages: `PowerAdmin`, `WorkerRegistry`, `PushUpdate`, `AuditLog`.
 
 ### 6.2 Admin User Dashboard
 - Company profile editor (calls Worker)
@@ -140,12 +140,12 @@ Required pages: `PowerAdmin`, `WorkerRegistryPage`, `PushUpdatePage`, `AuditLogP
 - Billing
 - Their company's analytics
 
-Required pages: `AdminPage`, `BillingPage`, `CompanySettingsPage`, `UserManagementPage`.
+Required pages: `Admin`, `Billing`, `CompanySettings`, `UserManagement`.
 
 ### 6.3 Member Dashboard
 - The actual product surface (graphs, business data — all from Worker).
 
-Required pages: `DashboardPage`.
+Required pages: `Dashboard`.
 
 ---
 
@@ -171,4 +171,4 @@ Every access denial writes to an `AccessDenialEvent` table (transactional, inclu
 
 ---
 
-*Role-based dashboards v1.0.0 — 2026-05-04*
+*Role-based dashboards v2.0.0 — 2026-05-06 (AccessItem rename)*
