@@ -171,13 +171,13 @@ All Backup-tier tunables now allocated. Phase 12 closes the backup work with dia
 
 ## 4. `config.seed.json` Categories binding (paste-ready)
 
-Add (or merge with) the following category at SemVer `1.5.0` of `config.seed.json` (bumped from `1.4.0` to materialize the third caching key added in Phase 13.3 — `CacheRecentCompanyPerUserTtlSeconds` — closing the §4↔§4.2 gap flagged by audit-08 §2.3; the four §2.7–2.9 keys (`PushUpdateIssuedSkewSec`, `SelfUpdateRedirectStaleHours`, `BootstrapRetryBackoffSec`, `BootstrapRetryMaxAttempts`) and the two cache keys (`CacheCompanyToWorkerTtlSeconds`, `CacheWorkerRegistryTtlSeconds`) carry over from the v1.3.0→v1.4.0 bump):
+Add (or merge with) the following category at SemVer `2.0.0` of `config.seed.json` (bumped from `1.5.0` to materialize the 27 backup-tier tunables (`MainWorker.Backup.*`) defined in §2.11–2.15, closing the audit-09 §2.1 deferral; the major bump reflects the new `Backup` sub-namespace and the addition of the `Enabled` feature flag, not a breaking change to existing v1.5.0 keys — all v1.5.0 defaults are preserved verbatim):
 
 ```jsonc
 "MainWorker": {
   "DisplayName": "Main / Worker tunables",
   "Description": "Single-value tunables for spec/19. See 15-tunable-constants.md.",
-  "Version": "1.5.0",
+  "Version": "2.0.0",
   "AddedIn":  "1.3.0",
   "Settings": {
 
@@ -221,13 +221,55 @@ Add (or merge with) the following category at SemVer `1.5.0` of `config.seed.jso
 
     "CacheCompanyToWorkerTtlSeconds":     { "Type": "number", "Default": 900,   "Min": 30 },
     "CacheWorkerRegistryTtlSeconds":      { "Type": "number", "Default": 60,    "Min": 5  },
-    "CacheRecentCompanyPerUserTtlSeconds":{ "Type": "number", "Default": 28800, "Min": 300, "Description": "Default mirrors MainSessionTtlSeconds; runtime resolver MAY substitute the live MainSessionTtlSeconds value to honour §4.2 binding." }
+    "CacheRecentCompanyPerUserTtlSeconds":{ "Type": "number", "Default": 28800, "Min": 300, "Description": "Default mirrors MainSessionTtlSeconds; runtime resolver MAY substitute the live MainSessionTtlSeconds value to honour §4.2 binding." },
+
+    // ─── Backup tier (added v2.0.0; gated by Backup.Enabled) ─────────────────
+    // Source: §2.11–2.15. All defaults match the prose verbatim.
+
+    "Backup.Enabled":                              { "Type": "boolean", "Default": false, "Description": "Master feature flag. When false, the entire backup subsystem is dormant: backup endpoints reject with MAIN-800-01 BackupSubsystemDisabled, sync cron does not run, and Backup.* tunables below have no effect. Default false until operator explicitly opts in (per D9 — no auto-failover)." },
+
+    // §2.11 Backup nodes
+    "Backup.MaxBackupsPerPrimary":                 { "Type": "number",  "Default": 3,       "Min": 1, "Max": 10 },
+    "Backup.LagWarningSeconds":                    { "Type": "number",  "Default": 900,     "Min": 60 },
+    "Backup.HeartbeatIntervalSeconds":             { "Type": "number",  "Default": 60,      "Min": 5,  "Max": 600 },
+    "Backup.SyncIntervalSeconds":                  { "Type": "number",  "Default": 60,      "Min": 5,  "Max": 3600 },
+    "Backup.MaxRowsPerEnvelope":                   { "Type": "number",  "Default": 5000,    "Min": 1,  "Max": 100000 },
+    "Backup.TombstoneRetentionSeconds":            { "Type": "number",  "Default": 604800,  "Min": 86400 },
+    "Backup.LogRetentionSeconds":                  { "Type": "number",  "Default": 604800,  "Min": 86400 },
+    "Backup.QuarantineCompactionOverrideSeconds":  { "Type": "number",  "Default": 86400,   "Min": 3600 },
+
+    // §2.12 Backup encryption + Pair-RSA rotation
+    "Backup.MaxKeyAgeSeconds":                     { "Type": "number",  "Default": 7776000, "Min": 86400 },
+    "Backup.RotationAckTimeoutSeconds":            { "Type": "number",  "Default": 120,     "Min": 10 },
+    "Backup.RotationActivationDelaySeconds":       { "Type": "number",  "Default": 60,      "Min": 0 },
+    "Backup.RetiredKeyGraceSeconds":               { "Type": "number",  "Default": 86400,   "Min": 0,  "Description": "Grace window for in-flight envelopes signed with retired keys. MUST be 0 when rotation Reason='Compromise' (override at request time, not via seed)." },
+    "Backup.RsaKeySizeBits":                       { "Type": "number",  "Default": 4096,    "Min": 4096, "Max": 4096, "Description": "Locked at 4096 for v2.0; bumping requires a v3.0 seed review." },
+
+    // §2.13 Backup endpoints
+    "Backup.Endpoint.IncrementalDiffTimeoutSeconds": { "Type": "number", "Default": 120, "Min": 1 },
+    "Backup.Endpoint.RotateKeysTimeoutSeconds":      { "Type": "number", "Default": 30,  "Min": 1 },
+    "Backup.Endpoint.RestoreByDateTimeoutSeconds":   { "Type": "number", "Default": 60,  "Min": 1 },
+    "Backup.Endpoint.SnapshotsTimeoutSeconds":       { "Type": "number", "Default": 15,  "Min": 1 },
+    "Backup.Endpoint.HealthTimeoutSeconds":          { "Type": "number", "Default": 5,   "Min": 1 },
+
+    // §2.14 Backup apply pipeline
+    "Backup.Apply.MaxRetriesPerEnvelope":           { "Type": "number", "Default": 5,  "Min": 1, "Max": 20 },
+    "Backup.Apply.TransactionTimeoutSeconds":       { "Type": "number", "Default": 30, "Min": 1 },
+    "Backup.Apply.DeadLetterRetentionDays":         { "Type": "number", "Default": 30, "Min": 1 },
+    "Backup.Apply.IdempotencyRowRetentionDays":     { "Type": "number", "Default": 14, "Min": 1 },
+
+    // §2.15 Backup snapshot + restore
+    "Backup.SnapshotRetentionDays":                 { "Type": "number", "Default": 30,   "Min": 7, "Description": "Linter BACKUP-SNAP-002 enforces ≥7 (compliance floor)." },
+    "Backup.Snapshot.BuildHourUtc":                 { "Type": "number", "Default": 3,    "Min": 0, "Max": 23 },
+    "Backup.Snapshot.QuiesceTimeoutSeconds":        { "Type": "number", "Default": 120,  "Min": 1 },
+    "Backup.Snapshot.MaxBuildSeconds":              { "Type": "number", "Default": 1800, "Min": 60 },
+    "Backup.Restore.PrimaryAckTimeoutSeconds":      { "Type": "number", "Default": 600,  "Min": 30 }
 
   }
 }
 ```
 
-> **Backup-tier seed (Phase 13.4 follow-up):** §2.11–2.15 define ~28 backup-tier tunables (`MainWorker.Backup.*`) that are NOT yet materialized in the JSON payload above. They are intentionally deferred to a `config.seed.json` v2.0.0 bump because the backup subsystem ships behind a feature flag (`MainWorker.Backup.Enabled`, default false). Until that bump, implementers MUST read backup tunables from §2.11–2.15 prose defaults verbatim. Linter T3 (§6) is waived for the `MainWorker.Backup.*` namespace until v2.0.0.
+> **Backup-tier seed (v2.0.0 — closes audit-09 §2.1):** All 27 `MainWorker.Backup.*` tunables from §2.11–2.15 are now materialized in the JSON payload above, gated by `MainWorker.Backup.Enabled` (default `false`). The T3 (seed parity) linter waiver previously held against the `MainWorker.Backup.*` namespace is **lifted as of v2.0.0**; T3 now applies to every key in §2 including the backup tier. Implementers reading defaults MUST consume the seed; §2.11–2.15 prose remains the SoT for *meaning* and unit conventions only.
 
 ---
 
