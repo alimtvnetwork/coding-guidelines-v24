@@ -4,6 +4,27 @@
 
 ---
 
+## v2.2.0 — 2026-05-06 (Phase 4 — WorkerNode backup & ordering, "Region" UI label)
+
+**Scope:** Per locked decisions D6, D7, D8, D9 — give `WorkerNode` the structural fields needed to express the backup-node concept and the deterministic ordering needed by RoundRobin, and rename the user-facing column to "Region" without touching code identifiers.
+
+- `03-main-db-schema.md` → **v2.2.0**:
+  - `WorkerNode` (§2.1) gains `Sequence INTEGER NOT NULL` (RoundRobin order, unique among non-backup peers), `IsBackup INTEGER NOT NULL DEFAULT 0`, `BackupOfWorkerNodeId INTEGER NULL` (self-FK).
+  - CHECK constraints: backup-flag and FK move together (`(IsBackup=0 AND BackupOfWorkerNodeId IS NULL) OR (IsBackup=1 AND BackupOfWorkerNodeId IS NOT NULL)`); backup chains forbidden (referenced row MUST have `IsBackup=0`, enforced by trigger).
+  - New indexes: `IX_WorkerNode_BackupOf` and partial `IX_WorkerNode_PrimaryEligible (WorkerNodeStatusId, Sequence) WHERE IsBackup = 0`.
+- `04-worker-routing.md` → **v1.2.0**: §1.1 RoundRobin walks `Sequence ASC`; §1.4 eligibility filter prefixed with positive guard `IsPrimary(node) → IsBackup = 0`. Manual strategy now rejects backup targets with `WORKER-300-04 BackupNotRoutable`.
+- `13-error-codes.md`: added `WORKER-300-04 / 21033 / BackupNotRoutable` (HTTP 409).
+- `07-role-based-dashboards.md` → **v2.1.0**: new §9 "UI Labels" — `WorkerNode` renders as **"Region"** in dashboards, forms, and audit views via i18n key `worker_node.label`. Code, API, and DB identifiers unchanged.
+
+**Cross-spec impact:**
+- Worker bootstrap (`10-worker-bootstrap-protocol.md`) and self-update pointer (`09-self-update-pointer.md`) are unchanged for primary nodes; backup-node registration / pairing flow is deferred to Phase 6 (`17-backup-nodes.md`).
+- ER diagram regeneration deferred to Phase 12 (`diagrams/erd-main-db.mmd`).
+- Cache-bin tables for role resolution and the cascading-roles union semantics remain Phase 5 work.
+
+**Open questions carried into Phase 5:** OQ-A1 (cascading semantics — union vs hierarchy), OQ-A2 (cache-bin tech), OQ-A3 (zip password derivation), OQ-A4 (snapshot retention).
+
+---
+
 ## v2.1.0 — 2026-05-06 (Phase 3 — Move Users off Main)
 
 **Scope:** Per locked decision D5, Main becomes credential-blind. All identity, password, and 2FA state moves to the assigned Worker's split-DB App tier. Spec-only; no runtime code touched.
