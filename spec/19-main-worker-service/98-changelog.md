@@ -4,6 +4,13 @@
 
 ---
 
+## v5.27.0 — 2026-05-06 (Phase 13.3 — literal-reader trap audit + §6.4 visibility callout in 22- (audit-08 §2.5 traps #1 and #3 confirmed false positives))
+
+**Scope:** Version bump (`5.26.0` → `5.27.0`). Phase 13.3 — literal-reader trap audit + §6.4 visibility callout in 22- (audit-08 §2.5 traps #1 and #3 confirmed false positives).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.26.0 — 2026-05-06 (Phase 13.3 — inline cross-spec inherited rules in new 25-inherited-rules.md (closes audit-08 §2.4))
 
 **Scope:** Version bump (`5.25.0` → `5.26.0`). Phase 13.3 — inline cross-spec inherited rules in new 25-inherited-rules.md (closes audit-08 §2.4).
