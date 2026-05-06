@@ -551,6 +551,14 @@ jobs:
         #   git add -A && git commit -m "chore: sync generated files"
         run: npm run sync:check
 
+      - name: Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)
+        # Mirror of scripts/lint-ci.sh step 14. Uses node built-ins only —
+        # passes when no PNGs exist (adoption is opt-in per
+        # spec/19-main-worker-service/diagrams/readme.md), fails only when
+        # a committed *.png is older than its *.mmd source. Closes
+        # spec/19 audit-09 §2.2 end-to-end (local + CI parity).
+        run: node scripts/render-diagrams.mjs --check
+
   runner-dispatch-guard:
     name: Runner Dispatch Guard
     runs-on: ubuntu-latest
