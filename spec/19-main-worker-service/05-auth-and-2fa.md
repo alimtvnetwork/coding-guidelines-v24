@@ -1,53 +1,64 @@
 # 05 — Authentication and 2FA
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 2.0.0
+
+> **v2.0.0 (Phase 3 — Users moved off Main).** Main is now a **credential-blind reverse proxy** for `/Auth/*` traffic. It owns the routing index `UserDirectory` (`03-main-db-schema.md` §2.4) and nothing else. Password hashes, TOTP secrets, backup codes, and role assignments live exclusively on the assigned Worker's split-DB App tier (`AppUser`, `AppUserRole`). The flows in §5–§7 below are rewritten accordingly. The previous v1.0 flow — where Main verified passwords locally — is **removed**.
 
 Auth is a **first-class given** in BOTH Main and Worker tiers. This file defines the contract; implementer chooses Laravel Sanctum / Passport / custom JWT as long as the contract is honored.
 
 ---
 
-## 1. What both tiers MUST ship with
+## 1. Capability matrix (v2.0.0)
 
 | Capability | Main | Worker |
 |-----------|------|--------|
-| Email + password sign-up | ✅ | ✅ |
-| Email + password sign-in | ✅ | ✅ |
-| 2FA (TOTP) enroll + verify | ✅ | ✅ |
-| Session management | ✅ | ✅ |
-| JWT issuance | ✅ | ✅ |
-| Cookie-based session | ✅ (for React UI) | optional |
-| Password reset (email link) | ✅ | ✅ |
+| Email + password sign-up (HTTP entry point) | ✅ proxy | ✅ authoritative |
+| Email + password sign-in (HTTP entry point) | ✅ proxy | ✅ authoritative |
+| Password hashing / verification | ❌ never | ✅ |
+| TOTP enroll + verify | ❌ never | ✅ |
+| TOTP backup-code storage | ❌ never | ✅ |
+| `UserDirectory` routing index | ✅ | ❌ (mirrored read-only via bootstrap) |
+| Session management (UI cookie) | ✅ | optional |
+| Worker-JWT issuance | ❌ | ✅ (Worker mints; Main forwards) |
+| Cookie-based session for React UI | ✅ | optional |
+| Password reset (email link) | ✅ proxy | ✅ authoritative |
 | Sign-out (single + all sessions) | ✅ | ✅ |
 
-Worker has these even though it has no UI — they're required for service-to-service auth and direct-from-React calls after Main resolves the worker.
+> **Why Main proxies instead of authenticates.** Per locked decision D5, Main MUST be a thin catalog. Storing password hashes on Main would re-introduce the cross-tenant blast radius the split-DB architecture exists to eliminate. The proxy pattern keeps Main credential-blind while preserving a single public entry URL.
 
 ---
 
 ## 2. Two Authentication Surfaces
 
-### 2.1 User → Main (UI-facing)
-- **Mechanism:** session cookie (HTTPOnly, Secure, SameSite=Lax) issued by Main.
-- **2FA gate:** if `User.Has2FAEnabled = true`, Main blocks issuance until TOTP code verified.
-- **Token:** opaque session ID, mapped server-side. NOT a JWT (cookies don't need to carry payload).
+### 2.1 User → Main → Worker (UI-facing, credential proxy)
 
-### 2.2 React → Worker (data-facing, after Main resolves the worker)
-- **Mechanism:** short-lived JWT minted by Main, accepted by the resolved Worker.
+- **Entry:** browser POSTs `/API/V1/Auth/SignIn` to Main with `{ Email, Password, TotpCode? }`.
+- **Main step 1 — routing lookup:** Main reads `UserDirectory WHERE UserEmail = LOWER(:email)` to obtain `WorkerNodeId`. **Constant-time response on miss** (no email enumeration): if no row, Main forwards to a synthetic "null Worker" handler that returns the same generic 401 envelope after the same wall-clock budget as a real verification.
+- **Main step 2 — forward:** Main proxies the original body verbatim over a mutual-TLS internal channel to `POST {WorkerEndpoint}/API/V1/Auth/InternalSignIn` with headers `X-Forwarded-For-User: <hash(email)>`, `X-Correlation-Id`, and an OAuth client-credentials Bearer (per §2.3). **Main does NOT log the password** (scrubbed per §3).
+- **Worker step:** Worker reads its `AppUser` row, runs the password verifier (Argon2id / bcrypt per §3), checks TOTP if enrolled, then mints the Worker-JWT (per `12-jwt-delivery-contract.md`).
+- **Main step 3 — session cookie:** On Worker 200, Main stamps a session cookie (HTTPOnly, Secure, SameSite=Lax) bound to the Worker-JWT and returns the JWT body to the browser. On Worker 401, Main returns 401 unchanged.
+- **Main never sees the cleartext password after forwarding.** The proxied body buffer MUST be zeroed (`sodium_memzero` or equivalent) immediately after the forward call returns.
+
+### 2.2 React → Worker (data-facing, after sign-in)
+
+- **Mechanism:** short-lived JWT minted by **the Worker** (not Main, as in v1.0), accepted by that same Worker. JWT claims unchanged from v1.0 except `iss = WorkerEndpoint` (was Main URL).
 - **JWT claims:**
-  - `sub` = `UserId`
+  - `sub` = `AppUserId` (Worker-local)
   - `cmp` = `CompanyId`
   - `wnk` = `WorkerNodeId` (so Worker rejects misrouted tokens)
-  - `iss` = Main's URL
-  - `aud` = Worker's URL
+  - `iss` = Worker URL
+  - `aud` = Worker URL (self-issued)
   - `exp` = issued + `MainWorker.Auth.WorkerJwtTtlSeconds` (default per `15-tunable-constants.md` §2.4 = 15 min)
   - `iat` = epoch
-  - `roles` = array of `RoleCode` strings
-- **Signing:** asymmetric (RS256). Main holds private key; each Worker holds Main's public key (rotatable via Seedable-Config).
-- **Refresh:** React calls Main `/API/V1/Auth/RefreshWorkerToken` when JWT is within `MainWorker.Auth.JwtRefreshLeadSeconds` of expiry (default per `15-tunable-constants.md` §2.4 = 60 s).
+  - `roles` = array of `RoleCode` strings (Worker computed cascading union per Phase 5)
+- **Signing:** asymmetric (RS256). Worker holds private key; Main holds the Worker's public key (rotatable via Seedable-Config) so it can validate JWTs on session-cookie refresh.
+- **Refresh:** React calls Worker `/API/V1/Auth/RefreshToken` directly (Main bypassed) when JWT is within `MainWorker.Auth.JwtRefreshLeadSeconds` of expiry (default per `15-tunable-constants.md` §2.4 = 60 s).
 
-### 2.3 Main → Worker (orchestration: push-update, registry sync)
+### 2.3 Main → Worker (orchestration: push-update, registry sync, credential proxy)
 - **Mechanism:** OAuth 2.0 client-credentials grant OR pre-shared API key (configurable).
 - **Default:** OAuth client-credentials per Worker, secrets stored via Seedable-Config (encrypted at rest).
+- The credential-proxy channel (§2.1) reuses this same client-credential token; the Worker enforces that `/API/V1/Auth/InternalSignIn` is callable **only** from Main's IP allowlist + valid Bearer.
 - Per-endpoint flexibility per verbatim §Main Server Concept 3c — see Open Question OQ-1 below.
 
 ---
