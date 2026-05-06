@@ -93,6 +93,18 @@ def toggle_fence(line: str, in_fence: bool) -> bool:
     return in_fence
 
 
+CATALOGUE_START_RE = re.compile(r"^##\s+2\.\s")
+CATALOGUE_END_RE = re.compile(r"^##\s+(?!2(?:\.\d+)?\b)\d")
+
+
+def _is_inside_catalogue(line: str, inside: bool) -> bool:
+    if CATALOGUE_START_RE.match(line):
+        return True
+    if inside and CATALOGUE_END_RE.match(line):
+        return False
+    return inside
+
+
 def collect_catalogue_keys() -> set[str]:
     keys: set[str] = set()
     in_fence = False
