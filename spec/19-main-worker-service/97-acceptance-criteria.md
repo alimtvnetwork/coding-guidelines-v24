@@ -30,7 +30,7 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Sub-criterion | Defined in | Test |
 |---------------|-----------|------|
 | `POST /API/V1/Company` works end-to-end | `06-core-api-endpoints.md` §2.2, §3.1, `diagrams/seq-company-creation.mmd` | E2E: POST returns 201, Worker has full row, Main has minimal row |
-| Worker selected by load-balanced strategy | `04-worker-routing.md` §1 | Unit: 100 sequential creates with `LeastLoaded` distribute within ±10% |
+| Worker selected by load-balanced strategy | `04-worker-routing.md` §1 + §1.5; default pinned in `15-tunable-constants.md` §2.5 | Unit: 100 sequential creates with default `LeastLoaded` distribute within ±10%; startup test: Main MUST refuse to start when `MainWorker.Routing.DefaultStrategy` is outside `{RoundRobin, LeastLoaded, Manual}` (no silent fallback). |
 | Main DB stores only minimal company identification | `03-main-db-schema.md` §2.3 | Schema review: only `CompanyId`, `CompanySlug`, `CompanyName`, `WorkerNodeId`, `CompanyAssignedAt`, `Description` |
 | Worker DB stores full company data via split-DB | `diagrams/erd-worker-split-db.mmd` | Schema review: `RootCompany` includes Address, Website, Social fields |
 
@@ -114,4 +114,4 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 
 ---
 
-*Acceptance criteria v1.2.0 — 2026-05-06 (Phase 12.2 — Pinned-snapshot audit-trail criterion added per OQ-23-3).*
+*Acceptance criteria v1.3.0 — 2026-05-06 (Phase 12.3 — AC-3 worker-selection row tightened: default pinned + allow-list startup guard per OQ-2).*
