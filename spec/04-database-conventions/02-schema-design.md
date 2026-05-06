@@ -213,7 +213,7 @@ Every database schema MUST be documented with:
 | TableNameId | INTEGER | PK, AUTOINCREMENT | Primary key |
 | ForeignTableId | INTEGER | FK, NOT NULL | References ForeignTable |
 | Name | TEXT | NOT NULL | Human-readable name |
-| CreatedAt | TEXT | NOT NULL, DEFAULT CURRENT_TIMESTAMP | ISO 8601 timestamp |
+| CreatedAt | INTEGER | NOT NULL, DEFAULT (unixepoch()) | Epoch seconds, UTC (Naming Rule 7.1) |
 ```
 
 ---
