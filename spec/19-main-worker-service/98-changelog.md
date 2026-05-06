@@ -4,6 +4,20 @@
 
 ---
 
+## v2.16.0 — 2026-05-06 (Phase 12.6 — Spec slot 24 reserved with `24-threat-model.md` stub)
+
+**Scope:** Closes the last unresolved item in the Backup System initiative. Creates a stub `24-threat-model.md` (v0.1.0) that visibly reserves spec slot 24 inside `19-main-worker-service/` so a future spec author cannot grab it for an unrelated topic. The stub is the **shared prerequisite** declared by `12-jwt-delivery-contract.md` §11.3 (OQ-12-1 / OQ-12-2) and `23-snapshot-storage-and-restore.md` §14.4 (OQ-23-1 / OQ-23-2). Project version bump to `5.19.0`.
+
+- **`24-threat-model.md` → v0.1.0 (NEW, stub)**
+  - §1 Purpose: explicit slot-reservation, cross-links the four origin OQs to the two future-work catalogues that depend on this slot.
+  - §2 CODE RED forbidden contents: no STRIDE, no error-code allocations, no schema sketches, no AC rows, no "for future use" allocations, no v1.0 implementation guidance — adding any of these to a stub is itself a CODE RED violation per the formalised dispositions.
+  - §3 Promotion criteria: 4 mandatory conditions before stub → draft (trigger fired + tunable cap added + error-code family allocated + AC row added). All four must hold.
+  - §4 Cross-references back to `12-jwt-delivery-contract.md`, `23-snapshot-storage-and-restore.md`, `15-tunable-constants.md`, `13-error-codes.md`, `97-acceptance-criteria.md`.
+- **No new tables, no new error codes, no acceptance criteria changes** — by design. The stub is a structural reservation only.
+- **Initiative status:** Backup System spec arc complete. All open questions in scope have a binding v1.0 disposition; the v2.0 reopen path is now structurally protected.
+
+---
+
 ## v2.15.0 — 2026-05-06 (Phase 12.5 — OQ-23-1 / OQ-23-2 dispositions formalised)
 
 **Scope:** Promotes the two remaining open questions in `23-snapshot-storage-and-restore.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Mirrors the Phase 12.4 pattern. Project version bump to `5.18.0`.
