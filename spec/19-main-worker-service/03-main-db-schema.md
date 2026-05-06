@@ -49,14 +49,25 @@ Unique: `(WorkerNodeIdentity)`.
 
 ### 2.2 `WorkerNodeStatus` (ref) and `WorkerNodeKind` (ref)
 
-Both follow the canonical `(Id, Code, Label)` ref shape (Rule 13):
+Both follow the canonical Rule 13 ref shape — PK keeps the full `{TableName}Id` form (Rule 1, universal); only `Code` / `Label` / `Description` drop the prefix:
 
-| Column | Type | Null |
-|--------|------|------|
-| `{TableName}Id` | INTEGER | NO (PK) |
-| `Code` | TEXT | NO (unique, e.g. `Active`, `Draining`, `Offline`) |
-| `Label` | TEXT | NO (human-readable) |
-| `Description` | TEXT | YES |
+**`WorkerNodeStatus`:**
+
+| Column | Type | Null | Notes |
+|--------|------|------|-------|
+| `WorkerNodeStatusId` | INTEGER | NO | PK, AUTOINCREMENT (Rule 1) |
+| `Code` | TEXT | NO | Unique, e.g. `Active`, `Draining`, `Offline` |
+| `Label` | TEXT | NO | Human-readable |
+| `Description` | TEXT | YES | Per Rule 10 |
+
+**`WorkerNodeKind`:**
+
+| Column | Type | Null | Notes |
+|--------|------|------|-------|
+| `WorkerNodeKindId` | INTEGER | NO | PK, AUTOINCREMENT (Rule 1) |
+| `Code` | TEXT | NO | Unique, e.g. `Standard`, `HighMemory`, `Reserved` |
+| `Label` | TEXT | NO | Human-readable |
+| `Description` | TEXT | YES | Per Rule 10 |
 
 Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Quarantined`. Kinds: `Standard`, `HighMemory`, `Reserved` (extensible).
 
@@ -151,8 +162,8 @@ Unique: `(RoleId, AccessItemId)`. Seeded with 19 rows per `14-rbac-and-status-se
 
 Audit row written by Workers on every 403 returned for an `AccessDenied` envelope (per `08-error-contract.md` §3.5 and `07-§8`). (Resolves F-A-17.)
 
-| Column | Type | Null |
-|--------|------|------|
+| Column | Type | Null | Notes |
+|--------|------|------|------|
 | `AccessDenialEventId` | INTEGER | NO (PK) |
 | `UserId` | INTEGER | NO (FK) |
 | `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
@@ -222,8 +233,8 @@ Tracks which version each Worker is currently running.
 
 Records every routing decision. Useful for debugging load distribution.
 
-| Column | Type | Null |
-|--------|------|------|
+| Column | Type | Null | Notes |
+|--------|------|------|------|
 | `WorkerSelectionEventId` | INTEGER | NO (PK) |
 | `CompanyId` | INTEGER | NO (FK) |
 | `WorkerNodeId` | INTEGER | NO (FK) |

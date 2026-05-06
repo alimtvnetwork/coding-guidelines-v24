@@ -308,24 +308,46 @@ CREATE TABLE UserBill (
 );
 ```
 
-### 6.5 Rule 13 — Enum / Lookup Table Canonical Shape `(Id, Code, Label)`
+### 6.5 Rule 13 — Enum / Lookup Table Canonical Shape
 
-> **Effective v5.13.0.** Every enum-like reference table (status, type, role, kind, category, channel, etc.) MUST use exactly these three columns plus optional `Description`:
+> **Effective v5.13.0.** Every enum-like reference table (status, type, role, kind, category, channel, etc.) MUST use exactly the column set below.
+
+**The primary-key rule (Rule 1) is universal and is NOT relaxed by Rule 13.** The PK column on every table — entity, transactional, ref, join — is `{TableName}Id`. The "simplification" introduced by Rule 13 applies **only** to the descriptive columns `Code`, `Label`, and `Description` (no `{Table}` prefix on those three).
 
 | Column | Type | Constraint | Purpose |
 |--------|------|------------|---------|
-| `{TableName}Id` | INTEGER | PK, AUTOINCREMENT | Surrogate key |
-| `Code` | TEXT | NOT NULL, UNIQUE | Stable machine identifier (PascalCase). Code is referenced by application code, not the Id. |
-| `Label` | TEXT | NOT NULL | Default human-readable label (English). I18n is handled by a separate `{Table}Translation` table when needed. |
-| `Description` | TEXT | NULL | Optional explanatory hint (Rule 10). |
+| `{TableName}Id` | INTEGER | PK, AUTOINCREMENT | Surrogate key. **Always `{TableName}Id`** — e.g. `WorkerNodeStatusId`, `RoleId`, `TransactionStatusId`. Never bare `Id`. |
+| `Code` | TEXT | NOT NULL, UNIQUE | Stable machine identifier (PascalCase). Application code references rows by `Code`, not by `Id`. **Bare `Code` — no `{Table}` prefix.** |
+| `Label` | TEXT | NOT NULL | Default human-readable label (English). I18n is handled by a separate `{Table}Translation` table when needed. **Bare `Label` — no `{Table}` prefix.** |
+| `Description` | TEXT | NULL | Optional explanatory hint (Rule 10). **Bare `Description` — no `{Table}` prefix.** |
 
-**Forbidden alternatives** (deprecated): `{Table}Code` as the column name, `Name` instead of `Label`, `DisplayName`, `Title`, mixing `Code`+`Slug` on the same enum table.
+**Forbidden alternatives** (deprecated and removed in v5.13.0):
 
-**Rationale:** consistent shape across every enum table makes ORM mappers, admin UIs, and seeders trivially generic; downstream code can target `(Code, Label)` without knowing the table name.
+| ❌ Forbidden | ✅ Required | Why |
+|-------------|------------|-----|
+| `Id` (bare PK) | `{TableName}Id` | Universal Rule 1; ambiguous in JOINs |
+| `{Table}Code` (e.g. `RoleCode`, `WorkerNodeStatusCode`) | `Code` | Rule 13 simplification |
+| `{Table}Label` (e.g. `RoleLabel`) | `Label` | Rule 13 simplification |
+| `Name`, `DisplayName`, `Title` (instead of `Label`) | `Label` | Single canonical name |
+| `{Table}Description` (e.g. `RoleDescription`) | `Description` | Rule 13 simplification |
+| Mixing `Code` + `Slug` on the same enum table | Pick one (`Code`) | One stable identifier per row |
+
+**Rationale:** PK keeps the `{TableName}Id` prefix because PKs travel into other tables as FKs, where the `{Table}Id` prefix is what makes the FK self-documenting. The descriptive columns (`Code`, `Label`, `Description`) never travel — they live only on the enum row itself — so the prefix adds noise without information.
+
+**Canonical example:**
+
+```sql
+CREATE TABLE WorkerNodeStatus (
+    WorkerNodeStatusId  INTEGER PRIMARY KEY AUTOINCREMENT,  -- Rule 1: {TableName}Id
+    Code                TEXT NOT NULL UNIQUE,               -- Rule 13: bare 'Code'
+    Label               TEXT NOT NULL,                      -- Rule 13: bare 'Label'
+    Description         TEXT NULL                           -- Rule 13: bare 'Description'
+);
+```
 
 **Lookup pattern:**
 ```sql
-SELECT TransactionStatusId FROM TransactionStatus WHERE Code = 'PendingSettlement';
+SELECT WorkerNodeStatusId FROM WorkerNodeStatus WHERE Code = 'Active';
 ```
 
 **Seeding pattern** — see [`14-rbac-and-status-seed.md`](../19-main-worker-service/14-rbac-and-status-seed.md) for the canonical seed format used by `19-main-worker-service`.
