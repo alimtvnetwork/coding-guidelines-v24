@@ -1,9 +1,9 @@
 {
-  "Version": "5.11.0",
+  "Version": "5.12.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "ffc6332451f9f14628dcbd4d213506b9f7184b86",
+  "LastCommitSha": "8aad38bdb29248d3bdb15d8fe5348c9078bc6b47",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "5.11.0",
+  "version": "5.12.0",
   "updated": "2026-05-06",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "ffc6332451f9f14628dcbd4d213506b9f7184b86",
-    "shortSha": "ffc6332",
-    "branch": "edit/edt-e6199fa5-a1a6-4e69-afc3-1bcf4dd238c8"
+    "sha": "8aad38bdb29248d3bdb15d8fe5348c9078bc6b47",
+    "shortSha": "8aad38b",
+    "branch": "edit/edt-7b0ae083-8c3b-48f2-a65b-cade498dfde9"
   },
   "stats": {
-    "totalFiles": 655,
-    "totalLines": 140014,
+    "totalFiles": 656,
+    "totalLines": 140282,
     "totalFolders": 23,
-    "totalBytes": 4888593,
+    "totalBytes": 4902675,
     "rootFiles": 6
   },
   "folders": [
@@ -275,14 +275,14 @@
       "path": "19-main-worker-service",
       "name": "Main Worker Service",
       "title": "Overview: Main / Worker Service Architecture",
-      "version": "1.0.0",
-      "updated": "2026-05-04",
+      "version": "1.1.0",
+      "updated": "2026-05-06",
       "status": null,
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 28,
-      "lineCount": 5021,
-      "byteCount": 277470
+      "fileCount": 29,
+      "lineCount": 5289,
+      "byteCount": 291552
     },
     {
       "path": "21-app",
