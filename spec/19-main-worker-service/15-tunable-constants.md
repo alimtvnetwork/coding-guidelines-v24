@@ -101,6 +101,16 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.RoleCache.TtlSeconds` | **600** (10m) | seconds | `17-…` §4 — TTL on `RoleAccessCache` rows in the Worker's in-memory Cache tier. | Safety net bound on staleness when the §5 invalidation broadcast fails. Must be ≤ `MainWorker.Auth.WorkerJwtTtlSeconds × 2` so a stale cache cannot outlive two JWT generations. |
 | `MainWorker.RoleCache.RequireReauthOnCatalogBump` | **false** | bool | `17-…` §5.3 — when `true`, a JWT carrying an outdated `CatalogVersion` triggers `401 ReauthRequired` instead of transparent recompute. | Set `true` for high-security tenants where role demotions must take effect immediately even at the cost of a forced sign-in. |
 
+### 2.11 Backup nodes (consumer: `18-backup-nodes.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Backup.MaxBackupsPerPrimary` | **3** | count | `18-…` §2 R2 / §3.2 `AssertCapacityForBackup` | Hard ceiling enforced at backup registration. |
+| `MainWorker.Backup.LagWarningSeconds` | **900** (15m) | seconds | `18-…` §4.3 — heartbeat watcher flips `BackupAttached` → `BackupLagging`. | No auto-failover; Power Admin acts on the warning. |
+| `MainWorker.Backup.HeartbeatIntervalSeconds` | **60** | seconds | Backup → Main heartbeat cadence | Slower than primary heartbeat (`MainWorker.Heartbeat.IntervalSeconds = 30`) because backups never serve traffic. |
+
+Phase 7 will add `MainWorker.Backup.SyncIntervalSeconds`; Phase 8 adds key-rotation tunables; Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
+
 ---
 
 ## 3. Single-value rule (for the dumb AI)
