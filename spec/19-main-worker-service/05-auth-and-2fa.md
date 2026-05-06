@@ -1,7 +1,7 @@
 # 05 — Authentication and 2FA
 
 **Spec:** `19-main-worker-service`
-**Version:** 2.0.0
+**Version:** 2.1.0
 
 > **v2.0.0 (Phase 3 — Users moved off Main).** Main is now a **credential-blind reverse proxy** for `/Auth/*` traffic. It owns the routing index `UserDirectory` (`03-main-db-schema.md` §2.4) and nothing else. Password hashes, TOTP secrets, backup codes, and role assignments live exclusively on the assigned Worker's split-DB App tier (`AppUser`, `AppUserRole`). The flows in §5–§7 below are rewritten accordingly. The previous v1.0 flow — where Main verified passwords locally — is **removed**.
 
@@ -170,3 +170,28 @@ Failure → 401 with `08-error-contract.md` envelope. NEVER 500 on auth failure.
 ---
 
 *Auth and 2FA v2.0.0 — 2026-05-06 (Phase 3: Main is credential-blind proxy; auth authority moved to Worker)*
+
+---
+
+## §11 — Backup S2S Audience (Phase 12 stub)
+
+**Added:** Phase 12 (Backup-tier consolidation). **Authority for full contract:** `21-backup-endpoints.md` §3 + `12-jwt-delivery-contract.md` §13.
+
+In addition to the OAuth client-credentials surface in §2.3 (Main → Worker orchestration), Workers acting as **Primary** or **Backup** nodes MUST accept a separate S2S audience for Backup-tier traffic (BE-1..BE-6 per `21-backup-endpoints.md`):
+
+| Token field | Value | Purpose |
+|-------------|-------|---------|
+| `aud` | `Backup` | Disjoint from `worker` (UI JWT) and `main-orchestration` (push-update). |
+| `scope` | One of: `Backup.Sync.Write`, `Backup.Ack.Read`, `Backup.Restore.Write`, `Backup.Restore.Apply` | Per-endpoint capability. |
+| `PairingId` | Mandatory string claim | MUST match a row in `BackupPairing` on the receiving node, or request is rejected with **HTTP 421 Misdirected Request** (error code `MAIN-800-04`). |
+
+**Rules:**
+1. The `Backup` audience MUST NOT be granted to UI clients, React, or end-user sessions — S2S only.
+2. A token missing `PairingId`, or carrying a `PairingId` not registered on the receiving node, MUST be rejected at the proxy layer **before** application logic runs (CODE RED: no silent fallback to other audiences).
+3. Token signing key, TTL, and rotation cadence reuse the existing OAuth client-credentials infrastructure from §2.3; only the `aud` and `scope`/`PairingId` claims are new.
+
+*See `21-backup-endpoints.md` §3 for the full enforcement table and `97-acceptance-criteria.md` AC "Backup-tier acceptance" for tests.*
+
+---
+
+*Auth and 2FA v2.1.0 — 2026-05-06 (Phase 12: §11 Backup S2S audience stub added)*
