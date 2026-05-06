@@ -4,6 +4,13 @@
 
 ---
 
+## v5.39.0 — 2026-05-07 (Patch D (audit-10) closure: RAG mutation-score TBD resolved at v2.0.0; ≥80% gate now binding for future executable RAG validator (deferred-by-design); audit-11 disposition updated.)
+
+**Scope:** Version bump (`5.38.0` → `5.39.0`). Spec-only — no spec/19 markdown touched (cross-corpus closure of audit-10 Patch D in `spec/06-seedable-config-architecture/02-features/04-rag-test-coverage-matrix.md`); audit-11 Patch D row updated to reflect re-closure at v5.39.0. No mutation tooling added inside `spec/` per `mem://constraints/spec19-no-implementation`.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.38.0 — 2026-05-06 (v2.0.0 backup-tier seed materialization: 28 MainWorker.Backup.* keys + Backup.Enabled flag fully checked by T3 parity (silent waiver lifted); §2.16 cache catalogue added; check-tunable-constants linter parser fixed (§2-only scope) and wired into CI.)
 
 **Scope:** Version bump (`5.37.0` → `5.38.0`). v2.0.0 backup-tier seed materialization: 28 MainWorker.Backup.* keys + Backup.Enabled flag fully checked by T3 parity (silent waiver lifted); §2.16 cache catalogue added; check-tunable-constants linter parser fixed (§2-only scope) and wired into CI..

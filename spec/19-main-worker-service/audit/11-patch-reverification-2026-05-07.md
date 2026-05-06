@@ -33,7 +33,7 @@
 | B2 | (same)                                  | 180–184 | "SHOULD adopt 20 going forward; 5 remains acceptable for legacy" | **"New installers MUST adopt LOOKAHEAD = 20. Installers explicitly tagged `legacy` … MAY retain 5"** ✅ |
 | B3 | `spec/14-update/23-install-script-version-probe.md` | 405 | "SHOULD log identity + range + outcome…" | **"MUST log identity + range + outcome … (sole debuggability hook)"** ✅ |
 | C  | `spec/15-distribution-and-runner/06-fix-repo-forwarding.md` | 75–76 | "dispatch path SHOULD be a single `exec`" | **"dispatch path MUST be a single `exec`"** ✅ |
-| D  | `spec/06-…/04-rag-test-coverage-matrix.md` | 251 | `Mutation Score \| ≥80% \| TBD` | **"Not measured (deferred to v2.0.0; line+branch coverage at 100% is the active gate)"** ✅ |
+| D  | `spec/06-…/04-rag-test-coverage-matrix.md` | 251 | `Mutation Score \| ≥80% \| TBD` | **"Closed at v2.0.0 (Patch D). ≥80% is the binding gate; measurement deferred-by-design until executable RAG code lands outside `spec/`. Line+branch at 100% remains the active proxy."** ✅ ✅ (re-closed at v5.39.0) |
 
 **Spot-check rg on the 4 patched files for any new `SHOULD` regressions: 0 hits.** All patches durable.
 
