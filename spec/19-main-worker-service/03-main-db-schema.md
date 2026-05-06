@@ -77,6 +77,8 @@ Unique: `(Slug)`. Seedable-Config aliases `CompanySlug → Slug` / `CompanyName 
 
 ### 2.4 `User` (entity, MINIMAL identity only)
 
+> ⚠ **Phase 3 (planned, v2.1.0): the `User`, `UserRole`, and TOTP columns will be removed from Main.** Per locked decision D5, Users live exclusively in the assigned Worker's split-DB; Main only needs `Company → Worker` mapping to route an inbound login to the correct Worker. The schema below is the v2.0.0 transitional shape (epoch timestamps applied so the rows remain readable until the move).
+
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
 | `UserId` | INTEGER | NO | PK |
