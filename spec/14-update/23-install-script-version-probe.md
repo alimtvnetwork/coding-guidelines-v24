@@ -402,7 +402,7 @@ invoke_latest_version_probe
 - MUST inherit stdout/stderr on hand-off (no `Start-Process -NoNewWindow` quirks).
 - MUST cap probe range at +20 from current version.
 - MUST cap per-request timeout at 2 seconds and total wall-time at 4 seconds.
-- SHOULD log identity + range + outcome on stdout for traceability.
+- MUST log identity + range + outcome on stdout for traceability (sole debuggability hook for headless installs).
 
 ---
 
