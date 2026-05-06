@@ -1,0 +1,85 @@
+%% ==========================================================
+%% NON-AUTHORITATIVE PROJECTION
+%% ==========================================================
+%% Subject:        Worker split-DB tiers
+%% Authoritative:  spec/05-split-db-architecture/ + spec/19/11-split-db-tier-reconciliation.md
+%% Status:         Illustrative only. If this diagram disagrees
+%%                 with the authoritative spec(s) above, the
+%%                 spec wins and this file is the bug.
+%% Banner version: 1.0.0 (2026-05-04, audit fix #9)
+%% ==========================================================
+erDiagram
+    %% Worker-side split-DB ERD — projection of spec/05's 6-tier model.
+    %% Worker uses 4 of 6: Root / Settings / App / Session (Cache + Document unused in v1.0).
+    %% Authoritative tier mapping: spec/19/11-split-db-tier-reconciliation.md §5.
+    %% NOTE (FU-4): Settings-tier tables (WorkerBootstrapState, WorkerUpdateInstruction)
+    %%              are catalogued in 11-…md §5 but not redrawn here to keep the ERD readable.
+
+    %% ---- Root tier (one DB per worker) ----
+    RootCompany ||--o{ AppCompanyShard : "shards into"
+    RootCompany ||--o{ RootCompanyContact : "has contacts"
+    RootCompanyStatus ||--o{ RootCompany : "classifies"
+
+    RootCompany {
+        INTEGER RootCompanyId PK
+        TEXT CompanySlug UK
+        TEXT CompanyName
+        TEXT CompanyWebsite
+        TEXT Address
+        TEXT PhoneNumber
+        INTEGER NumberOfPeople
+        INTEGER RootCompanyStatusId FK
+        TEXT Description
+    }
+    RootCompanyStatus {
+        INTEGER RootCompanyStatusId PK
+        TEXT RootCompanyStatusCode UK
+        TEXT RootCompanyStatusLabel
+        TEXT Description
+    }
+    RootCompanyContact {
+        INTEGER RootCompanyContactId PK
+        INTEGER RootCompanyId FK
+        TEXT ContactKind
+        TEXT ContactValue
+        TEXT Description
+    }
+
+    %% ---- App tier (one DB per company shard) ----
+    AppCompanyShard ||--o{ AppUser : "houses"
+    AppCompanyShard ||--o{ AppBusinessEntity : "owns"
+    AppUser ||--o{ AppSession : "opens"
+
+    AppCompanyShard {
+        INTEGER AppCompanyShardId PK
+        INTEGER RootCompanyId FK
+        TEXT AppDbPath
+        TEXT AppCreatedAt
+        TEXT Description
+    }
+    AppUser {
+        INTEGER AppUserId PK
+        INTEGER AppCompanyShardId FK
+        TEXT AppUserEmail
+        TEXT AppUserDisplayName
+        TEXT Description
+    }
+    AppBusinessEntity {
+        INTEGER AppBusinessEntityId PK
+        INTEGER AppCompanyShardId FK
+        TEXT EntityKind
+        TEXT EntityPayload
+        TEXT Notes
+        TEXT Comments
+    }
+
+    %% ---- Session tier (one DB per logical session window) ----
+    AppSession {
+        INTEGER AppSessionId PK
+        INTEGER AppUserId FK
+        TEXT SessionToken UK
+        TEXT SessionStartedAt
+        TEXT SessionLastSeenAt
+        TEXT Notes
+        TEXT Comments
+    }

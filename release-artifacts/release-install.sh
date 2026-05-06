@@ -31,13 +31,47 @@
 
 set -euo pipefail
 
+# ── Crash logging (curl | bash safe) ──────────────────────────────
+__INSTALLER_LOG_DIR="${TMPDIR:-/tmp}/installer-logs"
+mkdir -p "$__INSTALLER_LOG_DIR" 2>/dev/null || __INSTALLER_LOG_DIR="/tmp"
+__INSTALLER_LOG_FILE="$__INSTALLER_LOG_DIR/release-install-$(date -u +%Y%m%dT%H%M%SZ).log"
+{
+    echo "# release-install crash log"
+    echo "# started: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "# bash:    ${BASH_VERSION:-unknown}"
+    echo "# uname:   $(uname -a 2>/dev/null || echo unknown)"
+    echo "# cwd:     $(pwd)"
+    echo "# argv:    $0 $*"
+    echo "# ────────────────────────────────────────────────"
+} >"$__INSTALLER_LOG_FILE" 2>/dev/null || true
+
+__installer_log() { echo "$*" >>"$__INSTALLER_LOG_FILE" 2>/dev/null || true; }
+
+__installer_on_err() {
+    local rc=$?
+    local line=${1:-?}
+    local cmd=${2:-?}
+    {
+        echo ""
+        echo "════════════════════════════════════════════════════════"
+        echo "  ❌ release-install FAILED (exit $rc) at line $line"
+        echo "     command: $cmd"
+        echo "  ────────────────────────────────────────────────────"
+        echo "  Crash log: $__INSTALLER_LOG_FILE"
+        echo "════════════════════════════════════════════════════════"
+    } | tee -a "$__INSTALLER_LOG_FILE" >&2
+    exit "$rc"
+}
+trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
+trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
+
 # ── Build-time substitution target ────────────────────────────────
-# The release workflow replaces the literal string `v5.2.0`
+# The release workflow replaces the literal string `v5.11.0`
 # with the concrete tag (e.g. v3.21.0) when uploading this file as a
 # release asset. Unbaked checkouts keep the placeholder verbatim.
-BAKED_VERSION="v5.2.0"
+BAKED_VERSION="v5.11.0"
 
-REPO="alimtvnetwork/coding-guidelines-v19"
+REPO="alimtvnetwork/coding-guidelines-v22"
 SEMVER_RE='^v?[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.]+)?$'
 
 # ── Colors / output ───────────────────────────────────────────────
@@ -70,7 +104,7 @@ MODE DISPATCH (spec §3)
 RESOLUTION ORDER (highest precedence first, spec §4.3)
   1. --version <tag>    (CLI flag)
   2. $INSTALLER_VERSION (env var, if set)
-  3. v5.2.0 baked at release-asset build time
+  3. v5.11.0 baked at release-asset build time
   If two sources disagree, a warning is emitted and the higher-precedence
   value wins.
 
@@ -112,10 +146,10 @@ done
 # Precedence (spec §B.2 + ratified env-var extension §B.2.b'):
 #   1. --version flag
 #   2. $INSTALLER_VERSION env var
-#   3. Baked v5.2.0
+#   3. Baked v5.11.0
 resolve_version() {
   if [[ -n "$ARG_VERSION" ]]; then
-    if [[ "$BAKED_VERSION" != "v5.2.0" \
+    if [[ "$BAKED_VERSION" != "v5.11.0" \
           && "$BAKED_VERSION" != "$ARG_VERSION" ]]; then
       warn "Argument version ($ARG_VERSION) overrides baked-in ($BAKED_VERSION)."
     fi
@@ -123,14 +157,14 @@ resolve_version() {
     return 0
   fi
   if [[ -n "${INSTALLER_VERSION:-}" ]]; then
-    if [[ "$BAKED_VERSION" != "v5.2.0" \
+    if [[ "$BAKED_VERSION" != "v5.11.0" \
           && "$BAKED_VERSION" != "$INSTALLER_VERSION" ]]; then
       warn "Env INSTALLER_VERSION ($INSTALLER_VERSION) overrides baked-in ($BAKED_VERSION)."
     fi
     echo "$INSTALLER_VERSION"
     return 0
   fi
-  if [[ "$BAKED_VERSION" != "v5.2.0" ]]; then
+  if [[ "$BAKED_VERSION" != "v5.11.0" ]]; then
     echo "$BAKED_VERSION"
     return 0
   fi
