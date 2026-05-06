@@ -114,7 +114,17 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Backup.LogRetentionSeconds` | **604800** (7 d) | seconds | `19-…` §4 (Shape B compaction) | Minimum age before a delivered `BackupSyncLog` row is truncated. |
 | `MainWorker.Backup.QuarantineCompactionOverrideSeconds` | **86400** (24 h) | seconds | `19-…` §4 stall guard | When a single lagging backup blocks compaction past this, Main raises `MAIN-810-01 BackupCompactionStalled`. Operator decides next step; never auto-detaches. |
 
-Phase 8 will add encryption / key-rotation tunables; Phase 9 adds endpoint timeouts; Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
+### 2.12 Backup encryption + Pair-RSA rotation (consumer: `20-backup-encryption-and-keys.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Backup.MaxKeyAgeSeconds` | **7776000** (90 d) | seconds | `20-…` §7.1 trigger #1 | Scheduled rotation cadence per primary-backup couple. |
+| `MainWorker.Backup.RotationAckTimeoutSeconds` | **120** | seconds | `20-…` §7.2 S2/S3/S6 | Per-step ACK budget; miss → `MAIN-820-01 RotationStepTimeout`. |
+| `MainWorker.Backup.RotationActivationDelaySeconds` | **60** | seconds | `20-…` §7.2 S5→S6 | Settle window before flipping `Pending` → `Active`. |
+| `MainWorker.Backup.RetiredKeyGraceSeconds` | **86400** (24 h) | seconds | `20-…` §6 background sweeper | How long `Retired` private material survives in-flight envelopes; after this, `WORKER-920-02 KeyEpochDiscarded`. Override = 0 when `Reason="Compromise"`. |
+| `MainWorker.Backup.RsaKeySizeBits` | **4096** | bits | `20-…` §3 K1 | RSA-OAEP wrap + RSA-PSS sign modulus. Bumping requires v2.0 review. |
+
+Phase 9 adds endpoint timeouts; Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
 
 ---
 
@@ -266,4 +276,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.6.0 — 2026-05-06 (Phase 7: §2.11 extended — SyncIntervalSeconds, MaxRowsPerEnvelope, TombstoneRetentionSeconds, LogRetentionSeconds, QuarantineCompactionOverrideSeconds)*
+*Tunable constants v1.7.0 — 2026-05-06 (Phase 8: §2.12 added — MaxKeyAgeSeconds, RotationAckTimeoutSeconds, RotationActivationDelaySeconds, RetiredKeyGraceSeconds, RsaKeySizeBits)*
