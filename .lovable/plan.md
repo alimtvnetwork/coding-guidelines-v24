@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.17.0 (Phase 12.4 — OQ-12-1 / OQ-12-2 dispositions formalised in `12-jwt-delivery-contract.md` §11)
+**Version:** 5.18.0 (Phase 12.5 — OQ-23-1 / OQ-23-2 dispositions formalised in `23-snapshot-storage-and-restore.md` §14)
 **Updated:** 2026-05-06
 
 ---
