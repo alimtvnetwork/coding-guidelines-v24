@@ -136,14 +136,15 @@
 
 - [x] **Phase 0** — Plan written.
 - [x] **Phase 1** — `EnumPage` → `AccessItem` rename.
-- [x] **Phase 2** — DB convention overhaul (epoch INTEGER, `(Id, Code, Label)` ref shape).
-- [x] **Phase 3** — Users moved off Main; `UserDirectory` routing index; credential-blind proxy.
-- [x] **Phase 4** — `WorkerNode` `Sequence` / `IsBackup` / `BackupOfWorkerNodeId`; routing excludes backups; "Region" UI label.
-- [x] **Phase 5** — `17-cascading-roles-and-cache-bin.md` v1.0.0; OQ-A1/OQ-A2 default proposals adopted.
-- [x] **Phase 6** — `18-backup-nodes.md` v1.0.0 (registration extends `10-…`, `KnownBackupNode` Worker mirror, defence-in-depth no-traffic invariant); `MAIN-800-01..04` Backup Lifecycle codes; tunables §2.11; status seed extended with `Provisioning`/`BackupAttached`/`BackupLagging`.
-- [ ] Phases 7–12 — pending.
+- [x] **Phase 2** — DB convention overhaul.
+- [x] **Phase 3** — Users moved off Main; credential-blind proxy.
+- [x] **Phase 4** — `WorkerNode` `Sequence` / `IsBackup` / `BackupOfWorkerNodeId`; "Region" UI label.
+- [x] **Phase 5** — `17-cascading-roles-and-cache-bin.md` v1.0.0; OQ-A1/A2 default proposals adopted.
+- [x] **Phase 6** — `18-backup-nodes.md` v1.0.0; `MAIN-800-*` lifecycle codes; status seed extended.
+- [x] **Phase 7** — `19-incremental-backup-sync.md` v1.0.0 (two `SyncOp` shapes, `BackupSyncWatermark`, envelope = SQLite file, compaction safety rule); `WORKER-910-*` + `MAIN-810-01` codes; tunables §2.11 extended.
+- [ ] Phases 8–12 — pending.
 
-> **File numbering note:** Phase 5 took the `17-…` slot, so the original plan's `17-…`/`18-…`/`19-…`/`20-…`/`21-…`/`22-…` shifts by one — backup-nodes is `18-…`, incremental sync becomes `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
+> **File numbering:** Phase 5 took the `17-…` slot, so backup-nodes is `18-…`, incremental sync `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
 
 ---
 
