@@ -1,7 +1,7 @@
 # 23 — Snapshot Storage and Restore Flow
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Created:** 2026-05-06
 **Status:** Authoritative (spec-only, per plan §Mode)
 **Resolves:** Locked decision **D14** (date-by-date full snapshot storage on backup; main-controlled restore by date). Closes open question **OQ-A4** — default snapshot retention adopted at **30 days rolling**.
@@ -349,12 +349,86 @@ Main tier (snapshot integrity, slot `21192` — first free in Phase-11-reserved 
 
 ---
 
-## 14. Open Questions (logged, non-blocking)
+## 14. Open Questions — formalised dispositions
 
-- **OQ-23-1** Should snapshots be deduplicated across days (rolling diff zip pyramid) to save disk for low-write-rate primaries? Inferred: defer to v2.0 — flat date-named files are dumb-AI friendliest and disk is cheap at 30-day default.
-- **OQ-23-2** Should the restore flow support partial-table restore (e.g., one tenant)? Inferred: no — out of scope; full App-tier replacement only. Tenant-level recovery is owned by the application data model, not the backup tier.
-- **OQ-23-3** ✅ **Resolved Phase 12.2.** `Pinned` status now requires `PinReason TEXT NULL` (NOT NULL on insert), `PinnedAtEpoch INTEGER NULL`, and `PinnedByActor TEXT NULL`. Pin/unpin contract codified in §6.1; enforced by linter `BACKUP-SNAP-005`.
+This section formalises the dispositions of v1.0 open questions so dumb-AI implementers do not re-litigate them mid-implementation. Each disposition is **binding** for v1.0; the Future-Work block at the bottom names what a v2.0 spec MUST cover if a disposition is reopened. Pattern mirrors `12-jwt-delivery-contract.md` §11.
+
+### 14.1 OQ-23-1 — Snapshot dedup pyramid (rolling diff zips)
+
+**Question.** Should daily snapshots be deduplicated across days — e.g. weekly base + daily diffs zipped against the prior base — to save disk on low-write-rate primaries?
+
+**Disposition for v1.0:** ❌ **Deferred to v2.0. Implementers MUST ship flat, full, date-named snapshot zips.**
+
+**Rationale.**
+
+| Concern | Flat full snapshots (chosen for v1.0) | Diff pyramid (deferred) |
+|---|---|---|
+| Restore complexity | One file → one decrypt → one re-seal → one BE-6 push | N files (base + diffs in date order) → ordered decrypt → reconciliation step → re-seal → BE-6 push |
+| Failure modes | A corrupt snapshot loses **one day** | A corrupt base loses **a week**; a corrupt diff loses everything from that diff forward until next base |
+| Retention sweep | One UPDATE per day's row (§6 S2) | Retention must reason about the entire dependency graph — cannot reap a base while any diff still references it |
+| Operator mental model | "Restore the snapshot from `2026-05-03`" | "Restore the snapshot whose chain resolves to `2026-05-03`" |
+| Disk savings (target audience: low-write primaries) | Baseline | Real but bounded — SQLite page-level diffs of a mostly-static DB are typically 1–5% of full size; absolute saving is small in absolute bytes at v1.0 expected scale |
+| CODE RED footprint | Adds 0 functions to the Build pipeline | Adds chain-resolution + diff-application + diff-build paths, each must obey 8–15 line + 0-nesting + ≤2-operand caps |
+| Forward-secrecy interaction | Each snapshot independently re-sealable under current Active KeyEpoch (§7 R5) | A diff sealed under the base's KeyEpoch may need the base's keystream to apply — re-introduces the retired-epoch revival problem the §7 R5 design exists to avoid |
+
+**Trigger conditions that would force OQ-23-1 to be reopened in v2.0** (any one is sufficient):
+
+1. Default `MainWorker.Backup.SnapshotRetentionDays` raised above **180** AND p95 primary App-DB size exceeds **5 GB** — at that point flat-full storage cost dominates incident-response value.
+2. A primary deployment profile lands where **>90% of days produce <0.1% byte-level change** AND operators explicitly request dedup as a paid feature.
+3. Storage tier moves to a target that bills per-byte at a rate where the marginal cost crosses the engineering cost of the dependency graph.
+
+**Forbidden v1.0 implementations** (any of these is a CODE RED violation):
+
+- ❌ Storing anything other than self-contained full-snapshot zips under `var/snapshots/`.
+- ❌ Adding a `BasedOnSnapshotCatalogId` FK to `BackupSnapshotCatalog` — there is nothing to base anything on.
+- ❌ "Optimising" the build path to skip days when no `SyncOpLedger` rows changed — every scheduled day MUST produce a snapshot row, even an identical one. Dedup is the v2.0 spec's job, not the build path's.
+- ❌ Allocating error codes `WORKER-940-05+` "for diff-chain failures" — error codes are added when the feature ships, not before.
+
+### 14.2 OQ-23-2 — Partial-table / per-tenant restore
+
+**Question.** Should the restore flow support partial-table restore — e.g. recover one tenant's rows from yesterday's snapshot without rolling the whole App-DB back?
+
+**Disposition for v1.0:** ❌ **Rejected. Out of scope for v1.0 and not on the v2.0 roadmap.**
+
+**Rationale.**
+
+| Concern | Full App-tier restore (chosen) | Partial-table restore (rejected) |
+|---|---|---|
+| Conceptual ownership | Backup tier owns "the App-DB at point in time" — a single coherent unit | Tenant-level recovery is the **application data model's** job (soft-delete, audit log, undo stack), not the backup tier's |
+| Cross-row consistency | Trivially preserved — the entire DB is consistent at the snapshot's `MaxSyncOpSeq` | Restoring tenant A's rows without tenant A's foreign-key referents is a corruption pattern, not a feature |
+| Re-seal step (§7 R5) | Single zip re-sealed once under Active KeyEpoch | Per-tenant filter step before re-seal — adds a slow plaintext extract path and a new attack surface |
+| Watermark realignment (§7 R7) | One `BackupSyncWatermark` reset to snapshot's `MaxSyncOpSeq` | Watermark cannot be "partially" reset — leaves the system in an undefined state vs. the CDC ledger |
+| Operator mental model | "Roll the App-DB back to `2026-05-03`" | "Roll tenant `acme` back to `2026-05-03` while leaving `globex` at today" — every cross-tenant invariant in the App becomes a question |
+| Forward-secrecy contract | Preserved — full re-seal under current Active KeyEpoch | Partial re-seal of a row subset has no defined epoch story |
+
+**Trigger conditions that would force OQ-23-2 to be reopened:**
+
+1. The application data model formally adopts **strict tenant isolation at the schema level** — i.e. no foreign keys cross tenant boundaries, every table carries a non-null `TenantId`, and the App spec defines a `TenantUndoBoundary` contract that the backup tier can honour. None of these hold today.
+2. A regulatory regime lands that requires **per-tenant point-in-time recovery** as a contractual obligation (e.g. data-residency unwind). Currently no such regime is in scope.
+
+Until **both** trigger conditions hold, this OQ stays rejected. Re-opening it without them is a CODE RED violation — the swallowed reason being "operators sometimes ask for it" (which is true, and the correct answer is "use the application's undo path, not the backup tier").
+
+**Forbidden v1.0 implementations:**
+
+- ❌ Adding a `TenantId` filter parameter to BE-3 (`/Backup/RestoreByDate`).
+- ❌ Adding a `RestoreScope` column to `BackupRestoreJob` to leave room for `Partial` — leaving room for rejected features is itself a CODE RED smell ("planning for the swallowed reason").
+- ❌ Operator runbooks that decompress a snapshot manually and `INSERT … SELECT` a subset of rows back into the live App-DB — bypasses the §7 R5 re-seal step and the BE-6 audit path.
+
+### 14.3 OQ-23-3 — `Pinned` status audit columns
+
+✅ **Resolved Phase 12.2.** `Status='Pinned'` requires `PinReason TEXT NULL` (NOT NULL on insert), `PinnedAtEpoch INTEGER NULL`, and `PinnedByActor TEXT NULL`. Pin/unpin contract codified in §6.1; enforced by linter `BACKUP-SNAP-005`.
+
+### 14.4 Future-work catalogue (v2.0 prerequisites)
+
+If/when the product reopens §14.1 or §14.2, the v2.0 spec MUST specify, in this order:
+
+1. **Threat-model document** at `spec/19-main-worker-service/24-threat-model.md` (slot reserved by `12-jwt-delivery-contract.md` §11.3) — must enumerate the new attack surfaces (diff-chain corruption for §14.1; partial-restore plaintext extract for §14.2).
+2. **Application data-model contract** at `spec/05-split-db-architecture/` describing `TenantUndoBoundary` (precondition for §14.2 only).
+3. Net-new error-code family in `13-error-codes.md` for the chosen path (`WORKER-940-05..` for diff-chain failures; `WORKER-940-10..` for partial-restore failures — neither allocated until the feature ships).
+4. Acceptance-criterion rows in `97-acceptance-criteria.md` proving the new path is exercised in CI, including the negative tests that the v1.0 forbidden patterns would have failed.
+
+**Until that v2.0 spec lands, the four "Forbidden v1.0 implementations" in §14.1 and the three forbidden patterns in §14.2 are the binding contract.**
 
 ---
 
-*Snapshot storage + restore flow v1.1.0 — 2026-05-06 (Phase 12.2 — OQ-23-3 resolved: `PinReason` + `PinnedAtEpoch` + `PinnedByActor` columns + §6.1 pin/unpin protocol + `BACKUP-SNAP-005`).*
+*Snapshot storage + restore flow v1.2.0 — 2026-05-06 (Phase 12.5 — §14 OQ-23-1 / OQ-23-2 dispositions formalised: rationale matrices + v2.0 trigger conditions + forbidden v1.0 patterns + future-work catalogue. OQ-23-3 resolution preserved as §14.3).*
