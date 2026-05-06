@@ -1,0 +1,257 @@
+#!/usr/bin/env node
+// ============================================================
+// bump-version.mjs — automated version bump + changelog entry
+// ============================================================
+//
+// Bumps package.json to a new SemVer, runs `npm run sync`, detects
+// which sync-managed artifacts were regenerated (by content hash),
+// and prepends a changelog entry to the chosen target(s).
+//
+// USAGE
+//   node scripts/bump-version.mjs --version 5.21.0 --scope "Phase 13.1 prose hardening"
+//   node scripts/bump-version.mjs -v 5.21.0 -s "..." --target root
+//   node scripts/bump-version.mjs -v 5.21.0 -s "..." --target spec19
+//   node scripts/bump-version.mjs -v 5.21.0 -s "..." --target both    (default)
+//   node scripts/bump-version.mjs -v 5.21.0 -s "..." --dry-run
+//
+// EXIT CODES
+//   0  success
+//   1  bad arguments
+//   2  sync pipeline failed
+//   3  changelog file missing or unparseable
+// ============================================================
+
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(__dirname, "..");
+
+// ----- Tracked artifacts (must mirror sync-check.mjs TRACKED list) --------
+
+const TRACKED_FILES = [
+  "version.json",
+  "public/health-score.json",
+  "src/data/specTree.json",
+  "readme.md",
+  "docs/architecture.md",
+  "docs/principles.md",
+  "docs/author.md",
+];
+
+const ROOT_CHANGELOG = "CHANGELOG.md";
+const SPEC19_CHANGELOG = "spec/19-main-worker-service/98-changelog.md";
+
+// ----- Argument parsing ---------------------------------------------------
+
+function parseArgs(argv) {
+  const out = { version: null, scope: null, target: "both", dryRun: false };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "-v" || a === "--version") out.version = argv[++i];
+    else if (a === "-s" || a === "--scope") out.scope = argv[++i];
+    else if (a === "--target") out.target = argv[++i];
+    else if (a === "--dry-run") out.dryRun = true;
+  }
+  return out;
+}
+
+function isValidSemver(version) {
+  return /^\d+\.\d+\.\d+$/.test(version || "");
+}
+
+function isValidTarget(target) {
+  return ["root", "spec19", "both"].includes(target);
+}
+
+function fail(code, message) {
+  console.error(`✗ ${message}`);
+  process.exit(code);
+}
+
+function validateArgs(args) {
+  if (!isValidSemver(args.version)) fail(1, "Missing/invalid --version (expected X.Y.Z)");
+  if (!args.scope) fail(1, "Missing --scope (one-line description)");
+  if (!isValidTarget(args.target)) fail(1, `Invalid --target '${args.target}'`);
+}
+
+// ----- File hashing -------------------------------------------------------
+
+function hashFile(relativePath) {
+  const absolutePath = resolve(ROOT, relativePath);
+  if (!existsSync(absolutePath)) return null;
+  const buffer = readFileSync(absolutePath);
+  return createHash("sha256").update(buffer).digest("hex");
+}
+
+function snapshotHashes() {
+  const snapshot = {};
+  for (const file of TRACKED_FILES) snapshot[file] = hashFile(file);
+  return snapshot;
+}
+
+function diffHashes(before, after) {
+  const changed = [];
+  for (const file of TRACKED_FILES) {
+    if (before[file] !== after[file]) changed.push(file);
+  }
+  return changed;
+}
+
+// ----- package.json version bump -----------------------------------------
+
+function readPackageJson() {
+  return JSON.parse(readFileSync(resolve(ROOT, "package.json"), "utf8"));
+}
+
+function writePackageJson(pkg) {
+  const path = resolve(ROOT, "package.json");
+  writeFileSync(path, JSON.stringify(pkg, null, 2) + "\n");
+}
+
+function bumpPackageVersion(newVersion) {
+  const pkg = readPackageJson();
+  const previous = pkg.version;
+  pkg.version = newVersion;
+  writePackageJson(pkg);
+  return previous;
+}
+
+// ----- Sync pipeline ------------------------------------------------------
+
+function runSync() {
+  const result = spawnSync("npm", ["run", "sync"], { cwd: ROOT, stdio: "inherit" });
+  if (result.status !== 0) fail(2, "`npm run sync` failed — aborting");
+}
+
+// ----- Changelog rendering ------------------------------------------------
+
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function renderArtifactList(regenerated) {
+  if (regenerated.length === 0) return "_None — sync regenerated no artifacts._";
+  return regenerated.map((file) => `\`${file}\``).join(", ");
+}
+
+function renderRootEntry(version, previousVersion, scope, regenerated) {
+  const date = todayIso();
+  const artifacts = renderArtifactList(regenerated);
+  return [
+    `## [${version}] - ${date}`,
+    "",
+    `### Changed — ${scope}`,
+    "",
+    `- Bumped \`package.json\` from \`${previousVersion}\` → \`${version}\`.`,
+    `- Sync-managed artifacts regenerated by \`npm run sync\`: ${artifacts}`,
+    "",
+    "---",
+    "",
+  ].join("\n");
+}
+
+function renderSpec19Entry(version, previousVersion, scope, regenerated) {
+  const date = todayIso();
+  const artifacts = renderArtifactList(regenerated);
+  return [
+    `## v${version} — ${date} (${scope})`,
+    "",
+    `**Scope:** Version bump (\`${previousVersion}\` → \`${version}\`). ${scope}.`,
+    `**Sync-regenerated artifacts:** ${artifacts}`,
+    "",
+    "---",
+    "",
+  ].join("\n");
+}
+
+// ----- Changelog prepending ----------------------------------------------
+
+function readChangelog(relativePath) {
+  const absolutePath = resolve(ROOT, relativePath);
+  if (!existsSync(absolutePath)) fail(3, `Changelog not found: ${relativePath}`);
+  return readFileSync(absolutePath, "utf8");
+}
+
+function findInsertionIndex(content) {
+  // Insert immediately after the first `---` separator that follows the
+  // top header block. Falls back to end-of-header if no separator found.
+  const marker = "\n---\n";
+  const idx = content.indexOf(marker);
+  if (idx < 0) return content.length;
+  return idx + marker.length;
+}
+
+function prependChangelogEntry(relativePath, entry) {
+  const content = readChangelog(relativePath);
+  const insertAt = findInsertionIndex(content);
+  const next = content.slice(0, insertAt) + "\n" + entry + content.slice(insertAt);
+  writeFileSync(resolve(ROOT, relativePath), next);
+}
+
+// ----- Target dispatch ----------------------------------------------------
+
+function shouldWriteRoot(target) {
+  return target === "root" || target === "both";
+}
+
+function shouldWriteSpec19(target) {
+  return target === "spec19" || target === "both";
+}
+
+function writeChangelogs(args, previousVersion, regenerated) {
+  if (shouldWriteRoot(args.target)) {
+    const entry = renderRootEntry(args.version, previousVersion, args.scope, regenerated);
+    prependChangelogEntry(ROOT_CHANGELOG, entry);
+    console.log(`  ✓ Prepended entry to ${ROOT_CHANGELOG}`);
+  }
+  if (shouldWriteSpec19(args.target)) {
+    const entry = renderSpec19Entry(args.version, previousVersion, args.scope, regenerated);
+    prependChangelogEntry(SPEC19_CHANGELOG, entry);
+    console.log(`  ✓ Prepended entry to ${SPEC19_CHANGELOG}`);
+  }
+}
+
+// ----- Dry-run preview ----------------------------------------------------
+
+function previewDryRun(args, previousVersion, regenerated) {
+  console.log("\n--- DRY RUN — no files written ---\n");
+  if (shouldWriteRoot(args.target)) {
+    console.log(`# ${ROOT_CHANGELOG}\n`);
+    console.log(renderRootEntry(args.version, previousVersion, args.scope, regenerated));
+  }
+  if (shouldWriteSpec19(args.target)) {
+    console.log(`# ${SPEC19_CHANGELOG}\n`);
+    console.log(renderSpec19Entry(args.version, previousVersion, args.scope, regenerated));
+  }
+}
+
+// ----- Orchestration ------------------------------------------------------
+
+function main() {
+  const args = parseArgs(process.argv.slice(2));
+  validateArgs(args);
+
+  console.log(`→ Bumping to v${args.version} (target: ${args.target})`);
+  const before = snapshotHashes();
+  const previousVersion = bumpPackageVersion(args.version);
+  console.log(`  ✓ package.json: ${previousVersion} → ${args.version}`);
+
+  console.log("→ Running npm run sync...");
+  runSync();
+
+  const after = snapshotHashes();
+  const regenerated = diffHashes(before, after);
+  console.log(`→ Detected ${regenerated.length} regenerated artifact(s)`);
+
+  if (args.dryRun) return previewDryRun(args, previousVersion, regenerated);
+
+  console.log("→ Writing changelog entries...");
+  writeChangelogs(args, previousVersion, regenerated);
+  console.log(`✓ Done. v${args.version} bumped and changelog updated.`);
+}
+
+main();

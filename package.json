@@ -11,6 +11,7 @@
     "sync:readme": "node scripts/sync-readme-stats.mjs",
     "sync:health": "node scripts/sync-health-score.mjs",
     "sync:check": "node scripts/sync-check.mjs",
+    "version:bump": "node scripts/bump-version.mjs",
     "validate:version": "node scripts/validate-version-json.mjs",
     "gen:role-enum": "node scripts/generate-role-enum.mjs",
     "check:role-enum": "node scripts/check-role-enum.mjs",
