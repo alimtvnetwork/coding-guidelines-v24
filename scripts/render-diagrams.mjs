@@ -61,11 +61,12 @@ function isPngFresh(mmd, png) {
 }
 
 function renderOne(mmd, png) {
-  const result = spawnSync(
-    'npx',
-    ['--yes', '@mermaid-js/mermaid-cli', '-i', mmd, '-o', png, '-b', 'transparent'],
-    { stdio: 'inherit' },
-  );
+  const args = ['--yes', '@mermaid-js/mermaid-cli', '-i', mmd, '-o', png, '-b', 'transparent'];
+  const puppeteerCfg = join(ROOT, 'scripts', 'puppeteer-ci.json');
+  if (existsSync(puppeteerCfg)) {
+    args.push('-p', puppeteerCfg);
+  }
+  const result = spawnSync('npx', args, { stdio: 'inherit' });
   return result.status === 0;
 }
 
