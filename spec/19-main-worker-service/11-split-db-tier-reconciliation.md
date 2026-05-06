@@ -1,7 +1,7 @@
 # 11 — Split-DB Tier Reconciliation (Main + Worker)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-X-01, F-X-04, F-D-09 (top-10 fix #2). Unblocks AC-2.
@@ -51,23 +51,30 @@ These edits are tracked as follow-up tasks (see §8) — this doc establishes th
 
 ## 4. Per-tier table allocation (Main)
 
+> **v2.1.0 (Phase 3) update.** `User` and `UserRole` are **removed from Main**. Routing is served by the new `UserDirectory` table (Root tier). Authoritative `AppUser` / `AppUserRole` rows now live on the Worker (§5).
+
 | Table | Tier | Source spec |
 |---|---|---|
-| `Tenant` | Root | `19/03-main-db-schema.md` |
+| `Company` | Root | `19/03-main-db-schema.md` §2.3 |
 | `WorkerNode` | Root | `19/10-worker-bootstrap-protocol.md` §8 |
 | `WorkerNodeStatus` | Root | `19/10-worker-bootstrap-protocol.md` §8 |
-| `User` (auth identity) | Root | `19/03-main-db-schema.md` |
-| `EnumPage` | Settings | `19/07-role-based-dashboards.md` (seeded via spec/06) |
-| `RolePageAccess` | Settings | `19/07-role-based-dashboards.md` |
+| `UserDirectory` (routing index, no secrets) | Root | `19/03-main-db-schema.md` §2.4 (v2.1.0) |
+| `Role` (catalog) | Settings | `19/03-main-db-schema.md` §2.6 |
+| `AccessItem` (catalog) | Settings | `19/07-role-based-dashboards.md` (seeded via spec/06) |
+| `RoleAccessItem` (catalog) | Settings | `19/07-role-based-dashboards.md` |
 | `EndpointAuthSetting` | Settings | `19/06-core-api-endpoints.md` §5 |
 | `AuthMechanism` | Settings | `19/06-core-api-endpoints.md` §5 |
 | `UpdateSchedule` | Settings | `19/06-core-api-endpoints.md` §4 |
 | `AuthSession` | Session | `19/05-auth-and-2fa.md` |
-| `TwoFactorChallenge` | Session | `19/05-auth-and-2fa.md` |
+| `TwoFactorChallenge` | Session | `19/05-auth-and-2fa.md` (relayed; ephemeral) |
+| ~~`User` (auth identity)~~ | ~~Root~~ | **REMOVED v2.1.0 — moved to Worker as `AppUser`.** |
+| ~~`UserRole`~~ | ~~Root~~ | **REMOVED v2.1.0 — moved to Worker as `AppUserRole`.** |
 
 ---
 
 ## 5. Per-tier table allocation (Worker)
+
+> **v2.1.0 (Phase 3) update.** Worker is now the authoritative identity store. `AppUser` carries `PasswordHash`, `PasswordSalt`, `TotpSecret`, `TotpEnrolledAt`, `TotpBackupCodesHash`. `AppUserRole` carries the user-to-role assignments that Main used to hold.
 
 | Table | Tier | Source spec |
 |---|---|---|
@@ -77,7 +84,8 @@ These edits are tracked as follow-up tasks (see §8) — this doc establishes th
 | `AppCompanyShard` | Root | (registry of App-tier DBs) |
 | `WorkerBootstrapState` | Settings | `19/10-worker-bootstrap-protocol.md` §9 |
 | `WorkerUpdateInstruction` | Settings | `spec/14-update/28-worker-push-instruction.md` §7 |
-| `AppUser` | App | `19/diagrams/erd-worker-split-db.mmd` |
+| `AppUser` (authoritative identity, v2.1.0) | App | `19/05-auth-and-2fa.md` §3, `19/diagrams/erd-worker-split-db.mmd` |
+| `AppUserRole` (user→role assignments, v2.1.0) | App | `19/14-rbac-and-status-seed.md` §6 |
 | `AppBusinessEntity` | App | same |
 | `AppSession` | Session | same |
 
@@ -142,4 +150,4 @@ These are catalogued in `audit/05-implementation-pivot-score.md` Top-10 — Fix 
 
 ---
 
-*Split-DB tier reconciliation v1.0.0 — 2026-05-04*
+*Split-DB tier reconciliation v1.1.0 — 2026-05-06 (Phase 3: User → Worker.AppUser, UserDirectory routing index added on Main)*

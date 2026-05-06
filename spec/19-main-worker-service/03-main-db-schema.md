@@ -1,8 +1,15 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 2.0.0
+**Version:** 2.1.0
 
+> **v2.1.0 (Phase 3 — Move Users off Main):**
+> - The legacy Main `User` table is **REMOVED**. Replaced by `UserDirectory` — a routing-only index containing `(UserEmail, CompanyId, WorkerNodeId)` and **no secrets**. Authoritative `AppUser` rows (with `PasswordHash`, `TotpSecret`, `BackupCodesHash`, etc.) now live exclusively in the assigned Worker's split-DB App tier per `11-split-db-tier-reconciliation.md` §5.
+> - The legacy Main `UserRole` table is **REMOVED**. Role assignments live on the Worker as `AppUserRole`. Cascading-roles union is computed per-request on the Worker (Phase 5).
+> - Audit tables `AccessDenialEvent` and `EndpointAuthAuditEvent` swap their `UserId` FKs for `UserDirectoryId` (nullable / non-nullable respectively) plus a snapshotted email so audit rows survive Worker-side `AppUser` deletion.
+> - All TOTP columns (`UserTotpSecret`, `UserTotpEnrolledAt`, `UserTotpBackupCodesHash`) are deleted from Main.
+> - Sign-in flow rewritten in `05-auth-and-2fa.md` §2.1, §6: Main forwards credentials to the resolved Worker; **Main never verifies passwords or TOTP codes**.
+>
 > **v2.0.0 (Phase 2 — DB convention overhaul):**
 > - All `*At` timestamp columns are now `INTEGER` (epoch seconds, UTC) per `spec/04-database-conventions/01-naming-conventions.md` Rule 7.1 v2.
 > - All ref / enum-like tables now use the canonical `(Id, Code, Label)` shape per Rule 13. The legacy `{Table}Code` / `{Table}Label` column names are **removed** in this spec; readers MUST migrate.
@@ -86,34 +93,29 @@ Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Qua
 
 Unique: `(Slug)`. Seedable-Config aliases `CompanySlug → Slug` / `CompanyName → Name` accepted through v2.1.0 then removed.
 
-### 2.4 `User` (entity, MINIMAL identity only)
+### 2.4 `UserDirectory` (lookup index — auth credentials live on Worker)
 
-> ⚠ **Phase 3 (planned, v2.1.0): the `User`, `UserRole`, and TOTP columns will be removed from Main.** Per locked decision D5, Users live exclusively in the assigned Worker's split-DB; Main only needs `Company → Worker` mapping to route an inbound login to the correct Worker. The schema below is the v2.0.0 transitional shape (epoch timestamps applied so the rows remain readable until the move).
+> 🔒 **Phase 3 — v2.1.0 (REMOVED from Main):** Per locked decision D5, the legacy Main `User`, `UserRole`, and all TOTP columns are **deleted from Main**. All identity, password, and 2FA state now live in the assigned **Worker's split-DB App tier** (table `AppUser` per `11-split-db-tier-reconciliation.md` §5; full schema in `spec/05-split-db-architecture/`). Main retains **only the routing pointer** below so an inbound `/Auth/SignIn` POST can be forwarded to the correct Worker without leaking credentials through Main.
+
+`UserDirectory` is a **routing-only index**. It contains no secrets and no PII beyond email. The Worker — not Main — is the authoritative identity store.
 
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
-| `UserId` | INTEGER | NO | PK |
-| `UserEmail` | TEXT | NO | Unique |
-| `UserPasswordHash` | TEXT | NO | Salted, see `05-auth-and-2fa.md` §3 |
-| `UserPasswordSalt` | TEXT | NO | |
-| `CompanyId` | INTEGER | NO | FK |
-| `UserCreatedAt` | INTEGER | NO | Epoch seconds, UTC |
-| `UserTotpSecret` | TEXT | YES | Base32-encoded RFC-6238 shared secret. NULL = TOTP not enrolled. Encrypted-at-rest per `05-auth-and-2fa.md` §4. (Resolves F-A-24.) |
-| `UserTotpEnrolledAt` | INTEGER | YES | Epoch seconds, UTC; NULL until first successful TOTP verification. |
-| `UserTotpBackupCodesHash` | TEXT | YES | JSON array of bcrypt hashes of 10 single-use backup codes per `05-§4`. NULL until enrollment. |
-| `Description` | TEXT | YES |
+| `UserDirectoryId` | INTEGER | NO | PK, AUTOINCREMENT |
+| `UserEmail` | TEXT | NO | Unique. Lower-cased before insert. |
+| `CompanyId` | INTEGER | NO | FK → `Company`. Used to look up the assigned WorkerNode. |
+| `WorkerNodeId` | INTEGER | NO | FK → `WorkerNode`. Denormalized from `Company.WorkerNodeId` so a sign-in lookup is a single-row read. Updated whenever `Company.WorkerNodeId` changes (cascade per §5). |
+| `CreatedAt` | INTEGER | NO | Epoch seconds, UTC. |
+| `LastSeenAt` | INTEGER | YES | Epoch seconds, UTC. Updated by Main on each successful forward. NULL before first sign-in. |
+| `Description` | TEXT | YES | Per Rule 11. |
 
-Unique: `(UserEmail)`.
+Unique: `(UserEmail)`. Indexed on `(CompanyId)` and `(WorkerNodeId)`.
 
-### 2.5 `UserRole` (join, exempt from Description rule)
+> **What is NOT here (deliberately):** no `UserPasswordHash`, no `UserPasswordSalt`, no `UserTotpSecret`, no `UserTotpEnrolledAt`, no `UserTotpBackupCodesHash`, no role assignments. **Main MUST NOT verify passwords or TOTP codes.** It only resolves `email → WorkerNode` and proxies the credentialed body to the Worker. See `05-auth-and-2fa.md` §2.1 for the new flow.
 
-| Column | Type | Null |
-|--------|------|------|
-| `UserRoleId` | INTEGER | NO (PK) |
-| `UserId` | INTEGER | NO (FK) |
-| `RoleId` | INTEGER | NO (FK → `Role`) |
+### 2.5 `UserRole` — REMOVED in v2.1.0
 
-Unique: `(UserId, RoleId)`.
+Removed. Role assignments now live on the Worker as `AppUserRole` (Worker App tier). Cascading-roles union semantics defined in Phase 5 (`14-rbac-and-status-seed.md` §6) and remain a Worker-side computation. Main never reads role assignments.
 
 ### 2.6 `Role` (ref)
 
@@ -165,15 +167,18 @@ Audit row written by Workers on every 403 returned for an `AccessDenied` envelop
 | Column | Type | Null | Notes |
 |--------|------|------|------|
 | `AccessDenialEventId` | INTEGER | NO (PK) |
-| `UserId` | INTEGER | NO (FK) |
-| `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
-| `WorkerNodeId` | INTEGER | YES (FK; NULL when denied at Main edge) |
+| `UserDirectoryId` | INTEGER | YES (FK → `UserDirectory`; NULL when actor is unknown / pre-auth) |
+| `ActorEmail` | TEXT | NO | Snapshotted email at time of denial. Survives `UserDirectory` deletion for audit. |
+| `AccessItemId` | INTEGER | NO (FK → `AccessItem`) | The Main-side AccessItem catalog row that was denied. The catalog stays on Main per Phase 5; only user-to-role assignments move to Worker. |
+| `WorkerNodeId` | INTEGER | YES (FK; the Worker that authoritatively denied. NULL when denied at Main edge) |
 | `CorrelationId` | TEXT | NO |
 | `OccurredAt` | INTEGER | NO | Epoch seconds, UTC (Rule 7.1 v2). |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
-Indexed on `(UserId, OccurredAt)` and `(AccessItemId, OccurredAt)` for audit queries.
+Indexed on `(UserDirectoryId, OccurredAt)` and `(AccessItemId, OccurredAt)` for audit queries.
+
+> **v2.1.0 change.** `UserId` FK was replaced by `UserDirectoryId` (nullable) plus a snapshotted `ActorEmail`, because authoritative `User` rows now live on the Worker. The Worker forwards the denial event to Main with the resolved `AccessItemId` and the actor's email; Main stores it for cross-Worker audit aggregation.
 
 ### 2.6.4 `EndpointAuthAuditEvent` (transactional, audit) — FU-17
 
@@ -191,14 +196,15 @@ Audit row written on every successful `PATCH /API/V1/Settings/EndpointAuth` (per
 | `OldMechanismsJson` | TEXT | YES | JSON array of prior `AuthMechanismCode[]`; NULL on create |
 | `NewMechanismsJson` | TEXT | NO | JSON array of post-PATCH `AuthMechanismCode[]` (sorted ascending for diffability) |
 | `ChangeKindId` | INTEGER | NO | FK → `EndpointAuthChangeKind.EndpointAuthChangeKindId` (`Create`, `Replace`, `SoftDisable`, `Reenable`) |
-| `UpdatedByUserId` | INTEGER | NO | FK → `User`. Same actor stamped on the parent row's `UpdatedByUserId`. |
+| `UpdatedByUserDirectoryId` | INTEGER | NO | FK → `UserDirectory.UserDirectoryId`. Identifies the Power Admin actor; full identity / role check happened on the Worker that minted the JWT carried by the PATCH. |
+| `UpdatedByUserEmail` | TEXT | NO | Snapshotted at write time so the audit row survives later `UserDirectory` deletion. |
 | `CorrelationId` | TEXT | NO | Echoes the inbound `X-Correlation-Id` header per `spec/04-database-conventions/06-rest-api-format.md` |
 | `IdempotencyKey` | TEXT | NO | The `X-Idempotency-Key` that produced the write. Index supports replay-detection joins. |
 | `OccurredAt` | INTEGER | NO | Epoch seconds, UTC; server-stamped, equals the parent row's `UpdatedAt` |
 | `Notes` | TEXT | YES | Per Rule 12 |
 | `Comments` | TEXT | YES | Per Rule 12 |
 
-Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant above. Indexed on `(EndpointAuthSettingId, OccurredAt DESC)` and `(UpdatedByUserId, OccurredAt DESC)` for audit queries.
+Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant above. Indexed on `(EndpointAuthSettingId, OccurredAt DESC)` and `(UpdatedByUserDirectoryId, OccurredAt DESC)` for audit queries.
 
 ### 2.6.5 `EndpointAuthChangeKind` (ref)
 
@@ -259,23 +265,30 @@ Records every routing decision. Useful for debugging load distribution.
 | Index | Columns |
 |-------|---------|
 | `IX_Company_WorkerNodeId` | `Company(WorkerNodeId)` |
-| `IX_User_CompanyId` | `User(CompanyId)` |
+| `IX_UserDirectory_CompanyId` | `UserDirectory(CompanyId)` |
+| `IX_UserDirectory_WorkerNodeId` | `UserDirectory(WorkerNodeId)` |
+| `UX_UserDirectory_UserEmail` | `UserDirectory(UserEmail)` UNIQUE |
 | `IX_WorkerVersion_WorkerNodeId_RecordedAt` | `WorkerVersion(WorkerNodeId, WorkerVersionRecordedAt DESC)` |
 | `IX_WorkerSelectionEvent_At` | `WorkerSelectionEvent(WorkerSelectionEventAt DESC)` |
 | `UX_EndpointAuthAuditEvent_IdempotencyKey` | `EndpointAuthAuditEvent(IdempotencyKey)` UNIQUE |
 | `IX_EndpointAuthAuditEvent_Setting_At` | `EndpointAuthAuditEvent(EndpointAuthSettingId, OccurredAt DESC)` |
-| `IX_EndpointAuthAuditEvent_Actor_At` | `EndpointAuthAuditEvent(UpdatedByUserId, OccurredAt DESC)` |
+| `IX_EndpointAuthAuditEvent_Actor_At` | `EndpointAuthAuditEvent(UpdatedByUserDirectoryId, OccurredAt DESC)` |
 
 ---
 
 ## 4. What Main DB does NOT store
 
 - Company business fields (address, social media, employee count, etc.)
-- User profile data beyond auth
-- Any per-tenant business state
-- Session bodies (kept in cache or session store, not the catalog)
+- **User passwords, password salts, password hashes, or pepper** (Worker only).
+- **TOTP secrets, TOTP enrollment timestamps, TOTP backup codes** (Worker only).
+- **User → Role assignments** (Worker only as `AppUserRole`).
+- User profile data beyond auth-routing (no name, no avatar, no preferences).
+- Any per-tenant business state.
+- Session bodies (kept in cache or session store, not the catalog).
 
 All of the above belong in the Worker's split-DB per `spec/05-split-db-architecture/`.
+
+> **Phase 3 invariant.** A grep over the Main DB for `password`, `totp`, `secret`, or `hash` MUST return zero column hits. Cache-bin tables (Phase 5) are likewise password-free.
 
 ---
 
@@ -283,8 +296,9 @@ All of the above belong in the Worker's split-DB per `spec/05-split-db-architect
 
 - Use the implementer's standard migration tool (Laravel migrations for the default stack).
 - Migrations are idempotent and forward-only.
-- Seed data for `Role`, `WorkerNodeStatus`, `WorkerNodeKind`, `WorkerSelectionStrategy` ships via Seedable-Config (`spec/06-seedable-config-architecture/`).
+- **v2.1.0 migration (Phase 3):** drop tables `User`, `UserRole`; create `UserDirectory`; backfill `UserDirectory` from any existing Main `User` rows (`UserEmail`, `CompanyId`, `WorkerNodeId` resolved via `Company.WorkerNodeId`) **before** the drop; then forward `(UserPasswordHash, UserPasswordSalt, UserTotpSecret, UserTotpEnrolledAt, UserTotpBackupCodesHash, UserRole rows)` to each Worker via the bootstrap protocol (`10-worker-bootstrap-protocol.md`) using a one-shot `MigrateLegacyUsers` instruction. After Worker ACK, delete the rows from Main. The migration script MUST refuse to drop `User` if any `UserDirectory.WorkerNodeId` is unresolved.
+- Seed data for `Role`, `WorkerNodeStatus`, `WorkerNodeKind`, `WorkerSelectionStrategy`, `AccessItem`, `RoleAccessItem` ships via Seedable-Config (`spec/06-seedable-config-architecture/`). `Role` and `RoleAccessItem` remain on Main as the **catalog** of available roles (Worker resolves `User → Role → AccessItem` against this catalog at JWT mint time).
 
 ---
 
-*Main DB schema v1.4.0 — 2026-05-06 (Phase 1: AccessItem rename)*
+*Main DB schema v2.1.0 — 2026-05-06 (Phase 3: Users moved to Worker; UserDirectory routing index added)*
