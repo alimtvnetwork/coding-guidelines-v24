@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.13.0 (Backup System spec arc complete — Phase 12 done)
+**Version:** 5.14.0 (Phase 12.1 — Cross-spec Backup stubs landed in 05/06/12)
 **Updated:** 2026-05-06
 
 ---
