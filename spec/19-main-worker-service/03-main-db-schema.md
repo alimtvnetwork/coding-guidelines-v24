@@ -295,4 +295,4 @@ All of the above belong in the Worker's split-DB per `spec/05-split-db-architect
 
 ---
 
-*Main DB schema v1.4.0 — 2026-05-06 (Phase 1: AccessItem rename)*
+*Main DB schema v2.1.0 — 2026-05-06 (Phase 3: Users moved to Worker; UserDirectory routing index added)*
