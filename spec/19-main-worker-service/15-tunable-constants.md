@@ -143,7 +143,17 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Backup.Apply.DeadLetterRetentionDays` | **30** | days | DLQ sweeper (`22-…` §6) | Symmetric with snapshot retention default; finalised in Phase 11 with OQ-A4. |
 | `MainWorker.Backup.Apply.IdempotencyRowRetentionDays` | **14** | days | DLQ sweeper (`22-…` §7) | `BackupApplyIdempotency.Status='Applied'` rows reaped after this; replay-protection window. |
 
-Phase 11 adds `MainWorker.Backup.SnapshotRetentionDays` (resolves OQ-A4).
+### 2.15 Backup snapshot + restore (consumer: `23-snapshot-storage-and-restore.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Backup.SnapshotRetentionDays` | **30** | days | `23-…` §6 sweep | **Resolves OQ-A4.** Linter `BACKUP-SNAP-002` enforces ≥ 7 (compliance floor). |
+| `MainWorker.Backup.Snapshot.BuildHourUtc` | **3** | hour-of-day (0-23) | `23-…` §3 cron | Off-peak default; overridable per node. |
+| `MainWorker.Backup.Snapshot.QuiesceTimeoutSeconds` | **120** | seconds | `23-…` §3 B2 | Below `MaxRetriesPerEnvelope × TransactionTimeoutSeconds` (5×30=150). |
+| `MainWorker.Backup.Snapshot.MaxBuildSeconds` | **1800** (30 m) | seconds | `23-…` §3 B3 | Hard ceiling on `sqlite3_backup_step` total elapsed; exceeded → `WORKER-940-03`. |
+| `MainWorker.Backup.Restore.PrimaryAckTimeoutSeconds` | **600** (10 m) | seconds | `23-…` §7 R8 | Backup waits this long for primary's BE-6 200 before flipping job to `Failed`. |
+
+All Backup-tier tunables now allocated. Phase 12 closes the backup work with diagrams + acceptance criteria.
 
 ---
 
