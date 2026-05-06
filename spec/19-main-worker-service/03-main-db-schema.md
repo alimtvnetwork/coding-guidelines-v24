@@ -279,11 +279,16 @@ Records every routing decision. Useful for debugging load distribution.
 ## 4. What Main DB does NOT store
 
 - Company business fields (address, social media, employee count, etc.)
-- User profile data beyond auth
-- Any per-tenant business state
-- Session bodies (kept in cache or session store, not the catalog)
+- **User passwords, password salts, password hashes, or pepper** (Worker only).
+- **TOTP secrets, TOTP enrollment timestamps, TOTP backup codes** (Worker only).
+- **User → Role assignments** (Worker only as `AppUserRole`).
+- User profile data beyond auth-routing (no name, no avatar, no preferences).
+- Any per-tenant business state.
+- Session bodies (kept in cache or session store, not the catalog).
 
 All of the above belong in the Worker's split-DB per `spec/05-split-db-architecture/`.
+
+> **Phase 3 invariant.** A grep over the Main DB for `password`, `totp`, `secret`, or `hash` MUST return zero column hits. Cache-bin tables (Phase 5) are likewise password-free.
 
 ---
 
@@ -291,7 +296,8 @@ All of the above belong in the Worker's split-DB per `spec/05-split-db-architect
 
 - Use the implementer's standard migration tool (Laravel migrations for the default stack).
 - Migrations are idempotent and forward-only.
-- Seed data for `Role`, `WorkerNodeStatus`, `WorkerNodeKind`, `WorkerSelectionStrategy` ships via Seedable-Config (`spec/06-seedable-config-architecture/`).
+- **v2.1.0 migration (Phase 3):** drop tables `User`, `UserRole`; create `UserDirectory`; backfill `UserDirectory` from any existing Main `User` rows (`UserEmail`, `CompanyId`, `WorkerNodeId` resolved via `Company.WorkerNodeId`) **before** the drop; then forward `(UserPasswordHash, UserPasswordSalt, UserTotpSecret, UserTotpEnrolledAt, UserTotpBackupCodesHash, UserRole rows)` to each Worker via the bootstrap protocol (`10-worker-bootstrap-protocol.md`) using a one-shot `MigrateLegacyUsers` instruction. After Worker ACK, delete the rows from Main. The migration script MUST refuse to drop `User` if any `UserDirectory.WorkerNodeId` is unresolved.
+- Seed data for `Role`, `WorkerNodeStatus`, `WorkerNodeKind`, `WorkerSelectionStrategy`, `AccessItem`, `RoleAccessItem` ships via Seedable-Config (`spec/06-seedable-config-architecture/`). `Role` and `RoleAccessItem` remain on Main as the **catalog** of available roles (Worker resolves `User → Role → AccessItem` against this catalog at JWT mint time).
 
 ---
 
