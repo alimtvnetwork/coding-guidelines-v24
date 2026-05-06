@@ -160,6 +160,12 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-600-01` | `21160` | `WorkerUnreachable` | "Main could not reach worker on `WorkerEndpointPublic`." | 502 | `04` |
 | `MAIN-600-02` | `21161` | `WorkerHeartbeatStale` | "Worker missed ≥3 heartbeats; quarantining." | n/a | `10` §7 |
 
+### 3.7 Cache Coherence (700-799 → 21170-21179)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-700-01` | `21170` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
+
 ---
 
 ## 4. Reserved sub-ranges
