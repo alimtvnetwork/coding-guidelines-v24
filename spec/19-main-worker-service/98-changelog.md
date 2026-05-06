@@ -4,6 +4,25 @@
 
 ---
 
+## v2.7.0 — 2026-05-06 (Phase 9 — Backup endpoints contract)
+
+**Scope:** Wire surface for Phases 6–8. Five S2S OAuth-protected HTTP endpoints hosted on the backup node, all Main-triggered. Apply logic remains Phase 10; snapshot storage / retention remains Phase 11.
+
+- New file **`21-backup-endpoints.md` v1.0.0** — `BE-1 IncrementalDiff` (multipart upload of sealed Phase-8 envelope; ACKs `LastAcceptedSyncOpSeq` back into `BackupSyncWatermark`), `BE-2 RotateKeys` (steps S3/S6 of the Pair-RSA rotation flow), `BE-3 RestoreByDate` (202-Accepted enqueue, returns `RestoreJobId`), `BE-4 Snapshots` (date-bounded catalogue), `BE-5 Health` (single-call dashboard surface; never throws on degradation). Defence-in-depth `421` re-asserted at proxy. Endpoint↔scope matrix introduces `Backup.Diff.Write`, `Backup.Rotate.Write`, `Backup.Restore.Write`, `Backup.Read` scopes plus a new `Backup` audience to be wired into `05-…` §S2S in Phase 11. CODE-RED handler size budgets pinned per endpoint.
+- `13-error-codes.md` → **v1.3.0**: §3.10 added with two new wire-only Main codes — `MAIN-830-01 SnapshotNotFound` (21189, 404) and `MAIN-830-02 RestoreAlreadyInProgress` (21190, 409). Reserved-range table refreshed; `MAIN-21191-21199` now reserved for Phase 11 snapshot/restore overflow.
+- `15-tunable-constants.md` → **v1.8.0**: new §2.13 with five backup-endpoint timeouts — `IncrementalDiffTimeoutSeconds=120`, `RotateKeysTimeoutSeconds=30`, `RestoreByDateTimeoutSeconds=60`, `SnapshotsTimeoutSeconds=15`, `HealthTimeoutSeconds=5`.
+
+**Cross-spec impact:**
+- `06-core-api-endpoints.md` §2 receives a paste-ready `2.X Backup` table merge in Phase 12 cleanup; this file is the source of truth in the interim.
+- `MAIN-830-*` rows are wire-side only here; their storage semantics (filesystem layout, retention sweep) are owned by `22-snapshot-storage-and-restore.md` (Phase 11).
+- ER diagram regen deferred to Phase 12 — no schema change in Phase 9 (BE-1 writes are confined to `BackupSyncWatermark` already in `19-…`; BE-3 enqueues a job into the existing worker job table).
+
+**Open questions still pending:**
+- **OQ-A4** — Snapshot retention policy (Phase 11).
+- OQ-21-1 (streaming vs. multipart for BE-1 at >100 MB envelopes) and OQ-21-2 (BE-5 scope vs. unauth proxy probe) logged in `21-…` §14, non-blocking.
+
+---
+
 ## v2.6.0 — 2026-05-06 (Phase 8 — Backup encryption and Pair-RSA key rotation)
 
 **Scope:** Per locked decision **D13** (RSA pair shared between Worker and its Backups; Main issues rotation; zip password follows known pattern). Resolves open question **OQ-A3** (zip password derivation = `HMAC-SHA256(SharedSecret, EnvelopeTimestampEpoch)` truncated to 32 hex chars). Endpoints / apply / restore remain Phases 9–11.

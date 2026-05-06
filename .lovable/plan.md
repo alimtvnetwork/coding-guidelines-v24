@@ -143,7 +143,8 @@
 - [x] **Phase 6** — `18-backup-nodes.md` v1.0.0; `MAIN-800-*` lifecycle codes; status seed extended.
 - [x] **Phase 7** — `19-incremental-backup-sync.md` v1.0.0 (two `SyncOp` shapes, `BackupSyncWatermark`, envelope = SQLite file, compaction safety rule); `WORKER-910-*` + `MAIN-810-01` codes; tunables §2.11 extended.
 - [x] **Phase 8** — `20-backup-encryption-and-keys.md` v1.0.0 (Pair-RSA + Envelope-AES + HKDF zip password resolving OQ-A3, four-state rotation, `BackupKeyEpoch` table); `WORKER-920-01..05` + `MAIN-820-01..03` codes; tunables §2.12 added.
-- [ ] Phases 9–12 — pending.
+- [x] **Phase 9** — `21-backup-endpoints.md` v1.0.0 (5 S2S OAuth endpoints: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health; endpoint↔scope matrix; CODE-RED handler budgets); `MAIN-830-01..02` wire codes; tunables §2.13 added.
+- [ ] Phases 10–12 — pending.
 
 > **File numbering:** Phase 5 took the `17-…` slot, so backup-nodes is `18-…`, incremental sync `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
 
