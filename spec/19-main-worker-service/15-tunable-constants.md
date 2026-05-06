@@ -261,4 +261,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.4.0 — 2026-05-06 (Phase 5: §2.10 RoleCache TTL + RequireReauthOnCatalogBump)*
+*Tunable constants v1.5.0 — 2026-05-06 (Phase 6: §2.11 Backup tunables — MaxBackupsPerPrimary, LagWarningSeconds, HeartbeatIntervalSeconds)*
