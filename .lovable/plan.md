@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.18.0 (Phase 12.5 — OQ-23-1 / OQ-23-2 dispositions formalised in `23-snapshot-storage-and-restore.md` §14)
+**Version:** 5.19.0 (Phase 12.6 — Spec slot 24 reserved with `24-threat-model.md` stub; Backup System initiative complete)
 **Updated:** 2026-05-06
 
 ---
