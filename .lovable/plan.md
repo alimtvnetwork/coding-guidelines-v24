@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.14.0 (Phase 12.1 — Cross-spec Backup stubs landed in 05/06/12)
+**Version:** 5.15.0 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
 **Updated:** 2026-05-06
 
 ---
