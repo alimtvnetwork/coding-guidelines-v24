@@ -135,8 +135,9 @@
 ## Status
 
 - [x] **Phase 0** — Plan written.
-- [x] **Phase 1** — `EnumPage` → `AccessItem` rename (authoritative files: `03-main-db-schema.md`, `14-rbac-and-status-seed.md`, `07-role-based-dashboards.md`). New column `PageUrlSuffix`. Deprecation aliases noted. Changelog entry v1.4.0 added. **Deferred to Phase 12 cleanup pass:** stale references in `00-`, `01-`, `02-`, `04-`, `05-`, `06-`, `08-`, `09-`, `11-`, `13-`, `97-`, `99-`, `error-codes.json`, `diagrams/erd-main-db.mmd`, `audit/*` — these are non-authoritative cross-refs that will be batch-rewritten when the ER diagram is regenerated in Phase 12.
-- [ ] Phases 2–12 — pending.
+- [x] **Phase 1** — `EnumPage` → `AccessItem` rename. Authoritative files updated; stale cross-refs deferred to Phase 12.
+- [x] **Phase 2** — DB convention overhaul. `04-database-conventions/01-naming-conventions.md` Rule 7.1 rewritten as **v2 (epoch INTEGER)**. New **Rule 13** added in `02-schema-design.md` §6.5 for canonical `(Id, Code, Label)` enum tables. `19-…/03-main-db-schema.md` bumped to **v2.0.0**: every `*At` flipped to `INTEGER`, every ref table flattened to `(Id, Code, Label)`, `Company.Slug` / `Company.Name` rename. `05-split-db-architecture/01-fundamentals.md` bumped to **v3.4.0** with propagation banner. Phase-3 banner placed over Main `User` table.
+- [ ] Phases 3–12 — pending.
 
 ---
 

@@ -38,7 +38,7 @@
   <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.12.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-05-06<!-- /STAMP:UPDATED -->
 </p>
 <!-- STAMP:FILES -->656<!-- /STAMP:FILES -->
-<!-- STAMP:LINES -->140,282<!-- /STAMP:LINES -->
+<!-- STAMP:LINES -->140,370<!-- /STAMP:LINES -->
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.7.0</code>) covers all 22 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="QUICKSTART.md">QUICKSTART.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="QUICKSTART.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
 

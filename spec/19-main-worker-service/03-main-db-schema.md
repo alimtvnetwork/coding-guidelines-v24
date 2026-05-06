@@ -1,10 +1,16 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.4.0
+**Version:** 2.0.0
 
-> **v1.4.0 rename (Phase 1):** `EnumPage` → `AccessItem`, `RolePageAccess` → `RoleAccessItem`. New column `AccessItem.PageUrlSuffix` becomes the route-matcher source of truth. Deprecation aliases accepted for one release; full removal in v1.5.0 per `98-changelog.md`.
-**DB:** SQLite (default). Same schema portable to PostgreSQL/MySQL.
+> **v2.0.0 (Phase 2 — DB convention overhaul):**
+> - All `*At` timestamp columns are now `INTEGER` (epoch seconds, UTC) per `spec/04-database-conventions/01-naming-conventions.md` Rule 7.1 v2.
+> - All ref / enum-like tables now use the canonical `(Id, Code, Label)` shape per Rule 13. The legacy `{Table}Code` / `{Table}Label` column names are **removed** in this spec; readers MUST migrate.
+> - `Company` columns renamed: `CompanySlug` → `Slug`, `CompanyName` → `Name`.
+>
+> **v1.4.0 carryover (Phase 1):** `EnumPage` → `AccessItem`, `RolePageAccess` → `RoleAccessItem`. New column `AccessItem.PageUrlSuffix` is the route-matcher source of truth. Deprecation aliases for the old names remain accepted through v1.5.0 per `98-changelog.md`.
+>
+> **DB:** SQLite (default). Same schema portable to PostgreSQL/MySQL.
 
 > **Split-DB tier authority (FU-2):** Main uses only **3 tiers** — Root, Settings, Session — per [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md) §4. **Main has no App tier** (it owns no business data). Any prior reference placing Main tables in an App tier is a bug; per the reconciliation file, such tables belong in Root or Settings. Tier assignments per table are listed in `11-…` §4.
 
@@ -35,21 +41,21 @@ ERD: `diagrams/erd-main-db.mmd`.
 | `WorkerNodeEndpoint` | TEXT | NO | Base URL, e.g. `https://w1.example.com` |
 | `WorkerNodeStatusId` | INTEGER | NO | FK → `WorkerNodeStatus.WorkerNodeStatusId` |
 | `WorkerNodeKindId` | INTEGER | NO | FK → `WorkerNodeKind.WorkerNodeKindId` |
-| `WorkerNodeRegisteredAt` | TEXT | NO | ISO-8601 |
-| `WorkerNodeLastSeenAt` | TEXT | NO | ISO-8601, updated on heartbeat |
+| `WorkerNodeRegisteredAt` | INTEGER | NO | Epoch seconds, UTC |
+| `WorkerNodeLastSeenAt` | INTEGER | NO | Epoch seconds, UTC; updated on heartbeat |
 | `Description` | TEXT | YES | Per Rule 11 |
 
 Unique: `(WorkerNodeIdentity)`.
 
 ### 2.2 `WorkerNodeStatus` (ref) and `WorkerNodeKind` (ref)
 
-Both follow the same shape:
+Both follow the canonical `(Id, Code, Label)` ref shape (Rule 13):
 
 | Column | Type | Null |
 |--------|------|------|
 | `{TableName}Id` | INTEGER | NO (PK) |
-| `{TableName}Code` | TEXT | NO (unique, e.g. `Active`, `Draining`, `Offline`) |
-| `{TableName}Label` | TEXT | NO |
+| `Code` | TEXT | NO (unique, e.g. `Active`, `Draining`, `Offline`) |
+| `Label` | TEXT | NO (human-readable) |
 | `Description` | TEXT | YES |
 
 Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Quarantined`. Kinds: `Standard`, `HighMemory`, `Reserved` (extensible).
@@ -61,15 +67,17 @@ Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Qua
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
 | `CompanyId` | INTEGER | NO | PK |
-| `CompanySlug` | TEXT | NO | Unique, URL-safe |
-| `CompanyName` | TEXT | NO | Display name |
+| `Slug` | TEXT | NO | Unique, URL-safe (renamed from `CompanySlug` in v2.0.0) |
+| `Name` | TEXT | NO | Display name (renamed from `CompanyName` in v2.0.0) |
 | `WorkerNodeId` | INTEGER | NO | FK → `WorkerNode` |
-| `CompanyAssignedAt` | TEXT | NO | ISO-8601 |
+| `CompanyAssignedAt` | INTEGER | NO | Epoch seconds, UTC |
 | `Description` | TEXT | YES |
 
-Unique: `(CompanySlug)`.
+Unique: `(Slug)`. Seedable-Config aliases `CompanySlug → Slug` / `CompanyName → Name` accepted through v2.1.0 then removed.
 
 ### 2.4 `User` (entity, MINIMAL identity only)
+
+> ⚠ **Phase 3 (planned, v2.1.0): the `User`, `UserRole`, and TOTP columns will be removed from Main.** Per locked decision D5, Users live exclusively in the assigned Worker's split-DB; Main only needs `Company → Worker` mapping to route an inbound login to the correct Worker. The schema below is the v2.0.0 transitional shape (epoch timestamps applied so the rows remain readable until the move).
 
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
@@ -78,9 +86,9 @@ Unique: `(CompanySlug)`.
 | `UserPasswordHash` | TEXT | NO | Salted, see `05-auth-and-2fa.md` §3 |
 | `UserPasswordSalt` | TEXT | NO | |
 | `CompanyId` | INTEGER | NO | FK |
-| `UserCreatedAt` | TEXT | NO | |
+| `UserCreatedAt` | INTEGER | NO | Epoch seconds, UTC |
 | `UserTotpSecret` | TEXT | YES | Base32-encoded RFC-6238 shared secret. NULL = TOTP not enrolled. Encrypted-at-rest per `05-auth-and-2fa.md` §4. (Resolves F-A-24.) |
-| `UserTotpEnrolledAt` | TEXT | YES | ISO-8601 enrollment timestamp; NULL until first successful TOTP verification. |
+| `UserTotpEnrolledAt` | INTEGER | YES | Epoch seconds, UTC; NULL until first successful TOTP verification. |
 | `UserTotpBackupCodesHash` | TEXT | YES | JSON array of bcrypt hashes of 10 single-use backup codes per `05-§4`. NULL until enrollment. |
 | `Description` | TEXT | YES |
 
@@ -101,8 +109,8 @@ Unique: `(UserId, RoleId)`.
 | Column | Type | Null |
 |--------|------|------|
 | `RoleId` | INTEGER | NO (PK) |
-| `RoleCode` | TEXT | NO (unique, e.g. `PowerAdmin`, `AdminUser`, `Member`) |
-| `RoleLabel` | TEXT | NO |
+| `Code` | TEXT | NO (unique, e.g. `PowerAdmin`, `AdminUser`, `Member`) |
+| `Label` | TEXT | NO |
 | `Description` | TEXT | YES |
 
 Seeded via Seedable-Config.
@@ -150,7 +158,7 @@ Audit row written by Workers on every 403 returned for an `AccessDenied` envelop
 | `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
 | `WorkerNodeId` | INTEGER | YES (FK; NULL when denied at Main edge) |
 | `CorrelationId` | TEXT | NO |
-| `OccurredAt` | INTEGER | NO (epoch seconds UTC — see Phase 2; legacy TEXT readers must accept either during the v1.4 → v1.5 transition) |
+| `OccurredAt` | INTEGER | NO | Epoch seconds, UTC (Rule 7.1 v2). |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
@@ -175,7 +183,7 @@ Audit row written on every successful `PATCH /API/V1/Settings/EndpointAuth` (per
 | `UpdatedByUserId` | INTEGER | NO | FK → `User`. Same actor stamped on the parent row's `UpdatedByUserId`. |
 | `CorrelationId` | TEXT | NO | Echoes the inbound `X-Correlation-Id` header per `spec/04-database-conventions/06-rest-api-format.md` |
 | `IdempotencyKey` | TEXT | NO | The `X-Idempotency-Key` that produced the write. Index supports replay-detection joins. |
-| `OccurredAt` | TEXT | NO | ISO-8601 UTC; server-stamped, equals the parent row's `UpdatedAt` |
+| `OccurredAt` | INTEGER | NO | Epoch seconds, UTC; server-stamped, equals the parent row's `UpdatedAt` |
 | `Notes` | TEXT | YES | Per Rule 12 |
 | `Comments` | TEXT | YES | Per Rule 12 |
 
@@ -186,8 +194,8 @@ Unique: `(IdempotencyKey)` — guarantees the no-duplicate-on-replay invariant a
 | Column | Type | Null |
 |--------|------|------|
 | `EndpointAuthChangeKindId` | INTEGER | NO (PK) |
-| `EndpointAuthChangeKindCode` | TEXT | NO (unique: `Create`, `Replace`, `SoftDisable`, `Reenable`) |
-| `EndpointAuthChangeKindLabel` | TEXT | NO |
+| `Code` | TEXT | NO (unique: `Create`, `Replace`, `SoftDisable`, `Reenable`) |
+| `Label` | TEXT | NO |
 | `Description` | TEXT | YES |
 
 Seeded via Seedable-Config — 4 rows. Resolution rules:
@@ -206,7 +214,7 @@ Tracks which version each Worker is currently running.
 | `WorkerVersionId` | INTEGER | NO | PK |
 | `WorkerNodeId` | INTEGER | NO | FK |
 | `WorkerVersionSemver` | TEXT | NO | e.g. `1.4.2` |
-| `WorkerVersionRecordedAt` | TEXT | NO | ISO-8601 |
+| `WorkerVersionRecordedAt` | INTEGER | NO | Epoch seconds, UTC |
 | `Notes` | TEXT | YES | Per Rule 12 |
 | `Comments` | TEXT | YES | Per Rule 12 |
 
@@ -220,7 +228,7 @@ Records every routing decision. Useful for debugging load distribution.
 | `CompanyId` | INTEGER | NO (FK) |
 | `WorkerNodeId` | INTEGER | NO (FK) |
 | `WorkerSelectionStrategyId` | INTEGER | NO (FK → `WorkerSelectionStrategy`) |
-| `WorkerSelectionEventAt` | TEXT | NO |
+| `WorkerSelectionEventAt` | INTEGER | NO | Epoch seconds, UTC |
 | `Notes` | TEXT | YES |
 | `Comments` | TEXT | YES |
 
@@ -229,8 +237,8 @@ Records every routing decision. Useful for debugging load distribution.
 | Column | Type | Null |
 |--------|------|------|
 | `WorkerSelectionStrategyId` | INTEGER | NO (PK) |
-| `WorkerSelectionStrategyCode` | TEXT | NO (`RoundRobin`, `LeastLoaded`, `Manual`) |
-| `WorkerSelectionStrategyLabel` | TEXT | NO |
+| `Code` | TEXT | NO (`RoundRobin`, `LeastLoaded`, `Manual`) |
+| `Label` | TEXT | NO |
 | `Description` | TEXT | YES |
 
 ---
