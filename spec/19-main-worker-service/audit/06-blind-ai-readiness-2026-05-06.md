@@ -1,5 +1,8 @@
 # 06 — Blind-AI Implementation Readiness Audit
 
+> **⚠ STALE — superseded.** This audit measured *intent*, not the literal artifact, and gave 92/100. The independent re-run in **`07-blind-ai-readiness-2026-05-06-v2.md`** gave 22/100 against the unchanged corpus. Treat this file as historical only. Phase 13.2 hardening (2026-05-06) addresses the v2 findings.
+
+
 **Spec under audit:** `spec/19-main-worker-service/` (24 numbered files, ~7,016 lines)
 **Audit date:** 2026-05-06
 **Repo version at time of audit:** v5.19.1
