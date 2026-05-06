@@ -559,6 +559,60 @@ jobs:
         # spec/19 audit-09 §2.2 end-to-end (local + CI parity).
         run: node scripts/render-diagrams.mjs --check
 
+  docs-diagrams:
+    name: Docs Build — Render Mermaid Diagrams
+    runs-on: ubuntu-latest
+    needs: sync-drift
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Discover .mmd files
+        id: discover
+        run: |
+          set -euo pipefail
+          count=$(find spec -type f -name '*.mmd' 2>/dev/null | wc -l | tr -d ' ')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Found $count .mmd file(s)."
+
+      - name: Install Mermaid CLI
+        if: steps.discover.outputs.count != '0'
+        # Pin a known-good version of mermaid-cli to keep CI deterministic.
+        # `npx --yes @mermaid-js/mermaid-cli` would also work, but a direct
+        # install lets us cache the global node_modules between runs.
+        run: npm install --no-save --no-audit --no-fund @mermaid-js/mermaid-cli@10.9.1
+
+      - name: Render Mermaid → PNG (all spec/**/{diagrams,images}/*.mmd)
+        if: steps.discover.outputs.count != '0'
+        # Uses scripts/puppeteer-ci.json for `--no-sandbox` so headless
+        # Chrome boots inside the GitHub-hosted runner. Re-renders only
+        # files where the PNG is missing or older than its .mmd source
+        # (idempotent — fast no-op when nothing changed).
+        run: node scripts/render-diagrams.mjs
+
+      - name: Verify no drift after render
+        if: steps.discover.outputs.count != '0'
+        # Defence-in-depth: after rendering, the --check pass must be
+        # clean. If this fails, the renderer itself is buggy.
+        run: node scripts/render-diagrams.mjs --check
+
+      - name: Upload rendered PNGs as artifact
+        if: always() && steps.discover.outputs.count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: spec-diagrams-png
+          path: spec/**/*.png
+          if-no-files-found: ignore
+          retention-days: 14
+
   runner-dispatch-guard:
     name: Runner Dispatch Guard
     runs-on: ubuntu-latest
