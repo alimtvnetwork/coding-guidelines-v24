@@ -162,8 +162,8 @@ Unique: `(RoleId, AccessItemId)`. Seeded with 19 rows per `14-rbac-and-status-se
 
 Audit row written by Workers on every 403 returned for an `AccessDenied` envelope (per `08-error-contract.md` §3.5 and `07-§8`). (Resolves F-A-17.)
 
-| Column | Type | Null |
-|--------|------|------|
+| Column | Type | Null | Notes |
+|--------|------|------|------|
 | `AccessDenialEventId` | INTEGER | NO (PK) |
 | `UserId` | INTEGER | NO (FK) |
 | `AccessItemId` | INTEGER | NO (FK → `AccessItem`) |
