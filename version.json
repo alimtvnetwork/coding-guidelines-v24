@@ -3,7 +3,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "8aad38bdb29248d3bdb15d8fe5348c9078bc6b47",
+  "LastCommitSha": "72640b331796d844ed1938e343c389ba2bd4c0a5",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -25,15 +25,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "8aad38bdb29248d3bdb15d8fe5348c9078bc6b47",
-    "shortSha": "8aad38b",
-    "branch": "edit/edt-7b0ae083-8c3b-48f2-a65b-cade498dfde9"
+    "sha": "72640b331796d844ed1938e343c389ba2bd4c0a5",
+    "shortSha": "72640b3",
+    "branch": "edit/edt-7c4d0f9d-48e1-4a25-9c75-2ca121eb01a4"
   },
   "stats": {
     "totalFiles": 656,
-    "totalLines": 140282,
+    "totalLines": 140370,
     "totalFolders": 23,
-    "totalBytes": 4902675,
+    "totalBytes": 4914485,
     "rootFiles": 6
   },
   "folders": [
@@ -86,8 +86,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 9,
-      "lineCount": 2824,
-      "byteCount": 106299
+      "lineCount": 2857,
+      "byteCount": 108940
     },
     {
       "path": "05-split-db-architecture",
@@ -99,8 +99,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 14,
-      "lineCount": 4104,
-      "byteCount": 170523
+      "lineCount": 4109,
+      "byteCount": 171298
     },
     {
       "path": "06-seedable-config-architecture",
@@ -281,8 +281,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 29,
-      "lineCount": 5289,
-      "byteCount": 291552
+      "lineCount": 5339,
+      "byteCount": 299946
     },
     {
       "path": "21-app",

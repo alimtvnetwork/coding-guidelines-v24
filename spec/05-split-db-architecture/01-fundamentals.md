@@ -1,8 +1,13 @@
 # Split Database Architecture — Fundamentals
 
-**Version:** 3.3.0  
-**Updated:** 2026-05-04  
+**Version:** 3.4.0
+**Updated:** 2026-05-06
 **Parent:** [00-overview.md](./00-overview.md)
+
+> **v3.4.0 — DB convention propagation (Phase 2):** Every tier in this architecture inherits the global DB conventions:
+> - All `*At` timestamp columns MUST be `INTEGER` (epoch seconds, UTC) per [`spec/04-database-conventions/01-naming-conventions.md`](../04-database-conventions/01-naming-conventions.md) **Rule 7.1 v2**. TEXT/ISO-8601 storage is forbidden for new tier-local schemas.
+> - Every enum-like reference table in any tier MUST follow the canonical `(Id, Code, Label)` shape per **Rule 13** ([`spec/04-database-conventions/02-schema-design.md`](../04-database-conventions/02-schema-design.md) §6.5). The legacy `{Table}Code` / `{Table}Label` column-name style is removed.
+> - These rules apply uniformly to Root, Settings, App, Session, Cache, and Document tiers.
 
 > **Downstream tier consumers (FU-6 back-link, added 2026-05-04):** This file defines the canonical 6-tier model (Root / Settings / App / Session / Cache / Document). Service-level specs that consume only a subset MUST publish a reconciliation file naming which tiers they use. Current consumers:
 > - **Main / Worker service** — see [`spec/19-main-worker-service/11-split-db-tier-reconciliation.md`](../19-main-worker-service/11-split-db-tier-reconciliation.md). Main = 3 tiers (Root/Settings/Session); Worker = 4 tiers (Root/Settings/App/Session). Cache + Document unused in v1.0.
