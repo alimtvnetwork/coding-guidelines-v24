@@ -20,9 +20,9 @@ See also [`images/03-worker-subdomain-routing.png`](./images/03-worker-subdomain
 Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStrategy`. Stored in `WorkerSelectionStrategy` table.
 
 ### 1.1 `RoundRobin`
-- Pick next `Active` worker in registry order.
+- Pick next eligible worker ordered by `WorkerNode.Sequence ASC` (ties broken by `WorkerNodeRegisteredAt ASC`).
 - Cursor persisted in main DB (single-row config table or `WorkerSelectionEvent` last-row lookup).
-- Pros: trivially predictable. Cons: ignores load.
+- Pros: trivially predictable, deterministic across restarts. Cons: ignores load.
 
 ### 1.2 `LeastLoaded` (recommended default)
 - Pick `Active` worker with fewest assigned `Company` rows.
