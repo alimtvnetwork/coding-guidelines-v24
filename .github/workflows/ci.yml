@@ -170,6 +170,16 @@ jobs:
         # prompt file on disk. Catches orphans + dangling references.
         run: python3 linter-scripts/check-prompts-loaded.py
 
+      - name: Check tunable constants (T1–T4 — single-source-of-truth, seed parity)
+        # Enforces the §6 contract in spec/19-main-worker-service/15-tunable-constants.md:
+        #   T1 every numeric+unit literal is catalogued or waivered
+        #   T2 §2 keys are unique
+        #   T3 §4 config.seed.json defaults match §2 catalogue (parity)
+        #   T4 MainSessionAbsoluteMaxSeconds >= MainSessionTtlSeconds
+        # Wired in v5.38.0 alongside the v2.0.0 backup-tier seed materialization
+        # — T3 now covers all 28 MainWorker.Backup.* keys (silent waiver lifted).
+        run: python3 linter-scripts/check-tunable-constants.py
+
       - name: Restore placeholder-linter PASS cache
         # Two-layer safety:
         #   1. The cache key is content-derived from the linter script
