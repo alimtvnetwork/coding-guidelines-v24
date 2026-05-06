@@ -217,12 +217,30 @@ SEED_TO_KEY = {
 }
 
 
+CATALOGUE_START_RE = re.compile(r"^##\s+2\.\s")
+CATALOGUE_END_RE = re.compile(r"^##\s+(?!2(?:\.\d+)?\b)\d")
+
+
+def _is_inside_catalogue(line: str, inside: bool) -> bool:
+    if CATALOGUE_START_RE.match(line):
+        return True
+    if inside and CATALOGUE_END_RE.match(line):
+        return False
+    return inside
+
+
 def collect_catalogue_defaults() -> dict[str, str]:
+    # T3 catalogue parser: only §2 rows count. Skipping §4.1's alias map
+    # (which reuses ROW_RE shape) prevents the alias map's seed-short-name
+    # cells from overwriting real defaults. Lifts the silent T3 waiver
+    # exposed by the v2.0.0 backup-tier materialization.
     out: dict[str, str] = {}
     in_fence = False
+    in_catalogue = False
     for raw in read_lines(TUNABLES_FILE):
         in_fence = toggle_fence(raw, in_fence)
-        if in_fence:
+        in_catalogue = _is_inside_catalogue(raw, in_catalogue)
+        if in_fence or not in_catalogue:
             continue
         match = ROW_RE.match(raw)
         if not match:
