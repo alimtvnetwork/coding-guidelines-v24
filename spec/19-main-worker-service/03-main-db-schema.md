@@ -183,7 +183,7 @@ Audit row written on every successful `PATCH /API/V1/Settings/EndpointAuth` (per
 | `UpdatedByUserId` | INTEGER | NO | FK → `User`. Same actor stamped on the parent row's `UpdatedByUserId`. |
 | `CorrelationId` | TEXT | NO | Echoes the inbound `X-Correlation-Id` header per `spec/04-database-conventions/06-rest-api-format.md` |
 | `IdempotencyKey` | TEXT | NO | The `X-Idempotency-Key` that produced the write. Index supports replay-detection joins. |
-| `OccurredAt` | TEXT | NO | ISO-8601 UTC; server-stamped, equals the parent row's `UpdatedAt` |
+| `OccurredAt` | INTEGER | NO | Epoch seconds, UTC; server-stamped, equals the parent row's `UpdatedAt` |
 | `Notes` | TEXT | YES | Per Rule 12 |
 | `Comments` | TEXT | YES | Per Rule 12 |
 
