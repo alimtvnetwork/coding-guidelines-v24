@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.12.0 → planned 5.13.0 (after Phase 12)
+**Version:** 5.13.0 (Backup System spec arc complete — Phase 12 done)
 **Updated:** 2026-05-06
 
 ---
@@ -146,7 +146,7 @@
 - [x] **Phase 9** — `21-backup-endpoints.md` v1.0.0 (5 S2S OAuth endpoints: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health; endpoint↔scope matrix; CODE-RED handler budgets); `MAIN-830-01..02` wire codes; tunables §2.13 added.
 - [x] **Phase 10** — `22-backup-apply-logic.md` v1.0.0 (5-stage pipeline, V1–V7 validation, single-TX dispatch, DLQ no-silent-skip, V7 idempotency via UNIQUE lock); `BackupApplyIdempotency` + `BackupApplyDeadLetter` tables; `WORKER-930-01..04` opening overflow `WORKER-21200-21299` + `MAIN-840-01`; tunables §2.14 added.
 - [x] **Phase 11** — `23-snapshot-storage-and-restore.md` v1.0.0 (3-moment lifecycle, 8-step Build using `sqlite3_backup_init`, separate HKDF salt for snapshot password, 8-step Restore re-sealing under current Active KeyEpoch); BE-6 RestoreInbox on primary; `BackupSnapshotCatalog` + `BackupSnapshotJob` + `BackupRestoreJob` tables; final `Backup` S2S audience wiring with mandatory `PairingId` JWT claim; `WORKER-940-01..04` + `MAIN-840-02`; tunables §2.15 added — **OQ-A4 resolved at 30 days rolling**.
-- [ ] Phase 12 — pending (diagrams + acceptance criteria + linter promotion + final 5.13.0 bump).
+- [x] **Phase 12** — Final consolidation: 3 new diagrams (`erd-backup-tier.mmd`, `seq-incremental-backup.mmd`, `seq-backup-restore.mmd`); diagrams index → v1.1.0; `97-acceptance-criteria.md` → v1.1.0 with 13 new Backup-tier criteria; cross-spec stubs noted (auth `Backup` audience, `PairingId` JWT claim, BE-1..BE-6 endpoint catalogue merge); linter `BACKUP-*` / `DB-SYNCOP-*` promoted; `AppBackupTrackedTable` seed referenced; **version bumped to `5.13.0` (final, phase suffix removed)**. Backup System spec arc COMPLETE.
 
 > **File numbering:** Phase 5 took the `17-…` slot, so backup-nodes is `18-…`, incremental sync `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
 
