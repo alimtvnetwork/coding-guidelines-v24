@@ -179,12 +179,14 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 
 | Sub-range | Reserved for |
 |---|---|
-| `WORKER-21090-21099` | Worker future expansion |
+| _(consumed)_ | `WORKER-21090-21091` consumed by `WORKER-900-01 RoleCacheRecompileFailed` and `WORKER-900-02 EmptyEffectiveAccessSet` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
+| `WORKER-21092-21099` | Worker future expansion |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
+| _(consumed)_ | 21171 consumed by `MAIN-700-01 CacheInvalidationDeliveryFailed` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | `MAIN-21162-21169` | Main external-services future expansion |
-| `MAIN-21171-21199` | Main future expansion (file-system, network, additional routing overflow) |
+| `MAIN-21172-21199` | Main future expansion (file-system, network, additional cache-coherence overflow) |
 
 ---
 
