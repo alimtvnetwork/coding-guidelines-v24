@@ -241,6 +241,17 @@ def render_text(rules: list[dict], scans: dict[str, dict]) -> tuple[str, int]:
 
 
 def render_markdown(rules: list[dict], scans: dict[str, dict]) -> tuple[str, int]:
+    """Markdown report.
+
+    The persisted summary report is itself scanned by the linter, so we
+    deliberately avoid embedding any literal stale string (forbidden brand
+    names, legacy module paths, legacy CDN domains, etc.). When a rule
+    declares ``summary_description`` / ``summary_pattern`` /
+    ``summary_replacement``, those redacted variants are used instead of
+    the raw fields. The exact stale matches per file are masked the same
+    way, and the fix command is replaced with a pointer to the CLI which
+    can emit the runnable command on demand.
+    """
     lines: list[str] = ["# Forbidden-Strings Summary Report", ""]
     total = 0
     for rule in rules:
@@ -248,12 +259,15 @@ def render_markdown(rules: list[dict], scans: dict[str, dict]) -> tuple[str, int
         hits = scans[rid]
         count = sum(len(v) for v in hits.values())
         total += count
+        desc = rule.get("summary_description") or rule.get("description", "")
+        pat = rule.get("summary_pattern") or rule["pattern"]
+        repl = rule.get("summary_replacement") or rule.get("replacement")
         lines.append(f"## `{rid}`")
         lines.append("")
-        lines.append(f"- **Description:** {rule.get('description', '')}")
-        lines.append(f"- **Pattern:** `{rule['pattern']}`")
-        if rule.get("replacement"):
-            lines.append(f"- **Canonical replacement:** `{rule['replacement']}`")
+        lines.append(f"- **Description:** {desc}")
+        lines.append(f"- **Pattern:** `{pat}`")
+        if repl:
+            lines.append(f"- **Canonical replacement:** `{repl}`")
         if not hits:
             lines.append("- **Status:** ✅ clean (0 findings)")
             lines.append("")
@@ -264,23 +278,23 @@ def render_markdown(rules: list[dict], scans: dict[str, dict]) -> tuple[str, int
         lines.append("")
         lines.append("| File | Hits | Stale matches |")
         lines.append("|------|-----:|---------------|")
+        masked = "`<redacted>`"
         for path in sorted(hits.keys()):
             entries = hits[path]
-            uniq = sorted({m for _, _, m in entries})
+            uniq_count = len({m for _, _, m in entries})
+            mask_cells = ", ".join([masked] * uniq_count)
             lines.append(
-                f"| `{path}` | {len(entries)} | "
-                f"{', '.join(f'`{u}`' for u in uniq)} |"
+                f"| `{path}` | {len(entries)} | {mask_cells} |"
             )
         lines.append("")
-        cmd = build_fix_command(rule, hits)
-        if cmd is None:
-            lines.append("_No `replacement` declared — fix manually._")
+        if rule.get("replacement"):
+            lines.append(
+                "**Fix command:** run "
+                f"`python3 linter-scripts/forbidden-strings-summary.py "
+                f"--rule {rid} --emit-fix-command | bash`"
+            )
         else:
-            lines.append("**Fix command:**")
-            lines.append("")
-            lines.append("```bash")
-            lines.append(cmd)
-            lines.append("```")
+            lines.append("_No `replacement` declared — fix manually._")
         lines.append("")
     if total == 0:
         lines.append("✅ All rules clean — no findings.")
