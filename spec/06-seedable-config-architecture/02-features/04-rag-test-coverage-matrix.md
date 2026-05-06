@@ -1,9 +1,9 @@
 # RAG Validation Test Coverage Matrix
 
-**Version:** 3.2.0  
+**Version:** 2.0.0  
 **Created:** 2026-02-02  
-**Updated:** 2026-04-16  
-**Status:** Active  
+**Updated:** 2026-05-07  
+**Status:** Active
 **Parent:** [04-rag-validation-tests.md](./03-rag-validation-tests.md)
 
 ---
