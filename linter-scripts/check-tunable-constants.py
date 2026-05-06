@@ -62,7 +62,7 @@ DEFAULT_BOLD_RE = re.compile(r"\*\*([^*|]+?)\*\*")
 DEFAULT_TICK_RE = re.compile(r"`([^`|]+?)`")
 # §4 Settings.<Name> with Default.
 SEED_RE = re.compile(
-    r"\"([A-Za-z][A-Za-z0-9_]+)\"\s*:\s*\{\s*"
+    r"\"([A-Za-z][A-Za-z0-9_.]+)\"\s*:\s*\{\s*"
     r"\"Type\"\s*:\s*\"[^\"]+\"\s*,\s*\"Default\"\s*:\s*"
     r"(\"[^\"]*\"|true|false|[0-9.]+)"
 )
@@ -91,6 +91,18 @@ def toggle_fence(line: str, in_fence: bool) -> bool:
     if CODE_FENCE_RE.match(line):
         return not in_fence
     return in_fence
+
+
+CATALOGUE_START_RE = re.compile(r"^##\s+2\.\s")
+CATALOGUE_END_RE = re.compile(r"^##\s+(?!2(?:\.\d+)?\b)\d")
+
+
+def _is_inside_catalogue(line: str, inside: bool) -> bool:
+    if CATALOGUE_START_RE.match(line):
+        return True
+    if inside and CATALOGUE_END_RE.match(line):
+        return False
+    return inside
 
 
 def collect_catalogue_keys() -> set[str]:
@@ -166,11 +178,15 @@ def rule_t1() -> list[str]:
 
 
 def rule_t2() -> list[str]:
+    # Same §2-only scope as T3: §4.1 alias map's first column reuses the
+    # prose key, so we'd get spurious duplicates if we scanned globally.
     seen: dict[str, int] = {}
     in_fence = False
-    for idx, raw in enumerate(read_lines(TUNABLES_FILE), start=1):
+    in_catalogue = False
+    for raw in read_lines(TUNABLES_FILE):
         in_fence = toggle_fence(raw, in_fence)
-        if in_fence:
+        in_catalogue = _is_inside_catalogue(raw, in_catalogue)
+        if in_fence or not in_catalogue:
             continue
         match = ROW_RE.match(raw)
         if not match:
@@ -214,15 +230,59 @@ SEED_TO_KEY = {
     "SelfUpdateRedirectStaleHours": "MainWorker.SelfUpdate.RedirectStaleHours",
     "BootstrapRetryBackoffSec": "MainWorker.Bootstrap.RetryBackoffSeconds",
     "BootstrapRetryMaxAttempts": "MainWorker.Bootstrap.RetryMaxAttempts",
+    "CacheCompanyToWorkerTtlSeconds": "MainWorker.Cache.CompanyToWorkerTtlSeconds",
+    "CacheWorkerRegistryTtlSeconds": "MainWorker.Cache.WorkerRegistryTtlSeconds",
+    # CacheRecentCompanyPerUserTtlSeconds intentionally omitted from T3
+    # parity: §2.16 binds its default to MainSessionTtlSeconds (not a
+    # numeric literal), so seed-vs-prose equality is undefined. §4.1
+    # alias map still requires the row.
+    # ── v2.0.0 backup-tier materialization (lifts the prior
+    # MainWorker.Backup.* T3 waiver per §4 line 272 / audit-09 §2.1) ──
+    "Backup.Enabled": "MainWorker.Backup.Enabled",
+    "Backup.MaxBackupsPerPrimary": "MainWorker.Backup.MaxBackupsPerPrimary",
+    "Backup.LagWarningSeconds": "MainWorker.Backup.LagWarningSeconds",
+    "Backup.HeartbeatIntervalSeconds": "MainWorker.Backup.HeartbeatIntervalSeconds",
+    "Backup.SyncIntervalSeconds": "MainWorker.Backup.SyncIntervalSeconds",
+    "Backup.MaxRowsPerEnvelope": "MainWorker.Backup.MaxRowsPerEnvelope",
+    "Backup.TombstoneRetentionSeconds": "MainWorker.Backup.TombstoneRetentionSeconds",
+    "Backup.LogRetentionSeconds": "MainWorker.Backup.LogRetentionSeconds",
+    "Backup.QuarantineCompactionOverrideSeconds": "MainWorker.Backup.QuarantineCompactionOverrideSeconds",
+    "Backup.MaxKeyAgeSeconds": "MainWorker.Backup.MaxKeyAgeSeconds",
+    "Backup.RotationAckTimeoutSeconds": "MainWorker.Backup.RotationAckTimeoutSeconds",
+    "Backup.RotationActivationDelaySeconds": "MainWorker.Backup.RotationActivationDelaySeconds",
+    "Backup.RetiredKeyGraceSeconds": "MainWorker.Backup.RetiredKeyGraceSeconds",
+    "Backup.RsaKeySizeBits": "MainWorker.Backup.RsaKeySizeBits",
+    "Backup.Endpoint.IncrementalDiffTimeoutSeconds": "MainWorker.Backup.Endpoint.IncrementalDiffTimeoutSeconds",
+    "Backup.Endpoint.RotateKeysTimeoutSeconds": "MainWorker.Backup.Endpoint.RotateKeysTimeoutSeconds",
+    "Backup.Endpoint.RestoreByDateTimeoutSeconds": "MainWorker.Backup.Endpoint.RestoreByDateTimeoutSeconds",
+    "Backup.Endpoint.SnapshotsTimeoutSeconds": "MainWorker.Backup.Endpoint.SnapshotsTimeoutSeconds",
+    "Backup.Endpoint.HealthTimeoutSeconds": "MainWorker.Backup.Endpoint.HealthTimeoutSeconds",
+    "Backup.Apply.MaxRetriesPerEnvelope": "MainWorker.Backup.Apply.MaxRetriesPerEnvelope",
+    "Backup.Apply.TransactionTimeoutSeconds": "MainWorker.Backup.Apply.TransactionTimeoutSeconds",
+    "Backup.Apply.DeadLetterRetentionDays": "MainWorker.Backup.Apply.DeadLetterRetentionDays",
+    "Backup.Apply.IdempotencyRowRetentionDays": "MainWorker.Backup.Apply.IdempotencyRowRetentionDays",
+    "Backup.SnapshotRetentionDays": "MainWorker.Backup.SnapshotRetentionDays",
+    "Backup.Snapshot.BuildHourUtc": "MainWorker.Backup.Snapshot.BuildHourUtc",
+    "Backup.Snapshot.QuiesceTimeoutSeconds": "MainWorker.Backup.Snapshot.QuiesceTimeoutSeconds",
+    "Backup.Snapshot.MaxBuildSeconds": "MainWorker.Backup.Snapshot.MaxBuildSeconds",
+    "Backup.Restore.PrimaryAckTimeoutSeconds": "MainWorker.Backup.Restore.PrimaryAckTimeoutSeconds",
 }
 
 
+
+
 def collect_catalogue_defaults() -> dict[str, str]:
+    # T3 catalogue parser: only §2 rows count. Skipping §4.1's alias map
+    # (which reuses ROW_RE shape) prevents the alias map's seed-short-name
+    # cells from overwriting real defaults. Lifts the silent T3 waiver
+    # exposed by the v2.0.0 backup-tier materialization.
     out: dict[str, str] = {}
     in_fence = False
+    in_catalogue = False
     for raw in read_lines(TUNABLES_FILE):
         in_fence = toggle_fence(raw, in_fence)
-        if in_fence:
+        in_catalogue = _is_inside_catalogue(raw, in_catalogue)
+        if in_fence or not in_catalogue:
             continue
         match = ROW_RE.match(raw)
         if not match:
