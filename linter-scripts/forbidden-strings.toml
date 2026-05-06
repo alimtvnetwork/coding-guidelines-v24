@@ -24,7 +24,10 @@
 # --- Rule: stale repo slug (pre-renumber references) ---
 [[rule]]
 id = "STALE-REPO-SLUG"
-description = "Pre-renumber repo slug (coding-guidelines-v1..v14). Current canonical slug is coding-guidelines-v20."
+description = "Pre-renumber repo slug (pre-renumber major versions). Current canonical slug is the latest major version."
+summary_description = "Pre-renumber repo slug references. See TOML for exact pattern."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
+summary_replacement = "<redacted: current canonical slug>"
 pattern = 'coding-guidelines-v(1[0-4]|[1-9])(?!\.\d)\b'
 replacement = "coding-guidelines-v20"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-REPO-SLUG --emit-fix-command | bash"
@@ -58,7 +61,10 @@ allowlist = [
 # --- Rule: stale module path (movie-cli v1 references) ---
 [[rule]]
 id = "STALE-MODULE-PATH"
-description = "Stale module path reference (movie-cli-v1). Current canonical namespace is movie-cli-v2."
+description = "Stale module path reference (legacy v1 namespace). Current canonical namespace is the v2 module path."
+summary_description = "Stale module path reference. See TOML for exact pattern."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
+summary_replacement = "<redacted: current canonical module path>"
 pattern = 'movie-cli-v1\b'
 replacement = "movie-cli-v2"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-MODULE-PATH --emit-fix-command | bash"
@@ -77,7 +83,10 @@ allowlist = [
 # --- Rule: legacy CDN domain references ---
 [[rule]]
 id = "LEGACY-CDN-DOMAIN"
-description = "Legacy CDN domain (cdn.riseup-asia.com). Current canonical domain is cdn.riseup.asia."
+description = "Legacy CDN domain reference. Current canonical CDN domain is the renamed host."
+summary_description = "Legacy CDN domain reference. See TOML for exact pattern."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
+summary_replacement = "<redacted: current canonical CDN domain>"
 pattern = 'cdn\.riseup-asia\.com'
 replacement = "cdn.riseup.asia"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule LEGACY-CDN-DOMAIN --emit-fix-command | bash"
@@ -91,7 +100,9 @@ allowlist = []
 # See `.lovable/strictly-avoid.md` and `mem://constraints/spec19-no-implementation`.
 [[rule]]
 id = "SPEC19-NO-IMPL"
-description = "Forbidden Spec/19 implementation phrases (phase 1 implementation, begin coding, ship the service, starter skeleton, etc.). spec/19-main-worker-service is spec-only."
+description = "Forbidden Spec/19 implementation phrases. spec/19-main-worker-service is spec-only — see linter-scripts/forbidden-strings.toml for the exact phrase list (kept only in this TOML to avoid self-trips)."
+summary_description = "Forbidden Spec/19 implementation phrases. spec/19-main-worker-service is spec-only."
+summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
 pattern = '(?i)\b(phase\s*1\s*implementation|begin\s*coding|ship\s*the\s*service|starter\s*skeleton|begin\s*spec[/\s-]*19\s*phase\s*1|start\s*implementing\s*spec[/\s-]*19)\b'
 fix_hint = "Remove the phrase. spec/19-main-worker-service is spec-only — no implementation work is permitted in this repo. See .lovable/strictly-avoid.md."
 exclude_dirs = ["release-artifacts"]
