@@ -30,7 +30,7 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Sub-criterion | Defined in | Test |
 |---------------|-----------|------|
 | `POST /API/V1/Company` works end-to-end | `06-core-api-endpoints.md` §2.2, §3.1, `diagrams/seq-company-creation.mmd` | E2E: POST returns 201, Worker has full row, Main has minimal row |
-| Worker selected by load-balanced strategy | `04-worker-routing.md` §1 | Unit: 100 sequential creates with `LeastLoaded` distribute within ±10% |
+| Worker selected by load-balanced strategy | `04-worker-routing.md` §1 + §1.5; default pinned in `15-tunable-constants.md` §2.5 | Unit: 100 sequential creates with default `LeastLoaded` distribute within ±10%; startup test: Main MUST refuse to start when `MainWorker.Routing.DefaultStrategy` is outside `{RoundRobin, LeastLoaded, Manual}` (no silent fallback). |
 | Main DB stores only minimal company identification | `03-main-db-schema.md` §2.3 | Schema review: only `CompanyId`, `CompanySlug`, `CompanyName`, `WorkerNodeId`, `CompanyAssignedAt`, `Description` |
 | Worker DB stores full company data via split-DB | `diagrams/erd-worker-split-db.mmd` | Schema review: `RootCompany` includes Address, Website, Social fields |
 
@@ -112,6 +112,9 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Linter rules `BACKUP-*` and `DB-SYNCOP-*` enforced in CI | `96-linter-audit.md` (Phase-12 promotion) | CI test: linter-scripts run as part of standards enforcement; failure blocks merge |
 | Pinned snapshots carry mandatory audit trail | `23-snapshot-storage-and-restore.md` §6.1 + `BACKUP-SNAP-005` | Negative test: any `BackupSnapshotCatalog` row with `Status='Pinned'` AND (`PinReason` NULL/empty OR `PinnedAtEpoch` NULL OR `PinnedByActor` NULL) MUST fail linter; positive test: pin via BE-3 sub-route writes a paired `EndpointAuthAuditEvent` row in the same transaction. |
 
+| Refresh path uses Main session cookie only — no `RefreshToken` cookie in v1.0 | `12-jwt-delivery-contract.md` §11.1 | Negative test: grep for `Set-Cookie:.*RefreshToken` across the codebase MUST return zero matches; positive test: `/Auth/RefreshWorkerToken` succeeds when only the Main session cookie is present and fails (401) when it is absent. |
+| Worker JWT never reaches a Service Worker in v1.0 | `12-jwt-delivery-contract.md` §11.2 | Negative test: no `navigator.serviceWorker.controller.postMessage(*token*)` call sites; SW registrations (if any) MUST be inert for token traffic. |
+
 ---
 
-*Acceptance criteria v1.2.0 — 2026-05-06 (Phase 12.2 — Pinned-snapshot audit-trail criterion added per OQ-23-3).*
+*Acceptance criteria v1.4.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 disposition tests added).*

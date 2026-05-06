@@ -4,6 +4,34 @@
 
 ---
 
+## v2.14.0 — 2026-05-06 (Phase 12.4 — OQ-12-1 / OQ-12-2 dispositions formalised)
+
+**Scope:** Promotes the two open questions in `12-jwt-delivery-contract.md` from inferred-deferred / inferred-rejected to **binding v1.0 dispositions** with explicit forbidden patterns, v2.0 trigger conditions, and a future-work catalogue. Project version bump to `5.17.0`.
+
+- **`12-jwt-delivery-contract.md` → v1.2.0**
+  - §11 retitled *Open Questions — formalised dispositions* (was *logged, non-blocking*).
+  - §11.1 OQ-12-1: rationale matrix (refresh authority, theft window, server state, sign-out-everywhere, CODE RED footprint, what-it-buys), 3 trigger conditions for v2.0 reopen, 4 forbidden v1.0 patterns (`Set-Cookie: RefreshToken`, refresh-token persistence, Main-cookie-value rotation on refresh, premature error-code allocation).
+  - §11.2 OQ-12-2: same matrix shape, 2 trigger conditions (cross-origin isolation + browser primitive), CODE RED reasoning ("sounds more secure" is a swallowed reason).
+  - §11.3 Future-work catalogue: 4 ordered prerequisites for any v2.0 reopen — `MainWorker.Auth.MaxSessionLifetimeSeconds` cap, threat-model spec slot 24 reserved, error-code family allocation, AC row.
+- **`97-acceptance-criteria.md` → v1.4.0** — Two new criteria: (a) grep-test for forbidden `Set-Cookie: RefreshToken`, (b) grep-test for SW token postMessage call sites. Both negative tests + positive counterparts.
+- **No new tables, no schema migrations, no error codes.** Per the formalised disposition itself, allocating "WORKER-100-04 REFRESH_REPLAY for future use" is itself a CODE RED violation — error codes are added when the feature ships.
+
+---
+
+## v2.13.0 — 2026-05-06 (Phase 12.3 — OQ-2 resolved: default worker-selection strategy)
+
+**Scope:** Resolves Phase-1 OQ-2 by promoting `LeastLoaded` from "recommended" to authoritative default with a full rationale block. Project version bump to `5.16.0`.
+
+- **`15-tunable-constants.md` → v1.4.0** — added `MainWorker.Routing.DefaultStrategy = "LeastLoaded"` to §2.5 with allow-list (`RoundRobin | LeastLoaded | Manual`) and start-up enforcement note (Main MUST refuse to start on out-of-list values — CODE RED, no silent fallback).
+- **`04-worker-routing.md` → v1.3.0**
+  - §1 prose: replaced "configurable via Seedable-Config" with explicit cross-reference to canonical default + allow-list start-up rule.
+  - §1.2: re-titled `LeastLoaded` from *(recommended default)* → ***default* — resolves OQ-2**.
+  - New §1.5 *Default selection rationale*: 6-criterion decision matrix (cold-cluster fairness, recovery after quarantine, long-running fairness, predictability, query cost, ties), explicit override guidance (`RoundRobin` for tests, `Manual` for reserved capacity / canaries), explicit non-reasons, and migration path (existing `Company → Worker` mappings are NOT rebalanced — only new creates observe a strategy change).
+- **`97-acceptance-criteria.md` → v1.3.0** — AC-3 worker-selection row extended with the start-up allow-list guard test in addition to the existing ±10% distribution test.
+- **`plan.md`** — OQ-2 marked ✅ Resolved Phase 12.3 with cross-references.
+
+---
+
 ## v2.12.0 — 2026-05-06 (Phase 12.2 — OQ-23-3 resolved: pinned-snapshot audit trail)
 
 **Scope:** Resolves OQ-23-3 from `23-snapshot-storage-and-restore.md`. Adds the audit-trail column trio that operators need when reviewing why a snapshot escaped retention. Project version bump to `5.15.0`.
