@@ -200,9 +200,10 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
 | _(consumed)_ | 21171 consumed by `MAIN-700-01 CacheInvalidationDeliveryFailed` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | _(consumed)_ | 21181-21184 consumed by `MAIN-800-01..04` Backup Lifecycle per Phase 6 (`18-backup-nodes.md`) |
+| _(consumed)_ | 21185 consumed by `MAIN-810-01 BackupCompactionStalled` per Phase 7 (`19-incremental-backup-sync.md`) |
 | `MAIN-21162-21169` | Main external-services future expansion |
 | `MAIN-21172-21180` | Main future expansion (file-system, network, additional cache-coherence overflow) |
-| `MAIN-21185-21199` | Main future expansion (additional backup-lifecycle overflow, etc.) |
+| `MAIN-21186-21199` | Main future expansion (additional backup-lifecycle / sync overflow, etc.) |
 
 ---
 
