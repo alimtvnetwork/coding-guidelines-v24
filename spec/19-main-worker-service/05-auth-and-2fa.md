@@ -59,7 +59,7 @@ Auth is a **first-class given** in BOTH Main and Worker tiers. This file defines
 - **Mechanism:** OAuth 2.0 client-credentials grant OR pre-shared API key (configurable).
 - **Default:** OAuth client-credentials per Worker, secrets stored via Seedable-Config (encrypted at rest).
 - The credential-proxy channel (§2.1) reuses this same client-credential token; the Worker enforces that `/API/V1/Auth/InternalSignIn` is callable **only** from Main's IP allowlist + valid Bearer.
-- Per-endpoint flexibility per verbatim §Main Server Concept 3c — see Open Question OQ-1 below.
+- Per-endpoint flexibility per verbatim §Main Server Concept 3c is **resolved** — see §8 below for the pinned `PATCH /API/V1/Settings/EndpointAuth` contract (OQ-1 RESOLVED 2026-05-04).
 
 ---
 

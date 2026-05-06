@@ -23,7 +23,7 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 | Holds all business logic | `01-architecture.md` §2 | Code review: business code lives in Worker repo |
 | Has auth, 2FA, session, sign-up, sign-in, JWT or cookie | `05-auth-and-2fa.md` §1 | Endpoint test: all rows of §1 table return 2xx on happy path |
 | Has no UI dependency | `01-architecture.md` §2 | Worker repo has no React/Vue/HTML view templates |
-| Uses split DB per `spec/05-split-db-architecture/` | `01-architecture.md` §2, `diagrams/erd-worker-split-db.mmd` | Worker startup creates Root/App/Session DBs |
+| Uses split DB per `spec/05-split-db-architecture/` | `01-architecture.md` §2, `11-split-db-tier-reconciliation.md` §4, `diagrams/erd-worker-split-db.mmd` | Worker startup creates **Root/Settings/App/Session** DBs (4 tiers per FU-1; Cache + Document tiers unused in v1.0) |
 
 ## AC-3 — Company creation
 

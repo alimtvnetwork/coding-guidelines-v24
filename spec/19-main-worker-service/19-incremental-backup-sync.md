@@ -14,7 +14,11 @@
 
 ## 1. The `SyncOp` Convention (D10)
 
-Every App-tier table whose rows must mirror to backups carries a logical `SyncOp` lifecycle. Two implementation shapes are permitted; Workers MUST pick one **per database**, not per table.
+Every App-tier table whose rows must mirror to backups carries a logical `SyncOp` lifecycle. Two implementation shapes are defined below; Workers MUST pick one **per database**, not per table.
+
+### 1.0 Default for v1.0 (binding)
+
+**Default for v1.0 is Shape A (inline column).** Workers MUST adopt Shape A unless an existing production table cannot accept three new columns without unacceptable downtime; in that exceptional case the Worker MAY adopt Shape B and MUST record the choice in its Seedable-Config under `MainWorker.Backup.SyncOpShape` (allowed values: `Inline` | `SideLog`). A blind-AI implementer MUST treat this as an unconditional MUST and choose Shape A.
 
 ### 1.1 Shape A — Inline column (recommended for small tables)
 
