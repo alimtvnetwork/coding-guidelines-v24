@@ -166,11 +166,15 @@ def rule_t1() -> list[str]:
 
 
 def rule_t2() -> list[str]:
+    # Same §2-only scope as T3: §4.1 alias map's first column reuses the
+    # prose key, so we'd get spurious duplicates if we scanned globally.
     seen: dict[str, int] = {}
     in_fence = False
-    for idx, raw in enumerate(read_lines(TUNABLES_FILE), start=1):
+    in_catalogue = False
+    for raw in read_lines(TUNABLES_FILE):
         in_fence = toggle_fence(raw, in_fence)
-        if in_fence:
+        in_catalogue = _is_inside_catalogue(raw, in_catalogue)
+        if in_fence or not in_catalogue:
             continue
         match = ROW_RE.match(raw)
         if not match:
