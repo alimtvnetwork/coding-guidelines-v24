@@ -1,10 +1,16 @@
 # 03 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.4.0
+**Version:** 2.0.0
 
-> **v1.4.0 rename (Phase 1):** `EnumPage` → `AccessItem`, `RolePageAccess` → `RoleAccessItem`. New column `AccessItem.PageUrlSuffix` becomes the route-matcher source of truth. Deprecation aliases accepted for one release; full removal in v1.5.0 per `98-changelog.md`.
-**DB:** SQLite (default). Same schema portable to PostgreSQL/MySQL.
+> **v2.0.0 (Phase 2 — DB convention overhaul):**
+> - All `*At` timestamp columns are now `INTEGER` (epoch seconds, UTC) per `spec/04-database-conventions/01-naming-conventions.md` Rule 7.1 v2.
+> - All ref / enum-like tables now use the canonical `(Id, Code, Label)` shape per Rule 13. The legacy `{Table}Code` / `{Table}Label` column names are **removed** in this spec; readers MUST migrate.
+> - `Company` columns renamed: `CompanySlug` → `Slug`, `CompanyName` → `Name`.
+>
+> **v1.4.0 carryover (Phase 1):** `EnumPage` → `AccessItem`, `RolePageAccess` → `RoleAccessItem`. New column `AccessItem.PageUrlSuffix` is the route-matcher source of truth. Deprecation aliases for the old names remain accepted through v1.5.0 per `98-changelog.md`.
+>
+> **DB:** SQLite (default). Same schema portable to PostgreSQL/MySQL.
 
 > **Split-DB tier authority (FU-2):** Main uses only **3 tiers** — Root, Settings, Session — per [`11-split-db-tier-reconciliation.md`](./11-split-db-tier-reconciliation.md) §4. **Main has no App tier** (it owns no business data). Any prior reference placing Main tables in an App tier is a bug; per the reconciliation file, such tables belong in Root or Settings. Tier assignments per table are listed in `11-…` §4.
 
