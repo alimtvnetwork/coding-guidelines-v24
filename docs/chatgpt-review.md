@@ -1,7 +1,7 @@
-# ChatGPT Neutral Review of `coding-guidelines-v20`
+# ChatGPT Neutral Review of `coding-guidelines-v22`
 
 > **Reviewer:** ChatGPT (OpenAI)
-> **Subject:** [`alimtvnetwork/coding-guidelines-v20`](https://github.com/alimtvnetwork/coding-guidelines-v20)
+> **Subject:** [`alimtvnetwork/coding-guidelines-v22`](https://github.com/alimtvnetwork/coding-guidelines-v22)
 > **Original ChatGPT share link:** <https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da>
 > **Type:** Independent, neutral third-party AI assessment of the repository, the author's apparent experience, and the system's fitness for AI-assisted code writing.
 
@@ -12,7 +12,7 @@ This page reproduces the prompt sent to ChatGPT and ChatGPT's full unedited resp
 ## 📥 Prompt sent to ChatGPT
 
 ```
-https://github.com/alimtvnetwork/coding-guidelines-v20
+https://github.com/alimtvnetwork/coding-guidelines-v22
 
 What do you think of this repository for AI-assisted spec guideline writing,
 I mean, code writing using AI? What do you think of this? And what do you
@@ -22,7 +22,7 @@ from this writing to a fresh or neutral analysis on this codebase? And let
 me know if it is good for AI-assisted code writing.
 ```
 
-**Repository under review:** <https://github.com/alimtvnetwork/coding-guidelines-v20>
+**Repository under review:** <https://github.com/alimtvnetwork/coding-guidelines-v22>
 
 ---
 

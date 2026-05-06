@@ -13,7 +13,7 @@
 Define a generic, language-agnostic prologue that every CLI's
 `install.ps1` and `install.sh` MUST run before doing any local install
 work. The prologue probes for a newer numbered fork of the same
-repository (e.g. `coding-guidelines-v5` → `coding-guidelines-v20`) and,
+repository (e.g. `coding-guidelines-v22` → `coding-guidelines-v22`) and,
 if a higher version exists, **hands off** to that repo's installer
 instead of installing the older copy.
 
@@ -49,7 +49,7 @@ invocation context. Detection is a 4-step ladder; the first match wins.
 
 | # | Source | Example produces |
 |---|--------|------------------|
-| 1 | URL captured from `$MyInvocation.MyCommand.Definition` (PowerShell) or the script's own location resolved via `BASH_SOURCE` / `$0` (sh). When invoked via `irm \| iex`, PowerShell exposes the source URL inside `$MyInvocation`. | `https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v5/main/install.ps1` |
+| 1 | URL captured from `$MyInvocation.MyCommand.Definition` (PowerShell) or the script's own location resolved via `BASH_SOURCE` / `$0` (sh). When invoked via `irm \| iex`, PowerShell exposes the source URL inside `$MyInvocation`. | `https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/install.ps1` |
 | 2 | Environment variables — `INSTALL_PROBE_OWNER`, `INSTALL_PROBE_BASE`, `INSTALL_PROBE_VERSION`. Used for local dev or CI. | — |
 | 3 | Constants embedded at the top of the script: `$ProbeOwner`, `$ProbeBase`, `$ProbeVersion`. Maintainer fills these when forking. | — |
 | 4 | Hard fail-open — if nothing resolves, log `"version probe disabled (no self-identity)"` and skip the probe. **Never block the local install.** | — |
@@ -161,7 +161,7 @@ can recognise the probe phase in support logs:
 
 ```
 ▸ Detecting installer identity...
-✓ Identity: alimtvnetwork/coding-guidelines-v5  (probing v6..v25)
+✓ Identity: alimtvnetwork/coding-guidelines-v22  (probing v6..v25)
 ▸ Probing 20 candidate versions in parallel (timeout 2s)...
 ✓ Newer version found: v19 (was v5). Handing off to v19 installer...
 ─────────────────────────────────────────
@@ -172,7 +172,7 @@ Or, when nothing newer is found:
 
 ```
 ▸ Detecting installer identity...
-✓ Identity: alimtvnetwork/coding-guidelines-v20  (probing v20..v39)
+✓ Identity: alimtvnetwork/coding-guidelines-v22  (probing v20..v39)
 ▸ Probing 20 candidate versions in parallel (timeout 2s)...
 ✓ Already on latest (v19). Continuing local install...
 ```
@@ -410,8 +410,8 @@ invoke_latest_version_probe
 
 | Scenario | Expected |
 |----------|----------|
-| `irm .../coding-guidelines-v5/main/install.ps1 \| iex`, v19 exists | Hands off to v19, exits 0. |
-| `irm .../coding-guidelines-v20/main/install.ps1 \| iex`, no v20..v39 | Falls through to local install. |
+| `irm .../coding-guidelines-v22/main/install.ps1 \| iex`, v19 exists | Hands off to v19, exits 0. |
+| `irm .../coding-guidelines-v22/main/install.ps1 \| iex`, no v20..v39 | Falls through to local install. |
 | Local dev: `.\install.ps1` (no URL context), constants point to v19 | If running script claims v19 and no v20..v39 exists, falls through. |
 | Network down | Logs `⚠ network unreachable`, falls through. |
 | GitHub returns 429 for all probes | Falls through. |

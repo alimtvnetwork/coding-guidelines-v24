@@ -29,7 +29,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const VERSION_PATH = resolve(ROOT, "version.json");
 const HEALTH_PATH = resolve(ROOT, "public/health-score.json");
-const REPO = "alimtvnetwork/coding-guidelines-v20";
+const REPO = "alimtvnetwork/coding-guidelines-v22";
 
 // ---------- data loaders ----------
 

@@ -67,10 +67,10 @@
     editing the manifest.
 
 .EXAMPLE
-    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.ps1 | iex
+    irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/splitdb-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v20/main/splitdb-install.ps1))) -Version v5.9.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v22/main/splitdb-install.ps1))) -Version v5.9.0 -Target .\vendor
 #>
 
 param(
@@ -173,8 +173,8 @@ function Stop-Install {
 $BundleName = "splitdb"
 $BundleMapping = "spec/04-database-conventions|spec/04-database-conventions,spec/05-split-db-architecture|spec/05-split-db-architecture,spec/06-seedable-config-architecture|spec/06-seedable-config-architecture"
 $ArchiveStableName = "splitdb"
-$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v20/releases"
-$RepoSlug = "alimtvnetwork/coding-guidelines-v20"
+$ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v22/releases"
+$RepoSlug = "alimtvnetwork/coding-guidelines-v22"
 $AutoOpenEntry = ""
 $PrebuiltSrc = ""
 $PrebuiltDest = ""
