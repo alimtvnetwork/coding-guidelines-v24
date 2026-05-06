@@ -144,7 +144,8 @@
 - [x] **Phase 7** — `19-incremental-backup-sync.md` v1.0.0 (two `SyncOp` shapes, `BackupSyncWatermark`, envelope = SQLite file, compaction safety rule); `WORKER-910-*` + `MAIN-810-01` codes; tunables §2.11 extended.
 - [x] **Phase 8** — `20-backup-encryption-and-keys.md` v1.0.0 (Pair-RSA + Envelope-AES + HKDF zip password resolving OQ-A3, four-state rotation, `BackupKeyEpoch` table); `WORKER-920-01..05` + `MAIN-820-01..03` codes; tunables §2.12 added.
 - [x] **Phase 9** — `21-backup-endpoints.md` v1.0.0 (5 S2S OAuth endpoints: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health; endpoint↔scope matrix; CODE-RED handler budgets); `MAIN-830-01..02` wire codes; tunables §2.13 added.
-- [ ] Phases 10–12 — pending.
+- [x] **Phase 10** — `22-backup-apply-logic.md` v1.0.0 (5-stage pipeline, V1–V7 validation, single-TX dispatch, DLQ no-silent-skip, V7 idempotency via UNIQUE lock); `BackupApplyIdempotency` + `BackupApplyDeadLetter` tables; `WORKER-930-01..04` opening overflow `WORKER-21200-21299` + `MAIN-840-01`; tunables §2.14 added.
+- [ ] Phases 11–12 — pending.
 
 > **File numbering:** Phase 5 took the `17-…` slot, so backup-nodes is `18-…`, incremental sync `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
 
