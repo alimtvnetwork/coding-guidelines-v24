@@ -93,8 +93,11 @@ CREATE TABLE BackupSnapshotCatalog (
     Sha256Hex                TEXT    NOT NULL,
     BuiltAtEpoch             INTEGER NOT NULL,
     StoragePath              TEXT    NOT NULL,        -- relative under var/snapshots/
-    Status                   TEXT    NOT NULL,        -- Available | Reaped | Corrupt
+    Status                   TEXT    NOT NULL,        -- Available | Pinned | Reaped | Corrupt
     ReapedAtEpoch            INTEGER NULL,
+    PinReason                TEXT    NULL,            -- audit trail for Status='Pinned' (Phase 12.2)
+    PinnedAtEpoch            INTEGER NULL,            -- when the pin was applied (D2)
+    PinnedByActor            TEXT    NULL,            -- operator identity that pinned (S2S sub or PowerAdmin UserId)
     Description              TEXT    NULL,            -- entity-ish ref → Rule 10 (still nullable)
     UNIQUE (BackupWorkerNodeId, PrimaryWorkerNodeId, SnapshotDate)
 );
@@ -141,9 +144,34 @@ Operator overrides:
 | Override | Mechanism | Effect |
 |---|---|---|
 | Per-pairing retention | Seedable-Config `MainWorker.Backup.SnapshotRetentionDays` | Lifts/lowers the global default. Linter `BACKUP-SNAP-002` enforces ≥ 7 days minimum (compliance floor). |
-| Pin a snapshot | Manual `UPDATE BackupSnapshotCatalog SET Status='Pinned' WHERE …` | Reserved value `Pinned` survives the sweep. Phase 12 will add the migration adding `Pinned` to the Status enum. |
+| Pin a snapshot | BE-3 sub-route `POST /API/V1/Backup/Snapshot/Pin` (per `21-backup-endpoints.md`) — see §6.1 below for the column contract | Sets `Status='Pinned'` and stamps `PinReason`, `PinnedAtEpoch`, `PinnedByActor`. Pinned rows survive every retention sweep until explicitly unpinned. |
 
 **No auto-shortening.** The sweep never deletes a snapshot whose date is ≥ cutoff regardless of disk pressure — disk pressure is an operational alert, not a data-loss trigger.
+
+---
+
+### 6.1 Pin / unpin protocol (resolves OQ-23-3)
+
+`Status='Pinned'` is the only retention-bypass mechanism. Because pinning blocks the sweep indefinitely, every pin MUST carry an audit trail — silent pins are a CODE RED violation (no swallowed reasons).
+
+**Required column contract on every pin transition (`Available` → `Pinned`):**
+
+| Column | Required value | Validation |
+|---|---|---|
+| `Status` | `'Pinned'` | Enum check (linter `BACKUP-SNAP-005`). |
+| `PinReason` | NON-empty TEXT, ≤ 500 chars | Free-text per Rule 12 (TEXT NULL on the table — but the pin operation refuses NULL/empty). |
+| `PinnedAtEpoch` | `now()` epoch seconds (D2) | Set server-side; client-supplied values rejected. |
+| `PinnedByActor` | One of: `"S2S:<PairingId>"`, `"User:<UserId>"` | Derived from the calling token; never client-supplied. |
+
+**Unpin transition (`Pinned` → `Available`):** clears all four pin columns in a single transaction. The previous values are preserved in the `EndpointAuthAuditEvent` row written for the pin/unpin call (per `06-core-api-endpoints.md` §5.6) — so the table itself is the **current** state and the audit log is the **history**.
+
+**Forbidden transitions:**
+
+- `Pinned` → `Reaped` directly. The sweep MUST skip pinned rows; explicit unpin is required first.
+- `Pinned` row with NULL `PinReason`. Linter `BACKUP-SNAP-005` fails the build.
+- Pin via raw SQL `UPDATE` outside the documented endpoint. Operational runbooks MUST route through BE-3's sub-route so `EndpointAuthAuditEvent` is written.
+
+**Why three columns instead of just `PinReason`:** "who" and "when" are the audit questions operators always ask after the fact. Capturing them on the row itself (denormalised against the audit log) makes incident response a single SELECT, not a JOIN against a multi-million-row audit table.
 
 ---
 
