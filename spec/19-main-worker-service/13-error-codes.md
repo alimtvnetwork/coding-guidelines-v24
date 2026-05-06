@@ -171,7 +171,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 
 | Code | Flat | Name | Message | HTTP | Source |
 |---|---|---|---|---|---|
-| `MAIN-700-01` | `21170` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
+| `MAIN-700-01` | `21171` | `CacheInvalidationDeliveryFailed` | "Worker did not ACK `InvalidateRoleAccess` within retry budget." | 502 | `17-cascading-roles-and-cache-bin.md` §5.2 |
 
 ---
 
