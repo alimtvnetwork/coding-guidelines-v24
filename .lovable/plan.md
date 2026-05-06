@@ -136,8 +136,9 @@
 
 - [x] **Phase 0** — Plan written.
 - [x] **Phase 1** — `EnumPage` → `AccessItem` rename. Authoritative files updated; stale cross-refs deferred to Phase 12.
-- [x] **Phase 2** — DB convention overhaul. `04-database-conventions/01-naming-conventions.md` Rule 7.1 rewritten as **v2 (epoch INTEGER)**. New **Rule 13** added in `02-schema-design.md` §6.5 for canonical `(Id, Code, Label)` enum tables. `19-…/03-main-db-schema.md` bumped to **v2.0.0**: every `*At` flipped to `INTEGER`, every ref table flattened to `(Id, Code, Label)`, `Company.Slug` / `Company.Name` rename. `05-split-db-architecture/01-fundamentals.md` bumped to **v3.4.0** with propagation banner. Phase-3 banner placed over Main `User` table.
-- [ ] Phases 3–12 — pending.
+- [x] **Phase 2** — DB convention overhaul. `04-database-conventions/01-naming-conventions.md` Rule 7.1 v2 (epoch INTEGER); new Rule 13 `(Id, Code, Label)` in `02-schema-design.md` §6.5; `19-…/03-main-db-schema.md` v2.0.0; `05-split-db-architecture/01-fundamentals.md` v3.4.0; PK universal-truth clarification applied (Rule 1 always wins; Rule 13 only simplifies non-FK descriptive columns).
+- [x] **Phase 3** — Move Users off Main. `User` + `UserRole` + all TOTP columns deleted from Main; new `UserDirectory` routing index; `AccessDenialEvent` and `EndpointAuthAuditEvent` re-keyed to `UserDirectoryId` + snapshotted email; `05-auth-and-2fa.md` v2.0.0 rewritten as credential-blind proxy (Worker mints JWT, Main never sees password hash); `11-split-db-tier-reconciliation.md` v1.1.0 Main §4 / Worker §5 updated. `Role` / `AccessItem` / `RoleAccessItem` remain catalog tables on Main.
+- [ ] Phases 4–12 — pending.
 
 ---
 
