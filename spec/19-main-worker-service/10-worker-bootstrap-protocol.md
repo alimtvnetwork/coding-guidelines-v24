@@ -181,31 +181,20 @@ Missed-heartbeat policy is owned by Main (per `04-worker-routing.md`). The thres
 
 ---
 
-## 8. WorkerNode table (Main-side, canonical)
+## 8. WorkerNode table (Main-side) — see canonical schema
 
-```sql
-CREATE TABLE WorkerNode (
-    WorkerNodeId               INTEGER PRIMARY KEY AUTOINCREMENT,
-    WorkerNodeDisplayName      TEXT NOT NULL UNIQUE,
-    WorkerEndpointPublic       TEXT NOT NULL,
-    WorkerVersionCurrent       TEXT NOT NULL,
-    WorkerOAuthClientId        TEXT NOT NULL UNIQUE,
-    WorkerNodeStatusId         INTEGER NOT NULL REFERENCES WorkerNodeStatus(WorkerNodeStatusId),
-    LastBootInstanceUlid       TEXT NULL,
-    LastHeartbeatAtUtc         TEXT NULL,
-    LastRegisteredAtUtc        TEXT NULL,
-    Description                TEXT NULL
-);
+The canonical `WorkerNode` and `WorkerNodeStatus` table definitions live in **`03-main-db-schema.md` §2.1 and §2.2** and are the single source of truth. This file MUST NOT redefine them.
 
-CREATE TABLE WorkerNodeStatus (
-    WorkerNodeStatusId    INTEGER PRIMARY KEY AUTOINCREMENT,
-    WorkerNodeStatusCode  TEXT NOT NULL UNIQUE,    -- Registering | Active | Quarantined | Retired
-    WorkerNodeStatusLabel TEXT NOT NULL,
-    Description           TEXT NULL
-);
-```
+The bootstrap fields named in §3.1 (`WorkerNodeDisplayName`, `WorkerEndpointPublic`, `WorkerVersionPin`, `BootInstanceUlid`) are the **request-body field names** the Worker sends. They map onto the canonical schema columns as follows:
 
-Status enum seeded via `spec/06-seedable-config-architecture/`.
+| Bootstrap request field | Canonical column in `03-` §2.1 |
+|---|---|
+| `WorkerNodeDisplayName` | `WorkerNodeTitle` |
+| `WorkerEndpointPublic` | `WorkerNodeEndpoint` |
+| `WorkerVersionPin` | `WorkerVersion.WorkerVersionSemver` (latest row, see `03-` §2.7) |
+| `BootInstanceUlid` | not persisted on `WorkerNode`; used only for `X-Idempotency-Key` (see §3.1) |
+
+The `WorkerNodeIdentity` column (`03-` §2.1) is server-derived from the OAuth client identity at registration time. Status enum seeded via `spec/06-seedable-config-architecture/`.
 
 ---
 
