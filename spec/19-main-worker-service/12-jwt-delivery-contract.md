@@ -1,7 +1,7 @@
 # 12 — JWT Delivery Contract (XSS-Safe)
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** audit findings F-A-12, F-D-04, F-B-05 (top-10 fix #3). Closes AC-4.
@@ -194,3 +194,60 @@ Tracked as follow-up FU-7 / FU-8 (extends §8 list of `11-split-db-tier-reconcil
 ---
 
 *JWT delivery contract v1.0.0 — 2026-05-04*
+
+---
+
+## 13. Backup-tier S2S tokens (Phase 12 stub)
+
+**Added:** Phase 12 (Backup-tier consolidation). **Authority for full contract:** `21-backup-endpoints.md` §3.
+
+The Backup tier (BE-1..BE-6 endpoints) does **not** use the React-facing Worker JWT defined in §1–§8. It uses a separate S2S OAuth client-credentials token with its own audience and a mandatory `PairingId` claim.
+
+### 13.1 Backup token shape (canonical)
+
+```jsonc
+{
+  "iss": "main.example.com",          // Main host (unchanged)
+  "aud": "Backup",                     // disjoint from "worker"
+  "sub": "PairingId:01J...ULID",       // S2S principal — the pairing, not a user
+  "PairingId": "01J...ULID",           // MUST equal sub's pairing; mandatory
+  "scope": "Backup.Sync.Write",        // one of the four capabilities
+  "iat": 1714824000,
+  "exp": 1714824900,                   // same TTL as orchestration tokens
+  "jti": "01J...ULID",
+  "kid": "main-s2s-2026-q2"
+}
+```
+
+### 13.2 Verification rules (in order)
+
+1. RS256 signature against the orchestration signing key (reuses §7 verification path with `aud="Backup"` branch).
+2. `aud` claim equals **exactly** `"Backup"`. UI tokens (`aud="worker"`) and orchestration tokens (`aud="main-orchestration"`) MUST be rejected here — no audience downgrade.
+3. `PairingId` claim is present **and** matches a row in the receiving node's `BackupPairing` table (per `19-incremental-backup-sync.md` §5).
+4. `scope` claim matches the endpoint's required scope (per `21-backup-endpoints.md` §3 table).
+5. `exp` in future with `MainWorker.Auth.ClockSkewToleranceSeconds` tolerance.
+
+Any failure → **HTTP 421 Misdirected Request** with error code `MAIN-800-04 BackupPairingMismatch` (per `13-error-codes.md`). CODE RED: no silent passthrough.
+
+### 13.3 Why disjoint from the Worker JWT
+
+| Concern | Worker JWT (`aud="worker"`) | Backup S2S (`aud="Backup"`) |
+|---------|------------------------------|------------------------------|
+| Carrier | JSON body, in-memory React | OAuth `Authorization: Bearer`, S2S only |
+| Principal | End user (`sub=AppUserId`) | Pairing (`sub=PairingId:...`) |
+| TTL | 15 min (UI refreshable) | 15 min (machine refreshable via client-creds) |
+| XSS exposure | Designed-around per §3 | None — never reaches a browser |
+| Cross-node misroute | Detected by `wnk` claim | Detected by `PairingId` claim → 421 |
+
+### 13.4 Test cases (extend §9)
+
+| # | Scenario | Expected |
+|---|----------|----------|
+| T-10 | UI Worker JWT (`aud="worker"`) sent to BE-1 | 421 `MAIN-800-04` |
+| T-11 | Backup token sent to a non-paired Backup node | 421 `MAIN-800-04` |
+| T-12 | Backup token missing `PairingId` claim | 421 `MAIN-800-04` |
+| T-13 | Backup token with valid `PairingId` but wrong `scope` for the endpoint | 403 (per `21-backup-endpoints.md` §3) |
+
+---
+
+*JWT delivery contract v1.1.0 — 2026-05-06 (Phase 12: §13 Backup S2S tokens stub added)*
