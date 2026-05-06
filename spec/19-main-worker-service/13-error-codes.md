@@ -322,4 +322,4 @@ Failure = build break.
 
 ---
 
-*Error codes (Main/Worker Service) v1.2.0 — 2026-05-06 (Phase 8: +`WORKER-920-01..05` Backup Encryption decrypt failures; +`MAIN-820-01..03` Pair-RSA rotation orchestration; §4 reserved-range refresh — `WORKER-21095-21099` and `MAIN-21186-21188` now consumed)*
+*Error codes (Main/Worker Service) v1.3.0 — 2026-05-06 (Phase 9: +`MAIN-830-01..02` Backup Endpoints wire — `SnapshotNotFound` 21189, `RestoreAlreadyInProgress` 21190; §4 reserved-range refresh — `MAIN-21191-21199` reserved for Phase 11 snapshot/restore)*
