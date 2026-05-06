@@ -84,9 +84,9 @@ Unique: `(Slug)`. Seedable-Config aliases `CompanySlug → Slug` / `CompanyName 
 | `UserPasswordHash` | TEXT | NO | Salted, see `05-auth-and-2fa.md` §3 |
 | `UserPasswordSalt` | TEXT | NO | |
 | `CompanyId` | INTEGER | NO | FK |
-| `UserCreatedAt` | TEXT | NO | |
+| `UserCreatedAt` | INTEGER | NO | Epoch seconds, UTC |
 | `UserTotpSecret` | TEXT | YES | Base32-encoded RFC-6238 shared secret. NULL = TOTP not enrolled. Encrypted-at-rest per `05-auth-and-2fa.md` §4. (Resolves F-A-24.) |
-| `UserTotpEnrolledAt` | TEXT | YES | ISO-8601 enrollment timestamp; NULL until first successful TOTP verification. |
+| `UserTotpEnrolledAt` | INTEGER | YES | Epoch seconds, UTC; NULL until first successful TOTP verification. |
 | `UserTotpBackupCodesHash` | TEXT | YES | JSON array of bcrypt hashes of 10 single-use backup codes per `05-§4`. NULL until enrollment. |
 | `Description` | TEXT | YES |
 
