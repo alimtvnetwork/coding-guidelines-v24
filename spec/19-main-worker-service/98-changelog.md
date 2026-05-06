@@ -4,6 +4,32 @@
 
 ---
 
+## v2.9.0 — 2026-05-06 (Phase 11 — Snapshot storage + restore flow)
+
+**Scope:** Resolves locked decision **D14** (date-by-date full snapshot storage on backup; main-controlled restore by date). Closes open question **OQ-A4** — snapshot retention adopted at **30 days rolling** (linter floor: 7 days). Final backup-tier spec; only diagrams + acceptance criteria + linter promotion remain (Phase 12).
+
+- New file **`23-snapshot-storage-and-restore.md` v1.0.0** — three-moment lifecycle (Build / Catalogue / Restore), eight-step Build pipeline using SQLite's `sqlite3_backup_init` for transactional consistency, snapshot zip password derived from a separate HKDF salt (`"BackupSnapshot/v1"`) to prevent envelope/snapshot keystream collision, eight-step Restore flow that re-seals the snapshot under the **current Active KeyEpoch** (forward secrecy — never revives a Retired epoch), new `BackupSnapshotCatalog` (entity-ish, Rule 10) + `BackupSnapshotJob` (transactional, Rule 11) + `BackupRestoreJob` (transactional, Rule 11) tables on the backup App tier, retention sweep with `Pinned` status reserved for operator-protected snapshots, never-auto-shorten guarantee under disk pressure.
+- New endpoint **BE-6** `POST /API/V1/Backup/RestoreInbox` hosted on the **primary** Worker — symmetric counterpart to BE-1 but flowing backward; uses scope `Backup.Restore.Apply`; bypasses `22-backup-apply-logic.md` Stage-4 dispatch (offline App-tier import).
+- Final wiring of the **`Backup` S2S audience** reserved by Phase 9 §9: 5 scopes (`Backup.Diff.Write`, `Backup.Rotate.Write`, `Backup.Restore.Write`, `Backup.Restore.Apply`, `Backup.Read`); mandatory `PairingId` JWT claim; mismatch short-circuits with `MAIN-800-04`.
+- `13-error-codes.md` → **v1.5.0**: §2.10 extended with `WORKER-940-01..04` (`SnapshotQuiesceTimeout` 21204, `RestoreImportFailed` 21205, `SnapshotBuildTimeout` 21206, `SnapshotSealFailed` 21207). §3.11 extended with `MAIN-840-02 SnapshotCorrupt` (21192). Reserved-range table refreshed; `MAIN-21193-21199` reserved for future overflow.
+- `15-tunable-constants.md` → **v1.10.0**: new §2.15 — `SnapshotRetentionDays=30` (resolves OQ-A4), `Snapshot.BuildHourUtc=3`, `Snapshot.QuiesceTimeoutSeconds=120`, `Snapshot.MaxBuildSeconds=1800` (30 m), `Restore.PrimaryAckTimeoutSeconds=600` (10 m). All Backup-tier tunables now allocated.
+
+**Cross-spec impact:**
+- `05-auth-and-2fa.md` §S2S — Phase 12 cleanup will add a one-line stub citing `23-…` §9 for the `Backup` audience (no schema change needed; audience names are config).
+- `12-jwt-delivery-contract.md` — Phase 12 cleanup will document the mandatory `PairingId` claim on `Backup`-audience tokens.
+- `06-core-api-endpoints.md` §2 — Phase 12 cleanup will merge BE-1..BE-6 catalogue rows from `21-…` §2 + `23-…` §8 into the canonical endpoint table.
+- ER diagram regen deferred to Phase 12 — Worker ER must show `BackupSnapshotCatalog`, `BackupSnapshotJob`, `BackupRestoreJob`.
+- A successful restore (R7) **resets** the incremental watermark by definition — `BackupSyncWatermark.LastAcceptedSyncOpSeq` is realigned to the snapshot's max `SyncOpSeq` so subsequent BE-1 deliveries continue without re-shipping pre-snapshot rows.
+
+**Decisions resolved (this phase):**
+- D14 — fully spec'd (date-named files, Main-controlled restore-by-date).
+- OQ-A4 — **30 days rolling** with operator override and 7-day compliance floor.
+
+**Open questions still pending:**
+- OQ-23-1 (snapshot dedup pyramid for low-write primaries), OQ-23-2 (partial-table restore), OQ-23-3 (`PinReason` column for `Pinned` status) — all logged in `23-…` §14, non-blocking; OQ-23-3 will be picked up by the Phase-12 migration.
+
+---
+
 ## v2.8.0 — 2026-05-06 (Phase 10 — Backup apply pipeline)
 
 **Scope:** Server-side processing pipeline that runs on the backup node once BE-1 (`21-backup-endpoints.md` §4) accepts a sealed envelope. Wire is owned by Phase 9, encryption by Phase 8, CDC source-side by Phase 7. Snapshot/restore remains Phase 11.

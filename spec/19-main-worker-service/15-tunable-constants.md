@@ -305,4 +305,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.9.0 — 2026-05-06 (Phase 10: §2.14 added — MaxRetriesPerEnvelope, TransactionTimeoutSeconds, DeadLetterRetentionDays, IdempotencyRowRetentionDays)*
+*Tunable constants v1.10.0 — 2026-05-06 (Phase 11: §2.15 added — SnapshotRetentionDays=30 resolving OQ-A4, Snapshot.BuildHourUtc, Snapshot.QuiesceTimeoutSeconds, Snapshot.MaxBuildSeconds, Restore.PrimaryAckTimeoutSeconds)*

@@ -45,7 +45,7 @@
 - **OQ-A1:** Cascading beyond simple union — propose role inheritance hierarchy (parent role implies child accesses)? Default = simple union.
 - **OQ-A2:** Cache-bin technology — in-memory (process-local) vs SQLite memory DB vs Redis? Default proposal = SQLite `:memory:` per-process with TTL invalidation broadcast via Main.
 - **OQ-A3:** Zip password "known pattern" — propose `HMAC-SHA256(SharedSecret, BackupTimestampEpoch)` truncated to 32 hex chars. Confirm.
-- **OQ-A4:** Snapshot retention policy (days). Default proposal = 30 days rolling.
+- ~~**OQ-A4:**~~ ✅ RESOLVED 2026-05-06 (Phase 11) — `MainWorker.Backup.SnapshotRetentionDays = 30` rolling, with operator override + 7-day compliance floor.
 
 ---
 
@@ -145,7 +145,8 @@
 - [x] **Phase 8** — `20-backup-encryption-and-keys.md` v1.0.0 (Pair-RSA + Envelope-AES + HKDF zip password resolving OQ-A3, four-state rotation, `BackupKeyEpoch` table); `WORKER-920-01..05` + `MAIN-820-01..03` codes; tunables §2.12 added.
 - [x] **Phase 9** — `21-backup-endpoints.md` v1.0.0 (5 S2S OAuth endpoints: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health; endpoint↔scope matrix; CODE-RED handler budgets); `MAIN-830-01..02` wire codes; tunables §2.13 added.
 - [x] **Phase 10** — `22-backup-apply-logic.md` v1.0.0 (5-stage pipeline, V1–V7 validation, single-TX dispatch, DLQ no-silent-skip, V7 idempotency via UNIQUE lock); `BackupApplyIdempotency` + `BackupApplyDeadLetter` tables; `WORKER-930-01..04` opening overflow `WORKER-21200-21299` + `MAIN-840-01`; tunables §2.14 added.
-- [ ] Phases 11–12 — pending.
+- [x] **Phase 11** — `23-snapshot-storage-and-restore.md` v1.0.0 (3-moment lifecycle, 8-step Build using `sqlite3_backup_init`, separate HKDF salt for snapshot password, 8-step Restore re-sealing under current Active KeyEpoch); BE-6 RestoreInbox on primary; `BackupSnapshotCatalog` + `BackupSnapshotJob` + `BackupRestoreJob` tables; final `Backup` S2S audience wiring with mandatory `PairingId` JWT claim; `WORKER-940-01..04` + `MAIN-840-02`; tunables §2.15 added — **OQ-A4 resolved at 30 days rolling**.
+- [ ] Phase 12 — pending (diagrams + acceptance criteria + linter promotion + final 5.13.0 bump).
 
 > **File numbering:** Phase 5 took the `17-…` slot, so backup-nodes is `18-…`, incremental sync `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
 
