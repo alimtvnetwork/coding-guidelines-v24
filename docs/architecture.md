@@ -2,7 +2,7 @@
 
 > **Version:** <!-- STAMP:VERSION -->5.13.0-phase9<!-- /STAMP:VERSION -->
 > **Updated:** <!-- STAMP:UPDATED -->2026-05-06<!-- /STAMP:UPDATED -->
-> **Stats:** <!-- STAMP:FILES -->661<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->142,144<!-- /STAMP:LINES --> lines).
+> **Stats:** <!-- STAMP:FILES -->662<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->142,420<!-- /STAMP:LINES --> lines).
 
 ---
 

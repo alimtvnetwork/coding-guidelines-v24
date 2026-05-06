@@ -295,4 +295,4 @@ Failure = build break.
 
 ---
 
-*Tunable constants v1.8.0 — 2026-05-06 (Phase 9: §2.13 added — five Backup-endpoint timeouts: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health)*
+*Tunable constants v1.9.0 — 2026-05-06 (Phase 10: §2.14 added — MaxRetriesPerEnvelope, TransactionTimeoutSeconds, DeadLetterRetentionDays, IdempotencyRowRetentionDays)*
