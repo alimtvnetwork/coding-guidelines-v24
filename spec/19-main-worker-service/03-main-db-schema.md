@@ -41,21 +41,21 @@ ERD: `diagrams/erd-main-db.mmd`.
 | `WorkerNodeEndpoint` | TEXT | NO | Base URL, e.g. `https://w1.example.com` |
 | `WorkerNodeStatusId` | INTEGER | NO | FK → `WorkerNodeStatus.WorkerNodeStatusId` |
 | `WorkerNodeKindId` | INTEGER | NO | FK → `WorkerNodeKind.WorkerNodeKindId` |
-| `WorkerNodeRegisteredAt` | TEXT | NO | ISO-8601 |
-| `WorkerNodeLastSeenAt` | TEXT | NO | ISO-8601, updated on heartbeat |
+| `WorkerNodeRegisteredAt` | INTEGER | NO | Epoch seconds, UTC |
+| `WorkerNodeLastSeenAt` | INTEGER | NO | Epoch seconds, UTC; updated on heartbeat |
 | `Description` | TEXT | YES | Per Rule 11 |
 
 Unique: `(WorkerNodeIdentity)`.
 
 ### 2.2 `WorkerNodeStatus` (ref) and `WorkerNodeKind` (ref)
 
-Both follow the same shape:
+Both follow the canonical `(Id, Code, Label)` ref shape (Rule 13):
 
 | Column | Type | Null |
 |--------|------|------|
 | `{TableName}Id` | INTEGER | NO (PK) |
-| `{TableName}Code` | TEXT | NO (unique, e.g. `Active`, `Draining`, `Offline`) |
-| `{TableName}Label` | TEXT | NO |
+| `Code` | TEXT | NO (unique, e.g. `Active`, `Draining`, `Offline`) |
+| `Label` | TEXT | NO (human-readable) |
 | `Description` | TEXT | YES |
 
 Seed values via Seedable-Config. Statuses: `Active`, `Draining`, `Offline`, `Quarantined`. Kinds: `Standard`, `HighMemory`, `Reserved` (extensible).
