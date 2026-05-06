@@ -1,7 +1,9 @@
 # 07 — Role-Based Dashboards
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 2.0.0
+
+> **v2.0.0 rename (Phase 1):** all references to `AccessItem` are now `AccessItem`. Access checks resolve by `Code` or by `PageUrlSuffix` matcher. See `03-main-db-schema.md` §2.6.1 and `14-rbac-and-status-seed.md`.
 
 Roles, dashboards, and the **non-negotiable** access-check pattern.
 
@@ -12,9 +14,9 @@ Roles, dashboards, and the **non-negotiable** access-check pattern.
 Per verbatim §Roles.3:
 
 > ❌ **NEVER** check `if (user.role === 'PowerAdmin')`.
-> ✅ **ALWAYS** check `User has access to {EnumPage}`.
+> ✅ **ALWAYS** check `User has access to {AccessItem}`.
 
-Why: roles change. Capabilities don't. Tomorrow a new role (`SupportAgent`) needs to see the billing page — with the role-based check you change every site of the check; with the page-based check you grant `SupportAgent → BillingPage` once.
+Why: roles change. Capabilities don't. Tomorrow a new role (`SupportAgent`) needs the billing screen — with the role-based check you change every call site; with the AccessItem-based check you grant `SupportAgent → AccessItem.Billing` once.
 
 ---
 
@@ -32,46 +34,40 @@ Role assignment happens from the Power Admin dashboard (verbatim §Roles.4).
 
 ---
 
-## 3. `EnumPage` Capability Catalog
+## 3. `AccessItem` Capability Catalog
 
 ```php
-enum EnumPage: string
+enum AccessItem: string
 {
-    case PowerAdminPage     = 'PowerAdminPage';
-    case AdminPage          = 'AdminPage';
-    case BillingPage        = 'BillingPage';
-    case CompanySettingsPage = 'CompanySettingsPage';
-    case UserManagementPage = 'UserManagementPage';
-    case WorkerRegistryPage = 'WorkerRegistryPage';
-    case PushUpdatePage     = 'PushUpdatePage';
-    case AuditLogPage       = 'AuditLogPage';
-    case DashboardPage      = 'DashboardPage';
+    case PowerAdmin      = 'PowerAdmin';
+    case Admin           = 'Admin';
+    case Billing         = 'Billing';
+    case CompanySettings = 'CompanySettings';
+    case UserManagement  = 'UserManagement';
+    case WorkerRegistry  = 'WorkerRegistry';   // UI label: "Region Registry"
+    case PushUpdate      = 'PushUpdate';
+    case AuditLog        = 'AuditLog';
+    case Dashboard       = 'Dashboard';
 }
 ```
 
-Extensible. Adding a page = add an enum case + a row in `RolePageAccess` join table seed.
+Code values match the `AccessItem.Code` column (see `03-main-db-schema.md` §2.6.1). Each `AccessItem` row also carries a `PageUrlSuffix` used as a route-matcher fallback when callers do not pass an explicit `Code`.
+
+Extensible. Adding a capability = add an enum case + a row in the `AccessItem` seed (`14-rbac-and-status-seed.md`) + a row in the `RoleAccessItem` seed for each role that should hold it.
 
 ---
 
 ## 4. Schema Additions for Access (Main DB)
 
-### 4.1 `RolePageAccess` (join, exempt from Description rule)
+`AccessItem`, `RoleAccessItem`, and `AccessDenialEvent` are defined authoritatively in `03-main-db-schema.md` §2.6.1–§2.6.3. This file does not duplicate columns — refer there for the exact shape.
 
-| Column | Type | Null |
-|--------|------|------|
-| `RolePageAccessId` | INTEGER | NO (PK) |
-| `RoleId` | INTEGER | NO (FK) |
-| `EnumPageCode` | TEXT | NO (matches `EnumPage` value) |
+### 4.1 Default seed summary (full row set in `14-rbac-and-status-seed.md`)
 
-Unique: `(RoleId, EnumPageCode)`.
-
-### 4.2 Default seed (via Seedable-Config)
-
-| Role | Pages |
-|------|-------|
-| `PowerAdmin` | All `EnumPage` values |
-| `AdminUser` | `AdminPage`, `BillingPage`, `CompanySettingsPage`, `UserManagementPage`, `DashboardPage` |
-| `Member` | `DashboardPage` |
+| Role | AccessItems granted |
+|------|---------------------|
+| `PowerAdmin` | All 9 `AccessItem` values |
+| `AdminUser` | `Admin`, `Billing`, `CompanySettings`, `UserManagement`, `AuditLog` (read-only), `Dashboard` |
+| `Member` | `Dashboard` |
 
 ---
 
@@ -80,7 +76,7 @@ Unique: `(RoleId, EnumPageCode)`.
 CODE RED compliant (≤8 lines, positive guard, max 2 operands):
 
 ```php
-public function userHasAccessToPage(int $userId, EnumPage $page): bool
+public function userHasAccessToItem(int $userId, AccessItem $accessItem): bool
 {
     $roleIds = $this->userRoleRepo->roleIdsFor($userId);
     return $this->rolePageAccessRepo->anyRoleGrants($roleIds, $page->value);
@@ -92,7 +88,7 @@ Used in middleware:
 ```php
 public function handle(Request $request, Closure $next, string $pageCode): Response
 {
-    $page = EnumPage::from($pageCode);
+    $page = AccessItem::from($accessItemCode);
     $this->guardUserHasAccess($request->user()->id, $page);
     return $next($request);
 }
@@ -103,7 +99,7 @@ public function handle(Request $request, Closure $next, string $pageCode): Respo
 Route declaration (resolves F-A-34 — stack-agnostic contract first, Laravel example second):
 
 **Stack-agnostic contract.** Every route that mutates or reads a governed page MUST be wrapped by an access guard that:
-1. Resolves the route to its `EnumPageCode` (PascalCase, from `EnumPage` ref table per `03-` §2.6.1).
+1. Resolves the route to its `Code` (PascalCase, from `AccessItem` ref table per `03-` §2.6.1).
 2. Calls `guardUserHasAccess(userId, pageCode)` BEFORE the controller body.
 3. On denial, returns the `AccessDenied` envelope per `08-error-contract.md` §3.5 with HTTP 403.
 
@@ -113,14 +109,14 @@ Laravel example (one valid binding of the contract above):
 
 ```php
 Route::post('/API/V1/Workers/All/Update', UpdateAllController::class)
-    ->middleware('access:PushUpdatePage');
+    ->middleware('access:PushUpdate');
 ```
 
 Express example (equivalent contract):
 
 ```ts
 app.post('/API/V1/Workers/All/Update',
-    requireAccess('PushUpdatePage'),
+    requireAccess('PushUpdate'),
     updateAllController);
 ```
 
@@ -136,7 +132,7 @@ app.post('/API/V1/Workers/All/Update',
 - Audit log viewer
 - Role/access matrix editor
 
-Required pages: `PowerAdminPage`, `WorkerRegistryPage`, `PushUpdatePage`, `AuditLogPage`.
+Required pages: `PowerAdmin`, `WorkerRegistry`, `PushUpdate`, `AuditLog`.
 
 ### 6.2 Admin User Dashboard
 - Company profile editor (calls Worker)
@@ -144,26 +140,26 @@ Required pages: `PowerAdminPage`, `WorkerRegistryPage`, `PushUpdatePage`, `Audit
 - Billing
 - Their company's analytics
 
-Required pages: `AdminPage`, `BillingPage`, `CompanySettingsPage`, `UserManagementPage`.
+Required pages: `Admin`, `Billing`, `CompanySettings`, `UserManagement`.
 
 ### 6.3 Member Dashboard
 - The actual product surface (graphs, business data — all from Worker).
 
-Required pages: `DashboardPage`.
+Required pages: `Dashboard`.
 
 ---
 
 ## 7. Frontend Gating
 
-React components use a `<RequiresAccess page={EnumPage.PushUpdatePage}>` wrapper:
+React components use a `<RequiresAccess page={AccessItem.PushUpdate}>` wrapper:
 
 ```tsx
-<RequiresAccess page={EnumPage.PushUpdatePage} fallback={<Hidden/>}>
+<RequiresAccess page={AccessItem.PushUpdate} fallback={<Hidden/>}>
   <PushUpdatePanel />
 </RequiresAccess>
 ```
 
-The wrapper reads access flags from the worker JWT's `roles` claim resolved against the local `RolePageAccess` cache (refreshed when token refreshes). NEVER hardcode role names in JSX.
+The wrapper reads access flags from the worker JWT's `roles` claim resolved against the local `RoleAccessItem` cache (refreshed when token refreshes). NEVER hardcode role names in JSX.
 
 Per `.lovable/coding-guidelines/coding-guidelines.md`: React components < 100 lines, small and reusable.
 
@@ -175,4 +171,4 @@ Every access denial writes to an `AccessDenialEvent` table (transactional, inclu
 
 ---
 
-*Role-based dashboards v1.0.0 — 2026-05-04*
+*Role-based dashboards v2.0.0 — 2026-05-06 (AccessItem rename)*

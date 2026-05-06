@@ -134,8 +134,9 @@
 
 ## Status
 
-- [x] **Phase 0** — Plan written (this commit). Awaiting `next`.
-- [ ] Phases 1–12 — pending.
+- [x] **Phase 0** — Plan written.
+- [x] **Phase 1** — `EnumPage` → `AccessItem` rename (authoritative files: `03-main-db-schema.md`, `14-rbac-and-status-seed.md`, `07-role-based-dashboards.md`). New column `PageUrlSuffix`. Deprecation aliases noted. Changelog entry v1.4.0 added. **Deferred to Phase 12 cleanup pass:** stale references in `00-`, `01-`, `02-`, `04-`, `05-`, `06-`, `08-`, `09-`, `11-`, `13-`, `97-`, `99-`, `error-codes.json`, `diagrams/erd-main-db.mmd`, `audit/*` — these are non-authoritative cross-refs that will be batch-rewritten when the ER diagram is regenerated in Phase 12.
+- [ ] Phases 2–12 — pending.
 
 ---
 
