@@ -140,15 +140,18 @@ CREATE TABLE AuthMechanism (
 
   "WorkerNodeStatus": {
     "AddedIn": "1.3.0",
-    "Version": "1.3.0",
+    "Version": "1.5.0",
     "PrimaryKey": ["WorkerNodeStatusCode"],
     "MergeStrategy": "UpsertByLogicalKey",
-    "Description": "Worker lifecycle states observed by Main.",
+    "Description": "Worker lifecycle states observed by Main. Codes Active/Draining/Offline/Quarantined/Retired apply to primaries (IsBackup=0); BackupAttached/BackupLagging apply to backups (IsBackup=1) per 18-backup-nodes.md §4.3.",
     "Rows": [
-      { "WorkerNodeStatusCode": "Registering", "WorkerNodeStatusLabel": "Registering", "Description": "Initial state — handshake in progress." },
-      { "WorkerNodeStatusCode": "Active",      "WorkerNodeStatusLabel": "Active",      "Description": "Heartbeating; eligible for routing." },
-      { "WorkerNodeStatusCode": "Quarantined", "WorkerNodeStatusLabel": "Quarantined", "Description": "Missed >=3 heartbeats; new tenants not routed here." },
-      { "WorkerNodeStatusCode": "Retired",     "WorkerNodeStatusLabel": "Retired",     "Description": "Permanently removed; preserved for audit." }
+      { "WorkerNodeStatusCode": "Registering",    "WorkerNodeStatusLabel": "Registering",     "Description": "Initial state — handshake in progress." },
+      { "WorkerNodeStatusCode": "Provisioning",   "WorkerNodeStatusLabel": "Provisioning",    "Description": "Backup registered; awaiting first diff. Phase 6." },
+      { "WorkerNodeStatusCode": "Active",         "WorkerNodeStatusLabel": "Active",          "Description": "Primary heartbeating; eligible for routing. Never assigned to IsBackup=1 rows." },
+      { "WorkerNodeStatusCode": "Quarantined",    "WorkerNodeStatusLabel": "Quarantined",     "Description": "Primary missed >=3 heartbeats; new tenants not routed here." },
+      { "WorkerNodeStatusCode": "Retired",        "WorkerNodeStatusLabel": "Retired",         "Description": "Permanently removed; preserved for audit." },
+      { "WorkerNodeStatusCode": "BackupAttached", "WorkerNodeStatusLabel": "Backup Attached", "Description": "Backup healthy; last diff applied within MainWorker.Backup.LagWarningSeconds. Phase 6." },
+      { "WorkerNodeStatusCode": "BackupLagging",  "WorkerNodeStatusLabel": "Backup Lagging",  "Description": "Backup attached but diff lag exceeds MainWorker.Backup.LagWarningSeconds. No auto-failover. Phase 6." }
     ]
   },
 
