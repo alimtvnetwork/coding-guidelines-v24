@@ -266,30 +266,32 @@ The naming guideline (Rule 11) distinguishes the two transactional columns by **
 ### 6.4 Examples
 
 ```sql
--- ✅ Entity table — gains Description (Rule 10)
+-- ✅ Entity table — gains Description (Rule 10), epoch CreatedAt (Rule 7.1)
 CREATE TABLE AgentSite (
     AgentSiteId  INTEGER PRIMARY KEY AUTOINCREMENT,
     SiteName     TEXT NOT NULL,
-    Description  TEXT NULL,                    -- future-proofing / help / hint
-    CreatedAt    TEXT NOT NULL DEFAULT (datetime('now'))
+    Description  TEXT NULL,                                  -- future-proofing / help / hint
+    CreatedAt    INTEGER NOT NULL DEFAULT (unixepoch())      -- epoch seconds, UTC
 );
 
--- ✅ Lookup table — gains Description (Rule 10)
+-- ✅ Lookup / enum table — canonical (Id, Code, Label) shape (Rule 13)
+--    See §6.5 below. Replaces older `{Table}Code` style.
 CREATE TABLE TransactionStatus (
     TransactionStatusId  INTEGER PRIMARY KEY AUTOINCREMENT,
-    StatusCode           TEXT NOT NULL UNIQUE,
-    Description          TEXT NULL             -- "Pending settlement with bank"
+    Code                 TEXT NOT NULL UNIQUE,               -- machine identifier, e.g. 'PendingSettlement'
+    Label                TEXT NOT NULL,                      -- human-readable, e.g. 'Pending settlement'
+    Description          TEXT NULL                           -- "Pending settlement with bank"
 );
 
--- ✅ Transactional table — gains Notes AND Comments (Rule 11)
+-- ✅ Transactional table — gains Notes AND Comments (Rule 11), epoch CreatedAt
 CREATE TABLE Transaction (
     TransactionId        INTEGER PRIMARY KEY AUTOINCREMENT,
     AgentSiteId          INTEGER NOT NULL,
     Amount               REAL    NOT NULL,
     TransactionStatusId  INTEGER NOT NULL,
-    Notes                TEXT NULL,            -- internal or operational context
-    Comments             TEXT NULL,            -- human-facing or discussion-oriented context
-    CreatedAt            TEXT NOT NULL DEFAULT (datetime('now')),
+    Notes                TEXT NULL,                          -- internal or operational context
+    Comments             TEXT NULL,                          -- human-facing or discussion-oriented context
+    CreatedAt            INTEGER NOT NULL DEFAULT (unixepoch()),
     FOREIGN KEY (AgentSiteId)         REFERENCES AgentSite(AgentSiteId),
     FOREIGN KEY (TransactionStatusId) REFERENCES TransactionStatus(TransactionStatusId)
 );
@@ -299,12 +301,34 @@ CREATE TABLE UserBill (
     UserBillId   INTEGER PRIMARY KEY AUTOINCREMENT,
     UserId       INTEGER NOT NULL,
     AmountDue    REAL    NOT NULL,
-    DueDate      TEXT    NOT NULL,
-    Notes        TEXT NULL,                    -- "Adjusted for credit memo #4421"
-    Comments     TEXT NULL,                    -- "Customer disputes line 3"
+    DueDate      INTEGER NOT NULL,                           -- epoch seconds (date-of-day = midnight UTC)
+    Notes        TEXT NULL,                                  -- "Adjusted for credit memo #4421"
+    Comments     TEXT NULL,                                  -- "Customer disputes line 3"
     FOREIGN KEY (UserId) REFERENCES User(UserId)
 );
 ```
+
+### 6.5 Rule 13 — Enum / Lookup Table Canonical Shape `(Id, Code, Label)`
+
+> **Effective v5.13.0.** Every enum-like reference table (status, type, role, kind, category, channel, etc.) MUST use exactly these three columns plus optional `Description`:
+
+| Column | Type | Constraint | Purpose |
+|--------|------|------------|---------|
+| `{TableName}Id` | INTEGER | PK, AUTOINCREMENT | Surrogate key |
+| `Code` | TEXT | NOT NULL, UNIQUE | Stable machine identifier (PascalCase). Code is referenced by application code, not the Id. |
+| `Label` | TEXT | NOT NULL | Default human-readable label (English). I18n is handled by a separate `{Table}Translation` table when needed. |
+| `Description` | TEXT | NULL | Optional explanatory hint (Rule 10). |
+
+**Forbidden alternatives** (deprecated): `{Table}Code` as the column name, `Name` instead of `Label`, `DisplayName`, `Title`, mixing `Code`+`Slug` on the same enum table.
+
+**Rationale:** consistent shape across every enum table makes ORM mappers, admin UIs, and seeders trivially generic; downstream code can target `(Code, Label)` without knowing the table name.
+
+**Lookup pattern:**
+```sql
+SELECT TransactionStatusId FROM TransactionStatus WHERE Code = 'PendingSettlement';
+```
+
+**Seeding pattern** — see [`14-rbac-and-status-seed.md`](../19-main-worker-service/14-rbac-and-status-seed.md) for the canonical seed format used by `19-main-worker-service`.
 
 ```sql
 -- ❌ WRONG — entity table without Description (violates Rule 10)
