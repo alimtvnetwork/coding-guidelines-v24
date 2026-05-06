@@ -114,7 +114,9 @@ Implementer wires this to a scheduler (Laravel scheduler / cron / systemd timer)
 
 ## 8. Cross-References
 
+- **`16-update-channels.md`** — three update channels (push / pull-from-main / pull-from-url) with Kubernetes-style reconciliation. **This is the technical realization of the intent captured here.**
 - `spec/14-update/` — authoritative self-update spec
+- `spec/14-update/28-worker-push-instruction.md` — JID schema shared by all channels
 - `mem://features/self-update-architecture` — rename-first + `latest.json` rule
 - `06-core-api-endpoints.md` §2.5, §2.6, §4 — endpoints + schedule
 - `diagrams/seq-push-update.mmd` — push-update sequence (which calls `/SelfUpdate`)

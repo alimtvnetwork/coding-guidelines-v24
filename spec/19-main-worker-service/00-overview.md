@@ -1,13 +1,37 @@
 # 00 — Overview: Main / Worker Service Architecture
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
-**Updated:** 2026-05-04
+**Version:** 1.1.0
+**Updated:** 2026-05-06
 **Default stack:** Laravel (PHP) — stack-agnostic by design.
 
 ---
 
-## 0. Author Mindmaps (source of intent)
+## 0. Mental Model — Kubernetes-style Control Plane
+
+Treat this topology as a **lightweight Kubernetes analogy**:
+
+| Kubernetes concept | This spec's analogue |
+|---|---|
+| Control plane (api-server + scheduler) | **Main Server** — catalog, routing, admission, push-update fan-out |
+| Worker node (kubelet) | **Worker Server** — runs all business logic under its own split-DB |
+| Pod scheduling | Tenant→Worker assignment via `04-worker-routing.md` |
+| Node heartbeat / `kubelet → api-server` | Worker `POST /Heartbeat` to Main |
+| `kubectl apply` / push deploy | Power-Admin push-update (`16-update-channels.md` §2) |
+| Reconciliation loop / desired state | Worker pull-update poll loop (`16-update-channels.md` §3) |
+| Image registry pull | Worker fetching release zip from a known URL (`16-update-channels.md` §4) |
+
+Three update channels exist (full spec in `16-update-channels.md`):
+
+1. **Pull from Main (Kubernetes-style reconciliation)** — Worker periodically polls `GET /API/V1/SelfUpdate/Desired` on Main; if the desired version differs from its running version, Worker self-updates from a Main-issued URL. Always available.
+2. **Pull from a known release URL** — Worker reads its `UpdateSourceUrl` (Seedable-Config) and fetches the latest release JSON+zip directly. Used as Main-independent fallback.
+3. **Push from Main (dev/debug only)** — Power Admin uploads a zip and Main fans it out to Workers. **Disabled in production** (`Env=Production` rejects the endpoint with HTTP 403). Allowed when `Env ∈ {Development, Debug, Staging}`.
+
+The Main↔Worker relationship is **declarative**: Main stores desired state, Workers reconcile toward it. The push channel is an explicit override for dev/staging convenience.
+
+---
+
+## 0.1 Author Mindmaps (source of intent)
 
 The architecture in this folder formalizes these author-drawn mindmaps.
 The single best one-page summary is image 04. See [`images/readme.md`](./images/readme.md) for the full index.
@@ -89,6 +113,7 @@ Full diagrams in `diagrams/` and details in `01-architecture.md`.
 | `07-role-based-dashboards.md` | Roles + `User has access to {EnumPage}` pattern |
 | `08-error-contract.md` | Main↔worker error semantics (inline) |
 | `09-self-update-pointer.md` | Pointer-only doc (no implementation) |
+| `16-update-channels.md` | Three update channels: pull-from-main, pull-from-url, dev-only push |
 | `97-acceptance-criteria.md` | Verbatim acceptance criteria mapping |
 | `98-changelog.md` | Spec version history |
 | `99-consistency-report.md` | Cross-link verification |
