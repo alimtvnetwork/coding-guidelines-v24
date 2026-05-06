@@ -406,9 +406,9 @@ CREATE TABLE AgentSite (
 );
 ```
 
-### Rule 11: Transactional Tables Should Include `Notes` and `Comments`
+### Rule 11: Transactional Tables MUST Include `Notes` and `Comments`
 
-Transactional / invoice / billing / payment / order-like tables SHOULD include these nullable free-text columns:
+Transactional / invoice / billing / payment / order-like tables MUST include these nullable free-text columns (aligns with project memory rule 11; absence triggers linter `MISSING-DESC-001` per the SQL linter spec):
 
 ```sql
 Notes    TEXT NULL,
