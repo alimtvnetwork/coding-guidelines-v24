@@ -107,8 +107,8 @@ Unique: `(UserId, RoleId)`.
 | Column | Type | Null |
 |--------|------|------|
 | `RoleId` | INTEGER | NO (PK) |
-| `RoleCode` | TEXT | NO (unique, e.g. `PowerAdmin`, `AdminUser`, `Member`) |
-| `RoleLabel` | TEXT | NO |
+| `Code` | TEXT | NO (unique, e.g. `PowerAdmin`, `AdminUser`, `Member`) |
+| `Label` | TEXT | NO |
 | `Description` | TEXT | YES |
 
 Seeded via Seedable-Config.
