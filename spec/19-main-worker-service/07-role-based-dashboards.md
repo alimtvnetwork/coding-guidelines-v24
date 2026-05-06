@@ -16,7 +16,7 @@ Per verbatim §Roles.3:
 > ❌ **NEVER** check `if (user.role === 'PowerAdmin')`.
 > ✅ **ALWAYS** check `User has access to {AccessItem}`.
 
-Why: roles change. Capabilities don't. Tomorrow a new role (`SupportAgent`) needs to see the billing page — with the role-based check you change every site of the check; with the page-based check you grant `SupportAgent → BillingPage` once.
+Why: roles change. Capabilities don't. Tomorrow a new role (`SupportAgent`) needs the billing screen — with the role-based check you change every call site; with the AccessItem-based check you grant `SupportAgent → AccessItem.Billing` once.
 
 ---
 
