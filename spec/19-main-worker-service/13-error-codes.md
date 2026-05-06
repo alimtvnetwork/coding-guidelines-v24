@@ -60,6 +60,7 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-300-01` | `21030` | `IdempotencyKeyMissing` | "Required `X-Idempotency-Key` header absent on POST/PUT/PATCH." | 400 | `06-core-api-endpoints.md` §1 |
 | `WORKER-300-02` | `21031` | `CorrelationIdMissing` | "Required `X-Correlation-Id` header absent." | 400 | `06` §1 |
 | `WORKER-300-03` | `21032` | `RequestBodyInvalid` | "Request body fails JSON schema validation." | 400 | `06` |
+| `WORKER-300-04` | `21033` | `BackupNotRoutable` | "Selected `WorkerNode` has `IsBackup = 1`; backup nodes never serve traffic." | 409 | `04-worker-routing.md` §1.4 |
 
 ### 2.5 Business Logic / Versioning (400-499 → 21040-21049)
 
