@@ -141,13 +141,15 @@ A literal AI MUST read every numbered file 00→24 before scoping work. The map 
 
 ## 7. Compliance References
 
+> **Blind-AI inline reference (Phase 13.3):** the operative subset of every inherited rule below — enough to implement without leaving this folder — is inlined in **[`25-inherited-rules.md`](./25-inherited-rules.md)**. Read that file first; the source-spec links remain authoritative on conflict.
+
 This spec inherits and does not redefine:
 
 - `.lovable/coding-guidelines/coding-guidelines.md` — function length, zero-nesting, positive booleans, PascalCase, enum-for-Type/Status/Category/Kind
-- `spec/04-database-conventions/` — DB schema rules (PascalCase, `{TableName}Id`, no UUIDs)
-- `spec/05-split-db-architecture/` — worker-side split-DB
-- `spec/06-seedable-config-architecture/` — config seeding for both tiers
-- `spec/03-error-manage/` — generic error rules
+- `spec/03-error-manage/` — generic error rules (catch → log → rethrow; `apperror` wrapping; explicit file/op context)
+- `spec/04-database-conventions/` — DB schema + REST header rules (PascalCase, `{TableName}Id`, no UUIDs as PKs, `X-Correlation-Id` / `X-Idempotency-Key` / `X-Auth-Action`)
+- `spec/05-split-db-architecture/` — 6-tier split-DB model (Worker uses 4, Main uses 3 per FU-1)
+- `spec/06-seedable-config-architecture/` — SemVer-merged config seeding for both tiers
 
 ---
 
