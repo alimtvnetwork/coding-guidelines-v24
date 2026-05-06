@@ -93,4 +93,24 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 
 ---
 
-*Acceptance criteria v1.0.0 — 2026-05-04*
+## Backup-tier acceptance (Phases 7–11)
+
+| Criterion | Defined in | Test / failure condition |
+|-----------|-----------|--------------------------|
+| CDC ledger captures every Insert/Update/Delete on tracked tables | `19-incremental-backup-sync.md` §3 + `AppBackupTrackedTable` seed | Trigger test: row mutation must produce exactly one `SyncOpLedger` row with monotonic `SyncOpSeq` |
+| Envelopes are sealed under the Active `KeyEpoch` only | `20-backup-encryption-and-keys.md` §4 | Negative test: sealing under Retired epoch must fail with `WORKER-21090-…` |
+| BE-1..BE-6 reject non-S2S traffic at the proxy | `21-backup-endpoints.md` §3 | Wire test: any request without S2S OAuth + `PairingId` claim returns `421 Misdirected Request` |
+| Apply pipeline is idempotent on envelope replay | `22-backup-apply-logic.md` §5 (V7) | Replay test: same `EnvelopeId` twice → second call returns 200 with unchanged `LastAcceptedSyncOpSeq`; no duplicate row writes |
+| Apply failures land in DLQ — never silently dropped | `22-backup-apply-logic.md` §6 | Fault-injection test: each failure mode produces a `BackupApplyDeadLetter` row with `FailureCode` populated (CODE RED enforcement) |
+| Daily snapshot built via `sqlite3_backup_init` | `23-snapshot-storage-and-restore.md` §3 | Build test: snapshot file is openable as SQLite DB and passes `PRAGMA integrity_check` |
+| Snapshot zip uses HKDF salt `"BackupSnapshot/v1"` (distinct from envelope salt) | `23-snapshot-storage-and-restore.md` §4 | Crypto test: derived password differs from envelope keystream for the same `KeyEpoch` |
+| Restore re-seals under current Active KeyEpoch (forward secrecy) | `23-snapshot-storage-and-restore.md` §6 | Restore test: a restore performed after a key rotation MUST NOT decrypt with the retired epoch |
+| Snapshot retention defaults to 30 days rolling, never auto-shortened under disk pressure | `23-…` §7 + `15-tunable-constants.md` §2.15 | Retention sweep test: snapshots older than 30 days deleted unless `Status=Pinned`; disk-pressure path raises alert instead of trimming |
+| Successful restore realigns `BackupSyncWatermark` to snapshot's max `SyncOpSeq` | `23-…` §6 + `seq-backup-restore.mmd` | Integration test: BE-1 deliveries after restore must not re-ship pre-snapshot rows |
+| `Backup` audience tokens carry mandatory `PairingId` claim | `21-backup-endpoints.md` §3 + `12-jwt-delivery-contract.md` (Phase-12 stub) | Wire test: missing or mismatched `PairingId` → `MAIN-800-04` |
+| All Backup-tier tables comply with DB Schema Rules 10/11/12 | `04-database-conventions/` + `erd-backup-tier.mmd` | Linter test: `MISSING-DESC-001` and `DB-FREETEXT-001` pass against the new tables |
+| Linter rules `BACKUP-*` and `DB-SYNCOP-*` enforced in CI | `96-linter-audit.md` (Phase-12 promotion) | CI test: linter-scripts run as part of standards enforcement; failure blocks merge |
+
+---
+
+*Acceptance criteria v1.1.0 — 2026-05-06 (Phase 12 — Backup-tier acceptance added).*
