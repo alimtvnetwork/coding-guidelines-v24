@@ -1,0 +1,130 @@
+%% ==========================================================
+%% NON-AUTHORITATIVE PROJECTION
+%% ==========================================================
+%% Subject:        Main Server SQLite catalog
+%% Authoritative:  spec/19-main-worker-service/03-main-db-schema.md (v1.2.0+)
+%%                 + spec/04-database-conventions/
+%% Status:         Illustrative only. If this diagram disagrees
+%%                 with the authoritative spec(s) above, the
+%%                 spec wins and this file is the bug.
+%% Banner version: 1.1.0 (2026-05-04, sync to 03-main-db-schema.md v1.2.0:
+%%                 added EnumPage, AccessDenialEvent, RolePageAccess FK to
+%%                 EnumPage, User TOTP columns; per audit task #29 + #32)
+%% ==========================================================
+erDiagram
+    WorkerNode ||--o{ Company : "hosts"
+    WorkerNode ||--o{ WorkerVersion : "has versions"
+    WorkerNode ||--o{ WorkerSelectionEvent : "selected in"
+    WorkerNode ||--o{ AccessDenialEvent : "denied at"
+    WorkerNodeStatus ||--o{ WorkerNode : "classifies"
+    WorkerNodeKind ||--o{ WorkerNode : "classifies"
+    Company ||--o{ User : "employs"
+    Company ||--o{ WorkerSelectionEvent : "routed in"
+    User ||--o{ UserRole : "has"
+    User ||--o{ AccessDenialEvent : "triggered by"
+    Role ||--o{ UserRole : "granted via"
+    Role ||--o{ RolePageAccess : "grants"
+    EnumPage ||--o{ RolePageAccess : "governed by"
+    EnumPage ||--o{ AccessDenialEvent : "denied for"
+    WorkerSelectionStrategy ||--o{ WorkerSelectionEvent : "used by"
+
+    WorkerNode {
+        INTEGER WorkerNodeId PK
+        TEXT WorkerNodeTitle
+        TEXT WorkerNodeIdentity UK
+        TEXT WorkerNodeEndpoint
+        INTEGER WorkerNodeStatusId FK
+        INTEGER WorkerNodeKindId FK
+        TEXT WorkerNodeRegisteredAt
+        TEXT WorkerNodeLastSeenAt
+        TEXT Description
+    }
+    WorkerNodeStatus {
+        INTEGER WorkerNodeStatusId PK
+        TEXT WorkerNodeStatusCode UK
+        TEXT WorkerNodeStatusLabel
+        TEXT Description
+    }
+    WorkerNodeKind {
+        INTEGER WorkerNodeKindId PK
+        TEXT WorkerNodeKindCode UK
+        TEXT WorkerNodeKindLabel
+        TEXT Description
+    }
+    Company {
+        INTEGER CompanyId PK
+        TEXT CompanySlug UK
+        TEXT CompanyName
+        INTEGER WorkerNodeId FK
+        TEXT CompanyAssignedAt
+        TEXT Description
+    }
+    User {
+        INTEGER UserId PK
+        TEXT UserEmail UK
+        TEXT UserPasswordHash
+        TEXT UserPasswordSalt
+        INTEGER CompanyId FK
+        TEXT UserCreatedAt
+        TEXT UserTotpSecret
+        TEXT UserTotpEnrolledAt
+        TEXT UserTotpBackupCodesHash
+        TEXT Description
+    }
+    Role {
+        INTEGER RoleId PK
+        TEXT RoleCode UK
+        TEXT RoleLabel
+        TEXT Description
+    }
+    UserRole {
+        INTEGER UserRoleId PK
+        INTEGER UserId FK
+        INTEGER RoleId FK
+    }
+    EnumPage {
+        INTEGER EnumPageId PK
+        TEXT EnumPageCode UK
+        TEXT EnumPageLabel
+        TEXT Description
+    }
+    RolePageAccess {
+        INTEGER RolePageAccessId PK
+        INTEGER RoleId FK
+        INTEGER EnumPageId FK
+        INTEGER CanRead
+        INTEGER CanWrite
+    }
+    AccessDenialEvent {
+        INTEGER AccessDenialEventId PK
+        INTEGER UserId FK
+        INTEGER EnumPageId FK
+        INTEGER WorkerNodeId FK
+        TEXT CorrelationId
+        TEXT OccurredAt
+        TEXT Notes
+        TEXT Comments
+    }
+    WorkerVersion {
+        INTEGER WorkerVersionId PK
+        INTEGER WorkerNodeId FK
+        TEXT WorkerVersionSemver
+        TEXT WorkerVersionRecordedAt
+        TEXT Notes
+        TEXT Comments
+    }
+    WorkerSelectionEvent {
+        INTEGER WorkerSelectionEventId PK
+        INTEGER CompanyId FK
+        INTEGER WorkerNodeId FK
+        INTEGER WorkerSelectionStrategyId FK
+        TEXT WorkerSelectionEventAt
+        TEXT Notes
+        TEXT Comments
+    }
+    WorkerSelectionStrategy {
+        INTEGER WorkerSelectionStrategyId PK
+        TEXT WorkerSelectionStrategyCode UK
+        TEXT WorkerSelectionStrategyLabel
+        TEXT Description
+    }
