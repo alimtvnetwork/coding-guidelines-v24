@@ -171,4 +171,16 @@ Every access denial writes to an `AccessDenialEvent` table (transactional, inclu
 
 ---
 
-*Role-based dashboards v2.0.0 — 2026-05-06 (AccessItem rename)*
+## 9. UI Labels (Phase 4 — D7)
+
+The internal table `WorkerNode` is rendered to end users as **"Region"**. This applies to:
+
+- Power Admin "Worker Registry" page → header reads **"Regions"**; columns include **Region** (was "Worker"), **Sequence**, **Kind**, **Status**, **Backup Of** (shows the primary's `WorkerNodeTitle` when `IsBackup = 1`, else "—").
+- Company create / edit forms → field label **"Region"** (was "Worker").
+- Routing audit views → column **"Region"** (was "Worker").
+
+**Code, table names, column names, JSON keys, error codes, and API URLs are NOT renamed.** Only the rendered label changes. The mapping is a single i18n key: `worker_node.label = "Region"`.
+
+---
+
+*Role-based dashboards v2.1.0 — 2026-05-06 (Phase 4: Region UI label)*
