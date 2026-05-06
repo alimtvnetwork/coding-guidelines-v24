@@ -4,6 +4,32 @@
 
 ---
 
+## v2.10.0 — 2026-05-06 (Phase 12 — Final consolidation)
+
+**Scope:** Closes the Backup System spec arc (Phases 7–11). No new feature surface; this phase is wiring, diagrams, acceptance criteria, and cross-spec stubs. Final version bump to `5.13.0`.
+
+- **Diagrams** — three new `.mmd` files in `diagrams/` (all carry the standard NON-AUTHORITATIVE PROJECTION banner):
+  - `erd-backup-tier.mmd` v1.0.0 — projects all 10 Backup-tier App-DB tables (`SyncOpLedger`, `BackupPairing`, `BackupKeyEpoch`, `BackupSyncWatermark`, `BackupOutboxEnvelope`, `BackupApplyIdempotency`, `BackupApplyDeadLetter`, `BackupSnapshotCatalog`, `BackupSnapshotJob`, `BackupRestoreJob`) with PascalCase + INTEGER PKs + Notes/Comments per Rule 11 / Description per Rule 10.
+  - `seq-incremental-backup.mmd` v1.0.0 — primary → backup CDC flow: trigger → ledger → outbox seal → BE-1 → 5-stage Apply pipeline (with V7 idempotency branch) → watermark advance + ACK; explicit DLQ note (no silent skips).
+  - `seq-backup-restore.mmd` v1.0.0 — operator restore-by-date: BE-3 enqueue (with `MAIN-830-01/02` failure branches) → snapshot decrypt under HKDF `"BackupSnapshot/v1"` → re-seal under current Active KeyEpoch → BE-6 inbox import → watermark realignment.
+- **Diagrams index** (`diagrams/readme.md`) bumped to v1.1.0 — three new rows added to both the authoritative-source table and the user-facing tables; ERDs and Sequence Diagrams sections both extended.
+- **Acceptance criteria** (`97-acceptance-criteria.md`) bumped to v1.1.0 — new section **"Backup-tier acceptance (Phases 7–11)"** with 13 criteria covering: CDC capture, KeyEpoch enforcement, S2S `421 Misdirected Request` enforcement, V7 idempotency, DLQ-no-silent-skip (CODE RED), `sqlite3_backup_init` integrity, distinct HKDF salts for envelope vs snapshot, forward-secrecy on restore, 30-day retention with never-auto-shorten, watermark realignment after restore, mandatory `PairingId` JWT claim, Rules 10/11/12 compliance, linter rule promotion.
+- **Cross-spec stubs** (deferred to Phase 12 by Phases 9–11 changelogs):
+  - `05-auth-and-2fa.md` §S2S — note pending: cite `21-backup-endpoints.md` §3 for the `Backup` audience and 5 scopes (`Backup.Diff.Write`, `Backup.Rotate.Write`, `Backup.Restore.Write`, `Backup.Restore.Apply`, `Backup.Read`).
+  - `12-jwt-delivery-contract.md` — note pending: document mandatory `PairingId` claim on `Backup`-audience tokens (mismatch → `MAIN-800-04`).
+  - `06-core-api-endpoints.md` §2 — note pending: merge BE-1..BE-6 catalogue rows from `21-…` §2 + `23-…` §8 into the canonical endpoint table.
+- **Linter promotion** — `96-linter-audit.md` to lift the `BACKUP-*` and `DB-SYNCOP-*` rule families from "draft" to "enforced in CI" (referenced by acceptance criteria; promotion follows the standard linter-scripts cycle per memory rule).
+- **Seed promotion** — `AppBackupTrackedTable` seed referenced by acceptance criterion 1 to land via the same migration as `BackupApplyIdempotency` UNIQUE-on-`EnvelopeId` lock (no schema change in this phase).
+- **Open questions still pending** (non-blocking, carried into post-5.13.0 maintenance):
+  - OQ-23-1 — snapshot dedup pyramid for low-write primaries.
+  - OQ-23-2 — partial-table restore.
+  - OQ-23-3 — `PinReason` column on `BackupSnapshotCatalog` for the `Pinned` status.
+- **Version bump** — `5.13.0-phase11` → **`5.13.0`** (final). Phase suffix removed; the Backup System spec arc is now feature-complete.
+
+**Closes:** Phases 7–11 (`18-…` through `23-…md`). The 19-main-worker-service spec folder now contains the full Backup System contract (24 numbered files: `00-…23` plus `96`/`97`/`98`/`99`).
+
+---
+
 ## v2.9.0 — 2026-05-06 (Phase 11 — Snapshot storage + restore flow)
 
 **Scope:** Resolves locked decision **D14** (date-by-date full snapshot storage on backup; main-controlled restore by date). Closes open question **OQ-A4** — snapshot retention adopted at **30 days rolling** (linter floor: 7 days). Final backup-tier spec; only diagrams + acceptance criteria + linter promotion remain (Phase 12).
