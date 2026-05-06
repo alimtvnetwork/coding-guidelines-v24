@@ -113,6 +113,7 @@ Full diagrams in `diagrams/` and details in `01-architecture.md`.
 | `07-role-based-dashboards.md` | Roles + `User has access to {EnumPage}` pattern |
 | `08-error-contract.md` | Main↔worker error semantics (inline) |
 | `09-self-update-pointer.md` | Pointer-only doc (no implementation) |
+| `16-update-channels.md` | Three update channels: pull-from-main, pull-from-url, dev-only push |
 | `97-acceptance-criteria.md` | Verbatim acceptance criteria mapping |
 | `98-changelog.md` | Spec version history |
 | `99-consistency-report.md` | Cross-link verification |
