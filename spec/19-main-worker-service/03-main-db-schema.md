@@ -48,16 +48,23 @@ ERD: `diagrams/erd-main-db.mmd`.
 | Column | Type | Null | Notes |
 |--------|------|------|-------|
 | `WorkerNodeId` | INTEGER | NO | PK, AUTOINCREMENT |
-| `WorkerNodeTitle` | TEXT | NO | Human label, may repeat across nodes |
+| `WorkerNodeTitle` | TEXT | NO | Human label, may repeat across nodes. **UI renders this under the column header "Region"** (D7). |
 | `WorkerNodeIdentity` | TEXT | NO | Unique stable identifier (e.g. machine fingerprint) |
 | `WorkerNodeEndpoint` | TEXT | NO | Base URL, e.g. `https://w1.example.com` |
 | `WorkerNodeStatusId` | INTEGER | NO | FK → `WorkerNodeStatus.WorkerNodeStatusId` |
 | `WorkerNodeKindId` | INTEGER | NO | FK → `WorkerNodeKind.WorkerNodeKindId` |
+| `Sequence` | INTEGER | NO | Monotonic display + RoundRobin order. Unique among non-backup peers. Backups inherit their primary's `Sequence` for grouping but never participate in RoundRobin (Phase 4, D6). |
+| `IsBackup` | INTEGER | NO | Boolean (0/1). `1` ⇒ this row is a backup mirror of `BackupOfWorkerNodeId`. Backup rows MUST NOT serve traffic (D9). DEFAULT 0 (Phase 4, D8). |
+| `BackupOfWorkerNodeId` | INTEGER | YES | Self-FK → `WorkerNode.WorkerNodeId`. NOT NULL when `IsBackup = 1`; MUST be NULL when `IsBackup = 0`. The referenced row MUST have `IsBackup = 0` (no chains). |
 | `WorkerNodeRegisteredAt` | INTEGER | NO | Epoch seconds, UTC |
 | `WorkerNodeLastSeenAt` | INTEGER | NO | Epoch seconds, UTC; updated on heartbeat |
 | `Description` | TEXT | YES | Per Rule 11 |
 
-Unique: `(WorkerNodeIdentity)`.
+Unique: `(WorkerNodeIdentity)`, `(Sequence) WHERE IsBackup = 0`.
+
+CHECK constraints (enforced at migration time):
+- `(IsBackup = 0 AND BackupOfWorkerNodeId IS NULL) OR (IsBackup = 1 AND BackupOfWorkerNodeId IS NOT NULL)`
+- A row referenced by `BackupOfWorkerNodeId` MUST itself have `IsBackup = 0` (validated by trigger; SQLite cannot express this in pure CHECK).
 
 ### 2.2 `WorkerNodeStatus` (ref) and `WorkerNodeKind` (ref)
 
