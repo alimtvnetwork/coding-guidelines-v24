@@ -337,3 +337,36 @@ Implementer uses framework-native middleware (e.g. Laravel `throttle`). On limit
 ---
 
 *Core API endpoints v1.2.0 — 2026-05-05 (FU-17: §5.6 Audit trail wired to `EndpointAuthAuditEvent` (`03-main-db-schema.md` §2.6.4) — same-transaction insert, idempotent-replay skip, ChangeKind resolution, `apperror` sibling log)*
+
+---
+
+## §6 — Backup-Tier Endpoint Catalogue (Phase 12 stub)
+
+**Added:** Phase 12 (Backup-tier consolidation). **Authority for full contract:** `21-backup-endpoints.md`. This section is a **directory pointer** — request/response shapes, error codes, and idempotency rules live in the authoritative file.
+
+All Backup-tier endpoints are **S2S only** (`aud="Backup"`, mandatory `PairingId` claim per `12-jwt-delivery-contract.md` §13). They MUST NOT be exposed via the public proxy chain that serves `/API/V1/Auth/*` and `/API/V1/Company/*`.
+
+### 6.1 Catalogue
+
+| ID | Method | Path | Direction | Scope | Auth | Purpose |
+|----|--------|------|-----------|-------|------|---------|
+| **BE-1** | POST | `/API/V1/Backup/SyncEnvelope` | Primary → Backup | `Backup.Sync.Write` | S2S `aud=Backup` | Deliver sealed CDC envelope (apply pipeline per `22-backup-apply-logic.md`). |
+| **BE-2** | GET | `/API/V1/Backup/SyncWatermark` | Backup → Primary (poll) | `Backup.Ack.Read` | S2S `aud=Backup` | Returns `LastAcceptedSyncOpSeq` for catch-up replay. |
+| **BE-3** | POST | `/API/V1/Backup/RestoreByDate` | Operator → Backup | `Backup.Restore.Write` | S2S `aud=Backup` | Operator-initiated restore (per `23-snapshot-storage-and-restore.md` §6 + `seq-backup-restore.mmd`). |
+| **BE-4** | GET | `/API/V1/Backup/RestoreJob/{RestoreJobId}` | Operator → Backup | `Backup.Restore.Write` | S2S `aud=Backup` | Poll restore job status. |
+| **BE-5** | POST | `/API/V1/Backup/Pairing/Confirm` | Either side | `Backup.Sync.Write` | S2S `aud=Backup` | Two-phase pairing handshake (per `19-incremental-backup-sync.md` §5). |
+| **BE-6** | POST | `/API/V1/Backup/RestoreInbox` | Backup → Primary | `Backup.Restore.Apply` | S2S `aud=Backup` | Receive re-sealed snapshot, perform offline App-tier import, realign watermark. |
+
+### 6.2 Cross-cutting rules
+
+1. **Audience isolation:** §5.2 default-deny middleware MUST treat `aud=Backup` as a **separate** auth surface. A token valid for `aud=worker` or `aud=main-orchestration` MUST NOT satisfy any BE-* endpoint.
+2. **Misroute detection:** All BE-* endpoints reject with **HTTP 421 Misdirected Request** + `MAIN-800-04` when `PairingId` does not match the receiving node's `BackupPairing` table. This is a **CODE RED** path — never silently 404 or 401.
+3. **Rate limits:** BE-1 and BE-2 are exempted from §5.4 user/IP throttles and instead governed by `MainWorker.Backup.PerPairingEnvelopesPerMinute` (per `15-tunable-constants.md` §2.15).
+4. **Audit trail:** BE-3 and BE-6 MUST write to `EndpointAuthAuditEvent` (per §5.6) with `ChangeKind=BackupRestore`.
+5. **Endpoint not yet enumerated in §2:** Intentional. The §2.x catalogue is for UI/orchestration surfaces; the BE-* surface is segregated to make audience-isolation review trivial.
+
+*See `21-backup-endpoints.md` for full payloads, error envelopes, and idempotency contracts.*
+
+---
+
+*Core API endpoints v1.3.0 — 2026-05-06 (Phase 12: §6 Backup-tier endpoint catalogue stub added)*
