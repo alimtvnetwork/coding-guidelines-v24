@@ -100,24 +100,42 @@ Full diagrams in `diagrams/` and details in `01-architecture.md`.
 
 ## 6. Document Map
 
+A literal AI MUST read every numbered file 00→24 before scoping work. The map below is exhaustive — no file in this folder is optional reading.
+
 | File | Purpose |
 |------|---------|
 | `plan.md` | Phased task list, decisions, open questions |
 | `00-overview.md` | This file |
 | `01-architecture.md` | Topology, request flow, boundaries |
 | `02-glossary.md` | Canonical terms |
-| `03-main-db-schema.md` | Main-server SQLite schema |
-| `04-worker-routing.md` | Selection strategies, caching, failover |
+| `03-main-db-schema.md` | Main-server SQLite schema (single source of truth for `WorkerNode`, `Company`, `UserDirectory`, audit tables) |
+| `04-worker-routing.md` | Selection strategies, caching, failover (no endpoint catalogue — see `06-`) |
 | `05-auth-and-2fa.md` | Auth flows, 2FA, JWT/cookie, main↔worker handshake |
-| `06-core-api-endpoints.md` | REST surface |
+| `06-core-api-endpoints.md` | **Single source of truth** for the REST surface (paths, payloads, auth) |
 | `07-role-based-dashboards.md` | Roles + `User has access to {EnumPage}` pattern |
-| `08-error-contract.md` | Main↔worker error semantics (inline) |
+| `08-error-contract.md` | **Single source of truth** for the JSON error envelope shape |
 | `09-self-update-pointer.md` | Pointer-only doc (no implementation) |
+| `10-worker-bootstrap-protocol.md` | Worker first-boot registration + heartbeat (defers WorkerNode schema to `03-`) |
+| `11-split-db-tier-reconciliation.md` | Authoritative Main↔spec/05 tier mapping (applied stub) |
+| `12-jwt-delivery-contract.md` | JWT issuance, claims, verification, rotation |
+| `13-error-codes.md` | Error code catalogue (codes only — envelope owned by `08-`) |
+| `14-rbac-and-status-seed.md` | RBAC + status enum seed values |
+| `15-tunable-constants.md` | **Single source of truth** for every numeric tunable + cache TTL |
 | `16-update-channels.md` | Three update channels: pull-from-main, pull-from-url, dev-only push |
+| `17-cascading-roles-and-cache-bin.md` | Role cache bin + cascading roles union |
+| `18-backup-nodes.md` | Backup-node registration, propagation, lifecycle |
+| `19-incremental-backup-sync.md` | Incremental CDC backup sync (Shape A inline column) |
+| `20-backup-encryption-and-keys.md` | Pair-RSA encryption + key rotation |
+| `21-backup-endpoints.md` | Backup-tier S2S endpoint catalogue (BE-1..BE-6) |
+| `22-backup-apply-logic.md` | Backup apply pipeline (stages, transactions, DLQ) |
+| `23-snapshot-storage-and-restore.md` | Snapshot build + restore flow |
+| `24-threat-model.md` | Threat-model pointer (no implementation) |
+| `96-linter-audit.md` | ⚠ Historical linter snapshot — see banner at top |
 | `97-acceptance-criteria.md` | Verbatim acceptance criteria mapping |
 | `98-changelog.md` | Spec version history |
-| `99-consistency-report.md` | Cross-link verification |
-| `diagrams/` | Mermaid ERDs + sequence diagrams |
+| `99-consistency-report.md` | ⚠ Historical consistency snapshot — see banner at top |
+| `audit/` | Independent blind-AI readiness audits (latest = `07-…-v2.md`); earlier files marked STALE |
+| `diagrams/` | Mermaid ERDs + sequence diagrams (non-authoritative projections) |
 
 ---
 
