@@ -225,7 +225,7 @@ See [08-cross-references.md](./08-cross-references.md) for full syntax and examp
 
 ## Reliability Check Report
 
-Every module SHOULD include a **reliability risk assessment** to evaluate implementation feasibility before coding begins. These reports are stored in `spec/validation-reports/` or inline within the module.
+Every module MUST include a **reliability risk assessment** to evaluate implementation feasibility before coding begins. Reports are stored in `spec/validation-reports/` or inline within the module. The only allowed exception: pure-documentation modules with no implementable surface (e.g. `spec/_template.md`, `spec/folder-structure-root.md`) MAY omit the assessment when an `<!-- AUTHORING-WAIVER: documentation-only -->` comment is present near the title.
 
 ### What It Covers
 
