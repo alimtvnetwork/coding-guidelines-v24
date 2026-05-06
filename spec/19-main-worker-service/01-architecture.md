@@ -111,11 +111,11 @@ Note: correlation IDs and idempotency keys are opaque request-scoped strings, no
 
 | Cache | Scope | TTL | Invalidation |
 |-------|-------|-----|--------------|
-| `CompanyId → WorkerNodeId` | Main process / session | 15 min <!-- TUNABLE-WAIVER: cache TTL distinct from MainWorker tunables; owned by caching-policy memory --> | On worker reassignment |
-| Worker registry | Main process | 60 s <!-- TUNABLE-WAIVER: cache TTL distinct from MainWorker tunables; owned by caching-policy memory --> | On worker register/deregister |
-| Per-user recent-company | User session | session lifetime | On logout |
+| `CompanyId → WorkerNodeId` | Main process / session | Per `MainWorker.Cache.CompanyToWorkerTtlSeconds` (default 900 s / 15 m) — see `15-tunable-constants.md` §4.2 | On worker reassignment |
+| Worker registry | Main process | Per `MainWorker.Cache.WorkerRegistryTtlSeconds` (default 60 s) — see `15-tunable-constants.md` §4.2 | On worker register/deregister |
+| Per-user recent-company | User session | Per `MainWorker.Cache.RecentCompanyPerUserTtlSeconds` (= `MainWorker.Auth.MainSessionTtlSeconds`) — see `15-tunable-constants.md` §4.2 | On logout |
 
-Per memory `mem://architecture/caching-policy`: explicit TTL, deterministic keys, invalidate on mutation.
+Caching policy (explicit TTL, deterministic keys, invalidate on mutation) is the local rule for this spec. The repo-level memory `mem://architecture/caching-policy` is informational; the binding values live in `15-tunable-constants.md` §4.2 (closes audit M-2 / M-3).
 
 ---
 
