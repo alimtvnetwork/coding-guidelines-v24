@@ -4,6 +4,13 @@
 
 ---
 
+## v5.28.0 — 2026-05-06 (Audit 09 wrap-up)
+
+**Scope:** Version bump (`5.27.0` → `5.28.0`). Audit 09 wrap-up.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.27.0 — 2026-05-06 (Phase 13.3 — literal-reader trap audit + §6.4 visibility callout in 22- (audit-08 §2.5 traps #1 and #3 confirmed false positives))
 
 **Scope:** Version bump (`5.26.0` → `5.27.0`). Phase 13.3 — literal-reader trap audit + §6.4 visibility callout in 22- (audit-08 §2.5 traps #1 and #3 confirmed false positives).
