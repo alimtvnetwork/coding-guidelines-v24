@@ -63,60 +63,76 @@ Auth is a **first-class given** in BOTH Main and Worker tiers. This file defines
 
 ---
 
-## 3. Password Storage
+## 3. Password Storage (Worker tier only — v2.0.0)
+
+> **Authority moved.** As of v2.0.0 (Phase 3), all password material lives in the Worker's `AppUser` table. Main MUST NOT persist `PasswordHash`, `PasswordSalt`, or `PasswordPepper`. Tunable keys keep the `MainWorker.Auth.*` namespace for compatibility but are now resolved on the Worker.
 
 Per verbatim §Login 3:
 
 - **Hash:** Argon2id (preferred) or bcrypt. Bcrypt cost is **environment-pinned** to remove ambiguity (resolves F-A-03): `MainWorker.Auth.BcryptCost` defaults to `12` when `Env=dev|test`, `14` when `Env=prod|staging`. Implementations MUST refuse cost < 12 and MUST NOT exceed 14 unless overridden by Power Admin via Seedable-Config (caps at 16).
-- **Salt:** unique per user, stored alongside hash in `UserPasswordSalt`. The chosen hash function may also embed a salt; storing it explicitly keeps the contract stack-portable.
-- **Pepper:** global pepper from Seedable-Config secret `MainWorker.Auth.PasswordPepper`. **MUST be set when `Env=prod|staging`** (resolves F-A-04 — was previously "optional"). In `dev|test` MAY be empty; if empty, Main MUST log a one-shot WARN at startup so drift is visible. When present, mixed in before hashing.
-- **No plaintext anywhere.** Logs MUST scrub `password`, `confirmPassword`, `currentPassword`.
+- **Salt:** unique per user, stored alongside hash on the **Worker** as `AppUser.PasswordSalt`. The chosen hash function may also embed a salt; storing it explicitly keeps the contract stack-portable.
+- **Pepper:** per-Worker pepper from Worker-local Seedable-Config secret `MainWorker.Auth.PasswordPepper`. **MUST be set when `Env=prod|staging`**. In `dev|test` MAY be empty; if empty, the Worker MUST log a one-shot WARN at startup so drift is visible. Each Worker MAY hold a distinct pepper — this is a feature, not a bug, because it limits cross-Worker hash portability.
+- **No plaintext anywhere — including Main's proxy buffer.** Logs MUST scrub `password`, `confirmPassword`, `currentPassword` on **both** tiers. Main's proxy buffer MUST be zeroed after forward (§2.1).
 - **No retrieval.** Reset is replace-only.
-- **Breach check:** Implementations MUST verify against a HIBP-style API on sign-up and password change when `MainWorker.Auth.EnableBreachCheck=true` (default `true` in prod, `false` in dev).
+- **Breach check:** Implementations MUST verify against a HIBP-style API on sign-up and password change when `MainWorker.Auth.EnableBreachCheck=true` (default `true` in prod, `false` in dev). The breach check runs on the **Worker** (so the cleartext password never reaches an external service from Main).
 
 ---
 
-## 4. Two-Factor Authentication (2FA)
+## 4. Two-Factor Authentication (2FA) — Worker tier only (v2.0.0)
+
+> **Authority moved.** TOTP enrollment, verification, and backup-code storage all live on the **Worker** as of v2.0.0 (Phase 3). Main proxies the QR-render request and the verify POST to the assigned Worker, but stores no TOTP material itself.
 
 - **Standard:** TOTP (RFC 6238), 30s window <!-- TUNABLE-WAIVER: RFC 6238 mandates 30s; not a MainWorker tunable -->, 6 digits.
-- **Enrollment:** Main shows QR (otpauth URI), user scans, submits one TOTP to confirm. On success, store `User.TotpSecret` (encrypted at rest with key from Seedable-Config).
-- **Backup codes:** generate 10 single-use codes at enrollment (stored as bcrypt hashes in `User.UserTotpBackupCodesHash` per `03-main-db-schema.md` §2.4). When the count of unused codes reaches **0**, the user MUST be forced to regenerate at next sign-in: Main returns `Error.SubCode = TotpBackupExhausted` with HTTP 403 and `X-Auth-Action: RegenerateBackupCodes` header (resolves F-A-05). Regeneration invalidates the prior batch. Power Admin override path: `POST /API/V1/Auth/2FA/RegenerateBackupCodes` (audit logged).
+- **Enrollment:** the user's browser POSTs `/API/V1/Auth/2FA/Enroll` to Main; Main resolves `Email → Worker` via `UserDirectory` and forwards. The Worker generates the TOTP secret, writes `AppUser.TotpSecret` (encrypted at rest with key from Worker-local Seedable-Config), returns the `otpauth://` URI. Main proxies the URI back to the browser unmodified. The browser submits one TOTP to confirm via the same Main-proxied `/API/V1/Auth/2FA/Confirm` path.
+- **Backup codes:** generate 10 single-use codes at enrollment (stored as bcrypt hashes in `AppUser.TotpBackupCodesHash` on the Worker). When the count of unused codes reaches **0**, the user MUST be forced to regenerate at next sign-in: the Worker returns `Error.SubCode = TotpBackupExhausted` with HTTP 403 and `X-Auth-Action: RegenerateBackupCodes` header (resolves F-A-05). Main forwards the response unchanged. Regeneration invalidates the prior batch. Power Admin override path: `POST /API/V1/Auth/2FA/RegenerateBackupCodes` (audit logged on the Worker, mirrored to Main `EndpointAuthAuditEvent`).
 - **Verification points:** sign-in, password change, 2FA disable, role escalation.
-- **Recovery:** Power Admin can reset 2FA for any user (audit logged).
+- **Recovery:** Power Admin can reset 2FA for any user (audit logged on the Worker).
 
 ---
 
-## 5. Sign-Up Flow (Main)
+## 5. Sign-Up Flow (Main as proxy, Worker as authority)
 
-1. POST `/API/V1/Auth/SignUp` with email + password + (optional) `CompanySlug`.
-2. Main runs guards: `IsEmailWellFormed`, `IsPasswordStrongEnough`, `IsCompanySlugAvailable`.
-3. Main creates `User` row in main DB (auth fields only).
-4. If new company: Main runs worker selection (`04-worker-routing.md`) and forwards full company payload to chosen Worker.
-5. Main returns 201 + sets session cookie (or returns "verify email" status if email-confirm flag is on).
+1. Browser POSTs `/API/V1/Auth/SignUp` to **Main** with `{ Email, Password, CompanySlug? }`.
+2. Main runs cheap guards locally (no credentials required): `IsEmailWellFormed`, `IsPasswordWellFormed` (length / charset only — strength check runs on Worker), `IsCompanySlugAvailable` (read of `Company.Slug`).
+3. Main resolves the target Worker:
+   - **Existing company:** `WorkerNodeId = Company.WorkerNodeId WHERE Slug = :companySlug`.
+   - **New company:** Main runs worker selection (`04-worker-routing.md`), creates `Company`, creates `UserDirectory` row pointing at the chosen Worker.
+4. Main forwards the body to `POST {WorkerEndpoint}/API/V1/Auth/InternalSignUp` over the credential-proxy channel (§2.3). The Worker:
+   - Runs `IsPasswordStrongEnough` (Worker-side policy), HIBP breach check, hashes the password, creates `AppUser` row with `PasswordHash` / `PasswordSalt`.
+   - Returns `{ AppUserId, NeedsEmailVerification: bool }`.
+5. Main writes `UserDirectory.LastSeenAt = now()`, zeroes the proxy buffer, returns 201 to the browser plus a session cookie (or returns "verify email" status if email-confirm flag is on).
+
+**Failure modes:**
+- Worker rejects password (weak / breached) → Main returns the Worker's 400 envelope unchanged, **does not** persist a `UserDirectory` row.
+- Worker unreachable → Main returns 503 `Error.SubCode = WorkerUnreachable` with retry-after; `UserDirectory` row is created only after the Worker ACK.
 
 ---
 
-## 6. Sign-In Flow (Main)
+## 6. Sign-In Flow (Main as proxy, Worker as authority)
 
-1. POST `/API/V1/Auth/SignIn` with email + password.
-2. Main verifies hash, checks `User.Has2FAEnabled`.
-3. If 2FA on: return 200 with `{ "Step": "AwaitTotp", "ChallengeId": "..." }`. Client POSTs `/API/V1/Auth/Verify2FA` with the TOTP code + ChallengeId. Main grants session on success.
-4. Main resolves `User → Company → WorkerNode`, mints worker JWT, returns:
-   ```json
-   {
-     "WorkerEndpoint": "https://w3.example.com",
-     "WorkerJwt": "<RS256 token>",
-     "JwtExpiresAt": "2026-05-04T12:15:00Z"
-   }
-   ```
-5. React stores JWT in memory (NOT localStorage), uses it for direct Worker calls.
+1. Browser POSTs `/API/V1/Auth/SignIn` to **Main** with `{ Email, Password, TotpCode? }`.
+2. Main reads `UserDirectory WHERE UserEmail = LOWER(:email)`. **Constant-time miss handling** per §2.1.
+3. Main forwards the body to `POST {WorkerEndpoint}/API/V1/Auth/InternalSignIn` over the credential-proxy channel.
+4. **Worker** verifies the password hash, checks TOTP status:
+   - If TOTP enrolled and no `TotpCode` provided: Worker returns 200 with `{ "Step": "AwaitTotp", "ChallengeId": "..." }`. Main forwards verbatim. The browser POSTs `/API/V1/Auth/Verify2FA` with `{ ChallengeId, TotpCode }` → Main proxies to Worker `/API/V1/Auth/InternalVerify2FA`.
+   - If credentials valid (with TOTP if required): Worker mints the Worker-JWT (claims per §2.2), returns:
+     ```json
+     {
+       "WorkerEndpoint": "https://w3.example.com",
+       "WorkerJwt": "<RS256 token>",
+       "JwtExpiresAt": 1746360900
+     }
+     ```
+     (`JwtExpiresAt` is now epoch seconds per Rule 7.1 v2.)
+5. Main updates `UserDirectory.LastSeenAt`, zeroes the proxy buffer, sets the browser session cookie bound to the JWT, returns the body to the browser.
+6. React stores the JWT in memory (NOT localStorage), uses it for direct Worker calls (Main bypassed for data-tier traffic).
 
 ---
 
 ## 7. Worker JWT Validation (Worker side)
 
 Every Worker request validates:
-1. Signature against Main's public key.
+1. Signature against the Worker's own public key (Worker is the issuer in v2.0.0; Main holds the public key only for session-cookie refresh).
 2. `exp` not passed.
 3. `aud` matches this Worker's URL.
 4. `wnk` claim matches this Worker's `WorkerNodeId`.
