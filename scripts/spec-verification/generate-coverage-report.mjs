@@ -41,6 +41,15 @@ const SACRED_BASENAMES = new Set([
   "changelog.md",
 ]);
 
+// Spec-only folders are exempt from `## Verification` requirements:
+// they are markdown specs that explicitly forbid implementation work,
+// so there is nothing to "verify" against running code. Keep this list
+// in sync with `.lovable/strictly-avoid.md` and
+// `mem://constraints/spec19-no-implementation`.
+const SPEC_ONLY_FOLDERS = new Set([
+  "19-main-worker-service",
+]);
+
 const VALID_MODES = ["overview-only", "all-files"];
 
 function parseArgs(argv) {
@@ -97,13 +106,20 @@ function isTopLevelOverview(rel) {
   return parts.length === 2 && parts[1].toLowerCase() === "00-overview.md";
 }
 
+function isSpecOnlyFolder(rel) {
+  const top = rel.split(sep)[0] ?? "";
+  return SPEC_ONLY_FOLDERS.has(top);
+}
+
 /**
- * Classify a file as one of: expected, sacred-skip, root-skip.
+ * Classify a file as one of: expected, sacred-skip, root-skip,
+ * spec-only-skip, out-of-scope.
  */
 function classifyExpectation(rel, mode) {
   if (isSpecRootFile(rel)) return "root-skip";
   const base = basename(rel).toLowerCase();
   if (SACRED_BASENAMES.has(base)) return "sacred-skip";
+  if (isSpecOnlyFolder(rel)) return "spec-only-skip";
   if (mode === "overview-only") {
     if (!isTopLevelOverview(rel)) return "out-of-scope";
   }
@@ -117,12 +133,13 @@ function hasVerificationBlock(content) {
 function buildReport(rootAbs, mode) {
   const files = walk(rootAbs);
   const buckets = {
-    updated: [],     // expected AND has block
-    missing: [],     // expected AND no block
-    sacredSkip: [],  // readme / changelog / 97 / 99
-    rootSkip: [],    // spec/<root-file>.md
-    outOfScope: [],  // not expected under current mode but exists
-    stray: [],       // out-of-scope yet still carries a block (informational)
+    updated: [],       // expected AND has block
+    missing: [],       // expected AND no block
+    sacredSkip: [],    // readme / changelog / 97 / 99
+    rootSkip: [],      // spec/<root-file>.md
+    specOnlySkip: [],  // spec-only folders (e.g. spec/19) — no impl, no verification
+    outOfScope: [],    // not expected under current mode but exists
+    stray: [],         // out-of-scope yet still carries a block (informational)
     errors: [],
   };
   for (const full of files) {
@@ -136,6 +153,7 @@ function buildReport(rootAbs, mode) {
     else if (klass === "expected" && !present) buckets.missing.push(rel);
     else if (klass === "sacred-skip") buckets.sacredSkip.push(rel);
     else if (klass === "root-skip") buckets.rootSkip.push(rel);
+    else if (klass === "spec-only-skip") buckets.specOnlySkip.push(rel);
     else if (klass === "out-of-scope") {
       buckets.outOfScope.push(rel);
       if (present) buckets.stray.push(rel);
@@ -159,12 +177,14 @@ function buildSummary(buckets, mode) {
     generatedAt: new Date().toISOString(),
     totals: {
       scanned: buckets.updated.length + buckets.missing.length
-        + buckets.sacredSkip.length + buckets.rootSkip.length + buckets.outOfScope.length,
+        + buckets.sacredSkip.length + buckets.rootSkip.length
+        + buckets.specOnlySkip.length + buckets.outOfScope.length,
       expected: expectedTotal,
       updated: buckets.updated.length,
       missing: buckets.missing.length,
       sacredSkip: buckets.sacredSkip.length,
       rootSkip: buckets.rootSkip.length,
+      specOnlySkip: buckets.specOnlySkip.length,
       outOfScope: buckets.outOfScope.length,
       stray: buckets.stray.length,
       errors: buckets.errors.length,
@@ -191,6 +211,7 @@ function renderMarkdown(buckets, summary) {
   lines.push(`| **Missing (still need \`## Verification\`)** | **${summary.totals.missing}** |`);
   lines.push(`| Skipped — sacred (readme/changelog/97/99) | ${summary.totals.sacredSkip} |`);
   lines.push(`| Skipped — spec root files | ${summary.totals.rootSkip} |`);
+  lines.push(`| Skipped — spec-only folders (no implementation) | ${summary.totals.specOnlySkip} |`);
   lines.push(`| Out of scope under current mode | ${summary.totals.outOfScope} |`);
   lines.push(`| Stray blocks (out-of-scope yet present) | ${summary.totals.stray} |`);
   lines.push(`| IO errors | ${summary.totals.errors} |`);
