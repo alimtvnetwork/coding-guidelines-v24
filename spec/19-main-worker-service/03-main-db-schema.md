@@ -189,7 +189,8 @@ Audit row written on every successful `PATCH /API/V1/Settings/EndpointAuth` (per
 | `OldMechanismsJson` | TEXT | YES | JSON array of prior `AuthMechanismCode[]`; NULL on create |
 | `NewMechanismsJson` | TEXT | NO | JSON array of post-PATCH `AuthMechanismCode[]` (sorted ascending for diffability) |
 | `ChangeKindId` | INTEGER | NO | FK → `EndpointAuthChangeKind.EndpointAuthChangeKindId` (`Create`, `Replace`, `SoftDisable`, `Reenable`) |
-| `UpdatedByUserId` | INTEGER | NO | FK → `User`. Same actor stamped on the parent row's `UpdatedByUserId`. |
+| `UpdatedByUserDirectoryId` | INTEGER | NO | FK → `UserDirectory.UserDirectoryId`. Identifies the Power Admin actor; full identity / role check happened on the Worker that minted the JWT carried by the PATCH. |
+| `UpdatedByUserEmail` | TEXT | NO | Snapshotted at write time so the audit row survives later `UserDirectory` deletion. |
 | `CorrelationId` | TEXT | NO | Echoes the inbound `X-Correlation-Id` header per `spec/04-database-conventions/06-rest-api-format.md` |
 | `IdempotencyKey` | TEXT | NO | The `X-Idempotency-Key` that produced the write. Index supports replay-detection joins. |
 | `OccurredAt` | INTEGER | NO | Epoch seconds, UTC; server-stamped, equals the parent row's `UpdatedAt` |
