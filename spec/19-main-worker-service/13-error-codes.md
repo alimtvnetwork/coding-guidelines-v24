@@ -199,6 +199,13 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-820-02` | `21187` | `RotationAlreadyInProgress` | "A `Pending` `BackupKeyEpoch` already exists for this pairing." | 409 | `20-backup-encryption-and-keys.md` §6 |
 | `MAIN-820-03` | `21188` | `RotationActivationSplitBrain` | "One side activated, counterpart did not; manual recovery required." | 500 | `20-backup-encryption-and-keys.md` §7.2 |
 
+### 3.10 Backup Endpoints / Restore Wire (830-899 → 21189-21190)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-830-01` | `21189` | `SnapshotNotFound` | "Requested `SnapshotDate` not present on backup filesystem." | 404 | `21-backup-endpoints.md` §6.3, §11 (Phase 11 owns storage contract) |
+| `MAIN-830-02` | `21190` | `RestoreAlreadyInProgress` | "A `RestoreJobId` for the same `(BackupWorkerNodeId, TargetPrimaryWorkerNodeId)` is still running." | 409 | `21-backup-endpoints.md` §6.3 |
+
 ---
 
 ## 4. Reserved sub-ranges
@@ -217,7 +224,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-21162-21169` | Main external-services future expansion |
 | `MAIN-21172-21180` | Main future expansion (file-system, network, additional cache-coherence overflow) |
 | _(consumed)_ | 21186-21188 consumed by `MAIN-820-01..03` Backup Encryption rotation per Phase 8 (`20-backup-encryption-and-keys.md`) |
-| `MAIN-21189-21199` | Main future expansion (additional backup-lifecycle / endpoint overflow, etc.) |
+| _(consumed)_ | 21189-21190 consumed by `MAIN-830-01..02` Backup Endpoints wire per Phase 9 (`21-backup-endpoints.md`); rows 21191-21199 reserved for Phase 11 snapshot/restore |
+| `MAIN-21191-21199` | Main future expansion (Phase 11 snapshot/restore + additional wire overflow) |
 
 ---
 
@@ -314,4 +322,4 @@ Failure = build break.
 
 ---
 
-*Error codes (Main/Worker Service) v1.2.0 — 2026-05-06 (Phase 8: +`WORKER-920-01..05` Backup Encryption decrypt failures; +`MAIN-820-01..03` Pair-RSA rotation orchestration; §4 reserved-range refresh — `WORKER-21095-21099` and `MAIN-21186-21188` now consumed)*
+*Error codes (Main/Worker Service) v1.3.0 — 2026-05-06 (Phase 9: +`MAIN-830-01..02` Backup Endpoints wire — `SnapshotNotFound` 21189, `RestoreAlreadyInProgress` 21190; §4 reserved-range refresh — `MAIN-21191-21199` reserved for Phase 11 snapshot/restore)*
