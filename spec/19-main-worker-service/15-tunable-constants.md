@@ -94,6 +94,13 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 | `MainWorker.Bootstrap.RetryBackoffSeconds` | `[10, 30, 90, 300]` | seconds[] | `10-worker-bootstrap-protocol.md` §6 (`WORKER-100-01 OAUTH_HANDSHAKE_FAIL`) | Cold-bootstrap retry ladder for Worker→Main OAuth handshake; distinct from the steady-state `MainWorker.Retry.BackoffSeconds` of §2.1. After exhaustion the Worker exits and is restarted by its supervisor. Bumped to v1.1.0 to retire the §10 line-137 TUNABLE-WAIVER. |
 | `MainWorker.Bootstrap.RetryMaxAttempts` | **4** | count | Same | MUST equal `len(RetryBackoffSeconds)`. |
 
+### 2.10 Role-access cache bin (consumer: `17-cascading-roles-and-cache-bin.md`)
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.RoleCache.TtlSeconds` | **600** (10m) | seconds | `17-…` §4 — TTL on `RoleAccessCache` rows in the Worker's in-memory Cache tier. | Safety net bound on staleness when the §5 invalidation broadcast fails. Must be ≤ `MainWorker.Auth.WorkerJwtTtlSeconds × 2` so a stale cache cannot outlive two JWT generations. |
+| `MainWorker.RoleCache.RequireReauthOnCatalogBump` | **false** | bool | `17-…` §5.3 — when `true`, a JWT carrying an outdated `CatalogVersion` triggers `401 ReauthRequired` instead of transparent recompute. | Set `true` for high-security tenants where role demotions must take effect immediately even at the cost of a forced sign-in. |
+
 ---
 
 ## 3. Single-value rule (for the dumb AI)
