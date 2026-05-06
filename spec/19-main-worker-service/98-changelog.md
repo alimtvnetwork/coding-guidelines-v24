@@ -4,6 +4,36 @@
 
 ---
 
+## v2.3.0 — 2026-05-06 (Phase 5 — Cascading roles + Role-Access cache bin)
+
+**Scope:** Per locked decisions D11 (cascading = union) and D12 (cache-bin in ER). Adopts default proposals for OQ-A1 (simple union, no inheritance) and OQ-A2 (per-process SQLite `:memory:` storage with TTL + Main-broadcast invalidation) until the user overrides.
+
+- New file **`17-cascading-roles-and-cache-bin.md` v1.0.0** — single source of truth for:
+  - The union rule for users holding multiple roles (bitwise-OR of `CanRead` / `CanWrite` per AccessItem).
+  - Two-tier resolution: catalog stays on Main, per-user resolution + cache live on Worker.
+  - Cache-bin schema (`RoleAccessCache`, `RoleCacheCatalogVersion`) in the Worker's in-memory Cache tier.
+  - Invalidation broadcast `POST /API/V1/Cache/InvalidateRoleAccess` (idempotent on `CatalogVersion`, retry per §2.1, no rollback on delivery failure — TTL bounds staleness).
+  - JWT staleness mitigations: short TTL + `CatalogVersion` stamp + optional `RequireReauthOnCatalogBump`.
+- `15-tunable-constants.md` → **v1.4.0**: new §2.10 "Role-access cache bin" with `MainWorker.RoleCache.TtlSeconds` (600 s default) and `MainWorker.RoleCache.RequireReauthOnCatalogBump` (false default).
+- `13-error-codes.md`:
+  - New §2.10 "Cache Coherence" (Worker): `WORKER-900-01 RoleCacheRecompileFailed` (21090, 500), `WORKER-900-02 EmptyEffectiveAccessSet` (21091, 403).
+  - New §3.7 "Cache Coherence" (Main): `MAIN-700-01 CacheInvalidationDeliveryFailed` (21171, 502).
+  - Reserved sub-range table updated: 21090-21091 marked consumed; 21171 marked consumed; future-expansion ranges narrowed accordingly.
+
+**Cross-spec impact:**
+- Worker JWT mint contract gains `CatalogVersion` claim + read/write AccessItem code arrays. `12-jwt-delivery-contract.md` will need a Phase-12 follow-up entry to document the claim shape (added to the Phase-12 punch list).
+- ER diagram regeneration deferred to Phase 12 — Worker ER must show `RoleAccessCache` and `RoleCacheCatalogVersion` (Cache tier, in-memory annotation); Main ER must show the new `RoleAccessInvalidationEvent` audit table once authored in Phase 12.
+
+**Open questions resolved with default proposals (overridable):**
+- **OQ-A1** — Cascading semantics → adopted **simple union**.
+- **OQ-A2** — Cache-bin tech → adopted **per-process SQLite `:memory:`** behind a swappable contract.
+
+**Open questions still pending (carried into Phase 8 / Phase 11):**
+- **OQ-A3** — Backup zip password derivation pattern.
+- **OQ-A4** — Snapshot retention policy.
+
+---
+
 ## v2.2.0 — 2026-05-06 (Phase 4 — WorkerNode backup & ordering, "Region" UI label)
 
 **Scope:** Per locked decisions D6, D7, D8, D9 — give `WorkerNode` the structural fields needed to express the backup-node concept and the deterministic ordering needed by RoundRobin, and rename the user-facing column to "Region" without touching code identifiers.
