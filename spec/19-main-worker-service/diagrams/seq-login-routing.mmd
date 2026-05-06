@@ -1,59 +1,57 @@
 %% ==========================================================
 %% NON-AUTHORITATIVE PROJECTION
 %% ==========================================================
-%% Subject:        Login + worker-JWT routing
-%% Authoritative:  spec/19/12-jwt-delivery-contract.md + spec/19/04-worker-routing.md
+%% Subject:        Login + worker-JWT routing (with backup-node lane)
+%% Authoritative:  spec/19/12-jwt-delivery-contract.md + 04-worker-routing.md + 18-backup-nodes.md
 %% Status:         Illustrative only. If this diagram disagrees
 %%                 with the authoritative spec(s) above, the
 %%                 spec wins and this file is the bug.
-%% Banner version: 1.1.0 (2026-05-04, task #38 — added Reauthenticate + RegenerateBackupCodes signals)
+%% Banner version: 2.0.0 (2026-05-06, Phase 13.3 — refreshed for:
+%%                 (a) UserDirectory lookup at Main (no password at Main, per 03-§2.x + 05-§2.1);
+%%                 (b) credentialed body proxied to Worker for verification;
+%%                 (c) backup-node lane: backups EXCLUDED from routing (D9, 04-§1.4).
 %% ==========================================================
 sequenceDiagram
     autonumber
     participant React as React Frontend
     participant Main as Main Server
     participant Cache as Main Cache
-    participant DB as Main SQLite
-    participant Worker as Worker Node
+    participant DB as Main SQLite (Root tier)
+    participant Worker as Worker Node (primary)
+    participant Backup as Worker Node (IsBackup=1)
 
     React->>Main: POST /API/V1/Auth/Login<br/>X-Correlation-Id, X-Idempotency-Key, X-Auth-Action: Login<br/>{ Email, Password }
-    Main->>DB: Verify hash, load User
-    Main->>Main: Check Has2FAEnabled
-    alt 2FA on
-        Main-->>React: 200 JSON { Step: AwaitTotp, ChallengeId, PartialAuthJwt }
-        React->>Main: POST /API/V1/Auth/TwoFactor/Verify<br/>X-Auth-Action: TwoFactorVerify<br/>{ Code, ChallengeId }
-        Main->>Main: Validate TOTP, count unused backup codes
-        alt UnusedBackupCodes == 0
-            Main-->>React: 403 JSON { Error.SubCode: TotpBackupExhausted }<br/>X-Auth-Action: RegenerateBackupCodes
-            Note over React: Frontend MUST route to backup-code regeneration flow<br/>per spec/19/05-auth-and-2fa.md §4 (F-A-05).
-            React->>Main: POST /API/V1/Auth/2FA/RegenerateBackupCodes<br/>X-Auth-Action: RegenerateBackupCodes
-            Main-->>React: 200 JSON { BackupCodes: [10 single-use] }
-        end
-    end
+    Main->>DB: SELECT CompanyId, WorkerNodeId FROM UserDirectory WHERE UserEmail=?
+    Note over Main,DB: Main MUST NOT verify passwords / TOTP.<br/>UserDirectory holds NO secrets (03-§2.x).
     Main->>Cache: GET MainWorker:Company:{id}:WorkerNodeId
     alt cache hit
         Cache-->>Main: WorkerNodeId
     else cache miss
-        Main->>DB: SELECT WorkerNodeId FROM Company
-        DB-->>Main: WorkerNodeId
-        Main->>Cache: SET (TTL 15m)
+        Main->>DB: SELECT WorkerNodeEndpoint FROM WorkerNode WHERE WorkerNodeId=? AND IsBackup=0
+        DB-->>Main: WorkerNodeEndpoint
+        Main->>Cache: SET TTL=MainWorker.Cache.CompanyToWorkerTtlSeconds (default 900s)
     end
-    Main->>Main: Mint RS256 worker JWT (sub, cmp, wnk, aud, exp, roles, jti, kid)
+    Note over Backup: Backup nodes (IsBackup=1) are EXCLUDED from every routing strategy (D9, 04-§1.4).<br/>They mirror data via 19-incremental-backup-sync but never serve live traffic.
+    Main->>Worker: POST /API/V1/Auth/VerifyCredential (proxy)<br/>{ Email, Password } + X-Correlation-Id
+    Worker->>Worker: Verify PasswordHash + TOTP against AppUser (App tier)
+    Worker-->>Main: 200 { Verified: true, Has2FAEnabled, UnusedBackupCodes }
+    alt 2FA on
+        Main-->>React: 200 JSON { Step: AwaitTotp, ChallengeId, PartialAuthJwt }
+        React->>Main: POST /API/V1/Auth/TwoFactor/Verify { Code, ChallengeId }
+        Main->>Worker: proxy TOTP verify
+        Worker-->>Main: 200 / 403
+        alt UnusedBackupCodes == 0
+            Main-->>React: 403 { Error.SubCode: TotpBackupExhausted }<br/>X-Auth-Action: RegenerateBackupCodes
+        end
+    end
+    Main->>Main: Mint RS256 worker JWT (sub, cmp, wnk, aud=worker, exp<=WorkerJwtTtlSeconds, roles, jti, kid)
     Main-->>React: 200 JSON { WorkerEndpoint, WorkerJwt, JwtExpiresAt }
-    Note over React: JWT delivered in JSON body — never as cookie / localStorage / URL param.<br/>React stores it IN-MEMORY ONLY (useRef / Zustand non-persistent)<br/>per spec/19/12-jwt-delivery-contract.md §2. CSP per §5 mandatory.<br/>TTL <= 900s per spec/19/15-tunable-constants.md (WorkerJwtTtlSeconds).
+    Note over React: JWT in JSON body only — never cookie / localStorage / URL.<br/>Stored IN-MEMORY (useRef / non-persistent store) per 12-§2. CSP per §5.
 
-    Note over React,Worker: All subsequent business calls bypass Main
-    React->>Worker: GET /API/V1/Company/{slug}<br/>Authorization: Bearer <WorkerJwt><br/>X-Correlation-Id: <ULID>
-    Worker->>Worker: Verify RS256 sig, kid, exp(skew=60s), aud=worker, wnk, iss<br/>per spec/19/12 §7
+    Note over React,Worker: Subsequent business calls bypass Main
+    React->>Worker: GET /API/V1/Company/{slug}<br/>Authorization: Bearer <WorkerJwt>
+    Worker->>Worker: Verify RS256 sig, kid, exp(skew=60s), aud, wnk, iss (12-§7)
     Worker-->>React: 200 (data)
 
-    Note over React,Main: Token refresh — single-use rotation (replay -> MAIN-400-09)
-    React->>Main: POST /API/V1/Auth/Refresh (Main session cookie attached)
-    Main->>Main: Check (now - SessionStartedAt) vs MainSessionAbsoluteMaxSeconds
-    alt absolute cap exceeded OR AuthHandshakeFail (user-initiated)
-        Main-->>React: 401 JSON { Error.Code: AuthHandshakeFail }<br/>X-Auth-Action: Reauthenticate
-        Note over React: Frontend MUST treat X-Auth-Action: Reauthenticate as the SOLE<br/>"force re-login" signal — never infer from status code alone.<br/>Per spec/19/08-error-contract.md §3.4 (F-A-26).<br/>Clear in-memory JWT + redirect to /Login.
-    else within cap
-        Main-->>React: 200 JSON { WorkerJwt, JwtExpiresAt }
-    end
-    Note over React: After page reload the in-memory JWT is gone;<br/>React must re-call /Company/{slug}/Resolve to obtain a fresh one.
+    Note over Worker,Backup: Async replication only — backup never appears in WorkerEndpoint responses.
+    Worker-->>Backup: incremental sync (19-§4)
