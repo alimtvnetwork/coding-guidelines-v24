@@ -364,8 +364,8 @@ CREATE TABLE User (
     IsVerified    BOOLEAN NOT NULL DEFAULT 0,
     HasLicense    BOOLEAN NOT NULL DEFAULT 0,
     IsAdmin       BOOLEAN NOT NULL DEFAULT 0,
-    CreatedAt     TEXT NOT NULL DEFAULT (datetime('now')),
-    DeletedAt     TEXT NULL                                -- soft delete (timestamp > boolean)
+    CreatedAt     INTEGER NOT NULL DEFAULT (unixepoch()),  -- epoch seconds, UTC (Rule 7.1)
+    DeletedAt     INTEGER NULL                              -- soft delete (epoch seconds; NULL = not deleted)
 );
 
 -- Clean queries
