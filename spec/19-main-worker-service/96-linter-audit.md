@@ -1,5 +1,7 @@
 # 96 — Linter Audit
 
+> **⚠ STALE — historical snapshot.** This file's "all green" claims pre-date Phase 13.2 hardening. The current authoritative blind-AI score lives in `audit/07-blind-ai-readiness-2026-05-06-v2.md` (and any successor). Do **not** treat this file as a green light to skip verification — re-run the linters before relying on it.
+
 **Spec:** `19-main-worker-service`
 **Audited:** 2026-05-04
 **Audit Version:** 1.0.0
