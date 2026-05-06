@@ -117,6 +117,10 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-920-03` | `21097` | `UnknownKeyEpoch` | "No `BackupKeyEpoch` row for the supplied epoch." | 404 | `20-backup-encryption-and-keys.md` §9 |
 | `WORKER-920-04` | `21098` | `ZipCipherTooWeak` | "Outer zip used ZipCrypto / non-AES; refused." | 415 | `20-backup-encryption-and-keys.md` §5 |
 | `WORKER-920-05` | `21099` | `EnvelopeSignatureInvalid` | "RSA-PSS signature failed verification." | 422 | `20-backup-encryption-and-keys.md` §9 |
+| `WORKER-930-01` | `21200` | `EnvelopeRowCountMismatch` | "`Envelope.RowCount` ≠ `COUNT(EnvelopeRow)` (V4)." | 422 | `22-backup-apply-logic.md` §3 |
+| `WORKER-930-02` | `21201` | `UntrackedSourceTable` | "`SourceTable` not in `AppBackupTrackedTable` allowlist (V5)." | 422 | `22-backup-apply-logic.md` §3 |
+| `WORKER-930-03` | `21202` | `UnknownSyncOpCode` | "`SyncOpCode` not in {`Insert`,`Update`,`Delete`} (Stage-4 guard)." | 422 | `22-backup-apply-logic.md` §4 |
+| `WORKER-930-04` | `21203` | `ApplyTransactionTimeout` | "Stage-4 TX exceeded `MainWorker.Backup.Apply.TransactionTimeoutSeconds`." | 504 | `22-backup-apply-logic.md` §4 |
 
 ---
 
@@ -206,6 +210,12 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-830-01` | `21189` | `SnapshotNotFound` | "Requested `SnapshotDate` not present on backup filesystem." | 404 | `21-backup-endpoints.md` §6.3, §11 (Phase 11 owns storage contract) |
 | `MAIN-830-02` | `21190` | `RestoreAlreadyInProgress` | "A `RestoreJobId` for the same `(BackupWorkerNodeId, TargetPrimaryWorkerNodeId)` is still running." | 409 | `21-backup-endpoints.md` §6.3 |
 
+### 3.11 Backup Apply Pipeline (840-899 → 21191)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-840-01` | `21191` | `BackupApplyExhausted` | "`MaxRetriesPerEnvelope` exceeded for one `EnvelopeId`; surfaced via BE-5 Health." | n/a | `22-backup-apply-logic.md` §6.2 |
+
 ---
 
 ## 4. Reserved sub-ranges
@@ -215,6 +225,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | _(consumed)_ | `WORKER-21090-21091` consumed by `WORKER-900-01 RoleCacheRecompileFailed` and `WORKER-900-02 EmptyEffectiveAccessSet` per Phase 5 (`17-cascading-roles-and-cache-bin.md`) |
 | _(consumed)_ | `WORKER-21092-21094` consumed by `WORKER-910-01..03` Backup Sync per Phase 7 (`19-incremental-backup-sync.md`) |
 | _(consumed)_ | `WORKER-21095-21099` consumed by `WORKER-920-01..05` Backup Encryption per Phase 8 (`20-backup-encryption-and-keys.md`) |
+| _(consumed)_ | `WORKER-21200-21203` consumed by `WORKER-930-01..04` Backup Apply per Phase 10 (`22-backup-apply-logic.md`); `WORKER-21204-21299` reserved for apply-pipeline overflow |
+| `WORKER-21204-21299` | Worker future expansion (apply-pipeline overflow + future overflow windows per §1 Slot-overflow rule) |
 | `MAIN-21133-21139` | Main validation future expansion |
 | _(consumed)_ | 21147-21149 consumed by `WorkerRegisterRejected` / `WorkerHeartbeatRejected` / `WorkerPushAckUnknownJid` per task #32 (was: Main routing future expansion) |
 | _(consumed)_ | 21170 consumed by `MAIN-400-10 EndpointAuthLocked` per FU-18 (overflow from exhausted 21140-21149 4xx-routing range; see §1 *Slot-overflow rule*) |
