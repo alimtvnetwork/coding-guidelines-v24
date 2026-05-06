@@ -1,7 +1,7 @@
 # 05 — Authentication and 2FA
 
 **Spec:** `19-main-worker-service`
-**Version:** 2.0.0
+**Version:** 2.1.0
 
 > **v2.0.0 (Phase 3 — Users moved off Main).** Main is now a **credential-blind reverse proxy** for `/Auth/*` traffic. It owns the routing index `UserDirectory` (`03-main-db-schema.md` §2.4) and nothing else. Password hashes, TOTP secrets, backup codes, and role assignments live exclusively on the assigned Worker's split-DB App tier (`AppUser`, `AppUserRole`). The flows in §5–§7 below are rewritten accordingly. The previous v1.0 flow — where Main verified passwords locally — is **removed**.
 
