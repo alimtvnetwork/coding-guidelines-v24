@@ -51,19 +51,24 @@ These edits are tracked as follow-up tasks (see §8) — this doc establishes th
 
 ## 4. Per-tier table allocation (Main)
 
+> **v2.1.0 (Phase 3) update.** `User` and `UserRole` are **removed from Main**. Routing is served by the new `UserDirectory` table (Root tier). Authoritative `AppUser` / `AppUserRole` rows now live on the Worker (§5).
+
 | Table | Tier | Source spec |
 |---|---|---|
-| `Tenant` | Root | `19/03-main-db-schema.md` |
+| `Company` | Root | `19/03-main-db-schema.md` §2.3 |
 | `WorkerNode` | Root | `19/10-worker-bootstrap-protocol.md` §8 |
 | `WorkerNodeStatus` | Root | `19/10-worker-bootstrap-protocol.md` §8 |
-| `User` (auth identity) | Root | `19/03-main-db-schema.md` |
-| `EnumPage` | Settings | `19/07-role-based-dashboards.md` (seeded via spec/06) |
-| `RolePageAccess` | Settings | `19/07-role-based-dashboards.md` |
+| `UserDirectory` (routing index, no secrets) | Root | `19/03-main-db-schema.md` §2.4 (v2.1.0) |
+| `Role` (catalog) | Settings | `19/03-main-db-schema.md` §2.6 |
+| `AccessItem` (catalog) | Settings | `19/07-role-based-dashboards.md` (seeded via spec/06) |
+| `RoleAccessItem` (catalog) | Settings | `19/07-role-based-dashboards.md` |
 | `EndpointAuthSetting` | Settings | `19/06-core-api-endpoints.md` §5 |
 | `AuthMechanism` | Settings | `19/06-core-api-endpoints.md` §5 |
 | `UpdateSchedule` | Settings | `19/06-core-api-endpoints.md` §4 |
 | `AuthSession` | Session | `19/05-auth-and-2fa.md` |
-| `TwoFactorChallenge` | Session | `19/05-auth-and-2fa.md` |
+| `TwoFactorChallenge` | Session | `19/05-auth-and-2fa.md` (relayed; ephemeral) |
+| ~~`User` (auth identity)~~ | ~~Root~~ | **REMOVED v2.1.0 — moved to Worker as `AppUser`.** |
+| ~~`UserRole`~~ | ~~Root~~ | **REMOVED v2.1.0 — moved to Worker as `AppUserRole`.** |
 
 ---
 
