@@ -4,6 +4,12 @@
 
 ---
 
+## v2.17.0 — 2026-05-06 (Phase 12.7 — Blind-AI readiness audit + readme pin refresh)
+
+**Scope:** Minor bump (`5.19.1` → `5.20.0`). Adds **`audit/06-blind-ai-readiness-2026-05-06.md`** — a fresh audit scoring the full 24-file spec against the *dumbest plausible* AI implementer (literal-minded, no clarification questions). Result: **92/100 (A−)**. The 8-point gap is itemised as 4 mechanical prose-hardening fixes (Gap 1: stale OQ-1 hint in `05-auth-and-2fa.md` line 62; Gap 2: two `SyncOp` shapes in `19-incremental-backup-sync.md` §1; Gap 3: OQ-22-1 inferred-not-pinned in `22-backup-apply-logic.md` §12; Gap 4: stale "3-tier" prose in 4 places). Companion non-spec change: root `readme.md` line 43 stale pin `v5.7.0` → `v5.19.1` and "22 spec folders" → "23 spec folders". No spec content, schema, error-code, or AC changes.
+
+---
+
 ## v2.16.1 — 2026-05-06 (Phase 12.6.1 — Sync-managed file drift fix)
 
 **Scope:** Patch bump (`5.19.0` → `5.19.1`). Re-ran `npm run sync` to regenerate the 5 sync-managed artifacts that drifted in CI (`public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`). No spec content, schema, error-code, or AC changes — generated stamps + spec-tree counts only (664 files / 23 folders / 143,353 lines). Unblocks the `sync:check` pre-commit / CI gate.
