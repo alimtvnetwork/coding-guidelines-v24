@@ -138,6 +138,8 @@ Memory compliance:
 
 ## 6. Failure handling
 
+> **Blind-AI MUST read §6.4 first.** Per-envelope `PRAGMA journal_mode=WAL` is **forbidden** — the App tier sets WAL once per session and that mode is authoritative. A literal AI that flips WAL inside Stage 4 will defeat the App tier's shared cache and regress to Phase-13.2-era contradictions. (Phase 13.3 callout — closes audit-08 §2.5 trap #2.)
+
 ### 6.1 Pre-Stage-4 failures (V1–V6, decrypt errors)
 
 - Insert a `BackupApplyDeadLetter` row with `FailedAtSyncOpSeq = NULL`.
