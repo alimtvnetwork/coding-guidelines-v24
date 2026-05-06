@@ -157,6 +157,16 @@ Each row below is **the** value. Implementations MAY override via Seedable-Confi
 
 All Backup-tier tunables now allocated. Phase 12 closes the backup work with diagrams + acceptance criteria.
 
+### 2.16 In-process Main caches (consumer: `01-architecture.md` §5)
+
+Promoted from §4.2 to a first-class catalogue entry so T3 (seed parity) covers them. Defaults match §4.2 verbatim; §4.2 retains the prose discussion.
+
+| Key | Default | Unit | Used by | Notes |
+|---|---:|---|---|---|
+| `MainWorker.Cache.CompanyToWorkerTtlSeconds` | **900** (15 m) | seconds | `01-architecture.md` §5 — `CompanyId → WorkerNodeId` cache | Invalidate on worker reassignment. |
+| `MainWorker.Cache.WorkerRegistryTtlSeconds` | **60** | seconds | `01-architecture.md` §5 — Worker registry | Invalidate on worker register/deregister. |
+| `MainWorker.Cache.RecentCompanyPerUserTtlSeconds` | **`= MainWorker.Auth.MainSessionTtlSeconds`** | seconds | `01-architecture.md` §5 — Per-user recent-company | Bound to session TTL by definition; T3 omits parity check (non-numeric default). |
+
 ---
 
 ## 3. Single-value rule (for the dumb AI)
