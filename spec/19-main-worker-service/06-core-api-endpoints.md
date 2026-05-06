@@ -185,15 +185,16 @@ CREATE TABLE AuthMechanism (
 );
 
 CREATE TABLE EndpointAuthSetting (
-    EndpointAuthSettingId INTEGER PRIMARY KEY AUTOINCREMENT,
-    EndpointPathPattern   TEXT NOT NULL UNIQUE,           -- e.g. "/API/V1/Status", "/API/V1/Company/*"
-    HttpMethodMask        TEXT NOT NULL,                  -- CSV of GET|POST|PATCH|PUT|DELETE or "*"
-    IsEnabled             INTEGER NOT NULL,               -- 1 = override active, 0 = ignore (fallback to default)
-    UpdatedByUserId       INTEGER NOT NULL REFERENCES User(UserId),
-    UpdatedAt             TEXT NOT NULL,                  -- ISO-8601 UTC per spec/04 Rule 7.1
-    Notes                 TEXT NULL,
-    Comments              TEXT NULL,
-    Description           TEXT NULL
+    EndpointAuthSettingId       INTEGER PRIMARY KEY AUTOINCREMENT,
+    EndpointPathPattern         TEXT NOT NULL UNIQUE,           -- e.g. "/API/V1/Status", "/API/V1/Company/*"
+    HttpMethodMask              TEXT NOT NULL,                  -- CSV of GET|POST|PATCH|PUT|DELETE or "*"
+    IsEnabled                   INTEGER NOT NULL,               -- 1 = override active, 0 = ignore (fallback to default)
+    UpdatedByUserDirectoryId    INTEGER NOT NULL REFERENCES UserDirectory(UserDirectoryId),  -- v2.1.0: legacy `User` table removed; routing index is the canonical actor reference (see `03-main-db-schema.md` §2.4)
+    UpdatedByUserEmail          TEXT NOT NULL,                  -- snapshotted at write time so audit/listing survives `UserDirectory` deletion
+    UpdatedAt                   INTEGER NOT NULL,               -- Epoch seconds, UTC (Rule 7.1 v2)
+    Notes                       TEXT NULL,
+    Comments                    TEXT NULL,
+    Description                 TEXT NULL
 );
 
 CREATE TABLE EndpointAuthSettingMechanism (
