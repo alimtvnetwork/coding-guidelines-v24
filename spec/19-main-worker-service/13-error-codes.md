@@ -5,7 +5,7 @@
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Project Prefix:** `MWS`
-**Range:** Worker tier `21000-21099`, Main tier `21100-21199`
+**Range:** Worker tier `21000-21099` (primary) + `21200-21299` (overflow expansion per §4 Slot-overflow rule), Main tier `21100-21199`
 **Resolves:** audit findings F-X-08, F-A-21, F-B-08 (top-10 fix #4). Unblocks AC-6, AC-1.
 **Registered in:** `spec/03-error-manage/03-error-code-registry/01-registry.md` (line 61–62 entries).
 
