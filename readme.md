@@ -1523,7 +1523,13 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 | [`docs/guidelines-audit.md`](docs/guidelines-audit.md) | Guidelines audit findings · drift detection · remediation log |
 | [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
-Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
+Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
+
+### What's new in v5.45.0
+
+- **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md`](spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md).
+- **Diagram pipeline at full coverage** — all 23 `spec/**/{diagrams,images}/*.mmd` sources now render cleanly via `node scripts/render-diagrams.mjs` (mermaid-cli 11.4.2). Two pre-existing mermaid-v11 parser issues fixed: `;`-as-separator in `seq-incremental-backup.mmd`, and unquoted `@` token in `ci-pipeline-flow.mmd`.
+- **Sole residual −1** = the intentional v2.0 `Backup.Snapshot.Restore.*` freeze, guarded by `MAIN-900-01 SpecContradiction`.
 
 ---
 
