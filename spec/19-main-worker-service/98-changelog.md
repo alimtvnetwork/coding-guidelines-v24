@@ -4,6 +4,13 @@
 
 ---
 
+## v5.42.0 — 2026-05-07 (Minor version bump; no spec/19 markdown changes; Backup-tier deferral preserved.)
+
+**Scope:** Version bump (`5.41.0` → `5.42.0`). No spec/19 markdown touched. Readiness baseline unchanged at 98/100 (audit-12). `MainWorker.Backup.*` surface remains frozen until v2.0 behind `MAIN-900-01 SpecContradiction`.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.41.0 — 2026-05-07 (Hardening Patch I: G1+G2+G3 closed; MWS error catalogue 84→89 codes; audit-12 (blind-AI v5) + audit-13 (Patch-I reverification) shipped; readiness 97→98/100.)
 
 **Scope:** Spec + linter + audit work. (a) `13-error-codes.md`: catalogued 5 real codes (`WORKER-403-01` `PushDisabledInProduction`, `WORKER-403-02` `PayloadHostNotAllowed`, `WORKER-503-01` `MainUnreachable`, `WORKER-503-02` `ManifestUnreachable`, `MAIN-900-01` `SpecContradiction`); header §1 + §4 now first-class document the `21200-21299` overflow range. (b) `25-inherited-rules.md`: corrected `../03-error-manage/` link depth. (c) `linter-scripts/check-mws-error-codes.py`: R4 widened, new unallocated allowlist `check-mws-error-codes.unallocated.txt` for `WORKER-940-05/10` + `MAIN-830-04`. (d) `linter-scripts/spec-folder-refs.allowlist`: `03-tasks` allowlisted. (e) New audits `12-blind-ai-readiness-2026-05-07-v5.md` (98/100) + `13-patch-i-reverification-2026-05-07.md`. All 14/14 lint-ci steps + 4/4 ancillary checks GREEN. Spec/19 implementation constraint memory broadened (v5.40.0 reverted Phase-14 scaffold + new tracker forbidden).
