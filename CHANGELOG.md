@@ -5,6 +5,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.43.0] - 2026-05-07
+
+### Changed — Baseline diagram PNGs committed (audit-12 §2.2 residual closure); audit-14 shipped.
+
+- Installed `@mermaid-js/mermaid-cli@11.4.2` as a dev dependency and ran `node scripts/render-diagrams.mjs`.
+- Rendered 20 new PNGs across `spec/**/{diagrams,images}/`; 26 total baseline PNGs now committed.
+- 2 sources have pre-existing mermaid-v11 parser errors (tracked separately): `spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`, `spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`.
+- New audit `spec/19-main-worker-service/audit/14-baseline-diagram-pngs-2026-05-07.md`.
+- Spec/19 SPEC-ONLY constraint preserved (only renderer output committed). Backup-tier deferral unchanged.
+- Bumped `package.json` from `5.42.0` → `5.43.0`. Sync-managed artifacts regenerated.
+
+---
+
 ## [5.42.0] - 2026-05-07
 
 ### Changed — Minor version bump (no spec/19 markdown touched).
