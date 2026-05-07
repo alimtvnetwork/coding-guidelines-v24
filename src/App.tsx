@@ -9,6 +9,7 @@ import CodeReviewChecklist from "./pages/CodeReviewChecklist";
 import Dashboard from "./pages/Dashboard";
 import DocsViewer from "./pages/DocsViewer";
 import LandingPage from "./pages/LandingPage";
+import Phase14Tracker from "./pages/Phase14Tracker";
 import ReadmeEditor from "./pages/ReadmeEditor";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/checklist" element={<CodeReviewChecklist />} />
             <Route path="/readme" element={<ReadmeEditor />} />
             <Route path="/author" element={<Author />} />
+            <Route path="/phase-14" element={<Phase14Tracker />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
