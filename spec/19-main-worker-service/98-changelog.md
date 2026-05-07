@@ -4,6 +4,13 @@
 
 ---
 
+## v5.43.0 — 2026-05-07 (Baseline diagram PNGs committed via render-diagrams pipeline; audit-14 shipped; 20 new PNGs, 26 total; 2 pre-existing mermaid-v11 parser failures tracked separately.)
+
+**Scope:** Renderer output only — no spec/19 markdown changed. `@mermaid-js/mermaid-cli@11.4.2` added as dev dep. `spec/19-main-worker-service/audit/14-baseline-diagram-pngs-2026-05-07.md` documents disposition. Backup-tier deferral preserved.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.42.0 — 2026-05-07 (Minor version bump; no spec/19 markdown changes; Backup-tier deferral preserved.)
 
 **Scope:** Version bump (`5.41.0` → `5.42.0`). No spec/19 markdown touched. Readiness baseline unchanged at 98/100 (audit-12). `MainWorker.Backup.*` surface remains frozen until v2.0 behind `MAIN-900-01 SpecContradiction`.
