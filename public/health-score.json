@@ -1,27 +1,24 @@
 {
   "schemaVersion": 1,
-  "generated": "2026-05-07T12:00:00.000Z",
-  "version": "5.41.0",
-  "overallScore": 82,
-  "grade": "A-",
+  "generated": "2026-05-07T04:01:19.042Z",
+  "version": "5.42.0",
+  "overallScore": 80,
+  "grade": "B",
   "effectiveScore": 100,
   "effectiveGrade": "A+",
   "totals": {
     "files": 675,
     "folders": 23,
-    "lines": 144811
+    "lines": 144824
   },
   "blindAiAudit": {
-    "version": "v5",
-    "score": 98.0,
-    "handoffWeighted": 99.5,
-    "source": "spec/19-main-worker-service/audit/12-blind-ai-readiness-2026-05-07-v5.md"
+    "version": "v3",
+    "score": 99.8,
+    "handoffWeighted": 99.9
   },
   "sources": [
     "spec/health-dashboard.md",
-    "spec/17-consolidated-guidelines/19-gap-analysis.md",
-    "spec/19-main-worker-service/audit/12-blind-ai-readiness-2026-05-07-v5.md",
-    "spec/19-main-worker-service/audit/13-patch-i-reverification-2026-05-07.md",
+    "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md",
     "version.json"
   ]
 }
