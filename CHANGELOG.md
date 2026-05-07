@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.45.0] - 2026-05-07
+
+### Fixed — Mermaid v11 parser failures eliminated; diagram pipeline at 100% coverage; readme "What's new" section added.
+
+- `spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`: replaced `;` (mermaid-v11 statement separator) with `and` in message text.
+- `spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`: quoted all node labels so `@` tokens (e.g. `actions/checkout@v6`) parse cleanly.
+- `node scripts/render-diagrams.mjs` now reports `rendered=2 skipped=21 failed=0` — full coverage.
+- `readme.md`: new "What's new in v5.45.0" subsection under the spec-tree block; `changelog.md` link corrected to `CHANGELOG.md`.
+- Bumped `package.json` from `5.44.0` → `5.45.0`. Sync artifacts regenerated.
+
+---
+
 ## [5.44.0] - 2026-05-07
 
 ### Changed — Audit-15 (blind-AI readiness v6) shipped; spec/19 promoted 98 → 99/100 (A+).
