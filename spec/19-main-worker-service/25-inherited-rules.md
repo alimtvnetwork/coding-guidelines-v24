@@ -23,7 +23,7 @@ The dumb-AI audit (`audit/07-…v2.md`, `audit/08-…v3.md`) flagged that severa
 
 ## 2. Inherited from `spec/03-error-manage/`
 
-Operative subset for spec/19 implementers (full text in [`../03-error-manage/`](../../03-error-manage/)):
+Operative subset for spec/19 implementers (full text in [`../03-error-manage/`](../03-error-manage/)):
 
 1. **Catch → log → rethrow or handle.** Every `catch` block MUST take one of these three actions. Silent catch is forbidden.
 2. **Log level matches severity:** `debug` (verbose internals) | `info` (normal lifecycle) | `warn` (recoverable anomaly) | `error` (failed operation, surfaced) | `fatal` (process-ending).
