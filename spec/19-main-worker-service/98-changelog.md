@@ -4,6 +4,13 @@
 
 ---
 
+## v5.45.0 — 2026-05-07 (Mermaid-v11 parser fix in `diagrams/seq-incremental-backup.mmd` (`;` → `and`); diagram pipeline at 100% coverage; root readme updated.)
+
+**Scope:** Diagram-source fix only — no spec/19 chapter markdown changed. `seq-incremental-backup.mmd` and `spec/12/ci-pipeline-flow.mmd` now render cleanly under mermaid-cli 11.4.2; `render-diagrams.mjs` reports `failed=0`. Backup-tier deferral preserved; readiness baseline unchanged at 99/100 (audit-15).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.44.0 — 2026-05-07 (Audit-15 blind-AI readiness v6 shipped: 98 → 99/100 (A+); audit-12 §2.2 closed for 8/9 diagrams; backup-tier deferral preserved.)
 
 **Scope:** Audit-only — no spec/19 markdown changed. New file: `audit/15-blind-ai-readiness-2026-05-07-v6.md`. Linter posture unchanged (12/12 non-Go lint-ci steps GREEN, 89-code MWS catalogue, 0 stale folder refs). Sole residual −1 = intentional v2.0 `Backup.Snapshot.Restore.*` freeze.
