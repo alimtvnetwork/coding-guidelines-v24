@@ -35,6 +35,6 @@ sequenceDiagram
         App-->>BE1: 200 OK { LastAcceptedSyncOpSeq: ToSeq }
     end
     BE1-->>Pri: ACK
-    Pri->>Pri: Advance local cursor; mark envelope Acked
+    Pri->>Pri: Advance local cursor and mark envelope Acked
 
     Note over App,DB: Any Stage failure → BackupApplyDeadLetter (no silent skip per CODE RED).
