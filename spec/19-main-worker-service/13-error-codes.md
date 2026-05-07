@@ -106,6 +106,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|---|---|---|---|
 | `WORKER-800-01` | `21080` | `ListenerBindFail` | "Failed to bind public listener." | 500 | `10` §6 |
 | `WORKER-800-02` | `21081` | `WorkerUnreachable` | "Main could not reach worker on `WorkerEndpointPublic`." | 502 | `04-worker-routing.md` |
+| `WORKER-503-01` | `21082` | `MainUnreachable` | "Channel B pull: Main host unreachable; exponential backoff, fall through to Channel C if enabled." | 503 | `16-update-channels.md` §B |
+| `WORKER-503-02` | `21083` | `ManifestUnreachable` | "Channel C pull: remote manifest unreachable; retry per `PollIntervalSeconds`." | 503 | `16-update-channels.md` §C |
 
 ### 2.10 Cache Coherence (900-999 → 21090-21099)
 
