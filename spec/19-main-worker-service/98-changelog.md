@@ -4,6 +4,19 @@
 
 ---
 
+## v5.41.0 — 2026-05-07 (Hardening Patch I: G1+G2+G3 closed; MWS error catalogue 84→89 codes; audit-12 (blind-AI v5) + audit-13 (Patch-I reverification) shipped; readiness 97→98/100.)
+
+**Scope:** Spec + linter + audit work. (a) `13-error-codes.md`: catalogued 5 real codes (`WORKER-403-01` `PushDisabledInProduction`, `WORKER-403-02` `PayloadHostNotAllowed`, `WORKER-503-01` `MainUnreachable`, `WORKER-503-02` `ManifestUnreachable`, `MAIN-900-01` `SpecContradiction`); header §1 + §4 now first-class document the `21200-21299` overflow range. (b) `25-inherited-rules.md`: corrected `../03-error-manage/` link depth. (c) `linter-scripts/check-mws-error-codes.py`: R4 widened, new unallocated allowlist `check-mws-error-codes.unallocated.txt` for `WORKER-940-05/10` + `MAIN-830-04`. (d) `linter-scripts/spec-folder-refs.allowlist`: `03-tasks` allowlisted. (e) New audits `12-blind-ai-readiness-2026-05-07-v5.md` (98/100) + `13-patch-i-reverification-2026-05-07.md`. All 14/14 lint-ci steps + 4/4 ancillary checks GREEN. Spec/19 implementation constraint memory broadened (v5.40.0 reverted Phase-14 scaffold + new tracker forbidden).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v5.40.0 — 2026-05-07 (Reverted: Phase-14 kickoff scaffold deleted; spec/19 SPEC-ONLY constraint broadened to forbid issue-tracking + app-side trackers + typed task indexes derived from spec/19.)
+
+**Scope:** Version bump (`5.39.0` → `5.40.0`). No spec/19 markdown touched.
+
+---
+
 ## v5.39.0 — 2026-05-07 (Patch D (audit-10) closure: RAG mutation-score TBD resolved at v2.0.0; ≥80% gate now binding for future executable RAG validator (deferred-by-design); audit-11 disposition updated.)
 
 **Scope:** Version bump (`5.38.0` → `5.39.0`). Spec-only — no spec/19 markdown touched (cross-corpus closure of audit-10 Patch D in `spec/06-seedable-config-architecture/02-features/04-rag-test-coverage-matrix.md`); audit-11 Patch D row updated to reflect re-closure at v5.39.0. No mutation tooling added inside `spec/` per `mem://constraints/spec19-no-implementation`.
