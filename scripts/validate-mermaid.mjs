@@ -13,7 +13,18 @@
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import { join, relative, dirname } from 'node:path';
-import mermaid from 'mermaid';
+import { JSDOM } from 'jsdom';
+
+// Mermaid v11 calls DOMPurify.addHook during parse; provide a browser-like
+// global before importing it so the parser doesn't crash in pure Node.
+const dom = new JSDOM('<!doctype html><html><body></body></html>');
+globalThis.window = dom.window;
+globalThis.document = dom.window.document;
+globalThis.DocumentFragment = dom.window.DocumentFragment;
+globalThis.Element = dom.window.Element;
+globalThis.Node = dom.window.Node;
+
+const mermaid = (await import('mermaid')).default;
 
 const ROOT = process.cwd();
 const SPEC_ROOT = join(ROOT, 'spec');
