@@ -40,7 +40,7 @@ sequenceDiagram
     React->>Main: "POST /API/V1/Auth/RefreshEndpoint (session cookie)"
     Main->>Cache: "GET CompanyId -> WorkerNodeId"
     alt worker reassigned
-        Main->>DB: "Re-resolve mapping; invalidate stale cache"
+        Main->>DB: "Re-resolve mapping and invalidate stale cache"
     end
     Main->>Main: "Mint fresh worker JWT"
     Main-->>React: "200 { WorkerEndpoint, WorkerJwt, JwtExpiresAt }"
