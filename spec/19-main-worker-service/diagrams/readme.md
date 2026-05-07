@@ -23,6 +23,7 @@
 | `erd-seedable-config.mmd` | `spec/06-seedable-config-architecture/` + `14-rbac-and-status-seed.md` |
 | `seq-company-creation.mmd` | `04-worker-routing.md` + `15-tunable-constants.md` |
 | `seq-login-routing.mmd` | `12-jwt-delivery-contract.md` + `04-worker-routing.md` |
+| `seq-ui-endpoint-discovery.mmd` | `12-jwt-delivery-contract.md` + `04-worker-routing.md` + `06-core-api-endpoints.md` |
 | `seq-push-update.mmd` | `spec/14-update/28-worker-push-instruction.md` + `15-tunable-constants.md` |
 | `erd-backup-tier.mmd` | `19-incremental-backup-sync.md` + `20-backup-encryption-and-keys.md` + `22-backup-apply-logic.md` + `23-snapshot-storage-and-restore.md` |
 | `seq-incremental-backup.mmd` | `19-incremental-backup-sync.md` + `21-backup-endpoints.md` + `22-backup-apply-logic.md` |
@@ -47,6 +48,7 @@ Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last 
 |------|------|
 | [`seq-company-creation.mmd`](seq-company-creation.mmd) | `POST /API/V1/Company` end-to-end: validate → strategy pick → main insert → worker delegate → split-DB create. |
 | [`seq-login-routing.mmd`](seq-login-routing.mmd) | Sign-in → 2FA → cache lookup → mint worker JWT → React calls Worker directly → token refresh. |
+| [`seq-ui-endpoint-discovery.mmd`](seq-ui-endpoint-discovery.mmd) | Three-phase view of UI endpoint learning: discovery on login, direct Worker calls, endpoint refresh on 401 / near-expiry. |
 | [`seq-push-update.mmd`](seq-push-update.mmd) | Power Admin push-update fan-out, parallel worker hits, partial-failure handling. |
 | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | Primary → Backup CDC flow: SyncOp → envelope seal → BE-1 → 5-stage Apply pipeline → ACK + watermark advance. |
 | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | Operator restore-by-date: BE-3 enqueue → snapshot decrypt → re-seal under current Active KeyEpoch → BE-6 import → watermark realign. |
