@@ -227,6 +227,12 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `MAIN-840-01` | `21191` | `BackupApplyExhausted` | "`MaxRetriesPerEnvelope` exceeded for one `EnvelopeId`; surfaced via BE-5 Health." | n/a | `22-backup-apply-logic.md` §6.2 |
 | `MAIN-840-02` | `21192` | `SnapshotCorrupt` | "Restore R3 SHA-256 mismatch against `BackupSnapshotCatalog.Sha256Hex`; surfaced via BE-5." | n/a | `23-snapshot-storage-and-restore.md` §7 |
 
+### 3.12 Spec Integrity (900-999 → 21193)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-900-01` | `21193` | `SpecContradiction` | "Literal AI/implementation found a precedence-rule contradiction; halt rather than guess." | 500 | `25-inherited-rules.md` §6 |
+
 ---
 
 ## 4. Reserved sub-ranges
