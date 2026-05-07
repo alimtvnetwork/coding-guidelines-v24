@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.44.0] - 2026-05-07
+
+### Changed — Audit-15 (blind-AI readiness v6) shipped; spec/19 promoted 98 → 99/100 (A+).
+
+- New audit `spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md`.
+- Closes audit-12 §2.2 (baseline diagram PNGs) for 8/9 spec/19 diagrams; 1 residual `seq-incremental-backup.mmd` mermaid-v11 parser issue quarantined as renderer-only follow-up.
+- Sole remaining −1 is the intentional v2.0 backup-tier deferral (`MAIN-900-01 SpecContradiction` safe-fail).
+- All 12/12 non-Go `lint-ci.sh` steps GREEN; MWS catalogue stable at 89 codes; 0 stale folder refs.
+- No spec/19 markdown changed — SPEC-ONLY rule preserved. Bumped `package.json` from `5.43.0` → `5.44.0`. Sync artifacts regenerated.
+
+---
+
 ## [5.43.0] - 2026-05-07
 
 ### Changed — Baseline diagram PNGs committed (audit-12 §2.2 residual closure); audit-14 shipped.

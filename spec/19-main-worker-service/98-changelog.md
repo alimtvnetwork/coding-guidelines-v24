@@ -4,6 +4,13 @@
 
 ---
 
+## v5.44.0 — 2026-05-07 (Audit-15 blind-AI readiness v6 shipped: 98 → 99/100 (A+); audit-12 §2.2 closed for 8/9 diagrams; backup-tier deferral preserved.)
+
+**Scope:** Audit-only — no spec/19 markdown changed. New file: `audit/15-blind-ai-readiness-2026-05-07-v6.md`. Linter posture unchanged (12/12 non-Go lint-ci steps GREEN, 89-code MWS catalogue, 0 stale folder refs). Sole residual −1 = intentional v2.0 `Backup.Snapshot.Restore.*` freeze.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.43.0 — 2026-05-07 (Baseline diagram PNGs committed via render-diagrams pipeline; audit-14 shipped; 20 new PNGs, 26 total; 2 pre-existing mermaid-v11 parser failures tracked separately.)
 
 **Scope:** Renderer output only — no spec/19 markdown changed. `@mermaid-js/mermaid-cli@11.4.2` added as dev dep. `spec/19-main-worker-service/audit/14-baseline-diagram-pngs-2026-05-07.md` documents disposition. Backup-tier deferral preserved.
