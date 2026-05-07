@@ -72,6 +72,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-400-02` | `21041` | `VersionMismatch` | "Worker version not in Main's accepted range." | 409 | `10` §6 |
 | `WORKER-400-03` | `21042` | `InstructionExpired` | "Push-update instruction past `LatestStartUtc`." | 409 | `spec/14-update/28` §6 |
 | `WORKER-400-04` | `21043` | `InstructionKindUnsupported` | "PayloadKind not implemented in this worker version." | 409 | `spec/14-update/28` §4 |
+| `WORKER-403-01` | `21044` | `PushDisabledInProduction` | "Push endpoints REFUSE with 403 when `Env=Production` at Main." | 403 | `16-update-channels.md` §A (Push) |
+| `WORKER-403-02` | `21045` | `PayloadHostNotAllowed` | "`PayloadUrl` host not on `AllowedHostsAllowlist` (Channel C defence-in-depth)." | 403 | `16-update-channels.md` §C |
 
 ### 2.6 Database / Persistence (500-599 → 21050-21059)
 
