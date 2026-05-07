@@ -36,6 +36,7 @@ SPEC_FILE = REPO_ROOT / "spec/19-main-worker-service/13-error-codes.md"
 INDEX_FILE = REPO_ROOT / "spec/19-main-worker-service/error-codes.json"
 MASTER_FILE = REPO_ROOT / "spec/03-error-manage/03-error-code-registry/error-codes-master.json"
 WAIVER_FILE = REPO_ROOT / "linter-scripts/check-mws-error-codes.waivers.txt"
+UNALLOCATED_FILE = REPO_ROOT / "linter-scripts/check-mws-error-codes.unallocated.txt"
 
 # Files that contain catalogue entries — references inside them do NOT
 # count for orphan detection (Rule R2).
@@ -93,7 +94,8 @@ def record_refs_in_file(f: Path, refs: dict[str, set[Path]]) -> None:
 
 
 def has_no_unknown_refs(refs: dict[str, set[Path]], catalogue: set[str], errors: list[str]) -> bool:
-    unknown = sorted(set(refs) - catalogue)
+    unallocated = load_unallocated()
+    unknown = sorted((set(refs) - catalogue) - unallocated)
     for code in unknown:
         sample = sorted(refs[code])[0].relative_to(REPO_ROOT)
         errors.append(f"R1 unknown code {code} referenced in {sample} (and {len(refs[code])-1} more) — not in 13-error-codes.md")
@@ -101,9 +103,17 @@ def has_no_unknown_refs(refs: dict[str, set[Path]], catalogue: set[str], errors:
 
 
 def load_waivers() -> set[str]:
-    if not WAIVER_FILE.is_file():
+    return load_code_list(WAIVER_FILE)
+
+
+def load_unallocated() -> set[str]:
+    return load_code_list(UNALLOCATED_FILE)
+
+
+def load_code_list(path: Path) -> set[str]:
+    if not path.is_file():
         return set()
-    lines = WAIVER_FILE.read_text(encoding="utf-8").splitlines()
+    lines = path.read_text(encoding="utf-8").splitlines()
     return {ln.strip() for ln in lines if ln.strip() and not ln.lstrip().startswith("#")}
 
 
@@ -133,11 +143,17 @@ def is_in_range(catalogue: dict[str, int], errors: list[str]) -> bool:
 
 
 def check_one_range(code: str, flat: int) -> list[str]:
-    if code.startswith("WORKER") and not 21000 <= flat <= 21099:
-        return [f"R4 {code} flat {flat} outside Worker range 21000-21099"]
+    if code.startswith("WORKER") and not is_worker_flat_valid(flat):
+        return [f"R4 {code} flat {flat} outside Worker ranges 21000-21099 or 21200-21299"]
     if code.startswith("MAIN") and not 21100 <= flat <= 21199:
         return [f"R4 {code} flat {flat} outside Main range 21100-21199"]
     return []
+
+
+def is_worker_flat_valid(flat: int) -> bool:
+    primary = 21000 <= flat <= 21099
+    overflow = 21200 <= flat <= 21299
+    return primary or overflow
 
 
 def main() -> int:
