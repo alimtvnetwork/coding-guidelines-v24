@@ -1,9 +1,27 @@
 # Consolidated Guidelines — Gap Analysis Report
 
-**Version:** 13.0.0  
-**Updated:** 2026-04-22  
-**Scope:** All 23 consolidated guideline files vs source spec folders  
-**Previous:** v12.0.0 (2026-04-16) — pre source-folder coverage map sweep
+**Version:** 13.1.0  
+**Updated:** 2026-05-07  
+**Scope:** All 23 consolidated guideline files vs source spec folders + spec/19 readiness sweep at v5.41.0  
+**Previous:** v13.0.0 (2026-04-22) — source-folder coverage map sweep
+
+---
+
+## v13.1.0 Changes — Hardening Patch I + Audit-12 closure
+
+At v5.41.0 the spec/19 non-backup surface advanced to **98 / 100** (audit `12-`). Hardening Patch I closed the three gaps surfaced by the v5.39.0 readiness sweep:
+
+- **G1** — `03-tasks` added to `linter-scripts/spec-folder-refs.allowlist` (sibling-repo doc-only ref).
+- **G2** — broken cross-link in `spec/19/25-inherited-rules.md` corrected (`../03-error-manage/`).
+- **G3** — MWS error catalogue grew 84 → 89 codes (`WORKER-403-01/02`, `WORKER-503-01/02`, `MAIN-900-01`); R4 widened to recognise §4 overflow range `21200-21299`; new `check-mws-error-codes.unallocated.txt` codifies 3 forbidden-future codes (`WORKER-940-05`, `WORKER-940-10`, `MAIN-830-04`).
+
+All 14/14 `lint-ci.sh` steps green; 4/4 ancillary checks green. Patches A–D (audit-10) and Patch D-closure (v5.39.0) verified durable in audit `13-`.
+
+Overall implementability score: **98.0/100** (up from 97.6). Handoff-weighted: **99.5/100** (up from 99.0). The remaining 0.5 point splits between the documented backup-snapshot-restore deferral (intentional, gated by `MAIN-900-01 SpecContradiction` safe-fail) and uncommitted baseline diagram PNGs.
+
+---
+
+## v13.0.0 Changes — Source-Folder Coverage Sweep (preserved below)
 
 ---
 

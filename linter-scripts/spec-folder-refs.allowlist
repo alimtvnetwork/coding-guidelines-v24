@@ -29,6 +29,7 @@
 01-general-spec
 02-spec-management-software
 03-issues
+03-tasks
 
 # --- gitmap-v3 CLI suite (cross-repo references) ---
 09-api-integration

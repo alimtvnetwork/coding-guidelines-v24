@@ -5,7 +5,7 @@
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Project Prefix:** `MWS`
-**Range:** Worker tier `21000-21099`, Main tier `21100-21199`
+**Range:** Worker tier `21000-21099` (primary) + `21200-21299` (overflow expansion per §4 Slot-overflow rule), Main tier `21100-21199`
 **Resolves:** audit findings F-X-08, F-A-21, F-B-08 (top-10 fix #4). Unblocks AC-6, AC-1.
 **Registered in:** `spec/03-error-manage/03-error-code-registry/01-registry.md` (line 61–62 entries).
 
@@ -72,6 +72,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 | `WORKER-400-02` | `21041` | `VersionMismatch` | "Worker version not in Main's accepted range." | 409 | `10` §6 |
 | `WORKER-400-03` | `21042` | `InstructionExpired` | "Push-update instruction past `LatestStartUtc`." | 409 | `spec/14-update/28` §6 |
 | `WORKER-400-04` | `21043` | `InstructionKindUnsupported` | "PayloadKind not implemented in this worker version." | 409 | `spec/14-update/28` §4 |
+| `WORKER-403-01` | `21044` | `PushDisabledInProduction` | "Push endpoints REFUSE with 403 when `Env=Production` at Main." | 403 | `16-update-channels.md` §A (Push) |
+| `WORKER-403-02` | `21045` | `PayloadHostNotAllowed` | "`PayloadUrl` host not on `AllowedHostsAllowlist` (Channel C defence-in-depth)." | 403 | `16-update-channels.md` §C |
 
 ### 2.6 Database / Persistence (500-599 → 21050-21059)
 
@@ -104,6 +106,8 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|---|---|---|---|
 | `WORKER-800-01` | `21080` | `ListenerBindFail` | "Failed to bind public listener." | 500 | `10` §6 |
 | `WORKER-800-02` | `21081` | `WorkerUnreachable` | "Main could not reach worker on `WorkerEndpointPublic`." | 502 | `04-worker-routing.md` |
+| `WORKER-503-01` | `21082` | `MainUnreachable` | "Channel B pull: Main host unreachable; exponential backoff, fall through to Channel C if enabled." | 503 | `16-update-channels.md` §B |
+| `WORKER-503-02` | `21083` | `ManifestUnreachable` | "Channel C pull: remote manifest unreachable; retry per `PollIntervalSeconds`." | 503 | `16-update-channels.md` §C |
 
 ### 2.10 Cache Coherence (900-999 → 21090-21099)
 
@@ -222,6 +226,12 @@ The mapping is mechanical: `WORKER-{XYY}-{ZZ}` ↔ `21{XYY}` for worker, `MAIN-{
 |---|---|---|---|---|---|
 | `MAIN-840-01` | `21191` | `BackupApplyExhausted` | "`MaxRetriesPerEnvelope` exceeded for one `EnvelopeId`; surfaced via BE-5 Health." | n/a | `22-backup-apply-logic.md` §6.2 |
 | `MAIN-840-02` | `21192` | `SnapshotCorrupt` | "Restore R3 SHA-256 mismatch against `BackupSnapshotCatalog.Sha256Hex`; surfaced via BE-5." | n/a | `23-snapshot-storage-and-restore.md` §7 |
+
+### 3.12 Spec Integrity (900-999 → 21193)
+
+| Code | Flat | Name | Message | HTTP | Source |
+|---|---|---|---|---|---|
+| `MAIN-900-01` | `21193` | `SpecContradiction` | "Literal AI/implementation found a precedence-rule contradiction; halt rather than guess." | 500 | `25-inherited-rules.md` §6 |
 
 ---
 
