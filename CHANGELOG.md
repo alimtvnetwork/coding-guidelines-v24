@@ -7,13 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [5.40.0] - 2026-05-07
 
-### Added — Phase 14 kickoff: implementation task tracker for spec/19 non-backup surface.
+### Reverted — Phase 14 kickoff artifacts removed.
 
-- New `03-issues/phase-14-kickoff/` folder with 20 issue-first task files (one per spec/19 chapter 00–17, 24–25). Backup-tier chapters 18–23 excluded; tracked separately.
-- New `src/data/phase14Tasks.ts` typed task index + `src/pages/Phase14Tracker.tsx` route at `/phase-14`.
-- Each task carries `LanguageTBD` / `RepoTBD` placeholders pending Phase 14 scoping decisions.
-- Mutation gate fixed at ≥80% per Patch D closure (v5.39.0).
-- One-way reference only (app → spec); spec/19 remains markdown-only per `mem://constraints/spec19-no-implementation`.
+- Deleted `03-issues/phase-14-kickoff/`, `src/data/phase14Tasks.ts`, `src/pages/Phase14Tracker.tsx`, and the `/phase-14` route.
+- Reason: scoping/materializing spec/19 chapters into typed code or issue scaffolds counts as implementation derived from spec/19 and is forbidden by the broadened `mem://constraints/spec19-no-implementation` rule.
 
 ---
 
