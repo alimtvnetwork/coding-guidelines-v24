@@ -1531,6 +1531,18 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 - **Diagram pipeline at full coverage** — all 23 `spec/**/{diagrams,images}/*.mmd` sources now render cleanly via `node scripts/render-diagrams.mjs` (mermaid-cli 11.4.2). Two pre-existing mermaid-v11 parser issues fixed: `;`-as-separator in `seq-incremental-backup.mmd`, and unquoted `@` token in `ci-pipeline-flow.mmd`.
 - **Sole residual −1** = the intentional v2.0 `Backup.Snapshot.Restore.*` freeze, guarded by `MAIN-900-01 SpecContradiction`.
 
+#### Diagram changelog (mermaid-v11 fixes)
+
+Tracks every `.mmd` source change and the parser rule that motivated it. Use this table when re-rendering or migrating new diagrams.
+
+| Diagram | Change | Why (mermaid-v11 rule) |
+|---|---|---|
+| [`spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`](spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd) | Replaced `;` inside a sequenceDiagram message (`Advance local cursor; mark envelope Acked` → `Advance local cursor and mark envelope Acked`) | **Semicolon separator rule** — mermaid-v11 treats `;` as a statement terminator even inside message text, splitting one message into two malformed statements. Use `and`, `,`, or `·` instead. |
+| [`spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`](spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd) | Quoted every node label so tokens like `actions/checkout@v6` parse cleanly (`A[actions/checkout@v6]` → `A["actions/checkout@v6"]`) | **Quoting rule for special tokens** — mermaid-v11's flowchart lexer rejects `@`, `:`, `(`, `)`, `/` and other punctuation in unquoted node labels. Always wrap labels containing non-alphanumerics in `"..."`. |
+
+> **Pre-render gate:** `npm run diagrams:validate` (lint-ci step 14) parses every `.mmd` against mermaid v11 before PNGs are committed, so future regressions of either rule fail CI instead of slipping through.
+
+
 ---
 
 ## 🔍 Neutral AI Assessment
