@@ -19,6 +19,7 @@
     "diagrams:check": "node scripts/render-diagrams.mjs --check",
     "diagrams:validate": "node scripts/validate-mermaid.mjs",
     "diagrams:rebaseline": "node scripts/regen-diagrams-and-audit.mjs",
+    "readme:auto-update": "node scripts/auto-update-readme.mjs",
     "sync:check:verbose": "node scripts/sync-check.mjs --verbose",
     "sync:fix": "node scripts/sync-check.mjs --fix",
     "lint:readme": "python3 linter-scripts/check-root-readme.py",
