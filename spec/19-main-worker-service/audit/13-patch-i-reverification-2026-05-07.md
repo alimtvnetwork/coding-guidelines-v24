@@ -26,7 +26,7 @@
 | Patch | File | Pre-state | Post-state at v5.41.0 |
 | --- | --- | --- | --- |
 | I-G1 | `linter-scripts/spec-folder-refs.allowlist:31-32` | `03-issues` only | **`03-issues` + `03-tasks`** ✅ |
-| I-G2 | `spec/19-main-worker-service/25-inherited-rules.md:26` | link `(../../03-error-manage/)` resolved one dir too deep | corrected to sibling-relative `(../03-error-manage/)` ✅ |
+| I-G2 | `spec/19-main-worker-service/25-inherited-rules.md:26` | link target was one directory too deep | corrected to sibling-relative path (`../03-error-manage/` from `25-…`) ✅ |
 | I-G3a | `spec/19-main-worker-service/13-error-codes.md:7` | "Worker tier `21000-21099`" | **"Worker tier `21000-21099` (primary) + `21200-21299` (overflow)"** ✅ |
 | I-G3b | `spec/19-main-worker-service/13-error-codes.md` §2.5/§2.9/§3.12 | 5 codes missing | **`WORKER-403-01/02` + `WORKER-503-01/02` + `MAIN-900-01` catalogued** ✅ |
 | I-G3c | `linter-scripts/check-mws-error-codes.py` + `…unallocated.txt` | R4 range narrow; no unallocated allowlist | **R4 widened (21200-21299); 3 unallocated codes recognised** ✅ |
