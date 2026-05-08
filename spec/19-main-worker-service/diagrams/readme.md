@@ -89,6 +89,12 @@ Each row links the authoritative Mermaid source and its committed PNG export. PN
 | Incremental backup CDC | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | [![seq-incremental-backup](seq-incremental-backup.png)](seq-incremental-backup.png) |
 | Backup restore | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | [![seq-backup-restore](seq-backup-restore.png)](seq-backup-restore.png) |
 
+### Architecture / trust flows
+
+| Diagram | Mermaid source | Rendered PNG |
+|---------|---------------|--------------|
+| Trust boundaries + git backup | [`flow-trust-boundaries-and-git-backup.mmd`](flow-trust-boundaries-and-git-backup.mmd) | [![flow-trust-boundaries-and-git-backup](flow-trust-boundaries-and-git-backup.png)](flow-trust-boundaries-and-git-backup.png) |
+
 ---
 
 ## Conventions
