@@ -1,0 +1,71 @@
+name: Diagrams CI
+
+on:
+  pull_request:
+    paths:
+      - 'spec/**/*.mmd'
+      - 'spec/**/*.png'
+      - 'scripts/validate-mermaid.mjs'
+      - 'scripts/render-diagrams.mjs'
+      - 'scripts/regen-diagrams-and-audit.mjs'
+      - 'package.json'
+      - '.github/workflows/diagrams-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagrams:
+    name: Validate, render & drift-check Mermaid diagrams
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Headless Chromium dependencies for mermaid PNG rendering (puppeteer).
+      - name: Install Chromium system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
+            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+            libgbm1 libpango-1.0-0 libcairo2 libasound2t64 libnspr4 \
+            libxshmfence1 fonts-liberation
+
+      # Step 1 — Parse-validate every .mmd against mermaid v11 grammar.
+      - name: Validate Mermaid sources (mermaid v11 parse)
+        run: bun run diagrams:validate
+
+      # Step 2 — Render all diagrams to PNG into a temp output tree.
+      - name: Render diagrams to PNG
+        run: bun run diagrams:render
+
+      # Step 3 — Drift-check: fail if rendered PNGs differ from committed baseline.
+      - name: Drift-check committed PNGs vs freshly rendered
+        run: bun run diagrams:check
+
+      - name: Upload rendered diagrams on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-diagrams
+          path: |
+            spec/**/diagrams/*.png
+            spec/**/images/*.png
+          if-no-files-found: ignore
+          retention-days: 7
