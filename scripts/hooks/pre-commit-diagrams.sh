@@ -29,6 +29,15 @@ fi
 
 STAGED_MMD=$(git diff --cached --name-only --diff-filter=ACMR -- '*.mmd' || true)
 
+# Allow opt-out of the hash cache via NO_DIAGRAM_CACHE=1. Forwarded to
+# render-diagrams.mjs as --no-cache so every staged diagram is re-rendered
+# from scratch (useful when debugging stale PNGs or cache corruption).
+NO_CACHE_FLAG=""
+if [ "${NO_DIAGRAM_CACHE:-0}" = "1" ]; then
+  NO_CACHE_FLAG="--no-cache"
+  echo "  pre-commit: NO_DIAGRAM_CACHE=1 — forcing full re-render (cache bypassed)."
+fi
+
 echo "  pre-commit: validating Mermaid sources (mermaid v11 parse)..."
 node scripts/validate-mermaid.mjs
 
@@ -37,7 +46,7 @@ if [ -n "$STAGED_MMD" ]; then
   while IFS= read -r mmd; do
     [ -z "$mmd" ] && continue
     touch "$mmd"
-    node scripts/render-diagrams.mjs --only "$mmd"
+    node scripts/render-diagrams.mjs --only "$mmd" $NO_CACHE_FLAG
     png="${mmd%.mmd}.png"
     if [ -f "$png" ]; then
       git add "$png"
@@ -49,7 +58,7 @@ if [ -n "$STAGED_MMD" ]; then
   # the spec/ tree is large. Full-tree drift-check still runs in CI
   # (.github/workflows/diagrams-ci.yml).
   echo "  pre-commit: drift-checking staged diagrams only..."
-  node scripts/render-diagrams.mjs --check --staged
+  node scripts/render-diagrams.mjs --check --staged $NO_CACHE_FLAG
 else
   echo "  pre-commit: no staged .mmd files — skipping drift-check."
 fi
