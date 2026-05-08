@@ -47,19 +47,72 @@ jobs:
             libgbm1 libpango-1.0-0 libcairo2 libasound2t64 libnspr4 \
             libxshmfence1 fonts-liberation
 
+      - name: Prepare CI log directory
+        run: mkdir -p .ci-logs/diagrams
+
       # Step 1 — Parse-validate every .mmd against mermaid v11 grammar.
       - name: Validate Mermaid sources (mermaid v11 parse)
-        run: bun run diagrams:validate
+        id: validate
+        run: |
+          set -o pipefail
+          bun run diagrams:validate 2>&1 | tee .ci-logs/diagrams/validate.log
 
-      # Step 2 — Render all diagrams to PNG into a temp output tree.
+      # Step 2 — Render all diagrams to PNG (writes alongside .mmd sources).
       - name: Render diagrams to PNG
-        run: bun run diagrams:render
+        id: render
+        run: |
+          set -o pipefail
+          bun run diagrams:render 2>&1 | tee .ci-logs/diagrams/render.log
 
       # Step 3 — Drift-check: fail if rendered PNGs differ from committed baseline.
       - name: Drift-check committed PNGs vs freshly rendered
-        run: bun run diagrams:check
+        id: drift
+        run: |
+          set -o pipefail
+          bun run diagrams:check 2>&1 | tee .ci-logs/diagrams/drift-check.log
 
-      - name: Upload rendered diagrams on failure
+      # Always-on: capture the working-tree diff vs committed baseline so
+      # PNG drift (and any unexpected .mmd churn) is reviewable as an artifact.
+      - name: Capture git diff vs baseline
+        if: always()
+        run: |
+          {
+            echo "=== git status (porcelain) ==="
+            git status --porcelain
+            echo
+            echo "=== git diff --stat (working tree vs HEAD) ==="
+            git diff --stat -- 'spec/**/*.png' 'spec/**/*.mmd' || true
+            echo
+            echo "=== git diff (text-only sources) ==="
+            git diff -- 'spec/**/*.mmd' || true
+          } > .ci-logs/diagrams/git-diff.log
+          # Binary-aware diff for PNGs (lists changed PNGs without huge blobs).
+          git diff --binary --stat -- 'spec/**/*.png' \
+            > .ci-logs/diagrams/png-diff.stat 2>&1 || true
+
+      - name: Summarise failure for the PR check
+        if: failure()
+        run: |
+          {
+            echo "## Diagrams CI — failure summary"
+            echo
+            echo "- validate: ${{ steps.validate.outcome }}"
+            echo "- render:   ${{ steps.render.outcome }}"
+            echo "- drift:    ${{ steps.drift.outcome }}"
+            echo
+            echo "Full logs are attached as the \`diagrams-ci-logs\` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload diagrams CI logs and diff (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagrams-ci-logs
+          path: .ci-logs/diagrams/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload rendered diagrams (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -69,3 +122,4 @@ jobs:
             spec/**/images/*.png
           if-no-files-found: ignore
           retention-days: 7
+
