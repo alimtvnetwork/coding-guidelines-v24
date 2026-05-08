@@ -77,6 +77,7 @@ Each row links the authoritative Mermaid source and its committed PNG export. PN
 | Company creation | [`seq-company-creation.mmd`](seq-company-creation.mmd) | [![seq-company-creation](seq-company-creation.png)](seq-company-creation.png) |
 | Login + worker routing | [`seq-login-routing.mmd`](seq-login-routing.mmd) | [![seq-login-routing](seq-login-routing.png)](seq-login-routing.png) |
 | UI endpoint discovery | [`seq-ui-endpoint-discovery.mmd`](seq-ui-endpoint-discovery.mmd) | [![seq-ui-endpoint-discovery](seq-ui-endpoint-discovery.png)](seq-ui-endpoint-discovery.png) |
+| Login + endpoint edge cases | [`seq-login-edge-cases.mmd`](seq-login-edge-cases.mmd) | [![seq-login-edge-cases](seq-login-edge-cases.png)](seq-login-edge-cases.png) |
 | Push update fan-out | [`seq-push-update.mmd`](seq-push-update.mmd) | [![seq-push-update](seq-push-update.png)](seq-push-update.png) |
 | Incremental backup CDC | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | [![seq-incremental-backup](seq-incremental-backup.png)](seq-incremental-backup.png) |
 | Backup restore | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | [![seq-backup-restore](seq-backup-restore.png)](seq-backup-restore.png) |
