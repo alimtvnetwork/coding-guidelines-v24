@@ -48,7 +48,22 @@ jobs:
             libxshmfence1 fonts-liberation
 
       - name: Prepare CI log directory
-        run: mkdir -p .ci-logs/diagrams
+        run: mkdir -p .ci-logs/diagrams .cache
+
+      # Warm-cache: restore the SHA-256 render cache from a previous run so
+      # unchanged .mmd sources skip the (slow) Chromium boot. The cache key
+      # is keyed on every .mmd source + the render script itself, so any
+      # change invalidates the exact-match key but `restore-keys` still
+      # provides a usable partial match (per-source skip remains valid
+      # because isCacheHit() re-verifies content hash at use time).
+      - name: Restore diagram render cache
+        id: diagrams-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/diagrams-hashes.json
+          key: diagrams-hashes-${{ runner.os }}-${{ hashFiles('spec/**/*.mmd', 'scripts/render-diagrams.mjs') }}
+          restore-keys: |
+            diagrams-hashes-${{ runner.os }}-
 
       # Step 1 — Parse-validate every .mmd against mermaid v11 grammar.
       - name: Validate Mermaid sources (mermaid v11 parse)
