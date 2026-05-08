@@ -176,7 +176,8 @@ async function main() {
 
   const mmdFiles = await findMmdFiles(SPEC_ROOT);
   const scopeNote = STAGED_ONLY ? ' (staged-only)' : (ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : '');
-  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}`);
+  const cacheNote = NO_CACHE ? ' [--no-cache: forcing full re-render]' : '';
+  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}${cacheNote}`);
 
   if (STAGED_ONLY && mmdFiles.length === 0) {
     console.log('[render-diagrams] no staged .mmd files — skipping.');
