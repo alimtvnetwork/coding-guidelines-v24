@@ -16,7 +16,7 @@
 // yet — opt-in adoption):
 //   node scripts/render-diagrams.mjs --check
 
-import { existsSync, statSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, statSync, readFileSync, writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join, relative, dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -95,9 +95,23 @@ function loadCache() {
   catch { return {}; }
 }
 
+// Atomic write: serialise to a sibling temp file in the same directory
+// (same filesystem → rename is atomic on POSIX and Windows), then rename
+// over the target. Guarantees the cache file is never observed as a
+// partially-written / truncated JSON document if the hook is interrupted
+// (Ctrl-C, SIGTERM, power loss, etc.). Temp file is best-effort cleaned
+// on failure so we don't leave stray .tmp-* artefacts behind.
 function saveCache(cache) {
   mkdirSync(CACHE_DIR, { recursive: true });
-  writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2) + '\n');
+  const payload = JSON.stringify(cache, null, 2) + '\n';
+  const tmp = join(CACHE_DIR, `diagrams-hashes.json.tmp-${process.pid}-${Date.now()}`);
+  try {
+    writeFileSync(tmp, payload);
+    renameSync(tmp, CACHE_FILE);
+  } catch (err) {
+    try { if (existsSync(tmp)) unlinkSync(tmp); } catch { /* ignore */ }
+    throw err;
+  }
 }
 
 function cacheKey(mmd) {
