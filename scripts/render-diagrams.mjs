@@ -29,6 +29,7 @@ const CHECK_ONLY = ARGS.includes('--check');
 const STAGED_ONLY = ARGS.includes('--staged');
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
+const NO_CACHE = ARGS.includes('--no-cache');
 
 const DIAGRAM_DIR_NAMES = new Set(['diagrams', 'images']);
 
@@ -119,6 +120,7 @@ function cacheKey(mmd) {
 }
 
 function isCacheHit(mmd, png, cache) {
+  if (NO_CACHE) return false;
   if (!existsSync(png)) return false;
   const entry = cache[cacheKey(mmd)];
   if (!entry) return false;
@@ -174,7 +176,8 @@ async function main() {
 
   const mmdFiles = await findMmdFiles(SPEC_ROOT);
   const scopeNote = STAGED_ONLY ? ' (staged-only)' : (ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : '');
-  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}`);
+  const cacheNote = NO_CACHE ? ' [--no-cache: forcing full re-render]' : '';
+  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}${cacheNote}`);
 
   if (STAGED_ONLY && mmdFiles.length === 0) {
     console.log('[render-diagrams] no staged .mmd files — skipping.');
