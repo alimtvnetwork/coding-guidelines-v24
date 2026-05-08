@@ -29,6 +29,7 @@
 | `erd-backup-tier.mmd` | `19-incremental-backup-sync.md` + `20-backup-encryption-and-keys.md` + `22-backup-apply-logic.md` + `23-snapshot-storage-and-restore.md` |
 | `seq-incremental-backup.mmd` | `19-incremental-backup-sync.md` + `21-backup-endpoints.md` + `22-backup-apply-logic.md` |
 | `seq-backup-restore.mmd` | `23-snapshot-storage-and-restore.md` + `21-backup-endpoints.md` |
+| `flow-trust-boundaries-and-git-backup.mmd` | `26-trust-boundaries-and-isolation.md` + `27-git-backup-targets.md` + `18-backup-nodes.md` + `19-incremental-backup-sync.md` |
 
 Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last BLOCKER from `audit/03-diagram-audit.md`. Phase 12 (2026-05-06) added the three Backup-tier diagrams listed above.
 
