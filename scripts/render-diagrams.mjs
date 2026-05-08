@@ -29,6 +29,7 @@ const CHECK_ONLY = ARGS.includes('--check');
 const STAGED_ONLY = ARGS.includes('--staged');
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
+const NO_CACHE = ARGS.includes('--no-cache');
 
 const DIAGRAM_DIR_NAMES = new Set(['diagrams', 'images']);
 
