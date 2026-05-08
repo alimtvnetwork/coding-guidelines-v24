@@ -50,6 +50,7 @@ Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last 
 | [`seq-company-creation.mmd`](seq-company-creation.mmd) | `POST /API/V1/Company` end-to-end: validate → strategy pick → main insert → worker delegate → split-DB create. |
 | [`seq-login-routing.mmd`](seq-login-routing.mmd) | Sign-in → 2FA → cache lookup → mint worker JWT → React calls Worker directly → token refresh. |
 | [`seq-ui-endpoint-discovery.mmd`](seq-ui-endpoint-discovery.mmd) | Three-phase view of UI endpoint learning: discovery on login, direct Worker calls, endpoint refresh on 401 / near-expiry. |
+| [`seq-login-edge-cases.mmd`](seq-login-edge-cases.mmd) | Edge-case lanes: 2FA failure (`MAIN-2FA-001/002`), JWT expiry + 401 retry (`MAIN-401-001`), and worker reassignment mid-session (`MAIN-RTNG-003`). |
 | [`seq-push-update.mmd`](seq-push-update.mmd) | Power Admin push-update fan-out, parallel worker hits, partial-failure handling. |
 | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | Primary → Backup CDC flow: SyncOp → envelope seal → BE-1 → 5-stage Apply pipeline → ACK + watermark advance. |
 | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | Operator restore-by-date: BE-3 enqueue → snapshot decrypt → re-seal under current Active KeyEpoch → BE-6 import → watermark realign. |
