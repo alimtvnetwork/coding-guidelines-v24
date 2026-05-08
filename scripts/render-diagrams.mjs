@@ -25,11 +25,47 @@ import { createHash } from 'node:crypto';
 const ROOT = process.cwd();
 const SPEC_ROOT = join(ROOT, 'spec');
 const ARGS = process.argv.slice(2);
+const HELP = ARGS.includes('--help') || ARGS.includes('-h');
 const CHECK_ONLY = ARGS.includes('--check');
 const STAGED_ONLY = ARGS.includes('--staged');
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
 const NO_CACHE = ARGS.includes('--no-cache');
+
+function printHelp() {
+  console.log(`Usage: node scripts/render-diagrams.mjs [options]
+
+Renders Mermaid (.mmd) sources under spec/**/{diagrams,images}/ to sibling .png
+files using @mermaid-js/mermaid-cli, with a SHA-256 content-hash cache at
+.cache/diagrams-hashes.json.
+
+Options:
+  --check            Drift-check mode. Do not render; exit non-zero if any
+                     existing PNG is stale relative to its .mmd source
+                     (content-hash mismatch, or mtime older when uncached).
+                     Missing PNGs are tolerated (adoption is opt-in).
+  --staged           Restrict discovery to .mmd files currently staged in git
+                     (--diff-filter=ACMR). Useful for fast pre-commit runs.
+                     Combine with --check for a staged-only drift gate.
+  --only <substr>    Restrict discovery to .mmd paths whose absolute path
+                     contains <substr> (e.g. "spec/19" or a single file path).
+  --no-cache         Bypass the hash cache: re-render every discovered .mmd
+                     even when content hash matches. Cache is rewritten with
+                     fresh entries on success.
+  -h, --help         Show this message and exit.
+
+Examples:
+  node scripts/render-diagrams.mjs
+  node scripts/render-diagrams.mjs --only spec/19
+  node scripts/render-diagrams.mjs --check
+  node scripts/render-diagrams.mjs --check --staged
+  node scripts/render-diagrams.mjs --no-cache --only spec/14`);
+}
+
+if (HELP) {
+  printHelp();
+  process.exit(0);
+}
 
 const DIAGRAM_DIR_NAMES = new Set(['diagrams', 'images']);
 
