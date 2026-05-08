@@ -16,10 +16,11 @@
 // yet — opt-in adoption):
 //   node scripts/render-diagrams.mjs --check
 
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, statSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join, relative, dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
 const SPEC_ROOT = join(ROOT, 'spec');
@@ -69,8 +70,62 @@ function pngPathFor(mmd) {
   return mmd.replace(/\.mmd$/, '.png');
 }
 
-function isPngFresh(mmd, png) {
+// ---------- Hash-based render cache (keyed by .mmd content) ----------
+//
+// Renders are slow (Chromium boot per file). We persist a SHA-256 of every
+// rendered .mmd in .cache/diagrams-hashes.json so subsequent runs can skip
+// any diagram whose content is byte-identical AND whose PNG still exists.
+// Hashing source content (not mtime) is reliable across `git checkout`,
+// `touch`, and CI clones where mtime is reset.
+
+const CACHE_DIR = join(ROOT, '.cache');
+const CACHE_FILE = join(CACHE_DIR, 'diagrams-hashes.json');
+
+function sha256(buf) {
+  return createHash('sha256').update(buf).digest('hex');
+}
+
+function hashFile(path) {
+  return sha256(readFileSync(path));
+}
+
+function loadCache() {
+  if (!existsSync(CACHE_FILE)) return {};
+  try { return JSON.parse(readFileSync(CACHE_FILE, 'utf8')); }
+  catch { return {}; }
+}
+
+function saveCache(cache) {
+  mkdirSync(CACHE_DIR, { recursive: true });
+  writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2) + '\n');
+}
+
+function cacheKey(mmd) {
+  return relative(ROOT, mmd);
+}
+
+function isCacheHit(mmd, png, cache) {
   if (!existsSync(png)) return false;
+  const entry = cache[cacheKey(mmd)];
+  if (!entry) return false;
+  return entry.MmdSha256 === hashFile(mmd);
+}
+
+function recordCacheHit(mmd, png, cache) {
+  cache[cacheKey(mmd)] = {
+    MmdSha256: hashFile(mmd),
+    PngBytes: statSync(png).size,
+    RenderedAtUtc: new Date().toISOString(),
+  };
+}
+
+// Drift-check uses content hash too, falling back to mtime when no cache
+// entry exists yet (first adoption). This keeps `--check` cheap and stable
+// across `touch` / clone scenarios.
+function isPngFresh(mmd, png, cache) {
+  if (!existsSync(png)) return false;
+  const entry = cache[cacheKey(mmd)];
+  if (entry) return entry.MmdSha256 === hashFile(mmd);
   return statSync(png).mtimeMs >= statSync(mmd).mtimeMs;
 }
 
@@ -112,36 +167,44 @@ async function main() {
     process.exit(0);
   }
 
+  const cache = loadCache();
+
   if (CHECK_ONLY) {
     // Drift-check mode: pass if no PNGs exist yet (adoption is opt-in);
-    // fail only when a PNG is present but older than its .mmd source.
+    // fail only when a PNG is present but its source content has changed
+    // since the last recorded render (hash mismatch) or — for un-cached
+    // legacy entries — the PNG is older than its .mmd source.
     const stale = [];
     for (const mmd of mmdFiles) {
       const png = pngPathFor(mmd);
       if (!existsSync(png)) continue; // adoption pending; not a failure
-      if (!isPngFresh(mmd, png)) {
-        stale.push({ mmd, png, reason: 'PNG older than .mmd' });
+      if (!isPngFresh(mmd, png, cache)) {
+        stale.push({ mmd, png, reason: 'content hash mismatch (or PNG older than .mmd)' });
       }
     }
     process.exit(reportDrift(stale));
   }
 
-  // Render mode: regenerate every PNG that is missing or stale.
+  // Render mode: hash-based cache skips byte-identical sources whose PNG
+  // still exists. Hits are persisted to .cache/diagrams-hashes.json so
+  // subsequent runs (including CI clones with reset mtimes) stay fast.
   let rendered = 0;
-  let skipped = 0;
+  let cacheHits = 0;
   let failed = 0;
   for (const mmd of mmdFiles) {
     const png = pngPathFor(mmd);
-    if (isPngFresh(mmd, png)) {
-      skipped += 1;
+    if (isCacheHit(mmd, png, cache)) {
+      cacheHits += 1;
       continue;
     }
     console.log(`[render-diagrams] rendering ${relative(ROOT, mmd)}`);
     const ok = renderOne(mmd, png);
-    if (ok) rendered += 1;
-    else failed += 1;
+    if (!ok) { failed += 1; continue; }
+    rendered += 1;
+    recordCacheHit(mmd, png, cache);
   }
-  console.log(`[render-diagrams] rendered=${rendered} skipped=${skipped} failed=${failed}`);
+  saveCache(cache);
+  console.log(`[render-diagrams] rendered=${rendered} cache-hits=${cacheHits} failed=${failed}`);
   process.exit(failed === 0 ? 0 : 1);
 }
 
