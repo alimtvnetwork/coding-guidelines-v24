@@ -16,10 +16,11 @@
 // yet — opt-in adoption):
 //   node scripts/render-diagrams.mjs --check
 
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, statSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join, relative, dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
 const SPEC_ROOT = join(ROOT, 'spec');
