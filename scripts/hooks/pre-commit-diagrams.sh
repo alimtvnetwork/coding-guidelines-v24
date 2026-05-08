@@ -44,7 +44,12 @@ if [ -n "$STAGED_MMD" ]; then
       echo "  pre-commit: re-staged $png"
     fi
   done <<< "$STAGED_MMD"
-fi
 
-echo "  pre-commit: drift-checking committed PNGs vs sources..."
-node scripts/render-diagrams.mjs --check
+  # Drift-check is scoped to staged-only — keeps pre-commit fast even when
+  # the spec/ tree is large. Full-tree drift-check still runs in CI
+  # (.github/workflows/diagrams-ci.yml).
+  echo "  pre-commit: drift-checking staged diagrams only..."
+  node scripts/render-diagrams.mjs --check --staged
+else
+  echo "  pre-commit: no staged .mmd files — skipping drift-check."
+fi

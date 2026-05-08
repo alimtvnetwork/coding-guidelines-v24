@@ -18,13 +18,14 @@
 
 import { existsSync, statSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
-import { join, relative, dirname } from 'node:path';
+import { join, relative, dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const ROOT = process.cwd();
 const SPEC_ROOT = join(ROOT, 'spec');
 const ARGS = process.argv.slice(2);
 const CHECK_ONLY = ARGS.includes('--check');
+const STAGED_ONLY = ARGS.includes('--staged');
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
 
@@ -33,6 +34,18 @@ const DIAGRAM_DIR_NAMES = new Set(['diagrams', 'images']);
 function isDiagramsDir(name) {
   return DIAGRAM_DIR_NAMES.has(name);
 }
+
+// Returns the set of absolute paths for .mmd files currently staged in git
+// (Added/Copied/Modified/Renamed). Empty set if not in a git repo or git
+// command fails — caller decides whether that is fatal.
+function getStagedMmdSet() {
+  const result = spawnSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMR'], { encoding: 'utf8' });
+  if (result.status !== 0) return new Set();
+  const paths = result.stdout.split('\n').filter((p) => p.endsWith('.mmd'));
+  return new Set(paths.map((p) => resolve(ROOT, p)));
+}
+
+const STAGED_SET = STAGED_ONLY ? getStagedMmdSet() : null;
 
 async function findMmdFiles(dir, acc = []) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -46,6 +59,7 @@ async function findMmdFiles(dir, acc = []) {
     if (!isMmd) continue;
     if (!isDiagramsDir(dirname(full).split('/').pop())) continue;
     if (ONLY_FILTER && !full.includes(ONLY_FILTER)) continue;
+    if (STAGED_SET && !STAGED_SET.has(full)) continue;
     acc.push(full);
   }
   return acc;
@@ -90,7 +104,13 @@ async function main() {
   }
 
   const mmdFiles = await findMmdFiles(SPEC_ROOT);
-  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : ''}`);
+  const scopeNote = STAGED_ONLY ? ' (staged-only)' : (ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : '');
+  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}`);
+
+  if (STAGED_ONLY && mmdFiles.length === 0) {
+    console.log('[render-diagrams] no staged .mmd files — skipping.');
+    process.exit(0);
+  }
 
   if (CHECK_ONLY) {
     // Drift-check mode: pass if no PNGs exist yet (adoption is opt-in);
