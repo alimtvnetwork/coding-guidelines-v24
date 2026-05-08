@@ -56,6 +56,12 @@ Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last 
 | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | Primary → Backup CDC flow: SyncOp → envelope seal → BE-1 → 5-stage Apply pipeline → ACK + watermark advance. |
 | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | Operator restore-by-date: BE-3 enqueue → snapshot decrypt → re-seal under current Active KeyEpoch → BE-6 import → watermark realign. |
 
+## Architecture / Trust Flows
+
+| File | Flow |
+|------|------|
+| [`flow-trust-boundaries-and-git-backup.mmd`](flow-trust-boundaries-and-git-backup.mmd) | Trust gradient (Main → Worker → Backup → Git) and the forbidden reverse channels enforced by chs. 26 + 27. Includes the optional git-push lane for cold off-site archives. |
+
 ---
 
 ## Diagram gallery (source ↔ rendered PNG)
