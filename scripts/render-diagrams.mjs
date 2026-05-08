@@ -70,8 +70,62 @@ function pngPathFor(mmd) {
   return mmd.replace(/\.mmd$/, '.png');
 }
 
-function isPngFresh(mmd, png) {
+// ---------- Hash-based render cache (keyed by .mmd content) ----------
+//
+// Renders are slow (Chromium boot per file). We persist a SHA-256 of every
+// rendered .mmd in .cache/diagrams-hashes.json so subsequent runs can skip
+// any diagram whose content is byte-identical AND whose PNG still exists.
+// Hashing source content (not mtime) is reliable across `git checkout`,
+// `touch`, and CI clones where mtime is reset.
+
+const CACHE_DIR = join(ROOT, '.cache');
+const CACHE_FILE = join(CACHE_DIR, 'diagrams-hashes.json');
+
+function sha256(buf) {
+  return createHash('sha256').update(buf).digest('hex');
+}
+
+function hashFile(path) {
+  return sha256(readFileSync(path));
+}
+
+function loadCache() {
+  if (!existsSync(CACHE_FILE)) return {};
+  try { return JSON.parse(readFileSync(CACHE_FILE, 'utf8')); }
+  catch { return {}; }
+}
+
+function saveCache(cache) {
+  mkdirSync(CACHE_DIR, { recursive: true });
+  writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2) + '\n');
+}
+
+function cacheKey(mmd) {
+  return relative(ROOT, mmd);
+}
+
+function isCacheHit(mmd, png, cache) {
   if (!existsSync(png)) return false;
+  const entry = cache[cacheKey(mmd)];
+  if (!entry) return false;
+  return entry.MmdSha256 === hashFile(mmd);
+}
+
+function recordCacheHit(mmd, png, cache) {
+  cache[cacheKey(mmd)] = {
+    MmdSha256: hashFile(mmd),
+    PngBytes: statSync(png).size,
+    RenderedAtUtc: new Date().toISOString(),
+  };
+}
+
+// Drift-check uses content hash too, falling back to mtime when no cache
+// entry exists yet (first adoption). This keeps `--check` cheap and stable
+// across `touch` / clone scenarios.
+function isPngFresh(mmd, png, cache) {
+  if (!existsSync(png)) return false;
+  const entry = cache[cacheKey(mmd)];
+  if (entry) return entry.MmdSha256 === hashFile(mmd);
   return statSync(png).mtimeMs >= statSync(mmd).mtimeMs;
 }
 
