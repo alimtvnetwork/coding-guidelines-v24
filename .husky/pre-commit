@@ -28,8 +28,17 @@ fi
 
 # Forbidden-strings gate + linter-scripts guards. Surfaces the rule id
 # and exact matched phrase (e.g. SPEC19-NO-IMPL) before any test noise.
+# Forbidden-strings gate + linter-scripts guards. Surfaces the rule id
+# and exact matched phrase (e.g. SPEC19-NO-IMPL) before any test noise.
 if [ -x scripts/hooks/pre-commit ]; then
   bash scripts/hooks/pre-commit
 fi
+
+# Mermaid validation + render + drift-check. Mirrors diagrams-ci.yml so
+# CI failures surface locally before the push. Skip via SKIP_DIAGRAMS_HOOK=1.
+if [ -x scripts/hooks/pre-commit-diagrams.sh ]; then
+  bash scripts/hooks/pre-commit-diagrams.sh
+fi
+
 
 npm test
