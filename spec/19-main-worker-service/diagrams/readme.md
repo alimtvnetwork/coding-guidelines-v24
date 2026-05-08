@@ -24,6 +24,7 @@
 | `seq-company-creation.mmd` | `04-worker-routing.md` + `15-tunable-constants.md` |
 | `seq-login-routing.mmd` | `12-jwt-delivery-contract.md` + `04-worker-routing.md` |
 | `seq-ui-endpoint-discovery.mmd` | `12-jwt-delivery-contract.md` + `04-worker-routing.md` + `06-core-api-endpoints.md` |
+| `seq-login-edge-cases.mmd` | `12-jwt-delivery-contract.md` + `04-worker-routing.md` + `06-core-api-endpoints.md` + `08-error-contract.md` |
 | `seq-push-update.mmd` | `spec/14-update/28-worker-push-instruction.md` + `15-tunable-constants.md` |
 | `erd-backup-tier.mmd` | `19-incremental-backup-sync.md` + `20-backup-encryption-and-keys.md` + `22-backup-apply-logic.md` + `23-snapshot-storage-and-restore.md` |
 | `seq-incremental-backup.mmd` | `19-incremental-backup-sync.md` + `21-backup-endpoints.md` + `22-backup-apply-logic.md` |
