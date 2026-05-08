@@ -103,8 +103,13 @@ async function main() {
     process.exit(2);
   }
 
-  const mmdFiles = await findMmdFiles(SPEC_ROOT);
-  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : ''}`);
+  const scopeNote = STAGED_ONLY ? ' (staged-only)' : (ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : '');
+  console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}`);
+
+  if (STAGED_ONLY && mmdFiles.length === 0) {
+    console.log('[render-diagrams] no staged .mmd files — skipping.');
+    process.exit(0);
+  }
 
   if (CHECK_ONLY) {
     // Drift-check mode: pass if no PNGs exist yet (adoption is opt-in);
