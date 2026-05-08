@@ -103,6 +103,7 @@ async function main() {
     process.exit(2);
   }
 
+  const mmdFiles = await findMmdFiles(SPEC_ROOT);
   const scopeNote = STAGED_ONLY ? ' (staged-only)' : (ONLY_FILTER ? ` (filter: ${ONLY_FILTER})` : '');
   console.log(`[render-diagrams] discovered ${mmdFiles.length} .mmd file(s)${scopeNote}`);
 
