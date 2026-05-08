@@ -27,3 +27,4 @@ dist-ssr
 release-assets
 reports/runner-guard-report.md
 .gitmap/release-assets
+.cache/diagrams-hashes.json
