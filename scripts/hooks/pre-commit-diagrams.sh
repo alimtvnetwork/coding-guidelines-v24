@@ -29,6 +29,15 @@ fi
 
 STAGED_MMD=$(git diff --cached --name-only --diff-filter=ACMR -- '*.mmd' || true)
 
+# Allow opt-out of the hash cache via NO_DIAGRAM_CACHE=1. Forwarded to
+# render-diagrams.mjs as --no-cache so every staged diagram is re-rendered
+# from scratch (useful when debugging stale PNGs or cache corruption).
+NO_CACHE_FLAG=""
+if [ "${NO_DIAGRAM_CACHE:-0}" = "1" ]; then
+  NO_CACHE_FLAG="--no-cache"
+  echo "  pre-commit: NO_DIAGRAM_CACHE=1 — forcing full re-render (cache bypassed)."
+fi
+
 echo "  pre-commit: validating Mermaid sources (mermaid v11 parse)..."
 node scripts/validate-mermaid.mjs
 
