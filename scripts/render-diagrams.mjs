@@ -120,6 +120,7 @@ function cacheKey(mmd) {
 }
 
 function isCacheHit(mmd, png, cache) {
+  if (NO_CACHE) return false;
   if (!existsSync(png)) return false;
   const entry = cache[cacheKey(mmd)];
   if (!entry) return false;
