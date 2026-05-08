@@ -29,6 +29,7 @@
 | `erd-backup-tier.mmd` | `19-incremental-backup-sync.md` + `20-backup-encryption-and-keys.md` + `22-backup-apply-logic.md` + `23-snapshot-storage-and-restore.md` |
 | `seq-incremental-backup.mmd` | `19-incremental-backup-sync.md` + `21-backup-endpoints.md` + `22-backup-apply-logic.md` |
 | `seq-backup-restore.mmd` | `23-snapshot-storage-and-restore.md` + `21-backup-endpoints.md` |
+| `flow-trust-boundaries-and-git-backup.mmd` | `26-trust-boundaries-and-isolation.md` + `27-git-backup-targets.md` + `18-backup-nodes.md` + `19-incremental-backup-sync.md` |
 
 Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last BLOCKER from `audit/03-diagram-audit.md`. Phase 12 (2026-05-06) added the three Backup-tier diagrams listed above.
 
@@ -54,6 +55,12 @@ Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last 
 | [`seq-push-update.mmd`](seq-push-update.mmd) | Power Admin push-update fan-out, parallel worker hits, partial-failure handling. |
 | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | Primary → Backup CDC flow: SyncOp → envelope seal → BE-1 → 5-stage Apply pipeline → ACK + watermark advance. |
 | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | Operator restore-by-date: BE-3 enqueue → snapshot decrypt → re-seal under current Active KeyEpoch → BE-6 import → watermark realign. |
+
+## Architecture / Trust Flows
+
+| File | Flow |
+|------|------|
+| [`flow-trust-boundaries-and-git-backup.mmd`](flow-trust-boundaries-and-git-backup.mmd) | Trust gradient (Main → Worker → Backup → Git) and the forbidden reverse channels enforced by chs. 26 + 27. Includes the optional git-push lane for cold off-site archives. |
 
 ---
 
@@ -81,6 +88,12 @@ Each row links the authoritative Mermaid source and its committed PNG export. PN
 | Push update fan-out | [`seq-push-update.mmd`](seq-push-update.mmd) | [![seq-push-update](seq-push-update.png)](seq-push-update.png) |
 | Incremental backup CDC | [`seq-incremental-backup.mmd`](seq-incremental-backup.mmd) | [![seq-incremental-backup](seq-incremental-backup.png)](seq-incremental-backup.png) |
 | Backup restore | [`seq-backup-restore.mmd`](seq-backup-restore.mmd) | [![seq-backup-restore](seq-backup-restore.png)](seq-backup-restore.png) |
+
+### Architecture / trust flows
+
+| Diagram | Mermaid source | Rendered PNG |
+|---------|---------------|--------------|
+| Trust boundaries + git backup | [`flow-trust-boundaries-and-git-backup.mmd`](flow-trust-boundaries-and-git-backup.mmd) | [![flow-trust-boundaries-and-git-backup](flow-trust-boundaries-and-git-backup.png)](flow-trust-boundaries-and-git-backup.png) |
 
 ---
 
