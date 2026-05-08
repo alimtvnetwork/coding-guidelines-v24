@@ -167,36 +167,44 @@ async function main() {
     process.exit(0);
   }
 
+  const cache = loadCache();
+
   if (CHECK_ONLY) {
     // Drift-check mode: pass if no PNGs exist yet (adoption is opt-in);
-    // fail only when a PNG is present but older than its .mmd source.
+    // fail only when a PNG is present but its source content has changed
+    // since the last recorded render (hash mismatch) or — for un-cached
+    // legacy entries — the PNG is older than its .mmd source.
     const stale = [];
     for (const mmd of mmdFiles) {
       const png = pngPathFor(mmd);
       if (!existsSync(png)) continue; // adoption pending; not a failure
-      if (!isPngFresh(mmd, png)) {
-        stale.push({ mmd, png, reason: 'PNG older than .mmd' });
+      if (!isPngFresh(mmd, png, cache)) {
+        stale.push({ mmd, png, reason: 'content hash mismatch (or PNG older than .mmd)' });
       }
     }
     process.exit(reportDrift(stale));
   }
 
-  // Render mode: regenerate every PNG that is missing or stale.
+  // Render mode: hash-based cache skips byte-identical sources whose PNG
+  // still exists. Hits are persisted to .cache/diagrams-hashes.json so
+  // subsequent runs (including CI clones with reset mtimes) stay fast.
   let rendered = 0;
-  let skipped = 0;
+  let cacheHits = 0;
   let failed = 0;
   for (const mmd of mmdFiles) {
     const png = pngPathFor(mmd);
-    if (isPngFresh(mmd, png)) {
-      skipped += 1;
+    if (isCacheHit(mmd, png, cache)) {
+      cacheHits += 1;
       continue;
     }
     console.log(`[render-diagrams] rendering ${relative(ROOT, mmd)}`);
     const ok = renderOne(mmd, png);
-    if (ok) rendered += 1;
-    else failed += 1;
+    if (!ok) { failed += 1; continue; }
+    rendered += 1;
+    recordCacheHit(mmd, png, cache);
   }
-  console.log(`[render-diagrams] rendered=${rendered} skipped=${skipped} failed=${failed}`);
+  saveCache(cache);
+  console.log(`[render-diagrams] rendered=${rendered} cache-hits=${cacheHits} failed=${failed}`);
   process.exit(failed === 0 ? 0 : 1);
 }
 
