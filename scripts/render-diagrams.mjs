@@ -246,11 +246,16 @@ async function main() {
   let failed = 0;
   for (const mmd of mmdFiles) {
     const png = pngPathFor(mmd);
+    const rel = relative(ROOT, mmd);
     if (isCacheHit(mmd, png, cache)) {
       cacheHits += 1;
+      console.log(`[render-diagrams]   cache-hit  ${rel}`);
       continue;
     }
-    console.log(`[render-diagrams] rendering ${relative(ROOT, mmd)}`);
+    // When --no-cache is set, surface why the render is happening so logs
+    // make it obvious the bypass (not a real source change) drove the work.
+    const reason = NO_CACHE ? 're-render (--no-cache)' : 'render';
+    console.log(`[render-diagrams]   ${reason}  ${rel}`);
     const ok = renderOne(mmd, png);
     if (!ok) { failed += 1; continue; }
     rendered += 1;
