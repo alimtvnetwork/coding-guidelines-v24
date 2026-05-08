@@ -62,7 +62,7 @@ async function main() {
     try {
       await mermaid.parse(src);
     } catch (err) {
-      failures.push({ file, message: err?.message || String(err) });
+      failures.push({ file, src, message: err?.message || String(err) });
     }
   }
 
@@ -71,13 +71,46 @@ async function main() {
     process.exit(0);
   }
 
-  console.error(`[validate-mermaid] FAIL — ${failures.length} diagram(s) failed mermaid v11 parse:`);
-  for (const { file, message } of failures) {
-    const firstLine = message.split('\n').slice(0, 6).join('\n  ');
-    console.error(`\n  • ${relative(ROOT, file)}\n  ${firstLine}`);
+  console.error(`\n[validate-mermaid] FAIL — ${failures.length}/${files.length} diagram(s) failed mermaid v11 parse:\n`);
+  for (const { file, src, message } of failures) {
+    const rel = relative(ROOT, file);
+    console.error(`────────────────────────────────────────────────────────────`);
+    console.error(`✗ ${rel}`);
+    const lineNo = extractLineNumber(message);
+    if (lineNo) {
+      console.error(`  at line ${lineNo}:`);
+      printSourceContext(src, lineNo);
+    }
+    console.error(`  mermaid v11 parser said:`);
+    const trimmed = message.split('\n').slice(0, 8).map((l) => `    ${l}`).join('\n');
+    console.error(trimmed);
+    console.error('');
   }
-  console.error('\nFix the .mmd source(s) above before committing PNGs.');
+  console.error(`────────────────────────────────────────────────────────────`);
+  console.error(`\n${failures.length} file(s) failed. Fix the .mmd source(s) above, then re-stage and retry the commit.`);
+  console.error(`Bypass (emergencies only): SKIP_DIAGRAMS_HOOK=1 git commit ...\n`);
   process.exit(1);
+}
+
+// Extract a 1-based line number from a mermaid parser error message.
+// Mermaid v11 emits messages like "Parse error on line 14:" or
+// "Lexical error on line 7:". Returns null if no line number is present.
+function extractLineNumber(message) {
+  const m = /(?:Parse|Lexical|Syntax)\s+error\s+on\s+line\s+(\d+)/i.exec(message);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+// Print 2 lines of context above + below the failing line, with a caret marker.
+function printSourceContext(src, lineNo) {
+  const lines = src.split('\n');
+  const start = Math.max(1, lineNo - 2);
+  const end = Math.min(lines.length, lineNo + 2);
+  const gutter = String(end).length;
+  for (let i = start; i <= end; i += 1) {
+    const marker = i === lineNo ? '>' : ' ';
+    const num = String(i).padStart(gutter, ' ');
+    console.error(`    ${marker} ${num} | ${lines[i - 1] ?? ''}`);
+  }
 }
 
 main().catch((e) => { console.error('[validate-mermaid] unexpected:', e); process.exit(2); });
