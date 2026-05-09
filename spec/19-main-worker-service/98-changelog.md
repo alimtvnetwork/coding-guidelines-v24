@@ -4,6 +4,13 @@
 
 ---
 
+## v5.46.0 — 2026-05-09 (Diagram cache CI integration, pre-commit no-cache toggle, render-diagrams --help and cache-hit logging)
+
+**Scope:** Version bump (`5.45.0` → `5.46.0`). Diagram cache CI integration, pre-commit no-cache toggle, render-diagrams --help and cache-hit logging.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.45.0 — 2026-05-07 (Mermaid-v11 parser fix in `diagrams/seq-incremental-backup.mmd` (`;` → `and`); diagram pipeline at 100% coverage; root readme updated.)
 
 **Scope:** Diagram-source fix only — no spec/19 chapter markdown changed. `seq-incremental-backup.mmd` and `spec/12/ci-pipeline-flow.mmd` now render cleanly under mermaid-cli 11.4.2; `render-diagrams.mjs` reports `failed=0`. Backup-tier deferral preserved; readiness baseline unchanged at 99/100 (audit-15).
