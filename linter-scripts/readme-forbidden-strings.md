@@ -73,7 +73,7 @@ on it: *which files, what's the exact replacement, give me the
 command.* And because the command uses the **actual matched text from
 the scan** (not a hardcoded template), it can fan out across multiple
 stale variants in a single invocation — for example, the `STALE-REPO-SLUG`
-rule may match `coding-guidelines-v22`, `coding-guidelines-v22`, and
-`coding-guidelines-v22` in the same file, and the summary will emit
+rule may match `coding-guidelines-v23`, `coding-guidelines-v23`, and
+`coding-guidelines-v23` in the same file, and the summary will emit
 three `-e` substitutions in one `sed` call rather than three separate
 templates the operator has to expand by hand.
