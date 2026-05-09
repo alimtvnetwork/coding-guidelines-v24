@@ -288,13 +288,13 @@ Top-level shape (abbreviated):
         "driver": {
           "name": "<tool-name>",
           "version": "<X.Y.Z>",
-          "informationUri": "https://github.com/alimtvnetwork/coding-guidelines-v22",
+          "informationUri": "https://github.com/alimtvnetwork/coding-guidelines-v23",
           "rules": [
             {
               "id": "TEMPLATE-001",
               "name": "LeftoverDebugCall",
               "shortDescription": { "text": "Remove var_dump() / print_r() / error_log() debug calls before merging to main." },
-              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v22/blob/main/spec/02-coding-guidelines/02-coding-guidelines/06-cicd-integration/02-plugin-model.md"
+              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v23/blob/main/spec/02-coding-guidelines/02-coding-guidelines/06-cicd-integration/02-plugin-model.md"
             }
           ]
         }

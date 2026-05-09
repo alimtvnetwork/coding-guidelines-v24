@@ -91,9 +91,9 @@ Examples (Current = 3):
 3. **Match policy:** plain substring, case-sensitive. **No** word
    boundaries are required, BUT a numeric-overflow guard is
    applied: the token MUST NOT be immediately followed by a digit.
-   So `coding-guidelines-v22` matches inside
-   `coding-guidelines-v22/install.sh` and inside
-   `https://github.com/x/coding-guidelines-v22` but does NOT match
+   So `coding-guidelines-v23` matches inside
+   `coding-guidelines-v23/install.sh` and inside
+   `https://github.com/x/coding-guidelines-v23` but does NOT match
    inside `coding-guidelines-v170`.
 4. **URL handling:** plain substring everywhere. Host stays
    untouched because the host is not part of the token. Both
