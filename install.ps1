@@ -152,7 +152,7 @@ if ($Prompt -and $Force) {
 # ── Latest-version probe (skipped for -Version / listings / -NoProbe) ──
 $script:ProbeOwner   = "alimtvnetwork"
 $script:ProbeBase    = "coding-guidelines"
-$script:ProbeVersion = 19
+$script:ProbeVersion = 24
 
 function Invoke-LatestVersionProbe {
     Write-Step "Detecting installer identity..."
