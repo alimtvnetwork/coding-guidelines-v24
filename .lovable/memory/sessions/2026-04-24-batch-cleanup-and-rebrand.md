@@ -10,7 +10,7 @@
 
 Three sequential user requests, executed in one session:
 
-1. **Slug rebrand** — replaced `coding-guidelines-v23` → `coding-guidelines-v23` → `coding-guidelines-v23` across the repo. Final canonical slug: **`alimtvnetwork/coding-guidelines-v23`**.
+1. **Slug rebrand** — replaced `coding-guidelines-v24` → `coding-guidelines-v24` → `coding-guidelines-v24` across the repo. Final canonical slug: **`alimtvnetwork/coding-guidelines-v24`**.
 2. **InstallSection redesign** — collapsed the legacy "Install in One Line" list into a clean two-card **"Release & Migration"** section: Windows (PowerShell) + macOS/Linux (Bash). Removed the "skip latest probe" variants per direct user instruction ("this section is stupidity").
 3. **Batch task completion** — closed 11 outstanding plan/suggestion items in a single pass.
 
@@ -41,7 +41,7 @@ Three sequential user requests, executed in one session:
 ## Key decisions / user instructions
 
 1. 🔴 **Release & Migration UI shape is locked** — exactly two cards (Windows PS / Unix Bash), one-liner each, header above. **Never** restore "skip latest probe" variants. User words: *"I don't want to discuss this ever again."*
-2. 🔴 **Slug must be `alimtvnetwork/coding-guidelines-v23` everywhere** — when doing repo-wide rebrand, run a full `grep -rn` sweep across **all** non-`.release` files. The user explicitly called out that the previous replacement was incomplete: *"you didn't do all replace in the repo"*.
+2. 🔴 **Slug must be `alimtvnetwork/coding-guidelines-v24` everywhere** — when doing repo-wide rebrand, run a full `grep -rn` sweep across **all** non-`.release` files. The user explicitly called out that the previous replacement was incomplete: *"you didn't do all replace in the repo"*.
 3. **Version bump rule still applies** — every code change bumps at least minor.
 
 ## Pending after session
@@ -55,7 +55,7 @@ Three sequential user requests, executed in one session:
 ## Audit trail — why the old slug is preserved here
 
 This file intentionally retains the pre-rebrand slug strings
-(`coding-guidelines-v23`, `coding-guidelines-v23`..`v13`) inside the
+(`coding-guidelines-v24`, `coding-guidelines-v24`..`v13`) inside the
 narrative above (see §Scope item 1 and §Key decisions item 2). They are
 not stale references — they are the historical record of the rename
 itself. Removing them would erase the very change this session note
@@ -75,7 +75,7 @@ blocks the old slug everywhere else in the repo.
    legitimately needs to mention the old slug, add it explicitly with a
    one-line comment justifying why.
 3. The canonical, current slug remains
-   **`alimtvnetwork/coding-guidelines-v23`** (see §Key decisions item 2)
+   **`alimtvnetwork/coding-guidelines-v24`** (see §Key decisions item 2)
    — that is the only slug allowed in code, configs, install scripts,
    release artifacts, and live documentation.
 
