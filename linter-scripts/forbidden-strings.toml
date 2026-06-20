@@ -31,7 +31,7 @@ summary_replacement = "<redacted: current canonical slug>"
 pattern = 'coding-guidelines-v(1[0-4]|[1-9])(?!\.\d)\b'
 replacement = "coding-guidelines-v24"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-REPO-SLUG --emit-fix-command | bash"
-exclude_dirs = ["release-artifacts"]
+exclude_dirs = ["release-artifacts", ".gitmap"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py"]
 allowlist = [
   "spec/06-seedable-config-architecture/97-changelog.md",
@@ -68,7 +68,7 @@ summary_replacement = "<redacted: current canonical module path>"
 pattern = 'movie-cli-v1\b'
 replacement = "movie-cli-v2"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule STALE-MODULE-PATH --emit-fix-command | bash"
-exclude_dirs = ["release-artifacts"]
+exclude_dirs = ["release-artifacts", ".gitmap"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py"]
 allowlist = [
   "spec/14-update/23-install-script-version-probe.md",
@@ -90,7 +90,7 @@ summary_replacement = "<redacted: current canonical CDN domain>"
 pattern = 'cdn\.riseup-asia\.com'
 replacement = "cdn.riseup.asia"
 fix_hint = "python3 linter-scripts/forbidden-strings-summary.py --rule LEGACY-CDN-DOMAIN --emit-fix-command | bash"
-exclude_dirs = ["release-artifacts"]
+exclude_dirs = ["release-artifacts", ".gitmap"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py", "CHANGELOG.md"]
 allowlist = []
 
@@ -105,7 +105,7 @@ summary_description = "Forbidden Spec/19 implementation phrases. spec/19-main-wo
 summary_pattern = "<redacted: see linter-scripts/forbidden-strings.toml>"
 pattern = '(?i)\b(phase\s*1\s*implementation|begin\s*coding|ship\s*the\s*service|starter\s*skeleton|begin\s*spec[/\s-]*19\s*phase\s*1|start\s*implementing\s*spec[/\s-]*19)\b'
 fix_hint = "Remove the phrase. spec/19-main-worker-service is spec-only — no implementation work is permitted in this repo. See .lovable/strictly-avoid.md."
-exclude_dirs = ["release-artifacts"]
+exclude_dirs = ["release-artifacts", ".gitmap"]
 exclude_files = ["forbidden-strings.toml", "check-forbidden-strings.py", "forbidden-strings-summary.py", "CHANGELOG.md"]
 allowlist = [
   # Canonical ban definitions must cite the forbidden phrases verbatim.
