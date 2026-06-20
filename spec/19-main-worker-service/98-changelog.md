@@ -4,6 +4,13 @@
 
 ---
 
+## v5.47.0 — 2026-06-20 (Routine release ceremony — sync regeneration and release artifact refresh)
+
+**Scope:** Version bump (`5.46.0` → `5.47.0`). Routine release ceremony — sync regeneration and release artifact refresh.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.46.0 — 2026-05-09 (Diagram cache CI integration, pre-commit no-cache toggle, render-diagrams --help and cache-hit logging)
 
 **Scope:** Version bump (`5.45.0` → `5.46.0`). Diagram cache CI integration, pre-commit no-cache toggle, render-diagrams --help and cache-hit logging.
