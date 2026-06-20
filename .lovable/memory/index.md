@@ -26,6 +26,7 @@ Updated: 2026-04-27
 - 🔴 Docs sidebar tree diagnostics: opt-in via `localStorage["lovable.tree-diagnostics.enabled"]="1"`. Logs prefixed `[tree:<category>]`. Off by default. Never enable by default. The Lovable IDE file tree is platform UI — NOT instrumentable from project code; do not conflate it with the in-app docs sidebar. See mem://sessions/2026-04-27-tree-diagnostics-logging.
 
 ## Memories
+- [Release Ceremony](mem://preferences/release-ceremony) — Triggers "release"/"bump version"/"bump version + add changelog + pin to root readme". Full ceremony: pick bump tier → sync all version pins (version.json, manifest.json, src/shared/constants.ts, readme.md, standalone-scripts SDK + instruction.ts files) → changelog.md entry → pin root readme → aggregate-prompts if prompt sources touched → verify no stale refs. No confirmation, no plan mode.
 - [Install Command Formatting](mem://constraints/install-command-formatting) — One-line installs, no inline comments, per-platform headers, mirror InstallSection.tsx order.
 - [readme.txt Timestamp TOTAL BAN](mem://constraints/readme-txt-timestamp-total-ban) — No script/spec/doc/suggestion of any timestamp generator for readme.txt. Hard prohibition.
 - [No readme.txt Time Instructions](mem://constraints/no-readme-time-instructions) — Never produce instructions/docs/how-to-run for the readme.txt Malaysia date-time generator.
