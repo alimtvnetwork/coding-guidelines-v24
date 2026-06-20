@@ -23,7 +23,7 @@
 
 | Field | Type | Required | Default | Notes |
 |-------|------|----------|---------|-------|
-| `repo` | string | yes | `"alimtvnetwork/coding-guidelines-v23"` | GitHub `owner/repo` |
+| `repo` | string | yes | `"alimtvnetwork/coding-guidelines-v24"` | GitHub `owner/repo` |
 | `branch` | string | yes | `"main"` | Branch to install from when no `--version` is given |
 | `folders` | string[] | yes | `["spec","linters","linter-scripts","linters-cicd"]` | Top-level folders to fetch |
 
@@ -37,7 +37,7 @@ The committed `install-config.json` at the repo root MUST equal:
 
 ```json
 {
-  "repo": "alimtvnetwork/coding-guidelines-v23",
+  "repo": "alimtvnetwork/coding-guidelines-v24",
   "branch": "main",
   "folders": [
     "spec",
@@ -69,7 +69,7 @@ A team may ship its own config in its private repo:
 
 ```json
 {
-  "repo": "acme-corp/coding-guidelines-v23-fork",
+  "repo": "acme-corp/coding-guidelines-v24-fork",
   "branch": "internal",
   "folders": ["spec", "linters-cicd"]
 }

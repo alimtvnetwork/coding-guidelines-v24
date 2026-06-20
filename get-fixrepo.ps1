@@ -3,7 +3,7 @@
   Installer for the fix-repo toolkit.
 
 .DESCRIPTION
-  Downloads from github.com/alimtvnetwork/coding-guidelines-v23 (branch: main)
+  Downloads from github.com/alimtvnetwork/coding-guidelines-v24 (branch: main)
   and installs into the current working directory:
     - fix-repo.sh, fix-repo.ps1
     - fix-repo.config.json
@@ -20,7 +20,7 @@
   Branch to download from. Defaults to 'main'.
 
 .EXAMPLE
-  iwr -useb https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v23/main/get-fixrepo.ps1 | iex
+  iwr -useb https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/get-fixrepo.ps1 | iex
   ./get-fixrepo.ps1
   ./get-fixrepo.ps1 -NoRun
   ./get-fixrepo.ps1 -Branch dev
@@ -34,7 +34,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$Repo    = 'alimtvnetwork/coding-guidelines-v23'
+$Repo    = 'alimtvnetwork/coding-guidelines-v24'
 $RawBase = "https://raw.githubusercontent.com/$Repo/$Branch"
 
 function Get-Manifest {

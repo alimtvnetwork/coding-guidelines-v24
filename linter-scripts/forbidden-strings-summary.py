@@ -148,8 +148,8 @@ def scan_rule(rule: dict) -> dict[str, list[tuple[int, str, str]]]:
 def collect_unique_matches(hits: dict[str, list[tuple[int, str, str]]]) -> list[str]:
     """Every distinct exact text the regex matched, across all files.
 
-    A rule like ``STALE-REPO-SLUG`` matches ``coding-guidelines-v23``,
-    ``coding-guidelines-v23``, etc. — each needs its own
+    A rule like ``STALE-REPO-SLUG`` matches ``coding-guidelines-v24``,
+    ``coding-guidelines-v24``, etc. — each needs its own
     ``s|stale|new|g`` substitution because the canonical replacement
     is a single string, not a function of the match.
     """

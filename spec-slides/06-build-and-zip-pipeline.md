@@ -118,7 +118,7 @@ Keyboard shortcuts:
   P          Presenter view (notes + timer)
   Home/End   First / last slide
 
-Built from the coding-guidelines-v23 repository.
+Built from the coding-guidelines-v24 repository.
 Author: Md. Alim Ul Karim — alimkarim.com
 License: see UFL-1.0.txt for the bundled Ubuntu fonts.
 ```
