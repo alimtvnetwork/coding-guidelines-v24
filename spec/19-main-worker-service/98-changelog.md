@@ -4,6 +4,13 @@
 
 ---
 
+## v5.48.0 — 2026-06-20 (Pin installer probe-version floor to v24 (was v19))
+
+**Scope:** Version bump (`5.47.0` → `5.48.0`). Pin installer probe-version floor to v24 (was v19).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.47.0 — 2026-06-20 (Routine release ceremony — sync regeneration and release artifact refresh)
 
 **Scope:** Version bump (`5.46.0` → `5.47.0`). Routine release ceremony — sync regeneration and release artifact refresh.
