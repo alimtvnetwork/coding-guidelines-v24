@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # =====================================================================
-# check-install-probe-starts-at-v19.sh
+# check-install-probe-starts-at-v24.sh
 #
-# Asserts the installer probe-version floor is pinned to v19 (not the
+# Asserts the installer probe-version floor is pinned to v24 (not the
 # pre-renumber v14) in BOTH the root installers and the latest baked
 # release artifact pair. The release-artifact path is derived from
 # version.json so this test never goes stale on bumps.
@@ -25,9 +25,9 @@ fi
 
 for file in "${FILES[@]}"; do
   case "$file" in
-    *.ps1) grep -q 'ProbeVersion = 19' "$file" ;;
-    *.sh)  grep -q 'PROBE_VERSION_FALLBACK=19' "$file" ;;
+    *.ps1) grep -q 'ProbeVersion = 24' "$file" ;;
+    *.sh)  grep -q 'PROBE_VERSION_FALLBACK=24' "$file" ;;
   esac
   grep -q 'INSTALLER FAILED — diagnostic report' "$file"
-  ! grep -Eq 'ProbeVersion = 14|PROBE_VERSION_FALLBACK=14' "$file"
+  ! grep -Eq 'ProbeVersion = 19|PROBE_VERSION_FALLBACK=19' "$file"
 done

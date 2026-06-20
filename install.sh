@@ -116,7 +116,7 @@ usage() {
 # ── Latest-version probe (unchanged) ──────────────────────────────
 PROBE_OWNER_FALLBACK="alimtvnetwork"
 PROBE_BASE_FALLBACK="coding-guidelines"
-PROBE_VERSION_FALLBACK=19
+PROBE_VERSION_FALLBACK=24
 
 invoke_latest_version_probe() {
     step "Detecting installer identity..."
