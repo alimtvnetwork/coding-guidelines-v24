@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const HEADLINE_LINE_1 = "10 transformations";
-const HEADLINE_LINE_2 = "that make code reviewable";
+const HEADLINE_LINE_1 = "11 rules.";
+const HEADLINE_LINE_2 = "One per pull request.";
 
 const wordParent = {
   hidden: {},
@@ -94,13 +94,27 @@ export default function TitleSlide() {
         Md. Alim Ul Karim · Riseup Asia LLC
       </motion.div>
       <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 1.7, ease: EASE }}
+        style={{
+          fontSize: 26,
+          color: "hsl(var(--fg))",
+          marginTop: "var(--space-3)",
+          maxWidth: 1100,
+          lineHeight: 1.4,
+        }}
+      >
+        Each slide = one rule, one before/after, one concrete action you can ship in your next PR.
+      </motion.div>
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
-        transition={{ duration: 0.6, delay: 1.8, ease: EASE }}
+        transition={{ duration: 0.6, delay: 2.1, ease: EASE }}
         style={{
           fontSize: 22,
           color: "hsl(var(--muted-fg))",
-          marginTop: "var(--space-5)",
+          marginTop: "var(--space-4)",
         }}
       >
         Press → to begin
