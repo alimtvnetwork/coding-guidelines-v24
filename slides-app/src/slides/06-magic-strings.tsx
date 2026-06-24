@@ -1,5 +1,6 @@
 import { SlideLayout } from "@/components/SlideLayout";
 import { CodeDiff } from "@/components/CodeDiff";
+import { ActionPanel } from "@/components/ActionPanel";
 
 const BEFORE = `if (order.status === 'shipped') { /* ... */ }
 if (order.status === 'shippped') { /* typo */ }
@@ -16,9 +17,9 @@ if (order.Status === OrderStatus.Shipped) { /* ... */ }
 export default function MagicStringsSlide() {
   return (
     <SlideLayout
-      eyebrow="Code Red"
-      title="Magic strings are bugs in disguise"
-      subtitle="Never compare a string literal in two places. Promote to enum or const so the compiler catches typos."
+      eyebrow="Rule 06 · Code Red"
+      title="Promote repeated literals to an enum or const"
+      subtitle="If a string literal appears in two places, the compiler can no longer protect you. Promote it once and reuse."
     >
       <CodeDiff
         language="typescript"
@@ -26,6 +27,11 @@ export default function MagicStringsSlide() {
         after={AFTER}
         beforeLabel="❌ Repeated literals"
         afterLabel="✅ Enum-checked"
+      />
+      <ActionPanel
+        symptom="A one-character typo in a status string ships to production and silently breaks a branch."
+        rule="Never compare against the same string literal twice. The second occurrence is the trigger to extract an enum."
+        doThis="Pick the most-compared string in your diff (status, kind, type) and replace usages with an enum value."
       />
     </SlideLayout>
   );
