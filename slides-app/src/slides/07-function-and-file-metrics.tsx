@@ -1,4 +1,5 @@
 import { SlideLayout } from "@/components/SlideLayout";
+import { ActionPanel } from "@/components/ActionPanel";
 import { motion } from "framer-motion";
 
 const BARS = [
@@ -14,16 +15,16 @@ const MAX = 80;
 export default function FunctionAndFileMetricsSlide() {
   return (
     <SlideLayout
-      eyebrow="Code Red"
-      title="Small files, small functions"
-      subtitle="Functions 8–15 lines · Files < 300 lines · React components < 100 lines. If it doesn't fit, decompose."
+      eyebrow="Rule 07 · Code Red"
+      title="Keep functions 8–15 lines and files under 300"
+      subtitle="Hard caps, not suggestions. If it doesn't fit, decompose — never shrink with clever one-liners."
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "var(--space-3)",
-          fontSize: 24,
+          gap: "var(--space-2)",
+          fontSize: 22,
         }}
       >
         {BARS.map((bar, i) => (
@@ -41,7 +42,7 @@ export default function FunctionAndFileMetricsSlide() {
               style={{
                 background: "hsl(var(--bg-raised))",
                 borderRadius: 8,
-                height: 40,
+                height: 32,
                 overflow: "hidden",
                 position: "relative",
               }}
@@ -74,6 +75,11 @@ export default function FunctionAndFileMetricsSlide() {
           </div>
         ))}
       </div>
+      <ActionPanel
+        symptom="One 73-line function holds the whole flow. Reviewers can't form a mental model in under 10 minutes."
+        rule="Functions 8–15 lines. Files < 300 lines. React components < 100 lines. Decompose when you exceed."
+        doThis="Run `wc -l` on the file you're touching. If > 300, extract the most cohesive chunk into its own file now."
+      />
     </SlideLayout>
   );
 }
