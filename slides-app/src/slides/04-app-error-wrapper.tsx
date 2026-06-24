@@ -1,5 +1,6 @@
 import { SlideLayout } from "@/components/SlideLayout";
 import { CodeDiff } from "@/components/CodeDiff";
+import { ActionPanel } from "@/components/ActionPanel";
 
 const BEFORE = `try {
   await charge(order);
@@ -18,9 +19,9 @@ const AFTER = `try {
 export default function AppErrorWrapperSlide() {
   return (
     <SlideLayout
-      eyebrow="Errors"
-      title="Wrap every error with file:line context"
-      subtitle="Raw throw loses the trail. AppError.wrap preserves the cause and pins the failure to a code location."
+      eyebrow="Rule 04 · Errors"
+      title="Wrap every catch with AppError + file:line context"
+      subtitle="A naked re-throw loses the trail. AppError.wrap pins the failure to a code location and preserves the cause."
     >
       <CodeDiff
         language="typescript"
@@ -28,6 +29,11 @@ export default function AppErrorWrapperSlide() {
         after={AFTER}
         beforeLabel="❌ Naked re-throw"
         afterLabel="✅ Wrapped with context"
+      />
+      <ActionPanel
+        symptom="Production logs show `ECONNREFUSED` with no idea which call, which order, or which file raised it."
+        rule="Every catch block re-throws via AppError.wrap(err, 'Component.Action', { context }). Never `throw err;` alone."
+        doThis="Find one `throw err` or empty catch in your service. Replace with AppError.wrap including the relevant Id."
       />
     </SlideLayout>
   );
