@@ -18,7 +18,7 @@ export default function CorePrinciples1Slide() {
     <SlideLayout
       eyebrow="Core Development Principles · 1 of 3"
       title="Reviewable code starts here"
-      subtitle="Two principles per slide. Internalise them in this order."
+      subtitle="How to read this deck: each rule slide shows the symptom, the rule, and one concrete action for your next PR."
     >
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, marginTop: 24 }}>
         {principles.map((p) => (
