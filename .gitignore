@@ -28,3 +28,11 @@ release-assets
 reports/runner-guard-report.md
 .gitmap/release-assets
 .cache/diagrams-hashes.json
+
+# Repo-size diet (v5.49.0): historical release bundles + gitmap backup snapshots
+# are reproducible from git tags / GitHub Releases — keep them out of clones.
+release-artifacts/coding-guidelines-v*
+release-artifacts/*.tar.gz
+release-artifacts/*.zip
+release-artifacts/checksums.txt
+.gitmap/backup/
