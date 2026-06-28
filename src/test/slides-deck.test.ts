@@ -34,7 +34,9 @@ describe("slides-app deck", () => {
 
   it("DECK entry count matches imported slide count", () => {
     const importCount = (deckSrc.match(/from\s+"\.\/slides\//g) ?? []).length;
-    const entryCount = (deckSrc.match(/component:\s*\w+/g) ?? []).length;
+    // Exclude the `component: ComponentType` interface field; only count
+    // DECK entries (`component: <PascalCaseIdentifier>` with no generics).
+    const entryCount = (deckSrc.match(/component:\s+[A-Z]\w*\s*[,}]/g) ?? []).length;
     expect(entryCount).toBe(importCount);
   });
 });
