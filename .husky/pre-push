@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+# ============================================================
+# Husky pre-push — mirrors the CI guards that fail most often.
+#
+# 1. Confirms sync-managed files are GREEN (npm run sync:check).
+# 2. Runs a fast subset of lint-ci.sh (steps 1, 4–9, 14) — the
+#    string/link/install-section/mermaid-validate guards that
+#    catch >90% of CI failures, without the slow Go/Python
+#    validators or full diagram render.
+#
+# Skip in emergencies with:  SKIP_PREPUSH=1 git push
+# ============================================================
+
+set -e
+
+if [ "${SKIP_PREPUSH:-0}" = "1" ]; then
+  echo "  pre-push: SKIP_PREPUSH=1 set — skipping guards"
+  exit 0
+fi
+
+echo "→ pre-push: sync:check"
+if ! npm run --silent sync:check; then
+  echo ""
+  echo "  pre-push: sync:check failed — run \`npm run sync\` and commit before pushing."
+  exit 1
+fi
+
+echo "→ pre-push: lint-ci fast subset (steps 1, 4–9, 14)"
+for step in 1 4 5 6 7 8 9 14; do
+  if ! bash scripts/lint-ci.sh --step "$step"; then
+    echo ""
+    echo "  pre-push: lint-ci step $step failed — fix before pushing (or SKIP_PREPUSH=1 to bypass)."
+    exit 1
+  fi
+done
+
+echo "✓ pre-push guards passed"
