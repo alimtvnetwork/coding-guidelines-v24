@@ -1,4 +1,0 @@
-742950bbbdcc9d65ae03081d8664253bd625bb4f8fae71cf3a69c1a828c3d114  coding-guidelines-v5.11.0.zip
-98807c46767b2d3ccfd97264bac7efad7505d30ac28bae75e75c64ca5f6e6f2f  coding-guidelines-v5.11.0.tar.gz
-a208d3563aa32e3946d23b2c690acffc71eea5e6c7272d7aa5b74f7988df7ac5  release-install.sh
-066f387c5075c44314249a0b26f507bcfa3ee4a90a08423bd0c4aab8d4d6f7fb  release-install.ps1
