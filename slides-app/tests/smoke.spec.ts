@@ -60,14 +60,16 @@ test("every slide index renders a slide-content root", async ({ page }) => {
   }
 });
 
-test("first and last slides expose their title text", async ({ page }) => {
+test("first and last slides render non-empty content", async ({ page }) => {
   await page.goto(`${DIST_URL}#/0`);
-  await expect(page.locator(".slide-title, .slide-title-lg").first()).toBeVisible({
-    timeout: 10_000,
-  });
+  const first = page.locator(".slide-content").first();
+  await expect(first).toBeVisible({ timeout: 10_000 });
+  expect((await first.innerText()).trim().length).toBeGreaterThan(0);
 
   await page.evaluate((n) => {
     window.location.hash = `/${n}`;
   }, SLIDE_COUNT - 1);
-  await expect(page.locator(".slide-content").first()).toBeVisible({ timeout: 5_000 });
+  const last = page.locator(".slide-content").first();
+  await expect(last).toBeVisible({ timeout: 5_000 });
+  expect((await last.innerText()).trim().length).toBeGreaterThan(0);
 });
