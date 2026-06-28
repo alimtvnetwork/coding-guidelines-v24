@@ -267,7 +267,30 @@ async function main() {
   process.exit(failed === 0 ? 0 : 1);
 }
 
-main().catch((err) => {
-  console.error('[render-diagrams] unexpected error:', err);
-  process.exit(2);
-});
+async function watchLoop() {
+  const { watch } = await import('node:fs');
+  console.log('[render-diagrams] watch mode — re-renders on .mmd save (Ctrl-C to exit).');
+  await main().catch((e) => console.error(e));
+  const debounce = new Map();
+  watch(SPEC_ROOT, { recursive: true }, (_evt, file) => {
+    if (!file || !file.endsWith('.mmd')) return;
+    clearTimeout(debounce.get(file));
+    debounce.set(file, setTimeout(async () => {
+      const full = join(SPEC_ROOT, file);
+      if (!existsSync(full)) return;
+      console.log(`\n[render-diagrams] change: ${file}`);
+      const cache = loadCache();
+      const png = pngPathFor(full);
+      if (renderOne(full, png)) { recordCacheHit(full, png, cache); saveCache(cache); }
+    }, 150));
+  });
+}
+
+if (WATCH) {
+  watchLoop().catch((err) => { console.error('[render-diagrams] watch error:', err); process.exit(2); });
+} else {
+  main().catch((err) => {
+    console.error('[render-diagrams] unexpected error:', err);
+    process.exit(2);
+  });
+}
