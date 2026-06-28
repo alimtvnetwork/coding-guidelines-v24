@@ -31,6 +31,7 @@ const STAGED_ONLY = ARGS.includes('--staged');
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
 const NO_CACHE = ARGS.includes('--no-cache');
+const WATCH = ARGS.includes('--watch') || ARGS.includes('-w');
 
 function printHelp() {
   console.log(`Usage: node scripts/render-diagrams.mjs [options]
