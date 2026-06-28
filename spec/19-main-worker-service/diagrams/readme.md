@@ -61,6 +61,7 @@ Resolves audit findings F-D-01..F-D-12 (diagram-authority cluster) and the last 
 | File | Flow |
 |------|------|
 | [`flow-trust-boundaries-and-git-backup.mmd`](flow-trust-boundaries-and-git-backup.mmd) | Trust gradient (Main → Worker → Backup → Git) and the forbidden reverse channels enforced by chs. 26 + 27. Includes the optional git-push lane for cold off-site archives. |
+| [`flow-reverse-channel-denial-matrix.mmd`](flow-reverse-channel-denial-matrix.mmd) | Reverse-channel denial test matrix: per-edge allow/deny ledger that test suites assert against to prove the trust gradient is one-way (closes audit-12 §7 gap). |
 
 ---
 
