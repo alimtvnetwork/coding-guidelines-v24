@@ -4,6 +4,13 @@
 
 ---
 
+## v5.54.0 — 2026-07-19 (SS-02 task 63: a11y badge in GitHub Release notes)
+
+**Scope:** Version bump (`5.53.0` → `5.54.0`). SS-02 task 63: a11y badge in GitHub Release notes.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.52.0 — 2026-07-19 (Attach slides-deck.zip to GitHub Release (Plan SS-01 step 6))
 
 **Scope:** Version bump (`5.52.0` → `5.52.0`). Attach slides-deck.zip to GitHub Release (Plan SS-01 step 6).
