@@ -585,6 +585,20 @@ jobs:
         # trustworthy-in-appearance-only. Added in v5.122.
         run: node scripts/tests/check-lint-ci-drift.test.mjs
 
+      - name: Check branch-protection expected.json for stale required contexts
+        # Mirror of scripts/lint-ci.sh step 19. Fails when
+        # .github/branch-protection.expected.json lists a required
+        # context name that no workflow job produces (e.g. after a
+        # job rename). Prevents the promotion procedure at
+        # .lovable/procedures/branch-protection.md from failing
+        # mid-ceremony with a stale context. Added in v5.126.
+        run: node scripts/print-required-checks.mjs --check
+      - name: Self-test print-required-checks parser (parseWorkflowText + checkStale)
+        # Guards the parser + staleness detector so the check above
+        # cannot silently pass on parser regressions (empty jobs array
+        # would make every expected context look "stale but also OK").
+        run: node scripts/tests/print-required-checks.test.mjs
+
 
   docs-diagrams:
     name: Docs Build — Render Mermaid Diagrams

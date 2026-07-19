@@ -33,20 +33,27 @@ import { join, basename } from "node:path";
 const WORKFLOWS_DIR = ".github/workflows";
 const EXPECTED_FILE = ".github/branch-protection.expected.json";
 
-function parseWorkflow(path) {
-  const src = readFileSync(path, "utf8");
+export function parseWorkflowText(src, fallbackName) {
   // Top-level `name:` (workflow display name shown in the Checks tab).
   const wfNameMatch = src.match(/^name:\s*(.+?)\s*$/m);
-  const workflowName = wfNameMatch ? wfNameMatch[1] : basename(path, ".yml");
+  const workflowName = wfNameMatch ? wfNameMatch[1] : fallbackName;
   // Job entries under `jobs:`. Job id = 2-space indented key; job's
   // `name:` (if present) is what GitHub shows as the check name.
   const jobs = [];
   const jobsIdx = src.indexOf("\njobs:\n");
-  if (jobsIdx < 0) return { workflowName, file: path, jobs };
+  if (jobsIdx < 0) return { workflowName, jobs };
   const after = src.slice(jobsIdx + 7);
   const lines = after.split("\n");
   let currentJob = null;
   for (const line of lines) {
+    // Stop scanning when a new top-level yaml key begins (column 0).
+    // Check BEFORE the job-id match so a top-level key that happens to
+    // match the id regex (none today, but future-proof) still terminates.
+    if (/^[a-zA-Z]/.test(line) && !line.startsWith(" ")) {
+      if (currentJob) jobs.push(currentJob);
+      currentJob = null;
+      break;
+    }
     const jobIdMatch = line.match(/^ {2}([a-zA-Z0-9_-]+):\s*$/);
     if (jobIdMatch) {
       if (currentJob) jobs.push(currentJob);
@@ -56,11 +63,15 @@ function parseWorkflow(path) {
     if (!currentJob) continue;
     const jobNameMatch = line.match(/^ {4}name:\s*(.+?)\s*$/);
     if (jobNameMatch) currentJob.name = jobNameMatch[1];
-    // Stop scanning this job when we hit a new top-level yaml key.
-    if (/^[a-zA-Z]/.test(line) && !line.startsWith(" ")) break;
   }
   if (currentJob) jobs.push(currentJob);
-  return { workflowName, file: path, jobs };
+  return { workflowName, jobs };
+}
+
+function parseWorkflow(path) {
+  const src = readFileSync(path, "utf8");
+  const parsed = parseWorkflowText(src, basename(path, ".yml"));
+  return { ...parsed, file: path };
 }
 
 function loadWorkflows() {
@@ -143,4 +154,8 @@ function main() {
   }
 }
 
-main();
+// Guard main() so importing from tests does not exit the process.
+import { fileURLToPath } from "node:url";
+if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+
+export { checkStale };

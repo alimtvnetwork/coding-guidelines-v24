@@ -146,6 +146,8 @@ STEPS=(
   "Check lint-ci ↔ ci.yml drift (mirror guard)|node scripts/check-lint-ci-drift.mjs"
   "Self-test lint-ci drift checker (parser + analyzer)|node scripts/tests/check-lint-ci-drift.test.mjs"
   "Self-test pre-push visual-hint helper (sandbox vs host branches)|bash scripts/tests/pre-push-visual-hint.test.sh"
+  "Check branch-protection expected.json for stale required contexts|node scripts/print-required-checks.mjs --check"
+  "Self-test print-required-checks parser (parseWorkflowText + checkStale)|node scripts/tests/print-required-checks.test.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then

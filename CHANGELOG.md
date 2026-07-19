@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.126.0] - 2026-07-19
+
+### Added, branch-protection stale-context guard + parser self-test
+
+- `scripts/print-required-checks.mjs`: refactored to export `parseWorkflowText(src, fallbackName)` and `checkStale(workflows, expected)` and guarded `main()` behind a `process.argv[1] === fileURLToPath(import.meta.url)` check, so tests can import without exiting the process. Loop terminator moved BEFORE the job-id match so a top-level yaml key (e.g. `concurrency:` at file end) can no longer leak into the last job's parse tree.
+- `scripts/tests/print-required-checks.test.mjs`: 13-assertion self-test covering (1) minimal workflow with id-only jobs, (2) explicit `name:` preferred over id (this is what GitHub branch-protection actually matches), (3) trailing top-level keys not leaking as fake jobs, (4) missing `jobs:` section returns empty array safely, (5) indented (malformed) `jobs:` returns empty array safely, (6) `checkStale` flags required contexts with no matching job, (7) end-to-end parse of every real `.github/workflows/*.yml` without throwing.
+- `scripts/lint-ci.sh` steps 19+20 and `.github/workflows/ci.yml` `sync-drift` job: wired `node scripts/print-required-checks.mjs --check` and the parser self-test. Mirror guard (step 16) verifies both are present in both places.
+- Root cause this closes: v5.125 exposed `npm run branch-protection:check` but nothing ran it. If a workflow job gets renamed (e.g. `Linter Scripts Validation` -> `Lint Scripts`), `.github/branch-protection.expected.json` silently rots and the next `gh api PATCH .../required_status_checks` payload lists a non-existent context, which GitHub rejects mid-promotion-ceremony. The parser self-test prevents the class of "silent-pass because parser returned empty jobs" bug that let v5.117 ship with zero visual baselines under a strict guard.
+- Verification: `bash scripts/lint-ci.sh --list` shows steps 19 and 20. `node scripts/tests/print-required-checks.test.mjs` reports 13 ok, 0 fail. `node scripts/check-lint-ci-drift.mjs` reports "no drift" (both new steps mirrored in `ci.yml`). `node scripts/print-required-checks.mjs --check` reports "OK, no stale required-check names".
+
 ## [5.125.0] - 2026-07-19
 
 ### Changed, backlog cleanup + branch-protection npm surface
