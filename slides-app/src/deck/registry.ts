@@ -201,6 +201,8 @@ export const DECK: readonly SlideEntry[] = [
 
   { id: "10-spec-first", title: "Spec-first workflow", section: "workflow", severity: "style", ruleId: "WF-001", tags: ["spec", "process", "planning"], component: SpecFirst },
   { id: "11-cache-invalidation", title: "Cache invalidation", section: "workflow", severity: "warn", ruleId: "WF-002", tags: ["cache", "ttl", "invalidate", "keys"], component: CacheInvalidation },
+  { id: "60-test-pyramid", title: "Test pyramid", section: "workflow", severity: "hard", ruleId: "WF-003", tags: ["tests", "unit", "integration", "e2e", "pyramid"], component: TestPyramid },
+  { id: "61-pr-template", title: "PR template", section: "workflow", severity: "hard", ruleId: "WF-004", tags: ["pr", "template", "checklist", "review"], component: PrTemplate },
 
   { id: "12-closing", title: "Closing", section: "closing", tags: ["wrap-up", "references", "q&a"], component: Closing },
 ] as const;
