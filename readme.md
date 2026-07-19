@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.121.0
+
+- Drift guard promoted to CI. `.github/workflows/ci.yml` (`sync-drift` job) now runs `node scripts/check-lint-ci-drift.mjs` right after the Mermaid drift step, so a new lint step added to ci.yml without a matching `STEPS[]` entry fails PRs, not just pre-push. Root cause: v5.120 wired the check only through `bun run lint:ci`, which CI doesn't invoke as a single step.
+- `npm run slides:bake-baselines:sandbox` ships `scripts/bake-baselines-sandbox.mjs`. Resolves `libglib-2.0.so.0` and `libX11.so.6` from `/nix/store/*/lib` and widens `LD_LIBRARY_PATH` before invoking `bunx playwright test --update-snapshots --workers=1`. Verified libs resolve on the current sandbox (`glib-2.86.3`, `libx11-1.8.12`). Refuses to run when `/nix/store` is absent OR `ldconfig -p` already exposes glib, so it can't silently mask a real chromium failure on developer machines or CI.
+
 ### What's new in v5.120.0
 
 - `lint-ci.sh` ↔ `ci.yml` drift is now enforced. New `scripts/check-lint-ci-drift.mjs` parses step names from `.github/workflows/ci.yml` and the `STEPS=()` array from `scripts/lint-ci.sh`, stems on the first ` (` so `(spec)` vs `(spec, advisory)` still matches, and fails if any lint-scope CI step lacks a mirror. Wired as step 16 in `lint-ci.sh` so pre-push catches drift too. `IGNORED_CI_STEPS` documents 37 infra/off-scope steps with one-line reasons and flags stale ignores.
