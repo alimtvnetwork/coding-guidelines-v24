@@ -36,6 +36,7 @@ function parseArgs(argv) {
     scope: null,
     target: "both",
     dryRun: false,
+    skipSlides: false,
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -44,8 +45,9 @@ function parseArgs(argv) {
     else if (a === "--scope" || a === "-s") out.scope = argv[++i];
     else if (a === "--target") out.target = argv[++i];
     else if (a === "--dry-run") out.dryRun = true;
+    else if (a === "--skip-slides") out.skipSlides = true;
     else if (a === "-h" || a === "--help") {
-      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--dry-run]");
+      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--skip-slides] [--dry-run]");
       process.exit(0);
     }
   }
@@ -114,6 +116,23 @@ function verifySync(dryRun) {
   if (res.status !== 0) fail(3, "post-release sync:check drift — run `npm run sync` and inspect");
 }
 
+function buildSlidesDeck(args) {
+  if (args.skipSlides) { console.log("→ skip slides-app build (--skip-slides)"); return; }
+  const slidesDir = resolve(ROOT, "slides-app");
+  if (!existsSync(slidesDir)) return;
+  if (args.dryRun) { console.log("→ (dry-run) would run: bun install && bun run build (slides-app)"); return; }
+  const runner = spawnSync("bun", ["--version"], { stdio: "ignore" }).status === 0 ? "bun" : "npm";
+  if (!existsSync(resolve(slidesDir, "node_modules"))) {
+    console.log(`→ slides-app: ${runner} install (node_modules missing)`);
+    const inst = spawnSync(runner, ["install"], { cwd: slidesDir, stdio: "inherit" });
+    if (inst.status !== 0) fail(2, "slides-app dependency install failed");
+  }
+  console.log(`→ slides-app: ${runner} run build (compiles deck + packages dist.zip)`);
+  const res = spawnSync(runner, ["run", "build"], { cwd: slidesDir, stdio: "inherit" });
+  if (res.status !== 0) fail(2, "slides-app build failed (run `cd slides-app && bun run build` to reproduce)");
+}
+
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const current = readCurrentVersion();
@@ -121,8 +140,10 @@ function main() {
   console.log(`\n=== Release ceremony: ${current} → ${next} (${args.tier ?? "explicit"}) ===\n`);
   runBump(args, next);
   maybeAggregatePrompts();
+  buildSlidesDeck(args);
   verifySync(args.dryRun);
   console.log(`\n✓ Release ${args.dryRun ? "(dry-run) " : ""}complete: v${next}`);
 }
 
 main();
+

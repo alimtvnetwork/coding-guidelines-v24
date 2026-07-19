@@ -4,6 +4,13 @@
 
 ---
 
+## v5.49.0 — 2026-07-19 (Wire slides-app build into release ceremony (Plan SS-01 step 3))
+
+**Scope:** Version bump (`5.48.1` → `5.49.0`). Wire slides-app build into release ceremony (Plan SS-01 step 3).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.48.0 — 2026-06-20 (Pin installer probe-version floor to v24 (was v19))
 
 **Scope:** Version bump (`5.47.0` → `5.48.0`). Pin installer probe-version floor to v24 (was v19).
