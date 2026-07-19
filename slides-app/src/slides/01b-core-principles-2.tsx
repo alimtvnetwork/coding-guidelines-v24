@@ -1,17 +1,5 @@
 import { SlideLayout } from "@/components/SlideLayout";
-
-const principles = [
-  {
-    n: "03",
-    title: "Positively Named Guards",
-    body: "isReady, hasError, canPublish. Never !isNotReady. The reader should not invert booleans in their head.",
-  },
-  {
-    n: "04",
-    title: "Structured Error Wrapping",
-    body: "Every error crosses a boundary as AppError with stack trace and context. No silent swallowing. Ever.",
-  },
-];
+import { PrincipleCard } from "@/components/PrincipleCard";
 
 export default function CorePrinciples2Slide() {
   return (
@@ -20,26 +8,25 @@ export default function CorePrinciples2Slide() {
       title="Make intent unambiguous"
       subtitle="Booleans read like sentences. Errors carry their own evidence."
     >
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, marginTop: 24 }}>
-        {principles.map((p) => (
-          <div
-            key={p.n}
-            style={{
-              background: "hsl(var(--bg-raised))",
-              border: "1px solid hsl(var(--border))",
-              borderLeft: "6px solid hsl(var(--primary))",
-              borderRadius: 16,
-              padding: 40,
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-            }}
-          >
-            <div style={{ fontSize: 36, color: "hsl(var(--primary))", fontWeight: 700, letterSpacing: "0.05em" }}>{p.n}</div>
-            <div style={{ fontSize: 56, fontWeight: 700, lineHeight: 1.1, fontFamily: "Ubuntu, sans-serif" }}>{p.title}</div>
-            <div style={{ fontSize: 28, color: "hsl(var(--muted-fg))", lineHeight: 1.4 }}>{p.body}</div>
-          </div>
-        ))}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, marginTop: 16 }}>
+        <PrincipleCard
+          number="03"
+          title="Positively Named Guards"
+          symptom="Names like `!isNotReady` or `!hasNoError` force the reader to invert booleans in their head."
+          rule="Guards are affirmative: `isReady`, `hasError`, `canPublish`. Never a negated negative."
+          action="Rename every `!isNot*` / `!has No*` in your diff. Flip the condition to match the new name."
+          accent="primary"
+          delay={0.5}
+        />
+        <PrincipleCard
+          number="04"
+          title="Structured Error Wrapping"
+          symptom="Errors get swallowed by bare `catch {}` or re-thrown as strings, losing stack and context."
+          rule="Every error that crosses a boundary is an `AppError` with stack trace and structured context."
+          action="Search your PR for `catch` blocks with no `AppError`. Wrap each with context and rethrow."
+          accent="primary"
+          delay={0.65}
+        />
       </div>
     </SlideLayout>
   );

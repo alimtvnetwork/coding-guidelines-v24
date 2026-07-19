@@ -1,45 +1,32 @@
 import { SlideLayout } from "@/components/SlideLayout";
-
-const principles = [
-  {
-    n: "01",
-    title: "Zero-Nesting Discipline",
-    body: "No nested if-else. Use early-return guards. One indentation level inside a function body.",
-  },
-  {
-    n: "02",
-    title: "Two-Operand Maximum",
-    body: "Boolean expressions take at most two operands. Extract the third into a positively named guard.",
-  },
-];
+import { PrincipleCard } from "@/components/PrincipleCard";
 
 export default function CorePrinciples1Slide() {
   return (
     <SlideLayout
       eyebrow="Core Development Principles · 1 of 3"
       title="Reviewable code starts here"
-      subtitle="How to read this deck: each rule slide shows the symptom, the rule, and one concrete action for your next PR."
+      subtitle="Every rule slide in this deck follows the same shape: Symptom, Rule, Do this next. These two set the shape."
     >
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, marginTop: 24 }}>
-        {principles.map((p) => (
-          <div
-            key={p.n}
-            style={{
-              background: "hsl(var(--bg-raised))",
-              border: "1px solid hsl(var(--border))",
-              borderLeft: "6px solid hsl(var(--accent))",
-              borderRadius: 16,
-              padding: 40,
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-            }}
-          >
-            <div style={{ fontSize: 36, color: "hsl(var(--accent))", fontWeight: 700, letterSpacing: "0.05em" }}>{p.n}</div>
-            <div style={{ fontSize: 56, fontWeight: 700, lineHeight: 1.1, fontFamily: "Ubuntu, sans-serif" }}>{p.title}</div>
-            <div style={{ fontSize: 28, color: "hsl(var(--muted-fg))", lineHeight: 1.4 }}>{p.body}</div>
-          </div>
-        ))}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, marginTop: 16 }}>
+        <PrincipleCard
+          number="01"
+          title="Zero-Nesting Discipline"
+          symptom="Logic buried 3+ levels deep. Reviewers scroll past every error case to find the happy path."
+          rule="No nested if-else. Each precondition exits early with its own guard. One indentation level per body."
+          action="Pick the deepest function in your next diff. Invert its outer if into an early return."
+          accent="accent"
+          delay={0.5}
+        />
+        <PrincipleCard
+          number="02"
+          title="Two-Operand Maximum"
+          symptom="Boolean expressions with 3+ operands force reviewers to mentally evaluate the truth table."
+          rule="At most two operands per boolean. Extract the third into a positively named guard function."
+          action="Grep your PR for `&& .* &&` or `|| .* ||`. Extract each hit into a named predicate."
+          accent="accent"
+          delay={0.65}
+        />
       </div>
     </SlideLayout>
   );
