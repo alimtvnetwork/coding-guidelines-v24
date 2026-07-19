@@ -447,7 +447,7 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/downl
 irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 
 # Install a pinned version (recommended for CI)
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1))) -Version v5.128.0
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1))) -Version v5.129.0
 
 # Run the linter pack (use WSL / Git-Bash for the bash runner on Windows)
 bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
