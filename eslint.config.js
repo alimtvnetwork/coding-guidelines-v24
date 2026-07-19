@@ -25,21 +25,29 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
 
       // ═══════════════════════════════════════════════════════════════
-      // 🔴 HARD RULES from coding-guidelines.md — CI-enforced
+      // 🔴 CANONICAL SIZE TIER (single source of truth)
+      // Canonical doc: spec/02-coding-guidelines/00-canonical-size-tier.md
+      // ┌────────────────────────────┬──────────────┬─────────┐
+      // │ Metric                     │ Limit        │ Level   │
+      // ├────────────────────────────┼──────────────┼─────────┤
+      // │ Function body (preferred)  │ ≤ 8 lines    │ warn    │
+      // │ Function body (hard cap)   │ ≤ 15 lines   │ error   │
+      // │ File length                │ ≤ 300 lines  │ error   │
+      // │ React component file       │ ≤ 100 lines  │ error   │  (*.tsx override)
+      // │ Struct / class             │ ≤ 120 lines  │ error   │  (linter-cicd)
+      // └────────────────────────────┴──────────────┴─────────┘
+      // Line counts skip blanks and comments. Waiver syntax:
+      //   // lint-allow: function-length reason="..." max=N
       // ═══════════════════════════════════════════════════════════════
 
-      // File length ≤ 300 lines (CODE-RED-006). Mirrors linters-cicd/checks/file-length.
+      // File length ≤ 300 (canonical tier).
       "max-lines": ["error", { max: 300, skipBlankLines: true, skipComments: true }],
-
-      // React component / any function body ≤ 100 lines (Core memory: components < 100 LOC).
-      "max-lines-per-function": ["error", { max: 100, skipBlankLines: true, skipComments: true, IIFEs: true }],
 
       // `any` is prohibited (TS Standards §2.1).
       "@typescript-eslint/no-explicit-any": "error",
 
       // ═══════════════════════════════════════════════════════════════
       // 🔴 CODE RED RULES — Automatic PR rejection
-      // Canonical source: spec/02-coding-guidelines/03-coding-guidelines-spec/
       // ═══════════════════════════════════════════════════════════════
 
       // Zero nested if — flatten with early returns or named booleans
@@ -51,13 +59,14 @@ export default tseslint.config(
       // No raw string literals in comparisons — use enum/typed constants
       "coding-guidelines/no-magic-strings": "warn",
 
-      // Max 15 lines per function body (non-blank, non-comment) — hard cap
-      // Hard 15-line cap — CODE-RED-004 (redundant safety net under the strict-8 rule below).
+      // Function body hard cap: 15 lines (canonical tier, error level)
       "coding-guidelines/max-function-lines": ["error", { max: 15 }],
 
-      // STRICT 8-line cap — CODE-RED-005. Build-failing per coding-guidelines.md rule #1.
-      // Was previously a `warn` in the prefer-band (9–15); now an `error` on any body >8.
-      "coding-guidelines/prefer-function-lines": ["error", { prefer: 8 }],
+      // Function body preferred: 8 lines (canonical tier, warn level).
+      // Kept as warn so the 15-line hard cap is the sole build-failing gate;
+      // eliminates the prior 8=error vs 15=error contradiction.
+      "coding-guidelines/prefer-function-lines": ["warn", { prefer: 8 }],
+
 
       // Promise.all for independent async calls — no sequential await
       "coding-guidelines/promise-all-independent": "error",
@@ -73,4 +82,12 @@ export default tseslint.config(
       "coding-guidelines/no-else-after-return": "error",
     },
   },
+  {
+    // React component files: tighter 100-line file cap (canonical tier).
+    files: ["**/*.tsx"],
+    rules: {
+      "max-lines": ["error", { max: 100, skipBlankLines: true, skipComments: true }],
+    },
+  },
 );
+

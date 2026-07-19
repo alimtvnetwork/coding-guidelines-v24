@@ -10,10 +10,14 @@ Read `llm.md` in the project root FIRST. It is the single entry point for unders
 1. Zero nested `if` — flatten with early returns
 2. All booleans start with `is`, `has`, `can`, `should`, `was`, `will`
 3. No magic strings — use enum/typed constants
-4. Max 15 lines per function
+4. Function size (canonical tier, see `spec/02-coding-guidelines/00-canonical-size-tier.md`):
+   - Function body: ≤8 lines preferred (warn), ≤15 lines hard cap (error)
+   - File: ≤300 lines; React component file (`.tsx`): ≤100 lines
+   - Struct/class: ≤120 lines; counts skip blanks and comments
 5. No boolean flag parameters — split into named methods
 6. Blank line before `return`/`throw`
 7. No `else` after `return`/`throw`/`continue`/`break`
+
 
 ### Go-Specific
 - Use `apperror.Result[T]`, never `(T, error)`

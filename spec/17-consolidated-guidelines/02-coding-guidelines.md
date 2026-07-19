@@ -297,16 +297,22 @@ Every function body must be **≤ 15 lines** (excluding blank lines, comments, a
 
 Structs, classes, and interfaces must not exceed 120 lines. Extract behavior into focused sub-types.
 
-### File Size Limits
+### File Size Limits (Canonical Tier)
 
-| Metric | Limit |
-|--------|-------|
-| Function body | ≤ 15 lines |
-| File size | < 300 lines (hard max 400) |
-| React components | < 100 lines |
-| Struct/class | ≤ 120 lines |
-| Parameters per function | ≤ 3 |
-| Cognitive complexity | ≤ 10 |
+Single source of truth: [`spec/02-coding-guidelines/00-canonical-size-tier.md`](../02-coding-guidelines/00-canonical-size-tier.md). Mirrored in `.cursorrules`, `eslint.config.js`, and `linters-cicd/`.
+
+| Metric                    | Limit         | Level  |
+|---------------------------|---------------|--------|
+| Function body (preferred) | ≤ 8 lines     | warn   |
+| Function body (hard cap)  | ≤ 15 lines    | error  |
+| File length               | ≤ 300 lines   | error  |
+| React component file      | ≤ 100 lines   | error  |
+| Struct / class            | ≤ 120 lines   | error  |
+| Parameters per function   | ≤ 3           | error  |
+| Cognitive complexity      | ≤ 10          | error  |
+
+Line counts skip blank lines and comments. Waiver syntax: `// lint-allow: function-length reason="..." max=N`.
+
 
 ---
 
