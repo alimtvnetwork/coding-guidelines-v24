@@ -577,6 +577,14 @@ jobs:
         # gate from silently falling behind CI (was the follow-up
         # called out at scripts/lint-ci.sh:9-11 pre-v5.120).
         run: node scripts/check-lint-ci-drift.mjs
+      - name: Self-test lint-ci drift checker (parser + analyzer)
+        # Guards the drift checker itself. Root cause it prevents:
+        # if parseLintCiLabels() or analyzeDrift() silently regresses
+        # (e.g. stops matching parenthetical qualifiers, or fails to
+        # flag stale ignores), the mirror guard above becomes
+        # trustworthy-in-appearance-only. Added in v5.122.
+        run: node scripts/tests/check-lint-ci-drift.test.mjs
+
 
   docs-diagrams:
     name: Docs Build — Render Mermaid Diagrams
