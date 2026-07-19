@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.71.0] - 2026-07-19
+
+### Added - SS-02 task 19: "Comments lie, code does not" slide
+
+- New slide [`slides-app/src/slides/16-comments-lie-code-does-not.tsx`](slides-app/src/slides/16-comments-lie-code-does-not.tsx), registered as `16-comments-lie-code-does-not` in the `principles` section (ruleId `MUST-004`, severity `warn`) after `15-spec-first-vs-code-first` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
+- Layout: `<ActionPanel>` header (satisfies `scripts/validate-slides-sra.mjs`) plus a 2-column body. Left column embeds the Go stdlib `ExamplePath_Clean` snippet (verbatim shape from https://go.dev/src/go/doc/example.go) in a `var(--font-mono)` panel, showing executable doc examples that `go test` runs. Right column stacks three evidence rows (Prose comment / Doc example / Effect) and a `<CalloutQuote>` with the Norm Schryer aphorism.
+- Root cause of prior gap: the compiled guideline warns "comments drift" but the deck had no visible contrast between free prose and executable doctests, so learners had no anchor to remember the rule by.
+- Verification: `scripts/validate-slides-sra.mjs` reports "OK: 18 slide(s)" (was 17). Palette search `comments`, `doctest`, `go`, or `path.clean` returns the new slide.
+
+---
+
 ## [5.70.0] - 2026-07-19
 
 ### Added - SS-02 task 18: spec-first vs code-first PR contrast slide
