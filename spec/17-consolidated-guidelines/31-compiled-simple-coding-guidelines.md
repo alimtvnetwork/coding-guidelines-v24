@@ -1,8 +1,16 @@
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-Version: 1.4.0
+Version: 1.5.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
+
+Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
+
+1. `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` (source of truth).
+2. `.lovable/coding-guidelines/coding-guidelines.md` (mirror for Lovable agent search).
+3. `.cursorrules` (mirror for Cursor and other IDE agents).
+
+If any mirror is missing or out of date, run `node scripts/sync-guidelines.mjs` before writing code. Missing mirrors are the top cause of "AI cannot find the coding guideline" search failures.
 
 ---
 
