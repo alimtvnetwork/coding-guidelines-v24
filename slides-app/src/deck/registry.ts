@@ -89,6 +89,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "13-must-follow", title: "Must Follow · Five non-negotiables", section: "principles", severity: "hard", ruleId: "MUST-001", tags: ["must-follow", "non-negotiable", "root cause", "verify", "changelog"], component: MustFollow },
   { id: "14-root-cause-first", title: "Root cause before fix", section: "principles", severity: "hard", ruleId: "MUST-002", tags: ["root cause", "rca", "debugging", "symptom patch", "one sentence"], component: RootCauseFirst },
   { id: "15-spec-first-vs-code-first", title: "Spec-first vs code-first · PR contrast", section: "principles", severity: "hard", ruleId: "MUST-003", tags: ["spec-first", "pull request", "review", "contract", "before after"], component: SpecFirstVsCodeFirst },
+  { id: "16-comments-lie-code-does-not", title: "Comments lie, code does not", section: "principles", severity: "warn", ruleId: "MUST-004", tags: ["comments", "docs", "example", "go", "doctest", "path.clean"], component: CommentsLieCodeDoesNot },
   { id: "01a-core-principles-1", title: "Core Principles · 1", section: "principles", tags: ["mindset", "must-follow", "non-negotiable"], component: CorePrinciples1 },
   { id: "01b-core-principles-2", title: "Core Principles · 2", section: "principles", tags: ["mindset", "review"], component: CorePrinciples2 },
   { id: "01c-core-principles-3", title: "Core Principles · 3", section: "principles", tags: ["mindset", "ownership"], component: CorePrinciples3 },
