@@ -63,7 +63,7 @@ Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUIL
 23. [CONTENT] PascalCase entities / camelCase fields / `{Table}Id` PK naming. ✅ v5.76.0 (`slides-app/src/slides/21-db-schema-naming.tsx`, ruleId `NAM-002`)
 24. [CONTENT] Zero-underscore policy + full-uppercase acronyms. ✅ v5.77.0 (`slides-app/src/slides/22-zero-underscore-acronyms.tsx`, ruleId `NAM-003`)
 25. [CONTENT] Boolean naming: is/has/can/should + positive framing (before/after). ✅ v5.78.0 (`slides-app/src/slides/23-boolean-naming.tsx`, ruleId `BOOL-002`)
-26. [CONTENT] No boolean parameters (refactor to two named methods).
+26. [CONTENT] No boolean parameters (refactor to two named methods). ✅ v5.79.0 (`slides-app/src/slides/24-no-boolean-parameters.tsx`, ruleId `BOOL-003`)
 27. [CONTENT] Enum standards (cross-language PascalCase, strict parse).
 28. [CONTENT] Line-gap discipline: blank line before return/throw, after closing brace, import grouping.
 29. [CONTENT] File size tier (<300 LOC, <100 for .tsx) with real repo example.
