@@ -4,6 +4,13 @@
 
 ---
 
+## v5.105.0 — 2026-07-19 (SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns)
+
+**Scope:** Version bump (`5.104.0` → `5.105.0`). SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.78.0 — 2026-07-19 (SS-02 task 25: boolean naming slide (BOOL-002))
 
 **Scope:** Version bump (`5.77.0` → `5.78.0`). SS-02 task 25: boolean naming slide (BOOL-002).
