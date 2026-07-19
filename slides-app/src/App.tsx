@@ -319,16 +319,46 @@ function CommandPalette({
     inputRef.current?.focus();
   }, []);
 
-  const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const all = DECK.map((slide, index) => ({ slide, index }));
-    if (!q) return all;
-    return all.filter(({ slide }) => {
+  type Match =
+    | { kind: "slide"; slide: (typeof DECK)[number]; index: number }
+    | { kind: "section"; section: (typeof SECTIONS)[number]; index: number; count: number };
+
+  const matches = useMemo<Match[]>(() => {
+    const raw = query.trim().toLowerCase();
+    // Section-jump prefixes: `s:<name>` or `#<name>` filter to sections only.
+    const sectionOnly = raw.startsWith("s:") || raw.startsWith("#");
+    const stripped = sectionOnly ? raw.replace(/^(s:|#)/, "").trim() : raw;
+
+    const sectionHits: Match[] = SECTIONS
+      .map((section) => {
+        const idx = DECK.findIndex((s) => s.section === section.id);
+        return { section, idx };
+      })
+      .filter(({ section, idx }) => {
+        if (idx < 0) return false;
+        if (!stripped) return sectionOnly;
+        const hay = `${section.id} ${section.label} ${section.description}`.toLowerCase();
+        return hay.includes(stripped);
+      })
+      .map(({ section, idx }) => ({
+        kind: "section" as const,
+        section,
+        index: idx,
+        count: DECK.filter((s) => s.section === section.id).length,
+      }));
+
+    if (sectionOnly) return sectionHits;
+
+    const slideAll = DECK.map((slide, index) => ({ kind: "slide" as const, slide, index }));
+    if (!stripped) return [...sectionHits, ...slideAll];
+    const slideHits = slideAll.filter(({ slide }) => {
       const tagText = (slide.tags ?? []).join(" ");
       const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section} ${tagText}`.toLowerCase();
-      return hay.includes(q);
+      return hay.includes(stripped);
     });
+    return [...sectionHits, ...slideHits];
   }, [query]);
+
 
   useEffect(() => {
     setActive(0);
