@@ -15,6 +15,7 @@ import BooleanNaming from "../slides/23-boolean-naming";
 import NoBooleanParameters from "../slides/24-no-boolean-parameters";
 import EnumStandards from "../slides/25-enum-standards";
 import LineGapDiscipline from "../slides/26-line-gap-discipline";
+import FileSizeTiers from "../slides/27-file-size-tiers";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -115,6 +116,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "24-no-boolean-parameters", title: "No boolean parameters · split into two named functions", section: "naming", severity: "hard", ruleId: "BOOL-003", tags: ["boolean", "parameter", "flag", "refactor", "render", "named function"], component: NoBooleanParameters },
   { id: "25-enum-standards", title: "Enum standards · PascalCase, strict parse, per-language idiom", section: "naming", severity: "hard", ruleId: "ENUM-001", tags: ["enum", "pascalcase", "iota", "isequal", "magic string", "typescript", "go", "php"], component: EnumStandards },
   { id: "26-line-gap-discipline", title: "Line-gap discipline · grouped imports, blank before return, no double blanks", section: "structure", severity: "hard", ruleId: "STYLE-001", tags: ["whitespace", "blank line", "imports", "return", "structure", "readability"], component: LineGapDiscipline },
+  { id: "27-file-size-tiers", title: "File-size tiers · 100 tsx, 120 class, 300 fallback", section: "structure", severity: "hard", ruleId: "SIZE-001", tags: ["file size", "300 lines", "100 lines", "component", "class", "refactor", "extract"], component: FileSizeTiers },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
