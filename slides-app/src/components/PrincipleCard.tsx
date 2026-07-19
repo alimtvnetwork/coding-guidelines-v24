@@ -84,6 +84,7 @@ export function PrincipleCard({
   action,
   accent,
   delay,
+  progressId,
 }: PrincipleCardProps) {
   const color = `hsl(var(--${accent}))`;
   return (
@@ -125,18 +126,24 @@ export function PrincipleCard({
           label="Symptom"
           body={symptom}
           color="hsl(var(--destructive))"
+          progressId={progressId}
+          block="symptom"
         />
         <Row
           icon={<Compass size={22} strokeWidth={2.5} />}
           label="Rule"
           body={rule}
           color="hsl(var(--primary))"
+          progressId={progressId}
+          block="rule"
         />
         <Row
           icon={<CheckCircle2 size={22} strokeWidth={2.5} />}
           label="Do this next"
           body={action}
           color="hsl(var(--accent))"
+          progressId={progressId}
+          block="action"
         />
       </div>
     </motion.div>
