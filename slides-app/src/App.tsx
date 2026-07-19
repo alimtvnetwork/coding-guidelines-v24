@@ -387,7 +387,7 @@ function CommandPalette({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKey}
-            placeholder="Jump to slide by title, rule id, or section..."
+            placeholder="Jump by title, rule id, section, or tag..."
             aria-label="Search slides"
             style={{
               flex: 1,
