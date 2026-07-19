@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.86.0
+
+- SS-02 task 33: DRY extract-now slide (`DRY-001`, hard) covering the two-site trigger and extract-to-helper pattern per spec/17/31 line 33. 33 slides validated.
+
 ### What's new in v5.85.0
 
 - SS-02 task 32: dedicated definitions file slide (`DEF-001`, hard) covering extraction of types/enums/constants into their own file per spec/17/31 line 32. 32 slides validated.
