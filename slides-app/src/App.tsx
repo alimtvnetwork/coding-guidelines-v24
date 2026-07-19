@@ -254,9 +254,153 @@ const SHORTCUTS: readonly { keys: string; label: string }[] = [
   { keys: "G", label: "Toggle grid overview" },
   { keys: "P", label: "Toggle presenter view" },
   { keys: "F", label: "Toggle fullscreen" },
+  { keys: "Cmd/Ctrl + K", label: "Open command palette" },
   { keys: "? / H", label: "Toggle this help" },
   { keys: "Esc", label: "Close overlay or return to deck" },
 ];
+
+function CommandPalette({
+  onClose,
+  onPick,
+}: {
+  onClose: () => void;
+  onPick: (index: number) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(0);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const all = DECK.map((slide, index) => ({ slide, index }));
+    if (!q) return all;
+    return all.filter(({ slide }) => {
+      const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }, [query]);
+
+  useEffect(() => {
+    setActive(0);
+  }, [query]);
+
+  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActive((a) => Math.min(a + 1, matches.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActive((a) => Math.max(a - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const hit = matches[active];
+      if (hit) onPick(hit.index);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      onClose();
+    }
+  }
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command palette"
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0, 0, 0, 0.65)",
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        paddingTop: "10vh",
+        zIndex: 1001,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "hsl(var(--slide-bg, 222 47% 11%))",
+          color: "hsl(var(--slide-fg, 210 40% 98%))",
+          border: "1px solid rgba(148, 163, 184, 0.35)",
+          borderRadius: 14,
+          width: "min(640px, 92vw)",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5)",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: "1px solid rgba(148,163,184,0.2)" }}>
+          <Search size={16} style={{ opacity: 0.6 }} />
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKey}
+            placeholder="Jump to slide by title, rule id, or section..."
+            aria-label="Search slides"
+            style={{
+              flex: 1,
+              background: "transparent",
+              border: 0,
+              outline: "none",
+              color: "inherit",
+              fontSize: 15,
+              fontFamily: "inherit",
+            }}
+          />
+          <kbd style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.6 }}>Esc</kbd>
+        </div>
+        <ul
+          role="listbox"
+          aria-label="Slide results"
+          style={{ listStyle: "none", margin: 0, padding: 6, maxHeight: "50vh", overflowY: "auto" }}
+        >
+          {matches.length === 0 ? (
+            <li style={{ padding: "18px 12px", opacity: 0.6, fontSize: 13 }}>No matches.</li>
+          ) : (
+            matches.map(({ slide, index }, i) => {
+              const isActive = i === active;
+              return (
+                <li
+                  key={slide.id}
+                  role="option"
+                  aria-selected={isActive}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => onPick(index)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    cursor: "pointer",
+                    background: isActive ? "rgba(148,163,184,0.15)" : "transparent",
+                  }}
+                >
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.55, minWidth: 32 }}>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span style={{ fontSize: 14, flex: 1 }}>{slide.title}</span>
+                  {slide.ruleId ? (
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.6 }}>{slide.ruleId}</span>
+                  ) : null}
+                  {slide.severity ? <RuleBadge severity={slide.severity} /> : null}
+                  <span style={{ fontSize: 11, opacity: 0.5 }}>{slide.section}</span>
+                </li>
+              );
+            })
+          )}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 
 function HelpOverlay({ onClose }: { onClose: () => void }) {
   return (
