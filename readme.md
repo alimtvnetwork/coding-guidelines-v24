@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.69.0
+
+- **Root-cause-first workflow slide (SS-02 task 17).** New [`slides-app/src/slides/14-root-cause-first.tsx`](slides-app/src/slides/14-root-cause-first.tsx) (ruleId `MUST-002`, hard) contrasts the RCA-first loop (Reproduce → Trace → State the cause → Minimum fix → Prove it) against the symptom-patch loop (try/catch, fallback, extra effect, ship). Operationalizes non-negotiable #2 from `MUST-001`. SRA validator now passes 16 slides.
+
 ### What's new in v5.68.0
 
 - **"Must Follow" opener slide (SS-02 task 16).** New [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx) (ruleId `MUST-001`, hard severity) opens the Principles section with the 5 non-negotiables distilled from `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` §Must Follow: read first, one-sentence root cause, minimum correct fix, verify in the logs, ship the trail. Uses `<ActionPanel>` so the SRA structural validator passes; palette search `must-follow` now returns it.
