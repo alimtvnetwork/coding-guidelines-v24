@@ -249,8 +249,11 @@ function parseWaiver(commentValue) {
 function findWaiverFor(node, src, ruleName) {
   const aliases = WAIVER_ALIASES[ruleName] || [ruleName];
   const candidates = [node];
-  if (node.parent?.type === "VariableDeclarator") candidates.push(node.parent.parent);
-  if (node.parent?.type === "Property" || node.parent?.type === "MethodDefinition") candidates.push(node.parent);
+  const p = node.parent;
+  if (p?.type === "VariableDeclarator") candidates.push(p.parent, p.parent?.parent);
+  if (p?.type === "Property" || p?.type === "MethodDefinition") candidates.push(p);
+  if (p?.type === "ExportNamedDeclaration" || p?.type === "ExportDefaultDeclaration") candidates.push(p);
+  if (p?.parent?.type === "ExportNamedDeclaration") candidates.push(p.parent);
   for (const target of candidates) {
     const comments = src.getCommentsBefore(target) || [];
     for (const c of comments) {
