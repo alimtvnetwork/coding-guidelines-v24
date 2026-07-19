@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.89.0
+
+- SS-02 task 36: Registered error codes slide (`ERR-004`, hard) covering the central `ErrorCodes` registry, typed union, and exhaustive UI switch per spec/17/31 line 79. 36 slides validated.
+
 ### What's new in v5.88.0
 
 - SS-02 task 35: Assets folder convention slide (`ASSET-001`, hard) covering the `assets/NN-folder/NN-file.ext` tree and no `-final`/`-v2` suffixes per spec/17/31 rule 12. 35 slides validated.
