@@ -5,6 +5,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.64.0] - 2026-07-19
+
+### Added - SS-02 task 5: `LanguageTabs` component for multi-language rule slides
+
+- New [`slides-app/src/components/LanguageTabs.tsx`](slides-app/src/components/LanguageTabs.tsx) renders an accessible tab shell (`role="tablist"` / `role="tab"` / `role="tabpanel"` with `aria-selected`, `aria-controls`, `aria-labelledby`) so a single rule slide can show Go / TS / PHP / Rust snippets without duplicating slides.
+- Content-agnostic: each tab accepts any `ReactNode`, typically a `CodeDiff` or a static `<pre>` block. Framer Motion `layoutId="lang-tab-pill"` animates the active-tab pill; panel crossfade uses `AnimatePresence`.
+- Design tokens only (`--bg-raised`, `--border`, `--primary`, `--primary-fg`, `--fg-muted`); no hardcoded colors, dark-mode safe.
+- Highlighter note: shared `CodeDiff` still bundles only the TypeScript grammar to respect the 8 MB offline-contract ceiling; expanding grammars is tracked separately and does not block LanguageTabs adoption (callers may pass plain `<pre>` blocks in the meantime).
+- Root cause of prior gap: rule slides had no shell for equivalent-across-languages snippets, so authors would have duplicated slides per language, inflating the deck and drifting rule text between copies.
+- Verification: `bun run build` succeeds; offline contract intact (38 files, 1828 KB); `dist.zip` regenerated.
+
+---
+
 ## [5.63.0] - 2026-07-19
 
 ### Added - SS-02 task 6: `CalloutQuote` component for aphorism panels
