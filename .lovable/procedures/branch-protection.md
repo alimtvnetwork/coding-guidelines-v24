@@ -7,14 +7,22 @@ Turn a passing workflow into a merge blocker on `main`. Backlog item 1 (promote 
 - Repo admin permission on GitHub.
 - `gh` CLI logged in as an admin: `gh auth status`.
 - The workflow has been green on `main` for at least one full release cycle. Promoting a flaky check blocks every PR.
+- **Readiness gate (v5.128+):** run `npm run branch-protection:soak` and confirm the target check reports `READY` (pass rate >=95% over the last 20 runs on `main`). Do NOT promote a `WATCH` or `NOT READY` check. If output is `NO DATA`, the workflow has not run on `main` at all; trigger a run first.
 
 ## Procedure
+
+0. Confirm the target check is stable.
+   ```bash
+   npm run branch-protection:soak
+   ```
+   Every desired entry must print `READY`. If any prints `WATCH` / `NOT READY` / `NO DATA`, stop and fix that first, do not promote.
 
 1. Regenerate the machine-readable payload from the checked-in expectation file.
    ```bash
    node scripts/print-required-checks.mjs --json
    ```
    Copy the `contexts` array from the output.
+
 
 2. Add the new check name to `.github/branch-protection.expected.json` under `required`, and remove it from `desired-but-not-yet-required` if present. Commit that change with the same PR that flips branch protection.
 
@@ -26,17 +34,21 @@ Turn a passing workflow into a merge blocker on `main`. Backlog item 1 (promote 
    ```
    `strict=true` means PRs must be up-to-date with `main` before merge (blocks stale-branch bypasses).
 
-4. Verify.
+4. Verify (v5.128+): use the one-command diff instead of eyeballing raw JSON.
+   ```bash
+   npm run branch-protection:diff
+   ```
+   Exit 0 means live state matches `.github/branch-protection.expected.json` exactly. Exit 1 prints the drift (missing/extra contexts) with a clear diff. Fallback for older setups:
    ```bash
    gh api "repos/{owner}/{repo}/branches/main/protection/required_status_checks" \
      --jq '.contexts'
    ```
-   Output should exactly match `required` from the expectation file.
 
 5. Re-run the enumerator to confirm no drift.
    ```bash
    node scripts/print-required-checks.mjs --check
    ```
+
 
 ## Rolling back a required check
 

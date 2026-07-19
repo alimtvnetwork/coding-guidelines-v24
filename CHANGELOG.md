@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.128.0] - 2026-07-19
+
+### Added, self-tests for v5.127 branch-protection helpers + procedure update
+
+- `scripts/tests/branch-protection-diff.test.mjs`: 12 assertions on `diff(live, expected)` covering empty sets, identical order, set-equal-with-different-order, missing-on-live, extra-on-live, mixed drift, and duplicate entries on live (must not produce phantom missing). Guards the v5.127 read-only wrapper so it can never silently report "OK" when live GitHub state has drifted from `.github/branch-protection.expected.json`.
+- `scripts/tests/branch-protection-soak.test.mjs`: 10 assertions on `verdict(passRate, sampleSize)` locking the promotion threshold contract: sampleSize=0 => NO DATA (never fake READY on empty windows), >=0.95 READY, >=0.80 WATCH, <0.80 NOT READY, including exact boundary hits at 0.95 and 0.80 and just-below cases at 0.9499 and 0.7999. Prevents "we relaxed the gate to 0.85 for one release" from silently becoming permanent.
+- `scripts/lint-ci.sh` steps 21+22 and `.github/workflows/ci.yml` `sync-drift` job: wired both self-tests. Mirror-drift guard (`scripts/check-lint-ci-drift.mjs`) verifies both are present in both places, matching the pattern established in v5.126 for the parser self-test.
+- `.lovable/procedures/branch-protection.md`: promoted `npm run branch-protection:soak` to a **required precondition** (step 0) before running the promotion ceremony, and replaced the raw `gh api ... --jq '.contexts'` eyeball diff in step 4 with `npm run branch-protection:diff` (raw command kept as fallback for older setups). Turns the ceremony into: soak READY -> edit expected.json -> patch protection -> diff OK -> `--check` OK.
+- Root cause this closes: v5.127 shipped two read-only wrappers (`:diff`, `:soak`) without self-tests and without wiring them into the promotion procedure. That would let (a) a regression in `diff()` set logic silently ship "OK" on drifted repos, (b) a threshold typo in `verdict()` silently pass a `WATCH` check as `READY`, and (c) operators keep following the old procedure that skipped the new gates. All three are now blocked at PR-time by CI.
+- Verification: `node scripts/tests/branch-protection-diff.test.mjs` reports 12 ok, 0 fail. `node scripts/tests/branch-protection-soak.test.mjs` reports 10 ok, 0 fail. `bash scripts/lint-ci.sh --list | tail -5` shows steps 21 and 22 registered. `node scripts/check-lint-ci-drift.mjs` reports no drift after mirroring both new steps in `ci.yml`.
+
 ## [5.127.0] - 2026-07-19
 
 ### Added, branch-protection readiness diff + soak report
