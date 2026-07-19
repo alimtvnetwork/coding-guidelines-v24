@@ -42,7 +42,13 @@ function writeSlideToHash(n: number) {
   window.location.hash = `/id/${encodeURIComponent(slide.id)}`;
 }
 
+function isPrintMode(): boolean {
+  return new URLSearchParams(window.location.search).has("print");
+}
+
 export default function App() {
+  if (isPrintMode()) return <PrintView />;
+
   const [index, setIndex] = useState(readSlideFromHash);
   const [view, setView] = useState<View>("deck");
   const [helpOpen, setHelpOpen] = useState(false);
