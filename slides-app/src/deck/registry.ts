@@ -212,6 +212,8 @@ export const DECK: readonly SlideEntry[] = [
   { id: "62-release-ceremony", title: "Release ceremony", section: "workflow", severity: "hard", ruleId: "WF-005", tags: ["release", "ceremony", "tag", "changelog", "dist"], component: ReleaseCeremony },
 
   { id: "63-dashboards", title: "Golden-signals dashboards", section: "ops", severity: "hard", ruleId: "OPS-001", tags: ["dashboard", "grafana", "sre", "traffic", "errors", "latency", "saturation"], component: Dashboards },
+  { id: "64-alert-rules", title: "Alert rules · SLO burn, dashboard, runbook, owner", section: "ops", severity: "hard", ruleId: "OPS-002", tags: ["alerts", "slo", "burn rate", "pager", "owner", "severity"], component: AlertRules },
+  { id: "65-runbooks", title: "Runbooks · executable, drilled, verified", section: "ops", severity: "hard", ruleId: "OPS-003", tags: ["runbook", "on-call", "game-day", "mitigation", "rollback", "incident"], component: Runbooks },
 
   { id: "12-closing", title: "Closing", section: "closing", tags: ["wrap-up", "references", "q&a"], component: Closing },
 ] as const;
