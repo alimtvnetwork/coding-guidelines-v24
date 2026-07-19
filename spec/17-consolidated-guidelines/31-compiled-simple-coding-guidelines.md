@@ -65,7 +65,7 @@ auto-reject on the same tier as RULE 0.
 
 ## Error Management (One-Liner Digest)
 
-If this repository has a `spec/xx-error-manage/` folder, that folder is binding and overrides any conflict here. Otherwise follow these rules directly.
+If this repository has a `spec/**/error-manage/` folder, that folder is binding and overrides any conflict here. Otherwise follow these rules directly.
 
 - Never swallow. Every `catch` logs the operation name and the key inputs, then rethrows or returns a typed error.
 - Wrap, do not lose. Wrap the original error with an operation label and context (`apperror.Wrap(err, "op", ctx)` in Go, `throw new AppError(cause, { op, ctx })` in TS). The original stack must survive.
