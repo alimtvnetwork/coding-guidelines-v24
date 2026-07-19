@@ -598,6 +598,19 @@ jobs:
         # cannot silently pass on parser regressions (empty jobs array
         # would make every expected context look "stale but also OK").
         run: node scripts/tests/print-required-checks.test.mjs
+      - name: Self-test branch-protection-diff classifier (diff live vs expected)
+        # Guards diff() in scripts/branch-protection-diff.mjs so the
+        # v5.127 "diff live GH state vs expected.json" wrapper can never
+        # silently report OK on drift. Threshold-free set-diff logic
+        # with 12 assertions covering mixed drift and duplicate entries.
+        # Added in v5.128.
+        run: node scripts/tests/branch-protection-diff.test.mjs
+      - name: Self-test branch-protection-soak verdict thresholds
+        # Guards verdict(passRate, sampleSize) in
+        # scripts/branch-protection-soak.mjs. Locks the promotion gate:
+        # sampleSize=0 => NO DATA (never fake READY on empty windows),
+        # >=0.95 READY, >=0.80 WATCH, <0.80 NOT READY. Added in v5.128.
+        run: node scripts/tests/branch-protection-soak.test.mjs
 
 
   docs-diagrams:

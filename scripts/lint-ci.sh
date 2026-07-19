@@ -148,6 +148,8 @@ STEPS=(
   "Self-test pre-push visual-hint helper (sandbox vs host branches)|bash scripts/tests/pre-push-visual-hint.test.sh"
   "Check branch-protection expected.json for stale required contexts|node scripts/print-required-checks.mjs --check"
   "Self-test print-required-checks parser (parseWorkflowText + checkStale)|node scripts/tests/print-required-checks.test.mjs"
+  "Self-test branch-protection-diff classifier (diff live vs expected)|node scripts/tests/branch-protection-diff.test.mjs"
+  "Self-test branch-protection-soak verdict thresholds (READY/WATCH/NOT READY)|node scripts/tests/branch-protection-soak.test.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then
