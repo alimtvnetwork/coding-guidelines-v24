@@ -437,7 +437,7 @@ bash ./linters-cicd/run-all.sh --path . --format text
 ### 🐧 Pinned version (recommended for CI)
 
 ```bash
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v5.128.0/install.sh | bash -s -- -v v5.128.0
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v5.129.0/install.sh | bash -s -- -v v5.129.0
 ```
 
 ### 🪟 Windows · PowerShell
