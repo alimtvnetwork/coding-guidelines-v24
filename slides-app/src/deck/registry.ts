@@ -33,6 +33,7 @@ import DataSchemaChapterOpener from "../slides/41-data-schema-chapter-opener";
 import TableIdPks from "../slides/42-table-id-pks";
 import JoinTableNaming from "../slides/43-join-table-naming";
 import NullableNarrativeColumns from "../slides/44-nullable-narrative-columns";
+import SqliteOrmExplicitJoins from "../slides/45-sqlite-orm-explicit-joins";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
