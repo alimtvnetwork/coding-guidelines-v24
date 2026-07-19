@@ -64,6 +64,12 @@ export interface SlideEntry {
    * logic and by slide components via `useSlideStep()`. Absent = 0 (no reveals).
    */
   steps?: number;
+  /**
+   * Optional free-form search tags for the command palette. Match on concept
+   * keywords (e.g. "guard", "effect", "wcag") that are not in the title,
+   * rule id, or section. Lowercase; kept short (1-3 words each).
+   */
+  tags?: readonly string[];
   notes?: string;
   component: ComponentType;
 }
