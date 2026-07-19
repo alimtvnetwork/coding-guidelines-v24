@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.70.0
+
+- **Spec-first vs code-first PR contrast slide (SS-02 task 18).** New [`slides-app/src/slides/15-spec-first-vs-code-first.tsx`](slides-app/src/slides/15-spec-first-vs-code-first.tsx) (ruleId `MUST-003`, hard) shows two PR payloads side by side: PR #482 (code-first, rejected) touches only `src/`; PR #483 (spec-first, accepted) lands the same code diff alongside a `spec/12-payments/` entry, an `03-issues/` entry, and tests. Makes the failure mode of code-only PRs visible instead of abstract. SRA validator now passes 17 slides.
+
 ### What's new in v5.69.0
 
 - **Root-cause-first workflow slide (SS-02 task 17).** New [`slides-app/src/slides/14-root-cause-first.tsx`](slides-app/src/slides/14-root-cause-first.tsx) (ruleId `MUST-002`, hard) contrasts the RCA-first loop (Reproduce → Trace → State the cause → Minimum fix → Prove it) against the symptom-patch loop (try/catch, fallback, extra effect, ship). Operationalizes non-negotiable #2 from `MUST-001`. SRA validator now passes 16 slides.
