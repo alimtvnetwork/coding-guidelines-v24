@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.124.0
+
+- OQ-A1 and OQ-A2 promoted from "default adopted" to locked spec decisions **D15** and **D16**. `spec/19-main-worker-service/17-cascading-roles-and-cache-bin.md` v1.1.0: §7 rewritten as "Resolved Decisions". D15 locks cascading semantics as simple union (no role hierarchy). D16 locks the cache-bin storage tier as per-process SQLite `:memory:` with the `RoleAccessCache` schema in §4 and the invalidation contract in §5; Redis and plain in-process map stay documented as configurable alternatives against the same four-function contract.
+- `.lovable/plan.md`: Locked Decisions table gains D15 and D16. Open Questions section renamed to "all resolved". Root cause this closes: every blind-AI and mediocre-AI audit kept flagging these as legitimately open even though 18+ downstream chapters had already conformed to the defaults; leaving them "open" invited a future implementer to waste a phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
+
 ### What's new in v5.123.0
 
 - Testable pre-push visual-hint helper. `scripts/pre-push-visual-hint.sh` extracts the sandbox vs host branching that lived inline in `.husky/pre-push`, and `scripts/tests/pre-push-visual-hint.test.sh` runs 9 cases (both branches recommend the correct target, neither leaks the other, both include the workflow-dispatch fallback, unknown env exits non-zero). Wired as `lint-ci.sh` step 18. Root cause: untested inline shell inside a git hook is how the v5.117 "strict guard, zero baselines" regression happened.
