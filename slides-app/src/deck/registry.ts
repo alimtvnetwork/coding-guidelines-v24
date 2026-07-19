@@ -26,6 +26,7 @@ import RegisteredErrorCodes from "../slides/34-registered-error-codes";
 import ResponseEnvelope from "../slides/35-response-envelope";
 import LogLevelSeverity from "../slides/36-log-level-severity";
 import LogContext from "../slides/37-log-context";
+import VerifyBothDirections from "../slides/38-verify-both-directions";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
