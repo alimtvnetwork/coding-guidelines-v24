@@ -34,17 +34,21 @@ Turn a passing workflow into a merge blocker on `main`. Backlog item 1 (promote 
    ```
    `strict=true` means PRs must be up-to-date with `main` before merge (blocks stale-branch bypasses).
 
-4. Verify.
+4. Verify (v5.128+): use the one-command diff instead of eyeballing raw JSON.
+   ```bash
+   npm run branch-protection:diff
+   ```
+   Exit 0 means live state matches `.github/branch-protection.expected.json` exactly. Exit 1 prints the drift (missing/extra contexts) with a clear diff. Fallback for older setups:
    ```bash
    gh api "repos/{owner}/{repo}/branches/main/protection/required_status_checks" \
      --jq '.contexts'
    ```
-   Output should exactly match `required` from the expectation file.
 
 5. Re-run the enumerator to confirm no drift.
    ```bash
    node scripts/print-required-checks.mjs --check
    ```
+
 
 ## Rolling back a required check
 
