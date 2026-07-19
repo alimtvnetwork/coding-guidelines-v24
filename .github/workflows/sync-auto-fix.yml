@@ -1,0 +1,103 @@
+# ============================================================
+# sync-auto-fix.yml — CI option to run sync in fix mode
+# ============================================================
+#
+# Regenerates every file produced by `npm run sync`, commits the
+# result back to the PR branch (or the dispatch ref), and fails
+# ONLY if drift is still present AFTER regeneration ran. This is
+# the escape hatch for the strict `sync-drift` job in ci.yml
+# (which fails on any drift, no auto-fix).
+#
+# Triggers:
+#   * workflow_dispatch                    (manual, any branch)
+#   * pull_request labeled `sync:auto-fix` (opt-in per PR)
+#
+# Exit semantics (see scripts/sync-check.mjs):
+#   0 - sync ran, tree is clean (a commit may have been pushed)
+#   1 - drift REMAINS after `npm run sync` (bug in a sync script)
+#   2 - a sync script itself crashed
+#
+# The commit-back step is skipped on forked PRs (no write token).
+# ============================================================
+
+name: Sync Auto-Fix
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  sync-auto-fix:
+    name: Regenerate generated files and re-check
+    # Only run on PRs when the `sync:auto-fix` label is present; always
+    # run on manual dispatch.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' &&
+       contains(github.event.pull_request.labels.*.name, 'sync:auto-fix'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (PR head, with write token)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          # Needed so the auto-commit push is accepted on the PR branch.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies (no scripts)
+        run: npm ci --ignore-scripts --no-audit --no-fund
+        continue-on-error: true
+
+      - name: Run sync in fix mode, then re-verify no drift
+        # sync:ci-fix = sync-check.mjs --fix (regenerates + re-checks
+        # generated files) + sync-guidelines.mjs (regenerates mirrors)
+        # + a final sync:check pass so BOTH pipelines must exit clean.
+        # If a sync script has a bug that produces non-idempotent output,
+        # this step fails and the workflow reports the drifted files.
+        run: npm run sync:ci-fix
+
+      - name: Detect regenerated files
+        id: diff
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Tree clean — no regenerated files to commit."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Regenerated files:"
+            git status --porcelain
+          fi
+
+      - name: Commit and push regenerated files
+        # Skip on forks (no write token) and on already-clean trees.
+        if: >
+          steps.diff.outputs.changed == 'true' &&
+          (github.event_name == 'workflow_dispatch' ||
+           github.event.pull_request.head.repo.full_name == github.repository)
+        run: |
+          git config user.name "lovable-sync-bot"
+          git config user.email "sync-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: sync generated files [auto]"
+          git push
+
+      - name: Warn when running on a fork (cannot push)
+        if: >
+          steps.diff.outputs.changed == 'true' &&
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::warning::PR is from a fork; regenerated files were not pushed. Run \`npm run sync\` locally and commit."
+          exit 1
