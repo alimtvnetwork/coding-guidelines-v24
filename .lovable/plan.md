@@ -42,12 +42,9 @@
 
 ---
 
-## Open Questions (all resolved)
+## Open Questions
 
-- ~~**OQ-A1:**~~ ✅ RESOLVED 2026-07-19 → locked as **D15** (simple union final).
-- ~~**OQ-A2:**~~ ✅ RESOLVED 2026-07-19 → locked as **D16** (per-process SQLite `:memory:` final).
-- ~~**OQ-A3:**~~ ✅ RESOLVED 2026-05 (Phase 8) - `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 defines the HKDF-derived per-snapshot zip password (Pair-RSA + Envelope-AES stack), superseding the original `HMAC-SHA256(SharedSecret, BackupTimestampEpoch)` proposal.
-- ~~**OQ-A4:**~~ ✅ RESOLVED 2026-05-06 (Phase 11) — `MainWorker.Backup.SnapshotRetentionDays = 30` rolling, with operator override + 7-day compliance floor.
+All prior open questions (OQ-A1..A4) have been resolved and promoted to locked decisions D15, D16 (2026-07-19) and D-entries from Phases 8/11. See the Locked Decisions table above. No open questions remain.
 
 ---
 
