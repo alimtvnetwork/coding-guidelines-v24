@@ -1,6 +1,6 @@
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-Version: 1.1.0
+Version: 1.2.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
 
@@ -128,6 +128,6 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 2. Apply the minimum correct fix. No drive-by refactors.
 3. Verify in the logs (or in a live run) that the fix works. Do not claim done based on the build passing alone.
 4. List every remaining task before ending the turn.
-5. Bump the version, update the changelog, update the release notes.
-6. Plan multi-file features with a Mermaid component or flow diagram first.
-7. If you cannot find the answer in this file or in an existing`spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
+5. Plan multi-file features with a Mermaid component or flow diagram first.
+6. If you cannot find the answer in this file or in an existing `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
+
