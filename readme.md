@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.67.0
+
+- **Palette tag search (SS-02 task 13).** `SlideEntry` gains an optional `tags?: readonly string[]` field ([`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts)); every rule slide is now tagged with concept keywords (e.g. `guard clause`, `early return`, `observability`). The Cmd/Ctrl+K palette in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) folds tags into its haystack and renders up to 3 tag chips per result row, so slides are findable by intent even when the tag word appears nowhere in the title or rule id.
+
 ### What's new in v5.66.0
 
 - **Dark + light mode WCAG AA contrast audit (SS-02 task 14).** New [`slides-app/scripts/contrast-audit.mjs`](slides-app/scripts/contrast-audit.mjs) parses `tokens.css` for both themes, computes WCAG 2.1 contrast ratios for 9 fg/bg pairs each, and fails on any violation. Wired as `npm run slides:contrast-audit`. First run caught `--accent` at 2.47:1 on light bg; fixed by darkening light-theme accent to `160 84% 30%` (now 4.02:1). All 18 pairs pass AA.

@@ -64,6 +64,12 @@ export interface SlideEntry {
    * logic and by slide components via `useSlideStep()`. Absent = 0 (no reveals).
    */
   steps?: number;
+  /**
+   * Optional free-form search tags for the command palette. Match on concept
+   * keywords (e.g. "guard", "effect", "wcag") that are not in the title,
+   * rule id, or section. Lowercase; kept short (1-3 words each).
+   */
+  tags?: readonly string[];
   notes?: string;
   component: ComponentType;
 }
@@ -76,26 +82,26 @@ export const DECK: readonly SlideEntry[] = [
   { id: "00-title", title: "Title", section: "opening", component: Title },
   { id: "01-toc", title: "Table of Contents", section: "opening", component: TableOfContents },
 
-  { id: "01a-core-principles-1", title: "Core Principles · 1", section: "principles", component: CorePrinciples1 },
-  { id: "01b-core-principles-2", title: "Core Principles · 2", section: "principles", component: CorePrinciples2 },
-  { id: "01c-core-principles-3", title: "Core Principles · 3", section: "principles", component: CorePrinciples3 },
+  { id: "01a-core-principles-1", title: "Core Principles · 1", section: "principles", tags: ["mindset", "must-follow", "non-negotiable"], component: CorePrinciples1 },
+  { id: "01b-core-principles-2", title: "Core Principles · 2", section: "principles", tags: ["mindset", "review"], component: CorePrinciples2 },
+  { id: "01c-core-principles-3", title: "Core Principles · 3", section: "principles", tags: ["mindset", "ownership"], component: CorePrinciples3 },
 
-  { id: "01-naming", title: "Naming conventions", section: "naming", severity: "hard", ruleId: "NAM-001", component: Naming },
-  { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", component: Metrics },
+  { id: "01-naming", title: "Naming conventions", section: "naming", severity: "hard", ruleId: "NAM-001", tags: ["pascalcase", "camelcase", "identifiers", "acronyms"], component: Naming },
+  { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
-  { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", component: NestedIf },
-  { id: "03-boolean-prefixes", title: "Boolean prefixes", section: "control-flow", severity: "warn", ruleId: "BOOL-001", component: BooleanPrefixes },
-  { id: "08-two-operand", title: "Two-operand max", section: "control-flow", severity: "hard", ruleId: "CF-002", component: TwoOperandMax },
-  { id: "09-positive-guards", title: "Positive guards", section: "control-flow", severity: "warn", ruleId: "CF-003", component: PositiveGuards },
+  { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
+  { id: "03-boolean-prefixes", title: "Boolean prefixes", section: "control-flow", severity: "warn", ruleId: "BOOL-001", tags: ["is", "has", "can", "should", "boolean naming"], component: BooleanPrefixes },
+  { id: "08-two-operand", title: "Two-operand max", section: "control-flow", severity: "hard", ruleId: "CF-002", tags: ["boolean expression", "extract intent", "readability"], component: TwoOperandMax },
+  { id: "09-positive-guards", title: "Positive guards", section: "control-flow", severity: "warn", ruleId: "CF-003", tags: ["positive condition", "negation", "guard"], component: PositiveGuards },
 
-  { id: "04-app-error", title: "AppError wrapper", section: "errors", severity: "hard", ruleId: "ERR-001", component: AppErrorWrapper },
-  { id: "05-logging", title: "Structured logging", section: "errors", severity: "warn", ruleId: "ERR-002", component: StructuredLogging },
-  { id: "06-magic-strings", title: "Magic strings", section: "errors", severity: "hard", ruleId: "ERR-003", component: MagicStrings },
+  { id: "04-app-error", title: "AppError wrapper", section: "errors", severity: "hard", ruleId: "ERR-001", tags: ["error handling", "wrap", "context", "apperror"], component: AppErrorWrapper },
+  { id: "05-logging", title: "Structured logging", section: "errors", severity: "warn", ruleId: "ERR-002", tags: ["observability", "log", "context", "surface errors"], component: StructuredLogging },
+  { id: "06-magic-strings", title: "Magic strings", section: "errors", severity: "hard", ruleId: "ERR-003", tags: ["constants", "enum", "literals"], component: MagicStrings },
 
-  { id: "10-spec-first", title: "Spec-first workflow", section: "workflow", severity: "style", ruleId: "WF-001", component: SpecFirst },
-  { id: "11-cache-invalidation", title: "Cache invalidation", section: "workflow", severity: "warn", ruleId: "WF-002", component: CacheInvalidation },
+  { id: "10-spec-first", title: "Spec-first workflow", section: "workflow", severity: "style", ruleId: "WF-001", tags: ["spec", "process", "planning"], component: SpecFirst },
+  { id: "11-cache-invalidation", title: "Cache invalidation", section: "workflow", severity: "warn", ruleId: "WF-002", tags: ["cache", "ttl", "invalidate", "keys"], component: CacheInvalidation },
 
-  { id: "12-closing", title: "Closing", section: "closing", component: Closing },
+  { id: "12-closing", title: "Closing", section: "closing", tags: ["wrap-up", "references", "q&a"], component: Closing },
 ] as const;
 
 /** Group deck entries by section, preserving section order defined in `SECTIONS`. */

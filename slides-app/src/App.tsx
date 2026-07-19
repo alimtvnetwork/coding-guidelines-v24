@@ -324,7 +324,8 @@ function CommandPalette({
     const all = DECK.map((slide, index) => ({ slide, index }));
     if (!q) return all;
     return all.filter(({ slide }) => {
-      const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section}`.toLowerCase();
+      const tagText = (slide.tags ?? []).join(" ");
+      const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section} ${tagText}`.toLowerCase();
       return hay.includes(q);
     });
   }, [query]);
@@ -386,7 +387,7 @@ function CommandPalette({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKey}
-            placeholder="Jump to slide by title, rule id, or section..."
+            placeholder="Jump by title, rule id, section, or tag..."
             aria-label="Search slides"
             style={{
               flex: 1,
@@ -431,6 +432,25 @@ function CommandPalette({
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span style={{ fontSize: 14, flex: 1 }}>{slide.title}</span>
+                  {slide.tags && slide.tags.length > 0 ? (
+                    <span style={{ display: "flex", gap: 4, flexWrap: "wrap", maxWidth: 220, justifyContent: "flex-end" }}>
+                      {slide.tags.slice(0, 3).map((t) => (
+                        <span
+                          key={t}
+                          style={{
+                            fontSize: 10,
+                            padding: "2px 6px",
+                            borderRadius: 999,
+                            background: "rgba(148,163,184,0.15)",
+                            opacity: 0.85,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
                   {slide.ruleId ? (
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.6 }}>{slide.ruleId}</span>
                   ) : null}
