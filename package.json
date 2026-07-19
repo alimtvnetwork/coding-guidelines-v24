@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "5.116.0",
+  "version": "5.117.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -78,6 +78,8 @@
     "test:slides:visual": "playwright test slides-app/tests/visual.spec.ts",
     "test:slides:visual:update": "playwright test slides-app/tests/visual.spec.ts --update-snapshots",
     "slides:validate-sra": "node scripts/validate-slides-sra.mjs",
+    "slides:validate-baselines": "node scripts/validate-visual-baselines.mjs",
+    "slides:validate-baselines:strict": "node scripts/validate-visual-baselines.mjs --strict --list",
     "slides:contrast-audit": "node slides-app/scripts/contrast-audit.mjs"
   },
   "dependencies": {

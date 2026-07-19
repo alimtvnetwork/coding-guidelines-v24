@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.117.0] - 2026-07-19
+
+### Added — Visual baseline coverage guard (`scripts/validate-visual-baselines.mjs`)
+
+- Parses `DECK` in `slides-app/src/deck/registry.ts` (top-level object-literal count anchored on `= [` to skip the `SlideEntry[]` type bracket) and cross-checks `slides-app/tests/visual.spec.ts-snapshots/` for one `slide-NN-chromium-linux.png` per entry. Root cause it addresses: the visual regression suite iterates `DECK.length` slides, but a missing baseline PNG causes Playwright to auto-create one on first run and pass, hiding zero-protection cases. First run reported `deck=70 baselines=0 missing=70`, confirming the suite has been silently green since inception.
+- Wired advisory (`node scripts/validate-visual-baselines.mjs`) into `.husky/pre-push` and `.github/workflows/slides-visual.yml` as a pre-Playwright step. Ships with `--strict` mode (exit 1 on any drift, ready to flip once baselines land) and `--list` (enumerate missing baseline names). Exposed as `slides:validate-baselines` and `slides:validate-baselines:strict` npm scripts.
+
+### Fixed — Stale open question in `.lovable/plan.md`
+
+- OQ-A3 (Zip password "known pattern") was resolved in Phase 8 by `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack) but the Open Questions block was never swept, so the item kept surfacing in every remaining-work list. Marked resolved with a pointer to the spec section.
+
 ## [5.116.0] - 2026-07-19
 
 ### Fixed — Visual regression covered only 17 of 70 slides

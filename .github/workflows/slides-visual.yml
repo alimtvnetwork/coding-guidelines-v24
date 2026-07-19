@@ -62,6 +62,12 @@ jobs:
       - name: Install Playwright Chromium
         run: bunx playwright install --with-deps chromium
 
+      - name: Validate baseline coverage (advisory)
+        # Fails only in --strict mode. Once the initial 70-slide baseline
+        # set is committed, flip this to `slides:validate-baselines:strict`
+        # so any future deck growth without a baseline refresh blocks CI.
+        run: bun run slides:validate-baselines
+
       - name: Run visual regression
         if: ${{ inputs.update_baselines != 'true' }}
         run: bunx playwright test slides-app/tests/visual.spec.ts
