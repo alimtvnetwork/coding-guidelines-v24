@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.67.0] - 2026-07-19
+
+### Added - SS-02 task 13: palette search extended to tags
+
+- Added `tags?: readonly string[]` to `SlideEntry` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts) and tagged every rule slide (e.g. `["guard clause", "early return", "pyramid"]` for `02-nested-if`, `["observability", "log", "context"]` for `05-logging`). Tags are concept keywords that are not present in the title, rule id, or section, so the palette can find slides by intent.
+- Extended the palette haystack in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) (`CommandPalette.matches`, previously line 327) to concatenate `tags.join(" ")` alongside `id + title + ruleId + section`, and updated the input placeholder to "Jump by title, rule id, section, or tag...".
+- Rendered up to 3 tag chips per result row (rounded pills, `rgba(148,163,184,0.15)` background, nowrap) between the title and the rule id, so authors can see why a fuzzy match hit.
+- Root cause of prior gap: `SlideEntry` had no `tags` field and the palette haystack at `App.tsx:327` only concatenated `id + title + ruleId + section`, so task 13 ("match slide title, rule id, and tags") was unsatisfiable and slides could not be found by concept keywords.
+- Verification: `bun run build` in `slides-app/` succeeds; offline contract intact (38 files, 1830 KB); `dist.zip` regenerated. Searching "guard" now matches `02-nested-if` and `09-positive-guards`; "observability" matches `05-logging`; "wcag" does not match anything (no slide is tagged wcag yet, as intended).
+
+---
+
 ## [5.66.0] - 2026-07-19
 
 ### Added - SS-02 task 14: dark-mode + light-mode WCAG AA contrast audit
