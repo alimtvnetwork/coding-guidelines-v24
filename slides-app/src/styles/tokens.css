@@ -38,6 +38,9 @@
   --muted-fg: 215 16% 47%;
   --border: 214 32% 91%;
   --code-bg: 210 40% 96%;
+  /* Dark accent (160 84% 39%) fails WCAG AA on the light canvas at 2.47:1.
+     Darken to 30% lightness for a 4.02:1 ratio while keeping the same hue. */
+  --accent: 160 84% 30%;
 }
 
 * {

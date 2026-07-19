@@ -44,7 +44,7 @@ Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUIL
 11. [INFRA] Presenter view: show notes + next-slide preview + rule id.
 12. [INFRA] Grid view: filter by section + severity.
 13. [INFRA] Add search-in-deck (Cmd+K) matching slide title, rule id, and tags.
-14. [INFRA] Dark-mode audit: ensure all diff/code contrast meets WCAG AA.
+14. [INFRA] Dark-mode audit: ensure all diff/code contrast meets WCAG AA. ✅ v5.66.0 (`slides-app/scripts/contrast-audit.mjs`; caught `--accent` 2.47:1 on light bg, darkened to 30% L for 4.02:1)
 15. [INFRA] Replace any remaining Tailwind `text-*` inside `.slide-content` with semantic classes per slides-app skill.
 
 ## B. Content: Must-Follow + core principles (tasks 16-22)

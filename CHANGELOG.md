@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.66.0] - 2026-07-19
+
+### Added - SS-02 task 14: dark-mode + light-mode WCAG AA contrast audit
+
+- New [`slides-app/scripts/contrast-audit.mjs`](slides-app/scripts/contrast-audit.mjs) parses `slides-app/src/styles/tokens.css` for both `:root` (dark) and `[data-theme="light"]` blocks, converts each HSL value to sRGB, computes WCAG 2.1 relative-luminance contrast ratios, and asserts 9 foreground/background pairs against AA thresholds (4.5:1 for normal text, 3.0:1 for UI/graphics). Exits non-zero on any failure with a per-pair PASS/FAIL table for both themes.
+- Wired as `npm run slides:contrast-audit` in [`package.json`](package.json).
+- Root cause of prior gap: token values were never verified against WCAG AA, so a token tweak could silently drop text pairs below threshold in either theme. First run of the audit caught exactly that: `--accent` (`160 84% 39%`) rendered at 2.47:1 on the light canvas (`210 40% 98%`), below the 3:1 minimum for UI/graphics.
+- Fix: added a light-theme override `--accent: 160 84% 30%` in [`slides-app/src/styles/tokens.css`](slides-app/src/styles/tokens.css) (same hue, darker L), raising the ratio to 4.02:1 while dark-theme accent (7.52:1) remains unchanged.
+- Verification: `node slides-app/scripts/contrast-audit.mjs` now reports `Contrast audit PASSED. 18 pairs meet WCAG AA.` (9 dark + 9 light). Before/after signal captured in this changelog entry.
+
+---
+
 ## [5.65.0] - 2026-07-19
 
 ### Added - SS-02 task 10: sub-step URL coordinate for staged reveals
