@@ -66,30 +66,6 @@ const IGNORED_CI_STEPS = new Map([
   ["Check tunable constants (T1–T4 — single-source-of-truth, seed parity)", "runs in the tunable-constants job scope"],
 ]);
 
-function ciStepNames() {
-  const src = readFileSync(CI_YAML, "utf8");
-  const names = [];
-  const re = /^\s+-\s+name:\s+(.+?)\s*$/gm;
-  let m;
-  while ((m = re.exec(src)) !== null) names.push(m[1]);
-  return names;
-}
-
-function lintCiLabels() {
-  const src = readFileSync(LINT_CI, "utf8");
-  const lines = src.split("\n");
-  const startIdx = lines.findIndex((l) => l.trim().startsWith("STEPS=("));
-  if (startIdx < 0) throw new Error("STEPS=( block not found in lint-ci.sh");
-  const labels = [];
-  for (let i = startIdx + 1; i < lines.length; i += 1) {
-    const t = lines[i].trim();
-    if (t === ")") break;
-    if (!t.startsWith('"') || !t.includes("|")) continue;
-    const inner = t.slice(1, t.lastIndexOf('"'));
-    labels.push(inner.split("|", 1)[0]);
-  }
-  return labels;
-}
 
 export function parseCiStepNames(src) {
   const names = [];
