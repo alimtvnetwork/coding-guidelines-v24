@@ -31,17 +31,17 @@ const AFTER = `# ops/runbooks/checkout-api/p99-latency-burn.md
 #
 # ## First 5 minutes (assess, do not fix yet)
 # 1. Open dashboard: <link>. Confirm the burn is still active.
-# 2. Check deploys: `kubectl rollout history deploy/checkout-api -n prod`.
+# 2. Check deploys: 'kubectl rollout history deploy/checkout-api -n prod'.
 #    If a deploy landed in the last 30 min, jump to "Recent deploy" branch.
 # 3. Check upstream: open the payments-gateway dashboard, look for correlated latency.
 #
 # ## Mitigations (pick the first that applies)
 # - Recent deploy in last 30 min:
-#   `kubectl rollout undo deploy/checkout-api -n prod`   # rollback, ~40s
+#   'kubectl rollout undo deploy/checkout-api -n prod'   # rollback, ~40s
 # - Upstream (payments) is the cause:
 #   Page team-payments via <pager-link>. Enable degraded-checkout flag: <link>.
 # - No deploy, no upstream, box hot (CPU > 85 percent for > 5 min):
-#   `kubectl scale deploy/checkout-api --replicas=+2 -n prod`   # add headroom
+#   'kubectl scale deploy/checkout-api --replicas=+2 -n prod'   # add headroom
 #
 # ## After the fire is out
 # 1. File incident ticket with root cause + this runbook's outcome.
