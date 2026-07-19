@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.103.0] - 2026-07-19
+
+### Changed: SS-02 task 50: `useEffect` last resort with positive guards (REACT-002)
+
+- New slide `slides-app/src/slides/48-effect-last-resort.tsx` registered as `REACT-002` (hard) in `react`. Before/after contrasts a four-effect `OrderPanel` (derive-state effect, negative inline guard `!user || (!user.isVerified && !user.hasPaymentMethod)`, click-driven effect, no-cleanup fetch) against a zero-effect version using `useMemo`, an extracted positive `getIsCheckoutReady`, and a normal `handleQuoteClick` event handler.
+- Enforcement path: custom ESLint rules `no-derive-state-in-effect`, `no-negative-effect-guard`, `require-effect-cleanup-when-async`; codemod `scripts/extract-effect-guard.mjs`; CI log `react.effect.violation` with `{ file, line, rule, effectIndex }`.
+- Cites spec/17/31 lines 99-101.
+- Validator confirms 50 slides follow Symptom/Rule/Action.
+
 ## [5.102.0] - 2026-07-19
 
 ### Changed: SS-02 task 49: React & TypeScript chapter opener (REACT-001)
