@@ -114,4 +114,4 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 4. List every remaining task before ending the turn.
 5. Bump the version, update the changelog, update the release notes.
 6. Plan multi-file features with a Mermaid component or flow diagram first.
-7. If you cannot find the answer in this file or in an existing `spec/**/coding-guidelines/` or `spec/**/error-manage/` folder, ask. Do not invent.
+7. If you cannot find the answer in this file or in an existing`spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
