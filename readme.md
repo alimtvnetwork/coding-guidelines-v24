@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.75.0
+
+- **Backup-tier freeze slide (SS-02 task 22a).** New [`slides-app/src/slides/20-backup-tier-freeze.tsx`](slides-app/src/slides/20-backup-tier-freeze.tsx) (ruleId `MUST-008`, warn) explains why `MainWorker.Backup.*` seed keys in spec/19 ch. 20 stay defaults-only until Phase 12 closes: materializing them now would delete the MAIN-900-01 SpecContradiction safe-fail. 2-column "materialize now vs defer" contrast with a `<CalloutQuote>` from spec/19 ch. 25 §6. SRA validator now passes 22 slides.
+
 ### What's new in v5.74.0
 
 - **Trust-boundary teaser slide (SS-02 task 22).** New [`slides-app/src/slides/19-trust-boundaries-teaser.tsx`](slides-app/src/slides/19-trust-boundaries-teaser.tsx) (ruleId `MUST-007`, hard) surfaces the one-way trust gradient from spec/19 chs. [26](spec/19-main-worker-service/26-trust-boundaries-and-isolation.md) and [27](spec/19-main-worker-service/27-git-backup-targets.md): Main > Worker > Backup > Git. Three Allowed vs Forbidden cards cover Main→Worker, Worker→Backup, and Worker→Git; footer `<CalloutQuote>` cites ch. 26 §2. SRA validator now passes 21 slides.
