@@ -19,12 +19,15 @@ import { pathToFileURL } from "node:url";
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { DECK } from "../src/deck/registry";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DIST_INDEX = resolve(HERE, "..", "dist", "index.html");
 const DIST_URL = pathToFileURL(DIST_INDEX).href;
 
-const SLIDE_COUNT = 17;
+// Derive from the canonical deck so new slides are auto-covered and stale
+// hardcoded counts (previously 17 while the deck held 70) cannot recur.
+const SLIDE_COUNT = DECK.length;
 const SETTLE_MS = 1200;
 
 test.beforeAll(() => {
