@@ -124,7 +124,7 @@ export default function TableOfContentsSlide() {
         {body.map((entry) => (
           <a
             key={entry.id}
-            href={`#/${entry.index}`}
+            href={`#/id/${encodeURIComponent(entry.id)}`}
             className="toc-link"
             style={{
               display: "flex",
@@ -167,14 +167,14 @@ export default function TableOfContentsSlide() {
         }}
       >
         {title ? (
-          <a href={`#/${title.index}`} className="slide-chrome toc-chrome-link">
+          <a href={`#/id/${encodeURIComponent(title.id)}`} className="slide-chrome toc-chrome-link">
             ← {String(title.index).padStart(2, "0")} · {title.title}
           </a>
         ) : (
           <span />
         )}
         {closing ? (
-          <a href={`#/${closing.index}`} className="slide-chrome toc-chrome-link">
+          <a href={`#/id/${encodeURIComponent(closing.id)}`} className="slide-chrome toc-chrome-link">
             {String(closing.index).padStart(2, "0")} · {closing.title} →
           </a>
         ) : (

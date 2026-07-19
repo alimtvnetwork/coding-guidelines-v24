@@ -7,10 +7,24 @@ import { DECK, SECTIONS, groupBySection, type SlideSection } from "./deck";
 
 type View = "deck" | "grid" | "presenter";
 
+/**
+ * Hash routing. Two supported forms:
+ *   #/id/<slide-id>   (preferred, stable across reorderings)
+ *   #/<index>         (legacy numeric, still honored)
+ * Unknown or malformed hashes fall back to slide 0.
+ */
 function readSlideFromHash(): number {
-  const m = window.location.hash.match(/^#\/(\d+)/);
-  if (!m) return 0;
-  return clampSlide(parseInt(m[1], 10));
+  const raw = window.location.hash;
+  const idMatch = raw.match(/^#\/id\/(.+)$/);
+  if (idMatch) {
+    const found = DECK.findIndex((s) => s.id === decodeURIComponent(idMatch[1]));
+    if (found >= 0) return found;
+    console.warn(`[slides] unknown slide id in hash: ${idMatch[1]}, falling back to 0`);
+    return 0;
+  }
+  const numMatch = raw.match(/^#\/(\d+)/);
+  if (!numMatch) return 0;
+  return clampSlide(parseInt(numMatch[1], 10));
 }
 
 function clampSlide(n: number): number {
@@ -20,7 +34,12 @@ function clampSlide(n: number): number {
 }
 
 function writeSlideToHash(n: number) {
-  window.location.hash = `/${n}`;
+  const slide = DECK[n];
+  if (!slide) {
+    window.location.hash = `/${n}`;
+    return;
+  }
+  window.location.hash = `/id/${encodeURIComponent(slide.id)}`;
 }
 
 export default function App() {
