@@ -145,6 +145,7 @@ STEPS=(
   "Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)|node scripts/render-diagrams.mjs --check"
   "Check lint-ci ↔ ci.yml drift (mirror guard)|node scripts/check-lint-ci-drift.mjs"
   "Self-test lint-ci drift checker (parser + analyzer)|node scripts/tests/check-lint-ci-drift.test.mjs"
+  "Self-test pre-push visual-hint helper (sandbox vs host branches)|bash scripts/tests/pre-push-visual-hint.test.sh"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then

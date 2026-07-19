@@ -5,6 +5,27 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.123.0] - 2026-07-19
+
+### Added, testable pre-push visual-hint helper
+
+- `scripts/pre-push-visual-hint.sh` extracts the sandbox vs host branching that lived inline in `.husky/pre-push:54-58`. Detects the environment via `/nix/store` presence and can be forced with `HINT_ENV_OVERRIDE=sandbox|host` for testing. Unknown values exit non-zero.
+- `scripts/tests/pre-push-visual-hint.test.sh` exercises 9 cases: both branches recommend the correct bake target, both label the context correctly, neither leaks the other branch's command, both include the workflow-dispatch fallback, and an unknown env exits non-zero. Wired as `scripts/lint-ci.sh` step 18.
+- `.husky/pre-push:51-59` now calls the helper instead of inlining shell. Root cause it fixes: untested inline shell inside a git hook is exactly how the v5.117 "strict guard, zero baselines" regression happened. If someone swaps the branches by accident, nothing catches it until a real user gets the wrong command and reaches for `SKIP_PREPUSH=1`.
+
+### Added, `scripts/print-required-checks.mjs` + `.github/branch-protection.expected.json`
+
+- Enumerates every workflow -> job pair under `.github/workflows/*.yml`, marks each as REQUIRED or advisory against a checked-in expectation file, and prints the exact `gh api PATCH .../required_status_checks` payload ready to copy. Modes: human report (default), `--json` (machine payload), `--check` (fails when the expectation file references a job that no longer exists).
+- `.github/branch-protection.expected.json` captures the current 5 required checks (`Linter Scripts Validation`, `Codegen (Rule 9 inverted-fields)`, `Spec Cross-Reference Validation`, `Sync Drift Check (all generated files)`, `Validate version.json schema`) and lists `visual` + `smoke` as `desired-but-not-yet-required` with the promotion criteria (one clean release cycle first).
+- `.lovable/procedures/branch-protection.md` documents the 5-step promotion procedure including verification and rollback. Root cause it addresses: backlog item 1 (promote `slides-visual.yml` to required) has been carried forward for two releases because the exact `gh api` payload was never captured. It is now a copy-paste 30-second operation instead of a hunt through the GitHub UI.
+
+### Verified
+
+- `bash scripts/tests/pre-push-visual-hint.test.sh` -> 9/9 pass.
+- `bash scripts/lint-ci.sh --step 18` -> green.
+- `node scripts/print-required-checks.mjs --check` -> `OK, no stale required-check names`.
+- `node scripts/print-required-checks.mjs` reports 8 workflows, 5 required, 5 advisory, correctly flags `visual` and `smoke` as advisory-pending-promotion.
+
 ## [5.122.0] - 2026-07-19
 
 ### Added, sandbox-aware bake hint in `.husky/pre-push`

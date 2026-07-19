@@ -1,0 +1,23 @@
+{
+  "$schema-note": "Desired branch protection required_status_checks for `main`. Job names must match the `name:` field of each job (or the job id when no name is set). scripts/print-required-checks.mjs validates this list against .github/workflows/*.yml.",
+  "branch": "main",
+  "required": [
+    "Linter Scripts Validation",
+    "Codegen (Rule 9 inverted-fields)",
+    "Spec Cross-Reference Validation",
+    "Sync Drift Check (all generated files)",
+    "Validate version.json schema"
+  ],
+  "desired-but-not-yet-required": [
+    {
+      "check": "visual",
+      "workflow": ".github/workflows/slides-visual.yml",
+      "reason": "Promote once the 70-slide baseline set has soaked for one full release cycle without spurious diffs. Tracked as backlog item 1."
+    },
+    {
+      "check": "smoke",
+      "workflow": ".github/workflows/slides-smoke.yml",
+      "reason": "Playwright a11y smoke. Promote alongside slides-visual to avoid protecting rendering without protecting accessibility."
+    }
+  ]
+}

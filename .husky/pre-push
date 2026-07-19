@@ -51,14 +51,10 @@ fi
 echo "→ pre-push: visual baseline coverage (strict)"
 if ! node scripts/validate-visual-baselines.mjs --strict --list; then
   echo ""
-  if [ -d /nix/store ]; then
-    BAKE_HINT="npm run slides:bake-baselines:sandbox  (Lovable sandbox: resolves nix-store libs for Chromium)"
-  else
-    BAKE_HINT="npm run slides:bake-baselines  (local dev / CI runner with system Chromium libs)"
-  fi
-  echo "  pre-push: visual baseline drift, deck grew without a matching baseline."
-  echo "  Bake locally with: $BAKE_HINT"
-  echo "  Or dispatch .github/workflows/slides-visual.yml with update_baselines=true and commit the artifact."
+  # Hint block extracted so both branches (sandbox vs host) are
+  # covered by scripts/tests/pre-push-visual-hint.test.sh. Do not
+  # inline the branching back here without also deleting that test.
+  bash scripts/pre-push-visual-hint.sh
   exit 1
 fi
 
