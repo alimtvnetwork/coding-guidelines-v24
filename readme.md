@@ -1527,7 +1527,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.103.0
 
-- SS-02 task 49: React & TypeScript chapter opener (`REACT-001`, hard). Maps the next 13 slides to spec/17/31 lines 97-112: effects are last resort, no inline prop types, no tuple hook returns, components under 100 lines. Enforced by ESLint + custom rules and the `react-shape-audit` CI job. 49 slides validated.
+- SS-02 task 50: `useEffect` last resort with positive guards (`REACT-002`, hard). Default effect count is zero; derive state with `useMemo` or plain expressions, react to clicks with event handlers, extract every remaining guard into a positively named boolean like `isCheckoutReady`. Enforced by custom ESLint rules `no-derive-state-in-effect`, `no-negative-effect-guard`, `require-effect-cleanup-when-async` and CI log `react.effect.violation`. Per spec/17/31 lines 99-101. 50 slides validated.
 
 ### What's new in v5.101.0
 
