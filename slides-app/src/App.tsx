@@ -324,7 +324,8 @@ function CommandPalette({
     const all = DECK.map((slide, index) => ({ slide, index }));
     if (!q) return all;
     return all.filter(({ slide }) => {
-      const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section}`.toLowerCase();
+      const tagText = (slide.tags ?? []).join(" ");
+      const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section} ${tagText}`.toLowerCase();
       return hay.includes(q);
     });
   }, [query]);
