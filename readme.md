@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.117.0
+
+- Visual baseline coverage guard. `scripts/validate-visual-baselines.mjs` parses `DECK` in `slides-app/src/deck/registry.ts` and asserts a matching `slide-NN-chromium-linux.png` exists under `slides-app/tests/visual.spec.ts-snapshots/`. First run surfaced the real state: 0 of 70 baselines committed, meaning every previous visual CI run was silently green. Wired advisory into `.husky/pre-push` and `.github/workflows/slides-visual.yml` today; flips to `--strict` (blocking) after the initial baseline set is baked via workflow_dispatch. Npm scripts: `slides:validate-baselines` (advisory) and `slides:validate-baselines:strict`.
+- Plan hygiene. `.lovable/plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
+
 ### What's new in v5.116.0
 
 - Visual regression coverage matches the deck. `slides-app/tests/visual.spec.ts` now derives `SLIDE_COUNT` from `DECK.length` in `src/deck/registry.ts` instead of the hardcoded `17` that only covered 24 percent of the 70 real slides; new slides get baseline coverage automatically on the next `--update-snapshots` run, and the "hardcoded count drifts silently" class of bug is closed.
