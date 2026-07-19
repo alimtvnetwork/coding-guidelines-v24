@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.130.0] - 2026-07-19
+
+### Added, enforce Hard Rule #13 (guideline mirror sync) in lint-ci and CI + self-test
+
+- `scripts/lint-ci.sh` steps 23+24 and `.github/workflows/ci.yml` `sync-drift` job: wired `node scripts/sync-guidelines.mjs --check` and `node scripts/tests/sync-guidelines.test.mjs`. Any hand-edit to `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` that forgets to re-run `npm run sync:guidelines` now fails pre-push AND PR checks. Closes the enforcement gap opened in v5.129: Hard Rule #13 was documentation-only theatre without a CI gate.
+- `scripts/sync-guidelines.mjs`: refactored to export pure helpers (`diffReport`, `computeDrifts`, `buildLovableMirror`, `buildCursorRules`, `extractSection`) and guarded `main()` behind an `invokedDirectly` check so importing the module in tests does not touch the real mirrors or exit the process. Same pattern as v5.126 `print-required-checks.mjs` refactor.
+- `scripts/tests/sync-guidelines.test.mjs`: 14 assertions locking the contract. Covers `diffReport` (identical, single-char, empty, line-count message format), `extractSection` (pull body, stop at next heading or `---`, throw on missing heading), `computeDrifts` (clean, lovable-only drift, cursor-only drift including missing markers, both drifted), end-to-end spawn of `--check` (exits 0 with "OK" on clean repo), and an implicit assertion that the import guard prevented `main()` from running at module import time.
+- `scripts/check-lint-ci-drift.mjs` verified no drift: `ci.yml` mirrors `lint-ci.sh` with both new steps present in both places.
+- Root cause this closes: v5.129 promoted "missing or stale mirrors are a build-fail" to Hard Rule #13 but shipped zero enforcement, so the exact bug the rule was written to fix (agent search fails because the mirror was not regenerated) could still land silently. Now the rule has teeth.
+
+
+
 ## [5.129.0] - 2026-07-19
 
 ### Changed, coding guideline 31 v1.5.0: hard rule for mirror sync + expanded React mutation guidance
