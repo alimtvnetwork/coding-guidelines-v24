@@ -5,10 +5,11 @@
 # .github/workflows/ci.yml, plus the cross-link checker from the
 # `cross-links` job. Halts on the first failure (matches CI semantics).
 #
-# Wired into package.json as `npm run lint:ci`. Keep this script in
-# lockstep with ci.yml — a drift check in CI itself is left as a
-# follow-up, but for now any new step added to ci.yml MUST be appended
-# here in the same position so local runs catch the same regressions.
+# Wired into package.json as `npm run lint:ci`. The drift check at
+# step 16 (`scripts/check-lint-ci-drift.mjs`) is the enforcement for
+# "keep this in lockstep with ci.yml": any new lint step in ci.yml
+# without a matching entry here fails the pipeline until it's added
+# (or explicitly ignored with a reason in the drift checker).
 #
 # Exit codes:
 #   0  all checks passed
