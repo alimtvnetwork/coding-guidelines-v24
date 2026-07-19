@@ -156,6 +156,10 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 
 ---
 
+## Language One-Liners
+
+
+
 
 - Go: use a result type, not `(T, error)`. Wrap errors with an operation label. Enums are `type X byte` plus `iota`, never string constants.
 - TypeScript: `Promise.all` for independent async, never sequential `await`. No `any`. `readonly` on interface fields by default.
