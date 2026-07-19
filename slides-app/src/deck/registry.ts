@@ -50,6 +50,8 @@ import NameOrSplit from "../slides/58-name-or-split";
 import A11yFloor from "../slides/59-a11y-floor";
 import TestPyramid from "../slides/60-test-pyramid";
 import PrTemplate from "../slides/61-pr-template";
+import ReleaseCeremony from "../slides/62-release-ceremony";
+import Dashboards from "../slides/63-dashboards";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -81,6 +83,7 @@ export type SlideSection =
   | "react"
   | "a11y"
   | "workflow"
+  | "ops"
   | "closing";
 
 export interface SlideSectionMeta {
@@ -99,7 +102,8 @@ export const SECTIONS: readonly SlideSectionMeta[] = [
   { id: "react", label: "React & TypeScript", description: "Types, hooks, effects" },
   { id: "a11y", label: "Accessibility", description: "WCAG 2.2 AA is the shipping floor" },
   { id: "data-schema", label: "Data & Schema", description: "PascalCase entities, camelCase columns, integer PKs" },
-  { id: "workflow", label: "Workflow & Ops", description: "Spec-first, testing, caching" },
+  { id: "workflow", label: "Workflow", description: "Spec-first, tests, PRs, release" },
+  { id: "ops", label: "Ops & Observability", description: "Dashboards, alerts, runbooks" },
   { id: "closing", label: "Closing", description: "Wrap-up and references" },
 ] as const;
 
@@ -203,6 +207,9 @@ export const DECK: readonly SlideEntry[] = [
   { id: "11-cache-invalidation", title: "Cache invalidation", section: "workflow", severity: "warn", ruleId: "WF-002", tags: ["cache", "ttl", "invalidate", "keys"], component: CacheInvalidation },
   { id: "60-test-pyramid", title: "Test pyramid", section: "workflow", severity: "hard", ruleId: "WF-003", tags: ["tests", "unit", "integration", "e2e", "pyramid"], component: TestPyramid },
   { id: "61-pr-template", title: "PR template", section: "workflow", severity: "hard", ruleId: "WF-004", tags: ["pr", "template", "checklist", "review"], component: PrTemplate },
+  { id: "62-release-ceremony", title: "Release ceremony", section: "workflow", severity: "hard", ruleId: "WF-005", tags: ["release", "ceremony", "tag", "changelog", "dist"], component: ReleaseCeremony },
+
+  { id: "63-dashboards", title: "Golden-signals dashboards", section: "ops", severity: "hard", ruleId: "OPS-001", tags: ["dashboard", "grafana", "sre", "traffic", "errors", "latency", "saturation"], component: Dashboards },
 
   { id: "12-closing", title: "Closing", section: "closing", tags: ["wrap-up", "references", "q&a"], component: Closing },
 ] as const;

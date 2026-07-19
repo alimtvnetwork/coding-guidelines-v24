@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.111.0] - 2026-07-19
+
+### Added — SS-02 tasks 64-65: WF-005 release ceremony (closes Workflow), OPS-001 dashboards (opens Ops)
+
+- Slide 62 `slides-app/src/slides/62-release-ceremony.tsx` (`WF-005`, hard). `npm run release -- --{patch,minor,major}` runs the 13-step ceremony end-to-end; each step gates the next; `.husky/pre-push` rejects hand-typed tag pushes; release notes pull the matching CHANGELOG section verbatim; SHA-256 of `dist.zip` posted with the release.
+- Slide 63 `slides-app/src/slides/63-dashboards.tsx` (`OPS-001`, hard). Chapter J opener: every deployable service ships `docs/dashboards/{service}.json` with five panels in fixed order (Traffic, Errors, Latency, Saturation, Domain). Enforced by `scripts/validate-dashboards.mjs` and nightly drift check.
+- New deck section `ops` (Ops & Observability) inserted between `workflow` and `closing` in `slides-app/src/deck/registry.ts`. `workflow` label shortened to "Workflow".
+- Registry: 65 slides, SRA validator green.
+
 ## [5.110.0] - 2026-07-19
 
 ### Added — SS-02 tasks 62-63: WF-003 test pyramid, WF-004 PR template (Workflow chapter continues)

@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.110.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.111.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.110.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.111.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.19.1</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="QUICKSTART.md">QUICKSTART.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="QUICKSTART.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -1524,6 +1524,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 | [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
+
+### What's new in v5.111.0
+
+- SS-02 tasks 64-65: closes Workflow, opens Ops. Slide 62 `WF-005` (hard) makes `npm run release -- --{patch,minor,major}` the single sanctioned release entry point; 13 gated steps (clean tree, on main, full CI, version bump, sync, diagrams rebaseline when sources changed, sync mirrors, CHANGELOG presence check, dist build + zip, signed tag, push, GitHub Release with pasted notes and SHA-256, `a11y clean` + `SRA green` badges); `.husky/pre-push` rejects any tag push without a matching `.release-logs/vX.Y.Z.log`, killing hand-typed `git tag && git push`. Slide 63 `OPS-001` (hard) is the Ops chapter opener: every deployable service ships `docs/dashboards/{service}.json` with exactly five panels in fixed order (Traffic rps by route, Errors 5xx rate + percent by route, Latency p50/p95/p99 ms by route, Saturation CPU + mem + pool percent, one Domain KPI); enforced by `scripts/validate-dashboards.mjs` in CI, provisioned by `.github/workflows/dashboards-provision.yml`, drift-checked nightly against live config. New deck section `ops` inserted between `workflow` and `closing`; `workflow` label shortened to "Workflow". 65 slides validated, SRA green.
 
 ### What's new in v5.110.0
 
