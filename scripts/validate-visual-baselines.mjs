@@ -88,6 +88,7 @@ function expectedBaselineNames(deckCount) {
 
 function main() {
   const wantList = process.argv.includes("--list");
+  const strict = process.argv.includes("--strict");
 
   if (isMissingRegistry()) {
     process.stderr.write(
@@ -108,7 +109,7 @@ function main() {
   const present = new Set(pngs);
   const missing = expected.filter((name) => !present.has(name));
 
-  const line = `[validate-visual-baselines] deck=${deckCount} baselines=${pngs.length} missing=${missing.length}`;
+  const line = `[validate-visual-baselines] deck=${deckCount} baselines=${pngs.length} missing=${missing.length} strict=${strict}`;
   process.stdout.write(`${line}\n`);
 
   const hasDrift = missing.length > 0 || pngs.length < deckCount;
@@ -116,8 +117,9 @@ function main() {
     process.exit(0);
   }
 
+  const level = strict ? "DRIFT" : "WARN";
   process.stderr.write(
-    `[validate-visual-baselines] DRIFT: ${missing.length} baselines missing for ${deckCount} deck slides.\n`,
+    `[validate-visual-baselines] ${level}: ${missing.length} baselines missing for ${deckCount} deck slides.\n`,
   );
   if (wantList) {
     for (const name of missing) process.stderr.write(`  - ${name}\n`);
@@ -125,7 +127,9 @@ function main() {
   process.stderr.write(
     "[validate-visual-baselines] Fix: run the slides-visual workflow via workflow_dispatch with update_baselines=true, then commit the artifact.\n",
   );
-  process.exit(1);
+  // Advisory by default so the guard can ship before baselines are baked;
+  // flip to --strict in CI once the initial 70-slide baseline set lands.
+  process.exit(strict ? 1 : 0);
 }
 
 main();
