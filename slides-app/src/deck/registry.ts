@@ -16,6 +16,7 @@ import NoBooleanParameters from "../slides/24-no-boolean-parameters";
 import EnumStandards from "../slides/25-enum-standards";
 import LineGapDiscipline from "../slides/26-line-gap-discipline";
 import FileSizeTiers from "../slides/27-file-size-tiers";
+import FunctionLength from "../slides/28-function-length";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
