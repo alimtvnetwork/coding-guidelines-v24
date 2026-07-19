@@ -11,6 +11,7 @@ import TrustBoundariesTeaser from "../slides/19-trust-boundaries-teaser";
 import BackupTierFreeze from "../slides/20-backup-tier-freeze";
 import DbSchemaNaming from "../slides/21-db-schema-naming";
 import ZeroUnderscoreAcronyms from "../slides/22-zero-underscore-acronyms";
+import BooleanNaming from "../slides/23-boolean-naming";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
