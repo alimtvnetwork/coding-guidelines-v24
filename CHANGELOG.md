@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.102.0] - 2026-07-19
+
+### Changed: SS-02 task 49: React & TypeScript chapter opener (REACT-001)
+
+- New slide `slides-app/src/slides/47-react-chapter-opener.tsx` registered as `REACT-001` (hard) in `react`. Before/after contrasts an effect-driven component (derive-state effect, no-cleanup fetch, inline prop type) against a derived-value + named-type + composed-shells layout. Maps the next 13 slides to spec/17/31 lines 97-112.
+- Enforcement path: ESLint (`react-hooks/exhaustive-deps`, `react/jsx-key`, `@typescript-eslint/no-explicit-any`) plus custom `no-inline-prop-types`, `no-tuple-hook-return`, `no-negative-effect-guard`, `max-lines-per-component: 100`; CI job `react-shape-audit` logs `react.shape.violation` with `{ file, rule, line }` and blocks merges on any hard rule.
+- Cites spec/17/31 lines 97-112.
+- Validator confirms 49 slides follow Symptom/Rule/Action.
+
 ## [5.101.0] - 2026-07-19
 
 ### Changed: SS-02 task 48: ERD required on DB PRs (SCHEMA-006)
