@@ -87,7 +87,7 @@ assert("analyzeDrift surfaces STALE ignore",
   result.unusedIgnores.length === 1 && result.unusedIgnores[0] === "Long-gone step",
   result.unusedIgnores);
 assert("analyzeDrift counts are accurate",
-  result.counts.ci === 4 && result.counts.labels === 2 && result.counts.ignored === 3,
+  result.counts.ci === 5 && result.counts.labels === 2 && result.counts.ignored === 3,
   result.counts);
 
 // Zero-drift case: mirror every ci step, remove stale ignore.
