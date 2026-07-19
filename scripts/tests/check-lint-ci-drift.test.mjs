@@ -65,7 +65,7 @@ const ignored = new Map([
 
 // --- Cases ------------------------------------------------------------
 const ciNames = parseCiStepNames(ciYaml);
-assert("parseCiStepNames extracts 4 names", ciNames.length === 4, ciNames);
+assert("parseCiStepNames extracts 5 names", ciNames.length === 5, ciNames);
 assert("parseCiStepNames preserves order",
   ciNames[1] === "Run alpha check" && ciNames[2] === "Run beta check (spec)");
 
