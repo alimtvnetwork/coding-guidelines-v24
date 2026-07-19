@@ -43,7 +43,7 @@ This folder provides standalone, self-contained AI-readable references for every
 | # | File | Summarizes (Source Module) |
 |---|------|---------------------------|
 | 01 | [01-spec-authoring.md](./01-spec-authoring.md) | `01-spec-authoring-guide/` — Spec authoring conventions, folder rules, naming, scoring, templates |
-| 02 | [02-coding-guidelines.md](./02-coding-guidelines.md) | `02-coding-guidelines/` — Cross-language coding standards, boolean principles, code style, typing, naming |
+| 02 | [02-coding-guidelines.md](./02-coding-guidelines.md) | **Redirect stub** → file 31 is the canonical coding guideline |
 | 03 | [03-error-management.md](./03-error-management.md) | `03-error-manage/` — 3-tier error architecture, apperror, response envelope, error codes, TypedQuery |
 | 04 | [04-enum-standards.md](./04-enum-standards.md) | `02-coding-guidelines/` — Enum patterns for Go, TypeScript, PHP, Rust with full examples |
 | 05 | [05-split-db-architecture.md](./05-split-db-architecture.md) | `05-split-db-architecture/` — Hierarchical SQLite pattern, schemas, WAL, RBAC, reset API, user isolation |
