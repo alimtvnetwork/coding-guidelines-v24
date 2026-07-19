@@ -41,3 +41,24 @@ For full details, load files in this order from `spec/02-coding-guidelines/03-co
 ## Enforcement
 
 Linter configs are in `linters/`. Validators are in `scripts/`.
+
+<!-- BEGIN:SYNC-HARD-RULES -->
+<!-- Auto-generated from spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->
+<!-- Edit the canonical file then run `npm run sync:guidelines`. -->
+
+## Hard Rules (Zero Tolerance, canonical)
+
+1. Function length: 8 lines preferred, 15 lines hard cap. Skip blank lines and comments when counting. Waiver only via inline comment `// lint-allow: function-length reason="..." max=N`.
+2. No nested `if`. Flatten with early returns and guard clauses.
+3. `if` conditions must be positive and simple. No `!`, no double negatives. If you need a negation, extract a positively named boolean and use that.
+4. No swallowed errors. Every `catch` logs with context (operation name + key inputs) and then rethrows or handles explicitly. Silent `catch {}` is a build-fail.
+5. Narrow types only. No `any`, `unknown`, `interface{}`, `object`, `dynamic`, or other catch-all types. Exception: at trust boundaries (a `catch` block, external JSON, third-party libraries) narrow immediately with a type guard. `Generic<T>` is the only wide-scope tool.
+6. File size caps: any file 300 lines max, any React component file (.tsx) 100 lines max, any class or struct 120 lines max.
+7. No magic strings or numbers. Use an enum or a typed constant. Every comparison must be against a named symbol.
+8. Definitions live in dedicated files. Types, enums, constants, and interfaces get their own file, not inline next to the first use.
+9. DRY is priority one. Duplicate logic across two sites means extract it now, not later.
+10. Components stay small and reusable. For any feature with three or more components, produce a Mermaid component diagram first.
+11. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
+12. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
+
+<!-- END:SYNC-HARD-RULES -->
