@@ -3,7 +3,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "c47ed1d8a29bd481542a5ab1d83461d0427eb85b",
+  "LastCommitSha": "be83d6dbad6e4a6d617c0d79e1c4dc3946d1a993",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -25,15 +25,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "c47ed1d8a29bd481542a5ab1d83461d0427eb85b",
-    "shortSha": "c47ed1d",
+    "sha": "be83d6dbad6e4a6d617c0d79e1c4dc3946d1a993",
+    "shortSha": "be83d6d",
     "branch": "edit/edt-b006c4d4-17ac-43ba-89e5-7d5f2d7e7859"
   },
   "stats": {
     "totalFiles": 682,
-    "totalLines": 145750,
+    "totalLines": 145757,
     "totalFolders": 23,
-    "totalBytes": 5290954,
+    "totalBytes": 5291291,
     "rootFiles": 6
   },
   "folders": [
@@ -281,8 +281,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 53,
-      "lineCount": 10381,
-      "byteCount": 650622
+      "lineCount": 10388,
+      "byteCount": 650959
     },
     {
       "path": "21-app",
