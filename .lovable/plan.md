@@ -37,13 +37,15 @@
 | D12 | Add **cache-bin** tables/notes for role management in the ER diagram. |
 | D13 | Encryption: shared internal RSA key pair between worker and its backup; main can issue **rotation instruction**. Zip password follows known pattern. |
 | D14 | Date-by-date full snapshot storage on backup node. Restore by date is main-controlled. |
+| D15 | **Cascading semantics is simple union (locked 2026-07-19).** No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Supersedes OQ-A1. See `19-main-worker-service/17-cascading-roles-and-cache-bin.md` v1.1.0 §1 + §7. |
+| D16 | **Cache-bin storage is per-process SQLite `:memory:` (locked 2026-07-19).** Redis and plain in-process map remain configurable alternatives against the same contract (four functions in §4 + invalidation endpoint in §5); they are not defaults. Supersedes OQ-A2. See `19-main-worker-service/17-cascading-roles-and-cache-bin.md` v1.1.0 §4 + §7. |
 
 ---
 
-## Open Questions (carried forward)
+## Open Questions (all resolved)
 
-- **OQ-A1:** Cascading beyond simple union — propose role inheritance hierarchy (parent role implies child accesses)? Default = simple union.
-- **OQ-A2:** Cache-bin technology — in-memory (process-local) vs SQLite memory DB vs Redis? Default proposal = SQLite `:memory:` per-process with TTL invalidation broadcast via Main.
+- ~~**OQ-A1:**~~ ✅ RESOLVED 2026-07-19 → locked as **D15** (simple union final).
+- ~~**OQ-A2:**~~ ✅ RESOLVED 2026-07-19 → locked as **D16** (per-process SQLite `:memory:` final).
 - ~~**OQ-A3:**~~ ✅ RESOLVED 2026-05 (Phase 8) - `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 defines the HKDF-derived per-snapshot zip password (Pair-RSA + Envelope-AES stack), superseding the original `HMAC-SHA256(SharedSecret, BackupTimestampEpoch)` proposal.
 - ~~**OQ-A4:**~~ ✅ RESOLVED 2026-05-06 (Phase 11) — `MainWorker.Backup.SnapshotRetentionDays = 30` rolling, with operator override + 7-day compliance floor.
 
