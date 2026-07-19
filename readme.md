@@ -1527,6 +1527,10 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.100.0
 
+- SS-02 task 47: SQLite default + ORM + explicit joins/PK/FK (`SCHEMA-005`, hard). One engine across dev/CI/prod; ORM models own the schema with `primaryKey({ autoIncrement: true })` and `.references(...)`; queries use `.innerJoin(..., on)` or parameterized SQL only. Raw SQL strings live only in a whitelisted `db/raw/*.sql` folder. Per spec/17/31 line 93. 47 slides validated.
+
+### What's new in v5.99.0
+
 - SS-02 task 46: Nullable narrative columns (`SCHEMA-004`, hard). Entity/ref tables carry `Description TEXT NULL`, transactional tables carry `Notes TEXT NULL` + `Comments TEXT NULL`, all nullable, no `DEFAULT`. Join tables exempt. Enforced by `MISSING-DESC-001` and `DB-FREETEXT-001`. Per spec/17/31 line 92. 46 slides validated.
 
 ### What's new in v5.98.0
