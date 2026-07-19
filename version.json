@@ -1,9 +1,9 @@
 {
-  "Version": "5.48.1",
+  "Version": "5.49.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "24c6cba74147af6c146a284e0bb025e7ee930b15",
+  "LastCommitSha": "34d60b2683d20e56e9bba7f656876d37d1213af9",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "5.48.1",
-  "updated": "2026-06-29",
+  "version": "5.49.0",
+  "updated": "2026-07-19",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "24c6cba74147af6c146a284e0bb025e7ee930b15",
-    "shortSha": "24c6cba",
-    "branch": "edit/edt-211d07b1-1369-4db6-b932-cdbd4ca2fe68"
+    "sha": "34d60b2683d20e56e9bba7f656876d37d1213af9",
+    "shortSha": "34d60b2",
+    "branch": "edit/edt-ce3cbb42-917f-405b-a0cb-1cabe74a6fd4"
   },
   "stats": {
-    "totalFiles": 680,
-    "totalLines": 145435,
+    "totalFiles": 682,
+    "totalLines": 145722,
     "totalFolders": 23,
-    "totalBytes": 5268802,
+    "totalBytes": 5289509,
     "rootFiles": 6
   },
   "folders": [
@@ -59,9 +59,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 197,
-      "lineCount": 33265,
-      "byteCount": 1045298
+      "fileCount": 198,
+      "lineCount": 33360,
+      "byteCount": 1050888
     },
     {
       "path": "03-error-manage",
@@ -254,9 +254,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 33,
-      "lineCount": 14925,
-      "byteCount": 555542
+      "fileCount": 34,
+      "lineCount": 15117,
+      "byteCount": 570659
     },
     {
       "path": "18-wp-plugin-how-to",
