@@ -611,6 +611,18 @@ jobs:
         # sampleSize=0 => NO DATA (never fake READY on empty windows),
         # >=0.95 READY, >=0.80 WATCH, <0.80 NOT READY. Added in v5.128.
         run: node scripts/tests/branch-protection-soak.test.mjs
+      - name: Check coding-guideline mirrors in sync (Hard Rule 13)
+        # Enforces spec/17-.../31-*.md (source) == .lovable/coding-guidelines/coding-guidelines.md
+        # and == .cursorrules, byte-for-byte. Missing/stale mirrors are a build-fail
+        # per Hard Rule #13 (v5.129), because agent search indexes the mirror,
+        # not the spec tree. Added in v5.130.
+        run: node scripts/sync-guidelines.mjs --check
+      - name: Self-test sync-guidelines --check (drift detection contract)
+        # Guards the --check path in scripts/sync-guidelines.mjs so a refactor
+        # cannot silently make it exit 0 on drift. Added in v5.130.
+        run: node scripts/tests/sync-guidelines.test.mjs
+
+
 
 
   docs-diagrams:
