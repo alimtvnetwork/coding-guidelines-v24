@@ -25,6 +25,19 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
 
       // ═══════════════════════════════════════════════════════════════
+      // 🔴 HARD RULES from coding-guidelines.md — CI-enforced
+      // ═══════════════════════════════════════════════════════════════
+
+      // File length ≤ 300 lines (CODE-RED-006). Mirrors linters-cicd/checks/file-length.
+      "max-lines": ["error", { max: 300, skipBlankLines: true, skipComments: true }],
+
+      // React component / any function body ≤ 100 lines (Core memory: components < 100 LOC).
+      "max-lines-per-function": ["error", { max: 100, skipBlankLines: true, skipComments: true, IIFEs: true }],
+
+      // `any` is prohibited (TS Standards §2.1).
+      "@typescript-eslint/no-explicit-any": "error",
+
+      // ═══════════════════════════════════════════════════════════════
       // 🔴 CODE RED RULES — Automatic PR rejection
       // Canonical source: spec/02-coding-guidelines/03-coding-guidelines-spec/
       // ═══════════════════════════════════════════════════════════════
