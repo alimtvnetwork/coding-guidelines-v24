@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.72.0] - 2026-07-19
+
+### Added - SS-02 task 20: Method-documentation decision tree slide
+
+- New slide [`slides-app/src/slides/17-method-doc-decision-tree.tsx`](slides-app/src/slides/17-method-doc-decision-tree.tsx), registered as `17-method-doc-decision-tree` in the `principles` section (ruleId `MUST-005`, severity `warn`) after `16-comments-lie-code-does-not` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
+- Layout: `<ActionPanel>` header plus a 5-column horizontal decision tree encoding Q1-Q5 from spec/17/31 §"Method Documentation": Q1 rename? / Q2 split? / Q3 restate signature? / Q4 WHY-or-example? / Q5 godoc wired?. Each node shows the yes-branch outcome (Skip / Delete / Keep 1-2 lines / One-liner) with an accent-tinted panel. Footer cites the source file and notes cross-language applicability (Go, TS, PHP, Rust, C#, PowerShell, Python).
+- Root cause of prior gap: the compiled guideline documented the 5-step checklist in prose only. Readers had to remember ordering (refactor-first, then delete-restatements, then keep with WHY) instead of seeing it as a tree.
+- Verification: `node scripts/validate-slides-sra.mjs` reports "OK: 19 slide(s)" (was 18). Palette search `decision tree`, `godoc`, or `checklist` returns the new slide.
+
 ## [5.71.0] - 2026-07-19
 
 ### Added - SS-02 task 19: "Comments lie, code does not" slide
