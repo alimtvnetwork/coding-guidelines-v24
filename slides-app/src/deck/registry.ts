@@ -46,6 +46,8 @@ import CustomHookShape from "../slides/54-custom-hook-shape";
 import NoTuplesPublicShapes from "../slides/55-no-tuples-public-shapes";
 import NamedGenericsComposites from "../slides/56-named-generics-composites";
 import TypesFileColocation from "../slides/57-types-file-colocation";
+import NameOrSplit from "../slides/58-name-or-split";
+import A11yFloor from "../slides/59-a11y-floor";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -75,6 +77,7 @@ export type SlideSection =
   | "errors"
   | "data-schema"
   | "react"
+  | "a11y"
   | "workflow"
   | "closing";
 
@@ -91,7 +94,8 @@ export const SECTIONS: readonly SlideSectionMeta[] = [
   { id: "naming", label: "Naming & Structure", description: "Identifiers, size, shape" },
   { id: "control-flow", label: "Control Flow", description: "Guards, effects, loops" },
   { id: "errors", label: "Error Management", description: "Never swallow, always log" },
-  { id: "react", label: "React & TypeScript", description: "Types, hooks, a11y" },
+  { id: "react", label: "React & TypeScript", description: "Types, hooks, effects" },
+  { id: "a11y", label: "Accessibility", description: "WCAG 2.2 AA is the shipping floor" },
   { id: "data-schema", label: "Data & Schema", description: "PascalCase entities, camelCase columns, integer PKs" },
   { id: "workflow", label: "Workflow & Ops", description: "Spec-first, testing, caching" },
   { id: "closing", label: "Closing", description: "Wrap-up and references" },
