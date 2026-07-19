@@ -23,7 +23,7 @@ const DIST_URL = pathToFileURL(DIST_INDEX).href;
 
 // Mirror of slides-app/src/deck.ts (length only — kept in sync by the
 // src/test/slides-deck.test.ts vitest guard).
-const SLIDE_COUNT = 16;
+const SLIDE_COUNT = 17;
 
 test.beforeAll(() => {
   if (!existsSync(DIST_INDEX)) {

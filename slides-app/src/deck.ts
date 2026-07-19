@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import Title from "./slides/00-title";
+import TableOfContents from "./slides/01-table-of-contents";
 import CorePrinciples1 from "./slides/01a-core-principles-1";
 import CorePrinciples2 from "./slides/01b-core-principles-2";
 import CorePrinciples3 from "./slides/01c-core-principles-3";
@@ -25,6 +26,7 @@ export interface SlideEntry {
 
 export const DECK: readonly SlideEntry[] = [
   { id: "00-title", title: "Title", component: Title },
+  { id: "01-toc", title: "Table of Contents", component: TableOfContents },
   { id: "01a-core-principles-1", title: "Core Principles · 1", component: CorePrinciples1 },
   { id: "01b-core-principles-2", title: "Core Principles · 2", component: CorePrinciples2 },
   { id: "01c-core-principles-3", title: "Core Principles · 3", component: CorePrinciples3 },

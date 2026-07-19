@@ -20,7 +20,7 @@ const SLIDES_DIR = resolve(HERE, "..", "slides-app", "src", "slides");
 
 // Slides that legitimately do NOT carry a rule (title card, closing).
 // Keep this list minimal; every rule/content slide MUST follow SRA.
-const EXEMPT = new Set(["00-title.tsx", "12-closing.tsx"]);
+const EXEMPT = new Set(["00-title.tsx", "01-table-of-contents.tsx", "12-closing.tsx"]);
 
 // Required prop names on each carrier component.
 const CARRIERS = [
