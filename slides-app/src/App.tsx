@@ -188,6 +188,9 @@ export default function App() {
   );
 }
 
+type SectionFilter = SlideSection | "all";
+type SeverityFilter = RuleSeverity | "all";
+
 function GridView({
   currentIndex,
   onPick,
@@ -197,6 +200,25 @@ function GridView({
   onPick: (n: number) => void;
   onClose: () => void;
 }) {
+  const [sectionFilter, setSectionFilter] = useState<SectionFilter>("all");
+  const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
+
+  const grouped = useMemo(() => {
+    const all = groupBySection();
+    return all
+      .filter((group) => sectionFilter === "all" || group.section.id === sectionFilter)
+      .map((group) => ({
+        ...group,
+        slides: group.slides.filter((s) =>
+          severityFilter === "all" ? true : s.severity === severityFilter,
+        ),
+      }))
+      .filter((group) => group.slides.length > 0);
+  }, [sectionFilter, severityFilter]);
+
+  const visibleCount = grouped.reduce((sum, g) => sum + g.slides.length, 0);
+  const indexOf = (id: string) => DECK.findIndex((s) => s.id === id);
+
   return (
     <div className="grid-view">
       <div
@@ -205,47 +227,158 @@ function GridView({
           justifyContent: "space-between",
           alignItems: "center",
           maxWidth: 1600,
-          margin: "0 auto 24px",
+          margin: "0 auto 16px",
+          gap: 16,
+          flexWrap: "wrap",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: 24 }}>All slides ({DECK.length})</h2>
-        <button
-          onClick={onClose}
-          style={{
-            background: "hsl(var(--bg-raised))",
-            color: "hsl(var(--fg))",
-            border: "1px solid hsl(var(--border))",
-            padding: "8px 16px",
-            borderRadius: 8,
-            cursor: "pointer",
-          }}
-        >
-          Close (Esc)
-        </button>
+        <h2 style={{ margin: 0, fontSize: 24 }}>
+          Slides ({visibleCount} of {DECK.length})
+        </h2>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <FilterGroup
+            label="Section"
+            value={sectionFilter}
+            onChange={(v) => setSectionFilter(v as SectionFilter)}
+            options={[
+              { value: "all", label: "All" },
+              ...SECTIONS.map((s) => ({ value: s.id, label: s.label })),
+            ]}
+          />
+          <FilterGroup
+            label="Severity"
+            value={severityFilter}
+            onChange={(v) => setSeverityFilter(v as SeverityFilter)}
+            options={[
+              { value: "all", label: "All" },
+              { value: "hard", label: "Hard" },
+              { value: "warn", label: "Warn" },
+              { value: "style", label: "Style" },
+            ]}
+          />
+          <button
+            onClick={onClose}
+            style={{
+              background: "hsl(var(--bg-raised))",
+              color: "hsl(var(--fg))",
+              border: "1px solid hsl(var(--border))",
+              padding: "8px 16px",
+              borderRadius: 8,
+              cursor: "pointer",
+            }}
+          >
+            Close (Esc)
+          </button>
+        </div>
       </div>
-      <div className="grid-view-grid">
-        {DECK.map((slide, i) => {
-          const Comp = slide.component;
-          return (
+
+      {grouped.length === 0 ? (
+        <div style={{ textAlign: "center", opacity: 0.7, padding: 48 }}>
+          No slides match the current filters.
+        </div>
+      ) : (
+        grouped.map((group) => (
+          <section key={group.section.id} style={{ marginBottom: 32 }}>
             <div
-              key={slide.id}
-              className="grid-thumb"
               style={{
-                outline: i === currentIndex ? "2px solid hsl(var(--primary))" : "none",
+                maxWidth: 1600,
+                margin: "0 auto 12px",
+                display: "flex",
+                alignItems: "baseline",
+                gap: 12,
+                borderBottom: "1px solid hsl(var(--border))",
+                paddingBottom: 8,
               }}
-              onClick={() => onPick(i)}
             >
-              <ScaledSlide>
-                <Comp />
-              </ScaledSlide>
-              <div className="grid-thumb-label">
-                {String(i + 1).padStart(2, "0")} · {slide.title}
-              </div>
+              <h3 style={{ margin: 0, fontSize: 18, letterSpacing: "0.02em" }}>
+                {group.section.label}
+              </h3>
+              <span style={{ opacity: 0.6, fontSize: 13 }}>
+                {group.section.description} · {group.slides.length} slide
+                {group.slides.length === 1 ? "" : "s"}
+              </span>
             </div>
-          );
-        })}
-      </div>
+            <div className="grid-view-grid">
+              {group.slides.map((slide) => {
+                const i = indexOf(slide.id);
+                const Comp = slide.component;
+                return (
+                  <div
+                    key={slide.id}
+                    className="grid-thumb"
+                    style={{
+                      outline: i === currentIndex ? "2px solid hsl(var(--primary))" : "none",
+                    }}
+                    onClick={() => onPick(i)}
+                  >
+                    <ScaledSlide>
+                      <Comp />
+                    </ScaledSlide>
+                    <div className="grid-thumb-label">
+                      <span>
+                        {String(i + 1).padStart(2, "0")} · {slide.title}
+                      </span>
+                      {slide.severity ? (
+                        <RuleBadge severity={slide.severity} ruleId={slide.ruleId} />
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        ))
+      )}
     </div>
+  );
+}
+
+interface FilterOption {
+  value: string;
+  label: string;
+}
+
+function FilterGroup({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: FilterOption[];
+}) {
+  return (
+    <label
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        fontSize: 13,
+        color: "hsl(var(--fg))",
+      }}
+    >
+      <span style={{ opacity: 0.7 }}>{label}:</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        style={{
+          background: "hsl(var(--bg-raised))",
+          color: "hsl(var(--fg))",
+          border: "1px solid hsl(var(--border))",
+          padding: "6px 10px",
+          borderRadius: 6,
+          cursor: "pointer",
+        }}
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
