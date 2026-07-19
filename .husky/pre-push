@@ -48,9 +48,11 @@ if ! node scripts/sync-guidelines.mjs --check; then
   exit 1
 fi
 
-echo "→ pre-push: visual baseline coverage (advisory)"
-# Advisory only until the first 70-slide baseline set lands. Non-zero
-# `missing` count is printed to stderr but does not block push.
-node scripts/validate-visual-baselines.mjs || true
+echo "→ pre-push: visual baseline coverage (strict)"
+if ! node scripts/validate-visual-baselines.mjs --strict --list; then
+  echo ""
+  echo "  pre-push: visual baseline drift — deck grew without a matching baseline. Bake with \`npm run slides:bake-baselines\` (local) or dispatch \`slides-visual.yml\` with update_baselines=true and commit the artifact."
+  exit 1
+fi
 
 echo "✓ pre-push guards passed"
