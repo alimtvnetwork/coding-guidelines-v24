@@ -116,6 +116,18 @@ function verifySync(dryRun) {
   if (res.status !== 0) fail(3, "post-release sync:check drift — run `npm run sync` and inspect");
 }
 
+function buildSlidesDeck(args) {
+  if (args.skipSlides) { console.log("→ skip slides-app build (--skip-slides)"); return; }
+  const slidesDir = resolve(ROOT, "slides-app");
+  if (!existsSync(slidesDir)) return;
+  if (args.dryRun) { console.log("→ (dry-run) would run: bun run build (slides-app)"); return; }
+  console.log("→ slides-app: bun run build (compiles deck + packages dist.zip)");
+  const runner = existsSync(resolve(ROOT, "bun.lockb")) || existsSync(resolve(ROOT, "slides-app/bun.lockb")) ? "bun" : "npm";
+  const cmdArgs = runner === "bun" ? ["run", "build"] : ["run", "build"];
+  const res = spawnSync(runner, cmdArgs, { cwd: slidesDir, stdio: "inherit" });
+  if (res.status !== 0) fail(2, "slides-app build failed (run `cd slides-app && bun run build` to reproduce)");
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const current = readCurrentVersion();
@@ -123,8 +135,10 @@ function main() {
   console.log(`\n=== Release ceremony: ${current} → ${next} (${args.tier ?? "explicit"}) ===\n`);
   runBump(args, next);
   maybeAggregatePrompts();
+  buildSlidesDeck(args);
   verifySync(args.dryRun);
   console.log(`\n✓ Release ${args.dryRun ? "(dry-run) " : ""}complete: v${next}`);
 }
 
 main();
+
