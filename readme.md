@@ -1525,9 +1525,14 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.99.0
+
+- SS-02 task 46: Nullable narrative columns (`SCHEMA-004`, hard). Entity/ref tables carry `Description TEXT NULL`, transactional tables carry `Notes TEXT NULL` + `Comments TEXT NULL`, all nullable, no `DEFAULT`. Join tables exempt. Enforced by `MISSING-DESC-001` and `DB-FREETEXT-001`. Per spec/17/31 line 92. 46 slides validated.
+
 ### What's new in v5.98.0
 
 - SS-02 task 45: Join-table naming and composite PK (`SCHEMA-003`, hard). Join tables are `{A}{B}` with composite PK `({A}Id, {B}Id)`, no surrogate, no `Description`/`Notes`. `Status`/`Type`/`Category` resolve through a registered enum + join table (time key for history), never a free-form string column. Per spec/17/31 line 91. 45 slides validated.
+
 
 ### What's new in v5.97.0
 
