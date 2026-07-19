@@ -79,6 +79,7 @@ export type SlideSection =
   | "opening"
   | "principles"
   | "naming"
+  | "structure"
   | "control-flow"
   | "errors"
   | "data-schema"
