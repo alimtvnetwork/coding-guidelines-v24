@@ -338,6 +338,8 @@ const preferFunctionLines = {
       const count = countEffectiveBodyLines(node, src);
       if (count === null) return;
       if (count <= prefer) return;
+      const waiver = findWaiverFor(node, src, "prefer-function-lines");
+      if (waiver && (waiver.max === null || count <= waiver.max)) return;
       const name = resolveFunctionName(node);
       context.report({ node, messageId: "tooLong", data: { name, actual: count, prefer } });
     }
