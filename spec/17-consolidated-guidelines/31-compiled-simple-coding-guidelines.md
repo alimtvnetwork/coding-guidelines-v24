@@ -35,7 +35,6 @@ auto-reject on the same tier as RULE 0.
 11. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
 12. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
 
-
 ---
 
 ## Boolean Naming
@@ -131,15 +130,18 @@ Go reference (doc comment starts with the identifier, no blank line between doc 
 Go example (canonical, applies conceptually to every language, only comment syntax changes):
 
 ```go
-// AVOID: verbose prose that repeats the code
+// AVOID below type comments: verbose prose that repeats the code
+
 // GetUser gets a user by id and returns it, or an error.
 func GetUser(id int64) (User, error) { ... }
 
-// AVOID: doc on a trivially named simple method
+// AVOID below type comments: doc on a trivially named simple method
+
 // Add adds a and b.
 func Add(a, b int) int { return a + b }
 
-// OK: exported, non-trivial behavior, with a brief example.
+// OK: exported, non-trivial behavior, with a brief example. Start with method name for GO but similar can be done for other specific lang.
+
 // Clean returns the shortest path name equivalent to path by purely
 // lexical processing. Rules applied iteratively:
 //   1. Replace multiple slashes with a single slash.
@@ -162,9 +164,6 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 
 ## Language One-Liners
 
-
-
-
 - Go: use a result type, not `(T, error)`. Wrap errors with an operation label. Enums are `type X byte` plus `iota`, never string constants.
 - TypeScript: `Promise.all` for independent async, never sequential `await`. No `any`. `readonly` on interface fields by default.
 - Rust: `Result<T, E>` with a `thiserror`-style enum. `let` not `let mut` unless mutation is the point.
@@ -172,7 +171,6 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 - PowerShell: `Verb-Noun` PascalCase function names, `lowercase-kebab-case` filenames.
 - C#: PascalCase methods and properties, `_camelCase` private fields, `I`-prefix interfaces.
 - Python: `snake_case` functions and variables, `PascalCase` classes, type hints on every public function, `dataclass` or `pydantic` for structured records.
-
 
 ---
 
@@ -184,4 +182,3 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 4. List every remaining task before ending the turn.
 5. Plan multi-file features with a Mermaid component or flow diagram first.
 6. If you cannot find the answer in this file or in an existing `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
-
