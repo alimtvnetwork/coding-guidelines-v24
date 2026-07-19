@@ -28,6 +28,7 @@ import LogLevelSeverity from "../slides/36-log-level-severity";
 import LogContext from "../slides/37-log-context";
 import VerifyBothDirections from "../slides/38-verify-both-directions";
 import RetrospectiveOnRepeats from "../slides/39-retrospective-on-repeats";
+import GlobalErrorStore from "../slides/40-global-error-store";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
