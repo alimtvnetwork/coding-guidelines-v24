@@ -1525,6 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.51.0
+
+- **Slides deck a11y guardrail** — new [`slides-app/tests/a11y.spec.ts`](slides-app/tests/a11y.spec.ts) runs `@axe-core/playwright` against every slide (`#/0` … `#/15`) with WCAG 2.1 A/AA rules. Wired into [`.github/workflows/slides-smoke.yml`](.github/workflows/slides-smoke.yml) alongside the existing boot smoke test. Closes Plan SS-01 step 5.
+- **Rationale over visual-regression baselines** — a11y scans catch contrast, ARIA, and heading-order regressions with no baseline PNGs to maintain (avoids repo bloat after the 45 MB diet in v5.47.0).
+
 ### What's new in v5.50.0
 
 - **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
