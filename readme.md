@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.83.0
+
+- SS-02 task 30: function length slide (`FUNC-001`, hard) covering the 8/15 rule, count method, and exact `lint-allow: function-length` waiver form per spec/17/31 line 25. 30 slides validated.
+
 ### What's new in v5.82.0
 
 - SS-02 task 29: file-size tier slide (`SIZE-001`, hard) covering the 100/120/300 line caps with extract triggers per spec/17/31 line 30. 29 slides validated.
