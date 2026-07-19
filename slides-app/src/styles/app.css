@@ -157,10 +157,20 @@
 
 .presenter-side {
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto auto auto auto;
   padding: 16px;
   gap: 16px;
+  overflow-y: auto;
 }
+
+.presenter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 128px;
+  overflow-y: auto;
+}
+
 
 .presenter-next {
   position: relative;
