@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.94.0
+
+- SS-02 task 41: Retrospective on repeats slide (`RCA-002`, hard) requiring a stop-and-RCA on the second occurrence of a bug class before any third fix, per spec/17/31 line 79. 41 slides validated.
+
 ### What's new in v5.93.0
 
 - SS-02 task 40: Verify both directions integration check slide (`INT-001`, hard) requiring curl + frontend field assertion + UI screenshot on the same payload before marking any integration ticket done, per spec/17/31 line 78. 40 slides validated.
