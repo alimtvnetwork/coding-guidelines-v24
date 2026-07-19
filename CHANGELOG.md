@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.74.0] - 2026-07-19
+
+### Added - SS-02 task 22: Trust-boundary teaser slide
+
+- New slide [`slides-app/src/slides/19-trust-boundaries-teaser.tsx`](slides-app/src/slides/19-trust-boundaries-teaser.tsx), registered as `19-trust-boundaries-teaser` in the `principles` section (ruleId `MUST-007`, severity `hard`) after `18-version-bump-myth-buster` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
+- Layout: `<ActionPanel>` header plus a 3-column Allowed vs Forbidden grid for the three canonical arrows (Main→Worker, Worker→Backup, Worker→Git). Footer `<CalloutQuote>` cites spec/19 ch. 26 §2.
+- Root cause of prior gap: spec/19 chs. 26 and 27 defined the one-way trust gradient (Main > Worker > Backup > Git) in normative markdown, but the deck had no artifact so reviewers kept re-litigating "temporary reverse call" shortcuts in PRs.
+- Verification: `node scripts/validate-slides-sra.mjs` reports "OK: 21 slide(s)" (was 20). Palette search `trust`, `isolation`, `spec/19`, or `one-way` returns the new slide.
+
 ## [5.73.0] - 2026-07-19
 
 ### Added - SS-02 task 21: Version-bump myth-buster slide

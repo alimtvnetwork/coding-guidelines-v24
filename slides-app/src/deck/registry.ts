@@ -7,6 +7,7 @@ import SpecFirstVsCodeFirst from "../slides/15-spec-first-vs-code-first";
 import CommentsLieCodeDoesNot from "../slides/16-comments-lie-code-does-not";
 import MethodDocDecisionTree from "../slides/17-method-doc-decision-tree";
 import VersionBumpMythBuster from "../slides/18-version-bump-myth-buster";
+import TrustBoundariesTeaser from "../slides/19-trust-boundaries-teaser";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -94,6 +95,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "16-comments-lie-code-does-not", title: "Comments lie, code does not", section: "principles", severity: "warn", ruleId: "MUST-004", tags: ["comments", "docs", "example", "go", "doctest", "path.clean"], component: CommentsLieCodeDoesNot },
   { id: "17-method-doc-decision-tree", title: "Method-doc decision tree", section: "principles", severity: "warn", ruleId: "MUST-005", tags: ["docs", "decision tree", "checklist", "rename", "split", "godoc"], component: MethodDocDecisionTree },
   { id: "18-version-bump-myth-buster", title: "Version bump myth-buster", section: "principles", severity: "hard", ruleId: "MUST-006", tags: ["version", "semver", "changelog", "release", "v1.2", "myth"], component: VersionBumpMythBuster },
+  { id: "19-trust-boundaries-teaser", title: "Trust boundaries · Main > Worker > Backup > Git", section: "principles", severity: "hard", ruleId: "MUST-007", tags: ["trust", "isolation", "spec/19", "backup", "git", "one-way"], component: TrustBoundariesTeaser },
   { id: "01a-core-principles-1", title: "Core Principles · 1", section: "principles", tags: ["mindset", "must-follow", "non-negotiable"], component: CorePrinciples1 },
   { id: "01b-core-principles-2", title: "Core Principles · 2", section: "principles", tags: ["mindset", "review"], component: CorePrinciples2 },
   { id: "01c-core-principles-3", title: "Core Principles · 3", section: "principles", tags: ["mindset", "ownership"], component: CorePrinciples3 },

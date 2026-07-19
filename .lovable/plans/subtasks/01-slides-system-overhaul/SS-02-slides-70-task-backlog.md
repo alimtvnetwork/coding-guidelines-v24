@@ -55,7 +55,7 @@ Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUIL
 19. [CONTENT] "Comments lie, code does not" slide with Go `path.Clean` doc example and link to https://go.dev/src/go/doc/example.go. ✅ v5.71.0 (`slides-app/src/slides/16-comments-lie-code-does-not.tsx`, ruleId `MUST-004`)
 20. [CONTENT] Method-documentation decision tree (simple method → no docs; complex + irreducible → doc). ✅ v5.72.0 (`slides-app/src/slides/17-method-doc-decision-tree.tsx`, ruleId `MUST-005`)
 21. [CONTENT] Version-bump myth-buster slide (no longer required per v1.2 update). ✅ v5.73.0 (`slides-app/src/slides/18-version-bump-myth-buster.tsx`, ruleId `MUST-006`)
-22. [CONTENT] Trust-boundary teaser (Main > Worker > Backup > Git) linking to spec/19 chs. 26/27.
+22. [CONTENT] Trust-boundary teaser (Main > Worker > Backup > Git) linking to spec/19 chs. 26/27. — DONE v5.74.0 (`slides-app/src/slides/19-trust-boundaries-teaser.tsx`, `MUST-007`).
 
 ## C. Content: Naming, style, structure (tasks 23-32)
 
