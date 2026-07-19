@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.130.0
+
+- Enforces Hard Rule #13 (guideline mirror sync). `scripts/lint-ci.sh` steps 23+24 and the CI `sync-drift` job now run `node scripts/sync-guidelines.mjs --check` and a 14-assertion self-test at `scripts/tests/sync-guidelines.test.mjs`. Any edit to `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` that forgets `npm run sync:guidelines` fails pre-push AND PR. Closes the enforcement gap v5.129 left open.
+- `scripts/sync-guidelines.mjs` refactored to export `diffReport`, `computeDrifts`, `buildLovableMirror`, `buildCursorRules`, `extractSection` and guarded `main()` behind an `invokedDirectly` check. Same import-safe pattern as v5.126 print-required-checks refactor.
+
 ### What's new in v5.129.0
 
 - Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
