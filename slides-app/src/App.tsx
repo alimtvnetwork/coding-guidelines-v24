@@ -319,16 +319,46 @@ function CommandPalette({
     inputRef.current?.focus();
   }, []);
 
-  const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const all = DECK.map((slide, index) => ({ slide, index }));
-    if (!q) return all;
-    return all.filter(({ slide }) => {
+  type Match =
+    | { kind: "slide"; slide: (typeof DECK)[number]; index: number }
+    | { kind: "section"; section: (typeof SECTIONS)[number]; index: number; count: number };
+
+  const matches = useMemo<Match[]>(() => {
+    const raw = query.trim().toLowerCase();
+    // Section-jump prefixes: `s:<name>` or `#<name>` filter to sections only.
+    const sectionOnly = raw.startsWith("s:") || raw.startsWith("#");
+    const stripped = sectionOnly ? raw.replace(/^(s:|#)/, "").trim() : raw;
+
+    const sectionHits: Match[] = SECTIONS
+      .map((section) => {
+        const idx = DECK.findIndex((s) => s.section === section.id);
+        return { section, idx };
+      })
+      .filter(({ section, idx }) => {
+        if (idx < 0) return false;
+        if (!stripped) return sectionOnly;
+        const hay = `${section.id} ${section.label} ${section.description}`.toLowerCase();
+        return hay.includes(stripped);
+      })
+      .map(({ section, idx }) => ({
+        kind: "section" as const,
+        section,
+        index: idx,
+        count: DECK.filter((s) => s.section === section.id).length,
+      }));
+
+    if (sectionOnly) return sectionHits;
+
+    const slideAll = DECK.map((slide, index) => ({ kind: "slide" as const, slide, index }));
+    if (!stripped) return [...sectionHits, ...slideAll];
+    const slideHits = slideAll.filter(({ slide }) => {
       const tagText = (slide.tags ?? []).join(" ");
       const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section} ${tagText}`.toLowerCase();
-      return hay.includes(q);
+      return hay.includes(stripped);
     });
+    return [...sectionHits, ...slideHits];
   }, [query]);
+
 
   useEffect(() => {
     setActive(0);
@@ -387,7 +417,7 @@ function CommandPalette({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKey}
-            placeholder="Jump by title, rule id, section, or tag..."
+            placeholder="Search title, rule id, tag... or `s:react` / `#ops` to jump to a section"
             aria-label="Search slides"
             style={{
               flex: 1,
@@ -409,8 +439,41 @@ function CommandPalette({
           {matches.length === 0 ? (
             <li style={{ padding: "18px 12px", opacity: 0.6, fontSize: 13 }}>No matches.</li>
           ) : (
-            matches.map(({ slide, index }, i) => {
+            matches.map((match, i) => {
               const isActive = i === active;
+              const commonRow = {
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 12px",
+                borderRadius: 8,
+                cursor: "pointer",
+                background: isActive ? "rgba(148,163,184,0.15)" : "transparent",
+              } as const;
+
+              if (match.kind === "section") {
+                return (
+                  <li
+                    key={`section:${match.section.id}`}
+                    role="option"
+                    aria-selected={isActive}
+                    onMouseEnter={() => setActive(i)}
+                    onClick={() => onPick(match.index)}
+                    style={{ ...commonRow, borderLeft: "3px solid hsl(var(--accent, 217 91% 60%))" }}
+                  >
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.55, minWidth: 32 }}>§</span>
+                    <span style={{ fontSize: 14, flex: 1, fontWeight: 600 }}>
+                      Jump to section: {match.section.label}
+                    </span>
+                    <span style={{ fontSize: 11, opacity: 0.6 }}>{match.count} slides</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.5 }}>
+                      → {String(match.index + 1).padStart(2, "0")}
+                    </span>
+                  </li>
+                );
+              }
+
+              const { slide, index } = match;
               return (
                 <li
                   key={slide.id}
@@ -418,15 +481,7 @@ function CommandPalette({
                   aria-selected={isActive}
                   onMouseEnter={() => setActive(i)}
                   onClick={() => onPick(index)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 12px",
-                    borderRadius: 8,
-                    cursor: "pointer",
-                    background: isActive ? "rgba(148,163,184,0.15)" : "transparent",
-                  }}
+                  style={commonRow}
                 >
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.55, minWidth: 32 }}>
                     {String(index + 1).padStart(2, "0")}

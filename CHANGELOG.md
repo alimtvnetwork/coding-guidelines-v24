@@ -5,6 +5,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.113.0] - 2026-07-19
+
+### Added — Polish pass: closing recap refresh + command-palette section jump
+
+- `slides-app/src/slides/12-closing.tsx` rewritten. Old 11-item legacy checklist (only covered naming, control-flow, errors, workflow) replaced with a 12-item rule-id keyed action list that spans all 10 sections of the completed SS-02 catalogue: MUST-002, NAM-001, BOOL-002, SIZE-001, CF-001, ERR-001, LOG-002, SCHEMA-002, REACT-002, REACT-011, A11Y-001, OPS-002. Each row renders the rule id as a monospace pill so learners can trace the item back to its rule slide. Eyebrow updated to reflect "67 slides, 10 sections".
+- `slides-app/src/App.tsx` command palette (Cmd/Ctrl+K) now supports section-jump. Prefix `s:<name>` or `#<name>` filters results to sections only, e.g. `s:react` or `#ops`; selecting a section entry jumps to the first slide of that section. With no prefix, matching section entries are inlined above matching slide entries and rendered with a `§` marker plus slide-count so the palette works as a mini-TOC. Placeholder updated to advertise the syntax.
+- SRA validator green (67 slides). Fixed a stray unescaped-backtick bug in `64-alert-rules.tsx` and `65-runbooks.tsx` template literals (inline `` ` `` around shell commands prematurely terminated the surrounding backtick template string). Root cause: shipping shell examples inside a JS template literal requires either escaping the inner backticks or switching to single-quote inline emphasis; chose single quotes to keep diffs readable.
+
 ## [5.112.0] - 2026-07-19
 
 ### Added — SS-02 tasks 66-67: OPS-002 alert rules, OPS-003 runbooks (closes Ops & Observability and the SS-02 rule catalogue)
