@@ -76,7 +76,8 @@
     "test:pipeline": "bash tests/pipeline/check-bool-neg-001-pipeline.sh && bash tests/pipeline/check-orchestrator-flags.sh",
     "test:slides:visual": "playwright test slides-app/tests/visual.spec.ts",
     "test:slides:visual:update": "playwright test slides-app/tests/visual.spec.ts --update-snapshots",
-    "slides:validate-sra": "node scripts/validate-slides-sra.mjs"
+    "slides:validate-sra": "node scripts/validate-slides-sra.mjs",
+    "slides:contrast-audit": "node slides-app/scripts/contrast-audit.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
