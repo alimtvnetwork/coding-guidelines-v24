@@ -19,6 +19,7 @@ import FileSizeTiers from "../slides/27-file-size-tiers";
 import FunctionLength from "../slides/28-function-length";
 import ImmutableFirst from "../slides/29-immutable-first";
 import DedicatedDefinitions from "../slides/30-dedicated-definitions";
+import DryExtractNow from "../slides/31-dry-extract-now";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
