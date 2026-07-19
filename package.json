@@ -73,7 +73,9 @@
     "codegen:regen": "bash linters-cicd/codegen/scripts/regen-codegen-fixtures.sh",
     "test:pipeline:bool-neg": "bash tests/pipeline/check-bool-neg-001-pipeline.sh",
     "test:pipeline:orchestrator": "bash tests/pipeline/check-orchestrator-flags.sh",
-    "test:pipeline": "bash tests/pipeline/check-bool-neg-001-pipeline.sh && bash tests/pipeline/check-orchestrator-flags.sh"
+    "test:pipeline": "bash tests/pipeline/check-bool-neg-001-pipeline.sh && bash tests/pipeline/check-orchestrator-flags.sh",
+    "test:slides:visual": "playwright test slides-app/tests/visual.spec.ts",
+    "test:slides:visual:update": "playwright test slides-app/tests/visual.spec.ts --update-snapshots"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

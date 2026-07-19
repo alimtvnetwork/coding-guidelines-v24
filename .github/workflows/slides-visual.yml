@@ -1,0 +1,89 @@
+name: slides-visual
+
+# Visual regression for the slides deck.
+#
+# Default run compares every slide against its committed baseline under
+# `slides-app/tests/visual.spec.ts-snapshots/`. A diff beyond
+# `maxDiffPixelRatio` (see playwright.config.ts) fails the job and the
+# `playwright-report` artifact holds side-by-side actual / expected /
+# diff PNGs.
+#
+# Regenerate baselines on demand: run this workflow via workflow_dispatch
+# with `update_baselines=true`. The refreshed snapshots ship as an
+# artifact named `updated-visual-baselines`; download and commit its
+# contents to `slides-app/tests/visual.spec.ts-snapshots/`.
+#
+# Runner is pinned to `ubuntu-latest` so font hinting and Chromium
+# rasterisation stay identical across baseline and comparison runs.
+
+on:
+  pull_request:
+    paths:
+      - "slides-app/**"
+      - "playwright.config.ts"
+      - ".github/workflows/slides-visual.yml"
+  push:
+    branches: [main]
+    paths:
+      - "slides-app/**"
+      - "playwright.config.ts"
+      - ".github/workflows/slides-visual.yml"
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: "Regenerate baseline PNGs and upload as artifact"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install root deps (Playwright)
+        run: bun install --frozen-lockfile
+
+      - name: Install slides-app deps
+        working-directory: slides-app
+        run: bun install --frozen-lockfile
+
+      - name: Build slides-app
+        working-directory: slides-app
+        run: bun run build
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run visual regression
+        if: ${{ inputs.update_baselines != 'true' }}
+        run: bunx playwright test slides-app/tests/visual.spec.ts
+
+      - name: Regenerate baselines
+        if: ${{ inputs.update_baselines == 'true' }}
+        run: bunx playwright test slides-app/tests/visual.spec.ts --update-snapshots
+
+      - name: Upload updated baselines artifact
+        if: ${{ inputs.update_baselines == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: updated-visual-baselines
+          path: slides-app/tests/visual.spec.ts-snapshots/
+          retention-days: 14
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-visual-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
