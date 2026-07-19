@@ -5,6 +5,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.125.0] - 2026-07-19
+
+### Changed, backlog cleanup + branch-protection npm surface
+
+- `.lovable/plan.md`: replaced the "Open Questions (all resolved)" section (4 struck-through bullets, zero live content) with a two-line pointer to the Locked Decisions table. Root cause: mediocre-AI audits kept re-flagging OQ-A1..A4 as "open" because they scanned for the `Open Questions:` header, even though every one had a D-number since 2026-07-19 (D15/D16) and Phases 8/11 (OQ-A3/A4).
+- `package.json`: added `npm run branch-protection:print`, `branch-protection:json`, and `branch-protection:check` wrappers over `scripts/print-required-checks.mjs`. Root cause: procedure `.lovable/procedures/branch-protection.md` still required remembering the raw `node scripts/...` invocation, which is why the `visual` + `smoke` promotion has sat in the backlog for 3 releases. `npm run` is discoverable via tab-completion.
+- Verification: `grep -c "OQ-A1\|OQ-A2\|OQ-A3\|OQ-A4" .lovable/plan.md` returns only Locked-Decisions row references. `npm run branch-protection:check` exits 0 (no stale entries in `.github/branch-protection.expected.json`).
+
 ## [5.124.0] - 2026-07-19
 
 ### Changed, OQ-A1 and OQ-A2 promoted to locked decisions D15/D16
