@@ -562,12 +562,21 @@ jobs:
         run: npm run sync:check
 
       - name: Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)
-        # Mirror of scripts/lint-ci.sh step 14. Uses node built-ins only —
+        # Mirror of scripts/lint-ci.sh step 14. Uses node built-ins only,
         # passes when no PNGs exist (adoption is opt-in per
         # spec/19-main-worker-service/diagrams/readme.md), fails only when
         # a committed *.png is older than its *.mmd source. Closes
         # spec/19 audit-09 §2.2 end-to-end (local + CI parity).
         run: node scripts/render-diagrams.mjs --check
+
+      - name: Check lint-ci ↔ ci.yml drift (mirror guard)
+        # Mirror of scripts/lint-ci.sh step 16. Fails if a lint-scope
+        # step is added to this workflow without a matching entry in
+        # scripts/lint-ci.sh STEPS[], or if IGNORED_CI_STEPS holds a
+        # stale entry no longer present here. Prevents the pre-push
+        # gate from silently falling behind CI (was the follow-up
+        # called out at scripts/lint-ci.sh:9-11 pre-v5.120).
+        run: node scripts/check-lint-ci-drift.mjs
 
   docs-diagrams:
     name: Docs Build — Render Mermaid Diagrams
