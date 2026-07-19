@@ -4,6 +4,13 @@
 
 ---
 
+## v5.77.0 — 2026-07-19 (SS-02 task 24: zero-underscore + full-caps acronyms slide (NAM-003))
+
+**Scope:** Version bump (`5.76.0` → `5.77.0`). SS-02 task 24: zero-underscore + full-caps acronyms slide (NAM-003).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.76.0 — 2026-07-19 (SS-02 task 23: DB schema naming slide (NAM-002))
 
 **Scope:** Version bump (`5.75.0` → `5.76.0`). SS-02 task 23: DB schema naming slide (NAM-002).
