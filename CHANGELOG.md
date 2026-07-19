@@ -5,6 +5,24 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.121.0] - 2026-07-19
+
+### Added — `lint-ci ↔ ci.yml` drift guard now runs in CI
+
+- `.github/workflows/ci.yml` `sync-drift` job gained a `Check lint-ci ↔ ci.yml drift (mirror guard)` step immediately after the Mermaid drift step (Node is already set up on that job, no new toolchain cost). Runs `node scripts/check-lint-ci-drift.mjs`. Root cause the v5.120 fix missed: ci.yml executes each linter directly rather than calling `bun run lint:ci`, so the drift check I added at `scripts/lint-ci.sh` step 16 only fired via pre-push. A `--no-verify` push (or a GitHub Web UI edit) would bypass it entirely.
+- Verified: 57 ci.yml steps parsed, 16 lint-ci labels, 37 ignored with reason, 0 drift. The new ci.yml step is itself mirrored in `scripts/lint-ci.sh` STEPS[16].
+
+### Added — `slides:bake-baselines:sandbox` wrapper
+
+- `scripts/bake-baselines-sandbox.mjs` + `npm run slides:bake-baselines:sandbox` automate the v5.120 recipe. Scans first-level `/nix/store/*/lib` dirs for `libglib-2.0.so.0` and `libX11.so.6`, joins every `/nix/store/*/lib` into `LD_LIBRARY_PATH`, then invokes `bunx playwright test tests/visual.spec.ts --update-snapshots --workers=1 --reporter=list` from `slides-app`.
+- Refuses to run when `/nix/store` is absent, or when it exists but `ldconfig -p` already advertises `libglib-2.0.so.0` (off-sandbox Linux hosts with nix installed). This prevents the wrapper from silently hiding a real "chromium missing" failure on dev/CI machines. Fallback path is a clear stderr message pointing at `npm run slides:bake-baselines`.
+- `slides:bake-baselines:help` alias updated with the sandbox path.
+
+### Verified
+
+- `node scripts/check-lint-ci-drift.mjs` -> `ci.yml steps: 57, labels: 16, ignored: 37, no drift`.
+- Sandbox lib probe: `glib -> /nix/store/mg151w65chcirlr7398jrz916wrfh3gg-glib-2.86.3/lib`, `x11 -> /nix/store/0d2nplzyyigdjbd9l7s1ka4809zm7pwl-libx11-1.8.12/lib`.
+
 ## [5.120.0] - 2026-07-19
 
 ### Added — `lint-ci.sh` ↔ `ci.yml` drift guard (`scripts/check-lint-ci-drift.mjs`)
