@@ -262,6 +262,75 @@ function detectDrift() {
   return { genError: false, drifted };
 }
 
+function unifiedDiff(a, b) {
+  const r = spawnSync("diff", ["-u", a, b], { encoding: "utf8" });
+  return r.stdout || "";
+}
+
+function writeReport({ drifted, mode }) {
+  if (!REPORT_DIR) return;
+  mkdirSync(REPORT_DIR, { recursive: true });
+  const tmp = mkdtempSync(resolve(tmpdir(), "sync-check-report-"));
+  const files = drifted.map((item) => {
+    const a = resolve(tmp, "before_" + item.file.path.replace(/[\\/]/g, "__"));
+    const b = resolve(tmp, "after_" + item.file.path.replace(/[\\/]/g, "__"));
+    writeFileSync(a, item.beforeText || "");
+    writeFileSync(b, item.afterText || "");
+    const summary = item.existedBefore && item.existsAfter
+      ? diffSummary(item.beforeText, item.afterText)
+      : { added: 0, removed: 0, beforeLines: 0, afterLines: 0 };
+    return {
+      path: item.file.path,
+      status: !item.existedBefore ? "created" : !item.existsAfter ? "removed" : "modified",
+      added: summary.added,
+      removed: summary.removed,
+      note: item.file.note || null,
+      unifiedDiff: item.existedBefore && item.existsAfter ? unifiedDiff(a, b) : null,
+    };
+  });
+  const json = {
+    mode,
+    generatedAt: new Date().toISOString(),
+    tracked: TRACKED.length,
+    driftedCount: files.length,
+    files,
+  };
+  writeFileSync(resolve(REPORT_DIR, "drift.json"), JSON.stringify(json, null, 2) + "\n");
+
+  const md = [];
+  md.push(`# Sync drift report`);
+  md.push("");
+  md.push(`- Mode: \`${mode}\``);
+  md.push(`- Generated: ${json.generatedAt}`);
+  md.push(`- Drifted: **${files.length}** of ${TRACKED.length} tracked file(s)`);
+  md.push("");
+  if (files.length === 0) {
+    md.push("No drift detected.");
+  } else {
+    md.push("| File | Status | +Lines | -Lines |");
+    md.push("| --- | --- | ---: | ---: |");
+    for (const f of files) {
+      md.push(`| \`${f.path}\` | ${f.status} | ${f.added} | ${f.removed} |`);
+    }
+    md.push("");
+    for (const f of files) {
+      md.push(`## \`${f.path}\``);
+      if (f.note) md.push(`> ${f.note}`);
+      md.push("");
+      if (f.unifiedDiff) {
+        md.push("```diff");
+        md.push(f.unifiedDiff.trimEnd());
+        md.push("```");
+      } else {
+        md.push(`_${f.status === "created" ? "New file would be created" : "File would be removed"}._`);
+      }
+      md.push("");
+    }
+  }
+  writeFileSync(resolve(REPORT_DIR, "drift.md"), md.join("\n"));
+  process.stdout.write(`\nReport written to ${relative(ROOT, REPORT_DIR)}/drift.{json,md}\n`);
+}
+
 function main() {
   const result = detectDrift();
   if (result.genError) {
@@ -272,6 +341,7 @@ function main() {
   }
 
   if (result.drifted.length === 0) {
+    writeReport({ drifted: [], mode: FIX ? "fix" : "check" });
     process.stdout.write(
       `OK All ${TRACKED.length} sync-managed file(s) are up to date.\n`,
     );
@@ -282,6 +352,7 @@ function main() {
   // the restore step), so the drift IS the fix. Report what changed
   // and exit 0 so callers can chain `git add` / commit.
   if (FIX) {
+    writeReport({ drifted: result.drifted, mode: "fix" });
     process.stdout.write(
       `\nFixed ${result.drifted.length} of ${TRACKED.length} sync-managed file(s):\n\n`,
     );
@@ -293,6 +364,8 @@ function main() {
     );
     process.exit(0);
   }
+
+  writeReport({ drifted: result.drifted, mode: "check" });
 
   process.stdout.write(
     `\nDrift detected in ${result.drifted.length} of ${TRACKED.length} sync-managed file(s):\n\n`,
