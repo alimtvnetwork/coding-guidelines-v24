@@ -1,10 +1,11 @@
 # 17 — Cascading Roles & Role-Access Cache Bin
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-06
-**Status:** Authoritative (Phase 5)
-**Resolves:** locked decisions D11 (cascading = union), D12 (cache-bin in ER diagram). Open questions OQ-A1, OQ-A2 captured in §7 with default proposals adopted until the user overrides.
+**Updated:** 2026-07-19 (v1.1.0: OQ-A1 promoted to D15, OQ-A2 promoted to D16; §7 rewritten as "Resolved decisions" and both items removed from `.lovable/plan.md` Open Questions.)
+**Status:** Authoritative (Phase 5, all open questions in scope now closed)
+**Resolves:** locked decisions D11 (cascading = union), D12 (cache-bin in ER diagram), **D15** (simple union is final, no role hierarchy), **D16** (per-process SQLite `:memory:` is final for the cache bin storage tier; Redis and in-process map remain configurable alternatives per §4).
 
 > **Phase 5 scope.** Define how a user that holds **multiple roles simultaneously** resolves to a single effective `AccessItem` set, where that resolution happens, and how the result is cached safely under a credential-blind Main + authoritative Worker split (Phase 3).
 >
@@ -194,14 +195,14 @@ These rows MUST be added to `13-error-codes.md` and `error-codes.json` in the Ph
 
 ---
 
-## 7. Open Questions — Default Proposals Adopted
+## 7. Resolved Decisions (was "Open Questions")
 
-These remain overridable by the user. The spec ships with the defaults below so Phase 6+ can build on a complete contract.
+Both OQ-A1 and OQ-A2 were promoted to locked decisions on 2026-07-19 after the defaults below shipped in v1.0.0 and drove Phases 6, 8, 11, and 12 without contradiction.
 
-- **OQ-A1 — Cascading semantics.** **Default adopted: simple union (D11).** Rejected alternative: role inheritance hierarchy. Rationale: union keeps every grant traceable to exactly one `RoleAccessItem` row; hierarchy hides grants behind transitive edges and complicates audit. If the user later prefers hierarchy, a `Role.ParentRoleId` self-FK + recursive CTE walk would replace `LoadEffectiveAccess` step 1; the cache key would still be `RoleId`.
-- **OQ-A2 — Cache-bin tech.** **Default adopted: per-process SQLite `:memory:`** with §5 TTL + invalidation broadcast. Alternatives: (a) Redis — cross-process invalidation native, but adds a runtime dependency and a network hop; (b) plain in-process map — zero dependency but lacks indexed eviction. Spec keeps the contract (the four functions in §4 + the §5 endpoint) so swapping the storage is a Worker-internal change.
-- **OQ-A3 — Backup zip password derivation.** Carried into Phase 8.
-- **OQ-A4 — Snapshot retention.** Carried into Phase 11.
+- **OQ-A1 → D15 (locked).** Cascading semantics is **simple union** per §1. Role hierarchy is rejected: every effective grant must trace to exactly one `RoleAccessItem` row for auditability. Reopening this would require dropping `WORKER-900-02 EmptyEffectiveAccessSet` and every guard that currently reads `AppUserRole` as a flat set, and would invalidate the JWT `AccessItem.Code[]` embedding in §2 step 1.
+- **OQ-A2 → D16 (locked).** Cache-bin storage tier is **per-process SQLite `:memory:`** with the `RoleAccessCache` / `RoleCacheCatalogVersion` schema in §4 and the invalidation contract in §5. Redis and plain in-process map remain **configurable alternatives** (implementer swaps the four functions in §4 against the same contract); they are not the default and MUST NOT be assumed by Phase 6+ code. `MainWorker.RoleCache.TtlSeconds` (default 600 s) and `MainWorker.RoleCache.RequireReauthOnCatalogBump` (default `false`) in `15-tunable-constants.md` are part of this decision.
+- **OQ-A3: Backup zip password derivation.** ✅ Resolved in Phase 8 (`20-backup-encryption-and-keys.md` §2.12).
+- **OQ-A4: Snapshot retention.** ✅ Resolved in Phase 11 (`MainWorker.Backup.SnapshotRetentionDays = 30`).
 
 ---
 

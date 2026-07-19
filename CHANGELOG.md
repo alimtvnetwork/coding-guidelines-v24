@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.124.0] - 2026-07-19
+
+### Changed, OQ-A1 and OQ-A2 promoted to locked decisions D15/D16
+
+- `spec/19-main-worker-service/17-cascading-roles-and-cache-bin.md` bumped to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". Header `Resolves:` line now cites D15 and D16.
+- D15 (locked): cascading semantics is simple union. No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Reopening would invalidate `WORKER-900-02 EmptyEffectiveAccessSet` and the JWT `AccessItem.Code[]` embedding in §2.
+- D16 (locked): cache-bin storage tier is per-process SQLite `:memory:` with the `RoleAccessCache` / `RoleCacheCatalogVersion` schema in §4 and the invalidation contract in §5. Redis and plain in-process map remain configurable alternatives against the same four-function contract; they are not defaults and MUST NOT be assumed by Phase 6+ implementers.
+- `.lovable/plan.md`: added D15 and D16 rows to the Locked Decisions table. "Open Questions (carried forward)" section renamed to "Open Questions (all resolved)" with OQ-A1/A2 struck through and linked to their new D-numbers. OQ-A3 and OQ-A4 were already resolved (Phase 8 and Phase 11).
+- Root cause this closes: the last blind-AI audit and every mediocre-AI gap analysis kept flagging OQ-A1/A2 as legitimately open, even though every downstream chapter (13 error codes, 14 seeds, 07 dashboards, 15 tunables) had already been built against the defaults for 18+ versions. Leaving them "open" was a documentation lie that would cost a future implementer a wasted phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
+- Verification: `grep -n "OQ-A1\|OQ-A2" .lovable/plan.md` now returns only the two struck-through resolution lines and the two Locked-Decisions rows (no bare open questions). Chapter 17 §7 no longer contains the phrase "Open Questions".
+
 ## [5.123.0] - 2026-07-19
 
 ### Added, testable pre-push visual-hint helper
