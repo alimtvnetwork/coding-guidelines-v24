@@ -1526,6 +1526,12 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.119.0
+
+- Visual regression is now actually enforced. Baked all 70 baseline PNGs into `slides-app/tests/visual.spec.ts-snapshots/` (6.8 MB, `slide-00-linux.png` through `slide-69-linux.png`) by running Playwright in the Lovable sandbox with the missing shared libs supplied via `LD_LIBRARY_PATH` (nix-store glib + libX11 + adjacent GTK deps). Before: `deck=70 baselines=0 missing=70`. After: `deck=70 baselines=70 missing=0`.
+- Validator naming bug fixed. `scripts/validate-visual-baselines.mjs` expected `slide-NN-chromium-linux.png` (multi-project Playwright naming), but `playwright.config.ts` has no `projects[]` array so the real suffix is `-linux.png`. Root cause: assumed the naming pattern without reading the config. Fix at line 81-90 uses the correct single-project suffix; if the config ever grows projects, this needs to be revisited.
+- Guards flipped to `--strict`. `.husky/pre-push` and `.github/workflows/slides-visual.yml` now block on missing baselines (`slides:validate-baselines:strict`), with `--list` output so any drift enumerates the missing files. Skipped in the `update_baselines=true` workflow_dispatch path so bakes can still land.
+
 ### What's new in v5.118.0
 
 - CI/CD backlog swept. All 7 files under `.lovable/cicd-issues/` were already `✅ Solved` yet kept surfacing in every "remaining work" pass because they sat next to open backlogs. Moved to `.lovable/resolved-issues/` and rewrote `.lovable/cicd-index.md` links so the index still resolves. `cicd-issues/` is now empty and reserved for genuinely open findings; anything landing there again means a real regression.
