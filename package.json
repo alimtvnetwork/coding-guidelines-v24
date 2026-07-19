@@ -14,6 +14,7 @@
     "sync:guidelines:check": "node scripts/sync-guidelines.mjs --check",
     "sync:check": "node scripts/sync-check.mjs && node scripts/sync-guidelines.mjs --check",
     "version:bump": "node scripts/bump-version.mjs",
+    "postversion": "npm run sync",
     "validate:version": "node scripts/validate-version-json.mjs",
     "gen:role-enum": "node scripts/generate-role-enum.mjs",
     "check:role-enum": "node scripts/check-role-enum.mjs",
