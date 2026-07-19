@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.122.0
+
+- Sandbox-aware pre-push hint. `.husky/pre-push` visual-baseline failure now branches on `/nix/store` presence and points sandbox users at `npm run slides:bake-baselines:sandbox`, off-sandbox devs at plain `npm run slides:bake-baselines`. Root cause: the v5.121 wrapper existed but the pre-push hint pointed at the sandbox-broken command, so users would follow the hint, watch it fail with `libglib-2.0.so.0: cannot open shared object file`, and bypass with `SKIP_PREPUSH=1`.
+- Self-test guards the drift checker itself. `scripts/tests/check-lint-ci-drift.test.mjs` runs 10 cases against in-memory fixtures (parser stop-at-`)`, comment skipping, stem match, ignored-map, stale-ignore surfacing, count accuracy, zero-drift end-state). Wired as `lint-ci.sh` step 17 AND as a second step inside the `sync-drift` CI job. Root cause: the mirror guard was load-bearing but had no test, so a silent regression in `parseLintCiLabels` or `analyzeDrift` would leave CI green while providing zero real coverage. Refactor exports `parseCiStepNames`/`parseLintCiLabels`/`analyzeDrift` and guards `main()` behind a direct-invocation check so imports don't `process.exit`.
+
 ### What's new in v5.121.0
 
 - Drift guard promoted to CI. `.github/workflows/ci.yml` (`sync-drift` job) now runs `node scripts/check-lint-ci-drift.mjs` right after the Mermaid drift step, so a new lint step added to ci.yml without a matching `STEPS[]` entry fails PRs, not just pre-push. Root cause: v5.120 wired the check only through `bun run lint:ci`, which CI doesn't invoke as a single step.
