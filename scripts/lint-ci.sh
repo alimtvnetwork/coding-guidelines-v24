@@ -152,6 +152,8 @@ STEPS=(
   "Self-test branch-protection-soak verdict thresholds (READY/WATCH/NOT READY)|node scripts/tests/branch-protection-soak.test.mjs"
   "Check coding-guideline mirrors in sync (Hard Rule 13)|node scripts/sync-guidelines.mjs --check"
   "Self-test sync-guidelines --check (drift detection contract)|node scripts/tests/sync-guidelines.test.mjs"
+  "Check file sizes vs baseline (Hard Rule 6, ratchet)|python3 linter-scripts/check-file-sizes.py --check"
+  "Self-test check-file-sizes (baseline classifier + waivers)|python3 linter-scripts/tests/check-file-sizes.test.py"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then

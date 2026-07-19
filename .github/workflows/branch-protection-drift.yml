@@ -1,0 +1,61 @@
+name: Branch Protection Drift (Nightly)
+
+# Nightly mechanical audit: does GitHub's live branch-protection config for
+# `main` still match `.lovable/procedures/branch-protection.expected.json`?
+#
+# Runs `npm run branch-protection:diff`, which shells out to the GH API
+# using `GH_ADMIN_TOKEN` (a PAT with `repo` + admin:repo_hook scopes on the
+# repo owner). The job self-skips when the secret is absent so forks and
+# unprivileged clones do not fail. When drift is detected, the job fails
+# and posts the classified diff (added/removed/unchanged contexts) into
+# the run summary so an admin can reconcile without hunting logs.
+#
+# Added: v5.131.0 (backlog step from v5.130.0 handoff).
+
+on:
+  schedule:
+    - cron: "17 6 * * *"    # 06:17 UTC daily, off-peak
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Diff live vs expected required contexts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Guard on secret presence
+        id: guard
+        env:
+          GH_ADMIN_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+        run: |
+          if [ -z "${GH_ADMIN_TOKEN}" ]; then
+            echo "GH_ADMIN_TOKEN not configured on this repo; skipping drift check." >> "$GITHUB_STEP_SUMMARY"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run branch-protection diff
+        if: steps.guard.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -o pipefail
+          node scripts/branch-protection-diff.mjs | tee drift.txt
+          {
+            echo '### Branch protection drift'
+            echo '```'
+            cat drift.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

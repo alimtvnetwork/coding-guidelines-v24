@@ -621,6 +621,16 @@ jobs:
         # Guards the --check path in scripts/sync-guidelines.mjs so a refactor
         # cannot silently make it exit 0 on drift. Added in v5.130.
         run: node scripts/tests/sync-guidelines.test.mjs
+      - name: Check file sizes vs baseline (Hard Rule 6, ratchet)
+        # Enforces spec/17 Hard Rule #6 (files 300, .tsx 100) via a frozen
+        # baseline at .file-size-baseline.json. Pinned legacy files stay
+        # allowed; growing past pin or NEW files over cap fail CI. Waivers
+        # require reason=... and cap at 600 lines. Added in v5.131.
+        run: python3 linter-scripts/check-file-sizes.py --check
+      - name: Self-test check-file-sizes (baseline classifier + waivers)
+        # Locks the classify/waiver contract so refactors of the linter
+        # cannot silently green-light drift. Added in v5.131.
+        run: python3 linter-scripts/tests/check-file-sizes.test.py
 
 
 
