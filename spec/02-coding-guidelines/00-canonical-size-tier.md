@@ -1,7 +1,7 @@
 # Canonical Size Tier (Single Source of Truth)
 
 > **This file is the ONLY authoritative source for function-length, file-length, and component-size limits.**
-> All other locations (`.cursorrules`, `eslint.config.js`, `linters-cicd/`, `spec/13-generic-cli/08-code-style.md`, `spec/17-consolidated-guidelines/02-coding-guidelines.md`) mirror this table and MUST reference it. If any of those drift, this file wins and the others get patched.
+> All other locations (`.cursorrules`, `eslint.config.js`, `linters-cicd/`, `spec/13-generic-cli/08-code-style.md`, `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`) mirror this table and MUST reference it. If any of those drift, this file wins and the others get patched.
 
 ## Tier
 
@@ -44,7 +44,7 @@ function mapKind(k: Kind): Label { ... }
 | `linters-cicd/checks/file-length/` | Language-agnostic CI check |
 | `linters-cicd/checks/function-length-prefer8/` | Language-agnostic prefer-8 check |
 | `spec/13-generic-cli/08-code-style.md` | CLI code-style ref |
-| `spec/17-consolidated-guidelines/02-coding-guidelines.md` §"File Size Limits" | Consolidated guidelines mirror |
+| `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` §"File Size Limits" | Consolidated guidelines mirror |
 
 ## Change protocol
 

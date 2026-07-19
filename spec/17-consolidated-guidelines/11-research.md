@@ -177,7 +177,7 @@ spec/02-coding-guidelines/10-research/
 |-----------|----------|
 | Root-level research | `spec/17-consolidated-guidelines/12-root-research.md` |
 | Source folder | `spec/02-coding-guidelines/10-research/00-overview.md` |
-| Coding guidelines | `spec/17-consolidated-guidelines/02-coding-guidelines.md` |
+| Coding guidelines | `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` |
 | Spec authoring | `spec/17-consolidated-guidelines/01-spec-authoring.md` |
 
 ---

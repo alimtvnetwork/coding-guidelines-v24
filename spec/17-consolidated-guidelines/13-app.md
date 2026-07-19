@@ -201,7 +201,7 @@ Features in `21-app/` drive work in the other three folders. Not the reverse.
 | App Issues | `spec/17-consolidated-guidelines/14-app-issues.md` |
 | App Database | `spec/17-consolidated-guidelines/22-app-database.md` |
 | App Design System | `spec/17-consolidated-guidelines/16-app-design-system-and-ui.md` |
-| Coding Guidelines | `spec/17-consolidated-guidelines/02-coding-guidelines.md` |
+| Coding Guidelines | `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` |
 | Spec Authoring Guide | `spec/17-consolidated-guidelines/01-spec-authoring.md` |
 
 ---
