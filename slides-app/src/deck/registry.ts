@@ -110,6 +110,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "21-db-schema-naming", title: "DB schema naming · PascalCase entities, camelCase fields, {Table}Id PKs", section: "naming", severity: "hard", ruleId: "NAM-002", tags: ["database", "schema", "pascalcase", "camelcase", "primary key", "uuid"], component: DbSchemaNaming },
   { id: "22-zero-underscore-acronyms", title: "Zero underscores · acronyms stay UPPERCASE", section: "naming", severity: "hard", ruleId: "NAM-003", tags: ["underscore", "acronym", "uppercase", "http", "url", "json", "api"], component: ZeroUnderscoreAcronyms },
   { id: "23-boolean-naming", title: "Boolean naming · is/has/can/should, positive only", section: "naming", severity: "hard", ruleId: "BOOL-002", tags: ["boolean", "is", "has", "can", "should", "positive framing", "negation"], component: BooleanNaming },
+  { id: "24-no-boolean-parameters", title: "No boolean parameters · split into two named functions", section: "naming", severity: "hard", ruleId: "BOOL-003", tags: ["boolean", "parameter", "flag", "refactor", "render", "named function"], component: NoBooleanParameters },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
