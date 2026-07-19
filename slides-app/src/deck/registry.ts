@@ -18,6 +18,7 @@ import LineGapDiscipline from "../slides/26-line-gap-discipline";
 import FileSizeTiers from "../slides/27-file-size-tiers";
 import FunctionLength from "../slides/28-function-length";
 import ImmutableFirst from "../slides/29-immutable-first";
+import DedicatedDefinitions from "../slides/30-dedicated-definitions";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -121,6 +122,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "27-file-size-tiers", title: "File-size tiers · 100 tsx, 120 class, 300 fallback", section: "structure", severity: "hard", ruleId: "SIZE-001", tags: ["file size", "300 lines", "100 lines", "component", "class", "refactor", "extract"], component: FileSizeTiers },
   { id: "28-function-length", title: "Function length · 8 preferred, 15 hard cap, lint-allow waiver", section: "structure", severity: "hard", ruleId: "FUNC-001", tags: ["function length", "8 lines", "15 lines", "waiver", "lint-allow", "extract", "refactor"], component: FunctionLength },
   { id: "29-immutable-first", title: "Immutable-first · assign once, spread-copy, no in-place mutation", section: "structure", severity: "hard", ruleId: "IMMUT-001", tags: ["immutable", "const", "let", "mutation", "spread", "rust", "reassignment"], component: ImmutableFirst },
+  { id: "30-dedicated-definitions", title: "Dedicated definitions files · types, enums, constants get their own file", section: "structure", severity: "hard", ruleId: "DEF-001", tags: ["types", "enums", "constants", "interfaces", "extract", "colocation", "types.ts"], component: DedicatedDefinitions },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
