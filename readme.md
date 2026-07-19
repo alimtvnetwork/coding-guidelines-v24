@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.96.0
+
+- SS-02 task 43: Data & Schema chapter opener (`SCHEMA-001`, hard) opens a new `data-schema` section. PascalCase tables/types/entities/JSON keys, camelCase columns/fields, single entity name across DB, API, and TypeScript. Per spec/17/31 lines 87 to 89. 43 slides validated.
+
 ### What's new in v5.95.0
 
 - SS-02 task 42: Global error store + single modal slide (`ERR-006`, hard). One `errorStore` fed by `apiCall` (ERR-005), a single top-level `ErrorModal` rendering copy from the ERR-004 registry, `log.error` on every push per LOG-002. No per-feature toasts or local error state. Per spec/17/31 line 80. 42 slides validated.
