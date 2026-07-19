@@ -1,110 +1,117 @@
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-**Version:** 1.0.0
-**Purpose:** One-page checklist any AI can follow without extra context. If a rule here conflicts with a longer spec, the longer spec wins; but this file is enough to write compliant code.
+Version: 1.1.0
+
+This is a standalone file. Follow every rule below without consulting any other document. If a `spec/**/coding-guidelines/` folder or `spec/**/error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
 
 ---
 
-## 0. Read These First (in order)
+## Must Follow and without negotiation
 
-1. This file: `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`
-2. Canonical size tier (function/file/class caps): `spec/02-coding-guidelines/00-canonical-size-tier.md`
-3. Boolean naming: `spec/17-consolidated-guidelines/02-coding-guidelines.md` (Rule 2)
-4. Enum standards: `spec/17-consolidated-guidelines/04-enum-standards.md`
-5. Error management: `spec/17-consolidated-guidelines/03-error-management.md` + `spec/03-error-manage/`
-6. Language-specific: `spec/02-coding-guidelines/{07-csharp,08-go,09-typescript,10-rust,11-python,12-php}/`
-7. Mirror for AI editors: `.lovable/coding-guidelines/coding-guidelines.md`
-
----
-
-## 1. Hard Rules (Zero Tolerance)
-
-1. **Function length**: ≤ 8 lines preferred, ≤ 15 lines hard cap. Skip blanks and comments. Waiver: `// lint-allow: function-length reason="..." max=N`.
-2. **No nested `if`**. Flatten with early returns / guard clauses.
-3. **Positive, simple `if` conditions**. No `!`, no double negatives. Extract a positively named boolean (`isReady`, `hasAccess`) instead.
-4. **Boolean names** start with `is`, `has`, `can`, `should`, `was`, `will`. Never negative (`isNotReady` is forbidden; use `isReady` and invert at the call site).
-5. **Narrow types only**. Never `any`, `unknown`, `interface{}`, `object`, `Object`, `dynamic`. Exception: at trust boundaries (catch block, external JSON, third-party lib) narrow immediately with a type guard. `Generic<T>` is the only accepted wide-scope tool.
-6. **No swallowed errors**. Every `catch` logs with context AND either rethrows or handles explicitly. Silent `catch {}` is a build-fail.
-7. **File size**: ≤ 300 lines any file, ≤ 100 lines any React component (`.tsx`), ≤ 120 lines any class/struct.
-8. **No magic strings or numbers**. Use enum, typed constant, or config key. Comparisons must be against a named symbol.
-9. **Definitions in dedicated files**. Types, enums, constants, interfaces get their own file, not inline next to first use.
-10. **Booleans use `is`/`has` prefix AND positive framing** (reinforces rule 3+4). If you write `if (!isDisabled)`, refactor to `isEnabled`.
-11. **DRY is priority #1**. Duplicate logic across two sites means extract it now, not later.
-12. **Components stay small and reusable** (React/TS/Vue/etc.). For any feature with 3+ components, produce a Mermaid component diagram first.
-13. **Error-manage folder is law**. If `spec/**/error-manage/` exists, every error path follows it exactly.
-14. **Immutable-first (Rust-style)**. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`/`let`/`final`/`val` over `let mut`/`var`. Build result objects with spread/copy, not in-place mutation.
-15. **Assets** go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes (`assets/01-icons/03-logo.svg`).
+Listen, past next-tasks turns have been sloppy as fuck: wrong step
+count, missing remaining-tasks list, symptom patches sold as fixes,
+coding guidelines ignored, version bump forgotten, logs never checked.
+WTF. Stop doing that, you stupid fuck. Read the code, find the root
+cause in one sentence, apply the minimum correct fix, verify it in the
+logs, list EVERY remaining task, bump the version, update changelog
+and release notes. Going deep IS the job. If you are not going deep,
+you are not doing the job. This section is a MUST. Violating it is
+auto-reject on the same tier as RULE 0.
 
 ---
 
-## 2. Line-Gap and Whitespace Style
+## Hard Rules (Zero Tolerance)
 
-1. **One blank line** before every `return`/`throw`, unless it is the only statement in the block.
-2. **One blank line** after a closing `}`, unless the next line is another `}`, `else`, `case`, or `catch`.
-3. **No double blank lines** anywhere. Ever.
-4. **No blank line** immediately after `{` or immediately before `}`.
-5. **One blank line** between logical sections inside a function (input validation, core logic, return). But if you need sections, the function is probably too long, refactor first.
-6. **One blank line** between top-level declarations (functions, classes, exported constants).
-7. **Group imports** with one blank line between groups: stdlib, third-party, first-party absolute, first-party relative. Never mix.
-8. **Trailing newline** at end of file. No trailing whitespace on any line.
-
----
-
-## 3. Error Management (One-Liner Digest)
-
-Full spec: `spec/03-error-manage/` and `spec/17-consolidated-guidelines/03-error-management.md`.
-
-- **Never swallow**: every `catch` logs with operation name + key inputs, then rethrows or returns a typed error.
-- **Wrap, do not lose**: `apperror.Wrap(err, "operation", context)` (Go), `throw new AppError(cause, {op, ctx})` (TS). Original stack must survive.
-- **Typed errors only**: no `throw "string"`, no `panic("msg")`. Use `AppError`/`apperror.Result[T]` with a registered code.
-- **Registered codes**: every user-visible error has an entry in `spec/03-error-manage/03-error-code-registry/`. No ad-hoc codes.
-- **Universal response envelope**: backend APIs return `{ data, errors[], meta }`. Frontend parses via a single `parseEnvelope()` helper.
-- **Log level matches severity**: `debug` (trace), `info` (lifecycle), `warn` (recoverable), `error` (user-visible failure), `fatal` (process-exit only).
-- **Context on every log**: operation name, request/session id, key input values (never secrets, never PII beyond user id).
-- **Verify both directions**: before declaring an integration works, curl the backend and inspect the frontend detection logic. Do not trust one side.
-- **Retrospective on repeats**: if the same error class hits twice, add a retrospective under `spec/03-error-manage/01-error-resolution/03-retrospectives/`.
-- **Frontend**: all captured errors flow through the global error store, then the error modal. No per-component alert boxes.
+1. Function length: 8 lines preferred, 15 lines hard cap. Skip blank lines and comments when counting. Waiver only via inline comment `// lint-allow: function-length reason="..." max=N`.
+2. No nested `if`. Flatten with early returns and guard clauses.
+3. `if` conditions must be positive and simple. No `!`, no double negatives. If you need a negation, extract a positively named boolean and use that.
+4. No swallowed errors. Every `catch` logs with context (operation name + key inputs) and then rethrows or handles explicitly. Silent `catch {}` is a build-fail.
+5. Narrow types only. No `any`, `unknown`, `interface{}`, `object`, `dynamic`, or other catch-all types. Exception: at trust boundaries (a `catch` block, external JSON, third-party libraries) narrow immediately with a type guard. `Generic<T>` is the only wide-scope tool.
+6. File size caps: any file 300 lines max, any React component file (.tsx) 100 lines max, any class or struct 120 lines max.
+7. No magic strings or numbers. Use an enum or a typed constant. Every comparison must be against a named symbol.
+8. Definitions live in dedicated files. Types, enums, constants, and interfaces get their own file, not inline next to the first use.
+9. DRY is priority one. Duplicate logic across two sites means extract it now, not later.
+10. Components stay small and reusable. For any feature with three or more components, produce a Mermaid component diagram first.
+11. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
+12. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
+13. Every commit that changes behavior bumps the version, updates the changelog, and updates the release notes.
 
 ---
 
-## 4. Data and Schema Rules
+## Boolean Naming
 
-1. Tables, types, entities: **PascalCase**.
-2. Fields/columns: **camelCase**.
-3. JSON keys: **PascalCase** (project convention).
-4. Primary key: `int auto-increment`, named `{TableName}Id`. No UUIDs.
-5. `Type`/`Status`/`Category`/`Kind` columns: use a 1-N or N-M join table with a registered enum. Never a free-form string column.
-6. Every entity/ref table: `Description TEXT NULL`. Every transactional table: `Notes TEXT NULL` + `Comments TEXT NULL`. All nullable, no `DEFAULT`. Join tables exempt.
-7. Default DB is SQLite. Prefer ORM. Define joins, PK, FK explicitly.
-8. Any DB-touching PR includes a Mermaid ERD.
-
----
-
-## 5. Language-Specific One-Liners
-
-- **Go**: `apperror.Result[T]` not `(T, error)`. `apperror.New`/`Wrap` not `fmt.Errorf`. `type X byte` + `iota` not string enums.
-- **TypeScript**: `Promise.all` for independent async, never sequential `await`. No `any`. `readonly` on interface fields by default.
-- **Rust**: prefer `Result<T, E>` with `thiserror`. `let` not `let mut` unless the mutation is the point.
-- **PHP**: enum comparison via `->isEqual()`, never `===`.
-- **PowerShell**: `Verb-Noun` PascalCase function names, `lowercase-kebab-case` filenames.
-- **C#**: `PascalCase` methods and properties, `_camelCase` private fields, `I`-prefix interfaces.
+1. Every boolean starts with one of these prefixes: `is`, `has`, `can`, `should`, `was`, `will`, `did`, `must`.
+2. Positive framing only. `isEnabled` yes, `isNotDisabled` no. `hasAccess` yes, `hasNoAccess` no.
+3. If the natural name is negative, invert it: replace `isNotReady` with `isReady` and flip the check site.
+4. State prefixes match tense: `is*` for current state, `has*` for possession or completion, `was*` for past state, `will*` for future/pending, `did*` for a completed action.
+5. Capability prefixes: `can*` for permission or feasibility, `should*` for policy or recommendation, `must*` for hard requirements.
+6. Never use `flag`, `bool`, `check`, or bare adjectives as boolean names. `enabled` alone is not allowed, use `isEnabled`.
+7. No boolean flag parameters on functions. Split into two named functions instead. `render(true)` is wrong, `renderExpanded()` and `renderCollapsed()` are right.
+8. Booleans that come back from questions to the user or from external systems get normalized to the same prefix rules at the boundary, never leak the raw name into internal code.
 
 ---
 
-## 6. Workflow
+## Line-Gap and Whitespace Style
 
-1. Read `spec/03-error-manage/` before writing any error path.
-2. Read the relevant `spec/NN-*` module before implementing a feature it covers.
-3. If you cannot find the spec, ask, do not invent.
-4. Plan multi-file features with a Mermaid component/flow diagram first.
-5. Run the linters locally: `linters-cicd/` covers file-length, function-length, boolean naming, magic strings, enum standards.
-6. Every commit that changes public behavior updates `CHANGELOG.md` + the relevant `spec/**/98-changelog.md`.
+1. One blank line before every `return` or `throw`, unless it is the only statement in the block.
+2. One blank line after a closing `}`, unless the next line is another `}`, `else`, `case`, or `catch`.
+3. Never two blank lines in a row anywhere.
+4. No blank line immediately after `{` or immediately before `}`.
+5. One blank line between top-level declarations (functions, classes, exported constants).
+6. Group imports with one blank line between groups: standard library, third-party, first-party absolute, first-party relative. Never mix groups.
+7. Trailing newline at end of file. No trailing whitespace on any line.
+8. If you feel the need for section-separator blank lines inside a single function, the function is too long. Refactor before adding whitespace.
 
 ---
 
-## 7. Change Protocol for This File
+## Error Management (One-Liner Digest)
 
-- Edit here first.
-- Update the mirror `.lovable/coding-guidelines/coding-guidelines.md` in the same commit.
-- Bump the version at the top.
-- Do not add rules that contradict the canonical size tier or the error-manage spec, patch those first.
+If this repository has a `spec/**/error-manage/` folder, that folder is binding and overrides any conflict here. Otherwise follow these rules directly.
+
+- Never swallow. Every `catch` logs the operation name and the key inputs, then rethrows or returns a typed error.
+- Wrap, do not lose. Wrap the original error with an operation label and context (`apperror.Wrap(err, "op", ctx)` in Go, `throw new AppError(cause, { op, ctx })` in TS). The original stack must survive.
+- Typed errors only. No `throw "string"`, no bare `panic("msg")`. Use a typed error class or result type with a registered code.
+- Registered codes. Every user-visible error has a stable code. No ad-hoc codes invented at the throw site.
+- Universal response envelope. Backend APIs return `{ data, errors[], meta }`. Frontend parses via one shared helper, never per-caller.
+- Log level matches severity. `debug` for trace, `info` for lifecycle, `warn` for recoverable, `error` for user-visible failure, `fatal` only for process exit.
+- Context on every log. Include operation name, request or session id, and key input values. Never secrets, never PII beyond a user id.
+- Verify both directions. Before claiming an integration works, curl the backend and inspect the frontend detection logic. One side is not enough.
+- Retrospective on repeats. If the same error class hits twice, write a short retrospective note explaining root cause and prevention.
+- Frontend errors flow through a global error store and a single error modal. No per-component alert boxes.
+
+---
+
+## Data and Schema Rules
+
+1. Tables, types, entities: PascalCase.
+2. Fields and columns: camelCase.
+3. JSON keys: PascalCase.
+4. Primary key: integer auto-increment, named `{TableName}Id`. No UUIDs.
+5. `Type`, `Status`, `Category`, `Kind` columns: use a 1-N or N-M join table with a registered enum. Never a free-form string column.
+6. Entity and reference tables: `Description TEXT NULL`. Transactional tables: `Notes TEXT NULL` and `Comments TEXT NULL`. All nullable, no `DEFAULT`. Join tables are exempt.
+7. Default database is SQLite. Prefer an ORM. Define joins, primary keys, and foreign keys explicitly.
+8. Any pull request that touches the database includes a Mermaid ERD.
+
+---
+
+## Language One-Liners
+
+- Go: use a result type, not `(T, error)`. Wrap errors with an operation label. Enums are `type X byte` plus `iota`, never string constants.
+- TypeScript: `Promise.all` for independent async, never sequential `await`. No `any`. `readonly` on interface fields by default.
+- Rust: `Result<T, E>` with a `thiserror`-style enum. `let` not `let mut` unless mutation is the point.
+- PHP: enum comparison via method call (`->isEqual()`), never `===`.
+- PowerShell: `Verb-Noun` PascalCase function names, `lowercase-kebab-case` filenames.
+- C#: PascalCase methods and properties, `_camelCase` private fields, `I`-prefix interfaces.
+- Python: `snake_case` functions and variables, `PascalCase` classes, type hints on every public function, `dataclass` or `pydantic` for structured records.
+
+---
+
+## Workflow
+
+1. Read the code before writing the fix. Find the root cause in one sentence.
+2. Apply the minimum correct fix. No drive-by refactors.
+3. Verify in the logs (or in a live run) that the fix works. Do not claim done based on the build passing alone.
+4. List every remaining task before ending the turn.
+5. Bump the version, update the changelog, update the release notes.
+6. Plan multi-file features with a Mermaid component or flow diagram first.
+7. If you cannot find the answer in this file or in an existing `spec/**/coding-guidelines/` or `spec/**/error-manage/` folder, ask. Do not invent.
