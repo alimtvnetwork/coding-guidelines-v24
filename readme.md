@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.62.0
+
+- **Print handout route (SS-02 task 9).** Append `?print` to the slides-app URL to render every slide stacked at native 1920x1080; then Cmd/Ctrl+P > Save as PDF produces a landscape handout that matches the on-screen design. New `PrintView` in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) plus `@page { size: 1920px 1080px; margin: 0 }` in [`slides-app/src/styles/slide.css`](slides-app/src/styles/slide.css). Enables offline review, distribution to non-technical stakeholders, and a future `slides-handout.pdf` release asset.
+
 ### What's new in v5.61.0
 
 - **Command palette (SS-02 task 11).** Press `Cmd/Ctrl+K` (or the new toolbar Search button) in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) to open a keyboard-first jump-to-slide overlay. Fuzzy match against slide `id`, `title`, `ruleId`, and `section`; arrow keys navigate; Enter opens; Escape closes. Result rows render `RuleBadge` severity pills so reviewers can visually scan Hard/Warn/Style rules while typing. Global shortcut bypasses the input-focus guard so it works from any context.
