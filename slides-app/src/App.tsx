@@ -901,6 +901,10 @@ function PrintView() {
             <div className="slide-content">
               <S />
             </div>
+            <div className="print-page-stamp" aria-hidden="true">
+              {String(i + 1).padStart(2, "0")} / {DECK.length}
+              {slide.ruleId ? ` · ${slide.ruleId}` : ""} · {slide.title}
+            </div>
           </section>
         );
       })}
