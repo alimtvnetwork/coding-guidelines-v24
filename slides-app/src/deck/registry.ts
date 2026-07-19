@@ -4,6 +4,7 @@ import TableOfContents from "../slides/01-table-of-contents";
 import MustFollow from "../slides/13-must-follow";
 import RootCauseFirst from "../slides/14-root-cause-first";
 import SpecFirstVsCodeFirst from "../slides/15-spec-first-vs-code-first";
+import CommentsLieCodeDoesNot from "../slides/16-comments-lie-code-does-not";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
