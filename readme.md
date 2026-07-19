@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.129.0
+
+- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
+- React rule #7 rewritten from one line into full guidance. Explains WHY mutation breaks React (reconciler uses referential inequality), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`), when to reach for `structuredClone` (deep copies), when Immer is acceptable, and the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
+
 ### What's new in v5.128.0
 
 - Self-tests for the v5.127 `branch-protection:diff` and `:soak` wrappers. `scripts/tests/branch-protection-diff.test.mjs` (12 assertions on set-diff logic incl. duplicates + mixed drift) and `scripts/tests/branch-protection-soak.test.mjs` (10 assertions locking the READY >=0.95 / WATCH >=0.80 / NOT READY thresholds + `sampleSize=0 => NO DATA`). Wired as `lint-ci.sh` steps 21+22 and inside CI `sync-drift`, with mirror-drift guard enforcing both.
