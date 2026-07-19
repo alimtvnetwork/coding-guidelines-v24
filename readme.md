@@ -1525,6 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.50.0
+
+- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
+- **New scripts:** `npm run sync:guidelines` (write) and `npm run sync:guidelines:check` (verify, non-zero exit on drift). Closes Plan SS-01 step 4.
+
 ### What's new in v5.49.0
 
 - **Slides deck now ships with every release** — `scripts/release.mjs` auto-installs `slides-app/` dependencies (via `bun` when available, else `npm`) and runs `bun run build`, producing `slides-app/dist/` + `dist.zip` (0.95 MB) on every `npm run release`. Opt out with `--skip-slides`. Executes Plan SS-01 step 3 and the captured user command at [`.lovable/spec/commands/01-slides-attached-to-release.md`](.lovable/spec/commands/01-slides-attached-to-release.md).
