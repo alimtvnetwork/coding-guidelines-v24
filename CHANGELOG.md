@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.101.0] - 2026-07-19
+
+### Changed: SS-02 task 48: ERD required on DB PRs (SCHEMA-006)
+
+- New slide `slides-app/src/slides/46-erd-required-on-db-prs.tsx` registered as `SCHEMA-006` (hard) in `data-schema`. Before/after contrasts a PR with 62 lines of raw DDL and no picture against the same PR shipping `docs/erd/referral.mmd` with cardinality, FK direction, and narrative columns visible.
+- Enforcement path: required CI check `erd-required` parses the diff for `migrations/**`, `**/db/schema/**`, `**/*.sql`, extracts every added/altered table, and fails when any is missing from `docs/erd/**.mmd` or when a listed `.mmd` fails to render via `mermaid-cli`. Violations log `erd.required.missing` with `{ pr, table, migrationFile }`.
+- Cites spec/17/31 line 93 (Data & Schema rule 8).
+- Validator confirms 48 slides follow Symptom/Rule/Action.
+
 ## [5.100.0] - 2026-07-19
 
 ### Changed: SS-02 task 47: SQLite default + ORM + explicit joins/PK/FK (SCHEMA-005)

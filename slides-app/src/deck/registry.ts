@@ -34,6 +34,7 @@ import TableIdPks from "../slides/42-table-id-pks";
 import JoinTableNaming from "../slides/43-join-table-naming";
 import NullableNarrativeColumns from "../slides/44-nullable-narrative-columns";
 import SqliteOrmExplicitJoins from "../slides/45-sqlite-orm-explicit-joins";
+import ErdRequiredOnDbPrs from "../slides/46-erd-required-on-db-prs";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -155,6 +156,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "43-join-table-naming", title: "Join tables · {A}{B} name, composite ({A}Id, {B}Id) PK, no surrogate", section: "data-schema", severity: "hard", ruleId: "SCHEMA-003", tags: ["join table", "many-to-many", "composite key", "enum", "status", "type", "category"], component: JoinTableNaming },
   { id: "44-nullable-narrative-columns", title: "Narrative columns · Description / Notes / Comments, NULL, no DEFAULT", section: "data-schema", severity: "hard", ruleId: "SCHEMA-004", tags: ["description", "notes", "comments", "nullable", "default", "freetext", "linter"], component: NullableNarrativeColumns },
   { id: "45-sqlite-orm-explicit-joins", title: "SQLite default · ORM required · explicit PK/FK/JOIN, no raw SQL strings", section: "data-schema", severity: "hard", ruleId: "SCHEMA-005", tags: ["sqlite", "orm", "drizzle", "gorm", "join", "foreign key", "raw sql"], component: SqliteOrmExplicitJoins },
+  { id: "46-erd-required-on-db-prs", title: "ERD required · every DB PR ships a Mermaid diagram, no diagram no merge", section: "data-schema", severity: "hard", ruleId: "SCHEMA-006", tags: ["erd", "mermaid", "pr review", "cardinality", "ci gate", "docs/erd"], component: ErdRequiredOnDbPrs },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
