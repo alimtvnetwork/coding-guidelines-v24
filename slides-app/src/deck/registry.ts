@@ -52,6 +52,8 @@ import TestPyramid from "../slides/60-test-pyramid";
 import PrTemplate from "../slides/61-pr-template";
 import ReleaseCeremony from "../slides/62-release-ceremony";
 import Dashboards from "../slides/63-dashboards";
+import AlertRules from "../slides/64-alert-rules";
+import Runbooks from "../slides/65-runbooks";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
