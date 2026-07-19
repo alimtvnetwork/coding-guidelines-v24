@@ -11,6 +11,7 @@ import TrustBoundariesTeaser from "../slides/19-trust-boundaries-teaser";
 import BackupTierFreeze from "../slides/20-backup-tier-freeze";
 import DbSchemaNaming from "../slides/21-db-schema-naming";
 import ZeroUnderscoreAcronyms from "../slides/22-zero-underscore-acronyms";
+import BooleanNaming from "../slides/23-boolean-naming";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -107,6 +108,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "01-naming", title: "Naming conventions", section: "naming", severity: "hard", ruleId: "NAM-001", tags: ["pascalcase", "camelcase", "identifiers", "acronyms"], component: Naming },
   { id: "21-db-schema-naming", title: "DB schema naming · PascalCase entities, camelCase fields, {Table}Id PKs", section: "naming", severity: "hard", ruleId: "NAM-002", tags: ["database", "schema", "pascalcase", "camelcase", "primary key", "uuid"], component: DbSchemaNaming },
   { id: "22-zero-underscore-acronyms", title: "Zero underscores · acronyms stay UPPERCASE", section: "naming", severity: "hard", ruleId: "NAM-003", tags: ["underscore", "acronym", "uppercase", "http", "url", "json", "api"], component: ZeroUnderscoreAcronyms },
+  { id: "23-boolean-naming", title: "Boolean naming · is/has/can/should, positive only", section: "naming", severity: "hard", ruleId: "BOOL-002", tags: ["boolean", "is", "has", "can", "should", "positive framing", "negation"], component: BooleanNaming },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
