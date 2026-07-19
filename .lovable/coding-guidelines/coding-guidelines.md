@@ -1,6 +1,6 @@
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-Version: 1.3.0
+Version: 1.4.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
 
@@ -105,7 +105,11 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 7. Never mutate state, props, or arrays/objects returned by hooks. Build a new value with spread or `structuredClone`.
 8. Lists must have stable, unique `key` props derived from data, never the array index unless the list is truly static.
 9. Keep component files under 100 lines. Extract child components, hooks, and helpers into their own files before the component grows.
-10. Custom hooks start with `use`, return a stable object or tuple, and never call other hooks conditionally.
+10. Custom hooks start with `use`, return a named object type (never a bare tuple), and never call other hooks conditionally.
+11. No tuples as public shapes. Tuples signal laziness. Every hook return, component prop bundle, reducer state, reducer action, context value, and function argument bag gets an explicit named `type` or `interface`. Rule of thumb: if a value has two or more fields or gets destructured at the call site, it needs a name. `useUser(): [User, boolean, Error]` is wrong, `useUser(): UserQueryResult` with `{ user, isLoading, error }` is right.
+12. Name every generic parameter and every composite type. `Map<string, Array<{ id: number; name: string }>>` inline is wrong. Define `type UserId = string; type UsersById = Map<UserId, User[]>` and use that. Generic parameters get meaningful names (`TItem`, `TKey`, `TResponse`), never bare `T`, `U`, `K`, `V` in application code.
+13. Prop types and event handler types live in a dedicated `types.ts` next to the component (or in `src/types/` when shared). Never inline anonymous object types on a component signature. `({ user, onSave }: { user: User; onSave: (u: User) => void })` is wrong, extract `type ProfileCardProps = { user: User; onSave: (next: User) => void }`.
+14. As the author (human or AI), invent the clearest domain name for each type. If you cannot name it, you do not understand it yet. Split until you can.
 
 ---
 
