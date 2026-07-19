@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Maximize, Grid3x3, Presentation, Sun, Moon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ScaledSlide } from "./components/ScaledSlide";
-import { DECK } from "./deck";
+import { RuleBadge, type RuleSeverity } from "./components/RuleBadge";
+import { DECK, SECTIONS, groupBySection, type SlideSection } from "./deck";
 
 type View = "deck" | "grid" | "presenter";
 
