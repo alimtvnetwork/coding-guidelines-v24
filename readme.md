@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.66.0
+
+- **Dark + light mode WCAG AA contrast audit (SS-02 task 14).** New [`slides-app/scripts/contrast-audit.mjs`](slides-app/scripts/contrast-audit.mjs) parses `tokens.css` for both themes, computes WCAG 2.1 contrast ratios for 9 fg/bg pairs each, and fails on any violation. Wired as `npm run slides:contrast-audit`. First run caught `--accent` at 2.47:1 on light bg; fixed by darkening light-theme accent to `160 84% 30%` (now 4.02:1). All 18 pairs pass AA.
+
 ### What's new in v5.65.0
 
 - **Sub-step URL coordinate (SS-02 task 10).** Hash routing in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) now understands `#/id/<slide-id>/<step>`. `next`/`prev` step through reveals before advancing slides, and reloading mid-reveal preserves the exact state. New [`slides-app/src/lib/step-context.ts`](slides-app/src/lib/step-context.ts) exposes `useSlideStep()` for slides to drive bullet/diff visibility from URL state; slides opt in by declaring `steps: N` in the deck registry. Completes the URL-as-state trio: slide id + step + view.
