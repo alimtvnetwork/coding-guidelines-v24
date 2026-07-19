@@ -1,6 +1,6 @@
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-Version: 1.2.0
+Version: 1.3.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
 
@@ -109,7 +109,53 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 
 ---
 
-## Language One-Liners
+## Method Documentation (When To Write, When Not To)
+
+Must-follow rule: simple methods do NOT require documentation. Do not write verbose comments. Comments lie, code does not. Names and signatures are the primary documentation. If you feel the need to explain what a method does in prose, first rename it or split it until the code explains itself.
+
+Write a method doc comment ONLY when one of these is true, and even then the preferred fix is to refactor so the doc becomes unnecessary:
+
+1. The method does many non-obvious things that could not be expressed in the name. This is a smell, refactor first. Only if refactoring is genuinely impossible, document.
+2. The method processes or transforms data where a one-line example clarifies the contract. Example: Go `path.Clean` performs path cleaning and normalization, a short example is worth more than prose.
+3. The code is adapted or copied from an external source. Citation (URL plus license note) is mandatory.
+4. The team runs automated doc generation (godoc, TypeDoc, phpDocumentor). In that case exported APIs get a one-liner so the generated docs are usable.
+
+Never write a doc that restates the signature ("Returns the user by id" on `getUser(id)`). That is a review-blocking violation.
+
+Go reference (doc comment starts with the identifier, no blank line between doc and declaration): https://go.dev/src/go/doc/example.go
+
+Go example (canonical, applies conceptually to every language, only comment syntax changes):
+
+```go
+// AVOID: verbose prose that repeats the code
+// GetUser gets a user by id and returns it, or an error.
+func GetUser(id int64) (User, error) { ... }
+
+// AVOID: doc on a trivially named simple method
+// Add adds a and b.
+func Add(a, b int) int { return a + b }
+
+// OK: exported, non-trivial behavior, with a brief example.
+// Clean returns the shortest path name equivalent to path by purely
+// lexical processing. Rules applied iteratively:
+//   1. Replace multiple slashes with a single slash.
+//   2. Eliminate each . path name element.
+//   3. Eliminate each inner .. path name element.
+func Clean(path string) string { ... }
+```
+
+Decision checklist before writing any doc comment:
+
+1. Can I rename the method so the doc becomes redundant? If yes, rename and skip the doc.
+2. Can I split the method so each piece is trivially named? If yes, split and skip the doc.
+3. Does the doc restate the signature or parameter names? If yes, delete it.
+4. Does the doc explain WHY (business rule, ordering constraint, cited source) or provide a short example that clarifies the contract? If yes, keep it, one or two lines.
+5. Does the team run automated doc generation? If yes, one-liner on exported APIs is acceptable.
+
+The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only the comment syntax changes.
+
+---
+
 
 - Go: use a result type, not `(T, error)`. Wrap errors with an operation label. Enums are `type X byte` plus `iota`, never string constants.
 - TypeScript: `Promise.all` for independent async, never sequential `await`. No `any`. `readonly` on interface fields by default.
