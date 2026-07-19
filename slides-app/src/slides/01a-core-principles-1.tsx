@@ -11,6 +11,7 @@ export default function CorePrinciples1Slide() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, marginTop: 16 }}>
         <PrincipleCard
           number="01"
+          progressId="01a-core-principles-1#01"
           title="Zero-Nesting Discipline"
           symptom="Logic buried 3+ levels deep. Reviewers scroll past every error case to find the happy path."
           rule="No nested if-else. Each precondition exits early with its own guard. One indentation level per body."
@@ -20,6 +21,7 @@ export default function CorePrinciples1Slide() {
         />
         <PrincipleCard
           number="02"
+          progressId="01a-core-principles-1#02"
           title="Two-Operand Maximum"
           symptom="Boolean expressions with 3+ operands force reviewers to mentally evaluate the truth table."
           rule="At most two operands per boolean. Extract the third into a positively named guard function."
