@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Compass, CheckCircle2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { ReviewCheckbox } from "@/components/ReviewCheckbox";
+import type { ProgressBlock } from "@/lib/progress";
 
 export interface ActionPanelProps {
   symptom: string;
   rule: string;
   doThis: string;
+  /** When set, each card shows a "Reviewed" checkbox persisted per block. */
+  slideId?: string;
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const;
