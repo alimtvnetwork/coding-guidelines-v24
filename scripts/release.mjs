@@ -167,11 +167,28 @@ function uploadSlidesAsset(args, nextVersion) {
 }
 
 
+function preflight(args) {
+  // Fast-fail before the bump so a broken SS-02 slide or stale guideline
+  // mirror does not end up in a tagged release.
+  console.log("→ preflight: sync-guidelines --check");
+  const g = spawnSync("node", ["scripts/sync-guidelines.mjs", "--check"], { cwd: ROOT, stdio: "inherit" });
+  if (g.status !== 0) fail(2, "preflight: guideline drift — run `node scripts/sync-guidelines.mjs` and commit.");
+  console.log("→ preflight: validate-slides-sra");
+  const s = spawnSync("node", ["scripts/validate-slides-sra.mjs"], { cwd: ROOT, stdio: "inherit" });
+  if (s.status !== 0) fail(2, "preflight: SS-02 SRA validator failed — fix slides before releasing.");
+  if (!args.skipSlides) {
+    console.log("→ preflight: slides-app typecheck (tsc -b)");
+    const t = spawnSync("bun", ["run", "-b", "tsc", "-b"], { cwd: resolve(ROOT, "slides-app"), stdio: "inherit" });
+    if (t.status !== 0) fail(2, "preflight: slides-app typecheck failed — fix before releasing.");
+  }
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const current = readCurrentVersion();
   const next = resolveTargetVersion(args);
   console.log(`\n=== Release ceremony: ${current} → ${next} (${args.tier ?? "explicit"}) ===\n`);
+  preflight(args);
   runBump(args, next);
   maybeAggregatePrompts();
   buildSlidesDeck(args);
