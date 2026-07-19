@@ -7,14 +7,22 @@ Turn a passing workflow into a merge blocker on `main`. Backlog item 1 (promote 
 - Repo admin permission on GitHub.
 - `gh` CLI logged in as an admin: `gh auth status`.
 - The workflow has been green on `main` for at least one full release cycle. Promoting a flaky check blocks every PR.
+- **Readiness gate (v5.128+):** run `npm run branch-protection:soak` and confirm the target check reports `READY` (pass rate >=95% over the last 20 runs on `main`). Do NOT promote a `WATCH` or `NOT READY` check. If output is `NO DATA`, the workflow has not run on `main` at all; trigger a run first.
 
 ## Procedure
+
+0. Confirm the target check is stable.
+   ```bash
+   npm run branch-protection:soak
+   ```
+   Every desired entry must print `READY`. If any prints `WATCH` / `NOT READY` / `NO DATA`, stop and fix that first, do not promote.
 
 1. Regenerate the machine-readable payload from the checked-in expectation file.
    ```bash
    node scripts/print-required-checks.mjs --json
    ```
    Copy the `contexts` array from the output.
+
 
 2. Add the new check name to `.github/branch-protection.expected.json` under `required`, and remove it from `desired-but-not-yet-required` if present. Commit that change with the same PR that flips branch protection.
 
