@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.60.0
+
+- **Keyboard shortcut help overlay (SS-02 task 10).** Press `?` (or `H`, or the new toolbar `?` button) in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) to open a modal listing all 8 shortcut families: arrows/space/PgDn/PgUp, Home/End, G, P, F, ?/H, Esc. Escape closes the overlay first, then falls back to view reset. The 9 shortcuts that were bound since v1 but hidden from first-time viewers are finally discoverable.
+
 ### What's new in v5.59.0
 
 - **Stable id-based slide URLs (SS-02 task 7).** [`slides-app/src/App.tsx`](slides-app/src/App.tsx) now reads and writes `#/id/<slide-id>` as the preferred hash form; legacy `#/<index>` still resolves so existing bookmarks keep working. Unknown ids fall back to slide 0 with a `console.warn`. [`01-table-of-contents.tsx`](slides-app/src/slides/01-table-of-contents.tsx) emits id links for all entries and the prev/next chrome. Shared TOC links, screenshot captions, and bug-report URLs now survive future content reorderings.
