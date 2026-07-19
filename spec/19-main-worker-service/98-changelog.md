@@ -4,6 +4,13 @@
 
 ---
 
+## v5.50.0 — 2026-07-19 (sync-guidelines generator: file 31 as single source of truth (Plan SS-01 step 4))
+
+**Scope:** Version bump (`5.49.0` → `5.50.0`). sync-guidelines generator: file 31 as single source of truth (Plan SS-01 step 4).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.49.0 — 2026-07-19 (Wire slides-app build into release ceremony (Plan SS-01 step 3))
 
 **Scope:** Version bump (`5.48.1` → `5.49.0`). Wire slides-app build into release ceremony (Plan SS-01 step 3).
