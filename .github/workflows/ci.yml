@@ -556,10 +556,27 @@ jobs:
         # readme UPDATED stamp), and prints the exact `npm run sync`
         # command operators must run on failure.
         #
+        # --report writes drift.json + drift.md to /tmp/sync-drift-report
+        # on BOTH success and failure so the artifact upload below always
+        # has something to publish (empty report on clean runs, full
+        # unified diffs on drift). Exit code is preserved.
+        #
         # Local fix workflow:
         #   npm run sync:fix      # regenerate everything in place
         #   git add -A && git commit -m "chore: sync generated files"
-        run: npm run sync:check
+        run: node scripts/sync-check.mjs --report /tmp/sync-drift-report && node scripts/sync-guidelines.mjs --check
+
+      - name: Append drift report to GitHub step summary
+        if: always() && hashFiles('/tmp/sync-drift-report/drift.md') != ''
+        run: cat /tmp/sync-drift-report/drift.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload sync drift report (JSON + Markdown)
+        if: always() && hashFiles('/tmp/sync-drift-report/drift.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-drift-report
+          path: /tmp/sync-drift-report/
+          if-no-files-found: ignore
 
       - name: Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)
         # Mirror of scripts/lint-ci.sh step 14. Uses node built-ins only,

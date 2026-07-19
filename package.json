@@ -13,6 +13,7 @@
     "sync:guidelines": "node scripts/sync-guidelines.mjs",
     "sync:guidelines:check": "node scripts/sync-guidelines.mjs --check",
     "sync:check": "node scripts/sync-check.mjs && node scripts/sync-guidelines.mjs --check",
+    "sync:check:report": "node scripts/sync-check.mjs --report /tmp/sync-drift-report",
     "version:bump": "node scripts/bump-version.mjs",
     "postversion": "npm run sync",
     "validate:version": "node scripts/validate-version-json.mjs",
