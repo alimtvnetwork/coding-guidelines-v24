@@ -283,10 +283,11 @@ const maxFunctionLines = {
     function check(node) {
       const count = countEffectiveBodyLines(node, src);
       if (count === null) return;
-      if (count > maxL) {
-        const name = resolveFunctionName(node);
-        context.report({ node, messageId: "tooLong", data: { name, actual: count, max: maxL } });
-      }
+      if (count <= maxL) return;
+      const waiver = findWaiverFor(node, src, "max-function-lines");
+      if (waiver && (waiver.max === null || count <= waiver.max)) return;
+      const name = resolveFunctionName(node);
+      context.report({ node, messageId: "tooLong", data: { name, actual: count, max: maxL } });
     }
 
     return { FunctionDeclaration: check, FunctionExpression: check, ArrowFunctionExpression: check };
