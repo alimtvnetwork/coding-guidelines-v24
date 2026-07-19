@@ -1525,6 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.54.0
+
+- **A11y badge in GitHub Release notes (SS-02 task 63)** — [`.github/workflows/release.yml`](.github/workflows/release.yml) resolves the [`slides-smoke.yml`](.github/workflows/slides-smoke.yml) workflow conclusion for the release SHA via `gh run list`, then injects a badge at the top of the release body: green `a11y: WCAG 2.1 AA clean` on success, red on failure, grey `not verified` when no run exists yet. Badge links to the workflow run. Consumers of `slides-deck.zip` now see the accessibility signal without leaving the release page.
+- Root cause fixed: prior releases published `slides-deck.zip` with zero visible a11y provenance despite the axe-core scan running in CI. The badge closes the "was this checked?" gap for every future tag.
+
 ### What's new in v5.52.0
 
 - **Slides deck ships as a downloadable release asset** — [`scripts/release.mjs`](scripts/release.mjs) now uploads `slides-app/dist.zip` as `slides-deck.zip` on release tag `v<X.Y.Z>` via `gh release upload ... --clobber`. Missing/unauthenticated `gh` prints the exact manual command instead of failing (release ceremony stays green). New flag: `--skip-slides-upload`. Closes Plan SS-01 step 6.
