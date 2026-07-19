@@ -5,6 +5,22 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.120.0] - 2026-07-19
+
+### Added — `lint-ci.sh` ↔ `ci.yml` drift guard (`scripts/check-lint-ci-drift.mjs`)
+
+- Parses `.github/workflows/ci.yml` step names and the `STEPS=()` registry in `scripts/lint-ci.sh`. Matches on stem (prefix before the first ` (`) so `Run Python validator (spec)` in ci.yml matches `Run Python validator (spec, advisory)` in the local script. Reports both directions: missing mirrors AND stale ignores (entries in `IGNORED_CI_STEPS` no longer present in ci.yml).
+- Wired as step 16 in `scripts/lint-ci.sh` so `bun run lint:ci` and the `.husky/pre-push` mirror both catch drift before push.
+- `IGNORED_CI_STEPS` map documents 37 infra/off-scope CI steps (checkout, setup, cache, upload, installer-tests job, runner-guard job, codegen job) with a one-line reason each. Adding a new lint step to ci.yml now REQUIRES either a matching `STEPS[]` entry or an explicit ignore with reason.
+
+### Added — Sandbox visual-bake recipe (`slides-app/docs/visual-baseline-sandbox-recipe.md`)
+
+- Documents the `LD_LIBRARY_PATH` resolution used in v5.119 to bake 70 baselines inside the Lovable sandbox (nix-store `libglib-2.0.so.0` + `libX11.so.6` + brute-scan of `/nix/store/*/lib` for the ~40 transitive Chromium deps). Explains why the recipe stays out of `slides:bake-baselines` (would mask real "chromium missing" errors on dev machines/CI). Adds `slides:bake-baselines:help` npm alias.
+
+### Removed — Stale TODO in `scripts/lint-ci.sh:9-11`
+
+- The v5.115 comment claiming "a drift check in CI itself is left as a follow-up" replaced with a pointer to step 16. Root cause of the TODO living this long: no ticket, no owner.
+
 ## [5.119.0] - 2026-07-19
 
 ### Added — Initial 70-slide visual baseline set
