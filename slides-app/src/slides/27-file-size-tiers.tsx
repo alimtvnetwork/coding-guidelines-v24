@@ -89,7 +89,7 @@ export default function FileSizeTiersSlide() {
       <ActionPanel
         slideId="27-file-size-tiers"
         symptom="A .tsx file grows to 340 lines with 6 hooks, 4 handlers, and nested subcomponents. Reviewers scroll past the diff because it no longer fits one screen; regressions land because nobody spots the state coupling."
-        rule="Any file 300 lines max. Any React .tsx 100 lines max. Any class or struct 120 lines max. The tightest applicable cap wins. Waiver only via inline `lint-allow: file-length reason=\"...\" max=N` and only for generated fixtures or one-shot data tables. Per spec/17/31 line 30."
+        rule="Any file 300 lines max. Any React .tsx 100 lines max. Any class or struct 120 lines max. The tightest applicable cap wins. Waiver only via inline `lint-allow: file-length reason='...' max=N` and only for generated fixtures or one-shot data tables. Per spec/17/31 line 30."
         doThis="When a .tsx passes 100 lines, extract child components into siblings, move hooks into `useXxx.ts` under a colocated `hooks/` folder, and move pure helpers into `.ts` modules. When a class passes 120, extract collaborators; do not inline more methods. When any file passes 300, split by concern before merging."
       />
     </SlideLayout>

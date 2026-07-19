@@ -73,7 +73,7 @@ export default function FunctionLengthSlide() {
         <ActionPanel
           slideId="28-function-length"
           symptom="A function grows to 40 lines mixing pricing, invoicing, email, and persistence. Reviewers cannot hold it in their head; a bug fix in one branch silently breaks another. Nobody notices the length because the file compiles fine."
-          rule="8 lines preferred, 15 lines hard cap, counting only executable statements (skip blank lines and comment lines). Extract cohesive blocks into named helpers. The only escape is an inline waiver on the line above the signature using the exact form `// lint-allow: function-length reason=\"...\" max=N` with a real reason and an explicit max. Per spec/17/31 line 25."
+          rule="8 lines preferred, 15 lines hard cap, counting only executable statements (skip blank lines and comment lines). Extract cohesive blocks into named helpers. The only escape is an inline waiver on the line above the signature using the exact form `// lint-allow: function-length reason='...' max=N` with a real reason and an explicit max. Per spec/17/31 line 25."
           doThis="When a function passes 15, split it around its verbs: pricing, formatting, side effects. Give each helper an intention-revealing name so the orchestrator reads like a paragraph. Use the waiver only for genuinely irreducible cases (dispatch tables, generated code), never for `it's clearer this way`."
         />
       </div>
