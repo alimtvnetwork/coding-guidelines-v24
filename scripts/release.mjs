@@ -120,13 +120,18 @@ function buildSlidesDeck(args) {
   if (args.skipSlides) { console.log("→ skip slides-app build (--skip-slides)"); return; }
   const slidesDir = resolve(ROOT, "slides-app");
   if (!existsSync(slidesDir)) return;
-  if (args.dryRun) { console.log("→ (dry-run) would run: bun run build (slides-app)"); return; }
-  console.log("→ slides-app: bun run build (compiles deck + packages dist.zip)");
-  const runner = existsSync(resolve(ROOT, "bun.lockb")) || existsSync(resolve(ROOT, "slides-app/bun.lockb")) ? "bun" : "npm";
-  const cmdArgs = runner === "bun" ? ["run", "build"] : ["run", "build"];
-  const res = spawnSync(runner, cmdArgs, { cwd: slidesDir, stdio: "inherit" });
+  if (args.dryRun) { console.log("→ (dry-run) would run: bun install && bun run build (slides-app)"); return; }
+  const runner = spawnSync("bun", ["--version"], { stdio: "ignore" }).status === 0 ? "bun" : "npm";
+  if (!existsSync(resolve(slidesDir, "node_modules"))) {
+    console.log(`→ slides-app: ${runner} install (node_modules missing)`);
+    const inst = spawnSync(runner, ["install"], { cwd: slidesDir, stdio: "inherit" });
+    if (inst.status !== 0) fail(2, "slides-app dependency install failed");
+  }
+  console.log(`→ slides-app: ${runner} run build (compiles deck + packages dist.zip)`);
+  const res = spawnSync(runner, ["run", "build"], { cwd: slidesDir, stdio: "inherit" });
   if (res.status !== 0) fail(2, "slides-app build failed (run `cd slides-app && bun run build` to reproduce)");
 }
+
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
