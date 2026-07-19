@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.116.0
+
+- Visual regression coverage matches the deck. `slides-app/tests/visual.spec.ts` now derives `SLIDE_COUNT` from `DECK.length` in `src/deck/registry.ts` instead of the hardcoded `17` that only covered 24 percent of the 70 real slides; new slides get baseline coverage automatically on the next `--update-snapshots` run, and the "hardcoded count drifts silently" class of bug is closed.
+- Version drift auto-close. `package.json` gains a `postversion` hook that runs `npm run sync` after any `npm version` bump, regenerating `version.json`, `public/health-score.json`, `src/data/specTree.json`, and readme stamps in the same commit window. This closes the recurring cause behind CI/CD Issue 06 (drift after bump) at its root rather than relying on the human to remember `npm run sync`.
+
 ### What's new in v5.115.0
 
 - Slides deck ships again. Fixed `slides-app/src/slides/59-a11y-floor.tsx` where the `rule` prop was a plain-string JSX attribute containing `\"alt=\\"\\"\"` escapes: JSX does not parse `\"` inside `"..."` attributes, so the parser closed the value on the first inner quote and downstream tokens exploded (TS1127 at col 735, TS1382 at col 10). Root cause: the slide was authored with backslash-escaped quotes as if it were a JS string literal, not a JSX attribute. Fix: switched `rule` to a template literal `rule={`...`}` and rewrote the escaped quotes as bare `""`. Same commit adds the missing `"structure"` id to `SlideSection` union in `slides-app/src/deck/registry.ts` plus a matching `SECTIONS` entry ("Code Structure — Line-gaps, file/function size, DRY, immutability") so slides 26-33 (STYLE-001, SIZE-001, FUNC-001, IMMUT-001, DEF-001, DRY-001, COMP-001, ASSET-001) type-check against the section literal.
