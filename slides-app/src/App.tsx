@@ -205,6 +205,9 @@ export default function App() {
         >
           {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
         </button>
+        <button onClick={() => setHelpOpen((v) => !v)} title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
+          <HelpCircle size={14} /> ?
+        </button>
       </div>
 
       <div className="nav-pill">
@@ -213,6 +216,90 @@ export default function App() {
           {String(index + 1).padStart(2, "0")} / {String(DECK.length).padStart(2, "0")}
         </span>
         <button onClick={next} aria-label="Next">→</button>
+      </div>
+
+      {helpOpen ? <HelpOverlay onClose={() => setHelpOpen(false)} /> : null}
+    </div>
+  );
+}
+
+const SHORTCUTS: readonly { keys: string; label: string }[] = [
+  { keys: "→ / Space / PgDn", label: "Next slide" },
+  { keys: "← / PgUp", label: "Previous slide" },
+  { keys: "Home / End", label: "First / last slide" },
+  { keys: "G", label: "Toggle grid overview" },
+  { keys: "P", label: "Toggle presenter view" },
+  { keys: "F", label: "Toggle fullscreen" },
+  { keys: "? / H", label: "Toggle this help" },
+  { keys: "Esc", label: "Close overlay or return to deck" },
+];
+
+function HelpOverlay({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Keyboard shortcuts"
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0, 0, 0, 0.65)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "hsl(var(--slide-bg, 222 47% 11%))",
+          color: "hsl(var(--slide-fg, 210 40% 98%))",
+          border: "1px solid rgba(148, 163, 184, 0.35)",
+          borderRadius: 16,
+          padding: "28px 32px",
+          minWidth: 460,
+          maxWidth: 560,
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <h2 style={{ margin: 0, fontSize: 20, letterSpacing: "-0.01em" }}>Keyboard shortcuts</h2>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{ background: "transparent", border: 0, color: "inherit", cursor: "pointer", padding: 4 }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 10 }}>
+          {SHORTCUTS.map((s) => (
+            <li
+              key={s.keys}
+              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24 }}
+            >
+              <span style={{ fontSize: 14, opacity: 0.85 }}>{s.label}</span>
+              <kbd
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 12,
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  background: "rgba(148, 163, 184, 0.15)",
+                  border: "1px solid rgba(148, 163, 184, 0.3)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {s.keys}
+              </kbd>
+            </li>
+          ))}
+        </ul>
+        <p style={{ marginTop: 18, marginBottom: 0, fontSize: 12, opacity: 0.6 }}>
+          Press <kbd style={{ fontFamily: "var(--font-mono)" }}>?</kbd> or <kbd style={{ fontFamily: "var(--font-mono)" }}>Esc</kbd> to close.
+        </p>
       </div>
     </div>
   );
