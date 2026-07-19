@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.110.0] - 2026-07-19
+
+### Added — SS-02 tasks 62-63: WF-003 test pyramid, WF-004 PR template (Workflow chapter continues)
+
+- Slide 60 `slides-app/src/slides/60-test-pyramid.tsx` (`WF-003`, hard). Unit-heavy (80 percent, ms), integration-thin (15 percent, s), e2e-minimal (5 percent, tens of s). CI enforces per-layer timers, `test:e2e` capped at 10 percent of total specs by `scripts/report-test-shape.mjs`, pricing/auth/schema require 100 percent line coverage.
+- Slide 61 `slides-app/src/slides/61-pr-template.tsx` (`WF-004`, hard). `.github/pull_request_template.md` becomes the merge gate: linked issue, one-sentence root cause before fix, WF-003 test layer, SCHEMA-006 ERD when DB touched, A11Y-001 keyboard + axe when UI touched, CHANGELOG entry, no swallowed errors (ERR-001/002), size caps (SIZE-001/REACT-007), no placeholder types (REACT-012). Enforced by `pr-template-check` action + `danger.js`; waivers logged to `docs/waivers.md`.
+- Both slides registered in `slides-app/src/deck/registry.ts` under section `workflow`.
+- SRA validator green (63 slides). Fixed one structural false-negative in slide 61 by rewording an `->` occurrence that broke the regex tag boundary.
+
 ## [5.109.0] - 2026-07-19
 
 ### Added — SS-02 tasks 60-61: REACT-012 name-or-split, A11Y-001 accessibility floor (Section H opener)
