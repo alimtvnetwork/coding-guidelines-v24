@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.128.0
+
+- Self-tests for the v5.127 `branch-protection:diff` and `:soak` wrappers. `scripts/tests/branch-protection-diff.test.mjs` (12 assertions on set-diff logic incl. duplicates + mixed drift) and `scripts/tests/branch-protection-soak.test.mjs` (10 assertions locking the READY >=0.95 / WATCH >=0.80 / NOT READY thresholds + `sampleSize=0 => NO DATA`). Wired as `lint-ci.sh` steps 21+22 and inside CI `sync-drift`, with mirror-drift guard enforcing both.
+- `.lovable/procedures/branch-protection.md`: `npm run branch-protection:soak` is now a required precondition (step 0) before the promotion ceremony, and `npm run branch-protection:diff` replaces the raw `gh api ... --jq '.contexts'` eyeball diff in step 4. Ceremony is now: soak READY -> edit expected.json -> patch protection -> diff OK -> `--check` OK.
+
 ### What's new in v5.127.0
 
 - `npm run branch-protection:diff` compares LIVE `main` required_status_checks against `.github/branch-protection.expected.json` in one command (uses `gh api`, read-only, exits 1 on drift). Turns the post-promotion verification step from an eyeball diff into a machine check.
