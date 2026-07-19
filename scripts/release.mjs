@@ -37,6 +37,7 @@ function parseArgs(argv) {
     target: "both",
     dryRun: false,
     skipSlides: false,
+    skipSlidesUpload: false,
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -46,8 +47,9 @@ function parseArgs(argv) {
     else if (a === "--target") out.target = argv[++i];
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--skip-slides") out.skipSlides = true;
+    else if (a === "--skip-slides-upload") out.skipSlidesUpload = true;
     else if (a === "-h" || a === "--help") {
-      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--skip-slides] [--dry-run]");
+      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--skip-slides] [--skip-slides-upload] [--dry-run]");
       process.exit(0);
     }
   }
