@@ -214,6 +214,7 @@ export default function App() {
         Next={NextSlide}
         index={index}
         total={DECK.length}
+        onJump={(n) => goto(n)}
         onClose={() => setView("deck")}
       />
     );
@@ -792,12 +793,14 @@ function PresenterView({
   Next,
   index,
   total,
+  onJump,
   onClose,
 }: {
   Current: React.ComponentType;
   Next: React.ComponentType;
   index: number;
   total: number;
+  onJump: (n: number) => void;
   onClose: () => void;
 }) {
   const [seconds, setSeconds] = useState(0);
@@ -807,6 +810,16 @@ function PresenterView({
   }, []);
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
   const ss = String(seconds % 60).padStart(2, "0");
+  const currentSection = DECK[index]?.section;
+  const sectionEntries = useMemo(
+    () =>
+      SECTIONS.map((sec) => {
+        const first = DECK.findIndex((s) => s.section === sec.id);
+        const count = DECK.filter((s) => s.section === sec.id).length;
+        return { sec, first, count };
+      }).filter((e) => e.first >= 0),
+    [],
+  );
   return (
     <div className="presenter-view">
       <div className="presenter-main">
@@ -820,10 +833,35 @@ function PresenterView({
             <Next />
           </ScaledSlide>
         </div>
+        <div className="presenter-chips" role="toolbar" aria-label="Jump to section">
+          {sectionEntries.map(({ sec, first, count }) => {
+            const active = sec.id === currentSection;
+            return (
+              <button
+                key={sec.id}
+                onClick={() => onJump(first)}
+                aria-pressed={active}
+                title={`${sec.label} · ${count} slide${count === 1 ? "" : "s"}`}
+                style={{
+                  fontSize: 12,
+                  padding: "5px 10px",
+                  borderRadius: 999,
+                  cursor: "pointer",
+                  border: `1px solid ${active ? "hsl(var(--primary))" : "hsl(var(--border))"}`,
+                  background: active ? "hsl(var(--primary))" : "hsl(var(--bg-raised))",
+                  color: active ? "hsl(var(--primary-fg, var(--bg)))" : "hsl(var(--fg))",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {sec.label} <span style={{ opacity: 0.65 }}>· {count}</span>
+              </button>
+            );
+          })}
+        </div>
         <div className="presenter-notes">
           <strong>Slide {index + 1} of {total}</strong>
           {"\n\n"}
-          Use ← → to navigate. Press P or Esc to exit presenter view. Press F for fullscreen.
+          Use ← → to navigate. Click a chip above to jump to a section. Press P or Esc to exit, F for fullscreen.
         </div>
         <div className="presenter-timer">⏱ {mm}:{ss}</div>
         <button
@@ -862,6 +900,10 @@ function PrintView() {
           <section key={slide.id} className="print-page" aria-label={`Slide ${i + 1}: ${slide.title}`}>
             <div className="slide-content">
               <S />
+            </div>
+            <div className="print-page-stamp" aria-hidden="true">
+              {String(i + 1).padStart(2, "0")} / {DECK.length}
+              {slide.ruleId ? ` · ${slide.ruleId}` : ""} · {slide.title}
             </div>
           </section>
         );

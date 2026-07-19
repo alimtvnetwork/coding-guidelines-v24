@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.114.0] - 2026-07-19
+
+### Changed
+
+- **Slides polish (presenter chips + print density).** `slides-app/src/App.tsx` `PresenterView` now renders a section filter-chip toolbar between the next-slide preview and the notes block: one pill per chapter with label + slide-count, current chapter highlighted via `aria-pressed`, click jumps to the chapter's first slide via a new `onJump` prop wired to `goto(n)`. `.presenter-side` grid rows updated to `1fr auto auto auto auto` and made scrollable so the timer never gets pushed off-screen. `PrintView` (`?print`) plus `styles/slide.css` `.print-page` get a density pass: on-screen preview scales each 1920x1080 page to `0.5` with `-540px` negative margin (~4x more slides per viewport when reviewing a handout), gap tightened 24px → 12px, box-shadow lightened. New `.print-page-stamp` overlay prints `NN / total · RULE-ID · title` in a mono pill at bottom-left of every page; `@media print` restores native scale, removes the negative margin, darkens the stamp for ink contrast. No slide-authoring API or content changes.
+
 ## [5.113.0] - 2026-07-19
 
 ### Added — Polish pass: closing recap refresh + command-palette section jump
