@@ -117,14 +117,24 @@ export default function App() {
         case "F":
           toggleFullscreen();
           break;
+        case "?":
+        case "h":
+        case "H":
+          e.preventDefault();
+          setHelpOpen((v) => !v);
+          break;
         case "Escape":
+          if (helpOpen) {
+            setHelpOpen(false);
+            break;
+          }
           if (view !== "deck") setView("deck");
           break;
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev, goto, toggleFullscreen, view]);
+  }, [next, prev, goto, toggleFullscreen, view, helpOpen]);
 
   const Current = DECK[index].component;
   const NextSlide = DECK[Math.min(index + 1, DECK.length - 1)].component;
