@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.101.0
+
+- SS-02 task 48: ERD required on DB PRs (`SCHEMA-006`, hard). Every PR touching a migration, ORM schema, or DDL file ships a Mermaid ERD under `docs/erd/**` covering every added/altered table. CI gate `erd-required` blocks merges when the diagram is missing or fails to render. Per spec/17/31 line 93 (rule 8). 48 slides validated.
+
 ### What's new in v5.100.0
 
 - SS-02 task 47: SQLite default + ORM + explicit joins/PK/FK (`SCHEMA-005`, hard). One engine across dev/CI/prod; ORM models own the schema with `primaryKey({ autoIncrement: true })` and `.references(...)`; queries use `.innerJoin(..., on)` or parameterized SQL only. Raw SQL strings live only in a whitelisted `db/raw/*.sql` folder. Per spec/17/31 line 93. 47 slides validated.
