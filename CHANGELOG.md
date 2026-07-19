@@ -5,6 +5,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.112.0] - 2026-07-19
+
+### Added — SS-02 tasks 66-67: OPS-002 alert rules, OPS-003 runbooks (closes Ops & Observability and the SS-02 rule catalogue)
+
+- Slide 64 `slides-app/src/slides/64-alert-rules.tsx` (`OPS-002`, hard). Every alert lives in `ops/alerts/{service}.yml` reviewed like source; required labels/annotations: `severity` (page|ticket|log-only), `layer` (api|worker|data|edge), `owner` (matches `services.json`), `slo`, `summary`, `dashboard` deep link, `runbook` deep link. Page-severity alerts fire on multi-window multi-burn SLO burn (2 percent in 1h fast, 10 percent in 6h slow), not raw thresholds. Dedup groups by `service` + `slo`. Enforced by `scripts/validate-alerts.mjs`, synthetic pager test in CI, monthly false-positive retro under RCA-002, and WF-005 gate requiring golden-signals alerts before first release.
+- Slide 65 `slides-app/src/slides/65-runbooks.tsx` (`OPS-003`, hard). Every `severity=page` alert MUST have `ops/runbooks/{service}/{alert-slug}.md`. Fixed sections in order: Symptom, Blast radius, First 5 minutes (assess-only), Mitigations (ranked, each a copy-pastable command or explicit click path), After. Front-matter: `alert`, `owner`, `last-verified`. Enforced by `scripts/validate-runbooks.mjs` (schema + alert cross-check), quarterly game-day drills that update `last-verified`, and WF-005 release gate blocking on any runbook older than 180 days.
+- Registry: 67 slides, `node scripts/validate-slides-sra.mjs` green. Closes Ops chapter and the SS-02 rule catalogue: only polish tasks remain.
+
 ## [5.111.0] - 2026-07-19
 
 ### Added — SS-02 tasks 64-65: WF-005 release ceremony (closes Workflow), OPS-001 dashboards (opens Ops)

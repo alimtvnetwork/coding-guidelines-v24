@@ -25,7 +25,8 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.111.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.112.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+
 </p>
 
 <p align="center">
@@ -35,7 +36,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.111.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.112.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.19.1</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="QUICKSTART.md">QUICKSTART.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="QUICKSTART.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -1524,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 | [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
+
+### What's new in v5.112.0
+
+- SS-02 tasks 66-67 close the Ops & Observability chapter and the SS-02 rule catalogue. Slide 64 `OPS-002` (hard) makes every alert a schema-validated rule in `ops/alerts/{service}.yml` with required `severity` (page|ticket|log-only), `layer`, `owner` matched to `services.json`, `slo`, dashboard deep link, and runbook deep link; page-severity alerts fire on multi-window multi-burn SLO burn (2 percent budget in 1h fast, 10 percent in 6h slow), never on raw thresholds; dedup groups by `service` + `slo`; enforced by `scripts/validate-alerts.mjs`, a synthetic pager test in CI, monthly false-positive retro under RCA-002, and a WF-005 release gate requiring golden-signals alerts before first release. Slide 65 `OPS-003` (hard) requires every `severity=page` alert to have `ops/runbooks/{service}/{alert-slug}.md` with fixed sections in order (Symptom, Blast radius, First 5 minutes assess-only, Mitigations ranked with copy-pastable commands or explicit click paths, After) and front-matter `alert`, `owner`, `last-verified`; enforced by `scripts/validate-runbooks.mjs` (schema + alert cross-check), quarterly game-day drills that refresh `last-verified`, and a WF-005 gate blocking releases where any runbook is older than 180 days. 67 slides validated, SRA green. Only polish tasks remain.
 
 ### What's new in v5.111.0
 

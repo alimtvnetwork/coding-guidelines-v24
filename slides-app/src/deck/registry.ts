@@ -52,6 +52,8 @@ import TestPyramid from "../slides/60-test-pyramid";
 import PrTemplate from "../slides/61-pr-template";
 import ReleaseCeremony from "../slides/62-release-ceremony";
 import Dashboards from "../slides/63-dashboards";
+import AlertRules from "../slides/64-alert-rules";
+import Runbooks from "../slides/65-runbooks";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -210,6 +212,8 @@ export const DECK: readonly SlideEntry[] = [
   { id: "62-release-ceremony", title: "Release ceremony", section: "workflow", severity: "hard", ruleId: "WF-005", tags: ["release", "ceremony", "tag", "changelog", "dist"], component: ReleaseCeremony },
 
   { id: "63-dashboards", title: "Golden-signals dashboards", section: "ops", severity: "hard", ruleId: "OPS-001", tags: ["dashboard", "grafana", "sre", "traffic", "errors", "latency", "saturation"], component: Dashboards },
+  { id: "64-alert-rules", title: "Alert rules · SLO burn, dashboard, runbook, owner", section: "ops", severity: "hard", ruleId: "OPS-002", tags: ["alerts", "slo", "burn rate", "pager", "owner", "severity"], component: AlertRules },
+  { id: "65-runbooks", title: "Runbooks · executable, drilled, verified", section: "ops", severity: "hard", ruleId: "OPS-003", tags: ["runbook", "on-call", "game-day", "mitigation", "rollback", "incident"], component: Runbooks },
 
   { id: "12-closing", title: "Closing", section: "closing", tags: ["wrap-up", "references", "q&a"], component: Closing },
 ] as const;
