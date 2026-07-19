@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.76.0
+
+- **DB schema naming slide (SS-02 task 23).** New [`slides-app/src/slides/21-db-schema-naming.tsx`](slides-app/src/slides/21-db-schema-naming.tsx) (ruleId `NAM-002`, hard) teaches the schema rules from [spec/17/31 §Data and Schema](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md): PascalCase singular entities, camelCase fields, `{TableName}Id` INTEGER auto-increment PKs, no UUIDs. Ships a before/after `<CodeDiff>` SQL migration plus an `<ActionPanel>` symptom/rule/action. SRA validator now passes 23 slides.
+
 ### What's new in v5.75.0
 
 - **Backup-tier freeze slide (SS-02 task 22a).** New [`slides-app/src/slides/20-backup-tier-freeze.tsx`](slides-app/src/slides/20-backup-tier-freeze.tsx) (ruleId `MUST-008`, warn) explains why `MainWorker.Backup.*` seed keys in spec/19 ch. 20 stay defaults-only until Phase 12 closes: materializing them now would delete the MAIN-900-01 SpecContradiction safe-fail. 2-column "materialize now vs defer" contrast with a `<CalloutQuote>` from spec/19 ch. 25 §6. SRA validator now passes 22 slides.
