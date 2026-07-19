@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.102.0
+
+- SS-02 task 49: React & TypeScript chapter opener (`REACT-001`, hard). Maps the next 13 slides to spec/17/31 lines 97-112: effects are last resort, no inline prop types, no tuple hook returns, components under 100 lines. Enforced by ESLint + custom rules and the `react-shape-audit` CI job. 49 slides validated.
+
 ### What's new in v5.101.0
 
 - SS-02 task 48: ERD required on DB PRs (`SCHEMA-006`, hard). Every PR touching a migration, ORM schema, or DDL file ships a Mermaid ERD under `docs/erd/**` covering every added/altered table. CI gate `erd-required` blocks merges when the diagram is missing or fails to render. Per spec/17/31 line 93 (rule 8). 48 slides validated.
