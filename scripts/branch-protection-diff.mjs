@@ -195,8 +195,11 @@ function main() {
   if (!inSync) process.exit(1);
 }
 
+export { diff, buildReport };
+
 import { fileURLToPath } from "node:url";
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+
 
 export { diff, buildReport };
 
