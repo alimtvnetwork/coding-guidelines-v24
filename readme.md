@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.91.0
+
+- SS-02 task 38: Log-level severity map slide (`LOG-001`, hard) locking in `debug`/`info`/`warn`/`error`/`fatal` semantics per spec/17/31 line 76. 38 slides validated.
+
 ### What's new in v5.90.0
 
 - SS-02 task 37: Universal response envelope slide (`ERR-005`, hard) covering the `{ data, errors[], meta }` shape and the single shared `apiCall` parser per spec/17/31 line 80. 37 slides validated.
