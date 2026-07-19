@@ -208,6 +208,48 @@ jobs:
           sha256sum release-artifacts/release-install.sh  >> release-artifacts/checksums.txt
           sha256sum release-artifacts/release-install.ps1 >> release-artifacts/checksums.txt
 
+      # ── a11y badge (SS-02 task 63) ──────────────────────────────────
+      # Query the slides-smoke workflow conclusion for the tagged SHA so
+      # the release notes carry a visible WCAG 2.1 AA signal for the exact
+      # build being published. Falls back to "not verified" when no run
+      # exists yet (e.g. tag pushed before smoke completes).
+      - name: Resolve a11y badge from slides-smoke
+        id: a11y
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          CONCLUSION=$(gh run list \
+            --workflow slides-smoke.yml \
+            --commit "$SHA" \
+            --limit 1 \
+            --json conclusion \
+            --jq '.[0].conclusion // ""' 2>/dev/null || echo "")
+          URL=$(gh run list \
+            --workflow slides-smoke.yml \
+            --commit "$SHA" \
+            --limit 1 \
+            --json url \
+            --jq '.[0].url // ""' 2>/dev/null || echo "")
+          echo "conclusion=$CONCLUSION"
+          case "$CONCLUSION" in
+            success)
+              BADGE="[![a11y: WCAG 2.1 AA clean](https://img.shields.io/badge/a11y-WCAG_2.1_AA_clean-brightgreen)]($URL)"
+              ;;
+            failure|timed_out|cancelled)
+              BADGE="[![a11y: $CONCLUSION](https://img.shields.io/badge/a11y-$CONCLUSION-red)]($URL)"
+              ;;
+            *)
+              BADGE="![a11y: not verified](https://img.shields.io/badge/a11y-not_verified-lightgrey)"
+              ;;
+          esac
+          {
+            echo "badge<<EOF"
+            echo "$BADGE"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -236,6 +278,8 @@ jobs:
             release-artifacts/release-install.sh
             release-artifacts/release-install.ps1
           body: |
+            ${{ steps.a11y.outputs.badge }}
+
             ## Installation
 
             **Windows (PowerShell)**
@@ -252,6 +296,8 @@ jobs:
 
             Download `coding-guidelines-slides-${{ steps.version.outputs.version }}.zip`,
             unzip it, and double-click `index.html` to launch the offline training deck.
+            The badge above reflects the axe-core WCAG 2.1 AA scan status
+            (`slides-app/tests/a11y.spec.ts`) for the tagged commit.
 
             ## CI/CD Linter Pack (NEW)
 
