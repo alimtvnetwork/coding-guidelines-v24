@@ -27,6 +27,7 @@ export default function StructuredLoggingSlide() {
         afterLabel="✅ Structured event"
       />
       <ActionPanel
+        slideId="05-structured-logging"
         symptom="Free-text logs can't be filtered, aggregated or alerted on. Search for one order = scrolling forever."
         rule="One logger call per event. Event name in PascalCase + structured fields including File and the relevant Id."
         doThis="Replace every `console.log` in your diff with `logger.info|error` and put dynamic values as fields."

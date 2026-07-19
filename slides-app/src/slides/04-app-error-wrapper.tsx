@@ -31,6 +31,7 @@ export default function AppErrorWrapperSlide() {
         afterLabel="✅ Wrapped with context"
       />
       <ActionPanel
+        slideId="04-app-error-wrapper"
         symptom="Production logs show `ECONNREFUSED` with no idea which call, which order, or which file raised it."
         rule="Every catch block re-throws via AppError.wrap(err, 'Component.Action', { context }). Never `throw err;` alone."
         doThis="Find one `throw err` or empty catch in your service. Replace with AppError.wrap including the relevant Id."

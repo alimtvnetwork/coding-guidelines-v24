@@ -105,6 +105,7 @@ export default function SpecFirstWorkflowSlide() {
         ))}
       </div>
       <ActionPanel
+        slideId="10-spec-first-workflow"
         symptom="Code lands without a written commitment. Reviewers and AI agents can't tell what 'done' means."
         rule="Every change starts with a spec file or an issue. The diff implements it, the PR links to it."
         doThis="Before your next commit, write a 5-line spec/<area>/NN-name.md describing what & why. Link it in the PR."

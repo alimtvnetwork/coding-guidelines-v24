@@ -29,6 +29,7 @@ export default function MagicStringsSlide() {
         afterLabel="✅ Enum-checked"
       />
       <ActionPanel
+        slideId="06-magic-strings"
         symptom="A one-character typo in a status string ships to production and silently breaks a branch."
         rule="Never compare against the same string literal twice. The second occurrence is the trigger to extract an enum."
         doThis="Pick the most-compared string in your diff (status, kind, type) and replace usages with an enum value."

@@ -38,6 +38,7 @@ export default function NestedIfElseSlide() {
         layout="stacked"
       />
       <ActionPanel
+        slideId="02-nested-if-else"
         symptom="Logic is buried 4 levels deep. To read the happy path you scroll past every error case."
         rule="Zero nested if-else. Invert each condition into an early return so the happy path stays flat."
         doThis="Open the deepest function in your diff. Replace its outer if with a `return early` guard."

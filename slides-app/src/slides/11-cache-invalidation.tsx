@@ -38,6 +38,7 @@ export default function CacheInvalidationSlide() {
         afterLabel="✅ TTL + invalidation"
       />
       <ActionPanel
+        slideId="11-cache-invalidation"
         symptom="Users see stale data after updates. The cache fills, never clears, and bugs are blamed on 'something weird'."
         rule="Caches require: explicit TTL + a documented mutation that calls cache.delete on the same key."
         doThis="Audit one cache.set in your code. Add a TTL, and wire cache.delete into the matching update/delete path."

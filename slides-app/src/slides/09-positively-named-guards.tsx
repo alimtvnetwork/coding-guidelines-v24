@@ -27,6 +27,7 @@ export default function PositivelyNamedGuardsSlide() {
         afterLabel="✅ Positive guard"
       />
       <ActionPanel
+        slideId="09-positively-named-guards"
         symptom="`!isInvalid(x) && !isMissing(y)` — readers run a NOT-NOT loop in their head before they understand the branch."
         rule="Predicates are always positive: IsValid, HasItems, CanShip. The caller is free to write `if (!IsValid)`."
         doThis="Rename one `isInvalid/isMissing/isBad`-style function in your diff to its positive form, update callers."
