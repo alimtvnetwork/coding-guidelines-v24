@@ -26,6 +26,7 @@
     "readme:auto-update": "node scripts/auto-update-readme.mjs",
     "sync:check:verbose": "node scripts/sync-check.mjs --verbose",
     "sync:fix": "node scripts/sync-check.mjs --fix",
+    "sync:ci-fix": "node scripts/sync-check.mjs --fix && node scripts/sync-guidelines.mjs && node scripts/sync-check.mjs && node scripts/sync-guidelines.mjs --check",
     "lint:readme": "python3 linter-scripts/check-root-readme.py",
     "lint:readme:canonicals": "python3 linter-scripts/check-readme-canonicals.py",
     "lint:readme:install": "python3 linter-scripts/check-readme-install-section.py",
