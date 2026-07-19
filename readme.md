@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.105.0
+
+- SS-02 tasks 52-53: React render correctness pair. Slide 50 `REACT-004` (hard) bans raw `for`/`forEach` in render and derived state; iteration must be an expression (`map`/`filter`/`reduce`/`flatMap`/`Array.from`), never a mutation of arrays declared during render. Slide 51 `REACT-005` (hard) forbids mutating state, props, or arrays/objects returned by hooks; always build a new value with spread or `structuredClone` so React's reference-equality bailouts, `React.memo`, and React Query caches stay correct. Enforced by ESLint rules `no-raw-loop-in-render` and `no-mutate-hook-return`, plus `readonly` state and hook-return types. Per spec/17/31 lines 104-105. 53 slides validated.
+
 ### What's new in v5.104.0
 
 - SS-02 task 51: one effect, one concern, always with cleanup (`REACT-003`, hard). Split unrelated subscriptions/fetches into separate effects; every acquired resource returns a cleanup (`socket.close()`, `clearInterval`, `AbortController.abort()`). Enforced by custom ESLint rules `one-concern-per-effect` and `require-effect-cleanup`, plus dev-only `useTrackedEffect` that logs `react.effect.leak` on non-zero unmount balance. Per spec/17/31 lines 102-103. 51 slides validated.
