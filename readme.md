@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.108.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.109.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.108.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.109.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.19.1</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="QUICKSTART.md">QUICKSTART.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="QUICKSTART.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -1525,9 +1525,14 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.109.0
+
+- SS-02 tasks 60-61: closes React & TypeScript (Section G) and opens Accessibility (Section H). Slide 58 `REACT-012` (hard) bans placeholder type names (`Data`, `Info`, `Config`, `Payload`, `Options`, `Params`, and 14 others bare); if you cannot name it, split until you can. Slide 59 `A11Y-001` (hard) is the Section H chapter opener: WCAG 2.2 AA is the shipping floor, with ten non-negotiable minimums (keyboard reach, visible focus, programmatic labels, 4.5:1 contrast, no colour-only info, reduced-motion, focus trap + restore, live regions, alt text, sequential headings, 24x24 hit targets). Enforced by custom `no-placeholder-type-names` ESLint rule, `eslint-plugin-jsx-a11y` strict, axe-core CI (since v5.54.0), and a design-token contrast gate. New deck section `a11y` inserted between React and Data & Schema. Per spec/17/31 line 112 and WCAG 2.2 AA. 61 slides validated.
+
 ### What's new in v5.108.0
 
 - SS-02 tasks 58-59: React types-and-generics pair. Slide 56 `REACT-010` (hard) requires named generic parameters (`TItem`, `TKey`) and named aliases for every composite type; bare `T`/`U`/`K`/`V` and inline `Map`/`Array`/object composites are banned in application code. Slide 57 `REACT-011` (hard) moves prop types and event handler types into a sibling `types.ts`, with shared cross-component types in `src/types/<domain>.ts`; anonymous prop object literals on component signatures are rejected. Enforced by `@typescript-eslint/naming-convention` (`typeParameter` `^T[A-Z]`), custom `no-inline-composite` and `no-inline-props-type` rules, and a `pnpm gen:component` scaffold. Per spec/17/31 lines 110-111. 59 slides validated.
+
 
 ### What's new in v5.107.0
 

@@ -46,6 +46,8 @@ import CustomHookShape from "../slides/54-custom-hook-shape";
 import NoTuplesPublicShapes from "../slides/55-no-tuples-public-shapes";
 import NamedGenericsComposites from "../slides/56-named-generics-composites";
 import TypesFileColocation from "../slides/57-types-file-colocation";
+import NameOrSplit from "../slides/58-name-or-split";
+import A11yFloor from "../slides/59-a11y-floor";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -75,6 +77,7 @@ export type SlideSection =
   | "errors"
   | "data-schema"
   | "react"
+  | "a11y"
   | "workflow"
   | "closing";
 
@@ -91,7 +94,8 @@ export const SECTIONS: readonly SlideSectionMeta[] = [
   { id: "naming", label: "Naming & Structure", description: "Identifiers, size, shape" },
   { id: "control-flow", label: "Control Flow", description: "Guards, effects, loops" },
   { id: "errors", label: "Error Management", description: "Never swallow, always log" },
-  { id: "react", label: "React & TypeScript", description: "Types, hooks, a11y" },
+  { id: "react", label: "React & TypeScript", description: "Types, hooks, effects" },
+  { id: "a11y", label: "Accessibility", description: "WCAG 2.2 AA is the shipping floor" },
   { id: "data-schema", label: "Data & Schema", description: "PascalCase entities, camelCase columns, integer PKs" },
   { id: "workflow", label: "Workflow & Ops", description: "Spec-first, testing, caching" },
   { id: "closing", label: "Closing", description: "Wrap-up and references" },
@@ -179,6 +183,9 @@ export const DECK: readonly SlideEntry[] = [
   { id: "55-no-tuples-public-shapes", title: "No tuples as public shapes · every hook return, action, prop bundle gets a named type", section: "react", severity: "hard", ruleId: "REACT-009", tags: ["typescript", "tuple", "named type", "reducer action", "hook return", "context"], component: NoTuplesPublicShapes },
   { id: "56-named-generics-composites", title: "Name every generic parameter and every composite type · no `T`, no inline `Map<...,{...}>`", section: "react", severity: "hard", ruleId: "REACT-010", tags: ["typescript", "generics", "composite type", "named alias", "TItem", "TKey"], component: NamedGenericsComposites },
   { id: "57-types-file-colocation", title: "Prop & handler types live in a dedicated `types.ts` next to the component", section: "react", severity: "hard", ruleId: "REACT-011", tags: ["typescript", "props", "types.ts", "colocation", "component folder", "shared types"], component: TypesFileColocation },
+  { id: "58-name-or-split", title: "Name it or split it · no `Data`, `Info`, `Config`, `Payload` bare", section: "react", severity: "hard", ruleId: "REACT-012", tags: ["typescript", "naming", "domain type", "split", "aggregate", "placeholder names"], component: NameOrSplit },
+
+  { id: "59-a11y-floor", title: "Accessibility floor · WCAG 2.2 AA is the shipping minimum", section: "a11y", severity: "hard", ruleId: "A11Y-001", tags: ["accessibility", "wcag", "keyboard", "screen reader", "contrast", "axe-core", "focus"], component: A11yFloor },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
