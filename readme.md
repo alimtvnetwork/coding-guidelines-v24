@@ -1525,9 +1525,14 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.108.0
+
+- SS-02 tasks 58-59: React types-and-generics pair. Slide 56 `REACT-010` (hard) requires named generic parameters (`TItem`, `TKey`) and named aliases for every composite type; bare `T`/`U`/`K`/`V` and inline `Map`/`Array`/object composites are banned in application code. Slide 57 `REACT-011` (hard) moves prop types and event handler types into a sibling `types.ts`, with shared cross-component types in `src/types/<domain>.ts`; anonymous prop object literals on component signatures are rejected. Enforced by `@typescript-eslint/naming-convention` (`typeParameter` `^T[A-Z]`), custom `no-inline-composite` and `no-inline-props-type` rules, and a `pnpm gen:component` scaffold. Per spec/17/31 lines 110-111. 59 slides validated.
+
 ### What's new in v5.107.0
 
 - SS-02 tasks 56-57: React hook-shape pair. Slide 54 `REACT-008` (hard) requires every custom hook to start with `use`, return a named object type (never a bare tuple), and call hooks unconditionally (guards live inside the hook body). Slide 55 `REACT-009` (hard) bans tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. Only the built-in `useState` pair is tolerated. Enforced by `eslint-plugin-react-hooks`, `@typescript-eslint/consistent-type-definitions`, and custom `hook-name-prefix` / `hook-return-named-type` / `no-tuple-return` / `action-shape` rules. Per spec/17/31 lines 108-109. 57 slides validated.
+
 
 ### What's new in v5.106.0
 
