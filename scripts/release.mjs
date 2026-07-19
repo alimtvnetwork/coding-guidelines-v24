@@ -36,6 +36,7 @@ function parseArgs(argv) {
     scope: null,
     target: "both",
     dryRun: false,
+    skipSlides: false,
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -44,8 +45,9 @@ function parseArgs(argv) {
     else if (a === "--scope" || a === "-s") out.scope = argv[++i];
     else if (a === "--target") out.target = argv[++i];
     else if (a === "--dry-run") out.dryRun = true;
+    else if (a === "--skip-slides") out.skipSlides = true;
     else if (a === "-h" || a === "--help") {
-      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--dry-run]");
+      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--skip-slides] [--dry-run]");
       process.exit(0);
     }
   }
