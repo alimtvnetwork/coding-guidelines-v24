@@ -5,10 +5,11 @@
 # .github/workflows/ci.yml, plus the cross-link checker from the
 # `cross-links` job. Halts on the first failure (matches CI semantics).
 #
-# Wired into package.json as `npm run lint:ci`. Keep this script in
-# lockstep with ci.yml — a drift check in CI itself is left as a
-# follow-up, but for now any new step added to ci.yml MUST be appended
-# here in the same position so local runs catch the same regressions.
+# Wired into package.json as `npm run lint:ci`. The drift check at
+# step 16 (`scripts/check-lint-ci-drift.mjs`) is the enforcement for
+# "keep this in lockstep with ci.yml": any new lint step in ci.yml
+# without a matching entry here fails the pipeline until it's added
+# (or explicitly ignored with a reason in the drift checker).
 #
 # Exit codes:
 #   0  all checks passed
@@ -142,6 +143,7 @@ STEPS=(
   "Check runner dispatch anti-patterns (run.sh / run.ps1)|bash linter-scripts/check-runner-dispatch-antipatterns.sh"
   "Validate Mermaid sources parse under mermaid v11 (pre-render gate)|node scripts/validate-mermaid.mjs"
   "Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)|node scripts/render-diagrams.mjs --check"
+  "Check lint-ci ↔ ci.yml drift (mirror guard)|node scripts/check-lint-ci-drift.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then
