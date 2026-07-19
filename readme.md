@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.59.0
+
+- **Stable id-based slide URLs (SS-02 task 7).** [`slides-app/src/App.tsx`](slides-app/src/App.tsx) now reads and writes `#/id/<slide-id>` as the preferred hash form; legacy `#/<index>` still resolves so existing bookmarks keep working. Unknown ids fall back to slide 0 with a `console.warn`. [`01-table-of-contents.tsx`](slides-app/src/slides/01-table-of-contents.tsx) emits id links for all entries and the prev/next chrome. Shared TOC links, screenshot captions, and bug-report URLs now survive future content reorderings.
+
 ### What's new in v5.55.0
 
 - **Core Principles slides now use the same Symptom / Rule / Do this next shape as every rule slide (SS-02).** Rewrote [`01a-core-principles-1.tsx`](slides-app/src/slides/01a-core-principles-1.tsx), [`01b`](slides-app/src/slides/01b-core-principles-2.tsx), and [`01c`](slides-app/src/slides/01c-core-principles-3.tsx) around a shared [`PrincipleCard`](slides-app/src/components/PrincipleCard.tsx) component. Principles 01-06 now open with the same three rows as slides 02-11, so the mental model is established on the first substantive slide instead of drifting mid-deck.
