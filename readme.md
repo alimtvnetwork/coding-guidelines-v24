@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.118.0
+
+- CI/CD backlog swept. All 7 files under `.lovable/cicd-issues/` were already `✅ Solved` yet kept surfacing in every "remaining work" pass because they sat next to open backlogs. Moved to `.lovable/resolved-issues/` and rewrote `.lovable/cicd-index.md` links so the index still resolves. `cicd-issues/` is now empty and reserved for genuinely open findings; anything landing there again means a real regression.
+- Local baseline bake script. New `npm run slides:bake-baselines` runs `playwright test slides-app/tests/visual.spec.ts --update-snapshots --reporter=list` for developers who have working Chromium libs locally (the Lovable sandbox is missing `libglib-2.0.so.0`, so this stays a local/CI-runner path). Complements the existing `slides-visual.yml` workflow_dispatch trigger for teams that can bake in-browser instead.
+
 ### What's new in v5.117.0
 
 - Visual baseline coverage guard. `scripts/validate-visual-baselines.mjs` parses `DECK` in `slides-app/src/deck/registry.ts` and asserts a matching `slide-NN-chromium-linux.png` exists under `slides-app/tests/visual.spec.ts-snapshots/`. First run surfaced the real state: 0 of 70 baselines committed, meaning every previous visual CI run was silently green. Wired advisory into `.husky/pre-push` and `.github/workflows/slides-visual.yml` today; flips to `--strict` (blocking) after the initial baseline set is baked via workflow_dispatch. Npm scripts: `slides:validate-baselines` (advisory) and `slides:validate-baselines:strict`.
