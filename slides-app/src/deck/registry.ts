@@ -30,6 +30,7 @@ import VerifyBothDirections from "../slides/38-verify-both-directions";
 import RetrospectiveOnRepeats from "../slides/39-retrospective-on-repeats";
 import GlobalErrorStore from "../slides/40-global-error-store";
 import DataSchemaChapterOpener from "../slides/41-data-schema-chapter-opener";
+import TableIdPks from "../slides/42-table-id-pks";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
