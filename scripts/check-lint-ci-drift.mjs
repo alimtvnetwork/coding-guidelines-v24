@@ -95,9 +95,14 @@ function main() {
   const ciNames = ciStepNames();
   const labels = lintCiLabels();
   const missing = [];
+  // Stem = text before the first " (" so parenthetical qualifiers
+  // ("(spec)" in ci.yml vs "(spec, advisory)" in lint-ci.sh) match.
+  const stem = (s) => s.split(" (")[0];
+  const labelStems = labels.map(stem);
   for (const ciName of ciNames) {
     if (IGNORED_CI_STEPS.has(ciName)) continue;
-    const matched = labels.some((label) => ciName.startsWith(label) || label.startsWith(ciName));
+    const s = stem(ciName);
+    const matched = labelStems.some((ls) => ls === s || ciName.startsWith(labels[labelStems.indexOf(ls)]) || labels[labelStems.indexOf(ls)].startsWith(ciName));
     if (!matched) missing.push(ciName);
   }
   const unusedIgnores = [...IGNORED_CI_STEPS.keys()].filter((k) => !ciNames.includes(k));
