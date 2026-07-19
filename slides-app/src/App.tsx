@@ -46,6 +46,7 @@ export default function App() {
   const [index, setIndex] = useState(readSlideFromHash);
   const [view, setView] = useState<View>("deck");
   const [helpOpen, setHelpOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const prevIndexRef = useRef(index);
   const direction = index >= prevIndexRef.current ? 1 : -1;
