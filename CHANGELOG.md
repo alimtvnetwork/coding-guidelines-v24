@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.104.0] - 2026-07-19
+
+### Changed: SS-02 task 51: one effect, one concern, always with cleanup (REACT-003)
+
+- New slide `slides-app/src/slides/49-one-effect-one-concern.tsx` registered as `REACT-003` (hard) in `react`. Before/after contrasts a `LiveDashboard` mega-effect (websocket + interval + fetch, no return) against three effects, one concern each, with `socket.close()`, `clearInterval`, and `AbortController.abort()` cleanups.
+- Enforcement path: custom ESLint rules `one-concern-per-effect` and `require-effect-cleanup`; dev-only `useTrackedEffect` in `src/lib/effects.ts` logs `react.effect.leak` with `{ component, resource, count }` on non-zero unmount balance.
+- Cites spec/17/31 lines 102-103.
+- Validator confirms 51 slides follow Symptom/Rule/Action.
+
 ## [5.103.0] - 2026-07-19
 
 ### Changed: SS-02 task 50: `useEffect` last resort with positive guards (REACT-002)

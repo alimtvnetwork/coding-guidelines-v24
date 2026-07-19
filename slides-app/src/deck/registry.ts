@@ -37,6 +37,7 @@ import SqliteOrmExplicitJoins from "../slides/45-sqlite-orm-explicit-joins";
 import ErdRequiredOnDbPrs from "../slides/46-erd-required-on-db-prs";
 import ReactChapterOpener from "../slides/47-react-chapter-opener";
 import EffectLastResort from "../slides/48-effect-last-resort";
+import OneEffectOneConcern from "../slides/49-one-effect-one-concern";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -161,6 +162,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "46-erd-required-on-db-prs", title: "ERD required · every DB PR ships a Mermaid diagram, no diagram no merge", section: "data-schema", severity: "hard", ruleId: "SCHEMA-006", tags: ["erd", "mermaid", "pr review", "cardinality", "ci gate", "docs/erd"], component: ErdRequiredOnDbPrs },
   { id: "47-react-chapter-opener", title: "React & TypeScript · effects last resort, named types, small files", section: "react", severity: "hard", ruleId: "REACT-001", tags: ["react", "typescript", "chapter opener", "useEffect", "named types", "component size"], component: ReactChapterOpener },
   { id: "48-effect-last-resort", title: "useEffect last resort · zero default, positive named guards, no derive-state effects", section: "react", severity: "hard", ruleId: "REACT-002", tags: ["useEffect", "positive guard", "derived state", "useMemo", "event handler", "cleanup"], component: EffectLastResort },
+  { id: "49-one-effect-one-concern", title: "One effect one concern · always with cleanup, split unrelated subscriptions", section: "react", severity: "hard", ruleId: "REACT-003", tags: ["useEffect", "cleanup", "abortcontroller", "websocket", "interval", "one concern"], component: OneEffectOneConcern },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
