@@ -35,6 +35,7 @@ import JoinTableNaming from "../slides/43-join-table-naming";
 import NullableNarrativeColumns from "../slides/44-nullable-narrative-columns";
 import SqliteOrmExplicitJoins from "../slides/45-sqlite-orm-explicit-joins";
 import ErdRequiredOnDbPrs from "../slides/46-erd-required-on-db-prs";
+import ReactChapterOpener from "../slides/47-react-chapter-opener";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
