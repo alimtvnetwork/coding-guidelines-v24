@@ -207,6 +207,9 @@ export const DECK: readonly SlideEntry[] = [
   { id: "11-cache-invalidation", title: "Cache invalidation", section: "workflow", severity: "warn", ruleId: "WF-002", tags: ["cache", "ttl", "invalidate", "keys"], component: CacheInvalidation },
   { id: "60-test-pyramid", title: "Test pyramid", section: "workflow", severity: "hard", ruleId: "WF-003", tags: ["tests", "unit", "integration", "e2e", "pyramid"], component: TestPyramid },
   { id: "61-pr-template", title: "PR template", section: "workflow", severity: "hard", ruleId: "WF-004", tags: ["pr", "template", "checklist", "review"], component: PrTemplate },
+  { id: "62-release-ceremony", title: "Release ceremony", section: "workflow", severity: "hard", ruleId: "WF-005", tags: ["release", "ceremony", "tag", "changelog", "dist"], component: ReleaseCeremony },
+
+  { id: "63-dashboards", title: "Golden-signals dashboards", section: "ops", severity: "hard", ruleId: "OPS-001", tags: ["dashboard", "grafana", "sre", "traffic", "errors", "latency", "saturation"], component: Dashboards },
 
   { id: "12-closing", title: "Closing", section: "closing", tags: ["wrap-up", "references", "q&a"], component: Closing },
 ] as const;
