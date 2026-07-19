@@ -85,6 +85,13 @@ export default function App() {
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
+      // Cmd/Ctrl+K toggles palette regardless of focus (except when already inside palette input,
+      // which handles it locally by not re-firing — global still fine since toggle is idempotent).
+      if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+        return;
+      }
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       switch (e.key) {
         case "ArrowRight":
@@ -125,6 +132,10 @@ export default function App() {
           setHelpOpen((v) => !v);
           break;
         case "Escape":
+          if (paletteOpen) {
+            setPaletteOpen(false);
+            break;
+          }
           if (helpOpen) {
             setHelpOpen(false);
             break;
@@ -135,7 +146,7 @@ export default function App() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev, goto, toggleFullscreen, view, helpOpen]);
+  }, [next, prev, goto, toggleFullscreen, view, helpOpen, paletteOpen]);
 
   const Current = DECK[index].component;
   const NextSlide = DECK[Math.min(index + 1, DECK.length - 1)].component;
