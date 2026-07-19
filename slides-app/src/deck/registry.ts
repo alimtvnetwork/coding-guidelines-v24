@@ -76,6 +76,7 @@ export const SECTIONS: readonly SlideSectionMeta[] = [
   { id: "control-flow", label: "Control Flow", description: "Guards, effects, loops" },
   { id: "errors", label: "Error Management", description: "Never swallow, always log" },
   { id: "react", label: "React & TypeScript", description: "Types, hooks, a11y" },
+  { id: "data-schema", label: "Data & Schema", description: "PascalCase entities, camelCase columns, integer PKs" },
   { id: "workflow", label: "Workflow & Ops", description: "Spec-first, testing, caching" },
   { id: "closing", label: "Closing", description: "Wrap-up and references" },
 ] as const;
