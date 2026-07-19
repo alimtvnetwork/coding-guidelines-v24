@@ -79,6 +79,7 @@ export type SlideSection =
   | "opening"
   | "principles"
   | "naming"
+  | "structure"
   | "control-flow"
   | "errors"
   | "data-schema"
@@ -99,6 +100,7 @@ export const SECTIONS: readonly SlideSectionMeta[] = [
   { id: "opening", label: "Opening", description: "Title and orientation" },
   { id: "principles", label: "Core Principles", description: "Non-negotiables and mindset" },
   { id: "naming", label: "Naming & Structure", description: "Identifiers, size, shape" },
+  { id: "structure", label: "Code Structure", description: "Line-gaps, file/function size, DRY, immutability" },
   { id: "control-flow", label: "Control Flow", description: "Guards, effects, loops" },
   { id: "errors", label: "Error Management", description: "Never swallow, always log" },
   { id: "react", label: "React & TypeScript", description: "Types, hooks, effects" },

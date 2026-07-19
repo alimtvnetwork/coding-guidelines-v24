@@ -34,4 +34,18 @@ for step in 1 4 5 6 7 8 9 14; do
   fi
 done
 
+echo "→ pre-push: validate SS-02 slides Symptom/Rule/Action structure"
+if ! node scripts/validate-slides-sra.mjs; then
+  echo ""
+  echo "  pre-push: validate-slides-sra.mjs failed — align every SS-02 slide with the SRA structure."
+  exit 1
+fi
+
+echo "→ pre-push: guideline sync drift check"
+if ! node scripts/sync-guidelines.mjs --check; then
+  echo ""
+  echo "  pre-push: sync-guidelines drift — run \`node scripts/sync-guidelines.mjs\` and commit before pushing."
+  exit 1
+fi
+
 echo "✓ pre-push guards passed"
