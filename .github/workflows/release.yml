@@ -278,6 +278,8 @@ jobs:
             release-artifacts/release-install.sh
             release-artifacts/release-install.ps1
           body: |
+            ${{ steps.a11y.outputs.badge }}
+
             ## Installation
 
             **Windows (PowerShell)**
@@ -294,6 +296,8 @@ jobs:
 
             Download `coding-guidelines-slides-${{ steps.version.outputs.version }}.zip`,
             unzip it, and double-click `index.html` to launch the offline training deck.
+            The badge above reflects the axe-core WCAG 2.1 AA scan status
+            (`slides-app/tests/a11y.spec.ts`) for the tagged commit.
 
             ## CI/CD Linter Pack (NEW)
 
