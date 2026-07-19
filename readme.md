@@ -1526,6 +1526,12 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.120.0
+
+- `lint-ci.sh` ↔ `ci.yml` drift is now enforced. New `scripts/check-lint-ci-drift.mjs` parses step names from `.github/workflows/ci.yml` and the `STEPS=()` array from `scripts/lint-ci.sh`, stems on the first ` (` so `(spec)` vs `(spec, advisory)` still matches, and fails if any lint-scope CI step lacks a mirror. Wired as step 16 in `lint-ci.sh` so pre-push catches drift too. `IGNORED_CI_STEPS` documents 37 infra/off-scope steps with one-line reasons and flags stale ignores.
+- Sandbox visual-bake recipe captured at `slides-app/docs/visual-baseline-sandbox-recipe.md`. Explains the `LD_LIBRARY_PATH` incantation resolving `libglib-2.0.so.0` and `libX11.so.6` from `/nix/store/*/lib` that made the v5.119 bake possible. `slides:bake-baselines:help` alias points at it.
+- Removed the "drift check is a follow-up" TODO from `scripts/lint-ci.sh:9-11`. Root cause: TODO from v5.115 was never closed. Fix: replaced the comment with a pointer to step 16.
+
 ### What's new in v5.119.0
 
 - Visual regression is now actually enforced. Baked all 70 baseline PNGs into `slides-app/tests/visual.spec.ts-snapshots/` (6.8 MB, `slide-00-linux.png` through `slide-69-linux.png`) by running Playwright in the Lovable sandbox with the missing shared libs supplied via `LD_LIBRARY_PATH` (nix-store glib + libX11 + adjacent GTK deps). Before: `deck=70 baselines=0 missing=70`. After: `deck=70 baselines=70 missing=0`.
