@@ -1525,7 +1525,14 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.52.0
+
+- **Slides deck ships as a downloadable release asset** — [`scripts/release.mjs`](scripts/release.mjs) now uploads `slides-app/dist.zip` as `slides-deck.zip` on release tag `v<X.Y.Z>` via `gh release upload ... --clobber`. Missing/unauthenticated `gh` prints the exact manual command instead of failing (release ceremony stays green). New flag: `--skip-slides-upload`. Closes Plan SS-01 step 6.
+- Stable download URL: `https://github.com/<owner>/<repo>/releases/latest/download/slides-deck.zip`.
+
 ### What's new in v5.51.0
+
+
 
 - **Slides deck a11y guardrail** — new [`slides-app/tests/a11y.spec.ts`](slides-app/tests/a11y.spec.ts) runs `@axe-core/playwright` against every slide (`#/0` … `#/15`) with WCAG 2.1 A/AA rules. Wired into [`.github/workflows/slides-smoke.yml`](.github/workflows/slides-smoke.yml) alongside the existing boot smoke test. Closes Plan SS-01 step 5.
 - **Rationale over visual-regression baselines** — a11y scans catch contrast, ARIA, and heading-order regressions with no baseline PNGs to maintain (avoids repo bloat after the 45 MB diet in v5.47.0).
