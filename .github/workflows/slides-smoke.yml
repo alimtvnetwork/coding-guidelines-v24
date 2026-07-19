@@ -35,6 +35,9 @@ jobs:
         working-directory: slides-app
         run: bun run build
 
+      - name: Validate SS-02 Symptom -> Rule -> Action structure
+        run: node scripts/validate-slides-sra.mjs
+
       - name: Install Playwright Chromium
         run: bunx playwright install --with-deps chromium
 
