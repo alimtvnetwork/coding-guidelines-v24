@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.123.0
+
+- Testable pre-push visual-hint helper. `scripts/pre-push-visual-hint.sh` extracts the sandbox vs host branching that lived inline in `.husky/pre-push`, and `scripts/tests/pre-push-visual-hint.test.sh` runs 9 cases (both branches recommend the correct target, neither leaks the other, both include the workflow-dispatch fallback, unknown env exits non-zero). Wired as `lint-ci.sh` step 18. Root cause: untested inline shell inside a git hook is how the v5.117 "strict guard, zero baselines" regression happened.
+- Required-checks enumerator + procedure. `scripts/print-required-checks.mjs` parses `.github/workflows/*.yml`, marks each job REQUIRED or advisory against `.github/branch-protection.expected.json`, and prints the exact `gh api PATCH .../required_status_checks` payload ready to copy. `.lovable/procedures/branch-protection.md` documents the 5-step promotion + rollback procedure. Root cause: backlog item 1 (promote `slides-visual` to required) kept getting deferred because the exact `gh api` payload was never captured. It is now a 30-second copy-paste.
+
 ### What's new in v5.122.0
 
 - Sandbox-aware pre-push hint. `.husky/pre-push` visual-baseline failure now branches on `/nix/store` presence and points sandbox users at `npm run slides:bake-baselines:sandbox`, off-sandbox devs at plain `npm run slides:bake-baselines`. Root cause: the v5.121 wrapper existed but the pre-push hint pointed at the sandbox-broken command, so users would follow the hint, watch it fail with `libglib-2.0.so.0: cannot open shared object file`, and bypass with `SKIP_PREPUSH=1`.
