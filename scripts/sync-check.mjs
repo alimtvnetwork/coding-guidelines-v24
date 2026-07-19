@@ -24,6 +24,8 @@
 //   node scripts/sync-check.mjs                # check, exit non-zero on drift
 //   node scripts/sync-check.mjs --verbose      # print diff for each drifted file
 //   node scripts/sync-check.mjs --fix          # run `npm run sync` and re-check
+//   node scripts/sync-check.mjs --report <dir> # write drift.json + drift.md
+//                                              # (both check and --fix modes)
 //
 // EXIT CODES
 //   0  no drift
@@ -46,6 +48,11 @@ const ROOT = resolve(__dirname, "..");
 const argv = process.argv.slice(2);
 const VERBOSE = argv.includes("--verbose") || argv.includes("-v");
 const FIX = argv.includes("--fix");
+const REPORT_DIR = (() => {
+  const idx = argv.indexOf("--report");
+  if (idx === -1 || !argv[idx + 1]) return null;
+  return resolve(ROOT, argv[idx + 1]);
+})();
 
 // ----- Files watched for drift --------------------------------------------
 //
