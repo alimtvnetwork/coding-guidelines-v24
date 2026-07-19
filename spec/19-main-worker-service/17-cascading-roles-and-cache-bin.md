@@ -1,10 +1,11 @@
 # 17 — Cascading Roles & Role-Access Cache Bin
 
 **Spec:** `19-main-worker-service`
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-05-06
-**Status:** Authoritative (Phase 5)
-**Resolves:** locked decisions D11 (cascading = union), D12 (cache-bin in ER diagram). Open questions OQ-A1, OQ-A2 captured in §7 with default proposals adopted until the user overrides.
+**Updated:** 2026-07-19 (v1.1.0: OQ-A1 promoted to D15, OQ-A2 promoted to D16; §7 rewritten as "Resolved decisions" and both items removed from `.lovable/plan.md` Open Questions.)
+**Status:** Authoritative (Phase 5, all open questions in scope now closed)
+**Resolves:** locked decisions D11 (cascading = union), D12 (cache-bin in ER diagram), **D15** (simple union is final, no role hierarchy), **D16** (per-process SQLite `:memory:` is final for the cache bin storage tier; Redis and in-process map remain configurable alternatives per §4).
 
 > **Phase 5 scope.** Define how a user that holds **multiple roles simultaneously** resolves to a single effective `AccessItem` set, where that resolution happens, and how the result is cached safely under a credential-blind Main + authoritative Worker split (Phase 3).
 >
