@@ -238,7 +238,9 @@ export default function App() {
             style={{ width: "100%", height: "100%" }}
           >
             <ScaledSlide>
-              <Current />
+              <SlideStepContext.Provider value={{ step, maxStep: DECK[index]?.steps ?? 0 }}>
+                <Current />
+              </SlideStepContext.Provider>
             </ScaledSlide>
           </motion.div>
         </AnimatePresence>
