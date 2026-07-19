@@ -4,27 +4,38 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ScaledSlide } from "./components/ScaledSlide";
 import { RuleBadge, type RuleSeverity } from "./components/RuleBadge";
 import { DECK, SECTIONS, groupBySection, type SlideSection } from "./deck";
+import { SlideStepContext } from "./lib/step-context";
 
 type View = "deck" | "grid" | "presenter";
 
+interface SlidePosition {
+  index: number;
+  step: number;
+}
+
 /**
- * Hash routing. Two supported forms:
- *   #/id/<slide-id>   (preferred, stable across reorderings)
- *   #/<index>         (legacy numeric, still honored)
- * Unknown or malformed hashes fall back to slide 0.
+ * Hash routing. Supported forms:
+ *   #/id/<slide-id>          (preferred, stable across reorderings)
+ *   #/id/<slide-id>/<step>   (with sub-step reveal coordinate, step >= 0)
+ *   #/<index>                (legacy numeric, still honored)
+ *   #/<index>/<step>         (legacy numeric + step)
+ * Unknown or malformed hashes fall back to slide 0, step 0.
  */
-function readSlideFromHash(): number {
+function readSlideFromHash(): SlidePosition {
   const raw = window.location.hash;
-  const idMatch = raw.match(/^#\/id\/(.+)$/);
+  const idMatch = raw.match(/^#\/id\/([^/]+)(?:\/(\d+))?$/);
   if (idMatch) {
     const found = DECK.findIndex((s) => s.id === decodeURIComponent(idMatch[1]));
-    if (found >= 0) return found;
-    console.warn(`[slides] unknown slide id in hash: ${idMatch[1]}, falling back to 0`);
-    return 0;
+    if (found < 0) {
+      console.warn(`[slides] unknown slide id in hash: ${idMatch[1]}, falling back to 0`);
+      return { index: 0, step: 0 };
+    }
+    return { index: found, step: clampStep(found, idMatch[2] ? parseInt(idMatch[2], 10) : 0) };
   }
-  const numMatch = raw.match(/^#\/(\d+)/);
-  if (!numMatch) return 0;
-  return clampSlide(parseInt(numMatch[1], 10));
+  const numMatch = raw.match(/^#\/(\d+)(?:\/(\d+))?/);
+  if (!numMatch) return { index: 0, step: 0 };
+  const idx = clampSlide(parseInt(numMatch[1], 10));
+  return { index: idx, step: clampStep(idx, numMatch[2] ? parseInt(numMatch[2], 10) : 0) };
 }
 
 function clampSlide(n: number): number {
@@ -33,13 +44,17 @@ function clampSlide(n: number): number {
   return n;
 }
 
-function writeSlideToHash(n: number) {
-  const slide = DECK[n];
-  if (!slide) {
-    window.location.hash = `/${n}`;
-    return;
-  }
-  window.location.hash = `/id/${encodeURIComponent(slide.id)}`;
+function clampStep(slideIndex: number, step: number): number {
+  const max = DECK[slideIndex]?.steps ?? 0;
+  if (Number.isNaN(step) || step < 0) return 0;
+  if (step > max) return max;
+  return step;
+}
+
+function writePositionToHash({ index, step }: SlidePosition) {
+  const slide = DECK[index];
+  const base = slide ? `/id/${encodeURIComponent(slide.id)}` : `/${index}`;
+  window.location.hash = step > 0 ? `${base}/${step}` : base;
 }
 
 function isPrintMode(): boolean {
@@ -49,7 +64,9 @@ function isPrintMode(): boolean {
 export default function App() {
   if (isPrintMode()) return <PrintView />;
 
-  const [index, setIndex] = useState(readSlideFromHash);
+  const initial = readSlideFromHash();
+  const [index, setIndex] = useState(initial.index);
+  const [step, setStep] = useState(initial.step);
   const [view, setView] = useState<View>("deck");
   const [helpOpen, setHelpOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -66,20 +83,40 @@ export default function App() {
 
   useEffect(() => {
     function onHash() {
-      setIndex(readSlideFromHash());
+      const pos = readSlideFromHash();
+      setIndex(pos.index);
+      setStep(pos.step);
     }
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
-  const goto = useCallback((n: number) => {
-    const next = clampSlide(n);
-    writeSlideToHash(next);
-    setIndex(next);
+  const goto = useCallback((n: number, s: number = 0) => {
+    const nextIndex = clampSlide(n);
+    const nextStep = clampStep(nextIndex, s);
+    writePositionToHash({ index: nextIndex, step: nextStep });
+    setIndex(nextIndex);
+    setStep(nextStep);
   }, []);
 
-  const next = useCallback(() => goto(index + 1), [index, goto]);
-  const prev = useCallback(() => goto(index - 1), [index, goto]);
+  const next = useCallback(() => {
+    const maxStep = DECK[index]?.steps ?? 0;
+    if (step < maxStep) {
+      goto(index, step + 1);
+      return;
+    }
+    goto(index + 1, 0);
+  }, [index, step, goto]);
+
+  const prev = useCallback(() => {
+    if (step > 0) {
+      goto(index, step - 1);
+      return;
+    }
+    const prevIndex = clampSlide(index - 1);
+    const prevMax = DECK[prevIndex]?.steps ?? 0;
+    goto(prevIndex, prevMax);
+  }, [index, step, goto]);
 
   const toggleFullscreen = useCallback(async () => {
     if (document.fullscreenElement) {
