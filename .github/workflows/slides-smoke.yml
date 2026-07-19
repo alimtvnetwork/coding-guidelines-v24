@@ -41,6 +41,9 @@ jobs:
       - name: Run slides smoke test
         run: bunx playwright test slides-app/tests/smoke.spec.ts
 
+      - name: Run slides a11y scan (axe-core, WCAG 2.1 A/AA)
+        run: bunx playwright test slides-app/tests/a11y.spec.ts
+
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
