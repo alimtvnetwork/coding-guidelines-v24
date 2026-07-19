@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.68.0] - 2026-07-19
+
+### Added - SS-02 task 16: "Must Follow" opener slide
+
+- New slide [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx), registered in the `principles` section as `13-must-follow` (ruleId `MUST-001`, severity `hard`) in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Distills §"Must Follow and without negotiation" of `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` into 5 non-negotiables: (1) Read first, guess never; (2) One-sentence root cause; (3) Minimum correct fix; (4) Verify in the logs; (5) Ship the trail (remaining tasks + version + changelog + release notes).
+- Slide carries the S→R→A pattern via `<ActionPanel>` (satisfies `scripts/validate-slides-sra.mjs`) and renders the 5 non-negotiables as a 2-column numbered grid using design tokens (`hsl(var(--bg-raised))`, `hsl(var(--accent))`, `var(--font-mono)`).
+- Root cause of prior gap: SS-02 backlog task 16 was open because the principles section had 3 aphorism slides (`01a`/`01b`/`01c`) but no distilled Must-Follow checklist tied to file 31; blind-follow readers had to reconstruct the 5 rules from a rant paragraph.
+- Verification: `bun run build` succeeds (offline contract intact, 38 files, 1833 KB, `dist.zip` 0.96 MB); `node scripts/validate-slides-sra.mjs` reports "OK: 15 slide(s) follow the Symptom -> Rule -> Action pattern" (was 14). Palette search for "must-follow" now returns the new slide.
+
+---
+
 ## [5.67.0] - 2026-07-19
 
 ### Added - SS-02 task 13: palette search extended to tags
