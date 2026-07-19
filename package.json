@@ -81,7 +81,8 @@
     "slides:validate-baselines": "node scripts/validate-visual-baselines.mjs",
     "slides:validate-baselines:strict": "node scripts/validate-visual-baselines.mjs --strict --list",
     "slides:bake-baselines": "playwright test slides-app/tests/visual.spec.ts --update-snapshots --reporter=list",
-    "slides:bake-baselines:help": "echo 'Sandbox bake recipe: slides-app/docs/visual-baseline-sandbox-recipe.md'",
+    "slides:bake-baselines:sandbox": "node scripts/bake-baselines-sandbox.mjs",
+    "slides:bake-baselines:help": "echo 'Off-sandbox: npm run slides:bake-baselines | In Lovable sandbox: npm run slides:bake-baselines:sandbox | Recipe: slides-app/docs/visual-baseline-sandbox-recipe.md'",
     "slides:contrast-audit": "node slides-app/scripts/contrast-audit.mjs"
   },
   "dependencies": {
