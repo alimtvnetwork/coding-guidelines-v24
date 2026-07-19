@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.100.0] - 2026-07-19
+
+### Changed: SS-02 task 47: SQLite default + ORM + explicit joins/PK/FK (SCHEMA-005)
+
+- New slide `slides-app/src/slides/45-sqlite-orm-explicit-joins.tsx` registered as `SCHEMA-005` (hard) in `data-schema`. Before/after contrasts raw concatenated SQL with implicit `FROM a, b WHERE ...` join against an ORM model (Drizzle shown) with `primaryKey({ autoIncrement: true })`, `.references(() => Parent.PK)`, and `.innerJoin(..., on)`.
+- Enforcement path: migration linter fails on `{Other}Id` columns without a matching `REFERENCES`; code linter bans raw SQL outside a whitelisted `db/raw/*.sql` folder; CI runs the suite against SQLite only. Violations log `schema.fk.missing`.
+- Cites spec/17/31 line 93.
+- Validator confirms 47 slides follow Symptom/Rule/Action.
+
 ## [5.99.0] - 2026-07-19
 
 ### Changed: SS-02 task 46: Nullable narrative columns (SCHEMA-004)
