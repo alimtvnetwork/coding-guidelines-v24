@@ -1,6 +1,6 @@
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-Version: 1.1.0
+Version: 1.2.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
 
@@ -34,7 +34,7 @@ auto-reject on the same tier as RULE 0.
 10. Components stay small and reusable. For any feature with three or more components, produce a Mermaid component diagram first.
 11. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
 12. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
-13. Every commit that changes behavior bumps the version, updates the changelog, and updates the release notes.
+
 
 ---
 
@@ -94,6 +94,21 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 
 ---
 
+## React Specific
+
+1. `useEffect` conditions must be highly readable. Extract every guard into a positively named boolean (`isReadyToSync`, `hasFreshData`) and use that boolean inside the effect. No inline `!x && y` or nested ternaries in the effect body or its dependency guard.
+2. No negative conditions inside `useEffect`. If the natural check is negative, invert it into a positive boolean above the effect and early-return on the positive path.
+3. Minimize `useEffect` count. Default is zero. Add one only when you actually need to synchronize with an external system (network, timer, subscription, DOM API). Do not use effects to derive state, to transform props, or to react to user events (use derived values, `useMemo`, or event handlers instead).
+4. One effect, one concern. If an effect does two unrelated things, split it. Never combine unrelated subscriptions or fetches in a single effect.
+5. Every effect that acquires a resource must return a cleanup function. No exceptions.
+6. Avoid raw `for` and `forEach` loops in render or in derived state. Use `map`, `filter`, `reduce`, `flatMap`, or `Array.from` so the result is an expression, not a mutation. `for` is only acceptable when you need early-exit performance on very large arrays and a comment explains why.
+7. Never mutate state, props, or arrays/objects returned by hooks. Build a new value with spread or `structuredClone`.
+8. Lists must have stable, unique `key` props derived from data, never the array index unless the list is truly static.
+9. Keep component files under 100 lines. Extract child components, hooks, and helpers into their own files before the component grows.
+10. Custom hooks start with `use`, return a stable object or tuple, and never call other hooks conditionally.
+
+---
+
 ## Language One-Liners
 
 - Go: use a result type, not `(T, error)`. Wrap errors with an operation label. Enums are `type X byte` plus `iota`, never string constants.
@@ -104,6 +119,7 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 - C#: PascalCase methods and properties, `_camelCase` private fields, `I`-prefix interfaces.
 - Python: `snake_case` functions and variables, `PascalCase` classes, type hints on every public function, `dataclass` or `pydantic` for structured records.
 
+
 ---
 
 ## Workflow
@@ -112,6 +128,6 @@ If this repository has a `spec/**/error-manage/` folder, that folder is binding 
 2. Apply the minimum correct fix. No drive-by refactors.
 3. Verify in the logs (or in a live run) that the fix works. Do not claim done based on the build passing alone.
 4. List every remaining task before ending the turn.
-5. Bump the version, update the changelog, update the release notes.
-6. Plan multi-file features with a Mermaid component or flow diagram first.
-7. If you cannot find the answer in this file or in an existing`spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
+5. Plan multi-file features with a Mermaid component or flow diagram first.
+6. If you cannot find the answer in this file or in an existing `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
+
