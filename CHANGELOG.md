@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.69.0] - 2026-07-19
+
+### Added - SS-02 task 17: root-cause-first workflow slide
+
+- New slide [`slides-app/src/slides/14-root-cause-first.tsx`](slides-app/src/slides/14-root-cause-first.tsx), registered as `14-root-cause-first` in the `principles` section (ruleId `MUST-002`, severity `hard`) directly after `13-must-follow` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Operationalizes non-negotiable #2 from `MUST-001`: one-sentence RCA must precede any fix.
+- Layout: `<ActionPanel>` header (satisfies `scripts/validate-slides-sra.mjs`) plus a two-column contrast between the RCA-first loop (5 numbered steps: Reproduce, Trace, State the cause, Minimum fix, Prove it) and the symptom-patch loop (4 rejected patterns: bare try/catch, fallback value, extra effect, ship). Uses design tokens (`hsl(var(--accent))` vs `hsl(var(--destructive))`) so the reject column reads red in both themes.
+- Root cause of prior gap: task 16 landed the 5 non-negotiables headline but rule #2 ("one-sentence root cause") had no dedicated slide showing the loop, so readers could quote the rule without knowing what a compliant loop looks like end-to-end.
+- Verification: `bun run build` succeeds (offline contract intact, 38 files, 1836 KB, `dist.zip` 0.96 MB); `scripts/validate-slides-sra.mjs` reports "OK: 16 slide(s)" (was 15). Palette search `rca`, `symptom patch`, or `one sentence` returns the new slide.
+
+---
+
 ## [5.68.0] - 2026-07-19
 
 ### Added - SS-02 task 16: "Must Follow" opener slide
