@@ -1525,6 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.49.0
+
+- **Slides deck now ships with every release** — `scripts/release.mjs` auto-installs `slides-app/` dependencies (via `bun` when available, else `npm`) and runs `bun run build`, producing `slides-app/dist/` + `dist.zip` (0.95 MB) on every `npm run release`. Opt out with `--skip-slides`. Executes Plan SS-01 step 3 and the captured user command at [`.lovable/spec/commands/01-slides-attached-to-release.md`](.lovable/spec/commands/01-slides-attached-to-release.md).
+- **Release ceremony help updated** — `node scripts/release.mjs --help` now lists the new `--skip-slides` flag alongside `--tier`, `--version`, `--scope`, `--target`, and `--dry-run`.
+
 ### What's new in v5.45.0
 
 - **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md`](spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md).
