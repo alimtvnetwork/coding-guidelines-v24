@@ -31,6 +31,7 @@ import RetrospectiveOnRepeats from "../slides/39-retrospective-on-repeats";
 import GlobalErrorStore from "../slides/40-global-error-store";
 import DataSchemaChapterOpener from "../slides/41-data-schema-chapter-opener";
 import TableIdPks from "../slides/42-table-id-pks";
+import JoinTableNaming from "../slides/43-join-table-naming";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -149,6 +150,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "40-global-error-store", title: "Global error store · one store, one modal, fed by apiCall", section: "errors", severity: "hard", ruleId: "ERR-006", tags: ["error store", "modal", "central", "apiCall", "no toast", "audit"], component: GlobalErrorStore },
   { id: "41-data-schema-chapter-opener", title: "Data & Schema · PascalCase entities, camelCase columns, PascalCase JSON", section: "data-schema", severity: "hard", ruleId: "SCHEMA-001", tags: ["schema", "pascalcase", "camelcase", "json", "naming", "chapter opener"], component: DataSchemaChapterOpener },
   { id: "42-table-id-pks", title: "Primary keys · {TableName}Id INTEGER AUTOINCREMENT, no UUIDs", section: "data-schema", severity: "hard", ruleId: "SCHEMA-002", tags: ["primary key", "pk", "integer", "autoincrement", "uuid", "foreign key", "{table}id"], component: TableIdPks },
+  { id: "43-join-table-naming", title: "Join tables · {A}{B} name, composite ({A}Id, {B}Id) PK, no surrogate", section: "data-schema", severity: "hard", ruleId: "SCHEMA-003", tags: ["join table", "many-to-many", "composite key", "enum", "status", "type", "category"], component: JoinTableNaming },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },

@@ -1,6 +1,6 @@
 # Author, Philosophy & Assessment
 
-> **Version:** <!-- STAMP:VERSION -->5.97.0<!-- /STAMP:VERSION -->
+> **Version:** <!-- STAMP:VERSION -->5.98.0<!-- /STAMP:VERSION -->
 > **Updated:** <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
 
 ## About the Author
