@@ -439,8 +439,41 @@ function CommandPalette({
           {matches.length === 0 ? (
             <li style={{ padding: "18px 12px", opacity: 0.6, fontSize: 13 }}>No matches.</li>
           ) : (
-            matches.map(({ slide, index }, i) => {
+            matches.map((match, i) => {
               const isActive = i === active;
+              const commonRow = {
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 12px",
+                borderRadius: 8,
+                cursor: "pointer",
+                background: isActive ? "rgba(148,163,184,0.15)" : "transparent",
+              } as const;
+
+              if (match.kind === "section") {
+                return (
+                  <li
+                    key={`section:${match.section.id}`}
+                    role="option"
+                    aria-selected={isActive}
+                    onMouseEnter={() => setActive(i)}
+                    onClick={() => onPick(match.index)}
+                    style={{ ...commonRow, borderLeft: "3px solid hsl(var(--accent, 217 91% 60%))" }}
+                  >
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.55, minWidth: 32 }}>§</span>
+                    <span style={{ fontSize: 14, flex: 1, fontWeight: 600 }}>
+                      Jump to section: {match.section.label}
+                    </span>
+                    <span style={{ fontSize: 11, opacity: 0.6 }}>{match.count} slides</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.5 }}>
+                      → {String(match.index + 1).padStart(2, "0")}
+                    </span>
+                  </li>
+                );
+              }
+
+              const { slide, index } = match;
               return (
                 <li
                   key={slide.id}
@@ -448,15 +481,7 @@ function CommandPalette({
                   aria-selected={isActive}
                   onMouseEnter={() => setActive(i)}
                   onClick={() => onPick(index)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 12px",
-                    borderRadius: 8,
-                    cursor: "pointer",
-                    background: isActive ? "rgba(148,163,184,0.15)" : "transparent",
-                  }}
+                  style={commonRow}
                 >
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, opacity: 0.55, minWidth: 32 }}>
                     {String(index + 1).padStart(2, "0")}
