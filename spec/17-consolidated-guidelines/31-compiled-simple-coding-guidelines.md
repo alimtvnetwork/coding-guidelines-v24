@@ -34,7 +34,7 @@ auto-reject on the same tier as RULE 0.
 10. Components stay small and reusable. For any feature with three or more components, produce a Mermaid component diagram first.
 11. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
 12. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
-13. Every commit that changes behavior bumps the version, updates the changelog, and updates the release notes.
+
 
 ---
 
