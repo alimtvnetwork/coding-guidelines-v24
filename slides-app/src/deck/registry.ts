@@ -23,6 +23,7 @@ import DryExtractNow from "../slides/31-dry-extract-now";
 import MermaidFirstComponents from "../slides/32-mermaid-first-components";
 import AssetsFolderConvention from "../slides/33-assets-folder-convention";
 import RegisteredErrorCodes from "../slides/34-registered-error-codes";
+import ResponseEnvelope from "../slides/35-response-envelope";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -131,6 +132,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "32-mermaid-first-components", title: "Mermaid-first · diagram before three components land", section: "structure", severity: "hard", ruleId: "COMP-001", tags: ["mermaid", "diagram", "components", "architecture", "state ownership", "flowchart"], component: MermaidFirstComponents },
   { id: "33-assets-folder-convention", title: "Assets folder · NN-folder / NN-file, no -final, no -v2", section: "structure", severity: "hard", ruleId: "ASSET-001", tags: ["assets", "folder", "naming", "sequence prefix", "icons", "logos", "convention"], component: AssetsFolderConvention },
   { id: "34-registered-error-codes", title: "Registered error codes · one registry, typed union, exhaustive switch", section: "errors", severity: "hard", ruleId: "ERR-004", tags: ["error codes", "registry", "apperror", "exhaustive switch", "typed union", "support"], component: RegisteredErrorCodes },
+  { id: "35-response-envelope", title: "Response envelope · { data, errors[], meta } and one apiCall parser", section: "errors", severity: "hard", ruleId: "ERR-005", tags: ["envelope", "api", "apiCall", "requestId", "typed errors", "shared parser"], component: ResponseEnvelope },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
