@@ -55,7 +55,7 @@ export default function EnumStandardsSlide() {
         <ActionPanel
           slideId="25-enum-standards"
           symptom="You grep for the literal `ready` and find it in 14 files across TS, Go, and PHP. A typo like `redy` silently branches to the false path. Renaming the state requires a full-repo find-and-replace and still misses stringly-typed JSON boundaries."
-          rule="Every finite set of values is a PascalCase enum type with PascalCase members. TS uses `enum`, Go uses `type X byte` + `iota`, PHP uses backed enums with `->isEqual()`. Parsing external input goes through a strict `ParseX` / `TryFromValue` that returns an error on unknown values. No string literal comparisons at call sites. Per spec/17/31 lines 31, 168, 171."
+          rule="Every finite set of values is a PascalCase enum type with PascalCase members. TS uses `enum`, Go uses `type X byte` plus `iota`, PHP uses backed enums with an `isEqual` method. Parsing external input goes through a strict `ParseX` / `TryFromValue` that returns an error on unknown values. No string literal comparisons at call sites. Per spec/17/31 lines 31, 168, 171."
           doThis="When you touch a stringly-typed status/kind/type field, introduce the enum type in a dedicated file, add a strict parser at the JSON/DB boundary, and replace every string literal comparison with the enum symbol in the same diff. Add a switch with exhaustive default that throws on unknown members."
         />
       </div>
