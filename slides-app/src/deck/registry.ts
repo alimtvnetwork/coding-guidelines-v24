@@ -7,6 +7,7 @@ import SpecFirstVsCodeFirst from "../slides/15-spec-first-vs-code-first";
 import CommentsLieCodeDoesNot from "../slides/16-comments-lie-code-does-not";
 import MethodDocDecisionTree from "../slides/17-method-doc-decision-tree";
 import VersionBumpMythBuster from "../slides/18-version-bump-myth-buster";
+import TrustBoundariesTeaser from "../slides/19-trust-boundaries-teaser";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
