@@ -216,6 +216,57 @@ function resolveFunctionName(node) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// Shared: waiver directive parser
+//
+// Syntax (documented in .lovable/coding-guidelines/coding-guidelines.md):
+//   // lint-allow: <rule-key> reason="..." [max=N]
+//   /* lint-allow: <rule-key> reason="..." [max=N] */
+//
+// Accepted <rule-key> aliases for length rules:
+//   function-length         -> max-function-lines + prefer-function-lines
+//   max-function-lines      -> max-function-lines
+//   prefer-function-lines   -> prefer-function-lines
+//
+// Placement: comment must be attached to the function (leading comment,
+// or on the line immediately above the function/declarator/property).
+// `reason="..."` is REQUIRED (non-empty). `max=N` is optional: when
+// present the waiver only silences when actual <= N.
+// ═══════════════════════════════════════════════════════════════
+
+const WAIVER_ALIASES = {
+  "max-function-lines": ["function-length", "max-function-lines"],
+  "prefer-function-lines": ["function-length", "prefer-function-lines"],
+};
+
+const WAIVER_RE = /lint-allow:\s*([\w-]+)\s+reason\s*=\s*"([^"]+)"(?:\s+max\s*=\s*(\d+))?/;
+
+function parseWaiver(commentValue) {
+  const m = WAIVER_RE.exec(commentValue);
+  if (!m) return null;
+  return { rule: m[1], reason: m[2].trim(), max: m[3] ? parseInt(m[3], 10) : null };
+}
+
+function findWaiverFor(node, src, ruleName) {
+  const aliases = WAIVER_ALIASES[ruleName] || [ruleName];
+  const candidates = [node];
+  const p = node.parent;
+  if (p?.type === "VariableDeclarator") candidates.push(p.parent, p.parent?.parent);
+  if (p?.type === "Property" || p?.type === "MethodDefinition") candidates.push(p);
+  if (p?.type === "ExportNamedDeclaration" || p?.type === "ExportDefaultDeclaration") candidates.push(p);
+  if (p?.parent?.type === "ExportNamedDeclaration") candidates.push(p.parent);
+  for (const target of candidates) {
+    const comments = src.getCommentsBefore(target) || [];
+    for (const c of comments) {
+      const w = parseWaiver(c.value);
+      if (!w || !aliases.includes(w.rule) || !w.reason) continue;
+      if (target.loc.start.line - c.loc.end.line > 1) continue;
+      return w;
+    }
+  }
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // Rule: max-function-lines (CODE RED — hard cap, 15)
 // ═══════════════════════════════════════════════════════════════
 
@@ -235,10 +286,11 @@ const maxFunctionLines = {
     function check(node) {
       const count = countEffectiveBodyLines(node, src);
       if (count === null) return;
-      if (count > maxL) {
-        const name = resolveFunctionName(node);
-        context.report({ node, messageId: "tooLong", data: { name, actual: count, max: maxL } });
-      }
+      if (count <= maxL) return;
+      const waiver = findWaiverFor(node, src, "max-function-lines");
+      if (waiver && (waiver.max === null || count <= waiver.max)) return;
+      const name = resolveFunctionName(node);
+      context.report({ node, messageId: "tooLong", data: { name, actual: count, max: maxL } });
     }
 
     return { FunctionDeclaration: check, FunctionExpression: check, ArrowFunctionExpression: check };
@@ -289,6 +341,8 @@ const preferFunctionLines = {
       const count = countEffectiveBodyLines(node, src);
       if (count === null) return;
       if (count <= prefer) return;
+      const waiver = findWaiverFor(node, src, "prefer-function-lines");
+      if (waiver && (waiver.max === null || count <= waiver.max)) return;
       const name = resolveFunctionName(node);
       context.report({ node, messageId: "tooLong", data: { name, actual: count, prefer } });
     }
