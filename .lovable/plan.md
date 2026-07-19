@@ -44,7 +44,7 @@
 
 - **OQ-A1:** Cascading beyond simple union — propose role inheritance hierarchy (parent role implies child accesses)? Default = simple union.
 - **OQ-A2:** Cache-bin technology — in-memory (process-local) vs SQLite memory DB vs Redis? Default proposal = SQLite `:memory:` per-process with TTL invalidation broadcast via Main.
-- **OQ-A3:** Zip password "known pattern" — propose `HMAC-SHA256(SharedSecret, BackupTimestampEpoch)` truncated to 32 hex chars. Confirm.
+- ~~**OQ-A3:**~~ ✅ RESOLVED 2026-05 (Phase 8) - `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 defines the HKDF-derived per-snapshot zip password (Pair-RSA + Envelope-AES stack), superseding the original `HMAC-SHA256(SharedSecret, BackupTimestampEpoch)` proposal.
 - ~~**OQ-A4:**~~ ✅ RESOLVED 2026-05-06 (Phase 11) — `MainWorker.Backup.SnapshotRetentionDays = 30` rolling, with operator override + 7-day compliance floor.
 
 ---
