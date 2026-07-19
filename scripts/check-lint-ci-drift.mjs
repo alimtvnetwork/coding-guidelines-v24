@@ -77,13 +77,13 @@ function ciStepNames() {
 
 function lintCiLabels() {
   const src = readFileSync(LINT_CI, "utf8");
-  const start = src.indexOf("STEPS=(");
-  const end = src.indexOf(")", start);
-  if (start < 0 || end < 0) throw new Error("STEPS=(...) block not found in lint-ci.sh");
-  const block = src.slice(start, end);
+  const lines = src.split("\n");
+  const startIdx = lines.findIndex((l) => l.trim().startsWith("STEPS=("));
+  if (startIdx < 0) throw new Error("STEPS=( block not found in lint-ci.sh");
   const labels = [];
-  for (const line of block.split("\n")) {
-    const t = line.trim();
+  for (let i = startIdx + 1; i < lines.length; i += 1) {
+    const t = lines[i].trim();
+    if (t === ")") break;
     if (!t.startsWith('"') || !t.includes("|")) continue;
     const inner = t.slice(1, t.lastIndexOf('"'));
     labels.push(inner.split("|", 1)[0]);
