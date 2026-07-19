@@ -48,6 +48,8 @@ import NamedGenericsComposites from "../slides/56-named-generics-composites";
 import TypesFileColocation from "../slides/57-types-file-colocation";
 import NameOrSplit from "../slides/58-name-or-split";
 import A11yFloor from "../slides/59-a11y-floor";
+import TestPyramid from "../slides/60-test-pyramid";
+import PrTemplate from "../slides/61-pr-template";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
