@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.118.0] - 2026-07-19
+
+### Changed — CI/CD issue backlog swept clean
+
+- Moved all 7 `✅ Solved` files from `.lovable/cicd-issues/` to `.lovable/resolved-issues/` (01-readme-boolean-negatives-and-style, 02-installsection-component-split, 03-fuzzymatch-function-length-negative-guards, 04-usesearchkeyboard-raw-not-operator, 05-markdown-highlighter-newline-violations, 06-version-drift-after-package-bump, 07-cross-spec-missing-file-link-checker). Root cause of noise: solved items stayed co-located with the active-backlog folder, so every remaining-work sweep re-listed them. `.lovable/cicd-index.md` link paths rewritten from `cicd-issues/` to `resolved-issues/`. `cicd-issues/` is now empty and reserved for actual open findings.
+
+### Added — `slides:bake-baselines` npm script
+
+- Local baseline bake path: `playwright test slides-app/tests/visual.spec.ts --update-snapshots --reporter=list`. Complements the `slides-visual.yml` workflow_dispatch trigger. Note: the Lovable sandbox cannot run this because Chromium headless-shell requires `libglib-2.0.so.0` which is not present; use a local dev machine or CI runner.
+
 ## [5.117.0] - 2026-07-19
 
 ### Added — Visual baseline coverage guard (`scripts/validate-visual-baselines.mjs`)
