@@ -35,7 +35,7 @@ Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUIL
 2. [INFRA] Add a `SlideSection` type and render section dividers between groups in grid view.
 3. [INFRA] Add `SymptomRuleAction` compound component (S/R/A three-column layout) so every rule slide has the same shape.
 4. [INFRA] Add `RuleBadge` component (Hard / Warn / Style) driven by a rule-severity enum.
-5. [INFRA] Add `LanguageTabs` component so a single rule can show Go / TS / PHP / Rust snippets without duplicating slides.
+5. [INFRA] Add `LanguageTabs` component so a single rule can show Go / TS / PHP / Rust snippets without duplicating slides. ✅ v5.64.0
 6. [INFRA] Add `CalloutQuote` for the "comments lie, code does not" style aphorisms. ✅ v5.63.0
 7. [INFRA] Add `RuleAnchor` slug per slide (`/slides/naming-camelcase`) for deep-linking from the docs site.
 8. [INFRA] Sync deck title to `document.title` on slide change (per slides-app spec §9).
