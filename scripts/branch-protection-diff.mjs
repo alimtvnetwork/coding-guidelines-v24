@@ -24,8 +24,9 @@
  *
  * Never mutates anything. Safe to run without admin.
  */
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { join } from "node:path";
 
 const EXPECTED_FILE = ".github/branch-protection.expected.json";
 
@@ -38,15 +39,19 @@ function loadExpected() {
 }
 
 function parseArgs(argv) {
-  const args = { repo: null };
+  const args = { repo: null, reportDir: null };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === "--repo" && argv[i + 1]) {
       args.repo = argv[i + 1];
+      i += 1;
+    } else if (argv[i] === "--report" && argv[i + 1]) {
+      args.reportDir = argv[i + 1];
       i += 1;
     }
   }
   return args;
 }
+
 
 function detectRepo() {
   const r = spawnSync("gh", ["repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner"], {
