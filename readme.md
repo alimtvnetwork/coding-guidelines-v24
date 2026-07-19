@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.105.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-5.106.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.105.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->5.106.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-07-19<!-- /STAMP:UPDATED -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.19.1</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="QUICKSTART.md">QUICKSTART.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="QUICKSTART.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -1525,9 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
-### What's new in v5.105.0
+### What's new in v5.106.0
 
-- SS-02 tasks 52-53: React render correctness pair. Slide 50 `REACT-004` (hard) bans raw `for`/`forEach` in render and derived state; iteration must be an expression (`map`/`filter`/`reduce`/`flatMap`/`Array.from`), never a mutation of arrays declared during render. Slide 51 `REACT-005` (hard) forbids mutating state, props, or arrays/objects returned by hooks; always build a new value with spread or `structuredClone` so React's reference-equality bailouts, `React.memo`, and React Query caches stay correct. Enforced by ESLint rules `no-raw-loop-in-render` and `no-mutate-hook-return`, plus `readonly` state and hook-return types. Per spec/17/31 lines 104-105. 53 slides validated.
+- SS-02 tasks 54-55: React list-keys + component-size pair. Slide 52 `REACT-006` (hard) requires stable, unique `key` props derived from data (`{TableName}Id`); bans array-index keys and per-render UUIDs that scramble child state or remount rows on every render. Slide 53 `REACT-007` (hard) caps React `.tsx` files at 100 lines (stricter than SIZE-001's 300 because JSX+hooks density is ~3x); extract child components, custom hooks, and data files before growth. Enforced by ESLint `react/no-array-index-key`, custom `react/no-unstable-key`, and `max-lines` on `**/*.tsx`. Per spec/17/31 lines 106-107. 55 slides validated.
+
+### What's new in v5.105.0
 
 ### What's new in v5.104.0
 
