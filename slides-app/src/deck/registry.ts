@@ -57,6 +57,7 @@ export type SlideSection =
   | "naming"
   | "control-flow"
   | "errors"
+  | "data-schema"
   | "react"
   | "workflow"
   | "closing";
