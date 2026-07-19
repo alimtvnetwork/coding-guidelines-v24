@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.70.0] - 2026-07-19
+
+### Added - SS-02 task 18: spec-first vs code-first PR contrast slide
+
+- New slide [`slides-app/src/slides/15-spec-first-vs-code-first.tsx`](slides-app/src/slides/15-spec-first-vs-code-first.tsx), registered as `15-spec-first-vs-code-first` in the `principles` section (ruleId `MUST-003`, severity `hard`) directly after `14-root-cause-first` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
+- Layout: `<ActionPanel>` header (satisfies `scripts/validate-slides-sra.mjs`) plus a 2-column side-by-side of two PR payloads (PR #482 code-first rejected vs PR #483 spec-first accepted) showing identical code diffs but different accompanying files, so reviewers can pattern-match rejection at a glance. Uses design tokens (`hsl(var(--destructive))` vs `hsl(var(--accent))`, `var(--font-mono)` file lists).
+- Root cause of prior gap: `10-spec-first-workflow` taught the 3-step process (Spec, Issue, Code+PR) but never showed what a spec-less PR looks like next to a spec-first one, so the failure mode remained abstract.
+- Verification: `scripts/validate-slides-sra.mjs` reports "OK: 17 slide(s)" (was 16). Palette search `spec-first`, `pull request`, or `before after` returns the new slide.
+
+---
+
 ## [5.69.0] - 2026-07-19
 
 ### Added - SS-02 task 17: root-cause-first workflow slide
