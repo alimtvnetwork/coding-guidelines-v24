@@ -29,9 +29,12 @@ interface CardProps {
   body: string;
   accent: "destructive" | "primary" | "accent";
   delay: number;
+  slideId?: string;
+  block?: ProgressBlock;
 }
 
-function Card({ icon, kicker, body, accent, delay }: CardProps) {
+function Card({ icon, kicker, body, accent, delay, slideId, block }: CardProps) {
+  const accentColor = `hsl(var(--${accent}))`;
   return (
     <motion.div
       variants={cardEntrance}
@@ -55,7 +58,7 @@ function Card({ icon, kicker, body, accent, delay }: CardProps) {
           display: "flex",
           alignItems: "center",
           gap: 12,
-          color: `hsl(var(--${accent}))`,
+          color: accentColor,
           fontSize: 22,
           fontWeight: 700,
           letterSpacing: "0.06em",
@@ -68,11 +71,16 @@ function Card({ icon, kicker, body, accent, delay }: CardProps) {
       <div style={{ fontSize: 26, lineHeight: 1.35, color: "hsl(var(--fg))" }}>
         {body}
       </div>
+      {slideId && block && (
+        <div style={{ marginTop: "auto", paddingTop: 12 }}>
+          <ReviewCheckbox slideId={slideId} block={block} color={accentColor} />
+        </div>
+      )}
     </motion.div>
   );
 }
 
-export function ActionPanel({ symptom, rule, doThis }: ActionPanelProps) {
+export function ActionPanel({ symptom, rule, doThis, slideId }: ActionPanelProps) {
   return (
     <div
       style={{
