@@ -27,6 +27,7 @@ import ResponseEnvelope from "../slides/35-response-envelope";
 import LogLevelSeverity from "../slides/36-log-level-severity";
 import LogContext from "../slides/37-log-context";
 import VerifyBothDirections from "../slides/38-verify-both-directions";
+import RetrospectiveOnRepeats from "../slides/39-retrospective-on-repeats";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -139,6 +140,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "36-log-level-severity", title: "Log-level severity map · debug/info/warn/error/fatal, one meaning each", section: "errors", severity: "hard", ruleId: "LOG-001", tags: ["logging", "severity", "debug", "info", "warn", "error", "fatal", "on-call"], component: LogLevelSeverity },
   { id: "37-log-context", title: "Log context · op, requestId, key inputs, never secrets or PII", section: "errors", severity: "hard", ruleId: "LOG-002", tags: ["logging", "context", "requestId", "redaction", "pii", "secrets", "grep"], component: LogContext },
   { id: "38-verify-both-directions", title: "Verify both directions · curl the backend AND inspect the frontend on the same payload", section: "errors", severity: "hard", ruleId: "INT-001", tags: ["integration", "verification", "curl", "contract", "frontend", "backend", "pr-checklist"], component: VerifyBothDirections },
+  { id: "39-retrospective-on-repeats", title: "Retrospective on repeats · second occurrence triggers an RCA before the third fix", section: "errors", severity: "hard", ruleId: "RCA-002", tags: ["rca", "repeats", "class-fix", "prevention", "lint", "ci"], component: RetrospectiveOnRepeats },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
