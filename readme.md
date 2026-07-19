@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.65.0
+
+- **Sub-step URL coordinate (SS-02 task 10).** Hash routing in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) now understands `#/id/<slide-id>/<step>`. `next`/`prev` step through reveals before advancing slides, and reloading mid-reveal preserves the exact state. New [`slides-app/src/lib/step-context.ts`](slides-app/src/lib/step-context.ts) exposes `useSlideStep()` for slides to drive bullet/diff visibility from URL state; slides opt in by declaring `steps: N` in the deck registry. Completes the URL-as-state trio: slide id + step + view.
+
 ### What's new in v5.64.0
 
 - **`LanguageTabs` component (SS-02 task 5).** New [`slides-app/src/components/LanguageTabs.tsx`](slides-app/src/components/LanguageTabs.tsx) provides an accessible (`role="tablist"`) tab shell for Go / TS / PHP / Rust snippets on a single rule slide. Content-agnostic (accepts any `ReactNode` per tab), Framer Motion pill and panel crossfade, design tokens only. Unblocks any rule slide that needs equivalent-across-languages examples without slide duplication.

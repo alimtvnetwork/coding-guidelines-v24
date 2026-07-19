@@ -58,6 +58,12 @@ export interface SlideEntry {
   severity?: RuleSeverity;
   /** Optional rule id from `spec/17/31`, e.g. "NAM-001". */
   ruleId?: string;
+  /**
+   * Optional max sub-step index for staged reveals. When set to N, the slide
+   * supports steps 0..N (N+1 total render states). Consumed by App.tsx nav
+   * logic and by slide components via `useSlideStep()`. Absent = 0 (no reveals).
+   */
+  steps?: number;
   notes?: string;
   component: ComponentType;
 }

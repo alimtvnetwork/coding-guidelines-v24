@@ -5,6 +5,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.65.0] - 2026-07-19
+
+### Added - SS-02 task 10: sub-step URL coordinate for staged reveals
+
+- Extended hash routing in [`slides-app/src/App.tsx`](slides-app/src/App.tsx) to support `#/id/<slide-id>/<step>` (and legacy `#/<index>/<step>`). `readSlideFromHash()` now returns `{ index, step }` with `clampStep()` bounded by the slide's declared `steps` field; unknown or over-max steps clamp safely and log to console rather than swallowing the error.
+- `next()` advances step-first (step < maxStep) then slide-first (step 0 of next slide); `prev()` mirrors it, landing on the previous slide's max step. Reloading mid-reveal preserves the exact reveal state, so screen recordings and shared links land identically.
+- Added `steps?: number` to `SlideEntry` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Slides opt in; absent means single-state (step always 0). Zero existing slides use it yet, so no behavior change for the current deck.
+- New [`slides-app/src/lib/step-context.ts`](slides-app/src/lib/step-context.ts) exposes `SlideStepContext`, `useSlideStep()`, and `isStepVisible(index, current)`. Current slide is wrapped in `<SlideStepContext.Provider value={{ step, maxStep }}>` so future staged-reveal slides can drive bullet/diff visibility purely from URL state.
+- Root cause of prior gap: the slides-app skill (§9 URL-Driven Navigation) mandates sub-step reveals get their own URL coordinate, but the app tracked only slide index; any staged-reveal slide would have needed local state that reset on reload and could not be linked to.
+- Verification: `bun run build` in `slides-app/` succeeds; offline contract intact (38 files, 1829 KB); `dist.zip` regenerated.
+
+---
+
 ## [5.64.0] - 2026-07-19
 
 ### Added - SS-02 task 5: `LanguageTabs` component for multi-language rule slides

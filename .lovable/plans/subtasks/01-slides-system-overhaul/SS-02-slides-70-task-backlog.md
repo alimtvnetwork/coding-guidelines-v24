@@ -40,7 +40,7 @@ Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUIL
 7. [INFRA] Add `RuleAnchor` slug per slide (`/slides/naming-camelcase`) for deep-linking from the docs site.
 8. [INFRA] Sync deck title to `document.title` on slide change (per slides-app spec §9).
 9. [INFRA] Add `?print` route rendering all slides stacked for PDF handout export.
-10. [INFRA] Add `?step=N` sub-step URL coordinate for staged reveals (bullets, diffs).
+10. [INFRA] Add `?step=N` sub-step URL coordinate for staged reveals (bullets, diffs). ✅ v5.65.0 (hash form `#/id/<slide-id>/<step>`)
 11. [INFRA] Presenter view: show notes + next-slide preview + rule id.
 12. [INFRA] Grid view: filter by section + severity.
 13. [INFRA] Add search-in-deck (Cmd+K) matching slide title, rule id, and tags.
