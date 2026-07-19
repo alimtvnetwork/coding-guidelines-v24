@@ -42,7 +42,13 @@ function writeSlideToHash(n: number) {
   window.location.hash = `/id/${encodeURIComponent(slide.id)}`;
 }
 
+function isPrintMode(): boolean {
+  return new URLSearchParams(window.location.search).has("print");
+}
+
 export default function App() {
+  if (isPrintMode()) return <PrintView />;
+
   const [index, setIndex] = useState(readSlideFromHash);
   const [view, setView] = useState<View>("deck");
   const [helpOpen, setHelpOpen] = useState(false);
@@ -720,6 +726,32 @@ function PresenterView({
           Close presenter (Esc)
         </button>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Print handout: renders every slide at native 1920x1080, stacked vertically.
+ * Trigger via `?print`. Combined with the @page rule in slide.css, Cmd/Ctrl+P →
+ * Save as PDF produces a landscape handout that matches the on-screen design.
+ * See slides-app skill §10 (Print Mode).
+ */
+function PrintView() {
+  useEffect(() => {
+    document.title = `Handout · ${DECK.length} slides`;
+  }, []);
+  return (
+    <div className="print-root">
+      {DECK.map((slide, i) => {
+        const S = slide.component;
+        return (
+          <section key={slide.id} className="print-page" aria-label={`Slide ${i + 1}: ${slide.title}`}>
+            <div className="slide-content">
+              <S />
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
