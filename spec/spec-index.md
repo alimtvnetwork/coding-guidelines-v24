@@ -490,7 +490,7 @@
 |------|-------|---------|
 | `spec/17-consolidated-guidelines/00-overview.md` | Consolidated Guidelines | 1.0.0 |
 | `spec/17-consolidated-guidelines/01-spec-authoring.md` | Consolidated: Spec Authoring Guide | 1.0.0 |
-| `spec/17-consolidated-guidelines/02-coding-guidelines.md` | Consolidated: Coding Guidelines | 1.0.0 |
+| `spec/17-consolidated-guidelines/02-coding-guidelines.md` | Redirect Stub (see file 31) | 1.0.0 |
 | `spec/17-consolidated-guidelines/03-error-management.md` | Consolidated: Error Management | 1.0.0 |
 | `spec/17-consolidated-guidelines/05-split-db-architecture.md` | Consolidated: Split DB Architecture | 1.0.0 |
 | `spec/17-consolidated-guidelines/06-seedable-config.md` | Consolidated: Seedable Config | 1.0.0 |
