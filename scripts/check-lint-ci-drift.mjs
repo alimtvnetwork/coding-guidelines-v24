@@ -97,7 +97,7 @@ function main() {
   const missing = [];
   for (const ciName of ciNames) {
     if (IGNORED_CI_STEPS.has(ciName)) continue;
-    const matched = labels.some((label) => ciName.startsWith(label));
+    const matched = labels.some((label) => ciName.startsWith(label) || label.startsWith(ciName));
     if (!matched) missing.push(ciName);
   }
   const unusedIgnores = [...IGNORED_CI_STEPS.keys()].filter((k) => !ciNames.includes(k));
