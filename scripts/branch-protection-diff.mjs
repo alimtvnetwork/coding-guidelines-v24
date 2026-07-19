@@ -93,9 +93,8 @@ function diff(live, expected) {
   return { missingOnLive, extraOnLive };
 }
 
-function main() {
-  if (!ghAvailable()) {
 function buildReport({ repo, expected, live, missingOnLive, extraOnLive }) {
+
   const unchanged = expected.filter((n) => live.includes(n));
   const status = !missingOnLive.length && !extraOnLive.length ? "in-sync" : "drift";
   const json = {
