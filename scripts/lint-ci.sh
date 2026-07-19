@@ -150,6 +150,8 @@ STEPS=(
   "Self-test print-required-checks parser (parseWorkflowText + checkStale)|node scripts/tests/print-required-checks.test.mjs"
   "Self-test branch-protection-diff classifier (diff live vs expected)|node scripts/tests/branch-protection-diff.test.mjs"
   "Self-test branch-protection-soak verdict thresholds (READY/WATCH/NOT READY)|node scripts/tests/branch-protection-soak.test.mjs"
+  "Check coding-guideline mirrors in sync (Hard Rule 13)|node scripts/sync-guidelines.mjs --check"
+  "Self-test sync-guidelines --check (drift detection contract)|node scripts/tests/sync-guidelines.test.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then
