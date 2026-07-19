@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Compass, CheckCircle2 } from "lucide-react";
+import { ReviewCheckbox } from "@/components/ReviewCheckbox";
+import type { ProgressBlock } from "@/lib/progress";
 
 export interface PrincipleCardProps {
   number: string;
@@ -9,6 +11,8 @@ export interface PrincipleCardProps {
   action: string;
   accent: "destructive" | "primary" | "accent";
   delay: number;
+  /** Enables per-block review checkboxes when set. */
+  progressId?: string;
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const;
