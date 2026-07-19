@@ -4,6 +4,13 @@
 
 ---
 
+## v5.76.0 — 2026-07-19 (SS-02 task 23: DB schema naming slide (NAM-002))
+
+**Scope:** Version bump (`5.75.0` → `5.76.0`). SS-02 task 23: DB schema naming slide (NAM-002).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.55.0 — 2026-07-19 (SS-02: rewrite Core Principles slides with Symptom/Rule/Action)
 
 **Scope:** Version bump (`5.54.0` → `5.55.0`). SS-02: rewrite Core Principles slides with Symptom/Rule/Action.
