@@ -1525,6 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.55.0
+
+- **Core Principles slides now use the same Symptom / Rule / Do this next shape as every rule slide (SS-02).** Rewrote [`01a-core-principles-1.tsx`](slides-app/src/slides/01a-core-principles-1.tsx), [`01b`](slides-app/src/slides/01b-core-principles-2.tsx), and [`01c`](slides-app/src/slides/01c-core-principles-3.tsx) around a shared [`PrincipleCard`](slides-app/src/components/PrincipleCard.tsx) component. Principles 01-06 now open with the same three rows as slides 02-11, so the mental model is established on the first substantive slide instead of drifting mid-deck.
+- Root cause fixed: the three overview slides listed rule names as inert cards, breaking the S/R/A framing every downstream slide uses.
+
 ### What's new in v5.54.0
 
 - **A11y badge in GitHub Release notes (SS-02 task 63)** — [`.github/workflows/release.yml`](.github/workflows/release.yml) resolves the [`slides-smoke.yml`](.github/workflows/slides-smoke.yml) workflow conclusion for the release SHA via `gh run list`, then injects a badge at the top of the release body: green `a11y: WCAG 2.1 AA clean` on success, red on failure, grey `not verified` when no run exists yet. Badge links to the workflow run. Consumers of `slides-deck.zip` now see the accessibility signal without leaving the release page.
