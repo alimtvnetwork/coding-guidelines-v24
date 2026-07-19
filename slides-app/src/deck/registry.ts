@@ -20,6 +20,7 @@ import FunctionLength from "../slides/28-function-length";
 import ImmutableFirst from "../slides/29-immutable-first";
 import DedicatedDefinitions from "../slides/30-dedicated-definitions";
 import DryExtractNow from "../slides/31-dry-extract-now";
+import MermaidFirstComponents from "../slides/32-mermaid-first-components";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -125,6 +126,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "29-immutable-first", title: "Immutable-first · assign once, spread-copy, no in-place mutation", section: "structure", severity: "hard", ruleId: "IMMUT-001", tags: ["immutable", "const", "let", "mutation", "spread", "rust", "reassignment"], component: ImmutableFirst },
   { id: "30-dedicated-definitions", title: "Dedicated definitions files · types, enums, constants get their own file", section: "structure", severity: "hard", ruleId: "DEF-001", tags: ["types", "enums", "constants", "interfaces", "extract", "colocation", "types.ts"], component: DedicatedDefinitions },
   { id: "31-dry-extract-now", title: "DRY extract-now · two sites is the trigger, not three", section: "structure", severity: "hard", ruleId: "DRY-001", tags: ["dry", "duplication", "extract", "helper", "drift", "copy-paste"], component: DryExtractNow },
+  { id: "32-mermaid-first-components", title: "Mermaid-first · diagram before three components land", section: "structure", severity: "hard", ruleId: "COMP-001", tags: ["mermaid", "diagram", "components", "architecture", "state ownership", "flowchart"], component: MermaidFirstComponents },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
