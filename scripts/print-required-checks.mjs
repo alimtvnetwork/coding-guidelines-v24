@@ -154,4 +154,8 @@ function main() {
   }
 }
 
-main();
+// Guard main() so importing from tests does not exit the process.
+import { fileURLToPath } from "node:url";
+if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+
+export { checkStale };
