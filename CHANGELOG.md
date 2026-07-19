@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.63.0] - 2026-07-19
+
+### Added - SS-02 task 6: `CalloutQuote` component for aphorism panels
+
+- New [`slides-app/src/components/CalloutQuote.tsx`](slides-app/src/components/CalloutQuote.tsx) renders a bordered blockquote with an accent bar, quote icon, italicized body, and optional uppercase attribution. Supports `primary`, `accent`, and `destructive` accents mapped to design tokens (no hardcoded colors). Framer Motion entrance mirrors `ActionPanel` timing so aphorism slides feel cohesive with the S->R->A pattern.
+- Unblocks aphorism-heavy content slides (16-62), notably guideline callouts like "comments lie, code does not" and "explicit is better than implicit" that need a distinct visual treatment separate from the Symptom/Rule/Action grid.
+- Root cause of prior gap: guideline slides had no reusable component for short aphorisms, so authors would have inlined ad-hoc blockquote styles per slide, drifting from the deck's design tokens and typography scale.
+- Verification: `bun run build` in `slides-app/` succeeds; offline contract intact (38 files, 1828 KB); `dist.zip` regenerated.
+
+---
+
 ## [5.62.0] - 2026-07-19
 
 ### Added - SS-02 task 9: `?print` handout route for PDF export
