@@ -51,6 +51,8 @@ const IGNORED_CI_STEPS = new Map([
   ["Skipped — no codegen-relevant files changed", "path-filter skip marker"],
   ["Verify checker present", "presence-check for the cross-links job; the actual check IS mirrored"],
   ["Check sync drift (all generated files)", "runs in the sync-drift job; lint-ci.sh scope is placeholder-linters"],
+  ["Append drift report to GitHub step summary", "sync-drift job reporting; not a lint"],
+  ["Upload sync drift report (JSON + Markdown)", "artifact upload — infra"],
   ["Guard release-install.* against /releases/latest calls", "installer-tests job, mirrored in scripts/installer-*.sh not lint-ci.sh"],
   ["release-install.sh exit-code acceptance (spec §F + §AC)", "installer-tests job"],
   ["release.sh bake-output integration (spec §Release-Time Build Step)", "installer-tests job"],
