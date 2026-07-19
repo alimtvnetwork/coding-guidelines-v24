@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.92.0
+
+- SS-02 task 39: Log context requirements slide (`LOG-002`, hard) mandating `op`, `requestId`, `userId`, and safe scalar inputs while banning secrets and PII beyond `userId` per spec/17/31 line 77. 39 slides validated.
+
 ### What's new in v5.91.0
 
 - SS-02 task 38: Log-level severity map slide (`LOG-001`, hard) locking in `debug`/`info`/`warn`/`error`/`fatal` semantics per spec/17/31 line 76. 38 slides validated.
