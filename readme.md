@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.78.0
+
+- **Boolean naming slide (SS-02 task 25).** New [`slides-app/src/slides/23-boolean-naming.tsx`](slides-app/src/slides/23-boolean-naming.tsx) (ruleId `BOOL-002`, hard) codifies [spec/17/31 §Boolean Naming](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md) lines 40-49: prefixes `is` / `has` / `can` / `should` / `was` / `will` / `did` / `must`, positive framing only, no bare adjectives or `flag` / `bool` / `check`. Before/after `<CodeDiff>` inverts a triple-negative guard to a readable positive form. SRA validator now passes 25 slides.
+
 ### What's new in v5.77.0
 
 - **Zero-underscore + full-caps acronyms slide (SS-02 task 24).** New [`slides-app/src/slides/22-zero-underscore-acronyms.tsx`](slides-app/src/slides/22-zero-underscore-acronyms.tsx) (ruleId `NAM-003`, hard) extends `NAM-001` with the two most-violated PascalCase corollaries: no mid-name underscores, and acronyms stay fully uppercase (`HTTPResponse`, `URLParser`, `APIKey`, `JSONBody`). Before/after `<CodeDiff>` plus `<ActionPanel>`. SRA validator now passes 24 slides.
