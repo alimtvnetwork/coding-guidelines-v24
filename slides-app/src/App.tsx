@@ -214,6 +214,7 @@ export default function App() {
         Next={NextSlide}
         index={index}
         total={DECK.length}
+        onJump={(n) => goto(n)}
         onClose={() => setView("deck")}
       />
     );
