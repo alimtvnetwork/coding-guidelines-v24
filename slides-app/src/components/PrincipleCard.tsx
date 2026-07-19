@@ -31,23 +31,42 @@ interface RowProps {
   label: string;
   body: string;
   color: string;
+  progressId?: string;
+  block?: ProgressBlock;
 }
 
-function Row({ icon, label, body, color }: RowProps) {
+function Row({ icon, label, body, color, progressId, block }: RowProps) {
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
       <div style={{ color, marginTop: 2, flexShrink: 0 }}>{icon}</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
         <div
           style={{
-            fontSize: 16,
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
           }}
         >
-          {label}
+          <div
+            style={{
+              fontSize: 16,
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color,
+            }}
+          >
+            {label}
+          </div>
+          {progressId && block && (
+            <ReviewCheckbox
+              slideId={progressId}
+              block={block}
+              color={color}
+              label=""
+            />
+          )}
         </div>
         <div style={{ fontSize: 22, lineHeight: 1.32, color: "hsl(var(--fg))" }}>
           {body}
