@@ -2,7 +2,15 @@
 
 Slug: slides-system-overhaul
 Steps: 5
-Status: pending
+Status: in-progress (steps 3, 4, 5 shipped; steps 1, 2 remain)
+
+## Reconciliation (2026-07-19, v5.56.0)
+
+- Step 3 (release.mjs slides zip + README link): DONE in v5.52.0 - v5.53.0.
+- Step 4 (`scripts/sync-guidelines.mjs` + CI drift fail): DONE in v5.50.0.
+- Step 5 (smoke + axe-core a11y + Playwright visual regression + SRA validator): DONE across v5.49.0 - v5.55.0.
+- Step 1 (publish 3-theme audit): subtask written, publication pending.
+- Step 2 (execute 70-task backlog): 13/70 shipped, 57 remain. See SS-02.
 Created: 2026-07-19
 
 ## Context

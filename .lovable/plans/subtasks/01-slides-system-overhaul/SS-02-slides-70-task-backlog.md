@@ -2,7 +2,27 @@
 
 Parent: 01-slides-system-overhaul
 Slug: slides-70-task-backlog
-Status: pending
+Status: in-progress (13/70 shipped as of v5.56.0)
+
+## Completed (reconciled 2026-07-19, v5.56.0)
+
+Shipped in v5.50.0 - v5.55.0 across prior sessions:
+
+- Task 8 (document.title sync) - landed with URL-driven nav.
+- Task 15 (semantic classes audit in `.slide-content`) - completed with PrincipleCard rewrite.
+- Task 45 (frontend global error boundary) - `ErrorBoundary` in slides-app.
+- Task 63 (slides build wired into `scripts/release.mjs`) - v5.52.0.
+- Task 64 (attach `slides-deck.zip` to GitHub Release) - v5.52.0.
+- Task 65 (README link to slides deck asset) - v5.53.0.
+- Task 66 (`scripts/sync-guidelines.mjs`) - v5.50.0.
+- Task 68 (smoke test rule-id coverage) - v5.49.0 + extended.
+- Task 69 (Playwright visual regression baseline) - `tests/visual.spec.ts` + `slides-visual.yml`.
+- Task 70 (axe-core a11y per slide) - v5.51.0 + `a11y.spec.ts`.
+- Extra: TOC slide with deep links and progress dots.
+- Extra: per-block review checklists (`ReviewCheckbox`, `lib/progress.ts`).
+- Extra: SRA structural validator (`scripts/validate-slides-sra.mjs`) in CI.
+
+Remaining: 57 tasks (infra 1-7, 9-14; content 16-62; build 67).
 Created: 2026-07-19
 
 Ordered backlog to evolve `slides-app/` into the canonical teaching surface for the compiled simple coding guideline (`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` v1.4.0). Every slide follows the Symptom → Rule → Action pattern already used by `ActionPanel`.
