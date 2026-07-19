@@ -1527,7 +1527,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.104.0
 
-- SS-02 task 50: `useEffect` last resort with positive guards (`REACT-002`, hard). Default effect count is zero; derive state with `useMemo` or plain expressions, react to clicks with event handlers, extract every remaining guard into a positively named boolean like `isCheckoutReady`. Enforced by custom ESLint rules `no-derive-state-in-effect`, `no-negative-effect-guard`, `require-effect-cleanup-when-async` and CI log `react.effect.violation`. Per spec/17/31 lines 99-101. 50 slides validated.
+- SS-02 task 51: one effect, one concern, always with cleanup (`REACT-003`, hard). Split unrelated subscriptions/fetches into separate effects; every acquired resource returns a cleanup (`socket.close()`, `clearInterval`, `AbortController.abort()`). Enforced by custom ESLint rules `one-concern-per-effect` and `require-effect-cleanup`, plus dev-only `useTrackedEffect` that logs `react.effect.leak` on non-zero unmount balance. Per spec/17/31 lines 102-103. 51 slides validated.
 
 ### What's new in v5.101.0
 
