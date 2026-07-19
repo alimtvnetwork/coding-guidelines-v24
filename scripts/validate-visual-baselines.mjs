@@ -52,7 +52,9 @@ function countDeckEntries() {
   const marker = "export const DECK";
   const start = src.indexOf(marker);
   if (start < 0) return 0;
-  const open = src.indexOf("[", start);
+  // Anchor on the assignment `= [` to skip the `SlideEntry[]` type bracket.
+  const eq = src.indexOf("= [", start);
+  const open = eq < 0 ? -1 : eq + 2;
   if (open < 0) return 0;
   let depth = 0;
   let count = 0;
