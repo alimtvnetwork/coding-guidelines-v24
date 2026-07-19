@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.75.0] - 2026-07-19
+
+### Added - SS-02 task 22a: Backup-tier freeze slide
+
+- New slide [`slides-app/src/slides/20-backup-tier-freeze.tsx`](slides-app/src/slides/20-backup-tier-freeze.tsx), registered as `20-backup-tier-freeze` in the `principles` section (ruleId `MUST-008`, severity `warn`) after `19-trust-boundaries-teaser` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
+- Layout: `<ActionPanel>` header plus a 2-column "materialize now vs defer to Phase 12" contrast, closing with a `<CalloutQuote>` from spec/19 ch. 25 §6 (MAIN-900-01 rationale).
+- Root cause of prior gap: `MainWorker.Backup.*` seed keys in spec/19 ch. 20 are listed as defaults-only, but reviewers kept pushing to pin them as v2.0.0 contract values. Materializing prematurely would delete the MAIN-900-01 SpecContradiction safe-fail that halts literal AI implementers on Backup-tier gaps.
+- Verification: `node scripts/validate-slides-sra.mjs` reports "OK: 22 slide(s)" (was 21). Palette search `backup`, `freeze`, `phase 12`, or `MAIN-900-01` returns the new slide.
+
 ## [5.74.0] - 2026-07-19
 
 ### Added - SS-02 task 22: Trust-boundary teaser slide

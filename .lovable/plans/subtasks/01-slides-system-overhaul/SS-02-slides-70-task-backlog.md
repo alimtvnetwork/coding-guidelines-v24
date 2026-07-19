@@ -59,6 +59,7 @@ Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUIL
 
 ## C. Content: Naming, style, structure (tasks 23-32)
 
+22a. [CONTENT] Backup-tier freeze rationale (why `MainWorker.Backup.*` seed keys stay defaults-only until Phase 12). — DONE v5.75.0 (`slides-app/src/slides/20-backup-tier-freeze.tsx`, `MUST-008`). Inserted between task 22 and 23 during execution.
 23. [CONTENT] PascalCase entities / camelCase fields / `{Table}Id` PK naming.
 24. [CONTENT] Zero-underscore policy + full-uppercase acronyms.
 25. [CONTENT] Boolean naming: is/has/can/should + positive framing (before/after).
