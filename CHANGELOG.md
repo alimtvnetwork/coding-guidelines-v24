@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.73.0] - 2026-07-19
+
+### Added - SS-02 task 21: Version-bump myth-buster slide
+
+- New slide [`slides-app/src/slides/18-version-bump-myth-buster.tsx`](slides-app/src/slides/18-version-bump-myth-buster.tsx), registered as `18-version-bump-myth-buster` in the `principles` section (ruleId `MUST-006`, severity `hard`) after `17-method-doc-decision-tree` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
+- Layout: `<ActionPanel>` header plus a 2x2 Myth vs Reality grid killing the four common misreads of the v1.2 workflow update ("bump is optional", "docs-only PRs skip it", "CI's job", "changelog later"). Footer `<CalloutQuote>` cites spec/17/31 §Must Follow (v1.4.0, line 16). All four rebuttals resolve back to the non-negotiable line in the compiled guideline.
+- Root cause of prior gap: informal chat readouts of the v1.2 workflow simplification were being cited as "the bump is no longer required", but §Must Follow in the current v1.4.0 compiled guideline still lists it as auto-reject on violation. Deck had no artifact refuting the myth.
+- Verification: `node scripts/validate-slides-sra.mjs` reports "OK: 20 slide(s)" (was 19). Palette search `version`, `semver`, `changelog`, `v1.2`, or `myth` returns the new slide.
+
 ## [5.72.0] - 2026-07-19
 
 ### Added - SS-02 task 20: Method-documentation decision tree slide
