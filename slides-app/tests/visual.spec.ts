@@ -24,7 +24,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const DIST_INDEX = resolve(HERE, "..", "dist", "index.html");
 const DIST_URL = pathToFileURL(DIST_INDEX).href;
 
-const SLIDE_COUNT = 16;
+const SLIDE_COUNT = 17;
 const SETTLE_MS = 1200;
 
 test.beforeAll(() => {
