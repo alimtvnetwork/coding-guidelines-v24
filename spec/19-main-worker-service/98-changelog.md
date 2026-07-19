@@ -4,6 +4,13 @@
 
 ---
 
+## v5.52.0 — 2026-07-19 (Attach slides-deck.zip to GitHub Release (Plan SS-01 step 6))
+
+**Scope:** Version bump (`5.52.0` → `5.52.0`). Attach slides-deck.zip to GitHub Release (Plan SS-01 step 6).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`
+
+---
+
 ## v5.51.0 — 2026-07-19 (Slides a11y scan (axe-core WCAG 2.1 A/AA) in CI (Plan SS-01 step 5))
 
 **Scope:** Version bump (`5.50.0` → `5.51.0`). Slides a11y scan (axe-core WCAG 2.1 A/AA) in CI (Plan SS-01 step 5).

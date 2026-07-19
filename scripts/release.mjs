@@ -37,6 +37,7 @@ function parseArgs(argv) {
     target: "both",
     dryRun: false,
     skipSlides: false,
+    skipSlidesUpload: false,
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -46,8 +47,9 @@ function parseArgs(argv) {
     else if (a === "--target") out.target = argv[++i];
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--skip-slides") out.skipSlides = true;
+    else if (a === "--skip-slides-upload") out.skipSlidesUpload = true;
     else if (a === "-h" || a === "--help") {
-      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--skip-slides] [--dry-run]");
+      console.log("Usage: node scripts/release.mjs --tier patch|minor|major [--scope \"...\"] [--target root|spec19|both] [--skip-slides] [--skip-slides-upload] [--dry-run]");
       process.exit(0);
     }
   }
@@ -132,6 +134,38 @@ function buildSlidesDeck(args) {
   if (res.status !== 0) fail(2, "slides-app build failed (run `cd slides-app && bun run build` to reproduce)");
 }
 
+// Uploads slides-app/dist.zip as `slides-deck.zip` on GitHub release
+// `v<nextVersion>`. Requires `gh` CLI + auth. Non-fatal when either is
+// missing: prints the exact manual command so the release still finishes.
+function uploadSlidesAsset(args, nextVersion) {
+  if (args.skipSlides || args.skipSlidesUpload) {
+    console.log("→ skip slides asset upload (flag)");
+    return;
+  }
+  const zip = resolve(ROOT, "slides-app", "dist.zip");
+  if (!existsSync(zip)) { console.log("→ skip slides asset upload (no dist.zip)"); return; }
+  const tag = `v${nextVersion}`;
+  const uploadArgs = ["release", "upload", tag, `${zip}#slides-deck.zip`, "--clobber"];
+  if (args.dryRun) { console.log(`→ (dry-run) would run: gh ${uploadArgs.join(" ")}`); return; }
+  const hasGh = spawnSync("gh", ["--version"], { stdio: "ignore" }).status === 0;
+  if (!hasGh) {
+    console.warn(`! gh CLI not found — skipping upload. Run manually once installed:\n    gh ${uploadArgs.join(" ")}`);
+    return;
+  }
+  const authed = spawnSync("gh", ["auth", "status"], { stdio: "ignore" }).status === 0;
+  if (!authed) {
+    console.warn(`! gh not authenticated — skipping upload. Run \`gh auth login\` then:\n    gh ${uploadArgs.join(" ")}`);
+    return;
+  }
+  console.log(`→ gh ${uploadArgs.join(" ")}`);
+  const res = spawnSync("gh", uploadArgs, { cwd: ROOT, stdio: "inherit" });
+  if (res.status !== 0) {
+    console.warn(`! gh release upload exited ${res.status} (release ${tag} may not exist yet). Manual retry:\n    gh ${uploadArgs.join(" ")}`);
+    return;
+  }
+  console.log(`✓ Uploaded slides-deck.zip to release ${tag}`);
+}
+
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
@@ -141,6 +175,7 @@ function main() {
   runBump(args, next);
   maybeAggregatePrompts();
   buildSlidesDeck(args);
+  uploadSlidesAsset(args, next);
   verifySync(args.dryRun);
   console.log(`\n✓ Release ${args.dryRun ? "(dry-run) " : ""}complete: v${next}`);
 }
