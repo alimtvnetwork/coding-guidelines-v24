@@ -143,6 +143,7 @@ STEPS=(
   "Check runner dispatch anti-patterns (run.sh / run.ps1)|bash linter-scripts/check-runner-dispatch-antipatterns.sh"
   "Validate Mermaid sources parse under mermaid v11 (pre-render gate)|node scripts/validate-mermaid.mjs"
   "Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)|node scripts/render-diagrams.mjs --check"
+  "Check lint-ci ↔ ci.yml drift (mirror guard)|node scripts/check-lint-ci-drift.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then
