@@ -29,6 +29,7 @@ export default function BooleanPrefixesSlide() {
         afterLabel="✅ Self-describing"
       />
       <ActionPanel
+        slideId="03-boolean-prefixes"
         symptom="`active`, `valid`, `items` could be flags, strings or arrays — type comes only from reading the assignment."
         rule="Every boolean variable and predicate starts with Is / Has / Can / Should. No exceptions."
         doThis="Grep your file for `const ` followed by a one-word name. Rename any boolean to Is/Has/Can/Should + Noun."

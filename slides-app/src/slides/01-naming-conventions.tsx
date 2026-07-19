@@ -27,6 +27,7 @@ export default function NamingConventionsSlide() {
         afterLabel="✅ PascalCase, full-caps acronyms"
       />
       <ActionPanel
+        slideId="01-naming-conventions"
         symptom="snake_case, camelCase and lowercase acronyms all coexist — readers can't predict any name."
         rule="PascalCase for every identifier. Acronyms (URL, HTTP, ID) stay fully uppercase inside the name."
         doThis="Rename one snake_case symbol in the file you're touching. Don't bulk-rename — fix as you go."

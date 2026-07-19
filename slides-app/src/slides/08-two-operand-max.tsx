@@ -33,6 +33,7 @@ export default function TwoOperandMaxSlide() {
         afterLabel="✅ Named helper"
       />
       <ActionPanel
+        slideId="08-two-operand-max"
         symptom="A wall of && and || conditions. The reader has to mentally evaluate the chain to know what 'ship' means."
         rule="No more than 2 operands in a single boolean expression. The third operand is the signal to extract a helper."
         doThis="Find the longest && / || chain in your diff. Extract it into a `Can…/Is…` function that returns a boolean."

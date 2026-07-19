@@ -76,6 +76,7 @@ export default function FunctionAndFileMetricsSlide() {
         ))}
       </div>
       <ActionPanel
+        slideId="07-function-and-file-metrics"
         symptom="One 73-line function holds the whole flow. Reviewers can't form a mental model in under 10 minutes."
         rule="Functions 8–15 lines. Files < 300 lines. React components < 100 lines. Decompose when you exceed."
         doThis="Run `wc -l` on the file you're touching. If > 300, extract the most cohesive chunk into its own file now."

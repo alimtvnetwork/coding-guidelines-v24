@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Compass, CheckCircle2 } from "lucide-react";
+import { ReviewCheckbox } from "@/components/ReviewCheckbox";
+import type { ProgressBlock } from "@/lib/progress";
 
 export interface PrincipleCardProps {
   number: string;
@@ -9,6 +11,8 @@ export interface PrincipleCardProps {
   action: string;
   accent: "destructive" | "primary" | "accent";
   delay: number;
+  /** Enables per-block review checkboxes when set. */
+  progressId?: string;
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -27,23 +31,42 @@ interface RowProps {
   label: string;
   body: string;
   color: string;
+  progressId?: string;
+  block?: ProgressBlock;
 }
 
-function Row({ icon, label, body, color }: RowProps) {
+function Row({ icon, label, body, color, progressId, block }: RowProps) {
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
       <div style={{ color, marginTop: 2, flexShrink: 0 }}>{icon}</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: 1 }}>
         <div
           style={{
-            fontSize: 16,
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
           }}
         >
-          {label}
+          <div
+            style={{
+              fontSize: 16,
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color,
+            }}
+          >
+            {label}
+          </div>
+          {progressId && block && (
+            <ReviewCheckbox
+              slideId={progressId}
+              block={block}
+              color={color}
+              label=""
+            />
+          )}
         </div>
         <div style={{ fontSize: 22, lineHeight: 1.32, color: "hsl(var(--fg))" }}>
           {body}
@@ -61,6 +84,7 @@ export function PrincipleCard({
   action,
   accent,
   delay,
+  progressId,
 }: PrincipleCardProps) {
   const color = `hsl(var(--${accent}))`;
   return (
@@ -102,18 +126,24 @@ export function PrincipleCard({
           label="Symptom"
           body={symptom}
           color="hsl(var(--destructive))"
+          progressId={progressId}
+          block="symptom"
         />
         <Row
           icon={<Compass size={22} strokeWidth={2.5} />}
           label="Rule"
           body={rule}
           color="hsl(var(--primary))"
+          progressId={progressId}
+          block="rule"
         />
         <Row
           icon={<CheckCircle2 size={22} strokeWidth={2.5} />}
           label="Do this next"
           body={action}
           color="hsl(var(--accent))"
+          progressId={progressId}
+          block="action"
         />
       </div>
     </motion.div>

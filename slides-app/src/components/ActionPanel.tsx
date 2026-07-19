@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Compass, CheckCircle2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { ReviewCheckbox } from "@/components/ReviewCheckbox";
+import type { ProgressBlock } from "@/lib/progress";
 
 export interface ActionPanelProps {
   symptom: string;
   rule: string;
   doThis: string;
+  /** When set, each card shows a "Reviewed" checkbox persisted per block. */
+  slideId?: string;
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -25,9 +29,12 @@ interface CardProps {
   body: string;
   accent: "destructive" | "primary" | "accent";
   delay: number;
+  slideId?: string;
+  block?: ProgressBlock;
 }
 
-function Card({ icon, kicker, body, accent, delay }: CardProps) {
+function Card({ icon, kicker, body, accent, delay, slideId, block }: CardProps) {
+  const accentColor = `hsl(var(--${accent}))`;
   return (
     <motion.div
       variants={cardEntrance}
@@ -51,7 +58,7 @@ function Card({ icon, kicker, body, accent, delay }: CardProps) {
           display: "flex",
           alignItems: "center",
           gap: 12,
-          color: `hsl(var(--${accent}))`,
+          color: accentColor,
           fontSize: 22,
           fontWeight: 700,
           letterSpacing: "0.06em",
@@ -64,11 +71,16 @@ function Card({ icon, kicker, body, accent, delay }: CardProps) {
       <div style={{ fontSize: 26, lineHeight: 1.35, color: "hsl(var(--fg))" }}>
         {body}
       </div>
+      {slideId && block && (
+        <div style={{ marginTop: "auto", paddingTop: 12 }}>
+          <ReviewCheckbox slideId={slideId} block={block} color={accentColor} />
+        </div>
+      )}
     </motion.div>
   );
 }
 
-export function ActionPanel({ symptom, rule, doThis }: ActionPanelProps) {
+export function ActionPanel({ symptom, rule, doThis, slideId }: ActionPanelProps) {
   return (
     <div
       style={{
@@ -84,6 +96,8 @@ export function ActionPanel({ symptom, rule, doThis }: ActionPanelProps) {
         body={symptom}
         accent="destructive"
         delay={1.3}
+        slideId={slideId}
+        block="symptom"
       />
       <Card
         icon={<Compass size={26} strokeWidth={2.5} />}
@@ -91,6 +105,8 @@ export function ActionPanel({ symptom, rule, doThis }: ActionPanelProps) {
         body={rule}
         accent="primary"
         delay={1.45}
+        slideId={slideId}
+        block="rule"
       />
       <Card
         icon={<CheckCircle2 size={26} strokeWidth={2.5} />}
@@ -98,6 +114,8 @@ export function ActionPanel({ symptom, rule, doThis }: ActionPanelProps) {
         body={doThis}
         accent="accent"
         delay={1.6}
+        slideId={slideId}
+        block="action"
       />
     </div>
   );
