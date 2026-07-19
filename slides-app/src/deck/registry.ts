@@ -44,6 +44,8 @@ import StableUniqueKeys from "../slides/52-stable-unique-keys";
 import ComponentFileSize from "../slides/53-component-file-size";
 import CustomHookShape from "../slides/54-custom-hook-shape";
 import NoTuplesPublicShapes from "../slides/55-no-tuples-public-shapes";
+import NamedGenericsComposites from "../slides/56-named-generics-composites";
+import TypesFileColocation from "../slides/57-types-file-colocation";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
