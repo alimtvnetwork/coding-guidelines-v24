@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.116.0] - 2026-07-19
+
+### Fixed — Visual regression covered only 17 of 70 slides
+
+- `slides-app/tests/visual.spec.ts` hardcoded `const SLIDE_COUNT = 17` while the canonical `DECK` in `slides-app/src/deck/registry.ts` holds 70 entries. Root cause: the count was seeded when the deck had 17 slides and never re-derived; 53 slides had no baseline check, so silent visual regressions were possible. Fix: import `DECK` and set `SLIDE_COUNT = DECK.length` so any new slide is auto-covered on the next `--update-snapshots` run.
+
+### Added — `postversion` auto-sync hook (closes CI/CD Issue 06 at the root)
+
+- `package.json` `"postversion": "npm run sync"`. `npm version` bumps now regenerate `version.json`, `public/health-score.json`, `src/data/specTree.json`, and readme stamps in the same commit window, so the "version drift after package.json bump" CI failure cannot recur from a forgotten manual sync.
+
 ## [5.115.0] - 2026-07-19
 
 ### Fixed — Slides deck build (slide 59 JSX escapes, missing `structure` section in registry)
