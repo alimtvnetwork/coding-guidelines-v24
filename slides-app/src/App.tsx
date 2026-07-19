@@ -217,6 +217,9 @@ export default function App() {
         >
           {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
         </button>
+        <button onClick={() => setPaletteOpen(true)} title="Command palette (Cmd/Ctrl+K)" aria-label="Command palette">
+          <Search size={14} /> Search
+        </button>
         <button onClick={() => setHelpOpen((v) => !v)} title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
           <HelpCircle size={14} /> ?
         </button>
@@ -231,6 +234,15 @@ export default function App() {
       </div>
 
       {helpOpen ? <HelpOverlay onClose={() => setHelpOpen(false)} /> : null}
+      {paletteOpen ? (
+        <CommandPalette
+          onClose={() => setPaletteOpen(false)}
+          onPick={(n) => {
+            goto(n);
+            setPaletteOpen(false);
+          }}
+        />
+      ) : null}
     </div>
   );
 }
