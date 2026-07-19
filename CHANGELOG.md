@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.127.0] - 2026-07-19
+
+### Added, branch-protection readiness diff + soak report
+
+- `scripts/branch-protection-diff.mjs` + `npm run branch-protection:diff`: read-only diff of LIVE `main` branch protection required_status_checks vs `.github/branch-protection.expected.json`. Uses `gh api` (no admin needed to read), auto-detects repo via `gh repo view`, exits 0 on match / 1 on drift / 2 on missing gh / 3 on repo-detect fail. Turns `.lovable/procedures/branch-protection.md` step 4 verification from "eyeball a raw JSON array" into a one-command check.
+- `scripts/branch-protection-soak.mjs` + `npm run branch-protection:soak`: read-only soak report for every `desired-but-not-yet-required[]` entry. Queries last N runs on `main` via `gh run list --workflow=<file>` and classifies each candidate READY (>=95% pass), WATCH (>=80%), or NOT READY. Removes the "has it actually soaked?" ambiguity that has deferred `visual` + `smoke` promotion for 4 releases.
+- Root cause this closes: v5.125 exposed npm scripts and v5.126 guarded expected.json against stale names, but neither answered the two questions an admin actually asks before running the promotion ceremony: "is live already in sync?" and "is the desired check stable enough on main to be a merge blocker?". Without those answers the promotion kept being deferred with the same reason ("wait one more cycle") every release. Both scripts are read-only and safe to run without admin, so any dev can run them and post the verdict.
+- Verification: `node scripts/branch-protection-diff.mjs --repo alimtvnetwork/coding-guidelines-v24` exits with a diff or OK line without mutating anything; `node scripts/branch-protection-soak.mjs --runs 20` prints a per-workflow verdict block. Both fall back cleanly with exit code 2 when `gh auth status` fails, so they never fabricate a "READY" verdict from missing data.
+
 ## [5.126.0] - 2026-07-19
 
 ### Added, branch-protection stale-context guard + parser self-test

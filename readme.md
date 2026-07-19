@@ -1526,6 +1526,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.127.0
+
+- `npm run branch-protection:diff` compares LIVE `main` required_status_checks against `.github/branch-protection.expected.json` in one command (uses `gh api`, read-only, exits 1 on drift). Turns the post-promotion verification step from an eyeball diff into a machine check.
+- `npm run branch-protection:soak` reports pass rate over the last N runs on `main` for every `desired-but-not-yet-required[]` workflow and prints READY / WATCH / NOT READY per entry. Kills the "wait one more cycle" perpetual deferral of `visual` + `smoke` promotion by putting the readiness answer in the terminal.
+
 ### What's new in v5.126.0
 
 - Branch-protection expected.json is now actively guarded. `node scripts/print-required-checks.mjs --check` runs as `lint-ci.sh` step 19 and inside CI `sync-drift`, so a workflow job rename that leaves a stale required-context name in `.github/branch-protection.expected.json` fails pre-push AND PRs instead of surfacing mid-promotion when `gh api` rejects the payload.
