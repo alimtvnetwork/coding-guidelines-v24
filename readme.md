@@ -437,7 +437,7 @@ bash ./linters-cicd/run-all.sh --path . --format text
 ### 🐧 Pinned version (recommended for CI)
 
 ```bash
-curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v5.127.0/install.sh | bash -s -- -v v5.127.0
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v5.128.0/install.sh | bash -s -- -v v5.128.0
 ```
 
 ### 🪟 Windows · PowerShell
@@ -447,7 +447,7 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/downl
 irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 
 # Install a pinned version (recommended for CI)
-& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1))) -Version v5.127.0
+& ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1))) -Version v5.128.0
 
 # Run the linter pack (use WSL / Git-Bash for the bash runner on Windows)
 bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
