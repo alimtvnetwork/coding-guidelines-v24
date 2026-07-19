@@ -201,8 +201,8 @@ Both OQ-A1 and OQ-A2 were promoted to locked decisions on 2026-07-19 after the d
 
 - **OQ-A1 → D15 (locked).** Cascading semantics is **simple union** per §1. Role hierarchy is rejected: every effective grant must trace to exactly one `RoleAccessItem` row for auditability. Reopening this would require dropping `WORKER-900-02 EmptyEffectiveAccessSet` and every guard that currently reads `AppUserRole` as a flat set, and would invalidate the JWT `AccessItem.Code[]` embedding in §2 step 1.
 - **OQ-A2 → D16 (locked).** Cache-bin storage tier is **per-process SQLite `:memory:`** with the `RoleAccessCache` / `RoleCacheCatalogVersion` schema in §4 and the invalidation contract in §5. Redis and plain in-process map remain **configurable alternatives** (implementer swaps the four functions in §4 against the same contract); they are not the default and MUST NOT be assumed by Phase 6+ code. `MainWorker.RoleCache.TtlSeconds` (default 600 s) and `MainWorker.RoleCache.RequireReauthOnCatalogBump` (default `false`) in `15-tunable-constants.md` are part of this decision.
-- **OQ-A3 — Backup zip password derivation.** ✅ Resolved in Phase 8 (`20-backup-encryption-and-keys.md` §2.12).
-- **OQ-A4 — Snapshot retention.** ✅ Resolved in Phase 11 (`MainWorker.Backup.SnapshotRetentionDays = 30`).
+- **OQ-A3: Backup zip password derivation.** ✅ Resolved in Phase 8 (`20-backup-encryption-and-keys.md` §2.12).
+- **OQ-A4: Snapshot retention.** ✅ Resolved in Phase 11 (`MainWorker.Backup.SnapshotRetentionDays = 30`).
 
 ---
 
