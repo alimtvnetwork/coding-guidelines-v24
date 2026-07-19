@@ -5,6 +5,24 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.122.0] - 2026-07-19
+
+### Added, sandbox-aware bake hint in `.husky/pre-push`
+
+- The strict visual-baseline failure at `.husky/pre-push:51-63` now branches on `/nix/store` presence and hints `npm run slides:bake-baselines:sandbox` inside the Lovable sandbox (where the plain `slides:bake-baselines` fails with `libglib-2.0.so.0: cannot open shared object file`). Off-sandbox devs still get the plain command. Root cause it fixes: the v5.121 wrapper existed but the pre-push hint pointed at the broken-in-sandbox command, so whoever hit the guard would follow the hint, watch it fail, and reach for `SKIP_PREPUSH=1`. Silent bypass = zero visual coverage.
+
+### Added, self-test for `scripts/check-lint-ci-drift.mjs`
+
+- `scripts/tests/check-lint-ci-drift.test.mjs` exercises 10 cases against in-memory fixtures: `parseCiStepNames` count/order, `parseLintCiLabels` stop-at-`)` and comment/blank-line skipping, `analyzeDrift` un-mirrored detection, parenthetical stem match (no false positive), ignored-map respect, STALE ignore surfacing, count accuracy, and zero-drift end-state.
+- `scripts/check-lint-ci-drift.mjs` refactored to export `parseCiStepNames`, `parseLintCiLabels`, `analyzeDrift`, and `IGNORED_CI_STEPS`. `main()` only runs when the module is invoked directly (guarded by `import.meta.url === file://${process.argv[1]}`), so the test file can import without triggering `process.exit`.
+- Wired as `scripts/lint-ci.sh` step 17 AND as a second step in the `sync-drift` job of `.github/workflows/ci.yml`. Root cause it prevents: the drift checker itself had no test. If `parseLintCiLabels` regressed (e.g. failed to stop at `)`) or `analyzeDrift` lost its stem-matching, the mirror guard would report "no drift" on everything and we'd be back to v5.115 behavior with a green light and zero real coverage.
+
+### Verified
+
+- `node scripts/tests/check-lint-ci-drift.test.mjs` -> 10/10 cases pass.
+- `bash scripts/lint-ci.sh --step 16` and `--step 17` both green.
+- Live drift check unchanged: 57 ci.yml steps, 17 lint-ci labels (was 16), 37 ignored, 0 drift.
+
 ## [5.121.0] - 2026-07-19
 
 ### Added — `lint-ci ↔ ci.yml` drift guard now runs in CI

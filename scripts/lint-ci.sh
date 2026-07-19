@@ -144,6 +144,7 @@ STEPS=(
   "Validate Mermaid sources parse under mermaid v11 (pre-render gate)|node scripts/validate-mermaid.mjs"
   "Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)|node scripts/render-diagrams.mjs --check"
   "Check lint-ci ↔ ci.yml drift (mirror guard)|node scripts/check-lint-ci-drift.mjs"
+  "Self-test lint-ci drift checker (parser + analyzer)|node scripts/tests/check-lint-ci-drift.test.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then

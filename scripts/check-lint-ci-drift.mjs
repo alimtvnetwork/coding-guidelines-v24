@@ -66,8 +66,8 @@ const IGNORED_CI_STEPS = new Map([
   ["Check tunable constants (T1–T4 — single-source-of-truth, seed parity)", "runs in the tunable-constants job scope"],
 ]);
 
-function ciStepNames() {
-  const src = readFileSync(CI_YAML, "utf8");
+
+export function parseCiStepNames(src) {
   const names = [];
   const re = /^\s+-\s+name:\s+(.+?)\s*$/gm;
   let m;
@@ -75,8 +75,7 @@ function ciStepNames() {
   return names;
 }
 
-function lintCiLabels() {
-  const src = readFileSync(LINT_CI, "utf8");
+export function parseLintCiLabels(src) {
   const lines = src.split("\n");
   const startIdx = lines.findIndex((l) => l.trim().startsWith("STEPS=("));
   if (startIdx < 0) throw new Error("STEPS=( block not found in lint-ci.sh");
@@ -91,25 +90,38 @@ function lintCiLabels() {
   return labels;
 }
 
-function main() {
-  const ciNames = ciStepNames();
-  const labels = lintCiLabels();
-  const missing = [];
-  // Stem = text before the first " (" so parenthetical qualifiers
-  // ("(spec)" in ci.yml vs "(spec, advisory)" in lint-ci.sh) match.
+// Pure analyzer used by main() AND by scripts/tests/check-lint-ci-drift.test.mjs.
+// Returns { missing, unusedIgnores, counts } so callers decide exit code.
+export function analyzeDrift(ciNames, labels, ignored) {
   const stem = (s) => s.split(" (")[0];
   const labelStems = labels.map(stem);
+  const missing = [];
   for (const ciName of ciNames) {
-    if (IGNORED_CI_STEPS.has(ciName)) continue;
+    if (ignored.has(ciName)) continue;
     const s = stem(ciName);
-    const matched = labelStems.some((ls) => ls === s || ciName.startsWith(labels[labelStems.indexOf(ls)]) || labels[labelStems.indexOf(ls)].startsWith(ciName));
+    const matched = labelStems.some((ls, idx) =>
+      ls === s || ciName.startsWith(labels[idx]) || labels[idx].startsWith(ciName),
+    );
     if (!matched) missing.push(ciName);
   }
-  const unusedIgnores = [...IGNORED_CI_STEPS.keys()].filter((k) => !ciNames.includes(k));
+  const unusedIgnores = [...ignored.keys()].filter((k) => !ciNames.includes(k));
+  return {
+    missing,
+    unusedIgnores,
+    counts: { ci: ciNames.length, labels: labels.length, ignored: ignored.size },
+  };
+}
 
-  console.log(`[check-lint-ci-drift] ci.yml steps: ${ciNames.length}`);
-  console.log(`[check-lint-ci-drift] lint-ci.sh labels: ${labels.length}`);
-  console.log(`[check-lint-ci-drift] ignored (with reason): ${IGNORED_CI_STEPS.size}`);
+function ciStepNames() { return parseCiStepNames(readFileSync(CI_YAML, "utf8")); }
+function lintCiLabels() { return parseLintCiLabels(readFileSync(LINT_CI, "utf8")); }
+
+function main() {
+  const { missing, unusedIgnores, counts } = analyzeDrift(
+    ciStepNames(), lintCiLabels(), IGNORED_CI_STEPS,
+  );
+  console.log(`[check-lint-ci-drift] ci.yml steps: ${counts.ci}`);
+  console.log(`[check-lint-ci-drift] lint-ci.sh labels: ${counts.labels}`);
+  console.log(`[check-lint-ci-drift] ignored (with reason): ${counts.ignored}`);
   if (unusedIgnores.length) {
     console.log("");
     console.log("STALE IGNORES (present in IGNORED_CI_STEPS but no longer in ci.yml):");
@@ -129,4 +141,8 @@ function main() {
   console.log("OK — lint-ci.sh mirrors ci.yml (no drift).");
 }
 
-main();
+export { IGNORED_CI_STEPS };
+
+// Only run main() when invoked directly (not when imported by tests).
+const invokedDirectly = import.meta.url === `file://${process.argv[1]}`;
+if (invokedDirectly) main();
