@@ -74,25 +74,40 @@ function buildCursorRules(canonical, currentCursor) {
   return `${currentCursor.trimEnd()}\n\n${block}\n`;
 }
 
-function diffReport(label, expected, actual) {
+export function diffReport(label, expected, actual) {
   if (expected === actual) return null;
   const expLines = expected.split("\n").length;
   const actLines = actual.split("\n").length;
   return `${label}: drift (expected ${expLines} lines, actual ${actLines} lines)`;
 }
 
+export function computeDrifts({ canonical, currentLovable, currentCursor, lovableLabel, cursorLabel }) {
+  const nextLovable = buildLovableMirror(canonical);
+  const nextCursor = buildCursorRules(canonical, currentCursor);
+  return {
+    nextLovable,
+    nextCursor,
+    drifts: [
+      diffReport(lovableLabel, nextLovable, currentLovable),
+      diffReport(cursorLabel, nextCursor, currentCursor),
+    ].filter(Boolean),
+  };
+}
+
+export { buildLovableMirror, buildCursorRules, extractSection };
+
 function main() {
   const check = process.argv.includes("--check");
   const canonical = readCanonical();
-  const nextLovable = buildLovableMirror(canonical);
   const currentCursor = readFileSync(CURSORRULES, "utf8");
-  const nextCursor = buildCursorRules(canonical, currentCursor);
-
   const currentLovable = readFileSync(LOVABLE_MIRROR, "utf8");
-  const drifts = [
-    diffReport(relative(ROOT, LOVABLE_MIRROR), nextLovable, currentLovable),
-    diffReport(relative(ROOT, CURSORRULES), nextCursor, currentCursor),
-  ].filter(Boolean);
+  const { nextLovable, nextCursor, drifts } = computeDrifts({
+    canonical,
+    currentLovable,
+    currentCursor,
+    lovableLabel: relative(ROOT, LOVABLE_MIRROR),
+    cursorLabel: relative(ROOT, CURSORRULES),
+  });
 
   if (check) {
     if (drifts.length === 0) { console.log("OK guideline mirrors are up to date"); return; }
@@ -109,4 +124,6 @@ function main() {
   for (const d of drifts) console.log(`  - ${d}`);
 }
 
-main();
+const invokedDirectly = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (invokedDirectly) main();
+
