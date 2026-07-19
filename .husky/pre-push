@@ -51,7 +51,14 @@ fi
 echo "→ pre-push: visual baseline coverage (strict)"
 if ! node scripts/validate-visual-baselines.mjs --strict --list; then
   echo ""
-  echo "  pre-push: visual baseline drift — deck grew without a matching baseline. Bake with \`npm run slides:bake-baselines\` (local) or dispatch \`slides-visual.yml\` with update_baselines=true and commit the artifact."
+  if [ -d /nix/store ]; then
+    BAKE_HINT="npm run slides:bake-baselines:sandbox  (Lovable sandbox: resolves nix-store libs for Chromium)"
+  else
+    BAKE_HINT="npm run slides:bake-baselines  (local dev / CI runner with system Chromium libs)"
+  fi
+  echo "  pre-push: visual baseline drift, deck grew without a matching baseline."
+  echo "  Bake locally with: $BAKE_HINT"
+  echo "  Or dispatch .github/workflows/slides-visual.yml with update_baselines=true and commit the artifact."
   exit 1
 fi
 
