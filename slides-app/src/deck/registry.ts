@@ -14,6 +14,7 @@ import ZeroUnderscoreAcronyms from "../slides/22-zero-underscore-acronyms";
 import BooleanNaming from "../slides/23-boolean-naming";
 import NoBooleanParameters from "../slides/24-no-boolean-parameters";
 import EnumStandards from "../slides/25-enum-standards";
+import LineGapDiscipline from "../slides/26-line-gap-discipline";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
