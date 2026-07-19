@@ -82,4 +82,12 @@ export default tseslint.config(
       "coding-guidelines/no-else-after-return": "error",
     },
   },
+  {
+    // React component files: tighter 100-line file cap (canonical tier).
+    files: ["**/*.tsx"],
+    rules: {
+      "max-lines": ["error", { max: 100, skipBlankLines: true, skipComments: true }],
+    },
+  },
 );
+
