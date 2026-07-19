@@ -1,0 +1,104 @@
+# SS-02 Slides system improvement backlog (70 tasks)
+
+Parent: 01-slides-system-overhaul
+Slug: slides-70-task-backlog
+Status: pending
+Created: 2026-07-19
+
+Ordered backlog to evolve `slides-app/` into the canonical teaching surface for the compiled simple coding guideline (`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` v1.4.0). Every slide follows the Symptom → Rule → Action pattern already used by `ActionPanel`.
+
+Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUILD] build/release, [TEST] verification.
+
+## A. Deck infrastructure (tasks 1-15)
+
+1. [INFRA] Extract `deck.ts` entries into `slides-app/src/deck/registry.ts` grouped by section (Principles, Naming, Control-flow, Errors, React, Workflow, Closing).
+2. [INFRA] Add a `SlideSection` type and render section dividers between groups in grid view.
+3. [INFRA] Add `SymptomRuleAction` compound component (S/R/A three-column layout) so every rule slide has the same shape.
+4. [INFRA] Add `RuleBadge` component (Hard / Warn / Style) driven by a rule-severity enum.
+5. [INFRA] Add `LanguageTabs` component so a single rule can show Go / TS / PHP / Rust snippets without duplicating slides.
+6. [INFRA] Add `CalloutQuote` for the "comments lie, code does not" style aphorisms.
+7. [INFRA] Add `RuleAnchor` slug per slide (`/slides/naming-camelcase`) for deep-linking from the docs site.
+8. [INFRA] Sync deck title to `document.title` on slide change (per slides-app spec §9).
+9. [INFRA] Add `?print` route rendering all slides stacked for PDF handout export.
+10. [INFRA] Add `?step=N` sub-step URL coordinate for staged reveals (bullets, diffs).
+11. [INFRA] Presenter view: show notes + next-slide preview + rule id.
+12. [INFRA] Grid view: filter by section + severity.
+13. [INFRA] Add search-in-deck (Cmd+K) matching slide title, rule id, and tags.
+14. [INFRA] Dark-mode audit: ensure all diff/code contrast meets WCAG AA.
+15. [INFRA] Replace any remaining Tailwind `text-*` inside `.slide-content` with semantic classes per slides-app skill.
+
+## B. Content: Must-Follow + core principles (tasks 16-22)
+
+16. [CONTENT] "Must Follow" opener slide (from §Must Follow of file 31) with 5 non-negotiables.
+17. [CONTENT] Root-cause-first workflow slide (one-sentence RCA before fix).
+18. [CONTENT] Spec-first vs code-first (before/after: PR touching only code vs PR with spec+code).
+19. [CONTENT] "Comments lie, code does not" slide with Go `path.Clean` doc example and link to https://go.dev/src/go/doc/example.go.
+20. [CONTENT] Method-documentation decision tree (simple method → no docs; complex + irreducible → doc).
+21. [CONTENT] Version-bump myth-buster slide (no longer required per v1.2 update).
+22. [CONTENT] Trust-boundary teaser (Main > Worker > Backup > Git) linking to spec/19 chs. 26/27.
+
+## C. Content: Naming, style, structure (tasks 23-32)
+
+23. [CONTENT] PascalCase entities / camelCase fields / `{Table}Id` PK naming.
+24. [CONTENT] Zero-underscore policy + full-uppercase acronyms.
+25. [CONTENT] Boolean naming: is/has/can/should + positive framing (before/after).
+26. [CONTENT] No boolean parameters (refactor to two named methods).
+27. [CONTENT] Enum standards (cross-language PascalCase, strict parse).
+28. [CONTENT] Line-gap discipline: blank line before return/throw, after closing brace, import grouping.
+29. [CONTENT] File size tier (<300 LOC, <100 for .tsx) with real repo example.
+30. [CONTENT] Function size tier (8 warn / 15 hard) with waiver syntax demo.
+31. [CONTENT] Max 3 params + cognitive complexity ≤10.
+32. [CONTENT] Named types over tuples (React `useUser`, `ProfileCardProps` example from v1.4).
+
+## D. Content: Control flow (tasks 33-40)
+
+33. [CONTENT] Positive-condition rule + guard-clause refactor.
+34. [CONTENT] No-nested-if pyramid (before/after with early returns).
+35. [CONTENT] Two-operand max per boolean expression (extract intent to named helper).
+36. [CONTENT] No else-after-return (`no-lonely-if`).
+37. [CONTENT] useEffect: no negative conditions, extract guards to booleans.
+38. [CONTENT] Minimize useEffect count (derive don't sync).
+39. [CONTENT] Mandatory cleanup in effects (subscription, timers).
+40. [CONTENT] Avoid for/forEach in render; prefer map/filter/reduce.
+
+## E. Content: Error management (tasks 41-48)
+
+41. [CONTENT] Never swallow errors (before: bare catch; after: apperror.Wrap).
+42. [CONTENT] Registered error codes only (link to MWS catalogue).
+43. [CONTENT] Explicit file/path in every error log.
+44. [CONTENT] Retry policy vs surface-and-fail decision matrix.
+45. [CONTENT] Frontend global error boundary + toast policy.
+46. [CONTENT] Structured logging one-liner discipline (from slide 05, refreshed).
+47. [CONTENT] Magic-string elimination (constants package) promoted to error.
+48. [CONTENT] `any` prohibition + switch exhaustiveness (TS §2.1).
+
+## F. Content: React, TS, cross-language (tasks 49-56)
+
+49. [CONTENT] Named types for hook returns + props.
+50. [CONTENT] Composition over prop drilling.
+51. [CONTENT] Memoization only after profiling (guardrail).
+52. [CONTENT] Accessibility floor: semantic HTML, alt text, keyboard focus.
+53. [CONTENT] Go one-liner slide (idiomatic error return, no panics).
+54. [CONTENT] Rust one-liner slide (snake_case identifiers exception).
+55. [CONTENT] PHP + PowerShell one-liner slide (PascalCase Verb-Noun, kebab-case files).
+56. [CONTENT] C# one-liner slide (StyleCop ruleset link).
+
+## G. Workflow, testing, security (tasks 57-62)
+
+57. [CONTENT] Testing minimums: happy + edge + error path.
+58. [CONTENT] Security defaults: no secret logging, validate at boundaries.
+59. [CONTENT] Caching policy (explicit TTL, deterministic keys, invalidate on mutation).
+60. [CONTENT] Decision tree slide (catches 80% of common violations).
+61. [CONTENT] Common-violation clinic (5 real repo diffs, anonymized).
+62. [CONTENT] Closing slide refresh with QR to spec/17/31.
+
+## H. Build, release, distribution (tasks 63-70)
+
+63. [BUILD] Wire `slides-app` build into `scripts/release.mjs` (build + zip + verify offline contract).
+64. [BUILD] Attach `slides-app/dist.zip` to every GitHub Release (per command 01).
+65. [BUILD] Add "Slides deck" link to root README release section pointing to latest release asset.
+66. [BUILD] Add `scripts/sync-guidelines.mjs` that regenerates deck rule cards from file 31 frontmatter.
+67. [BUILD] Fail CI if deck slide count is less than rule count in file 31.
+68. [TEST] Extend `slides-app/tests/smoke.spec.ts` to assert every rule id from file 31 appears in the deck.
+69. [TEST] Add visual-regression baseline (Playwright screenshots per slide).
+70. [A11Y] Add axe-core Playwright check per slide; fail CI on serious/critical violations.
