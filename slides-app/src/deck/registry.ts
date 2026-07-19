@@ -50,6 +50,8 @@ import NameOrSplit from "../slides/58-name-or-split";
 import A11yFloor from "../slides/59-a11y-floor";
 import TestPyramid from "../slides/60-test-pyramid";
 import PrTemplate from "../slides/61-pr-template";
+import ReleaseCeremony from "../slides/62-release-ceremony";
+import Dashboards from "../slides/63-dashboards";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -81,6 +83,7 @@ export type SlideSection =
   | "react"
   | "a11y"
   | "workflow"
+  | "ops"
   | "closing";
 
 export interface SlideSectionMeta {
@@ -99,7 +102,8 @@ export const SECTIONS: readonly SlideSectionMeta[] = [
   { id: "react", label: "React & TypeScript", description: "Types, hooks, effects" },
   { id: "a11y", label: "Accessibility", description: "WCAG 2.2 AA is the shipping floor" },
   { id: "data-schema", label: "Data & Schema", description: "PascalCase entities, camelCase columns, integer PKs" },
-  { id: "workflow", label: "Workflow & Ops", description: "Spec-first, testing, caching" },
+  { id: "workflow", label: "Workflow", description: "Spec-first, tests, PRs, release" },
+  { id: "ops", label: "Ops & Observability", description: "Dashboards, alerts, runbooks" },
   { id: "closing", label: "Closing", description: "Wrap-up and references" },
 ] as const;
 
