@@ -4,6 +4,13 @@
 
 ---
 
+## v5.51.0 — 2026-07-19 (Slides a11y scan (axe-core WCAG 2.1 A/AA) in CI (Plan SS-01 step 5))
+
+**Scope:** Version bump (`5.50.0` → `5.51.0`). Slides a11y scan (axe-core WCAG 2.1 A/AA) in CI (Plan SS-01 step 5).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.50.0 — 2026-07-19 (sync-guidelines generator: file 31 as single source of truth (Plan SS-01 step 4))
 
 **Scope:** Version bump (`5.49.0` → `5.50.0`). sync-guidelines generator: file 31 as single source of truth (Plan SS-01 step 4).
