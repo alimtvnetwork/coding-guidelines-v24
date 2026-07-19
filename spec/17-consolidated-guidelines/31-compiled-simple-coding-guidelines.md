@@ -2,7 +2,7 @@
 
 Version: 1.1.0
 
-This is a standalone file. Follow every rule below without consulting any other document. If a `spec/**/coding-guidelines/` folder or `spec/**/error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
+This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
 
 ---
 
