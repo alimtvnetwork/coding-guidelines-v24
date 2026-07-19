@@ -124,7 +124,7 @@ export default function TableOfContentsSlide() {
         {body.map((entry) => (
           <a
             key={entry.id}
-            href={`#/${entry.index}`}
+            href={`#/id/${encodeURIComponent(entry.id)}`}
             className="toc-link"
             style={{
               display: "flex",
