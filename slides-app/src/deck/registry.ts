@@ -37,6 +37,7 @@ import SqliteOrmExplicitJoins from "../slides/45-sqlite-orm-explicit-joins";
 import ErdRequiredOnDbPrs from "../slides/46-erd-required-on-db-prs";
 import ReactChapterOpener from "../slides/47-react-chapter-opener";
 import EffectLastResort from "../slides/48-effect-last-resort";
+import OneEffectOneConcern from "../slides/49-one-effect-one-concern";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
