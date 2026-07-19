@@ -48,4 +48,9 @@ if ! node scripts/sync-guidelines.mjs --check; then
   exit 1
 fi
 
+echo "→ pre-push: visual baseline coverage (advisory)"
+# Advisory only until the first 70-slide baseline set lands. Non-zero
+# `missing` count is printed to stderr but does not block push.
+node scripts/validate-visual-baselines.mjs || true
+
 echo "✓ pre-push guards passed"
