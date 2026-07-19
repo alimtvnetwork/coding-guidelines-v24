@@ -96,6 +96,8 @@ export function ActionPanel({ symptom, rule, doThis, slideId }: ActionPanelProps
         body={symptom}
         accent="destructive"
         delay={1.3}
+        slideId={slideId}
+        block="symptom"
       />
       <Card
         icon={<Compass size={26} strokeWidth={2.5} />}
@@ -103,6 +105,8 @@ export function ActionPanel({ symptom, rule, doThis, slideId }: ActionPanelProps
         body={rule}
         accent="primary"
         delay={1.45}
+        slideId={slideId}
+        block="rule"
       />
       <Card
         icon={<CheckCircle2 size={26} strokeWidth={2.5} />}
@@ -110,6 +114,8 @@ export function ActionPanel({ symptom, rule, doThis, slideId }: ActionPanelProps
         body={doThis}
         accent="accent"
         delay={1.6}
+        slideId={slideId}
+        block="action"
       />
     </div>
   );
