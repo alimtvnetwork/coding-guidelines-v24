@@ -4,6 +4,13 @@
 
 ---
 
+## v5.115.0 — 2026-07-19 (Slides build fix (slide 59 JSX escapes, structure section registry) + release preflight (SRA + guideline drift + slides typecheck) + pre-push parity)
+
+**Scope:** Version bump (`5.114.0` → `5.115.0`). Slides build fix (slide 59 JSX escapes, structure section registry) + release preflight (SRA + guideline drift + slides typecheck) + pre-push parity.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.105.0 — 2026-07-19 (SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns)
 
 **Scope:** Version bump (`5.104.0` → `5.105.0`). SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns.
