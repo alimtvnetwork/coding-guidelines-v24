@@ -39,6 +39,7 @@ import ReactChapterOpener from "../slides/47-react-chapter-opener";
 import EffectLastResort from "../slides/48-effect-last-resort";
 import OneEffectOneConcern from "../slides/49-one-effect-one-concern";
 import NoRawForInRender from "../slides/50-no-raw-for-in-render";
+import NoMutateStatePropsHookReturns from "../slides/51-no-mutate-state-props-hook-returns";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
