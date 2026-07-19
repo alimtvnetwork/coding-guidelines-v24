@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "5.126.0",
+  "version": "5.127.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -86,7 +86,9 @@
     "slides:contrast-audit": "node slides-app/scripts/contrast-audit.mjs",
     "branch-protection:print": "node scripts/print-required-checks.mjs",
     "branch-protection:json": "node scripts/print-required-checks.mjs --json",
-    "branch-protection:check": "node scripts/print-required-checks.mjs --check"
+    "branch-protection:check": "node scripts/print-required-checks.mjs --check",
+    "branch-protection:diff": "node scripts/branch-protection-diff.mjs",
+    "branch-protection:soak": "node scripts/branch-protection-soak.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
