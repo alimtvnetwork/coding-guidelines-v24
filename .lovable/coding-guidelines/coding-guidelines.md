@@ -3,9 +3,17 @@
 <!-- Regenerate with: npm run sync:guidelines -->
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
-Version: 1.4.0
+Version: 1.5.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code.
+
+Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
+
+1. `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` (source of truth).
+2. `.lovable/coding-guidelines/coding-guidelines.md` (mirror for Lovable agent search).
+3. `.cursorrules` (mirror for Cursor and other IDE agents).
+
+If any mirror is missing or out of date, run `node scripts/sync-guidelines.mjs` before writing code. Missing mirrors are the top cause of "AI cannot find the coding guideline" search failures.
 
 ---
 
@@ -37,6 +45,7 @@ auto-reject on the same tier as RULE 0.
 10. Components stay small and reusable. For any feature with three or more components, produce a Mermaid component diagram first.
 11. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
 12. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
+13. This coding guideline file MUST be mirrored to `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` at every edit. The mirror script `scripts/sync-guidelines.mjs` is the only allowed writer. Missing or stale mirrors are a build-fail: agent search tools index the mirror, not the spec folder, so a missing mirror means the guideline effectively does not exist for the AI. Never hand-edit the mirrors; always edit the source file and re-run the sync.
 
 ---
 
@@ -105,7 +114,7 @@ If this repository has a `spec/xx-error-manage/` folder, that folder is binding 
 4. One effect, one concern. If an effect does two unrelated things, split it. Never combine unrelated subscriptions or fetches in a single effect.
 5. Every effect that acquires a resource must return a cleanup function. No exceptions.
 6. Avoid raw `for` and `forEach` loops in render or in derived state. Use `map`, `filter`, `reduce`, `flatMap`, or `Array.from` so the result is an expression, not a mutation. `for` is only acceptable when you need early-exit performance on very large arrays and a comment explains why.
-7. Never mutate state, props, or arrays/objects returned by hooks. Build a new value with spread or `structuredClone`.
+7. Never mutate state, props, or arrays/objects returned by hooks. React's reconciler relies on referential inequality to detect change: a mutated-in-place value looks identical to the previous render, so updates silently drop and bugs surface far from the mutation site. Default posture is read-only plus creation: treat every value as `Readonly<T>` or `ReadonlyArray<T>`, and produce a new object or array for every change (spread `{ ...prev, field: next }`, `arr.map`, `arr.filter`, `arr.concat`, `Object.freeze` for constants). When a deep copy is genuinely required (nested state trees, complex form drafts), use `structuredClone(value)`, then mutate the clone locally and hand the new reference to `setState`. Reach for a mutation library (Immer's `produce`) only when the reducer would otherwise become unreadable, and even then the output handed back to React is still a fresh reference. Rules of thumb: (a) if you typed `.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, or `arr[i] =` on a value that came from `useState`, `useReducer`, props, context, or a query hook, you are wrong; use the immutable counterpart (`.concat`, `.slice`, `.toSorted`, `.toReversed`, spread) or `structuredClone` first. (b) Prefer creation over mutation everywhere: a new local `const next = { ...prev, ... }` beats reassigning fields. (c) Freeze shared constants with `as const` and `Object.freeze` so accidental writes fail loudly in dev.
 8. Lists must have stable, unique `key` props derived from data, never the array index unless the list is truly static.
 9. Keep component files under 100 lines. Extract child components, hooks, and helpers into their own files before the component grows.
 10. Custom hooks start with `use`, return a named object type (never a bare tuple), and never call other hooks conditionally.
