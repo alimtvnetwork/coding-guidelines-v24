@@ -1525,9 +1525,11 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
-### What's new in v5.106.0
+### What's new in v5.107.0
 
-- SS-02 tasks 54-55: React list-keys + component-size pair. Slide 52 `REACT-006` (hard) requires stable, unique `key` props derived from data (`{TableName}Id`); bans array-index keys and per-render UUIDs that scramble child state or remount rows on every render. Slide 53 `REACT-007` (hard) caps React `.tsx` files at 100 lines (stricter than SIZE-001's 300 because JSX+hooks density is ~3x); extract child components, custom hooks, and data files before growth. Enforced by ESLint `react/no-array-index-key`, custom `react/no-unstable-key`, and `max-lines` on `**/*.tsx`. Per spec/17/31 lines 106-107. 55 slides validated.
+- SS-02 tasks 56-57: React hook-shape pair. Slide 54 `REACT-008` (hard) requires every custom hook to start with `use`, return a named object type (never a bare tuple), and call hooks unconditionally (guards live inside the hook body). Slide 55 `REACT-009` (hard) bans tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. Only the built-in `useState` pair is tolerated. Enforced by `eslint-plugin-react-hooks`, `@typescript-eslint/consistent-type-definitions`, and custom `hook-name-prefix` / `hook-return-named-type` / `no-tuple-return` / `action-shape` rules. Per spec/17/31 lines 108-109. 57 slides validated.
+
+### What's new in v5.106.0
 
 ### What's new in v5.105.0
 
