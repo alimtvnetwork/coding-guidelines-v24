@@ -23,8 +23,10 @@ SCRIPT = REPO_ROOT / "linter-scripts" / "check-file-sizes.py"
 
 
 def run(args, cwd):
+    # Use the COPY inside `cwd` so its REPO_ROOT resolves into the sandbox.
+    local_script = Path(cwd) / "linter-scripts" / "check-file-sizes.py"
     return subprocess.run(
-        [sys.executable, str(SCRIPT), *args],
+        [sys.executable, str(local_script), *args],
         cwd=cwd, capture_output=True, text=True,
     )
 
