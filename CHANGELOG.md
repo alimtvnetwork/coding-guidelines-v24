@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.131.0] - 2026-07-19
+
+### Added, nightly branch-protection drift workflow + Hard Rule #6 (file-size caps) enforcement with ratchet baseline
+
+- `.github/workflows/branch-protection-drift.yml`: new nightly job (06:17 UTC, `workflow_dispatch` also) that runs `node scripts/branch-protection-diff.mjs` against the live `main` branch protection and posts the classified diff into the run summary. Self-skips when `GH_ADMIN_TOKEN` secret is absent (forks, unprivileged clones) so it never causes false-positive noise. Closes the second open backlog item from the v5.130 handoff: mechanical, always-on detection when GitHub protections drift from `.github/branch-protection.expected.json`. Root cause it addresses: `scripts/branch-protection-diff.mjs` (v5.127) is only useful if someone remembers to run it; a nightly workflow makes drift detection a property of the repo, not a habit of an operator.
+- `linter-scripts/check-file-sizes.py`: new linter enforcing spec/17 Hard Rule #6 (any file 300 lines, `.tsx` 100 lines). Discovers `src/`, `slides-app/src/`, `scripts/`, `linter-scripts/`; excludes vendored/generated (`*.d.ts`, `*_pb.ts`, `src/components/ui/` shadcn primitives, build dirs). Supports top-of-file waivers (`// lint-allow: file-size reason="..." max=N`, ceiling 600). Ratchet baseline written to `.file-size-baseline.json` (55 pre-existing entries pinned): any NEW file over cap or any pinned file that GROWS past its baseline fails `--check`; shrinking is always accepted. `--strict` ignores the baseline. Wired into `scripts/lint-ci.sh` (steps 25+26) and `.github/workflows/ci.yml` `sync-drift` job.
+- `linter-scripts/tests/check-file-sizes.test.py`: 10 self-test assertions locking the contract: pinned-only passes, growth fails with `GREW from N`, NEW files fail with `NEW`, waivers within ceiling clear a violation, waivers over ceiling exit 2, `--strict` fails even when baseline is clean. Prevents a linter refactor from silently green-lighting drift.
+- Root cause this closes: Hard Rule #6 has existed in `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` since v1.0 but had zero enforcement, so files like `slides-app/src/App.tsx` (913 lines) and `src/components/ui/sidebar.tsx` (650 lines) drifted past cap unchallenged. The ratchet lets us pin the current mess without a big-bang refactor while guaranteeing no new violations land. Same "rule with teeth" pattern established in v5.130 for Hard Rule #13.
+
+---
+
 ## [5.130.0] - 2026-07-19
 
 ### Added, enforce Hard Rule #13 (guideline mirror sync) in lint-ci and CI + self-test
