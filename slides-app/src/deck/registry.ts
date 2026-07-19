@@ -40,6 +40,8 @@ import EffectLastResort from "../slides/48-effect-last-resort";
 import OneEffectOneConcern from "../slides/49-one-effect-one-concern";
 import NoRawForInRender from "../slides/50-no-raw-for-in-render";
 import NoMutateStatePropsHookReturns from "../slides/51-no-mutate-state-props-hook-returns";
+import StableUniqueKeys from "../slides/52-stable-unique-keys";
+import ComponentFileSize from "../slides/53-component-file-size";
 import CorePrinciples1 from "../slides/01a-core-principles-1";
 import CorePrinciples2 from "../slides/01b-core-principles-2";
 import CorePrinciples3 from "../slides/01c-core-principles-3";
@@ -167,6 +169,8 @@ export const DECK: readonly SlideEntry[] = [
   { id: "49-one-effect-one-concern", title: "One effect one concern · always with cleanup, split unrelated subscriptions", section: "react", severity: "hard", ruleId: "REACT-003", tags: ["useEffect", "cleanup", "abortcontroller", "websocket", "interval", "one concern"], component: OneEffectOneConcern },
   { id: "50-no-raw-for-in-render", title: "No raw `for` or `forEach` in render · use map/filter/reduce, iteration returns an expression", section: "react", severity: "hard", ruleId: "REACT-004", tags: ["react", "for", "forEach", "map", "filter", "reduce", "mutation", "useMemo"], component: NoRawForInRender },
   { id: "51-no-mutate-state-props-hook-returns", title: "Never mutate state, props, or hook returns · spread or structuredClone, always", section: "react", severity: "hard", ruleId: "REACT-005", tags: ["react", "immutability", "mutation", "spread", "structuredClone", "react query", "reference equality"], component: NoMutateStatePropsHookReturns },
+  { id: "52-stable-unique-keys", title: "Stable unique keys · derive from data, never the array index, never a fresh UUID per render", section: "react", severity: "hard", ruleId: "REACT-006", tags: ["react", "key", "list", "index", "uuid", "reorder", "focus"], component: StableUniqueKeys },
+  { id: "53-component-file-size", title: "Component files under 100 lines · extract children, hooks, and helpers before growth", section: "react", severity: "hard", ruleId: "REACT-007", tags: ["react", "file size", "100 lines", "extract", "component", "hook", "memo"], component: ComponentFileSize },
   { id: "07-metrics", title: "Function & file metrics", section: "naming", severity: "hard", ruleId: "SIZE-001", tags: ["size", "cognitive complexity", "function length", "file length"], component: Metrics },
 
   { id: "02-nested-if", title: "Nested if-else", section: "control-flow", severity: "hard", ruleId: "CF-001", tags: ["guard clause", "early return", "pyramid", "no-nested-if"], component: NestedIf },
