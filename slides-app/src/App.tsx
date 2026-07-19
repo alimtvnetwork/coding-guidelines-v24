@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Maximize, Grid3x3, Presentation, Sun, Moon, HelpCircle, X } from "lucide-react";
+import { Maximize, Grid3x3, Presentation, Sun, Moon, HelpCircle, Search, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ScaledSlide } from "./components/ScaledSlide";
 import { RuleBadge, type RuleSeverity } from "./components/RuleBadge";
