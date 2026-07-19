@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "5.131.0",
+  "version": "5.132.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -92,7 +92,6 @@
     "branch-protection:diff": "node scripts/branch-protection-diff.mjs",
     "branch-protection:drift-report": "node scripts/branch-protection-diff.mjs --report artifacts/branch-protection",
     "branch-protection:soak": "node scripts/branch-protection-soak.mjs"
-
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
