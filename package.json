@@ -88,7 +88,9 @@
     "branch-protection:json": "node scripts/print-required-checks.mjs --json",
     "branch-protection:check": "node scripts/print-required-checks.mjs --check",
     "branch-protection:diff": "node scripts/branch-protection-diff.mjs",
+    "branch-protection:drift-report": "node scripts/branch-protection-diff.mjs --report artifacts/branch-protection",
     "branch-protection:soak": "node scripts/branch-protection-soak.mjs"
+
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

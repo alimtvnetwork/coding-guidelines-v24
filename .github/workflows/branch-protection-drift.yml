@@ -45,17 +45,33 @@ jobs:
             echo "run=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Run branch-protection diff
+      - name: Run branch-protection diff (+ report)
         if: steps.guard.outputs.run == 'true'
+        id: diff
         env:
           GH_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -o pipefail
-          node scripts/branch-protection-diff.mjs | tee drift.txt
+          npm run --silent branch-protection:drift-report | tee drift.txt
           {
             echo '### Branch protection drift'
-            echo '```'
-            cat drift.txt
-            echo '```'
+            echo ''
+            if [ -f artifacts/branch-protection/drift.md ]; then
+              cat artifacts/branch-protection/drift.md
+            else
+              echo '```'
+              cat drift.txt
+              echo '```'
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload drift report artifact
+        if: always() && steps.guard.outputs.run == 'true' && hashFiles('artifacts/branch-protection/drift.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-protection-drift
+          path: artifacts/branch-protection/
+          if-no-files-found: ignore
+          retention-days: 30
+

@@ -24,8 +24,9 @@
  *
  * Never mutates anything. Safe to run without admin.
  */
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { join } from "node:path";
 
 const EXPECTED_FILE = ".github/branch-protection.expected.json";
 
@@ -38,15 +39,19 @@ function loadExpected() {
 }
 
 function parseArgs(argv) {
-  const args = { repo: null };
+  const args = { repo: null, reportDir: null };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === "--repo" && argv[i + 1]) {
       args.repo = argv[i + 1];
+      i += 1;
+    } else if (argv[i] === "--report" && argv[i + 1]) {
+      args.reportDir = argv[i + 1];
       i += 1;
     }
   }
   return args;
 }
+
 
 function detectRepo() {
   const r = spawnSync("gh", ["repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner"], {
@@ -88,6 +93,67 @@ function diff(live, expected) {
   return { missingOnLive, extraOnLive };
 }
 
+function buildReport({ repo, expected, live, missingOnLive, extraOnLive }) {
+
+  const unchanged = expected.filter((n) => live.includes(n));
+  const status = !missingOnLive.length && !extraOnLive.length ? "in-sync" : "drift";
+  const json = {
+    generatedAt: new Date().toISOString(),
+    repo,
+    status,
+    counts: {
+      expected: expected.length,
+      live: live.length,
+      missingOnLive: missingOnLive.length,
+      extraOnLive: extraOnLive.length,
+      unchanged: unchanged.length,
+    },
+    expected,
+    live,
+    missingOnLive,
+    extraOnLive,
+    unchanged,
+  };
+  const bullet = (arr) => (arr.length ? arr.map((n) => `- \`${n}\``).join("\n") : "_none_");
+  const md = [
+    `# Branch Protection Drift Report`,
+    ``,
+    `- Repo: \`${repo}\``,
+    `- Generated: ${json.generatedAt}`,
+    `- Status: **${status.toUpperCase()}**`,
+    ``,
+    `## Counts`,
+    ``,
+    `| Metric | Count |`,
+    `| --- | ---: |`,
+    `| Expected required | ${expected.length} |`,
+    `| Live required | ${live.length} |`,
+    `| Missing on live (drift) | ${missingOnLive.length} |`,
+    `| Extra on live (drift) | ${extraOnLive.length} |`,
+    `| Unchanged (in sync) | ${unchanged.length} |`,
+    ``,
+    `## Missing on live (expected but not required)`,
+    ``,
+    bullet(missingOnLive),
+    ``,
+    `## Extra on live (required but not expected)`,
+    ``,
+    bullet(extraOnLive),
+    ``,
+    `## Unchanged`,
+    ``,
+    bullet(unchanged),
+    ``,
+  ].join("\n");
+  return { json, md };
+}
+
+function writeReport(dir, report) {
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "drift.json"), JSON.stringify(report.json, null, 2) + "\n");
+  writeFileSync(join(dir, "drift.md"), report.md);
+}
+
 function main() {
   if (!ghAvailable()) {
     console.error("gh CLI not found or not authenticated. Run `gh auth login`.");
@@ -102,24 +168,36 @@ function main() {
   const expected = loadExpected().required || [];
   const live = fetchLiveContexts(repo);
   const { missingOnLive, extraOnLive } = diff(live, expected);
+  const report = buildReport({ repo, expected, live, missingOnLive, extraOnLive });
 
   console.log(`Repo: ${repo}`);
   console.log(`Expected required (${expected.length}): ${expected.join(", ") || "(none)"}`);
   console.log(`Live required     (${live.length}): ${live.join(", ") || "(none)"}`);
 
-  if (!missingOnLive.length && !extraOnLive.length) {
+  const inSync = !missingOnLive.length && !extraOnLive.length;
+  if (inSync) {
     console.log("");
     console.log("OK, live branch protection matches expected.json exactly.");
-    return;
+  } else {
+    console.log("");
+    console.log("DRIFT:");
+    for (const n of missingOnLive) console.log(`  - missing on live (expected but not required): ${n}`);
+    for (const n of extraOnLive) console.log(`  + extra on live  (required but not in expected):   ${n}`);
   }
-  console.log("");
-  console.log("DRIFT:");
-  for (const n of missingOnLive) console.log(`  - missing on live (expected but not required): ${n}`);
-  for (const n of extraOnLive) console.log(`  + extra on live  (required but not in expected):   ${n}`);
-  process.exit(1);
+
+  if (args.reportDir) {
+    writeReport(args.reportDir, report);
+    console.log("");
+    console.log(`Report written: ${join(args.reportDir, "drift.json")}, ${join(args.reportDir, "drift.md")}`);
+  }
+
+  if (!inSync) process.exit(1);
 }
+
+export { diff, buildReport };
 
 import { fileURLToPath } from "node:url";
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();
 
-export { diff };
+
+
