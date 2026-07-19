@@ -1525,6 +1525,10 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
 
+### What's new in v5.77.0
+
+- **Zero-underscore + full-caps acronyms slide (SS-02 task 24).** New [`slides-app/src/slides/22-zero-underscore-acronyms.tsx`](slides-app/src/slides/22-zero-underscore-acronyms.tsx) (ruleId `NAM-003`, hard) extends `NAM-001` with the two most-violated PascalCase corollaries: no mid-name underscores, and acronyms stay fully uppercase (`HTTPResponse`, `URLParser`, `APIKey`, `JSONBody`). Before/after `<CodeDiff>` plus `<ActionPanel>`. SRA validator now passes 24 slides.
+
 ### What's new in v5.76.0
 
 - **DB schema naming slide (SS-02 task 23).** New [`slides-app/src/slides/21-db-schema-naming.tsx`](slides-app/src/slides/21-db-schema-naming.tsx) (ruleId `NAM-002`, hard) teaches the schema rules from [spec/17/31 §Data and Schema](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md): PascalCase singular entities, camelCase fields, `{TableName}Id` INTEGER auto-increment PKs, no UUIDs. Ships a before/after `<CodeDiff>` SQL migration plus an `<ActionPanel>` symptom/rule/action. SRA validator now passes 23 slides.
