@@ -5,6 +5,21 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [5.119.0] - 2026-07-19
+
+### Added — Initial 70-slide visual baseline set
+
+- Baked `slide-00-linux.png` through `slide-69-linux.png` into `slides-app/tests/visual.spec.ts-snapshots/` (6.8 MB total). Bake path used inside the Lovable sandbox: `LD_LIBRARY_PATH="<nix-glib>/lib:<nix-libx11>/lib:<all-nix-libs>" bunx playwright test tests/visual.spec.ts --update-snapshots`. Runtime: 3.4 min for 70 slides on one worker. Before: `deck=70 baselines=0 missing=70` (silent-green suite). After: `deck=70 baselines=70 missing=0`.
+
+### Fixed — `scripts/validate-visual-baselines.mjs` snapshot naming mismatch
+
+- Line 81-90 previously computed `slide-NN-chromium-linux.png`, which assumed a multi-project Playwright config. `playwright.config.ts` declares no `projects[]` array, so the real Playwright snapshot suffix is `<snapshotName>-<platform>.png` (`slide-NN-linux.png`). Root cause: expected filename was written from memory instead of confirmed against the config, and it went undetected because no baselines existed to compare against. Fix documents the naming rule inline so any future move to per-project configs is caught in review.
+
+### Changed — Guards flipped to blocking
+
+- `.husky/pre-push`: swapped the advisory `|| true` for `validate-visual-baselines.mjs --strict --list`. Failure prints the missing baselines and the bake command.
+- `.github/workflows/slides-visual.yml`: added a `slides:validate-baselines:strict` step ahead of Playwright, gated by `if: inputs.update_baselines != 'true'` so intentional baseline bakes are not blocked.
+
 ## [5.118.0] - 2026-07-19
 
 ### Changed — CI/CD issue backlog swept clean

@@ -79,9 +79,12 @@ function listBaselinePngs() {
 }
 
 function expectedBaselineNames(deckCount) {
+  // Playwright names snapshots `<snapshotName>-<projectName>-<platform>.png`.
+  // Root `playwright.config.ts` defines no `projects[]`, so the project
+  // segment is omitted, leaving `slide-NN-linux.png` on Linux runners.
   const names = [];
   for (let i = 0; i < deckCount; i += 1) {
-    names.push(`slide-${String(i).padStart(2, "0")}-chromium-linux.png`);
+    names.push(`slide-${String(i).padStart(2, "0")}-linux.png`);
   }
   return names;
 }
