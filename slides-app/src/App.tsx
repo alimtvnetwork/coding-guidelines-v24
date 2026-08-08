@@ -28,19 +28,24 @@ function readSlideFromHash(): SlidePosition {
     const found = DECK.findIndex((s) => s.id === decodeURIComponent(idMatch[1]));
     if (found < 0) {
       console.warn(`[slides] unknown slide id in hash: ${idMatch[1]}, falling back to 0`);
+
       return { index: 0, step: 0 };
     }
+
     return { index: found, step: clampStep(found, idMatch[2] ? parseInt(idMatch[2], 10) : 0) };
   }
+
   const numMatch = raw.match(/^#\/(\d+)(?:\/(\d+))?/);
   if (!numMatch) return { index: 0, step: 0 };
   const idx = clampSlide(parseInt(numMatch[1], 10));
+
   return { index: idx, step: clampStep(idx, numMatch[2] ? parseInt(numMatch[2], 10) : 0) };
 }
 
 function clampSlide(n: number): number {
   if (Number.isNaN(n) || n < 0) return 0;
   if (n >= DECK.length) return DECK.length - 1;
+
   return n;
 }
 
@@ -48,6 +53,7 @@ function clampStep(slideIndex: number, step: number): number {
   const max = DECK[slideIndex]?.steps ?? 0;
   if (Number.isNaN(step) || step < 0) return 0;
   if (step > max) return max;
+
   return step;
 }
 
@@ -87,7 +93,9 @@ export default function App() {
       setIndex(pos.index);
       setStep(pos.step);
     }
+
     window.addEventListener("hashchange", onHash);
+
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
@@ -103,16 +111,20 @@ export default function App() {
     const maxStep = DECK[index]?.steps ?? 0;
     if (step < maxStep) {
       goto(index, step + 1);
+
       return;
     }
+
     goto(index + 1, 0);
   }, [index, step, goto]);
 
   const prev = useCallback(() => {
     if (step > 0) {
       goto(index, step - 1);
+
       return;
     }
+
     const prevIndex = clampSlide(index - 1);
     const prevMax = DECK[prevIndex]?.steps ?? 0;
     goto(prevIndex, prevMax);
@@ -133,8 +145,10 @@ export default function App() {
       if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
         e.preventDefault();
         setPaletteOpen((v) => !v);
+
         return;
       }
+
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       switch (e.key) {
         case "ArrowRight":
@@ -179,15 +193,19 @@ export default function App() {
             setPaletteOpen(false);
             break;
           }
+
           if (helpOpen) {
             setHelpOpen(false);
             break;
           }
+
           if (view !== "deck") setView("deck");
           break;
       }
     }
+
     window.addEventListener("keydown", onKey);
+
     return () => window.removeEventListener("keydown", onKey);
   }, [next, prev, goto, toggleFullscreen, view, helpOpen, paletteOpen]);
 
@@ -333,12 +351,14 @@ function CommandPalette({
     const sectionHits: Match[] = SECTIONS
       .map((section) => {
         const idx = DECK.findIndex((s) => s.section === section.id);
+
         return { section, idx };
       })
       .filter(({ section, idx }) => {
         if (idx < 0) return false;
         if (!stripped) return sectionOnly;
         const hay = `${section.id} ${section.label} ${section.description}`.toLowerCase();
+
         return hay.includes(stripped);
       })
       .map(({ section, idx }) => ({
@@ -355,11 +375,12 @@ function CommandPalette({
     const slideHits = slideAll.filter(({ slide }) => {
       const tagText = (slide.tags ?? []).join(" ");
       const hay = `${slide.id} ${slide.title} ${slide.ruleId ?? ""} ${slide.section} ${tagText}`.toLowerCase();
+
       return hay.includes(stripped);
     });
+
     return [...sectionHits, ...slideHits];
   }, [query]);
-
 
   useEffect(() => {
     setActive(0);
@@ -475,6 +496,7 @@ function CommandPalette({
               }
 
               const { slide, index } = match;
+
               return (
                 <li
                   key={slide.id}
@@ -521,7 +543,6 @@ function CommandPalette({
     </div>
   );
 }
-
 
 function HelpOverlay({ onClose }: { onClose: () => void }) {
   return (
@@ -611,6 +632,7 @@ function GridView({
 
   const grouped = useMemo(() => {
     const all = groupBySection();
+
     return all
       .filter((group) => sectionFilter === "all" || group.section.id === sectionFilter)
       .map((group) => ({
@@ -708,6 +730,7 @@ function GridView({
               {group.slides.map((slide) => {
                 const i = indexOf(slide.id);
                 const Comp = slide.component;
+
                 return (
                   <div
                     key={slide.id}
@@ -806,6 +829,7 @@ function PresenterView({
   const [seconds, setSeconds] = useState(0);
   useEffect(() => {
     const t = window.setInterval(() => setSeconds((s) => s + 1), 1000);
+
     return () => window.clearInterval(t);
   }, []);
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -816,10 +840,12 @@ function PresenterView({
       SECTIONS.map((sec) => {
         const first = DECK.findIndex((s) => s.section === sec.id);
         const count = DECK.filter((s) => s.section === sec.id).length;
+
         return { sec, first, count };
       }).filter((e) => e.first >= 0),
     [],
   );
+
   return (
     <div className="presenter-view">
       <div className="presenter-main">
@@ -836,6 +862,7 @@ function PresenterView({
         <div className="presenter-chips" role="toolbar" aria-label="Jump to section">
           {sectionEntries.map(({ sec, first, count }) => {
             const active = sec.id === currentSection;
+
             return (
               <button
                 key={sec.id}
@@ -892,10 +919,12 @@ function PrintView() {
   useEffect(() => {
     document.title = `Handout · ${DECK.length} slides`;
   }, []);
+
   return (
     <div className="print-root">
       {DECK.map((slide, i) => {
         const S = slide.component;
+
         return (
           <section key={slide.id} className="print-page" aria-label={`Slide ${i + 1}: ${slide.title}`}>
             <div className="slide-content">

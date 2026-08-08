@@ -48,6 +48,7 @@ async function silenceAnimations(page: Page): Promise<void> {
         transition-duration: 0s !important;
         transition-delay: 0s !important;
       }
+
     `,
   });
 }

@@ -17,6 +17,7 @@ function getHighlighter() {
       engine: createOnigurumaEngine(import("shiki/wasm")),
     });
   }
+
   return highlighterPromise;
 }
 
@@ -59,6 +60,7 @@ export function CodeDiff({
       setBeforeHtml(hl.codeToHtml(before, opts));
       setAfterHtml(hl.codeToHtml(after, opts));
     });
+
     return () => {
       cancelled = true;
     };
@@ -66,6 +68,7 @@ export function CodeDiff({
   }, [before, after, language]);
 
   const isStacked = layout === "stacked";
+
   return (
     <div
       className="code-diff"

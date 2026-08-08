@@ -24,6 +24,7 @@ export function InvoiceTable({ invoices, filters }: InvoiceTableProps) {
   });
 
   const memoRows = useMemo(() => rows, [rows]);
+
   return <Grid rows={memoRows} totals={totalsByCurrency} filters={filters} />;
 }`;
 
@@ -41,6 +42,7 @@ export function InvoiceTable({ invoices, filters }: InvoiceTableProps) {
     () =>
       invoices.reduce<Record<string, number>>((acc, inv) => {
         acc[inv.Currency] = (acc[inv.Currency] ?? 0) + inv.Total;
+
         return acc;
       }, {}),
     [invoices],

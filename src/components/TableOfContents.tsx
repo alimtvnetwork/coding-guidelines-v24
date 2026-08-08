@@ -23,7 +23,6 @@ function extractHeadings(markdown: string): TocItem[] {
   const state = { isInCodeBlock: false };
 
   return markdown.split("\n").reduce<TocItem[]>((headings, line) => {
-
     if (line.startsWith("```")) { state.isInCodeBlock = !state.isInCodeBlock; return headings; }
 
     if (state.isInCodeBlock) return headings;

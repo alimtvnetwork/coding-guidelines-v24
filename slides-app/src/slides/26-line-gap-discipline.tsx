@@ -21,15 +21,16 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "./utils";
 import { logger } from "@/lib/logger";
 
-
 function loadUser(id: string) {
-
   if (!id) {
     throw new Error("id required");
   }
+
   const raw = readFile(path);
+
   return parse(raw);
 }
+
 function parse(raw: string) {
   return schema.parse(raw);
 }`;

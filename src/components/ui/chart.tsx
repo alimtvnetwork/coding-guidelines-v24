@@ -125,7 +125,6 @@ const ChartTooltipContent = React.forwardRef<
     const { config } = useChart();
 
     const tooltipLabel = React.useMemo(() => {
-
       if (hideLabel || !payload?.length) {
         return null;
       }
@@ -283,7 +282,6 @@ ChartLegendContent.displayName = "ChartLegend";
 
 // Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
-
   if (typeof payload !== "object" || payload === null) {
     return undefined;
   }

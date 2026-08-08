@@ -59,7 +59,6 @@ export function createDragMoveHandler(
   lastPinned: Map<Element, number>
 ) {
   return (e: Event) => {
-
     if (!dragStateRef.current) return;
 
     const me = e as MouseEvent;
@@ -132,7 +131,6 @@ export function createFontHandler(containerEl: HTMLElement) {
 }
 
 function computeFontSize(current: number, flags: { isIncrease: Element | null; isDecrease: Element | null }): number {
-
   if (flags.isIncrease) return Math.min(current + FONT_SIZE_STEP, MAX_FONT_SIZE);
 
   if (flags.isDecrease) return Math.max(current - FONT_SIZE_STEP, MIN_FONT_SIZE);

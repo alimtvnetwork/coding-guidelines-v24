@@ -60,7 +60,6 @@ interface State {
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
 const addToRemoveQueue = (toastId: string) => {
-
   if (toastTimeouts.has(toastId)) {
     return;
   }
@@ -77,7 +76,6 @@ const addToRemoveQueue = (toastId: string) => {
 };
 
 const handleDismiss = (state: State, toastId?: string) => {
-
   if (toastId) {
     addToRemoveQueue(toastId);
   } else {
@@ -98,7 +96,6 @@ const buildDismissed = (state: State, toastId?: string): State => ({
 });
 
 const handleRemove = (state: State, toastId?: string): State => {
-
   if (toastId === undefined) {
     return { ...state, toasts: [] };
   }
@@ -162,7 +159,6 @@ function createToastEntry(id: string, props: Toast) {
       id,
       open: true,
       onOpenChange: (isOpen) => {
-
         if (!isOpen) dismiss();
       },
     },

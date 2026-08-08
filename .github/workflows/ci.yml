@@ -107,6 +107,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -127,6 +132,8 @@ jobs:
           test -f linter-scripts/check-placeholder-comments.py      || { echo "::error::check-placeholder-comments.py missing"; exit 1; }
           test -f linter-scripts/check-prompts-loaded.py            || { echo "::error::check-prompts-loaded.py missing"; exit 1; }
           test -f linter-scripts/forbidden-strings.toml             || { echo "::error::forbidden-strings.toml missing"; exit 1; }
+          test -f linter-scripts/check-newline-styling.py           || { echo "::error::check-newline-styling.py missing"; exit 1; }
+          test -f linter-scripts/check-newline-styling.mjs          || { echo "::error::check-newline-styling.mjs missing"; exit 1; }
 
       - name: Run Go validator (spec)
         run: go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
@@ -136,6 +143,12 @@ jobs:
 
       - name: Run Axios version check
         run: bash linter-scripts/check-axios-version.sh
+
+      - name: Run newline-concept Python linter
+        run: python3 linter-scripts/check-newline-styling.py
+
+      - name: Run newline-concept MJS linter
+        run: node linter-scripts/check-newline-styling.mjs
 
       - name: Check spec folder references (stale-link guard)
         run: python3 linter-scripts/check-spec-folder-refs.py

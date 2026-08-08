@@ -91,6 +91,7 @@ export default function MethodDocDecisionTreeSlide() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
           {NODES.map((node) => {
             const outcome = OUTCOME_META[node.yes.outcome];
+
             return (
               <div
                 key={node.step}

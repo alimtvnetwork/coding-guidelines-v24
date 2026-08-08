@@ -16,7 +16,6 @@ export const SPLIT_MAX_RATIO = 80;
 
 function createDragHandlers(isDragging: React.MutableRefObject<boolean>, splitContainerRef: React.RefObject<HTMLDivElement>, setSplitRatio: React.Dispatch<React.SetStateAction<number>>) {
   const onMouseMove = (ev: MouseEvent) => {
-
     if (!isDragging.current || !splitContainerRef.current) return;
 
     const rect = splitContainerRef.current.getBoundingClientRect();
@@ -114,7 +113,6 @@ export function useSplitState() {
 function useDocsNavigation(tree: SpecNode[], activeFile: SpecNode | null) {
   const orderedFiles = useMemo(() => flattenFilesOrdered(tree), [tree]);
   const currentIndex = useMemo(() => {
-
     if (!activeFile) return -1;
 
     return orderedFiles.findIndex(f => f.file.path === activeFile.path);
@@ -126,7 +124,6 @@ function useDocsNavigation(tree: SpecNode[], activeFile: SpecNode | null) {
 
 export function useCopyMarkdown(activeFile: SpecNode | null, setCopied: (v: boolean) => void) {
   return useCallback(() => {
-
     if (!activeFile?.content) return;
 
     void copyTextToClipboard(activeFile.content)
@@ -210,7 +207,6 @@ export function useDeepLinkFile(allFiles: SpecNode[], setActiveFile: (f: SpecNod
 
 export function useFileSelection(setActiveFile: (f: SpecNode | null) => void, setSearchQuery: (q: string) => void) {
   return useCallback((node: SpecNode) => {
-
     if (node.type !== SpecEntryType.File) return;
 
     setActiveFile(node);

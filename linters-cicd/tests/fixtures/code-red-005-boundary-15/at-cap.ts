@@ -30,5 +30,6 @@ export function fixtureAtCap15(items: number[]): number {
     if (value % 2 === 0) evens += 1;
     if (value > maxSeen) maxSeen = value;
   }
+
   return total + positive - negative + zeroes + evens + maxSeen;
 }

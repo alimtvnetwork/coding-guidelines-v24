@@ -11,6 +11,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 const BEFORE = `// Every list uses the array index or a fresh id per render.
 export function TaskList({ tasks }: TaskListProps) {
   const sorted = [...tasks].sort(byDueDate);
+
   return (
     <ul>
       {sorted.map((task, i) => (
@@ -36,6 +37,7 @@ export function CommentList({ comments }: CommentListProps) {
 const AFTER = `// Keys come from the row's own identity and stay stable across renders.
 export function TaskList({ tasks }: TaskListProps) {
   const sorted = useMemo(() => [...tasks].sort(byDueDate), [tasks]);
+
   return (
     <ul>
       {sorted.map((task) => (

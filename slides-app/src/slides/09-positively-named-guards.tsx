@@ -5,11 +5,13 @@ import { ActionPanel } from "@/components/ActionPanel";
 const BEFORE = `if (!isInvalid(input) && !isMissing(token)) {
   proceed();
 }
+
 // double-negation — readers must mentally flip every check`;
 
 const AFTER = `if (IsValid(input) && IsPresent(token)) {
   proceed();
 }
+
 // reads naturally — every check states what we want`;
 
 export default function PositivelyNamedGuardsSlide() {

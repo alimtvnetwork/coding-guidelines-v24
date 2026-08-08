@@ -43,6 +43,7 @@ interface InfoFieldProps {
 
 function InfoField({ label, value, mono, title }: InfoFieldProps) {
   const valueClass = mono === true ? "font-mono text-foreground" : "text-foreground";
+
   return (
     <div className="space-y-1">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>

@@ -17,7 +17,6 @@ export function clearPinnedLines(wrapper: Element): void {
 }
 
 function hideSelectionUi(bar: HTMLElement | null, headerLabel: HTMLElement | null): void {
-
   if (bar) bar.style.display = "none";
 
   if (headerLabel) headerLabel.style.display = "none";
@@ -149,7 +148,6 @@ function handleSingleArrow(refs: PinRefs, totalLines: number, delta: number): vo
 
 export function createLineKeyHandler(refs: PinRefs) {
   return (e: KeyboardEvent) => {
-
     if (!refs.activeWrapperRef.current) return;
 
     const isArrowKey = e.key === ARROW_UP || e.key === ARROW_DOWN;

@@ -7,7 +7,6 @@
 
 package models
 
-
 // --- User: derived inverses ---
 
 // IsInactive is derived from IsActive (db column: IsActive).

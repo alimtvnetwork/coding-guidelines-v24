@@ -26,6 +26,7 @@ function containsIf(node) {
   if (node.type === "BlockStatement" && node.body) {
     return node.body.some((s) => s.type === "IfStatement");
   }
+
   return false;
 }
 
@@ -46,11 +47,14 @@ const noNestedIf = {
         if (["ForStatement", "ForInStatement", "ForOfStatement", "WhileStatement", "DoWhileStatement"].includes(current.type)) {
           passedLoop = true;
         }
+
         if (current.type === "IfStatement") {
           return !passedLoop;
         }
+
         current = current.parent;
       }
+
       return false;
     }
 
@@ -59,6 +63,7 @@ const noNestedIf = {
         if (isInsideIf(node) && !containsIf(node.consequent)) {
           context.report({ node, messageId: "nestedIf" });
         }
+
         if (node.consequent?.type === "BlockStatement" && !isInsideIf(node)) {
           for (const stmt of node.consequent.body) {
             if (stmt.type === "IfStatement") {
@@ -68,6 +73,7 @@ const noNestedIf = {
                 if (p.type === "IfStatement") break;
                 p = p.parent;
               }
+
               if (!inLoop) context.report({ node: stmt, messageId: "nestedIf" });
             }
           }
@@ -107,6 +113,7 @@ const booleanNaming = {
       if (node.init?.type === "LogicalExpression") return true;
       if (node.init?.type === "UnaryExpression" && node.init.operator === "!") return true;
       if (node.id?.typeAnnotation?.typeAnnotation?.type === "TSBooleanKeyword") return true;
+
       return false;
     }
 
@@ -158,6 +165,7 @@ const noMagicStrings = {
       if (v === "" || v.length === 1) return true;
       if (TYPEOF_VALUES.has(v) || allowed.has(v)) return true;
       if (v.startsWith("/") || v.startsWith("http") || v.startsWith(".")) return true;
+
       return false;
     }
 
@@ -203,6 +211,7 @@ function countEffectiveBodyLines(node, src) {
   const lines = src.lines.slice(start - 1, end - 1);
   // ESLint operates on TS/JS source; both share the "typescript" entry
   // in the unified counter (// + /* */ tokens, no docstrings).
+
   return countEffective(lines, "typescript");
 }
 
@@ -243,6 +252,7 @@ const WAIVER_RE = /lint-allow:\s*([\w-]+)\s+reason\s*=\s*"([^"]+)"(?:\s+max\s*=\
 function parseWaiver(commentValue) {
   const m = WAIVER_RE.exec(commentValue);
   if (!m) return null;
+
   return { rule: m[1], reason: m[2].trim(), max: m[3] ? parseInt(m[3], 10) : null };
 }
 
@@ -260,9 +270,11 @@ function findWaiverFor(node, src, ruleName) {
       const w = parseWaiver(c.value);
       if (!w || !aliases.includes(w.rule) || !w.reason) continue;
       if (target.loc.start.line - c.loc.end.line > 1) continue;
+
       return w;
     }
   }
+
   return null;
 }
 
@@ -370,6 +382,7 @@ const promiseAllIndependent = {
     function getName(stmt) {
       if (stmt.type === "VariableDeclaration" && stmt.declarations[0]?.id) return stmt.declarations[0].id.name;
       if (stmt.type === "ExpressionStatement" && stmt.expression.type === "AssignmentExpression" && stmt.expression.left.type === "Identifier") return stmt.expression.left.name;
+
       return null;
     }
 
@@ -377,6 +390,7 @@ const promiseAllIndependent = {
       if (stmt.type === "VariableDeclaration" && stmt.declarations[0]?.init?.type === "AwaitExpression") return stmt.declarations[0].init;
       if (stmt.type === "ExpressionStatement" && stmt.expression.type === "AwaitExpression") return stmt.expression;
       if (stmt.type === "ExpressionStatement" && stmt.expression.type === "AssignmentExpression" && stmt.expression.right.type === "AwaitExpression") return stmt.expression.right;
+
       return null;
     }
 
@@ -421,6 +435,7 @@ const blankLineBeforeReturn = {
         context.report({ node, messageId: "missingBlankLine", data: { keyword: kw }, fix(f) { return f.insertTextAfter(src.getTokenBefore(node), "\n"); } });
       }
     }
+
     return { ReturnStatement(n) { chk(n, "return"); }, ThrowStatement(n) { chk(n, "throw"); } };
   },
 };
@@ -442,8 +457,10 @@ const noElseAfterReturn = {
       const stmts = block.type === "BlockStatement" ? block.body : [block];
       if (!stmts?.length) return null;
       const last = stmts[stmts.length - 1];
+
       return { ReturnStatement: "return", ThrowStatement: "throw", ContinueStatement: "continue", BreakStatement: "break" }[last.type] || null;
     }
+
     return {
       IfStatement(node) {
         if (!node.alternate) return;

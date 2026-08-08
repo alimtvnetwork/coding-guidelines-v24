@@ -46,6 +46,7 @@ export function HealthTrendCard({ score, grade, blindAuditScore, handoffScore }:
     if (previousScoreRef.current === score) {
       return;
     }
+
     setFlashKey((prev) => prev + 1);
     setStrokeKey((prev) => prev + 1);
     previousScoreRef.current = score;

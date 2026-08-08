@@ -11,6 +11,7 @@ const AFTER = `enum OrderStatus {
   Shipped = 'Shipped',
   Delivered = 'Delivered',
 }
+
 if (order.Status === OrderStatus.Shipped) { /* ... */ }
 // compiler catches typos at build time`;
 

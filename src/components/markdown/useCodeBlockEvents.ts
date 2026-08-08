@@ -32,7 +32,6 @@ export function useCodeBlockEvents(
   const dragStateRef = useRef<DragState | null>(null);
 
   useEffect(() => {
-
     if (!containerRef.current) return;
 
     const el = containerRef.current;

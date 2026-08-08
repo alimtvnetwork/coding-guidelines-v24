@@ -50,6 +50,7 @@ export function SlideLayout({
   const hasEyebrow = isStringTruthy(eyebrow);
   const hasSubtitle = isStringTruthy(subtitle);
   const words = splitIntoWords(title);
+
   return (
     <>
       {hasEyebrow && (

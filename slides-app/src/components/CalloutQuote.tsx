@@ -26,6 +26,7 @@ export function CalloutQuote({
   delay = 0,
 }: CalloutQuoteProps) {
   const accentColor = `hsl(var(--${accent}))`;
+
   return (
     <motion.figure
       initial={{ opacity: 0, y: 12 }}

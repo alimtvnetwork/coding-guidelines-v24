@@ -42,12 +42,14 @@ erDiagram
     int    RefereeCustomerId  FK
     text   Notes
   }
+
   ReferralReward {
     int    ReferralRewardId PK
     int    ReferralId       FK
     int    AmountCents
     text   Comments
   }
+
 \`\`\`
 CI gate \`erd-required\` blocks the PR until the diagram renders and
 covers every table changed in the migration.`;

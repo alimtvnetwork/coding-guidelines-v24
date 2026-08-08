@@ -37,6 +37,7 @@ export default function ClosingSlide() {
           <span>Md. Alim Ul Karim · Riseup Asia LLC</span>
         </>
       }
+
     >
       <div
         style={{

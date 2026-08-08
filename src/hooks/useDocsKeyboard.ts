@@ -111,7 +111,6 @@ function handleVerticalNav(key: string, options: KeyboardNavOptions): void {
 }
 
 function handleEscapeKey(options: KeyboardNavOptions): void {
-
   if (options.showShortcuts) {
     options.setShowShortcuts(isHidden);
 
@@ -124,7 +123,6 @@ function handleEscapeKey(options: KeyboardNavOptions): void {
 }
 
 function handleToggleKeys(e: KeyboardEvent, options: KeyboardNavOptions): boolean {
-
   if (e.key === KEY_QUESTION) {
     e.preventDefault();
     options.setShowShortcuts(prev => !prev);
@@ -143,7 +141,6 @@ function handleToggleKeys(e: KeyboardEvent, options: KeyboardNavOptions): boolea
 }
 
 function handleViewModeKeys(e: KeyboardEvent, options: KeyboardNavOptions): boolean {
-
   if (!options.activeFile) return false;
 
   if (e.key === KEY_E) {
@@ -171,7 +168,6 @@ function handleViewModeKeys(e: KeyboardEvent, options: KeyboardNavOptions): bool
 }
 
 function handleArrowKeys(e: KeyboardEvent, options: KeyboardNavOptions): void {
-
   if (options.currentIndex < 0 || options.orderedFiles.length === 0) return;
 
   const isHorizontal = e.key === KEY_ARROW_RIGHT || e.key === KEY_ARROW_LEFT;
@@ -189,7 +185,6 @@ function handleArrowKeys(e: KeyboardEvent, options: KeyboardNavOptions): void {
 }
 
 function handleKeyPress(e: KeyboardEvent, options: KeyboardNavOptions): void {
-
   if (handleToggleKeys(e, options)) return;
 
   if (handleViewModeKeys(e, options)) return;
@@ -206,7 +201,6 @@ function handleKeyPress(e: KeyboardEvent, options: KeyboardNavOptions): void {
 export function useDocsKeyboard(options: KeyboardNavOptions): void {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-
       if (isInputElement(e.target as HTMLElement)) return;
 
       if (hasModifier(e)) return;
@@ -225,7 +219,6 @@ export function flattenFilesOrdered(nodes: SpecNode[]): OrderedFile[] {
 
   const walk = (items: SpecNode[], parentPath: string) => {
     for (const node of items) {
-
       if (node.type === NODE_TYPE_FILE) {
         result.push({ file: node, folderPath: parentPath });
       }
@@ -258,7 +251,6 @@ function processFolderEntry(
 }
 
 export function buildFolderGroups(orderedFiles: OrderedFile[]): FolderGroup[] {
-
   if (orderedFiles.length === 0) return [];
 
   const state = { folder: orderedFiles[0].folderPath, startIdx: 0 };

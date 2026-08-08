@@ -20,6 +20,7 @@ export function ProfileCard({
   onCancel: () => void;
 }) {
   const [draft, setDraft] = useState(user);
+
   return ( ... );
 }`;
 
@@ -43,6 +44,7 @@ import type { User } from "@/types/user";
 
 export function ProfileCard({ user, onSave, onCancel }: ProfileCardProps) {
   const [draft, setDraft] = useState<User>(user);
+
   return ( ... );
 }
 

@@ -72,7 +72,6 @@ function convertLists(html: string): string {
     .replace(/^\d+\. (.+)$/gm, '<li class="spec-oli">$1</li>')
     .replace(/^[-*+] (.+)$/gm, '<li class="spec-li">$1</li>')
     .replace(/(<li class="spec-(?:li|oli)">.*<\/li>\n?)+/g, (match) => {
-
       if (match.includes("spec-oli")) return `<ol class="spec-ol">${match}</ol>`;
 
       return `<ul class="spec-ul">${match}</ul>`;

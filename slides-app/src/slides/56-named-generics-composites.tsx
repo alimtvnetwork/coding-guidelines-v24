@@ -17,6 +17,7 @@ export function group<T, K>(items: T[], key: (x: T) => K): Map<K, T[]> {
     arr.push(x);
     out.set(k, arr);
   }
+
   return out;
 }
 
@@ -43,6 +44,7 @@ export function groupBy<TItem, TKey>(
     bucket.push(item);
     out.set(k, bucket);
   }
+
   return out;
 }
 

@@ -15,6 +15,7 @@ function CanShipOrder(user, order, payment) {
   if (!user.IsActive)         return false;
   if (!order.HasItems)        return false;
   if (!payment.IsAuthorized)  return false;
+
   return !order.IsLocked;
 }`;
 

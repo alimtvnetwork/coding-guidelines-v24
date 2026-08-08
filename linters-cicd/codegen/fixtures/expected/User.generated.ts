@@ -5,7 +5,6 @@
 // The database stores ONLY the canonical (positive) form; the inverse
 // is derived in code with a single negation. Never persist these.
 
-
 export abstract class UserInvertedFields {
   readonly IsActive!: boolean;
   readonly HasLicense!: boolean;

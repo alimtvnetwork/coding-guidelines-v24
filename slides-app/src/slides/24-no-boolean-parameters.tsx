@@ -15,6 +15,7 @@ const BEFORE = `function render(expanded: boolean) {
   if (expanded) {
     return <Panel rows={rows} />;
   }
+
   return <Summary rows={rows} />;
 }
 

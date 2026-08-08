@@ -8,6 +8,7 @@ export function debugMe(rows: ReadonlyArray<{ id: number }>): void {
     if (rows.length === 0) {
         debugger;                             // ← TEMPLATE-001 (warning, line 9)
     }
+
     console.error(`failed for ${rows[0]?.id}`); // ← TEMPLATE-001 (warning, line 11)
 }
 

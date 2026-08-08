@@ -51,6 +51,7 @@ export function RuleBadge({ severity, ruleId }: RuleBadgeProps) {
     borderRadius: 999,
     background: `hsl(var(--${style.accentToken}))`,
   };
+
   return (
     <span className="slide-badge" style={pill} aria-label={`Severity: ${style.label}`}>
       <span style={dot} aria-hidden="true" />

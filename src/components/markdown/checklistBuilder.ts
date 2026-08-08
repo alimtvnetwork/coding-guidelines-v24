@@ -59,7 +59,6 @@ interface ChecklistContext {
 }
 
 function flushBlock(block: string[], ctx: ChecklistContext): void {
-
   if (block.length === 0) return;
 
   const placeholder = `\x00CHECKLIST_${ctx.blockId}\x00`;
@@ -73,7 +72,6 @@ export function extractChecklistBlocks(md: string): ExtractionResult {
   let currentBlock: string[] = [];
 
   for (const line of lines) {
-
     if (CHECKLIST_PATTERN.test(line)) {
       currentBlock.push(line);
       continue;

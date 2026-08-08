@@ -37,15 +37,18 @@ function countEffective(bodyLines, language) {
       if (syntax.blockClose && stripped.includes(syntax.blockClose)) inBlock = false;
       continue;
     }
+
     if (syntax.blockOpen && stripped.startsWith(syntax.blockOpen)) {
       const rest = stripped.slice(syntax.blockOpen.length);
       if (syntax.blockClose && !rest.includes(syntax.blockClose)) inBlock = true;
       continue;
     }
+
     if (isLineComment(stripped, syntax.lineTokens)) continue;
     if (isLineComment(stripped, syntax.docstringTokens)) continue;
     count++;
   }
+
   return count;
 }
 

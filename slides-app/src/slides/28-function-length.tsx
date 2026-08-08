@@ -17,6 +17,7 @@ const BEFORE = `function processOrder(order: Order) {
   for (const item of items) {
     subtotal += item.price * item.qty;
   }
+
   const tax = subtotal * 0.2;
   const shipping = subtotal > 50 ? 0 : 5;
   const discount = order.coupon ? applyCoupon(order.coupon, subtotal) : 0;
@@ -26,6 +27,7 @@ const BEFORE = `function processOrder(order: Order) {
   sendEmail(order.email, invoice);
   await saveInvoice(invoice);
   await markPaid(order.id);
+
   return invoice;
 }`;
 

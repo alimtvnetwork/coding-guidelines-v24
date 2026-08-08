@@ -22,6 +22,7 @@ interface AnimatedHeadlineProps {
 
 function AnimatedHeadline({ text, color }: AnimatedHeadlineProps) {
   const words = text.split(/\s+/);
+
   return (
     <span style={{ display: "inline-flex", flexWrap: "wrap", gap: "0.25em", justifyContent: "center", color }}>
       {words.map((word, i) => (

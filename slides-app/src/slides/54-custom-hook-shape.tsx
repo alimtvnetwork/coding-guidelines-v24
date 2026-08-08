@@ -47,6 +47,7 @@ export function useOrder(id: OrderId): OrderQueryResult {
       .then((next) => !cancelled && setOrder(next))
       .catch((err) => !cancelled && setError(err))
       .finally(() => !cancelled && setIsLoading(false));
+
     return () => { cancelled = true; };
   }, [id]);
 

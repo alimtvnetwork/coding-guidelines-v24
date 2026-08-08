@@ -39,9 +39,11 @@ const GO_EXAMPLE = `func ExamplePath_Clean() {
         "path//double-slash",
         "path/./same-dir/",
     }
+
     for _, p := range paths {
         fmt.Printf("Clean(%q) = %q\\n", p, path.Clean(p))
     }
+
     // Output:
     // Clean("path/to/../file")   = "path/file"
     // Clean("path//double-slash")= "path/double-slash"

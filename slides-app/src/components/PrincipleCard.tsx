@@ -87,6 +87,7 @@ export function PrincipleCard({
   progressId,
 }: PrincipleCardProps) {
   const color = `hsl(var(--${accent}))`;
+
   return (
     <motion.div
       variants={entrance}

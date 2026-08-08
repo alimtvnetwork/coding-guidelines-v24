@@ -67,7 +67,6 @@ export default tseslint.config(
       // eliminates the prior 8=error vs 15=error contradiction.
       "coding-guidelines/prefer-function-lines": ["warn", { prefer: 8 }],
 
-
       // Promise.all for independent async calls — no sequential await
       "coding-guidelines/promise-all-independent": "error",
 
@@ -90,4 +89,3 @@ export default tseslint.config(
     },
   },
 );
-

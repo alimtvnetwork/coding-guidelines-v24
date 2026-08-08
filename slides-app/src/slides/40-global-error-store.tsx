@@ -15,6 +15,7 @@ function CheckoutButton() {
     try { await pay(); }
     catch (e) { setErr(String(e)); toast.error(String(e)); }
   };
+
   return <>{err && <Alert>{err}</Alert>} ...</>;
 }
 
@@ -22,6 +23,7 @@ function ProfileForm() {
   const [error, setError] = useState("");   // different name, same job
   // ...
 }
+
 // -> Same failure shows as toast + inline alert + modal. Or nothing at all.
 // -> Stale errors linger after route change. No single audit surface.`;
 
@@ -40,6 +42,7 @@ if (!res.ok) errorStore.getState().push(parseError(body));
 export function ErrorModal() {
   const err = errorStore((s) => s.current);
   if (!err) return null;
+
   return <Modal onClose={() => errorStore.getState().clear()}>{copyFor(err.code)}</Modal>;
 }
 

@@ -35,6 +35,7 @@ interface CardProps {
 
 function Card({ icon, kicker, body, accent, delay, slideId, block }: CardProps) {
   const accentColor = `hsl(var(--${accent}))`;
+
   return (
     <motion.div
       variants={cardEntrance}

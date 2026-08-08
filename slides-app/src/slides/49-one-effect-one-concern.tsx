@@ -41,12 +41,14 @@ export function LiveDashboard({ roomId }: LiveDashboardProps) {
   useEffect(() => {
     const socket = new WebSocket(\`wss://api/rooms/\${roomId}\`);
     socket.onmessage = (e) => setMessages((prev) => [...prev, JSON.parse(e.data)]);
+
     return () => socket.close();
   }, [roomId]);
 
   // Concern B: header clock. Cleanup clears the interval.
   useEffect(() => {
     const timer = setInterval(() => setTick((n) => n + 1), 1000);
+
     return () => clearInterval(timer);
   }, []);
 
@@ -54,6 +56,7 @@ export function LiveDashboard({ roomId }: LiveDashboardProps) {
   useEffect(() => {
     const controller = new AbortController();
     fetchSeed(roomId, controller.signal).then(setSeed).catch(logIfNotAbort);
+
     return () => controller.abort();
   }, [roomId]);
 

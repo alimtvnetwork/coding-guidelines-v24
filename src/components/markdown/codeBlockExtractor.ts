@@ -62,7 +62,6 @@ function handleClosingFence(ctx: ExtractionContext): void {
 }
 
 function processBlockLine(line: string, trimmed: string, ctx: ExtractionContext): void {
-
   if (isClosingFence(trimmed, ctx.state.blockFence)) {
     handleClosingFence(ctx);
 
@@ -97,7 +96,6 @@ function processLine(line: string, ctx: ExtractionContext): void {
 }
 
 function appendUnclosedBlock(ctx: ExtractionContext): void {
-
   if (!ctx.state.isInBlock) return;
 
   ctx.result.push(`${ctx.state.blockFence}${ctx.state.blockLang}`);

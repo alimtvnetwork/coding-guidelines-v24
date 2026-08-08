@@ -49,6 +49,7 @@ export function OrderPanel({ order, user }: OrderPanelProps) {
 
 function getIsCheckoutReady(user: User | null): boolean {
   if (!user) return false;
+
   return user.isVerified && user.hasPaymentMethod;   // positive, extracted, one place
 }`;
 

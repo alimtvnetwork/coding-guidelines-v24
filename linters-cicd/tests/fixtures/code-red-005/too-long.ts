@@ -22,5 +22,6 @@ export function fixtureTooLongPrefer8(items: number[]): number {
     if (value < 0) negative += 1;
     if (value === 0) zeroes += 1;
   }
+
   return total + positive - negative + zeroes;
 }

@@ -31,10 +31,12 @@ const TRACKED_SLIDE_IDS: readonly string[] = [
 function ProgressDots({ entryId }: { entryId: string }) {
   const all = useProgressSnapshot();
   const entry = all[entryId] ?? {};
+
   return (
     <span style={{ display: "inline-flex", gap: 6 }} aria-label="review progress">
       {PROGRESS_BLOCKS.map((b) => {
         const on = Boolean(entry[b]);
+
         return (
           <span
             key={b}
@@ -59,9 +61,11 @@ function OverallProgress() {
   const total = TRACKED_SLIDE_IDS.length * PROGRESS_BLOCKS.length;
   const done = TRACKED_SLIDE_IDS.reduce((acc, id) => {
     const entry = all[id] ?? {};
+
     return acc + PROGRESS_BLOCKS.filter((b) => entry[b]).length;
   }, 0);
   const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12 }}>
       <div

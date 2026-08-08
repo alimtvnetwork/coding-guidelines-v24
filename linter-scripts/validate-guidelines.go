@@ -104,6 +104,7 @@ func truncate(s string, max int) string {
 	if len(s) <= max {
 		return s
 	}
+
 	return s[:max]
 }
 
@@ -113,6 +114,7 @@ func isExemptBoolName(name string) bool {
 		"exists": true, "err": true, "error": true,
 		"true": true, "false": true,
 	}
+
 	return exempt[strings.ToLower(name)]
 }
 
@@ -126,6 +128,7 @@ func hasBoolPrefix(name string) bool {
 			}
 		}
 	}
+
 	return false
 }
 
@@ -139,6 +142,7 @@ func checkNestedIf(lines []string, path string) []Violation {
 		indent int
 		line   int
 	}
+
 	var stack []stackEntry
 
 	for i, line := range lines {
@@ -172,6 +176,7 @@ func checkNestedIf(lines []string, path string) []Violation {
 					newStack = append(newStack, e)
 				}
 			}
+
 			stack = newStack
 		}
 	}
@@ -268,6 +273,7 @@ func checkMagicStrings(lines []string, path string, lang string) []Violation {
 			if exempt[value] || len(value) <= 1 {
 				continue
 			}
+
 			if strings.HasPrefix(value, "/") || strings.HasPrefix(value, "http") || strings.HasPrefix(value, ".") {
 				continue
 			}
@@ -326,6 +332,7 @@ func checkFunctionLength(lines []string, path string, lang string, maxLines int)
 		for braceLine < len(lines) && !strings.Contains(lines[braceLine], "{") {
 			braceLine++
 		}
+
 		if braceLine >= len(lines) {
 			continue
 		}
@@ -341,6 +348,7 @@ func checkFunctionLength(lines []string, path string, lang string, maxLines int)
 					bodyLines++
 				}
 			}
+
 			if depth <= 0 && j > braceLine {
 				break
 			}
@@ -452,12 +460,15 @@ func checkMagicNumbers(lines []string, path string, lang string) []Violation {
 		if strings.HasPrefix(stripped, "//") || strings.HasPrefix(stripped, "#") || strings.HasPrefix(stripped, "*") {
 			continue
 		}
+
 		if strings.HasPrefix(stripped, "import") || strings.HasPrefix(stripped, "require") {
 			continue
 		}
+
 		if strings.HasPrefix(stripped, "const ") || strings.HasPrefix(stripped, "const(") {
 			continue
 		}
+
 		if strings.Contains(stripped, "= iota") {
 			continue
 		}
@@ -481,6 +492,7 @@ func checkMagicNumbers(lines []string, path string, lang string) []Violation {
 			if exempt[value] || value == "" {
 				continue
 			}
+
 			lowerStripped := strings.ToLower(stripped)
 			if strings.Contains(lowerStripped, "line") || strings.Contains(lowerStripped, "column") {
 				continue
@@ -527,9 +539,11 @@ func checkVariableMutation(lines []string, path string, lang string) []Violation
 			if exemptNames[name] {
 				continue
 			}
+
 			if strings.Contains(line, "useState") || strings.Contains(line, "useRef") {
 				continue
 			}
+
 			if strings.HasPrefix(stripped, "for ") || strings.HasPrefix(stripped, "for(") {
 				continue
 			}
@@ -628,6 +642,7 @@ func checkStyleRules(lines []string, path string) []Violation {
 						})
 						break
 					}
+
 					if ps == "}" || ps == "{" {
 						break
 					}
@@ -684,11 +699,13 @@ func shouldSkip(path string) bool {
 		"vendor/", "node_modules/", "dist/", ".min.", "_test.go",
 		"components/ui/", // Auto-generated shadcn/ui — not business logic
 	}
+
 	for _, p := range skipPatterns {
 		if strings.Contains(normalized, p) {
 			return true
 		}
 	}
+
 	base := filepath.Base(path)
 
 	return strings.HasSuffix(base, ".test.ts") || strings.HasSuffix(base, ".spec.ts")
@@ -902,6 +919,7 @@ func printReport(report *ValidationReport) {
 
 	if len(report.Violations) == 0 {
 		fmt.Println("\n  ✅ ALL CLEAR — No violations found.\n")
+
 		return
 	}
 
@@ -916,6 +934,7 @@ func printReport(report *ValidationReport) {
 	for f := range byFile {
 		files = append(files, f)
 	}
+
 	sort.Strings(files)
 
 	for _, f := range files {
@@ -927,6 +946,7 @@ func printReport(report *ValidationReport) {
 			if v.Severity != "CODE-RED" {
 				icon = "⚠️ "
 			}
+
 			fmt.Printf("  %s L%-5d [%s] %s\n", icon, v.Line, v.Rule, v.Message)
 			if v.CodeSnippet != "" {
 				fmt.Printf("           │ %d: %s\n", v.Line, v.CodeSnippet)
@@ -941,6 +961,7 @@ func printReport(report *ValidationReport) {
 	for r := range report.ByRule {
 		rules = append(rules, r)
 	}
+
 	sort.Strings(rules)
 
 	for _, r := range rules {
@@ -977,9 +998,11 @@ func main() {
 		if err != nil {
 			return nil // skip errors
 		}
+
 		if info.IsDir() {
 			return nil
 		}
+
 		ext := strings.ToLower(filepath.Ext(path))
 		if !extensions[ext] {
 			return nil

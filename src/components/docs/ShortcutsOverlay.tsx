@@ -26,7 +26,6 @@ function ShortcutRow({ shortcut }: { shortcut: { key: string; action: string } }
 function useOverlayClose(onClose: () => void) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-
       if (e.key === KeyboardKeyType.Escape || e.key === KeyboardKeyType.QuestionMark) onClose();
     };
 

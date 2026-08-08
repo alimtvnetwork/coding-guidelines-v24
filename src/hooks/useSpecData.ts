@@ -7,7 +7,6 @@ import { treeDiagDebug, treeDiagWarn, TreeDiagCategory } from "@/lib/treeDiagnos
 const flattenFiles = (nodes: SpecNode[]): SpecNode[] => {
   const result: SpecNode[] = [];
   for (const node of nodes) {
-
     if (node.type === SpecEntryType.File) result.push(node);
 
     if (node.children) result.push(...flattenFiles(node.children));
@@ -45,7 +44,6 @@ function isQueryBlank(query: string): boolean {
 
 export function useSpecSearch(allFiles: SpecNode[], query: string) {
   return useMemo(() => {
-
     if (isQueryBlank(query)) {
       return [];
     }

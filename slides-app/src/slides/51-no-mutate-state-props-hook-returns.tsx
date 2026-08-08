@@ -29,6 +29,7 @@ export function TaskBoard({ board }: TaskBoardProps) {
   }
 
   board.Meta.LastViewedAt = Date.now(); // mutates prop
+
   return <Grid tasks={tasks} users={users} board={board} onAdd={handleAdd} />;
 }`;
 

@@ -41,6 +41,7 @@ function useOverflowDetection(
     if (!node) return;
     const observer = new ResizeObserver(measure);
     observer.observe(node);
+
     return () => observer.disconnect();
   }, [ref, command]);
 
@@ -52,6 +53,7 @@ function useOverflowDetection(
       setHasOverflow(isWider ? isOverflowing : isOverflowFit);
     };
     window.addEventListener("resize", onResize);
+
     return () => window.removeEventListener("resize", onResize);
   }, [ref]);
 

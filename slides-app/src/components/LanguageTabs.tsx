@@ -58,6 +58,7 @@ export function LanguageTabs({
       >
         {tabs.map((tab) => {
           const isActive = tab.id === active?.id;
+
           return (
             <button
               key={tab.id}

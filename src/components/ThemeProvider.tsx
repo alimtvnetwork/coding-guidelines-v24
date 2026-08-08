@@ -17,7 +17,6 @@ const THEME_LIGHT: Theme = "light";
 const THEME_DARK: Theme = "dark";
 
 function getInitialTheme(): Theme {
-
   if (typeof window === "undefined") return THEME_LIGHT;
 
   const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;

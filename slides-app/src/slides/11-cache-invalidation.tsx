@@ -8,8 +8,10 @@ function GetUser(id) {
   if (cache.has(id)) return cache.get(id);
   const u = db.fetch(id);
   cache.set(id, u);
+
   return u;
 }
+
 // UpdateUser never clears cache → stale forever`;
 
 const AFTER = `const cache = new TTLCache({ ttl: 60_000 });

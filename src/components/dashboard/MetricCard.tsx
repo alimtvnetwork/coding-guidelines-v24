@@ -67,6 +67,7 @@ export function MetricCard({
     if (previousCaptionRef.current === caption) {
       return;
     }
+
     setCaptionKey((prev) => prev + 1);
     previousCaptionRef.current = caption;
   }, [caption]);

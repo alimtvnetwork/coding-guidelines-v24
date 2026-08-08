@@ -18,12 +18,15 @@ export function ScaledSlide({ children }: ScaledSlideProps) {
       const sy = stage.clientHeight / 1080;
       setScale(Math.min(sx, sy));
     }
+
     recompute();
     const ro = new ResizeObserver(recompute);
     if (stageRef.current?.parentElement) {
       ro.observe(stageRef.current.parentElement);
     }
+
     window.addEventListener("resize", recompute);
+
     return () => {
       ro.disconnect();
       window.removeEventListener("resize", recompute);

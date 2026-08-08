@@ -12,6 +12,7 @@ const BEFORE = `function processOrder(order) {
       }
     }
   }
+
   return null;
 }`;
 
@@ -19,6 +20,7 @@ const AFTER = `function processOrder(order) {
   if (!IsValidOrder(order)) return null;
   if (!HasActiveUser(order)) return null;
   if (!HasItems(order))      return null;
+
   return charge(order);
 }`;
 

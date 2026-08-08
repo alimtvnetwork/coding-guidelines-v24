@@ -9,6 +9,7 @@ const DEFAULT_DURATION = 900;
 
 function easeOutCubic(t: number): number {
   const inv = 1 - t;
+
   return 1 - inv * inv * inv;
 }
 
@@ -24,6 +25,7 @@ export function useCountUp(target: number, options: UseCountUpOptions = {}): num
 
     if (prefersReduce === true) {
       setValue(target);
+
       return;
     }
 
@@ -47,6 +49,7 @@ export function useCountUp(target: number, options: UseCountUpOptions = {}): num
 
       if (progress < 1) {
         rafRef.current = requestAnimationFrame(tick);
+
         return;
       }
 
@@ -59,6 +62,7 @@ export function useCountUp(target: number, options: UseCountUpOptions = {}): num
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
+
       fromRef.current = target;
     };
   }, [target, duration, decimals]);

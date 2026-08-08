@@ -27,6 +27,7 @@ export function ReviewCheckbox({
   useProgressSnapshot();
   const checked = getBlock(slideId, block);
   const onClick = () => setBlock(slideId, block, !checked);
+
   return (
     <button
       type="button"

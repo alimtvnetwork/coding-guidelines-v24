@@ -51,7 +51,6 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
     const [canScrollNext, setCanScrollNext] = React.useState(false);
 
     const onSelect = React.useCallback((api: CarouselApi) => {
-
       if (!api) {
         return;
       }
@@ -70,7 +69,6 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
-
         if (event.key === "ArrowLeft") {
           event.preventDefault();
           scrollPrev();
@@ -84,7 +82,6 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
     );
 
     React.useEffect(() => {
-
       if (!api || !setApi) {
         return;
       }
@@ -93,7 +90,6 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
     }, [api, setApi]);
 
     React.useEffect(() => {
-
       if (!api) {
         return;
       }

@@ -28,6 +28,7 @@ function readAll(): ProgressMap {
     // Corrupt JSON: wipe so future writes start clean.
     window.localStorage.removeItem(STORAGE_KEY);
   }
+
   return {};
 }
 
@@ -39,6 +40,7 @@ function writeAll(next: ProgressMap): void {
 
 export function getBlock(slideId: string, block: ProgressBlock): boolean {
   const all = readAll();
+
   return Boolean(all[slideId]?.[block]);
 }
 
@@ -62,6 +64,7 @@ function subscribe(callback: () => void): () => void {
   const handler = () => callback();
   window.addEventListener(EVENT_NAME, handler);
   window.addEventListener("storage", handler);
+
   return () => {
     window.removeEventListener(EVENT_NAME, handler);
     window.removeEventListener("storage", handler);
@@ -70,6 +73,7 @@ function subscribe(callback: () => void): () => void {
 
 function getSnapshot(): string {
   if (!isBrowser()) return "{}";
+
   return window.localStorage.getItem(STORAGE_KEY) ?? "{}";
 }
 
@@ -99,5 +103,6 @@ export function useSlideProgress(slideId: string): {
     action: Boolean(entry.action),
   };
   const completedCount = PROGRESS_BLOCKS.filter((b) => reviewed[b]).length;
+
   return { reviewed, completedCount, isComplete: completedCount === PROGRESS_BLOCKS.length };
 }
