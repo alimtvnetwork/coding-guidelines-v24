@@ -1,9 +1,9 @@
 {
-  "Version": "6.1.0",
+  "Version": "6.2.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "396f0955c918abe43c0d1cf58635638c7f3f2170",
+  "LastCommitSha": "ffdd5f5b6b5985c175a21927b0694c24da20cb2c",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "6.1.0",
-  "updated": "2026-08-09",
+  "version": "6.2.0",
+  "updated": "2026-08-10",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "396f0955c918abe43c0d1cf58635638c7f3f2170",
-    "shortSha": "396f095",
+    "sha": "ffdd5f5b6b5985c175a21927b0694c24da20cb2c",
+    "shortSha": "ffdd5f5",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 702,
-    "totalLines": 144955,
+    "totalFiles": 703,
+    "totalLines": 145151,
     "totalFolders": 23,
-    "totalBytes": 5408417,
+    "totalBytes": 5417778,
     "rootFiles": 6
   },
   "folders": [
@@ -60,8 +60,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 213,
-      "lineCount": 33716,
-      "byteCount": 1098327
+      "lineCount": 33718,
+      "byteCount": 1098710
     },
     {
       "path": "03-error-manage",
@@ -190,8 +190,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 43,
-      "lineCount": 8436,
-      "byteCount": 284560
+      "lineCount": 8437,
+      "byteCount": 284736
     },
     {
       "path": "13-generic-cli",
@@ -202,9 +202,9 @@
       "status": "Active",
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 22,
-      "lineCount": 4466,
-      "byteCount": 147554
+      "fileCount": 23,
+      "lineCount": 4659,
+      "byteCount": 156263
     },
     {
       "path": "14-update",
@@ -256,7 +256,7 @@
       "ambiguity": "None",
       "fileCount": 34,
       "lineCount": 13833,
-      "byteCount": 534821
+      "byteCount": 534914
     },
     {
       "path": "18-wp-plugin-how-to",

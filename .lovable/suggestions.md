@@ -208,3 +208,11 @@
 ---
 
 *Suggestions — v3.13.0 — 2026-04-24*
+
+## Active Suggestions
+
+### Fix absolute file paths in previous artifacts
+- Status: Pending
+- Priority: High
+- Description: Update `walkthrough.md` and other artifacts to use standalone repo-relative paths instead of `file:///`.
+- Added: 2026-08-09

@@ -37,6 +37,7 @@ AI INSTRUCTION:
 5. Add new files to the Feature Inventory below and update 99-consistency-report.md.
 6. Shared patterns (version resolution, checksums, release creation) go in root-level files.
 7. Archetype-specific patterns go in the appropriate subfolder.
+8. **AI Readability Guarantee**: Any AI agent can read and seamlessly implement the CI/CD release and pipeline integration correctly simply by reading through these MD files.
 ```
 
 ---

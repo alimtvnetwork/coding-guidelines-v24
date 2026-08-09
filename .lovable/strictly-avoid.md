@@ -46,3 +46,11 @@ This includes — but is not limited to:
 The only acceptable interaction with `readme.txt` is a one-shot manual edit when the user explicitly types the exact content they want in that turn.
 
 **Why:** User has rejected this feature, the suggestion of this feature, the discussion of this feature, and the documentation of this feature multiple times across sessions, with escalating frustration. Re-raising it is a hard failure.
+
+---
+
+## Absolute File System Paths
+
+🔴 **NEVER use `file:///` absolute paths in markdown files, artifacts, or code.**
+
+Everything must be standalone relative to the repo root (`/`). See: `.lovable/memory/avoid/03-absolute-file-system-paths.md`
