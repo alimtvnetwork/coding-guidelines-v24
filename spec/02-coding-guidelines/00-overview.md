@@ -24,6 +24,7 @@ Consolidated coding standards and conventions organized by category. This folder
 > 4. **Database conventions** — Singular table names (`User` not `Users`), PascalCase everywhere, `{TableName}Id` as `INTEGER PRIMARY KEY AUTOINCREMENT`, FK uses the exact PK name. See [Database Conventions](../04-database-conventions/00-overview.md).
 > 5. **Never hallucinate** — If a requirement is unclear or missing, **ask a clarifying question** instead of guessing. Wrong assumptions cause rewrites.
 > 6. **Function metrics** — Functions: 8–15 lines. Files: < 300 lines. React components: < 100 lines.
+> 7. **No Generated Artifacts** — Never commit test results, test reports, or compiled binaries. See [No Generated Artifacts](./01-cross-language/29-no-generated-artifacts.md).
 >
 > These rules are **CODE RED** — violations are treated as bugs and must be fixed before merge.
 

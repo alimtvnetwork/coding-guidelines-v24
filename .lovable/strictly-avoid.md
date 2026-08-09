@@ -54,3 +54,16 @@ The only acceptable interaction with `readme.txt` is a one-shot manual edit when
 🔴 **NEVER use `file:///` absolute paths in markdown files, artifacts, or code.**
 
 Everything must be standalone relative to the repo root (`/`). See: `.lovable/memory/avoid/03-absolute-file-system-paths.md`
+
+---
+
+## Committing Generated Artifacts and Test Reports — TOTAL BAN
+
+🔴 **NEVER commit test results, test reports, temporary test data, or compiled binaries.**
+
+This includes — but is not limited to:
+- ❌ `.test-report.*`, HTML coverage reports, or JSON test outputs
+- ❌ `.exe`, `.dll`, `.so`, `.class`, `.out`, or any compiled binary
+- ❌ Committing the `build/`, `bin/`, `obj/`, or `dist/` folder unless explicitly permitted by a deploy spec.
+
+**If you generate these files during a run or compilation, verify they are ignored by `.gitignore`. If not, update `.gitignore` or delete them before running `git add`.**

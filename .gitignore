@@ -14,6 +14,21 @@ dist
 dist-ssr
 *.local
 
+# Generated artifacts, test data, and binaries (NEVER COMMIT)
+coverage/
+test-results/
+test-reports/
+*.test-report.*
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+build/
+bin/
+obj/
+*.class
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
