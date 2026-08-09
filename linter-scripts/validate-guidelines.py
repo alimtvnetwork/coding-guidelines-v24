@@ -1086,7 +1086,8 @@ def validate_file(filepath: str) -> List[Violation]:
     try:
         with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
-    except (IOError, OSError):
+    except (IOError, OSError) as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return []
 
     lines = content.split("\n")

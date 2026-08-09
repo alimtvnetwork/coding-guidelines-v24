@@ -9,32 +9,37 @@ import { ActionPanel } from "@/components/ActionPanel";
  * survives only when refactor, split, and signature-restate checks all fail.
  */
 
-type Outcome = "skip" | "delete" | "keep" | "oneliner";
+enum OutcomeType {
+  Skip = "skip",
+  Delete = "delete",
+  Keep = "keep",
+  Oneliner = "oneliner"
+}
 
 interface Node {
   step: string;
   question: string;
-  yes: { label: string; outcome: Outcome };
+  yes: { label: string; outcome: OutcomeType };
   no: string;
 }
 
-const OUTCOME_META: Record<Outcome, { label: string; accent: string; detail: string }> = {
-  skip: {
+const OUTCOME_META: Record<OutcomeType, { label: string; accent: string; detail: string }> = {
+  [OutcomeType.Skip]: {
     label: "Skip the doc",
     accent: "primary",
     detail: "Rename or split the method. The identifier becomes the doc.",
   },
-  delete: {
+  [OutcomeType.Delete]: {
     label: "Delete the doc",
     accent: "destructive",
     detail: "Restating the signature is review-blocking noise.",
   },
-  keep: {
+  [OutcomeType.Keep]: {
     label: "Keep · 1-2 lines",
     accent: "accent",
     detail: "WHY / cited source / short example that clarifies the contract.",
   },
-  oneliner: {
+  [OutcomeType.Oneliner]: {
     label: "One-liner on exported API",
     accent: "accent",
     detail: "Only when godoc / TypeDoc / phpDocumentor is wired in CI.",
@@ -45,31 +50,31 @@ const NODES: readonly Node[] = [
   {
     step: "Q1",
     question: "Can I rename so the doc becomes redundant?",
-    yes: { label: "Yes → rename", outcome: "skip" },
+    yes: { label: "Yes → rename", outcome: OutcomeType.Skip },
     no: "No",
   },
   {
     step: "Q2",
     question: "Can I split so each piece is trivially named?",
-    yes: { label: "Yes → split", outcome: "skip" },
+    yes: { label: "Yes → split", outcome: OutcomeType.Skip },
     no: "No",
   },
   {
     step: "Q3",
     question: "Does the draft doc restate the signature?",
-    yes: { label: "Yes", outcome: "delete" },
+    yes: { label: "Yes", outcome: OutcomeType.Delete },
     no: "No",
   },
   {
     step: "Q4",
     question: "Does it explain WHY, cite a source, or give a runnable example?",
-    yes: { label: "Yes", outcome: "keep" },
+    yes: { label: "Yes", outcome: OutcomeType.Keep },
     no: "No",
   },
   {
     step: "Q5",
     question: "Is automated doc generation wired in CI?",
-    yes: { label: "Yes", outcome: "oneliner" },
+    yes: { label: "Yes", outcome: OutcomeType.Oneliner },
     no: "No → skip",
   },
 ];

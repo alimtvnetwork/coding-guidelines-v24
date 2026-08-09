@@ -1,4 +1,10 @@
-type TokenKind = "command" | "flag" | "url" | "pipe" | "text";
+export enum TokenKindType {
+  Command = "command",
+  Flag = "flag",
+  Url = "url",
+  Pipe = "pipe",
+  Text = "text"
+}
 
 const ShellOperatorType = {
   Pipe: "|",
@@ -10,12 +16,12 @@ const ShellOperatorType = {
 const SHELL_OPERATORS: ReadonlySet<string> = new Set(Object.values(ShellOperatorType));
 const KNOWN_COMMANDS = new Set(["irm", "iex", "curl", "bash", "sh", "wget", "powershell", "pwsh"]);
 
-const TOKEN_CLASS: Record<TokenKind, string> = {
-  command: "text-primary font-medium",
-  flag: "text-accent-foreground/80",
-  url: "text-muted-foreground/90 underline decoration-dotted decoration-muted-foreground/40 underline-offset-2",
-  pipe: "text-destructive/80 font-semibold",
-  text: "text-foreground/85",
+const TOKEN_CLASS: Record<TokenKindType, string> = {
+  [TokenKindType.Command]: "text-primary font-medium",
+  [TokenKindType.Flag]: "text-accent-foreground/80",
+  [TokenKindType.Url]: "text-muted-foreground/90 underline decoration-dotted decoration-muted-foreground/40 underline-offset-2",
+  [TokenKindType.Pipe]: "text-destructive/80 font-semibold",
+  [TokenKindType.Text]: "text-foreground/85",
 };
 
 function isShellOperator(token: string): boolean {
@@ -34,24 +40,24 @@ function isCommandToken(token: string, index: number): boolean {
   return index === 0 || KNOWN_COMMANDS.has(token.toLowerCase());
 }
 
-function classifyToken(token: string, index: number): TokenKind {
+function classifyToken(token: string, index: number): TokenKindType {
   if (isShellOperator(token)) {
-    return "pipe";
+    return TokenKindType.Pipe;
   }
 
   if (isUrlToken(token)) {
-    return "url";
+    return TokenKindType.Url;
   }
 
   if (isFlagToken(token)) {
-    return "flag";
+    return TokenKindType.Flag;
   }
 
   if (isCommandToken(token, index)) {
-    return "command";
+    return TokenKindType.Command;
   }
 
-  return "text";
+  return TokenKindType.Text;
 }
 
 function isWhitespaceToken(token: string): boolean {

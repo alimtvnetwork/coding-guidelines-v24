@@ -86,7 +86,8 @@ def parse_args() -> argparse.Namespace:
 def read_readme(path: Path) -> str | None:
     try:
         return path.read_text(encoding="utf-8")
-    except OSError:
+    except OSError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return None
 
 

@@ -58,12 +58,14 @@ def _symlinks_supported(root: Path) -> bool:
     probe_target.write_text("x", encoding="utf-8")
     try:
         probe_link.symlink_to(probe_target)
-    except (OSError, NotImplementedError):
+    except (OSError, NotImplementedError) as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return False
     finally:
         try:
             probe_link.unlink()
-        except FileNotFoundError:
+        except FileNotFoundError as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             pass
         probe_target.unlink()
     return True

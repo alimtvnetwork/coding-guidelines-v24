@@ -19,11 +19,11 @@ const KEY_ARROW_UP = "ArrowUp";
 const INPUT_TAG = "INPUT";
 const TEXTAREA_TAG = "TEXTAREA";
 
-const VIEW_PREVIEW: ViewMode = "preview";
-const VIEW_EDIT: ViewMode = "edit";
-const VIEW_SPLIT: ViewMode = "split";
-
-type ViewMode = "preview" | "edit" | "split";
+export enum ViewModeType {
+  Preview = "preview",
+  Edit = "edit",
+  Split = "split"
+}
 
 interface FolderGroup {
   folderPath: string;
@@ -46,7 +46,7 @@ interface KeyboardNavOptions {
   activeFile: SpecNode | null;
   setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>;
   setShowShortcuts: React.Dispatch<React.SetStateAction<boolean>>;
-  setViewMode: React.Dispatch<React.SetStateAction<ViewMode>>;
+  setViewMode: React.Dispatch<React.SetStateAction<ViewModeType>>;
   setEditContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -58,8 +58,8 @@ function hasModifier(e: KeyboardEvent): boolean {
   return e.ctrlKey || e.metaKey;
 }
 
-function ensureEditContent(activeFile: SpecNode, prev: ViewMode, setEditContent: React.Dispatch<React.SetStateAction<string>>): void {
-  const isAlreadyEditing = prev === VIEW_EDIT || prev === VIEW_SPLIT;
+function ensureEditContent(activeFile: SpecNode, prev: ViewModeType, setEditContent: React.Dispatch<React.SetStateAction<string>>): void {
+  const isAlreadyEditing = prev === ViewModeType.Edit || prev === ViewModeType.Split;
 
   if (!isAlreadyEditing) {
     setEditContent(activeFile.content || "");
@@ -70,7 +70,7 @@ function handleEditToggle(options: KeyboardNavOptions): void {
   options.setViewMode(prev => {
     ensureEditContent(options.activeFile!, prev, options.setEditContent);
 
-    return prev === VIEW_EDIT ? VIEW_PREVIEW : VIEW_EDIT;
+    return prev === ViewModeType.Edit ? ViewModeType.Preview : ViewModeType.Edit;
   });
 }
 
@@ -78,7 +78,7 @@ function handleSplitToggle(options: KeyboardNavOptions): void {
   options.setViewMode(prev => {
     ensureEditContent(options.activeFile!, prev, options.setEditContent);
 
-    return prev === VIEW_SPLIT ? VIEW_PREVIEW : VIEW_SPLIT;
+    return prev === ViewModeType.Split ? ViewModeType.Preview : ViewModeType.Split;
   });
 }
 
@@ -159,7 +159,7 @@ function handleViewModeKeys(e: KeyboardEvent, options: KeyboardNavOptions): bool
 
   if (e.key === KEY_P) {
     e.preventDefault();
-    options.setViewMode(VIEW_PREVIEW);
+    options.setViewMode(ViewModeType.Preview);
 
     return true;
   }

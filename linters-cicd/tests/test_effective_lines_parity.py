@@ -20,7 +20,9 @@ from pathlib import Path
 
 try:
     import pytest
-except ImportError:  # pragma: no cover - environment guard
+except Exception as exc:
+    import sys; print(f"Error: {exc}", file=sys.stderr)
+    # pragma: no cover - environment guard
     import unittest
     raise unittest.SkipTest("pytest not installed; skipping parity suite")
 

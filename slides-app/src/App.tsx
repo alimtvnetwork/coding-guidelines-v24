@@ -6,7 +6,11 @@ import { RuleBadge, type RuleSeverity } from "./components/RuleBadge";
 import { DECK, SECTIONS, groupBySection, type SlideSection } from "./deck";
 import { SlideStepContext } from "./lib/step-context";
 
-type View = "deck" | "grid" | "presenter";
+enum ViewType {
+  Deck = "deck",
+  Grid = "grid",
+  Presenter = "presenter"
+}
 
 interface SlidePosition {
   index: number;
@@ -73,7 +77,7 @@ export default function App() {
   const initial = readSlideFromHash();
   const [index, setIndex] = useState(initial.index);
   const [step, setStep] = useState(initial.step);
-  const [view, setView] = useState<View>("deck");
+  const [view, setView] = useState<ViewType>(ViewType.Deck);
   const [helpOpen, setHelpOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
@@ -172,11 +176,11 @@ export default function App() {
           break;
         case "g":
         case "G":
-          setView((v) => (v === "grid" ? "deck" : "grid"));
+          setView((v) => (v === ViewType.Grid ? ViewType.Deck : ViewType.Grid));
           break;
         case "p":
         case "P":
-          setView((v) => (v === "presenter" ? "deck" : "presenter"));
+          setView((v) => (v === ViewType.Presenter ? ViewType.Deck : ViewType.Presenter));
           break;
         case "f":
         case "F":
@@ -199,7 +203,7 @@ export default function App() {
             break;
           }
 
-          if (view !== "deck") setView("deck");
+          if (view !== ViewType.Deck) setView(ViewType.Deck);
           break;
       }
     }
@@ -212,20 +216,20 @@ export default function App() {
   const Current = DECK[index].component;
   const NextSlide = DECK[Math.min(index + 1, DECK.length - 1)].component;
 
-  if (view === "grid") {
+  if (view === ViewType.Grid) {
     return (
       <GridView
         currentIndex={index}
         onPick={(n) => {
           goto(n);
-          setView("deck");
+          setView(ViewType.Deck);
         }}
-        onClose={() => setView("deck")}
+        onClose={() => setView(ViewType.Deck)}
       />
     );
   }
 
-  if (view === "presenter") {
+  if (view === ViewType.Presenter) {
     return (
       <PresenterView
         Current={Current}
@@ -233,7 +237,7 @@ export default function App() {
         index={index}
         total={DECK.length}
         onJump={(n) => goto(n)}
-        onClose={() => setView("deck")}
+        onClose={() => setView(ViewType.Deck)}
       />
     );
   }
@@ -266,10 +270,10 @@ export default function App() {
       </div>
 
       <div className="toolbar">
-        <button onClick={() => setView("grid")} title="Grid (G)">
+        <button onClick={() => setView(ViewType.Grid)} title="Grid (G)">
           <Grid3x3 size={14} /> Grid
         </button>
-        <button onClick={() => setView("presenter")} title="Presenter (P)">
+        <button onClick={() => setView(ViewType.Presenter)} title="Presenter (P)">
           <Presentation size={14} /> Presenter
         </button>
         <button onClick={toggleFullscreen} title="Fullscreen (F)">

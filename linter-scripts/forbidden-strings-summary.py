@@ -70,7 +70,8 @@ try:
 except ModuleNotFoundError:
     try:
         import tomli as tomllib  # type: ignore[no-redef]
-    except ModuleNotFoundError:
+    except ModuleNotFoundError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         sys.exit("Error: Python 3.11+ required (tomllib), or install 'tomli'.")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -133,7 +134,8 @@ def scan_rule(rule: dict) -> dict[str, list[tuple[int, str, str]]]:
                 continue
             try:
                 text = full.read_text(encoding="utf-8", errors="ignore")
-            except OSError:
+            except OSError as exc:
+                import sys; print(f"Error: {exc}", file=sys.stderr)
                 continue
             for lineno, line in enumerate(text.splitlines(), 1):
                 for m in pattern.finditer(line):
@@ -380,7 +382,8 @@ def main() -> int:
                 md, _ = render_markdown(rules, scans)
                 fh.write("\n")
                 fh.write(md)
-        except OSError:
+        except OSError as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             pass  # non-fatal
 
     return 1 if total > 0 else 0

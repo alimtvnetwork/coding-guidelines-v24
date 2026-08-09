@@ -11,13 +11,18 @@ import { CodeDiff } from "@/components/CodeDiff";
  */
 
 const BEFORE = `// src/features/orders/OrderCard.tsx
-type OrderStatus = "pending" | "paid" | "shipped" | "cancelled";
+enum OrderStatusType {
+  Pending = "pending",
+  Paid = "paid",
+  Shipped = "shipped",
+  Cancelled = "cancelled"
+}
 
 const MAX_LINE_ITEMS = 50;
 const FREE_SHIPPING_THRESHOLD = 50;
 
 interface OrderCardProps {
-  order: { id: number; status: OrderStatus; total: number };
+  order: { id: number; status: OrderStatusType; total: number };
   onCancel: (id: number) => void;
 }
 
@@ -26,7 +31,12 @@ export function OrderCard({ order, onCancel }: OrderCardProps) {
 }`;
 
 const AFTER = `// src/features/orders/types.ts
-export type OrderStatus = "pending" | "paid" | "shipped" | "cancelled";
+export enum OrderStatusType {
+  Pending = "pending",
+  Paid = "paid",
+  Shipped = "shipped",
+  Cancelled = "cancelled"
+}
 export interface OrderCardProps {
   order: Order;
   onCancel: (id: OrderId) => void;
@@ -60,7 +70,7 @@ export default function DedicatedDefinitionsSlide() {
         />
         <ActionPanel
           slideId="30-dedicated-definitions"
-          symptom="A second screen needs `OrderStatus`, so it imports it from `OrderCard.tsx`. Now the card file cannot be renamed or deleted without breaking unrelated modules. Circular imports appear the moment a util also wants the type. Reviewers stop noticing because 'it works.'"
+          symptom="A second screen needs `OrderStatusType`, so it imports it from `OrderCard.tsx`. Now the card file cannot be renamed or deleted without breaking unrelated modules. Circular imports appear the moment a util also wants the type. Reviewers stop noticing because 'it works.'"
           rule="Types, enums, interfaces, and typed constants each live in a dedicated file, not inline next to the first use. Colocate as `types.ts` / `constants.ts` next to the feature; promote to `src/types/` or `src/constants/` when shared across features. Per spec/17/31 line 32 and rule 13 for React prop types."
           doThis="Create `types.ts` and `constants.ts` the moment you write the first non-trivial type or literal. Import types with `import type` so bundlers can drop them. When you catch an inline `type Props = {...}` on a component signature during review, request extraction before approving. No 'we will extract it later.'"
         />

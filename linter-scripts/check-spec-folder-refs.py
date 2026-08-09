@@ -177,7 +177,8 @@ def find_stale_refs(
     for md_file in iter_markdown_files():
         try:
             text = md_file.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        except OSError as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             continue
         refs = collect_absolute_refs(text) | collect_relative_refs(md_file, text)
         for folder in sorted(refs):

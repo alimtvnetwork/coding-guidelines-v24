@@ -5,13 +5,17 @@ import { useSyncExternalStore } from "react";
  * guideline slide; state persists in localStorage and drives the TOC bar.
  */
 
-export type ProgressBlock = "symptom" | "rule" | "action";
-export const PROGRESS_BLOCKS: readonly ProgressBlock[] = ["symptom", "rule", "action"] as const;
+export enum ProgressBlockType {
+  Symptom = "symptom",
+  Rule = "rule",
+  Action = "action"
+}
+export const PROGRESS_BLOCKS: readonly ProgressBlockType[] = [ProgressBlockType.Symptom, ProgressBlockType.Rule, ProgressBlockType.Action] as const;
 
 const STORAGE_KEY = "slides-sra-progress-v1";
 const EVENT_NAME = "slides-sra-progress-change";
 
-type ProgressMap = Record<string, Partial<Record<ProgressBlock, boolean>>>;
+type ProgressMap = Record<string, Partial<Record<ProgressBlockType, boolean>>>;
 
 function isBrowser(): boolean {
   return typeof window !== "undefined";
@@ -38,20 +42,20 @@ function writeAll(next: ProgressMap): void {
   window.dispatchEvent(new Event(EVENT_NAME));
 }
 
-export function getBlock(slideId: string, block: ProgressBlock): boolean {
+export function getBlock(slideId: string, block: ProgressBlockType): boolean {
   const all = readAll();
 
   return Boolean(all[slideId]?.[block]);
 }
 
-export function setBlock(slideId: string, block: ProgressBlock, value: boolean): void {
+export function setBlock(slideId: string, block: ProgressBlockType, value: boolean): void {
   const all = readAll();
   const current = all[slideId] ?? {};
   const nextEntry = { ...current, [block]: value };
   writeAll({ ...all, [slideId]: nextEntry });
 }
 
-export function toggleBlock(slideId: string, block: ProgressBlock): void {
+export function toggleBlock(slideId: string, block: ProgressBlockType): void {
   setBlock(slideId, block, !getBlock(slideId, block));
 }
 
@@ -91,16 +95,16 @@ export function useProgressSnapshot(): ProgressMap {
 }
 
 export function useSlideProgress(slideId: string): {
-  reviewed: Record<ProgressBlock, boolean>;
+  reviewed: Record<ProgressBlockType, boolean>;
   completedCount: number;
   isComplete: boolean;
 } {
   const all = useProgressSnapshot();
   const entry = all[slideId] ?? {};
-  const reviewed: Record<ProgressBlock, boolean> = {
-    symptom: Boolean(entry.symptom),
-    rule: Boolean(entry.rule),
-    action: Boolean(entry.action),
+  const reviewed: Record<ProgressBlockType, boolean> = {
+    [ProgressBlockType.Symptom]: Boolean(entry[ProgressBlockType.Symptom]),
+    [ProgressBlockType.Rule]: Boolean(entry[ProgressBlockType.Rule]),
+    [ProgressBlockType.Action]: Boolean(entry[ProgressBlockType.Action]),
   };
   const completedCount = PROGRESS_BLOCKS.filter((b) => reviewed[b]).length;
 

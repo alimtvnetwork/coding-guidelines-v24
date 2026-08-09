@@ -19,7 +19,8 @@ from pathlib import Path
 
 try:
     import tomllib  # Python 3.11+
-except ModuleNotFoundError:
+except ModuleNotFoundError as exc:
+    import sys; print(f"Error: {exc}", file=sys.stderr)
     tomllib = None  # type: ignore
 
 # Allow-list of recognised TOML keys under [run]. Anything else is treated
@@ -86,7 +87,8 @@ def _load_toml(path: Path) -> dict:
         return {}
     try:
         return tomllib.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except (OSError, ValueError) as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return {}
 
 

@@ -31,7 +31,8 @@ def scan(path: Path, root: str) -> Finding | None:
         with per_file_timeout(seconds=2):
             text = path.read_text(encoding="utf-8", errors="replace")
             n = text.count("\n") + (0 if text.endswith("\n") else 1)
-    except PerFileTimeout:
+    except PerFileTimeout as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return Finding(
             rule_id=RULE.id,
             level="warning",

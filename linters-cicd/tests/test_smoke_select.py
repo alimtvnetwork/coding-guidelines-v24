@@ -36,7 +36,8 @@ def _git_add_allowed() -> bool:
             res = subprocess.run(["git", "-C", tmp, "add", "-A"],
                                  capture_output=True, text=True)
             return res.returncode == 0
-        except (FileNotFoundError, subprocess.CalledProcessError):
+        except (FileNotFoundError, subprocess.CalledProcessError) as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             return False
 
 
@@ -57,7 +58,8 @@ def _run(repo: Path, registry: Path, *extra: str) -> tuple[int, dict | None, str
     if res.stdout.strip():
         try:
             payload = json.loads(res.stdout)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             payload = None
     return res.returncode, payload, res.stderr
 

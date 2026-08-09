@@ -1,11 +1,16 @@
 import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export type LanguageId = "go" | "ts" | "php" | "rust" | (string & {});
+export enum LanguageIdType {
+  Go = "go",
+  Ts = "ts",
+  Php = "php",
+  Rust = "rust"
+}
 
 export interface LanguageTab {
   /** Stable identifier used for selection state and deep-link hooks. */
-  id: LanguageId;
+  id: LanguageIdType | (string & {});
   /** Short display label shown on the tab pill (e.g. "Go", "TypeScript"). */
   label: string;
   /** Rendered content for this tab (usually a `CodeDiff` or `<pre>` block). */
@@ -15,7 +20,7 @@ export interface LanguageTab {
 export interface LanguageTabsProps {
   tabs: LanguageTab[];
   /** Which tab id is active by default. Defaults to the first tab. */
-  defaultTabId?: LanguageId;
+  defaultTabId?: LanguageIdType | (string & {});
   /** Optional label announced to screen readers (defaults to "Language"). */
   ariaLabel?: string;
 }
@@ -38,7 +43,7 @@ export function LanguageTabs({
   ariaLabel = "Language",
 }: LanguageTabsProps) {
   const initialId = defaultTabId ?? tabs[0]?.id;
-  const [activeId, setActiveId] = useState<LanguageId | undefined>(initialId);
+  const [activeId, setActiveId] = useState<LanguageIdType | (string & {}) | undefined>(initialId);
   const active = tabs.find((tab) => tab.id === activeId) ?? tabs[0];
 
   return (

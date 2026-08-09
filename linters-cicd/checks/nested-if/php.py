@@ -35,7 +35,8 @@ def scan(path: Path, root: str) -> list[Finding]:
     try:
         with per_file_timeout(seconds=2):
             text = path.read_text(encoding="utf-8", errors="replace")
-    except PerFileTimeout:
+    except PerFileTimeout as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return findings
     depth_stack: list[bool] = []  # True = this brace level was opened by `if`
     line_no = 1

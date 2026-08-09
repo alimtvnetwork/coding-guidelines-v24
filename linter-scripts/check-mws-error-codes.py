@@ -42,6 +42,15 @@ UNALLOCATED_FILE = REPO_ROOT / "linter-scripts/check-mws-error-codes.unallocated
 # count for orphan detection (Rule R2).
 CATALOGUE_FILES = {SPEC_FILE, INDEX_FILE, MASTER_FILE}
 
+WORKER_PREFIX = "WORKER"
+MAIN_PREFIX = "MAIN"
+WORKER_RANGE_1_START = 21000
+WORKER_RANGE_1_END = 21099
+WORKER_RANGE_2_START = 21200
+WORKER_RANGE_2_END = 21299
+MAIN_RANGE_START = 21100
+MAIN_RANGE_END = 21199
+
 CODE_RX = re.compile(r"\b(WORKER|MAIN)-(\d{3})-(\d{2})\b")
 ROW_RX = re.compile(
     r"^\|\s*`(?P<code>(?:WORKER|MAIN)-\d{3}-\d{2})`\s*"
@@ -87,6 +96,7 @@ def record_refs_in_file(f: Path, refs: dict[str, set[Path]]) -> None:
     try:
         text = f.read_text(encoding="utf-8", errors="replace")
     except OSError as exc:
+        print(f"Error reading {f}: {exc}", file=sys.stderr)
         raise SystemExit(f"[linter setup] cannot read {f}: {exc}")
     for m in CODE_RX.finditer(text):
         code = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
@@ -143,17 +153,17 @@ def is_in_range(catalogue: dict[str, int], errors: list[str]) -> bool:
 
 
 def check_one_range(code: str, flat: int) -> list[str]:
-    if code.startswith("WORKER") and not is_worker_flat_valid(flat):
-        return [f"R4 {code} flat {flat} outside Worker ranges 21000-21099 or 21200-21299"]
-    if code.startswith("MAIN") and not 21100 <= flat <= 21199:
-        return [f"R4 {code} flat {flat} outside Main range 21100-21199"]
+    if code.startswith(WORKER_PREFIX) and is_worker_flat_invalid(flat):
+        return [f"R4 {code} flat {flat} outside Worker ranges {WORKER_RANGE_1_START}-{WORKER_RANGE_1_END} or {WORKER_RANGE_2_START}-{WORKER_RANGE_2_END}"]
+    if code.startswith(MAIN_PREFIX) and not MAIN_RANGE_START <= flat <= MAIN_RANGE_END:
+        return [f"R4 {code} flat {flat} outside Main range {MAIN_RANGE_START}-{MAIN_RANGE_END}"]
     return []
 
 
-def is_worker_flat_valid(flat: int) -> bool:
-    primary = 21000 <= flat <= 21099
-    overflow = 21200 <= flat <= 21299
-    return primary or overflow
+def is_worker_flat_invalid(flat: int) -> bool:
+    primary = WORKER_RANGE_1_START <= flat <= WORKER_RANGE_1_END
+    overflow = WORKER_RANGE_2_START <= flat <= WORKER_RANGE_2_END
+    return not (primary or overflow)
 
 
 def main() -> int:

@@ -245,7 +245,8 @@ class WithSimilarityCli(unittest.TestCase):
             try:
                 decoded = json.loads(err[chunk_start:].split("\n\n", 1)[0])
                 break
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as exc:
+                import sys; print(f"Error: {exc}", file=sys.stderr)
                 continue
         self.assertIsNotNone(decoded, f"no JSON array on STDERR: {err!r}")
         by_path = {row["path"]: row for row in decoded}
@@ -277,7 +278,8 @@ class WithSimilarityCli(unittest.TestCase):
                 try:
                     decoded = json.loads(err[i:].split("\n\n", 1)[0])
                     break
-                except json.JSONDecodeError:
+                except json.JSONDecodeError as exc:
+                    import sys; print(f"Error: {exc}", file=sys.stderr)
                     continue
         self.assertIsNotNone(decoded)
         for row in decoded:

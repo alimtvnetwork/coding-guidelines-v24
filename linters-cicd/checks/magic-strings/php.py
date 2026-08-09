@@ -36,7 +36,8 @@ def scan(path: Path, root: str) -> list[Finding]:
     try:
         with per_file_timeout(seconds=2):
             text = path.read_text(encoding="utf-8", errors="replace")
-    except PerFileTimeout:
+    except PerFileTimeout as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return findings
     for line_no, line in enumerate(text.splitlines(), start=1):
         if EXEMPT_RE.search(line):

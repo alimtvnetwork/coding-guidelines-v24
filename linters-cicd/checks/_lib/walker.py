@@ -90,7 +90,8 @@ def _matches_any(rel: str, globs: tuple[str, ...]) -> bool:
 def _relposix(p: Path, root: Path) -> str:
     try:
         rel = p.resolve().relative_to(root)
-    except ValueError:
+    except ValueError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return p.as_posix()
     return rel.as_posix()
 
@@ -98,7 +99,8 @@ def _relposix(p: Path, root: Path) -> str:
 def _safe_size(path: Path) -> int:
     try:
         return path.stat().st_size
-    except OSError:
+    except OSError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return 0
 
 

@@ -93,7 +93,8 @@ class TestTemplateIsolation(unittest.TestCase):
         combined = (result.stdout or "") + "\n" + (result.stderr or "")
         try:
             produced = Path("/tmp/_test_template_isolation.txt").read_text(encoding="utf-8")
-        except FileNotFoundError:
+        except FileNotFoundError as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             produced = ""
         haystack = combined + "\n" + produced
         self.assertNotIn(

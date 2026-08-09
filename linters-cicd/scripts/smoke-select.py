@@ -144,7 +144,8 @@ def _slug_from_script(script: str) -> str | None:
     parts = script.replace("\\", "/").split("/")
     try:
         idx = parts.index(CHECKS_DIR_NAME)
-    except ValueError:
+    except ValueError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return None
     if idx + 1 >= len(parts):
         return None
@@ -164,7 +165,8 @@ def _changed_slugs(repo_root: Path, base: str) -> tuple[set[str], bool]:
             res = subprocess.run(
                 cmd, cwd=str(repo_root), capture_output=True, text=True, timeout=15,
             )
-        except (OSError, subprocess.TimeoutExpired):
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             git_ok = False
             continue
         if res.returncode != 0:

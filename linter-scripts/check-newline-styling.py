@@ -8,7 +8,8 @@ def check_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         try:
             content = f.read()
-        except UnicodeDecodeError:
+        except UnicodeDecodeError as exc:
+            import sys; print(f"Error: {exc}", file=sys.stderr)
             return violations # skip unreadable files
             
     lines = content.split('\n')

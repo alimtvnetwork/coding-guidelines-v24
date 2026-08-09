@@ -73,7 +73,8 @@ def parse_file_full(path: Path) -> ParseResult:
 def _read_lines(path: Path) -> list[str]:
     try:
         return path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
+    except OSError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return []
 
 

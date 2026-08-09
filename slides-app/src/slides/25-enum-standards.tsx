@@ -22,8 +22,12 @@ if row.Status == statusReady { ship(row) }
 if ($row->status === 'ready') { ship($row); }`;
 
 const AFTER = `// TypeScript
-export enum OrderStatus { Pending, Ready, Failed }
-if (row.status === OrderStatus.Ready) { ship(row); }
+export enum OrderStatusType {
+  Pending = "pending",
+  Ready = "ready",
+  Failed = "failed"
+}
+if (row.status === OrderStatusType.Ready) { ship(row); }
 
 // Go
 type OrderStatus byte

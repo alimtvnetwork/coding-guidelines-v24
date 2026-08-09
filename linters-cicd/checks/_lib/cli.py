@@ -71,5 +71,6 @@ def _pack_version() -> str:
     version_file = Path(__file__).resolve().parents[2] / "VERSION"
     try:
         return version_file.read_text(encoding="utf-8").strip()
-    except OSError:
+    except OSError as exc:
+        import sys; print(f"Error: {exc}", file=sys.stderr)
         return "0.0.0"
