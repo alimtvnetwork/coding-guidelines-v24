@@ -19,8 +19,10 @@ const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
+export enum SidebarStateType { Expanded = "expanded", Collapsed = "collapsed" }
+
 type SidebarContext = {
-  state: "expanded" | "collapsed";
+  state: SidebarStateType;
   open: boolean;
   setOpen: (open: boolean) => void;
   openMobile: boolean;
@@ -95,7 +97,7 @@ const SidebarProvider = React.forwardRef<
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
-  const state = open ? "expanded" : "collapsed";
+  const state = open ? SidebarStateType.Expanded : SidebarStateType.Collapsed;
 
   const contextValue = React.useMemo<SidebarContext>(
     () => ({
@@ -183,7 +185,7 @@ const Sidebar = React.forwardRef<
       ref={ref}
       className="group peer hidden text-sidebar-foreground md:block"
       data-state={state}
-      data-collapsible={state === "collapsed" ? collapsible : ""}
+      data-collapsible={state === SidebarStateType.Collapsed ? collapsible : ""}
       data-variant={variant}
       data-side={side}
     >
@@ -476,7 +478,7 @@ const SidebarMenuButton = React.forwardRef<
   return (
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile} {...tooltip} />
+      <TooltipContent side="right" align="center" hidden={state !== SidebarStateType.Collapsed || isMobile} {...tooltip} />
     </Tooltip>
   );
 });

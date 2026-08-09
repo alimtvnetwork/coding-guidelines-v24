@@ -168,4 +168,12 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 
 ---
 
-*Plan v2.0.0 — 2026-05-06. Type `next` to begin Phase 1.*
+## Phase 13 — Codebase Audit, Query Wrappers & Enum Fixes
+- **Enum Renaming**: Eradicate string unions (`"pass" | "fail"`) and `Status7` anomalies; enforce `Type` suffix universally.
+- **Boolean Corrections**: Revert all instances of `!response.isSuccess` to `response.isFail`.
+- **Query Wrappers**: Implement and adopt query wrappers for PHP, Python, and TypeScript to automate failure logging. Fix overhead logic like `$isFailed = !$exists` in PHP scripts.
+- **Linters**: Add CI/CD checks to enforce these rules.
+
+---
+
+*Plan v2.1.0 — 2026-08-09. Type `next` to begin Phase 13.*

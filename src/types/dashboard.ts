@@ -1,10 +1,9 @@
 // Strict named-interface types for the CI/CD dashboard data layer.
 // Source files: version.json, public/health-score.json, public/ci-runs.json.
 
-export type RunStatus = "passed" | "failed" | "running";
-export type IssueStatus = "solved" | "pending";
-export type RuleStatus = "cleared" | "active";
-
+export enum RunStatusType { Passed = "passed", Failed = "failed", Running = "running" }
+export enum IssueStatusType { Solved = "solved", Pending = "pending" }
+export enum RuleStatusType { Cleared = "cleared", Active = "active" }
 export interface VersionFolderStats {
   path: string;
   name: string;
@@ -47,7 +46,7 @@ export interface CiIssue {
   number: number;
   slug: string;
   title: string;
-  status: IssueStatus;
+  status: IssueStatusType;
   date: string;
   rules: string[];
 }
@@ -55,14 +54,14 @@ export interface CiIssue {
 export interface CiRule {
   rule: string;
   occurrences: number;
-  status: RuleStatus;
+  status: RuleStatusType;
 }
 
 export interface CiRun {
   id: string;
   date: string;
   commitSha: string;
-  status: RunStatus;
+  status: RunStatusType;
   durationSeconds: number;
   filesScanned: number;
   linesScanned: number;
