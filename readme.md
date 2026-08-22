@@ -1440,6 +1440,8 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 2. **Read nearby code** in the same file (and 1-2 sibling files) before editing. Match existing naming and structure.
 3. **Follow existing conventions** — naming, folder layout, import style — over your defaults. The repo's style wins.
 4. **Do not invent** APIs, folders, config keys, file names, environment variables, or library functions. If unsure, search or ask.
+5. **Read the .lovable/prompts.md index** to understand the workflow and execution prompts required for this project.
+6. **Follow AI Execution Rules** from .lovable/coding-guidelines/coding-guidelines.md if present.
 
 **While writing code:**
 
