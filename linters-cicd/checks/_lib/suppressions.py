@@ -74,7 +74,7 @@ def _read_lines(path: Path) -> list[str]:
     try:
         return path.read_text(encoding="utf-8", errors="replace").splitlines()
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return []
 
 

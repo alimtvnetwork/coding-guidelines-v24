@@ -91,7 +91,7 @@ def _relposix(p: Path, root: Path) -> str:
     try:
         rel = p.resolve().relative_to(root)
     except ValueError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return p.as_posix()
     return rel.as_posix()
 
@@ -100,7 +100,7 @@ def _safe_size(path: Path) -> int:
     try:
         return path.stat().st_size
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return 0
 
 

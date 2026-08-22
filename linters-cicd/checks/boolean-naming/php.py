@@ -36,7 +36,7 @@ def scan(path: Path, root: str) -> list[Finding]:
         with per_file_timeout(seconds=2):
             text = path.read_text(encoding="utf-8", errors="replace")
     except PerFileTimeout as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return findings
     for line_no, line in enumerate(text.splitlines(), start=1):
         for match in DECL_RE.finditer(line):

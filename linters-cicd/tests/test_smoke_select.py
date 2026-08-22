@@ -37,7 +37,7 @@ def _git_add_allowed() -> bool:
                                  capture_output=True, text=True)
             return res.returncode == 0
         except (FileNotFoundError, subprocess.CalledProcessError) as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             return False
 
 
@@ -58,8 +58,10 @@ def _run(repo: Path, registry: Path, *extra: str) -> tuple[int, dict | None, str
     if res.stdout.strip():
         try:
             payload = json.loads(res.stdout)
+            if payload and "fixture_dirs" in payload:
+                payload["fixture_dirs"] = [p.replace("\\", "/") for p in payload["fixture_dirs"]]
         except json.JSONDecodeError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             payload = None
     return res.returncode, payload, res.stderr
 

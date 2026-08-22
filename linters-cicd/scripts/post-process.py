@@ -166,7 +166,7 @@ def _read_version() -> str:
     try:
         return version_file.read_text(encoding="utf-8").strip()
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return "0.0.0"
 
 
@@ -200,7 +200,7 @@ def _load_fingerprints(path: str) -> set[str] | None:
     try:
         baseline_doc = json.loads(file.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return None
     out: set[str] = set()
     for run in baseline_doc.get("runs", []):

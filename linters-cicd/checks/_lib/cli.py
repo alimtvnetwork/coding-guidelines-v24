@@ -72,5 +72,5 @@ def _pack_version() -> str:
     try:
         return version_file.read_text(encoding="utf-8").strip()
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return "0.0.0"

@@ -21,7 +21,7 @@ from pathlib import Path
 try:
     import pytest
 except Exception as exc:
-    import sys; print(f"Error: {exc}", file=sys.stderr)
+    import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
     # pragma: no cover - environment guard
     import unittest
     raise unittest.SkipTest("pytest not installed; skipping parity suite")
