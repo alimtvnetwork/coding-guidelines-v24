@@ -7,7 +7,7 @@ Version: 1.5.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/02-coding-guidelines/` folder, a `spec/xx-coding-guidelines.md` file, or a `spec/03-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code. The `error-manage` rules must be tightly followed.
 
-**Before reading the rules below**, read the [AI Instruction Manual & Overview](./00-AI-REVIEW-OVERVIEW.md) to understand how to review code, interpret files, and maintain repository hygiene (e.g. updating `.gitignore`).
+**Before reading the rules below**, read the [AI Instruction Manual & Overview](./00-ai-review-overview.md) to understand how to review code, interpret files, and maintain repository hygiene (e.g. updating `.gitignore`).
 
 Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
 
