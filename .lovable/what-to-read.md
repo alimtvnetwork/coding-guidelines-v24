@@ -7,6 +7,7 @@
 - 2026-08-09T18:21:37Z, Memory write: code red refactor and strict absolute path avoidance.
 
 ## Before any task (always)
+- `version.json`, why: single source of truth for the repository version. New releases MUST bump this file.
 - `.lovable/memory/index.md`, why: core memory index
 - `.lovable/coding-guidelines.md`, why: baseline rules
 - `.lovable/plans/index.md`, why: active roadmap

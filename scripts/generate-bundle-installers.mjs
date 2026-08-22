@@ -369,12 +369,17 @@ extract_mapping() {
   for pair in \${BUNDLE_MAPPING}; do
     src="\${pair%|*}"
     dest="\${pair#*|}"
-    if [[ ! -d "\${archive_root}/\${src}" ]]; then
-      echo "  ⚠️  archive missing \${src} — skipping" >&2
+    if [[ ! -e "\${archive_root}/\${src}" ]]; then
+      echo "  ? \${src} not found in archive. Skipping."
       continue
     fi
-    mkdir -p "\${TARGET}/\${dest}"
-    cp -R "\${archive_root}/\${src}/." "\${TARGET}/\${dest}/"
+    if [[ -d "\${archive_root}/\${src}" ]]; then
+      mkdir -p "\${TARGET}/\${dest}"
+      cp -R "\${archive_root}/\${src}/." "\${TARGET}/\${dest}/"
+    else
+      mkdir -p "\$(dirname "\${TARGET}/\${dest}")"
+      cp -p "\${archive_root}/\${src}" "\${TARGET}/\${dest}"
+    fi
     echo "  ✓ \${src} → \${TARGET}/\${dest}"
   done
 }

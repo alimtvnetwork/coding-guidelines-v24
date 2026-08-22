@@ -283,7 +283,7 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v24}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines" ".lovable/what-to-read.md" "version.json")
 
 # Top-level files always pulled alongside the folders. These are repo-root
 # scripts (not contained in any installed folder) that users need locally to
@@ -508,15 +508,29 @@ check_hash_match() {
 merge_folder() {
   local folder="$1"
   local src="$ARCHIVE_ROOT/$folder"
-  if [[ ! -d "$src" ]]; then
-    warn "Folder '$folder' not found in $REPO@$REF — skipping"
+  if [[ ! -e "$src" ]]; then
+    warn "Folder or file '$folder' not found in $REPO@$REF - skipping"
     ((SKIPPED_FOLDERS++))
     return
   fi
   step "Merging: $folder"
+  
+  local is_src_file=false
+  [[ -f "$src" ]] && is_src_file=true
+
   while IFS= read -r -d '' f; do
-    local rel="${f#$src/}"
-    local full_rel="$folder/$rel"
+    if $is_src_file && [[ "$f" != "$src" ]]; then
+      continue
+    fi
+    local rel
+    local full_rel
+    if $is_src_file; then
+      rel="$(basename "$f")"
+      full_rel="$folder"
+    else
+      rel="${f#$src/}"
+      full_rel="$folder/$rel"
+    fi
     
     # Skip folders 21+ inside spec on second run
     if $IS_SECOND_RUN && [[ "$full_rel" =~ ^spec/([2-9][1-9]|[3-9][0-9])-.*/ ]]; then
@@ -524,6 +538,18 @@ merge_folder() {
     fi
     
     local dst="$DEST/$full_rel"
+
+    # Lovable folder protection rules:
+    if [[ "$full_rel" == .lovable/* ]]; then
+      if [[ -e "$dst" ]]; then
+        # If target exists, only allow updating coding-guidelines.md
+        if [[ "$full_rel" != *coding-guidelines.md ]]; then
+          ((SKIPPED_FILES++))
+          continue
+        fi
+      fi
+    fi
+
     local filename
     filename="$(basename "$f")"
     
@@ -553,7 +579,7 @@ merge_folder() {
     echo "    \"$full_rel\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
     FETCHED_PATHS+=("$full_rel")
     echo "    ↳ fetched: $full_rel"
-  done < <(find "$src" -type f -print0)
+  done < <(if $is_src_file; then printf "%s\0" "$src"; else find "$src" -type f -print0; fi)
   ((COPIED++))
 }
 

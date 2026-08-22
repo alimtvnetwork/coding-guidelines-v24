@@ -258,7 +258,7 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines") }
+    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines", ".lovable/what-to-read.md", "version.json") }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }
@@ -437,16 +437,31 @@ try {
             $skippedFolders++; continue
         }
         Write-Step "Merging: $folder"
-        Get-ChildItem -Path $srcPath -Recurse -File -Force | ForEach-Object {
-            $relativePath = $_.FullName.Substring($srcPath.Length).TrimStart('\','/')
-            $rel = "$folder/$($relativePath -replace '\\','/')"
+        $isSrcFile = (Get-Item $srcPath) -is [System.IO.FileInfo]
+        
+        $itemsToCopy = if ($isSrcFile) { Get-Item $srcPath } else { Get-ChildItem -Path $srcPath -Recurse -File -Force }
+
+        $itemsToCopy | ForEach-Object {
+            $relativePath = if ($isSrcFile) { $_.Name } else { $_.FullName.Substring($srcPath.Length).TrimStart('\','/') }
+            $rel = if ($isSrcFile) { $folder } else { "$folder/$($relativePath -replace '\\','/')" }
 
             # Skip folders 21+ inside spec on second run
             if ($IsSecondRun -and $rel -match "^spec/([2-9][1-9]|[3-9][0-9])-.*/") {
                 return
             }
 
-            $targetFile = Join-Path (Join-Path $Dest $folder) $relativePath
+            $targetFile = if ($isSrcFile) { Join-Path $Dest $folder } else { Join-Path (Join-Path $Dest $folder) $relativePath }
+
+            # Lovable folder protection rules:
+            if ($rel -match "^\.lovable/") {
+                if (Test-Path $targetFile) {
+                    # If target exists, only allow updating coding-guidelines.md
+                    if ($rel -notmatch "coding-guidelines\.md$") {
+                        $skippedFiles++
+                        return
+                    }
+                }
+            }
 
             # Skip .gitkeep if folder already has other files
             if ($_.Name -eq ".gitkeep") {

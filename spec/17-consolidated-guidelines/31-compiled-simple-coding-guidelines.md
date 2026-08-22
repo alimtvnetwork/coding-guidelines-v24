@@ -44,6 +44,7 @@ auto-reject on the same tier as RULE 0.
 12. Immutable-first, Rust-style. Assign every variable once at declaration. Never reassign except loop indices. Prefer `const`, `let`, `final`, `val` over `let mut` or `var`. Build result objects with spread or copy, not in-place mutation.
 13. Assets go to `assets/<NN-folder>/<NN-file>.<ext>` with two-digit sequence prefixes, for example `assets/01-icons/03-logo.svg`.
 14. This coding guideline file MUST be mirrored to `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` at every edit. The mirror script `scripts/sync-guidelines.mjs` is the only allowed writer. Missing or stale mirrors are a build-fail: agent search tools index the mirror, not the spec folder, so a missing mirror means the guideline effectively does not exist for the AI. Never hand-edit the mirrors; always edit the source file and re-run the sync.
+15. **Version Source of Truth**: There MUST be a `version.json` file in the root of the repo (delivered via the coding guidelines installer). It must contain the repository's root version information and description. Every language implementation (Go, TypeScript, Python, etc.) MUST import this single `version.json` file to get the repo's version. To make a new release, you MUST only change this root `version.json`.
 
 ---
 
