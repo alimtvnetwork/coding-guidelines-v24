@@ -10,10 +10,16 @@
 Before planning, you must read the following locations (if they exist) to build your context:
 - `.lovable/coding-guidelines/coding-guidelines.md` (or `.lovable/coding-guidelines.md`)
 - `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` (Style Guidelines)
+- `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` (Condition Extraction)
 - `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md` (Return statement rules)
 - `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md` (Function Guidelines: functions MUST be < 8 lines)
+- `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` (Multi-line and struct rules)
 - `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` (Boolean Naming: 'has'/'is' prefixes, inverse naming like isHonest/isDishonest)
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` (Guard clauses)
 - `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md` (Golang Wrapped Booleans)
+- `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` (Anti-Hallucination)
+- `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md` (Common Mistakes)
+- `spec/03-error-manage/00-overview.md` (Error Management)
 
 - `spec/02-coding-guidelines/` or `spec/coding-guidelines/`
 - `spec/03-error-manage/` or `spec/XX-error-manage/`
@@ -97,6 +103,7 @@ Listen, past next-tasks turns have been sloppy as fuck: wrong step count, missin
 - [ ] Complete all work on the current branch only.
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
 - [ ] Group all completed work into a single logical commit.
+- [ ] Anti-Hallucination Check: Before finalizing the plan or writing code, you MUST use read/search tools to verify that every file, function, enum, and variable mentioned actually exists in the codebase. Do not guess.
 - [ ] Push the commit to the remote repository.
 
 - [ ] Self-loop continuously until all the code issues are listed out in tasks and pending tasks.
@@ -259,7 +266,6 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 4. List every remaining task before ending the turn.
 5. Plan multi-file features with a Mermaid component or flow diagram first.
 6. If you cannot find the answer in this file or in an existing `spec/xx-coding-guidelines/` folder or `spec/xx-error-manage/` folder, ask. Do not invent.
-
 
 ---
 

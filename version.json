@@ -1,9 +1,9 @@
 {
-  "Version": "6.9.5",
+  "Version": "6.10.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "2e1af03923f1706ee21b3b8a8b371504674e9872",
+  "LastCommitSha": "6301276ec205b4dc4219a22593678f323b06bbf6",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "6.9.5",
+  "version": "6.10.0",
   "updated": "2026-08-22",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "2e1af03923f1706ee21b3b8a8b371504674e9872",
-    "shortSha": "2e1af03",
+    "sha": "6301276ec205b4dc4219a22593678f323b06bbf6",
+    "shortSha": "6301276",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 706,
-    "totalLines": 145414,
+    "totalLines": 145415,
     "totalFolders": 23,
-    "totalBytes": 5288000,
+    "totalBytes": 5288381,
     "rootFiles": 6
   },
   "folders": [
@@ -255,8 +255,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 35,
-      "lineCount": 13876,
-      "byteCount": 526294
+      "lineCount": 13877,
+      "byteCount": 526675
     },
     {
       "path": "18-wp-plugin-how-to",

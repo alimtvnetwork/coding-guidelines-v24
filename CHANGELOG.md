@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [6.10.0] - 2026-08-22
+
+### Changed - Add prompt architect update scripts and AI trigger
+
+- Added scripts/update-prompts-from-architect.ps1 and .sh to fetch standard AI system prompts directly from the prompt-architect-v2 repository.
+- Added Hard Rule 25 specifying the AI trigger for updating prompts.
+- Updated readme with documentation for the AI utility script.
+
+---
+
 ## [6.0.0] - 2026-07-19
 
 ### Major, milestone release rolling up sync-check refactor + v5.13x hardening cycle
@@ -1616,3 +1626,4 @@ the canonical superset.
 - `package.json`, `version.json` — bumped to `3.8.0`.
 
 ---
+
