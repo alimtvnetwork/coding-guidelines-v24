@@ -8,7 +8,7 @@ import { resolve } from "node:path";
 // import in deck.ts, DECK length drift vs file count.
 
 const SLIDES_DIR = resolve(__dirname, "../../slides-app/src/slides");
-const DECK_FILE = resolve(__dirname, "../../slides-app/src/deck.ts");
+const DECK_FILE = resolve(__dirname, "../../slides-app/src/deck/registry.ts");
 
 describe("slides-app deck", () => {
   const slideFiles = readdirSync(SLIDES_DIR).filter((f) => f.endsWith(".tsx"));
@@ -18,10 +18,10 @@ describe("slides-app deck", () => {
     expect(slideFiles.length).toBeGreaterThanOrEqual(12);
   });
 
-  it("imports every slide file in deck.ts", () => {
+  it("imports every slide file in registry.ts", () => {
     for (const f of slideFiles) {
       const base = f.replace(/\.tsx$/, "");
-      expect(deckSrc, `deck.ts missing import for ${base}`).toContain(`/slides/${base}`);
+      expect(deckSrc, `registry.ts missing import for ${base}`).toContain(`../slides/${base}`);
     }
   });
 
@@ -33,7 +33,7 @@ describe("slides-app deck", () => {
   });
 
   it("DECK entry count matches imported slide count", () => {
-    const importCount = (deckSrc.match(/from\s+"\.\/slides\//g) ?? []).length;
+    const importCount = (deckSrc.match(/from\s+"\.\.\/slides\//g) ?? []).length;
     // Exclude the `component: ComponentType` interface field; only count
     // DECK entries (`component: <PascalCaseIdentifier>` with no generics).
     const entryCount = (deckSrc.match(/component:\s+[A-Z]\w*\s*[,}]/g) ?? []).length;
