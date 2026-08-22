@@ -235,6 +235,9 @@ def print_report(
 
 def main() -> int:
     """Entry point."""
+    import sys
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
     if not SPEC_ROOT.is_dir():
         print(f"::error::spec/ directory not found at {SPEC_ROOT}")
         return 1

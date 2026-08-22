@@ -110,6 +110,9 @@ def scan_rule(rule: dict, root: str) -> list[str]:
 
 
 def main() -> int:
+    import sys
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
     config = load_config(CONFIG_PATH)
     root = os.getcwd()
     total_failures = 0

@@ -3,7 +3,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "c3156f555db63f77b893196cf64c5de42a66163e",
+  "LastCommitSha": "cba24ea1d7a1c4a394a5eef4954fb4b6ed420b1b",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -25,8 +25,8 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "c3156f555db63f77b893196cf64c5de42a66163e",
-    "shortSha": "c3156f5",
+    "sha": "cba24ea1d7a1c4a394a5eef4954fb4b6ed420b1b",
+    "shortSha": "cba24ea",
     "branch": "main"
   },
   "stats": {
