@@ -16,6 +16,16 @@ AI agents **MUST** check every generated code block against these rules before o
 
 ---
 
+## Category 0: Repository Protection
+
+### AH-00: No Generated Code or Artifacts
+
+? **Never generate/commit:** Generated code (`*.generated.*`, ORM models, gRPC clients), test results, test reports, or compiled binaries.
+? **Always generate:** `.gitignore` entries to exclude them from the repository.
+?? Auto-generated code clutters the repository, creates diff noise, and should be produced dynamically at build time or in CI.
+
+---
+
 ## Category 1: Naming Hallucinations
 
 ### AH-N1: Abbreviation Casing

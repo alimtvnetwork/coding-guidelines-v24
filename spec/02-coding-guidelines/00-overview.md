@@ -18,13 +18,13 @@ Consolidated coding standards and conventions organized by category. This folder
 >
 > After reading this coding guideline, you **MUST** internalize the following rules and apply them to **every single code change** without exception. Do not proceed with implementation until you have understood and committed these to your working memory:
 >
-> 1. **Error Management is the #1 priority** — Error handling from [03-error-manage/](../03-error-manage/00-overview.md) must be implemented from the **very first line of code**. Never write business logic without proper error handling wrapping it. This is non-negotiable.
-> 2. **Boolean naming** — All booleans use `is`/`has`/`should` prefixes and are **positively named only** (`IsActive`, never `IsDisabled`). Extract multi-part conditions into named variables.
-> 3. **if/else and nesting** — Zero nesting. Use early returns and guard clauses. No nested `if` blocks.
-> 4. **Database conventions** — Singular table names (`User` not `Users`), PascalCase everywhere, `{TableName}Id` as `INTEGER PRIMARY KEY AUTOINCREMENT`, FK uses the exact PK name. See [Database Conventions](../04-database-conventions/00-overview.md).
-> 5. **Never hallucinate** — If a requirement is unclear or missing, **ask a clarifying question** instead of guessing. Wrong assumptions cause rewrites.
-> 6. **Function metrics** — Functions: 8–15 lines. Files: < 300 lines. React components: < 100 lines.
-> 7. **No Generated Artifacts** — Never commit test results, test reports, or compiled binaries. See [No Generated Artifacts](./01-cross-language/29-no-generated-artifacts.md).
+> 1. **No Generated Code or Artifacts (Never Commit)** - Never commit generated code (e.g., ORM models, gRPC clients), test results, test reports, or compiled binaries. They belong in build artifacts or CI, never in source control. See [No Generated Code](./01-cross-language/29-no-generated-artifacts.md).
+> 2. **Error Management is the #1 priority** - Error handling from [03-error-manage/](../03-error-manage/00-overview.md) must be implemented from the **very first line of code**. Never write business logic without proper error handling wrapping it. This is non-negotiable.
+> 3. **Boolean naming** - All booleans use `is`/`has`/`should` prefixes and are **positively named only** (`IsActive`, never `IsDisabled`). Extract multi-part conditions into named variables.
+> 4. **if/else and nesting** - Zero nesting. Use early returns and guard clauses. No nested `if` blocks.
+> 5. **Database conventions** - Singular table names (`User` not `Users`), PascalCase everywhere, `{TableName}Id` as `INTEGER PRIMARY KEY AUTOINCREMENT`, FK uses the exact PK name. See [Database Conventions](../04-database-conventions/00-overview.md).
+> 6. **Never hallucinate** - If a requirement is unclear or missing, **ask a clarifying question** instead of guessing. Wrong assumptions cause rewrites.
+> 7. **Function metrics** - Functions: 8-15 lines. Files: < 300 lines. React components: < 100 lines.
 >
 > These rules are **CODE RED** — violations are treated as bugs and must be fixed before merge.
 
