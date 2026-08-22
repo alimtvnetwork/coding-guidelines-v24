@@ -25,6 +25,7 @@ class QueryWrapper {
   static async execute<T>(queryFn: () => Promise<T>): Promise<QueryResult<T>> {
     try {
       const data = await queryFn();
+
       return {
         data,
         isFail: false,
@@ -32,6 +33,7 @@ class QueryWrapper {
       };
     } catch (error) {
       CentralLogger.log(LogLevelType.ERROR, ERROR_MESSAGES.QUERY_FAILED, error);
+
       return {
         data: null,
         isFail: true,

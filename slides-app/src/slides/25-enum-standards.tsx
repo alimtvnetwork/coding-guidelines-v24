@@ -27,6 +27,7 @@ export enum OrderStatusType {
   Ready = "ready",
   Failed = "failed"
 }
+
 if (row.status === OrderStatusType.Ready) { ship(row); }
 
 // Go

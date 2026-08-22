@@ -37,6 +37,7 @@ export enum OrderStatusType {
   Shipped = "shipped",
   Cancelled = "cancelled"
 }
+
 export interface OrderCardProps {
   order: Order;
   onCancel: (id: OrderId) => void;

@@ -10,6 +10,7 @@ export enum ProgressBlockType {
   Rule = "rule",
   Action = "action"
 }
+
 export const PROGRESS_BLOCKS: readonly ProgressBlockType[] = [ProgressBlockType.Symptom, ProgressBlockType.Rule, ProgressBlockType.Action] as const;
 
 const STORAGE_KEY = "slides-sra-progress-v1";
