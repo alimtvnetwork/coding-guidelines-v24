@@ -1,0 +1,15 @@
+70943e13b2dcbb2a8d2c93cacc7b1310e73c5ff4 commit	refs/heads/main
+70943e13b2dcbb2a8d2c93cacc7b1310e73c5ff4 commit	refs/remotes/origin/HEAD
+70943e13b2dcbb2a8d2c93cacc7b1310e73c5ff4 commit	refs/remotes/origin/main
+62a732e707c403b5b1ea7f4c71a787dac662ffb7 commit	refs/remotes/origin/release/v5.47.0
+da99ac2689ae5a4d69a4d31f0398d9cae34e0642 commit	refs/remotes/origin/release/v6.0.0
+59552bada082f11ea4129b663da655ce7d202fb4 tag	refs/tags/v5.47.0
+2ca58a6ea449ab7116e5db737baa2c7627f328d8 tag	refs/tags/v6.0.0
+1c6c48bebbb766651d4ad49a88e03c4f77fe53b1 tag	refs/tags/v6.4.0
+2b5c9d10a86c446490f78fe6a9a0d0284bc17ee1 tag	refs/tags/v6.5.0
+88ca593e55738d7bfe6c58f7435df711965af074 tag	refs/tags/v6.6.0
+2bdca50f4b3ae7266478ea55acf670ebde302eae tag	refs/tags/v6.7.0
+5ec2bdc13790b18634a24ca875ea5fd7bb944e26 tag	refs/tags/v6.7.1
+c69e80d54a07971672525c9fa1fba5fe7354d81b tag	refs/tags/v6.7.2
+aa6dba9e1ce2c04acab22ccf33e0eed82217c54b tag	refs/tags/v6.8.0
+b98aef4f4a070936f6e3c37d7600abdccca45faf tag	refs/tags/v6.9.0

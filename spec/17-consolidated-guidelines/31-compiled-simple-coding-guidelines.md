@@ -4,6 +4,8 @@ Version: 1.5.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/02-coding-guidelines/` folder, a `spec/xx-coding-guidelines.md` file, or a `spec/03-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code. The `error-manage` rules must be tightly followed.
 
+**Before reading the rules below**, read the [AI Instruction Manual & Overview](./00-AI-REVIEW-OVERVIEW.md) to understand how to review code, interpret files, and maintain repository hygiene (e.g. updating `.gitignore`).
+
 Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
 
 1. `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` (source of truth).
@@ -30,7 +32,7 @@ auto-reject on the same tier as RULE 0.
 
 ## Hard Rules (Zero Tolerance)
 
-1. No Generated Code or Artifacts. Never commit generated code (`*.generated.*`, gRPC/ORM models), test results, test reports, `.test-report.*` files, temporary test data, compiled binaries (`.exe`, `.dll`, `.so`), or output directories (`build/`, `bin/`) to the repository. They must be ignored via `.gitignore` to prevent bloat and security leaks. Generated code belongs in build artifacts or CI, never in source control.
+1. No Generated Code or Artifacts. Never commit generated code (`*.generated.*`, gRPC/ORM models), cache files (`__pycache__`, `*.pyc`), test results, test reports, `.test-report.*` files, temporary test data, compiled binaries (`.exe`, `.dll`, `.so`), or output directories (`build/`, `bin/`) to the repository. They must be ignored via `.gitignore` to prevent bloat and security leaks. Generated code belongs in build artifacts or CI, never in source control. **AI Agents MUST read this and proactively add such patterns (e.g. `__pycache__/`, `*.pyc`) to `.gitignore` when setting up projects.**
 2. Function length: 8 lines preferred, 15 lines hard cap. Skip blank lines and comments when counting. Waiver only via inline comment `// lint-allow: function-length reason="..." max=N`.
 3. No nested `if`. Flatten with early returns and guard clauses.
 4. `if` conditions must be positive and simple. No `!`, no double negatives. If you need a negation, extract a positively named boolean and use that.
