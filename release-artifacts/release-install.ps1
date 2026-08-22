@@ -19,7 +19,7 @@
     RESOLUTION ORDER (highest precedence first, spec §4.3):
       1. -Version <tag>          (CLI flag)
       2. $env:INSTALLER_VERSION  (env var, if set)
-      3. v6.7.0 baked at release-asset build time
+      3. v6.7.1 baked at release-asset build time
     If two sources disagree, a warning is emitted and the higher-
     precedence value wins.
 
@@ -96,9 +96,9 @@ try {
 
 
 # ── Build-time substitution target ────────────────────────────────
-# The release workflow replaces v6.7.0 with the concrete
+# The release workflow replaces v6.7.1 with the concrete
 # tag (e.g. v3.21.0) when uploading this file as a release asset.
-$BakedVersion = "v6.7.0"
+$BakedVersion = "v6.7.1"
 
 $Repo     = "alimtvnetwork/coding-guidelines-v24"
 $SemverRe = '^v?\d+\.\d+\.\d+(-[A-Za-z0-9.]+)?$'
@@ -120,21 +120,21 @@ if ($Help) {
 # Precedence (spec §B.2 + ratified env-var extension §B.2.b'):
 #   1. -Version flag
 #   2. $env:INSTALLER_VERSION
-#   3. Baked v6.7.0
+#   3. Baked v6.7.1
 function Resolve-PinnedVersion {
     if ($Version) {
-        if ($BakedVersion -ne "v6.7.0" -and $BakedVersion -ne $Version) {
+        if ($BakedVersion -ne "v6.7.1" -and $BakedVersion -ne $Version) {
             Write-Warn "Argument -Version ($Version) overrides baked-in ($BakedVersion)."
         }
         return $Version
     }
     if ($env:INSTALLER_VERSION) {
-        if ($BakedVersion -ne "v6.7.0" -and $BakedVersion -ne $env:INSTALLER_VERSION) {
+        if ($BakedVersion -ne "v6.7.1" -and $BakedVersion -ne $env:INSTALLER_VERSION) {
             Write-Warn "Env INSTALLER_VERSION ($($env:INSTALLER_VERSION)) overrides baked-in ($BakedVersion)."
         }
         return $env:INSTALLER_VERSION
     }
-    if ($BakedVersion -ne "v6.7.0") {
+    if ($BakedVersion -ne "v6.7.1") {
         return $BakedVersion
     }
     return $null
