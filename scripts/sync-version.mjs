@@ -219,10 +219,10 @@ function walkStats(absPath) {
       if (!entry.endsWith(".md")) continue;
 
       files += 1;
-      bytes += st.size;
       try {
-        const content = readText(child);
+        const content = readText(child).replace(/\r/g, "");
         lines += content.split("\n").length;
+        bytes += Buffer.byteLength(content, "utf8");
       } catch { /* skip unreadable */ }
     }
   }
@@ -318,8 +318,11 @@ function rootFileStats() {
     if (!st.isFile()) continue;
 
     files += 1;
-    bytes += st.size;
-    try { lines += readText(abs).split("\n").length; } catch { /* skip */ }
+    try {
+      const content = readText(abs).replace(/\r/g, "");
+      lines += content.split("\n").length;
+      bytes += Buffer.byteLength(content, "utf8");
+    } catch { /* skip */ }
   }
   return { fileCount: files, lineCount: lines, byteCount: bytes };
 }

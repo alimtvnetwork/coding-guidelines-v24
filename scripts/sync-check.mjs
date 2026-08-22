@@ -57,7 +57,7 @@ function snapshotAll() {
 function runSyncPipeline() {
   const result = spawnSync("npm", ["run", "sync"], {
     cwd: ROOT,
-    stdio: VERBOSE ? "inherit" : "pipe",
+    stdio: VERBOSE ? "inherit" : "pipe", shell: process.platform === "win32",
     encoding: "utf8",
   });
   if (result.status !== 0) {

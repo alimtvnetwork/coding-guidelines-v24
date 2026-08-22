@@ -79,7 +79,7 @@ function naturalSort(a, b) {
 }
 
 function readMarkdown(absPath) {
-  return readFileSync(absPath, "utf8");
+  return readFileSync(absPath, "utf8").replace(/\r/g, "");
 }
 
 function buildNode(absPath, relPath, name) {
