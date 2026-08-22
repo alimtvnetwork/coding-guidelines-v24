@@ -229,7 +229,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 cli-install v6.13.2"
+echo "  📦 cli-install v6.13.3"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then

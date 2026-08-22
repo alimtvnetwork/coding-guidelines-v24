@@ -22,7 +22,7 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "..");
@@ -30,7 +30,7 @@ const REPO_ROOT = resolve(HERE, "..");
 let BUNDLES, bashScript, powershellScript;
 try {
   ({ BUNDLES, bashScript, powershellScript } = await import(
-    resolve(HERE, "generate-bundle-installers.mjs")
+    pathToFileURL(resolve(HERE, "generate-bundle-installers.mjs")).href
   ));
 } catch (err) {
   console.error(`drift-check: failed to import generator: ${err.message}`);
