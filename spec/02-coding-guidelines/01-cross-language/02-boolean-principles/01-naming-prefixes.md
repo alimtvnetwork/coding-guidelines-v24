@@ -90,6 +90,7 @@ Double negatives (`!isNot...`, `!isNotBlocked`) are the worst form and must neve
 | `isNotBlocked` | `isActive` | The entity is active |
 | `isClassNotLoaded` | `isClassUnregistered` | The class is unregistered |
 | `hasNoPermission` | `isUnauthorized` | The user lacks access |
+| `isNotHonest` | `isDishonest` | Use the inverse naming instead of 'not' |
 
 ```typescript
 // ❌ FORBIDDEN — "not" in the variable name
