@@ -344,6 +344,20 @@ try {
     $script:PromptSkipAll = $false
     $copied = 0; $skippedFolders = 0; $wroteNew = 0; $overwrote = 0; $skippedFiles = 0
 
+    $ManifestPath = Join-Path $Dest "coding-guidelines.json"
+    $IsSecondRun = Test-Path $ManifestPath
+    $ManifestData = @{}
+    if ($IsSecondRun) {
+        try {
+            $json = Get-Content -Raw $ManifestPath | ConvertFrom-Json
+            if ($null -ne $json.files) {
+                $json.files.psobject.properties | ForEach-Object {
+                    $ManifestData[$_.Name] = $_.Value
+                }
+            }
+        } catch { Write-Warn "Could not parse existing coding-guidelines.json" }
+    }
+
     function Test-ShouldOverwrite {
         param([string]$Target)
         if ($script:PromptAll)     { return $true }
@@ -423,11 +437,36 @@ try {
             $skippedFolders++; continue
         }
         Write-Step "Merging: $folder"
-        Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
+        Get-ChildItem -Path $srcPath -Recurse -File -Force | ForEach-Object {
             $relativePath = $_.FullName.Substring($srcPath.Length).TrimStart('\','/')
-            $targetFile = Join-Path (Join-Path $Dest $folder) $relativePath
-            Merge-File -Src $_.FullName -Target $targetFile
             $rel = "$folder/$($relativePath -replace '\\','/')"
+
+            # Skip folders 21+ inside spec on second run
+            if ($IsSecondRun -and $rel -match "^spec/([2-9][1-9]|[3-9][0-9])-.*/") {
+                return
+            }
+
+            $targetFile = Join-Path (Join-Path $Dest $folder) $relativePath
+
+            # Skip .gitkeep if folder already has other files
+            if ($_.Name -eq ".gitkeep") {
+                $targetDir = Split-Path $targetFile -Parent
+                if (Test-Path $targetDir) {
+                    $existingFiles = Get-ChildItem -Path $targetDir -File -Force | Where-Object { $_.Name -ne ".gitkeep" }
+                    if ($existingFiles.Count -gt 0) {
+                        return
+                    }
+                }
+            }
+
+            # Check hash to avoid touching unmodified files
+            $srcHash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+            if ($IsSecondRun -and $ManifestData[$rel] -eq $srcHash -and (Test-Path $targetFile)) {
+                return
+            }
+
+            Merge-File -Src $_.FullName -Target $targetFile
+            $ManifestData[$rel] = $srcHash
             [void]$script:fetchedPaths.Add($rel)
             Write-Host "    ↳ fetched: $rel" -ForegroundColor DarkGray
         }
@@ -436,17 +475,33 @@ try {
 
     # Top-level files: copy each from archive root into Dest. Missing files
     # are warned (not fatal) so installer remains forward-compatible.
-    $topLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1")
+    $topLevelFiles = @("fix-repo.sh", "fix-repo.ps1", "visibility-change.sh", "visibility-change.ps1", ".gitattributes", ".gitignore")
     foreach ($tlf in $topLevelFiles) {
         $srcFile = Join-Path $archiveRoot.FullName $tlf
         if (-not (Test-Path $srcFile)) {
             Write-Warn "Top-level file '$tlf' not found in $Repo@$ref — skipping"
             continue
         }
+        
+        $srcHash = (Get-FileHash $srcFile -Algorithm SHA256).Hash
+        if ($IsSecondRun -and $ManifestData[$tlf] -eq $srcHash -and (Test-Path (Join-Path $Dest $tlf))) {
+            continue
+        }
+
         Write-Step "Merging file: $tlf"
         Merge-File -Src $srcFile -Target (Join-Path $Dest $tlf)
+        $ManifestData[$tlf] = $srcHash
         [void]$script:fetchedPaths.Add($tlf)
         Write-Host "    ↳ fetched: $tlf" -ForegroundColor DarkGray
+    }
+
+    if (-not $DryRun) {
+        $outObj = @{
+            version = $ref
+            hash = (Get-FileHash $archivePath -Algorithm SHA256).Hash
+            files = $ManifestData
+        }
+        $outObj | ConvertTo-Json -Depth 5 -Compress | Set-Content $ManifestPath -Encoding UTF8
     }
 
     Write-Host ""

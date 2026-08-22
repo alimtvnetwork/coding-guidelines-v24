@@ -480,7 +480,30 @@ merge_file() {
   fi
 }
 
+MANIFEST_PATH="$DEST/coding-guidelines.json"
+IS_SECOND_RUN=false
+[[ -f "$MANIFEST_PATH" ]] && IS_SECOND_RUN=true
 FETCHED_PATHS=()
+
+# Temporary file to store the new file hashes
+MANIFEST_NEW_TMP="$(mktemp)"
+
+compute_hash() {
+  if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then shasum -a 256 "$1" | awk '{print $1}'
+  else echo "nohash_$(date +%s%N)"; fi
+}
+
+check_hash_match() {
+  local rel="$1" srchash="$2"
+  if $IS_SECOND_RUN; then
+    # Quick grep check for "path": "hash"
+    if grep -F "\"$rel\": \"$srchash\"" "$MANIFEST_PATH" >/dev/null 2>&1; then
+      return 0
+    fi
+  fi
+  return 1
+}
 
 merge_folder() {
   local folder="$1"
@@ -493,10 +516,43 @@ merge_folder() {
   step "Merging: $folder"
   while IFS= read -r -d '' f; do
     local rel="${f#$src/}"
-    local dst="$DEST/$folder/$rel"
+    local full_rel="$folder/$rel"
+    
+    # Skip folders 21+ inside spec on second run
+    if $IS_SECOND_RUN && [[ "$full_rel" =~ ^spec/([2-9][1-9]|[3-9][0-9])-.*/ ]]; then
+      continue
+    fi
+    
+    local dst="$DEST/$full_rel"
+    local filename
+    filename="$(basename "$f")"
+    
+    # Skip .gitkeep if folder already has other files
+    if [[ "$filename" == ".gitkeep" ]]; then
+      local target_dir
+      target_dir="$(dirname "$dst")"
+      if [[ -d "$target_dir" ]]; then
+        local existing_count
+        existing_count=$(find "$target_dir" -mindepth 1 -maxdepth 1 -not -name ".gitkeep" 2>/dev/null | wc -l)
+        if [[ $existing_count -gt 0 ]]; then
+          continue
+        fi
+      fi
+    fi
+    
+    local srchash
+    srchash="$(compute_hash "$f")"
+    
+    if check_hash_match "$full_rel" "$srchash" && [[ -e "$dst" ]]; then
+      # Already exists and hash matches, skip to save time and mtime
+      echo "    \"$full_rel\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
+      continue
+    fi
+    
     merge_file "$f" "$dst"
-    FETCHED_PATHS+=("$folder/$rel")
-    echo "    ↳ fetched: $folder/$rel"
+    echo "    \"$full_rel\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
+    FETCHED_PATHS+=("$full_rel")
+    echo "    ↳ fetched: $full_rel"
   done < <(find "$src" -type f -print0)
   ((COPIED++))
 }
@@ -508,17 +564,43 @@ done
 # Top-level files: copy each from the archive root into DEST (same name).
 # Missing files are warned (not fatal) so installer remains forward-compatible
 # with repos that omit a script.
+TOP_LEVEL_FILES=("fix-repo.sh" "fix-repo.ps1" "visibility-change.sh" "visibility-change.ps1" ".gitattributes" ".gitignore")
 for tlf in "${TOP_LEVEL_FILES[@]}"; do
   src="$ARCHIVE_ROOT/$tlf"
   if [[ ! -f "$src" ]]; then
     warn "Top-level file '$tlf' not found in $REPO@$REF — skipping"
     continue
   fi
+  
+  local srchash
+  srchash="$(compute_hash "$src")"
+  if check_hash_match "$tlf" "$srchash" && [[ -e "$DEST/$tlf" ]]; then
+    echo "    \"$tlf\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
+    continue
+  fi
+  
   step "Merging file: $tlf"
   merge_file "$src" "$DEST/$tlf"
+  echo "    \"$tlf\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
   FETCHED_PATHS+=("$tlf")
   echo "    ↳ fetched: $tlf"
 done
+
+if ! $DRY_RUN; then
+  # Write the final JSON
+  archive_hash="$(compute_hash "$ARCHIVE_PATH")"
+  {
+    echo "{"
+    echo "  \"version\": \"$REF\","
+    echo "  \"hash\": \"$archive_hash\","
+    echo "  \"files\": {"
+    # Remove trailing comma from last file entry
+    sed '$ s/,$//' "$MANIFEST_NEW_TMP"
+    echo "  }"
+    echo "}"
+  } > "$MANIFEST_PATH"
+fi
+rm -f "$MANIFEST_NEW_TMP"
 
 echo ""
 echo "═══ Fetched ${#FETCHED_PATHS[@]} file(s) from $REPO@$REF ═══"
