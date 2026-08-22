@@ -94,18 +94,18 @@ Listen, past next-tasks turns have been sloppy as fuck: wrong step count, missin
 
 ## Actionable Items & Checklist
 
-- [ ] Read and adhere to: `.lovable/coding-guidelines/coding-guidelines.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
-- [ ] Read and adhere to: `spec/03-error-manage/00-overview.md`
+- [ ] read and /learn  adhere to: `.lovable/coding-guidelines/coding-guidelines.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
+- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
+- [ ] read and /learn  adhere to: `spec/03-error-manage/00-overview.md`
 
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
