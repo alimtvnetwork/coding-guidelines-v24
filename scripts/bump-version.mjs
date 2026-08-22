@@ -123,8 +123,9 @@ function bumpPackageVersion(newVersion) {
 // ----- Sync pipeline ------------------------------------------------------
 
 function runSync() {
-  const result = spawnSync("npm", ["run", "sync"], { cwd: ROOT, stdio: "inherit" });
-  if (result.status !== 0) fail(2, "`npm run sync` failed — aborting");
+  const isWindows = process.platform === "win32";
+  const result = spawnSync("npm", ["run", "sync"], { cwd: ROOT, stdio: "inherit", shell: isWindows });
+  if (result.error || result.status !== 0) fail(2, "`npm run sync` failed — aborting");
 }
 
 // ----- Changelog rendering ------------------------------------------------

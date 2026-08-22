@@ -22,7 +22,13 @@
 // ============================================================
 
 import { readFileSync, existsSync } from "node:fs";
-import { spawnSync } from "node:child_process";
+import { spawnSync as _spawnSync } from "node:child_process";
+
+// Windows-safe spawn wrapper
+function spawnSync(cmd, args, opts) {
+  const isWin = process.platform === "win32";
+  return _spawnSync(cmd, args, { ...opts, shell: isWin });
+}
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
