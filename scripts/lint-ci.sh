@@ -154,6 +154,8 @@ STEPS=(
   "Self-test sync-guidelines --check (drift detection contract)|node scripts/tests/sync-guidelines.test.mjs"
   "Check file sizes vs baseline (Hard Rule 6, ratchet)|python3 linter-scripts/check-file-sizes.py --check"
   "Self-test check-file-sizes (baseline classifier + waivers)|python3 linter-scripts/tests/check-file-sizes.test.py"
+  "Run newline-concept Python linter|python3 linter-scripts/check-newline-styling.py"
+  "Run newline-concept MJS linter|node linter-scripts/check-newline-styling.mjs"
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then
