@@ -163,5 +163,13 @@
       "python": "checks/enum-suffix/python.py",
       "rust": "checks/enum-suffix/rust.py"
     }
+  },
+  "CODE-RED-011": {
+    "name": "LowercaseReadme",
+    "level": "error",
+    "spec": "01-cross-language/08-file-folder-naming/00-overview.md",
+    "languages": {
+      "markdown": "checks/lowercase-readme/markdown.py"
+    }
   }
 }
