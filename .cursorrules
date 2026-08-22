@@ -48,7 +48,7 @@ Linter configs are in `linters/`. Validators are in `scripts/`.
 
 ## Hard Rules (Zero Tolerance, canonical)
 
-1. No Generated Code or Artifacts. Never commit generated code (`*.generated.*`, gRPC/ORM models), test results, test reports, `.test-report.*` files, temporary test data, compiled binaries (`.exe`, `.dll`, `.so`), or output directories (`build/`, `bin/`) to the repository. They must be ignored via `.gitignore` to prevent bloat and security leaks. Generated code belongs in build artifacts or CI, never in source control.
+1. No Generated Code or Artifacts. Never commit generated code (`*.generated.*`, gRPC/ORM models), cache files (`__pycache__`, `*.pyc`), test results, test reports, `.test-report.*` files, temporary test data, compiled binaries (`.exe`, `.dll`, `.so`), or output directories (`build/`, `bin/`) to the repository. They must be ignored via `.gitignore` to prevent bloat and security leaks. Generated code belongs in build artifacts or CI, never in source control. **AI Agents MUST read this and proactively add such patterns (e.g. `__pycache__/`, `*.pyc`) to `.gitignore` when setting up projects.**
 2. Function length: 8 lines preferred, 15 lines hard cap. Skip blank lines and comments when counting. Waiver only via inline comment `// lint-allow: function-length reason="..." max=N`.
 3. No nested `if`. Flatten with early returns and guard clauses.
 4. `if` conditions must be positive and simple. No `!`, no double negatives. If you need a negation, extract a positively named boolean and use that.
