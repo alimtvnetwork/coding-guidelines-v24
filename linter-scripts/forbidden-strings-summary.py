@@ -345,6 +345,10 @@ def select_rules(all_rules: list[dict], rule_id: str | None) -> list[dict]:
 
 
 def main() -> int:
+    import sys
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+
     args = parse_args()
     all_rules = load_rules()
     if not all_rules:
