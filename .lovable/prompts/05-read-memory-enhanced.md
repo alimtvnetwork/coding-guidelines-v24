@@ -16,10 +16,10 @@ Read both folders in full during Phase 1. Surface open-ambiguity counts and slug
 The specs, `.lovable/` folder, `what-to-read.md`, root `readme.md`, and the codebase as a whole are the single source of truth. Your training data is not. If the two disagree, the repo wins, every time.
 
 Autonomously self-loop and read:
-- The entire codebase as a whole.
-- The root `readme.md`.
-- The entire `.lovable/` folder (especially `what-to-read.md` and all files it references).
-- Recursively traverse every single folder, subfolder, and nested markdown file in the `spec/` directory — specifically `spec/01-spec-authoring-guide/`, `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/04-database-conventions/`, `spec/21-app/` (or any domain-specific app folder).
+- `/learn` the entire codebase as a whole to create memory.
+- `/learn` the root `readme.md` to create memory.
+- `/learn` the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines/` and all files they reference) to create memory.
+- `/learn` every single folder, subfolder, and nested markdown file in the `spec/` directory (specifically `spec/02-coding-guidelines/`, `spec/03-error-manage/`, enum fixes, database conventions) to create memory.
 - Read every pending task across `.lovable/plans/pending/01-<slug>.md`, `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md`, `.lovable/issues/`, and `.lovable/cicd-issues/`, listing them out in full.
 
 Note on spec folder naming: Spec folders follow the hyphenated pattern `spec/<NN>-<slug>/` where `<NN>` is a sequence prefix and `<slug>` is the descriptive name. These numbers and folder placements are not rigidly fixed and may switch or be reorganized between projects. This canonical layout represents the general architecture the AI must dynamically discover, inspect, and read in full.
@@ -317,6 +317,16 @@ Then stop. No next-step suggestions, no exploratory questions.
 - [ ] Confirmed that reading remained strictly read-only regarding the codebase (no source code refactored, only memory and lowercase readme auto-fix updated)
 
 ## Actionable Items & Checklist
+
+- [ ] `/learn` the coding guidelines in: `.lovable/coding-guidelines/coding-guidelines.md` and create memory.
+- [ ] `/learn` the condition extraction in: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` and create memory.
+- [ ] `/learn` the formatting and braces in: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` and create memory.
+- [ ] `/learn` the multi-line formatting in: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` and create memory.
+- [ ] `/learn` the boolean guidelines in: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` and create memory.
+- [ ] `/learn` the anti-hallucination rules in: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` and create memory.
+- [ ] `/learn` the error management architecture in: `spec/03-error-manage/00-overview.md` (and related error manage files) and create memory.
+- [ ] `/learn` the enum standards and fixes in: `spec/17-consolidated-guidelines/04-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
+- [ ] `/learn` ALL other single-file specs in `spec/02-coding-guidelines/` and create memory.
 
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
