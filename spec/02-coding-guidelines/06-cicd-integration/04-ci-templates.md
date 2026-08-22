@@ -39,15 +39,48 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/lates
 
 ---
 
-## GitHub composite Action — usage
+## GitHub composite Action - usage
 
 ```yaml
 - uses: alimtvnetwork/coding-guidelines-v24/linters-cicd@v3.9.0
   with:
     path: .
-    languages: go,typescript     # optional, default: auto-detect
+    languages: go,typescript,python,rust # specify languages here
     severity: error              # optional, default: error
     fail-on-warning: false       # optional, default: false
+```
+
+---
+
+## 🤖 AI Agent Instructions: Connecting Linters for Specific Languages
+
+When an AI is integrating these linters into a CI/CD pipeline, it MUST explicitly define the target languages. This is crucial for avoiding auto-detection errors and speeding up CI runs.
+
+### How an AI should integrate this:
+1. **Identify the languages** used in the codebase (e.g., `go`, `typescript`, `python`, `rust`, `php`, `csharp`).
+2. **Wire the script** to run explicitly for those languages using the `--languages` argument.
+3. **Fail the build** if the script exits with a non-zero code.
+
+**Example: Jenkins / GitLab / Bitbucket (Bash)**
+```bash
+# 1. Install the tools
+curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
+
+# 2. Execute ONLY for specific languages
+./linters-cicd/run-all.sh \
+  --path . \
+  --languages go,typescript,python \
+  --format sarif \
+  --output coding-guidelines.sarif
+```
+
+**Example: GitHub Actions**
+```yaml
+      - name: Run Coding Guidelines Linters
+        uses: alimtvnetwork/coding-guidelines-v24/linters-cicd@v3.9.0
+        with:
+          path: .
+          languages: 'go,typescript,python'
 ```
 
 ---

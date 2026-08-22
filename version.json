@@ -1,9 +1,9 @@
 {
-  "Version": "6.2.0",
+  "Version": "6.5.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
   "RepoUrl": "https://github.com/mahin/coding-guidelines",
-  "LastCommitSha": "ce3fdca611f2fe55e6a492f54866204093dde0c2",
+  "LastCommitSha": "16b613eed64f0e9bff8d5bd5b1649e44c0cb8a3a",
   "Description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
   "Authors": [
     {
@@ -20,20 +20,20 @@
       "Background": "Founder, Riseup Asia LLC. Focus on developer tooling, spec-first AI workflows, and cross-language coding standards."
     }
   ],
-  "version": "6.2.0",
-  "updated": "2026-08-10",
+  "version": "6.5.0",
+  "updated": "2026-08-22",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "ce3fdca611f2fe55e6a492f54866204093dde0c2",
-    "shortSha": "ce3fdca",
+    "sha": "16b613eed64f0e9bff8d5bd5b1649e44c0cb8a3a",
+    "shortSha": "16b613e",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 704,
-    "totalLines": 145191,
+    "totalFiles": 705,
+    "totalLines": 145342,
     "totalFolders": 23,
-    "totalBytes": 5420376,
+    "totalBytes": 5426833,
     "rootFiles": 6
   },
   "folders": [
@@ -59,9 +59,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 214,
-      "lineCount": 33757,
-      "byteCount": 1101015
+      "fileCount": 215,
+      "lineCount": 33908,
+      "byteCount": 1107272
     },
     {
       "path": "03-error-manage",
@@ -126,7 +126,7 @@
       "ambiguity": "Low",
       "fileCount": 17,
       "lineCount": 2727,
-      "byteCount": 86343
+      "byteCount": 86356
     },
     {
       "path": "08-docs-viewer-ui",
@@ -191,7 +191,7 @@
       "ambiguity": "None",
       "fileCount": 43,
       "lineCount": 8437,
-      "byteCount": 284736
+      "byteCount": 284790
     },
     {
       "path": "13-generic-cli",
@@ -256,7 +256,7 @@
       "ambiguity": "None",
       "fileCount": 34,
       "lineCount": 13834,
-      "byteCount": 535207
+      "byteCount": 535340
     },
     {
       "path": "18-wp-plugin-how-to",

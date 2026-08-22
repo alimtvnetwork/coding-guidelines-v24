@@ -15,20 +15,38 @@ this repository's coding guidelines. Drop into any pipeline with one line.
 - uses: alimtvnetwork/coding-guidelines-v24/linters-cicd@v3.9.0
   with:
     path: .
+    languages: 'go,typescript,php,rust,python' # specify languages or omit for auto-detect
 ```
 
 ### Any other CI
 
 ```bash
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
-bash ./linters-cicd/run-all.sh --path . --output coding-guidelines.sarif
+# Run for specific languages:
+bash ./linters-cicd/run-all.sh --path . --languages go,typescript,python,rust --output coding-guidelines.sarif
 ```
 
 ### Local run (text output)
 
 ```bash
-bash ./linters-cicd/run-all.sh --path . --format text
+bash ./linters-cicd/run-all.sh --path . --languages go,typescript --format text
 ```
+
+---
+
+## ?? AI Agent Instructions: Connecting Linters for Specific Languages
+
+When an AI is instructed to integrate these linters into a CI/CD pipeline, it is CRITICAL to configure the script to run against the precise languages used in the repository.
+
+**How to connect specific languages:**
+1. Determine the languages in the repo (e.g., Go, TypeScript, PHP, Python, Rust, C#).
+2. Pass the comma-separated list of languages to the `--languages` argument of `run-all.sh` (e.g., `--languages go,typescript,python`).
+3. For GitHub Actions, supply the `languages` parameter in the `with` block:
+   ```yaml
+     with:
+       languages: 'go,typescript,python'
+   ```
+4. If you omit the `--languages` flag, the script will attempt to auto-detect based on file extensions, but explicitly declaring them is preferred for strict CI checks.
 
 ---
 
