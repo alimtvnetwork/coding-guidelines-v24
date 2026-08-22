@@ -143,5 +143,25 @@
       "php": "checks/sqli-order-group-by/php.py",
       "typescript": "checks/sqli-order-group-by/typescript.py"
     }
+  },
+  "CODE-RED-009": {
+    "name": "ConditionalMagicStrings",
+    "level": "error",
+    "spec": "17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    "languages": {
+      "go": "checks/conditional-magic-strings/go.py",
+      "typescript": "checks/conditional-magic-strings/typescript.py"
+    }
+  },
+  "CODE-RED-010": {
+    "name": "EnumSuffix",
+    "level": "error",
+    "spec": "17-consolidated-guidelines/04-enum-standards.md",
+    "languages": {
+      "go": "checks/enum-suffix/go.py",
+      "typescript": "checks/enum-suffix/typescript.py",
+      "python": "checks/enum-suffix/python.py",
+      "rust": "checks/enum-suffix/rust.py"
+    }
   }
 }

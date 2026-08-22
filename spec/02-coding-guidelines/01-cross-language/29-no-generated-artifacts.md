@@ -1,4 +1,4 @@
-# 🔴 CODE RED: No Generated Artifacts or Test Results
+# 🔴 CODE RED: No Generated Code, Artifacts, or Test Results
 
 **Status:** Active  
 **AI Confidence:** Production-Ready  
@@ -6,11 +6,12 @@
 
 ---
 
-## 🚫 The Rule: NEVER Commit Generated Artifacts
+## 🚫 The Rule: NEVER Commit Generated Code or Artifacts
 
-Under no circumstances should any generated artifact, compiled binary, test result, test report, or temporary test data ever be committed to the Git repository.
+Under no circumstances should any generated code (e.g., ORM models, gRPC stubs, OpenAPI clients), compiled binary, test result, test report, or temporary test data ever be committed to the Git repository.
 
 ### What is Forbidden?
+- **Generated Code:** `*.generated.*` or `*_generated.*` files produced by code generators (unless explicitly permitted as test fixtures).
 - **Test Results & Reports:** Any outputs from test runs, such as HTML reports, coverage data, JSON summaries, `.test-report.*`, or CSV results.
 - **Compiled Binaries & Executables:** `.exe`, `.dll`, `.so`, `.dylib`, `.out`, `.class`, or any pre-compiled binaries resulting from a build step.
 - **Build Directories:** `build/`, `bin/`, `obj/`, `dist/` (unless explicitly allowed for a specific deployment pipeline in a separate spec).

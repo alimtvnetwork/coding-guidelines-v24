@@ -14,7 +14,10 @@ dist
 dist-ssr
 *.local
 
-# Generated artifacts, test data, and binaries (NEVER COMMIT)
+# Generated code, artifacts, test data, and binaries (NEVER COMMIT)
+*.generated.*
+*_generated.*
+!linters-cicd/codegen/fixtures/expected/*.generated.*
 coverage/
 test-results/
 test-reports/
@@ -51,3 +54,4 @@ release-artifacts/*.tar.gz
 release-artifacts/*.zip
 release-artifacts/checksums.txt
 .gitmap/backup/
+/linters-cicd/codegen
