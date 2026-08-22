@@ -3,10 +3,12 @@
 
 import { createWriteStream, readFileSync, writeFileSync, statSync, existsSync } from "node:fs";
 import { readdir } from "node:fs/promises";
-import { join, relative } from "node:path";
+import { join, dirname, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import archiver from "archiver";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+const __filename = fileURLToPath(import.meta.url);
+const ROOT = join(dirname(__filename), "..");
 const DIST = join(ROOT, "dist");
 const OUT = join(ROOT, "dist.zip");
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB ceiling (loosened from spec — Shiki theme adds weight)
