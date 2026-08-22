@@ -107,10 +107,10 @@ jobs:
             PREBUILT_SRC=$(node scripts/read-bundles.mjs prebuilt-src "$bundle")
             PREBUILT_BUILD=$(node scripts/read-bundles.mjs prebuilt-build "$bundle")
 
-            echo "▸ packaging bundle: $bundle  [folders: $FOLDERS]"
+            echo "▸ packaging bundle: $bundle  [paths: $FOLDERS]"
 
             for src in $FOLDERS; do
-              test -d "$src" || { echo "::error::missing source folder $src for bundle $bundle"; exit 1; }
+              test -e "$src" || { echo "::error::missing source path $src for bundle $bundle"; exit 1; }
             done
 
             # If the bundle declares a prebuilt artifact, ensure it exists
@@ -165,8 +165,9 @@ jobs:
             test -f "$ZIP" || { echo "::error::$ZIP missing"; exit 1; }
             test -f "$TGZ" || { echo "::error::$TGZ missing"; exit 1; }
             for src in $FOLDERS; do
-              unzip -l "$ZIP" | grep -q "${src}/" || { echo "::error::$ZIP missing $src"; exit 1; }
-              tar tzf "$TGZ" | grep -q "${src}/" || { echo "::error::$TGZ missing $src"; exit 1; }
+              # We use regex to match both files (exact name) and directories (with trailing slash)
+              unzip -l "$ZIP" | grep -Eq " ${src}(/|$)" || { echo "::error::$ZIP missing $src"; exit 1; }
+              tar tzf "$TGZ" | grep -Eq "^${src}(/|$)" || { echo "::error::$TGZ missing $src"; exit 1; }
             done
             echo "  ✓ $bundle archives validated"
           done

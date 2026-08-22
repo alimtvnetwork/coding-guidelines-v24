@@ -997,8 +997,16 @@ function Copy-Mapping {
             continue
         }
         $destPath = Join-Path $Target $pair.Dest
-        New-Item -ItemType Directory -Path $destPath -Force | Out-Null
-        Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
+        if ((Get-Item $srcPath).PSIsContainer) {
+            New-Item -ItemType Directory -Path $destPath -Force | Out-Null
+            Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
+        } else {
+            $parentDir = Split-Path $destPath -Parent
+            if (-not (Test-Path $parentDir)) {
+                New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
+            }
+            Copy-Item -Path $srcPath -Destination $destPath -Force
+        }
         Write-Host "  ✓ $($pair.Src) → $destPath" -ForegroundColor Green
     }
 }
@@ -1309,9 +1317,9 @@ function writeFile(relPath, contents, executable = false) {
 
 // Skip side-effect generation when imported by another module
 // (e.g. the drift checker). Run only when invoked as a CLI.
+const __filename = fileURLToPath(import.meta.url);
 const INVOKED_DIRECTLY =
-  import.meta.url === `file://${process.argv[1]}` ||
-  import.meta.url.endsWith(process.argv[1] || "");
+  process.argv[1] && resolve(process.argv[1]) === __filename;
 if (INVOKED_DIRECTLY) {
   console.log(`Generating bundle installers from ${MANIFEST_PATH}...`);
   for (const bundle of BUNDLES) {
