@@ -15,6 +15,7 @@
 
 | Rule | Requirement |
 |------|-------------|
+| Type Suffix | Enum types must end with `Type` in camelCase languages (e.g. `UserType`), or `_type` in snake_case languages |
 | No magic strings | Never compare against raw string literals — always use enum constants |
 | PascalCase values | Enum members/cases use PascalCase (`Production`, not `PRODUCTION` or `production`) |
 | One definition | String representations defined **once**, co-located with the enum type |

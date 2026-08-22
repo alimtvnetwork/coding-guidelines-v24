@@ -6,7 +6,9 @@
     "languages": {
       "go": "checks/nested-if/go.py",
       "typescript": "checks/nested-if/typescript.py",
-      "php": "checks/nested-if/php.py"
+      "php": "checks/nested-if/php.py",
+      "python": "checks/nested-if/python.py",
+      "rust": "checks/nested-if/rust.py"
     }
   },
   "CODE-RED-002": {
@@ -161,7 +163,8 @@
       "go": "checks/enum-suffix/go.py",
       "typescript": "checks/enum-suffix/typescript.py",
       "python": "checks/enum-suffix/python.py",
-      "rust": "checks/enum-suffix/rust.py"
+      "rust": "checks/enum-suffix/rust.py",
+      "php": "checks/enum-suffix/php.py"
     }
   },
   "CODE-RED-011": {
@@ -170,6 +173,30 @@
     "spec": "01-cross-language/08-file-folder-naming/00-overview.md",
     "languages": {
       "markdown": "checks/lowercase-readme/markdown.py"
+    }
+  },
+  "CODE-RED-012": {
+    "name": "BooleanReturnWrapper",
+    "level": "error",
+    "spec": "17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    "languages": {
+      "go": "checks/boolean-return-wrapper/go.py",
+      "typescript": "checks/boolean-return-wrapper/typescript.py",
+      "python": "checks/boolean-return-wrapper/python.py",
+      "rust": "checks/boolean-return-wrapper/rust.py",
+      "php": "checks/boolean-return-wrapper/php.py"
+    }
+  },
+  "CODE-RED-013": {
+    "name": "InvertedComplexConditions",
+    "level": "error",
+    "spec": "17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    "languages": {
+      "go": "checks/inverted-complex-conditions/go.py",
+      "typescript": "checks/inverted-complex-conditions/typescript.py",
+      "python": "checks/inverted-complex-conditions/python.py",
+      "rust": "checks/inverted-complex-conditions/rust.py",
+      "php": "checks/inverted-complex-conditions/php.py"
     }
   }
 }
