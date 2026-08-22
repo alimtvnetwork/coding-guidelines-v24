@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Compass, CheckCircle2 } from "lucide-react";
 import { ReviewCheckbox } from "@/components/ReviewCheckbox";
-import type { ProgressBlock } from "@/lib/progress";
+import type { ProgressBlockType } from "@/lib/progress";
 
 export interface PrincipleCardProps {
   number: string;
@@ -32,7 +32,7 @@ interface RowProps {
   body: string;
   color: string;
   progressId?: string;
-  block?: ProgressBlock;
+  block?: ProgressBlockType;
 }
 
 function Row({ icon, label, body, color, progressId, block }: RowProps) {

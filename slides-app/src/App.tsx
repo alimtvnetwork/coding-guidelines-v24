@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Maximize, Grid3x3, Presentation, Sun, Moon, HelpCircle, Search, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ScaledSlide } from "./components/ScaledSlide";
-import { RuleBadge, type RuleSeverity } from "./components/RuleBadge";
+import { RuleBadge, type RuleSeverityType } from "./components/RuleBadge";
 import { DECK, SECTIONS, groupBySection, type SlideSection } from "./deck";
 import { SlideStepContext } from "./lib/step-context";
 
@@ -620,7 +620,7 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
 }
 
 type SectionFilter = SlideSection | "all";
-type SeverityFilter = RuleSeverity | "all";
+type SeverityFilter = RuleSeverityType | "all";
 
 function GridView({
   currentIndex,

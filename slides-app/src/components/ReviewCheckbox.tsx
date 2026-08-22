@@ -3,12 +3,12 @@ import {
   getBlock,
   setBlock,
   useProgressSnapshot,
-  type ProgressBlock,
+  type ProgressBlockType,
 } from "@/lib/progress";
 
 export interface ReviewCheckboxProps {
   slideId: string;
-  block: ProgressBlock;
+  block: ProgressBlockType;
   color: string;
   label?: string;
 }

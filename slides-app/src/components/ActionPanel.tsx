@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Compass, CheckCircle2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { ReviewCheckbox } from "@/components/ReviewCheckbox";
-import type { ProgressBlock } from "@/lib/progress";
+import type { ProgressBlockType } from "@/lib/progress";
 
 export interface ActionPanelProps {
   symptom: string;
@@ -30,7 +30,7 @@ interface CardProps {
   accent: "destructive" | "primary" | "accent";
   delay: number;
   slideId?: string;
-  block?: ProgressBlock;
+  block?: ProgressBlockType;
 }
 
 function Card({ icon, kicker, body, accent, delay, slideId, block }: CardProps) {

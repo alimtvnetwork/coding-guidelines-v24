@@ -8,11 +8,7 @@ import type { CSSProperties } from "react";
  * - `warn`  : linter warning, expected to be fixed same-PR.
  * - `style` : style/consistency preference, non-blocking.
  */
-export enum RuleSeverityType {
-  Hard = "hard",
-  Warn = "warn",
-  Style = "style"
-}
+export type RuleSeverityType = "hard" | "warn" | "style";
 
 export interface RuleBadgeProps {
   severity: RuleSeverityType;
@@ -26,9 +22,9 @@ interface SeverityStyle {
 }
 
 const SEVERITY_STYLES: Record<RuleSeverityType, SeverityStyle> = {
-  [RuleSeverityType.Hard]: { label: "Hard", accentToken: "destructive" },
-  [RuleSeverityType.Warn]: { label: "Warn", accentToken: "primary" },
-  [RuleSeverityType.Style]: { label: "Style", accentToken: "accent" },
+  hard: { label: "Hard", accentToken: "destructive" },
+  warn: { label: "Warn", accentToken: "primary" },
+  style: { label: "Style", accentToken: "accent" },
 };
 
 /**

@@ -5,13 +5,9 @@ import { useSyncExternalStore } from "react";
  * guideline slide; state persists in localStorage and drives the TOC bar.
  */
 
-export enum ProgressBlockType {
-  Symptom = "symptom",
-  Rule = "rule",
-  Action = "action"
-}
+export type ProgressBlockType = "symptom" | "rule" | "action";
 
-export const PROGRESS_BLOCKS: readonly ProgressBlockType[] = [ProgressBlockType.Symptom, ProgressBlockType.Rule, ProgressBlockType.Action] as const;
+export const PROGRESS_BLOCKS: readonly ProgressBlockType[] = ["symptom", "rule", "action"] as const;
 
 const STORAGE_KEY = "slides-sra-progress-v1";
 const EVENT_NAME = "slides-sra-progress-change";
@@ -103,9 +99,9 @@ export function useSlideProgress(slideId: string): {
   const all = useProgressSnapshot();
   const entry = all[slideId] ?? {};
   const reviewed: Record<ProgressBlockType, boolean> = {
-    [ProgressBlockType.Symptom]: Boolean(entry[ProgressBlockType.Symptom]),
-    [ProgressBlockType.Rule]: Boolean(entry[ProgressBlockType.Rule]),
-    [ProgressBlockType.Action]: Boolean(entry[ProgressBlockType.Action]),
+    symptom: Boolean(entry["symptom"]),
+    rule: Boolean(entry["rule"]),
+    action: Boolean(entry["action"]),
   };
   const completedCount = PROGRESS_BLOCKS.filter((b) => reviewed[b]).length;
 

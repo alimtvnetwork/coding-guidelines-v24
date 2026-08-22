@@ -69,7 +69,7 @@ import PositiveGuards from "../slides/09-positively-named-guards";
 import SpecFirst from "../slides/10-spec-first-workflow";
 import CacheInvalidation from "../slides/11-cache-invalidation";
 import Closing from "../slides/12-closing";
-import type { RuleSeverity } from "../components/RuleBadge";
+import type { RuleSeverityType } from "../components/RuleBadge";
 
 /**
  * Grouping surfaced in grid view, TOC, and (future) presenter filters.
@@ -116,7 +116,7 @@ export interface SlideEntry {
   title: string;
   section: SlideSection;
   /** Optional severity; set for rule slides so `RuleBadge` can render it. */
-  severity?: RuleSeverity;
+  severity?: RuleSeverityType;
   /** Optional rule id from `spec/17/31`, e.g. "NAM-001". */
   ruleId?: string;
   /**
