@@ -166,8 +166,8 @@ jobs:
             test -f "$TGZ" || { echo "::error::$TGZ missing"; exit 1; }
             for src in $FOLDERS; do
               # We use regex to match both files (exact name) and directories (with trailing slash)
-              unzip -l "$ZIP" | grep -Eq " ${src}(/|$)" || { echo "::error::$ZIP missing $src"; exit 1; }
-              tar tzf "$TGZ" | grep -Eq "^${src}(/|$)" || { echo "::error::$TGZ missing $src"; exit 1; }
+              unzip -l "$ZIP" | grep -E " ${src}(/|$)" > /dev/null || { echo "::error::$ZIP missing $src"; exit 1; }
+              tar tzf "$TGZ" | grep -E "^${src}(/|$)" > /dev/null || { echo "::error::$TGZ missing $src"; exit 1; }
             done
             echo "  ✓ $bundle archives validated"
           done
