@@ -89,3 +89,8 @@
 
 # --- Illustrative PR example in readme.md §"What's new" (SS-02 task 18 slide narrative) ---
 12-payments
+
+# --- Prompts repository examples ---
+# These are referenced strictly inside .lovable/prompts/ example AI workflows
+02-app
+05-failing-tests
