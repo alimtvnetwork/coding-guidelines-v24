@@ -107,7 +107,7 @@ def read_waiver(path: Path):
         with path.open("r", encoding="utf-8", errors="replace") as fh:
             head = [next(fh, "") for _ in range(5)]
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return None, None
     for line in head:
         match = WAIVER_RE.search(line)

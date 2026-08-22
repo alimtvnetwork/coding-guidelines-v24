@@ -87,7 +87,7 @@ def read_readme(path: Path) -> str | None:
     try:
         return path.read_text(encoding="utf-8")
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return None
 
 

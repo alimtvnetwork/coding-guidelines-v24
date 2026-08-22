@@ -597,7 +597,7 @@ def _canonical_target(source_rel: str, target: str, repo_root: Path) -> str:
         resolved = (source_dir / path_part).resolve()
         return str(resolved.relative_to(repo_root.resolve()))
     except (ValueError, OSError) as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         # Fall back to the literal path if it escapes the repo root —
         # still gives consistent grouping for duplicate detection.
         return path_part
@@ -1622,7 +1622,7 @@ def _should_emit_similarity_legend(
     try:
         return os.isatty(fileno())
     except (OSError, ValueError) as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return False
 
 
@@ -2074,10 +2074,10 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
                 cwd=repo_root, check=True, capture_output=True, text=True,
             )
         except FileNotFoundError as e:
-            import sys; print(f"Error: {e}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {e}", file=_sys.stderr)
             raise RuntimeError(f"git not found on PATH: {e}") from e
         except subprocess.CalledProcessError as e:
-            import sys; print(f"Error: {e}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {e}", file=_sys.stderr)
             raise RuntimeError(
                 f"git diff vs. {diff_base!r} failed (exit {e.returncode}): "
                 f"{e.stderr.strip() or '(no stderr)'}"
@@ -2092,7 +2092,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
             try:
                 lines = Path(changed_files).read_text(encoding="utf-8").splitlines()
             except OSError as e:
-                import sys; print(f"Error: {e}", file=sys.stderr)
+                import sys as _sys; print(f"Error: {e}", file=_sys.stderr)
                 raise RuntimeError(
                     f"--changed-files {changed_files!r} unreadable: {e}"
                 ) from e
@@ -2127,7 +2127,7 @@ def _resolve_changed_md(repo_root: Path, root: Path, *,
         try:
             p.relative_to(root)
         except ValueError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             if audit is not None:
                 audit.append(_ChangedFileAudit(
                     path=s, status="ignored-out-of-root",
@@ -2241,7 +2241,7 @@ def _unquote_git_path(field: str) -> str:
         try:
             buf = bytes(int(t, 8) for t in run.split("\\")[1:])
         except ValueError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             return run
         return buf.decode("utf-8", "replace")
     inner = _C_OCT_RUN_RE.sub(_oct_run_sub, inner)
@@ -2947,7 +2947,7 @@ def _fetch_diff_excerpts(repo_root: Path, diff_base: str, rel_path: str,
             cwd=repo_root, check=True, capture_output=True, text=True,
         )
     except (FileNotFoundError, subprocess.CalledProcessError) as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return None
     if not proc.stdout.strip():
         return None
@@ -3072,7 +3072,7 @@ def _compute_cache_key(
         script_bytes = Path(__file__).resolve().read_bytes()
         h.update(b"script=" + hashlib.sha256(script_bytes).hexdigest().encode() + b"\n")
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         # __file__ unreadable (zipapp / frozen). Fall back to a stable
         # tag so the cache still works, just with coarser invalidation.
         h.update(b"script=unknown\n")
@@ -3080,7 +3080,7 @@ def _compute_cache_key(
         try:
             data = md.read_bytes()
         except OSError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             continue
         rel = str(md.relative_to(root)).encode("utf-8")
         h.update(rel + b"\0" + hashlib.sha256(data).hexdigest().encode() + b"\n")

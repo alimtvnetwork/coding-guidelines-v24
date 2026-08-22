@@ -23,7 +23,7 @@ except ModuleNotFoundError:
     try:
         import tomli as tomllib  # type: ignore[no-redef]
     except ModuleNotFoundError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         sys.exit("Error: Python 3.11+ required (tomllib), or install 'tomli'.")
 
 ALWAYS_EXCLUDE_DIRS = {".git", "node_modules", "dist", "build"}
@@ -103,7 +103,7 @@ def scan_rule(rule: dict, root: str) -> list[str]:
                             "content": line.rstrip(),
                         })
             except (OSError, UnicodeDecodeError) as exc:
-                import sys; print(f"Error: {exc}", file=sys.stderr)
+                import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
                 continue
 
     return findings

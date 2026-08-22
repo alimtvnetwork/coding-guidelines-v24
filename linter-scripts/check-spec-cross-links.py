@@ -130,7 +130,7 @@ def collect_headings(path: Path) -> set[str]:
     try:
         content = path.read_text(encoding="utf-8", errors="ignore")
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return set()
     return {slugify(m.group(2)) for m in HEADING_RE.finditer(content)}
 
@@ -187,7 +187,7 @@ def scan(root: Path, repo_root: Path) -> list[dict]:
         try:
             text = md.read_text(encoding="utf-8", errors="ignore")
         except OSError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             failures.append({"file": str(md), "kind": "read-error", "detail": str(exc)})
             continue
         scan_text = strip_spec_placeholders(strip_code_fences(text))

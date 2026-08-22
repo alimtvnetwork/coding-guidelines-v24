@@ -9,7 +9,7 @@ def check_file(filepath):
         try:
             content = f.read()
         except UnicodeDecodeError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             return violations # skip unreadable files
             
     lines = content.split('\n')

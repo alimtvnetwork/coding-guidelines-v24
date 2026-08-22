@@ -86,7 +86,7 @@ def collect_headings(path: Path) -> list[tuple[str, str]]:
     try:
         content = path.read_text(encoding="utf-8", errors="ignore")
     except OSError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         return []
     return [(m.group(2).strip(), slugify(m.group(2))) for m in HEADING_RE.finditer(content)]
 
@@ -164,7 +164,7 @@ def relativize(target_file: Path, source_file: Path) -> str:
         rel_path = Path(target_file).resolve().relative_to(source_file.parent.resolve())
         rel_str = "./" + rel_path.as_posix()
     except ValueError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         # Need ../ traversal — compute manually via os.path.relpath semantics.
         import os
         rel_str = os.path.relpath(target_file.resolve(), source_file.parent.resolve())
@@ -180,7 +180,7 @@ def find_link_failures(root: Path, repo_root: Path) -> list[dict]:
         try:
             text = md.read_text(encoding="utf-8", errors="ignore")
         except OSError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             continue
         scan_text = strip_code_fences(text)
         for match in MD_LINK_RE.finditer(scan_text):

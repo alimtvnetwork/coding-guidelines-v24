@@ -72,7 +72,7 @@ except ModuleNotFoundError:
     try:
         import tomli as tomllib  # type: ignore[no-redef]
     except ModuleNotFoundError as exc:
-        import sys; print(f"Error: {exc}", file=sys.stderr)
+        import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
         sys.exit("Error: Python 3.11+ required (tomllib), or install 'tomli'.")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -159,7 +159,7 @@ def find_matching_paths(rule: dict) -> list[str]:
             try:
                 text = full.read_text(encoding="utf-8", errors="ignore")
             except OSError as exc:
-                import sys; print(f"Error: {exc}", file=sys.stderr)
+                import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
                 continue
             if pattern.search(text):
                 hits.append(rel)
@@ -190,7 +190,7 @@ def validate_paths(rule: dict, paths: list[str]) -> tuple[list[str], list[str]]:
         try:
             text = full.read_text(encoding="utf-8", errors="ignore")
         except OSError as exc:
-            import sys; print(f"Error: {exc}", file=sys.stderr)
+            import sys as _sys; print(f"Error: {exc}", file=_sys.stderr)
             errors.append(f"{rel}: read error: {exc}")
             continue
         if not pattern.search(text):
