@@ -258,3 +258,33 @@ if isProjectConflict {
 ```
 
 ---
+
+## Principle 9: Strict Conditional Joins
+
+Never mix logical operators (`&&` and `||`) in the same `if` condition. Furthermore, keep it to a single conditional join (max two operands).
+If you need more than one join, you must extract the logic into well-named boolean variables.
+
+```go
+// ❌ FORBIDDEN - Multiple conditional joins
+if isUserActive && hasSubscription && isBillingCurrent { ... }
+
+// ❌ FORBIDDEN - Mixed operators
+if isUserActive && (hasSubscription || isTrial) { ... }
+
+// ✅ REQUIRED - Extracted named booleans
+canAccessContent := hasSubscription || isTrial
+isEligible := isUserActive && canAccessContent
+if isEligible { ... }
+```
+
+## Principle 10: No Mixed Polarity
+
+Never mix positive and negative conditions in a single conditional join. Both sides of the join must be positive.
+
+```typescript
+// ❌ FORBIDDEN - Mixed polarity
+if (isReady && !isExpired) { ... }
+
+// ✅ REQUIRED - All positive
+if (isReady && isValid) { ... }
+```

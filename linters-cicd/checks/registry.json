@@ -198,5 +198,17 @@
       "rust": "checks/inverted-complex-conditions/rust.py",
       "php": "checks/inverted-complex-conditions/php.py"
     }
+  },
+  "CODE-RED-014": {
+    "name": "StrictBooleanConditions",
+    "level": "error",
+    "spec": "17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    "languages": {
+      "go": "checks/strict-boolean-conditions/go.py",
+      "typescript": "checks/strict-boolean-conditions/typescript.py",
+      "python": "checks/strict-boolean-conditions/python.py",
+      "rust": "checks/strict-boolean-conditions/rust.py",
+      "php": "checks/strict-boolean-conditions/php.py"
+    }
   }
 }
