@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [6.17.0] - 2026-08-22
+
+### Changed — Update prompts & fix linter rules
+
+- Re-synced 18 AI prompts in `.lovable/prompts/` from `prompt-architect-v2` repository using `scripts/update-prompts-from-architect.ps1`.
+- Fixed false positive forbidden string detections in `linter-scripts/forbidden-strings.toml` caused by `changelog.md` casing rename.
+- Resolved Windows Unicode crashes in `forbidden-strings-summary.py` by forcing `utf-8` stdout.
+- Fixed `src/test/slides-deck.test.ts` to assert against `deck/registry.ts` instead of `deck.ts` following refactor.
+
+---
+
 ## [6.16.0] - 2026-08-22
 
 ### Changed — Python charmap crashes & error code fixes
