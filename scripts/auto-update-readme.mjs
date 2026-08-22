@@ -106,7 +106,7 @@ function buildBullets({ diagrams, audits, specMd }, version) {
   }
   if (specMd.length > 0) {
     const folders = uniqueSpecFolders(specMd).map((f) => `\`spec/${f}\``).join(', ');
-    bullets.push(`- **Spec markdown changes** in ${folders} (${specMd.length} file${specMd.length === 1 ? '' : 's'}). See \`CHANGELOG.md\` for detail.`);
+    bullets.push(`- **Spec markdown changes** in ${folders} (${specMd.length} file${specMd.length === 1 ? '' : 's'}). See \`changelog.md\` for detail.`);
   }
   return bullets.join('\n');
 }

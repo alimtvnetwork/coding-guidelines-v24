@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-6.14.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-6.15.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 
 </p>
 
@@ -36,10 +36,10 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.14.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-23<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.15.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-23<!-- /STAMP:UPDATED -->
 </p>
 
-<p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.19.1</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="QUICKSTART.md">QUICKSTART.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="QUICKSTART.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
+<p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v5.19.1</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="quickstart.md">quickstart.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="quickstart.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
 
 ---
 
@@ -72,7 +72,7 @@
 
 <p align="center"><sub><strong>Problem it solves:</strong> inconsistent code, swallowed errors, and AI-generated diffs that drift from house style. <strong>How:</strong> explicit numeric rules + standalone spec files + ready-to-run installers and CI checks. <strong>Tradeoffs:</strong> opinionated defaults, real adoption cost, best rolled out in waves (see <a href="ci-guards.example.yaml">CI guards example</a>).</sub></p>
 
-<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="QUICKSTART.md">QUICKSTART.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
+<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="quickstart.md">quickstart.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
 
 
 <h2 align="center">⚡ Install in One Line</h2>
@@ -424,7 +424,7 @@ Installs: `spec/17-consolidated-guidelines`.
 
 <p align="center">
   Drop the runnable <code>linters-cicd/</code> SARIF tool into any repo from a signed GitHub Release, no clone, no spec files.<br/>
-  Pairs with <a href="QUICKSTART.md">QUICKSTART.md</a> and the <a href="linters-cicd/README.md"><code>linters-cicd/README.md</code></a>.
+  Pairs with <a href="quickstart.md">quickstart.md</a> and the <a href="linters-cicd/readme.md"><code>linters-cicd/readme.md</code></a>.
 </p>
 
 ### 🐧 macOS · Linux · Bash (latest)
@@ -639,7 +639,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-author">Author</a>
 </p>
 
-<p align="center"><strong>Docs Pages</strong>, full index: <a href="docs/README.md"><code>docs/README.md</code></a></p>
+<p align="center"><strong>Docs Pages</strong>, full index: <a href="docs/readme.md"><code>docs/readme.md</code></a></p>
 
 <p align="center">
   <strong>Authoritative Read-List:</strong> <a href=".lovable/what-to-read.md"><code>.lovable/what-to-read.md</code></a>
@@ -1517,7 +1517,7 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 
 ## 📚 Documentation
 
-Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/README.md`](docs/README.md).
+Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/readme.md`](docs/readme.md).
 
 | Doc | What's inside |
 |---|---|
@@ -1530,7 +1530,7 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/RE
 | [`docs/guidelines-audit.md`](docs/guidelines-audit.md) | Guidelines audit findings · drift detection · remediation log |
 | [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
 
-Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`CHANGELOG.md`](CHANGELOG.md).
+Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/00-overview.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
 ### What's new in v5.131.0
 
@@ -1950,7 +1950,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 **Fair observation, and intentional:**
 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
-- For humans: the **[QUICKSTART.md](QUICKSTART.md)**, the **10 CODE-RED rules**, and **[`docs/principles.md`](docs/principles.md)** form a < 30-minute on-ramp.
+- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`docs/principles.md`](docs/principles.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
@@ -1990,7 +1990,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 | PascalCase JSON is opinionated | Required by [C#](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions)/[Go](https://go.dev/ref/spec#Exported_identifiers) reality; eliminates serialization boilerplate ([System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonnamingpolicy), [encoding/json tags](https://pkg.go.dev/encoding/json#Marshal)) and magic strings |
 | 15-line function limit is strict | Backed by [*Clean Code*](https://www.oreilly.com/library/view/clean-code-a/9780136083238/) (Martin, ch. 3), [*Code Complete 2*](https://www.microsoftpressstore.com/store/code-complete-9780735619678) (McConnell, ch. 7), [*Refactoring*](https://martinfowler.com/books/refactoring.html) (Fowler, "Extract Function"), and the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Function_Length) |
 | No nested `if` / no raw `!` | Documented anti-patterns: [McCabe cyclomatic complexity (1976)](https://www.computer.org/csdl/journal/ts/1976/04/01702388/13rRUxYIN5N), [Fowler "Replace Nested Conditional with Guard Clauses"](https://refactoring.com/catalog/replaceNestedConditionalWithGuardClauses.html), [Clean Code G28/G29](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29) |
-| 622 files is overwhelming | Two audiences (humans + AI); [QUICKSTART](./QUICKSTART.md) + [10 CODE-RED rules](#-code-red-non-negotiable-rules) for humans, or install only the 33-file compact layer via [`consolidated-install.{sh,ps1}`](#-bundle-installers) |
+| 622 files is overwhelming | Two audiences (humans + AI); [QUICKSTART](./quickstart.md) + [10 CODE-RED rules](#-code-red-non-negotiable-rules) for humans, or install only the 33-file compact layer via [`consolidated-install.{sh,ps1}`](#-bundle-installers) |
 | Too strict for general use | This is an **AI-first engineering standard**, not a generic style guide, see [*For AI Agents*](#-for-ai-agents-this-repo-is-built-for-you), that is the point |
 
 ---

@@ -167,7 +167,7 @@ project/
 │   │   └── Footer.tsx
 │   └── index.ts
 ├── package.json
-└── README.md
+└── readme.md
 ```
 
 ---

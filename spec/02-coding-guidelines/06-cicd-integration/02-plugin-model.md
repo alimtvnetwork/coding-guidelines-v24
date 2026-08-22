@@ -22,7 +22,7 @@ linters-cicd/
 │   ├── nested-if/
 │   │   ├── go.py             # Go AST walker
 │   │   ├── typescript.py     # TS AST walker (uses tree-sitter-typescript via py)
-│   │   └── README.md         # Rule rationale + spec link
+│   │   └── readme.md         # Rule rationale + spec link
 │   ├── magic-strings/
 │   │   ├── go.py
 │   │   └── typescript.py

@@ -55,7 +55,7 @@ Outputs are documents only. No source code touched yet.
 
 ## Phase 6 — Verification + dry-run capture  ✅
 
-- [x] Fixture created at `linters-cicd/tests/fixtures/fix-repo/README.md`.
+- [x] Fixture created at `linters-cicd/tests/fixtures/fix-repo/readme.md`.
 - [x] Functional matrix passed: default / `--3` / `--all` / dry-run all behave per spec.
 - [x] Error matrix passed: `--bogus` → exit 6, no-git-repo → exit 2.
 - [x] Three real bugs found and fixed (`.git` strip, null-byte detector, perl dependency); details in `05-verification-log.md`.

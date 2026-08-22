@@ -27,4 +27,4 @@
 - `spec/02-coding-guidelines/`, why: testing conventions
 
 ## See also
-- Root `README.md` (must stay in sync with this file)
+- Root `readme.md` (must stay in sync with this file)

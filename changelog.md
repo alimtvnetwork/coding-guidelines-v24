@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [6.15.0] - 2026-08-22
+
+### Changed — CI Pipeline Fixes & Guard Report
+
+- Fixed SIGPIPE write error in `.github/workflows/release.yml` tar verification.
+- Configured python stdout to utf-8 in linter scripts (`check-forbidden-strings.py`, `check-spec-folder-refs.py`) to prevent charmap crashes on Windows.
+- Updated `reports/runner-guard-report.md`.
+
+---
+
 ## [6.10.0] - 2026-08-22
 
 ### Changed - Add prompt architect update scripts and AI trigger
@@ -888,7 +898,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Changed - Reconcile slides-overhaul plan status (SS-01 / SS-02)
 
-- Marked 13 shipped tasks as complete in `.lovable/plans/subtasks/01-slides-system-overhaul/SS-02-slides-70-task-backlog.md` (tasks 8, 15, 45, 63-66, 68-70 plus TOC, per-block review checklists, SRA validator extras). Status changed from `pending` to `in-progress (13/70 shipped)`.
+- Marked 13 shipped tasks as complete in `.lovable/plans/subtasks/01-slides-system-overhaul/ss-02-slides-70-task-backlog.md` (tasks 8, 15, 45, 63-66, 68-70 plus TOC, per-block review checklists, SRA validator extras). Status changed from `pending` to `in-progress (13/70 shipped)`.
 - Marked steps 3, 4, 5 as done in `.lovable/plans/pending/01-slides-system-overhaul.md`; steps 1 (3-theme audit publication) and 2 (57 remaining backlog tasks) still open.
 - Root cause of the drift: prior release ceremonies (v5.50-v5.55) bumped code and changelog but skipped plan reconciliation. No code changes in this bump - documentation truth-up only.
 - Bumped `package.json` from `5.55.0` -> `5.56.0`.
@@ -988,7 +998,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`: replaced `;` (mermaid-v11 statement separator) with `and` in message text.
 - `spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`: quoted all node labels so `@` tokens (e.g. `actions/checkout@v6`) parse cleanly.
 - `node scripts/render-diagrams.mjs` now reports `rendered=2 skipped=21 failed=0` — full coverage.
-- `readme.md`: new "What's new in v5.45.0" subsection under the spec-tree block; `changelog.md` link corrected to `CHANGELOG.md`.
+- `readme.md`: new "What's new in v5.45.0" subsection under the spec-tree block; `changelog.md` link corrected to `changelog.md`.
 - Bumped `package.json` from `5.44.0` → `5.45.0`. Sync artifacts regenerated.
 
 ---
@@ -1238,8 +1248,8 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 | Area | Files | Replacements | Notes |
 |---|---:|---:|---|
 | `release-artifacts/` (v1.4.0 / v4.6.0 / v4.7.0 / v4.8.0 snapshots) | 84 | 247 | Historical release bundles updated for consistency |
-| Repo root | 27 | 123 | Including `readme.md`, `QUICKSTART.md`, `bundles.json`, `install-config.json`, `install.{sh,ps1}`, `release-install.{sh,ps1}`, `release.{sh,ps1}`, `run.{sh,ps1}`, all 7 `<bundle>-install.{sh,ps1}` pairs |
-| `linters-cicd/` | 13 | 52 | `README.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
+| Repo root | 27 | 123 | Including `readme.md`, `quickstart.md`, `bundles.json`, `install-config.json`, `install.{sh,ps1}`, `release-install.{sh,ps1}`, `release.{sh,ps1}`, `run.{sh,ps1}`, all 7 `<bundle>-install.{sh,ps1}` pairs |
+| `linters-cicd/` | 13 | 52 | `readme.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
 | `src/` | 2 | 47 | `src/components/landing/InstallSection.tsx`, `src/data/specTree.json` |
 | `spec/` | 19 | 44 | Spec docs referencing the slug (sarif-contract, ci-templates, distribution, install-contract, install-config, version-pinned-release-installers, install-script-version-probe, repo-major-version-migrator, generic-installer-behavior, distribution-and-runner, lovable-folder-structure, readme-improvement-suggestions, root-readme-conventions, etc.) |
 | `.lovable/` | 8 | 16 | `memory/index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `plan.md`, `strictly-avoid.md`, `suggestions.md` |
@@ -1393,7 +1403,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
   rule's allowlist in `linter-scripts/forbidden-strings.toml` — neither
   path exists in the repository, so they could only mask future
   legitimate findings. Allowlist is now empty for this rule. Added
-  `CHANGELOG.md` to `exclude_files` so changelog prose can describe
+  `changelog.md` to `exclude_files` so changelog prose can describe
   legacy patterns without false positives.
 
 ## [3.20.0] - 2026-04-21
@@ -1410,7 +1420,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
     tree (typo / sibling-repo / doc-only) so authors know exactly how
     to resolve each finding.
   - The previously-allowlisted `15-domain-migration` was removed — the
-    only consumer (CHANGELOG.md) was fixed in 3.19.x cleanup, so
+    only consumer (changelog.md) was fixed in 3.19.x cleanup, so
     `[doc-only]` starts empty.
 
 ## [3.19.0] - 2026-04-20
@@ -1502,7 +1512,7 @@ the canonical superset.
   `reason="..."` clause is **mandatory** — bare waivers are ignored so
   silent suppressions can't pass review. Documented in
   `spec/04-database-conventions/02-schema-design.md` §6.6 and
-  `linters-cicd/checks/missing-desc/README.md`.
+  `linters-cicd/checks/missing-desc/readme.md`.
 
 ### Audited & cleaned
 - **Spec tree audit (115 violations → 0 unwaived).** Every `CREATE TABLE`

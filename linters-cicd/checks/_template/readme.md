@@ -37,7 +37,7 @@ the language(s) you do not need.
 | `fixtures/dirty.ts` | TS source that MUST trigger 4 findings | `fixtures/dirty.ts` |
 | `fixtures/clean.ts` | TS source that MUST stay silent | `fixtures/clean.ts` |
 | `test_template.py` | Unit + end-to-end tests for both languages, plus a cross-language metadata contract | move to `linters-cicd/tests/test_<your_rule>.py` |
-| `README.md` | This file | leave behind in `_template/`; do NOT copy |
+| `readme.md` | This file | leave behind in `_template/`; do NOT copy |
 
 **Multi-language note:** the two scanners share `RULE.id`,
 `RULE.name`, and `RULE.help_uri_relative` so SARIF consumers treat
@@ -69,7 +69,7 @@ grep -E '"[A-Z]+-[A-Z0-9-]+":' linters-cicd/checks/registry.json
 
 ```bash
 cp -r linters-cicd/checks/_template linters-cicd/checks/<your-slug>
-rm linters-cicd/checks/<your-slug>/README.md
+rm linters-cicd/checks/<your-slug>/readme.md
 mv linters-cicd/checks/<your-slug>/test_template.py \
    linters-cicd/tests/test_<your_rule>.py
 ```
@@ -183,7 +183,7 @@ in `linters-cicd/tests/test_template_sarif_snapshot.py`. Snapshots
 live under `linters-cicd/tests/snapshots/` and lock down rule
 metadata (`id`, `name`, `shortDescription`, `helpUri`) plus per-finding
 line numbers, columns, and messages. See
-`linters-cicd/tests/snapshots/README.md` for the format.
+`linters-cicd/tests/snapshots/readme.md` for the format.
 
 If you add a sibling-language template (e.g. `typescript.py` next to
 `php.py`):

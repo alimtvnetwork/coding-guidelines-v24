@@ -253,7 +253,7 @@ jobs:
               if (index($0, ver)) found=1
             }
             found { print }
-          ' CHANGELOG.md 2>/dev/null || echo "")
+          ' changelog.md 2>/dev/null || echo "")
 
           if [ -z "$CHANGELOG_ENTRY" ]; then
             CHANGELOG_ENTRY="No changelog entry found for $VERSION."
@@ -376,7 +376,7 @@ This workflow assumes the following project structure for multi-binary projects:
 ├── scripts/
 │   ├── install.ps1            # Template with placeholders
 │   └── install.sh             # Template with placeholders
-└── CHANGELOG.md
+└── changelog.md
 ```
 
 Key rules:

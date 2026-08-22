@@ -1344,7 +1344,7 @@
           "09-binary-icon-branding.md",
           "10-release-pipeline-issues-rca.md",
           "99-consistency-report.md",
-          "README.md"
+          "readme.md"
         ]
       },
       {
@@ -1430,7 +1430,7 @@
           "07-console-safe-handoff.md",
           "08-repo-path-sync.md",
           "99-consistency-report.md",
-          "README.md"
+          "readme.md"
         ]
       },
       {

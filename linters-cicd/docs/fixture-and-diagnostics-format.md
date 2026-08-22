@@ -490,8 +490,8 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 ## 8. Cross-references
 
-- Starter kit: [`linters-cicd/checks/_template/README.md`](../checks/_template/README.md)
-- Pack overview: [`linters-cicd/README.md`](../README.md)
+- Starter kit: [`linters-cicd/checks/_template/readme.md`](../checks/_template/readme.md)
+- Pack overview: [`linters-cicd/readme.md`](../readme.md)
 - SARIF contract: `spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md`
 - Plugin model:   `spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md`
 - Performance:    `spec/02-coding-guidelines/06-cicd-integration/07-performance.md`

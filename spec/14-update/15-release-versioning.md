@@ -408,12 +408,12 @@ func CreateAndPushTag(tag string) error {
 
 ## Changelog Extraction
 
-The release pipeline extracts the relevant section from `CHANGELOG.md` for the release body:
+The release pipeline extracts the relevant section from `changelog.md` for the release body:
 
 ```bash
 extract_changelog() {
     local version="$1"
-    local changelog="${2:-CHANGELOG.md}"
+    local changelog="${2:-changelog.md}"
 
     if [ ! -f "$changelog" ]; then
         echo "Release $version"
@@ -462,12 +462,12 @@ Three sources must always be in sync:
 | Source | Location | Purpose |
 |--------|----------|---------|
 | `Version` constant | Source code (`constants.go`) | Compiled into binary |
-| `CHANGELOG.md` | Repository root | Human-readable history |
+| `changelog.md` | Repository root | Human-readable history |
 | Release metadata | `.release/latest.json` or tags | CI/CD and tooling |
 
 When bumping a version:
 1. Update the `Version` constant in source code.
-2. Add the new section to `CHANGELOG.md`.
+2. Add the new section to `changelog.md`.
 3. Update any metadata files (e.g., `latest.json`).
 
 All three changes must happen in the **same commit** that is tagged.

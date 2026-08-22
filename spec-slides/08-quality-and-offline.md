@@ -79,8 +79,8 @@ typography and animations.
 
 When implementation lands, these files become required:
 
-- `slides-app/README.md` — setup, build, package, troubleshoot
-- `slides-app/CHANGELOG.md` — semver per the main repo's release cadence
+- `slides-app/readme.md` — setup, build, package, troubleshoot
+- `slides-app/changelog.md` — semver per the main repo's release cadence
 - `dist/README.txt` — end-user usage (see
   [06-build-and-zip-pipeline.md](./06-build-and-zip-pipeline.md))
 

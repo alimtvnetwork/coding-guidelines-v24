@@ -15,7 +15,7 @@ Defines the standard patterns for extracting changelog entries and assembling st
 
 ### Convention
 
-Projects maintain a `CHANGELOG.md` at the repository root following Keep a Changelog format:
+Projects maintain a `changelog.md` at the repository root following Keep a Changelog format:
 
 ```markdown
 ## v1.3.0 — Feature Title (2026-04-10)
@@ -42,7 +42,7 @@ ENTRY=$(awk -v ver="$VERSION" '
         if (index($0, ver)) found=1
     }
     found { print }
-' CHANGELOG.md 2>/dev/null || echo "")
+' changelog.md 2>/dev/null || echo "")
 
 if [ -z "$ENTRY" ]; then
     ENTRY="Release $VERSION"
@@ -61,7 +61,7 @@ echo "$ENTRY" > /tmp/changelog-entry.md
 
 ### Graceful Fallback
 
-If `CHANGELOG.md` does not exist or the version is not found, the release body still generates successfully with a minimal entry. This ensures releases never fail due to missing changelog entries.
+If `changelog.md` does not exist or the version is not found, the release body still generates successfully with a minimal entry. This ensures releases never fail due to missing changelog entries.
 
 ---
 
@@ -147,7 +147,7 @@ The complete script for assembling the release body in a GitHub Actions step:
             if (index($0, ver)) found=1
         }
         found { print }
-    ' CHANGELOG.md 2>/dev/null || echo "")
+    ' changelog.md 2>/dev/null || echo "")
 
     if [ -z "$ENTRY" ]; then
         ENTRY="Release $VERSION"
@@ -334,7 +334,7 @@ curl -fsSL https://raw.githubusercontent.com/<repo>/main/scripts/install.sh | ba
 
 - **Always include checksums** — the full `checksums.txt` content in a fenced code block
 - **Always include an asset matrix** — maps platform/architecture to filename
-- **Graceful changelog fallback** — never fail a release because `CHANGELOG.md` is missing
+- **Graceful changelog fallback** — never fail a release because `changelog.md` is missing
 - **UTC timestamps** — all dates in the release body use UTC
 - **Consistent field order** — Version, Commit, Branch, Build Date, Go Version (always this order)
 - **Pre-release banner** — auto-detected from version suffix and prepended to body

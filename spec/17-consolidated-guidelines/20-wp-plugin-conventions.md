@@ -518,7 +518,7 @@ All plugins follow SemVer 2.0.0. Version is declared in exactly two places (must
 
 1. Update main plugin file header → `Version: X.Y.Z`
 2. Update `PluginConfigType::Version` → `case Version = 'X.Y.Z'`
-3. Update `CHANGELOG.md` → add entry under `## [X.Y.Z] - YYYY-MM-DD`
+3. Update `changelog.md` → add entry under `## [X.Y.Z] - YYYY-MM-DD`
 4. If `composer.json` has a version field → update it too
 
 ### ZIP Packaging

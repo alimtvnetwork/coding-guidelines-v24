@@ -9,7 +9,7 @@
  * If you change one, change the other in the same commit.
  *
  * Canonical prose spec:
- *   linters-cicd/checks/function-length-prefer8/README.md  §2
+ *   linters-cicd/checks/function-length-prefer8/readme.md  §2
  */
 
 const SYNTAX = {

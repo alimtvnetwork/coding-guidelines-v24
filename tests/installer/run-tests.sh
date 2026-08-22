@@ -42,7 +42,7 @@ mkdir -p "$fixture_dir/payload/spec-slides" \
          "$fixture_dir/payload/slides-app/dist"
 echo "<!doctype html><title>fixture</title>" \
   > "$fixture_dir/payload/slides-app/dist/index.html"
-echo "fixture" > "$fixture_dir/payload/spec-slides/README.md"
+echo "fixture" > "$fixture_dir/payload/spec-slides/readme.md"
 ( cd "$fixture_dir/payload" && tar -czf "$fixture_dir/release.tar.gz" . )
 
 make_shim_dir() {

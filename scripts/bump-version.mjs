@@ -42,7 +42,7 @@ const TRACKED_FILES = [
   "docs/author.md",
 ];
 
-const ROOT_CHANGELOG = "CHANGELOG.md";
+const ROOT_CHANGELOG = "changelog.md";
 const SPEC19_CHANGELOG = "spec/19-main-worker-service/98-changelog.md";
 
 // ----- Argument parsing ---------------------------------------------------

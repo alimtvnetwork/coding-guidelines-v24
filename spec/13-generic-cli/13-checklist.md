@@ -142,7 +142,7 @@ All constraints from `08-code-style.md` apply to every file you write.
 
 ## Phase 10: Polish
 
-- [ ] Update `README.md` with grouped command reference + examples
+- [ ] Update `readme.md` with grouped command reference + examples
 - [ ] Verify all files ≤ 200 lines (split if exceeded)
 - [ ] Verify all functions ≤ 15 lines (extract helpers if exceeded)
 - [ ] Verify every edited Go file has zero unused imports after refactors

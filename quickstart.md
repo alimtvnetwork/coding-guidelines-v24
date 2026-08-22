@@ -16,7 +16,7 @@ This project ships **two independently versioned artifacts**. They are **not** e
 | Track | Where it shows | Current | What it covers | Cadence |
 |-------|---------------|---------|----------------|---------|
 | **Repo / spec version** | Root `readme.md` badge, `package.json`, `version.json` | **v5.7.0** (updated 2026-05-01) | The full repo: 22 spec folders, docs, bundles, installers, prompts | Bumped on any repo-level change |
-| **Linter pack version** | `QUICKSTART.md`, `linters-cicd/VERSION`, install URLs | **v3.79.0** (updated 2026-04-23) | Only the standalone CI/CD linter pack under `linters-cicd/` | Bumped only when linter logic, rules, or SARIF output change |
+| **Linter pack version** | `quickstart.md`, `linters-cicd/VERSION`, install URLs | **v3.79.0** (updated 2026-04-23) | Only the standalone CI/CD linter pack under `linters-cicd/` | Bumped only when linter logic, rules, or SARIF output change |
 
 **Why decoupled?** The linter pack is consumed as a pinned dependency by external repos (`...@v3.79.0`). Bumping it on every spec-only edit would force every downstream pipeline to re-pin for a no-op change. The repo version moves freely; the pack version moves only when its surface actually changes.
 

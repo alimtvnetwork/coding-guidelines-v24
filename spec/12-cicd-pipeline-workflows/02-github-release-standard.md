@@ -16,7 +16,7 @@ This document defines the standard format and assembly process for GitHub Releas
 The release description is assembled from multiple data sources into a single Markdown file:
 
 ```
-1. Changelog entry (extracted from CHANGELOG.md or generated from commits)
+1. Changelog entry (extracted from changelog.md or generated from commits)
 2. Release info table (version, commit SHA, branch, build date, toolchain version)
 3. Checksums block (full checksums.txt in a code fence)
 4. Install instructions (quick install one-liners for each platform)
@@ -48,7 +48,7 @@ The release description is assembled from multiple data sources into a single Ma
 
 ## Changelog Extraction
 
-### From CHANGELOG.md
+### From changelog.md
 
 Extract the matching version section using `awk`:
 
@@ -59,14 +59,14 @@ awk -v ver="$VERSION" '
     if (index($0, ver)) found=1
   }
   found { print }
-' CHANGELOG.md
+' changelog.md
 ```
 
 Falls back to a "No changelog entry found" message if the version section does not exist.
 
 ### From Commit History (Conventional Commits)
 
-When no `CHANGELOG.md` exists, generate release notes from Git history:
+When no `changelog.md` exists, generate release notes from Git history:
 
 ```bash
 PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -1 || true)

@@ -283,7 +283,7 @@ See [Release Body and Changelog](../07-release-body-and-changelog.md) for the fu
 
 The GitHub Release description is assembled from multiple sources:
 
-1. **Changelog entry** — extracted from `CHANGELOG.md`
+1. **Changelog entry** — extracted from `changelog.md`
 2. **Release info table** — version, commit SHA, branch, build date, Go version
 3. **Checksums block** — full `checksums.txt` in a code fence
 4. **Install instructions** — quick install one-liners for PowerShell and Bash, plus version-pinned alternatives
@@ -339,7 +339,7 @@ Binaries are compiled **exactly once**. Compression, checksums, and publishing o
 CHANGELOG_ENTRY=$(awk -v ver="$VERSION" '
   /^## / { if (found) exit; if (index($0, ver)) found=1 }
   found { print }
-' CHANGELOG.md 2>/dev/null || echo "")
+' changelog.md 2>/dev/null || echo "")
 
 if [ -z "$CHANGELOG_ENTRY" ]; then
   CHANGELOG_ENTRY="No changelog entry found for $VERSION."

@@ -313,7 +313,7 @@ const maxFunctionLines = {
 // Rule: prefer-function-lines (CODE-RED-005 — STRICT 8-line cap)
 //
 // Canonical spec (threshold + counting rules + per-language scope):
-//   linters-cicd/checks/function-length-prefer8/README.md
+//   linters-cicd/checks/function-length-prefer8/readme.md
 // That README is the single source of truth. If this rule's behavior
 // drifts from it, the README wins — fix the README first then bring
 // this code into alignment.

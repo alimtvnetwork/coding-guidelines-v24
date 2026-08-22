@@ -61,7 +61,7 @@ Repo layout:
 
 ```
 acme-backups/worker-eu-1/
-├── README.md                          # Auto-generated, see §3.1
+├── readme.md                          # Auto-generated, see §3.1
 ├── manifest.json                      # Latest GitBackupManifest (see §3.2)
 ├── envelopes/
 │   ├── 0000000001.env.bin             # Sealed BackupOutboxEnvelope (ch. 19)

@@ -50,4 +50,4 @@ function mapKind(k: Kind): Label { ... }
 
 1. Edit this file first.
 2. Update the mirrors above in the **same commit**.
-3. Bump patch version and add an entry to `CHANGELOG.md` under "Canonical tier change".
+3. Bump patch version and add an entry to `changelog.md` under "Canonical tier change".

@@ -46,7 +46,7 @@ export default function VersionBumpMythBusterSlide() {
         <ActionPanel
           slideId="18-version-bump-myth-buster"
           symptom="PRs land without a version bump or changelog entry, citing 'the v1.2 update made it optional'. Downstream pins break silently because two different code states share one version string."
-          rule="Every merged PR bumps package.json (patch / minor / major per SemVer intent) AND adds a CHANGELOG.md entry in the same commit. Non-negotiable per spec/17/31 §Must Follow (v1.4.0, line 16)."
+          rule="Every merged PR bumps package.json (patch / minor / major per SemVer intent) AND adds a changelog.md entry in the same commit. Non-negotiable per spec/17/31 §Must Follow (v1.4.0, line 16)."
           doThis="Add the bump + changelog to your PR template checklist. Reviewer rejects on missing bump the same way they reject on a failing test. Run `node scripts/sync-version.mjs` after editing package.json."
         />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>

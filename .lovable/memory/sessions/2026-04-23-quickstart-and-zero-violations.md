@@ -6,7 +6,7 @@ Multi-task session covering CI/CD documentation, "other repo" templates (GitLab/
 
 ## Completed
 
-- ✅ `QUICKSTART.md` (root) — local + GitHub Actions copy-paste recipes for `linters-cicd/run-all.sh`, with flags (`--baseline`, `--languages`, `--jobs`) and exit-code reference.
+- ✅ `quickstart.md` (root) — local + GitHub Actions copy-paste recipes for `linters-cicd/run-all.sh`, with flags (`--baseline`, `--languages`, `--jobs`) and exit-code reference.
 - ✅ Other-repo CI/CD templates for GitLab CI, Azure Pipelines, Jenkins (SARIF upload + required files).
 - ✅ Refactored `InstallSection.tsx` (337 → < 100 lines) into `src/components/landing/install/{HighlightedCommand,CopyButton,BundleCard}.tsx`.
 - ✅ Refactored `fuzzyMatch.ts` — `let → const`, extracted `buildPreviewWindow`, added `isResultEmpty` guard.
@@ -17,7 +17,7 @@ Multi-task session covering CI/CD documentation, "other repo" templates (GitLab/
 
 ## Files modified
 
-- `QUICKSTART.md` (created)
+- `quickstart.md` (created)
 - `src/components/landing/InstallSection.tsx`
 - `src/components/landing/install/HighlightedCommand.tsx` (created)
 - `src/components/landing/install/CopyButton.tsx` (created)

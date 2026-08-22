@@ -13,7 +13,7 @@ For the 40-task batch starting 2026-04-26: **never** invoke
    `.lovable/question-and-ambiguity/xx-brief-title.md` (xx =
    zero-padded sequence, monotonic across the run, starts at 01).
 3. Each entry uses the template in
-   `.lovable/question-and-ambiguity/README.md` and MUST include:
+   `.lovable/question-and-ambiguity/readme.md` and MUST include:
    verbatim original request, context, the ambiguity, every option
    considered with pros/cons, chosen option (with recommendation
    rationale), and a reversibility note.

@@ -57,7 +57,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `linters-cicd/codegen/inversion_table.py`
 - `linters-cicd/codegen/parsers/{__init__,go_parser,php_parser,ts_parser}.py`
 - `linters-cicd/codegen/emitters/{__init__,go_emitter,php_emitter,ts_emitter}.py`
-- `linters-cicd/codegen/README.md`
+- `linters-cicd/codegen/readme.md`
 - `linters-cicd/scripts/emit-timeout.py`
 - `spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md`
 - `.lovable/prompts/03-write-prompt.md`

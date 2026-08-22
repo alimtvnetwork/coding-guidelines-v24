@@ -275,7 +275,7 @@ Windows binary signing via SignPath:
 ### Changelog Extraction
 
 ```bash
-awk '/^## \['"${VERSION}"'\]/{flag=1;next}/^## \[/{flag=0}flag' CHANGELOG.md
+awk '/^## \['"${VERSION}"'\]/{flag=1;next}/^## \[/{flag=0}flag' changelog.md
 ```
 
 Graceful fallback if version section not found.
@@ -560,7 +560,7 @@ The `env` command is **idempotent** — running it twice never duplicates the en
 
 **Source:** `12-cicd-pipeline-workflows/07-release-body-and-changelog.md`
 
-Standard release body sections (assembled by CI from CHANGELOG.md):
+Standard release body sections (assembled by CI from changelog.md):
 
 1. **Summary** — one-paragraph what + why.
 2. **Highlights** — 3–5 bullet headlines.

@@ -35,7 +35,7 @@ The version is declared in **exactly two places** and must always match:
 ```
 1. Update main plugin file header → Version: X.Y.Z
 2. Update PluginConfigType::Version → case Version = 'X.Y.Z'
-3. Update CHANGELOG.md → add entry under ## [X.Y.Z] - YYYY-MM-DD
+3. Update changelog.md → add entry under ## [X.Y.Z] - YYYY-MM-DD
 4. If composer.json has a version field → update it too
 5. Commit with message: "Bump version to X.Y.Z"
 ```
@@ -50,8 +50,8 @@ The version is declared in **exactly two places** and must always match:
 plugin-slug/                      ← ZIP root
 ├── plugin-slug.php               ← Main plugin file (required)
 ├── uninstall.php                 ← Clean removal hook
-├── README.md                     ← Plugin readme
-├── CHANGELOG.md                  ← Version history
+├── readme.md                     ← Plugin readme
+├── changelog.md                  ← Version history
 ├── composer.json                 ← Dependency manifest
 ├── settings.json                 ← Default configuration
 ├── assets/                       ← Admin CSS/JS/images
@@ -782,7 +782,7 @@ trait UpdateResolverUrlTrait
 
 ---
 
-## 10.8 CHANGELOG.md Format
+## 10.8 changelog.md Format
 
 Every version bump must include a CHANGELOG entry:
 
@@ -974,7 +974,7 @@ jobs:
 ```
 1. ✅ All tests pass (phpunit + phpstan)
 2. ✅ Version bumped in plugin header + PluginConfigType
-3. ✅ CHANGELOG.md updated
+3. ✅ changelog.md updated
 4. ✅ composer install --no-dev succeeds
 5. ✅ ZIP packages correctly (no double-nesting, vendor/ present)
 6. ✅ ZIP installs cleanly on a fresh WordPress site

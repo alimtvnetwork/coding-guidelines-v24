@@ -36,20 +36,20 @@ git config user.email t@t.t
 git config user.name t
 git remote add origin "git@github.com:acme/widget-cli-v3.git"
 
-cat > README.md <<'EOF'
+cat > readme.md <<'EOF'
 # widget-cli-v3
 
 Old GitHub HTTPS:   https://github.com/acme/widget-cli-v1
 Old GitHub SSH-SCP: git@github.com:acme/widget-cli-v1.git
 Old self-hosted:    https://gitlab.example.com/acme/widget-cli-v2/-/tree/main
-Raw asset:          https://raw.githubusercontent.com/acme/widget-cli-v2/main/README.md
+Raw asset:          https://raw.githubusercontent.com/acme/widget-cli-v2/main/readme.md
 Plain reference:    See widget-cli-v1 docs.
 Current (no-op):    widget-cli-v3 should stay.
 Numeric guard:      widget-cli-v10 must NOT be rewritten.
 EOF
 
-hash="$(git hash-object -w README.md)"
-git update-index --add --cacheinfo "100644,$hash,README.md"
+hash="$(git hash-object -w readme.md)"
+git update-index --add --cacheinfo "100644,$hash,readme.md"
 
 bash "$FR_SH" --3 >/dev/null 2>&1
 exit_code=$?
@@ -60,7 +60,7 @@ fi
 
 assert_grep() {
     local label="$1" pattern="$2"
-    if ! grep -qF "$pattern" README.md; then
+    if ! grep -qF "$pattern" readme.md; then
         echo "::error::[$label] expected to find: $pattern" >&2
         RC=1
     fi
@@ -68,7 +68,7 @@ assert_grep() {
 
 assert_no_grep() {
     local label="$1" pattern="$2"
-    if grep -qF "$pattern" README.md; then
+    if grep -qF "$pattern" readme.md; then
         echo "::error::[$label] unexpected residual: $pattern" >&2
         RC=1
     fi
@@ -78,7 +78,7 @@ assert_no_grep() {
 assert_grep "github https"   "https://github.com/acme/widget-cli-v3"
 assert_grep "github ssh-scp" "git@github.com:acme/widget-cli-v3.git"
 assert_grep "self-hosted"    "https://gitlab.example.com/acme/widget-cli-v3/-/tree/main"
-assert_grep "raw asset"      "https://raw.githubusercontent.com/acme/widget-cli-v3/main/README.md"
+assert_grep "raw asset"      "https://raw.githubusercontent.com/acme/widget-cli-v3/main/readme.md"
 assert_grep "plain text"     "See widget-cli-v3 docs."
 
 # --- Negative: old tokens fully gone ---------------------------------

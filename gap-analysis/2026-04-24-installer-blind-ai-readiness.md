@@ -17,7 +17,7 @@
 > - `spec/15-distribution-and-runner/01-install-contract.md`
 > - `spec/12-cicd-pipeline-workflows/04-install-script-generation.md`
 > - Reference implementations: `linters-cicd/install.sh`, `linters-cicd/install.ps1`
-> - Public documentation: `linters-cicd/README.md`
+> - Public documentation: `linters-cicd/readme.md`
 
 ---
 
@@ -205,7 +205,7 @@ machine would crash instead of printing usage.
 ### 3.2 The exit-code matrix lives in the README, not the spec
 
 The detailed table showing how exit code `4` behaves with verification
-ON vs OFF is in `linters-cicd/README.md`. Spec 27 §8 only lists the
+ON vs OFF is in `linters-cicd/readme.md`. Spec 27 §8 only lists the
 codes; spec 15 §"Exit codes" lists 0/1/2 (and is *inconsistent* with
 spec 27's 0–5 list).
 
@@ -324,4 +324,4 @@ current ship-it-simple shape of `linters-cicd/install.sh`).
 
 ---
 
-*Gap analysis — 2026-04-24 — generated from a static read of specs 12, 14, 15 and the shipped `linters-cicd/install.{sh,ps1}` and `README.md`.*
+*Gap analysis — 2026-04-24 — generated from a static read of specs 12, 14, 15 and the shipped `linters-cicd/install.{sh,ps1}` and `readme.md`.*

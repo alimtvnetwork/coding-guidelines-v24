@@ -21,7 +21,7 @@ linters-cicd/
 ├── action.yml
 ├── run-all.sh
 ├── install.sh
-├── README.md
+├── readme.md
 └── VERSION
 ```
 

@@ -471,10 +471,10 @@ spec/folder-structure-root.md
 Plain-text, one path per line, relative to repo root, no globs:
 
 ```
-README.md
+readme.md
 LICENSE
 .github/CODEOWNERS
-CHANGELOG.md
+changelog.md
 ```
 
 Use this when a markdown file links to a non-spec file that exists outside the spec tree.

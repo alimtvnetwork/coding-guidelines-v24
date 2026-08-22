@@ -31,7 +31,7 @@ A reusable pattern for managing application configuration where:
 
 1. **First-run seeding** populates SQLite DB from `config.seed.json`
 2. **Every config change updates the version** (SemVer)
-3. **Every version change logs to `CHANGELOG.md`**
+3. **Every version change logs to `changelog.md`**
 4. **Subsequent runs respect version** to avoid duplicate seeds
 5. **User customizations are never overwritten** by seed updates
 
@@ -50,7 +50,7 @@ config.seed.json (source of truth)
  Skip     Merge new settings (preserve existing)
            │
            ▼
-      Update CHANGELOG.md
+      Update changelog.md
 ```
 
 ---
@@ -451,7 +451,7 @@ func (s *ConfigService) updateChangelog(seed SeedConfig) error {
 
 ---
 
-## 7. CHANGELOG.md Format
+## 7. changelog.md Format
 
 ```markdown
 # Changelog
@@ -736,7 +736,7 @@ function SettingItem({ setting, currentVersion }: Props) {
 | 2 | **Typed SettingValue** — no `interface{}` or `any` — use union struct |
 | 3 | **SemVer gating** — seed only runs when version increases |
 | 4 | **Merge, don't overwrite** — user customizations are always preserved |
-| 5 | **Changelog auto-updated** — every version bump appends to CHANGELOG.md |
+| 5 | **Changelog auto-updated** — every version bump appends to changelog.md |
 | 6 | **JSON Schema validation** — all seed files validated against `config.schema.json` |
 | 7 | **No hardcoded arrays** — all validation data seeded via CW Config → Root DB |
 | 8 | **Typed constants** — never use magic strings for category/key lookups |

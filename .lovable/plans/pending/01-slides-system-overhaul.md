@@ -27,8 +27,8 @@ Detailed material lives in subtasks to keep this file skimmable.
 
 ## Steps
 
-1. Publish the 3-theme repo-wide improvement audit (guideline SSOT + enforcement parity, slides as canonical teaching surface, release+CI hardening). See ./subtasks/01-slides-system-overhaul/SS-01-repo-improvements-3-themes.md.
-2. Execute the 70-task slides backlog (deck infra → content by section → build/release/test). See ./subtasks/01-slides-system-overhaul/SS-02-slides-70-task-backlog.md.
+1. Publish the 3-theme repo-wide improvement audit (guideline SSOT + enforcement parity, slides as canonical teaching surface, release+CI hardening). See ./subtasks/01-slides-system-overhaul/ss-01-repo-improvements-3-themes.md.
+2. Execute the 70-task slides backlog (deck infra → content by section → build/release/test). See ./subtasks/01-slides-system-overhaul/ss-02-slides-70-task-backlog.md.
 3. Wire `slides-app` build+zip into `scripts/release.mjs` and attach `slides-app/dist.zip` to the GitHub Release, per command 01; add a "Slides deck" link in the root README release section.
 4. Add `scripts/sync-guidelines.mjs` that regenerates deck rule cards from file 31 and fails CI on drift (slide count < rule count, or missing rule id).
 5. Extend `slides-app/tests/smoke.spec.ts` with a per-rule presence assertion and add axe-core a11y + Playwright visual regression per slide; gate the release script on all three.

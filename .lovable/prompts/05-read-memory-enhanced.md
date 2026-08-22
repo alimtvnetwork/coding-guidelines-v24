@@ -73,7 +73,7 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
    - Assign sub-agents small, granular folders/files to read rather than asking one agent to read the entire codebase in a single pass.
 
 7. Root `readme.md` lowercase self-healing exception:
-   - If the root readme is uppercase `README.md` or incorrectly cased, immediately rename it to `readme.md`, commit, and push to git without asking.
+   - If the root readme is uppercase `readme.md` or incorrectly cased, immediately rename it to `readme.md`, commit, and push to git without asking.
 
 8. Memory persistence:
    - You are allowed to write to the `.lovable/` directory to enhance project memory after reading.
@@ -100,7 +100,7 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
 1. Read `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`). This is the authoritative reading order for the project and overrides any generic order. Follow every file and order it specifies.
 2. Root `readme.md` lowercase verification and auto-fix:
    - Verify that the root readme file is strictly named lowercase `readme.md`.
-   - If an uppercase `README.md` exists or the casing is incorrect on disk or in git, immediately rename it to `readme.md`, remove the stale uppercase file, commit the change (`fix: ensure root readme is strictly lowercase readme.md`), and push to git without asking or second-guessing.
+   - If an uppercase `readme.md` exists or the casing is incorrect on disk or in git, immediately rename it to `readme.md`, remove the stale uppercase file, commit the change (`fix: ensure root readme is strictly lowercase readme.md`), and push to git without asking or second-guessing.
    - Read the root `readme.md` file for architecture, casing rules, repository layout, and AI entry points.
 
 ### 1.1 Read the Whole `.lovable/` Folder & Pending Tasks Queue

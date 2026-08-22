@@ -2,7 +2,7 @@
 /**
  * generate-templates-doc.mjs
  *
- * Renders `scripts/spec-verification/COMMAND-TEMPLATES.md` from the
+ * Renders `scripts/spec-verification/command-templates.md` from the
  * registry in `command-templates.mjs`. Re-run whenever templates or the
  * verification-need map change so the docs never drift.
  */
@@ -13,7 +13,7 @@ import { COMMAND_TEMPLATES, VERIFICATION_NEED_MAP, listByCategory } from "./comm
 import { FOLDER_PROFILES } from "./profiles.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const OUT = join(HERE, "COMMAND-TEMPLATES.md");
+const OUT = join(HERE, "command-templates.md");
 const TODAY = new Date().toISOString().slice(0, 10);
 
 function categoryHeading(cat) {

@@ -22,15 +22,15 @@
 
 ## 1. What a blind AI WILL get right
 
-Given only this repo's documentation (`linters-cicd/README.md`, `examples/other-repo-integration/`, `spec/02-coding-guidelines/06-cicd-integration/`, `spec/12-cicd-pipeline-workflows/`):
+Given only this repo's documentation (`linters-cicd/readme.md`, `examples/other-repo-integration/`, `spec/02-coding-guidelines/06-cicd-integration/`, `spec/12-cicd-pipeline-workflows/`):
 
 | Capability | Source |
 |------------|--------|
-| Install pack with one curl line | `linters-cicd/README.md` §Quick start |
+| Install pack with one curl line | `linters-cicd/readme.md` §Quick start |
 | Run all checks and emit SARIF 2.1.0 | `linters-cicd/run-all.sh --format sarif --output coding-guidelines.sarif` |
 | Wire into GitHub Actions in 5 lines | `linters-cicd/ci/github-actions.yml` (copy-paste ready) |
 | Wire into GitLab / Azure / Jenkins | `examples/other-repo-integration/{gitlab,azure-devops,jenkins}/` (each has README + working pipeline file) |
-| Pin a specific pack version | `examples/other-repo-integration/README.md` §"Pinning a version" |
+| Pin a specific pack version | `examples/other-repo-integration/readme.md` §"Pinning a version" |
 | Pre-commit hook | `linters-cicd/ci/pre-commit-hook.sh` |
 | Understand the rule set | `linters-cicd/checks/registry.json` enumerates every rule |
 | Codegen drift detection (PHP/Go/TS field inversion tables) | `linters-cicd/codegen/scripts/verify-codegen-determinism.sh` + new CI job (`.github/workflows/ci.yml`) |
@@ -47,19 +47,19 @@ These are real, working artifacts. A fresh AI can wire any of the four major CIs
 
 | Source | Says |
 |--------|------|
-| `linters-cicd/README.md` Phase 1 table | Go, TS for most rules; "universal" for file-length |
+| `linters-cicd/readme.md` Phase 1 table | Go, TS for most rules; "universal" for file-length |
 | `linters-cicd/checks/registry.json` | Source of truth — but not surfaced in the README |
 | `examples/other-repo-integration/` README | Doesn't mention language support at all |
 
 **Impact:** An AI integrating the pack into a Python or Rust repo will assume it works, get zero findings (the rule files silently no-op for unsupported extensions), and ship a green build that lints nothing.
 
-**Fix:** Surface a "supported languages today" matrix in `linters-cicd/README.md` AND in the per-platform README under `examples/other-repo-integration/`. Have `run-all.sh` print a `WARNING: 0 files matched supported extensions` when the language detection finds nothing.
+**Fix:** Surface a "supported languages today" matrix in `linters-cicd/readme.md` AND in the per-platform README under `examples/other-repo-integration/`. Have `run-all.sh` print a `WARNING: 0 files matched supported extensions` when the language detection finds nothing.
 
 ### 2.2 No "first-run" output discipline
 
 The shipped `run-all.sh` writes `coding-guidelines.sarif` into the CWD by default. There is no documented `.gitignore` line for it, so AI integrators will commit it. (The shipped repo itself has `linters-cicd/coding-guidelines.sarif` in its tree — exhibit A.)
 
-**Fix:** Add to `examples/other-repo-integration/README.md`: "Add `coding-guidelines.sarif` to `.gitignore` in the consuming repo."
+**Fix:** Add to `examples/other-repo-integration/readme.md`: "Add `coding-guidelines.sarif` to `.gitignore` in the consuming repo."
 
 ### 2.3 Version-pinning is documented; auto-update isn't
 
@@ -77,15 +77,15 @@ An AI integrating the pack into a long-lived repo needs a story for "how do I ke
 
 The new CI guard fails the build with `Codegen drift detected` and instructs to run `npm run codegen:regen`. ✅ That's good. But:
 - A blind AI in a downstream repo may not have `npm` or this script — the regen tool lives only in *this* repo.
-- The codegen feature's purpose ("invert PHP/Go/TS field names so PascalCase columns map to snake_case structs") is documented in `linters-cicd/codegen/README.md`, but there's no mention of *whether downstream repos need it at all*. They probably don't.
+- The codegen feature's purpose ("invert PHP/Go/TS field names so PascalCase columns map to snake_case structs") is documented in `linters-cicd/codegen/readme.md`, but there's no mention of *whether downstream repos need it at all*. They probably don't.
 
-**Fix:** Mark the codegen verification step as "internal to this repo only" in the CI workflow, OR document explicitly under `examples/other-repo-integration/README.md` that the codegen step is opt-in and only useful if the consumer adopts the same field-inversion pattern.
+**Fix:** Mark the codegen verification step as "internal to this repo only" in the CI workflow, OR document explicitly under `examples/other-repo-integration/readme.md` that the codegen step is opt-in and only useful if the consumer adopts the same field-inversion pattern.
 
 ### 2.6 Pipeline test bash scripts assume a specific shell
 
 `tests/pipeline/*.sh` use `bash` features (arrays, `set -euo pipefail`, process substitution). They will break on `sh`-only CI runners (some Alpine-based GitLab runners). Not flagged anywhere.
 
-**Fix:** Add a `Requirements` section to `tests/pipeline/README.md` listing `bash >= 4`, `python3 >= 3.10`, `jq` (if used).
+**Fix:** Add a `Requirements` section to `tests/pipeline/readme.md` listing `bash >= 4`, `python3 >= 3.10`, `jq` (if used).
 
 ### 2.7 SARIF upload is GitHub-specific
 
@@ -127,13 +127,13 @@ The shipped `linters-cicd/ci/github-actions.yml` uploads SARIF to the Security t
 
 | # | Target | Patch | Effort |
 |---|--------|-------|--------|
-| 1 | `linters-cicd/README.md` + `examples/other-repo-integration/README.md` | Resolve version drift — single source of truth (`linters-cicd/VERSION`) referenced from both | S |
-| 2 | `linters-cicd/README.md` | Add "Supported languages today" matrix; have `run-all.sh` warn on zero matched files | S |
-| 3 | `examples/other-repo-integration/README.md` | Add `.gitignore` instruction; add `renovate.json` template | S |
+| 1 | `linters-cicd/readme.md` + `examples/other-repo-integration/readme.md` | Resolve version drift — single source of truth (`linters-cicd/VERSION`) referenced from both | S |
+| 2 | `linters-cicd/readme.md` | Add "Supported languages today" matrix; have `run-all.sh` warn on zero matched files | S |
+| 3 | `examples/other-repo-integration/readme.md` | Add `.gitignore` instruction; add `renovate.json` template | S |
 | 4 | `linters-cicd/checks/_template/` | Create rule-skeleton template with README; cover via `tests/pipeline/` | M |
-| 5 | `examples/other-repo-integration/README.md` | Document codegen step as internal-only / opt-in | S |
-| 6 | `tests/pipeline/README.md` | Document bash/python/jq requirements | S |
-| 7 | `examples/other-repo-integration/README.md` | Per-platform SARIF rendering fidelity table | M |
+| 5 | `examples/other-repo-integration/readme.md` | Document codegen step as internal-only / opt-in | S |
+| 6 | `tests/pipeline/readme.md` | Document bash/python/jq requirements | S |
+| 7 | `examples/other-repo-integration/readme.md` | Per-platform SARIF rendering fidelity table | M |
 
 ---
 

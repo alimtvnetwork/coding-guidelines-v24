@@ -178,7 +178,7 @@
 ### Restructure `.lovable/` to single-file convention — 2026-04-19
 - Removed `completed-tasks/`, `pending-tasks/`, `suggestions/`, `strictly-avoid/` directories.
 
-### Created `QUICKSTART.md` at repo root — 2026-04-23
+### Created `quickstart.md` at repo root — 2026-04-23
 - Local + GitHub Actions copy-paste recipes for `linters-cicd/run-all.sh`.
 
 ### Other-repo CI/CD templates (GitLab / Azure / Jenkins) — 2026-04-23

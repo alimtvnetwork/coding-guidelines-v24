@@ -16,7 +16,7 @@
 #   3. Any uppercase-letter .md filename anywhere under spec/
 #      or release-artifacts/. The lowercase-markdown standard
 #      requires every Markdown filename to be lowercase
-#      (e.g. readme.md, not README.md or ReadMe.md).
+#      (e.g. readme.md, not readme.md or ReadMe.md).
 #
 # Usage:
 #   bash linter-scripts/check-forbidden-spec-paths.sh

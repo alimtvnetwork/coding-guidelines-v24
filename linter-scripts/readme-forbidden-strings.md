@@ -24,7 +24,7 @@ python3 linter-scripts/forbidden-strings-summary.py \
 python3 linter-scripts/allowlist-forbidden-string.py \
     --rule STALE-MODULE-PATH \
     --reason "Historical changelog entry; documents the rule itself." \
-    CHANGELOG.md
+    changelog.md
 
 # 4. Re-verify.
 npm run lint:strings

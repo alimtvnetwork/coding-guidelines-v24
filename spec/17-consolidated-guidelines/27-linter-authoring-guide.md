@@ -187,9 +187,9 @@ Two acceptable formats:
 # Each non-blank line is a path that may appear as a link target
 # even though it does not resolve inside spec/.
 
-README.md
+readme.md
 LICENSE
-CHANGELOG.md
+changelog.md
 ```
 
 **Format B — sectioned** (when entries belong to disjoint categories):

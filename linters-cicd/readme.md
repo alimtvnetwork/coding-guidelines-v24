@@ -165,7 +165,7 @@ plugin model documented in
 ### Adding your own rule
 
 There is a complete copy-paste starter kit at
-[`checks/_template/`](./checks/_template/README.md) — a working
+[`checks/_template/`](./checks/_template/readme.md) — a working
 example rule (`TEMPLATE-001` — leftover `var_dump`/`print_r` debug
 calls), fixtures, unit tests, and a 7-step checklist written for
 an autonomous AI agent. It lands a new CI-blocking rule in one

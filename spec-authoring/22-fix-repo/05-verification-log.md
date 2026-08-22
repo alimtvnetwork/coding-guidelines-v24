@@ -1,7 +1,7 @@
 # Phase 6 — Verification log
 
 ## Fixture
-`linters-cicd/tests/fixtures/fix-repo/README.md` — synthetic file containing
+`linters-cicd/tests/fixtures/fix-repo/readme.md` — synthetic file containing
 tokens `v1`, `v15`, `v16`×2, `v17`×3, `v170` plus HTTPS/SSH/scp URL forms.
 
 ## Sandbox

@@ -44,7 +44,7 @@ The two new GIFs (`coding-guidelines-walkthrough.gif`, `install-flow.gif`) and t
 | 9 | Split readme.md into `readme.md` (≤ 400 lines, "what + how to install") and `docs/architecture.md`, `docs/principles.md`, `docs/author.md`. The 1354-line file violates the project's own 300-line rule. | 🔴 |
 | 10 | Auto-generate the Folder Structure tree via `scripts/sync-spec-tree.mjs` and embed it via an HTML comment marker — never hand-edit again. | 🟡 |
 | 11 | The two `<details>` blocks (TOC + author assessment) should expand to anchored sections; collapsed `<details>` hide content from many search engines and from Markdown renderers in IDEs. | 🟡 |
-| 12 | Add a "What's new in v3.55.0" callout that links to `CHANGELOG.md` — refreshed on every release. | 🟢 |
+| 12 | Add a "What's new in v3.55.0" callout that links to `changelog.md` — refreshed on every release. | 🟢 |
 
 ## Visual & accessibility
 
