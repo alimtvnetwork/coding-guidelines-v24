@@ -87,6 +87,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     args = parse_args()
     owner, slug, cdn = load_canonicals(args)
     readme = Path(args.readme)

@@ -103,6 +103,9 @@ def report(prompt_files: list[str], orphans: list[str],
 
 
 def main() -> int:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     args = parse_args()
     index_path = Path(args.index)
     prompts_dir = Path(args.prompts_dir)

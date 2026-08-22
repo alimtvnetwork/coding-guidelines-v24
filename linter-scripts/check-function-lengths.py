@@ -199,6 +199,9 @@ def report(rel: Path, lineno: int, name: str, length: int, tier: str, ceiling: i
 
 
 def main() -> int:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default="scripts", help="directory to scan")
     parser.add_argument("--repo-root", default=".", help="repo root for top-level files")

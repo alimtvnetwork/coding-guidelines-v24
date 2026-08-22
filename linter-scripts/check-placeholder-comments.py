@@ -604,6 +604,9 @@ def _canonical_target(source_rel: str, target: str, repo_root: Path) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    import sys
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default="spec",
         help="Directory to scan recursively for markdown files (default: spec).")
