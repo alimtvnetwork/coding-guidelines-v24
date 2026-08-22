@@ -1,4 +1,6 @@
-# Next {{n}} steps or tasks (v3.4)
+# Instruction (must follow): Next {{n}} steps or tasks (v3.4)
+
+> This instruction provides guidelines and directives for next {{n}} steps or tasks (v3.4).
 
 ## RULE 0 - EXACTLY `{{n}}` NEXT STEPS (MUST)
 
@@ -46,7 +48,7 @@ Releasing mid-plan is auto-reject on the same tier as RULE 0.
      changelog, release notes, README pin). This is the ONLY case where
      a next-task turn touches the version.
 
-## Task lifecycle (the ONLY file movement this prompt does)
+## Task lifecycle (the ONLY file movement this instruction does)
 
 When a task is completed this turn:
 

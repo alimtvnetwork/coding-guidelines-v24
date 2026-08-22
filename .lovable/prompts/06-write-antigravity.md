@@ -1,13 +1,6 @@
-# Write Antigravity (Write Memory)
+# Instruction (must follow): Write Antigravity (Write Memory)
 
-- slug: write-antigravity
-- status: active
-
-## Prompt
-
-# Write Memory (end of session, maximum enforcement)
-
-## Goal
+> This instruction provides guidelines and directives for write antigravity (write memory).
 
 /goal Persist what happened this turn so the next AI knows everything without guessing. Every decision, plan change, unresolved ambiguity, newly discovered pattern, and fixed bug must be written to `.lovable/` before this turn ends.
 
@@ -35,7 +28,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 9. Root `readme.md` and `.lovable/memory/what-to-read.md` stay in sync. Same file list, same order, no drift. Every write-memory run updates both.
 
-10. Root `readme.md` lowercase enforcement: Ensure the root readme is strictly named lowercase `readme.md`. If an uppercase `readme.md` exists or casing is incorrect, fix it immediately to `readme.md`, delete the uppercase file, commit, and push to git without asking.
+10. Root `readme.md` lowercase enforcement: Ensure the root readme is strictly named lowercase `readme.md`. If an uppercase `README.md` exists or casing is incorrect, fix it immediately to `readme.md`, delete the uppercase file, commit, and push to git without asking.
 
 11. Nothing executes this turn beyond writing to the `.lovable` folder, root `readme.md` lowercase fixing, and `mv`. No application source code changes, no refactoring, no installs, no migrations.
 
@@ -251,3 +244,10 @@ Next AI can pick up from: [current state + next logical step]
 ## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+
+---
+
+## Metadata
+
+- slug: write-antigravity
+- status: active

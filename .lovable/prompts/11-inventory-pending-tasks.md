@@ -1,15 +1,8 @@
-# Inventory Pending Tasks (Read-Only Scan & 3-Agent Dispatch Proposal)
+# Instruction (must follow): Inventory Pending Tasks (Read-Only Scan & 3-Agent Dispatch Proposal)
 
-- slug: inventory-pending-tasks
-- status: active
+> This instruction provides guidelines and directives for inventory pending tasks (read-only scan & 3-agent dispatch proposal).
 
-## Prompt
-
-# Inventory Pending Tasks (Read-Only Scan & 3-Agent Dispatch Proposal)
-
-## Goal
-
-Perform a strictly read-only scan of the entire repository, `spec/`, and `.lovable/` directory to compile a comprehensive, deduplicated inventory of every pending task, subtask, unresolved issue, and open requirement structured into Execution Waves.
+/goal Perform a strictly read-only scan of the entire repository, `spec/`, and `.lovable/` directory to compile a comprehensive, deduplicated inventory of every pending task, subtask, unresolved issue, and open requirement structured into Execution Waves.
 
 CRITICAL CONSTRAINT: This prompt is strictly for inventorying, structuring, and sequencing pending work. It MUST NOT execute code modifications, build changes, or launch the execution loop. Batch execution is handled by dedicated execution prompts.
 
@@ -152,7 +145,7 @@ Would you like to start the continuous self-loop to execute and resolve these pe
 
 ---
 
-## Checklist: What This Prompt MUST Do and MUST NOT Do
+## Checklist: What This Instruction MUST Do and MUST NOT Do
 
 ### What to Do (Mandatory):
 
@@ -193,3 +186,10 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 ## Before Writing Code
 
 Read and follow spec folders `spec/02-coding-guidelines/`, `spec/03-error-manage/`, and `spec/04-database-conventions/` before writing any code. Error management must be followed. Code must be DRY.
+
+---
+
+## Metadata
+
+- slug: inventory-pending-tasks
+- status: active

@@ -8,7 +8,7 @@ No variables. No prompts to the user. Discover the current version from disk, bu
 
 ## RULE 0, MUST, NON-NEGOTIABLE
 
-1. Read the canonical version source for THIS repo (discover it: `version.json`, `package.json` "version", or whatever single file the repo treats as the version of record). Do not guess.
+1. Read the canonical version source for THIS repo (discover it: `version.json`, `package.json` `"version"`, or whatever single file the repo treats as the version of record). Do not guess.
 
 2. Bump MINOR only: `MAJOR.MINOR.PATCH` becomes `MAJOR.(MINOR+1).0`. PATCH MUST reset to `0`.
 
@@ -165,7 +165,7 @@ Then link it from the `### Issues` bullet under the changelog entry.
 
 - [ ] No em dashes.
 
-## Prompt maintenance (meta, run once at end)
+## Instruction maintenance (meta, run once at end)
 
 Save this prompt's full body into `.lovable/prompts/XX-release.md` (lowercase):
 

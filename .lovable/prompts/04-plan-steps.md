@@ -1,4 +1,6 @@
-# {{n}} number of steps plan, maximum enforcement (v4.2)
+# Instruction (must follow): {{n}} number of steps plan, maximum enforcement (v4.2)
+
+> This instruction provides guidelines and directives for {{n}} number of steps plan, maximum enforcement (v4.2).
 
 ## RULE 0, step count is law
 

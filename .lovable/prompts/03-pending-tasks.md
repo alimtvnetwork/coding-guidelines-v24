@@ -1,4 +1,6 @@
-# Any pending tasks (full inventory, maximum enforcement)
+# Instruction (must follow): Any pending tasks (full inventory, maximum enforcement)
+
+> This instruction provides guidelines and directives for any pending tasks (full inventory, maximum enforcement).
 
 ## RULE 0, list EVERY pending task or the run is a failure
 

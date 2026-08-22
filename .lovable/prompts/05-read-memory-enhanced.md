@@ -1,11 +1,6 @@
-# Read Memory (Enhanced)
+# Instruction (must follow): Read Memory (Enhanced)
 
-- slug: read-memory-enhanced
-- status: active
-
-## Prompt
-
-# Read Memory (Enhanced)
+> This instruction provides guidelines and directives for read memory (enhanced).
 
 ## Ambiguity Folder Path (Non-Negotiable)
 
@@ -13,8 +8,6 @@
 - Answered questions: `.lovable/ambiguous-questions/02-ambiguity-resolved/01-<slug>.md`
 
 Read both folders in full during Phase 1. Surface open-ambiguity counts and slugs in the Completion Confirmation block. Treat resolved-ambiguity files as binding project decisions; do not re-litigate them. If an open ambiguity is relevant to the incoming task, stop and surface it before doing work. Never guess past it.
-
-## Goal
 
 /goal Before you touch this project, load its identity into your head: who it is, what it forbids, what it has already decided, and what work is in flight.
 
@@ -73,7 +66,7 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
    - Assign sub-agents small, granular folders/files to read rather than asking one agent to read the entire codebase in a single pass.
 
 7. Root `readme.md` lowercase self-healing exception:
-   - If the root readme is uppercase `readme.md` or incorrectly cased, immediately rename it to `readme.md`, commit, and push to git without asking.
+   - If the root readme is uppercase `README.md` or incorrectly cased, immediately rename it to `readme.md`, commit, and push to git without asking.
 
 8. Memory persistence:
    - You are allowed to write to the `.lovable/` directory to enhance project memory after reading.
@@ -100,7 +93,7 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
 1. Read `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`). This is the authoritative reading order for the project and overrides any generic order. Follow every file and order it specifies.
 2. Root `readme.md` lowercase verification and auto-fix:
    - Verify that the root readme file is strictly named lowercase `readme.md`.
-   - If an uppercase `readme.md` exists or the casing is incorrect on disk or in git, immediately rename it to `readme.md`, remove the stale uppercase file, commit the change (`fix: ensure root readme is strictly lowercase readme.md`), and push to git without asking or second-guessing.
+   - If an uppercase `README.md` exists or the casing is incorrect on disk or in git, immediately rename it to `readme.md`, remove the stale uppercase file, commit the change (`fix: ensure root readme is strictly lowercase readme.md`), and push to git without asking or second-guessing.
    - Read the root `readme.md` file for architecture, casing rules, repository layout, and AI entry points.
 
 ### 1.1 Read the Whole `.lovable/` Folder & Pending Tasks Queue
@@ -335,3 +328,10 @@ Then stop. No next-step suggestions, no exploratory questions.
 ## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+
+---
+
+## Metadata
+
+- slug: read-memory-enhanced
+- status: active

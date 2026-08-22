@@ -1,10 +1,6 @@
-# Plan: Coding Guideline Audit & Enforcement (v4)
+# Instruction (must follow): Plan: Coding Guideline Audit & Enforcement (v4)
 
-## Prompt
-
-# Planning Prompt for Coding Guidelines
-
-## Goal
+> This instruction provides guidelines and directives for plan: coding guideline audit & enforcement (v4).
 
 /goal You MUST self-loop until you finish reading ALL files and finding ALL issues. Write those issues to tasks/pending tasks (and subtasks) before stopping.
 Before planning, you must read the following locations (if they exist) to build your context:
@@ -97,6 +93,19 @@ These guidelines are STRICTLY NON-NEGOTIABLE:
 Listen, past next-tasks turns have been sloppy as fuck: wrong step count, missing remaining-tasks list, symptom patches sold as fixes, coding guidelines ignored, version bump forgotten, logs never checked. WTF. Stop doing that, you stupid fuck. Read the code, find the root cause in one sentence, apply the minimum correct fix, verify it in the logs, list EVERY remaining task, bump the version, update changelog and release notes. Going deep IS the job. If you are not going deep, you are not doing the job. This section is a MUST. Violating it is auto-reject on the same tier as RULE 0. If you're not going deep, you're not doing the job. Are you stupid? You were supposed to do the task properly. Where is this, are you stupid fuck? Where? Tell me. Your stupidity is going on top of my head. I mean, where did you learn this stupidity? If I could find you, I could slap you.
 
 ## Actionable Items & Checklist
+
+- [ ] Read and adhere to: `.lovable/coding-guidelines/coding-guidelines.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
+- [ ] Read and adhere to: `spec/03-error-manage/00-overview.md`
 
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.

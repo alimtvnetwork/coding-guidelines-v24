@@ -1,8 +1,10 @@
-# Unified AI Prompt - v4
+# Instruction (must follow): Unified AI Instruction - v4
+
+> This instruction provides guidelines and directives for unified ai instruction - v4.
 
 ## Part 1 - Repository Analysis, Memory Reconstruction, and Implementation Readiness
 
-### Proofread prompt
+### Proofread instruction
 
 Read and synthesize existing repository context from the Lovable memory folder and the full specification set, then produce a reliability risk report before any implementation work begins. Do not implement anything. Only produce a report and specification-side artifacts for memory, suggestions, and planning.
 
@@ -14,9 +16,7 @@ Before producing any report or analysis, the AI must:
 2. Read workflow memory - specifically `.lovable/memory/workflow/01-plan.md` - to understand what has been done and what is pending. This avoids repeated work.
 3. Read all relevant memory files under `.lovable/memory/`, including workflow, suggestions, rules, decisions, history, issue references, and any protocol or process files present.
 
-### Goals
-
-1. Reconstruct project requirements by reading:
+/goal 1. Reconstruct project requirements by reading:
    1. the .lovable memory content
    2. the existing spec files and idea files across all projects
 2. Produce a detailed risk and failure-chance report for handing the current specs to another AI.

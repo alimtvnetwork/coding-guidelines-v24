@@ -1,15 +1,8 @@
-# Clean Artifacts and Git History Purge
+# Instruction (must follow): Clean Artifacts and Git History Purge
 
-- slug: clean-artifacts-and-git-history
-- status: active
+> This instruction provides guidelines and directives for clean artifacts and git history purge.
 
-## Prompt
-
-# Clean Artifacts and Git History Purge
-
-## Goal
-
-Ensure that NO assets, zip files from artifacts, test data, temporary scratch scripts, or extraneous generated code are accidentally committed to or retained in the Git repository.
+/goal Ensure that NO assets, zip files from artifacts, test data, temporary scratch scripts, or extraneous generated code are accidentally committed to or retained in the Git repository.
 
 If any temporary files, artifact dumps, or unwanted generated files are detected in the workspace or git index, the AI MUST NOT silently commit them or guess about their disposition. Instead, execute the following structured protocol:
 
@@ -102,3 +95,10 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 ## Before Writing Code
 
 Read and follow spec folders `spec/02-coding-guidelines/`, `spec/03-error-manage/`, and `spec/04-database-conventions/` before writing any code. Error management must be followed. Code must be DRY.
+
+---
+
+## Metadata
+
+- slug: clean-artifacts-and-git-history
+- status: active

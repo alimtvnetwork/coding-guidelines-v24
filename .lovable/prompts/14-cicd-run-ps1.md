@@ -1,11 +1,6 @@
-# CI/CD Pipeline & Run Script Creation
+# Instruction (must follow): CI/CD Pipeline & Run Script Creation
 
-- slug: cicd-run-ps1
-- status: active
-
-## Prompt
-
-# CI/CD Pipeline & Run Script Creation
+> This instruction provides guidelines and directives for ci/cd pipeline & run script creation.
 
 You are responsible for creating or fixing CI/CD pipelines (e.g., GitHub Actions workflows) and dynamic execution scripts (e.g., `run.ps1`, `run.sh`, `run.config.json`). 
 
@@ -187,3 +182,10 @@ After completing the pipeline and run script creation, you MUST follow this chec
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
+
+---
+
+## Metadata
+
+- slug: cicd-run-ps1
+- status: active
