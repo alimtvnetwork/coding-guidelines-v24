@@ -7,7 +7,7 @@
     },
     {
       "path": "scripts/generate-bundle-installers.mjs",
-      "lines": 1325
+      "lines": 1333
     },
     {
       "path": "linter-scripts/validate-guidelines.py",
@@ -54,12 +54,12 @@
       "lines": 376
     },
     {
-      "path": "scripts/ci-config.mjs",
-      "lines": 353
+      "path": "linter-scripts/suggest-spec-cross-link-fixes.py",
+      "lines": 359
     },
     {
-      "path": "linter-scripts/suggest-spec-cross-link-fixes.py",
-      "lines": 350
+      "path": "scripts/ci-config.mjs",
+      "lines": 353
     },
     {
       "path": "linter-scripts/tests/test_similarity_legend_flag.py",
