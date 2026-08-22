@@ -3,23 +3,23 @@
   "files": [
     {
       "path": "linter-scripts/check-placeholder-comments.py",
-      "lines": 3135
+      "lines": 3145
     },
     {
       "path": "scripts/generate-bundle-installers.mjs",
-      "lines": 1320
+      "lines": 1325
     },
     {
       "path": "linter-scripts/validate-guidelines.py",
-      "lines": 1217
+      "lines": 1218
     },
     {
       "path": "linter-scripts/validate-guidelines.go",
-      "lines": 1021
+      "lines": 1044
     },
     {
       "path": "slides-app/src/App.tsx",
-      "lines": 913
+      "lines": 946
     },
     {
       "path": "scripts/spec-change-report.mjs",
@@ -31,7 +31,7 @@
     },
     {
       "path": "linter-scripts/allowlist-forbidden-string.py",
-      "lines": 457
+      "lines": 460
     },
     {
       "path": "linter-scripts/check-tunable-constants.py",
@@ -39,15 +39,15 @@
     },
     {
       "path": "scripts/sync-version.mjs",
-      "lines": 427
+      "lines": 430
+    },
+    {
+      "path": "linter-scripts/forbidden-strings-summary.py",
+      "lines": 393
     },
     {
       "path": "linter-scripts/tests/test_ignored_deleted_reason_exact_match.py",
       "lines": 393
-    },
-    {
-      "path": "linter-scripts/forbidden-strings-summary.py",
-      "lines": 390
     },
     {
       "path": "linter-scripts/validate-rename-intake.py",
@@ -58,20 +58,16 @@
       "lines": 353
     },
     {
+      "path": "linter-scripts/suggest-spec-cross-link-fixes.py",
+      "lines": 350
+    },
+    {
       "path": "linter-scripts/tests/test_similarity_legend_flag.py",
       "lines": 348
     },
     {
-      "path": "linter-scripts/suggest-spec-cross-link-fixes.py",
-      "lines": 347
-    },
-    {
       "path": "linter-scripts/tests/test_list_changed_files_verbose.py",
       "lines": 344
-    },
-    {
-      "path": "scripts/sync-check.mjs",
-      "lines": 336
     },
     {
       "path": "linter-scripts/tests/test_audit_reason_field_present.py",
@@ -114,40 +110,40 @@
       "lines": 211
     },
     {
+      "path": "slides-app/src/slides/01-table-of-contents.tsx",
+      "lines": 190
+    },
+    {
       "path": "src/components/docs/CommandPalette.tsx",
       "lines": 187
     },
     {
-      "path": "slides-app/src/slides/01-table-of-contents.tsx",
-      "lines": 186
-    },
-    {
       "path": "slides-app/src/slides/17-method-doc-decision-tree.tsx",
-      "lines": 170
+      "lines": 176
     },
     {
       "path": "src/components/docs/GithubSyncBanner.tsx",
       "lines": 166
     },
     {
+      "path": "slides-app/src/components/CodeDiff.tsx",
+      "lines": 165
+    },
+    {
       "path": "src/components/SpecTreeNav.tsx",
       "lines": 164
     },
     {
-      "path": "slides-app/src/components/CodeDiff.tsx",
-      "lines": 162
+      "path": "slides-app/src/components/PrincipleCard.tsx",
+      "lines": 152
     },
     {
-      "path": "slides-app/src/components/PrincipleCard.tsx",
-      "lines": 151
+      "path": "slides-app/src/slides/16-comments-lie-code-does-not.tsx",
+      "lines": 150
     },
     {
       "path": "src/components/docs/SearchDialog.tsx",
       "lines": 149
-    },
-    {
-      "path": "slides-app/src/slides/16-comments-lie-code-does-not.tsx",
-      "lines": 148
     },
     {
       "path": "src/pages/Index.tsx",
@@ -163,10 +159,22 @@
     },
     {
       "path": "slides-app/src/slides/00-title.tsx",
+      "lines": 125
+    },
+    {
+      "path": "slides-app/src/components/LanguageTabs.tsx",
       "lines": 124
     },
     {
       "path": "slides-app/src/components/ActionPanel.tsx",
+      "lines": 123
+    },
+    {
+      "path": "src/components/landing/install/CommandRow.tsx",
+      "lines": 123
+    },
+    {
+      "path": "src/components/dashboard/HealthTrendCard.tsx",
       "lines": 122
     },
     {
@@ -174,24 +182,12 @@
       "lines": 121
     },
     {
-      "path": "src/components/dashboard/HealthTrendCard.tsx",
-      "lines": 121
-    },
-    {
-      "path": "src/components/landing/install/CommandRow.tsx",
-      "lines": 121
-    },
-    {
-      "path": "slides-app/src/components/LanguageTabs.tsx",
-      "lines": 118
-    },
-    {
       "path": "slides-app/src/slides/10-spec-first-workflow.tsx",
       "lines": 115
     },
     {
       "path": "src/components/TableOfContents.tsx",
-      "lines": 115
+      "lines": 114
     },
     {
       "path": "src/components/docs/search/SearchParts.tsx",
@@ -200,6 +196,14 @@
     {
       "path": "slides-app/src/slides/13-must-follow.tsx",
       "lines": 109
+    },
+    {
+      "path": "slides-app/src/components/SlideLayout.tsx",
+      "lines": 107
+    },
+    {
+      "path": "slides-app/src/slides/12-closing.tsx",
+      "lines": 107
     },
     {
       "path": "slides-app/src/slides/18-version-bump-myth-buster.tsx",
@@ -212,14 +216,6 @@
     {
       "path": "src/pages/Dashboard.tsx",
       "lines": 107
-    },
-    {
-      "path": "slides-app/src/components/SlideLayout.tsx",
-      "lines": 106
-    },
-    {
-      "path": "slides-app/src/slides/12-closing.tsx",
-      "lines": 106
     }
   ]
 }
