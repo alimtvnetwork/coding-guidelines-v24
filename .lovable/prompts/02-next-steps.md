@@ -1,7 +1,5 @@
 # Instruction (must follow): Next {{n}} steps or tasks (v3.4)
 
-> This instruction provides guidelines and directives for next {{n}} steps or tasks (v3.4).
-
 ## RULE 0 - EXACTLY `{{n}}` NEXT STEPS (MUST)
 
 `{{n}}` is a positive integer injected at runtime. Deliver EXACTLY `{{n}}`

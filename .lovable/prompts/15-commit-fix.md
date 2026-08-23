@@ -1,7 +1,5 @@
 # Instruction (must follow): Commit Fix
 
-> This instruction provides guidelines and directives for commit fix.
-
 ## 1. Initial State: Clean the Git Tree & Verify Casing First
 
 Before you do anything else, you must ensure the git repository is in a completely clean state.

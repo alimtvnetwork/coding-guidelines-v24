@@ -1,7 +1,5 @@
 # Instruction (must follow): Inventory Pending Tasks (Read-Only Scan & 3-Agent Dispatch Proposal)
 
-> This instruction provides guidelines and directives for inventory pending tasks (read-only scan & 3-agent dispatch proposal).
-
 /goal Perform a strictly read-only scan of the entire repository, `spec/`, and `.lovable/` directory to compile a comprehensive, deduplicated inventory of every pending task, subtask, unresolved issue, and open requirement structured into Execution Waves.
 
 CRITICAL CONSTRAINT: This prompt is strictly for inventorying, structuring, and sequencing pending work. It MUST NOT execute code modifications, build changes, or launch the execution loop. Batch execution is handled by dedicated execution prompts.

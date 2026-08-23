@@ -1,7 +1,5 @@
 # Instruction (must follow): Any pending tasks (full inventory, maximum enforcement)
 
-> This instruction provides guidelines and directives for any pending tasks (full inventory, maximum enforcement).
-
 ## RULE 0, list EVERY pending task or the run is a failure
 
 Scan the whole project. Produce ONE complete list of every task that is not yet done, structured into Execution Waves with the number of steps each one needs to reach done. Missing a single pending task is auto-reject. No cherry-picking. No "and a few more". If nothing is pending, say so explicitly with the folders you checked.

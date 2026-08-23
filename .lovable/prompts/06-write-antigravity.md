@@ -1,7 +1,5 @@
 # Instruction (must follow): Write Antigravity (Write Memory)
 
-> This instruction provides guidelines and directives for write antigravity (write memory).
-
 /goal Persist what happened this turn so the next AI knows everything without guessing. Every decision, plan change, unresolved ambiguity, newly discovered pattern, and fixed bug must be written to `.lovable/` before this turn ends.
 
 /learn Persist all user corrections, resolved setups, directives, learned architectural decisions, and mistakes avoided into `.lovable/memory/learned/01-<slug>.md` and `.lovable/strictly-avoid.md` so Antigravity learns permanently and never repeats past errors.

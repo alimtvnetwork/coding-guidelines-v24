@@ -1,7 +1,5 @@
 # Instruction (must follow): Clean Artifacts and Git History Purge
 
-> This instruction provides guidelines and directives for clean artifacts and git history purge.
-
 /goal Ensure that NO assets, zip files from artifacts, test data, temporary scratch scripts, or extraneous generated code are accidentally committed to or retained in the Git repository.
 
 If any temporary files, artifact dumps, or unwanted generated files are detected in the workspace or git index, the AI MUST NOT silently commit them or guess about their disposition. Instead, execute the following structured protocol:

@@ -1,25 +1,16 @@
-## Instruction
+# Instruction (must follow): Execute Coding Guideline Fixes
 
-> This instruction provides guidelines and directives for this task.
+/goal Apply concrete, surgical fixes for all coding guideline violations listed in the pending tasks. Strictly adhere to all style rules, boolean principles, function size limits (< 8 lines), and type-safety standards without introducing regressions.
 
+/learn Ingest and internalize all coding standards, boolean extraction patterns, and error management rules before applying fixes.
 
-You are to execute the coding‑guideline fixes that were identified by the planning prompt.
-
-## Context Checklist
-
-Before executing, you must read the following locations (if they exist) to build your context:
-- `.lovable/coding-guidelines/coding-guidelines.md` (or `.lovable/coding-guidelines.md`)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` (Style Guidelines)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` (Condition Extraction)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md` (Return statement rules)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md` (Function Guidelines: functions MUST be < 8 lines)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` (Multi-line and struct rules)
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` (Boolean Naming: 'has'/'is' prefixes, inverse naming like isHonest/isDishonest)
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` (Guard clauses)
-- `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md` (Golang Wrapped Booleans)
-- `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` (Anti-Hallucination)
-- `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md` (Common Mistakes)
-- `spec/03-error-manage/00-overview.md` (Error Management)
+Context & References:
+- /learn master cross-language coding guidelines: `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/`
+- /learn braces, nesting, and conditions: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` & `02-conditions-and-extraction.md`
+- /learn function size caps (< 8 lines): `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
+- /learn boolean naming & inverse rules: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` & `12-no-negatives.md`
+- /learn error management & logging: `spec/03-error-manage/00-overview.md`
+- /learn language-specific rules in `spec/02-coding-guidelines/` (Go wrapped booleans: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`)
 
 /goal - Apply concrete fixes for all violations listed in the pending tasks.
 - Enforce non‑negotiable rules:

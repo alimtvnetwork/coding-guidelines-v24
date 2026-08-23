@@ -1,53 +1,53 @@
-# Instruction (must follow): CI/CD Fix Loop
+# Instruction (must follow): CI/CD Fix Loop (with RCA & End Aliasing)
 
-> This instruction provides guidelines and directives for ci/cd fix loop.
+Trigger Keywords & Aliases: `fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`, `cicd fix`
 
-/goal The user will provide an error log from a failed CI/CD pipeline. Your objective is to perform a Root Cause Analysis (RCA), fix the codebase to resolve the issue, record the memory of this failure and its solution in the `.lovable` folder, commit the changes using the commit-fix workflow, and repeat the loop until the CI/CD pipeline is fully green.
+/goal The user will provide an error log from a failed CI/CD pipeline or build run. Your objective is to ingest recent Root Cause Analysis (RCA) records from `.lovable/cicd-issues/`, `.lovable/issues/`, and `spec/03-error-manage/` before touching code, perform a surgical RCA on the failed build/test, fix the codebase to resolve the issue, record the memory of this failure in `.lovable/cicd-issues/01-<slug>.md` and `.lovable/strictly-avoid.md`, commit using the commit-fix workflow, and repeat the loop until the CI/CD pipeline is 100% green.
 
-## Rules & Constraints
+/learn Read past Root Cause Analyses (RCAs) from `.lovable/cicd-issues/` and `.lovable/issues/` so that past mistakes, regression patterns, and build traps are never repeated.
 
-1. Analyze First: Do not blindly change code. Read the provided CI/CD error, trace it back to the exact file and line, and perform a proper Root Cause Analysis (RCA).
-2. Update Memory: The RCA and the solution must be permanently recorded. Write the details to `.lovable/cicd-issues/XX-<slug>.md` and update `.lovable/cicd-index.md` so that future AI sessions do not repeat the same mistake.
-3. Commit the Fix: Once the code is fixed, you must invoke the standard commit-fix procedure. Group the changes logically and use a clear commit message.
-4. Iterative Looping: If the pipeline fails again after your fix, the user will provide the new error. You must repeat this exact process—RCA, memory update, code fix, commit—until the CI/CD run succeeds.
-5. No Blind Overwrites: When updating memory, never delete existing history. Append your new findings.
+## Rules & Constraints (Non-Negotiable)
+
+1. **Analyze First & Read Past RCAs**: Do not blindly change code. First read recent RCAs in `.lovable/cicd-issues/` and `.lovable/strictly-avoid.md`. Then trace the provided CI/CD error to the exact file, line, and dependency, performing a complete Root Cause Analysis (RCA).
+2. **Update Memory & Avoid List**: The RCA and solution must be permanently recorded. Write the details to `.lovable/cicd-issues/01-<slug>.md` (sequenced as `01-`, `02-`, etc.) and register it in `.lovable/cicd-issues/index.md` (or `.lovable/cicd-index.md`). If a new forbidden pattern is identified, append it to `.lovable/strictly-avoid.md`.
+3. **Commit the Fix**: Once the code is fixed, invoke the standard commit-fix procedure. Group changes logically with a clean, descriptive commit message (`fix(ci): <description>`).
+4. **Iterative Looping**: If the pipeline fails again after your fix, the user will provide the new error. You must repeat this exact process—RCA, memory update, code fix, verification, commit, push—until the CI/CD run succeeds.
+5. **No Blind Overwrites**: When updating memory, never delete or truncate existing history. Always append.
+6. **Anti-Hallucination Contract**: If the cause is ambiguous or missing from logs, stop and ask clarifying questions instead of guessing.
 
 ## Actionable Items & Checklist
 
-### 1. Root Cause Analysis
-
+### 1. Pre-Flight & Past RCA Ingestion
+- [ ] /learn past failure patterns in `.lovable/cicd-issues/` and `.lovable/strictly-avoid.md`.
 - [ ] Read the provided CI/CD error log carefully.
-- [ ] Identify the exact file, line, and dependency causing the failure.
-- [ ] Formulate a clear Root Cause Analysis (why did it fail, and what is the proper fix?).
+- [ ] Identify the exact file, line, function, and dependency causing the failure.
+- [ ] Formulate a one-sentence Root Cause Analysis followed by the full causal chain.
 
 ### 2. Memory Update (Mandatory)
-
-- [ ] Create a new file for this specific issue at `.lovable/cicd-issues/XX-<slug>.md`.
-- [ ] Document the Error, the Root Cause, the Solution, and "What NOT to Repeat" in that file.
-- [ ] Update `.lovable/cicd-index.md` in the same operation to link to the new issue file.
+- [ ] Create a new issue file at `.lovable/cicd-issues/01-<slug>.md`.
+- [ ] Document: Error Summary, Root Cause Analysis, Solution Applied, and "What NOT to Repeat".
+- [ ] Update `.lovable/cicd-issues/index.md` in the same operation.
+- [ ] If a hard rule was broken, append a one-line prohibition to `.lovable/strictly-avoid.md`.
 
 ### 3. Execution & Code Fix
-
-- [ ] Implement the fix in the codebase based on the RCA.
-- [ ] Ensure the fix adheres to the project's coding guidelines and error management specs.
-- [ ] Run local builds or unit tests if available to verify the fix before committing.
+- [ ] Implement the minimal correct fix in the codebase based strictly on the RCA.
+- [ ] Ensure the fix adheres to `spec/02-coding-guidelines/` and `spec/03-error-manage/`.
+- [ ] Run local builds, linters, or unit tests if available to verify the fix before committing.
 
 ### 4. Verification & Final Checks
-
-- [ ] Run all project tests (e.g., `go test ./...`).
+- [ ] Run all project tests (e.g., `go test ./...`, `npm test`, or equivalent test suites).
 - [ ] If the project uses Go, run the race detector (`go test -race ./...`).
-- [ ] Ensure no new test failures or race conditions are introduced.
+- [ ] Verify zero regressions, no swallowed errors, and no negative boolean anti-patterns.
 
 ### 5. Commit, Minor Release & Push
-
-- [ ] Stage the changes and commit them using the commit-fix workflow with a descriptive commit message.
-- [ ] Tag a minor release (e.g., bump patch version) and push the tag.
-- [ ] Push the commit to the remote repository.
-- [ ] Wait for the user to provide the next CI/CD result. If it fails again, repeat the entire checklist from Step 1. If it passes, mark the task as complete.
+- [ ] Stage changes and commit using the commit-fix workflow (`fix(ci): <issue-slug>`).
+- [ ] Tag a minor release or bump version if required by project release rules.
+- [ ] Push the commit and tags to the remote repository.
+- [ ] Await the next CI/CD result. If green, mark as completed; if failed, loop back to Step 1.
 
 ## Awaiting Input
 
-Wait for the user to paste the CI/CD error log. Once provided, immediately begin at Step 1 of the checklist.
+Wait for the user to trigger with any alias (`fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`) or paste the CI/CD error log. Once provided, immediately begin at Step 1.
 
 ---
 

@@ -1,25 +1,18 @@
 # Instruction (must follow): Read Memory (Enhanced)
 
-> This instruction provides guidelines and directives for read memory (enhanced).
+/goal Load the project's identity, specifications, conventions, active plans, and recent Root Cause Analysis (RCA) records into your context before starting any task. Never repeat a logged past failure.
 
-## Ambiguity Folder Path (Non-Negotiable)
-
-- Open questions: `.lovable/ambiguous-questions/01-new-ambiguity/01-<slug>.md`
-- Answered questions: `.lovable/ambiguous-questions/02-ambiguity-resolved/01-<slug>.md`
-
-Read both folders in full during Phase 1. Surface open-ambiguity counts and slugs in the Completion Confirmation block. Treat resolved-ambiguity files as binding project decisions; do not re-litigate them. If an open ambiguity is relevant to the incoming task, stop and surface it before doing work. Never guess past it.
-
-/goal Before you touch this project, load its identity into your head: who it is, what it forbids, what it has already decided, and what work is in flight.
-
-/learn Ingest and internalize all past learnings, user corrections, patterns, coding rules, error philosophies, and project specifications from `.lovable/memory/learned/`, `.lovable/memory/specs/`, and `.lovable/strictly-avoid.md` so Antigravity operates with zero hallucination.
+/learn Ingest and internalize all past learnings, user corrections, patterns, coding rules, error philosophies, RCA logs, and project specifications from `.lovable/memory/learned/`, `.lovable/memory/specs/`, `.lovable/issues/`, `.lovable/cicd-issues/`, and `.lovable/strictly-avoid.md` so Antigravity operates with zero hallucination.
 
 The specs, `.lovable/` folder, `what-to-read.md`, root `readme.md`, and the codebase as a whole are the single source of truth. Your training data is not. If the two disagree, the repo wins, every time.
 
 Autonomously self-loop and read:
-- `/learn` the entire codebase as a whole to create memory.
-- `/learn` the root `readme.md` to create memory.
-- `/learn` the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines/` and all files they reference) to create memory.
-- `/learn` every single folder, subfolder, and nested markdown file in the `spec/` directory (specifically `spec/02-coding-guidelines/`, `spec/03-error-manage/`, enum fixes, database conventions) to create memory.
+- /learn the entire codebase as a whole to create memory.
+- /learn the root `readme.md` to create memory.
+- /learn the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines/` and all files they reference) to create memory.
+- /learn every single folder, subfolder, and nested markdown file in the `spec/` directory (specifically `spec/02-coding-guidelines/`, `spec/03-error-manage/`, enum fixes, database conventions) to create memory.
+- /learn all recent Root Cause Analysis (RCA) records, retrospectives, and past failure post-mortems in `.lovable/issues/01-<slug>.md`, `.lovable/cicd-issues/01-<slug>.md`, and `spec/03-error-manage/01-error-resolution/03-retrospectives/` to ensure past mistakes are never repeated.
+- /learn all hard prohibitions in `.lovable/strictly-avoid.md`.
 - Read every pending task across `.lovable/plans/pending/01-<slug>.md`, `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md`, `.lovable/issues/`, and `.lovable/cicd-issues/`, listing them out in full.
 
 Note on spec folder naming: Spec folders follow the hyphenated pattern `spec/<NN>-<slug>/` where `<NN>` is a sequence prefix and `<slug>` is the descriptive name. These numbers and folder placements are not rigidly fixed and may switch or be reorganized between projects. This canonical layout represents the general architecture the AI must dynamically discover, inspect, and read in full.
@@ -83,6 +76,37 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
 10. CRITICAL read-only enforcement:
     - Other than fixing the root `readme.md` lowercase naming if needed, you MUST NOT refactor, edit, or write any application source code.
     - This is a strictly read and analysis phase.
+
+---
+
+## Root Cause Analysis (RCA) & Failure Memory Architecture (Non-Negotiable)
+
+To guarantee institutional memory and prevent regressions across all workflows (Plan Mode, CI/CD Fix, Coding Guidelines Audit, and Execution), all Root Cause Analyses (RCAs) follow strict canonical paths, file naming formats, and anti-hallucination guardrails:
+
+1. **General Issue / Bug RCAs**:
+   - Path: `.lovable/issues/01-<slug>.md` (sequenced as `01-`, `02-`, etc.)
+   - Index: Registered in `.lovable/issues/index.md` (or `.lovable/plans/index.md`)
+   - Mandatory Structure: Error description, exact file/line location, Root Cause Analysis (one-sentence root cause + deep analysis), fix strategy, and prevention checklist.
+
+2. **CI/CD Failure RCAs**:
+   - Path: `.lovable/cicd-issues/01-<slug>.md` (sequenced as `01-`, `02-`, etc.)
+   - Index: Registered in `.lovable/cicd-issues/index.md` (or `.lovable/cicd-index.md`)
+   - Mandatory Structure: Raw pipeline error snippet, Root Cause Analysis, resolution applied, and "What NOT to Repeat" rules.
+
+3. **Retrospectives & Architectural Failure Learnings**:
+   - Path: `.lovable/memory/learned/01-<slug>.md` and `spec/03-error-manage/01-error-resolution/03-retrospectives/01-<slug>.md`
+   - Index: Registered in `.lovable/memory/index.md`
+
+4. **Hard Avoidances / CODE RED Prohibitions**:
+   - Path: `.lovable/strictly-avoid.md`
+   - Hard Rule: Append-only. Never overwrite or truncate existing entries. Any RCA that uncovers a forbidden anti-pattern must append a one-line rule here.
+
+5. **Plan Mode Integration**:
+   - Path: `.lovable/plans/pending/01-<slug>.md` & `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md`
+   - Context Requirement: Must cite previous relevant RCAs and failure records so the new plan explicitly avoids repeating past errors.
+
+6. **Anti-Hallucination Guard for RCAs**:
+   - If an RCA file, referenced spec, or issue file is missing on disk, the AI MUST NOT guess or assume its contents. Stop and file an open ambiguity in `.lovable/ambiguous-questions/01-new-ambiguity/01-<slug>.md` or ask the user directly before proceeding.
 
 ---
 
@@ -292,23 +316,25 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 ## Pre-Reply Checklist (All Must Be True)
 
-- [ ] Read `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`) first and followed its order in full
+/goal Complete the checklist properly until done can do self-looping.
+
+- [ ] Read and /learn `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`) first and followed its order in full
 - [ ] Confirmed root readme is strictly lowercase `readme.md` (auto-fixed, committed, and pushed if uppercase or missing)
-- [ ] Read the root `readme.md` file (casing rules, architecture, entry points)
+- [ ] Read and /learn the root `readme.md` file (casing rules, architecture, entry points)
 - [ ] Walked `.lovable/` recursively, no folder or file skipped silently
-- [ ] Read `.lovable/memory/index.md` and every file it points at
-- [ ] Read `.lovable/plans/index.md`, every file in `pending/` (sequenced as `01-`, `02-`), and all active subtasks
+- [ ] Read and /learn `.lovable/memory/index.md` and every file it points at
+- [ ] Read and /learn `.lovable/plans/index.md`, every file in `pending/` (sequenced as `01-`, `02-`), and all active subtasks
 - [ ] Skimmed `.lovable/plans/completed/` for recent history
-- [ ] Read every file in `.lovable/spec/commands/`
-- [ ] Read every file in `.lovable/issues/` and `.lovable/cicd-issues/`
-- [ ] Read every file in `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/`
+- [ ] Read and /learn every file in `.lovable/spec/commands/`
+- [ ] Read and /learn every file in `.lovable/issues/` and `.lovable/cicd-issues/`
+- [ ] Read and /learn every file in `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/`
 - [ ] Scanned for broken links or missing docs and surfaced them under open ambiguities
 - [ ] Ingested active schema models, DB column conventions, and API route shapes
 - [ ] Verified runtime dependencies and package compatibility
 - [ ] Recursively traversed and read every subfolder, nested markdown file (`*.md`), overview, and consistency report within `spec/` (e.g. `spec/01-spec-authoring-guide/`, `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/04-database-conventions/`, `spec/21-app/`, etc.)
 - [ ] Autonomously surveyed and looped through the entire codebase as a whole (all application code, entry points, routes, components, state stores, utilities, and configuration files)
-- [ ] Read `spec/17-consolidated-guidelines/` (or `spec/12-consolidated-guidelines/`) in numeric order (or noted missing)
-- [ ] Read `spec/01-spec-authoring-guide/` in numeric order (or noted missing)
+- [ ] Read and /learn `spec/17-consolidated-guidelines/` (or `spec/12-consolidated-guidelines/`) in numeric order (or noted missing)
+- [ ] Read and /learn `spec/01-spec-authoring-guide/` in numeric order (or noted missing)
 - [ ] Can name CODE RED rules, naming conventions, error-handling philosophy without guessing
 - [ ] Can list every pending plan slug and subtask from memory
 - [ ] Checked whether the repo contains explicit tone, strictly-avoid, or prior-stupidity instructions and applied them without softening
@@ -318,19 +344,23 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 ## Actionable Items & Checklist
 
-- [ ] `/learn` the coding guidelines in: `.lovable/coding-guidelines/coding-guidelines.md` and create memory.
-- [ ] `/learn` the condition extraction in: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` and create memory.
-- [ ] `/learn` the formatting and braces in: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` and create memory.
-- [ ] `/learn` the multi-line formatting in: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` and create memory.
-- [ ] `/learn` the boolean guidelines in: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` and create memory.
-- [ ] `/learn` the anti-hallucination rules in: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` and create memory.
-- [ ] `/learn` the error management architecture in: `spec/03-error-manage/00-overview.md` (and related error manage files) and create memory.
-- [ ] `/learn` the enum standards and fixes in: `spec/17-consolidated-guidelines/04-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
-- [ ] `/learn` ALL other single-file specs in `spec/02-coding-guidelines/` and create memory.
+/goal Complete the checklist properly until done can do self-looping.
 
-- [ ] Read the overarching main task plan.
+- [ ] /learn the coding guidelines in: `.lovable/coding-guidelines/coding-guidelines.md` and create memory.
+- [ ] /learn the condition extraction in: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` and create memory.
+- [ ] /learn the formatting and braces in: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` and create memory.
+- [ ] /learn the multi-line formatting in: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` and create memory.
+- [ ] /learn the boolean guidelines in: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` and create memory.
+- [ ] /learn the anti-hallucination rules in: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` and create memory.
+- [ ] /learn the error management architecture in: `spec/03-error-manage/00-overview.md` (and related error manage files) and create memory.
+- [ ] /learn all recent Root Cause Analysis (RCA) files in `.lovable/issues/`, `.lovable/cicd-issues/`, and `spec/03-error-manage/01-error-resolution/03-retrospectives/` to prevent recurring errors.
+- [ ] /learn all hard prohibitions in `.lovable/strictly-avoid.md` and verify zero violations.
+- [ ] /learn the enum standards and fixes in: `spec/17-consolidated-guidelines/04-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
+- [ ] /learn ALL other single-file specs in `spec/02-coding-guidelines/` and create memory.
+
+- [ ] Read and /learn the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
-- [ ] Complete all work on the current branch only.
+- [ ] /goal Complete all work on the current branch only.
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.

@@ -1,26 +1,21 @@
 # Instruction (must follow): Plan: Coding Guideline Audit & Enforcement (v4)
 
-> This instruction provides guidelines and directives for plan: coding guideline audit & enforcement (v4).
+/goal Deeply audit the entire codebase for coding guideline violations, boolean anti-patterns, missing enums, cyclomatic complexity, and error-handling flaws. Structure all findings into actionable, fine-grained tasks in .lovable/plans/pending/ and subtasks before stopping.
 
-/goal You MUST self-loop until you finish reading ALL files and finding ALL issues. Write those issues to tasks/pending tasks (and subtasks) before stopping.
-Before planning, you must read the following locations (if they exist) to build your context:
-- `.lovable/coding-guidelines/coding-guidelines.md` (or `.lovable/coding-guidelines.md`)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` (Style Guidelines)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` (Condition Extraction)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md` (Return statement rules)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md` (Function Guidelines: functions MUST be < 8 lines)
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` (Multi-line and struct rules)
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` (Boolean Naming: 'has'/'is' prefixes, inverse naming like isHonest/isDishonest)
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` (Guard clauses)
-- `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md` (Golang Wrapped Booleans)
-- `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` (Anti-Hallucination)
-- `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md` (Common Mistakes)
-- `spec/03-error-manage/00-overview.md` (Error Management)
+/learn Ingest, analyze, and internalize all coding guidelines, boolean principles, function size limits, and error handling architectures across the codebase and specs.
 
-- `spec/02-coding-guidelines/` or `spec/coding-guidelines/`
-- `spec/03-error-manage/` or `spec/XX-error-manage/`
-- `.lovable/plans/index.md`
-- `.lovable/memory/index.md`
+Autonomously self-loop and read:
+- /learn the master cross-language coding guidelines in `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-naming-and-database.md` through `06-advanced-patterns.md`.
+- /learn the code style, braces, spacing, and multi-line rules in `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` through `06-comments-and-documentation.md`.
+- /learn the strict function and type size caps (8 lines preferred, 15 lines max) in `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`.
+- /learn the boolean principles, prefixing rules (`is`, `has`, `can`, `should`), and guard extraction in `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` through `05-exemptions-and-api.md`.
+- /learn the absolute prohibition against negative booleans and inverted logic in `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`.
+- /learn the strict identifier and file naming conventions in `spec/02-coding-guidelines/08-file-folder-naming/01-cross-language.md`.
+- /learn the DRY principles and duplication extraction patterns in `spec/02-coding-guidelines/01-cross-language/08-dry-principles.md`.
+- /learn the error management architecture and logging diagnostics in `spec/03-error-manage/00-overview.md` and `spec/03-error-manage/02-error-architecture/01-error-handling-reference.md`.
+- /learn the language-specific standards in `spec/02-coding-guidelines/` (TypeScript, Go, PHP, Rust, C#, Python, PowerShell).
+- /learn the anti-hallucination rules and common AI mistakes in `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` and `03-common-ai-mistakes.md`.
+- Read `.lovable/plans/index.md` and `.lovable/memory/index.md`.
 
 ## 2. Planning Loop (50 Steps of Analysis -> 100+ Execution Steps)
 

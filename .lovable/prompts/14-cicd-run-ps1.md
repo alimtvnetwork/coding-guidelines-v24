@@ -1,7 +1,5 @@
 # Instruction (must follow): CI/CD Pipeline & Run Script Creation
 
-> This instruction provides guidelines and directives for ci/cd pipeline & run script creation.
-
 You are responsible for creating or fixing CI/CD pipelines (e.g., GitHub Actions workflows) and dynamic execution scripts (e.g., `run.ps1`, `run.sh`, `run.config.json`). 
 
 ## Generic CI/CD & Automation Guidelines Checklist
