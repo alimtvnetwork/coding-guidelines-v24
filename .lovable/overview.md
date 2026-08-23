@@ -7,7 +7,7 @@
 
 ## What Is This Project?
 
-A **specification-driven documentation system** for a multi-language CLI toolchain (`github.com/mahin/movie-cli-v2`). It contains:
+A **specification-driven documentation system** for a multi-language CLI toolchain (`github.com/alimtvnetwork/movie-cli-v2`). It contains:
 
 - **285+ specification files** across 17 modules covering coding guidelines, error management, database architecture, CI/CD, design systems, and more
 - **A React docs viewer app** for browsing, searching, and reading specs
@@ -57,7 +57,7 @@ These are the highest-priority rules. Violations are blocking.
 
 ## Project Namespace
 
-**Always:** `github.com/mahin/movie-cli-v2`  
+**Always:** `github.com/alimtvnetwork/movie-cli-v2`  
 **Never:** Any `v1` reference — that is a bug.
 
 ---

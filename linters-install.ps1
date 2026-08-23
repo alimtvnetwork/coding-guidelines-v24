@@ -71,7 +71,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/linters-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/linters-install.ps1))) -Version v6.13.3 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/linters-install.ps1))) -Version v6.18.0 -Target .\vendor
 #>
 
 param(
@@ -208,7 +208,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 linters-install v6.13.3" -ForegroundColor Cyan
+Write-Host "  📦 linters-install v6.18.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
@@ -274,6 +274,35 @@ function Copy-Mapping {
             continue
         }
         $destPath = Join-Path $Target $pair.Dest
+        if ($pair.Src -eq "version.json") {
+            try {
+                $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json
+                $destData = @{}
+                $prevVersion = "unknown"
+                if (Test-Path $destPath) {
+                    try { 
+                        $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json
+                        if ($destData.codingGuideline -and $destData.codingGuideline.version) {
+                            $prevVersion = $destData.codingGuideline.version
+                        }
+                    } catch {}
+                }
+                $guidelineData = @{
+                    repositoryUrl = if ($srcData.RepoUrl) { $srcData.RepoUrl } else { $srcData.repositoryUrl }
+                    lastCommit = if ($srcData.LastCommitSha) { $srcData.LastCommitSha } elseif ($srcData.git) { $srcData.git.sha } else { "" }
+                    version = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
+                    previousVersion = $prevVersion
+                    description = if ($srcData.Description) { $srcData.Description } else { $srcData.description }
+                    prompts = if ($srcData.Prompts) { $srcData.Prompts } elseif ($srcData.prompts) { $srcData.prompts } else { @() }
+                }
+                $destData | Add-Member -NotePropertyName "codingGuideline" -NotePropertyValue $guidelineData -Force
+                $destData | ConvertTo-Json -Depth 10 | Set-Content -Path $destPath -Encoding UTF8
+                Write-Host "  ✓ $($pair.Src) → $destPath (merged into codingGuideline section)" -ForegroundColor Green
+            } catch {
+                Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)"
+            }
+            continue
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
@@ -463,6 +492,19 @@ function Verify-Install {
     $count = $VerifyPairs.Split(",").Count
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
+function Scaffold-LovableFolders {
+    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues")) {
+        $dp = Join-Path $Target $d
+        if (-not (Test-Path -LiteralPath $dp)) {
+            New-Item -ItemType Directory -Path $dp -Force | Out-Null
+        }
+        if ((Get-ChildItem -LiteralPath $dp -Force | Measure-Object).Count -eq 0) {
+            Set-Content -LiteralPath (Join-Path $dp ".gitkeep") -Value "" -Encoding UTF8
+        }
+    }
+}
+Scaffold-LovableFolders
+
 Verify-Install
 
 function Invoke-FixRepo {

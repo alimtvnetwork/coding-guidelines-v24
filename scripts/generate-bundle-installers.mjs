@@ -373,6 +373,36 @@ extract_mapping() {
       echo "  ? \${src} not found in archive. Skipping."
       continue
     fi
+    if [[ "\${src}" == "version.json" ]]; then
+      # Handle smart merge for version.json -> codingGuideline
+      python3 -c "
+import sys, json, os
+src_file = sys.argv[1]
+dest_file = sys.argv[2]
+try:
+    with open(src_file) as f: src_data = json.load(f)
+except Exception: sys.exit(0)
+dest_data = {}
+prev_version = 'unknown'
+if os.path.exists(dest_file):
+    try:
+        with open(dest_file) as f: dest_data = json.load(f)
+        if 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
+            prev_version = dest_data['codingGuideline']['version']
+    except Exception: pass
+dest_data['codingGuideline'] = {
+    'repositoryUrl': src_data.get('RepoUrl', src_data.get('repositoryUrl', '')),
+    'lastCommit': src_data.get('LastCommitSha', src_data.get('git', {}).get('sha', '')),
+    'version': src_data.get('Version', src_data.get('version', '')),
+    'previousVersion': prev_version,
+    'description': src_data.get('Description', src_data.get('description', '')),
+    'prompts': src_data.get('Prompts', src_data.get('prompts', []))
+}
+with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
+" "\${archive_root}/\${src}" "\${TARGET}/\${dest}"
+      echo "  ✓ \${src} → \${TARGET}/\${dest} (merged into codingGuideline section)"
+      continue
+    fi
     if [[ -d "\${archive_root}/\${src}" ]]; then
       mkdir -p "\${TARGET}/\${dest}"
       cp -R "\${archive_root}/\${src}/." "\${TARGET}/\${dest}/"
@@ -586,6 +616,17 @@ else
 fi
 
 echo ""
+scaffold_lovable_folders() {
+  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues"; do
+    local dp="\${TARGET}/\${d}"
+    mkdir -p "\${dp}"
+    if [ -z "$(ls -A "\${dp}" 2>/dev/null)" ]; then
+      touch "\${dp}/.gitkeep"
+    fi
+  done
+}
+scaffold_lovable_folders
+
 verify_install
 
 confirm_fix_repo() {
@@ -997,6 +1038,35 @@ function Copy-Mapping {
             continue
         }
         $destPath = Join-Path $Target $pair.Dest
+        if ($pair.Src -eq "version.json") {
+            try {
+                $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json
+                $destData = @{}
+                $prevVersion = "unknown"
+                if (Test-Path $destPath) {
+                    try { 
+                        $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json
+                        if ($destData.codingGuideline -and $destData.codingGuideline.version) {
+                            $prevVersion = $destData.codingGuideline.version
+                        }
+                    } catch {}
+                }
+                $guidelineData = @{
+                    repositoryUrl = if ($srcData.RepoUrl) { $srcData.RepoUrl } else { $srcData.repositoryUrl }
+                    lastCommit = if ($srcData.LastCommitSha) { $srcData.LastCommitSha } elseif ($srcData.git) { $srcData.git.sha } else { "" }
+                    version = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
+                    previousVersion = $prevVersion
+                    description = if ($srcData.Description) { $srcData.Description } else { $srcData.description }
+                    prompts = if ($srcData.Prompts) { $srcData.Prompts } elseif ($srcData.prompts) { $srcData.prompts } else { @() }
+                }
+                $destData | Add-Member -NotePropertyName "codingGuideline" -NotePropertyValue $guidelineData -Force
+                $destData | ConvertTo-Json -Depth 10 | Set-Content -Path $destPath -Encoding UTF8
+                Write-Host "  ✓ $($pair.Src) → $destPath (merged into codingGuideline section)" -ForegroundColor Green
+            } catch {
+                Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)"
+            }
+            continue
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
@@ -1186,6 +1256,19 @@ function Verify-Install {
     $count = $VerifyPairs.Split(",").Count
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
+function Scaffold-LovableFolders {
+    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues")) {
+        $dp = Join-Path $Target $d
+        if (-not (Test-Path -LiteralPath $dp)) {
+            New-Item -ItemType Directory -Path $dp -Force | Out-Null
+        }
+        if ((Get-ChildItem -LiteralPath $dp -Force | Measure-Object).Count -eq 0) {
+            Set-Content -LiteralPath (Join-Path $dp ".gitkeep") -Value "" -Encoding UTF8
+        }
+    }
+}
+Scaffold-LovableFolders
+
 Verify-Install
 
 function Invoke-FixRepo {

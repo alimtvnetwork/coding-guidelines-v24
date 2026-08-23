@@ -229,7 +229,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 slides-install v6.13.3"
+echo "  📦 slides-install v6.18.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then
@@ -314,6 +314,36 @@ extract_mapping() {
     dest="${pair#*|}"
     if [[ ! -e "${archive_root}/${src}" ]]; then
       echo "  ? ${src} not found in archive. Skipping."
+      continue
+    fi
+    if [[ "${src}" == "version.json" ]]; then
+      # Handle smart merge for version.json -> codingGuideline
+      python3 -c "
+import sys, json, os
+src_file = sys.argv[1]
+dest_file = sys.argv[2]
+try:
+    with open(src_file) as f: src_data = json.load(f)
+except Exception: sys.exit(0)
+dest_data = {}
+prev_version = 'unknown'
+if os.path.exists(dest_file):
+    try:
+        with open(dest_file) as f: dest_data = json.load(f)
+        if 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
+            prev_version = dest_data['codingGuideline']['version']
+    except Exception: pass
+dest_data['codingGuideline'] = {
+    'repositoryUrl': src_data.get('RepoUrl', src_data.get('repositoryUrl', '')),
+    'lastCommit': src_data.get('LastCommitSha', src_data.get('git', {}).get('sha', '')),
+    'version': src_data.get('Version', src_data.get('version', '')),
+    'previousVersion': prev_version,
+    'description': src_data.get('Description', src_data.get('description', '')),
+    'prompts': src_data.get('Prompts', src_data.get('prompts', []))
+}
+with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
+" "${archive_root}/${src}" "${TARGET}/${dest}"
+      echo "  ✓ ${src} → ${TARGET}/${dest} (merged into codingGuideline section)"
       continue
     fi
     if [[ -d "${archive_root}/${src}" ]]; then
@@ -529,6 +559,17 @@ else
 fi
 
 echo ""
+scaffold_lovable_folders() {
+  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues"; do
+    local dp="${TARGET}/${d}"
+    mkdir -p "${dp}"
+    if [ -z "$(ls -A "${dp}" 2>/dev/null)" ]; then
+      touch "${dp}/.gitkeep"
+    fi
+  done
+}
+scaffold_lovable_folders
+
 verify_install
 
 confirm_fix_repo() {

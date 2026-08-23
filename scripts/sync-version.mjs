@@ -393,11 +393,24 @@ function buildManifest() {
   const rootStats = rootFileStats();
   const gitInfo = readGitInfo();
   const identity = buildPascalIdentity(pkg, gitInfo);
+  
+  let promptsList = [];
+  try {
+    const promptConfig = readJson(resolve(ROOT, "scripts/prompt-sync-config.json"));
+    if (promptConfig.mappings) {
+      promptsList = promptConfig.mappings.map(m => m.target);
+    }
+  } catch (e) {
+    console.warn("Could not read prompt-sync-config.json", e);
+  }
 
   const pascal = buildPascalSection(identity);
+  pascal.Prompts = promptsList;
+  
   if (shouldEmitLegacy() === false) return pascal;
 
   const legacy = buildLegacySection(pkg, existing, gitInfo, folders, rootStats);
+  legacy.prompts = promptsList;
   return { ...pascal, ...legacy };
 }
 

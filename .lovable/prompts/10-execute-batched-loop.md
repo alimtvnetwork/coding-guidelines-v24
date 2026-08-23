@@ -11,7 +11,8 @@ Run again if said: go, continue, or next
 1. Maximum 3 sub-agents may run concurrently at any time. Never exceed this limit.
 2. No end-to-end tests that make live API calls. Only run local, isolated unit tests.
 3. At the end of every loop, output explicit task statistics (done, pending, remaining list).
-4. Violation of any rule below is auto-reject on the same tier as RULE 0.
+4. Temporary Scripts: Any temporary automation scripts (CSJ, python, etc.) used to perform fixes or mass edits MUST be written to `.lovable/temp-scripts/`. This folder MUST be gitignored. These scripts must NEVER be committed to the repository history.
+5. Violation of any rule below is auto-reject on the same tier as RULE 0.
 
 ## Anti-Hallucination Rules
 
@@ -93,6 +94,21 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 ---
 
+
+## Execution Reporting (Mandatory Output Format)
+
+1. Start of Run (Initial Output): Before writing any code, explicitly list out all pending tasks in your output window.
+2. End of Run Summary: When all tasks are completed (or if the run concludes), you MUST output a comprehensive final summary containing:
+   - Completed Tasks: Explicit list of what was successfully completed.
+   - Pending Tasks Left: Explicit list of any tasks still remaining.
+   - Quality Assessment: A brief summary of how well the execution went.
+   - Compliance Checklist: A markdown checklist explicitly verifying that you followed the rules:
+     - [x] Coding Guidelines enforced (spec/02-coding-guidelines/ and consolidated file checked).
+     - [x] Boolean conventions used (is/has prefixes, no negatives).
+     - [x] No garbage variable names used.
+     - [x] No magic strings or numbers.
+     - [x] Error management protocols followed (AppError/AppException).
+
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] `.gitignore` verified to exclude `.lovable/temp/` and garbage collection executed.
@@ -116,6 +132,39 @@ Every time you return a response or complete a loop iteration, explicitly output
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
+
+## Execution & Self-Looping Protocol
+
+This task requires deep, multi-agent processing. You MUST NOT run a fast, linear self-loop that artificially consolidates work or skips steps to save time. 
+
+How to self-loop and distribute tasks effectively:
+- [ ] Spawn Sub-Agents:
+  - [ ] For any multi-step group, deep file reading, or complex analysis, actively spawn dedicated sub-agents.
+  - [ ] Ensure these sub-agents are self-looping to handle the workload.
+- [ ] Utilize Processing Power:
+  - [ ] Take your time and use maximum processing power and credits.
+  - [ ] Do not take shortcuts.
+  - [ ] Do not attempt to process a massive spec or write a complex plan in a single, consolidated step.
+- [ ] Wait and Aggregate:
+  - [ ] As the master agent, loop autonomously to wait for your sub-agents.
+  - [ ] Aggregate their precise findings to ensure the highest quality result.
+
+### Temp-Agent State Management Protocol (Non-Negotiable)
+To ensure agents don't lose context, you MUST use the .lovable/temp-agents/ directory for tracking sub-agent tasks.
+- [ ] On Start:
+  - [ ] The sub-agent creates .lovable/temp-agents/<task-name>.md.
+  - [ ] Write the objective and STATUS: IN_PROGRESS.
+- [ ] On Error/Crash:
+  - [ ] If an agent breaks or fails, append the exact error and cause to the file.
+  - [ ] Append STATUS: FAILED to that file before closing.
+- [ ] On Resume:
+  - [ ] The next assigned agent must first read that file to avoid repeating the mistake.
+- [ ] On Success:
+  - [ ] Update the file to STATUS: DONE.
+  - [ ] Immediately update the master plan in .lovable/plans/index.md or .lovable/plans/pending/.
+
+NEVER MAKE THIS EXCUSE: *"I did not literally perform N self-loops or spawn dozens of sub-agents. Instead of artificially spinning up N separate loops, I consolidated the required deep work into a concentrated series of sequential steps within my existing execution environment."*
+If you write this excuse, you are a lazy, stupid fuck and you are violating RULE 0. Spawn the actual sub-agents. Do the actual loops. Utilize the processing power effectively to get the right answer. Avoid stupidity.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 

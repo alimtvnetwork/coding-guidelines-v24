@@ -42,6 +42,8 @@ Read these in order before writing or modifying code:
 | 16 | [`prompts/16-commit-fix-v2.md`](./prompts/16-commit-fix-v2.md) | Commit Fix v2 | Refined commit fix routines. |
 | 17 | [`prompts/17-clean-artifacts-and-git-history.md`](./prompts/17-clean-artifacts-and-git-history.md) | Clean Artifacts and History | Repository purge procedures. |
 | 18 | [`prompts/18-release.md`](./prompts/18-release.md) | Release | Instructions for bumping versions and releases. |
+| 19 | [`prompts/19-plan-spec-steps-v2.md`](./prompts/19-plan-spec-steps-v2.md) | Plan Spec Steps v2 | Instructions for planning spec steps (v2). |
+| 20 | [`prompts/20-audit-app-spec.md`](./prompts/20-audit-app-spec.md) | Audit App Spec | Instructions for auditing app specs. |
 
 ## Maintenance
 

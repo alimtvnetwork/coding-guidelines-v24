@@ -10,7 +10,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 1. Folder is `.lovable/memory/`, NEVER `.lovable/memories/` or `memories/`. A single file written to `memories/` is an immediate failure.
 
-2. Every new memory file under `.lovable/memory/` MUST be registered in `.lovable/memory/index.md` in the same operation.
+2. Every new memory file under `.lovable/memory/` MUST be registered in `.lovable/memory/00-index.md` in the same operation.
 
 3. Every plan added, moved, or completed MUST update `.lovable/plans/index.md` in the same operation.
 
@@ -30,7 +30,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 11. Nothing executes this turn beyond writing to the `.lovable` folder, root `readme.md` lowercase fixing, and `mv`. No application source code changes, no refactoring, no installs, no migrations.
 
-12. Recent conversation and directive capture: All recent conversations, instructions, user directives, decisions, and session progress MUST be recorded as a spec or conversation summary inside `.lovable/memory/specs/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md` and added to `memory/index.md`.
+12. Recent conversation and directive capture: All recent conversations, instructions, user directives, decisions, and session progress MUST be recorded as a spec or conversation summary inside `.lovable/memory/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md` and added to `memory/index.md`.
 
 13. Pending tasks single source of truth: All active plans and pending tasks are consolidated strictly under `.lovable/plans/pending/01-<slug>.md` (with two-digit sequence prefixes `01-`, `02-`, etc.) and `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md`.
 
@@ -61,8 +61,8 @@ Do not repeat any of that stupidity. Writing memory IS the work this turn. Go de
 
 Walk `.lovable/` recursively. Read all of these if they exist; note missing and create them per the templates in this prompt:
 
-1. `.lovable/memory/index.md` — master memory index
-2. `.lovable/coding-guidelines.md` or `spec/02-coding-guidelines/` — coding rules
+1. `.lovable/memory/00-index.md` — master memory index
+2. `.lovable/coding-guidelines/coding-guidelines.md` or `spec/02-coding-guidelines/` — coding rules
 3. `.lovable/plans/index.md` and every file under `plans/pending/` (`01-<slug>.md`) and `plans/subtasks/`; skim `plans/completed/`
 4. `.lovable/plan.md` if the project uses the single-file variant
 5. `.lovable/suggestions.md` and `.lovable/suggestions/index.md`
@@ -144,7 +144,7 @@ Resolved ambiguities are binding decisions. You will never ask about them again.
 ## Phase 5: Verbatim Spec Capture and Consolidation Rules
 
 1. Verbatim spec capture and learning persistence:
-   - Every sizeable user directive, decision, architectural rule, or spec from the session is saved verbatim under `.lovable/memory/specs/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md`.
+   - Every sizeable user directive, decision, architectural rule, or spec from the session is saved verbatim under `.lovable/memory/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md`.
    - Reference from `memory/index.md`.
    - Reflect in `plan.md` / `plans/index.md` if it changes the roadmap.
    - Never paraphrase. Quote the user.
@@ -173,7 +173,7 @@ Before you reply, check every item:
 
 - [ ] `.lovable/plans/index.md` lists every file in `pending/` and `completed/`?
 - [ ] Every file in `completed/` has `Status: completed` in its frontmatter?
-- [ ] `.lovable/memory/index.md` lists every file in `memory/`?
+- [ ] `.lovable/memory/00-index.md` lists every file in `memory/`?
 - [ ] `01-new-ambiguity/` contains ONLY open questions?
 - [ ] Every file in `02-ambiguity-resolved/` has `## Resolution` + `Status: resolved`?
 - [ ] `cicd-index.md` matches `cicd-issues/` exactly?
@@ -217,7 +217,7 @@ Next AI can pick up from: [current state + next logical step]
 - [ ] `suggestions.md` tracker updated; verbatim captures under `.lovable/suggestions/` with `index.md`
 - [ ] Issues routed correctly: `pending-issues/` / `solved-issues/` / `cicd-issues/`; `cicd-index.md` updated; no duplicates
 - [ ] `strictly-avoid.md` appended (not overwritten) with links to solved files
-- [ ] Verbatim user directives and recent conversations captured under `.lovable/memory/specs/` or `.lovable/memory/learned/`
+- [ ] Verbatim user directives and recent conversations captured under `.lovable/memory/` or `.lovable/memory/learned/`
 - [ ] Confirmed that detailed/important specs were NOT consolidated or shortened
 - [ ] Confirmed root readme is strictly lowercase `readme.md` (auto-fixed and committed/pushed if needed)
 - [ ] Ambiguities moved via `mv` from `01-new-ambiguity/` to `02-ambiguity-resolved/` with `## Resolution` block

@@ -22,7 +22,7 @@ canonical repo manifest defined in
   "Version": "4.24.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines",
-  "RepoUrl": "https://github.com/mahin/coding-guidelines",
+  "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
   "LastCommitSha": "8dc2161da12441992726ccc0e7788f60527bced1",
   "Description": "Cross-language coding standards…",
   "Authors": [

@@ -4,6 +4,13 @@
 
 ---
 
+## v6.18.0 — 2026-08-24 (Installer)
+
+**Scope:** Version bump (`6.17.0` → `6.18.0`). Installer.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v5.132.0 — 2026-07-19 (CI sync auto-fix workflow and drift report artifact)
 
 **Scope:** Version bump (`5.131.0` → `5.132.0`). CI sync auto-fix workflow and drift report artifact.

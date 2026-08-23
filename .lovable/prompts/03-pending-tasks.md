@@ -27,9 +27,9 @@ Walk each of these recursively. Missing = note it, continue.
 2. `.lovable/plans/pending/` (every file with `01-`, `02-` sequence)
 3. `.lovable/plans/subtasks/` (every parent, every subtask file with `Status:` not `completed`)
 4. `.lovable/plan.md` if the project uses the single-file variant, `## Active` / non-`## Completed` sections
-5. `.lovable/memory/index.md` and every file it references, looking for pending work, TODOs, `⏳ Pending`, `🔄 In Progress`, `🚫 Blocked`
+5. `.lovable/memory/00-index.md` and every file it references, looking for pending work, TODOs, `⏳ Pending`, `🔄 In Progress`, `🚫 Blocked`
 6. `.lovable/memory/workflow/` current workflow state
-7. `.lovable/memory/specs/` for verbatim user directives not yet implemented
+7. `.lovable/memory/` for verbatim user directives not yet implemented
 8. `.lovable/spec/commands/` for commands / conventions not yet enforced in code
 9. `.lovable/issues/` and `.lovable/pending-issues/` (every file)
 10. `.lovable/cicd-issues/` and `.lovable/cicd-index.md`

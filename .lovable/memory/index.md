@@ -18,7 +18,7 @@ Updated: 2026-04-27
 - DB Schema: PascalCase naming. PKs are `{TableName}Id` (INTEGER PRIMARY KEY AUTOINCREMENT). No UUIDs.
 - DB Schema Rules 10/11/12: Entity/ref tables need `Description TEXT NULL`; transactional need `Notes`+`Comments TEXT NULL`; all must be nullable, no DEFAULT. Join tables exempt.
 - Workflow: Spec-First (`spec/`) and Issue-First (`03-issues/`).
-- Global Namespace: Always use `github.com/mahin/movie-cli-v2`. Any v1 reference is a bug.
+- Global Namespace: Always use `github.com/alimtvnetwork/movie-cli-v2`. Any v1 reference is a bug.
 - Version sync: bump package.json → `node scripts/sync-version.mjs` → `node scripts/sync-spec-tree.mjs`.
 - Execution: Break complex requests into discrete tasks. Wait for "next" prompt to continue.
 - 🔴 NO-QUESTIONS MODE active (40-task batch from 2026-04-26): never call ask_questions; log ambiguities to `.lovable/question-and-ambiguity/xx-title.md` and update its README index. Resume on explicit "ask questions" signal.
@@ -86,3 +86,4 @@ Updated: 2026-04-27
 - [Session 2026-08-09 Code Red Refactor](mem://sessions/08-2026-08-09-code-red-refactor) — Enum enforcement and boolean fix.
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
 - [Avoid Absolute File System Paths](mem://avoid/03-absolute-file-system-paths) — Do not use file:/// absolute paths.
+- 🔴 Install scripts now dynamically inject a codingGuideline section into the target repository's ersion.json file. The target repo's version.json will receive epositoryUrl, lastCommit, ersion, description, and prompts automatically without overwriting the file. This does not apply to the .lovable/memory directory itself which is intentionally excluded from bundles.

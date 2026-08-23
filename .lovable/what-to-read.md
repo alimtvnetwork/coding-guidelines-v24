@@ -9,7 +9,7 @@
 ## Before any task (always)
 - `version.json`, why: single source of truth for the repository version. New releases MUST bump this file.
 - `.lovable/memory/index.md`, why: core memory index
-- `.lovable/coding-guidelines.md`, why: baseline rules
+- `.lovable/coding-guidelines/coding-guidelines.md`, why: baseline rules
 - `.lovable/plans/index.md`, why: active roadmap
 - `.lovable/strictly-avoid.md`, why: hard constraints
 - `.lovable/question-and-ambiguity/01-new-ambiguity/`, why: open questions

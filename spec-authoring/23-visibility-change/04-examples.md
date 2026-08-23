@@ -67,8 +67,8 @@ $ ./visibility-change.sh
 visibility: public → private (github)
 
 $ ./visibility-change.sh --visible pub
-⚠  About to make mahin/movie-cli-v2 PUBLIC on github.
-   URL: https://github.com/mahin/movie-cli-v2
+⚠  About to make alimtvnetwork/movie-cli-v2 PUBLIC on github.
+   URL: https://github.com/alimtvnetwork/movie-cli-v2
    Type 'yes' to continue, anything else aborts: yes
 visibility: private → public (github)
 

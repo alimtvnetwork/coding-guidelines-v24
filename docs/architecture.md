@@ -1,8 +1,8 @@
 # Architecture, Folder Structure & Decisions
 
-> **Version:** <!-- STAMP:VERSION -->6.17.0<!-- /STAMP:VERSION -->
-> **Updated:** <!-- STAMP:UPDATED -->2026-08-23<!-- /STAMP:UPDATED -->
-> **Stats:** <!-- STAMP:FILES -->706<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->145,425<!-- /STAMP:LINES --> lines).
+> **Version:** <!-- STAMP:VERSION -->6.18.0<!-- /STAMP:VERSION -->
+> **Updated:** <!-- STAMP:UPDATED -->2026-08-25<!-- /STAMP:UPDATED -->
+> **Stats:** <!-- STAMP:FILES -->707<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->146,937<!-- /STAMP:LINES --> lines).
 
 ---
 

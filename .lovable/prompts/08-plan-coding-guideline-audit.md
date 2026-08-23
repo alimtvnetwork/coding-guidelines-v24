@@ -1,5 +1,11 @@
 # Instruction (must follow): Plan: Coding Guideline Audit & Enforcement (v4)
 
+## Variables — Auto-Discovered at Runtime
+
+```text
+N = 150 (Default number of steps the planning AI should take to generate the audit plan. The user may override this when triggering the prompt)
+```
+
 /goal Deeply audit the entire codebase for coding guideline violations, boolean anti-patterns, missing enums, cyclomatic complexity, and error-handling flaws. Structure all findings into actionable, fine-grained tasks in .lovable/plans/pending/ and subtasks before stopping.
 
 /learn Ingest, analyze, and internalize all coding guidelines, boolean principles, function size limits, and error handling architectures across the codebase and specs.
@@ -15,11 +21,13 @@ Autonomously self-loop and read:
 - /learn the error management architecture and logging diagnostics in `spec/03-error-manage/00-overview.md` and `spec/03-error-manage/02-error-architecture/01-error-handling-reference.md`.
 - /learn the language-specific standards in `spec/02-coding-guidelines/` (TypeScript, Go, PHP, Rust, C#, Python, PowerShell).
 - /learn the anti-hallucination rules and common AI mistakes in `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` and `03-common-ai-mistakes.md`.
-- Read `.lovable/plans/index.md` and `.lovable/memory/index.md`.
+- Read `.lovable/plans/index.md` and `.lovable/memory/00-index.md`.
 
-## 2. Planning Loop (50 Steps of Analysis -> 100+ Execution Steps)
+## 2. Planning Loop (Deep N-Step Analysis)
 
-This is not a quick glance. You must deeply read the codebase, looping yourself as much as needed (taking at least 50 steps of internal planning and reading) to uncover:
+This is not a quick glance. You must deeply read the codebase, looping yourself as much as needed (taking exactly `N` steps of internal planning and reading). Each one of these steps MUST be followed properly using your highest processing capacity, proper memory retention of prior files, and careful multi-agent cognitive logic.
+
+You must dedicate this immense processing power to uncover:
 - Every inverted boolean (`!isSuccess`).
 - Every magic string or number.
 - Every swallowed error or generic `catch {}`.
@@ -39,8 +47,8 @@ For every issue found:
 ## 4. Enqueueing Tasks for Sub-Agents
 
 Your final output must be a massively detailed plan stored at `.lovable/plans/pending/01-coding-guideline-fixes.md` and granular subtask files written to `.lovable/plans/subtasks/01-coding-guideline-fixes/01-<subslug>.md`.
-The plan must break the work down so granularly (100 to 200 steps) that 3 concurrent sub-agents can be spawned later to safely execute the fixes.
-- Step 1..100+: Exact file, exact line, exact boolean to rename, exact enum to extract.
+The plan must break the work down so granularly (exactly `N` steps) that 3 concurrent sub-agents can be spawned later to safely execute the fixes.
+- Step 1..N: Exact file, exact line, exact boolean to rename, exact enum to extract. Keep the writing concise but hyper-specific. Do not write too much fluff.
 - Do NOT fix the code in this turn. Your job is ONLY to plan, audit, and enqueue.
 - Anti-Hallucination: If referenced guidelines or files are missing, ask clarifying questions rather than guessing.
 
@@ -57,12 +65,12 @@ This is a standalone file. Follow every rule below without consulting any other 
 ### Top-Notch Anti-Hallucination & Non-Negotiable Guidelines
 
 These guidelines are STRICTLY NON-NEGOTIABLE:
-- **Function Size:** Functions MUST be strictly less than 8 lines.
-- **Style Guideline (Returns):** There MUST be a blank line before every `return` statement.
-- **Boolean Naming:** Every boolean MUST start with `has` or `is`. 
+- Function Size: Functions MUST be strictly less than 8 lines.
+- Style Guideline (Returns): There MUST be a blank line before every `return` statement.
+- Boolean Naming: Every boolean MUST start with `has` or `is`. 
   - NEVER use negative naming like `isNot`.
   - ALWAYS use inverse naming. For example, if something is dishonest, use `isDishonest` instead of `isNotHonest`. Use `isHonest` and `isDishonest`.
-- **Golang Single Return & Wrapped Booleans:** In Go, strictly recommend passing a single return parameter. If multiple are needed, bundle them into a struct. Functions MUST NOT return raw booleans. Instead, return a single generic wrapped `Result` object (bundling `Data`, `AppError`, and status together) containing a status flag with TWO mutually exclusive properties (e.g. `IsSuccess` and `IsFailed`). The user NEVER sets both manually; they are set via an initialization/constructor method (like `NewSuccess()` or `NewFailure()`) where setting one automatically infers the other.
+- Golang Single Return & Wrapped Booleans: In Go, strictly recommend passing a single return parameter. If multiple are needed, bundle them into a struct. Functions MUST NOT return raw booleans. Instead, return a single generic wrapped `Result` object (bundling `Data`, `AppError`, and status together) containing a status flag with TWO mutually exclusive properties (e.g. `IsSuccess` and `IsFailed`). The user NEVER sets both manually; they are set via an initialization/constructor method (like `NewSuccess()` or `NewFailure()`) where setting one automatically infers the other.
   *Fallback definition (in case spec file is missing):*
   ```go
   type Result[T any] struct {
@@ -81,7 +89,7 @@ These guidelines are STRICTLY NON-NEGOTIABLE:
       // handle success
   }
   ```
-- **Anti-Hallucination:** Do not guess the existence of files, enums, or functions. If they are not found in the codebase during your read loops, ask the user.
+- Anti-Hallucination: Do not guess the existence of files, enums, or functions. If they are not found in the codebase during your read loops, ask the user.
 
 ## Must Follow and without negotiation
 
@@ -89,18 +97,18 @@ Listen, past next-tasks turns have been sloppy as fuck: wrong step count, missin
 
 ## Actionable Items & Checklist
 
-- [ ] read and /learn  adhere to: `.lovable/coding-guidelines/coding-guidelines.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
-- [ ] read and /learn  adhere to: `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
-- [ ] read and /learn  adhere to: `spec/03-error-manage/00-overview.md`
+- [ ] /learn `.lovable/coding-guidelines/coding-guidelines.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
+- [ ] /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
+- [ ] /learn `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
+- [ ] /learn `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
+- [ ] /learn `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
+- [ ] /learn `spec/03-error-manage/00-overview.md`
 
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.

@@ -301,6 +301,26 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/coding-guidelines",
+          "dest": ".lovable/coding-guidelines"
+        },
+        {
+          "src": ".lovable/prompts",
+          "dest": ".lovable/prompts"
+        },
+        {
+          "src": ".lovable/plans",
+          "dest": ".lovable/plans"
+        },
+        {
+          "src": ".lovable/issues",
+          "dest": ".lovable/issues"
+        },
+        {
+          "src": ".lovable/cicd-issues",
+          "dest": ".lovable/cicd-issues"
         }
       ],
       "archive": {
