@@ -787,3 +787,10 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 **Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
 
 ---
+
+## v6.19.0 — 2026-08-26 (Markdown)
+
+**Scope:** Version bump (`6.18.2` → `6.19.0`). Markdown.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
