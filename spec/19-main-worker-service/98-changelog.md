@@ -4,6 +4,13 @@
 
 ---
 
+## v6.20.0 — 2026-08-26 (version.json subpackage inheritance, import protocol, what-to-read queue, release architecture map)
+
+**Scope:** Version bump (`6.19.0` → `6.20.0`). version.json subpackage inheritance, import protocol, what-to-read queue, release architecture map.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.18.1 — 2026-08-26 (Sync)
 
 **Scope:** Version bump (`6.18.0` → `6.18.1`). Sync.
@@ -785,6 +792,13 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 
 **Scope:** Version bump (`6.18.1` → `6.18.2`). Add.
 **Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
+## v6.20.0 — 2026-08-26 (version.json)
+
+**Scope:** Version bump (`6.19.0` → `6.20.0`). version.json.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
 
 ---
 
