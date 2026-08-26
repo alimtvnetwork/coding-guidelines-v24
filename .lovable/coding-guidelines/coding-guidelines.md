@@ -1,7 +1,6 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. -->
 <!-- Source: spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->
 <!-- Regenerate with: npm run sync:guidelines -->
-
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
 Version: 1.5.0
@@ -87,7 +86,6 @@ auto-reject on the same tier as RULE 0.
 6. Group imports with one blank line between groups: standard library, third-party, first-party absolute, first-party relative. Never mix groups.
 7. Trailing newline at end of file. No trailing whitespace on any line.
 8. If you feel the need for section-separator blank lines inside a single function, the function is too long. Refactor before adding whitespace.
-9. **[MD-H001] Markdown headings** — every `#` through `######` heading must be preceded by exactly one blank line (unless it is the very first content line of the file) and followed by exactly one blank line. Enforced by `linter-scripts/check-markdown-headings.py`. Auto-fixable with `--fix`.
 
 ---
 
