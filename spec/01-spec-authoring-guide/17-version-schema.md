@@ -61,6 +61,8 @@ and the cross-language Enum standard
 
 | Key             | Type            | Required | Description                                                                 |
 |-----------------|-----------------|----------|-----------------------------------------------------------------------------|
+| `_purpose`      | String          | optional | Human/AI explanation of version.json as the canonical source of truth.      |
+| `_instructions` | Object          | optional | Explicit instructions on how to use/change the version (sync workflow).     |
 | `Version`       | String (SemVer) | yes      | Current shipped semantic version (for example `1.4.2`).                     |
 | `Title`         | String          | yes      | Human-readable application or project title.                                |
 | `RepoSlug`      | String (slug)   | yes      | Repository name in slug form (for example `git-logs-app`).                  |

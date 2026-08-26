@@ -89,7 +89,6 @@ Updated: 2026-04-27
 - [Session 2026-08-09 Code Red Refactor](mem://sessions/08-2026-08-09-code-red-refactor) — Enum enforcement and boolean fix.
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
 - [Avoid Absolute File System Paths](mem://avoid/03-absolute-file-system-paths) — Do not use file:/// absolute paths.
-- 🔴 Install scripts now dynamically inject a codingGuideline section into the target repository's ersion.json file. The target repo's version.json will receive 
-epositoryUrl, lastCommit, ersion, description, and prompts automatically without overwriting the file. This does not apply to the .lovable/memory directory itself which is intentionally excluded from bundles.
-
+- [Version Source of Truth](mem://standards/version-source-of-truth) — `version.json` at repo root is the single canonical source of truth for versions across all languages and tools. Self-explaining metadata (`_purpose`, `_instructions`) embedded directly in the JSON. Changing version is done solely in `version.json` and propagated via `npm run sync`.
 - [Prompt Architect Version Tracking](mem://standards/prompt-architect-version-tracking) — Installers inject a `promptArchitectByRiseupAsia` block into target repo's `version.json` when copying `.lovable/prompts`. Block contains author (Md. Alim Ul Karim, Chief Software Engineer), sourceRepository, installedAt, version, lastCommit, and fileMapping array. Template at `prompt-version.template.json`.
+- 🔴 Install scripts dynamically inject `codingGuideline` and `promptArchitectByRiseupAsia` sections into target repository's `version.json` without overwriting the file. The `.lovable/memory` directory is packaged in bundles and transferred to target repositories during install and update phases so all downstream repos inherit memory standards.

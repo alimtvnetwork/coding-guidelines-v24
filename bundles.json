@@ -35,6 +35,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         }
       ],
       "archive": {
@@ -79,6 +83,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         }
       ],
       "archive": {
@@ -116,6 +124,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         }
       ],
       "archive": {
@@ -173,6 +185,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         }
       ],
       "archive": {
@@ -228,6 +244,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         }
       ],
       "archive": {
@@ -261,6 +281,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         }
       ],
       "archive": {
@@ -301,6 +325,10 @@
         {
           "src": ".lovable/what-to-read.md",
           "dest": ".lovable/what-to-read.md"
+        },
+        {
+          "src": ".lovable/memory",
+          "dest": ".lovable/memory"
         },
         {
           "src": ".lovable/coding-guidelines",

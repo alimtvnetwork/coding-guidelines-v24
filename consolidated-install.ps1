@@ -63,6 +63,7 @@
       spec/17-consolidated-guidelines → spec/17-consolidated-guidelines
       version.json → version.json
       .lovable/what-to-read.md → .lovable/what-to-read.md
+      .lovable/memory → .lovable/memory
       .lovable/coding-guidelines → .lovable/coding-guidelines
       .lovable/prompts → .lovable/prompts
       .lovable/plans → .lovable/plans
@@ -77,7 +78,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1))) -Version v6.18.1 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1))) -Version v6.19.0 -Target .\vendor
 #>
 
 param(
@@ -178,7 +179,7 @@ function Stop-Install {
 
 
 $BundleName = "consolidated"
-$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/coding-guidelines|.lovable/coding-guidelines,.lovable/prompts|.lovable/prompts,.lovable/plans|.lovable/plans,.lovable/issues|.lovable/issues,.lovable/cicd-issues|.lovable/cicd-issues"
+$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory,.lovable/coding-guidelines|.lovable/coding-guidelines,.lovable/prompts|.lovable/prompts,.lovable/plans|.lovable/plans,.lovable/issues|.lovable/issues,.lovable/cicd-issues|.lovable/cicd-issues"
 $ArchiveStableName = "consolidated"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v24"
@@ -214,7 +215,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 consolidated-install v6.18.1" -ForegroundColor Cyan
+Write-Host "  📦 consolidated-install v6.19.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan

@@ -23,6 +23,7 @@
 #   spec/17-consolidated-guidelines → spec/17-consolidated-guidelines
 #   version.json → version.json
 #   .lovable/what-to-read.md → .lovable/what-to-read.md
+#   .lovable/memory → .lovable/memory
 #   .lovable/coding-guidelines → .lovable/coding-guidelines
 #   .lovable/prompts → .lovable/prompts
 #   .lovable/plans → .lovable/plans
@@ -75,7 +76,7 @@ trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
 trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
 
 BUNDLE_NAME="consolidated"
-BUNDLE_MAPPING="spec/01-spec-authoring-guide|spec/01-spec-authoring-guide spec/03-error-manage|spec/03-error-manage spec/17-consolidated-guidelines|spec/17-consolidated-guidelines version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/coding-guidelines|.lovable/coding-guidelines .lovable/prompts|.lovable/prompts .lovable/plans|.lovable/plans .lovable/issues|.lovable/issues .lovable/cicd-issues|.lovable/cicd-issues"
+BUNDLE_MAPPING="spec/01-spec-authoring-guide|spec/01-spec-authoring-guide spec/03-error-manage|spec/03-error-manage spec/17-consolidated-guidelines|spec/17-consolidated-guidelines version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory .lovable/coding-guidelines|.lovable/coding-guidelines .lovable/prompts|.lovable/prompts .lovable/plans|.lovable/plans .lovable/issues|.lovable/issues .lovable/cicd-issues|.lovable/cicd-issues"
 ARCHIVE_STABLE_NAME="consolidated"
 RELEASE_BASE="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 REPO_SLUG="alimtvnetwork/coding-guidelines-v24"
@@ -231,7 +232,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 consolidated-install v6.18.1"
+echo "  📦 consolidated-install v6.19.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then
