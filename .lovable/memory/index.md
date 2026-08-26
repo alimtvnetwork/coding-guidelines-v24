@@ -87,3 +87,5 @@ Updated: 2026-04-27
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
 - [Avoid Absolute File System Paths](mem://avoid/03-absolute-file-system-paths) — Do not use file:/// absolute paths.
 - 🔴 Install scripts now dynamically inject a codingGuideline section into the target repository's ersion.json file. The target repo's version.json will receive epositoryUrl, lastCommit, ersion, description, and prompts automatically without overwriting the file. This does not apply to the .lovable/memory directory itself which is intentionally excluded from bundles.
+
+- [Prompt Architect Version Tracking](mem://standards/prompt-architect-version-tracking) — Installers inject a `promptArchitectByRiseupAsia` block into target repo's `version.json` when copying `.lovable/prompts`. Block contains author (Md. Alim Ul Karim, Chief Software Engineer), sourceRepository, installedAt, version, lastCommit, and fileMapping array. Template at `prompt-version.template.json`.

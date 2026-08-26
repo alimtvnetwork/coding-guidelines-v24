@@ -77,7 +77,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1))) -Version v6.18.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1))) -Version v6.18.1 -Target .\vendor
 #>
 
 param(
@@ -214,7 +214,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 consolidated-install v6.18.0" -ForegroundColor Cyan
+Write-Host "  📦 consolidated-install v6.18.1" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
@@ -312,6 +312,41 @@ function Copy-Mapping {
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
+            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+                # Inject promptArchitectByRiseupAsia tracking block into target version.json
+                $targetVersionFile = Join-Path $Target "version.json"
+                try {
+                    $configFile = Join-Path $root ".." "scripts" "prompt-sync-config.json"
+                    $cfg = if (Test-Path $configFile) { Get-Content -Raw $configFile | ConvertFrom-Json } else { $null }
+                    $fileMapping = if ($cfg -and $cfg.mappings) {
+                        $cfg.mappings | ForEach-Object { @{ source = $_.source; target = $_.target } }
+                    } else { @() }
+                    $srcVerFile = Join-Path $root "version.json"
+                    $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
+                    $paVersion = if ($verData -and $verData.Version) { $verData.Version } elseif ($verData -and $verData.version) { $verData.version } else { "" }
+                    $paCommit = if ($verData -and $verData.LastCommitSha) { $verData.LastCommitSha } else { "" }
+                    $destVersionData = if (Test-Path $targetVersionFile) { 
+                        try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} }
+                    } else { [PSCustomObject]@{} }
+                    $paBlock = @{
+                        author = @{
+                            name  = "Md. Alim Ul Karim"
+                            title = "Chief Software Engineer"
+                            url   = "https://github.com/aukgit/alim.karim.profile"
+                        }
+                        sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"
+                        installedAt      = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
+                        version          = $paVersion
+                        lastCommit       = $paCommit
+                        fileMapping      = $fileMapping
+                    }
+                    $destVersionData | Add-Member -NotePropertyName "promptArchitectByRiseupAsia" -NotePropertyValue $paBlock -Force
+                    $destVersionData | ConvertTo-Json -Depth 10 | Set-Content -Path $targetVersionFile -Encoding UTF8
+                    Write-Host "  ✓ promptArchitectByRiseupAsia block injected into $targetVersionFile" -ForegroundColor Green
+                } catch {
+                    Write-Warning "  ⚠️  failed to inject promptArchitectByRiseupAsia: $($_.Exception.Message)"
+                }
+            }
         } else {
             $parentDir = Split-Path $destPath -Parent
             if (-not (Test-Path $parentDir)) {

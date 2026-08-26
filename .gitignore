@@ -60,3 +60,5 @@ release-artifacts/checksums.txt
 __pycache__/
 *.pyc
 *.pyo
+
+.lovable/temp-scripts/

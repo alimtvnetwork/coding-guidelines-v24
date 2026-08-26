@@ -229,7 +229,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 slides-install v6.18.0"
+echo "  📦 slides-install v6.18.1"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then
@@ -349,6 +349,49 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
     if [[ -d "${archive_root}/${src}" ]]; then
       mkdir -p "${TARGET}/${dest}"
       cp -R "${archive_root}/${src}/." "${TARGET}/${dest}/"
+      if [[ "${src}" == ".lovable/prompts" || "${src}" == ".lovable/prompts/" ]]; then
+        # Inject promptArchitectByRiseupAsia tracking block into target version.json
+        local target_version_file="${TARGET}/version.json"
+        python3 -c "
+import sys, json, os, datetime
+src_dir = sys.argv[1]
+archive_root = sys.argv[2]
+dest_file = sys.argv[3]
+config_file = sys.argv[4]
+try:
+    with open(config_file) as f: cfg = json.load(f)
+except Exception: cfg = {}
+mappings = cfg.get('mappings', [])
+file_mapping = [{'source': m['source'], 'target': m['target']} for m in mappings]
+src_ver_file = os.path.join(archive_root, 'version.json')
+version = ''
+last_commit = ''
+try:
+    with open(src_ver_file) as f: vdata = json.load(f)
+    version = vdata.get('Version', vdata.get('version', ''))
+    last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
+except Exception: pass
+dest_data = {}
+if os.path.exists(dest_file):
+    try:
+        with open(dest_file) as f: dest_data = json.load(f)
+    except Exception: pass
+dest_data['promptArchitectByRiseupAsia'] = {
+    'author': {
+        'name': 'Md. Alim Ul Karim',
+        'title': 'Chief Software Engineer',
+        'url': 'https://github.com/aukgit/alim.karim.profile'
+    },
+    'sourceRepository': 'https://github.com/alimtvnetwork/prompt-architect-v2',
+    'installedAt': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'version': version,
+    'lastCommit': last_commit,
+    'fileMapping': file_mapping
+}
+with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
+" "${archive_root}/${src}" "${archive_root}" "${target_version_file}" "${archive_root}/../scripts/prompt-sync-config.json" 2>/dev/null || true
+        echo "  ✓ promptArchitectByRiseupAsia block injected into ${target_version_file}"
+      fi
     else
       mkdir -p "$(dirname "${TARGET}/${dest}")"
       cp -p "${archive_root}/${src}" "${TARGET}/${dest}"

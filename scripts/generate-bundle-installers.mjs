@@ -406,6 +406,49 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
     if [[ -d "\${archive_root}/\${src}" ]]; then
       mkdir -p "\${TARGET}/\${dest}"
       cp -R "\${archive_root}/\${src}/." "\${TARGET}/\${dest}/"
+      if [[ "\${src}" == ".lovable/prompts" || "\${src}" == ".lovable/prompts/" ]]; then
+        # Inject promptArchitectByRiseupAsia tracking block into target version.json
+        local target_version_file="\${TARGET}/version.json"
+        python3 -c "
+import sys, json, os, datetime
+src_dir = sys.argv[1]
+archive_root = sys.argv[2]
+dest_file = sys.argv[3]
+config_file = sys.argv[4]
+try:
+    with open(config_file) as f: cfg = json.load(f)
+except Exception: cfg = {}
+mappings = cfg.get('mappings', [])
+file_mapping = [{'source': m['source'], 'target': m['target']} for m in mappings]
+src_ver_file = os.path.join(archive_root, 'version.json')
+version = ''
+last_commit = ''
+try:
+    with open(src_ver_file) as f: vdata = json.load(f)
+    version = vdata.get('Version', vdata.get('version', ''))
+    last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
+except Exception: pass
+dest_data = {}
+if os.path.exists(dest_file):
+    try:
+        with open(dest_file) as f: dest_data = json.load(f)
+    except Exception: pass
+dest_data['promptArchitectByRiseupAsia'] = {
+    'author': {
+        'name': 'Md. Alim Ul Karim',
+        'title': 'Chief Software Engineer',
+        'url': 'https://github.com/aukgit/alim.karim.profile'
+    },
+    'sourceRepository': 'https://github.com/alimtvnetwork/prompt-architect-v2',
+    'installedAt': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'version': version,
+    'lastCommit': last_commit,
+    'fileMapping': file_mapping
+}
+with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
+" "\${archive_root}/\${src}" "\${archive_root}" "\${target_version_file}" "\${archive_root}/../scripts/prompt-sync-config.json" 2>/dev/null || true
+        echo "  ✓ promptArchitectByRiseupAsia block injected into \${target_version_file}"
+      fi
     else
       mkdir -p "\$(dirname "\${TARGET}/\${dest}")"
       cp -p "\${archive_root}/\${src}" "\${TARGET}/\${dest}"
@@ -1070,6 +1113,41 @@ function Copy-Mapping {
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
+            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+                # Inject promptArchitectByRiseupAsia tracking block into target version.json
+                $targetVersionFile = Join-Path $Target "version.json"
+                try {
+                    $configFile = Join-Path $root ".." "scripts" "prompt-sync-config.json"
+                    $cfg = if (Test-Path $configFile) { Get-Content -Raw $configFile | ConvertFrom-Json } else { $null }
+                    $fileMapping = if ($cfg -and $cfg.mappings) {
+                        $cfg.mappings | ForEach-Object { @{ source = $_.source; target = $_.target } }
+                    } else { @() }
+                    $srcVerFile = Join-Path $root "version.json"
+                    $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
+                    $paVersion = if ($verData -and $verData.Version) { $verData.Version } elseif ($verData -and $verData.version) { $verData.version } else { "" }
+                    $paCommit = if ($verData -and $verData.LastCommitSha) { $verData.LastCommitSha } else { "" }
+                    $destVersionData = if (Test-Path $targetVersionFile) { 
+                        try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} }
+                    } else { [PSCustomObject]@{} }
+                    $paBlock = @{
+                        author = @{
+                            name  = "Md. Alim Ul Karim"
+                            title = "Chief Software Engineer"
+                            url   = "https://github.com/aukgit/alim.karim.profile"
+                        }
+                        sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"
+                        installedAt      = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
+                        version          = $paVersion
+                        lastCommit       = $paCommit
+                        fileMapping      = $fileMapping
+                    }
+                    $destVersionData | Add-Member -NotePropertyName "promptArchitectByRiseupAsia" -NotePropertyValue $paBlock -Force
+                    $destVersionData | ConvertTo-Json -Depth 10 | Set-Content -Path $targetVersionFile -Encoding UTF8
+                    Write-Host "  ✓ promptArchitectByRiseupAsia block injected into $targetVersionFile" -ForegroundColor Green
+                } catch {
+                    Write-Warning "  ⚠️  failed to inject promptArchitectByRiseupAsia: $($_.Exception.Message)"
+                }
+            }
         } else {
             $parentDir = Split-Path $destPath -Parent
             if (-not (Test-Path $parentDir)) {

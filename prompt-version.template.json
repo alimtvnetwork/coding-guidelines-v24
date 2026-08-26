@@ -1,0 +1,20 @@
+{
+  "_comment": "This template documents the promptArchitectByRiseupAsia block that installers inject into version.json. Copy this structure into your repository version.json.",
+  "promptArchitectByRiseupAsia": {
+    "author": {
+      "name": "Md. Alim Ul Karim",
+      "title": "Chief Software Engineer",
+      "url": "https://github.com/aukgit/alim.karim.profile"
+    },
+    "sourceRepository": "https://github.com/alimtvnetwork/prompt-architect-v2",
+    "installedAt": "<ISO-8601 timestamp set by installer>",
+    "version": "<semver from version.json at install time>",
+    "lastCommit": "<git sha at install time>",
+    "fileMapping": [
+      {
+        "source": "<source path inside prompt-architect-v2 repo>",
+        "target": "<destination path in target repository>"
+      }
+    ]
+  }
+}
