@@ -20,6 +20,7 @@ What we **can** instrument is the **in-app docs sidebar** rendered by `src/pages
 ## What was done
 
 ### 1. Diagnostics ring buffer
+
 - New module `src/lib/treeDiagnostics.ts`:
   - Bounded ring buffer (default 200 entries) to avoid memory growth.
   - Categorised log entries prefixed `[tree:<category>]` in console.
@@ -27,11 +28,13 @@ What we **can** instrument is the **in-app docs sidebar** rendered by `src/pages
   - Toggle via `localStorage["lovable.tree-diagnostics.enabled"] = "1"` (also toggleable from the panel).
 
 ### 2. Instrumentation points
+
 - `src/hooks/useSpecData.ts` — spec-tree load lifecycle (`tree:load.start`, `tree:load.success`, `tree:load.error`, file count, root folder names).
 - `src/components/docs/DocsSidebar.tsx` — render counts, expand/collapse refresh actions, mount/unmount.
 - `src/components/SpecTreeNav.tsx` — node renders, expansion-state changes, missing-children edge cases.
 
 ### 3. Floating diagnostics panel
+
 - New component `src/components/docs/TreeDiagnosticsPanel.tsx`:
   - Floating button (bottom-right) shown only when diagnostics are enabled.
   - Panel: live log stream, Copy logs, Clear, Disable buttons.

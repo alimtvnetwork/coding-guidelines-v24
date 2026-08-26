@@ -169,12 +169,15 @@ fi
 Never use `cd` in CI steps to change directories. Use the `working-directory` key instead:
 
 ```yaml
+
 # ✅ Correct
+
 - name: Run lint
   working-directory: my-module
   run: go vet ./...
 
 # ❌ Wrong
+
 - name: Run lint
   run: cd my-module && go vet ./...
 ```

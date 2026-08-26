@@ -91,7 +91,9 @@ Maps cross-language coding guidelines to **Ruff** rules (primary), with **Pylint
 ## Type Checking — mypy Configuration
 
 ```toml
+
 # pyproject.toml — [tool.mypy]
+
 [tool.mypy]
 python_version = "3.12"
 strict = true
@@ -160,13 +162,17 @@ indent-style = "space"
 ### CI Commands
 
 ```bash
+
 # Lint
+
 ruff check . --output-format=github
 
 # Format check
+
 ruff format --check .
 
 # Type check
+
 mypy . --strict
 ```
 

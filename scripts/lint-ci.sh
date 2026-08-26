@@ -156,6 +156,7 @@ STEPS=(
   "Self-test check-file-sizes (baseline classifier + waivers)|python3 linter-scripts/tests/check-file-sizes.test.py"
   "Run newline-concept Python linter|python3 linter-scripts/check-newline-styling.py"
   "Run newline-concept MJS linter|node linter-scripts/check-newline-styling.mjs"
+  "Markdown heading blank-line linter (MD-H001)|py -3 linter-scripts/check-markdown-headings.py ."
 )
 
 if [[ "$LIST_ONLY" == "1" ]]; then

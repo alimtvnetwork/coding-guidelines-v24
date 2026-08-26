@@ -20,6 +20,7 @@
 ## 1. Findings — BLOCKER (12)
 
 ### F-B-01 · Worker registration bootstrap is undefined
+
 - **Location:** `06-core-api-endpoints.md` §2.5 (`POST /API/V1/Workers/Register`); `05-auth-and-2fa.md` §2.3.
 - **Quote:** *"OAuth client-credentials per Worker, secrets stored via Seedable-Config (encrypted at rest)."*
 - **Gap:** How does a brand-new Worker obtain its client_id/client_secret **before** Seedable-Config can deliver them? Chicken-and-egg.
@@ -27,58 +28,69 @@
 - **Fix:** Define a one-time bootstrap token, its lifetime, who issues it, and the rotation rule.
 
 ### F-B-02 · `WorkerNode.WorkerNodeEndpoint` is required NOT NULL but registration payload is unspecified
+
 - **Location:** `03-main-db-schema.md` §2.1 vs `06-core-api-endpoints.md` §2.5.
 - **Gap:** No request-body schema for `POST /API/V1/Workers/Register`. Required fields, validation rules, response shape — all missing.
 - **Fix:** Add a §3.x reference payload mirroring §3.1 style.
 
 ### F-B-03 · `WorkerNodeIdentity` source is undefined
+
 - **Location:** `03-main-db-schema.md` §2.1.
 - **Quote:** *"Unique stable identifier (e.g. machine fingerprint)"*
 - **Gap:** "e.g." is not a contract. No algorithm, length, character set, or collision policy.
 - **Fix:** Pick one (`UUIDv7` of MAC+hostname hashed, or operator-set string), specify length and regex.
 
 ### F-B-04 · JWT public-key distribution mechanism is undefined
+
 - **Location:** `05-auth-and-2fa.md` §2.2.
 - **Quote:** *"each Worker holds Main's public key (rotatable via Seedable-Config)."*
 - **Gap:** Where is the key fetched from? At what URL? With what auth? With what cache TTL? What happens during rotation overlap (workers must accept old + new key for some window)?
 - **Fix:** Define a JWKS endpoint (path, auth, cache-control), and a key-rotation overlap window.
 
 ### F-B-05 · `WorkerJwt` storage location contradicts itself
+
 - **Location:** `05-auth-and-2fa.md` §6 step 5 vs `06-core-api-endpoints.md` §3.2 (`Resolve` returns `WorkerJwt` in JSON body to the browser).
 - **Quote:** *"React stores JWT in memory (NOT localStorage)"* — but the JSON-body delivery means the JWT is exposed to JS, defeating the cookie-only HTTPOnly protection.
 - **Gap:** No threat model section. No XSS mitigation. No CSP requirement.
 - **Fix:** State explicitly that JWT-in-memory is accepted XSS exposure, OR switch to HTTPOnly cookie-bearer for Worker JWT.
 
 ### F-B-06 · Request body for `POST /API/V1/Workers/All/Update` and `/Workers/{id}/Update` is missing
+
 - **Location:** `06-core-api-endpoints.md` §2.5.
 - **Gap:** No schema for which version/zip to push, no idempotency semantics for fan-out, no response shape (the consistency report mentions 207 Multi-Status but no payload example).
 - **Fix:** Add request + 207 response payloads in §3.
 
 ### F-B-07 · `WorkerSelectionEvent` has no Strategy column for `LeastLoaded` audit
+
 - **Location:** `03-main-db-schema.md` §2.8 lists `WorkerSelectionStrategyId` ✅ but no `EligibleCandidateCount`, no `RejectedReasonCode`. Audit cannot answer "why was W3 picked over W5?"
 - **Fix:** Add `EligibleCount INTEGER NOT NULL` and `Notes TEXT NULL` (already present, but make the convention explicit).
 
 ### F-B-08 · No spec exists for `Settings.UpdateSchedule` persistence
+
 - **Location:** `06-core-api-endpoints.md` §4 defines the JSON shape but no table appears in `03-main-db-schema.md`.
 - **Gap:** Where does this row live? Single-row config table? Seedable-Config? Cache?
 - **Fix:** Add `MainSetting` table to schema or explicitly delegate to Seedable-Config with the key path.
 
 ### F-B-09 · `EnumPage` enumeration is referenced but never enumerated
+
 - **Location:** `07-role-based-dashboards.md` (referenced by `05-auth-and-2fa.md` §8 and AC-8).
 - **Gap:** I read the spec — §1, §5 of `07-` reference the pattern but the file does not list the actual `EnumPage` values (`PowerAdminPage`, `AdminPage`, `MemberPage`, `WorkersPage`, …). A dumb AI cannot generate the seed data.
 - **Fix:** Add a definitive enum table (Code, Label, Description, default access matrix per role).
 
 ### F-B-10 · `RolePageAccess` table appears in ERD but not in schema spec
+
 - **Location:** `diagrams/erd-main-db.mmd` mentions it (per audit-step-3 prep); `03-main-db-schema.md` §2 does not list it.
 - **Gap:** Implementer cannot create a migration without column list.
 - **Fix:** Add §2.10 `RolePageAccess` (RoleId, EnumPageId, IsAllowed, Description).
 
 ### F-B-11 · `User` table is missing `UserPasswordAlgorithmId`, `Has2FAEnabled`, `TotpSecret`, `TotpRecoveryHash` columns
+
 - **Location:** `03-main-db-schema.md` §2.4 vs `05-auth-and-2fa.md` §3, §4.
 - **Quote:** Spec text references `User.Has2FAEnabled` and `User.TotpSecret` as if they exist; schema defines neither.
 - **Fix:** Reconcile — add columns or move to a `UserAuth` side-table.
 
 ### F-B-12 · No spec for the React-frontend → Main session-cookie domain / SameSite / cross-subdomain story
+
 - **Location:** Implied by `01-architecture.md` topology but never written.
 - **Gap:** When Worker lives at `w3.alimkarim.com` and Main at `recalltime.com`, cookies set by Main do NOT reach Worker. Spec assumes JWT covers it but never says so.
 - **Fix:** Add a one-paragraph "cookie scope vs JWT scope" in `05-auth-and-2fa.md` with explicit domain rules.
@@ -88,52 +100,62 @@
 ## 2. Findings — MAJOR (10)
 
 ### F-M-01 · "Most fields Non-Nullable" is not a schema
+
 - **Location:** `06-core-api-endpoints.md` §3.1 caption.
 - **Gap:** Which fields exactly? Min/max length? Format for `PhoneNumber`, `Calendar`?
 - **Fix:** Per-field validation table.
 
 ### F-M-02 · No idempotency-key uniqueness window defined
+
 - **Location:** `06-core-api-endpoints.md` §1.
 - **Quote:** *"`X-Idempotency-Key` mandatory on POST/PUT/PATCH"*
 - **Gap:** Storage TTL? Per-user or global? What status code for replay?
 - **Fix:** Add §1.x with TTL (24h typical) and 409 Conflict on conflicting body.
 
 ### F-M-03 · `LeastLoaded` tiebreaker is by registration date, ignores capacity headroom
+
 - **Location:** `04-worker-routing.md` §1.2.
 - **Gap:** Two workers with equal load get the older one — guarantees skew over time when capacity differs.
 - **Fix:** Tiebreaker by `(MaxCompaniesPerWorker - assignedCount)` desc, then registration date.
 
 ### F-M-04 · Heartbeat endpoint has no payload contract
+
 - **Location:** `06-core-api-endpoints.md` §2.5.
 - **Gap:** Should heartbeat report load? Version? Disk? Spec says nothing.
 - **Fix:** Define payload (LoadAvg, AssignedCompanyCount, CurrentVersion) — these feed `LeastLoaded` and `WorkerVersion`.
 
 ### F-M-05 · `MainWorker.Routing.HeartbeatWindowSeconds` default 60s but `× 3` rule for offline is in §3.2
+
 - **Location:** `04-worker-routing.md` §1.4 vs §3.2.
 - **Gap:** Two configs, one derived. What if operator sets `OfflineMultiplier`? Not configurable, hard-coded.
 - **Fix:** Promote `OfflineMultiplier` to its own Seedable-Config key with default 3.
 
 ### F-M-06 · 2FA backup-code consumption is unspecified
+
 - **Location:** `05-auth-and-2fa.md` §4.
 - **Quote:** *"generate 10 single-use codes at enrollment. Store hashed."*
 - **Gap:** What happens at 0 remaining? Auto-regenerate? Force re-enroll?
 - **Fix:** State the policy and the warning thresholds (≤3 remaining → email warning).
 
 ### F-M-07 · `PasswordResetRequest` has no anti-enumeration requirement
+
 - **Location:** `06-core-api-endpoints.md` §2.1.
 - **Gap:** Must always return 202, never reveal whether email exists.
 - **Fix:** Add to `05-auth-and-2fa.md` §5 anti-patterns.
 
 ### F-M-08 · Sign-in 2FA challenge `ChallengeId` lifetime undefined
+
 - **Location:** `05-auth-and-2fa.md` §6.
 - **Fix:** Define TTL (5 min standard) and one-time-use rule.
 
 ### F-M-09 · `RefreshWorkerToken` endpoint has no rate limit beyond auth-group default
+
 - **Location:** `06-core-api-endpoints.md` §6.
 - **Gap:** A misbehaving SPA could refresh every second. Need stricter per-user cap.
 - **Fix:** 60/min/user for refresh.
 
 ### F-M-10 · `Settings/EndpointAuth` PATCH semantics undefined
+
 - **Location:** `06-core-api-endpoints.md` §2.7.
 - **Gap:** Replace-all? Patch-merge? What about an unknown `EndpointPathPattern`?
 - **Fix:** Specify upsert-by-pattern and 422 on unknown pattern.

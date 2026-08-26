@@ -85,6 +85,7 @@ This is the **standalone consolidated reference** for the `.lovable/` folder str
 Every memory file follows this template:
 
 ```markdown
+
 # Memory: [descriptive-title]
 
 **Category:** architecture | constraints | features | issues | patterns | processes | project | standards | style | workflow  
@@ -126,13 +127,16 @@ Full content — rules, decisions, patterns, constraints.
 The `memory/index.md` has two sections:
 
 ```markdown
+
 # Project Memory
 
 ## Core
+
 - 🔴 CODE RED: [critical rule — one line, <150 chars]
 - [universal rule that applies to every action]
 
 ## Memories
+
 - [Descriptive title](mem://category/filename) — One-line description
 ```
 
@@ -177,6 +181,7 @@ The `memory/index.md` has two sections:
 ### Task File Template
 
 ```markdown
+
 # Pending Task: [Title]
 
 **Priority:** High | Medium | Low  
@@ -214,6 +219,7 @@ What needs to be done.
 ### Issue File Template
 
 ```markdown
+
 # Issue: [Title]
 
 **Severity:** Critical | High | Medium | Low  
@@ -250,6 +256,7 @@ Quick-reference list of all prohibitions. One line per rule, linking to the deta
 ### Detail Files (`strictly-avoid/{rule-name}.md`)
 
 ```markdown
+
 # Strictly Avoid: [Rule Title]
 
 **Rule:** One-sentence prohibition.

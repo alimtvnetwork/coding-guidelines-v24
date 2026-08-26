@@ -34,6 +34,7 @@ Cross-language coding standards and conventions that apply to **all languages** 
 ## Categories
 
 ### 🎨 Code Style & Formatting
+
 Rules for braces, spacing, blank lines, function size, struct size, chaining, and newlines.
 
 | # | File | Description |
@@ -42,6 +43,7 @@ Rules for braces, spacing, blank lines, function size, struct size, chaining, an
 | 21 | `21-newline-styling-examples.md` | Before/after newline examples, Go newline constants |
 
 ### 📛 Naming Conventions
+
 Variable, function, boolean, key, and database naming rules.
 
 | # | File | Description |
@@ -53,6 +55,7 @@ Variable, function, boolean, key, and database naming rules.
 | 22 | `22-variable-naming-conventions.md` | Singular/plural, maps, loop variables, abbreviations |
 
 ### 🏗️ Architecture & Design Principles
+
 SOLID, DRY, complexity limits, and structural patterns.
 
 | # | File | Description |
@@ -63,6 +66,7 @@ SOLID, DRY, complexity limits, and structural patterns.
 | 23 | `23-solid-principles.md` | SOLID principles with cross-language examples |
 
 ### 🛡️ Type Safety & Data Handling
+
 Strict typing, casting elimination, null safety, mutation avoidance.
 
 | # | File | Description |
@@ -74,6 +78,7 @@ Strict typing, casting elimination, null safety, mutation avoidance.
 | 19 | `19-null-pointer-safety.md` | Null/nil safety guards |
 
 ### 🔧 Patterns & Techniques
+
 Nesting resolution, lazy evaluation, regex usage.
 
 | # | File | Description |
@@ -83,6 +88,7 @@ Nesting resolution, lazy evaluation, regex usage.
 | 20 | `20-nesting-resolution-patterns.md` | Flatten nested code, avoid else after return |
 
 ### 🧪 Testing
+
 Test naming and structure conventions.
 
 | # | File | Description |
@@ -91,6 +97,7 @@ Test naming and structure conventions.
 | 28 | `28-slug-conventions.md` | Slug format rules, REST API examples, generation code |
 
 ### 📋 Reference & Meta
+
 Consolidated reference, audit logs, contradiction checks.
 
 | # | File | Description |

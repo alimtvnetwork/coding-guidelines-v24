@@ -77,10 +77,13 @@ In Go, `http.ProxyFromEnvironment` handles this automatically when using the def
 ### Bash (curl/wget)
 
 ```bash
+
 # curl automatically respects HTTP_PROXY/HTTPS_PROXY
+
 curl -fsSL "$url" -o "$output"
 
 # wget also respects proxy env vars
+
 wget -q "$url" -O "$output"
 ```
 

@@ -46,6 +46,7 @@ All research content scoped to coding guidelines MUST be placed in `spec/02-codi
 ## Research File Template
 
 ````markdown
+
 # Research: [Topic Title]
 
 **Status:** Proposed | In Progress | Complete | Archived  

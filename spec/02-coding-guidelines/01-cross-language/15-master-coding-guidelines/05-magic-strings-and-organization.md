@@ -80,11 +80,13 @@ if participant.Status == entitystatus.Active { ... }
 ## 9. File & Function Organization
 
 ### PHP
+
 - PSR-4 autoloading: file name = class name
 - One class/enum per file
 - Traits must declare all their own `use` imports
 
 ### Go
+
 - File target: 300 lines (hard limit 400)
 - Function body: max 15 lines
 - Split large files: `_crud.go`, `_helpers.go`, `_validation.go`

@@ -69,12 +69,16 @@ two diverge.
 ### §3.1 One-liners (must work verbatim)
 
 ```bash
+
 # Linux / macOS
+
 curl -fsSL https://github.com/<org>/coding-guidelines-v24/releases/latest/download/install.sh | bash
 ```
 
 ```powershell
+
 # Windows
+
 irm https://github.com/<org>/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 ```
 
@@ -205,7 +209,9 @@ bash install.sh
 Uninstall:
 
 ```bash
+
 # from the repo root that was installed-into
+
 rm -rf spec linters linter-scripts linters-cicd
 ```
 

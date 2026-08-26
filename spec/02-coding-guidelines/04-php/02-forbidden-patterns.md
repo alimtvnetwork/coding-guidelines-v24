@@ -124,6 +124,7 @@ In v1.58.0, two missing `use` import statements caused a **full site crash** ("c
 ### Dos and Don'ts
 
 #### ✅ DO:
+
 - **Import every cross-namespace symbol** at the top of every PHP file, even if it "seems to work without it"
 - **Verify the full namespace path** of any trait, class, or enum before adding a `use` statement
 - **Run a cold activation test** (deactivate → delete OPcache → activate) after adding new trait compositions
@@ -131,6 +132,7 @@ In v1.58.0, two missing `use` import statements caused a **full site crash** ("c
 - **Treat trait files identically to class files** — they do NOT inherit imports from the class that mixes them in
 
 #### ❌ DON'T:
+
 - **Don't rely on OPcache** to mask missing imports — it works until the cache is flushed, then the site crashes
 - **Don't assume "it works on my machine" means it's correct** — local environments often have warm OPcache that hides missing imports
 - **Don't copy trait `use` statements without checking the namespace** — the trait name alone is not enough; the full namespace must match

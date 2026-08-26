@@ -80,16 +80,21 @@ These are the **canonical rule sources** (if a conflict is found, these win):
 For each rule domain, search ALL spec files for code examples or prose that contradict the canonical source:
 
 ```bash
+
 # Example: find camelCase log keys that should be PascalCase
+
 grep -rn '"[a-z][a-zA-Z]*"' spec/ --include="*.md" | grep -i "logkey\|log.*key\|context.*key"
 
 # Example: find type assertions in business logic examples
+
 grep -rn '\.\(\*\?[A-Z]' spec/ --include="*.md" | grep -v "EXEMPTED\|Exempt\|stdlib\|test"
 
 # Example: find raw nil checks that should use IsDefined()
+
 grep -rn 'if.*!= nil' spec/ --include="*.md" | grep -v "err\|error\|recover\|ok"
 
 # Example: find negative boolean helpers
+
 grep -rn 'isNot[A-Z]\|hasNo[A-Z]' spec/ --include="*.md" | grep -v "FORBIDDEN\|WRONG\|❌"
 ```
 

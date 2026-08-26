@@ -91,24 +91,31 @@ Maps cross-language coding guidelines to **.NET Analyzers**, **StyleCop.Analyzer
 ### `.editorconfig`
 
 ```ini
+
 # VB.NET Analyzer Severity Overrides
+
 [*.vb]
 
 # Zero nesting / early exit
+
 dotnet_diagnostic.RCS1004.severity = error
 
 # Unused code
+
 dotnet_diagnostic.IDE0059.severity = error
 dotnet_diagnostic.IDE0005.severity = error
 
 # String handling
+
 dotnet_diagnostic.CA1820.severity = error
 
 # Dispose pattern
+
 dotnet_diagnostic.CA1816.severity = error
 dotnet_diagnostic.CA2000.severity = error
 
 # Style
+
 dotnet_diagnostic.SA1513.severity = warning
 dotnet_diagnostic.IDE0071.severity = warning
 ```
@@ -150,6 +157,7 @@ dotnet_diagnostic.IDE0071.severity = warning
 is_global = true
 
 # SonarAnalyzer thresholds
+
 dotnet_diagnostic.S138.max = 15
 dotnet_diagnostic.S107.max = 3
 dotnet_diagnostic.S3776.threshold = 10
@@ -157,6 +165,7 @@ dotnet_diagnostic.S134.max = 1
 dotnet_diagnostic.S1192.threshold = 3
 
 # SonarAnalyzer severity
+
 dotnet_diagnostic.S138.severity = error
 dotnet_diagnostic.S107.severity = error
 dotnet_diagnostic.S3776.severity = error

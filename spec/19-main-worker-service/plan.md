@@ -29,12 +29,14 @@
 Each phase is one user `next` cycle.
 
 ### ✅ Phase 1 — Foundation (this turn)
+
 - `plan.md` (this file)
 - `00-overview.md` — purpose, scope, stack flexibility, terminology pointers
 - `01-architecture.md` — main/worker topology, request flow, boundaries
 - `02-glossary.md` — Main Server, Worker Node, Tenant Root, Power Admin, etc.
 
 ### Phase 2 — Five deliverable specs (on `next`)
+
 - `03-main-db-schema.md` — main-server SQLite schema (workers, tenant→worker map, version tracking)
 - `04-worker-routing.md` — selection strategies, caching, failover
 - `05-auth-and-2fa.md` — auth flows, 2FA, session, JWT/cookie, main↔worker auth handshake
@@ -42,6 +44,7 @@ Each phase is one user `next` cycle.
 - `07-role-based-dashboards.md` — Power Admin / Admin User / extensible roles, `User has access to {EnumPage}` pattern
 
 ### Phase 3 — Diagrams (on `next`)
+
 - `diagrams/erd-main-db.mmd` — main-server SQLite ERD
 - `diagrams/erd-worker-split-db.mmd` — worker-side split-DB ERD (Root / App / Session)
 - `diagrams/erd-seedable-config.mmd` — Seedable-Config layout for both tiers
@@ -51,6 +54,7 @@ Each phase is one user `next` cycle.
 - `diagrams/readme.md` — index of diagrams
 
 ### Phase 4 — Error-manage integration + consistency (on `next`)
+
 - `08-error-contract.md` — main↔worker correlation IDs, retry semantics, failure taxonomy (worker-unreachable / version-mismatch / split-DB-write-fail / auth-handshake-fail). References `spec/03-error-manage/`, does not duplicate.
 - `09-self-update-pointer.md` — pointer-only doc per verbatim §Self-Update Mechanism (NOT implementation)
 - `97-acceptance-criteria.md` — verbatim §Acceptance Criteria 1–9 mapped to deliverables
@@ -58,6 +62,7 @@ Each phase is one user `next` cycle.
 - `99-consistency-report.md`
 
 ### Phase 5 — Version bump + sync (on `next`)
+
 - Bump `package.json` minor (per standing rule: any codebase change → minor bump)
 - `node scripts/sync-version.mjs`
 - `node scripts/sync-spec-tree.mjs`

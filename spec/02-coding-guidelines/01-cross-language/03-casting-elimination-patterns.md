@@ -472,15 +472,19 @@ results := result.Value()
 Search for unannotated violations:
 
 ```bash
+
 # Find all type assertions missing EXEMPTED annotation
+
 grep -rn '\.\(string\)\|\.\(float64\)\|\.\(int\)\|\.\(\[\]' spec/ --include="*.md" \
   | grep -v 'EXEMPTED\|FORBIDDEN\|WRONG\|❌\|PROHIBITED'
 
 # Find all .(type) switches missing annotation
+
 grep -rn '\.\(type\)' spec/ --include="*.md" \
   | grep -v 'EXEMPTED\|FORBIDDEN\|WRONG\|❌'
 
 # Find raw ctx.Value casts outside accessor functions
+
 grep -rn 'ctx\.Value\|context\.Value' spec/ --include="*.md" \
   | grep '\.\(string\)' \
   | grep -v 'EXEMPTED\|ctxutil\|accessor'

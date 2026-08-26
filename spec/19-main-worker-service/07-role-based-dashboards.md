@@ -125,6 +125,7 @@ app.post('/API/V1/Workers/All/Update',
 ## 6. The Three Dashboards (default)
 
 ### 6.1 Power Admin Dashboard
+
 - Worker registry view (status, version, assigned-company count)
 - Push-update controls (one / all)
 - Endpoint auth settings (OQ-1)
@@ -135,6 +136,7 @@ app.post('/API/V1/Workers/All/Update',
 Required pages: `PowerAdmin`, `WorkerRegistry`, `PushUpdate`, `AuditLog`.
 
 ### 6.2 Admin User Dashboard
+
 - Company profile editor (calls Worker)
 - User management for their company
 - Billing
@@ -143,6 +145,7 @@ Required pages: `PowerAdmin`, `WorkerRegistry`, `PushUpdate`, `AuditLog`.
 Required pages: `Admin`, `Billing`, `CompanySettings`, `UserManagement`.
 
 ### 6.3 Member Dashboard
+
 - The actual product surface (graphs, business data — all from Worker).
 
 Required pages: `Dashboard`.

@@ -120,13 +120,17 @@ interface JsonPayload {}
 ```
 
 ```python
+
 # BEFORE
+
 def fetchUserJsonUrl(userId, apiUrl): ...
 class JSONParser: ...
 ```
 
 ```python
+
 # AFTER
+
 def fetch_user_json_url(user_id: str, api_url: str) -> None: ...
 
 class JsonParser: ...
@@ -200,7 +204,9 @@ interface UserDto {
 ```
 
 ```python
+
 # AFTER — serialization alias is Pascal case even though Python fields are snake_case
+
 class UserDto(BaseModel):
     id: str = Field(alias="Id")
     api_url: str = Field(alias="ApiUrl")
@@ -275,7 +281,9 @@ function hasAdminRole(user: User): boolean {}
 ```
 
 ```python
+
 # AFTER
+
 is_enabled: bool = True
 
 def has_admin_role(user: User) -> bool: ...
@@ -341,7 +349,9 @@ export async function swapIpWindows(
 ```
 
 ```python
+
 # AFTER
+
 def swap_ip_windows(
     ctx: Context,
     interface_name: str,
@@ -440,6 +450,7 @@ class SwapIpParams:
 def swap_ip(ctx: Context, params: SwapIpParams) -> None: ...
 
 # Python alternative: keyword-only parameters
+
 def swap_ip(ctx: Context, *, interface_name: str, old_ip: str, new_ip: str) -> None: ...
 ```
 
@@ -1178,12 +1189,16 @@ export function createUser(params: CreateUserParams): Promise<User> {}
 ### Python
 
 ```python
+
 # BEFORE
+
 def create_user(id, name, email, role, tenant, legacy_flag): ...
 ```
 
 ```python
+
 # AFTER
+
 @dataclass(frozen=True)
 class CreateUserParams:
     user_id: str
@@ -1485,7 +1500,9 @@ formatter_precedence:
 ## 20. Review output format the AI should produce
 
 ```text
+
 ### Findings
+
 - R1 (must fix) — `swapIPWindows`: all-caps acronym; rename to `swapIpWindows`, `newIP` → `newIp`.
 - R5 (must fix) — `swapIp`: three adjacent `string` parameters; group into `SwapIpParams`.
 - R6 (must fix) — `swapIp`: `oldIp` accepted but never used.
@@ -1494,11 +1511,13 @@ formatter_precedence:
 - R21 (must fix) — `SwapIpParams`: every field commented; keep only the `OldIp` note.
 
 ### Self-verification
+
 R1: pass
 R2: pass
 ...
 R21: pass
 
 ### Rewritten code
+
 <full corrected file or unified diff>
 ```

@@ -137,38 +137,52 @@ under `languages`.
 ### 7. Verify everything (mandatory, in order)
 
 ```bash
+
 # 7a. Unit tests must all pass
+
 python3 linters-cicd/tests/run.py
 
 # 7b-fast. One-shot smoke run — verifies just the rule(s) you
+
 # edited (or the starter kit) against their own fixtures. Use
+
 # this for quick iteration before the full 7b/7c/7d sweep.
+
 bash linters-cicd/run-all.sh --smoke --include-template --format text
 
 # 7b. The orchestrator must dispatch your rule
+
 bash linters-cicd/run-all.sh \
   --path linters-cicd/checks/<your-slug>/fixtures \
   --rules YOUR-RULE-001 \
   --format text \
   --output /tmp/your-rule.txt
 cat /tmp/your-rule.txt
+
 # Expected: exit code 1, your rule id appears, dirty.<ext> is
+
 # flagged, clean.<ext> is silent.
 
 # 7c. SARIF must validate
+
 bash linters-cicd/run-all.sh \
   --path linters-cicd/checks/<your-slug>/fixtures \
   --rules YOUR-RULE-001 \
   --format sarif \
   --output /tmp/your-rule.sarif
 python3 linters-cicd/scripts/validate-sarif.py /tmp/your-rule.sarif
+
 # Expected: exit code 0, "OK SARIF 2.1.0".
 
 # 7d. Cross-link checker stays green (proves help_uri_relative
+
 # points at a real spec section)
+
 python3 linter-scripts/check-spec-cross-links.py \
   --root spec --repo-root .
+
 # Expected: "OK All internal spec cross-references resolve."
+
 ```
 
 If any of 7a–7d fails, **fix the new rule** — do not weaken an

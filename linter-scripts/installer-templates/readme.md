@@ -43,7 +43,9 @@ prose or progress output would break discovery.
 ## Local Testing
 
 ```bash
+
 # Substitute placeholders manually for a smoke test
+
 sed -e 's|__EmbeddedVersion__|V1.5.0|g' \
     -e 's|__EmbeddedRepo__|https://github.com/Owner/Repo|g' \
     -e 's|__EmbeddedCommit__|abcdef0123456789abcdef0123456789abcdef01|g' \

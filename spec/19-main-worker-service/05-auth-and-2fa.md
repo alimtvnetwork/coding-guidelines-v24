@@ -56,6 +56,7 @@ Auth is a **first-class given** in BOTH Main and Worker tiers. This file defines
 - **Refresh:** React calls Worker `/API/V1/Auth/RefreshToken` directly (Main bypassed) when JWT is within `MainWorker.Auth.JwtRefreshLeadSeconds` of expiry (default per `15-tunable-constants.md` §2.4 = 60 s).
 
 ### 2.3 Main → Worker (orchestration: push-update, registry sync, credential proxy)
+
 - **Mechanism:** OAuth 2.0 client-credentials grant OR pre-shared API key (configurable).
 - **Default:** OAuth client-credentials per Worker, secrets stored via Seedable-Config (encrypted at rest).
 - The credential-proxy channel (§2.1) reuses this same client-credential token; the Worker enforces that `/API/V1/Auth/InternalSignIn` is callable **only** from Main's IP allowlist + valid Bearer.

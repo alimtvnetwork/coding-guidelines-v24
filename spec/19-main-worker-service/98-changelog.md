@@ -743,6 +743,7 @@ Linter verification (4/4 green): `check-mws-error-codes` (R1-R4 — 52 codes ver
 Initial authoring. Phases 1–4 of the spec roadmap complete.
 
 ### Added
+
 - `plan.md` — phased roadmap, locked decisions (Q1–Q5), open questions (OQ-1, OQ-2)
 - `00-overview.md` — purpose, scope, stack flexibility, document map
 - `01-architecture.md` — topology, request lifecycle, comms contract, caching
@@ -760,6 +761,7 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 - `diagrams/readme.md`
 
 ### Decisions locked
+
 - Tenant root: **Company-as-root** (multi-tenant; user-as-root is degenerate 1:1).
 - Spec slot: `spec/19-main-worker-service/` (slots 19–20 free).
 - Diagrams home: in-spec `diagrams/` subfolder.
@@ -770,6 +772,7 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 - Password hash: Argon2id (preferred) / bcrypt cost ≥12.
 
 ### Deferred
+
 - Self-update implementation (pointer only; lives in `spec/14-update/`).
 - Tenant migration between workers (sketched in `04-worker-routing.md` §4, not v1.0).
 - OQ-1: per-endpoint auth-mechanism overrides — schema sketched in `06-core-api-endpoints.md` §5; final design awaits user resolution.

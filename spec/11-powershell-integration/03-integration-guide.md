@@ -26,7 +26,9 @@
 Copy from spec templates to your project:
 
 ```powershell
+
 # From this spec folder
+
 Copy-Item "spec/powershell-integration/templates/run.ps1" "YOUR_PROJECT/run.ps1"
 ```
 
@@ -91,14 +93,18 @@ Uses all defaults including pnpm PnP with `.pnpm-store` in project root.
 **IMPORTANT:** Add these entries to your `.gitignore` to exclude pnpm artifacts:
 
 ```gitignore
+
 # pnpm store (local cache - do not commit)
+
 .pnpm-store/
 
 # pnpm PnP files (generated on install)
+
 .pnp.cjs
 .pnp.loader.mjs
 
 # Build artifacts
+
 dist/
 .vite/
 ```
@@ -133,13 +139,17 @@ your-project/
 ## Step 5: First Run
 
 ```powershell
+
 # Navigate to project
+
 cd YOUR_PROJECT
 
 # Run with help to verify
+
 .\run.ps1 -Help
 
 # Full build and run
+
 .\run.ps1
 ```
 
@@ -184,7 +194,9 @@ cd YOUR_PROJECT
 For network access, run as Administrator:
 
 ```powershell
+
 # Right-click PowerShell → Run as Administrator
+
 .\run.ps1 -OpenFirewall
 ```
 
@@ -328,7 +340,9 @@ For monorepo projects:
 
 **Solution:**
 ```powershell
+
 # Restart PowerShell or manually refresh PATH
+
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 ```
 
@@ -338,7 +352,9 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";"
 
 **Solution:**
 ```powershell
+
 # Force reinstall
+
 .\run.ps1 -Force
 ```
 
@@ -348,11 +364,14 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";"
 
 **Solution:**
 ```powershell
+
 # Clear pnpm cache and store
+
 pnpm store prune
 pnpm cache clean
 
 # Then force rebuild
+
 .\run.ps1 -Force
 ```
 
@@ -362,8 +381,11 @@ pnpm cache clean
 
 **Solution:**
 ```powershell
+
 # Right-click PowerShell → Run as Administrator
+
 # Then run:
+
 .\run.ps1 -OpenFirewall
 ```
 
@@ -373,10 +395,13 @@ pnpm cache clean
 
 **Solution:**
 ```powershell
+
 # Skip build if no frontend changes
+
 .\run.ps1 -SkipBuild
 
 # Or use incremental builds
+
 .\run.ps1  # (without -Force)
 ```
 

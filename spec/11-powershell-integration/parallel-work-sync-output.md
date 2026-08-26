@@ -16,7 +16,9 @@ Pre-allocate a synchronized result array with one slot per job. Each parallel jo
 ### Data Structure
 
 ```powershell
+
 # Pre-allocate result slots in sequential order
+
 $totalJobs = $plugins.Count * $sites.Count
 $results = [System.Collections.ArrayList]::new()
 
@@ -110,6 +112,7 @@ foreach ($job in $jobs) {
 }
 
 # Sort by original index for deterministic display
+
 $orderedResults = $completedResults | Sort-Object { $_.Index }
 ```
 
@@ -122,6 +125,7 @@ Write-Host "  Multi-Site Upload Summary" -ForegroundColor Magenta
 Write-Host "========================================" -ForegroundColor Magenta
 
 # Table header
+
 $col1 = 22  # Site
 $col2 = 28  # Plugin
 $col3 = 10  # Version

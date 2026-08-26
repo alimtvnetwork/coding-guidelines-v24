@@ -624,6 +624,7 @@ python3 linter-scripts/validate-rename-intake.py \
   --print-schema --with-similarity > rename-intake.schema.json
 
 # Example: check-jsonschema (pipx install check-jsonschema)
+
 check-jsonschema --schemafile rename-intake.schema.json \
   rename-intake.json
 ```

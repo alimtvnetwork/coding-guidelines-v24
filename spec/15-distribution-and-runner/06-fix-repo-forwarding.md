@@ -108,6 +108,7 @@ function Assert-FixRepoPresent {
 }
 
 # dispatch (inlined — no wrapper Invoke-FixRepo function):
+
 "fix-repo" {
     $inner = Assert-FixRepoPresent
     Write-FixRepoDebugPreflight -Inner $inner -Argv $args

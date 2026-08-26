@@ -87,10 +87,12 @@ func ProcessUpload(ctx context.Context, req Request) error {
 ## 6. Error Handling
 
 ### PHP
+
 - Use `try/catch` with `Throwable` (unqualified, imported via `use`)
 - Never use leading backslash: `\Throwable` → `Throwable`
 
 ### Go
+
 - All errors via `apperror.New()` or `apperror.Wrap()` — automatic stack traces
 - Never use `fmt.Errorf()` for service errors
 - Service methods return `apperror.Result[T]` — never raw `(T, error)` or multi-value tuples (§7.1)

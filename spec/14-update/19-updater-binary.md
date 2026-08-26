@@ -66,13 +66,17 @@ Flags:
 ### Example Invocations
 
 ```bash
+
 # Install latest version to a specific directory
+
 <binary>-updater --install-dir /usr/local/bin/<binary>
 
 # Install a specific version
+
 <binary>-updater --install-dir /usr/local/bin/<binary> --version v1.3.0
 
 # Called by the main binary's update command (typical flow)
+
 <binary>-updater --install-dir "$INSTALL_DIR" --version "$TARGET_VERSION"
 ```
 
@@ -164,7 +168,9 @@ See [14-network-requirements.md](./20-network-requirements.md) for full details.
 The updater is built as part of the release pipeline, using the **main module's `dist/` folder** as output:
 
 ```bash
+
 # Build from updater module, output to main module's dist/
+
 cd <binary>-updater
 CGO_ENABLED=0 GOOS="$os" GOARCH="$arch" \
   go build -ldflags "$LDFLAGS" \

@@ -442,14 +442,18 @@ The default copy output includes:
 ### Quick Debug Commands
 
 ```bash
+
 # Go — check server
+
 curl -s http://localhost:8080/api/v1/health | jq .
 tail -f logs/app.log
 
 # PHP — check logs
+
 cat wp-content/uploads/{plugin-slug}/logs/error.log
 
 # TypeScript — check API
+
 console.log(import.meta.env.VITE_API_URL)
 ```
 

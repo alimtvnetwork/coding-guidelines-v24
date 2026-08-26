@@ -3,6 +3,7 @@ name: no-questions-mode
 description: Active 40-task no-questions run. Never call ask_questions; log ambiguities to .lovable/question-and-ambiguity/xx-title.md with options + rationale.
 type: preference
 ---
+
 # No-Questions Mode (active)
 
 For the 40-task batch starting 2026-04-26: **never** invoke

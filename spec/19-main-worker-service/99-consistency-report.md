@@ -122,8 +122,11 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 **Reproducible verification commands** (closes audit finding F-N-03; run from repo root):
 
 ```bash
+
 # 4.1 — forbidden literals (case-insensitive). Excludes meta-docs that legitimately
+
 # define/cite the replacements: this report, the glossary, plan, changelog, AC.
+
 rg -i -n \
    --glob '!spec/19-main-worker-service/02-glossary.md' \
    --glob '!spec/19-main-worker-service/99-consistency-report.md' \
@@ -135,6 +138,7 @@ rg -i -n \
    spec/19-main-worker-service/
 
 # 4.2 — author-title compliance (must NOT appear). Same meta-doc exclusions.
+
 rg -n \
    --glob '!spec/19-main-worker-service/02-glossary.md' \
    --glob '!spec/19-main-worker-service/99-consistency-report.md' \
@@ -142,6 +146,7 @@ rg -n \
    spec/19-main-worker-service/
 
 # 4.3 — global enforcement (delegated to the canonical linter)
+
 python3 linter-scripts/check-forbidden-strings.py
 ```
 

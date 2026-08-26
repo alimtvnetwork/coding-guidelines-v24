@@ -89,7 +89,9 @@ SonarQube provides cross-language analysis. Rules that map to our guidelines:
 ### SonarQube Quality Gate
 
 ```yaml
+
 # sonar-project.properties
+
 sonar.qualitygate.conditions:
   - metric: cognitive_complexity  threshold: 10
   - metric: duplicated_lines_density  threshold: 3

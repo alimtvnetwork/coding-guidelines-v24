@@ -18,6 +18,7 @@ An AI reading only this file must be able to create, triage, diagnose, and docum
 Each issue file follows this template:
 
 ```markdown
+
 # Issue #NN — [Title]
 
 **Severity:** Critical | High | Medium | Low  

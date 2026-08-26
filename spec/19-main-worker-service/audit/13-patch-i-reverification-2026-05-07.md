@@ -38,12 +38,15 @@
 ## 2. Re-sweep results (non-spec/19 corpus, v5.41.0)
 
 ### 2.1 SHOULD distribution
+
 Same 8 hits as audit-11 §2.1 — **all 4 operative ones (Patches E/F/G/H) confirmed already closed by earlier loops**. No new SHOULD regressions.
 
 ### 2.2 TBD / FIXME
+
 Single benign lint-doc example unchanged. No new hits.
 
 ### 2.3 Spec/19 implementation drift
+
 v5.40.0 Phase-14 kickoff scaffold attempt was reverted same-loop; constraint memory `mem://constraints/spec19-no-implementation` broadened to forbid issue-tracking + app-side trackers + typed task indexes derived from spec/19. No code surface remains.
 
 ---

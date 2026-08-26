@@ -109,15 +109,25 @@ unreplaced after substitution.
 
 ```bash
 #!/usr/bin/env bash
+
 # ──────────────────────────────────────────────────────────────────────
+
 # install.sh — version-pinned release installer
+
 #   Repo:    __REPO_SLUG__
+
 #   Version: __EMBEDDED_VERSION__
+
 #   Built:   __BUILD_DATE_UTC__   (commit __COMMIT_SHA__)
+
 #
+
 # This script installs EXACTLY __EMBEDDED_VERSION__.
+
 # It will NEVER probe "latest" or switch repositories.
+
 # ──────────────────────────────────────────────────────────────────────
+
 set -euo pipefail
 
 readonly EMBEDDED_VERSION="__EMBEDDED_VERSION__"
@@ -128,15 +138,25 @@ readonly EMBEDDED_COMMIT="__COMMIT_SHA__"
 ### 4.2 PowerShell template (`install.pinned.ps1.tmpl`) — required header
 
 ```powershell
+
 # ──────────────────────────────────────────────────────────────────────
+
 # install.ps1 — version-pinned release installer
+
 #   Repo:    __REPO_SLUG__
+
 #   Version: __EMBEDDED_VERSION__
+
 #   Built:   __BUILD_DATE_UTC__   (commit __COMMIT_SHA__)
+
 #
+
 # This script installs EXACTLY __EMBEDDED_VERSION__.
+
 # It will NEVER probe "latest" or switch repositories.
+
 # ──────────────────────────────────────────────────────────────────────
+
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
@@ -273,6 +293,7 @@ The release body MUST link to the **pinned** installers, not the
 `raw.githubusercontent.com/.../main/` ones. Use this canonical block:
 
 ```markdown
+
 ## Install vX.Y.Z (exact version)
 
 **Linux / macOS:**

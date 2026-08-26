@@ -168,16 +168,21 @@ same wrapper:
 ## Local Developer UX
 
 ```bash
+
 # Run all check-phase guards
+
 ./scripts/ci-runner.sh --phase check --source-dir src/constants
 
 # Iterate on one guard
+
 ./scripts/ci-runner.sh --guard collisions --verbose
 
 # Regenerate the naming baseline after an approved rename
+
 ./scripts/ci-runner.sh --guard naming-baseline --fix
 
 # Full pre-push gate, machine-readable summary
+
 ./scripts/ci-runner.sh --phase all --json /tmp/ci.json
 echo "exit=$?"; cat /tmp/ci.json | jq .
 ```

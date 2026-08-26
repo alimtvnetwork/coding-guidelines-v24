@@ -140,12 +140,17 @@ These seven edits remove the entire "Inconsistent Definitions" (65 %) and "Misle
 ## 8. Reproduction
 
 ```bash
+
 # Re-run this audit:
+
 node /tmp/audit19b.mjs   # or rebuild from scripts/spec-audit/run-audit.mjs
 
 # Inputs: every *.md under spec/19-main-worker-service/ except 98-changelog.md
+
 # Model:  google/gemini-2.5-pro via Lovable AI Gateway
+
 # Mode:   full corpus (no per-file truncation), strict JSON response_format
+
 ```
 
 ---

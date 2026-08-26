@@ -79,14 +79,17 @@ spec/02-coding-guidelines/
 **Structure:**
 
 ```markdown
+
 # Anti-Hallucination Rules
 
 ## How to Use
+
 AI agents MUST check every code generation against these rules before output.
 
 ## Rule Categories
 
 ### Category 1: Naming Hallucinations
+
 - AH-N1: Never generate `ID`, `URL`, `API` — always `Id`, `Url`, `Api`
 - AH-N2: Never generate snake_case variables — always camelCase
 - AH-N3: Never generate camelCase JSON keys — always PascalCase
@@ -94,6 +97,7 @@ AI agents MUST check every code generation against these rules before output.
 - AH-N5: Never generate `Unknown` as enum zero value — always `Invalid`
 
 ### Category 2: Type Safety Hallucinations
+
 - AH-T1: Never generate `any` or `interface{}` in business logic
 - AH-T2: Never generate `fmt.Errorf()` — use `apperror.Wrap()`
 - AH-T3: Never generate multi-return Go functions — use `Result[T]`
@@ -101,12 +105,14 @@ AI agents MUST check every code generation against these rules before output.
 - AH-T5: Never generate `(T, error)` return — use `apperror.Result[T]`
 
 ### Category 3: Boolean Hallucinations
+
 - AH-B1: Never generate `!func()` — use semantic inverse (`isInvalid()`)
 - AH-B2: Never generate booleans without `is`/`has`/`can`/`should`/`was` prefix
 - AH-B3: Never generate negative names (`isNotReady`) — use positive (`isPending`)
 - AH-B4: Never generate boolean function parameters — use options objects
 
 ### Category 4: Structure Hallucinations
+
 - AH-S1: Never generate nested `if` — flatten with early returns
 - AH-S2: Never generate functions >15 lines body
 - AH-S3: Never generate functions with >3 parameters
@@ -114,12 +120,14 @@ AI agents MUST check every code generation against these rules before output.
 - AH-S5: Never omit blank line before `return`/`throw` after statements
 
 ### Category 5: Error Handling Hallucinations
+
 - AH-E1: Never access `.Value()` without prior `HasError()` check
 - AH-E2: Never use raw `error` in Go struct fields — use `*AppError`
 - AH-E3: Never swallow errors silently — always log, return, or propagate
 - AH-E4: Never use `\Throwable` in PHP — use `use Throwable;` import
 
 ### Category 6: Enum Hallucinations
+
 - AH-EN1: Never use `string` as Go enum type — use `byte`
 - AH-EN2: Never compare enums with `===` in PHP — use `isEqual()`
 - AH-EN3: Never use magic strings for status comparisons — use enum constants
@@ -135,11 +143,13 @@ Each rule includes: ❌ Forbidden pattern | ✅ Required pattern | 📖 Why
 **Structure:**
 
 ```markdown
+
 # AI Quick Reference Checklist
 
 ## Pre-Output Validation (check every code block)
 
 ### Naming (5 checks)
+
 - [ ] Variables: camelCase (`pluginSlug`, not `plugin_slug`)
 - [ ] Types/Classes/Components: PascalCase (`SnapshotManager`)
 - [ ] JSON/API keys: PascalCase (`"PluginSlug"`, not `"pluginSlug"`)
@@ -147,6 +157,7 @@ Each rule includes: ❌ Forbidden pattern | ✅ Required pattern | 📖 Why
 - [ ] Booleans: `is`/`has`/`can`/`should`/`was` prefix
 
 ### Structure (5 checks)
+
 - [ ] Zero nested `if` — early return pattern
 - [ ] Function body ≤15 lines (error handling exempt)
 - [ ] Function params ≤3 (use options object for 4+)
@@ -154,6 +165,7 @@ Each rule includes: ❌ Forbidden pattern | ✅ Required pattern | 📖 Why
 - [ ] Blank line before `return`/`throw` when preceded by statements
 
 ### Go-Specific (6 checks)
+
 - [ ] Enums: `byte` type, `Invalid` zero value, `iota`
 - [ ] Returns: single `Result[T]`, never `(T, error)`
 - [ ] Errors: `apperror.Wrap()`, never `fmt.Errorf()`
@@ -162,18 +174,21 @@ Each rule includes: ❌ Forbidden pattern | ✅ Required pattern | 📖 Why
 - [ ] No explicit `json:` tags (unless `omitempty` or `-`)
 
 ### PHP-Specific (4 checks)
+
 - [ ] No `\Throwable` — use `use` import
 - [ ] Enum comparison via `isEqual()`, not `===`
 - [ ] Blank line before `if` when preceded by statements
 - [ ] Log keys: camelCase; DB keys: PascalCase
 
 ### TypeScript-Specific (4 checks)
+
 - [ ] No `any` — use explicit types
 - [ ] Enum: PascalCase + `Type` suffix (`StatusType`)
 - [ ] No magic strings — use enum constants
 - [ ] `isDefined()` / `isDefinedAndValid()` — no raw null checks
 
 ### Error Handling (3 checks)
+
 - [ ] `HasError()`/`hasError()` before `.Value()`/`.value()`
 - [ ] No silent error swallowing
 - [ ] Struct error fields: `*AppError` (Go), `Throwable` (PHP)

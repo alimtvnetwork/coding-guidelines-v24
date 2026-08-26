@@ -209,7 +209,9 @@ Windows file metadata, regenerate `winres.json` from a template
 before each release:
 
 ```powershell
+
 # Pseudocode — release pipeline
+
 $tmpl = Get-Content winres.json.tmpl -Raw
 $rendered = $tmpl `
     -replace '\{\{VERSION\}\}',  $version `

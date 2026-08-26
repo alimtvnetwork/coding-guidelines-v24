@@ -24,6 +24,7 @@ File naming: `YYYY-MM-DD-short-description.md` (e.g., `2026-04-02-cors-header-mi
 ### Step 2: Document Using This Template
 
 ```markdown
+
 # Issue: [Short Title]
 
 **Date:** YYYY-MM-DD  

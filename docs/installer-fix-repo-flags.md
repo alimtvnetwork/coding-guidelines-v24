@@ -107,7 +107,9 @@ The four boolean switches in §1a (`--run-fix-repo`, `--show-fix-repo-log`, `--r
 #### Worked example — exported env var is silently ignored
 
 ```bash
+
 # A user *guesses* there is an env-var fallback. There isn't.
+
 export INSTALL_RUN_FIX_REPO=true
 export INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE=1
 export INSTALL_FULL_ROLLBACK=yes
@@ -270,13 +272,17 @@ newest**. `N` must be a non-negative integer.
 Equivalent flag dialects:
 
 ```bash
+
 # Bash
+
 ./install.sh --run-fix-repo --max-fix-repo-logs 5
 INSTALL_MAX_FIX_REPO_LOGS=5 ./install.sh --run-fix-repo
 ```
 
 ```powershell
+
 # PowerShell
+
 .\install.ps1 -RunFixRepo -MaxFixRepoLogs 5
 $env:INSTALL_MAX_FIX_REPO_LOGS = '5'; .\install.ps1 -RunFixRepo
 ```
@@ -380,7 +386,9 @@ A safe CI recipe:
 Runs the installer with `--run-fix-repo`, prunes to the newest 20 logs, and uploads the entire log directory as a build artifact named `fix-repo-logs-*` — even when the job fails, so you can post-mortem the failing run.
 
 ````yaml
+
 # .github/workflows/install-and-fix-repo.yml
+
 name: Install + fix-repo
 
 on:
@@ -552,15 +560,20 @@ The `(source: …)` suffix is one of `default`, `env INSTALL_LOG_DIR`, or `CLI -
 
 ```bash
 grep -E '^▸ log dir:' install-stdout.log
+
 # → ▸ log dir: ./coding-guidelines/.install-logs   (source: default)
+
 ```
 
 **Diagnose in one line:**
 
 ```bash
 printf 'INSTALL_LOG_DIR=[%s] (len=%d)\n' "$INSTALL_LOG_DIR" "${#INSTALL_LOG_DIR}"
+
 # len=0  → installer will treat it as unset
+
 # len>0  → installer will use it (assuming --log-dir is not also passed)
+
 ```
 
 PowerShell equivalent:
@@ -578,16 +591,21 @@ PowerShell equivalent:
 When you have an uploaded `fix-repo-*.log` artifact, these greps answer "what happened?" in one pass:
 
 ```bash
+
 # Did rollback fire? Which mode?
+
 grep -E '^(═══ ROLLBACK TRIGGERED|Rollback: (NOT TRIGGERED|not needed|armed|complete))' fix-repo-*.log
 
 # Did pruning run? Which mode? How many removed?
+
 grep -E '^  ▸ Log pruning:' fix-repo-*.log
 
 # Why was rollback disabled?
+
 grep -E 'is not a git repo; rollback disabled' fix-repo-*.log
 
 # fix-repo final exit code
+
 grep -E '^# exit:' fix-repo-*.log
 ```
 

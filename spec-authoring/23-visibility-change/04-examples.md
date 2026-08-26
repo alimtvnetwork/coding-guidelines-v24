@@ -3,44 +3,58 @@
 ## PowerShell
 
 ```powershell
+
 # Toggle current visibility
+
 .\visibility-change.ps1
 
 # Force public (will prompt if going from private)
+
 .\visibility-change.ps1 -Visible pub
 
 # Force public, no prompt (CI use)
+
 .\visibility-change.ps1 -Visible pub -Yes
 
 # Force private
+
 .\visibility-change.ps1 -Visible pri
 
 # Dry-run a toggle
+
 .\visibility-change.ps1 -DryRun
 
 # Help
+
 .\visibility-change.ps1 -Help
 ```
 
 ## Bash
 
 ```bash
+
 # Toggle current visibility
+
 ./visibility-change.sh
 
 # Force public (will prompt if going from private)
+
 ./visibility-change.sh --visible pub
 
 # Force public, no prompt
+
 ./visibility-change.sh --visible pub --yes
 
 # Force private
+
 ./visibility-change.sh --visible pri
 
 # Dry-run
+
 ./visibility-change.sh --dry-run
 
 # Help
+
 ./visibility-change.sh --help
 ```
 

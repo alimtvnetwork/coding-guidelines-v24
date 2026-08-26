@@ -78,13 +78,17 @@ Before reading content, before forming an opinion, print the inventory. No score
 may be written until this table exists in `audit-file`.
 
 ``bash
+
 # 1. the audited scope, with line counts
+
 # Be sure to include any recent folders and files written for recent specs in these commands!
+
 wc -l spec/21-app/*.md spec/21-app/*/*.md spec/21-app/*/*/*.md 2>/dev/null | sort -n
 wc -l spec/23-app-db/*.md spec/24-app-ui-design-system/*.md 2>/dev/null | sort -n
 ls spec/21-app/fixtures/
 
 # 2. the guideline and support folders the spec must bind to
+
 ls spec/02-coding-guidelines spec/02-coding-guidelines/01-cross-language \
    spec/02-coding-guidelines/01-cross-language/02-boolean-principles \
    spec/02-coding-guidelines/01-cross-language/04-code-style \
@@ -94,6 +98,7 @@ ls spec/04-database-conventions spec/12-cicd-pipeline-workflows spec/12-cicd-pip
 ls spec/17-consolidated-guidelines
 
 # 3. the plan surface that consumes the spec
+
 ls .lovable/plans/pending .lovable/plans/subtasks/*/ .lovable/ambiguous-questions/01-new-ambiguity
 ``
 
@@ -191,10 +196,13 @@ python3 linter-scripts/check-spec-folder-refs.py
 python3 linter-scripts/check-file-sizes.py
 
 # every relative link in scope must resolve
+
 rg -o --no-filename '\]\(([^)]+)\)' spec/21-app spec/23-app-db spec/24-app-ui-design-system \
   | sed -E 's/^\]\(//; s/\)$//' | sort -u > /tmp/links.txt
 wc -l < /tmp/links.txt
+
 # index vs filesystem, both directions
+
 rg -n '\| *[0-9]{2} *\|' spec/21-app/00-overview.md
 ``
 
@@ -285,6 +293,7 @@ Remedy Consolidation: If mechanical sweeps yield more than 20 findings of the ex
 section order:
 
 ``text
+
 # Audit <audit-date> v<audit-version> — <scope>
 
 Version: 1.0.0
@@ -294,21 +303,37 @@ AI Confidence: <band>
 Ambiguity: <band>
 
 ## Keywords
+
 ## 1. Scope and file inventory
+
 ## 2. Mechanical sweep output
+
 ## 3. Unit inventory and diff against subtasks
+
 ## 4. Determinism read
+
 ## 5. Consistency map and mirror drift
+
 ## 6. Coding-guideline checklist
+
 ## 7. Tests and acceptance criteria
+
 ## 8. Reference integrity counts
+
 ## 9. Ci/cd verifiability
+
 ## 10. Blind-buildability trace
+
 ## 11. Scores and arithmetic
+
 ## 12. Findings
+
 ## 13. Improvement set
+
 ## 14. Disposition of prior findings
+
 ## 15. Acceptance criteria of this audit
+
 ``
 
 Also update `spec/25-app-spec-audit/00-overview.md` §Index with the new row and
@@ -387,6 +412,7 @@ This prompt is standalone — read it plus the spec files it names, nothing else
 
 
 ### Temp-Agent State Management Protocol (Non-Negotiable)
+
 To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
 - On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md` and writes the objective and `STATUS: IN_PROGRESS`.
 - On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.

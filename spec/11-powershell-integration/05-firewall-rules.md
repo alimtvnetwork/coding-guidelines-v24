@@ -17,7 +17,9 @@ The PowerShell runner can automatically configure Windows Firewall inbound rules
 ### Using the Script
 
 ```powershell
+
 # Run as Administrator
+
 .\run.ps1 -OpenFirewall
 ```
 
@@ -51,7 +53,9 @@ If automatic configuration fails:
 ### PowerShell (Admin)
 
 ```powershell
+
 # Create rule for port 8080
+
 New-NetFirewallRule `
     -DisplayName "LLM Runner (Go Backend) TCP 8080" `
     -Direction Inbound `
@@ -61,6 +65,7 @@ New-NetFirewallRule `
     -Profile Private,Domain
 
 # Create rule for port 8081
+
 New-NetFirewallRule `
     -DisplayName "LLM Runner (Go Backend) TCP 8081" `
     -Direction Inbound `

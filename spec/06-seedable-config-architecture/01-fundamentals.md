@@ -181,6 +181,7 @@ JSON Schema for validation:
 ### changelog.md Format
 
 ```markdown
+
 # Changelog
 
 All notable configuration changes are documented here.
@@ -188,19 +189,23 @@ All notable configuration changes are documented here.
 ## [1.2.0] - 2026-02-01
 
 ### Added
+
 - Cache category with Enabled, MaxSizeMb, TtlHours settings
 
 ### Changed
+
 - Theme options now include "high-contrast"
 
 ## [1.1.0] - 2026-01-15
 
 ### Added
+
 - Network category with port and timeout settings
 
 ## [1.0.0] - 2026-01-01
 
 ### Initial Release
+
 - General category with Theme, Language, AutoSave
 ```
 
@@ -714,6 +719,7 @@ This pattern is used by:
 See: `06-validation-data-seeding.md` for complete implementation guide.
 
 ### Examples of Data That Must Be Seeded:
+
 - Transition words for SEO validation
 - Stop words for RAG indexing
 - Allowed file types for search

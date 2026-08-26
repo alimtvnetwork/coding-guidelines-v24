@@ -343,6 +343,7 @@ Every app table MUST be documented in `spec/23-app-db/` with:
 ### Documentation File Template
 
 ```markdown
+
 # {TableName} Table
 
 **Version:** 1.0.0

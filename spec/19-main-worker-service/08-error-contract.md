@@ -66,18 +66,21 @@ Extension fields (always present in the JSON shape, `null` when not applicable):
 ## 3. Failure Taxonomy (the catalog)
 
 ### 3.1 `WorkerUnreachable`
+
 - **Category:** Transport. **Severity:** Error. **Retryable:** true.
 - **When:** TCP connect fail, TLS fail, request timeout, DNS fail.
 - **Main does:** retry per `15-tunable-constants.md` §2.1 (`RetryMaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`). Log each attempt. Final failure → return envelope to caller, mark Worker `LastSeenAt` stale.
 - **Worker does:** N/A (Worker never sees it; it's a Main-side observation).
 
 ### 3.2 `WorkerVersionMismatch`
+
 - **Category:** Configuration. **Severity:** Error. **Retryable:** false.
 - **When:** Worker reports a version Main doesn't expect (e.g. an in-flight push update half-applied).
 - **Main does:** stop routing to that Worker, mark `Quarantined`, alert Power Admin. Do NOT retry.
 - **Why no retry:** retrying a version-skewed worker risks data corruption.
 
 ### 3.3 `SplitDBWriteFail`
+
 - **Category:** Storage. **Severity:** Error. **Retryable:** depends on `SubCode`.
 - **Sub-codes** (in `Error.SubCode` extension field):
   - `SplitDBLocked` — retryable (SQLite WAL contention). Backoff 50ms, max 5 attempts <!-- TUNABLE-WAIVER: SQLite-WAL-local micro-retry; distinct from Main↔Worker HTTP retries pinned in 15-tunable-constants.md §2.1 -->.
@@ -86,28 +89,33 @@ Extension fields (always present in the JSON shape, `null` when not applicable):
 - **Worker does:** wrap the underlying `apperror` per `spec/03-error-manage/`, then map to this envelope at the API boundary. Never expose raw SQLite errors over the wire.
 
 ### 3.4 `AuthHandshakeFail`
+
 - **Category:** Auth. **Severity:** Error. **Retryable:** false.
 - **When:** JWT signature invalid, claims mismatch, OAuth client-credentials rejected, expired token Main thought was fresh.
 - **Worker does:** return 401 with this envelope. NEVER 500.
 - **Main does:** if Main initiated the call, refresh credentials and retry **once**. If still fails, surface to caller. If user-initiated, force re-login by setting response header `X-Auth-Action: Reauthenticate` per `spec/04-database-conventions/06-rest-api-format.md` (X-headers section). The frontend MUST treat this header as the sole "force re-login" signal — no inference from status codes alone. (Resolves F-A-26.)
 
 ### 3.5 `AccessDenied`
+
 - **Category:** Auth. **Severity:** Warn. **Retryable:** false.
 - **When:** JWT valid but `User has access to {EnumPage}` returns false.
 - **Worker does:** return 403 with this envelope. Write `AccessDenialEvent` row (audit).
 - **Main does:** propagate to caller verbatim. Do NOT retry.
 
 ### 3.6 `WorkerOverloaded`
+
 - **Category:** Transport. **Severity:** Warn. **Retryable:** true.
 - **When:** Worker rate-limit middleware fires, or Worker reports `WorkerNodeStatus = Draining`.
 - **Main does:** for new tenants — re-run worker selection (excluding this worker). For existing tenants — retry with `RetryAfterSeconds` honored.
 
 ### 3.7 `IdempotencyConflict`
+
 - **Category:** Validation. **Severity:** Warn. **Retryable:** false.
 - **When:** `X-Idempotency-Key` reused with a different request body.
 - **Worker does:** return 409 with the original response's `OperationId` so the caller can reconcile.
 
 ### 3.8 `ValidationFail`
+
 - **Category:** Validation. **Severity:** Warn. **Retryable:** false.
 - **When:** payload fails schema or business validation on Worker.
 - **Includes:** `Error.FieldErrors` array with `{FieldName, FailureReason}`.

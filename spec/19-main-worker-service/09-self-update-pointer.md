@@ -41,6 +41,7 @@ If `spec/14-update/` and this pointer ever conflict, `spec/14-update/` wins.
 ## 3. Intended Future Flow (summary, NOT a build instruction)
 
 ### Step 1 — Endpoint discovery + redirect caching
+
 1. App calls `POST /API/V1/SelfUpdate` with OAuth/JWT.
 2. Endpoint redirects to a download URL.
 3. App **saves the redirect URL** to its local DB.
@@ -48,6 +49,7 @@ If `spec/14-update/` and this pointer ever conflict, `spec/14-update/` wins.
 5. If saved URL is unreachable OR older than `MainWorker.SelfUpdate.RedirectStaleHours` (default 36h per `15-tunable-constants.md` §2.8), re-resolve via the original endpoint.
 
 ### Step 2 — Download + apply
+
 1. Hit redirect URL with auth.
 2. Receive a JSON instruction document. **Format spec deferred** — will live in a sibling file under `spec/14-update/`.
 3. JSON typically contains:
@@ -57,6 +59,7 @@ If `spec/14-update/` and this pointer ever conflict, `spec/14-update/` wins.
 4. App unzips, applies actions atomically (rename-first per `mem://features/self-update-architecture`), reports new version.
 
 ### Applies to
+
 - Main Server.
 - All Worker Nodes.
 

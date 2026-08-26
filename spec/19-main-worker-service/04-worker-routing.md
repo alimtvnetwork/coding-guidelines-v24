@@ -20,21 +20,25 @@ See also [`images/03-worker-subdomain-routing.png`](./images/03-worker-subdomain
 Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStrategy` (canonical default in `15-tunable-constants.md` §2.5). Stored in `WorkerSelectionStrategy` table. Allowed values: `RoundRobin`, `LeastLoaded`, `Manual`. Main MUST refuse to start when the configured value is outside this allow-list (no silent fallback — CODE RED).
 
 ### 1.1 `RoundRobin`
+
 - Pick next eligible worker ordered by `WorkerNode.Sequence ASC` (ties broken by `WorkerNodeRegisteredAt ASC`).
 - Cursor persisted in main DB (single-row config table or `WorkerSelectionEvent` last-row lookup).
 - Pros: trivially predictable, deterministic across restarts. Cons: ignores load.
 
 ### 1.2 `LeastLoaded` (**default** — resolves OQ-2)
+
 - Pick `Active` worker with fewest assigned `Company` rows.
 - Tiebreaker: oldest `WorkerNodeRegisteredAt`.
 - Pros: balances over time. Cons: slightly more expensive query (still O(N) on workers, N is small).
 
 ### 1.3 `Manual`
+
 - Power Admin specifies `WorkerNodeId` in the create request.
 - Used for testing and reserved-capacity tenants.
 - Requires `User has access to EnumPage.PowerAdminPage`.
 
 ### 1.4 Eligibility filter (applies to all strategies)
+
 A worker is eligible only if **all** are true (positive guards, per CODE RED):
 - `IsPrimary(node)` → `WorkerNode.IsBackup = 0` (Phase 4, D9 — backups never serve traffic).
 - `IsWorkerActive(node)` → `WorkerNodeStatusCode = 'Active'`
@@ -88,16 +92,19 @@ Cache backend: Laravel cache driver (file/redis/memcached) — implementer's cho
 ## 3. Failover
 
 ### 3.1 Worker becomes unreachable mid-request
+
 1. Main retries per `15-tunable-constants.md` §2.1 (`RetryMaxAttempts`, `RetryBackoffSeconds`, `RetryJitterPct`).
 2. On final failure: surface `WorkerUnreachable` to caller. Do NOT silently reroute — the user's data lives on that specific worker.
 3. Log event with `X-Correlation-Id`. Per `spec/03-error-manage/`, never swallow.
 
 ### 3.2 Worker marked offline
+
 - Background heartbeat checker flips status to `Quarantined` after `MainWorker.Heartbeat.MissedThreshold` consecutive misses (per `15-tunable-constants.md` §2.3); cooldown before re-eligibility = `MainWorker.Heartbeat.QuarantineCooldownSeconds`.
 - Existing `Company → Worker` mappings are NOT reassigned automatically. Tenant data is on that worker.
 - Power Admin can trigger manual reassignment via `POST /API/V1/Workers/{From}/Migrate/{To}` (deferred — not in initial endpoint set).
 
 ### 3.3 Worker comes back online
+
 - On heartbeat resume, status flips to `Active`.
 - Existing tenants resume routing automatically.
 

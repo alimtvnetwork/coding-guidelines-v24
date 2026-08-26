@@ -583,7 +583,9 @@ export default defineConfig(({ mode }) => {
 ### .distignore additions for React projects
 
 ```
+
 # Add to .distignore when using React
+
 frontend
 node_modules
 assets/dist/*.map

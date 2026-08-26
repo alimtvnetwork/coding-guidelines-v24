@@ -124,7 +124,9 @@ For install scripts, JSON manifests, and Linux binaries:
 
 ```bash
 gpg --detach-sign --armor --local-user "$RELEASE_KEY_ID" install.ps1
+
 # Produces: install.ps1.asc
+
 ```
 
 Verification (user-side):

@@ -23,19 +23,27 @@ back to inserting `Not`/`No` after the `Is`/`Has` prefix.
 ## Usage
 
 ```bash
+
 # Go
+
 python3 inverted_fields.py --input User.go  --lang go
+
 # → writes User.generated.go
 
 # PHP
+
 python3 inverted_fields.py --input User.php --lang php
+
 # → writes User.generated.php
 
 # TypeScript
+
 python3 inverted_fields.py --input User.ts  --lang typescript
+
 # → writes User.generated.ts
 
 # Print to stdout instead
+
 python3 inverted_fields.py --input User.go  --lang go --stdout
 ```
 

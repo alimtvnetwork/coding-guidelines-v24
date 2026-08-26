@@ -59,6 +59,7 @@ define('PLUGIN_ERROR_LOGGING', true);  // Set to false to disable
 ## What Gets Logged
 
 ### Debug Log (debug.log)
+
 - Plugin initialization start
 - PHP and WordPress versions
 - Class loading (each file loaded)
@@ -70,6 +71,7 @@ define('PLUGIN_ERROR_LOGGING', true);  // Set to false to disable
 - Success/failure for each step
 
 ### Error Log (error.log)
+
 - Critical errors with full stack traces
 - Database connection failures
 - Missing classes or dependencies
@@ -147,12 +149,14 @@ define('PLUGIN_ERROR_LOGGING', true);  // Set to false to disable
 ## Log Format
 
 ### Debug Log Entry Format:
+
 ```
 [2026-02-04 15:30:45] [DEBUG] [Memory: 12.5 MB] Message here
 --------------------------------------------------------------------------------
 ```
 
 ### Error Log Entry Format:
+
 ```
 [2026-02-04 15:30:45] [ERROR] [Memory: 12.5 MB] Error message
 Context: Array

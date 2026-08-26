@@ -727,6 +727,7 @@ When the document enters fullscreen mode, text scales up:
 ---
 
 ## Animation Timing Reference
+
 | Category | Duration | Easing | Use Case |
 |----------|----------|--------|----------|
 | Micro | `0.15s` | `ease` | Color shifts, opacity |

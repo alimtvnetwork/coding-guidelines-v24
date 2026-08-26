@@ -50,7 +50,9 @@ The reference linter (`linter-scripts/validate-guidelines.py` and its Go twin `v
 ### Recommended Linter Change (non-breaking)
 
 ```python
+
 # linter-scripts/validate-guidelines.py
+
 GO_ONLY_EXEMPT = {"done", "found", "exists"}
 UNIVERSAL_EXEMPT = {"ok", "err", "error", "true", "false"}
 

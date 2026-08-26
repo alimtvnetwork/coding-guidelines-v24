@@ -64,6 +64,7 @@ See: [Database Standards](../../.lovable/memories/architecture/database-standard
 Every `00-overview.md` file should end with a cross-reference table:
 
 ```markdown
+
 ## Cross-References
 
 | Reference | Location |

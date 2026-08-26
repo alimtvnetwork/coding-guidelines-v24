@@ -222,10 +222,13 @@ func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
 ### Health Check Verification
 
 ```bash
+
 # Test health endpoint
+
 curl -s http://localhost:8080/api/v1/health | jq .
 
 # Expected response:
+
 {
   "success": true,
   "data": {
@@ -415,10 +418,13 @@ _, err := db.Exec("PRAGMA journal_mode=WAL")
 ### Check if server is running
 
 ```bash
+
 # Check process
+
 ps aux | grep "cli-name"
 
 # Check port
+
 lsof -i :8080
 netstat -tlnp | grep 8080
 ```
@@ -426,37 +432,48 @@ netstat -tlnp | grep 8080
 ### Test endpoints
 
 ```bash
+
 # Health check
+
 curl -s http://localhost:8080/api/v1/health | jq .
 
 # With verbose output
+
 curl -v http://localhost:8080/api/v1/health
 
 # Check response headers
+
 curl -I http://localhost:8080/api/v1/health
 ```
 
 ### Enable debug logging
 
 ```bash
+
 # Set environment variable
+
 export DEBUG=true
 ./cli-name serve
 
 # Or pass flag
+
 ./cli-name serve --debug
 ```
 
 ### Check logs
 
 ```bash
+
 # If using file logging
+
 tail -f logs/app.log
 
 # If using journald (systemd)
+
 journalctl -u cli-name -f
 
 # Filter by level
+
 journalctl -u cli-name -f | grep -E '"level":"error"'
 ```
 
@@ -483,13 +500,17 @@ func main() {
 ### Collect profiles
 
 ```bash
+
 # CPU profile (30 seconds)
+
 go tool pprof http://localhost:6060/debug/pprof/profile?seconds=30
 
 # Heap profile
+
 go tool pprof http://localhost:6060/debug/pprof/heap
 
 # Goroutine profile
+
 go tool pprof http://localhost:6060/debug/pprof/goroutine
 ```
 

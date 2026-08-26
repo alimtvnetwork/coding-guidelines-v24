@@ -8,6 +8,7 @@
 ---
 
 ## 0. Rule Zero - NEVER COMMIT GENERATED CODE OR ARTIFACTS
+
 **NEVER** commit generated code (e.g., ORM models, gRPC clients, OpenAPI stubs), test results, test reports, or compiled binaries. They must be added to `.gitignore`. **This is the most critical repository rule.**
 
 ---

@@ -63,6 +63,7 @@ ASCII above is a quick reference. Authoritative diagram: `diagrams/seq-login-rou
 ## 3. Request Lifecycle
 
 ### 3.1 New Company creation
+
 1. React → Main: `POST /API/V1/Company` (authenticated session).
 2. Main validates payload, runs worker-selection strategy (`04-worker-routing.md`).
 3. Main writes minimal identity row (`CompanyId`, `CompanySlug`, `CompanyName`, `WorkerNodeId`) into main DB.
@@ -73,6 +74,7 @@ ASCII above is a quick reference. Authoritative diagram: `diagrams/seq-login-rou
 Authoritative: `diagrams/seq-company-creation.mmd`.
 
 ### 3.2 Subsequent business requests
+
 1. React → Main: first request after login.
 2. Main resolves `CompanyId → WorkerNodeId` (cache hit if recent).
 3. Main returns the worker endpoint + a worker-scoped JWT to React.
@@ -82,6 +84,7 @@ Authoritative: `diagrams/seq-company-creation.mmd`.
 Authoritative: `diagrams/seq-login-routing.mmd`.
 
 ### 3.3 Push update
+
 1. Power Admin → Main: `POST /API/V1/Workers/{WorkerNodeId}/Update` (or `/All/Update`).
 2. Main calls Worker's `/SelfUpdate` endpoint with auth.
 3. Worker performs self-update (mechanism is pointer-only — see `09-self-update-pointer.md`).

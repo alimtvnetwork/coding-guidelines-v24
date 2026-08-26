@@ -79,36 +79,52 @@ matching closing marker so the CLI can rewrite or remove it without
 disturbing surrounding content:
 
 ```
+
 # <tool> shell wrapper v2 — managed by `<tool> setup`. Do not edit manually.
+
 ...snippet body...
+
 # <tool> shell wrapper v2 end
+
 ```
 
 ### PowerShell (`$PROFILE`)
 
 ```powershell
+
 # toolname shell wrapper v2 — managed by `toolname setup`. Do not edit manually.
+
 $env:TOOLNAME_WRAPPER = "1"
 function gcd { Set-Location (toolname cd @args) }
+
 # toolname shell wrapper v2 end
+
 ```
 
 ### Bash / Zsh (`~/.bashrc`, `~/.zshrc`)
 
 ```bash
+
 # toolname shell wrapper v2 — managed by `toolname setup`. Do not edit manually.
+
 export TOOLNAME_WRAPPER=1
 gcd() { cd "$(toolname cd "$@")" ; }
+
 # toolname shell wrapper v2 end
+
 ```
 
 ### Fish (`~/.config/fish/config.fish`)
 
 ```fish
+
 # toolname shell wrapper v2 — managed by `toolname setup`. Do not edit manually.
+
 set -gx TOOLNAME_WRAPPER 1
 function gcd; cd (toolname cd $argv); end
+
 # toolname shell wrapper v2 end
+
 ```
 
 The detection variable name MUST follow `<TOOL>_WRAPPER` (uppercased,

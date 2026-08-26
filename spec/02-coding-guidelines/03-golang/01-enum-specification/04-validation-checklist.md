@@ -17,14 +17,18 @@ Use this checklist when auditing a CLI for enum compliance.
 Search for hardcoded strings that should be enums:
 
 ```bash
+
 # Find string comparisons in switch statements
+
 grep -rn 'case "' --include="*.go" .
 
 # Find string equality checks
+
 grep -rn '== "' --include="*.go" .
 grep -rn '!= "' --include="*.go" .
 
 # Find string assignments to type fields
+
 grep -rn 'Type.*=' --include="*.go" .
 grep -rn 'Mode.*=' --include="*.go" .
 grep -rn 'Status.*=' --include="*.go" .
@@ -99,6 +103,7 @@ grep -rn 'Provider.*=' --include="*.go" .
 ## Audit Report Template
 
 ```markdown
+
 # Enum Compliance Audit: {CLI Name}
 
 **Date:** YYYY-MM-DD  
@@ -244,19 +249,25 @@ const (
 ## Grep Commands for Audit
 
 ```bash
+
 # Find potential enum candidates
+
 grep -rn 'type.*string' --include="*.go" internal/
 
 # Find switch on strings
+
 grep -rn 'switch.*{' -A5 --include="*.go" . | grep 'case "'
 
 # Find string fields that could be enums
+
 grep -rn 'Type\|Mode\|Status\|Provider\|Format' --include="*.go" internal/models/
 
 # Find missing Is* methods
+
 grep -rn 'if.*==' --include="*.go" . | grep -v 'err\|nil\|0\|false\|true'
 
 # Find legacy "Unknown" zero values (should be "Invalid")
+
 grep -rn 'Unknown.*Variant.*=.*iota' --include="*.go" internal/enums/
 ```
 

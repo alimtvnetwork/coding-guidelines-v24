@@ -109,7 +109,9 @@ pub fn register_hook() -> Result<HookHandle, OsError> {
 ### Rule 2: Feature flags for optional capabilities
 
 ```toml
+
 # Cargo.toml
+
 [features]
 default = ["x11"]
 x11 = ["x11rb"]

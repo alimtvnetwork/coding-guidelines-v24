@@ -113,7 +113,9 @@ catch {
 ### Graceful Degradation
 
 ```powershell
+
 # Non-critical errors (warn but continue)
+
 git pull
 if ($LASTEXITCODE -ne 0) {
     Write-Host "WARNING [9551]: git pull failed, continuing anyway..." -ForegroundColor Yellow

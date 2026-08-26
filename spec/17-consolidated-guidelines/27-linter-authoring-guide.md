@@ -83,27 +83,34 @@ Forbidden:
 Reference implementation:
 
 ```python
+
 # linter-scripts/check-memory-mirror-drift.py
+
 def fail(msg: str, code: int = 1) -> None:
     print(f"[memory-mirror-drift] FAIL: {msg}", file=sys.stderr)
     sys.exit(code)
 
 # Structural error → code=2
+
 if not MIRROR.exists():
     fail(f"missing {MIRROR}", code=2)
 
 # Findings → code=1
+
 if missing:
     return 1
 
 # Clean → code=0
+
 return 0
 ```
 
 Bash equivalent:
 
 ```bash
+
 # linter-scripts/check-axios-version.sh
+
 set -euo pipefail
 if ! grep -q '"axios"' package.json; then
   echo "[axios] structural: package.json has no axios entry" >&2
@@ -182,9 +189,13 @@ Two acceptable formats:
 **Format A — flat list** (one entry per line):
 
 ```
+
 # linter-scripts/spec-cross-links.allowlist
+
 # Lines starting with # are comments.
+
 # Each non-blank line is a path that may appear as a link target
+
 # even though it does not resolve inside spec/.
 
 readme.md
@@ -195,13 +206,19 @@ changelog.md
 **Format B — sectioned** (when entries belong to disjoint categories):
 
 ```
+
 # linter-scripts/spec-folder-refs.allowlist
+
 [external]
+
 # Folders living in sibling repos
+
 gitmap-v3/spec/01-app
 
 [doc-only]
+
 # Folders intentionally referenced only in prose, never created
+
 spec/99-future-work
 ```
 
@@ -210,10 +227,15 @@ spec/99-future-work
 Every allowlist file **must** begin with:
 
 ```
+
 # <linter-name> allowlist
+
 # Owner: <github-username>
+
 # Last reviewed: YYYY-MM-DD
+
 # Each entry below MUST have a justification comment on the preceding line.
+
 ```
 
 ### §6.3 Adding an entry — workflow
@@ -270,7 +292,9 @@ Rules:
 Reference test harness:
 
 ```python
+
 # linter-scripts/fixtures/check-memory-mirror-drift_test.py
+
 import subprocess, pathlib, sys
 ROOT = pathlib.Path(__file__).parent
 SCRIPT = ROOT.parent.parent / "check-memory-mirror-drift.py"

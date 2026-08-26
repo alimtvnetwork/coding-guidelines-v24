@@ -44,7 +44,9 @@ mirrors median-first instead of in declaration order.
 ### Implementation hook
 
 ```python
+
 # linters-cicd/checks/_lib/walker.py
+
 def walk_files_middle_out(root, extensions):
     files = walk_files(root, extensions)
     files.sort(key=lambda p: p.stat().st_size)

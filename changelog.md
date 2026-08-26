@@ -112,7 +112,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Root cause this closes: v5.129 promoted "missing or stale mirrors are a build-fail" to Hard Rule #13 but shipped zero enforcement, so the exact bug the rule was written to fix (agent search fails because the mirror was not regenerated) could still land silently. Now the rule has teeth.
 
 
-
 ## [5.129.0] - 2026-07-19
 
 ### Changed, coding guideline 31 v1.5.0: hard rule for mirror sync + expanded React mutation guidance
@@ -121,7 +120,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Promoted the mirror requirement to Hard Rule #13 (Zero Tolerance): missing or stale mirrors are a build-fail; never hand-edit mirrors; always edit source and re-run the sync script. Root cause this closes: v1.4.0 documented sync only in the release notes, not inside the guideline itself, so any AI reading only file 31 had no reason to keep the mirrors alive.
 - React rule #7 rewritten from a one-line "never mutate, use spread or structuredClone" into a full guidance paragraph. Explains WHY (React reconciler uses referential inequality, so in-place mutation silently drops updates), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`, `Object.freeze` for constants), when to use `structuredClone` (deep copies for nested state / form drafts), when Immer is acceptable (only when a reducer would otherwise be unreadable, output still a fresh reference), and three concrete rules of thumb including the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 - Ran `node scripts/sync-guidelines.mjs`: both mirrors now match source byte-for-byte (198 lines / 66 lines respectively). Verified with `node scripts/sync-version.mjs` at v5.129.0.
-
 
 
 ## [5.128.0] - 2026-07-19
@@ -1370,6 +1368,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.23.0] - 2026-04-21
 
 ### Removed
+
 - **`spec/19-ai-reliability/`** — folder removed at user request along
   with all dependent artifacts: `scripts/replay-repro.sh`,
   `linters-cicd/scripts/check-context-hygiene.py`,
@@ -1384,6 +1383,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.22.0] - 2026-04-21
 
 ### Changed
+
 - **Release pipeline bakes and uploads versioned `release-install.*`
   scripts.** New `.github/workflows/release.yml` step
   *"Bake version into release-install scripts"* (runs after the
@@ -1410,6 +1410,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.21.0] - 2026-04-21
 
 ### Added
+
 - **`release-install.sh` and `release-install.ps1`** — pinned-version
   installers for GitHub Release pages. Implementation of
   `spec/14-update/25-release-pinned-installer.md`.
@@ -1436,6 +1437,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
     strict pinning when an explicit version is requested.
 
 ### Removed
+
 - **Stale `LEGACY-CDN-DOMAIN` allowlist entries.** Removed
   `spec/15-domain-migration/` and `docs/legacy-domains.md` from the
   rule's allowlist in `linter-scripts/forbidden-strings.toml` — neither
@@ -1447,6 +1449,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.20.0] - 2026-04-21
 
 ### Changed
+
 - **`check-spec-folder-refs.py` — section-aware allowlist + clearer errors.**
   The linter now distinguishes documentation-only references from real
   external (sibling-repo) folder references.
@@ -1464,6 +1467,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.19.0] - 2026-04-20
 
 ### Added
+
 - **`LEGACY-CDN-DOMAIN` forbidden-strings rule.** Guards against legacy CDN domain
   references (`cdn.riseup-asia.com`) that should be `cdn.riseup.asia` per the
   current infrastructure standard.
@@ -1475,6 +1479,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.18.0] - 2026-04-20
 
 ### Added
+
 - **`STALE-MODULE-PATH` forbidden-strings rule.** Guards against legacy module
   path references (`movie-cli-v1`) that should be `movie-cli-v2` per the
   global namespace standard.
@@ -1487,6 +1492,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.17.0] - 2026-04-20
 
 ### Refactored
+
 - **`forbidden-strings` TOML-driven linter.** Generalized the single-purpose
   `check-stale-repo-slug.sh` into a reusable, configuration-driven scanner.
   - New `linter-scripts/forbidden-strings.toml` — each `[[rule]]` defines a
@@ -1499,6 +1505,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
   lint job.
 
 ### Benefits
+
 - Adding new rename guards no longer requires new scripts — just append a
   `[[rule]]` block to the TOML.
 - Allowlists live next to their rules, making intent explicit and reviews easier.
@@ -1506,6 +1513,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.16.0] - 2026-04-20
 
 ### Added
+
 - **`check-stale-repo-slug.sh` linter safeguard.** Scans repository for pre-renumber
   repo slug references (`coding-guidelines-v24` through `v14`). The current canonical
   slug is `coding-guidelines-v24`; any older slug is a bug from incomplete bulk rename.
@@ -1518,6 +1526,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ## [3.12.0] — 2026-04-19
 
 ### Refactored
+
 - **Free-text-column rule family — extracted shared logic** into
   `linters-cicd/checks/_lib/free_text_columns.py`. Both rules are now
   thin shims over the shared module:
@@ -1532,6 +1541,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
   enable **only one** of the two rules in CI to avoid duplicate findings.
 
 ### Why this approach
+
 The user requested "extend DB-FREETEXT-001 with Rule 12 too." Mirroring
 the logic would have created two rules emitting identical findings on
 the same code (noisy CI output, ambiguous suppressions). The refactor
@@ -1543,6 +1553,7 @@ the canonical superset.
 ## [3.11.0] — 2026-04-19
 
 ### Added
+
 - **`MISSING-DESC-001` v1.1 — waiver mechanism.** Per-block waiver
   `-- linter-waive: MISSING-DESC-001 reason="..."` (5-line lookback,
   comments-only chain) and per-file waiver
@@ -1553,6 +1564,7 @@ the canonical superset.
   `linters-cicd/checks/missing-desc/readme.md`.
 
 ### Audited & cleaned
+
 - **Spec tree audit (115 violations → 0 unwaived).** Every `CREATE TABLE`
   inside ` ```sql ` markdown fences across `spec/` was audited against
   Rules 10/11/12.
@@ -1574,6 +1586,7 @@ the canonical superset.
 ## [3.10.0] — 2026-04-19
 
 ### Added
+
 - **`DB-FREETEXT-001`** SQL linter (`linters-cicd/checks/free-text-columns/sql.py`)
   — flags `CREATE TABLE` statements missing the required nullable free-text
   columns per `spec/04-database-conventions/02-schema-design.md` §6 and Naming
@@ -1596,6 +1609,7 @@ the canonical superset.
 ## [3.9.0] — 2026-04-19
 
 ### Added
+
 - **`linters-cicd/` CI/CD linter pack** — portable, language-agnostic CODE RED
   enforcement that any pipeline can integrate with one line.
   - 7 checks (Phase 1, Go + TypeScript): nested-if, boolean-naming,
@@ -1616,12 +1630,14 @@ the canonical superset.
   distribution model, rules mapping, and acceptance criteria.
 
 ### Release pipeline
+
 - `.github/workflows/release.yml` now also packages
   `coding-guidelines-linters-vX.Y.Z.zip` on every `v*` tag, computes its
   SHA-256, appends to `checksums.txt`, and attaches both the ZIP and
   `linters-install.sh` to the GitHub Release.
 
 ### Smoke test
+
 - Orchestrator self-tested against this repo's `src/`: all 7 checks ran,
   SARIF validated against the 2.1.0 schema, exit codes correct.
 
@@ -1630,6 +1646,7 @@ the canonical superset.
 ## [3.8.0] — 2026-04-19
 
 ### Added
+
 - **`-n` / `--no-latest` skip-probe flag** on both installers. Pass `-n` to bypass
   the latest-version auto-probe and run the current installer as-is — useful on
   flaky networks, in CI pipelines, or when you want a fully reproducible install
@@ -1640,6 +1657,7 @@ the canonical superset.
   install section and the root `readme.md` so users can copy them in one click.
 
 ### Changed
+
 - **Windows PowerShell command is now listed first** in the UI install section
   and the README's Option 1 — matching the dominant audience for this repo.
   Bash (macOS / Linux) follows immediately below.
@@ -1656,12 +1674,14 @@ the canonical superset.
   clean, professional column. Matches the visual rhythm of the bash output.
 
 ### Performance
+
 - The PowerShell probe was rewritten to use in-process `System.Net.Http.HttpClient`
   async HEAD requests instead of `Start-Job` (which spawns one PowerShell process
   per candidate, ~20 s of overhead). The `Timeout = 2s` setting is now genuinely
   honoured and the probe finishes in ~2–3 s end-to-end.
 
 ### Documentation
+
 - README's flag table updated with the full alias list:
   `--no-probe`, `--no-latest`, `-n` ↔ `-NoProbe`, `-NoLatest`, `-n`.
 - New section in `spec/14-update/23-install-script-version-probe.md`:
@@ -1671,6 +1691,7 @@ the canonical superset.
   pseudocode any installer can copy.
 
 ### Files touched
+
 - `install.ps1` — `-NoLatest` / `-n` aliases, middle-out candidate array,
   descending result scan.
 - `install.sh` — `--no-latest` / `-n` aliases, middle-out candidate array,

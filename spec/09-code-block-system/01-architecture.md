@@ -73,6 +73,7 @@ Instead of attaching listeners to each button or line, a single set of listeners
 ## File Responsibilities
 
 ### codeBlockExtractor.ts
+
 - Scans markdown line-by-line
 - Detects opening fences (three or more backticks followed by optional language)
 - Detects closing fences (matching backtick count)
@@ -80,18 +81,21 @@ Instead of attaching listeners to each button or line, a single set of listeners
 - Delegates HTML building to codeBlockBuilder.ts
 
 ### codeBlockBuilder.ts
+
 - Receives raw code string + language + block ID
 - Calls highlighter.ts for syntax highlighting
 - Builds complete HTML structure: wrapper → header → body → selection bar
 - Generates all buttons with embedded data attributes
 
 ### highlighter.ts
+
 - Wraps highlight.js with tree structure detection
 - Registers 12 languages explicitly
 - Falls back to auto-detection, then to tree rendering
 - Tree renderer adds 📁/📄 icons, colorizes guides, ellipsis, comments
 
 ### useCodeBlockEvents.ts
+
 - Single React hook that creates all handlers and attaches them
 - Maintains refs for: active wrapper, anchor index, cursor index, pinned lines, drag state
 - Splits handler creation into buildActionHandlers and buildLineHandlers

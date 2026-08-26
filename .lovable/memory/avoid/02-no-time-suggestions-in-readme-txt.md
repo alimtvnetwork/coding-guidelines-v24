@@ -3,6 +3,7 @@ name: no-time-suggestions-in-readme-txt
 description: Hard prohibition — never suggest, recommend, mention, or auto-add timestamps, time-update workflows, or git-commit-time tips inside readme.txt or in chat about readme.txt. Sequence 02 in strictly-avoid.
 type: constraint
 ---
+
 # Avoid 02 — No time-related suggestions for `readme.txt`
 
 **Sequence:** 02 (strictly-avoid)

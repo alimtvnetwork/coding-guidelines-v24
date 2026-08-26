@@ -27,12 +27,15 @@ Reduce the time from "I have a spec idea" to "CI is green and the doc is live in
 ## Recommended improvements (ranked by leverage)
 
 ### 1. `spec/_template.md` (shipped in this PR)
+
 Eliminates step 2 friction. Authors `cp` and edit. Already in repo.
 
 ### 2. `00-strictly-avoid-quickref.md` (shipped in this PR)
+
 30-second read; eliminates the most common review-time rejections (boolean negatives, magic strings, swallowed errors, version drift).
 
 ### 3. VS Code task — one-button validate
+
 ✅ **Shipped** in `.vscode/tasks.json`. Open the Command Palette → *Tasks: Run Task* → pick one of:
 
 - **Spec: Validate** (default test task) — `validate-guidelines.py` + `check-spec-cross-links.py`
@@ -56,6 +59,7 @@ Reference shape:
 Next iteration: pair with a custom `problemMatcher` once the validator emits `file:line: message` lines so violations land in the Problems panel inline.
 
 ### 4. Pre-commit hook expansion
+
 ✅ **Shipped** in `scripts/hooks/pre-commit`. The hook now runs three phases in addition to the original `linter-scripts/check-*` guards:
 
 1. **Spec guards** — when staged paths touch `spec/` or `.lovable/`, the hook runs `validate-guidelines.py` and `check-spec-cross-links.py`.
@@ -75,25 +79,33 @@ bash scripts/hooks/install-hooks.sh
 ✅ **Shipped** in `scripts/spec-change-report.mjs`. Generates a styled HTML + PDF report scoping validator + cross-link findings to the spec files you actually changed.
 
 ```bash
+
 # Default — staged + unstaged + untracked spec files
+
 node scripts/spec-change-report.mjs
 
 # Full repo (useful for baseline / nightly)
+
 node scripts/spec-change-report.mjs --all
 
 # Only what's in the git index (mirrors what the pre-commit hook sees)
+
 node scripts/spec-change-report.mjs --staged
 
 # Only modified-but-unstaged + untracked (in-flight work, no commit yet)
+
 node scripts/spec-change-report.mjs --unstaged
 
 # Skip PDF rendering (HTML only — fastest, no headless browser needed)
+
 node scripts/spec-change-report.mjs --html-only        # alias: --no-pdf
 
 # Custom output dir
+
 node scripts/spec-change-report.mjs --out ./reports
 
 # Show full usage and exit codes
+
 node scripts/spec-change-report.mjs --help
 ```
 
@@ -122,9 +134,11 @@ procedure.
 
 
 ### 5. Live preview wired into the docs viewer
+
 The viewer already reads `src/data/specTree.json`. Add a dev-mode watch (or `bun run sync:watch`) that re-runs `sync-spec-tree.mjs` on `spec/**/*.md` save. Authors see their doc render in the live preview within ~1 s.
 
 ### 6. Frontmatter linter (specific to spec metadata)
+
 Today the validator checks header presence but not content. Add micro-rules:
 
 - `Version` is semver
@@ -137,6 +151,7 @@ Today the validator checks header presence but not content. Add micro-rules:
 Each rule is a 5-line Python check. Output format `path:line:col: SPEC-XXX message` so editors and CI both render it identically.
 
 ### 7. Auto-bump helper
+
 `scripts/bump-spec.mjs <path> [patch|minor|major]` that:
 
 - Bumps `Version` in the file's frontmatter
@@ -147,6 +162,7 @@ Each rule is a 5-line Python check. Output format `path:line:col: SPEC-XXX messa
 Removes the most common "I forgot to bump" PR comment.
 
 ### 8. Scaffold command
+
 `scripts/new-spec.mjs <module-name> <file-name>`:
 
 - Picks the next free numeric prefix in the chosen module
@@ -156,9 +172,11 @@ Removes the most common "I forgot to bump" PR comment.
 - Echoes the file path so the author can `code $(...)` straight into it
 
 ### 9. CODE-RED-024 in-editor lint for TS / TSX
+
 Authors of *code* (not specs) keep tripping on bare `true` / `false` positional args. Add an ESLint rule (`no-restricted-syntax` with a tight selector) that flags `CallExpression > Literal[value=true|false]` outside test files. The fix is "import a named flag from `@/constants/boolFlags`."
 
 ### 10. Cross-link auto-fix
+
 `check-spec-cross-links.py` reports broken links. A `--fix` flag that uses fuzzy matching against existing files would resolve 80 % of typos in one keystroke.
 
 ---

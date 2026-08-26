@@ -51,12 +51,14 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 ## Phased Plan (12 phases, one per `next`)
 
 ### Phase 1 — Rename EnumPage → AccessItem
+
 - Rename across `07-role-based-dashboards.md`, `03-main-db-schema.md`, `14-rbac-and-status-seed.md`, ERD.
 - Define `AccessItem` columns: `AccessItemId`, `Code`, `Label`, `PageUrlSuffix`, `Description`.
 - Define matcher logic (suffix match against route).
 - Update all references; add migration note in `98-changelog.md`.
 
 ### Phase 2 — Global DB Convention Updates
+
 - `spec/04-database-conventions/01-naming-conventions.md` — DateTime = INTEGER (epoch seconds, UTC).
 - `spec/04-database-conventions/02-schema-design.md` — enum tables shape `Id/Code/Label`.
 - `spec/05-split-db-architecture/` — propagate INTEGER DateTime convention.
@@ -64,12 +66,14 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 - Update `Company` to `(CompanyId, Slug, Name, ...)`.
 
 ### Phase 3 — Move Users off Main
+
 - `03-main-db-schema.md` — remove `User`, `UserRole`, TOTP columns from Main.
 - Document Users now live on Worker split-DB.
 - Update `05-auth-and-2fa.md` — auth lookup flow becomes: Main resolves Company→Worker, Worker authenticates User.
 - Update `11-split-db-tier-reconciliation.md` — move User/UserRole to Worker App tier.
 
 ### Phase 4 — Worker Node Field Additions
+
 - Add `Sequence INTEGER NOT NULL` to `WorkerNode`.
 - Add `IsBackup INTEGER NOT NULL DEFAULT 0` (boolean).
 - Add `BackupOfWorkerNodeId INTEGER NULL` FK self-ref.
@@ -77,29 +81,34 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 - Update `04-worker-routing.md` — backup nodes excluded from selection pool.
 
 ### Phase 5 — Role / AccessItem N-M + Cache Bin + Cascading
+
 - Document `UserRole` (N-M), `RoleAccessItem` (N-M).
 - Define cache-bin tables: `RoleAccessCache` (per-role compiled access set, TTL).
 - Cascading rules section: union semantics, multi-role behavior, examples (Admin alone, Editor alone, Admin+Editor).
 - Cache invalidation protocol from Main.
 
 ### Phase 6 — Backup Node Concept Spec
+
 - New file: `17-backup-nodes.md`.
 - Sections: relationship model, registration flow, propagation Main→Worker→Worker-DB, "no serving traffic" invariant.
 - ER additions to `WorkerNode` table (already in Phase 4).
 - Worker-side mirror table `KnownBackupNode` (in Worker DB).
 
 ### Phase 7 — Incremental Diff Generator
+
 - New file: `18-incremental-backup-sync.md`.
 - Sections: cron schedule, last-sync watermark table, per-table walk, change-data-capture using `SyncOp` flag column on each app row.
 - Watermark table schema in Worker DB.
 
 ### Phase 8 — Encryption + Zip Pipeline
+
 - New file: `19-backup-encryption-and-keys.md`.
 - RSA key pair shared between worker and its backups.
 - Zip password derivation pattern.
 - Key rotation instruction issued from Main: endpoint contract + state machine (Pending / Active / Retired).
 
 ### Phase 9 — Backup Endpoints Contract
+
 - New file: `20-backup-endpoints.md`.
 - Endpoints:
   1. `POST /API/V1/Backup/IncrementalDiff` (on backup node)
@@ -111,16 +120,19 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 - Add error codes in `13-error-codes.md`.
 
 ### Phase 10 — Backup Apply Logic
+
 - Append to `20-backup-endpoints.md` or new `21-backup-apply-logic.md`.
 - Decrypt → unzip → open SQLite diff → iterate rows → apply by `SyncOp` flag → idempotency via `(SourceTable, SourceRowId, SyncOpSeq)`.
 
 ### Phase 11 — Snapshot Storage + Restore Flow
+
 - New file: `22-snapshot-storage-and-restore.md`.
 - Date-named full DB zips on backup node filesystem.
 - Retention policy (default 30 days).
 - Restore flow: Main → Backup `RestoreByDate` → Backup decompresses → Worker pulls or Backup pushes to Worker.
 
 ### Phase 12 — ER Diagram + Acceptance Criteria + Sync
+
 - Update `diagrams/erd-main-db.mmd`: AccessItem rename, Users removed, WorkerNode new fields, cache-bin notation, INTEGER DateTime.
 - New diagram: `diagrams/erd-worker-db.mmd` (Users + KnownBackupNode + watermark).
 - New diagram: `diagrams/seq-backup-incremental.mmd`.
@@ -169,6 +181,7 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 ---
 
 ## Phase 13 — Codebase Audit, Query Wrappers & Enum Fixes
+
 - ✅ **COMPLETED**. See `## Completed` section.
 
 ---

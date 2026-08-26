@@ -42,13 +42,17 @@ GitHub Actions users do **not** need this kit — use the one-liner
 Every platform does the same thing:
 
 ```bash
+
 # 1. INSTALL — downloads linters-cicd/ into the workspace
+
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
 
 # 2. RUN — emits SARIF, exits 1 on CODE RED
+
 bash ./linters-cicd/run-all.sh --path . --format sarif --output coding-guidelines.sarif
 
 # 3. UPLOAD — platform-specific artifact upload
+
 ```
 
 Everything below is just glue around those three lines.

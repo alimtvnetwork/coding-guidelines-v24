@@ -45,6 +45,7 @@ Subtotal recovered: **+62 raw points**, capped at +53 net by residual gaps below
 ## 2. What still costs the dumb AI ~25 points
 
 ### 2.1 Diagram debt (-8)
+
 `spec/19-main-worker-service/diagrams/` was not refreshed in Phase 13.2. The Mermaid/PNG diagrams still show:
 - 3-tier DB instead of 4-tier (Root/Settings/App/Session per FU-1).
 - `User` table boxes instead of `UserDirectory` / `AppUser` split.
@@ -53,6 +54,7 @@ Subtotal recovered: **+62 raw points**, capped at +53 net by residual gaps below
 A literal AI that prefers diagrams over prose (common failure mode) will replicate the stale model.
 
 ### 2.2 Test-vector / fixture gap (-7)
+
 - `97-acceptance-criteria.md` lists ACs but provides **no canonical request/response JSON fixtures** for the 12 core endpoints in `06-`.
 - `08-error-contract.md` defines the envelope shape but ships **no golden-file examples** keyed to `13-error-codes.md` codes.
 - `12-jwt-delivery-contract.md` lacks a worked HS256/RS256 token example with claim ordering.
@@ -60,15 +62,18 @@ A literal AI that prefers diagrams over prose (common failure mode) will replica
 A blind AI will invent fixtures and drift from intent on field ordering, timestamp format (epoch vs ISO), and null-vs-omitted.
 
 ### 2.3 Prose-vs-seed drift residue (-4)
+
 `15-§4.1` alias map covers the 32 collisions caught in 07-, but spot-check finds **3 keys still only in prose**:
 - `MainWorker.Cache.WorkerToCompanyTtlSeconds` (mentioned `01-§5`, missing from `config.seed.json`).
 - `MainWorker.Routing.BackupPromotionGraceSeconds` (`18-§3`, not seeded).
 - `MainWorker.Sync.IncrementalBatchMaxRows` (`19-§4`, not seeded).
 
 ### 2.4 Cross-spec inlining incomplete (-3)
+
 `11-` now declares reconciliation **applied**, but several rules it inherits from `spec/01-app/` and `spec/03-tasks/` are still **referenced by link**, not inlined. A blind AI handed only the `spec/19-…` folder cannot resolve them.
 
 ### 2.5 Minor literal-reader traps (-3)
+
 - `05-§2.1` uses "SHOULD" for the proxy-credentialed-body rule that the rest of the spec treats as MUST.
 - `22-§6.4` (the new WAL prohibition) lives in a sub-section a literal AI may skip if it stops reading at §6.
 - `17-cascading-roles-and-cache-bin.md` §3 still has one un-resolved OQ marker (`OQ-17-2`) without a default.

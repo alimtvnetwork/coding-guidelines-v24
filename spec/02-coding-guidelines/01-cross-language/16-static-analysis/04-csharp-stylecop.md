@@ -134,29 +134,37 @@ Maps every cross-language coding guideline to its **StyleCop Analyzers**, **Rosl
 
 ```ini
 [*.cs]
+
 # Naming: Boolean properties must use Is/Has/Can/Should/Was/Will prefix
+
 # (enforced via dotnet_naming_rule — requires custom symbol group)
 
 # Braces
+
 csharp_prefer_braces = true:error
 
 # Expression-bodied members (short methods)
+
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion
 
 # Null checks
+
 csharp_style_conditional_delegate_call = true:error
 dotnet_style_coalesce_expression = true:error
 dotnet_style_null_propagation = true:error
 
 # Var usage
+
 csharp_style_var_for_built_in_types = false:warning
 csharp_style_var_when_type_is_apparent = true:suggestion
 
 # Unused
+
 dotnet_code_quality_unused_parameters = all:error
 dotnet_remove_unnecessary_suppression_exclusions = none
 
 # Severity overrides
+
 dotnet_diagnostic.SA1503.severity = error
 dotnet_diagnostic.SA1513.severity = warning
 dotnet_diagnostic.SA1600.severity = warning
@@ -177,18 +185,23 @@ For repo-wide rule severity (complements `.editorconfig`):
 is_global = true
 
 # Zero nesting
+
 dotnet_diagnostic.S134.severity = error
 
 # Max function length
+
 dotnet_diagnostic.S138.severity = error
 
 # Cognitive complexity
+
 dotnet_diagnostic.S3776.severity = error
 
 # Duplicated strings
+
 dotnet_diagnostic.S1192.severity = warning
 
 # Too many parameters
+
 dotnet_diagnostic.S107.severity = error
 ```
 

@@ -161,37 +161,48 @@ Every CI pipeline MUST execute these stages **in order**. A failure in any stage
 ### 4.1 `sonar-project.properties`
 
 ```properties
+
 # Project identification
+
 sonar.projectKey=<project-key>
 sonar.projectName=<project-name>
 sonar.projectVersion=1.0
 
 # Source configuration
+
 sonar.sources=src
 sonar.tests=tests
 sonar.sourceEncoding=UTF-8
 
 # Language-specific coverage reports
+
 # TypeScript / Node.js
+
 sonar.javascript.lcov.reportPaths=coverage/lcov.info
 
 # Go
+
 sonar.go.coverage.reportPaths=coverage.out
 
 # PHP
+
 sonar.php.coverage.reportPaths=coverage.xml
 
 # C# / VB.NET
+
 sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
 sonar.vbnet.opencover.reportsPaths=**/coverage.opencover.xml
 
 # Python
+
 sonar.python.coverage.reportPaths=coverage.xml
 
 # Rust (community plugin)
+
 # sonar.rust.lcov.reportPaths=lcov.info
 
 # Quality gate thresholds (custom)
+
 sonar.qualitygate.wait=true
 ```
 
@@ -229,7 +240,9 @@ Enable these rules in **every** language profile:
 ## 5. Reference GitHub Actions Workflow
 
 ```yaml
+
 # .github/workflows/quality-gate.yml
+
 name: Quality Gate
 
 on:
@@ -283,7 +296,9 @@ jobs:
 ## 6. Reference GitLab CI Configuration
 
 ```yaml
+
 # .gitlab-ci.yml
+
 stages:
   - format
   - lint
@@ -337,7 +352,9 @@ sonar:
 For repositories containing multiple languages, run language-specific checks in **parallel jobs**:
 
 ```yaml
+
 # GitHub Actions — mono-repo
+
 jobs:
   typescript:
     runs-on: ubuntu-latest

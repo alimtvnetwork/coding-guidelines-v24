@@ -118,6 +118,7 @@ Both the archive and checksums must be downloaded before verification begins. If
 Include a formatted checksum table in the release description:
 
 ```markdown
+
 ## Checksums (SHA-256)
 
 | File | Hash |

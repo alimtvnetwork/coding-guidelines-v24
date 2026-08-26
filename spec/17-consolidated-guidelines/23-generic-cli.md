@@ -205,11 +205,15 @@ All commands support `--format` with these values:
 ## Build & Deploy
 
 ```bash
+
 # Build all targets
+
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X main.Version=$VERSION" -o dist/<app>-linux-amd64 ./cmd/<app>
 
 # Cross-compilation targets
+
 # windows/amd64, windows/arm64, linux/amd64, linux/arm64, darwin/amd64, darwin/arm64
+
 ```
 
 **Rules:**

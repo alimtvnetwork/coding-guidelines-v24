@@ -23,6 +23,7 @@ Every spec folder follows strict conventions defined in [`spec/01-spec-authoring
 ### Required Metadata (every `00-overview.md`)
 
 ```markdown
+
 # Module Name
 
 **Version:** X.Y.Z
@@ -31,9 +32,11 @@ Every spec folder follows strict conventions defined in [`spec/01-spec-authoring
 **Ambiguity:** None | Low | Medium | High | Critical
 
 ## Keywords
+
 `keyword-1` · `keyword-2` · `keyword-3`
 
 ## Scoring
+
 | Criterion | Status |
 |-----------|--------|
 | `00-overview.md` present | ✅ |

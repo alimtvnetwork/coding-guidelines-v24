@@ -13,6 +13,7 @@ All notable changes to the Coding Guidelines specification are documented here.
 ### Structural Improvements
 
 #### Changed
+
 - `02-boolean-principles.md` split into subfolder (5 files, max 262 lines)
 - `15-master-coding-guidelines.md` split into subfolder (7 files, max 277 lines)
 - Deduplicated enum rules — `06-ai-optimization/05-enum-naming-quick-reference.md` is now the single cross-language enum source
@@ -27,6 +28,7 @@ All notable changes to the Coding Guidelines specification are documented here.
 ### Phase 4 Rules Added to Master Guidelines
 
 #### Changed
+
 - `15-master-coding-guidelines/00-overview.md` bumped to **v2.0.0**
 - Added 7 new sections (§14–§20): Lazy Evaluation, Regex Usage, Code Mutation Avoidance, Null Pointer Safety, Nesting Resolution, Newline Styling, Defer Rules (Go)
 - Expanded Quick Checklist with 7 new items covering mutation, regex, lazy eval, defer, nesting, newlines, null safety
@@ -49,6 +51,7 @@ All notable changes to the Coding Guidelines specification are documented here.
 Project-wide major version increment (+1.0.0) applied to all specification files in `03-coding-guidelines/01-cross-language`.
 
 #### Changed
+
 - All spec files received a major version bump and date update to 2026-03-09.
 - Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
 

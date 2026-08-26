@@ -82,7 +82,9 @@ deferred to the user — it runs as the final step of the update cycle.
 | **MUST NOT** fail the update because cleanup failed | Cleanup is best-effort, never blocking |
 
 ```
+
 # At the very end of the update worker, after version verify:
+
 if newBinaryExists and versionVerifyPassed:
     run(newBinaryPath, "update-cleanup")  # best-effort, ignore exit code
 ```

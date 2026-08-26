@@ -9,11 +9,13 @@
 ## 7. Type Safety
 
 ### PHP
+
 - Native type declarations on all parameters, return values, properties
 - Remove redundant PHPDoc when native types are present
 - Max 3 parameters per function
 
 ### Go
+
 - Zero `any`/`interface{}`/`map[string]any` in business logic
 - `json.RawMessage` only at architectural boundaries
 - Concrete domain models for all handler decoding

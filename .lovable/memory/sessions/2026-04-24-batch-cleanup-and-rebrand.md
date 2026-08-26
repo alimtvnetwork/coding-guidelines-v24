@@ -31,6 +31,7 @@ Three sequential user requests, executed in one session:
 | (UI) | Release & Migration card | `src/components/landing/InstallSection.tsx` rewritten — 2 cards, no skip-probe variants |
 
 ## Files modified (high level)
+
 - **UI/landing:** `src/components/landing/InstallSection.tsx`
 - **Release scripts:** `release-artifacts/release-install.{ps1,sh}` — slug rebrand
 - **Linters-cicd:** `run-all.sh`, `scripts/load-config.py`, `checks/_lib/per_file_timeout.py` (new), `checks/file-length/universal.py`, `checks/registry.json`, 4 new PHP plugins

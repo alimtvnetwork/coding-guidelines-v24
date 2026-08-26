@@ -106,13 +106,17 @@ Thumbs.db
 ### Manual packaging (development)
 
 ```bash
+
 # From the directory containing the plugin folder
+
 cd wp-plugins/
 
 # Install production dependencies only
+
 cd plugin-slug && composer install --no-dev --optimize-autoloader && cd ..
 
 # Create ZIP excluding dev files
+
 zip -r plugin-slug-v2.31.0.zip plugin-slug/ \
   -x "plugin-slug/.git/*" \
   -x "plugin-slug/.github/*" \
@@ -141,9 +145,11 @@ OUTPUT="${PLUGIN_SLUG}-v${VERSION}.zip"
 echo "📦 Packaging ${PLUGIN_SLUG} v${VERSION}..."
 
 # Production dependencies
+
 composer install --no-dev --optimize-autoloader --quiet
 
 # Build ZIP respecting .distignore
+
 if command -v rsync &> /dev/null; then
     TMPDIR=$(mktemp -d)
     rsync -a --exclude-from=.distignore . "${TMPDIR}/${PLUGIN_SLUG}/"
@@ -787,6 +793,7 @@ trait UpdateResolverUrlTrait
 Every version bump must include a CHANGELOG entry:
 
 ```markdown
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -794,18 +801,23 @@ All notable changes to this project will be documented in this file.
 ## [2.31.0] - 2026-04-08
 
 ### Added
+
 - New feature description
 
 ### Changed
+
 - Updated behaviour description
 
 ### Fixed
+
 - Bug fix description
 
 ### Removed
+
 - Deprecated feature removed
 
 ## [2.30.0] - 2026-04-01
+
 ...
 ```
 
@@ -927,7 +939,9 @@ Update/
 ### Recommended workflow
 
 ```yaml
+
 # .github/workflows/release.yml
+
 name: Release Plugin
 
 on:

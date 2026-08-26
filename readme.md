@@ -446,13 +446,17 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/downl
 ### 🪟 Windows · PowerShell
 
 ```powershell
+
 # Install latest (downloads & runs install.ps1 in one line)
+
 irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 
 # Install a pinned version (recommended for CI)
+
 & ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1))) -Version v6.0.0
 
 # Run the linter pack (use WSL / Git-Bash for the bash runner on Windows)
+
 bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
 ```
 
@@ -461,12 +465,15 @@ bash ./linters-cicd/run-all.sh --path . --format text   # WSL / Git-Bash
 `install.ps1` recognizes `-Help`, the alias `-h`, and the bash-style `--help` long-form. Help is handled **before any network probe**, so you can safely inspect the flags offline, behind a firewall, or in a sandboxed CI runner without triggering a single request to GitHub.
 
 ```powershell
+
 # After downloading the installer locally:
+
 .\install.ps1 -Help        # canonical PowerShell switch
 .\install.ps1 -h           # short alias
 .\install.ps1 --help       # bash-style long form
 
 # Or pipe-to-iex with explicit -Help (zero network beyond fetching the script itself):
+
 & ([scriptblock]::Create((irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1))) -Help
 ```
 
@@ -553,12 +560,16 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
 If you ran an installer with `-NoVerify` / `-n`, re-run it **without** the flag to restore SHA-256 checksum verification. Copy-paste the matching command:
 
 ```powershell
+
 # PowerShell (Windows), re-run with verification ON
+
 irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 ```
 
 ```bash
+
 # Bash (macOS / Linux), re-run with verification ON
+
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
 ```
 
@@ -797,7 +808,9 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 **Waiver example (Bash):**
 
 ```bash
+
 # lint-allow: function-length reason="WordPress hook signature" framework=true
+
 function register_settings_page() {
     # ... 28 lines required by add_options_page() + register_setting() wiring ...
 }
@@ -1842,7 +1855,6 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 - Stable download URL: `https://github.com/<owner>/<repo>/releases/latest/download/slides-deck.zip`.
 
 ### What's new in v5.51.0
-
 
 
 - **Slides deck a11y guardrail** — new [`slides-app/tests/a11y.spec.ts`](slides-app/tests/a11y.spec.ts) runs `@axe-core/playwright` against every slide (`#/0` … `#/15`) with WCAG 2.1 A/AA rules. Wired into [`.github/workflows/slides-smoke.yml`](.github/workflows/slides-smoke.yml) alongside the existing boot smoke test. Closes Plan SS-01 step 5.

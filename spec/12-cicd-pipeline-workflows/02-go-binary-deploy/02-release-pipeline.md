@@ -117,12 +117,15 @@ When the project produces multiple binaries (e.g., main tool + updater), each is
 #### Build Commands
 
 ```bash
+
 # Main binary — builds to its own dist/
+
 cd <binary>
 CGO_ENABLED=0 GOOS="$os" GOARCH="$arch" \
   go build -ldflags "$LDFLAGS_MAIN" -o "dist/<binary>-${os}-${arch}${ext}" .
 
 # Updater — builds to the MAIN module's dist/ (note: ../<binary>/dist/)
+
 cd <binary>-updater
 CGO_ENABLED=0 GOOS="$os" GOARCH="$arch" \
   go build -ldflags "$LDFLAGS_UPDATER" -o "../<binary>/dist/<binary>-updater-${os}-${arch}${ext}" .
@@ -181,7 +184,9 @@ If the project includes a documentation site (e.g., a Node.js/Vite app), it is b
 Both `install.ps1` and `install.sh` download and extract `docs-site.zip` alongside the binary:
 
 ```bash
+
 # In install.sh
+
 DOCS_URL="https://github.com/$REPO/releases/download/$VERSION/docs-site.zip"
 curl -fsSL "$DOCS_URL" -o "$TMP_DIR/docs-site.zip" 2>/dev/null || true
 if [ -f "$TMP_DIR/docs-site.zip" ]; then

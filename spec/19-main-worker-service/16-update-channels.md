@@ -29,6 +29,7 @@ All three channels converge on the same execution path: a **JSON Instruction Doc
 ## 2. Channel A — Push from Main (DEV/STAGING ONLY)
 
 ### 2.1 Purpose
+
 Allow a Power Admin to upload a zip and force every Worker (or one Worker) to run it immediately. Useful for in-house testing, hotfix rehearsal, and reproducing customer environments.
 
 ### 2.2 Hard environment gate
@@ -57,6 +58,7 @@ Implementer obligations:
 | `POST /API/V1/Workers/All/Update` | Fan-out to every `Active` Worker. |
 
 ### 2.4 Wire flow
+
 1. Power Admin `POST /Workers/PublishZip` (multipart, `application/zip`).
 2. Main verifies `Env ≠ Production`, stores zip, computes SHA256, signs with `MainReleaseSigningKey`.
 3. Main constructs a JID per `spec/14-update/28-worker-push-instruction.md` §3 with:
@@ -68,6 +70,7 @@ Implementer obligations:
 6. Main returns `207 Multi-Status` aggregating per-worker outcomes.
 
 ### 2.5 Why this is dev-only
+
 - A push channel bypasses the Worker's pull-loop safety net (windowed retries, channel selection).
 - In production, all updates MUST flow through Channel B or C so they are auditable, schedulable, and rollbackable via the same path operators rehearse daily.
 
@@ -76,6 +79,7 @@ Implementer obligations:
 ## 3. Channel B — Pull from Main (Reconciliation Loop, ALWAYS ON)
 
 ### 3.1 Purpose
+
 Each Worker independently asks Main "what version should I be running?" and self-heals if behind. Mirrors `kubelet` polling `kube-apiserver` for pod spec.
 
 ### 3.2 Endpoint
@@ -131,6 +135,7 @@ Jitter prevents thundering-herd when many Workers boot together.
 ## 4. Channel C — Pull from Known Release URL (Main-Independent)
 
 ### 4.1 Purpose
+
 Allow a Worker to keep updating itself even when Main is unreachable. Source of truth is a single HTTPS URL pointing to a release manifest (analogous to a Kubernetes container image registry).
 
 ### 4.2 Configuration
@@ -160,6 +165,7 @@ Allow a Worker to keep updating itself even when Main is unreachable. Source of 
 ```
 
 ### 4.4 Worker behavior
+
 1. Fetch `ManifestUrl` (HTTPS, optional bearer per Seedable-Config).
 2. If `LatestVersion > CurrentVersion` AND `CurrentVersion ≥ MinimumWorkerVersion`:
    - Synthesize a JID locally (Worker is both issuer and executor for this channel).
@@ -169,6 +175,7 @@ Allow a Worker to keep updating itself even when Main is unreachable. Source of 
 3. Report outcome to Main via `Heartbeat` (best-effort; failure to reach Main MUST NOT abort the local update).
 
 ### 4.5 Why allowlist is mandatory
+
 `PayloadUrl` arriving from a remote manifest is an **attacker-controllable string** if the manifest host is compromised. The allowlist is the second line of defense (signature verification is the first). Worker MUST refuse `PayloadUrl` whose host is not on `AllowedHostsAllowlist` with `WORKER-403-02 PAYLOAD_HOST_NOT_ALLOWED`.
 
 ---
@@ -176,6 +183,7 @@ Allow a Worker to keep updating itself even when Main is unreachable. Source of 
 ## 5. Channel Interaction Rules
 
 ### 5.1 Precedence
+
 A Worker MAY have multiple channels enabled. When more than one fires in the same window, precedence is:
 
 1. **Channel A (Push)** — wins instantly (operator intent overrides reconciliation).
@@ -183,9 +191,11 @@ A Worker MAY have multiple channels enabled. When more than one fires in the sam
 3. **Channel C (Pull from URL)** — used only when (B) returned no instruction OR when `WorkerUpdate.PullFromMain.Enabled=false`.
 
 ### 5.2 Idempotency across channels
+
 All three channels produce a JID with a unique `InstructionId` (ULID). Worker dedupes on `InstructionId` per `spec/14-update/28-worker-push-instruction.md` §3.1; the same logical update arriving via two channels is applied **once**.
 
 ### 5.3 No double-apply guard
+
 Worker MUST persist a `LastAppliedInstructionId` in the Settings tier. On startup, Worker:
 1. Reads `LastAppliedInstructionId`.
 2. If a channel offers an InstructionId equal to this, skip with `INSTRUCTION_ALREADY_APPLIED` (200 OK).

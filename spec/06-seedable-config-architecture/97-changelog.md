@@ -15,6 +15,7 @@ All notable changes to the Seedable Config Architecture specification are docume
 Project-wide major version increment (+1.0.0) applied to all specification files in `07-seedable-config-architecture`.
 
 #### Changed
+
 - All spec files received a major version bump and date update to 2026-03-09.
 - Part of a global effort spanning ~638 files across all 30+ spec folders, establishing a new project-wide versioning baseline.
 
@@ -31,6 +32,7 @@ Project-wide major version increment (+1.0.0) applied to all specification files
 Updated all references from `coding-guidelines-v24` to `coding-guidelines-v24` across distribution and CI/CD specifications.
 
 #### Changed
+
 - Install scripts, CI templates, and release pipelines now reference `coding-guidelines-v24` repository slug
 - Affected specs: Distribution & Runner (15), Generic Release (16), CI/CD Integration (02), Update Check Mechanism (14)
 - 42 files updated with 440 total reference replacements

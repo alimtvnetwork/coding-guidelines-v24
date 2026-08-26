@@ -83,7 +83,9 @@ if (Test-Path $targetPath) {
     if (Test-Path $oldPath) { Remove-Item $oldPath -Force }
     Rename-Item $targetPath $oldPath -Force
 }
+
 # ... extract and install ...
+
 Remove-Item "$targetPath.old" -Force -ErrorAction SilentlyContinue
 ```
 

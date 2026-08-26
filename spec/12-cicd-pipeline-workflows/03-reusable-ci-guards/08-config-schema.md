@@ -155,14 +155,18 @@ the loader, evaluates the env output, and uses those values as
 defaults — explicit CLI flags still take precedence:
 
 ```bash
+
 # Use only the config
+
 ./scripts/ci-runner.sh --phase all --config ci-guards.yaml
 
 # Override one field from the config
+
 ./scripts/ci-runner.sh --phase test --config ci-guards.yaml \
   --results-dir ./alt-test-artifacts
 
 # No config — pure CLI flags (Pattern 07 baseline)
+
 ./scripts/ci-runner.sh --phase check --source-dir src/lib
 ```
 

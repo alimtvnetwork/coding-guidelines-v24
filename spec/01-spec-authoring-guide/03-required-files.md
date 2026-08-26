@@ -50,6 +50,7 @@ The health dashboard scores each module on four equally weighted criteria:
 ### 00-overview.md Template
 
 ```markdown
+
 # Module Name
 
 **Version:** 3.2.0  
@@ -94,6 +95,7 @@ The health dashboard scores each module on four equally weighted criteria:
 ---
 
 ```markdown
+
 ## Cross-References
 
 | Reference | Location |
@@ -105,6 +107,7 @@ The health dashboard scores each module on four equally weighted criteria:
 ### 97-acceptance-criteria.md Template
 
 ```markdown
+
 # Acceptance Criteria — Module Name
 
 **Version:** 3.2.0  
@@ -137,6 +140,7 @@ The health dashboard scores each module on four equally weighted criteria:
 ### 98-changelog.md Template
 
 ```markdown
+
 # Changelog — Module Name
 
 **Version:** 3.2.0  
@@ -154,6 +158,7 @@ The health dashboard scores each module on four equally weighted criteria:
 ### 99-consistency-report.md Template
 
 ```markdown
+
 # Consistency Report — Module Name
 
 **Version:** 3.2.0  

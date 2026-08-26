@@ -119,9 +119,11 @@ Content that exists in multiple sources (03 is the canonical version):
 ## Consolidation Recommendations
 
 ### Keep in Consolidated (from 03)
+
 - All 60+ files — this is the canonical source
 
 ### Merge into 03 (unique from other sources)
+
 - **U1-U9** from 01: Go-specific practical rules (lazy eval, regex, newlines, mutation, null safety, nesting, defer, internals, severity)
 - **U10** from 01: Promise/await anti-patterns → into TS standards
 - **U11** from 04: PHP spacing/imports → into `04-php/` section
@@ -129,6 +131,7 @@ Content that exists in multiple sources (03 is the canonical version):
 - **U13** from 04: PHP-Go consistency audit → into cross-language
 
 ### Archive (duplicates)
+
 - `04-coding-guidelines-wpon/04-coding-guidelines/` — full duplicate of 03's cross-language
 - `04-coding-guidelines-wpon/05-golang-standards/` — duplicate of 03's Go section
 - `04-coding-guidelines-wpon/06-golang-standards/01-enum-specification/` — duplicate of 03's enum spec
@@ -136,6 +139,7 @@ Content that exists in multiple sources (03 is the canonical version):
 - `05-coding-guidelines-workflowy/10-typescript-enums/` — duplicate of 03's TypeScript section
 
 ### Keep as Archive Reference (remediation history)
+
 - `06-enum-spec/96-naming-convention-remediation.md` — historical remediation tracking
 - `06-enum-spec/97-acronym-json-tag-remediation.md` — completed remediation record
 - `06-enum-spec/98-migration-checklist.md` — migration verification record

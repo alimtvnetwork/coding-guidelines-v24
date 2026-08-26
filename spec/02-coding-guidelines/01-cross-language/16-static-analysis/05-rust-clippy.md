@@ -89,6 +89,7 @@ Enable these Clippy lint groups project-wide:
 ### `clippy.toml`
 
 ```toml
+
 # clippy.toml — project root
 
 too-many-arguments-threshold = 3

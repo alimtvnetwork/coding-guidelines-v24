@@ -6,7 +6,9 @@ One-command refresh of AI-implementation-readiness audit artifacts.
 
 ```bash
 bun run spec:audit
+
 # or
+
 node scripts/spec-audit/run-audit.mjs
 ```
 

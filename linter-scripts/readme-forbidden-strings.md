@@ -13,20 +13,25 @@ Single source of truth: [`forbidden-strings.toml`](./forbidden-strings.toml).
 ## Quick start
 
 ```bash
+
 # 1. CI failed? Get a focused report with a one-liner fix per rule.
+
 npm run lint:strings:report
 
 # 2. Apply the fix for one rule directly.
+
 python3 linter-scripts/forbidden-strings-summary.py \
     --rule STALE-MODULE-PATH --emit-fix-command | bash
 
 # 3. The match is legitimate (audit trail, changelog, fixture) — waive it.
+
 python3 linter-scripts/allowlist-forbidden-string.py \
     --rule STALE-MODULE-PATH \
     --reason "Historical changelog entry; documents the rule itself." \
     changelog.md
 
 # 4. Re-verify.
+
 npm run lint:strings
 ```
 

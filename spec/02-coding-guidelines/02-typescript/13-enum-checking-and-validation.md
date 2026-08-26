@@ -13,6 +13,7 @@ This document details the **zero-tolerance policy for magic strings** and provid
 Raw strings must **never** be used for domain logic, event names, statuses, or arbitrary flags. Any string that represents a state, type, or identifier with a bounded set of values MUST be extracted into a `const` or `enum`.
 
 ### ❌ FORBIDDEN: Raw Magic Strings
+
 ```typescript
 // ❌ WRONG: Hardcoded strings scattered in code
 if (status === 'success') {
@@ -26,6 +27,7 @@ interface ButtonProps {
 ```
 
 ### ✅ REQUIRED: Strict Constant Maps / Enums
+
 ```typescript
 // ✅ RIGHT: Centralized constants
 export const Status = {
@@ -47,12 +49,14 @@ if (status === Status.Success) {
 When receiving a string from an API, user input, or legacy data, you MUST validate it against the Enum values. **Do not use `any` or cast blindly.**
 
 ### ❌ FORBIDDEN: Blind Casting
+
 ```typescript
 // ❌ WRONG: Casting raw string to Enum type blindly
 const backendStatus = response.status as StatusType; // Dangerous! What if response.status is 'foo'?
 ```
 
 ### ✅ REQUIRED: Safe Type Guard Validation
+
 You must implement a type guard to validate if an arbitrary string belongs to the Enum.
 
 ```typescript
@@ -86,6 +90,7 @@ if (isValidStatus(response.status)) {
 When you need to render UI elements (like dropdowns) based on an Enum, you should iterate over the object values.
 
 ### ✅ REQUIRED: Iterating with `Object.values`
+
 ```typescript
 import { LogLevel } from '@/constants/log-levels';
 
@@ -109,6 +114,7 @@ function LogLevelSelector() {
 React `onChange`, `onClick`, and other native event listeners should map internal strings to domain-specific constants if they are passed through generic handlers.
 
 ### ❌ FORBIDDEN: Magic String Event Handlers
+
 ```typescript
 // ❌ WRONG
 function handleEvent(eventName: string) {
@@ -117,6 +123,7 @@ function handleEvent(eventName: string) {
 ```
 
 ### ✅ REQUIRED: Using Event Constants
+
 ```typescript
 // ✅ RIGHT
 export const UIEvents = {

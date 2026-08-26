@@ -65,7 +65,9 @@ navigates to each slide, takes a screenshot, diffs against
 
 ```bash
 cd slides-app && bun run build && bun run package
+
 # Verify the offline contract
+
 ! grep -rE 'https?://' dist/ --include='*.html' --include='*.js' --include='*.css'
 [ "$(du -sb dist | cut -f1)" -lt 5242880 ]
 [ "$(stat -c%s dist.zip)" -lt 3145728 ]

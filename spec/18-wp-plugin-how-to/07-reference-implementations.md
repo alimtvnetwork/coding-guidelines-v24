@@ -750,13 +750,16 @@ enum ResponseKeyType: string
 Place this file at the plugin root. AI code generators read it before generating code.
 
 ```markdown
+
 # AI Instructions for {Plugin Name}
 
 ## Architecture
+
 - This plugin follows the spec at `spec/18-wp-plugin-how-to/`
 - Read ALL 11 phases before writing any code
 
 ## Critical Rules
+
 1. **No `is_array()`, `is_string()`, `is_int()`, etc.** — Use `TypeCheckerTrait` methods (`$this->isArray()`) or `PhpNativeType::matches()` in static contexts. The syntax validator blocks T_ARRAY tokens.
 2. **No `array()` syntax** — Use `[]` exclusively.
 3. **No `Exception` catches** — Always catch `Throwable`.
@@ -774,6 +777,7 @@ Place this file at the plugin root. AI code generators read it before generating
 15. **Source maps: dev only** — Production builds must NOT include `.map` files (see Phase 11, §11.8).
 
 ## File Generation Order
+
 When creating a new plugin from scratch:
 1. `plugin-name.php` (bootstrap)
 2. `includes/Autoloader.php`
@@ -794,6 +798,7 @@ When creating a new plugin from scratch:
 17. *(Optional, if React confirmed)* `frontend/` — React source → builds to `assets/dist/`
 
 ## Formatting Rules
+
 - R1: Always use braces, even for single-line if/foreach/while
 - R4: Blank line before return/throw only when preceded by other statements
 - R9a: 3+ parameters → one per line, trailing comma

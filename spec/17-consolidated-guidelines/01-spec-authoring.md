@@ -89,6 +89,7 @@ This is the **standalone consolidated reference** for spec authoring conventions
 Every `.md` file **must** begin with:
 
 ```markdown
+
 # Title of the Document
 
 **Version:** X.Y.Z  
@@ -444,19 +445,24 @@ This section is the **single canonical reference** for how versions are bumped a
 When `check-spec-folder-refs.py` reports `Stale references found`, the fix is **not** always to fix the link. Three valid resolutions:
 
 #### (a) Typo / rename — fix the path in markdown
+
 Use this when the target folder was renamed or you mistyped the number.
 
 #### (b) Sibling-repo reference — add to `[external]`
+
 Use this when the path points to a folder in a different repo (e.g., `spec/15-domain-migration/` lives in a sibling repo).
 
 ```
+
 # linter-scripts/spec-folder-refs.allowlist
+
 [external]
 spec/15-domain-migration/
 spec/legacy-archive/
 ```
 
 #### (c) Documentation-only — add to `[doc-only]`
+
 Use this when the path is a redirect stub or a documentation pointer with no real content.
 
 ```

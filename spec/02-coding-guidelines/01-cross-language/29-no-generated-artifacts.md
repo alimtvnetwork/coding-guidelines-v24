@@ -11,6 +11,7 @@
 Under no circumstances should any generated code (e.g., ORM models, gRPC stubs, OpenAPI clients), compiled binary, test result, test report, or temporary test data ever be committed to the Git repository.
 
 ### What is Forbidden?
+
 - **Generated Code:** `*.generated.*` or `*_generated.*` files produced by code generators (unless explicitly permitted as test fixtures).
 - **Test Results & Reports:** Any outputs from test runs, such as HTML reports, coverage data, JSON summaries, `.test-report.*`, or CSV results.
 - **Compiled Binaries & Executables:** `.exe`, `.dll`, `.so`, `.dylib`, `.out`, `.class`, or any pre-compiled binaries resulting from a build step.
@@ -18,6 +19,7 @@ Under no circumstances should any generated code (e.g., ORM models, gRPC stubs, 
 - **Temporary Data:** Any mock data, database dumps, or local logs generated during a local run.
 
 ### Why?
+
 1. **Repository Bloat:** Binary files and continuous test reports exponentially increase the Git repository size, slowing down clones and pulls for all team members and CI/CD pipelines.
 2. **Noise in History:** Committing transient data pollutes the Git history and diffs, making it impossible to perform meaningful code reviews.
 3. **Security Risks:** Test results or compiled binaries can accidentally leak sensitive environment data, secrets, or internal architectural layouts.
@@ -35,4 +37,5 @@ Under no circumstances should any generated code (e.g., ORM models, gRPC stubs, 
 > **Never blindly run `git add .` without verifying that generated artifacts are safely ignored.**
 
 ## Enforcement
+
 This rule is enforced globally via `.gitignore` patterns. If a new type of artifact is introduced, you must update `.gitignore` before committing anything else.

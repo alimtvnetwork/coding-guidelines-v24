@@ -30,6 +30,7 @@ An AI reading only this file must be able to create, organize, and review app-sp
 ## App Spec File Template
 
 ````markdown
+
 # App Spec: [Feature/Topic Title]
 
 **Version:** 1.0.0  
@@ -45,23 +46,28 @@ What this feature/component does and why it exists.
 ## Requirements
 
 ### Functional Requirements
+
 - FR-1: [requirement]
 - FR-2: [requirement]
 
 ### Non-Functional Requirements
+
 - NFR-1: [performance, security, accessibility]
 
 ## Design
 
 ### User Flow
+
 1. Step 1
 2. Step 2
 3. Step 3
 
 ### Data Model
+
 Tables, fields, relationships affected. Reference `23-app-db/` for schema.
 
 ### API Endpoints
+
 Routes needed (reference REST conventions from `14-rest-api-conventions.md`).
 
 ## Edge Cases
@@ -104,6 +110,7 @@ Routes needed (reference REST conventions from `14-rest-api-conventions.md`).
 ## Placement Decision Guide
 
 ### Place content in `21-app/` when:
+
 - It defines a specific app feature or workflow
 - It documents app architecture decisions not reusable across projects
 - It specifies UI/UX flows tied to a particular application
@@ -151,6 +158,7 @@ spec/21-app/
 ```
 
 ### Rules
+
 - Lowercase kebab-case only
 - Numeric prefix mandatory for sequencing
 - Feature name should be 2–4 words, descriptive

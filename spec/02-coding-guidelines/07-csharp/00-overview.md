@@ -56,6 +56,7 @@ C#-specific coding standards that extend the [cross-language guidelines](../01-c
 | 02-method-design.md |
 | 03-error-handling.md |
 | 04-type-safety.md |
+
 ## Cross-References
 
 - [Cross-Language Guidelines](../01-cross-language/00-overview.md) — universal rules applied to C#

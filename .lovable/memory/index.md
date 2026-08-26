@@ -1,9 +1,11 @@
 # Memory: index.md
+
 Updated: 2026-04-27
 
 # Project Memory
 
 ## Core
+
 - 🔴 CODE RED: Never swallow errors. Zero-nesting (no nested if). Max 2 operands. Positively named guard functions.
 - 🔴 CODE RED: Strict metrics: functions 8-15 lines, files < 300 lines, React components < 100 lines.
 - 🔴 CODE RED: Standalone scripts — NO `!important`, NO `as unknown` / `as any`, NO error-swallowing `return null` in catch, NO magic strings (use enums in `types.ts`), NO bare top-level functions (class-based, DI). Hide via class toggle + CSS transition — never nested `requestAnimationFrame`. Always blank line before `return`.
@@ -27,6 +29,7 @@ Updated: 2026-04-27
 - 🔴 Docs sidebar tree diagnostics: opt-in via `localStorage["lovable.tree-diagnostics.enabled"]="1"`. Logs prefixed `[tree:<category>]`. Off by default. Never enable by default. The Lovable IDE file tree is platform UI — NOT instrumentable from project code; do not conflate it with the in-app docs sidebar. See mem://sessions/2026-04-27-tree-diagnostics-logging.
 
 ## Memories
+
 - [Release Ceremony](mem://preferences/release-ceremony) — Triggers "release"/"bump version"/"bump version + add changelog + pin to root readme". Full ceremony: pick bump tier → sync all version pins (version.json, manifest.json, src/shared/constants.ts, readme.md, standalone-scripts SDK + instruction.ts files) → changelog.md entry → pin root readme → aggregate-prompts if prompt sources touched → verify no stale refs. No confirmation, no plan mode.
 - [Install Command Formatting](mem://constraints/install-command-formatting) — One-line installs, no inline comments, per-platform headers, mirror InstallSection.tsx order.
 - [readme.txt Timestamp TOTAL BAN](mem://constraints/readme-txt-timestamp-total-ban) — No script/spec/doc/suggestion of any timestamp generator for readme.txt. Hard prohibition.
@@ -86,6 +89,7 @@ Updated: 2026-04-27
 - [Session 2026-08-09 Code Red Refactor](mem://sessions/08-2026-08-09-code-red-refactor) — Enum enforcement and boolean fix.
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
 - [Avoid Absolute File System Paths](mem://avoid/03-absolute-file-system-paths) — Do not use file:/// absolute paths.
-- 🔴 Install scripts now dynamically inject a codingGuideline section into the target repository's ersion.json file. The target repo's version.json will receive epositoryUrl, lastCommit, ersion, description, and prompts automatically without overwriting the file. This does not apply to the .lovable/memory directory itself which is intentionally excluded from bundles.
+- 🔴 Install scripts now dynamically inject a codingGuideline section into the target repository's ersion.json file. The target repo's version.json will receive 
+epositoryUrl, lastCommit, ersion, description, and prompts automatically without overwriting the file. This does not apply to the .lovable/memory directory itself which is intentionally excluded from bundles.
 
 - [Prompt Architect Version Tracking](mem://standards/prompt-architect-version-tracking) — Installers inject a `promptArchitectByRiseupAsia` block into target repo's `version.json` when copying `.lovable/prompts`. Block contains author (Md. Alim Ul Karim, Chief Software Engineer), sourceRepository, installedAt, version, lastCommit, and fileMapping array. Template at `prompt-version.template.json`.

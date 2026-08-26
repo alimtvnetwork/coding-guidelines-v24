@@ -107,6 +107,7 @@ Each feature lives in its own numbered subfolder. Inside each feature folder:
 **Feature overview index** (`02-features/00-overview.md`) must list all features with their status:
 
 ```markdown
+
 ## Feature Index
 
 | # | Feature | Status | Files |
@@ -128,6 +129,7 @@ Tracks bugs, investigations, and resolutions. Each issue follows the same `{NN}-
 **Issue overview index** (`03-issues/00-overview.md`) must list all issues with their status:
 
 ```markdown
+
 ## Issue Index
 
 | # | Issue | Status | Severity | Files |

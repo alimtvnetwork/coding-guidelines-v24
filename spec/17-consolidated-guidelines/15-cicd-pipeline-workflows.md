@@ -51,7 +51,9 @@ The source module `spec/12-cicd-pipeline-workflows/` contains 13 root specs + 3 
 ### Trigger Patterns
 
 ```yaml
+
 # CI Pipeline
+
 on:
   push:
     branches: [main]
@@ -59,12 +61,14 @@ on:
     branches: [main]
 
 # Release Pipeline
+
 on:
   push:
     branches: ["release/**"]
     tags: ["v*"]
 
 # Scheduled Scans
+
 on:
   schedule:
     - cron: "0 9 * * 1"  # Weekly Monday 9:00 UTC
@@ -74,12 +78,15 @@ on:
 ### Concurrency Control
 
 ```yaml
+
 # CI — cancel old runs on same branch (except release branches)
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/heads/release/') }}
 
 # Release — NEVER cancel
+
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
@@ -176,7 +183,9 @@ Skips redundant validation via **step-level conditionals** (not job-level `if`) 
 #### Version Resolution
 
 ```bash
+
 # From tag: refs/tags/v1.2.0 → 1.2.0
+
 VERSION="${GITHUB_REF#refs/tags/v}"
 ```
 
@@ -283,10 +292,13 @@ Graceful fallback if version section not found.
 ### Release Body Template
 
 ```markdown
+
 ## What's Changed
+
 {changelog content}
 
 ## Build Info
+
 | Key | Value |
 |-----|-------|
 | Version | {version} |
@@ -296,15 +308,18 @@ Graceful fallback if version section not found.
 | Go Version | {go_version} |
 
 ## Checksums
+
 \`\`\`
 {checksums.txt content}
 \`\`\`
 
 ## Install
+
 **PowerShell:** `irm .../install.ps1 | iex`
 **Bash:** `curl -fsSL .../install.sh | bash`
 
 ## Assets
+
 | File | OS | Arch |
 |------|-----|------|
 | binary-windows-amd64.zip | Windows | amd64 |

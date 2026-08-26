@@ -570,13 +570,17 @@ All four generators are invoked from `scripts/codegen/`.
 ### 11.3 Invocation
 
 ```bash
+
 # Single enum, all languages:
+
 node scripts/codegen/gen-all-enums.mjs --enum ErrorSeverity
 
 # All enums in a module, all languages:
+
 node scripts/codegen/gen-all-enums.mjs --module 03-error-manage
 
 # Full repo regeneration (used in CI):
+
 node scripts/codegen/gen-all-enums.mjs --all
 ```
 

@@ -22,7 +22,9 @@ this repository's coding guidelines. Drop into any pipeline with one line.
 
 ```bash
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
+
 # Run for specific languages:
+
 bash ./linters-cicd/run-all.sh --path . --languages go,typescript,python,rust --output coding-guidelines.sarif
 ```
 
@@ -183,17 +185,25 @@ Once your new rule has fixtures and a test, verify it end-to-end
 with a single command:
 
 ```bash
+
 # Verify ONLY the rules whose checks/<slug>/ folder you just edited.
+
 # Runs them against their own fixtures/ dir, never the whole pack.
+
 bash linters-cicd/run-all.sh --smoke --format text
 
 # Same, plus the canonical TEMPLATE-001 starter-kit pass — useful
+
 # the very first time you copy _template/ before you have any
+
 # git-tracked changes yet.
+
 bash linters-cicd/run-all.sh --smoke --include-template --format text
 
 # Compare against a different ref (default is HEAD = uncommitted +
+
 # staged). Useful in CI to scope to changes vs main.
+
 bash linters-cicd/run-all.sh --smoke --smoke-base origin/main --format text
 ```
 
@@ -281,24 +291,32 @@ the same exit-code contract from
 
 ```bash
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
+
 # checksum mismatch → exit 4
+
 ```
 
 ```powershell
 irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
+
 # checksum mismatch → exit 4
+
 ```
 
 ### Verification OFF (`-n` / `-NoVerify`, NOT recommended)
 
 ```bash
 curl -fsSL .../install.sh | bash -s -- -n
+
 # checksum mismatch → NO exit 4 — install proceeds even on tampered zip
+
 ```
 
 ```powershell
 & ([scriptblock]::Create((irm .../install.ps1))) -NoVerify
+
 # checksum mismatch → NO exit 4 — install proceeds even on tampered zip
+
 ```
 
 The PowerShell installer additionally prints a loud multi-line warning

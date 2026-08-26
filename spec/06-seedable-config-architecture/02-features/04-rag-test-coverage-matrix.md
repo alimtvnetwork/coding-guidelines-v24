@@ -224,19 +224,24 @@ Comprehensive test coverage matrix mapping each RAG validation error code to its
 ## Test Execution Commands
 
 ```bash
+
 # Run all RAG validation tests
+
 go test -v ./internal/rag/... -run "Validation"
 
 # Run specific error code tests
+
 go test -v ./internal/rag/... -run "ChunkSize"
 go test -v ./internal/rag/... -run "ChunkOverlap"
 go test -v ./internal/rag/... -run "ContextBudget"
 
 # Run with coverage report
+
 go test -coverprofile=coverage.out ./internal/rag/...
 go tool cover -html=coverage.out
 
 # Run benchmark tests
+
 go test -bench=. ./internal/rag/...
 ```
 

@@ -44,76 +44,101 @@
 ## Usage Examples
 
 ```powershell
+
 # Show help
+
 .\run.ps1 -h
 
 # Install/update all dependencies (frontend + backend)
+
 .\run.ps1 -i
 
 # Complete clean reinstall (recommended after git pull with new deps)
+
 .\run.ps1 -r
 
 # Full build and run (default)
+
 .\run.ps1
 
 # Clean rebuild everything
+
 .\run.ps1 -f
 
 # Quick start (skip build)
+
 .\run.ps1 -s
 
 # Build only for CI/CD
+
 .\run.ps1 -b
 
 # Skip git, clean build
+
 .\run.ps1 -p -f
 
 # First-time setup with firewall
+
 .\run.ps1 -fw
 
 # Upload default plugin to WordPress (V2 uploader)
+
 .\run.ps1 -u
 
 # Upload custom plugin path
+
 .\run.ps1 -u -pp "C:\path\to\custom-plugin"
 
 # Upload via QUpload API
+
 .\run.ps1 -q
 
 # Upload specific plugin via QUpload
+
 .\run.ps1 -q -pp "wp-plugins/qupload"
 
 # ZIP all plugins in wp-plugins/ with version numbers (best compression)
+
 .\run.ps1 -z
 
 # ZIP a specific plugin
+
 .\run.ps1 -z -pp "wp-plugins/qupload"
 
 # ZIP + upload all plugins (except QUpload) via QUpload API
+
 .\run.ps1 -ua
 
 # Multi-site: upload all plugins to all enabled sites
+
 .\run.ps1 -uas
 
 # Multi-site: upload to a specific site
+
 .\run.ps1 -uas -site "Test V1"
 
 # Multi-site: upload to all except one site
+
 .\run.ps1 -uas -xs "Test V1"
 
 # Multi-site: exclude multiple sites (comma-separated)
+
 .\run.ps1 -uas -xs "Test V1,Test V2"
 
 # Clear old ZIPs, then ZIP + upload all
+
 .\run.ps1 -ua -c
 
 # Run Go backend tests
+
 .\run.ps1 -t
 
 # Full deploy: git pull, upload all sites, plugin status, then build & run
+
 .\run.ps1 -d
 
 # Verbose output for debugging
+
 .\run.ps1 -v
 ```
 
@@ -283,17 +308,21 @@ if (-not $SkipPull) {
 ### Step 2: Prerequisites Check
 
 ```powershell
+
 # Check Go
+
 if ($config.prerequisites.go -and -not (Test-Command "go")) {
     Install-Go
 }
 
 # Check Node.js
+
 if ($config.prerequisites.node -and -not (Test-Command "node")) {
     Install-NodeJS
 }
 
 # Check pnpm
+
 if ($config.prerequisites.pnpm -and -not (Test-Command "pnpm")) {
     Install-Pnpm
 }
@@ -313,12 +342,14 @@ if ($config.prerequisites.pnpm -and -not (Test-Command "pnpm")) {
 Push-Location $FrontendDir
 
 # Configure pnpm store path
+
 if ($config.pnpmStorePath) {
     $storePath = Join-Path $RootDir $config.pnpmStorePath
     pnpm config set store-dir $storePath
 }
 
 # Force clean (removes ALL pnpm artifacts including PnP loaders)
+
 if ($Force) {
     Remove-Item -Recurse -Force "node_modules" -ErrorAction SilentlyContinue
     Remove-Item -Recurse -Force ".pnpm" -ErrorAction SilentlyContinue
@@ -338,13 +369,21 @@ if ($Force) {
 }
 
 # Install dependencies
+
 # NOTE: pnpm v10+ blocks dependency build scripts by default.
+
 # The runner auto-appends:
+
 #   --dangerously-allow-all-builds
+
 # when pnpm v10+ is detected, to ensure native deps like esbuild/@swc work for Vite.
+
 #
+
 # IMPORTANT: -rebuild (-r) defers install until AFTER force-clean to avoid
+
 # installing then immediately deleting node_modules.
+
 pnpm install
 
 Pop-Location
@@ -367,8 +406,11 @@ Pop-Location
 Push-Location $FrontendDir
 
 # Build the frontend
+
 # NOTE: When pnpm PnP is enabled, Node ESM tools like Vite may require PnP loader options.
+
 # The runner handles this automatically when `node-linker=pnp` is active.
+
 pnpm run build
 
 ---
@@ -394,11 +436,13 @@ $SourceDist = Join-Path $RootDir $DistDir
 $TargetDist = Join-Path $RootDir $TargetDir
 
 # Remove old
+
 if (Test-Path $TargetDist) {
     Remove-Item -Recurse -Force $TargetDist
 }
 
 # Copy new
+
 Copy-Item -Recurse $SourceDist $TargetDist
 ```
 
@@ -410,14 +454,17 @@ Copy-Item -Recurse $SourceDist $TargetDist
 Push-Location $BackendDir
 
 # Create config if missing
+
 if (-not (Test-Path $config.configFile)) {
     Copy-Item $config.configExampleFile $config.configFile
 }
 
 # Create data directories
+
 New-Item -ItemType Directory -Path "data" -ErrorAction SilentlyContinue
 
 # Run
+
 Invoke-Expression $config.runCommand
 
 Pop-Location
@@ -484,19 +531,25 @@ The script tracks time for each step:
 Useful commands for managing the pnpm store:
 
 ```powershell
+
 # View store path
+
 pnpm store path
 
 # Check store status
+
 pnpm store status
 
 # Prune unused packages (run periodically)
+
 pnpm store prune
 
 # Add package
+
 pnpm add <package>
 
 # Remove package
+
 pnpm remove <package>
 ```
 

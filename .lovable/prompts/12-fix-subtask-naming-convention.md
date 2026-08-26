@@ -1,6 +1,7 @@
 # Fix Spec from Audit (Maximum Enforcement)
 
 ## Goal
+
 Fix the specification files strictly based on the latest generated audit file. The non-negotiable goal is to increase the spec score to exactly 100%. 
 You must ingest the audit, map the findings to the broken files, and execute the fixes.
 
@@ -27,6 +28,7 @@ How to self-loop and distribute tasks effectively:
 3. Wait and Aggregate: As the master agent, loop autonomously to wait for your sub-agents to complete their assigned fixes. Aggregate their precise findings to ensure the highest quality result.
 
 ### Temp-Agent State Management Protocol (Non-Negotiable)
+
 To ensure agents don't lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
 1. On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md`. Write the objective and `STATUS: IN_PROGRESS`.
 2. On Error/Crash: If an agent breaks or fails, it MUST append the exact error, cause, and `STATUS: FAILED` to that file before closing.

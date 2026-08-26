@@ -490,6 +490,7 @@ func (s *SearchService) GetAllowedFileTypes() apperror.Result[[]string] {
 ## Anti-Pattern vs Correct Pattern
 
 ### ❌ WRONG: Magic Strings
+
 ```go
 // Never do this
 transitions, _ := v.validationData.GetStringArray("Seo", "TransitionWords")
@@ -497,6 +498,7 @@ threshold, _ := v.validationData.GetNumber("Seo", "TransitionDensityThreshold")
 ```
 
 ### ✅ CORRECT: Typed Constants
+
 ```go
 // Always use typed constants
 transitions, _ := v.validationData.GetSeoStringArray(SeoKeyTransitionWords)

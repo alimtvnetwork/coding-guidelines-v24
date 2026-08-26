@@ -323,7 +323,9 @@ Validate every SARIF you produce with:
 
 ```bash
 python3 linters-cicd/scripts/validate-sarif.py /tmp/your-rule.sarif
+
 # Expected: exit 0, prints "OK SARIF 2.1.0".
+
 ```
 
 ### 4.3 Tool-name convention
@@ -351,22 +353,28 @@ Every check follows this five-step shape (see
 `checks/_template/php.py` for the canonical reference):
 
 ```python
+
 # 1. Boilerplate — make _lib importable. Do not change.
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _lib.cli import build_parser, parse_exclude_paths
 from _lib.sarif import Finding, Rule, SarifRun, emit
 from _lib.walker import relpath, walk_files
 
 # 2. Rule metadata.
+
 RULE = Rule(id=..., name=..., short_description=..., help_uri_relative=...)
 
 # 3. Detection pattern (regex, AST visitor, or grammar walk).
+
 PATTERN = re.compile(r"...")
 
 # 4. scan(path, root) -> list[Finding].
+
 def scan(path: Path, root: str) -> list[Finding]: ...
 
 # 5. main() wires CLI -> walker -> scan -> emit.
+
 def main() -> int:
     args = build_parser("…").parse_args()
     globs = parse_exclude_paths(args.exclude_paths)
@@ -460,30 +468,39 @@ def _load(name: str, path: Path):
 ## 7. Verification commands (run these before opening a PR)
 
 ```bash
+
 # 7a. Unit tests
+
 python3 linters-cicd/tests/run.py
 
 # 7b. Orchestrator dispatch (text)
+
 bash linters-cicd/run-all.sh \
   --path linters-cicd/checks/<your-slug>/fixtures \
   --rules YOUR-RULE-001 \
   --format text \
   --output /tmp/your-rule.txt
 cat /tmp/your-rule.txt
+
 # Expected: exit 1, dirty.<ext> flagged, clean.<ext> silent.
 
 # 7c. SARIF validation
+
 bash linters-cicd/run-all.sh \
   --path linters-cicd/checks/<your-slug>/fixtures \
   --rules YOUR-RULE-001 \
   --format sarif \
   --output /tmp/your-rule.sarif
 python3 linters-cicd/scripts/validate-sarif.py /tmp/your-rule.sarif
+
 # Expected: exit 0, "OK SARIF 2.1.0".
 
 # 7d. Cross-link checker (proves help_uri_relative resolves)
+
 python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
+
 # Expected: "OK All internal spec cross-references resolve."
+
 ```
 
 ---

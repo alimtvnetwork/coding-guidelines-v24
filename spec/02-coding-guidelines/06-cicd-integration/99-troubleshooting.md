@@ -48,13 +48,17 @@ setup step:
 ### Fix — self-hosted runners
 
 ```bash
+
 # Debian / Ubuntu
+
 sudo apt-get update && sudo apt-get install -y python3 python3-venv
 
 # RHEL / Amazon Linux
+
 sudo dnf install -y python3.11
 
 # Alpine (note: 'python3' symlink may be missing)
+
 apk add --no-cache python3 && ln -sf /usr/bin/python3 /usr/local/bin/python3
 ```
 
@@ -113,13 +117,17 @@ hanging on a 90-second compile that ultimately fails.
 ### Fix — install build tools (last resort)
 
 ```bash
+
 # Debian / Ubuntu
+
 sudo apt-get install -y build-essential python3-dev
 
 # RHEL / Fedora
+
 sudo dnf install -y gcc python3-devel
 
 # Alpine
+
 apk add --no-cache build-base python3-dev
 ```
 
@@ -360,14 +368,18 @@ ignored.
 #### b) Quoting — values must be valid TOML strings or arrays
 
 ```toml
+
 # ❌ WRONG — bare list, comma-less, unquoted
+
 [run]
 languages = go typescript php
 
 # ❌ WRONG — Python-style list with single quotes (TOML allows but mixing types breaks)
+
 exclude-rules = ['STYLE-002', "STYLE-099"]
 
 # ✅ RIGHT
+
 [run]
 languages = ["go", "typescript", "php"]
 exclude-rules = ["STYLE-002"]
@@ -416,7 +428,9 @@ column.
 ### Reference config (copy + customise)
 
 ```toml
+
 # .codeguidelines.toml — repo-level defaults for the linter pack.
+
 # CLI flags always override these values.
 
 [run]
@@ -431,7 +445,9 @@ fail-on-warning   = false                 # only `error` level breaks the build
 
 ```bash
 python3 linters-cicd/scripts/load-config.py --config .codeguidelines.toml
+
 # Should print the effective LANGUAGES=, RULES=, EXCLUDE_RULES=, FAIL_ON_WARNING= values
+
 ```
 
 ---

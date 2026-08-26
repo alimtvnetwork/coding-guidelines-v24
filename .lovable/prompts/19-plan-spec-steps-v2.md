@@ -52,9 +52,13 @@ Every file and folder you create or rename obeys all of these, with no exception
 Mechanical check, run it and print the output before saving (RULE 11):
 
 ``bash
+
 # any uppercase character, space, or underscore in an authored path = FAIL
+
 git ls-files | grep -nE '(^|/)[^/]*[A-Z_ ][^/]*$' || echo "naming OK"
+
 # every file in an ordered folder must carry a numeric prefix
+
 ls .lovable/plans/subtasks/xx-plan-slug | grep -vE '^[0-9]{3}-' || echo "sequence OK"
 ``
 
@@ -255,6 +259,7 @@ that ends in a question mark, or that says "assume", "probably", "TBD" or
 - Answered: `.lovable/ambiguous-questions/02-ambiguity-resolved/01-<slug>.md`
 
 ``markdown
+
 # <one-line question>
 
 Slug: <slug>
@@ -267,12 +272,14 @@ Blocking: <plan slug(s) or "none">
 ## Options considered
 
 ## Impact if guessed wrong
+
 ``
 
 When answered: `mv` the file into `02-ambiguity-resolved/`, flip
 `Status: resolved`, and append:
 
 ``markdown
+
 ## Resolution
 
 Answered: <YYYY-MM-DD>
@@ -324,6 +331,7 @@ A step that exists because something broke carries an RCA, not just a fix.
 - RCA record shape, mandatory, in the issue file:
 
 ``markdown
+
 ## Root cause analysis
 
 Symptom: <observed failure, with the command or log line that showed it>
@@ -352,7 +360,9 @@ Two mechanical gates, both run with output pasted into the report (RULE 11).
 Missing links and references. Report absolute counts, not adjectives:
 
 ``bash
+
 # every cited spec/.lovable path in the batch must resolve
+
 rg -o --no-filename '(spec|\.lovable)/[A-Za-z0-9/._-]+' \
   .lovable/plans/pending/01-xx-plan-slug.md .lovable/plans/subtasks/xx-plan-slug/*.md \
   | sed 's/[.,)`]*$//' | sort -u > /tmp/cited-paths.txt
@@ -473,16 +483,25 @@ citations:
   ambiguity: "n/a"
   issue_rca: "n/a"
 ---
+
 # Task NNN — <specific outcome, not a phase name>
 
 ## 1. Learn
+
 ## 2. Goal
+
 ## 3. Inputs and Contracts
+
 ## 4. Execute
+
 ## 5. Constraints
+
 ## 6. Verify
+
 ## 7. Done When
+
 ## 8. Notes and Open Questions
+
 ``
 
 Acceptance bar per section — a section that misses its bar fails the batch:
@@ -548,10 +567,13 @@ Before the batch is saved, run both sweeps and paste the real output into the
 report:
 
 ``bash
+
 # 1. uniform length is the first smell
+
 wc -l .lovable/plans/subtasks/xx-plan-slug/*.md | sort -n | head
 
 # 2. strip title + header lines, hash the remainder; any bucket > 1 is a FAIL
+
 for f in .lovable/plans/subtasks/xx-plan-slug/*.md; do
   tail -n +4 "$f" | rg -v '^\*\*(Plan|Domain|Target Files|Depends On)' \
     | sha256sum | cut -c1-12 | tr '\n' ' '; echo "$f"
@@ -706,6 +728,7 @@ Spec gaps filed: <list or none>
 ``
 
 ### Temp-Agent State Management Protocol (Non-Negotiable)
+
 To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
 - On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md` and writes the objective and `STATUS: IN_PROGRESS`.
 - On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.

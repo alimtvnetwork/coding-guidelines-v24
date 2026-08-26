@@ -20,16 +20,21 @@ section from a **folder profile**.
 ## Usage
 
 ```bash
+
 # Plan only — no writes
+
 npm run spec:verify:inject:dry
 
 # Apply
+
 npm run spec:verify:inject
 
 # Restrict to a single folder
+
 node scripts/spec-verification/inject-verification-sections.mjs --only 04-database
 
 # Machine-readable report
+
 node scripts/spec-verification/inject-verification-sections.mjs --json
 ```
 

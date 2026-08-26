@@ -836,6 +836,7 @@ migrations/
 Every table MUST be documented:
 
 ```markdown
+
 ### TableName (singular)
 
 **Purpose:** [What this table stores]  

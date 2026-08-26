@@ -28,13 +28,17 @@ is identical across platforms.
 Not shipped as templates. Users wire them themselves using the contract:
 
 ```bash
+
 # 1. Install
+
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
 
 # 2. Run
+
 ./linters-cicd/run-all.sh --path . --format sarif --output coding-guidelines.sarif
 
 # 3. Upload artifact + fail build on exit code 1
+
 ```
 
 ---
@@ -57,16 +61,20 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/lates
 When an AI is integrating these linters into a CI/CD pipeline, it MUST explicitly define the target languages. This is crucial for avoiding auto-detection errors and speeding up CI runs.
 
 ### How an AI should integrate this:
+
 1. **Identify the languages** used in the codebase (e.g., `go`, `typescript`, `python`, `rust`, `php`, `csharp`).
 2. **Wire the script** to run explicitly for those languages using the `--languages` argument.
 3. **Fail the build** if the script exits with a non-zero code.
 
 **Example: Jenkins / GitLab / Bitbucket (Bash)**
 ```bash
+
 # 1. Install the tools
+
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
 
 # 2. Execute ONLY for specific languages
+
 ./linters-cicd/run-all.sh \
   --path . \
   --languages go,typescript,python \

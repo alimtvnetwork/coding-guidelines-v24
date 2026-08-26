@@ -49,7 +49,9 @@ The following folders MUST exist at the **root of the project repository**:
 Projects MAY use a unified `linters/` parent folder instead of placing `linter-scripts/` at the root:
 
 ```
+
 # Option A — Root-level (default)
+
 project-root/
 ├── linter-scripts/
 │   ├── validate-guidelines.py
@@ -61,6 +63,7 @@ project-root/
 └── ...
 
 # Option B — Nested under linters/
+
 project-root/
 ├── linters/
 │   └── linter-scripts/

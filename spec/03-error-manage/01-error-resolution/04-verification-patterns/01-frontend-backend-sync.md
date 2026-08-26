@@ -19,10 +19,13 @@ This document defines the mandatory verification pattern for ensuring frontend a
 Verify the backend endpoint exists and returns the expected format.
 
 ```bash
+
 # Test health endpoint
+
 curl -s http://localhost:8080/api/v1/health | jq .
 
 # Expected output:
+
 {
   "success": true,
   "data": {
@@ -43,10 +46,13 @@ curl -s http://localhost:8080/api/v1/health | jq .
 Verify the frontend code correctly handles the backend response.
 
 ```bash
+
 # Find detection logic
+
 grep -rn "connected\|isConnected\|setConnected" src/
 
 # Check what the code expects
+
 cat src/components/shared/BackendStatus.tsx
 ```
 
@@ -118,13 +124,19 @@ Before implementing frontend code for an endpoint:
 ### Verify with curl
 
 ```bash
+
 # Success case
+
 curl -s http://localhost:8080/api/v1/resource/123 | jq '.success'
+
 # Should return: true
 
 # Error case
+
 curl -s http://localhost:8080/api/v1/resource/invalid | jq '.success'
+
 # Should return: false
+
 ```
 
 ---
@@ -180,6 +192,7 @@ Create a verification script for your project:
 
 ```bash
 #!/bin/bash
+
 # verify-api.sh
 
 API_BASE="${API_BASE:-http://localhost:8080}"
@@ -189,6 +202,7 @@ echo "Base URL: $API_BASE"
 echo ""
 
 # Check health
+
 echo "1. Health Check:"
 HEALTH=$(curl -s -w "\n%{http_code}" "$API_BASE/api/v1/health")
 HTTP_CODE=$(echo "$HEALTH" | tail -n1)
@@ -206,6 +220,7 @@ else
 fi
 
 # Check API index
+
 echo ""
 echo "2. API Index:"
 INDEX=$(curl -s -w "\n%{http_code}" "$API_BASE/api/v1")
@@ -228,7 +243,9 @@ echo "=== Verification Complete ==="
 Add verification to your CI pipeline:
 
 ```yaml
+
 # .github/workflows/verify-api.yml
+
 name: API Verification
 
 on: [push, pull_request]

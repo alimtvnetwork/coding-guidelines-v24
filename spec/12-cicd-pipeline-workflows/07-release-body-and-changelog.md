@@ -18,15 +18,19 @@ Defines the standard patterns for extracting changelog entries and assembling st
 Projects maintain a `changelog.md` at the repository root following Keep a Changelog format:
 
 ```markdown
+
 ## v1.3.0 — Feature Title (2026-04-10)
 
 ### Added
+
 - New `map` subcommand for repository visualization
 
 ### Fixed
+
 - Crash when no Git remote is configured
 
 ## v1.2.0 — Previous Release (2026-04-08)
+
 ...
 ```
 
@@ -242,6 +246,7 @@ if [[ "$VERSION" == *-* ]]; then
 fi
 
 # Prepend warning if pre-release
+
 if [ "$IS_PRERELEASE" = "true" ]; then
     BANNER='> ⚠️ **This is a pre-release.** It may contain breaking changes and is not recommended for production use.\n\n'
     sed -i "1s/^/$BANNER/" /tmp/release-body.md
@@ -301,17 +306,22 @@ After assembly, validate the release body contains all required sections:
 For projects with both version-pinned and generic installers, the release body includes both:
 
 ```markdown
+
 ### Install specific version (generic installer)
 
 ```powershell
 irm https://raw.githubusercontent.com/<repo>/main/scripts/install.ps1 | iex
+
 # Or pin this version:
+
 & { $Version = "<version>"; irm https://raw.githubusercontent.com/<repo>/main/scripts/install.ps1 | iex }
 ```
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/<repo>/main/scripts/install.sh | bash
+
 # Or pin this version:
+
 curl -fsSL https://raw.githubusercontent.com/<repo>/main/scripts/install.sh | bash -s -- --version <version>
 ```
 ```

@@ -62,6 +62,7 @@ All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 ## Files Touched
 
 ### Created (specs)
+
 - `spec/15-distribution-and-runner/00-overview.md`
 - `spec/15-distribution-and-runner/01-install-contract.md`
 - `spec/15-distribution-and-runner/02-runner-contract.md`
@@ -69,9 +70,11 @@ All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 - `spec/15-distribution-and-runner/04-install-config.md`
 
 ### Created (memory)
+
 - `.lovable/memory/sessions/2026-04-19-distribution-runner-slides.md` (this file)
 
 ### Modified
+
 - `install-config.json` — added `linters-cicd`
 - `run.ps1` — full rewrite with sub-command dispatch
 - `run.sh` — full rewrite with sub-command dispatch
@@ -79,6 +82,7 @@ All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 - `.lovable/plan.md` — added rows 37–41
 
 ### Deleted
+
 - `.gitmap/`
 - `src/.gitmap/`
 

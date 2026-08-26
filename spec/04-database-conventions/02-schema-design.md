@@ -203,6 +203,7 @@ Every database schema MUST be documented with:
 ### Template
 
 ```markdown
+
 ### TableName
 
 **Purpose:** [What this table stores]  

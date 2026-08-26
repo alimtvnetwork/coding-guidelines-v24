@@ -79,6 +79,7 @@ DELETE /api/v1/error-logs/2026-04-02-url-error
 ### Full REST API Design Sample
 
 ```yaml
+
 # OpenAPI-style paths — all slugs are lowercase kebab-case
 
 paths:

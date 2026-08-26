@@ -53,6 +53,7 @@ Uses the same template as `10-research.md` (coding guidelines research). See tha
 For architecture-specific research, use this extended template:
 
 ````markdown
+
 # ADR: [Decision Title]
 
 **Status:** Proposed | Accepted | Deprecated | Superseded  
@@ -73,14 +74,17 @@ What is the change that we're proposing and/or doing?
 ## Consequences
 
 ### Positive
+
 - [benefit 1]
 - [benefit 2]
 
 ### Negative
+
 - [trade-off 1]
 - [trade-off 2]
 
 ### Risks
+
 - [risk 1 with mitigation strategy]
 
 ## Alternatives Considered

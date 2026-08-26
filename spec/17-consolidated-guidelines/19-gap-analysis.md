@@ -142,6 +142,7 @@ Weighting by "how badly will another AI mess up without this file":
 ## Priority Recommendations (Updated)
 
 ### P0 — Done ✅
+
 1. ~~Expand top 5 critical consolidated files~~ — Done (02, 03, 15, 17, 18)
 2. ~~Create WP plugin conventions (20)~~ — Done
 3. ~~Fix broken cross-references in WP plugin spec~~ — Done (8 fixes)
@@ -152,25 +153,30 @@ Weighting by "how badly will another AI mess up without this file":
 8. ~~Expand `06-seedable-config.md`~~ — Done (311→754 lines)
 
 ### P1 — Done ✅
+
 1. ~~Add complete CSS variable enumeration to `07-design-system.md`~~ — Done (228→580+ lines)
 2. ~~Add component variant details to `16-app-design-system-and-ui.md`~~ — Done (119→340+ lines)
 
 ### P2 — Done ✅
+
 1. ~~Add 4-backtick fence details to `09-code-block-system.md`~~ — Done (213→530+ lines)
 2. ~~Add keyboard shortcut full list to `08-docs-viewer-ui.md`~~ — Done (129→430+ lines)
 3. ~~Expand `11-powershell-integration.md` with full module patterns~~ — Done (191→560+ lines)
 
 ### P3 — Done ✅
+
 1. ~~Expand `20-wp-plugin-conventions.md` with upload flow details~~ — Done (462→570+ lines, 88%→92%)
 2. ~~Expand `21-lovable-folder-structure.md` with memory file conventions~~ — Done (86→220+ lines, 85%→91%)
 3. ~~Expand `14-app-issues.md` with resolution patterns~~ — Done (65→210+ lines, 60%→85%)
 4. ~~Address placeholder files (11, 12, 13)~~ — Done (expanded to full content: 180+, 170+, 210+ lines; 88% each)
 
 ### P4 — Done ✅
+
 1. ~~Expand `01-spec-authoring.md`~~ — Done (90%→95%, 330+ lines, v3.2.0)
 2. ~~Expand `16-app-design-system-and-ui.md`~~ — Done (88%→93%, 530+ lines, v3.3.0)
 
 ### P5 — Future Considerations
+
 1. Expand `14-app-issues.md` — currently 85%, could add resolution pattern details
 2. Expand `15-cicd-pipeline-workflows.md` — currently 92%, near ceiling
 3. Populate research files (11, 12) with actual research when conducted

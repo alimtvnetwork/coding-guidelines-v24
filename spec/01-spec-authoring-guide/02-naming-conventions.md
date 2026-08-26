@@ -114,6 +114,7 @@ Some modules contain non-markdown files. These follow relaxed naming:
 Every `.md` file MUST begin with a standardized metadata header:
 
 ```markdown
+
 # Title of the Document
 
 **Version:** X.Y.Z  

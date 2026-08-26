@@ -192,6 +192,7 @@ How to self-loop and distribute tasks effectively:
   - [ ] Aggregate their precise findings to ensure the highest quality result.
 
 ### Temp-Agent State Management Protocol (Non-Negotiable)
+
 To ensure agents don't lose context, you MUST use the .lovable/temp-agents/ directory for tracking sub-agent tasks.
 - [ ] On Start:
   - [ ] The sub-agent creates .lovable/temp-agents/<task-name>.md.

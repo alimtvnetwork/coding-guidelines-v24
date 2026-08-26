@@ -127,6 +127,7 @@ any working directory).
 
 ````markdown
 <!-- repo-lint-suggestions -->
+
 ### golangci-lint — actionable suggestions
 
 Found **2** new finding(s) introduced by this change. Each entry

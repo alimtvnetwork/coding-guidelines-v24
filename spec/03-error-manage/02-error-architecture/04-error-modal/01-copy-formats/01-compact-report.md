@@ -79,6 +79,7 @@ Without this section, the recipient cannot diagnose root-cause errors on the del
 ## Complete Sample
 
 ````markdown
+
 ## Compact Error Report
 
 **App:** WP Publish v1.19.4

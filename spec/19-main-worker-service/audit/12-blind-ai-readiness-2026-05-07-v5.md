@@ -43,11 +43,13 @@ Subtotal recovered: **+2 raw**, capped at the deferral ceiling (backup-tier T3).
 ## 2. Residual gap (2 points)
 
 ### 2.1 Backup-tier seed keys partial deferral (-1)
+
 v5.38.0 materialised the 28 `MainWorker.Backup.*` tunables behind T3 silent-waiver; the cache-bin & rotation timers fully covered. One residual sub-bin (`Backup.Snapshot.Restore.*`) remains prose-only because the partial-restore feature is explicitly forbidden until v2.0 (per `24-threat-model.md` §1 and `97-acceptance-criteria.md` AC). A literal AI building this path will hit `MAIN-900-01 SpecContradiction` (now formally catalogued in §3.12) and halt — the desired safe-fail.
 
 **Disposition:** intentional deferral.
 
 ### 2.2 Diagram-PNG regeneration (-1)
+
 `.mmd` sources are authoritative; rendered `.png` snapshots are produced by the docs-diagrams CI job per push but are not committed to `diagrams/`. A literal AI reading PNGs out-of-band (rare path) could see stale visuals. Mitigation: `25-§6` precedence rules rank diagrams **last**.
 
 **Disposition:** documented and bounded; closure deferred to optional baseline-PNG commit loop.

@@ -37,6 +37,7 @@ The release description is assembled from multiple data sources into a single Ma
 ### Checksums Block
 
 ```markdown
+
 ### Checksums (SHA256)
 
 \`\`\`
@@ -73,6 +74,7 @@ PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -1 || true
 RANGE="${PREV_TAG:+${PREV_TAG}..HEAD}"
 
 # Categorize by conventional commit prefix
+
 FEATS=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^feat" -i || true)
 FIXES=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^fix" -i || true)
 OTHER=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^refactor\|^chore\|^docs" -i || true)

@@ -13,6 +13,7 @@ Check every generated code block against these rules before outputting.
 ---
 
 ### Critical Repository Rules (1 check)
+
 - [ ] NEVER output generated code files (`*.generated.*`, ORM models, etc.) or test artifacts for Git check-in. They belong in `.gitignore`.
 
 ---

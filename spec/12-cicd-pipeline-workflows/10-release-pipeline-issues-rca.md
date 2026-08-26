@@ -262,7 +262,9 @@ Error: Process completed with exit code 1.
 
 **Fix applied (in sibling reference implementation):**
 ```yaml
+
 # release.yml
+
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false   # NEVER cancel release runs

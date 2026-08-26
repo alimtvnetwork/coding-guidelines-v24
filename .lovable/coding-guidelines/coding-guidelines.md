@@ -1,6 +1,7 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. -->
 <!-- Source: spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->
 <!-- Regenerate with: npm run sync:guidelines -->
+
 # 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
 Version: 1.5.0
@@ -86,6 +87,7 @@ auto-reject on the same tier as RULE 0.
 6. Group imports with one blank line between groups: standard library, third-party, first-party absolute, first-party relative. Never mix groups.
 7. Trailing newline at end of file. No trailing whitespace on any line.
 8. If you feel the need for section-separator blank lines inside a single function, the function is too long. Refactor before adding whitespace.
+9. **[MD-H001] Markdown headings** — every `#` through `######` heading must be preceded by exactly one blank line (unless it is the very first content line of the file) and followed by exactly one blank line. Enforced by `linter-scripts/check-markdown-headings.py`. Auto-fixable with `--fix`.
 
 ---
 
@@ -209,6 +211,7 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 4. List every remaining task before ending the turn.
 5. Plan multi-file features with a Mermaid component or flow diagram first.
 6. If you cannot find the answer in this file or in an existing `spec/02-coding-guidelines/` folder or `spec/03-error-manage/` folder, ask. Do not invent.
+
 # Coding Guidelines
 
 > NOTE: Conflict with folder-level `spec/02-coding-guidelines/`, `spec/coding-guidelines/`, `spec/03-error-manage` or similar guideline folders. The folder-level spec wins over this file if those exist.
@@ -236,6 +239,7 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 - [ ] **Single Source of Truth for Versions**: Do not hardcode version numbers across files. Use a root-level JSON file (e.g. `version.json`) as the single source of truth and inject/read it dynamically.
 
 > **See Full Guide**: For complete rules and multi-language examples, see `.lovable/coding-guidelines/01-ai-code-review-guide.md`
+
 # AI Code Review Guide — Naming, Signatures, Whitespace
 
 > **Audience:** an AI assistant performing a code review.
@@ -358,13 +362,17 @@ interface JsonPayload {}
 ```
 
 ```python
+
 # BEFORE
+
 def fetchUserJsonUrl(userId, apiUrl): ...
 class JSONParser: ...
 ```
 
 ```python
+
 # AFTER
+
 def fetch_user_json_url(user_id: str, api_url: str) -> None: ...
 
 class JsonParser: ...
@@ -438,7 +446,9 @@ interface UserDto {
 ```
 
 ```python
+
 # AFTER — serialization alias is Pascal case even though Python fields are snake_case
+
 class UserDto(BaseModel):
     id: str = Field(alias="Id")
     api_url: str = Field(alias="ApiUrl")
@@ -513,7 +523,9 @@ function hasAdminRole(user: User): boolean {}
 ```
 
 ```python
+
 # AFTER
+
 is_enabled: bool = True
 
 def has_admin_role(user: User) -> bool: ...
@@ -579,7 +591,9 @@ export async function swapIpWindows(
 ```
 
 ```python
+
 # AFTER
+
 def swap_ip_windows(
     ctx: Context,
     interface_name: str,
@@ -678,6 +692,7 @@ class SwapIpParams:
 def swap_ip(ctx: Context, params: SwapIpParams) -> None: ...
 
 # Python alternative: keyword-only parameters
+
 def swap_ip(ctx: Context, *, interface_name: str, old_ip: str, new_ip: str) -> None: ...
 ```
 
@@ -1416,12 +1431,16 @@ export function createUser(params: CreateUserParams): Promise<User> {}
 ### Python
 
 ```python
+
 # BEFORE
+
 def create_user(id, name, email, role, tenant, legacy_flag): ...
 ```
 
 ```python
+
 # AFTER
+
 @dataclass(frozen=True)
 class CreateUserParams:
     user_id: str
@@ -1723,7 +1742,9 @@ formatter_precedence:
 ## 20. Review output format the AI should produce
 
 ```text
+
 ### Findings
+
 - R1 (must fix) — `swapIPWindows`: all-caps acronym; rename to `swapIpWindows`, `newIP` → `newIp`.
 - R5 (must fix) — `swapIp`: three adjacent `string` parameters; group into `SwapIpParams`.
 - R6 (must fix) — `swapIp`: `oldIp` accepted but never used.
@@ -1732,11 +1753,13 @@ formatter_precedence:
 - R21 (must fix) — `SwapIpParams`: every field commented; keep only the `OldIp` note.
 
 ### Self-verification
+
 R1: pass
 R2: pass
 ...
 R21: pass
 
 ### Rewritten code
+
 <full corrected file or unified diff>
 ```

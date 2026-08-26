@@ -56,7 +56,9 @@ The following tools MUST NOT be allowed to modify the Axios version:
 ### 2.2 Dependabot Configuration Example
 
 ```yaml
+
 # .github/dependabot.yml
+
 version: 2
 updates:
   - package-ecosystem: "npm"
@@ -106,18 +108,21 @@ Add a validation step to CI that verifies Axios version compliance:
 
 ```bash
 #!/bin/bash
+
 # ci/check-axios-version.sh
 
 BLOCKED_VERSIONS=("1.14.1" "0.30.4")
 CURRENT=$(node -e "console.log(require('./package.json').dependencies?.axios || require('./package.json').devDependencies?.axios || 'NOT_FOUND')")
 
 # Check for range symbols
+
 if [[ "$CURRENT" == ^* ]] || [[ "$CURRENT" == ~* ]] || [[ "$CURRENT" == ">="* ]] || [[ "$CURRENT" == "*" ]]; then
   echo "❌ FAIL: Axios version uses range symbol: $CURRENT"
   exit 1
 fi
 
 # Check for blocked versions
+
 for blocked in "${BLOCKED_VERSIONS[@]}"; do
   if [[ "$CURRENT" == "$blocked" ]]; then
     echo "❌ FAIL: Axios version $CURRENT is BLOCKED (security vulnerability)"

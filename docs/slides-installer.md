@@ -54,26 +54,34 @@ Use this in air-gapped CI or when you want to pre-stage the archive locally and 
 ### PowerShell (Windows)
 
 ```powershell
+
 # default: main branch, auto-open
+
 irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.ps1 | iex
 
 # pinned version, do not auto-open
+
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.ps1))) -Version v3.66.0 -NoOpen
 
 # offline — fails fast if download required
+
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.ps1))) -Offline
 ```
 
 ### Bash (Linux/macOS)
 
 ```bash
+
 # default: main branch, auto-open
+
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.sh | bash
 
 # pinned version, do not auto-open
+
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.sh | bash -s -- --version v3.66.0 --no-open
 
 # offline — fails fast if download required
+
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.sh | bash -s -- --offline
 ```
 
@@ -271,7 +279,9 @@ artifacts. Offline blocks (`exit 2`) are surfaced as a warning so cached
 vendor directories can take over without aborting the run.
 
 ```yaml
+
 # .github/workflows/install-slides.yml
+
 name: Install slides bundle
 
 on:

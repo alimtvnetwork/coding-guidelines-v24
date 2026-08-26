@@ -142,25 +142,33 @@ spec/upload-scripts/              ← Related: WordPress plugin upload scripts
 ## Quick Start
 
 ```powershell
+
 # Full build and run (pnpm PnP enabled)
+
 .\run.ps1
 
 # Clean rebuild everything (clears pnpm store cache)
+
 .\run.ps1 -Force
 
 # Just start backend (skip frontend build)
+
 .\run.ps1 -SkipBuild
 
 # Build only (don't start server)
+
 .\run.ps1 -BuildOnly
 
 # Skip git pull + clean build
+
 .\run.ps1 -SkipPull -Force
 
 # Configure firewall (requires Admin)
+
 .\run.ps1 -OpenFirewall
 
 # Show help
+
 .\run.ps1 -Help
 ```
 
@@ -230,14 +238,18 @@ The `-Force` flag removes:
 **IMPORTANT:** Add these entries to your `.gitignore` to exclude pnpm artifacts from version control:
 
 ```gitignore
+
 # pnpm store (local cache)
+
 .pnpm-store/
 
 # pnpm PnP files (generated)
+
 .pnp.cjs
 .pnp.loader.mjs
 
 # Build artifacts
+
 dist/
 .vite/
 ```
@@ -245,13 +257,17 @@ dist/
 ### pnpm Store Management
 
 ```powershell
+
 # Check store status
+
 pnpm store status
 
 # Prune unused packages
+
 pnpm store prune
 
 # View store path
+
 pnpm store path
 ```
 

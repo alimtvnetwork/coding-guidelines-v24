@@ -38,10 +38,13 @@ bash ./linters-cicd/run-all.sh \
 ### b. From any other repo (one-liner installer)
 
 ```bash
+
 # Step 1 — install the pack into ./linters-cicd/
+
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
 
 # Step 2 — run it
+
 bash ./linters-cicd/run-all.sh \
   --path . \
   --format sarif \

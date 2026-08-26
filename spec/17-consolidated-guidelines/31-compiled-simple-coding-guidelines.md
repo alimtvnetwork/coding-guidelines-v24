@@ -206,6 +206,7 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 4. List every remaining task before ending the turn.
 5. Plan multi-file features with a Mermaid component or flow diagram first.
 6. If you cannot find the answer in this file or in an existing `spec/02-coding-guidelines/` folder or `spec/03-error-manage/` folder, ask. Do not invent.
+
 # Coding Guidelines
 
 > NOTE: Conflict with folder-level `spec/02-coding-guidelines/`, `spec/coding-guidelines/`, `spec/03-error-manage` or similar guideline folders. The folder-level spec wins over this file if those exist.
@@ -233,6 +234,7 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 - [ ] **Single Source of Truth for Versions**: Do not hardcode version numbers across files. Use a root-level JSON file (e.g. `version.json`) as the single source of truth and inject/read it dynamically.
 
 > **See Full Guide**: For complete rules and multi-language examples, see `.lovable/coding-guidelines/01-ai-code-review-guide.md`
+
 # AI Code Review Guide — Naming, Signatures, Whitespace
 
 > **Audience:** an AI assistant performing a code review.
@@ -355,13 +357,17 @@ interface JsonPayload {}
 ```
 
 ```python
+
 # BEFORE
+
 def fetchUserJsonUrl(userId, apiUrl): ...
 class JSONParser: ...
 ```
 
 ```python
+
 # AFTER
+
 def fetch_user_json_url(user_id: str, api_url: str) -> None: ...
 
 class JsonParser: ...
@@ -435,7 +441,9 @@ interface UserDto {
 ```
 
 ```python
+
 # AFTER — serialization alias is Pascal case even though Python fields are snake_case
+
 class UserDto(BaseModel):
     id: str = Field(alias="Id")
     api_url: str = Field(alias="ApiUrl")
@@ -510,7 +518,9 @@ function hasAdminRole(user: User): boolean {}
 ```
 
 ```python
+
 # AFTER
+
 is_enabled: bool = True
 
 def has_admin_role(user: User) -> bool: ...
@@ -576,7 +586,9 @@ export async function swapIpWindows(
 ```
 
 ```python
+
 # AFTER
+
 def swap_ip_windows(
     ctx: Context,
     interface_name: str,
@@ -675,6 +687,7 @@ class SwapIpParams:
 def swap_ip(ctx: Context, params: SwapIpParams) -> None: ...
 
 # Python alternative: keyword-only parameters
+
 def swap_ip(ctx: Context, *, interface_name: str, old_ip: str, new_ip: str) -> None: ...
 ```
 
@@ -1413,12 +1426,16 @@ export function createUser(params: CreateUserParams): Promise<User> {}
 ### Python
 
 ```python
+
 # BEFORE
+
 def create_user(id, name, email, role, tenant, legacy_flag): ...
 ```
 
 ```python
+
 # AFTER
+
 @dataclass(frozen=True)
 class CreateUserParams:
     user_id: str
@@ -1720,7 +1737,9 @@ formatter_precedence:
 ## 20. Review output format the AI should produce
 
 ```text
+
 ### Findings
+
 - R1 (must fix) — `swapIPWindows`: all-caps acronym; rename to `swapIpWindows`, `newIP` → `newIp`.
 - R5 (must fix) — `swapIp`: three adjacent `string` parameters; group into `SwapIpParams`.
 - R6 (must fix) — `swapIp`: `oldIp` accepted but never used.
@@ -1729,11 +1748,13 @@ formatter_precedence:
 - R21 (must fix) — `SwapIpParams`: every field commented; keep only the `OldIp` note.
 
 ### Self-verification
+
 R1: pass
 R2: pass
 ...
 R21: pass
 
 ### Rewritten code
+
 <full corrected file or unified diff>
 ```

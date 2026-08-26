@@ -8,9 +8,13 @@ heading anchor.
 
 ```bash
 python3 linter-scripts/check-spec-cross-links.py --root spec
+
 # Optional: JSON report
+
 python3 linter-scripts/check-spec-cross-links.py --root spec --json
+
 # Optional: GitHub annotations
+
 python3 linter-scripts/check-spec-cross-links.py --root spec --github
 ```
 
@@ -65,7 +69,9 @@ Known-broken links live in `linter-scripts/spec-cross-links.allowlist`,
 one waiver per line:
 
 ```
+
 # Comments start with `#` (only at line start; anchor `#` inside entries is preserved)
+
 spec/path/to/file.md:42:./missing-target.md
 spec/other.md:99:./file.md#missing-section
 ```
@@ -103,13 +109,17 @@ each failure using `difflib.SequenceMatcher`:
 ### Local usage
 
 ```bash
+
 # Preview what would change
+
 python3 linter-scripts/suggest-spec-cross-link-fixes.py --root spec
 
 # Apply high-confidence fixes only
+
 python3 linter-scripts/suggest-spec-cross-link-fixes.py --root spec --apply
 
 # Stricter threshold
+
 python3 linter-scripts/suggest-spec-cross-link-fixes.py --root spec --apply --min-confidence 0.9
 ```
 

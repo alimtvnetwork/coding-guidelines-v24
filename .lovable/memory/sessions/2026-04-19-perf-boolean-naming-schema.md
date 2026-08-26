@@ -10,11 +10,13 @@
 This was a long, single-day session that produced multiple linked deliverables across `spec/` and `linters-cicd/`. The work centered on three themes: **CI/CD performance & UX flags**, **boolean column naming overhaul**, and **mandatory descriptive columns**.
 
 ### linters-cicd evolution
+
 - **v3.11.x → v3.12.0** — Performance spec implementation: middle-out walker, `--jobs N|auto`, `--check-timeout SECONDS` (default 20s), and `TOOL-TIMEOUT` synthetic SARIF result on overrun.
 - **v3.12.0 → v3.13.0** — `--version` flag added to every check script via shared `_lib/cli.py` (uses `inspect.stack()` to derive `<rule-slug>` from caller's parent directory).
 - **v3.13.0 → v3.14.0** — New `BOOL-NEG-001` check at `checks/boolean-column-negative/sql.py`. Flags `^(Is|Has)(Not|No)[A-Z]` column names inside `CREATE TABLE` bodies. Allow-list expanded over the day from 4 → 10 names: `IsDisabled`, `IsInvalid`, `IsIncomplete`, `IsUnavailable`, `IsUnread`, `IsHidden`, `IsBroken`, `IsLocked`, `IsUnpublished`, `IsUnverified`.
 
 ### Codegen tool (new)
+
 - Created `linters-cicd/codegen/` implementing Rule 9's auto-inverted-field contract.
 - Per-language regex parsers: Go (`db:""`), PHP (`#[Db('…')]`), TypeScript (`@DbField('…')`).
 - Per-language emitters: Go methods, PHP traits, TS abstract-class getter mixins.
@@ -22,19 +24,23 @@ This was a long, single-day session that produced multiple linked deliverables a
 - Outputs go to `<basename>.generated.<ext>` companion files; source never modified.
 
 ### Spec changes — `spec/04-database-conventions/01-naming-conventions.md`
+
 - **v3.2.0 → v3.3.0** — Rule 2 clarification (single-negative roots like `IsDisabled` are NOT forbidden, only explicit `Not`/`No` prefixes are). Added Rule 9 (Auto-Generated Inverted Computed Fields) with code-generation contract.
 - **v3.3.0 → v3.4.0** — Rule 8 restructured into a **three-bucket table** (Forbidden / Positive / 🟦 Approved Inverse of Positive). Reframed `HasNoAccess` → `IsUnauthorized`, `HasNoChildren` → `IsSingle`, `HasNoLicense` → `HasInvalidLicense`.
 - **v3.4.0 → v3.5.0** — Added Rules 10/11/12 for descriptive free-text columns (`Description` on entity/reference tables; `Notes`+`Comments` on transactional tables; both nullable). Updated summary table and the `AgentSite`/`Transaction` SQL example.
 
 ### Spec changes — schema design + cross-links
+
 - `spec/04-database-conventions/02-schema-design.md` v3.3.0 — added §6 "Mandatory Descriptive Columns" with table-category classification matrix.
 - `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md` — added "Database ↔ Code Inverse Pattern (Rule 9)" callout linking to the canonical Rule 9 spec, the codegen tool, and BOOL-NEG-001.
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` v2.2.0 — added "Database-Backed Inverses (Rule 9)" subsection.
 
 ### CI/CD spec
+
 - Created `spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md` covering python3 detection, tree-sitter install failures, SARIF size limits, false-positive triage, and TOML parse errors. Updated `00-overview.md` document inventory.
 
 ### Earlier in the same session
+
 - Implemented FAQ features in code: inline `codeguidelines:disable=` parsing, `--baseline`, `--refresh-baseline`, `--rules`, `--exclude-rules`, `.codeguidelines.toml` config loading.
 - Added `STYLE-099 SuppressionWithoutReason` synthetic finding for suppressions missing the em-dash reason.
 
@@ -52,6 +58,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 ## Files Touched (Highlights)
 
 ### Created
+
 - `linters-cicd/checks/boolean-column-negative/sql.py`
 - `linters-cicd/codegen/inverted_fields.py`
 - `linters-cicd/codegen/inversion_table.py`
@@ -65,6 +72,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `.lovable/memory/avoid/01-avoid-per-task-folders.md`
 
 ### Modified
+
 - `linters-cicd/VERSION` (3.11.x → 3.14.0)
 - `linters-cicd/run-all.sh`
 - `linters-cicd/checks/_lib/walker.py`
@@ -78,6 +86,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `.lovable/plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/index.md`
 
 ### Removed (folder restructure)
+
 - `.lovable/completed-tasks/`
 - `.lovable/pending-tasks/`
 - `.lovable/strictly-avoid/`

@@ -80,6 +80,7 @@ normalize_version() {
 }
 
 # Usage in post-update verification
+
 old_version="1.2.0"
 new_version=$(<binary> version | xargs)
 
@@ -267,8 +268,11 @@ bump_version() {
 }
 
 # Usage:
+
 # bump_version "v1.2.3" "minor"  →  "v1.3.0"
+
 # bump_version "1.0.0" "major"   →  "v2.0.0"
+
 ```
 
 ---
@@ -354,7 +358,9 @@ create_and_push_tag() {
 }
 
 # Usage:
+
 # create_and_push_tag "v1.3.0"
+
 ```
 
 ### Go Implementation — TagVerification
@@ -437,12 +443,15 @@ extract_changelog() {
 }
 
 # Usage:
+
 # extract_changelog "v1.3.0" > /tmp/changelog-entry.md
+
 ```
 
 ### Changelog Format
 
 ```markdown
+
 ## v1.2.0 — Feature Title (2026-04-08)
 
 ### Improvements

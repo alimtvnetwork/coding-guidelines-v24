@@ -23,15 +23,18 @@
 ## 1. QueryClient Automatic Retry Loop
 
 ### Symptom
+
 Failed API requests were automatically retried 3 times (React Query default), causing:
 - Triple error toasts for a single failure
 - Unnecessary load on backend during outages
 - Confusing UX where errors appeared multiple times
 
 ### Root Cause
+
 React Query's `QueryClient` defaults to `retry: 3` and `refetchOnWindowFocus: true`. When the backend was down or returned errors, every query would silently retry 3 times, and every time the user tabbed back to the app, all stale queries would refetch.
 
 ### Fix — `src/App.tsx`
+
 ```typescript
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +48,7 @@ const queryClient = new QueryClient({
 ```
 
 ### Key Principle
+
 **Data should only refresh through explicit user actions** (button clicks, manual refresh, navigation). Never rely on React Query's automatic retry/refetch — it creates invisible network storms and duplicate errors.
 
 ---
@@ -52,15 +56,18 @@ const queryClient = new QueryClient({
 ## 2. Window Focus Refetch Storm
 
 ### Symptom
+
 Every time the user switched tabs and returned, ALL queries would refetch simultaneously, causing:
 - Sudden burst of 10-20+ API requests
 - Stale error modals reappearing
 - Backend rate limiting
 
 ### Root Cause
+
 `refetchOnWindowFocus: true` (React Query default) triggers a refetch for every mounted query when `document.visibilitychange` fires.
 
 ### Fix
+
 Set `refetchOnWindowFocus: false` globally (see Section 1) and also per-query for sensitive hooks:
 
 ```typescript
@@ -73,6 +80,7 @@ Set `refetchOnWindowFocus: false` globally (see Section 1) and also per-query fo
 ```
 
 ### Key Principle
+
 Pair `refetchOnWindowFocus: false` with `suppressGlobalError: true` in query meta for background/polling queries that should never trigger the global error modal.
 
 ---
@@ -80,6 +88,7 @@ Pair `refetchOnWindowFocus: false` with `suppressGlobalError: true` in query met
 ## 3. Publish Double-Invocation (API-Level Dedup Lock)
 
 ### Symptom
+
 Users could trigger the publish function multiple times by:
 - Double-clicking the publish button
 - Auto-publish triggering while a manual publish was in-flight
@@ -88,9 +97,11 @@ Users could trigger the publish function multiple times by:
 This caused duplicate ZIP uploads, duplicate activity logs, and race conditions on the remote WordPress site.
 
 ### Root Cause
+
 No guard existed at the API method level. The publish function was a simple `request()` call that could be invoked any number of times concurrently.
 
 ### Fix — `src/lib/api/methods.ts`
+
 ```typescript
 publishPlugin: (() => {
   const inFlight = new Set<string>();
@@ -136,6 +147,7 @@ publishPlugin: (() => {
 ```
 
 ### Architecture Details
+
 - **IIFE closure** wraps the function so `inFlight` and `cooldowns` are module-scoped singletons
 - **`E_DEDUP` error code** — returned locally, never reaches the network
 - **`E_COOLDOWN` error code** — prevents rapid re-publish after success
@@ -143,6 +155,7 @@ publishPlugin: (() => {
 - **`.finally()`** — ensures `inFlight` is always cleaned up, even on network errors
 
 ### Key Principle
+
 **Critical mutating operations must have an API-layer dedup lock**, not just UI-level button disabling. UI guards can be bypassed by programmatic callers (auto-publish, WebSocket event handlers).
 
 ---
@@ -150,12 +163,15 @@ publishPlugin: (() => {
 ## 4. Post-Publish Cooldown Guard
 
 ### Symptom
+
 After a successful publish, the auto-publish watcher would detect the new files (uploaded by the publish itself) and immediately trigger another publish cycle, creating an infinite re-publish loop.
 
 ### Root Cause
+
 The file watcher detected the ZIP files and version.json changes created by the publish as "new changes" and queued another auto-publish.
 
 ### Fix
+
 The 30-second cooldown in the `publishPlugin` IIFE (Section 3) blocks any re-invocation within the cooldown window. Combined with the `E_COOLDOWN` error code, the auto-publish handler can silently discard the blocked attempt.
 
 ---
@@ -163,12 +179,14 @@ The 30-second cooldown in the `publishPlugin` IIFE (Section 3) blocks any re-inv
 ## 5. WebSocket Event Listener Duplication (PublishProgressDialog)
 
 ### Symptom
+
 The PublishProgressDialog showed:
 - Duplicate or triple log entries for the same publish step
 - Progress bar jumping erratically (e.g., 30% → 60% → 30% → 90%)
 - Late-arriving "complete" events from previous publishes resetting the UI
 
 ### Root Cause
+
 The `useEffect` that subscribed to WebSocket events had **unstable dependencies** (callbacks, computed labels) that changed on every render, causing:
 1. Effect re-runs → re-subscriptions → multiple active listeners for the same event
 2. No deduplication of log entries
@@ -247,6 +265,7 @@ useEffect(() => {
 ```
 
 ### Key Principles
+
 1. **Never put callbacks or computed strings in `useEffect` dependency arrays** — use `useRef` to read their latest value inside the effect
 2. **WebSocket listeners must have a completion lock** — once a lifecycle event (publish, restore, backup) is "done," ignore all subsequent events for that session
 3. **Deduplicate event-driven state updates** — WebSocket events can arrive out-of-order or multiple times; always deduplicate by a composite key
@@ -257,14 +276,17 @@ useEffect(() => {
 ## 6. Toast Notification Deduplication
 
 ### Symptom
+
 Multiple identical toast notifications appeared simultaneously, e.g.:
 - "Publish complete" × 3 (from WebSocket event + local state change + query refetch)
 - "Connection test passed" × 2 (from WebSocket + API response)
 
 ### Root Cause
+
 Both the WebSocket event handler (`useWsToastNotifications`) AND the local UI handler would fire toasts for the same event. No dedup existed.
 
 ### Fix — `src/lib/dedupToast.ts`
+
 ```typescript
 const DEDUP_WINDOW_MS = 3000; // 3 seconds
 const recentToasts = new Map<string, number>();
@@ -296,12 +318,14 @@ export const dedupToast = {
 ```
 
 ### Usage
+
 ```typescript
 // Replace: import { toast } from "sonner";
 // With:    import { dedupToast as toast } from "@/lib/dedupToast";
 ```
 
 ### Key Principle
+
 **Always use `dedupToast` instead of raw `sonner.toast`** in any component that might fire toasts from multiple sources (WebSocket + API response + state change).
 
 ---
@@ -309,12 +333,15 @@ export const dedupToast = {
 ## 7. Circuit Breaker for Failing Endpoints
 
 ### Symptom
+
 When a backend endpoint was consistently failing (e.g., site offline), every poll/check would generate error toasts and error log entries indefinitely.
 
 ### Root Cause
+
 No mechanism existed to stop calling a persistently failing endpoint. Polling intervals would keep firing, generating noise.
 
 ### Fix — `src/lib/circuitBreaker.ts`
+
 ```typescript
 const DEFAULT_CONFIG = {
   failureThreshold: 5,    // Open circuit after 5 failures
@@ -329,6 +356,7 @@ const result = await withCircuitBreaker('api.getSites', () => api.getSites());
 States: `closed` (normal) → `open` (blocked) → `half-open` (test one request after cooldown) → `closed` (if test succeeds).
 
 ### Key Principle
+
 **Wrap polling and health-check calls in a circuit breaker** to prevent error storms against failing endpoints.
 
 ---
@@ -336,12 +364,15 @@ States: `closed` (normal) → `open` (blocked) → `half-open` (test one request
 ## 8. Snapshot Query Retry Suppression
 
 ### Symptom
+
 Snapshot list queries for disconnected sites (siteId=0) would trigger the global error modal on every poll cycle.
 
 ### Root Cause
+
 Queries with `siteId: 0` are "background" queries that run speculatively. Their failures should be silent.
 
 ### Fix
+
 ```typescript
 // src/hooks/useRemoteSnapshots.ts
 {
@@ -364,6 +395,7 @@ The `suppressGlobalError` flag is checked in the global `QueryCache.onError` han
 ## 9. Anti-Patterns Summary (Never Do This)
 
 ### ❌ NEVER: Use React Query defaults for retry/refetch
+
 ```typescript
 // BAD — causes retry storms and background refetches
 const queryClient = new QueryClient(); // uses retry:3, refetchOnWindowFocus:true
@@ -376,6 +408,7 @@ const queryClient = new QueryClient({
 ```
 
 ### ❌ NEVER: Put callbacks/labels in useEffect deps for WebSocket listeners
+
 ```typescript
 // BAD — re-subscribes on every render
 useEffect(() => {
@@ -395,6 +428,7 @@ useEffect(() => {
 ```
 
 ### ❌ NEVER: Rely only on UI-level button disabling for mutation dedup
+
 ```typescript
 // BAD — can be bypassed by programmatic callers
 <Button disabled={isLoading} onClick={publish}>Publish</Button>
@@ -416,6 +450,7 @@ publishPlugin: (() => {
 ```
 
 ### ❌ NEVER: Use raw `toast()` from sonner in WebSocket-connected components
+
 ```typescript
 // BAD — duplicate toasts from WS + local state
 import { toast } from "sonner";
@@ -428,6 +463,7 @@ toast.success("Done");
 ```
 
 ### ❌ NEVER: Process WebSocket events without a completion lock
+
 ```typescript
 // BAD — late events from previous sessions leak through
 wsClient.on("complete", (data) => { setIsComplete(true); });
@@ -443,6 +479,7 @@ wsClient.on("complete", (data) => {
 ```
 
 ### ❌ NEVER: Fire polling queries for background/speculative targets without suppressGlobalError
+
 ```typescript
 // BAD — error modal pops up for disconnected sites
 useQuery({ queryKey: ["snapshots", 0], queryFn: () => api.getSnapshots(0) });

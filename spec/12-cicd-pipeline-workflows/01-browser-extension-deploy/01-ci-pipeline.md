@@ -57,7 +57,9 @@ The entry point job performs:
 When a project uses workspaces, the extension subdirectory may need its own install step:
 
 ```bash
+
 # Remove workspace file to prevent cross-linking issues
+
 rm -f pnpm-workspace.yaml
 if [ -f pnpm-lock.yaml ]; then
   pnpm install --frozen-lockfile

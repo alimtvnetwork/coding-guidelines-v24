@@ -89,6 +89,7 @@ if paymentStatus.IsFailed {
 ```
 
 ## Why?
+
 1. **Clarity**: It forces explicit checking of `.IsSuccess` or `.IsFailed` instead of a cryptic `if ok { ... }`.
 2. **Extensibility**: You can add metadata, logging contexts, or payload data (`T`) without changing the function signature.
 3. **Safety**: By forcing the use of `NewSuccess()` or `NewFailure()`, it is structurally impossible for a developer to accidentally set `IsSuccess = true` and `IsFailed = true` at the same time.

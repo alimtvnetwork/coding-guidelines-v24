@@ -1,10 +1,12 @@
 # 01 — Scope of `ignored-deleted` reason enrichment
 
 ## Original request
+
 > Add a `reason` value for each audit-trail entry so I can see why a
 > deleted path was marked `ignored-deleted`.
 
 ## Context
+
 - File: `linter-scripts/check-placeholder-comments.py`
 - Today every `ignored-deleted` row carries the same static string:
   `"git reported D (deleted): no post-state file to lint"`.
@@ -19,6 +21,7 @@
   count (e.g. only 1 `ignored-deleted` row from one `D\t…` input).
 
 ## Ambiguity
+
 "Why a deleted path was marked `ignored-deleted`" can mean either:
 
 1. **Diversify the `reason` text per *source***: the row set stays
@@ -33,6 +36,7 @@
 ## Options considered
 
 ### Option A — Diversify reason text only (no new rows)
+
 - **Pros:**
   - Zero behaviour change for callers / dashboards counting rows.
   - All current tests stay green; only `reason`-string assertions
@@ -44,6 +48,7 @@
   - User may have been hinting they want OLD sides too.
 
 ### Option B — Also emit rename/copy OLD-side rows
+
 - **Pros:**
   - Matches the `_AUDIT_STATUSES` docstring's stated contract.
   - Gives reviewers a complete picture: every path the diff
@@ -56,10 +61,12 @@
   - Schema change, not just a copy change.
 
 ### Option C — Both (diversify + add OLD-side rows)
+
 - **Pros:** Most informative.
 - **Cons:** All of Option B's risks plus more surface area.
 
 ## Chosen — Option A
+
 **Recommendation rationale:** The user's wording focuses on the
 *reason* field ("Add a `reason` value … so I can see why"). The
 narrowest faithful reading is "make the existing reason more
@@ -70,6 +77,7 @@ explicitly because it changes the row schema for downstream
 consumers.
 
 ## Reversibility
+
 Trivial. Switching to Option B later is purely additive — just
 thread the OLD-side paths into the same `(path, source)` tuple
 pipeline this task introduces. Option A's per-source reason map is

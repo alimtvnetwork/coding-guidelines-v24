@@ -454,6 +454,7 @@ func (s *ConfigService) updateChangelog(seed SeedConfig) error {
 ## 7. changelog.md Format
 
 ```markdown
+
 # Changelog
 
 All notable configuration changes are documented here.
@@ -461,14 +462,17 @@ All notable configuration changes are documented here.
 ## [1.2.0] - 2026-02-01
 
 ### Added
+
 - Cache category with Enabled, MaxSizeMb, TtlHours settings
 
 ### Changed
+
 - Theme options now include "high-contrast"
 
 ## [1.0.0] - 2026-01-01
 
 ### Initial Release
+
 - General category with Theme, Language, AutoSave
 ```
 

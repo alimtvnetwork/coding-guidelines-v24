@@ -185,7 +185,9 @@ function getHumanMessage(code: string): string {
 For PowerShell scripts, use exit codes:
 
 ```powershell
+
 # Define exit codes
+
 $ErrorCodes = @{
     Success = 0
     ConfigMissing = 9510
@@ -194,6 +196,7 @@ $ErrorCodes = @{
 }
 
 # Usage
+
 if (-not (Test-Path $configPath)) {
     Write-Error "PS-9510-01: Configuration file not found"
     exit $ErrorCodes.ConfigMissing
@@ -207,7 +210,9 @@ if (-not (Test-Path $configPath)) {
 Use the JSON schema to validate error code format:
 
 ```bash
+
 # Validate error code format
+
 echo '{"code": "SM-400-01"}' | \
   npx ajv validate -s schemas/error-code.schema.json -d -
 ```

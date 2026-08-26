@@ -3,6 +3,7 @@ name: fix-repo URL-handling rule
 description: fix-repo.ps1/.sh replace the versioned-repo-name token in ALL text files including inside URLs — host stays untouched, only the repo-name path segment changes.
 type: feature
 ---
+
 # fix-repo URL handling
 
 The `fix-repo` scripts (PowerShell + Bash, repo-root) treat the

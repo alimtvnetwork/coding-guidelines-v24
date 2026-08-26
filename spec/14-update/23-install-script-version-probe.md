@@ -128,7 +128,9 @@ required for correctness.
 ## Hand-Off
 
 ```powershell
+
 # PowerShell hand-off
+
 $newerUrl = "https://raw.githubusercontent.com/$Owner/$Base-v$Latest/main/install.ps1"
 Write-OK "Newer version found: v$Latest (was v$Current). Handing off..."
 Invoke-RestMethod -Uri $newerUrl | Invoke-Expression
@@ -136,7 +138,9 @@ exit $LASTEXITCODE   # propagate child exit
 ```
 
 ```bash
+
 # Bash hand-off
+
 newer_url="https://raw.githubusercontent.com/$OWNER/$BASE-v$LATEST/main/install.sh"
 ok "Newer version found: v$LATEST (was v$CURRENT). Handing off..."
 curl -fsSL "$newer_url" | bash
@@ -205,7 +209,9 @@ probe path falls back to "install whatever I am right now".
 ## PowerShell Reference Implementation
 
 ```powershell
+
 # ── Version probe ─────────────────────────────────────────────────
+
 function Invoke-LatestVersionProbe {
     # 1. Self-identify
     $sourceUrl = $null
@@ -288,12 +294,15 @@ function Invoke-LatestVersionProbe {
 }
 
 # Maintainer-supplied fallback constants (used when URL parse fails)
+
 $script:ProbeOwner   = "alimtvnetwork"
 $script:ProbeBase    = "coding-guidelines"
 $script:ProbeVersion = 19
 
 Invoke-LatestVersionProbe
+
 # ── End probe ─────────────────────────────────────────────────────
+
 ```
 
 ---
@@ -301,7 +310,9 @@ Invoke-LatestVersionProbe
 ## Bash Reference Implementation
 
 ```bash
+
 # ── Version probe ─────────────────────────────────────────────────
+
 PROBE_OWNER_FALLBACK="alimtvnetwork"
 PROBE_BASE_FALLBACK="coding-guidelines"
 PROBE_VERSION_FALLBACK=19
@@ -387,7 +398,9 @@ invoke_latest_version_probe() {
 }
 
 invoke_latest_version_probe
+
 # ── End probe ─────────────────────────────────────────────────────
+
 ```
 
 ---

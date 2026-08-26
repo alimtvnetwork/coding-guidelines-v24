@@ -22,35 +22,44 @@ the end.
 ## Entry template
 
 ```markdown
+
 # xx — <brief title>
 
 ## Original request
+
 > <verbatim user message that triggered the task>
 
 ## Context
+
 <files touched, prior state, relevant constraints>
 
 ## Ambiguity
+
 <the specific point of confusion in 1–3 sentences>
 
 ## Options considered
 
 ### Option A — <name>
+
 - **Pros:** …
 - **Cons:** …
 
 ### Option B — <name>
+
 - **Pros:** …
 - **Cons:** …
 
 ### Option C — <name>
+
 - **Pros:** …
 - **Cons:** …
 
 ## Chosen — <Option X>
+
 **Recommendation rationale:** <why this option won>
 
 ## Reversibility
+
 <how hard would it be to switch to a different option later>
 ```
 
