@@ -4,6 +4,13 @@
 
 ---
 
+## v6.18.1 — 2026-08-26 (Sync)
+
+**Scope:** Version bump (`6.18.0` → `6.18.1`). Sync.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.18.0 — 2026-08-24 (Installer)
 
 **Scope:** Version bump (`6.17.0` → `6.18.0`). Installer.
