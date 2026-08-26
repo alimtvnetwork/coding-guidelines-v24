@@ -5,6 +5,23 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v6.21.0] 2026-08-26 Add Alim profile link and update prompts from prompt-architect-v2
+
+### Install Prompt Architect v6.21.0
+
+To pin your repository to this exact version, run the following one-liner:
+**Unix/Bash:** `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.21.0/install.sh | bash -s -- ".lovable/prompts" "v6.21.0"`
+**PowerShell:** `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.21.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "v6.21.0"`
+
+### Added / Changed / Fixed
+
+- Updated AI prompts across `.lovable/prompts/` from `prompt-architect-v2`.
+- Added `alim.karim.profile` repository link to Connect sections in `readme.md`, `docs/author.md`, and `docs/author-bio.md`.
+- Regenerated all 14 bundle installer scripts (`*-install.sh` and `*-install.ps1`) for v6.21.0.
+- Regenerated sync-managed files `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, and `docs/author.md`.
+
+---
+
 ## [v6.20.0] 2026-08-26 version.json subpackage inheritance, import protocol, what-to-read queue, release architecture map
 
 ### Install Prompt Architect v6.20.0

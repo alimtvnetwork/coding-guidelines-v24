@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.20.0",
+  "Version": "6.21.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "6bc7c01464d611c61d6c3540cd9af093fb19b149",
+  "LastCommitSha": "aa1f615073d8ae094bb7ab39bb5197094411c8ee",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -54,20 +54,20 @@
     "19-plan-spec-steps-v2.md",
     "20-audit-app-spec.md"
   ],
-  "version": "6.20.0",
+  "version": "6.21.0",
   "updated": "2026-08-27",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "6bc7c01464d611c61d6c3540cd9af093fb19b149",
-    "shortSha": "6bc7c01",
+    "sha": "aa1f615073d8ae094bb7ab39bb5197094411c8ee",
+    "shortSha": "aa1f615",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 707,
-    "totalLines": 149474,
+    "totalLines": 149481,
     "totalFolders": 23,
-    "totalBytes": 5387623,
+    "totalBytes": 5387992,
     "rootFiles": 6
   },
   "folders": [
@@ -315,8 +315,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 53,
-      "lineCount": 10581,
-      "byteCount": 658384
+      "lineCount": 10588,
+      "byteCount": 658753
     },
     {
       "path": "21-app",

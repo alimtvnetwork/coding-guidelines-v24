@@ -29,6 +29,7 @@ const BANNER = [
   "<!-- Source: spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->",
   "<!-- Regenerate with: npm run sync:guidelines -->",
   "",
+  "",
 ].join("\n");
 
 const CURSOR_BEGIN = "<!-- BEGIN:SYNC-HARD-RULES -->";
