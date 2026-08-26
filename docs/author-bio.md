@@ -120,7 +120,7 @@ Today, gaming is still where he resets. Recent obsessions:
 |---|---|
 | Personal Website | [alimkarim.com](https://alimkarim.com/) · [my.alimkarim.com](https://my.alimkarim.com/) |
 | LinkedIn | [linkedin.com/in/alimkarim](https://www.linkedin.com/in/alimkarim/) |
-| GitHub | [github.com/aukgit](https://github.com/aukgit) |
+| GitHub | [github.com/aukgit](https://github.com/aukgit) · [Profile](https://github.com/aukgit/alim.karim.profile) |
 | GitLab (Evatix) | [gitlab.com/aukgit.evatix](https://gitlab.com/aukgit.evatix) |
 | GitLab (Personal) | [gitlab.com/aukgitlab](https://gitlab.com/aukgitlab) |
 | Stack Overflow | [stackoverflow.com/users/513511/md-alim-ul-karim](https://stackoverflow.com/users/513511/md-alim-ul-karim), 2,452+ rep, since 2010 |
