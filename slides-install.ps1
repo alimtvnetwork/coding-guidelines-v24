@@ -78,7 +78,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.ps1))) -Version v6.21.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.ps1))) -Version v6.22.0 -Target .\vendor
 #>
 
 param(
@@ -215,7 +215,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 slides-install v6.21.0" -ForegroundColor Cyan
+Write-Host "  📦 slides-install v6.22.0" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan

@@ -4,6 +4,13 @@
 
 ---
 
+## v6.22.0 — 2026-08-26 (Update)
+
+**Scope:** Version bump (`6.21.0` → `6.22.0`). Update.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.21.0 — 2026-08-26 (Add Alim profile link and update prompts from prompt-architect-v2)
 
 **Scope:** Version bump (`6.20.0` → `6.21.0`). Add Alim profile link and update prompts from prompt-architect-v2.
