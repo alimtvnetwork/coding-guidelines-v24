@@ -17,5 +17,8 @@
         "https://github.com/aukgit/alim.karim.profile"
       ]
     }
-  ]
+  ],
+  "backend": "inherit",
+  "frontend": "inherit",
+  "linters": "3.79.0"
 }

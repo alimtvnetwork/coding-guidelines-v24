@@ -9,11 +9,12 @@
 
 ## Before any task (always)
 
-- `version.json`, why: single source of truth for the repository version. New releases MUST bump this file.
+- `version.json`, why: single source of truth for the repository version, backend/frontend sections, and sub-package version tracks. All codebases must import this file for version information.
 - `.lovable/memory/index.md`, why: core memory index
-- `.lovable/coding-guidelines/coding-guidelines.md`, why: baseline rules
-- `.lovable/plans/index.md`, why: active roadmap
-- `.lovable/strictly-avoid.md`, why: hard constraints
+- `.lovable/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
+- `.lovable/coding-guidelines/coding-guidelines.md`, why: baseline rules and coding standards
+- `.lovable/plans/index.md`, why: active roadmap and pending tasks
+- `.lovable/strictly-avoid.md`, why: hard constraints and anti-patterns
 - `.lovable/question-and-ambiguity/01-new-ambiguity/`, why: open questions
 
 ## Before writing code

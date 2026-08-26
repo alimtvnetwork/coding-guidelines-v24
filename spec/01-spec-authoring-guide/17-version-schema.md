@@ -115,6 +115,17 @@ The canonical role set is:
 
 ---
 
+## §6.5 — Sub-Package Tracks & the `"inherit"` Keyword
+
+In polyglot codebases or monorepos containing multiple services or client-server packages (such as `backend`, `frontend`, `cli`, `linters`, `services`, `packages`):
+
+1. **Root Centralization**: All sub-package version tracks MUST be declared in the root `version.json`.
+2. **Inheritance (`"inherit"`)**: Setting a sub-package key to `"inherit"` (e.g. `"backend": "inherit"`, `"frontend": "inherit"`) mandates that all build tools, runtimes, and Dockerfiles resolving that sub-package inherit the root global `Version`.
+3. **Explicit Tracks**: If a sub-package maintains a separate version cadence (e.g. `"linters": "3.79.0"`), it is declared as an explicit SemVer string while remaining tracked in the single root `version.json`.
+4. **Mandatory Codebase Imports**: Every language implementation in the repo (Go, TypeScript, Python, PHP, C#, Rust) MUST import or read the root `version.json` file dynamically rather than hardcoding version strings.
+
+---
+
 ## §7 — `LastCommitSha` Automation
 
 `LastCommitSha` MUST be kept in sync with the actual latest commit on the

@@ -358,15 +358,20 @@ function shouldEmitLegacy() {
 }
 
 function buildPascalSection(identity) {
+  const cfg = loadAuthorsConfig();
   // §4 PascalCase identity (canonical, always emitted).
   return {
     _purpose:
-      "version.json is the single canonical source of truth for repository versioning, releases, metadata, and cross-repo dependencies. All tools, packages, scripts, CI/CD pipelines, manifests, and AI agents must read this file for version information. To bump or change the version in this repository, update the 'Version' field in this file and run the project sync script (e.g. 'npm run sync' or 'npm run sync:version').",
+      "version.json is the single canonical source of truth for repository versioning, releases, metadata, and cross-repo dependencies. All tools, packages, scripts, CI/CD pipelines, manifests, and AI agents must read this file for version information. To bump or change the version in this repository, update the 'Version' field (or sub-package sections) in this file and run the project sync script (e.g. 'npm run sync' or 'npm run sync:version').",
     _instructions: {
       versionSourceOfTruth:
         "Every codebase must use version.json at the repository root as the single source of truth for version numbers.",
       howToChangeVersion:
         "To change the version of the repository, edit the 'Version' field in version.json, then run 'npm run sync' (or the project's sync command) to propagate it across all files, docs, badges, and manifests.",
+      subPackageSections:
+        "Supports sub-component sections (e.g. backend, frontend, cli, linters). Set to 'inherit' to use the global root Version, or specify an explicit version string for independent version tracks.",
+      inheritanceRule:
+        "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
       prohibition:
         "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json.",
     },
@@ -377,6 +382,9 @@ function buildPascalSection(identity) {
     LastCommitSha: identity.LastCommitSha,
     Description:   identity.Description,
     Authors:       identity.Authors,
+    backend:       cfg.backend || "inherit",
+    frontend:      cfg.frontend || "inherit",
+    linters:       cfg.linters || "3.79.0",
   };
 }
 
