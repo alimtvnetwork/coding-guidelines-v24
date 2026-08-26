@@ -656,7 +656,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 <p align="center"><strong>Docs Pages</strong>, full index: <a href="docs/readme.md"><code>docs/readme.md</code></a></p>
 
 <p align="center">
-  <strong>Authoritative Read-List:</strong> <a href=".lovable/what-to-read.md"><code>.lovable/what-to-read.md</code></a>
+  <strong>Authoritative Read-List:</strong> <a href=".lovable/what-to-read.md"><code>.lovable/what-to-read.md</code></a> · <strong>Release Map:</strong> <a href=".lovable/memory/release-architecture-map.md"><code>.lovable/memory/release-architecture-map.md</code></a>
 </p>
 
 <p align="center">

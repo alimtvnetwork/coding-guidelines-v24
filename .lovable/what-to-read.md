@@ -12,6 +12,7 @@
 - `version.json`, why: single source of truth for the repository version, backend/frontend sections, and sub-package version tracks. All codebases must import this file for version information.
 - `.lovable/memory/index.md`, why: core memory index
 - `.lovable/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
+- `.lovable/memory/release-architecture-map.md`, why: architectural map of version propagation, sync pipeline, and release ceremony
 - `.lovable/coding-guidelines/coding-guidelines.md`, why: baseline rules and coding standards
 - `.lovable/plans/index.md`, why: active roadmap and pending tasks
 - `.lovable/strictly-avoid.md`, why: hard constraints and anti-patterns
