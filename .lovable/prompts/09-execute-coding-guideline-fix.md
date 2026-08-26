@@ -94,6 +94,7 @@ Context & References:
 - [ ] Make a detailed plan/task for each file.
 
 ---
+
 slug: execute-coding-guideline-fix
 status: active
 ---

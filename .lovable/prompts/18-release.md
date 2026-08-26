@@ -2,7 +2,7 @@
 
 Trigger phrases: `release`, `bump version`, `bump version + add changelog + pin to root readme`, `abump version ...` (typo variants count).
 
-No variables. No prompts to the user. Discover the current version from disk, bump it, do the full ceremony in one turn.
+If I say bump, or release use this prompt and save this prompt if not saved properly into the `.lovable\prompts\xx-release.md` or `.lovable\prompts\18-release.md` (update the prompt if there is a unsync)
 
 ---
 
@@ -26,13 +26,17 @@ When in doubt: MINOR.
 
 ## Hard rules (MUST)
 
+
 - **Changelog Formatting (version.json):** You MUST read the `"changelog"` configuration from `version.json` (e.g., `file_path` and `format`). If it exists, you MUST follow its exact instructions for where to write the changelog and how to format the header. If it does not exist, fallback to the hardcoded format below.
 - **Root README Pinning (Fatal if missed):** You MUST pin the latest release version into the root `readme.md` file. It is a fatal failure if you skip updating the badges or version pins in the root README file!
+
 
 - **Test File Ban:** You MUST NOT read, scan, or modify test files (e.g., `*_test.*`, `*.spec.*`, `test/*`) when discovering or updating versions. Test files contain mock data, and updating mock data corrupts the tests.
 - **Release Architecture Memory:** You must dynamically build a map of how the release works in this codebase (where the version lives, how it propagates) and write it to `.lovable/memory/release-architecture-map.md`. You must then enqueue this file inside `.lovable/memory/what-to-read.md` and link it in the root `readme.md`.
 
+
 - **Version Inheritance Protocol:** The root `version.json` file is the strict Single Source of Truth. It may contain components (e.g. `frontend`, `backend`) whose version is set to `"inherit"`. If a component's version is `"inherit"`, DO NOT bump it independently; it automatically scales with the global version. Always bump the global root `"version"` property unless the user explicitly asks to bump an unlinked sub-component.
+
 
 - All version pin sites move in lock-step. Partial bumps are rejected.
 
@@ -73,7 +77,7 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
 2. Discover pin sites, then update every one to the new version in lock-step. Use a single canonical search:
 
    ```
-   rg -n "\b<PREV_MAJOR>\.<PREV_MINOR>\.<PREV_PATCH>\b" -g '!node_modules' -g '!*.lock' -g '!.git'
+   rg -n "\b<PREV_MAJOR>\.<PREV_MINOR>\.<PREV_PATCH>\b" -g '!node_modules' -g '!*.lock' -g '!.git' -g '!*test*' -g '!*.spec.*'
    rg -n "\b(VERSION|APP_VERSION|EXTENSION_VERSION|SCHEMA_VERSION|CACHE_SCHEMA_VERSION|BUILD_VERSION)\b"
    ```
 
@@ -97,8 +101,13 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
 
 4. Add a changelog entry at the top of `changelog.md`, directly under `# Changelog`. Replace `X.Y.Z` with the actual new version and `YYYY-MM-DD` with `date -u +%Y-%m-%d` output:
 
-   ```
+   ```markdown
    ## [vX.Y.Z] YYYY-MM-DD <short headline>
+
+   ### Install Prompt Architect vX.Y.Z
+   To pin your repository to this exact version, run the following one-liner:
+   **Unix/Bash:** `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/vX.Y.Z/install.sh | bash -s -- ".lovable/prompts" "vX.Y.Z"`
+   **PowerShell:** `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/vX.Y.Z/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "vX.Y.Z"`
 
    ### Added / Changed / Fixed / Removed
 
@@ -109,7 +118,7 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    - [xx-<new-version>-<slug>](.lovable/release/issues/xx-<new-version>-<slug>.md) short description
    ```
 
-   Use only the subheadings that apply. `### Issues` is REQUIRED whenever any step surfaced a problem, even if worked around.
+   Use only the subheadings that apply. `### Issues` is REQUIRED whenever any step surfaced a problem, even if worked around. You MUST include the `### Install Prompt Architect` block exactly as shown above, ensuring `vX.Y.Z` is fully replaced with the new version tag.
 
 5. Rewrite remaining pin sites via the project's stale-version helper if one exists (discover: `scripts/update-stale-version-refs.*`, `scripts/bump-version.*`, `tools/update-versions.*`). Run it with previous and new version. If no helper exists, use the `rg` output from step 2 and rewrite each match by hand.
 

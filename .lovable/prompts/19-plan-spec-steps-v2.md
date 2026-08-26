@@ -115,6 +115,7 @@ Mandatory footer, verbatim, at the end of every task file:
 
 ``text
 ---
+
 Execution: one step per run. Self-loop after Verify passes. Max 2 agents, max 3 threads per agent.
 This task is standalone — read it plus its cited files, nothing else is assumed.
 ``
@@ -459,6 +460,7 @@ this order, named `NNN-task.md` with a zero-padded three-digit sequence:
 
 ``text
 ---
+
 plan: .lovable/plans/pending/01-xx-plan-slug.md
 domain: <one of domains>
 phase: Scaffold | Implement | Wire+Test
