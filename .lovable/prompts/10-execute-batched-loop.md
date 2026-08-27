@@ -198,3 +198,20 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 - slug: execute-batched-loop
 - status: active
+
+
+## Install Section (Non-Negotiable for Releases)
+
+When generating release notes, changelogs, or README updates during a release task, you MUST include the install snippet:
+
+### Install <Project Name> vX.Y.Z
+
+To pin your repository to this exact version, run the following one-liner:
+Unix/Bash: `curl -sL https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.sh | bash -s -- ".lovable/prompts" "vX.Y.Z"`
+PowerShell: `Invoke-WebRequest -Uri https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "vX.Y.Z"`
+
+*(Note: You MUST dynamically discover the `<owner>/<repo>` by running `git config --get remote.origin.url`.)*
+
+## Version Bumping Rule
+
+If the task involves a release, DO NOT manually search and replace versions. Execute `.lovable/release/bump_versions.py --type <major|minor|patch>`. If the script does not exist, fall back to the release prompt bootstrapping rules.

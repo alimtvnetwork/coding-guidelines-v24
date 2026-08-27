@@ -26,20 +26,20 @@ When in doubt: MINOR.
 ## Hard rules (MUST)
 
 
-- Changelog Formatting (version.json): You MUST read the `"changelog"` configuration from `version.json` (e.g., `file_path` and `format`). If it exists, you MUST follow its exact instructions for where to write the changelog and how to format the header. If it does not exist, fallback to the hardcoded format below.
-- Root README Pinning (Fatal if missed): You MUST pin the latest release version into the root `readme.md` file. It is a fatal failure if you skip updating the badges or version pins in the root README file!
-- Test File Ban: You MUST NOT read, scan, or modify test files (e.g., `*_test.*`, `*.spec.*`, `test/*`) when discovering or updating versions. Test files contain mock data, and updating mock data corrupts the tests.
+- [ ] Changelog Formatting (version.json): You MUST read the `"changelog"` configuration from `version.json` (e.g., `file_path` and `format`). If it exists, you MUST follow its exact instructions for where to write the changelog and how to format the header. If it does not exist, fallback to the hardcoded format below.
+- [ ] Root README Pinning (Fatal if missed): You MUST pin the latest release version into the root `readme.md` file. It is a fatal failure if you skip updating the badges or version pins in the root README file!
+- [ ] Test File Ban: You MUST NOT read, scan, or modify test files (e.g., `*_test.*`, `*.spec.*`, `test/*`) when discovering or updating versions. Test files contain mock data, and updating mock data corrupts the tests.
 - Release Architecture Memory: You must dynamically build a map of how the release works in this codebase (where the version lives, how it propagates) and write it to `.lovable/memory/release-architecture-map.md`. You must then enqueue this file inside `.lovable/memory/what-to-read.md` and link it in the root `readme.md`.
-- Version Inheritance Protocol: The root `version.json` file is the strict Single Source of Truth. It may contain components (e.g. `frontend`, `backend`) whose version is set to `"inherit"`. If a component's version is `"inherit"`, DO NOT bump it independently; it automatically scales with the global version. Always bump the global root `"version"` property unless the user explicitly asks to bump an unlinked sub-component.
-- All version pin sites move in lock-step. Partial bumps are rejected.
-- The previous version string MUST NOT appear anywhere in the repo after this turn EXCEPT in historic files: `changelog.md`, `release_notes.md`, anything under `.lovable/release/`, and any dated archive folder.
-- Changelog entry under the new version heading is MANDATORY. A release without one is INVALID.
-- All markdown filenames MUST be lowercase: `readme.md`, `changelog.md`, `release_notes.md`, every audit / issue / plan / spec `.md`. Rename any `README.md`, `CHANGELOG.md`, `ReadMe.md`, etc. in the same turn with `mv` (or `git mv` if tracked), and update every reference.
-- If ANY step fails or is flagged, log it under `.lovable/release/issues/xx-<new-version>-<slug>.md` AND add an `### Issues` bullet under the new changelog entry linking to that file. Never hide failures.
-- Never invent changelog bullets. Only real work since the previous release.
-- The repository must be synced before releasing. Always check `git status`, commit uncommitted work, and `git pull` before modifying release files.
-- The final release commit and tag MUST be pushed to Git.
-- No em dashes anywhere.
+- [ ] Version Inheritance Protocol: The root `version.json` file is the strict Single Source of Truth. It may contain components (e.g. `frontend`, `backend`) whose version is set to `"inherit"`. If a component's version is `"inherit"`, DO NOT bump it independently; it automatically scales with the global version. Always bump the global root `"version"` property unless the user explicitly asks to bump an unlinked sub-component.
+- [ ] All version pin sites move in lock-step. Partial bumps are rejected.
+- [ ] The previous version string MUST NOT appear anywhere in the repo after this turn EXCEPT in historic files: `changelog.md`, `release_notes.md`, anything under `.lovable/release/`, and any dated archive folder.
+- [ ] Changelog entry under the new version heading is MANDATORY. A release without one is INVALID.
+- [ ] All markdown filenames MUST be lowercase: `readme.md`, `changelog.md`, `release_notes.md`, every audit / issue / plan / spec `.md`. Rename any `README.md`, `CHANGELOG.md`, `ReadMe.md`, etc. in the same turn with `mv` (or `git mv` if tracked), and update every reference.
+- [ ] If ANY step fails or is flagged, log it under `.lovable/release/issues/xx-<new-version>-<slug>.md` AND add an `### Issues` bullet under the new changelog entry linking to that file. Never hide failures.
+- [ ] Never invent changelog bullets. Only real work since the previous release.
+- [ ] The repository must be synced before releasing. Always check `git status`, commit uncommitted work, and `git pull` before modifying release files.
+- [ ] The final release commit and tag MUST be pushed to Git.
+- [ ] No em dashes anywhere.
 
 ## Working stance
 
@@ -56,17 +56,31 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
 
 1. Read the current version from the canonical version source. Print previous and new version. Confirm PATCH digit is `0`.
 
-2. Discover pin sites, then update every one to the new version in lock-step. Use a single canonical search:
-
+2. **Version Bumping (The Python Auto-Bumper Bootstrap)**:
+   You MUST NOT manually hunt and replace versions using `rg` in every release. Instead, rely on a dedicated python script: `.lovable/release/bump_versions.py`.
+   
+   **First-Time Bootstrap (If `.lovable/release/bump_versions.py` or `.lovable/memory/release-architecture.md` do NOT exist, or are outdated):**
+   - **Investigate:** Run a one-time global `rg` scan (`rg -n "<PREV_VERSION>" -g '!node_modules'`) across the repository to discover every file where the version is pinned (e.g., manifests, configs, constants).
+   - **Document:** Write `.lovable/memory/release-architecture.md` detailing all discovered pin sites, the version source of truth, and how releases are structured.
+   - **Generate Script:** Write the `.lovable/release/bump_versions.py` script. The script MUST:
+     - Accept an argument for the bump tier (`--type major`, `--type minor`, `--type patch`).
+     - Read the old version, bump it, and update the canonical version file.
+     - Explicitly open and replace the old version string with the new version string across all the discovered pin sites.
+     - GUARANTEE it pins the newest version into the root `readme.md` (lowercase).
+     - Include a `PROMPT_VERSION = "vX.Y.Z"` variable at the top so it knows when it needs to be regenerated.
+   - **Enqueue:** Add both files to `.lovable/what-to-read.md` and link them in the root `readme.md`.
+   
+   **Sample `bump_versions.py` structure:**
+   ```python
+   import argparse, re, json, sys
+   PROMPT_VERSION = "vX.Y.Z" # Tie this to the version of the release prompt that generated it
+   PIN_SITES = ["readme.md", "manifest.json", "package.json"]
+   
+   # ... [Implementation: parse args, bump SemVer, loop through PIN_SITES and replace old_version with new_version] ...
    ```
-   rg -n "\b<PREV_MAJOR>\.<PREV_MINOR>\.<PREV_PATCH>\b" -g '!node_modules' -g '!*.lock' -g '!.git' -g '!*test*' -g '!*.spec.*'
-   rg -n "\b(VERSION|APP_VERSION|EXTENSION_VERSION|SCHEMA_VERSION|CACHE_SCHEMA_VERSION|BUILD_VERSION)\b"
-   ```
 
-   Typical pin sites (non-exhaustive):
-
-   - Canonical version file (set `releaseDate` to UTC today if the field exists).
-   - Manifests: `manifest.json`, extension / plugin manifests.
+   **Normal Execution (If the script DOES exist and is up-to-date):**
+   - Execute it: `python .lovable/release/bump_versions.py --type minor` (or major/patch).
    - Source constants named like `VERSION`, `APP_VERSION`, `EXTENSION_VERSION`, `SCHEMA_VERSION`, `CACHE_SCHEMA_VERSION`, `BUILD_VERSION`.
    - `instruction.ts` / `instruction.md` / metadata files with a `Version:` field.
    - Sub-packages under `scripts/`, `standalone-scripts/`, `packages/`, `apps/` carrying their own version constant.

@@ -80,3 +80,7 @@ When EVERYTHING is completely finished and fixed (at the very end of the tunnel)
 
 - slug: cicd-fix
 - status: active
+
+## Version Bumping Rule
+
+If the task involves a release or version bump, DO NOT manually search and replace versions across files. Execute `.lovable/release/bump_versions.py --type <major|minor|patch>`. If the script does not exist, trigger the first-time release bootstrapping phase to generate it.
