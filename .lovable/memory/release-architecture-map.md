@@ -79,7 +79,7 @@ A complete release follows these strict steps:
 1. **Pre-flight**:
    - Check git status (clean state required).
    - Run git pull to ensure local branch is in sync with upstream.
-   - Verify version bump tier (e.g. MINOR: 6.23.0 -> 6.23.0).
+   - Verify version bump tier (e.g. MINOR: 6.24.0 -> 6.24.0).
 2. **Bumping**:
    - Run 
 ode scripts/release.mjs --tier minor --scope "<headline>" --skip-slides.
