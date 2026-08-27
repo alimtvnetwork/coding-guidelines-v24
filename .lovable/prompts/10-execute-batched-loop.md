@@ -103,23 +103,30 @@ Every time you return a response or complete a loop iteration, explicitly output
    - Pending Tasks Left: Explicit list of any tasks still remaining.
    - Quality Assessment: A brief summary of how well the execution went.
    - Compliance Checklist: A markdown checklist explicitly verifying that you followed the rules:
-     - [x] Coding Guidelines enforced (spec/02-coding-guidelines/ and consolidated file checked).
-     - [x] Boolean conventions used (is/has prefixes, no negatives).
-     - [x] No garbage variable names used.
-     - [x] No magic strings or numbers.
-     - [x] Markdown format verified (newlines around every header).
-     - [x] Error management protocols followed (AppError/AppException).
-     - [x] Signatures > 3 parameters or > 100 chars split to one parameter per line.
-     - [x] Boolean conventions followed (e.g., `isFail` instead of `!isSuccess`).
-     - [x] Acronyms are PascalCased (e.g., `UserId`, not `UserID`).
-     - [x] Magic strings/numbers extracted to constants.
-3. End of Tunnel Release & Version Bump: When EVERYTHING is completely finished (at the very end of the tunnel), you MUST trigger a release.
-   - You must bump the MINOR version.
-   - You must focus on the `version.json` file as the source of truth for the release.
-     - Root README Pinning (FATAL): You MUST pin the latest release version into the root `readme.md` file! Do not skip this! Also, update the changelog according to `version.json` format.
-   - If you do not know how to cut a release for this specific repository, or if `version.json` is missing/unclear, you must either search the repository for release instructions or explicitly ask the user for help. Do not guess.
-- You MUST strictly exclude all test files (e.g., `*test*`, `*.spec.*`) from version scanning and modification, as they contain mock data.
-- You must create and maintain `.lovable/memory/release-architecture-map.md` documenting exactly how releases work in the repository. Ensure it is enqueued in `what-to-read.md` and linked in the root `readme.md`.
+
+## Compliance Checklist (must follow non negociable)
+
+- [x] Coding Guidelines enforced (spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines/coding-guidelines.md).
+- [x] Boolean conventions used (is/has prefixes, no negatives).
+- [x] No garbage variable names used.
+- [x] No magic strings or numbers.
+- [x] Markdown format verified (newlines around every header).
+- [x] Error management protocols followed (AppError/AppException).
+- [x] Signatures > 3 parameters or > 100 chars split to one parameter per line.
+- [x] Boolean conventions followed (e.g., `isFail` instead of `!isSuccess`).
+- [x] Acronyms are PascalCased (e.g., `UserId`, not `UserID`).
+- [x] Magic strings/numbers extracted to constants.
+- [x] Action Summary Checklist (Anti-Hallucination): I have output a detailed `- [x]` checklist summarizing exactly what I accomplished this turn to ensure no steps were hallucinated or skipped (e.g. `- [x] Created schema`, `- [x] Pinned README`).
+
+## End of Tunnel Release (Anti-Hallucination Checklist)
+
+Past execution turns were sloppy and failed to pin READMEs or bump versions. To prevent this hallucination, when EVERYTHING is completely finished (at the very end of the tunnel), you MUST trigger a release and physically check off these items in your final report:
+
+- [ ] Minor Bump: I have bumped the MINOR version in the canonical `version.json` file.
+- [ ] Test File Ban: I have strictly excluded all test files (`*test*`, `*.spec.*`) from version scanning.
+- [ ] Root readme.md (lowercase always) Pinning (FATAL): I have pinned the latest release version into the root `readme.md` file! I have verified badges and install snippets match the new version.
+- [ ] Changelog Formatting: I have updated the changelog exactly according to the `version.json` format.
+- [ ] Release Architecture Map: I have maintained `.lovable/memory/release-architecture-map.md`, enqueued it in `what-to-read.md`, and linked it in the root `readme.md`.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
@@ -150,6 +157,7 @@ Every time you return a response or complete a loop iteration, explicitly output
 This task requires deep, multi-agent processing. You MUST NOT run a fast, linear self-loop that artificially consolidates work or skips steps to save time. 
 
 How to self-loop and distribute tasks effectively:
+
 - [ ] Spawn Sub-Agents:
   - [ ] For any multi-step group, deep file reading, or complex analysis, actively spawn dedicated sub-agents.
   - [ ] Ensure these sub-agents are self-looping to handle the workload.
@@ -164,6 +172,7 @@ How to self-loop and distribute tasks effectively:
 ### Temp-Agent State Management Protocol (Non-Negotiable)
 
 To ensure agents don't lose context, you MUST use the .lovable/temp-agents/ directory for tracking sub-agent tasks.
+
 - [ ] On Start:
   - [ ] The sub-agent creates .lovable/temp-agents/<task-name>.md.
   - [ ] Write the objective and STATUS: IN_PROGRESS.
@@ -189,10 +198,3 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 - slug: execute-batched-loop
 - status: active
-
-
-## Anti-Hallucination & Compliance Checklist
-Before finalizing this turn, you MUST manually verify the following to prevent hallucination and ignored instructions:
-- [ ] **File Presence:** Did I verify that the files I am referencing actually exist on disk? (No guessing).
-- [ ] **README Version Pinning:** If a release occurred, did I verify that the root `readme.md` has the latest version strictly pinned?
-- [ ] **Guideline Compliance:** Did I adhere strictly to the coding guidelines, including Markdown rules (MD022/MD032) and the parameter-per-line formatting rule?

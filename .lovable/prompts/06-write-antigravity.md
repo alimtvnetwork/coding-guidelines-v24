@@ -43,6 +43,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 ## Working Stance
 
 The AI running this prompt has been a stupid fuck on prior runs:
+
 - Dumped session summaries into chat and called it "memory".
 - Left `.lovable/memory/` half-empty.
 - Created `.lovable/memories/` by accident.

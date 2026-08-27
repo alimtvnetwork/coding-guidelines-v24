@@ -690,6 +690,7 @@ in section 2.
 ## RULE 12 — Subagent Validation & Self-Score
 
 Before printing the final report, you MUST spawn a read-only Validation Subagent to independently verify your batch.
+
 - Pass the Validation Subagent the path to the plan folder (`.lovable/plans/subtasks/xx-plan-slug/`).
 - Ask the Subagent to compute the scores for the dimensions below based on the generated files.
 - You must use the Subagent's exact output for your final report, rather than scoring your own work.
@@ -732,6 +733,7 @@ Spec gaps filed: <list or none>
 ### Temp-Agent State Management Protocol (Non-Negotiable)
 
 To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
+
 - On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md` and writes the objective and `STATUS: IN_PROGRESS`.
 - On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.
 - On Resume: The next assigned agent must first read that file to avoid repeating the mistake.

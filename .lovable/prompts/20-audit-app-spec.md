@@ -40,15 +40,18 @@ spec", "run audit v<N>".
 ## RULE 0K - strict anti-garbage naming audit
 
 You must rigorously audit all proposed files, variables, and unit tests for garbage naming conventions.
+
 - If a spec proposes tests like `TestHandleComp100` or arbitrary generic IDs instead of semantic domain behaviors (e.g., `TestUpdateUser_RejectsInvalidEmail`), you must flag it as a critical failure.
 - If you find generic variable names like `data`, `obj`, `temp`, or `Input100`, record it as a defect and demand a remedy.
 
 ## RULE 0L - temporary automation scripts must not be committed
 
 If a spec proposes creating temporary scripts (e.g., CSJ, Python) for fixing or refactoring the codebase:
+
 - It must explicitly specify that the scripts go into `.lovable/temp-scripts/`.
 - It must explicitly specify that `.lovable/temp-scripts/` is added to .gitignore.
 - If the spec implies committing these temporary files to the repository, you must flag it as a critical failure task.
+
 ---
 
 ## RULE 0 — Temp Script Sandboxing (Global Law)
@@ -414,6 +417,7 @@ This prompt is standalone — read it plus the spec files it names, nothing else
 ### Temp-Agent State Management Protocol (Non-Negotiable)
 
 To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
+
 - On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md` and writes the objective and `STATUS: IN_PROGRESS`.
 - On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.
 - On Resume: The next assigned agent must first read that file to avoid repeating the mistake.

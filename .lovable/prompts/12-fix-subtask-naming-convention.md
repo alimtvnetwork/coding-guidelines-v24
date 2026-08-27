@@ -23,6 +23,7 @@ You must ingest the audit, map the findings to the broken files, and execute the
 This task requires deep, multi-agent processing. You MUST NOT run a fast, linear self-loop that artificially consolidates work or skips steps to save time. 
 
 How to self-loop and distribute tasks effectively:
+
 1. Spawn Sub-Agents: You must actively spawn dedicated, self-looping sub-agents to handle the workload. You must spawn at least 2 agents, each executing 2 to 3 parallel tasks (e.g. assigning one agent to fix `spec/21-app/` and another to `spec/23-app-db/`).
 2. Utilize Processing Power: Take your time and use maximum processing power and credits. Do not take shortcuts. Do not attempt to fix a massive spec in a single, consolidated step.
 3. Wait and Aggregate: As the master agent, loop autonomously to wait for your sub-agents to complete their assigned fixes. Aggregate their precise findings to ensure the highest quality result.
@@ -30,6 +31,7 @@ How to self-loop and distribute tasks effectively:
 ### Temp-Agent State Management Protocol (Non-Negotiable)
 
 To ensure agents don't lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
+
 1. On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md`. Write the objective and `STATUS: IN_PROGRESS`.
 2. On Error/Crash: If an agent breaks or fails, it MUST append the exact error, cause, and `STATUS: FAILED` to that file before closing.
 3. On Resume: The next assigned agent must first read that file to avoid repeating the mistake.

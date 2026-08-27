@@ -15,6 +15,7 @@ Before producing any report or analysis, the AI must:
 3. Read all relevant memory files under `.lovable/memory/`, including workflow, suggestions, rules, decisions, history, issue references, and any protocol or process files present.
 
 /goal 1. Reconstruct project requirements by reading:
+
    1. the .lovable memory content
    2. the existing spec files and idea files across all projects
 2. Produce a detailed risk and failure-chance report for handing the current specs to another AI.
@@ -59,6 +60,7 @@ Completion handling - When a suggestion is completed, update its status to done.
 `.lovable/memory/workflow/01-plan.md` is the canonical workflow tracker. Root `plan.md` (if created) is a summarized AI handoff roadmap only. It must not contradict the canonical plan.
 
 plan.md requirements:
+
 1. A prioritized backlog of tasks
 2. Grouping by phase and by project
 3. For each task: objective, dependencies, expected outputs (spec updates, UI changes, API changes), acceptance criteria
@@ -132,6 +134,7 @@ Prevention and non-regression - prevention rule, acceptance criteria/test scenar
 TODO and follow-ups - remaining tasks, owners or roles if applicable.
 
 Done checklist
+
 - [ ] Spec updated under /spec/01-app/
 - [ ] Issue write-up created under /spec/02-app/issues/
 - [ ] Memory updated with summary and prevention rule
@@ -197,6 +200,7 @@ Every failing test resolution must be documented at: `/spec/05-failing-tests/{se
 The specification is the source of truth.
 
 Priority order (highest to lowest):
+
 1. Specification files under `/spec/01-app/`
 2. Issue corrections under `/spec/02-app/issues/`
 3. Failing test documentation under `/spec/05-failing-tests/`
@@ -235,6 +239,7 @@ If the AI does not persist conclusions to memory, the work is considered incompl
 ## Task Selection Protocol
 
 When asking for the next task, present:
+
 1. The top 3 next implementable tasks from the plan
 2. Their dependencies (what must be done first)
 3. Their estimated complexity (simple / medium / complex)
@@ -247,6 +252,7 @@ Then ask the user to select the task number.
 ## Blocker Handling
 
 If a blocker prevents reliable implementation or specification updates:
+
 1. Record the blocker in `.lovable/memory/workflow/01-plan.md`
 2. Document it in the relevant spec or issue file
 3. Explain the minimum information or change required to unblock progress
@@ -305,6 +311,7 @@ Every fix - specs, code, or tests - must include an explicit, testable regressio
 ### Definition of Done
 
 A task is done only when:
+
 1. Spec updated (if applicable)
 2. Issue documented (if applicable)
 3. Memory updated
@@ -319,6 +326,7 @@ A task is done only when:
 Implementation must not begin until readiness analysis and specification validation are completed and the user explicitly selects the next task.
 
 Use:
+
 1. Required Execution Order for sequencing
 2. Specification Authority for conflict resolution
 3. Context Preservation for memory persistence

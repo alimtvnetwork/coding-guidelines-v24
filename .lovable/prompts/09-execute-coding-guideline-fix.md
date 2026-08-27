@@ -5,6 +5,7 @@
 /learn Ingest and internalize all coding standards, boolean extraction patterns, and error management rules before applying fixes.
 
 Context & References:
+
 - /learn master cross-language coding guidelines: `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/`
 - /learn braces, nesting, and conditions: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` & `02-conditions-and-extraction.md`
 - /learn function size caps (< 8 lines): `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
@@ -13,6 +14,7 @@ Context & References:
 - /learn language-specific rules in `spec/02-coding-guidelines/` (Go wrapped booleans: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`)
 
 /goal - Apply concrete fixes for all violations listed in the pending tasks.
+
 - Enforce non‑negotiable rules:
   - DRY – eliminate duplicated logic.
   - Use typed enums instead of magic strings or numbers.
@@ -22,7 +24,6 @@ Context & References:
   - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested `if`s, no magic values.
   - Style: Ensure a blank line before every `return` statement.
   - Golang Single Return & Wrapped Booleans: Strictly return a single parameter (bundle multiple returns into a struct). No raw booleans returned in Go. Return a single Result struct (bundling Data, AppError, and Status together) with two flags (`IsSuccess` and `IsFailed`) managed by a constructor (`NewSuccess`/`NewFailure`).
-
   - Example usage (Note the explicit variable name `paymentStatus`, no short names like `res`):
     ```go
     paymentStatus := ProcessPayment(100)
@@ -81,7 +82,6 @@ Context & References:
 - [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
 - [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
 - [ ] Read and adhere to: `spec/03-error-manage/00-overview.md`
-
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
 - [ ] Complete all work on the current branch only.

@@ -9,11 +9,13 @@ If any temporary files, artifact dumps, or unwanted generated files are detected
 ### Step 1: Detect and Itemize Unwanted Artifacts & Temporary Files
 
 Scan the entire repository, untracked files, and recent commit history for:
+
 - Artifact zip files, archive bundles, or binary dumps.
 - Temporary test data files, scratch scripts, mock output files, or debug logs.
 - Extraneous auto-generated code, intermediate build artifacts, or temporary caches.
 
 For EVERY detected candidate file, compile an explicit report detailing:
+
 1. File Path & Name: Exact location in the workspace.
 2. File Size: Size in bytes / KB / MB.
 3. Creation Step & Origin: Exactly how and at which step/command it was generated.
@@ -47,6 +49,7 @@ Never ask negative or inverted questions such as "Do you want to avoid not delet
 ### Step 3: Dual Removal (Filesystem + Git History Purge)
 
 When the developer indicates that a file should be removed:
+
 1. Filesystem Removal: Delete the file from the local working tree.
 2. Git History Purge: Remove and purge the file from Git history and index (e.g., using `git rm --cached` or Git history filtering) so that large binary blobs or unwanted scripts are not permanently bloating the repository's git object database (`.git` size).
 3. Verify Clean Repository State: Verify `git status` and repository size to confirm the files are completely eradicated.

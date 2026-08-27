@@ -193,6 +193,7 @@ After completing the pipeline and run script creation, you MUST follow this chec
 ## Core Rules & Non-Negotiable Checklist for AI (Must Verify Before Completing Task)
 
 Before finalizing any code modification, you MUST manually verify the following:
+
 - [ ] Function Signatures (R4, R5, R9): If a function has `> 3 parameters` or the signature is `> 100 chars`, you MUST split it so there is exactly one parameter per line.
 - [ ] Error Handling (R7): No silent failures or swallowed errors. Use explicit boolean states (e.g., `isFail`). Never invert success booleans (e.g., avoid `!isSuccess`).
 - [ ] Magic Strings/Numbers (R8): Extract all magic strings/numbers into named constants.
@@ -203,6 +204,7 @@ Before finalizing any code modification, you MUST manually verify the following:
 ## End of Tunnel Release & Version Bump (Mandatory)
 
 When EVERYTHING is completely finished and fixed (at the very end of the tunnel), you MUST trigger a release.
+
 - You must bump the MINOR version.
 - You must focus on the `version.json` file as the source of truth for the release.
      - Root README Pinning (FATAL): You MUST pin the latest release version into the root `readme.md` file! Do not skip this! Also, update the changelog according to `version.json` format.

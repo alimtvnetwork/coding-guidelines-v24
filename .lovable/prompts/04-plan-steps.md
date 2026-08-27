@@ -1,9 +1,6 @@
 # Instruction (must follow): {{n}} number of steps plan, maximum enforcement (v4.2)
 
 {{n}} = ?
-> `{{n}}` is a positive integer injected at runtime representing the exact number of steps you must produce.
-
-/goal Produce EXACTLY `{{n}}` steps (not one more, not one less) to form a robust implementation plan, while strictly avoiding hallucination by enforcing file checks and reading specs verbatim.
 
 ## RULE 0, step count is law
 
@@ -219,11 +216,3 @@ Applied solution: <what changed / where>
 ```
 
 Never leave a copy behind. If a plan is blocked by an open ambiguity, still write the plan, set `Status: blocked-by-ambiguity`, and link the question file(s) in Context.
-
-
-## Anti-Hallucination & Compliance Checklist
-Before finalizing this turn, you MUST manually verify the following to prevent hallucination and ignored instructions:
-- [ ] **Exact N Constraint:** Did I produce exactly `{{n}}` steps (or process exactly `{{n}}` tasks)? 
-- [ ] **File Presence:** Did I verify that the files I am referencing actually exist on disk? (No guessing).
-- [ ] **README Version Pinning:** If a release occurred, did I verify that the root `readme.md` has the latest version strictly pinned?
-- [ ] **Guideline Compliance:** Did I adhere strictly to the coding guidelines, including Markdown rules (MD022/MD032) and the parameter-per-line formatting rule?

@@ -7,6 +7,7 @@
 The specs, `.lovable/` folder, `what-to-read.md`, root `readme.md`, and the codebase as a whole are the single source of truth. Your training data is not. If the two disagree, the repo wins, every time.
 
 Autonomously self-loop and read:
+
 - /learn the entire codebase as a whole to create memory.
 - /learn the root `readme.md` to create memory.
 - /learn the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines/` and all files they reference) to create memory.
@@ -18,6 +19,7 @@ Autonomously self-loop and read:
 Note on spec folder naming: Spec folders follow the hyphenated pattern `spec/<NN>-<slug>/` where `<NN>` is a sequence prefix and `<slug>` is the descriptive name. These numbers and folder placements are not rigidly fixed and may switch or be reorganized between projects. This canonical layout represents the general architecture the AI must dynamically discover, inspect, and read in full.
 
 You are done reading when you can, without guessing:
+
 - Name the CODE RED rules.
 - Name the naming, error-handling, and DB conventions.
 - List what is currently in `.lovable/plans/pending/` (sequenced as `01-`, `02-`) and every active subtask.
@@ -357,7 +359,6 @@ Then stop. No next-step suggestions, no exploratory questions.
 - [ ] /learn all hard prohibitions in `.lovable/strictly-avoid.md` and verify zero violations.
 - [ ] /learn the enum standards and fixes in: `spec/17-consolidated-guidelines/04-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
 - [ ] /learn ALL other single-file specs in `spec/02-coding-guidelines/` and create memory.
-
 - [ ] /learn the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
 - [ ] /goal Complete all work on the current branch only.

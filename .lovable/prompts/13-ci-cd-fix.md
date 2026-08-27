@@ -50,22 +50,14 @@ Trigger Keywords & Aliases: `fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`, `cic
 - [ ] Push the commit and tags to the remote repository.
 - [ ] Await the next CI/CD result. If green, mark as completed; if failed, loop back to Step 1.
 
-## Awaiting Input
-
-Wait for the user to trigger with any alias (`fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`) or paste the CI/CD error log. Once provided, immediately begin at Step 1.
-
----
-
-## Metadata
-
-- slug: cicd-fix
-- status: active
-
-
-
 ## Core Rules & Non-Negotiable Checklist for AI (Must Verify Before Completing Task)
 
 Before finalizing any code modification, you MUST manually verify the following:
+
+- [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Error Manage Checklist: I have fully read and enforced the error management files at `spec/03-error-manage/`. I understand which files to follow (architecture, response envelopes) and how to follow them (never swallow errors, always wrap with context).
+- [ ] Boolean Examples & Fixations: All boolean variables MUST begin with `is`, `has`, `can`, or `should` (e.g., `isReady`, `hasData`). NEVER use negative booleans (e.g., `isNotReady`, `disableCache`). NEVER invert success checks (e.g., `!response.isSuccess` is banned; use `response.isFail`).
+- [ ] Anti-Garbage Naming (Non-Negotiable): I have strictly verified that absolutely NO generic garbage variable names (e.g., `comp_100.go`, `temp`, `data`, `obj`, `Input100`, `TestHandleComp100`) were written. All names are highly semantic and domain-specific.
 - [ ] Function Signatures (R4, R5, R9): If a function has `> 3 parameters` or the signature is `> 100 chars`, you MUST split it so there is exactly one parameter per line.
 - [ ] Error Handling (R7): No silent failures or swallowed errors. Use explicit boolean states (e.g., `isFail`). Never invert success booleans (e.g., avoid `!isSuccess`).
 - [ ] Magic Strings/Numbers (R8): Extract all magic strings/numbers into named constants.
@@ -76,10 +68,15 @@ Before finalizing any code modification, you MUST manually verify the following:
 ## End of Tunnel Release & Version Bump (Mandatory)
 
 When EVERYTHING is completely finished and fixed (at the very end of the tunnel), you MUST trigger a release.
-- You must bump the MINOR version.
-- You must focus on the `version.json` file as the source of truth for the release.
-     - Root README Pinning (FATAL): You MUST pin the latest release version into the root `readme.md` file! Do not skip this! Also, update the changelog according to `version.json` format.
-- If you do not know how to cut a release for this specific repository, or if `version.json` is missing/unclear, you must either search the repository for release instructions or explicitly ask the user for help. Do not guess.
-- You MUST strictly exclude all test files (e.g., `*test*`, `*.spec.*`) from version scanning and modification, as they contain mock data.
-- You must create and maintain `.lovable/memory/release-architecture-map.md` documenting exactly how releases work in the repository. Ensure it is enqueued in `what-to-read.md` and linked in the root `readme.md`.
 
+- [ ] You must bump the MINOR version.
+- [ ] You must focus on the `version.json` file as the source of truth for the release.
+- [ ] Root README Pinning (FATAL): You MUST pin the latest release version into the root `readme.md` file! Do not skip this! Also, update the changelog according to `version.json` format.
+- [ ] If you do not know how to cut a release for this specific repository, or if `version.json` is missing/unclear, you must either search the repository for release instructions or explicitly ask the user for help. Do not guess.
+- [ ] You MUST strictly exclude all test files (e.g., `*test*`, `*.spec.*`) from version scanning and modification, as they contain mock data.
+- [ ] You must create and maintain `.lovable/memory/release-architecture-map.md` documenting exactly how releases work in the repository. Ensure it is enqueued in `what-to-read.md` and linked in the root `readme.md`.
+
+## Metadata
+
+- slug: cicd-fix
+- status: active

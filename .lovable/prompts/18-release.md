@@ -19,7 +19,6 @@ If I say bump, or release use this prompt and save this prompt if not saved prop
 Deviations (only when the trigger explicitly says so):
 
 - MAJOR = `(MAJOR+1).0.0` if the user said the change is breaking (storage schema, prompt schema, public SDK, extension contract).
-
 - PATCH = `MAJOR.MINOR.(PATCH+1)` only if the user literally said `patch bump` or `patch release`.
 
 When in doubt: MINOR.
@@ -29,31 +28,17 @@ When in doubt: MINOR.
 
 - Changelog Formatting (version.json): You MUST read the `"changelog"` configuration from `version.json` (e.g., `file_path` and `format`). If it exists, you MUST follow its exact instructions for where to write the changelog and how to format the header. If it does not exist, fallback to the hardcoded format below.
 - Root README Pinning (Fatal if missed): You MUST pin the latest release version into the root `readme.md` file. It is a fatal failure if you skip updating the badges or version pins in the root README file!
-
-
 - Test File Ban: You MUST NOT read, scan, or modify test files (e.g., `*_test.*`, `*.spec.*`, `test/*`) when discovering or updating versions. Test files contain mock data, and updating mock data corrupts the tests.
 - Release Architecture Memory: You must dynamically build a map of how the release works in this codebase (where the version lives, how it propagates) and write it to `.lovable/memory/release-architecture-map.md`. You must then enqueue this file inside `.lovable/memory/what-to-read.md` and link it in the root `readme.md`.
-
-
 - Version Inheritance Protocol: The root `version.json` file is the strict Single Source of Truth. It may contain components (e.g. `frontend`, `backend`) whose version is set to `"inherit"`. If a component's version is `"inherit"`, DO NOT bump it independently; it automatically scales with the global version. Always bump the global root `"version"` property unless the user explicitly asks to bump an unlinked sub-component.
-
-
 - All version pin sites move in lock-step. Partial bumps are rejected.
-
 - The previous version string MUST NOT appear anywhere in the repo after this turn EXCEPT in historic files: `changelog.md`, `release_notes.md`, anything under `.lovable/release/`, and any dated archive folder.
-
 - Changelog entry under the new version heading is MANDATORY. A release without one is INVALID.
-
 - All markdown filenames MUST be lowercase: `readme.md`, `changelog.md`, `release_notes.md`, every audit / issue / plan / spec `.md`. Rename any `README.md`, `CHANGELOG.md`, `ReadMe.md`, etc. in the same turn with `mv` (or `git mv` if tracked), and update every reference.
-
 - If ANY step fails or is flagged, log it under `.lovable/release/issues/xx-<new-version>-<slug>.md` AND add an `### Issues` bullet under the new changelog entry linking to that file. Never hide failures.
-
 - Never invent changelog bullets. Only real work since the previous release.
-
 - The repository must be synced before releasing. Always check `git status`, commit uncommitted work, and `git pull` before modifying release files.
-
 - The final release commit and tag MUST be pushed to Git.
-
 - No em dashes anywhere.
 
 ## Working stance
@@ -63,11 +48,8 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
 ## Pre-flight (before step 1)
 
 - Idempotency guard: if the canonical version file already equals the computed new version, STOP. Someone half-ran a release. Detect what is already done, resume from the first incomplete step, do NOT double-bump.
-
 - Placeholder guard: if the previous version's changelog entry is empty or a placeholder (`TBD`, `WIP`, no bullets), refuse to release until it is filled or the user overrides.
-
 - Date source: the release date is UTC today. Get it from `date -u +%Y-%m-%d`. Do not invent it.
-
 - Git Sync & Clean State: Run `git status`. If there are pending uncommitted changes, fix them and `git commit` them first. Then run `git pull` to fetch and merge upstream changes. Resolve any issues before starting the release steps.
 
 ## Mandatory steps (in order, fail-fast)
@@ -84,15 +66,10 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    Typical pin sites (non-exhaustive):
 
    - Canonical version file (set `releaseDate` to UTC today if the field exists).
-
    - Manifests: `manifest.json`, extension / plugin manifests.
-
    - Source constants named like `VERSION`, `APP_VERSION`, `EXTENSION_VERSION`, `SCHEMA_VERSION`, `CACHE_SCHEMA_VERSION`, `BUILD_VERSION`.
-
    - `instruction.ts` / `instruction.md` / metadata files with a `Version:` field.
-
    - Sub-packages under `scripts/`, `standalone-scripts/`, `packages/`, `apps/` carrying their own version constant.
-
    - Install snippets, badge URLs, zip filenames, release-branch examples, "current version" lines in docs.
 
    A pin site missed here breaks installs.
@@ -104,10 +81,13 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    ```markdown
    ## [vX.Y.Z] YYYY-MM-DD <short headline>
 
-   ### Install Prompt Architect vX.Y.Z
+   ### Install <Project Name> vX.Y.Z
    To pin your repository to this exact version, run the following one-liner:
-   Unix/Bash: `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/vX.Y.Z/install.sh | bash -s -- ".lovable/prompts" "vX.Y.Z"`
-   PowerShell: `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/vX.Y.Z/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "vX.Y.Z"`
+   Unix/Bash: `curl -sL https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.sh | bash -s -- ".lovable/prompts" "vX.Y.Z"`
+   PowerShell: `Invoke-WebRequest -Uri https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "vX.Y.Z"`
+
+   *(Note: You MUST dynamically discover the `<owner>/<repo>` by running `git config --get remote.origin.url`. Do not hardcode Prompt Architect URLs unless you are actually in the Prompt Architect repository.)*
+
 
    ### Added / Changed / Fixed / Removed
 
@@ -118,7 +98,7 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    - [xx-<new-version>-<slug>](.lovable/release/issues/xx-<new-version>-<slug>.md) short description
    ```
 
-   Use only the subheadings that apply. `### Issues` is REQUIRED whenever any step surfaced a problem, even if worked around. You MUST include the `### Install Prompt Architect` block exactly as shown above, ensuring `vX.Y.Z` is fully replaced with the new version tag.
+   Use only the subheadings that apply. `### Issues` is REQUIRED whenever any step surfaced a problem, even if worked around. You MUST include the `### Install <Project Name>` block, dynamically filling in the GitHub owner and repo parsed from the git config, ensuring `vX.Y.Z` is fully replaced with the new version tag.
 
 5. Rewrite remaining pin sites via the project's stale-version helper if one exists (discover: `scripts/update-stale-version-refs.*`, `scripts/bump-version.*`, `tools/update-versions.*`). Run it with previous and new version. If no helper exists, use the `rg` output from step 2 and rewrite each match by hand.
 
@@ -135,13 +115,9 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
 Path: `.lovable/release/issues/xx-<new-version>-<slug>.md` (lowercase). Body:
 
 - Previous version and new version
-
 - Step that failed (number and name)
-
 - Command run and full error output
-
 - Files involved
-
 - Resolution or workaround, or `unresolved`
 
 Then link it from the `### Issues` bullet under the changelog entry.
@@ -149,37 +125,21 @@ Then link it from the `### Issues` bullet under the changelog entry.
 ## Checklist before you claim done
 
 - [ ] Previous version read from the canonical version source, not memory.
-
 - [ ] New version is a MINOR bump (or explicit MAJOR / PATCH per rules); PATCH digit is `0`.
-
 - [ ] Previous and new version both stated in the reply.
-
 - [ ] Pre-flight passed (idempotency, changelog placeholder, UTC date from `date -u`).
-
 - [ ] Every pin site from step 2 `rg` output matches the new version.
-
 - [ ] Canonical version file's `releaseDate` (if the field exists) is today's UTC date.
-
 - [ ] Changelog entry added at the top of `changelog.md` with real bullets only.
-
 - [ ] All markdown filenames in the repo are lowercase.
-
 - [ ] `rg "<previous-version>"` returns matches ONLY in the historic allow-list (`changelog.md`, `release_notes.md`, `.lovable/release/`, dated archives).
-
 - [ ] `### Issues` block present in the changelog if any step failed or was flagged, with links to `.lovable/release/issues/` files.
-
 - [ ] Stale-version helper (if it exists) ran successfully; otherwise manual rewrite done.
-
 - [ ] Bundled / aggregated artifacts regenerated if their sources changed.
-
 - [ ] Version-sync check (if it exists) exited 0; otherwise manual `rg` confirms allow-list only.
-
 - [ ] Pre-flight Git sync completed (`git status`, commit pending changes, `git pull`).
-
 - [ ] Commit + tag created (if git-tracked) with `release: vX.Y.Z <headline>` and `vX.Y.Z`, AND successfully pushed to Git.
-
 - [ ] Report includes previous version, new version, tier, and exact file list.
-
 - [ ] No em dashes.
 
 ## Instruction maintenance (meta, run once at end)
@@ -187,9 +147,7 @@ Then link it from the `### Issues` bullet under the changelog entry.
 Save this prompt's full body into `.lovable/prompts/XX-release.md` (lowercase):
 
 - If any existing file in `.lovable/prompts/` matches `*release*.md` (case-insensitive), OVERWRITE it in place. Do not create a duplicate.
-
 - Otherwise pick `XX` = next 2-digit zero-padded sequence (highest existing `XX` prefix + 1, or `01` if the folder is empty / missing). Create the folder if needed.
-
 - Save the prompt body only, no chat wrapping.
 
 ## Must Follow and without negotiation
@@ -201,7 +159,6 @@ Listen, past release turns were sloppy. You must clean and sync the Git working 
 Ambiguity is not a license to guess. It is a file to write.
 
 - Open: `.lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md`
-
 - Answered: `.lovable/ambiguous-questions/02-ambiguity-resolved/XX-<slug>.md`
 
 New question file shape:
@@ -241,7 +198,6 @@ When answered: `mv` from `01-new-ambiguity/` to `02-ambiguity-resolved/`, flip `
 
 - [ ] I have successfully pinned the new version in the root `readme.md` (FATAL IF MISSED).
 - [ ] I have successfully updated the changelog.
-
 - [ ] Discover current version from disk.
 - [ ] Determine new version according to SemVer rules.
 - [ ] Explicitly state previous and new version in the reply.

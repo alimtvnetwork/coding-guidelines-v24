@@ -11,6 +11,7 @@ N = 150 (Default number of steps the planning AI should take to generate the aud
 /learn Ingest, analyze, and internalize all coding guidelines, boolean principles, function size limits, and error handling architectures across the codebase and specs.
 
 Autonomously self-loop and read:
+
 - /learn the master cross-language coding guidelines in `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-naming-and-database.md` through `06-advanced-patterns.md`.
 - /learn the code style, braces, spacing, and multi-line rules in `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` through `06-comments-and-documentation.md`.
 - /learn the strict function and type size caps (8 lines preferred, 15 lines max) in `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`.
@@ -28,6 +29,7 @@ Autonomously self-loop and read:
 This is not a quick glance. You must deeply read the codebase, looping yourself as much as needed (taking exactly `N` steps of internal planning and reading). Each one of these steps MUST be followed properly using your highest processing capacity, proper memory retention of prior files, and careful multi-agent cognitive logic.
 
 You must dedicate this immense processing power to uncover:
+
 - Every inverted boolean (`!isSuccess`).
 - Every magic string or number.
 - Every swallowed error or generic `catch {}`.
@@ -40,6 +42,7 @@ If there are NO discrepancies, explicitly state: "There are no coding guideline 
 ## 3. Root Cause & Fallout Analysis
 
 For every issue found:
+
 - What is the root cause? Why was it written this way?
 - How many places does it need to be fixed?
 - Fallout Check: If we change this, what else breaks? Will it break the CI/CD pipeline? Will it break tests? Map the entire blast radius.
@@ -48,6 +51,7 @@ For every issue found:
 
 Your final output must be a massively detailed plan stored at `.lovable/plans/pending/01-coding-guideline-fixes.md` and granular subtask files written to `.lovable/plans/subtasks/01-coding-guideline-fixes/01-<subslug>.md`.
 The plan must break the work down so granularly (exactly `N` steps) that 3 concurrent sub-agents can be spawned later to safely execute the fixes.
+
 - Step 1..N: Exact file, exact line, exact boolean to rename, exact enum to extract. Keep the writing concise but hyper-specific. Do not write too much fluff.
 - Do NOT fix the code in this turn. Your job is ONLY to plan, audit, and enqueue.
 - Anti-Hallucination: If referenced guidelines or files are missing, ask clarifying questions rather than guessing.
@@ -65,6 +69,7 @@ This is a standalone file. Follow every rule below without consulting any other 
 ### Top-Notch Anti-Hallucination & Non-Negotiable Guidelines
 
 These guidelines are STRICTLY NON-NEGOTIABLE:
+
 - Function Size: Functions MUST be strictly less than 8 lines.
 - Style Guideline (Returns): There MUST be a blank line before every `return` statement.
 - Boolean Naming: Every boolean MUST start with `has` or `is`. 
@@ -109,7 +114,6 @@ Listen, past next-tasks turns have been sloppy as fuck: wrong step count, missin
 - [ ] /learn `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
 - [ ] /learn `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
 - [ ] /learn `spec/03-error-manage/00-overview.md`
-
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
 - [ ] Complete all work on the current branch only.
@@ -117,7 +121,6 @@ Listen, past next-tasks turns have been sloppy as fuck: wrong step count, missin
 - [ ] Group all completed work into a single logical commit.
 - [ ] Anti-Hallucination Check: Before finalizing the plan or writing code, you MUST use read/search tools to verify that every file, function, enum, and variable mentioned actually exists in the codebase. Do not guess.
 - [ ] Push the commit to the remote repository.
-
 - [ ] Self-loop continuously until all the code issues are listed out in tasks and pending tasks.
 - [ ] Describe all issues found for each file.
 - [ ] List all files that need to be tested against.
