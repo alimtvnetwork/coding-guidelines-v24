@@ -1,6 +1,7 @@
 # Output Formatting
 
 > **Related specs:**
+>
 > - [20-terminal-output-design.md](20-terminal-output-design.md) — full terminal formatting
 >   reference (banner, item list, tree, color system, `NO_COLOR` support)
 > - [15-constants-reference.md](15-constants-reference.md) — format string constants used by output renderers

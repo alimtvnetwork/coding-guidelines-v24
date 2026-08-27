@@ -25,6 +25,7 @@
 ### Symptom
 
 Failed API requests were automatically retried 3 times (React Query default), causing:
+
 - Triple error toasts for a single failure
 - Unnecessary load on backend during outages
 - Confusing UX where errors appeared multiple times
@@ -58,6 +59,7 @@ const queryClient = new QueryClient({
 ### Symptom
 
 Every time the user switched tabs and returned, ALL queries would refetch simultaneously, causing:
+
 - Sudden burst of 10-20+ API requests
 - Stale error modals reappearing
 - Backend rate limiting
@@ -90,6 +92,7 @@ Pair `refetchOnWindowFocus: false` with `suppressGlobalError: true` in query met
 ### Symptom
 
 Users could trigger the publish function multiple times by:
+
 - Double-clicking the publish button
 - Auto-publish triggering while a manual publish was in-flight
 - WebSocket reconnection re-triggering the publish
@@ -181,6 +184,7 @@ The 30-second cooldown in the `publishPlugin` IIFE (Section 3) blocks any re-inv
 ### Symptom
 
 The PublishProgressDialog showed:
+
 - Duplicate or triple log entries for the same publish step
 - Progress bar jumping erratically (e.g., 30% → 60% → 30% → 90%)
 - Late-arriving "complete" events from previous publishes resetting the UI
@@ -188,6 +192,7 @@ The PublishProgressDialog showed:
 ### Root Cause
 
 The `useEffect` that subscribed to WebSocket events had **unstable dependencies** (callbacks, computed labels) that changed on every render, causing:
+
 1. Effect re-runs → re-subscriptions → multiple active listeners for the same event
 2. No deduplication of log entries
 3. No completion lock — late events from finished publishes were still processed
@@ -278,6 +283,7 @@ useEffect(() => {
 ### Symptom
 
 Multiple identical toast notifications appeared simultaneously, e.g.:
+
 - "Publish complete" × 3 (from WebSocket event + local state change + query refetch)
 - "Connection test passed" × 2 (from WebSocket + API response)
 

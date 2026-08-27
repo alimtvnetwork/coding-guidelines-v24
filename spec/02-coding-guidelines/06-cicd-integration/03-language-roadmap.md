@@ -26,6 +26,7 @@ on day one — no waiting for a follow-up release.
 | no-else-after-return (STYLE-002) | ✅ | ✅ | ✅ |
 
 **Why these three first:**
+
 - **Go + TS** are the languages used in this repo, so the checks self-test
   against the spec's own corpus.
 - **PHP** rules already exist in `spec/02-coding-guidelines/04-php/` and

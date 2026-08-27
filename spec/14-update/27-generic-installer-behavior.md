@@ -4,6 +4,7 @@
 > **Status:** Normative — applies to ALL installer scripts in ALL repositories
 > **Audience:** Any AI or human implementing an installer for any repo
 > **Companion specs:**
+>
 > - `25-release-pinned-installer.md` (release-pinned variant details)
 > - `24-update-check-mechanism/01-fundamentals.md` (V → V+N parallel discovery)
 > - `26-repo-major-version-migrator.md` (cross-major repo migration)

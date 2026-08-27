@@ -101,6 +101,7 @@ function highlightAsTree(code: string): string {
 ### Icon Placement
 
 Icons are inserted as literal Unicode emoji characters in the HTML output, not as CSS pseudo-elements. This ensures they are:
+
 - Visible in copy/paste operations
 - Selectable with text
 - Rendered consistently across platforms
@@ -185,6 +186,7 @@ Files like `app.config.ts` or `styles.module.css` are correctly matched by the f
 ### 3 — Curly Braces in Names
 
 The regex supports `{}` in filenames/directories for placeholder syntax:
+
 - `{id}/` → rendered as directory `📁 {id}/`
 - `{slug}.tsx` → rendered as file `📄 {slug}.tsx`
 

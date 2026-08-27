@@ -64,6 +64,7 @@ function createHiddenTextarea(text: string): HTMLTextAreaElement {
 ```
 
 Key properties:
+
 - `readonly` prevents mobile keyboards
 - `position: fixed` + `left: -9999px` keeps it invisible
 - `opacity: 0` + `pointerEvents: none` ensures no visual/interaction impact

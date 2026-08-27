@@ -182,6 +182,7 @@ function ErrorModal({ error, diagnostics }: ErrorModalProps) {
 ### Issue: "Backend disconnected" but server is running
 
 **Symptoms:**
+
 - Go server logs show it's running
 - Frontend shows "disconnected" or "connection failed"
 
@@ -219,6 +220,7 @@ function ErrorModal({ error, diagnostics }: ErrorModalProps) {
 ### Issue: API calls work in development but fail in production
 
 **Symptoms:**
+
 - Works on localhost:3000
 - Fails when deployed
 
@@ -251,6 +253,7 @@ function ErrorModal({ error, diagnostics }: ErrorModalProps) {
 ### Issue: State not updating after API call
 
 **Symptoms:**
+
 - API returns data successfully
 - UI doesn't reflect new data
 
@@ -281,6 +284,7 @@ function ErrorModal({ error, diagnostics }: ErrorModalProps) {
 ### Issue: TypeScript errors with API responses
 
 **Symptoms:**
+
 - Type errors when accessing response data
 - `Property 'x' does not exist on type`
 

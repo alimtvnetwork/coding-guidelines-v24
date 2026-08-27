@@ -13,6 +13,7 @@
 >
 > **Date:** 2026-04-24
 > **Scope reviewed:**
+>
 > - `spec/14-update/27-generic-installer-behavior.md` (canonical)
 > - `spec/15-distribution-and-runner/01-install-contract.md`
 > - `spec/12-cicd-pipeline-workflows/04-install-script-generation.md`
@@ -83,6 +84,7 @@ The shipped Bash installer goes through this dance:
 3. Retry with `coding-guidelines-linters-<TAG>.zip`.
 
 None of this is in any spec. A blind AI would either:
+
 - assume a single asset name (and fail when GitHub serves the
   versioned one), or
 - always hit the API first (slower, hits rate limits faster).

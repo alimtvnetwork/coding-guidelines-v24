@@ -127,6 +127,7 @@ Abbreviations in identifiers are treated as regular words — only capitalize th
 | `htmlOutput` | `htmlOutput` | ✅ already correct (lowercase prefix) |
 
 **Exemptions (Go standard library interfaces only):**
+
 - `MarshalJSON()` / `UnmarshalJSON()` — required by `encoding/json`
 - `Error() string` — required by `error` interface
 - `String() string` — required by `fmt.Stringer`

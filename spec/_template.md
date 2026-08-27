@@ -106,6 +106,7 @@ above.
 ```
 
 Guidelines for placeholders (both formats):
+
 - Keep the comment block contiguous (no blank lines inside).
 - Replace `NN-module-name` and `01-file-name.md` with real paths before removing the comment markers.
 - Remove the `<spec-placeholder>` / `</spec-placeholder>` wrappers (or `<!--`/`-->` for the legacy form) once the target exists.

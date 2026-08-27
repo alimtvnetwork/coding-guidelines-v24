@@ -18,6 +18,7 @@
 **AND** WAL mode is enabled on the SQLite connection
 
 **Edge Cases:**
+
 - **GIVEN** the `data/` directory does not exist **WHEN** initialization runs **THEN** the directory is created with 0755 permissions before creating the DB
 - **GIVEN** the root DB file exists but is corrupted **WHEN** initialization runs **THEN** the error is reported with error code and the tool exits cleanly without overwriting
 - **GIVEN** the filesystem is read-only **WHEN** initialization runs **THEN** a clear error "Cannot create database: filesystem is read-only" is returned
@@ -31,6 +32,7 @@
 **AND** the app is registered in the root DB's apps table with its metadata
 
 **Edge Cases:**
+
 - **GIVEN** an app with the same name already exists **WHEN** registration is attempted **THEN** a duplicate error is returned without modifying existing data
 - **GIVEN** the app name contains invalid filesystem characters **WHEN** registration is attempted **THEN** a validation error is returned listing the invalid characters
 
@@ -42,6 +44,7 @@
 **AND** the item is registered in the app DB's items table
 
 **Edge Cases:**
+
 - **GIVEN** the slug exceeds 50 characters **WHEN** the item DB is created **THEN** the slug is truncated to 50 characters with a hash suffix for uniqueness
 - **GIVEN** disk space is insufficient **WHEN** creation is attempted **THEN** a storage error is returned with available and required space
 - **GIVEN** two concurrent goroutines create items with the same sequence number **WHEN** both write to the items table **THEN** the UNIQUE constraint prevents duplicates and one goroutine retries with the next sequence number
@@ -58,6 +61,7 @@
 **AND** the reset token is stored in memory with a 5-minute TTL
 
 **Edge Cases:**
+
 - **GIVEN** an invalid scope value is provided **WHEN** the request is sent **THEN** a 400 error is returned listing valid scope options
 - **GIVEN** a reset request is already pending **WHEN** a new request is sent **THEN** the previous request is invalidated and a new token is issued
 
@@ -69,6 +73,7 @@
 **AND** the response includes `Status: "completed"`, `DeletedDatabases` count, and `Duration`
 
 **Edge Cases:**
+
 - **GIVEN** the reset token has expired (>5 minutes) **WHEN** confirmation is attempted **THEN** a 410 Gone error is returned with message "Reset token expired, please request again"
 - **GIVEN** an invalid/unknown `ResetId` is provided **WHEN** confirmation is attempted **THEN** a 404 error is returned
 - **GIVEN** scope is `all` **WHEN** reset is confirmed **THEN** all app databases and the root DB tables are wiped but the root DB file and schema remain intact
@@ -93,6 +98,7 @@
 **AND** the denial is logged with user, role, resource, and action
 
 **Edge Cases:**
+
 - **GIVEN** no policy file exists **WHEN** the server starts **THEN** a default deny-all policy is loaded and a warning is logged
 - **GIVEN** the policy file is modified at runtime **WHEN** the hot-reload interval triggers **THEN** the updated policies take effect without server restart
 
@@ -115,6 +121,7 @@
 **AND** user A's databases are stored in `data/users/{userId}/`
 
 **Edge Cases:**
+
 - **GIVEN** user A's session token is used by an attacker **WHEN** attempting to access user B's path **THEN** path traversal is blocked and a security event is logged
 - **GIVEN** a user is deleted **WHEN** cleanup runs **THEN** all user-scoped databases and directories are removed
 

@@ -76,6 +76,7 @@ An AI integrating the pack into a long-lived repo needs a story for "how do I ke
 ### 2.5 Codegen "what to do when the table changes" is implicit
 
 The new CI guard fails the build with `Codegen drift detected` and instructs to run `npm run codegen:regen`. ✅ That's good. But:
+
 - A blind AI in a downstream repo may not have `npm` or this script — the regen tool lives only in *this* repo.
 - The codegen feature's purpose ("invert PHP/Go/TS field names so PascalCase columns map to snake_case structs") is documented in `linters-cicd/codegen/readme.md`, but there's no mention of *whether downstream repos need it at all*. They probably don't.
 

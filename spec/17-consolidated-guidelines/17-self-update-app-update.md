@@ -135,6 +135,7 @@ Step 5: If verify succeeds → .old is cleanup candidate
 ### PATH Sync
 
 When the deploy target differs from the PATH location, the script must sync:
+
 1. Copy binary to deploy target
 2. Update PATH to point to deploy target (if different from current PATH entry)
 
@@ -604,6 +605,7 @@ This section is the **exact runtime contract** for the 20-repo version probe. A 
 ```
 
 **Capture groups:**
+
 - `owner` — GitHub org/user
 - `base` — repo prefix (e.g., `movie-cli`)
 - `ver` — current numbered version (digits only)
@@ -658,6 +660,7 @@ All three resolve to the same internal `should_skip_probe()` / `Test-ShouldSkipP
 ### 15.6 Middle-Out Dispatch Order
 
 Although all 20 HEAD requests fire in parallel (ordering is functionally moot), the dispatch sequence is **middle-out** for two reasons documented in the source spec:
+
 1. **Connection pooling fairness** — first-dispatched requests get sockets first under degraded parallelism.
 2. **Result-scan optimization** — descending sort of responders short-circuits at the first match.
 

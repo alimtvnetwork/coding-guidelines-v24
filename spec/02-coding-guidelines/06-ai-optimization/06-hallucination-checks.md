@@ -3,6 +3,7 @@
 ## 1. Defining "Hallucination" in Code
 
 An AI agent "hallucinates" when it:
+
 - Invents API endpoints that do not exist in the backend.
 - Proposes database columns or tables that were never defined in the schema.
 - Uses third-party library functions that do not exist or are deprecated.

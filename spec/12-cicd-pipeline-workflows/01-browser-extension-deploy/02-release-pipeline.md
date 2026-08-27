@@ -111,6 +111,7 @@ cd ../..
 Release notes are assembled from conventional commit history. See [GitHub Release Standard](../02-github-release-standard.md) for the full format.
 
 The release body includes:
+
 1. Version header
 2. Release info table (version, commit SHA, branch, build date)
 3. Categorized commit log (Features, Bug Fixes, Maintenance)

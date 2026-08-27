@@ -219,6 +219,7 @@ Each language has an HSL accent used for the badge, glow, and hover effects:
 ## Checklist Rendering
 
 Checklists are wrapped in a `.checklist-block` container with:
+
 - A header bar showing "Checklist" label and a copy button
 - Checked items get a green gradient checkbox (`--success` color)
 - Unchecked items get a bordered empty box

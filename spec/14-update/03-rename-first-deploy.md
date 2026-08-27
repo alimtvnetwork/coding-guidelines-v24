@@ -23,6 +23,7 @@ used by another process.
 ```
 
 This happens because:
+
 - The OS holds a file lock on any running executable.
 - `Copy-Item` / `cp` tries to open the destination for writing, which
   the lock prevents.

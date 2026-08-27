@@ -5,6 +5,7 @@ canonical repo manifest defined in
 [`spec/01-spec-authoring-guide/17-version-schema.md`](../spec/01-spec-authoring-guide/17-version-schema.md).
 
 > **TL;DR**
+>
 > 1. Always read from the repo-root `version.json`. Never hardcode `Version`,
 >    `Title`, `RepoSlug`, `RepoUrl`, or `LastCommitSha`.
 > 2. Use the **PascalCase** keys (`Version`, `Title`, `RepoSlug`,

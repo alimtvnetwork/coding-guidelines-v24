@@ -22,6 +22,7 @@
 ## 12. Cross-Language Enum Synchronization
 
 Any modification to an enum must follow the enum-consumer-checklist <!-- external: spec/02-spec-management-software/18-enum-consumer-checklist.md -->:
+
 1. Update PHP enum file
 2. Update Go enum file (if mirrored)
 3. Update TypeScript constants/types

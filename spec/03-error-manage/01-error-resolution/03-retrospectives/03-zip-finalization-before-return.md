@@ -7,6 +7,7 @@
  ## Issue ID: ZIP-FINALIZE-001
  
  ## Summary
+
  ZIP files created with Go's `archive/zip` package were returned before being properly finalized, causing upload failures with "Could not find plugin file after extraction" errors.
  
  ## Root Cause

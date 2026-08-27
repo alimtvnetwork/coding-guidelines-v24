@@ -159,6 +159,7 @@ src/
 ````
 
 **Rendered visual (dark mode):**
+
 - `src/` → 📁 **src/** (white, bold)
 - `├──` → dim gray connection lines (50% opacity)
 - `components/` → 📁 **components/** (white, bold)
@@ -242,6 +243,7 @@ Each language gets a unique HSL accent stored in `--lang-accent`:
 | Plain Text | `PLAIN TEXT` | `220 10% 50%` | ⚪ Gray (default) |
 
 The accent color is used for:
+
 1. Badge dot color + glow (`box-shadow: 0 0 6px`)
 2. Badge text color
 3. Hover glow on the entire block wrapper
@@ -814,6 +816,7 @@ The divider between editor and preview panels is a drag handle that resizes both
 ```
 
 **Behavior:**
+
 1. `mousedown` on divider → sets `isDragging = true`, cursor to `col-resize`, disables text selection
 2. `mousemove` → calculates ratio: `((clientX - containerLeft) / containerWidth) * 100`
 3. `mouseup` → resets dragging state, restores cursor and selection
@@ -1188,6 +1191,7 @@ const handleSelect = useCallback((node: SpecNode) => {
 ```
 
 **Key behaviors:**
+
 - Clicking a **file** sets it as active and clears any search query
 - Clicking a **folder** toggles its expand/collapse state (no file selection)
 - Search results clicking behaves identically to tree file clicks
@@ -1196,6 +1200,7 @@ const handleSelect = useCallback((node: SpecNode) => {
 ### Sidebar Collapse
 
 The sidebar supports icon-only collapse via shadcn's `collapsible="icon"` mode:
+
 - Branding text and search input hide via `group-data-[collapsible=icon]:hidden`
 - Only folder/file icons remain visible in collapsed state
 - Toggle via the `SidebarTrigger` button or `Ctrl/Cmd+B` keyboard shortcut

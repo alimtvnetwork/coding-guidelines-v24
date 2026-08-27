@@ -9,6 +9,7 @@
 ## Tab: Overview
 
 Displays the primary error information:
+
 - Error message with code badge and timestamp
 - Target site URL (if WordPress operation)
 - API request method and endpoint
@@ -19,6 +20,7 @@ Displays the primary error information:
 ## Tab: Log
 
 Fetches and displays `error.log.txt` from the backend:
+
 - Auto-fetched when the modal opens on the Backend section
 - Refresh, Copy, and Download buttons
 - `ScrollArea` with monospace font, 400px height
@@ -26,12 +28,14 @@ Fetches and displays `error.log.txt` from the backend:
 ## Tab: Execution
 
 Two sections:
+
 1. **Go Call Chain** — Table from `envelopeMethodsStack.Backend`
 2. **Session Execution Logs** — Timeline from `backendLogs[]` with level-based coloring and step labels
 
 ## Tab: Stack
 
 Multi-source stack traces:
+
 1. **Go Backend** — From `envelopeErrors.Backend` (blue-themed)
 2. **PHP Delegated** — From `envelopeErrors.DelegatedServiceErrorStack` (orange-themed)
 3. **PHP Structured Frames** — Table from `phpStackFrames[]` (file, line, class::function)
@@ -41,6 +45,7 @@ Multi-source stack traces:
 ## Tab: Session
 
 Full session-level diagnostics (only shown when `sessionId` exists):
+
 - Sub-tabs: **Logs**, **Request**, **Response**, **Stack Trace**
 - Fetches from `GET /api/v1/sessions/{id}/logs` and `GET /api/v1/sessions/{id}/diagnostics`
 - Log rendering with color-coded levels and stage headers

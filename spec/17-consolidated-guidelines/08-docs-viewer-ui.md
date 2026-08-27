@@ -39,6 +39,7 @@ This is the **standalone consolidated reference** for the interactive documentat
 | Code blocks | Ubuntu Mono, JetBrains Mono | 400 | 18px | monospace |
 
 Font loading via Google Fonts `<link>` in `index.html`:
+
 - Ubuntu: 400, 500, 600, 700
 - Poppins: 300, 400, 500, 600
 - `font-display: swap` for performance
@@ -193,6 +194,7 @@ Sidebar
 ### Data Source — `specTree.json`
 
 Each node requires:
+
 - `name`: display name (string)
 - `type`: `"file"` or `"folder"` (string)
 - `path`: relative path to `.md` file (string)
@@ -446,6 +448,7 @@ Each language has a unique HSL accent used for badge, glow, and hover:
 ### Detection Logic
 
 Code blocks auto-detected as tree when content matches:
+
 - Unicode box-drawing chars: `/[├└│─]/`
 - Lines ending with `/` (directories): `/^\s*[A-Za-z0-9{}._-]+\/$/m`
 - Lines with file extensions: `/^\s*[A-Za-z0-9{}._-]+\.[A-Za-z0-9_-]+\s*$/m`

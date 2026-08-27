@@ -14,12 +14,14 @@
 This specification defines a **cross-project reusable** PowerShell integration pattern for building and running fullstack applications with Go backend and React frontend. The system uses a JSON configuration file (`powershell.json`) to define project-specific paths and settings.
 
 **Key Features:**
+
 - **pnpm Plug'n'Play (PnP)** - Disk-efficient package management with shared store
 - **Relative Path Resolution** - All paths relative to script location (working directory)
 - **Force Reinstall** - Clear caches and reset everything with `-Force` flag
 - **Multi-Project Root Folder** - Shared pnpm store across Node.js projects
 
 **This spec is NOT project-specific** — it can be used by:
+
 - WP Plugin Publish
 - Spec Management Software
 - Any Go + React fullstack project
@@ -226,6 +228,7 @@ Create `powershell.json` in project root:
 ### Force Clean Build
 
 The `-Force` flag removes:
+
 - `.pnp.cjs` and `.pnp.loader.mjs` files
 - `node_modules/` directory (if exists)
 - `dist/` directory
@@ -274,6 +277,7 @@ pnpm store path
 ### Firewall Configuration
 
 The `-OpenFirewall` flag (requires Administrator):
+
 - Creates inbound rules for configured ports
 - Sets profile to Private and Domain
 - Names rules consistently for easy management

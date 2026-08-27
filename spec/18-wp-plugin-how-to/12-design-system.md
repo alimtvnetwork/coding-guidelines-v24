@@ -526,6 +526,7 @@ Table rows MUST use staggered delays for entrance:
 ```
 
 **Internal structure:**
+
 - `.stat-value` — `font-size: 20px; font-weight: 700; font-family: monospace; color: primary`
 - `.stat-label` — `font-size: 11px; uppercase; letter-spacing: 0.5px; font-weight: 600; color: muted`
 
@@ -799,6 +800,7 @@ Shared modal styles are defined in `admin-shared.css` and reused across all page
 ```
 
 **Key properties:**
+
 - Overlay: `rgba(15, 23, 42, 0.6)` + `backdrop-filter: blur(4px)`
 - Content: `border-radius: 12px`, shadow xl, `max-height: 80vh`
 - Close button: `32×32px`, rotates `90deg` on hover, turns red
@@ -814,6 +816,7 @@ Shared modal styles are defined in `admin-shared.css` and reused across all page
 ### 11.3 Page-Specific Modal Overrides
 
 Pages MAY override `max-width` on `.riseup-modal-content`:
+
 - Agents page: `max-width: 800px`
 - Error page: uses fullscreen variant
 

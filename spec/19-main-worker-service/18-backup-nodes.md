@@ -178,11 +178,13 @@ CREATE INDEX IX_KnownBackupNode_StatusCode ON KnownBackupNode(StatusCode);
 ```
 
 **Conventions applied:**
+
 - PK `KnownBackupNodeId` per Rule 1 (universal).
 - `BackupEndpointPublic`, `BackupPublicKeyPem`, `StatusCode` are NOT enum-FK refs — they are **snapshots** kept locally so the Worker remains operational without Main. The authoritative copy lives on Main; reconciliation occurs on the next Main-initiated `BackupAttached` / `BackupRotated` instruction.
 - `LastSyncWatermark` is the bridge into Phase 7 (`SyncOp` CDC).
 
 **Mutation rules:**
+
 - INSERT only on `BackupAttached` instruction.
 - UPDATE on `BackupRotated` (Phase 8) or after each successful diff push.
 - DELETE on `BackupDetached` (instruction added in Phase 9 endpoint set).

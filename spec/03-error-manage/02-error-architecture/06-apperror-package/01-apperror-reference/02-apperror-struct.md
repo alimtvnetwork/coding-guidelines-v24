@@ -23,6 +23,7 @@ type AppError struct {
 ```
 
 **Fields:**
+
 - `Code` — error code from constants (e.g., `ErrNotFound`, `ErrDatabaseQuery`)
 - `Message` — human-readable error description
 - `Details` — additional context (auto-set from cause on `Wrap`)
@@ -425,6 +426,7 @@ func (e *AppError) Throw()
 ```
 
 **Rules:**
+
 - `Panic()` is reserved for startup/initialization failures only
 - `Throw()` enables structured panic/recover patterns where the `AppError` is preserved
 - Neither should be used in request handlers — return errors instead

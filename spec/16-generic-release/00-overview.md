@@ -6,6 +6,7 @@
 > **Imported from:** sibling reference implementation `spec/16-generic-release`
 >
 > **Related local specs:**
+>
 > - [`../12-cicd-pipeline-workflows/02-release-pipeline.md`](../12-cicd-pipeline-workflows/02-release-pipeline.md) — this repo's concrete release workflow (consumes the generic contract below)
 > - [`../12-cicd-pipeline-workflows/10-release-pipeline-issues-rca.md`](../12-cicd-pipeline-workflows/10-release-pipeline-issues-rca.md) — local RCA ledger of release-pipeline failures
 > - [`../13-generic-cli/20-terminal-output-design.md`](../13-generic-cli/20-terminal-output-design.md) — terminal output contract used by install scripts

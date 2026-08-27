@@ -10,6 +10,7 @@ This file defines **only** the error patterns specific to Main↔Worker communic
 ## 1. Inherited Rules (from `spec/03-error-manage/`)
 
 By reference, every handler in this spec MUST:
+
 1. Catch → log → rethrow or handle. Never silent.
 2. Log level matches severity (`debug`/`info`/`warn`/`error`/`fatal`).
 3. Include explicit file path + operation name in log context (per `mem://architecture/error-handling`).
@@ -48,6 +49,7 @@ Every Main↔Worker error response uses this JSON shape:
 ```
 
 Field rules (core):
+
 - `EnvelopeVersion` — SemVer of the envelope schema itself. Bump on additive change. Consumers MUST tolerate unknown fields and MUST refuse to parse a major-version mismatch.
 - `ErrorCode` — values from §3 catalog only. PascalCase.
 - `ErrorCategory` — `Transport` | `Auth` | `Validation` | `Business` | `Storage` | `Configuration`.
@@ -57,6 +59,7 @@ Field rules (core):
 - `RetryAfterSeconds` — present only when `Retryable=true`.
 
 Extension fields (always present in the JSON shape, `null` when not applicable):
+
 - `OperationId` (string, nullable) — set by `IdempotencyConflict` (§3.7) so the caller can reconcile against the original successful response. PascalCase UUID v4 string. (Resolves F-A-12.)
 - `SubCode` (string, nullable) — set by `SplitDBWriteFail` (§3.3) and any future error that needs a discriminator under a single `ErrorCode`. PascalCase enum from the per-code sub-code list. (Resolves F-A-15.)
 - `FieldErrors` (array, nullable) — set by `ValidationFail` (§3.8); each item `{FieldName: string, FailureReason: string}`. (Resolves F-A-16.)
@@ -134,6 +137,7 @@ Main   --(in response Error.CorrelationId)-->  React
 ```
 
 Rules:
+
 - If inbound request lacks `X-Correlation-Id`, generate a UUID v4 at the edge (Main).
 - Workers MUST NOT generate fresh IDs; they propagate Main's.
 - Every log line related to the request includes `cid=<uuid>`.
@@ -228,6 +232,7 @@ Single source of truth for which HTTP status code Main returns to React (and whi
 | `ValidationFail` | 422 Unprocessable Entity | 422 | Envelope carries `FieldErrors`. |
 
 Rules:
+
 - Main MUST set `Retry-After` (seconds) whenever it returns 429/503/504 and the envelope's `RetryAfterSeconds` is set.
 - Main MUST NOT return 500 for any catalogued ErrorCode. 500 is reserved for un-categorised exceptions (which themselves MUST be wrapped in a `WorkerVersionMismatch`-equivalent envelope before the next deploy).
 
@@ -238,11 +243,13 @@ Rules:
 The envelope shape from §2 is **bidirectional**. Workers also use it when reporting failures back to Main on Worker-initiated calls — namely Heartbeat (`POST /Workers/Heartbeat`), Register (`POST /Workers/Register`, see `10-worker-bootstrap-protocol.md`), and Push-Update acknowledgement (`POST /Workers/PushAck`, see `spec/14-update/28-worker-push-instruction.md`). (Resolves F-A-32.)
 
 Direction-specific overrides:
+
 - `WorkerNodeId` — set to the Worker's own ID (or `null` for `Register` first-call).
 - `OperationName` — uses Worker-initiated op names: `Worker.Heartbeat`, `Worker.Register`, `Worker.PushAck`.
 - `CorrelationId` — Worker generates a UUID v4 ONLY for Worker-initiated calls (overrides §4 rule which forbids Worker-side ID generation for Main-initiated calls). Main echoes it back.
 
 Worker → Main specific ErrorCodes (added to the §3 catalog by reference; full definitions in `13-error-codes.md`):
+
 - `WorkerRegisterRejected` (`MAIN-400-04`) — Main refused the registration (version pin mismatch, IP not in allow-list, duplicate `WorkerNodeName`).
 - `WorkerHeartbeatRejected` (`MAIN-400-06`) — Main accepted the request but the Worker is `Quarantined` or `Offline`; Worker MUST stop sending heartbeats until restart.
 - `WorkerPushAckUnknownJid` (`MAIN-400-07`) — Main received an ack for an unknown Job-Id (replay / late-arriving ack); Worker logs and discards.

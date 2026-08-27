@@ -465,6 +465,7 @@
 - `15-tunable-constants.md` → **v1.10.0**: new §2.15 — `SnapshotRetentionDays=30` (resolves OQ-A4), `Snapshot.BuildHourUtc=3`, `Snapshot.QuiesceTimeoutSeconds=120`, `Snapshot.MaxBuildSeconds=1800` (30 m), `Restore.PrimaryAckTimeoutSeconds=600` (10 m). All Backup-tier tunables now allocated.
 
 **Cross-spec impact:**
+
 - `05-auth-and-2fa.md` §S2S — Phase 12 cleanup will add a one-line stub citing `23-…` §9 for the `Backup` audience (no schema change needed; audience names are config).
 - `12-jwt-delivery-contract.md` — Phase 12 cleanup will document the mandatory `PairingId` claim on `Backup`-audience tokens.
 - `06-core-api-endpoints.md` §2 — Phase 12 cleanup will merge BE-1..BE-6 catalogue rows from `21-…` §2 + `23-…` §8 into the canonical endpoint table.
@@ -472,10 +473,12 @@
 - A successful restore (R7) **resets** the incremental watermark by definition — `BackupSyncWatermark.LastAcceptedSyncOpSeq` is realigned to the snapshot's max `SyncOpSeq` so subsequent BE-1 deliveries continue without re-shipping pre-snapshot rows.
 
 **Decisions resolved (this phase):**
+
 - D14 — fully spec'd (date-named files, Main-controlled restore-by-date).
 - OQ-A4 — **30 days rolling** with operator override and 7-day compliance floor.
 
 **Open questions still pending:**
+
 - OQ-23-1 (snapshot dedup pyramid for low-write primaries), OQ-23-2 (partial-table restore), OQ-23-3 (`PinReason` column for `Pinned` status) — all logged in `23-…` §14, non-blocking; OQ-23-3 will be picked up by the Phase-12 migration.
 
 ---
@@ -489,6 +492,7 @@
 - `15-tunable-constants.md` → **v1.9.0**: new §2.14 with four apply-pipeline keys — `MaxRetriesPerEnvelope=5`, `TransactionTimeoutSeconds=30`, `DeadLetterRetentionDays=30`, `IdempotencyRowRetentionDays=14`.
 
 **Cross-spec impact:**
+
 - `BackupApplyIdempotency` + `BackupApplyDeadLetter` are App-tier-local on the backup; the cross-tier reconciliation file (`11-…`) does not need an entry.
 - BE-1's idempotency short-circuit (V7) tightens the contract referenced in `21-…` §4.4 — replay returns the **stored** `OriginalResponseJson`, not a freshly-recomputed body.
 - Tracked-table allowlist (`AppBackupTrackedTable` ref) is reserved for the Phase 12 seed; `BACKUP-APPLY-003` linter will enforce membership.
@@ -496,6 +500,7 @@
 - ER diagram regen deferred to Phase 12 — Worker ER must show `BackupApplyIdempotency` + `BackupApplyDeadLetter`.
 
 **Open questions still pending:**
+
 - **OQ-A4** — Snapshot retention policy (Phase 11).
 - OQ-22-1 (per-envelope WAL pragma), OQ-22-2 (DLQ auto-sweep semantics), OQ-22-3 (tracked-table allowlist seeding strategy) logged in `22-…` §12, non-blocking.
 
@@ -510,11 +515,13 @@
 - `15-tunable-constants.md` → **v1.8.0**: new §2.13 with five backup-endpoint timeouts — `IncrementalDiffTimeoutSeconds=120`, `RotateKeysTimeoutSeconds=30`, `RestoreByDateTimeoutSeconds=60`, `SnapshotsTimeoutSeconds=15`, `HealthTimeoutSeconds=5`.
 
 **Cross-spec impact:**
+
 - `06-core-api-endpoints.md` §2 receives a paste-ready `2.X Backup` table merge in Phase 12 cleanup; this file is the source of truth in the interim.
 - `MAIN-830-*` rows are wire-side only here; their storage semantics (filesystem layout, retention sweep) are owned by `22-snapshot-storage-and-restore.md` (Phase 11).
 - ER diagram regen deferred to Phase 12 — no schema change in Phase 9 (BE-1 writes are confined to `BackupSyncWatermark` already in `19-…`; BE-3 enqueues a job into the existing worker job table).
 
 **Open questions still pending:**
+
 - **OQ-A4** — Snapshot retention policy (Phase 11).
 - OQ-21-1 (streaming vs. multipart for BE-1 at >100 MB envelopes) and OQ-21-2 (BE-5 scope vs. unauth proxy probe) logged in `21-…` §14, non-blocking.
 
@@ -529,12 +536,14 @@
 - `15-tunable-constants.md` → **v1.7.0**: new §2.12 with five backup-encryption keys — `MaxKeyAgeSeconds=7776000` (90 d), `RotationAckTimeoutSeconds=120`, `RotationActivationDelaySeconds=60`, `RetiredKeyGraceSeconds=86400` (24 h), `RsaKeySizeBits=4096`.
 
 **Cross-spec impact:**
+
 - App-tier mirror: `BackupKeyEpoch` is added on both primary and backup Worker App tiers; the cross-tier reconciliation file (`11-…`) does not need a new entry because App-tier additions are local. Main holds the row too but with `PrivateKeyPem` always NULL (public halves only).
 - ER diagram regen deferred to Phase 12 — Worker ER must show `BackupKeyEpoch` with the four-state lifecycle.
 - `19-incremental-backup-sync.md` §6 envelope SQLite is now the input artefact to `20-…` §4 step 1 — no schema change.
 - Phase 9 (endpoints) will surface `POST /API/V1/Backup/RotateKeys` as the operator-forced rotation trigger named in `20-…` §7.1.
 
 **Open questions still pending:**
+
 - **OQ-A4** — Snapshot retention policy (Phase 11).
 - OQ-20-1 (split-brain pager routing) and OQ-20-2 (RSA-4096 vs Ed25519+X25519) logged in `20-…` §14, non-blocking.
 
@@ -549,11 +558,13 @@
 - `15-tunable-constants.md` → **v1.6.0**: §2.11 extended with five new keys — `SyncIntervalSeconds=60`, `MaxRowsPerEnvelope=5000`, `TombstoneRetentionSeconds=604800`, `LogRetentionSeconds=604800`, `QuarantineCompactionOverrideSeconds=86400`.
 
 **Cross-spec impact:**
+
 - App-tier tables that participate in backup mirroring will need either Shape A columns (`SyncOpCode`, `SyncOpSeq`, `SyncOpAt`) or a write-side hook into `BackupSyncLog`. The concrete tracked-table list is a Phase-12 follow-up (seed file + `DB-SYNCOP-001` linter).
 - `KnownBackupNode.LastSyncWatermark` (Phase 6) is reframed as a denormalized view of `BackupSyncWatermark.LastAckedSyncOpSeq` for human dashboards; the authoritative pointer is the new `BackupSyncWatermark` table.
 - ER diagram regen deferred to Phase 12 — Worker ER must show `SyncOp`, `BackupSyncLog`, `BackupSyncWatermark`, `BackupSyncSequence`.
 
 **Open questions still pending:**
+
 - **OQ-A3** — Backup zip password derivation (Phase 8).
 - **OQ-A4** — Snapshot retention policy (Phase 11).
 
@@ -569,11 +580,13 @@
 - `14-rbac-and-status-seed.md` — `WorkerNodeStatus` seed bumped to v1.5.0; row count 4 → 7. Added `Provisioning` (backup just registered, awaiting first diff), `BackupAttached` (healthy backup), `BackupLagging` (backup lag exceeds tunable). Existing primary-only codes annotated as never-assigned-to-backups.
 
 **Cross-spec impact:**
+
 - `WorkerNode` schema (Phase 4) is the structural enabler — no further DB changes in Phase 6.
 - `KnownBackupNode` is added to the Worker App tier; the cross-tier reconciliation file (`11-…`) does not need a new entry because App-tier additions are local to the Worker.
 - ER diagram regeneration deferred to Phase 12 — Worker ER must show `KnownBackupNode`.
 
 **Open questions still pending:**
+
 - **OQ-A3** — Backup zip password derivation (Phase 8).
 - **OQ-A4** — Snapshot retention policy (Phase 11).
 
@@ -596,14 +609,17 @@
   - Reserved sub-range table updated: 21090-21091 marked consumed; 21171 marked consumed; future-expansion ranges narrowed accordingly.
 
 **Cross-spec impact:**
+
 - Worker JWT mint contract gains `CatalogVersion` claim + read/write AccessItem code arrays. `12-jwt-delivery-contract.md` will need a Phase-12 follow-up entry to document the claim shape (added to the Phase-12 punch list).
 - ER diagram regeneration deferred to Phase 12 — Worker ER must show `RoleAccessCache` and `RoleCacheCatalogVersion` (Cache tier, in-memory annotation); Main ER must show the new `RoleAccessInvalidationEvent` audit table once authored in Phase 12.
 
 **Open questions resolved with default proposals (overridable):**
+
 - **OQ-A1** — Cascading semantics → adopted **simple union**.
 - **OQ-A2** — Cache-bin tech → adopted **per-process SQLite `:memory:`** behind a swappable contract.
 
 **Open questions still pending (carried into Phase 8 / Phase 11):**
+
 - **OQ-A3** — Backup zip password derivation pattern.
 - **OQ-A4** — Snapshot retention policy.
 
@@ -622,6 +638,7 @@
 - `07-role-based-dashboards.md` → **v2.1.0**: new §9 "UI Labels" — `WorkerNode` renders as **"Region"** in dashboards, forms, and audit views via i18n key `worker_node.label`. Code, API, and DB identifiers unchanged.
 
 **Cross-spec impact:**
+
 - Worker bootstrap (`10-worker-bootstrap-protocol.md`) and self-update pointer (`09-self-update-pointer.md`) are unchanged for primary nodes; backup-node registration / pairing flow is deferred to Phase 6 (`17-backup-nodes.md`).
 - ER diagram regeneration deferred to Phase 12 (`diagrams/erd-main-db.mmd`).
 - Cache-bin tables for role resolution and the cascading-roles union semantics remain Phase 5 work.
@@ -647,6 +664,7 @@
 - `11-split-db-tier-reconciliation.md` → **v1.1.0**: Main §4 — `User` and `UserRole` struck through with the v2.1.0 removal note; `UserDirectory` added to Root tier; `Role`, `AccessItem`, `RoleAccessItem` reaffirmed as Settings-tier **catalogs** (kept on Main, mirrored read-only to each Worker). Worker §5 — `AppUser` annotated as authoritative identity store, `AppUserRole` added as the user→role join.
 
 **Cross-spec impact:**
+
 - Any service reading `MainDB.User.*` MUST switch to either (a) `MainDB.UserDirectory` (routing only) or (b) `WorkerDB.AppUser` (credentials, identity).
 - The `/API/V1/Auth/RefreshWorkerToken` endpoint on Main is **deprecated**; React MUST refresh JWTs by calling Worker `/API/V1/Auth/RefreshToken` directly.
 - Audit consumers joining `EndpointAuthAuditEvent` on `User.UserId` MUST switch to `UserDirectory.UserDirectoryId` (or fall back to `UpdatedByUserEmail` for hard-deleted directory rows).

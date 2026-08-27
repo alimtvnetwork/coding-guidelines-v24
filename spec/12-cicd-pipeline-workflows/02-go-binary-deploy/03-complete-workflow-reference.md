@@ -380,6 +380,7 @@ This workflow assumes the following project structure for multi-binary projects:
 ```
 
 Key rules:
+
 - The updater binary outputs to `../<binary>/dist/` (the main module's dist folder)
 - `docs-site.zip` is built from a Node.js project and placed in the same `dist/`
 - All assets converge into a **single `dist/` directory** for unified packaging and release

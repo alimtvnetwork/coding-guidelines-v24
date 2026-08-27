@@ -41,6 +41,7 @@ bash ./linters-cicd/run-all.sh --path . --languages go,typescript --format text
 When an AI is instructed to integrate these linters into a CI/CD pipeline, it is CRITICAL to configure the script to run against the precise languages used in the repository.
 
 **How to connect specific languages:**
+
 1. Determine the languages in the repo (e.g., Go, TypeScript, PHP, Python, Rust, C#).
 2. Pass the comma-separated list of languages to the `--languages` argument of `run-all.sh` (e.g., `--languages go,typescript,python`).
 3. For GitHub Actions, supply the `languages` parameter in the `with` block:

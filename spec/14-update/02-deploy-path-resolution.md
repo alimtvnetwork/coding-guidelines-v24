@@ -153,6 +153,7 @@ Default: C:\Users\<user>\bin-run (press Enter to accept)
 ```
 
 After the user provides a path:
+
 1. Create the directory if it does not exist.
 2. Deploy the binary into it.
 3. Register the directory in the system PATH (see PATH Registration below).

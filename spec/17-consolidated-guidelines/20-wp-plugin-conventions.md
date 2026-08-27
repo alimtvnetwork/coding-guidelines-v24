@@ -178,6 +178,7 @@ trait SomeHandlerTrait
 ## Backed Enums (PHP 8.1+)
 
 All string constants use backed enums with:
+
 - `Type` suffix (e.g., `ResponseKeyType`, `StatusType`)
 - `isEqual()` method for comparison
 - PascalCase values
@@ -494,6 +495,7 @@ Every plugin **must** expose a `GET /ping` endpoint that returns:
 | `Version` | string | `PluginConfigType::Version->value` |
 
 **Authorization mode** configurable via `PluginConfigType::IsPingAuthorized`:
+
 - `'true'` → requires authentication (`checkPingPermission`)
 - `'false'` → publicly accessible (`__return_true`)
 
@@ -612,6 +614,7 @@ Fluent query builder with Go-style result wrappers:
 ### Root Database (RootDb)
 
 Cross-plugin shared SQLite database for:
+
 - Plugin manifest (installed plugins, versions)
 - Shared configuration
 - Cross-plugin communication

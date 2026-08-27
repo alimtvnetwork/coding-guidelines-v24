@@ -17,6 +17,7 @@ Initial implementation followed Go stdlib convention (`URL` all-caps) instead of
 ## Solution
 
 Renamed all occurrences across 3 files:
+
 - `URLError` → `UrlError`
 - `WrapURLError` → `WrapUrlError`
 

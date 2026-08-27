@@ -42,6 +42,7 @@ $this->fileLogger->warn('Upload conflict', array('duplicateDir' => $path));
 ```
 
 **Files Fixed:**
+
 - `PostCrudTrait.php`: `post_id` → `postId`
 - `CategoryTrait.php`: `term_id` → `termId`
 - `UploadZipTrait.php`: `duplicate_dir` → `duplicateDir`, `target_slug` → `targetSlug`, `old_version` → `oldVersion`, `new_version` → `newVersion`, `file_size` → `fileSize`

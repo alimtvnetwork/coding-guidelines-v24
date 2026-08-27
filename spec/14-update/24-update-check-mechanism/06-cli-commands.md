@@ -62,6 +62,7 @@ If `NewRepoUrl` is set, an extra line is printed:
 ### `--force` behavior
 
 Skips `IsCheckDue()`. Used by:
+
 * The `--async` child (so the interval gate doesn't short-circuit it).
 * Power users who want to re-check immediately.
 

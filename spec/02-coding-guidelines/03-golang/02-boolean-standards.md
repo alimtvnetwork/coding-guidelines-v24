@@ -287,6 +287,7 @@ if !isValid {
 ```
 
 **Rule summary:**
+
 - `!isX` alone in a condition → ✅ Permitted
 - `!isX && isY` or `isY && !isX` → ❌ Prohibited — extract `!isX` to a named positive counterpart first
 - `!isX && !isY` → ❌ Prohibited — two negations is never acceptable
@@ -296,6 +297,7 @@ See [Boolean Principles P6](../01-cross-language/02-boolean-principles/03-parame
 ## 2.8 — No Inline Statements in `if` Conditions (Rule P7)
 
 Go allows semicolon-separated inline statements in `if` conditions (e.g., `if x := compute(); x > 0 {`). This pattern is **prohibited** in application code because it:
+
 - Hides variable assignment inside control flow
 - Makes the condition harder to read and debug
 - Encourages coupling unrelated operations (filesystem check + boolean logic)

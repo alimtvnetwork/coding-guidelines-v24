@@ -172,6 +172,7 @@ $id = Orm::forTable('Transactions')
 ```
 
 Internally:
+
 1. `create()` sets `$isNew = true` and clears `$data`
 2. `set($col, $val)` accumulates column-value pairs
 3. `save()` dispatches to `doInsert()` which builds `INSERT INTO ... VALUES (...)`

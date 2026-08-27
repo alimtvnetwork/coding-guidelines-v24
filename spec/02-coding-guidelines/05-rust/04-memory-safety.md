@@ -82,6 +82,7 @@ fn merge_activities<'session, 'filter>(
 ### Strict Rule: `unsafe` requires justification comment and review
 
 Every `unsafe` block **must** include:
+
 1. A `// SAFETY:` comment explaining why it's sound
 2. The invariants being upheld
 

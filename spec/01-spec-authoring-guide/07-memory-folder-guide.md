@@ -108,6 +108,7 @@ This folder contains things the AI must **NEVER** do. Each rule gets its own `.m
 - **What to do instead**
 
 Example files:
+
 - `no-memories-folder.md` — Never create `.lovable/memories/` (use `memory/` only)
 - `no-error-swallowing.md` — Never catch and ignore errors
 - `no-uuid-primary-keys.md` — Never use UUIDs for primary keys

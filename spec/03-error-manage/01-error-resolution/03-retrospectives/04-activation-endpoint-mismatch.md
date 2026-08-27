@@ -7,6 +7,7 @@
  ## Issue ID: ACTIVATE-404-001
  
  ## Summary
+
  Plugin activation failed with 404 because the Go backend was calling a non-existent endpoint `/plugins/{slug}/enable` on the Riseup Asia Uploader WordPress plugin.
  
  ## Root Cause
@@ -19,6 +20,7 @@
  ```
  
  But the WordPress PHP plugin (`riseup-asia-uploader.php`) only registers these endpoints:
+
  - `/status` - Status check
  - `/upload` - Plugin upload (with optional `activate: true`)
  - `/plugins` - List plugins

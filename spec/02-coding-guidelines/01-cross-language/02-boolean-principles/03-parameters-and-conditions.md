@@ -9,6 +9,7 @@
 ## Principle 5: Boolean Parameters Must Be Explicit
 
 Never use bare `true`/`false` at call sites. If a function accepts a boolean parameter, either:
+
 1. Use separate, explicitly named methods
 2. Use an enum or options object
 

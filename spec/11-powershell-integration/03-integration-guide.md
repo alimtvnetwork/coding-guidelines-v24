@@ -251,6 +251,7 @@ The `-Force` flag performs a complete clean:
 ```
 
 **What it removes:**
+
 - `.pnp.cjs` and `.pnp.loader.mjs` (PnP resolution files)
 - `node_modules/` directory (if exists)
 - `dist/` directory
@@ -259,6 +260,7 @@ The `-Force` flag performs a complete clean:
 - Prunes pnpm store (removes unused packages)
 
 **When to use:**
+
 - After major dependency changes
 - When builds fail mysteriously
 - Periodically to clean up unused packages

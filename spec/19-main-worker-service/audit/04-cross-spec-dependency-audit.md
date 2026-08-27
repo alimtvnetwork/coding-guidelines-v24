@@ -21,6 +21,7 @@ Spec 19 references **5 external spec folders**:
 | `spec/14-update/` | `09-self-update-pointer.md` (entire file) |
 
 Method:
+
 1. Confirm each folder exists.
 2. Confirm each **concept** spec/19 borrows from it actually appears there.
 3. Flag contradictions, missing concepts, and dangling deep-references.
@@ -102,6 +103,7 @@ All 5 folders **exist on disk** (verified). The remainder of this audit checks *
 (F-X-11 is a ✅, not a finding.)
 
 **Cumulative across steps 1–4:**
+
 - BLOCKER: 17 + 9 = **26**
 - MAJOR: 22 + 5 = **27**
 - MINOR: 70 + 6 = **76**

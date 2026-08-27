@@ -109,6 +109,7 @@ The session-based logging system provides complete request/response traceability
 ```
 
 **Session-Error Linkage Flow:**
+
 1. Go middleware creates session UUID → stored in `context.Value("SessionId")`
 2. Handler proxies to delegated server → captures `DelegatedRequestServer` data
 3. On error (status ≥ 400): `respondErrorWithSession` extracts `sessionId` from `apperror.AppError.Context` and attaches it to the envelope response as `Attributes.SessionId`
@@ -480,6 +481,7 @@ The following headers are automatically redacted:
 ### 7.2 Body Truncation
 
 Request and response bodies are truncated at 50KB to prevent:
+
 - Disk exhaustion from large payloads
 - Memory pressure during capture
 - Slow reads when listing sessions
@@ -491,6 +493,7 @@ Delegated request bodies and responses are subject to the same truncation rules.
 ### 7.4 Retention
 
 Sessions auto-expire after 7 days to:
+
 - Limit disk usage
 - Reduce exposure of sensitive data
 - Keep queries performant

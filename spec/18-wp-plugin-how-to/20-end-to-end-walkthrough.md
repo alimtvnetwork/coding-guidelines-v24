@@ -385,6 +385,7 @@ Key implementation checkpoints:
 **File: `includes/Traits/Core/ResponseTrait.php`**
 
 Contains:
+
 - `safeExecute(callable $callback, string $endpointName): WP_REST_Response` — universal error boundary
 - `buildErrorResponse(Throwable $e, string $endpointName): WP_REST_Response` — debug-gated error envelope
 - `formatStackFrames(Throwable $e): array` — trace extraction

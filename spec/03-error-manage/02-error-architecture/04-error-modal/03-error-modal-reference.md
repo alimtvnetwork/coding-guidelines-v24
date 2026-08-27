@@ -337,6 +337,7 @@ The Universal Response Envelope provides six top-level blocks. The error modal c
 ```
 
 **Mapping:**
+
 - `BackendMessage` → Overview tab red banner
 - `DelegatedServiceErrorStack` → Stack tab (orange-themed PHP trace) + Traversal tab (legacy)
 - `DelegatedRequestServer` → Stack tab (purple-themed delegated section) + Request tab (3rd hop) + Traversal tab (NEW v2.0.0)
@@ -376,6 +377,7 @@ The Universal Response Envelope provides six top-level blocks. The error modal c
 ```
 
 **Mapping:**
+
 - `RequestedAt` + `RequestDelegatedAt` → Traversal tab endpoint flow
 - `SessionId` → Session tab auto-fetch trigger
 
@@ -670,6 +672,7 @@ The modal uses a **full-screen** layout on mobile and **95vw × 95vh** on deskto
 ### Tab: Overview
 
 Displays the primary error information:
+
 - Error message with code badge and timestamp
 - Target site URL (if WordPress operation)
 - API request method and endpoint
@@ -680,6 +683,7 @@ Displays the primary error information:
 ### Tab: Log
 
 Fetches and displays `error.log.txt` from the backend:
+
 - Auto-fetched when the modal opens on the Backend section
 - Refresh, Copy, and Download buttons
 - `ScrollArea` with monospace font, 400px height
@@ -687,12 +691,14 @@ Fetches and displays `error.log.txt` from the backend:
 ### Tab: Execution
 
 Two sections:
+
 1. **Go Call Chain** — Table from `envelopeMethodsStack.Backend`
 2. **Session Execution Logs** — Timeline from `backendLogs[]` with level-based coloring and step labels
 
 ### Tab: Stack
 
 Multi-source stack traces:
+
 1. **Go Backend** — From `envelopeErrors.Backend` (blue-themed)
 2. **PHP Delegated** — From `envelopeErrors.DelegatedServiceErrorStack` (orange-themed)
 3. **PHP Structured Frames** — Table from `phpStackFrames[]` (file, line, class::function)
@@ -702,6 +708,7 @@ Multi-source stack traces:
 ### Tab: Session
 
 Full session-level diagnostics (only shown when `sessionId` exists):
+
 - Sub-tabs: **Logs**, **Request**, **Response**, **Stack Trace**
 - Fetches from `GET /api/v1/sessions/{id}/logs` and `GET /api/v1/sessions/{id}/diagnostics`
 - Log rendering with color-coded levels and stage headers
@@ -1044,6 +1051,7 @@ export function generateCompactReport(error: CapturedError, app?: AppInfo): stri
 ```
 
 **Stripping rules for execution chain:**
+
 - Timestamps (e.g., `[12:58:22 AM] ⬡`) are removed
 - Base API URLs (e.g., `http://localhost:8080/api/v1`) are stripped to relative paths (e.g., `/sites`)
 - Result: clean, scannable list like `GET /sites`, `POST /error-history`

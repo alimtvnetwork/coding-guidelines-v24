@@ -89,6 +89,7 @@ Each line is processed individually by `highlightTreeLine()`:
 `escapeHtml()` converts: `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`
 
 Used for:
+
 - Raw code before tree highlighting
 - Data attributes (`data-code`) for copy/download
 - Checklist markdown encoding

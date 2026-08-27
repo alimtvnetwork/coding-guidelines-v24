@@ -73,6 +73,7 @@ catch (Throwable $e) { ... }
 ```
 
 **Exemptions:**
+
 - `Autoloader.php` — must be self-contained
 - Main plugin bootstrap file — may use backslash before autoloader is registered
 

@@ -274,6 +274,7 @@ Windows binary signing via SignPath:
 | Standalone | Weekly schedule + manual | Catch newly disclosed CVEs |
 
 **Classification:**
+
 - Third-party vulnerabilities → **fail** the pipeline
 - Stdlib vulnerabilities → **warn** only (logged, not blocking)
 

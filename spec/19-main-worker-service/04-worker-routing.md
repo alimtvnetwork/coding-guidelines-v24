@@ -40,6 +40,7 @@ Strategy is configurable via Seedable-Config key `MainWorker.Routing.DefaultStra
 ### 1.4 Eligibility filter (applies to all strategies)
 
 A worker is eligible only if **all** are true (positive guards, per CODE RED):
+
 - `IsPrimary(node)` → `WorkerNode.IsBackup = 0` (Phase 4, D9 — backups never serve traffic).
 - `IsWorkerActive(node)` → `WorkerNodeStatusCode = 'Active'`
 - `IsWorkerReachable(node)` → last heartbeat within `MainWorker.Heartbeat.IntervalSeconds × MissedThreshold` per `15-tunable-constants.md` §2.3 <!-- TUNABLE-WAIVER: derived product, not a literal -->.
@@ -113,6 +114,7 @@ Cache backend: Laravel cache driver (file/redis/memcached) — implementer's cho
 ## 4. Migration of Existing Tenants (deferred)
 
 Migrating a `Company` from Worker A → Worker B requires:
+
 1. Quiesce traffic to Worker A for that company.
 2. Copy split-DB rows (per `spec/05-split-db-architecture/`).
 3. Update `Company.WorkerNodeId` on Main.

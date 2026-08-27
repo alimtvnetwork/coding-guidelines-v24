@@ -77,6 +77,7 @@ Shows how `{TableName}Id` creates self-documenting FK relationships.
 ```
 
 **Key rules demonstrated:**
+
 - FK column `AgentSiteId` in `Transactions` has the **exact same name** as PK `AgentSiteId` in `AgentSite`
 - Lookup tables (`StatusTypes`, `FileTypes`) use SMALLINT PK — they will never exceed 32K rows
 - Main table stores only the integer FK — the human-readable `Name` lives in the lookup table
@@ -105,6 +106,7 @@ The junction table holds FKs to both sides. FK columns use the **exact PK names*
 ```
 
 **Junction table rules:**
+
 - PK: `{JunctionTable}Id` → `UserRoleId`
 - FK columns: exact same names as source PKs → `UserId`, `RoleId`
 - `UNIQUE(UserId, RoleId)` prevents duplicate assignments

@@ -258,6 +258,7 @@ Every installer below copies the listed **folders** (recursively, preserving str
 | **`consolidated-install.{sh,ps1}`** | `spec/01-spec-authoring-guide/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 
 > Notes:
+>
 > - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
 > - **`version.json`** is smartly merged. The installer injects a `codingGuideline` object into the target repo's `version.json` with version tracking and prompt references, rather than overwriting the file.
@@ -1123,6 +1124,7 @@ func NewType(errorType apperrtype.ErrorType) *AppError {
 ```
 
 > **Rules:**
+>
 > - Treat raw code strings as a compatibility path, not the standard path for new examples.
 > - Prefer `NewType`, `WrapType`, `WrapTypeMsg`, and domain helpers such as `SiteError` / `SlugError`.
 > - Keep the registry as the single source of truth for `Code` and `Message`.
@@ -1274,6 +1276,7 @@ func (handler *PluginHandler) DisablePlugin(siteId string, pluginSlug string) ap
 ```
 
 **Rules:**
+
 - If a `Result[T]` specialization appears **3+ times**, create a type alias
 - Place common aliases in `types/AppResults.go` or inside the `apperror` package
 - One definition per file, `types/AppResults.go` for result aliases, `types/ContentType.go` for content types, etc.
@@ -1295,6 +1298,7 @@ Magic strings and magic numbers are raw literals (`"active"`, `86400`, `0.2`) us
 **The compounding effect:** A magic string written on Day 1 gets copied to 5 files by Day 30. On Day 90, a rename is applied to 3 of 6 files. On Day 92, three features break silently in production. With an enum, renaming causes a **compile-time error** in all files instantly.
 
 **Rules:**
+
 - Every string in a comparison **must** be an enum or typed constant
 - Every number in logic **must** be a named constant (`const VAT_RATE = 0.2`, not `price * 0.2`)
 - Exemptions: `0`, `1`, `-1`, `""`, `true`, `false`, `null`/`nil`
@@ -1909,6 +1913,7 @@ Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](
 External AI reviewers consistently flag the same handful of "concerns." Here is the reasoning, with references, so future reviewers (human or AI) understand **why** these rules exist and stop re-litigating them.
 
 > **Reference reviews:**
+>
 > - [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
 > - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response). Original ChatGPT share link: [chatgpt.com/s/t_69f4edc897d481918482893df897c9da](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da). Repository under review: [github.com/alimtvnetwork/coding-guidelines-v24](https://github.com/alimtvnetwork/coding-guidelines-v24).
 >

@@ -181,6 +181,7 @@ In v1.58.0, two missing `use` import statements caused a **full site crash** ("c
 Structured response arrays (`['success' => true, 'error' => '...']`) appear in **every** REST handler, logger call, and service return value. When these keys are raw strings, typos silently break consumers and grep-based audits miss variants (`'errors'` vs `'error'`).
 
 `ResponseKeyType` centralizes all envelope and domain keys so that:
+
 - A single rename propagates everywhere.
 - IDE autocompletion prevents typos.
 - The Go proxy and TypeScript frontend can mirror the same enum for end-to-end type safety.

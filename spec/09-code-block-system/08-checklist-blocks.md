@@ -18,6 +18,7 @@ Consecutive lines matching the checklist pattern (`- [ ]` or `- [x]`) are groupe
 ```
 
 Matches:
+
 - Optional leading whitespace (for nesting)
 - List marker (`-`, `*`, `+`, or `1.`)
 - Checkbox `[ ]` or `[x]`/`[X]`
@@ -84,6 +85,7 @@ Indent level is calculated as `Math.floor(indent / 2)` where indent is the numbe
 ## Inline Formatting in Items
 
 Checklist item content supports:
+
 - Inline code: `` `code` `` → `<code class="inline-code">`
 - Bold: `**text**` → `<strong>`
 - Italic: `*text*` → `<em>`

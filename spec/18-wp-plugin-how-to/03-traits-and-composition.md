@@ -129,6 +129,7 @@ This is the **only** place where endpoint-level exceptions are caught. Individua
 ### errorResponse()
 
 Creates a structured error response with:
+
 - A log entry including backtrace
 - An envelope-formatted WP_REST_Response
 - Optional exception details (stack trace frames)

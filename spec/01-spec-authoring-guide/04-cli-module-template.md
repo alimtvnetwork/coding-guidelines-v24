@@ -156,6 +156,7 @@ Consolidate all testable requirements from backend, frontend, and deploy specs:
 ### Step 7: Create Consistency Reports
 
 Create `99-consistency-report.md` at each level:
+
 - Module root
 - `01-backend/`
 - `02-frontend/` (if present)
@@ -201,6 +202,7 @@ Add the new module to `spec/00-overview.md` in the appropriate layer table.
 ```
 
 **Key observations:**
+
 - No `02-frontend/` — This CLI is headless; the UI is a separate module (`35-time-log-ui`)
 - Backend has 11 content files (01–11) + meta files (97, 98, 99)
 - Deploy covers 3 platforms + auto-update

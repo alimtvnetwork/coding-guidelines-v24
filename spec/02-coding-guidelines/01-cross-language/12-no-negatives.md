@@ -30,6 +30,7 @@ Raw negations are easy to miss during code review, cause cognitive overhead, and
 ### Key: Every negative check becomes a **positively named function**
 
 The function name must express the **positive assertion** of what is being checked:
+
 - "is missing" not "is not existing"
 - "is disabled" not "is not active"  
 - "is empty" not "is not filled"
@@ -73,6 +74,7 @@ if (BooleanHelpers::isClassMissing('PDO')) {
 ```
 
 **Utility classes:**
+
 - `PathHelper` (`RiseupAsia\Helpers\PathHelper`) — file/directory guards
 - `BooleanHelpers` (`RiseupAsia\Helpers\BooleanHelpers`) — function/class/extension/database guards
 

@@ -8,6 +8,7 @@
 ---
 
 Fetched via:
+
 - `GET /api/v1/sessions/{sessionId}/diagnostics` (for diagnostics)
 - `GET /api/v1/sessions/{sessionId}/logs` (for logs)
 - `GET /api/v1/request-sessions/{sessionId}` (raw session data)

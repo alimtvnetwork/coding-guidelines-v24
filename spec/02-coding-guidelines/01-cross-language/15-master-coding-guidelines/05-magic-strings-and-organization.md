@@ -65,6 +65,7 @@ if participant.Status == entitystatus.Active { ... }
 **Standardized domain enums:** `ExecutionStatus`, `ConnectionStatus`, `ExportStatus`, `MessageStatus`, `EntityStatus` — see [TypeScript Enum Inventory](../../02-typescript/08-typescript-standards-reference.md#enum-inventory).
 
 **Exempt patterns** (no enum required):
+
 - Framework/runtime APIs: `process.env.NODE_ENV === 'production'`
 - Browser Web APIs: `mediaRecorder.state === 'recording'`
 - Language operators: `typeof x === 'string'`

@@ -114,6 +114,7 @@ The badge displays the detected language with a colored dot:
 ```
 
 Each code block sets `--lang-accent` inline, which drives:
+
 - Badge dot color and glow
 - Hover glow on the entire block
 - Fullscreen shadow color

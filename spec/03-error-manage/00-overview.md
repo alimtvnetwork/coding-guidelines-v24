@@ -71,6 +71,7 @@ Frontend detection logic MUST use HTTP status codes (2xx) as the primary indicat
 ### 4. Structured Error Architecture
 
 All errors use the three-tier architecture documented in [02-error-architecture/01-error-handling-reference.md](./02-error-architecture/01-error-handling-reference.md):
+
 - **Tier 1:** Delegated Server (PHP/other) — structured error responses
 - **Tier 2:** Go Backend — `apperror` package with stack traces
 - **Tier 3:** Frontend — Error store, Global Error Modal

@@ -38,6 +38,7 @@ The frontend checked for `success === true` OR `status === "ok"`, but backend re
 ### Problem 2: Confusing Diagnostics
 
 The error modal displayed:
+
 - `VITE_API_URL: (not set)` — but this was actually the **resolved** value, not the raw env var
 - No distinction between raw environment variables and resolved/effective URLs
 - Missing UI origin (host + port) to help diagnose port mismatches
@@ -108,6 +109,7 @@ if (response.ok) {
 **Files:** `src/lib/diagnostics.ts`, `src/lib/api.ts`, `GlobalErrorModal.tsx`
 
 Now clearly shows:
+
 - **Raw env vars:** `VITE_API_URL (raw): http://localhost:8080`
 - **Resolved values:** `Resolved API Origin: http://localhost:8080`
 - **UI Origin:** `http://localhost:8080`

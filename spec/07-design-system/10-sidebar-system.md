@@ -96,6 +96,7 @@ The sidebar provides file tree navigation, search, and context. It uses theme to
 ## Mobile Behavior
 
 On screens < 768px:
+
 - Sidebar becomes a `Sheet` overlay (slides from left)
 - Overlay: `hsl(0 0% 0% / 0.5)` backdrop
 - Triggered by hamburger button

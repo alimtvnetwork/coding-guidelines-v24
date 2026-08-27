@@ -88,11 +88,13 @@ getQueryData<DashboardStats>(key);
 ### Rule 2.2: `unknown` is acceptable ONLY at parse boundaries
 
 `unknown` may appear in:
+
 - JSON parsing entry points (immediately narrowed via type guard)
 - Error catch blocks (without `: any` annotation — bare `catch (err)`)
 - Internal type narrowing functions (e.g., `isEnvelope(obj: unknown)`)
 
 `unknown` MUST NOT appear in:
+
 - Component props, hook return types, store state
 - API method return types (use generics instead)
 - Exported function signatures

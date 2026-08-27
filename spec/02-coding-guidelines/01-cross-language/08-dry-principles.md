@@ -35,6 +35,7 @@ When you find yourself writing the same logic a second time, **extract it immedi
 ```
 
 **Extraction targets:**
+
 - **3+ lines** of identical logic → Extract to function
 - **2+ components** sharing state logic → Extract to custom hook (React) or service (Go)
 - **2+ endpoints** sharing validation → Extract to middleware or shared validator
@@ -99,6 +100,7 @@ Each implementation references the schema version in a comment.
 ### During Code Review
 
 Ask these questions:
+
 - "Have I seen this pattern before in the codebase?"
 - "Would a new team member know where to find this logic?"
 - "If this requirement changes, how many files would I need to update?"

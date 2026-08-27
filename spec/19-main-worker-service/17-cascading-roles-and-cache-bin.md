@@ -164,6 +164,7 @@ After any of the above commits, Main:
 ```
 
 **Semantics:**
+
 - `InvalidateAll = true` ⇒ Worker MUST `DELETE FROM RoleAccessCache;` AND bump its local `CatalogVersion`.
 - `InvalidateAll = false` ⇒ Worker MUST `DELETE FROM RoleAccessCache WHERE RoleId IN (...);` AND bump its local `CatalogVersion`.
 - A request whose `CatalogVersion` is **older than** the Worker's current value is a **no-op** (out-of-order delivery is safe; the higher version already invalidated).
@@ -171,6 +172,7 @@ After any of the above commits, Main:
 **Response:** `200 OK` → `{ "AppliedAt": 1730000000, "EvictedCount": 2 }`.
 
 **Failure modes:**
+
 - Worker unreachable → Main retries per `15-tunable-constants.md` §2.1; final failure logs `MAIN-700-01 CacheInvalidationDeliveryFailed` (new error code, see §6) but **does not roll back the Main-side mutation**. The TTL safety net (default 600 s) bounds staleness. <!-- TUNABLE-WAIVER: 600 s = MainWorker.RoleCache.TtlSeconds, see §2.10 -->
 - Worker reachable but returns 5xx → same retry policy; same fallback.
 

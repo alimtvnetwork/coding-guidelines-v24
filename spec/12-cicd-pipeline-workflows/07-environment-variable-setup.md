@@ -122,6 +122,7 @@ syscall.SendMessage(syscall.HWND_BROADCAST, syscall.WM_SETTINGCHANGE, 0, "Enviro
 ```
 
 PATH is updated in both:
+
 - Registry (`HKCU\Environment\Path`)
 - PowerShell profile (`$PROFILE`)
 - Git Bash profiles (`~/.bashrc`, `~/.bash_profile`)
@@ -178,6 +179,7 @@ The tool maintains an `env-registry.json` file to track all managed variables:
 ```
 
 This registry enables:
+
 - `env remove` to know which profiles to clean
 - `env doctor` to verify all registrations are still active
 - Uninstall to remove all managed variables

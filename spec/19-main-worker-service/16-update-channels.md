@@ -44,6 +44,7 @@ ELSE
 ```
 
 Implementer obligations:
+
 1. The check MUST live in middleware, not the handler.
 2. The check MUST read `Settings.Env` from Seedable-Config (key `MainWorker.Environment`); never from a request-scoped value.
 3. The check MUST be covered by a regression test that asserts 403 when `Env=Production`.
@@ -197,6 +198,7 @@ All three channels produce a JID with a unique `InstructionId` (ULID). Worker de
 ### 5.3 No double-apply guard
 
 Worker MUST persist a `LastAppliedInstructionId` in the Settings tier. On startup, Worker:
+
 1. Reads `LastAppliedInstructionId`.
 2. If a channel offers an InstructionId equal to this, skip with `INSTRUCTION_ALREADY_APPLIED` (200 OK).
 

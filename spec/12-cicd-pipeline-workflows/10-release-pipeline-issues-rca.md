@@ -73,6 +73,7 @@ Error: Process completed with exit code 1.
 The release workflow ran `npm ci` to bootstrap a Node environment so it could call `node -p "require('./package.json').version"` to read the version string.
 
 **Root cause:**  
+
 1. `package.json` is updated by Lovable's preview environment whenever new deps are added.
 2. `package-lock.json` is **read-only** in this project and is *not* regenerated on every dep change.
 3. Therefore `package.json` and `package-lock.json` drift out of sync continuously.
@@ -80,6 +81,7 @@ The release workflow ran `npm ci` to bootstrap a Node environment so it could ca
 5. **Deeper cause:** the release pipeline had no business depending on Node at all. Reading a version string does not require `npm ci`.
 
 **Fix applied:**
+
 - Removed `actions/setup-node` and `npm ci` from `release.yml`.
 - Replaced `node -p` with a shell `resolve_version` function in `release.sh` that:
   1. Prefers `$RELEASE_VERSION` env var (set by workflow from `GITHUB_REF_NAME`).
@@ -110,6 +112,7 @@ checked out the target repository
 Built-in caching in `setup-python` and `setup-go` assumes the project has a canonical dependency manifest at a discoverable path. This repo is *not* a Python or Go project — it merely *contains* validator scripts in those languages with zero external deps. Built-in caching is the wrong tool.
 
 **Fix applied:**
+
 - Removed `cache: 'pip'` from `setup-python` and `cache: true` from `setup-go`.
 - Added explicit `actions/cache@v4` steps with cache keys derived from `hashFiles('linter-scripts/**/*.go')` and `hashFiles('linter-scripts/**/*.py')`.
 - Cache paths: `~/.cache/go-build`, `~/go/pkg/mod` for Go; `~/.cache/pip` for pip.
@@ -168,6 +171,7 @@ Error: Process completed with exit code 1.
 **Root cause:** The Windows `.ico` resource format hard-limits each frame to 256×256 px. `go-winres` refuses any larger source image. Local `go build` succeeds without resource embedding, so the constraint is invisible until CI runs.
 
 **Fix applied (in sibling reference implementation):**
+
 - Created a 256×256 copy `assets/icon-256.png`.
 - Updated `winres/winres.json` to reference the smaller file.
 - Kept the original 512×512 `icon.png` for web/docs.
@@ -318,6 +322,7 @@ sed -i "s|VERSION_PLACEHOLDER|${VERSION}|g; s|REPO_PLACEHOLDER|${GITHUB_REPOSITO
 **Root cause:** The compress step produced `app-v1.2.0-windows-amd64.zip`, but the checksum step (running in a different working directory) generated `checksums.txt` listing `app-windows-amd64.zip` (no version). Install scripts looked up the versioned name in a non-versioned manifest → mismatch.
 
 **Fix applied (in sibling reference implementation):**
+
 1. Centralize asset naming as a shell function:
    ```bash
    asset_name() { echo "app-${VERSION}-${OS}-${ARCH}.${EXT}"; }
@@ -361,6 +366,7 @@ sed -i "s|VERSION_PLACEHOLDER|${VERSION}|g; s|REPO_PLACEHOLDER|${GITHUB_REPOSITO
 Before committing changes to `.github/workflows/*.yml`, `release.sh`, `install.sh`, `install.ps1`:
 
 **Repo-specific (always required):**
+
 - [ ] No `npm`, `node`, `setup-node`, or JS dep introduced? → else **STOP**, see Issue #1.
 - [ ] No built-in `cache:` on `setup-python` / `setup-go`? → else **STOP**, see Issue #2.
 - [ ] All action versions pinned to exact tag (`@v6`, not `@latest`)? — Issue #8
@@ -371,6 +377,7 @@ Before committing changes to `.github/workflows/*.yml`, `release.sh`, `install.s
 - [ ] Every directory used has a `test -d` guard? — Issue #5
 
 **If pipeline grows (apply when relevant):**
+
 - [ ] Required-status-check jobs have NO job-level `if`? — Issue #6
 - [ ] Cache writes are inlined into the last validation job, not a trailing job? — Issue #7
 - [ ] `release.yml` has `cancel-in-progress: false`? — Issue #9

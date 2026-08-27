@@ -93,6 +93,7 @@ Every PR that touches `package.json`, `package-lock.json`, or `bun.lock` MUST be
 ### 3.2 Rejection Criteria
 
 Reject any PR that:
+
 - Upgrades Axios to a blocked version (`1.14.1`, `0.30.4`)
 - Upgrades Axios to any unverified version
 - Adds range symbols to the Axios version declaration

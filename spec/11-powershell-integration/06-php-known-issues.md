@@ -13,6 +13,7 @@ The QUpload plugin runs `token_get_all($content, TOKEN_PARSE)` on all non-templa
 ### Template Detection Logic
 
 Files are skipped (not validated) when they:
+
 - Start with `<?php`
 - **AND** contain `?>`
 
@@ -29,6 +30,7 @@ Pure PHP files (no closing `?>` tag) are **always validated**.
 ### Diagnostic Indicators
 
 When QUpload blocks activation due to syntax:
+
 - **error.txt**: `Plugin syntax validation failed for {slug} file: {path}: syntax error, unexpected token "array" (:{line})`
 - **stacktrace.txt**: Full trace from `UploadExtractTrait::checkPhpFileSyntax()`
 - **API response**: `Plugin uploaded but activation was blocked due to PHP syntax error in {path}`

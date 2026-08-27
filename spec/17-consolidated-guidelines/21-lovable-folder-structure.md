@@ -141,11 +141,13 @@ The `memory/index.md` has two sections:
 ```
 
 **Core section rules:**
+
 - Only rules that apply to **every** action across the entire project
 - Max ~150 characters per entry
 - Prefixed with 🔴 for CODE RED severity items
 
 **Memories section rules:**
+
 - Every memory file in `memory/` must have a corresponding entry
 - Format: `[Title](mem://category/filename) — Description`
 - Description must be specific enough to judge relevance without opening the file
@@ -283,6 +285,7 @@ The correct alternative approach.
 ### `overview.md`
 
 Project onboarding for AI. Must contain:
+
 - Project name and purpose
 - Tech stack summary
 - Key architecture decisions
@@ -291,6 +294,7 @@ Project onboarding for AI. Must contain:
 ### `user-preferences`
 
 User communication preferences (plain text, no frontmatter). Applied to every AI response. Examples:
+
 - Preferred language/tone
 - Timezone
 - Response format preferences

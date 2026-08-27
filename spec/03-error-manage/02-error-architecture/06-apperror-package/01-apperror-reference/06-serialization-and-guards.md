@@ -59,6 +59,7 @@ func causeMessage(e *AppError) string {
 ```
 
 **Rules:**
+
 - Uses type alias to prevent infinite recursion
 - `Cause` serialized as `"Cause"` string field (not nested error object)
 - Empty cause omitted via `omitempty`
@@ -101,6 +102,7 @@ func truncateData(data []byte, maxLen int) string {
 ```
 
 **Rules:**
+
 - Reconstructed `Cause` is a `plainError` struct — the original type is lost (acceptable for deserialization)
 - Stack trace, values, and diagnostics are fully preserved
 - **Error messages include the raw received data** (truncated to 200 bytes) for debugging malformed payloads

@@ -42,6 +42,7 @@
 ## Copy Button — Split Button Pattern
 
 The Copy button uses a **Split Button** pattern:
+
 - **Main area** (left): Copies the **Compact Report** instantly (no API call)
 - **Arrow/Chevron** (right): Opens a dropdown with all copy options
 

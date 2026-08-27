@@ -48,6 +48,7 @@ Comprehensive test coverage matrix mapping each RAG validation error code to its
 | `NegativeValue` | -256 | FAIL:9301 | Negative |
 
 **Boundary Tests:**
+
 - Minimum boundary (256): PASS
 - Maximum boundary (8192): PASS
 - Below minimum (255): FAIL
@@ -65,6 +66,7 @@ Comprehensive test coverage matrix mapping each RAG validation error code to its
 | `NotMultiple2000` | 2000 | FAIL:9302 | Near default |
 
 **Valid Multiples Tested:**
+
 - 256, 512, 1024, 2048, 4096, 8192
 
 ---
@@ -121,6 +123,7 @@ Comprehensive test coverage matrix mapping each RAG validation error code to its
 | `CaseSensitive` | NOMIC-EMBED-TEXT | FAIL:9305 | Wrong case |
 
 **Supported Models:**
+
 - `NomicEmbedText` (default)
 - `TextEmbedding3Small`
 - `TextEmbedding3Large`

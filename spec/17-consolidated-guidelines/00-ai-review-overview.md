@@ -14,6 +14,7 @@
 ## 2. How to Read the Guidelines
 
 When reviewing or generating code:
+
 1. Always start with `31-compiled-simple-coding-guidelines.md`. It overrides conflicting rules found elsewhere.
 2. If the task involves a specific domain (like Database or UI), locate the corresponding compiled spec in this folder (e.g., `18-database-conventions.md`).
 3. Assume rules are Zero-Tolerance unless a specific `lint-allow` exception is documented. 
@@ -21,6 +22,7 @@ When reviewing or generating code:
 ## 3. How to Review Code (Styling & Rules)
 
 When acting as a reviewer or when writing code, strictly check against:
+
 - **Zero Generated Code in Git**: Ensure `__pycache__`, `*.pyc`, `*.generated.*` are ignored in `.gitignore`. Proactively update `.gitignore` files if you see a new project being set up.
 - **Boolean Strictness**: Max 1 logical join (`&&` / `||`), no mixed polarity. Check CODE-RED-014.
 - **No Swallowed Errors**: Every catch block must log context.

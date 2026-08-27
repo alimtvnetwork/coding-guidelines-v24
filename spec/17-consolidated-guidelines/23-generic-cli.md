@@ -55,6 +55,7 @@ Standard layout for a CLI project:
 ```
 
 **Rules:**
+
 - `cmd/` contains only the entry point — no business logic
 - `internal/` is the main code tree — unexported by Go convention
 - One file per subcommand in `commands/`
@@ -92,6 +93,7 @@ func main() {
 ```
 
 **Rules:**
+
 - Each `Run*` function accepts `[]string` args
 - Each handler parses its own flags via `flag.NewFlagSet`
 - No global flag state
@@ -112,6 +114,7 @@ func RunList(args []string) {
 ```
 
 **Rules:**
+
 - Per-command `FlagSet` — never global flags
 - Defaults are explicit in the flag definition
 - Validate after parsing, fail fast with actionable error
@@ -145,6 +148,7 @@ All commands support `--format` with these values:
 | `markdown` | Documentation / reports |
 
 **Rules:**
+
 - Default is always `table`
 - JSON output must be valid, parseable JSON (arrays/objects)
 - CSV must include a header row
@@ -164,6 +168,7 @@ All commands support `--format` with these values:
 | 5 | Network error |
 
 **Rules:**
+
 - Every error prints to `stderr`, never `stdout`
 - Error messages include what failed AND what to do: `"Config file not found: ~/.config/app/config.json — run '<app> init' to create it"`
 - Batch operations collect errors and report at the end, exit with highest severity code
@@ -217,6 +222,7 @@ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X main.Version=$
 ```
 
 **Rules:**
+
 - Static linking (`CGO_ENABLED=0`) for all targets
 - Version embedded via `-ldflags` at build time
 - Self-update mechanism follows rename-first deploy pattern
@@ -269,6 +275,7 @@ Summary: 4 succeeded, 1 failed (1.4s total)
 ## Shell Completion
 
 Support tab-completion for:
+
 - Subcommand names
 - Flag names (including `--` prefix)
 - Flag values where applicable

@@ -644,6 +644,7 @@ private function extractStructuredFrames(Throwable $e): array
 ```
 
 Note: No `Errors` key at all in production. The error is fully logged server-side (both Tier 1 and Tier 2), but the API consumer only sees a generic message. This prevents:
+
 - Exposing internal file paths
 - Leaking class/method names
 - Revealing PHP version or WordPress internals

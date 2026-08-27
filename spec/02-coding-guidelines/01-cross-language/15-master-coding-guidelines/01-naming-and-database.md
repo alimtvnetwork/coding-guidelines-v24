@@ -9,6 +9,7 @@
 ## How to Use This Document
 
 This is the **master reference**. Every rule here is enforced across all languages. Language-specific details are in:
+
 - [PHP Standards](../../04-php/00-overview.md)
 - [Go Standards](../../03-golang/04-golang-standards-reference/00-overview.md)
 - [TypeScript Standards](../../02-typescript/08-typescript-standards-reference.md)
@@ -109,11 +110,13 @@ UserProfile.tsx      →  contains function UserProfile
 ### 1.4 — Zero Underscore Policy
 
 **Snake_case is prohibited** for all logic-level identifiers across PHP, Go, and TypeScript. This includes:
+
 - Variables, method names, properties, parameters
 - Log context array keys (PHP): use camelCase (`'postId'`, not `'post_id'`)
 - Internal array keys used in code logic
 
 **Exemptions** (persistence-level only):
+
 - WordPress hooks, capabilities, option keys, core table/column names
 - Database migration rename maps (old→new mappings)
 - PHP superglobals (`$_GET`, `$_POST`)

@@ -89,6 +89,7 @@ All page content is organized into `.riseup-card` sections. Each card is a logic
 ```
 
 **Rules:**
+
 1. Each card has exactly one `<h2>` heading with a dashicon
 2. Cards are stacked vertically with consistent spacing
 3. Cards MAY contain nested `.form-table`, `.wp-list-table`, or custom content
@@ -164,6 +165,7 @@ The actions bar provides primary page-level operations:
 ```
 
 **Rules:**
+
 1. Primary action is always `button-primary`, secondary actions are `button-secondary`
 2. Every button with an icon uses a dashicon `<span>` inside the button
 3. Inline status text (`riseup-inline-status`) appears after the last button
@@ -713,6 +715,7 @@ Rich stat displays with hero numbers:
 ```
 
 **Rules:**
+
 1. Stat cards use `display: flex; gap: 14px; flex-wrap: wrap`
 2. Each card has `flex: 1; min-width: 90px`
 3. Value is monospace, 20px, bold, primary color
@@ -819,6 +822,7 @@ For mutually exclusive options, use visual selection cards instead of radio butt
 ```
 
 **Rules:**
+
 1. Radio inputs are hidden (`display: none`)
 2. The `.active` class is toggled via JavaScript on selection
 3. Active card shows primary border + primary background tint
@@ -1127,6 +1131,7 @@ templates/
 ### 18.2 When to Extract a Partial
 
 Extract a partial when:
+
 1. The same HTML block appears on 2+ pages
 2. A single template file exceeds ~300 lines
 3. A logical section (modals, settings group) is self-contained

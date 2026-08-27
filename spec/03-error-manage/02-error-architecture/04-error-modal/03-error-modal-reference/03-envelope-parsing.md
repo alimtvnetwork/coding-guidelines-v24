@@ -45,6 +45,7 @@ The Universal Response Envelope provides six top-level blocks. The error modal c
 ```
 
 **Mapping:**
+
 - `BackendMessage` → Overview tab red banner
 - `DelegatedServiceErrorStack` → Stack tab (orange-themed PHP trace) + Traversal tab (legacy)
 - `DelegatedRequestServer` → Stack tab (purple-themed delegated section) + Request tab (3rd hop) + Traversal tab (NEW v2.0.0)
@@ -88,6 +89,7 @@ The Universal Response Envelope provides six top-level blocks. The error modal c
 ```
 
 **Mapping:**
+
 - `RequestedAt` + `RequestDelegatedAt` → Traversal tab endpoint flow
 - `SessionId` → Session tab auto-fetch trigger
 

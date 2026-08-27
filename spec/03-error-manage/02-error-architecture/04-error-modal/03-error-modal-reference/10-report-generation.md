@@ -23,6 +23,7 @@ export function generateCompactReport(error: CapturedError, app?: AppInfo): stri
 ```
 
 **Stripping rules for execution chain:**
+
 - Timestamps (e.g., `[12:58:22 AM] ⬡`) are removed
 - Base API URLs (e.g., `http://localhost:8080/api/v1`) are stripped to relative paths
 - Result: clean, scannable list like `GET /sites`, `POST /error-history`

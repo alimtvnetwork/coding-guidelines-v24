@@ -475,6 +475,7 @@ Three sources must always be in sync:
 | Release metadata | `.release/latest.json` or tags | CI/CD and tooling |
 
 When bumping a version:
+
 1. Update the `Version` constant in source code.
 2. Add the new section to `changelog.md`.
 3. Update any metadata files (e.g., `latest.json`).
@@ -671,6 +672,7 @@ main → release/1.2.0 → tag v1.2.0 → merge back to main
 ### Rollback
 
 If the release push fails:
+
 1. Switch back to the original branch.
 2. Force-delete the local release branch.
 3. Delete the local tag.

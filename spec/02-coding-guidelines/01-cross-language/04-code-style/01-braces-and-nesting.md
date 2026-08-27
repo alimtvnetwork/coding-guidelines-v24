@@ -131,6 +131,7 @@ if hasIssue {
 > Instead, each enum value **must** define a corresponding string constant, and the `case` labels **must** reference those constants. This prevents typos, enables compile-time safety, and ensures the string representation is defined once alongside the enum — not scattered across parser functions.
 >
 > **For full enum patterns, folder structure, and required methods, see:**  
+>
 > - **Go:** [Enum Specification](../../03-golang/01-enum-specification/00-overview.md) — pattern, required methods, folder layout  
 > - **TypeScript:** [TypeScript Enums](../../02-typescript/00-overview.md) — string enum definitions, usage patterns  
 > - **PHP:** [PHP Enums](../../04-php/01-enums.md) — backed enum classes
@@ -240,12 +241,14 @@ function parseEnvironment(input: string): Environment {
 ```
 
 **Conditions for exemption (from zero-nesting rule):**
+
 - Function is a pure enum parser (`FromString`, `fromString`, `Parse<Enum>`)
 - Uses `switch` (Go) or `match` (PHP 8.0+) — not chained `if/else`
 - Has an explicit `default` / `default =>` branch that returns an error
 - Contains no other logic beyond the mapping
 
 **Mandatory for all languages:**
+
 - Switch/match cases must use **enum constants or defined string constants** — never raw string literals
 - String representations are defined **once**, co-located with the enum type definition
 - **Go:** Constants use package-scoped names (`ProductionStr`), not type-prefixed names (`EnvironmentProductionStr`) — the package name (`environmenttype`) already provides the grouping
@@ -253,6 +256,7 @@ function parseEnvironment(input: string): Environment {
 ### Exemption: Optional-Field Validation (isDefined → isValid)
 
 When validating an **optional input field**, a two-level nested `if` is permitted where:
+
 - The **outer** `if` checks existence/presence (`isDefined`, `IsDefined`, `has_param`)
 - The **inner** `if/else` checks validity and returns an error on the `else` branch
 
@@ -270,6 +274,7 @@ if input.Config.IsDefined() {
 ```
 
 **Conditions for exemption:**
+
 - Outer condition is a pure existence/presence check
 - Inner condition validates the same field
 - The `else` branch returns/propagates an error

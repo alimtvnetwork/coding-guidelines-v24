@@ -138,6 +138,7 @@ Runs static analysis using `go vet` and `golangci-lint`.
 See [Vulnerability Scanning](../03-vulnerability-scanning.md) for full details.
 
 Runs `govulncheck` with third-party vs. stdlib differentiation:
+
 - Third-party vulnerabilities → **fail the build**
 - Standard library vulnerabilities → **warn only**
 
@@ -189,6 +190,7 @@ exit "$exit_code"
 ```
 
 Key details:
+
 - `set +e` prevents the step from exiting on the first test failure — capture the exit code instead
 - `tee` writes output to both stdout and a file for artifact upload
 - `PIPESTATUS[0]` captures the exit code of `go test`, not `tee`
@@ -217,6 +219,7 @@ Aggregates results from all test matrix jobs into a single report.
 ### Failure Report
 
 A script parses each suite's `test-output.txt` to extract:
+
 - Failing test names
 - Specific failure reasons (assertion errors, expected/got mismatches, panics, undefined references)
 
@@ -225,6 +228,7 @@ It produces a **"FAILURE REPORT (copy-paste ready)"** block — a self-contained
 ### Coverage Aggregation
 
 After failure reporting, merge all coverage profiles:
+
 1. Concatenate all `coverage-*.out` files (stripping duplicate `mode:` headers)
 2. Run `go tool cover -func=combined-coverage.out`
 3. Use `awk` to calculate per-package average coverage
@@ -265,6 +269,7 @@ CGO_ENABLED=0 GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags 
 ```
 
 Key details:
+
 - `CGO_ENABLED=0` produces static binaries with no C dependencies
 - `-s -w` strips debug symbols for smaller binaries
 - `-X` embeds the version string at compile time

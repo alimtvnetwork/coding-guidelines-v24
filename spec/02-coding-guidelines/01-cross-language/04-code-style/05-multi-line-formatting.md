@@ -12,6 +12,7 @@
 When a function/method **signature or call** has **more than two arguments**, each argument must be on its own line with consistent indentation and a **trailing comma** after the last argument (where syntax permits).
 
 This applies equally to:
+
 - **Function/method signatures** (parameter declarations)
 - **Function/method calls** (argument expressions)
 - **Constructor calls** (`new Foo(...)`)

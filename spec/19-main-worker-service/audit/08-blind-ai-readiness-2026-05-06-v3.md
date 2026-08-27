@@ -47,6 +47,7 @@ Subtotal recovered: **+62 raw points**, capped at +53 net by residual gaps below
 ### 2.1 Diagram debt (-8)
 
 `spec/19-main-worker-service/diagrams/` was not refreshed in Phase 13.2. The Mermaid/PNG diagrams still show:
+
 - 3-tier DB instead of 4-tier (Root/Settings/App/Session per FU-1).
 - `User` table boxes instead of `UserDirectory` / `AppUser` split.
 - No backup-node lane in the routing sequence diagram.
@@ -64,6 +65,7 @@ A blind AI will invent fixtures and drift from intent on field ordering, timesta
 ### 2.3 Prose-vs-seed drift residue (-4)
 
 `15-§4.1` alias map covers the 32 collisions caught in 07-, but spot-check finds **3 keys still only in prose**:
+
 - `MainWorker.Cache.WorkerToCompanyTtlSeconds` (mentioned `01-§5`, missing from `config.seed.json`).
 - `MainWorker.Routing.BackupPromotionGraceSeconds` (`18-§3`, not seeded).
 - `MainWorker.Sync.IncrementalBatchMaxRows` (`19-§4`, not seeded).

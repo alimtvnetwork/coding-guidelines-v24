@@ -1,6 +1,7 @@
 # Post-Install Shell Activation — Generic CLI Spec
 
 > **Related specs:**
+>
 > - [11-build-deploy.md](11-build-deploy.md) — install/deploy step that places the binary on PATH
 > - [19-shell-completion.md](19-shell-completion.md) — completion install uses the same profile-injection pattern
 > - [13-checklist.md](13-checklist.md) — implementation phases that include setup
@@ -223,6 +224,7 @@ behaviour where possible:
 ```
 
 The warning text MUST include both:
+
 1. The action the user should run (`toolname setup`).
 2. The reload step required after setup (`. $PROFILE`, `source ~/.<rc>`).
 

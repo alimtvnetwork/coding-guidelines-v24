@@ -23,6 +23,7 @@ Issues that are **critical** and must be fixed immediately:
 - [ ] Looks alright but contains hard-to-detect bugs
 
 **Examples:**
+
 - Calling methods on unchecked return values
 - Missing nil checks on pointers
 - Multiple defers creating unclear execution order

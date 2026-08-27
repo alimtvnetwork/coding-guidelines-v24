@@ -316,6 +316,7 @@ Standard error codes for reset operations (add to each CLI's error registry):
 | 8401-8409 | Nexus Flow | Reset errors |
 
 Common errors:
+
 - `x401`: Reset expired
 - `x402`: Invalid reset ID
 - `x403`: Reset already confirmed

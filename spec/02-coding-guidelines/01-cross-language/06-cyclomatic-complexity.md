@@ -47,6 +47,7 @@ public void Process(Order? order)
 ```
 
 **Problems:**
+
 - 5 levels of nesting — reader must track all conditions mentally
 - The "happy path" is buried at the deepest level
 - Adding a new validation requires finding the right nesting level
@@ -101,6 +102,7 @@ public void Process(Order? order)
 ```
 
 **Benefits:**
+
 - Zero nesting — every guard is at the same indentation level
 - Happy path is at the bottom, clearly visible
 - Adding a new guard is trivial — just add another `if (...) { return; }` block

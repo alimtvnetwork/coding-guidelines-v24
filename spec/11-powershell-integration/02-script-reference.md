@@ -162,6 +162,7 @@ function Format-ElapsedTime($Stopwatch) {
 ```
 
 **Output Examples:**
+
 - `2.3s` - Short duration
 - `1m 45.2s` - Longer duration
 
@@ -279,6 +280,7 @@ function Ensure-FirewallRules {
 ```
 
 **Requirements:**
+
 - Must run as Administrator
 - Windows PowerShell 5.1+ or PowerShell 7+
 
@@ -299,6 +301,7 @@ if (-not $SkipPull) {
 ```
 
 **Behavior:**
+
 - Skipped if `-SkipPull` flag
 - Warns but continues if git pull fails
 - Skips if not a git repository
@@ -329,6 +332,7 @@ if ($config.prerequisites.pnpm -and -not (Test-Command "pnpm")) {
 ```
 
 **Auto-Install:**
+
 - Uses winget for Go and Node.js
 - Uses npm for pnpm
 - Refreshes PATH after install
@@ -390,11 +394,13 @@ Pop-Location
 ```
 
 **PnP Benefits:**
+
 - No `node_modules` folder needed (or minimal)
 - Faster installs from shared store
 - Disk savings of 50-70%
 
 **Install Detection (v1.1.0+):**
+
 - Respects `EffectiveNodeLinker` setting (PnP checks `.pnp.cjs`, isolated checks `node_modules`)
 - `-i` and `-r` flags always trigger install, even if deps appear present
 

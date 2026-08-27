@@ -41,6 +41,7 @@ any of the following — adding them here is itself a CODE RED violation:
 - ❌ Any v1.0 implementation guidance — slot 24 is **v2.0-only**.
 
 Forbidden patterns above mirror:
+
 - [`12-jwt-delivery-contract.md` §11.1 / §11.3](./12-jwt-delivery-contract.md)
 - [`23-snapshot-storage-and-restore.md` §14.1 / §14.2 / §14.4](./23-snapshot-storage-and-restore.md)
 

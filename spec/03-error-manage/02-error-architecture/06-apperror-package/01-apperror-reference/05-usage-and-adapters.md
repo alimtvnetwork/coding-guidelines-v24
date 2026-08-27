@@ -108,6 +108,7 @@ Services return `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` to preserve
 ```
 
 **Rules:**
+
 - Services **never** return raw `(T, error)` for data-fetching operations — use `Result[T]` or `ResultSlice[T]`
 - Void operations (`Delete`, `MarkSynced`, etc.) may return plain `error`
 - Adapters are the **only** place that calls `.Value()`, `.Items()`, or `.AppError()` to convert back to tuples
@@ -174,6 +175,7 @@ plug := plugResult.Value()
 ```
 
 **Cross-service audit checklist** — when migrating a service to Result types, verify:
+
 1. All cross-service callers that hold a direct `*service.Service` reference
 2. All `main.go` initialization code that calls service methods
 3. All adapter methods are updated to unwrap the new return types
@@ -207,6 +209,7 @@ return apperror.NewType(apperrtype.EntryNotFound)
 ```
 
 **Exemptions:**
+
 - `filepath.Walk` callbacks (framework requires `error` interface)
 - E2E test harness (`e2e/` package) — test assertion errors, not production
 - Enum `UnmarshalJSON` / `MarshalJSON` methods (`internal/enums/*/variant.go`) — circular import risk with `apperror` package; these are standard library interface implementations
@@ -242,16 +245,19 @@ type OperationLog struct {
 ```
 
 **Why this matters:**
+
 - `*AppError` serializes to a complete JSON object with code, message, stack, values, and diagnostics
 - Raw `error` serializes to `{}` or requires per-struct custom `MarshalJSON` (DRY violation)
 - Error history DB stores `*AppError` as structured JSON — raw `error` cannot be queried
 - Subprocess JSON protocol transmits `*AppError` — raw `error` loses all context
 
 **Exemptions:**
+
 - The `Cause` field on `AppError` itself uses `error` (handled by custom `MarshalJSON/UnmarshalJSON` — see §11.2/§11.3)
 - Constructor parameters (`Wrap(cause error, ...)`) accept `error` at the wrapping boundary — this is where raw errors enter the system and get wrapped
 
 **Cross-language equivalent:**
+
 - **PHP:** Struct/class error fields use the framework's `Throwable` type with `stackTrace()` method, never bare `string` or `null`
 - **TypeScript:** Error fields use the framework's structured error type with `code`, `message`, and `stack` properties, never bare `Error` or `string`
 

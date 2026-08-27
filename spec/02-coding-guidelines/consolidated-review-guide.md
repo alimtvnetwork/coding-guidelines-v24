@@ -366,6 +366,7 @@ func (s *PluginService) Upload(ctx context.Context, req UploadRequest) apperror.
 ```
 
 **Stack trace gives you:**
+
 - `err.FullString()` → code + message + full stack + cause chain
 - `err.ToClipboard()` → markdown-formatted for AI paste
 - `err.CallerLine()` → `"Upload.go:42"` compact reference

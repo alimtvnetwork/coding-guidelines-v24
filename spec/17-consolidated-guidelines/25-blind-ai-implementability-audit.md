@@ -34,6 +34,7 @@
 ### 🔴 CRITICAL-1 — Linter Script Blindness (Severity: Highest)
 
 **The gap:** The consolidated docs reference exactly **3 linter scripts by name**:
+
 - `linter-scripts/validate-guidelines.py`
 - `linter-scripts/check-spec-cross-links.py`
 - `linter-scripts/check-code-collisions.py` _(does not even exist — the real name is `check-spec-cross-links.py` or `check-spec-folder-refs.py`)_
@@ -58,6 +59,7 @@ The repo actually ships **16 linter assets**:
 | `run.ps1` / `run.sh` | Linter orchestrators | ❌ |
 
 **Failure mode:** A blind AI will commit code that looks pristine but fails CI on the first push because:
+
 1. It used a forbidden token from `forbidden-strings.toml` it never saw.
 2. It bumped Axios to a blocked version (1.14.1 / 0.30.4) it doesn't know about.
 3. It added a sibling-repo reference without registering it in `spec-folder-refs.allowlist [external]`.
@@ -80,6 +82,7 @@ The repo actually ships **16 linter assets**:
 ### 🔴 CRITICAL-3 — Sync-Script Contract Is Implicit
 
 **The gap:** Consolidated docs mention `scripts/sync-version.mjs` and `scripts/sync-spec-tree.mjs` exist, but never specify:
+
 - The exact invocation order (bump `package.json` → `sync-version` → `sync-spec-tree`).
 - Which fields in `version.json` are computed vs hand-edited.
 - That `version.json` drift is a hard CI failure (`Error: Drift detected in version.json`).
@@ -94,6 +97,7 @@ The repo actually ships **16 linter assets**:
 ### 🟠 HIGH-1 — Error Code Registry Has No Live Inventory
 
 **The gap:** `03-error-management.md` §26 documents that an error code registry exists and that codes are PascalCase like `RagChunkNotFound`. It **does not** include:
+
 - The current list of codes already used (so the AI invents duplicates).
 - The numeric range allocations per subsystem (1xxx, 2xxx, ...).
 - The generator command that produces `apperror_codes_generated.go`, `ErrorCode.php`, `errorCodes.generated.ts`.
@@ -108,6 +112,7 @@ The repo actually ships **16 linter assets**:
 ### 🟠 HIGH-2 — Database Migration Mechanics Are Absent
 
 **The gap:** `18-database-conventions.md` documents naming, schema design, free-text rules, and the 3-tier split-DB pattern in 1,065 lines. It does **not** specify:
+
 - Which migration tool is used (`golang-migrate`, GORM AutoMigrate, custom SQL files, Atlas?).
 - Where migration files live on disk.
 - The naming convention for migration files.
@@ -124,6 +129,7 @@ The repo actually ships **16 linter assets**:
 ### 🟠 HIGH-3 — Self-Update Probe Has Documentation but No Runtime Contract
 
 **The gap:** `17-self-update-app-update.md` describes the 20-repo version probe, the Identity Ladder, and middle-out dispatch. It does **not** specify:
+
 - The exact regex string used to parse install URLs (the source has it; the consolidated paraphrases).
 - The exact env var names a host can set to override (`INSTALL_PROBE_OWNER`, `INSTALL_PROBE_BASE`, `INSTALL_PROBE_VERSION`, `INSTALL_PROBE_HANDOFF_DEPTH`).
 - The fail-open default version number (`14`).

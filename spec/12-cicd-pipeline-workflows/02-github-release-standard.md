@@ -81,6 +81,7 @@ OTHER=$(git log $RANGE --pretty=format:"- %s (%h)" --grep="^refactor\|^chore\|^d
 ```
 
 Categories rendered:
+
 - **Features** — `feat:` commits
 - **Bug Fixes** — `fix:` commits
 - **Maintenance** — `refactor:`, `chore:`, `docs:`, `style:`, `perf:`, `test:`, `ci:`, `build:` commits

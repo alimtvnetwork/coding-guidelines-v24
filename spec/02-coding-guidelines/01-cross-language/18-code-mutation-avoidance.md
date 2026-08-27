@@ -18,6 +18,7 @@
 ### Rule 1: Single Assignment
 
 Variables should be assigned once and not modified after. At worst case:
+
 - A loop collecting data (slice append) may reassign
 - If a variable must change, it should be done in **one method**, not across multiple
 
@@ -64,6 +65,7 @@ func (r *Receiver) GetLinesLock() []string {
 ```
 
 Provide both locked and unlocked versions:
+
 - `GetLines()` — non-locked (for single-goroutine use)
 - `GetLinesLock()` — locked (for concurrent use)
 

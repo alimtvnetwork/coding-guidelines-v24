@@ -109,10 +109,12 @@ Every key in a service result array or structured response **must** use a `Respo
 ### 3.2 When to Add a New Case
 
 Add a new `ResponseKeyType` case when:
+
 - A string key appears in **two or more** response arrays across different traits/classes.
 - A string key is part of a **client-facing API response** (even if used only once).
 
 Do **not** add cases for:
+
 - Internal-only metadata keys used within a single method (e.g., database record fields).
 - WordPress core keys (`type` in `error_get_last()`, array config keys).
 - Log context arrays (these are for debugging, not structured API contracts).
@@ -120,6 +122,7 @@ Do **not** add cases for:
 ### 3.3 Exemptions
 
 The following bare string keys remain permitted per project conventions:
+
 - **WordPress API contracts:** Hook names, option names, table column names (snake_case).
 - **Database record fields:** Column names read from `PDO::FETCH_ASSOC` results.
 - **Log context arrays:** Keys in the second argument of `$this->log()` calls.
@@ -130,6 +133,7 @@ The following bare string keys remain permitted per project conventions:
 ## 4. Multi-Line Array Formatting
 
 All response arrays **must** use one key-value pair per line. This improves:
+
 - **Readability** — Each field is immediately visible.
 - **Diff quality** — Changes to a single field produce a one-line diff.
 - **Code review** — Reviewers can scan vertically rather than parsing long horizontal lines.

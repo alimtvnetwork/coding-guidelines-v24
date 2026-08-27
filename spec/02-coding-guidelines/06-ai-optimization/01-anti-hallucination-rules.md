@@ -9,6 +9,7 @@
 ## How to Use
 
 AI agents **MUST** check every generated code block against these rules before output. Each rule has:
+
 - **Rule ID** — for referencing in reviews
 - **❌ Forbidden** — what to never generate
 - **✅ Required** — what to generate instead
@@ -130,6 +131,7 @@ AI agents **MUST** check every generated code block against these rules before o
 
 ❌ **Never generate:** `function process(data, true, false)`, `func Save(doc, isDraft bool)`  
 ✅ **Always generate:** Two named methods that express each intent explicitly:
+
 - `processWithValidation(data)` / `processWithoutValidation(data)`
 - `SaveDraft(doc)` / `PublishDocument(doc)`
 

@@ -27,6 +27,7 @@ cssClass() → match($this) {...}           variantInfoMap[variant].CssClass
 ```
 
 **Why info-object in Go?**
+
 - Go has no `match` expression — `switch` is verbose for per-variant metadata
 - A single map lookup is more efficient than multiple switch statements
 - The info struct is compile-time typed — missing fields are caught immediately
@@ -53,6 +54,7 @@ type VariantInfo struct {
 ```
 
 **Rules:**
+
 - Struct name: `VariantInfo` (always this name, in every enum package)
 - All fields are **exported** (PascalCase)
 - Fields are value types only — no pointers, no interfaces
@@ -102,6 +104,7 @@ var variantInfoMap = map[Variant]VariantInfo{
 ```
 
 **Rules:**
+
 - Map name: `variantInfoMap` (unexported — accessed via methods only)
 - Every variant in `All()` MUST have an entry — enforced by unit test
 - `Invalid` variant MUST have an entry (used as fallback)
@@ -149,6 +152,7 @@ func (v Variant) IsTerminal() bool {
 ```
 
 **Rules:**
+
 - `Info()` is the single access point — all other methods delegate to it
 - Unknown/invalid variants fall back to the `Invalid` entry (never panic)
 - Method names match the `VariantInfo` field names exactly

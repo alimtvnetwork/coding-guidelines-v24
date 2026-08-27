@@ -80,6 +80,7 @@ Every token has two values:
 Components NEVER check which theme is active. They always use `hsl(var(--primary))` — the cascade handles the rest.
 
 **Dark mode adjustments:**
+
 - Backgrounds: much darker (8-12% lightness)
 - Foreground text: lighter (85-95% lightness)
 - Primary/accent: +5% lightness for contrast on dark backgrounds
@@ -117,6 +118,7 @@ The design system aims for **subtle, responsive, professional** interactions:
 | Hover glow | `box-shadow` with `/ 0.1` to `/ 0.25` opacity | Soft halo, never harsh |
 
 **Anti-patterns to avoid:**
+
 - Bouncy or spring-like easing
 - Hover effects that take longer than `0.3s`
 - Transforms greater than `translateY(-4px)` or `scale(1.15)`

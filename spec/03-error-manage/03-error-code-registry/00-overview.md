@@ -95,6 +95,7 @@ Centralized error code registry ensuring no collisions between projects, consist
 ## Quick Reference
 
 **To register new codes:**
+
 1. Check the Range Allocation Map in `01-registry.md`
 2. Claim a project prefix
 3. Add your codes following category offsets

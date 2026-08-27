@@ -66,6 +66,7 @@
 ## Validation
 
 All criteria are testable via code review or static analysis. Each AC maps to rules in:
+
 - [01-naming-and-conventions.md](./01-naming-and-conventions.md)
 - [02-method-design.md](./02-method-design.md)
 - [03-error-handling.md](./03-error-handling.md)

@@ -447,6 +447,7 @@ CREATE TABLE UserBill (
 `Description`, `Notes`, and `Comments` MUST be nullable (`TEXT NULL`). They are optional context fields, not required business data.
 
 > **Naming-only summary:**
+>
 > - Entity/reference/master tables → `Description`
 > - Transaction / invoice / bill / payment / order tables → `Notes`, `Comments`
 > - All three use PascalCase and remain nullable

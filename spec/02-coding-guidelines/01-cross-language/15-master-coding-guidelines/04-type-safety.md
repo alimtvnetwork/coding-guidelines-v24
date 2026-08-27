@@ -42,6 +42,7 @@ func ProcessData(data PluginDetails) apperror.Result[PluginSummary] { ... }
 ### Why
 
 Multiple return values:
+
 - Create ambiguous call sites — callers must remember positional meaning
 - Break serialization — you cannot JSON-encode a multi-return tuple
 - Defeat the Result pattern — error handling becomes scattered across return positions
@@ -129,6 +130,7 @@ Name the return struct after the operation + `Outcome` or `Output`:
 ### Why
 
 Type assertions:
+
 - Panic at runtime if the unchecked form is used (`x.(string)` without comma-ok)
 - Signal that the data model is untyped (`interface{}`, `map[string]any`)
 - Defeat the generics-first and strict-typing policies
@@ -147,6 +149,7 @@ Type assertions:
 **Cast errors must NEVER be swallowed.** The blank-identifier pattern (`_, _ :=`) and bare assertions are both prohibited. All casts produce an `*apperror.AppError` on failure that must be returned or logged.
 
 **Exemptions:**
+
 - Go standard library interfaces: `net.Listener.Addr().(*net.TCPAddr)` — framework boundary
 - `apperror` package internals — error unwrapping
 - Test helpers using `require` / `assert` (test-only code) — but prefer `typecast.CastOrFail[T]` + `t.Fatalf`

@@ -45,6 +45,7 @@ Table names MUST be **singular** — they represent the entity type, not the col
 | `UserRoles` | `UserRole` |
 
 **Why singular?**
+
 - The table defines the **entity schema**, not the collection
 - PK becomes `{TableName}Id` naturally: `User` → `UserId`, `Transaction` → `TransactionId`
 - No ambiguity about singular vs plural forms (`Status` vs `Statuses` vs `StatusTypes`)
@@ -152,6 +153,7 @@ CREATE TABLE StatusType (
 | Fragmentation | None | High (random inserts) |
 
 > **Rule:** ❌ Do NOT use UUID as primary key unless **ALL THREE** are true:
+>
 > 1. Records created across multiple disconnected systems
 > 2. No central ID authority
 > 3. IDs must be publicly exposed and non-guessable
@@ -278,6 +280,7 @@ CREATE TABLE UserRole (
 ```
 
 **Junction table rules:**
+
 - Name: singular compound name → `UserRole` (not `UserRoles`)
 - PK: `{TableName}Id` → `UserRoleId`
 - FK columns: exact same names as source PKs → `UserId`, `RoleId`
@@ -530,6 +533,7 @@ type Transaction struct {
 ```
 
 **Rules:**
+
 - `db:"ColumnName"` tags are always required
 - `json` tags are omitted — Go serializes PascalCase by default
 - Add `json:",omitempty"` only when zero-value fields should be excluded
@@ -1103,6 +1107,7 @@ CREATE TABLE AuditLog (
 ```
 
 **Required fields** in every waiver:
+
 - `@waiver <RULE-ID>` — exact rule ID being suppressed
 - `@reason <text>` — single-line justification
 - `@approved-by <handle>` — reviewer who approved
@@ -1169,6 +1174,7 @@ Examples:
 ```
 
 **Rules:**
+
 - `UTC-timestamp` is `YYYYMMDDHHmmss` — collision-proof and lex-sortable.
 - `verb` is one of: `add`, `drop`, `rename`, `alter`, `create`, `backfill`, `index`.
 - `scope` follows PascalCase: `<Column>_to_<Table>` or just `<Table>`.
@@ -1188,6 +1194,7 @@ ALTER TABLE User DROP COLUMN LastLoginAt;
 ```
 
 **Required headers:**
+
 - `@migration: <name>` — must match the file name (sans timestamp and `.sql`).
 - `@up` — forward SQL (always required).
 - `@down` — reverse SQL (required unless the migration is non-reversible — then add `@irreversible: <reason>`).
@@ -1233,6 +1240,7 @@ CREATE TABLE AuditLog (...);
 ```
 
 The migration runner routes to the correct SQLite file based on `@target`:
+
 - `root` → `~/.app/root.db` (cross-app config, license)
 - `app` → `~/.app/<appName>/app.db` (per-app state)
 - `session` → `~/.app/<appName>/sessions/<sessionId>.db` (per-user-session state)

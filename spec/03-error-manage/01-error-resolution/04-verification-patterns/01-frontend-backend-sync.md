@@ -36,6 +36,7 @@ curl -s http://localhost:8080/api/v1/health | jq .
 ```
 
 **Check for:**
+
 - ✅ HTTP 200 status code
 - ✅ Standard envelope `{success: true, data: {...}}`
 - ✅ Correct Content-Type header (`application/json`)
@@ -57,6 +58,7 @@ cat src/components/shared/BackendStatus.tsx
 ```
 
 **Check for:**
+
 - ✅ Uses HTTP status code (2xx) as primary indicator
 - ✅ Handles response envelope correctly
 - ✅ Has proper error handling
@@ -75,6 +77,7 @@ fetch('/api/v1/health')
 ```
 
 **Check for:**
+
 - ✅ Network request visible in DevTools
 - ✅ Response matches expected format
 - ✅ No CORS errors
@@ -179,6 +182,7 @@ ws.onclose = (e) => console.log('WS Closed:', e.code, e.reason);
 ```
 
 **Check for:**
+
 - ✅ Connection established (onopen fired)
 - ✅ Messages received in expected format
 - ✅ Ping/pong working (if implemented)

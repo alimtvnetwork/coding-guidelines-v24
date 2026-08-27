@@ -104,6 +104,7 @@ Per verbatim §Login 3:
 5. Main writes `UserDirectory.LastSeenAt = now()`, zeroes the proxy buffer, returns 201 to the browser plus a session cookie (or returns "verify email" status if email-confirm flag is on).
 
 **Failure modes:**
+
 - Worker rejects password (weak / breached) → Main returns the Worker's 400 envelope unchanged, **does not** persist a `UserDirectory` row.
 - Worker unreachable → Main returns 503 `Error.SubCode = WorkerUnreachable` with retry-after; `UserDirectory` row is created only after the Worker ACK.
 
@@ -133,6 +134,7 @@ Per verbatim §Login 3:
 ## 7. Worker JWT Validation (Worker side)
 
 Every Worker request validates:
+
 1. Signature against the Worker's own public key (Worker is the issuer in v2.0.0; Main holds the public key only for session-cookie refresh).
 2. `exp` not passed.
 3. `aud` matches this Worker's URL.
@@ -187,6 +189,7 @@ In addition to the OAuth client-credentials surface in §2.3 (Main → Worker or
 | `PairingId` | Mandatory string claim | MUST match a row in `BackupPairing` on the receiving node, or request is rejected with **HTTP 421 Misdirected Request** (error code `MAIN-800-04`). |
 
 **Rules:**
+
 1. The `Backup` audience MUST NOT be granted to UI clients, React, or end-user sessions — S2S only.
 2. A token missing `PairingId`, or carrying a `PairingId` not registered on the receiving node, MUST be rejected at the proxy layer **before** application logic runs (CODE RED: no silent fallback to other audiences).
 3. Token signing key, TTL, and rotation cadence reuse the existing OAuth client-credentials infrastructure from §2.3; only the `aud` and `scope`/`PairingId` claims are new.

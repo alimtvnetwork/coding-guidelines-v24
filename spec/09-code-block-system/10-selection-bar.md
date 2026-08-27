@@ -10,6 +10,7 @@
 The selection bar and line interaction system provides IDE-like line selection within code blocks. Users can click, Shift+click, drag, and use keyboard arrows to select lines. A floating selection bar appears at the bottom of the code block showing the active selection and offering copy/clear actions.
 
 **Source files:**
+
 - `codeBlockLineHandlers.ts` — click, keyboard, pin/range logic
 - `codeBlockDragHandlers.ts` — drag-select and hover-highlight
 - `codeBlockActionHandlers.ts` — copy-selected and clear-selected handlers
@@ -52,6 +53,7 @@ interface PinRefs {
 **Trigger:** Click on `.code-line` or `.code-line-number` (excluding `.code-tool-btn`, `.code-font-controls`, `.copy-selected-bar`)
 
 **Flow:**
+
 1. Resolve the wrapper via `.closest(".code-block-wrapper")`
 2. Determine line index via `getLineIndex()` helper
 3. Call `pinSingle()`:
@@ -65,6 +67,7 @@ interface PinRefs {
 **Trigger:** Click with Shift key held, when the wrapper has a previous pin
 
 **Flow:**
+
 1. Retrieve the previously pinned index from `lastPinned` map
 2. Set anchor to previous pin, cursor to clicked line
 3. Call `pinRange()`:
@@ -77,14 +80,17 @@ interface PinRefs {
 **Trigger:** Arrow Up / Arrow Down when `activeWrapperRef` is set
 
 **Guards:**
+
 - Ignored if `document.activeElement` is `INPUT`, `TEXTAREA`, or `contentEditable`
 - `e.preventDefault()` is called to suppress default scroll
 
 **Without Shift:**
+
 - Move the single pin to the adjacent line
 - Scroll the new line into view via `scrollIntoView({ block: "nearest" })`
 
 **With Shift:**
+
 - Extend or contract the range from the anchor
 - Anchor stays fixed; only cursor moves
 - Selection bar updates to show the new range
@@ -94,11 +100,13 @@ interface PinRefs {
 **Trigger:** `mousedown` on a `.code-line-number` element
 
 **Drag lifecycle:**
+
 1. `mousedown` — Record anchor index, clear existing pins, pin the anchor line
 2. `mousemove` (on `document`) — Use `document.elementFromPoint(clientX, clientY)` to find the element under the cursor. If it resolves to a line in the same wrapper, call `pinRange()` from anchor to current
 3. `mouseup` (on `document`) — Clear drag state
 
 **Resolution logic (`resolveDragIdx`):**
+
 - First checks for `.code-line-number` via `.closest()` and uses DOM index
 - Falls back to `.code-line` and reads `data-line` attribute (1-based, converted to 0-based)
 
@@ -109,11 +117,13 @@ interface PinRefs {
 **Trigger:** `mouseover` on any element inside `.code-block-wrapper`
 
 **Behavior:**
+
 1. Resolve line index from target via `getLineIndex()`
 2. Add `.line-highlight` class to the line and its line number
 3. On `mouseout`, remove all `.line-highlight` classes in the wrapper
 
 **Styling:**
+
 - Line background: `hsl(220 15% 16%)`
 - Line number color: `hsl(var(--primary))`
 - Line number background: `hsl(220 15% 12%)`
@@ -157,6 +167,7 @@ Placed in `.code-header-right`, next to the line count. Shows the same text as t
 ### Update Label (`updateSelectedBar`)
 
 Called after every pin operation:
+
 1. Query all `.code-line.line-pinned` elements in the wrapper
 2. If none: hide both the bar and header label
 3. If pinned lines exist: extract `data-line` values, compute min/max
@@ -169,6 +180,7 @@ Called after every pin operation:
 **Trigger:** Click `.copy-selected-btn`
 
 **Flow:**
+
 1. Find the parent `.code-block-wrapper`
 2. Query all `.code-line.line-pinned` elements
 3. Extract `textContent` from each, join with newlines
@@ -180,6 +192,7 @@ Called after every pin operation:
 **Trigger:** Click `.clear-selected-btn` (the ✕ button)
 
 **Flow:**
+
 1. Find the parent `.code-block-wrapper`
 2. Remove `.line-pinned` from all elements
 3. Hide the selection bar (`display: none`)

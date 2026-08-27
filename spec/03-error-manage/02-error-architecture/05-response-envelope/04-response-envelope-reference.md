@@ -195,12 +195,14 @@ Present only when debug/traversal mode is enabled in config.
 ### Boolean Fields
 
 All boolean fields in API responses **MUST** use a prefix:
+
 - **`Is`** — for state/identity booleans (e.g., `IsSuccess`, `IsFailed`, `IsSingle`, `IsMultiple`, `IsEmpty`, `IsActive`)
 - **`Has`** — for presence booleans (e.g., `HasAnyErrors`)
 
 **Do NOT** use bare boolean names like `success`, `active`, `enabled`. Use `isSuccess`, `isActive`, `isEnabled` instead.
 
 This applies to:
+
 - Envelope fields (`Status`, `Attributes`)
 - Individual result object fields
 - All backend response payloads (Go, PHP, WebSocket events)

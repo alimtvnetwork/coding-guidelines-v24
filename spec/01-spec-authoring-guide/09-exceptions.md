@@ -40,6 +40,7 @@ spec/
 **Exception:** `readme.md` files are allowed WITHOUT numeric prefixes.
 
 **Where:**
+
 - `.lovable/memories/readme.md` — Project memory overview
 - Any project root `readme.md`
 

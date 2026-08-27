@@ -83,6 +83,7 @@ func tryUpdaterFallback() bool {
 ```
 
 If `<binary>-updater` is found on PATH:
+
 - Execute `<binary>-updater run` synchronously.
 - Pipe all stdout/stderr to the terminal.
 - On success, exit with code 0.
@@ -144,6 +145,7 @@ func launchHandoff(copyPath, repoPath string) {
 ```
 
 **Critical behaviors:**
+
 - Uses `cmd.Run()` (blocking), NOT `cmd.Start()` (non-blocking).
 - Terminal stays attached — user sees all build/deploy output.
 - The `--verbose` flag is forwarded if present.
@@ -166,15 +168,18 @@ func runUpdateRunner() {
 The `executeUpdate()` function:
 
 **On Windows:**
+
 1. Generate a temporary PowerShell script with UTF-8 BOM.
 2. Script calls `run.ps1 -Update` in the repo directory.
 3. Execute via `powershell.exe -ExecutionPolicy Bypass -NoProfile -NoLogo -File <script>`.
 
 **On Linux/macOS:**
+
 1. Execute `bash run.sh --update` directly.
 2. No temporary script needed.
 
 Both paths invoke the build script which:
+
 1. Pulls latest code (`git pull`).
 2. Resolves dependencies (`go mod download`).
 3. Builds the binary (`go build`).

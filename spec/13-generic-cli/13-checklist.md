@@ -1,6 +1,7 @@
 # Implementation Checklist
 
 > **Related specs:**
+>
 > - [00-overview.md](00-overview.md) — design philosophy guiding each phase
 > - [02-project-structure.md](02-project-structure.md) — scaffold phase package layout
 > - [11-build-deploy.md](11-build-deploy.md) — build and deploy phase details
@@ -10,6 +11,7 @@
 This is a sequenced implementation plan. Execute each phase in order.
 Reference the numbered spec files for detailed patterns.
 All constraints from `08-code-style.md` apply to every file you write.
+
 - After any Go refactor or file split, run `go test ./<affected-package>` immediately.
 - Do not leave unused imports or stale symbols for a later cleanup pass.
 

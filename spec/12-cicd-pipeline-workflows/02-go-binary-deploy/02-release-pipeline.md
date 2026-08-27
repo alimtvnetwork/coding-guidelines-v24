@@ -243,6 +243,7 @@ chmod +x dist/install.sh
 ### PowerShell Installer (`install.ps1`)
 
 Features:
+
 - Auto-detect CPU architecture (amd64/arm64)
 - Download versioned `.zip` from GitHub Releases
 - Verify SHA-256 checksum against `checksums.txt`
@@ -253,6 +254,7 @@ Features:
 ### Bash Installer (`install.sh`)
 
 Features:
+
 - Auto-detect OS (`linux`/`darwin`) and architecture (`amd64`/`arm64`)
 - Download versioned `.tar.gz` from GitHub Releases
 - Verify SHA-256 checksum (`sha256sum` or `shasum -a 256` fallback)

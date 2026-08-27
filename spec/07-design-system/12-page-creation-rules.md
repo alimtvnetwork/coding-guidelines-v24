@@ -14,6 +14,7 @@ When building new pages, follow these rules to maintain visual consistency with 
 ## Rule 1: No Page-Specific Colors
 
 Every color on every page MUST come from the theme token registry. No page may introduce:
+
 - Hardcoded hex/rgb values
 - Tailwind literal color classes (`bg-purple-600`)
 - Inline style color values
@@ -52,6 +53,7 @@ Never skip heading levels (no H1 → H3).
 ## Rule 4: Motion Budget
 
 Each page should use no more than:
+
 - 3 unique transition durations
 - 2 unique easing functions
 - 1 keyframe animation (beyond shared ones)
@@ -63,6 +65,7 @@ This prevents visual noise. Stick to the shared transitions from [06-motion-tran
 ## Rule 5: Responsive First
 
 Design for mobile (< 768px) first, then enhance:
+
 - Single column on mobile
 - Grid layouts on tablet/desktop
 - Sidebar collapses to sheet on mobile
@@ -86,6 +89,7 @@ Each section is visually self-contained and can be reordered.
 ## Rule 7: Spacing Rhythm
 
 Maintain vertical rhythm between sections:
+
 - Section-to-section gap: `4rem` to `6rem`
 - Heading-to-content gap: `1rem` to `1.5rem`
 - Content-to-content gap: `0.5rem` to `1rem`
@@ -96,6 +100,7 @@ Maintain vertical rhythm between sections:
 ## Rule 8: Dark Mode Compatibility
 
 Every page must work in both light and dark modes without modification. This is automatic if all colors use tokens. Verify by toggling themes and checking:
+
 - Text contrast (WCAG AA: 4.5:1 minimum)
 - Border visibility
 - Hover state visibility

@@ -218,6 +218,7 @@ A new sub-range `MAIN-810` for sync-pipeline errors observed at Main, and a new 
 | `MAIN-810-01` | `21185` | `BackupCompactionStalled` | "Backup acknowledgement lag exceeds `QuarantineCompactionOverrideSeconds`; compaction blocked." | n/a | `19-incremental-backup-sync.md` §4 |
 
 Reserved-range table (§4 of `13-…`) gains:
+
 - `WORKER-21092-21094` consumed by `WORKER-910-01..03` (Phase 7).
 - `21185` consumed by `MAIN-810-01` (Phase 7).
 - `MAIN-21186-21199` remains for future expansion.

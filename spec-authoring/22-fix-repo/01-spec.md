@@ -73,12 +73,14 @@ TargetVersions = { v ∈ ℤ | max(1, Current - M) <= v <= Current - 1 }
 ```
 
 Examples (Current = 18):
+
 - default / `-2` → `{16, 17}`
 - `-3` → `{15, 16, 17}`
 - `-5` → `{13, 14, 15, 16, 17}`
 - `-all` → `{1, 2, …, 17}`
 
 Examples (Current = 3):
+
 - default / `-2` → `{1, 2}`
 - `-3` → `{1, 2}`  (clamped — never below `1`)
 - `-all` → `{1, 2}`

@@ -68,6 +68,7 @@ The default reference implementation is **Laravel (PHP)**. Every rule in this sp
 > **Future stacks explicitly supported:** .NET, Go (Golang), Python, Node.js, additional PHP frameworks (e.g., Symfony, raw PHP), WordPress as a host.
 
 Implementer obligations regardless of stack:
+
 1. Implement the same REST API surface (`06-core-api-endpoints.md`).
 2. Honor the same auth contract (`05-auth-and-2fa.md`).
 3. Use the same main-DB schema (`03-main-db-schema.md`) — column names PascalCase, PKs `{TableName}Id INTEGER AUTOINCREMENT`, no UUIDs.

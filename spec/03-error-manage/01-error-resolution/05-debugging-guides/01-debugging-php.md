@@ -21,6 +21,7 @@ The plugin follows a strict initialization order to prevent errors:
 3. **STEP 3+: Components** - All other components initialize after database is ready
 
 This order is enforced by **reusable helper functions**:
+
 - `ensure_directories_exist()` - Creates/verifies all directories (only runs once)
 - `ensure_database_ready()` - Initializes database (only runs once, requires directories)
 
@@ -112,6 +113,7 @@ define('PLUGIN_ERROR_LOGGING', true);  // Set to false to disable
 ### Issue: Plugin won't activate
 
 **Check:**
+
 1. PDO SQLite extension installed?
    - Look for: "pdo_sqlite extension is loaded" in debug.log
    - If not found, install PHP SQLite extension
@@ -127,12 +129,14 @@ define('PLUGIN_ERROR_LOGGING', true);  // Set to false to disable
 ### Issue: Database connection fails
 
 **Check debug.log for:**
+
 - "Database directory: [path]" - Is path correct?
 - "Database directory created successfully" - Did creation work?
 - "Database directory is writable" - Check permissions
 - "Main database PDO connection established" - Did connection succeed?
 
 **Check error.log for:**
+
 - PDO exceptions with detailed error messages
 - File permission errors
 - SQLite errors
@@ -140,6 +144,7 @@ define('PLUGIN_ERROR_LOGGING', true);  // Set to false to disable
 ### Issue: Components not initializing
 
 **Check debug.log for:**
+
 - "Initializing Component..." - Each component logs initialization
 - Look for "✓ Component initialized" vs "✗ Component class not found"
 - Missing dependencies will be logged

@@ -22,6 +22,7 @@
 | Enum types | PascalCase, **`Type` suffix required** | `UploadSourceType`, `CapabilityType`, `HttpMethodType` | PHP 8.1+ native backed enums |
 
 > **PSR-4 file naming convention:**
+>
 > - **All classes** under `includes/` use PascalCase filenames matching the class name (e.g., `EnvelopeBuilder.php`, `SnapshotFactory.php`)
 > - **Enums** in `includes/Enums/` use `{DefinitionName}Type.php` — PascalCase with `Type` suffix, no prefix, no hyphens, no underscores (e.g., `UploadSourceType.php` contains `enum UploadSourceType: string`)
 

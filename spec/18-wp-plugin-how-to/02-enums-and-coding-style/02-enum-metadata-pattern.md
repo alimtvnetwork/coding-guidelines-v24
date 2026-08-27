@@ -93,6 +93,7 @@ When multiple cases share a domain concept, add a group helper:
 | Explicit groups | `isLifecycle()` → `isAnyOf(Enable, Disable, Delete)` |
 
 Group helpers should be added when:
+
 - Multiple cases share a **domain concept**
 - The combination appears in **2+ call sites**
 - The prefix-based shortcut (`str_starts_with`) is applicable

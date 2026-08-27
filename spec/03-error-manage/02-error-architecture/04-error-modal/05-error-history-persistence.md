@@ -238,6 +238,7 @@ export function ErrorQueueBadge() {
 **Component:** `Sheet` (side drawer, `sm:max-w-lg`)
 
 **Features:**
+
 - Search/filter by message, code, endpoint
 - Multi-select with checkboxes
 - Bulk actions: View (in queue), Copy (export), Delete

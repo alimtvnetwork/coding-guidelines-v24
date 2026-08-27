@@ -3,6 +3,7 @@
 **Version:** 3.2.0  
 **Updated:** 2026-04-16  
 **Source Specs:**  
+
 - [Go Enum Specification](../02-coding-guidelines/03-golang/01-enum-specification/00-overview.md)  
 - [TypeScript Enums](../02-coding-guidelines/02-typescript/00-overview.md)  
 - [PHP Enums](../02-coding-guidelines/04-php/01-enums.md)  
@@ -610,6 +611,7 @@ Hint: run `node scripts/codegen/gen-all-enums.mjs --all` and commit the result
 ### 11.6 Forbidden Patterns
 
 A blind AI must **never**:
+
 - Hand-edit a `*_generated.{go,ts,php,rs}` file — changes will be overwritten on next codegen.
 - Define an enum directly in a language file — it will collide with future codegen.
 - Use a numeric value directly in business code — use the enum constant via `ParseEnum`/`from`/`parse`.

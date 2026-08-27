@@ -184,6 +184,7 @@ register_shutdown_function(function() {
 ### Context Enrichment
 
 Every `error()` and `logException()` call automatically captures:
+
 - 6-frame backtrace
 - HTTP method and endpoint
 - User-agent and IP
@@ -364,6 +365,7 @@ Every failure log entry follows this structure:
 ### Session-Based Logging
 
 Every HTTP request gets a unique session ID. Full request/response data is captured:
+
 - Headers (with Authorization redacted)
 - Bodies (truncated at 50KB)
 - Timing
@@ -441,6 +443,7 @@ interface EnvelopeErrors {
 ### Envelope Parsing
 
 The API client's `parseEnvelope` detects failed responses and extracts:
+
 - `Errors.BackendMessage` — Primary error text
 - `Errors.DelegatedServiceErrorStack` — Delegated server stack trace lines (legacy)
 - `Errors.DelegatedRequestServer` — Full delegated server error details (NEW v2.0.0)
@@ -491,6 +494,7 @@ When `sessionId` is present, the modal automatically fetches session-level diagn
 ### Error Reporting Bundle
 
 The "Download Bundle" button exports:
+
 - All diagnostic data as JSON
 - Syntax-highlighted error report
 - Execution chain and click path

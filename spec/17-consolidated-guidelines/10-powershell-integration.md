@@ -196,6 +196,7 @@ Uses all defaults: pnpm PnP with `.pnpm-store` in project root.
 ### Node 24+ / Cross-Drive Fallback
 
 If `usePnp` is enabled, the runner falls back to `node-linker=isolated` when:
+
 - Node.js major version is **24+**
 - The pnpm store is on a **different drive** than the project
 
@@ -335,6 +336,7 @@ if ($config.prerequisites.pnpm -and -not (Test-Command "pnpm")) { Install-Pnpm }
 ## Force Clean Build (`-Force`)
 
 Removes:
+
 - `.pnp.cjs` and `.pnp.loader.mjs` files
 - `node_modules/` directory
 - `dist/` directory

@@ -103,6 +103,7 @@ func NewType(errType apperrtype.ErrorType) *AppError {
 ```
 
 **Rules:**
+
 - Single `Variation uint16` enum in `variation.go` — all domains in one file
 - Global `variantRegistry` maps each `Variation` → `VariantStructure{Name, Code, Message, Variant}`
 - `Variation` implements `ErrorType` interface (`Code()` + `Message()` + `Name()`)

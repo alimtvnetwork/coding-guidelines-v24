@@ -18,6 +18,7 @@
 **AND** the config version is set to "1.0.0" in the database
 
 **Edge Cases:**
+
 - **GIVEN** `config.seed.json` is missing **WHEN** first-run seeding is attempted **THEN** the tool exits with a clear error referencing the expected file path
 - **GIVEN** `config.seed.json` fails JSON schema validation **WHEN** seeding is attempted **THEN** all validation errors are listed and seeding is aborted
 
@@ -30,6 +31,7 @@
 **AND** the version is updated to "1.3.0"
 
 **Edge Cases:**
+
 - **GIVEN** the seed version is LOWER than the DB version **WHEN** the CLI starts **THEN** seeding is skipped entirely and a debug log is emitted
 - **GIVEN** the seed version EQUALS the DB version **WHEN** the CLI starts **THEN** seeding is skipped (no-op)
 - **GIVEN** two CLI instances start simultaneously with the same seed file **WHEN** both attempt seeding **THEN** the database transaction ensures only one succeeds and the other detects the version is already current
@@ -48,6 +50,7 @@
 **THEN** a new entry is appended to `changelog.md` with version, date, and change description
 
 **Edge Cases:**
+
 - **GIVEN** `changelog.md` does not exist **WHEN** a version change occurs **THEN** the file is created with a header and the first entry
 - **GIVEN** `changelog.md` is read-only **WHEN** an append is attempted **THEN** the change proceeds but a warning is logged about the changelog failure
 
@@ -62,6 +65,7 @@
 **THEN** the value is returned from the `sync.Map` cache without a database query
 
 **Edge Cases:**
+
 - **GIVEN** the cache is empty (cold start) **WHEN** `GetSetting(key)` is called **THEN** all settings are loaded from DB into cache first, then the value is returned
 - **GIVEN** a setting is updated via API **WHEN** the update is confirmed **THEN** the cache is invalidated for that key and refreshed on next read
 - **GIVEN** two goroutines concurrently write different values for the same key via `sync.Map.Store()` **WHEN** both complete **THEN** the last write wins and subsequent reads return a consistent value (no panic or corruption)

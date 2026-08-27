@@ -653,6 +653,7 @@ Change HSL values in `:root {}` and `.dark {}` — every component updates autom
 | Dark mode | Backgrounds: 5-12% lightness; Foregrounds: 85-95% lightness |
 
 **Validation rules:**
+
 - Heading gradients must remain visually distinct
 - Primary and accent should have minimum 60° hue difference
 - Text on colored backgrounds must meet WCAG AA contrast (4.5:1)

@@ -96,6 +96,7 @@ composer require --dev phpstan/phpstan-strict-rules
 ```
 
 Adds enforcement for:
+
 - No dynamic property access
 - No `empty()` usage (use strict comparison)
 - No loose comparison (`==` / `!=`)

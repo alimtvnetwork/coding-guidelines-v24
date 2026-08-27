@@ -60,6 +60,7 @@ CREATE TABLE User (
 ### 1.4 When UUID Is Acceptable
 
 Only use UUID when **all** of these are true:
+
 1. Records are created across multiple disconnected systems
 2. There is no central ID authority
 3. IDs must be publicly exposed and non-guessable
@@ -182,6 +183,7 @@ The project follows the **Split DB** pattern: multiple small SQLite databases pe
 ### 4.2 Fallback: MySQL
 
 Use MySQL only when:
+
 - High concurrent write volume exceeds SQLite's single-writer model
 - Multi-server access to the same database is required
 - The application requires server-level replication
@@ -390,6 +392,7 @@ When generating or reviewing a `CREATE TABLE` statement:
 6. **Use the exact column names** `Description`, `Notes`, `Comments` — no synonyms (`Memo`, `Remarks`, etc.). Rules 10/11 fix the names.
 
 > **Naming-only summary (mirrors Rule 12 callout):**
+>
 > - Entity / reference / master tables → `Description`
 > - Transaction / invoice / bill / payment / order tables → `Notes`, `Comments`
 > - All three use PascalCase and remain nullable

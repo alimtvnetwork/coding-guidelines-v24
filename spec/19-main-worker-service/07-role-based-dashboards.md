@@ -99,6 +99,7 @@ public function handle(Request $request, Closure $next, string $pageCode): Respo
 Route declaration (resolves F-A-34 — stack-agnostic contract first, Laravel example second):
 
 **Stack-agnostic contract.** Every route that mutates or reads a governed page MUST be wrapped by an access guard that:
+
 1. Resolves the route to its `Code` (PascalCase, from `AccessItem` ref table per `03-` §2.6.1).
 2. Calls `guardUserHasAccess(userId, pageCode)` BEFORE the controller body.
 3. On denial, returns the `AccessDenied` envelope per `08-error-contract.md` §3.5 with HTTP 403.

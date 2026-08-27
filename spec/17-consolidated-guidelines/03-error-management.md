@@ -387,6 +387,7 @@ interface ErrorState {
 ### Compact Report (Default Copy Format)
 
 The default copy output includes:
+
 - Error code, message, HTTP status
 - Request URL, method, timestamp
 - **Delegated Server Info** (built from `CapturedError.envelopeErrors.DelegatedRequestServer`) — no API call needed
@@ -878,6 +879,7 @@ All four live at `spec/03-error-manage/03-error-code-registry/08-linter-scripts/
 ### 27.7 Schema Reference
 
 The per-module `error-codes.json` schema is documented at:
+
 - `spec/03-error-manage/03-error-code-registry/07-schemas/error-code.schema.json`
 - `spec/03-error-manage/03-error-code-registry/07-schemas/error-codes-index.schema.json`
 
@@ -907,6 +909,7 @@ Remap mapping lives at the module's `EcosystemRemapIndex` path. The remap is **b
 ### 27.9 Collision Resolution
 
 13 historical collisions have been resolved (full log: `03-collision-resolution-summary.md`). The two intentional overlaps are:
+
 - **PS/AB SEO 9500–9540** — format-separated (`PS-9500-00` vs flat `9500`).
 - **GS local vs SM-GS remap** — by design via the ecosystem remap pattern.
 

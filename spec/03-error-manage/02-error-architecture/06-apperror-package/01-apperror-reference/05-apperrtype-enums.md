@@ -592,6 +592,7 @@ return apperror.FailSettings(apperror.NewType(apperrtype.ConfigKeyMissing))
 | No display methods | `String()`, `TypeNameCodeMessage()`, `CodeTypeName()`, `Error()`, `Panic()` |
 
 **Breaking changes:**
+
 - Import path unchanged (`types/apperrtype`)
 - Variant names unchanged (`apperrtype.SiteNotFound`, `apperrtype.DBQueryFailed`)
 - `ErrorType` interface gains `Name() string` method

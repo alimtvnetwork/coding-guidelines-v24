@@ -121,10 +121,12 @@
 **Overlap:** PowerShell Integration (PS, 9500-9599) and AI Bridge SEO (AB, 9500-9540) share the 9500-9540 sub-range.
 
 **Resolution:** This is a **known intentional overlap** that does not cause runtime collisions due to format separation:
+
 - **PS codes** use prefixed format: `PS-9500-00`, `PS-9501-01`, etc. (3-segment, string-based)
 - **AB SEO codes** use flat integer format: `9501`, `9502`, etc. (Go constants, integer-based)
 
 The two formats are distinguishable at parse time by their encoding. No reassignment is required. Both modules document their codes independently:
+
 - PS: `spec/11-powershell-integration/04-error-codes.md`
 - AB SEO: `spec/11-ai-bridge-cli/01-backend/16-ai-seo-error-codes.md`
 
@@ -135,6 +137,7 @@ The two formats are distinguishable at parse time by their encoding. No reassign
 **Collision:** AI Transcribe CLI voice-related specs used 13200-13308 (voice commands, voice cloning, TTS providers), directly overlapping WPP (WP Plugin Publish, 13000-13999).
 
 **Resolution:** All AIT voice codes reassigned to their canonical 14xxx sub-ranges per the AIT allocation map:
+
 - Voice Commands: 13200-13206 → **14200-14206**
 - Voice Cloning: 13250-13257 → **14300-14307**
 - TTS Providers: 13300-13308 → **14150-14158**
@@ -441,6 +444,7 @@ All CLI frontends use a consistent error code pattern at offset +50 from their b
 | `GEN-600-02` | `ErrCastSliceElementFailed` | `typecast.CastSliceOrFail[T]()` |
 
 **Rules:**
+
 - These codes are emitted exclusively by `pkg/typecast/` — never constructed manually
 - The `AppError` includes `.WithSkip(1)` so stack traces point to the caller
 - Cast errors must **never** be swallowed — see §7.2 and §10 in [03-casting-elimination-patterns.md](../../02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md)

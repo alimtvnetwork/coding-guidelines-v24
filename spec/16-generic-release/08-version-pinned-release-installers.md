@@ -5,6 +5,7 @@
 > **Status:** Authoritative — implementers MUST follow this spec verbatim.
 
 > **Related specs:**
+>
 > - [03-install-scripts.md](03-install-scripts.md) — generic installer pipeline (placeholder substitution, checksum, PATH)
 > - [02-release-pipeline.md](02-release-pipeline.md) — release CI stages
 > - [05-release-assets.md](05-release-assets.md) — asset naming and packaging

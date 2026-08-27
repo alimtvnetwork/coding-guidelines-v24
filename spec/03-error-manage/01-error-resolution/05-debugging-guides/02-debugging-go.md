@@ -304,10 +304,12 @@ func (w *statusResponseWriter) WriteHeader(status int) {
 ### Issue: "Connection refused" on startup
 
 **Symptoms:**
+
 - Server appears to start but clients can't connect
 - Health check returns "connection refused"
 
 **Check:**
+
 1. Is the server binding to the correct address?
    ```go
    // ❌ Wrong - only localhost
@@ -327,10 +329,12 @@ func (w *statusResponseWriter) WriteHeader(status int) {
 ### Issue: 404 on API base URL
 
 **Symptoms:**
+
 - `GET /api/v1` returns 404
 - Frontend shows "Backend disconnected"
 
 **Check:**
+
 1. Is there a handler for the base URL?
    ```go
    // Add index route
@@ -349,10 +353,12 @@ func (w *statusResponseWriter) WriteHeader(status int) {
 ### Issue: Response format mismatch
 
 **Symptoms:**
+
 - Backend returns 200 OK
 - Frontend still shows "disconnected"
 
 **Check:**
+
 1. Is the response using the standard envelope?
    ```go
    // ❌ Wrong
@@ -369,6 +375,7 @@ func (w *statusResponseWriter) WriteHeader(status int) {
 ### Issue: CORS errors
 
 **Symptoms:**
+
 - Browser console shows CORS errors
 - Requests work from curl but not browser
 
@@ -397,6 +404,7 @@ func CORSMiddleware(next http.Handler) http.Handler {
 ### Issue: Database "locked" errors
 
 **Symptoms:**
+
 - SQLite returns "database is locked"
 - Concurrent requests fail
 
@@ -642,6 +650,7 @@ op := database.NewDbOperation("User", database.OpUpdate)
 ### Rule
 
 Use GORM for 99% of database operations. Raw SQL is forbidden except for:
+
 - FTS5 virtual tables (SQLite limitation)
 - Vector storage operations (if no ORM support)
 - Complex CTEs/recursive queries

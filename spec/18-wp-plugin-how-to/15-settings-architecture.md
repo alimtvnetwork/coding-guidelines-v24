@@ -39,6 +39,7 @@ enum OptionNameType: string
 ```
 
 **Rules:**
+
 1. Plugin option names use PascalCase prefix + PascalCase suffix (e.g., `RiseupSnapshotSettings`)
 2. WordPress core option names retain their original format (e.g., `active_plugins`)
 3. Every `get_option()` and `update_option()` call MUST use `OptionNameType::Case->value`
@@ -87,6 +88,7 @@ enum SettingsKeyType: string
 ```
 
 **Rules:**
+
 1. All settings keys use PascalCase as the enum value
 2. The `legacyMap()` provides backward compatibility with snake_case keys
 3. `migrateArray()` transforms an entire array in one call
@@ -195,6 +197,7 @@ $retentionDays     = $snapshotSettings[SettingsKeyType::RetentionDays->value]
 ```
 
 **Rules:**
+
 1. ALWAYS use null coalescing (`??`) with an explicit default
 2. Enum defaults reference the enum's `->value`, not the case itself
 3. Boolean defaults use `false` (opt-in) or `true` (opt-out) explicitly
@@ -323,6 +326,7 @@ Settings pages use the WordPress Options API flow:
 ```
 
 This uses WordPress's built-in `options.php` handler which:
+
 1. Verifies the nonce (from `settings_fields()`)
 2. Calls the registered sanitize callback
 3. Saves to `wp_options`
@@ -805,6 +809,7 @@ A specialized settings pattern for per-endpoint toggles:
 ```
 
 **Rules:**
+
 1. Endpoints are grouped by category with group headers
 2. Each endpoint has independent enabled/auth toggles
 3. Group data comes from `data/endpoints.json` processed by PHP
@@ -817,6 +822,7 @@ A specialized settings pattern for per-endpoint toggles:
 ### 15.1 Extraction Criteria
 
 Extract a settings section into a partial when:
+
 1. The section has ≥5 form fields
 2. The section has its own save/action button (AJAX-based)
 3. The section is logically independent (snapshot settings, log settings)
@@ -889,6 +895,7 @@ Within a card, logical groups are separated by `<h3>` headings:
 ### 16.1 WordPress Form Save (Global)
 
 The main settings form uses WordPress Options API with `submit_button()`:
+
 - Saves via `POST` to `options.php`
 - Redirects back with `?settings-updated=true`
 - Success notice rendered from query param
@@ -896,6 +903,7 @@ The main settings form uses WordPress Options API with `submit_button()`:
 ### 16.2 AJAX Save (Section-Level)
 
 Individual sections may have their own save buttons that use AJAX:
+
 - Uses `type="button"` to prevent form submission
 - Calls REST API or AJAX endpoint
 - Shows inline status feedback

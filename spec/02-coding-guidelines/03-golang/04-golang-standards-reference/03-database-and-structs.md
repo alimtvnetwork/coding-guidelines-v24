@@ -91,6 +91,7 @@ type PluginDetails struct {
 ```
 
 **Rules:**
+
 - **No tag:** Field marshals as its Go name (PascalCase) — this is the default
 - **`json:",omitempty"`:** Only when zero-value fields should be excluded from output
 - **`json:"-"`:** Only when a field must be excluded from JSON entirely

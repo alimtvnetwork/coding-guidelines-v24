@@ -10,6 +10,7 @@
 All interactions use **event delegation**. A single set of listeners is attached to the markdown container element. Each handler uses `.closest(selector)` to check if the click target is relevant.
 
 Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
+
 - `codeBlockActionHandlers.ts` — copy, download, fullscreen, checklist
 - `codeBlockLineHandlers.ts` — line click, pin, range, keyboard
 - `codeBlockDragHandlers.ts` — drag-select, hover, font size
@@ -21,6 +22,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click `.copy-code-btn`
 
 **Behavior:**
+
 1. Read `data-code` attribute (HTML-escaped raw code)
 2. Decode escaped characters (`&#10;` → `\n`, `&amp;` → `&`, etc.)
 3. Copy to clipboard via `copyTextToClipboard()` (see Clipboard spec)
@@ -47,6 +49,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click `.download-code-btn`
 
 **Behavior:**
+
 1. Read `data-code` (escaped raw code) and `data-ext` (file extension)
 2. Decode escaped characters
 3. Create `Blob` with `type: "text/plain"`
@@ -62,17 +65,20 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click `.fullscreen-code-btn`
 
 **Behavior:**
+
 1. Read `data-block-id` from button
 2. Toggle state: if current fullscreen block matches ID → exit, otherwise enter
 3. `useSyncFullscreenClass` adds/removes `.code-fullscreen` class on the wrapper
 4. An overlay `<div class="code-fullscreen-overlay">` is rendered behind the block
 
 **Exit methods:**
+
 - Click fullscreen button again
 - Click the overlay
 - Press **Escape** key (`useEscapeFullscreen` hook)
 
 **Fullscreen layout:**
+
 - Block becomes `position: fixed; inset: 2rem; z-index: 999`
 - Overlay is `position: fixed; inset: 0; z-index: 998; background: hsl(0 0% 0% / 0.7); backdrop-filter: blur(4px)`
 - Body has `flex-direction: column; max-height: calc(100vh - 4rem)`
@@ -85,6 +91,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click `.font-increase-btn`, `.font-decrease-btn`, or `.font-reset-btn`
 
 **Behavior:**
+
 1. Read `data-block-id` to find the target wrapper
 2. Read current `--code-font-size` from computed style
 3. Compute new size:
@@ -108,12 +115,14 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click on a `.code-line` or `.code-line-number` (not on tool buttons)
 
 **Single click:**
+
 1. Clear all `.line-pinned` classes in the wrapper
 2. Add `.line-pinned` to the clicked line AND its corresponding line number
 3. Update selection bar with "Line {N}"
 4. Store as anchor for future Shift+click
 
 **Shift+click:**
+
 1. Use previously stored anchor line
 2. Pin all lines from anchor to clicked line (inclusive)
 3. Update selection bar with "Lines {from}–{to}"
@@ -125,14 +134,17 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Arrow Up / Arrow Down when a wrapper is active
 
 **Without Shift:**
+
 - Move pin to adjacent line (single line selected)
 - Scroll line into view
 
 **With Shift:**
+
 - Extend/contract the range from anchor
 - Update selection bar
 
 **Guards:**
+
 - Ignores input if `document.activeElement` is `INPUT`, `TEXTAREA`, or `contentEditable`
 - Prevents default scroll behavior
 
@@ -143,6 +155,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Mousedown on `.code-line-number`
 
 **Behavior:**
+
 1. `mousedown` on a line number starts drag: record anchor, clear existing pins, pin anchor
 2. `mousemove` (on document): resolve line under cursor, pin range from anchor to current
 3. `mouseup` (on document): end drag state
@@ -156,6 +169,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** `mouseover` on any element inside `.code-block-wrapper`
 
 **Behavior:**
+
 1. Resolve line index from target
 2. Add `.line-highlight` class to that line and its line number
 3. On `mouseout`, remove all `.line-highlight` classes in the wrapper
@@ -167,6 +181,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click `.copy-selected-btn` in the selection bar
 
 **Behavior:**
+
 1. Find all `.code-line.line-pinned` in the wrapper
 2. Extract `textContent` from each
 3. Join with `\n`
@@ -180,6 +195,7 @@ Source: `useCodeBlockEvents.ts` → creates handlers from 3 files:
 **Trigger:** Click `.clear-selected-btn` (✕) in the selection bar
 
 **Behavior:**
+
 1. Remove `.line-pinned` from all elements in the wrapper
 2. Hide the selection bar (`display: none`)
 3. Hide the header selection label
