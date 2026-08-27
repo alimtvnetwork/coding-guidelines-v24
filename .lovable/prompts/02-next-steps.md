@@ -2,6 +2,9 @@
 
 
 {{n}} = 1
+> `{{n}}` is a positive integer injected at runtime representing the exact number of next execution steps to process.
+
+/goal Execute exactly the next `{{n}}` steps from the pending queue without skipping any, while strictly following anti-hallucination checks to ensure requirements (like pinning the latest version in the README on release) are followed.
 
 ## RULE 0 - EXACTLY `{{n}}` NEXT STEPS (MUST)
 
@@ -151,3 +154,11 @@ Before touching code, verify guideline sources and follow them:
 ## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+
+
+## Anti-Hallucination & Compliance Checklist
+Before finalizing this turn, you MUST manually verify the following to prevent hallucination and ignored instructions:
+- [ ] **Exact N Constraint:** Did I produce exactly `{{n}}` steps (or process exactly `{{n}}` tasks)? 
+- [ ] **File Presence:** Did I verify that the files I am referencing actually exist on disk? (No guessing).
+- [ ] **README Version Pinning:** If a release occurred, did I verify that the root `readme.md` has the latest version strictly pinned?
+- [ ] **Guideline Compliance:** Did I adhere strictly to the coding guidelines, including Markdown rules (MD022/MD032) and the parameter-per-line formatting rule?

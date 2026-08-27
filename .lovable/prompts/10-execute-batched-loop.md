@@ -189,3 +189,10 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 - slug: execute-batched-loop
 - status: active
+
+
+## Anti-Hallucination & Compliance Checklist
+Before finalizing this turn, you MUST manually verify the following to prevent hallucination and ignored instructions:
+- [ ] **File Presence:** Did I verify that the files I am referencing actually exist on disk? (No guessing).
+- [ ] **README Version Pinning:** If a release occurred, did I verify that the root `readme.md` has the latest version strictly pinned?
+- [ ] **Guideline Compliance:** Did I adhere strictly to the coding guidelines, including Markdown rules (MD022/MD032) and the parameter-per-line formatting rule?
