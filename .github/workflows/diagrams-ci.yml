@@ -137,4 +137,3 @@ jobs:
             spec/**/images/*.png
           if-no-files-found: ignore
           retention-days: 7
-

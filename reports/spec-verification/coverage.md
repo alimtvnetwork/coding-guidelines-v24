@@ -42,4 +42,3 @@
 - `spec/22-app-issues/01-index.md`
 - `spec/23-app-db/01-index.md`
 - `spec/24-app-ui-design-system/01-index.md`
-

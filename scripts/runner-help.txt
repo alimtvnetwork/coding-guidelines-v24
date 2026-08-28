@@ -26,4 +26,3 @@
     --max-lines <n>   Max function body lines (default: 15)
     --json            JSON output
     -d                Skip validation, only git pull
-

@@ -74,4 +74,3 @@ jobs:
           path: artifacts/branch-protection/
           if-no-files-found: ignore
           retention-days: 30
-

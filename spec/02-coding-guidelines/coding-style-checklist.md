@@ -56,3 +56,4 @@ func ProcessTransaction(
 
 - **Encoding:** All files MUST be encoded in **UTF-8 without BOM**.
 - **Line Endings:** All files MUST use strictly **Unix-style Line Feeds (LF / \n)**. Carriage returns (\r\n) are strictly prohibited.
+- **EOF Newline:** All source files, markdown, and config files MUST end with a single empty newline (\n). This should be handled by .editorconfig (insert_final_newline = true).

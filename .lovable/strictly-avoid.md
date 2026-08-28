@@ -75,7 +75,8 @@ This includes — but is not limited to:
 Forbidden:
 - ❌ Running scripts/release.mjs or 
 pm run release for standard tasks, documentation updates, bug fixes, or minor features.
-- ❌ Creating elease: vX.Y.Z commits and git tag vX.Y.Z on every single conversation turn.
+- ❌ Creating 
+elease: vX.Y.Z commits and git tag vX.Y.Z on every single conversation turn.
 - ❌ Treating the end of an AI turn as the "End of Tunnel Release" unless the user EXPLICITLY commands a version release.
 
 Allowed work:
@@ -83,5 +84,4 @@ Allowed work:
 - ✅ Pushing standard commits to the branch (git push).
 - ✅ Executing a release **ONLY** when the user explicitly says "release", "bump version", or something explicitly confirming a version bump is needed for distribution.
 
-**Why:** Releasing on every commit completely pollutes the git history and version tags (e.g., bumping from v6.24.0 to v6.31.0 in just a few hours for minor formatting/docs). 
-
+**Why:** Releasing on every commit completely pollutes the git history and version tags (e.g., bumping from v6.24.0 to v6.31.0 in just a few hours for minor formatting/docs).

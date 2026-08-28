@@ -2108,3 +2108,4 @@ This will fetch the latest versions of the read, write, plan, execute, and relea
 - [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/03-guideline-prompt-and-installer-upgrade.md)
 - [Plan: Normalize Encoding](.lovable/plans/pending/05-fix-encoding.md)
   - [Plan: Rename Overviews and JSON Installer](.lovable/plans/pending/04-rename-overviews-and-installer-json.md)
+- [Plan: Trailing Newlines & AI Scripts](.lovable/plans/pending/06-trailing-newlines-and-ai-scripts.md)

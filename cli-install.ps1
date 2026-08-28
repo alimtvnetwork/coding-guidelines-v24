@@ -662,4 +662,3 @@ Restore-CallerPreferences
     $global:LASTEXITCODE = $code
     return
 }
-

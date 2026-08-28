@@ -1491,4 +1491,3 @@ if (INVOKED_DIRECTLY) {
 }
 
 export { BUNDLES, MANIFEST, bashScript, powershellScript };
-
