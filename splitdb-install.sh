@@ -227,7 +227,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 splitdb-install v6.30.0"
+echo "  📦 splitdb-install v6.31.0"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then

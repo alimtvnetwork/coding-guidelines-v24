@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.30.0",
+  "Version": "6.31.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "62c915330bc22d8a99538dcaf0a51d9f9432fa02",
+  "LastCommitSha": "28282d310d9563e8d498ece4b0796c96d08fdc2a",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -54,20 +54,20 @@
     "19-plan-spec-steps-v2.md",
     "20-audit-app-spec.md"
   ],
-  "version": "6.30.0",
+  "version": "6.31.0",
   "updated": "2026-08-28",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "62c915330bc22d8a99538dcaf0a51d9f9432fa02",
-    "shortSha": "62c9153",
+    "sha": "28282d310d9563e8d498ece4b0796c96d08fdc2a",
+    "shortSha": "28282d3",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 711,
-    "totalLines": 150829,
+    "totalLines": 150841,
     "totalFolders": 23,
-    "totalBytes": 5424780,
+    "totalBytes": 5425298,
     "rootFiles": 6
   },
   "folders": [
@@ -94,8 +94,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
       "fileCount": 216,
-      "lineCount": 34150,
-      "byteCount": 1070472
+      "lineCount": 34155,
+      "byteCount": 1070711
     },
     {
       "path": "03-error-manage",
@@ -315,8 +315,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 53,
-      "lineCount": 10707,
-      "byteCount": 661334
+      "lineCount": 10714,
+      "byteCount": 661613
     },
     {
       "path": "21-app",

@@ -51,3 +51,8 @@ func ProcessTransaction(
 
 - Any temporary code, scratchpads, or debugging scripts you create must be written to the \.lovable/temp-scripts/\ directory.
 - **NEVER** commit temporary scripts to Git.
+
+## 4. File Encoding & Line Endings
+
+- **Encoding:** All files MUST be encoded in **UTF-8 without BOM**.
+- **Line Endings:** All files MUST use strictly **Unix-style Line Feeds (LF / \n)**. Carriage returns (\r\n) are strictly prohibited.

@@ -53,3 +53,7 @@
 - .lovable/plans/subtasks/04-rename-overviews-and-installer-json/02-enhance-installers.md
 - .lovable/plans/subtasks/04-rename-overviews-and-installer-json/03-update-readme.md
 - .lovable/plans/subtasks/04-rename-overviews-and-installer-json/04-release.md
+- .lovable/plans/pending/05-fix-encoding.md
+- .lovable/plans/subtasks/05-fix-encoding/01-normalize-encoding.md
+- .lovable/plans/subtasks/05-fix-encoding/02-update-checklist.md
+- .lovable/plans/subtasks/05-fix-encoding/03-release-6.31.0.md
