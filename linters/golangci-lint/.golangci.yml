@@ -32,6 +32,9 @@ linters:
     # ── Error handling ────────────────────────────────────────────
     - errcheck        # Ensure errors are handled
     - errorlint       # Error wrapping best practices
+    # CODE-RED-026: *AppError return type enforcement (custom, via validate-guidelines.go)
+    # CODE-RED-027: No raw terminal/log error output (custom, via validate-guidelines.go)
+    # See: spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md
 
     # ── General quality ───────────────────────────────────────────
     - gosimple

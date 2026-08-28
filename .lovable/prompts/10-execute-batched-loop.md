@@ -214,4 +214,4 @@ PowerShell: `Invoke-WebRequest -Uri https://raw.githubusercontent.com/<owner>/<r
 
 ## Version Bumping Rule
 
-If the task involves a release, DO NOT manually search and replace versions. Execute `.lovable/release/bump_versions.py --type <major|minor|patch>`. If the script does not exist, fall back to the release prompt bootstrapping rules.
+If the task involves a release, DO NOT manually search and replace versions. Execute `.lovable/release/bump_versions.py --type <major|minor|patch>`. If the script does not exist, fall back to the release prompt bootstrapping rules from .lovable/prompts/18-release.md (must read non-negotiable)

@@ -35,7 +35,7 @@
   "linters": "inherit",
   "codingGuideline": {
     "repositoryUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-    "version": "6.24.0",
+    "version": "6.25.0",
     "previousVersion": "unknown",
     "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications.",
     "prompts": []
@@ -48,7 +48,7 @@
     },
     "sourceRepository": "https://github.com/alimtvnetwork/prompt-architect-v2",
     "installedAt": "2026-08-26T17:29:00Z",
-    "version": "6.24.0",
+    "version": "6.25.0",
     "lastCommit": "<git sha>",
     "fileMapping": []
   }

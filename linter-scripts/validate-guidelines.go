@@ -1,6 +1,6 @@
 // Package main — Cross-Language Coding Guidelines Validator (Go Edition)
 //
-// Version: 1.5.0  (2026-04-19) — Added P2/P3/P5/P7 boolean-principle checks.
+// Version: 1.6.0  (2026-08-28) — Added CODE-RED-026 (*AppError returns) and CODE-RED-027 (no raw terminal error output).
 //
 // A Go port of validate-guidelines.py that validates Go, PHP, TypeScript,
 // and Rust source files against the coding guidelines defined in
@@ -26,6 +26,8 @@
 //	CODE-RED-023  Raw `!` on function/method calls                       [P3]
 //	CODE-RED-024  Bare true/false as positional argument                 [P5]
 //	CODE-RED-025  Assignment inside if/while condition                   [P7]
+//	CODE-RED-026  Go service functions must return *AppError, not bare error
+//	CODE-RED-027  Raw terminal/log output of error — must wrap in AppError first
 //	STYLE-001     Blank line before return
 //	STYLE-002     No else after return
 //	STYLE-003     Blank line after closing brace
@@ -370,9 +372,35 @@ func checkFunctionLength(lines []string, path string, lang string, maxLines int)
 }
 
 var (
-	goStringEnumPattern      = regexp.MustCompile(`^type\s+\w+\s+string\s*$`)
-	goTupleReturnPattern     = regexp.MustCompile(`func\s.*\)\s*\(\*?\w+,\s*error\)`)
-	goRawErrorCodePattern    = regexp.MustCompile(`apperror\.(New|Wrap|Fail\w*)\(\s*"E\d+`)
+	goStringEnumPattern   = regexp.MustCompile(`^type\s+\w+\s+string\s*$`)
+	goTupleReturnPattern  = regexp.MustCompile(`func\s.*\)\s*\(\*?\w+,\s*error\)`)
+	goRawErrorCodePattern = regexp.MustCompile(`apperror\.(New|Wrap|Fail\w*)\(\s*"E\d+`)
+
+	// CODE-RED-026: Detect functions returning bare `error` (not *AppError).
+	// Matches:  func Foo() error {
+	//           func Foo(x int) (SomeType, error) {
+	//           func (r Recv) Foo() error {
+	// Does NOT match functions that return *AppError or Result[T].
+	goBareErrorReturnPattern = regexp.MustCompile(
+		`^\s*func\b.*\)\s+(?:error|\([^)]*\berror\b[^)]*\))\s*(?:\{|$)`,
+	)
+
+	// CODE-RED-027: Detect raw error values passed to terminal/log output calls.
+	// Matches: fmt.Println(err), log.Printf("%v", err), fmt.Fprintf(os.Stderr, ..., err)
+	// when the argument contains a raw error variable (err, appErr, e) without .DisplayError or .FullString()
+	goRawTerminalErrorPattern = regexp.MustCompile(
+		`(?:fmt\.Print(?:ln|f)?|fmt\.Fprintf|log\.Print(?:ln|f)?|log\.Fatal(?:ln|f)?|log\.Panic(?:ln|f)?|os\.Stderr\.WriteString)\s*\([^)]*\b(?:err|appErr|e|error)\b[^)]*\)`,
+	)
+
+	// Allowed suffixes — these are fine because they route through AppError methods
+	goAllowedErrorOutputPattern = regexp.MustCompile(
+		`\.(?:DisplayError|FullString|Error|String|ToClipboard)\b`,
+	)
+
+	// Exempt interface method signatures — these must match the interface's error signature
+	goInterfaceExemptPattern = regexp.MustCompile(
+		`func\s+\([^)]+\)\s+(?:ServeHTTP|Error|Unwrap|Is|As|Write|Close|Read|Seek|Flush|Reset|Open|Stat)\s*\(`,
+	)
 )
 
 func checkGoSpecific(lines []string, path string) []Violation {
@@ -384,11 +412,11 @@ func checkGoSpecific(lines []string, path string) []Violation {
 		// CODE-RED-005: No fmt.Errorf()
 		if strings.Contains(stripped, "fmt.Errorf(") && !strings.HasPrefix(stripped, "//") {
 			violations = append(violations, Violation{
-				File:     path,
-				Line:     i + 1,
-				Rule:     "CODE-RED-005",
-				Severity: "CODE-RED",
-				Message:  "Use apperror.New()/apperror.Wrap() instead of fmt.Errorf().",
+				File:        path,
+				Line:        i + 1,
+				Rule:        "CODE-RED-005",
+				Severity:    "CODE-RED",
+				Message:     "Use apperror.New()/apperror.Wrap() instead of fmt.Errorf().",
 				CodeSnippet: truncate(stripped, 120),
 			})
 		}
@@ -396,13 +424,13 @@ func checkGoSpecific(lines []string, path string) []Violation {
 		// CODE-RED-007: No string-based enums
 		if goStringEnumPattern.MatchString(stripped) {
 			violations = append(violations, Violation{
-				File:     path,
-				Line:     i + 1,
-				Rule:     "CODE-RED-007",
-				Severity: "CODE-RED",
-				Message:  "String-based enums forbidden. Use `type Variant byte` with iota.",
+				File:        path,
+				Line:        i + 1,
+				Rule:        "CODE-RED-007",
+				Severity:    "CODE-RED",
+				Message:     "String-based enums forbidden. Use `type Variant byte` with iota.",
 				CodeSnippet: truncate(stripped, 120),
-		})
+			})
 		}
 
 		// CODE-RED-008: No raw string error codes — use apperrtype enum
@@ -418,25 +446,95 @@ func checkGoSpecific(lines []string, path string) []Violation {
 		}
 	}
 
-	// CODE-RED-006: No (T, error) returns in service functions
 	lowerPath := strings.ToLower(path)
-	if !strings.Contains(lowerPath, "test") && !strings.HasSuffix(lowerPath, "_test.go") {
+	isTestFile := strings.Contains(lowerPath, "test") || strings.HasSuffix(lowerPath, "_test.go")
+
+	// CODE-RED-006: No (T, error) returns in service functions
+	if !isTestFile {
 		for i, line := range lines {
 			if goTupleReturnPattern.MatchString(line) {
 				violations = append(violations, Violation{
-					File:     path,
-					Line:     i + 1,
-					Rule:     "CODE-RED-006",
-					Severity: "CODE-RED",
-					Message:  "Service functions must return Result[T], not (T, error).",
+					File:        path,
+					Line:        i + 1,
+					Rule:        "CODE-RED-006",
+					Severity:    "CODE-RED",
+					Message:     "Service functions must return Result[T], not (T, error).",
 					CodeSnippet: truncate(strings.TrimSpace(line), 120),
 				})
 			}
 		}
 	}
 
+	// CODE-RED-026: Service functions must return *AppError, not bare error
+	if !isTestFile {
+		for i, line := range lines {
+			stripped := strings.TrimSpace(line)
+
+			if !goBareErrorReturnPattern.MatchString(line) {
+				continue
+			}
+
+			if strings.HasPrefix(stripped, "//") {
+				continue
+			}
+
+			// Exempt known stdlib interface implementations
+			if goInterfaceExemptPattern.MatchString(line) {
+				continue
+			}
+
+			// Exempt if the function already returns *AppError (belt-and-suspenders)
+			if strings.Contains(line, "*AppError") || strings.Contains(line, "Result[") {
+				continue
+			}
+
+			violations = append(violations, Violation{
+				File:     path,
+				Line:     i + 1,
+				Rule:     "CODE-RED-026",
+				Severity: "CODE-RED",
+				Message: "Function returns bare `error`. Service functions MUST return *apperror.AppError or apperror.Result[T]." +
+					" See spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md",
+				CodeSnippet: truncate(stripped, 120),
+			})
+		}
+	}
+
+	// CODE-RED-027: Raw terminal/log output without AppError wrapping
+	if !isTestFile {
+		for i, line := range lines {
+			stripped := strings.TrimSpace(line)
+
+			if strings.HasPrefix(stripped, "//") {
+				continue
+			}
+
+			if !goRawTerminalErrorPattern.MatchString(line) {
+				continue
+			}
+
+			// Allow if the error is accessed via .DisplayError, .FullString(), .Error(), etc.
+			if goAllowedErrorOutputPattern.MatchString(line) {
+				continue
+			}
+
+			violations = append(violations, Violation{
+				File:     path,
+				Line:     i + 1,
+				Rule:     "CODE-RED-027",
+				Severity: "CODE-RED",
+				Message: "Raw error value passed to terminal/log output. Wrap in *AppError first." +
+					" Use appErr.DisplayError for terminal output and appErr.FullString() for internal logs." +
+					" See CODE-RED-027 in spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md",
+				CodeSnippet: truncate(stripped, 120),
+			})
+		}
+	}
+
 	return violations
 }
+
+
 
 var (
 	magicNumberPattern      = regexp.MustCompile(`(?:==|!=|===|!==|>=|<=|[><]|\*|/|%)\s*(-?\d+\.?\d*)`)
