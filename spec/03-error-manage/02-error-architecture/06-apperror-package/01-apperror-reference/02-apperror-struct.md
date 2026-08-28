@@ -38,9 +38,63 @@ type AppError struct {
 - `Stack` — mandatory stack trace captured at creation
 - `Cause` — wrapped underlying error (implements `Unwrap()`)
 
-### 2.2 Constructors
+### 2.2.0 The `apperror.New` Creator Namespace (Preferred)
 
-Every constructor captures a stack trace automatically. **Three things are always required: cause (or nil), code, and message.**
+To prevent boilerplate `if err != nil` checks when wrapping errors, the package exposes a global `New` namespace (e.g., via a struct variable). These methods **automatically return `nil` if the provided error is `nil`**. 
+
+This is the **mandatory** pattern for all new code.
+
+```go
+// Error wraps an existing error with a Variation enum. 
+// VERY IMPORTANT: If `err == nil`, this MUST return `nil`.
+// No error means no AppError is created.
+func (c creator) Error(errType apperrtype.ErrorType, err error) *AppError
+
+// UsingErrorMsg wraps an existing error and overrides the default enum message.
+// VERY IMPORTANT: If `err == nil`, this MUST return `nil`.
+func (c creator) UsingErrorMsg(errType apperrtype.ErrorType, err error, msg string) *AppError
+
+// UsingMsg creates a NEW error using the enum variant and a custom message.
+// Because it does not take a cause, it ALWAYS creates an AppError.
+func (c creator) UsingMsg(errType apperrtype.ErrorType, msg string) *AppError
+
+// ErrorVar wraps an existing error and injects a single key-value into Values.
+// VERY IMPORTANT: If `err == nil`, this MUST return `nil`.
+func (c creator) ErrorVar(errType apperrtype.ErrorType, err error, varName string, varValue any) *AppError
+
+// ErrorVars wraps an existing error and injects a map of values.
+// VERY IMPORTANT: If `err == nil`, this MUST return `nil`.
+func (c creator) ErrorVars(errType apperrtype.ErrorType, err error, vars map[string]any) *AppError
+```
+
+**Usage Examples:**
+
+```go
+// 1. Wrapping an error elegantly (Returns nil immediately if err is nil)
+// This completely replaces `if err != nil { return apperror.WrapType(...) }`
+return apperror.New.Error(apperrtype.DatabaseQueryFailed, err)
+
+// 2. Overriding the message
+return apperror.New.UsingErrorMsg(apperrtype.DatabaseQueryFailed, err, "failed to query users table")
+
+// 3. Creating a brand new error from scratch (always returns *AppError)
+if user == nil {
+    return apperror.New.UsingMsg(apperrtype.UserNotFound, "user ID 123 does not exist")
+}
+
+// 4. Wrapping and adding context in one step
+return apperror.New.ErrorVar(apperrtype.FileReadFailed, err, "filePath", "/etc/passwd")
+
+// 5. Wrapping and adding multiple context variables
+return apperror.New.ErrorVars(apperrtype.InvalidPayload, err, map[string]any{
+    "userId": 123,
+    "action": "delete",
+})
+```
+
+### 2.2 Constructors (Legacy)
+
+Every legacy constructor captures a stack trace automatically. **Three things are always required: cause (or nil), code, and message.**
 
 ```go
 // New creates a new AppError with code + message. Stack captured at caller.

@@ -8,6 +8,7 @@ When an AI agent is instructed to implement the new AppError methods (contact, 
 ---
 
 ## 1. Modify the AppError Struct
+
 **File to edit:** pperror.go (or wherever AppError is defined)
 
 Add the new fields to the AppError struct, matching the JSON tags required by the spec:
@@ -29,6 +30,7 @@ type AppError struct {
 *(Note: Ensure you do not accidentally overwrite existing JSON tags if they are explicitly declared in the codebase.)*
 
 ## 2. Implement the Fluent Setters
+
 **File to edit:** pperror_setters.go (or append to pperror.go)
 
 Create the fluent setter methods for AppError:
@@ -66,11 +68,13 @@ func (e *AppError) WithMsg(msg string) *AppError {
 `
 
 ## 3. Update Display Methods (String, FullString)
+
 **File to edit:** pperror_display.go (or equivalent stringification file)
 
 Ensure that Contact and Errors are rendered when the error is printed to logs via FullString().
 
 **Checklist for FullString() / ToClipboard():**
+
 - [ ] If .Contact != "", append it to the output string (e.g., mt.Sprintf(" Contact: %s", e.Contact)).
 - [ ] If len(e.Errors) > 0, iterate over .Errors and print each one, indenting them under the main error.
 
@@ -88,6 +92,80 @@ if len(e.Errors) > 0 {
 `
 
 ## 4. Run Unit Tests & Linting
+
 - Write unit tests in pperror_test.go to ensure chaining WithContact("foo").WithMsg("bar") works.
 - Verify json.Marshal(appErr) correctly includes "Contact" and "Errors" if set, and omits them if empty.
 - Run go run linter-scripts/validate-guidelines.go --path . to ensure no CODE-RED violations were introduced.
+
+# Action Plan for AI: Implementing pperror.New Namespace
+
+> **Goal:** Implement the new creator struct namespace to elegantly wrap errors and allow early 
+il returns.
+
+## 1. Create the creator struct and New variable
+
+**File to edit:** pperror_creator.go (new file) or pperror.go
+
+`go
+type creator struct{}
+
+// New exposes the fluent creator methods for AppError.
+var New = creator{}
+`
+
+## 2. Implement the Creator Methods
+
+**File to edit:** pperror_creator.go
+
+You MUST implement the early if err == nil { return nil } check for all methods that take an rror.
+
+`go
+// Error wraps an existing error. If no error, nothing is created.
+func (c creator) Error(errType apperrtype.ErrorType, err error) *AppError {
+    if err == nil {
+        return nil
+    }
+    return WrapType(err, errType)
+}
+
+// UsingErrorMsg wraps an error and overrides the default message.
+func (c creator) UsingErrorMsg(errType apperrtype.ErrorType, err error, msg string) *AppError {
+    if err == nil {
+        return nil
+    }
+    return WrapTypeMsg(err, errType, msg)
+}
+
+// UsingMsg creates a new error from scratch (always returns an error).
+func (c creator) UsingMsg(errType apperrtype.ErrorType, msg string) *AppError {
+    appErr := NewType(errType)
+    appErr.Message = msg
+    return appErr
+}
+
+// ErrorVar wraps an error and injects a single variable.
+func (c creator) ErrorVar(errType apperrtype.ErrorType, err error, varName string, varValue any) *AppError {
+    if err == nil {
+        return nil
+    }
+    // Note: Assuming WithValue is implemented or can accept stringified values
+    return WrapType(err, errType).WithValue(varName, fmt.Sprintf("%v", varValue))
+}
+
+// ErrorVars wraps an error and injects multiple variables.
+func (c creator) ErrorVars(errType apperrtype.ErrorType, err error, vars map[string]any) *AppError {
+    if err == nil {
+        return nil
+    }
+    appErr := WrapType(err, errType)
+    for k, v := range vars {
+        appErr = appErr.WithValue(k, fmt.Sprintf("%v", v))
+    }
+    return appErr
+}
+`
+
+## 3. Verify nil-safety in tests
+
+Write tests ensuring pperror.New.Error(t, nil) strictly returns a typeless 
+il or typed (*AppError)(nil) so that rr != nil checks do not falsely trigger in Go.

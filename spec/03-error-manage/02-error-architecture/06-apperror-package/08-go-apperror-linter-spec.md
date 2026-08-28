@@ -284,10 +284,13 @@ Service layer NEVER prints to terminal. Only the boundary layer outputs.
 ## Integration with validate-guidelines.go
 
 `ash
+
 # Full validation including AppError return type enforcement
+
 go run linter-scripts/validate-guidelines.go --path . --max-lines 15
 
 # Go files only, JSON output
+
 go run linter-scripts/validate-guidelines.go --path ./services --json
 `
 

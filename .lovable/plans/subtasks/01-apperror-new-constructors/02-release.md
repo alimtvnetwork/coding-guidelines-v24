@@ -1,0 +1,14 @@
+# Subtask 2: Release
+
+1. Verify eadme.md is lowercase.
+2. Update .lovable/what-to-read.md with any new spec files (if created).
+3. Run 
+px markdownlint "**/*.md" --ignore node_modules --ignore .lovable/prompts --fix (if available) or manual check.
+4. Run 
+ode scripts/release.mjs --tier minor --scope "Implement apperror.New creator namespace" --skip-slides.
+5. Run 
+ode scripts/sync-check.mjs --fix.
+6. Run 
+pm run bundles:generate.
+7. Update versions in ersion.template.json, .lovable/memory/standards/version-source-of-truth.md, and .lovable/memory/release-architecture-map.md.
+8. Commit, tag 6.27.0, and push.

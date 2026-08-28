@@ -37,3 +37,6 @@
 ## See also
 
 - Root `readme.md` (must stay in sync with this file)
+- .lovable/plans/pending/01-apperror-new-constructors.md
+- .lovable/plans/subtasks/01-apperror-new-constructors/01-update-spec.md
+- .lovable/plans/subtasks/01-apperror-new-constructors/02-release.md
