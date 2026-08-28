@@ -1,6 +1,6 @@
 # Coding Principles & Standards
 
-> **Version:** <!-- STAMP:VERSION -->6.25.0<!-- /STAMP:VERSION -->
+> **Version:** <!-- STAMP:VERSION -->6.26.0<!-- /STAMP:VERSION -->
 > **Updated:** <!-- STAMP:UPDATED -->2026-08-28<!-- /STAMP:UPDATED -->
 > **Source of truth:** [`spec/02-coding-guidelines/`](../spec/02-coding-guidelines/00-overview.md). This page is a navigable summary — it does **not** redefine rules.
 

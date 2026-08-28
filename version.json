@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.25.0",
+  "Version": "6.26.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "86b8734309b2c4e72684923e5e6f05aeeb9cbec6",
+  "LastCommitSha": "fea874f07d9a72ec5d4d33182dffc5f481c62e2a",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -54,20 +54,20 @@
     "19-plan-spec-steps-v2.md",
     "20-audit-app-spec.md"
   ],
-  "version": "6.25.0",
+  "version": "6.26.0",
   "updated": "2026-08-28",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "86b8734309b2c4e72684923e5e6f05aeeb9cbec6",
-    "shortSha": "86b8734",
+    "sha": "fea874f07d9a72ec5d4d33182dffc5f481c62e2a",
+    "shortSha": "fea874f",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 708,
-    "totalLines": 150260,
+    "totalFiles": 709,
+    "totalLines": 150398,
     "totalFolders": 23,
-    "totalBytes": 5400504,
+    "totalBytes": 5405789,
     "rootFiles": 6
   },
   "folders": [
@@ -106,9 +106,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 119,
-      "lineCount": 19043,
-      "byteCount": 689309
+      "fileCount": 120,
+      "lineCount": 19174,
+      "byteCount": 694349
     },
     {
       "path": "04-database-conventions",
@@ -315,8 +315,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 53,
-      "lineCount": 10669,
-      "byteCount": 659857
+      "lineCount": 10676,
+      "byteCount": 660102
     },
     {
       "path": "21-app",

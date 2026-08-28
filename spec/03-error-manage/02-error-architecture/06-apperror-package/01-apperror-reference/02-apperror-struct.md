@@ -12,23 +12,29 @@
 
 ```go
 type AppError struct {
-    Code       string
-    Message    string
-    Details    string            `json:",omitempty"`
-    Values     map[string]string `json:",omitempty"`
-    Diagnostic ErrorDiagnostic   `json:",omitempty"`
-    Stack      StackTrace
-    Cause      error             `json:"-"` // EXEMPTED: AppError internal cause (I-2)
+    Code         string
+    Message      string
+    DisplayError string            `json:",omitempty"` // User-facing safe message for UI/terminal output
+    Details      string            `json:",omitempty"`
+    Contact      string            `json:",omitempty"` // Support contact (email, URL, or instruction)
+    Values       map[string]string `json:",omitempty"`
+    Diagnostic   ErrorDiagnostic   `json:",omitempty"`
+    Errors       []error           `json:",omitempty"` // Sub-errors or batch validation failures
+    Stack        StackTrace
+    Cause        error             `json:"-"` // EXEMPTED: AppError internal cause (I-2)
 }
 ```
 
 **Fields:**
 
 - `Code` — error code from constants (e.g., `ErrNotFound`, `ErrDatabaseQuery`)
-- `Message` — human-readable error description
+- `Message` — human-readable developer error description
+- `DisplayError` — user-facing message safe for UI/terminal output (hide internal paths/details)
 - `Details` — additional context (auto-set from cause on `Wrap`)
+- `Contact` — support contact instructions (e.g., `"support@example.com"`, `"Slack #help-eng"`)
 - `Values` — key-value map for injecting variables relevant to the error context (paths, IDs, names, etc.)
 - `Diagnostic` — typed diagnostic fields for structured reporting
+- `Errors` — slice of sub-errors (e.g., multiple validation failures)
 - `Stack` — mandatory stack trace captured at creation
 - `Cause` — wrapped underlying error (implements `Unwrap()`)
 
@@ -458,6 +464,37 @@ err.WithMethod(m string)
 err.WithEndpoint(ep string)
 err.WithUsername(u string)
 // ... etc (see error_diagnostic.go for full list)
+```
+
+### 2.8 Core Fluent Setters (Contact, Errors, Msg)
+
+These fluent setters allow you to easily mutate the core error properties after instantiation.
+
+```go
+// WithContact adds support contact information (email, Slack channel, URL)
+func (e *AppError) WithContact(contact string) *AppError
+
+// WithErrors attaches a list of sub-errors (e.g., batch validation failures)
+func (e *AppError) WithErrors(errs ...error) *AppError
+
+// WithMsg overrides or updates the developer-facing Message on the fly
+func (e *AppError) WithMsg(msg string) *AppError
+```
+
+**Usage:**
+
+```go
+// Providing a contact route on critical failure
+return apperror.Wrap(err, ErrDatabaseExec, "database partition full").
+    WithContact("infrastructure-team@company.com")
+
+// Attaching batch validation errors
+return apperror.New(ErrValidationFailed, "payload validation failed").
+    WithErrors(fieldErrs...)
+
+// Overriding default variation message
+return apperror.NewType(apperrtype.WPConnectionFailed).
+    WithMsg("specifically failed during initial handshake")
 ```
 
 ---
