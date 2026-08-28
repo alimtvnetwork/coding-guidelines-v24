@@ -67,3 +67,21 @@ This includes — but is not limited to:
 - ❌ Committing the `build/`, `bin/`, `obj/`, or `dist/` folder unless explicitly permitted by a deploy spec.
 
 **If you generate these files during a run or compilation, verify they are ignored by `.gitignore`. If not, update `.gitignore` or delete them before running `git add`.**
+
+## Release on Every Commit — TOTAL BAN
+
+🔴 **NEVER trigger a release (version bump, release tagging, scripts/release.mjs) on every commit or every chat turn.**
+
+Forbidden:
+- ❌ Running scripts/release.mjs or 
+pm run release for standard tasks, documentation updates, bug fixes, or minor features.
+- ❌ Creating elease: vX.Y.Z commits and git tag vX.Y.Z on every single conversation turn.
+- ❌ Treating the end of an AI turn as the "End of Tunnel Release" unless the user EXPLICITLY commands a version release.
+
+Allowed work:
+- ✅ Standard semantic commits (eat: ..., ix: ..., docs: ..., chore: ...) for all work.
+- ✅ Pushing standard commits to the branch (git push).
+- ✅ Executing a release **ONLY** when the user explicitly says "release", "bump version", or something explicitly confirming a version bump is needed for distribution.
+
+**Why:** Releasing on every commit completely pollutes the git history and version tags (e.g., bumping from v6.24.0 to v6.31.0 in just a few hours for minor formatting/docs). 
+
