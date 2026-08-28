@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.28.0",
+  "Version": "6.29.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "e4e29bbfd4299a37df191586ca162645b282ffaa",
+  "LastCommitSha": "0e0a541a573a232795c8bd629f54fca2495c5109",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -54,20 +54,20 @@
     "19-plan-spec-steps-v2.md",
     "20-audit-app-spec.md"
   ],
-  "version": "6.28.0",
+  "version": "6.29.0",
   "updated": "2026-08-28",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "e4e29bbfd4299a37df191586ca162645b282ffaa",
-    "shortSha": "e4e29bb",
+    "sha": "0e0a541a573a232795c8bd629f54fca2495c5109",
+    "shortSha": "0e0a541",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 709,
-    "totalLines": 150630,
+    "totalFiles": 711,
+    "totalLines": 150578,
     "totalFolders": 23,
-    "totalBytes": 5413725,
+    "totalBytes": 5414122,
     "rootFiles": 6
   },
   "folders": [
@@ -87,15 +87,15 @@
     {
       "path": "02-coding-guidelines",
       "name": "Coding Guidelines",
-      "title": "Coding Guidelines",
-      "version": "3.2.0",
-      "updated": "2026-04-16",
+      "title": "Coding Guidelines (AI Execution Prompt)",
+      "version": "3.3.0",
+      "updated": "2026-08-28",
       "status": "Active",
       "aiConfidence": "Production-Ready",
-      "ambiguity": "None",
-      "fileCount": 215,
-      "lineCount": 34195,
-      "byteCount": 1074888
+      "ambiguity": null,
+      "fileCount": 216,
+      "lineCount": 34069,
+      "byteCount": 1067378
     },
     {
       "path": "03-error-manage",
@@ -106,9 +106,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 120,
-      "lineCount": 19392,
-      "byteCount": 701731
+      "fileCount": 121,
+      "lineCount": 19459,
+      "byteCount": 709359
     },
     {
       "path": "04-database-conventions",
@@ -315,8 +315,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 53,
-      "lineCount": 10690,
-      "byteCount": 660656
+      "lineCount": 10697,
+      "byteCount": 660935
     },
     {
       "path": "21-app",

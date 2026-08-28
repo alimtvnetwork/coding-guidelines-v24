@@ -43,3 +43,8 @@
 - .lovable/plans/pending/02-apperror-human-logger-methods.md
 - .lovable/plans/subtasks/02-apperror-human-logger-methods/01-update-display-specs.md
 - .lovable/plans/subtasks/02-apperror-human-logger-methods/02-release.md
+- .lovable/plans/pending/03-guideline-prompt-and-installer-upgrade.md
+- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/01-format-overview-prompt.md
+- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/02-upgrade-installer-scripts.md
+- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/03-generate-50-improvements.md
+- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/04-release.md

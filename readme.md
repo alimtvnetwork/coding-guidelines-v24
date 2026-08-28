@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-6.28.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
+  <!-- STAMP:BADGES --><a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"><img alt="Version" src="https://img.shields.io/badge/version-6.29.0-3B82F6?style=flat-square"/></a> <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"/></a> <a href="llm.md"><img alt="AI Ready" src="https://img.shields.io/badge/AI%20ready-yes-FF6E3C?style=flat-square"/></a><!-- /STAMP:BADGES -->
 
 </p>
 
@@ -36,9 +36,9 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.28.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-28<!-- /STAMP:UPDATED -->
-  <!-- STAMP:FILES -->709<!-- /STAMP:FILES -->
-  <!-- STAMP:LINES -->150,630<!-- /STAMP:LINES -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.29.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-28<!-- /STAMP:UPDATED -->
+  <!-- STAMP:FILES -->711<!-- /STAMP:FILES -->
+  <!-- STAMP:LINES -->150,578<!-- /STAMP:LINES -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v6.15.0</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="quickstart.md">quickstart.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="quickstart.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -2105,3 +2105,4 @@ This will fetch the latest versions of the read, write, plan, execute, and relea
 
 - [Plan: AppError Constructors](.lovable/plans/pending/01-apperror-new-constructors.md)
 - [Plan: AppError Human & Logger Methods](.lovable/plans/pending/02-apperror-human-logger-methods.md)
+- [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/03-guideline-prompt-and-installer-upgrade.md)
