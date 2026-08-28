@@ -69,7 +69,9 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    You MUST follow this strict chain:
    1. **Primary:** Run `.lovable/release/bump_versions.py --type <major|minor|patch> --create-release`. The `--create-release` flag is REQUIRED during official releases so the script handles the git branching (`release/vX.Y.Z`), tagging, pushing, and GitHub/GitLab CLI (`gh` / `glab`) release creation.
    2. **Fallback 1 (Read Docs):** If script is missing, read `.lovable/release/release-method.md` to learn which files contain versions. Generate `bump_versions.py` and run it.
-   3. **Fallback 2 (Efficient Search):**
+   
+   - **CRITICAL ADAPTATION RULE:** The `bump_versions.py` script is shipped via the installer as a baseline. When you run this command on a NEW project for the first time, you MUST review and update its internal `FILES_TO_BUMP` array to match the target repository's architecture before running it.
+3. **Fallback 2 (Efficient Search):**
    - **CRITICAL SCRIPT RECOVERY:** If you have to recreate `bump_versions.py` from scratch, you MUST include the `subprocess` logic that handles `git checkout -b release/vX.Y.Z`, `git commit`, `git tag`, `git push`, and detecting `gh` / `glab` CLI to create the platform release. If `release-method.md` is missing, perform a highly efficient, OS-agnostic search (e.g., Python `os.walk` ignoring `.git`, `node_modules`, `.venv`, `.lovable`). Create `release-method.md` documenting the pin sites, create `bump_versions.py`, and run it.
    4. **Fallback 3 (Ask User):** If you cannot find the files, stop and ask the user to specify them.
 

@@ -59,3 +59,4 @@
 - .lovable/plans/subtasks/05-fix-encoding/03-release-6.31.0.md
 - .lovable/plans/pending/06-trailing-newlines-and-ai-scripts.md
 - .lovable/plans/pending/07-lowercase-changelog.md
+- .lovable/plans/pending/08-update-prompts-and-release.md

@@ -4,6 +4,13 @@
 
 ---
 
+## v6.32.0 — 2026-08-28 (Update)
+
+**Scope:** Version bump (`6.31.0` → `6.32.0`). Update.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.31.0 — 2026-08-28 (Enforce)
 
 **Scope:** Version bump (`6.30.0` → `6.31.0`). Enforce.
