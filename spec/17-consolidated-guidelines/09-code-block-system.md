@@ -128,7 +128,7 @@ For each line:
 
 ```
 NN-module-name/
-├── 00-overview.md
+├── 01-index.md
 └── 99-consistency-report.md
 ```
 ````

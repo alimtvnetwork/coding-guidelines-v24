@@ -93,4 +93,4 @@ curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/lates
 
 ---
 
-*Part of [CI/CD Integration](./00-overview.md)*
+*Part of [CI/CD Integration](./01-index.md)*

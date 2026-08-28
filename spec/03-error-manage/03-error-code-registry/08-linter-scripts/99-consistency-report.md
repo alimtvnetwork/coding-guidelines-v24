@@ -10,7 +10,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 1 | `00-overview.md` | ✅ Present |
+| 1 | `01-index.md` | ✅ Present |
 | 2 | `check-utilization-threshold.mjs` | ✅ Present |
 | 3 | `detect-collisions.mjs` | ✅ Present |
 | 4 | `generate-utilization-report.mjs` | ✅ Present |

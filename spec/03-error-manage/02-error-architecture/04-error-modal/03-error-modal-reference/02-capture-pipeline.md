@@ -1,6 +1,6 @@
 # Error Capture Pipeline
 
-> **Parent:** [Error Modal Reference](./00-overview.md)  
+> **Parent:** [Error Modal Reference](./01-index.md)  
 > **Version:** 2.3.0  
 > **Updated:** 2026-04-01
 

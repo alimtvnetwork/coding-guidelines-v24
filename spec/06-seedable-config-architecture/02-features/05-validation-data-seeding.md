@@ -604,7 +604,7 @@ GET /api/v1/config/validation/:category/:key
 
 | Reference | Location |
 |-----------|----------|
-| CW Config Overview | `../00-overview.md` |
+| CW Config Overview | `../01-index.md` |
 | RAG Chunk Settings | `./02-rag-chunk-settings.md` |
 | RAG Validation Helpers | `./03-rag-validation-helpers.md` |
 | AI SEO Guidelines | `../22-ai-bridge-cli/01-backend/17-ai-seo-core-guidelines.md` |

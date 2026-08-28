@@ -46,7 +46,7 @@ The recommended template for each common verification need:
 | `lint:guidelines-go` | Zero CODE-RED violations: functions ≤ 15 lines, files ≤ 300 lines, no nested ifs, max 2 boolean operands. | `go run linter-scripts/validate-guidelines.go --path spec --max-lines 15` |
 | `lint:guidelines-py` | Python-side guideline validator agrees with the Go validator on every rule. | `python3 linter-scripts/validate-guidelines.py spec` |
 | `lint:powershell` | PowerShell scripts pass PSScriptAnalyzer at Warning severity or higher. | `pwsh -NoProfile -Command "Invoke-ScriptAnalyzer -Path scripts -Recurse -Severity Warning"` |
-| `lint:spec-folders` | Every spec folder has the required 00-overview.md and follows kebab-case numeric prefixes. | `python3 linter-scripts/check-spec-folder-refs.py` |
+| `lint:spec-folders` | Every spec folder has the required 01-index.md and follows kebab-case numeric prefixes. | `python3 linter-scripts/check-spec-folder-refs.py` |
 | `lint:spec-links` | Every internal markdown link in spec/ resolves to an existing file and heading anchor. | `python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .` |
 
 ### 🧪 Test

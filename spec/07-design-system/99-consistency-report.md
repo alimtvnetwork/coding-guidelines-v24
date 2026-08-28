@@ -9,7 +9,7 @@
 
 | # | File | Present | Naming |
 |---|------|---------|--------|
-| 00 | 00-overview.md | ✅ | ✅ |
+| 00 | 01-index.md | ✅ | ✅ |
 | 01 | 01-design-principles.md | ✅ | ✅ |
 | 02 | 02-theme-variable-architecture.md | ✅ | ✅ |
 | 03 | 03-typography.md | ✅ | ✅ |
@@ -32,7 +32,7 @@
 
 | Criterion | Status | Weight |
 |-----------|--------|--------|
-| `00-overview.md` present | ✅ | 25% |
+| `01-index.md` present | ✅ | 25% |
 | `99-consistency-report.md` present | ✅ | 25% |
 | Lowercase kebab-case naming | ✅ | 25% |
 | Unique numeric sequence | ✅ | 25% |

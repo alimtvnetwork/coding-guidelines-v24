@@ -121,7 +121,7 @@ What is the change that we're proposing and/or doing?
 
 ```
 spec/10-research/
-├── 00-overview.md
+├── 01-index.md
 ├── 01-deployment-strategy-evaluation.md
 ├── 02-monitoring-tool-comparison.md
 ├── 03-cicd-platform-assessment.md
@@ -164,7 +164,7 @@ Use the same standardized 1–5 rubric defined in `10-research.md`. For infrastr
 | Reference | Location |
 |-----------|----------|
 | Coding guidelines research | `spec/17-consolidated-guidelines/10-research.md` |
-| Source folder | `spec/10-research/00-overview.md` |
+| Source folder | `spec/10-research/01-index.md` |
 | CI/CD pipeline specs | `spec/17-consolidated-guidelines/15-cicd-pipeline-workflows.md` |
 | Split DB architecture | `spec/17-consolidated-guidelines/05-split-db-architecture.md` |
 | Spec authoring | `spec/17-consolidated-guidelines/01-spec-authoring.md` |

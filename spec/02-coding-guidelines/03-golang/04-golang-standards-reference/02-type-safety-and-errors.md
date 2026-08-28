@@ -1,6 +1,6 @@
 # Golang Coding Standards — Type safety, error handling, Result types
 
-> **Parent:** [Golang Coding Standards](./00-overview.md)  
+> **Parent:** [Golang Coding Standards](./01-index.md)  
 > **Version:** 3.7.0  
 > **Updated:** 2026-03-31
 

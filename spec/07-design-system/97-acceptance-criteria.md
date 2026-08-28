@@ -81,4 +81,4 @@ Testable criteria for validating design system compliance across all components 
 
 | Reference | Location |
 |-----------|----------|
-| Full Design System | [00-overview.md](./00-overview.md) |
+| Full Design System | [01-index.md](./01-index.md) |

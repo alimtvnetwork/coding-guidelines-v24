@@ -4,6 +4,13 @@
 
 ---
 
+## v6.30.0 — 2026-08-28 (Rename)
+
+**Scope:** Version bump (`6.29.0` → `6.30.0`). Rename.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.29.0 — 2026-08-28 (Upgrade)
 
 **Scope:** Version bump (`6.28.0` → `6.29.0`). Upgrade.
@@ -789,7 +796,7 @@ Linter verification (4/4 green): `check-mws-error-codes` (R1-R4 — 52 codes ver
 - `07-role-based-dashboards.md` → **v1.1.0**: §5 stack-agnostic 3-step access-guard contract above the Laravel example + Express equivalent (F-A-34).
 - `08-error-contract.md` → **v1.1.0**: §2 envelope +`EnvelopeVersion`/`OperationId`/`SubCode`/`FieldErrors` (F-A-12/15/16/28); §3.4 `X-Auth-Action: Reauthenticate` header (F-A-26); §5 `lastResponse` initialised via `makeNullResponse(call)` (F-A-35); §8 ErrorCode→HTTP-status mapping (F-A-31); §9 Worker→Main envelope + 3 new ErrorCodes `WorkerRegisterRejected/WorkerHeartbeatRejected/WorkerPushAckUnknownJid` (F-A-32); §10 audit-closure log.
 - `09-self-update-pointer.md` → **v1.2.0**: bounded sunset (3-way expiry: spec/19 v2.0.0 OR prod-green-14d OR 2026-12-31); §9 deletion checklist (F-A-09); inline tunables replaced with §15 citations.
-- `00-overview.md`, `01-architecture.md` → **v1.1.0**: bumped for image-import + tunable citations.
+- `01-index.md`, `01-architecture.md` → **v1.1.0**: bumped for image-import + tunable citations.
 
 ### Cross-spec contributions
 
@@ -833,7 +840,7 @@ Initial authoring. Phases 1–4 of the spec roadmap complete.
 ### Added
 
 - `plan.md` — phased roadmap, locked decisions (Q1–Q5), open questions (OQ-1, OQ-2)
-- `00-overview.md` — purpose, scope, stack flexibility, document map
+- `01-index.md` — purpose, scope, stack flexibility, document map
 - `01-architecture.md` — topology, request lifecycle, comms contract, caching
 - `02-glossary.md` — canonical terms + forbidden-term replacements (`CW configuration` → `Seedable-Config`, `git map` → `gitmap`)
 - `03-main-db-schema.md` — 9 tables (WorkerNode, WorkerNodeStatus/Kind, Company, User, UserRole, Role, WorkerVersion, WorkerSelectionEvent/Strategy)

@@ -17,7 +17,7 @@
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present in module | ✅ / ❌ |
+| `01-index.md` present in module | ✅ / ❌ |
 | AI Confidence assigned | ✅ / ❌ |
 | Ambiguity assigned | ✅ / ❌ |
 | Keywords present | ✅ / ❌ |
@@ -33,7 +33,7 @@ One paragraph: what this document specifies, who reads it, and what they should 
 
 ## Document Inventory
 
-(For `00-overview.md` files only — list every sibling file in this module.)
+(For `01-index.md` files only — list every sibling file in this module.)
 
 | # | File | Purpose |
 |---|------|---------|
@@ -71,7 +71,7 @@ Tables for rule comparisons:
 Add file-relative links here. Always include `.md`. Examples (replace before committing):
 
 ```
-- [Related module](../NN-related-module/00-overview.md)
+- [Related module](../NN-related-module/01-index.md)
 - [Strictly-avoid quick reference](../17-consolidated-guidelines/00-strictly-avoid-quickref.md)
 ```
 
@@ -87,7 +87,7 @@ ignores:
 
 ```markdown
 <spec-placeholder reason="Activate when target is created.">
-- [Target Title](../NN-module-name/00-overview.md)
+- [Target Title](../NN-module-name/01-index.md)
 - [Target Title](../NN-module-name/01-file-name.md#section-anchor)
 </spec-placeholder>
 ```
@@ -100,7 +100,7 @@ above.
 
 ```markdown
 <!-- TODO: Activate when target is created.
-- [Target Title](../NN-module-name/00-overview.md)
+- [Target Title](../NN-module-name/01-index.md)
 - [Target Title](../NN-module-name/01-file-name.md#section-anchor)
 -->
 ```
@@ -132,14 +132,14 @@ starts validating them. Three steps, in order:
 
 ```markdown
 <!-- TODO: Activate when target is created.
-- [Database conventions](../04-database-conventions/00-overview.md)
+- [Database conventions](../04-database-conventions/01-index.md)
 -->
 ```
 
 **After** (live link, validated by the checker):
 
 ```markdown
-- [Database conventions](../04-database-conventions/00-overview.md)
+- [Database conventions](../04-database-conventions/01-index.md)
 ```
 
 #### Example 2 — partial activation, one target still pending

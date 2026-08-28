@@ -10,7 +10,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 1 | `00-overview.md` | ✅ Present |
+| 1 | `01-index.md` | ✅ Present |
 | 2 | `01-braces-and-nesting.md` | ✅ Present |
 | 3 | `02-conditions-and-extraction.md` | ✅ Present |
 | 4 | `03-blank-lines-and-spacing.md` | ✅ Present |
@@ -50,7 +50,7 @@
 
 | Source | Target | Status |
 |--------|--------|--------|
-| All files → `00-overview.md` | ✅ Valid |
+| All files → `01-index.md` | ✅ Valid |
 | `04-function-and-type-size.md` → `05-multi-line-formatting.md` | ✅ Valid |
 | `07-checklist.md` → external specs | ✅ Valid |
 

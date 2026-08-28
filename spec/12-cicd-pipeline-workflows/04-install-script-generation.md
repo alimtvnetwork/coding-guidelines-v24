@@ -204,7 +204,7 @@ The release pipeline generates **version-pinned** scripts. Generic installers (t
 - [Go Binary Release Pipeline](./02-go-binary-deploy/02-release-pipeline.md) — Full release workflow
 - [Self-Update Mechanism](./06-self-update-mechanism.md) — How CLIs use install scripts internally
 - [Code Signing](./05-code-signing.md) — Signed binaries that install scripts download
-- [Self-Update & App Update (Full Specs)](../14-update/00-overview.md) — Client-side update implementation details
+- [Self-Update & App Update (Full Specs)](../14-update/01-index.md) — Client-side update implementation details
 
 ---
 

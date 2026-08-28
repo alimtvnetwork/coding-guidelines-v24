@@ -102,4 +102,4 @@ if isUpstreamError {
 
 ---
 
-*Part of [Code Style](./00-overview.md) — Rule 3*
+*Part of [Code Style](./01-index.md) — Rule 3*

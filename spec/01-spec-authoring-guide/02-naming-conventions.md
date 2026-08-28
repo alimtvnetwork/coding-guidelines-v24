@@ -65,7 +65,7 @@ gsearch-cli/          # Missing numeric prefix
 
 ✅ Correct:
 ```
-00-overview.md
+01-index.md
 01-architecture.md
 07-error-codes.md
 97-acceptance-criteria.md
@@ -89,7 +89,7 @@ These numeric prefixes have fixed meanings across the entire spec tree:
 
 | Prefix | File | Purpose | Required? |
 |--------|------|---------|-----------|
-| `00` | `00-overview.md` | Module index — lists all files, provides metadata | ✅ Always required |
+| `00` | `01-index.md` | Module index — lists all files, provides metadata | ✅ Always required |
 | `96` | `96-ai-context.md` | AI-specific context notes | Optional |
 | `97` | `97-acceptance-criteria.md` | Testable acceptance criteria | ✅ Recommended for all modules |
 | `98` | `98-changelog.md` | Chronological change log | Optional (recommended for active modules) |

@@ -176,7 +176,7 @@ suggestions.md (summary) → suggestions/ (details) → suggestions/completed/
 |--------|---------|-------------|
 | Purpose | Formal specifications | Institutional knowledge & AI context |
 | Naming | Numeric prefix **required** | Numeric prefix **optional** |
-| Required files | `00-overview.md`, `99-consistency-report.md` | `overview.md`, `memory/index.md` |
+| Required files | `01-index.md`, `99-consistency-report.md` | `overview.md`, `memory/index.md` |
 | Health scoring | ✅ Tracked by dashboard | ❌ Not scored |
 | AI consumption | Referenced during implementation | Referenced during **all** interactions |
 | Depth | Up to 3 levels | Up to 2 levels (category/file) |

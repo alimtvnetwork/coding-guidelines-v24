@@ -8,7 +8,7 @@
 
 | File | Description |
 |------|-------------|
-| [00-overview.md](./00-overview.md) | Overview of PowerShell runner (`run.ps1`) |
+| [01-index.md](./01-index.md) | Overview of PowerShell runner (`run.ps1`) |
 | [01-configuration-schema.md](./01-configuration-schema.md) | Configuration schema for `powershell.json` |
 | [01-template-vs-project-differences.md](./01-template-vs-project-differences.md) | Template vs project configuration differences |
 | [02-script-reference.md](./02-script-reference.md) | Script reference and CLI flags |

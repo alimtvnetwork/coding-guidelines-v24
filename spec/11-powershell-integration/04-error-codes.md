@@ -157,4 +157,4 @@ if ($LASTEXITCODE -ne 0) {
 
 - [Script Reference](./02-script-reference.md) - CLI flags
 - [Integration Guide](./03-integration-guide.md) - Setup steps
-- [Error Management](../03-error-manage/00-overview.md) - Global error patterns
+- [Error Management](../03-error-manage/01-index.md) - Global error patterns

@@ -140,7 +140,7 @@ input contracts cannot drift under them.
 
 ## Cross-References
 
-- [00-overview.md](./00-overview.md)
+- [01-index.md](./01-index.md)
 - [07-shared-cli-wrapper.md](./07-shared-cli-wrapper.md) — Underlying runner
 - [08-config-schema.md](./08-config-schema.md) — `ci-guards.yaml` schema
 - [99-ai-implementation-guide.md](./99-ai-implementation-guide.md) — End-to-end decision tree

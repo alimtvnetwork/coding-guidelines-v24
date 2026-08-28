@@ -17,7 +17,7 @@
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present | ✅ |
+| `01-index.md` present | ✅ |
 | AI Confidence assigned | ✅ |
 | Ambiguity assigned | ✅ |
 | Keywords present | ✅ |
@@ -70,13 +70,13 @@ golangci-lint bundles 100+ linters. We enable only those that enforce our coding
 | Max 400-line files (target 300) | [File Rules](../../03-golang/04-golang-standards-reference/01-file-and-function-rules.md) | `revive` | `file-header` + custom |
 | Blank line before return | [Code Style §R4](../04-code-style/03-blank-lines-and-spacing.md) | `whitespace` | `multi-func: true` |
 | Import 3-group ordering | [Concurrency & Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `goimports` | `local-prefixes: project/` |
-| No dead code | [Code Style §R5](../04-code-style/00-overview.md) | `unused` | (enabled by default) |
+| No dead code | [Code Style §R5](../04-code-style/01-index.md) | `unused` | (enabled by default) |
 
 ### 2.2 Naming Conventions
 
 | Guideline | Spec Source | Linter | Rule / Setting |
 |-----------|-------------|--------|----------------|
-| Boolean naming (`is/has/can/should/was/will`) | [Boolean Principles](../02-boolean-principles/00-overview.md) | `revive` | `var-naming` + custom regex |
+| Boolean naming (`is/has/can/should/was/will`) | [Boolean Principles](../02-boolean-principles/01-index.md) | `revive` | `var-naming` + custom regex |
 | PascalCase keys (API/DB) | [Key Naming](../11-key-naming-pascalcase.md) | `revive` | `var-naming` |
 | No raw negation (`!fn()`) | [No Negatives](../12-no-negatives.md) | `gocritic` | `unslice` / code review |
 | No boolean flag params | [Function Naming](../10-function-naming.md) | `revive` | `flag-parameter` |
@@ -224,11 +224,11 @@ issues:
 
 ## Cross-References
 
-- [Static Analysis Overview](./00-overview.md) — Cross-language analyzer guide
-- [Go Standards Reference](../../03-golang/04-golang-standards-reference/00-overview.md) — Full Go rules
+- [Static Analysis Overview](./01-index.md) — Cross-language analyzer guide
+- [Go Standards Reference](../../03-golang/04-golang-standards-reference/01-index.md) — Full Go rules
 - [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) — Go forbidden patterns
-- [Cross-Language Code Style](../04-code-style/00-overview.md) — Formatting rules
-- [Boolean Principles](../02-boolean-principles/00-overview.md) — Boolean naming rules
+- [Cross-Language Code Style](../04-code-style/01-index.md) — Formatting rules
+- [Boolean Principles](../02-boolean-principles/01-index.md) — Boolean naming rules
 - [DRY Principles](../08-dry-principles.md) — Deduplication rules
 
 ---

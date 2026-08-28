@@ -205,7 +205,7 @@ See `.github/scripts/lint-diff.py` in `gitmap-v6`.
 
 ## Cross-References
 
-- [00-overview.md](./00-overview.md)
+- [01-index.md](./01-index.md)
 - [05-actionable-lint-suggestions.md](./05-actionable-lint-suggestions.md) — Companion script that turns NEW findings into PR comments
 - [02-grandfather-baseline-naming.md](./02-grandfather-baseline-naming.md) — Same "grandfather" idea for identifier names
 

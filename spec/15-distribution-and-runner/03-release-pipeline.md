@@ -116,7 +116,7 @@ make_latest: ${{ !contains(steps.version.outputs.version, '-') }}
 
 ## Cross-references
 
-- [`./00-overview.md`](./00-overview.md) — Distribution overview
+- [`./01-index.md`](./01-index.md) — Distribution overview
 - [`./01-install-contract.md`](./01-install-contract.md) — Install contract (consumes these artifacts)
 - [`spec/12-cicd-pipeline-workflows/`](../12-cicd-pipeline-workflows/) — CICD conventions
 - [`spec/16-generic-release/`](../16-generic-release/) — Generic release standard

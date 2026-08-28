@@ -3,7 +3,7 @@
 **Version:** 3.2.0  
 **Created:** 2026-03-09  
 **Status:** Active  
-**Parent:** [00-overview.md](../00-overview.md)
+**Parent:** [01-index.md](../01-index.md)
 
 ---
 

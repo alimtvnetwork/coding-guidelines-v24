@@ -100,7 +100,7 @@ interface WebhookConfig {
 
 - [Go HttpMethod Enum](../03-golang/03-httpmethod-enum.md) — Backend parity spec
 - [TypeScript Standards](./08-typescript-standards-reference.md) — Parent TS spec
-- [Master Coding Guidelines §8](../01-cross-language/15-master-coding-guidelines/00-overview.md) — Magic strings zero tolerance
+- [Master Coding Guidelines §8](../01-cross-language/15-master-coding-guidelines/01-index.md) — Magic strings zero tolerance
 - Enum Consumer Checklist — Cross-language sync process <!-- external: spec/02-spec-management-software/18-enum-consumer-checklist.md -->
 
 ---

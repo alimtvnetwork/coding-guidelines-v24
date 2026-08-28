@@ -1,6 +1,6 @@
 # Component Hierarchy
 
-> **Parent:** [React Components Index](./00-overview.md)  
+> **Parent:** [React Components Index](./01-index.md)  
 > **Version:** 3.2.0  
 > **Updated:** 2026-03-31
 

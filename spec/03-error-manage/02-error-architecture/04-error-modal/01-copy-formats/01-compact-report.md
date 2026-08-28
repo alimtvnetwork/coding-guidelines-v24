@@ -1,6 +1,6 @@
 # Compact Report (Markdown) — DEFAULT Copy Format
 
-> **Parent:** [Copy Formats Index](./00-overview.md)  
+> **Parent:** [Copy Formats Index](./01-index.md)  
 > **Version:** 3.2.0  
 > **Updated:** 2026-03-31  
 > **Purpose:** The default copy format — instant, no API call. Built entirely from CapturedError fields already in memory.

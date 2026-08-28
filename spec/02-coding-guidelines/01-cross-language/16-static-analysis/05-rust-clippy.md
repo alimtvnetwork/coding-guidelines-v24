@@ -17,7 +17,7 @@
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present | ✅ |
+| `01-index.md` present | ✅ |
 | AI Confidence assigned | ✅ |
 | Ambiguity assigned | ✅ |
 | Keywords present | ✅ |
@@ -165,10 +165,10 @@ cargo fmt --all -- --check
 
 ## Cross-References
 
-- [Static Analysis Overview](./00-overview.md) — Parent document
-- [Rust Coding Standards](../../05-rust/00-overview.md) — Rust-specific guidelines
-- [Cross-Language Code Style](../04-code-style/00-overview.md) — Source rules
-- [Master Coding Guidelines](../15-master-coding-guidelines/00-overview.md) — Full checklist
+- [Static Analysis Overview](./01-index.md) — Parent document
+- [Rust Coding Standards](../../05-rust/01-index.md) — Rust-specific guidelines
+- [Cross-Language Code Style](../04-code-style/01-index.md) — Source rules
+- [Master Coding Guidelines](../15-master-coding-guidelines/01-index.md) — Full checklist
 
 ---
 

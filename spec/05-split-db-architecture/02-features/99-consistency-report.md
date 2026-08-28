@@ -7,7 +7,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 00 | `00-overview.md` | ✅ Present |
+| 00 | `01-index.md` | ✅ Present |
 | 01 | `01-cli-examples.md` | ✅ Present |
 | 02 | `02-reset-api-standard.md` | ✅ Present |
 | 03 | `03-database-flow-diagrams.md` | ✅ Present |

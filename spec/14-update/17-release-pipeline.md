@@ -222,7 +222,7 @@ permissions:
 - [Release Versioning](./15-release-versioning.md) — Version resolution and tagging
 - [Updater Binary](./19-updater-binary.md) — Multi-module build for the updater
 - [Network Requirements](./20-network-requirements.md) — Download infrastructure for update consumers
-- [CI/CD Pipeline Workflows](../12-cicd-pipeline-workflows/00-overview.md) — Server-side pipeline patterns
+- [CI/CD Pipeline Workflows](../12-cicd-pipeline-workflows/01-index.md) — Server-side pipeline patterns
 - [Complete Workflow Reference](../12-cicd-pipeline-workflows/02-go-binary-deploy/03-complete-workflow-reference.md) — Full annotated YAML
 
 ---

@@ -150,7 +150,7 @@ Research files use the standard numbered prefix pattern:
 
 ```
 spec/02-coding-guidelines/10-research/
-├── 00-overview.md
+├── 01-index.md
 ├── 01-framework-comparison-react-vue.md
 ├── 02-orm-evaluation-prisma-drizzle.md
 ├── 03-state-management-patterns.md
@@ -177,7 +177,7 @@ spec/02-coding-guidelines/10-research/
 | Reference | Location |
 |-----------|----------|
 | Root-level research | `spec/17-consolidated-guidelines/12-root-research.md` |
-| Source folder | `spec/02-coding-guidelines/10-research/00-overview.md` |
+| Source folder | `spec/02-coding-guidelines/10-research/01-index.md` |
 | Coding guidelines | `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` |
 | Spec authoring | `spec/17-consolidated-guidelines/01-spec-authoring.md` |
 

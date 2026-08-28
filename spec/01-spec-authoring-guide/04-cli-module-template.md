@@ -15,10 +15,10 @@ Every CLI tool in the project follows a **standardized 3-folder structure**. Thi
 
 ```
 {NN}-{cli-name}/
-├── 00-overview.md                    # Module overview and file inventory
+├── 01-index.md                    # Module overview and file inventory
 │
 ├── 01-backend/                       # Backend specifications
-│   ├── 00-overview.md               # Backend overview and file listing
+│   ├── 01-index.md               # Backend overview and file listing
 │   ├── 01-architecture.md           # Core system design, lifecycle, patterns
 │   ├── 02-{component}.md           # Feature-specific spec (numbered sequentially)
 │   ├── 03-{component}.md
@@ -29,14 +29,14 @@ Every CLI tool in the project follows a **standardized 3-folder structure**. Thi
 │   └── 99-consistency-report.md    # Backend consistency report
 │
 ├── 02-frontend/                     # Frontend specifications (if applicable)
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   ├── 01-architecture.md
 │   ├── 02-components.md
 │   ├── 03-pages.md
 │   └── 99-consistency-report.md
 │
 ├── 03-deploy/                       # Deployment & operations
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   ├── 01-build-pipeline.md
 │   ├── 02-{platform}.md           # Platform-specific deployment
 │   └── 99-consistency-report.md
@@ -52,7 +52,7 @@ Every CLI tool in the project follows a **standardized 3-folder structure**. Thi
 
 ### Step 1: Choose the Module Number
 
-Look at the current `spec/00-overview.md` master index. Use the **next available number** after the highest existing module. Do NOT reuse or insert numbers in the middle of the sequence.
+Look at the current `spec/01-index.md` master index. Use the **next available number** after the highest existing module. Do NOT reuse or insert numbers in the middle of the sequence.
 
 ### Step 2: Create the Folder
 
@@ -62,7 +62,7 @@ mkdir -p spec/{NN}-{cli-name}/02-frontend
 mkdir -p spec/{NN}-{cli-name}/03-deploy
 ```
 
-### Step 3: Write 00-overview.md (Root)
+### Step 3: Write 01-index.md (Root)
 
 This is the **first file** to create. It must include:
 
@@ -95,9 +95,9 @@ This is the **first file** to create. It must include:
 
 ```
 {NN}-{cli-name}/
-├── 00-overview.md
+├── 01-index.md
 ├── 01-backend/
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   ├── 01-architecture.md
 │   └── ...
 ├── 02-frontend/
@@ -116,8 +116,8 @@ All code must follow:
 
 <!-- Example template links — replace {NN} and {language} with actual values -->
 
-- [Cross-Language Guidelines](../02-coding-guidelines/01-cross-language/00-overview.md)
-- `{Language} Guidelines` → `../02-coding-guidelines/{NN}-{language}/00-overview.md`
+- [Cross-Language Guidelines](../02-coding-guidelines/01-cross-language/01-index.md)
+- `{Language} Guidelines` → `../02-coding-guidelines/{NN}-{language}/01-index.md`
 - PascalCase for all database columns, JSON fields, and API payloads
 
 ---
@@ -126,13 +126,13 @@ All code must follow:
 
 | Reference | Location |
 |-----------|----------|
-| Coding Guidelines | `../02-coding-guidelines/00-overview.md` |
-| Error Code Registry | `../03-error-manage/03-error-code-registry/00-overview.md` |
+| Coding Guidelines | `../02-coding-guidelines/01-index.md` |
+| Error Code Registry | `../03-error-manage/03-error-code-registry/01-index.md` |
 ````
 
 ### Step 4: Write Backend Specs
 
-Start with `01-backend/00-overview.md`, then add numbered component specs:
+Start with `01-backend/01-index.md`, then add numbered component specs:
 
 - **01-architecture.md** — Always first: daemon lifecycle, patterns, event bus
 - **02-{first-component}.md** — Next major feature
@@ -164,7 +164,7 @@ Create `99-consistency-report.md` at each level:
 
 ### Step 8: Update Master Index
 
-Add the new module to `spec/00-overview.md` in the appropriate layer table.
+Add the new module to `spec/01-index.md` in the appropriate layer table.
 
 ---
 
@@ -172,9 +172,9 @@ Add the new module to `spec/00-overview.md` in the appropriate layer table.
 
 ```
 34-time-log-cli/
-├── 00-overview.md                    # Overview, features, folder structure
+├── 01-index.md                    # Overview, features, folder structure
 ├── 01-backend/
-│   ├── 00-overview.md               # Backend file listing
+│   ├── 01-index.md               # Backend file listing
 │   ├── 01-architecture.md           # Daemon lifecycle, collector pattern
 │   ├── 02-os-integration.md         # Platform-specific hooks (Win/Linux/Mac)
 │   ├── 03-browser-tracking.md       # Tab detection, URL capture
@@ -190,7 +190,7 @@ Add the new module to `spec/00-overview.md` in the appropriate layer table.
 │   ├── 98-changelog.md
 │   └── 99-consistency-report.md
 ├── 03-deploy/
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   ├── 01-build-pipeline.md
 │   ├── 02-windows-installer.md
 │   ├── 03-linux-packaging.md
@@ -213,12 +213,12 @@ Add the new module to `spec/00-overview.md` in the appropriate layer table.
 ## Checklist: New CLI Module
 
 - [ ] Module number selected (next available after highest)
-- [ ] Root `00-overview.md` created with full metadata
-- [ ] `01-backend/` folder with `00-overview.md` and `01-architecture.md`
+- [ ] Root `01-index.md` created with full metadata
+- [ ] `01-backend/` folder with `01-index.md` and `01-architecture.md`
 - [ ] `02-frontend/` folder (or documented why omitted)
-- [ ] `03-deploy/` folder with `00-overview.md`
+- [ ] `03-deploy/` folder with `01-index.md`
 - [ ] `97-acceptance-criteria.md` with numbered, testable criteria
 - [ ] `99-consistency-report.md` at root and each subfolder
-- [ ] `spec/00-overview.md` master index updated
+- [ ] `spec/01-index.md` master index updated
 - [ ] Cross-references added to related modules
 - [ ] Error codes registered in `spec/03-error-manage/03-error-code-registry/`

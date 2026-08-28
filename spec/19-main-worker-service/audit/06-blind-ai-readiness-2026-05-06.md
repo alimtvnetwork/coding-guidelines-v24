@@ -37,7 +37,7 @@ Result: the spec still scores **92/100 (A−)**, which is unusually high for a 2
 
 | File | Lines | Completeness | Determinism | X-link | Blind-build | Notes |
 |---|---:|---:|---:|---:|---:|---|
-| `00-overview.md` | 168 | 100 | 100 | 100 | 100 | Mind-model + doc map; no implementer surface |
+| `01-index.md` | 168 | 100 | 100 | 100 | 100 | Mind-model + doc map; no implementer surface |
 | `01-architecture.md` | 165 | 100 | 100 | 95 | 100 | One stale "3-tier" mention reconciled by FU-1 banner |
 | `02-glossary.md` | — | 100 | 100 | 100 | 100 | Reserved-term map present |
 | `03-main-db-schema.md` | — | 100 | 100 | 100 | 100 | All Description / Notes / Comments present (Rule 11/12 ✅) |
@@ -127,7 +127,7 @@ These are the reasons the score is 92 and not 70:
 
 ### Gap 4 — Stale "3-tier (Root/App/Session)" prose in 4 places (−1 pt)
 
-**Problem.** `01-architecture.md`, `00-overview.md` §1 table, and two diagrams still describe Main as 3-tier *Root/App/Session*. The FU-1 banner reconciles this for a thinking AI; a literal AI updates only the file it's currently reading.
+**Problem.** `01-architecture.md`, `01-index.md` §1 table, and two diagrams still describe Main as 3-tier *Root/App/Session*. The FU-1 banner reconciles this for a thinking AI; a literal AI updates only the file it's currently reading.
 
 **Fix (one sentence per file).** Add an inline `<!-- FU-1: superseded — Main = Root/Settings/Session, see 11-split-db-tier-reconciliation.md -->` HTML comment next to each stale "3-tier" mention. Cost: 4 single-line edits.
 

@@ -94,7 +94,7 @@ Therefore: 0 net readiness penalty for the parser failure, but +1 Testability an
 
 I re-read the following with the literal-reader hat on, looking for any new MUST/SHOULD/MAY contradictions, undefined terms, or unreachable code paths introduced since v5.41.0:
 
-- `00-overview.md`, `01-architecture.md`, `02-glossary.md`, `03-main-db-schema.md`, `04-worker-routing.md`, `05-auth-and-2fa.md`, `06-core-api-endpoints.md`, `07-role-based-dashboards.md`, `08-error-contract.md`, `09-self-update-pointer.md`, `10-worker-bootstrap-protocol.md`, `11-split-db-tier-reconciliation.md`, `12-jwt-delivery-contract.md`, `13-error-codes.md`, `14-rbac-and-status-seed.md`, `15-tunable-constants.md`, `16-update-channels.md`, `17-cascading-roles-and-cache-bin.md`, `24-threat-model.md`, `25-inherited-rules.md`.
+- `01-index.md`, `01-architecture.md`, `02-glossary.md`, `03-main-db-schema.md`, `04-worker-routing.md`, `05-auth-and-2fa.md`, `06-core-api-endpoints.md`, `07-role-based-dashboards.md`, `08-error-contract.md`, `09-self-update-pointer.md`, `10-worker-bootstrap-protocol.md`, `11-split-db-tier-reconciliation.md`, `12-jwt-delivery-contract.md`, `13-error-codes.md`, `14-rbac-and-status-seed.md`, `15-tunable-constants.md`, `16-update-channels.md`, `17-cascading-roles-and-cache-bin.md`, `24-threat-model.md`, `25-inherited-rules.md`.
 
 **Findings:** zero new traps. None of these files were modified v5.41.0 → v5.43.0; every audit-12 closure remains structurally durable. The 89-code MWS catalogue still resolves cleanly.
 

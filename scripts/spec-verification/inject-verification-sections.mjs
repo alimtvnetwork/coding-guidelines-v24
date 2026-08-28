@@ -12,7 +12,7 @@
  *  - Idempotent: if a ``## Verification`` heading already exists, the
  *    block is replaced (everything from that heading down to the next
  *    H2 or EOF). Files unchanged after replacement are left untouched.
- *  - Skips: ``00-overview.md``, ``97-acceptance-criteria.md``,
+ *  - Skips: ``01-index.md``, ``97-acceptance-criteria.md``,
  *    ``99-consistency-report.md``, ``readme.md``, ``changelog.md``.
  *  - Each section deterministically derives its AC tag from
  *    ``<folder-prefix>-<file-prefix>`` so cross-references stay stable
@@ -74,7 +74,7 @@ function printHelp() {
   --root <dir>   Spec root (default 'spec')
   --only <substr> Restrict to folders whose path includes this substring
   --mode <m>      'overview-only' (default) — inject only into each folder's
-                  00-overview.md. 'all-files' — inject into every prose file.
+                  01-index.md. 'all-files' — inject into every prose file.
   --strip         Remove existing ## Verification blocks instead of writing
                   new ones. Useful when downsizing scope.
   --dry-run       Show plan without writing
@@ -166,14 +166,14 @@ function replaceOrAppend(content, newSection) {
 function shouldSkip(fullPath, relPath, mode) {
   const base = basename(fullPath).toLowerCase();
   if (SKIP_BASENAMES.has(base)) return true;
-  // Spec-root files (e.g. spec/00-overview.md) own their own bespoke
+  // Spec-root files (e.g. spec/01-index.md) own their own bespoke
   // verification logic — never touch them.
   if (relPath.split(sep).length === 1) return true;
-  // overview-only mode: only touch each folder's 00-overview.md.
+  // overview-only mode: only touch each folder's 01-index.md.
   if (mode === "overview-only") {
-    if (base !== "00-overview.md") return true;
-    // Only the top-level overview (e.g. spec/04-database-conventions/00-overview.md
-    // — depth 2). Skip nested 00-overview.md files in subfolders.
+    if (base !== "01-index.md") return true;
+    // Only the top-level overview (e.g. spec/04-database-conventions/01-index.md
+    // — depth 2). Skip nested 01-index.md files in subfolders.
     if (relPath.split(sep).length !== 2) return true;
   }
   return false;
@@ -223,9 +223,9 @@ function main() {
       }
       // In overview-only strip mode, do NOT strip the overview itself.
       // (Only the top-level overview — depth 2 — is preserved; nested
-      // 00-overview.md files lost their per-file block earlier and are
+      // 01-index.md files lost their per-file block earlier and are
       // now treated like any other prose file.)
-      if (args.mode === "overview-only" && base === "00-overview.md" && rel.split(sep).length === 2) {
+      if (args.mode === "overview-only" && base === "01-index.md" && rel.split(sep).length === 2) {
         summary.skipped++; continue;
       }
     }

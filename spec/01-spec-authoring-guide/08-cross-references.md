@@ -36,19 +36,19 @@ See: [Error Codes](./07-error-codes.md)
 ### Parent folder
 
 ```markdown
-See: [Module Overview](../00-overview.md)
+See: [Module Overview](../01-index.md)
 ```
 
 ### Another module (one level up, then into sibling)
 
 ```markdown
-See: [Coding Guidelines](../02-coding-guidelines/00-overview.md)
+See: [Coding Guidelines](../02-coding-guidelines/01-index.md)
 ```
 
 ### Deep cross-reference (from a subfolder to another module's subfolder)
 
 ```markdown
-See: [GSearch Backend](../../09-gsearch-cli/01-backend/00-overview.md)
+See: [GSearch Backend](../../09-gsearch-cli/01-backend/01-index.md)
 ```
 
 ### From spec to memories
@@ -61,7 +61,7 @@ See: [Database Standards](../../.lovable/memories/architecture/database-standard
 
 ## Cross-Reference Table Pattern
 
-Every `00-overview.md` file should end with a cross-reference table:
+Every `01-index.md` file should end with a cross-reference table:
 
 ```markdown
 
@@ -69,8 +69,8 @@ Every `00-overview.md` file should end with a cross-reference table:
 
 | Reference | Location |
 |-----------|----------|
-| Module A | `../XX-module-a/00-overview.md` |
-| Module B | `../YY-module-b/00-overview.md` |
+| Module A | `../XX-module-a/01-index.md` |
+| Module B | `../YY-module-b/01-index.md` |
 | Memory X | `../../.lovable/memories/category/file.md` |
 ```
 
@@ -81,7 +81,7 @@ Every `00-overview.md` file should end with a cross-reference table:
 ### ❌ Root-relative paths
 
 ```markdown
-See: [Guidelines](/spec/02-coding-guidelines/00-overview.md)
+See: [Guidelines](/spec/02-coding-guidelines/01-index.md)
 ```
 
 **Why wrong:** Root-relative paths break depending on the viewer's base URL.
@@ -89,7 +89,7 @@ See: [Guidelines](/spec/02-coding-guidelines/00-overview.md)
 ### ❌ Absolute filesystem paths
 
 ```markdown
-See: [Guidelines](/dev-server/spec/02-coding-guidelines/00-overview.md)
+See: [Guidelines](/dev-server/spec/02-coding-guidelines/01-index.md)
 ```
 
 **Why wrong:** Filesystem paths are environment-specific.
@@ -97,7 +97,7 @@ See: [Guidelines](/dev-server/spec/02-coding-guidelines/00-overview.md)
 ### ❌ Mixed case in paths
 
 ```markdown
-See: [Guidelines](../03-Coding-Guidelines/00-overview.md)
+See: [Guidelines](../03-Coding-Guidelines/01-index.md)
 ```
 
 **Why wrong:** Paths must be entirely lowercase to match the kebab-case convention.
@@ -118,9 +118,9 @@ To write the correct relative path, count directory levels:
 
 | From | To | Path |
 |------|----|------|
-| `spec/09-gsearch-cli/01-backend/01-arch.md` | `spec/02-coding-guidelines/00-overview.md` | `../../02-coding-guidelines/00-overview.md` |
-| `spec/09-gsearch-cli/00-overview.md` | `spec/02-coding-guidelines/00-overview.md` | `../02-coding-guidelines/00-overview.md` |
-| `spec/09-gsearch-cli/01-backend/01-arch.md` | `spec/09-gsearch-cli/00-overview.md` | `../00-overview.md` |
+| `spec/09-gsearch-cli/01-backend/01-arch.md` | `spec/02-coding-guidelines/01-index.md` | `../../02-coding-guidelines/01-index.md` |
+| `spec/09-gsearch-cli/01-index.md` | `spec/02-coding-guidelines/01-index.md` | `../02-coding-guidelines/01-index.md` |
+| `spec/09-gsearch-cli/01-backend/01-arch.md` | `spec/09-gsearch-cli/01-index.md` | `../01-index.md` |
 
 **Formula:** Count how many directories UP you need to go, then navigate DOWN to the target.
 
@@ -154,7 +154,7 @@ When a module's numeric prefix changes (e.g., `09-gsearch-cli` → `09-gsearch-c
 1. **Other spec files** — Any `../09-gsearch-cli/...` → `../09-gsearch-cli/...`
 2. **Memory files** — Any reference to the old path
 3. **Dashboard code** — `SpecFileViewer.tsx` module definitions
-4. **Master index** — `spec/00-overview.md` module table
+4. **Master index** — `spec/01-index.md` module table
 5. **Consistency reports** — If they mention module paths
 
 **This is why module renaming should be done carefully and in batches.**

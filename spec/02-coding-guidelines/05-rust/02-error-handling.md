@@ -226,5 +226,5 @@ impl From<&AppError> for ErrorResponse {
 | Reference | Location |
 |-----------|----------|
 | Error Code Registry | `../../03-error-manage/03-error-code-registry/01-registry.md` |
-| Error Resolution Spec | `../../03-error-manage/00-overview.md` |
-| Cross-Language Guidelines | `../01-cross-language/00-overview.md` |
+| Error Resolution Spec | `../../03-error-manage/01-index.md` |
+| Cross-Language Guidelines | `../01-cross-language/01-index.md` |

@@ -28,14 +28,14 @@ For CLI tools, use the [CLI Module Template](./04-cli-module-template.md) instea
 
 ```
 {NN}-{app-name}/
-├── 00-overview.md                        # Project overview, purpose, and folder index
+├── 01-index.md                        # Project overview, purpose, and folder index
 ├── 01-fundamentals.md                    # Core concepts, architecture, data model
 │
 ├── 02-features/                          # All feature specifications
-│   ├── 00-overview.md                   # Feature index — lists all features with status
+│   ├── 01-index.md                   # Feature index — lists all features with status
 │   │
 │   ├── 01-{feature-name}/              # Each feature in its own numbered folder
-│   │   ├── 00-overview.md              # Feature purpose, scope, dependencies
+│   │   ├── 01-index.md              # Feature purpose, scope, dependencies
 │   │   ├── 01-backend.md               # Server-side logic, API endpoints, DB queries
 │   │   ├── 02-frontend.md              # UI components, pages, user interactions
 │   │   ├── 03-wp-admin.md              # WordPress admin screens, settings, hooks
@@ -43,7 +43,7 @@ For CLI tools, use the [CLI Module Template](./04-cli-module-template.md) instea
 │   │   └── 99-consistency-report.md
 │   │
 │   ├── 02-{feature-name}/
-│   │   ├── 00-overview.md
+│   │   ├── 01-index.md
 │   │   ├── 01-backend.md
 │   │   ├── 02-frontend.md
 │   │   └── ...
@@ -51,10 +51,10 @@ For CLI tools, use the [CLI Module Template](./04-cli-module-template.md) instea
 │   └── ...                              # More features, numbered sequentially
 │
 ├── 03-issues/                            # Tracked issues, bugs, and investigations
-│   ├── 00-overview.md                   # Issue index — lists all issues with status
+│   ├── 01-index.md                   # Issue index — lists all issues with status
 │   │
 │   ├── 01-{issue-name}/                # Multi-file issues get their own folder
-│   │   ├── 00-overview.md              # Issue description, impact, root cause
+│   │   ├── 01-index.md              # Issue description, impact, root cause
 │   │   ├── 01-investigation.md         # Analysis, logs, reproduction steps
 │   │   ├── 02-resolution.md            # Fix details, code changes, verification
 │   │   └── 99-consistency-report.md
@@ -72,7 +72,7 @@ For CLI tools, use the [CLI Module Template](./04-cli-module-template.md) instea
 
 ## Folder Details
 
-### `00-overview.md` (Root)
+### `01-index.md` (Root)
 
 The first file anyone reads. Must contain:
 
@@ -97,14 +97,14 @@ Each feature lives in its own numbered subfolder. Inside each feature folder:
 
 | File | Purpose | Required? |
 |------|---------|-----------|
-| `00-overview.md` | Feature scope, dependencies, user stories | ✅ Yes |
+| `01-index.md` | Feature scope, dependencies, user stories | ✅ Yes |
 | `01-backend.md` | API endpoints, DB queries, server logic | ✅ Yes |
 | `02-frontend.md` | UI components, pages, interactions | If applicable |
 | `03-wp-admin.md` | Admin screens, settings pages, hooks | WordPress only |
 | `97-acceptance-criteria.md` | Testable criteria for this feature | Recommended |
 | `99-consistency-report.md` | Consistency check | ✅ Yes |
 
-**Feature overview index** (`02-features/00-overview.md`) must list all features with their status:
+**Feature overview index** (`02-features/01-index.md`) must list all features with their status:
 
 ```markdown
 
@@ -123,10 +123,10 @@ Tracks bugs, investigations, and resolutions. Each issue follows the same `{NN}-
 
 | Format | When to Use |
 |--------|------------|
-| **Folder** (`{NN}-{issue-name}/`) | Multi-file issues requiring investigation + resolution docs. Must include `00-overview.md`. |
+| **Folder** (`{NN}-{issue-name}/`) | Multi-file issues requiring investigation + resolution docs. Must include `01-index.md`. |
 | **Single file** (`{NN}-{issue-name}.md`) | Simple issues with a straightforward description and fix |
 
-**Issue overview index** (`03-issues/00-overview.md`) must list all issues with their status:
+**Issue overview index** (`03-issues/01-index.md`) must list all issues with their status:
 
 ```markdown
 
@@ -157,35 +157,35 @@ Tracks bugs, investigations, and resolutions. Each issue follows the same `{NN}-
 
 ```
 13-wp-plugin/03-exam-manager/
-├── 00-overview.md                        # Plugin overview, tech stack, folder index
+├── 01-index.md                        # Plugin overview, tech stack, folder index
 ├── 01-fundamentals.md                    # Schema, auth model, plugin lifecycle
 │
 ├── 02-features/
-│   ├── 00-overview.md                   # Feature index with 8 features listed
+│   ├── 01-index.md                   # Feature index with 8 features listed
 │   ├── 01-exam-builder/
-│   │   ├── 00-overview.md              # Exam creation workflow
+│   │   ├── 01-index.md              # Exam creation workflow
 │   │   ├── 01-backend.md               # REST API, DB tables, validation
 │   │   ├── 02-frontend.md              # React exam editor component
 │   │   ├── 03-wp-admin.md              # Admin menu registration, settings
 │   │   └── 99-consistency-report.md
 │   ├── 02-question-bank/
-│   │   ├── 00-overview.md
+│   │   ├── 01-index.md
 │   │   ├── 01-backend.md
 │   │   ├── 02-frontend.md
 │   │   └── 99-consistency-report.md
 │   ├── 03-results-dashboard/
-│   │   ├── 00-overview.md
+│   │   ├── 01-index.md
 │   │   ├── 01-backend.md
 │   │   └── 02-frontend.md
 │   └── 04-certificate-generator/
-│       ├── 00-overview.md
+│       ├── 01-index.md
 │       ├── 01-backend.md
 │       └── 02-frontend.md
 │
 ├── 03-issues/
-│   ├── 00-overview.md                   # Issue index — 3 tracked issues
+│   ├── 01-index.md                   # Issue index — 3 tracked issues
 │   ├── 01-score-calculation-rounding/
-│   │   ├── 00-overview.md              # Bug: scores rounded incorrectly
+│   │   ├── 01-index.md              # Bug: scores rounded incorrectly
 │   │   ├── 01-investigation.md         # Root cause: float precision
 │   │   └── 02-resolution.md            # Fix: decimal(10,4) + round-half-up
 │   └── 02-wp-65-compat.md              # Simple issue: single file
@@ -200,14 +200,14 @@ Tracks bugs, investigations, and resolutions. Each issue follows the same `{NN}-
 ## Checklist: New App/WordPress Module
 
 - [ ] Module number selected (next available after highest)
-- [ ] Root `00-overview.md` created with full metadata and folder tree
+- [ ] Root `01-index.md` created with full metadata and folder tree
 - [ ] `01-fundamentals.md` written with core architecture
-- [ ] `02-features/00-overview.md` created with feature index table
-- [ ] At least one feature folder with `00-overview.md` + `01-backend.md`
-- [ ] `03-issues/00-overview.md` created (even if empty initially)
+- [ ] `02-features/01-index.md` created with feature index table
+- [ ] At least one feature folder with `01-index.md` + `01-backend.md`
+- [ ] `03-issues/01-index.md` created (even if empty initially)
 - [ ] `97-acceptance-criteria.md` with numbered, testable criteria
 - [ ] `99-consistency-report.md` at root and each major subfolder
-- [ ] `spec/00-overview.md` master index updated
+- [ ] `spec/01-index.md` master index updated
 - [ ] Cross-references added to related modules
 - [ ] Error codes registered in error code registry (if applicable)
 

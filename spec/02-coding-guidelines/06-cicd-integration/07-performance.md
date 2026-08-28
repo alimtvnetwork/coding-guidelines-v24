@@ -130,11 +130,11 @@ findings (`1`).
 
 ## Cross-References
 
-- [Orchestrator](./00-overview.md#layer-1--portable-check-scripts-linters-cicdchecks)
+- [Orchestrator](./01-index.md#layer-1--portable-check-scripts-linters-cicdchecks)
 - [Plugin Model](./02-plugin-model.md)
 - [Acceptance Criteria](./97-acceptance-criteria.md)
 - `install.sh` middle-out mirror probe — same pattern, different domain
 
 ---
 
-*Part of [CI/CD Integration](./00-overview.md)*
+*Part of [CI/CD Integration](./01-index.md)*

@@ -88,7 +88,7 @@ Direct mapping from verbatim §Acceptance Criteria 1–9 to spec deliverables. E
 |---------|-----------|------|
 | Main↔Worker errors use the envelope contract | `08-error-contract.md` §2, §3 | Wire test: every error response matches schema |
 | Correlation ID propagated end-to-end | `08-error-contract.md` §4 | Trace test: same `cid` in React, Main, Worker logs |
-| Stack flexibility honored | `00-overview.md` §3 | Spec is stack-agnostic; default Laravel called out |
+| Stack flexibility honored | `01-index.md` §3 | Spec is stack-agnostic; default Laravel called out |
 | Replacers applied | `02-glossary.md` §Reserved | grep: zero `CW configuration`, zero `git map` strings in this spec folder |
 
 ---

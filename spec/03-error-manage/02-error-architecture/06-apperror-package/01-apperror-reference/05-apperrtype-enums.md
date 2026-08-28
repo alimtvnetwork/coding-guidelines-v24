@@ -1,6 +1,6 @@
 # AppError Package Reference — Domain Error Type Enums (`apperrtype`)
 
-> **Parent:** [AppError Package Reference](./00-overview.md)  
+> **Parent:** [AppError Package Reference](./01-index.md)  
 > **Version:** 2.0.0  
 > **Updated:** 2026-04-02  
 > **Breaking:** Migrated from per-domain `byte` enums to single `uint16` Variation enum (inspired by [evatix-go/errorwrapper/errtype](https://gitlab.com/auk-go/errorwrapper/-/tree/develop/errtype))
@@ -633,7 +633,7 @@ The ecosystem uses **two complementary error code systems**:
 |-----------|----------|
 | Error Code Convention | [04-codes-and-policy.md](./04-codes-and-policy.md) |
 | Error Code Registry | [03-error-code-registry/01-registry.md](../../../03-error-code-registry/01-registry.md) |
-| Enum Specification | [03-golang/01-enum-specification](../../../../02-coding-guidelines/03-golang/01-enum-specification/00-overview.md) |
+| Enum Specification | [03-golang/01-enum-specification](../../../../02-coding-guidelines/03-golang/01-enum-specification/01-index.md) |
 | Lint Rule CODE-RED-008 | `linter-scripts/validate-guidelines.go` |
 | Source Inspiration | [evatix-go/errorwrapper/errtype](https://gitlab.com/auk-go/errorwrapper/-/tree/develop/errtype) |
 

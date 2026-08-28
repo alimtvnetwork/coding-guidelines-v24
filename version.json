@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.29.0",
+  "Version": "6.30.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "0e0a541a573a232795c8bd629f54fca2495c5109",
+  "LastCommitSha": "62c915330bc22d8a99538dcaf0a51d9f9432fa02",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -54,20 +54,20 @@
     "19-plan-spec-steps-v2.md",
     "20-audit-app-spec.md"
   ],
-  "version": "6.29.0",
+  "version": "6.30.0",
   "updated": "2026-08-28",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "0e0a541a573a232795c8bd629f54fca2495c5109",
-    "shortSha": "0e0a541",
+    "sha": "62c915330bc22d8a99538dcaf0a51d9f9432fa02",
+    "shortSha": "62c9153",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 711,
-    "totalLines": 150578,
+    "totalLines": 150829,
     "totalFolders": 23,
-    "totalBytes": 5414122,
+    "totalBytes": 5424780,
     "rootFiles": 6
   },
   "folders": [
@@ -81,8 +81,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 17,
-      "lineCount": 3390,
-      "byteCount": 132164
+      "lineCount": 3393,
+      "byteCount": 131884
     },
     {
       "path": "02-coding-guidelines",
@@ -94,8 +94,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
       "fileCount": 216,
-      "lineCount": 34069,
-      "byteCount": 1067378
+      "lineCount": 34150,
+      "byteCount": 1070472
     },
     {
       "path": "03-error-manage",
@@ -107,8 +107,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 121,
-      "lineCount": 19459,
-      "byteCount": 709359
+      "lineCount": 19526,
+      "byteCount": 712457
     },
     {
       "path": "04-database-conventions",
@@ -120,8 +120,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 9,
-      "lineCount": 2886,
-      "byteCount": 110608
+      "lineCount": 2889,
+      "byteCount": 110733
     },
     {
       "path": "05-split-db-architecture",
@@ -133,8 +133,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 14,
-      "lineCount": 4120,
-      "byteCount": 171311
+      "lineCount": 4129,
+      "byteCount": 171773
     },
     {
       "path": "06-seedable-config-architecture",
@@ -146,8 +146,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 19,
-      "lineCount": 4803,
-      "byteCount": 155095
+      "lineCount": 4812,
+      "byteCount": 155569
     },
     {
       "path": "07-design-system",
@@ -159,8 +159,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 17,
-      "lineCount": 2740,
-      "byteCount": 83659
+      "lineCount": 2743,
+      "byteCount": 83820
     },
     {
       "path": "08-docs-viewer-ui",
@@ -172,8 +172,8 @@
       "aiConfidence": "90%",
       "ambiguity": "10%",
       "fileCount": 14,
-      "lineCount": 2033,
-      "byteCount": 64849
+      "lineCount": 2039,
+      "byteCount": 65198
     },
     {
       "path": "09-code-block-system",
@@ -185,8 +185,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 12,
-      "lineCount": 2132,
-      "byteCount": 61077
+      "lineCount": 2135,
+      "byteCount": 61259
     },
     {
       "path": "10-research",
@@ -198,8 +198,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 2,
-      "lineCount": 120,
-      "byteCount": 3454
+      "lineCount": 123,
+      "byteCount": 3624
     },
     {
       "path": "11-powershell-integration",
@@ -212,7 +212,7 @@
       "ambiguity": null,
       "fileCount": 13,
       "lineCount": 2766,
-      "byteCount": 77911
+      "byteCount": 77887
     },
     {
       "path": "12-cicd-pipeline-workflows",
@@ -224,8 +224,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 43,
-      "lineCount": 8540,
-      "byteCount": 276499
+      "lineCount": 8552,
+      "byteCount": 277095
     },
     {
       "path": "13-generic-cli",
@@ -237,8 +237,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 23,
-      "lineCount": 4701,
-      "byteCount": 151690
+      "lineCount": 4704,
+      "byteCount": 151857
     },
     {
       "path": "14-update",
@@ -250,8 +250,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 44,
-      "lineCount": 9004,
-      "byteCount": 294426
+      "lineCount": 9013,
+      "byteCount": 294864
     },
     {
       "path": "15-distribution-and-runner",
@@ -263,8 +263,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 7,
-      "lineCount": 895,
-      "byteCount": 35359
+      "lineCount": 898,
+      "byteCount": 35499
     },
     {
       "path": "16-generic-release",
@@ -276,8 +276,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 10,
-      "lineCount": 2144,
-      "byteCount": 66832
+      "lineCount": 2147,
+      "byteCount": 67014
     },
     {
       "path": "17-consolidated-guidelines",
@@ -289,8 +289,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 36,
-      "lineCount": 17100,
-      "byteCount": 620741
+      "lineCount": 17103,
+      "byteCount": 620791
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -302,8 +302,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 31,
-      "lineCount": 17602,
-      "byteCount": 585121
+      "lineCount": 17608,
+      "byteCount": 585413
     },
     {
       "path": "19-main-worker-service",
@@ -315,8 +315,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 53,
-      "lineCount": 10697,
-      "byteCount": 660935
+      "lineCount": 10707,
+      "byteCount": 661334
     },
     {
       "path": "21-app",
@@ -328,8 +328,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 64,
-      "byteCount": 2200
+      "lineCount": 67,
+      "byteCount": 2373
     },
     {
       "path": "22-app-issues",
@@ -341,8 +341,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 58,
-      "byteCount": 1873
+      "lineCount": 61,
+      "byteCount": 2046
     },
     {
       "path": "23-app-db",
@@ -354,8 +354,8 @@
       "aiConfidence": "Draft",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 74,
-      "byteCount": 2202
+      "lineCount": 77,
+      "byteCount": 2375
     },
     {
       "path": "24-app-ui-design-system",
@@ -367,8 +367,8 @@
       "aiConfidence": "Draft",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 73,
-      "byteCount": 1990
+      "lineCount": 76,
+      "byteCount": 2166
     }
   ],
   "prompts": [

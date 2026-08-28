@@ -238,7 +238,7 @@ All `WORKER-*` codes registered in `spec/03-error-manage/03-error-code-registry/
 
 ## 8. Cross-References
 
-- `00-overview.md` §0 — Kubernetes mental model.
+- `01-index.md` §0 — Kubernetes mental model.
 - `06-core-api-endpoints.md` §2.5 — push endpoints (Channel A wire surface).
 - `09-self-update-pointer.md` — high-level intent + pause note (this file is the technical realization).
 - `15-tunable-constants.md` §2.10 — defaults for all channel knobs.

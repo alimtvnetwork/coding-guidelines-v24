@@ -1,6 +1,6 @@
 # C# Error Handling
 
-> **Parent:** [C# Coding Standards](./00-overview.md)  
+> **Parent:** [C# Coding Standards](./01-index.md)  
 > **Version:** 1.0.0  
 > **Updated:** 2026-04-02
 

@@ -6,7 +6,7 @@ verification pass.
 
 ## Files exist
 
-- [ ] `spec-authoring/22-fix-repo/00-overview.md`
+- [ ] `spec-authoring/22-fix-repo/01-index.md`
 - [ ] `spec-authoring/22-fix-repo/01-spec.md`
 - [ ] `spec-authoring/22-fix-repo/02-edge-cases.md`
 - [ ] `spec-authoring/22-fix-repo/03-acceptance-criteria.md`

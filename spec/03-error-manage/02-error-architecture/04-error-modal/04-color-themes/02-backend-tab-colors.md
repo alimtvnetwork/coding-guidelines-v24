@@ -1,6 +1,6 @@
 # Backend Section — Tab-Specific Color Themes
 
-> **Parent:** [Color Themes Index](./00-overview.md)  
+> **Parent:** [Color Themes Index](./01-index.md)  
 > **Version:** 2.1.0  
 > **Updated:** 2026-03-31
 

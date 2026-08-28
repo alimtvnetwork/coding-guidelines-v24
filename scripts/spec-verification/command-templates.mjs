@@ -38,7 +38,7 @@ export const COMMAND_TEMPLATES = {
     key: "lint:spec-folders",
     category: "lint",
     command: "python3 linter-scripts/check-spec-folder-refs.py",
-    asserts: "Every spec folder has the required 00-overview.md and follows kebab-case numeric prefixes.",
+    asserts: "Every spec folder has the required 01-index.md and follows kebab-case numeric prefixes.",
   },
   "lint:forbidden-strings": {
     key: "lint:forbidden-strings",

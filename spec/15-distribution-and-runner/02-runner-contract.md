@@ -98,7 +98,7 @@ The first positional argument is the sub-command. If it starts with `-` (e.g. `-
 
 ## Cross-references
 
-- [`./00-overview.md`](./00-overview.md) — Distribution overview
+- [`./01-index.md`](./01-index.md) — Distribution overview
 - [`./01-install-contract.md`](./01-install-contract.md) — Install contract
 - [`spec-slides/`](../../spec-slides/) — Slides app spec
 - [`spec/13-generic-cli/`](../13-generic-cli/) — Generic CLI conventions

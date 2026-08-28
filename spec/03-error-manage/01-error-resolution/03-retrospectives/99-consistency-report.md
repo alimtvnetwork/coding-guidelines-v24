@@ -10,7 +10,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 1 | `00-overview.md` | ✅ Present |
+| 1 | `01-index.md` | ✅ Present |
 | 2 | `01-health-endpoint-mismatch.md` | ✅ Present |
 | 3 | `02-retry-debounce-dedup-fixes.md` | ✅ Present |
 | 4 | `03-zip-finalization-before-return.md` | ✅ Present |

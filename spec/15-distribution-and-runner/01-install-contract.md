@@ -117,7 +117,7 @@ No silent failures. No bare stack traces.
 
 ## Cross-references
 
-- [`./00-overview.md`](./00-overview.md) — Distribution overview
+- [`./01-index.md`](./01-index.md) — Distribution overview
 - [`./03-release-pipeline.md`](./03-release-pipeline.md) — Where the artifacts come from
 - [`./04-install-config.md`](./04-install-config.md) — Folder-list contract
 

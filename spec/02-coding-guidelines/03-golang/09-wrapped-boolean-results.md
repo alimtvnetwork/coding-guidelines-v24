@@ -1,6 +1,6 @@
 # Golang Single Return Parameter & Wrapped Results
 
-> **Parent:** [Golang Overview](./00-overview.md)
+> **Parent:** [Golang Overview](./01-index.md)
 > **Version:** 1.0.0
 
 ## The Rule: Single Return Parameter

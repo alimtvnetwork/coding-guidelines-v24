@@ -649,7 +649,7 @@ if (import.meta.env.DEV) {
 
 ## Cross-Reference
 
-- [Error Resolution Overview](../../00-overview.md)
+- [Error Resolution Overview](../../01-index.md)
 - [Frontend-Backend Sync Verification](../04-verification-patterns/01-frontend-backend-sync.md)
 - [Go Debugging Guide](./02-debugging-go.md)
 - React Coding Guidelines *(external spec)*

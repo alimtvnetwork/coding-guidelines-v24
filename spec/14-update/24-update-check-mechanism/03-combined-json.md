@@ -1,7 +1,7 @@
 # Combined Discovery JSON
 
 > **Version:** 1.0.0
-> **Parent:** [00-overview.md](./00-overview.md)
+> **Parent:** [01-index.md](./01-index.md)
 
 ---
 

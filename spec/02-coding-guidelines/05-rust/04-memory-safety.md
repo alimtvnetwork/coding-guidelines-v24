@@ -187,4 +187,4 @@ for _ in 0..1000 {
 | Reference | Location |
 |-----------|----------|
 | FFI & Platform Abstraction | `./06-ffi-platform.md` |
-| Cross-Language Guidelines | `../01-cross-language/00-overview.md` |
+| Cross-Language Guidelines | `../01-cross-language/01-index.md` |

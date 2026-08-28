@@ -48,3 +48,8 @@
 - .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/02-upgrade-installer-scripts.md
 - .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/03-generate-50-improvements.md
 - .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/04-release.md
+- .lovable/plans/pending/04-rename-overviews-and-installer-json.md
+- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/01-rename-and-update-refs.md
+- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/02-enhance-installers.md
+- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/03-update-readme.md
+- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/04-release.md

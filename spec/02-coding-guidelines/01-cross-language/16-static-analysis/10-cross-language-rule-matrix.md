@@ -139,5 +139,5 @@ Side-by-side mapping of every enforced rule across all 8 languages, with SonarQu
 ## Cross-References
 
 - [CI Pipeline Quality Gate](./09-ci-pipeline-quality-gate.md)
-- [Static Analysis Overview](./00-overview.md)
+- [Static Analysis Overview](./01-index.md)
 - [TypeScript ESLint Enforcement](../../02-typescript/11-eslint-enforcement.md)

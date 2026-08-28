@@ -147,7 +147,7 @@ Each row in the master matrix below contains:
 |-----|------------------|--------|
 | `15-distribution-and-runner/` has no standalone consolidated file — merged into `17-self-update-app-update.md` | `15-distribution-and-runner/` | 🟡 Acceptable — referenced inline; promote to standalone if it grows beyond 5 files |
 | `16-generic-release/` folded into CI/CD consolidated rather than its own file | `16-generic-release/` | 🟡 Acceptable — overlaps heavily with `12-cicd-pipeline-workflows/` |
-| `10-research/` and `21-app/`, `22-app-issues/` are placeholder folders with only `00-overview.md` | `10-research/`, `21-app/`, `22-app-issues/` | 🟡 Expected — content lives in app-* consolidated files |
+| `10-research/` and `21-app/`, `22-app-issues/` are placeholder folders with only `01-index.md` | `10-research/`, `21-app/`, `22-app-issues/` | 🟡 Expected — content lives in app-* consolidated files |
 | `02-coding-guidelines/06-cicd-integration/` cross-references CI/CD specs but is not summarized in `02-coding-guidelines.md` | `02-coding-guidelines/06-cicd-integration/` | ✅ Covered via `15-cicd-pipeline-workflows.md` cross-ref |
 
 ---
@@ -166,7 +166,7 @@ When implementing **any** rule from the consolidated section:
 
 ## Cross-References
 
-- [`00-overview.md`](./00-overview.md) — file inventory and scoring
+- [`01-index.md`](./01-index.md) — file inventory and scoring
 - [`19-gap-analysis.md`](./19-gap-analysis.md) — formal gap analysis and implementability scores
 - [`99-consistency-report.md`](./99-consistency-report.md) — validation history
 - `../01-spec-authoring-guide/01-folder-structure.md` — canonical folder structure rules

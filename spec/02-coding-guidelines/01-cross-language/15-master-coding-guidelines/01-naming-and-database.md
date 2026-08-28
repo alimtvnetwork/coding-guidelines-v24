@@ -1,6 +1,6 @@
 # Master Coding Guidelines — Naming conventions, database naming, file naming
 
-> **Parent:** [Master Coding Guidelines](./00-overview.md)  
+> **Parent:** [Master Coding Guidelines](./01-index.md)  
 > **Version:** 2.1.0  
 > **Updated:** 2026-03-31
 
@@ -10,11 +10,11 @@
 
 This is the **master reference**. Every rule here is enforced across all languages. Language-specific details are in:
 
-- [PHP Standards](../../04-php/00-overview.md)
-- [Go Standards](../../03-golang/04-golang-standards-reference/00-overview.md)
+- [PHP Standards](../../04-php/01-index.md)
+- [Go Standards](../../03-golang/04-golang-standards-reference/01-index.md)
 - [TypeScript Standards](../../02-typescript/08-typescript-standards-reference.md)
 - [Database Naming](../07-database-naming.md)
-- [Boolean Principles](../02-boolean-principles/00-overview.md)
+- [Boolean Principles](../02-boolean-principles/01-index.md)
 - [No-Negatives](../12-no-negatives.md)
 - [Test Naming & Structure](../14-test-naming-and-structure.md)
 - [Lazy Evaluation Patterns](../16-lazy-evaluation-patterns.md)

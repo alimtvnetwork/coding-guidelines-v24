@@ -129,10 +129,10 @@ return ErrorResponse::logAndReturnWithTrace($this->fileLogger, $e, 'Middleware e
 
 ## Cross-References
 
-- [PHP Standards](../04-php/07-php-standards-reference/00-overview.md)
+- [PHP Standards](../04-php/07-php-standards-reference/01-index.md)
 - [TypeScript Standards](../02-typescript/08-typescript-standards-reference.md)
-- [Go Standards](../03-golang/04-golang-standards-reference/00-overview.md)
-- [Cross-Language Code Style](./04-code-style/00-overview.md)
+- [Go Standards](../03-golang/04-golang-standards-reference/01-index.md)
+- [Cross-Language Code Style](./04-code-style/01-index.md)
 
 ---
 

@@ -1,6 +1,6 @@
 # Discriminated Union & Action Type Patterns
 
-> **Parent:** [TypeScript Standards](./00-overview.md)  
+> **Parent:** [TypeScript Standards](./01-index.md)  
 > **Version:** 1.0.0  
 > **Updated:** 2026-04-05
 
@@ -175,7 +175,7 @@ type: ActionType.AddToast
 | Reference | Location |
 |-----------|----------|
 | TypeScript Standards (§8) | [08-typescript-standards-reference.md § Discriminated Unions](./08-typescript-standards-reference.md) |
-| Enum Conventions | [00-overview.md](./00-overview.md) |
+| Enum Conventions | [01-index.md](./01-index.md) |
 | Consolidated Review Guide (Type Safety) | [../consolidated-review-guide.md](../consolidated-review-guide.md) |
 | Condensed Review Guide (Types — CODE RED) | [../consolidated-review-guide-condensed.md](../consolidated-review-guide-condensed.md) |
 | AI Quick-Reference Checklist | [../06-ai-optimization/02-ai-quick-reference-checklist.md](../06-ai-optimization/02-ai-quick-reference-checklist.md) |

@@ -9,7 +9,7 @@
 
 | # | File | Status | Lines | Impl. Score |
 |---|------|--------|-------|-------------|
-| 1 | `00-overview.md` | ✅ Present | — | — |
+| 1 | `01-index.md` | ✅ Present | — | — |
 | 2 | `01-spec-authoring.md` | ✅ Present | 330+ | 95% |
 | 3 | `02-coding-guidelines.md` | ✅ Present | 726 | 97% |
 | 4 | `03-error-management.md` | ✅ Present | 489 | 97% |

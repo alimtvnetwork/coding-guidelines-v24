@@ -1,6 +1,6 @@
 # Error Report Generator
 
-> **Parent:** [React Components Index](./00-overview.md)  
+> **Parent:** [React Components Index](./01-index.md)  
 > **Version:** 4.0.0  
 > **Updated:** 2026-04-01
 
@@ -43,7 +43,7 @@ export function generateErrorReport(error: CapturedError, app?: AppInfo): string
 }
 ```
 
-**Sample output:** See [Copy Format Samples](../01-copy-formats/00-overview.md) for complete examples.
+**Sample output:** See [Copy Format Samples](../01-copy-formats/01-index.md) for complete examples.
 
 ---
 

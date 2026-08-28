@@ -176,10 +176,10 @@ const isInputFocused = () => {
 Sidebar
 ├── Search Input (Ctrl+K)
 ├── Folder (expandable)
-│   ├── 00-overview.md (file)
+│   ├── 01-index.md (file)
 │   ├── 01-fundamentals.md (file)
 │   └── 02-features/ (subfolder)
-│       ├── 00-overview.md
+│       ├── 01-index.md
 │       └── 01-feature.md
 └── Folder 2 (expandable)
     └── ...

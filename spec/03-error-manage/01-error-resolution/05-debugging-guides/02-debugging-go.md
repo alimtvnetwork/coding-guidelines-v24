@@ -676,9 +676,9 @@ See full specification: `spec/02-spec-management-software/13-shared-packages/08-
 
 ## Cross-Reference
 
-- [Error Resolution Overview](../../00-overview.md)
+- [Error Resolution Overview](../../01-index.md)
 - [Frontend-Backend Sync Verification](../04-verification-patterns/01-frontend-backend-sync.md)
-- [Error Code Registry](../../03-error-code-registry/00-overview.md)
+- [Error Code Registry](../../03-error-code-registry/01-index.md)
 - Split DB Architecture *(external spec)*
 - DBOperation Wrapper Spec *(external spec)*
 - ORM-Only Policy — enforced project-wide (no raw SQL outside migrations)

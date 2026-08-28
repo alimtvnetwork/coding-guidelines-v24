@@ -1,6 +1,6 @@
 # Changelog — Update Check Mechanism
 
-> **Parent:** [00-overview.md](./00-overview.md)
+> **Parent:** [01-index.md](./01-index.md)
 
 ---
 
@@ -11,7 +11,7 @@ update-check mechanism for every CLI in the stack.
 
 ### Files added
 
-* `00-overview.md` — Index, defining properties, resolved decisions
+* `01-index.md` — Index, defining properties, resolved decisions
 * `01-fundamentals.md` — V → V+5 parallel discovery algorithm
 * `02-status-script-json.md` — `Status.ps1` / `Status.sh` output schema
 * `03-combined-json.md` — Combined discovery JSON

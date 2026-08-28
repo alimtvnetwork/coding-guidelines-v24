@@ -15,7 +15,7 @@ Every spec module (top-level folder under `spec/`) must contain a minimum set of
 
 | File | Purpose | Scored? |
 |------|---------|---------|
-| `00-overview.md` | Module index: metadata, file inventory table, cross-references | ✅ 25% of health score |
+| `01-index.md` | Module index: metadata, file inventory table, cross-references | ✅ 25% of health score |
 | `99-consistency-report.md` | Structural health report: file inventory, naming compliance, link validation | ✅ 25% of health score |
 
 ---
@@ -36,7 +36,7 @@ The health dashboard scores each module on four equally weighted criteria:
 
 | Criterion | Weight | Check |
 |-----------|--------|-------|
-| `00-overview.md` present | 25% | File exists in module root |
+| `01-index.md` present | 25% | File exists in module root |
 | `99-consistency-report.md` present | 25% | File exists in module root |
 | Lowercase kebab-case naming | 25% | All files and folders comply |
 | Unique numeric sequence prefixes | 25% | No duplicate prefixes within a folder |
@@ -47,7 +47,7 @@ The health dashboard scores each module on four equally weighted criteria:
 
 ## File Templates
 
-### 00-overview.md Template
+### 01-index.md Template
 
 ```markdown
 
@@ -83,7 +83,7 @@ The health dashboard scores each module on four equally weighted criteria:
 
 ```
 
-**Files table template** *(copy into your `00-overview.md` — replace placeholder names)*:
+**Files table template** *(copy into your `01-index.md` — replace placeholder names)*:
 
 ```markdown
 | # | File | Description |
@@ -100,8 +100,8 @@ The health dashboard scores each module on four equally weighted criteria:
 
 | Reference | Location |
 |-----------|----------|
-| Related Module | `../XX-module-name/00-overview.md` |
-| Coding Guidelines | `../02-coding-guidelines/00-overview.md` |
+| Related Module | `../XX-module-name/01-index.md` |
+| Coding Guidelines | `../02-coding-guidelines/01-index.md` |
 ```
 
 ### 97-acceptance-criteria.md Template
@@ -170,7 +170,7 @@ The health dashboard scores each module on four equally weighted criteria:
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present | ✅ |
+| `01-index.md` present | ✅ |
 | `99-consistency-report.md` present | ✅ |
 | Lowercase kebab-case naming | ✅ |
 | Unique numeric sequence prefixes | ✅ |
@@ -183,7 +183,7 @@ The health dashboard scores each module on four equally weighted criteria:
 
 | # | File | Status |
 |---|------|--------|
-| 00 | `00-overview.md` | ✅ Present |
+| 00 | `01-index.md` | ✅ Present |
 | 01 | `01-component.md` | ✅ Present |
 | 97 | `97-acceptance-criteria.md` | ✅ Present |
 | 99 | `99-consistency-report.md` | ✅ Present |
@@ -213,7 +213,7 @@ Subfolders within a module (e.g., `01-backend/`, `02-frontend/`) also require:
 
 | File | Required? |
 |------|-----------|
-| `00-overview.md` | ✅ Always |
+| `01-index.md` | ✅ Always |
 | `99-consistency-report.md` | ✅ For subfolders with 3+ files |
 | `97-acceptance-criteria.md` | Optional (can consolidate at parent level) |
 

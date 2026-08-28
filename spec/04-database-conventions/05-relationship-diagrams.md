@@ -355,5 +355,5 @@ When an AI is asked to create or modify a database schema, follow this checklist
 | ORM and views | [./03-orm-and-views.md](./03-orm-and-views.md) |
 | Testing strategy | [./04-testing-strategy.md](./04-testing-strategy.md) |
 | REST API format | [./06-rest-api-format.md](./06-rest-api-format.md) |
-| Boolean principles | [../02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md](../02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md) |
+| Boolean principles | [../02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md](../02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md) |
 | No-negatives rule | [../02-coding-guidelines/01-cross-language/12-no-negatives.md](../02-coding-guidelines/01-cross-language/12-no-negatives.md) |

@@ -1,6 +1,6 @@
 # ⚠️ THIS FILE HAS BEEN SPLIT INTO A SUBFOLDER
 
-> **Moved to:** [01-copy-formats/00-overview.md](./01-copy-formats/00-overview.md)  
+> **Moved to:** [01-copy-formats/01-index.md](./01-copy-formats/01-index.md)  
 > **Date:** 2026-03-31  
 > **Reason:** 871-line file split into 10 focused files for easier AI consumption.
 
@@ -10,7 +10,7 @@
 
 | File | Content |
 |------|---------|
-| [00-overview.md](./01-copy-formats/00-overview.md) | Index, format overview, copy/download menu patterns |
+| [01-index.md](./01-copy-formats/01-index.md) | Index, format overview, copy/download menu patterns |
 | [01-compact-report.md](./01-copy-formats/01-compact-report.md) | ⭐ DEFAULT — Compact Report (instant, includes delegated server info) |
 | [02-full-report.md](./01-copy-formats/02-full-report.md) | Full Report — all sections, verbose |
 | [03-full-report-with-backend-logs.md](./01-copy-formats/03-full-report-with-backend-logs.md) | Full Report + error.log.txt appended |

@@ -1,26 +1,26 @@
 # Architecture, Folder Structure & Decisions
 
-> **Version:** <!-- STAMP:VERSION -->6.29.0<!-- /STAMP:VERSION -->
+> **Version:** <!-- STAMP:VERSION -->6.30.0<!-- /STAMP:VERSION -->
 > **Updated:** <!-- STAMP:UPDATED -->2026-08-28<!-- /STAMP:UPDATED -->
-> **Stats:** <!-- STAMP:FILES -->711<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->150,578<!-- /STAMP:LINES --> lines).
+> **Stats:** <!-- STAMP:FILES -->711<!-- /STAMP:FILES --> spec files across <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders (<!-- STAMP:LINES -->150,829<!-- /STAMP:LINES --> lines).
 
 ---
 
 ## Spec Authoring Conventions
 
-Every spec folder follows strict conventions defined in [`spec/01-spec-authoring-guide/`](../spec/01-spec-authoring-guide/00-overview.md).
+Every spec folder follows strict conventions defined in [`spec/01-spec-authoring-guide/`](../spec/01-spec-authoring-guide/01-index.md).
 
 ### Folder Rules
 
 | Rule | Convention |
 |------|-----------|
 | **Naming** | `{NN}-{kebab-case-name}/` — numeric prefix + lowercase kebab-case |
-| **Entry point** | Every folder MUST have `00-overview.md` |
+| **Entry point** | Every folder MUST have `01-index.md` |
 | **Health check** | Every folder MUST have `99-consistency-report.md` |
 | **File limit** | Target 300 lines per file (soft limit 400) |
 | **Numbering gaps** | Intentional — allows future insertions without renaming |
 
-### Required Metadata (every `00-overview.md`)
+### Required Metadata (every `01-index.md`)
 
 ```markdown
 
@@ -39,7 +39,7 @@ Every spec folder follows strict conventions defined in [`spec/01-spec-authoring
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present | ✅ |
+| `01-index.md` present | ✅ |
 | AI Confidence assigned   | ✅ |
 | Ambiguity assigned       | ✅ |
 | Keywords present         | ✅ |
@@ -48,7 +48,7 @@ Every spec folder follows strict conventions defined in [`spec/01-spec-authoring
 
 ### Cross-References
 
-- **Always** use file-relative paths (`../03-golang/00-overview.md`)
+- **Always** use file-relative paths (`../03-golang/01-index.md`)
 - **Never** use root-relative paths
 - **Always** include `.md` extension
 - **Always** use lowercase kebab-case in paths
@@ -57,7 +57,7 @@ Every spec folder follows strict conventions defined in [`spec/01-spec-authoring
 
 | Type | Pattern | Example |
 |------|---------|---------|
-| Overview | `00-overview.md` | Every folder |
+| Overview | `01-index.md` | Every folder |
 | Spec content | `{NN}-{kebab-case}.md` | `02-boolean-principles.md` |
 | Acceptance criteria | `97-acceptance-criteria.md` | Testable requirements |
 | Changelog | `98-changelog.md` | Version history |
@@ -133,7 +133,7 @@ The error management system is built around three pillars, battle-tested in the 
 2. **Error Architecture** (`02-error-architecture/`) — `apperror` package, response envelope, error modal, structured logging.
 3. **Error Code Registry** (`03-error-code-registry/`) — centralized catalog, JSON Schemas, collision detection, templates.
 
-Full reference: [`spec/03-error-manage/00-overview.md`](../spec/03-error-manage/00-overview.md). Complete `apperror` constructor catalogue and Response Envelope JSON examples live under [`02-error-architecture/06-apperror-package/`](../spec/03-error-manage/02-error-architecture/06-apperror-package/00-overview.md) and [`02-error-architecture/05-response-envelope/`](../spec/03-error-manage/02-error-architecture/05-response-envelope/00-overview.md).
+Full reference: [`spec/03-error-manage/01-index.md`](../spec/03-error-manage/01-index.md). Complete `apperror` constructor catalogue and Response Envelope JSON examples live under [`02-error-architecture/06-apperror-package/`](../spec/03-error-manage/02-error-architecture/06-apperror-package/01-index.md) and [`02-error-architecture/05-response-envelope/`](../spec/03-error-manage/02-error-architecture/05-response-envelope/01-index.md).
 
 ---
 
@@ -143,4 +143,4 @@ Full reference: [`spec/03-error-manage/00-overview.md`](../spec/03-error-manage/
 - [`src/data/specTree.json`](../src/data/specTree.json) — machine-readable tree (auto-generated).
 - [`version.json`](../version.json) — single source of truth for live counts and per-folder metadata.
 
-Every folder scores itself on 4 criteria (25 points each): `00-overview.md` present with required metadata, AI Confidence assigned, Ambiguity assessed, Keywords + scoring table included.
+Every folder scores itself on 4 criteria (25 points each): `01-index.md` present with required metadata, AI Confidence assigned, Ambiguity assessed, Keywords + scoring table included.

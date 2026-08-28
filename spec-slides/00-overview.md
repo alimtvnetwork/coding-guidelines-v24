@@ -44,7 +44,7 @@ This spec defines:
 
 | # | File | Purpose |
 |---|------|---------|
-| 00 | [00-overview.md](./00-overview.md) | This document |
+| 00 | [01-index.md](./01-index.md) | This document |
 | 01 | [01-architecture.md](./01-architecture.md) | Project layout, tech stack, isolation rules |
 | 02 | [02-slide-authoring.md](./02-slide-authoring.md) | How to write a slide component |
 | 03 | [03-design-tokens.md](./03-design-tokens.md) | Ubuntu typography, color tokens, spacing |

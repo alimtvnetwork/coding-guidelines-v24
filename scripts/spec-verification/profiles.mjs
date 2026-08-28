@@ -35,7 +35,7 @@ export const FOLDER_PROFILES = {
     title: (s) => `Conformance check for spec authoring rule: ${slugTitle(s)}`,
     given: () => "Run the spec-structure linter against `spec/`.",
     when: "Run the verification command shown below.",
-    then: () => "Every folder MUST contain a valid `00-overview.md`, follow kebab-case numeric prefixes, and resolve all internal links.",
+    then: () => "Every folder MUST contain a valid `01-index.md`, follow kebab-case numeric prefixes, and resolve all internal links.",
     commandKeys: ["meta:spec-health"],
   },
   "02-coding-guidelines": {
@@ -213,6 +213,6 @@ export const DEFAULT_PROFILE = {
   title: (s) => `General conformance check: ${slugTitle(s)}`,
   given: () => "Run the spec health-check against this folder.",
   when: "Run the verification command shown below.",
-  then: () => "Cross-references resolve and the folder contains the required `00-overview.md`, `97-acceptance-criteria.md`, and `99-consistency-report.md`.",
+  then: () => "Cross-references resolve and the folder contains the required `01-index.md`, `97-acceptance-criteria.md`, and `99-consistency-report.md`.",
   commandKeys: ["lint:spec-links"],
 };

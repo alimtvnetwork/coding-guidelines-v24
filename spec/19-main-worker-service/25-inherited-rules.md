@@ -124,7 +124,7 @@ The RBAC adapter lives in the App tier per `mem://architecture/split-database`. 
 
 If two inherited rules disagree, resolve in this order (highest authority first):
 
-1. **Locked decisions D1–D10** (listed in `00-overview.md` §3) — never override.
+1. **Locked decisions D1–D10** (listed in `01-index.md` §3) — never override.
 2. The **source spec** named in §2–§5 above.
 3. The local file in `spec/19-…/` that re-states the rule.
 4. This `25-inherited-rules.md` summary.
@@ -136,7 +136,7 @@ A literal AI that finds a contradiction MUST stop and surface it via `MAIN-900-0
 
 ## 7. Cross-references
 
-- `00-overview.md` §Inherits — points to this file from the spec entry-point.
+- `01-index.md` §Inherits — points to this file from the spec entry-point.
 - `08-error-contract.md` §1 — names `spec/03-error-manage/` as the source of catch/log/rethrow.
 - `15-tunable-constants.md` §4 — names `spec/06-seedable-config-architecture/` as the source of seed semantics.
 - `11-split-db-tier-reconciliation.md` §5 — names `spec/05-split-db-architecture/` as the source of the tier model.

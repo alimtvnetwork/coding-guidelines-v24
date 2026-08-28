@@ -173,7 +173,7 @@ See `.github/scripts/lint-suggest.py` in `gitmap-v6`.
 
 ## Cross-References
 
-- [00-overview.md](./00-overview.md)
+- [01-index.md](./01-index.md)
 - [04-baseline-diff-lint-gate.md](./04-baseline-diff-lint-gate.md) — Sibling script that decides which findings are NEW
 
 ---

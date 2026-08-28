@@ -34,7 +34,7 @@ and less error-prone.
 
 ## Files (this folder)
 
-- `00-overview.md` — this file
+- `01-index.md` — this file
 - `01-spec.md` — normative behavior, flags, exit codes, contracts
 - `02-edge-cases.md` — unusual inputs and their handling
 - `03-acceptance-criteria.md` — testable assertions

@@ -177,7 +177,7 @@ See `.github/scripts/check-constants-collisions.py` in `gitmap-v6`.
 
 ## Cross-References
 
-- [00-overview.md](./00-overview.md)
+- [01-index.md](./01-index.md)
 - [02-grandfather-baseline-naming.md](./02-grandfather-baseline-naming.md) — Shares the string-literal-aware extractor
 
 ---

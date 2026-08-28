@@ -3,7 +3,7 @@
 Portable, language-agnostic CI/CD checks for the **CODE RED** rules from
 this repository's coding guidelines. Drop into any pipeline with one line.
 
-> **Spec:** [`spec/02-coding-guidelines/06-cicd-integration/`](../spec/02-coding-guidelines/06-cicd-integration/00-overview.md)
+> **Spec:** [`spec/02-coding-guidelines/06-cicd-integration/`](../spec/02-coding-guidelines/06-cicd-integration/01-index.md)
 
 ---
 

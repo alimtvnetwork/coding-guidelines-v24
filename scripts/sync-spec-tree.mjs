@@ -69,7 +69,7 @@ function deriveName(slug) {
 }
 
 function deriveFileName(filename) {
-  // "00-overview.md" -> "Overview"
+  // "01-index.md" -> "Overview"
   return deriveName(filename.replace(/\.md$/, ""));
 }
 

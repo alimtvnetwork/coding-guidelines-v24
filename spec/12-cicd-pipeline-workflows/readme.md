@@ -17,7 +17,7 @@ Generic, portable documentation for the project's CI/CD pipeline architecture. T
 | [07-environment-variable-setup.md](./07-environment-variable-setup.md) | `env` command: persistent variables, PATH registration, auto-home, drive setup |
 | [08-terminal-output-standards.md](./08-terminal-output-standards.md) | Output formatting conventions: icons, tables, progress, errors, CI summaries |
 | [09-binary-icon-branding.md](./09-binary-icon-branding.md) | Windows binary icon embedding via `go-winres`: icon, manifest, version info |
-| [03-reusable-ci-guards/00-overview.md](./03-reusable-ci-guards/00-overview.md) | **Reusable CI guards** — six language-agnostic patterns (forbidden-name, grandfather baseline, collision audit, baseline-diff lint gate, lint suggestions, matrix test aggregator) with Go/Node/Python/Rust adaptations and an AI implementation guide |
+| [03-reusable-ci-guards/01-index.md](./03-reusable-ci-guards/01-index.md) | **Reusable CI guards** — six language-agnostic patterns (forbidden-name, grandfather baseline, collision audit, baseline-diff lint gate, lint suggestions, matrix test aggregator) with Go/Node/Python/Rust adaptations and an AI implementation guide |
 
 ---
 

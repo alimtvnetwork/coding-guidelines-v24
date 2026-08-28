@@ -9,7 +9,7 @@
  *
  * Two scope modes mirror the injector:
  *   - overview-only (default): only each top-level folder's
- *     ``00-overview.md`` (depth 2) is *expected* to carry a block.
+ *     ``01-index.md`` (depth 2) is *expected* to carry a block.
  *   - all-files: every prose file outside the skip set is expected
  *     to carry a block.
  *
@@ -103,7 +103,7 @@ function isSpecRootFile(rel) {
 
 function isTopLevelOverview(rel) {
   const parts = rel.split(sep);
-  return parts.length === 2 && parts[1].toLowerCase() === "00-overview.md";
+  return parts.length === 2 && parts[1].toLowerCase() === "01-index.md";
 }
 
 function isSpecOnlyFolder(rel) {

@@ -1,8 +1,8 @@
 # Coding Principles & Standards
 
-> **Version:** <!-- STAMP:VERSION -->6.29.0<!-- /STAMP:VERSION -->
+> **Version:** <!-- STAMP:VERSION -->6.30.0<!-- /STAMP:VERSION -->
 > **Updated:** <!-- STAMP:UPDATED -->2026-08-28<!-- /STAMP:UPDATED -->
-> **Source of truth:** [`spec/02-coding-guidelines/`](../spec/02-coding-guidelines/00-overview.md). This page is a navigable summary — it does **not** redefine rules.
+> **Source of truth:** [`spec/02-coding-guidelines/`](../spec/02-coding-guidelines/01-index.md). This page is a navigable summary — it does **not** redefine rules.
 
 ---
 
@@ -79,7 +79,7 @@ These rules have **zero tolerance** — any violation is an immediate rejection:
 | 26 | `26-magic-values-and-immutability.md` | Type Safety |
 | 27 | `27-types-folder-convention.md` | Architecture |
 
-Full reference: [`spec/02-coding-guidelines/01-cross-language/00-overview.md`](../spec/02-coding-guidelines/01-cross-language/00-overview.md).
+Full reference: [`spec/02-coding-guidelines/01-cross-language/01-index.md`](../spec/02-coding-guidelines/01-cross-language/01-index.md).
 
 ---
 
@@ -89,7 +89,7 @@ The full before/after refactor catalogue (CODE-RED-001 nested-if, CODE-RED-005/0
 
 - [`spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md`](../spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md)
 - [`spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md`](../spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md)
-- [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/`](../spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md)
+- [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/`](../spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/01-index.md)
 
 ---
 
@@ -105,4 +105,4 @@ The full before/after refactor catalogue (CODE-RED-001 nested-if, CODE-RED-005/0
 
 **Usage:** Load `04-condensed-master-guidelines.md` into your AI context, then validate output against `02-ai-quick-reference-checklist.md`.
 
-Full folder: [`spec/02-coding-guidelines/06-ai-optimization/`](../spec/02-coding-guidelines/06-ai-optimization/00-overview.md).
+Full folder: [`spec/02-coding-guidelines/06-ai-optimization/`](../spec/02-coding-guidelines/06-ai-optimization/01-index.md).

@@ -692,4 +692,4 @@ if isNonApiRoute {
 
 ## 7. Cross-Language Alignment
 
-This standard mirrors the cross-language [Boolean Principles](../01-cross-language/02-boolean-principles/00-overview.md) (P1–P6) and [No-Negatives](../01-cross-language/12-no-negatives.md) with Go-specific exemptions for idiomatic patterns (comma-ok, handler guards, error-nil checks) and Go-specific additions (P3b, P5, P7–P9). See [PHP Standards](../04-php/03-naming-conventions.md) for the PHP counterpart.
+This standard mirrors the cross-language [Boolean Principles](../01-cross-language/02-boolean-principles/01-index.md) (P1–P6) and [No-Negatives](../01-cross-language/12-no-negatives.md) with Go-specific exemptions for idiomatic patterns (comma-ok, handler guards, error-nil checks) and Go-specific additions (P3b, P5, P7–P9). See [PHP Standards](../04-php/03-naming-conventions.md) for the PHP counterpart.

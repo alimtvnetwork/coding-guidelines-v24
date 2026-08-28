@@ -90,7 +90,7 @@
 | Concept | Where It's Defined |
 |---------|-------------------|
 | File and folder naming conventions | Spec authoring guide |
-| Required files in every spec folder (`00-overview.md`, `99-consistency-report.md`) | Spec authoring guide |
+| Required files in every spec folder (`01-index.md`, `99-consistency-report.md`) | Spec authoring guide |
 | The `.lovable/` folder structure and its purpose | `07-memory-folder-guide.md` |
 | Linter infrastructure requirements | Spec authoring guide |
 
@@ -125,7 +125,7 @@
 
 ### Reading order within each folder
 
-1. `00-overview.md` — always first
+1. `01-index.md` — always first
 2. All numbered files in order
 3. `99-consistency-report.md` — always last (if present)
 

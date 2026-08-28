@@ -48,7 +48,7 @@ The committed `install-config.json` at the repo root MUST equal:
 }
 ```
 
-This list MUST stay in sync with the §"Default install layout" table in [`00-overview.md`](./00-overview.md) and the §"What gets installed (default)" table in [`01-install-contract.md`](./01-install-contract.md).
+This list MUST stay in sync with the §"Default install layout" table in [`01-index.md`](./01-index.md) and the §"What gets installed (default)" table in [`01-install-contract.md`](./01-install-contract.md).
 
 ---
 
@@ -93,7 +93,7 @@ Invocation:
 
 ## Cross-references
 
-- [`./00-overview.md`](./00-overview.md)
+- [`./01-index.md`](./01-index.md)
 - [`./01-install-contract.md`](./01-install-contract.md)
 - [`./03-release-pipeline.md`](./03-release-pipeline.md)
 

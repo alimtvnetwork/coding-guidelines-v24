@@ -69,4 +69,4 @@ maintenance for consumers — just bump the version pin.
 
 ---
 
-*Part of [CI/CD Integration](./00-overview.md)*
+*Part of [CI/CD Integration](./01-index.md)*

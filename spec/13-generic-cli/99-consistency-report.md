@@ -9,7 +9,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 1 | `00-overview.md` | ✅ Present |
+| 1 | `01-index.md` | ✅ Present |
 | 2 | `02-project-structure.md` | ✅ Present |
 | 3 | `03-subcommand-architecture.md` | ✅ Present |
 | 4 | `04-flag-parsing.md` | ✅ Present |
@@ -37,7 +37,7 @@
 
 ## Known Gaps
 
-- `01-*.md` slot intentionally skipped — `00-overview.md` carries the introduction. No content gap.
+- `01-*.md` slot intentionally skipped — `01-index.md` carries the introduction. No content gap.
 
 ---
 

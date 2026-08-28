@@ -55,7 +55,7 @@ This is the **standalone consolidated reference** for spec authoring conventions
 
 | File | Required When |
 |------|---------------|
-| `00-overview.md` | **Always** — every module |
+| `01-index.md` | **Always** — every module |
 | `99-consistency-report.md` | Every module with 3+ files |
 | `97-acceptance-criteria.md` | App/feature modules |
 | `98-changelog.md` | Modules with version history |
@@ -104,9 +104,9 @@ Every `.md` file **must** begin with:
 
 ---
 
-## `00-overview.md` — Required Content
+## `01-index.md` — Required Content
 
-Every `00-overview.md` must include:
+Every `01-index.md` must include:
 
 ### Scoring Metrics
 
@@ -122,7 +122,7 @@ Every `00-overview.md` must include:
 - **Keywords** for searchability
 - **Document Inventory** table listing all files with status
 - **Cross-References** to related modules
-- **Scoring table** with `00-overview.md` present check
+- **Scoring table** with `01-index.md` present check
 
 ---
 
@@ -130,7 +130,7 @@ Every `00-overview.md` must include:
 
 - Use **file-relative paths only** — never root-relative `/spec/...`
 - Always include `.md` extension
-- Example: `[Split DB](../05-split-db-architecture/00-overview.md)`
+- Example: `[Split DB](../05-split-db-architecture/01-index.md)`
 - Broken links are **blocking errors** in the dashboard scanner
 
 ---
@@ -141,13 +141,13 @@ Every `00-overview.md` must include:
 
 ```
 NN-module-name/
-├── 00-overview.md
+├── 01-index.md
 ├── 01-fundamentals.md
 ├── 02-features/
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   └── 01-feature-name.md
 ├── 03-issues/
-│   └── 00-overview.md
+│   └── 01-index.md
 ├── 97-acceptance-criteria.md
 ├── 98-changelog.md
 └── 99-consistency-report.md
@@ -159,20 +159,20 @@ NN-module-name/
 
 ```
 {NN}-{app-name}/
-├── 00-overview.md
+├── 01-index.md
 ├── 01-fundamentals.md
 ├── 02-features/
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   └── 01-{feature-name}/
-│       ├── 00-overview.md
+│       ├── 01-index.md
 │       ├── 01-backend.md
 │       ├── 02-frontend.md
 │       ├── 03-wp-admin.md          # WordPress only
 │       └── 99-consistency-report.md
 ├── 03-issues/
-│   ├── 00-overview.md
+│   ├── 01-index.md
 │   ├── 01-{issue-name}/            # Multi-file issues
-│   │   ├── 00-overview.md
+│   │   ├── 01-index.md
 │   │   ├── 01-investigation.md
 │   │   └── 02-resolution.md
 │   └── 02-{issue-name}.md          # Simple single-file issues
@@ -187,7 +187,7 @@ NN-module-name/
 
 ```
 NN-module-name/
-├── 00-overview.md
+├── 01-index.md
 ├── 01-topic-a.md
 ├── 02-topic-b.md
 └── 99-consistency-report.md
@@ -258,7 +258,7 @@ The `.lovable/` directory holds all AI-readable project knowledge.
 
 1. **Select module number** — next available after highest existing (do NOT fill gaps)
 2. **Create folder** — `{NN}-{module-name}/` using kebab-case
-3. **Create `00-overview.md`** — with all required sections (scoring, inventory, cross-refs)
+3. **Create `01-index.md`** — with all required sections (scoring, inventory, cross-refs)
 4. **Write content files** — numbered sequentially (`01-`, `02-`, etc.)
 5. **Create `99-consistency-report.md`** — structural health check
 6. **Add `97-acceptance-criteria.md`** — if app/feature module
@@ -307,7 +307,7 @@ python linter-scripts/validate-guidelines.py
 
 | Check | Severity | Rule |
 |-------|----------|------|
-| `00-overview.md` present in every module | CODE-RED | Blocking |
+| `01-index.md` present in every module | CODE-RED | Blocking |
 | Lowercase kebab-case naming | STYLE | Blocking |
 | Unique numeric prefixes per folder | STYLE | Blocking |
 | Metadata header (H1 + Version + Updated) | STYLE | Warning |
@@ -383,7 +383,7 @@ When specs change, update **all three** targets:
 - [ ] New module added to `spec-index.md` with correct number and description
 - [ ] `specTree.json` updated with new entry (including full `content` field)
 - [ ] Consolidated guideline file created or updated in `17-consolidated-guidelines/`
-- [ ] `17-consolidated-guidelines/00-overview.md` file inventory updated
+- [ ] `17-consolidated-guidelines/01-index.md` file inventory updated
 - [ ] `17-consolidated-guidelines/99-consistency-report.md` updated
 - [ ] Gap analysis (`19-gap-analysis.md`) scores recalculated
 

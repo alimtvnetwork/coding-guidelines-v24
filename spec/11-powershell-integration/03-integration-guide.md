@@ -453,6 +453,6 @@ When asking an AI to integrate this PowerShell runner:
 
 ## Cross-References
 
-- [Overview](./00-overview.md) - Architecture and quick start
+- [Overview](./01-index.md) - Architecture and quick start
 - [Configuration Schema](./01-configuration-schema.md) - JSON config details
 - [Script Reference](./02-script-reference.md) - All CLI flags

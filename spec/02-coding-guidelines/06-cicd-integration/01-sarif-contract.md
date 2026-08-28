@@ -26,7 +26,7 @@ conforming to this contract when run with `--format sarif`.
               "id": "CODE-RED-001",
               "name": "NoNestedIf",
               "shortDescription": { "text": "Nested if statements are forbidden" },
-              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md"
+              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/spec/02-coding-guidelines/01-cross-language/04-code-style/01-index.md"
             }
           ]
         }
@@ -93,4 +93,4 @@ every PR to the linter pack itself.
 
 ---
 
-*Part of [CI/CD Integration](./00-overview.md)*
+*Part of [CI/CD Integration](./01-index.md)*

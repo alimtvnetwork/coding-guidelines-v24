@@ -65,9 +65,9 @@ These are the **canonical rule sources** (if a conflict is found, these win):
 
 | Rule Domain | Canonical Source |
 |-------------|-----------------|
-| Naming (all languages) | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/00-overview.md` |
+| Naming (all languages) | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-index.md` |
 | Key naming (PascalCase) | `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md` |
-| Boolean logic | `spec/02-coding-guidelines/03-golang/02-boolean-standards.md` + `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md` |
+| Boolean logic | `spec/02-coding-guidelines/03-golang/02-boolean-standards.md` + `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` |
 | Strict typing | `spec/02-coding-guidelines/01-cross-language/13-strict-typing.md` |
 | Error handling | `spec/03-error-manage/01-error-resolution/10-apperror-package/01-apperror-reference.md` |
 | Code style | `spec/02-coding-guidelines/01-cross-language/04-code-style/` |
@@ -160,6 +160,6 @@ These areas have historically produced contradictions and need extra scrutiny:
 - Global Consistency Report <!-- external: spec/99-consistency-report.md -->
 - Mistake Remediation Protocol <!-- external: .lovable/memories/workflow/03-mistake-remediation-protocol.md -->
 - Issue Template <!-- external: spec/23-how-app-issues-track/01-issue-template.md -->
-- [Master Coding Guidelines](./15-master-coding-guidelines/00-overview.md)
+- [Master Coding Guidelines](./15-master-coding-guidelines/01-index.md)
 - [PascalCase Key Naming](./11-key-naming-pascalcase.md)
 - [Boolean Standards](../03-golang/02-boolean-standards.md)

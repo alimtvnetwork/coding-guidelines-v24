@@ -16,7 +16,7 @@ P1 bug and bring them back into alignment with this folder.
 
 | File | Purpose |
 |------|---------|
-| `00-overview.md` | This file. Top-level map. |
+| `01-index.md` | This file. Top-level map. |
 | `01-spec.md` | Full normative spec — detection, flags, replacement, traversal, exit codes. |
 | `02-edge-cases.md` | Enumerated edge cases with expected behavior for each. |
 | `03-acceptance-criteria.md` | Checkable list used to verify the implementation. |

@@ -17,7 +17,7 @@
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present | ✅ |
+| `01-index.md` present | ✅ |
 | AI Confidence assigned | ✅ |
 | Ambiguity assigned | ✅ |
 | Keywords present | ✅ |
@@ -207,10 +207,10 @@ npx eslint . --max-warnings 0
 
 ## Cross-References
 
-- [Static Analysis Overview](./00-overview.md) — Parent document
+- [Static Analysis Overview](./01-index.md) — Parent document
 - [TypeScript ESLint Enforcement](../../02-typescript/11-eslint-enforcement.md) — Frontend sibling
-- [Cross-Language Code Style](../04-code-style/00-overview.md) — Source rules
-- [Master Coding Guidelines](../15-master-coding-guidelines/00-overview.md) — Full checklist
+- [Cross-Language Code Style](../04-code-style/01-index.md) — Source rules
+- [Master Coding Guidelines](../15-master-coding-guidelines/01-index.md) — Full checklist
 - [Promise/Await Patterns](../../02-typescript/09-promise-await-patterns.md) — Async guidelines
 
 ---

@@ -7,7 +7,7 @@
 
 ---
 
-## Database Hierarchy (00-overview.md)
+## Database Hierarchy (01-index.md)
 
 ### SD-01: Root DB Initialization
 

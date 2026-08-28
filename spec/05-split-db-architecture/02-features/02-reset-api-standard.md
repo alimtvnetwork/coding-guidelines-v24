@@ -3,7 +3,7 @@
 **Version:** 3.2.0  
 **Status:** Active  
 **Updated:** 2026-04-16  
-**Parent:** [00-overview.md](../00-overview.md)
+**Parent:** [01-index.md](../01-index.md)
 
 ---
 
@@ -328,7 +328,7 @@ Common errors:
 
 | Reference | Location |
 |-----------|----------|
-| Split DB Overview | `../00-overview.md` |
+| Split DB Overview | `../01-index.md` |
 | CLI Examples | `./01-cli-examples.md` |
 | AI Bridge Reset | `spec/22-ai-bridge-cli/01-backend/14-reset-and-export-api.md` |
 | GSearch Database | `spec/20-gsearch-cli/01-backend/22-database-architecture.md` |

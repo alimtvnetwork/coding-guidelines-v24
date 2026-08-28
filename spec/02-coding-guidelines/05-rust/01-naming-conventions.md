@@ -399,10 +399,10 @@ Use this table to instantly decide which casing to apply:
 | Reference | Location |
 |-----------|----------|
 | Cross-Language Function Naming | `../01-cross-language/10-function-naming.md` |
-| Abbreviation Casing | `../01-cross-language/04-code-style/00-overview.md` |
+| Abbreviation Casing | `../01-cross-language/04-code-style/01-index.md` |
 | Database Naming (Project-Wide) | `../01-cross-language/07-database-naming.md` |
-| Database Conventions | `../../../04-database-conventions/00-overview.md` |
-| Cross-Language Guidelines | `../01-cross-language/00-overview.md` |
+| Database Conventions | `../../../04-database-conventions/01-index.md` |
+| Cross-Language Guidelines | `../01-cross-language/01-index.md` |
 | PascalCase Key Naming (Other Languages) | `../01-cross-language/11-key-naming-pascalcase.md` |
 | Boolean Flag Method Splitting | `../01-cross-language/24-boolean-flag-methods.md` |
 | Enum Standards (Cross-Language) | `../../../../17-consolidated-guidelines/04-enum-standards.md` |

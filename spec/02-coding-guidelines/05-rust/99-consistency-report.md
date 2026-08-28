@@ -9,7 +9,7 @@
 
 | Criterion | Status |
 |-----------|--------|
-| `00-overview.md` present | ✅ |
+| `01-index.md` present | ✅ |
 | `97-acceptance-criteria.md` present | ✅ |
 | `99-consistency-report.md` present | ✅ |
 | Lowercase kebab-case naming | ✅ |
@@ -23,7 +23,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 00 | `00-overview.md` | ✅ Present |
+| 00 | `01-index.md` | ✅ Present |
 | 01 | `01-naming-conventions.md` | ✅ Present |
 | 02 | `02-error-handling.md` | ✅ Present |
 | 03 | `03-async-patterns.md` | ✅ Present |

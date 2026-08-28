@@ -61,7 +61,7 @@
 | F-D-17 | Diagram shows `IsSecret INTEGER` (boolean as INT). No documentation of allowed values (0/1, true/false). | MINOR |
 | F-D-18 | `SeedableConfigEntryValue TEXT` — secrets are stored alongside non-secrets in plain TEXT. Encryption-at-rest is mentioned only in `05-§2.3`; the schema doesn't enforce it. | MAJOR |
 | F-D-19 | No relationship to `WorkerNode` for per-worker secrets. `05-§2.3` says "OAuth client-credentials per Worker, secrets stored via Seedable-Config" but this ERD has no scoping mechanism. | MAJOR |
-| F-D-20 | This ERD says it is a "projection", but `00-overview.md` references it as if it were authoritative. Fix wording in `00-` or add a banner comment to the diagram. | MINOR |
+| F-D-20 | This ERD says it is a "projection", but `01-index.md` references it as if it were authoritative. Fix wording in `00-` or add a banner comment to the diagram. | MINOR |
 
 ---
 

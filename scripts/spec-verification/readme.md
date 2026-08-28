@@ -42,7 +42,7 @@ node scripts/spec-verification/inject-verification-sections.mjs --json
 
 - **Idempotent**: replaces any existing `## Verification` block (from the
   preceding `---` separator down to EOF). Running twice writes nothing.
-- **Skipped basenames**: `00-overview.md`, `97-acceptance-criteria.md`,
+- **Skipped basenames**: `01-index.md`, `97-acceptance-criteria.md`,
   `99-consistency-report.md`, `readme.md`, `changelog.md`, plus all
   spec-root files at depth 1.
 - **AC tag derivation**: `<profile.tag>-<file-prefix>[a|b|c…]`, where the

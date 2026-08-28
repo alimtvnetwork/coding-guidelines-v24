@@ -402,7 +402,7 @@ Before committing changes to `.github/workflows/*.yml`, `release.sh`, `install.s
 | Current CI workflow | `.github/workflows/ci.yml` |
 | Current Release workflow | `.github/workflows/release.yml` |
 | Current release script | `release.sh` |
-| Coding standards | `spec/02-coding-guidelines/00-overview.md` |
+| Coding standards | `spec/02-coding-guidelines/01-index.md` |
 
 ---
 

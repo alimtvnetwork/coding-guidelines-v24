@@ -212,8 +212,8 @@ Never use `cd` in CI steps to change directories. Use the `working-directory` ke
 - [Vulnerability Scanning](./03-vulnerability-scanning.md) — Scanning classification rules
 - [Install Script Generation](./04-install-script-generation.md) — Placeholder strategy, checksum verification
 - [Code Signing](./05-code-signing.md) — SignPath integration, feature-flag gating
-- [Browser Extension Deploy](./01-browser-extension-deploy/00-overview.md) — Node.js pipeline archetype
-- [Go Binary Deploy](./02-go-binary-deploy/00-overview.md) — Go pipeline archetype
+- [Browser Extension Deploy](./01-browser-extension-deploy/01-index.md) — Node.js pipeline archetype
+- [Go Binary Deploy](./02-go-binary-deploy/01-index.md) — Go pipeline archetype
 
 ---
 

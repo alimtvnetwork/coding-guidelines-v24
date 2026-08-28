@@ -1,6 +1,6 @@
 # Go AppError — Mandatory Return Type, DisplayError & Linter Enforcement
 
-> **Parent:** [AppError Package Reference](./00-overview.md)
+> **Parent:** [AppError Package Reference](./01-index.md)
 > **Version:** 1.0.0
 > **Updated:** 2026-08-28
 > **Rule IDs:** CODE-RED-026, CODE-RED-027
@@ -312,4 +312,4 @@ The linter checks:
 | Linter Script | [linter-scripts/validate-guidelines.go](../../../../../linter-scripts/validate-guidelines.go) |
 | golangci-lint Config | [linters/golangci-lint/.golangci.yml](../../../../../linters/golangci-lint/.golangci.yml) |
 | codestack package | `gitlab.com/auk-go/core/codestack` |
-| Error Management Overview | [spec/03-error-manage/00-overview.md](../../../00-overview.md) |
+| Error Management Overview | [spec/03-error-manage/01-index.md](../../../01-index.md) |

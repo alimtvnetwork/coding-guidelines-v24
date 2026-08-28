@@ -1,6 +1,6 @@
 # Boolean Principles — Quick reference table, common mistakes
 
-> **Parent:** [Boolean Principles](./00-overview.md)  
+> **Parent:** [Boolean Principles](./01-index.md)  
 > **Version:** 2.6.0  
 > **Updated:** 2026-03-31
 

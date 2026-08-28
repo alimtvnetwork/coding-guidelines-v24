@@ -133,5 +133,5 @@ Use `index.ts` for barrel exports:
 
 | Reference | Location |
 |-----------|----------|
-| TypeScript Standards | [../02-typescript/00-overview.md](../02-typescript/00-overview.md) |
+| TypeScript Standards | [../02-typescript/01-index.md](../02-typescript/01-index.md) |
 | Cross-Language Rules | [./01-cross-language.md](./01-cross-language.md) |

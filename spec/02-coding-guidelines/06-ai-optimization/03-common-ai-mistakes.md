@@ -456,7 +456,7 @@ const { data } = useQuery({
 
 - [Anti-Hallucination Rules](./01-anti-hallucination-rules.md) — Full rule catalog
 - [AI Quick Reference Checklist](./02-ai-quick-reference-checklist.md) — Pre-output validation
-- [Master Coding Guidelines](../01-cross-language/15-master-coding-guidelines/00-overview.md) — Complete reference
+- [Master Coding Guidelines](../01-cross-language/15-master-coding-guidelines/01-index.md) — Complete reference
 
 ---
 

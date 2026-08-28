@@ -45,7 +45,7 @@
 
 | File | Verdict |
 | --- | --- |
-| `spec/01-spec-authoring-guide/00-overview.md` | **Operative** — "Every module SHOULD include a reliability risk assessment". Promote to MUST or carve an explicit allowed-exception clause. |
+| `spec/01-spec-authoring-guide/01-index.md` | **Operative** — "Every module SHOULD include a reliability risk assessment". Promote to MUST or carve an explicit allowed-exception clause. |
 | `spec/01-spec-authoring-guide/11-root-readme-conventions.md` | RFC-2119 reference text inside the spec-authoring guide itself. Benign. |
 | `spec/01-spec-authoring-guide/17-version-schema.md` | RFC-2119 reference text. Benign. |
 | `spec/02-coding-guidelines/04-php/07-php-standards-reference/05-forbidden-and-database.md` | Non-MUST coding hint within forbidden-list rationale. Benign. |
@@ -70,7 +70,7 @@ Single hit, in `spec/02-coding-guidelines/01-cross-language/04-code-style/06-com
 
 The 4 newly-surfaced ambiguities are smaller than audit-10's set (one is just a "make the existing intent explicit" caveat, not a true MUST-promotion). Estimate ~5 line-edits total, single loop. Suggested grouping:
 
-- **Patch E** — `spec/01-spec-authoring-guide/00-overview.md:228` SHOULD → MUST (or carve exception clause).
+- **Patch E** — `spec/01-spec-authoring-guide/01-index.md:228` SHOULD → MUST (or carve exception clause).
 - **Patch F** — `spec/04-database-conventions/01-naming-conventions.md:411` SHOULD → MUST (aligns with memory rule 11).
 - **Patch G** — `spec/12-cicd-pipeline-workflows/05-code-signing.md:10` add cert-unavailable + CI banner clause.
 - **Patch H** — `spec/authoring-guideline/version-schema.md:141` SHOULD → MUST (multi-writer corruption guard).

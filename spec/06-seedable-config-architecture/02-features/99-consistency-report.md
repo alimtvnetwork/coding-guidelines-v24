@@ -7,7 +7,7 @@
 
 | # | File | Status |
 |---|------|--------|
-| 00 | `00-overview.md` | ✅ Present |
+| 00 | `01-index.md` | ✅ Present |
 | 01 | `01-rag-chunk-settings.md` | ✅ Present |
 | 02 | `02-rag-validation-helpers.md` | ✅ Present |
 | 03 | `03-rag-validation-tests.md` | ✅ Present |

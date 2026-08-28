@@ -5,7 +5,7 @@ Implementation does not begin until Phase 2.
 
 ## Phase 1 — Spec + plan authoring  ✅
 
-- [x] `00-overview.md`
+- [x] `01-index.md`
 - [x] `01-spec.md`
 - [x] `02-edge-cases.md`
 - [x] `03-acceptance-criteria.md`

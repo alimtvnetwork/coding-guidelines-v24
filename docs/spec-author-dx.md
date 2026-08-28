@@ -146,7 +146,7 @@ Today the validator checks header presence but not content. Add micro-rules:
 - `AI Confidence` ∈ {Production-Ready, High, Medium, Low, Draft}
 - `Ambiguity` ∈ {None, Low, Medium, High, Critical}
 - Exactly one H1
-- Scoring table present when file is `00-overview.md`
+- Scoring table present when file is `01-index.md`
 
 Each rule is a 5-line Python check. Output format `path:line:col: SPEC-XXX message` so editors and CI both render it identically.
 

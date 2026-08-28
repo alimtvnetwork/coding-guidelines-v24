@@ -293,7 +293,7 @@ Generation commands:
 
 | # | File | Topic |
 |---|------|-------|
-| 00 | 00-overview.md | Philosophy, scope, document index |
+| 00 | 01-index.md | Philosophy, scope, document index |
 | 02 | 02-project-structure.md | Package layout, file organization |
 | 03 | 03-subcommand-architecture.md | Routing, dispatch, handler pattern |
 | 04 | 04-flag-parsing.md | Per-command flags, defaults, validation |

@@ -1,6 +1,6 @@
 # PHP Coding Standards — Forbidden patterns, database wrapper
 
-> **Parent:** [PHP Coding Standards](./00-overview.md)  
+> **Parent:** [PHP Coding Standards](./01-index.md)  
 > **Version:** 5.1.0  
 > **Updated:** 2026-03-31
 
