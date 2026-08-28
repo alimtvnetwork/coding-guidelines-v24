@@ -1,5 +1,10 @@
 # Instruction (must follow): Commit Fix
 
+
+## No Automatic Releases (Strict Policy)
+
+You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+
 ## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
@@ -74,7 +79,7 @@ You MUST follow the project's strict coding guidelines. These files are located 
 
 ### 5. Consolidated Coding Standards & Temp Scripts (Non-Negotiable)
 
-- [ ] Temp Script Sandboxing: If you need to generate any temporary code, scripts, or scratch files to aid in your execution, you MUST write them strictly into the `.lovable/temp-scripts/` directory. You MUST ensure this directory is added to `.gitignore`. NEVER commit temporary scripts to the repository.
+- [ ] Temp Script Sandboxing: AI Fix Scripts (Reusable Tools): Before creating a helper script, you MUST check `.lovable/ai-fix-scripts/index.md` to reuse existing tools. If you generate a new script, you MUST write it to `.lovable/ai-fix-scripts/`, update `index.md` with its explanation, ensure `index.md` is linked in `what-to-read.md`, and commit the script.
 - [ ] Consolidated Coding Guidelines: I have fully read and strictly enforced the master coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] Error Manage Checklist: I have fully read and enforced the error management files at `spec/03-error-manage/`. (Never swallow errors, always wrap with context, use domain-specific AppError/AppException).
 - [ ] Boolean Examples & Fixations: All boolean variables MUST begin with `is`, `has`, `can`, or `should` (e.g., `isReady`, `hasData`). NEVER use negative booleans (e.g., `isNotReady`, `disableCache`). NEVER invert success checks (e.g., `!response.isSuccess` is banned; use `response.isFail`).
@@ -126,6 +131,3 @@ When EVERYTHING is completely finished and fixed (at the very end of the tunnel)
 
 
 
-## Version Bumping Rule
-
-If the task involves a release or version bump, DO NOT manually search and replace versions across files. Execute `.lovable/release/bump_versions.py --type <major|minor|patch>`. If the script does not exist, trigger the first-time release bootstrapping phase to generate it.

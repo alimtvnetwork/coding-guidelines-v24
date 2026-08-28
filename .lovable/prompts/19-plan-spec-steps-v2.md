@@ -70,7 +70,11 @@ ls .lovable/plans/subtasks/xx-plan-slug | grep -vE '^[0-9]{3}-' || echo "sequenc
 
 ## RULE 0B — Temp Script Sandboxing (Global Law)
 
-If you need to generate any temporary code, scripts, or scratch files to aid in your execution or planning, you MUST write them strictly into the `.lovable/temp-scripts/` directory. You MUST ensure this directory is added to `.gitignore`. NEVER commit temporary scripts to the repository.
+## AI Fix Scripts Memory (Reusable Tooling)
+
+- [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/index.md` to check if a helper script already exists before writing any new temporary code.
+- [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
+- [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
 ---
 

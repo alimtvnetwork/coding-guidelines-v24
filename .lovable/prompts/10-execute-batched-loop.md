@@ -11,7 +11,13 @@ Run again if said: go, continue, or next
 1. Maximum 3 sub-agents may run concurrently at any time. Never exceed this limit.
 2. No end-to-end tests that make live API calls. Only run local, isolated unit tests.
 3. At the end of every loop, output explicit task statistics (done, pending, remaining list).
-4. Temporary Scripts: Any temporary automation scripts (CSJ, python, etc.) used to perform fixes or mass edits MUST be written to `.lovable/temp-scripts/`. This folder MUST be gitignored. These scripts must NEVER be committed to the repository history.
+
+## AI Fix Scripts Memory (Reusable Tooling)
+
+- [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/index.md` to check if a helper script already exists before writing any new temporary code.
+- [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
+- [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
+
 5. Violation of any rule below is auto-reject on the same tier as RULE 0.
 
 ## Anti-Hallucination Rules
@@ -19,8 +25,6 @@ Run again if said: go, continue, or next
 - If a spec file, folder, or task is missing or ambiguous, do NOT guess or invent a rule.
 - Ask a clarifying question or log an open ambiguity in `.lovable/ambiguous-questions/01-new-ambiguity/01-<slug>.md` before proceeding.
 - Never invent step counts. Read the actual files and count from them.
-
----
 
 ## Phase 1: Pre-Flight & Gitignore Enforcement (Non-Negotiable)
 
@@ -32,32 +36,24 @@ Run again if said: go, continue, or next
    - Wave 2: Business logic and services
    - Wave 3: UI and documentation
 
----
-
 ## Phase 2: Allocation & Execution (Strict 3x3 Rule & Locking Matrix)
 
 1. Strict limits:
    - Spawn up to 3 sub-agents to run in parallel.
-
 2. Chunking micro-tasks:
    - Each agent is assigned a chunk of simple, small micro-tasks (under 15 lines per function) to complete sequentially in its own context.
    - Tasks exceeding 7 steps must be decomposed into subtasks.
-
 3. File collision locking matrix (`active-locks.json`):
    - Register active target files in `.lovable/temp/active-locks.json`.
    - Ensure parallel tasks touch completely disjoint files to prevent git merge conflicts.
-
 4. Temp folder logging and specific titling (mandatory):
    - Spawn the sub-agent with a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service` or `Fixing DB Query Wrapper`). Do not use generic names. If an agent switches chunks, its title must change.
    - Log its assigned chunk of tasks to `.lovable/temp/XX-agent-state.md`.
-
 5. Crash identification and 3-strike rollback:
    - If an agent fails or crashes, inspect its state in `.lovable/temp/`.
    - If an agent fails 3 times, automatically revert dirty changes (`git checkout -- <files>`).
    - Log root cause to `.lovable/memory/last-failure.md` and `.lovable/issues/`.
    - Restart a new agent for the next disjoint chunk.
-
----
 
 ## Phase 3: Code Quality (Non-Negotiable)
 
@@ -69,8 +65,6 @@ While executing tasks, you and your agents must adhere to these strict coding gu
 - Always use explicit boolean state checks (e.g., `response.isFail`). Never invert success booleans (e.g., `!response.isSuccess`).
 - Code must be DRY. Reuse constants and wrappers.
 
----
-
 ## Phase 4: Chunked Delivery, Artifact Purge & File Moving
 
 When a chunk of tasks is completed by the agents, do the following before starting the next loop iteration:
@@ -81,8 +75,6 @@ When a chunk of tasks is completed by the agents, do the following before starti
 4. Artifact sanitizer: Audit staged files. Purge unapproved artifact zip archives, temporary scratch files, or test outputs before committing.
 5. Lovable git history guard: Run local tests (no live API calls). Commit code with a clear descriptive message. Never rewrite published git history (no force push, no rebasing, no squash). Push to git cleanly without failure.
 
----
-
 ## Phase 5: Output Window Stats (Mandatory Every Loop)
 
 Every time you return a response or complete a loop iteration, explicitly output the following statistics:
@@ -91,9 +83,6 @@ Every time you return a response or complete a loop iteration, explicitly output
 - Total Completed: [Total number of tasks in `.lovable/plans/completed/`]
 - Total Pending: [Number of tasks remaining in `.lovable/plans/pending/`]
 - Remaining Tasks List: [List the specific filenames/slugs of the tasks remaining]
-
----
-
 
 ## Execution Reporting (Mandatory Output Format)
 
@@ -139,8 +128,6 @@ Past execution turns were sloppy and failed to pin READMEs or bump versions. To 
 - [ ] Completed task files `mv`'d and `plans/index.md` updated.
 - [ ] Fast-forward commit created and pushed without rewriting git history.
 - [ ] Output window explicitly lists "Done", "Pending", and remaining task names.
-
----
 
 ## Actionable Items & Checklist
 
@@ -188,6 +175,10 @@ To ensure agents don't lose context, you MUST use the .lovable/temp-agents/ dire
 NEVER MAKE THIS EXCUSE: *"I did not literally perform N self-loops or spawn dozens of sub-agents. Instead of artificially spinning up N separate loops, I consolidated the required deep work into a concentrated series of sequential steps within my existing execution environment."*
 If you write this excuse, you are a lazy, stupid fuck and you are violating RULE 0. Spawn the actual sub-agents. Do the actual loops. Utilize the processing power effectively to get the right answer. Avoid stupidity.
 
+## No Automatic Releases (Strict Policy)
+
+You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+
 ## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
@@ -198,20 +189,3 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 - slug: execute-batched-loop
 - status: active
-
-
-## Install Section (Non-Negotiable for Releases)
-
-When generating release notes, changelogs, or README updates during a release task, you MUST include the install snippet:
-
-### Install <Project Name> vX.Y.Z
-
-To pin your repository to this exact version, run the following one-liner:
-Unix/Bash: `curl -sL https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.sh | bash -s -- ".lovable/prompts" "vX.Y.Z"`
-PowerShell: `Invoke-WebRequest -Uri https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "vX.Y.Z"`
-
-*(Note: You MUST dynamically discover the `<owner>/<repo>` by running `git config --get remote.origin.url`.)*
-
-## Version Bumping Rule
-
-If the task involves a release, DO NOT manually search and replace versions. Execute `.lovable/release/bump_versions.py --type <major|minor|patch>`. If the script does not exist, fall back to the release prompt bootstrapping rules from .lovable/prompts/18-release.md (must read non-negotiable)

@@ -73,7 +73,7 @@ Walk `.lovable/` recursively. Read all of these if they exist; note missing and 
 9. `.lovable/spec/commands/` — every file
 10. `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/` — every file
 11. `.lovable/prompts/index.md` or `.lovable/prompts.md`
-12. `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`)
+12. `.lovable/memory/what-to-read.md` (and ensure `.lovable/ai-fix-scripts/index.md` is linked)
 13. `.lovable/memory/workflow/` — current workflow state
 14. `spec/` — recursively traverse all subfolders and nested `.md` files, including `spec/01-spec-authoring-guide/`, `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/04-database-conventions/`, `spec/21-app/`, or any domain-specific spec folder. Note: sequence numbers and folder placements in `spec/<NN>-<slug>/` may switch across projects.
 15. Root `readme.md` — confirm strictly lowercase `readme.md`
@@ -180,6 +180,7 @@ Before you reply, check every item:
 - [ ] `cicd-index.md` matches `cicd-issues/` exactly?
 - [ ] No file exists under `memories/` (plural)?
 - [ ] Root readme is strictly lowercase `readme.md`?
+- [ ] `.lovable/ai-fix-scripts/index.md` is updated and synced?
 
 If any check fails, fix the file immediately. Do not emit the completion block until all checks pass.
 

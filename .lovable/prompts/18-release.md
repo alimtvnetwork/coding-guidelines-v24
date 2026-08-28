@@ -60,45 +60,18 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
 
 1. Read the current version from the canonical version source. Print previous and new version. Confirm PATCH digit is `0`.
 
-2. **Version Bumping (The Python Auto-Bumper Bootstrap)**:
+2. **Version Bumping (The 4-Step Fallback Chain)**:
 
-### CRITICAL PERFORMANCE RULE: NO GLOBAL RIPGREP SEARCHES
+   ### CRITICAL PERFORMANCE RULE: NO GLOBAL RIPGREP SEARCHES
 
-You MUST NEVER use `rg`, `grep`, or `find` to globally search the entire repository for version strings (e.g. `rg "1.2.3" --hidden --glob !.git`). This is extremely slow and degrades performance.
-Instead, use a highly targeted Python script (`bump_versions.py`) that strictly limits its search to known version files (`version.json`, `package.json`, `readme.md`, `changelog.md`, and specific `.md` prompt files). Do not scan `.lovable/memory` or `.venv`.
+   You MUST NEVER use `rg`, `grep`, or `find` to globally search the entire repository for version strings.
 
-   You MUST NOT manually hunt and replace versions using `rg` in every release. Instead, rely on a dedicated python script: `.lovable/release/bump_versions.py`.
-   
-   **First-Time Bootstrap (If `.lovable/release/bump_versions.py` or `.lovable/memory/release-architecture.md` do NOT exist, or are outdated):**
-
-   - **Investigate:** Use a targeted python script or manual inspection to scan (using specific file targeting, NEVER global searches) across the repository to discover every file where the version is pinned (e.g., manifests, configs, constants).
-   - **Document:** Write `.lovable/memory/release-architecture.md` detailing all discovered pin sites, the version source of truth, and how releases are structured.
-   - **Generate Script:** Write the `.lovable/release/bump_versions.py` script. The script MUST:
-     - Accept an argument for the bump tier (`--type major`, `--type minor`, `--type patch`).
-     - Read the old version, bump it, and update the canonical version file.
-     - Explicitly open and replace the old version string with the new version string across all the discovered pin sites.
-     - GUARANTEE it pins the newest version into the root `readme.md` (lowercase).
-     - Include a `PROMPT_VERSION = "vX.Y.Z"` variable at the top so it knows when it needs to be regenerated.
-   - **Enqueue:** Add both files to `.lovable/what-to-read.md` and link them in the root `readme.md`.
-   
-   **Sample `bump_versions.py` structure:**
-   ```python
-   import argparse, re, json, sys
-   PROMPT_VERSION = "vX.Y.Z" # Tie this to the version of the release prompt that generated it
-   PIN_SITES = ["readme.md", "manifest.json", "package.json"]
-   
-   # ... [Implementation: parse args, bump SemVer, loop through PIN_SITES and replace old_version with new_version] ...
-   ```
-
-   **Normal Execution (If the script DOES exist and is up-to-date):**
-
-   - Execute it: `python .lovable/release/bump_versions.py --type minor` (or major/patch).
-   - Source constants named like `VERSION`, `APP_VERSION`, `EXTENSION_VERSION`, `SCHEMA_VERSION`, `CACHE_SCHEMA_VERSION`, `BUILD_VERSION`.
-   - `instruction.ts` / `instruction.md` / metadata files with a `Version:` field.
-   - Sub-packages under `scripts/`, `standalone-scripts/`, `packages/`, `apps/` carrying their own version constant.
-   - Install snippets, badge URLs, zip filenames, release-branch examples, "current version" lines in docs.
-
-   A pin site missed here breaks installs.
+   You MUST follow this strict chain:
+   1. **Primary:** Run `.lovable/release/bump_versions.py --type <major|minor|patch> --create-release`. The `--create-release` flag is REQUIRED during official releases so the script handles the git branching (`release/vX.Y.Z`), tagging, pushing, and GitHub/GitLab CLI (`gh` / `glab`) release creation.
+   2. **Fallback 1 (Read Docs):** If script is missing, read `.lovable/release/release-method.md` to learn which files contain versions. Generate `bump_versions.py` and run it.
+   3. **Fallback 2 (Efficient Search):**
+   - **CRITICAL SCRIPT RECOVERY:** If you have to recreate `bump_versions.py` from scratch, you MUST include the `subprocess` logic that handles `git checkout -b release/vX.Y.Z`, `git commit`, `git tag`, `git push`, and detecting `gh` / `glab` CLI to create the platform release. If `release-method.md` is missing, perform a highly efficient, OS-agnostic search (e.g., Python `os.walk` ignoring `.git`, `node_modules`, `.venv`, `.lovable`). Create `release-method.md` documenting the pin sites, create `bump_versions.py`, and run it.
+   4. **Fallback 3 (Ask User):** If you cannot find the files, stop and ask the user to specify them.
 
 3. Pin the new version in `readme.md` (lowercase filename, MUST). Rewrite every occurrence of the previous version (`vX.Y.Z` and bare `X.Y.Z`) in badges, install snippets, "current version" lines, release-branch examples, zip filenames, inline references. After this step, `grep "<previous-version>" readme.md` MUST return nothing.
 
