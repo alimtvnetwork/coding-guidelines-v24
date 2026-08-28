@@ -167,5 +167,85 @@ func (c creator) ErrorVars(errType apperrtype.ErrorType, err error, vars map[str
 
 ## 3. Verify nil-safety in tests
 
-Write tests ensuring pperror.New.Error(t, nil) strictly returns a typeless 
-il or typed (*AppError)(nil) so that rr != nil checks do not falsely trigger in Go.
+Write tests ensuring `apperror.New.Error(t, nil)` strictly returns a typeless 
+`nil` or typed `(*AppError)(nil)` so that `err != nil` checks do not falsely trigger in Go.
+
+---
+
+# Action Plan for AI: Implementing Human & Logger Output Methods
+
+> **Goal:** Extend `AppError` to support segregated output formats for humans (UI), loggers (JSON), and developers (Console).
+
+## 1. Implement `HumanString()`
+
+**File to edit:** `apperror_display.go`
+
+This method must act as a firewall, ensuring no technical details leak to the end user.
+
+```go
+// HumanString returns the safe, user-facing error message.
+func (e *AppError) HumanString() string {
+    if e == nil {
+        return ""
+    }
+    if e.DisplayError != "" {
+        return e.DisplayError
+    }
+    // Strict fallback if the developer forgot to set a DisplayError
+    return "An unexpected error occurred. Please contact support if the issue persists."
+}
+```
+
+## 2. Implement `LogMap()`
+
+**File to edit:** `apperror_display.go`
+
+This method translates the error into a flat/nested map for structured loggers (e.g., Zap, Logrus).
+
+```go
+// LogMap returns structured fields for JSON loggers.
+func (e *AppError) LogMap() map[string]any {
+    if e == nil {
+        return nil
+    }
+    
+    m := map[string]any{
+        "error_code": e.Code,
+        "error_msg":  e.Message,
+    }
+    
+    if e.Details != "" {
+        m["error_details"] = e.Details
+    }
+    if len(e.Values) > 0 {
+        m["error_values"] = e.Values
+    }
+    // You must map the Diagnostic fields if they exist
+    // You must include the stack trace array
+    m["error_stack"] = e.Stack.Frames // Assuming StackTrace has a slice of frames
+    
+    if len(e.Errors) > 0 {
+        var subErrs []string
+        for _, sub := range e.Errors {
+            subErrs = append(subErrs, sub.Error())
+        }
+        m["error_sub_errors"] = subErrs
+    }
+    
+    return m
+}
+```
+
+## 3. Implement `ConsoleString()`
+
+**File to edit:** `apperror_display.go`
+
+Alias this to the existing `FullString()` method, or replace `FullString()` with `ConsoleString()`.
+
+```go
+// ConsoleString returns the full, multi-line representation of the error 
+// designed for developer terminal output.
+func (e *AppError) ConsoleString() string {
+    return e.FullString()
+}
+```

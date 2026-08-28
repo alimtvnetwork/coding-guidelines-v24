@@ -369,14 +369,17 @@ if len(errs) > 0 {
   3. [E4011] file path is empty — path: ""
 ```
 
-### 2.3 Display Methods
+### 2.3 Formatted Output Methods (Human vs Logger vs Console)
 
-| Method | Returns | Description |
-|--------|---------|-------------|
-| `Error()` | `string` | `"[CODE] message"` — implements `error` interface |
-| `FullString()` | `string` | Code + message + details + values + diagnostics + stack + cause chain |
-| `String()` | `string` | Alias for `FullString()` — complete error representation |
-| `ToClipboard()` | `string` | Markdown-formatted error report for AI paste |
+An `AppError` supports multiple output targets: the end-user (UI), structured loggers (JSON), and the developer terminal.
+
+| Method | Returns | Target Audience | Description |
+|--------|---------|-----------------|-------------|
+| `HumanString()` | `string` | **End-User / UI** | Returns the `DisplayError` if set, otherwise a generic fallback (e.g. `"An unexpected error occurred"`). Never leaks technical details. |
+| `LogMap()` | `map[string]any` | **Structured Loggers** | Returns a flat/nested map of fields (Code, Message, Values, Diagnostics, StackTrace) to be passed directly to loggers like Zap or Logrus (e.g. `logger.WithFields(err.LogMap())`). |
+| `ConsoleString()` | `string` | **Developer** | Full terminal representation (colored, multi-line) of the error and stack trace. Alias of `FullString()`. |
+| `Error()` | `string` | **Standard Lib** | `"[CODE] message"` — implements the Go `error` interface. |
+| `ToClipboard()` | `string` | **AI Assistants** | Markdown-formatted error report for pasting into chat. |
 
 ### 2.3.1 Variation Display Methods
 

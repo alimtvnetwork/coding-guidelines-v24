@@ -34,7 +34,7 @@ In polyglot codebases, monorepos, and client-server architectures, sub-component
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.27.0",
+  "Version": "6.28.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",

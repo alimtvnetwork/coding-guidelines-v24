@@ -40,3 +40,6 @@
 - .lovable/plans/pending/01-apperror-new-constructors.md
 - .lovable/plans/subtasks/01-apperror-new-constructors/01-update-spec.md
 - .lovable/plans/subtasks/01-apperror-new-constructors/02-release.md
+- .lovable/plans/pending/02-apperror-human-logger-methods.md
+- .lovable/plans/subtasks/02-apperror-human-logger-methods/01-update-display-specs.md
+- .lovable/plans/subtasks/02-apperror-human-logger-methods/02-release.md
