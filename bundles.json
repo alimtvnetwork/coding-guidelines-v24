@@ -351,12 +351,12 @@
           "dest": ".lovable/cicd-issues"
         },
         {
-          "src": ".lovable/skills",
-          "dest": ".lovable/skills"
+          "src": ".agent/skills",
+          "dest": ".agent/skills"
         },
         {
-          "src": ".lovable/scripts",
-          "dest": ".lovable/scripts"
+          "src": ".agent/scripts",
+          "dest": ".agent/scripts"
         },
         {
           "src": ".lovable/strictly-avoid.md",
