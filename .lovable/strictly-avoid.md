@@ -70,35 +70,35 @@ This includes — but is not limited to:
 
 ## Release on Every Commit — TOTAL BAN
 
-🔴 **NEVER trigger a release (version bump, release tagging, scripts/release.mjs) on every commit or every chat turn.**
+🔴 **NEVER trigger a release (version bump, release tagging, `scripts/release.mjs`) on every commit or every chat turn.**
 
 Forbidden:
-- ❌ Running scripts/release.mjs or 
-pm run release for standard tasks, documentation updates, bug fixes, or minor features.
-- ❌ Creating 
-elease: vX.Y.Z commits and git tag vX.Y.Z on every single conversation turn.
+- ❌ Running `scripts/release.mjs` or `npm run release` for standard tasks, documentation updates, bug fixes, or minor features.
+- ❌ Creating `release: vX.Y.Z` commits and `git tag vX.Y.Z` on every single conversation turn.
 - ❌ Treating the end of an AI turn as the "End of Tunnel Release" unless the user EXPLICITLY commands a version release.
 
 Allowed work:
-- ✅ Standard semantic commits (eat: ..., ix: ..., docs: ..., chore: ...) for all work.
-- ✅ Pushing standard commits to the branch (git push).
+- ✅ Standard semantic commits (`feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`) for all work.
+- ✅ Pushing standard commits to the branch (`git push`).
 - ✅ Executing a release **ONLY** when the user explicitly says "release", "bump version", or something explicitly confirming a version bump is needed for distribution.
 
-**Why:** Releasing on every commit completely pollutes the git history and version tags (e.g., bumping from v6.24.0 to v6.31.0 in just a few hours for minor formatting/docs).
+**Why:** Releasing on every commit completely pollutes the git history and version tags.
 
-## Explicit == true Checks — TOTAL BAN
+---
 
-🔴 **NEVER evaluate boolean variables explicitly against 	rue (e.g., == true or === true).**
+## Explicit `== true` Checks — TOTAL BAN
+
+🔴 **NEVER evaluate boolean variables explicitly against `true` (e.g., `== true` or `=== true`).**
 
 Forbidden:
-- ❌ if isValid == true {
-- ❌ if (hasMatch === true) {
-- ❌ eturn isSuccess == true
+- ❌ `if isValid == true {`
+- ❌ `if (hasMatch === true) {`
+- ❌ `return isSuccess == true`
 
 Allowed work:
-- ✅ Implicit positive checks: if isValid {
-- ✅ Implicit positive checks: if (hasMatch) {
-- ✅ Returning directly: eturn isSuccess
-- ✅ Using == false or === false as a replacement for the banned ! operator (if permitted by the language's specific guideline). 
+- ✅ Implicit positive checks: `if isValid {`
+- ✅ Implicit positive checks: `if (hasMatch) {`
+- ✅ Returning directly: `return isSuccess`
+- ✅ Using `== false` or `=== false` as a replacement for the banned `!` operator (if permitted by the language's specific guideline). 
 
-**Why:** Implicit boolean evaluation is a universal standard. The AI incorrectly generalized the === false rule into === true. 	rue is redundant and prohibited.
+**Why:** Implicit boolean evaluation is a universal standard. The AI incorrectly generalized the `=== false` rule into `=== true`. `true` is redundant and prohibited.

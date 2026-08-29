@@ -694,11 +694,11 @@ if isNonApiRoute {
 
 This standard mirrors the cross-language [Boolean Principles](../01-cross-language/02-boolean-principles/01-index.md) (P1–P6) and [No-Negatives](../01-cross-language/12-no-negatives.md) with Go-specific exemptions for idiomatic patterns (comma-ok, handler guards, error-nil checks) and Go-specific additions (P3b, P5, P7–P9). See [PHP Standards](../04-php/03-naming-conventions.md) for the PHP counterpart.
 
-## 8. Explicit == true Evaluation
+## 8. Explicit `== true` Evaluation
 
-Never use == true for boolean conditions. If an explicit negative check (== false) is used to satisfy the ban on the ! operator, **do not** erroneously generalize this to positive checks.
+Never use `== true` for boolean conditions. If an explicit negative check (`== false`) is used to satisfy the ban on the `!` operator, **do not** erroneously generalize this to positive checks.
 
-`go
+```go
 // ❌ FORBIDDEN — redundant explicit check
 if hasMatch == true {
     // ...
@@ -708,4 +708,4 @@ if hasMatch == true {
 if hasMatch {
     // ...
 }
-`
+```

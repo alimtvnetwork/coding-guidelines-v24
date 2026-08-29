@@ -21,6 +21,7 @@
 | `isX && !isY` | `isConflict` (extracted) | P6: No mixed polarity |
 | `if x := fn(); x > 0` | Separate assignment | P7: No inline statements |
 | `os.Stat(path)` | `pathutil.IsDir(path)` | P8: No raw filesystem |
+| `if ($x == true)` | `if ($x)` | P9: No explicit true checks |
 
 ---
 
@@ -29,20 +30,19 @@
 
 ## Common Mistakes — Boolean Logic
 
-### Mistake 0: Explicit == true Evaluation (P9)
+### Mistake 0: Explicit `== true` Evaluation (P9)
 
-`php
+```php
 // ❌ WRONG — redundant and banned explicit true check
-if ( == true) {
+if ($isActive == true) {
     // ...
 }
 
 // ✅ CORRECT — implicit boolean evaluation
-if () {
+if ($isActive) {
     // ...
 }
-`
-
+```
 
 ### Mistake 1: Missing `is`/`has` Prefix (P1)
 

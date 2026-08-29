@@ -22,6 +22,7 @@ Context & References:
   - Source files must be ≤ 80 lines.
   - No code mutation – only apply fixes, never introduce new bugs.
   - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested `if`s, no magic values.
+  - **CRITICAL BOOLEAN EVALUATION:** NEVER evaluate booleans explicitly against `true` (e.g. `== true` or `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly: `if hasMatch { ... }`. Do NOT hallucinate explicit `== true` checks.
   - Style: Ensure a blank line before every `return` statement.
   - Golang Single Return & Wrapped Booleans: Strictly return a single parameter (bundle multiple returns into a struct). No raw booleans returned in Go. Return a single Result struct (bundling Data, AppError, and Status together) with two flags (`IsSuccess` and `IsFailed`) managed by a constructor (`NewSuccess`/`NewFailure`).
   - Example usage (Note the explicit variable name `paymentStatus`, no short names like `res`):
@@ -49,13 +50,15 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
    - Ensure the refactored function body is ≤ 8 lines; extract sub‑logic to private helpers if needed.
    - Run the project's test suite and the Go race detector (`go test -race ./...`).
    - If tests pass, stage the changes.
-3. Commit each fix using the CI/CD fix workflow:
+3. Pre-Commit CI/CD Drift Prevention:
+   - **Go Generate Sync:** If you modified any Go constants, enums, or stringers, you MUST run `cd <relevant_dir> && go generate ./...` (e.g. `cd gitmap && go generate ./...`) and include the generated files to prevent `auto_fix_generate_drift` CI failures.
+4. Commit each fix using the CI/CD fix workflow:
    - Run `git add <modified files>`.
    - Commit with message `fix(coding-guidelines): resolve <issue‑id>`.
    - If any file changed, bump a minor version tag (`git tag -a vX.Y.Z -m "minor release"`).
    - Push commits and tags (`git push origin main && git push origin --tags`).
-4. Update the pending task file to mark it as completed.
-5. If no pending tasks remain, output a summary of all fixes applied.
+5. Update the pending task file to mark it as completed.
+6. If no pending tasks remain, output a summary of all fixes applied.
 
 ### Non‑Hallucination Policy
 

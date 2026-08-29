@@ -293,11 +293,11 @@ if (isReady && isValid) { ... }
 
 ## Rule P9: No Explicit True Checks
 
-> Never evaluate a boolean variable explicitly against 	rue (== true, === true). Positive booleans MUST ALWAYS be evaluated implicitly.
+> Never evaluate a boolean variable explicitly against `true` (`== true`, `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly.
 
-While languages or linters may occasionally force you to use === false or == false as a fallback to avoid the banned ! operator, this exception **does not apply to 	rue**.
+While languages or linters may occasionally force you to use `=== false` or `== false` as a fallback to avoid the banned `!` operator, this exception **does not apply to `true`**.
 
-`go
+```go
 // ❌ FORBIDDEN: Explicit == true is redundant and banned
 if hasMatch == true {
     // ...
@@ -307,4 +307,4 @@ if hasMatch == true {
 if hasMatch {
     // ...
 }
-`
+```
