@@ -98,3 +98,17 @@ ode scripts/sync-check.mjs --fix to verify 0 drift across all 7 sync-managed fil
 When downstream repositories run any bundle installer (*-install.sh or *-install.ps1):
 - ersion.json is smart-merged into the target's ersion.json under codingGuideline.
 - .lovable/memory/ and .lovable/what-to-read.md are copied into the target repo, transferring this architectural knowledge directly.
+
+## 5. AI Rules for Versioning (STRICTLY AVOID)
+
+🔴 **AI AGENTS MUST NEVER MANUALLY MODIFY VERSION INFORMATION OR DATES.**
+
+- **Do NOT** modify `version.json` manually to bump a version.
+- **Do NOT** modify `version.json` manually to change an `updated` or `job date`.
+- **Do NOT** modify `package.json` version fields manually.
+- **Do NOT** modify `changelog.md` dates manually.
+
+**Why:** The version information and dates are managed strictly by synchronization repositories and the automated `release.mjs` / `sync.mjs` pipeline. Manual edits by AI cause drift, pipeline failures, and merge conflicts.
+
+**How to find Repository Information:**
+If an AI agent needs to check or verify repository information, it must examine the `.git` folder (e.g., using `git remote -v` or viewing `.git/config`). Do NOT assume `version.json` is safe for manual editing just because you need repository details.

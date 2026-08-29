@@ -399,3 +399,5 @@ You must list:
 1. **NO CI/CD BYPASSING:** NEVER disable any CI/CD checks, linter rules (e.g., in `.golangci.yml`, `.eslintrc`), or tests to force a passing build. STRICTLY AVOID modifying configuration files to bypass errors. You must fix the underlying code.
 2. **LINTER ENFORCEMENT - EXPLICIT TRUE:** You must actively enforce and implement linter rules that ban explicit true checks (e.g., `x == true` or `y === true`). Booleans must be evaluated implicitly.
 3. **LINTER ENFORCEMENT - MIXED POLARITY:** You must actively enforce and implement linter rules that ban combinations of positive and negative conditions in `if`/`else` statements (e.g., `if isReady && !hasError`). This mixed polarity must be flagged by the linter and refactored into clearly named intermediate variables (e.g., `isSafeToProceed := isReady && !hasError`).
+
+4. **NO VERSION MODIFICATIONS:** NEVER manually edit `version.json`, `package.json` version numbers, or changelog dates. These are managed strictly by synchronization repositories and release scripts. If you need repository info, check the `.git` folder.

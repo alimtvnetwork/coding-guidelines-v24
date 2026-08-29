@@ -423,6 +423,8 @@ function buildManifest() {
   }
 
   const pascal = buildPascalSection(identity);
+  pascal._AI_CAUTION = "STRICTLY AVOID: Never touch or manually modify this version information or the update dates! This file is generated and managed exclusively by its own specific scripts and synchronization repositories. If you need repository information, ask to check the .git folder instead.";
+
   pascal.Prompts = promptsList;
   
   if (shouldEmitLegacy() === false) return pascal;

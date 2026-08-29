@@ -147,3 +147,17 @@ Allowed work:
 - ✅ `type UserModel struct` (PascalCase for structs/exported types)
 
 **Why:** Go conventions explicitly dictate `camelCase` or `PascalCase`. Underscores violate the language's core style guide and will fail standard linters.
+
+## Modifying Version Information — TOTAL BAN
+
+🔴 **NEVER manually edit `version.json`, `package.json` version strings, or changelog dates.**
+
+Forbidden:
+- ❌ Modifying `version.json` manually to bump a version or change an `updated` date.
+- ❌ Updating the `version` field in `package.json` by hand.
+
+Allowed work:
+- ✅ Allowing the `scripts/release.mjs` (or similar node scripts) to manage versions and dates.
+- ✅ Inspecting the `.git/config` or running `git remote -v` if you need to verify repository information.
+
+**Why:** Version information is strictly managed by its own synchronization scripts and source-of-truth repositories. Manual AI edits cause synchronization drift and pipeline failures.
