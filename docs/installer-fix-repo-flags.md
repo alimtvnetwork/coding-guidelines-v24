@@ -164,8 +164,8 @@ INSTALL_LOG_DIR=/tmp/from-env \
 **🪟 Windows · PowerShell**
 
 ```powershell
-$env:INSTALL_LOG_DIR = 'C:\Temp\from-env'
-$out = .\install.ps1 -DryRun -LogDir 'C:\Temp\from-cli' 2>&1 | Out-String
+$env:INSTALL_LOG_DIR = '/Temp/from-env'
+$out = .\install.ps1 -DryRun -LogDir '/Temp/from-cli' 2>&1 | Out-String
 $cliWon = $out -match 'from-cli'
 $envLeaked = $out -match 'from-env'
 if ($cliWon -and -not $envLeaked) {
@@ -243,7 +243,7 @@ INSTALL_LOG_DIR=/tmp/from-env \
 **🪟 Windows · PowerShell**
 
 ```powershell
-$env:INSTALL_LOG_DIR = 'C:\Temp\from-env'
+$env:INSTALL_LOG_DIR = '/Temp/from-env'
 $out = .\install.ps1 -DryRun 2>&1 | Out-String
 Remove-Item Env:INSTALL_LOG_DIR
 if ($out -match 'from-env') {

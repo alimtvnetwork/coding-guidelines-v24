@@ -414,7 +414,7 @@ filename, and a short description.
   ■ Output Files
   ──────────────────────────────────────────
 
-  📁 D:\projects\.toolname\output/
+  📁 /projects/.toolname/output/
   ├── 📄 data.csv  Data in CSV format
   ├── 📄 data.json  Data in JSON format
   ├── 📄 structure.md  Folder tree
@@ -510,9 +510,9 @@ plain, unformatted confirmation lines.
 ### Format
 
 ```
-CSV written to D:\projects\.toolname\output\data.csv
-JSON written to D:\projects\.toolname\output\data.json
-Structure written to D:\projects\.toolname\output\structure.md
+CSV written to /projects/.toolname/output/data.csv
+JSON written to /projects/.toolname/output/data.json
+Structure written to /projects/.toolname/output/structure.md
 Database updated: 41 items upserted
 ```
 

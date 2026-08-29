@@ -59,7 +59,7 @@ reading source code.
   Version before:   <binary> v1.2.0
   Version active:   <binary> v1.3.0
   Version deployed: unknown
-  Active binary:    C:\Users\user\bin\<binary>.exe
+  Active binary:    /Users/user/bin/<binary>.exe
   Deployed binary:  (not resolved)
 
   [WARN] Deployed binary could not be verified.

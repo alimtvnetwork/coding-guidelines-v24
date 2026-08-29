@@ -148,7 +148,7 @@ exists, prompt the user:
 No existing installation found.
 Where should <binary> be installed?
 
-Default: C:\Users\<user>\bin-run (press Enter to accept)
+Default: /Users/<user>\bin-run (press Enter to accept)
 > _
 ```
 

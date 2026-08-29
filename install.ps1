@@ -10,7 +10,7 @@
       -Branch main                Override branch (ignored if -Version given)
       -Version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
       -Folders spec,linters       Explicit folder list (subpaths OK: spec/14-update)
-      -Dest C:\path               Install destination (default: cwd)
+      -Dest /path               Install destination (default: cwd)
       -ConfigFile my-config.json  Use custom config file
       -Prompt                     Ask before overwriting each existing file (y/n/a/s)
       -Force                      Overwrite all existing files without prompting

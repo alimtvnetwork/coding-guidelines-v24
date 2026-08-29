@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document specifies an `env` command that manages persistent, cross-platform environment variables and PATH entries. The command allows users to define a custom drive or directory (e.g., `E:\tools` or `/opt/tools`) where the tool is installed, and ensures the environment variable is always set — automatically registering it if missing.
+This document specifies an `env` command that manages persistent, cross-platform environment variables and PATH entries. The command allows users to define a custom drive or directory (e.g., `/tools` or `/opt/tools`) where the tool is installed, and ensures the environment variable is always set — automatically registering it if missing.
 
 This is particularly useful for portable installations where the binary lives on a non-standard drive or path, and the user needs the system to "just work" without manual `PATH` or environment variable configuration.
 
@@ -11,9 +11,9 @@ This is particularly useful for portable installations where the binary lives on
 ## Core Concept
 
 ```
-User specifies:    E:\gitmap           (or /opt/gitmap)
-Tool ensures:      GITMAP_HOME=E:\gitmap   is set persistently
-                   E:\gitmap is in PATH    if not already present
+User specifies:    /gitmap           (or /opt/gitmap)
+Tool ensures:      GITMAP_HOME=/gitmap   is set persistently
+                   /gitmap is in PATH    if not already present
 ```
 
 If the environment variable is already set and valid → no action taken.
@@ -42,25 +42,25 @@ If the environment variable is missing or points to a stale path → auto-regist
 This is the primary power feature. The user specifies where the tool lives:
 
 ```
-$ <tool> env home E:\gitmap
+$ <tool> env home /gitmap
 ```
 
 This does:
 
 1. Validates the directory exists (or creates it with confirmation)
-2. Sets `<TOOL>_HOME=E:\gitmap` persistently
-3. Adds `E:\gitmap` to PATH if not already present
+2. Sets `<TOOL>_HOME=/gitmap` persistently
+3. Adds `/gitmap` to PATH if not already present
 4. Records the registration in `env-registry.json`
 5. Prints activation command
 
 ### Terminal Output
 
 ```
-$ <tool> env home E:\gitmap
+$ <tool> env home /gitmap
 
   Setting <TOOL>_HOME...
 
-  [+] <TOOL>_HOME = E:\gitmap
+  [+] <TOOL>_HOME = /gitmap
 
   Registering PATH...
 
@@ -73,8 +73,8 @@ $ <tool> env home E:\gitmap
 
   To activate in this session:
 
-    $env:GITMAP_HOME = "E:\gitmap"
-    $env:Path = "E:\gitmap;" + $env:Path
+    $env:GITMAP_HOME = "/gitmap"
+    $env:Path = "/gitmap;" + $env:Path
 
   Or restart your terminal.
   ============================================
@@ -193,8 +193,8 @@ $ <tool> env doctor
 
   Checking managed environment variables...
 
-  [OK]   GITMAP_HOME = E:\gitmap (directory exists)
-  [OK]   E:\gitmap is in PATH
+  [OK]   GITMAP_HOME = /gitmap (directory exists)
+  [OK]   /gitmap is in PATH
 
   Checking shell profiles...
 
@@ -212,12 +212,12 @@ $ <tool> env doctor
 
   Checking managed environment variables...
 
-  [FAIL] GITMAP_HOME = E:\gitmap (directory does NOT exist)
-  [WARN] E:\gitmap is NOT in PATH
+  [FAIL] GITMAP_HOME = /gitmap (directory does NOT exist)
+  [WARN] /gitmap is NOT in PATH
 
   Suggested fix:
 
-    <tool> env home E:\gitmap    # Re-register with valid path
+    <tool> env home /gitmap    # Re-register with valid path
 
   1 failure, 1 warning.
 ```

@@ -134,10 +134,10 @@ The script must print a visible summary after installation:
 ```
   ✓ <binary> v1.2.0 installed successfully
 
-  Binary:  C:\Users\<user>\AppData\Local\<binary>\<binary>.exe
+  Binary:  /Users/<user>\AppData\Local\<binary>\<binary>.exe
   Version: v1.2.0
 
-  PATH: Added C:\Users\<user>\AppData\Local\<binary> to user PATH
+  PATH: Added /Users/<user>\AppData\Local\<binary> to user PATH
   Note: Restart your terminal for PATH changes to take effect
 ```
 

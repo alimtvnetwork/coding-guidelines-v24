@@ -69,7 +69,7 @@
 #   Example:
 #     .\run.ps1 -u              # Upload default plugin
 #     .\run.ps1 -u -d           # Upload with debug output
-#     .\run.ps1 -u -pp "C:\custom-plugin"  # Upload custom path
+#     .\run.ps1 -u -pp "/custom-plugin"  # Upload custom path
 #
 # See spec/powershell-integration/ for full documentation.
 
@@ -204,7 +204,7 @@ if ($help) {
     Write-Host "  .\run.ps1 -p -f        # Clean build without git pull"
     Write-Host "  .\run.ps1 -u           # Upload default plugin to WordPress"
     Write-Host "  .\run.ps1 -u -d        # Upload with debug output"
-    Write-Host "  .\run.ps1 -u -pp 'C:\path'  # Upload custom plugin path"
+    Write-Host "  .\run.ps1 -u -pp '/path'  # Upload custom plugin path"
     Write-Host ""
     Write-Host "CONFIGURATION:" -ForegroundColor Yellow
     Write-Host "  Config file: $ConfigPath"

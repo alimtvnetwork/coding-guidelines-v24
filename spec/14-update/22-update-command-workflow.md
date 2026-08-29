@@ -122,8 +122,8 @@ Naming convention:
 
 ```
  [+] Self-update active
-     Running:  C:\tools\<binary>\<binary>.exe
-     Worker:   C:\tools\<binary>\<binary>-update-12345.exe
+     Running:  /tools/<binary>\<binary>.exe
+     Worker:   /tools/<binary>\<binary>-update-12345.exe
 ```
 
 #### Step 6 — Launch Handoff Worker

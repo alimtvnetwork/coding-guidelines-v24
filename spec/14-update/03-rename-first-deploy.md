@@ -174,8 +174,8 @@ a separate sync step is needed after deploy:
 
 ```
 Scenario:
-  Deploy target:  C:\Users\user\AppData\Local\<binary>\<binary>.exe
-  PATH points to: D:\tools\<binary>\<binary>.exe
+  Deploy target:  /Users/user/AppData/Local/<binary>\<binary>.exe
+  PATH points to: /tools/<binary>\<binary>.exe
 
 Solution:
   After deploying to the target, also copy/sync to the PATH location.

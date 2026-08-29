@@ -107,7 +107,7 @@ PS> irm https://raw.githubusercontent.com/owner/repo/main/install.ps1 | iex
   ╚══════════════════════════════════════╝
 
   Platform:       windows/amd64
-  Install path:   C:\Users\Admin\AppData\Local\<tool>\
+  Install path:   /Users/Admin/AppData/Local/<tool>\
   Downloading:    <tool>-v1.2.3-windows-amd64.zip
 
   Verifying checksum... OK
@@ -170,7 +170,7 @@ PS> irm https://raw.githubusercontent.com/owner/repo/main/install.ps1 | iex
   <tool> Installer v1.3.0
 
   Platform:       windows/amd64
-  Install path:   C:\Users\Admin\AppData\Local\<tool>\
+  Install path:   /Users/Admin/AppData/Local/<tool>\
   Existing:       v1.2.3 -> renaming to <tool>.exe.old
   Downloading:    <tool>-v1.3.0-windows-amd64.zip
 
@@ -256,7 +256,7 @@ Or the CLI itself:
 ```
   Uninstalling <tool>...
 
-  Removing binary:   C:\Users\Admin\AppData\Local\<tool>\<tool>.exe
+  Removing binary:   /Users/Admin/AppData/Local/<tool>\<tool>.exe
   Cleaning PATH:
 
     [-] Windows Registry (User PATH)
@@ -264,7 +264,7 @@ Or the CLI itself:
     [-] Git Bash profile
 
   <tool> has been uninstalled.
-  Data directory preserved at: C:\Users\Admin\AppData\Local\<tool>\data\
+  Data directory preserved at: /Users/Admin/AppData/Local/<tool>\data\
   To remove all data, run: <tool> uninstall --purge
 ```
 

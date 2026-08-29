@@ -87,7 +87,7 @@
 
 # Upload custom plugin path
 
-.\run.ps1 -u -pp "C:\path\to\custom-plugin"
+.\run.ps1 -u -pp "/path/to/custom-plugin"
 
 # Upload via QUpload API
 

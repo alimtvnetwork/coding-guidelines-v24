@@ -1548,6 +1548,7 @@ the rewrite; the rest are reported.
 | R19  | File ends with exactly one `\n`; no line matches `[ \t]+$`                                       | Must fix   | Yes          |
 | R20  | No blank line inside a function that is not required by R13 or R14                               | Suggestion | No           |
 | R21  | No comment attached to a struct field unless it states units, invariants, defaults, or wire quirks | Must fix | No           |
+| R22  | No absolute filesystem paths or file:/// URIs in code, docs, or plans; strictly relative to git root  | Must fix | Yes          |
 
 ### Machine-readable rules
 
@@ -1693,7 +1694,13 @@ rules:
     autofix: false
     deny_field_comments_unless:
       [units, invariants, non-obvious-default, wire-contract-quirk]
-    applies_to: [go, ts, js, python, rust, java, csharp]
+    applies_to: [go, ts, js, python, rust, java, csharp]    applies_to: [go, ts, js, python, rust, java, csharp]
+  - id: R22
+    kind: structure
+    severity: must-fix
+    autofix: true
+    deny: '(?i)(?:file:///[a-z]:[/\]+|file:///[/\]+|(?<![a-zA-Z0-9])[a-z]:\[a-zA-Z0-9_])'
+    applies_to: [go, ts, js, python, rust, java, csharp, md, json, yml, yaml]
 formatter_precedence:
   note: >-
     gofmt, prettier, black, rustfmt, spotless, and dotnet format win only where they
@@ -1735,6 +1742,7 @@ formatter_precedence:
 | R19 trailing newline / no trailing whitespace   | Must fix   | Yes            |
 | R20 no in-function section separators           | Suggestion | No             |
 | R21 no unnecessary struct field comments        | Must fix   | Yes            |
+| R22 no absolute paths or file:/// URIs          | Must fix   | Yes            |
 
 ---
 
