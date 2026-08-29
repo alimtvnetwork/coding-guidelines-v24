@@ -13,7 +13,7 @@ When an AI agent is instructed to implement the new AppError methods (contact, 
 
 Add the new fields to the AppError struct, matching the JSON tags required by the spec:
 
-`go
+```go
 type AppError struct {
     Code         string            json:"Code"
     Message      string            json:"Message"
@@ -26,7 +26,7 @@ type AppError struct {
     Stack        StackTrace        json:"Stack"
     Cause        error             json:"-"
 }
-`
+```
 *(Note: Ensure you do not accidentally overwrite existing JSON tags if they are explicitly declared in the codebase.)*
 
 ## 2. Implement the Fluent Setters
@@ -35,7 +35,7 @@ type AppError struct {
 
 Create the fluent setter methods for AppError:
 
-`go
+```go
 // WithContact sets support contact information (email, URL, Slack channel)
 // and returns the modified AppError for chaining.
 func (e *AppError) WithContact(contact string) *AppError {
@@ -65,7 +65,7 @@ func (e *AppError) WithMsg(msg string) *AppError {
     e.Message = msg
     return e
 }
-`
+```
 
 ## 3. Update Display Methods (String, FullString)
 
@@ -75,11 +75,11 @@ Ensure that Contact and Errors are rendered when the error is printed to logs vi
 
 **Checklist for FullString() / ToClipboard():**
 
-- [ ] If .Contact != "", append it to the output string (e.g., mt.Sprintf(" Contact: %s", e.Contact)).
+- [ ] If .Contact != "", append it to the output string (e.g., `fmt`.Sprintf(" Contact: %s", e.Contact)).
 - [ ] If len(e.Errors) > 0, iterate over .Errors and print each one, indenting them under the main error.
 
 *Example stringification update:*
-`go
+```go
 if e.Contact != "" {
     sb.WriteString(fmt.Sprintf(" | Contact: %s", e.Contact))
 }
@@ -89,7 +89,7 @@ if len(e.Errors) > 0 {
         sb.WriteString(fmt.Sprintf("\n    %d. %s", i+1, subErr.Error()))
     }
 }
-`
+```
 
 ## 4. Run Unit Tests & Linting
 
@@ -106,12 +106,12 @@ il returns.
 
 **File to edit:** pperror_creator.go (new file) or pperror.go
 
-`go
+```go
 type creator struct{}
 
 // New exposes the fluent creator methods for AppError.
 var New = creator{}
-`
+```
 
 ## 2. Implement the Creator Methods
 
@@ -119,7 +119,7 @@ var New = creator{}
 
 You MUST implement the early if err == nil { return nil } check for all methods that take an rror.
 
-`go
+```go
 // Error wraps an existing error. If no error, nothing is created.
 func (c creator) Error(errType apperrtype.ErrorType, err error) *AppError {
     if err == nil {
@@ -163,7 +163,7 @@ func (c creator) ErrorVars(errType apperrtype.ErrorType, err error, vars map[str
     }
     return appErr
 }
-`
+```
 
 ## 3. Verify nil-safety in tests
 
