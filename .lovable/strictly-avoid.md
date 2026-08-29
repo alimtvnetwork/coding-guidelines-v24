@@ -132,3 +132,18 @@ Allowed work:
 - ✅ Modifying linter configurations ONLY if the user explicitly commands you to "configure the linter" or "add this rule to golangci".
 
 **Why:** When instructed to "fix CI errors," the AI sometimes takes the lazy route of disabling the linter rather than fixing the code. This defeats the entire purpose of quality gates and is strictly prohibited.
+
+## Golang Underscore Variable Naming — TOTAL BAN
+
+🔴 **NEVER use underscores (`snake_case`) for variable, struct, or function names in Golang.**
+
+Forbidden:
+- ❌ `user_id`, `has_error`, `api_key`
+- ❌ `type user_model struct`
+
+Allowed work:
+- ✅ `userId` or `userID` (camelCase for variables)
+- ✅ `hasError`, `apiKey`
+- ✅ `type UserModel struct` (PascalCase for structs/exported types)
+
+**Why:** Go conventions explicitly dictate `camelCase` or `PascalCase`. Underscores violate the language's core style guide and will fail standard linters.

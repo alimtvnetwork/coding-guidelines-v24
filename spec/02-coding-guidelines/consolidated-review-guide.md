@@ -91,7 +91,7 @@ function sendEmail(opts: SendEmailInput): Result<void> { ... }
 |---------|-----------|---------|
 | Classes / Types | PascalCase | `OrderService`, `UserRole` |
 | Functions / Methods | camelCase (TS/PHP), PascalCase (Go exported) | `getUser()`, `GetUser()` |
-| Variables | camelCase | `orderTotal`, `userName` |
+| Variables | camelCase (NO UNDERSCORES IN GO) | `orderTotal`, `userName` (Not `user_name`) |
 | Constants | UPPER_SNAKE_CASE or PascalCase | `MAX_RETRIES`, `DefaultTimeout` |
 | Files (Go) | PascalCase | `OrderService.go` |
 | Files (TS) | kebab-case or PascalCase | `order-service.ts` |
