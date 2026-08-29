@@ -25,6 +25,7 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 6. Anti-Hallucination Contract: If the cause is ambiguous or missing from logs, stop and ask clarifying questions instead of guessing.
 
 ## Actionable Items & Checklist
+- [ ] **ANTI-BYPASS RULE:** NEVER edit configuration files (like `.golangci.yml`) to disable rules or bypass CI errors. Fix the code.
 
 ### 1. Pre-Flight & Past RCA Ingestion
 

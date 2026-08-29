@@ -129,10 +129,8 @@ When EVERYTHING is completely finished and fixed (at the very end of the tunnel)
 - [ ] You MUST strictly exclude all test files (e.g., `*test*`, `*.spec.*`) from version scanning and modification, as they contain mock data.
 - [ ] You must create and maintain `.lovable/memory/release-architecture-map.md` documenting exactly how releases work in the repository. Ensure it is enqueued in `what-to-read.md` and linked in the root `readme.md`.
 
+## Critical Rules for Execution
 
-
-
-## Critical Fixes & RCA Reminders
-
-1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
-2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.
+1. **Explicit `== true` Ban:** NEVER explicitly evaluate boolean variables against `true` (`== true` or `=== true`). A previous AI hallucinated this behavior to avoid the `!` operator. Positive booleans MUST ALWAYS be evaluated implicitly: `if hasMatch { ... }`.
+2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files. Failing to do this causes `auto_fix_generate_drift` CI errors.
+3. **ANTI-BYPASS RULE:** NEVER edit configuration files (like `.golangci.yml`, `eslint.config.js`) to disable rules or bypass CI errors. You must fix the underlying code.

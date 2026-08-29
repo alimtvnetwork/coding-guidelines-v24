@@ -131,6 +131,7 @@ Past execution turns were sloppy and failed to pin READMEs or bump versions. To 
 - [ ] Output window explicitly lists "Done", "Pending", and remaining task names.
 
 ## Actionable Items & Checklist
+- [ ] **ANTI-BYPASS RULE:** NEVER edit configuration files (like `.golangci.yml`) to disable rules or bypass CI errors. Fix the code.
 
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.

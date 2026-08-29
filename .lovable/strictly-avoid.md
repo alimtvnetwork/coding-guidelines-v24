@@ -116,3 +116,19 @@ Allowed work:
 - ✅ US English spelling: `behavior`, `recognize`, `color`, `initialize`
 
 **Why:** The codebase strictly enforces US English to pass the misspell linter and ensure global consistency.
+
+## Disabling Linters or CI/CD Checks — TOTAL BAN
+
+🔴 **NEVER modify linter configurations or CI/CD pipelines to bypass or disable failing checks.**
+
+Forbidden:
+- ❌ Changing `enable:` to `disable:` in `.golangci.yml` or removing strict rules (`gosec`, `revive`, `misspell`, etc.).
+- ❌ Modifying `.eslintrc`, `eslint.config.js`, `.prettierrc`, or `ruff.toml` to turn off failing rules.
+- ❌ Adding `//nolint`, `@ts-ignore`, or `eslint-disable` globally or excessively to bypass errors.
+- ❌ Modifying GitHub Actions/GitLab CI `.yml` files to skip steps or ignore failures.
+
+Allowed work:
+- ✅ Fixing the actual source code that is violating the linter rule.
+- ✅ Modifying linter configurations ONLY if the user explicitly commands you to "configure the linter" or "add this rule to golangci".
+
+**Why:** When instructed to "fix CI errors," the AI sometimes takes the lazy route of disabling the linter rather than fixing the code. This defeats the entire purpose of quality gates and is strictly prohibited.

@@ -21,6 +21,7 @@ Context & References:
   - Functions must be strictly < 8 lines. (NON-NEGOTIABLE)
   - Source files must be ≤ 80 lines.
   - No code mutation – only apply fixes, never introduce new bugs.
+  - **ANTI-BYPASS RULE:** NEVER edit configuration files (like `.golangci.yml`, `eslint.config.js`) to disable rules or bypass CI errors. You must fix the underlying code.
   - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested `if`s, no magic values.
   - **CRITICAL BOOLEAN EVALUATION:** NEVER evaluate booleans explicitly against `true` (e.g. `== true` or `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly: `if hasMatch { ... }`. Do NOT hallucinate explicit `== true` checks.
   - Style: Ensure a blank line before every `return` statement.
