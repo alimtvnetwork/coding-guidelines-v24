@@ -249,3 +249,25 @@ func (e *AppError) ConsoleString() string {
     return e.FullString()
 }
 ```
+
+---
+
+# Action Plan for AI: Constructing Enums
+
+> **Goal:** Properly generate the `errtype` structure and enums without hallucination.
+
+If you are instructed to create, modify, or scaffold the Error Enum types (e.g., `Variation`, `VariantStructure`), you MUST fetch and read the following raw reference implementations from the `auk-go/errorwrapper` repository to ensure your architecture exactly matches the production spec:
+
+| Component | Raw Link for AI to `fetch` or `curl` |
+|-----------|--------------------------------------|
+| `consts.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/consts.go?ref_type=heads) |
+| `errTypesMap.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/errTypesMap.go?ref_type=heads) |
+| `istype.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/istype.go?ref_type=heads) |
+| `variation-functions.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/variation-functions.go?ref_type=heads) |
+| `vars.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/vars.go?ref_type=heads) |
+| `VariantStructure.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/VariantStructure.go?ref_type=heads) |
+| `StringToVariantMap.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/StringToVariantMap.go?ref_type=heads) |
+| `New.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/New.go?ref_type=heads) |
+| `JsonModel.go` | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/JsonModel.go?ref_type=heads) |
+
+**AI Instruction:** Use your network reading tools (like `read_url_content` or `curl`) to download the `Raw` URLs above before you attempt to scaffold the Error Enum structure.
