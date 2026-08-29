@@ -161,6 +161,32 @@ When you need the opposite of a boolean, **do not negate** — use the inverse n
 6. **No `else` after `return`/`throw`/`continue`/`break`**.
 7. **Keep cyclomatic complexity low** — one path through the function, guard and exit early.
 
+
+### Mandatory Linter Rules for Booleans
+
+To ensure these rules are not violated, the project's custom linter (e.g., `validate-guidelines.go`) MUST actively disable and flag the following patterns:
+
+#### 1. No Explicit True Checks
+Evaluating a boolean against `true` is completely forbidden. Booleans must be evaluated implicitly.
+```go
+// ❌ LINTER MUST REJECT: Explicit == true
+if isReady == true { ... }
+
+// ✅ LINTER ALLOWS: Implicit evaluation
+if isReady { ... }
+```
+
+#### 2. No Mixed Polarity in Conditionals
+Combining positive and negative conditions in the same `if/else` block is strictly forbidden. It must be extracted into a clearly named variable.
+```go
+// ❌ LINTER MUST REJECT: Mixed polarity
+if isReady && !hasError { ... }
+
+// ✅ LINTER ALLOWS: Extracted semantic variable
+isSafeToProceed := isReady && !hasError
+if isSafeToProceed { ... }
+```
+
 ### Zero Nested `if` — The Inverse Guard Pattern
 
 The idea: **invert the condition, exit the function, continue on the happy path.** This keeps every function a single straight line — no indentation pyramids, no cognitive load.

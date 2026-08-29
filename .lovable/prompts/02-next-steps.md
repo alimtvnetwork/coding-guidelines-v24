@@ -156,3 +156,21 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
 2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.
+
+
+---
+
+## 🚨 MANDATORY END OF TURN SUMMARY
+
+At the very end of your response, you MUST provide a detailed summary of all changes made during your turn. This summary is critically important.
+
+You must list:
+1. **The Exact Files Changed:** (e.g., `src/main.go`, `.golangci.yml`)
+2. **What was Changed:** (e.g., "Replaced explicit `== true` check with implicit boolean", "Added `apperror.New.Error` wrapping")
+3. **WHY it was Changed:** (e.g., "To comply with Rule P9 of the Boolean guidelines which forbids explicit true checks")
+
+## 🚨 GLOBAL LINTER & CI/CD RULES
+
+1. **NO CI/CD BYPASSING:** NEVER disable any CI/CD checks, linter rules (e.g., in `.golangci.yml`, `.eslintrc`), or tests to force a passing build. STRICTLY AVOID modifying configuration files to bypass errors. You must fix the underlying code.
+2. **LINTER ENFORCEMENT - EXPLICIT TRUE:** You must actively enforce and implement linter rules that ban explicit true checks (e.g., `x == true` or `y === true`). Booleans must be evaluated implicitly.
+3. **LINTER ENFORCEMENT - MIXED POLARITY:** You must actively enforce and implement linter rules that ban combinations of positive and negative conditions in `if`/`else` statements (e.g., `if isReady && !hasError`). This mixed polarity must be flagged by the linter and refactored into clearly named intermediate variables (e.g., `isSafeToProceed := isReady && !hasError`).
