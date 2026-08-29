@@ -403,6 +403,36 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
       echo "  ✓ \${src} → \${TARGET}/\${dest} (merged into codingGuideline section)"
       continue
     fi
+    if [[ "${src}" == *".lovable/strictly-avoid.md"* || "${src}" == *".lovable/memory"* ]]; then
+      python3 -c "
+import sys, os, shutil
+def merge_file(src, dst):
+    if not os.path.exists(dst):
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copy2(src, dst)
+        return
+    with open(dst, 'r', encoding='utf-8') as f: old = f.read().splitlines()
+    with open(src, 'r', encoding='utf-8') as f: new = f.read().splitlines()
+    old_set = set(old)
+    added = [line for line in new if line not in old_set]
+    if added:
+        with open(dst, 'a', encoding='utf-8') as f:
+            f.write('\n\n### [Auto-Merged from Coding Guidelines Update]\n')
+            f.write('\n'.join(added))
+            f.write('\n')
+def merge_path(src, dst):
+    if os.path.isdir(src):
+        for root, dirs, files in os.walk(src):
+            for file in files:
+                rel = os.path.relpath(os.path.join(root, file), src)
+                merge_file(os.path.join(root, file), os.path.join(dst, rel))
+    else:
+        merge_file(src, dst)
+merge_path(sys.argv[1], sys.argv[2])
+" "${archive_root}/${src}" "${TARGET}/${dest}"
+      echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
+      continue
+    fi
     if [[ -d "\${archive_root}/\${src}" ]]; then
       mkdir -p "\${TARGET}/\${dest}"
       cp -R "\${archive_root}/\${src}/." "\${TARGET}/\${dest}/"
@@ -1108,6 +1138,35 @@ function Copy-Mapping {
             } catch {
                 Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)"
             }
+            continue
+        }
+        if ($pair.Src -match "\.lovable/strictly-avoid\.md" -or $pair.Src -match "\.lovable/memory") {
+            function Merge-File {
+                param($srcFile, $dstFile)
+                if (-not (Test-Path $dstFile)) {
+                    New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null
+                    Copy-Item -Path $srcFile -Destination $dstFile -Force
+                    return
+                }
+                $old = Get-Content $dstFile -Encoding UTF8
+                $new = Get-Content $srcFile -Encoding UTF8
+                if ($null -eq $old) { $old = @() }
+                if ($null -eq $new) { $new = @() }
+                $diff = Compare-Object -ReferenceObject $old -DifferenceObject $new | Where-Object { $_.SideIndicator -eq '=>' }
+                if ($diff) {
+                    Add-Content -Path $dstFile -Value "`n`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8
+                    $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 }
+                }
+            }
+            if ((Get-Item $srcPath).PSIsContainer) {
+                Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
+                    $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('\')
+                    Merge-File -srcFile $_.FullName -dstFile (Join-Path $destPath $rel)
+                }
+            } else {
+                Merge-File -srcFile $srcPath -dstFile $destPath
+            }
+            Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
         if ((Get-Item $srcPath).PSIsContainer) {

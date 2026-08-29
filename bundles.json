@@ -97,7 +97,7 @@
     {
       "name": "slides",
       "title": "Slides App + Decks",
-      "description": "Installs the slides Vite app, the source decks (spec-slides/), and the pre-built dist/ so index.html opens directly in the browser — no Node/build step required.",
+      "description": "Installs the slides Vite app, the source decks (spec-slides/), and the pre-built dist/ so index.html opens directly in the browser \u2014 no Node/build step required.",
       "intent": [
         "slides",
         "presentation",
@@ -349,6 +349,18 @@
         {
           "src": ".lovable/cicd-issues",
           "dest": ".lovable/cicd-issues"
+        },
+        {
+          "src": ".lovable/skills",
+          "dest": ".lovable/skills"
+        },
+        {
+          "src": ".lovable/scripts",
+          "dest": ".lovable/scripts"
+        },
+        {
+          "src": ".lovable/strictly-avoid.md",
+          "dest": ".lovable/strictly-avoid.md"
         }
       ],
       "archive": {
