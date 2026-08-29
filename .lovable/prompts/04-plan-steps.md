@@ -216,3 +216,8 @@ Applied solution: <what changed / where>
 ```
 
 Never leave a copy behind. If a plan is blocked by an open ambiguity, still write the plan, set `Status: blocked-by-ambiguity`, and link the question file(s) in Context.
+
+## Critical Fixes & RCA Reminders
+
+1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
+2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.

@@ -85,3 +85,20 @@ Allowed work:
 - ✅ Executing a release **ONLY** when the user explicitly says "release", "bump version", or something explicitly confirming a version bump is needed for distribution.
 
 **Why:** Releasing on every commit completely pollutes the git history and version tags (e.g., bumping from v6.24.0 to v6.31.0 in just a few hours for minor formatting/docs).
+
+## Explicit == true Checks — TOTAL BAN
+
+🔴 **NEVER evaluate boolean variables explicitly against 	rue (e.g., == true or === true).**
+
+Forbidden:
+- ❌ if isValid == true {
+- ❌ if (hasMatch === true) {
+- ❌ eturn isSuccess == true
+
+Allowed work:
+- ✅ Implicit positive checks: if isValid {
+- ✅ Implicit positive checks: if (hasMatch) {
+- ✅ Returning directly: eturn isSuccess
+- ✅ Using == false or === false as a replacement for the banned ! operator (if permitted by the language's specific guideline). 
+
+**Why:** Implicit boolean evaluation is a universal standard. The AI incorrectly generalized the === false rule into === true. 	rue is redundant and prohibited.

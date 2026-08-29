@@ -208,3 +208,8 @@ When answered: `mv` from `01-new-ambiguity/` to `02-ambiguity-resolved/`, flip `
 - [ ] Execute `git commit -m "chore(release): bump version to <new_version>"`
 - [ ] Execute `git push`
 - [ ] AVOID: Do NOT create a git tag (e.g., `git tag`). Tags are managed externally by Git Map.
+
+## Critical Fixes & RCA Reminders
+
+1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
+2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.

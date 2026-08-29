@@ -131,3 +131,8 @@ When EVERYTHING is completely finished and fixed (at the very end of the tunnel)
 
 
 
+
+## Critical Fixes & RCA Reminders
+
+1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
+2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.

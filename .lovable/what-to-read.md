@@ -60,3 +60,4 @@
 - .lovable/plans/pending/06-trailing-newlines-and-ai-scripts.md
 - .lovable/plans/pending/07-lowercase-changelog.md
 - .lovable/plans/pending/08-update-prompts-and-release.md
+- .lovable/plans/pending/09-rca-and-boolean-fix.md

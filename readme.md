@@ -2111,3 +2111,4 @@ This will fetch the latest versions of the read, write, plan, execute, and relea
 - [Plan: Trailing Newlines & AI Scripts](.lovable/plans/pending/06-trailing-newlines-and-ai-scripts.md)
 - [Plan: Lowercase changelog.md](.lovable/plans/pending/07-lowercase-changelog.md)
 - [Plan: Update Prompts and Release](.lovable/plans/pending/08-update-prompts-and-release.md)
+- [Plan: RCA & Boolean Fix](.lovable/plans/pending/09-rca-and-boolean-fix.md)

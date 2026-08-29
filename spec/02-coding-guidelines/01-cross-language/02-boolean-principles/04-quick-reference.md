@@ -29,6 +29,21 @@
 
 ## Common Mistakes — Boolean Logic
 
+### Mistake 0: Explicit == true Evaluation (P9)
+
+`php
+// ❌ WRONG — redundant and banned explicit true check
+if ( == true) {
+    // ...
+}
+
+// ✅ CORRECT — implicit boolean evaluation
+if () {
+    // ...
+}
+`
+
+
 ### Mistake 1: Missing `is`/`has` Prefix (P1)
 
 ```php

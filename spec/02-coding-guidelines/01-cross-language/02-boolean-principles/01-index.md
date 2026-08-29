@@ -40,7 +40,7 @@ Previously a single 858-line file, now split into focused modules under 300 line
 |---|------|---------|-------|
 | — | [01-naming-prefixes.md](./01-naming-prefixes.md) | P1: is/has prefixes, P2: no negative words | 134 |
 | — | [02-guards-and-extraction.md](./02-guards-and-extraction.md) | P3: named guards, P4: extract complex expressions | 205 |
-| — | [03-parameters-and-conditions.md](./03-parameters-and-conditions.md) | P5: explicit params, P6: no mixed booleans, P7: no inline statements, P8: no raw system calls | 262 |
+| — | [03-parameters-and-conditions.md](./03-parameters-and-conditions.md) | P5: explicit params, P6: no mixed booleans, P7: no inline statements, P8: no raw system calls, P9: no explicit true checks | 262 |
 | — | [04-quick-reference.md](./04-quick-reference.md) | Quick reference table, common mistakes | 155 |
 | — | [05-exemptions-and-api.md](./05-exemptions-and-api.md) | Static factory exemption, Result wrapper API | 139 |
 | — | 99-consistency-report.md | — | — |

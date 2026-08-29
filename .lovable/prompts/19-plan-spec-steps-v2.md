@@ -747,3 +747,8 @@ To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` d
 - On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.
 - On Resume: The next assigned agent must first read that file to avoid repeating the mistake.
 - On Success: Update the file to `STATUS: DONE` and immediately update the master plan.
+
+## Critical Fixes & RCA Reminders
+
+1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
+2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.
