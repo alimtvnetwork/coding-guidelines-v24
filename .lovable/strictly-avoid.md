@@ -102,3 +102,17 @@ Allowed work:
 - ✅ Using `== false` or `=== false` as a replacement for the banned `!` operator (if permitted by the language's specific guideline). 
 
 **Why:** Implicit boolean evaluation is a universal standard. The AI incorrectly generalized the `=== false` rule into `=== true`. `true` is redundant and prohibited.
+
+## British English Spelling — TOTAL BAN
+
+🔴 **NEVER use British English spelling (e.g., `behaviour`, `recognise`) in the codebase.**
+
+Forbidden:
+- ❌ `behaviour`
+- ❌ `recognise`
+- ❌ `colour`, `initialise`
+
+Allowed work:
+- ✅ US English spelling: `behavior`, `recognize`, `color`, `initialize`
+
+**Why:** The codebase strictly enforces US English to pass the misspell linter and ensure global consistency.
