@@ -627,6 +627,24 @@ The ecosystem uses **two complementary error code systems**:
 
 ---
 
+## AI Implementation Examples (`auk-go/errorwrapper`)
+
+To ensure AI agents properly construct the `errtype` structure and enums without hallucination, the following source files from the `auk-go/errorwrapper` repository serve as the canonical reference implementation. AIs must use these examples to match the architecture exactly:
+
+| Component | Source Link | Raw Link |
+|-----------|-------------|----------|
+| `consts.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/consts.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/consts.go?ref_type=heads) |
+| `errTypesMap.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/errTypesMap.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/errTypesMap.go?ref_type=heads) |
+| `istype.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/istype.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/istype.go?ref_type=heads) |
+| `variation-functions.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/variation-functions.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/variation-functions.go?ref_type=heads) |
+| `vars.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/vars.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/vars.go?ref_type=heads) |
+| `VariantStructure.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/VariantStructure.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/VariantStructure.go?ref_type=heads) |
+| `StringToVariantMap.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/StringToVariantMap.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/StringToVariantMap.go?ref_type=heads) |
+| `New.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/New.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/New.go?ref_type=heads) |
+| `JsonModel.go` | [View](https://gitlab.com/auk-go/errorwrapper/-/blob/develop/errtype/JsonModel.go?ref_type=heads) | [Raw](https://gitlab.com/auk-go/errorwrapper/-/raw/develop/errtype/JsonModel.go?ref_type=heads) |
+
+---
+
 ## Cross-References
 
 | Reference | Location |
