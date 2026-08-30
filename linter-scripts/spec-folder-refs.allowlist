@@ -94,3 +94,8 @@
 # These are referenced strictly inside .lovable/prompts/ example AI workflows
 02-app
 05-failing-tests
+25-app-spec-audit
+26-coding-guideline-audit
+06-design-system
+09-pipeline-extend-v2
+

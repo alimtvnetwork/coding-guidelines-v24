@@ -32,6 +32,7 @@ JOBS_MATRIX = {
     "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md", "docs/installer-fix-repo-flags.md"],
     "Check File Sizes Baseline": [sys.executable, "linter-scripts/check-file-sizes.py", "--check"],
     "Newline Styling MJS Check": ["node", "linter-scripts/check-newline-styling.mjs"],
+    "Spec Folder References Check": [sys.executable, "linter-scripts/check-spec-folder-refs.py"],
 }
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:

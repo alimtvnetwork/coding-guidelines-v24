@@ -24,14 +24,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CODEGEN_DIR = ROOT / "linters-cicd" / "codegen"
-VERIFY = CODEGEN_DIR / "scripts" / "verify-codegen-determinism.sh"
-REGEN = CODEGEN_DIR / "scripts" / "regen-codegen-fixtures.sh"
+VERIFY = CODEGEN_DIR / "scripts" / "verify_codegen_determinism.py"
+REGEN = CODEGEN_DIR / "scripts" / "regen_codegen_fixtures.py"
 EXPECTED_DIR = CODEGEN_DIR / "fixtures" / "expected"
 
 
 def run_verify() -> subprocess.CompletedProcess:
     return subprocess.run(
-        ["bash", str(VERIFY)],
+        [sys.executable, str(VERIFY)],
         capture_output=True, text=True, cwd=ROOT,
     )
 
@@ -93,7 +93,7 @@ class TestRegenIdempotency(unittest.TestCase):
             # Run regen again into the live expected/ dir; verify
             # nothing changed byte-for-byte.
             result = subprocess.run(
-                ["bash", str(REGEN)],
+                [sys.executable, str(REGEN)],
                 capture_output=True, text=True, cwd=ROOT,
             )
             self.assertEqual(result.returncode, 0,

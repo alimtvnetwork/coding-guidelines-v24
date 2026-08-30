@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(REPO_ROOT / "linters-cicd"))
 
 from checks._lib.walker import walk_files, walk_files_middle_out  # noqa: E402
 
@@ -22,7 +23,7 @@ def _touch(root: Path, rel: str) -> None:
 class TestExcludeGlobs(unittest.TestCase):
     def setUp(self) -> None:
         self._tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self._tmp.name)
+        self.root = Path(self._tmp.name).resolve()
         _touch(self.root, "src/app.go")
         _touch(self.root, "src/util.go")
         _touch(self.root, "thirdparty/lib1/big.go")
@@ -34,7 +35,7 @@ class TestExcludeGlobs(unittest.TestCase):
         self._tmp.cleanup()
 
     def _names(self, files: list[Path]) -> set[str]:
-        return {f.relative_to(self.root).as_posix() for f in files}
+        return {f.resolve().relative_to(self.root).as_posix() for f in files}
 
     def test_no_globs_returns_all(self) -> None:
         files = walk_files(str(self.root), [".go"])

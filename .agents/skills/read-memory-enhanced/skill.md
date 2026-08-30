@@ -82,7 +82,7 @@ If any answer is fuzzy, go back and reread. Do not proceed.
 
 ## Phase 2 - Consolidated guidelines
 
-Read `spec/12-consolidated-guidelines/` in numeric order (`01-*.md` through `18-*.md`). Each file is a self-contained policy document. Missing folder: note it and continue.
+Read `spec/17-consolidated-guidelines/` in numeric order (`01-*.md` through `18-*.md`). Each file is a self-contained policy document. Missing folder: note it and continue.
 ---
 
 ## Phase 3 - Spec authoring rules
@@ -107,14 +107,14 @@ Only open a spec folder when the current task needs it.
 | UI theming, CSS variables, design tokens | `spec/07-design-system/` |
 | Documentation viewer features | `spec/08-docs-viewer-ui/` |
 | Code block rendering | `spec/09-code-block-system/` |
-| PowerShell scripts | `spec/10-powershell-integration/` |
-| CI/CD pipelines | `spec/13-cicd-pipeline-workflows/` |
-| CLI self-update | `spec/14-self-update-app-update/` |
-| WordPress plugins | `spec/15-wp-plugin-how-to/` |
+| PowerShell scripts | `spec/11-powershell-integration/` |
+| CI/CD pipelines | `spec/12-cicd-pipeline-workflows/` |
+| CLI self-update | `spec/14-update/` |
+| WordPress plugins | `spec/18-wp-plugin-how-to/` |
 | App-specific features | `spec/21-app/` |
 | Known app bugs | `spec/22-app-issues/` |
-| App-specific DB schema | `spec/23-app-database/` |
-| App-specific UI + design system | `spec/24-app-design-system-and-ui/` |
+| App-specific DB schema | `spec/23-app-db/` |
+| App-specific UI + design system | `spec/24-app-ui-design-system/` |
 Inside each folder: `00-overview.md` → numbered files → `99-consistency-report.md`.
 Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `spec/coding-guidelines/`, `coding-guidelines/`, `spec/XX-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
 ---
