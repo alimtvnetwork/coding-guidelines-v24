@@ -305,11 +305,11 @@ The linter checks:
 
 | Reference | Location |
 |-----------|----------|
-| AppError Struct | [02-apperror-struct.md](./02-apperror-struct.md) |
-| StackTrace | [01-overview-and-stack.md](./01-overview-and-stack.md) |
-| Result types | [03-result-types.md](./03-result-types.md) |
-| AppErrType Enums | [05-apperrtype-enums.md](./05-apperrtype-enums.md) |
-| Linter Script | [linter-scripts/validate-guidelines.go](../../../../../linter-scripts/validate-guidelines.go) |
-| golangci-lint Config | [linters/golangci-lint/.golangci.yml](../../../../../linters/golangci-lint/.golangci.yml) |
+| AppError Struct | [02-apperror-struct.md](./02-apperror-reference.md) |
+| StackTrace | [01-overview-and-stack.md](./01-index.md) |
+| Result types | [03-result-types.md](./01-index.md) |
+| AppErrType Enums | [05-apperrtype-enums.md](./02-apperror-reference.md) |
+| Linter Script | [linter-scripts/validate-guidelines.go](../../../../linter-scripts/validate-guidelines.go) |
+| golangci-lint Config | [linters/golangci-lint/.golangci.yml](../../../../linters/golangci-lint/.golangci.yml) |
 | codestack package | `gitlab.com/auk-go/core/codestack` |
 | Error Management Overview | [spec/03-error-manage/01-index.md](../../../01-index.md) |

@@ -183,5 +183,5 @@ Consolidated reference, audit logs, contradiction checks.
 ## Cross-References
 
 - [Parent Overview](../01-index.md) — Broader coding guidelines context
-- [AI Quick-Reference Checklist](../06-ai-optimization/02-ai-quick-reference-checklist.md) — Condensed checklist for AI code generation
-- [Condensed Master Guidelines](../06-ai-optimization/04-condensed-master-guidelines.md) — AI-optimized single-file reference
+- [AI Quick-Reference Checklist](../06-ai-optimization/03-ai-quick-reference-checklist.md) — Condensed checklist for AI code generation
+- [Condensed Master Guidelines](../06-ai-optimization/05-condensed-master-guidelines.md) — AI-optimized single-file reference

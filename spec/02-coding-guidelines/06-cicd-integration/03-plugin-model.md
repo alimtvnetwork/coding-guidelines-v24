@@ -44,7 +44,7 @@ Every check script:
 
 1. Is invoked as `python3 <script> --path <dir> [--format sarif|text]`.
 2. Walks files matching its language extensions only.
-3. Emits SARIF 2.1.0 per [`01-sarif-contract.md`](./01-sarif-contract.md).
+3. Emits SARIF 2.1.0 per [`01-sarif-contract.md`](./02-sarif-contract.md).
 4. Exits `0` (clean) / `1` (findings) / `2` (tool error).
 5. Has a sibling `<plugin>_test.py` with at least one bad fixture and
    one good fixture under `linters-cicd/checks/<rule>/fixtures/`.

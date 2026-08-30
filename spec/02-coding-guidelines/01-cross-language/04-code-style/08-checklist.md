@@ -39,9 +39,9 @@
 - [Boolean Principles](../02-boolean-principles/01-index.md) — P1–P6 boolean naming rules (all languages)
 - [Go Enum Specification](../../03-golang/01-enum-specification/01-index.md) — Go enum pattern, required methods, folder structure
 - [TypeScript Enums](../../02-typescript/01-index.md) — TypeScript string enum definitions and usage patterns
-- [PHP Enum Classes](../../04-php/01-enums.md) — PHP backed enum patterns
+- [PHP Enum Classes](../../04-php/02-enums.md) — PHP backed enum patterns
 - [PHP Coding Standards](../../04-php/07-php-standards-reference/01-index.md) — PHP-specific rules that reference this spec
-- [PHP Forbidden Patterns](../../04-php/02-forbidden-patterns.md) — PHP checklist
+- [PHP Forbidden Patterns](../../04-php/03-forbidden-patterns.md) — PHP checklist
 
 ---
 

@@ -75,8 +75,8 @@ honor.
 ## Cross-references
 
 - [CI/CD Integration overview](../01-index.md)
-- [SARIF contract](../01-sarif-contract.md)
-- [Distribution](../05-distribution.md) — how installers are packaged
+- [SARIF contract](../02-sarif-contract.md)
+- [Distribution](../06-distribution.md) — how installers are packaged
 - [Generic installer behavior](../../../14-update/27-generic-installer-behavior.md)
 - [Release pinned installer](../../../14-update/25-release-pinned-installer.md)
 - [Code Red Guidelines](../../../17-consolidated-guidelines/01-index.md)

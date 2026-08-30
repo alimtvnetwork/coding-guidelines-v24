@@ -4,7 +4,7 @@
 **Created:** 2026-02-02  
 **Updated:** 2026-04-16  
 **Status:** Active  
-**Parent:** [02-rag-chunk-settings.md](./01-rag-chunk-settings.md)
+**Parent:** [02-rag-chunk-settings.md](./02-rag-chunk-settings.md)
 
 ---
 

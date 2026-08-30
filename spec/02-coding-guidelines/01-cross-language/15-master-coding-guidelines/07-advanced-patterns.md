@@ -37,7 +37,7 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 
 ## 13. Test Naming & Structure
 
-> Full reference: [14-test-naming-and-03-structure.md](../14-test-naming-and-03-structure.md)
+> Full reference: [14-test-naming-and-03-structure.md](../14-test-naming-and-structure.md)
 
 | Rule | Description |
 |------|-------------|

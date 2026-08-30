@@ -301,7 +301,7 @@ test_summary:
 ## Cross-References
 
 - [01-index.md](./01-index.md)
-- [07-shared-cli-wrapper.md](./07-shared-cli-wrapper.md) — Wrapper that consumes the env vars
+- [07-shared-cli-wrapper.md](./08-shared-cli-wrapper.md) — Wrapper that consumes the env vars
 - [99-ai-implementation-guide.md](./99-ai-implementation-guide.md) — Decision tree referencing this schema
 
 ---

@@ -214,4 +214,4 @@ func (s *Service) GetReport() {
 |-----------|----------|
 | Schema design | [./03-schema-design.md](./03-schema-design.md) |
 | Testing strategy | [./05-testing-strategy.md](./05-testing-strategy.md) |
-| Naming conventions | [./03-naming-conventions.md](./03-naming-conventions.md) |
+| Naming conventions | [./02-naming-conventions.md](./02-naming-conventions.md) |

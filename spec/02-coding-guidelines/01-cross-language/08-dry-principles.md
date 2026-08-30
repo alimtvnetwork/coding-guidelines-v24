@@ -135,7 +135,7 @@ Ask these questions:
 
 - [DRY Refactoring Summary](./09-dry-refactoring-summary.md) — Complete 10-phase history
 - [Response Envelope Schema](../../03-error-manage/02-error-architecture/05-response-envelope/envelope.schema.json) — Cross-stack type contract
-- [TypeScript Standards](../02-typescript/08-typescript-standards-reference.md) — TS-specific rules
+- [TypeScript Standards](../02-typescript/09-typescript-standards-reference.md) — TS-specific rules
 - [Golang Standards](../03-golang/04-golang-standards-reference/01-index.md) — Go-specific rules
 - [PHP Standards](../04-php/07-php-standards-reference/01-index.md) — PHP-specific rules
 

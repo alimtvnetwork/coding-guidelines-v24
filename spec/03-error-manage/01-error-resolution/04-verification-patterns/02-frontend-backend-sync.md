@@ -276,5 +276,5 @@ jobs:
 ## Cross-Reference
 
 - [Error Resolution Overview](../../01-index.md)
-- [Health Endpoint Mismatch Retrospective](../03-retrospectives/01-health-endpoint-mismatch.md)
+- [Health Endpoint Mismatch Retrospective](../03-retrospectives/02-health-endpoint-mismatch.md)
 - Shared CLI Frontend *(external spec)*

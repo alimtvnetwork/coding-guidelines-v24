@@ -428,7 +428,7 @@ func Toggle() apperror.BoolResult { ... }
 - [Code Mutation Avoidance](./18-code-mutation-avoidance.md) — Immutable type values
 - [Strict Typing](./13-strict-typing.md) — No `any`/`interface{}`
 - [Generic Return Types](./25-generic-return-types.md) — Result[T] patterns
-- [Boolean Principles](./02-boolean-principles.md) — Boolean naming in type definitions
+- [Boolean Principles](./03-boolean-principles.md) — Boolean naming in type definitions
 
 ---
 

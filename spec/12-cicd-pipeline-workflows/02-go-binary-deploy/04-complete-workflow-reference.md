@@ -335,8 +335,8 @@ jobs:
 | Version Resolution | [Shared Conventions — Version Resolution](../03-shared-conventions.md#version-resolution) |
 | Windows Resources | [Binary Icon Branding](../16-binary-icon-branding.md) |
 | Cross-Compilation | [Cross-Compilation](../../14-update/17-cross-compilation.md) |
-| Multi-Module Build | [Release Pipeline — Multiple Binaries](./05-release-pipeline.md#multiple-binaries-multi-module-build) |
-| Docs-Site Bundling | [Docs-Site Bundling](./05-release-pipeline.md#docs-site-bundling) |
+| Multi-Module Build | [Release Pipeline — Multiple Binaries](../05-release-pipeline.md#multiple-binaries) |
+| Docs-Site Bundling | [Docs-Site Bundling](../05-release-pipeline.md#docs-site-bundling) |
 | Code Signing | [Code Signing](../10-code-signing.md) |
 | Compression | [Release Assets](../../14-update/14-release-assets.md) |
 | Checksums | [Checksums & Verification](../../14-update/15-checksums-verification.md) |
@@ -416,7 +416,7 @@ Key rules:
 ## Cross-References
 
 - [CI Pipeline](./02-ci-pipeline.md) — Validation pipeline that precedes releases
-- [Release Pipeline](./05-release-pipeline.md) — Modular spec this workflow implements
+- [Release Pipeline](../05-release-pipeline.md) — Modular spec this workflow implements
 - [Shared Conventions](../03-shared-conventions.md) — Platform, triggers, permissions
 
 ---

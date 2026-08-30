@@ -88,7 +88,7 @@ var role = RoleType.Admin;
 ## Cross-References
 
 - [Strict Typing](../01-cross-language/13-strict-typing.md) — cross-language type safety rules
-- [Casting Elimination](../01-cross-language/03-casting-elimination-patterns.md) — avoid type casts
+- [Casting Elimination](../01-cross-language/04-casting-elimination-patterns.md) — avoid type casts
 - [Code Mutation Avoidance](../01-cross-language/18-code-mutation-avoidance.md) — immutability patterns
 
 ---

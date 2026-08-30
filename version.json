@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "363f16cd4ac00f46b7264c3f53a5dbf80b715fb2",
+  "LastCommitSha": "5aec499a80fe11b12a99cf56600412f77999cbf6",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -61,15 +61,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "363f16cd4ac00f46b7264c3f53a5dbf80b715fb2",
-    "shortSha": "363f16c",
+    "sha": "5aec499a80fe11b12a99cf56600412f77999cbf6",
+    "shortSha": "5aec499",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 692,
-    "totalLines": 148852,
+    "totalFiles": 693,
+    "totalLines": 148861,
     "totalFolders": 23,
-    "totalBytes": 5291208,
+    "totalBytes": 5291871,
     "rootFiles": 6
   },
   "folders": [
@@ -84,7 +84,7 @@
       "ambiguity": "None",
       "fileCount": 17,
       "lineCount": 3411,
-      "byteCount": 133301
+      "byteCount": 133295
     },
     {
       "path": "02-coding-guidelines",
@@ -97,7 +97,7 @@
       "ambiguity": null,
       "fileCount": 216,
       "lineCount": 34401,
-      "byteCount": 1079937
+      "byteCount": 1080107
     },
     {
       "path": "03-error-manage",
@@ -110,7 +110,7 @@
       "ambiguity": "None",
       "fileCount": 121,
       "lineCount": 19687,
-      "byteCount": 726009
+      "byteCount": 725997
     },
     {
       "path": "04-database-conventions",
@@ -123,7 +123,7 @@
       "ambiguity": "None",
       "fileCount": 9,
       "lineCount": 2900,
-      "byteCount": 111491
+      "byteCount": 111488
     },
     {
       "path": "05-split-db-architecture",
@@ -227,7 +227,7 @@
       "ambiguity": "None",
       "fileCount": 46,
       "lineCount": 8566,
-      "byteCount": 276016
+      "byteCount": 275903
     },
     {
       "path": "13-generic-cli",
@@ -240,7 +240,7 @@
       "ambiguity": null,
       "fileCount": 23,
       "lineCount": 4715,
-      "byteCount": 152638
+      "byteCount": 152630
     },
     {
       "path": "14-update",
@@ -266,7 +266,7 @@
       "ambiguity": null,
       "fileCount": 7,
       "lineCount": 909,
-      "byteCount": 36266
+      "byteCount": 36247
     },
     {
       "path": "16-generic-release",
@@ -279,7 +279,7 @@
       "ambiguity": null,
       "fileCount": 10,
       "lineCount": 2158,
-      "byteCount": 67752
+      "byteCount": 67870
     },
     {
       "path": "17-consolidated-guidelines",
@@ -292,7 +292,7 @@
       "ambiguity": "None",
       "fileCount": 36,
       "lineCount": 17118,
-      "byteCount": 621660
+      "byteCount": 621641
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -305,7 +305,7 @@
       "ambiguity": "None",
       "fileCount": 30,
       "lineCount": 17530,
-      "byteCount": 577968
+      "byteCount": 577978
     },
     {
       "path": "19-main-worker-service",
@@ -316,9 +316,9 @@
       "status": null,
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 34,
-      "lineCount": 8284,
-      "byteCount": 503800
+      "fileCount": 35,
+      "lineCount": 8293,
+      "byteCount": 504345
     },
     {
       "path": "21-app",

@@ -263,7 +263,7 @@ trait RouteRegistrationTrait
 ## 14.5.1 Security — Permission Callbacks (🔴 CODE RED)
 
 > **Severity:** 🔴 CODE RED — non-negotiable. Linter rule
-> [`WP-PERM-001`](../02-coding-guidelines/06-cicd-integration/06-rules-mapping.md)
+> [`WP-PERM-001`](../02-coding-guidelines/06-cicd-integration/07-rules-mapping.md)
 > blocks merge on any violation.
 
 ### Hard rules
@@ -330,7 +330,7 @@ build on any of the forbidden patterns above. See
 ## 14.5.2 Security — Nonce Verification for Mutating Routes (🔴 CODE RED)
 
 > **Severity:** 🔴 CODE RED — non-negotiable. Linter rule
-> [`WP-NONCE-001`](../02-coding-guidelines/06-cicd-integration/06-rules-mapping.md)
+> [`WP-NONCE-001`](../02-coding-guidelines/06-cicd-integration/07-rules-mapping.md)
 > blocks merge on any violation.
 
 REST authentication via cookies is vulnerable to CSRF unless the

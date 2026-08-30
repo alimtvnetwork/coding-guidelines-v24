@@ -66,7 +66,7 @@
 ## Collision Resolution Log
 
 > This section documents all error code collisions resolved in Wave 1 remediation (2026-02-07).
-> 📋 **Summary report:** [03-collision-resolution-summary.md](./03-collision-resolution-summary.md) — consolidated before/after table of all 13 resolutions.
+> 📋 **Summary report:** [03-collision-resolution-summary.md](./04-collision-resolution-summary.md) — consolidated before/after table of all 13 resolutions.
 
 ### Resolution 1: AI Bridge Lovable Reasoning vs WebSocket Resilience (Phase 14, CRIT-07)
 
@@ -429,7 +429,7 @@ All CLI frontends use a consistent error code pattern at offset +50 from their b
 
 ### GEN-600: Type Casting / Conversion
 
-> Cross-cutting errors used by `pkg/typecast/`. See [Casting Elimination Patterns](../../02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md) for usage.
+> Cross-cutting errors used by `pkg/typecast/`. See [Casting Elimination Patterns](../../02-coding-guidelines/01-cross-language/04-casting-elimination-patterns.md) for usage.
 
 | Code | Name | Message |
 |------|------|---------|
@@ -447,7 +447,7 @@ All CLI frontends use a consistent error code pattern at offset +50 from their b
 
 - These codes are emitted exclusively by `pkg/typecast/` — never constructed manually
 - The `AppError` includes `.WithSkip(1)` so stack traces point to the caller
-- Cast errors must **never** be swallowed — see §7.2 and §10 in [03-casting-elimination-patterns.md](../../02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md)
+- Cast errors must **never** be swallowed — see §7.2 and §10 in [03-casting-elimination-patterns.md](../../02-coding-guidelines/01-cross-language/04-casting-elimination-patterns.md)
 
 
 ### GEN-700: File System
@@ -646,7 +646,7 @@ Both formats are valid. Go CLI tools use flat integers in API responses, constan
 5. Provide clear, actionable message
 6. Update this registry in the same commit
 7. Never reuse deprecated or retired codes
-8. If the code is a Go domain error, also register it as an `apperrtype` enum — see [05-apperrtype-enums.md](../02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md)
+8. If the code is a Go domain error, also register it as an `apperrtype` enum — see [05-apperrtype-enums.md](../02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md)
 
 ---
 
@@ -655,4 +655,4 @@ Both formats are valid. Go CLI tools use flat integers in API responses, constan
 The `apperror` package uses a separate `E{x}xxx` string code format for Go-internal domain errors (e.g., `E2010` = site not found). These do **not** collide with this registry's prefixed format (`GEN-000-01`, `AB-9301`, etc.) because the formats are distinguishable at parse time.
 
 For the full `apperrtype` enum reference and collision analysis, see:
-→ [apperrtype Domain Error Enums](../02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md)
+→ [apperrtype Domain Error Enums](../02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md)

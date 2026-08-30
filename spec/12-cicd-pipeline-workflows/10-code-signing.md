@@ -166,7 +166,7 @@ If signing is disabled, steps 2–3 are skipped and unsigned binaries proceed di
 
 ## Cross-References
 
-- [Go Binary Release Pipeline](./02-go-binary-deploy/05-release-pipeline.md) — Where signing is used
+- [Go Binary Release Pipeline](./05-release-pipeline.md) — Where signing is used
 - [Shared Conventions](./03-shared-conventions.md) — Platform, runner, action version rules
 - [Install Script Generation](./07-install-script-generation.md) — Scripts that download signed binaries
 - [Self-Update Mechanism](./11-self-update-mechanism.md) — Update flow that distributes signed binaries

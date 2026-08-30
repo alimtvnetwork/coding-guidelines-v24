@@ -35,7 +35,7 @@ Maps our cross-language coding guidelines to **static analysis tools and linter 
 
 | # | File | Language | Analyzer | Status |
 |---|------|----------|----------|--------|
-| 01 | [11-eslint-enforcement.md](../../02-typescript/11-eslint-enforcement.md) | TypeScript | ESLint + custom plugin + SonarJS | ✅ Complete |
+| 01 | [11-eslint-enforcement.md](../../02-typescript/12-eslint-enforcement.md) | TypeScript | ESLint + custom plugin + SonarJS | ✅ Complete |
 | 02 | [02-go-golangci-lint.md](./02-go-golangci-lint.md) | Go | golangci-lint | ✅ Complete |
 | 03 | [03-php-phpcs-phpstan.md](./03-php-phpcs-phpstan.md) | PHP | PHP_CodeSniffer + PHPStan | ✅ Complete |
 | 04 | [04-csharp-stylecop.md](./04-csharp-stylecop.md) | C# | StyleCop Analyzers + Roslyn | ✅ Complete |
@@ -57,16 +57,16 @@ These coding guidelines apply to **all** languages. Each language-specific doc m
 
 | Guideline | Spec Source | Enforcement Category |
 |-----------|-------------|---------------------|
-| Zero nested `if` | [Code Style §R2](../04-code-style/01-braces-and-nesting.md) | Complexity / nesting |
+| Zero nested `if` | [Code Style §R2](../04-code-style/02-braces-and-nesting.md) | Complexity / nesting |
 | Boolean naming (`is/has/can/should/was/will`) | [Boolean Principles](../02-boolean-principles/01-index.md) | Naming convention |
-| No magic strings | [Master §5](../15-master-coding-guidelines/05-magic-strings-and-organization.md) | Literal detection |
-| Max 15-line functions | [Code Style §R6](../04-code-style/04-function-and-type-size.md) | Function size |
-| No else after return | [Code Style §R7](../04-code-style/01-braces-and-nesting.md) | Control flow |
-| Blank line before return | [Code Style §R4](../04-code-style/03-blank-lines-and-spacing.md) | Formatting |
+| No magic strings | [Master §5](../15-master-coding-guidelines/06-magic-strings-and-organization.md) | Literal detection |
+| Max 15-line functions | [Code Style §R6](../04-code-style/05-function-and-type-size.md) | Function size |
+| No else after return | [Code Style §R7](../04-code-style/02-braces-and-nesting.md) | Control flow |
+| Blank line before return | [Code Style §R4](../04-code-style/04-blank-lines-and-spacing.md) | Formatting |
 | DRY — no duplicate code | [DRY Principles](../08-dry-principles.md) | Duplication detection |
 | No `any` / loose types | [Strict Typing](../13-strict-typing.md) | Type safety |
-| Promise.all for independent calls | [Promise Patterns](../../02-typescript/09-promise-await-patterns.md) | Async patterns (TS/JS/Node) |
-| Single return value | [Master §4](../15-master-coding-guidelines/04-type-safety.md) | Return pattern (Go) |
+| Promise.all for independent calls | [Promise Patterns](../../02-typescript/10-promise-await-patterns.md) | Async patterns (TS/JS/Node) |
+| Single return value | [Master §4](../15-master-coding-guidelines/05-type-safety.md) | Return pattern (Go) |
 
 ---
 
@@ -120,7 +120,7 @@ sonar.qualitygate.conditions:
 
 ## Cross-References
 
-- [TypeScript ESLint Enforcement](../../02-typescript/11-eslint-enforcement.md) — Step 1 (complete)
+- [TypeScript ESLint Enforcement](../../02-typescript/12-eslint-enforcement.md) — Step 1 (complete)
 - [CI Pipeline & Quality Gate](./09-ci-pipeline-quality-gate.md) — Unified CI pipeline
 - [Cross-Language Code Style](../04-code-style/01-index.md) — Source rules
 - [Master Coding Guidelines](../15-master-coding-guidelines/01-index.md) — Full checklist

@@ -140,4 +140,4 @@ my-awesome-plugin/               ← kebab-case plugin slug
 | Reference | Location |
 |-----------|----------|
 | PHP Standards | [../04-php/01-index.md](../04-php/01-index.md) |
-| Cross-Language Rules | [./01-cross-language.md](./01-cross-language.md) |
+| Cross-Language Rules | [./01-cross-language.md](./02-cross-language.md) |

@@ -127,7 +127,7 @@ See [Master Coding Guidelines §3.1](./15-master-coding-guidelines/01-index.md) 
 
 - [Boolean Principles](./02-boolean-principles/01-index.md) — Positive null guards (`isDefined`)
 - [Master Coding Guidelines §3.1](./15-master-coding-guidelines/01-index.md) — Guard table
-- [Casting Elimination Patterns](./03-casting-elimination-patterns.md) — Type-safe access
+- [Casting Elimination Patterns](./04-casting-elimination-patterns.md) — Type-safe access
 
 ---
 

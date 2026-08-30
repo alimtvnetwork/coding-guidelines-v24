@@ -37,19 +37,19 @@ Source: `eslint-plugins/coding-guidelines/index.js`
 
 | Rule | Severity | Spec Source | Description |
 |------|----------|-------------|-------------|
-| `coding-guidelines/no-nested-if` | `error` | [Code Style §R2](../01-cross-language/04-code-style/01-braces-and-nesting.md) | Zero nested `if` — flatten with early returns |
+| `coding-guidelines/no-nested-if` | `error` | [Code Style §R2](../01-cross-language/04-code-style/02-braces-and-nesting.md) | Zero nested `if` — flatten with early returns |
 | `coding-guidelines/boolean-naming` | `error` | [Boolean Principles](../01-cross-language/02-boolean-principles/01-index.md) | Boolean vars must use `is/has/can/should/was/will` prefix |
-| `coding-guidelines/no-magic-strings` | `warn` | [TS Standards §3](./08-typescript-standards-reference.md) | No raw string literals in `===`/`!==`/`switch` — use enum/constant |
-| `coding-guidelines/max-function-lines` | `error` | [Code Style §R6](../01-cross-language/04-code-style/04-function-and-type-size.md) | Max 15 lines per function body (non-blank, non-comment) |
-| `coding-guidelines/promise-all-independent` | `error` | [Promise Patterns §3](./09-promise-await-patterns.md) | Sequential `await` on independent promises → use `Promise.all` |
-| `coding-guidelines/blank-line-before-return` | `warn` | [Code Style §R4](../01-cross-language/04-code-style/03-blank-lines-and-spacing.md) | Blank line before `return`/`throw` when preceded by statements |
-| `coding-guidelines/no-else-after-return` | `error` | [Code Style §R7](../01-cross-language/04-code-style/01-braces-and-nesting.md) | No `else` after `return`/`throw`/`continue`/`break` |
+| `coding-guidelines/no-magic-strings` | `warn` | [TS Standards §3](./09-typescript-standards-reference.md) | No raw string literals in `===`/`!==`/`switch` — use enum/constant |
+| `coding-guidelines/max-function-lines` | `error` | [Code Style §R6](../01-cross-language/04-code-style/05-function-and-type-size.md) | Max 15 lines per function body (non-blank, non-comment) |
+| `coding-guidelines/promise-all-independent` | `error` | [Promise Patterns §3](./10-promise-await-patterns.md) | Sequential `await` on independent promises → use `Promise.all` |
+| `coding-guidelines/blank-line-before-return` | `warn` | [Code Style §R4](../01-cross-language/04-code-style/04-blank-lines-and-spacing.md) | Blank line before `return`/`throw` when preceded by statements |
+| `coding-guidelines/no-else-after-return` | `error` | [Code Style §R7](../01-cross-language/04-code-style/02-braces-and-nesting.md) | No `else` after `return`/`throw`/`continue`/`break` |
 
 ---
 
 ## 2. Recommended `@typescript-eslint` Rules
 
-These enforce type safety rules from [TS Standards §1–§2](./08-typescript-standards-reference.md):
+These enforce type safety rules from [TS Standards §1–§2](./09-typescript-standards-reference.md):
 
 | Rule | Severity | Spec Source | Description |
 |------|----------|-------------|-------------|
@@ -135,8 +135,8 @@ The canonical ESLint configuration lives at `eslint.config.js` in the project ro
 
 - [ESLint Config](../../../eslint.config.js) — Active rule set
 - [Custom Plugin Source](../../../eslint-plugins/coding-guidelines/index.js) — Rule implementations
-- [Promise Patterns](./09-promise-await-patterns.md) — Promise.all enforcement rationale
-- [TS Standards Reference](./08-typescript-standards-reference.md) — Full TypeScript rules
+- [Promise Patterns](./10-promise-await-patterns.md) — Promise.all enforcement rationale
+- [TS Standards Reference](./09-typescript-standards-reference.md) — Full TypeScript rules
 - [Cross-Language Code Style](../01-cross-language/04-code-style/01-index.md) — Formatting rules
 - [Static Analysis Overview](../01-cross-language/16-static-analysis/01-index.md) — Cross-language analyzer guide
 

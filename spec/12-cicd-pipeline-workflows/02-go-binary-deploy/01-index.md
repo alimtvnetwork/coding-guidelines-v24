@@ -46,7 +46,7 @@ The CI pipeline uses a **SHA-based passthrough gate** to skip redundant validati
 | # | File | Description | Status |
 |---|------|-------------|--------|
 | 01 | [02-ci-pipeline.md](./02-ci-pipeline.md) | CI pipeline: SHA dedup, lint, vulncheck, test matrix, cross-compile | ✅ Active |
-| 02 | [05-release-pipeline.md](./05-release-pipeline.md) | Release pipeline: binary build, compression, install scripts, GitHub Release | ✅ Active |
+| 02 | [05-release-pipeline.md](../05-release-pipeline.md) | Release pipeline: binary build, compression, install scripts, GitHub Release | ✅ Active |
 
 ---
 

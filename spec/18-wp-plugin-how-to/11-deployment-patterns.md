@@ -415,9 +415,9 @@ $defaults = [
 
 ### SelfUpdateStatusType Enum
 
-> **Full definition:** [Phase 2 — 03-self-update-status-enum.md](02-enums-and-coding-style/03-self-update-status-enum.md)
+> **Full definition:** [Phase 2 — 03-self-update-status-enum.md](./02-enums-and-coding-style/04-self-update-status-enum.md)
 
-This enum tracks every possible outcome of the self-update lifecycle. It uses `match`-based metadata methods (see [02-enum-metadata-pattern.md](02-enums-and-coding-style/02-enum-metadata-pattern.md)) with per-case `is*()` helpers.
+This enum tracks every possible outcome of the self-update lifecycle. It uses `match`-based metadata methods (see [02-enum-metadata-pattern.md](./02-enums-and-coding-style/03-enum-metadata-pattern.md)) with per-case `is*()` helpers.
 
 Key cases: `Success`, `RolledBack`, `RollbackFailed`, `BackupCreationFailed`, `ExtractionFailed`, `ValidationFailed`, `ActivationException`, `ActivationWpError`, `HealthCheckFailed`, `PluginFileNotFound`, `CriticalFileMissing`, `SyntaxError`, `FileUnreadable`, `DirectoryMissing`, `BootErrorDetected`, `CriticalClassMissing`, `RestHookMissing`.
 
@@ -779,7 +779,7 @@ trait UpdateResolverUrlTrait
 
 ## 10.7 UpdateConfigType Enum
 
-> **Pattern:** Config enums (int-backed, no metadata) — do NOT use info-object pattern. See [01-enum-architecture.md §2.1](02-enums-and-coding-style/01-enum-architecture.md).
+> **Pattern:** Config enums (int-backed, no metadata) — do NOT use info-object pattern. See [01-enum-architecture.md §2.1](./02-enums-and-coding-style/02-enum-architecture.md).
 
 | Case | Value | Purpose |
 |------|-------|---------|

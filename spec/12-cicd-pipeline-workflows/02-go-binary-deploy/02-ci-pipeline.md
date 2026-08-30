@@ -310,7 +310,7 @@ done
 
 - [Shared Conventions](../03-shared-conventions.md) — Platform, triggers, concurrency, version resolution
 - [Vulnerability Scanning](../06-vulnerability-scanning.md) — Full scanning classification rules
-- [Go Binary Release Pipeline](./05-release-pipeline.md) — Release pipeline that follows CI
+- [Go Binary Release Pipeline](../05-release-pipeline.md) — Release pipeline that follows CI
 
 ---
 

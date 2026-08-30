@@ -125,7 +125,7 @@ Name the return struct after the operation + `Outcome` or `Output`:
 
 **Type assertions (`.(*Type)`, `.(string)`, `.(float64)`) are prohibited** in business logic and service code. Their presence indicates missing concrete types upstream.
 
-**Canonical utility:** All unavoidable casts must go through `typecast.CastOrFail[T]()` from `pkg/typecast/`, which returns `apperror.Result[T]` on failure. See [Casting Elimination Patterns](../03-casting-elimination-patterns.md) for the full specification, including `CastSliceOrFail[T]`, stack-skip requirements, and test patterns.
+**Canonical utility:** All unavoidable casts must go through `typecast.CastOrFail[T]()` from `pkg/typecast/`, which returns `apperror.Result[T]` on failure. See [Casting Elimination Patterns](../04-casting-elimination-patterns.md) for the full specification, including `CastSliceOrFail[T]`, stack-skip requirements, and test patterns.
 
 ### Why
 

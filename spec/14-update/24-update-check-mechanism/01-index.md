@@ -63,16 +63,16 @@ detached process so the user is never blocked.
 |---|------|-------------|
 | 00 | [01-index.md](./01-index.md) | This file — index and defining properties |
 | 01 | [02-fundamentals.md](./02-fundamentals.md) | Discovery algorithm, version-probe URLs, owner/repo conventions |
-| 02 | [02-status-script-json.md](./02-status-script-json.md) | `Status.ps1` / `Status.sh` output JSON schema (PascalCase) |
-| 03 | [03-combined-json.md](./03-combined-json.md) | Combined JSON after parallel discovery — fed to consumers |
-| 04 | [04-database-schema.md](./04-database-schema.md) | `UpdateChecker` table, `UpdateStatus` enum + lookup |
-| 05 | [05-update-checker-service.md](./05-update-checker-service.md) | Reusable `UpdateCheckerService` class contract |
-| 06 | [06-cli-commands.md](./06-cli-commands.md) | `update-check` (flags) and `do-update` commands |
-| 07 | [07-pre-command-hook.md](./07-pre-command-hook.md) | Pre-command hook, interval gate, trailing warning line |
-| 08 | [08-error-handling.md](./08-error-handling.md) | Try/catch policy, file-system log, `ErrorMessage` column |
-| 09 | [09-json-fallback-store.md](./09-json-fallback-store.md) | JSON-file storage when no SQLite database exists |
+| 02 | [02-status-script-json.md](./03-status-script-json.md) | `Status.ps1` / `Status.sh` output JSON schema (PascalCase) |
+| 03 | [03-combined-json.md](./04-combined-json.md) | Combined JSON after parallel discovery — fed to consumers |
+| 04 | [04-database-schema.md](./05-database-schema.md) | `UpdateChecker` table, `UpdateStatus` enum + lookup |
+| 05 | [05-update-checker-service.md](./06-update-checker-service.md) | Reusable `UpdateCheckerService` class contract |
+| 06 | [06-cli-commands.md](./07-cli-commands.md) | `update-check` (flags) and `do-update` commands |
+| 07 | [07-pre-command-hook.md](./08-pre-command-hook.md) | Pre-command hook, interval gate, trailing warning line |
+| 08 | [08-error-handling.md](./09-error-handling.md) | Try/catch policy, file-system log, `ErrorMessage` column |
+| 09 | [09-json-fallback-store.md](./10-json-fallback-store.md) | JSON-file storage when no SQLite database exists |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | 16-point acceptance criteria |
-| 97b | [97-changelog.md](./97-changelog.md) | Changelog |
+| 97b | [97-changelog.md](./98-changelog.md) | Changelog |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Consistency report |
 
 ---

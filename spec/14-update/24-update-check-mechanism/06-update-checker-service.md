@@ -82,7 +82,7 @@ implementation and the JSON-file implementation.
    the previous successful check. The trailing warning continues to
    surface until a successful check supersedes it.
 
-See [08-error-handling.md](./08-error-handling.md) for the full policy.
+See [08-error-handling.md](./09-error-handling.md) for the full policy.
 
 ---
 

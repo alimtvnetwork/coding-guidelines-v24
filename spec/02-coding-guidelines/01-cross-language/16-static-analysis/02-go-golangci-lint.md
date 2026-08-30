@@ -63,13 +63,13 @@ golangci-lint bundles 100+ linters. We enable only those that enforce our coding
 
 | Guideline | Spec Source | Linter | Rule / Setting |
 |-----------|-------------|--------|----------------|
-| Zero nested `if` | [Code Style §R2](../04-code-style/01-braces-and-nesting.md) | `nestif` | `min-complexity: 1` |
-| Zero nested `if` (alt) | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `revive` | `nested-structs` |
-| No `else` after return | [Code Style §R7](../04-code-style/01-braces-and-nesting.md) | `revive` | `superfluous-else` |
-| Max 15-line functions | [Code Style §R6](../04-code-style/04-function-and-type-size.md) | `funlen` | `lines: 15, statements: 10` |
-| Max 400-line files (target 300) | [File Rules](../../03-golang/04-golang-standards-reference/01-file-and-function-rules.md) | `revive` | `file-header` + custom |
-| Blank line before return | [Code Style §R4](../04-code-style/03-blank-lines-and-spacing.md) | `whitespace` | `multi-func: true` |
-| Import 3-group ordering | [Concurrency & Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `goimports` | `local-prefixes: project/` |
+| Zero nested `if` | [Code Style §R2](../04-code-style/02-braces-and-nesting.md) | `nestif` | `min-complexity: 1` |
+| Zero nested `if` (alt) | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `revive` | `nested-structs` |
+| No `else` after return | [Code Style §R7](../04-code-style/02-braces-and-nesting.md) | `revive` | `superfluous-else` |
+| Max 15-line functions | [Code Style §R6](../04-code-style/05-function-and-type-size.md) | `funlen` | `lines: 15, statements: 10` |
+| Max 400-line files (target 300) | [File Rules](../../03-golang/04-golang-standards-reference/02-file-and-function-rules.md) | `revive` | `file-header` + custom |
+| Blank line before return | [Code Style §R4](../04-code-style/04-blank-lines-and-spacing.md) | `whitespace` | `multi-func: true` |
+| Import 3-group ordering | [Concurrency & Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `goimports` | `local-prefixes: project/` |
 | No dead code | [Code Style §R5](../04-code-style/01-index.md) | `unused` | (enabled by default) |
 
 ### 2.2 Naming Conventions
@@ -85,12 +85,12 @@ golangci-lint bundles 100+ linters. We enable only those that enforce our coding
 
 | Guideline | Spec Source | Linter | Rule / Setting |
 |-----------|-------------|--------|----------------|
-| No `interface{}` / `any` in exported APIs | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `revive` | `use-any` (inverted) |
-| No `fmt.Errorf` for service errors | [Type Safety §2](../../03-golang/04-golang-standards-reference/02-type-safety-and-errors.md) | `revive` | `error-strings` + code review |
-| Unchecked error returns | [Type Safety §2](../../03-golang/04-golang-standards-reference/02-type-safety-and-errors.md) | `errcheck` | `check-blank: true` |
-| No `init()` functions | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `revive` | `no-init` (custom) |
-| No global mutable state | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `gocritic` | code review |
-| No panic in handlers | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `revive` | `deep-exit` |
+| No `interface{}` / `any` in exported APIs | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `revive` | `use-any` (inverted) |
+| No `fmt.Errorf` for service errors | [Type Safety §2](../../03-golang/04-golang-standards-reference/03-type-safety-and-errors.md) | `revive` | `error-strings` + code review |
+| Unchecked error returns | [Type Safety §2](../../03-golang/04-golang-standards-reference/03-type-safety-and-errors.md) | `errcheck` | `check-blank: true` |
+| No `init()` functions | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `revive` | `no-init` (custom) |
+| No global mutable state | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `gocritic` | code review |
+| No panic in handlers | [Forbidden Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `revive` | `deep-exit` |
 
 ### 2.4 Complexity & DRY
 
@@ -98,15 +98,15 @@ golangci-lint bundles 100+ linters. We enable only those that enforce our coding
 |-----------|-------------|--------|----------------|
 | Cyclomatic complexity | [Complexity](../06-cyclomatic-complexity.md) | `cyclop` | `max-complexity: 10` |
 | Cognitive complexity | [Complexity](../06-cyclomatic-complexity.md) | `gocognit` | `min-complexity: 10` |
-| No magic strings / numbers | [Magic Strings](../15-master-coding-guidelines/05-magic-strings-and-organization.md) | `goconst` | `min-len: 3, min-occurrences: 2` |
+| No magic strings / numbers | [Magic Strings](../15-master-coding-guidelines/06-magic-strings-and-organization.md) | `goconst` | `min-len: 3, min-occurrences: 2` |
 | No duplicate code | [DRY Principles](../08-dry-principles.md) | `dupl` | `threshold: 100` |
 
 ### 2.5 Concurrency
 
 | Guideline | Spec Source | Linter | Rule / Setting |
 |-----------|-------------|--------|----------------|
-| Context propagation | [Concurrency](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `revive` | `context-as-argument` |
-| Context first parameter | [Concurrency](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) | `revive` | `context-keys-type` |
+| Context propagation | [Concurrency](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `revive` | `context-as-argument` |
+| Context first parameter | [Concurrency](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) | `revive` | `context-keys-type` |
 
 ---
 
@@ -226,7 +226,7 @@ issues:
 
 - [Static Analysis Overview](./01-index.md) — Cross-language analyzer guide
 - [Go Standards Reference](../../03-golang/04-golang-standards-reference/01-index.md) — Full Go rules
-- [Forbidden Patterns](../../03-golang/04-golang-standards-reference/06-concurrency-and-patterns.md) — Go forbidden patterns
+- [Forbidden Patterns](../../03-golang/04-golang-standards-reference/07-concurrency-and-patterns.md) — Go forbidden patterns
 - [Cross-Language Code Style](../04-code-style/01-index.md) — Formatting rules
 - [Boolean Principles](../02-boolean-principles/01-index.md) — Boolean naming rules
 - [DRY Principles](../08-dry-principles.md) — Deduplication rules

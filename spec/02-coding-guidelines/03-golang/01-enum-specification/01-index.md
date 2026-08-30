@@ -40,11 +40,11 @@ This specification defines the **universal enum pattern** for all Go-based CLI a
 
 | File | Purpose |
 |------|---------|
-| [01-enum-pattern.md](01-enum-pattern.md) | Core byte-based enum pattern |
-| [02-required-methods.md](02-required-methods.md) | Mandatory methods for all enums |
-| [03-folder-03-structure.md](03-folder-03-structure.md) | Directory layout standard |
-| [04-validation-checklist.md](04-validation-checklist.md) | Compliance audit checklist |
-| [05-info-object-pattern.md](05-info-object-pattern.md) | Rich metadata via info-object map pattern |
+| [01-enum-pattern.md](./02-enum-pattern.md) | Core byte-based enum pattern |
+| [02-required-methods.md](./03-required-methods.md) | Mandatory methods for all enums |
+| [03-folder-03-structure.md](./04-folder-structure.md) | Directory layout standard |
+| [04-validation-checklist.md](./05-validation-checklist.md) | Compliance audit checklist |
+| [05-info-object-pattern.md](./06-info-object-pattern.md) | Rich metadata via info-object map pattern |
 
 ---
 
@@ -65,7 +65,7 @@ const (
 )
 ```
 
-> **Convention:** All enum packages end with `type` suffix (e.g., `providertype`, `httpmethodtype`). See [03-folder-03-structure.md](03-folder-03-structure.md) §Package Naming Convention.
+> **Convention:** All enum packages end with `type` suffix (e.g., `providertype`, `httpmethodtype`). See [03-folder-03-structure.md](./04-folder-structure.md) §Package Naming Convention.
 
 ### Required Methods
 

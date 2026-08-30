@@ -48,13 +48,13 @@ Maps every cross-language coding guideline to its **PHP_CodeSniffer (PHPCS)** an
 
 | Guideline | Spec Source | PHPCS Sniff | Setting |
 |-----------|-------------|-------------|---------|
-| Zero nested `if` | [Code Style §R2](../04-code-style/01-braces-and-nesting.md) | `Generic.Metrics.NestingLevel` | `absoluteNestingLevel: 1` |
-| No `else` after return | [Code Style §R7](../04-code-style/01-braces-and-nesting.md) | `SlevomatCodingStandard.ControlStructures.EarlyExit` | (enabled) |
-| Max 15-line functions | [Code Style §R6](../04-code-style/04-function-and-type-size.md) | `Generic.Metrics.FunctionLength` | `maxLength: 15` |
-| Blank line before return | [Code Style §R4](../04-code-style/03-blank-lines-and-spacing.md) | `SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing` | `linesCountBeforeFirst: 1` |
+| Zero nested `if` | [Code Style §R2](../04-code-style/02-braces-and-nesting.md) | `Generic.Metrics.NestingLevel` | `absoluteNestingLevel: 1` |
+| No `else` after return | [Code Style §R7](../04-code-style/02-braces-and-nesting.md) | `SlevomatCodingStandard.ControlStructures.EarlyExit` | (enabled) |
+| Max 15-line functions | [Code Style §R6](../04-code-style/05-function-and-type-size.md) | `Generic.Metrics.FunctionLength` | `maxLength: 15` |
+| Blank line before return | [Code Style §R4](../04-code-style/04-blank-lines-and-spacing.md) | `SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing` | `linesCountBeforeFirst: 1` |
 | No dead code | [Code Style §R5](../04-code-style/01-index.md) | `SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure` | (enabled) |
-| Max 400-line files | [File Rules](../04-code-style/04-function-and-type-size.md) | `Generic.Files.LineLength` + `Generic.Metrics.ClassLength` | custom |
-| Braces on same line | [Code Style §R1](../04-code-style/01-braces-and-nesting.md) | `PSR12.ControlStructures.ControlStructureSpacing` | PSR-12 default |
+| Max 400-line files | [File Rules](../04-code-style/05-function-and-type-size.md) | `Generic.Files.LineLength` + `Generic.Metrics.ClassLength` | custom |
+| Braces on same line | [Code Style §R1](../04-code-style/02-braces-and-nesting.md) | `PSR12.ControlStructures.ControlStructureSpacing` | PSR-12 default |
 
 ### 2.2 Naming Conventions
 
@@ -70,7 +70,7 @@ Maps every cross-language coding guideline to its **PHP_CodeSniffer (PHPCS)** an
 | Guideline | Spec Source | PHPCS Sniff | Setting |
 |-----------|-------------|-------------|---------|
 | Cyclomatic complexity | [Complexity](../06-cyclomatic-complexity.md) | `Generic.Metrics.CyclomaticComplexity` | `complexity: 10` |
-| No magic strings / numbers | [Magic Strings](../15-master-coding-guidelines/05-magic-strings-and-organization.md) | `SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator` + custom | detection |
+| No magic strings / numbers | [Magic Strings](../15-master-coding-guidelines/06-magic-strings-and-organization.md) | `SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator` + custom | detection |
 | No duplicate code | [DRY Principles](../08-dry-principles.md) | `phpcpd` (separate tool) | `min-lines: 5` |
 
 ---

@@ -19,7 +19,7 @@
 > **Status:** Active  
 > **Related specs:**
 >
-> - [02-project-03-structure.md](02-project-03-structure.md) — package layout and file organization
+> - [02-project-03-structure.md](./02-project-structure.md) — package layout and file organization
 > - [03-subcommand-architecture.md](03-subcommand-architecture.md) — dispatch pattern and entry point
 > - [13-checklist.md](13-checklist.md) — phased implementation plan referencing all specs
 > - [20-terminal-output-design.md](20-terminal-output-design.md) — terminal rendering architecture
@@ -53,7 +53,7 @@ concrete examples. Adapt syntax to your target language.
 | # | File | Topic |
 |---|------|-------|
 | 01 | [01-overview.md](01-index.md) | This document — philosophy, scope, index |
-| 02 | [02-project-03-structure.md](02-project-03-structure.md) | Package layout, file organization, naming |
+| 02 | [02-project-03-structure.md](./02-project-structure.md) | Package layout, file organization, naming |
 | 03 | [03-subcommand-architecture.md](03-subcommand-architecture.md) | Routing, dispatch, handler pattern |
 | 04 | [04-flag-parsing.md](04-flag-parsing.md) | Per-command flags, defaults, validation |
 | 05 | [05-configuration.md](05-configuration.md) | Three-layer config (defaults → file → flags) |

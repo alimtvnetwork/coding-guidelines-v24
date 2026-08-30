@@ -39,7 +39,7 @@ Documents the cross-language alignment between PHP (WordPress plugin) and Go (ba
 | Zero value | N/A (PHP enums have no zero) | `Invalid = iota` | ✅ By design |
 | Protocol-driven exemptions | N/A | Preserve functional values (`application/json`) | ✅ Documented |
 
-**Reference:** [PHP enums.md](./01-enums.md), [Go 02-required-methods.md](../03-golang/01-enum-specification/02-required-methods.md)
+**Reference:** [PHP enums.md](./02-enums.md), [Go 02-required-methods.md](../03-golang/01-enum-specification/03-required-methods.md)
 
 ---
 
@@ -65,7 +65,7 @@ Documents the cross-language alignment between PHP (WordPress plugin) and Go (ba
 | Key casing | camelCase values (`'pluginSlug'`, `'isUpdate'`) | camelCase (JSON output) | ✅ Aligned |
 | Envelope keys | `Success`, `Error`, `Results` | `Success`, `Error`, `Results` | ✅ Aligned |
 
-**Reference:** [response-key-type-inventory.md](./09-response-key-type-inventory.md)
+**Reference:** [response-key-type-inventory.md](./08-response-key-type-inventory.md)
 
 ---
 
@@ -111,10 +111,10 @@ Documents the cross-language alignment between PHP (WordPress plugin) and Go (ba
 ## Cross-References
 
 - [Database Naming Convention](../01-cross-language/07-database-naming.md)
-- [PHP Enum Specification](./01-enums.md)
-- [PHP Naming Conventions](./03-naming-conventions.md)
+- [PHP Enum Specification](./02-enums.md)
+- [PHP Naming Conventions](../../01-spec-authoring-guide/03-naming-conventions.md)
 - [Go Enum Specification](../03-golang/01-enum-specification/01-index.md)
-- [Go Required Methods](../03-golang/01-enum-specification/02-required-methods.md)
+- [Go Required Methods](../03-golang/01-enum-specification/03-required-methods.md)
 
 ---
 

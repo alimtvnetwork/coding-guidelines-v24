@@ -77,7 +77,7 @@ Comprehensive database design and implementation conventions covering naming, sc
 
 | # | File | Description |
 |---|------|-------------|
-| 01 | [02-naming-conventions.md](./03-naming-conventions.md) | PascalCase rules for tables, columns, indexes — singular table names |
+| 01 | [02-naming-conventions.md](./02-naming-conventions.md) | PascalCase rules for tables, columns, indexes — singular table names |
 | 02 | [03-schema-design.md](./03-schema-design.md) | Key sizing, primary keys, foreign keys, normalization rules |
 | 03 | [04-orm-and-views.md](./04-orm-and-views.md) | ORM-first approach, view patterns, no raw SQL in business logic |
 | 04 | [05-testing-strategy.md](./05-testing-strategy.md) | Unit tests for schemas, integration tests with in-memory DB |

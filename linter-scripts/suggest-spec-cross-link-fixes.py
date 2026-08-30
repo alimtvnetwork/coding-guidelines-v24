@@ -38,6 +38,11 @@ import sys
 from pathlib import Path
 from typing import Iterable
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # Reuse the same regexes / helpers as the checker. We re-implement here
 # (rather than importing) so this script stays a single-file dependency
 # of CI and can be run standalone in any checkout.

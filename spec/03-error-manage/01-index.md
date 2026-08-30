@@ -51,7 +51,7 @@ Consolidated error management specification covering error resolution/debugging,
 | 02 | [Error Architecture](./02-error-architecture/01-index.md) | Cross-stack 3-tier error handling, error modal, response envelope, apperror package, logging, notifications | 22 |
 | 03 | [Error Code Registry](./03-error-code-registry/01-index.md) | Master registry, integration guide, schemas, scripts, templates, collision resolution, utilization report | 18 |
 
-> 📖 **Quick onboarding?** See [03-structure.md](./03-03-structure.md) for a full visual tree with role-based entry points.
+> 📖 **Quick onboarding?** See [03-structure.md](./03-structure.md) for a full visual tree with role-based entry points.
 
 ---
 
@@ -84,7 +84,7 @@ Frontend detection logic MUST use HTTP status codes (2xx) as the primary indicat
 
 ### 4. Structured Error Architecture
 
-All errors use the three-tier architecture documented in [02-error-architecture/01-error-handling-reference.md](./02-error-architecture/01-error-handling-reference.md):
+All errors use the three-tier architecture documented in [02-error-architecture/01-error-handling-reference.md](./02-error-architecture/02-error-handling-reference.md):
 
 - **Tier 1:** Delegated Server (PHP/other) — structured error responses
 - **Tier 2:** Go Backend — `apperror` package with stack traces
@@ -128,10 +128,10 @@ This folder consolidates content previously located at:
 | Reference | Location |
 |-----------|----------|
 | Coding Guidelines | [../02-coding-guidelines/01-index.md](../02-coding-guidelines/01-index.md) |
-| Rust Error Handling | [../02-coding-guidelines/05-rust/02-error-handling.md](../02-coding-guidelines/05-rust/02-error-handling.md) |
+| Rust Error Handling | [../02-coding-guidelines/05-rust/02-error-handling.md](../02-coding-guidelines/05-rust/03-error-handling.md) |
 | Cross-Language Guidelines | [../02-coding-guidelines/01-cross-language/01-index.md](../02-coding-guidelines/01-cross-language/01-index.md) |
 | Database Conventions | [../04-database-conventions/01-index.md](../04-database-conventions/01-index.md) |
-| [03-structure.md](./03-03-structure.md) | Full visual tree |
+| [03-structure.md](./03-structure.md) | Full visual tree |
 
 ---
 

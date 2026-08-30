@@ -27,7 +27,7 @@
 
 ## Purpose
 
-Maps cross-language coding guidelines to **ESLint rules** for **Node.js server-side** code (Express, Fastify, NestJS, plain Node). Extends the [TypeScript ESLint spec](../../02-typescript/11-eslint-enforcement.md) with Node-specific rules for async patterns, security, and runtime concerns.
+Maps cross-language coding guidelines to **ESLint rules** for **Node.js server-side** code (Express, Fastify, NestJS, plain Node). Extends the [TypeScript ESLint spec](../../02-typescript/12-eslint-enforcement.md) with Node-specific rules for async patterns, security, and runtime concerns.
 
 ---
 
@@ -208,10 +208,10 @@ npx eslint . --max-warnings 0
 ## Cross-References
 
 - [Static Analysis Overview](./01-index.md) — Parent document
-- [TypeScript ESLint Enforcement](../../02-typescript/11-eslint-enforcement.md) — Frontend sibling
+- [TypeScript ESLint Enforcement](../../02-typescript/12-eslint-enforcement.md) — Frontend sibling
 - [Cross-Language Code Style](../04-code-style/01-index.md) — Source rules
 - [Master Coding Guidelines](../15-master-coding-guidelines/01-index.md) — Full checklist
-- [Promise/Await Patterns](../../02-typescript/09-promise-await-patterns.md) — Async guidelines
+- [Promise/Await Patterns](../../02-typescript/10-promise-await-patterns.md) — Async guidelines
 
 ---
 

@@ -309,4 +309,4 @@ type Project struct {
 - [PHP Naming Conventions](../04-php/01-index.md) — PHP-specific naming
 - [Go Coding Standards](../03-golang/04-golang-standards-reference/01-index.md) — Go-specific naming
 - [Master Coding Guidelines](./15-master-coding-guidelines/01-index.md) — Consolidated cross-language reference
-- [Issues & Fixes Log](./01-issues-and-fixes-log.md) — Full historical fixes
+- [Issues & Fixes Log](./02-issues-and-fixes-log.md) — Full historical fixes

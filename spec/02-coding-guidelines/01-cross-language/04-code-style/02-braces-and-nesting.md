@@ -134,7 +134,7 @@ if hasIssue {
 >
 > - **Go:** [Enum Specification](../../03-golang/01-enum-specification/01-index.md) — pattern, required methods, folder layout  
 > - **TypeScript:** [TypeScript Enums](../../02-typescript/01-index.md) — string enum definitions, usage patterns  
-> - **PHP:** [PHP Enums](../../04-php/01-enums.md) — backed enum classes
+> - **PHP:** [PHP Enums](../../04-php/02-enums.md) — backed enum classes
 
 ```go
 // ── Go ───────────────────────────────────────────────────────

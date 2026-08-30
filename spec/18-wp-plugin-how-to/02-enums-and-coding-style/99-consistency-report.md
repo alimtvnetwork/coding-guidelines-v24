@@ -10,10 +10,10 @@
 | # | File | Status |
 |---|------|--------|
 | 1 | `01-index.md` | ✅ Present |
-| 2 | `01-enum-architecture.md` | ✅ Present |
-| 3 | `02-enum-metadata-pattern.md` | ✅ Present |
-| 4 | `03-self-update-status-enum.md` | ✅ Present |
-| 5 | `04-action-type-enum.md` | ✅ Present |
+| 2 | `02-enum-architecture.md` | ✅ Present |
+| 3 | `03-enum-metadata-pattern.md` | ✅ Present |
+| 4 | `04-self-update-status-enum.md` | ✅ Present |
+| 5 | `05-action-type-enum.md` | ✅ Present |
 
 **Total:** 5 files (excluding this report)
 

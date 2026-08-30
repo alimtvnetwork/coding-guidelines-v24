@@ -45,7 +45,7 @@ The build graph has a **diamond dependency**: the SDK is built first, then multi
 | # | File | Description | Status |
 |---|------|-------------|--------|
 | 01 | [02-ci-pipeline.md](./02-ci-pipeline.md) | CI pipeline: lint, test, dependency-graph builds | ✅ Active |
-| 02 | [05-release-pipeline.md](./05-release-pipeline.md) | Release pipeline: version, build, package, GitHub Release | ✅ Active |
+| 02 | [05-release-pipeline.md](../05-release-pipeline.md) | Release pipeline: version, build, package, GitHub Release | ✅ Active |
 
 ---
 

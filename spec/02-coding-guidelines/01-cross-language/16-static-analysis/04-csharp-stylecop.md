@@ -67,14 +67,14 @@ Maps every cross-language coding guideline to its **StyleCop Analyzers**, **Rosl
 
 | Guideline | Spec Source | Analyzer | Rule ID | Setting |
 |-----------|-------------|----------|---------|---------|
-| Zero nested `if` | [Code Style §R2](../04-code-style/01-braces-and-nesting.md) | Roslynator | `RCS1208` | Reduce `if` nesting |
-| No `else` after return | [Code Style §R7](../04-code-style/01-braces-and-nesting.md) | Roslynator | `RCS1004` | Remove braces from `if-else` |
-| No `else` after return (alt) | [Code Style §R7](../04-code-style/01-braces-and-nesting.md) | SonarAnalyzer | `S1126` | Return boolean directly |
-| Max 15-line functions | [Code Style §R6](../04-code-style/04-function-and-type-size.md) | SonarAnalyzer | `S138` | `max: 15` |
-| Blank line before return | [Code Style §R4](../04-code-style/03-blank-lines-and-spacing.md) | StyleCop | `SA1513` | Closing brace followed by blank line |
+| Zero nested `if` | [Code Style §R2](../04-code-style/02-braces-and-nesting.md) | Roslynator | `RCS1208` | Reduce `if` nesting |
+| No `else` after return | [Code Style §R7](../04-code-style/02-braces-and-nesting.md) | Roslynator | `RCS1004` | Remove braces from `if-else` |
+| No `else` after return (alt) | [Code Style §R7](../04-code-style/02-braces-and-nesting.md) | SonarAnalyzer | `S1126` | Return boolean directly |
+| Max 15-line functions | [Code Style §R6](../04-code-style/05-function-and-type-size.md) | SonarAnalyzer | `S138` | `max: 15` |
+| Blank line before return | [Code Style §R4](../04-code-style/04-blank-lines-and-spacing.md) | StyleCop | `SA1513` | Closing brace followed by blank line |
 | No dead code | [Code Style §R5](../04-code-style/01-index.md) | NetAnalyzers | `IDE0051` | Remove unused private members |
 | No dead code (alt) | [Code Style §R5](../04-code-style/01-index.md) | NetAnalyzers | `IDE0052` | Remove unread private members |
-| Braces required | [Code Style §R1](../04-code-style/01-braces-and-nesting.md) | StyleCop | `SA1503` | Braces should not be omitted |
+| Braces required | [Code Style §R1](../04-code-style/02-braces-and-nesting.md) | StyleCop | `SA1503` | Braces should not be omitted |
 
 ### 2.2 Naming Conventions
 
@@ -101,7 +101,7 @@ Maps every cross-language coding guideline to its **StyleCop Analyzers**, **Rosl
 | Guideline | Spec Source | Analyzer | Rule ID | Setting |
 |-----------|-------------|----------|---------|---------|
 | Cyclomatic complexity | [Complexity](../06-cyclomatic-complexity.md) | SonarAnalyzer | `S3776` | `threshold: 10` |
-| No magic strings / numbers | [Magic Strings](../15-master-coding-guidelines/05-magic-strings-and-organization.md) | SonarAnalyzer | `S1192` | `threshold: 3` |
+| No magic strings / numbers | [Magic Strings](../15-master-coding-guidelines/06-magic-strings-and-organization.md) | SonarAnalyzer | `S1192` | `threshold: 3` |
 | No duplicate code | [DRY Principles](../08-dry-principles.md) | SonarAnalyzer | `S4144` | Identical functions |
 | No identical branches | [DRY Principles](../08-dry-principles.md) | SonarAnalyzer | `S1871` | Identical if/else branches |
 
@@ -109,8 +109,8 @@ Maps every cross-language coding guideline to its **StyleCop Analyzers**, **Rosl
 
 | Guideline | Spec Source | Analyzer | Rule ID | Setting |
 |-----------|-------------|----------|---------|---------|
-| XML doc on public members | [Code Style §R8](../04-code-style/06-comments-and-documentation.md) | StyleCop | `SA1600` | Elements should be documented |
-| Summary required | [Code Style §R8](../04-code-style/06-comments-and-documentation.md) | StyleCop | `SA1604` | Element documentation must have summary |
+| XML doc on public members | [Code Style §R8](../04-code-style/07-comments-and-documentation.md) | StyleCop | `SA1600` | Elements should be documented |
+| Summary required | [Code Style §R8](../04-code-style/07-comments-and-documentation.md) | StyleCop | `SA1604` | Element documentation must have summary |
 
 ---
 

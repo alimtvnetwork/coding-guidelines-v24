@@ -28,7 +28,7 @@ This module outlines modern C++ conventions (C++20 baseline) to ensure memory sa
 
 | # | File | Category | Description |
 |---|------|----------|-------------|
-| 01 | [01-standards.md](./01-standards.md) | Logic / Rules | Modern C++ coding standards |
+| 01 | [01-standards.md](./02-standards.md) | Logic / Rules | Modern C++ coding standards |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency and compliance report |
 
 ## Cross-References

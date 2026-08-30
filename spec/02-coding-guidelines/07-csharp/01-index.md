@@ -36,10 +36,10 @@ C#-specific coding standards that extend the [cross-language guidelines](../01-c
 
 | # | File | Description |
 |---|------|-------------|
-| 01 | [Naming and Conventions](./01-naming-and-conventions.md) | PascalCase methods, property naming, abbreviation casing |
-| 02 | [Method Design](./02-method-design.md) | Boolean flag splitting, async patterns, LINQ usage |
-| 03 | [Error Handling](./03-error-handling.md) | Exception patterns, Result types, guard clauses |
-| 04 | [Type Safety](./04-type-safety.md) | Generics, nullable reference types, pattern matching |
+| 01 | [Naming and Conventions](./02-naming-and-conventions.md) | PascalCase methods, property naming, abbreviation casing |
+| 02 | [Method Design](./03-method-design.md) | Boolean flag splitting, async patterns, LINQ usage |
+| 03 | [Error Handling](../05-rust/03-error-handling.md) | Exception patterns, Result types, guard clauses |
+| 04 | [Type Safety](./05-type-safety.md) | Generics, nullable reference types, pattern matching |
 
 ---
 

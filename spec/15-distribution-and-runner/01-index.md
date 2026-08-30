@@ -102,7 +102,7 @@ This list is the contract. It MUST stay in sync with §"Distributable artifacts"
 
 ## Cross-references
 
-- Slides app spec: [`spec-slides/01-index.md`](../../spec-slides/01-index.md)
+- Slides app spec: [`spec-slides/01-index.md`](../01-index.md)
 - CICD pipeline conventions: [`spec/12-cicd-pipeline-workflows/`](../12-cicd-pipeline-workflows/)
 - Generic CLI conventions: [`spec/13-generic-cli/`](../13-generic-cli/)
 - Generic release standard: [`spec/16-generic-release/`](../16-generic-release/)

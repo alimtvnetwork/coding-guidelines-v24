@@ -347,10 +347,10 @@ try {
 
 ## Cross-References
 
-- [AI Quick Reference Checklist](./02-ai-quick-reference-checklist.md) — Condensed validation checklist
-- [Common AI Mistakes](./03-common-ai-mistakes.md) — Real before/after examples
+- [AI Quick Reference Checklist](./03-ai-quick-reference-checklist.md) — Condensed validation checklist
+- [Common AI Mistakes](./04-common-ai-mistakes.md) — Real before/after examples
 - [Master Coding Guidelines](../01-cross-language/15-master-coding-guidelines/01-index.md) — Full rule reference
-- [Condensed Master Guidelines — Caching](./04-condensed-master-guidelines.md) — Section 16
+- [Condensed Master Guidelines — Caching](./05-condensed-master-guidelines.md) — Section 16
 
 ---
 

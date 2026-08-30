@@ -336,7 +336,7 @@ Apply before merging any change to `release.yml`:
 ## Cross-References
 
 - [02-cross-compilation.md](./02-cross-compilation.md) — Cross-compilation matrix
-- [05-release-pipeline.md](./05-release-pipeline.md) — Release pipeline overview
+- [05-release-pipeline.md](../12-cicd-pipeline-workflows/05-release-pipeline.md) — Release pipeline overview
 - [04-install-scripts.md](./04-install-scripts.md) — Install script generation
 - [05-checksums-verification.md](./05-checksums-verification.md) — SHA-256 manifest format
 - [spec/12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md](../12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md) — CI-pipeline issue catalog

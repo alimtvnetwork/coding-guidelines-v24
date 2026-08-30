@@ -158,8 +158,8 @@ production Go implementation that originated this pattern.
 ## Cross-References
 
 - [01-index.md](./01-index.md) — Pattern inventory
-- [02-grandfather-baseline-naming.md](./02-grandfather-baseline-naming.md) — Companion pattern for legacy code
-- [Coding Guidelines — Naming](../../02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-naming-and-database.md)
+- [02-grandfather-baseline-naming.md](./03-grandfather-baseline-naming.md) — Companion pattern for legacy code
+- [Coding Guidelines — Naming](../../02-coding-guidelines/01-cross-language/15-master-coding-guidelines/02-naming-and-database.md)
 
 ---
 

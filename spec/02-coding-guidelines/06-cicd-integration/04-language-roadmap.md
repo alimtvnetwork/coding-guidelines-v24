@@ -46,7 +46,7 @@ Python uses the standard library `ast` module — trivial. Rust uses
 ## Phase 4+ — On request
 
 Any additional language (Java, Kotlin, Swift, C#, …) is added on user
-request following [`02-plugin-model.md`](./02-plugin-model.md). The
+request following [`02-plugin-model.md`](./03-plugin-model.md). The
 orchestrator and SARIF contract remain unchanged.
 
 ---

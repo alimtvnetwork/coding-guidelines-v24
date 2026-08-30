@@ -37,7 +37,7 @@ in the same `.<CliName>/` tree — keep the whole tree user-private.)
 ## 2. Document Schema
 
 A single JSON object whose keys mirror the `UpdateChecker` columns
-(see [04-database-schema.md](./04-database-schema.md)) one-to-one,
+(see [04-database-schema.md](./05-database-schema.md)) one-to-one,
 PascalCase:
 
 ```json
@@ -96,7 +96,7 @@ On Windows, step 4 uses `MoveFileEx(MOVEFILE_REPLACE_EXISTING |
 MOVEFILE_WRITE_THROUGH)`.
 
 If any step fails, the tmp file is deleted and the error is propagated
-per [08 §3](./08-error-handling.md#3-subsystem-level-failure).
+per [08 §3](./09-error-handling.md#3-subsystem-level-failure).
 
 ---
 

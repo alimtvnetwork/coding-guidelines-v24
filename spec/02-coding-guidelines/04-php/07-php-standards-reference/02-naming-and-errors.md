@@ -8,7 +8,7 @@
 
 ## Naming Conventions
 
-> **Baseline:** [PSR-12 PHP Naming Conventions](../03-naming-conventions.md)  
+> **Baseline:** [PSR-12 PHP Naming Conventions](../../../01-spec-authoring-guide/03-naming-conventions.md)  
 > The table below lists **project-specific overrides** that take precedence over PSR-12 defaults.
 
 | Element | Convention | Example | Override reason |
@@ -85,7 +85,7 @@ private function safeExecute(callable $callback): WP_REST_Response {
 
 ### Global Shutdown Handler
 
-Register a shutdown handler to catch fatal errors. **Delegate the type-check to `ErrorChecker`** which uses `ErrorType::FATAL_TYPES` (see [PHP Enum Spec](../01-enums.md)):
+Register a shutdown handler to catch fatal errors. **Delegate the type-check to `ErrorChecker`** which uses `ErrorType::FATAL_TYPES` (see [PHP Enum Spec](../02-enums.md)):
 
 ```php
 // ❌ FORBIDDEN: Inline error-type checking
@@ -107,7 +107,7 @@ register_shutdown_function(function() {
 });
 ```
 
-> **Implementation:** `ErrorChecker` delegates to `ErrorType::FATAL_TYPES` for the constant list. Use `ErrorChecker::getTypeLabel($error['type'])` to convert any `E_*` integer to a human-readable string (e.g., `'E_ERROR'`) — this replaces all inline type-mapping arrays. See [enums.md](../01-enums.md) for the full `ErrorChecker`, `ErrorType`, and `TYPE_LABELS` implementations.
+> **Implementation:** `ErrorChecker` delegates to `ErrorType::FATAL_TYPES` for the constant list. Use `ErrorChecker::getTypeLabel($error['type'])` to convert any `E_*` integer to a human-readable string (e.g., `'E_ERROR'`) — this replaces all inline type-mapping arrays. See [enums.md](../02-enums.md) for the full `ErrorChecker`, `ErrorType`, and `TYPE_LABELS` implementations.
 
 ---
 

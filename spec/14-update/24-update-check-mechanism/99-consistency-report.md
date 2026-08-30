@@ -53,8 +53,8 @@ implementation choices the executing AI must make:
 
 1. **Concrete language.** The spec is language-neutral. The first
    implementation target (Go, Rust, TS, …) will pick concurrency
-   primitives per [05 §5](./05-update-checker-service.md#5-concurrency).
-2. **CLI framework.** [07 §4](./07-pre-command-hook.md#4-integration-points)
+   primitives per [05 §5](./06-update-checker-service.md#5-concurrency).
+2. **CLI framework.** [07 §4](./08-pre-command-hook.md#4-integration-points)
    lists hook bindings for cobra, clap, commander, and symfony/console.
    Pick the one your CLI already uses.
 3. **Seedable-config registry entry.** When implementing, add a row

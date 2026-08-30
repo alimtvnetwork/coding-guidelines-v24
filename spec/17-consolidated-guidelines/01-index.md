@@ -76,7 +76,7 @@ This folder provides standalone, self-contained AI-readable references for every
 | 18 | [21-database-conventions.md](./21-database-conventions.md) | `04-database-conventions/` — Database naming, PK/FK patterns, singular tables, booleans, views, ORM, schema design |
 | 19 | [22-gap-analysis.md](./22-gap-analysis.md) | Gap analysis — coverage matrix, implementability scores, priority recommendations |
 | 20 | [23-wp-plugin-conventions.md](./23-wp-plugin-conventions.md) | `18-wp-plugin-how-to/` — WordPress plugin Gold Standard architecture, traits, enums, REST API |
-| 21 | [24-lovable-folder-03-structure.md](./24-lovable-folder-03-structure.md) | `.lovable/` folder structure — memory, tasks, suggestions, strictly-avoid, AI reading order |
+| 21 | [24-lovable-folder-03-structure.md](./24-lovable-folder-structure.md) | `.lovable/` folder structure — memory, tasks, suggestions, strictly-avoid, AI reading order |
 | 22 | [25-app-database.md](./25-app-database.md) | `23-app-db/` — App-specific schema design, migration strategy, query patterns, ORM integration |
 | 23 | [26-generic-cli.md](./26-generic-cli.md) | `13-generic-cli/` — CLI creation blueprint: project structure, subcommands, flags, config, output, errors, help, database, build, testing, shell completion |
 | 24 | [27-folder-mapping.md](./27-folder-mapping.md) | **Meta** — Bidirectional folder-by-folder mapping: every source spec folder ↔ consolidated file, with coverage heatmap and blind-spots |

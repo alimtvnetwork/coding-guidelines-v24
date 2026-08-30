@@ -2,7 +2,7 @@
 
 > **Version:** 4.0.0  
 > **Updated:** 2026-03-09  
-> **Consolidates:** [readme.md](./07-php-standards-reference/01-index.md), [enums.md](./01-enums.md), WP Error Handling <!-- external: spec/28-wp-plugin-development/07-error-handling.md -->
+> **Consolidates:** [readme.md](./07-php-standards-reference/01-index.md), [enums.md](./02-enums.md), WP Error Handling <!-- external: spec/28-wp-plugin-development/07-error-handling.md -->
 
 ---
 
@@ -400,7 +400,7 @@ The `Autoloader` class is **exempt** — it loads before enums are available.
 ## Cross-References
 
 - [PHP Coding Standards](./07-php-standards-reference/01-index.md) — Full spec with examples
-- [PHP Enum Classes](./01-enums.md) — `HookType`, `CapabilityType`, `HttpMethodType`, Path enums, `ErrorType`, `ErrorChecker`
+- [PHP Enum Classes](./02-enums.md) — `HookType`, `CapabilityType`, `HttpMethodType`, Path enums, `ErrorType`, `ErrorChecker`
 - [Cross-Language Code Style](../01-cross-language/04-code-style/01-index.md) — Rules 1-9 (braces, nesting, spacing, function size, Throwable, multi-line params)
 - WordPress Error Handling <!-- external: spec/28-wp-plugin-development/07-error-handling.md -->
 - WordPress Initialization <!-- external: spec/28-wp-plugin-development/01-initialization-patterns.md -->

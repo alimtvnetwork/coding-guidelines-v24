@@ -62,7 +62,7 @@ table and printed by `update-check` (sync mode).
 | `Candidates[].Version` | string | Probed version label |
 | `Candidates[].Found` | boolean | True if HTTP 200 + valid JSON |
 | `Candidates[].Url` | string \| null | The status URL probed; null when not found |
-| `Selected` | object | Full status JSON from the winning probe — schema defined in [02-status-script-json.md](./02-status-script-json.md) |
+| `Selected` | object | Full status JSON from the winning probe — schema defined in [02-status-script-json.md](./03-status-script-json.md) |
 
 > The current-version (V) probe is **not** listed in `Candidates` — its
 > result is captured in `CurrentVersion` and is the comparison baseline.

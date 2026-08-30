@@ -4,7 +4,7 @@
 **Created:** 2026-02-02  
 **Updated:** 2026-05-07  
 **Status:** Active
-**Parent:** [04-rag-validation-tests.md](./03-rag-validation-tests.md)
+**Parent:** [04-rag-validation-tests.md](./04-rag-validation-tests.md)
 
 ---
 
@@ -274,9 +274,9 @@ Operative effect: the target is no longer "TBD" — it is **≥80%, deferred-by-
 
 | Document | Description |
 |----------|-------------|
-| [03-rag-validation-helpers.md](./02-rag-validation-helpers.md) | Implementation spec |
-| [04-rag-validation-tests.md](./03-rag-validation-tests.md) | Full test code |
-| [02-rag-chunk-settings.md](./01-rag-chunk-settings.md) | Configuration spec |
+| [03-rag-validation-helpers.md](./03-rag-validation-helpers.md) | Implementation spec |
+| [04-rag-validation-tests.md](./04-rag-validation-tests.md) | Full test code |
+| [02-rag-chunk-settings.md](./02-rag-chunk-settings.md) | Configuration spec |
 
 ---
 

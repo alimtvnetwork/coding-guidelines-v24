@@ -65,7 +65,7 @@ If a requirement is unclear or missing, **ask a clarifying question** instead of
 - [Go Guidelines](./03-golang/01-index.md)
 - [C# Guidelines](./07-csharp/01-index.md)
 - [AI Optimization](./06-ai-optimization/01-index.md)
-- **[Coding Style Checklist](./03-03-coding-style-checklist.md)**
+- **[Coding Style Checklist](./03-coding-style-checklist.md)**
 
 ---
 

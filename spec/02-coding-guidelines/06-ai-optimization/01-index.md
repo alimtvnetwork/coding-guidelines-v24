@@ -20,11 +20,11 @@ AI-specific guidelines designed to prevent hallucination and ensure AI-generated
 
 | # | File | Description |
 |---|------|-------------|
-| 01 | [01-anti-hallucination-rules.md](./01-anti-hallucination-rules.md) | 30+ explicit "never generate X" rules with forbidden/required patterns |
-| 02 | [02-ai-quick-reference-checklist.md](./02-ai-quick-reference-checklist.md) | 50-check pre-output validation checklist |
-| 03 | [03-common-ai-mistakes.md](./03-common-ai-mistakes.md) | Top 15 real mistakes AI makes, with before/after corrections |
-| 04 | [04-condensed-master-guidelines.md](./04-condensed-master-guidelines.md) | Sub-200-line distillation of master guidelines for AI context windows |
-| 05 | [05-enum-naming-quick-reference.md](./05-enum-naming-quick-reference.md) | Cross-language enum naming rules: Go, TypeScript, PHP — declaration, naming, usage, validation checklist |
+| 01 | [01-anti-hallucination-rules.md](./02-anti-hallucination-rules.md) | 30+ explicit "never generate X" rules with forbidden/required patterns |
+| 02 | [02-ai-quick-reference-checklist.md](./03-ai-quick-reference-checklist.md) | 50-check pre-output validation checklist |
+| 03 | [03-common-ai-mistakes.md](./04-common-ai-mistakes.md) | Top 15 real mistakes AI makes, with before/after corrections |
+| 04 | [04-condensed-master-guidelines.md](./05-condensed-master-guidelines.md) | Sub-200-line distillation of master guidelines for AI context windows |
+| 05 | [05-enum-naming-quick-reference.md](./07-enum-naming-quick-reference.md) | Cross-language enum naming rules: Go, TypeScript, PHP — declaration, naming, usage, validation checklist |
 
 ---
 

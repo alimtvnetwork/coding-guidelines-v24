@@ -52,13 +52,13 @@ Full session-level diagnostics (only shown when `sessionId` exists):
 
 ## Tab: Request
 
-**Request Chain Visualization** — see [07-request-chain.md](./07-request-chain.md) for full details.
+**Request Chain Visualization** — see [07-request-chain.md](./08-request-chain.md) for full details.
 
 Plus environment diagnostics: API base, VITE_API_URL, resolved origin, UI origin.
 
 ## Tab: Traversal
 
-See [08-traversal-details.md](./08-traversal-details.md) for full details.
+See [08-traversal-details.md](./09-traversal-details.md) for full details.
 
 ### Sections Rendered (Priority Order):
 

@@ -9,7 +9,7 @@
 ## Typed Constants & Enums
 
 > **Canonical source:** [Go Enum Specification](../01-enum-specification/01-index.md) — core pattern, required methods, folder structure  
-> **Cross-language reference:** [Enum Naming Quick Reference](../../06-ai-optimization/05-enum-naming-quick-reference.md) — Go, TypeScript, PHP comparison
+> **Cross-language reference:** [Enum Naming Quick Reference](../../06-ai-optimization/07-enum-naming-quick-reference.md) — Go, TypeScript, PHP comparison
 
 All Go enum rules (byte type, `Invalid` zero value, `iota`, `variantLabels`, required methods, folder structure) are defined in the [Go Enum Specification](../01-enum-specification/01-index.md). Do not duplicate here.
 

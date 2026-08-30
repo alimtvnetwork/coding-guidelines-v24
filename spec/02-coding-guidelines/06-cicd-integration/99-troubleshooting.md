@@ -454,11 +454,11 @@ python3 linters-cicd/scripts/load-config.py --config .codeguidelines.toml
 
 ## Cross-References
 
-- [SARIF Contract](./01-sarif-contract.md) — wire format every check emits
+- [SARIF Contract](./02-sarif-contract.md) — wire format every check emits
 - [FAQ](./98-faq.md) — suppression syntax, baseline workflow, version pinning
-- [Performance](./07-performance.md) — timeouts, parallel jobs, walker order
+- [Performance](./08-performance.md) — timeouts, parallel jobs, walker order
 - [Acceptance Criteria](./97-acceptance-criteria.md) — testable AC list
-- [Distribution](./05-distribution.md) — install methods, version pinning
+- [Distribution](./06-distribution.md) — install methods, version pinning
 
 ---
 

@@ -648,5 +648,5 @@ func (m *UserDbManager) DeleteAllUserData(appName, userId string, companySlug ..
 ## References
 
 - [01-index.md](../01-index.md) - Split DB Architecture Overview
-- [01-cli-examples.md](./01-cli-examples.md) - CLI-specific Examples
-- [04-rbac-casbin.md](./04-rbac-casbin.md) - RBAC with Casbin
+- [01-cli-examples.md](./02-cli-examples.md) - CLI-specific Examples
+- [04-rbac-casbin.md](./05-rbac-casbin.md) - RBAC with Casbin

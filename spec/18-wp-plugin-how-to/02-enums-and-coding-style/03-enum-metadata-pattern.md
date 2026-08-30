@@ -10,7 +10,7 @@
 
 Define how enums expose metadata (labels, icons, CSS classes, etc.) via `match` expressions in PHP. Each metadata field is a separate method using PHP's `match` expression.
 
-> **Note:** Go and TypeScript use the info-object / lookup-map pattern instead. See [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/05-info-object-pattern.md) for details. This document covers **PHP only**.
+> **Note:** Go and TypeScript use the info-object / lookup-map pattern instead. See [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/06-info-object-pattern.md) for details. This document covers **PHP only**.
 
 ---
 
@@ -208,7 +208,7 @@ Every enum must include `isEqual()`, `isOtherThan()`, and `isAnyOf()`.
 | Language | Metadata Pattern |
 |----------|-----------------|
 | PHP 8.1+ | `match` expression per method (this document) |
-| Go | Info-object with `map[Variant]EnumInfo` — see [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/05-info-object-pattern.md) |
+| Go | Info-object with `map[Variant]EnumInfo` — see [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/06-info-object-pattern.md) |
 | TypeScript | Info-object with `Record<EnumValue, EnumInfo>` |
 
 PHP uses `match` because it is idiomatic, compile-time optimized, and requires no extra classes. Go and TypeScript use the info-object pattern because their type systems benefit from centralised metadata maps.
@@ -217,10 +217,10 @@ PHP uses `match` because it is idiomatic, compile-time optimized, and requires n
 
 ## Cross-References
 
-- [01-enum-architecture.md](01-enum-architecture.md) — core enum structure and comparison methods
-- [03-self-update-status-enum.md](03-self-update-status-enum.md) — reference impl (17 cases, deployment domain)
-- [04-action-type-enum.md](04-action-type-enum.md) — reference impl (40+ cases, transaction logging)
-- [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/05-info-object-pattern.md)
+- [02-enum-architecture.md](02-enum-architecture.md) — core enum structure and comparison methods
+- [04-self-update-status-enum.md](04-self-update-status-enum.md) — reference impl (17 cases, deployment domain)
+- [05-action-type-enum.md](05-action-type-enum.md) — reference impl (40+ cases, transaction logging)
+- [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/06-info-object-pattern.md)
 
 ---
 

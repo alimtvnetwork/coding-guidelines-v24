@@ -276,4 +276,4 @@ project/
 |-----------|----------|
 | Schema design | [./03-schema-design.md](./03-schema-design.md) |
 | ORM and views | [./04-orm-and-views.md](./04-orm-and-views.md) |
-| Test naming conventions | [../02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md](../02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md) |
+| Test naming conventions | [../02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md](../02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md) |

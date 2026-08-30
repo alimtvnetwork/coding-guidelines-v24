@@ -38,11 +38,11 @@ Previously a single 858-line file, now split into focused modules under 300 line
 
 | # | File | Purpose | Lines |
 |---|------|---------|-------|
-| — | [01-naming-prefixes.md](./01-naming-prefixes.md) | P1: is/has prefixes, P2: no negative words | 134 |
-| — | [02-guards-and-extraction.md](./02-guards-and-extraction.md) | P3: named guards, P4: extract complex expressions | 205 |
-| — | [03-parameters-and-conditions.md](./03-parameters-and-conditions.md) | P5: explicit params, P6: no mixed booleans, P7: no inline statements, P8: no raw system calls, P9: no explicit true checks | 262 |
-| — | [04-quick-reference.md](./04-quick-reference.md) | Quick reference table, common mistakes | 155 |
-| — | [05-exemptions-and-api.md](./05-exemptions-and-api.md) | Static factory exemption, Result wrapper API | 139 |
+| — | [01-naming-prefixes.md](./02-naming-prefixes.md) | P1: is/has prefixes, P2: no negative words | 134 |
+| — | [02-guards-and-extraction.md](./03-guards-and-extraction.md) | P3: named guards, P4: extract complex expressions | 205 |
+| — | [03-parameters-and-conditions.md](./04-parameters-and-conditions.md) | P5: explicit params, P6: no mixed booleans, P7: no inline statements, P8: no raw system calls, P9: no explicit true checks | 262 |
+| — | [04-quick-reference.md](./05-quick-reference.md) | Quick reference table, common mistakes | 155 |
+| — | [05-exemptions-and-api.md](./06-exemptions-and-api.md) | Static factory exemption, Result wrapper API | 139 |
 | — | 99-consistency-report.md | — | — |
 
 | — | 99-consistency-report.md | — | — |
@@ -74,5 +74,5 @@ in-memory semantic-inverse pairs documented in
 - [PHP Boolean Guard Inventory](../../04-php/07-php-standards-reference/01-index.md) — PHP-specific helpers
 - [Go Boolean Standards](../../03-golang/02-boolean-standards.md) — Go-specific rules and exemptions (P7, P8)
 - [Master Coding Guidelines](../15-master-coding-guidelines/01-index.md) — Consolidated reference
-- [Issues & Fixes Log](../01-issues-and-fixes-log.md) — Historical fixes
-- [apperror Package — Result Guard Rule](../../../03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-serialization-and-guards.md#12-result-guard-rule--mandatory-error-check-before-value-access)
+- [Issues & Fixes Log](../02-issues-and-fixes-log.md) — Historical fixes
+- [apperror Package — Result Guard Rule](../../../03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/08-serialization-and-guards.md#12-result-guard-rule--mandatory-error-check-before-value-access)

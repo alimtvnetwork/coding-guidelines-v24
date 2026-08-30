@@ -166,7 +166,7 @@ This ensures the Go backend always receives structured metadata when a delegated
 
 ### Global Shutdown Handler (PHP Example)
 
-Use `ErrorChecker::isFatalError()` to centralize fatal error detection. `ErrorChecker` delegates to `ErrorTypeEnum::FATAL_TYPES` (see [PHP Enum Spec](../../02-coding-guidelines/04-php/01-enums.md) for full implementation). Other delegated languages should implement equivalent uncaught-exception handlers (e.g., Node.js `process.on('uncaughtException')`, Python `sys.excepthook`).
+Use `ErrorChecker::isFatalError()` to centralize fatal error detection. `ErrorChecker` delegates to `ErrorTypeEnum::FATAL_TYPES` (see [PHP Enum Spec](../../02-coding-guidelines/04-php/02-enums.md) for full implementation). Other delegated languages should implement equivalent uncaught-exception handlers (e.g., Node.js `process.on('uncaughtException')`, Python `sys.excepthook`).
 
 ```php
 register_shutdown_function(function() {
@@ -599,12 +599,12 @@ The Errors page implements a 3-tier fallback:
 ## Cross-References
 
 - [Error Resolution Retrospectives](../01-error-resolution/03-retrospectives/)
-- [Session-Based Logging](./07-logging-and-diagnostics/02-session-based-logging.md)
-- [React Execution Logger](./07-logging-and-diagnostics/01-react-execution-logger.md)
-- [Error Modal Spec](./04-error-modal/03-error-modal-reference.md)
-- [Copy Format Samples](./04-error-modal/01-copy-formats.md)
+- [Session-Based Logging](./07-logging-and-diagnostics/03-session-based-logging.md)
+- [React Execution Logger](./07-logging-and-diagnostics/02-react-execution-logger.md)
+- [Error Modal Spec](./04-error-modal/04-error-modal-reference.md)
+- [Copy Format Samples](./04-error-modal/02-copy-formats.md)
 - [Response Envelope Schema](./05-response-envelope/envelope.schema.json)
-- [Envelope Configurability](./05-response-envelope/01-adr.md)
+- [Envelope Configurability](./05-response-envelope/02-adr.md)
 - [PHP Standards](../../02-coding-guidelines/04-php/07-php-standards-reference/01-index.md)
 - [Golang Standards](../../02-coding-guidelines/03-golang/04-golang-standards-reference/01-index.md)
 

@@ -124,7 +124,7 @@ Installing…
 * The commands MUST be visible in `<cli> --help`.
 * They MUST NOT require any DB/network setup beyond what the rest of
   the CLI already needs — `update-check` works on a fresh install via
-  the JSON fallback (see [09-json-fallback-store.md](./09-json-fallback-store.md)).
+  the JSON fallback (see [09-json-fallback-store.md](./10-json-fallback-store.md)).
 
 ---
 

@@ -40,9 +40,9 @@ Cross-stack error handling architecture spanning React → Go → Delegated Serv
 
 | # | File | Purpose |
 |---|------|---------|
-| 01 | [01-error-handling-reference.md](./01-error-handling-reference.md) | Cross-stack 3-tier error flow architecture |
-| 02 | [02-go-delegation-fix.md](./02-go-delegation-fix.md) | DelegatedRequestServer implementation pattern |
-| 03 | [03-notification-colors.md](./03-notification-colors.md) | Toast/notification color tokens & error code mapping |
+| 01 | [01-error-handling-reference.md](./02-error-handling-reference.md) | Cross-stack 3-tier error flow architecture |
+| 02 | [02-go-delegation-fix.md](./03-go-delegation-fix.md) | DelegatedRequestServer implementation pattern |
+| 03 | [03-notification-colors.md](./04-notification-colors.md) | Toast/notification color tokens & error code mapping |
 | — | 99-consistency-report.md | — |
 
 ### Subfolders

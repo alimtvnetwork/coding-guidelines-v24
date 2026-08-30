@@ -316,11 +316,11 @@ url:/api/                       # API-related only
 
 | Guide | Target |
 |-------|--------|
-| [PHP Debugging](./05-debugging-guides/01-debugging-php.md) | WordPress, PHP backends |
-| [Go Debugging](./05-debugging-guides/02-debugging-go.md) | CLI tools, Go backends |
-| [TypeScript Debugging](./05-debugging-guides/03-debugging-typescript.md) | React frontends |
-| [Frontend-Backend Sync](./04-verification-patterns/01-frontend-backend-sync.md) | Integration verification |
-| [Cross-Reference Diagram](./01-cross-reference-diagram.md) | Architecture overview |
+| [PHP Debugging](./05-debugging-guides/02-debugging-php.md) | WordPress, PHP backends |
+| [Go Debugging](./05-debugging-guides/03-debugging-go.md) | CLI tools, Go backends |
+| [TypeScript Debugging](./05-debugging-guides/04-debugging-typescript.md) | React frontends |
+| [Frontend-Backend Sync](./04-verification-patterns/02-frontend-backend-sync.md) | Integration verification |
+| [Cross-Reference Diagram](./03-cross-reference-diagram.md) | Architecture overview |
 
 ---
 

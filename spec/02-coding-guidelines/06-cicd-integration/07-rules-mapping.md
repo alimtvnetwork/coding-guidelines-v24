@@ -84,7 +84,7 @@ reserved for future soft rules.)*
 
 Added to this table as they ship. Removing a rule requires a major
 version bump of the linter pack and a deprecation note in
-[`03-language-roadmap.md`](./03-language-roadmap.md).
+[`03-language-roadmap.md`](./04-language-roadmap.md).
 
 ---
 

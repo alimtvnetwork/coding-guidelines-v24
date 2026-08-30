@@ -32,13 +32,13 @@
 
 ## Cross-References
 
-- [Error Handling Cross-Stack Spec](../../01-error-handling-reference.md) — PHP, Go, frontend error chain + DelegatedRequestServer flow
+- [Error Handling Cross-Stack Spec](../../02-error-handling-reference.md) — PHP, Go, frontend error chain + DelegatedRequestServer flow
 - [Copy Format Samples](../01-copy-formats/01-index.md) — Complete samples for all copy/export formats
 - [React Components Reference](../02-react-components/01-index.md) — Portable React code for rebuilding the modal
 - [Response Envelope Schema](../../05-response-envelope/envelope.schema.json) — JSON Schema for envelope (incl. DelegatedRequestServer)
-- [Session-Based Logging](../../07-logging-and-diagnostics/02-session-based-logging.md) — Backend session system
-- [React Execution Logger](../../07-logging-and-diagnostics/01-react-execution-logger.md) — Frontend debug logger
-- [TypeScript Standards](../../../../02-coding-guidelines/02-typescript/08-typescript-standards-reference.md) — Type safety rules
+- [Session-Based Logging](../../07-logging-and-diagnostics/03-session-based-logging.md) — Backend session system
+- [React Execution Logger](../../07-logging-and-diagnostics/02-react-execution-logger.md) — Frontend debug logger
+- [TypeScript Standards](../../../../02-coding-guidelines/02-typescript/09-typescript-standards-reference.md) — Type safety rules
 
 ---
 

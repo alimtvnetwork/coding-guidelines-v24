@@ -225,7 +225,7 @@ Every database schema MUST be documented with:
 
 > **Aligned with:** Naming Conventions **v3.5.0** — Rules 10, 11, and 12.
 
-This section is the **schema-design counterpart** of [Naming Conventions Rules 10, 11, and 12](./03-naming-conventions.md#descriptive-free-text-column-naming). Naming conventions define **what the columns are called**; this section defines **which tables must include them and how they are placed in the schema**. The two documents MUST stay aligned — if Rule 10/11/12 changes, this section changes.
+This section is the **schema-design counterpart** of [Naming Conventions Rules 10, 11, and 12](./02-naming-conventions.md#descriptive-free-text-column-naming). Naming conventions define **what the columns are called**; this section defines **which tables must include them and how they are placed in the schema**. The two documents MUST stay aligned — if Rule 10/11/12 changes, this section changes.
 
 Every table (except pure join/pivot tables) MUST reserve at least one nullable free-text column to absorb future context that the schema did not anticipate. The exact column depends on the **table category**:
 
@@ -443,7 +443,7 @@ comments — any other SQL statement breaks the chain.
 
 | Reference | Location |
 |-----------|----------|
-| Naming conventions (Rules 10/11/12 — canonical wording) | [./03-naming-conventions.md#descriptive-free-text-column-naming](./03-naming-conventions.md#descriptive-free-text-column-naming) |
+| Naming conventions (Rules 10/11/12 — canonical wording) | [./02-naming-conventions.md#descriptive-free-text-column-naming](./02-naming-conventions.md#descriptive-free-text-column-naming) |
 | ORM and views | [./04-orm-and-views.md](./04-orm-and-views.md) |
 | Testing strategy | [./05-testing-strategy.md](./05-testing-strategy.md) |
 | Cross-language DB naming | [../02-coding-guidelines/01-cross-language/07-database-naming.md](../02-coding-guidelines/01-cross-language/07-database-naming.md) |

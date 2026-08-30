@@ -61,7 +61,7 @@ existing section.
 | `Storage.Backend`                     | `ParseStorageBackend()` strict enum | Reject seed; fall back to `Sqlite` and log |
 
 Validation lives in the same file as other CW Config validators
-(see [02-rag-validation-helpers.md](./02-rag-validation-helpers.md) for
+(see [02-rag-validation-helpers.md](./03-rag-validation-helpers.md) for
 the helper pattern). Functions follow CODE RED metrics: 8–15 lines,
 positively named, max 2 operands.
 
@@ -88,7 +88,7 @@ Do not collapse them into a single `UpdateChecksEnabled` flag.
 `Sqlite` (default) routes `UpdateCheckerService` to the host CLI's
 existing SQLite database. `JsonFile` routes it to
 `~/.<CliName>/data/UpdateChecker.json` per
-[09-json-fallback-store.md](../../14-update/24-update-check-mechanism/09-json-fallback-store.md).
+[09-json-fallback-store.md](../../14-update/24-update-check-mechanism/10-json-fallback-store.md).
 
 The host CLI MAY override this at boot (e.g. a CLI with no DB at all
 hard-codes `JsonFile`). The seeded value is the user-visible default.
@@ -113,9 +113,9 @@ When upgrading a project that does not yet have these keys:
 | Reference | Description |
 |-----------|-------------|
 | [Update Check Mechanism — Overview](../../14-update/24-update-check-mechanism/01-index.md) | Subsystem that consumes these keys |
-| [Pre-Command Hook](../../14-update/24-update-check-mechanism/07-pre-command-hook.md) | Reads both `Update.*` boolean switches |
-| [JSON Fallback Store](../../14-update/24-update-check-mechanism/09-json-fallback-store.md) | Activated when `Storage.Backend = "JsonFile"` |
-| [Validation Helpers](./02-rag-validation-helpers.md) | Helper pattern these validators follow |
+| [Pre-Command Hook](../../14-update/24-update-check-mechanism/08-pre-command-hook.md) | Reads both `Update.*` boolean switches |
+| [JSON Fallback Store](../../14-update/24-update-check-mechanism/10-json-fallback-store.md) | Activated when `Storage.Backend = "JsonFile"` |
+| [Validation Helpers](./03-rag-validation-helpers.md) | Helper pattern these validators follow |
 
 ---
 

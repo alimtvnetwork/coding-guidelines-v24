@@ -10,7 +10,7 @@
 
 This document defines the **info-object pattern** — the Go-idiomatic way to attach rich metadata (labels, icons, CSS classes, descriptions, sort order) to enum variants. This is the Go equivalent of PHP's `match`-based metadata methods.
 
-> **PHP equivalent:** Each metadata field is a `match` method on the enum. See [WP Plugin Spec — Enum Metadata Pattern](../../../18-wp-plugin-how-to/02-enums-and-coding-style/02-enum-metadata-pattern.md).
+> **PHP equivalent:** Each metadata field is a `match` method on the enum. See [WP Plugin Spec — Enum Metadata Pattern](../../../18-wp-plugin-how-to/02-enums-and-coding-style/03-enum-metadata-pattern.md).
 
 ---
 
@@ -341,9 +341,9 @@ func (v Variant) IsTerminal() bool    { return v.Info().IsTerminal }
 
 ## Cross-References
 
-- [01-enum-pattern.md](01-enum-pattern.md) — Core byte-based enum pattern and `variantLabels`
-- [02-required-methods.md](02-required-methods.md) — Mandatory methods (String, Parse, Is*, All)
-- [PHP Enum Metadata Pattern](../../../18-wp-plugin-how-to/02-enums-and-coding-style/02-enum-metadata-pattern.md) — PHP `match`-based equivalent
+- [01-enum-pattern.md](./02-enum-pattern.md) — Core byte-based enum pattern and `variantLabels`
+- [02-required-methods.md](./03-required-methods.md) — Mandatory methods (String, Parse, Is*, All)
+- [PHP Enum Metadata Pattern](../../../18-wp-plugin-how-to/02-enums-and-coding-style/03-enum-metadata-pattern.md) — PHP `match`-based equivalent
 
 ---
 

@@ -62,8 +62,8 @@ Unless there is a specific legacy compatibility requirement, use **`1.14.0`** as
 
 | # | File | Purpose |
 |---|------|---------|
-| 01 | [01-implementation-rules.md](./01-implementation-rules.md) | Dependency declaration, code review, CI enforcement |
-| 02 | [02-security-notes.md](./02-security-notes.md) | Detailed security advisory and audit trail |
+| 01 | [01-implementation-rules.md](./02-implementation-rules.md) | Dependency declaration, code review, CI enforcement |
+| 02 | [02-security-notes.md](./03-security-notes.md) | Detailed security advisory and audit trail |
 | 99 | `99-consistency-report.md` | Health check |
 
 ---

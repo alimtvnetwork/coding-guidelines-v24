@@ -3,11 +3,11 @@
 > **Parent:** [Copy Formats Index](./01-index.md)  
 > **Version:** 3.2.0  
 > **Updated:** 2026-03-31  
-> **Purpose:** Full Report (all sections from [02-full-report.md](./02-full-report.md)) with error.log.txt content appended at the bottom.
+> **Purpose:** Full Report (all sections from [02-full-report.md](./03-full-report.md)) with error.log.txt content appended at the bottom.
 
 ---
 
-This is the [Full Report](./02-full-report.md) with `error.log.txt` content appended. This variant **requires an API call** to fetch the backend log.
+This is the [Full Report](./03-full-report.md) with `error.log.txt` content appended. This variant **requires an API call** to fetch the backend log.
 
 ---
 

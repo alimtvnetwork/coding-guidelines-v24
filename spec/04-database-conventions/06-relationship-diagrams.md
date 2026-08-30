@@ -350,7 +350,7 @@ When an AI is asked to create or modify a database schema, follow this checklist
 
 | Reference | Location |
 |-----------|----------|
-| Naming conventions | [./03-naming-conventions.md](./03-naming-conventions.md) |
+| Naming conventions | [./02-naming-conventions.md](./02-naming-conventions.md) |
 | Schema design | [./03-schema-design.md](./03-schema-design.md) |
 | ORM and views | [./04-orm-and-views.md](./04-orm-and-views.md) |
 | Testing strategy | [./05-testing-strategy.md](./05-testing-strategy.md) |

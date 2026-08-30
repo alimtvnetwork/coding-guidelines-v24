@@ -20,7 +20,7 @@
 
 ## 2.1 Core Error Model — `CapturedError`
 
-This is the central type stored in the error store and consumed by all modal components. See [01-data-model.md](../03-error-modal-reference/01-data-model.md) for full documentation with field descriptions.
+This is the central type stored in the error store and consumed by all modal components. See [01-data-model.md](../03-error-modal-reference/02-data-model.md) for full documentation with field descriptions.
 
 ```typescript
 /** Parsed stack frame with file, line, column info */

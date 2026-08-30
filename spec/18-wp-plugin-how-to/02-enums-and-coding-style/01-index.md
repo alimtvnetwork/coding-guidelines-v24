@@ -11,10 +11,10 @@
 
 | File | Purpose |
 |------|---------|
-| [01-enum-architecture.md](01-enum-architecture.md) | Core enum pattern, standard categories, comparison methods, coding style, naming |
-| [02-enum-metadata-pattern.md](02-enum-metadata-pattern.md) | `match`-based metadata methods (label, icon, cssClass) and `is*()` helpers |
-| [03-self-update-status-enum.md](03-self-update-status-enum.md) | `SelfUpdateStatusType` — reference impl (17 cases, deployment domain) |
-| [04-action-type-enum.md](04-action-type-enum.md) | `ActionType` — reference impl (40+ cases, transaction logging domain) |
+| [02-enum-architecture.md](02-enum-architecture.md) | Core enum pattern, standard categories, comparison methods, coding style, naming |
+| [03-enum-metadata-pattern.md](03-enum-metadata-pattern.md) | `match`-based metadata methods (label, icon, cssClass) and `is*()` helpers |
+| [04-self-update-status-enum.md](04-self-update-status-enum.md) | `SelfUpdateStatusType` — reference impl (17 cases, deployment domain) |
+| [05-action-type-enum.md](05-action-type-enum.md) | `ActionType` — reference impl (40+ cases, transaction logging domain) |
 
 ---
 
@@ -51,12 +51,12 @@ public function label(): string
 }
 ```
 
-See [02-enum-metadata-pattern.md](02-enum-metadata-pattern.md) for the full pattern.
+See [03-enum-metadata-pattern.md](03-enum-metadata-pattern.md) for the full pattern.
 
 ---
 
 ## Cross-References
 
 - [Go Enum Specification](../../02-coding-guidelines/03-golang/01-enum-specification/01-index.md) — equivalent pattern for Go
-- [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/05-info-object-pattern.md) — Go version of the metadata pattern (uses info-object, not `match`)
+- [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/06-info-object-pattern.md) — Go version of the metadata pattern (uses info-object, not `match`)
 - [Phase 10 — Deployment Patterns](../11-deployment-patterns.md) — uses `SelfUpdateStatusType`

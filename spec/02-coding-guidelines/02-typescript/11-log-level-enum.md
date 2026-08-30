@@ -105,9 +105,9 @@ interface LogEntry {
 
 ## Cross-References
 
-- [ConnectionStatus Enum](./01-connection-status-enum.md) — Sibling enum spec
-- [HttpMethod Enum](./05-http-method-enum.md) — Sibling enum spec
-- [TypeScript Standards](./08-typescript-standards-reference.md) — Parent spec
+- [ConnectionStatus Enum](./02-connection-status-enum.md) — Sibling enum spec
+- [HttpMethod Enum](./06-http-method-enum.md) — Sibling enum spec
+- [TypeScript Standards](./09-typescript-standards-reference.md) — Parent spec
 
 ---
 

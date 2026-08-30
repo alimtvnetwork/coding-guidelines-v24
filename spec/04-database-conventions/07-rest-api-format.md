@@ -9,7 +9,7 @@
 
 All REST API responses MUST use **PascalCase** for JSON keys, matching the database column naming convention. This ensures a single casing standard from database → ORM → API response → frontend TypeScript types.
 
-All responses MUST use the **Universal Response Envelope** defined in the [Response Envelope Specification](../03-error-manage/02-error-architecture/05-response-envelope/04-response-envelope-reference.md).
+All responses MUST use the **Universal Response Envelope** defined in the [Response Envelope Specification](../03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md).
 
 ---
 
@@ -52,7 +52,7 @@ All responses MUST use the **Universal Response Envelope** defined in the [Respo
 
 ## 2. Full REST API Samples (Using Universal Envelope)
 
-All examples below conform to the [Universal Response Envelope](../03-error-manage/02-error-architecture/05-response-envelope/04-response-envelope-reference.md).
+All examples below conform to the [Universal Response Envelope](../03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md).
 
 ### 2.1 List Resources (Paginated)
 
@@ -347,7 +347,7 @@ DELETE /api/v1/transactions/42
 
 ## 3. Envelope Quick Reference
 
-All responses use the [Universal Response Envelope](../03-error-manage/02-error-architecture/05-response-envelope/04-response-envelope-reference.md). Summary:
+All responses use the [Universal Response Envelope](../03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md). Summary:
 
 | Section | Type | Present | Description |
 |---------|------|---------|-------------|
@@ -483,9 +483,9 @@ type TransactionListResponse = ApiResponse<Transaction>;
 
 | Reference | Location |
 |-----------|----------|
-| **Response Envelope Spec** | [04-response-envelope-reference.md](../03-error-manage/02-error-architecture/05-response-envelope/04-response-envelope-reference.md) |
+| **Response Envelope Spec** | [04-response-envelope-reference.md](../03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md) |
 | Envelope examples | [envelope-minimal.json](../03-error-manage/02-error-architecture/05-response-envelope/envelope-minimal.json), [envelope-single.json](../03-error-manage/02-error-architecture/05-response-envelope/envelope-single.json), [envelope-multiple.json](../03-error-manage/02-error-architecture/05-response-envelope/envelope-multiple.json) |
-| Database naming | [./03-naming-conventions.md](./03-naming-conventions.md) |
+| Database naming | [./02-naming-conventions.md](./02-naming-conventions.md) |
 | Schema design | [./03-schema-design.md](./03-schema-design.md) |
 | Key naming PascalCase | [../02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md](../02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md) |
 | Slug conventions | [../02-coding-guidelines/01-cross-language/28-slug-conventions.md](../02-coding-guidelines/01-cross-language/28-slug-conventions.md) |

@@ -30,7 +30,7 @@
 
 ## Purpose
 
-Documented application errors with root cause analysis, solutions, and prevention steps. Each entry follows the [Error Documentation Guideline](../00-error-documentation-guideline.md) to prevent AI hallucination on previously solved problems.
+Documented application errors with root cause analysis, solutions, and prevention steps. Each entry follows the [Error Documentation Guideline](../02-error-documentation-guideline.md) to prevent AI hallucination on previously solved problems.
 
 ---
 
@@ -38,14 +38,14 @@ Documented application errors with root cause analysis, solutions, and preventio
 
 | File | Purpose |
 |------|---------|
-| [2026-04-02-url-error-casing-fix.md](./2026-04-02-url-error-casing-fix.md) | URLError renamed to UrlError — inconsistent casing fix |
-| [error-management-file-path-and-missing-file-code-red-rule.md](./error-management-file-path-and-missing-file-code-red-rule.md) | 🔴 Code Red: Mandatory file path and failure reason in all file/path error logs |
+| [2026-04-02-url-error-casing-fix.md](./03-04-02-url-error-casing-fix.md) | URLError renamed to UrlError — inconsistent casing fix |
+| [error-management-file-path-and-missing-file-code-red-rule.md](./02-error-management-file-path-and-missing-file-code-red-rule.md) | 🔴 Code Red: Mandatory file path and failure reason in all file/path error logs |
 
 ---
 
 ## Cross-References
 
-- [Error Documentation Guideline](../00-error-documentation-guideline.md) — Mandatory documentation process
+- [Error Documentation Guideline](../02-error-documentation-guideline.md) — Mandatory documentation process
 - [Error Resolution Overview](../01-index.md) — Parent folder
 
 ---

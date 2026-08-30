@@ -28,7 +28,7 @@ Issues that are **critical** and must be fixed immediately:
 - Missing nil checks on pointers
 - Multiple defers creating unclear execution order
 - Mutation of shared state without locks
-- File/path error logged without exact file path or failure reason ([rule](../../03-error-manage/01-error-resolution/app-issues/error-management-file-path-and-missing-file-code-red-rule.md))
+- File/path error logged without exact file path or failure reason ([rule](../../03-error-manage/01-error-resolution/app-issues/02-error-management-file-path-and-missing-file-code-red-rule.md))
 
 ---
 

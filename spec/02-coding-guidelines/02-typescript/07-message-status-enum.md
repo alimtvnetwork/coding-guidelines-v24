@@ -87,8 +87,8 @@ interface ChatMessage {
 ## Cross-References
 
 - Issue #10 — Domain Status Magic Strings <!-- external: spec/23-how-app-issues-track/10-domain-status-magic-strings.md -->
-- [HttpMethod Enum](./05-http-method-enum.md) — Sibling enum spec
-- [TypeScript Standards](./08-typescript-standards-reference.md) — Parent spec
+- [HttpMethod Enum](./06-http-method-enum.md) — Sibling enum spec
+- [TypeScript Standards](./09-typescript-standards-reference.md) — Parent spec
 
 ---
 

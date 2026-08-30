@@ -7,7 +7,7 @@
 > **Related specs:**
 >
 > - [04-install-scripts.md](04-install-scripts.md) — generic installer pipeline (placeholder substitution, checksum, PATH)
-> - [05-release-pipeline.md](05-release-pipeline.md) — release CI stages
+> - [05-release-pipeline.md](../12-cicd-pipeline-workflows/05-release-pipeline.md) — release CI stages
 > - [06-release-assets.md](06-release-assets.md) — asset naming and packaging
 > - [07-release-metadata.md](07-release-metadata.md) — version normalization and tagging
 
@@ -235,7 +235,7 @@ There is no fallback URL, no mirror, no CDN.
 ## 7. Release Pipeline Integration
 
 Add a new stage between **Generate Scripts** and **Publish** in
-[05-release-pipeline.md](05-release-pipeline.md):
+[05-release-pipeline.md](../12-cicd-pipeline-workflows/05-release-pipeline.md):
 
 ```
 … → 7. Generate Scripts → 7a. Render Pinned Installers → 8. Extract Changelog → 9. Publish

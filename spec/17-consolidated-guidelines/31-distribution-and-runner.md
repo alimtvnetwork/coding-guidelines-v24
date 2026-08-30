@@ -237,7 +237,7 @@ the following:
 ## §10 — Cross-References
 
 - Source folder: [`spec/15-distribution-and-runner/`](../15-distribution-and-runner/)
-- Slides app spec: [`spec-slides/01-index.md`](../../spec-slides/01-index.md)
+- Slides app spec: [`spec-slides/01-index.md`](../01-index.md)
 - CI/CD pipeline conventions: [`spec/12-cicd-pipeline-workflows/`](../12-cicd-pipeline-workflows/)
 - Generic CLI conventions: [`spec/13-generic-cli/`](../13-generic-cli/)
 - Generic release standard: [`spec/16-generic-release/`](../16-generic-release/)

@@ -80,7 +80,7 @@ use (`__EmbeddedVersion__`, `__EmbeddedRepo__`, `__EmbeddedCommit__`,
 1. The CLI parses the JSON and keeps the entire document as `RawJson`
    in the `UpdateChecker` row.
 2. Individual fields are projected into typed columns (see
-   [04-database-schema.md](./04-database-schema.md)).
+   [04-database-schema.md](./05-database-schema.md)).
 3. If `NewRepoUrl` is non-null, the CLI surfaces a migration notice
    on every subsequent command alongside (or instead of) the standard
    "update available" line.

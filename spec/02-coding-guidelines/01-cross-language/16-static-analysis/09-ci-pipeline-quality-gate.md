@@ -87,7 +87,7 @@ Every CI pipeline MUST execute these stages **in order**. A failure in any stage
 | Stage | Command | Spec Reference |
 |-------|---------|----------------|
 | Format | `npx prettier --check .` | — |
-| Lint | `npx eslint . --max-warnings 0` | [TS ESLint](../../02-typescript/11-eslint-enforcement.md) |
+| Lint | `npx eslint . --max-warnings 0` | [TS ESLint](../../02-typescript/12-eslint-enforcement.md) |
 | Type | `npx tsc --noEmit --strict` | — |
 | Test | `npx vitest run --coverage` | — |
 
@@ -441,7 +441,7 @@ When a rule must be suppressed:
 ## Cross-References
 
 - [Static Analysis Overview](./01-index.md) — Parent document
-- [TypeScript ESLint Enforcement](../../02-typescript/11-eslint-enforcement.md) — TS linter config
+- [TypeScript ESLint Enforcement](../../02-typescript/12-eslint-enforcement.md) — TS linter config
 - [Go golangci-lint](./02-go-golangci-lint.md) — Go linter config
 - [PHP PHPCS + PHPStan](./03-php-phpcs-phpstan.md) — PHP linter config
 - [C# StyleCop + Roslyn](./04-csharp-stylecop.md) — C# linter config

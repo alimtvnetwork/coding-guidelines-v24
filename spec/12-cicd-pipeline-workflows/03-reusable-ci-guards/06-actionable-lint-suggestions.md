@@ -174,7 +174,7 @@ See `.github/scripts/lint-suggest.py` in reference CLI implementations.
 ## Cross-References
 
 - [01-index.md](./01-index.md)
-- [04-baseline-diff-lint-gate.md](./04-baseline-diff-lint-gate.md) — Sibling script that decides which findings are NEW
+- [04-baseline-diff-lint-gate.md](./05-baseline-diff-lint-gate.md) — Sibling script that decides which findings are NEW
 
 ---
 

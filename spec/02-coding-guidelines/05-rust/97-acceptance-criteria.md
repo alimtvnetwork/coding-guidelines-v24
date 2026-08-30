@@ -46,9 +46,9 @@
 ## Cross-References
 
 - [Overview](./01-index.md)
-- [Naming Conventions](./03-naming-conventions.md)
-- [Error Handling](./02-error-handling.md)
-- [Async Patterns](./03-async-patterns.md)
-- [Memory Safety](./04-memory-safety.md)
-- [Testing Standards](./05-testing-standards.md)
-- [FFI & Platform](./06-ffi-platform.md)
+- [Naming Conventions](../../01-spec-authoring-guide/03-naming-conventions.md)
+- [Error Handling](./03-error-handling.md)
+- [Async Patterns](./04-async-patterns.md)
+- [Memory Safety](./05-memory-safety.md)
+- [Testing Standards](./06-testing-standards.md)
+- [FFI & Platform](./07-ffi-platform.md)

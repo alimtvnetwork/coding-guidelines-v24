@@ -174,9 +174,9 @@ When creating a new `useQuery` or `useMutation`:
 
 ## Cross-References
 
-- [Error Handling Cross-Stack Spec](../01-error-handling-reference.md) — Tier 3: Frontend Error Handling
-- [Error Modal Reference](./03-error-modal-reference.md) — §13 React Code Examples
-- [Error History Persistence](./05-error-history-persistence.md) — Why all history mutations use the flag
+- [Error Handling Cross-Stack Spec](../02-error-handling-reference.md) — Tier 3: Frontend Error Handling
+- [Error Modal Reference](./04-error-modal-reference.md) — §13 React Code Examples
+- [Error History Persistence](./06-error-history-persistence.md) — Why all history mutations use the flag
 
 ---
 

@@ -7,7 +7,7 @@
 
 ---
 
-> Full architectural context: [03-error-modal-reference.md § 11 – Error Report Generation](../03-error-modal-reference.md#11-error-report-generation)
+> Full architectural context: [03-error-modal-reference.md § 11 – Error Report Generation](../04-error-modal-reference.md#11-error-report-generation)
 
 ---
 
@@ -59,7 +59,7 @@ To replicate this error reporting system in another project:
 
 1. **Copy `errorReportGenerator.ts`** — Pure function, no side effects
 2. **Copy `errorLogAdapter.ts`** — If you need to feed backend-stored errors into the generators
-3. **Implement `CapturedError` interface** — See Section 2 of [03-error-modal-reference.md](../03-error-modal-reference.md)
+3. **Implement `CapturedError` interface** — See Section 2 of [03-error-modal-reference.md](../04-error-modal-reference.md)
 4. **Implement `errorStore`** — Zustand store with `captureError()`, `buildCapturedError()`
 5. **Implement `parseEnvelope()`** — Extract `Errors`, `MethodsStack`, `Attributes` from API responses
 6. **Implement click path tracking** — DOM click listener that records interactive element clicks

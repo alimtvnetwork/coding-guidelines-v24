@@ -28,7 +28,7 @@ This module defines the standard practices for writing Python code within the re
 
 | # | File | Category | Description |
 |---|------|----------|-------------|
-| 01 | [01-standards.md](./01-standards.md) | Logic / Rules | Python-specific coding standards |
+| 01 | [01-standards.md](./02-standards.md) | Logic / Rules | Python-specific coding standards |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency and compliance report |
 
 ## Cross-References

@@ -76,11 +76,11 @@ Centralized error code registry ensuring no collisions between projects, consist
 
 | # | File | Purpose |
 |---|------|---------|
-| 01 | [01-registry.md](./01-registry.md) | Master list of all registered codes |
-| 02 | [02-integration-guide.md](./02-integration-guide.md) | How to add codes to your project |
-| 03 | [03-collision-resolution-summary.md](./03-collision-resolution-summary.md) | Consolidated before/after table of all 13 resolutions |
-| 04 | [04-error-code-utilization-report.md](./04-error-code-utilization-report.md) | Auto-generated range utilization report |
-| 05 | [05-overlap-validator.md](./05-overlap-validator.md) | Automated overlap detection tool spec |
+| 01 | [01-registry.md](./02-registry.md) | Master list of all registered codes |
+| 02 | [02-integration-guide.md](./03-integration-guide.md) | How to add codes to your project |
+| 03 | [03-collision-resolution-summary.md](./04-collision-resolution-summary.md) | Consolidated before/after table of all 13 resolutions |
+| 04 | [04-error-code-utilization-report.md](./05-error-code-utilization-report.md) | Auto-generated range utilization report |
+| 05 | [05-overlap-validator.md](./06-overlap-validator.md) | Automated overlap detection tool spec |
 | 06 | [error-codes-master.json](./error-codes-master.json) | Machine-readable master index |
 | — | 99-consistency-report.md | — |
 

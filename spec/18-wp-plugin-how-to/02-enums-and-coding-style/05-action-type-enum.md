@@ -226,9 +226,9 @@ $action->label();
 
 ## Cross-References
 
-- [02-enum-metadata-pattern.md](02-enum-metadata-pattern.md) — the pattern specification
-- [03-self-update-status-enum.md](03-self-update-status-enum.md) — first reference implementation (17 cases)
-- [01-enum-architecture.md](01-enum-architecture.md) — core enum rules and comparison methods
+- [03-enum-metadata-pattern.md](03-enum-metadata-pattern.md) — the pattern specification
+- [04-self-update-status-enum.md](04-self-update-status-enum.md) — first reference implementation (17 cases)
+- [02-enum-architecture.md](02-enum-architecture.md) — core enum rules and comparison methods
 
 ---
 

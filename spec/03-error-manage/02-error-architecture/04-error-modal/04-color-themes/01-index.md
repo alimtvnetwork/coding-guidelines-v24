@@ -14,9 +14,9 @@
 
 | # | File | Description |
 |---|------|-------------|
-| 01 | [01-design-tokens.md](./01-design-tokens.md) | CSS custom properties (light/dark) + error level color mapping |
-| 02 | [02-backend-tab-colors.md](./02-backend-tab-colors.md) | Backend section tab-specific colors (Overview, Stack, Session, Request, Traversal, Execution) |
-| 03 | [03-frontend-and-ui-colors.md](./03-frontend-and-ui-colors.md) | Frontend section color themes + UI element colors (section toggle, error history drawer, queue badge, error boundary) |
+| 01 | [01-design-tokens.md](./02-design-tokens.md) | CSS custom properties (light/dark) + error level color mapping |
+| 02 | [02-backend-tab-colors.md](./03-backend-tab-colors.md) | Backend section tab-specific colors (Overview, Stack, Session, Request, Traversal, Execution) |
+| 03 | [03-frontend-and-ui-colors.md](./04-frontend-and-ui-colors.md) | Frontend section color themes + UI element colors (section toggle, error history drawer, queue badge, error boundary) |
 
 ---
 
@@ -34,7 +34,7 @@
 ---
 
 - [Error Modal Reference](../03-error-modal-reference/01-index.md)
-- [LogLevel Enum](../../../../02-coding-guidelines/02-typescript/10-log-level-enum.md)
+- [LogLevel Enum](../../../../02-coding-guidelines/02-typescript/11-log-level-enum.md)
 
 ---
 

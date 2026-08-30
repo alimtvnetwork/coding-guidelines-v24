@@ -292,7 +292,7 @@ if !isValid {
 - `!isX && isY` or `isY && !isX` → ❌ Prohibited — extract `!isX` to a named positive counterpart first
 - `!isX && !isY` → ❌ Prohibited — two negations is never acceptable
 
-See [Boolean Principles P6](../01-cross-language/02-boolean-principles/03-parameters-and-conditions.md#principle-6-never-mix-positive-and-negative-booleans-in-a-single-condition) for the cross-language rule.
+See [Boolean Principles P6](../01-cross-language/02-boolean-principles/04-parameters-and-conditions.md#principle-6-never-mix-positive-and-negative-booleans-in-a-single-condition) for the cross-language rule.
 
 ## 2.8 — No Inline Statements in `if` Conditions (Rule P7)
 
@@ -692,7 +692,7 @@ if isNonApiRoute {
 
 ## 7. Cross-Language Alignment
 
-This standard mirrors the cross-language [Boolean Principles](../01-cross-language/02-boolean-principles/01-index.md) (P1–P6) and [No-Negatives](../01-cross-language/12-no-negatives.md) with Go-specific exemptions for idiomatic patterns (comma-ok, handler guards, error-nil checks) and Go-specific additions (P3b, P5, P7–P9). See [PHP Standards](../04-php/03-naming-conventions.md) for the PHP counterpart.
+This standard mirrors the cross-language [Boolean Principles](../01-cross-language/02-boolean-principles/01-index.md) (P1–P6) and [No-Negatives](../01-cross-language/12-no-negatives.md) with Go-specific exemptions for idiomatic patterns (comma-ok, handler guards, error-nil checks) and Go-specific additions (P3b, P5, P7–P9). See [PHP Standards](../../01-spec-authoring-guide/03-naming-conventions.md) for the PHP counterpart.
 
 ## 8. Explicit `== true` Evaluation
 

@@ -158,7 +158,7 @@ curl -fsSL https://raw.githubusercontent.com/<owner>/<repo>/main/scripts/install
 - [Release Body and Changelog](./14-release-body-and-changelog.md) — Detailed changelog extraction and body template
 - [Install Script Generation](./07-install-script-generation.md) — Scripts referenced in install instructions
 - [Code Signing](./10-code-signing.md) — Signed binaries in release assets
-- [Go Binary Release Pipeline](./02-go-binary-deploy/05-release-pipeline.md) — Go-specific release implementation
+- [Go Binary Release Pipeline](./05-release-pipeline.md) — Go-specific release implementation
 
 ---
 

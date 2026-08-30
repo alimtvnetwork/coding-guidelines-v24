@@ -197,7 +197,7 @@ spec/13-wp-plugin/03-exam-manager/
 | 07 | [09-memory-folder-guide.md](./09-memory-folder-guide.md) | Guide | Structure and conventions for the `.lovable/memories/` tree |
 | 08 | [10-cross-references.md](./10-cross-references.md) | Rules | How to write cross-references, relative paths, and link integrity rules |
 | 09 | [11-exceptions.md](./11-exceptions.md) | Rules | All known exception cases with folder structure examples |
-| 10 | [12-mandatory-linter-infra03-structure.md](./12-mandatory-linter-infra03-structure.md) | Rules | Mandatory linter scripts — AI must verify presence before validation |
+| 10 | [12-mandatory-linter-infra03-structure.md](./12-mandatory-linter-infrastructure.md) | Rules | Mandatory linter scripts — AI must verify presence before validation |
 | 11 | [13-root-readme-conventions.md](./13-root-readme-conventions.md) | Rules | **MANDATORY** root `readme.md` format — centered icon, hero block, author/company template, badges, §9 release-blocker checklist |
 
 ## File Naming Convention (Quick Reference)
@@ -374,7 +374,7 @@ See [09-memory-folder-guide.md](./09-memory-folder-guide.md) for the complete me
 5. **Read [04-required-files.md](./04-required-files.md)** for mandatory file checklist
 6. **Choose a template**: [06-cli-module-template.md](./06-cli-module-template.md), [07-app-project-template.md](./07-app-project-template.md), or [08-non-cli-module-template.md](./08-non-cli-module-template.md)
 7. **Check [11-exceptions.md](./11-exceptions.md)** for edge cases before creating files
-8. **Verify linter infrastructure** — read [12-mandatory-linter-infra03-structure.md](./12-mandatory-linter-infra03-structure.md) and confirm `linter-scripts/` exists
+8. **Verify linter infrastructure** — read [12-mandatory-linter-infra03-structure.md](./12-mandatory-linter-infrastructure.md) and confirm `linter-scripts/` exists
 9. **Score the module** — set AI Confidence and Ambiguity percentages in `01-index.md`
 10. **Validate cross-references** — run the link scanner and fix any broken links
 11. **Check `.lovable/memories/`** — read relevant memories before writing new specs

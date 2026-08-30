@@ -39,7 +39,7 @@ func ProcessUpload(ctx context.Context, req UploadRequest) error {
 }
 ```
 
-**Rationale:** Error wrapping must always be explicit — each `.WithX()` context value on its own line (see [Rule 11 — Method Chaining](./05-multi-line-formatting.md)). Never compress error handling to save line count.
+**Rationale:** Error wrapping must always be explicit — each `.WithX()` context value on its own line (see [Rule 11 — Method Chaining](./06-multi-line-formatting.md)). Never compress error handling to save line count.
 
 ### 6b — Why
 

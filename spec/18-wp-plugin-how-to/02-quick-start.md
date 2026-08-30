@@ -1,7 +1,7 @@
 # Phase 00 — Quick Start Guide
 
 > **Purpose:** Condensed onboarding for AI models. Read this first, then dive into individual phases as needed.  
-> **Full index:** [readme.md](readme.md)  
+> **Full index:** [01-index.md](01-index.md)  
 > **Rule:** Every decision below links to the authoritative phase. When in doubt, the phase document wins.
 
 ---

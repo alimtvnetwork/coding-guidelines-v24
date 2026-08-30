@@ -112,7 +112,7 @@ func NewType(errType apperrtype.ErrorType) *AppError {
 - All types live in `types/apperrtype/`
 - Never pass raw string codes (`"E2012"`) when an `apperrtype` variant exists
 
-> 📖 Full enum specification: [05-apperrtype-enums.md](./05-apperrtype-enums.md)
+> 📖 Full enum specification: [05-apperrtype-enums.md](./06-apperrtype-enums.md)
 
 ---
 

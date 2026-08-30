@@ -308,8 +308,8 @@ This spec works in concert with:
 
 | Rule | How It Helps |
 |------|-------------|
-| [Rule 2: Zero Nested `if`](./04-code-style/01-braces-and-nesting.md) | Enforces the same principle at the syntax level |
-| [Rule 6: 15-Line Function Limit](./04-code-style/04-function-and-type-size.md) | Guards keep functions short — if too many guards, extract a `validate()` helper |
+| [Rule 2: Zero Nested `if`](./04-code-style/02-braces-and-nesting.md) | Enforces the same principle at the syntax level |
+| [Rule 6: 15-Line Function Limit](./04-code-style/05-function-and-type-size.md) | Guards keep functions short — if too many guards, extract a `validate()` helper |
 | [Boolean Principles](./02-boolean-principles/01-index.md) | Guards use `is`/`has` named booleans for clarity |
 | [No Raw Negations](./12-no-negatives.md) | Guards use positive names (`isFileMissing`) not `!fileExists()` |
 

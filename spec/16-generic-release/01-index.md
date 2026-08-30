@@ -42,7 +42,7 @@ a complete release pipeline from scratch without ambiguity.
 | File | Topic |
 |------|-------|
 | [02-cross-compilation.md](02-cross-compilation.md) | Building static binaries for 6+ platform targets |
-| [05-release-pipeline.md](05-release-pipeline.md) | CI/CD workflow structure, triggers, and stages |
+| [05-release-pipeline.md](../12-cicd-pipeline-workflows/05-release-pipeline.md) | CI/CD workflow structure, triggers, and stages |
 | [04-install-scripts.md](04-install-scripts.md) | Generating version-pinned PowerShell and Bash installers |
 | [05-checksums-verification.md](05-checksums-verification.md) | SHA-256 checksum generation and verification |
 | [06-release-assets.md](06-release-assets.md) | Asset naming, compression, and packaging conventions |

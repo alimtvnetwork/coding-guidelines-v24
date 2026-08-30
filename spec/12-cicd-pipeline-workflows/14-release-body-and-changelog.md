@@ -357,7 +357,7 @@ curl -fsSL https://raw.githubusercontent.com/<repo>/main/scripts/install.sh | ba
 - [GitHub Release Standard](./04-github-release-standard.md) — Pre-release detection, asset rules
 - [Shared Conventions](./03-shared-conventions.md) — Version resolution
 - [Install Script Generation](./07-install-script-generation.md) — Scripts referenced in the install section
-- [Go Binary Release Pipeline](./02-go-binary-deploy/05-release-pipeline.md) — Full release workflow
+- [Go Binary Release Pipeline](./05-release-pipeline.md) — Full release workflow
 - [Release Versioning](../14-update/16-release-versioning.md) — How versions are resolved and tags created
 
 ---

@@ -12,11 +12,11 @@ This is the **master reference**. Every rule here is enforced across all languag
 
 - [PHP Standards](../../04-php/01-index.md)
 - [Go Standards](../../03-golang/04-golang-standards-reference/01-index.md)
-- [TypeScript Standards](../../02-typescript/08-typescript-standards-reference.md)
+- [TypeScript Standards](../../02-typescript/09-typescript-standards-reference.md)
 - [Database Naming](../07-database-naming.md)
 - [Boolean Principles](../02-boolean-principles/01-index.md)
 - [No-Negatives](../12-no-negatives.md)
-- [Test Naming & Structure](../14-test-naming-and-03-structure.md)
+- [Test Naming & Structure](../14-test-naming-and-structure.md)
 - [Lazy Evaluation Patterns](../16-lazy-evaluation-patterns.md)
 - [Regex Usage Guidelines](../17-regex-usage-guidelines.md)
 - [Code Mutation Avoidance](../18-code-mutation-avoidance.md)

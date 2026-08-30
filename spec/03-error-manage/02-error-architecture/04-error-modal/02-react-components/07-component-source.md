@@ -101,11 +101,11 @@ function LogLine({ line }: { line: string }): JSX.Element {
 
 ## 7.4 RequestDetails
 
-Visualizes the 3-hop request chain. See [07-request-chain.md](../03-error-modal-reference/07-request-chain.md) for full code.
+Visualizes the 3-hop request chain. See [07-request-chain.md](../03-error-modal-reference/08-request-chain.md) for full code.
 
 ## 7.5 TraversalDetails
 
-See [08-traversal-details.md](../03-error-modal-reference/08-traversal-details.md) for full code.
+See [08-traversal-details.md](../03-error-modal-reference/09-traversal-details.md) for full code.
 
 ## 7.6 ErrorModalActions
 

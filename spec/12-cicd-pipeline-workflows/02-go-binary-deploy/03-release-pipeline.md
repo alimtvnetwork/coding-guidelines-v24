@@ -373,7 +373,7 @@ fi
 
 - [Shared Conventions](../03-shared-conventions.md) — Version resolution, checksums, permissions
 - [GitHub Release Standard](../04-github-release-standard.md) — Release body assembly, pre-release detection
-- [Complete Workflow Reference](./03-complete-workflow-reference.md) — Full annotated YAML assembling all patterns
+- [Complete Workflow Reference](./04-complete-workflow-reference.md) — Full annotated YAML assembling all patterns
 - [Install Script Generation](../07-install-script-generation.md) — Placeholder strategy, PS1/Bash installers
 - [Code Signing](../10-code-signing.md) — SignPath integration, pipeline placement
 - [Release Body and Changelog](../14-release-body-and-changelog.md) — Changelog extraction, body template

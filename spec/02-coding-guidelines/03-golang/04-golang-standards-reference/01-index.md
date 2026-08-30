@@ -38,12 +38,12 @@ Previously a single 1281-line file, now split into focused modules under 300 lin
 
 | # | File | Purpose | Lines |
 |---|------|---------|-------|
-| — | [01-file-and-function-rules.md](./01-file-and-function-rules.md) | File naming, size, function size, nesting ban | 224 |
-| — | [02-type-safety-and-errors.md](./02-type-safety-and-errors.md) | Type safety, error handling, Result types | 362 |
-| — | [03-database-and-structs.md](./03-database-and-structs.md) | Database naming, dbutil wrapper, struct design | 123 |
-| — | [04-naming-and-organization.md](./04-naming-and-organization.md) | File organization, naming conventions, negations, guards | 272 |
-| — | [05-enums-and-dry.md](./05-enums-and-dry.md) | Typed constants, enums, DRY enforcement | 186 |
-| — | [06-concurrency-and-patterns.md](./06-concurrency-and-patterns.md) | Concurrency, forbidden patterns, imports, common mistakes | 274 |
+| — | [01-file-and-function-rules.md](./02-file-and-function-rules.md) | File naming, size, function size, nesting ban | 224 |
+| — | [02-type-safety-and-errors.md](./03-type-safety-and-errors.md) | Type safety, error handling, Result types | 362 |
+| — | [03-database-and-structs.md](./04-database-and-structs.md) | Database naming, dbutil wrapper, struct design | 123 |
+| — | [04-naming-and-organization.md](./05-naming-and-organization.md) | File organization, naming conventions, negations, guards | 272 |
+| — | [05-enums-and-dry.md](./06-enums-and-dry.md) | Typed constants, enums, DRY enforcement | 186 |
+| — | [06-concurrency-and-patterns.md](./07-concurrency-and-patterns.md) | Concurrency, forbidden patterns, imports, common mistakes | 274 |
 | — | 99-consistency-report.md | — | — |
 
 | — | 99-consistency-report.md | — | — |
@@ -60,5 +60,5 @@ Previously a single 1281-line file, now split into focused modules under 300 lin
 - apperror Package Spec — Full StackTrace, AppError, Result types specification <!-- external: spec/03-error-manage/01-error-resolution/10-apperror-package/01-apperror-reference.md -->
 - [Enum Specification](../01-enum-specification/01-index.md) — Byte-based enum pattern, required methods, folder structure
 - [Master Coding Guidelines](../../01-cross-language/15-master-coding-guidelines/01-index.md) — Consolidated cross-language reference
-- [Issues & Fixes Log](../../01-cross-language/01-issues-and-fixes-log.md) — Full historical fixes
+- [Issues & Fixes Log](../../01-cross-language/02-issues-and-fixes-log.md) — Full historical fixes
 - [golangci-lint Enforcement](../../01-cross-language/16-static-analysis/02-go-golangci-lint.md) — Linter rule mapping for Go guidelines

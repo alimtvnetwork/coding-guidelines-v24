@@ -123,4 +123,4 @@ Enum packages MUST end with `type` suffix:
 |-----------|----------|
 | Golang Standards | [../03-golang/01-index.md](../03-golang/01-index.md) |
 | Enum Specification | [../03-golang/01-enum-specification/01-index.md](../03-golang/01-enum-specification/01-index.md) |
-| Cross-Language Rules | [./01-cross-language.md](./01-cross-language.md) |
+| Cross-Language Rules | [./01-cross-language.md](./02-cross-language.md) |

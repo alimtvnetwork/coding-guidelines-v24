@@ -15,7 +15,7 @@
     },
     {
       "path": "linter-scripts/validate-guidelines.go",
-      "lines": 1142
+      "lines": 1140
     },
     {
       "path": "slides-app/src/App.tsx",
@@ -55,7 +55,7 @@
     },
     {
       "path": "linter-scripts/suggest-spec-cross-link-fixes.py",
-      "lines": 359
+      "lines": 364
     },
     {
       "path": "scripts/ci-config.mjs",

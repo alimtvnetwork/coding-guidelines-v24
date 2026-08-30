@@ -45,11 +45,11 @@ Defines file and folder naming conventions for **every language** in the project
 
 | # | File | Language | Convention Summary |
 |---|------|----------|-------------------|
-| 01 | [01-cross-language.md](./01-cross-language.md) | All | Universal rules that apply everywhere |
-| 02 | [02-php-wordpress.md](./02-php-wordpress.md) | PHP / WordPress | WordPress plugin/theme file & folder naming |
-| 03 | [03-golang.md](./03-golang.md) | Go | Package-based naming, flat structure |
-| 04 | [04-typescript-javascript.md](./04-typescript-javascript.md) | TypeScript / JS | Component files, hooks, utilities |
-| 05 | [05-rust-csharp.md](./05-rust-csharp.md) | Rust / C# | snake_case (Rust) and PascalCase (C#) |
+| 01 | [01-cross-language.md](./02-cross-language.md) | All | Universal rules that apply everywhere |
+| 02 | [02-php-wordpress.md](./03-php-wordpress.md) | PHP / WordPress | WordPress plugin/theme file & folder naming |
+| 03 | [03-golang.md](./04-golang.md) | Go | Package-based naming, flat structure |
+| 04 | [04-typescript-javascript.md](./05-typescript-javascript.md) | TypeScript / JS | Component files, hooks, utilities |
+| 05 | [05-rust-csharp.md](./06-rust-csharp.md) | Rust / C# | snake_case (Rust) and PascalCase (C#) |
 
 ---
 

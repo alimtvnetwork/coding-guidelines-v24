@@ -16,14 +16,14 @@
 
 | # | File | Section | Description |
 |---|------|---------|-------------|
-| 01 | [01-typescript-interfaces.md](./01-typescript-interfaces.md) | TypeScript Interfaces | CapturedError, SessionDiagnostics, shared props |
-| 02 | [02-error-store.md](./02-error-store.md) | Error Store (Zustand) | Store interface, key behaviors, stack trace parser |
-| 03 | [03-api-types.md](./03-api-types.md) | API Types & Methods | Required API endpoints |
-| 04 | [04-hooks.md](./04-hooks.md) | Hooks | useSessionDiagnostics |
-| 05 | [05-component-hierarchy.md](./05-component-hierarchy.md) | Component Hierarchy | File structure + component props summary |
-| 06 | [06-component-source.md](./06-component-source.md) | Component Source Code | All 7 major components with code patterns |
-| 07 | [07-report-generator.md](./07-report-generator.md) | Error Report Generator | generateErrorReport + suggested fixes |
-| 08 | [08-integration-guide.md](./08-integration-guide.md) | Integration Guide | Setup, React Query, utilities, adaptation |
+| 01 | [01-typescript-interfaces.md](./02-typescript-interfaces.md) | TypeScript Interfaces | CapturedError, SessionDiagnostics, shared props |
+| 02 | [02-error-store.md](./03-error-store.md) | Error Store (Zustand) | Store interface, key behaviors, stack trace parser |
+| 03 | [03-api-types.md](./04-api-types.md) | API Types & Methods | Required API endpoints |
+| 04 | [04-hooks.md](./05-hooks.md) | Hooks | useSessionDiagnostics |
+| 05 | [05-component-hierarchy.md](./06-component-hierarchy.md) | Component Hierarchy | File structure + component props summary |
+| 06 | [06-component-source.md](./07-component-source.md) | Component Source Code | All 7 major components with code patterns |
+| 07 | [07-report-generator.md](./08-report-generator.md) | Error Report Generator | generateErrorReport + suggested fixes |
+| 08 | [08-integration-guide.md](./09-integration-guide.md) | Integration Guide | Setup, React Query, utilities, adaptation |
 
 ---
 
@@ -66,7 +66,7 @@ GlobalErrorModal (Dialog shell)
 
 - [Error Modal Spec](../03-error-modal-reference/01-index.md) — Full modal structure, data model, and UX specification
 - [Copy Format Samples](../01-copy-formats/01-index.md) — Complete samples for all copy/export formats
-- [Error Handling Spec](../../01-error-handling-reference.md) — Cross-stack error architecture
+- [Error Handling Spec](../../02-error-handling-reference.md) — Cross-stack error architecture
 - [Response Envelope Schema](../../05-response-envelope/envelope.schema.json) — JSON Schema source of truth
 
 ---

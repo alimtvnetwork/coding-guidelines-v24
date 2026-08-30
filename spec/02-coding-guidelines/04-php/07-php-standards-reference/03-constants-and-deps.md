@@ -12,7 +12,7 @@
 
 Every endpoint path, action name, capability string, option key, **hook name**, **file path segment**, **HTTP method**, and **WordPress capability** must be defined centrally. Use PHP `constants.php` for simple values and **PHP 8.1+ native backed enums** in `includes/Enums/` for categorized groups.
 
-> **See [enums.md](../01-enums.md)** for the full enum specification (v4.0.0), including file naming rules, namespace conventions, and all enum/const class definitions.
+> **See [enums.md](../02-enums.md)** for the full enum specification (v4.0.0), including file naming rules, namespace conventions, and all enum/const class definitions.
 
 ### Hook Names — HookType enum
 
@@ -139,6 +139,6 @@ $path = PathHelper::getRootDb();
 | `getDataDir() . PathConst::X` | Leaks the composition pattern; callers shouldn't know how paths are built |
 | `getRootDb()` ✅ | Filename lives in `PathConst`, directory in `getDataDir()`, both hidden from caller |
 
-> **Rule:** If a path does not have a typed accessor in `PathHelper`, create one before using it. See [PHP Enum Spec](../01-enums.md) for full `PathEnum` and `PathHelper` listings.
+> **Rule:** If a path does not have a typed accessor in `PathHelper`, create one before using it. See [PHP Enum Spec](../02-enums.md) for full `PathEnum` and `PathHelper` listings.
 
 ---

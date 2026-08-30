@@ -10,7 +10,7 @@
 Defines the SQLite tables that persist update-check results. PascalCase
 naming throughout — table names, column names, enum values. Default
 backend is SQLite via the project ORM; when no database exists the same
-data is written to JSON (see [09-json-fallback-store.md](./09-json-fallback-store.md)).
+data is written to JSON (see [09-json-fallback-store.md](./10-json-fallback-store.md)).
 
 ---
 

@@ -100,7 +100,7 @@ The first positional argument is the sub-command. If it starts with `-` (e.g. `-
 
 - [`./01-index.md`](./01-index.md) — Distribution overview
 - [`./02-install-contract.md`](./02-install-contract.md) — Install contract
-- [`spec-slides/`](../../spec-slides/) — Slides app spec
+- [`spec-slides/`](../01-index.md) — Slides app spec
 - [`spec/13-generic-cli/`](../13-generic-cli/) — Generic CLI conventions
 
 ---

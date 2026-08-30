@@ -349,10 +349,10 @@ export class AppErrorBoundary extends React.Component<Props, State> {
 ## Cross-References
 
 - [Error Modal Overview](./01-index.md) — Modal architecture overview
-- [Error Modal Reference](./03-error-modal-reference.md) — GlobalErrorModal structure and data model
-- [suppressGlobalError Pattern](./06-suppress-global-error.md) — Why all history mutations use the flag
-- [Error Handling Cross-Stack Spec](../01-error-handling-reference.md) — Tier 3 frontend capture pipeline
-- [React Components Reference](./02-react-components.md) — Component code
+- [Error Modal Reference](./04-error-modal-reference.md) — GlobalErrorModal structure and data model
+- [suppressGlobalError Pattern](./07-suppress-global-error.md) — Why all history mutations use the flag
+- [Error Handling Cross-Stack Spec](../02-error-handling-reference.md) — Tier 3 frontend capture pipeline
+- [React Components Reference](./03-react-components.md) — Component code
 
 ---
 

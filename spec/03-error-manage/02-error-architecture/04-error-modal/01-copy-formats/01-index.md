@@ -17,15 +17,15 @@
 
 | # | File | Format | Description |
 |---|------|--------|-------------|
-| 01 | [01-compact-report.md](./01-compact-report.md) | Compact Report (Markdown) ⭐ | **DEFAULT** — stripped-down, instant copy (no API call). Includes delegated server info built from CapturedError |
-| 02 | [02-full-report.md](./02-full-report.md) | Full Report (Markdown) | All frontend + backend diagnostics, verbose |
-| 03 | [03-full-report-with-backend-logs.md](./03-full-report-with-backend-logs.md) | Full Report + Backend Logs | Full Report with error.log.txt appended (async, fetches API) |
-| 04 | [04-error-log-txt.md](./04-error-log-txt.md) | error.log.txt | Raw backend error log from `GET /api/v1/logs/error` |
-| 05 | [05-full-log-txt.md](./05-full-log-txt.md) | log.txt | Raw backend full log from `GET /api/v1/logs/full` |
-| 06 | [06-error-log-with-delegated-info.md](./06-error-log-with-delegated-info.md) | error.log.txt + Delegated Server | Enhanced error log with downstream server diagnostics |
-| 07 | [07-envelope-error-response.md](./07-envelope-error-response.md) | Envelope Error (JSON) | Raw Go backend JSON error response |
-| 08 | [08-session-diagnostics.md](./08-session-diagnostics.md) | Session Diagnostics (JSON) | Session-linked request/response data |
-| 09 | [09-generator-code-reference.md](./09-generator-code-reference.md) | Generator Code | Source files, function signatures, replication guide |
+| 01 | [01-compact-report.md](./02-compact-report.md) | Compact Report (Markdown) ⭐ | **DEFAULT** — stripped-down, instant copy (no API call). Includes delegated server info built from CapturedError |
+| 02 | [02-full-report.md](./03-full-report.md) | Full Report (Markdown) | All frontend + backend diagnostics, verbose |
+| 03 | [03-full-report-with-backend-logs.md](./04-full-report-with-backend-logs.md) | Full Report + Backend Logs | Full Report with error.log.txt appended (async, fetches API) |
+| 04 | [04-error-log-txt.md](./05-error-log-txt.md) | error.log.txt | Raw backend error log from `GET /api/v1/logs/error` |
+| 05 | [05-full-log-txt.md](./06-full-log-txt.md) | log.txt | Raw backend full log from `GET /api/v1/logs/full` |
+| 06 | [06-error-log-with-delegated-info.md](./07-error-log-with-delegated-info.md) | error.log.txt + Delegated Server | Enhanced error log with downstream server diagnostics |
+| 07 | [07-envelope-error-response.md](./08-envelope-error-response.md) | Envelope Error (JSON) | Raw Go backend JSON error response |
+| 08 | [08-session-diagnostics.md](./09-session-diagnostics.md) | Session Diagnostics (JSON) | Session-linked request/response data |
+| 09 | [09-generator-code-reference.md](./10-generator-code-reference.md) | Generator Code | Source files, function signatures, replication guide |
 
 ---
 
@@ -88,7 +88,7 @@ The **Compact Report** (the default copy format) **MUST** include the `Delegated
 
 This is essential for debugging proxy-chain errors (React → Go → WordPress/PHP). Without it, the recipient only sees the Go backend error and cannot diagnose the root cause on the delegated server.
 
-See [01-compact-report.md § Backend error.log.txt Section](./01-compact-report.md#backend-errorlogtxt-section-built-from-capturederror) for field mapping.
+See [01-compact-report.md § Backend error.log.txt Section](./02-compact-report.md#backend-errorlogtxt-section-built-from-capturederror) for field mapping.
 
 ---
 
@@ -101,13 +101,13 @@ See [01-compact-report.md § Backend error.log.txt Section](./01-compact-report.
 
 ## Cross-References
 
-- [Error Modal Spec](../03-error-modal-reference.md) — Full modal structure and component hierarchy
-- [React Components Reference](../02-react-components.md) — Portable React code and component props
+- [Error Modal Spec](../04-error-modal-reference.md) — Full modal structure and component hierarchy
+- [React Components Reference](../03-react-components.md) — Portable React code and component props
 - [Envelope Schema](../../05-response-envelope/envelope.schema.json) — JSON Schema source of truth
 - [Envelope Error Sample](../../05-response-envelope/envelope-error.json) — Canonical error response
-- [Error Handling Spec](../../01-error-handling-reference.md) — Cross-stack error architecture
-- [Session Logging Spec](../../07-logging-and-diagnostics/02-session-based-logging.md) — Session data model
-- [React Execution Logger](../../07-logging-and-diagnostics/01-react-execution-logger.md) — Frontend call chain
+- [Error Handling Spec](../../02-error-handling-reference.md) — Cross-stack error architecture
+- [Session Logging Spec](../../07-logging-and-diagnostics/03-session-based-logging.md) — Session data model
+- [React Execution Logger](../../07-logging-and-diagnostics/02-react-execution-logger.md) — Frontend call chain
 
 ---
 

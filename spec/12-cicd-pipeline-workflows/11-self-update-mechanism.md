@@ -349,7 +349,7 @@ fi
 
 - [Install Script Generation](./07-install-script-generation.md) — Install scripts used by binary-based update
 - [Code Signing](./10-code-signing.md) — Signed binaries distributed via update
-- [Go Binary Release Pipeline](./02-go-binary-deploy/05-release-pipeline.md) — Release pipeline that produces the binaries
+- [Go Binary Release Pipeline](./05-release-pipeline.md) — Release pipeline that produces the binaries
 - [Shared Conventions](./03-shared-conventions.md) — Version resolution patterns
 - **Full Client-Side Specs:**
   - [Self-Update Overview](../14-update/02-self-update-overview.md) — Problem statement, strategies, command flow

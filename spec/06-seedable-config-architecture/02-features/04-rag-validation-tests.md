@@ -4,7 +4,7 @@
 **Created:** 2026-02-02  
 **Updated:** 2026-04-16  
 **Status:** Active  
-**Parent:** [03-rag-validation-helpers.md](./02-rag-validation-helpers.md)
+**Parent:** [03-rag-validation-helpers.md](./03-rag-validation-helpers.md)
 
 ---
 

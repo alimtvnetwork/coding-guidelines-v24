@@ -24,7 +24,7 @@ are **never silently swallowed** except at one named boundary
 | `NetworkError`     | HTTP timeout, DNS failure, connection refused | `CheckForUpdate` |
 | `HttpStatusError`  | Non-200, non-404 response | `CheckForUpdate` |
 | `JsonParseError`   | 200 response with malformed JSON | `CheckForUpdate` |
-| `ValidationError`  | JSON missing required fields (see [02 §Validation](./02-status-script-json.md#validation)) | `CheckForUpdate` |
+| `ValidationError`  | JSON missing required fields (see [02 §Validation](./03-status-script-json.md#validation)) | `CheckForUpdate` |
 | `PersistenceError` | DB write / file write failure | `PersistResult` |
 | `InstallError`     | `do-update` install command non-zero exit | `ApplyUpdate` |
 
@@ -92,7 +92,7 @@ When `CheckForUpdate` or `PersistResult` returns an error:
 
 ## 4. Pre-Command Hook Boundary (Single Permitted Swallow)
 
-The pre-command hook (see [07-pre-command-hook.md](./07-pre-command-hook.md))
+The pre-command hook (see [07-pre-command-hook.md](./08-pre-command-hook.md))
 is the **only** place where an error from this subsystem is allowed to
 be logged-and-swallowed. Rationale: the user typed `<cli> some-command`
 — their command must run regardless of update-check health.
@@ -117,7 +117,7 @@ If the install command exits non-zero:
 1. Capture stdout + stderr (truncate to 4 KiB) into `ErrorMessage`.
 2. Set `UpdateStatusId = Failed`.
 3. Log the full output to `~/.<CliName>/Logs/UpdateChecker.log`.
-4. Exit code 4 (see [06 §3](./06-cli-commands.md#3-exit-codes)).
+4. Exit code 4 (see [06 §3](./07-cli-commands.md#3-exit-codes)).
 5. **Leave `HasUpdate = true`** so the user keeps seeing the warning
    and can retry.
 
