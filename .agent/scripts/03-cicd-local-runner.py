@@ -1,63 +1,75 @@
-import sys
-import subprocess
+#!/usr/bin/env python3
+"""
+Fast Multi-Threaded Local CI/CD Runner
+Executes repository quality gates in parallel using ThreadPoolExecutor and enforces zero-failure tolerance.
+"""
+
 from concurrent.futures import ThreadPoolExecutor
+from enum import Enum
+from pathlib import Path
+import subprocess
+import sys
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+# --- Top-Level Enums & Constants ---
+class ExitCodeType(int, Enum):
+    SUCCESS = 0
+    FAILURE = 1
 
-JOBS = {
+JOBS_MATRIX = {
     "Relative Path Check": [sys.executable, "linter-scripts/check-relative-paths.py"],
     "Prompts Loaded Check": [sys.executable, "linter-scripts/check-prompts-loaded.py"],
     "Readme Install Section Check": [sys.executable, "linter-scripts/check-readme-install-section.py"],
     "Forbidden Strings Check": [sys.executable, "linter-scripts/check-forbidden-strings.py"],
     "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
     "Fast File Scanner Cache": [sys.executable, ".lovable/ai-fix-scripts/08-fast-file-scanner.py", "--check"],
+    "File Size Guard": [sys.executable, ".lovable/ai-fix-scripts/10-file-size-guard.py"],
+    "Version Sync Check": [sys.executable, ".lovable/ai-fix-scripts/11-version-sync-checker.py"],
 }
 
-def run_job(job_name, cmd):
-    print(f"🔄 Starting: {job_name}...")
+def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
+    """Executes a single validation check asynchronously."""
     try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            encoding='utf-8',
-            errors='replace'
-        )
-        if result.returncode == 0:
-            return (job_name, True, result.stdout)
-        else:
-            return (job_name, False, result.stdout + "\n" + result.stderr)
+        res = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if res.returncode == 0:
+            return (job_name, True, res.stdout)
+        return (job_name, False, res.stdout + "\n" + res.stderr)
     except Exception as e:
         return (job_name, False, str(e))
 
-def main():
+def run_pipeline() -> int:
+    """Dispatches all jobs concurrently and prints clean summary report."""
     print("🚀 Running Local CI/CD Pipeline via ThreadPoolExecutor...")
-    print(f"📋 Enqueued Jobs: {', '.join(JOBS.keys())}\n")
-    
-    results = []
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        futures = {executor.submit(run_job, name, cmd): name for name, cmd in JOBS.items()}
-        for future in futures:
-            results.append(future.result())
+    print(f"📋 Enqueued Jobs: {', '.join(JOBS_MATRIX.keys())}\n")
 
-    failed = False
+    results = []
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = [executor.submit(execute_ci_job, name, cmd) for name, cmd in JOBS_MATRIX.items()]
+        for f in futures:
+            results.append(f.result())
+
+    has_failures = False
     print("\n================ FINAL SUMMARY ================")
-    for name, success, output in results:
-        if success:
+    for name, is_success, log in results:
+        if is_success:
             print(f"✅ {name}: PASSED")
         else:
             print(f"❌ {name}: FAILED")
-            failed = True
-            print("--- LOG ---")
-            print(output.strip())
-            print("-----------\n")
+            has_failures = True
+            print(f"--- {name} LOG ---")
+            print(log.strip())
+            print("--------------------\n")
 
-    if failed:
-        sys.exit(1)
-    else:
-        print("🎉 All jobs passed successfully!")
-        sys.exit(0)
+    if has_failures:
+        print("\n❌ Pipeline failed.")
+        return ExitCodeType.FAILURE.value
+
+    print("🎉 All jobs passed successfully!")
+    return ExitCodeType.SUCCESS.value
+
+def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    sys.exit(run_pipeline())
 
 if __name__ == "__main__":
     main()

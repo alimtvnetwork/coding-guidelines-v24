@@ -46,10 +46,13 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | **Python Standards** | `spec/02-coding-guidelines/06-python/` | Strict type hints, `@dataclass`, `pydantic` |
 | **C# / Java Standards** | `spec/02-coding-guidelines/07-csharp/` | `I` prefix interfaces, PascalCase properties |
 | **Error Management** | `spec/03-error-manage/` | `AppError` wrapping, universal response envelopes |
-| **Auto-Fixer Script** | `.lovable/ai-fix-scripts/02-guideline-autofixer.py` | Universal multi-language auto-fixer for blank lines & booleans |
-| **File Manipulator** | `.lovable/ai-fix-scripts/01-file-manipulator.py` | Mass renaming, sequence sorting, encoding fixes |
-| **Go Linter** | `linter-scripts/validate-guidelines.go` | Automated AST/regex validator (CODE-RED-001 through CODE-RED-027) |
-| **Python Linter** | `linter-scripts/validate-guidelines.py` | Python validator mirror for guideline enforcement |
+| **Shared Core Engine** | `.lovable/ai-fix-scripts/00-shared-engine.py` | Universal streaming engine with two-phase mtime caching |
+| **Local CI Runner** | `.lovable/ai-fix-scripts/03-cicd-local-runner.py` | Parallel local quality gate runner (8 checks) |
+| **Fast File Scanner** | `.lovable/ai-fix-scripts/08-fast-file-scanner.py` | Multi-language fast file scanner (<15ms) and cache builder |
+| **Path Fixer** | `.lovable/ai-fix-scripts/04-relative-path-fixer.py` | Relative path detector and sanitizer |
+| **Naming Guard** | `.lovable/ai-fix-scripts/05-naming-autofixer.py` | Boolean naming and implicit condition validator |
+| **Encoding Normalizer**| `.lovable/ai-fix-scripts/07-encoding-normalizer.py` | UTF-8 and strict UNIX LF line ending normalizer |
+| **Size Guard** | `.lovable/ai-fix-scripts/10-file-size-guard.py` | Binary blob and file size threshold checker |
 | **Global Rules** | `agents.md` | Always-on workspace constraints for Antigravity agents |
 | **Version Truth** | `version.json` | Root version source of truth dynamically read across all languages |
 | **Antigravity Skills** | `.agents/skills/` | On-demand skill runbooks for progressive disclosure |

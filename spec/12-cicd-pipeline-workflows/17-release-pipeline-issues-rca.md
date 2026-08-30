@@ -364,7 +364,7 @@ A `git tag vX.Y.Z` was pushed out-of-band to trigger a release before `version.j
 
 1. In Go, `constants.Version` declared as `const` cannot be overridden via `-ldflags` during `go build`.
 2. Pushing a tag before synchronizing the repository source creates a race condition where the compiled binary reflects stale code.
-3. The release workflow parsed `changelog.md` for ```[vX.Y.Z]```, found none, and emitted "No changelog entry found".
+3. The release workflow parsed `changelog.md` for ````[vX.Y.Z]````, found none, and emitted "No changelog entry found".
 
 **Fix applied:**
 

@@ -14,11 +14,15 @@ You are an expert Python Developer AI. Your task is to write a standalone, reusa
 
 ## Non-Negotiable Rules for the Python Script
 
-1. **Zero Dependencies**: The script MUST use only Python standard libraries (e.g., os, sys, argparse, shutil, subprocess, pathlib).
-2. **Robust CLI**: Use argparse to provide a professional, CLI-like experience with complete --help documentation and examples.
-3. **Windows Long Paths**: The script must normalize paths and safely handle Windows MAX_PATH limitations (e.g., prefixing absolute paths with \\?\ on Windows environments).
-4. **Git Awareness**: Whenever renaming a file, the script must attempt to use git mv via subprocess first. If the file is untracked or the command fails, gracefully fallback to standard os.rename.
-5. **Update Index**: After generating the script, you MUST document its usage in .lovable/ai-fix-scripts/01-index.md.
+1. **Zero Dependencies**: The script MUST use only Python standard libraries (`os`, `sys`, `argparse`, `shutil`, `subprocess`, `pathlib`, `enum`, `json`, `time`).
+2. **Root Constants & Enums**: Top-level configuration constants and Enums ending with `Type` suffix (`ScanModeType`, `ExitCodeType`) MUST be declared at the root of the file.
+3. **Small Decomposed Functions**: Code must be decomposed into small, testable functions under 25 lines each following the Single Responsibility Principle.
+4. **DRY Shared Engine**: Import common filesystem scanning, caching, and line-ending utilities from `00-shared-engine.py`.
+5. **Two-Phase Incremental Caching**: Leverage `tmp/repo-file-cache.json` to start with cached entries first and stream newly discovered or modified files concurrently.
+6. **Robust CLI**: Use argparse to provide a professional CLI experience with complete `--help` documentation and examples.
+7. **Windows Long Paths**: Normalize paths and safely handle Windows `MAX_PATH` limitations.
+8. **Git Awareness**: Attempt `git mv` via subprocess first, gracefully falling back to standard `os.rename`.
+9. **Update Index**: Document usage in `.lovable/ai-fix-scripts/01-index.md`.
 
 ---
 

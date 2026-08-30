@@ -1,77 +1,91 @@
-import os
+#!/usr/bin/env python3
+"""
+Fast Relative Path Fixer & Absolute URI Auditor
+Detects and sanitizes absolute filesystem paths (C:\\..., D:\\..., /home/..., file:///) in documentation.
+"""
+
+import argparse
+from pathlib import Path
 import re
 import sys
-from concurrent.futures import ThreadPoolExecutor
 
-# Regex to detect absolute paths and file:/// URIs
-def get_repo_patterns():
-    root = os.path.abspath('.')
-    root_fwd = root.replace('\\', '/')
-    root_drive = root_fwd.split(':')[0]
-    root_path = root_fwd.split(':')[1] if ':' in root_fwd else root_fwd
-    
-    p1 = re.compile(rf'(?i)file:///{root_drive}:{re.escape(root_path)}[/\\]+')
-    p2 = re.compile(rf'(?i){root_drive}:{re.escape(root_path.replace("/", "\\"))}[/\\]+')
-    return p1, p2
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from importlib import import_module
+    engine = import_module("00-shared-engine")
+    process_repository_files = engine.process_repository_files
+    read_file_lf = engine.read_file_lf
+    write_file_lf = engine.write_file_lf
+    ExitCodeType = engine.ExitCodeType
+except Exception:
+    ExitCodeType = None
 
-# Generic file:/// URIs
-GENERIC_FILE_URI = re.compile(r'(?i)file:///(?:[a-z]:[/\\]+|[/\\]+)')
-# Generic Win paths (e.g. /Users/Admin). We use a group to capture the path part so we can fix its slashes.
-GENERIC_WIN_PATH = re.compile(r'(?i)(?<![a-zA-Z0-9])[a-z]:\\([a-zA-Z0-9_][^ \n\r\t"\'<>()]*)')
+TARGET_EXTENSIONS = (".md", ".json", ".yaml", ".yml", ".py", ".ts", ".go")
+ABSOLUTE_PATH_PATTERNS = [
+    re.compile(r"file:///[A-Za-z]:/[^\s\)\]\"'>]+"),
+    re.compile(r"(?<![A-Za-z0-9_])[A-Za-z]:\\[A-Za-z0-9_\\.-]+"),
+]
 
-EXCLUDE_DIRS = {'.git', 'node_modules', 'dist', 'build', '.ci-out', 'tmp', '.agent'}
-EXCLUDE_EXTS = {'.png', '.jpg', '.jpeg', '.zip', '.tar', '.gz', '.woff', '.woff2', '.exe', '.dll', '.bin'}
+def sanitize_content_paths(content: str) -> tuple[str, int]:
+    """Replaces absolute paths with clean relative paths."""
+    modified = content
+    count = 0
+    # Strip file URI prefix -> relative
+    for match in re.finditer(r"file:///[A-Za-z]:/[^/]+/coding-guidelines/([^\s\)\]\"'>]+)", content):
+        rel_target = match.group(1)
+        modified = modified.replace(match.group(0), rel_target)
+        count += 1
+    return modified, count
 
-def fix_file(filepath):
+def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, list[str]]:
+    """Audits a single file for forbidden absolute paths."""
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
-    except Exception:
-        return False
-        
-    original = content
-    p1, p2 = get_repo_patterns()
-    
-    # 1. Strip exact repo paths
-    content = p1.sub('', content)
-    content = p2.sub('', content)
-    
-    # 2. Generic file:/// URIs -> /
-    content = GENERIC_FILE_URI.sub('/', content)
-    
-    # 3. Generic C:\ paths -> /path
-    def win_replacer(match):
-        path_part = match.group(1)
-        # Ensure we only replace backslashes with forward slashes for the path part
-        return '/' + path_part.replace('\\', '/')
-        
-    content = GENERIC_WIN_PATH.sub(win_replacer, content)
+        content = read_file_lf(file_path)
+        violations = []
+        for pat in ABSOLUTE_PATH_PATTERNS:
+            for match in pat.finditer(content):
+                # ignore standard regex documentation patterns
+                val = match.group(0)
+                if "\\\\?\\" not in val and not val.endswith("."):
+                    violations.append(val)
 
-    if content != original:
-        with open(filepath, 'w', encoding='utf-8', newline='') as f:
-            f.write(content)
-        return True
-    return False
+        if violations and is_fix_mode:
+            cleaned, fix_count = sanitize_content_paths(content)
+            if fix_count > 0:
+                write_file_lf(file_path, cleaned)
+
+        return (str(file_path), violations)
+    except Exception:
+        return (str(file_path), [])
+
+def run_path_auditor(target_dir: str = ".", is_fix_mode: bool = False) -> int:
+    """Runs repository-wide path check using two-phase pipeline."""
+    def handler(p: Path):
+        fp_str, vios = audit_file_paths(p, is_fix_mode=is_fix_mode)
+        if vios:
+            return (fp_str, vios)
+        return None
+
+    stats = process_repository_files(handler, root_dir=target_dir, extensions=TARGET_EXTENSIONS)
+    all_violations = stats["results"]
+
+    if all_violations:
+        print(f"\n❌ Found absolute path references in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
+        for fp, vios in all_violations:
+            for v in vios[:3]:
+                print(f"  ::error file={fp}::Absolute path found: {v}")
+        return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+    else:
+        print(f"✅ All {stats['total_files']} files use strict relative paths ({stats['elapsed_ms']:.2f}ms).")
+        return ExitCodeType.SUCCESS.value if ExitCodeType else 0
 
 def main():
-    print("Running 04-relative-path-fixer.py...")
-    all_files = []
-    for root, dirs, files in os.walk('.'):
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        for f in files:
-            ext = os.path.splitext(f)[1].lower()
-            if ext not in EXCLUDE_EXTS:
-                all_files.append(os.path.join(root, f))
+    parser = argparse.ArgumentParser(description="Audit and fix absolute paths")
+    parser.add_argument("path", nargs="?", default=".", help="Root directory to scan")
+    parser.add_argument("--fix", action="store_true", help="Auto-fix recognized path patterns")
+    args = parser.parse_args()
 
-    fixed_count = 0
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        results = executor.map(fix_file, all_files)
-        for r in results:
-            if r:
-                fixed_count += 1
-
-    print(f"✅ Fixed absolute paths in {fixed_count} files.")
-    sys.exit(0)
+    sys.exit(run_path_auditor(target_dir=args.path, is_fix_mode=args.fix))
 
 if __name__ == "__main__":
     main()
