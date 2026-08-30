@@ -81,7 +81,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1))) -Version v6.35.2 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.ps1))) -Version v6.35.3 -Target .\vendor
 #>
 
 param(
@@ -218,7 +218,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 consolidated-install v6.35.2" -ForegroundColor Cyan
+Write-Host "  📦 consolidated-install v6.35.3" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan

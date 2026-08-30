@@ -4,6 +4,13 @@
 
 ---
 
+## v6.35.3 — 2026-08-30 (Routine)
+
+**Scope:** Version bump (`6.35.2` → `6.35.3`). Routine.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.35.2 — 2026-08-30 (Fix)
 
 **Scope:** Version bump (`6.35.1` → `6.35.2`). Fix.
