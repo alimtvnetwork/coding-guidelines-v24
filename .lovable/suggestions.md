@@ -20,7 +20,7 @@
 ### Unit tests for `treeDiagnostics` ring buffer
 
 - **Status:** Pending **Priority:** Low **Added:** 2026-04-27
-- Cover: bound enforcement, category filter, snapshot immutability, disabled-state no-op behaviour.
+- Cover: bound enforcement, category filter, snapshot immutability, disabled-state no-op behavior.
 
 ### Playwright spec for Cmd/Ctrl+J → Spec Overview
 

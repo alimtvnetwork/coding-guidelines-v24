@@ -13,8 +13,8 @@ When the user says **release** (or any trigger phrase above), perform the full r
 ## Mandatory steps (all of them, in order)
 
 1. **Pick the bump tier**
-   - Patch (`x.y.Z`) — lint fix, comment, doc-only, no behaviour change.
-   - Minor (`x.Y.0`) — new feature, new prompt, UI change, behaviour change that is backward compatible.
+   - Patch (`x.y.Z`) — lint fix, comment, doc-only, no behavior change.
+   - Minor (`x.Y.0`) — new feature, new prompt, UI change, behavior change that is backward compatible.
    - Major (`X.0.0`) — breaking change to storage, prompt schema, public API, or extension contract.
    - If unsure, default to **minor**.
 
@@ -32,7 +32,7 @@ When the user says **release** (or any trigger phrase above), perform the full r
    ```
    ## [vX.Y.Z] — YYYY-MM-DD <short headline>
    ### Fixed / Added / Changed / Removed
-   - <one bullet per real change, naming the exact file or behaviour>
+   - <one bullet per real change, naming the exact file or behavior>
    ```
    Never invent changes. Only list work actually done in this release.
 

@@ -21,7 +21,7 @@
 * **Rule 12** (NOT NULL / DEFAULT on the reserved columns) — that is
   enforced by the sibling rule [`MISSING-DESC-001`](../missing-desc/readme.md).
 * **Waivers** — DB-FREETEXT-001 ignores `-- linter-waive` comments to
-  preserve v1.0 CI behaviour. If you need the waiver mechanism, switch
+  preserve v1.0 CI behavior. If you need the waiver mechanism, switch
   to MISSING-DESC-001.
 
 ## Relationship to MISSING-DESC-001

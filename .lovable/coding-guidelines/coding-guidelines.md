@@ -299,7 +299,7 @@ For every function, method, constructor, struct, and call site you touch:
 
 1. Run the **Quick checklist** (§1) top to bottom.
 2. For each violation, produce the rule number, a one-line reason, and the corrected code.
-3. Never change behaviour while applying a formatting or naming rule. Naming, splitting,
+3. Never change behavior while applying a formatting or naming rule. Naming, splitting,
    struct-grouping, and whitespace are mechanical refactors — keep logic identical unless a rule
    explicitly says otherwise (R6 unused parameters, R7 swallowed errors).
 4. If a rule conflicts with a formatter the repo already runs (`gofmt`, `prettier`, `black`,
@@ -918,6 +918,23 @@ receives `oldIp` and never forwards it) is a defect, not a style issue.
 ## 9. R8 — No magic literals as arguments, characters, or string comparisons
 
 Every magic number, hardcoded string, character code (`rune(10)`), or delimiter must be extracted to a centralized typed constant or enum.
+
+## 9. R8 — No magic literals as arguments
+
+```go
+// BEFORE
+netshExecutor(ctx, "netsh", "interface", "ip", "set", "address", "name="+interfaceName, "static", newIp, "255.255.255.0")
+```
+
+```go
+// AFTER
+const (
+	defaultInterfaceName = "Ethernet"
+	defaultSubnetMask    = "255.255.255.0"
+	netshBinary          = "netsh"
+	addressModeStatic    = "static"
+)
+```
 
 ### 9a. Character Codes, Runes & Delimiters (No Raw Conversions)
 

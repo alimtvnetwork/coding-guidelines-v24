@@ -24,7 +24,7 @@ toolname completion --list-groups
 toolname completion --list-commands
 ```
 
-### List Flag Behaviour
+### List Flag Behavior
 
 | Flag | Output |
 |------|--------|

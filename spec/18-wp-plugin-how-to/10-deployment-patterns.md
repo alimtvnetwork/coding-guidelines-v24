@@ -806,7 +806,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Updated behaviour description
+- Updated behavior description
 
 ### Fixed
 

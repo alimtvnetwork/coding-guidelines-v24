@@ -162,7 +162,7 @@ plain text and exit codes.
 
 ## §5 — CLI Flag Contract
 
-| Flag | Required | Behaviour |
+| Flag | Required | Behavior |
 |---|---|---|
 | `--help` / `-h` | ✅ | Print usage, exit `0` |
 | `--version` | ✅ for `linters-cicd/checks/` plugins | Print `coding-guidelines/<rule-slug> <X.Y.Z>`, exit `0` |

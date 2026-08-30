@@ -209,7 +209,7 @@ link that file from the plan's `## Context`. Chat is not storage.
 | Input                                                | File                                          |
 | ---------------------------------------------------- | --------------------------------------------- |
 | Command, convention, "always do X", new CLI          | `.lovable/spec/commands/01-<slug>.md`         |
-| Bug, regression, broken behaviour                    | `.lovable/issues/01-<slug>.md`                |
+| Bug, regression, broken behavior                    | `.lovable/issues/01-<slug>.md`                |
 | CI/CD-specific failure                               | `.lovable/cicd-issues/01-<slug>.md`           |
 | Institutional knowledge (pattern, decision)          | `.lovable/memory/` + update `memory/index.md` |
 | "Never do this again"                                | `.lovable/strictly-avoid.md`                  |
@@ -439,7 +439,7 @@ Aggressive enforcement is intentional. Do not soften it.
    UI → CI. Name every unit before assigning any step numbers.
 2. Split each unit into phases only when each phase owns distinct symbols and a
    distinct runnable check. The usual split is `Scaffold` (types, files,
-   signatures, no behaviour), `Implement` (behaviour plus unit tests),
+   signatures, no behavior), `Implement` (behavior plus unit tests),
    `Wire+Test` (integration into the caller plus an end-to-end check).
 3. Units × phases must total `n`. If the total overshoots, merge phases in the
    least risky units. If it undershoots, split the riskiest units further —
@@ -520,7 +520,7 @@ Acceptance bar per section — a section that misses its bar fails the batch:
 | Section                     | Bar                                                                                 |
 | --------------------------- | ----------------------------------------------------------------------------------- |
 | 1. Learn                    | 3-7 links, at least half unique to this task, each with a one-line "why read this"  |
-| 2. Goal                     | 2-4 sentences of behaviour and blast radius. Never a restated title                 |
+| 2. Goal                     | 2-4 sentences of behavior and blast radius. Never a restated title                 |
 | 3. Inputs and Contracts     | Types consumed and produced, the wire shape inlined literally, error codes in scope |
 | 4. Execute                  | Ordered steps; every step names a symbol AND the file it lands in                   |
 | 5. Constraints              | 3-6 rules this task could actually violate, each with a rule id and source file     |
@@ -559,7 +559,7 @@ default. When a task has a database surface, also cite
 
 These citations must be task-specific. A task whose twelve citations match its
 neighbour's line for line fails the clone gate in RULE 6. Cite the section that
-decides _this_ task's behaviour, not the folder overview as a reflex.
+decides _this_ task's behavior, not the folder overview as a reflex.
 
 ### RULE 5A — the per-task frontmatter citations (must follow, non-negotiable)
 

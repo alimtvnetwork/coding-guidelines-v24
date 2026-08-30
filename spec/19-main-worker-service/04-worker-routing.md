@@ -197,7 +197,7 @@ The single source of truth for every routing-related endpoint (paths, methods, r
 | Error envelope used by every endpoint | `08-error-contract.md` §2 (single envelope) |
 | Error codes referenced from endpoints | `13-error-codes.md` §3 |
 
-Routing-specific behaviour that is NOT an endpoint contract (selection strategies, cache TTLs, failover rules) lives in §1–§6 above.
+Routing-specific behavior that is NOT an endpoint contract (selection strategies, cache TTLs, failover rules) lives in §1–§6 above.
 
 ---
 

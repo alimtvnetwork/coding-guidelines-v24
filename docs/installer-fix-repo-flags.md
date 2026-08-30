@@ -100,7 +100,7 @@ rollback-on-failure:   false                   (source: default — no env fallb
 
 The four boolean switches in §1a (`--run-fix-repo`, `--show-fix-repo-log`, `--rollback-on-fix-repo-failure`, `--full-rollback`) are **CLI-only by design**. There is no `INSTALL_RUN_FIX_REPO`, no `INSTALL_ROLLBACK_ON_FIX_REPO_FAILURE`, no `INSTALL_FULL_ROLLBACK`, and no `INSTALL_SHOW_FIX_REPO_LOG`. The installer never reads them, even if you export them.
 
-**Why:** booleans control destructive or auto-executing behaviour (running `fix-repo` against your tree, reverting edits, deleting newly-created files). A stale `export` lingering in a developer's shell rc — or inherited into a CI job — must never silently arm those actions. Forcing them onto the command line keeps the intent explicit and visible in shell history / CI logs.
+**Why:** booleans control destructive or auto-executing behavior (running `fix-repo` against your tree, reverting edits, deleting newly-created files). A stale `export` lingering in a developer's shell rc — or inherited into a CI job — must never silently arm those actions. Forcing them onto the command line keeps the intent explicit and visible in shell history / CI logs.
 
 **What happens if you set one anyway:** nothing. The variable is simply ignored and the flag stays at its default (`false`). The installer does **not** warn, because the name is not in its known-flag list — to the installer it is just an unrelated environment variable.
 
@@ -263,7 +263,7 @@ After each `fix-repo` run, the installer prunes
 `fix-repo-*.log` files in the log directory, keeping only the **N
 newest**. `N` must be a non-negative integer.
 
-| Value      | Behaviour                                                       |
+| Value      | Behavior                                                       |
 |------------|------------------------------------------------------------------|
 | unset / 0  | Pruning **disabled** — every log is kept forever.                |
 | `N ≥ 1`    | Keep the newest `N` logs; older ones are deleted.                |
@@ -333,7 +333,7 @@ Rollback armed: HEAD=<sha>, full-rollback=on
 | non-zero        | full            | Same as above **plus** new files removed and overwritten files restored from backup | `5` |
 
 The decision line always names the flag values, so a `grep` on the log
-tells you exactly which behaviour was selected.
+tells you exactly which behavior was selected.
 
 ### Pre-conditions
 

@@ -116,7 +116,7 @@ class IterMarkdownFilesFollowsFileSymlinks(unittest.TestCase):
     def test_mixed_case_link_to_lowercase_target_is_yielded(self) -> None:
         # Suffix on the *link* drives classification — the walker
         # never inspects the target's suffix. This pins that
-        # behaviour so a future refactor that lowercases the
+        # behavior so a future refactor that lowercases the
         # resolved path instead of the link path can't change
         # semantics.
         target = self.root / "real.md"

@@ -16,7 +16,7 @@
 | Completeness (every endpoint/table/key defined) | **98 / 100** | One intentional v2.0 deferral |
 | Determinism (only one valid implementation per rule) | **97 / 100** | Strong; minor prose ambiguity in §11 reconciliation order |
 | Consistency (no contradiction between chapters) | **99 / 100** | Backstopped by `MAIN-900-01 SpecContradiction` safe-fail |
-| Testability (acceptance fixtures + observable behaviour) | **97 / 100** | 89-code MWS catalogue + fixtures + diagram baseline |
+| Testability (acceptance fixtures + observable behavior) | **97 / 100** | 89-code MWS catalogue + fixtures + diagram baseline |
 | Blind-buildability (mediocre AI can ship without asking) | **99 / 100** | A+ |
 | **Overall blind-AI readiness** | **99 / 100 (A+)** | Production-grade; **single −1 = backup-restore freeze** |
 | Estimated mediocre AI implements correctly | **~99 %** | |

@@ -141,7 +141,7 @@ class FileLogger
 }
 ```
 
-### Method behaviour matrix
+### Method behavior matrix
 
 | Method | Level | Writes to info.log | Writes to error.log | Writes stacktrace | Dedup enabled | Skipped in non-debug |
 |--------|-------|--------------------|---------------------|--------------------|---------------|---------------------|
@@ -295,7 +295,7 @@ Logging only `$e->getMessage()` without the trace is a **critical defect**.
 
 When FileLogger is not available (autoloader, bootstrap), use the `ErrorLogHelper` static class:
 
-| Method | Behaviour |
+| Method | Behavior |
 |--------|-----------|
 | `ErrorLogHelper::log($e, 'Context:')` | Logs message + trace to `error_log()` |
 | `ErrorLogHelper::logAndThrow($e, 'Context:')` | Logs and re-throws (return type `never`) |

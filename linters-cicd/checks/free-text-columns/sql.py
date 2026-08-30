@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB-FREETEXT-001 — Require Description / Notes / Comments columns (presence only).
 
-Thin shim over ``_lib/free_text_columns.py``. Presence-only behaviour
+Thin shim over ``_lib/free_text_columns.py``. Presence-only behavior
 preserved for backwards compatibility with v1.0 CI configs.
 
 For full Rule 10/11/12 enforcement (presence + nullability + waivers),

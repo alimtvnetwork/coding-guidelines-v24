@@ -38,7 +38,7 @@
 ### Option A — Diversify reason text only (no new rows)
 
 - **Pros:**
-  - Zero behaviour change for callers / dashboards counting rows.
+  - Zero behavior change for callers / dashboards counting rows.
   - All current tests stay green; only `reason`-string assertions
     (none today) would care.
   - Smallest, easiest-to-review patch.

@@ -7,7 +7,7 @@
  * is derived from a *folder profile* (see ``profiles.mjs``) so the body
  * stays minimal and topically relevant — no copy-paste boilerplate.
  *
- * Behaviour
+ * Behavior
  * ---------
  *  - Idempotent: if a ``## Verification`` heading already exists, the
  *    block is replaced (everything from that heading down to the next

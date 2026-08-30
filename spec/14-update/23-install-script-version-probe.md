@@ -192,7 +192,7 @@ Or, when the probe is skipped:
 
 ## Failure Modes
 
-| Condition | Behaviour |
+| Condition | Behavior |
 |-----------|-----------|
 | No internet | Log `⚠ Probe skipped: network unreachable`. Continue local install. |
 | GitHub rate-limit (HTTP 403/429) | Log warning with `X-RateLimit-Reset` if present. Continue local install. |

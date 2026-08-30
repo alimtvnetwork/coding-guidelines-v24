@@ -60,7 +60,7 @@ This file may be promoted from **stub** (v0.x) to **draft** (v1.0+) only when
    `WORKER-940-05+` / `MAIN-830-04+` for backup) has been formally allocated in
    `13-error-codes.md` — **not** before.
 4. A corresponding row exists in `97-acceptance-criteria.md` covering the new
-   threat-model-derived behaviour.
+   threat-model-derived behavior.
 
 Until **all four** are satisfied, this file stays at v0.1.0 and contains
 only this reservation notice.

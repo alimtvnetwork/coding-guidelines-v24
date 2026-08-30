@@ -145,7 +145,7 @@ remedy row in the improvement set. Point costs come from
 
 | #   | Dimension                      | The question it answers                                                                                          |
 | --- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| 1   | Blind-AI readiness             | Can a blind implementer build the system from these files alone, without inventing behaviour?                     |
+| 1   | Blind-AI readiness             | Can a blind implementer build the system from these files alone, without inventing behavior?                     |
 | 2   | Code-file coverage             | Does the spec name the exact repo-relative files to create or modify, per unit, in the target language?            |
 | 3   | Coding-guideline checklist     | Does every unit bind to exactly one authoritative guideline file per topic, and do the bindings resolve?           |
 | 4   | Code-mutation discipline       | Is mutation forbidden where it must be, per `01-cross-language/18-code-mutation-avoidance.md`, and are contracts immutable? |

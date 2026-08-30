@@ -38,7 +38,7 @@ node scripts/spec-verification/inject-verification-sections.mjs --only 04-databa
 node scripts/spec-verification/inject-verification-sections.mjs --json
 ```
 
-## Behaviour
+## Behavior
 
 - **Idempotent**: replaces any existing `## Verification` block (from the
   preceding `---` separator down to EOF). Running twice writes nothing.

@@ -43,7 +43,7 @@ DIFF_FLAG=""
 LIST_ONLY=0
 # Range bounds are populated from --step / --from / --to. Empty = unbounded
 # on that end (so the default RUN_FROM=1 / RUN_TO=<total> covers the
-# pre-existing "run everything" behaviour).
+# pre-existing "run everything" behavior).
 RUN_FROM=""
 RUN_TO=""
 RANGE_SOURCE=""  # "step" or "from-to"; tracked for the mutual-exclusion check.
@@ -168,7 +168,7 @@ total=${#STEPS[@]}
 
 # ---- Resolve and validate the requested range against the registry ----
 # Defaults: empty bounds = unbounded → cover the full registry, which
-# preserves the pre-flag behaviour of "run everything".
+# preserves the pre-flag behavior of "run everything".
 [[ -z "$RUN_FROM" ]] && RUN_FROM=1
 [[ -z "$RUN_TO"   ]] && RUN_TO="$total"
 if (( RUN_FROM < 1 || RUN_FROM > total )); then

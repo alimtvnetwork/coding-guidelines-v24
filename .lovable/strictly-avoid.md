@@ -105,10 +105,10 @@ Allowed work:
 
 ## British English Spelling — TOTAL BAN
 
-🔴 **NEVER use British English spelling (e.g., `behaviour`, `recognise`) in the codebase.**
+🔴 **NEVER use British English spelling (e.g., `behavior`, `recognise`) in the codebase.**
 
 Forbidden:
-- ❌ `behaviour`
+- ❌ `behavior`
 - ❌ `recognise`
 - ❌ `colour`, `initialise`
 

@@ -150,7 +150,7 @@ def scan_text(
         rule_id_for_waivers: when set, honour ``-- linter-waive`` and
             ``-- linter-waive-file`` comments scoped to that rule ID.
             When ``None``, waivers are ignored (DB-FREETEXT-001 keeps its
-            original behaviour for backwards compatibility with existing
+            original behavior for backwards compatibility with existing
             CI configs that rely on no-waiver mode).
     """
     findings: list[FreeTextFinding] = []

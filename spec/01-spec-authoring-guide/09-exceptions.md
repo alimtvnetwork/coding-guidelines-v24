@@ -219,7 +219,7 @@ spec/
 > 🧠 **Memory directive:** Once an AI agent reads this section, it MUST
 > retain every numbered prohibition in its strictly-avoid working memory
 > for the rest of the session and across future sessions. Never
-> re-propose, re-suggest, or "double-check" any prohibited behaviour.
+> re-propose, re-suggest, or "double-check" any prohibited behavior.
 > Silence is the required response.
 
 ### Sequence 01 — `readme.txt` time suggestions

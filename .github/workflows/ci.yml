@@ -9,7 +9,7 @@ on:
   # Exposes the diff-mode placeholder linter knobs as workflow
   # inputs so operators can re-run the pipeline against any base
   # without touching this file. Defaults reproduce the automatic
-  # behaviour for `push` / `pull_request` events; overrides are
+  # behavior for `push` / `pull_request` events; overrides are
   # resolved in the `Resolve placeholder-linter diff base` step
   # below. All inputs flow through the env block on the `lint`
   # job — never read `inputs.*` directly inside `run:` blocks
@@ -19,7 +19,7 @@ on:
       placeholder_diff_strategy:
         description: >-
           How to pick the diff base for the placeholder linter.
-          `auto` mirrors push/PR behaviour (event.before / PR base),
+          `auto` mirrors push/PR behavior (event.before / PR base),
           `full_scan` disables diff mode entirely, `previous_commit`
           uses HEAD~1, `merge_base_main` uses the merge-base with
           origin/main, `custom` uses the value of
@@ -70,7 +70,7 @@ jobs:
     # inlining `${{ inputs.* }}` (which would be a script-injection
     # vector if the input ever held shell metacharacters). For
     # non-`workflow_dispatch` events the inputs are absent, so
-    # `||` falls back to the original auto behaviour.
+    # `||` falls back to the original auto behavior.
     env:
       PLACEHOLDER_DIFF_STRATEGY: ${{ inputs.placeholder_diff_strategy || 'auto' }}
       PLACEHOLDER_DIFF_BASE_REF: ${{ inputs.placeholder_diff_base_ref || '' }}

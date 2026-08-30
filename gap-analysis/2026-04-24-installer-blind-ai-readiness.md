@@ -316,7 +316,7 @@ source of truth.
 > **Is the current spec set "blind-AI ready"?**
 > **No, not yet.** A blind AI would produce a *plausible* installer
 > from spec 27, but it would diverge from the shipped script in 6+
-> behaviour-visible ways and would directly contradict spec 15.
+> behavior-visible ways and would directly contradict spec 15.
 
 Closing the P0 conflict and moving the items in §3.1, §3.2, and §2.3
 into spec 27 would push the readiness score from "partially" to

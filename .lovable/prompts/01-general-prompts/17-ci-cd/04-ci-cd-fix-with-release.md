@@ -559,7 +559,7 @@ PowerShell:
 
 ### Added / Changed / Fixed / Removed
 
-- <one bullet per real change, naming the exact file or behaviour>
+- <one bullet per real change, naming the exact file or behavior>
 
 ### Issues (only if any step failed)
 

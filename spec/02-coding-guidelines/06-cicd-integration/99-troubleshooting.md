@@ -290,7 +290,7 @@ A check fires on code you believe is correct. Examples:
                                   ▼                                 ▼
                           File a spec issue with             File a check issue
                           repro + proposed wording.          with the source line
-                          Once merged, regenerate            and expected behaviour.
+                          Once merged, regenerate            and expected behavior.
                           baseline.                          Suppress locally until
                                                              a fix ships.
 ```

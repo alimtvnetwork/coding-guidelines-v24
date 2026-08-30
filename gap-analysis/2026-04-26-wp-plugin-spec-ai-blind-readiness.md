@@ -15,7 +15,7 @@
 | SQL-injection resistance of the recommended micro-ORM + validation patterns | **8.7 / 10** | Safe by default; one escape-hatch caveat |
 | Overall confidence | **8.8 / 10** | Ship-ready with the gaps below addressed |
 
-The 18-phase spec is one of the strongest authored modules in the repo. It is internally consistent, uses copy-paste-ready code, and routes every behaviour through a single named pattern (`safeExecute`, `EnvelopeBuilder`, `validationError`, `Orm::forTable`, `TypeCheckerTrait`, `FileLogger`). An AI agent can build a working plugin from this spec without asking a single clarifying question for ~85% of features.
+The 18-phase spec is one of the strongest authored modules in the repo. It is internally consistent, uses copy-paste-ready code, and routes every behavior through a single named pattern (`safeExecute`, `EnvelopeBuilder`, `validationError`, `Orm::forTable`, `TypeCheckerTrait`, `FileLogger`). An AI agent can build a working plugin from this spec without asking a single clarifying question for ~85% of features.
 
 ---
 

@@ -799,7 +799,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center"><sub>Function length is graded, not binary. The linter (<a href="linter-scripts/check-function-lengths.py"><code>linter-scripts/check-function-lengths.py</code></a>) enforces the same tiers automatically.</sub></p>
 
-| Tier | Body lines | Linter behaviour | When it applies |
+| Tier | Body lines | Linter behavior | When it applies |
 |------|------------|------------------|-----------------|
 | 🟢 **Best practice** | **≤ 8** | Silent OK | Default target for all new code. Forces single-responsibility and trivial unit tests. |
 | 🟡 **Acceptable** | **9–15** | `::warning` (non-blocking; `--strict` flips it to fail) | Normal upper bound. Anything bigger should usually be split. |

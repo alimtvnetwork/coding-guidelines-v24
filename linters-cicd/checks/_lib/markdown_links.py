@@ -209,7 +209,7 @@ def _is_external(target: str) -> bool:
 def _slugify(heading: str) -> str:
     """GitHub-flavored heading slug.
 
-    Algorithm (matches `gfm.kramdown` behaviour used by GitHub):
+    Algorithm (matches `gfm.kramdown` behavior used by GitHub):
       1. Lowercase
       2. Strip everything except `[a-z0-9 _-]` (drops em-dash, `&`, etc.)
       3. Replace spaces with hyphens

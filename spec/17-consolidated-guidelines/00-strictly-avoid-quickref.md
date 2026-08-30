@@ -13,7 +13,7 @@
 > 🧠 **Memory directive:** Once an AI agent reads this file, every numbered
 > "Strictly Prohibited" item below MUST be retained in its strictly-avoid
 > working memory for the rest of the session and across future sessions.
-> Never re-propose, re-suggest, or "double-check" a prohibited behaviour.
+> Never re-propose, re-suggest, or "double-check" a prohibited behavior.
 > Silence is the required response.
 
 ---
