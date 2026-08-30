@@ -68,8 +68,8 @@ class TestTemplateIsolation(unittest.TestCase):
         # checks become vacuously true. Fail loudly instead.
         self.assertTrue(TEMPLATE_DIR.is_dir(), f"missing {TEMPLATE_DIR}")
         self.assertTrue(
-            (TEMPLATE_DIR / "README.md").is_file(),
-            "checks/_template/README.md is the AI onboarding doc; do not delete it.",
+            (TEMPLATE_DIR / "README.md").is_file() or (TEMPLATE_DIR / "readme.md").is_file(),
+            "checks/_template/readme.md is the AI onboarding doc; do not delete it.",
         )
         self.assertTrue(TEMPLATE_FIXTURES.is_dir(), f"missing {TEMPLATE_FIXTURES}")
 

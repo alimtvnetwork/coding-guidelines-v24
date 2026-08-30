@@ -62,7 +62,6 @@ release-artifacts/*.tar.gz
 release-artifacts/*.zip
 release-artifacts/checksums.txt
 .gitmap/backup/
-/linters-cicd/codegen
 
 # Python caches
 __pycache__/
