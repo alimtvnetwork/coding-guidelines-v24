@@ -28,6 +28,8 @@ JOBS_MATRIX = {
     "Spec Tree Sync": ["node", "scripts/sync-spec-tree.mjs"],
     "Codegen Determinism Check": [sys.executable, "linters-cicd/codegen/scripts/verify_codegen_determinism.py"],
     "Spec Verification Coverage": ["node", "scripts/spec-verification/generate-coverage-report.mjs", "--strict", "--out", "reports/spec-verification/coverage.md"],
+    "Validate Version JSON": ["node", "scripts/validate-version-json.mjs"],
+    "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md", "docs/installer-fix-repo-flags.md"],
 }
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:

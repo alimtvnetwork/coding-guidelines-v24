@@ -36,9 +36,9 @@
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.35.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-30<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.35.0<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-31<!-- /STAMP:UPDATED -->
   <!-- STAMP:FILES -->692<!-- /STAMP:FILES -->
-  <!-- STAMP:LINES -->148,779<!-- /STAMP:LINES -->
+  <!-- STAMP:LINES -->148,852<!-- /STAMP:LINES -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v6.15.0</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="quickstart.md">quickstart.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="quickstart.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -1131,7 +1131,7 @@ func NewType(errorType apperrtype.ErrorType) *AppError {
 > - Keep the registry as the single source of truth for `Code` and `Message`.
 > - Use descriptive local names in examples; do not teach `err` / `ERR` as the preferred naming style.
 
-> 📖 Full error type enum specification: [`05-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md)
+> 📖 Full error type enum specification: [`05-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md)
 
 **CODE-RED-005 & 006, `fmt.Errorf()` and `(T, error)` returns (before/after):**
 
@@ -1216,7 +1216,7 @@ if response.StatusCode != http.StatusOK {
 | `SiteError` / `WrapSiteError` | `WithSiteId` | `SiteNotFound`, `SiteBlocked` |
 | `EndpointError` / `WrapEndpointError` | `WithEndpoint` + `WithMethod` + `WithStatusCode` | `WPResponseInvalid`, `WPRateLimited` |
 
-> 📖 Full constructor reference: [`02-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md)
+> 📖 Full constructor reference: [`02-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md)
 
 **CODE-RED-007, String-based enum (before/after):**
 
@@ -1351,13 +1351,13 @@ Quick-navigation index of every spec and linter file referenced in the CODE-RED 
 
 | # | Topic | Path |
 |---|---|---|
-| 1 | `apperrtype` enum registry | [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/05-apperrtype-enums.md) |
-| 2 | `AppError` struct + domain constructors | [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md) |
+| 1 | `apperrtype` enum registry | [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md) |
+| 2 | `AppError` struct + domain constructors | [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md) |
 | 3 | Magic values & immutability | [`spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md`](spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md) |
 | 4 | Code mutation avoidance | [`spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md`](spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md) |
 | 5 | `types/` folder convention | [`spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md`](spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md) |
 | 6 | Go code severity taxonomy (Code Red vs Dangerous) | [`spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md) |
-| 7 | AI condensed master guidelines | [`spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md`](spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md) |
+| 7 | AI condensed master guidelines | [`spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md`](spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md) |
 | 8 | Linter (Go) | [`linter-scripts/validate-guidelines.go`](linter-scripts/validate-guidelines.go) |
 | 9 | Linter (Python) | [`linter-scripts/validate-guidelines.py`](linter-scripts/validate-guidelines.py) |
 
@@ -1441,7 +1441,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <a href="llm.md"><img alt="llm.md, repository map" src="https://img.shields.io/badge/llm.md-Repository%20map-3B82F6?style=for-the-badge&logo=readthedocs&logoColor=white"/></a>
   <a href="bundles.json"><img alt="bundles.json, machine-readable catalogue" src="https://img.shields.io/badge/bundles.json-Bundle%20catalogue-10B981?style=for-the-badge&logo=json&logoColor=white"/></a>
   <a href="version.json"><img alt="version.json, live counts" src="https://img.shields.io/badge/version.json-Live%20counts-F59E0B?style=for-the-badge&logo=semver&logoColor=white"/></a>
-  <a href="spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
+  <a href="spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
   <a href="spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
   <a href="spec/17-consolidated-guidelines/01-index.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
   <a href=".lovable/memory/01-index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
@@ -1872,12 +1872,12 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.49.0
 
-- **Slides deck now ships with every release** — `scripts/release.mjs` auto-installs `slides-app/` dependencies (via `bun` when available, else `npm`) and runs `bun run build`, producing `slides-app/dist/` + `dist.zip` (0.95 MB) on every `npm run release`. Opt out with `--skip-slides`. Executes Plan SS-01 step 3 and the captured user command at [`.lovable/spec/commands/01-slides-attached-to-release.md`](.lovable/spec/commands/01-slides-attached-to-release.md).
+- **Slides deck now ships with every release** — `scripts/release.mjs` auto-installs `slides-app/` dependencies (via `bun` when available, else `npm`) and runs `bun run build`, producing `slides-app/dist/` + `dist.zip` (0.95 MB) on every `npm run release`. Opt out with `--skip-slides`. Executes Plan SS-01 step 3 and the captured user command at [`.lovable/memory/preferences/01-slides-attached-to-release.md`](.lovable/memory/preferences/01-slides-attached-to-release.md).
 - **Release ceremony help updated** — `node scripts/release.mjs --help` now lists the new `--skip-slides` flag alongside `--tier`, `--version`, `--scope`, `--target`, and `--dry-run`.
 
 ### What's new in v5.45.0
 
-- **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md`](spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md).
+- **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md`](spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md).
 - **Diagram pipeline at full coverage** — all 23 `spec/**/{diagrams,images}/*.mmd` sources now render cleanly via `node scripts/render-diagrams.mjs` (mermaid-cli 11.4.2). Two pre-existing mermaid-v11 parser issues fixed: `;`-as-separator in `seq-incremental-backup.mmd`, and unquoted `@` token in `ci-pipeline-flow.mmd`.
 - **Sole residual −1** = the intentional v2.0 `Backup.Snapshot.Restore.*` freeze, guarded by `MAIN-900-01 SpecContradiction`.
 
@@ -2104,11 +2104,11 @@ Prompts are authored and maintained directly inside `.lovable/prompts/01-prompts
 This compiles all categorized prompts using `scripts/prompt-sync-config.json` and verifies that the prompt registry index remains 100% in sync.
 
 - [Plan: AppError Constructors](.lovable/plans/pending/01-apperror-new-constructors.md)
-- [Plan: AppError Human & Logger Methods](.lovable/plans/pending/02-apperror-human-logger-methods.md)
-- [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/03-guideline-prompt-and-installer-upgrade.md)
-- [Plan: Normalize Encoding](.lovable/plans/pending/05-fix-encoding.md)
-  - [Plan: Rename Overviews and JSON Installer](.lovable/plans/pending/04-rename-overviews-and-installer-json.md)
-- [Plan: Trailing Newlines & AI Scripts](.lovable/plans/pending/06-trailing-newlines-and-ai-scripts.md)
-- [Plan: Lowercase changelog.md](.lovable/plans/pending/07-lowercase-changelog.md)
-- [Plan: Update Prompts and Release](.lovable/plans/pending/08-update-prompts-and-release.md)
-- [Plan: RCA & Boolean Fix](.lovable/plans/pending/09-rca-and-boolean-fix.md)
+- [Plan: AppError Human & Logger Methods](.lovable/plans/pending/03-apperror-human-logger-methods.md)
+- [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/04-guideline-prompt-and-installer-upgrade.md)
+- [Plan: Normalize Encoding](.lovable/plans/pending/06-fix-encoding.md)
+  - [Plan: Rename Overviews and JSON Installer](.lovable/plans/pending/05-rename-overviews-and-installer-json.md)
+- [Plan: Trailing Newlines & AI Scripts](.lovable/plans/pending/07-trailing-newlines-and-ai-scripts.md)
+- [Plan: Lowercase changelog.md](.lovable/plans/pending/08-lowercase-changelog.md)
+- [Plan: Update Prompts and Release](.lovable/plans/pending/09-update-prompts-and-release.md)
+- [Plan: RCA & Boolean Fix](.lovable/plans/pending/10-rca-and-boolean-fix.md)
