@@ -271,6 +271,42 @@ The GitHub Release description is assembled from multiple sources:
 
 ---
 
+## AI Release Synchronization Protocol
+
+When an AI Agent or automated system handles a release, it MUST synchronously update all canonical version strings across the codebase *before* pushing any Git tag.
+
+### Mandatory Pre-Release Step Sequence
+
+1. **Update `version.json` (Source of Truth):**
+   ```json
+   {
+     "version": "X.Y.Z"
+   }
+   ```
+2. **Update Web & Changelog Metadata:**
+   Inject the `## [vX.Y.Z] YYYY-MM-DD` block into `changelog.md` and update `package.json`.
+3. **Commit & Push to Branch First:**
+   ```bash
+   git add .
+   git commit -m "chore(release): bump version to vX.Y.Z"
+   git push origin main
+   ```
+4. **Tag Execution (Only after branch push is verified):**
+   ```bash
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
+   ```
+
+### 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Verify version consistency between `version.json` and `package.json`.
+- [ ] `/learn` Read `.lovable/folder-structure.md` and `spec/12-cicd-pipeline-workflows/03-shared-conventions.md` to follow version resolution rules.
+- [ ] `/goal` Verify branch changes are committed and pushed to remote before pushing tags.
+- [ ] `/learn` Read `spec/12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md` Issue #13 to prevent release skew.
+- [ ] `/learn` Run verification via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+---
+
 ## Constraints
 
 - **Build once, package once** — binaries are compiled exactly once; compression, checksums, and publishing operate on the already-built artifacts and must never trigger a rebuild

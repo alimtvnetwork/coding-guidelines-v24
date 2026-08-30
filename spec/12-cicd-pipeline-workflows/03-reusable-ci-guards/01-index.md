@@ -1,54 +1,21 @@
 # Reusable CI Guards — AI-Implementation Guide
 
-. **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
+> **/goal** Master and implement language-agnostic CI guards for baseline diffing, naming conventions, and lint gating.
+> **/learn** Read the modular guard specifications in this directory to implement zero-dependency CI quality gates across any language.
 
+## 🎯 Actionable CI/CD & Agent Checklist
 
-**Version:** 1.0.0
-**Updated:** 2026-04-21
-**AI Confidence:** Production-Ready
+- [ ] `/goal` Block collision-prone identifiers and enforce positive naming conventions.
+- [ ] `/learn` Apply baseline diff gating to prevent new lint errors from entering mature codebases.
+- [ ] `/goal` Ensure every guard emits standard `::error file=...,line=...::` annotations.
+- [ ] `/learn` Verify local guard executions via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+---
+
+**Version:** 2.0.0  
+**Updated:** 2026-08-30  
+**AI Confidence:** Production-Ready  
 **Ambiguity:** None
-
----
-
-## Keywords
-
-`reusable-ci` · `ci-guards` · `baseline-diff` · `name-collision` · `grandfather-baseline` · `lint-suggest` · `test-summary` · `ai-portable`
-
----
-
-## Scoring
-
-| Criterion | Status |
-|-----------|--------|
-| `01-index.md` present | ✅ |
-| AI Confidence assigned | ✅ |
-| Ambiguity assigned | ✅ |
-| Keywords present | ✅ |
-| Scoring table present | ✅ |
-
----
-
-## Purpose
-
-This sub-section captures **six language-agnostic CI guard patterns** that
-were originally implemented in Bash and Python under `.github/scripts/` of a
-Go monorepo. Each pattern solves a problem that recurs in **every**
-non-trivial repository — flat-namespace collisions, lint-debt creep,
-inconsistent naming, opaque test failures — regardless of programming
-language or build system.
-
-The intent is that an AI assistant (or human engineer) reading this folder
-can re-implement any of the six guards for **any repository in any
-language** without ever seeing the original Go-specific source. Each
-pattern file is structured as:
-
-1. **Problem statement** — what failure mode the guard prevents
-2. **Algorithm** — abstract, language-agnostic pseudocode
-3. **Inputs / outputs / exit codes** — the contract
-4. **Configuration surface** — what must be parameterized per repo
-5. **Adaptations** — concrete worked examples for Go, Node/TypeScript,
-   Python, and Rust
-6. **Failure modes** — known pitfalls captured from production use
 
 ---
 
@@ -56,62 +23,16 @@ pattern file is structured as:
 
 | # | File | Pattern | One-Line Summary |
 |---|------|---------|------------------|
-| 01 | [01-forbidden-name-guard.md](./01-forbidden-name-guard.md) | Forbidden-name guard | Block collision-prone helper names in flat-namespace packages |
-| 02 | [02-grandfather-baseline-naming.md](./02-grandfather-baseline-naming.md) | Grandfather-baseline naming | Enforce naming convention on **new** identifiers only |
-| 03 | [03-cross-file-collision-audit.md](./03-cross-file-collision-audit.md) | Cross-file collision audit | Detect duplicate / case-insensitive identifier collisions |
-| 04 | [04-baseline-diff-lint-gate.md](./04-baseline-diff-lint-gate.md) | Baseline-diff lint gate | Fail build only on **new** lint findings vs cached baseline |
-| 05 | [05-actionable-lint-suggestions.md](./05-actionable-lint-suggestions.md) | Actionable lint suggestions | PR comment mapping each new finding to a fix template |
-| 06 | [06-matrix-test-aggregator.md](./06-matrix-test-aggregator.md) | Matrix test aggregator | Combine matrix-job test outputs into one copy-paste report |
-| 07 | [07-shared-cli-wrapper.md](./07-shared-cli-wrapper.md) | Shared CLI wrapper | Unified `--phase check\|lint\|test\|all` entry point dispatching to all six guards |
-| 08 | [08-config-schema.md](./08-config-schema.md) | Unified config schema | Single `ci-guards.yaml` parameterizes every guard; loader emits env vars consumed by Pattern 07 |
-| 09 | [09-workflow-templates.md](./09-workflow-templates.md) | GitHub Actions templates | Composite action + reusable workflow + 4 language starters wrapping Patterns 07/08 |
+| 02 | [02-forbidden-name-guard.md](./02-forbidden-name-guard.md) | Forbidden-name guard | Block collision-prone helper names in flat-namespace packages |
+| 03 | [03-grandfather-baseline-naming.md](./03-grandfather-baseline-naming.md) | Grandfather-baseline naming | Enforce naming convention on **new** identifiers only |
+| 04 | [04-cross-file-collision-audit.md](./04-cross-file-collision-audit.md) | Cross-file collision audit | Detect duplicate / case-insensitive identifier collisions |
+| 05 | [05-baseline-diff-lint-gate.md](./05-baseline-diff-lint-gate.md) | Baseline-diff lint gate | Fail build only on **new** lint findings vs cached baseline |
+| 06 | [06-actionable-lint-suggestions.md](./06-actionable-lint-suggestions.md) | Actionable lint suggestions | PR comment mapping each new finding to a fix template |
+| 07 | [07-matrix-test-aggregator.md](./07-matrix-test-aggregator.md) | Matrix test aggregator | Combine matrix-job test outputs into one copy-paste report |
+| 08 | [08-shared-cli-wrapper.md](./08-shared-cli-wrapper.md) | Shared CLI wrapper | Unified `--phase check\|lint\|test\|all` entry point dispatching to all guards |
+| 09 | [09-config-schema.md](./09-config-schema.md) | Unified config schema | Single `ci-guards.yaml` parameterizes every guard |
+| 10 | [10-workflow-templates.md](./10-workflow-templates.md) | GitHub Actions templates | Composite action + reusable workflow + 4 language starters |
+| 11 | [11-changelog-awk-integration.md](./11-changelog-awk-integration.md) | Changelog parser guard | AWK-free JSON-based changelog extraction in CI |
+| 12 | [12-strict-enum-enforcement.md](./12-strict-enum-enforcement.md) | Enum convention guard | Strict validation of Type suffixes and Enum objects |
+| 13 | [13-query-wrapper-python-ts.md](./13-query-wrapper-python-ts.md) | Query wrapper guard | Validation of cross-language typed query wrappers |
 | 99 | [99-ai-implementation-guide.md](./99-ai-implementation-guide.md) | AI handoff | How an AI should select, configure, and ship these guards |
-
----
-
-## Why These Six?
-
-| Pattern | Recurring Pain It Solves |
-|---------|--------------------------|
-| Forbidden-name guard | Two contributors independently invent `runOne()` in the same flat package → silent build break in CI |
-| Grandfather baseline | Style policy change ("all constants must use `Cmd*` prefix") would require renaming 2,700 identifiers in one PR |
-| Collision audit | Compiler errors ("redeclared in this block") only catch exact matches; case-only differences and intra-file dupes slip through code review |
-| Baseline-diff lint gate | Adopting a new linter on a mature repo produces 5,000 findings; team can't fix them all but must not add new ones |
-| Lint suggestions | Contributors see `[gocritic] paramTypeCombine` and have no idea what to change; suggestion bot turns each warning into a copy-paste diff |
-| Test aggregator | A 12-shard test matrix produces 12 separate logs; reviewer wants one report listing every failing test and its assertion message |
-
----
-
-## Common Design Principles
-
-All six patterns share these properties — copy them when extending:
-
-1. **Single binary, single concern.** Each script does one thing and
-   exits with a meaningful status code (`0` clean, `1` violation,
-   `2` tool error).
-2. **String-literal aware.** Source-text scanners must skip code inside
-   raw strings, regular strings, and comments — otherwise `WHERE` inside
-   an SQL constant gets reported as a top-level identifier.
-3. **Portable runtime.** Bash + POSIX `awk` + Python ≥ 3.10. No `pip
-   install`, no Node, no compiled tools required on the runner.
-4. **Annotation-friendly output.** Every error line uses the
-   `::error file=…,line=…::` GitHub Actions annotation format so
-   findings appear inline in the PR diff view.
-5. **Idempotent.** Re-running the guard with the same inputs produces
-   the same exit code and the same output. No timestamps, no random IDs.
-6. **Fail-soft on missing baselines.** A baseline file that is absent or
-   empty triggers a "seeding" mode that warns but exits `0`; the next
-   run has something to diff against.
-
----
-
-## Cross-References
-
-- [Shared Conventions](../03-shared-conventions.md) — Pinning, triggers, permissions
-- [CI Pipeline (Browser Extension)](../01-browser-extension-deploy/02-ci-pipeline.md)
-- [CI Pipeline (Go Binary)](../02-go-binary-deploy/02-ci-pipeline.md)
-- [Coding Guidelines (Cross-Language)](../../02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-index.md)
-
----
-
-*Reusable CI guards overview — v1.0.0 — 2026-04-21*

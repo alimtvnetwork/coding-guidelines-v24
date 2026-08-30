@@ -57,9 +57,10 @@ Read this file **before** modifying `.github/workflows/*.yml`, `release.sh`, `in
 
 **Date observed:** 2026-04-16  
 **Workflow:** Release (`release.yml`)  
-**Tag:** `v1.4.0`
+**Tag:** `vX.Y.Z`
 
 **Symptom:**
+
 ```
 npm error `npm ci` can only install packages when your package.json and
 package-lock.json or npm-shrinkwrap.json are in sync.
@@ -99,6 +100,7 @@ The release workflow ran `npm ci` to bootstrap a Node environment so it could ca
 **Workflow:** CI (`ci.yml`)
 
 **Symptom:**
+
 ```
 Error: No file in /home/runner/work/coding-guidelines-v24/coding-guidelines-v24
 matched to [**/requirements.txt or **/pyproject.toml], make sure you have
@@ -161,6 +163,7 @@ The following lessons were captured during the development of the a sibling refe
 ### Issue #4 — `go-winres` Icon Size > 256×256 px
 
 **Symptom:**
+
 ```
 2026/04/16 16:26:46 image size too big, must fit in 256x256
 Error: Process completed with exit code 1.
@@ -187,6 +190,7 @@ python3 -c "from PIL import Image; img=Image.open('assets/icon-256.png'); assert
 ### Issue #5 — `cd: dist: No such file or directory`
 
 **Symptom:**
+
 ```
 cd: dist: No such file or directory
 Error: Process completed with exit code 1.
@@ -246,8 +250,8 @@ Error: Process completed with exit code 1.
 
 | Tool / Action | Pinned Version |
 |---|---|
-| `golangci-lint` | `v1.64.8` |
-| `govulncheck` | `v1.1.4` |
+| `golangci-lint` | `vX.Y.Z` |
+| `govulncheck` | `vX.Y.Z` |
 | `actions/checkout` | `@v6` |
 | `actions/setup-go` | `@v6` |
 | `actions/cache` | `@v4` |
@@ -260,7 +264,7 @@ Error: Process completed with exit code 1.
 
 ### Issue #9 — Release Branch Run Cancelled by Follow-Up Commit
 
-**Symptom:** A push to `release/v2.5x.0` started the release workflow. A follow-up commit (changelog typo fix) on the same branch cancelled the in-progress run, leaving artifacts half-built and the GitHub Release inconsistent.
+**Symptom:** A push to `release/vX.Y.Z` started the release workflow. A follow-up commit (changelog typo fix) on the same branch cancelled the in-progress run, leaving artifacts half-built and the GitHub Release inconsistent.
 
 **Root cause:** `concurrency.cancel-in-progress: true` is appropriate for PRs but catastrophic for release branches where every commit must produce complete artifacts.
 
@@ -319,7 +323,7 @@ sed -i "s|VERSION_PLACEHOLDER|${VERSION}|g; s|REPO_PLACEHOLDER|${GITHUB_REPOSITO
 
 **Symptom:** Users running install scripts saw checksum-verification failures even when the binary was intact.
 
-**Root cause:** The compress step produced `app-v1.2.0-windows-amd64.zip`, but the checksum step (running in a different working directory) generated `checksums.txt` listing `app-windows-amd64.zip` (no version). Install scripts looked up the versioned name in a non-versioned manifest → mismatch.
+**Root cause:** The compress step produced `app-vX.Y.Z-windows-amd64.zip`, but the checksum step (running in a different working directory) generated `checksums.txt` listing `app-windows-amd64.zip` (no version). Install scripts looked up the versioned name in a non-versioned manifest → mismatch.
 
 **Fix applied (in sibling reference implementation):**
 
@@ -335,6 +339,44 @@ sed -i "s|VERSION_PLACEHOLDER|${VERSION}|g; s|REPO_PLACEHOLDER|${GITHUB_REPOSITO
 
 ---
 
+
+
+---
+
+### Issue #13 — Release Skew & Out-of-Band Tagging
+
+**Date observed:** 2026-04-16  
+**Workflow:** Release (`release.yml`)  
+**Tag:** `vX.Y.Z`
+
+**Symptom:**
+
+```
+Installer Smoke Test failed: Version mismatch. expected: vX.Y.Z, actual: vX.Y.Z
+Error: Process completed with exit code 1.
+```
+
+**Trigger:**
+
+A `git tag vX.Y.Z` was pushed out-of-band to trigger a release before `version.json`, `constants.go`, and `changelog.md` had been updated and committed on `main`.
+
+**Root cause:**
+
+1. In Go, `constants.Version` declared as `const` cannot be overridden via `-ldflags` during `go build`.
+2. Pushing a tag before synchronizing the repository source creates a race condition where the compiled binary reflects stale code.
+3. The release workflow parsed `changelog.md` for ``[vX.Y.Z]``, found none, and emitted "No changelog entry found".
+
+**Fix applied:**
+
+1. Switched `Version` in Go to `var Version = "dev"` so `-ldflags -X` injection works reliably.
+2. Synchronized `version.json`, `package.json`, and `changelog.md` on `main` before creating the git tag.
+3. Created the AI Release Synchronization standard in `05-release-pipeline.md`.
+
+**Prevention rule:**
+
+🔴 **Source control dictates the tag; tags NEVER dictate source control.** Always run `npm run sync` and push to the `main` branch before creating any release tag.
+
+
 ## Standing Rules (apply to every CI/CD change)
 
 | # | Rule | Rationale | Source |
@@ -344,7 +386,7 @@ sed -i "s|VERSION_PLACEHOLDER|${VERSION}|g; s|REPO_PLACEHOLDER|${GITHUB_REPOSITO
 | 3 | No built-in `cache:` on language setup actions | No canonical manifests exist for those languages | Issue #2 |
 | 4 | Version reads from `package.json` use `sed`, not `node` | Avoid Node toolchain dependency | Issue #3 |
 | 5 | All `actions/*` versions pinned to exact tag (no `@latest`/`@main`) | Reproducibility | Issue #8 |
-| 6 | Tool versions pinned exactly (e.g. `golangci-lint@v1.64.8`) | Reproducibility | Issue #8 |
+| 6 | Tool versions pinned exactly (e.g. `golangci-lint@vX.Y.Z`) | Reproducibility | Issue #8 |
 | 7 | Every code change bumps at least the minor version | Per `.lovable/user-preferences` | — |
 | 8 | Touching `release-artifacts/` outside of `release.sh` is forbidden | Generated content; do not hand-edit | — |
 | 9 | NEVER `cd` inside `run:` blocks — use `working-directory:` | Steps reset CWD to repo root | Issue #5 |
@@ -370,7 +412,7 @@ Before committing changes to `.github/workflows/*.yml`, `release.sh`, `install.s
 - [ ] No `npm`, `node`, `setup-node`, or JS dep introduced? → else **STOP**, see Issue #1.
 - [ ] No built-in `cache:` on `setup-python` / `setup-go`? → else **STOP**, see Issue #2.
 - [ ] All action versions pinned to exact tag (`@v6`, not `@latest`)? — Issue #8
-- [ ] All tool versions pinned (e.g. `@v1.64.8`)? — Issue #8
+- [ ] All tool versions pinned (e.g. `@vX.Y.Z`)? — Issue #8
 - [ ] `release.sh` resolves version without Node? (`grep -E 'node |require\(' release.sh` returns empty) — Issue #3
 - [ ] `package.json` version bumped (minor or major)?
 - [ ] No `cd` in `run:` blocks? Use `working-directory:` instead. — Issue #5

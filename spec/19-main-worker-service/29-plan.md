@@ -19,7 +19,7 @@
 
 ## Open questions (carried forward, NOT decided)
 
-- **OQ-1 (from §Main Server Concept 3c):** Per-endpoint authentication-type configuration — flagged as `❓ Open Question` in `06-auth-and-2fa.md`.
+- **OQ-1 (from §Main Server Concept 3c):** Per-endpoint authentication-type configuration — ✅ RESOLVED via `PATCH /API/V1/Settings/EndpointAuth` (see `06-auth-and-2fa.md` §8).
 - **OQ-2:** ✅ **Resolved Phase 12.3.** Worker-selection default = `LeastLoaded`. Pinned in `16-tunable-constants.md` §2.5; rationale + override guidance in `05-worker-routing.md` §1.5.
 
 ---

@@ -268,3 +268,19 @@ This log records all atomic file moves, renames, merges, and index normalization
 - MOVE: spec-slides\07-gif-generation.md -> spec-coding-guideline\07-gif-generation.md
 - MOVE: spec-slides\08-quality-and-offline.md -> spec-coding-guideline\08-quality-and-offline.md
 - DELETE: Merged and removed spec-slides/ into spec-coding-guideline/
+- MERGE: Merged `22-known-issues-and-fixes.md` & `28-rca-release-skew.md` into `17-release-pipeline-issues-rca.md`
+- MERGE: Merged `24-ai-release-synchronization.md` into `05-release-pipeline.md`
+- MOVE: `spec/12-cicd-pipeline-workflows\25-changelog-awk-integration.md` -> `spec/12-cicd-pipeline-workflows\03-reusable-ci-guards\10-changelog-awk-integration.md`
+- MOVE: `spec/12-cicd-pipeline-workflows\27-strict-enum-enforcement.md` -> `spec/12-cicd-pipeline-workflows\03-reusable-ci-guards\11-strict-enum-enforcement.md`
+- MOVE: `spec/12-cicd-pipeline-workflows\26-query-wrapper-python-ts.md` -> `spec/12-cicd-pipeline-workflows\03-reusable-ci-guards\12-query-wrapper-python-ts.md`
+- DELETE: Removed merged `spec/12-cicd-pipeline-workflows\22-known-issues-and-fixes.md`
+- DELETE: Removed merged `spec/12-cicd-pipeline-workflows\24-ai-release-synchronization.md`
+- DELETE: Removed merged `spec/12-cicd-pipeline-workflows\28-rca-release-skew.md`
+- RENAME: `spec/12-cicd-pipeline-workflows/23-lint-gating-rules.md` -> `spec/12-cicd-pipeline-workflows/18-lint-gating-rules.md`
+- RENAME: `spec/12-cicd-pipeline-workflows/18-blue-green-deployment.md` -> `spec/12-cicd-pipeline-workflows/19-blue-green-deployment.md`
+- RENAME: `spec/12-cicd-pipeline-workflows/19-flaky-test-quarantine.md` -> `spec/12-cicd-pipeline-workflows/20-flaky-test-quarantine.md`
+- RENAME: `spec/12-cicd-pipeline-workflows/20-contract-testing.md` -> `spec/12-cicd-pipeline-workflows/21-contract-testing.md`
+- RENAME: `spec/12-cicd-pipeline-workflows/21-e2e-testing-pattern.md` -> `spec/12-cicd-pipeline-workflows/22-e2e-testing-pattern.md`
+- UPDATE: Updated `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/01-index.md`
+- UPDATE: Updated `spec/12-cicd-pipeline-workflows/01-index.md` with consolidated 22-item inventory
+- RESOLVE: Marked OQ-1 as resolved in `spec/19-main-worker-service/29-plan.md`
