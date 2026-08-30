@@ -114,7 +114,7 @@ def main() -> int:
         sys.stdout.write(output)
         return 0
     out_path = resolve_output_path(input_path, args.lang, args.output)
-    out_path.write_text(output, encoding="utf-8")
+    out_path.write_text(output, encoding="utf-8", newline="\n")
     total = sum(len(b.fields) for b in blocks)
     sys.stderr.write(
         f"✅ Wrote {out_path} — {len(blocks)} type(s), {total} inverted field(s)\n"

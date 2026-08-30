@@ -30,6 +30,7 @@ JOBS_MATRIX = {
     "Spec Verification Coverage": ["node", "scripts/spec-verification/generate-coverage-report.mjs", "--strict", "--out", "reports/spec-verification/coverage.md"],
     "Validate Version JSON": ["node", "scripts/validate-version-json.mjs"],
     "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md", "docs/installer-fix-repo-flags.md"],
+    "Check File Sizes Baseline": [sys.executable, "linter-scripts/check-file-sizes.py", "--check"],
 }
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:

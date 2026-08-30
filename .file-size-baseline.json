@@ -3,19 +3,19 @@
   "files": [
     {
       "path": "linter-scripts/check-placeholder-comments.py",
-      "lines": 3145
+      "lines": 3148
     },
     {
       "path": "scripts/generate-bundle-installers.mjs",
-      "lines": 1333
+      "lines": 1552
     },
     {
       "path": "linter-scripts/validate-guidelines.py",
-      "lines": 1218
+      "lines": 1221
     },
     {
       "path": "linter-scripts/validate-guidelines.go",
-      "lines": 1044
+      "lines": 1142
     },
     {
       "path": "slides-app/src/App.tsx",
@@ -30,6 +30,10 @@
       "lines": 511
     },
     {
+      "path": "scripts/sync-version.mjs",
+      "lines": 463
+    },
+    {
       "path": "linter-scripts/allowlist-forbidden-string.py",
       "lines": 460
     },
@@ -38,12 +42,8 @@
       "lines": 438
     },
     {
-      "path": "scripts/sync-version.mjs",
-      "lines": 430
-    },
-    {
       "path": "linter-scripts/forbidden-strings-summary.py",
-      "lines": 393
+      "lines": 397
     },
     {
       "path": "linter-scripts/tests/test_ignored_deleted_reason_exact_match.py",
