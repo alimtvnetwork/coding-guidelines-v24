@@ -13,6 +13,7 @@ If this test fails, either:
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import unittest
 from pathlib import Path
@@ -32,6 +33,8 @@ class TestRunAllSpecLinkWiring(unittest.TestCase):
         self.assertIn("markdown", entry["languages"])
 
     def test_runall_dispatches_spec_link_and_exits_clean(self) -> None:
+        if not shutil.which("bash"):
+            self.skipTest("bash not found on PATH (non-UNIX environment)")
         if not SPEC_DIR.exists():
             self.skipTest("spec/ tree not present in this checkout")
         result = subprocess.run(

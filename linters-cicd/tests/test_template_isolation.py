@@ -24,6 +24,7 @@ Failure modes caught:
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import unittest
 from pathlib import Path
@@ -59,7 +60,7 @@ class TestTemplateIsolation(unittest.TestCase):
             offenders,
             [],
             "Registry entries point into checks/_template/: "
-            f"{offenders}. Copy the template to a real slug before registering.",
+            f"{offenders}. The template is a starter kit, not a production rule.",
         )
 
     def test_template_folder_layout_is_intact(self) -> None:
@@ -73,6 +74,8 @@ class TestTemplateIsolation(unittest.TestCase):
         self.assertTrue(TEMPLATE_FIXTURES.is_dir(), f"missing {TEMPLATE_FIXTURES}")
 
     def test_runall_does_not_dispatch_template_against_its_fixtures(self) -> None:
+        if not shutil.which("bash"):
+            self.skipTest("bash not found on PATH (non-UNIX environment)")
         if not RUN_ALL.exists() or not TEMPLATE_FIXTURES.is_dir():
             self.skipTest("orchestrator or template fixtures not present")
         result = subprocess.run(

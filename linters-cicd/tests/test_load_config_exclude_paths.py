@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -13,7 +14,7 @@ LOAD_CONFIG = REPO_ROOT / "linters-cicd" / "scripts" / "load-config.py"
 
 def _run(args: list[str]) -> dict[str, str]:
     result = subprocess.run(
-        ["python3", str(LOAD_CONFIG), *args],
+        [sys.executable, str(LOAD_CONFIG), *args],
         capture_output=True,
         text=True,
         check=True,
