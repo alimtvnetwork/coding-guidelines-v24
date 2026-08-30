@@ -5,10 +5,10 @@
 
 ## 🎯 Actionable CI/CD & Agent Checklist
 
-- [ ] `/goal` Read and understand all numbered specifications under `12-cicd-pipeline-workflows/`.
-- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
-- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
-- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+1. [ ] `/goal` Read and understand all numbered specifications under `12-cicd-pipeline-workflows/`.
+2. [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+3. [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+4. [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
 
 ---
 
@@ -72,7 +72,7 @@ This module covers two distinct pipeline archetypes, shared conventions, reusabl
 
 ## Subfolders
 
-* [01-browser-extension-deploy/01-index.md](./01-browser-extension-deploy/01-index.md) — Chrome extension automated build and packaging.
-* [02-go-binary-deploy/01-index.md](./02-go-binary-deploy/01-index.md) — Cross-platform Go binary packaging, signing, and release.
-* [03-reusable-ci-guards/01-index.md](./03-reusable-ci-guards/01-index.md) — 12 modular, language-agnostic CI guards and checkers.
-* [04-gitmap-pipeline/01-index.md](./04-gitmap-pipeline/01-index.md) — Gitmap extended workflow reference templates.
+1. [ ] `/learn` [01-browser-extension-deploy/01-index.md](./01-browser-extension-deploy/01-index.md) — Chrome extension automated build and packaging.
+2. [ ] `/learn` [02-go-binary-deploy/01-index.md](./02-go-binary-deploy/01-index.md) — Cross-platform Go binary packaging, signing, and release.
+3. [ ] `/learn` [03-reusable-ci-guards/01-index.md](./03-reusable-ci-guards/01-index.md) — 12 modular, language-agnostic CI guards and checkers.
+4. [ ] `/learn` [04-gitmap-pipeline/01-index.md](./04-gitmap-pipeline/01-index.md) — Gitmap extended workflow reference templates.

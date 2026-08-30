@@ -5,10 +5,10 @@
 
 ## 🎯 Actionable CI/CD & Agent Checklist
 
-- [ ] `/goal` Block collision-prone identifiers and enforce positive naming conventions.
-- [ ] `/learn` Apply baseline diff gating to prevent new lint errors from entering mature codebases.
-- [ ] `/goal` Ensure every guard emits standard `::error file=...,line=...::` annotations.
-- [ ] `/learn` Verify local guard executions via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+1. [ ] `/goal` Block collision-prone identifiers and enforce positive naming conventions.
+2. [ ] `/learn` Read `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/05-baseline-diff-lint-gate.md` to prevent new lint errors.
+3. [ ] `/goal` Ensure every guard emits standard `::error file=...,line=...::` annotations.
+4. [ ] `/learn` Verify local guard executions via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
 
 ---
 
