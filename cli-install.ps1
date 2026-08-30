@@ -76,7 +76,7 @@
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/cli-install.ps1 | iex
 
 .EXAMPLE
-    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/cli-install.ps1))) -Version v6.32.0 -Target .\vendor
+    & ([scriptblock]::Create((irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/cli-install.ps1))) -Version v6.33.3 -Target .\vendor
 #>
 
 param(
@@ -213,7 +213,7 @@ if ($UseLocalArchive) {
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════" -ForegroundColor Cyan
 # Spec §7 banner — literal field names: mode/repo/version/source.
-Write-Host "  📦 cli-install v6.32.0" -ForegroundColor Cyan
+Write-Host "  📦 cli-install v6.33.3" -ForegroundColor Cyan
 Write-Host "     mode:    $Mode" -ForegroundColor Cyan
 Write-Host "     repo:    $RepoSlug" -ForegroundColor Cyan
 Write-Host "     version: $VersionLabel" -ForegroundColor Cyan
@@ -306,6 +306,35 @@ function Copy-Mapping {
             } catch {
                 Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)"
             }
+            continue
+        }
+        if ($pair.Src -match ".lovable/strictly-avoid.md" -or $pair.Src -match ".lovable/memory") {
+            function Merge-File {
+                param($srcFile, $dstFile)
+                if (-not (Test-Path $dstFile)) {
+                    New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null
+                    Copy-Item -Path $srcFile -Destination $dstFile -Force
+                    return
+                }
+                $old = Get-Content $dstFile -Encoding UTF8
+                $new = Get-Content $srcFile -Encoding UTF8
+                if ($null -eq $old) { $old = @() }
+                if ($null -eq $new) { $new = @() }
+                $diff = Compare-Object -ReferenceObject $old -DifferenceObject $new | Where-Object { $_.SideIndicator -eq '=>' }
+                if ($diff) {
+                    Add-Content -Path $dstFile -Value "`n`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8
+                    $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 }
+                }
+            }
+            if ((Get-Item $srcPath).PSIsContainer) {
+                Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
+                    $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('')
+                    Merge-File -srcFile $_.FullName -dstFile (Join-Path $destPath $rel)
+                }
+            } else {
+                Merge-File -srcFile $srcPath -dstFile $destPath
+            }
+            Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
         if ((Get-Item $srcPath).PSIsContainer) {
@@ -533,7 +562,7 @@ function Verify-Install {
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
 function Scaffold-LovableFolders {
-    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues")) {
+    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues", ".agent/skills", ".agent/scripts")) {
         $dp = Join-Path $Target $d
         if (-not (Test-Path -LiteralPath $dp)) {
             New-Item -ItemType Directory -Path $dp -Force | Out-Null
@@ -662,3 +691,4 @@ Restore-CallerPreferences
     $global:LASTEXITCODE = $code
     return
 }
+

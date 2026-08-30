@@ -403,7 +403,7 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
       echo "  ✓ \${src} → \${TARGET}/\${dest} (merged into codingGuideline section)"
       continue
     fi
-    if [[ "${src}" == *".lovable/strictly-avoid.md"* || "${src}" == *".lovable/memory"* ]]; then
+    if [[ "\${src}" == *".lovable/strictly-avoid.md"* || "\${src}" == *".lovable/memory"* ]]; then
       python3 -c "
 import sys, os, shutil
 def merge_file(src, dst):
@@ -429,8 +429,8 @@ def merge_path(src, dst):
     else:
         merge_file(src, dst)
 merge_path(sys.argv[1], sys.argv[2])
-" "${archive_root}/${src}" "${TARGET}/${dest}"
-      echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
+" "\${archive_root}/\${src}" "\${TARGET}/\${dest}"
+      echo "  ✔️ \${src} -> \${TARGET}/\${dest} (smart merged)"
       continue
     fi
     if [[ -d "\${archive_root}/\${src}" ]]; then
@@ -1154,7 +1154,7 @@ function Copy-Mapping {
                 if ($null -eq $new) { $new = @() }
                 $diff = Compare-Object -ReferenceObject $old -DifferenceObject $new | Where-Object { $_.SideIndicator -eq '=>' }
                 if ($diff) {
-                    Add-Content -Path $dstFile -Value "`n`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8
+                    Add-Content -Path $dstFile -Value "\`n\`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8
                     $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 }
                 }
             }

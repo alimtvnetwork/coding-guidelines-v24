@@ -225,7 +225,7 @@ fi
 echo ""
 # Spec §7 banner — literal field names: mode/repo/version/source.
 echo "════════════════════════════════════════════════════════"
-echo "  📦 wp-install v6.32.0"
+echo "  📦 wp-install v6.33.3"
 echo "     mode:    ${MODE}"
 echo "     repo:    ${REPO_SLUG}"
 if [[ -n "${LOCAL_ARCHIVE}" ]]; then
@@ -340,6 +340,41 @@ dest_data['codingGuideline'] = {
 with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
 " "${archive_root}/${src}" "${TARGET}/${dest}"
       echo "  ✓ ${src} → ${TARGET}/${dest} (merged into codingGuideline section)"
+      continue
+    fi
+    if [[ "${src}" == *".lovable/strictly-avoid.md"* || "${src}" == *".lovable/memory"* ]]; then
+      python3 -c "
+import sys, os, shutil
+def merge_file(src, dst):
+    if not os.path.exists(dst):
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copy2(src, dst)
+        return
+    with open(dst, 'r', encoding='utf-8') as f: old = f.read().splitlines()
+    with open(src, 'r', encoding='utf-8') as f: new = f.read().splitlines()
+    old_set = set(old)
+    added = [line for line in new if line not in old_set]
+    if added:
+        with open(dst, 'a', encoding='utf-8') as f:
+            f.write('
+
+### [Auto-Merged from Coding Guidelines Update]
+')
+            f.write('
+'.join(added))
+            f.write('
+')
+def merge_path(src, dst):
+    if os.path.isdir(src):
+        for root, dirs, files in os.walk(src):
+            for file in files:
+                rel = os.path.relpath(os.path.join(root, file), src)
+                merge_file(os.path.join(root, file), os.path.join(dst, rel))
+    else:
+        merge_file(src, dst)
+merge_path(sys.argv[1], sys.argv[2])
+" "${archive_root}/${src}" "${TARGET}/${dest}"
+      echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
       continue
     fi
     if [[ -d "${archive_root}/${src}" ]]; then
@@ -599,7 +634,7 @@ fi
 
 echo ""
 scaffold_lovable_folders() {
-  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues"; do
+  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues" ".agent/skills" ".agent/scripts"; do
     local dp="${TARGET}/${d}"
     mkdir -p "${dp}"
     if [ -z "$(ls -A "${dp}" 2>/dev/null)" ]; then

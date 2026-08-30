@@ -24,6 +24,8 @@ JOBS_MATRIX = {
     "Fast File Scanner Cache": [sys.executable, ".lovable/ai-fix-scripts/08-fast-file-scanner.py", "--check"],
     "File Size Guard": [sys.executable, ".lovable/ai-fix-scripts/10-file-size-guard.py"],
     "Version Sync Check": [sys.executable, ".lovable/ai-fix-scripts/11-version-sync-checker.py"],
+    "Bundle Installer Generation": ["node", "scripts/generate-bundle-installers.mjs"],
+    "Spec Tree Sync": ["node", "scripts/sync-spec-tree.mjs"],
 }
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
