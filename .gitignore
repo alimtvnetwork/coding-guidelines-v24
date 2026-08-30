@@ -70,3 +70,5 @@ __pycache__/
 *.pyo
 
 .lovable/temp-scripts/
+/tmp
+*.code-workspace
