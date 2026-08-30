@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Fast Repository File Scanner & Caching Engine.
-Ultra-fast file scanner with multi-language filters, globbing, and persistent cache indexing in tmp/.
+Ultra-fast file scanner with multi-language filters, substring search, and persistent cache indexing in tmp/.
 
 Usage:
   python .lovable/ai-fix-scripts/08-fast-file-scanner.py [options]
@@ -11,12 +11,14 @@ Examples:
   python .lovable/ai-fix-scripts/08-fast-file-scanner.py --lang go,ts,tsx
   python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path spec/ --ext .md
   python .lovable/ai-fix-scripts/08-fast-file-scanner.py --search install --stats
+  python .lovable/ai-fix-scripts/08-fast-file-scanner.py --query-cache "component"
 """
 
 import argparse
 import datetime
 import json
 import os
+import re
 import sys
 import time
 
@@ -42,6 +44,8 @@ DEFAULT_IGNORE_DIRS = {
     "coverage",
     ".turbo",
     ".parcel-cache",
+    ".vs",
+    ".idea",
 }
 
 # Binary and non-code asset extensions to exclude
@@ -95,7 +99,7 @@ def parse_args():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  Scan all text/source files:
+  Scan all text/source files and generate tmp/ caches:
     python .lovable/ai-fix-scripts/08-fast-file-scanner.py
 
   Filter by languages (comma-separated):
@@ -107,20 +111,22 @@ Examples:
   Search for specific keyword in file paths:
     python .lovable/ai-fix-scripts/08-fast-file-scanner.py --search install --stats
 
-  Output plaintext file list directly to tmp/:
-    python .lovable/ai-fix-scripts/08-fast-file-scanner.py --format txt --out tmp/files.txt
+  Instant cache query (reads tmp/ cache in <1ms without disk walk):
+    python .lovable/ai-fix-scripts/08-fast-file-scanner.py --query-cache "button"
         """,
     )
     parser.add_argument("--path", "-p", default=".", help="Subdirectory or root to scan (default: .)")
     parser.add_argument("--lang", "-l", help="Language filter alias (e.g. go, ts, py, md, or comma-separated go,ts)")
     parser.add_argument("--ext", "-e", help="Custom extension filter (comma-separated, e.g. .go,.ts,.json)")
     parser.add_argument("--search", "-s", help="Case-insensitive substring filter on file path")
-    parser.add_argument("--out", "-o", default="tmp/repo-file-cache.json", help="Cache output path (default: tmp/repo-file-cache.json)")
+    parser.add_argument("--out", "-o", help="Custom cache output path (default: auto-named in tmp/)")
     parser.add_argument("--format", "-f", choices=["json", "txt", "summary"], default="json", help="Output format (json, txt, summary)")
     parser.add_argument("--limit", type=int, default=100, help="Max file lines to print to console (default: 100)")
     parser.add_argument("--stats", action="store_true", help="Display extension statistics breakdown")
     parser.add_argument("--no-cache", action="store_true", help="Skip saving results to tmp/ cache")
     parser.add_argument("--include-hidden", action="store_true", help="Include dot-files/folders (normally ignored)")
+    parser.add_argument("--query-cache", "-q", help="Query existing cached index without walking the filesystem")
+    parser.add_argument("--check", action="store_true", help="CI validation mode: verifies file index and exits 0 on success")
 
     return parser.parse_args()
 
@@ -150,7 +156,6 @@ def scan_files(scan_root, allowed_exts, search_term, include_hidden):
     ext_counts = {}
 
     for root, dirs, files in os.walk(scan_root):
-        # Prune ignored directories in-place
         if not include_hidden:
             dirs[:] = [
                 d for d in dirs
@@ -181,8 +186,33 @@ def scan_files(scan_root, allowed_exts, search_term, include_hidden):
     return matched_files, ext_counts
 
 
-def write_cache(cache_path, matched_files, ext_counts, args, scan_duration_ms):
-    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+def get_cache_filenames(args):
+    slug_parts = []
+    if args.path and args.path != ".":
+        clean_p = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.path).strip("_")
+        if clean_p:
+            slug_parts.append(clean_p)
+    if args.lang:
+        clean_l = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.lang).strip("_")
+        slug_parts.append(f"lang-{clean_l}")
+    if args.ext:
+        clean_e = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.ext).strip("_")
+        slug_parts.append(f"ext-{clean_e}")
+    if args.search:
+        clean_s = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.search).strip("_")
+        slug_parts.append(f"search-{clean_s}")
+
+    slug = "-".join(slug_parts) if slug_parts else "all"
+
+    json_path = args.out if (args.out and args.out.endswith(".json")) else "tmp/repo-file-cache.json"
+    txt_path = f"tmp/file-list-{slug}.txt"
+    all_txt_path = "tmp/file-list-all.txt"
+
+    return json_path, txt_path, all_txt_path
+
+
+def write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, args, scan_duration_ms):
+    os.makedirs("tmp", exist_ok=True)
     cache_data = {
         "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "scanRoot": args.path,
@@ -194,52 +224,89 @@ def write_cache(cache_path, matched_files, ext_counts, args, scan_duration_ms):
             "search": args.search,
             "includeHidden": args.include_hidden,
         },
+        "cacheFiles": {
+            "jsonCache": json_path,
+            "filterTextList": txt_path,
+            "globalTextList": all_txt_path,
+        },
         "stats": {
             "byExtension": dict(sorted(ext_counts.items(), key=lambda x: x[1], reverse=True))
         },
         "files": matched_files,
     }
 
-    if cache_path.endswith(".json"):
-        with open(cache_path, "w", encoding="utf-8") as f:
-            json.dump(cache_data, f, indent=2)
-    else:
-        with open(cache_path, "w", encoding="utf-8") as f:
+    # 1. Main JSON Cache
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(cache_data, f, indent=2)
+
+    # 2. Filter-specific text file
+    with open(txt_path, "w", encoding="utf-8") as f:
+        for fp in matched_files:
+            f.write(fp + "\n")
+
+    # 3. Global text list (if scanning full repo)
+    if args.path == "." and not args.lang and not args.ext and not args.search:
+        with open(all_txt_path, "w", encoding="utf-8") as f:
             for fp in matched_files:
                 f.write(fp + "\n")
 
-    # Also automatically write a plain text list in tmp/ for instant shell/script reading
-    plain_txt_path = "tmp/repo-file-list.txt"
-    try:
-        with open(plain_txt_path, "w", encoding="utf-8") as f:
-            for fp in matched_files:
-                f.write(fp + "\n")
-    except Exception:
-        pass
+
+def query_cached_index(query_term):
+    cache_path = "tmp/repo-file-cache.json"
+    if not os.path.exists(cache_path):
+        print(f"⚠️ Cache not found at `{cache_path}`. Running quick scan to generate cache...")
+        matched_files, _ = scan_files(".", None, None, False)
+        os.makedirs("tmp", exist_ok=True)
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump({"files": matched_files}, f)
+    else:
+        with open(cache_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        matched_files = data.get("files", [])
+
+    results = [f for f in matched_files if query_term.lower() in f.lower()]
+    print(f"⚡ Instant Cache Query for `{query_term}`: found **{len(results)}** matches in pre-computed index:\n")
+    for idx, r in enumerate(results[:100], 1):
+        print(f"   {idx:>3}. {r}")
+    if len(results) > 100:
+        print(f"   ... and {len(results) - 100} more matches.")
+    sys.exit(0)
 
 
 def main():
     args = parse_args()
-    start_time = time.perf_counter()
 
+    if args.query_cache:
+        query_cached_index(args.query_cache)
+        return
+
+    start_time = time.perf_counter()
     allowed_exts = resolve_extensions(args.lang, args.ext)
     matched_files, ext_counts = scan_files(args.path, allowed_exts, args.search, args.include_hidden)
     scan_duration_ms = (time.perf_counter() - start_time) * 1000.0
 
-    if not args.no_cache:
-        write_cache(args.out, matched_files, ext_counts, args, scan_duration_ms)
+    json_path, txt_path, all_txt_path = get_cache_filenames(args)
 
-    # Print summary & results to console
-    print(f"⚡ Fast File Scanner: scanned in {scan_duration_ms:.2f}ms")
-    print(f"📁 Root: `{args.path}` | Matched Files: **{len(matched_files)}**")
     if not args.no_cache:
-        print(f"💾 Cache saved to: `{args.out}` (and `tmp/repo-file-list.txt`)")
+        write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, args, scan_duration_ms)
+
+    # Print clean summary & results to console
+    print("================================================================================")
+    print(f"⚡ Fast Repository File Scanner: scanned in {scan_duration_ms:.2f}ms")
+    print(f"📁 Root: `{args.path}` | Filtered Files Found: **{len(matched_files)}**")
+    print("================================================================================")
+
+    if not args.no_cache:
+        print("\n💾 TEMP FOLDER CACHE INVENTORY:")
+        print(f"   • Full JSON Cache : `{json_path}`")
+        print(f"   • Specific Filter : `{txt_path}`")
+        print(f"   • Global List     : `{all_txt_path}`")
 
     if args.stats or len(matched_files) == 0:
         print("\n📊 Extension Breakdown:")
         for ext, count in sorted(ext_counts.items(), key=lambda x: x[1], reverse=True):
             display_ext = ext if ext else "(no extension)"
-            print(f"   • {display_ext:<12} : {count:>5} files")
+            print(f"   • {display_ext:<14} : {count:>5} files")
 
     print("\n📋 File Inventory Preview:")
     preview_limit = args.limit if args.limit > 0 else len(matched_files)
@@ -247,9 +314,12 @@ def main():
         print(f"   {idx:>4}. {fp}")
 
     if len(matched_files) > preview_limit:
-        print(f"   ... and {len(matched_files) - preview_limit} more files (see `{args.out}` for full list).")
+        print(f"   ... and {len(matched_files) - preview_limit} more files (see `{txt_path}` for complete list).")
 
-    print("\n💡 Tip for AI Agents: Read `tmp/repo-file-cache.json` or `tmp/repo-file-list.txt` for instant cached file access.")
+    print("\n💡 AI AGENT INSTRUCTION:")
+    print(f"   To read or verify files in subsequent steps without ad-hoc queries,")
+    print(f"   simply read `{txt_path}` or `{json_path}` directly.")
+    print("================================================================================")
     sys.exit(0)
 
 

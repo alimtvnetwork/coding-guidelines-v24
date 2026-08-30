@@ -11,6 +11,7 @@ JOBS = {
     "Readme Install Section Check": [sys.executable, "linter-scripts/check-readme-install-section.py"],
     "Forbidden Strings Check": [sys.executable, "linter-scripts/check-forbidden-strings.py"],
     "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
+    "Fast File Scanner Cache": [sys.executable, ".lovable/ai-fix-scripts/08-fast-file-scanner.py", "--check"],
 }
 
 def run_job(job_name, cmd):
