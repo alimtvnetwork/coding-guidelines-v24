@@ -1,4 +1,4 @@
-# 05 — Authentication and 2FA
+# 06 — Authentication and 2FA
 
 **Spec:** `19-main-worker-service`
 **Version:** 2.1.0

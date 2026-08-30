@@ -1,4 +1,4 @@
-# 19 — Incremental Backup Sync (CDC)
+# 20 — Incremental Backup Sync (CDC)
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

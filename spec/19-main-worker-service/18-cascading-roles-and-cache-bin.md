@@ -1,4 +1,4 @@
-# 17 — Cascading Roles & Role-Access Cache Bin
+# 18 — Cascading Roles & Role-Access Cache Bin
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.1.0

@@ -47,14 +47,20 @@ No app-specific content may appear in the 01–20 range. No foundational princip
 | 07 | `07-design-system/` | Design system tokens, components, theming |
 | 08 | `08-docs-viewer-ui/` | Documentation viewer UI specifications |
 | 09 | `09-code-block-system/` | Code block rendering pipeline, interactions, styling |
-| 10 | `11-powershell-integration/` | PowerShell scripting conventions, cross-platform automation |
-| 11 | `10-research/` | Comparative studies, technology evaluations, exploratory notes |
-| 12 | `17-consolidated-guidelines/` | AI-readable summaries of every major spec module |
-| 13 | `12-cicd-pipeline-workflows/` | CI/CD pipeline specs, deployment workflows, automation |
+| 10 | `10-research/` | Comparative studies, technology evaluations, exploratory notes |
+| 11 | `11-powershell-integration/` | PowerShell scripting conventions, cross-platform automation |
+| 12 | `12-cicd-pipeline-workflows/` | CI/CD pipeline specs, deployment workflows, automation |
+| 13 | `13-generic-cli/` | Generic CLI terminal UX, colors, flags, and help contracts |
 | 14 | `14-update/` | CLI self-update blueprints, release distribution, deploy strategies |
-| 15–20 | _Reserved_ | Future core fundamental topics |
+| 15 | `15-distribution-and-runner/` | Cross-platform installers, runners, and repository forwarding |
+| 16 | `16-generic-release/` | Universal release pipeline blueprint and asset matrices |
+| 17 | `17-consolidated-guidelines/` | AI-readable summaries of every major spec module |
+| 18 | `18-wp-plugin-how-to/` | WordPress plugin architecture, admin UI, and REST API |
+| 19 | `19-main-worker-service/` | Split-tier architecture, credential-blind proxy, and backup nodes |
 | 21 | `21-app/` | App-specific specs: features, workflows, architecture |
 | 22 | `22-app-issues/` | App bug analysis, root cause analysis, fix documentation |
+| 23 | `23-app-db/` | App-specific data model, table designs, migration strategies |
+| 24 | `24-app-ui-design-system/` | App-specific UI, design system, theming, component patterns |
 
 ### Rules
 

@@ -1,4 +1,4 @@
-# 25 — Inherited Rules (Inline Reference for Blind-AI Implementers)
+# 26 — Inherited Rules (Inline Reference for Blind-AI Implementers)
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

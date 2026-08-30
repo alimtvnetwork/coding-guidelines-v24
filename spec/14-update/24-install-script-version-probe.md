@@ -1,4 +1,4 @@
-# 17 — Install Script Version Probe (Latest-Repo Hand-Off)
+# 24 — Install Script Version Probe (Latest-Repo Hand-Off)
 
 **Version:** 1.0.0
 **Updated:** 2026-04-17

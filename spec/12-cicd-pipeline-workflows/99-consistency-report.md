@@ -86,7 +86,7 @@
 | 2026-04-09 | 3.0.0 | Added root files 04–07, expanded cross-references |
 | 2026-04-10 | 5.0.0 | Updated for 06-self-update-mechanism v2.0.0, added subfolder consistency reports to inventory |
 | 2026-04-10 | 6.0.0 | Removed 08-ci-failure-logs (commit-back approach rejected) |
-| 2026-04-11 | 7.0.0 | Added 08–13 from gitmap-v2 pipeline specs (installation, changelog, version, env, terminal, icon) |
+| 2026-04-11 | 7.0.0 | Added 08–13 from <tool>-v2 pipeline specs (installation, changelog, version, env, terminal, icon) |
 | 2026-04-13 | 8.0.0 | Added 03-complete-workflow-reference to go-binary-deploy inventory; fixed broken anchor; verified all cross-refs |
 
 ---

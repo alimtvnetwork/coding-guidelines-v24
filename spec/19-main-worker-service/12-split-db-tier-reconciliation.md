@@ -1,4 +1,4 @@
-# 11 — Split-DB Tier Reconciliation (Main + Worker)
+# 12 — Split-DB Tier Reconciliation (Main + Worker)
 
 **Spec:** `19-main-worker-service`
 **Version:** 2.0.0

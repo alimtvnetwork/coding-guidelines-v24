@@ -105,7 +105,7 @@ go-winres make --product-version "1.3.0" --file-version "1.3.0"
 
 # 2. Build as normal — Go automatically links the .syso file
 
-go build -o gitmap.exe .
+go build -o <binary>.exe .
 ```
 
 ### CI Pipeline Step

@@ -1,4 +1,4 @@
-# 02 — Deploy Path Resolution
+# 03 — Deploy Path Resolution
 
 ## Purpose
 

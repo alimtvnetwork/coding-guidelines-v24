@@ -1,4 +1,4 @@
-# 20 — Backup Encryption and Key Rotation
+# 21 — Backup Encryption and Key Rotation
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

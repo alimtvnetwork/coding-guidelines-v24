@@ -1,4 +1,4 @@
-# 08 — Code Block System
+# 01 — Code Block System
 
 > **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 09 Code Block System.
 > **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.

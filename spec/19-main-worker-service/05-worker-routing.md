@@ -1,4 +1,4 @@
-# 04 — Worker Routing
+# 05 — Worker Routing
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.3.0

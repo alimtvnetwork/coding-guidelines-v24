@@ -1,4 +1,4 @@
-# 02 — Glossary
+# 03 — Glossary
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.1.0

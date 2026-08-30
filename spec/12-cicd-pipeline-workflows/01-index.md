@@ -33,8 +33,7 @@ This module covers two distinct pipeline archetypes, shared conventions, reusabl
 |-----------|-----------|-------------|
 | Browser Extension Deploy | `01-browser-extension-deploy/` | Node.js/pnpm multi-component builds, zip packaging, Chrome Web Store |
 | Go Binary Deploy | `02-go-binary-deploy/` | Cross-compiled Go binaries, tar.gz/zip, install scripts, code signing |
-| Reusable CI Guards | `03-reusable-ci-guards/` | 12 language-agnostic baseline diff gating and quality guards |
-| Gitmap Extended Pipeline | `04-gitmap-pipeline/` | Extended multi-architecture workflow reference templates |
+| Reusable CI Guards | `03-reusable-ci-guards/` | 13 language-agnostic baseline diff gating and quality guards |
 | Shared Conventions | Root files | Common patterns used across all pipeline types |
 
 ---
@@ -74,5 +73,4 @@ This module covers two distinct pipeline archetypes, shared conventions, reusabl
 
 1. [ ] `/learn` [01-browser-extension-deploy/01-index.md](./01-browser-extension-deploy/01-index.md) — Chrome extension automated build and packaging.
 2. [ ] `/learn` [02-go-binary-deploy/01-index.md](./02-go-binary-deploy/01-index.md) — Cross-platform Go binary packaging, signing, and release.
-3. [ ] `/learn` [03-reusable-ci-guards/01-index.md](./03-reusable-ci-guards/01-index.md) — 12 modular, language-agnostic CI guards and checkers.
-4. [ ] `/learn` [04-gitmap-pipeline/01-index.md](./04-gitmap-pipeline/01-index.md) — Gitmap extended workflow reference templates.
+3. [ ] `/learn` [03-reusable-ci-guards/01-index.md](./03-reusable-ci-guards/01-index.md) — 13 modular, language-agnostic CI guards and checkers.

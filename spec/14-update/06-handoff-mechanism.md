@@ -1,4 +1,4 @@
-# 05 — Handoff Mechanism (Windows)
+# 06 — Handoff Mechanism (Windows)
 
 ## Purpose
 

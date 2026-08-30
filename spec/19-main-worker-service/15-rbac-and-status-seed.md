@@ -1,4 +1,4 @@
-# 14 — RBAC + Status Seed (Concrete Row Sets)
+# 15 — RBAC + Status Seed (Concrete Row Sets)
 
 **Spec:** `19-main-worker-service`
 **Version:** 2.0.0

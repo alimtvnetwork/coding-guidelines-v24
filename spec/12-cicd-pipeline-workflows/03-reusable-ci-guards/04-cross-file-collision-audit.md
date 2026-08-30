@@ -68,7 +68,7 @@ string** (double-quote), and `const ( … )` / `var ( … )` block state.
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| `FILE_GLOB` | Files to scan | `gitmap/constants/constants*.go`, `src/**/*.ts` |
+| `FILE_GLOB` | Files to scan | `cmd/constants/*.go`, `src/**/*.ts` |
 | `IDENT_RE` | Regex for top-level identifier names | `^[A-Z][A-Za-z0-9_]*` (Go/TS) or `^[A-Z][A-Z0-9_]*` (Python/Rust SCREAMING_SNAKE) |
 | `BLOCK_OPEN_RE` | Optional: regex matching multi-decl block opener | `^\s*const\s*\(` (Go) |
 | `BLOCK_CLOSE_RE` | Optional: regex matching block closer | `^\s*\)` |
@@ -171,7 +171,7 @@ Total unique top-level identifiers: 2734
 
 ## Reference Implementation
 
-See `.github/scripts/check-constants-collisions.py` in `gitmap-v6`.
+See `.github/scripts/check-constants-collisions.py` in reference CLI implementations.
 
 ---
 

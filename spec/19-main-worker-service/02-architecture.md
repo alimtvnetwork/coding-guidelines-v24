@@ -1,4 +1,4 @@
-# 01 — Architecture
+# 02 — Architecture
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.1.0

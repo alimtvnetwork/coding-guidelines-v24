@@ -1,4 +1,4 @@
-# 27 — Linter Authoring Guide
+# 30 — Linter Authoring Guide
 
 > **Version:** 1.0.0
 > **Updated:** 2026-04-22

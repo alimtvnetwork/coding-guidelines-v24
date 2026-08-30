@@ -1,4 +1,4 @@
-# 03 — Main Server DB Schema
+# 04 — Main Server DB Schema
 
 **Spec:** `19-main-worker-service`
 **Version:** 2.2.0

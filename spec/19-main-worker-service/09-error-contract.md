@@ -1,4 +1,4 @@
-# 08 — Main↔Worker Error Contract
+# 09 — Main↔Worker Error Contract
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.1.0

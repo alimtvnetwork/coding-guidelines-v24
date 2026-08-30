@@ -31,11 +31,16 @@ Root index for the entire specification tree. Each top-level folder contains a d
 | 07 | [Design System](./07-design-system/01-index.md) | Theme variables, typography, spacing, and component patterns |
 | 08 | [Docs Viewer UI](./08-docs-viewer-ui/01-index.md) | Specification viewer React application |
 | 09 | [Code Block System](./09-code-block-system/01-index.md) | Rich code block rendering — syntax highlighting, interactions, styling |
-| 10 | [PowerShell Integration](./11-powershell-integration/01-index.md) | PowerShell scripting conventions, cross-platform automation |
-| 11 | [Research](./10-research/01-index.md) | Comparative studies, technology evaluations, exploratory notes |
-| 12 | [Consolidated Guidelines](./17-consolidated-guidelines/01-index.md) | AI-readable summaries of every major spec module |
-| 13 | [CI/CD Pipeline Workflows](./12-cicd-pipeline-workflows/01-index.md) | CI/CD pipeline specs, deployment workflows, automation |
+| 10 | [Research](./10-research/01-index.md) | Comparative studies, technology evaluations, exploratory notes |
+| 11 | [PowerShell Integration](./11-powershell-integration/01-index.md) | PowerShell scripting conventions, cross-platform automation |
+| 12 | [CI/CD Pipeline Workflows](./12-cicd-pipeline-workflows/01-index.md) | CI/CD pipeline specs, deployment workflows, automation |
+| 13 | [Generic CLI Standards](./13-generic-cli/01-index.md) | Generic CLI terminal UX, colors, flags, and help contracts |
 | 14 | [Self-Update & App Update](./14-update/01-index.md) | Rename-first deployment, release pipeline, cross-compilation |
+| 15 | [Distribution and Runner](./15-distribution-and-runner/01-index.md) | Cross-platform installers, runners, and repository forwarding |
+| 16 | [Generic Release Pipeline](./16-generic-release/01-index.md) | Universal release pipeline blueprint and asset matrices |
+| 17 | [Consolidated Guidelines](./17-consolidated-guidelines/01-index.md) | AI-readable summaries of every major spec module |
+| 18 | [WP Plugin Conventions](./18-wp-plugin-how-to/01-index.md) | WordPress plugin architecture, admin UI, and REST API |
+| 19 | [Main Worker Service Architecture](./19-main-worker-service/01-index.md) | Split-tier architecture, credential-blind proxy, and backup nodes |
 
 ### App-Specific (21+)
 

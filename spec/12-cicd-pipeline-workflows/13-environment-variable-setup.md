@@ -11,9 +11,9 @@ This is particularly useful for portable installations where the binary lives on
 ## Core Concept
 
 ```
-User specifies:    /gitmap           (or /opt/gitmap)
-Tool ensures:      GITMAP_HOME=/gitmap   is set persistently
-                   /gitmap is in PATH    if not already present
+User specifies:    /opt/<tool>           (or /opt/opt/<tool>)
+Tool ensures:      <TOOL>_HOME=/opt/<tool>   is set persistently
+                   /opt/<tool> is in PATH    if not already present
 ```
 
 If the environment variable is already set and valid → no action taken.
@@ -42,25 +42,25 @@ If the environment variable is missing or points to a stale path → auto-regist
 This is the primary power feature. The user specifies where the tool lives:
 
 ```
-$ <tool> env home /gitmap
+$ <tool> env home /opt/<tool>
 ```
 
 This does:
 
 1. Validates the directory exists (or creates it with confirmation)
-2. Sets `<TOOL>_HOME=/gitmap` persistently
-3. Adds `/gitmap` to PATH if not already present
+2. Sets `<TOOL>_HOME=/opt/<tool>` persistently
+3. Adds `/opt/<tool>` to PATH if not already present
 4. Records the registration in `env-registry.json`
 5. Prints activation command
 
 ### Terminal Output
 
 ```
-$ <tool> env home /gitmap
+$ <tool> env home /opt/<tool>
 
   Setting <TOOL>_HOME...
 
-  [+] <TOOL>_HOME = /gitmap
+  [+] <TOOL>_HOME = /opt/<tool>
 
   Registering PATH...
 
@@ -73,8 +73,8 @@ $ <tool> env home /gitmap
 
   To activate in this session:
 
-    $env:GITMAP_HOME = "/gitmap"
-    $env:Path = "/gitmap;" + $env:Path
+    $env:<TOOL>_HOME = "/opt/<tool>"
+    $env:Path = "/opt/<tool>;" + $env:Path
 
   Or restart your terminal.
   ============================================
@@ -86,7 +86,7 @@ When the tool starts, it checks if `<TOOL>_HOME` is set. If not, and if the tool
 
 ```go
 func ensureHomeEnv() {
-    home := os.Getenv("GITMAP_HOME")
+    home := os.Getenv("<TOOL>_HOME")
     if home != "" && dirExists(home) {
         return // Already configured and valid
     }
@@ -98,9 +98,9 @@ func ensureHomeEnv() {
     }
 
     // Auto-register
-    setEnvPersistent("GITMAP_HOME", binaryDir)
+    setEnvPersistent("<TOOL>_HOME", binaryDir)
     addToPath(binaryDir)
-    fmt.Printf("  Auto-configured GITMAP_HOME=%s\n", binaryDir)
+    fmt.Printf("  Auto-configured <TOOL>_HOME=%s\n", binaryDir)
 }
 ```
 
@@ -115,7 +115,7 @@ Environment variables are set via the Windows Registry:
 ```go
 // User-level variable
 key, _ := registry.OpenKey(registry.CURRENT_USER, `Environment`, registry.SET_VALUE)
-key.SetStringValue("GITMAP_HOME", value)
+key.SetStringValue("<TOOL>_HOME", value)
 
 // Notify the system of the change
 syscall.SendMessage(syscall.HWND_BROADCAST, syscall.WM_SETTINGCHANGE, 0, "Environment")
@@ -135,7 +135,7 @@ Environment variables are persisted by writing to shell profiles:
 
 # Appended to ~/.bashrc, ~/.zshrc, etc.
 
-export GITMAP_HOME="/opt/gitmap"   # <tool>-env
+export <TOOL>_HOME="/opt/opt/<tool>"   # <tool>-env
 ```
 
 The marker comment (`# <tool>-env`) enables idempotent updates and clean removal.
@@ -157,21 +157,21 @@ The tool maintains an `env-registry.json` file to track all managed variables:
 {
   "variables": [
     {
-      "key": "GITMAP_HOME",
-      "value": "E:\\gitmap",
+      "key": "<TOOL>_HOME",
+      "value": "E:\\<tool>",
       "createdAt": "2026-04-09T14:30:00Z",
       "platforms": ["registry", "powershell-profile", "git-bash"]
     },
     {
-      "key": "GITMAP_DATA",
-      "value": "E:\\gitmap\\data",
+      "key": "<TOOL>_DATA",
+      "value": "E:\\<tool>\\data",
       "createdAt": "2026-04-09T14:30:00Z",
       "platforms": ["registry", "powershell-profile"]
     }
   ],
   "pathEntries": [
     {
-      "directory": "E:\\gitmap",
+      "directory": "E:\\<tool>",
       "createdAt": "2026-04-09T14:30:00Z"
     }
   ]
@@ -193,13 +193,13 @@ $ <tool> env doctor
 
   Checking managed environment variables...
 
-  [OK]   GITMAP_HOME = /gitmap (directory exists)
-  [OK]   /gitmap is in PATH
+  [OK]   <TOOL>_HOME = /opt/<tool> (directory exists)
+  [OK]   /opt/<tool> is in PATH
 
   Checking shell profiles...
 
-  [OK]   PowerShell profile: GITMAP_HOME registered
-  [OK]   Git Bash profile: GITMAP_HOME registered
+  [OK]   PowerShell profile: <TOOL>_HOME registered
+  [OK]   Git Bash profile: <TOOL>_HOME registered
   [WARN] Zsh profile: not found (not applicable on Windows)
 
   All checks passed.
@@ -212,12 +212,12 @@ $ <tool> env doctor
 
   Checking managed environment variables...
 
-  [FAIL] GITMAP_HOME = /gitmap (directory does NOT exist)
-  [WARN] /gitmap is NOT in PATH
+  [FAIL] <TOOL>_HOME = /opt/<tool> (directory does NOT exist)
+  [WARN] /opt/<tool> is NOT in PATH
 
   Suggested fix:
 
-    <tool> env home /gitmap    # Re-register with valid path
+    <tool> env home /opt/<tool>    # Re-register with valid path
 
   1 failure, 1 warning.
 ```

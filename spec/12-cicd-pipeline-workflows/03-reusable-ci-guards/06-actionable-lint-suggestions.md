@@ -76,7 +76,7 @@ any working directory).
 | Exit `0` | Always — this script never gates the build |
 | Output | Appends Markdown to `--out` (default `$GITHUB_STEP_SUMMARY`) |
 | PR comment | Read by `peter-evans/create-or-update-comment` action |
-| Sentinel | `<!-- gitmap-lint-suggestions -->` first line so prior comments are replaced, not stacked |
+| Sentinel | `<!-- ci-lint-suggestions -->` first line so prior comments are replaced, not stacked |
 
 ---
 
@@ -167,7 +167,7 @@ full JSON report is attached as the `lint-report` artifact._
 
 ## Reference Implementation
 
-See `.github/scripts/lint-suggest.py` in `gitmap-v6`.
+See `.github/scripts/lint-suggest.py` in reference CLI implementations.
 
 ---
 

@@ -1,4 +1,4 @@
-# 11 — Windows Icon Embedding (go-winres)
+# 12 — Windows Icon Embedding (go-winres)
 
 **Version:** 2.0.0  
 **Updated:** 2026-04-17  

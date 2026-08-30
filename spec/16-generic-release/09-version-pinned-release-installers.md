@@ -1,4 +1,4 @@
-# 08 — Version-Pinned Release Installers
+# 09 — Version-Pinned Release Installers
 
 > **Version:** 1.0.0
 > **Updated:** 2026-04-20

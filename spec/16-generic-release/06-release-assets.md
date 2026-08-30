@@ -1,4 +1,4 @@
-# 05 — Release Assets
+# 06 — Release Assets
 
 ## Purpose
 

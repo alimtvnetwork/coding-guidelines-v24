@@ -1,4 +1,4 @@
-# 18 — Backup Nodes
+# 19 — Backup Nodes
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

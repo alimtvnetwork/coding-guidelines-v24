@@ -1,4 +1,4 @@
-# 04 — Checksums & Verification
+# 05 — Checksums & Verification
 
 ## Purpose
 

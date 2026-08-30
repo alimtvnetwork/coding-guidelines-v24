@@ -1,4 +1,4 @@
-# 00 — Overview: Main / Worker Service Architecture
+# 01 — Overview: Main / Worker Service Architecture
 
 > **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 19 Main Worker Service.
 > **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.

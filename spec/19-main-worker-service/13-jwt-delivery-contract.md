@@ -1,4 +1,4 @@
-# 12 — JWT Delivery Contract (XSS-Safe)
+# 13 — JWT Delivery Contract (XSS-Safe)
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.2.0

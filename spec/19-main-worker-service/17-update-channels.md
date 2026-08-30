@@ -1,4 +1,4 @@
-# 16 — Update Channels (Pull, Push, Reconcile)
+# 17 — Update Channels (Pull, Push, Reconcile)
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

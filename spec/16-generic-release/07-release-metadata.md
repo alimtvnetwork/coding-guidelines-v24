@@ -1,4 +1,4 @@
-# 06 — Release Metadata
+# 07 — Release Metadata
 
 ## Purpose
 

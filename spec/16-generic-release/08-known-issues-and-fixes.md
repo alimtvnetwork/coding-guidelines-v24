@@ -1,4 +1,4 @@
-# 07 — Release Pipeline: Known Issues, Root Causes & Fixes
+# 08 — Release Pipeline: Known Issues, Root Causes & Fixes
 
 > **Purpose**: Self-contained post-mortem catalog of every release-pipeline failure. Any AI model or engineer reading this should be able to diagnose and fix the same class of issue instantly.
 >

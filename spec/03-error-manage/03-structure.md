@@ -1,4 +1,4 @@
-# 04-error-manage — Structure Summary
+# 03-error-manage — Structure Summary
 
 **Version:** 3.2.0  
 **Generated:** 2026-03-31  

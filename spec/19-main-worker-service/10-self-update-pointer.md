@@ -1,4 +1,4 @@
-# 09 — Self-Update (Pointer Only)
+# 10 — Self-Update (Pointer Only)
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.2.0

@@ -1,4 +1,4 @@
-# 24 — Threat Model (Reserved Stub)
+# 25 — Threat Model (Reserved Stub)
 
 **Spec:** `19-main-worker-service`
 **Version:** 0.1.0

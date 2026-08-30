@@ -1,4 +1,4 @@
-# 26 — Trust Boundaries & One-Way Isolation
+# 27 — Trust Boundaries & One-Way Isolation
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

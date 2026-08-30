@@ -1,4 +1,4 @@
-# 01 — Self-Update Overview
+# 02 — Self-Update Overview
 
 ## Purpose
 

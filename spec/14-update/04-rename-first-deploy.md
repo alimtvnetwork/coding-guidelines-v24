@@ -1,4 +1,4 @@
-# 03 — Rename-First Deploy Strategy
+# 04 — Rename-First Deploy Strategy
 
 ## Purpose
 

@@ -1,4 +1,4 @@
-# 22 — Backup Apply Logic
+# 23 — Backup Apply Logic
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

@@ -1,4 +1,4 @@
-# 02 — Release Pipeline
+# 03 — Release Pipeline
 
 ## Purpose
 

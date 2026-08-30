@@ -1,4 +1,4 @@
-# 10 — Worker Bootstrap Protocol
+# 11 — Worker Bootstrap Protocol
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

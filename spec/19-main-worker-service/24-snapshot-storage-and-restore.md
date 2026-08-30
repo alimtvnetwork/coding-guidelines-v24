@@ -1,4 +1,4 @@
-# 23 — Snapshot Storage and Restore Flow
+# 24 — Snapshot Storage and Restore Flow
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.2.0

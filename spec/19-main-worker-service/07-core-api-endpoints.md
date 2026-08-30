@@ -1,4 +1,4 @@
-# 06 — Core API Endpoints
+# 07 — Core API Endpoints
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.3.0

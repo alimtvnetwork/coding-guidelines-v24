@@ -1,4 +1,4 @@
-# 27 — Git Backup Targets (GitHub / Git-SSH Repos)
+# 28 — Git Backup Targets (GitHub / Git-SSH Repos)
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.0.0

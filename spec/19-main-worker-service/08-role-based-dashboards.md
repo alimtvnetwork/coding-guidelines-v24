@@ -1,4 +1,4 @@
-# 07 — Role-Based Dashboards
+# 08 — Role-Based Dashboards
 
 **Spec:** `19-main-worker-service`
 **Version:** 2.0.0
