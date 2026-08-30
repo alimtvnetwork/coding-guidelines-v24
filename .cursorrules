@@ -43,7 +43,7 @@ For full details, load files in this order from `spec/02-coding-guidelines/03-co
 Linter configs are in `linters/`. Validators are in `scripts/`.
 
 <!-- BEGIN:SYNC-HARD-RULES -->
-<!-- Auto-generated from spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->
+<!-- Auto-generated from spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->
 <!-- Edit the canonical file then run `npm run sync:guidelines`. -->
 
 ## Hard Rules (Zero Tolerance, canonical)

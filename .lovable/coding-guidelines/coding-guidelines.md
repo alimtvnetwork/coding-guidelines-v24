@@ -1,4 +1,8 @@
-# Must Follow Coding Guidelines
+<!-- AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. -->
+<!-- Source: spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->
+<!-- Regenerate with: npm run sync:guidelines -->
+
+# 31. Compiled Simple Coding Guidelines (AI Blind-Follow)
 
 Version: 1.5.0
 
@@ -27,51 +31,6 @@ logs, list EVERY remaining task, bump the version, update changelog
 and release notes. Going deep IS the job. If you are not going deep,
 you are not doing the job. This section is a MUST. Violating it is
 auto-reject on the same tier as RULE 0.
-
-## Master Coding Guidelines Specification & Architecture Checklist
-
-When auditing, refactoring, or authoring code, AI agents MUST cross-reference this comprehensive checklist of authoritative specification documents across the repository:
-
-### Cross-Language Foundations (`spec/02-coding-guidelines/01-cross-language/`)
-
-- [ ] `02-canonical-size-tier.md`: Standard file size under 100 coding lines (recommended 80 lines or fewer, max 200–300 lines), function size under 15 lines (preferred 8 lines or fewer).
-- [ ] `01-cross-language/02-boolean-principles.md` & `02-boolean-principles/`: Implicit positive booleans, zero explicit `true` or `false` checks, no mixed polarity (`isA && !isB` banned).
-- [ ] `01-cross-language/04-code-style/01-braces-and-nesting.md`: Zero nested if statements, invert conditions into early return guard clauses, cyclomatic complexity 5 or less.
-- [ ] `01-cross-language/04-code-style/03-blank-lines-and-spacing.md` & `21-newline-styling-examples.md`: Rule R13–R20 return new line and brace spacing rules.
-- [ ] `01-cross-language/04-code-style/04-function-and-type-size.md`: 8 lines preferred, 15 lines max.
-- [ ] `01-cross-language/04-code-style/05-multi-line-formatting.md`: Parameter splitting for more than 3 parameters or over 100 characters.
-- [ ] `01-cross-language/08-dry-principles.md` & `09-dry-refactoring-summary.md`: DRY extraction for duplicated code across 2 or more call sites.
-- [ ] `01-cross-language/10-function-naming.md` & `11-key-naming-pascalcase.md`: PascalCase identifiers and PascalCase abbreviation casing (`Id`, `Url`, `Api`).
-- [ ] `01-cross-language/12-no-negatives.md`: Strict prohibition against negative booleans and inverted logic.
-- [ ] `01-cross-language/13-strict-typing.md`: Narrow types only, zero `any`, `unknown`, or `interface{}`.
-- [ ] `01-cross-language/14-test-naming-and-03-structure.md`: Semantic 3-part test naming `TestUnit_Scenario_Outcome`.
-- [ ] `01-cross-language/15-master-coding-guidelines/`: Chapters 01 through 07 for comprehensive patterns.
-- [ ] `01-cross-language/16-static-analysis/`: Quality gates for Go (`golangci-lint`), PHP (`phpcs`/`phpstan`), C# (`StyleCop`), Rust (`clippy`), Node (`eslint`).
-- [ ] `01-cross-language/23-solid-principles.md`: Single Responsibility and Interface Segregation.
-
-### Language-Specific Implementations (`spec/02-coding-guidelines/`)
-
-- [ ] `02-typescript/`: Strict TypeScript, immutability, React component caps (100 lines max), named hook objects.
-- [ ] `03-golang/`: Single result struct with `IsSuccess`/`IsFailed`, enum bytes with `iota`, error wrapping.
-- [ ] `04-php/`: Strict typing, enum methods `->isEqual()`, spacing and imports.
-- [ ] `05-rust/`: Immutability-first, error handling, clippy validation.
-- [ ] `07-csharp/`: `I` prefix interfaces, custom `AppException`, PascalCase properties.
-- [ ] `12-python/`: Strict type hints, `@dataclass`, `pydantic` models, no global pip install.
-
-### Error Management Architecture (`spec/03-error-manage/`)
-
-- [ ] `00-overview.md` & `02-error-architecture/01-error-handling-reference.md`: Zero swallowed errors, universal `AppError` wrapping with operation context.
-- [ ] `02-error-architecture/02-response-envelopes.md`: Universal response envelopes `{ data, errors[], meta }`.
-- [ ] Zero dual-handling: never panic/log AND return error in the same branch.
-- [ ] Typed exit enums for error categories.
-
-### Anti-Hallucination, AI Optimization & CI/CD
-
-- [ ] `06-ai-optimization/01-anti-hallucination-rules.md`: Rule AH-N1 abbreviation casing, AH-O1 zero truncation.
-- [ ] `06-ai-optimization/05-citation-requirement.md`: Mandatory rule citations on all reviews and fixes.
-- [ ] `06-ai-optimization/06-hallucination-checks.md`: Pre-commit diff proof and disk reality checks.
-- [ ] `06-cicd-integration/04-ci-templates.md`: Quality gates; total ban on disabling or bypassing CI/CD checks.
-- [ ] `26-coding-guideline-audit/00-overview.md`: Master 0 to 100 scoring and drop-by-drop gap audit.
 
 ---
 
@@ -107,15 +66,14 @@ When auditing, refactoring, or authoring code, AI agents MUST cross-reference th
 
 ## Boolean Naming
 
-1. **Only Two Allowed Prefixes (`is` or `has`):** Every boolean variable, struct field, return flag, and predicate function MUST begin strictly with `is` or `has` (e.g., `isReady`, `hasData`, `isValid`, `hasError`, `isSuccess`, `isSafePull`).
-2. **Forbidden Prefixes (NOT Acceptable):** All other prefixes (including `can`, `should`, `was`, `will`, `did`, `must`, `allow`, `enable`, `check`, `flag`) are strictly NOT acceptable.
-3. **Positive Framing Only:** `isEnabled` yes, `isNotDisabled` no. `hasAccess` yes, `hasNoAccess` no. Negative prefixes (`isNot*`, `hasNo*`, `disable*`, `no*`) are strictly forbidden.
-4. **No Inverted Checks on Success:** Never write `!isSuccess`; use affirmative `isFail` or `isFailed` when checking failure states.
-5. **No Explicit True Checks:** NEVER compare booleans against `true` (`if isReady == true` is FORBIDDEN; use `if isReady`).
-6. **No Mixed Polarity:** NEVER combine a positive check and a negative check in the same `if` condition (`if isA && !isB` is forbidden).
-7. **No Boolean Flag Parameters on Functions:** Never pass bare boolean flags to functions (`render(true)` is forbidden). Split into two explicitly named functions instead (`renderExpanded()` and `renderCollapsed()`).
-8. **No Bare Adjectives or Garbage Suffixes:** Never use bare words (`enabled`, `valid`, `ready`, `flag`, `bool`). Always use `isEnabled`, `isValid`, `isReady`.
-9. **Boundary Normalization:** Booleans received from external systems or APIs must be normalized to `is` or `has` at the boundary before consumption.
+1. Every boolean starts with one of these prefixes: `is`, `has`, `can`, `should`, `was`, `will`, `did`, `must`.
+2. Positive framing only. `isEnabled` yes, `isNotDisabled` no. `hasAccess` yes, `hasNoAccess` no.
+3. If the natural name is negative, invert it: replace `isNotReady` with `isReady` and flip the check site.
+4. State prefixes match tense: `is*` for current state, `has*` for possession or completion, `was*` for past state, `will*` for future/pending, `did*` for a completed action.
+5. Capability prefixes: `can*` for permission or feasibility, `should*` for policy or recommendation, `must*` for hard requirements.
+6. Never use `flag`, `bool`, `check`, or bare adjectives as boolean names. `enabled` alone is not allowed, use `isEnabled`.
+7. No boolean flag parameters on functions. Split into two named functions instead. `render(true)` is wrong, `renderExpanded()` and `renderCollapsed()` are right.
+8. Booleans that come back from questions to the user or from external systems get normalized to the same prefix rules at the boundary, never leak the raw name into internal code.
 
 ---
 
@@ -258,29 +216,26 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 > NOTE: Conflict with folder-level `spec/02-coding-guidelines/`, `spec/coding-guidelines/`, `spec/03-error-manage` or similar guideline folders. The folder-level spec wins over this file if those exist.
 > However, if they do not exist, follow the rules below strictly.
 
-## Core Rules & Non-Negotiable Checklist for AI (with File References)
+## Core Rules & Non-Negotiable Checklist for AI
 
-- [ ] **Language & Runtime Standards:** Strict enforcement across Go (`spec/02-coding-guidelines/03-golang/`), TypeScript/React (`spec/02-coding-guidelines/02-typescript/`), Python (`spec/02-coding-guidelines/06-python/`), PHP (`spec/02-coding-guidelines/04-php/`), and C# (`spec/02-coding-guidelines/07-csharp/`).
-- [ ] **Enums (`spec/02-coding-guidelines/01-cross-language/04-code-style/`):** TypeScript string unions are banned. All Enum names MUST end with the `Type` suffix (e.g. `UserRoleType`). Switch/match statements on enums must be exhaustive.
-- [ ] **Error Handling (R7 & `spec/03-error-manage/`):** No silent failures or swallowed errors. Every error/failure is wrapped with operation context (`apperror.Wrap`). Never invert success booleans (`!isSuccess` is banned; use explicit `isFail`).
-- [ ] **Magic Strings/Numbers (R8 & `spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md`):** No magic strings or numbers. Extract named constants. Consult `.lovable/strictly-avoid.md`.
-- [ ] **Naming & Casing (R1, R2 & `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md`):** PascalCase everywhere. Acronyms (`Id`, `Json`, `Url`, `Ip`, `Http`) are PascalCase, never all-caps (e.g. `UserId`, not `UserID`). JSON/serialization keys are PascalCase (`{"UserId": "123", "IsActive": true}`).
-- [ ] **Booleans (R3, P1-P9 & `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/`):** Every boolean starts with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must`. Positive framing only. No negative booleans (`isNotReady` banned). NEVER evaluate explicitly against `true` or `false` (`if isReady == true` is banned). No mixed polarity (`if isA && !isB` is banned).
-- [ ] **Function Signatures & Parameter Structs (R4, R5, R9):**
+- [ ] **Language/Runtime**: TypeScript, PHP, Python, Go.
+- [ ] **Enums**: TypeScript string unions are banned. All Enums must end with the `Type` suffix.
+- [ ] **Error Handling (R7)**: No silent failures or swallowed errors. Every error/failure is propagated with context. Use explicit boolean states (e.g. `isFail`), do not invert success booleans (e.g. `!isSuccess`).
+- [ ] **Magic Strings/Numbers (R8)**: No magic strings or numbers except for loggers. Extract named constants. See `.lovable/strictly-avoid.md`.
+- [ ] **Naming & Casing (R1, R2)**: PascalCase everywhere. Acronyms (Id, Json, Url) are Pascal case, never all-caps (e.g. `UserId`, not `UserID`). JSON/serialization keys are Pascal case.
+- [ ] **Booleans (R3)**: Every boolean starts with `is` or `has` (e.g., `isEnabled`, `hasAdminRole`).
+- [ ] **Function Signatures (R4, R5, R9)**:
   - \> 3 parameters or signature > 100 chars -> **split each line** (one parameter per line).
-  - \> 4 parameters or 2+ adjacent same-typed parameters -> use a **param struct** / options object (e.g. `SwapIpParams`).
-  - Call > 100 chars or > 4 args -> one argument per line (mirrors R4 at call site).
-- [ ] **Unused Parameters (R6):** Every parameter must be used, or explicitly discarded with `_` and a trailing explanatory comment.
-- [ ] **Import Grouping (R18):** Imports grouped: stdlib -> third-party -> first-party absolute -> first-party relative, separated by exactly one blank line.
-- [ ] **The Return New Line & Whitespace Concept (R13-R20 & `spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md`):**
-  - **R13 (Blank Line Before Return/Throw):** Exactly ONE blank line before every `return`, `throw`, `raise`, or early exit when preceded by other statements. Exception: If `return` is the ONLY statement in the block or function body, NO blank line is placed.
-  - **R14 (Blank Line After Closing `}`):** Exactly ONE blank line after closing `}`, unless the next line is `}`, `else`, `case`, `catch`, or `finally`.
-  - **R15 (No Double Blanks):** **Never two blank lines in a row, anywhere**.
-  - **R16 (No Padded Braces):** No blank line immediately after `{` and no blank line immediately before `}`.
-  - **R17 (Top-Level Separation):** Exactly one blank line between top-level declarations (functions, classes, types).
-- [ ] **Automated Tooling Execution:** Run `.lovable/ai-fix-scripts/02-guideline-autofixer.py` to auto-fix whitespace and booleans. Validate with `go run linter-scripts/validate-guidelines.go` or `python linter-scripts/validate-guidelines.py`.
-- [ ] **Single Source of Truth for Versions (`version.json`):** Do not hardcode version numbers across files. Use root `version.json` as the sole authority dynamically read across all languages.
-- [ ] **Strict Lowercase Filenames (`agents.md`):** All files, scripts, and docs generated by AI MUST use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
+  - \> 4 parameters or 2+ adjacent same-typed parameters -> use a **param struct** / options object.
+  - Call > 100 chars or > 4 args -> one argument per line.
+- [ ] **Unused Parameters (R6)**: Every parameter must be used, or explicitly discarded with a comment.
+- [ ] **Import Grouping (R18)**: Imports grouped stdlib / third-party / first-party absolute / first-party relative.
+- [ ] **Blank Lines (R13-R20)**:
+  - **MUST FOLLOW**: New line blank line concept.
+  - One blank line before every `return` / `throw` (unless only statement in block).
+  - One blank line after closing `}` (unless next line is `}`, `else`, `case`, `catch`).
+  - **Never two blank lines in a row, anywhere**. No empty lines padded inside braces.
+- [ ] **Single Source of Truth for Versions**: Do not hardcode version numbers across files. Use a root-level JSON file (e.g. `version.json`) as the single source of truth and inject/read it dynamically.
 
 > **See Full Guide**: For complete rules and multi-language examples, see `.lovable/coding-guidelines/01-ai-code-review-guide.md`
 
@@ -596,49 +551,6 @@ public bool IsEnabled { get; init; }
 public bool HasAdminRole() { }
 ```
 
-### Comma-`ok` & Type Assertion Renaming (Total Ban on `ok`)
-
-In Go type assertions, map lookups, and channel receives, bare `ok` is strictly banned. Always use a domain-specific affirmative boolean:
-
-```go
-// ❌ FORBIDDEN: Nested if with bare ok
-if appErr, ok := err.(*apperror.AppError); ok {
-    if appErr.Code != "E_INTERNAL_ERROR" {
-        t.Errorf("expected E_INTERNAL_ERROR, got %s", appErr.Code)
-    }
-} else {
-    t.Errorf("expected AppError, got %T", err)
-}
-
-// ✅ REQUIRED: Semantic isAppErr + inverted guard clause
-appErr, isAppErr := err.(*apperror.AppError)
-if !isAppErr {
-    t.Fatalf("expected AppError, got %T", err)
-}
-
-if appErr.Code != "E_INTERNAL_ERROR" {
-    t.Errorf("expected E_INTERNAL_ERROR, got %s", appErr.Code)
-}
-```
-
-### Positive Boolean Framing with Inverted Guard Clauses
-
-Never name booleans with negative words (`hasNo*`, `isNot*`). Declare positively, then invert inside the `if` guard clause:
-
-```tsx
-// ❌ FORBIDDEN: Negative boolean names
-const hasNoColors = !colorConfig.length;
-if (hasNoColors) {
-    return null;
-}
-
-// ✅ REQUIRED: Positive framing + inverted guard condition
-const hasColors = colorConfig.length > 0;
-if (!hasColors) {
-    return null;
-}
-```
-
 ---
 
 ## 5. R4 — Split the parameter list
@@ -915,10 +827,6 @@ receives `oldIp` and never forwards it) is a defect, not a style issue.
 
 ---
 
-## 9. R8 — No magic literals as arguments, characters, or string comparisons
-
-Every magic number, hardcoded string, character code (`rune(10)`), or delimiter must be extracted to a centralized typed constant or enum.
-
 ## 9. R8 — No magic literals as arguments
 
 ```go
@@ -936,90 +844,8 @@ const (
 )
 ```
 
-### 9a. Character Codes, Runes & Delimiters (No Raw Conversions)
-
-```go
-// ❌ FORBIDDEN: Raw rune casts and hardcoded delimiters
-lines := strings.Split(string(data), string(rune(10)))
-header := strings.Join(fields, ",")
-
-// ✅ REQUIRED: Centralized typed constants
-const (
-	NewLineUnix    = "\n"
-	DelimiterComma = ","
-)
-
-lines := strings.Split(string(data), NewLineUnix)
-header := strings.Join(fields, DelimiterComma)
-```
-
-### 9b. Logging & Test Assertion Exemption
-
-- **Exempt:** Informational log strings (`logger.Info("user logged in")`), format templates (`fmt.Sprintf(...)`), and test expectation descriptions (`t.Errorf("expected %v, got %v")`).
-- **Required as Constants:** Status codes, error codes, HTTP headers, timeouts, entity states, delimiters, and business flags.
-
-### 9c. TypeScript: Native Enums or `as const` Object Enums
-
-```typescript
-// ❌ FORBIDDEN: String union for enums
-type Role = "admin" | "editor";
-
-// ✅ REQUIRED: TypeScript Enum with *Type suffix
-export enum UserRoleType {
-    Admin = "ADMIN",
-    Editor = "EDITOR",
-}
-
-// ✅ REQUIRED Alternative: `as const` Object Enum
-export const UserRoleType = {
-    Admin: "ADMIN",
-    Editor: "EDITOR",
-} as const;
-
-export type UserRoleType = (typeof UserRoleType)[keyof typeof UserRoleType];
-```
-
-### 9d. PHP: Backed Enums & Trait Helpers (PHP 8.1+)
-
-```php
-namespace App\Traits;
-
-trait HasEnumHelpers {
-    public static function values(): array {
-        return array_column(self::cases(), 'value');
-    }
-}
-
-namespace App\Enums;
-
-use App\Traits\HasEnumHelpers;
-
-enum OrderStatusType: string {
-    use HasEnumHelpers;
-
-    case Pending = 'pending';
-    case Completed = 'completed';
-
-    public function label(): string {
-        return match($this) {
-            self::Pending => 'Pending Review',
-            self::Completed => 'Order Completed',
-        };
-    }
-}
-```
-
-### 9e. Python: `StrEnum`
-
-```python
-from enum import StrEnum
-
-class TaskPriorityType(StrEnum):
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-```
-
+The same applies in every language: `const`, `final`, `enum`, module-level constants, or a config
+struct — never a bare literal at the call site.
 
 ---
 
@@ -1936,158 +1762,3 @@ R21: pass
 
 <full corrected file or unified diff>
 ```
-
----
-
-## 21. Autonomous Agent Execution & Phase-by-Phase Self-Looping Protocol (Anti-Hallucination Framework)
-
-To prevent AI hallucination, context drift, premature turn exit, or superficial reviews, AI agents operating on this codebase MUST follow this strict 5-phase execution lifecycle.
-
-### Phase 1: Deep Read & Exploratory Bounded Scan (Turn 1 .. N/2)
-
-- **Zero-Mutation Rule:** The AI must NEVER modify code during Phase 1.
-- **Dependency & Scope Mapping:** Walk all target source files, read local types and imported modules, and locate the architectural boundaries.
-- **Spec Verification:** Cross-check the target code against the Master Checklist in Section 0 and language-specific specs.
-
-### Phase 2: Microscopic Task Decomposition (60-Item Fine-Grained Atomic Verification Matrix)
-
-Every file and function must be audited against these 60 atomic sub-tasks:
-
-#### A. Size & Structural Boundaries (Checks 1–8)
-
-- [ ] **Check 01:** Function line count: 8 lines preferred, 15 lines max (excluding blank lines and comments).
-- [ ] **Check 02:** File coding lines: max 100 lines (recommended 80 lines or fewer).
-- [ ] **Check 03:** File total lines: hard cap 300 lines maximum.
-- [ ] **Check 04:** React component files (`.tsx`): 100 lines max (recommended 80 lines or fewer).
-- [ ] **Check 05:** Class or struct body: 120 lines max.
-- [ ] **Check 06:** Anti-line compression check: zero removed indentation, zero single-line if/else blocks to cheat line caps.
-- [ ] **Check 07:** Function signature: 100 characters max.
-- [ ] **Check 08:** Parameter count: max 3 parameters (split more than 3 parameters to one per line or use a parameter struct).
-
-#### B. Braces, Nesting & Control Flow (Checks 9–15)
-
-- [ ] **Check 09:** Zero nested if statements.
-- [ ] **Check 10:** Inversion of conditions into guard clauses and early returns.
-- [ ] **Check 11:** Cyclomatic complexity: 5 or less per function.
-- [ ] **Check 12:** No `else` after a returning or throwing `if`.
-- [ ] **Check 13:** Strict conditional joins: at most 2 operands (1 logical join).
-- [ ] **Check 14:** Never mix `&&` and `||` within the same `if` condition.
-- [ ] **Check 15:** No inverted complex conditions with `!` (apply De Morgan's laws or extract a named boolean).
-
-#### C. Boolean Syntax & Logic (Checks 16–24)
-
-- [ ] **Check 16:** Zero explicit boolean comparisons against `true` (`if isReady == true` is FORBIDDEN).
-- [ ] **Check 17:** Zero explicit boolean comparisons against `false` (`if isReady == false` is FORBIDDEN).
-- [ ] **Check 18:** No mixed polarity (`if isA && !isB` is FORBIDDEN; extract to named boolean).
-- [ ] **Check 19:** Positive boolean prefixes: is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, `must`.
-- [ ] **Check 20:** No negative boolean variables (`isNotReady`, `disableCache` are FORBIDDEN).
-- [ ] **Check 21:** No inverted success checks (`!response.isSuccess` banned; use `response.isFail`).
-- [ ] **Check 22:** Zero boolean positional flag parameters on functions.
-- [ ] **Check 23:** Wrapped boolean multi-returns (struct/object wrapper, no bare tuples `(int, bool)`).
-- [ ] **Check 24:** Normalized booleans at external and user-input boundaries.
-
-#### D. Error Management & Architecture (Checks 25–33)
-
-- [ ] **Check 25:** Zero swallowed errors (no empty `catch {}` or `_ = err`).
-- [ ] **Check 26:** Universal `AppError` wrapping with operation context (`op` name + key parameters).
-- [ ] **Check 27:** Universal response envelopes (`{ data, errors[], meta }`).
-- [ ] **Check 28:** Zero dual-handling (never panic/log AND return error in the same branch).
-- [ ] **Check 29:** Typed exit enums for error categories (no raw string error codes).
-- [ ] **Check 30:** Preserved original error cause and stack trace.
-- [ ] **Check 31:** Context logging on every error (sanitized parameters, no raw secrets).
-- [ ] **Check 32:** Log levels match severity (`debug`, `info`, `warn`, `error`, `fatal`).
-- [ ] **Check 33:** Zero raw string throws (`throw "msg"` or bare `panic("msg")` is FORBIDDEN).
-
-#### E. Types, Enums & Centralized Constants (Checks 34–41)
-
-- [ ] **Check 34:** Zero magic strings or raw numeric literals.
-- [ ] **Check 35:** All Enum names MUST end with the `Type` suffix (e.g., `UserRoleType`).
-- [ ] **Check 36:** TypeScript string unions banned (`type Role = "admin" | "user"` -> `enum RoleType`).
-- [ ] **Check 37:** Dedicated files for definitions (types, enums, constants in `src/types/`, `src/enums/`).
-- [ ] **Check 38:** Exhaustive switch / pattern matching on enums.
-- [ ] **Check 39:** Narrow types only (zero `any`, `unknown`, `interface{}`, `object`, `dynamic`).
-- [ ] **Check 40:** Type guards at trust boundaries (external JSON, API inputs, catch blocks).
-- [ ] **Check 41:** Single `version.json` at root as sole version authority.
-
-#### F. Naming, Casing & Formatting (Checks 42–50)
-
-- [ ] **Check 42:** PascalCase for types, structs, interfaces, and database tables.
-- [ ] **Check 43:** camelCase for variables, methods, properties, and database columns.
-- [ ] **Check 44:** Abbreviation casing strictly PascalCase (`UserId`, `Url`, `Api`, not `UserID`, `URL`, `API`).
-- [ ] **Check 45:** Strictly lowercase file and folder names (`01-file.ts`, not `01-File.ts`).
-- [ ] **Check 46:** Blank line before `return`/`throw` (R13) unless sole statement in block.
-- [ ] **Check 47:** Blank line after closing `}` (R14) unless followed by `else`/`catch`/`case`.
-- [ ] **Check 48:** Never two consecutive blank lines anywhere in the file (R15).
-- [ ] **Check 49:** No padded braces (R16).
-- [ ] **Check 50:** Import grouping (std lib, third-party, first-party) with blank lines between groups (R18).
-
-#### G. Testing, QA & AI Optimization (Checks 51–60)
-
-- [ ] **Check 51:** Semantic 3-part unit test naming (`TestUnit_Scenario_Outcome`).
-- [ ] **Check 52:** Multi-variable positive and negative branch coverage.
-- [ ] **Check 53:** Zero generic garbage names (`temp`, `data`, `obj`, `comp_100`).
-- [ ] **Check 54:** Immutable-first variable declarations (`const`, `final`, no unnecessary `let`/`var`).
-- [ ] **Check 55:** DRY principle enforced (extract any logic duplicated across 2+ call sites).
-- [ ] **Check 56:** Zero generated files or build artifacts in Git (proactive `.gitignore`).
-- [ ] **Check 57:** Never disable or bypass CLI linters or CI/CD checks (no `|| true`, no suppression flags).
-- [ ] **Check 58:** Verifiable tool execution (real command execution with `exit code 0`).
-- [ ] **Check 59:** Zero truncation and no placeholder stubs (`TODO`, `FIXME`, `// ...`, `/* ... */`).
-- [ ] **Check 60:** Pre-commit diff proof via `git status --porcelain` and `git diff --stat`.
-
-### Phase 3: Multi-Agent Parallelization (2–3 Concurrent Threads Max)
-
-When analyzing large repositories, the parent agent MUST divide the workload:
-
-1. **Disjoint Bounding Boxes:** Assign non-overlapping directory trees to 2 or 3 parallel sub-agents (e.g., Sub-Agent A = Backend, Sub-Agent B = Frontend, Sub-Agent C = Shared/Scripts).
-2. **Context Diet:** Pass only the target file paths and specific subtask references to sub-agents. Never paste giant prompt texts or memory logs into sub-agent contexts.
-3. **Structured Response Gathering:** Sub-agents return markdown violation tables (`| Id | File | Line | Snippet | Planned Fix | Status |`) that the parent reconciles into the master ledger.
-
-### Phase 4: Bounded Sequential Self-Looping Execution (1 File per Turn)
-
-During execution or fix phases:
-
-1. **Isolated Micro-Tasking:** Never attempt to refactor multiple files in one turn. Process exactly **one file per turn**.
-2. **Run Guideline Autofixer:** Execute `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <file>` to handle formatting and boolean cleanup.
-3. **Apply Surgical Fix:** Refactor functions > 15 lines, flatten nested if statements, and wrap errors.
-4. **Local Verification:** Run local tests and linters to verify zero regressions.
-5. **End Turn & Self-Loop:** Check off the verified item and self-loop into the next turn.
-
-### Phase 5: Disk Reality Check & Verifiable Resolution
-
-Before marking any task complete:
-
-- Execute `git status --porcelain` and `git diff --stat` to verify modified files actually exist on disk.
-- Run regex searches for `TODO`, `FIXME`, and `// ...` to ensure zero placeholder stubs remain.
-- Ensure the master violation ledger in `.lovable/plans/pending/` is fully reconciled with all items marked `DONE`.
-
----
-
-## 22. Strict Relative Git Paths Mandate (TOTAL BAN on Absolute Paths / `file:///` URIs)
-
-> [!CAUTION]
-> **STRICT RELATIVE GIT PATHS ONLY — NO ABSOLUTE PATHS / NO `file:///` URIs:**
->
-> When generating plans (`.lovable/plans/pending/`), subtasks (`.lovable/plans/subtasks/`), memory logs (`.lovable/memory/issues/`), specs, code comments, or citations:
-> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/spec/commands/01-ssh-commands.md`, `cmd/main.go`).
-> 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
-> 
-> **Examples:**
-> - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
-> - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
-> - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
-> - ✅ **GOOD:** `Target File: cmd/login.go`
-
----
-
-## 23. Universal File Hygiene, Line Endings (LF `\n` Only) & UTF-8 (No BOM)
-
-Every file across the codebase, documentation, and specs MUST strictly enforce these file hygiene rules:
-
-1. **Unix LF (`\n`) Line Endings Only:** Total ban on Windows CRLF (`\r\n`). All source files (`.go`, `.ts`, `.tsx`, `.py`, `.php`, `.cs`, `.js`, etc.) and markdown files (`.md`) MUST use strictly `\n` line breaks.
-2. **Strict UTF-8 Encoding (NO BOM):** All files MUST be saved in UTF-8 without Byte Order Mark (BOM). Zero `\xef\xbb\xbf` header bytes.
-3. **Mandatory Single Trailing Newline at EOF:** Every file MUST terminate with exactly one newline (`\n`). Zero trailing blank lines, and never omit the final newline.
-4. **No Function Starts with a Blank Line:** Function bodies must begin with executable code immediately on line 1 after `{` (or `:` in Python). Never start a function with an empty line.
-5. **Zero Double Blank Lines in Code & Markdown:** Never use 2 or more consecutive blank lines anywhere inside code or markdown files (`\n\n\n` is strictly banned). Normalize all vertical gaps to exactly one single blank line (`\n\n`).
-6. **Markdown Heading Spacing (H1–H6: `#` through `######`):**
-   - Exactly **ONE blank line BEFORE** every markdown heading (EXCEPT when the heading is on line 1 of the file — line 1 has NO blank line before it).
-   - Exactly **ONE blank line AFTER** every markdown heading.

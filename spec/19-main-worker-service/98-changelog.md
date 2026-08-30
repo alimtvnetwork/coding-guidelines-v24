@@ -4,6 +4,13 @@
 
 ---
 
+## v6.34.0 — 2026-08-30 (Fix installer template literal SyntaxError & enhance fast Python tooling)
+
+**Scope:** Version bump (`6.34.0` → `6.34.0`). Fix installer template literal SyntaxError & enhance fast Python tooling.
+**Sync-regenerated artifacts:** `public/health-score.json`
+
+---
+
 ## v6.33.3 — 2026-08-29 (Routine)
 
 **Scope:** Version bump (`6.33.2` → `6.33.3`). Routine.

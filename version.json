@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.33.3",
+  "Version": "6.34.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "e9f86aea101385b93c048136f5103ceedeed1779",
+  "LastCommitSha": "8de4f8658ac051b4287002fa2e97686340bd31b8",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -34,41 +34,41 @@
   "linters": "3.79.0",
   "_AI_CAUTION": "STRICTLY AVOID: Never touch or manually modify this version information or the update dates! This file is generated and managed exclusively by its own specific scripts and synchronization repositories. If you need repository information, ask to check the .git folder instead.",
   "Prompts": [
-    "01-unified-ai-prompt-v4.md",
-    "02-next-steps.md",
-    "03-pending-tasks.md",
-    "04-plan-steps.md",
-    "05-read-memory-enhanced.md",
-    "06-write-antigravity.md",
-    "07-write-memory.md",
-    "08-plan-coding-guideline-audit.md",
-    "09-execute-coding-guideline-fix.md",
-    "10-execute-batched-loop.md",
-    "11-inventory-pending-tasks.md",
-    "12-fix-subtask-naming-convention.md",
-    "13-ci-cd-fix.md",
-    "14-cicd-run-ps1.md",
-    "15-commit-fix.md",
-    "16-commit-fix-v2.md",
-    "17-clean-artifacts-and-git-history.md",
-    "18-release.md",
-    "19-plan-spec-steps-v2.md",
-    "20-audit-app-spec.md"
+    "${TARGET_PREFIX}/01-unified-ai-prompt-v4.md",
+    "${TARGET_PREFIX}/02-next-steps.md",
+    "${TARGET_PREFIX}/03-pending-tasks.md",
+    "${TARGET_PREFIX}/04-plan-steps.md",
+    "${TARGET_PREFIX}/05-read-memory-enhanced.md",
+    "${TARGET_PREFIX}/06-write-antigravity.md",
+    "${TARGET_PREFIX}/07-write-memory.md",
+    "${TARGET_PREFIX}/08-plan-coding-guideline-audit.md",
+    "${TARGET_PREFIX}/09-execute-coding-guideline-fix.md",
+    "${TARGET_PREFIX}/10-execute-batched-loop.md",
+    "${TARGET_PREFIX}/11-inventory-pending-tasks.md",
+    "${TARGET_PREFIX}/12-fix-subtask-naming-convention.md",
+    "${TARGET_PREFIX}/13-ci-cd-fix.md",
+    "${TARGET_PREFIX}/14-cicd-run-ps1.md",
+    "${TARGET_PREFIX}/15-commit-fix.md",
+    "${TARGET_PREFIX}/16-commit-fix-v2.md",
+    "${TARGET_PREFIX}/17-clean-artifacts-and-git-history.md",
+    "${TARGET_PREFIX}/18-release.md",
+    "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
+    "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.33.3",
-  "updated": "2026-08-29",
+  "version": "6.34.0",
+  "updated": "2026-08-30",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "e9f86aea101385b93c048136f5103ceedeed1779",
-    "shortSha": "e9f86ae",
+    "sha": "8de4f8658ac051b4287002fa2e97686340bd31b8",
+    "shortSha": "8de4f86",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 711,
-    "totalLines": 151054,
+    "totalFiles": 692,
+    "totalLines": 148772,
     "totalFolders": 23,
-    "totalBytes": 5438947,
+    "totalBytes": 5288422,
     "rootFiles": 6
   },
   "folders": [
@@ -82,8 +82,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 17,
-      "lineCount": 3394,
-      "byteCount": 131885
+      "lineCount": 3411,
+      "byteCount": 133304
     },
     {
       "path": "02-coding-guidelines",
@@ -95,8 +95,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
       "fileCount": 216,
-      "lineCount": 34233,
-      "byteCount": 1073051
+      "lineCount": 34379,
+      "byteCount": 1079156
     },
     {
       "path": "03-error-manage",
@@ -108,8 +108,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 121,
-      "lineCount": 19608,
-      "byteCount": 722433
+      "lineCount": 19687,
+      "byteCount": 726012
     },
     {
       "path": "04-database-conventions",
@@ -121,8 +121,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 9,
-      "lineCount": 2889,
-      "byteCount": 110733
+      "lineCount": 2900,
+      "byteCount": 111494
     },
     {
       "path": "05-split-db-architecture",
@@ -134,8 +134,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 14,
-      "lineCount": 4129,
-      "byteCount": 171773
+      "lineCount": 4140,
+      "byteCount": 172530
     },
     {
       "path": "06-seedable-config-architecture",
@@ -147,8 +147,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 19,
-      "lineCount": 4812,
-      "byteCount": 155569
+      "lineCount": 4823,
+      "byteCount": 156340
     },
     {
       "path": "07-design-system",
@@ -160,8 +160,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "Low",
       "fileCount": 17,
-      "lineCount": 2743,
-      "byteCount": 83820
+      "lineCount": 2754,
+      "byteCount": 84561
     },
     {
       "path": "08-docs-viewer-ui",
@@ -173,8 +173,8 @@
       "aiConfidence": "90%",
       "ambiguity": "10%",
       "fileCount": 14,
-      "lineCount": 2039,
-      "byteCount": 65198
+      "lineCount": 2050,
+      "byteCount": 65941
     },
     {
       "path": "09-code-block-system",
@@ -186,8 +186,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 12,
-      "lineCount": 2135,
-      "byteCount": 61259
+      "lineCount": 2146,
+      "byteCount": 62017
     },
     {
       "path": "10-research",
@@ -199,8 +199,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 2,
-      "lineCount": 123,
-      "byteCount": 3624
+      "lineCount": 134,
+      "byteCount": 4358
     },
     {
       "path": "11-powershell-integration",
@@ -211,22 +211,22 @@
       "status": "Active",
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 13,
-      "lineCount": 2766,
-      "byteCount": 77887
+      "fileCount": 12,
+      "lineCount": 2746,
+      "byteCount": 77014
     },
     {
       "path": "12-cicd-pipeline-workflows",
       "name": "CICD Pipeline Workflows",
       "title": "CI/CD Pipeline Workflows",
-      "version": "3.2.0",
-      "updated": "2026-04-16",
+      "version": "4.1.0",
+      "updated": "2026-08-30",
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 43,
-      "lineCount": 8563,
-      "byteCount": 277106
+      "fileCount": 46,
+      "lineCount": 8544,
+      "byteCount": 275310
     },
     {
       "path": "13-generic-cli",
@@ -238,8 +238,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 23,
-      "lineCount": 4704,
-      "byteCount": 151857
+      "lineCount": 4715,
+      "byteCount": 152641
     },
     {
       "path": "14-update",
@@ -250,9 +250,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 44,
-      "lineCount": 9014,
-      "byteCount": 294865
+      "fileCount": 43,
+      "lineCount": 8938,
+      "byteCount": 291759
     },
     {
       "path": "15-distribution-and-runner",
@@ -264,8 +264,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 7,
-      "lineCount": 898,
-      "byteCount": 35499
+      "lineCount": 909,
+      "byteCount": 36269
     },
     {
       "path": "16-generic-release",
@@ -277,8 +277,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 10,
-      "lineCount": 2147,
-      "byteCount": 67014
+      "lineCount": 2158,
+      "byteCount": 67755
     },
     {
       "path": "17-consolidated-guidelines",
@@ -290,8 +290,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 36,
-      "lineCount": 17107,
-      "byteCount": 620795
+      "lineCount": 17118,
+      "byteCount": 621663
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -302,9 +302,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 31,
-      "lineCount": 17608,
-      "byteCount": 585413
+      "fileCount": 30,
+      "lineCount": 17530,
+      "byteCount": 577971
     },
     {
       "path": "19-main-worker-service",
@@ -315,9 +315,9 @@
       "status": null,
       "aiConfidence": null,
       "ambiguity": null,
-      "fileCount": 53,
-      "lineCount": 10749,
-      "byteCount": 662928
+      "fileCount": 34,
+      "lineCount": 8248,
+      "byteCount": 502442
     },
     {
       "path": "21-app",
@@ -329,8 +329,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 67,
-      "byteCount": 2373
+      "lineCount": 78,
+      "byteCount": 3094
     },
     {
       "path": "22-app-issues",
@@ -342,8 +342,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 61,
-      "byteCount": 2046
+      "lineCount": 72,
+      "byteCount": 2781
     },
     {
       "path": "23-app-db",
@@ -355,8 +355,8 @@
       "aiConfidence": "Draft",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 77,
-      "byteCount": 2375
+      "lineCount": 88,
+      "byteCount": 3102
     },
     {
       "path": "24-app-ui-design-system",
@@ -368,30 +368,30 @@
       "aiConfidence": "Draft",
       "ambiguity": "None",
       "fileCount": 1,
-      "lineCount": 76,
-      "byteCount": 2166
+      "lineCount": 87,
+      "byteCount": 2921
     }
   ],
   "prompts": [
-    "01-unified-ai-prompt-v4.md",
-    "02-next-steps.md",
-    "03-pending-tasks.md",
-    "04-plan-steps.md",
-    "05-read-memory-enhanced.md",
-    "06-write-antigravity.md",
-    "07-write-memory.md",
-    "08-plan-coding-guideline-audit.md",
-    "09-execute-coding-guideline-fix.md",
-    "10-execute-batched-loop.md",
-    "11-inventory-pending-tasks.md",
-    "12-fix-subtask-naming-convention.md",
-    "13-ci-cd-fix.md",
-    "14-cicd-run-ps1.md",
-    "15-commit-fix.md",
-    "16-commit-fix-v2.md",
-    "17-clean-artifacts-and-git-history.md",
-    "18-release.md",
-    "19-plan-spec-steps-v2.md",
-    "20-audit-app-spec.md"
+    "${TARGET_PREFIX}/01-unified-ai-prompt-v4.md",
+    "${TARGET_PREFIX}/02-next-steps.md",
+    "${TARGET_PREFIX}/03-pending-tasks.md",
+    "${TARGET_PREFIX}/04-plan-steps.md",
+    "${TARGET_PREFIX}/05-read-memory-enhanced.md",
+    "${TARGET_PREFIX}/06-write-antigravity.md",
+    "${TARGET_PREFIX}/07-write-memory.md",
+    "${TARGET_PREFIX}/08-plan-coding-guideline-audit.md",
+    "${TARGET_PREFIX}/09-execute-coding-guideline-fix.md",
+    "${TARGET_PREFIX}/10-execute-batched-loop.md",
+    "${TARGET_PREFIX}/11-inventory-pending-tasks.md",
+    "${TARGET_PREFIX}/12-fix-subtask-naming-convention.md",
+    "${TARGET_PREFIX}/13-ci-cd-fix.md",
+    "${TARGET_PREFIX}/14-cicd-run-ps1.md",
+    "${TARGET_PREFIX}/15-commit-fix.md",
+    "${TARGET_PREFIX}/16-commit-fix-v2.md",
+    "${TARGET_PREFIX}/17-clean-artifacts-and-git-history.md",
+    "${TARGET_PREFIX}/18-release.md",
+    "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
+    "${TARGET_PREFIX}/20-audit-app-spec.md"
   ]
 }
