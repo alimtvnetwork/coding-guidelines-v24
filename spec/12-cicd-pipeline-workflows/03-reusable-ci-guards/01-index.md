@@ -107,9 +107,9 @@ All six patterns share these properties — copy them when extending:
 
 ## Cross-References
 
-- [Shared Conventions](../01-shared-conventions.md) — Pinning, triggers, permissions
-- [CI Pipeline (Browser Extension)](../01-browser-extension-deploy/01-ci-pipeline.md)
-- [CI Pipeline (Go Binary)](../02-go-binary-deploy/01-ci-pipeline.md)
+- [Shared Conventions](../03-shared-conventions.md) — Pinning, triggers, permissions
+- [CI Pipeline (Browser Extension)](../01-browser-extension-deploy/02-ci-pipeline.md)
+- [CI Pipeline (Go Binary)](../02-go-binary-deploy/02-ci-pipeline.md)
 - [Coding Guidelines (Cross-Language)](../../02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-index.md)
 
 ---

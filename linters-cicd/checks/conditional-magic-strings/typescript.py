@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-009",
     name="ConditionalMagicStrings",
     short_description="Magic string literals must not be used in conditional (if/else if) comparisons.",
-    help_uri_relative="17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    help_uri_relative="17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
 )
 # Matches `if ` followed by anything with `==` or `!=` or `===` or `!==` and a string literal
 CONDITIONAL_MAGIC_RE = re.compile(r'\bif\s*\([^)]*(?:==|!=|===|!==)\s*[\'"`][^\'"`]+[\'"`]|\bif\s*\([^)]*[\'"`][^\'"`]+[\'"`]\s*(?:==|!=|===|!==)')

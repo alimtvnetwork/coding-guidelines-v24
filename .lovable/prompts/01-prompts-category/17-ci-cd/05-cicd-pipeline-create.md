@@ -28,7 +28,7 @@ N = total self-loop steps budget for end-to-end CI/CD creation and cross-platfor
 12. [ ] /learn Ingest `spec/14-update/` for domain-specific architectural specifications.
 13. [ ] /learn Ingest `spec/15-distribution-and-runner/` for domain-specific architectural specifications.
 14. [ ] /learn Ingest `spec/16-generic-release/` for domain-specific architectural specifications.
-15. [ ] /learn Ingest `spec/17-consolidated-guidelines/15-cicd-pipeline-workflows.md` for domain-specific architectural specifications.
+15. [ ] /learn Ingest `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
@@ -66,25 +66,25 @@ For every specification folder below, AI agents MUST read `index.md` or `00-over
 ### A. CI/CD Pipeline Workflows (`spec/12-cicd-pipeline-workflows/`)
 
 - [ ] Read `00-overview.md` or `index.md`
-- [ ] `01-ci-pipeline.md`: Core CI triggers, matrix builds, artifact passing, and caching contracts.
-- [ ] `01-shared-conventions.md`: Universal environment variables, exit codes, and cross-platform paths.
-- [ ] `02-release-pipeline.md` & `02-github-release-standard.md`: Automated release tagging, checksums, and assets.
-- [ ] `01-browser-extension-deploy/`: (`00-overview.md`, `01-ci-pipeline.md`, `02-release-pipeline.md`, `99-consistency-report.md`).
-- [ ] `02-go-binary-deploy/`: (`00-overview.md`, `01-ci-pipeline.md`, `02-release-pipeline.md`, `03-complete-workflow-reference.md`).
+- [ ] `02-ci-pipeline.md`: Core CI triggers, matrix builds, artifact passing, and caching contracts.
+- [ ] `03-shared-conventions.md`: Universal environment variables, exit codes, and cross-platform paths.
+- [ ] `05-release-pipeline.md` & `04-github-release-standard.md`: Automated release tagging, checksums, and assets.
+- [ ] `01-browser-extension-deploy/`: (`00-overview.md`, `02-ci-pipeline.md`, `05-release-pipeline.md`, `99-consistency-report.md`).
+- [ ] `02-go-binary-deploy/`: (`00-overview.md`, `02-ci-pipeline.md`, `05-release-pipeline.md`, `03-complete-workflow-reference.md`).
 - [ ] `03-reusable-ci-guards/`: (`00-overview.md`, `01-forbidden-name-guard.md`, `02-grandfather-baseline-naming.md`, `03-cross-file-collision-audit.md`, `04-baseline-diff-lint-gate.md`, `05-actionable-lint-suggestions.md`, `06-matrix-test-aggregator.md`, `07-shared-cli-wrapper.md`, `08-config-schema.md`, `09-workflow-templates.md`, `99-ai-implementation-guide.md`).
-- [ ] `03-vulnerability-scanning.md`: Trivy, Snyk, and dependency vulnerability audits.
-- [ ] `04-install-script-generation.md` & `04-installation-flow.md`: Cross-platform installer generation.
-- [ ] `05-changelog-integration.md` & `07-release-body-and-changelog.md`: Automated changelog parsing and notes.
-- [ ] `05-code-signing.md`: Binary signing for Windows (`signtool`/`osslsigncode`) and macOS (`codesign`).
-- [ ] `06-self-update-mechanism.md` & `06-version-and-help.md`: Self-update validation in CI.
-- [ ] `07-environment-variable-setup.md`: Secure secret injection and default environment fallbacks.
-- [ ] `08-terminal-output-standards.md`: Clean, color-coded ANSI logging without clutter.
-- [ ] `09-binary-icon-branding.md`: Resource embedding (`rsrc`, `windres`) in CI build steps.
-- [ ] `10-release-pipeline-issues-rca.md`: 4-part RCA logging for failed release stages.
-- [ ] `11-blue-green-deployment.md`: Zero-downtime deployment pipelines.
-- [ ] `12-flaky-test-quarantine.md`: Quarantine strategies and automatic retry bounds.
-- [ ] `13-contract-testing.md`: API schema validation and contract tests.
-- [ ] `14-e2e-testing-pattern.md`: End-to-end integration and browser automated test flows.
+- [ ] `06-vulnerability-scanning.md`: Trivy, Snyk, and dependency vulnerability audits.
+- [ ] `07-install-script-generation.md` & `08-installation-flow.md`: Cross-platform installer generation.
+- [ ] `09-changelog-integration.md` & `14-release-body-and-changelog.md`: Automated changelog parsing and notes.
+- [ ] `10-code-signing.md`: Binary signing for Windows (`signtool`/`osslsigncode`) and macOS (`codesign`).
+- [ ] `11-self-update-mechanism.md` & `12-version-and-help.md`: Self-update validation in CI.
+- [ ] `13-environment-variable-setup.md`: Secure secret injection and default environment fallbacks.
+- [ ] `15-terminal-output-standards.md`: Clean, color-coded ANSI logging without clutter.
+- [ ] `16-binary-icon-branding.md`: Resource embedding (`rsrc`, `windres`) in CI build steps.
+- [ ] `17-release-pipeline-issues-rca.md`: 4-part RCA logging for failed release stages.
+- [ ] `18-blue-green-deployment.md`: Zero-downtime deployment pipelines.
+- [ ] `19-flaky-test-quarantine.md`: Quarantine strategies and automatic retry bounds.
+- [ ] `20-contract-testing.md`: API schema validation and contract tests.
+- [ ] `21-e2e-testing-pattern.md`: End-to-end integration and browser automated test flows.
 
 ### B. Coding Guidelines CI/CD Integration (`spec/02-coding-guidelines/06-cicd-integration/`)
 
@@ -99,12 +99,12 @@ For every specification folder below, AI agents MUST read `index.md` or `00-over
 
 ### C. Cross-Platform Automation & Update Architecture
 
-- [ ] `spec/11-powershell-integration/`: (`00-overview.md`, `01-configuration-schema.md`, `02-script-reference.md`, `03-integration-guide.md`, `04-error-codes.md`).
+- [ ] `spec/11-powershell-integration/`: (`00-overview.md`, `02-configuration-schema.md`, `04-script-reference.md`, `05-integration-guide.md`, `06-error-codes.md`).
 - [ ] `spec/13-generic-cli/`: (`11-build-deploy.md`, `12-testing.md`, `18-batch-execution.md`, `20-terminal-output-design.md`, `22-self-update-gold-standard.md`).
-- [ ] `spec/14-update/`: (`04-build-scripts.md`, `16-cross-compilation.md`, `17-release-pipeline.md`, `18-install-scripts.md`, `24-update-check-mechanism/`).
-- [ ] `spec/15-distribution-and-runner/`: (`01-install-contract.md`, `02-runner-contract.md`, `03-release-pipeline.md`, `04-install-config.md`).
-- [ ] `spec/16-generic-release/`: (`01-cross-compilation.md`, `02-release-pipeline.md`, `03-install-scripts.md`, `04-checksums-verification.md`, `05-release-assets.md`, `08-version-pinned-release-installers.md`).
-- [ ] `spec/17-consolidated-guidelines/15-cicd-pipeline-workflows.md`: Master consolidated CI/CD reference.
+- [ ] `spec/14-update/`: (`05-build-scripts.md`, `17-cross-compilation.md`, `18-release-pipeline.md`, `19-install-scripts.md`, `24-update-check-mechanism/`).
+- [ ] `spec/15-distribution-and-runner/`: (`02-install-contract.md`, `03-runner-contract.md`, `04-release-pipeline.md`, `05-install-config.md`).
+- [ ] `spec/16-generic-release/`: (`02-cross-compilation.md`, `05-release-pipeline.md`, `04-install-scripts.md`, `05-checksums-verification.md`, `06-release-assets.md`, `09-version-pinned-release-installers.md`).
+- [ ] `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md`: Master consolidated CI/CD reference.
 
 ---
 

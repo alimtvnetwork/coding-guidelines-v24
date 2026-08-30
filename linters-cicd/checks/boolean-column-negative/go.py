@@ -26,7 +26,7 @@ Snake-case column names like ``is_not_active`` are normalized to
 PascalCase before matching so both naming styles are caught.
 
 Spec:
-- spec/04-database-conventions/01-naming-conventions.md  Rules 2, 8 & 9
+- spec/04-database-conventions/03-naming-conventions.md  Rules 2, 8 & 9
 - linters-cicd/checks/_lib/boolean_naming.py             (shared library)
 """
 
@@ -56,7 +56,7 @@ RULE = Rule(
         "embedded SQL string literals. Suspect Cannot*/Dis*/Un* "
         "roots are flagged as warnings."
     ),
-    help_uri_relative="../04-database-conventions/01-naming-conventions.md",
+    help_uri_relative="../04-database-conventions/02-naming-conventions.md",
 )
 
 EXTENSIONS = [".go"]

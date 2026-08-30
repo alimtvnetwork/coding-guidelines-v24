@@ -10,7 +10,7 @@ Implementation does not begin until Phase 2.
 - [x] `02-edge-cases.md`
 - [x] `03-acceptance-criteria.md`
 - [x] `04-examples.md`
-- [x] `plan.md` (this file)
+- [x] `29-plan.md` (this file)
 - [x] Open questions resolved (auth backend, default, runner, confirm).
 
 Outputs are documents only. No source code touched yet.

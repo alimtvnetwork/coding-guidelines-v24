@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-012",
     name="BooleanReturnWrapper",
     short_description="Do not return raw booleans in multi-return signatures; use a wrapper struct.",
-    help_uri_relative="17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    help_uri_relative="17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
 )
 # Matches `func Name(...) (..., bool, ...)` or `func Name(...) (bool, ...)`
 FUNC_MULTI_RET_BOOL_RE = re.compile(r"func\s+(?:[A-Za-z0-9_]+\s*)?(?:\([^)]*\)\s*)?[A-Za-z0-9_]+\s*\([^)]*\)\s*\([^)]*?(?:,[^)]*\bbool\b|\bbool\b[^)]*,)[^)]*?\)\s*\{")

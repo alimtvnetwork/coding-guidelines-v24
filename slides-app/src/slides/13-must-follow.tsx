@@ -5,7 +5,7 @@ import { ActionPanel } from "@/components/ActionPanel";
  * SS-02 task 16: "Must Follow" opener slide.
  *
  * Distills the 5 non-negotiables from
- * `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`
+ * `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
  * §"Must Follow and without negotiation" into a slide-friendly checklist.
  * Uses <ActionPanel> so the SS-02 SRA structural validator passes.
  */

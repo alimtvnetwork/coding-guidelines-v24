@@ -7,7 +7,7 @@
 # verify the sub-command dispatch table, not the full git-pull build,
 # which requires a clean checkout and network).
 #
-# Spec: spec/15-distribution-and-runner/02-runner-contract.md
+# Spec: spec/15-distribution-and-runner/03-runner-contract.md
 # =====================================================================
 set -uo pipefail
 

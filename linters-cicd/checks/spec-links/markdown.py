@@ -38,7 +38,7 @@ RULE = Rule(
         "existing file; anchored links must point at a heading that "
         "exists in the target file. External links are out of scope."
     ),
-    help_uri_relative="../04-database-conventions/01-naming-conventions.md",
+    help_uri_relative="../04-database-conventions/02-naming-conventions.md",
 )
 
 

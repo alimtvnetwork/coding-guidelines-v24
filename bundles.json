@@ -110,8 +110,8 @@
       "audience": "trainer",
       "folders": [
         {
-          "src": "spec-slides",
-          "dest": "spec-slides"
+          "src": "spec-coding-guideline",
+          "dest": "spec-coding-guideline"
         },
         {
           "src": "slides-app",

@@ -10,19 +10,19 @@
 | # | File | Present | Naming |
 |---|------|---------|--------|
 | 00 | 01-index.md | ✅ | ✅ |
-| 01 | 01-design-principles.md | ✅ | ✅ |
-| 02 | 02-theme-variable-architecture.md | ✅ | ✅ |
-| 03 | 03-typography.md | ✅ | ✅ |
-| 04 | 04-spacing-layout.md | ✅ | ✅ |
-| 05 | 05-borders-shapes.md | ✅ | ✅ |
-| 06 | 06-motion-transitions.md | ✅ | ✅ |
-| 07 | 07-code-blocks.md | ✅ | ✅ |
-| 08 | 08-header-navigation.md | ✅ | ✅ |
-| 09 | 09-button-system.md | ✅ | ✅ |
-| 10 | 10-sidebar-system.md | ✅ | ✅ |
-| 11 | 11-section-patterns.md | ✅ | ✅ |
-| 12 | 12-page-creation-rules.md | ✅ | ✅ |
-| 13 | 13-wordpress-migration.md | ✅ | ✅ |
+| 01 | 02-design-principles.md | ✅ | ✅ |
+| 02 | 03-theme-variable-architecture.md | ✅ | ✅ |
+| 03 | 04-typography.md | ✅ | ✅ |
+| 04 | 05-spacing-layout.md | ✅ | ✅ |
+| 05 | 06-borders-shapes.md | ✅ | ✅ |
+| 06 | 08-motion-transitions.md | ✅ | ✅ |
+| 07 | 09-code-blocks.md | ✅ | ✅ |
+| 08 | 10-header-navigation.md | ✅ | ✅ |
+| 09 | 11-button-system.md | ✅ | ✅ |
+| 10 | 12-sidebar-system.md | ✅ | ✅ |
+| 11 | 13-section-patterns.md | ✅ | ✅ |
+| 12 | 14-page-creation-rules.md | ✅ | ✅ |
+| 13 | 15-wordpress-migration.md | ✅ | ✅ |
 | 97 | 97-acceptance-criteria.md | ✅ | ✅ |
 | 99 | 99-consistency-report.md | ✅ | ✅ |
 
@@ -65,9 +65,9 @@
 
 | Item | Location | Status |
 |------|----------|--------|
-| WordPress migration approach | `13-wordpress-migration.md` | Documented as undecided |
-| Multi-theme preset support | `02-theme-variable-architecture.md` | Single base theme; presets deferred |
-| Reference site identification | `11-section-patterns.md` | Patterns documented from observed behavior |
+| WordPress migration approach | `15-wordpress-migration.md` | Documented as undecided |
+| Multi-theme preset support | `03-theme-variable-architecture.md` | Single base theme; presets deferred |
+| Reference site identification | `13-section-patterns.md` | Patterns documented from observed behavior |
 
 ---
 

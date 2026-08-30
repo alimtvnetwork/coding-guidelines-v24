@@ -44,7 +44,7 @@ TypeScript-specific coding standards, enum definitions, and type safety enforcem
 | 04 | [04-export-status-enum.md](./04-export-status-enum.md) | Enum | Export status enum definition |
 | 05 | [05-http-method-enum.md](./05-http-method-enum.md) | Enum | HTTP method enum definition |
 | 06 | [06-message-status-enum.md](./06-message-status-enum.md) | Enum | Message status enum definition |
-| 07 | [07-type-safety-remediation-plan.md](./07-type-safety-remediation-plan.md) | Plan | Type safety remediation plan (v2.0.0) — eliminates `any`, `unknown`, string unions |
+| 07 | [07-type-safety-remediation-29-plan.md](./07-type-safety-remediation-29-plan.md) | Plan | Type safety remediation plan (v2.0.0) — eliminates `any`, `unknown`, string unions |
 | 08 | [08-typescript-standards-reference.md](./08-typescript-standards-reference.md) | Reference | Comprehensive TypeScript standards reference |
 | 09 | [09-promise-await-patterns.md](./09-promise-await-patterns.md) | Patterns | Promise/await patterns and async conventions |
 | 10 | [10-log-level-enum.md](./10-log-level-enum.md) | Enum | Log level enum definition (Debug, Info, Warn, Error, Fatal) |

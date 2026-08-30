@@ -10,8 +10,8 @@
 | # | File | Status |
 |---|------|--------|
 | 1 | `01-index.md` | ✅ Present |
-| 2 | `01-ci-pipeline.md` | ✅ Present |
-| 3 | `02-release-pipeline.md` | ✅ Present |
+| 2 | `02-ci-pipeline.md` | ✅ Present |
+| 3 | `05-release-pipeline.md` | ✅ Present |
 
 **Total:** 3 files (excluding this report)
 
@@ -19,9 +19,9 @@
 
 ## Cross-Reference Integrity
 
-- [x] Overview links to shared conventions (`../01-shared-conventions.md`)
+- [x] Overview links to shared conventions (`../03-shared-conventions.md`)
 - [x] Aware of root-level files (01-08) for cross-referencing
-- [x] Release pipeline references `../02-github-release-standard.md`
+- [x] Release pipeline references `../04-github-release-standard.md`
 
 ---
 

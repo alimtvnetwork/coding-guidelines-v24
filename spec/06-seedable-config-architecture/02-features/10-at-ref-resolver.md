@@ -4,14 +4,14 @@
 **Version:** 1.0.0
 **Created:** 2026-05-04
 **Status:** Authoritative
-**Resolves:** FU-13 from `spec/19-main-worker-service/14-rbac-and-status-seed.md` §3.1.
+**Resolves:** FU-13 from `spec/19-main-worker-service/15-rbac-and-status-seed.md` §3.1.
 **Authority:** Canonical algorithm + diagnostics for the seeder feature that translates `@<Table>.<Code>` strings to AUTOINCREMENT integer ids at apply time. On any conflict with `07-reference-table-seeding.md`, **`07-…` wins** (this file is its mechanical extension).
 
 ---
 
 ## 1. Why this file exists
 
-`14-rbac-and-status-seed.md` §3.1 introduced `@Role.PowerAdmin` syntax for cross-table foreign-key resolution at seed time. Without an authoritative resolver spec, every implementer would write a different parser. This file pins the parsing rules, the lookup algorithm, the failure modes, and the trace output.
+`15-rbac-and-status-seed.md` §3.1 introduced `@Role.PowerAdmin` syntax for cross-table foreign-key resolution at seed time. Without an authoritative resolver spec, every implementer would write a different parser. This file pins the parsing rules, the lookup algorithm, the failure modes, and the trace output.
 
 ---
 
@@ -69,7 +69,7 @@ lookupCodeColumn(T):
 
 This means every table referenceable via `@-ref` MUST expose a `<TableName>Code TEXT NOT NULL UNIQUE` column. Convention is enforced — there is no override.
 
-Tables in scope today (from `spec/19/14-rbac-and-status-seed.md` §2):
+Tables in scope today (from `spec/19/15-rbac-and-status-seed.md` §2):
 
 | Table | Code column | Sample value |
 |-------|-------------|--------------|
@@ -140,7 +140,7 @@ Trace lines are stable contract for downstream log parsers — DO NOT alter the 
 
 ## 8. Worked example
 
-Input row from `spec/19/14-rbac-and-status-seed.md` §3 `RolePageAccess`:
+Input row from `spec/19/15-rbac-and-status-seed.md` §3 `RolePageAccess`:
 
 ```jsonc
 { "RoleId": "@Role.PowerAdmin", "EnumPageCode": "DashboardPage" }
@@ -221,8 +221,8 @@ Total: 4 functions, 22 lines combined. All inputs are validated; no error swallo
 - `spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md` — feature this resolver completes.
 - `spec/06-seedable-config-architecture/02-features/08-config-schema-tables-block.md` — JSON-Schema rejects malformed `@-refs` at lint time.
 - `spec/06-seedable-config-architecture/02-features/09-config-seed-1.3.0-bump.md` — first seed file that uses `@-refs` (`RolePageAccess`).
-- `spec/19-main-worker-service/13-error-codes.md` §2.1 + §2.6 — MWS codes raised by failures.
-- `spec/19-main-worker-service/14-rbac-and-status-seed.md` §3.1 — original syntax declaration.
+- `spec/19-main-worker-service/14-error-codes.md` §2.1 + §2.6 — MWS codes raised by failures.
+- `spec/19-main-worker-service/15-rbac-and-status-seed.md` §3.1 — original syntax declaration.
 
 ---
 

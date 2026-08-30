@@ -25,7 +25,7 @@ Shipped in v5.50.0 - v5.55.0 across prior sessions:
 Remaining: 57 tasks (infra 1-7, 9-14; content 16-62; build 67).
 Created: 2026-07-19
 
-Ordered backlog to evolve `slides-app/` into the canonical teaching surface for the compiled simple coding guideline (`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` v1.4.0). Every slide follows the Symptom → Rule → Action pattern already used by `ActionPanel`.
+Ordered backlog to evolve `slides-app/` into the canonical teaching surface for the compiled simple coding guideline (`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` v1.4.0). Every slide follows the Symptom → Rule → Action pattern already used by `ActionPanel`.
 
 Legend: [INFRA] deck framework, [CONTENT] new slide, [A11Y] accessibility, [BUILD] build/release, [TEST] verification.
 

@@ -27,4 +27,4 @@ _No content yet. Add database design documents as numbered files within this fol
 | Reference | Location |
 |-----------|----------|
 | Coding Guidelines Overview | [../01-index.md](../01-index.md) |
-| Consolidated Database Conventions | [../../17-consolidated-guidelines/18-database-conventions.md](../../17-consolidated-guidelines/18-database-conventions.md) |
+| Consolidated Database Conventions | [../../17-consolidated-guidelines/21-database-conventions.md](../../17-consolidated-guidelines/21-database-conventions.md) |

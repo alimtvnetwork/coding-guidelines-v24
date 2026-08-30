@@ -6,7 +6,7 @@
 > **Companion specs:**
 >
 > - `25-release-pinned-installer.md` (release-pinned variant details)
-> - `24-update-check-mechanism/01-fundamentals.md` (V → V+N parallel discovery)
+> - `24-update-check-mechanism/02-fundamentals.md` (V → V+N parallel discovery)
 > - `26-repo-major-version-migrator.md` (cross-major repo migration)
 
 ---
@@ -179,7 +179,7 @@ installer proceeds to main-branch fallback.
 1. Parse current `{N}` from the repo name.
 2. Build candidate names for `{N+1}` through `{N+LOOKAHEAD}`.
    - **Default `LOOKAHEAD = 20`** (per user requirement; was 5 in the
-     older `24-update-check-mechanism/01-fundamentals.md`). New
+     older `24-update-check-mechanism/02-fundamentals.md`). New
      installers MUST adopt `LOOKAHEAD = 20`. Installers explicitly
      tagged `legacy` in their manifest MAY retain `LOOKAHEAD = 5`;
      all other implementations MUST use 20.

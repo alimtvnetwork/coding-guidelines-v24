@@ -7,7 +7,7 @@
 
 ## Overview
 
-Testing conventions for Rust projects. Follows the cross-language [Test Naming and Structure](../01-cross-language/14-test-naming-and-structure.md) guidelines adapted for Rust's built-in test framework.
+Testing conventions for Rust projects. Follows the cross-language [Test Naming and Structure](../01-cross-language/14-test-naming-and-03-structure.md) guidelines adapted for Rust's built-in test framework.
 
 ---
 
@@ -240,5 +240,5 @@ impl ScreenCapture for MockScreenCapture {
 
 | Reference | Location |
 |-----------|----------|
-| Cross-Language Test Standards | `../01-cross-language/14-test-naming-and-structure.md` |
+| Cross-Language Test Standards | `../01-cross-language/14-test-naming-and-03-structure.md` |
 | Error Handling (testing error paths) | `./02-error-handling.md` |

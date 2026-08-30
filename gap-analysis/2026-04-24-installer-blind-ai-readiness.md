@@ -15,8 +15,8 @@
 > **Scope reviewed:**
 >
 > - `spec/14-update/27-generic-installer-behavior.md` (canonical)
-> - `spec/15-distribution-and-runner/01-install-contract.md`
-> - `spec/12-cicd-pipeline-workflows/04-install-script-generation.md`
+> - `spec/15-distribution-and-runner/02-install-contract.md`
+> - `spec/12-cicd-pipeline-workflows/07-install-script-generation.md`
 > - Reference implementations: `linters-cicd/install.sh`, `linters-cicd/install.ps1`
 > - Public documentation: `linters-cicd/readme.md`
 
@@ -50,7 +50,7 @@ certainly guess differently than the shipped script.
 
 | Source | What it says |
 |---|---|
-| `spec/15-distribution-and-runner/01-install-contract.md` §"What gets installed (default)" | Installs **four folders** (`spec/`, `linters/`, `linter-scripts/`, `linters-cicd/`) into the **current working directory**. |
+| `spec/15-distribution-and-runner/02-install-contract.md` §"What gets installed (default)" | Installs **four folders** (`spec/`, `linters/`, `linter-scripts/`, `linters-cicd/`) into the **current working directory**. |
 | `linters-cicd/install.sh` & `install.ps1` | Installs **only `linters-cicd/`** (one folder), default destination `./linters-cicd`. |
 | `spec/14-update/27-generic-installer-behavior.md` | Silent on what gets installed — only describes *how* it's fetched. |
 
@@ -269,7 +269,7 @@ questions — exactly what the user wants to avoid.
 
 Either:
 
-- **(a)** Mark `spec/15-distribution-and-runner/01-install-contract.md`
+- **(a)** Mark `spec/15-distribution-and-runner/02-install-contract.md`
   as describing a *different* installer (e.g. a future
   `bootstrap.sh`), and explicitly state that
   `linters-cicd/install.{sh,ps1}` follow spec 27, **or**

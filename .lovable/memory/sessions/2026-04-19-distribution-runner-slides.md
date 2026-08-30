@@ -28,10 +28,10 @@ Investigation revealed **most of this was already built**:
 | File | Purpose |
 |------|---------|
 | `00-overview.md` | Distributable artifact catalog + sub-command surface + default install layout |
-| `01-install-contract.md` | Exact behavior of `install.sh` / `install.ps1` (versioning, merge semantics, listings, exit codes, anti-requirements) |
-| `02-runner-contract.md` | Sub-command surface of root `run.sh` / `run.ps1` (`lint`/`slides`/`help`), argument-parsing rules |
-| `03-release-pipeline.md` | Required GitHub Release artifacts, job order, build-once rule, pre-release detection |
-| `04-install-config.md` | Schema + authoritative default for `install-config.json`, override precedence, anti-requirements |
+| `02-install-contract.md` | Exact behavior of `install.sh` / `install.ps1` (versioning, merge semantics, listings, exit codes, anti-requirements) |
+| `03-runner-contract.md` | Sub-command surface of root `run.sh` / `run.ps1` (`lint`/`slides`/`help`), argument-parsing rules |
+| `04-release-pipeline.md` | Required GitHub Release artifacts, job order, build-once rule, pre-release detection |
+| `05-install-config.md` | Schema + authoritative default for `install-config.json`, override precedence, anti-requirements |
 
 All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 
@@ -64,10 +64,10 @@ All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 ### Created (specs)
 
 - `spec/15-distribution-and-runner/00-overview.md`
-- `spec/15-distribution-and-runner/01-install-contract.md`
-- `spec/15-distribution-and-runner/02-runner-contract.md`
-- `spec/15-distribution-and-runner/03-release-pipeline.md`
-- `spec/15-distribution-and-runner/04-install-config.md`
+- `spec/15-distribution-and-runner/02-install-contract.md`
+- `spec/15-distribution-and-runner/03-runner-contract.md`
+- `spec/15-distribution-and-runner/04-release-pipeline.md`
+- `spec/15-distribution-and-runner/05-install-config.md`
 
 ### Created (memory)
 
@@ -79,7 +79,7 @@ All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 - `run.ps1` — full rewrite with sub-command dispatch
 - `run.sh` — full rewrite with sub-command dispatch
 - `src/data/specTree.json` — regenerated
-- `.lovable/plan.md` — added rows 37–41
+- `.lovable/29-plan.md` — added rows 37–41
 
 ### Deleted
 

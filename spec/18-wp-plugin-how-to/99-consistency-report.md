@@ -12,32 +12,32 @@ All 22 phases + 4 subfiles + 2 meta files verified against `readme.md` index.
 
 | # | File | Exists | Indexed in readme.md |
 |---|------|--------|---------------------|
-| 00 | `00-quick-start.md` | ✅ | ✅ |
-| 01 | `01-foundation-and-architecture.md` | ✅ | ✅ |
+| 00 | `02-quick-start.md` | ✅ | ✅ |
+| 01 | `03-foundation-and-architecture.md` | ✅ | ✅ |
 | 02 | `02-enums-and-coding-style/01-index.md` | ✅ | ✅ |
 | 02.1 | `02-enums-and-coding-style/01-enum-architecture.md` | ✅ | ✅ |
 | 02.2 | `02-enums-and-coding-style/02-enum-metadata-pattern.md` | ✅ | ✅ |
 | 02.3 | `02-enums-and-coding-style/03-self-update-status-enum.md` | ✅ | ✅ |
 | 02.4 | `02-enums-and-coding-style/04-action-type-enum.md` | ✅ | ✅ |
-| 03 | `03-traits-and-composition.md` | ✅ | ✅ |
-| 04 | `04-logging-and-error-handling.md` | ✅ | ✅ |
-| 05 | `05-helpers-responses-and-integration.md` | ✅ | ✅ |
-| 06 | `06-input-validation-patterns.md` | ✅ | ✅ |
-| 07 | `07-reference-implementations.md` | ✅ | ✅ |
-| 08 | `08-wordpress-integration-patterns.md` | ✅ | ✅ |
-| 09 | `09-testing-patterns.md` | ✅ | ✅ |
-| 10 | `10-deployment-patterns.md` | ✅ | ✅ |
-| 11 | `11-frontend-and-template-patterns.md` | ✅ | ✅ |
-| 12 | `12-design-system.md` | ✅ | ✅ |
-| 13 | `13-admin-ui-patterns.md` | ✅ | ✅ |
-| 14 | `14-rest-api-conventions.md` | ✅ | ✅ |
-| 15 | `15-settings-architecture.md` | ✅ | ✅ |
-| 16 | `16-error-handling-extraction.md` | ✅ | ✅ |
-| 17 | `17-data-file-patterns.md` | ✅ | ✅ |
-| 18 | `18-frontend-javascript-patterns.md` | ✅ | ✅ |
-| 19 | `19-micro-orm-and-root-db.md` | ✅ | ✅ |
-| 20 | `20-end-to-end-walkthrough.md` | ✅ | ✅ |
-| 21 | `21-ping-endpoint.md` | ✅ | ✅ |
+| 03 | `04-traits-and-composition.md` | ✅ | ✅ |
+| 04 | `05-logging-and-error-handling.md` | ✅ | ✅ |
+| 05 | `06-helpers-responses-and-integration.md` | ✅ | ✅ |
+| 06 | `07-input-validation-patterns.md` | ✅ | ✅ |
+| 07 | `08-reference-implementations.md` | ✅ | ✅ |
+| 08 | `09-wordpress-integration-patterns.md` | ✅ | ✅ |
+| 09 | `10-testing-patterns.md` | ✅ | ✅ |
+| 10 | `11-deployment-patterns.md` | ✅ | ✅ |
+| 11 | `12-frontend-and-template-patterns.md` | ✅ | ✅ |
+| 12 | `13-design-system.md` | ✅ | ✅ |
+| 13 | `14-admin-ui-patterns.md` | ✅ | ✅ |
+| 14 | `15-rest-api-conventions.md` | ✅ | ✅ |
+| 15 | `16-settings-architecture.md` | ✅ | ✅ |
+| 16 | `17-error-handling-extraction.md` | ✅ | ✅ |
+| 17 | `18-data-file-patterns.md` | ✅ | ✅ |
+| 18 | `19-frontend-javascript-patterns.md` | ✅ | ✅ |
+| 19 | `20-micro-orm-and-root-db.md` | ✅ | ✅ |
+| 20 | `21-end-to-end-walkthrough.md` | ✅ | ✅ |
+| 21 | `22-ping-endpoint.md` | ✅ | ✅ |
 | — | `readme.md` | ✅ | N/A (is the index) |
 | — | `changelog.md` | ✅ | ✅ (referenced) |
 | — | `.ai-instructions` | ✅ | N/A (meta) |
@@ -53,7 +53,7 @@ All 22 phases + 4 subfiles + 2 meta files verified against `readme.md` index.
 | Location | Reference | Issue | Fix |
 |----------|-----------|-------|-----|
 | `readme.md:84` | `changelog.md` | File is `changelog.md` (lowercase) | Change to `changelog.md` |
-| `10-deployment-patterns.md:38,54,785,977` | `changelog.md` | Same casing mismatch | Change to `changelog.md` or document as convention name |
+| `11-deployment-patterns.md:38,54,785,977` | `changelog.md` | Same casing mismatch | Change to `changelog.md` or document as convention name |
 
 **Impact:** Medium — links break on case-sensitive filesystems (Linux, CI).
 
@@ -61,7 +61,7 @@ All 22 phases + 4 subfiles + 2 meta files verified against `readme.md` index.
 
 | Location | Reference | Issue |
 |----------|-----------|-------|
-| `01-foundation-and-architecture.md:5` | `../01-app/formatting-rules-reference.md` | Target does not exist anywhere in spec/ |
+| `03-foundation-and-architecture.md:5` | `../01-app/formatting-rules-reference.md` | Target does not exist anywhere in spec/ |
 | `02-enums-and-coding-style/01-enum-architecture.md:4` | `../../01-app/formatting-rules-reference.md` | Same — no `01-app/` folder exists |
 | `02-enums-and-coding-style/01-enum-architecture.md:208` | `../../01-app/formatting-rules-reference.md` | Same |
 
@@ -102,7 +102,7 @@ All 22 phases + 4 subfiles + 2 meta files verified against `readme.md` index.
 |---|--------|-------|
 | 1 | Fix `changelog.md` → `changelog.md` in `readme.md:84` | `readme.md` |
 | 2 | Fix `../../06-golang-standards/` → `../../02-coding-guidelines/03-golang/` in 2 files | `02-enums-and-coding-style/01-index.md`, `02-enums-and-coding-style/02-enum-metadata-pattern.md` |
-| 3 | Remove or redirect `formatting-rules-reference.md` refs → point to `spec/02-coding-guidelines/01-cross-language/04-code-style/01-index.md` | `01-foundation-and-architecture.md`, `02-enums-and-coding-style/01-enum-architecture.md` |
+| 3 | Remove or redirect `formatting-rules-reference.md` refs → point to `spec/02-coding-guidelines/01-cross-language/04-code-style/01-index.md` | `03-foundation-and-architecture.md`, `02-enums-and-coding-style/01-enum-architecture.md` |
 
 ### P1 — Create Missing File or Remove Refs
 

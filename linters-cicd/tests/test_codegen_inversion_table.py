@@ -3,7 +3,7 @@
 
 Asserts the contract documented in
 ``linters-cicd/codegen/inversion_table.py`` and
-``spec/04-database-conventions/01-naming-conventions.md`` (Rule 9):
+``spec/04-database-conventions/03-naming-conventions.md`` (Rule 9):
 
 1.  **Bijection on the explicit table** — every (positive, negative)
     pair in ``_FORWARD`` must satisfy ``invert(invert(x)) == x`` in

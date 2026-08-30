@@ -63,7 +63,7 @@ Root index for the entire specification tree. Each top-level folder contains a d
 
 | Reference | Location |
 |-----------|----------|
-| Folder Structure (canonical) | `./01-spec-authoring-guide/01-folder-structure.md` |
+| Folder Structure (canonical) | `./01-spec-authoring-guide/02-folder-structure.md` |
 | Spec Authoring Guide | `./01-spec-authoring-guide/01-index.md` |
 | Coding Guidelines | `./02-coding-guidelines/01-index.md` |
 | Error Management | `./03-error-manage/01-index.md` |

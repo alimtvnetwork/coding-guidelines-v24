@@ -4,11 +4,11 @@ Version: 1.5.0
 
 This is a standalone file. Follow every rule below without consulting any other document. If a `spec/02-coding-guidelines/` folder, a `spec/xx-coding-guidelines.md` file, or a `spec/03-error-manage/` folder exists in this repository, treat those as strictly binding extensions to this file, but this file alone is enough to write compliant code. The `error-manage` rules must be tightly followed.
 
-**Before reading the rules below**, read the [AI Instruction Manual & Overview](./00-ai-review-overview.md) to understand how to review code, interpret files, and maintain repository hygiene (e.g. updating `.gitignore`).
+**Before reading the rules below**, read the [AI Instruction Manual & Overview](./02-ai-review-overview.md) to understand how to review code, interpret files, and maintain repository hygiene (e.g. updating `.gitignore`).
 
 Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
 
-1. `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` (source of truth).
+1. `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (source of truth).
 2. `.lovable/coding-guidelines/coding-guidelines.md` (mirror for Lovable agent search).
 3. `.cursorrules` (mirror for Cursor and other IDE agents).
 
@@ -34,7 +34,7 @@ When auditing, refactoring, or authoring code, AI agents MUST cross-reference th
 
 ### Cross-Language Foundations (`spec/02-coding-guidelines/01-cross-language/`)
 
-- [ ] `00-canonical-size-tier.md`: Standard file size under 100 coding lines (recommended 80 lines or fewer, max 200–300 lines), function size under 15 lines (preferred 8 lines or fewer).
+- [ ] `02-canonical-size-tier.md`: Standard file size under 100 coding lines (recommended 80 lines or fewer, max 200–300 lines), function size under 15 lines (preferred 8 lines or fewer).
 - [ ] `01-cross-language/02-boolean-principles.md` & `02-boolean-principles/`: Implicit positive booleans, zero explicit `true` or `false` checks, no mixed polarity (`isA && !isB` banned).
 - [ ] `01-cross-language/04-code-style/01-braces-and-nesting.md`: Zero nested if statements, invert conditions into early return guard clauses, cyclomatic complexity 5 or less.
 - [ ] `01-cross-language/04-code-style/03-blank-lines-and-spacing.md` & `21-newline-styling-examples.md`: Rule R13–R20 return new line and brace spacing rules.
@@ -44,7 +44,7 @@ When auditing, refactoring, or authoring code, AI agents MUST cross-reference th
 - [ ] `01-cross-language/10-function-naming.md` & `11-key-naming-pascalcase.md`: PascalCase identifiers and PascalCase abbreviation casing (`Id`, `Url`, `Api`).
 - [ ] `01-cross-language/12-no-negatives.md`: Strict prohibition against negative booleans and inverted logic.
 - [ ] `01-cross-language/13-strict-typing.md`: Narrow types only, zero `any`, `unknown`, or `interface{}`.
-- [ ] `01-cross-language/14-test-naming-and-structure.md`: Semantic 3-part test naming `TestUnit_Scenario_Outcome`.
+- [ ] `01-cross-language/14-test-naming-and-03-structure.md`: Semantic 3-part test naming `TestUnit_Scenario_Outcome`.
 - [ ] `01-cross-language/15-master-coding-guidelines/`: Chapters 01 through 07 for comprehensive patterns.
 - [ ] `01-cross-language/16-static-analysis/`: Quality gates for Go (`golangci-lint`), PHP (`phpcs`/`phpstan`), C# (`StyleCop`), Rust (`clippy`), Node (`eslint`).
 - [ ] `01-cross-language/23-solid-principles.md`: Single Responsibility and Interface Segregation.

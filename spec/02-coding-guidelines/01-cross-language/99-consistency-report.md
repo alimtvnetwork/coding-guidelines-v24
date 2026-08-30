@@ -24,7 +24,7 @@
 | 12 | `11-key-naming-pascalcase.md` | ✅ Present |
 | 13 | `12-no-negatives.md` | ✅ Present |
 | 14 | `13-strict-typing.md` | ✅ Present |
-| 15 | `14-test-naming-and-structure.md` | ✅ Present |
+| 15 | `14-test-naming-and-03-structure.md` | ✅ Present |
 | 16 | `15-master-coding-guidelines/01-index.md` | ✅ Present |
 | 17 | `16-lazy-evaluation-patterns.md` | ✅ Present |
 | 18 | `17-regex-usage-guidelines.md` | ✅ Present |

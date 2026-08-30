@@ -1,5 +1,16 @@
 # Research
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 10 Research.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `10-research/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -44,7 +55,7 @@ _No research documents added yet. Add research files as numbered entries (e.g., 
 |-----------|----------|
 | Coding Guidelines Research | [../02-coding-guidelines/10-research/01-index.md](../02-coding-guidelines/10-research/01-index.md) |
 | Spec Authoring Guide | [../01-spec-authoring-guide/01-index.md](../01-spec-authoring-guide/01-index.md) |
-| Consolidated Guidelines | [../17-consolidated-guidelines/12-root-research.md](../17-consolidated-guidelines/12-root-research.md) |
+| Consolidated Guidelines | [../17-consolidated-guidelines/15-root-research.md](../17-consolidated-guidelines/15-root-research.md) |
 
 ---
 

@@ -53,7 +53,7 @@ For every task, you MUST check if the following files or folders exist. If they 
 
 2. Master Consolidated Guide & Coding Guidelines
 
-- /learn `spec/17-consolidated-guidelines/02-coding-guidelines.md`
+- /learn `spec/17-consolidated-guidelines/05-coding-guidelines.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/00-overview.md`
 
 3. Error Management (Must Follow for all Coding Tasks)

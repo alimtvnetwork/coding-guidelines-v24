@@ -35,7 +35,7 @@ Release pipelines **never cancel** in-progress runs — every release commit mus
 
 ## Version Resolution
 
-See [Shared Conventions — Version Resolution](../01-shared-conventions.md#version-resolution).
+See [Shared Conventions — Version Resolution](../03-shared-conventions.md#version-resolution).
 
 ---
 
@@ -89,7 +89,7 @@ Before compilation, generate Windows resource files with `go-winres make` (not `
     ls -la rsrc_windows_*.syso
 ```
 
-This generates `.syso` resource files that `go build` links automatically when `GOOS=windows`. The `winres.json` in the module root defines the icon and manifest. See [Binary Icon Branding](../09-binary-icon-branding.md) for full `winres.json` schema.
+This generates `.syso` resource files that `go build` links automatically when `GOOS=windows`. The `winres.json` in the module root defines the icon and manifest. See [Binary Icon Branding](../16-binary-icon-branding.md) for full `winres.json` schema.
 
 ### Multiple Binaries (Multi-Module Build)
 
@@ -151,7 +151,7 @@ When using `actions/setup-go`, each module resolves its Go version from its own 
 
 For the updater build step, the same Go version is reused (already installed).
 
-See [Updater Binary](../../14-update/19-updater-binary.md) for the full updater architecture.
+See [Updater Binary](../../14-update/20-updater-binary.md) for the full updater architecture.
 
 ---
 
@@ -226,13 +226,13 @@ The `checksums.txt` file is included as a release asset for verification.
 
 ## Code Signing
 
-See [Code Signing](../05-code-signing.md) for the full SignPath integration pattern. Code signing occurs **after** binary building and **before** compression.
+See [Code Signing](../10-code-signing.md) for the full SignPath integration pattern. Code signing occurs **after** binary building and **before** compression.
 
 ---
 
 ## Install Scripts
 
-See [Install Script Generation](../04-install-script-generation.md) for the full pattern. The pipeline generates version-pinned install scripts using placeholder substitution:
+See [Install Script Generation](../07-install-script-generation.md) for the full pattern. The pipeline generates version-pinned install scripts using placeholder substitution:
 
 ```bash
 sed -i "s|VERSION_PLACEHOLDER|$VERSION|g" dist/install.ps1
@@ -282,7 +282,7 @@ Both scripts follow the same flow:
 
 ## Changelog Extraction
 
-See [Release Body and Changelog](../07-release-body-and-changelog.md) for the full extraction pattern and release body template.
+See [Release Body and Changelog](../14-release-body-and-changelog.md) for the full extraction pattern and release body template.
 
 ---
 
@@ -371,16 +371,16 @@ fi
 
 ## Cross-References
 
-- [Shared Conventions](../01-shared-conventions.md) — Version resolution, checksums, permissions
-- [GitHub Release Standard](../02-github-release-standard.md) — Release body assembly, pre-release detection
+- [Shared Conventions](../03-shared-conventions.md) — Version resolution, checksums, permissions
+- [GitHub Release Standard](../04-github-release-standard.md) — Release body assembly, pre-release detection
 - [Complete Workflow Reference](./03-complete-workflow-reference.md) — Full annotated YAML assembling all patterns
-- [Install Script Generation](../04-install-script-generation.md) — Placeholder strategy, PS1/Bash installers
-- [Code Signing](../05-code-signing.md) — SignPath integration, pipeline placement
-- [Release Body and Changelog](../07-release-body-and-changelog.md) — Changelog extraction, body template
-- [Binary Icon Branding](../09-binary-icon-branding.md) — `go-winres make` and version injection
-- [Self-Update Mechanism](../06-self-update-mechanism.md) — How CLI tools consume release assets
+- [Install Script Generation](../07-install-script-generation.md) — Placeholder strategy, PS1/Bash installers
+- [Code Signing](../10-code-signing.md) — SignPath integration, pipeline placement
+- [Release Body and Changelog](../14-release-body-and-changelog.md) — Changelog extraction, body template
+- [Binary Icon Branding](../16-binary-icon-branding.md) — `go-winres make` and version injection
+- [Self-Update Mechanism](../11-self-update-mechanism.md) — How CLI tools consume release assets
 - [Self-Update Full Specs](../../14-update/01-index.md) — Client-side update implementation
-- [Updater Binary](../../14-update/19-updater-binary.md) — Standalone updater architecture
+- [Updater Binary](../../14-update/20-updater-binary.md) — Standalone updater architecture
 
 ---
 

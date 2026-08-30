@@ -11,7 +11,7 @@ The `.lovable/` directory MUST follow the single-file convention defined in `pro
 
 | Concern | Single file |
 |---------|------------|
-| Roadmap | `.lovable/plan.md` (with `## Completed` section) |
+| Roadmap | `.lovable/29-plan.md` (with `## Completed` section) |
 | Suggestions | `.lovable/suggestions.md` (with `## Implemented Suggestions` section) |
 | Hard prohibitions | `.lovable/strictly-avoid.md` |
 
@@ -23,7 +23,7 @@ Never create per-task folders such as `.lovable/completed-tasks/`, `.lovable/pen
 
 During the session restructure these directories were collapsed back into the canonical single files:
 
-- `.lovable/completed-tasks/` — content already represented in `.lovable/plan.md` `## Completed Plans` section.
+- `.lovable/completed-tasks/` — content already represented in `.lovable/29-plan.md` `## Completed Plans` section.
 - `.lovable/pending-tasks/` — sole file (`gap-analysis-p1-p2.md`) was already complete; tracked under `## Completed Plans`.
 - `.lovable/suggestions/` — five detail files merged into `.lovable/suggestions.md` Active Suggestions block.
 - `.lovable/strictly-avoid/` — three rule files merged into `.lovable/strictly-avoid.md`.

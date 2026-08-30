@@ -24,7 +24,7 @@
 | # | File | Status |
 |---|------|--------|
 | 00 | `01-index.md` | ✅ Present |
-| 01 | `01-naming-conventions.md` | ✅ Present |
+| 01 | `02-naming-conventions.md` | ✅ Present |
 | 02 | `02-error-handling.md` | ✅ Present |
 | 03 | `03-async-patterns.md` | ✅ Present |
 | 04 | `04-memory-safety.md` | ✅ Present |

@@ -27,6 +27,6 @@ _No content yet. Add design system documents as numbered files within this folde
 | Reference | Location |
 |-----------|----------|
 | Coding Guidelines Overview | [../01-index.md](../01-index.md) |
-| Consolidated Summary | [../../17-consolidated-guidelines/16-app-design-system-and-ui.md](../../17-consolidated-guidelines/16-app-design-system-and-ui.md) |
+| Consolidated Summary | [../../17-consolidated-guidelines/19-app-design-system-and-ui.md](../../17-consolidated-guidelines/19-app-design-system-and-ui.md) |
 
 > Note: The consolidated guideline filename retains the historic `app-design-system-and-ui` name for backward compatibility; the source folder uses the canonical slug `24-app-ui-design-system`.

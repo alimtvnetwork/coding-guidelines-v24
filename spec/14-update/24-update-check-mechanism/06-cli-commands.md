@@ -88,7 +88,7 @@ Decision #2.)
    `update-check --force` first." and exit 1.
 4. Detect the current OS; pick `Install.Windows` or `Install.Unix`.
 5. Execute the install command. The command is the **pinned installer
-   one-liner** from [16-generic-release/08](../../16-generic-release/08-version-pinned-release-installers.md)
+   one-liner** from [16-generic-release/08](../../16-generic-release/09-version-pinned-release-installers.md)
    — never the "latest" redirect.
 6. On success: set `UpdateStatusId = UpdateApplied`, log to file, print
    success message.

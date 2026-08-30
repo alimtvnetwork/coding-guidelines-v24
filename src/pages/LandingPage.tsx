@@ -17,7 +17,7 @@ const codeRedRules = [
 const quickReference = [
   { category: "Naming", items: ["PascalCase: Components, Types, Enums, DB tables", "camelCase: functions, variables, utilities", "Abbreviations: Id, Url, Json, Api (not ID, URL)"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/22-variable-naming-conventions.md" },
   { category: "Booleans", items: ["Always is/has prefix", "No negative words (not, no, non)", "Max 2 operands per expression"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/00-overview.md" },
-  { category: "Database", items: ["PascalCase tables & columns (quoted)", "{TableName}Id INTEGER PRIMARY KEY", "Double-quoted identifiers in SQL"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/10-database-conventions/01-naming-conventions.md" },
+  { category: "Database", items: ["PascalCase tables & columns (quoted)", "{TableName}Id INTEGER PRIMARY KEY", "Double-quoted identifiers in SQL"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/10-database-conventions/02-naming-conventions.md" },
   { category: "Functions", items: ["Max 3 parameters (use options object for 4+)", "Max 15 lines per body", "Max 300 lines per file"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/04-function-and-type-size.md" },
 ];
 

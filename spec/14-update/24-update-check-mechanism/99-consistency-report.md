@@ -34,14 +34,14 @@ confirm zero contradictions before handing off to implementer AIs.
 | Reference | Used in | Status |
 |-----------|---------|--------|
 | [06-Seedable-Config](../../06-seedable-config-architecture/01-index.md) — `BackgroundUpdateCheckEnabled`, `CheckIntervalHours`, `PendingUpdateWarningEnabled`, `Storage.Backend` | 00, 07, 09 | ✅ Keys named per existing config conventions; will need a follow-up entry in the seedable-config registry when implemented |
-| [Self-update apply phase](../01-self-update-overview.md) — rename-first deployment | 00, 06 (`do-update` invokes pinned installer which uses rename-first) | ✅ Detection layer (this folder) and apply layer (parent folder) are cleanly separated |
-| [Install scripts](../18-install-scripts.md) | 02 (status JSON `Install.*` fields), 06 (`do-update`) | ✅ `do-update` invokes the same one-liners documented there |
-| [Version-pinned installers](../../16-generic-release/08-version-pinned-release-installers.md) | 02, 06 | ✅ Status JSON `Install.*.Command` MUST be the pinned one-liner — not the "latest" redirect |
+| [Self-update apply phase](../02-self-update-overview.md) — rename-first deployment | 00, 06 (`do-update` invokes pinned installer which uses rename-first) | ✅ Detection layer (this folder) and apply layer (parent folder) are cleanly separated |
+| [Install scripts](../19-install-scripts.md) | 02 (status JSON `Install.*` fields), 06 (`do-update`) | ✅ `do-update` invokes the same one-liners documented there |
+| [Version-pinned installers](../../16-generic-release/09-version-pinned-release-installers.md) | 02, 06 | ✅ Status JSON `Install.*.Command` MUST be the pinned one-liner — not the "latest" redirect |
 | [Local SQLite store](../../13-generic-cli/10-database.md) | 04, 09 | ✅ DDL pattern matches the project's standard split-database conventions |
 | [PascalCase key naming](../../02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md) | All files | ✅ |
 | [Code Red — boolean principles](../../02-coding-guidelines/01-cross-language/02-boolean-principles/) | 05 (positive booleans), 07 (no nested if), 08 (no swallow) | ✅ |
 | [Database naming](../../02-coding-guidelines/01-cross-language/07-database-naming.md) | 04 | ✅ PK = `UpdateCheckerId`, lookup PK = `UpdateStatusId` |
-| [Enum standards](../../17-consolidated-guidelines/04-enum-standards.md) | 04, 05 | ✅ Strict `ParseUpdateStatus()` mandated |
+| [Enum standards](../../17-consolidated-guidelines/07-enum-standards.md) | 04, 05 | ✅ Strict `ParseUpdateStatus()` mandated |
 | [Error handling — apperror](mem://architecture/error-handling) | 08 | ✅ File + line metadata required |
 
 ---

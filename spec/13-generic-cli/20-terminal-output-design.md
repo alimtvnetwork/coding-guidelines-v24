@@ -417,7 +417,7 @@ filename, and a short description.
   📁 /projects/.toolname/output/
   ├── 📄 data.csv  Data in CSV format
   ├── 📄 data.json  Data in JSON format
-  ├── 📄 structure.md  Folder tree
+  ├── 📄 03-structure.md  Folder tree
   ├── 📄 clone.ps1  PowerShell clone script
   ├── 📄 direct-clone.ps1  Plain clone commands (HTTPS)
   ├── 📄 direct-clone-ssh.ps1  Plain clone commands (SSH)
@@ -512,7 +512,7 @@ plain, unformatted confirmation lines.
 ```
 CSV written to /projects/.toolname/output/data.csv
 JSON written to /projects/.toolname/output/data.json
-Structure written to /projects/.toolname/output/structure.md
+Structure written to /projects/.toolname/output/03-structure.md
 Database updated: 41 items upserted
 ```
 

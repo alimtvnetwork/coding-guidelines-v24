@@ -23,7 +23,7 @@ A **specification-driven documentation system** for a multi-language CLI toolcha
 | `spec/17-consolidated-guidelines/` | AI-readable summaries of every spec module |
 | `.lovable/memory/` | Institutional knowledge (patterns, decisions, rules) |
 | `.lovable/strictly-avoid.md` | ⛔ Things you must NEVER do |
-| `.lovable/plan.md` | Current active roadmap |
+| `.lovable/29-plan.md` | Current active roadmap |
 | `.lovable/suggestions.md` | Pending improvement ideas |
 | `src/` | React docs viewer application |
 
@@ -70,7 +70,7 @@ All specs, memory, and UI are at **v3.1.0**. Never reference older versions.
 
 ## For Full Onboarding
 
-See `spec/01-spec-authoring-guide/04-ai-onboarding-prompt.md` for the comprehensive multi-phase reading prompt.
+See `spec/01-spec-authoring-guide/05-ai-onboarding-prompt.md` for the comprehensive multi-phase reading prompt.
 
 ---
 

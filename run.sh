@@ -8,7 +8,7 @@
 #   slides   → git pull → build slides-app/ → preview → open in browser
 #   help     → print this table
 #
-# Spec: spec/15-distribution-and-runner/02-runner-contract.md
+# Spec: spec/15-distribution-and-runner/03-runner-contract.md
 # ──────────────────────────────────────────────────────────────────────
 
 set -euo pipefail

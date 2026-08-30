@@ -1,0 +1,270 @@
+# Spec Migration Transaction Log
+
+This log records all atomic file moves, renames, merges, and index normalizations in spec/ for future reference and automated migration scripts.
+
+## Operations Log
+
+- MOVE: .lovable/spec/commands/01-slides-attached-to-release.md -> .lovable/memory/preferences/02-slides-attached-to-release.md (Eliminated .lovable/spec/)
+- MOVE: .lovable/spec/commands/02-improvement-audit-cadence.md -> .lovable/memory/preferences/03-improvement-audit-cadence.md (Eliminated .lovable/spec/)
+- DELETE: Removed directory .lovable/spec/ (Banned in strictly-avoid)
+- DELETE: Removed unnumbered duplicate spec/authoring-guideline/
+- DELETE: Removed duplicate folder spec/06-design-system/ in favor of spec/07-design-system/
+- MOVE: spec/09-pipeline-extend-v2/gitmap-pipeline/ -> spec/12-cicd-pipeline-workflows/04-gitmap-pipeline/
+- MERGE: spec/09-pipeline-extend-v2\01-ai-release-synchronization.md -> spec/12-cicd-pipeline-workflows\24-ai-release-synchronization.md
+- MERGE: spec/09-pipeline-extend-v2\02-changelog-awk-integration.md -> spec/12-cicd-pipeline-workflows\25-changelog-awk-integration.md
+- MERGE: spec/09-pipeline-extend-v2\03-query-wrapper-python-ts.md -> spec/12-cicd-pipeline-workflows\26-query-wrapper-python-ts.md
+- MERGE: spec/09-pipeline-extend-v2\04-strict-enum-enforcement.md -> spec/12-cicd-pipeline-workflows\27-strict-enum-enforcement.md
+- MERGE: spec/09-pipeline-extend-v2\05-rca-release-skew.md -> spec/12-cicd-pipeline-workflows\28-rca-release-skew.md
+- DELETE: Removed directory spec/09-pipeline-extend-v2/ after merging into spec/12-cicd-pipeline-workflows/
+- MERGE: spec/09-pipeline\10-known-issues-and-fixes.md -> spec/12-cicd-pipeline-workflows\22-known-issues-and-fixes.md
+- MERGE: spec/09-pipeline\11-lint-gating-rules.md -> spec/12-cicd-pipeline-workflows\23-lint-gating-rules.md
+- DELETE: Removed directory spec/09-pipeline/ after merging into spec/12-cicd-pipeline-workflows/
+- DELETE: Removed spec/12-cicd-pipeline-workflows/readme.md (Consolidated into 01-index.md)
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/02-folder-structure.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/03-naming-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/04-required-files.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/05-ai-onboarding-prompt.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/06-cli-module-template.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/07-app-project-template.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/08-non-cli-module-template.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/09-memory-folder-guide.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/10-cross-references.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/11-exceptions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/12-mandatory-linter-infra03-structure.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/13-root-readme-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/14-version-schema.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/02-canonical-size-tier.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/03-03-coding-style-checklist.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/05-05-consolidated-review-guide.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/03-error-manage/02-improvements.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/03-error-manage/03-03-structure.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/03-naming-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/03-schema-design.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/04-orm-and-views.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/05-testing-strategy.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/06-relationship-diagrams.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/07-rest-api-format.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/04-database-conventions/08-split-db-pattern.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/05-split-db-architecture/02-fundamentals.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/06-seedable-config-architecture/02-fundamentals.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/02-design-principles.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/03-theme-variable-architecture.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/04-typography.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/05-spacing-layout.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/06-borders-shapes.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/07-css-modularity.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/08-motion-transitions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/09-code-blocks.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/10-header-navigation.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/11-button-system.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/12-sidebar-system.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/13-section-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/14-page-creation-rules.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/07-design-system/15-wordpress-migration.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/08-docs-viewer-ui/02-fundamentals.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/02-architecture.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/03-html-03-structure.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/04-syntax-highlighting.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/05-interactions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/06-styling.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/07-constants-and-maps.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/08-clipboard.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/09-checklist-blocks.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/10-tree-structure-rendering.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/09-code-block-system/11-selection-bar.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/02-configuration-schema.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/03-template-vs-project-differences.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/04-script-reference.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/05-integration-guide.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/06-error-codes.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/07-firewall-rules.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/08-php-known-issues.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/09-multi-site-deployment.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/10-changelog.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/11-powershell-integration/11-11-parallel-work-sync-output.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/02-ci-pipeline.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/03-shared-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/04-github-release-standard.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/05-release-pipeline.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/06-vulnerability-scanning.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/07-install-script-generation.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/08-installation-flow.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/09-changelog-integration.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/10-code-signing.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/11-self-update-mechanism.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/12-version-and-help.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/13-environment-variable-setup.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/14-release-body-and-changelog.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/15-terminal-output-standards.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/16-binary-icon-branding.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/18-blue-green-deployment.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/19-flaky-test-quarantine.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/20-contract-testing.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/21-e2e-testing-pattern.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/22-known-issues-and-fixes.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/23-lint-gating-rules.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/24-ai-release-synchronization.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/25-changelog-awk-integration.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/26-query-wrapper-python-ts.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/27-strict-enum-enforcement.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/28-rca-release-skew.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/02-self-update-overview.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/03-deploy-path-resolution.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/04-rename-first-deploy.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/05-build-scripts.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/06-handoff-mechanism.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/07-cleanup.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/08-console-safe-handoff.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/09-repo-path-sync.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/10-version-verification.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/11-last-release-detection.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/12-windows-icon-embedding.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/13-code-signing.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/14-release-assets.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/15-checksums-verification.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/16-release-versioning.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/17-cross-compilation.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/18-release-pipeline.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/19-install-scripts.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/20-updater-binary.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/21-network-requirements.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/22-config-file.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/23-update-command-workflow.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/14-update/24-install-script-version-probe.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/15-distribution-and-runner/02-install-contract.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/15-distribution-and-runner/03-runner-contract.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/15-distribution-and-runner/04-release-pipeline.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/15-distribution-and-runner/05-install-config.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/02-cross-compilation.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/04-release-pipeline.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/04-install-scripts.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/05-checksums-verification.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/06-release-assets.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/07-release-metadata.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/08-known-issues-and-fixes.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/16-generic-release/09-version-pinned-release-installers.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/02-ai-review-overview.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/03-strictly-avoid-quickref.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/04-spec-authoring.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/05-coding-guidelines.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/06-error-management.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/07-enum-standards.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/08-split-db-architecture.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/09-seedable-config.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/10-design-system.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/11-docs-viewer-ui.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/12-code-block-system.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/13-powershell-integration.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/14-research.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/15-root-research.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/16-app.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/17-app-issues.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/19-app-design-system-and-ui.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/20-self-update-app-update.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/21-database-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/22-gap-analysis.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/23-wp-plugin-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/24-lovable-folder-03-structure.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/25-app-database.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/26-generic-cli.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/27-folder-mapping.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/28-blind-ai-implementability-audit.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/29-blind-ai-audit-v2.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/30-linter-authoring-guide.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/31-distribution-and-runner.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/33-readme-improvement-suggestions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/17-consolidated-guidelines/35-ai-code-review-guide.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/02-quick-start.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/03-foundation-and-architecture.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/04-traits-and-composition.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/05-logging-and-error-handling.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/06-helpers-responses-and-integration.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/07-input-validation-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/08-reference-implementations.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/09-wordpress-integration-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/10-testing-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/11-deployment-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/12-frontend-and-template-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/13-design-system.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/14-admin-ui-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/15-rest-api-conventions.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/16-settings-architecture.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/17-error-handling-extraction.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/18-data-file-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/19-frontend-javascript-patterns.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/21-end-to-end-walkthrough.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/22-ping-endpoint.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/18-wp-plugin-how-to/23-changelog.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/02-architecture.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/03-glossary.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/04-main-db-schema.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/05-worker-routing.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/06-auth-and-2fa.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/07-core-api-endpoints.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/08-role-based-dashboards.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/09-error-contract.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/10-self-update-pointer.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/11-worker-bootstrap-protocol.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/12-split-db-tier-reconciliation.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/13-jwt-delivery-contract.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/14-error-codes.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/15-rbac-and-status-seed.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/16-tunable-constants.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/17-update-channels.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/19-backup-nodes.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/20-incremental-backup-sync.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/21-backup-encryption-and-keys.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/22-backup-endpoints.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/23-backup-apply-logic.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/24-snapshot-storage-and-restore.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/25-threat-model.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/26-inherited-rules.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/27-trust-boundaries-and-isolation.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/28-git-backup-targets.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/19-main-worker-service/29-29-plan.md`
+- DELETE: Removed `spec/11-powershell-integration/readme.md` (Consolidated into 01-index.md)
+- DELETE: Removed `spec/14-update/readme.md` (Consolidated into 01-index.md)
+- DELETE: Removed `spec/18-wp-plugin-how-to/readme.md` (Consolidated into 01-index.md)
+- DELETE: Removed `spec/19-main-worker-service/diagrams/readme.md` (Consolidated into 01-index.md)
+- DELETE: Removed `spec/19-main-worker-service/fixtures/readme.md` (Consolidated into 01-index.md)
+- DELETE: Removed `spec/19-main-worker-service/images/readme.md` (Consolidated into 01-index.md)
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\01-spec-authoring-guide\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\02-coding-guidelines\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\03-error-manage\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\04-database-conventions\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\05-split-db-architecture\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\06-seedable-config-architecture\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\07-design-system\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\08-docs-viewer-ui\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\09-code-block-system\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\10-research\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\11-powershell-integration\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\12-cicd-pipeline-workflows\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\13-generic-cli\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\14-update\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\15-distribution-and-runner\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\16-generic-release\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\17-consolidated-guidelines\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\18-wp-plugin-how-to\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\19-main-worker-service\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\21-app\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\22-app-issues\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\23-app-db\01-index.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\24-app-ui-design-system\01-index.md`
+- CREATE: `spec-coding-guideline/01-index.md` & `spec-coding-guideline/02-slides-app-spec.md` (Internal repo specs)
+- MOVE: spec-slides\01-architecture.md -> spec-coding-guideline\01-architecture.md
+- MOVE: spec-slides\02-slide-authoring.md -> spec-coding-guideline\02-slide-authoring.md
+- MOVE: spec-slides\03-design-tokens.md -> spec-coding-guideline\03-design-tokens.md
+- MOVE: spec-slides\04-animation-primitives.md -> spec-coding-guideline\04-animation-primitives.md
+- MOVE: spec-slides\05-curriculum.md -> spec-coding-guideline\05-curriculum.md
+- MOVE: spec-slides\06-build-and-zip-pipeline.md -> spec-coding-guideline\06-build-and-zip-pipeline.md
+- MOVE: spec-slides\07-gif-generation.md -> spec-coding-guideline\07-gif-generation.md
+- MOVE: spec-slides\08-quality-and-offline.md -> spec-coding-guideline\08-quality-and-offline.md
+- DELETE: Merged and removed spec-slides/ into spec-coding-guideline/

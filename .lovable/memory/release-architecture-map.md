@@ -8,7 +8,8 @@ type: standard
 
 **Repository:** alimtvnetwork/coding-guidelines-v24
 **Canonical Version Source:** package.json (master version) + version.json (root single source of truth)
-**Reading Queue:** Enqueued in .lovable/what-to-read.md and linked in eadme.md
+**Reading Queue:** Enqueued in .lovable/what-to-read.md and linked in 
+eadme.md
 
 ## 1. Overview of Release Architecture
 
@@ -50,7 +51,8 @@ scripts/sync-spec-tree  scripts/sync-health-score  scripts/sync-readme-stats
    - Prompts: List of active AI prompts
 
 3. **Pin Sites (Lock-Step Update)**:
-   - eadme.md: Header shields badge (img.shields.io/badge/version-X.Y.Z-...), stats line (vX.Y.Z).
+   - 
+eadme.md: Header shields badge (img.shields.io/badge/version-X.Y.Z-...), stats line (vX.Y.Z).
    - docs/architecture.md, docs/principles.md, docs/author.md: <!-- STAMP:VERSION -->X.Y.Z<!-- /STAMP:VERSION -->.
    - public/health-score.json: "version": "X.Y.Z".
    - src/data/specTree.json: Generated navigation tree with version metadata.
@@ -68,9 +70,10 @@ pm run sync triggers five core synchronization scripts in sequence:
 3. **scripts/sync-health-score.mjs**:
    Computes spec completeness, rule coverage, and audit health score, emits public/health-score.json.
 4. **scripts/sync-readme-stats.mjs**:
-   Stamps versions, folder counts, file counts, and update timestamps into eadme.md and docs/*.md.
+   Stamps versions, folder counts, file counts, and update timestamps into 
+eadme.md and docs/*.md.
 5. **scripts/sync-guidelines.mjs**:
-   Mirrors spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines/coding-guidelines.md.
+   Mirrors spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines/coding-guidelines.md.
 
 ## 4. Release Ceremony Flow
 

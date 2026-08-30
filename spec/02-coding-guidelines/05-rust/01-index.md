@@ -42,7 +42,7 @@ PascalCase is MANDATORY in Rust for exactly two things:
 
 Everything else → standard Rust community conventions (RFC 430).
 
-See 01-naming-conventions.md for the complete reference with examples.
+See 02-naming-conventions.md for the complete reference with examples.
 ```
 
 ---
@@ -59,7 +59,7 @@ This override exists because Rust's compiler actively enforces `snake_case` for 
 
 | File | Description |
 |------|-------------|
-| 01-naming-conventions.md | Rust naming rules: snake_case default, PascalCase for DB + enum strings, serialization, module structure |
+| 02-naming-conventions.md | Rust naming rules: snake_case default, PascalCase for DB + enum strings, serialization, module structure |
 | 02-error-handling.md | Error types, Result patterns, thiserror/anyhow usage |
 | 03-async-patterns.md | Tokio async conventions, channel patterns, cancellation |
 | 04-memory-safety.md | Ownership idioms, lifetime rules, unsafe policy |
@@ -78,8 +78,8 @@ This override exists because Rust's compiler actively enforces `snake_case` for 
 | Cross-Language Guidelines | `../01-cross-language/01-index.md` |
 | Coding Guidelines Root | `../01-index.md` |
 | Database Conventions (PascalCase) | `../../../04-database-conventions/01-index.md` |
-| Enum Standards (Cross-Language) | `../../../../17-consolidated-guidelines/04-enum-standards.md` |
-| 01-naming-conventions.md | — |
+| Enum Standards (Cross-Language) | `../../../../17-consolidated-guidelines/07-enum-standards.md` |
+| 02-naming-conventions.md | — |
 | 02-error-handling.md | — |
 | 03-async-patterns.md | — |
 | 04-memory-safety.md | — |

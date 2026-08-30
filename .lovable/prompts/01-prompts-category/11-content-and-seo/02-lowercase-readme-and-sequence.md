@@ -17,7 +17,7 @@ Enforce these naming rules across the entire repository:
 
    Examples:
 
-   - ✅ `01-overview.md`, `02-coding-guidelines.md`, `13-cicd-pipeline.md`
+   - ✅ `01-overview.md`, `05-coding-guidelines.md`, `13-cicd-pipeline.md`
    - ❌ `1-Overview.md`, `01_Coding_Guidelines.md`, `13-CICD-Pipeline.MD`
 
 ## MUST FOLLOW NON-NEGOTIABLE

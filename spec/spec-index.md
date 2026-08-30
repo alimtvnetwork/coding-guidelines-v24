@@ -43,15 +43,15 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/01-spec-authoring-guide/01-index.md` | Spec Authoring Guide | 2.0.0 |
-| `spec/01-spec-authoring-guide/01-folder-structure.md` | Folder Structure | 1.0.0 |
-| `spec/01-spec-authoring-guide/02-naming-conventions.md` | Naming Conventions | 1.0.0 |
-| `spec/01-spec-authoring-guide/03-required-files.md` | Required Files | 1.0.0 |
-| `spec/01-spec-authoring-guide/04-cli-module-template.md` | CLI Module Template | 1.0.0 |
-| `spec/01-spec-authoring-guide/05-app-project-template.md` | App / WordPress Project Template | 1.0.0 |
-| `spec/01-spec-authoring-guide/06-non-cli-module-template.md` | Non-CLI Module Template | 1.0.0 |
-| `spec/01-spec-authoring-guide/07-memory-folder-guide.md` | Memory Folder Guide | 2.0.0 |
-| `spec/01-spec-authoring-guide/08-cross-references.md` | Cross-References | 1.0.0 |
-| `spec/01-spec-authoring-guide/09-exceptions.md` | Exceptions & Special Cases | 1.0.0 |
+| `spec/01-spec-authoring-guide/02-folder-structure.md` | Folder Structure | 1.0.0 |
+| `spec/01-spec-authoring-guide/03-naming-conventions.md` | Naming Conventions | 1.0.0 |
+| `spec/01-spec-authoring-guide/04-required-files.md` | Required Files | 1.0.0 |
+| `spec/01-spec-authoring-guide/06-cli-module-template.md` | CLI Module Template | 1.0.0 |
+| `spec/01-spec-authoring-guide/07-app-project-template.md` | App / WordPress Project Template | 1.0.0 |
+| `spec/01-spec-authoring-guide/08-non-cli-module-template.md` | Non-CLI Module Template | 1.0.0 |
+| `spec/01-spec-authoring-guide/09-memory-folder-guide.md` | Memory Folder Guide | 2.0.0 |
+| `spec/01-spec-authoring-guide/10-cross-references.md` | Cross-References | 1.0.0 |
+| `spec/01-spec-authoring-guide/11-exceptions.md` | Exceptions & Special Cases | 1.0.0 |
 | `spec/01-spec-authoring-guide/97-acceptance-criteria.md` | Spec Authoring Guide — Acceptance Criteria | 1.0.0 |
 | `spec/01-spec-authoring-guide/98-changelog.md` | Spec Authoring Guide — Changelog | 1.0.0 |
 | `spec/01-spec-authoring-guide/99-consistency-report.md` | Consistency Report — Spec Authoring Guide | 4.0.0 |
@@ -61,8 +61,8 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/02-coding-guidelines/01-index.md` | Coding Guidelines | 2.0.0 |
-| `spec/02-coding-guidelines/consolidated-review-guide-condensed.md` | Consolidated Review Guide — Condensed |  |
-| `spec/02-coding-guidelines/consolidated-review-guide.md` | Consolidated Code Review Guide | 1.0.0 |
+| `spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md` | Consolidated Review Guide — Condensed |  |
+| `spec/02-coding-guidelines/05-05-consolidated-review-guide.md` | Consolidated Code Review Guide | 1.0.0 |
 | `spec/02-coding-guidelines/01-index.md` | Coding Guidelines | 2.4.0 |
 | `spec/02-coding-guidelines/97-acceptance-criteria.md` | Coding Guidelines — Acceptance Criteria | 1.0.0 |
 | `spec/02-coding-guidelines/99-consistency-report.md` | Consistency Report — Coding Guidelines | 2.6.0 |
@@ -79,7 +79,7 @@
 | `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md` | PascalCase Key Naming Standard | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` | Cross-Language Rule: No Raw Negations — Use Positive Guard Functions | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/13-strict-typing.md` | Strict Typing — Cross-Language Type Declaration Rules | 1.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md` | Cross-Language Rule: Test Naming & Structure | 1.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md` | Cross-Language Rule: Test Naming & Structure | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines.md` | Master Coding Guidelines |  |
 | `spec/02-coding-guidelines/01-cross-language/16-lazy-evaluation-patterns.md` | Lazy Evaluation Patterns | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/17-regex-usage-guidelines.md` | Regex Usage Guidelines | 1.0.0 |
@@ -142,7 +142,7 @@
 | `spec/02-coding-guidelines/02-typescript/04-export-status-enum.md` | TypeScript ExportStatus Enum — `src/lib/enums/export-status.ts` |  |
 | `spec/02-coding-guidelines/02-typescript/05-http-method-enum.md` | TypeScript HttpMethod Enum — `src/lib/enums/http-method-type.ts` |  |
 | `spec/02-coding-guidelines/02-typescript/06-message-status-enum.md` | TypeScript MessageStatus Enum — `src/lib/enums/message-status.ts` |  |
-| `spec/02-coding-guidelines/02-typescript/07-type-safety-remediation-plan.md` | Codebase Type Safety Remediation Plan | 2.0.0 |
+| `spec/02-coding-guidelines/02-typescript/07-type-safety-remediation-29-plan.md` | Codebase Type Safety Remediation Plan | 2.0.0 |
 | `spec/02-coding-guidelines/02-typescript/08-typescript-standards-reference.md` | TypeScript Coding Standards | 3.0.0 |
 | `spec/02-coding-guidelines/02-typescript/09-promise-await-patterns.md` | Promise & Await Patterns | 1.0.0 |
 | `spec/02-coding-guidelines/02-typescript/10-log-level-enum.md` | TypeScript LogLevel Enum — `src/lib/enums/log-level.ts` |  |
@@ -165,7 +165,7 @@
 | `spec/02-coding-guidelines/03-golang/01-enum-specification/01-index.md` | Enum Specification | 4.1.0 |
 | `spec/02-coding-guidelines/03-golang/01-enum-specification/01-enum-pattern.md` | Enum Pattern | 4.0.0 |
 | `spec/02-coding-guidelines/03-golang/01-enum-specification/02-required-methods.md` | Required Methods | 5.0.0 |
-| `spec/02-coding-guidelines/03-golang/01-enum-specification/03-folder-structure.md` | Folder Structure | 4.0.0 |
+| `spec/02-coding-guidelines/03-golang/01-enum-specification/03-folder-03-structure.md` | Folder Structure | 4.0.0 |
 | `spec/02-coding-guidelines/03-golang/01-enum-specification/04-validation-checklist.md` | Validation Checklist | 3.0.0 |
 | `spec/02-coding-guidelines/03-golang/01-enum-specification/99-consistency-report.md` | Consistency Report: Enum Specification | 1.0.0 |
 | `spec/02-coding-guidelines/03-golang/04-golang-standards-reference/01-index.md` | Golang Coding Standards | 3.7.0 |
@@ -196,7 +196,7 @@
 | `spec/02-coding-guidelines/04-php/07-php-standards-reference/05-forbidden-and-database.md` | PHP Coding Standards — Forbidden patterns, database wrapper | 5.1.0 |
 | `spec/02-coding-guidelines/04-php/07-php-standards-reference/99-consistency-report.md` | Consistency Report: PHP Standards Reference | 1.0.0 |
 | `spec/02-coding-guidelines/05-rust/01-index.md` | Rust Coding Standards | 1.1.0 |
-| `spec/02-coding-guidelines/05-rust/01-naming-conventions.md` | Rust Naming Conventions | 1.0.0 |
+| `spec/02-coding-guidelines/05-rust/02-naming-conventions.md` | Rust Naming Conventions | 1.0.0 |
 | `spec/02-coding-guidelines/05-rust/02-error-handling.md` | Rust Error Handling | 1.0.0 |
 | `spec/02-coding-guidelines/05-rust/03-async-patterns.md` | Rust Async Patterns | 1.0.0 |
 | `spec/02-coding-guidelines/05-rust/04-memory-safety.md` | Rust Memory Safety | 1.0.0 |
@@ -237,13 +237,13 @@
 | `spec/02-coding-guidelines/11-security/01-axios-version-control/02-security-notes.md` | Security Notes — Axios Version Advisory | 1.1.0 |
 | `spec/02-coding-guidelines/11-security/01-axios-version-control/99-consistency-report.md` | Consistency Report — Axios Version Control | 1.1.0 |
 | `spec/04-database-conventions/01-index.md` | Database Conventions | 1.0.0 |
-| `spec/04-database-conventions/01-naming-conventions.md` | Database Naming Conventions | 1.1.0 |
-| `spec/04-database-conventions/02-schema-design.md` | Database Schema Design | 1.0.0 |
-| `spec/04-database-conventions/03-orm-and-views.md` | ORM Usage and Database Views | 1.0.0 |
-| `spec/04-database-conventions/04-testing-strategy.md` | Database Testing Strategy | 1.0.0 |
-| `spec/04-database-conventions/05-relationship-diagrams.md` | Database Relationship Diagrams | 1.1.0 |
-| `spec/04-database-conventions/06-rest-api-format.md` | REST API Response Format | 1.1.0 |
-| `spec/04-database-conventions/07-split-db-pattern.md` | Split DB Pattern | 1.0.0 |
+| `spec/04-database-conventions/03-naming-conventions.md` | Database Naming Conventions | 1.1.0 |
+| `spec/04-database-conventions/03-schema-design.md` | Database Schema Design | 1.0.0 |
+| `spec/04-database-conventions/04-orm-and-views.md` | ORM Usage and Database Views | 1.0.0 |
+| `spec/04-database-conventions/05-testing-strategy.md` | Database Testing Strategy | 1.0.0 |
+| `spec/04-database-conventions/06-relationship-diagrams.md` | Database Relationship Diagrams | 1.1.0 |
+| `spec/04-database-conventions/07-rest-api-format.md` | REST API Response Format | 1.1.0 |
+| `spec/04-database-conventions/08-split-db-pattern.md` | Split DB Pattern | 1.0.0 |
 | `spec/04-database-conventions/99-consistency-report.md` | Consistency Report — Database Conventions | 1.0.0 |
 | `spec/02-coding-guidelines/21-app/01-index.md` | App | 1.0.0 |
 | `spec/02-coding-guidelines/22-app-issues/01-index.md` | App Issues | 1.0.0 |
@@ -256,7 +256,7 @@
 | `spec/03-error-manage/97-acceptance-criteria.md` | Error Management — Acceptance Criteria | 1.0.0 |
 | `spec/03-error-manage/98-changelog.md` | Error Management — Changelog | 2.2.0 |
 | `spec/03-error-manage/99-consistency-report.md` | Consistency Report: Error Management | 1.0.0 |
-| `spec/03-error-manage/structure.md` | 04-error-manage — Structure Summary | 1.0.0 |
+| `spec/03-error-manage/03-03-structure.md` | 04-error-manage — Structure Summary | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/00-error-documentation-guideline.md` | Error Documentation Guideline | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/01-index.md` | Error Resolution | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/01-cross-reference-diagram.md` | Error Resolution Cross-Reference Diagram | 1.0.0 |
@@ -316,7 +316,7 @@
 | `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/01-data-model.md` | Data Model: CapturedError | 2.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/02-capture-pipeline.md` | Error Capture Pipeline | 2.3.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/03-envelope-parsing.md` | Envelope Parsing & Enrichment | 2.2.0 |
-| `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/04-modal-structure.md` | Modal Structure & Components | 2.2.0 |
+| `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/04-modal-03-structure.md` | Modal Structure & Components | 2.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/05-backend-tabs.md` | Backend Section (Tabs) | 2.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/06-frontend-tabs.md` | Frontend Section (Tabs) | 2.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/03-error-modal-reference/07-request-chain.md` | Request Chain Visualization | 2.2.0 |
@@ -374,7 +374,7 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/05-split-db-architecture/01-index.md` | Split Database Architecture | 3.0.0 |
-| `spec/05-split-db-architecture/01-fundamentals.md` | Split Database Architecture — Fundamentals | 3.0.0 |
+| `spec/05-split-db-architecture/02-fundamentals.md` | Split Database Architecture — Fundamentals | 3.0.0 |
 | `spec/05-split-db-architecture/97-acceptance-criteria.md` | Split Database Architecture — Acceptance Criteria | 1.0.0 |
 | `spec/05-split-db-architecture/97-changelog.md` | Split DB Architecture — Changelog | 1.0.0 |
 | `spec/05-split-db-architecture/98-acceptance-criteria.md` | Split DB Architecture: Acceptance Criteria | 2.0.0 |
@@ -393,7 +393,7 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/06-seedable-config-architecture/01-index.md` | Seedable Config Architecture + Changelog Versioning | 3.0.0 |
-| `spec/06-seedable-config-architecture/01-fundamentals.md` | Seedable Config Architecture — Fundamentals | 3.0.0 |
+| `spec/06-seedable-config-architecture/02-fundamentals.md` | Seedable Config Architecture — Fundamentals | 3.0.0 |
 | `spec/06-seedable-config-architecture/97-acceptance-criteria.md` | Seedable Config Architecture — Acceptance Criteria | 1.0.0 |
 | `spec/06-seedable-config-architecture/97-changelog.md` | Seedable Config Architecture — Changelog | 1.0.0 |
 | `spec/06-seedable-config-architecture/98-acceptance-criteria.md` | Seedable Config Architecture: Acceptance Criteria | 2.0.0 |
@@ -412,19 +412,19 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/07-design-system/01-index.md` | AI-Adaptable Design System | 1.0.0 |
-| `spec/07-design-system/01-design-principles.md` | Design Principles | 1.0.0 |
-| `spec/07-design-system/02-theme-variable-architecture.md` | Theme & Variable Architecture | 1.0.0 |
-| `spec/07-design-system/03-typography.md` | Typography | 1.0.0 |
-| `spec/07-design-system/04-spacing-layout.md` | Spacing & Layout | 1.0.0 |
-| `spec/07-design-system/05-borders-shapes.md` | Borders & Shapes | 1.0.0 |
-| `spec/07-design-system/06-motion-transitions.md` | Motion & Transitions | 1.0.0 |
-| `spec/07-design-system/07-code-blocks.md` | Code Blocks | 1.0.0 |
-| `spec/07-design-system/08-header-navigation.md` | Header & Navigation | 1.0.0 |
-| `spec/07-design-system/09-button-system.md` | Button System | 1.0.0 |
-| `spec/07-design-system/10-sidebar-system.md` | Sidebar System | 1.0.0 |
-| `spec/07-design-system/11-section-patterns.md` | Section Patterns | 1.0.0 |
-| `spec/07-design-system/12-page-creation-rules.md` | Page Creation Rules | 1.0.0 |
-| `spec/07-design-system/13-wordpress-migration.md` | WordPress Migration Compatibility | 1.0.0 |
+| `spec/07-design-system/02-design-principles.md` | Design Principles | 1.0.0 |
+| `spec/07-design-system/03-theme-variable-architecture.md` | Theme & Variable Architecture | 1.0.0 |
+| `spec/07-design-system/04-typography.md` | Typography | 1.0.0 |
+| `spec/07-design-system/05-spacing-layout.md` | Spacing & Layout | 1.0.0 |
+| `spec/07-design-system/06-borders-shapes.md` | Borders & Shapes | 1.0.0 |
+| `spec/07-design-system/08-motion-transitions.md` | Motion & Transitions | 1.0.0 |
+| `spec/07-design-system/09-code-blocks.md` | Code Blocks | 1.0.0 |
+| `spec/07-design-system/10-header-navigation.md` | Header & Navigation | 1.0.0 |
+| `spec/07-design-system/11-button-system.md` | Button System | 1.0.0 |
+| `spec/07-design-system/12-sidebar-system.md` | Sidebar System | 1.0.0 |
+| `spec/07-design-system/13-section-patterns.md` | Section Patterns | 1.0.0 |
+| `spec/07-design-system/14-page-creation-rules.md` | Page Creation Rules | 1.0.0 |
+| `spec/07-design-system/15-wordpress-migration.md` | WordPress Migration Compatibility | 1.0.0 |
 | `spec/07-design-system/97-acceptance-criteria.md` | Acceptance Criteria | 1.0.0 |
 | `spec/07-design-system/99-consistency-report.md` | Consistency Report | 1.0.0 |
 
@@ -433,7 +433,7 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/08-docs-viewer-ui/01-index.md` | Docs Viewer UI — Overview | 1.0.0 |
-| `spec/08-docs-viewer-ui/01-fundamentals.md` | Docs Viewer UI — Fundamentals | 1.0.0 |
+| `spec/08-docs-viewer-ui/02-fundamentals.md` | Docs Viewer UI — Fundamentals | 1.0.0 |
 | `spec/08-docs-viewer-ui/99-consistency-report.md` | Consistency Report: Docs Viewer UI | 1.0.0 |
 | `spec/08-docs-viewer-ui/02-features/01-index.md` | Docs Viewer UI — Features Index | 1.0.0 |
 | `spec/08-docs-viewer-ui/02-features/01-typography.md` | Feature: Typography System | 1.0.0 |
@@ -454,15 +454,15 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/09-code-block-system/01-index.md` | Code Block System — Overview | 1.0.0 |
-| `spec/09-code-block-system/01-architecture.md` | Architecture — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/02-html-structure.md` | HTML Structure — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/03-syntax-highlighting.md` | Syntax Highlighting — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/04-interactions.md` | Interactions — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/05-styling.md` | Styling — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/06-constants-and-maps.md` | Constants & Maps — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/07-clipboard.md` | Clipboard Utility — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/08-checklist-blocks.md` | Checklist Blocks — Code Block System | 1.0.0 |
-| `spec/09-code-block-system/09-tree-structure-rendering.md` | Tree-Structure Rendering — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/02-architecture.md` | Architecture — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/03-html-03-structure.md` | HTML Structure — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/04-syntax-highlighting.md` | Syntax Highlighting — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/05-interactions.md` | Interactions — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/06-styling.md` | Styling — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/07-constants-and-maps.md` | Constants & Maps — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/08-clipboard.md` | Clipboard Utility — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/09-checklist-blocks.md` | Checklist Blocks — Code Block System | 1.0.0 |
+| `spec/09-code-block-system/10-tree-structure-rendering.md` | Tree-Structure Rendering — Code Block System | 1.0.0 |
 | `spec/09-code-block-system/99-consistency-report.md` | Consistency Report — Code Block System | 1.0.0 |
 
 ---
@@ -489,14 +489,14 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/17-consolidated-guidelines/01-index.md` | Consolidated Guidelines | 1.0.0 |
-| `spec/17-consolidated-guidelines/01-spec-authoring.md` | Consolidated: Spec Authoring Guide | 1.0.0 |
-| `spec/17-consolidated-guidelines/02-coding-guidelines.md` | Redirect Stub (see file 31) | 1.0.0 |
-| `spec/17-consolidated-guidelines/03-error-management.md` | Consolidated: Error Management | 1.0.0 |
-| `spec/17-consolidated-guidelines/05-split-db-architecture.md` | Consolidated: Split DB Architecture | 1.0.0 |
-| `spec/17-consolidated-guidelines/06-seedable-config.md` | Consolidated: Seedable Config | 1.0.0 |
-| `spec/17-consolidated-guidelines/07-design-system.md` | Consolidated: Design System | 1.0.0 |
-| `spec/17-consolidated-guidelines/08-docs-viewer-ui.md` | Consolidated: Docs Viewer UI | 1.0.0 |
-| `spec/17-consolidated-guidelines/09-code-block-system.md` | Consolidated: Code Block System | 1.0.0 |
+| `spec/17-consolidated-guidelines/04-spec-authoring.md` | Consolidated: Spec Authoring Guide | 1.0.0 |
+| `spec/17-consolidated-guidelines/05-coding-guidelines.md` | Redirect Stub (see file 31) | 1.0.0 |
+| `spec/17-consolidated-guidelines/06-error-management.md` | Consolidated: Error Management | 1.0.0 |
+| `spec/17-consolidated-guidelines/08-split-db-architecture.md` | Consolidated: Split DB Architecture | 1.0.0 |
+| `spec/17-consolidated-guidelines/09-seedable-config.md` | Consolidated: Seedable Config | 1.0.0 |
+| `spec/17-consolidated-guidelines/10-design-system.md` | Consolidated: Design System | 1.0.0 |
+| `spec/17-consolidated-guidelines/11-docs-viewer-ui.md` | Consolidated: Docs Viewer UI | 1.0.0 |
+| `spec/17-consolidated-guidelines/12-code-block-system.md` | Consolidated: Code Block System | 1.0.0 |
 | `spec/17-consolidated-guidelines/11-powershell-integration.md` | Consolidated: PowerShell Integration | 1.0.0 |
 | `spec/17-consolidated-guidelines/10-research.md` | Consolidated: Research | 1.0.0 |
 | `spec/17-consolidated-guidelines/11-root-research.md` | Consolidated: Root-Level Research | 1.0.0 |
@@ -509,17 +509,17 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/11-powershell-integration/01-index.md` | PowerShell Integration | 2.25.0 |
-| `spec/11-powershell-integration/01-configuration-schema.md` | Configuration Schema | — |
-| `spec/11-powershell-integration/01-template-vs-project-differences.md` | Template vs Project Differences | — |
-| `spec/11-powershell-integration/02-script-reference.md` | Script Reference | — |
-| `spec/11-powershell-integration/03-integration-guide.md` | Integration Guide | — |
-| `spec/11-powershell-integration/04-error-codes.md` | Error Codes | — |
-| `spec/11-powershell-integration/05-firewall-rules.md` | Firewall Rules | — |
-| `spec/11-powershell-integration/06-php-known-issues.md` | PHP Known Issues | — |
-| `spec/11-powershell-integration/25-multi-site-deployment.md` | Multi-Site Deployment | — |
+| `spec/11-powershell-integration/02-configuration-schema.md` | Configuration Schema | — |
+| `spec/11-powershell-integration/03-template-vs-project-differences.md` | Template vs Project Differences | — |
+| `spec/11-powershell-integration/04-script-reference.md` | Script Reference | — |
+| `spec/11-powershell-integration/05-integration-guide.md` | Integration Guide | — |
+| `spec/11-powershell-integration/06-error-codes.md` | Error Codes | — |
+| `spec/11-powershell-integration/07-firewall-rules.md` | Firewall Rules | — |
+| `spec/11-powershell-integration/08-php-known-issues.md` | PHP Known Issues | — |
+| `spec/11-powershell-integration/09-multi-site-deployment.md` | Multi-Site Deployment | — |
 | `spec/11-powershell-integration/readme.md` | README | — |
-| `spec/11-powershell-integration/changelog.md` | Changelog | — |
-| `spec/11-powershell-integration/parallel-work-sync-output.md` | Parallel Work Sync Output | — |
+| `spec/11-powershell-integration/10-changelog.md` | Changelog | — |
+| `spec/11-powershell-integration/11-11-parallel-work-sync-output.md` | Parallel Work Sync Output | — |
 | `spec/11-powershell-integration/99-consistency-report.md` | Consistency Report | 1.0.0 |
 
 ## 🔬 Research
@@ -533,13 +533,13 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/12-cicd-pipeline-workflows/01-index.md` | CI/CD Pipeline Workflows | 2.0.0 |
-| `spec/12-cicd-pipeline-workflows/01-shared-conventions.md` | Shared Pipeline Conventions | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/02-github-release-standard.md` | GitHub Release Standard | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/03-vulnerability-scanning.md` | Vulnerability Scanning | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/04-install-script-generation.md` | Install Script Generation | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/05-code-signing.md` | Code Signing | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/06-self-update-mechanism.md` | Self-Update Mechanism | 2.0.0 |
-| `spec/12-cicd-pipeline-workflows/07-release-body-and-changelog.md` | Release Body and Changelog | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/03-shared-conventions.md` | Shared Pipeline Conventions | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/04-github-release-standard.md` | GitHub Release Standard | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/06-vulnerability-scanning.md` | Vulnerability Scanning | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/07-install-script-generation.md` | Install Script Generation | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/10-code-signing.md` | Code Signing | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/11-self-update-mechanism.md` | Self-Update Mechanism | 2.0.0 |
+| `spec/12-cicd-pipeline-workflows/14-release-body-and-changelog.md` | Release Body and Changelog | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/08-installation-flow.md` | Installation Flow | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/09-changelog-integration.md` | Changelog Integration | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/10-version-and-help.md` | Version Display and Help System | 1.0.0 |
@@ -547,12 +547,12 @@
 | `spec/12-cicd-pipeline-workflows/12-terminal-output-standards.md` | Terminal Output Standards | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/13-binary-icon-branding.md` | Binary Icon & Windows Resource Embedding | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/01-index.md` | Browser Extension Deploy — Overview | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/01-ci-pipeline.md` | Browser Extension — CI Pipeline | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/02-release-pipeline.md` | Browser Extension — Release Pipeline | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/02-ci-pipeline.md` | Browser Extension — CI Pipeline | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/05-release-pipeline.md` | Browser Extension — Release Pipeline | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/01-browser-extension-deploy/99-consistency-report.md` | Consistency Report — Browser Extension Deploy | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/02-go-binary-deploy/01-index.md` | Go Binary Deploy — Overview | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/02-go-binary-deploy/01-ci-pipeline.md` | Go Binary — CI Pipeline | 1.0.0 |
-| `spec/12-cicd-pipeline-workflows/02-go-binary-deploy/02-release-pipeline.md` | Go Binary — Release Pipeline | 2.0.0 |
+| `spec/12-cicd-pipeline-workflows/02-go-binary-deploy/02-ci-pipeline.md` | Go Binary — CI Pipeline | 1.0.0 |
+| `spec/12-cicd-pipeline-workflows/02-go-binary-deploy/05-release-pipeline.md` | Go Binary — Release Pipeline | 2.0.0 |
 | `spec/12-cicd-pipeline-workflows/02-go-binary-deploy/99-consistency-report.md` | Consistency Report — Go Binary Deploy | 1.0.0 |
 | `spec/12-cicd-pipeline-workflows/99-consistency-report.md` | Consistency Report — CI/CD Pipeline Workflows | 4.0.0 |
 
@@ -561,15 +561,15 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/14-update/01-index.md` | Self-Update & App Update | 1.0.0 |
-| `spec/14-update/01-self-update-overview.md` | Self-Update Overview | 1.0.0 |
-| `spec/14-update/02-deploy-path-resolution.md` | Deploy Path Resolution | 1.0.0 |
-| `spec/14-update/03-rename-first-deploy.md` | Rename-First Deploy Strategy | 1.0.0 |
-| `spec/14-update/04-build-scripts.md` | Build Scripts | 1.0.0 |
-| `spec/14-update/05-handoff-mechanism.md` | Handoff Mechanism (Windows) | 1.0.0 |
-| `spec/14-update/06-cleanup.md` | Cleanup | 1.0.0 |
-| `spec/14-update/13-release-assets.md` | Release Assets | 1.0.0 |
-| `spec/14-update/14-checksums-verification.md` | Checksums & Verification | 1.0.0 |
-| `spec/14-update/15-release-versioning.md` | Release Versioning | 1.0.0 |
+| `spec/14-update/02-self-update-overview.md` | Self-Update Overview | 1.0.0 |
+| `spec/14-update/03-deploy-path-resolution.md` | Deploy Path Resolution | 1.0.0 |
+| `spec/14-update/04-rename-first-deploy.md` | Rename-First Deploy Strategy | 1.0.0 |
+| `spec/14-update/05-build-scripts.md` | Build Scripts | 1.0.0 |
+| `spec/14-update/06-handoff-mechanism.md` | Handoff Mechanism (Windows) | 1.0.0 |
+| `spec/14-update/07-cleanup.md` | Cleanup | 1.0.0 |
+| `spec/14-update/14-release-assets.md` | Release Assets | 1.0.0 |
+| `spec/14-update/15-checksums-verification.md` | Checksums & Verification | 1.0.0 |
+| `spec/14-update/16-release-versioning.md` | Release Versioning | 1.0.0 |
 | `spec/14-update/99-consistency-report.md` | Consistency Report — Self-Update & App Update | 1.0.0 |
 
 ## 📱 App

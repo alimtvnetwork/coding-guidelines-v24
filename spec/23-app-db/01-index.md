@@ -1,5 +1,16 @@
 # App DB
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 23 App Db.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `23-app-db/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -47,7 +58,7 @@ Application-specific database (App DB) specifications for whatever project this 
 - [Database Conventions (Core)](../04-database-conventions/01-index.md) — General naming, PK/FK, ORM conventions
 - [Split DB Architecture](../05-split-db-architecture/01-index.md) — SQLite partitioning and migration patterns
 - [App](../21-app/01-index.md) — App-specific features and workflows
-- [Consolidated Database Conventions](../17-consolidated-guidelines/18-database-conventions.md) — Consolidated summary
+- [Consolidated Database Conventions](../17-consolidated-guidelines/21-database-conventions.md) — Consolidated summary
 
 ---
 

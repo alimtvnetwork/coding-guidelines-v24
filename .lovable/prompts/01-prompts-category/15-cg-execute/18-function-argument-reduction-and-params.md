@@ -27,7 +27,7 @@ N = total self-loop steps budget that the agents will perform.
 10. [ ] /goal Phase 2 (Step F): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
 11. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 12. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-13. [ ] /learn Ingest `spec/02-coding-guidelines/00-canonical-size-tier.md` for canonical file and function size tiers.
+13. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` for Rule 9a/9b multi-line parameter and call formatting.
 15. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/10-function-naming.md` for semantic verb and predicate prefix standards.
 16. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.

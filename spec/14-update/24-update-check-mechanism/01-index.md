@@ -17,8 +17,8 @@
 Defines the **non-blocking, parallel, status-script-driven** update-check
 mechanism for every CLI in the Riseup Asia stack. This is the **detection**
 half of the update lifecycle. The **application** half (rename-first deploy,
-handoff, cleanup) is already covered by `01-self-update-overview.md` through
-`07-console-safe-handoff.md` in the parent folder.
+handoff, cleanup) is already covered by `02-self-update-overview.md` through
+`08-console-safe-handoff.md` in the parent folder.
 
 This is **not a cron job**. There is no daemon, no scheduled task, no
 background service. Every check is initiated by the CLI itself, gated by
@@ -62,7 +62,7 @@ detached process so the user is never blocked.
 | # | File | Description |
 |---|------|-------------|
 | 00 | [01-index.md](./01-index.md) | This file — index and defining properties |
-| 01 | [01-fundamentals.md](./01-fundamentals.md) | Discovery algorithm, version-probe URLs, owner/repo conventions |
+| 01 | [02-fundamentals.md](./02-fundamentals.md) | Discovery algorithm, version-probe URLs, owner/repo conventions |
 | 02 | [02-status-script-json.md](./02-status-script-json.md) | `Status.ps1` / `Status.sh` output JSON schema (PascalCase) |
 | 03 | [03-combined-json.md](./03-combined-json.md) | Combined JSON after parallel discovery — fed to consumers |
 | 04 | [04-database-schema.md](./04-database-schema.md) | `UpdateChecker` table, `UpdateStatus` enum + lookup |
@@ -81,9 +81,9 @@ detached process so the user is never blocked.
 
 | Reference | Location |
 |-----------|----------|
-| Self-update (apply phase) | [../01-self-update-overview.md](../01-self-update-overview.md) |
-| Install script contract | [../18-install-scripts.md](../18-install-scripts.md) |
-| Version-pinned installers | [../../16-generic-release/08-version-pinned-release-installers.md](../../16-generic-release/08-version-pinned-release-installers.md) |
+| Self-update (apply phase) | [../02-self-update-overview.md](../02-self-update-overview.md) |
+| Install script contract | [../19-install-scripts.md](../19-install-scripts.md) |
+| Version-pinned installers | [../../16-generic-release/09-version-pinned-release-installers.md](../../16-generic-release/09-version-pinned-release-installers.md) |
 | Seedable config (where settings live) | [../../06-seedable-config-architecture/01-index.md](../../06-seedable-config-architecture/01-index.md) |
 | Local SQLite store | [../../13-generic-cli/10-database.md](../../13-generic-cli/10-database.md) |
 

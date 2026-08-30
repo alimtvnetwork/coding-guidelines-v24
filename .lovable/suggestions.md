@@ -193,11 +193,11 @@
 
 ### Placeholder guidelines 11/12/13 filled with real content — 2026-04-16
 
-### Expanded `01-spec-authoring.md` to 95% — 2026-04-16
+### Expanded `04-spec-authoring.md` to 95% — 2026-04-16
 
-### Expanded `16-app-design-system-and-ui.md` to 93% — 2026-04-16
+### Expanded `19-app-design-system-and-ui.md` to 93% — 2026-04-16
 
-### Created `22-app-database.md` consolidated guideline — 2026-04-16
+### Created `25-app-database.md` consolidated guideline — 2026-04-16
 
 ### Created write-memory prompt — 2026-04-16
 
@@ -213,7 +213,7 @@
 
 ### Database naming Rule 9 (auto-inverted computed fields) — 2026-04-19
 
-- `01-naming-conventions.md` v3.3.0 → v3.4.0 → v3.5.0. Three-bucket Rule 8 + Rules 10/11/12.
+- `02-naming-conventions.md` v3.3.0 → v3.4.0 → v3.5.0. Three-bucket Rule 8 + Rules 10/11/12.
 
 ### BOOL-NEG-001 linter check — 2026-04-19
 
@@ -229,7 +229,7 @@
 
 ### Schema design §6 Mandatory Descriptive Columns — 2026-04-19
 
-- `02-schema-design.md` v3.3.0.
+- `03-schema-design.md` v3.3.0.
 
 ### Restructure `.lovable/` to single-file convention — 2026-04-19
 
@@ -267,9 +267,9 @@
 
 - Promoted four `####` headings to `###` to keep level progression contiguous after the new `h2`. Verified 31 balanced code fences and intact TOC anchors.
 
-### Merged stray `.lovable/plans/installer-behavior-rollout.md` into `plan.md` — 2026-04-23
+### Merged stray `.lovable/plans/installer-behavior-rollout.md` into `29-plan.md` — 2026-04-23
 
-- Restores single-file convention; full rollout phases now live as a section inside `plan.md`.
+- Restores single-file convention; full rollout phases now live as a section inside `29-plan.md`.
 
 ---
 

@@ -4,7 +4,7 @@
 **Version:** 1.0.0
 **Created:** 2026-05-04
 **Status:** Authoritative
-**Resolves:** FU-11 from `spec/19-main-worker-service/14-rbac-and-status-seed.md` §3.1.
+**Resolves:** FU-11 from `spec/19-main-worker-service/15-rbac-and-status-seed.md` §3.1.
 **Authority:** Canonical JSON-Schema fragment for the new top-level `Tables` block introduced by `07-reference-table-seeding.md`. Implementations MUST embed §2 verbatim into the project's `config.schema.json`. On any conflict between this file and `07-reference-table-seeding.md`, **`07-…` wins** (this file is its machine-readable mirror).
 
 ---
@@ -124,7 +124,7 @@ Semantic rules **not** expressible in JSON-Schema (enforced by the seeder, see �
 
 ## 4. Worked validation example
 
-Valid — `EnumPage` block from `spec/19/14-rbac-and-status-seed.md` §3:
+Valid — `EnumPage` block from `spec/19/15-rbac-and-status-seed.md` §3:
 
 ```jsonc
 "Tables": {
@@ -180,7 +180,7 @@ A shared validator runs in CI before any seed is applied to a development DB:
 ```
 ajv validate \
   -s spec/06-seedable-config-architecture/02-features/08-config-schema-tables-block.md#section-2 \
-  -d spec/19-main-worker-service/14-rbac-and-status-seed.md#section-3
+  -d spec/19-main-worker-service/15-rbac-and-status-seed.md#section-3
 ```
 
 The build script extracts §2 (this file) and §3 (`14-…md`) at lint time. A future linter `check-config-seed.py` may absorb this — tracked, not in scope here.
@@ -189,18 +189,18 @@ The build script extracts §2 (this file) and §3 (`14-…md`) at lint time. A f
 
 ## 7. Cross-references
 
-- `spec/06-seedable-config-architecture/01-fundamentals.md` — sibling `Categories` block.
+- `spec/06-seedable-config-architecture/02-fundamentals.md` — sibling `Categories` block.
 - `spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md` — feature definition this file mechanizes.
 - `spec/06-seedable-config-architecture/02-features/09-config-seed-1.3.0-bump.md` — first seed file that uses this schema (FU-12).
 - `spec/06-seedable-config-architecture/02-features/10-at-ref-resolver.md` — `@<Table>.<Code>` resolver (FU-13).
-- `spec/19-main-worker-service/14-rbac-and-status-seed.md` — first concrete consumer.
+- `spec/19-main-worker-service/15-rbac-and-status-seed.md` — first concrete consumer.
 
 ---
 
 ## 8. Open Questions (logged, non-blocking)
 
 - **OQ-08-1** Add `MaxRows` per table to bound seed bloat? Inferred: defer; row counts already gated by code review.
-- **OQ-08-2** Allow `Version` downgrades (rollback)? Inferred: no — `01-fundamentals.md` §SeedWithVersionCheck mandates monotone increase.
+- **OQ-08-2** Allow `Version` downgrades (rollback)? Inferred: no — `02-fundamentals.md` §SeedWithVersionCheck mandates monotone increase.
 
 ---
 

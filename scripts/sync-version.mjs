@@ -39,7 +39,7 @@ const VERSION_PATH = resolve(ROOT, "version.json");
 const PKG_PATH = resolve(ROOT, "package.json");
 const AUTHORS_PATH = resolve(ROOT, "version-authors.json");
 
-// ---------- canonical Role enum (spec/01-spec-authoring-guide/17-version-schema.md §6) ----------
+// ---------- canonical Role enum (spec/01-spec-authoring-guide/14-version-schema.md §6) ----------
 
 const VALID_ROLES = new Set([
   "PrimaryAuthor",

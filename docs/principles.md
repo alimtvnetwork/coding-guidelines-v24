@@ -64,7 +64,7 @@ These rules have **zero tolerance** — any violation is an immediate rejection:
 | 10 | `10-function-naming.md` | Naming |
 | 12 | `12-no-negatives.md` | Naming |
 | 13 | `13-strict-typing.md` | Type Safety |
-| 14 | `14-test-naming-and-structure.md` | Testing |
+| 14 | `14-test-naming-and-03-structure.md` | Testing |
 | 15 | `15-master-coding-guidelines/` | Reference — consolidated cross-language |
 | 16 | `16-lazy-evaluation-patterns.md` | Patterns |
 | 17 | `17-regex-usage-guidelines.md` | Patterns |

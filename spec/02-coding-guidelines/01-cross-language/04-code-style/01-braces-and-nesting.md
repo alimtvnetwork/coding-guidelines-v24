@@ -140,7 +140,7 @@ if hasIssue {
 // ── Go ───────────────────────────────────────────────────────
 // Each enum lives in its own package (e.g., `internal/enums/environmenttype/`).
 // The package name provides the grouping — no type-name prefix needed on constants.
-// See: ../../03-golang/01-enum-specification/03-folder-structure.md
+// See: ../../03-golang/01-enum-specification/03-folder-03-structure.md
 
 package environmenttype
 

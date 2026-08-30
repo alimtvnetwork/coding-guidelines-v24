@@ -26,7 +26,7 @@ N = total self-loop steps budget that the agents will perform.
 8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-11. [ ] /learn Ingest `spec/02-coding-guidelines/00-canonical-size-tier.md` for canonical file and function size tiers.
+11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
 12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
 13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/02-typescript/` for domain-specific architectural specifications.
@@ -85,7 +85,7 @@ Before modifying application code, you MUST thoroughly scan the repository and w
 
 You MUST read, follow, and mechanically verify every single specification file below before and during execution:
 
-- [ ] **`spec/02-coding-guidelines/00-canonical-size-tier.md`**
+- [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Components <= 80 lines recommended (max 100 lines). Functions <= 8 lines preferred (max 15 lines). Max 100 lines for any file. Zero line-compression cheating.
 - [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`**
@@ -106,10 +106,10 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-typescript/09-promise-await-patterns.md`**
   - **Why:** Async lifecycle safety in React.
   - **How:** Handle all async flows with `try/catch` and `AppError` wrappers; avoid unhandled promises in `useEffect`.
-- [ ] **`spec/07-design-system/01-design-principles.md`**
+- [ ] **`spec/07-design-system/02-design-principles.md`**
   - **Why:** Modular UI architecture & sizing caps.
   - **How:** Hard 100-line cap per React component file (target <= 80 lines). Decompose large UI blocks into single-responsibility child components.
-- [ ] **`spec/07-design-system/02-theme-variable-architecture.md`**
+- [ ] **`spec/07-design-system/03-theme-variable-architecture.md`**
   - **Why:** Theme token usage.
   - **How:** Zero hardcoded hex color codes in components. Consume CSS theme custom properties and semantic tokens.
 - [ ] **`spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/02-error-store.md`**

@@ -59,4 +59,4 @@ See [02-enum-metadata-pattern.md](02-enum-metadata-pattern.md) for the full patt
 
 - [Go Enum Specification](../../02-coding-guidelines/03-golang/01-enum-specification/01-index.md) — equivalent pattern for Go
 - [Go Info-Object Pattern](../../02-coding-guidelines/03-golang/01-enum-specification/05-info-object-pattern.md) — Go version of the metadata pattern (uses info-object, not `match`)
-- [Phase 10 — Deployment Patterns](../10-deployment-patterns.md) — uses `SelfUpdateStatusType`
+- [Phase 10 — Deployment Patterns](../11-deployment-patterns.md) — uses `SelfUpdateStatusType`

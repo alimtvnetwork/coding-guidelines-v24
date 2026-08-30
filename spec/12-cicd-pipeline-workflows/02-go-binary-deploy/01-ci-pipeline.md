@@ -135,7 +135,7 @@ Runs static analysis using `go vet` and `golangci-lint`.
 
 ## Job: Vulnerability Scan (In-CI)
 
-See [Vulnerability Scanning](../03-vulnerability-scanning.md) for full details.
+See [Vulnerability Scanning](../06-vulnerability-scanning.md) for full details.
 
 Runs `govulncheck` with third-party vs. stdlib differentiation:
 
@@ -308,9 +308,9 @@ done
 
 ## Cross-References
 
-- [Shared Conventions](../01-shared-conventions.md) — Platform, triggers, concurrency, version resolution
-- [Vulnerability Scanning](../03-vulnerability-scanning.md) — Full scanning classification rules
-- [Go Binary Release Pipeline](./02-release-pipeline.md) — Release pipeline that follows CI
+- [Shared Conventions](../03-shared-conventions.md) — Platform, triggers, concurrency, version resolution
+- [Vulnerability Scanning](../06-vulnerability-scanning.md) — Full scanning classification rules
+- [Go Binary Release Pipeline](./05-release-pipeline.md) — Release pipeline that follows CI
 
 ---
 

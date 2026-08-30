@@ -4,7 +4,7 @@ Templates consumed by the release pipeline at tag time. Placeholders of
 the form `__EmbeddedXxx__` are substituted with the pinned values for
 the release being built, and the resulting files are uploaded as
 release assets / committed to `main` per
-[spec/16-generic-release/08-version-pinned-release-installers.md](../../spec/16-generic-release/08-version-pinned-release-installers.md).
+[spec/16-generic-release/09-version-pinned-release-installers.md](../../spec/16-generic-release/09-version-pinned-release-installers.md).
 
 ## Files
 

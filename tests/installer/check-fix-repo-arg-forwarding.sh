@@ -6,7 +6,7 @@
 # Strategy: shim fix-repo.sh in a temp copy of the runner so it just
 # echoes "$@" with NUL separators, then compare against the input.
 #
-# Spec: spec/15-distribution-and-runner/02-runner-contract.md
+# Spec: spec/15-distribution-and-runner/03-runner-contract.md
 # =====================================================================
 set -uo pipefail
 

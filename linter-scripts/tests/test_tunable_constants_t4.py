@@ -1,6 +1,6 @@
 """Tests for ``check-tunable-constants.py`` Rule T4 — session-TTL invariant.
 
-Rule T4 (defined in ``spec/19-main-worker-service/15-tunable-constants.md`` §6,
+Rule T4 (defined in ``spec/19-main-worker-service/16-tunable-constants.md`` §6,
 authored under FU-16) requires::
 
     MainWorker.Auth.MainSessionAbsoluteMaxSeconds
@@ -124,7 +124,7 @@ class RuleT4PairTests(unittest.TestCase):
 
     def test_pair_handles_existing_spec_format(self) -> None:
         # Smoke-test the actual on-disk spec strings to guarantee
-        # no-regression against the live `15-tunable-constants.md`.
+        # no-regression against the live `16-tunable-constants.md`.
         out = LINT.rule_t4_pair("§2", "**28800** (8h)", "**86400** (24h)")
         self.assertEqual(out, [])
 

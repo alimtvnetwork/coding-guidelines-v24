@@ -1,5 +1,16 @@
 # Database Conventions
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 04 Database Conventions.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `04-database-conventions/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -66,13 +77,13 @@ Comprehensive database design and implementation conventions covering naming, sc
 
 | # | File | Description |
 |---|------|-------------|
-| 01 | [01-naming-conventions.md](./01-naming-conventions.md) | PascalCase rules for tables, columns, indexes — singular table names |
-| 02 | [02-schema-design.md](./02-schema-design.md) | Key sizing, primary keys, foreign keys, normalization rules |
-| 03 | [03-orm-and-views.md](./03-orm-and-views.md) | ORM-first approach, view patterns, no raw SQL in business logic |
-| 04 | [04-testing-strategy.md](./04-testing-strategy.md) | Unit tests for schemas, integration tests with in-memory DB |
-| 05 | [05-relationship-diagrams.md](./05-relationship-diagrams.md) | Visual relationship patterns and AI-readable schema diagrams |
-| 06 | [06-rest-api-format.md](./06-rest-api-format.md) | PascalCase REST API response format, full CRUD sample, response envelope |
-| 07 | [07-split-db-pattern.md](./07-split-db-pattern.md) | Split DB pattern — one SQLite file per bounded context |
+| 01 | [02-naming-conventions.md](./03-naming-conventions.md) | PascalCase rules for tables, columns, indexes — singular table names |
+| 02 | [03-schema-design.md](./03-schema-design.md) | Key sizing, primary keys, foreign keys, normalization rules |
+| 03 | [04-orm-and-views.md](./04-orm-and-views.md) | ORM-first approach, view patterns, no raw SQL in business logic |
+| 04 | [05-testing-strategy.md](./05-testing-strategy.md) | Unit tests for schemas, integration tests with in-memory DB |
+| 05 | [06-relationship-diagrams.md](./06-relationship-diagrams.md) | Visual relationship patterns and AI-readable schema diagrams |
+| 06 | [07-rest-api-format.md](./07-rest-api-format.md) | PascalCase REST API response format, full CRUD sample, response envelope |
+| 07 | [08-split-db-pattern.md](./08-split-db-pattern.md) | Split DB pattern — one SQLite file per bounded context |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Module health and validation |
 
 ---
@@ -104,7 +115,7 @@ Comprehensive database design and implementation conventions covering naming, sc
 | 1st | **SQLite** (Split DB) | Default for all projects — embedded, zero-config, portable |
 | 2nd | **MySQL** | When concurrent write-heavy loads or multi-server access is needed |
 
-> The **Split DB** pattern uses multiple small SQLite databases per domain concern rather than one monolithic database. See [07-split-db-pattern.md](./07-split-db-pattern.md) for the full specification.
+> The **Split DB** pattern uses multiple small SQLite databases per domain concern rather than one monolithic database. See [08-split-db-pattern.md](./08-split-db-pattern.md) for the full specification.
 
 ---
 
@@ -116,7 +127,7 @@ Comprehensive database design and implementation conventions covering naming, sc
 | Coding Guidelines | [../02-coding-guidelines/01-index.md](../02-coding-guidelines/01-index.md) |
 | Cross-Language DB Naming | [../02-coding-guidelines/01-cross-language/07-database-naming.md](../02-coding-guidelines/01-cross-language/07-database-naming.md) |
 | Split DB Architecture | [../05-split-db-architecture/01-index.md](../05-split-db-architecture/01-index.md) |
-| Consolidated DB Conventions | [../17-consolidated-guidelines/18-database-conventions.md](../17-consolidated-guidelines/18-database-conventions.md) |
+| Consolidated DB Conventions | [../17-consolidated-guidelines/21-database-conventions.md](../17-consolidated-guidelines/21-database-conventions.md) |
 
 ---
 

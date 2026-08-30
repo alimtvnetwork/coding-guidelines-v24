@@ -8,8 +8,8 @@ Splitting the logic here keeps the two rules in lockstep on
 classification, scope, join-table detection, and column lookup so they
 can never drift apart on those concerns.
 
-Spec: spec/04-database-conventions/02-schema-design.md §6 (v3.4.0)
-Naming: spec/04-database-conventions/01-naming-conventions.md Rules 10/11/12
+Spec: spec/04-database-conventions/03-schema-design.md §6 (v3.4.0)
+Naming: spec/04-database-conventions/03-naming-conventions.md Rules 10/11/12
 """
 
 from __future__ import annotations
@@ -180,7 +180,7 @@ def scan_text(
                     message=(
                         f"{label_for(category)} table '{table}' is missing required "
                         f"nullable column '{col} TEXT NULL' "
-                        f"(Rule {rule_num} — see §6 of 02-schema-design.md)."
+                        f"(Rule {rule_num} — see §6 of 03-schema-design.md)."
                     ),
                 ))
 

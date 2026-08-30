@@ -6,7 +6,7 @@
 # (spec, linters, linter-scripts, linters-cicd) so a fresh `install.sh`
 # run pulls all of them. Offline — does not hit GitHub.
 #
-# Spec: spec/15-distribution-and-runner/04-install-config.md
+# Spec: spec/15-distribution-and-runner/05-install-config.md
 # =====================================================================
 set -uo pipefail
 

@@ -64,7 +64,7 @@ implementation and the JSON-file implementation.
 | `ApplyUpdate(ctx)` | `error` | Implements `do-update`: loads OS-specific install command, executes it, records `UpdateApplied` or `Failed`. |
 
 > No method blocks indefinitely. Every HTTP and DB call is bounded by
-> the timeouts declared in [01-fundamentals.md](./01-fundamentals.md) §5.
+> the timeouts declared in [02-fundamentals.md](./02-fundamentals.md) §5.
 
 ---
 

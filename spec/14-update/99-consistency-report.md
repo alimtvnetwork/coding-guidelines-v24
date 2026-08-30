@@ -10,14 +10,14 @@
 | # | File | Status |
 |---|------|--------|
 | 1 | `01-index.md` | ✅ Present |
-| 2 | `01-self-update-overview.md` | ✅ Present |
-| 3 | `02-deploy-path-resolution.md` | ✅ Present |
-| 4 | `03-rename-first-deploy.md` | ✅ Present |
-| 5 | `04-build-scripts.md` | ✅ Present |
-| 6 | `05-handoff-mechanism.md` | ✅ Present |
-| 7 | `06-cleanup.md` | ✅ Present |
-| 8 | `07-console-safe-handoff.md` | ✅ Present |
-| 9 | `08-repo-path-sync.md` | ✅ Present |
+| 2 | `02-self-update-overview.md` | ✅ Present |
+| 3 | `03-deploy-path-resolution.md` | ✅ Present |
+| 4 | `04-rename-first-deploy.md` | ✅ Present |
+| 5 | `05-build-scripts.md` | ✅ Present |
+| 6 | `06-handoff-mechanism.md` | ✅ Present |
+| 7 | `07-cleanup.md` | ✅ Present |
+| 8 | `08-console-safe-handoff.md` | ✅ Present |
+| 9 | `09-repo-path-sync.md` | ✅ Present |
 
 **Total:** 9 files (excluding this report)
 

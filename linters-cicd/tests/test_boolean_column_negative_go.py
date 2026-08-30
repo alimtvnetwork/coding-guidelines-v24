@@ -9,7 +9,7 @@ ensures lock-step parity with the SQL scanner's allow-list and
 forbidden-prefix regex.
 
 Spec:
-- spec/04-database-conventions/01-naming-conventions.md  Rules 2 & 9
+- spec/04-database-conventions/03-naming-conventions.md  Rules 2 & 9
 - linters-cicd/checks/boolean-column-negative/go.py
 """
 

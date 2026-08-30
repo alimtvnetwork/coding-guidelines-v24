@@ -173,7 +173,7 @@ To pin your repository to this exact version, run the following one-liner:
 - Enqueued `version.json`, `standards/version-source-of-truth.md`, and `release-architecture-map.md` in `.lovable/what-to-read.md`.
 - Created `.lovable/memory/release-architecture-map.md` and `.lovable/memory/standards/version-source-of-truth.md`.
 - Added `.lovable/memory` to all 7 bundles in `bundles.json` and regenerated 14 bundle installer scripts.
-- Updated Rule 19 in `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` and synced mirrors.
+- Updated Rule 19 in `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` and synced mirrors.
 
 ---
 
@@ -269,7 +269,7 @@ To pin your repository to this exact version, run the following one-liner:
 - `.github/workflows/branch-protection-drift.yml`: new nightly job (06:17 UTC, `workflow_dispatch` also) that runs `node scripts/branch-protection-diff.mjs` against the live `main` branch protection and posts the classified diff into the run summary. Self-skips when `GH_ADMIN_TOKEN` secret is absent (forks, unprivileged clones) so it never causes false-positive noise. Closes the second open backlog item from the v5.130 handoff: mechanical, always-on detection when GitHub protections drift from `.github/branch-protection.expected.json`. Root cause it addresses: `scripts/branch-protection-diff.mjs` (v5.127) is only useful if someone remembers to run it; a nightly workflow makes drift detection a property of the repo, not a habit of an operator.
 - `linter-scripts/check-file-sizes.py`: new linter enforcing spec/17 Hard Rule #6 (any file 300 lines, `.tsx` 100 lines). Discovers `src/`, `slides-app/src/`, `scripts/`, `linter-scripts/`; excludes vendored/generated (`*.d.ts`, `*_pb.ts`, `src/components/ui/` shadcn primitives, build dirs). Supports top-of-file waivers (`// lint-allow: file-size reason="..." max=N`, ceiling 600). Ratchet baseline written to `.file-size-baseline.json` (55 pre-existing entries pinned): any NEW file over cap or any pinned file that GROWS past its baseline fails `--check`; shrinking is always accepted. `--strict` ignores the baseline. Wired into `scripts/lint-ci.sh` (steps 25+26) and `.github/workflows/ci.yml` `sync-drift` job.
 - `linter-scripts/tests/check-file-sizes.test.py`: 10 self-test assertions locking the contract: pinned-only passes, growth fails with `GREW from N`, NEW files fail with `NEW`, waivers within ceiling clear a violation, waivers over ceiling exit 2, `--strict` fails even when baseline is clean. Prevents a linter refactor from silently green-lighting drift.
-- Root cause this closes: Hard Rule #6 has existed in `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` since v1.0 but had zero enforcement, so files like `slides-app/src/App.tsx` (913 lines) and `src/components/ui/sidebar.tsx` (650 lines) drifted past cap unchallenged. The ratchet lets us pin the current mess without a big-bang refactor while guaranteeing no new violations land. Same "rule with teeth" pattern established in v5.130 for Hard Rule #13.
+- Root cause this closes: Hard Rule #6 has existed in `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` since v1.0 but had zero enforcement, so files like `slides-app/src/App.tsx` (913 lines) and `src/components/ui/sidebar.tsx` (650 lines) drifted past cap unchallenged. The ratchet lets us pin the current mess without a big-bang refactor while guaranteeing no new violations land. Same "rule with teeth" pattern established in v5.130 for Hard Rule #13.
 
 ---
 
@@ -277,7 +277,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added, enforce Hard Rule #13 (guideline mirror sync) in lint-ci and CI + self-test
 
-- `scripts/lint-ci.sh` steps 23+24 and `.github/workflows/ci.yml` `sync-drift` job: wired `node scripts/sync-guidelines.mjs --check` and `node scripts/tests/sync-guidelines.test.mjs`. Any hand-edit to `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` that forgets to re-run `npm run sync:guidelines` now fails pre-push AND PR checks. Closes the enforcement gap opened in v5.129: Hard Rule #13 was documentation-only theatre without a CI gate.
+- `scripts/lint-ci.sh` steps 23+24 and `.github/workflows/ci.yml` `sync-drift` job: wired `node scripts/sync-guidelines.mjs --check` and `node scripts/tests/sync-guidelines.test.mjs`. Any hand-edit to `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` that forgets to re-run `npm run sync:guidelines` now fails pre-push AND PR checks. Closes the enforcement gap opened in v5.129: Hard Rule #13 was documentation-only theatre without a CI gate.
 - `scripts/sync-guidelines.mjs`: refactored to export pure helpers (`diffReport`, `computeDrifts`, `buildLovableMirror`, `buildCursorRules`, `extractSection`) and guarded `main()` behind an `invokedDirectly` check so importing the module in tests does not touch the real mirrors or exit the process. Same pattern as v5.126 `print-required-checks.mjs` refactor.
 - `scripts/tests/sync-guidelines.test.mjs`: 14 assertions locking the contract. Covers `diffReport` (identical, single-char, empty, line-count message format), `extractSection` (pull body, stop at next heading or `---`, throw on missing heading), `computeDrifts` (clean, lovable-only drift, cursor-only drift including missing markers, both drifted), end-to-end spawn of `--check` (exits 0 with "OK" on clean repo), and an implicit assertion that the import guard prevented `main()` from running at module import time.
 - `scripts/check-lint-ci-drift.mjs` verified no drift: `ci.yml` mirrors `lint-ci.sh` with both new steps present in both places.
@@ -288,7 +288,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed, coding guideline 31 v1.5.0: hard rule for mirror sync + expanded React mutation guidance
 
-- `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` bumped to v1.5.0. Added a "Canonical locations" block near the top naming all three required paths (`spec/17-.../31-*.md` as source, `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` as mirrors) and pointing at `scripts/sync-guidelines.mjs` as the only allowed writer. This closes the recurring symptom "sometimes the spec folder is visible to search, sometimes it isn't": agent search indexes the mirror, not the spec tree, so a missing mirror made the guideline effectively invisible.
+- `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` bumped to v1.5.0. Added a "Canonical locations" block near the top naming all three required paths (`spec/17-.../31-*.md` as source, `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` as mirrors) and pointing at `scripts/sync-guidelines.mjs` as the only allowed writer. This closes the recurring symptom "sometimes the spec folder is visible to search, sometimes it isn't": agent search indexes the mirror, not the spec tree, so a missing mirror made the guideline effectively invisible.
 - Promoted the mirror requirement to Hard Rule #13 (Zero Tolerance): missing or stale mirrors are a build-fail; never hand-edit mirrors; always edit source and re-run the sync script. Root cause this closes: v1.4.0 documented sync only in the release notes, not inside the guideline itself, so any AI reading only file 31 had no reason to keep the mirrors alive.
 - React rule #7 rewritten from a one-line "never mutate, use spread or structuredClone" into a full guidance paragraph. Explains WHY (React reconciler uses referential inequality, so in-place mutation silently drops updates), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`, `Object.freeze` for constants), when to use `structuredClone` (deep copies for nested state / form drafts), when Immer is acceptable (only when a reducer would otherwise be unreadable, output still a fresh reference), and three concrete rules of thumb including the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 - Ran `node scripts/sync-guidelines.mjs`: both mirrors now match source byte-for-byte (198 lines / 66 lines respectively). Verified with `node scripts/sync-version.mjs` at v5.129.0.
@@ -328,20 +328,20 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed, backlog cleanup + branch-protection npm surface
 
-- `.lovable/plan.md`: replaced the "Open Questions (all resolved)" section (4 struck-through bullets, zero live content) with a two-line pointer to the Locked Decisions table. Root cause: mediocre-AI audits kept re-flagging OQ-A1..A4 as "open" because they scanned for the `Open Questions:` header, even though every one had a D-number since 2026-07-19 (D15/D16) and Phases 8/11 (OQ-A3/A4).
+- `.lovable/29-plan.md`: replaced the "Open Questions (all resolved)" section (4 struck-through bullets, zero live content) with a two-line pointer to the Locked Decisions table. Root cause: mediocre-AI audits kept re-flagging OQ-A1..A4 as "open" because they scanned for the `Open Questions:` header, even though every one had a D-number since 2026-07-19 (D15/D16) and Phases 8/11 (OQ-A3/A4).
 - `package.json`: added `npm run branch-protection:print`, `branch-protection:json`, and `branch-protection:check` wrappers over `scripts/print-required-checks.mjs`. Root cause: procedure `.lovable/procedures/branch-protection.md` still required remembering the raw `node scripts/...` invocation, which is why the `visual` + `smoke` promotion has sat in the backlog for 3 releases. `npm run` is discoverable via tab-completion.
-- Verification: `grep -c "OQ-A1\|OQ-A2\|OQ-A3\|OQ-A4" .lovable/plan.md` returns only Locked-Decisions row references. `npm run branch-protection:check` exits 0 (no stale entries in `.github/branch-protection.expected.json`).
+- Verification: `grep -c "OQ-A1\|OQ-A2\|OQ-A3\|OQ-A4" .lovable/29-plan.md` returns only Locked-Decisions row references. `npm run branch-protection:check` exits 0 (no stale entries in `.github/branch-protection.expected.json`).
 
 ## [5.124.0] - 2026-07-19
 
 ### Changed, OQ-A1 and OQ-A2 promoted to locked decisions D15/D16
 
-- `spec/19-main-worker-service/17-cascading-roles-and-cache-bin.md` bumped to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". Header `Resolves:` line now cites D15 and D16.
+- `spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` bumped to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". Header `Resolves:` line now cites D15 and D16.
 - D15 (locked): cascading semantics is simple union. No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Reopening would invalidate `WORKER-900-02 EmptyEffectiveAccessSet` and the JWT `AccessItem.Code[]` embedding in §2.
 - D16 (locked): cache-bin storage tier is per-process SQLite `:memory:` with the `RoleAccessCache` / `RoleCacheCatalogVersion` schema in §4 and the invalidation contract in §5. Redis and plain in-process map remain configurable alternatives against the same four-function contract; they are not defaults and MUST NOT be assumed by Phase 6+ implementers.
-- `.lovable/plan.md`: added D15 and D16 rows to the Locked Decisions table. "Open Questions (carried forward)" section renamed to "Open Questions (all resolved)" with OQ-A1/A2 struck through and linked to their new D-numbers. OQ-A3 and OQ-A4 were already resolved (Phase 8 and Phase 11).
+- `.lovable/29-plan.md`: added D15 and D16 rows to the Locked Decisions table. "Open Questions (carried forward)" section renamed to "Open Questions (all resolved)" with OQ-A1/A2 struck through and linked to their new D-numbers. OQ-A3 and OQ-A4 were already resolved (Phase 8 and Phase 11).
 - Root cause this closes: the last blind-AI audit and every mediocre-AI gap analysis kept flagging OQ-A1/A2 as legitimately open, even though every downstream chapter (13 error codes, 14 seeds, 07 dashboards, 15 tunables) had already been built against the defaults for 18+ versions. Leaving them "open" was a documentation lie that would cost a future implementer a wasted phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
-- Verification: `grep -n "OQ-A1\|OQ-A2" .lovable/plan.md` now returns only the two struck-through resolution lines and the two Locked-Decisions rows (no bare open questions). Chapter 17 §7 no longer contains the phrase "Open Questions".
+- Verification: `grep -n "OQ-A1\|OQ-A2" .lovable/29-plan.md` now returns only the two struck-through resolution lines and the two Locked-Decisions rows (no bare open questions). Chapter 17 §7 no longer contains the phrase "Open Questions".
 
 ## [5.123.0] - 2026-07-19
 
@@ -448,9 +448,9 @@ To pin your repository to this exact version, run the following one-liner:
 - Parses `DECK` in `slides-app/src/deck/registry.ts` (top-level object-literal count anchored on `= [` to skip the `SlideEntry[]` type bracket) and cross-checks `slides-app/tests/visual.spec.ts-snapshots/` for one `slide-NN-chromium-linux.png` per entry. Root cause it addresses: the visual regression suite iterates `DECK.length` slides, but a missing baseline PNG causes Playwright to auto-create one on first run and pass, hiding zero-protection cases. First run reported `deck=70 baselines=0 missing=70`, confirming the suite has been silently green since inception.
 - Wired advisory (`node scripts/validate-visual-baselines.mjs`) into `.husky/pre-push` and `.github/workflows/slides-visual.yml` as a pre-Playwright step. Ships with `--strict` mode (exit 1 on any drift, ready to flip once baselines land) and `--list` (enumerate missing baseline names). Exposed as `slides:validate-baselines` and `slides:validate-baselines:strict` npm scripts.
 
-### Fixed — Stale open question in `.lovable/plan.md`
+### Fixed — Stale open question in `.lovable/29-plan.md`
 
-- OQ-A3 (Zip password "known pattern") was resolved in Phase 8 by `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack) but the Open Questions block was never swept, so the item kept surfacing in every remaining-work list. Marked resolved with a pointer to the spec section.
+- OQ-A3 (Zip password "known pattern") was resolved in Phase 8 by `spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack) but the Open Questions block was never swept, so the item kept surfacing in every remaining-work list. Marked resolved with a pointer to the spec section.
 
 ## [5.116.0] - 2026-07-19
 
@@ -960,7 +960,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added - SS-02 task 16: "Must Follow" opener slide
 
-- New slide [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx), registered in the `principles` section as `13-must-follow` (ruleId `MUST-001`, severity `hard`) in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Distills §"Must Follow and without negotiation" of `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` into 5 non-negotiables: (1) Read first, guess never; (2) One-sentence root cause; (3) Minimum correct fix; (4) Verify in the logs; (5) Ship the trail (remaining tasks + version + changelog + release notes).
+- New slide [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx), registered in the `principles` section as `13-must-follow` (ruleId `MUST-001`, severity `hard`) in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Distills §"Must Follow and without negotiation" of `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` into 5 non-negotiables: (1) Read first, guess never; (2) One-sentence root cause; (3) Minimum correct fix; (4) Verify in the logs; (5) Ship the trail (remaining tasks + version + changelog + release notes).
 - Slide carries the S→R→A pattern via `<ActionPanel>` (satisfies `scripts/validate-slides-sra.mjs`) and renders the 5 non-negotiables as a 2-column numbered grid using design tokens (`hsl(var(--bg-raised))`, `hsl(var(--accent))`, `var(--font-mono)`).
 - Root cause of prior gap: SS-02 backlog task 16 was open because the principles section had 3 aphorism slides (`01a`/`01b`/`01c`) but no distilled Must-Follow checklist tied to file 31; blind-follow readers had to reconstruct the 5 rules from a rant paragraph.
 - Verification: `bun run build` succeeds (offline contract intact, 38 files, 1833 KB, `dist.zip` 0.96 MB); `node scripts/validate-slides-sra.mjs` reports "OK: 15 slide(s) follow the Symptom -> Rule -> Action pattern" (was 14). Palette search for "must-follow" now returns the new slide.
@@ -1094,7 +1094,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added - SS-02 tasks 1 + 4: sectioned deck registry + RuleBadge
 
-- New `slides-app/src/deck/registry.ts` introduces `SlideSection` (opening, principles, naming, control-flow, errors, react, workflow, closing), `SlideSectionMeta`, `groupBySection()`, and per-slide `severity` + `ruleId` metadata mapped to `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`.
+- New `slides-app/src/deck/registry.ts` introduces `SlideSection` (opening, principles, naming, control-flow, errors, react, workflow, closing), `SlideSectionMeta`, `groupBySection()`, and per-slide `severity` + `ruleId` metadata mapped to `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`.
 - New `slides-app/src/components/RuleBadge.tsx` renders a compact Hard/Warn/Style pill using `.slide-badge` chrome tokens (nowrap, 20px) with dot indicator and optional rule id suffix.
 - `slides-app/src/deck.ts` now re-exports from the registry (backward compatible; no consumer touched).
 - Root cause of the prior gap: flat `deck.ts` array had no section or severity metadata, forcing every new content slide to reinvent grouping and badge chrome.
@@ -1375,7 +1375,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ## [5.26.0] - 2026-05-06
 
-### Changed — Phase 13.3 — inline cross-spec inherited rules in new 25-inherited-rules.md (closes audit-08 §2.4)
+### Changed — Phase 13.3 — inline cross-spec inherited rules in new 26-inherited-rules.md (closes audit-08 §2.4)
 
 - Bumped `package.json` from `5.25.0` → `5.26.0`.
 - Sync-managed artifacts regenerated by `npm run sync`: `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
@@ -1460,7 +1460,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 | `linters-cicd/` | 13 | 52 | `readme.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
 | `src/` | 2 | 47 | `src/components/landing/InstallSection.tsx`, `src/data/specTree.json` |
 | `spec/` | 19 | 44 | Spec docs referencing the slug (sarif-contract, ci-templates, distribution, install-contract, install-config, version-pinned-release-installers, install-script-version-probe, repo-major-version-migrator, generic-installer-behavior, distribution-and-runner, lovable-folder-structure, readme-improvement-suggestions, root-readme-conventions, etc.) |
-| `.lovable/` | 8 | 16 | `memory/01-index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `plan.md`, `strictly-avoid.md`, `suggestions.md` |
+| `.lovable/` | 8 | 16 | `memory/01-index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `29-plan.md`, `strictly-avoid.md`, `suggestions.md` |
 | `docs/` | 2 | 14 | `docs/github-repo-metadata.md`, `docs/slides-installer.md` |
 | `examples/other-repo-integration/` | 7 | 10 | `azure-devops/`, `gitlab/`, `jenkins/` integration recipes and READMEs |
 | `slides-app/` & `spec-slides/` | 4 | 9 | `slides-app/package.json`, `slides-app/scripts/package-zip.mjs`, `slides-app/src/slides/12-closing.tsx`, `spec-slides/05-curriculum.md`, `spec-slides/06-build-and-zip-pipeline.md` |
@@ -1484,7 +1484,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 - `.lovable/memory/constraints/install-command-formatting.md`
 - `.lovable/memory/suggestions/01-suggestions-tracker.md`
 - `.lovable/memory/workflow/01-plan-tracker.md`
-- `.lovable/plan.md`, `.lovable/strictly-avoid.md`, `.lovable/suggestions.md`
+- `.lovable/29-plan.md`, `.lovable/strictly-avoid.md`, `.lovable/suggestions.md`
 
 #### Skipped (intentional)
 
@@ -1656,7 +1656,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
   path references (`movie-cli-v1`) that should be `movie-cli-v2` per the
   global namespace standard.
   - Pattern: `movie-cli-v1\b`
-  - Allowlist: `spec/14-update/23-install-script-version-probe.md` (legitimate
+  - Allowlist: `spec/14-update/24-install-script-version-probe.md` (legitimate
     historical migration docs).
   - Added to `linter-scripts/forbidden-strings.toml` as the second `[[rule]]`
     demonstrating the TOML-driven scanner's extensibility.
@@ -1732,7 +1732,7 @@ the canonical superset.
   `-- linter-waive-file: MISSING-DESC-001 reason="..."`. The
   `reason="..."` clause is **mandatory** — bare waivers are ignored so
   silent suppressions can't pass review. Documented in
-  `spec/04-database-conventions/02-schema-design.md` §6.6 and
+  `spec/04-database-conventions/03-schema-design.md` §6.6 and
   `linters-cicd/checks/missing-desc/readme.md`.
 
 ### Audited & cleaned
@@ -1740,7 +1740,7 @@ the canonical superset.
 - **Spec tree audit (115 violations → 0 unwaived).** Every `CREATE TABLE`
   inside ` ```sql ` markdown fences across `spec/` was audited against
   Rules 10/11/12.
-  - **Fixed in place:** `spec/17-consolidated-guidelines/22-app-database.md`
+  - **Fixed in place:** `spec/17-consolidated-guidelines/25-app-database.md`
     — entity / lookup / transactional / migration templates now
     demonstrate `Description` and `Notes`+`Comments` correctly, and a
     new §4.4 *Transactional Table Template* was added.
@@ -1750,7 +1750,7 @@ the canonical superset.
     free-text columns would obscure the lesson being taught. Each
     waiver carries a path-appropriate `reason="..."`.
   - The three intentional ❌-WRONG anti-examples in
-    `02-schema-design.md` §6.4 carry the reason
+    `03-schema-design.md` §6.4 carry the reason
     `"Intentional anti-example for Rule {N} — teaches the violation"`.
 
 ---
@@ -1761,7 +1761,7 @@ the canonical superset.
 
 - **`DB-FREETEXT-001`** SQL linter (`linters-cicd/checks/free-text-columns/sql.py`)
   — flags `CREATE TABLE` statements missing the required nullable free-text
-  columns per `spec/04-database-conventions/02-schema-design.md` §6 and Naming
+  columns per `spec/04-database-conventions/03-schema-design.md` §6 and Naming
   Rules 10/11/12 (v3.5.0):
   - Entity / reference / lookup / master-data tables must declare
     `Description TEXT NULL`.
@@ -1839,7 +1839,7 @@ the canonical superset.
   The result-scan loop iterates highest → lowest so the first hit accepted is
   already the winner — no second pass, no per-iteration sort.
   - Documented as a portable trick in
-    [`spec/14-update/23-install-script-version-probe.md`](spec/14-update/23-install-script-version-probe.md)
+    [`spec/14-update/24-install-script-version-probe.md`](spec/14-update/24-install-script-version-probe.md)
     so any other CLI's installer can adopt it.
 - **Indented PowerShell output** — every `Write-Step / OK / Warn / Err / Dim / Plain`
   call (and the banner / summary blocks) now share a 4-space left gutter for a
@@ -1856,7 +1856,7 @@ the canonical superset.
 
 - README's flag table updated with the full alias list:
   `--no-probe`, `--no-latest`, `-n` ↔ `-NoProbe`, `-NoLatest`, `-n`.
-- New section in `spec/14-update/23-install-script-version-probe.md`:
+- New section in `spec/14-update/24-install-script-version-probe.md`:
   *"Probe ordering optimization (middle-out + descending result scan)"* —
   explains why ordering still matters under degraded parallelism (corporate
   proxies, throttled CI runners, low-fd shells) and provides reference
@@ -1872,7 +1872,7 @@ the canonical superset.
   two "skip latest probe" command cards.
 - `readme.md` — Reordered Option 1 (PowerShell first), added `-n` variants,
   expanded flag table.
-- `spec/14-update/23-install-script-version-probe.md` — middle-out ordering spec.
+- `spec/14-update/24-install-script-version-probe.md` — middle-out ordering spec.
 - `package.json`, `version.json` — bumped to `3.8.0`.
 
 ---

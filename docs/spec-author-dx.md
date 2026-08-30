@@ -15,7 +15,7 @@ Reduce the time from "I have a spec idea" to "CI is green and the doc is live in
 
 | Step | Today | Friction |
 |------|-------|----------|
-| 1. Find the right module / number | Read `01-spec-authoring.md` (475 lines) → `19-gap-analysis.md` → `spec-index.md` | 3 hops, easy to pick a duplicate prefix |
+| 1. Find the right module / number | Read `04-spec-authoring.md` (475 lines) → `22-gap-analysis.md` → `spec-index.md` | 3 hops, easy to pick a duplicate prefix |
 | 2. Write the metadata header | Type from memory or copy from a sibling | Drift in version / date / scoring fields |
 | 3. Write content | Free-form markdown | Catches `not`/`no` boolean names, missing alt text, broken links only at commit time |
 | 4. Validate | `python linter-scripts/validate-guidelines.py` locally | 8–15 s feedback loop, no in-editor squiggles |
@@ -30,7 +30,7 @@ Reduce the time from "I have a spec idea" to "CI is green and the doc is live in
 
 Eliminates step 2 friction. Authors `cp` and edit. Already in repo.
 
-### 2. `00-strictly-avoid-quickref.md` (shipped in this PR)
+### 2. `03-strictly-avoid-quickref.md` (shipped in this PR)
 
 30-second read; eliminates the most common review-time rejections (boolean negatives, magic strings, swallowed errors, version drift).
 

@@ -27,7 +27,7 @@ Three sequential user requests, executed in one session:
 | 10 | E2E `install.sh` four-folder pull (offline) | `tests/installer/check-install-folders-config.sh` — asserts `install-config.json` declares spec/linters/linter-scripts/linters-cicd |
 | B6 | `99-consistency-report.md` updates | Date-bumped across 13 spec subfolders |
 | B5 | Sub-90% guideline expansion | "Effective Score" waiver section added to `spec/health-dashboard.md` |
-| 12 | `02-schema-design.md` §6 alignment | Pinned to naming v3.5.0 |
+| 12 | `03-schema-design.md` §6 alignment | Pinned to naming v3.5.0 |
 | (UI) | Release & Migration card | `src/components/landing/InstallSection.tsx` rewritten — 2 cards, no skip-probe variants |
 
 ## Files modified (high level)
@@ -36,7 +36,7 @@ Three sequential user requests, executed in one session:
 - **Release scripts:** `release-artifacts/release-install.{ps1,sh}` — slug rebrand
 - **Linters-cicd:** `run-all.sh`, `scripts/load-config.py`, `checks/_lib/per_file_timeout.py` (new), `checks/file-length/universal.py`, `checks/registry.json`, 4 new PHP plugins
 - **Tests:** `tests/e2e/landing.spec.ts` (new), `tests/installer/check-{run-slides-help,install-folders-config}.sh` (new), `tests/installer/run-tests.sh`
-- **Docs:** 13 × `99-consistency-report.md`, `spec/health-dashboard.md`, `spec/04-database-conventions/02-schema-design.md`, `docs/architecture.md`, `docs/author.md`, `docs/principles.md`, `readme.md`, `public/health-score.json`
+- **Docs:** 13 × `99-consistency-report.md`, `spec/health-dashboard.md`, `spec/04-database-conventions/03-schema-design.md`, `docs/architecture.md`, `docs/author.md`, `docs/principles.md`, `readme.md`, `public/health-score.json`
 - **Config:** `package.json` (4.24.0), `version.json`, `linters-cicd/VERSION` (3.22.0), `install.sh`, `run.sh`
 
 ## Key decisions / user instructions

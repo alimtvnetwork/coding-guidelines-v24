@@ -26,11 +26,11 @@ N = total self-loop steps budget that the agents will perform.
 8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-11. [ ] /learn Ingest `spec/02-coding-guidelines/00-canonical-size-tier.md` for canonical file and function size tiers.
+11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
 12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
 13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
-14. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md` for domain-specific architectural specifications.
-15. [ ] /learn Ingest `spec/04-database-conventions/04-testing-strategy.md` for domain-specific architectural specifications.
+14. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md` for domain-specific architectural specifications.
+15. [ ] /learn Ingest `spec/04-database-conventions/05-testing-strategy.md` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
@@ -85,7 +85,7 @@ Before writing tests or modifying functions, you MUST perform a deep function-by
 
 You MUST read, follow, and mechanically verify every single specification file below before and during execution:
 
-- [ ] **`spec/02-coding-guidelines/00-canonical-size-tier.md`**
+- [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line compression.
 - [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`**
@@ -97,13 +97,13 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`**
   - **Why:** Absolute zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md`**
   - **Why:** Mandatory three-part semantic test naming and table-driven structure.
   - **How:** Name every test strictly as `Test{Unit}_{Scenario}_{ExpectedOutcome}` (e.g. `TestCreateSession_WithExpiredToken_ReturnsAuthError`). Colocate unit tests and name integration tests with `_integration_test.go` or `.integration.test.tsx`.
 - [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`**
   - **Why:** Function testability and branch simplicity.
   - **How:** Target <= 8 lines per function (hard cap 15 lines). Decompose complex multi-branch functions into pure, isolated sub-functions so each branch can be tested individually.
-- [ ] **`spec/04-database-conventions/04-testing-strategy.md`**
+- [ ] **`spec/04-database-conventions/05-testing-strategy.md`**
   - **Why:** Database integration and query testing standards.
   - **How:** Test schema migrations, repository CRUD methods, and foreign key cascades against isolated test SQLite instances with transactional rollbacks.
 - [ ] **`spec/03-error-manage/01-error-resolution/04-verification-patterns/01-frontend-backend-sync.md`**
@@ -248,7 +248,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md` and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md` and `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] Zero Nested Ifs: Absolutely zero nested if statements (flattened with guard clauses).
 - [ ] Function Limits: <= 8 lines preferred, <= 15 lines max.
 - [ ] File Limits: <= 100 lines coding max (recommended <= 80 lines).

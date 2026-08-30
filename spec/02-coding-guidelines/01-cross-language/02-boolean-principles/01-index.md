@@ -57,7 +57,7 @@ never as a second column. This is the database-side counterpart to the
 in-memory semantic-inverse pairs documented in
 [`12-no-negatives.md`](../12-no-negatives.md#object-level-semantic-inverses).
 
-> **Authoritative spec:** [Database Naming Conventions — Rule 9: Auto-Generated Inverted (Computed) Fields](../../../04-database-conventions/01-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code)
+> **Authoritative spec:** [Database Naming Conventions — Rule 9: Auto-Generated Inverted (Computed) Fields](../../../04-database-conventions/02-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code)
 >
 > **Codegen tool:** [`linters-cicd/codegen/`](../../../../linters-cicd/codegen/readme.md) — emits Go methods, PHP traits, and TypeScript getters from `Is*`/`Has*` db-tagged fields.
 >
@@ -68,7 +68,7 @@ in-memory semantic-inverse pairs documented in
 ## Cross-References
 
 - [No Raw Negations](../12-no-negatives.md) — Full guard function inventory
-- [Database Naming — Rule 9 (Inverted Fields)](../../../04-database-conventions/01-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code) — DB-side inverse contract
+- [Database Naming — Rule 9 (Inverted Fields)](../../../04-database-conventions/02-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code) — DB-side inverse contract
 - [Code Style — Rule 3](../04-code-style/01-index.md) — Complex condition extraction
 - [Function Naming](../10-function-naming.md) — No boolean flag parameters
 - [PHP Boolean Guard Inventory](../../04-php/07-php-standards-reference/01-index.md) — PHP-specific helpers

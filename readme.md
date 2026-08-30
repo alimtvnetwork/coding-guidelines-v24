@@ -30,7 +30,7 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="spec/health-dashboard.md"><img alt="Health Score (effective, waived per folder-ref allowlist; raw=80/100 in spec/health-dashboard.md)" src="https://img.shields.io/badge/health-100%2F100%20(A+)-22C55E?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
+  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="spec/health-dashboard.md"><img alt="Health Score (effective, waived per folder-ref allowlist; raw=80/100 in spec/health-dashboard.md)" src="https://img.shields.io/badge/health-100%2F100%20(A+)-22C55E?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
 </p>
 
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
@@ -263,6 +263,7 @@ Every installer below copies the listed **folders** (recursively, preserving str
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
 > - **`version.json`** is smartly merged. The installer injects a `codingGuideline` object into the target repo's `version.json` with version tracking and prompt references, rather than overwriting the file.
 > - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - **`spec-coding-guideline/`** is an internal-only repository specification folder for `coding-guidelines-v24` (housing internal slide deck specs) and is excluded from bundle exports to prevent collisions in consumer repositories.
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
 
@@ -1554,12 +1555,12 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.131.0
 
-- Enforces Hard Rule #13 (guideline mirror sync). `scripts/lint-ci.sh` steps 23+24 and the CI `sync-drift` job now run `node scripts/sync-guidelines.mjs --check` and a 14-assertion self-test at `scripts/tests/sync-guidelines.test.mjs`. Any edit to `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` that forgets `npm run sync:guidelines` fails pre-push AND PR. Closes the enforcement gap v5.129 left open.
+- Enforces Hard Rule #13 (guideline mirror sync). `scripts/lint-ci.sh` steps 23+24 and the CI `sync-drift` job now run `node scripts/sync-guidelines.mjs --check` and a 14-assertion self-test at `scripts/tests/sync-guidelines.test.mjs`. Any edit to `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` that forgets `npm run sync:guidelines` fails pre-push AND PR. Closes the enforcement gap v5.129 left open.
 - `scripts/sync-guidelines.mjs` refactored to export `diffReport`, `computeDrifts`, `buildLovableMirror`, `buildCursorRules`, `extractSection` and guarded `main()` behind an `invokedDirectly` check. Same import-safe pattern as v5.126 print-required-checks refactor.
 
 ### What's new in v5.129.0
 
-- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
+- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
 - React rule #7 rewritten from one line into full guidance. Explains WHY mutation breaks React (reconciler uses referential inequality), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`), when to reach for `structuredClone` (deep copies), when Immer is acceptable, and the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 
 ### What's new in v5.128.0
@@ -1579,13 +1580,13 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.125.0
 
-- Backlog cleanup: `.lovable/plan.md` "Open Questions (all resolved)" section replaced with a pointer to the Locked Decisions table. Mediocre-AI audits kept re-flagging OQ-A1..A4 despite each having a D-number (D15/D16 + Phase 8/11 resolutions).
+- Backlog cleanup: `.lovable/29-plan.md` "Open Questions (all resolved)" section replaced with a pointer to the Locked Decisions table. Mediocre-AI audits kept re-flagging OQ-A1..A4 despite each having a D-number (D15/D16 + Phase 8/11 resolutions).
 - New `npm run branch-protection:print | :json | :check` wrappers over `scripts/print-required-checks.mjs`, so the `visual` + `smoke` promotion procedure at `.lovable/procedures/branch-protection.md` is one tab-completion away instead of a raw `node scripts/...` invocation.
 
 ### What's new in v5.124.0
 
-- OQ-A1 and OQ-A2 promoted from "default adopted" to locked spec decisions **D15** and **D16**. `spec/19-main-worker-service/17-cascading-roles-and-cache-bin.md` v1.1.0: §7 rewritten as "Resolved Decisions". D15 locks cascading semantics as simple union (no role hierarchy). D16 locks the cache-bin storage tier as per-process SQLite `:memory:` with the `RoleAccessCache` schema in §4 and the invalidation contract in §5; Redis and plain in-process map stay documented as configurable alternatives against the same four-function contract.
-- `.lovable/plan.md`: Locked Decisions table gains D15 and D16. Open Questions section renamed to "all resolved". Root cause this closes: every blind-AI and mediocre-AI audit kept flagging these as legitimately open even though 18+ downstream chapters had already conformed to the defaults; leaving them "open" invited a future implementer to waste a phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
+- OQ-A1 and OQ-A2 promoted from "default adopted" to locked spec decisions **D15** and **D16**. `spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` v1.1.0: §7 rewritten as "Resolved Decisions". D15 locks cascading semantics as simple union (no role hierarchy). D16 locks the cache-bin storage tier as per-process SQLite `:memory:` with the `RoleAccessCache` schema in §4 and the invalidation contract in §5; Redis and plain in-process map stay documented as configurable alternatives against the same four-function contract.
+- `.lovable/29-plan.md`: Locked Decisions table gains D15 and D16. Open Questions section renamed to "all resolved". Root cause this closes: every blind-AI and mediocre-AI audit kept flagging these as legitimately open even though 18+ downstream chapters had already conformed to the defaults; leaving them "open" invited a future implementer to waste a phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
 
 ### What's new in v5.123.0
 
@@ -1622,7 +1623,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 ### What's new in v5.117.0
 
 - Visual baseline coverage guard. `scripts/validate-visual-baselines.mjs` parses `DECK` in `slides-app/src/deck/registry.ts` and asserts a matching `slide-NN-chromium-linux.png` exists under `slides-app/tests/visual.spec.ts-snapshots/`. First run surfaced the real state: 0 of 70 baselines committed, meaning every previous visual CI run was silently green. Wired advisory into `.husky/pre-push` and `.github/workflows/slides-visual.yml` today; flips to `--strict` (blocking) after the initial baseline set is baked via workflow_dispatch. Npm scripts: `slides:validate-baselines` (advisory) and `slides:validate-baselines:strict`.
-- Plan hygiene. `.lovable/plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `spec/19-main-worker-service/20-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
+- Plan hygiene. `.lovable/29-plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
 
 ### What's new in v5.116.0
 
@@ -1765,7 +1766,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.78.0
 
-- **Boolean naming slide (SS-02 task 25).** New [`slides-app/src/slides/23-boolean-naming.tsx`](slides-app/src/slides/23-boolean-naming.tsx) (ruleId `BOOL-002`, hard) codifies [spec/17/31 §Boolean Naming](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md) lines 40-49: prefixes `is` / `has` / `can` / `should` / `was` / `will` / `did` / `must`, positive framing only, no bare adjectives or `flag` / `bool` / `check`. Before/after `<CodeDiff>` inverts a triple-negative guard to a readable positive form. SRA validator now passes 25 slides.
+- **Boolean naming slide (SS-02 task 25).** New [`slides-app/src/slides/23-boolean-naming.tsx`](slides-app/src/slides/23-boolean-naming.tsx) (ruleId `BOOL-002`, hard) codifies [spec/17/31 §Boolean Naming](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) lines 40-49: prefixes `is` / `has` / `can` / `should` / `was` / `will` / `did` / `must`, positive framing only, no bare adjectives or `flag` / `bool` / `check`. Before/after `<CodeDiff>` inverts a triple-negative guard to a readable positive form. SRA validator now passes 25 slides.
 
 ### What's new in v5.77.0
 
@@ -1773,7 +1774,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.76.0
 
-- **DB schema naming slide (SS-02 task 23).** New [`slides-app/src/slides/21-db-schema-naming.tsx`](slides-app/src/slides/21-db-schema-naming.tsx) (ruleId `NAM-002`, hard) teaches the schema rules from [spec/17/31 §Data and Schema](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md): PascalCase singular entities, camelCase fields, `{TableName}Id` INTEGER auto-increment PKs, no UUIDs. Ships a before/after `<CodeDiff>` SQL migration plus an `<ActionPanel>` symptom/rule/action. SRA validator now passes 23 slides.
+- **DB schema naming slide (SS-02 task 23).** New [`slides-app/src/slides/21-db-schema-naming.tsx`](slides-app/src/slides/21-db-schema-naming.tsx) (ruleId `NAM-002`, hard) teaches the schema rules from [spec/17/31 §Data and Schema](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md): PascalCase singular entities, camelCase fields, `{TableName}Id` INTEGER auto-increment PKs, no UUIDs. Ships a before/after `<CodeDiff>` SQL migration plus an `<ActionPanel>` symptom/rule/action. SRA validator now passes 23 slides.
 
 ### What's new in v5.75.0
 
@@ -1781,7 +1782,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.74.0
 
-- **Trust-boundary teaser slide (SS-02 task 22).** New [`slides-app/src/slides/19-trust-boundaries-teaser.tsx`](slides-app/src/slides/19-trust-boundaries-teaser.tsx) (ruleId `MUST-007`, hard) surfaces the one-way trust gradient from spec/19 chs. [26](spec/19-main-worker-service/26-trust-boundaries-and-isolation.md) and [27](spec/19-main-worker-service/27-git-backup-targets.md): Main > Worker > Backup > Git. Three Allowed vs Forbidden cards cover Main→Worker, Worker→Backup, and Worker→Git; footer `<CalloutQuote>` cites ch. 26 §2. SRA validator now passes 21 slides.
+- **Trust-boundary teaser slide (SS-02 task 22).** New [`slides-app/src/slides/19-trust-boundaries-teaser.tsx`](slides-app/src/slides/19-trust-boundaries-teaser.tsx) (ruleId `MUST-007`, hard) surfaces the one-way trust gradient from spec/19 chs. [26](spec/19-main-worker-service/27-trust-boundaries-and-isolation.md) and [27](spec/19-main-worker-service/28-git-backup-targets.md): Main > Worker > Backup > Git. Three Allowed vs Forbidden cards cover Main→Worker, Worker→Backup, and Worker→Git; footer `<CalloutQuote>` cites ch. 26 §2. SRA validator now passes 21 slides.
 
 ### What's new in v5.73.0
 
@@ -1805,7 +1806,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.68.0
 
-- **"Must Follow" opener slide (SS-02 task 16).** New [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx) (ruleId `MUST-001`, hard severity) opens the Principles section with the 5 non-negotiables distilled from `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` §Must Follow: read first, one-sentence root cause, minimum correct fix, verify in the logs, ship the trail. Uses `<ActionPanel>` so the SRA structural validator passes; palette search `must-follow` now returns it.
+- **"Must Follow" opener slide (SS-02 task 16).** New [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx) (ruleId `MUST-001`, hard severity) opens the Principles section with the 5 non-negotiables distilled from `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` §Must Follow: read first, one-sentence root cause, minimum correct fix, verify in the logs, ship the trail. Uses `<ActionPanel>` so the SRA structural validator passes; palette search `must-follow` now returns it.
 
 ### What's new in v5.67.0
 
@@ -1866,7 +1867,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.50.0
 
-- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
+- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
 - **New scripts:** `npm run sync:guidelines` (write) and `npm run sync:guidelines:check` (verify, non-zero exit on drift). Closes Plan SS-01 step 4.
 
 ### What's new in v5.49.0

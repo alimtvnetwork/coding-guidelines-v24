@@ -2,7 +2,7 @@
 // ============================================================
 // sync-guidelines.mjs
 // ============================================================
-// Single source of truth: spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md
+// Single source of truth: spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md
 //
 // Mirrors:
 //   1. .lovable/coding-guidelines/coding-guidelines.md   (exact body copy + auto-gen banner)
@@ -20,13 +20,13 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-const CANONICAL = resolve(ROOT, "spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md");
+const CANONICAL = resolve(ROOT, "spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md");
 const LOVABLE_MIRROR = resolve(ROOT, ".lovable/coding-guidelines/coding-guidelines.md");
 const CURSORRULES = resolve(ROOT, ".cursorrules");
 
 const BANNER = [
   "<!-- AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. -->",
-  "<!-- Source: spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->",
+  "<!-- Source: spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->",
   "<!-- Regenerate with: npm run sync:guidelines -->",
   "",
   "",
@@ -58,7 +58,7 @@ function buildCursorRules(canonical, currentCursor) {
   const hardRules = extractSection(canonical, "Hard Rules (Zero Tolerance)");
   const block = [
     CURSOR_BEGIN,
-    "<!-- Auto-generated from spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md -->",
+    "<!-- Auto-generated from spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->",
     "<!-- Edit the canonical file then run `npm run sync:guidelines`. -->",
     "",
     "## Hard Rules (Zero Tolerance, canonical)",

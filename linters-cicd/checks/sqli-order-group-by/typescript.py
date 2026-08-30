@@ -23,7 +23,7 @@ RULE = Rule(
         "literal or an allow-listed column constant; raw variables "
         "or user input are forbidden."
     ),
-    help_uri_relative="../18-wp-plugin-how-to/19-micro-orm-and-root-db.md",
+    help_uri_relative="../18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
 )
 
 

@@ -8,8 +8,8 @@ For full Rule 10/11/12 enforcement (presence + nullability + waivers),
 use **MISSING-DESC-001** instead. Both rules share the same classifier
 and column-detection logic — they cannot drift apart.
 
-Spec: spec/04-database-conventions/02-schema-design.md §6
-Naming: spec/04-database-conventions/01-naming-conventions.md Rules 10/11
+Spec: spec/04-database-conventions/03-schema-design.md §6
+Naming: spec/04-database-conventions/03-naming-conventions.md Rules 10/11
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ RULE = Rule(
         "'Comments TEXT NULL'. Presence check only — for full Rule 12 "
         "(NOT NULL / DEFAULT) enforcement use MISSING-DESC-001."
     ),
-    help_uri_relative="../04-database-conventions/02-schema-design.md",
+    help_uri_relative="../04-database-conventions/03-schema-design.md",
 )
 
 

@@ -1,7 +1,7 @@
 # Inverted-Field Codegen (Rule 9)
 
 Implements the code-generation contract from
-[`spec/04-database-conventions/01-naming-conventions.md`](../../spec/04-database-conventions/01-naming-conventions.md)
+[`spec/04-database-conventions/03-naming-conventions.md`](../../spec/04-database-conventions/03-naming-conventions.md)
 **Rule 9 §4** for Go, PHP, and TypeScript.
 
 ## What it does

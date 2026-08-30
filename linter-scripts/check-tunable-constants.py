@@ -2,13 +2,13 @@
 """
 check-tunable-constants.py — Tunable-constants linter (FU-15).
 
-Enforces the contract in `spec/19-main-worker-service/15-tunable-constants.md` §6:
+Enforces the contract in `spec/19-main-worker-service/16-tunable-constants.md` §6:
 
   Rule T1 — Presence: every numeric literal in spec/19/ prose and
             spec/14-update/28-worker-push-instruction.md that is followed
             by a time/count unit (s, sec, seconds, min, minutes, h, hours,
             attempts, retries, times) MUST be either:
-              (a) named in §2 of 15-tunable-constants.md (the catalog
+              (a) named in §2 of 16-tunable-constants.md (the catalog
                   table — its key appears in `2.x` rows), OR
               (b) explicitly waivered by `<!-- TUNABLE-WAIVER: ... -->`
                   on the same line.
@@ -36,13 +36,13 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-TUNABLES_FILE = REPO_ROOT / "spec/19-main-worker-service/15-tunable-constants.md"
+TUNABLES_FILE = REPO_ROOT / "spec/19-main-worker-service/16-tunable-constants.md"
 SCAN_GLOBS = (
     "spec/19-main-worker-service/*.md",
     "spec/14-update/28-worker-push-instruction.md",
 )
 # Files exempt from T1 scanning (catalog + diagrams + JSON snippets).
-EXEMPT_NAMES = {"15-tunable-constants.md"}
+EXEMPT_NAMES = {"16-tunable-constants.md"}
 
 # A numeric followed by a unit token. Unit list mirrors §6.
 UNIT_RE = re.compile(
@@ -157,7 +157,7 @@ def check_line_t1(
     if referenced_keys_in_line(raw, keys):
         return None
     sample = hits[0]
-    return f"{path}:{idx}: untracked tunable `{sample[0]} {sample[1]}` — cite 15-tunable-constants.md §2 or add TUNABLE-WAIVER"
+    return f"{path}:{idx}: untracked tunable `{sample[0]} {sample[1]}` — cite 16-tunable-constants.md §2 or add TUNABLE-WAIVER"
 
 
 def expand_scan_targets() -> list[Path]:
@@ -170,7 +170,7 @@ def expand_scan_targets() -> list[Path]:
 def rule_t1() -> list[str]:
     keys = collect_catalog_keys()
     if not keys:
-        return ["15-tunable-constants.md §2: no catalog rows parsed"]
+        return ["16-tunable-constants.md §2: no catalog rows parsed"]
     out: list[str] = []
     for path in expand_scan_targets():
         out.extend(scan_file_for_t1(path, keys))

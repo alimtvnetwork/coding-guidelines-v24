@@ -16,28 +16,28 @@ Cross-link integrity, naming-convention compliance, and rule-inheritance audit f
 
 | File | Purpose | Version | Status |
 |------|---------|---------|--------|
-| `plan.md` | Phased roadmap + decisions | 1.0.0 | ✅ |
+| `29-plan.md` | Phased roadmap + decisions | 1.0.0 | ✅ |
 | `01-index.md` | Entry point, document map | 1.1.0 | ✅ |
-| `01-architecture.md` | Topology + comms contract | 1.1.0 | ✅ |
-| `02-glossary.md` | Canonical terms (5 entries added: Quarantined, Draining, Seedable-Config, apperror, Power Admin↔PowerAdmin) | 1.1.0 | ✅ |
-| `03-main-db-schema.md` | Main SQLite schema (+EnumPage, RolePageAccess, AccessDenialEvent, MainSetting, User TOTP cols, **+EndpointAuthAuditEvent §2.6.4 / EndpointAuthChangeKind §2.6.5 — FU-17**) | 1.3.0 | ✅ |
-| `04-worker-routing.md` | Selection + cache + failover + strategy interfaces | 1.1.0 | ✅ |
-| `05-auth-and-2fa.md` | Auth surfaces + 2FA + bcrypt-cost env pinning + backup-code regen + EndpointAuth audit cite | 1.1.0 | ✅ |
-| `06-core-api-endpoints.md` | REST surface + per-field validation + LeastLoaded tiebreaker patch + §5.6 audit wired to `EndpointAuthAuditEvent` (FU-17) | 1.2.0 | ✅ |
-| `07-role-based-dashboards.md` | Roles + EnumPage + stack-agnostic guard contract | 1.1.0 | ✅ |
-| `08-error-contract.md` | Main↔Worker envelope + EnvelopeVersion/OperationId/SubCode/FieldErrors + Worker→Main §9 | 1.1.0 | ✅ |
-| `09-self-update-pointer.md` | Pointer to `spec/14-update/` + bounded sunset + deletion checklist | 1.2.0 | ✅ |
-| `10-worker-bootstrap-protocol.md` | 8-step boot, /Workers/Register, public-key fetch, version pin | 1.0.0 | ✅ |
-| `11-split-db-tier-reconciliation.md` | Main=3-tier / Worker=4-tier mapping over spec/05's 6 tiers | 1.0.0 | ✅ |
-| `12-jwt-delivery-contract.md` | JSON-body + in-memory storage, mandatory CSP, 9 CI tests | 1.0.0 | ✅ |
-| `13-error-codes.md` | 31 codes (22 WORKER-* + 9 MAIN-*) + prefixed↔flat mapping + MWS prefix 21000-21199 + slot-overflow rule (`MAIN-400-10 EndpointAuthLocked` / `21170` per FU-18) | 1.1.0 | ✅ |
-| `14-rbac-and-status-seed.md` | 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism | 1.0.0 | ✅ |
-| `15-tunable-constants.md` | 30 numeric tunables (retry, idempotency, heartbeat, JWT, push-update, bootstrap) + config.seed.json binding | 1.1.0 | ✅ |
+| `02-architecture.md` | Topology + comms contract | 1.1.0 | ✅ |
+| `03-glossary.md` | Canonical terms (5 entries added: Quarantined, Draining, Seedable-Config, apperror, Power Admin↔PowerAdmin) | 1.1.0 | ✅ |
+| `04-main-db-schema.md` | Main SQLite schema (+EnumPage, RolePageAccess, AccessDenialEvent, MainSetting, User TOTP cols, **+EndpointAuthAuditEvent §2.6.4 / EndpointAuthChangeKind §2.6.5 — FU-17**) | 1.3.0 | ✅ |
+| `05-worker-routing.md` | Selection + cache + failover + strategy interfaces | 1.1.0 | ✅ |
+| `06-auth-and-2fa.md` | Auth surfaces + 2FA + bcrypt-cost env pinning + backup-code regen + EndpointAuth audit cite | 1.1.0 | ✅ |
+| `07-core-api-endpoints.md` | REST surface + per-field validation + LeastLoaded tiebreaker patch + §5.6 audit wired to `EndpointAuthAuditEvent` (FU-17) | 1.2.0 | ✅ |
+| `08-role-based-dashboards.md` | Roles + EnumPage + stack-agnostic guard contract | 1.1.0 | ✅ |
+| `09-error-contract.md` | Main↔Worker envelope + EnvelopeVersion/OperationId/SubCode/FieldErrors + Worker→Main §9 | 1.1.0 | ✅ |
+| `10-self-update-pointer.md` | Pointer to `spec/14-update/` + bounded sunset + deletion checklist | 1.2.0 | ✅ |
+| `11-worker-bootstrap-protocol.md` | 8-step boot, /Workers/Register, public-key fetch, version pin | 1.0.0 | ✅ |
+| `12-split-db-tier-reconciliation.md` | Main=3-tier / Worker=4-tier mapping over spec/05's 6 tiers | 1.0.0 | ✅ |
+| `13-jwt-delivery-contract.md` | JSON-body + in-memory storage, mandatory CSP, 9 CI tests | 1.0.0 | ✅ |
+| `14-error-codes.md` | 31 codes (22 WORKER-* + 9 MAIN-*) + prefixed↔flat mapping + MWS prefix 21000-21199 + slot-overflow rule (`MAIN-400-10 EndpointAuthLocked` / `21170` per FU-18) | 1.1.0 | ✅ |
+| `15-rbac-and-status-seed.md` | 3 Roles + 9 EnumPages + 19 RolePageAccess + 4 WorkerNodeStatus + 4 AuthMechanism | 1.0.0 | ✅ |
+| `16-tunable-constants.md` | 30 numeric tunables (retry, idempotency, heartbeat, JWT, push-update, bootstrap) + config.seed.json binding | 1.1.0 | ✅ |
 | `96-linter-audit.md` | Linter pipeline audit | 1.0.0 | ✅ |
 | `97-acceptance-criteria.md` | AC-1..AC-9 mapping | 1.0.0 | ✅ |
 | `98-changelog.md` | Version history | 1.1.0 | ✅ |
 | `99-consistency-report.md` | This file | 1.1.0 | ✅ |
-| `error-codes.json` | Machine-readable mirror of `13-error-codes.md` | — | ✅ |
+| `error-codes.json` | Machine-readable mirror of `14-error-codes.md` | — | ✅ |
 
 ### 1.2 Diagrams (`diagrams/`)
 
@@ -110,7 +110,7 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 
 ---
 
-## 4. Forbidden-term audit (per `02-glossary.md`)
+## 4. Forbidden-term audit (per `03-glossary.md`)
 
 | Forbidden | Replacement | Found in this spec? |
 |-----------|-------------|----------------------|
@@ -128,11 +128,11 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 # define/cite the replacements: this report, the glossary, plan, changelog, AC.
 
 rg -i -n \
-   --glob '!spec/19-main-worker-service/02-glossary.md' \
+   --glob '!spec/19-main-worker-service/03-glossary.md' \
    --glob '!spec/19-main-worker-service/99-consistency-report.md' \
    --glob '!spec/19-main-worker-service/98-changelog.md' \
    --glob '!spec/19-main-worker-service/97-acceptance-criteria.md' \
-   --glob '!spec/19-main-worker-service/plan.md' \
+   --glob '!spec/19-main-worker-service/29-29-plan.md' \
    -e 'CW configuration' -e 'git map' \
    -e '\bmaster/slave\b' -e '\bmaster-slave\b' \
    spec/19-main-worker-service/
@@ -140,7 +140,7 @@ rg -i -n \
 # 4.2 — author-title compliance (must NOT appear). Same meta-doc exclusions.
 
 rg -n \
-   --glob '!spec/19-main-worker-service/02-glossary.md' \
+   --glob '!spec/19-main-worker-service/03-glossary.md' \
    --glob '!spec/19-main-worker-service/99-consistency-report.md' \
    -e '\bCEO\b' -e 'Chief Executive Officer' \
    spec/19-main-worker-service/
@@ -152,7 +152,7 @@ python3 linter-scripts/check-forbidden-strings.py
 
 **Expected:** 4.1 and 4.2 print nothing and exit 1 (rg "no matches" convention); 4.3 exits 0. Anything else is a regression.
 
-Last verified: 2026-05-04 — 4.1: 0 matches in non-meta files (`01-architecture.md` §6 still references "Seedable-Config" by its canonical name only); 4.2: 0 matches; 4.3: exit 0.
+Last verified: 2026-05-04 — 4.1: 0 matches in non-meta files (`02-architecture.md` §6 still references "Seedable-Config" by its canonical name only); 4.2: 0 matches; 4.3: exit 0.
 
 ---
 
@@ -185,8 +185,8 @@ Last verified: 2026-05-04 — 4.1: 0 matches in non-meta files (`01-architecture
 
 | ID | Topic | Location | Status |
 |----|-------|----------|--------|
-| OQ-1 | Per-endpoint auth-mechanism overrides | `05-auth-and-2fa.md` §8, `06-core-api-endpoints.md` §5 | ✅ RESOLVED 2026-05-04 (task #39) — single-row whole-replace PATCH; 06 → v1.1.0 |
-| OQ-2 | Default selection strategy (RoundRobin vs LeastLoaded) | `04-worker-routing.md` §1 | RESOLVED — default `LeastLoaded`; user can change via Settings |
+| OQ-1 | Per-endpoint auth-mechanism overrides | `06-auth-and-2fa.md` §8, `07-core-api-endpoints.md` §5 | ✅ RESOLVED 2026-05-04 (task #39) — single-row whole-replace PATCH; 06 → v1.1.0 |
+| OQ-2 | Default selection strategy (RoundRobin vs LeastLoaded) | `05-worker-routing.md` §1 | RESOLVED — default `LeastLoaded`; user can change via Settings |
 
 ---
 
@@ -198,9 +198,9 @@ All 9 verbatim acceptance criteria mapped in `97-acceptance-criteria.md`. Covera
 
 ## 9. Outstanding (next phase)
 
-- **Phase 5** (separate task): bump `package.json` minor, run `node scripts/sync-version.mjs` and `node scripts/sync-spec-tree.mjs`, log entry in `.lovable/plan.md`.
+- **Phase 5** (separate task): bump `package.json` minor, run `node scripts/sync-version.mjs` and `node scripts/sync-spec-tree.mjs`, log entry in `.lovable/29-plan.md`.
 - Future: implement Phase 1 of the deliverables when user issues `next` after Phase 5 (or explicitly says "implement").
 
 ---
 
-*Consistency report v1.2.0 — 2026-05-04 (hardened §4 grep commands with meta-doc glob excludes; both 4.1 and 4.2 now exit 1/no-matches; rephrased `01-architecture.md` §6 to remove literal legacy term — closes F-N-03 fully)*
+*Consistency report v1.2.0 — 2026-05-04 (hardened §4 grep commands with meta-doc glob excludes; both 4.1 and 4.2 now exit 1/no-matches; rephrased `02-architecture.md` §6 to remove literal legacy term — closes F-N-03 fully)*

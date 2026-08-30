@@ -12,13 +12,13 @@
 | # | File | Version | Status |
 |---|------|---------|--------|
 | 1 | `01-index.md` | 5.0.0 | ✅ Present |
-| 2 | `01-shared-conventions.md` | — | ✅ Present |
-| 3 | `02-github-release-standard.md` | — | ✅ Present |
-| 4 | `03-vulnerability-scanning.md` | — | ✅ Present |
-| 5 | `04-install-script-generation.md` | — | ✅ Present |
-| 6 | `05-code-signing.md` | — | ✅ Present |
-| 7 | `06-self-update-mechanism.md` | 2.0.0 | ✅ Present |
-| 8 | `07-release-body-and-changelog.md` | 2.0.0 | ✅ Present |
+| 2 | `03-shared-conventions.md` | — | ✅ Present |
+| 3 | `04-github-release-standard.md` | — | ✅ Present |
+| 4 | `06-vulnerability-scanning.md` | — | ✅ Present |
+| 5 | `07-install-script-generation.md` | — | ✅ Present |
+| 6 | `10-code-signing.md` | — | ✅ Present |
+| 7 | `11-self-update-mechanism.md` | 2.0.0 | ✅ Present |
+| 8 | `14-release-body-and-changelog.md` | 2.0.0 | ✅ Present |
 | 9 | `08-installation-flow.md` | 1.0.0 | ✅ Present |
 | 10 | `09-changelog-integration.md` | 1.0.0 | ✅ Present |
 | 11 | `10-version-and-help.md` | 1.0.0 | ✅ Present |
@@ -31,8 +31,8 @@
 | # | File | Status |
 |---|------|--------|
 | 15 | `01-browser-extension-deploy/01-index.md` | ✅ Present |
-| 16 | `01-browser-extension-deploy/01-ci-pipeline.md` | ✅ Present |
-| 17 | `01-browser-extension-deploy/02-release-pipeline.md` | ✅ Present |
+| 16 | `01-browser-extension-deploy/02-ci-pipeline.md` | ✅ Present |
+| 17 | `01-browser-extension-deploy/05-release-pipeline.md` | ✅ Present |
 | 18 | `01-browser-extension-deploy/99-consistency-report.md` | ✅ Present |
 
 ### Subfolder: 02-go-binary-deploy
@@ -40,8 +40,8 @@
 | # | File | Status |
 |---|------|--------|
 | 19 | `02-go-binary-deploy/01-index.md` | ✅ Present |
-| 20 | `02-go-binary-deploy/01-ci-pipeline.md` | ✅ Present |
-| 21 | `02-go-binary-deploy/02-release-pipeline.md` | ✅ Present |
+| 20 | `02-go-binary-deploy/02-ci-pipeline.md` | ✅ Present |
+| 21 | `02-go-binary-deploy/05-release-pipeline.md` | ✅ Present |
 | 22 | `02-go-binary-deploy/03-complete-workflow-reference.md` | ✅ Present |
 | 23 | `02-go-binary-deploy/99-consistency-report.md` | ✅ Present |
 
@@ -53,7 +53,7 @@
 
 - [x] All overview files list their child documents
 - [x] All subfolder overviews link to shared convention files
-- [x] Consolidated summary exists at `../17-consolidated-guidelines/15-cicd-pipeline-workflows.md`
+- [x] Consolidated summary exists at `../17-consolidated-guidelines/18-cicd-pipeline-workflows.md`
 - [x] Bidirectional cross-refs with `../14-update/`
 - [x] Root files (01–13) all have cross-reference sections
 - [x] Subfolder consistency reports present in both archetypes

@@ -132,12 +132,12 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 
 > [!IMPORTANT]
 > **MANDATORY `.lovable/*.md` FLAGGING & AUDIT RULE:**
-> Every single `.md` file discovered directly in `.lovable/` (e.g. `.lovable/folder-structure.md`, `.lovable/prompts.md`, `.lovable/strictly-avoid.md`, `.lovable/project.json`) or inside any nested subdirectory MUST be actively read, cataloged, and flagged in the memory log. If an unindexed or orphan markdown file is found, immediately raise a flag in the context log and register it into `.lovable/memory/01-index.md` or `.lovable/plans/01-index.md`.
+> Every single `.md` file discovered directly in `.lovable/` (e.g. `.lovable/folder-03-structure.md`, `.lovable/prompts.md`, `.lovable/strictly-avoid.md`, `.lovable/project.json`) or inside any nested subdirectory MUST be actively read, cataloged, and flagged in the memory log. If an unindexed or orphan markdown file is found, immediately raise a flag in the context log and register it into `.lovable/memory/01-index.md` or `.lovable/plans/01-index.md`.
 
 | #   | Path                                                  | What you get                                                                                                                                |
 | --- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | `.lovable/memory/what-to-read.md`                     | Authoritative reading order for this project. Read it first and follow all referenced files.                                            |
-| 2   | `.lovable/folder-structure.md`                | Canonical architectural map of all `.lovable/` folders, scripts, and naming conventions.                                                  |
+| 2   | `.lovable/folder-03-structure.md`                | Canonical architectural map of all `.lovable/` folders, scripts, and naming conventions.                                                  |
 | 3   | `.lovable/strictly-avoid.md`                          | Hard prohibitions (CODE RED) — append-only, never truncate.                                                                               |
 | 4   | `.lovable/coding-guidelines/coding-guidelines.md`     | Master single source of truth for cross-language coding guidelines, `Result[T]` envelopes, and `is`/`has` booleans.                       |
 | 5   | `.lovable/ai-fix-scripts/`                            | Automated Python scripts (`01-file-manipulator.py`, `02-guideline-autofixer.py`, `03-cicd-local-runner.py`, `index.md`).                 |
@@ -396,7 +396,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 7. [ ] /learn the error management architecture in: `spec/03-error-manage/00-overview.md` (and related error manage files) and create memory.
 8. [ ] /learn all recent Root Cause Analysis (RCA) files in `.lovable/issues/`, `.lovable/cicd-issues/`, and `spec/03-error-manage/01-error-resolution/03-retrospectives/` to prevent recurring errors.
 9. [ ] /learn all hard prohibitions in `.lovable/strictly-avoid.md` and verify zero violations.
-10. [ ] /learn the enum standards and fixes in: `spec/17-consolidated-guidelines/04-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
+10. [ ] /learn the enum standards and fixes in: `spec/17-consolidated-guidelines/07-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
 11. [ ] /learn ALL other single-file specs in `spec/02-coding-guidelines/` and create memory.
 12. [ ] /learn the overarching main task plan.
 13. [ ] Ensure the git repository starts completely clean.

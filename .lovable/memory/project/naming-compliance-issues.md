@@ -46,4 +46,4 @@ All naming convention violations and cross-reference path issues have been resol
 
 | Reference | Location |
 |-----------|----------|
-| Consolidation Plan | `../done/coding-guidelines-consolidation-plan.md` |
+| Consolidation Plan | `../done/coding-guidelines-consolidation-29-plan.md` |

@@ -13,7 +13,7 @@ from __future__ import annotations
 # Forward direction: positive canonical → negative derived.
 # Forward direction: positive canonical → approved-inverse derived.
 # Mirrors the Rule 8 + Rule 9 tables in
-# spec/04-database-conventions/01-naming-conventions.md (v3.4.0).
+# spec/04-database-conventions/03-naming-conventions.md (v3.4.0).
 _FORWARD: dict[str, str] = {
     "IsActive": "IsInactive",
     "IsEnabled": "IsDisabled",

@@ -163,4 +163,13 @@ Allowed work:
 **Why:** Version information is strictly managed by its own synchronization scripts and source-of-truth repositories. Manual AI edits cause synchronization drift and pipeline failures.
 
 ### Strict Relative Git Paths (Zero Tolerance)
-Absolute filesystem paths (e.g., \/absolute/path/to/...\, \/Users/.../, \/home/...\) and absolute file URI schemes (file:///absolute/path/to/...\, file:///absolute/path/to/\) are **strictly forbidden** inside committed repository files, specifications, markdown plans, subtask files, code comments, and citations. All paths must be relative to the git repository root.
+
+Absolute filesystem paths (e.g., `/absolute/path/to/...`, `/Users/.../`, `/home/...`) and absolute file URI schemes (`file:///absolute/path/to/...`, `file:///absolute/path/to/`) are **strictly forbidden** inside committed repository files, specifications, markdown plans, subtask files, code comments, and citations. All paths must be relative to the git repository root.
+
+### No `spec/` Inside `.lovable/` (Total Ban on `.lovable/spec/`)
+
+🔴 **NEVER create or store specifications inside `.lovable/spec/`.**
+- All canonical specifications must live under the root `spec/` directory.
+- All repo-specific / application-specific specifications must reside under `spec/21-app/`.
+- The `.lovable/` directory is reserved exclusively for AI metadata (`memory/`, `plans/`, `prompts/`, `ai-fix-scripts/`, `assets/`, `procedures/`, `suggestions/`, `question-and-ambiguity/`).
+

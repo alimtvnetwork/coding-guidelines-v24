@@ -32,7 +32,7 @@ target-dir/
 └── toolname-output/
     ├── data.csv
     ├── data.json
-    ├── structure.md
+    ├── 03-structure.md
     └── scripts/
 ```
 

@@ -5,7 +5,7 @@ TypeScript ports of the WP-plugin micro-ORM (and other repos that adopt
 the same builder API) must follow the same rule: rawExecute()'s first
 argument is a string literal, dynamic values go through the second arg.
 
-Spec: spec/18-wp-plugin-how-to/19-micro-orm-and-root-db.md
+Spec: spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ RULE = Rule(
         "pass dynamic values via the params array, never via "
         "concatenation or template-literal interpolation."
     ),
-    help_uri_relative="../18-wp-plugin-how-to/19-micro-orm-and-root-db.md",
+    help_uri_relative="../18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
 )
 
 

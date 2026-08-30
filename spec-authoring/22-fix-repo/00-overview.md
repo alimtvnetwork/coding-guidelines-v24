@@ -21,7 +21,7 @@ P1 bug and bring them back into alignment with this folder.
 | `02-edge-cases.md` | Enumerated edge cases with expected behavior for each. |
 | `03-acceptance-criteria.md` | Checkable list used to verify the implementation. |
 | `04-examples.md` | Worked CLI examples + expected stdout. |
-| `plan.md` | Phased implementation plan (Phase 1–6). |
+| `29-plan.md` | Phased implementation plan (Phase 1–6). |
 
 ## Quick summary
 

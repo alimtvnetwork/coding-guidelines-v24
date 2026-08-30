@@ -6,7 +6,7 @@
 
 ## Description
 
-The "Refactored" example in `readme.md` and `spec/17-consolidated-guidelines/02-coding-guidelines.md` contained:
+The "Refactored" example in `readme.md` and `spec/17-consolidated-guidelines/05-coding-guidelines.md` contained:
 - Negative property `user.banned` (P1 violation)
 - Raw `!user` and `!isEligible(...)` operators (P2/P8 violation)
 - Single-line `if (...) return ...;` blocks (STYLE-001/004)
@@ -24,7 +24,7 @@ The "Refactored" example in `readme.md` and `spec/17-consolidated-guidelines/02-
 ## Files
 
 - `readme.md`
-- `spec/17-consolidated-guidelines/02-coding-guidelines.md`
+- `spec/17-consolidated-guidelines/05-coding-guidelines.md`
 
 ## Learning
 

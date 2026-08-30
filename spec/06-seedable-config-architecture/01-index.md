@@ -1,5 +1,16 @@
 # Seedable Config Architecture + Changelog Versioning (also known as CW Config)
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 06 Seedable Config Architecture.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `06-seedable-config-architecture/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -47,7 +58,7 @@ This ensures configuration is always traceable, auditable, and version-aware.
 | # | File | Description |
 |---|------|-------------|
 | 00 | `01-index.md` | This file — master index |
-| 01 | `01-fundamentals.md` | Core concepts, configuration files, version flow, merge strategies |
+| 01 | `02-fundamentals.md` | Core concepts, configuration files, version flow, merge strategies |
 | 02 | `02-features/01-index.md` | Feature index |
 | 02.01 | `02-features/01-rag-chunk-settings.md` | RAG chunk size and overlap configuration |
 | 02.02 | `02-features/02-rag-validation-helpers.md` | Go validation patterns for RAG config |
@@ -68,7 +79,7 @@ This ensures configuration is always traceable, auditable, and version-aware.
 ```
 06-seedable-config-architecture/
 ├── 01-index.md                    ← This file
-├── 01-fundamentals.md                ← Core concepts & architecture
+├── 02-fundamentals.md                ← Core concepts & architecture
 ├── 02-features/
 │   ├── 01-index.md                ← Feature index
 │   ├── 01-rag-chunk-settings.md
@@ -91,7 +102,7 @@ This ensures configuration is always traceable, auditable, and version-aware.
 | Reference | Description |
 |-----------|-------------|
 | [Split DB Architecture](../05-split-db-architecture/01-index.md) | Database organization patterns |
-| [App Project Template](../01-spec-authoring-guide/05-app-project-template.md) | Template this spec follows |
+| [App Project Template](../01-spec-authoring-guide/07-app-project-template.md) | Template this spec follows |
 
 ---
 

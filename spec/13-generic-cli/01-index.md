@@ -1,5 +1,16 @@
 # Generic CLI Creation Guidelines — Overview
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 13 Generic Cli.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `13-generic-cli/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -8,7 +19,7 @@
 > **Status:** Active  
 > **Related specs:**
 >
-> - [02-project-structure.md](02-project-structure.md) — package layout and file organization
+> - [02-project-03-structure.md](02-project-03-structure.md) — package layout and file organization
 > - [03-subcommand-architecture.md](03-subcommand-architecture.md) — dispatch pattern and entry point
 > - [13-checklist.md](13-checklist.md) — phased implementation plan referencing all specs
 > - [20-terminal-output-design.md](20-terminal-output-design.md) — terminal rendering architecture
@@ -42,7 +53,7 @@ concrete examples. Adapt syntax to your target language.
 | # | File | Topic |
 |---|------|-------|
 | 01 | [01-overview.md](01-index.md) | This document — philosophy, scope, index |
-| 02 | [02-project-structure.md](02-project-structure.md) | Package layout, file organization, naming |
+| 02 | [02-project-03-structure.md](02-project-03-structure.md) | Package layout, file organization, naming |
 | 03 | [03-subcommand-architecture.md](03-subcommand-architecture.md) | Routing, dispatch, handler pattern |
 | 04 | [04-flag-parsing.md](04-flag-parsing.md) | Per-command flags, defaults, validation |
 | 05 | [05-configuration.md](05-configuration.md) | Three-layer config (defaults → file → flags) |

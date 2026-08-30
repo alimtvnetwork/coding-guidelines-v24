@@ -1,5 +1,16 @@
 # Error Management Specification
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 03 Error Manage.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `03-error-manage/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -40,7 +51,7 @@ Consolidated error management specification covering error resolution/debugging,
 | 02 | [Error Architecture](./02-error-architecture/01-index.md) | Cross-stack 3-tier error handling, error modal, response envelope, apperror package, logging, notifications | 22 |
 | 03 | [Error Code Registry](./03-error-code-registry/01-index.md) | Master registry, integration guide, schemas, scripts, templates, collision resolution, utilization report | 18 |
 
-> 📖 **Quick onboarding?** See [structure.md](./structure.md) for a full visual tree with role-based entry points.
+> 📖 **Quick onboarding?** See [03-structure.md](./03-03-structure.md) for a full visual tree with role-based entry points.
 
 ---
 
@@ -120,7 +131,7 @@ This folder consolidates content previously located at:
 | Rust Error Handling | [../02-coding-guidelines/05-rust/02-error-handling.md](../02-coding-guidelines/05-rust/02-error-handling.md) |
 | Cross-Language Guidelines | [../02-coding-guidelines/01-cross-language/01-index.md](../02-coding-guidelines/01-cross-language/01-index.md) |
 | Database Conventions | [../04-database-conventions/01-index.md](../04-database-conventions/01-index.md) |
-| [structure.md](./structure.md) | Full visual tree |
+| [03-structure.md](./03-03-structure.md) | Full visual tree |
 
 ---
 

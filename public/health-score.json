@@ -18,7 +18,7 @@
   },
   "sources": [
     "spec/health-dashboard.md",
-    "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md",
+    "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md",
     "version.json"
   ]
 }

@@ -9,13 +9,13 @@ PATH-managed executable, you MUST follow every rule below.
 
 Cross-references (deep dives):
 
-- [`spec/14-update/01-self-update-overview.md`](../14-update/01-self-update-overview.md)
-- [`spec/14-update/02-deploy-path-resolution.md`](../14-update/02-deploy-path-resolution.md)
-- [`spec/14-update/03-rename-first-deploy.md`](../14-update/03-rename-first-deploy.md)
-- [`spec/14-update/05-handoff-mechanism.md`](../14-update/05-handoff-mechanism.md)
-- [`spec/14-update/06-cleanup.md`](../14-update/06-cleanup.md)
-- [`spec/14-update/07-console-safe-handoff.md`](../14-update/07-console-safe-handoff.md)
-- [`spec/14-update/08-repo-path-sync.md`](../14-update/08-repo-path-sync.md)
+- [`spec/14-update/02-self-update-overview.md`](../14-update/02-self-update-overview.md)
+- [`spec/14-update/03-deploy-path-resolution.md`](../14-update/03-deploy-path-resolution.md)
+- [`spec/14-update/04-rename-first-deploy.md`](../14-update/04-rename-first-deploy.md)
+- [`spec/14-update/06-handoff-mechanism.md`](../14-update/06-handoff-mechanism.md)
+- [`spec/14-update/07-cleanup.md`](../14-update/07-cleanup.md)
+- [`spec/14-update/08-console-safe-handoff.md`](../14-update/08-console-safe-handoff.md)
+- [`spec/14-update/09-repo-path-sync.md`](../14-update/09-repo-path-sync.md)
 
 ---
 

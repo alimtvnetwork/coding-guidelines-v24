@@ -15,5 +15,5 @@
 
 - 01-format-overview-prompt.md: Rewrite 00-overview.md (or index) as a powerful AI prompt and extract the method signature rule.
 - 02-upgrade-installer-scripts.md: Modify scripts/generate-bundle-installers.mjs to add deletion logic (based on manifest array), never touch root version, and output .lovable/install-summary.json. 
-- 03-generate-50-improvements.md: Audit spec/03-error-manage and draft 50 architectural/functional improvements.
+- 03-generate-02-improvements.md: Audit spec/03-error-manage and draft 50 architectural/functional improvements.
 - 04-release-6.29.0.md: Release script execution and readme sync.

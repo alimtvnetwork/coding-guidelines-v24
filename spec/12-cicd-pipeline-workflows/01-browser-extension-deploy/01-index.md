@@ -44,8 +44,8 @@ The build graph has a **diamond dependency**: the SDK is built first, then multi
 
 | # | File | Description | Status |
 |---|------|-------------|--------|
-| 01 | [01-ci-pipeline.md](./01-ci-pipeline.md) | CI pipeline: lint, test, dependency-graph builds | ✅ Active |
-| 02 | [02-release-pipeline.md](./02-release-pipeline.md) | Release pipeline: version, build, package, GitHub Release | ✅ Active |
+| 01 | [02-ci-pipeline.md](./02-ci-pipeline.md) | CI pipeline: lint, test, dependency-graph builds | ✅ Active |
+| 02 | [05-release-pipeline.md](./05-release-pipeline.md) | Release pipeline: version, build, package, GitHub Release | ✅ Active |
 
 ---
 
@@ -53,9 +53,9 @@ The build graph has a **diamond dependency**: the SDK is built first, then multi
 
 | Reference | Location |
 |-----------|----------|
-| Shared Conventions | `../01-shared-conventions.md` |
-| GitHub Release Standard | `../02-github-release-standard.md` |
-| Vulnerability Scanning | `../03-vulnerability-scanning.md` |
+| Shared Conventions | `../03-shared-conventions.md` |
+| GitHub Release Standard | `../04-github-release-standard.md` |
+| Vulnerability Scanning | `../06-vulnerability-scanning.md` |
 
 ---
 

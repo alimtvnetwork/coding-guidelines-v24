@@ -172,7 +172,7 @@ jobs:
 
       # ──────────────────────────────────────────────
       # Stage 5: Code signing (conditional)
-      # See: spec/12-cicd-pipeline-workflows/05-code-signing.md
+      # See: spec/12-cicd-pipeline-workflows/10-code-signing.md
       # ──────────────────────────────────────────────
       - name: Sign Windows binaries
         if: vars.SIGNPATH_SIGNING_ENABLED == 'true'
@@ -222,7 +222,7 @@ jobs:
 
       # ──────────────────────────────────────────────
       # Stage 8: Generate version-pinned install scripts
-      # See: spec/12-cicd-pipeline-workflows/04-install-script-generation.md
+      # See: spec/12-cicd-pipeline-workflows/07-install-script-generation.md
       # ──────────────────────────────────────────────
       - name: Generate install scripts
         run: |
@@ -241,7 +241,7 @@ jobs:
 
       # ──────────────────────────────────────────────
       # Stage 9: Extract changelog
-      # See: spec/12-cicd-pipeline-workflows/07-release-body-and-changelog.md
+      # See: spec/12-cicd-pipeline-workflows/14-release-body-and-changelog.md
       # ──────────────────────────────────────────────
       - name: Extract changelog
         id: changelog
@@ -331,18 +331,18 @@ jobs:
 
 | Stage | Spec Reference |
 |-------|---------------|
-| Checkout & Setup | [Shared Conventions](../01-shared-conventions.md) |
-| Version Resolution | [Shared Conventions — Version Resolution](../01-shared-conventions.md#version-resolution) |
-| Windows Resources | [Binary Icon Branding](../09-binary-icon-branding.md) |
-| Cross-Compilation | [Cross-Compilation](../../14-update/16-cross-compilation.md) |
-| Multi-Module Build | [Release Pipeline — Multiple Binaries](./02-release-pipeline.md#multiple-binaries-multi-module-build) |
-| Docs-Site Bundling | [Docs-Site Bundling](./02-release-pipeline.md#docs-site-bundling) |
-| Code Signing | [Code Signing](../05-code-signing.md) |
-| Compression | [Release Assets](../../14-update/13-release-assets.md) |
-| Checksums | [Checksums & Verification](../../14-update/14-checksums-verification.md) |
-| Install Scripts | [Install Script Generation](../04-install-script-generation.md) |
-| Changelog | [Release Body and Changelog](../07-release-body-and-changelog.md) |
-| GitHub Release | [GitHub Release Standard](../02-github-release-standard.md) |
+| Checkout & Setup | [Shared Conventions](../03-shared-conventions.md) |
+| Version Resolution | [Shared Conventions — Version Resolution](../03-shared-conventions.md#version-resolution) |
+| Windows Resources | [Binary Icon Branding](../16-binary-icon-branding.md) |
+| Cross-Compilation | [Cross-Compilation](../../14-update/17-cross-compilation.md) |
+| Multi-Module Build | [Release Pipeline — Multiple Binaries](./05-release-pipeline.md#multiple-binaries-multi-module-build) |
+| Docs-Site Bundling | [Docs-Site Bundling](./05-release-pipeline.md#docs-site-bundling) |
+| Code Signing | [Code Signing](../10-code-signing.md) |
+| Compression | [Release Assets](../../14-update/14-release-assets.md) |
+| Checksums | [Checksums & Verification](../../14-update/15-checksums-verification.md) |
+| Install Scripts | [Install Script Generation](../07-install-script-generation.md) |
+| Changelog | [Release Body and Changelog](../14-release-body-and-changelog.md) |
+| GitHub Release | [GitHub Release Standard](../04-github-release-standard.md) |
 
 ---
 
@@ -415,9 +415,9 @@ Key rules:
 
 ## Cross-References
 
-- [CI Pipeline](./01-ci-pipeline.md) — Validation pipeline that precedes releases
-- [Release Pipeline](./02-release-pipeline.md) — Modular spec this workflow implements
-- [Shared Conventions](../01-shared-conventions.md) — Platform, triggers, permissions
+- [CI Pipeline](./02-ci-pipeline.md) — Validation pipeline that precedes releases
+- [Release Pipeline](./05-release-pipeline.md) — Modular spec this workflow implements
+- [Shared Conventions](../03-shared-conventions.md) — Platform, triggers, permissions
 
 ---
 

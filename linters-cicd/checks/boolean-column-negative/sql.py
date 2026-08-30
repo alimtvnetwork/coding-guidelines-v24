@@ -41,7 +41,7 @@ RULE = Rule(
         "store one canonical state and derive the inverse in code. "
         "Suspect Cannot*/Dis*/Un* roots are flagged as warnings."
     ),
-    help_uri_relative="../04-database-conventions/01-naming-conventions.md",
+    help_uri_relative="../04-database-conventions/02-naming-conventions.md",
 )
 
 EXTENSIONS = [".sql"]

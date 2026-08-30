@@ -41,8 +41,8 @@
 
 ## Next Logical Step
 
-- Continue with the active backlog (BOOL-NEG-001 smoke test, Go-aware variant, codegen round-trip tests) — see `plan.md` Active Work table.
-- Address the `installer-behavior-rollout` Phase 2 (generator template update) — now folded into `plan.md`.
+- Continue with the active backlog (BOOL-NEG-001 smoke test, Go-aware variant, codegen round-trip tests) — see `29-plan.md` Active Work table.
+- Address the `installer-behavior-rollout` Phase 2 (generator template update) — now folded into `29-plan.md`.
 
 ---
 

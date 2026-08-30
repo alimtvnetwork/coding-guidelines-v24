@@ -197,7 +197,7 @@ See `.github/scripts/test-summary.sh` in `gitmap-v6`.
 ## Cross-References
 
 - [01-index.md](./01-index.md)
-- [Shared Conventions](../01-shared-conventions.md) — Pinned `actions/download-artifact@v4`
+- [Shared Conventions](../03-shared-conventions.md) — Pinned `actions/download-artifact@v4`
 
 ---
 

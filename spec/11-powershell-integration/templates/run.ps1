@@ -1,7 +1,7 @@
 # PowerShell Build & Run Script — Generic Template
 # Version: 1.3.0
 # Generic template for Go backend + React frontend projects with pnpm PnP support
-# Configure via powershell.json — see spec/powershell-integration/01-configuration-schema.md
+# Configure via powershell.json — see spec/powershell-integration/02-configuration-schema.md
 #
 # USAGE:
 #   Copy this file and powershell.json to your project root.
@@ -112,7 +112,7 @@ $ConfigPath = Join-Path $ScriptDir "powershell.json"
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "ERROR: powershell.json not found at: $ConfigPath" -ForegroundColor Red
     Write-Host "Create a powershell.json configuration file in the script directory." -ForegroundColor Yellow
-    Write-Host "See spec/powershell-integration/01-configuration-schema.md for format." -ForegroundColor Yellow
+    Write-Host "See spec/powershell-integration/02-configuration-schema.md for format." -ForegroundColor Yellow
     exit 1
 }
 

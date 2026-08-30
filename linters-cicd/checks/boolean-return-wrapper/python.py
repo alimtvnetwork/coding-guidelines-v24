@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-012",
     name="BooleanReturnWrapper",
     short_description="Do not return raw booleans in tuple multi-returns; use a dataclass or TypedDict.",
-    help_uri_relative="17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    help_uri_relative="17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
 )
 # Matches `def name(...) -> tuple[..., bool, ...]:` or `Tuple[..., bool, ...]`
 FUNC_MULTI_RET_BOOL_RE = re.compile(r"def\s+[A-Za-z0-9_]+\s*\([^)]*\)\s*->\s*(?:[Tt]uple)\s*\[[^\]]*?(?:,[^\]]*\bbool\b|\bbool\b[^\]]*,)[^\]]*?\]\s*:")

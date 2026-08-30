@@ -83,7 +83,7 @@ You MUST follow the project's strict coding guidelines. These files are located 
 1. The Master Consolidated Guide
 *(The single source of truth containing summaries of all rules)*
 
-- spec/17-consolidated-guidelines/02-coding-guidelines.md
+- spec/17-consolidated-guidelines/05-coding-guidelines.md
 
 2. Code Style & File Size Limits (80-100 lines max)
 *(Enforces strict size limitations: e.g., React components < 100 lines, functions < 15 lines, and basic formatting)*

@@ -46,7 +46,7 @@ Defines the JSON document that every `Status.ps1` / `Status.sh` script
 | `ReleaseUrl` | string (URL) | yes | GitHub release page |
 | `PublishedAt` | string (ISO 8601 UTC) | yes | Release publish time |
 | `Checksum` | string | yes | Format `<Algorithm>:<Hex>` — e.g., `Sha256:Abc...` |
-| `Install.Windows.ScriptUrl` | string (URL) | yes | Pinned installer per [16-generic-release/08](../../16-generic-release/08-version-pinned-release-installers.md) |
+| `Install.Windows.ScriptUrl` | string (URL) | yes | Pinned installer per [16-generic-release/08](../../16-generic-release/09-version-pinned-release-installers.md) |
 | `Install.Windows.Command` | string | yes | One-line invocation for end users |
 | `Install.Unix.ScriptUrl` | string (URL) | yes | Pinned installer |
 | `Install.Unix.Command` | string | yes | One-line invocation |
@@ -59,7 +59,7 @@ Defines the JSON document that every `Status.ps1` / `Status.sh` script
 ## Producer (Release Pipeline)
 
 The script is generated at release time by the pipeline (see
-[16-generic-release/08-version-pinned-release-installers.md](../../16-generic-release/08-version-pinned-release-installers.md)).
+[16-generic-release/09-version-pinned-release-installers.md](../../16-generic-release/09-version-pinned-release-installers.md)).
 Templates live next to the pinned installer templates:
 
 ```

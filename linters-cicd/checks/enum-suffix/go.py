@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-010",
     name="EnumSuffix",
     short_description="Enums must be named with a 'Type' suffix (e.g., UserType).",
-    help_uri_relative="17-consolidated-guidelines/04-enum-standards.md",
+    help_uri_relative="17-consolidated-guidelines/07-enum-standards.md",
 )
 # Extremely basic heuristic: `type X int` or `type X string` in Go are commonly used as enums.
 # To avoid false positives on standard type aliases, we might just look for any type declaration 

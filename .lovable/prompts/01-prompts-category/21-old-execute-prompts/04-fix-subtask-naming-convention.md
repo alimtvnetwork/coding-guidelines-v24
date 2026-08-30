@@ -35,7 +35,7 @@ You MUST follow the project's strict coding guidelines. These files are located 
 
 1. The Master Consolidated Guide
 
-- `spec/17-consolidated-guidelines/02-coding-guidelines.md`
+- `spec/17-consolidated-guidelines/05-coding-guidelines.md`
 
 2. Code Style & File Size Limits (80-100 lines max)
 

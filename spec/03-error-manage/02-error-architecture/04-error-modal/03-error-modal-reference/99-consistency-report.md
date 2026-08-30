@@ -14,7 +14,7 @@
 | 2 | `01-data-model.md` | ✅ Present |
 | 3 | `02-capture-pipeline.md` | ✅ Present |
 | 4 | `03-envelope-parsing.md` | ✅ Present |
-| 5 | `04-modal-structure.md` | ✅ Present |
+| 5 | `04-modal-03-structure.md` | ✅ Present |
 | 6 | `05-backend-tabs.md` | ✅ Present |
 | 7 | `06-frontend-tabs.md` | ✅ Present |
 | 8 | `07-request-chain.md` | ✅ Present |

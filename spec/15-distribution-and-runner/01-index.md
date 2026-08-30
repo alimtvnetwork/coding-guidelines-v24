@@ -1,5 +1,16 @@
 # Distribution and Runner
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 15 Distribution And Runner.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `15-distribution-and-runner/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -28,10 +39,10 @@ Everything in this folder is **end-user-facing**. If a non-developer can't follo
 | # | File | Purpose |
 |---|------|---------|
 | 00 | [01-index.md](./01-index.md) | This document |
-| 01 | [01-install-contract.md](./01-install-contract.md) | What `install.sh` / `install.ps1` install, in what layout, and from where |
-| 02 | [02-runner-contract.md](./02-runner-contract.md) | Root `run.sh` / `run.ps1` sub-command surface (`<no args>`, `slides`, `lint`) |
-| 03 | [03-release-pipeline.md](./03-release-pipeline.md) | Which artifacts the GitHub Release publishes and their naming |
-| 04 | [04-install-config.md](./04-install-config.md) | Schema and defaults for `install-config.json` |
+| 01 | [02-install-contract.md](./02-install-contract.md) | What `install.sh` / `install.ps1` install, in what layout, and from where |
+| 02 | [03-runner-contract.md](./03-runner-contract.md) | Root `run.sh` / `run.ps1` sub-command surface (`<no args>`, `slides`, `lint`) |
+| 03 | [04-release-pipeline.md](./04-release-pipeline.md) | Which artifacts the GitHub Release publishes and their naming |
+| 04 | [05-install-config.md](./05-install-config.md) | Schema and defaults for `install-config.json` |
 
 ---
 

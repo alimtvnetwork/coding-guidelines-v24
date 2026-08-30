@@ -49,13 +49,13 @@ You MUST verify and audit every item on this checklist across every file and fun
 ### Tier 1: Master Consolidated Guidelines (Highest Priority)
 
 - [ ] **Master Consolidated File (`.lovable/coding-guidelines/coding-guidelines.md`):** Read and enforce all 29 cross-language chapters and language-specific sections.
-- [ ] **Consolidated Review Spec (`spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`):** Cross-verify against root spec truth.
+- [ ] **Consolidated Review Spec (`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`):** Cross-verify against root spec truth.
 - [ ] **Anti-Hallucination & AI Optimization (`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`):** Rule AH-N1 (Abbreviation casing: `Id`, `Url`, `Api`), AH-O1 (Zero placeholder/truncation stubs), AH-E1 (Implicit booleans).
 - [ ] **Citation Requirement (`spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md`):** Every audit finding MUST cite the exact rule code and spec file path.
 
 ### Tier 2: Sizing, Nesting & Code Hygiene
 
-- [ ] **Canonical Size Tiers (`spec/02-coding-guidelines/00-canonical-size-tier.md`):**
+- [ ] **Canonical Size Tiers (`spec/02-coding-guidelines/02-canonical-size-tier.md`):**
   - **Functions:** Ideal 8 lines or fewer, hard cap 15 coding lines max.
   - **Source Files:** Recommended 80 lines or fewer, standard cap 100 coding lines, absolute limit 200–300 lines max.
   - **React Components (`.tsx`):** Hard cap 100 lines max per component file.

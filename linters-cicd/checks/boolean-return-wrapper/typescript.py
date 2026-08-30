@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-012",
     name="BooleanReturnWrapper",
     short_description="Do not return raw booleans in tuple multi-returns; use a wrapper interface.",
-    help_uri_relative="17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    help_uri_relative="17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
 )
 # Matches `function name(...) : [..., boolean, ...]` or `method(...) : [boolean, ...]`
 # or arrow functions `(...) : [..., boolean, ...] =>`

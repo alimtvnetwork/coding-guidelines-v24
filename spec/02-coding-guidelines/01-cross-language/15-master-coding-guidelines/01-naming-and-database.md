@@ -16,7 +16,7 @@ This is the **master reference**. Every rule here is enforced across all languag
 - [Database Naming](../07-database-naming.md)
 - [Boolean Principles](../02-boolean-principles/01-index.md)
 - [No-Negatives](../12-no-negatives.md)
-- [Test Naming & Structure](../14-test-naming-and-structure.md)
+- [Test Naming & Structure](../14-test-naming-and-03-structure.md)
 - [Lazy Evaluation Patterns](../16-lazy-evaluation-patterns.md)
 - [Regex Usage Guidelines](../17-regex-usage-guidelines.md)
 - [Code Mutation Avoidance](../18-code-mutation-avoidance.md)
@@ -89,7 +89,7 @@ Source code files that define a **single primary type** (struct, class, componen
 | `routes.go`, `middleware.go` | Infrastructure files not tied to one definition |
 | Go package directories | Stay `snake_case` per Go convention (`site_health/`) |
 
-**Spec/documentation files** are **NOT** affected — they remain lowercase kebab-case with numeric prefixes (e.g., `01-architecture.md`). See File Naming Convention <!-- external: spec/02-spec-management-software/02-instructions/01-file-naming-convention.md -->.
+**Spec/documentation files** are **NOT** affected — they remain lowercase kebab-case with numeric prefixes (e.g., `02-architecture.md`). See File Naming Convention <!-- external: spec/02-spec-management-software/02-instructions/01-file-naming-convention.md -->.
 
 ```
 ❌ WRONG — Go file with snake_case for a single-type file

@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit by hand.
-// Source: spec/01-spec-authoring-guide/17-version-schema.md §6
+// Source: spec/01-spec-authoring-guide/14-version-schema.md §6
 // Regenerate: npm run gen:role-enum
 
 export const ROLE_VALUES = [

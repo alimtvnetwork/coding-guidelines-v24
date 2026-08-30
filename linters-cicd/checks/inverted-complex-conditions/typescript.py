@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-013",
     name="InvertedComplexConditions",
     short_description="Do not use NOT (!) on complex conditions. Assign to a boolean variable or use De Morgan's laws.",
-    help_uri_relative="17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    help_uri_relative="17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
 )
 INVERTED_COMPLEX_RE = re.compile(r"if\s*\(\s*!\s*\([^)]+(&&|\|\|)[^)]+\)\s*\)")
 

@@ -108,7 +108,7 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
 - **Live spec tree:** [`../spec/`](../spec/) — 22 numbered folders, the source of truth for all rules.
 - **Health dashboard:** [`../spec/health-dashboard.md`](../spec/health-dashboard.md) — coverage, drift, and quality metrics.
 - **Consolidated index:** [`../spec/17-consolidated-guidelines/01-index.md`](../spec/17-consolidated-guidelines/01-index.md) — single-page reference of every rule.
-- **Changelog:** [`../changelog.md`](../changelog.md)
+- **Changelog:** [`../10-changelog.md`](../10-changelog.md)
 
 ---
 

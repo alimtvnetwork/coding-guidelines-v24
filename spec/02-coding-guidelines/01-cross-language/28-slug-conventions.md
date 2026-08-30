@@ -206,7 +206,7 @@ function to_slug(string $input): string {
 | Plugin/theme slugs | `my-awesome-plugin` |
 | Error documentation | `2026-04-02-url-error-casing-fix` |
 | Config keys (URL-safe) | `smtp-email-settings` |
-| File names (spec docs) | `08-cross-references.md` |
+| File names (spec docs) | `10-cross-references.md` |
 
 ---
 

@@ -11,7 +11,7 @@ verification pass.
 - [ ] `spec-authoring/22-fix-repo/02-edge-cases.md`
 - [ ] `spec-authoring/22-fix-repo/03-acceptance-criteria.md`
 - [ ] `spec-authoring/22-fix-repo/04-examples.md`
-- [ ] `spec-authoring/22-fix-repo/plan.md`
+- [ ] `spec-authoring/22-fix-repo/29-plan.md`
 - [ ] `fix-repo.ps1` at repo root
 - [ ] `fix-repo.sh` at repo root, `chmod +x`
 

@@ -1,6 +1,6 @@
 # Current Plan
 
-**Version:** 5.19.0 (Phase 12.6 — Spec slot 24 reserved with `24-threat-model.md` stub; Backup System initiative complete)
+**Version:** 5.19.0 (Phase 12.6 — Spec slot 24 reserved with `25-threat-model.md` stub; Backup System initiative complete)
 **Updated:** 2026-05-06
 
 ---
@@ -37,8 +37,8 @@
 | D12 | Add **cache-bin** tables/notes for role management in the ER diagram. |
 | D13 | Encryption: shared internal RSA key pair between worker and its backup; main can issue **rotation instruction**. Zip password follows known pattern. |
 | D14 | Date-by-date full snapshot storage on backup node. Restore by date is main-controlled. |
-| D15 | **Cascading semantics is simple union (locked 2026-07-19).** No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Supersedes OQ-A1. See `19-main-worker-service/17-cascading-roles-and-cache-bin.md` v1.1.0 §1 + §7. |
-| D16 | **Cache-bin storage is per-process SQLite `:memory:` (locked 2026-07-19).** Redis and plain in-process map remain configurable alternatives against the same contract (four functions in §4 + invalidation endpoint in §5); they are not defaults. Supersedes OQ-A2. See `19-main-worker-service/17-cascading-roles-and-cache-bin.md` v1.1.0 §4 + §7. |
+| D15 | **Cascading semantics is simple union (locked 2026-07-19).** No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Supersedes OQ-A1. See `19-main-worker-service/18-cascading-roles-and-cache-bin.md` v1.1.0 §1 + §7. |
+| D16 | **Cache-bin storage is per-process SQLite `:memory:` (locked 2026-07-19).** Redis and plain in-process map remain configurable alternatives against the same contract (four functions in §4 + invalidation endpoint in §5); they are not defaults. Supersedes OQ-A2. See `19-main-worker-service/18-cascading-roles-and-cache-bin.md` v1.1.0 §4 + §7. |
 
 ---
 
@@ -52,25 +52,25 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 
 ### Phase 1 — Rename EnumPage → AccessItem
 
-- Rename across `07-role-based-dashboards.md`, `03-main-db-schema.md`, `14-rbac-and-status-seed.md`, ERD.
+- Rename across `08-role-based-dashboards.md`, `04-main-db-schema.md`, `15-rbac-and-status-seed.md`, ERD.
 - Define `AccessItem` columns: `AccessItemId`, `Code`, `Label`, `PageUrlSuffix`, `Description`.
 - Define matcher logic (suffix match against route).
 - Update all references; add migration note in `98-changelog.md`.
 
 ### Phase 2 — Global DB Convention Updates
 
-- `spec/04-database-conventions/01-naming-conventions.md` — DateTime = INTEGER (epoch seconds, UTC).
-- `spec/04-database-conventions/02-schema-design.md` — enum tables shape `Id/Code/Label`.
+- `spec/04-database-conventions/03-naming-conventions.md` — DateTime = INTEGER (epoch seconds, UTC).
+- `spec/04-database-conventions/03-schema-design.md` — enum tables shape `Id/Code/Label`.
 - `spec/05-split-db-architecture/` — propagate INTEGER DateTime convention.
-- `spec/19-main-worker-service/03-main-db-schema.md` — flip all `*At TEXT` → `*At INTEGER`.
+- `spec/19-main-worker-service/04-main-db-schema.md` — flip all `*At TEXT` → `*At INTEGER`.
 - Update `Company` to `(CompanyId, Slug, Name, ...)`.
 
 ### Phase 3 — Move Users off Main
 
-- `03-main-db-schema.md` — remove `User`, `UserRole`, TOTP columns from Main.
+- `04-main-db-schema.md` — remove `User`, `UserRole`, TOTP columns from Main.
 - Document Users now live on Worker split-DB.
-- Update `05-auth-and-2fa.md` — auth lookup flow becomes: Main resolves Company→Worker, Worker authenticates User.
-- Update `11-split-db-tier-reconciliation.md` — move User/UserRole to Worker App tier.
+- Update `06-auth-and-2fa.md` — auth lookup flow becomes: Main resolves Company→Worker, Worker authenticates User.
+- Update `12-split-db-tier-reconciliation.md` — move User/UserRole to Worker App tier.
 
 ### Phase 4 — Worker Node Field Additions
 
@@ -78,7 +78,7 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 - Add `IsBackup INTEGER NOT NULL DEFAULT 0` (boolean).
 - Add `BackupOfWorkerNodeId INTEGER NULL` FK self-ref.
 - Add UI mapping note: "Worker" → "Region" (frontend label).
-- Update `04-worker-routing.md` — backup nodes excluded from selection pool.
+- Update `05-worker-routing.md` — backup nodes excluded from selection pool.
 
 ### Phase 5 — Role / AccessItem N-M + Cache Bin + Cascading
 
@@ -116,8 +116,8 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
   3. `POST /API/V1/Backup/RestoreByDate` (on backup node, Main-triggered)
   4. `GET  /API/V1/Backup/Snapshots` (list available dates)
   5. `GET  /API/V1/Backup/Health` (status)
-- Auth: S2S OAuth (per `05-auth-and-2fa.md`).
-- Add error codes in `13-error-codes.md`.
+- Auth: S2S OAuth (per `06-auth-and-2fa.md`).
+- Add error codes in `14-error-codes.md`.
 
 ### Phase 10 — Backup Apply Logic
 
@@ -150,13 +150,13 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 - [x] **Phase 2** — DB convention overhaul.
 - [x] **Phase 3** — Users moved off Main; credential-blind proxy.
 - [x] **Phase 4** — `WorkerNode` `Sequence` / `IsBackup` / `BackupOfWorkerNodeId`; "Region" UI label.
-- [x] **Phase 5** — `17-cascading-roles-and-cache-bin.md` v1.0.0; OQ-A1/A2 default proposals adopted.
-- [x] **Phase 6** — `18-backup-nodes.md` v1.0.0; `MAIN-800-*` lifecycle codes; status seed extended.
-- [x] **Phase 7** — `19-incremental-backup-sync.md` v1.0.0 (two `SyncOp` shapes, `BackupSyncWatermark`, envelope = SQLite file, compaction safety rule); `WORKER-910-*` + `MAIN-810-01` codes; tunables §2.11 extended.
-- [x] **Phase 8** — `20-backup-encryption-and-keys.md` v1.0.0 (Pair-RSA + Envelope-AES + HKDF zip password resolving OQ-A3, four-state rotation, `BackupKeyEpoch` table); `WORKER-920-01..05` + `MAIN-820-01..03` codes; tunables §2.12 added.
-- [x] **Phase 9** — `21-backup-endpoints.md` v1.0.0 (5 S2S OAuth endpoints: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health; endpoint↔scope matrix; CODE-RED handler budgets); `MAIN-830-01..02` wire codes; tunables §2.13 added.
-- [x] **Phase 10** — `22-backup-apply-logic.md` v1.0.0 (5-stage pipeline, V1–V7 validation, single-TX dispatch, DLQ no-silent-skip, V7 idempotency via UNIQUE lock); `BackupApplyIdempotency` + `BackupApplyDeadLetter` tables; `WORKER-930-01..04` opening overflow `WORKER-21200-21299` + `MAIN-840-01`; tunables §2.14 added.
-- [x] **Phase 11** — `23-snapshot-storage-and-restore.md` v1.0.0 (3-moment lifecycle, 8-step Build using `sqlite3_backup_init`, separate HKDF salt for snapshot password, 8-step Restore re-sealing under current Active KeyEpoch); BE-6 RestoreInbox on primary; `BackupSnapshotCatalog` + `BackupSnapshotJob` + `BackupRestoreJob` tables; final `Backup` S2S audience wiring with mandatory `PairingId` JWT claim; `WORKER-940-01..04` + `MAIN-840-02`; tunables §2.15 added — **OQ-A4 resolved at 30 days rolling**.
+- [x] **Phase 5** — `18-cascading-roles-and-cache-bin.md` v1.0.0; OQ-A1/A2 default proposals adopted.
+- [x] **Phase 6** — `19-backup-nodes.md` v1.0.0; `MAIN-800-*` lifecycle codes; status seed extended.
+- [x] **Phase 7** — `20-incremental-backup-sync.md` v1.0.0 (two `SyncOp` shapes, `BackupSyncWatermark`, envelope = SQLite file, compaction safety rule); `WORKER-910-*` + `MAIN-810-01` codes; tunables §2.11 extended.
+- [x] **Phase 8** — `21-backup-encryption-and-keys.md` v1.0.0 (Pair-RSA + Envelope-AES + HKDF zip password resolving OQ-A3, four-state rotation, `BackupKeyEpoch` table); `WORKER-920-01..05` + `MAIN-820-01..03` codes; tunables §2.12 added.
+- [x] **Phase 9** — `22-backup-endpoints.md` v1.0.0 (5 S2S OAuth endpoints: IncrementalDiff/RotateKeys/RestoreByDate/Snapshots/Health; endpoint↔scope matrix; CODE-RED handler budgets); `MAIN-830-01..02` wire codes; tunables §2.13 added.
+- [x] **Phase 10** — `23-backup-apply-logic.md` v1.0.0 (5-stage pipeline, V1–V7 validation, single-TX dispatch, DLQ no-silent-skip, V7 idempotency via UNIQUE lock); `BackupApplyIdempotency` + `BackupApplyDeadLetter` tables; `WORKER-930-01..04` opening overflow `WORKER-21200-21299` + `MAIN-840-01`; tunables §2.14 added.
+- [x] **Phase 11** — `24-snapshot-storage-and-restore.md` v1.0.0 (3-moment lifecycle, 8-step Build using `sqlite3_backup_init`, separate HKDF salt for snapshot password, 8-step Restore re-sealing under current Active KeyEpoch); BE-6 RestoreInbox on primary; `BackupSnapshotCatalog` + `BackupSnapshotJob` + `BackupRestoreJob` tables; final `Backup` S2S audience wiring with mandatory `PairingId` JWT claim; `WORKER-940-01..04` + `MAIN-840-02`; tunables §2.15 added — **OQ-A4 resolved at 30 days rolling**.
 - [x] **Phase 12** — Final consolidation: 3 new diagrams (`erd-backup-tier.mmd`, `seq-incremental-backup.mmd`, `seq-backup-restore.mmd`); diagrams index → v1.1.0; `97-acceptance-criteria.md` → v1.1.0 with 13 new Backup-tier criteria; cross-spec stubs noted (auth `Backup` audience, `PairingId` JWT claim, BE-1..BE-6 endpoint catalogue merge); linter `BACKUP-*` / `DB-SYNCOP-*` promoted; `AppBackupTrackedTable` seed referenced; **version bumped to `5.13.0` (final, phase suffix removed)**. Backup System spec arc COMPLETE.
 
 > **File numbering:** Phase 5 took the `17-…` slot, so backup-nodes is `18-…`, incremental sync `19-…`, encryption `20-…`, endpoints `21-…`, apply logic `22-…`, snapshot/restore `23-…`. Diagrams folder unchanged.
@@ -169,12 +169,12 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 |------|-------------------|
 | `04-database-conventions/` | 2 |
 | `05-split-db-architecture/` | 2, 3 |
-| `19-main-worker-service/03-main-db-schema.md` | 1, 2, 3, 4, 5 |
-| `19-main-worker-service/05-auth-and-2fa.md` | 3 |
-| `19-main-worker-service/07-role-based-dashboards.md` | 1, 5 |
-| `19-main-worker-service/11-split-db-tier-reconciliation.md` | 3 |
-| `19-main-worker-service/13-error-codes.md` | 9 |
-| `19-main-worker-service/14-rbac-and-status-seed.md` | 1, 5 |
+| `19-main-worker-service/04-main-db-schema.md` | 1, 2, 3, 4, 5 |
+| `19-main-worker-service/06-auth-and-2fa.md` | 3 |
+| `19-main-worker-service/08-role-based-dashboards.md` | 1, 5 |
+| `19-main-worker-service/12-split-db-tier-reconciliation.md` | 3 |
+| `19-main-worker-service/14-error-codes.md` | 9 |
+| `19-main-worker-service/15-rbac-and-status-seed.md` | 1, 5 |
 | `19-main-worker-service/diagrams/` | 12 |
 | New files: `17-…` through `22-…` | 6–11 |
 

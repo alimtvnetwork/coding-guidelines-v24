@@ -23,12 +23,12 @@
 | # | File | Status |
 |---|------|--------|
 | 00 | `01-index.md` | ✅ Present |
-| 01 | `01-naming-conventions.md` | ✅ Present |
-| 02 | `02-schema-design.md` | ✅ Present |
-| 03 | `03-orm-and-views.md` | ✅ Present |
-| 04 | `04-testing-strategy.md` | ✅ Present |
-| 05 | `05-relationship-diagrams.md` | ✅ Present |
-| 06 | `06-rest-api-format.md` | ✅ Present |
+| 01 | `02-naming-conventions.md` | ✅ Present |
+| 02 | `03-schema-design.md` | ✅ Present |
+| 03 | `04-orm-and-views.md` | ✅ Present |
+| 04 | `05-testing-strategy.md` | ✅ Present |
+| 05 | `06-relationship-diagrams.md` | ✅ Present |
+| 06 | `07-rest-api-format.md` | ✅ Present |
 | 99 | `99-consistency-report.md` | ✅ Present |
 
 **Total:** 8 files

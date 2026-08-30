@@ -17,7 +17,7 @@
 | 5 | `04-export-status-enum.md` | ✅ Present |
 | 6 | `05-http-method-enum.md` | ✅ Present |
 | 7 | `06-message-status-enum.md` | ✅ Present |
-| 8 | `07-type-safety-remediation-plan.md` | ✅ Present (v2.0.0) |
+| 8 | `07-type-safety-remediation-29-plan.md` | ✅ Present (v2.0.0) |
 | 9 | `08-typescript-standards-reference.md` | ✅ Present |
 | 10 | `09-promise-await-patterns.md` | ✅ Present (🔴 CODE RED: Promise.all for independent calls) |
 | 11 | `10-log-level-enum.md` | ✅ Present |

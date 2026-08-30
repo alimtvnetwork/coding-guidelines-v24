@@ -10,10 +10,10 @@
 | # | File | Status |
 |---|------|--------|
 | 1 | `01-index.md` | ✅ Present |
-| 2 | `01-install-contract.md` | ✅ Present |
-| 3 | `02-runner-contract.md` | ✅ Present |
-| 4 | `03-release-pipeline.md` | ✅ Present |
-| 5 | `04-install-config.md` | ✅ Present |
+| 2 | `02-install-contract.md` | ✅ Present |
+| 3 | `03-runner-contract.md` | ✅ Present |
+| 4 | `04-release-pipeline.md` | ✅ Present |
+| 5 | `05-install-config.md` | ✅ Present |
 
 **Total:** 5 files (excluding this report)
 
@@ -21,15 +21,15 @@
 
 ## Known Gaps
 
-- `97-acceptance-test-plan.md` is **missing**. Per the spec patch plan, this
+- `97-acceptance-test-29-plan.md` is **missing**. Per the spec patch plan, this
   folder needs a deterministic acceptance harness that validates installer
   exit codes (`Test-Path`/`[ -x ]`), dependency presence (`bun >=1.1`,
   `git >=2.40`, `unzip`, `curl`), and runner contract exit-code mapping
   (0 = success, 1 = usage, 2 = config, 3 = network, 4 = auth, 64+ = internal).
-- `03-release-pipeline.md` describes pipeline steps at a high level but does
+- `04-release-pipeline.md` describes pipeline steps at a high level but does
   not enumerate the exact environment variables (e.g. `GITHUB_TOKEN`) or
   the precise build commands. This is tracked in the patch plan.
-- See `/mnt/documents/spec-patch-plan.md` § `spec/15-distribution-and-runner/`
+- See `/mnt/documents/spec-patch-29-plan.md` § `spec/15-distribution-and-runner/`
   for the full remediation plan and example acceptance criteria.
 
 ---
@@ -46,7 +46,7 @@
 ## Summary
 
 - **Errors:** 0
-- **Warnings:** 2 (missing `97-acceptance-test-plan.md`, pipeline detail gaps in `03-release-pipeline.md`)
+- **Warnings:** 2 (missing `97-acceptance-test-29-plan.md`, pipeline detail gaps in `04-release-pipeline.md`)
 - **Health Score:** 75/100 (C — content present, validation harness pending)
 
 ---

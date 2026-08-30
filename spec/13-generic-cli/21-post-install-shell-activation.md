@@ -5,7 +5,7 @@
 > - [11-build-deploy.md](11-build-deploy.md) — install/deploy step that places the binary on PATH
 > - [19-shell-completion.md](19-shell-completion.md) — completion install uses the same profile-injection pattern
 > - [13-checklist.md](13-checklist.md) — implementation phases that include setup
-> - Implementation reference: [06-version-and-help.md](../12-cicd-pipeline-workflows/06-version-and-help.md) — shell-integrated commands and help output
+> - Implementation reference: [12-version-and-help.md](../12-cicd-pipeline-workflows/12-version-and-help.md) — shell-integrated commands and help output
 > - Historical sibling-app issue references live outside this repo; this spec keeps the activation contract local
 
 ## Purpose

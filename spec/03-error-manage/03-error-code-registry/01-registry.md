@@ -58,8 +58,8 @@
 | `SM-RT` | SM Realtime | 2800-2849 | `spec/02-spec-management-software/05-features/18-realtime/` | ✅ Active |
 | `SM-RV` | SM Registry Validator | 2850-2859 | `spec/03-error-manage/03-error-code-registry/08-overlap-validator.md` | ✅ Active |
 | `CAST` | Type Casting (Cross-Cutting) | GEN-600-01 to GEN-600-10 | `spec/02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md` | ✅ Active |
-| `MWS` | Main/Worker Service (Worker tier) | 21000-21099 | `spec/19-main-worker-service/13-error-codes.md` | ✅ Active |
-| `MWS` | Main/Worker Service (Main tier) | 21100-21199 | `spec/19-main-worker-service/13-error-codes.md` | ✅ Active |
+| `MWS` | Main/Worker Service (Worker tier) | 21000-21099 | `spec/19-main-worker-service/14-error-codes.md` | ✅ Active |
+| `MWS` | Main/Worker Service (Main tier) | 21100-21199 | `spec/19-main-worker-service/14-error-codes.md` | ✅ Active |
 
 ---
 
@@ -76,7 +76,7 @@
 
 ### Resolution 2: Nexus Flow Reset API vs State Errors (Phase 15, W-12)
 
-**Collision:** `09-reset-api.md` defined NF-8301 through NF-8308, but `04-error-codes.md` defines 8301-8303 as "State Errors".
+**Collision:** `09-reset-api.md` defined NF-8301 through NF-8308, but `06-error-codes.md` defines 8301-8303 as "State Errors".
 
 **Resolution:** Reset API errors reassigned to **8350-8369** (within NF's 8000-8399 range, previously unallocated). State Errors retain 8301-8303.
 
@@ -127,7 +127,7 @@
 
 The two formats are distinguishable at parse time by their encoding. No reassignment is required. Both modules document their codes independently:
 
-- PS: `spec/11-powershell-integration/04-error-codes.md`
+- PS: `spec/11-powershell-integration/06-error-codes.md`
 - AB SEO: `spec/11-ai-bridge-cli/01-backend/16-ai-seo-error-codes.md`
 
 **Contingency:** If future ambiguity arises (e.g., a unified logging system that strips prefixes), AB SEO should migrate to **9541-9599** (currently reserved for SEO expansion).
@@ -177,7 +177,7 @@ WPP retains 13000-13999.
 | GSearch Chrome Extension | `GS` | 7880-7899 | N/A | `spec/09-gsearch-cli/01-backend/` |
 | GSearch Enum Architecture | `GS` | 7900-7919 | N/A | `spec/09-gsearch-cli/01-backend/` |
 | GSearch Provider Integration | `GS` | 7920-7949 | N/A | `spec/09-gsearch-cli/01-backend/` |
-| Nexus Flow | `NF` | 8000-8399 | 8050-8069 | `spec/12-nexus-flow-cli/01-backend/04-error-codes.md` |
+| Nexus Flow | `NF` | 8000-8399 | 8050-8069 | `spec/12-nexus-flow-cli/01-backend/06-error-codes.md` |
 | AI Bridge Core | `AB` | 9000-9499 | 9050-9069 | `spec/11-ai-bridge-cli/01-backend/05-error-codes.md` |
 | AI Bridge SEO | `AB` | 9500-9540 | N/A | `spec/11-ai-bridge-cli/01-backend/16-ai-seo-error-codes.md` |
 | AI Bridge Extended | `AB` | 9600-9699 | N/A | `spec/11-ai-bridge-cli/01-backend/05-error-codes.md` |
@@ -565,7 +565,7 @@ All CLI frontends use a consistent error code pattern at offset +50 from their b
 
 ## PS: PowerShell Integration (9500-9599)
 
-> See `spec/11-powershell-integration/04-error-codes.md` for full list.
+> See `spec/11-powershell-integration/06-error-codes.md` for full list.
 
 | Code | Name | Message |
 |------|------|---------|

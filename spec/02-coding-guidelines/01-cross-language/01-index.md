@@ -93,7 +93,7 @@ Test naming and structure conventions.
 
 | # | File | Description |
 |---|------|-------------|
-| 14 | `14-test-naming-and-structure.md` | Test naming patterns and file organization |
+| 14 | `14-test-naming-and-03-structure.md` | Test naming patterns and file organization |
 | 28 | `28-slug-conventions.md` | Slug format rules, REST API examples, generation code |
 
 ### 📋 Reference & Meta
@@ -125,7 +125,7 @@ Consolidated reference, audit logs, contradiction checks.
 | 11 | `11-key-naming-pascalcase.md` | Naming |
 | 12 | `12-no-negatives.md` | Naming |
 | 13 | `13-strict-typing.md` | Type Safety |
-| 14 | `14-test-naming-and-structure.md` | Testing |
+| 14 | `14-test-naming-and-03-structure.md` | Testing |
 | 15 | `15-master-coding-guidelines/01-index.md` | Reference |
 | 16 | `16-lazy-evaluation-patterns.md` | Patterns |
 | 17 | `17-regex-usage-guidelines.md` | Patterns |
@@ -161,7 +161,7 @@ Consolidated reference, audit logs, contradiction checks.
 | 11-key-naming-pascalcase.md |
 | 12-no-negatives.md |
 | 13-strict-typing.md |
-| 14-test-naming-and-structure.md |
+| 14-test-naming-and-03-structure.md |
 | 15-master-coding-guidelines.md |
 | 16-lazy-evaluation-patterns.md |
 | 17-regex-usage-guidelines.md |

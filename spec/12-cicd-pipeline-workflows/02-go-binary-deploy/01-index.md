@@ -45,8 +45,8 @@ The CI pipeline uses a **SHA-based passthrough gate** to skip redundant validati
 
 | # | File | Description | Status |
 |---|------|-------------|--------|
-| 01 | [01-ci-pipeline.md](./01-ci-pipeline.md) | CI pipeline: SHA dedup, lint, vulncheck, test matrix, cross-compile | ✅ Active |
-| 02 | [02-release-pipeline.md](./02-release-pipeline.md) | Release pipeline: binary build, compression, install scripts, GitHub Release | ✅ Active |
+| 01 | [02-ci-pipeline.md](./02-ci-pipeline.md) | CI pipeline: SHA dedup, lint, vulncheck, test matrix, cross-compile | ✅ Active |
+| 02 | [05-release-pipeline.md](./05-release-pipeline.md) | Release pipeline: binary build, compression, install scripts, GitHub Release | ✅ Active |
 
 ---
 
@@ -54,13 +54,13 @@ The CI pipeline uses a **SHA-based passthrough gate** to skip redundant validati
 
 | Reference | Location |
 |-----------|----------|
-| Shared Conventions | `../01-shared-conventions.md` |
-| GitHub Release Standard | `../02-github-release-standard.md` |
-| Vulnerability Scanning | `../03-vulnerability-scanning.md` |
-| Install Script Generation | `../04-install-script-generation.md` |
-| Code Signing | `../05-code-signing.md` |
-| Self-Update Mechanism | `../06-self-update-mechanism.md` |
-| Release Body & Changelog | `../07-release-body-and-changelog.md` |
+| Shared Conventions | `../03-shared-conventions.md` |
+| GitHub Release Standard | `../04-github-release-standard.md` |
+| Vulnerability Scanning | `../06-vulnerability-scanning.md` |
+| Install Script Generation | `../07-install-script-generation.md` |
+| Code Signing | `../10-code-signing.md` |
+| Self-Update Mechanism | `../11-self-update-mechanism.md` |
+| Release Body & Changelog | `../14-release-body-and-changelog.md` |
 | Self-Update Full Specs | `../../14-update/01-index.md` |
 
 ---

@@ -150,5 +150,5 @@ Content that exists in multiple sources (03 is the canonical version):
 
 | Reference | Location |
 |-----------|----------|
-| Consolidation Plan | `../planned/coding-guidelines-consolidation-plan.md` |
+| Consolidation Plan | `../planned/coding-guidelines-consolidation-29-plan.md` |
 | Naming Compliance | `../project/naming-compliance-issues.md` |

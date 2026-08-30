@@ -13,7 +13,7 @@
  *    block is replaced (everything from that heading down to the next
  *    H2 or EOF). Files unchanged after replacement are left untouched.
  *  - Skips: ``01-index.md``, ``97-acceptance-criteria.md``,
- *    ``99-consistency-report.md``, ``readme.md``, ``changelog.md``.
+ *    ``99-consistency-report.md``, ``readme.md``, ``10-23-changelog.md``.
  *  - Each section deterministically derives its AC tag from
  *    ``<folder-prefix>-<file-prefix>`` so cross-references stay stable
  *    across runs.
@@ -43,7 +43,7 @@ const SKIP_BASENAMES = new Set([
   "97-acceptance-criteria.md",
   "99-consistency-report.md",
   "readme.md",
-  "changelog.md",
+  "10-23-changelog.md",
 ]);
 
 const VERIFICATION_HEADING = "## Verification";
@@ -213,7 +213,7 @@ function main() {
     if (!args.strip && shouldSkip(full, rel, args.mode)) { summary.skipped++; continue; }
     if (args.strip) {
       const base = basename(full).toLowerCase();
-      // For --strip we always visit readme.md / changelog.md too, so we
+      // For --strip we always visit readme.md / 10-23-changelog.md too, so we
       // can clean up blocks planted by earlier "all-files" runs. Only
       // 97-acceptance-criteria.md and 99-consistency-report.md are
       // sacred — those own their own verification narratives.

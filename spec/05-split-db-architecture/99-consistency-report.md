@@ -11,7 +11,7 @@
 | # | File | Status |
 |---|------|--------|
 | 00 | `01-index.md` | ✅ Present |
-| 01 | `01-fundamentals.md` | ✅ Present |
+| 01 | `02-fundamentals.md` | ✅ Present |
 | 02 | `02-features/01-index.md` | ✅ Present |
 | 02.01 | `02-features/01-cli-examples.md` | ✅ Present |
 | 02.02 | `02-features/02-reset-api-standard.md` | ✅ Present |

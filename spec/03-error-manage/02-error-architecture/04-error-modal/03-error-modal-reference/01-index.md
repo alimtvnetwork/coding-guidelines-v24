@@ -21,7 +21,7 @@
 | 01 | [01-data-model.md](./01-data-model.md) | CapturedError interface + supporting types | ~130 |
 | 02 | [02-capture-pipeline.md](./02-capture-pipeline.md) | Error capture: API client → store → modal | ~85 |
 | 03 | [03-envelope-parsing.md](./03-envelope-parsing.md) | Envelope parsing, Errors/MethodsStack/Attributes mapping | ~85 |
-| 04 | [04-modal-structure.md](./04-modal-structure.md) | Component hierarchy + visual layout diagrams | ~285 |
+| 04 | [04-modal-03-structure.md](./04-modal-03-structure.md) | Component hierarchy + visual layout diagrams | ~285 |
 | 05 | [05-backend-tabs.md](./05-backend-tabs.md) | Backend section tabs: Overview, Log, Execution, Stack, Session, Request, Traversal | ~80 |
 | 06 | [06-frontend-tabs.md](./06-frontend-tabs.md) | Frontend section tabs: Overview, Stack, Context, Fixes | ~25 |
 | 07 | [07-request-chain.md](./07-request-chain.md) | Request chain visualization (3-hop React→Go→Delegated) | ~115 |

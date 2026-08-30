@@ -112,7 +112,7 @@ function buildRegistry(stats, health) {
       href: "spec/health-dashboard.md" },
     { id: "blind-audit", row: "platform", enabled: true,
       alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`,
-      href: "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md" },
+      href: "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md" },
     { id: "prs", row: "platform", enabled: true,
       alt: "PRs Welcome", src: "https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square",
       href: "#-contributing" },

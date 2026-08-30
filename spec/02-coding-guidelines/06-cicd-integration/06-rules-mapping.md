@@ -69,9 +69,9 @@ reserved for future soft rules.)*
 
 | ID | Rule | Spec source | Check script | Phase 1 langs |
 |----|------|-------------|--------------|---------------|
-| BOOL-NEG-001 | No Not/No-prefixed boolean columns | `04-database-conventions/01-naming-conventions.md` | `checks/boolean-column-negative/sql.py` | sql |
-| DB-FREETEXT-001 | **Presence only** — entity tables need `Description`; transactional tables need `Notes`+`Comments` | `04-database-conventions/02-schema-design.md` §6 | `checks/free-text-columns/sql.py` | sql |
-| MISSING-DESC-001 | **Strict superset** — presence (Rules 10/11) + nullability (Rule 12) + waiver mechanism. Recommended for new pipelines. | `04-database-conventions/02-schema-design.md` §6 (v3.4.0) | `checks/missing-desc/sql.py` | sql |
+| BOOL-NEG-001 | No Not/No-prefixed boolean columns | `04-database-conventions/02-naming-conventions.md` | `checks/boolean-column-negative/sql.py` | sql |
+| DB-FREETEXT-001 | **Presence only** — entity tables need `Description`; transactional tables need `Notes`+`Comments` | `04-database-conventions/03-schema-design.md` §6 | `checks/free-text-columns/sql.py` | sql |
+| MISSING-DESC-001 | **Strict superset** — presence (Rules 10/11) + nullability (Rule 12) + waiver mechanism. Recommended for new pipelines. | `04-database-conventions/03-schema-design.md` §6 (v3.4.0) | `checks/missing-desc/sql.py` | sql |
 
 > Both DB-FREETEXT-001 and MISSING-DESC-001 share the same classifier
 > via `_lib/free_text_columns.py` so they cannot drift apart. Enable

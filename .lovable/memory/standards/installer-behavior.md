@@ -34,7 +34,7 @@ Source order, stop at first success:
 
 ## V → V+N discovery rules
 
-- Default `LOOKAHEAD = 20` (was 5 in older `24-update-check-mechanism/01-fundamentals.md`; new spec supersedes).
+- Default `LOOKAHEAD = 20` (was 5 in older `24-update-check-mechanism/02-fundamentals.md`; new spec supersedes).
 - Probes fire in parallel (Bash `&`+`wait`, PS `Start-Job`, Node `Promise.all`, Go goroutines, Python `asyncio.gather`).
 - 5s per probe, 10s total deadline, 0 retries.
 - Highest existing `K` wins.

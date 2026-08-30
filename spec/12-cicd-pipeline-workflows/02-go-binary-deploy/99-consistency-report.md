@@ -10,8 +10,8 @@
 | # | File | Status |
 |---|------|--------|
 | 1 | `01-index.md` | ✅ Present |
-| 2 | `01-ci-pipeline.md` | ✅ Present |
-| 3 | `02-release-pipeline.md` | ✅ Present |
+| 2 | `02-ci-pipeline.md` | ✅ Present |
+| 3 | `05-release-pipeline.md` | ✅ Present |
 | 4 | `03-complete-workflow-reference.md` | ✅ Present |
 
 **Total:** 4 files (excluding this report)

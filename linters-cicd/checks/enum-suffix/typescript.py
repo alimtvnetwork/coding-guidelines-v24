@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-010",
     name="EnumSuffix",
     short_description="Enums must be named with a 'Type' suffix (e.g., UserType).",
-    help_uri_relative="17-consolidated-guidelines/04-enum-standards.md",
+    help_uri_relative="17-consolidated-guidelines/07-enum-standards.md",
 )
 ENUM_RE = re.compile(r'\benum\s+([A-Za-z0-9_]+)\s*\{')
 

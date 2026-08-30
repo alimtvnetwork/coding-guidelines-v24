@@ -37,7 +37,7 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | Component | Path / Location | Purpose |
 | :--- | :--- | :--- |
 | **Master Guideline** | `.lovable/coding-guidelines/coding-guidelines.md` | Single standalone source of truth for AI agents |
-| **Consolidated Spec** | `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` | Authoritative root spec matching .lovable mirror |
+| **Consolidated Spec** | `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` | Authoritative root spec matching .lovable mirror |
 | **Cross-Language Specs** | `spec/02-coding-guidelines/01-cross-language/` | Detailed chapters (00-overview through 29-no-generated-artifacts) |
 | **Newline Examples** | `spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md` | Canonical Before/After examples for return new lines |
 | **TypeScript / React** | `spec/02-coding-guidelines/02-typescript/` | Strict TS, immutability, React hook guards |

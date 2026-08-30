@@ -1,5 +1,16 @@
 # Coding Guidelines (AI Execution Prompt)
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 02 Coding Guidelines.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `02-coding-guidelines/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -39,7 +50,7 @@ Absolutely NO generic garbage names. Variables named \	emp\, \data\, \obj\, \com
 ### 6. Function Metrics & Signatures
 
 - Functions: 8-15 lines. Files: < 300 lines. React components: < 100 lines.
-- **Maximum 3 Parameters:** See the strict formatting rules in \coding-style-checklist.md\.
+- **Maximum 3 Parameters:** See the strict formatting rules in \03-coding-style-checklist.md\.
 
 ### 7. Never Hallucinate
 
@@ -54,4 +65,4 @@ If a requirement is unclear or missing, **ask a clarifying question** instead of
 - [Go Guidelines](./03-golang/01-index.md)
 - [C# Guidelines](./07-csharp/01-index.md)
 - [AI Optimization](./06-ai-optimization/01-index.md)
-- **[Coding Style Checklist](./coding-style-checklist.md)**
+- **[Coding Style Checklist](./03-03-coding-style-checklist.md)**

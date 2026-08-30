@@ -1,5 +1,16 @@
 # 08 — Code Block System
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 09 Code Block System.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `09-code-block-system/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -19,16 +30,16 @@ This specification fully documents the code block rendering system — a rich, I
 | File | Description |
 |------|-------------|
 | `01-index.md` | This file — table of contents and architecture summary |
-| `01-architecture.md` | Pipeline overview, file map, data flow |
-| `02-html-structure.md` | Exact HTML output for code blocks, checklists, inline code |
-| `03-syntax-highlighting.md` | highlight.js setup, language registration, tree detection |
-| `04-interactions.md` | Copy, download, fullscreen, font controls, line selection, drag, keyboard |
-| `05-styling.md` | Complete CSS reference — every class, color, transition, animation |
-| `06-constants-and-maps.md` | Language labels, accent colors, file extensions, font sizes |
-| `07-clipboard.md` | Clipboard utility — fallback strategy, toast feedback |
-| `08-checklist-blocks.md` | Checklist extraction, rendering, copy/export |
-| `09-tree-structure-rendering.md` | Tree/folder visualization with box-drawing characters |
-| `10-selection-bar.md` | Selection bar UI, line pinning, drag-select, keyboard navigation |
+| `02-architecture.md` | Pipeline overview, file map, data flow |
+| `03-html-03-structure.md` | Exact HTML output for code blocks, checklists, inline code |
+| `04-syntax-highlighting.md` | highlight.js setup, language registration, tree detection |
+| `05-interactions.md` | Copy, download, fullscreen, font controls, line selection, drag, keyboard |
+| `06-styling.md` | Complete CSS reference — every class, color, transition, animation |
+| `07-constants-and-maps.md` | Language labels, accent colors, file extensions, font sizes |
+| `08-clipboard.md` | Clipboard utility — fallback strategy, toast feedback |
+| `09-checklist-blocks.md` | Checklist extraction, rendering, copy/export |
+| `10-tree-structure-rendering.md` | Tree/folder visualization with box-drawing characters |
+| `11-selection-bar.md` | Selection bar UI, line pinning, drag-select, keyboard navigation |
 | `99-consistency-report.md` | Cross-reference validation |
 
 ---

@@ -15,7 +15,7 @@ RULE = Rule(
     id="CODE-RED-012",
     name="BooleanReturnWrapper",
     short_description="Do not return raw booleans in tuple multi-returns; use a wrapper class.",
-    help_uri_relative="17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md",
+    help_uri_relative="17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
 )
 # Matches PHPDoc `@return array{..., bool, ...}`
 FUNC_MULTI_RET_BOOL_RE = re.compile(r"@return\s+(?:array|list)\s*(?:<|\{)[^>}]*?(?:,[^>}]*\bbool(?:ean)?\b|\bbool(?:ean)?\b[^>}]*,)[^>}]*?(?:>|\})")

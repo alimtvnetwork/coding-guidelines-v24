@@ -6,8 +6,8 @@ type: standard
 
 # Version Source of Truth Standard (`version.json`)
 
-**Canonical spec:** `spec/01-spec-authoring-guide/17-version-schema.md`
-**Rule:** Hard Rule 19 in `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`
+**Canonical spec:** `spec/01-spec-authoring-guide/14-version-schema.md`
+**Rule:** Hard Rule 19 in `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
 **Reading Queue:** Enqueued in `.lovable/what-to-read.md` and `.lovable/memory/01-index.md`
 
 ## 1. Single Source of Truth at Repository Root

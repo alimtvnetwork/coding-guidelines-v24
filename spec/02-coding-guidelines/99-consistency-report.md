@@ -24,8 +24,8 @@
 | # | File | Status |
 |---|------|--------|
 | 00 | `01-index.md` | ✅ Present |
-| — | `consolidated-review-guide.md` | ✅ Present |
-| — | `consolidated-review-guide-condensed.md` | ✅ Present |
+| — | `05-consolidated-review-guide.md` | ✅ Present |
+| — | `04-consolidated-review-guide-condensed.md` | ✅ Present |
 | 97 | `97-acceptance-criteria.md` | ✅ Present |
 | 99 | `99-consistency-report.md` | ✅ Present |
 

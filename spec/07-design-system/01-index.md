@@ -1,5 +1,16 @@
 # AI-Adaptable Design System
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 07 Design System.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `07-design-system/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -61,19 +72,19 @@ All animations and transitions use **CSS3 only** — no JavaScript-driven animat
 | # | File | Category | Description |
 |---|------|----------|-------------|
 | 00 | [01-index.md](./01-index.md) | Overview | This file — design system entry point and index |
-| 01 | [01-design-principles.md](./01-design-principles.md) | Principles | Visual philosophy, consistency rules, interaction feel |
-| 02 | [02-theme-variable-architecture.md](./02-theme-variable-architecture.md) | Theme | Complete CSS custom property registry — the single source of truth |
-| 03 | [03-typography.md](./03-typography.md) | Typography | Font stacks, size hierarchy, weight rules, text spacing |
-| 04 | [04-spacing-layout.md](./04-spacing-layout.md) | Layout | Spacing scale, container rules, grid/flex patterns, responsive breakpoints |
-| 05 | [05-borders-shapes.md](./05-borders-shapes.md) | Borders | Border thickness, radius, color behavior, state changes |
-| 06 | [06-motion-transitions.md](./06-motion-transitions.md) | Motion | CSS3 transition durations, easing, keyframe animations, state transforms |
-| 07 | [07-code-blocks.md](./07-code-blocks.md) | Components | Code block rendering, language badges, line interaction, fullscreen |
-| 08 | [08-header-navigation.md](./08-header-navigation.md) | Components | Header layout, menu structure, hover underlines, icon transitions |
-| 09 | [09-button-system.md](./09-button-system.md) | Components | Button variants, slide text animation, highlight styles |
-| 10 | [10-sidebar-system.md](./10-sidebar-system.md) | Components | Sidebar tree, active states, expand/collapse, search |
-| 11 | [11-section-patterns.md](./11-section-patterns.md) | Patterns | Reusable section templates (hero, feature, team, CTA) |
-| 12 | [12-page-creation-rules.md](./12-page-creation-rules.md) | Guide | Rules for building new pages from the design language |
-| 13 | [13-wordpress-migration.md](./13-wordpress-migration.md) | Migration | CMS compatibility notes, block theme mapping, admin theming |
+| 01 | [02-design-principles.md](./02-design-principles.md) | Principles | Visual philosophy, consistency rules, interaction feel |
+| 02 | [03-theme-variable-architecture.md](./03-theme-variable-architecture.md) | Theme | Complete CSS custom property registry — the single source of truth |
+| 03 | [04-typography.md](./04-typography.md) | Typography | Font stacks, size hierarchy, weight rules, text spacing |
+| 04 | [05-spacing-layout.md](./05-spacing-layout.md) | Layout | Spacing scale, container rules, grid/flex patterns, responsive breakpoints |
+| 05 | [06-borders-shapes.md](./06-borders-shapes.md) | Borders | Border thickness, radius, color behavior, state changes |
+| 06 | [08-motion-transitions.md](./08-motion-transitions.md) | Motion | CSS3 transition durations, easing, keyframe animations, state transforms |
+| 07 | [09-code-blocks.md](./09-code-blocks.md) | Components | Code block rendering, language badges, line interaction, fullscreen |
+| 08 | [10-header-navigation.md](./10-header-navigation.md) | Components | Header layout, menu structure, hover underlines, icon transitions |
+| 09 | [11-button-system.md](./11-button-system.md) | Components | Button variants, slide text animation, highlight styles |
+| 10 | [12-sidebar-system.md](./12-sidebar-system.md) | Components | Sidebar tree, active states, expand/collapse, search |
+| 11 | [13-section-patterns.md](./13-section-patterns.md) | Patterns | Reusable section templates (hero, feature, team, CTA) |
+| 12 | [14-page-creation-rules.md](./14-page-creation-rules.md) | Guide | Rules for building new pages from the design language |
+| 13 | [15-wordpress-migration.md](./15-wordpress-migration.md) | Migration | CMS compatibility notes, block theme mapping, admin theming |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | Testing | Testable criteria for design system compliance |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency validation report |
 

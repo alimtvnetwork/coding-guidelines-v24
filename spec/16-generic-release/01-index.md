@@ -1,5 +1,16 @@
 # Generic Release Pipeline Specification
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 16 Generic Release.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `16-generic-release/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -10,8 +21,8 @@
 >
 > **Related local specs:**
 >
-> - [`../12-cicd-pipeline-workflows/02-release-pipeline.md`](../12-cicd-pipeline-workflows/02-release-pipeline.md) — this repo's concrete release workflow (consumes the generic contract below)
-> - [`../12-cicd-pipeline-workflows/10-release-pipeline-issues-rca.md`](../12-cicd-pipeline-workflows/10-release-pipeline-issues-rca.md) — local RCA ledger of release-pipeline failures
+> - [`../12-cicd-pipeline-workflows/05-release-pipeline.md`](../12-cicd-pipeline-workflows/05-release-pipeline.md) — this repo's concrete release workflow (consumes the generic contract below)
+> - [`../12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md`](../12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md) — local RCA ledger of release-pipeline failures
 > - [`../13-generic-cli/20-terminal-output-design.md`](../13-generic-cli/20-terminal-output-design.md) — terminal output contract used by install scripts
 > - [`../13-generic-cli/21-post-install-shell-activation.md`](../13-generic-cli/21-post-install-shell-activation.md) — post-install PATH/profile/wrapper activation contract
 
@@ -30,14 +41,14 @@ a complete release pipeline from scratch without ambiguity.
 
 | File | Topic |
 |------|-------|
-| [01-cross-compilation.md](01-cross-compilation.md) | Building static binaries for 6+ platform targets |
-| [02-release-pipeline.md](02-release-pipeline.md) | CI/CD workflow structure, triggers, and stages |
-| [03-install-scripts.md](03-install-scripts.md) | Generating version-pinned PowerShell and Bash installers |
-| [04-checksums-verification.md](04-checksums-verification.md) | SHA-256 checksum generation and verification |
-| [05-release-assets.md](05-release-assets.md) | Asset naming, compression, and packaging conventions |
-| [06-release-metadata.md](06-release-metadata.md) | Version resolution, tagging, and changelog extraction |
-| [07-known-issues-and-fixes.md](07-known-issues-and-fixes.md) | Post-mortem catalog: every release-pipeline failure with root cause, fix, and prevention rule |
-| [08-version-pinned-release-installers.md](08-version-pinned-release-installers.md) | **Authoritative contract** for the per-release `install.sh` / `install.ps1` assets — spec-first ordering, embedded version, no "latest" probe |
+| [02-cross-compilation.md](02-cross-compilation.md) | Building static binaries for 6+ platform targets |
+| [05-release-pipeline.md](05-release-pipeline.md) | CI/CD workflow structure, triggers, and stages |
+| [04-install-scripts.md](04-install-scripts.md) | Generating version-pinned PowerShell and Bash installers |
+| [05-checksums-verification.md](05-checksums-verification.md) | SHA-256 checksum generation and verification |
+| [06-release-assets.md](06-release-assets.md) | Asset naming, compression, and packaging conventions |
+| [07-release-metadata.md](07-release-metadata.md) | Version resolution, tagging, and changelog extraction |
+| [08-known-issues-and-fixes.md](08-known-issues-and-fixes.md) | Post-mortem catalog: every release-pipeline failure with root cause, fix, and prevention rule |
+| [09-version-pinned-release-installers.md](09-version-pinned-release-installers.md) | **Authoritative contract** for the per-release `install.sh` / `install.ps1` assets — spec-first ordering, embedded version, no "latest" probe |
 
 ---
 

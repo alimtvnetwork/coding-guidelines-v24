@@ -16,6 +16,7 @@ Master directory of architectural and execution plans.
 - [09-rca-and-boolean-fix.md](pending/09-rca-and-boolean-fix.md): Root cause analysis and boolean condition remediation.
 - [14-code-red-refactor-remediation.md](pending/14-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 - [15-prompt-architect-version-tracking.md](pending/15-prompt-architect-version-tracking.md): Version tracking safeguards for prompt architect.
+- [16-cicd-pipeline-consolidation-and-owner-review.md](pending/16-cicd-pipeline-consolidation-and-owner-review.md): CI/CD pipeline workflow consolidation and open review questions.
 
 ## Completed Plans
 

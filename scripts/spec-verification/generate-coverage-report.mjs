@@ -38,7 +38,7 @@ const SACRED_BASENAMES = new Set([
   "97-acceptance-criteria.md",
   "99-consistency-report.md",
   "readme.md",
-  "changelog.md",
+  "10-23-changelog.md",
 ]);
 
 // Spec-only folders are exempt from `## Verification` requirements:

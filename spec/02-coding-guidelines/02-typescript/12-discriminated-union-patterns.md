@@ -176,6 +176,6 @@ type: ActionType.AddToast
 |-----------|----------|
 | TypeScript Standards (§8) | [08-typescript-standards-reference.md § Discriminated Unions](./08-typescript-standards-reference.md) |
 | Enum Conventions | [01-index.md](./01-index.md) |
-| Consolidated Review Guide (Type Safety) | [../consolidated-review-guide.md](../consolidated-review-guide.md) |
-| Condensed Review Guide (Types — CODE RED) | [../consolidated-review-guide-condensed.md](../consolidated-review-guide-condensed.md) |
+| Consolidated Review Guide (Type Safety) | [../05-05-consolidated-review-guide.md](../05-05-consolidated-review-guide.md) |
+| Condensed Review Guide (Types — CODE RED) | [../04-04-consolidated-review-guide-condensed.md](../04-04-consolidated-review-guide-condensed.md) |
 | AI Quick-Reference Checklist | [../06-ai-optimization/02-ai-quick-reference-checklist.md](../06-ai-optimization/02-ai-quick-reference-checklist.md) |

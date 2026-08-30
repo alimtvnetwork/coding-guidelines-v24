@@ -72,7 +72,7 @@ Add file-relative links here. Always include `.md`. Examples (replace before com
 
 ```
 - [Related module](../NN-related-module/01-index.md)
-- [Strictly-avoid quick reference](../17-consolidated-guidelines/00-strictly-avoid-quickref.md)
+- [Strictly-avoid quick reference](../17-consolidated-guidelines/03-strictly-avoid-quickref.md)
 ```
 
 ### Placeholder cross-references (copy-paste snippet)
@@ -152,18 +152,18 @@ one wrapped. Do **not** leave a half-commented block — the linter
 
 ```markdown
 <!-- TODO: Activate when targets are created.
-- [Naming conventions](../04-database-conventions/01-naming-conventions.md)
-- [Schema design](../04-database-conventions/02-schema-design.md)
+- [Naming conventions](../04-database-conventions/02-naming-conventions.md)
+- [Schema design](../04-database-conventions/03-schema-design.md)
 -->
 ```
 
 **After** (first target shipped, second still pending):
 
 ```markdown
-- [Naming conventions](../04-database-conventions/01-naming-conventions.md)
+- [Naming conventions](../04-database-conventions/02-naming-conventions.md)
 
 <!-- TODO: Activate when target is created.
-- [Schema design](../04-database-conventions/02-schema-design.md)
+- [Schema design](../04-database-conventions/03-schema-design.md)
 -->
 ```
 
@@ -176,14 +176,14 @@ activation rather than leaving a stale link to the file root.
 
 ```markdown
 <!-- TODO: Activate when target is created.
-- [Free-text columns](../04-database-conventions/02-schema-design.md)
+- [Free-text columns](../04-database-conventions/03-schema-design.md)
 -->
 ```
 
 **After** (anchor confirmed against the target's heading):
 
 ```markdown
-- [Free-text columns](../04-database-conventions/02-schema-design.md#free-text-columns)
+- [Free-text columns](../04-database-conventions/03-schema-design.md#free-text-columns)
 ```
 
 > **Do not** simply delete the `<!--` / `-->` markers without re-running
@@ -201,8 +201,8 @@ activation rather than leaving a stale link to the file root.
 - [ ] Scoring table filled in
 - [ ] Cross-references resolve (run `python linter-scripts/check-spec-cross-links.py --root spec --repo-root .`)
 - [ ] Validator passes (`python linter-scripts/validate-guidelines.py`)
-- [ ] Sync scripts run in order — see `17-consolidated-guidelines/01-spec-authoring.md` §X.2
+- [ ] Sync scripts run in order — see `17-consolidated-guidelines/04-spec-authoring.md` §X.2
 
 ---
 
-*Spec template — see `17-consolidated-guidelines/01-spec-authoring.md` for full authoring conventions.*
+*Spec template — see `17-consolidated-guidelines/04-spec-authoring.md` for full authoring conventions.*

@@ -165,7 +165,7 @@ condition-styling sub-file is listed individually:
 
 ``text
 | Topic                           | Authority file                                                                 | Bound from spec/21-app? | Duplicates |
-| canonical size tier             | spec/02-coding-guidelines/00-canonical-size-tier.md                            | yes/no                  | none       |
+| canonical size tier             | spec/02-coding-guidelines/02-canonical-size-tier.md                            | yes/no                  | none       |
 | boolean naming prefixes         | .../01-cross-language/02-boolean-principles/01-naming-prefixes.md              | yes/no                  | none       |
 | boolean guards + extraction     | .../02-boolean-principles/02-guards-and-extraction.md                          | yes/no                  | none       |
 | boolean params + conditions     | .../02-boolean-principles/03-parameters-and-conditions.md                      | yes/no                  | none       |
@@ -185,20 +185,20 @@ condition-styling sub-file is listed individually:
 | strict typing                   | .../01-cross-language/13-strict-typing.md                                      | yes/no                  | none       |
 | null-pointer safety             | .../01-cross-language/19-null-pointer-safety.md                                | yes/no                  | none       |
 | key naming pascalcase           | .../01-cross-language/11-key-naming-pascalcase.md                              | yes/no                  | none       |
-| test naming + structure         | .../01-cross-language/14-test-naming-and-structure.md                          | yes/no                  | none       |
+| test naming + structure         | .../01-cross-language/14-test-naming-and-03-structure.md                          | yes/no                  | none       |
 | file/folder naming              | spec/02-coding-guidelines/08-file-folder-naming/<language>.md                  | yes/no                  | none       |
 | language rules (go/php/ts)      | spec/02-coding-guidelines/03-golang|04-php|02-typescript/...                   | yes/no                  | none       |
 | error architecture              | spec/03-error-manage/02-error-architecture/00-overview.md                      | yes/no                  | none       |
 | error code registry             | spec/03-error-manage/03-error-code-registry/                                   | yes/no                  | none       |
 | database conventions            | spec/04-database-conventions/                                                  | yes/no                  | none       |
-| ci pipeline + guards            | spec/12-cicd-pipeline-workflows/01-ci-pipeline.md, 03-reusable-ci-guards/      | yes/no                  | none       |
+| ci pipeline + guards            | spec/12-cicd-pipeline-workflows/02-ci-pipeline.md, 03-reusable-ci-guards/      | yes/no                  | none       |
 ``
 
 Consolidated mirrors under `spec/17-consolidated-guidelines/` (notably
-`02-coding-guidelines.md`, `03-error-management.md`,
-`15-cicd-pipeline-workflows.md`, `31-compiled-simple-coding-guidelines.md`,
-`00-strictly-avoid-quickref.md`) and
-`spec/02-coding-guidelines/consolidated-review-guide-condensed.md` are checked for
+`05-coding-guidelines.md`, `06-error-management.md`,
+`18-cicd-pipeline-workflows.md`, `34-compiled-simple-coding-guidelines.md`,
+`03-strictly-avoid-quickref.md`) and
+`spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md` are checked for
 drift against their authority. A mirror that contradicts its authority is a
 Consistency finding; the mirror is never treated as the authority. Any topic
 appearing in two authoritative files is a duplicate-authority finding, cost per
@@ -241,8 +241,8 @@ file missing from the index are two separate findings.
 ### Dimension 10 — ci/cd verifiability
 
 For every buildable unit, name the pipeline job or guard that proves it, sourced
-from `spec/12-cicd-pipeline-workflows/01-ci-pipeline.md`,
-`03-reusable-ci-guards/`, `13-contract-testing.md`, `14-e2e-testing-pattern.md`,
+from `spec/12-cicd-pipeline-workflows/02-ci-pipeline.md`,
+`03-reusable-ci-guards/`, `20-contract-testing.md`, `21-e2e-testing-pattern.md`,
 and the local mirrors in `linter-scripts/`. A unit with no named check is a
 Testability finding. A spec that mentions "CI will catch it" without naming the
 job is the same finding.

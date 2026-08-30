@@ -2,7 +2,7 @@
 
 How application code, build scripts, and shell tooling should consume the
 canonical repo manifest defined in
-[`spec/01-spec-authoring-guide/17-version-schema.md`](../spec/01-spec-authoring-guide/17-version-schema.md).
+[`spec/01-spec-authoring-guide/14-version-schema.md`](../spec/01-spec-authoring-guide/14-version-schema.md).
 
 > **TL;DR**
 >
@@ -190,7 +190,7 @@ Write-Host "v$($V.Version) @ $($V.LastCommitSha.Substring(0, 7))"
 
 ## 8. Related
 
-- Schema spec: [`spec/01-spec-authoring-guide/17-version-schema.md`](../spec/01-spec-authoring-guide/17-version-schema.md)
+- Schema spec: [`spec/01-spec-authoring-guide/14-version-schema.md`](../spec/01-spec-authoring-guide/14-version-schema.md)
 - Mirror: [`spec/authoring-guideline/VersionSchema.md`](../spec/authoring-guideline/VersionSchema.md)
 - Sync script: [`scripts/sync-version.mjs`](../scripts/sync-version.mjs) — owns writes to `version.json`
 - Validator: [`scripts/validate-version-json.mjs`](../scripts/validate-version-json.mjs) — `npm run validate:version`

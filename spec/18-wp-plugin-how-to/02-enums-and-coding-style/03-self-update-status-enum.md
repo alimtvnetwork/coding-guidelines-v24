@@ -156,7 +156,7 @@ $status->label();
 ## Cross-References
 
 - [02-enum-metadata-pattern.md](02-enum-metadata-pattern.md) — the pattern this enum follows
-- [Phase 10 — Deployment Patterns](../10-deployment-patterns.md#105-self-update-with-rollback) — uses this enum
+- [Phase 10 — Deployment Patterns](../11-deployment-patterns.md#105-self-update-with-rollback) — uses this enum
 
 ---
 

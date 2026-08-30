@@ -1,5 +1,16 @@
 # Spec Authoring Guide
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 01 Spec Authoring Guide.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `01-spec-authoring-guide/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -92,7 +103,7 @@ Every spec file falls into one of these categories. When creating a new file, as
 | Category | Purpose | Examples |
 |----------|---------|----------|
 | **Overview** | Module entry point with metadata and file index | `01-index.md` |
-| **Architecture** | System design, data flow, component structure | `01-architecture.md`, `02-data-model.md` |
+| **Architecture** | System design, data flow, component structure | `02-architecture.md`, `02-data-model.md` |
 | **API / Interface** | Endpoints, contracts, request/response schemas | `03-api-design.md`, `04-rest-endpoints.md` |
 | **Logic / Rules** | Business logic, validation rules, algorithms | `05-validation-rules.md`, `06-scoring-logic.md` |
 | **UI / Frontend** | Component specs, layouts, user flows | `07-ui-components.md`, `08-user-flows.md` |
@@ -124,7 +135,7 @@ spec/17-research-queries/
 spec/09-gsearch-cli/
 ├── 01-index.md
 ├── 01-backend/
-│   ├── 01-architecture.md
+│   ├── 02-architecture.md
 │   ├── 02-commands.md
 │   └── 03-api-design.md
 ├── 02-frontend/
@@ -138,12 +149,12 @@ spec/09-gsearch-cli/
 
 ### WordPress / App Module (Features + Issues Pattern)
 
-App and WordPress projects use `01-fundamentals.md` as the first content file, then `02-features/` and `03-issues/` folders:
+App and WordPress projects use `02-fundamentals.md` as the first content file, then `02-features/` and `03-issues/` folders:
 
 ```
 spec/13-wp-plugin/03-exam-manager/
 ├── 01-index.md
-├── 01-fundamentals.md                    # Core architecture, schema, lifecycle
+├── 02-fundamentals.md                    # Core architecture, schema, lifecycle
 │
 ├── 02-features/                          # Feature specifications
 │   ├── 01-index.md                   # Feature index with status table
@@ -169,7 +180,7 @@ spec/13-wp-plugin/03-exam-manager/
 └── 99-consistency-report.md
 ```
 
-> **Key insight:** App/WP projects split features into `01-backend.md`, `02-frontend.md`, `03-wp-admin.md` inside each feature folder. Issues follow the same `{NN}-{kebab-name}` convention with `01-index.md` required for multi-file issues. See [05-app-project-template.md](./05-app-project-template.md) for the full template.
+> **Key insight:** App/WP projects split features into `01-backend.md`, `02-frontend.md`, `03-wp-admin.md` inside each feature folder. Issues follow the same `{NN}-{kebab-name}` convention with `01-index.md` required for multi-file issues. See [07-app-project-template.md](./07-app-project-template.md) for the full template.
 
 ---
 
@@ -177,17 +188,17 @@ spec/13-wp-plugin/03-exam-manager/
 
 | # | File | Category | Description |
 |---|------|----------|-------------|
-| 01 | [01-folder-structure.md](./01-folder-structure.md) | Architecture | Complete spec tree layout, layer grouping, and numbering ranges |
-| 02 | [02-naming-conventions.md](./02-naming-conventions.md) | Rules | File and folder naming rules (kebab-case, numeric prefixes, reserved ranges) |
-| 03 | [03-required-files.md](./03-required-files.md) | Rules | Mandatory files every module must contain (overview, consistency report, etc.) |
-| 04 | [04-cli-module-template.md](./04-cli-module-template.md) | Template | Step-by-step template for CLI tool spec modules (3-folder pattern) |
-| 05 | [05-app-project-template.md](./05-app-project-template.md) | Template | Template for app/WordPress projects (fundamentals + features + issues) |
-| 06 | [06-non-cli-module-template.md](./06-non-cli-module-template.md) | Template | Template for flat/non-CLI modules (research, utilities, standards) |
-| 07 | [07-memory-folder-guide.md](./07-memory-folder-guide.md) | Guide | Structure and conventions for the `.lovable/memories/` tree |
-| 08 | [08-cross-references.md](./08-cross-references.md) | Rules | How to write cross-references, relative paths, and link integrity rules |
-| 09 | [09-exceptions.md](./09-exceptions.md) | Rules | All known exception cases with folder structure examples |
-| 10 | [10-mandatory-linter-infrastructure.md](./10-mandatory-linter-infrastructure.md) | Rules | Mandatory linter scripts — AI must verify presence before validation |
-| 11 | [11-root-readme-conventions.md](./11-root-readme-conventions.md) | Rules | **MANDATORY** root `readme.md` format — centered icon, hero block, author/company template, badges, §9 release-blocker checklist |
+| 01 | [02-folder-structure.md](./02-folder-structure.md) | Architecture | Complete spec tree layout, layer grouping, and numbering ranges |
+| 02 | [03-naming-conventions.md](./03-naming-conventions.md) | Rules | File and folder naming rules (kebab-case, numeric prefixes, reserved ranges) |
+| 03 | [04-required-files.md](./04-required-files.md) | Rules | Mandatory files every module must contain (overview, consistency report, etc.) |
+| 04 | [06-cli-module-template.md](./06-cli-module-template.md) | Template | Step-by-step template for CLI tool spec modules (3-folder pattern) |
+| 05 | [07-app-project-template.md](./07-app-project-template.md) | Template | Template for app/WordPress projects (fundamentals + features + issues) |
+| 06 | [08-non-cli-module-template.md](./08-non-cli-module-template.md) | Template | Template for flat/non-CLI modules (research, utilities, standards) |
+| 07 | [09-memory-folder-guide.md](./09-memory-folder-guide.md) | Guide | Structure and conventions for the `.lovable/memories/` tree |
+| 08 | [10-cross-references.md](./10-cross-references.md) | Rules | How to write cross-references, relative paths, and link integrity rules |
+| 09 | [11-exceptions.md](./11-exceptions.md) | Rules | All known exception cases with folder structure examples |
+| 10 | [12-mandatory-linter-infra03-structure.md](./12-mandatory-linter-infra03-structure.md) | Rules | Mandatory linter scripts — AI must verify presence before validation |
+| 11 | [13-root-readme-conventions.md](./13-root-readme-conventions.md) | Rules | **MANDATORY** root `readme.md` format — centered icon, hero block, author/company template, badges, §9 release-blocker checklist |
 
 ## File Naming Convention (Quick Reference)
 
@@ -202,7 +213,7 @@ All files and folders in `spec/` and `.lovable/` MUST use **lowercase kebab-case
 ❌ 09_gsearch_cli/               ❌ file_naming.md
 ```
 
-**Numeric prefixes** are mandatory for spec files/folders and optional for memory files. See [02-naming-conventions.md](./02-naming-conventions.md) for full rules.
+**Numeric prefixes** are mandatory for spec files/folders and optional for memory files. See [03-naming-conventions.md](./03-naming-conventions.md) for full rules.
 
 ---
 
@@ -222,7 +233,7 @@ Every spec file must pass these cross-reference checks:
 
 **Automated validation:** Run `node linter-scripts/generate-dashboard-data.cjs` — the output JSON reports all broken links. Zero broken links = passing.
 
-See [08-cross-references.md](./08-cross-references.md) for full syntax and examples.
+See [10-cross-references.md](./10-cross-references.md) for full syntax and examples.
 
 ---
 
@@ -280,7 +291,7 @@ The `.lovable/` directory is the **institutional knowledge hub** for the project
 │   ├── ui/                      # UI component patterns
 │   ├── workflow/                # Process conventions
 │   └── wp-plugins/              # WordPress plugin knowledge
-├── plan.md                      # Current execution plan
+├── 29-plan.md                      # Current execution plan
 ├── reliability-risk-report.md   # Project-level reliability assessment
 └── [other root files]           # Standards archive, audit history, etc.
 ```
@@ -318,7 +329,7 @@ The memory folder includes dedicated folders for tracking work items:
 |---------|----------|
 | Formal specifications, APIs, data models | `spec/` |
 | Architectural decisions, conventions, patterns | `.lovable/memories/` |
-| Execution plans and batch tracking | `.lovable/plan.md` |
+| Execution plans and batch tracking | `.lovable/29-plan.md` |
 | Suggestion tracking | `.lovable/memories/suggestions/` |
 | Pending / planned / done tasks | `.lovable/memories/pending/`, `planned/`, `done/` |
 | Completed issues | `.lovable/memories/completed-issues/` |
@@ -331,14 +342,14 @@ When an AI agent learns something new or the user provides instructions:
 | User Says | AI Writes To |
 |-----------|-------------|
 | "Remember this pattern" | `.lovable/memories/patterns/` or relevant category |
-| "Add this to the plan" | `.lovable/plan.md` |
+| "Add this to the plan" | `.lovable/29-plan.md` |
 | "Track this task" | `.lovable/memories/planned/` or `pending/` |
 | "This issue is resolved" | Move to `.lovable/memories/completed-issues/` |
 | "Update coding guidelines" | `.lovable/memories/constraints/` |
 | "Add WP plugin spec" | `spec/XX-wp-plugin-name/` (spec tree) |
 | "Remember WP plugin convention" | `.lovable/memories/wp-plugins/` |
 
-See [07-memory-folder-guide.md](./07-memory-folder-guide.md) for the complete memory folder guide.
+See [09-memory-folder-guide.md](./09-memory-folder-guide.md) for the complete memory folder guide.
 
 ---
 
@@ -356,14 +367,14 @@ See [07-memory-folder-guide.md](./07-memory-folder-guide.md) for the complete me
 >
 > Failure to follow these rules will produce code that fails review and must be rewritten.
 
-1. **Read [01-folder-structure.md](./01-folder-structure.md)** — the single source of truth for all folder structure rules
+1. **Read [02-folder-structure.md](./02-folder-structure.md)** — the single source of truth for all folder structure rules
 2. **Read this overview** to understand the file inventory, scoring, and conventions
-3. **Read [01-folder-structure.md](./01-folder-structure.md)** for the tree layout
-4. **Read [02-naming-conventions.md](./02-naming-conventions.md)** for naming rules
-5. **Read [03-required-files.md](./03-required-files.md)** for mandatory file checklist
-6. **Choose a template**: [04-cli-module-template.md](./04-cli-module-template.md), [05-app-project-template.md](./05-app-project-template.md), or [06-non-cli-module-template.md](./06-non-cli-module-template.md)
-7. **Check [09-exceptions.md](./09-exceptions.md)** for edge cases before creating files
-8. **Verify linter infrastructure** — read [10-mandatory-linter-infrastructure.md](./10-mandatory-linter-infrastructure.md) and confirm `linter-scripts/` exists
+3. **Read [02-folder-structure.md](./02-folder-structure.md)** for the tree layout
+4. **Read [03-naming-conventions.md](./03-naming-conventions.md)** for naming rules
+5. **Read [04-required-files.md](./04-required-files.md)** for mandatory file checklist
+6. **Choose a template**: [06-cli-module-template.md](./06-cli-module-template.md), [07-app-project-template.md](./07-app-project-template.md), or [08-non-cli-module-template.md](./08-non-cli-module-template.md)
+7. **Check [11-exceptions.md](./11-exceptions.md)** for edge cases before creating files
+8. **Verify linter infrastructure** — read [12-mandatory-linter-infra03-structure.md](./12-mandatory-linter-infra03-structure.md) and confirm `linter-scripts/` exists
 9. **Score the module** — set AI Confidence and Ambiguity percentages in `01-index.md`
 10. **Validate cross-references** — run the link scanner and fix any broken links
 11. **Check `.lovable/memories/`** — read relevant memories before writing new specs
@@ -376,7 +387,7 @@ When asked to "follow the spec authoring guideline and fix the folder structure,
 
 ### Step 1 — Verify Root Structure
 
-1. Read [`01-folder-structure.md`](./01-folder-structure.md) — the single source of truth for all folder structure rules
+1. Read [`02-folder-structure.md`](./02-folder-structure.md) — the single source of truth for all folder structure rules
 2. Confirm all required root folders (01–11, 21–22) exist
 3. Confirm they are correctly numbered and named
 4. If any are missing, create them with at least `01-index.md`
@@ -435,13 +446,13 @@ All specifications in this repository are authored by **Md. Alim Ul Karim** — 
 
 | Reference | Location |
 |-----------|----------|
-| Folder Structure (canonical) | `./01-folder-structure.md` |
+| Folder Structure (canonical) | `./02-folder-structure.md` |
 | Master Index | `../01-index.md` |
 | Coding Guidelines | `../02-coding-guidelines/01-index.md` |
 | Memory Index | `../../.lovable/memories/00-memory-index.md` |
 | Reliability Reports | `../validation-reports/` |
-| Required Files | `./03-required-files.md` |
-| Cross-Reference Rules | `./08-cross-references.md` |
+| Required Files | `./04-required-files.md` |
+| Cross-Reference Rules | `./10-cross-references.md` |
 
 ---
 

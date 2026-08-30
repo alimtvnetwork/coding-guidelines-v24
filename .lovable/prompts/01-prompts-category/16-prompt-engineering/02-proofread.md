@@ -97,7 +97,7 @@ Aggressive tone is intentional. Precision IS the job.
 
 Canonical sources, read all three, they must be byte-for-byte in sync:
 
-1. `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md` (source of truth, v1.5.0 or later).
+1. `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (source of truth, v1.5.0 or later).
 
 2. `.lovable/coding-guidelines/coding-guidelines.md` (Lovable agent mirror).
 

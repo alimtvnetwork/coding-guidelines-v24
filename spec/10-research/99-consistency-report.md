@@ -20,7 +20,7 @@
 - Folder is currently a single-overview placeholder. Acceptance criteria
   (planned `97-acceptance-criteria.md`) and at least one example research
   document (planned `01-example-research.md`) are not yet authored.
-- See `/mnt/documents/spec-patch-plan.md` § `spec/10-research/` for the full
+- See `/mnt/documents/spec-patch-29-plan.md` § `spec/10-research/` for the full
   remediation plan and example acceptance criteria.
 
 ---

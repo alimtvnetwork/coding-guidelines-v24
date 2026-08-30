@@ -22,7 +22,7 @@
 ## Cross-Reference Health
 
 - All in-folder references resolve.
-- External references to `../../17-consolidated-guidelines/04-enum-standards.md` and `../../02-coding-guidelines/` verified after the renumber audit.
+- External references to `../../17-consolidated-guidelines/07-enum-standards.md` and `../../02-coding-guidelines/` verified after the renumber audit.
 
 ---
 

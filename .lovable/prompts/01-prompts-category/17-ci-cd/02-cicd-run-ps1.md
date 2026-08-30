@@ -46,16 +46,16 @@ Before making any changes to `.github/workflows` or automation scripts, you must
 #### PowerShell & Orchestration (`spec/11-powershell-integration`)
 
 - [ ] `spec/11-powershell-integration/00-overview.md`
-- [ ] `spec/11-powershell-integration/02-script-reference.md`
-- [ ] `spec/11-powershell-integration/03-integration-guide.md`
+- [ ] `spec/11-powershell-integration/04-script-reference.md`
+- [ ] `spec/11-powershell-integration/05-integration-guide.md`
 
 #### CI/CD Pipeline Workflows (`spec/12-cicd-pipeline-workflows`)
 
 - [ ] `spec/12-cicd-pipeline-workflows/00-overview.md`
-- [ ] `spec/12-cicd-pipeline-workflows/01-ci-pipeline.md`
-- [ ] `spec/12-cicd-pipeline-workflows/02-release-pipeline.md`
-- [ ] `spec/12-cicd-pipeline-workflows/04-install-script-generation.md`
-- [ ] `spec/12-cicd-pipeline-workflows/05-changelog-integration.md`
+- [ ] `spec/12-cicd-pipeline-workflows/02-ci-pipeline.md`
+- [ ] `spec/12-cicd-pipeline-workflows/05-release-pipeline.md`
+- [ ] `spec/12-cicd-pipeline-workflows/07-install-script-generation.md`
+- [ ] `spec/12-cicd-pipeline-workflows/09-changelog-integration.md`
 
 #### CLI & Build (`spec/13-generic-cli`)
 
@@ -65,15 +65,15 @@ Before making any changes to `.github/workflows` or automation scripts, you must
 
 #### Update Mechanisms (`spec/14-update`)
 
-- [ ] `spec/14-update/04-build-scripts.md`
-- [ ] `spec/14-update/17-release-pipeline.md`
-- [ ] `spec/14-update/18-install-scripts.md`
+- [ ] `spec/14-update/05-build-scripts.md`
+- [ ] `spec/14-update/18-release-pipeline.md`
+- [ ] `spec/14-update/19-install-scripts.md`
 
 #### Release Engineering (`spec/16-generic-release`)
 
 - [ ] `spec/16-generic-release/00-overview.md`
-- [ ] `spec/16-generic-release/02-release-pipeline.md`
-- [ ] `spec/16-generic-release/03-install-scripts.md`
+- [ ] `spec/16-generic-release/04-release-pipeline.md`
+- [ ] `spec/16-generic-release/04-install-scripts.md`
 
 #### Context / Issue Logging
 

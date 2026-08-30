@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 
 /**
  * Severity of a coding-guideline rule, mirrored from
- * `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`.
+ * `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`.
  *
  * - `hard`  : CI-enforced, blocks merge.
  * - `warn`  : linter warning, expected to be fixed same-PR.

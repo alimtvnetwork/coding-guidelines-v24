@@ -32,7 +32,7 @@ spec/02-coding-guidelines/
 │   ├── 11-key-naming-pascalcase.md
 │   ├── 12-no-negatives.md
 │   ├── 13-strict-typing.md
-│   ├── 14-test-naming-and-structure.md
+│   ├── 14-test-naming-and-03-structure.md
 │   ├── 15-master-coding-guidelines.md       # EXISTING: 997-line cross-language master
 │   ├── 16-lazy-evaluation-patterns.md       # NEW: from 01 (U1)
 │   ├── 17-regex-usage-guidelines.md         # NEW: from 01 (U2)
@@ -267,5 +267,5 @@ Each rule includes: ❌ Forbidden pattern | ✅ Required pattern | 📖 Why
 | Reference | Location |
 |-----------|----------|
 | Phase 2 Audit | `../project/phase2-content-overlap-audit.md` |
-| Consolidation Plan | `../planned/coding-guidelines-consolidation-plan.md` |
+| Consolidation Plan | `../planned/coding-guidelines-consolidation-29-plan.md` |
 | Naming Compliance | `../project/naming-compliance-issues.md` |

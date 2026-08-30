@@ -10,7 +10,7 @@ Centralizing these here means the SQL and Go scanners cannot drift on
 what counts as a violation or what hint they suggest. Tests in
 ``linters-cicd/tests/test_boolean_naming_lib.py`` lock the contract.
 
-Spec: spec/04-database-conventions/01-naming-conventions.md  Rules 2, 8, 9
+Spec: spec/04-database-conventions/03-naming-conventions.md  Rules 2, 8, 9
 """
 
 from __future__ import annotations
@@ -114,14 +114,14 @@ def format_message(name: str, *, tier: str, source_kind: str | None = None) -> s
             f"Boolean column '{name}' uses a forbidden Not/No prefix{src}.{suffix} "
             "Store the canonical positive form and derive the inverse as a "
             "computed field in code. See Rule 2 + Rule 9 in "
-            "04-database-conventions/01-naming-conventions.md."
+            "04-database-conventions/02-naming-conventions.md."
         )
     if tier == "suspect":
         return (
             f"Boolean column '{name}' uses a suspect single-negative root "
             f"(Cannot/Dis/Un){src}.{suffix} Prefer the positive form unless "
             "the name describes a recognized domain state (see allow-list). "
-            "Rule 2 + Rule 8 in 04-database-conventions/01-naming-conventions.md."
+            "Rule 2 + Rule 8 in 04-database-conventions/02-naming-conventions.md."
         )
     raise ValueError(f"Unknown tier: {tier!r}")
 

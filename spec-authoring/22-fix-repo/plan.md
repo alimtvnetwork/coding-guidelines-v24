@@ -10,7 +10,7 @@ Implementation does not begin until Phase 2.
 - [x] `02-edge-cases.md`
 - [x] `03-acceptance-criteria.md`
 - [x] `04-examples.md`
-- [x] `plan.md` (this file)
+- [x] `29-plan.md` (this file)
 - [x] Memory rule saved: `.lovable/memory/features/fix-repo-url-handling.md`
 - [x] Open questions resolved (URL handling, flag set, case + scope, backups).
 

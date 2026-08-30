@@ -1,5 +1,16 @@
 # PowerShell Integration for Project Runner
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 11 Powershell Integration.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `11-powershell-integration/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 > **Spec Version:** 2.25.0  
 > **Script Version:** 2.25.0  
 > **Updated:** 2026-03-19  
@@ -117,11 +128,11 @@ This specification defines a **cross-project reusable** PowerShell integration p
 ```
 spec/powershell-integration/
 ├── 01-index.md               ← This file
-├── 01-configuration-schema.md   ← JSON config format with pnpm options
-├── 02-script-reference.md       ← CLI flags and functions
-├── 03-integration-guide.md      ← How to add to any project
-├── 04-error-codes.md            ← Exit codes (9500-9599)
-├── 05-firewall-rules.md         ← Windows firewall setup
+├── 02-configuration-schema.md   ← JSON config format with pnpm options
+├── 04-script-reference.md       ← CLI flags and functions
+├── 05-integration-guide.md      ← How to add to any project
+├── 06-error-codes.md            ← Exit codes (9500-9599)
+├── 07-firewall-rules.md         ← Windows firewall setup
 ├── schemas/
 │   └── powershell.schema.json   ← JSON Schema for validation
 ├── templates/
@@ -348,11 +359,11 @@ Tell the AI:
 
 | Document | Description |
 |----------|-------------|
-| [Configuration Schema](./01-configuration-schema.md) | JSON config format with pnpm options |
-| [Script Reference](./02-script-reference.md) | CLI flags and functions |
-| [Integration Guide](./03-integration-guide.md) | Step-by-step setup |
-| [Error Codes](./04-error-codes.md) | Exit codes 9500-9599 |
-| [Firewall Rules](./05-firewall-rules.md) | Windows firewall setup |
+| [Configuration Schema](./02-configuration-schema.md) | JSON config format with pnpm options |
+| [Script Reference](./04-script-reference.md) | CLI flags and functions |
+| [Integration Guide](./05-integration-guide.md) | Step-by-step setup |
+| [Error Codes](./06-error-codes.md) | Exit codes 9500-9599 |
+| [Firewall Rules](./07-firewall-rules.md) | Windows firewall setup |
 | Upload Scripts Spec | WordPress plugin upload scripts (V1, V2, V3) — *folder pending creation* |
 | Upload V1 | Single-file upload via Invoke-RestMethod — *folder pending creation* |
 | Upload V2 | Envelope-aware upload with unwrapping — *folder pending creation* |

@@ -1,5 +1,16 @@
 # Docs Viewer UI — Overview
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 08 Docs Viewer Ui.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `08-docs-viewer-ui/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -40,7 +51,7 @@ docs-viewer, typography, ubuntu, poppins, syntax-highlighting, highlight-js, ful
 | # | File | Description |
 |---|------|-------------|
 | 00 | `01-index.md` | This file — master index |
-| 01 | `01-fundamentals.md` | Architecture, typography system, navigation model |
+| 01 | `02-fundamentals.md` | Architecture, typography system, navigation model |
 | 02 | `02-features/01-index.md` | Feature index |
 | 02.01 | `02-features/01-typography.md` | Ubuntu + Poppins font integration |
 | 02.02 | `02-features/02-syntax-highlighting.md` | highlight.js code block rendering |
@@ -57,7 +68,7 @@ docs-viewer, typography, ubuntu, poppins, syntax-highlighting, highlight-js, ful
 ## Cross-References
 
 - [Spec Authoring Guide](../01-spec-authoring-guide/01-index.md) — Conventions
-- [App Project Template](../01-spec-authoring-guide/05-app-project-template.md) — Template used
+- [App Project Template](../01-spec-authoring-guide/07-app-project-template.md) — Template used
 
 ---
 

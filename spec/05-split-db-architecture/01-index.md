@@ -1,5 +1,16 @@
 # Split Database Architecture
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 05 Split Db Architecture.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `05-split-db-architecture/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -52,7 +63,7 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 | # | File | Description |
 |---|------|-------------|
 | 00 | `01-index.md` | This file — master index |
-| 01 | `01-fundamentals.md` | Core concepts, terminology, hierarchical structure, implementation patterns |
+| 01 | `02-fundamentals.md` | Core concepts, terminology, hierarchical structure, implementation patterns |
 | 02 | `02-features/01-index.md` | Feature index |
 | 02.01 | `02-features/01-cli-examples.md` | Concrete examples for AI Bridge, GSearch, BRun, Nexus Flow |
 | 02.02 | `02-features/02-reset-api-standard.md` | 2-step reset API standard (5-min TTL) |
@@ -72,7 +83,7 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 ```
 05-split-db-architecture/
 ├── 01-index.md                    ← This file
-├── 01-fundamentals.md                ← Core concepts & architecture
+├── 02-fundamentals.md                ← Core concepts & architecture
 ├── 02-features/
 │   ├── 01-index.md                ← Feature index
 │   ├── 01-cli-examples.md
@@ -95,7 +106,7 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 | Reference | Description |
 |-----------|-------------|
 | [Seedable Config](../06-seedable-config-architecture/01-index.md) | Configuration seeding patterns |
-| [App Project Template](../01-spec-authoring-guide/05-app-project-template.md) | Template this spec follows |
+| [App Project Template](../01-spec-authoring-guide/07-app-project-template.md) | Template this spec follows |
 
 ---
 

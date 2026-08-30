@@ -39,7 +39,7 @@ and less error-prone.
 - `02-edge-cases.md` — unusual inputs and their handling
 - `03-acceptance-criteria.md` — testable assertions
 - `04-examples.md` — copy-pasteable invocations
-- `plan.md` — phased implementation plan
+- `29-plan.md` — phased implementation plan
 
 ## Decisions Locked (from approval)
 

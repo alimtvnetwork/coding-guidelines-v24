@@ -58,7 +58,7 @@ setup:
     version: ${{ steps.version.outputs.version }}
 ```
 
-See [Shared Conventions — Version Resolution](../01-shared-conventions.md#version-resolution) for the resolution logic.
+See [Shared Conventions — Version Resolution](../03-shared-conventions.md#version-resolution) for the resolution logic.
 
 ---
 
@@ -108,7 +108,7 @@ cd ../..
 
 ## Release Notes Generation
 
-Release notes are assembled from conventional commit history. See [GitHub Release Standard](../02-github-release-standard.md) for the full format.
+Release notes are assembled from conventional commit history. See [GitHub Release Standard](../04-github-release-standard.md) for the full format.
 
 The release body includes:
 

@@ -1,5 +1,16 @@
 # App UI — Design System
 
+> **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 24 App Ui Design System.
+> **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
+
+## 🎯 Actionable CI/CD & Agent Checklist
+
+- [ ] `/goal` Read and understand all numbered specifications under `24-app-ui-design-system/`.
+- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+
+
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
@@ -46,7 +57,7 @@ Application-specific UI and design-system specifications for whatever project th
 
 - [Design System (Core)](../07-design-system/01-index.md) — Foundational design system spec
 - [App](../21-app/01-index.md) — App-specific features and workflows
-- [Consolidated Design System](../17-consolidated-guidelines/07-design-system.md) — Consolidated summary
+- [Consolidated Design System](../17-consolidated-guidelines/10-design-system.md) — Consolidated summary
 
 ---
 

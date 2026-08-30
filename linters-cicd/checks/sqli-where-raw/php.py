@@ -6,7 +6,7 @@ Flags two patterns:
   warning — whereRaw('literal') with NO placeholders AND no params array
              (looks like an identifier splice — easy to weaponize later)
 
-Spec: spec/18-wp-plugin-how-to/19-micro-orm-and-root-db.md
+Spec: spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ RULE = Rule(
         "values via the params array; interpolation, concatenation, "
         "and placeholder-free dynamic clauses are forbidden."
     ),
-    help_uri_relative="../18-wp-plugin-how-to/19-micro-orm-and-root-db.md",
+    help_uri_relative="../18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
 )
 
 

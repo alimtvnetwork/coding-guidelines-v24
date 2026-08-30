@@ -272,7 +272,7 @@ a second column.
 | `IsEnabled`      | `IsDisabled()`              | `!IsEnabled` |
 | `HasLicense`     | `HasNoLicense()`            | `!HasLicense` |
 
-> **Spec:** [Database Naming Conventions — Rule 9: Auto-Generated Inverted (Computed) Fields](../../04-database-conventions/01-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code)
+> **Spec:** [Database Naming Conventions — Rule 9: Auto-Generated Inverted (Computed) Fields](../../04-database-conventions/02-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code)
 >
 > **Codegen:** [`linters-cicd/codegen/`](../../../linters-cicd/codegen/readme.md) emits the inverse methods/traits/getters for Go, PHP, and TypeScript automatically.
 >
@@ -327,7 +327,7 @@ Raw negation is **only** acceptable for:
 ## Cross-References
 
 - [Boolean Principles Overview](./02-boolean-principles/01-index.md) — Is/Has prefix rules and parent index
-- [Database Naming — Rule 9 (Inverted Fields)](../../04-database-conventions/01-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code) — DB-side inverse contract + codegen
+- [Database Naming — Rule 9 (Inverted Fields)](../../04-database-conventions/02-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code) — DB-side inverse contract + codegen
 - [PHP Boolean Logic](../04-php/07-php-standards-reference/03-initialization-and-booleans.md#boolean-logic) — PHP-specific helpers
 - [PHP Forbidden Patterns](../04-php/02-forbidden-patterns.md) — Pattern 4.x
 - [Cross-Language Code Style](./04-code-style/01-index.md) — Braces, nesting, spacing

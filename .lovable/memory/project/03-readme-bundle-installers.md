@@ -25,7 +25,7 @@ type: feature
 - Phase E a11y: all images use `<img>` with `width="960"` and descriptive alt text; centred via `<p align="center">`.
 
 **Known pre-existing issues (not regressions):**
-- `spec/17-consolidated-guidelines/00-overview.md` references `28-distribution-and-runner.md` and `29-blind-ai-audit-v3.md` — neither file exists yet. These were registered as planned content from prior phases but were never authored. Either create the files or remove the index entries.
+- `spec/17-consolidated-guidelines/00-overview.md` references `31-distribution-and-runner.md` and `32-blind-ai-audit-v3.md` — neither file exists yet. These were registered as planned content from prior phases but were never authored. Either create the files or remove the index entries.
 
 ## How to regenerate the GIFs
 

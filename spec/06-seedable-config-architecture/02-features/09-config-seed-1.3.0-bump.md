@@ -4,8 +4,8 @@
 **Version:** 1.0.0
 **Created:** 2026-05-04
 **Status:** Authoritative
-**Resolves:** FU-12 from `spec/19-main-worker-service/14-rbac-and-status-seed.md` §1.
-**Authority:** Canonical changelog + delivery instructions for the SemVer bump that introduces the `Tables` block. On any wording conflict with `01-fundamentals.md` §SeedWithVersionCheck, **`01-…` wins**.
+**Resolves:** FU-12 from `spec/19-main-worker-service/15-rbac-and-status-seed.md` §1.
+**Authority:** Canonical changelog + delivery instructions for the SemVer bump that introduces the `Tables` block. On any wording conflict with `02-fundamentals.md` §SeedWithVersionCheck, **`01-…` wins**.
 
 ---
 
@@ -16,7 +16,7 @@
 Two additive changes:
 
 1. New top-level `Tables` block (per `07-reference-table-seeding.md` + `08-config-schema-tables-block.md`).
-2. New `Categories.MainWorker` category carrying the 27 tunables from `spec/19-main-worker-service/15-tunable-constants.md`.
+2. New `Categories.MainWorker` category carrying the 27 tunables from `spec/19-main-worker-service/16-tunable-constants.md`.
 
 No existing keys are renamed or removed.
 
@@ -27,8 +27,8 @@ No existing keys are renamed or removed.
 | Change | Direction | Source | Risk |
 |--------|-----------|--------|------|
 | `Version`: `1.2.x` → `1.3.0` | bump | this file | none — monotone |
-| `Categories.MainWorker.*` | add (27 keys) | `spec/19/15-tunable-constants.md` §3 | none — new category |
-| `Tables.Role` | add (3 rows) | `spec/19/14-rbac-and-status-seed.md` §3 | none — new table seed |
+| `Categories.MainWorker.*` | add (27 keys) | `spec/19/16-tunable-constants.md` §3 | none — new category |
+| `Tables.Role` | add (3 rows) | `spec/19/15-rbac-and-status-seed.md` §3 | none — new table seed |
 | `Tables.EnumPage` | add (9 rows) | same | none |
 | `Tables.RolePageAccess` | add (19 rows, uses `@-ref`) | same | needs FU-13 resolver |
 | `Tables.WorkerNodeStatus` | add (4 rows) | same | none |
@@ -59,13 +59,13 @@ No existing keys are renamed or removed.
 }
 ```
 
-Concrete row sets are not duplicated here — `spec/19/14-rbac-and-status-seed.md` §3 is the single source of truth.
+Concrete row sets are not duplicated here — `spec/19/15-rbac-and-status-seed.md` §3 is the single source of truth.
 
 ---
 
 ## 4. New `Categories.MainWorker` block
 
-Verbatim from `spec/19-main-worker-service/15-tunable-constants.md` §3:
+Verbatim from `spec/19-main-worker-service/16-tunable-constants.md` §3:
 
 ```jsonc
 "MainWorker": {
@@ -88,7 +88,7 @@ Implementer note: the 18 omitted keys live in `spec/19/15` §3; copy them verbat
 
 ## 5. Migration from `1.2.x`
 
-Per `01-fundamentals.md` §SeedWithVersionCheck, the boot-time sequence on first 1.3.0 run is:
+Per `02-fundamentals.md` §SeedWithVersionCheck, the boot-time sequence on first 1.3.0 run is:
 
 ```
 1. Read installed seed.Version from `config_meta`.
@@ -107,7 +107,7 @@ Per Code Red error-handling: any failure aborts the boot, logs the offending key
 
 ## 6. Verification (post-merge)
 
-Mirrors `spec/19/14-rbac-and-status-seed.md` §4 — must all pass:
+Mirrors `spec/19/15-rbac-and-status-seed.md` §4 — must all pass:
 
 ```sql
 SELECT SeedVersion FROM config_meta;            -- expect '1.3.0'
@@ -125,7 +125,7 @@ SELECT COUNT(*) FROM TableSeedChangelog
 
 ## 7. Rollback policy
 
-Seed downgrade is **not supported** (per `01-fundamentals.md`). If a deploy of 1.3.0 must be reverted:
+Seed downgrade is **not supported** (per `02-fundamentals.md`). If a deploy of 1.3.0 must be reverted:
 
 1. Roll back the application binary to a 1.2.x-aware build.
 2. Leave the seeded rows in place. The 1.2.x build never reads `Tables.*` and ignores them safely (closed-additive-properties contract).
@@ -135,12 +135,12 @@ Seed downgrade is **not supported** (per `01-fundamentals.md`). If a deploy of 1
 
 ## 8. Cross-references
 
-- `spec/06-seedable-config-architecture/01-fundamentals.md` — `SeedWithVersionCheck` algorithm.
+- `spec/06-seedable-config-architecture/02-fundamentals.md` — `SeedWithVersionCheck` algorithm.
 - `spec/06-seedable-config-architecture/02-features/07-reference-table-seeding.md` — `Tables` block mechanism.
 - `spec/06-seedable-config-architecture/02-features/08-config-schema-tables-block.md` — JSON-Schema fragment used at lint time (FU-11).
 - `spec/06-seedable-config-architecture/02-features/10-at-ref-resolver.md` — `@-ref` resolver (FU-13).
-- `spec/19-main-worker-service/14-rbac-and-status-seed.md` — concrete row sets.
-- `spec/19-main-worker-service/15-tunable-constants.md` §3 — concrete `MainWorker` category values.
+- `spec/19-main-worker-service/15-rbac-and-status-seed.md` — concrete row sets.
+- `spec/19-main-worker-service/16-tunable-constants.md` §3 — concrete `MainWorker` category values.
 
 ---
 

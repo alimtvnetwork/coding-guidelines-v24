@@ -2,14 +2,14 @@
 """
 check-mws-error-codes.py — MWS error-code linter (FU-9).
 
-Enforces the contract in `spec/19-main-worker-service/13-error-codes.md` §7:
+Enforces the contract in `spec/19-main-worker-service/14-error-codes.md` §7:
 
   Rule R1 — Presence: every WORKER-XYY-ZZ / MAIN-XYY-ZZ literal that
             appears anywhere under spec/19/, spec/14-update/28-*,
-            and the source tree MUST be catalogued in 13-error-codes.md.
-  Rule R2 — No orphans: every code catalogued in 13-error-codes.md MUST
+            and the source tree MUST be catalogued in 14-error-codes.md.
+  Rule R2 — No orphans: every code catalogued in 14-error-codes.md MUST
             be referenced from at least one source location outside
-            13-error-codes.md and the generated index files.
+            14-error-codes.md and the generated index files.
   Rule R3 — Bijection: prefixed code <-> flat integer mapping MUST be
             one-to-one across the whole MWS range.
   Rule R4 — Range: WORKER-* flats live in 21000-21099, MAIN-* flats in
@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SPEC_FILE = REPO_ROOT / "spec/19-main-worker-service/13-error-codes.md"
+SPEC_FILE = REPO_ROOT / "spec/19-main-worker-service/14-error-codes.md"
 INDEX_FILE = REPO_ROOT / "spec/19-main-worker-service/error-codes.json"
 MASTER_FILE = REPO_ROOT / "spec/03-error-manage/03-error-code-registry/error-codes-master.json"
 WAIVER_FILE = REPO_ROOT / "linter-scripts/check-mws-error-codes.waivers.txt"
@@ -108,7 +108,7 @@ def has_no_unknown_refs(refs: dict[str, set[Path]], catalogue: set[str], errors:
     unknown = sorted((set(refs) - catalogue) - unallocated)
     for code in unknown:
         sample = sorted(refs[code])[0].relative_to(REPO_ROOT)
-        errors.append(f"R1 unknown code {code} referenced in {sample} (and {len(refs[code])-1} more) — not in 13-error-codes.md")
+        errors.append(f"R1 unknown code {code} referenced in {sample} (and {len(refs[code])-1} more) — not in 14-error-codes.md")
     return not unknown
 
 
@@ -130,7 +130,7 @@ def load_code_list(path: Path) -> set[str]:
 def has_no_orphans(refs: dict[str, set[Path]], catalogue: set[str], waivers: set[str], errors: list[str]) -> bool:
     orphans = sorted((catalogue - set(refs)) - waivers)
     for code in orphans:
-        errors.append(f"R2 orphan {code} catalogued in 13-error-codes.md but never referenced elsewhere (and not waived)")
+        errors.append(f"R2 orphan {code} catalogued in 14-error-codes.md but never referenced elsewhere (and not waived)")
     return not orphans
 
 

@@ -23,7 +23,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const VERSION_PATH = resolve(ROOT, "version.json");
 const DASHBOARD_PATH = resolve(ROOT, "spec/health-dashboard.md");
-const AUDIT_PATH = resolve(ROOT, "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md");
+const AUDIT_PATH = resolve(ROOT, "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md");
 const OUT_PATH = resolve(ROOT, "public/health-score.json");
 
 function readDashboardScore() {
@@ -81,7 +81,7 @@ function buildPayload() {
     blindAiAudit: audit,
     sources: [
       "spec/health-dashboard.md",
-      "spec/17-consolidated-guidelines/29-blind-ai-audit-v3.md",
+      "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md",
       "version.json",
     ],
   };

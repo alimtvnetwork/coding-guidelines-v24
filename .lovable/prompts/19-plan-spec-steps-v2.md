@@ -172,7 +172,7 @@ into "the boolean folder" fails.
 
 ``text
 | Topic                            | Single source file                                                          | Duplicates found |
-| canonical size tier              | spec/02-coding-guidelines/00-canonical-size-tier.md                         | none             |
+| canonical size tier              | spec/02-coding-guidelines/02-canonical-size-tier.md                         | none             |
 | boolean naming prefixes          | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md      | none |
 | boolean guards + extraction      | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md | none |
 | boolean params + conditions      | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/03-parameters-and-conditions.md | none |
@@ -193,25 +193,25 @@ into "the boolean folder" fails.
 | null-pointer safety              | spec/02-coding-guidelines/01-cross-language/19-null-pointer-safety.md       | none             |
 | naming + casing (keys)           | spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md     | none             |
 | file/folder naming               | spec/02-coding-guidelines/08-file-folder-naming/<language>.md               | none             |
-| testing                          | spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md | none             |
+| testing                          | spec/02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md | none             |
 | error handling + codes           | spec/03-error-manage/02-error-architecture/00-overview.md                   | none             |
 | error code registry              | spec/03-error-manage/03-error-code-registry/                                | none             |
 | logging + stack traces           | spec/21-app/07-error-and-logging/02-logging-and-stack-traces.md             | none             |
 | serialization/determinism        | spec/21-app/04-json-contract/                                               | none             |
-| ci/cd verification               | spec/12-cicd-pipeline-workflows/01-ci-pipeline.md                           | none             |
+| ci/cd verification               | spec/12-cicd-pipeline-workflows/02-ci-pipeline.md                           | none             |
 | ci guards                        | spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/00-overview.md        | none             |
-| contract + e2e testing           | spec/12-cicd-pipeline-workflows/13-contract-testing.md, 14-e2e-testing-pattern.md | none       |
+| contract + e2e testing           | spec/12-cicd-pipeline-workflows/20-contract-testing.md, 21-e2e-testing-pattern.md | none       |
 | static analysis / sarif          | spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md          | none             |
 ``
 
 Consolidated mirrors that MAY be cited as a reading aid, never as the authority:
 
-- `spec/17-consolidated-guidelines/02-coding-guidelines.md`
-- `spec/17-consolidated-guidelines/03-error-management.md`
-- `spec/17-consolidated-guidelines/15-cicd-pipeline-workflows.md`
-- `spec/17-consolidated-guidelines/31-compiled-simple-coding-guidelines.md`
-- `spec/17-consolidated-guidelines/00-strictly-avoid-quickref.md`
-- `spec/02-coding-guidelines/consolidated-review-guide-condensed.md`
+- `spec/17-consolidated-guidelines/05-coding-guidelines.md`
+- `spec/17-consolidated-guidelines/06-error-management.md`
+- `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md`
+- `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
+- `spec/17-consolidated-guidelines/03-strictly-avoid-quickref.md`
+- `spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md`
 
 When a consolidated mirror and a numbered guideline folder disagree, the numbered
 folder wins and the disagreement is filed under RULE 9.
@@ -383,7 +383,7 @@ Regression check: <runnable command + expected output>
 - Follow the retrospective and verification conventions in
   `spec/03-error-manage/01-error-resolution/03-retrospectives/` and
   `spec/03-error-manage/01-error-resolution/04-verification-patterns/`; pipeline
-  RCAs follow `spec/12-cicd-pipeline-workflows/10-release-pipeline-issues-rca.md`.
+  RCAs follow `spec/12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md`.
 - "Prevention: be more careful" is a failed RCA. Prevention names a test, a
   guard, or a rule file.
 - No fix step ships without its `Prevention` and `Regression check` lines filled.
@@ -417,13 +417,13 @@ guideline files. A non-zero count blocks the save.
 CI/CD verification. Every plan states how CI proves it, and every task that
 changes code names the pipeline check that guards it:
 
-- Pipeline definition: `spec/12-cicd-pipeline-workflows/01-ci-pipeline.md`.
+- Pipeline definition: `spec/12-cicd-pipeline-workflows/02-ci-pipeline.md`.
 - Reusable guards: `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/`
   (`01-forbidden-name-guard.md`, `04-baseline-diff-lint-gate.md`,
   `06-matrix-test-aggregator.md`).
 - Contract and end-to-end layers:
-  `spec/12-cicd-pipeline-workflows/13-contract-testing.md` and
-  `14-e2e-testing-pattern.md`.
+  `spec/12-cicd-pipeline-workflows/20-contract-testing.md` and
+  `21-e2e-testing-pattern.md`.
 - Local mirrors of the CI gates: `linter-scripts/run.sh` / `run.ps1`, plus the
   specific `linter-scripts/check-*.py|sh|mjs` scripts the task can break.
 - The plan carries a `## CI/CD verification` section mapping each domain to the
@@ -504,7 +504,7 @@ target_files: [<exact repo-relative paths>]
 depends_on: [<Task NNN>]
 citations:
   app_spec: "spec/21-app/... §<section>"
-  canonical_size: "spec/02-coding-guidelines/00-canonical-size-tier.md"
+  canonical_size: "spec/02-coding-guidelines/02-canonical-size-tier.md"
   language_guideline: "<path(s)>"
   boolean_styling: "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/<file>.md"
   folder_naming: "spec/02-coding-guidelines/08-file-folder-naming/<file>.md"
@@ -567,7 +567,7 @@ but all twelve must be present somewhere in the file.
 | #   | Citation                           | Where it comes from                                                                                                                                                                                                                                                                                                                                                                                                          |
 | --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Deciding app-spec section          | `spec/21-app/...` file plus section, e.g. `04-json-contract/02-section-and-asset-schema.md §Section`                                                                                                                                                                                                                                                                                                                         |
-| 2   | Canonical size tier                | `spec/02-coding-guidelines/00-canonical-size-tier.md`                                                                                                                                                                                                                                                                                                                                                                        |
+| 2   | Canonical size tier                | `spec/02-coding-guidelines/02-canonical-size-tier.md`                                                                                                                                                                                                                                                                                                                                                                        |
 | 3   | Language guideline for this domain | Go: `spec/02-coding-guidelines/03-golang/00-overview.md` + the specific rule file (`02-boolean-standards.md`, `05-defer-rules.md`, `09-wrapped-boolean-results.md`). PHP: `04-php/00-overview.md` + `02-forbidden-patterns.md`, `03-naming-conventions.md`, `05-response-array-standard.md`. TS/React: `02-typescript/08-typescript-standards-reference.md` + `12-discriminated-union-patterns.md`, `14-state-management.md` |
 | 4   | File and folder naming             | `spec/02-coding-guidelines/08-file-folder-naming/` — `03-golang.md`, `02-php-wordpress.md`, or `04-typescript-javascript.md` for the language this task writes                                                                                                                                                                                                                                                               |
 | 5   | Error architecture                 | `spec/03-error-manage/02-error-architecture/00-overview.md` plus `06-apperror-package/` (Go) or `05-response-envelope/` (transport)                                                                                                                                                                                                                                                                                          |
@@ -639,7 +639,7 @@ rg -o --no-filename 'spec/[A-Za-z0-9/._-]+' .lovable/plans/subtasks/xx-plan-slug
 | "the relevant file", "the model layer"       | Unresolvable                                   | Exact repo-relative path                                                |
 | "implemented correctly", "works as expected" | Unverifiable                                   | A command plus expected output                                          |
 | "Review the code"                            | Not a check                                    | A test name or linter invocation                                        |
-| "max 80-100 lines per function"              | Contradicts the canonical tier                 | Cite `spec/02-coding-guidelines/00-canonical-size-tier.md`              |
+| "max 80-100 lines per function"              | Contradicts the canonical tier                 | Cite `spec/02-coding-guidelines/02-canonical-size-tier.md`              |
 | The same `/learn` list in every task         | Anchoring theatre                              | 3-7 links chosen for this task                                          |
 | A commit or release block in a task          | Invites one commit per task                    | See RULE 8                                                              |
 

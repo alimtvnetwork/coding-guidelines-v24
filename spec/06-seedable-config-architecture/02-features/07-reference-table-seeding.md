@@ -5,13 +5,13 @@
 **Created:** 2026-05-04
 **Status:** Authoritative
 **Resolves:** spec/19 audit findings F-B-09, F-B-10, F-X-06 (top-10 fix #6). Unblocks AC-5.
-**Authority:** Extends the `config.seed.json` schema defined in `spec/06-seedable-config-architecture/01-fundamentals.md` with a sibling top-level `Tables` block for seeding small reference / enum / join tables. Existing `Categories` block is unchanged.
+**Authority:** Extends the `config.seed.json` schema defined in `spec/06-seedable-config-architecture/02-fundamentals.md` with a sibling top-level `Tables` block for seeding small reference / enum / join tables. Existing `Categories` block is unchanged.
 
 ---
 
 ## 1. Why this feature exists
 
-`config.seed.json` (per `01-fundamentals.md`) seeds **key/value settings** stored in the `config` table. Several specs — including `spec/19-main-worker-service/07-role-based-dashboards.md` — also need to seed **reference tables** (e.g. `Role`, `EnumPage`, `RolePageAccess`, `WorkerNodeStatus`) at install time and merge new rows on SemVer bumps.
+`config.seed.json` (per `02-fundamentals.md`) seeds **key/value settings** stored in the `config` table. Several specs — including `spec/19-main-worker-service/08-role-based-dashboards.md` — also need to seed **reference tables** (e.g. `Role`, `EnumPage`, `RolePageAccess`, `WorkerNodeStatus`) at install time and merge new rows on SemVer bumps.
 
 Before this feature, those specs assumed an unspecified mechanism. The audit (F-B-09/10) flagged this as a BLOCKER for AC-5 (RBAC). This file defines the mechanism.
 
@@ -120,7 +120,7 @@ Compliant with Code Red Schema Rules 10/11/12: entity table has `Description`; t
 
 ---
 
-## 6. Boot algorithm (mirrors `01-fundamentals.md` §SeedWithVersionCheck)
+## 6. Boot algorithm (mirrors `02-fundamentals.md` §SeedWithVersionCheck)
 
 ```
 for each (TableName, TableBlock) in seed.Tables:
@@ -162,7 +162,7 @@ Per spec/06 conventions: failure = error, never silent skip. Per Code Red error-
 
 ## 8. Spec/19 binding — Main-tier reference tables to seed
 
-Per `spec/19-main-worker-service/07-role-based-dashboards.md` and `10-worker-bootstrap-protocol.md`, the following Main-tier tables MUST be seeded via this mechanism. Concrete row sets live in `spec/19-main-worker-service/14-rbac-and-status-seed.md`.
+Per `spec/19-main-worker-service/08-role-based-dashboards.md` and `11-worker-bootstrap-protocol.md`, the following Main-tier tables MUST be seeded via this mechanism. Concrete row sets live in `spec/19-main-worker-service/15-rbac-and-status-seed.md`.
 
 | Table | Tier (per `19/11`) | Strategy | Purpose |
 |---|---|---|---|
@@ -183,11 +183,11 @@ Per `spec/19-main-worker-service/07-role-based-dashboards.md` and `10-worker-boo
 
 ## 10. Cross-references
 
-- `spec/06-seedable-config-architecture/01-fundamentals.md` — sibling `Categories` block; merge-on-version-bump pattern.
+- `spec/06-seedable-config-architecture/02-fundamentals.md` — sibling `Categories` block; merge-on-version-bump pattern.
 - `spec/06-seedable-config-architecture/02-features/05-validation-data-seeding.md` — earlier validation-only seeding (different scope).
-- `spec/19-main-worker-service/07-role-based-dashboards.md` — RBAC schema that consumes this feature.
-- `spec/19-main-worker-service/10-worker-bootstrap-protocol.md` §8 — `WorkerNodeStatus` rows.
-- `spec/19-main-worker-service/14-rbac-and-status-seed.md` — concrete row-set binding.
+- `spec/19-main-worker-service/08-role-based-dashboards.md` — RBAC schema that consumes this feature.
+- `spec/19-main-worker-service/11-worker-bootstrap-protocol.md` §8 — `WorkerNodeStatus` rows.
+- `spec/19-main-worker-service/15-rbac-and-status-seed.md` — concrete row-set binding.
 
 ---
 

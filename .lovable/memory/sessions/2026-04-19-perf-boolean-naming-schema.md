@@ -23,7 +23,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - Symmetric inversion table: `invert(invert(x)) == x`. Domain-specific pairs (`HasAccess` ↔ `IsUnauthorized`, `HasChildren` ↔ `IsSingle`) preferred over `Has-No-*` fallbacks.
 - Outputs go to `<basename>.generated.<ext>` companion files; source never modified.
 
-### Spec changes — `spec/04-database-conventions/01-naming-conventions.md`
+### Spec changes — `spec/04-database-conventions/03-naming-conventions.md`
 
 - **v3.2.0 → v3.3.0** — Rule 2 clarification (single-negative roots like `IsDisabled` are NOT forbidden, only explicit `Not`/`No` prefixes are). Added Rule 9 (Auto-Generated Inverted Computed Fields) with code-generation contract.
 - **v3.3.0 → v3.4.0** — Rule 8 restructured into a **three-bucket table** (Forbidden / Positive / 🟦 Approved Inverse of Positive). Reframed `HasNoAccess` → `IsUnauthorized`, `HasNoChildren` → `IsSingle`, `HasNoLicense` → `HasInvalidLicense`.
@@ -31,7 +31,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 
 ### Spec changes — schema design + cross-links
 
-- `spec/04-database-conventions/02-schema-design.md` v3.3.0 — added §6 "Mandatory Descriptive Columns" with table-category classification matrix.
+- `spec/04-database-conventions/03-schema-design.md` v3.3.0 — added §6 "Mandatory Descriptive Columns" with table-category classification matrix.
 - `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md` — added "Database ↔ Code Inverse Pattern (Rule 9)" callout linking to the canonical Rule 9 spec, the codegen tool, and BOOL-NEG-001.
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` v2.2.0 — added "Database-Backed Inverses (Rule 9)" subsection.
 
@@ -78,12 +78,12 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `linters-cicd/checks/_lib/walker.py`
 - `linters-cicd/checks/_lib/cli.py`
 - `linters-cicd/checks/registry.json`
-- `spec/04-database-conventions/01-naming-conventions.md` (v3.2.0 → v3.5.0)
-- `spec/04-database-conventions/02-schema-design.md` (v3.2.0 → v3.3.0)
+- `spec/04-database-conventions/03-naming-conventions.md` (v3.2.0 → v3.5.0)
+- `spec/04-database-conventions/03-schema-design.md` (v3.2.0 → v3.3.0)
 - `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md`
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` (v2.1.0 → v2.2.0)
 - `src/data/specTree.json` (regenerated multiple times)
-- `.lovable/plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/01-index.md`
+- `.lovable/29-plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/01-index.md`
 
 ### Removed (folder restructure)
 
@@ -106,4 +106,4 @@ This was a long, single-day session that produced multiple linked deliverables a
 
 ## What Next AI Session Should Pick Up
 
-The pending plan items from `.lovable/plan.md` Active Work section are the natural next steps. The most impactful single task is **Wire codegen into CI** (`run-all.sh` + `git diff --exit-code`) so developers can never forget to regenerate companion files. Right after that: **Add unit tests for both BOOL-NEG-001 and the codegen inversion table**.
+The pending plan items from `.lovable/29-plan.md` Active Work section are the natural next steps. The most impactful single task is **Wire codegen into CI** (`run-all.sh` + `git diff --exit-code`) so developers can never forget to regenerate companion files. Right after that: **Add unit tests for both BOOL-NEG-001 and the codegen inversion table**.

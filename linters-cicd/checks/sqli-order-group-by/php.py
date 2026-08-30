@@ -7,7 +7,7 @@ attacker-chosen column or table names. Any orderBy()/groupBy() call
 whose first argument is not a string literal or an allow-list lookup
 is flagged.
 
-Spec: spec/18-wp-plugin-how-to/19-micro-orm-and-root-db.md
+Spec: spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ RULE = Rule(
         "literal or an allow-listed column constant; raw variables "
         "or user input are forbidden."
     ),
-    help_uri_relative="../18-wp-plugin-how-to/19-micro-orm-and-root-db.md",
+    help_uri_relative="../18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
 )
 
 

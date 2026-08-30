@@ -10,7 +10,7 @@
 | # | File | Status |
 |---|------|--------|
 | 1 | `01-index.md` | ✅ Present |
-| 2 | `02-project-structure.md` | ✅ Present |
+| 2 | `02-project-03-structure.md` | ✅ Present |
 | 3 | `03-subcommand-architecture.md` | ✅ Present |
 | 4 | `04-flag-parsing.md` | ✅ Present |
 | 5 | `05-configuration.md` | ✅ Present |

@@ -40,7 +40,7 @@ All notable changes to the Coding Guidelines specification are documented here.
 
 ### Added
 
-- `14-test-naming-and-structure.md` — New spec covering test file naming, three-part test function naming convention, table-driven test rules, test helper placement, AAA pattern, test isolation, and integration test boundaries. Applies to Go, TypeScript, and PHP.
+- `14-test-naming-and-03-structure.md` — New spec covering test file naming, three-part test function naming convention, table-driven test rules, test helper placement, AAA pattern, test isolation, and integration test boundaries. Applies to Go, TypeScript, and PHP.
 
 ---
 

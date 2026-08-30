@@ -26,7 +26,7 @@ N = total self-loop steps budget that the agents will perform.
 8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-11. [ ] /learn Ingest `spec/02-coding-guidelines/00-canonical-size-tier.md` for canonical file and function size tiers.
+11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
 12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
 13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/04-database-conventions/` for domain-specific architectural specifications.
@@ -76,7 +76,7 @@ Before modifying application code, you MUST thoroughly scan the repository and w
 
 You MUST read, follow, and mechanically verify every single specification file below before and during execution:
 
-- [ ] **`spec/02-coding-guidelines/00-canonical-size-tier.md`**
+- [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line compression.
 - [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`**
@@ -91,22 +91,22 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/04-database-conventions/00-overview.md`**
   - **Why:** Authoritative database architectural foundation.
   - **How:** All schema definitions, migrations, and queries must follow SQLite-first, strongly-typed conventions.
-- [ ] **`spec/04-database-conventions/01-naming-conventions.md`**
+- [ ] **`spec/04-database-conventions/03-naming-conventions.md`**
   - **Why:** Strict casing and primary key rules.
   - **How:** Tables and entities in **PascalCase** (`UserAccount`), columns and fields in **camelCase** (`userId`, `createdAt`), primary keys MUST be `{TableName}Id` integer auto-increment (`UserAccountId`). No UUID primary keys.
-- [ ] **`spec/04-database-conventions/02-schema-design.md`**
+- [ ] **`spec/04-database-conventions/03-schema-design.md`**
   - **Why:** Standardized metadata and join constraints.
   - **How:** Entity & Reference tables MUST include `Description TEXT NULL`. Transactional tables MUST include `Notes TEXT NULL` and `Comments TEXT NULL`. `Type`/`Status` columns use join tables or registered enums, never free-form strings.
-- [ ] **`spec/04-database-conventions/03-orm-and-views.md`**
+- [ ] **`spec/04-database-conventions/04-orm-and-views.md`**
   - **Why:** Explicit ORM mapping and relation integrity.
   - **How:** Explicitly declare foreign key references, cascade rules, and indexes. Never rely on implicit unconstrained relations.
-- [ ] **`spec/04-database-conventions/05-relationship-diagrams.md`**
+- [ ] **`spec/04-database-conventions/06-relationship-diagrams.md`**
   - **Why:** Living visual documentation.
   - **How:** Every database change MUST include an updated Mermaid ERD diagram showing entities, primary/foreign keys, and relationships.
-- [ ] **`spec/04-database-conventions/06-rest-api-format.md`**
+- [ ] **`spec/04-database-conventions/07-rest-api-format.md`**
   - **Why:** JSON transport serialization.
   - **How:** JSON payload keys MUST be **PascalCase** (e.g. `{ "UserAccountId": 101, "EmailAddress": "..." }`).
-- [ ] **`spec/04-database-conventions/07-split-db-pattern.md`**
+- [ ] **`spec/04-database-conventions/08-split-db-pattern.md`**
   - **Why:** High-performance split database partitioning.
   - **How:** If data tier uses split databases (e.g. Core vs Analytics/History), keep schemas modular and isolated.
 

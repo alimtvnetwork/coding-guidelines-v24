@@ -85,7 +85,7 @@ Updated: 2026-04-27
 - [2026-04-23 README Code-Red Walkthrough](mem://sessions/2026-04-23-readme-code-red-walkthrough) — Session log.
 - [Installer Behavior Standards](mem://standards/installer-behavior) — Canonical installer UX rules.
 - [Suggestions Tracker (memory mirror)](mem://suggestions/01-suggestions-tracker) — Mirrors `.lovable/suggestions.md` highlights.
-- [Plan Tracker (workflow)](mem://workflow/01-plan-tracker) — Workflow-state mirror of `.lovable/plan.md`.
+- [Plan Tracker (workflow)](mem://workflow/01-plan-tracker) — Workflow-state mirror of `.lovable/29-plan.md`.
 - [Session 2026-08-09 Code Red Refactor](mem://sessions/08-2026-08-09-code-red-refactor) — Enum enforcement and boolean fix.
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
 - [Avoid Absolute File System Paths](mem://avoid/03-absolute-file-system-paths) — Do not use file:/// absolute paths.

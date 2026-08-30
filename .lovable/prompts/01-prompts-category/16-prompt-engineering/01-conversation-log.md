@@ -100,7 +100,7 @@ Rules:
 
 1. Read `mem://01-index.md` and confirm the following exist; if any is missing, propose (do not auto-create unless the user confirms):
    - A `coding-guidelines` memory entry mirroring `.lovable/coding-guidelines/coding-guidelines.md`. If the file exists on disk but no memory entry references it, draft a `mem://standards/coding-guidelines.md` stub and list it under *Proposed Memory Writes* below.
-   - `plan.md` reference (roadmap source of truth).
+   - `29-plan.md` reference (roadmap source of truth).
    - Conversation-log convention (this very prompt) - propose `mem://workflow/conversation-log` if absent.
 2. List every relevant memory file the follow-up prompt would touch, so the user can audit before approval.
 
@@ -111,7 +111,7 @@ Rules:
 Take the user's pasted follow-up prompt and produce an improved, unambiguous, AI-ready version. Rules:
 
 - Preserve original intent exactly. Do not add scope.
-- Add explicit references to: `plan.md`, `mem://01-index.md`, `.lovable/coding-guidelines/coding-guidelines.md`, and any other file the task clearly depends on.
+- Add explicit references to: `29-plan.md`, `mem://01-index.md`, `.lovable/coding-guidelines/coding-guidelines.md`, and any other file the task clearly depends on.
 - Convert vague phrasing into checklists, acceptance criteria, and file paths.
 - Call out inputs, outputs, and the *Definition of Done*.
 - End the rewritten prompt with a self-instruction: "Before acting, re-read `mem://01-index.md` and `.lovable/coding-guidelines/coding-guidelines.md`; restate which rules apply."
