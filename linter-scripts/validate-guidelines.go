@@ -534,8 +534,6 @@ func checkGoSpecific(lines []string, path string) []Violation {
 	return violations
 }
 
-
-
 var (
 	magicNumberPattern      = regexp.MustCompile(`(?:==|!=|===|!==|>=|<=|[><]|\*|/|%)\s*(-?\d+\.?\d*)`)
 	bracketIndexPattern     = regexp.MustCompile(`\[\s*\d+\s*\]`)
