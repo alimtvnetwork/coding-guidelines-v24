@@ -114,20 +114,70 @@ $isNoRecentErrors = empty($errors) || !$hasUnseen;
 $isErrorListClear = empty($errors) || !$hasUnseen;
 ```
 
-### Rule: Name booleans for the **positive semantic state**, then negate only once if needed
+### Rule: Name booleans for the **positive semantic state**, then negate only once in guard if needed
 
 ```typescript
-// ❌ AVOID — Raw negation at call site
-if (!isBlocked) {
-    // active
+// ❌ FORBIDDEN: Negative boolean names
+const hasNoColors = !colorConfig.length;
+if (hasNoColors) {
+    return null;
 }
 
-// ✅ BEST — Extract to a positive boolean
-const isActive = !isBlocked;
+const hasNoPayload = !payload?.length;
+if (hideLabel || hasNoPayload) {
+    return null;
+}
 
-if (isActive) {
-    // best to use like this
+// ✅ REQUIRED: Positive framing + inverted guard condition
+const hasColors = colorConfig.length > 0;
+if (!hasColors) {
+    return null;
+}
+
+const hasPayload = Boolean(payload?.length);
+if (hideLabel || !hasPayload) {
+    return null;
 }
 ```
 
 ---
+
+## Principle 3: Total Ban on Bare `ok` Identifiers
+
+In Go type assertions, map lookups, and channel receives, the bare identifier `ok` is **strictly forbidden**. It violates the boolean prefix rule and obscures the domain meaning. Always use a semantic affirmative boolean starting with `is` or `has`:
+
+```go
+// ❌ FORBIDDEN: Bare ok identifier in type assertions
+if appErr, ok := err.(*apperror.AppError); ok {
+    if appErr.Code != "E_INTERNAL_ERROR" {
+        t.Errorf("expected E_INTERNAL_ERROR, got %s", appErr.Code)
+    }
+} else {
+    t.Errorf("expected AppError, got %T", err)
+}
+
+// ✅ REQUIRED: Semantic isAppErr + inverted guard clause
+appErr, isAppErr := err.(*apperror.AppError)
+if !isAppErr {
+    t.Fatalf("expected AppError, got %T", err)
+}
+
+if appErr.Code != "E_INTERNAL_ERROR" {
+    t.Errorf("expected E_INTERNAL_ERROR, got %s", appErr.Code)
+}
+```
+
+```go
+// ❌ FORBIDDEN: Bare ok in map lookups
+val, ok := userCache[id]
+if !ok {
+    return nil, ErrUserNotFound
+}
+
+// ✅ REQUIRED: Semantic affirmative boolean
+val, isFound := userCache[id]
+if !isFound {
+    return nil, ErrUserNotFound
+}
+```
+

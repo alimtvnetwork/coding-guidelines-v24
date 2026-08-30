@@ -213,6 +213,74 @@ return apperror.New(
 
 **Forbidden:** `fmt.Errorf` for errors leaving a service (no stack trace).
 
+### Error Return Contract & Outer Handling Principle (Zero Dual-Handling)
+
+A function that declares an `error` return type MUST return the actual error instance directly to the caller (`return err`). It MUST NEVER invoke an exit handler or panic internally and then return `nil`.
+
+#### Why Dual-Handling & Internal Exit Is Forbidden
+
+1. **Broken Caller Sovereignty:** When a leaf function handles its own exit internally and returns `nil`, the caller is deceived into believing the operation succeeded.
+2. **Impossible Testability:** Unit tests cannot assert returned error values if the function exits the process internally.
+3. **Dual Execution Hazards:** Calling an exit handler inside a helper while returning a result creates race conditions and unhandled cleanup.
+
+#### Mandatory Rules & Generic Patterns
+
+1. **Leaf Functions Must Return the Error (`return err`):**
+   Leaf/business functions must construct or wrap the `AppError` and return it directly:
+
+   ```go
+   // ❌ FORBIDDEN: Handling exit inside leaf function and returning nil
+   func ExecuteOperation(items []string) error {
+       if len(items) == 0 {
+           err := apperror.NewValidationError("items cannot be empty")
+           exitHandler.HandleError(err, 1) // ❌ Banned internal exit call
+           return nil                      // ❌ Deceptive return
+       }
+
+       return nil
+   }
+
+   // ✅ REQUIRED: Return error directly with proper newline gaps
+   func ExecuteOperation(items []string) error {
+       if len(items) == 0 {
+           return apperror.NewValidationError("items cannot be empty")
+       }
+
+       return nil
+   }
+   ```
+
+2. **Outer Caller Handles the Error:**
+   Only the top-level orchestrator, root command dispatcher, or HTTP router receives the error and decides how to present it or terminate:
+
+   ```go
+   // ✅ REQUIRED: Top-level caller handles the error and exit
+   func MainCommandDispatcher(args []string) {
+       err := ExecuteOperation(args)
+       if err != nil {
+           exitHandler.HandleValidationError(err)
+           return
+       }
+
+       exitHandler.HandleSuccess()
+   }
+   ```
+
+3. **No Magic Literal Exit Codes (Enums Required):**
+   - NEVER pass raw integer literals (`1`, `2`, `0`) to exit handlers.
+   - Use strongly-typed enums ending in `Type`: `ExitCodeType` (`ExitCodeSuccess`, `ExitCodeValidationError`, `ExitCodeGeneralError`).
+
+4. **Parameter Reduction via Specialized Helpers:**
+   - If a handler parameter is frequently repeated (such as passing a constant exit code), create a dedicated specialized helper to reduce function arguments:
+
+   ```go
+   // ❌ FORBIDDEN: Repeating magic exit code parameter
+   exitHandler.Handle(err, ExitCodeValidationError)
+
+   // ✅ REQUIRED: Dedicated specialized helper function
+   exitHandler.HandleValidationError(err)
+   ```
+
 ### DelegatedRequestServer Injection (NEW v2.0.0)
 
 When the Go backend proxies a request to any downstream server and the request fails (status ≥ 400), it builds a `DelegatedRequestServer` object and injects it into the envelope's `Errors` block.

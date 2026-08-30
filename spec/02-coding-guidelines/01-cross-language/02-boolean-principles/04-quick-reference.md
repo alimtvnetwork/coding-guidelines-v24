@@ -17,11 +17,13 @@
 | `isNotReady` | `isPending` (synonym) | P2: No negative words |
 | `!$obj->isValid()` | `$obj->isInvalid()` | P3: Named guards |
 | `if (a && b \|\| c)` | `if (isValid(x))` | P4: Extract expressions |
+| `if (flag === true)` | `if (isFlag)` | Explicit comparisons forbidden |
+| `if (flag == false)` | `if (isInactiveFlag)` | Explicit comparisons forbidden |
 | `fn(true)` | `fnWithOption()` | P5: Explicit params |
 | `isX && !isY` | `isConflict` (extracted) | P6: No mixed polarity |
 | `if x := fn(); x > 0` | Separate assignment | P7: No inline statements |
 | `os.Stat(path)` | `pathutil.IsDir(path)` | P8: No raw filesystem |
-| `if ($x == true)` | `if ($x)` | P9: No explicit true checks |
+| `if ($x == true)` | `if ($isX)` | P9: No explicit true checks |
 
 ---
 
@@ -129,6 +131,7 @@ if err := os.MkdirAll(dir, 0755); err != nil {
 }
 
 // ✅ CORRECT — pathutil wrapper with apperror
+// Also must use App Error than regular error in golang
 if err := pathutil.EnsureDir(dir); err != nil {
     return apperror.Fail[ProjectResult](err)
 }
@@ -167,3 +170,17 @@ These patterns are **exempt** from the no-negation rule in Go:
 - `if v, ok := m[k]; ok {` — inline comma-ok (exempt from P7)
 
 ---
+
+### Mistake 8: Explicit True/False Comparisons
+
+Never compare a boolean variable directly to `true` or `false`. It is redundant, unidiomatic, and prone to bugs (especially in dynamically typed languages where truthiness differs).
+
+```php
+// ❌ WRONG
+if ($isActive === true) { ... }
+if ($isActive == false) { ... }
+
+// ✅ CORRECT
+if ($isActive) { ... }
+if (!$isActive) { ... } // Or prefer a positive inverse guard: if ($isInactive)
+```

@@ -12,7 +12,15 @@ dist
 !slides-app/dist/
 !slides-app/dist/**
 dist-ssr
+.output
+.vinxi
+.tanstack/**
+.nitro
 *.local
+
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
 
 # Generated code, artifacts, test data, and binaries (NEVER COMMIT)
 *.generated.*

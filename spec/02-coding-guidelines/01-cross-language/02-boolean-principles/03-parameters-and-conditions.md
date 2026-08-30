@@ -291,11 +291,11 @@ if (isReady && isValid) { ... }
 ```
 
 
-## Rule P9: No Explicit True Checks
+## Principle 9: No Explicit True Checks (TOTAL BAN)
 
-> Never evaluate a boolean variable explicitly against `true` (`== true`, `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly.
+> **CRITICAL RULE:** Never evaluate a boolean variable explicitly against `true` (`== true`, `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly.
 
-While languages or linters may occasionally force you to use `=== false` or `== false` as a fallback to avoid the banned `!` operator, this exception **does not apply to `true`**.
+While languages or linters may occasionally force you to use `=== false` or `== false` as a fallback to avoid the banned `!` operator, this exception **does not apply to `true`**. Explicitly checking `== true` is redundant, unidiomatic, and strictly forbidden.
 
 ```go
 // ❌ FORBIDDEN: Explicit == true is redundant and banned
@@ -305,6 +305,18 @@ if hasMatch == true {
 
 // ✅ REQUIRED: Implicit evaluation
 if hasMatch {
+    // ...
+}
+```
+
+```javascript
+// ❌ FORBIDDEN
+if (isValid === true) {
+    // ...
+}
+
+// ✅ REQUIRED
+if (isValid) {
     // ...
 }
 ```

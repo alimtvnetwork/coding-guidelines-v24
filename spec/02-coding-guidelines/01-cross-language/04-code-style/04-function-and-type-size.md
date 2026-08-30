@@ -124,6 +124,40 @@ func ProcessUpload(ctx context.Context, req UploadRequest) error {
 }
 ```
 
+### 6d — Parameter Reduction & Specialized Function Helpers
+
+When a function call frequently repeats identical constant arguments, enums, or exit codes across multiple call sites, extract a specialized helper function. This eliminates parameter bloat, keeps parameter counts <= 3, and enforces single-responsibility design.
+
+```go
+// ❌ FORBIDDEN: Repeating magic constants and parameters across call sites
+func ProcessPayload(data []byte) {
+    if len(data) == 0 {
+        reporter.ReportEvent(data, EventTypeValidationFailure, SeverityLevelError)
+        return
+    }
+
+    reporter.ReportEvent(data, EventTypeProcessingSuccess, SeverityLevelInfo)
+}
+
+// ✅ REQUIRED: Specialized helper functions reducing parameter count and boilerplate
+func ReportValidationError(data []byte) {
+    reporter.ReportEvent(data, EventTypeValidationFailure, SeverityLevelError)
+}
+
+func ReportSuccess(data []byte) {
+    reporter.ReportEvent(data, EventTypeProcessingSuccess, SeverityLevelInfo)
+}
+
+func ProcessPayload(data []byte) {
+    if len(data) == 0 {
+        ReportValidationError(data)
+        return
+    }
+
+    ReportSuccess(data)
+}
+```
+
 ---
 
 ## Rule 17: Struct / Class Size — Maximum 120 Lines
