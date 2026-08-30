@@ -22,6 +22,7 @@ ROOT = HERE.parent
 
 # Make `checks/...` and `tests/...` importable as top-level modules.
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT.parent))
 
 
 def main() -> int:
