@@ -34,3 +34,9 @@ This directory contains automated, reusable utility scripts designed for AI agen
 * **Purpose:** Removes corrupt binary/control characters (such as `NUL`, `BEL`, `BS`, `VT`, `FF`, `ESC`) and normalizes all repository files to clean UTF-8 without Byte Order Marks (BOM).
 * **Usage:** `python .lovable/ai-fix-scripts/07-encoding-normalizer.py`
 * **Tags:** `#encoding`, `#utf8`, `#bom-remover`, `#control-characters`, `#text-cleanup`
+
+### `08-fast-file-scanner.py`
+* **Purpose:** High-performance repository file scanner and cache indexer. Scans thousands of files in milliseconds with language filters (`--lang go,ts,py`), path filters (`--path spec/`), and substring search (`--search`). Automatically persists results to `tmp/repo-file-cache.json` and `tmp/repo-file-list.txt` for instant cached access in subsequent steps without ad-hoc filesystem queries.
+* **Usage:** `python .lovable/ai-fix-scripts/08-fast-file-scanner.py [--lang <lang>] [--path <dir>] [--search <term>] [--stats]`
+* **Tags:** `#file-scanner`, `#file-indexer`, `#fast-search`, `#cache`, `#files`, `#performance`
+
