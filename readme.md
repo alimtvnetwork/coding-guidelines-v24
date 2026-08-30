@@ -2040,7 +2040,8 @@ The result: when an AI agent operates inside a repo following these rules, the g
 1. Pick the correct parent folder (numeric prefix decides position).
 2. Use the [Non-CLI Module Template](spec/01-spec-authoring-guide/05-non-cli-module-template.md) and include `01-index.md` + `99-consistency-report.md`.
 3. Bump the version, add a changelog entry, then run `npm run sync` to refresh `version.json`, `specTree.json`, and the README stamps.
-4. Verify with `python3 linter-scripts/check-links.py` and `npm run lint:readme` before opening a PR.
+4. Run all local quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+5. Pre-warm repository file caches via `python .lovable/ai-fix-scripts/08-fast-file-scanner.py` for sub-millisecond AI file lookups.
 
 ---
 
