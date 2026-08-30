@@ -452,7 +452,7 @@ jobs:
         # artifacts. Backed by round-trip + bijection guarantees proven
         # in test_codegen_inversion_table.py.
         # On drift: `npm run codegen:regen` locally and commit.
-        run: bash linters-cicd/codegen/scripts/verify-codegen-determinism.sh
+        run: python3 linters-cicd/codegen/scripts/verify_codegen_determinism.py
 
       # ── Regen-diff guard (catches uncommitted regen output) ──
       # Even if verify-determinism passes, an author may have edited a
@@ -461,7 +461,7 @@ jobs:
       - name: Regen-diff guard (no uncommitted codegen output)
         if: steps.changes.outputs.codegen == 'true' || github.event_name == 'push'
         run: |
-          bash linters-cicd/codegen/scripts/regen-codegen-fixtures.sh
+          python3 linters-cicd/codegen/scripts/regen_codegen_fixtures.py
           if ! git diff --exit-code --stat -- linters-cicd/codegen/fixtures/expected/; then
             echo ""
             echo "::error::Codegen drift detected — fixtures/expected/ is out of sync with sources/."

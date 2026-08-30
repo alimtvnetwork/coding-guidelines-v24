@@ -102,12 +102,21 @@ AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildI
 
 ---
 
-## 6. Execution Checklist for the AI
+## 6. Cross-Platform Python Mandate for CI/CD & Codegen Checks (Ban on `.sh` in CI)
+
+- **Portability Contract:** All CI/CD checks, codegen determinism verifiers, fixture regenerators, and linter runners MUST be implemented as pure, cross-platform Python (`.py`) scripts using standard library modules (`pathlib`, `subprocess`, `difflib`, `tempfile`).
+- **TOTAL BAN on `.sh` in CI Workflows:** Shell scripts (`.sh`) fail or require bash emulation on Windows/PowerShell runner environments. CI workflow steps and `package.json` lifecycle scripts MUST invoke Python scripts (`python3 ... .py`) directly.
+- **Legacy Migration:** Whenever a legacy `.sh` check is encountered in CI or tests, migrate its core logic to a standalone Python script adhering to these standards, leaving only a lightweight shell forwarder if backward compatibility is required.
+
+---
+
+## 7. Execution Checklist for the AI
 
 - [ ] `/goal` Ensure all scripts import traversal and caching logic from `00-shared-engine.py`.
 - [ ] `/learn` Declare module constants and `*Type` Enums at the root of the file.
 - [ ] `/goal` Keep individual functions under 25 lines following Single Responsibility Principle.
 - [ ] `/learn` Store cache and lockfiles in pluggable `tmp/cache/` directories with atomic locks.
 - [ ] `/learn` Handle missing/deleted files safely via `read_file_safe()` with zero crashes.
+- [ ] `/learn` Implement all CI/CD verifiers and fixtures as cross-platform Python scripts instead of `.sh`.
 - [ ] `/learn` Verify zero external dependencies (Python standard library only).
 - [ ] `/learn` Ensure all generated files use strict UTF-8 with UNIX LF line endings.

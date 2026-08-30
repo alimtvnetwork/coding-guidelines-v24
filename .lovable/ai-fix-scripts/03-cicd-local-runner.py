@@ -26,6 +26,7 @@ JOBS_MATRIX = {
     "Version Sync Check": [sys.executable, ".lovable/ai-fix-scripts/11-version-sync-checker.py"],
     "Bundle Installer Generation": ["node", "scripts/generate-bundle-installers.mjs"],
     "Spec Tree Sync": ["node", "scripts/sync-spec-tree.mjs"],
+    "Codegen Determinism Check": [sys.executable, "linters-cicd/codegen/scripts/verify_codegen_determinism.py"],
 }
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
