@@ -4,6 +4,13 @@
 
 ---
 
+## v6.35.2 — 2026-08-30 (Fix)
+
+**Scope:** Version bump (`6.35.1` → `6.35.2`). Fix.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
+
+---
+
 ## v6.35.0 — 2026-08-30 (Convert codegen CI verifiers to Python & fix fixture determinism drift)
 
 **Scope:** Version bump (`6.34.0` → `6.35.0`). Convert codegen CI verifiers to Python & fix fixture determinism drift.

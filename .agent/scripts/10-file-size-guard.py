@@ -17,7 +17,7 @@ class ExitCodeType(int, Enum):
     VIOLATIONS_FOUND = 1
 
 DEFAULT_MAX_KB = 2048  # 2 MB general threshold
-EXCLUDE_DIRS = {".git", "node_modules", "dist", "build", ".venv", ".gemini", "tmp", ".system_generated"}
+EXCLUDE_DIRS = {".git", "node_modules", "dist", "build", ".venv", ".gemini", "tmp", ".system_generated", "release-artifacts"}
 ALLOWED_LARGE_FILES = {
     "src/data/specTree.json",
     "src\\data\\specTree.json",
