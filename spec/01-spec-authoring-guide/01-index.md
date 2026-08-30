@@ -460,7 +460,7 @@ All specifications in this repository are authored by **Md. Alim Ul Karim** — 
 
 _Auto-generated section — see `spec/01-spec-authoring-guide/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-SAG-000: Conformance check for spec authoring rule: Overview
+### AC-SAG-001: Conformance check for spec authoring rule: Index
 
 **Given** Run the spec-structure linter against `spec/`.  
 **When** Run the verification command shown below.  
@@ -474,4 +474,4 @@ python3 linter-scripts/check-spec-folder-refs.py && python3 linter-scripts/check
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

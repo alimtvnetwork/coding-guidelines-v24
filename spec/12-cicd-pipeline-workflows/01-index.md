@@ -74,3 +74,25 @@ This module covers two distinct pipeline archetypes, shared conventions, reusabl
 1. [ ] `/learn` [01-browser-extension-deploy/01-index.md](./01-browser-extension-deploy/01-index.md) — Chrome extension automated build and packaging.
 2. [ ] `/learn` [02-go-binary-deploy/01-index.md](./02-go-binary-deploy/01-index.md) — Cross-platform Go binary packaging, signing, and release.
 3. [ ] `/learn` [03-reusable-ci-guards/01-index.md](./03-reusable-ci-guards/01-index.md) — 13 modular, language-agnostic CI guards and checkers.
+
+---
+
+## Verification
+
+_Auto-generated section — see `spec/12-cicd-pipeline-workflows/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-CI-001: CI/CD pipeline conformance: Index
+
+**Given** Validate `.github/workflows/*.yml` against the documented job matrix.  
+**When** Run the verification command shown below.  
+**Then** Required jobs (`lint`, `cross-links`, `sync-drift`) are present; concurrency groups follow the `<workflow>-<ref>` pattern; `permissions:` is least-privilege.
+
+**Verification command:**
+
+```bash
+npm run sync && npm run lint && npm run test
+```
+
+**Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
+
+_Verification section last updated: 2026-08-30_

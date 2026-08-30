@@ -381,7 +381,7 @@ Tell the AI:
 
 _Auto-generated section — see `spec/11-powershell-integration/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-PS-000: PowerShell integration conformance: Overview
+### AC-PS-001: PowerShell integration conformance: Index
 
 **Given** Lint PowerShell scripts and modules in `scripts/` for naming, parameter binding, and error propagation.  
 **When** Run the verification command shown below.  
@@ -395,4 +395,4 @@ pwsh -NoProfile -Command "Invoke-ScriptAnalyzer -Path scripts -Recurse -Severity
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

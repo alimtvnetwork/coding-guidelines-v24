@@ -54,7 +54,7 @@ _No app issue analyses added yet. Add issue files as numbered entries within thi
 
 _Auto-generated section — see `spec/22-app-issues/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-AI-000: App issues triage conformance: Overview
+### AC-AI-001: App issues triage conformance: Index
 
 **Given** Audit issue write-ups for the required Reproduction / Cause / Fix / Prevention sections.  
 **When** Run the verification command shown below.  
@@ -68,4 +68,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

@@ -105,7 +105,7 @@ This folder provides standalone, self-contained AI-readable references for every
 
 _Auto-generated section — see `spec/17-consolidated-guidelines/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CON-000: Consolidated guideline conformance: Overview
+### AC-CON-001: Consolidated guideline conformance: Index
 
 **Given** Cross-check this consolidated digest against its source spec folder.  
 **When** Run the verification command shown below.  
@@ -119,4 +119,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

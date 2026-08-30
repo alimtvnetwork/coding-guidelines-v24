@@ -80,7 +80,7 @@ docs-viewer, typography, ubuntu, poppins, syntax-highlighting, highlight-js, ful
 
 _Auto-generated section — see `spec/08-docs-viewer-ui/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-UI-000: Docs viewer UI conformance: Overview
+### AC-UI-001: Docs viewer UI conformance: Index
 
 **Given** Render the docs viewer against the spec tree fixture.  
 **When** Run the verification command shown below.  
@@ -94,4 +94,4 @@ npm run test
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

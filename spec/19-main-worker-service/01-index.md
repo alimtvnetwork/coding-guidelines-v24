@@ -170,3 +170,25 @@ This spec inherits and does not redefine:
 ---
 
 *Overview v1.0.0 — 2026-05-04*
+
+---
+
+## Verification
+
+_Auto-generated section — see `spec/19-main-worker-service/97-acceptance-criteria.md` for the full criteria index._
+
+### AC-GEN-001: General conformance check: Index
+
+**Given** Run the spec health-check against this folder.  
+**When** Run the verification command shown below.  
+**Then** Cross-references resolve and the folder contains the required `01-index.md`, `97-acceptance-criteria.md`, and `99-consistency-report.md`.
+
+**Verification command:**
+
+```bash
+python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
+```
+
+**Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
+
+_Verification section last updated: 2026-08-30_

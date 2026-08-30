@@ -120,7 +120,7 @@ AI INSTRUCTION:
 
 _Auto-generated section — see `spec/18-wp-plugin-how-to/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-WP-000: WordPress plugin conformance: Overview
+### AC-WP-001: WordPress plugin conformance: Index
 
 **Given** Static-analyze the plugin source against the documented enum, trait, and REST conventions.  
 **When** Run the verification command shown below.  
@@ -134,4 +134,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

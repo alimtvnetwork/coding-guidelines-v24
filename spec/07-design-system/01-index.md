@@ -171,7 +171,7 @@ Every heading gradient, link color, button, code block glow, and hover effect up
 
 _Auto-generated section — see `spec/07-design-system/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-DS-000: Design-system conformance: Overview
+### AC-DS-001: Design-system conformance: Index
 
 **Given** Scan `src/` for raw color literals, hard-coded spacing, and untokenized typography.  
 **When** Run the verification command shown below.  
@@ -185,4 +185,4 @@ npm run lint
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

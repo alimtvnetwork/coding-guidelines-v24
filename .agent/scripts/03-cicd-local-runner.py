@@ -27,6 +27,7 @@ JOBS_MATRIX = {
     "Bundle Installer Generation": ["node", "scripts/generate-bundle-installers.mjs"],
     "Spec Tree Sync": ["node", "scripts/sync-spec-tree.mjs"],
     "Codegen Determinism Check": [sys.executable, "linters-cicd/codegen/scripts/verify_codegen_determinism.py"],
+    "Spec Verification Coverage": ["node", "scripts/spec-verification/generate-coverage-report.mjs", "--strict", "--out", "reports/spec-verification/coverage.md"],
 }
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:

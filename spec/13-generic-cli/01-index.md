@@ -100,7 +100,7 @@ concrete examples. Adapt syntax to your target language.
 
 _Auto-generated section — see `spec/13-generic-cli/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CLI-000: Generic CLI conformance: Overview
+### AC-CLI-001: Generic CLI conformance: Index
 
 **Given** Run the CLI smoke harness against the documented subcommand surface.  
 **When** Run the verification command shown below.  
@@ -114,4 +114,4 @@ go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

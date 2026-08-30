@@ -63,7 +63,7 @@ _No research documents added yet. Add research files as numbered entries (e.g., 
 
 _Auto-generated section — see `spec/10-research/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-RES-000: Research-folder conformance: Overview
+### AC-RES-001: Research-folder conformance: Index
 
 **Given** Validate research note structure (front-matter, dated filenames, source links).  
 **When** Run the verification command shown below.  
@@ -77,4 +77,4 @@ python3 linter-scripts/check-spec-folder-refs.py
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

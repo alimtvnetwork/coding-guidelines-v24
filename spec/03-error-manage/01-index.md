@@ -143,7 +143,7 @@ This folder consolidates content previously located at:
 
 _Auto-generated section — see `spec/03-error-manage/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-ERR-000: Error-management conformance: Overview
+### AC-ERR-001: Error-management conformance: Index
 
 **Given** Audit error-handling sites for use of the `apperror` package, error codes, and explicit file/path logging.  
 **When** Run the verification command shown below.  
@@ -157,4 +157,4 @@ python3 linter-scripts/check-forbidden-strings.py && go run linter-scripts/valid
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

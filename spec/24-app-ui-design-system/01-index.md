@@ -69,7 +69,7 @@ Application-specific UI and design-system specifications for whatever project th
 
 _Auto-generated section — see `spec/24-app-ui-design-system/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-ADS-000: App UI / design-system conformance: Overview
+### AC-ADS-001: App design-system conformance: Index
 
 **Given** Scan app UI for raw colors and untokenized spacing; render Storybook (or equivalent) snapshot suite.  
 **When** Run the verification command shown below.  
@@ -83,4 +83,4 @@ npm run lint && npm run test
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

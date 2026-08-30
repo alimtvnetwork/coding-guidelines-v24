@@ -118,7 +118,7 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 
 _Auto-generated section — see `spec/05-split-db-architecture/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-SDB-000: Split-DB architecture conformance: Overview
+### AC-SDB-001: Split-DB architecture conformance: Index
 
 **Given** Inspect Root/App/Session DB lifecycle wiring and Casbin RBAC enforcement points.  
 **When** Run the verification command shown below.  
@@ -132,4 +132,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

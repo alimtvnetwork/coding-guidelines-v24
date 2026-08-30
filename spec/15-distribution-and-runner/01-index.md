@@ -117,7 +117,7 @@ This list is the contract. It MUST stay in sync with §"Distributable artifacts"
 
 _Auto-generated section — see `spec/15-distribution-and-runner/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-DIST-000: Distribution & runner conformance: Overview
+### AC-DIST-001: Distribution & runner conformance: Index
 
 **Given** Validate the install contract and runner contract against a clean machine fixture.  
 **When** Run the verification command shown below.  
@@ -131,4 +131,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

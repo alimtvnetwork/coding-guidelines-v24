@@ -114,7 +114,7 @@ This ensures configuration is always traceable, auditable, and version-aware.
 
 _Auto-generated section — see `spec/06-seedable-config-architecture/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CFG-000: Seedable-config conformance: Overview
+### AC-CFG-001: Seedable-config conformance: Index
 
 **Given** Diff the running config tree against `config.seed.json` after a SemVer-aware GORM merge.  
 **When** Run the verification command shown below.  
@@ -128,4 +128,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

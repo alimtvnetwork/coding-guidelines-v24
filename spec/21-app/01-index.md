@@ -60,7 +60,7 @@ _No app-specific specs added yet. Add specs as numbered files within this folder
 
 _Auto-generated section — see `spec/21-app/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-APP-000: App-level conformance: Overview
+### AC-APP-001: App-level conformance: Index
 
 **Given** Run the application's integration smoke suite.  
 **When** Run the verification command shown below.  
@@ -74,4 +74,4 @@ npm run test
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

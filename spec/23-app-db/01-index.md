@@ -70,7 +70,7 @@ Application-specific database (App DB) specifications for whatever project this 
 
 _Auto-generated section — see `spec/23-app-db/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-ADB-000: App DB conformance: Overview
+### AC-ADB-001: App-database conformance: Index
 
 **Given** Validate app database migrations against the schema-design rules.  
 **When** Run the verification command shown below.  
@@ -84,4 +84,4 @@ python3 linter-scripts/check-forbidden-strings.py
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

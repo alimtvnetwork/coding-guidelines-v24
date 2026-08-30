@@ -103,7 +103,7 @@ useCodeBlockEvents() ─── attaches all click/drag/keyboard listeners
 
 _Auto-generated section — see `spec/09-code-block-system/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-CB-000: Code-block system conformance: Overview
+### AC-CB-001: Code-block system conformance: Index
 
 **Given** Render fenced code blocks (incl. nested 4-backtick fences) and checklist blocks from the spec tree.  
 **When** Run the verification command shown below.  
@@ -117,4 +117,4 @@ npm run test
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_

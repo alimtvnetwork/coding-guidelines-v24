@@ -103,7 +103,7 @@ Throughout these documents:
 
 _Auto-generated section — see `spec/16-generic-release/97-acceptance-criteria.md` for the full criteria index._
 
-### AC-REL-000: Generic-release conformance: Overview
+### AC-REL-001: Generic-release conformance: Index
 
 **Given** Inspect a release artifact bundle for required assets and checksums.  
 **When** Run the verification command shown below.  
@@ -117,4 +117,4 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 **Expected:** exit 0. Any non-zero exit is a hard fail and blocks merge.
 
-_Verification section last updated: 2026-04-21_
+_Verification section last updated: 2026-08-30_
