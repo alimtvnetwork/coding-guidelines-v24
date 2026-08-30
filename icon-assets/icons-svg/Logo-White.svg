@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Coding Guideline logo, white monochrome">
+  <title>Coding Guideline — White</title>
+  <g fill="none" stroke="#FAFAF9" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M186 116 C150 116 150 150 150 186 C150 226 128 240 116 256 C128 272 150 286 150 326 C150 362 150 396 186 396" />
+    <path d="M326 116 C362 116 362 150 362 186 C362 226 384 240 396 256 C384 272 362 286 362 326 C362 362 362 396 326 396" />
+  </g>
+  <path d="M198 262 L240 308 L318 208" fill="none" stroke="#FAFAF9" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
