@@ -2,15 +2,20 @@ import sys
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 JOBS = {
     "Relative Path Check": [sys.executable, "linter-scripts/check-relative-paths.py"],
+    "Prompts Loaded Check": [sys.executable, "linter-scripts/check-prompts-loaded.py"],
+    "Readme Install Section Check": [sys.executable, "linter-scripts/check-readme-install-section.py"],
+    "Forbidden Strings Check": [sys.executable, "linter-scripts/check-forbidden-strings.py"],
+    "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
 }
 
 def run_job(job_name, cmd):
     print(f"🔄 Starting: {job_name}...")
     try:
-        # Use shell=True for windows if it's a simple script, but sys.executable + list is safer.
-        # Ensure UTF-8 output capture
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -30,7 +35,6 @@ def main():
     print(f"📋 Enqueued Jobs: {', '.join(JOBS.keys())}\n")
     
     results = []
-    # 2-3 workers as per instructions
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures = {executor.submit(run_job, name, cmd): name for name, cmd in JOBS.items()}
         for future in futures:

@@ -34,11 +34,11 @@
 | 1 | `.lovable/overview.md` | Project summary, tech stack, navigation map |
 | 2 | `.lovable/strictly-avoid.md` | **Hard prohibitions** — violating ANY of these is a critical failure |
 | 3 | `.lovable/user-preferences` | How the human expects you to communicate and behave |
-| 4 | `.lovable/memory/index.md` | Index of all institutional knowledge files |
+| 4 | `.lovable/memory/01-index.md` | Index of all institutional knowledge files |
 | 5 | `.lovable/plan.md` | Current active roadmap and priorities |
 | 6 | `.lovable/suggestions.md` | Pending improvement ideas (not yet approved) |
 
-### Step 1.2 — Read EVERY file referenced in `.lovable/memory/index.md`
+### Step 1.2 — Read EVERY file referenced in `.lovable/memory/01-index.md`
 
 - If the index lists 12 files, you read 12 files. No exceptions.
 - If there are subfolders, traverse them recursively.
@@ -175,7 +175,7 @@ When you learn something new during a session, follow this decision tree:
 New information discovered
 │
 ├─ Is it institutional knowledge (pattern, convention, decision)?
-│  └─ YES → Write to `.lovable/memory/` and update `.lovable/memory/index.md`
+│  └─ YES → Write to `.lovable/memory/` and update `.lovable/memory/01-index.md`
 │
 ├─ Is it something that must NEVER be done?
 │  └─ YES → Add to `.lovable/strictly-avoid.md`
@@ -189,7 +189,7 @@ New information discovered
 ### Critical Rules
 
 - The memory folder is `.lovable/memory/` — **never** `.lovable/memories/` (no trailing `s`).
-- When adding a new memory file, **always** update the index at `.lovable/memory/index.md`.
+- When adding a new memory file, **always** update the index at `.lovable/memory/01-index.md`.
 - When modifying an existing memory, preserve all other content — do not truncate or overwrite unrelated entries.
 
 ---
@@ -221,7 +221,7 @@ Then **stop and wait** for instructions. Do not suggest next steps. Do not ask e
 ## Usage Notes
 
 - **Full onboarding** — Give the entire prompt above for a fresh AI session
-- **Quick refresh** — For an AI that has already been onboarded, ask it to re-read only `.lovable/strictly-avoid.md` and `.lovable/memory/index.md`
+- **Quick refresh** — For an AI that has already been onboarded, ask it to re-read only `.lovable/strictly-avoid.md` and `.lovable/memory/01-index.md`
 - **Task-specific** — For a focused task, give Phase 1 + the relevant Phase 4 folder only
 - **"Read memory"** — Refers to executing this full onboarding protocol (see `.lovable/prompts/01-read-prompt.md`)
 

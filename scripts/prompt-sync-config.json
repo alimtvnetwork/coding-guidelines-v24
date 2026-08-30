@@ -1,86 +1,88 @@
 {
-  "repositoryUrl": "https://github.com/alimtvnetwork/prompt-architect-v2.git",
-  "outDir": ".lovable/prompts",
+  "variables": {
+    "SOURCE_PREFIX": ".lovable/prompts/01-prompts-category",
+    "TARGET_PREFIX": ".lovable/prompts"
+  },
   "mappings": [
     {
-      "source": "01-general-prompts/02-core-workflow/05-unified-ai-prompt-v4.md",
-      "target": "01-unified-ai-prompt-v4.md"
+      "source": "${SOURCE_PREFIX}/02-core-workflow/05-unified-ai-prompt-v4.md",
+      "target": "${TARGET_PREFIX}/01-unified-ai-prompt-v4.md"
     },
     {
-      "source": "01-general-prompts/02-core-workflow/01-next-steps.md",
-      "target": "02-next-steps.md"
+      "source": "${SOURCE_PREFIX}/02-core-workflow/01-next-steps.md",
+      "target": "${TARGET_PREFIX}/02-next-steps.md"
     },
     {
-      "source": "01-general-prompts/02-core-workflow/02-pending-tasks.md",
-      "target": "03-pending-tasks.md"
+      "source": "${SOURCE_PREFIX}/02-core-workflow/02-pending-tasks.md",
+      "target": "${TARGET_PREFIX}/03-pending-tasks.md"
     },
     {
-      "source": "01-general-prompts/12-old-plan-prompts/03-plan-steps.md",
-      "target": "04-plan-steps.md"
+      "source": "${SOURCE_PREFIX}/12-old-plan-prompts/03-plan-steps.md",
+      "target": "${TARGET_PREFIX}/04-plan-steps.md"
     },
     {
-      "source": "01-general-prompts/03-read-write/02-read-memory-enhanced.md",
-      "target": "05-read-memory-enhanced.md"
+      "source": "${SOURCE_PREFIX}/03-read-write/02-read-memory-enhanced.md",
+      "target": "${TARGET_PREFIX}/05-read-memory-enhanced.md"
     },
     {
-      "source": "01-general-prompts/03-read-write/01-write-antigravity.md",
-      "target": "06-write-antigravity.md"
+      "source": "${SOURCE_PREFIX}/03-read-write/01-write-antigravity.md",
+      "target": "${TARGET_PREFIX}/06-write-antigravity.md"
     },
     {
-      "source": "01-general-prompts/03-read-write/03-write-memory.md",
-      "target": "07-write-memory.md"
+      "source": "${SOURCE_PREFIX}/03-read-write/03-write-memory.md",
+      "target": "${TARGET_PREFIX}/07-write-memory.md"
     },
     {
-      "source": "01-general-prompts/05-coding-guidelines/01-plan-coding-guideline-audit.md",
-      "target": "08-plan-coding-guideline-audit.md"
+      "source": "${SOURCE_PREFIX}/05-coding-guidelines/01-plan-coding-guideline-audit.md",
+      "target": "${TARGET_PREFIX}/08-plan-coding-guideline-audit.md"
     },
     {
-      "source": "01-general-prompts/05-coding-guidelines/02-execute-coding-guideline-fix.md",
-      "target": "09-execute-coding-guideline-fix.md"
+      "source": "${SOURCE_PREFIX}/05-coding-guidelines/02-execute-coding-guideline-fix.md",
+      "target": "${TARGET_PREFIX}/09-execute-coding-guideline-fix.md"
     },
     {
-      "source": "01-general-prompts/14-execute/03-execute-batched-loop.md",
-      "target": "10-execute-batched-loop.md"
+      "source": "${SOURCE_PREFIX}/14-execute/03-execute-batched-loop.md",
+      "target": "${TARGET_PREFIX}/10-execute-batched-loop.md"
     },
     {
-      "source": "01-general-prompts/13-plan-audit/01-inventory-pending-tasks.md",
-      "target": "11-inventory-pending-tasks.md"
+      "source": "${SOURCE_PREFIX}/13-plan-audit/01-inventory-pending-tasks.md",
+      "target": "${TARGET_PREFIX}/11-inventory-pending-tasks.md"
     },
     {
-      "source": "01-general-prompts/13-plan-audit/04-fix-spec-from-audit.md",
-      "target": "12-fix-subtask-naming-convention.md"
+      "source": "${SOURCE_PREFIX}/13-plan-audit/04-fix-spec-from-audit.md",
+      "target": "${TARGET_PREFIX}/12-fix-subtask-naming-convention.md"
     },
     {
-      "source": "01-general-prompts/16-ci-cd/01-ci-cd-fix.md",
-      "target": "13-ci-cd-fix.md"
+      "source": "${SOURCE_PREFIX}/17-ci-cd/01-ci-cd-fix.md",
+      "target": "${TARGET_PREFIX}/13-ci-cd-fix.md"
     },
     {
-      "source": "01-general-prompts/16-ci-cd/02-cicd-run-ps1.md",
-      "target": "14-cicd-run-ps1.md"
+      "source": "${SOURCE_PREFIX}/17-ci-cd/02-cicd-run-ps1.md",
+      "target": "${TARGET_PREFIX}/14-cicd-run-ps1.md"
     },
     {
-      "source": "01-general-prompts/09-commit-and-multi-agent-code-fix/03-commit-fix-v2.md",
-      "target": "15-commit-fix.md"
+      "source": "${SOURCE_PREFIX}/09-commit-and-multi-agent-code-fix/03-commit-fix-v2.md",
+      "target": "${TARGET_PREFIX}/15-commit-fix.md"
     },
     {
-      "source": "01-general-prompts/09-commit-and-multi-agent-code-fix/03-commit-fix-v2.md",
-      "target": "16-commit-fix-v2.md"
+      "source": "${SOURCE_PREFIX}/09-commit-and-multi-agent-code-fix/03-commit-fix-v2.md",
+      "target": "${TARGET_PREFIX}/16-commit-fix-v2.md"
     },
     {
-      "source": "01-general-prompts/09-commit-and-multi-agent-code-fix/07-clean-artifacts-and-git-history.md",
-      "target": "17-clean-artifacts-and-git-history.md"
+      "source": "${SOURCE_PREFIX}/09-commit-and-multi-agent-code-fix/07-clean-artifacts-and-git-history.md",
+      "target": "${TARGET_PREFIX}/17-clean-artifacts-and-git-history.md"
     },
     {
-      "source": "01-general-prompts/17-release-management/04-release.md",
-      "target": "18-release.md"
+      "source": "${SOURCE_PREFIX}/18-release-management/04-release.md",
+      "target": "${TARGET_PREFIX}/18-release.md"
     },
     {
-      "source": "01-general-prompts/13-plan-audit/02-plan-spec-steps-v2.md",
-      "target": "19-plan-spec-steps-v2.md"
+      "source": "${SOURCE_PREFIX}/13-plan-audit/02-plan-spec-steps-v2.md",
+      "target": "${TARGET_PREFIX}/19-plan-spec-steps-v2.md"
     },
     {
-      "source": "01-general-prompts/13-plan-audit/03-audit-app-spec.md",
-      "target": "20-audit-app-spec.md"
+      "source": "${SOURCE_PREFIX}/13-plan-audit/03-audit-app-spec.md",
+      "target": "${TARGET_PREFIX}/20-audit-app-spec.md"
     }
   ]
 }

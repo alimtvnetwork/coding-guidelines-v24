@@ -1,4 +1,8 @@
-# Instruction (must follow): Execute Coding Guideline Fixes
+# Guideline Fix Execution & Linter Remediation — Workflow (must follow)
+
+
+> **Prompt Version:** 2.1.0
+> **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 /goal Apply concrete, surgical fixes for all coding guideline violations listed in the pending tasks. Strictly adhere to all style rules, boolean principles, function size limits (< 8 lines), and type-safety standards without introducing regressions.
 
@@ -21,9 +25,7 @@ Context & References:
   - Functions must be strictly < 8 lines. (NON-NEGOTIABLE)
   - Source files must be ≤ 80 lines.
   - No code mutation – only apply fixes, never introduce new bugs.
-  - **ANTI-BYPASS RULE:** NEVER edit configuration files (like `.golangci.yml`, `eslint.config.js`) to disable rules or bypass CI errors. You must fix the underlying code.
-  - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested `if`s, no magic values.
-  - **CRITICAL BOOLEAN EVALUATION:** NEVER evaluate booleans explicitly against `true` (e.g. `== true` or `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly: `if hasMatch { ... }`. Do NOT hallucinate explicit `== true` checks.
+  - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested if statements, no magic values.
   - Style: Ensure a blank line before every `return` statement.
   - Golang Single Return & Wrapped Booleans: Strictly return a single parameter (bundle multiple returns into a struct). No raw booleans returned in Go. Return a single Result struct (bundling Data, AppError, and Status together) with two flags (`IsSuccess` and `IsFailed`) managed by a constructor (`NewSuccess`/`NewFailure`).
   - Example usage (Note the explicit variable name `paymentStatus`, no short names like `res`):
@@ -36,12 +38,21 @@ Context & References:
     }
     ```
 
-### MUST FOLLOW NON-NEGOTIABLE
+#
+
+## STRICT AVOIDANCE: Never Disable CI/CD
+
+> [!CAUTION]
+> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.** 
+> Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
+
+## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
 
 ## Checklist (execute phase)
 
+0. Automated Pre-Pass: Run `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <target-dir>` to automatically clean up return new lines (R13-R16) and remove explicit `== true` checks.
 1. Read pending tasks from the `.lovable/plans/subtasks/01-coding-guideline-fixes/` folder.
 2. For each task:
    - Locate the affected source file.
@@ -51,15 +62,12 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
    - Ensure the refactored function body is ≤ 8 lines; extract sub‑logic to private helpers if needed.
    - Run the project's test suite and the Go race detector (`go test -race ./...`).
    - If tests pass, stage the changes.
-3. Pre-Commit CI/CD Drift Prevention:
-   - **Go Generate Sync:** If you modified any Go constants, enums, or stringers, you MUST run `cd <relevant_dir> && go generate ./...` (e.g. `cd gitmap && go generate ./...`) and include the generated files to prevent `auto_fix_generate_drift` CI failures.
-4. Commit each fix using the CI/CD fix workflow:
+3. Commit each fix using the CI/CD fix workflow:
    - Run `git add <modified files>`.
    - Commit with message `fix(coding-guidelines): resolve <issue‑id>`.
-   - If any file changed, bump a minor version tag (`git tag -a vX.Y.Z -m "minor release"`).
-   - Push commits and tags (`git push origin main && git push origin --tags`).
-5. Update the pending task file to mark it as completed.
-6. If no pending tasks remain, output a summary of all fixes applied.
+   - Push commits to remote branch (`git push origin main`). No automatic version bumps unless explicitly commanded by user.
+4. Update the pending task file to mark it as completed.
+5. If no pending tasks remain, output a summary of all fixes applied.
 
 ### Non‑Hallucination Policy
 
@@ -100,6 +108,7 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 - [ ] Self-loop continuously until all the code issues are listed out in tasks and pending tasks.
 - [ ] Describe all issues and files that need to be tested against for each file.
 - [ ] Make a detailed plan/task for each file.
+- [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 ---
 
@@ -107,27 +116,12 @@ slug: execute-coding-guideline-fix
 status: active
 ---
 
-## Critical Fixes & RCA Reminders
 
-1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
-2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.
+## The 4-Part RCA Requirement (Mandatory Memory File)
 
+Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/XX-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
 
----
-
-## 🚨 MANDATORY END OF TURN SUMMARY
-
-At the very end of your response, you MUST provide a detailed summary of all changes made during your turn. This summary is critically important.
-
-You must list:
-1. **The Exact Files Changed:** (e.g., `src/main.go`, `.golangci.yml`)
-2. **What was Changed:** (e.g., "Replaced explicit `== true` check with implicit boolean", "Added `apperror.New.Error` wrapping")
-3. **WHY it was Changed:** (e.g., "To comply with Rule P9 of the Boolean guidelines which forbids explicit true checks")
-
-## 🚨 GLOBAL LINTER & CI/CD RULES
-
-1. **NO CI/CD BYPASSING:** NEVER disable any CI/CD checks, linter rules (e.g., in `.golangci.yml`, `.eslintrc`), or tests to force a passing build. STRICTLY AVOID modifying configuration files to bypass errors. You must fix the underlying code.
-2. **LINTER ENFORCEMENT - EXPLICIT TRUE:** You must actively enforce and implement linter rules that ban explicit true checks (e.g., `x == true` or `y === true`). Booleans must be evaluated implicitly.
-3. **LINTER ENFORCEMENT - MIXED POLARITY:** You must actively enforce and implement linter rules that ban combinations of positive and negative conditions in `if`/`else` statements (e.g., `if isReady && !hasError`). This mixed polarity must be flagged by the linter and refactored into clearly named intermediate variables (e.g., `isSafeToProceed := isReady && !hasError`).
-
-4. **NO VERSION MODIFICATIONS:** NEVER manually edit `version.json`, `package.json` version numbers, or changelog dates. These are managed strictly by synchronization repositories and release scripts. If you need repository info, check the `.git` folder.
+1. **Why it happened:** The high-level business, logical, or architectural breakdown of the failure.
+2. **How it happened:** The technical execution flow that triggered the bug.
+3. **Root Cause:** The exact file, line, and dependency responsible for the failure.
+4. **Code Fix:** The exact code snippets showing what needed to be changed to fix the root cause.

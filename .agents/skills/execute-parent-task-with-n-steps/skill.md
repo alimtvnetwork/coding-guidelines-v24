@@ -16,7 +16,7 @@ N = is the number of steps that the agents will perform
 
 - [ ] /goal First N/2 steps will be given for spec writing for AI as given and then breaking down into parts as instruction as subtasks for N/2 steps.
 - [ ] /goal second N/2 steps will be given execute the created tasks with following coding guidelines and error manage properly.
-- [ ] /learn Ingest `.lovable/memory/00-index.md`, `.lovable/strictly-avoid.md`, `spec/02-coding-guidelines/`, and `spec/03-error-manage/`, `.lovable/coding-guidelines/coding-guidelines.md` before taking action and also create agent rules in the repo if required to or missing from rules set of agent memory.
+- [ ] /learn Ingest `.lovable/memory/01-index.md`, `.lovable/strictly-avoid.md`, `spec/02-coding-guidelines/`, and `spec/03-error-manage/`, `.lovable/coding-guidelines/coding-guidelines.md` before taking action and also create agent rules in the repo if required to or missing from rules set of agent memory.
 - [ ] /learn `.lovable/coding-guidelines/coding-guidelines.md` and it is must and /goal apply the guidelines in coding every aspect.
 
 ## 1. Ruthless Orchestration & Insult Protocol
@@ -34,10 +34,10 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 - What to write: Break down the parent task into a detailed architectural plan, code review guides, and embedded coding guidelines.
 - Where to save it: Save this master plan into `.lovable/plans/pending/XX-<slug>.md`. Do not hallucinate folders.
 - **Strict Relative Git Paths Mandate (TOTAL BAN on Absolute Paths / `file:///` URIs):**
-  When breaking down tasks into subtasks (`.lovable/plans/subtasks/XX-<slug>/*.md`), writing specs, updating memory logs (`.lovable/memory/issues/`), or citing guidelines, ALL file paths and markdown links MUST be **strictly relative to the git repository root**. NEVER write absolute paths (`D:\...`, `C:\...`, `/home/...`) or absolute file URIs (`file:///...`) into any committed or created files.
+  When breaking down tasks into subtasks (`.lovable/plans/subtasks/XX-<slug>/*.md`), writing specs, updating memory logs (`.lovable/memory/issues/`), or citing guidelines, ALL file paths and markdown links MUST be **strictly relative to the git repository root**. NEVER write absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`) into any committed or created files.
   - ❌ **BAD (Absolute path / file URI):**
-    `- [SSH Commands](file:///d:/work/gitmap/.lovable/spec/commands/01-ssh-commands.md)`
-    `- [Target File](file:///d:/work/gitmap/gitmap/cmd/ssh_login_install_cmd.go)`
+    `- [SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md)`
+    `- [Target File](file:///absolute/path/to/gitmap/cmd/ssh_login_install_cmd.go)`
   - ✅ **GOOD (Strict relative Git path):**
     `- [SSH Commands](.lovable/spec/commands/01-ssh-commands.md)`
     `- [Target File](gitmap/cmd/ssh_login_install_cmd.go)`
@@ -50,22 +50,22 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 
 ## AI Fix Scripts Memory (Reusable Tooling)
 
-- [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/index.md` to check if a helper script already exists before writing any new temporary code.
+- [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
 - [ ] **Native File Manipulator:** If you need to perform mass file renaming, `.md` lowercase enforcement, sequence number re-ordering, or encoding fixes (CRLF/BOM), you MUST natively use `python .lovable/ai-fix-scripts/01-file-manipulator.py <command>` rather than writing a new script from scratch.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
-- [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
+- [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
 - [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
-- [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/index.md` was updated.
+- [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] Staged files sanitized of artifact zips and temporary scratch files.
-- [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`D:\...`, `C:\...`) or `file:///` URIs.
+- [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] /learn and apply as a /goal  `.lovable/coding-guidelines/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 - [ ] Error Manage Checklist: I have fully read and enforced the error management files at `spec/03-error-manage/`. I understand which files to follow (architecture, response envelopes) and how to follow them (never swallow errors, always wrap with context).
@@ -94,8 +94,8 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 
 ## 4. AI Fix Scripts Memory
 
-- [ ] /goal All helper scripts were written to `.lovable/ai-fix-scripts/`, documented in its `lovable/ai-fix-scripts/index.md`, and committed to Git for reuse.
-- [ ] `lovable/ai-fix-scripts/index.md` Should contain details tag, sequence of the script naming and why it is there and what it should do.
+- [ ] /goal All helper scripts were written to `.lovable/ai-fix-scripts/`, documented in its `lovable/ai-fix-scripts/01-index.md`, and committed to Git for reuse.
+- [ ] `lovable/ai-fix-scripts/01-index.md` Should contain details tag, sequence of the script naming and why it is there and what it should do.
 - [ ] Should first scan /learn all from that index.md file what is exist and can be reused.
 
 ## 5. Anti-Hallucination & Blast Radius Checklist (Mandatory for Every Turn)
@@ -115,9 +115,3 @@ You MUST NOT bump versions, update changelogs, or cut a release at the end of th
 ## MUST FOLLOW NON-NEGOTIABLE
 
 Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
-
-
-
-
-

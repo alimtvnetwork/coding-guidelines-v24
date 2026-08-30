@@ -283,7 +283,7 @@ Service layer NEVER prints to terminal. Only the boundary layer outputs.
 
 ## Integration with validate-guidelines.go
 
-`ash
+`bash
 
 # Full validation including AppError return type enforcement
 

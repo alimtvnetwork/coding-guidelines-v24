@@ -1,5 +1,9 @@
-# Instruction (must follow): Commit Fix
+# Atomic Commit Organization & Working Tree Sanitization — Workflow (must follow)
 
+
+
+> **Prompt Version:** 2.1.0
+> **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ## No Automatic Releases (Strict Policy)
 
@@ -79,10 +83,10 @@ You MUST follow the project's strict coding guidelines. These files are located 
 
 ### 5. Consolidated Coding Standards & Temp Scripts (Non-Negotiable)
 
-- [ ] Temp Script Sandboxing: AI Fix Scripts (Reusable Tools): Before creating a helper script, you MUST check `.lovable/ai-fix-scripts/index.md` to reuse existing tools. If you generate a new script, you MUST write it to `.lovable/ai-fix-scripts/`, update `index.md` with its explanation, ensure `index.md` is linked in `what-to-read.md`, and commit the script.
+- [ ] Temp Script Sandboxing: AI Fix Scripts (Reusable Tools): Before creating a helper script, you MUST check `.lovable/ai-fix-scripts/01-index.md` to reuse existing tools. If you generate a new script, you MUST write it to `.lovable/ai-fix-scripts/`, update `index.md` with its explanation, ensure `index.md` is linked in `what-to-read.md`, and commit the script.
 - [ ] Consolidated Coding Guidelines: I have fully read and strictly enforced the master coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] Error Manage Checklist: I have fully read and enforced the error management files at `spec/03-error-manage/`. (Never swallow errors, always wrap with context, use domain-specific AppError/AppException).
-- [ ] Boolean Examples & Fixations: All boolean variables MUST begin with `is`, `has`, `can`, or `should` (e.g., `isReady`, `hasData`). NEVER use negative booleans (e.g., `isNotReady`, `disableCache`). NEVER invert success checks (e.g., `!response.isSuccess` is banned; use `response.isFail`).
+- [ ] Boolean Examples & Fixations: All boolean variables MUST begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc (e. NEVER use explicit true/false comparisons (e.g., `if isReady == true` is FORBIDDEN, use `if isReady`).g., `isReady`, `hasData`). NEVER use negative booleans (e.g., `isNotReady`, `disableCache`). NEVER invert success checks (e.g., `!response.isSuccess` is banned; use `response.isFail`).
 - [ ] Anti-Garbage Naming (Non-Negotiable): I have strictly verified that absolutely NO generic garbage variable names (e.g., `comp_100.go`, `temp`, `data`, `obj`, `Input100`, `TestHandleComp100`) were written. All names are highly semantic and domain-specific.
 - [ ] Semantic Tests: All unit test names are strictly semantic and behavior-driven (e.g., `TestUpdateUser_RejectsInvalidEmail`).
 - [ ] Function Size: No function exceeds 15 lines. Long arguments are split across lines (max 100 chars).
@@ -107,6 +111,26 @@ To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` d
 
 
 
+
+
+## STRICT AVOIDANCE: Never Disable CI/CD
+
+> [!CAUTION]
+> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.** 
+> Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
+
+## Anti-Hallucination, Micro-Tasking, & Self-Looping
+
+> [!CAUTION]
+> **CRITICAL RULE: DO NOT ATTEMPT TO READ, PLAN, AND EXECUTE EVERYTHING AT ONCE.**
+> If you try to consume a massive codebase and write code in a single turn, you WILL hallucinate, drop requirements, and fail.
+
+To survive massive checklists and complex codebases, you MUST operate using these three principles:
+
+1. **Phase 1: Read & Understand (Isolated Loop):** Your very first action must be purely exploratory. Do NOT write code. Break down the task, read the specific files, trace the dependencies, and understand the architectural boundary. Once you understand the scope, end your turn and self-loop to begin execution.
+2. **Phase 2: Bounded Micro-Tasking (Sequential Self-Looping):** Never attempt to execute the entire checklist in one response. Treat each checklist section or file as a strict, isolated boundary. Execute *only* the first small portion, verify it, end your turn, and self-loop to process the next portion. 
+3. **Phase 3: Multi-Agent Parallelization:** If tasks are independent, you MUST spawn dedicated sub-agents to handle them concurrently. Give each sub-agent an extremely small, strictly defined bounding box (e.g., "Only edit File X"). Never give a sub-agent a generic or multi-file task.
+
 ## Core Rules & Non-Negotiable Checklist for AI (Must Verify Before Completing Task)
 
 Before finalizing any code modification, you MUST manually verify the following:
@@ -118,6 +142,10 @@ Before finalizing any code modification, you MUST manually verify the following:
 - [ ] Naming & Casing (R1, R2): PascalCase everywhere. Acronyms (Id, Json, Url) are Pascal case, never all-caps (e.g., `UserId`, not `UserID`).
 - [ ] Blank Lines (R13-R20): One blank line before every `return`/`throw`. One blank line after closing `}`. Never two blank lines in a row.
 
+## Language-Specific Requirements
+
+- [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
+
 ## End of Tunnel Release & Version Bump (Mandatory check-list to update the results)
 
 When EVERYTHING is completely finished and fixed (at the very end of the tunnel), you MUST trigger a release.
@@ -128,31 +156,4 @@ When EVERYTHING is completely finished and fixed (at the very end of the tunnel)
 - [ ] If you do not know how to cut a release for this specific repository, or if `version.json` is missing/unclear, you must either search the repository for release instructions or explicitly ask the user for help. Do not guess.
 - [ ] You MUST strictly exclude all test files (e.g., `*test*`, `*.spec.*`) from version scanning and modification, as they contain mock data.
 - [ ] You must create and maintain `.lovable/memory/release-architecture-map.md` documenting exactly how releases work in the repository. Ensure it is enqueued in `what-to-read.md` and linked in the root `readme.md`.
-
-
-
-
-## Critical Fixes & RCA Reminders
-
-1. **Explicit == true Ban:** NEVER explicitly evaluate boolean variables against 	rue (== true or === true). A previous AI hallucinated this behavior to avoid the ! operator. Positive booleans MUST ALWAYS be evaluated implicitly: if hasMatch { ... }.
-2. **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run go generate ./... in the relevant directory (e.g., cd gitmap && go generate ./...) and commit the resulting generated files. Failing to do this causes uto_fix_generate_drift CI errors.
-
-
----
-
-## 🚨 MANDATORY END OF TURN SUMMARY
-
-At the very end of your response, you MUST provide a detailed summary of all changes made during your turn. This summary is critically important.
-
-You must list:
-1. **The Exact Files Changed:** (e.g., `src/main.go`, `.golangci.yml`)
-2. **What was Changed:** (e.g., "Replaced explicit `== true` check with implicit boolean", "Added `apperror.New.Error` wrapping")
-3. **WHY it was Changed:** (e.g., "To comply with Rule P9 of the Boolean guidelines which forbids explicit true checks")
-
-## 🚨 GLOBAL LINTER & CI/CD RULES
-
-1. **NO CI/CD BYPASSING:** NEVER disable any CI/CD checks, linter rules (e.g., in `.golangci.yml`, `.eslintrc`), or tests to force a passing build. STRICTLY AVOID modifying configuration files to bypass errors. You must fix the underlying code.
-2. **LINTER ENFORCEMENT - EXPLICIT TRUE:** You must actively enforce and implement linter rules that ban explicit true checks (e.g., `x == true` or `y === true`). Booleans must be evaluated implicitly.
-3. **LINTER ENFORCEMENT - MIXED POLARITY:** You must actively enforce and implement linter rules that ban combinations of positive and negative conditions in `if`/`else` statements (e.g., `if isReady && !hasError`). This mixed polarity must be flagged by the linter and refactored into clearly named intermediate variables (e.g., `isSafeToProceed := isReady && !hasError`).
-
-4. **NO VERSION MODIFICATIONS:** NEVER manually edit `version.json`, `package.json` version numbers, or changelog dates. These are managed strictly by synchronization repositories and release scripts. If you need repository info, check the `.git` folder.
+- [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.

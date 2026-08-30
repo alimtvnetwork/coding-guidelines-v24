@@ -2069,11 +2069,11 @@ Before marking any task complete:
 >
 > When generating plans (`.lovable/plans/pending/`), subtasks (`.lovable/plans/subtasks/`), memory logs (`.lovable/memory/issues/`), specs, code comments, or citations:
 > 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/spec/commands/01-ssh-commands.md`, `cmd/main.go`).
-> 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`D:\...`, `C:\...`, `/home/...`) or absolute file URIs (`file:///d:/...`, `file:///C:/...`) into ANY file.
+> 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 > 
 > **Examples:**
-> - ❌ **BAD:** `[SSH Commands](file:///d:/work/gitmap/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
-> - ❌ **BAD:** `Target File: D:\work\gitmap\cmd\login.go`
+> - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
+> - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
 > - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
 > - ✅ **GOOD:** `Target File: cmd/login.go`
 
@@ -2091,5 +2091,3 @@ Every file across the codebase, documentation, and specs MUST strictly enforce t
 6. **Markdown Heading Spacing (H1–H6: `#` through `######`):**
    - Exactly **ONE blank line BEFORE** every markdown heading (EXCEPT when the heading is on line 1 of the file — line 1 has NO blank line before it).
    - Exactly **ONE blank line AFTER** every markdown heading.
-
-

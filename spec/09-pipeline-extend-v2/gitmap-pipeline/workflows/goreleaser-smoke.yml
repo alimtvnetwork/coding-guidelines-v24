@@ -545,7 +545,7 @@ jobs:
           & git commit -q -m 'fixture: initial commit for cfr cg smoke'
           Pop-Location
           & git clone -q --bare $src $bare
-          # Windows file URL: forward slashes, drive-letter form file:///C:/...
+          # Windows file URL: forward slashes, drive-letter form file:///absolute/path/to/
           $barePosix = ($bare -replace '\\','/')
           $repoUrl = "file:///$barePosix"
           "repo_url=$repoUrl"       | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8

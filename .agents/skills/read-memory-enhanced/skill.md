@@ -51,8 +51,8 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 | 3 | `.lovable/user-preferences` | How the human wants you to behave |
 | 4 | `.lovable/what-to-read.md` | Authoritative reading order for this project. If it exists, it overrides the generic order in this prompt. Read it first and follow it. |
 | 5 | `.lovable/prompt.md` + `.lovable/prompts/` | Canonical prompts (Read, Plan, etc.). "Read memory" = run this prompt. |
-| 6 | `.lovable/memory/index.md` | Index of institutional knowledge. Then read every file it references, recursively. |
-| 7 | `.lovable/plans/index.md` | Roll-up of all plans (pending + completed + subtasks). Read this before touching individual plan files. |
+| 6 | `.lovable/memory/01-index.md` | Index of institutional knowledge. Then read every file it references, recursively. |
+| 7 | `.lovable/plans/01-index.md` | Roll-up of all plans (pending + completed + subtasks). Read this before touching individual plan files. |
 | 8 | `.lovable/plans/pending/` | Active plans, `XX-<slug>.md` |
 | 9 | `.lovable/plans/completed/` | Recent history, skim only |
 | 10 | `.lovable/plans/subtasks/XX-<slug>/` | Depth files linked from a parent plan |
@@ -67,8 +67,8 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 ### 1.2 The two index files
 
 Two indexes decide what you read next. Treat them as required entry points, not as summaries:
-- `.lovable/memory/index.md` lists every institutional-knowledge file. If it points at 12 files, you read 12 files.
-- `.lovable/plans/index.md` lists every plan (pending, completed, subtasks) with its slug, status, and one-line intent. Use it to pick which plan files to open in full. If it is missing, create it as part of the next code change (see Memory Update Protocol).
+- `.lovable/memory/01-index.md` lists every institutional-knowledge file. If it points at 12 files, you read 12 files.
+- `.lovable/plans/01-index.md` lists every plan (pending, completed, subtasks) with its slug, status, and one-line intent. Use it to pick which plan files to open in full. If it is missing, create it as part of the next code change (see Memory Update Protocol).
 
 ### 1.3 Self-check (internal, before Phase 2)
 
@@ -134,7 +134,7 @@ Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guideli
 ```
 New info discovered
 ├─ Institutional knowledge (pattern / convention / decision)?
-│ YES → .lovable/memory/<slug>.md + update .lovable/memory/index.md
+│ YES → .lovable/memory/<slug>.md + update .lovable/memory/01-index.md
 ├─ Must never happen again?
 │ YES → .lovable/strictly-avoid.md
 ├─ Idea, not yet approved?
@@ -144,7 +144,7 @@ New info discovered
 ├─ Bug / regression?
 │ YES → .lovable/issues/XX-<slug>.md (or .lovable/cicd-issues/ if CI/CD)
 ├─ New or changed plan?
-│ YES → .lovable/plans/pending/XX-<slug>.md + update .lovable/plans/index.md
+│ YES → .lovable/plans/pending/XX-<slug>.md + update .lovable/plans/01-index.md
 ├─ Ambiguity / unclear requirement blocking progress?
 │ YES → .lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md
 ├─ User just answered a previously-open ambiguity?
@@ -154,8 +154,8 @@ New info discovered
 ```
 Hard rules:
 - Folder is `.lovable/memory/`, never `memories/`.
-- Adding a memory file always updates `.lovable/memory/index.md`.
-- Adding, moving, or completing a plan always updates `.lovable/plans/index.md`.
+- Adding a memory file always updates `.lovable/memory/01-index.md`.
+- Adding, moving, or completing a plan always updates `.lovable/plans/01-index.md`.
 - Ambiguity folders: `01-new-ambiguity/` for open, `02-ambiguity-resolved/` for answered. On answer, MOVE the file (never copy) so it exists in exactly one place. Every resolved file carries a `## Resolution` section.
 - Never guess past an open ambiguity. If one exists and is relevant to the current task, stop and surface it before doing work.
 - Editing existing memory or index files preserves unrelated content. No silent truncation.
@@ -170,7 +170,7 @@ After Phases 1-3, reply exactly:
 - Memory files read: [X]
 - Consolidated guidelines read: [Y]
 - Spec authoring files read: [Z]
-- Pending plans: [N] (from .lovable/plans/index.md)
+- Pending plans: [N] (from .lovable/plans/01-index.md)
 - CI/CD issues absorbed: [M] (from .lovable/cicd-issues/)
 - Open ambiguities: [K] (from .lovable/ambiguous-questions/01-new-ambiguity/)
 - Resolved ambiguities on file: [R] (from .lovable/ambiguous-questions/02-ambiguity-resolved/)
@@ -190,8 +190,8 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 - [ ] Read `.lovable/what-to-read.md` first if it exists, followed its order
 - [ ] Walked `.lovable/` recursively, no folder skipped silently
-- [ ] Read `.lovable/memory/index.md` and every file it points at
-- [ ] Read `.lovable/plans/index.md` and every file in `pending/`
+- [ ] Read `.lovable/memory/01-index.md` and every file it points at
+- [ ] Read `.lovable/plans/01-index.md` and every file in `pending/`
 - [ ] Skimmed `.lovable/plans/completed/` for recent history
 - [ ] Read every file in `.lovable/spec/commands/`
 - [ ] Read every file in `.lovable/issues/` and `.lovable/cicd-issues/`

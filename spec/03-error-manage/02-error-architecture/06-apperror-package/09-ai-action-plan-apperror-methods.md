@@ -1,15 +1,15 @@
 # Action Plan for AI: Implementing Contact, Errors, and Msg in AppError
 
-> **Target:** pperror package (e.g., gitlab.com/auk-go/core/apperror)
+> **Target:** Apperror package (e.g., gitlab.com/auk-go/core/apperror)
 > **Goal:** Extend AppError with new fields and fluent setters as requested by the spec.
 
-When an AI agent is instructed to implement the new AppError methods (contact, rrors, msg), the agent MUST follow these exact steps to ensure spec compliance.
+When an AI agent is instructed to implement the new AppError methods (contact, errors, msg), the agent MUST follow these exact steps to ensure spec compliance.
 
 ---
 
 ## 1. Modify the AppError Struct
 
-**File to edit:** pperror.go (or wherever AppError is defined)
+**File to edit:** Apperror.go (or wherever AppError is defined)
 
 Add the new fields to the AppError struct, matching the JSON tags required by the spec:
 
@@ -31,7 +31,7 @@ type AppError struct {
 
 ## 2. Implement the Fluent Setters
 
-**File to edit:** pperror_setters.go (or append to pperror.go)
+**File to edit:** Apperror_setters.go (or append to Apperror.go)
 
 Create the fluent setter methods for AppError:
 
@@ -69,14 +69,14 @@ func (e *AppError) WithMsg(msg string) *AppError {
 
 ## 3. Update Display Methods (String, FullString)
 
-**File to edit:** pperror_display.go (or equivalent stringification file)
+**File to edit:** Apperror_display.go (or equivalent stringification file)
 
 Ensure that Contact and Errors are rendered when the error is printed to logs via FullString().
 
 **Checklist for FullString() / ToClipboard():**
 
-- [ ] If .Contact != "", append it to the output string (e.g., `fmt`.Sprintf(" Contact: %s", e.Contact)).
-- [ ] If len(e.Errors) > 0, iterate over .Errors and print each one, indenting them under the main error.
+- [ ] If e.Contact != "", append it to the output string (e.g., `fmt`.Sprintf(" Contact: %s", e.Contact)).
+- [ ] If len(e.Errors) > 0, iterate over e.Errors and print each one, indenting them under the main error.
 
 *Example stringification update:*
 ```go
@@ -93,18 +93,18 @@ if len(e.Errors) > 0 {
 
 ## 4. Run Unit Tests & Linting
 
-- Write unit tests in pperror_test.go to ensure chaining WithContact("foo").WithMsg("bar") works.
+- Write unit tests in Apperror_test.go to ensure chaining WithContact("foo").WithMsg("bar") works.
 - Verify json.Marshal(appErr) correctly includes "Contact" and "Errors" if set, and omits them if empty.
 - Run go run linter-scripts/validate-guidelines.go --path . to ensure no CODE-RED violations were introduced.
 
-# Action Plan for AI: Implementing pperror.New Namespace
+# Action Plan for AI: Implementing Apperror.New Namespace
 
 > **Goal:** Implement the new creator struct namespace to elegantly wrap errors and allow early 
 il returns.
 
 ## 1. Create the creator struct and New variable
 
-**File to edit:** pperror_creator.go (new file) or pperror.go
+**File to edit:** Apperror_creator.go (new file) or Apperror.go
 
 ```go
 type creator struct{}
@@ -115,9 +115,9 @@ var New = creator{}
 
 ## 2. Implement the Creator Methods
 
-**File to edit:** pperror_creator.go
+**File to edit:** Apperror_creator.go
 
-You MUST implement the early if err == nil { return nil } check for all methods that take an rror.
+You MUST implement the early if err == nil { return nil } check for all methods that take an error.
 
 ```go
 // Error wraps an existing error. If no error, nothing is created.

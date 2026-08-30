@@ -6,7 +6,7 @@ Whenever an AI agent generates code, creates plans (`.lovable/plans/pending/`), 
 
 ### 1. Total Ban on Absolute Paths & `file:///` URIs in Repository Files
 
-- **TOTAL BAN:** NEVER write absolute filesystem paths (e.g. `D:\work\project\...`, `C:\Users\...`, `/home/...`) or absolute URI schemes (`file:///d:/work/...`, `file:///C:/...`) inside markdown plans, subtask files, code comments, citations, or committed repository files.
+- **TOTAL BAN:** NEVER write absolute filesystem paths (e.g. `/absolute/path/to/...`, `C:\Users\...`, `/home/...`) or absolute URI schemes (`file:///absolute/path/to/work/...`, `file:///absolute/path/to/`) inside markdown plans, subtask files, code comments, citations, or committed repository files.
 - **PORTABILITY REQUIREMENT:** All paths and markdown links within repository files MUST be relative to the git root so they work seamlessly across Windows, Linux, macOS, and CI/CD pipelines.
 
 ### 2. Concrete Examples
@@ -14,9 +14,9 @@ Whenever an AI agent generates code, creates plans (`.lovable/plans/pending/`), 
 #### ❌ INVALID (Absolute Path / File URI):
 
 ```markdown
-- [SSH Commands](file:///d:/.../.lovable/spec/commands/01-ssh-commands.md) — Why: Defines required behavior.
-- [App Error Docs](file:///d:/.../spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
-- [gitmap/cmd/ssh_login_install_cmd.go](file:///d:/.../gitmap/cmd/ssh_login_install_cmd.go) — Why: Target file.
+- [SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines required behavior.
+- [App Error Docs](file:///absolute/path/to/spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
+- [gitmap/cmd/ssh_login_install_cmd.go](file:///absolute/path/to/gitmap/cmd/ssh_login_install_cmd.go) — Why: Target file.
 ```
 
 #### ✅ VALID (Strict Relative Git Path):

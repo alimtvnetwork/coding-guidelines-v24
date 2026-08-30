@@ -163,5 +163,4 @@ Allowed work:
 **Why:** Version information is strictly managed by its own synchronization scripts and source-of-truth repositories. Manual AI edits cause synchronization drift and pipeline failures.
 
 ### Strict Relative Git Paths (Zero Tolerance)
-Absolute filesystem paths (e.g., \D:\work\project\...\, \C:\Users\...\, \/home/...\) and absolute file URI schemes (\ile:///d:/...\, \ile:///C:/...\) are **strictly forbidden** inside committed repository files, specifications, markdown plans, subtask files, code comments, and citations. All paths must be relative to the git repository root.
-
+Absolute filesystem paths (e.g., \/absolute/path/to/...\, \/Users/.../, \/home/...\) and absolute file URI schemes (file:///absolute/path/to/...\, file:///absolute/path/to/\) are **strictly forbidden** inside committed repository files, specifications, markdown plans, subtask files, code comments, and citations. All paths must be relative to the git repository root.

@@ -31,7 +31,7 @@ repository's `version.json`, via a required `promptArchitectByRiseupAsia` block.
 
 ### D3 — Memory documentation
 
-- [x] Append entry to `.lovable/memory/index.md` explaining this tracking block
+- [x] Append entry to `.lovable/memory/01-index.md` explaining this tracking block
 
 ### D4 — Release
 

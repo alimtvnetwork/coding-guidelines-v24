@@ -10,5 +10,5 @@ ode scripts/release.mjs --tier minor --scope "Implement apperror.New creator nam
 ode scripts/sync-check.mjs --fix.
 6. Run 
 pm run bundles:generate.
-7. Update versions in ersion.template.json, .lovable/memory/standards/version-source-of-truth.md, and .lovable/memory/release-architecture-map.md.
-8. Commit, tag 6.27.0, and push.
+7. Update versions in version.template.json, .lovable/memory/standards/version-source-of-truth.md, and .lovable/memory/release-architecture-map.md.
+8. Commit, tag v6.27.0, and push.

@@ -1460,7 +1460,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 | `linters-cicd/` | 13 | 52 | `readme.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
 | `src/` | 2 | 47 | `src/components/landing/InstallSection.tsx`, `src/data/specTree.json` |
 | `spec/` | 19 | 44 | Spec docs referencing the slug (sarif-contract, ci-templates, distribution, install-contract, install-config, version-pinned-release-installers, install-script-version-probe, repo-major-version-migrator, generic-installer-behavior, distribution-and-runner, lovable-folder-structure, readme-improvement-suggestions, root-readme-conventions, etc.) |
-| `.lovable/` | 8 | 16 | `memory/index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `plan.md`, `strictly-avoid.md`, `suggestions.md` |
+| `.lovable/` | 8 | 16 | `memory/01-index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `plan.md`, `strictly-avoid.md`, `suggestions.md` |
 | `docs/` | 2 | 14 | `docs/github-repo-metadata.md`, `docs/slides-installer.md` |
 | `examples/other-repo-integration/` | 7 | 10 | `azure-devops/`, `gitlab/`, `jenkins/` integration recipes and READMEs |
 | `slides-app/` & `spec-slides/` | 4 | 9 | `slides-app/package.json`, `slides-app/scripts/package-zip.mjs`, `slides-app/src/slides/12-closing.tsx`, `spec-slides/05-curriculum.md`, `spec-slides/06-build-and-zip-pipeline.md` |
@@ -1479,7 +1479,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 #### Memory & overlay files affected
 
-- `.lovable/memory/index.md`
+- `.lovable/memory/01-index.md`
 - `.lovable/memory/sessions/2026-04-24-batch-cleanup-and-rebrand.md`
 - `.lovable/memory/constraints/install-command-formatting.md`
 - `.lovable/memory/suggestions/01-suggestions-tracker.md`

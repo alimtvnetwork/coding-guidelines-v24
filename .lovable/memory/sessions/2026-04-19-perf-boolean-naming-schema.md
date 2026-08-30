@@ -83,7 +83,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md`
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` (v2.1.0 → v2.2.0)
 - `src/data/specTree.json` (regenerated multiple times)
-- `.lovable/plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/index.md`
+- `.lovable/plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/01-index.md`
 
 ### Removed (folder restructure)
 

@@ -242,8 +242,8 @@ The `.lovable/` directory holds all AI-readable project knowledge.
 
 - **Memory folder is `.lovable/memory/`** — never `.lovable/memories/` (no trailing `s`)
 - Memory subfolders use **kebab-case WITHOUT numeric prefixes**
-- When adding a memory file, **always** update `memory/index.md`
-- AI reading order: `overview.md` → `strictly-avoid.md` → `user-preferences` → `memory/index.md` → `plan.md`
+- When adding a memory file, **always** update `memory/01-index.md`
+- AI reading order: `overview.md` → `strictly-avoid.md` → `user-preferences` → `memory/01-index.md` → `plan.md`
 
 ### Task & Suggestion Lifecycle
 

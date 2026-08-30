@@ -180,4 +180,3 @@ if !isFound {
     return nil, ErrUserNotFound
 }
 ```
-

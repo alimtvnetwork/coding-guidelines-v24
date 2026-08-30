@@ -55,7 +55,7 @@ This is the **standalone consolidated reference** for the `.lovable/` folder str
 
 > **There is exactly ONE memory folder: `.lovable/memory/` (singular).** The variant `.lovable/memories/` (plural) is **prohibited**. If found, migrate contents and delete it.
 
-> **`memory/index.md` is the single source of truth** for all memory files. Every memory file must be listed there. Orphaned files (in `memory/` but not in `index.md`) must be indexed or removed.
+> **`memory/01-index.md` is the single source of truth** for all memory files. Every memory file must be listed there. Orphaned files (in `memory/` but not in `index.md`) must be indexed or removed.
 
 ---
 
@@ -64,7 +64,7 @@ This is the **standalone consolidated reference** for the `.lovable/` folder str
 1. `overview.md` → understand the project
 2. `strictly-avoid.md` → know what NOT to do
 3. `user-preferences` → adapt communication style
-4. `memory/index.md` → survey all institutional knowledge
+4. `memory/01-index.md` → survey all institutional knowledge
 5. `plan.md` → understand current work context
 6. `suggestions.md` → see pending ideas
 
@@ -124,7 +124,7 @@ Full content — rules, decisions, patterns, constraints.
 
 ### index.md Structure
 
-The `memory/index.md` has two sections:
+The `memory/01-index.md` has two sections:
 
 ```markdown
 
@@ -156,7 +156,7 @@ The `memory/index.md` has two sections:
 ### Creating a New Memory
 
 1. Write the file to `memory/{category}/{kebab-case-name}.md`
-2. Add entry to `memory/index.md` under `## Memories`
+2. Add entry to `memory/01-index.md` under `## Memories`
 3. Verify no duplicate or overlapping memory already exists
 
 ### Updating a Memory
@@ -168,7 +168,7 @@ The `memory/index.md` has two sections:
 ### Deleting a Memory
 
 1. Remove the file from `memory/{category}/`
-2. Remove its entry from `memory/index.md`
+2. Remove its entry from `memory/01-index.md`
 
 ---
 
@@ -316,7 +316,7 @@ Bullet-point list of pending suggestions with one-line descriptions.
 
 ## §X Project Memory — Active Core Rules (Mirror)
 
-This section **mirrors** the operational rules stored in `.lovable/memory/index.md` Core section. A blind AI receiving only the consolidated folder would otherwise miss these — and violate at least three on its first PR. This mirror is **read-only documentation** of the rules; the canonical source remains `mem://index.md`.
+This section **mirrors** the operational rules stored in `.lovable/memory/01-index.md` Core section. A blind AI receiving only the consolidated folder would otherwise miss these — and violate at least three on its first PR. This mirror is **read-only documentation** of the rules; the canonical source remains `mem://index.md`.
 
 ### X.1 Code-Red Quality Rules
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check-memory-mirror-drift.py — Detect drift between .lovable/memory/index.md Core
+check-memory-mirror-drift.py — Detect drift between .lovable/memory/01-index.md Core
 section and spec/17-consolidated-guidelines/21-lovable-folder-structure.md §X mirror.
 
 Exit codes:
@@ -17,7 +17,7 @@ import re
 import sys
 from pathlib import Path
 
-MEMORY = Path(".lovable/memory/index.md")
+MEMORY = Path(".lovable/memory/01-index.md")
 MIRROR = Path("spec/17-consolidated-guidelines/21-lovable-folder-structure.md")
 SECTION_MARKER = "## §X Project Memory"
 
@@ -78,7 +78,7 @@ def main() -> int:
             print(f"  - {desc!r}: token {token!r} not found", file=sys.stderr)
         print("", file=sys.stderr)
         print("Action: update §X in spec/17-consolidated-guidelines/21-lovable-folder-structure.md", file=sys.stderr)
-        print("        to mirror the latest .lovable/memory/index.md Core rules.", file=sys.stderr)
+        print("        to mirror the latest .lovable/memory/01-index.md Core rules.", file=sys.stderr)
         return 1
 
     print(f"[memory-mirror-drift] OK — all {len(EXPECTED_TOKENS)} core tokens present in §X mirror")

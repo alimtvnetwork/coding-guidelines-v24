@@ -11,7 +11,7 @@
 et/http\, \gin-gonic\) from the stack trace output.
 5. **PII Scrubbing:** Introduce a \SecureValues\ map or automatic PII redaction layer that strips emails/passwords/SSNs before serialization.
 6. **Error De-duplication:** If \WithErrors\ receives identical sub-errors, collapse them into a single entry with a multiplier count to avoid log bloat.
-7. **Severity Levels:** Integrate explicit severity (\Debug\, \Info\, \Warn\, \Error\, \Fatal\) alongside the \pperrtype.Variation\ to decouple HTTP status from log urgency.
+7. **Severity Levels:** Integrate explicit severity (\Debug\, \Info\, \Warn\, \Error\, \Fatal\) alongside the \apperrtype.Variation\ to decouple HTTP status from log urgency.
 8. **Time-To-Live (TTL) on Errors:** Introduce an expiration or timestamp field on \AppError\ to trace exactly when the latency/failure occurred at the microsecond level.
 9. **Component Tagging:** Add a \SourceComponent\ field to identify exactly which bounded context originated the error.
 10. **Error Masking:** Implement a production toggle that forces all \DisplayError\ messages to a generic string unless explicitly flagged as \SafeToDisplay\.
@@ -26,7 +26,7 @@ et/http\, \gin-gonic\) from the stack trace output.
 16. **AI-Friendly Digest:** Enhance \ToClipboard()\ to output a mini-AST of the code block where the error occurred (using the stack trace file path).
 17. **Censored FullString:** Create a \SafeFullString()\ that masks all \Values\ to prevent secret leakage in internal Slack alerts.
 18. **Flattened Sub-errors:** Allow \LogMap()\ to flatten \Errors\ into a top-level array for parsers that do not support nested JSON arrays well.
-19. **Log Field Prefixing:** Prefix all \AppError\ keys in \LogMap\ with \pp_err_\ to avoid collisions with standard HTTP log middleware fields.
+19. **Log Field Prefixing:** Prefix all \AppError\ keys in \LogMap\ with \app_err_\ to avoid collisions with standard HTTP log middleware fields.
 20. **Deterministic Output:** Sort \Values\ map keys alphabetically during \String()\ serialization to ensure deterministic test assertions.
 
 ## API & Type Safety
@@ -35,26 +35,26 @@ et/http\, \gin-gonic\) from the stack trace output.
 22. **Immutable AppErrors:** Make \AppError\ fields unexported and fully immutable after creation to prevent race conditions during concurrent logging.
 23. **Fluent If Setter:** Add \WithMsgIf(condition bool, msg string)\ to allow conditional chaining without breaking the fluent pattern.
 24. **Type-Safe Value Injection:** Replace \map[string]any\ with a strictly typed \DiagnosticPayload\ struct or generic constraints.
-25. **Variant Registry Freezing:** Lock the \ariantRegistry\ after initialization (e.g., during \init()\) to panic if dynamic errors are registered at runtime (prevents memory leaks).
+25. **Variant Registry Freezing:** Lock the \variantRegistry\ after initialization (e.g., during \init()\) to panic if dynamic errors are registered at runtime (prevents memory leaks).
 26. **Global Default Contact:** Allow setting a global default \Contact\ (e.g., "support@company.com") that is automatically appended if \WithContact()\ is not called.
 27. **Error Class Grouping:** Group \ErrorType\ enums by bitmask classes (e.g., \ClassDatabase\, \ClassNetwork\) so middleware can switch on classes rather than individual codes.
 28. **MustWrap Pattern:** Add a \MustWrap()\ that panics if the underlying cause is nil, enforcing that developers don't wrap empty errors.
-29. **Cause Type Introspection:** Add \IsCause(target error) bool\ to walk the \Cause\ chain, replacing standard \rrors.Is\.
+29. **Cause Type Introspection:** Add \IsCause(target error) bool\ to walk the \Cause\ chain, replacing standard \errors.Is\.
 30. **Error As/Unwrap:** Explicitly implement \As(target any) bool\ to perfectly map to Go 1.13+ error standards.
 
 ## Validation & Batching
 
 31. **Validation Error Interface:** Create a specialized \ValidationError\ struct that embeds \AppError\ but enforces structured field-level failures.
-32. **Batch Processor:** Add \pperror.Batch\ which accepts a slice of \Result[T]\ and reduces them into a single \*AppError\ using \WithErrors\.
+32. **Batch Processor:** Add \Apperror.Batch\ which accepts a slice of \Result[T]\ and reduces them into a single \*AppError\ using \WithErrors\.
 33. **Threshold Breakers:** If \WithErrors\ exceeds 100 sub-errors, truncate and append an overflow message to prevent memory exhaustion on massive batch jobs.
 34. **Soft Failures:** Allow tagging an \AppError\ as \IsWarning(true)\, letting the system log it as an error but return a 200 OK to the client.
 35. **Multi-Cause Tracking:** Support branching cause chains (e.g., a goroutine group where 3 distinct routines fail simultaneously).
 
 ## Testing & Automation
 
-36. **Test Assertion Helpers:** Provide \ssert.AppErrorCode(t, err, apperrtype.NotFound)\ specifically designed for the test suite.
+36. **Test Assertion Helpers:** Provide \assert.AppErrorCode(t, err, apperrtype.NotFound)\ specifically designed for the test suite.
 37. **Stack Trace Fixtures:** Provide mock constructors that freeze stack traces to a dummy value so snapshot tests don't break on line-number changes.
-38. **Linter Rule - Forbidden Generics:** Expand the linter to block \pperror.New("unknown error")\ (must use a registered enum variant).
+38. **Linter Rule - Forbidden Generics:** Expand the linter to block \Apperror.New("unknown error")\ (must use a registered enum variant).
 39. **Linter Rule - Unused Error:** Ensure all created \*AppError\ instances are either returned or logged (no silent drops).
 40. **Chaos Testing:** Add a middleware that randomly injects \AppError\s to verify the system handles the degraded state properly.
 

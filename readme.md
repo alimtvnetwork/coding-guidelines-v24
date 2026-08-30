@@ -1443,8 +1443,8 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <a href="spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
   <a href="spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
   <a href="spec/17-consolidated-guidelines/01-index.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
-  <a href=".lovable/memory/index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
-  <a href=".lovable/prompts/00-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
+  <a href=".lovable/memory/01-index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
+  <a href=".lovable/prompts/01-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
 </p>
 
 
@@ -2085,23 +2085,21 @@ Full bio, design philosophy, and FAQ: [`docs/author.md`](docs/author.md).
 ---
 
 
-## 🤖 AI Utilities
+### Compiling & Syncing Prompts
 
-### Updating Prompts
-
-You can instruct any AI agent to pull the latest versions of standard system prompts from the Prompt Architect repository by running the included utility scripts.
+Prompts are authored and maintained directly inside `.lovable/prompts/01-prompts-category/`. To compile and sync structured prompts into the top-level flat prompt directory (`.lovable/prompts/*.md`), run the prompt compilation script:
 
 **Windows (PowerShell)**:
 ```powershell
-.\scripts\update-prompts-from-architect.ps1
+.\scripts\update-prompts.ps1
 ```
 
 **macOS / Linux (Bash)**:
 ```bash
-./scripts/update-prompts-from-architect.sh
+./scripts/update-prompts.sh
 ```
 
-This will fetch the latest versions of the read, write, plan, execute, and release prompts into your local .lovable/prompts/ directory and run a sync check.
+This compiles all categorized prompts using `scripts/prompt-sync-config.json` and verifies that the prompt registry index remains 100% in sync.
 
 - [Plan: AppError Constructors](.lovable/plans/pending/01-apperror-new-constructors.md)
 - [Plan: AppError Human & Logger Methods](.lovable/plans/pending/02-apperror-human-logger-methods.md)
