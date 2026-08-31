@@ -5,6 +5,9 @@ Automatically inspects any codebase (Go, Rust, Python, TypeScript, PHP, C#, SQL)
 classifies subsystems (Backend, Database, Frontend, CI/CD, Docs), and maintains
 a high-speed TTL-cached topology map in tmp/cache/paths/codebase-topology-cache.json.
 
+Zero Magic Strings: All enums, language manifests, subsystem hints, and cache paths
+are imported directly from 02-shared-engine.py.
+
 Usage:
   python .lovable/ai-fix-scripts/18-codebase-topology-discoverer.py [--summary]
   python .lovable/ai-fix-scripts/18-codebase-topology-discoverer.py --query <subsystem-or-language>
@@ -28,210 +31,174 @@ sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
     engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    normalize_rel_path = engine.normalize_rel_path
-    is_ignored_directory = engine.is_ignored_directory
-    is_ignored_path = engine.is_ignored_path
-    is_binary_file = engine.is_binary_file
-    atomic_cache_lock = engine.atomic_cache_lock
+    LanguageType = engine.LanguageType
+    SubsystemType = engine.SubsystemType
+    EncodingType = engine.EncodingType
+    ExitCodeType = engine.ExitCodeType
+    LANGUAGE_MANIFESTS = engine.LANGUAGE_MANIFESTS
+    SUBSYSTEM_DIR_HINTS = engine.SUBSYSTEM_DIR_HINTS
+    SUBSYSTEM_ENTRYPOINTS = engine.SUBSYSTEM_ENTRYPOINTS
+    QUERY_ALIASES = engine.QUERY_ALIASES
+    LANG_EXT_MAP = engine.LANG_EXT_MAP
+    PRIMARY_TOPOLOGY_CACHE_FILE = engine.PRIMARY_TOPOLOGY_CACHE_FILE
+    LEGACY_TOPOLOGY_CACHE_FILE = engine.LEGACY_TOPOLOGY_CACHE_FILE
+    DEFAULT_TTL_SECONDS = engine.DEFAULT_TTL_SECONDS
     DEFAULT_ENCODING = engine.DEFAULT_ENCODING
     LINE_SEPARATOR = engine.LINE_SEPARATOR
     PATH_SEPARATOR = engine.PATH_SEPARATOR
-    ExitCodeType = engine.ExitCodeType
+    CACHE_PATHS_DIR = engine.CACHE_PATHS_DIR
+    process_repository_files = engine.process_repository_files
+    normalize_rel_path = engine.normalize_rel_path
+    is_ignored_directory = engine.is_ignored_directory
+    is_binary_file = engine.is_binary_file
+    atomic_cache_lock = engine.atomic_cache_lock
 except Exception:
+    class SubsystemType(str, Enum):
+        BACKEND = "BACKEND"
+        DATABASE = "DATABASE"
+        FRONTEND = "FRONTEND"
+        CICD = "CICD"
+        DOCS = "DOCS"
+        CLI = "CLI"
+        TESTS = "TESTS"
+        UNKNOWN = "UNKNOWN"
+
+    class LanguageType(str, Enum):
+        GO = "GO"
+        RUST = "RUST"
+        PYTHON = "PYTHON"
+        TYPESCRIPT = "TYPESCRIPT"
+        JAVASCRIPT = "JAVASCRIPT"
+        PHP = "PHP"
+        CSHARP = "CSHARP"
+        SQL = "SQL"
+        SHELL = "SHELL"
+        MARKDOWN = "MARKDOWN"
+        OTHER = "OTHER"
+
     class ExitCodeType(int, Enum):
         SUCCESS = 0
         VIOLATIONS_FOUND = 1
         TOOL_ERROR = 2
+
     DEFAULT_ENCODING = "utf-8"
     LINE_SEPARATOR = "\n"
     PATH_SEPARATOR = "/"
+    DEFAULT_TTL_SECONDS = 1800
+    CACHE_PATHS_DIR = Path("tmp/cache/paths")
+    PRIMARY_TOPOLOGY_CACHE_FILE = CACHE_PATHS_DIR / "codebase-topology-cache.json"
+    LEGACY_TOPOLOGY_CACHE_FILE = Path("tmp/cache/codebase-topology-cache.json")
+    LANGUAGE_MANIFESTS = {}
+    SUBSYSTEM_DIR_HINTS = {}
+    SUBSYSTEM_ENTRYPOINTS = ()
+    QUERY_ALIASES = {}
+    LANG_EXT_MAP = {}
     normalize_rel_path = lambda p: str(p).replace("\\", "/")
     is_ignored_directory = lambda d: d in {".git", "node_modules", ".venv", "dist", "build", "tmp"}
-    is_ignored_path = lambda p: False
     is_binary_file = lambda p: False
     atomic_cache_lock = None
 
-# --- Top-Level Enums Following Standard ---
+# Build Reverse Lookup for Extensions -> LanguageType
+EXT_TO_LANGUAGE_MAP: dict[str, LanguageType] = {}
+for lang_key, exts in LANG_EXT_MAP.items():
+    matching_enum = getattr(LanguageType, lang_key.upper(), None)
+    if matching_enum:
+        for ext in exts:
+            EXT_TO_LANGUAGE_MAP[ext.lower()] = matching_enum
 
-class SubsystemType(str, Enum):
-    """Enumeration for major codebase subsystems."""
-    BACKEND = "BACKEND"
-    DATABASE = "DATABASE"
-    FRONTEND = "FRONTEND"
-    CICD = "CICD"
-    DOCS = "DOCS"
-    CLI = "CLI"
-    TESTS = "TESTS"
-    UNKNOWN = "UNKNOWN"
+# --- Dynamic Topology Discovery Logic (Zero Magic Strings) ---
 
-class LanguageType(str, Enum):
-    """Enumeration for detected programming languages."""
-    GO = "GO"
-    RUST = "RUST"
-    PYTHON = "PYTHON"
-    TYPESCRIPT = "TYPESCRIPT"
-    JAVASCRIPT = "JAVASCRIPT"
-    PHP = "PHP"
-    CSHARP = "CSHARP"
-    SQL = "SQL"
-    SHELL = "SHELL"
-    MARKDOWN = "MARKDOWN"
-    OTHER = "OTHER"
+def match_language_manifest(filename: str) -> LanguageType | None:
+    """Matches a filename against centralized language manifests dynamically."""
+    f_lower = filename.lower()
+    for lang, manifests in LANGUAGE_MANIFESTS.items():
+        for pattern in manifests:
+            if pattern.startswith("*."):
+                if f_lower.endswith(pattern[1:]):
+                    return lang
+            elif f_lower == pattern.lower():
+                return lang
+    return None
 
-# --- Constants & Cache Paths ---
-TOPOLOGY_CACHE_DIR = Path("tmp/cache/paths")
-PRIMARY_TOPOLOGY_CACHE_FILE = TOPOLOGY_CACHE_DIR / "codebase-topology-cache.json"
-LEGACY_TOPOLOGY_CACHE_FILE = Path("tmp/codebase-topology-cache.json")
-DEFAULT_TTL_SECONDS = 1800  # 30 Minutes
+def detect_manifests(root_dir: str = ".") -> dict[str, list[str]]:
+    """Detects top-level and submodule package manifests using centralized rules."""
+    detected: dict[str, list[str]] = {lang.value: [] for lang in LanguageType}
 
-# Subsystem & Language Aliases
-QUERY_ALIASES = {
-    "db": SubsystemType.DATABASE,
-    "database": SubsystemType.DATABASE,
-    "sql": SubsystemType.DATABASE,
-    "migrations": SubsystemType.DATABASE,
-    "schema": SubsystemType.DATABASE,
-    "backend": SubsystemType.BACKEND,
-    "server": SubsystemType.BACKEND,
-    "api": SubsystemType.BACKEND,
-    "frontend": SubsystemType.FRONTEND,
-    "ui": SubsystemType.FRONTEND,
-    "web": SubsystemType.FRONTEND,
-    "client": SubsystemType.FRONTEND,
-    "app": SubsystemType.FRONTEND,
-    "ci": SubsystemType.CICD,
-    "cicd": SubsystemType.CICD,
-    "workflow": SubsystemType.CICD,
-    "actions": SubsystemType.CICD,
-    "docs": SubsystemType.DOCS,
-    "doc": SubsystemType.DOCS,
-    "spec": SubsystemType.DOCS,
-    "prompt": SubsystemType.DOCS,
-    "prompts": SubsystemType.DOCS,
-    "cli": SubsystemType.CLI,
-    "commands": SubsystemType.CLI,
-    "tests": SubsystemType.TESTS,
-    "test": SubsystemType.TESTS,
-    "qa": SubsystemType.TESTS,
-    "go": LanguageType.GO,
-    "golang": LanguageType.GO,
-    "rs": LanguageType.RUST,
-    "rust": LanguageType.RUST,
-    "py": LanguageType.PYTHON,
-    "python": LanguageType.PYTHON,
-    "ts": LanguageType.TYPESCRIPT,
-    "typescript": LanguageType.TYPESCRIPT,
-    "js": LanguageType.JAVASCRIPT,
-    "javascript": LanguageType.JAVASCRIPT,
-    "php": LanguageType.PHP,
-    "cs": LanguageType.CSHARP,
-    "csharp": LanguageType.CSHARP,
-    "sh": LanguageType.SHELL,
-    "shell": LanguageType.SHELL,
-    "bash": LanguageType.SHELL,
-    "ps1": LanguageType.SHELL,
-    "powershell": LanguageType.SHELL,
-    "md": LanguageType.MARKDOWN,
-    "markdown": LanguageType.MARKDOWN,
-}
-
-# Known Subsystem Indicators
-DATABASE_DIR_HINTS = {"db", "database", "migrations", "migration", "sql", "schemas", "schema", "prisma", "drizzle"}
-BACKEND_DIR_HINTS = {"cmd", "internal", "pkg", "api", "routes", "controllers", "handlers", "server", "services", "backend"}
-FRONTEND_DIR_HINTS = {"components", "views", "pages", "ui", "web", "frontend", "client", "app", "slides-app"}
-CICD_DIR_HINTS = {".github", "workflows", "scripts", "linter-scripts", "linters-cicd", "ci", ".lovable"}
-DOCS_DIR_HINTS = {"spec", "docs", "doc", "documentation", "prompts", ".lovable/prompts"}
-TESTS_DIR_HINTS = {"tests", "test", "spec", "__tests__", "testing"}
-
-# --- Topology Detection & Analysis Logic ---
-
-def detect_manifests(root_dir: str = ".") -> dict[LanguageType, list[str]]:
-    """Detects top-level and submodule package manifests."""
-    detected = {lang: [] for lang in LanguageType}
     for root, dirs, files in os.walk(root_dir):
         dirs[:] = [d for d in dirs if not is_ignored_directory(d)]
         for f in files:
-            norm_rel = normalize_rel_path(os.path.join(root, f))
-            if f in {"go.mod", "go.sum", "go.work"}:
-                detected[LanguageType.GO].append(norm_rel)
-            elif f in {"Cargo.toml", "Cargo.lock"}:
-                detected[LanguageType.RUST].append(norm_rel)
-            elif f in {"pyproject.toml", "setup.py", "requirements.txt", "Pipfile", "poetry.lock", "uv.lock"}:
-                detected[LanguageType.PYTHON].append(norm_rel)
-            elif f == "tsconfig.json":
-                detected[LanguageType.TYPESCRIPT].append(norm_rel)
-            elif f == "package.json":
-                detected[LanguageType.JAVASCRIPT].append(norm_rel)
-            elif f in {"composer.json", "composer.lock", "artisan"}:
-                detected[LanguageType.PHP].append(norm_rel)
-            elif f.endswith(".csproj") or f.endswith(".sln"):
-                detected[LanguageType.CSHARP].append(norm_rel)
+            matched_lang = match_language_manifest(f)
+            has_match = bool(matched_lang)
+            if has_match:
+                norm_rel = normalize_rel_path(os.path.join(root, f))
+                detected[matched_lang.value].append(norm_rel)
+
     return {k: v for k, v in detected.items() if v}
 
-def classify_codebase_subsystems(root_dir: str = ".") -> dict[SubsystemType, dict[str, Any]]:
-    """Scans and categorizes directory roots into functional subsystems."""
-    subsystems: dict[SubsystemType, dict[str, Any]] = {
-        SubsystemType.BACKEND: {"roots": set(), "entrypoints": []},
-        SubsystemType.DATABASE: {"roots": set(), "schemaFiles": []},
-        SubsystemType.FRONTEND: {"roots": set(), "entrypoints": []},
-        SubsystemType.CICD: {"roots": set(), "workflows": []},
-        SubsystemType.DOCS: {"roots": set(), "specRoots": []},
-        SubsystemType.CLI: {"roots": set(), "entrypoints": []},
-        SubsystemType.TESTS: {"roots": set(), "testRunners": []},
+def classify_codebase_subsystems(root_dir: str = ".") -> dict[str, dict[str, Any]]:
+    """Scans and categorizes directory roots into functional subsystems dynamically."""
+    subsystems: dict[str, dict[str, Any]] = {
+        SubsystemType.BACKEND.value: {"roots": set(), "entrypoints": []},
+        SubsystemType.DATABASE.value: {"roots": set(), "schemaFiles": []},
+        SubsystemType.FRONTEND.value: {"roots": set(), "entrypoints": []},
+        SubsystemType.CICD.value: {"roots": set(), "workflows": []},
+        SubsystemType.DOCS.value: {"roots": set(), "specRoots": []},
+        SubsystemType.CLI.value: {"roots": set(), "entrypoints": []},
+        SubsystemType.TESTS.value: {"roots": set(), "testRunners": []},
     }
+
+    # Inverted hint lookup: hint -> set of Subsystems
+    hint_to_subsystems: dict[str, set[str]] = {}
+    for subsys_enum, hints in SUBSYSTEM_DIR_HINTS.items():
+        for h in hints:
+            h_clean = h.lower()
+            if h_clean not in hint_to_subsystems:
+                hint_to_subsystems[h_clean] = set()
+            hint_to_subsystems[h_clean].add(subsys_enum.value)
 
     for root, dirs, files in os.walk(root_dir):
         dirs[:] = [d for d in dirs if not is_ignored_directory(d)]
         norm_dir = normalize_rel_path(root)
-        dir_name = Path(root).name.lower()
-        parts = {p.lower() for p in Path(root).parts}
+        dir_parts_lower = {p.lower() for p in Path(root).parts}
 
-        # 1. Database & Migrations
-        if parts & DATABASE_DIR_HINTS or dir_name in DATABASE_DIR_HINTS:
-            subsystems[SubsystemType.DATABASE]["roots"].add(norm_dir)
+        # Dynamically classify directory by matching hint keywords
+        for part in dir_parts_lower:
+            matched_subsystems = hint_to_subsystems.get(part)
+            has_matches = bool(matched_subsystems)
+            if has_matches:
+                for subsys_name in matched_subsystems:
+                    subsystems[subsys_name]["roots"].add(norm_dir)
 
-        # 2. Backend & Server Services
-        if parts & BACKEND_DIR_HINTS or dir_name in BACKEND_DIR_HINTS:
-            subsystems[SubsystemType.BACKEND]["roots"].add(norm_dir)
-
-        # 3. Frontend UI & Apps
-        if parts & FRONTEND_DIR_HINTS or dir_name in FRONTEND_DIR_HINTS:
-            subsystems[SubsystemType.FRONTEND]["roots"].add(norm_dir)
-
-        # 4. CI/CD & Workflow Automation
-        if parts & CICD_DIR_HINTS or dir_name in CICD_DIR_HINTS:
-            subsystems[SubsystemType.CICD]["roots"].add(norm_dir)
-
-        # 5. Docs & Specifications
-        if parts & DOCS_DIR_HINTS or dir_name in DOCS_DIR_HINTS:
-            subsystems[SubsystemType.DOCS]["roots"].add(norm_dir)
-
-        # 6. Tests & QA
-        if parts & TESTS_DIR_HINTS or dir_name in TESTS_DIR_HINTS:
-            subsystems[SubsystemType.TESTS]["roots"].add(norm_dir)
-
-        # File-level categorization
+        # File-level classification
         for f in files:
             norm_file = normalize_rel_path(os.path.join(root, f))
             ext = os.path.splitext(f)[1].lower()
             f_lower = f.lower()
 
-            if ext == ".sql" or "schema" in f_lower or "migration" in f_lower:
-                subsystems[SubsystemType.DATABASE]["schemaFiles"].append(norm_file)
-            if f in {"main.go", "main.py", "main.rs", "server.ts", "server.js", "app.py", "app.go", "index.ts"}:
-                subsystems[SubsystemType.BACKEND]["entrypoints"].append(norm_file)
-            if "cli" in f_lower or f.startswith("cmd") or "command" in f_lower:
-                subsystems[SubsystemType.CLI]["entrypoints"].append(norm_file)
-            if "test" in f_lower or f.startswith("test_") or f.endswith("_test.go") or f.endswith(".test.ts"):
-                subsystems[SubsystemType.TESTS]["testRunners"].append(norm_file)
-            if f.endswith(".yml") or f.endswith(".yaml"):
-                if ".github" in norm_file:
-                    subsystems[SubsystemType.CICD]["workflows"].append(norm_file)
+            is_sql_schema = (ext == ".sql" or "schema" in f_lower or "migration" in f_lower)
+            if is_sql_schema:
+                subsystems[SubsystemType.DATABASE.value]["schemaFiles"].append(norm_file)
 
-    serialized = {}
-    for st, data in subsystems.items():
-        serialized[st.value] = {
+            is_entrypoint = (f in SUBSYSTEM_ENTRYPOINTS)
+            if is_entrypoint:
+                subsystems[SubsystemType.BACKEND.value]["entrypoints"].append(norm_file)
+
+            is_cli = ("cli" in f_lower or f.startswith("cmd") or "command" in f_lower)
+            if is_cli:
+                subsystems[SubsystemType.CLI.value]["entrypoints"].append(norm_file)
+
+            is_test_file = ("test" in f_lower or f.startswith("test_") or f.endswith("_test.go") or f.endswith(".test.ts"))
+            if is_test_file:
+                subsystems[SubsystemType.TESTS.value]["testRunners"].append(norm_file)
+
+            is_workflow = (ext in {".yml", ".yaml"} and ".github" in norm_file)
+            if is_workflow:
+                subsystems[SubsystemType.CICD.value]["workflows"].append(norm_file)
+
+    # Convert sets to sorted lists for JSON serialization
+    serialized: dict[str, dict[str, Any]] = {}
+    for st_name, data in subsystems.items():
+        serialized[st_name] = {
             k: sorted(list(v)) if isinstance(v, set) else sorted(v)
             for k, v in data.items()
         }
@@ -257,33 +224,14 @@ def build_topology_map(root_dir: str = ".", ttl_seconds: int = DEFAULT_TTL_SECON
             total_files += 1
             ext = os.path.splitext(f)[1].lower()
 
-            target_lang = None
-            if ext == ".go":
-                target_lang = LanguageType.GO.value
-            elif ext == ".rs":
-                target_lang = LanguageType.RUST.value
-            elif ext in {".py", ".pyi"}:
-                target_lang = LanguageType.PYTHON.value
-            elif ext in {".ts", ".tsx"}:
-                target_lang = LanguageType.TYPESCRIPT.value
-            elif ext in {".js", ".jsx", ".mjs"}:
-                target_lang = LanguageType.JAVASCRIPT.value
-            elif ext in {".php", ".phtml"}:
-                target_lang = LanguageType.PHP.value
-            elif ext == ".cs":
-                target_lang = LanguageType.CSHARP.value
-            elif ext == ".sql":
-                target_lang = LanguageType.SQL.value
-            elif ext in {".md", ".markdown"}:
-                target_lang = LanguageType.MARKDOWN.value
-            elif ext in {".sh", ".bash", ".ps1"}:
-                target_lang = LanguageType.SHELL.value
-
-            if target_lang:
-                lang_file_counts[target_lang] = lang_file_counts.get(target_lang, 0) + 1
-                if target_lang not in lang_file_roots:
-                    lang_file_roots[target_lang] = set()
-                lang_file_roots[target_lang].add(norm_dir)
+            matched_lang = EXT_TO_LANGUAGE_MAP.get(ext)
+            has_lang = bool(matched_lang)
+            if has_lang:
+                lang_str = matched_lang.value
+                lang_file_counts[lang_str] = lang_file_counts.get(lang_str, 0) + 1
+                if lang_str not in lang_file_roots:
+                    lang_file_roots[lang_str] = set()
+                lang_file_roots[lang_str].add(norm_dir)
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
@@ -295,7 +243,7 @@ def build_topology_map(root_dir: str = ".", ttl_seconds: int = DEFAULT_TTL_SECON
         "scanDurationMs": round(elapsed_ms, 2),
         "totalFiles": total_files,
         "rootPath": normalize_rel_path(root_dir),
-        "manifests": {k.value: v for k, v in manifests.items()},
+        "manifests": manifests,
         "languageDistribution": dict(sorted(lang_file_counts.items(), key=lambda x: x[1], reverse=True)),
         "languageRoots": {k: sorted(list(v)) for k, v in lang_file_roots.items()},
         "subsystems": subsystems,
@@ -324,7 +272,7 @@ def load_cached_topology() -> dict[str, Any] | None:
 
 def save_topology_cache(topology_data: dict[str, Any]) -> None:
     """Saves topology data to primary and legacy cache locations with atomic locking."""
-    TOPOLOGY_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    CACHE_PATHS_DIR.mkdir(parents=True, exist_ok=True)
     for target in (PRIMARY_TOPOLOGY_CACHE_FILE, LEGACY_TOPOLOGY_CACHE_FILE):
         try:
             temp_file = target.with_suffix(".json.tmp")
@@ -360,10 +308,10 @@ def query_topology(query_term: str, topology: dict[str, Any]) -> None:
     lang_dist = topology.get("languageDistribution", {})
     lang_roots = topology.get("languageRoots", {})
 
-    print(f"\n⚡ Topology Routing Query for: `{query_term}`\n")
+    print(f"{LINE_SEPARATOR}⚡ Topology Routing Query for: `{query_term}`{LINE_SEPARATOR}")
     found = False
 
-    # Check Aliases (e.g. db -> DATABASE, py -> PYTHON)
+    # Resolve Alias from Centralized Map
     matched_target = QUERY_ALIASES.get(q_clean)
 
     # 1. Match Subsystems
@@ -429,13 +377,13 @@ def print_topology_summary(topology: dict[str, Any]) -> None:
     print(f"⏱️ TTL Expiry: {topology['expiresAt']} | Scan Time: {topology['scanDurationMs']}ms")
     print("================================================================================")
 
-    print("\n📊 Polyglot Language Breakdown:")
+    print(f"{LINE_SEPARATOR}📊 Polyglot Language Breakdown:")
     for lang, count in topology.get("languageDistribution", {}).items():
         man = topology.get("manifests", {}).get(lang, [])
         man_str = f" (Manifests: {', '.join(man[:2])})" if man else ""
         print(f"   • {lang:<14} : {count:>5} files{man_str}")
 
-    print("\n🏛️ Subsystem Map & Navigation Roots:")
+    print(f"{LINE_SEPARATOR}🏛️ Subsystem Map & Navigation Roots:")
     subsystems = topology.get("subsystems", {})
     for subsys_name, data in subsystems.items():
         roots = data.get("roots", [])
@@ -447,7 +395,7 @@ def print_topology_summary(topology: dict[str, Any]) -> None:
         else:
             print(f"   • {subsys_name:<10} : (none detected)")
 
-    print("\n💡 AI Navigation Tip:")
+    print(f"{LINE_SEPARATOR}💡 AI Navigation Tip:")
     print("   Query specific folders instantly using:")
     print("   `python .lovable/ai-fix-scripts/18-codebase-topology-discoverer.py --query <go|python|db|backend>`")
     print("================================================================================")

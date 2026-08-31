@@ -4,8 +4,9 @@ Shared Core Engine for AI Repository Tooling, CI Fix Scripts & High-Speed Cachin
 Dual-Platform Engine (100% Native Unix & Windows Support)
 
 Features:
-1. Centralized Constants for Encodings, Separators, Tokens, and Configuration Maps.
-2. Top-Level Enums (PascalCase class, UPPER_CASE members mirroring string values).
+1. Centralized Configuration Maps, Language Manifests, Subsystem Hints, and Top-Level Enums:
+   - EncodingType, LanguageType, SubsystemType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType.
+2. Centralized Encodings, Separators, Tokens, and Paths.
 3. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
 4. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
@@ -42,11 +43,94 @@ except ImportError:
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
+# --- Top-Level Enums Following Standard ---
+
+class EncodingType(str, Enum):
+    """Enumeration for standardized character encodings."""
+    UTF8 = "utf-8"
+    UTF8_SIG = "utf-8-sig"
+    UTF16 = "utf-16"
+    UTF16_LE = "utf-16le"
+    UTF16_BE = "utf-16be"
+    ASCII = "ascii"
+
+class LanguageType(str, Enum):
+    """Enumeration for detected programming languages."""
+    GO = "GO"
+    RUST = "RUST"
+    PYTHON = "PYTHON"
+    TYPESCRIPT = "TYPESCRIPT"
+    JAVASCRIPT = "JAVASCRIPT"
+    PHP = "PHP"
+    CSHARP = "CSHARP"
+    SQL = "SQL"
+    SHELL = "SHELL"
+    MARKDOWN = "MARKDOWN"
+    HTML = "HTML"
+    CSS = "CSS"
+    OTHER = "OTHER"
+
+class SubsystemType(str, Enum):
+    """Enumeration for major codebase subsystems."""
+    BACKEND = "BACKEND"
+    DATABASE = "DATABASE"
+    FRONTEND = "FRONTEND"
+    CICD = "CICD"
+    DOCS = "DOCS"
+    CLI = "CLI"
+    TESTS = "TESTS"
+    UNKNOWN = "UNKNOWN"
+
+class ScanModeType(str, Enum):
+    """Enumeration for file scanning modes."""
+    CHECK = "CHECK"
+    FIX = "FIX"
+    STREAM = "STREAM"
+
+class SeverityType(str, Enum):
+    """Enumeration for issue severity levels."""
+    BLOCKER = "BLOCKER"
+    HIGH = "HIGH"
+    WARN = "WARN"
+    INFO = "INFO"
+
+class ExitCodeType(int, Enum):
+    """Enumeration for application exit codes."""
+    SUCCESS = 0
+    VIOLATIONS_FOUND = 1
+    TOOL_ERROR = 2
+
+class RegexPatternType(str, Enum):
+    """Enumeration for cached regex pattern identifiers."""
+    WINDOWS_BACKSLASH = "WINDOWS_BACKSLASH"
+    LEADING_DOT_SLASH = "LEADING_DOT_SLASH"
+    CRLF = "CRLF"
+    UNIVERSAL_LINE_ENDING = "UNIVERSAL_LINE_ENDING"
+    TRAILING_WHITESPACE = "TRAILING_WHITESPACE"
+    SEQ_PREFIX = "SEQ_PREFIX"
+    UPPERCASE = "UPPERCASE"
+    FILE_URI_WIN = "FILE_URI_WIN"
+    DRIVE_ABS_WIN = "DRIVE_ABS_WIN"
+    REPO_FILE_URI = "REPO_FILE_URI"
+    EXPLICIT_DOUBLE_TRUE = "EXPLICIT_DOUBLE_TRUE"
+    EXPLICIT_TRIPLE_TRUE = "EXPLICIT_TRIPLE_TRUE"
+    EXPLICIT_PYTHON_TRUE = "EXPLICIT_PYTHON_TRUE"
+    COMMENT_PREFIX = "COMMENT_PREFIX"
+    COBRA_COMMAND = "COBRA_COMMAND"
+    SHORT_DESC = "SHORT_DESC"
+    EXAMPLE_USAGE = "EXAMPLE_USAGE"
+    CHANGELOG_HEADER = "CHANGELOG_HEADER"
+    FILE_NUM_PREFIX = "FILE_NUM_PREFIX"
+    H1_HEADER = "H1_HEADER"
+    PLACEHOLDER_TOKEN = "PLACEHOLDER_TOKEN"
+    NON_ALPHANUMERIC = "NON_ALPHANUMERIC"
+
 # --- Centralized Constants for Encodings, Separators & Tokens ---
-DEFAULT_ENCODING = "utf-8"
-UTF16_ENCODING = "utf-16"
-UTF16_LE_ENCODING = "utf-16le"
-UTF16_BE_ENCODING = "utf-16be"
+DEFAULT_ENCODING = EncodingType.UTF8.value
+UTF8_SIG_ENCODING = EncodingType.UTF8_SIG.value
+UTF16_ENCODING = EncodingType.UTF16.value
+UTF16_LE_ENCODING = EncodingType.UTF16_LE.value
+UTF16_BE_ENCODING = EncodingType.UTF16_BE.value
 
 LINE_SEPARATOR = "\n"
 CARRIAGE_RETURN = "\r"
@@ -62,6 +146,10 @@ CACHE_LOCKS_DIR = CACHE_BASE_DIR / "locks"
 CACHE_FILES_DIR = CACHE_BASE_DIR / "files"
 LEGACY_CACHE_FILE = Path("tmp/repo-file-cache.json")
 PRIMARY_CACHE_FILE = CACHE_BASE_DIR / "repo-file-cache.json"
+
+PRIMARY_TOPOLOGY_CACHE_FILE = CACHE_PATHS_DIR / "codebase-topology-cache.json"
+LEGACY_TOPOLOGY_CACHE_FILE = CACHE_BASE_DIR / "codebase-topology-cache.json"
+DEFAULT_TTL_SECONDS = 1800  # 30 Minutes
 
 DEFAULT_MAX_FILE_KB = 2048
 LOCK_TIMEOUT_SECONDS = 5.0
@@ -107,7 +195,8 @@ ALLOWED_LARGE_FILES = {
     "slides-app\\dist.zip",
 }
 
-LANG_EXT_MAP = {
+# Language Extension Mapping
+LANG_EXT_MAP: dict[str, list[str]] = {
     "go": [".go"],
     "golang": [".go"],
     "ts": [".ts", ".tsx", ".mts", ".cts"],
@@ -139,50 +228,85 @@ LANG_EXT_MAP = {
     "cpp": [".cpp", ".hpp", ".cc", ".cxx"],
 }
 
-# --- Top-Level Enums Following Standard ---
-class ScanModeType(str, Enum):
-    """Enumeration for file scanning modes."""
-    CHECK = "CHECK"
-    FIX = "FIX"
-    STREAM = "STREAM"
+# Manifest File Signatures by Language
+LANGUAGE_MANIFESTS: dict[LanguageType, tuple[str, ...]] = {
+    LanguageType.GO: ("go.mod", "go.sum", "go.work"),
+    LanguageType.RUST: ("Cargo.toml", "Cargo.lock"),
+    LanguageType.PYTHON: ("pyproject.toml", "setup.py", "requirements.txt", "Pipfile", "poetry.lock", "uv.lock"),
+    LanguageType.TYPESCRIPT: ("tsconfig.json", "tsconfig.base.json"),
+    LanguageType.JAVASCRIPT: ("package.json", "jsconfig.json"),
+    LanguageType.PHP: ("composer.json", "composer.lock", "artisan"),
+    LanguageType.CSHARP: ("*.csproj", "*.sln", "NuGet.Config"),
+    LanguageType.SQL: ("schema.sql", "migrations", "prisma/schema.prisma"),
+}
 
-class SeverityType(str, Enum):
-    """Enumeration for issue severity levels."""
-    BLOCKER = "BLOCKER"
-    HIGH = "HIGH"
-    WARN = "WARN"
-    INFO = "INFO"
+# Subsystem Directory Indicators
+SUBSYSTEM_DIR_HINTS: dict[SubsystemType, tuple[str, ...]] = {
+    SubsystemType.DATABASE: ("db", "database", "migrations", "migration", "sql", "schemas", "schema", "prisma", "drizzle"),
+    SubsystemType.BACKEND: ("cmd", "internal", "pkg", "api", "routes", "controllers", "handlers", "server", "services", "backend"),
+    SubsystemType.FRONTEND: ("components", "views", "pages", "ui", "web", "frontend", "client", "app", "slides-app"),
+    SubsystemType.CICD: (".github", "workflows", "scripts", "linter-scripts", "linters-cicd", "ci", ".lovable"),
+    SubsystemType.DOCS: ("spec", "docs", "doc", "documentation", "prompts", ".lovable/prompts"),
+    SubsystemType.TESTS: ("tests", "test", "spec", "__tests__", "testing", "fixtures"),
+    SubsystemType.CLI: ("cli", "cmd", "commands", "bin"),
+}
 
-class ExitCodeType(int, Enum):
-    """Enumeration for application exit codes."""
-    SUCCESS = 0
-    VIOLATIONS_FOUND = 1
-    TOOL_ERROR = 2
+# Known Subsystem Entrypoint Files
+SUBSYSTEM_ENTRYPOINTS: tuple[str, ...] = (
+    "main.go", "main.py", "main.rs", "server.ts", "server.js",
+    "app.py", "app.go", "index.ts", "index.js"
+)
 
-class RegexPatternType(str, Enum):
-    """Enumeration for cached regex pattern identifiers."""
-    WINDOWS_BACKSLASH = "WINDOWS_BACKSLASH"
-    LEADING_DOT_SLASH = "LEADING_DOT_SLASH"
-    CRLF = "CRLF"
-    UNIVERSAL_LINE_ENDING = "UNIVERSAL_LINE_ENDING"
-    TRAILING_WHITESPACE = "TRAILING_WHITESPACE"
-    SEQ_PREFIX = "SEQ_PREFIX"
-    UPPERCASE = "UPPERCASE"
-    FILE_URI_WIN = "FILE_URI_WIN"
-    DRIVE_ABS_WIN = "DRIVE_ABS_WIN"
-    REPO_FILE_URI = "REPO_FILE_URI"
-    EXPLICIT_DOUBLE_TRUE = "EXPLICIT_DOUBLE_TRUE"
-    EXPLICIT_TRIPLE_TRUE = "EXPLICIT_TRIPLE_TRUE"
-    EXPLICIT_PYTHON_TRUE = "EXPLICIT_PYTHON_TRUE"
-    COMMENT_PREFIX = "COMMENT_PREFIX"
-    COBRA_COMMAND = "COBRA_COMMAND"
-    SHORT_DESC = "SHORT_DESC"
-    EXAMPLE_USAGE = "EXAMPLE_USAGE"
-    CHANGELOG_HEADER = "CHANGELOG_HEADER"
-    FILE_NUM_PREFIX = "FILE_NUM_PREFIX"
-    H1_HEADER = "H1_HEADER"
-    PLACEHOLDER_TOKEN = "PLACEHOLDER_TOKEN"
-    NON_ALPHANUMERIC = "NON_ALPHANUMERIC"
+# Subsystem & Language Aliases for Fast CLI Routing
+QUERY_ALIASES: dict[str, LanguageType | SubsystemType] = {
+    "db": SubsystemType.DATABASE,
+    "database": SubsystemType.DATABASE,
+    "sql": SubsystemType.DATABASE,
+    "migrations": SubsystemType.DATABASE,
+    "schema": SubsystemType.DATABASE,
+    "backend": SubsystemType.BACKEND,
+    "server": SubsystemType.BACKEND,
+    "api": SubsystemType.BACKEND,
+    "frontend": SubsystemType.FRONTEND,
+    "ui": SubsystemType.FRONTEND,
+    "web": SubsystemType.FRONTEND,
+    "client": SubsystemType.FRONTEND,
+    "app": SubsystemType.FRONTEND,
+    "ci": SubsystemType.CICD,
+    "cicd": SubsystemType.CICD,
+    "workflow": SubsystemType.CICD,
+    "actions": SubsystemType.CICD,
+    "docs": SubsystemType.DOCS,
+    "doc": SubsystemType.DOCS,
+    "spec": SubsystemType.DOCS,
+    "prompt": SubsystemType.DOCS,
+    "prompts": SubsystemType.DOCS,
+    "cli": SubsystemType.CLI,
+    "commands": SubsystemType.CLI,
+    "tests": SubsystemType.TESTS,
+    "test": SubsystemType.TESTS,
+    "qa": SubsystemType.TESTS,
+    "go": LanguageType.GO,
+    "golang": LanguageType.GO,
+    "rs": LanguageType.RUST,
+    "rust": LanguageType.RUST,
+    "py": LanguageType.PYTHON,
+    "python": LanguageType.PYTHON,
+    "ts": LanguageType.TYPESCRIPT,
+    "typescript": LanguageType.TYPESCRIPT,
+    "js": LanguageType.JAVASCRIPT,
+    "javascript": LanguageType.JAVASCRIPT,
+    "php": LanguageType.PHP,
+    "cs": LanguageType.CSHARP,
+    "csharp": LanguageType.CSHARP,
+    "sh": LanguageType.SHELL,
+    "shell": LanguageType.SHELL,
+    "bash": LanguageType.SHELL,
+    "ps1": LanguageType.SHELL,
+    "powershell": LanguageType.SHELL,
+    "md": LanguageType.MARKDOWN,
+    "markdown": LanguageType.MARKDOWN,
+}
 
 # Centralized Raw Regex Definitions: Enum -> (Pattern String, Flags)
 REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {

@@ -21,11 +21,13 @@ try:
     ExitCodeType = engine.ExitCodeType
     DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
     DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+    UTF8_SIG_ENCODING = engine.UTF8_SIG_ENCODING
     LINE_SEPARATOR = engine.LINE_SEPARATOR
 except Exception:
     ExitCodeType = None
     DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
     DEFAULT_ENCODING = "utf-8"
+    UTF8_SIG_ENCODING = "utf-8-sig"
     LINE_SEPARATOR = "\n"
 
 def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
@@ -43,7 +45,7 @@ def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[s
 
         if has_bom or has_crlf:
             if is_fix_mode:
-                text = raw_bytes.decode("utf-8-sig", errors="replace")
+                text = raw_bytes.decode(UTF8_SIG_ENCODING, errors="replace")
                 write_file_lf(file_path, text, encoding=DEFAULT_ENCODING)
             return (norm_p, True)
     except Exception:
