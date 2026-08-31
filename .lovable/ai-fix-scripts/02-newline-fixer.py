@@ -30,7 +30,7 @@ except Exception:
 
 def clean_file_content(content: str) -> str:
     """Strips trailing whitespace per line and guarantees a single final newline."""
-    re_crlf = get_compiled_regex(RegexPatternType.CRLF)
+    re_crlf = get_compiled_regex(RegexPatternType.Crlf)
     normalized = re_crlf.sub("\n", content)
     lines = [line.rstrip() for line in normalized.split("\n")]
     while lines:
@@ -76,11 +76,11 @@ def run_newline_auditor(
         for v in violations[:10]:
             print(f"  ::notice file={v}::{v}")
         if not is_fix_mode:
-            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+            return ExitCodeType.ViolationsFound.value if ExitCodeType else 1
     else:
         print(f"✅ All {stats['total_files']} files in '{target_dir}' have clean newlines ({stats['elapsed_ms']:.2f}ms).")
 
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    return ExitCodeType.Success.value if ExitCodeType else 0
 
 def main():
     parser = argparse.ArgumentParser(description="Fix trailing whitespace and newlines across folders")

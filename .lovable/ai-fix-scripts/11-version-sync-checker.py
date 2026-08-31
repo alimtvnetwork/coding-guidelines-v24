@@ -22,8 +22,8 @@ try:
     ExitCodeType = engine.ExitCodeType
 except Exception:
     class ExitCodeType(int, Enum):
-        SUCCESS = 0
-        VIOLATIONS_FOUND = 1
+        Success = 0
+        ViolationsFound = 1
     RegexPatternType = None
     get_compiled_regex = None
 
@@ -58,7 +58,7 @@ def check_version_sync(root_dir: str = ".") -> int:
 
     if not canonical_version:
         print(f"⚠️ No canonical version source (version.json or package.json) found in '{root_dir}'.")
-        return ExitCodeType.SUCCESS.value
+        return ExitCodeType.Success.value
 
     # 1. Compare with package.json
     if os.path.exists(package_json_p):
@@ -76,7 +76,7 @@ def check_version_sync(root_dir: str = ".") -> int:
         try:
             with open(changelog_p, "r", encoding="utf-8") as f:
                 changelog_text = f.read()
-            re_changelog = get_compiled_regex(RegexPatternType.CHANGELOG_HEADER)
+            re_changelog = get_compiled_regex(RegexPatternType.ChangelogHeader)
             match = re_changelog.search(changelog_text)
             if match:
                 latest_cl_ver = match.group(1).lstrip("v")
@@ -91,10 +91,10 @@ def check_version_sync(root_dir: str = ".") -> int:
         print(f"\n❌ Version synchronization failed in '{root_dir}' ({elapsed_ms:.2f}ms):")
         for err in errors:
             print(f"  ::error::{err}")
-        return ExitCodeType.VIOLATIONS_FOUND.value
+        return ExitCodeType.ViolationsFound.value
 
     print(f"✅ Version synchronization verified: v{canonical_version} ({elapsed_ms:.2f}ms)")
-    return ExitCodeType.SUCCESS.value
+    return ExitCodeType.Success.value
 
 def main():
     parser = argparse.ArgumentParser(description="Check version synchronization across folders")

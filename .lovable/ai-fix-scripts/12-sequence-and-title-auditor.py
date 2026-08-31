@@ -32,8 +32,8 @@ except Exception:
 def fix_single_file_title_header(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
     """Checks and fixes H1 header number to match filename prefix."""
     norm_p = normalize_rel_path(file_path)
-    re_file_prefix = get_compiled_regex(RegexPatternType.FILE_NUM_PREFIX)
-    re_h1 = get_compiled_regex(RegexPatternType.H1_HEADER)
+    re_file_prefix = get_compiled_regex(RegexPatternType.FileNumPrefix)
+    re_h1 = get_compiled_regex(RegexPatternType.H1Header)
 
     m = re_file_prefix.match(file_path.name)
     if not m:
@@ -82,11 +82,11 @@ def run_sequence_title_auditor(
         for msg in mismatches:
             print(f"  ::notice::{msg}")
         if not is_fix_mode:
-            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+            return ExitCodeType.ViolationsFound.value if ExitCodeType else 1
     else:
         print(f"✅ All {stats['total_files']} markdown files in '{target_dir}' have synchronized # H1 titles ({stats['elapsed_ms']:.2f}ms).")
 
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    return ExitCodeType.Success.value if ExitCodeType else 0
 
 def main():
     if hasattr(sys.stdout, "reconfigure"):
