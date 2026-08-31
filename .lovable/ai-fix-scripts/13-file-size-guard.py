@@ -51,17 +51,20 @@ def audit_file_sizes(
         for f in files:
             fp = os.path.join(root, f)
             norm_fp = normalize_rel_path(fp)
-            if is_allowed_large_file(norm_fp):
+            is_allowed = is_allowed_large_file(norm_fp)
+            if is_allowed:
                 continue
             if allowed_exts:
                 ext = os.path.splitext(f)[1].lower()
-                if ext not in allowed_exts:
+                is_ext_allowed = (ext in allowed_exts)
+                if not is_ext_allowed:
                     continue
             try:
                 sz = os.path.getsize(fp)
                 total_files += 1
                 total_bytes += sz
-                if sz > max_bytes:
+                is_oversized = (sz > max_bytes)
+                if is_oversized:
                     violations.append((norm_fp, sz))
             except Exception:
                 pass
@@ -69,7 +72,8 @@ def audit_file_sizes(
     elapsed_ms = (time.perf_counter() - start_time) * 1000
     print(f"📊 Scanned {total_files:,} files in '{target_dir}' ({total_bytes / (1024*1024):.2f} MB) in {elapsed_ms:.2f}ms")
 
-    if violations:
+    has_violations = len(violations) > 0
+    if has_violations:
         print(f"\n❌ Found {len(violations)} oversized file(s) exceeding {max_kb} KB:")
         for fp, sz in sorted(violations, key=lambda x: x[1], reverse=True):
             print(f"  ::error file={fp}::{fp} ({sz / 1024:.1f} KB > {max_kb} KB)")

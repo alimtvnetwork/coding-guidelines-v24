@@ -27,7 +27,8 @@ except Exception:
 def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
     """Audits and converts CRLF/BOM in a file to clean UTF-8 LF."""
     norm_p = normalize_rel_path(file_path)
-    if is_binary_file(file_path):
+    is_binary = is_binary_file(file_path)
+    if is_binary:
         return (norm_p, False)
     try:
         with open(file_path, "rb") as f:
@@ -54,13 +55,14 @@ def run_encoding_normalizer(
     exts = normalize_extensions(extensions) or DEFAULT_TEXT_EXTENSIONS
 
     def handler(p: Path):
-        fp_str, changed = normalize_single_file(p, is_fix_mode=is_fix_mode)
-        return fp_str if changed else None
+        fp_str, has_changed = normalize_single_file(p, is_fix_mode=is_fix_mode)
+        return fp_str if has_changed else None
 
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     affected = stats["results"]
 
-    if affected:
+    has_affected = len(affected) > 0
+    if has_affected:
         action_verb = "Normalized" if is_fix_mode else "Found CRLF/BOM in"
         print(f"\n⚠️ {action_verb} {len(affected)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for f in affected[:5]:

@@ -43,8 +43,10 @@ def smoke_test_installers(dist_dir: str = ".") -> int:
     candidates = ["install.sh", "install.ps1", "release-install.sh", "release-install.ps1"]
     for fname in candidates:
         fp = os.path.join(dist_dir, fname) if dist_dir != "." else fname
-        if not os.path.exists(fp):
-            if dist_dir != "." and os.path.exists(fname):
+        has_file = os.path.exists(fp)
+        if not has_file:
+            is_in_root = (dist_dir != "." and os.path.exists(fname))
+            if is_in_root:
                 fp = fname
             else:
                 continue
@@ -55,25 +57,30 @@ def smoke_test_installers(dist_dir: str = ".") -> int:
 
         # 1. Check for unreplaced placeholder tokens
         placeholders = re_placeholder.findall(content)
-        if placeholders:
+        has_placeholders = len(placeholders) > 0
+        if has_placeholders:
             errors.append(f"Unreplaced placeholders in {fp}: {set(placeholders)}")
 
         # 2. Check for checksum verification pattern
         content_lower = content.lower()
-        if "sha256" not in content_lower and "hash" not in content_lower:
+        has_checksum = ("sha256" in content_lower or "hash" in content_lower)
+        if not has_checksum:
             errors.append(f"Installer {fp} missing SHA256 checksum verification routine")
 
         # 3. Check for rename-first / safe overwrite
-        if ".old" not in content and "old" not in content_lower:
+        has_rename_first = (".old" in content or "old" in content_lower)
+        if not has_rename_first:
             errors.append(f"Installer {fp} missing rename-first upgrade handling")
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
-    if checked_files == 0:
+    is_no_files = (checked_files == 0)
+    if is_no_files:
         print(f"ℹ️ No installer scripts found in '{dist_dir}' to smoke-test (skipping).")
         return ExitCodeType.SUCCESS.value
 
-    if errors:
+    has_errors = len(errors) > 0
+    if has_errors:
         print(f"\n❌ Installer smoke testing failed in '{dist_dir}' ({elapsed_ms:.2f}ms):")
         for err in errors:
             print(f"  ::error::{err}")

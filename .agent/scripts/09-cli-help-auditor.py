@@ -38,10 +38,13 @@ def audit_go_cobra_commands(content: str) -> list[tuple[str, str]]:
     for match in re_cobra.finditer(content):
         cmd_var = match.group(1)
         body = match.group(2)
-        if not re_short.search(body):
+        has_short = bool(re_short.search(body))
+        if not has_short:
             violations.append((cmd_var, "Missing Short description in cobra.Command"))
-        if cmd_var != "rootCmd":
-            if not re_example.search(body):
+        is_root = (cmd_var == "rootCmd")
+        if not is_root:
+            has_example = bool(re_example.search(body))
+            if not has_example:
                 violations.append((cmd_var, "Missing Example usage in cobra.Command"))
     return violations
 
@@ -51,12 +54,15 @@ def audit_python_cli_commands(file_path: Path, content: str) -> list[tuple[str, 
     try:
         tree = ast.parse(content, filename=str(file_path))
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+            is_func = isinstance(node, ast.FunctionDef)
+            if is_func:
                 for dec in node.decorator_list:
                     if isinstance(dec, ast.Call):
                         if hasattr(dec.func, "attr"):
-                            if dec.func.attr == "command":
-                                if not ast.get_docstring(node):
+                            is_cmd = (dec.func.attr == "command")
+                            if is_cmd:
+                                has_doc = bool(ast.get_docstring(node))
+                                if not has_doc:
                                     violations.append((node.name, "Missing docstring for CLI command function"))
     except Exception:
         pass
@@ -66,9 +72,11 @@ def audit_single_file_cli(file_path: Path) -> list[tuple[str, str]]:
     """Audits a single file for CLI help compliance."""
     try:
         content = read_file_lf(file_path)
-        if file_path.suffix == ".go":
+        is_go = (file_path.suffix == ".go")
+        if is_go:
             return audit_go_cobra_commands(content)
-        if file_path.suffix == ".py":
+        is_py = (file_path.suffix == ".py")
+        if is_py:
             return audit_python_cli_commands(file_path, content)
     except Exception:
         pass
@@ -89,7 +97,8 @@ def run_cli_auditor(
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     all_violations = stats["results"]
 
-    if all_violations:
+    has_violations = len(all_violations) > 0
+    if has_violations:
         print(f"\n⚠️ Found CLI help description issues in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for fp, vios in all_violations:
             for cmd, msg in vios:

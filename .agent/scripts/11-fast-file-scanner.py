@@ -81,7 +81,7 @@ def resolve_extensions(lang_arg: str | None, ext_arg: str | None) -> set[str] | 
 
     return allowed_exts if allowed_exts else None
 
-def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str | None, include_hidden: bool):
+def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str | None, is_include_hidden: bool):
     matched_files = []
     ext_counts = {}
 
@@ -89,7 +89,7 @@ def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str |
     search_re = re.compile(re.escape(search_term), re.IGNORECASE) if search_term else None
 
     for root, dirs, files in os.walk(scan_root):
-        if not include_hidden:
+        if not is_include_hidden:
             dirs[:] = [
                 d for d in dirs
                 if d not in DEFAULT_IGNORE_DIRS and (not d.startswith(".") or d in WHITELISTED_DOT_DIRS)
@@ -98,13 +98,14 @@ def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str |
             dirs[:] = [d for d in dirs if d not in DEFAULT_IGNORE_DIRS]
 
         for filename in sorted(files):
-            if not include_hidden:
+            if not is_include_hidden:
                 if filename.startswith("."):
                     if not filename.startswith(".lovable"):
                         continue
 
             ext = os.path.splitext(filename)[1].lower()
-            if ext in BINARY_EXTENSIONS:
+            is_bin = (ext in BINARY_EXTENSIONS)
+            if is_bin:
                 continue
 
             if allowed_exts:
@@ -237,15 +238,17 @@ def main():
 
     start_time = time.perf_counter()
     allowed_exts = resolve_extensions(args.lang, args.ext)
-    matched_files, ext_counts = scan_files(args.path, allowed_exts, args.search, args.include_hidden)
+    matched_files, ext_counts = scan_files(args.path, allowed_exts, args.search, is_include_hidden=args.include_hidden)
     scan_duration_ms = (time.perf_counter() - start_time) * 1000.0
 
     json_path, txt_path, all_txt_path = get_cache_filenames(args)
 
-    if not args.no_cache:
+    is_no_cache = args.no_cache
+    if not is_no_cache:
         write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, args, scan_duration_ms)
 
-    if args.check:
+    is_check_mode = args.check
+    if is_check_mode:
         print(f"✅ Fast File Scanner Check PASSED: {len(matched_files)} files indexed in {scan_duration_ms:.2f}ms")
         sys.exit(0)
 
@@ -255,14 +258,15 @@ def main():
     print(f"📁 Root: `{args.path}` | Filtered Files Found: **{len(matched_files)}**")
     print("================================================================================")
 
-    if not args.no_cache:
+    if not is_no_cache:
         print("\n💾 TEMP FOLDER CACHE INVENTORY:")
         print(f"   • Full JSON Cache : `{json_path}`")
         print(f"   • Primary Pluggable: `tmp/cache/repo-file-cache.json`")
         print(f"   • Specific Filter : `{txt_path}`")
         print(f"   • Global List     : `{all_txt_path}`")
 
-    if args.stats or len(matched_files) == 0:
+    has_stats_req = args.stats or len(matched_files) == 0
+    if has_stats_req:
         print("\n📊 Extension Breakdown:")
         for ext, count in sorted(ext_counts.items(), key=lambda x: x[1], reverse=True):
             display_ext = ext if ext else "(no extension)"
@@ -273,7 +277,8 @@ def main():
     for idx, fp in enumerate(matched_files[:preview_limit], 1):
         print(f"   {idx:>4}. {fp}")
 
-    if len(matched_files) > preview_limit:
+    has_more_files = len(matched_files) > preview_limit
+    if has_more_files:
         print(f"   ... and {len(matched_files) - preview_limit} more files (see `{txt_path}` for complete list).")
 
     print("\n💡 AI AGENT INSTRUCTION:")

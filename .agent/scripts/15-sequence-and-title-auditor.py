@@ -36,21 +36,26 @@ def fix_single_file_title_header(file_path: Path, is_fix_mode: bool = False) -> 
     re_h1 = get_compiled_regex(RegexPatternType.H1_HEADER)
 
     m = re_file_prefix.match(file_path.name)
-    if not m:
+    has_prefix_match = bool(m)
+    if not has_prefix_match:
         return (norm_p, False)
 
     f_num = int(m.group(1))
-    if f_num >= 90:
+    is_meta_file = (f_num >= 90)
+    if is_meta_file:
         return (norm_p, False)
 
     try:
         content = read_file_lf(file_path)
-        if not content:
+        has_content = bool(content)
+        if not has_content:
             return (norm_p, False)
         match = re_h1.search(content)
-        if match:
+        has_h1 = bool(match)
+        if has_h1:
             h_num = int(match.group(2))
-            if h_num != f_num:
+            is_matching_header = (h_num == f_num)
+            if not is_matching_header:
                 if h_num < 90:
                     if is_fix_mode:
                         new_header = f"{match.group(1)}{f_num:02d}{match.group(3)}{match.group(4)}"
@@ -76,7 +81,8 @@ def run_sequence_title_auditor(
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     mismatches = stats["results"]
 
-    if mismatches:
+    has_mismatches = len(mismatches) > 0
+    if has_mismatches:
         action_word = "Fixed" if is_fix_mode else "Found header mismatches in"
         print(f"\n⚠️ {action_word} {len(mismatches)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for msg in mismatches:

@@ -54,14 +54,18 @@ def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, l
         for pat in patterns:
             for match in pat.finditer(content):
                 val = match.group(0)
-                if "\\\\?\\" not in val:
-                    if not val.endswith("."):
+                is_device_path = "\\\\?\\" in val
+                is_trailing_dot = val.endswith(".")
+                if not is_device_path:
+                    if not is_trailing_dot:
                         violations.append(val)
 
-        if violations:
+        has_violations = len(violations) > 0
+        if has_violations:
             if is_fix_mode:
                 cleaned, fix_count = sanitize_content_paths(content)
-                if fix_count > 0:
+                has_fixed = fix_count > 0
+                if has_fixed:
                     write_file_lf(file_path, cleaned)
 
         return (norm_p, violations)
@@ -83,7 +87,8 @@ def run_path_auditor(
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     all_violations = stats["results"]
 
-    if all_violations:
+    has_violations = len(all_violations) > 0
+    if has_violations:
         print(f"\n❌ Found absolute path references in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for fp, vios in all_violations:
             for v in vios[:3]:

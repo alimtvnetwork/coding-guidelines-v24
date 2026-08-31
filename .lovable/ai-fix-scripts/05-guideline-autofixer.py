@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Fast Guideline Autofixer Forwarder & Composite Runner
-Combines newline/whitespace fixes (02-newline-fixer) and boolean convention auditing (05-naming-autofixer).
+Combines newline/whitespace fixes (04-newline-fixer) and boolean convention auditing (08-naming-autofixer).
 Multi-folder capable, customizable extensions, and sub-25ms execution.
 """
 
@@ -45,8 +45,8 @@ def main():
     args = parser.parse_args()
 
     target_path = args.opt_path or args.path or "."
-    is_fix = not args.check_only
-    sys.exit(run_composite_guideline_autofixer(target_dir=target_path, is_fix_mode=is_fix, extensions=args.ext))
+    is_fix_mode = not args.check_only
+    sys.exit(run_composite_guideline_autofixer(target_dir=target_path, is_fix_mode=is_fix_mode, extensions=args.ext))
 
 if __name__ == "__main__":
     main()

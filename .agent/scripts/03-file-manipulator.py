@@ -134,9 +134,9 @@ def parse_pin_mappings(pin_str: str | None) -> dict[str, int]:
 
 def fix_sequences_in_folder(
     folder_path: Path,
-    order_by_time: bool = False,
-    order_by_az: bool = False,
-    keep_old_order: bool = True,
+    is_order_by_time: bool = False,
+    is_order_by_az: bool = False,
+    is_keep_old_order: bool = True,
     pin_map: dict[str, int] | None = None
 ) -> int:
     """Re-sequences files inside a single directory sequentially."""
@@ -151,15 +151,15 @@ def fix_sequences_in_folder(
         for pin_name, pin_seq in pin_map.items():
             if pin_name in stem:
                 return (0, pin_seq, stem)
-        if order_by_time:
+        if is_order_by_time:
             return (1, f.stat().st_mtime, stem)
-        if order_by_az:
+        if is_order_by_az:
             m = re_seq.match(f.name)
             base = m.group(2) if m else f.name
             return (1, 0, base.lower())
         m = re_seq.match(f.name)
         if m:
-            if keep_old_order:
+            if is_keep_old_order:
                 return (1, int(m.group(1)), m.group(2).lower())
         return (1, 999, f.name.lower())
 
@@ -266,9 +266,9 @@ def main():
         pin_map = parse_pin_mappings(args.pin)
         sys.exit(fix_sequences_recursive(
             target_dir=args.path,
-            order_by_time=args.order_by_time,
-            order_by_az=args.order_by_az,
-            keep_old_order=args.keep_old_order,
+            is_order_by_time=args.order_by_time,
+            is_order_by_az=args.order_by_az,
+            is_keep_old_order=args.keep_old_order,
             pin_map=pin_map
         ))
     elif args.command == "fix-encoding":

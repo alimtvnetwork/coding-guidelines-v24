@@ -40,7 +40,8 @@ def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
     """Executes a single validation check asynchronously."""
     try:
         res = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace")
-        if res.returncode == 0:
+        is_success = (res.returncode == 0)
+        if is_success:
             return (job_name, True, res.stdout)
         return (job_name, False, res.stdout + "\n" + res.stderr)
     except Exception as e:

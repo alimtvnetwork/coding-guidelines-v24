@@ -41,14 +41,18 @@ def check_version_sync(root_dir: str = ".") -> int:
 
     canonical_version = None
 
-    if os.path.exists(version_json_p):
+    has_version_json = os.path.exists(version_json_p)
+    has_package_json = os.path.exists(package_json_p)
+    has_changelog = os.path.exists(changelog_p)
+
+    if has_version_json:
         try:
             with open(version_json_p, "r", encoding="utf-8") as f:
                 v_data = json.load(f)
                 canonical_version = v_data.get("version")
         except Exception as e:
             errors.append(f"version.json parse error: {e}")
-    elif os.path.exists(package_json_p):
+    elif has_package_json:
         try:
             with open(package_json_p, "r", encoding="utf-8") as f:
                 p_data = json.load(f)
@@ -56,38 +60,43 @@ def check_version_sync(root_dir: str = ".") -> int:
         except Exception as e:
             errors.append(f"package.json parse error: {e}")
 
-    if not canonical_version:
+    has_canonical = bool(canonical_version)
+    if not has_canonical:
         print(f"⚠️ No canonical version source (version.json or package.json) found in '{root_dir}'.")
         return ExitCodeType.SUCCESS.value
 
     # 1. Compare with package.json
-    if os.path.exists(package_json_p):
+    if has_package_json:
         try:
             with open(package_json_p, "r", encoding="utf-8") as f:
                 p_data = json.load(f)
                 pkg_ver = p_data.get("version")
-                if pkg_ver != canonical_version:
+                is_version_match = (pkg_ver == canonical_version)
+                if not is_version_match:
                     errors.append(f"Version mismatch: version.json has '{canonical_version}' but package.json has '{pkg_ver}'")
         except Exception as e:
             errors.append(f"package.json error: {e}")
 
     # 2. Compare with changelog.md latest entry
-    if os.path.exists(changelog_p):
+    if has_changelog:
         try:
             with open(changelog_p, "r", encoding="utf-8") as f:
                 changelog_text = f.read()
             re_changelog = get_compiled_regex(RegexPatternType.CHANGELOG_HEADER)
             match = re_changelog.search(changelog_text)
-            if match:
+            has_match = bool(match)
+            if has_match:
                 latest_cl_ver = match.group(1).lstrip("v")
-                if latest_cl_ver != canonical_version.lstrip("v"):
+                is_changelog_match = (latest_cl_ver == canonical_version.lstrip("v"))
+                if not is_changelog_match:
                     errors.append(f"Changelog mismatch: latest header is 'v{latest_cl_ver}' but canonical version is '{canonical_version}'")
         except Exception as e:
             errors.append(f"changelog.md error: {e}")
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
-    if errors:
+    has_errors = len(errors) > 0
+    if has_errors:
         print(f"\n❌ Version synchronization failed in '{root_dir}' ({elapsed_ms:.2f}ms):")
         for err in errors:
             print(f"  ::error::{err}")

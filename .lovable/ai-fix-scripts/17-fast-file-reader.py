@@ -32,7 +32,8 @@ except Exception:
 def list_folder_files(target_dir: str = ".", extensions: tuple | set | None = None) -> list[str]:
     """Lists files in target folder quickly using cache-first streaming."""
     norm_target = normalize_rel_path(target_dir).rstrip("/")
-    if norm_target == ".":
+    is_root_target = (norm_target == ".")
+    if is_root_target:
         norm_target = ""
 
     exts = normalize_extensions(extensions)
@@ -40,7 +41,8 @@ def list_folder_files(target_dir: str = ".", extensions: tuple | set | None = No
 
     def handler(p: Path):
         p_rel = normalize_rel_path(p)
-        if not norm_target:
+        is_empty_target = not norm_target
+        if is_empty_target:
             files_found.append(p_rel)
         elif p_rel.startswith(norm_target + "/"):
             files_found.append(p_rel)
@@ -66,7 +68,7 @@ def search_files_by_pattern(
     """Searches for pattern in file names/paths using compiled regex."""
     search_re = re.compile(re.escape(pattern), re.IGNORECASE)
     all_files = list_folder_files(target_dir=target_dir, extensions=extensions)
-    return [f for f in all_files if search_re.search(f)]
+    return [f for f in all_files if bool(search_re.search(f))]
 
 def main():
     if hasattr(sys.stdout, "reconfigure"):
@@ -82,16 +84,19 @@ def main():
 
     ext_set = normalize_extensions(args.ext)
 
-    if args.read_file:
+    has_read_file = bool(args.read_file)
+    if has_read_file:
         content, elapsed_ms = read_target_file(args.read_file)
-        if content is None:
+        is_missing = (content is None)
+        if is_missing:
             print(f"❌ File not found or unreadable: {args.read_file}")
             sys.exit(ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1)
         print(f"📖 Read {args.read_file} ({len(content)} chars) in {elapsed_ms:.2f}ms:\n")
         print(content)
         sys.exit(ExitCodeType.SUCCESS.value if ExitCodeType else 0)
 
-    if args.search_pattern:
+    has_search_pattern = bool(args.search_pattern)
+    if has_search_pattern:
         start = time.perf_counter()
         matches = search_files_by_pattern(args.search_pattern, target_dir=args.path, extensions=ext_set)
         elapsed_ms = (time.perf_counter() - start) * 1000
@@ -100,7 +105,8 @@ def main():
             print(f"  {m}")
         sys.exit(ExitCodeType.SUCCESS.value if ExitCodeType else 0)
 
-    if args.list_folder:
+    has_list_folder = bool(args.list_folder)
+    if has_list_folder:
         start = time.perf_counter()
         files = list_folder_files(target_dir=args.list_folder, extensions=ext_set)
         elapsed_ms = (time.perf_counter() - start) * 1000

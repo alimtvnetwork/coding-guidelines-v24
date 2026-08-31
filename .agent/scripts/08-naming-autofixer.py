@@ -39,11 +39,13 @@ def find_explicit_true_violations(content: str) -> list[tuple[int, str]]:
     )
     violations = []
     for idx, line in enumerate(content.split("\n"), start=1):
-        if re_comment.match(line):
+        is_comment = bool(re_comment.match(line))
+        if is_comment:
             continue
         stripped = line.strip()
         for pat in explicit_patterns:
-            if pat.search(line):
+            has_match = bool(pat.search(line))
+            if has_match:
                 violations.append((idx, stripped))
                 break
     return violations
@@ -72,7 +74,8 @@ def run_naming_auditor(
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     all_violations = stats["results"]
 
-    if all_violations:
+    has_violations = len(all_violations) > 0
+    if has_violations:
         print(f"\n❌ Found explicit boolean comparisons in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for fp, vios in all_violations:
             for l_num, line_str in vios[:2]:

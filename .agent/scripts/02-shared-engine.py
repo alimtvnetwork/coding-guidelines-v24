@@ -33,10 +33,10 @@ from typing import Any, Callable
 # Optional POSIX kernel locking
 try:
     import fcntl
-    HAS_FCNTL = True
+    IS_FCNTL_AVAILABLE = True
 except ImportError:
     fcntl = None
-    HAS_FCNTL = False
+    IS_FCNTL_AVAILABLE = False
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -363,25 +363,25 @@ def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_
     CACHE_LOCKS_DIR.mkdir(parents=True, exist_ok=True)
     lock_file = CACHE_LOCKS_DIR / lock_name
     start_time = time.time()
-    acquired = False
+    is_acquired = False
     lock_fd = None
 
-    if HAS_FCNTL:
+    if IS_FCNTL_AVAILABLE:
         # Native Unix POSIX flock
         try:
             lock_fd = open(lock_file, "w")
             while time.time() - start_time < timeout:
                 try:
                     fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    acquired = True
+                    is_acquired = True
                     break
                 except (BlockingIOError, OSError):
                     time.sleep(0.02)
         except Exception:
-            acquired = False
+            is_acquired = False
 
         try:
-            yield acquired
+            yield is_acquired
         finally:
             if lock_fd is not None:
                 try:
@@ -404,7 +404,7 @@ def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_
                 fd = os.open(str(lock_file), os.O_CREAT | os.O_EXCL | os.O_RDWR)
                 os.write(fd, f"pid={os.getpid()}\ntime={time.time()}".encode("utf-8"))
                 os.close(fd)
-                acquired = True
+                is_acquired = True
                 break
             except FileExistsError:
                 time.sleep(0.02)
@@ -412,9 +412,9 @@ def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_
                 break
 
         try:
-            yield acquired
+            yield is_acquired
         finally:
-            if acquired:
+            if is_acquired:
                 if lock_file.exists():
                     try:
                         lock_file.unlink()
@@ -527,7 +527,7 @@ def process_repository_files(
     processor_fn: Callable[[Path], Any],
     root_dir: str = ".",
     extensions: set[str] | tuple | list | str | None = None,
-    use_cache: bool = True,
+    is_use_cache: bool = True,
     custom_excludes: set[str] | None = None
 ) -> dict[str, Any]:
     """
@@ -538,7 +538,7 @@ def process_repository_files(
     4. Executes processor_fn on each unique file and aggregates statistics.
     """
     start_time = time.perf_counter()
-    cache_data = load_repo_cache() if use_cache else {}
+    cache_data = load_repo_cache() if is_use_cache else {}
     processed_paths: set[str] = set()
     results = []
     norm_exts = normalize_extensions(extensions)
