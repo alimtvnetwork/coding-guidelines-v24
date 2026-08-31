@@ -31,9 +31,9 @@ except Exception:
 def audit_go_cobra_commands(content: str) -> list[tuple[str, str]]:
     """Detects Go Cobra commands missing Short or Example descriptions."""
     violations = []
-    re_cobra = get_compiled_regex(RegexPatternType.CobraCommand)
-    re_short = get_compiled_regex(RegexPatternType.ShortDesc)
-    re_example = get_compiled_regex(RegexPatternType.ExampleUsage)
+    re_cobra = get_compiled_regex(RegexPatternType.COBRA_COMMAND)
+    re_short = get_compiled_regex(RegexPatternType.SHORT_DESC)
+    re_example = get_compiled_regex(RegexPatternType.EXAMPLE_USAGE)
 
     for match in re_cobra.finditer(content):
         cmd_var = match.group(1)
@@ -95,11 +95,11 @@ def run_cli_auditor(
             for cmd, msg in vios:
                 print(f"  ::warning file={fp}::{cmd}: {msg}")
         if is_strict:
-            return ExitCodeType.ViolationsFound.value if ExitCodeType else 1
+            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
     else:
         print(f"✅ All CLI commands in {stats['total_files']} files in '{target_dir}' contain required help strings ({stats['elapsed_ms']:.2f}ms).")
 
-    return ExitCodeType.Success.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
 
 def main():
     parser = argparse.ArgumentParser(description="Audit CLI commands for help descriptions across folders")

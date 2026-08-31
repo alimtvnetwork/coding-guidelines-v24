@@ -31,11 +31,11 @@ except Exception:
 
 def find_explicit_true_violations(content: str) -> list[tuple[int, str]]:
     """Inspects lines for explicit true comparisons."""
-    re_comment = get_compiled_regex(RegexPatternType.CommentPrefix)
+    re_comment = get_compiled_regex(RegexPatternType.COMMENT_PREFIX)
     explicit_patterns = get_compiled_regex_group(
-        RegexPatternType.ExplicitDoubleTrue,
-        RegexPatternType.ExplicitTripleTrue,
-        RegexPatternType.ExplicitPythonTrue,
+        RegexPatternType.EXPLICIT_DOUBLE_TRUE,
+        RegexPatternType.EXPLICIT_TRIPLE_TRUE,
+        RegexPatternType.EXPLICIT_PYTHON_TRUE,
     )
     violations = []
     for idx, line in enumerate(content.split("\n"), start=1):
@@ -77,10 +77,10 @@ def run_naming_auditor(
         for fp, vios in all_violations:
             for l_num, line_str in vios[:2]:
                 print(f"  ::error file={fp},line={l_num}::Explicit true comparison: {line_str}")
-        return ExitCodeType.ViolationsFound.value if ExitCodeType else 1
+        return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
 
     print(f"✅ All {stats['total_files']} code files in '{target_dir}' conform to implicit boolean rules ({stats['elapsed_ms']:.2f}ms).")
-    return ExitCodeType.Success.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
 
 def main():
     parser = argparse.ArgumentParser(description="Audit boolean conventions and naming across folders")

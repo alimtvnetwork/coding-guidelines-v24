@@ -24,8 +24,8 @@ try:
     ExitCodeType = engine.ExitCodeType
 except Exception:
     class ExitCodeType(int, Enum):
-        Success = 0
-        ViolationsFound = 1
+        SUCCESS = 0
+        VIOLATIONS_FOUND = 1
     RegexPatternType = None
     get_compiled_regex = None
 
@@ -38,7 +38,7 @@ def smoke_test_installers(dist_dir: str = ".") -> int:
     errors = []
     checked_files = 0
 
-    re_placeholder = get_compiled_regex(RegexPatternType.PlaceholderToken)
+    re_placeholder = get_compiled_regex(RegexPatternType.PLACEHOLDER_TOKEN)
 
     candidates = ["install.sh", "install.ps1", "release-install.sh", "release-install.ps1"]
     for fname in candidates:
@@ -71,16 +71,16 @@ def smoke_test_installers(dist_dir: str = ".") -> int:
 
     if checked_files == 0:
         print(f"ℹ️ No installer scripts found in '{dist_dir}' to smoke-test (skipping).")
-        return ExitCodeType.Success.value
+        return ExitCodeType.SUCCESS.value
 
     if errors:
         print(f"\n❌ Installer smoke testing failed in '{dist_dir}' ({elapsed_ms:.2f}ms):")
         for err in errors:
             print(f"  ::error::{err}")
-        return ExitCodeType.ViolationsFound.value
+        return ExitCodeType.VIOLATIONS_FOUND.value
 
     print(f"✅ Installer smoke tests passed for {checked_files} script(s) in '{dist_dir}' ({elapsed_ms:.2f}ms)")
-    return ExitCodeType.Success.value
+    return ExitCodeType.SUCCESS.value
 
 def main():
     parser = argparse.ArgumentParser(description="Smoke test install scripts across directories")

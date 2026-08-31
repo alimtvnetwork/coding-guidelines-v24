@@ -4,7 +4,7 @@ Shared Core Engine for AI Repository Tooling, CI Fix Scripts & High-Speed Cachin
 Dual-Platform Engine (100% Native Unix & Windows Support)
 
 Features:
-1. Centralized Configuration Maps and Top-Level Enums (with 'Type' suffix & PascalCase members).
+1. Centralized Configuration Maps and Top-Level Enums (PascalCase class, UPPER_CASE members mirroring string values).
 2. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
 3. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
@@ -125,71 +125,75 @@ LANG_EXT_MAP = {
     "cpp": [".cpp", ".hpp", ".cc", ".cxx"],
 }
 
-# --- Top-Level Enums with PascalCase Members ---
+# --- Top-Level Enums Following Standard ---
 class ScanModeType(str, Enum):
-    Check = "check"
-    Fix = "fix"
-    Stream = "stream"
+    """Enumeration for file scanning modes."""
+    CHECK = "CHECK"
+    FIX = "FIX"
+    STREAM = "STREAM"
 
 class SeverityType(str, Enum):
-    Blocker = "blocker"
-    High = "high"
-    Warn = "warn"
-    Info = "info"
+    """Enumeration for issue severity levels."""
+    BLOCKER = "BLOCKER"
+    HIGH = "HIGH"
+    WARN = "WARN"
+    INFO = "INFO"
 
 class ExitCodeType(int, Enum):
-    Success = 0
-    ViolationsFound = 1
-    ToolError = 2
+    """Enumeration for application exit codes."""
+    SUCCESS = 0
+    VIOLATIONS_FOUND = 1
+    TOOL_ERROR = 2
 
 class RegexPatternType(str, Enum):
-    WindowsBackslash = "windows_backslash"
-    LeadingDotSlash = "leading_dot_slash"
-    Crlf = "crlf"
-    UniversalLineEnding = "universal_line_ending"
-    TrailingWhitespace = "trailing_whitespace"
-    SeqPrefix = "seq_prefix"
-    Uppercase = "uppercase"
-    FileUriWin = "file_uri_win"
-    DriveAbsWin = "drive_abs_win"
-    RepoFileUri = "repo_file_uri"
-    ExplicitDoubleTrue = "explicit_double_true"
-    ExplicitTripleTrue = "explicit_triple_true"
-    ExplicitPythonTrue = "explicit_python_true"
-    CommentPrefix = "comment_prefix"
-    CobraCommand = "cobra_command"
-    ShortDesc = "short_desc"
-    ExampleUsage = "example_usage"
-    ChangelogHeader = "changelog_header"
-    FileNumPrefix = "file_num_prefix"
-    H1Header = "h1_header"
-    PlaceholderToken = "placeholder_token"
-    NonAlphanumeric = "non_alphanumeric"
+    """Enumeration for cached regex pattern identifiers."""
+    WINDOWS_BACKSLASH = "WINDOWS_BACKSLASH"
+    LEADING_DOT_SLASH = "LEADING_DOT_SLASH"
+    CRLF = "CRLF"
+    UNIVERSAL_LINE_ENDING = "UNIVERSAL_LINE_ENDING"
+    TRAILING_WHITESPACE = "TRAILING_WHITESPACE"
+    SEQ_PREFIX = "SEQ_PREFIX"
+    UPPERCASE = "UPPERCASE"
+    FILE_URI_WIN = "FILE_URI_WIN"
+    DRIVE_ABS_WIN = "DRIVE_ABS_WIN"
+    REPO_FILE_URI = "REPO_FILE_URI"
+    EXPLICIT_DOUBLE_TRUE = "EXPLICIT_DOUBLE_TRUE"
+    EXPLICIT_TRIPLE_TRUE = "EXPLICIT_TRIPLE_TRUE"
+    EXPLICIT_PYTHON_TRUE = "EXPLICIT_PYTHON_TRUE"
+    COMMENT_PREFIX = "COMMENT_PREFIX"
+    COBRA_COMMAND = "COBRA_COMMAND"
+    SHORT_DESC = "SHORT_DESC"
+    EXAMPLE_USAGE = "EXAMPLE_USAGE"
+    CHANGELOG_HEADER = "CHANGELOG_HEADER"
+    FILE_NUM_PREFIX = "FILE_NUM_PREFIX"
+    H1_HEADER = "H1_HEADER"
+    PLACEHOLDER_TOKEN = "PLACEHOLDER_TOKEN"
+    NON_ALPHANUMERIC = "NON_ALPHANUMERIC"
 
 # Centralized Raw Regex Definitions: Enum -> (Pattern String, Flags)
 REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
-    RegexPatternType.WindowsBackslash: (r"\\", 0),
-    RegexPatternType.LeadingDotSlash: (r"^\./", 0),
-    RegexPatternType.Crlf: (r"\r\n", 0),
-    RegexPatternType.UniversalLineEnding: (r"\r\n|\r", 0),
-    RegexPatternType.TrailingWhitespace: (r"[ \t]+$", re.MULTILINE),
-    RegexPatternType.SeqPrefix: (r"^([0-9]+)-(.*)$", 0),
-    RegexPatternType.Uppercase: (r"[A-Z]", 0),
-    RegexPatternType.FileUriWin: (r"file:///[A-Za-z]:/[^\s\)\]\"'>]+", 0),
-    RegexPatternType.DriveAbsWin: (r"(?<![A-Za-z0-9_])[A-Za-z]:\\[A-Za-z0-9_\\.-]+", 0),
-    RegexPatternType.RepoFileUri: (r"file:///[A-Za-z]:/[^/]+/coding-guidelines/([^\s\)\]\"'>]+)", 0),
-    RegexPatternType.ExplicitDoubleTrue: (r"==\s*true\b", re.IGNORECASE),
-    RegexPatternType.ExplicitTripleTrue: (r"===\s*true\b", re.IGNORECASE),
-    RegexPatternType.ExplicitPythonTrue: (r"==\s*True\b", 0),
-    RegexPatternType.CommentPrefix: (r"^\s*(//|#|\*|/\*)", 0),
-    RegexPatternType.CobraCommand: (r"var\s+(\w+Cmd)\s*=\s*&cobra\.Command\s*\{([^}]+)\}", re.DOTALL),
-    RegexPatternType.ShortDesc: (r"Short:\s*\"[^\"]+\"", 0),
-    RegexPatternType.ExampleUsage: (r"Example:\s*\"[^\"]+\"", 0),
-    RegexPatternType.ChangelogHeader: (r"##\s+\[v?([0-9]+\.[0-9]+\.[0-9]+[^\]]*)\]", 0),
-    RegexPatternType.FileNumPrefix: (r"^([0-9]+)-(.*)\.md$", 0),
-    RegexPatternType.H1Header: (r"^(#\s+)([0-9]+)(\s*[-—:]\s*)(.*)$", re.MULTILINE),
-    RegexPatternType.PlaceholderToken: (r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*", 0),
-    RegexPatternType.NonAlphanumeric: (r"[^a-zA-Z0-9_-]+", 0),
+    RegexPatternType.WINDOWS_BACKSLASH: (r"\\", 0),
+    RegexPatternType.LEADING_DOT_SLASH: (r"^\./", 0),
+    RegexPatternType.CRLF: (r"\r\n", 0),
+    RegexPatternType.UNIVERSAL_LINE_ENDING: (r"\r\n|\r", 0),
+    RegexPatternType.TRAILING_WHITESPACE: (r"[ \t]+$", re.MULTILINE),
+    RegexPatternType.SEQ_PREFIX: (r"^([0-9]+)-(.*)$", 0),
+    RegexPatternType.UPPERCASE: (r"[A-Z]", 0),
+    RegexPatternType.FILE_URI_WIN: (r"file:///[A-Za-z]:/[^\s\)\]\"'>]+", 0),
+    RegexPatternType.DRIVE_ABS_WIN: (r"(?<![A-Za-z0-9_])[A-Za-z]:\\[A-Za-z0-9_\\.-]+", 0),
+    RegexPatternType.REPO_FILE_URI: (r"file:///[A-Za-z]:/[^/]+/coding-guidelines/([^\s\)\]\"'>]+)", 0),
+    RegexPatternType.EXPLICIT_DOUBLE_TRUE: (r"==\s*true\b", re.IGNORECASE),
+    RegexPatternType.EXPLICIT_TRIPLE_TRUE: (r"===\s*true\b", re.IGNORECASE),
+    RegexPatternType.EXPLICIT_PYTHON_TRUE: (r"==\s*True\b", 0),
+    RegexPatternType.COMMENT_PREFIX: (r"^\s*(//|#|\*|/\*)", 0),
+    RegexPatternType.COBRA_COMMAND: (r"var\s+(\w+Cmd)\s*=\s*&cobra\.Command\s*\{([^}]+)\}", re.DOTALL),
+    RegexPatternType.SHORT_DESC: (r"Short:\s*\"[^\"]+\"", 0),
+    RegexPatternType.EXAMPLE_USAGE: (r"Example:\s*\"[^\"]+\"", 0),
+    RegexPatternType.CHANGELOG_HEADER: (r"##\s+\[v?([0-9]+\.[0-9]+\.[0-9]+[^\]]*)\]", 0),
+    RegexPatternType.FILE_NUM_PREFIX: (r"^([0-9]+)-(.*)\.md$", 0),
+    RegexPatternType.H1_HEADER: (r"^(#\s+)([0-9]+)(\s*[-—:]\s*)(.*)$", re.MULTILINE),
+    RegexPatternType.PLACEHOLDER_TOKEN: (r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*", 0),
+    RegexPatternType.NON_ALPHANUMERIC: (r"[^a-zA-Z0-9_-]+", 0),
 }
 
 # --- Thread-Safe Lazy Regex Registry ---
@@ -263,8 +267,8 @@ def is_allowed_large_file(file_path: str | Path) -> bool:
 
 def normalize_rel_path(path: str | Path) -> str:
     """Converts a path into a canonical relative POSIX path."""
-    re_slash = get_compiled_regex(RegexPatternType.WindowsBackslash)
-    re_lead = get_compiled_regex(RegexPatternType.LeadingDotSlash)
+    re_slash = get_compiled_regex(RegexPatternType.WINDOWS_BACKSLASH)
+    re_lead = get_compiled_regex(RegexPatternType.LEADING_DOT_SLASH)
     p_str = re_slash.sub("/", str(path))
     return re_lead.sub("", p_str)
 
@@ -296,7 +300,7 @@ def read_file_safe(path: str | Path, max_bytes: int = MAX_READ_SIZE_BYTES) -> st
             return None
         if not p.is_file():
             return None
-        re_univ_nl = get_compiled_regex(RegexPatternType.UniversalLineEnding)
+        re_univ_nl = get_compiled_regex(RegexPatternType.UNIVERSAL_LINE_ENDING)
         with open(p, "r", encoding="utf-8", errors="replace") as f:
             raw_text = f.read(max_bytes)
             return re_univ_nl.sub("\n", raw_text)
@@ -326,7 +330,7 @@ def write_file_lf(path: str | Path, content: str) -> bool:
             pass
 
     try:
-        re_univ_nl = get_compiled_regex(RegexPatternType.UniversalLineEnding)
+        re_univ_nl = get_compiled_regex(RegexPatternType.UNIVERSAL_LINE_ENDING)
         lf_content = re_univ_nl.sub("\n", content)
         with open(temp_path, "wb") as f:
             f.write(lf_content.encode("utf-8"))

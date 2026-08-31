@@ -1,6 +1,6 @@
 # Python File Manipulator CLI Specification — Tooling Spec (must follow)
 
-> **Prompt Version:** 2.3.0
+> **Prompt Version:** 2.4.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 /goal Autonomously generate and maintain a robust, dependency-free Python CLI tool to handle mass file renaming, sequencing, and encoding normalization across any specified folder.
@@ -16,7 +16,7 @@ You are an expert Python Developer AI. Your task is to write and maintain a stan
 ## 🔍 Pre-Flight AI Checklist (Before Modifying or Rewriting Any Script)
 
 Before modifying or creating any Python tool in `.lovable/ai-fix-scripts/` or `.agent/scripts/`, the AI agent MUST inspect these two files first:
-1. **`.lovable/ai-fix-scripts/00-shared-engine.py`**: The canonical library containing all centralized constants, Enums (with PascalCase members), file locking, two-phase caching, and lazy regex memoization.
+1. **`.lovable/ai-fix-scripts/00-shared-engine.py`**: The canonical library containing all centralized constants, Enums (`UPPER_CASE` members matching string values), file locking, two-phase caching, and lazy regex memoization.
 2. **`.lovable/ai-fix-scripts/01-index.md`**: The master registry of existing tools, parameters, and benchmark speeds.
 
 ### Canonical Library Import Pattern:
@@ -50,15 +50,18 @@ except Exception:
 ## Non-Negotiable Rules for Python Scripts
 
 1. **Zero Dependencies**: The script MUST use only Python standard libraries (`os`, `sys`, `argparse`, `shutil`, `subprocess`, `pathlib`, `enum`, `json`, `time`, `re`, `threading`).
-2. **Enums with PascalCase Members & `Type` Suffix**: Top-level Enums (`ScanModeType`, `ExitCodeType`, `RegexPatternType`) MUST end with `Type`, and all Enum variables/members MUST strictly use **PascalCase** (e.g. `RegexPatternType.Uppercase`, `ExitCodeType.Success`).
+2. **Python Enum Generation Standard**:
+   - Class Name: `PascalCase` singular noun ending with `Type` (e.g. `RegexPatternType`, `ExitCodeType`, `ScanModeType`).
+   - Enum Members: `UPPER_CASE` with underscores (e.g. `UPPERCASE`, `SEQ_PREFIX`, `SUCCESS`).
+   - Enum Values: String literals exactly matching the member name in `UPPER_CASE` (e.g. `UPPERCASE = "UPPERCASE"`).
 3. **Implicit Booleans Only**: Never write `if is_valid == True:` (FORBIDDEN). Always write `if is_valid:`.
 4. **Small Decomposed Functions**: Code must be decomposed into small, testable functions under 25 lines each following the Single Responsibility Principle.
 5. **DRY Shared Engine**: Import common filesystem scanning, caching, regexes, and line-ending utilities from `00-shared-engine.py`.
-6. **Thread-Safe Lazy Regex Memoization**: Consume regex patterns via `get_compiled_regex(RegexPatternType.<Member>)` or `RegexRegistry.get(...)`.
+6. **Thread-Safe Lazy Regex Memoization**: Consume regex patterns via `get_compiled_regex(RegexPatternType.<MEMBER>)` or `RegexRegistry.get(...)`.
 7. **Multi-Folder Scoping**: Support target directory specification (`<path>` or `--path` / `--dir`) so the tool can run on any directory, repository root, or nested subfolder.
 8. **Customizable File Extensions**: Support `--ext` for filtering specific file extensions (e.g. `.md,.ts,.py`), normalizing extensions to lowercase with leading dots.
 9. **Nested Ignore Pruning**: Prune `.git`, `.gitmap`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts` at all subtree depths including nested subprojects.
-10. **Windows Long Paths**: Normalize paths and safely handle Windows `MAX_PATH` limitations.
+10. **Windows Long Paths & Case-Hop**: Normalize paths and safely handle Windows NTFS case-only renames with an intermediate hop.
 11. **Git Awareness**: Attempt `git mv` via subprocess first, gracefully falling back to standard `shutil.move` / `os.rename`.
 12. **Update Index & Mirror**: Document usage in `.lovable/ai-fix-scripts/01-index.md` and sync changes to `.agent/scripts/`.
 
@@ -72,7 +75,7 @@ python .lovable/ai-fix-scripts/01-file-manipulator.py lowercase <target_director
 ```
 
 **Requirements**:
-1. Recursively convert all files matching a target pattern to lowercase using `RegexPatternType.Uppercase`.
+1. Recursively convert all files matching a target pattern to lowercase using `RegexPatternType.UPPERCASE`.
 2. **Extension Enforcement**: Strictly ensure all markdown and code file extensions are lowercased (e.g., converting `.MD` to `.md`).
 3. **Default Ignores**: Silently ignore `node_modules`, `.git`, `.gitmap`, and excluded folders from `00-shared-engine.py`.
 4. **Extendable Ignores**: Provide `--except` accepting a comma-separated list of additional files or patterns.
@@ -87,7 +90,7 @@ python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files <target_dire
 ```
 
 **Requirements**:
-1. Scan the specified directory for sequenced files using `RegexPatternType.SeqPrefix`.
+1. Scan the specified directory for sequenced files using `RegexPatternType.SEQ_PREFIX`.
 2. **Ordering Flags**:
    - `--order-by-time`: Re-sequence files sequentially based on modification time.
    - `--order-by-az`: Re-sequence files alphabetically.
@@ -108,7 +111,7 @@ python .lovable/ai-fix-scripts/01-file-manipulator.py fix-encoding <target_direc
 **Requirements**:
 1. Scan the specified directory and aggressively normalize encoding for all text files (customizable via `--ext`, defaulting to `DEFAULT_TEXT_EXTENSIONS`).
 2. **BOM Stripping**: Detect and strip any UTF-8 Byte Order Marks (BOM), standardizing strictly to UTF-8 without BOM.
-3. **Line Ending Normalization**: Automatically convert Windows CRLF (`\r\n`) to Unix LF (`\n`) using `RegexPatternType.Crlf`.
+3. **Line Ending Normalization**: Automatically convert Windows CRLF (`\r\n`) to Unix LF (`\n`) using `RegexPatternType.CRLF` or `RegexPatternType.UNIVERSAL_LINE_ENDING`.
 
 ---
 
@@ -118,7 +121,7 @@ Before completing this task, you MUST verify:
 
 - [ ] Checked `00-shared-engine.py` and `01-index.md` before writing code.
 - [ ] Saved the script precisely to `.lovable/ai-fix-scripts/01-file-manipulator.py` and synced to `.agent/scripts/`.
-- [ ] Used `RegexPatternType` with PascalCase members (`Uppercase`, `SeqPrefix`, `Crlf`).
+- [ ] Used `RegexPatternType` with UPPER_CASE members (`UPPERCASE`, `SEQ_PREFIX`, `CRLF`).
 - [ ] Used `argparse` for subcommands (`lowercase`, `fix-seq-files`, and `fix-encoding`) with detailed examples.
 - [ ] Pruned `node_modules`, `.git`, `.gitmap` via `is_ignored_directory()`.
 - [ ] Attempted `git mv` where applicable to preserve history.

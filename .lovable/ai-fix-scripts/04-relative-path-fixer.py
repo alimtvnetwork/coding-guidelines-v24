@@ -32,7 +32,7 @@ except Exception:
 
 def sanitize_content_paths(content: str) -> tuple[str, int]:
     """Replaces absolute repository paths with clean relative paths."""
-    re_repo = get_compiled_regex(RegexPatternType.RepoFileUri)
+    re_repo = get_compiled_regex(RegexPatternType.REPO_FILE_URI)
     modified = content
     count = 0
     for match in re_repo.finditer(content):
@@ -45,8 +45,8 @@ def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, l
     """Audits a single file for forbidden absolute paths."""
     norm_p = normalize_rel_path(file_path)
     patterns = get_compiled_regex_group(
-        RegexPatternType.FileUriWin,
-        RegexPatternType.DriveAbsWin,
+        RegexPatternType.FILE_URI_WIN,
+        RegexPatternType.DRIVE_ABS_WIN,
     )
     try:
         content = read_file_lf(file_path)
@@ -88,10 +88,10 @@ def run_path_auditor(
         for fp, vios in all_violations:
             for v in vios[:3]:
                 print(f"  ::error file={fp}::Absolute path found: {v}")
-        return ExitCodeType.ViolationsFound.value if ExitCodeType else 1
+        return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
 
     print(f"✅ All {stats['total_files']} files in '{target_dir}' use strict relative paths ({stats['elapsed_ms']:.2f}ms).")
-    return ExitCodeType.Success.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
 
 def main():
     parser = argparse.ArgumentParser(description="Audit and fix absolute paths across target folders")

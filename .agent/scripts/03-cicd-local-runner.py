@@ -10,10 +10,10 @@ from pathlib import Path
 import subprocess
 import sys
 
-# --- Top-Level Enums & Constants with PascalCase Members ---
+# --- Top-Level Enums & Constants with UPPER_CASE Members ---
 class ExitCodeType(int, Enum):
-    Success = 0
-    Failure = 1
+    SUCCESS = 0
+    FAILURE = 1
 
 JOBS_MATRIX = {
     "Relative Path Check": [sys.executable, "linter-scripts/check-relative-paths.py"],
@@ -71,10 +71,10 @@ def run_pipeline() -> int:
 
     if has_failures:
         print("\n❌ Pipeline failed.")
-        return ExitCodeType.Failure.value
+        return ExitCodeType.FAILURE.value
 
     print("🎉 All jobs passed successfully!")
-    return ExitCodeType.Success.value
+    return ExitCodeType.SUCCESS.value
 
 def main():
     if hasattr(sys.stdout, "reconfigure"):

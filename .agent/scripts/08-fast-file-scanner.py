@@ -122,7 +122,7 @@ def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str |
     return matched_files, ext_counts
 
 def get_cache_filenames(args):
-    re_clean = get_compiled_regex(RegexPatternType.NonAlphanumeric) if get_compiled_regex else re.compile(r"[^a-zA-Z0-9_-]+")
+    re_clean = get_compiled_regex(RegexPatternType.NON_ALPHANUMERIC) if get_compiled_regex else re.compile(r"[^a-zA-Z0-9_-]+")
     slug_parts = []
     if args.path:
         if args.path != ".":

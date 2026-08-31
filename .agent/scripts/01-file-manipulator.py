@@ -40,9 +40,9 @@ try:
     DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 except Exception:
     class ExitCodeType(int, Enum):
-        Success = 0
-        ViolationsFound = 1
-        ToolError = 2
+        SUCCESS = 0
+        VIOLATIONS_FOUND = 1
+        TOOL_ERROR = 2
     RegexPatternType = None
     get_compiled_regex = None
     DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
@@ -83,7 +83,7 @@ def parse_except_patterns(except_str: str | None) -> set[str]:
 def lowercase_directory(target_dir: str = ".", except_patterns: str | None = None) -> int:
     """Recursively renames files and directories to lowercase."""
     custom_ignores = parse_except_patterns(except_patterns)
-    re_upper = get_compiled_regex(RegexPatternType.Uppercase)
+    re_upper = get_compiled_regex(RegexPatternType.UPPERCASE)
     renamed_count = 0
     start_time = time.perf_counter()
 
@@ -114,7 +114,7 @@ def lowercase_directory(target_dir: str = ".", except_patterns: str | None = Non
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
     print(f"\n✅ Lowercase check complete: renamed {renamed_count} item(s) in {elapsed_ms:.2f}ms.")
-    return ExitCodeType.Success.value
+    return ExitCodeType.SUCCESS.value
 
 # --- Core Feature 2: Fix File Sequencing ---
 
@@ -141,7 +141,7 @@ def fix_sequences_in_folder(
 ) -> int:
     """Re-sequences files inside a single directory sequentially."""
     pin_map = pin_map or {}
-    re_seq = get_compiled_regex(RegexPatternType.SeqPrefix)
+    re_seq = get_compiled_regex(RegexPatternType.SEQ_PREFIX)
     files = [f for f in folder_path.iterdir() if f.is_file() and not is_binary_file(f)]
     if not files:
         return 0
@@ -200,7 +200,7 @@ def fix_sequences_recursive(target_dir: str = ".", **kwargs) -> int:
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
     print(f"\n✅ Sequencing complete: re-sequenced {total_renamed} file(s) in {elapsed_ms:.2f}ms.")
-    return ExitCodeType.Success.value
+    return ExitCodeType.SUCCESS.value
 
 # --- Core Feature 3: Fix Encoding & Line Endings ---
 
@@ -229,7 +229,7 @@ def fix_encoding_and_newlines(target_dir: str = ".", extensions: tuple | set | N
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     elapsed_ms = (time.perf_counter() - start_time) * 1000
     print(f"\n✅ Encoding & LF normalization complete: fixed {fixed_count} file(s) in {elapsed_ms:.2f}ms.")
-    return ExitCodeType.Success.value
+    return ExitCodeType.SUCCESS.value
 
 # --- CLI Entry Point ---
 

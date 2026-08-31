@@ -66,11 +66,11 @@ def run_encoding_normalizer(
         for f in affected[:5]:
             print(f"  ::notice file={f}::{f}")
         if not is_fix_mode:
-            return ExitCodeType.ViolationsFound.value if ExitCodeType else 1
+            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
     else:
         print(f"✅ All {stats['total_files']} files in '{target_dir}' normalized to UTF-8 LF ({stats['elapsed_ms']:.2f}ms).")
 
-    return ExitCodeType.Success.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
 
 def main():
     parser = argparse.ArgumentParser(description="Normalize files to UTF-8 UNIX LF across folders")

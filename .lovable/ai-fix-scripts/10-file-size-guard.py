@@ -25,8 +25,8 @@ try:
     ExitCodeType = engine.ExitCodeType
 except Exception:
     class ExitCodeType(int, Enum):
-        Success = 0
-        ViolationsFound = 1
+        SUCCESS = 0
+        VIOLATIONS_FOUND = 1
     DEFAULT_MAX_FILE_KB = 2048
     EXCLUDE_DIRS = {".git", ".gitmap", "node_modules", "dist", "build", ".venv", "tmp"}
     is_allowed_large_file = lambda p: False
@@ -73,10 +73,10 @@ def audit_file_sizes(
         print(f"\n❌ Found {len(violations)} oversized file(s) exceeding {max_kb} KB:")
         for fp, sz in sorted(violations, key=lambda x: x[1], reverse=True):
             print(f"  ::error file={fp}::{fp} ({sz / 1024:.1f} KB > {max_kb} KB)")
-        return ExitCodeType.ViolationsFound.value
+        return ExitCodeType.VIOLATIONS_FOUND.value
 
     print(f"✅ All files in '{target_dir}' within {max_kb} KB limit.")
-    return ExitCodeType.Success.value
+    return ExitCodeType.SUCCESS.value
 
 def main():
     if hasattr(sys.stdout, "reconfigure"):

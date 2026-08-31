@@ -86,10 +86,10 @@ def main():
         content, elapsed_ms = read_target_file(args.read_file)
         if content is None:
             print(f"❌ File not found or unreadable: {args.read_file}")
-            sys.exit(ExitCodeType.ViolationsFound.value if ExitCodeType else 1)
+            sys.exit(ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1)
         print(f"📖 Read {args.read_file} ({len(content)} chars) in {elapsed_ms:.2f}ms:\n")
         print(content)
-        sys.exit(ExitCodeType.Success.value if ExitCodeType else 0)
+        sys.exit(ExitCodeType.SUCCESS.value if ExitCodeType else 0)
 
     if args.search_pattern:
         start = time.perf_counter()
@@ -98,7 +98,7 @@ def main():
         print(f"🔍 Found {len(matches)} matching file(s) for '{args.search_pattern}' in '{args.path}' in {elapsed_ms:.2f}ms:")
         for m in matches:
             print(f"  {m}")
-        sys.exit(ExitCodeType.Success.value if ExitCodeType else 0)
+        sys.exit(ExitCodeType.SUCCESS.value if ExitCodeType else 0)
 
     if args.list_folder:
         start = time.perf_counter()
@@ -107,7 +107,7 @@ def main():
         print(f"📁 Found {len(files)} file(s) in '{args.list_folder}' in {elapsed_ms:.2f}ms:")
         for f in files:
             print(f"  {f}")
-        sys.exit(ExitCodeType.Success.value if ExitCodeType else 0)
+        sys.exit(ExitCodeType.SUCCESS.value if ExitCodeType else 0)
 
     parser.print_help()
 
