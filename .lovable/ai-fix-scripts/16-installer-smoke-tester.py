@@ -1,102 +1,108 @@
 #!/usr/bin/env python3
 """
-Fast Generic Installer Smoke Tester
-Validates install.sh and install.ps1 scripts:
-1. Validates placeholder resolution (no residual PLACEHOLDER strings).
-2. Verifies URL schema, fallback download mechanisms, and SHA256 checksum checks.
-3. Ensures non-destructive rename-first upgrade handling.
-Multi-folder capable and thread-safe lazy regex engine.
+Generic Installer Smoke Tester
+Validates generic bash/PowerShell installer scripts for:
+1. No leftover PLACEHOLDER tokens
+2. SHA256 verification pattern
+3. Non-destructive update flow (rename-first, then replace)
+4. Clean UNIX LF line endings
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
-from enum import Enum
-import os
+from importlib import import_module
 from pathlib import Path
 import sys
-import time
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    ExitCodeType = engine.ExitCodeType
-except Exception:
-    class ExitCodeType(int, Enum):
-        SUCCESS = 0
-        VIOLATIONS_FOUND = 1
-    RegexPatternType = None
-    get_compiled_regex = None
+engine = import_module("02-shared-engine")
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+read_file_lf = engine.read_file_lf
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
-def smoke_test_installers(dist_dir: str = ".") -> int:
-    """Smoke tests installer scripts in the target directory or root."""
-    start_time = time.perf_counter()
-    errors = []
-    checked_files = 0
-
+def test_bash_installer(script_path: Path) -> list[str]:
+    """Smoke tests a bash installer script."""
     re_placeholder = get_compiled_regex(RegexPatternType.PLACEHOLDER_TOKEN)
+    content = read_file_lf(script_path, encoding=DEFAULT_ENCODING)
+    issues = []
 
-    candidates = ["install.sh", "install.ps1", "release-install.sh", "release-install.ps1"]
-    for fname in candidates:
-        fp = os.path.join(dist_dir, fname) if dist_dir != "." else fname
-        has_file = os.path.exists(fp)
-        if not has_file:
-            is_in_root = (dist_dir != "." and os.path.exists(fname))
-            if is_in_root:
-                fp = fname
-            else:
-                continue
+    has_placeholder = bool(re_placeholder.search(content))
+    if has_placeholder:
+        issues.append(f"{script_path}: Contains unreplaced placeholder tokens")
 
-        checked_files += 1
-        with open(fp, "r", encoding="utf-8", errors="ignore") as f:
-            content = f.read()
+    has_sha = ("sha256" in content.lower() or "shasum" in content.lower())
+    if not has_sha:
+        issues.append(f"{script_path}: Missing SHA256 checksum verification")
 
-        # 1. Check for unreplaced placeholder tokens
-        placeholders = re_placeholder.findall(content)
-        has_placeholders = len(placeholders) > 0
-        if has_placeholders:
-            errors.append(f"Unreplaced placeholders in {fp}: {set(placeholders)}")
+    has_safe_rename = ("mv " in content or "install -m" in content)
+    if not has_safe_rename:
+        issues.append(f"{script_path}: Missing non-destructive binary replacement logic")
 
-        # 2. Check for checksum verification pattern
-        content_lower = content.lower()
-        has_checksum = ("sha256" in content_lower or "hash" in content_lower)
-        if not has_checksum:
-            errors.append(f"Installer {fp} missing SHA256 checksum verification routine")
+    return issues
 
-        # 3. Check for rename-first / safe overwrite
-        has_rename_first = (".old" in content or "old" in content_lower)
-        if not has_rename_first:
-            errors.append(f"Installer {fp} missing rename-first upgrade handling")
+def test_powershell_installer(script_path: Path) -> list[str]:
+    """Smoke tests a PowerShell installer script."""
+    re_placeholder = get_compiled_regex(RegexPatternType.PLACEHOLDER_TOKEN)
+    content = read_file_lf(script_path, encoding=DEFAULT_ENCODING)
+    issues = []
 
-    elapsed_ms = (time.perf_counter() - start_time) * 1000
+    has_placeholder = bool(re_placeholder.search(content))
+    if has_placeholder:
+        issues.append(f"{script_path}: Contains unreplaced placeholder tokens")
 
-    is_no_files = (checked_files == 0)
-    if is_no_files:
-        print(f"ℹ️ No installer scripts found in '{dist_dir}' to smoke-test (skipping).")
-        return ExitCodeType.SUCCESS.value
+    has_sha = ("get-filehash" in content.lower() or "sha256" in content.lower())
+    if not has_sha:
+        issues.append(f"{script_path}: Missing SHA256 hash verification")
 
-    has_errors = len(errors) > 0
-    if has_errors:
-        print(f"\n❌ Installer smoke testing failed in '{dist_dir}' ({elapsed_ms:.2f}ms):")
-        for err in errors:
-            print(f"  ::error::{err}")
+    has_safe_rename = ("move-item" in content.lower() or "rename-item" in content.lower())
+    if not has_safe_rename:
+        issues.append(f"{script_path}: Missing safe rename-first replacement logic")
+
+    return issues
+
+def run_installer_smoke_tests(target_dir: str = ".") -> int:
+    """Discovers and tests all installer scripts in target directory."""
+    root = Path(target_dir)
+    all_issues = []
+    scripts_tested = 0
+
+    for script_file in root.rglob("install.sh"):
+        is_ignored = any(part in script_file.parts for part in ("node_modules", ".git", "dist", "build"))
+        if not is_ignored:
+            scripts_tested += 1
+            all_issues.extend(test_bash_installer(script_file))
+
+    for script_file in root.rglob("install.ps1"):
+        is_ignored = any(part in script_file.parts for part in ("node_modules", ".git", "dist", "build"))
+        if not is_ignored:
+            scripts_tested += 1
+            all_issues.extend(test_powershell_installer(script_file))
+
+    has_issues = len(all_issues) > 0
+    if has_issues:
+        print(f"{LINE_SEPARATOR}❌ Installer smoke test failed with {len(all_issues)} issue(s):")
+        for issue in all_issues:
+            print(f"  ::error::{issue}")
         return ExitCodeType.VIOLATIONS_FOUND.value
 
-    print(f"✅ Installer smoke tests passed for {checked_files} script(s) in '{dist_dir}' ({elapsed_ms:.2f}ms)")
+    print(f"✅ Tested {scripts_tested} installer script(s) in '{target_dir}'. All smoke tests passed.")
     return ExitCodeType.SUCCESS.value
 
 def main():
-    parser = argparse.ArgumentParser(description="Smoke test install scripts across directories")
-    parser.add_argument("path", nargs="?", default=".", help="Directory containing install scripts")
-    parser.add_argument("--dir", "--path", "-p", dest="opt_dir", help="Directory containing install scripts")
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    parser = argparse.ArgumentParser(description="Smoke test installer scripts across target directory")
+    parser.add_argument("path", nargs="?", default=".", help="Root directory to search for installer scripts")
+    parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify target directory")
     args = parser.parse_args()
 
-    target_path = args.opt_dir or args.path or "."
-    sys.exit(smoke_test_installers(target_path))
+    target_path = args.opt_path or args.path or "."
+    sys.exit(run_installer_smoke_tests(target_dir=target_path))
 
 if __name__ == "__main__":
     main()

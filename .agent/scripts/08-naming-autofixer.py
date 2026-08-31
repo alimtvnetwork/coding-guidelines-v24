@@ -3,31 +3,29 @@
 Fast Boolean Naming & Code Convention Guard
 Audits and flags explicit boolean true comparisons (e.g. `== True`, `=== true`) and negative naming anti-patterns.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
+from importlib import import_module
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    read_file_lf = engine.read_file_lf
-    normalize_extensions = engine.normalize_extensions
-    normalize_rel_path = engine.normalize_rel_path
-    ExitCodeType = engine.ExitCodeType
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    get_compiled_regex_group = engine.get_compiled_regex_group
-    DEFAULT_CODE_EXTENSIONS = engine.DEFAULT_CODE_EXTENSIONS
-except Exception:
-    ExitCodeType = None
-    RegexPatternType = None
-    get_compiled_regex = None
-    get_compiled_regex_group = None
-    DEFAULT_CODE_EXTENSIONS = (".ts", ".tsx", ".js", ".jsx", ".go", ".py", ".php", ".cs")
+engine = import_module("02-shared-engine")
+
+process_repository_files = engine.process_repository_files
+read_file_lf = engine.read_file_lf
+normalize_extensions = engine.normalize_extensions
+normalize_rel_path = engine.normalize_rel_path
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+get_compiled_regex_group = engine.get_compiled_regex_group
+DEFAULT_CODE_EXTENSIONS = engine.DEFAULT_CODE_EXTENSIONS
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
 def find_explicit_true_violations(content: str) -> list[tuple[int, str]]:
     """Inspects lines for explicit true comparisons."""
@@ -38,7 +36,7 @@ def find_explicit_true_violations(content: str) -> list[tuple[int, str]]:
         RegexPatternType.EXPLICIT_PYTHON_TRUE,
     )
     violations = []
-    for idx, line in enumerate(content.split("\n"), start=1):
+    for idx, line in enumerate(content.split(LINE_SEPARATOR), start=1):
         is_comment = bool(re_comment.match(line))
         if is_comment:
             continue
@@ -54,7 +52,7 @@ def audit_file_naming(file_path: Path) -> tuple[str, list[tuple[int, str]]]:
     """Audits code file for boolean conventions."""
     norm_p = normalize_rel_path(file_path)
     try:
-        content = read_file_lf(file_path)
+        content = read_file_lf(file_path, encoding=DEFAULT_ENCODING)
         vios = find_explicit_true_violations(content)
         return (norm_p, vios)
     except Exception:
@@ -76,14 +74,14 @@ def run_naming_auditor(
 
     has_violations = len(all_violations) > 0
     if has_violations:
-        print(f"\n❌ Found explicit boolean comparisons in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
+        print(f"{LINE_SEPARATOR}❌ Found explicit boolean comparisons in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for fp, vios in all_violations:
             for l_num, line_str in vios[:2]:
                 print(f"  ::error file={fp},line={l_num}::Explicit true comparison: {line_str}")
-        return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+        return ExitCodeType.VIOLATIONS_FOUND.value
 
     print(f"✅ All {stats['total_files']} code files in '{target_dir}' conform to implicit boolean rules ({stats['elapsed_ms']:.2f}ms).")
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value
 
 def main():
     parser = argparse.ArgumentParser(description="Audit boolean conventions and naming across folders")

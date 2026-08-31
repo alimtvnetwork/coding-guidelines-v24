@@ -3,30 +3,29 @@
 Fast CLI Command Discovery & Help Text Parity Auditor
 Inspects CLI entry points, subcommands, and flags across Go (Cobra), TypeScript (Commander), Python (Click/Argparse), and PHP (Symfony).
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
 import ast
+from importlib import import_module
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    read_file_lf = engine.read_file_lf
-    normalize_extensions = engine.normalize_extensions
-    normalize_rel_path = engine.normalize_rel_path
-    ExitCodeType = engine.ExitCodeType
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    DEFAULT_CLI_EXTENSIONS = engine.DEFAULT_CLI_EXTENSIONS
-except Exception:
-    ExitCodeType = None
-    RegexPatternType = None
-    get_compiled_regex = None
-    DEFAULT_CLI_EXTENSIONS = (".go", ".ts", ".tsx", ".py", ".php")
+engine = import_module("02-shared-engine")
+
+process_repository_files = engine.process_repository_files
+read_file_lf = engine.read_file_lf
+normalize_extensions = engine.normalize_extensions
+normalize_rel_path = engine.normalize_rel_path
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+DEFAULT_CLI_EXTENSIONS = engine.DEFAULT_CLI_EXTENSIONS
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
 def audit_go_cobra_commands(content: str) -> list[tuple[str, str]]:
     """Detects Go Cobra commands missing Short or Example descriptions."""
@@ -71,7 +70,7 @@ def audit_python_cli_commands(file_path: Path, content: str) -> list[tuple[str, 
 def audit_single_file_cli(file_path: Path) -> list[tuple[str, str]]:
     """Audits a single file for CLI help compliance."""
     try:
-        content = read_file_lf(file_path)
+        content = read_file_lf(file_path, encoding=DEFAULT_ENCODING)
         is_go = (file_path.suffix == ".go")
         if is_go:
             return audit_go_cobra_commands(content)
@@ -99,16 +98,16 @@ def run_cli_auditor(
 
     has_violations = len(all_violations) > 0
     if has_violations:
-        print(f"\n⚠️ Found CLI help description issues in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
+        print(f"{LINE_SEPARATOR}⚠️ Found CLI help description issues in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for fp, vios in all_violations:
             for cmd, msg in vios:
                 print(f"  ::warning file={fp}::{cmd}: {msg}")
         if is_strict:
-            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+            return ExitCodeType.VIOLATIONS_FOUND.value
     else:
         print(f"✅ All CLI commands in {stats['total_files']} files in '{target_dir}' contain required help strings ({stats['elapsed_ms']:.2f}ms).")
 
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value
 
 def main():
     parser = argparse.ArgumentParser(description="Audit CLI commands for help descriptions across folders")

@@ -3,36 +3,28 @@
 Fast Repository File Size & Blob Guard
 Scans tracked repository files to ensure no accidental massive binary files exceed thresholds.
 Multi-folder capable, customizable extensions, and nested ignore pruning (.git, .gitmap, node_modules).
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
-from enum import Enum
+from importlib import import_module
 import os
 from pathlib import Path
 import sys
 import time
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    DEFAULT_MAX_FILE_KB = engine.DEFAULT_MAX_FILE_KB
-    EXCLUDE_DIRS = engine.EXCLUDE_DIRS
-    is_allowed_large_file = engine.is_allowed_large_file
-    is_ignored_directory = engine.is_ignored_directory
-    normalize_rel_path = engine.normalize_rel_path
-    normalize_extensions = engine.normalize_extensions
-    ExitCodeType = engine.ExitCodeType
-except Exception:
-    class ExitCodeType(int, Enum):
-        SUCCESS = 0
-        VIOLATIONS_FOUND = 1
-    DEFAULT_MAX_FILE_KB = 2048
-    EXCLUDE_DIRS = {".git", ".gitmap", "node_modules", "dist", "build", ".venv", "tmp"}
-    is_allowed_large_file = lambda p: False
-    is_ignored_directory = lambda d: d in EXCLUDE_DIRS
-    normalize_rel_path = lambda p: str(p).replace("\\", "/")
-    normalize_extensions = None
+engine = import_module("02-shared-engine")
+
+DEFAULT_MAX_FILE_KB = engine.DEFAULT_MAX_FILE_KB
+EXCLUDE_DIRS = engine.EXCLUDE_DIRS
+is_allowed_large_file = engine.is_allowed_large_file
+is_ignored_directory = engine.is_ignored_directory
+normalize_rel_path = engine.normalize_rel_path
+normalize_extensions = engine.normalize_extensions
+ExitCodeType = engine.ExitCodeType
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
 def audit_file_sizes(
     max_kb: int = DEFAULT_MAX_FILE_KB,
@@ -74,7 +66,7 @@ def audit_file_sizes(
 
     has_violations = len(violations) > 0
     if has_violations:
-        print(f"\n❌ Found {len(violations)} oversized file(s) exceeding {max_kb} KB:")
+        print(f"{LINE_SEPARATOR}❌ Found {len(violations)} oversized file(s) exceeding {max_kb} KB:")
         for fp, sz in sorted(violations, key=lambda x: x[1], reverse=True):
             print(f"  ::error file={fp}::{fp} ({sz / 1024:.1f} KB > {max_kb} KB)")
         return ExitCodeType.VIOLATIONS_FOUND.value
@@ -91,7 +83,7 @@ def main():
     parser.add_argument("--ext", help="Optional comma-separated extension filter (e.g. .json,.zip)")
     args = parser.parse_args()
 
-    exts = normalize_extensions(args.ext) if normalize_extensions else None
+    exts = normalize_extensions(args.ext)
     sys.exit(audit_file_sizes(max_kb=args.max_kb, target_dir=args.path, allowed_exts=exts))
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ Python File Manipulator CLI Tool
 Handles mass file renaming (lowercasing), sequence fixing, and encoding normalization.
 Zero-dependency, fast, git-aware, with multi-folder scoping and customizable extensions.
 
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
+
 Usage:
   python .lovable/ai-fix-scripts/03-file-manipulator.py lowercase <path> [--except <patterns>]
   python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files <path> [--order-by-time|--order-by-az] [--pin <mapping>]
@@ -11,7 +13,7 @@ Usage:
 """
 
 import argparse
-from enum import Enum
+from importlib import import_module
 import os
 from pathlib import Path
 import shutil
@@ -23,29 +25,23 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    read_file_safe = engine.read_file_safe
-    write_file_lf = engine.write_file_lf
-    normalize_rel_path = engine.normalize_rel_path
-    normalize_extensions = engine.normalize_extensions
-    is_ignored_directory = engine.is_ignored_directory
-    is_ignored_path = engine.is_ignored_path
-    is_binary_file = engine.is_binary_file
-    ExitCodeType = engine.ExitCodeType
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
-except Exception:
-    class ExitCodeType(int, Enum):
-        SUCCESS = 0
-        VIOLATIONS_FOUND = 1
-        TOOL_ERROR = 2
-    RegexPatternType = None
-    get_compiled_regex = None
-    DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
+engine = import_module("02-shared-engine")
+
+process_repository_files = engine.process_repository_files
+read_file_safe = engine.read_file_safe
+write_file_lf = engine.write_file_lf
+normalize_rel_path = engine.normalize_rel_path
+normalize_extensions = engine.normalize_extensions
+is_ignored_directory = engine.is_ignored_directory
+is_ignored_path = engine.is_ignored_path
+is_binary_file = engine.is_binary_file
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+UTF8_SIG_ENCODING = engine.UTF8_SIG_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
 def run_git_mv_or_rename(src_path: Path, dst_path: Path) -> bool:
     """Attempts git mv first; falls back to standard filesystem rename with Windows case-hop."""
@@ -113,7 +109,7 @@ def lowercase_directory(target_dir: str = ".", except_patterns: str | None = Non
                     renamed_count += 1
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
-    print(f"\n✅ Lowercase check complete: renamed {renamed_count} item(s) in {elapsed_ms:.2f}ms.")
+    print(f"{LINE_SEPARATOR}✅ Lowercase check complete: renamed {renamed_count} item(s) in {elapsed_ms:.2f}ms.")
     return ExitCodeType.SUCCESS.value
 
 # --- Core Feature 2: Fix File Sequencing ---
@@ -199,7 +195,7 @@ def fix_sequences_recursive(target_dir: str = ".", **kwargs) -> int:
             total_renamed += fix_sequences_in_folder(Path(root), **kwargs)
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
-    print(f"\n✅ Sequencing complete: re-sequenced {total_renamed} file(s) in {elapsed_ms:.2f}ms.")
+    print(f"{LINE_SEPARATOR}✅ Sequencing complete: re-sequenced {total_renamed} file(s) in {elapsed_ms:.2f}ms.")
     return ExitCodeType.SUCCESS.value
 
 # --- Core Feature 3: Fix Encoding & Line Endings ---
@@ -218,8 +214,8 @@ def fix_encoding_and_newlines(target_dir: str = ".", extensions: tuple | set | N
             has_bom = raw_bytes.startswith(b"\xef\xbb\xbf")
             has_crlf = b"\r\n" in raw_bytes
             if has_bom or has_crlf:
-                text = raw_bytes.decode("utf-8-sig", errors="replace")
-                if write_file_lf(file_path, text):
+                text = raw_bytes.decode(UTF8_SIG_ENCODING, errors="replace")
+                if write_file_lf(file_path, text, encoding=DEFAULT_ENCODING):
                     fixed_count += 1
                     return normalize_rel_path(file_path)
         except Exception:
@@ -228,7 +224,7 @@ def fix_encoding_and_newlines(target_dir: str = ".", extensions: tuple | set | N
 
     stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
     elapsed_ms = (time.perf_counter() - start_time) * 1000
-    print(f"\n✅ Encoding & LF normalization complete: fixed {fixed_count} file(s) in {elapsed_ms:.2f}ms.")
+    print(f"{LINE_SEPARATOR}✅ Encoding & LF normalization complete: fixed {fixed_count} file(s) in {elapsed_ms:.2f}ms.")
     return ExitCodeType.SUCCESS.value
 
 # --- CLI Entry Point ---

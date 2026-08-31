@@ -1,111 +1,125 @@
 #!/usr/bin/env python3
 """
-Fast Sequence, Numbering & Title Header Auditor and Fixer
-Audits and fixes:
-1. Gaps and duplicate numeric prefixes in directories.
-2. Mismatched Markdown H1 headers (e.g. # 00 -> # 01, # 10 -> # 17).
+Sequence, Numbering & Title Header Auditor
+Audits numbered markdown files (e.g. 01-intro.md) to ensure no sequence gaps and
+verifies that the primary # H1 title matches the file sequence prefix.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
+from importlib import import_module
+import os
 from pathlib import Path
 import sys
-import time
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    read_file_lf = engine.read_file_lf
-    write_file_lf = engine.write_file_lf
-    normalize_extensions = engine.normalize_extensions
-    normalize_rel_path = engine.normalize_rel_path
-    ExitCodeType = engine.ExitCodeType
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-except Exception:
-    ExitCodeType = None
-    RegexPatternType = None
-    get_compiled_regex = None
+engine = import_module("02-shared-engine")
 
-def fix_single_file_title_header(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
-    """Checks and fixes H1 header number to match filename prefix."""
-    norm_p = normalize_rel_path(file_path)
-    re_file_prefix = get_compiled_regex(RegexPatternType.FILE_NUM_PREFIX)
+read_file_lf = engine.read_file_lf
+write_file_lf = engine.write_file_lf
+normalize_rel_path = engine.normalize_rel_path
+is_ignored_directory = engine.is_ignored_directory
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
+
+def audit_directory_sequences(
+    target_dir: str = ".",
+    is_fix_mode: bool = False
+) -> tuple[list[str], list[str]]:
+    """Audits sequence numbering and # H1 headers in markdown files."""
+    re_num = get_compiled_regex(RegexPatternType.FILE_NUM_PREFIX)
     re_h1 = get_compiled_regex(RegexPatternType.H1_HEADER)
+    seq_issues = []
+    title_issues = []
 
-    m = re_file_prefix.match(file_path.name)
-    has_prefix_match = bool(m)
-    if not has_prefix_match:
-        return (norm_p, False)
+    for root, dirs, files in os.walk(target_dir):
+        dirs[:] = [d for d in dirs if not is_ignored_directory(d)]
+        norm_dir = normalize_rel_path(root)
 
-    f_num = int(m.group(1))
-    is_meta_file = (f_num >= 90)
-    if is_meta_file:
-        return (norm_p, False)
+        # Collect numbered markdown files
+        numbered_files = []
+        for f in files:
+            m = re_num.match(f)
+            has_match = bool(m)
+            if has_match:
+                num_val = int(m.group(1))
+                numbered_files.append((num_val, f, os.path.join(root, f)))
 
-    try:
-        content = read_file_lf(file_path)
-        has_content = bool(content)
-        if not has_content:
-            return (norm_p, False)
-        match = re_h1.search(content)
-        has_h1 = bool(match)
-        if has_h1:
-            h_num = int(match.group(2))
-            is_matching_header = (h_num == f_num)
-            if not is_matching_header:
-                if h_num < 90:
-                    if is_fix_mode:
-                        new_header = f"{match.group(1)}{f_num:02d}{match.group(3)}{match.group(4)}"
-                        updated = content[:match.start()] + new_header + content[match.end():]
-                        write_file_lf(file_path, updated)
-                    return (f"{norm_p}: header #{h_num:02d} != file prefix {f_num:02d}-", True)
-    except Exception:
-        pass
-    return (norm_p, False)
+        has_numbered = len(numbered_files) > 0
+        if has_numbered:
+            numbered_files.sort(key=lambda x: x[0])
+            first_num = numbered_files[0][0]
+            is_valid_start = (first_num in (0, 1))
 
-def run_sequence_title_auditor(
-    target_dir: str = "spec",
-    is_fix_mode: bool = False,
-    extensions: set[str] | tuple | None = None
-) -> int:
-    """Audits title header numbers across markdown specifications in target directory."""
-    exts = normalize_extensions(extensions) or (".md", ".markdown")
+            if is_valid_start:
+                expected = first_num
+                for num_val, f_name, full_path in numbered_files:
+                    is_gap = (num_val != expected)
+                    if is_gap:
+                        seq_issues.append(f"{norm_dir}/{f_name} (found {num_val:02d}, expected {expected:02d})")
+                    expected += 1
 
-    def handler(p: Path):
-        msg, has_mismatch = fix_single_file_title_header(p, is_fix_mode=is_fix_mode)
-        return msg if has_mismatch else None
+            for num_val, f_name, full_path in numbered_files:
+                content = read_file_lf(full_path, encoding=DEFAULT_ENCODING)
+                m_h1 = re_h1.search(content)
+                has_h1 = bool(m_h1)
+                if has_h1:
+                    h1_num = int(m_h1.group(2))
+                    is_mismatch = (h1_num != num_val)
+                    if is_mismatch:
+                        title_issues.append(f"{norm_dir}/{f_name} (file prefix {num_val:02d} != H1 header {h1_num:02d})")
+                        if is_fix_mode:
+                            def replacer(match):
+                                return f"{match.group(1)}{num_val:02d}{match.group(3)}{match.group(4)}"
+                            new_content = re_h1.sub(replacer, content, count=1)
+                            write_file_lf(full_path, new_content, encoding=DEFAULT_ENCODING)
 
-    stats = process_repository_files(handler, root_dir=target_dir, extensions=exts)
-    mismatches = stats["results"]
+    return seq_issues, title_issues
 
-    has_mismatches = len(mismatches) > 0
-    if has_mismatches:
-        action_word = "Fixed" if is_fix_mode else "Found header mismatches in"
-        print(f"\n⚠️ {action_word} {len(mismatches)} file(s) ({stats['elapsed_ms']:.2f}ms):")
-        for msg in mismatches:
-            print(f"  ::notice::{msg}")
+def run_sequence_auditor(target_dir: str = ".", is_fix_mode: bool = False) -> int:
+    """Executes sequence and title audit across target directory."""
+    seq_issues, title_issues = audit_directory_sequences(target_dir, is_fix_mode=is_fix_mode)
+
+    has_errors = False
+    has_seq = len(seq_issues) > 0
+    if has_seq:
+        has_errors = True
+        print(f"{LINE_SEPARATOR}❌ Found {len(seq_issues)} sequence gap(s):")
+        for issue in seq_issues:
+            print(f"  ::error::{issue}")
+
+    has_title = len(title_issues) > 0
+    if has_title:
         if not is_fix_mode:
-            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
-    else:
-        print(f"✅ All {stats['total_files']} markdown files in '{target_dir}' have synchronized # H1 titles ({stats['elapsed_ms']:.2f}ms).")
+            has_errors = True
+        action_word = "Fixed" if is_fix_mode else "Found"
+        print(f"{LINE_SEPARATOR}⚠️ {action_word} {len(title_issues)} H1 title mismatch issue(s):")
+        for issue in title_issues:
+            print(f"  ::warning::{issue}")
 
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    if has_errors:
+        return ExitCodeType.VIOLATIONS_FOUND.value
+
+    print(f"✅ All numbered files and H1 titles in '{target_dir}' are correctly sequenced.")
+    return ExitCodeType.SUCCESS.value
 
 def main():
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Audit and fix numbering and titles across folders")
-    parser.add_argument("path", nargs="?", default="spec", help="Target directory (default: spec)")
-    parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify target directory")
-    parser.add_argument("--ext", help="Comma-separated extensions to check (e.g. .md)")
-    parser.add_argument("--fix", action="store_true", help="Auto-fix issues in-place")
+    parser = argparse.ArgumentParser(description="Audit file sequence numbering and H1 title alignment")
+    parser.add_argument("path", nargs="?", default=".", help="Root directory to audit")
+    parser.add_argument("--dir", "--path", "-p", dest="opt_dir", help="Directory to audit")
+    parser.add_argument("--fix", action="store_true", help="Auto-fix H1 title numbers in markdown files")
     args = parser.parse_args()
 
-    target_path = args.opt_path or args.path or "spec"
-    sys.exit(run_sequence_title_auditor(target_dir=target_path, is_fix_mode=args.fix, extensions=args.ext))
+    target_path = args.opt_dir or args.path or "."
+    sys.exit(run_sequence_auditor(target_dir=target_path, is_fix_mode=args.fix))
 
 if __name__ == "__main__":
     main()

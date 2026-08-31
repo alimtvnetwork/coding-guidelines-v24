@@ -5,8 +5,8 @@ Automatically inspects any codebase (Go, Rust, Python, TypeScript, PHP, C#, SQL)
 classifies subsystems (Backend, Database, Frontend, CI/CD, Docs), and maintains
 a high-speed TTL-cached topology map in tmp/cache/paths/codebase-topology-cache.json.
 
-Zero Magic Strings: All enums, language manifests, subsystem hints, and cache paths
-are imported directly from 02-shared-engine.py.
+All Enums, Language Manifests, Subsystem Hints, and Cache Paths are imported
+cleanly from 02-shared-engine.py as the single source of truth.
 
 Usage:
   python .lovable/ai-fix-scripts/18-codebase-topology-discoverer.py [--summary]
@@ -16,7 +16,7 @@ Usage:
 
 import argparse
 import datetime
-from enum import Enum
+from importlib import import_module
 import json
 import os
 from pathlib import Path
@@ -28,77 +28,36 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    LanguageType = engine.LanguageType
-    SubsystemType = engine.SubsystemType
-    EncodingType = engine.EncodingType
-    ExitCodeType = engine.ExitCodeType
-    LANGUAGE_MANIFESTS = engine.LANGUAGE_MANIFESTS
-    SUBSYSTEM_DIR_HINTS = engine.SUBSYSTEM_DIR_HINTS
-    SUBSYSTEM_ENTRYPOINTS = engine.SUBSYSTEM_ENTRYPOINTS
-    QUERY_ALIASES = engine.QUERY_ALIASES
-    LANG_EXT_MAP = engine.LANG_EXT_MAP
-    PRIMARY_TOPOLOGY_CACHE_FILE = engine.PRIMARY_TOPOLOGY_CACHE_FILE
-    LEGACY_TOPOLOGY_CACHE_FILE = engine.LEGACY_TOPOLOGY_CACHE_FILE
-    DEFAULT_TTL_SECONDS = engine.DEFAULT_TTL_SECONDS
-    DEFAULT_ENCODING = engine.DEFAULT_ENCODING
-    LINE_SEPARATOR = engine.LINE_SEPARATOR
-    PATH_SEPARATOR = engine.PATH_SEPARATOR
-    CACHE_PATHS_DIR = engine.CACHE_PATHS_DIR
-    process_repository_files = engine.process_repository_files
-    normalize_rel_path = engine.normalize_rel_path
-    is_ignored_directory = engine.is_ignored_directory
-    is_binary_file = engine.is_binary_file
-    atomic_cache_lock = engine.atomic_cache_lock
-except Exception:
-    class SubsystemType(str, Enum):
-        BACKEND = "BACKEND"
-        DATABASE = "DATABASE"
-        FRONTEND = "FRONTEND"
-        CICD = "CICD"
-        DOCS = "DOCS"
-        CLI = "CLI"
-        TESTS = "TESTS"
-        UNKNOWN = "UNKNOWN"
+engine = import_module("02-shared-engine")
 
-    class LanguageType(str, Enum):
-        GO = "GO"
-        RUST = "RUST"
-        PYTHON = "PYTHON"
-        TYPESCRIPT = "TYPESCRIPT"
-        JAVASCRIPT = "JAVASCRIPT"
-        PHP = "PHP"
-        CSHARP = "CSHARP"
-        SQL = "SQL"
-        SHELL = "SHELL"
-        MARKDOWN = "MARKDOWN"
-        OTHER = "OTHER"
+# Centralized Enums
+LanguageType = engine.LanguageType
+SubsystemType = engine.SubsystemType
+EncodingType = engine.EncodingType
+ExitCodeType = engine.ExitCodeType
 
-    class ExitCodeType(int, Enum):
-        SUCCESS = 0
-        VIOLATIONS_FOUND = 1
-        TOOL_ERROR = 2
+# Centralized Configurations & Manifests
+LANGUAGE_MANIFESTS = engine.LANGUAGE_MANIFESTS
+SUBSYSTEM_DIR_HINTS = engine.SUBSYSTEM_DIR_HINTS
+SUBSYSTEM_ENTRYPOINTS = engine.SUBSYSTEM_ENTRYPOINTS
+QUERY_ALIASES = engine.QUERY_ALIASES
+LANG_EXT_MAP = engine.LANG_EXT_MAP
+PRIMARY_TOPOLOGY_CACHE_FILE = engine.PRIMARY_TOPOLOGY_CACHE_FILE
+LEGACY_TOPOLOGY_CACHE_FILE = engine.LEGACY_TOPOLOGY_CACHE_FILE
+DEFAULT_TTL_SECONDS = engine.DEFAULT_TTL_SECONDS
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
+PATH_SEPARATOR = engine.PATH_SEPARATOR
+CACHE_PATHS_DIR = engine.CACHE_PATHS_DIR
 
-    DEFAULT_ENCODING = "utf-8"
-    LINE_SEPARATOR = "\n"
-    PATH_SEPARATOR = "/"
-    DEFAULT_TTL_SECONDS = 1800
-    CACHE_PATHS_DIR = Path("tmp/cache/paths")
-    PRIMARY_TOPOLOGY_CACHE_FILE = CACHE_PATHS_DIR / "codebase-topology-cache.json"
-    LEGACY_TOPOLOGY_CACHE_FILE = Path("tmp/cache/codebase-topology-cache.json")
-    LANGUAGE_MANIFESTS = {}
-    SUBSYSTEM_DIR_HINTS = {}
-    SUBSYSTEM_ENTRYPOINTS = ()
-    QUERY_ALIASES = {}
-    LANG_EXT_MAP = {}
-    normalize_rel_path = lambda p: str(p).replace("\\", "/")
-    is_ignored_directory = lambda d: d in {".git", "node_modules", ".venv", "dist", "build", "tmp"}
-    is_binary_file = lambda p: False
-    atomic_cache_lock = None
+# Centralized Utility Functions
+process_repository_files = engine.process_repository_files
+normalize_rel_path = engine.normalize_rel_path
+is_ignored_directory = engine.is_ignored_directory
+is_binary_file = engine.is_binary_file
+atomic_cache_lock = engine.atomic_cache_lock
 
-# Build Reverse Lookup for Extensions -> LanguageType
+# Build Reverse Lookup for Extensions -> LanguageType from Centralized LANG_EXT_MAP
 EXT_TO_LANGUAGE_MAP: dict[str, LanguageType] = {}
 for lang_key, exts in LANG_EXT_MAP.items():
     matching_enum = getattr(LanguageType, lang_key.upper(), None)
@@ -106,7 +65,7 @@ for lang_key, exts in LANG_EXT_MAP.items():
         for ext in exts:
             EXT_TO_LANGUAGE_MAP[ext.lower()] = matching_enum
 
-# --- Dynamic Topology Discovery Logic (Zero Magic Strings) ---
+# --- Dynamic Topology Discovery Logic ---
 
 def match_language_manifest(filename: str) -> LanguageType | None:
     """Matches a filename against centralized language manifests dynamically."""

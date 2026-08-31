@@ -3,32 +3,30 @@
 Fast Relative Path Fixer & Absolute URI Auditor
 Detects and sanitizes absolute filesystem paths (C:\\..., D:\\..., /home/..., file:///) in documentation.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
+from importlib import import_module
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    read_file_lf = engine.read_file_lf
-    write_file_lf = engine.write_file_lf
-    normalize_extensions = engine.normalize_extensions
-    normalize_rel_path = engine.normalize_rel_path
-    ExitCodeType = engine.ExitCodeType
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    get_compiled_regex_group = engine.get_compiled_regex_group
-    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
-except Exception:
-    ExitCodeType = None
-    RegexPatternType = None
-    get_compiled_regex = None
-    get_compiled_regex_group = None
-    DEFAULT_TEXT_EXTENSIONS = (".md", ".json", ".yaml", ".yml", ".py", ".ts", ".go")
+engine = import_module("02-shared-engine")
+
+process_repository_files = engine.process_repository_files
+read_file_lf = engine.read_file_lf
+write_file_lf = engine.write_file_lf
+normalize_extensions = engine.normalize_extensions
+normalize_rel_path = engine.normalize_rel_path
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+get_compiled_regex_group = engine.get_compiled_regex_group
+DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
 def sanitize_content_paths(content: str) -> tuple[str, int]:
     """Replaces absolute repository paths with clean relative paths."""
@@ -49,7 +47,7 @@ def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, l
         RegexPatternType.DRIVE_ABS_WIN,
     )
     try:
-        content = read_file_lf(file_path)
+        content = read_file_lf(file_path, encoding=DEFAULT_ENCODING)
         violations = []
         for pat in patterns:
             for match in pat.finditer(content):
@@ -66,7 +64,7 @@ def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, l
                 cleaned, fix_count = sanitize_content_paths(content)
                 has_fixed = fix_count > 0
                 if has_fixed:
-                    write_file_lf(file_path, cleaned)
+                    write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
 
         return (norm_p, violations)
     except Exception:
@@ -89,14 +87,14 @@ def run_path_auditor(
 
     has_violations = len(all_violations) > 0
     if has_violations:
-        print(f"\n❌ Found absolute path references in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
+        print(f"{LINE_SEPARATOR}❌ Found absolute path references in {len(all_violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for fp, vios in all_violations:
             for v in vios[:3]:
                 print(f"  ::error file={fp}::Absolute path found: {v}")
-        return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+        return ExitCodeType.VIOLATIONS_FOUND.value
 
     print(f"✅ All {stats['total_files']} files in '{target_dir}' use strict relative paths ({stats['elapsed_ms']:.2f}ms).")
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value
 
 def main():
     parser = argparse.ArgumentParser(description="Audit and fix absolute paths across target folders")

@@ -3,34 +3,29 @@
 Fast Newline & Trailing Whitespace Fixer
 Enforces clean UNIX LF line endings, trims trailing spaces, and ensures a single trailing newline.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
+from importlib import import_module
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    process_repository_files = engine.process_repository_files
-    read_file_lf = engine.read_file_lf
-    write_file_lf = engine.write_file_lf
-    normalize_extensions = engine.normalize_extensions
-    normalize_rel_path = engine.normalize_rel_path
-    ExitCodeType = engine.ExitCodeType
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
-    DEFAULT_ENCODING = engine.DEFAULT_ENCODING
-    LINE_SEPARATOR = engine.LINE_SEPARATOR
-except Exception:
-    ExitCodeType = None
-    RegexPatternType = None
-    get_compiled_regex = None
-    DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
-    DEFAULT_ENCODING = "utf-8"
-    LINE_SEPARATOR = "\n"
+engine = import_module("02-shared-engine")
+
+process_repository_files = engine.process_repository_files
+read_file_lf = engine.read_file_lf
+write_file_lf = engine.write_file_lf
+normalize_extensions = engine.normalize_extensions
+normalize_rel_path = engine.normalize_rel_path
+ExitCodeType = engine.ExitCodeType
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
 
 def clean_file_content(content: str) -> str:
     """Strips trailing whitespace per line and guarantees a single final newline."""
@@ -76,15 +71,15 @@ def run_newline_auditor(
 
     if violations:
         action_word = "Fixed" if is_fix_mode else "Found issues in"
-        print(f"\n⚠️ {action_word} {len(violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
+        print(f"{LINE_SEPARATOR}⚠️ {action_word} {len(violations)} file(s) ({stats['elapsed_ms']:.2f}ms):")
         for v in violations[:10]:
             print(f"  ::notice file={v}::{v}")
         if not is_fix_mode:
-            return ExitCodeType.VIOLATIONS_FOUND.value if ExitCodeType else 1
+            return ExitCodeType.VIOLATIONS_FOUND.value
     else:
         print(f"✅ All {stats['total_files']} files in '{target_dir}' have clean newlines ({stats['elapsed_ms']:.2f}ms).")
 
-    return ExitCodeType.SUCCESS.value if ExitCodeType else 0
+    return ExitCodeType.SUCCESS.value
 
 def main():
     parser = argparse.ArgumentParser(description="Fix trailing whitespace and newlines across folders")
