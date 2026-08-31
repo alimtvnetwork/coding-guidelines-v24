@@ -19,6 +19,9 @@ import subprocess
 import sys
 import time
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
@@ -45,7 +48,7 @@ except Exception:
     DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
 
 def run_git_mv_or_rename(src_path: Path, dst_path: Path) -> bool:
-    """Attempts git mv first; falls back to standard filesystem rename."""
+    """Attempts git mv first; falls back to standard filesystem rename with Windows case-hop."""
     if src_path == dst_path:
         return True
     try:
@@ -59,6 +62,11 @@ def run_git_mv_or_rename(src_path: Path, dst_path: Path) -> bool:
     except Exception:
         pass
     try:
+        if src_path.name.lower() == dst_path.name.lower() and sys.platform.startswith("win"):
+            temp_hop = src_path.with_name(f"{src_path.name}.tmp_case_{os.getpid()}_{int(time.time()*1000)}")
+            shutil.move(str(src_path), str(temp_hop))
+            shutil.move(str(temp_hop), str(dst_path))
+            return True
         shutil.move(str(src_path), str(dst_path))
         return True
     except Exception:

@@ -45,7 +45,11 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
    - Use `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>" [--path <dir>] [--ext <extensions>]` for parallel multi-threaded content grepping using pre-compiled regexes.
    - Use `python .lovable/ai-fix-scripts/01-file-manipulator.py lowercase <dir>` or `fix-encoding <dir>` for rapid mass file management.
 
-2. Autonomous looping enforcement:
+2. Pre-Flight Script Authoring Checklist:
+   - Inspect `.lovable/ai-fix-scripts/00-shared-engine.py` for centralized constants, `RegexPatternType` Enums with PascalCase members, and lazy regex memoization.
+   - Inspect `.lovable/ai-fix-scripts/01-index.md` for tool inventory and performance baselines.
+
+3. Autonomous looping enforcement:
    - The AI agent MUST autonomously loop through all directories and files across `spec/`, `.lovable/`, and application source trees.
    - Do not stop after one high-level glance.
    - Systematically iterate through each directory layer.

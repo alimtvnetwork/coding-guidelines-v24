@@ -46,8 +46,8 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | **Python Standards** | `spec/02-coding-guidelines/06-python/` | Strict type hints, `@dataclass`, `pydantic` |
 | **C# / Java Standards** | `spec/02-coding-guidelines/07-csharp/` | `I` prefix interfaces, PascalCase properties |
 | **Error Management** | `spec/03-error-manage/` | `AppError` wrapping, universal response envelopes |
-| **Shared Core Engine** | `.lovable/ai-fix-scripts/00-shared-engine.py` | Universal streaming engine with two-phase mtime caching |
-| **Local CI Runner** | `.lovable/ai-fix-scripts/03-cicd-local-runner.py` | Parallel local quality gate runner (8 checks) |
+| **Shared Core Engine** | `.lovable/ai-fix-scripts/00-shared-engine.py` | Universal streaming engine with lazy regex registry and two-phase mtime caching |
+| **Local CI Runner** | `.lovable/ai-fix-scripts/03-cicd-local-runner.py` | Parallel local quality gate runner (18 checks) |
 | **Fast File Scanner** | `.lovable/ai-fix-scripts/08-fast-file-scanner.py` | Multi-language fast file scanner (<15ms) and cache builder |
 | **Path Fixer** | `.lovable/ai-fix-scripts/04-relative-path-fixer.py` | Relative path detector and sanitizer |
 | **Naming Guard** | `.lovable/ai-fix-scripts/05-naming-autofixer.py` | Boolean naming and implicit condition validator |
@@ -79,7 +79,7 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 16. **Strict Conditional Joins:** Never mix logical operators (e.g., OR with AND) and keep `if` conditions to at most one join (two operands).
 17. **No Mixed Polarity:** Never combine positive and negative conditions in the same `if` statement (e.g., `if isA && !isB` is banned; extract `isConflict := isA && !isB`).
 18. **No Explicit True Checks (TOTAL BAN):** NEVER evaluate a boolean explicitly against `true` or `false` (e.g., `if isReady == true` is FORBIDDEN; write `if isReady`).
-19. **Enum Naming:** Every enum name MUST end with the suffix `Type` (e.g. `UserRoleType`), except in Rust where PascalCase is used without suffix.
+19. **Enum Naming:** Every enum name MUST end with the suffix `Type` (e.g. `UserRoleType`), except in Rust where PascalCase is used without suffix. Variable members within Enums MUST strictly use **PascalCase** (e.g. `RegexPatternType.Uppercase`, `ExitCodeType.Success`).
 20. **Version Source of Truth:** `version.json` at root is the sole version authority. All languages import or read this file dynamically.
 
 ---
