@@ -32,8 +32,6 @@ export function buildTrackedList() {
       note: "the `generated` ISO timestamp is ignored." },
     { path: "readme.md", normalise: stripVolatileReadmeStamps,
       note: "the `<!-- UPDATED -->` date stamp is ignored." },
-    { path: "docs/architecture.md", normalise: stripVolatileReadmeStamps,
-      note: "the `<!-- UPDATED -->` date stamp is ignored." },
     { path: "docs/principles.md", normalise: stripVolatileReadmeStamps,
       note: "the `<!-- UPDATED -->` date stamp is ignored." },
     { path: "docs/author.md", normalise: stripVolatileReadmeStamps,

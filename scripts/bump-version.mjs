@@ -37,7 +37,6 @@ const TRACKED_FILES = [
   "public/health-score.json",
   "src/data/specTree.json",
   "readme.md",
-  "docs/architecture.md",
   "docs/principles.md",
   "docs/author.md",
 ];

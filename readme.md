@@ -38,7 +38,7 @@
 <p align="center">
   <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.35.3<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-31<!-- /STAMP:UPDATED -->
   <!-- STAMP:FILES -->693<!-- /STAMP:FILES -->
-  <!-- STAMP:LINES -->148,875<!-- /STAMP:LINES -->
+  <!-- STAMP:LINES -->148,598<!-- /STAMP:LINES -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v6.15.0</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="quickstart.md">quickstart.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="quickstart.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -663,7 +663,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center">
   <a href="docs/principles.md">Principles</a> ·
-  <a href="docs/architecture.md">Architecture</a> ·
+  <a href=".lovable/folder-structure.md">Folder Structure</a> ·
   <a href="docs/author.md">Author</a> ·
   <a href="docs/installer-fix-repo-flags.md">Installer fix-repo Flags</a> ·
   <a href="docs/slides-installer.md">Slides Installer</a> ·
@@ -1373,7 +1373,7 @@ Quick-navigation index of every spec and linter file referenced in the CODE-RED 
 | **Log structurally** | One `Log.Error(err, fields)` per boundary, no console spam. | `structured-logging` spec |
 | **Map to UI** | UI translates `Code` → user-visible message. Error `Code` is the contract. | `error-code` registry |
 
-Full architecture: [`docs/architecture.md#error-management`](docs/architecture.md#error-management) · spec: [`spec/02-coding-guidelines/03-error-handling/`](spec/02-coding-guidelines/03-error-handling/).
+Full architecture: [`spec/03-error-manage/01-index.md`](spec/03-error-manage/01-index.md) · spec: [`spec/02-coding-guidelines/03-error-handling/`](spec/02-coding-guidelines/03-error-handling/).
 
 ---
 
@@ -1416,7 +1416,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 
 <p align="center">
   <a href="docs/principles.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
-  <a href="docs/architecture.md"><img alt="Spec author, read architecture" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20architecture-8B5CF6?style=for-the-badge"/></a>
+  <a href="spec/01-spec-authoring-guide/01-index.md"><img alt="Spec author, read guide" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20authoring%20guide-8B5CF6?style=for-the-badge"/></a>
   <a href="spec/18-wp-plugin-how-to/01-index.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
   <a href="#-for-ai-agents"><img alt="AI agent, canonical entry points" src="https://img.shields.io/badge/%F0%9F%A4%96%20AI%20Agent-Canonical%20entry%20points-FF6E3C?style=for-the-badge"/></a>
 </p>
@@ -1543,7 +1543,7 @@ Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/re
 | Doc | What's inside |
 |---|---|
 | [`docs/principles.md`](docs/principles.md) | 9 core principles · 10 CODE RED rules · cross-language rule index · AI optimization suite |
-| [`docs/architecture.md`](docs/architecture.md) | Spec authoring conventions · folder structure · architecture decisions · error management summary |
+| [`.lovable/folder-structure.md`](.lovable/folder-structure.md) | Canonical folder structure · sequence ID system · AI metadata architecture |
 | [`docs/author.md`](docs/author.md) | Author bio · Riseup Asia LLC · AI assessments · FAQ · design philosophy |
 | [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md) | `--max-fix-repo-logs` · `INSTALL_MAX_FIX_REPO_LOGS` · `--rollback-on-fix-repo-failure` · `--full-rollback` · interaction matrix |
 | [`docs/slides-installer.md`](docs/slides-installer.md) | Slides app installer flags · packaging pipeline · offline behavior |

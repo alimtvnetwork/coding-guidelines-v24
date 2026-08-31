@@ -171,7 +171,17 @@ function countNodes(nodes) {
 
 function writeOutput(tree) {
   const json = JSON.stringify({ specTree: tree }, null, 2) + "\n";
-  writeFileSync(OUT_PATH, json);
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      writeFileSync(OUT_PATH, json);
+      return;
+    } catch (err) {
+      if (attempt === 4) throw err;
+      const wait = 50 * Math.pow(2, attempt);
+      const end = Date.now() + wait;
+      while (Date.now() < end) {}
+    }
+  }
 }
 
 function main() {

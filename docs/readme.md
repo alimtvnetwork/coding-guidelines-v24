@@ -11,7 +11,7 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
 
 - [Core references](#core-references)
   - [principles](#principles)
-  - [architecture](#architecture)
+  - [folder structure](#folder-structure)
   - [author](#author)
 - [Installers & tooling](#installers--tooling)
   - [installer fix-repo flags](#installer-fix-repo-flags)
@@ -35,10 +35,10 @@ Deep-dive documentation for the coding-guidelines repository. The root [`readme.
 - **Summary:** The 9 core development principles, 10 CODE RED rules, the cross-language rule index, and the AI optimization suite.
 - **Start here if:** you're new to the repo and want the foundational rules.
 
-### architecture
+### folder structure
 
-- **Path:** [`architecture.md`](architecture.md)
-- **Summary:** Spec authoring conventions, folder structure (`01-20` core / `21+` app), architecture decisions, and the error-management summary.
+- **Path:** [`../.lovable/folder-structure.md`](../.lovable/folder-structure.md)
+- **Summary:** Canonical repository hierarchy, sequence IDs, `.lovable/` AI metadata layers, and spec tiers.
 - **Start here if:** you need to understand how specs and folders are organized.
 
 ### author
