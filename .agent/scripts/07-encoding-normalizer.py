@@ -7,7 +7,6 @@ Multi-folder capable, customizable extensions, and sub-15ms execution.
 
 import argparse
 from pathlib import Path
-import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -20,16 +19,10 @@ try:
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
+    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 except Exception:
     ExitCodeType = None
-
-DEFAULT_TEXT_EXTENSIONS = (
-    ".md", ".markdown", ".py", ".ts", ".tsx", ".js", ".jsx",
-    ".json", ".yaml", ".yml", ".go", ".php", ".cs", ".sh", ".ps1"
-)
-
-# Pre-compiled regex for CRLF
-RE_CRLF = re.compile(r"\r\n")
+    DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
 
 def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
     """Audits and converts CRLF/BOM in a file to clean UTF-8 LF."""

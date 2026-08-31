@@ -2,7 +2,7 @@
 """
 Fast Repository File Reader, Finder & Pluggable Cache Accessor
 Provides AI agents with sub-millisecond file listing, reading, and searching using pluggable tmp/cache/.
-Multi-folder capable, customizable extensions, and pre-compiled regex engine.
+Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 
 Usage:
   python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <path> [--ext .md,.ts]
@@ -63,7 +63,7 @@ def search_files_by_pattern(
     target_dir: str = ".",
     extensions: tuple | set | None = None
 ) -> list[str]:
-    """Searches for pattern in file names/paths using pre-compiled regex."""
+    """Searches for pattern in file names/paths using compiled regex."""
     search_re = re.compile(re.escape(pattern), re.IGNORECASE)
     all_files = list_folder_files(target_dir=target_dir, extensions=extensions)
     return [f for f in all_files if search_re.search(f)]

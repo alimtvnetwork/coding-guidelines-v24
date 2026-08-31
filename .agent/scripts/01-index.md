@@ -12,9 +12,9 @@
 
 ---
 
-**Version:** 3.1.0
-**Updated:** 2026-08-31
-**AI Confidence:** Production-Ready
+**Version:** 3.2.0  
+**Updated:** 2026-08-31  
+**AI Confidence:** Production-Ready  
 **Ambiguity:** None
 
 ---
@@ -23,9 +23,10 @@
 
 | # | Script | Purpose | Execution Time |
 |---|--------|---------|----------------|
-| 00 | `00-shared-engine.py` | Shared engine: pluggable `tmp/cache/`, atomic locks, two-phase incremental streaming | ~2ms |
+| 00 | `00-shared-engine.py` | Shared engine: thread-safe lazy regex registry, centralized configuration maps, pluggable `tmp/cache/`, atomic locks, two-phase incremental streaming | ~2ms |
 | 01 | `01-file-manipulator.py` | Mass lowercasing, sequence fixing, and UTF-8 LF normalization CLI | ~15ms |
 | 02 | `02-newline-fixer.py` | Fixes trailing whitespace and missing final newlines across folders | ~15ms |
+| 02 | `02-guideline-autofixer.py` | Composite runner combining newline fixing and boolean naming checks | ~25ms |
 | 03 | `03-cicd-local-runner.py` | Runs all 18 CI quality checks locally via `ThreadPoolExecutor` | ~35ms |
 | 04 | `04-relative-path-fixer.py` | Detects and fixes absolute paths / `file:///` URIs across folders | ~30ms |
 | 05 | `05-naming-autofixer.py` | Enforces lowercase filenames, boolean conventions, and condition rules | ~20ms |
@@ -44,11 +45,13 @@
 ## 📖 Detailed Script Specifications
 
 <details>
-<summary><b>00-shared-engine.py — Shared Core Engine</b></summary>
+<summary><b>00-shared-engine.py — Shared Core Engine & Lazy Regex Registry</b></summary>
 
-- **Capabilities:** Core utilities for two-phase incremental scanning, cross-process atomic file locking in `tmp/cache/locks/`, and fault-tolerant file I/O.
+- **Capabilities:**
+  - `RegexPatternType` enum & `RegexRegistry.get(pattern_type)` thread-safe double-checked lock memoization.
+  - Centralized global configurations: `EXCLUDE_DIRS`, `BINARY_EXTENSIONS`, `DEFAULT_TEXT_EXTENSIONS`, `DEFAULT_CODE_EXTENSIONS`, `DEFAULT_CLI_EXTENSIONS`, `LANG_EXT_MAP`, `DEFAULT_MAX_FILE_KB`, `ALLOWED_LARGE_FILES`.
+  - Two-phase incremental scanning, cross-process atomic file locking in `tmp/cache/locks/`, and fault-tolerant file I/O.
 - **Ignore Pruning:** Recursively prunes `.git`, `.gitmap`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts`.
-- **Pre-compiled Regex:** All path conversion and CRLF normalization regexes are pre-compiled at module load time.
 </details>
 
 <details>
@@ -72,7 +75,7 @@
 <summary><b>09-fast-cached-grep.py — Parallel Cached Grepper</b></summary>
 
 - **Usage:** `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>" --path <dir> --lang ts,go`
-- **Pre-compiled Regex:** Pre-compiles search expressions prior to worker thread dispatch.
+- **Thread-Safe Matcher:** Runs 8 parallel worker threads using pre-compiled regex patterns.
 </details>
 
 <details>

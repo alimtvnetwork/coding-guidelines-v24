@@ -2,12 +2,11 @@
 """
 Fast Relative Path Fixer & Absolute URI Auditor
 Detects and sanitizes absolute filesystem paths (C:\\..., D:\\..., /home/..., file:///) in documentation.
-Multi-folder capable, customizable extensions, and pre-compiled regex engine.
+Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 """
 
 import argparse
 from pathlib import Path
-import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -20,26 +19,23 @@ try:
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    get_compiled_regex_group = engine.get_compiled_regex_group
+    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 except Exception:
     ExitCodeType = None
-
-DEFAULT_TARGET_EXTENSIONS = (".md", ".markdown", ".json", ".yaml", ".yml", ".py", ".ts", ".go", ".php", ".cs")
-
-# Pre-compiled regular expressions at module level
-RE_FILE_URI_WIN = re.compile(r"file:///[A-Za-z]:/[^\s\)\]\"'>]+")
-RE_DRIVE_ABS_WIN = re.compile(r"(?<![A-Za-z0-9_])[A-Za-z]:\\[A-Za-z0-9_\\.-]+")
-RE_REPO_FILE_URI = re.compile(r"file:///[A-Za-z]:/[^/]+/coding-guidelines/([^\s\)\]\"'>]+)")
-
-ABSOLUTE_PATH_PATTERNS = (
-    RE_FILE_URI_WIN,
-    RE_DRIVE_ABS_WIN,
-)
+    RegexPatternType = None
+    get_compiled_regex = None
+    get_compiled_regex_group = None
+    DEFAULT_TEXT_EXTENSIONS = (".md", ".json", ".yaml", ".yml", ".py", ".ts", ".go")
 
 def sanitize_content_paths(content: str) -> tuple[str, int]:
     """Replaces absolute repository paths with clean relative paths."""
+    re_repo = get_compiled_regex(RegexPatternType.REPO_FILE_URI)
     modified = content
     count = 0
-    for match in RE_REPO_FILE_URI.finditer(content):
+    for match in re_repo.finditer(content):
         rel_target = match.group(1)
         modified = modified.replace(match.group(0), rel_target)
         count += 1
@@ -48,10 +44,14 @@ def sanitize_content_paths(content: str) -> tuple[str, int]:
 def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, list[str]]:
     """Audits a single file for forbidden absolute paths."""
     norm_p = normalize_rel_path(file_path)
+    patterns = get_compiled_regex_group(
+        RegexPatternType.FILE_URI_WIN,
+        RegexPatternType.DRIVE_ABS_WIN,
+    )
     try:
         content = read_file_lf(file_path)
         violations = []
-        for pat in ABSOLUTE_PATH_PATTERNS:
+        for pat in patterns:
             for match in pat.finditer(content):
                 val = match.group(0)
                 if "\\\\?\\" not in val:
@@ -74,7 +74,7 @@ def run_path_auditor(
     extensions: set[str] | tuple | None = None
 ) -> int:
     """Runs repository-wide path check using two-phase pipeline."""
-    exts = normalize_extensions(extensions) or DEFAULT_TARGET_EXTENSIONS
+    exts = normalize_extensions(extensions) or DEFAULT_TEXT_EXTENSIONS
 
     def handler(p: Path):
         fp_str, vios = audit_file_paths(p, is_fix_mode=is_fix_mode)

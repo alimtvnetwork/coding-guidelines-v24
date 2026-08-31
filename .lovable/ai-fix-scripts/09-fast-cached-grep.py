@@ -2,7 +2,7 @@
 """
 Fast Cached Content Grepper & Pattern Matcher
 Leverages tmp/cache/repo-file-cache.json and concurrent threads to search file contents at sub-15ms speeds.
-Multi-folder capable, customizable extensions, and pre-compiled regex engine.
+Multi-folder capable, customizable extensions, and pre-compiled thread-safe regex engine.
 """
 
 import argparse
@@ -22,32 +22,11 @@ try:
     read_file_lf = engine.read_file_lf
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
+    LANG_EXT_MAP = engine.LANG_EXT_MAP
     ExitCodeType = engine.ExitCodeType
 except Exception:
     ExitCodeType = None
-
-LANG_EXTENSION_MAP = {
-    "go": {".go"},
-    "golang": {".go"},
-    "ts": {".ts", ".tsx"},
-    "typescript": {".ts", ".tsx"},
-    "tsx": {".tsx"},
-    "js": {".js", ".jsx", ".mjs"},
-    "javascript": {".js", ".jsx", ".mjs"},
-    "jsx": {".jsx"},
-    "py": {".py"},
-    "python": {".py"},
-    "md": {".md", ".markdown"},
-    "markdown": {".md", ".markdown"},
-    "json": {".json"},
-    "yaml": {".yaml", ".yml"},
-    "yml": {".yaml", ".yml"},
-    "php": {".php"},
-    "cs": {".cs"},
-    "csharp": {".cs"},
-    "sh": {".sh", ".bash"},
-    "ps1": {".ps1"},
-}
+    LANG_EXT_MAP = {}
 
 def resolve_language_extensions(lang_str: str | None, ext_str: str | None = None) -> set[str] | None:
     """Resolves language aliases and custom extensions into a unified set."""
@@ -55,8 +34,8 @@ def resolve_language_extensions(lang_str: str | None, ext_str: str | None = None
     if lang_str:
         for l in lang_str.lower().split(","):
             l = l.strip()
-            if l in LANG_EXTENSION_MAP:
-                exts.update(LANG_EXTENSION_MAP[l])
+            if l in LANG_EXT_MAP:
+                exts.update(LANG_EXT_MAP[l])
             elif l:
                 ext_form = f".{l}" if not l.startswith(".") else l
                 exts.add(ext_form)

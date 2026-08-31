@@ -23,86 +23,23 @@ import re
 import sys
 import time
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
-
-# Common directories and patterns to ignore (including nested .git, .gitmap, node_modules)
-DEFAULT_IGNORE_DIRS = {
-    ".git",
-    ".gitmap",
-    "gitmap",
-    ".git-map",
-    "node_modules",
-    "dist",
-    "build",
-    ".next",
-    ".cache",
-    ".venv",
-    "venv",
-    "vendor",
-    ".gemini",
-    ".agent",
-    "release-artifacts",
-    "release-assets",
-    "tmp",
-    ".system_generated",
-    "bin",
-    "obj",
-    "coverage",
-    ".turbo",
-    ".parcel-cache",
-    ".vs",
-    ".idea",
-}
-
-# Binary and non-code asset extensions to exclude
-BINARY_EXTENSIONS = {
-    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico", ".svg",
-    ".pdf", ".zip", ".tar", ".gz", ".7z", ".rar", ".bz2",
-    ".exe", ".dll", ".so", ".dylib", ".bin", ".o", ".a",
-    ".db", ".sqlite", ".sqlite3",
-    ".woff", ".woff2", ".ttf", ".eot", ".otf",
-    ".mp3", ".mp4", ".wav", ".avi", ".mov",
-    ".pyc", ".pyo", ".pyd", ".class",
-}
-
-# Language alias mappings to standard file extensions
-LANG_EXT_MAP = {
-    "go": [".go"],
-    "golang": [".go"],
-    "ts": [".ts", ".tsx", ".mts", ".cts"],
-    "typescript": [".ts", ".tsx", ".mts", ".cts"],
-    "tsx": [".tsx"],
-    "js": [".js", ".jsx", ".mjs", ".cjs"],
-    "javascript": [".js", ".jsx", ".mjs", ".cjs"],
-    "jsx": [".jsx"],
-    "py": [".py", ".pyi"],
-    "python": [".py", ".pyi"],
-    "php": [".php", ".phtml"],
-    "cs": [".cs"],
-    "csharp": [".cs"],
-    "rust": [".rs"],
-    "rs": [".rs"],
-    "md": [".md", ".markdown"],
-    "markdown": [".md", ".markdown"],
-    "json": [".json"],
-    "yaml": [".yaml", ".yml"],
-    "yml": [".yaml", ".yml"],
-    "sh": [".sh", ".bash"],
-    "bash": [".sh", ".bash"],
-    "ps1": [".ps1", ".psm1", ".psd1"],
-    "powershell": [".ps1", ".psm1", ".psd1"],
-    "sql": [".sql"],
-    "html": [".html", ".htm"],
-    "css": [".css", ".scss", ".sass", ".less"],
-    "c": [".c", ".h"],
-    "cpp": [".cpp", ".hpp", ".cc", ".cxx"],
-}
-
-# Pre-compiled regexes
-RE_NON_ALPHANUMERIC = re.compile(r"[^a-zA-Z0-9_-]+")
-RE_BACKSLASH = re.compile(r"\\")
-RE_LEADING_DOT_SLASH = re.compile(r"^\./")
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from importlib import import_module
+    engine = import_module("00-shared-engine")
+    DEFAULT_IGNORE_DIRS = engine.EXCLUDE_DIRS
+    BINARY_EXTENSIONS = engine.BINARY_EXTENSIONS
+    LANG_EXT_MAP = engine.LANG_EXT_MAP
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    normalize_rel_path = engine.normalize_rel_path
+except Exception:
+    DEFAULT_IGNORE_DIRS = {".git", ".gitmap", "node_modules", "dist", "build", ".venv", "tmp"}
+    BINARY_EXTENSIONS = {".png", ".jpg", ".zip", ".exe"}
+    LANG_EXT_MAP = {}
+    RegexPatternType = None
+    get_compiled_regex = None
+    normalize_rel_path = lambda p: str(p).replace("\\", "/")
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -174,7 +111,7 @@ def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str |
                 if ext not in allowed_exts:
                     continue
 
-            full_rel = os.path.relpath(os.path.join(root, filename), ".").replace("\\", "/")
+            full_rel = normalize_rel_path(os.path.relpath(os.path.join(root, filename), "."))
             if search_re:
                 if not search_re.search(full_rel):
                     continue
@@ -185,20 +122,21 @@ def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str |
     return matched_files, ext_counts
 
 def get_cache_filenames(args):
+    re_clean = get_compiled_regex(RegexPatternType.NON_ALPHANUMERIC) if get_compiled_regex else re.compile(r"[^a-zA-Z0-9_-]+")
     slug_parts = []
     if args.path:
         if args.path != ".":
-            clean_p = RE_NON_ALPHANUMERIC.sub("_", args.path).strip("_")
+            clean_p = re_clean.sub("_", args.path).strip("_")
             if clean_p:
                 slug_parts.append(clean_p)
     if args.lang:
-        clean_l = RE_NON_ALPHANUMERIC.sub("_", args.lang).strip("_")
+        clean_l = re_clean.sub("_", args.lang).strip("_")
         slug_parts.append(f"lang-{clean_l}")
     if args.ext:
-        clean_e = RE_NON_ALPHANUMERIC.sub("_", args.ext).strip("_")
+        clean_e = re_clean.sub("_", args.ext).strip("_")
         slug_parts.append(f"ext-{clean_e}")
     if args.search:
-        clean_s = RE_NON_ALPHANUMERIC.sub("_", args.search).strip("_")
+        clean_s = re_clean.sub("_", args.search).strip("_")
         slug_parts.append(f"search-{clean_s}")
 
     slug = "-".join(slug_parts) if slug_parts else "all"

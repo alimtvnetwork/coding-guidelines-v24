@@ -2,7 +2,7 @@
 """
 Fast Version Synchronization & Changelog Guard
 Validates that version.json, package.json, and changelog.md are in 100% sync.
-Multi-folder capable, pre-compiled regexes, and sub-5ms execution.
+Multi-folder capable, thread-safe lazy regex engine, and sub-5ms execution.
 """
 
 import argparse
@@ -10,20 +10,25 @@ from enum import Enum
 import json
 import os
 from pathlib import Path
-import re
 import sys
 import time
 
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from importlib import import_module
+    engine = import_module("00-shared-engine")
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    ExitCodeType = engine.ExitCodeType
+except Exception:
+    class ExitCodeType(int, Enum):
+        SUCCESS = 0
+        VIOLATIONS_FOUND = 1
+    RegexPatternType = None
+    get_compiled_regex = None
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
-
-# --- Top-Level Enums & Constants ---
-class ExitCodeType(int, Enum):
-    SUCCESS = 0
-    VIOLATIONS_FOUND = 1
-
-# Pre-compiled regular expressions
-RE_CHANGELOG_HEADER = re.compile(r"##\s+\[v?([0-9]+\.[0-9]+\.[0-9]+[^\]]*)\]")
 
 def check_version_sync(root_dir: str = ".") -> int:
     """Checks version parity across version.json, package.json, and changelog.md."""
@@ -71,7 +76,8 @@ def check_version_sync(root_dir: str = ".") -> int:
         try:
             with open(changelog_p, "r", encoding="utf-8") as f:
                 changelog_text = f.read()
-            match = RE_CHANGELOG_HEADER.search(changelog_text)
+            re_changelog = get_compiled_regex(RegexPatternType.CHANGELOG_HEADER)
+            match = re_changelog.search(changelog_text)
             if match:
                 latest_cl_ver = match.group(1).lstrip("v")
                 if latest_cl_ver != canonical_version.lstrip("v"):

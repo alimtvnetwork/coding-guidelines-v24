@@ -2,12 +2,11 @@
 """
 Fast Boolean Naming & Code Convention Guard
 Audits and flags explicit boolean true comparisons (e.g. `== True`, `=== true`) and negative naming anti-patterns.
-Multi-folder capable, customizable extensions, and pre-compiled regex engine.
+Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 """
 
 import argparse
 from pathlib import Path
-import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -19,31 +18,31 @@ try:
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    get_compiled_regex_group = engine.get_compiled_regex_group
+    DEFAULT_CODE_EXTENSIONS = engine.DEFAULT_CODE_EXTENSIONS
 except Exception:
     ExitCodeType = None
-
-DEFAULT_CODE_EXTENSIONS = (".ts", ".tsx", ".js", ".jsx", ".go", ".py", ".php", ".cs")
-
-# Pre-compiled regular expressions for boolean checks
-RE_EXPLICIT_DOUBLE_TRUE = re.compile(r"==\s*true\b", re.IGNORECASE)
-RE_EXPLICIT_TRIPLE_TRUE = re.compile(r"===\s*true\b", re.IGNORECASE)
-RE_EXPLICIT_PYTHON_TRUE = re.compile(r"==\s*True\b")
-RE_COMMENT_PREFIX = re.compile(r"^\s*(//|#|\*|/\*)")
-
-EXPLICIT_TRUE_PATTERNS = (
-    RE_EXPLICIT_DOUBLE_TRUE,
-    RE_EXPLICIT_TRIPLE_TRUE,
-    RE_EXPLICIT_PYTHON_TRUE,
-)
+    RegexPatternType = None
+    get_compiled_regex = None
+    get_compiled_regex_group = None
+    DEFAULT_CODE_EXTENSIONS = (".ts", ".tsx", ".js", ".jsx", ".go", ".py", ".php", ".cs")
 
 def find_explicit_true_violations(content: str) -> list[tuple[int, str]]:
     """Inspects lines for explicit true comparisons."""
+    re_comment = get_compiled_regex(RegexPatternType.COMMENT_PREFIX)
+    explicit_patterns = get_compiled_regex_group(
+        RegexPatternType.EXPLICIT_DOUBLE_TRUE,
+        RegexPatternType.EXPLICIT_TRIPLE_TRUE,
+        RegexPatternType.EXPLICIT_PYTHON_TRUE,
+    )
     violations = []
     for idx, line in enumerate(content.split("\n"), start=1):
-        if RE_COMMENT_PREFIX.match(line):
+        if re_comment.match(line):
             continue
         stripped = line.strip()
-        for pat in EXPLICIT_TRUE_PATTERNS:
+        for pat in explicit_patterns:
             if pat.search(line):
                 violations.append((idx, stripped))
                 break

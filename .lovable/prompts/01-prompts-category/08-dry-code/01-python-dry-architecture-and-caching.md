@@ -1,10 +1,10 @@
 # Python Script DRY Architecture, Enums, Pluggable Caching & Fast AI Reading Specification
 
-> **Prompt Version:** 2.1.0
-> **Target:** `.lovable/prompts/01-prompts-category/08-dry-code/01-python-dry-architecture-and-caching.md`
+> **Prompt Version:** 2.2.0  
+> **Target:** `.lovable/prompts/01-prompts-category/08-dry-code/01-python-dry-architecture-and-caching.md`  
 > **Synchronization:** Meta-Repo & AI Scripting Ecosystem
 
-/goal Standardize the architectural design of all Python CI/CD, linting, and fix scripts using top-level Enums, small decomposed functions, DRY shared engines, pre-compiled regex objects, multi-folder scoping, customizable extensions, pluggable `tmp/cache/` storage, cross-process atomic file locking, and two-phase incremental `mtime` caching.
+/goal Standardize the architectural design of all Python CI/CD, linting, and fix scripts using top-level Enums, centralized configuration maps, thread-safe lazy regex compilation with double-checked locking, small decomposed functions, DRY shared engines, multi-folder scoping, customizable extensions, pluggable `tmp/cache/` storage, cross-process atomic file locking, and two-phase incremental `mtime` caching.
 
 ## 🎯 Architectural Philosophy
 
@@ -12,55 +12,86 @@ All AI-authored Python scripts in this repository (`.lovable/ai-fix-scripts/` an
 
 ---
 
-## 1. Top-Level Constants, Enums & Pre-compiled Regexes
+## 1. Top-Level Constants, Enums & Thread-Safe Lazy Regex Registry
 
-- **Root Definition:** All configuration parameters (`EXCLUDE_DIRS`, `CACHE_BASE_DIR`, `DEFAULT_MAX_FILE_KB`) must be declared as module-level constants at the top of the file.
-- **Enum `Type` Suffix:** All Enums MUST end with the `Type` suffix (e.g., `ScanModeType`, `ExitCodeType`, `SeverityType`).
+- **Root Definition:** All configuration parameters (`EXCLUDE_DIRS`, `BINARY_EXTENSIONS`, `DEFAULT_TEXT_EXTENSIONS`, `DEFAULT_CODE_EXTENSIONS`, `DEFAULT_CLI_EXTENSIONS`, `CACHE_BASE_DIR`, `DEFAULT_MAX_FILE_KB`, `ALLOWED_LARGE_FILES`) must be centralized in `00-shared-engine.py`.
+- **Enum `Type` Suffix:** All Enums MUST end with the `Type` suffix (e.g., `ScanModeType`, `ExitCodeType`, `SeverityType`, `RegexPatternType`).
 - **Implicit Boolean Checks:** Never compare booleans against explicit `True` (BAN: `if is_valid == True:` -> MANDATORY: `if is_valid:`).
-- **Pre-compiled Regex Objects:** Compile all regular expressions at module or function initialization time (`re.compile(...)`) to avoid repetitive compilation inside tight file/line loops and maximize scanning speed.
+- **Thread-Safe Lazy Regex Compilation (Zero Startup Overhead):**
+  - Store raw regex pattern string definitions + compilation flags in a central `REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]]` map in `00-shared-engine.py`.
+  - Use `RegexRegistry.get(pattern_type)` or `get_compiled_regex(pattern_type)` with double-checked `threading.Lock()` memoization.
+  - Regex patterns are compiled on first demand, then served in `O(1)` time for all subsequent lookups across threads.
 - **Ignore Pruning:** Ensure `EXCLUDE_DIRS` covers `.gitmap`, `.git`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts` at all subtree depths.
 
 ```python
+import re
+import threading
 from enum import Enum
 from pathlib import Path
-import re
-
-# --- Module-Level Constants ---
-CACHE_BASE_DIR = Path("tmp/cache")
-CACHE_PATHS_DIR = CACHE_BASE_DIR / "paths"
-CACHE_LOCKS_DIR = CACHE_BASE_DIR / "locks"
-CACHE_FILES_DIR = CACHE_BASE_DIR / "files"
-DEFAULT_MAX_FILE_KB = 2048
-
-EXCLUDE_DIRS = {
-    ".git", ".gitmap", "gitmap", ".git-map",
-    "node_modules", "dist", "build", ".venv", "venv",
-    ".gemini", "tmp", ".system_generated", "vendor",
-    ".cache", ".next", "bin", "obj", "coverage",
-    "__pycache__", ".vs", ".idea", ".agent",
-    "release-artifacts", "release-assets",
-}
-
-# --- Pre-compiled Regular Expressions ---
-RE_CRLF = re.compile(r"\r\n")
-RE_WINDOWS_BACKSLASH = re.compile(r"\\")
 
 # --- Top-Level Enums ---
-class ScanModeType(str, Enum):
-    CHECK = "check"
-    FIX = "fix"
-    STREAM = "stream"
+class RegexPatternType(str, Enum):
+    WINDOWS_BACKSLASH = "windows_backslash"
+    LEADING_DOT_SLASH = "leading_dot_slash"
+    CRLF = "crlf"
+    TRAILING_WHITESPACE = "trailing_whitespace"
+    SEQ_PREFIX = "seq_prefix"
+    UPPERCASE = "uppercase"
+    FILE_URI_WIN = "file_uri_win"
+    DRIVE_ABS_WIN = "drive_abs_win"
+    REPO_FILE_URI = "repo_file_uri"
+    EXPLICIT_DOUBLE_TRUE = "explicit_double_true"
+    EXPLICIT_TRIPLE_TRUE = "explicit_triple_true"
+    EXPLICIT_PYTHON_TRUE = "explicit_python_true"
+    COMMENT_PREFIX = "comment_prefix"
+    COBRA_COMMAND = "cobra_command"
+    SHORT_DESC = "short_desc"
+    EXAMPLE_USAGE = "example_usage"
+    CHANGELOG_HEADER = "changelog_header"
+    FILE_NUM_PREFIX = "file_num_prefix"
+    H1_HEADER = "h1_header"
+    PLACEHOLDER_TOKEN = "placeholder_token"
+    NON_ALPHANUMERIC = "non_alphanumeric"
 
-class SeverityType(str, Enum):
-    BLOCKER = "blocker"
-    HIGH = "high"
-    WARN = "warn"
-    INFO = "info"
+# Centralized Raw Regex Definitions: Enum -> (Pattern String, Flags)
+REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
+    RegexPatternType.WINDOWS_BACKSLASH: (r"\\", 0),
+    RegexPatternType.LEADING_DOT_SLASH: (r"^\./", 0),
+    RegexPatternType.CRLF: (r"\r\n", 0),
+    RegexPatternType.TRAILING_WHITESPACE: (r"[ \t]+$", re.MULTILINE),
+    RegexPatternType.SEQ_PREFIX: (r"^([0-9]+)-(.*)$", 0),
+    RegexPatternType.UPPERCASE: (r"[A-Z]", 0),
+    RegexPatternType.FILE_URI_WIN: (r"file:///[A-Za-z]:/[^\s\)\]\"'>]+", 0),
+    RegexPatternType.DRIVE_ABS_WIN: (r"(?<![A-Za-z0-9_])[A-Za-z]:\\[A-Za-z0-9_\\.-]+", 0),
+    RegexPatternType.REPO_FILE_URI: (r"file:///[A-Za-z]:/[^/]+/coding-guidelines/([^\s\)\]\"'>]+)", 0),
+    RegexPatternType.EXPLICIT_DOUBLE_TRUE: (r"==\s*true\b", re.IGNORECASE),
+    RegexPatternType.EXPLICIT_TRIPLE_TRUE: (r"===\s*true\b", re.IGNORECASE),
+    RegexPatternType.EXPLICIT_PYTHON_TRUE: (r"==\s*True\b", 0),
+    RegexPatternType.COMMENT_PREFIX: (r"^\s*(//|#|\*|/\*)", 0),
+    RegexPatternType.COBRA_COMMAND: (r"var\s+(\w+Cmd)\s*=\s*&cobra\.Command\s*\{([^}]+)\}", re.DOTALL),
+    RegexPatternType.SHORT_DESC: (r"Short:\s*\"[^\"]+\"", 0),
+    RegexPatternType.EXAMPLE_USAGE: (r"Example:\s*\"[^\"]+\"", 0),
+    RegexPatternType.CHANGELOG_HEADER: (r"##\s+\[v?([0-9]+\.[0-9]+\.[0-9]+[^\]]*)\]", 0),
+    RegexPatternType.FILE_NUM_PREFIX: (r"^([0-9]+)-(.*)\.md$", 0),
+    RegexPatternType.H1_HEADER: (r"^(#\s+)([0-9]+)(\s*[-—:]\s*)(.*)$", re.MULTILINE),
+    RegexPatternType.PLACEHOLDER_TOKEN: (r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*", 0),
+    RegexPatternType.NON_ALPHANUMERIC: (r"[^a-zA-Z0-9_-]+", 0),
+}
 
-class ExitCodeType(int, Enum):
-    SUCCESS = 0
-    VIOLATIONS_FOUND = 1
-    TOOL_ERROR = 2
+# --- Thread-Safe Lazy Regex Registry ---
+class RegexRegistry:
+    _cache: dict[RegexPatternType, re.Pattern] = {}
+    _lock = threading.Lock()
+
+    @classmethod
+    def get(cls, pattern_type: RegexPatternType) -> re.Pattern:
+        if pattern_type in cls._cache:
+            return cls._cache[pattern_type]
+        with cls._lock:
+            if pattern_type not in cls._cache:
+                raw_pattern, flags = REGEX_DEFINITIONS[pattern_type]
+                cls._cache[pattern_type] = re.compile(raw_pattern, flags)
+            return cls._cache[pattern_type]
 ```
 
 ---

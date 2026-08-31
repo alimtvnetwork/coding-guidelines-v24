@@ -12,37 +12,30 @@ from pathlib import Path
 import sys
 import time
 
-# --- Top-Level Enums & Constants ---
-class ExitCodeType(int, Enum):
-    SUCCESS = 0
-    VIOLATIONS_FOUND = 1
-
-DEFAULT_MAX_KB = 2048  # 2 MB general threshold
-EXCLUDE_DIRS = {
-    ".git", ".gitmap", "gitmap", ".git-map",
-    "node_modules", "dist", "build", ".venv", "venv",
-    ".gemini", "tmp", ".system_generated", "release-artifacts", "release-assets",
-    "vendor", ".cache", ".next", "bin", "obj", "coverage", "__pycache__", ".vs", ".idea",
-}
-
-ALLOWED_LARGE_FILES = {
-    "src/data/specTree.json",
-    "src\\data\\specTree.json",
-    "slides-app/dist.zip",
-    "slides-app\\dist.zip",
-}
-
-def is_allowed_large_file(file_path: str) -> bool:
-    """Checks if file is on the explicit waiver list for large generated assets."""
-    norm = file_path.replace("\\", "/").lstrip("./")
-    return norm in {f.replace("\\", "/").lstrip("./") for f in ALLOWED_LARGE_FILES}
-
-def is_ignored_dir(dir_name: str) -> bool:
-    """Checks if directory name is in the global ignore list."""
-    return dir_name.lower() in {d.lower() for d in EXCLUDE_DIRS}
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from importlib import import_module
+    engine = import_module("00-shared-engine")
+    DEFAULT_MAX_FILE_KB = engine.DEFAULT_MAX_FILE_KB
+    EXCLUDE_DIRS = engine.EXCLUDE_DIRS
+    is_allowed_large_file = engine.is_allowed_large_file
+    is_ignored_directory = engine.is_ignored_directory
+    normalize_rel_path = engine.normalize_rel_path
+    normalize_extensions = engine.normalize_extensions
+    ExitCodeType = engine.ExitCodeType
+except Exception:
+    class ExitCodeType(int, Enum):
+        SUCCESS = 0
+        VIOLATIONS_FOUND = 1
+    DEFAULT_MAX_FILE_KB = 2048
+    EXCLUDE_DIRS = {".git", ".gitmap", "node_modules", "dist", "build", ".venv", "tmp"}
+    is_allowed_large_file = lambda p: False
+    is_ignored_directory = lambda d: d in EXCLUDE_DIRS
+    normalize_rel_path = lambda p: str(p).replace("\\", "/")
+    normalize_extensions = None
 
 def audit_file_sizes(
-    max_kb: int = DEFAULT_MAX_KB,
+    max_kb: int = DEFAULT_MAX_FILE_KB,
     target_dir: str = ".",
     allowed_exts: set[str] | None = None
 ) -> int:
@@ -54,10 +47,11 @@ def audit_file_sizes(
     max_bytes = max_kb * 1024
 
     for root, dirs, files in os.walk(target_dir):
-        dirs[:] = [d for d in dirs if not is_ignored_dir(d)]
+        dirs[:] = [d for d in dirs if not is_ignored_directory(d)]
         for f in files:
             fp = os.path.join(root, f)
-            if is_allowed_large_file(fp):
+            norm_fp = normalize_rel_path(fp)
+            if is_allowed_large_file(norm_fp):
                 continue
             if allowed_exts:
                 ext = os.path.splitext(f)[1].lower()
@@ -68,7 +62,7 @@ def audit_file_sizes(
                 total_files += 1
                 total_bytes += sz
                 if sz > max_bytes:
-                    violations.append((fp.replace("\\", "/"), sz))
+                    violations.append((norm_fp, sz))
             except Exception:
                 pass
 
@@ -88,12 +82,12 @@ def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Audit repository file sizes across folders")
-    parser.add_argument("--max-kb", type=int, default=DEFAULT_MAX_KB, help="Maximum allowed file size in KB")
+    parser.add_argument("--max-kb", type=int, default=DEFAULT_MAX_FILE_KB, help="Maximum allowed file size in KB")
     parser.add_argument("--path", "-p", default=".", help="Root path or folder to audit")
     parser.add_argument("--ext", help="Optional comma-separated extension filter (e.g. .json,.zip)")
     args = parser.parse_args()
 
-    exts = {e.strip().lower() if e.strip().startswith(".") else f".{e.strip().lower()}" for e in args.ext.split(",") if e.strip()} if args.ext else None
+    exts = normalize_extensions(args.ext) if normalize_extensions else None
     sys.exit(audit_file_sizes(max_kb=args.max_kb, target_dir=args.path, allowed_exts=exts))
 
 if __name__ == "__main__":

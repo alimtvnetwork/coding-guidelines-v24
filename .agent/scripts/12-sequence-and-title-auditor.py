@@ -4,12 +4,11 @@ Fast Sequence, Numbering & Title Header Auditor and Fixer
 Audits and fixes:
 1. Gaps and duplicate numeric prefixes in directories.
 2. Mismatched Markdown H1 headers (e.g. # 00 -> # 01, # 10 -> # 17).
-Multi-folder capable, customizable extensions, and pre-compiled regex engine.
+Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 """
 
 import argparse
 from pathlib import Path
-import re
 import sys
 import time
 
@@ -23,17 +22,20 @@ try:
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
 except Exception:
     ExitCodeType = None
-
-# Pre-compiled regular expressions
-RE_FILE_NUM_PREFIX = re.compile(r"^([0-9]+)-(.*)\.md$")
-RE_H1_HEADER = re.compile(r"^(#\s+)([0-9]+)(\s*[-—:]\s*)(.*)$", flags=re.MULTILINE)
+    RegexPatternType = None
+    get_compiled_regex = None
 
 def fix_single_file_title_header(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
     """Checks and fixes H1 header number to match filename prefix."""
     norm_p = normalize_rel_path(file_path)
-    m = RE_FILE_NUM_PREFIX.match(file_path.name)
+    re_file_prefix = get_compiled_regex(RegexPatternType.FILE_NUM_PREFIX)
+    re_h1 = get_compiled_regex(RegexPatternType.H1_HEADER)
+
+    m = re_file_prefix.match(file_path.name)
     if not m:
         return (norm_p, False)
 
@@ -45,7 +47,7 @@ def fix_single_file_title_header(file_path: Path, is_fix_mode: bool = False) -> 
         content = read_file_lf(file_path)
         if not content:
             return (norm_p, False)
-        match = RE_H1_HEADER.search(content)
+        match = re_h1.search(content)
         if match:
             h_num = int(match.group(2))
             if h_num != f_num:

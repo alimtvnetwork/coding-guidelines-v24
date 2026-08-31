@@ -14,7 +14,6 @@ import argparse
 from enum import Enum
 import os
 from pathlib import Path
-import re
 import shutil
 import subprocess
 import sys
@@ -33,21 +32,17 @@ try:
     is_ignored_path = engine.is_ignored_path
     is_binary_file = engine.is_binary_file
     ExitCodeType = engine.ExitCodeType
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 except Exception:
     class ExitCodeType(int, Enum):
         SUCCESS = 0
         VIOLATIONS_FOUND = 1
         TOOL_ERROR = 2
-
-# --- Pre-compiled Regular Expressions ---
-RE_SEQ_PREFIX = re.compile(r"^([0-9]+)-(.*)$")
-RE_UPPERCASE = re.compile(r"[A-Z]")
-RE_CRLF = re.compile(r"\r\n")
-
-DEFAULT_TEXT_EXTENSIONS = {
-    ".md", ".markdown", ".py", ".ts", ".tsx", ".js", ".jsx",
-    ".json", ".yaml", ".yml", ".go", ".php", ".cs", ".sh", ".ps1"
-}
+    RegexPatternType = None
+    get_compiled_regex = None
+    DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
 
 def run_git_mv_or_rename(src_path: Path, dst_path: Path) -> bool:
     """Attempts git mv first; falls back to standard filesystem rename."""
@@ -80,6 +75,7 @@ def parse_except_patterns(except_str: str | None) -> set[str]:
 def lowercase_directory(target_dir: str = ".", except_patterns: str | None = None) -> int:
     """Recursively renames files and directories to lowercase."""
     custom_ignores = parse_except_patterns(except_patterns)
+    re_upper = get_compiled_regex(RegexPatternType.UPPERCASE)
     renamed_count = 0
     start_time = time.perf_counter()
 
@@ -88,7 +84,7 @@ def lowercase_directory(target_dir: str = ".", except_patterns: str | None = Non
 
         # 1. Rename files to lowercase
         for f in files:
-            if RE_UPPERCASE.search(f):
+            if re_upper.search(f):
                 src = Path(root) / f
                 if is_ignored_path(src, custom_excludes=custom_ignores):
                     continue
@@ -99,7 +95,7 @@ def lowercase_directory(target_dir: str = ".", except_patterns: str | None = Non
 
         # 2. Rename directories to lowercase
         for d in dirs:
-            if RE_UPPERCASE.search(d):
+            if re_upper.search(d):
                 src = Path(root) / d
                 if is_ignored_path(src, custom_excludes=custom_ignores):
                     continue
@@ -137,6 +133,7 @@ def fix_sequences_in_folder(
 ) -> int:
     """Re-sequences files inside a single directory sequentially."""
     pin_map = pin_map or {}
+    re_seq = get_compiled_regex(RegexPatternType.SEQ_PREFIX)
     files = [f for f in folder_path.iterdir() if f.is_file() and not is_binary_file(f)]
     if not files:
         return 0
@@ -149,12 +146,13 @@ def fix_sequences_in_folder(
         if order_by_time:
             return (1, f.stat().st_mtime, stem)
         if order_by_az:
-            m = RE_SEQ_PREFIX.match(f.name)
+            m = re_seq.match(f.name)
             base = m.group(2) if m else f.name
             return (1, 0, base.lower())
-        m = RE_SEQ_PREFIX.match(f.name)
-        if m and keep_old_order:
-            return (1, int(m.group(1)), m.group(2).lower())
+        m = re_seq.match(f.name)
+        if m:
+            if keep_old_order:
+                return (1, int(m.group(1)), m.group(2).lower())
         return (1, 999, f.name.lower())
 
     sorted_files = sorted(files, key=sort_key)
@@ -166,7 +164,7 @@ def fix_sequences_in_folder(
         is_pinned = any(pin_name in stem for pin_name in pin_map)
         target_seq = pin_map[next(p for p in pin_map if p in stem)] if is_pinned else seq_idx
 
-        m = RE_SEQ_PREFIX.match(f.name)
+        m = re_seq.match(f.name)
         base_name = m.group(2) if m else f.name
         new_name = f"{target_seq:02d}-{base_name}"
 
@@ -215,7 +213,7 @@ def fix_encoding_and_newlines(target_dir: str = ".", extensions: tuple | set | N
                 text = raw_bytes.decode("utf-8-sig", errors="replace")
                 if write_file_lf(file_path, text):
                     fixed_count += 1
-                    return str(file_path)
+                    return normalize_rel_path(file_path)
         except Exception:
             pass
         return None

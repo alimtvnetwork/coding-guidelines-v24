@@ -2,12 +2,11 @@
 """
 Fast Newline & Trailing Whitespace Fixer
 Enforces clean UNIX LF line endings, trims trailing spaces, and ensures a single trailing newline.
-Multi-folder capable, customizable extensions, and sub-15ms streaming execution.
+Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 """
 
 import argparse
 from pathlib import Path
-import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -20,21 +19,19 @@ try:
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 except Exception:
     ExitCodeType = None
-
-DEFAULT_TEXT_EXTENSIONS = (
-    ".md", ".markdown", ".py", ".ts", ".tsx", ".js", ".jsx",
-    ".go", ".json", ".yaml", ".yml", ".sh", ".ps1", ".php", ".cs"
-)
-
-# Pre-compiled regex for trailing whitespace per line
-RE_TRAILING_WHITESPACE = re.compile(r"[ \t]+$", re.MULTILINE)
-RE_CRLF = re.compile(r"\r\n")
+    RegexPatternType = None
+    get_compiled_regex = None
+    DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
 
 def clean_file_content(content: str) -> str:
     """Strips trailing whitespace per line and guarantees a single final newline."""
-    normalized = RE_CRLF.sub("\n", content)
+    re_crlf = get_compiled_regex(RegexPatternType.CRLF)
+    normalized = re_crlf.sub("\n", content)
     lines = [line.rstrip() for line in normalized.split("\n")]
     while lines:
         if lines[-1]:

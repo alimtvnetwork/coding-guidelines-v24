@@ -5,33 +5,40 @@ Validates install.sh and install.ps1 scripts:
 1. Validates placeholder resolution (no residual PLACEHOLDER strings).
 2. Verifies URL schema, fallback download mechanisms, and SHA256 checksum checks.
 3. Ensures non-destructive rename-first upgrade handling.
-Multi-folder capable and pre-compiled regex engine.
+Multi-folder capable and thread-safe lazy regex engine.
 """
 
 import argparse
 from enum import Enum
 import os
 from pathlib import Path
-import re
 import sys
 import time
 
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from importlib import import_module
+    engine = import_module("00-shared-engine")
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    ExitCodeType = engine.ExitCodeType
+except Exception:
+    class ExitCodeType(int, Enum):
+        SUCCESS = 0
+        VIOLATIONS_FOUND = 1
+    RegexPatternType = None
+    get_compiled_regex = None
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
-
-# --- Top-Level Enums & Constants ---
-class ExitCodeType(int, Enum):
-    SUCCESS = 0
-    VIOLATIONS_FOUND = 1
-
-# Pre-compiled regular expressions
-RE_PLACEHOLDER_TOKEN = re.compile(r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*")
 
 def smoke_test_installers(dist_dir: str = ".") -> int:
     """Smoke tests installer scripts in the target directory or root."""
     start_time = time.perf_counter()
     errors = []
     checked_files = 0
+
+    re_placeholder = get_compiled_regex(RegexPatternType.PLACEHOLDER_TOKEN)
 
     candidates = ["install.sh", "install.ps1", "release-install.sh", "release-install.ps1"]
     for fname in candidates:
@@ -47,7 +54,7 @@ def smoke_test_installers(dist_dir: str = ".") -> int:
             content = f.read()
 
         # 1. Check for unreplaced placeholder tokens
-        placeholders = RE_PLACEHOLDER_TOKEN.findall(content)
+        placeholders = re_placeholder.findall(content)
         if placeholders:
             errors.append(f"Unreplaced placeholders in {fp}: {set(placeholders)}")
 

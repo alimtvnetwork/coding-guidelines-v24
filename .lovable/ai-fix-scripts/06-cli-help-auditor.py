@@ -2,13 +2,12 @@
 """
 Fast CLI Command Discovery & Help Text Parity Auditor
 Inspects CLI entry points, subcommands, and flags across Go (Cobra), TypeScript (Commander), Python (Click/Argparse), and PHP (Symfony).
-Multi-folder capable, customizable extensions, and pre-compiled regex engine.
+Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 """
 
 import argparse
 import ast
 from pathlib import Path
-import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -20,26 +19,29 @@ try:
     normalize_extensions = engine.normalize_extensions
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
+    RegexPatternType = engine.RegexPatternType
+    get_compiled_regex = engine.get_compiled_regex
+    DEFAULT_CLI_EXTENSIONS = engine.DEFAULT_CLI_EXTENSIONS
 except Exception:
     ExitCodeType = None
-
-DEFAULT_CLI_EXTENSIONS = (".go", ".ts", ".tsx", ".py", ".php")
-
-# Pre-compiled regular expressions
-RE_COBRA_COMMAND = re.compile(r"var\s+(\w+Cmd)\s*=\s*&cobra\.Command\s*\{([^}]+)\}", re.DOTALL)
-RE_SHORT_DESC = re.compile(r"Short:\s*\"[^\"]+\"")
-RE_EXAMPLE_USAGE = re.compile(r"Example:\s*\"[^\"]+\"")
+    RegexPatternType = None
+    get_compiled_regex = None
+    DEFAULT_CLI_EXTENSIONS = (".go", ".ts", ".tsx", ".py", ".php")
 
 def audit_go_cobra_commands(content: str) -> list[tuple[str, str]]:
     """Detects Go Cobra commands missing Short or Example descriptions."""
     violations = []
-    for match in RE_COBRA_COMMAND.finditer(content):
+    re_cobra = get_compiled_regex(RegexPatternType.COBRA_COMMAND)
+    re_short = get_compiled_regex(RegexPatternType.SHORT_DESC)
+    re_example = get_compiled_regex(RegexPatternType.EXAMPLE_USAGE)
+
+    for match in re_cobra.finditer(content):
         cmd_var = match.group(1)
         body = match.group(2)
-        if not RE_SHORT_DESC.search(body):
+        if not re_short.search(body):
             violations.append((cmd_var, "Missing Short description in cobra.Command"))
         if cmd_var != "rootCmd":
-            if not RE_EXAMPLE_USAGE.search(body):
+            if not re_example.search(body):
                 violations.append((cmd_var, "Missing Example usage in cobra.Command"))
     return violations
 
