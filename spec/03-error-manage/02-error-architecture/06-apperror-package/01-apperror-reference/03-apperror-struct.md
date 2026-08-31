@@ -1,7 +1,7 @@
 # AppError Package Reference — AppError struct and constructors
 
-> **Parent:** [AppError Package Reference](./01-index.md)  
-> **Version:** 2.0.0  
+> **Parent:** [AppError Package Reference](./01-index.md)
+> **Version:** 2.0.0
 > **Updated:** 2026-04-02
 
 ---
@@ -40,12 +40,12 @@ type AppError struct {
 
 ### 2.2.0 The `apperror.New` Creator Namespace (Preferred)
 
-To prevent boilerplate `if err != nil` checks when wrapping errors, the package exposes a global `New` namespace (e.g., via a struct variable). These methods **automatically return `nil` if the provided error is `nil`**. 
+To prevent boilerplate `if err != nil` checks when wrapping errors, the package exposes a global `New` namespace (e.g., via a struct variable). These methods **automatically return `nil` if the provided error is `nil`**.
 
 This is the **mandatory** pattern for all new code.
 
 ```go
-// Error wraps an existing error with a Variation enum. 
+// Error wraps an existing error with a Variation enum.
 // VERY IMPORTANT: If `err == nil`, this MUST return `nil`.
 // No error means no AppError is created.
 func (c creator) Error(errType apperrtype.ErrorType, err error) *AppError

@@ -1,7 +1,7 @@
 # Naming & Reference Compliance Issues
 
-**Updated:** 2026-03-31  
-**Version:** 2.0.0  
+**Updated:** 2026-03-31
+**Version:** 2.0.0
 **Status:** ✅ All Resolved
 
 ---

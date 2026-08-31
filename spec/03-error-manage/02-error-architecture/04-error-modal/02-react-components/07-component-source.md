@@ -1,7 +1,7 @@
 # Component Source Code
 
-> **Parent:** [React Components Index](./01-index.md)  
-> **Version:** 4.0.0  
+> **Parent:** [React Components Index](./01-index.md)
+> **Version:** 4.0.0
 > **Updated:** 2026-04-01
 
 ---

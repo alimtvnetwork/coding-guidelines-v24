@@ -1,6 +1,6 @@
 # Subtask 2: Release
 
-1. Run 
+1. Run
 ode scripts/release.mjs --tier minor --scope "Add AppError HumanString and LogMap formatting methods" --skip-slides.
 2. Fix sync drift.
 3. Generate bundles.

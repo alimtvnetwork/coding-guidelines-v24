@@ -28,10 +28,10 @@ def scan(path: Path, root: str) -> list[Finding]:
             cond = line[start_idx:end_idx].strip()
             if cond.startswith("("): cond = cond[1:]
             if cond.endswith(")"): cond = cond[:-1]
-            
+
             and_count = cond.count("&&") + cond.count(" and ")
             or_count = cond.count("||") + cond.count(" or ")
-            
+
             if and_count + or_count > 1:
                 findings.append(Finding(rule_id=RULE.id, level="error", message="Max one conditional join allowed (e.g. no A && B && C or A && B || C).", file_path=relpath(path, root), start_line=i))
             elif and_count + or_count == 1:

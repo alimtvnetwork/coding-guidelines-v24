@@ -1,7 +1,7 @@
 # Master Coding Guidelines — Quick checklist for any code change
 
-> **Parent:** [Master Coding Guidelines](./01-index.md)  
-> **Version:** 2.1.0  
+> **Parent:** [Master Coding Guidelines](./01-index.md)
+> **Version:** 2.1.0
 > **Updated:** 2026-03-31
 
 ---

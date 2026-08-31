@@ -14,7 +14,7 @@ description: Enforces query wrapper logic, zero-tolerance for string unions, str
 
 ## 3. Strict Enum Naming
 
-- Every Enum identifier MUST end with the suffix `Type` (e.g., `StatusType`, `LogLevelType`). 
+- Every Enum identifier MUST end with the suffix `Type` (e.g., `StatusType`, `LogLevelType`).
 - Names like `Status7` or raw `Status` are forbidden for Enum definitions.
 
 ## 4. Positive Failure Checks

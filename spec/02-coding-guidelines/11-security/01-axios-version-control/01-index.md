@@ -3,11 +3,11 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.2.0  
-**Status:** Active  
-**Updated:** 2026-04-16  
-**AI Confidence:** 100%  
-**Ambiguity:** None  
+**Version:** 3.2.0
+**Status:** Active
+**Updated:** 2026-04-16
+**AI Confidence:** 100%
+**Ambiguity:** None
 **Author:** Harshil Agrawal
 
 ---
@@ -78,7 +78,7 @@ Unless there is a specific legacy compatibility requirement, use **`1.14.0`** as
 }
 ```
 
-> **NEVER** use `"^1.14.0"`, `"~1.14.0"`, `">=1.14.0"`, or `"*"`.  
+> **NEVER** use `"^1.14.0"`, `"~1.14.0"`, `">=1.14.0"`, or `"*"`.
 > **ALWAYS** use exact version strings with no range symbols.
 
 ---

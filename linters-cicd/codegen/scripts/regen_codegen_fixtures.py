@@ -58,7 +58,7 @@ def run_regeneration() -> int:
     """Executes fixture regeneration across all target languages."""
     EXPECTED_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Regenerating codegen fixtures from {SOURCES_DIR.name}...")
-    
+
     is_all_success = True
     for lang, ext in TARGET_CONFIGS:
         if not regenerate_target(lang, ext):

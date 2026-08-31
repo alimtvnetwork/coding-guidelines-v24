@@ -17,7 +17,7 @@ When reviewing or generating code:
 
 1. Always start with `34-compiled-simple-coding-guidelines.md`. It overrides conflicting rules found elsewhere.
 2. If the task involves a specific domain (like Database or UI), locate the corresponding compiled spec in this folder (e.g., `21-database-conventions.md`).
-3. Assume rules are Zero-Tolerance unless a specific `lint-allow` exception is documented. 
+3. Assume rules are Zero-Tolerance unless a specific `lint-allow` exception is documented.
 
 ## 3. How to Review Code (Styling & Rules)
 

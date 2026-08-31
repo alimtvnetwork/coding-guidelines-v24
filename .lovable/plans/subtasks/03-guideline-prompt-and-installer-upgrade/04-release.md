@@ -1,6 +1,6 @@
 # Subtask 4: Release
 
-1. Run 
+1. Run
 ode scripts/release.mjs --tier minor --scope "Upgrade installer scripts and coding guideline prompt" --skip-slides.
 2. Fix sync drift.
 3. Generate bundles.

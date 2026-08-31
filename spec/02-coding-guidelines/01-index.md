@@ -14,10 +14,10 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.3.0  
-**Status:** Active  
-**Updated:** 2026-08-28  
-**AI Confidence:** Production-Ready  
+**Version:** 3.3.0
+**Status:** Active
+**Updated:** 2026-08-28
+**AI Confidence:** Production-Ready
 
 ## 🤖 MUST FOLLOW INSTRUCTIONS FOR ALL AI AGENTS
 
@@ -75,8 +75,8 @@ _Auto-generated section — see `spec/02-coding-guidelines/97-acceptance-criteri
 
 ### AC-CG-001: Coding guideline conformance: Index
 
-**Given** Run the cross-language coding-guidelines validator against `src/` and language-specific source roots.  
-**When** Run the verification command shown below.  
+**Given** Run the cross-language coding-guidelines validator against `src/` and language-specific source roots.
+**When** Run the verification command shown below.
 **Then** Zero CODE-RED violations are reported (functions ≤ 15 lines, files ≤ 300 lines, no nested ifs, max 2 boolean operands).
 
 **Verification command:**

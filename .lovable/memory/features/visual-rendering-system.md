@@ -1,7 +1,7 @@
 # Memory: features/visual-rendering-system
 
-**Updated:** 2026-04-03  
-**Version:** 1.0.0  
+**Updated:** 2026-04-03
+**Version:** 1.0.0
 **Status:** Active
 
 ---

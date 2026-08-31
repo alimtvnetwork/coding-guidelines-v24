@@ -14,10 +14,10 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 2.0.0  
-**Updated:** 2026-04-17  
-**Status:** Active  
-**AI Confidence:** Production-Ready  
+**Version:** 2.0.0
+**Updated:** 2026-04-17
+**Status:** Active
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -167,8 +167,8 @@ _Auto-generated section — see `spec/14-update/97-acceptance-criteria.md` for t
 
 ### AC-UPD-001: Self-update conformance: Index
 
-**Given** Exercise the rename-first deploy path against a fixture release directory.  
-**When** Run the verification command shown below.  
+**Given** Exercise the rename-first deploy path against a fixture release directory.
+**When** Run the verification command shown below.
 **Then** `latest.json` is written atomically; the old binary is renamed (not deleted) before the new one is moved into place; rollback restores the previous version.
 
 **Verification command:**

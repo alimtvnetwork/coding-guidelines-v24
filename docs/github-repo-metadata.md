@@ -1,6 +1,6 @@
 # GitHub Repo Metadata (Manual Action Required)
 
-**Version:** 1.0.0  
+**Version:** 1.0.0
 **Updated:** 2026-04-22
 
 The repository's GitHub-side metadata (description, topics, social

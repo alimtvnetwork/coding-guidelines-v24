@@ -5,18 +5,19 @@
 ## Acceptance Criteria
 
 1. Provide detailed API definition in the spec/03-error-manage architecture specs for the new Apperror.New.* namespaced creator methods.
-2. Define Apperror.New.Error(errortype, error): If error == nil, returns 
+2. Define Apperror.New.Error(errortype, error): If error == nil, returns
 il. Otherwise wraps the error with the enum variant.
-3. Define Apperror.New.UsingErrorMsg(errortype, error, msg): If error == nil, returns 
+3. Define Apperror.New.UsingErrorMsg(errortype, error, msg): If error == nil, returns
 il. Otherwise wraps the error with custom message.
 4. Define Apperror.New.UsingMsg(errortype, msg): Creates a new error using the provided message and enum variant.
-5. Define Apperror.New.ErrorVar(errortype, error, varname, varvalue): Wraps an error and injects a single key-value into Values (if error == nil, returns 
+5. Define Apperror.New.ErrorVar(errortype, error, varname, varvalue): Wraps an error and injects a single key-value into Values (if error == nil, returns
 il).
-6. Define Apperror.New.ErrorVars(errortype, error, vars): Wraps an error and injects a map of key-values into Values (if error == nil, returns 
+6. Define Apperror.New.ErrorVars(errortype, error, vars): Wraps an error and injects a map of key-values into Values (if error == nil, returns
 il).
-7. Must include actionable instructions for the AI on how to implement this pattern so that "if no error, nothing should be created" (early return 
+7. Must include actionable instructions for the AI on how to implement this pattern so that "if no error, nothing should be created" (early return
 il).
-8. Update eadme.md, .lovable/what-to-read.md properly.
+8. Update
+eadme.md, .lovable/what-to-read.md properly.
 9. Verify all coding guidelines and formatting.
 
 ## Architecture

@@ -1,7 +1,7 @@
 # Issue: Nested Code Fence Rendering Broken in Docs Viewer
 
-**Updated:** 2026-04-05  
-**Status:** Resolved  
+**Updated:** 2026-04-05
+**Status:** Resolved
 **Severity:** Medium
 
 ---

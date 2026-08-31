@@ -37,10 +37,10 @@ class IfVisitor(ast.NodeVisitor):
                     start_line=node.lineno,
                 )
             )
-            
+
         for child in node.body:
             self.visit(child)
-            
+
         for child in node.orelse:
             if isinstance(child, ast.If):
                 # This is an elif, do not increase depth
@@ -49,7 +49,7 @@ class IfVisitor(ast.NodeVisitor):
                 self.depth += 1
             else:
                 self.visit(child)
-                
+
         self.depth -= 1
 
 def scan(path: Path, root: str) -> list[Finding]:
@@ -58,10 +58,10 @@ def scan(path: Path, root: str) -> list[Finding]:
         tree = ast.parse(text, filename=path.name)
     except SyntaxError:
         return []
-        
+
     visitor = IfVisitor(path, root)
     visitor.visit(tree)
-    
+
     # Filter out elifs that are naturally nested in the AST
     # Wait, simple ast approach: 'elif' is tricky because it's stored in orelse.
     # To fix 'elif' depth:

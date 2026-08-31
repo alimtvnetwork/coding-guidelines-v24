@@ -6,9 +6,9 @@ type: standard
 
 # Fast File Indexing & Caching Strategy
 
-**Scanner Tool:** `.lovable/ai-fix-scripts/08-fast-file-scanner.py`  
-**Grepper Tool:** `.lovable/ai-fix-scripts/09-fast-cached-grep.py`  
-**Cache Outputs:** `tmp/repo-file-cache.json`, `tmp/file-list-all.txt`, `tmp/file-list-<slug>.txt`, `tmp/grep-results.json`  
+**Scanner Tool:** `.lovable/ai-fix-scripts/08-fast-file-scanner.py`
+**Grepper Tool:** `.lovable/ai-fix-scripts/09-fast-cached-grep.py`
+**Cache Outputs:** `tmp/repo-file-cache.json`, `tmp/file-list-all.txt`, `tmp/file-list-<slug>.txt`, `tmp/grep-results.json`
 **Tags:** `#file-scanner`, `#cached-grep`, `#caching`, `#performance`, `#ai-workflow`
 
 ## 1. The Multi-Step File Discovery Problem

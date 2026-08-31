@@ -1,6 +1,6 @@
 # Avoid: Per-Task Folders Under `.lovable/`
 
-**Status:** 🚫 Blocked — single-file convention required  
+**Status:** 🚫 Blocked — single-file convention required
 **Recorded:** 2026-04-19
 
 ---

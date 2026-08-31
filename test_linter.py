@@ -18,7 +18,7 @@ for line in lines:
         cond = line[line.find("if")+2:line.rfind("{")].strip()
         if cond.startswith("("): cond = cond[1:]
         if cond.endswith(")"): cond = cond[:-1]
-        
+
         and_count = cond.count("&&")
         or_count = cond.count("||")
         if and_count + or_count > 1:

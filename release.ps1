@@ -150,4 +150,3 @@ Write-Host "    - $releaseName.tar.gz" -ForegroundColor Gray
 Write-Host "    - release-install.sh (baked pinned to v$version)" -ForegroundColor Gray
 Write-Host "    - release-install.ps1 (baked pinned to v$version)" -ForegroundColor Gray
 Write-Host "    - checksums.txt" -ForegroundColor Gray
-

@@ -1,8 +1,8 @@
 # 02 — Health Endpoint Format Mismatch
 
-> **Created:** 2026-02-04  
-**Version:** 3.2.0  
-> **Time Wasted:** ~1 hour  
+> **Created:** 2026-02-04
+**Version:** 3.2.0
+> **Time Wasted:** ~1 hour
 > **Severity:** High (blocked all development)
 
 ---
@@ -125,7 +125,7 @@ Now clearly shows:
    ```bash
    # Verify backend
    curl http://localhost:8080/api/v1/health
-   
+
    # Verify frontend expectation
    grep -A5 "const connected" src/components/shared/BackendStatus.tsx
    ```

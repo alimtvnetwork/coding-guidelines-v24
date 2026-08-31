@@ -1,6 +1,6 @@
 # Session: 2026-04-19 — Performance, Boolean Naming, Schema Descriptive Columns
 
-**Status:** ✅ Done  
+**Status:** ✅ Done
 **Recorded:** 2026-04-19
 
 ---

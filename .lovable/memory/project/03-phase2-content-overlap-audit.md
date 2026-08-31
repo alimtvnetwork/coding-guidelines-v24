@@ -1,7 +1,7 @@
 # Phase 2: Content Overlap Audit — Coding Guidelines
 
-**Updated:** 2026-03-31  
-**Version:** 1.0.0  
+**Updated:** 2026-03-31
+**Version:** 1.0.0
 **Status:** Complete
 
 ---

@@ -70,4 +70,3 @@ def scan_text(text: str) -> list[dict[str, Any]]:
                 "message": f"Boolean column '{name}' uses a suspect single-negative root.",
             })
     return findings
-

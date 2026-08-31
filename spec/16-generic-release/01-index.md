@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-> **Version:** 1.0.0  
-> **Updated:** 2026-04-20  
-> **Status:** Active  
+> **Version:** 1.0.0
+> **Updated:** 2026-04-20
+> **Status:** Active
 > **Imported from:** sibling reference implementation `spec/16-generic-release`
 >
 > **Related local specs:**
@@ -105,8 +105,8 @@ _Auto-generated section — see `spec/16-generic-release/97-acceptance-criteria.
 
 ### AC-REL-001: Generic-release conformance: Index
 
-**Given** Inspect a release artifact bundle for required assets and checksums.  
-**When** Run the verification command shown below.  
+**Given** Inspect a release artifact bundle for required assets and checksums.
+**When** Run the verification command shown below.
 **Then** SHA-256 checksums verify; `release-metadata.json` matches the package version; install scripts pin the exact release tag.
 
 **Verification command:**

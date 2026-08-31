@@ -99,7 +99,7 @@ if len(e.Errors) > 0 {
 
 # Action Plan for AI: Implementing Apperror.New Namespace
 
-> **Goal:** Implement the new creator struct namespace to elegantly wrap errors and allow early 
+> **Goal:** Implement the new creator struct namespace to elegantly wrap errors and allow early
 il returns.
 
 ## 1. Create the creator struct and New variable
@@ -167,7 +167,7 @@ func (c creator) ErrorVars(errType apperrtype.ErrorType, err error, vars map[str
 
 ## 3. Verify nil-safety in tests
 
-Write tests ensuring `apperror.New.Error(t, nil)` strictly returns a typeless 
+Write tests ensuring `apperror.New.Error(t, nil)` strictly returns a typeless
 `nil` or typed `(*AppError)(nil)` so that `err != nil` checks do not falsely trigger in Go.
 
 ---
@@ -208,12 +208,12 @@ func (e *AppError) LogMap() map[string]any {
     if e == nil {
         return nil
     }
-    
+
     m := map[string]any{
         "error_code": e.Code,
         "error_msg":  e.Message,
     }
-    
+
     if e.Details != "" {
         m["error_details"] = e.Details
     }
@@ -223,7 +223,7 @@ func (e *AppError) LogMap() map[string]any {
     // You must map the Diagnostic fields if they exist
     // You must include the stack trace array
     m["error_stack"] = e.Stack.Frames // Assuming StackTrace has a slice of frames
-    
+
     if len(e.Errors) > 0 {
         var subErrs []string
         for _, sub := range e.Errors {
@@ -231,7 +231,7 @@ func (e *AppError) LogMap() map[string]any {
         }
         m["error_sub_errors"] = subErrs
     }
-    
+
     return m
 }
 ```
@@ -243,7 +243,7 @@ func (e *AppError) LogMap() map[string]any {
 Alias this to the existing `FullString()` method, or replace `FullString()` with `ConsoleString()`.
 
 ```go
-// ConsoleString returns the full, multi-line representation of the error 
+// ConsoleString returns the full, multi-line representation of the error
 // designed for developer terminal output.
 func (e *AppError) ConsoleString() string {
     return e.FullString()

@@ -1,7 +1,7 @@
 # Golang Coding Standards — File organization, naming conventions, negations, guards
 
-> **Parent:** [Golang Coding Standards](./01-index.md)  
-> **Version:** 3.7.0  
+> **Parent:** [Golang Coding Standards](./01-index.md)
+> **Version:** 3.7.0
 > **Updated:** 2026-03-31
 
 ---

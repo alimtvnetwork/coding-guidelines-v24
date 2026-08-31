@@ -6,9 +6,9 @@ type: standard
 
 # Prompt Synchronization Architecture
 
-**Authoritative Source:** `.lovable/prompts/01-prompts-category/`  
-**Compiled Output:** `.lovable/prompts/*.md` (flat prompt files)  
-**Configuration:** `scripts/prompt-sync-config.json`  
+**Authoritative Source:** `.lovable/prompts/01-prompts-category/`
+**Compiled Output:** `.lovable/prompts/*.md` (flat prompt files)
+**Configuration:** `scripts/prompt-sync-config.json`
 **Execution Script:** `scripts/update-prompts.ps1` / `scripts/update-prompts.sh`
 
 ## 1. Internal, Self-Contained Source of Truth

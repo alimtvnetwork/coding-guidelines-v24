@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
-**AI Confidence:** Production-Ready  
+**Version:** 3.2.0
+**Updated:** 2026-04-16
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -65,8 +65,8 @@ _Auto-generated section — see `spec/10-research/97-acceptance-criteria.md` for
 
 ### AC-RES-001: Research-folder conformance: Index
 
-**Given** Validate research note structure (front-matter, dated filenames, source links).  
-**When** Run the verification command shown below.  
+**Given** Validate research note structure (front-matter, dated filenames, source links).
+**When** Run the verification command shown below.
 **Then** Every research note has a date prefix, a `Source:` line, and a `Decision:` or `Outcome:` section.
 
 **Verification command:**

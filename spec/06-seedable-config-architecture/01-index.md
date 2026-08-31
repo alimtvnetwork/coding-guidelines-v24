@@ -14,12 +14,12 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-> **Version:** 3.0.0  
-> **Created:** 2026-02-01  
-> **Updated:** 2026-04-03  
-> **Status:** Active  
-> **AI Confidence:** Production-Ready  
-> **Ambiguity:** Low  
+> **Version:** 3.0.0
+> **Created:** 2026-02-01
+> **Updated:** 2026-04-03
+> **Status:** Active
+> **AI Confidence:** Production-Ready
+> **Ambiguity:** Low
 > **Purpose:** Reusable pattern for version-controlled configuration with automatic changelog updates and initial seeding
 
 ---
@@ -116,8 +116,8 @@ _Auto-generated section — see `spec/06-seedable-config-architecture/97-accepta
 
 ### AC-CFG-001: Seedable-config conformance: Index
 
-**Given** Diff the running config tree against `config.seed.json` after a SemVer-aware GORM merge.  
-**When** Run the verification command shown below.  
+**Given** Diff the running config tree against `config.seed.json` after a SemVer-aware GORM merge.
+**When** Run the verification command shown below.
 **Then** Merged keys preserve user overrides; new seed keys are added; removed seed keys are pruned; merge is idempotent on a second pass.
 
 **Verification command:**

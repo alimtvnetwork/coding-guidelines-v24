@@ -1,7 +1,7 @@
 # C# Type Safety
 
-> **Parent:** [C# Coding Standards](./01-index.md)  
-> **Version:** 1.0.0  
+> **Parent:** [C# Coding Standards](./01-index.md)
+> **Version:** 1.0.0
 > **Updated:** 2026-04-02
 
 ---

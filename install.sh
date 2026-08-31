@@ -514,7 +514,7 @@ merge_folder() {
     return
   fi
   step "Merging: $folder"
-  
+
   local is_src_file=false
   [[ -f "$src" ]] && is_src_file=true
 
@@ -531,12 +531,12 @@ merge_folder() {
       rel="${f#$src/}"
       full_rel="$folder/$rel"
     fi
-    
+
     # Skip folders 21+ inside spec on second run
     if $IS_SECOND_RUN && [[ "$full_rel" =~ ^spec/([2-9][1-9]|[3-9][0-9])-.*/ ]]; then
       continue
     fi
-    
+
     local dst="$DEST/$full_rel"
 
     # Lovable folder protection rules:
@@ -552,7 +552,7 @@ merge_folder() {
 
     local filename
     filename="$(basename "$f")"
-    
+
     # Skip .gitkeep if folder already has other files
     if [[ "$filename" == ".gitkeep" ]]; then
       local target_dir
@@ -565,16 +565,16 @@ merge_folder() {
         fi
       fi
     fi
-    
+
     local srchash
     srchash="$(compute_hash "$f")"
-    
+
     if check_hash_match "$full_rel" "$srchash" && [[ -e "$dst" ]]; then
       # Already exists and hash matches, skip to save time and mtime
       echo "    \"$full_rel\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
       continue
     fi
-    
+
     merge_file "$f" "$dst"
     echo "    \"$full_rel\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
     FETCHED_PATHS+=("$full_rel")
@@ -597,14 +597,14 @@ for tlf in "${TOP_LEVEL_FILES[@]}"; do
     warn "Top-level file '$tlf' not found in $REPO@$REF — skipping"
     continue
   fi
-  
+
   local srchash
   srchash="$(compute_hash "$src")"
   if check_hash_match "$tlf" "$srchash" && [[ -e "$DEST/$tlf" ]]; then
     echo "    \"$tlf\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"
     continue
   fi
-  
+
   step "Merging file: $tlf"
   merge_file "$src" "$DEST/$tlf"
   echo "    \"$tlf\": \"$srchash\"," >> "$MANIFEST_NEW_TMP"

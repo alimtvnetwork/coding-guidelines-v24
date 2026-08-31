@@ -1,6 +1,6 @@
 # 10 — Version Verification (Three-Branch)
 
-**Version:** 1.0.0  
+**Version:** 1.0.0
 **Updated:** 2026-04-17
 
 ---

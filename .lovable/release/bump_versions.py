@@ -57,7 +57,7 @@ def update_files(old_version, new_version):
         if not os.path.exists(file_path):
             print(f"Warning: {file_path} not found. Skipping.")
             continue
-            
+
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
@@ -132,32 +132,32 @@ def build_release_notes_file(new_version):
 def handle_git_release(new_version):
     v_string = f"v{new_version}"
     branch_name = f"release/{v_string}"
-    
+
     print(f"\n--- Creating Full Release: {v_string} ---")
-    
+
     try:
         # 1. Capture current branch to return to it later
         current_branch = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, check=True).stdout.strip()
         if not current_branch:
             current_branch = "main" # Fallback if detached head
-            
+
         print(f"Current branch is {current_branch}. Creating release branch: {branch_name}")
         subprocess.run(["git", "checkout", "-b", branch_name], check=True)
-        
+
         # Build release notes with Quick Install one-liners before commit so it is tracked
         notes_path = build_release_notes_file(new_version)
 
         print("Committing version bump and release notes...")
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"chore(release): bump version to {new_version}"], check=True)
-        
+
         print(f"Tagging release: {v_string}")
         subprocess.run(["git", "tag", v_string], check=True)
-        
+
         print("Pushing branch and tags...")
         subprocess.run(["git", "push", "-u", "origin", branch_name], check=True)
         subprocess.run(["git", "push", "origin", v_string], check=True)
-        
+
         # Detect CLI for platform release
         try:
             subprocess.run(["gh", "--version"], capture_output=True, check=True)
@@ -170,14 +170,14 @@ def handle_git_release(new_version):
                 subprocess.run(["glab", "release", "create", v_string, "--name", v_string, "--notes-file", notes_path], check=True)
             except (subprocess.CalledProcessError, FileNotFoundError):
                 print("No gh or glab CLI detected. Skipping platform release creation.")
-                
+
         # 2. Return to original branch, merge, and push
         print(f"Returning to {current_branch} and merging {branch_name}...")
         subprocess.run(["git", "checkout", current_branch], check=True)
         subprocess.run(["git", "merge", branch_name], check=True)
         subprocess.run(["git", "push", "origin", current_branch], check=True)
         print("Release loop successfully completed and synced with main branch!")
-                
+
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
         print("Release automation failed.")
@@ -190,7 +190,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     current_version = get_current_version()
-    
+
     if args.set:
         new_version = args.set
     elif args.type:
@@ -200,10 +200,10 @@ if __name__ == "__main__":
         exit(1)
 
     print(f"Bumping from {current_version} to {new_version}...")
-    
+
     set_current_version(new_version)
     update_files(current_version, new_version)
-    
+
     if args.create_release:
         handle_git_release(new_version)
     else:

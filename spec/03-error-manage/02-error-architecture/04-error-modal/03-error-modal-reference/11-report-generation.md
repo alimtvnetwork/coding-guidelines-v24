@@ -1,8 +1,8 @@
 # Error Report Generation
 
-> **Parent:** [Error Modal Reference](./01-index.md)  
-> **Version:** 2.2.0  
-> **Updated:** 2026-03-31  
+> **Parent:** [Error Modal Reference](./01-index.md)
+> **Version:** 2.2.0
+> **Updated:** 2026-03-31
 > **See also:** [Copy Format Samples](../01-copy-formats/01-index.md) for complete output examples.
 
 ---

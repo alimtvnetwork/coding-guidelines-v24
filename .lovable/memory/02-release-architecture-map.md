@@ -8,7 +8,7 @@ type: standard
 
 **Repository:** alimtvnetwork/coding-guidelines-v24
 **Canonical Version Source:** package.json (master version) + version.json (root single source of truth)
-**Reading Queue:** Enqueued in .lovable/what-to-read.md and linked in 
+**Reading Queue:** Enqueued in .lovable/what-to-read.md and linked in
 eadme.md
 
 ## 1. Overview of Release Architecture
@@ -51,7 +51,7 @@ scripts/sync-spec-tree  scripts/sync-health-score  scripts/sync-readme-stats
    - Prompts: List of active AI prompts
 
 3. **Pin Sites (Lock-Step Update)**:
-   - 
+   -
 eadme.md: Header shields badge (img.shields.io/badge/version-X.Y.Z-...), stats line (vX.Y.Z).
    - docs/architecture.md, docs/principles.md, docs/author.md: <!-- STAMP:VERSION -->X.Y.Z<!-- /STAMP:VERSION -->.
    - public/health-score.json: "version": "X.Y.Z".
@@ -60,7 +60,7 @@ eadme.md: Header shields badge (img.shields.io/badge/version-X.Y.Z-...), stats l
 
 ## 3. How Version Propagates (Sync Pipeline)
 
-Running 
+Running
 pm run sync triggers five core synchronization scripts in sequence:
 
 1. **scripts/sync-version.mjs**:
@@ -70,7 +70,7 @@ pm run sync triggers five core synchronization scripts in sequence:
 3. **scripts/sync-health-score.mjs**:
    Computes spec completeness, rule coverage, and audit health score, emits public/health-score.json.
 4. **scripts/sync-readme-stats.mjs**:
-   Stamps versions, folder counts, file counts, and update timestamps into 
+   Stamps versions, folder counts, file counts, and update timestamps into
 eadme.md and docs/*.md.
 5. **scripts/sync-guidelines.mjs**:
    Mirrors spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines/coding-guidelines.md.
@@ -84,12 +84,12 @@ A complete release follows these strict steps:
    - Run git pull to ensure local branch is in sync with upstream.
    - Verify version bump tier (e.g. MINOR: 6.32.0 -> 6.32.0).
 2. **Bumping**:
-   - Run 
+   - Run
 ode scripts/release.mjs --tier minor --scope "<headline>" --skip-slides.
-   - Updates package.json, runs 
+   - Updates package.json, runs
 pm run sync, prepends changelog.md and spec/19-main-worker-service/98-changelog.md.
 3. **Drift Verification**:
-   - Run 
+   - Run
 ode scripts/sync-check.mjs --fix to verify 0 drift across all 7 sync-managed files.
 4. **Commit, Tag & Push**:
    - git commit -m "release: vX.Y.Z <headline>"

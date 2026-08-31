@@ -1,6 +1,6 @@
 # 02. Coding Guidelines (Redirect)
 
-**Status:** Superseded  
+**Status:** Superseded
 **Canonical:** [`34-compiled-simple-coding-guidelines.md`](./34-compiled-simple-coding-guidelines.md)
 
 This file previously duplicated the coding guidelines. To eliminate drift, the single source of truth is now:

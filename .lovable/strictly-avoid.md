@@ -99,7 +99,7 @@ Allowed work:
 - ✅ Implicit positive checks: `if isValid {`
 - ✅ Implicit positive checks: `if (hasMatch) {`
 - ✅ Returning directly: `return isSuccess`
-- ✅ Using `== false` or `=== false` as a replacement for the banned `!` operator (if permitted by the language's specific guideline). 
+- ✅ Using `== false` or `=== false` as a replacement for the banned `!` operator (if permitted by the language's specific guideline).
 
 **Why:** Implicit boolean evaluation is a universal standard. The AI incorrectly generalized the `=== false` rule into `=== true`. `true` is redundant and prohibited.
 
@@ -172,4 +172,3 @@ Absolute filesystem paths (e.g., `/absolute/path/to/...`, `/Users/.../`, `/home/
 - All canonical specifications must live under the root `spec/` directory.
 - All repo-specific / application-specific specifications must reside under `spec/21-app/`.
 - The `.lovable/` directory is reserved exclusively for AI metadata (`memory/`, `plans/`, `prompts/`, `ai-fix-scripts/`, `assets/`, `procedures/`, `suggestions/`, `question-and-ambiguity/`).
-

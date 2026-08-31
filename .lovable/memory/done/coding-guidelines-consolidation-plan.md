@@ -1,7 +1,7 @@
 # Plan: Consolidate Coding Guidelines into AI-Optimized Master Guideline
 
-**Updated:** 2026-03-31  
-**Version:** 1.0.0  
+**Updated:** 2026-03-31
+**Version:** 1.0.0
 **Status:** Planned
 
 ---

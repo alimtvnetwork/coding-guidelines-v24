@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
-**AI Confidence:** Draft  
+**Version:** 3.2.0
+**Updated:** 2026-04-16
+**AI Confidence:** Draft
 **Ambiguity:** None
 
 ---
@@ -71,8 +71,8 @@ _Auto-generated section — see `spec/24-app-ui-design-system/97-acceptance-crit
 
 ### AC-ADS-001: App design-system conformance: Index
 
-**Given** Scan app UI for raw colors and untokenized spacing; render Storybook (or equivalent) snapshot suite.  
-**When** Run the verification command shown below.  
+**Given** Scan app UI for raw colors and untokenized spacing; render Storybook (or equivalent) snapshot suite.
+**When** Run the verification command shown below.
 **Then** All components consume semantic tokens; snapshot diff is empty in light and dark themes.
 
 **Verification command:**

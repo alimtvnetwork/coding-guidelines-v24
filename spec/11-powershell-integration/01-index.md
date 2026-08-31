@@ -11,11 +11,11 @@
 - [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
 
 
-> **Spec Version:** 2.25.0  
-> **Script Version:** 2.25.0  
-> **Updated:** 2026-03-19  
-> **Status:** Active  
-> **Location:** `spec/powershell-integration/`  
+> **Spec Version:** 2.25.0
+> **Script Version:** 2.25.0
+> **Updated:** 2026-03-19
+> **Status:** Active
+> **Location:** `spec/powershell-integration/`
 > **Purpose:** Reusable PowerShell runner for Go backend + React frontend projects with pnpm PnP support
 
 ---
@@ -383,8 +383,8 @@ _Auto-generated section — see `spec/11-powershell-integration/97-acceptance-cr
 
 ### AC-PS-001: PowerShell integration conformance: Index
 
-**Given** Lint PowerShell scripts and modules in `scripts/` for naming, parameter binding, and error propagation.  
-**When** Run the verification command shown below.  
+**Given** Lint PowerShell scripts and modules in `scripts/` for naming, parameter binding, and error propagation.
+**When** Run the verification command shown below.
 **Then** Filenames are lowercase-kebab-case; functions are `Verb-Noun` PascalCase; `$ErrorActionPreference = 'Stop'` is set; no `Write-Host` for control flow.
 
 **Verification command:**

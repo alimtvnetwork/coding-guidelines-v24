@@ -1,7 +1,7 @@
 # Boolean Principles — Static factory exemption, Result wrapper API
 
-> **Parent:** [Boolean Principles](./01-index.md)  
-> **Version:** 2.7.0  
+> **Parent:** [Boolean Principles](./01-index.md)
+> **Version:** 2.7.0
 > **Updated:** 2026-04-19
 
 ---

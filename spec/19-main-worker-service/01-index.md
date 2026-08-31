@@ -179,8 +179,8 @@ _Auto-generated section — see `spec/19-main-worker-service/97-acceptance-crite
 
 ### AC-GEN-001: General conformance check: Index
 
-**Given** Run the spec health-check against this folder.  
-**When** Run the verification command shown below.  
+**Given** Run the spec health-check against this folder.
+**When** Run the verification command shown below.
 **Then** Cross-references resolve and the folder contains the required `01-index.md`, `97-acceptance-criteria.md`, and `99-consistency-report.md`.
 
 **Verification command:**

@@ -1,7 +1,7 @@
 # Data Model: CapturedError
 
-> **Parent:** [Error Modal Reference](./01-index.md)  
-> **Version:** 2.2.0  
+> **Parent:** [Error Modal Reference](./01-index.md)
+> **Version:** 2.2.0
 > **Updated:** 2026-03-31
 
 ---

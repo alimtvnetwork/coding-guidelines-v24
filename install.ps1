@@ -438,7 +438,7 @@ try {
         }
         Write-Step "Merging: $folder"
         $isSrcFile = (Get-Item $srcPath) -is [System.IO.FileInfo]
-        
+
         $itemsToCopy = if ($isSrcFile) { Get-Item $srcPath } else { Get-ChildItem -Path $srcPath -Recurse -File -Force }
 
         $itemsToCopy | ForEach-Object {
@@ -497,7 +497,7 @@ try {
             Write-Warn "Top-level file '$tlf' not found in $Repo@$ref — skipping"
             continue
         }
-        
+
         $srcHash = (Get-FileHash $srcFile -Algorithm SHA256).Hash
         if ($IsSecondRun -and $ManifestData[$tlf] -eq $srcHash -and (Test-Path (Join-Path $Dest $tlf))) {
             continue

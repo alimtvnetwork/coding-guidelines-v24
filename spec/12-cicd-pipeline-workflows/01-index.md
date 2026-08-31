@@ -12,9 +12,9 @@
 
 ---
 
-**Version:** 4.1.0  
-**Updated:** 2026-08-30  
-**AI Confidence:** Production-Ready  
+**Version:** 4.1.0
+**Updated:** 2026-08-30
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -83,8 +83,8 @@ _Auto-generated section — see `spec/12-cicd-pipeline-workflows/97-acceptance-c
 
 ### AC-CI-001: CI/CD pipeline conformance: Index
 
-**Given** Validate `.github/workflows/*.yml` against the documented job matrix.  
-**When** Run the verification command shown below.  
+**Given** Validate `.github/workflows/*.yml` against the documented job matrix.
+**When** Run the verification command shown below.
 **Then** Required jobs (`lint`, `cross-links`, `sync-drift`) are present; concurrency groups follow the `<workflow>-<ref>` pattern; `permissions:` is least-privilege.
 
 **Verification command:**

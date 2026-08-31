@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-> **Version:** 1.0.0  
-> **Updated:** 2026-04-20  
-> **Status:** Active  
+> **Version:** 1.0.0
+> **Updated:** 2026-04-20
+> **Status:** Active
 > **Related specs:**
 >
 > - [02-project-03-structure.md](./02-project-structure.md) — package layout and file organization
@@ -102,8 +102,8 @@ _Auto-generated section — see `spec/13-generic-cli/97-acceptance-criteria.md` 
 
 ### AC-CLI-001: Generic CLI conformance: Index
 
-**Given** Run the CLI smoke harness against the documented subcommand surface.  
-**When** Run the verification command shown below.  
+**Given** Run the CLI smoke harness against the documented subcommand surface.
+**When** Run the verification command shown below.
 **Then** `--help` exits 0 for every subcommand; flags follow kebab-case; structured output is valid JSON when `--json` is set.
 
 **Verification command:**

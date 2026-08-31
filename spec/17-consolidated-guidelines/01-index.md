@@ -14,10 +14,10 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 4.0.0  
-**Updated:** 2026-07-19  
-**Status:** Active  
-**AI Confidence:** Production-Ready  
+**Version:** 4.0.0
+**Updated:** 2026-07-19
+**Status:** Active
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -107,8 +107,8 @@ _Auto-generated section — see `spec/17-consolidated-guidelines/97-acceptance-c
 
 ### AC-CON-001: Consolidated guideline conformance: Index
 
-**Given** Cross-check this consolidated digest against its source spec folder.  
-**When** Run the verification command shown below.  
+**Given** Cross-check this consolidated digest against its source spec folder.
+**When** Run the verification command shown below.
 **Then** Every rule cited here resolves to a section in the source folder via the cross-link checker; no orphan rules.
 
 **Verification command:**

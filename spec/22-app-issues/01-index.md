@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
-**AI Confidence:** Production-Ready  
+**Version:** 3.2.0
+**Updated:** 2026-04-16
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -56,8 +56,8 @@ _Auto-generated section — see `spec/22-app-issues/97-acceptance-criteria.md` f
 
 ### AC-AI-001: App issues triage conformance: Index
 
-**Given** Audit issue write-ups for the required Reproduction / Cause / Fix / Prevention sections.  
-**When** Run the verification command shown below.  
+**Given** Audit issue write-ups for the required Reproduction / Cause / Fix / Prevention sections.
+**When** Run the verification command shown below.
 **Then** Every issue file contains all four sections and references at least one commit or PR.
 
 **Verification command:**

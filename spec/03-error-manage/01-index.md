@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
-**AI Confidence:** Production-Ready  
+**Version:** 3.2.0
+**Updated:** 2026-04-16
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -145,8 +145,8 @@ _Auto-generated section — see `spec/03-error-manage/97-acceptance-criteria.md`
 
 ### AC-ERR-001: Error-management conformance: Index
 
-**Given** Audit error-handling sites for use of the `apperror` package, error codes, and explicit file/path logging.  
-**When** Run the verification command shown below.  
+**Given** Audit error-handling sites for use of the `apperror` package, error codes, and explicit file/path logging.
+**When** Run the verification command shown below.
 **Then** Every error site uses `apperror.Wrap`/`apperror.New` with a registered code; no bare `errors.New` or swallowed errors remain.
 
 **Verification command:**

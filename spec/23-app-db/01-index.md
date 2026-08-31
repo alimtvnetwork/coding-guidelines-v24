@@ -14,9 +14,9 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
-**AI Confidence:** Draft  
+**Version:** 3.2.0
+**Updated:** 2026-04-16
+**AI Confidence:** Draft
 **Ambiguity:** None
 
 ---
@@ -72,8 +72,8 @@ _Auto-generated section — see `spec/23-app-db/97-acceptance-criteria.md` for t
 
 ### AC-ADB-001: App-database conformance: Index
 
-**Given** Validate app database migrations against the schema-design rules.  
-**When** Run the verification command shown below.  
+**Given** Validate app database migrations against the schema-design rules.
+**When** Run the verification command shown below.
 **Then** Migrations are forward-only; PascalCase naming is preserved; new columns are nullable with no DEFAULT (Rule 12).
 
 **Verification command:**

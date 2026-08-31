@@ -1,6 +1,6 @@
 # Project Overview
 
-**Version:** 3.1.0  
+**Version:** 3.1.0
 **Updated:** 2026-04-16
 
 ---
@@ -57,7 +57,7 @@ These are the highest-priority rules. Violations are blocking.
 
 ## Project Namespace
 
-**Always:** `github.com/alimtvnetwork/movie-cli-v2`  
+**Always:** `github.com/alimtvnetwork/movie-cli-v2`
 **Never:** Any `v1` reference — that is a bug.
 
 ---

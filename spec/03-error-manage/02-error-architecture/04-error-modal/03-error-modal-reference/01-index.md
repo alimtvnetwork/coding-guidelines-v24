@@ -3,13 +3,13 @@
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
 
-> **Parent:** [Error Modal Spec](../01-index.md)  
-> **Version:** 2.2.0  
-> **Updated:** 2026-03-31  
-> **Status:** Active  
-> **Location:** `src/components/errors/`  
-> **AI Confidence:** 95%  
-> **Ambiguity Score:** 5%  
+> **Parent:** [Error Modal Spec](../01-index.md)
+> **Version:** 2.2.0
+> **Updated:** 2026-03-31
+> **Status:** Active
+> **Location:** `src/components/errors/`
+> **AI Confidence:** 95%
+> **Ambiguity Score:** 5%
 > **Purpose:** Comprehensive specification for the Global Error Modal — how errors are captured, enriched, displayed, and exported across the React → Go → Delegated Server request chain.
 
 ---
