@@ -5,8 +5,8 @@ Dual-Platform Engine (100% Native Unix & Windows Support)
 
 Features:
 1. Centralized Configuration Maps, Language Manifests, Subsystem Hints, and Top-Level Enums:
-   - EncodingType, LanguageType, SubsystemType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType, CacheKeyType.
-2. Centralized Encodings, Separators, Tokens, Paths, and Default Literals (CURRENT_DIR, CACHE_KEY_FILES).
+   - EncodingType, LanguageType, SubsystemType, ArtifactCategoryType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType, CacheKeyType.
+2. Centralized Encodings, Separators, Tokens, Paths, Default Literals (CURRENT_DIR, CACHE_KEY_FILES), and Artifact Clean Presets.
 3. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
 4. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
@@ -80,6 +80,14 @@ class SubsystemType(str, Enum):
     CLI = "CLI"
     TESTS = "TESTS"
     UNKNOWN = "UNKNOWN"
+
+class ArtifactCategoryType(str, Enum):
+    """Enumeration for cleanup artifact categories."""
+    PYCACHE = "PYCACHE"
+    BINARIES = "BINARIES"
+    TEMPORARY = "TEMPORARY"
+    CUSTOM = "CUSTOM"
+    ALL = "ALL"
 
 class CacheKeyType(str, Enum):
     """Enumeration for standardized cache and topology JSON keys."""
@@ -163,6 +171,19 @@ TAB_CHAR = "\t"
 PATH_SEPARATOR = "/"
 WINDOWS_PATH_SEPARATOR = "\\"
 
+# Standard Git Command String Constants
+GIT_EXECUTABLE = "git"
+GIT_CMD_LS_FILES = "ls-files"
+GIT_CMD_RM = "rm"
+GIT_FLAG_FORCE = "-f"
+GIT_FLAG_RECURSIVE = "-r"
+GIT_FLAG_ERROR_UNMATCH = "--error-unmatch"
+
+# Standard Status Badges
+STATUS_GIT_TRACKED = " [Git Tracked]"
+STATUS_UNTRACKED = " [Untracked]"
+
+# Cache Dictionary Keys
 CACHE_KEY_FILES = CacheKeyType.FILES.value
 CACHE_KEY_TOTAL_FILES = CacheKeyType.TOTAL_FILES.value
 CACHE_KEY_TIMESTAMP = CacheKeyType.TIMESTAMP.value
@@ -182,6 +203,20 @@ CACHE_KEY_SCHEMA_FILES = CacheKeyType.SCHEMA_FILES.value
 CACHE_KEY_WORKFLOWS = CacheKeyType.WORKFLOWS.value
 CACHE_KEY_SPEC_ROOTS = CacheKeyType.SPEC_ROOTS.value
 CACHE_KEY_TEST_RUNNERS = CacheKeyType.TEST_RUNNERS.value
+
+# Centralized Pycache & Temp Artifact Cleanup Presets
+PYCACHE_DIR_NAMES: tuple[str, ...] = (
+    "__pycache__", ".pytest_cache", ".coverage", ".mypy_cache", ".ruff_cache"
+)
+PYCACHE_FILE_EXTENSIONS: tuple[str, ...] = (
+    ".pyc", ".pyo", ".pyd"
+)
+TEMP_ARTIFACT_EXTENSIONS: tuple[str, ...] = (
+    ".tmp", ".log", ".swp", ".bak", ".orig", ".swo", ".swn"
+)
+TEMP_ARTIFACT_FILENAMES: tuple[str, ...] = (
+    ".DS_Store", "Thumbs.db", "desktop.ini", ".directory"
+)
 
 # --- Module-Level Directory & File Constants ---
 CACHE_BASE_DIR = Path("tmp/cache")

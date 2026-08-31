@@ -9,7 +9,7 @@
 
 Follow this sequence before and during any repository modification task:
 
-- [ ] **/learn** Inspect `02-shared-engine.py` to import centralized constants (`DEFAULT_ENCODING`, `LINE_SEPARATOR`, `TAB_CHAR`, `PATH_SEPARATOR`, `CURRENT_DIR`), enums (`RegexPatternType`, `ScanModeType`, `SeverityType`, `ExitCodeType`, `CacheKeyType`), regex cache, and dual-platform locks.
+- [ ] **/learn** Inspect `02-shared-engine.py` to import centralized constants (`DEFAULT_ENCODING`, `LINE_SEPARATOR`, `TAB_CHAR`, `PATH_SEPARATOR`, `CURRENT_DIR`), enums (`RegexPatternType`, `ScanModeType`, `SeverityType`, `ExitCodeType`, `CacheKeyType`, `ArtifactCategoryType`), regex cache, and dual-platform locks.
 - [ ] **/goal** Discover repository topology, languages (Go, Rust, Python, TypeScript, PHP, SQL), and subsystem roots using `18-codebase-topology-discoverer.py`.
 - [ ] **/goal** Run rapid repo-wide file discovery using `11-fast-file-scanner.py` or instant cache lookup `<1ms`.
 - [ ] **/goal** Rapidly read target files or explore folder contents using `17-fast-file-reader.py`.
@@ -191,7 +191,9 @@ WINDOWS_PATH_SEPARATOR = "\\"
   - `python .lovable/ai-fix-scripts/19-artifact-remover.py <path-or-pattern> [--dry-run]`
   - `python .lovable/ai-fix-scripts/19-artifact-remover.py <path-or-pattern> --force`
   - `python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-pycache [--force]`
+  - `python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-temp [--force]`
   - `python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-binaries [--force]`
+  - `python .lovable/ai-fix-scripts/19-artifact-remover.py --add-path build/,dist/ --add-ext .tmp,.log --force`
 
 ### 20-plan-consolidator.py — Fast Lovable Plans & Subtasks Consolidator
 - **Tags:** `plans`, `consolidator`, `subtasks`, `resequence`, `plan-cleanup`
