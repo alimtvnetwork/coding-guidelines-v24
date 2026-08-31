@@ -3,7 +3,7 @@
 Fast Multi-Threaded Local CI/CD Runner
 Executes repository quality gates in parallel using ThreadPoolExecutor and enforces zero-failure tolerance.
 
-All Enums, Constants, and Job Matrices are imported directly from 02-shared-engine.py.
+All Enums, Constants, and Utility Functions are imported directly from 02-shared-engine.py.
 """
 
 from concurrent.futures import ThreadPoolExecutor
@@ -23,6 +23,7 @@ DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
 DEFAULT_MAX_WORKERS = engine.DEFAULT_MAX_WORKERS
 CI_JOBS_MATRIX = engine.CI_JOBS_MATRIX
+format_keys = engine.format_keys
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
     """Executes a single validation check asynchronously."""
@@ -31,6 +32,7 @@ def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
         is_success = (res.returncode == 0)
         if is_success:
             return (job_name, True, res.stdout)
+
         return (job_name, False, res.stdout + LINE_SEPARATOR + res.stderr)
     except Exception as e:
         return (job_name, False, str(e))
@@ -41,8 +43,10 @@ def run_pipeline(
 ) -> int:
     """Dispatches all jobs concurrently and prints clean summary report."""
     target_jobs = jobs or CI_JOBS_MATRIX
+    enqueued_names = format_keys(target_jobs)
+
     print("🚀 Running Local CI/CD Pipeline via ThreadPoolExecutor...")
-    print(f"📋 Enqueued Jobs: {', '.join(target_jobs.keys())}{LINE_SEPARATOR}")
+    print(f"📋 Enqueued Jobs: {enqueued_names}{LINE_SEPARATOR}")
 
     results = []
     with ThreadPoolExecutor(max_workers=max_workers) as executor:

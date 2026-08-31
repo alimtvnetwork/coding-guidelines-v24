@@ -7,7 +7,7 @@ Features:
 1. Centralized Configuration Maps, Language Manifests, Subsystem Hints, and Top-Level Enums:
    - EncodingType, LanguageType, SubsystemType, ArtifactCategoryType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType, CacheKeyType.
 2. Centralized Encodings, Separators, Tokens, Paths, Default Literals (CURRENT_DIR, CACHE_KEY_FILES), and Artifact Clean Presets.
-3. Thread-Safe Lazy Regex Registry (Pre-initialized None Map, Zero import-time regex compilation).
+3. Thread-Safe Lazy Regex Registry (Pre-initialized None Map, Dynamic On-The-Fly Auto-Registration with Logging).
 4. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
    - Windows: Atomic `os.O_CREAT | os.O_EXCL` with PID timestamp & stale-lock recovery.
@@ -18,9 +18,10 @@ Features:
 9. Two-phase incremental mtime-based file streaming (cache-first + parallel scan).
 10. Pluggable cache layout in tmp/cache/ (paths, locks, files).
 11. Fault-tolerant file reader handling missing/deleted files gracefully (zero crash).
+12. Shared formatting and collection joining helpers (format_comma_separated, format_keys).
 """
 
-from collections.abc import Generator
+from collections.abc import Generator, Iterable
 from contextlib import contextmanager
 from enum import Enum
 import json
@@ -172,6 +173,7 @@ TAB_CHAR = "\t"
 PATH_SEPARATOR = "/"
 WINDOWS_PATH_SEPARATOR = "\\"
 DEVICE_PATH_PREFIX = "\\\\?\\"
+COMMA_SPACE_SEPARATOR = ", "
 
 # Raw Byte Constants
 UTF8_BOM_BYTES = b"\xef\xbb\xbf"
@@ -426,7 +428,7 @@ QUERY_ALIASES: dict[str, LanguageType | SubsystemType] = {
 }
 
 # Centralized Raw Regex Definitions: Enum -> (Pattern String, Flags)
-REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
+REGEX_DEFINITIONS: dict[RegexPatternType | str, tuple[str, int]] = {
     RegexPatternType.WINDOWS_BACKSLASH: (r"\\", 0),
     RegexPatternType.LEADING_DOT_SLASH: (r"^\./", 0),
     RegexPatternType.CRLF: (r"\r\n", 0),
@@ -451,43 +453,76 @@ REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
     RegexPatternType.NON_ALPHANUMERIC: (r"[^a-zA-Z0-9_-]+", 0),
 }
 
-# --- Thread-Safe Lazy Regex Registry (Zero import-time compilation) ---
+# --- Thread-Safe Lazy Regex Registry (Zero import-time compilation, on-the-fly dynamic auto-registration) ---
 class RegexRegistry:
     """
     Thread-safe lazy-compiling regex registry.
-    Initializes all entries to None mapping on startup.
-    Patterns are compiled on-demand upon first get() call and cached.
+    Initializes all known entries to None mapping on startup.
+    If an unknown pattern or key is requested, it logs the event, registers it on-the-fly in both maps, and compiles.
     """
-    _compiled_patterns: dict[RegexPatternType, re.Pattern | None] = {pt: None for pt in RegexPatternType}
+    _compiled_patterns: dict[RegexPatternType | str, re.Pattern | None] = {pt: None for pt in RegexPatternType}
     _lock = threading.Lock()
 
     @classmethod
-    def get(cls, pattern_type: RegexPatternType) -> re.Pattern:
-        """Lazily compiles on first demand and returns cached immutable re.Pattern."""
+    def get(
+        cls,
+        pattern_type: RegexPatternType | str,
+        default_pattern: str | None = None,
+        flags: int = 0
+    ) -> re.Pattern:
+        """
+        Lazily compiles on first demand and returns cached immutable re.Pattern.
+        Auto-registers dynamic regex strings on-the-fly if missing.
+        """
         cached = cls._compiled_patterns.get(pattern_type)
         if cached is not None:
             return cached
 
         with cls._lock:
-            if cls._compiled_patterns[pattern_type] is None:
-                if pattern_type not in REGEX_DEFINITIONS:
-                    raise KeyError(f"Pattern type '{pattern_type}' is not registered in REGEX_DEFINITIONS")
-                raw_pattern, flags = REGEX_DEFINITIONS[pattern_type]
-                cls._compiled_patterns[pattern_type] = re.compile(raw_pattern, flags)
-            return cls._compiled_patterns[pattern_type]
+            # Check again within lock
+            cached = cls._compiled_patterns.get(pattern_type)
+            if cached is not None:
+                return cached
+
+            # Auto-register on the fly if pattern is not present
+            if pattern_type not in REGEX_DEFINITIONS:
+                raw_pattern = default_pattern or str(pattern_type)
+                print(f"ℹ️ [RegexRegistry] Dynamic on-the-fly registration: '{pattern_type}' -> '{raw_pattern}'")
+                REGEX_DEFINITIONS[pattern_type] = (raw_pattern, flags)
+
+            raw_pattern, compile_flags = REGEX_DEFINITIONS[pattern_type]
+            compiled = re.compile(raw_pattern, compile_flags)
+            cls._compiled_patterns[pattern_type] = compiled
+            return compiled
 
     @classmethod
-    def get_group(cls, *pattern_types: RegexPatternType) -> tuple[re.Pattern, ...]:
+    def get_group(cls, *pattern_types: RegexPatternType | str) -> tuple[re.Pattern, ...]:
         """Lazily retrieves a tuple of compiled re.Pattern objects."""
         return tuple(cls.get(pt) for pt in pattern_types)
 
-def get_compiled_regex(pattern_type: RegexPatternType) -> re.Pattern:
+def get_compiled_regex(
+    pattern_type: RegexPatternType | str,
+    default_pattern: str | None = None,
+    flags: int = 0
+) -> re.Pattern:
     """Convenience functional accessor for RegexRegistry.get."""
-    return RegexRegistry.get(pattern_type)
+    return RegexRegistry.get(pattern_type, default_pattern=default_pattern, flags=flags)
 
-def get_compiled_regex_group(*pattern_types: RegexPatternType) -> tuple[re.Pattern, ...]:
+def get_compiled_regex_group(*pattern_types: RegexPatternType | str) -> tuple[re.Pattern, ...]:
     """Convenience functional accessor for RegexRegistry.get_group."""
     return RegexRegistry.get_group(*pattern_types)
+
+# --- Shared String Formatting & Collection Utilities ---
+
+def format_comma_separated(items: Iterable[Any]) -> str:
+    """Combines an iterable of items into a clean comma-separated string."""
+    return COMMA_SPACE_SEPARATOR.join(str(item) for item in items)
+
+def format_keys(mapping: Any, separator: str = COMMA_SPACE_SEPARATOR) -> str:
+    """Extracts and formats keys from a dictionary or iterable with separator."""
+    if hasattr(mapping, "keys"):
+        return separator.join(str(k) for k in mapping.keys())
+    return separator.join(str(k) for k in mapping)
 
 # --- Path & File Utility Functions ---
 
@@ -515,6 +550,7 @@ def is_binary_file(file_path: Path) -> bool:
     try:
         if not file_path.is_file():
             return False
+
         with open(file_path, "rb") as f:
             chunk = f.read(BINARY_PROBE_CHUNK_SIZE)
             return NULL_BYTE in chunk
@@ -537,16 +573,19 @@ def normalize_extensions(extensions: tuple | set | list | str | None) -> set[str
     """Normalizes custom extensions into a lowercased set with leading dots."""
     if not extensions:
         return None
+
     if isinstance(extensions, str):
         raw_items = [e.strip() for e in extensions.split(",") if e.strip()]
     else:
         raw_items = [str(e).strip() for e in extensions if str(e).strip()]
+
     normalized = set()
     for item in raw_items:
         clean = item.lower()
         if not clean.startswith(DOT_CHAR):
             clean = f"{DOT_CHAR}{clean}"
         normalized.add(clean)
+
     return normalized if normalized else None
 
 def read_file_safe(
@@ -562,6 +601,7 @@ def read_file_safe(
     p = Path(path)
     if not p.is_file():
         return None
+
     try:
         re_univ_nl = get_compiled_regex(RegexPatternType.UNIVERSAL_LINE_ENDING)
         with open(p, "r", encoding=encoding, errors="replace") as f:
@@ -742,16 +782,21 @@ def stream_cached_files(
                 if not norm_p.startswith(norm_root + PATH_SEPARATOR):
                     if norm_p != norm_root:
                         continue
+
         if is_ignored_path(norm_p, custom_excludes=custom_excludes):
             continue
+
         p = Path(norm_p)
         if not p.exists():
             continue
+
         if is_binary_file(p):
             continue
+
         if ext_set:
             if p.suffix.lower() not in ext_set:
                 continue
+
         yield p
 
 def stream_directory_files(
@@ -782,9 +827,11 @@ def stream_directory_files(
             p = Path(os.path.join(root, f))
             if is_binary_file(p):
                 continue
+
             if ext_set:
                 if p.suffix.lower() not in ext_set:
                     continue
+
             yield p
 
 def process_repository_files(
