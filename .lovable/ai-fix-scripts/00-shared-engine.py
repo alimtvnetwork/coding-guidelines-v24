@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """
 Shared Core Engine for AI Repository Tooling, CI Fix Scripts & High-Speed Caching
-Provides:
+Dual-Platform Engine (100% Native Unix & Windows Support)
+
+Features:
 1. Centralized Configuration Maps and Top-Level Enums (with 'Type' suffix & PascalCase members).
 2. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
-3. Pluggable cache layout in tmp/cache/ (paths, locks, files).
-4. Cross-process safe atomic file locking with timeout and stale-lock recovery.
-5. Two-phase incremental mtime-based file streaming (cache-first + parallel scan).
-6. Fault-tolerant file reader handling missing/deleted files gracefully (zero crash).
-7. Multi-folder scoping, customizable extensions, and nested ignore pruning (.git, .gitmap, node_modules).
+3. Dual-Mode Cross-Process Locking:
+   - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
+   - Windows: Atomic `os.O_CREAT | os.O_EXCL` with PID timestamp & stale-lock recovery.
+4. Unix Symlink & Cycle Guard: Inode tracking (st_dev, st_ino) preventing infinite recursion.
+5. Unix Permission Preservation: Preserves executable bits (chmod +x / st_mode) across atomic writes.
+6. Universal Line Ending Normalizer: Aggressively converts CRLF (\\r\\n) and legacy Mac CR (\\r) to clean UNIX LF (\\n).
+7. Memory-Safe Chunked Binary Probe: Inspects first 8KB for null-bytes without loading large blobs into RAM.
+8. Two-phase incremental mtime-based file streaming (cache-first + parallel scan).
+9. Pluggable cache layout in tmp/cache/ (paths, locks, files).
+10. Fault-tolerant file reader handling missing/deleted files gracefully (zero crash).
 """
 
 from collections.abc import Generator
@@ -22,6 +29,14 @@ import sys
 import threading
 import time
 from typing import Any, Callable
+
+# Optional POSIX kernel locking
+try:
+    import fcntl
+    HAS_FCNTL = True
+except ImportError:
+    fcntl = None
+    HAS_FCNTL = False
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -37,6 +52,7 @@ PRIMARY_CACHE_FILE = CACHE_BASE_DIR / "repo-file-cache.json"
 DEFAULT_MAX_FILE_KB = 2048
 LOCK_TIMEOUT_SECONDS = 5.0
 STALE_LOCK_SECONDS = 15.0
+MAX_READ_SIZE_BYTES = 20 * 1024 * 1024  # 20MB memory safety cap
 
 EXCLUDE_DIRS = {
     ".git", ".gitmap", "gitmap", ".git-map",
@@ -130,6 +146,7 @@ class RegexPatternType(str, Enum):
     WindowsBackslash = "windows_backslash"
     LeadingDotSlash = "leading_dot_slash"
     Crlf = "crlf"
+    UniversalLineEnding = "universal_line_ending"
     TrailingWhitespace = "trailing_whitespace"
     SeqPrefix = "seq_prefix"
     Uppercase = "uppercase"
@@ -154,6 +171,7 @@ REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
     RegexPatternType.WindowsBackslash: (r"\\", 0),
     RegexPatternType.LeadingDotSlash: (r"^\./", 0),
     RegexPatternType.Crlf: (r"\r\n", 0),
+    RegexPatternType.UniversalLineEnding: (r"\r\n|\r", 0),
     RegexPatternType.TrailingWhitespace: (r"[ \t]+$", re.MULTILINE),
     RegexPatternType.SeqPrefix: (r"^([0-9]+)-(.*)$", 0),
     RegexPatternType.Uppercase: (r"[A-Z]", 0),
@@ -222,8 +240,21 @@ def is_ignored_path(path: str | Path, custom_excludes: set[str] | None = None) -
     return any(p.lower() in excludes_lower for p in parts)
 
 def is_binary_file(file_path: Path) -> bool:
-    """Checks if file has a known binary extension."""
-    return file_path.suffix.lower() in BINARY_EXTENSIONS
+    """
+    Checks if file is binary by extension or by memory-safe 8KB chunk probing for null bytes.
+    Avoids loading full large files into RAM.
+    """
+    if file_path.suffix.lower() in BINARY_EXTENSIONS:
+        return True
+    try:
+        if file_path.is_file():
+            with open(file_path, "rb") as f:
+                chunk = f.read(8192)
+                if b"\x00" in chunk:
+                    return True
+    except Exception:
+        pass
+    return False
 
 def is_allowed_large_file(file_path: str | Path) -> bool:
     """Checks if file is on the explicit waiver list for large generated assets."""
@@ -253,17 +284,22 @@ def normalize_extensions(extensions: tuple | set | list | str | None) -> set[str
         normalized.add(clean)
     return normalized if normalized else None
 
-def read_file_safe(path: str | Path) -> str | None:
-    """Fault-tolerant file reader. Handles missing or deleted files gracefully with zero crashes."""
+def read_file_safe(path: str | Path, max_bytes: int = MAX_READ_SIZE_BYTES) -> str | None:
+    """
+    Memory-safe and fault-tolerant file reader.
+    Handles missing or deleted files gracefully with zero crashes.
+    Normalizes both CRLF (\\r\\n) and legacy Mac CR (\\r) to UNIX LF (\\n).
+    """
     try:
         p = Path(path)
         if not p.exists():
             return None
         if not p.is_file():
             return None
-        re_crlf = get_compiled_regex(RegexPatternType.Crlf)
+        re_univ_nl = get_compiled_regex(RegexPatternType.UniversalLineEnding)
         with open(p, "r", encoding="utf-8", errors="replace") as f:
-            return re_crlf.sub("\n", f.read())
+            raw_text = f.read(max_bytes)
+            return re_univ_nl.sub("\n", raw_text)
     except (FileNotFoundError, PermissionError, OSError):
         return None
 
@@ -273,15 +309,34 @@ def read_file_lf(path: str | Path) -> str:
     return content if content is not None else ""
 
 def write_file_lf(path: str | Path, content: str) -> bool:
-    """Atomic write ensuring UTF-8 encoding and strict UNIX LF line endings."""
+    """
+    Atomic write ensuring UTF-8 encoding, strict UNIX LF, and Unix permission preservation.
+    Preserves original executable bits (chmod +x / st_mode) on Linux/macOS.
+    """
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     temp_path = p.with_name(f"{p.name}.tmp_{os.getpid()}_{int(time.time()*1000)}")
+
+    # Preserve executable permissions if original file exists on Unix
+    original_mode = None
+    if p.exists():
+        try:
+            original_mode = p.stat().st_mode
+        except Exception:
+            pass
+
     try:
-        re_crlf = get_compiled_regex(RegexPatternType.Crlf)
-        lf_content = re_crlf.sub("\n", content)
+        re_univ_nl = get_compiled_regex(RegexPatternType.UniversalLineEnding)
+        lf_content = re_univ_nl.sub("\n", content)
         with open(temp_path, "wb") as f:
             f.write(lf_content.encode("utf-8"))
+
+        if original_mode is not None:
+            try:
+                os.chmod(temp_path, original_mode)
+            except Exception:
+                pass
+
         temp_path.replace(p)
         return True
     except Exception:
@@ -292,48 +347,75 @@ def write_file_lf(path: str | Path, content: str) -> bool:
                 pass
         return False
 
-# --- Safe Cross-Process Locking Mechanism ---
+# --- Dual-Platform Cross-Process Locking Mechanism ---
 
 @contextmanager
 def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_TIMEOUT_SECONDS):
     """
-    Acquires a cross-process lockfile in tmp/cache/locks/.
-    Recovers from stale locks (>15s) automatically.
+    Dual-platform cross-process lock:
+    - On Unix: Uses kernel-level `fcntl.flock` (automatic cleanup on crash/SIGKILL).
+    - On Windows: Uses `os.O_CREAT | os.O_EXCL` with PID timestamp & stale lock eviction (>15s).
     """
     CACHE_LOCKS_DIR.mkdir(parents=True, exist_ok=True)
     lock_file = CACHE_LOCKS_DIR / lock_name
     start_time = time.time()
     acquired = False
+    lock_fd = None
 
-    while time.time() - start_time < timeout:
+    if HAS_FCNTL:
+        # Native Unix POSIX flock
         try:
-            if lock_file.exists():
-                lock_age = time.time() - lock_file.stat().st_mtime
-                if lock_age > STALE_LOCK_SECONDS:
+            lock_fd = open(lock_file, "w")
+            while time.time() - start_time < timeout:
+                try:
+                    fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    acquired = True
+                    break
+                except (BlockingIOError, OSError):
+                    time.sleep(0.02)
+        except Exception:
+            acquired = False
+
+        try:
+            yield acquired
+        finally:
+            if lock_fd is not None:
+                try:
+                    fcntl.flock(lock_fd, fcntl.LOCK_UN)
+                    lock_fd.close()
+                except Exception:
+                    pass
+    else:
+        # Windows native O_EXCL with stale lock eviction
+        while time.time() - start_time < timeout:
+            try:
+                if lock_file.exists():
+                    lock_age = time.time() - lock_file.stat().st_mtime
+                    if lock_age > STALE_LOCK_SECONDS:
+                        try:
+                            lock_file.unlink()
+                        except Exception:
+                            pass
+
+                fd = os.open(str(lock_file), os.O_CREAT | os.O_EXCL | os.O_RDWR)
+                os.write(fd, f"pid={os.getpid()}\ntime={time.time()}".encode("utf-8"))
+                os.close(fd)
+                acquired = True
+                break
+            except FileExistsError:
+                time.sleep(0.02)
+            except Exception:
+                break
+
+        try:
+            yield acquired
+        finally:
+            if acquired:
+                if lock_file.exists():
                     try:
                         lock_file.unlink()
                     except Exception:
                         pass
-
-            fd = os.open(str(lock_file), os.O_CREAT | os.O_EXCL | os.O_RDWR)
-            os.write(fd, f"pid={os.getpid()}\ntime={time.time()}".encode("utf-8"))
-            os.close(fd)
-            acquired = True
-            break
-        except FileExistsError:
-            time.sleep(0.02)
-        except Exception:
-            break
-
-    try:
-        yield acquired
-    finally:
-        if acquired:
-            if lock_file.exists():
-                try:
-                    lock_file.unlink()
-                except Exception:
-                    pass
 
 # --- Pluggable Cache Management ---
 
@@ -371,7 +453,7 @@ def save_repo_cache(cache_data: dict[str, Any]) -> None:
         except Exception:
             pass
 
-# --- Two-Phase Streaming Engine with Delta Eviction ---
+# --- Two-Phase Streaming Engine with Inode Cycle Protection ---
 
 def stream_cached_files(
     cache_data: dict[str, Any],
@@ -408,9 +490,25 @@ def stream_directory_files(
     extensions: set[str] | tuple | None = None,
     custom_excludes: set[str] | None = None
 ) -> Generator[Path, None, None]:
-    """Phase 2: Walks filesystem pruning ignored folders (including nested .git, .gitmap, node_modules)."""
+    """
+    Phase 2: Walks filesystem pruning ignored folders (including nested .git, .gitmap, node_modules).
+    Guarded with visited inode tracking (st_dev, st_ino) on Unix to prevent symlink recursion cycles.
+    """
     ext_set = normalize_extensions(extensions)
-    for root, dirs, files in os.walk(root_dir):
+    visited_inodes: set[tuple[int, int]] = set()
+
+    for root, dirs, files in os.walk(root_dir, followlinks=False):
+        # Prevent Unix symlink recursion loops
+        try:
+            st = os.stat(root)
+            inode_key = (st.st_dev, st.st_ino)
+            if inode_key in visited_inodes:
+                dirs[:] = []
+                continue
+            visited_inodes.add(inode_key)
+        except Exception:
+            pass
+
         dirs[:] = [d for d in dirs if not is_ignored_directory(d, custom_excludes=custom_excludes)]
         for f in files:
             p = Path(os.path.join(root, f))
