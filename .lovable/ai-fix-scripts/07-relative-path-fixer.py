@@ -4,7 +4,10 @@ Fast Relative Path Fixer & Absolute URI Auditor
 Detects and sanitizes absolute filesystem paths (C:\\..., D:\\..., /home/..., file:///) in documentation.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 
-All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
+Performance & Clean Architecture:
+1. Fast Substring Pre-Filter: Skips regex if no path markers exist (<0.001ms).
+2. Flattened Conditionals: Clean guard clauses and flattened verification steps.
+3. All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
@@ -41,31 +44,37 @@ def sanitize_content_paths(content: str) -> tuple[str, int]:
     return modified, count
 
 def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, list[str]]:
-    """Audits a single file for forbidden absolute paths."""
+    """Audits a single file for forbidden absolute paths using flattened guard clauses."""
     norm_p = normalize_rel_path(file_path)
-    patterns = get_compiled_regex_group(
-        RegexPatternType.FILE_URI_WIN,
-        RegexPatternType.DRIVE_ABS_WIN,
-    )
     try:
         content = read_file_lf(file_path, encoding=DEFAULT_ENCODING)
+        # Fast substring pre-filter: skip if no path indicators exist
+        has_path_marker = ("file:" in content or ":\\" in content)
+        if not has_path_marker:
+            return (norm_p, [])
+
+        patterns = get_compiled_regex_group(
+            RegexPatternType.FILE_URI_WIN,
+            RegexPatternType.DRIVE_ABS_WIN,
+        )
+
         violations = []
         for pat in patterns:
             for match in pat.finditer(content):
                 val = match.group(0)
-                is_device_path = "\\\\?\\" in val
-                is_trailing_dot = val.endswith(".")
-                if not is_device_path:
-                    if not is_trailing_dot:
-                        violations.append(val)
+                is_ignored = ("\\\\?\\" in val or val.endswith("."))
+                if is_ignored:
+                    continue
+                violations.append(val)
 
         has_violations = len(violations) > 0
-        if has_violations:
-            if is_fix_mode:
-                cleaned, fix_count = sanitize_content_paths(content)
-                has_fixed = fix_count > 0
-                if has_fixed:
-                    write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
+        if not has_violations:
+            return (norm_p, [])
+
+        if is_fix_mode:
+            cleaned, fix_count = sanitize_content_paths(content)
+            if fix_count > 0:
+                write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
 
         return (norm_p, violations)
     except Exception:

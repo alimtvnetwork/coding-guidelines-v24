@@ -5,7 +5,9 @@ Audits numbered markdown files (e.g. 01-intro.md) to ensure no sequence gaps and
 verifies that the primary # H1 title matches the file sequence prefix.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 
-All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
+Performance & Clean Architecture:
+1. Flattened Conditionals: Zero deep nesting using early `continue` guard clauses.
+2. All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
@@ -35,7 +37,7 @@ def audit_directory_sequences(
     target_dir: str = CURRENT_DIR,
     is_fix_mode: bool = False
 ) -> tuple[list[str], list[str]]:
-    """Audits sequence numbering and # H1 headers in markdown files."""
+    """Audits sequence numbering and # H1 headers in markdown files using flattened guard clauses."""
     re_num = get_compiled_regex(RegexPatternType.FILE_NUM_PREFIX)
     re_h1 = get_compiled_regex(RegexPatternType.H1_HEADER)
     seq_issues = []
@@ -48,39 +50,38 @@ def audit_directory_sequences(
         numbered_files = []
         for f in files:
             m = re_num.match(f)
-            has_match = bool(m)
-            if has_match:
-                num_val = int(m.group(1))
-                numbered_files.append((num_val, f, os.path.join(root, f)))
+            if not m:
+                continue
+            numbered_files.append((int(m.group(1)), f, os.path.join(root, f)))
 
-        has_numbered = len(numbered_files) > 0
-        if has_numbered:
-            numbered_files.sort(key=lambda x: x[0])
-            first_num = numbered_files[0][0]
-            is_valid_start = (first_num in (0, 1))
+        if not numbered_files:
+            continue
 
-            if is_valid_start:
-                expected = first_num
-                for num_val, f_name, full_path in numbered_files:
-                    is_gap = (num_val != expected)
-                    if is_gap:
-                        seq_issues.append(f"{norm_dir}/{f_name} (found {num_val:02d}, expected {expected:02d})")
-                    expected += 1
+        numbered_files.sort(key=lambda x: x[0])
+        first_num = numbered_files[0][0]
+        if first_num in (0, 1):
+            expected = first_num
+            for num_val, f_name, _ in numbered_files:
+                if num_val != expected:
+                    seq_issues.append(f"{norm_dir}/{f_name} (found {num_val:02d}, expected {expected:02d})")
+                expected += 1
 
-            for num_val, f_name, full_path in numbered_files:
-                content = read_file_lf(full_path, encoding=DEFAULT_ENCODING)
-                m_h1 = re_h1.search(content)
-                has_h1 = bool(m_h1)
-                if has_h1:
-                    h1_num = int(m_h1.group(2))
-                    is_mismatch = (h1_num != num_val)
-                    if is_mismatch:
-                        title_issues.append(f"{norm_dir}/{f_name} (file prefix {num_val:02d} != H1 header {h1_num:02d})")
-                        if is_fix_mode:
-                            def replacer(match):
-                                return f"{match.group(1)}{num_val:02d}{match.group(3)}{match.group(4)}"
-                            new_content = re_h1.sub(replacer, content, count=1)
-                            write_file_lf(full_path, new_content, encoding=DEFAULT_ENCODING)
+        for num_val, f_name, full_path in numbered_files:
+            content = read_file_lf(full_path, encoding=DEFAULT_ENCODING)
+            m_h1 = re_h1.search(content)
+            if not m_h1:
+                continue
+
+            h1_num = int(m_h1.group(2))
+            if h1_num == num_val:
+                continue
+
+            title_issues.append(f"{norm_dir}/{f_name} (file prefix {num_val:02d} != H1 header {h1_num:02d})")
+            if is_fix_mode:
+                def replacer(match):
+                    return f"{match.group(1)}{num_val:02d}{match.group(3)}{match.group(4)}"
+                new_content = re_h1.sub(replacer, content, count=1)
+                write_file_lf(full_path, new_content, encoding=DEFAULT_ENCODING)
 
     return seq_issues, title_issues
 
