@@ -4,7 +4,9 @@ Fast Repository File Size & Blob Guard
 Scans tracked repository files to ensure no accidental massive binary files exceed thresholds.
 Multi-folder capable, customizable extensions, and nested ignore pruning (.git, .gitmap, node_modules).
 
-All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
+Performance & Clean Architecture:
+1. Flattened Conditionals: Zero nested if-blocks using clean guard clauses.
+2. All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
@@ -32,7 +34,7 @@ def audit_file_sizes(
     target_dir: str = CURRENT_DIR,
     allowed_exts: set[str] | None = None
 ) -> int:
-    """Scans files and checks sizes against threshold across target directory."""
+    """Scans files and checks sizes against threshold across target directory using flattened guard clauses."""
     start_time = time.perf_counter()
     violations = []
     total_files = 0
@@ -47,11 +49,11 @@ def audit_file_sizes(
             is_allowed = is_allowed_large_file(norm_fp)
             if is_allowed:
                 continue
-            if allowed_exts:
-                ext = os.path.splitext(f)[1].lower()
-                is_ext_allowed = (ext in allowed_exts)
-                if not is_ext_allowed:
-                    continue
+
+            is_filtered_ext = (allowed_exts is not None and os.path.splitext(f)[1].lower() not in allowed_exts)
+            if is_filtered_ext:
+                continue
+
             try:
                 sz = os.path.getsize(fp)
                 total_files += 1

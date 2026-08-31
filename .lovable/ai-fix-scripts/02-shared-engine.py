@@ -7,7 +7,7 @@ Features:
 1. Centralized Configuration Maps, Language Manifests, Subsystem Hints, and Top-Level Enums:
    - EncodingType, LanguageType, SubsystemType, ArtifactCategoryType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType, CacheKeyType.
 2. Centralized Encodings, Separators, Tokens, Paths, Default Literals (CURRENT_DIR, CACHE_KEY_FILES), and Artifact Clean Presets.
-3. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
+3. Thread-Safe Lazy Regex Registry (Pre-initialized None Map, Zero import-time regex compilation).
 4. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
    - Windows: Atomic `os.O_CREAT | os.O_EXCL` with PID timestamp & stale-lock recovery.
@@ -163,6 +163,7 @@ UTF16_LE_ENCODING = EncodingType.UTF16_LE.value
 UTF16_BE_ENCODING = EncodingType.UTF16_BE.value
 
 CURRENT_DIR = "."
+DOT_CHAR = "."
 EMPTY_STRING = ""
 LINE_SEPARATOR = "\n"
 CARRIAGE_RETURN = "\r"
@@ -170,6 +171,21 @@ CRLF_SEPARATOR = "\r\n"
 TAB_CHAR = "\t"
 PATH_SEPARATOR = "/"
 WINDOWS_PATH_SEPARATOR = "\\"
+DEVICE_PATH_PREFIX = "\\\\?\\"
+
+# Raw Byte Constants
+UTF8_BOM_BYTES = b"\xef\xbb\xbf"
+CRLF_BYTES = b"\r\n"
+NULL_BYTE = b"\x00"
+
+# Binary Probe & Chunk Constants
+BINARY_PROBE_CHUNK_SIZE = 8192
+DEFAULT_MAX_WORKERS = 4
+
+# Standard Installer Script File Names & Exclusions
+INSTALLER_BASH_NAME = "install.sh"
+INSTALLER_PWSH_NAME = "install.ps1"
+INSTALLER_EXCLUDE_PARTS = ("node_modules", ".git", "dist", "build")
 
 # Standard Git Command String Constants
 GIT_EXECUTABLE = "git"
@@ -217,6 +233,28 @@ TEMP_ARTIFACT_EXTENSIONS: tuple[str, ...] = (
 TEMP_ARTIFACT_FILENAMES: tuple[str, ...] = (
     ".DS_Store", "Thumbs.db", "desktop.ini", ".directory"
 )
+
+# Centralized 18 CI Quality Gate Job Definitions
+CI_JOBS_MATRIX: dict[str, list[str]] = {
+    "Relative Path Check": [sys.executable, "linter-scripts/check-relative-paths.py"],
+    "Prompts Loaded Check": [sys.executable, "linter-scripts/check-prompts-loaded.py"],
+    "Readme Install Section Check": [sys.executable, "linter-scripts/check-readme-install-section.py"],
+    "Forbidden Strings Check": [sys.executable, "linter-scripts/check-forbidden-strings.py"],
+    "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
+    "Fast File Scanner Cache": [sys.executable, ".lovable/ai-fix-scripts/11-fast-file-scanner.py", "--check"],
+    "File Size Guard": [sys.executable, ".lovable/ai-fix-scripts/13-file-size-guard.py"],
+    "Version Sync Check": [sys.executable, ".lovable/ai-fix-scripts/14-version-sync-checker.py"],
+    "Bundle Installer Generation": ["node", "scripts/generate-bundle-installers.mjs"],
+    "Spec Tree Sync": ["node", "scripts/sync-spec-tree.mjs"],
+    "Codegen Determinism Check": [sys.executable, "linters-cicd/codegen/scripts/verify_codegen_determinism.py"],
+    "Spec Verification Coverage": ["node", "scripts/spec-verification/generate-coverage-report.mjs", "--strict", "--out", "reports/spec-verification/coverage.md"],
+    "Validate Version JSON": ["node", "scripts/validate-version-json.mjs"],
+    "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md", "docs/installer-fix-repo-flags.md"],
+    "Check File Sizes Baseline": [sys.executable, "linter-scripts/check-file-sizes.py", "--check"],
+    "Newline Styling MJS Check": ["node", "linter-scripts/check-newline-styling.mjs"],
+    "Spec Folder References Check": [sys.executable, "linter-scripts/check-spec-folder-refs.py"],
+    "Linters CI/CD Test Suite": [sys.executable, "linters-cicd/tests/run.py"],
+}
 
 # --- Module-Level Directory & File Constants ---
 CACHE_BASE_DIR = Path("tmp/cache")
@@ -413,25 +451,30 @@ REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
     RegexPatternType.NON_ALPHANUMERIC: (r"[^a-zA-Z0-9_-]+", 0),
 }
 
-# --- Thread-Safe Lazy Regex Registry ---
+# --- Thread-Safe Lazy Regex Registry (Zero import-time compilation) ---
 class RegexRegistry:
-    """Thread-safe lazy-compiling regex registry with double-checked locking."""
-    _cache: dict[RegexPatternType, re.Pattern] = {}
+    """
+    Thread-safe lazy-compiling regex registry.
+    Initializes all entries to None mapping on startup.
+    Patterns are compiled on-demand upon first get() call and cached.
+    """
+    _compiled_patterns: dict[RegexPatternType, re.Pattern | None] = {pt: None for pt in RegexPatternType}
     _lock = threading.Lock()
 
     @classmethod
     def get(cls, pattern_type: RegexPatternType) -> re.Pattern:
-        """Lazily compiles and returns the cached re.Pattern object."""
-        if pattern_type in cls._cache:
-            return cls._cache[pattern_type]
+        """Lazily compiles on first demand and returns cached immutable re.Pattern."""
+        cached = cls._compiled_patterns.get(pattern_type)
+        if cached is not None:
+            return cached
 
         with cls._lock:
-            if pattern_type not in cls._cache:
+            if cls._compiled_patterns[pattern_type] is None:
                 if pattern_type not in REGEX_DEFINITIONS:
                     raise KeyError(f"Pattern type '{pattern_type}' is not registered in REGEX_DEFINITIONS")
                 raw_pattern, flags = REGEX_DEFINITIONS[pattern_type]
-                cls._cache[pattern_type] = re.compile(raw_pattern, flags)
-            return cls._cache[pattern_type]
+                cls._compiled_patterns[pattern_type] = re.compile(raw_pattern, flags)
+            return cls._compiled_patterns[pattern_type]
 
     @classmethod
     def get_group(cls, *pattern_types: RegexPatternType) -> tuple[re.Pattern, ...]:
@@ -462,20 +505,21 @@ def is_ignored_path(path: str | Path, custom_excludes: set[str] | None = None) -
 
 def is_binary_file(file_path: Path) -> bool:
     """
-    Checks if file is binary by extension or by memory-safe 8KB chunk probing for null bytes.
+    Checks if file is binary by extension or memory-safe 8KB chunk probing for null bytes.
     Avoids loading full large files into RAM.
     """
-    if file_path.suffix.lower() in BINARY_EXTENSIONS:
+    is_binary_ext = file_path.suffix.lower() in BINARY_EXTENSIONS
+    if is_binary_ext:
         return True
+
     try:
-        if file_path.is_file():
-            with open(file_path, "rb") as f:
-                chunk = f.read(8192)
-                if b"\x00" in chunk:
-                    return True
+        if not file_path.is_file():
+            return False
+        with open(file_path, "rb") as f:
+            chunk = f.read(BINARY_PROBE_CHUNK_SIZE)
+            return NULL_BYTE in chunk
     except Exception:
-        pass
-    return False
+        return False
 
 def is_allowed_large_file(file_path: str | Path) -> bool:
     """Checks if file is on the explicit waiver list for large generated assets."""
@@ -500,8 +544,8 @@ def normalize_extensions(extensions: tuple | set | list | str | None) -> set[str
     normalized = set()
     for item in raw_items:
         clean = item.lower()
-        if not clean.startswith("."):
-            clean = f".{clean}"
+        if not clean.startswith(DOT_CHAR):
+            clean = f"{DOT_CHAR}{clean}"
         normalized.add(clean)
     return normalized if normalized else None
 
@@ -515,12 +559,10 @@ def read_file_safe(
     Handles missing or deleted files gracefully with zero crashes.
     Normalizes both CRLF (\\r\\n) and legacy Mac CR (\\r) to strict UNIX LF (\\n).
     """
+    p = Path(path)
+    if not p.is_file():
+        return None
     try:
-        p = Path(path)
-        if not p.exists():
-            return None
-        if not p.is_file():
-            return None
         re_univ_nl = get_compiled_regex(RegexPatternType.UNIVERSAL_LINE_ENDING)
         with open(p, "r", encoding=encoding, errors="replace") as f:
             raw_text = f.read(max_bytes)

@@ -4,7 +4,9 @@ Fast Newline & Trailing Whitespace Fixer
 Enforces clean UNIX LF line endings, trims trailing spaces, and ensures a single trailing newline.
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 
-All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
+Performance & Clean Architecture:
+1. Flattened Conditionals: Zero nested if-blocks using clean guard clauses.
+2. All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
@@ -47,10 +49,12 @@ def process_file_newlines(file_path: Path, is_fix_mode: bool = False) -> tuple[s
         if not raw:
             return (norm_p, False)
         cleaned = clean_file_content(raw)
-        if raw != cleaned:
-            if is_fix_mode:
-                write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
-            return (norm_p, True)
+        has_changes = (raw != cleaned)
+        if not has_changes:
+            return (norm_p, False)
+        if is_fix_mode:
+            write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
+        return (norm_p, True)
     except Exception:
         pass
     return (norm_p, False)

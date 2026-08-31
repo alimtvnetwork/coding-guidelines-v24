@@ -25,6 +25,9 @@ get_compiled_regex = engine.get_compiled_regex
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
 CURRENT_DIR = engine.CURRENT_DIR
+INSTALLER_BASH_NAME = engine.INSTALLER_BASH_NAME
+INSTALLER_PWSH_NAME = engine.INSTALLER_PWSH_NAME
+INSTALLER_EXCLUDE_PARTS = engine.INSTALLER_EXCLUDE_PARTS
 
 def test_bash_installer(script_path: Path) -> list[str]:
     """Smoke tests a bash installer script."""
@@ -67,22 +70,24 @@ def test_powershell_installer(script_path: Path) -> list[str]:
     return issues
 
 def run_installer_smoke_tests(target_dir: str = CURRENT_DIR) -> int:
-    """Discovers and tests all installer scripts in target directory."""
+    """Discovers and tests all installer scripts in target directory using flattened guard clauses."""
     root = Path(target_dir)
     all_issues = []
     scripts_tested = 0
 
-    for script_file in root.rglob("install.sh"):
-        is_ignored = any(part in script_file.parts for part in ("node_modules", ".git", "dist", "build"))
-        if not is_ignored:
-            scripts_tested += 1
-            all_issues.extend(test_bash_installer(script_file))
+    for script_file in root.rglob(INSTALLER_BASH_NAME):
+        is_ignored = any(part in script_file.parts for part in INSTALLER_EXCLUDE_PARTS)
+        if is_ignored:
+            continue
+        scripts_tested += 1
+        all_issues.extend(test_bash_installer(script_file))
 
-    for script_file in root.rglob("install.ps1"):
-        is_ignored = any(part in script_file.parts for part in ("node_modules", ".git", "dist", "build"))
-        if not is_ignored:
-            scripts_tested += 1
-            all_issues.extend(test_powershell_installer(script_file))
+    for script_file in root.rglob(INSTALLER_PWSH_NAME):
+        is_ignored = any(part in script_file.parts for part in INSTALLER_EXCLUDE_PARTS)
+        if is_ignored:
+            continue
+        scripts_tested += 1
+        all_issues.extend(test_powershell_installer(script_file))
 
     has_issues = len(all_issues) > 0
     if has_issues:

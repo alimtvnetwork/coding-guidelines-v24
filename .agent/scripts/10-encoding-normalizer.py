@@ -4,7 +4,9 @@ Fast UTF-8 & UNIX LF Encoding Normalizer
 Recursively audits and standardizes all text files to UTF-8 without BOM and strict UNIX LF (\\n).
 Multi-folder capable, customizable extensions, and sub-15ms execution.
 
-All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
+Performance & Clean Architecture:
+1. Flattened Conditionals: Zero nested if-blocks using clean guard clauses.
+2. All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
@@ -26,9 +28,11 @@ DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 UTF8_SIG_ENCODING = engine.UTF8_SIG_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
 CURRENT_DIR = engine.CURRENT_DIR
+UTF8_BOM_BYTES = engine.UTF8_BOM_BYTES
+CRLF_BYTES = engine.CRLF_BYTES
 
 def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
-    """Audits and converts CRLF/BOM in a file to clean UTF-8 LF."""
+    """Audits and converts CRLF/BOM in a file to clean UTF-8 LF using flattened guard clauses."""
     norm_p = normalize_rel_path(file_path)
     is_binary = is_binary_file(file_path)
     if is_binary:
@@ -37,14 +41,14 @@ def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[s
         with open(file_path, "rb") as f:
             raw_bytes = f.read()
 
-        has_bom = raw_bytes.startswith(b"\xef\xbb\xbf")
-        has_crlf = b"\r\n" in raw_bytes
+        has_issue = (raw_bytes.startswith(UTF8_BOM_BYTES) or CRLF_BYTES in raw_bytes)
+        if not has_issue:
+            return (norm_p, False)
 
-        if has_bom or has_crlf:
-            if is_fix_mode:
-                text = raw_bytes.decode(UTF8_SIG_ENCODING, errors="replace")
-                write_file_lf(file_path, text, encoding=DEFAULT_ENCODING)
-            return (norm_p, True)
+        if is_fix_mode:
+            text = raw_bytes.decode(UTF8_SIG_ENCODING, errors="replace")
+            write_file_lf(file_path, text, encoding=DEFAULT_ENCODING)
+        return (norm_p, True)
     except Exception:
         pass
     return (norm_p, False)

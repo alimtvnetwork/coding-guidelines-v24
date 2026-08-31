@@ -1,10 +1,10 @@
 # Python Script DRY Architecture, Enums, Pluggable Caching & Fast AI Reading Specification
 
-> **Prompt Version:** 2.4.0  
+> **Prompt Version:** 2.5.0  
 > **Target:** `.lovable/prompts/01-prompts-category/08-dry-code/01-python-dry-architecture-and-caching.md`  
 > **Synchronization:** Meta-Repo & AI Scripting Ecosystem
 
-/goal Standardize the architectural design of all Python CI/CD, linting, and fix scripts using strict Python Enum conventions (PascalCase class name, UPPER_CASE members, string values mirroring member names), centralized configuration maps, thread-safe lazy regex compilation with double-checked locking, small decomposed functions, DRY shared engines, multi-folder scoping, customizable extensions, pluggable `tmp/cache/` storage, cross-process atomic file locking, and two-phase incremental `mtime` caching.
+/goal Standardize the architectural design of all Python CI/CD, linting, and fix scripts using strict Python Enum conventions (PascalCase class name ending in Type, UPPER_CASE members, string values mirroring member names), centralized configuration maps, thread-safe lazy regex compilation with pre-initialized None mapping, zero magic strings/numbers, shallow guard clauses (ban nested if pyramids), fast substring pre-filtering, DRY shared engines, multi-folder scoping, customizable extensions, pluggable `tmp/cache/` storage, cross-process atomic file locking, and two-phase incremental `mtime` caching.
 
 ## 🎯 Architectural Philosophy
 
@@ -18,7 +18,7 @@ When generating Python `Enum` classes, you must strictly follow these formatting
 
 1. **Class Name (The Enum Type):**
    - Convention: Use `PascalCase` (UpperCamelCase).
-   - Grammar: Use singular nouns ending with `Type` (e.g. `RegexPatternType`, `ScanModeType`, `SeverityType`, `ExitCodeType`).
+   - Grammar: Use singular nouns ending with `Type` (e.g. `RegexPatternType`, `ScanModeType`, `SeverityType`, `ExitCodeType`, `ArtifactCategoryType`, `CacheKeyType`).
 2. **Enum Members (The Variable Names):**
    - Convention: Use `UPPER_CASE` with underscores separating words (`SNAKE_CASE` in all caps).
    - Example: `WINDOWS_BACKSLASH`, `PENDING_APPROVAL`, `SUCCESS`.
@@ -48,6 +48,14 @@ class ExitCodeType(int, Enum):
     SUCCESS = 0
     VIOLATIONS_FOUND = 1
     TOOL_ERROR = 2
+
+class ArtifactCategoryType(str, Enum):
+    """Enumeration for cleanup artifact categories."""
+    PYCACHE = "PYCACHE"
+    BINARIES = "BINARIES"
+    TEMPORARY = "TEMPORARY"
+    CUSTOM = "CUSTOM"
+    ALL = "ALL"
 
 class RegexPatternType(str, Enum):
     """Enumeration for cached regex pattern identifiers."""
@@ -79,60 +87,52 @@ class RegexPatternType(str, Enum):
 
 ## 2. Centralized Configuration Maps & Lazy Regex Registry
 
-- **Root Definition:** All configuration parameters (`EXCLUDE_DIRS`, `BINARY_EXTENSIONS`, `DEFAULT_TEXT_EXTENSIONS`, `DEFAULT_CODE_EXTENSIONS`, `DEFAULT_CLI_EXTENSIONS`, `CACHE_BASE_DIR`, `DEFAULT_MAX_FILE_KB`, `ALLOWED_LARGE_FILES`) must be centralized in `00-shared-engine.py`.
+- **Root Definition:** All configuration parameters (`EXCLUDE_DIRS`, `BINARY_EXTENSIONS`, `DEFAULT_TEXT_EXTENSIONS`, `DEFAULT_CODE_EXTENSIONS`, `DEFAULT_CLI_EXTENSIONS`, `CACHE_BASE_DIR`, `DEFAULT_MAX_FILE_KB`, `ALLOWED_LARGE_FILES`, `CI_JOBS_MATRIX`, `INSTALLER_*`) must be centralized in `02-shared-engine.py`.
+- **Zero Magic Strings / Numbers:** Never hardcode raw byte tokens (`b"\x00"`, `b"\xef\xbb\xbf"`), chunk sizes (`8192`), path markers (`"\\\\?\\"`, `"."`), or string literals directly in child functions. Import them from `02-shared-engine.py`.
 - **Implicit Boolean Checks:** Never compare booleans against explicit `True` (BAN: `if is_valid == True:` -> MANDATORY: `if is_valid:`).
-- **Thread-Safe Lazy Regex Compilation (Zero Startup Overhead):**
-  - Store raw regex pattern string definitions + compilation flags in a central `REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]]` map in `00-shared-engine.py`.
-  - Use `RegexRegistry.get(pattern_type)` or `get_compiled_regex(pattern_type)` with double-checked `threading.Lock()` memoization.
+- **Thread-Safe Lazy Regex Compilation (Zero Import-Time Compilation):**
+  - Store raw regex pattern string definitions + compilation flags in a central `REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]]` map in `02-shared-engine.py`.
+  - Initialize a mapping `_compiled_patterns: dict[RegexPatternType, re.Pattern | None] = {pt: None for pt in RegexPatternType}` with `None` values on module import.
+  - Compile patterns lazily on first demand inside `RegexRegistry.get(pattern_type)` with double-checked `threading.Lock()`.
   - Regex patterns are compiled on first demand, then served in `O(1)` time for all subsequent lookups across threads.
-- **Ignore Pruning:** Ensure `EXCLUDE_DIRS` covers `.gitmap`, `.git`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts` at all subtree depths.
 
 ```python
-# Centralized Raw Regex Definitions: Enum -> (Pattern String, Flags)
-REGEX_DEFINITIONS: dict[RegexPatternType, tuple[str, int]] = {
-    RegexPatternType.WINDOWS_BACKSLASH: (r"\\", 0),
-    RegexPatternType.LEADING_DOT_SLASH: (r"^\./", 0),
-    RegexPatternType.CRLF: (r"\r\n", 0),
-    RegexPatternType.UNIVERSAL_LINE_ENDING: (r"\r\n|\r", 0),
-    RegexPatternType.TRAILING_WHITESPACE: (r"[ \t]+$", re.MULTILINE),
-    RegexPatternType.SEQ_PREFIX: (r"^([0-9]+)-(.*)$", 0),
-    RegexPatternType.UPPERCASE: (r"[A-Z]", 0),
-    RegexPatternType.FILE_URI_WIN: (r"file:///[A-Za-z]:/[^\s\)\]\"'>]+", 0),
-    RegexPatternType.DRIVE_ABS_WIN: (r"(?<![A-Za-z0-9_])[A-Za-z]:\\[A-Za-z0-9_\\.-]+", 0),
-    RegexPatternType.REPO_FILE_URI: (r"file:///[A-Za-z]:/[^/]+/coding-guidelines/([^\s\)\]\"'>]+)", 0),
-    RegexPatternType.EXPLICIT_DOUBLE_TRUE: (r"==\s*true\b", re.IGNORECASE),
-    RegexPatternType.EXPLICIT_TRIPLE_TRUE: (r"===\s*true\b", re.IGNORECASE),
-    RegexPatternType.EXPLICIT_PYTHON_TRUE: (r"==\s*True\b", 0),
-    RegexPatternType.COMMENT_PREFIX: (r"^\s*(//|#|\*|/\*)", 0),
-    RegexPatternType.COBRA_COMMAND: (r"var\s+(\w+Cmd)\s*=\s*&cobra\.Command\s*\{([^}]+)\}", re.DOTALL),
-    RegexPatternType.SHORT_DESC: (r"Short:\s*\"[^\"]+\"", 0),
-    RegexPatternType.EXAMPLE_USAGE: (r"Example:\s*\"[^\"]+\"", 0),
-    RegexPatternType.CHANGELOG_HEADER: (r"##\s+\[v?([0-9]+\.[0-9]+\.[0-9]+[^\]]*)\]", 0),
-    RegexPatternType.FILE_NUM_PREFIX: (r"^([0-9]+)-(.*)\.md$", 0),
-    RegexPatternType.H1_HEADER: (r"^(#\s+)([0-9]+)(\s*[-—:]\s*)(.*)$", re.MULTILINE),
-    RegexPatternType.PLACEHOLDER_TOKEN: (r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*", 0),
-    RegexPatternType.NON_ALPHANUMERIC: (r"[^a-zA-Z0-9_-]+", 0),
-}
-
-# --- Thread-Safe Lazy Regex Registry ---
+# --- Thread-Safe Lazy Regex Registry (Zero import-time compilation) ---
 class RegexRegistry:
-    _cache: dict[RegexPatternType, re.Pattern] = {}
+    """
+    Thread-safe lazy-compiling regex registry.
+    Initializes all entries to None mapping on startup.
+    Patterns are compiled on-demand upon first get() call and cached.
+    """
+    _compiled_patterns: dict[RegexPatternType, re.Pattern | None] = {pt: None for pt in RegexPatternType}
     _lock = threading.Lock()
 
     @classmethod
     def get(cls, pattern_type: RegexPatternType) -> re.Pattern:
-        if pattern_type in cls._cache:
-            return cls._cache[pattern_type]
+        """Lazily compiles on first demand and returns cached immutable re.Pattern."""
+        cached = cls._compiled_patterns.get(pattern_type)
+        if cached is not None:
+            return cached
+
         with cls._lock:
-            if pattern_type not in cls._cache:
+            if cls._compiled_patterns[pattern_type] is None:
+                if pattern_type not in REGEX_DEFINITIONS:
+                    raise KeyError(f"Pattern type '{pattern_type}' is not registered in REGEX_DEFINITIONS")
                 raw_pattern, flags = REGEX_DEFINITIONS[pattern_type]
-                cls._cache[pattern_type] = re.compile(raw_pattern, flags)
-            return cls._cache[pattern_type]
+                cls._compiled_patterns[pattern_type] = re.compile(raw_pattern, flags)
+            return cls._compiled_patterns[pattern_type]
 ```
 
 ---
 
-## 3. Multi-Folder Scoping & Customizable Extensions
+## 3. Shallow Guard Clauses & Fast Substring Pre-Filtering
+
+- **Total Ban on Deeply Nested If-Blocks:** Avoid 4+ levels of nested indentation pyramids (`if a: if b: if c:`). Replace with flat guard clauses (`if not a: continue`).
+- **Fast Substring Pre-Filtering:** Before invoking expensive AST parsers (`ast.parse()`) or running complex multi-line regex engines across hundreds of files, perform a quick substring check (e.g. `if "command" not in content: return []`, `if "file:" not in content and ":\\" not in content: return []`). This yields immediate **10x–50x speedups** on large codebases.
+
+---
+
+## 4. Multi-Folder Scoping & Customizable Extensions
 
 - **Multi-Folder Capability:** All scripts MUST accept a target directory (`<path>` or `--path` / `--dir`) allowing them to run on the full repository, specific submodules, or individual feature folders.
 - **Customizable File Extensions:** Supported file extensions must be customizable via `--ext` or function parameters (`extensions=...`), with robust lowercasing and leading dot normalization.
@@ -140,7 +140,7 @@ class RegexRegistry:
 
 ---
 
-## 4. Decomposed Pure Functions (< 25 Lines Each)
+## 5. Decomposed Pure Functions (< 25 Lines Each)
 
 - Monolithic scripts are strictly forbidden.
 - Scripts MUST be broken down into small, composable, single-responsibility functions.
@@ -148,11 +148,11 @@ class RegexRegistry:
 
 ---
 
-## 5. Pluggable `tmp/cache/` Structure & Cross-Process Locking
+## 6. Pluggable `tmp/cache/` Structure & Cross-Process Locking
 
 All cache data is organized in structured, pluggable subdirectories under `tmp/cache/`:
 
-1. **`tmp/cache/paths/`**: Stores repository file path listings and metadata indexes.
+1. **`tmp/cache/paths/`**: Stores repository file path listings, topology discoveries, and metadata indexes.
 2. **`tmp/cache/locks/`**: Cross-process file locks (`repo-cache.lock`) preventing corruption when multiple agents or subagents operate simultaneously.
 3. **`tmp/cache/files/`**: Cached tokenized contents or AST data.
 
@@ -162,7 +162,7 @@ All cache data is organized in structured, pluggable subdirectories under `tmp/c
 
 ---
 
-## 6. Two-Phase Incremental Caching & Missing File Tolerance
+## 7. Two-Phase Incremental Caching & Missing File Tolerance
 
 To achieve sub-15ms repository-wide execution without redundant disk I/O:
 
@@ -178,7 +178,7 @@ To achieve sub-15ms repository-wide execution without redundant disk I/O:
 
 ---
 
-## 7. High-Speed File Reading & Exploration for AI Agents
+## 8. High-Speed File Reading & Exploration for AI Agents
 
 AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildItem -Recurse`, `dir /s`, or brute-force glob searches). Instead, use the optimized Python toolchain:
 
@@ -190,3 +190,6 @@ AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildI
 | **Full Repo File Index** | `python .lovable/ai-fix-scripts/11-fast-file-scanner.py --lang ts,go --path spec/` | **~14ms** |
 | **Parallel Content Grep** | `python .lovable/ai-fix-scripts/12-fast-cached-grep.py --pattern "<text>"` | **~12ms** |
 | **File Manipulation CLI** | `python .lovable/ai-fix-scripts/03-file-manipulator.py <cmd> <dir>` | **~15ms** |
+| **Codebase Topology Routing**| `python .lovable/ai-fix-scripts/18-codebase-topology-discoverer.py --query <db\|backend\|go>` | **<1ms** |
+| **Safe Artifact Removal**| `python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-pycache --dry-run` | **~10ms** |
+| **Plan Consolidation**| `python .lovable/ai-fix-scripts/20-plan-consolidator.py --dry-run` | **~12ms** |

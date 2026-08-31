@@ -31,6 +31,8 @@ DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
 CURRENT_DIR = engine.CURRENT_DIR
+DEVICE_PATH_PREFIX = engine.DEVICE_PATH_PREFIX
+DOT_CHAR = engine.DOT_CHAR
 
 def sanitize_content_paths(content: str) -> tuple[str, int]:
     """Replaces absolute repository paths with clean relative paths."""
@@ -62,7 +64,7 @@ def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, l
         for pat in patterns:
             for match in pat.finditer(content):
                 val = match.group(0)
-                is_ignored = ("\\\\?\\" in val or val.endswith("."))
+                is_ignored = (DEVICE_PATH_PREFIX in val or val.endswith(DOT_CHAR))
                 if is_ignored:
                     continue
                 violations.append(val)

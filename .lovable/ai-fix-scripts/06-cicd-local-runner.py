@@ -3,7 +3,7 @@
 Fast Multi-Threaded Local CI/CD Runner
 Executes repository quality gates in parallel using ThreadPoolExecutor and enforces zero-failure tolerance.
 
-All Enums and Constants are imported directly from 02-shared-engine.py.
+All Enums, Constants, and Job Matrices are imported directly from 02-shared-engine.py.
 """
 
 from concurrent.futures import ThreadPoolExecutor
@@ -21,27 +21,8 @@ engine = import_module("02-shared-engine")
 ExitCodeType = engine.ExitCodeType
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
-
-JOBS_MATRIX = {
-    "Relative Path Check": [sys.executable, "linter-scripts/check-relative-paths.py"],
-    "Prompts Loaded Check": [sys.executable, "linter-scripts/check-prompts-loaded.py"],
-    "Readme Install Section Check": [sys.executable, "linter-scripts/check-readme-install-section.py"],
-    "Forbidden Strings Check": [sys.executable, "linter-scripts/check-forbidden-strings.py"],
-    "Newline Styling Check": [sys.executable, "linter-scripts/check-newline-styling.py"],
-    "Fast File Scanner Cache": [sys.executable, ".lovable/ai-fix-scripts/11-fast-file-scanner.py", "--check"],
-    "File Size Guard": [sys.executable, ".lovable/ai-fix-scripts/13-file-size-guard.py"],
-    "Version Sync Check": [sys.executable, ".lovable/ai-fix-scripts/14-version-sync-checker.py"],
-    "Bundle Installer Generation": ["node", "scripts/generate-bundle-installers.mjs"],
-    "Spec Tree Sync": ["node", "scripts/sync-spec-tree.mjs"],
-    "Codegen Determinism Check": [sys.executable, "linters-cicd/codegen/scripts/verify_codegen_determinism.py"],
-    "Spec Verification Coverage": ["node", "scripts/spec-verification/generate-coverage-report.mjs", "--strict", "--out", "reports/spec-verification/coverage.md"],
-    "Validate Version JSON": ["node", "scripts/validate-version-json.mjs"],
-    "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md", "docs/installer-fix-repo-flags.md"],
-    "Check File Sizes Baseline": [sys.executable, "linter-scripts/check-file-sizes.py", "--check"],
-    "Newline Styling MJS Check": ["node", "linter-scripts/check-newline-styling.mjs"],
-    "Spec Folder References Check": [sys.executable, "linter-scripts/check-spec-folder-refs.py"],
-    "Linters CI/CD Test Suite": [sys.executable, "linters-cicd/tests/run.py"],
-}
+DEFAULT_MAX_WORKERS = engine.DEFAULT_MAX_WORKERS
+CI_JOBS_MATRIX = engine.CI_JOBS_MATRIX
 
 def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
     """Executes a single validation check asynchronously."""
@@ -54,14 +35,18 @@ def execute_ci_job(job_name: str, command: list[str]) -> tuple[str, bool, str]:
     except Exception as e:
         return (job_name, False, str(e))
 
-def run_pipeline() -> int:
+def run_pipeline(
+    jobs: dict[str, list[str]] | None = None,
+    max_workers: int = DEFAULT_MAX_WORKERS
+) -> int:
     """Dispatches all jobs concurrently and prints clean summary report."""
+    target_jobs = jobs or CI_JOBS_MATRIX
     print("🚀 Running Local CI/CD Pipeline via ThreadPoolExecutor...")
-    print(f"📋 Enqueued Jobs: {', '.join(JOBS_MATRIX.keys())}{LINE_SEPARATOR}")
+    print(f"📋 Enqueued Jobs: {', '.join(target_jobs.keys())}{LINE_SEPARATOR}")
 
     results = []
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = [executor.submit(execute_ci_job, name, cmd) for name, cmd in JOBS_MATRIX.items()]
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(execute_ci_job, name, cmd) for name, cmd in target_jobs.items()]
         for f in futures:
             results.append(f.result())
 
