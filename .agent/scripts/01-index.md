@@ -1,6 +1,6 @@
 # AI Fix Scripts Index & Tooling Guide
 
-> /goal Master, discover, and execute the repository's suite of ultra-fast Python scripts for linting, path resolution, naming enforcement, version synchronization, local CI verification, polyglot discovery, and safe artifact removal.
+> /goal Master, discover, and execute the repository's suite of ultra-fast Python scripts for linting, path resolution, naming enforcement, version synchronization, local CI verification, polyglot discovery, artifact removal, and plan consolidation.
 > /learn Read the script specifications below and run scripts via `python .lovable/ai-fix-scripts/<script-name>.py`.
 
 ---
@@ -17,6 +17,7 @@ Follow this sequence before and during any repository modification task:
 - [ ] **/learn** Auto-fix whitespace, line endings, and boolean checks using `05-guideline-autofixer.py`.
 - [ ] **/goal** Sanitize absolute filesystem paths and `file:///` URIs using `07-relative-path-fixer.py`.
 - [ ] **/goal** Safely remove accidental binary blobs, pycache, or test artifacts using `19-artifact-remover.py`.
+- [ ] **/goal** Consolidate, archive, and re-sequence Lovable plan files and subtasks using `20-plan-consolidator.py`.
 - [ ] **/goal** Validate all 18 quality gates in parallel before submitting using `06-cicd-local-runner.py`.
 
 ---
@@ -44,6 +45,7 @@ Follow this sequence before and during any repository modification task:
 | **17** | `17-fast-file-reader.py` | AI agent fast file reader and folder explorer using `tmp/cache/` | <1ms | `reader`, `explorer`, `instant-read`, `ai-tool` |
 | **18** | `18-codebase-topology-discoverer.py` | Universal polyglot codebase & topology discovery with TTL cache | ~15ms | `topology`, `discovery`, `polyglot`, `routing`, `cache-ttl`, `ai-tool` |
 | **19** | `19-artifact-remover.py` | Safe interactive artifact remover with git index untracking (`git rm`) | ~10ms | `artifact-remover`, `cleanup`, `git-rm`, `pycache`, `safety-guard` |
+| **20** | `20-plan-consolidator.py` | Fast Lovable plans & subtasks consolidator and index synchronizer | ~12ms | `plans`, `consolidator`, `subtasks`, `resequence`, `plan-cleanup` |
 
 ---
 
@@ -191,17 +193,28 @@ WINDOWS_PATH_SEPARATOR = "\\"
   - `python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-pycache [--force]`
   - `python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-binaries [--force]`
 
+### 20-plan-consolidator.py — Fast Lovable Plans & Subtasks Consolidator
+- **Tags:** `plans`, `consolidator`, `subtasks`, `resequence`, `plan-cleanup`
+- **Description:** Automates the consolidation, archiving, subtask cleanup, and monotonic re-sequencing of Lovable execution plans and task lists with safety backup branches.
+- **Commands:**
+  - `python .lovable/ai-fix-scripts/20-plan-consolidator.py [--dry-run]`
+  - `python .lovable/ai-fix-scripts/20-plan-consolidator.py --archive <plan-name> [--force]`
+  - `python .lovable/ai-fix-scripts/20-plan-consolidator.py --resequence [--force]`
+  - `python .lovable/ai-fix-scripts/20-plan-consolidator.py --clean-subtasks [--force]`
+  - `python .lovable/ai-fix-scripts/20-plan-consolidator.py --backup`
+
 ---
 
 ## 📊 Code Quality & Performance Metrics (Past vs. Current vs. Future)
 
-| Dimension | Past Architecture (v1.0) | Current Architecture (v3.6) | Future Horizon (Optimized) |
+| Dimension | Past Architecture (v1.0) | Current Architecture (v3.7) | Future Horizon (Optimized) |
 |---|:---:|:---:|:---:|
 | **Code Modularity & DRY** | 45% (Monolithic duplicate scripts) | **99%** (Shared engine, decomposed pure functions, centralized literals) | **100%** (C-extension / Rust FFI core) |
 | **Enum & Naming Standards** | 50% (Mixed string literals, magic values) | **100%** (`PascalCase` class, `UPPER_CASE` members/values, `is_`/`has_` booleans) | **100%** (Automated AST pre-commit enforcement) |
 | **File Traversal Overhead** | ~450ms (Uncached recursive shell calls) | **~14ms** (Two-phase cached streaming + inode cycle guards) | **~3ms** (`scandir` zero-copy batching) |
 | **Regex Compilation Overhead** | ~60ms (Ad-hoc compiling inside loops) | **<0.01ms** (Thread-safe singleton lazy memoization) | **<0.005ms** (Pre-compiled byte arrays) |
 | **Cross-Platform Reliability** | 60% (Unix flock missing, Windows locks brittle) | **100%** (POSIX kernel flock + Windows atomic O_EXCL stale eviction) | **100%** (Zero-crash cross-process shared memory) |
+| **Plan Consolidation & Memory** | 0% (Manual markdown copy-pasting) | **100%** (Automated branch backups, subtask cleanup, index sync) | **100%** (Real-time agent planning telemetry) |
 | **Artifact Removal & Git Safety** | 0% (Manual rm / loose untracked files) | **100%** (Interactive confirmation, dry-run, atomic git rm index synchronization) | **100%** (Automated post-test hook garbage collection) |
 | **Topology Discovery & Routing** | 0% (Blind directory traversal) | **99%** (Automated polyglot stack classification with TTL cache) | **100%** (Real-time inotify graph index) |
 | **AI Operability & Searchability** | 35% (Unindexed scripts, complex XML) | **99%** (Clean markdown, discovery tags, sub-millisecond AI reader) | **100%** (Semantic tool router) |
