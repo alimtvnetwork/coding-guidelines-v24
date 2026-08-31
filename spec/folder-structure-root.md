@@ -6,9 +6,10 @@
 
 ## Single Source of Truth
 
-The complete folder structure specification — including numbering policy, required folders, rules, validation checklist, decision guide, and examples — is maintained in a **single canonical location**:
+The complete folder structure specification — including repository organization, `.lovable/` AI metadata layers, numbering policy, required folders, rules, and validation checklists — is maintained in:
 
-> **📄 [`01-spec-authoring-guide/02-folder-structure.md`](./01-spec-authoring-guide/02-folder-structure.md)**
+> **📄 [Canonical Folder Structure Specification](.lovable/folder-structure.md)**  
+> **📄 [`spec/01-spec-authoring-guide/02-folder-structure.md`](./01-spec-authoring-guide/02-folder-structure.md)** (Spec Hierarchy Guide)
 
 This file previously contained a full copy of the folder structure rules. To eliminate duplication and maintain a single source of truth, all content has been consolidated into the spec authoring guide.
 

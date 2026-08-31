@@ -1,114 +1,106 @@
 # Canonical Folder Structure & Sizing Rules — Architecture Spec (must follow)
 
+> **Prompt Version:** 3.0.0  
+> **Synchronization:** Single Source of Truth Mirror for `.lovable/folder-structure.md`  
+> **Target:** `.lovable/prompts/01-prompts-category/00-folder-structure/01-canonical-folder-structure.md`
 
-> **Prompt Version:** 2.1.0
-> **Synchronization:** Main Meta-Repo & Connected Workspaces
+Every AI prompt and agent MUST strictly adhere to the central repository layout defined below and in `.lovable/folder-structure.md`. No invented folders, no alternate paths.
 
-Every prompt in this set MUST write into this exact tree. No invented folders, no alternate paths. If a prompt seems to want a folder not listed here, the prompt is wrong, not the tree.
+All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-padded `XX-` prefix where sequencing applies. `XX-` is monotonic within its folder scope.
 
-All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-padded XX prefix where sequencing applies. XX is monotonic within its folder scope.
+```text
+/                                      # Root of the repository
+  spec/                                # Canonical layered specifications (source of truth)
+    01-spec-authoring-guide/           # Meta-guide for writing and maintaining specs
+    02-coding-guidelines/              # Detailed cross-language coding architectures
+    03-error-manage/                   # Error management, envelopes, error codes
+    04-database-conventions/          # Database schema design, ORM mappings, views
+    05-split-db-architecture/          # Operational vs. configuration DB patterns
+    06-seedable-config-architecture/   # Seedable configuration with versioned changelogs
+    07-design-system/                  # Design tokens, UI component hierarchy, dark mode
+    08-docs-viewer-ui/                 # Documentation viewer UI & presentation system
+    09-code-block-system/              # Syntax highlighting pipeline & interaction system
+    10-research/                       # Technology benchmarks and comparative studies
+    11-powershell-integration/         # PowerShell scripting and automation conventions
+    12-cicd-pipeline-workflows/        # CI/CD workflows, GitHub Actions, quality gates
+    13-generic-cli/                    # Generic CLI UX, terminal colors, flag semantics
+    14-update/                         # CLI self-update architecture & release delivery
+    15-distribution-and-runner/        # Cross-platform installers, runners, forwarding
+    16-generic-release/                # Universal release blueprint & asset matrices
+    17-consolidated-guidelines/        # Single-file AI summaries of all major spec modules
+    18-wp-plugin-how-to/               # WordPress plugin architecture & REST APIs
+    19-main-worker-service/            # Split-tier worker service & proxy nodes
+    21-app/ ... 24-app-ui-design-system/ # Application-specific business features & schemas
 
-`	ext
-/                                      # root of the repository
-  spec/                                # canonical app specs (source of truth)
-    02-coding-guidelines/              # detailed coding architectures
-    21-<area>/                         # foundational app spec areas (NEW SPECS GO HERE)
-    25-app-spec-audit/                 # output of app-spec audit
-      00-overview.md
-      NN-audit-<date>-v<version>.md
-    17-consolidated-guidelines/
+  .lovable/                            # AI metadata, cognitive memory, and automation layer
+    01-index.md                        # Master repository index and directory router
+    02-user-preferences                # Explicit user communication preferences
+    03-strictly-avoid.md               # Universal hard prohibitions & CODE RED constraints
+    04-suggestions.md                  # Architectural suggestions & pending improvements
+    05-plan.md                         # Active high-level roadmap and milestone tracker
+    06-what-to-read.md                 # Reading sequence and entrypoint priority list
+    folder-structure.md                # 📄 AUTHORITATIVE SINGLE SOURCE OF TRUTH FOR FOLDER STRUCTURE
 
-  .lovable/
-    what-to-read.md                    # priority reading list for read-memory
-    strictly-avoid.md                  # universal anti-patterns
+    ai-fix-scripts/                    # Reusable high-speed Python automation toolchain
+      01-index.md                      # Master catalog & search tag registry
+      02-shared-engine.py              # Central engine: constants, lazy regex, locks, cache
+      03..20-*.py                      # Specialized linters, fixers, and local CI runners
 
-    coding-guidelines/
-      coding-guidelines.md             # mirror of spec source of truth
+    plans/                             # Micro-task execution center
+      01-index.md                      # Master registry of active and completed plans
+      pending/                         # High-level active parent plans (XX-<slug>.md)
+      subtasks/                        # Bounded micro-tasks (XX-<slug>/01-step.md)
+      completed/                       # Archived completed parent plans & subtasks
 
-    memory/                            # cross-session AI context (FLAT FILES ONLY)
-      01-index.md                      # master index of all memory files
-      XX-<slug>.md                     # flat memory files (specs, workflow, standards, etc.)
+    memory/                            # Long-term institutional cognitive memory (SINGULAR)
+      01-index.md                      # Master table of contents & CODE RED rules
+      architecture/                    # System architecture decisions & split-DB patterns
+      constraints/                     # Non-negotiable technical constraints
+      done/                            # Historical completed milestones
+      features/                        # Feature-specific knowledge and requirements
+      issues/                          # Root cause analyses and bug postmortems
+      patterns/                        # Reusable design and coding patterns
+      processes/                       # Operational and maintenance procedures
+      project/                         # Project metadata and author attributions
+      standards/                       # Coding standards and enum specifications
+      style/                           # Code style and naming conventions
+      suggestions/                     # Granular suggestion trackers
+      workflow/                        # Sprint and migration state trackers
 
-    prompts/                           # ONLY when a prompt body itself changes
-      XX-<slug>.md
+    prompts/                           # Prompt repository & category hierarchy
+      01-prompts-category/             # Canonical source for categorized prompt modules (01-22)
+      *.md                             # Synced flat prompts generated from categories
 
-    plans/
-      index.md                         # roll-up of every plan, status, links
-      pending/
-        XX-<slug>.md                   # active plans (MAPPED & INDEXED IN index.md)
-      subtasks/
-        XX-<slug>/
-          01-<subslug>.md              # granular step-by-step tasks
-      completed/
-        XX-<slug>.md                   # finished plans (moved, not copied)
+    release/                           # Release automation & version bumping hub
+      release-method.md                # Authoritative version bump registry
+      bump_versions.py                 # Automated regex-based version mutator
+      issues/                          # Release failure logs and diagnostics
 
-    temp-agents/                       # agent lifecycle state management
-      XX-agent-state.md
+    question-and-ambiguity/            # Ambiguity resolution & iteration counters
+      readme.md                        # Open and resolved ambiguity log
+      task-counter.md                  # Task iteration metrics
 
-    issues/                            # app-level bugs and blockers
-      XX-<slug>.md
+    suggestions/                       # Detailed suggestion proposals
+      01-index.md                      # Index of active suggestions
+      completed/                       # Archived implemented proposals
 
-    cicd-issues/                       # CI / CD failures
-      XX-<slug>.md
+    cicd-issues/                       # CI pipeline failure diagnostics and RCAs
+    assets/                            # Mockups, diagrams, and reference media
+```
 
-    audits/
-      XX-<work-slug>/                  # one folder per recent-work audit run
-        01-index.md
-        02-<work-slug>.md
+---
 
-    release/
-      issues/
-        XX-<version>-<slug>.md         # release-time failures and flags
+## Numbering Rules (`XX-` Monotonic Sequencing)
 
-    ambiguous-questions/               # see 14-ambiguity-prompt.md
-      01-new-ambiguity/
-        XX-<slug>.md
-      02-ambiguity-resolved/
-        XX-<slug>.md
+1. Two-digit zero-padded, monotonic per folder scope (`01-`, `02-`, ...).
+2. Next `XX-` = max existing `XX-` in that folder scope + 1. Never reuse or decrement.
+3. Plans: `XX-` is monotonic across `pending/`, `subtasks/`, and `completed/` combined.
 
-    assets/                            # attachments referenced by specs / plans / audits
-      <category>/
-        XX-<slug>.<ext>
-`
+---
 
-## Numbering rules (XX and NN)
+## Hard Rules & Prohibitions
 
-- Two-digit zero-padded, monotonic per folder scope.
-- Next XX = max existing XX in that folder scope + 1. Never reuse.
-- Ambiguous questions: XX is monotonic across BOTH 01-new-ambiguity/ and 2-ambiguity-resolved/ combined.
-- Audits: XX in .lovable/audits/XX-<work-slug>/ is monotonic across all audit folders combined.
-- Release issues: XX monotonic within .lovable/release/issues/ regardless of version.
-- Plans: XX monotonic across pending/, subtasks/, and completed/ combined; filename does not change when moving between them.
-- Spec Audits: NN in spec/25-app-spec-audit/ increments based on existing files.
-
-## Movement rules
-
-- mv, never cp. Files carry their filename when their lifecycle changes folders (plan pending -> completed, ambiguity open -> resolved).
-- Never leave a copy behind in the origin folder.
-- Never rename on move.
-
-## What each folder is for
-
-- spec/21-<area>/ - This is where NEW specs go. App specs are sourced here at the ROOT, not inside .lovable/.
-- spec/25-app-spec-audit/ - The only place app-spec-audit writes its output.
-- plans/ - Every plan built by planning prompts. pending/ holds the master plan (indexed in plans/01-index.md), subtasks/ holds granular execution steps.
-- memory/ - Retained context so agents do not lose track of decisions. MUST be kept completely FLAT. All files are XX-<slug>.md. The main index is 0-index.md.
-- 	emp-agents/ - Explicit state files where agents record their current step and crash logs.
-- issues/ and cicd-issues/ - Runtime bugs and pipeline failures.
-- Audits/ - One folder per recent-work audit run (distinct from app-spec audit).
--
-
-elease/issues/ - Only issues discovered during release.
-
-- Ambiguous-questions/ - Open questions raised by any prompt.
-- Assets/ - Any binary or image. Reference by relative path with a caption.
-- prompts/ - Only touched when a prompt body itself changes.
-
-## Hard bans
-
-- No Ambiguities/, questions/, Blockers/, 	odo/,
-otes/, or any folder name not listed above.
-- No subfolders inside .lovable/memory/. Flat files ONLY.
-- No per-turn mirror files under .lovable/prompts/.
-- No renaming a file when moving it between lifecycle folders.
-- No guessing when the folder is unclear. File an ambiguity.
+- **Single Authority:** [`.lovable/folder-structure.md`](../../../folder-structure.md) is the absolute single source of truth.
+- **Strict Plurality:** Always `.lovable/memory/` (singular), `.lovable/plans/` (plural), `.lovable/prompts/` (plural), `.lovable/suggestions/` (plural).
+- **No Orphaned Folders:** Never invent unapproved folders (e.g., `memories/`, `tasks/`, `todos/`).
+- **Relative Paths Only:** All file paths must be relative from the git root. Absolute paths (`C:\...`, `file:///...`) are banned.

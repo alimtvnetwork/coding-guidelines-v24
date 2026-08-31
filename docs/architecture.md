@@ -65,35 +65,15 @@ Every spec folder follows strict conventions defined in [`spec/01-spec-authoring
 
 ---
 
-## Folder Structure (top-level)
+## Folder Structure
 
-The full tree is regenerated into [`src/data/specTree.json`](../src/data/specTree.json) by `scripts/sync-spec-tree.mjs`. Top-level layout:
+The authoritative single source of truth for the complete repository folder structure, AI metadata layers, and spec hierarchy is maintained centrally in:
 
-```
-spec/
-├── 01-spec-authoring-guide/        # How to write specs (meta-guide)
-├── 02-coding-guidelines/           # Cross-language + per-language coding rules
-├── 03-error-manage/                # Error management architecture (apperror, envelope, registry)
-├── 04-database-conventions/        # PascalCase schema, FK patterns, view conventions
-├── 05-split-db-architecture/       # Root / App / Session SQLite hierarchy
-├── 06-seedable-config-architecture/# config.seed.json + GORM merge strategy
-├── 07-design-system/               # AI-adaptable design tokens
-├── 08-docs-viewer-ui/              # Spec viewer React app
-├── 09-code-block-system/           # Markdown code-fence rendering
-├── 10-research/                    # Open research notes
-├── 11-powershell-integration/      # Cross-platform PowerShell runner
-├── 12-cicd-pipeline-workflows/     # GitHub Actions / CI patterns
-├── 13-generic-cli/                 # Reusable CLI scaffolding spec
-├── 14-update/                      # Self-update with rename-first deploy
-├── 15-distribution-and-runner/     # Bundle + runner separation (Phase 6B module)
-├── 16-generic-release/             # Versioned release pipeline
-├── 17-consolidated-guidelines/     # Master consolidated reference
-├── 18-wp-plugin-how-to/            # WordPress plugin Gold Standard
-├── 21-app/ … 24-app-ui-design-system/   # App-local specs (never synced from gitmap)
-└── health-dashboard.md             # Global self-assessment
-```
+> 📄 **[Canonical Folder Structure Specification](.lovable/folder-structure.md)**
 
-Numeric prefix gaps (e.g. 19, 20, 25–) are intentional and reserved for future insertions.
+All AI agents and contributors must refer to that single specification for folder layout, sequence prefixes, and subfolder depth rules. The tree is also regenerated into [`src/data/specTree.json`](../src/data/specTree.json) by `scripts/sync-spec-tree.mjs`.
+
+---
 
 ---
 
