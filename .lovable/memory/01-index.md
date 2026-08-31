@@ -20,7 +20,7 @@ Updated: 2026-04-27
 - DB Schema: PascalCase naming. PKs are `{TableName}Id` (INTEGER PRIMARY KEY AUTOINCREMENT). No UUIDs.
 - DB Schema Rules 10/11/12: Entity/ref tables need `Description TEXT NULL`; transactional need `Notes`+`Comments TEXT NULL`; all must be nullable, no DEFAULT. Join tables exempt.
 - Workflow: Spec-First (`spec/`) and Issue-First (`03-issues/`).
-- Global Namespace: Always use `github.com/alimtvnetwork/movie-cli-v2`. Any v1 reference is a bug.
+- Global Namespace: Always derive module imports and repository namespaces dynamically from the repository's canonical root configuration or manifest (`package.json`, `go.mod`, `version.json`).
 - Version sync: bump package.json → `node scripts/sync-version.mjs` → `node scripts/sync-spec-tree.mjs`.
 - Execution: Break complex requests into discrete tasks. Wait for "next" prompt to continue.
 - 🔴 NO-QUESTIONS MODE active (40-task batch from 2026-04-26): never call ask_questions; log ambiguities to `.lovable/question-and-ambiguity/xx-title.md` and update its README index. Resume on explicit "ask questions" signal.
