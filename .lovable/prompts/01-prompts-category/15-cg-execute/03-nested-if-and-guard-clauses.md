@@ -175,19 +175,19 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits and zero nested `if` mandate.
   - **How:** Zero nested `if` blocks. Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line-compression cheating.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/06-citation-requirement.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md`**
   - **Why:** Elimination of nested conditional pyramids and mandatory braces.
   - **How:** Use guard clauses and early returns to flatten all nested `if` statements (> 1 level deep).
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/04-blank-lines-and-spacing.md`**
   - **Why:** Spacing around guard clauses and return statements (R13-R16).
   - **How:** Exactly one blank line before `return`/`throw` and after closing `}`.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/05-function-and-type-size.md`**
   - **Why:** Function size limits.
   - **How:** Target <= 8 lines per function. Decompose multi-condition checks into small helper functions.
 

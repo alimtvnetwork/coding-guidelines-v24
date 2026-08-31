@@ -150,40 +150,40 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line-compression cheating.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/06-citation-requirement.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md`**
   - **Why:** Absolute zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
 - [ ] **`spec/03-error-manage/01-index.md`**
   - **Why:** Authoritative error management foundation across all services.
   - **How:** Never swallow errors; every `catch` logs with operation name and key inputs, then rethrows or returns a typed error.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/02-error-handling-reference.md`**
   - **Why:** Universal cross-language `AppError` and `AppException` structure.
   - **How:** Implement `apperror.Wrap(err, "OpName", ctx)` in Go, `throw new AppError(cause, { op, ctx })` in TS, and `AppException` in C#/PHP; preserve the root cause and causal stack.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/03-go-delegation-fix.md`**
   - **Why:** Prevents nil pointer panics and raw error leaks in Go routines.
   - **How:** Never delegate errors to uninitialized handlers; use explicit, typed error delegation channels with mutex guards.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/01-index.md`**
   - **Why:** Standardized error severity and UI feedback mapping.
   - **How:** Map log levels strictly: `debug` (trace), `info` (lifecycle), `warn` (recoverable/amber), `error` (user-visible failure/red), `fatal` (process exit).
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/08-envelope-error-response.md`**
   - **Why:** Universal API response contract across all endpoints.
   - **How:** Every HTTP/RPC response MUST return the standard envelope: `{ "data": T, "errors": [AppError], "meta": Meta }`. Never return raw un-enveloped error text.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/03-error-store.md`**
   - **Why:** Centralized UI error presentation.
   - **How:** Frontend errors flow exclusively through a single global error store and universal error modal; no per-component alert boxes or unhandled promise rejections.
-- [ ] **`spec/03-error-manage/03-error-code-registry/`**
+- [ ] **`spec/03-error-manage/03-error-code-registry/02-registry.md`**
   - **Why:** Stable error code registry and catalog.
   - **How:** All error codes must be registered constants (e.g. `ErrCodeNotFound`, `INVALID_PAYLOAD`). No ad-hoc string literals invented at the throw site.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/01-error-resolution/04-debugging-cheat-sheet.md`**
   - **Why:** Rapid triage and systematic root-cause discovery.
   - **How:** Follow the 4-part RCA pattern: Symptoms, Root Cause (1 sentence), Fix Applied, and Regression Prevention.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/01-error-resolution/04-verification-patterns/02-frontend-backend-sync.md`**
   - **Why:** Bidirectional integration verification.
   - **How:** Before claiming an integration works, verify both directions: inspect backend response payloads and test frontend error rendering. One side is not enough.
 

@@ -6,7 +6,7 @@ type: constraint
 
 # Blank Line After Closing `}` — Rule 5
 
-**Source spec:** `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
+**Source spec:** `spec/02-coding-guidelines/01-cross-language/04-code-style/04-blank-lines-and-spacing.md`
 
 ## The Rule
 

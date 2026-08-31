@@ -88,9 +88,7 @@ You MUST follow the project's strict coding guidelines. These files are located 
 2. Code Style & File Size Limits (80-100 lines max)
 *(Enforces strict size limitations: e.g., React components < 100 lines, functions < 15 lines, and basic formatting)*
 
-- spec/02-coding-guidelines/01-cross-language/01-index.md
-- spec/02-coding-guidelines/01-cross-language/01-index.md
-- spec/02-coding-guidelines/01-cross-language/01-index.md
+- spec/02-coding-guidelines/01-cross-language/04-code-style/01-index.md
 - spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md (Flatten logic to avoid nested ifs)
 - spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md
 
@@ -99,9 +97,6 @@ You MUST follow the project's strict coding guidelines. These files are located 
 ot/
 o, and extraction of complex logic)*
 
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
 - spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
 - spec/02-coding-guidelines/01-cross-language/12-no-negatives.md
 - spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md (Bans passing true/false as raw parameters)

@@ -88,22 +88,22 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Components <= 80 lines recommended (max 100 lines). Functions <= 8 lines preferred (max 15 lines). Max 100 lines for any file. Zero line-compression cheating.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/06-citation-requirement.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md`**
   - **Why:** Zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/02-typescript/09-typescript-standards-reference.md`**
   - **Why:** Authoritative TypeScript standards.
   - **How:** Strict typing, zero `any`, explicit function return types, and discriminated unions for polymorphic data.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/02-typescript/15-state-management.md`**
   - **Why:** Immutable state & hook conventions.
   - **How:** Custom React hooks MUST NOT return tuples (`[state, setState]` is banned). Custom hooks MUST return named property objects (`{ userProfile, isLoading, onUpdate }`).
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/02-typescript/10-promise-await-patterns.md`**
   - **Why:** Async lifecycle safety in React.
   - **How:** Handle all async flows with `try/catch` and `AppError` wrappers; avoid unhandled promises in `useEffect`.
 - [ ] **`spec/07-design-system/02-design-principles.md`**
@@ -112,7 +112,7 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/07-design-system/03-theme-variable-architecture.md`**
   - **Why:** Theme token usage.
   - **How:** Zero hardcoded hex color codes in components. Consume CSS theme custom properties and semantic tokens.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/03-error-store.md`**
   - **Why:** Centralized UI error modal.
   - **How:** Route all unhandled UI exceptions and API error responses to the global error store; display via standard error modal.
 

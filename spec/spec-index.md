@@ -98,28 +98,28 @@
 | `spec/02-coding-guidelines/01-cross-language/98-changelog.md` | Coding Guidelines — Changelog | 3.2.0 |
 | `spec/02-coding-guidelines/01-cross-language/99-consistency-report.md` | Consistency Report: Cross-Language Guidelines | 5.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` | Boolean Principles | 2.6.0 |
-| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` | Boolean Principles — P1: is/has prefixes, P2: no negative words | 2.6.0 |
-| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` | Boolean Principles — P3: named guards, P4: extract complex expressions | 2.6.0 |
+| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-naming-prefixes.md` | Boolean Principles — P1: is/has prefixes, P2: no negative words | 2.6.0 |
+| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/03-guards-and-extraction.md` | Boolean Principles — P3: named guards, P4: extract complex expressions | 2.6.0 |
 | `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/03-parameters-and-conditions.md` | Boolean Principles — P5: explicit params, P6: no mixed booleans, P7: no inline statements, P8: no raw system calls | 2.6.0 |
-| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md` | Boolean Principles — Quick reference table, common mistakes | 2.6.0 |
+| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/05-quick-reference.md` | Boolean Principles — Quick reference table, common mistakes | 2.6.0 |
 | `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/05-exemptions-and-api.md` | Boolean Principles — Static factory exemption, Result wrapper API | 2.6.0 |
 | `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/99-consistency-report.md` | Consistency Report: Boolean Principles | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/04-code-style/01-index.md` | Cross-Language Code Style — Braces, Nesting, Spacing & Function Size | 4.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` | Braces, Nesting & Exemptions | 4.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` | Condition Extraction | 4.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md` | Blank Lines & Spacing | 4.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md` | Function & Type Size Limits | 4.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` | Multi-Line Formatting | 4.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md` | Braces, Nesting & Exemptions | 4.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/04-code-style/03-conditions-and-extraction.md` | Condition Extraction | 4.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/04-code-style/04-blank-lines-and-spacing.md` | Blank Lines & Spacing | 4.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/04-code-style/05-function-and-type-size.md` | Function & Type Size Limits | 4.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/04-code-style/06-multi-line-formatting.md` | Multi-Line Formatting | 4.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/04-code-style/06-comments-and-documentation.md` | Comments, Documentation & Dead Code | 4.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/04-code-style/07-checklist.md` | Code Style Checklist & Cross-References | 4.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/04-code-style/99-consistency-report.md` | Consistency Report: Code Style | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-index.md` | Master Coding Guidelines | 2.1.0 |
-| `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-naming-and-database.md` | Master Coding Guidelines — Naming conventions, database naming, file naming | 2.1.0 |
+| `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/02-naming-and-database.md` | Master Coding Guidelines — Naming conventions, database naming, file naming | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` | Master Coding Guidelines — Boolean standards, isDefined guards, enum standards | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/03-code-style-and-errors.md` | Master Coding Guidelines — Code style formatting, error handling | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/04-type-safety.md` | Master Coding Guidelines — Type safety, single return value, no casting | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/05-magic-strings-and-organization.md` | Master Coding Guidelines — Magic strings, file organization, array keys | 2.1.0 |
-| `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/06-advanced-patterns.md` | Master Coding Guidelines — Lint, enum sync, tests, lazy eval, regex, mutation, null safety, nesting, newlines, defer | 2.1.0 |
+| `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/07-advanced-patterns.md` | Master Coding Guidelines — Lint, enum sync, tests, lazy eval, regex, mutation, null safety, nesting, newlines, defer | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/07-checklist.md` | Master Coding Guidelines — Quick checklist for any code change | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/99-consistency-report.md` | Consistency Report: Master Coding Guidelines | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/16-static-analysis/01-index.md` | Cross-Language Static Analysis & Linter Enforcement | 1.2.0 |
@@ -208,7 +208,7 @@
 | `spec/02-coding-guidelines/06-ai-optimization/01-index.md` | AI Optimization | 1.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/01-index.md` | Anti-Hallucination Rules | 1.0.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/02-ai-quick-reference-checklist.md` | AI Quick Reference Checklist | 2.1.0 |
-| `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md` | Common AI Mistakes | 1.0.0 |
+| `spec/02-coding-guidelines/06-ai-optimization/03-hallucination-prevention.md` | Common AI Mistakes | 1.0.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md` | Condensed Master Coding Guidelines — AI Context Reference | 1.2.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` | Enum Naming Quick Reference — All Languages | 1.0.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/97-acceptance-criteria.md` | Acceptance Criteria: AI Optimization | 1.0.0 |
@@ -222,7 +222,7 @@
 | `spec/02-coding-guidelines/07-csharp/98-changelog.md` | C# Coding Standards — Changelog |  |
 | `spec/02-coding-guidelines/07-csharp/99-consistency-report.md` | Consistency Report: C# Coding Standards | 1.0.0 |
 | `spec/02-coding-guidelines/08-file-folder-naming/01-index.md` | File & Folder Naming Conventions | 1.0.0 |
-| `spec/02-coding-guidelines/08-file-folder-naming/01-cross-language.md` | File & Folder Naming — Cross-Language Rules | 1.0.0 |
+| `spec/02-coding-guidelines/08-file-folder-naming/01-index.md` | File & Folder Naming — Cross-Language Rules | 1.0.0 |
 | `spec/02-coding-guidelines/08-file-folder-naming/02-php-wordpress.md` | File & Folder Naming — PHP / WordPress | 1.0.0 |
 | `spec/02-coding-guidelines/08-file-folder-naming/03-golang.md` | File & Folder Naming — Go | 1.0.0 |
 | `spec/02-coding-guidelines/08-file-folder-naming/04-typescript-javascript.md` | File & Folder Naming — TypeScript / JavaScript | 1.0.0 |
@@ -279,7 +279,7 @@
 | `spec/03-error-manage/01-error-resolution/app-issues/2026-04-02-url-error-casing-fix.md` | Issue: URLError Renamed to UrlError — Inconsistent Casing |  |
 | `spec/03-error-manage/01-error-resolution/app-issues/error-management-file-path-and-missing-file-code-red-rule.md` | 🔴 Code Red: File Path and Missing File Error Logging Rule | 1.0.0 |
 | `spec/03-error-manage/02-error-architecture/01-index.md` | Error Architecture | 1.0.0 |
-| `spec/03-error-manage/02-error-architecture/01-error-handling-reference.md` | Error Handling — Cross-Stack Specification | 2.0.0 |
+| `spec/03-error-manage/02-error-architecture/01-index.md` | Error Handling — Cross-Stack Specification | 2.0.0 |
 | `spec/03-error-manage/01-index.md` | Go Backend Fix: Missing Delegation Fields | 1.0.0 |
 | `spec/03-error-manage/01-index.md` | Notification & Toast Color System |  |
 | `spec/03-error-manage/02-error-architecture/99-consistency-report.md` | Consistency Report: Error Architecture | 2.0.0 |

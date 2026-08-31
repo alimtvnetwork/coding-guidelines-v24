@@ -79,19 +79,19 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line compression.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/06-citation-requirement.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md`**
   - **Why:** Absolute zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
 - [ ] **`spec/04-database-conventions/01-index.md`**
   - **Why:** Authoritative database architectural foundation.
   - **How:** All schema definitions, migrations, and queries must follow SQLite-first, strongly-typed conventions.
-- [ ] **`spec/04-database-conventions/01-index.md`**
+- [ ] **`spec/04-database-conventions/02-naming-conventions.md`**
   - **Why:** Strict casing and primary key rules.
   - **How:** Tables and entities in **PascalCase** (`UserAccount`), columns and fields in **camelCase** (`userId`, `createdAt`), primary keys MUST be `{TableName}Id` integer auto-increment (`UserAccountId`). No UUID primary keys.
 - [ ] **`spec/04-database-conventions/03-schema-design.md`**

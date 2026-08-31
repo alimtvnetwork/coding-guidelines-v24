@@ -32,7 +32,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 ### Spec changes — schema design + cross-links
 
 - `spec/04-database-conventions/03-schema-design.md` v3.3.0 — added §6 "Mandatory Descriptive Columns" with table-category classification matrix.
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md` — added "Database ↔ Code Inverse Pattern (Rule 9)" callout linking to the canonical Rule 9 spec, the codegen tool, and BOOL-NEG-001.
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` — added "Database ↔ Code Inverse Pattern (Rule 9)" callout linking to the canonical Rule 9 spec, the codegen tool, and BOOL-NEG-001.
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` v2.2.0 — added "Database-Backed Inverses (Rule 9)" subsection.
 
 ### CI/CD spec
@@ -80,7 +80,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `linters-cicd/checks/registry.json`
 - `spec/04-database-conventions/03-naming-conventions.md` (v3.2.0 → v3.5.0)
 - `spec/04-database-conventions/03-schema-design.md` (v3.2.0 → v3.3.0)
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` (v2.1.0 → v2.2.0)
 - `src/data/specTree.json` (regenerated multiple times)
 - `.lovable/29-plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/01-index.md`

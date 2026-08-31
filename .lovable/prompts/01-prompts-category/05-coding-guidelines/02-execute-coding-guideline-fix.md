@@ -88,15 +88,9 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 - [ ] Read and adhere to: `.lovable/coding-guidelines/coding-guidelines.md`
 - [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - [ ] Read and adhere to: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-index.md`
 - [ ] Read and adhere to: `spec/03-error-manage/01-index.md`
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.

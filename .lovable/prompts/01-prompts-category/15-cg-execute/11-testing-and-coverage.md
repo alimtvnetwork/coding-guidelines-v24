@@ -88,28 +88,28 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line compression.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/06-ai-optimization/06-citation-requirement.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md`**
   - **Why:** Absolute zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/14-test-naming-and-structure.md`**
   - **Why:** Mandatory three-part semantic test naming and table-driven structure.
   - **How:** Name every test strictly as `Test{Unit}_{Scenario}_{ExpectedOutcome}` (e.g. `TestCreateSession_WithExpiredToken_ReturnsAuthError`). Colocate unit tests and name integration tests with `_integration_test.go` or `.integration.test.tsx`.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/05-function-and-type-size.md`**
   - **Why:** Function testability and branch simplicity.
   - **How:** Target <= 8 lines per function (hard cap 15 lines). Decompose complex multi-branch functions into pure, isolated sub-functions so each branch can be tested individually.
 - [ ] **`spec/04-database-conventions/05-testing-strategy.md`**
   - **Why:** Database integration and query testing standards.
   - **How:** Test schema migrations, repository CRUD methods, and foreign key cascades against isolated test SQLite instances with transactional rollbacks.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/01-error-resolution/04-verification-patterns/02-frontend-backend-sync.md`**
   - **Why:** Full-stack integration and E2E verification.
   - **How:** Verify both directions: assert backend API status/envelope responses (`{ data, errors, meta }`) and assert frontend UI state/error modal rendering.
-- [ ] **`spec/03-error-manage/01-index.md`**
+- [ ] **`spec/03-error-manage/02-error-architecture/02-error-handling-reference.md`**
   - **Why:** Error branch coverage.
   - **How:** Explicitly write negative test cases that inject simulated failures (network timeouts, invalid payloads, missing headers) and assert that `AppError` is returned with full context.
 - [ ] **`spec/02-coding-guidelines/01-cross-language/08-dry-principles.md`**

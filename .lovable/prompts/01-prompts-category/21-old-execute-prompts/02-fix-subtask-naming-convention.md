@@ -40,16 +40,11 @@ You MUST follow the project's strict coding guidelines. These files are located 
 2. Code Style & File Size Limits (80-100 lines max)
 
 - `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- `spec/02-coding-guidelines/01-cross-language/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md`
 - `spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md`
 
 3. Boolean Conditions & Samples
 
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`
 - `spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md`

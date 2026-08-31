@@ -34,7 +34,7 @@ Whenever an AI agent generates code, creates plans (`.lovable/plans/pending/`), 
 ### Examples of Valid Citations
 
 - *"Implementing this as an early return to avoid nesting, per `spec/02-coding-guidelines/01-cross-language/01-zero-nesting.md`."*
-- *"Returning a structured error with context, per `spec/03-error-manage/02-error-architecture/01-error-handling-reference.md`."*
+- *"Returning a structured error with context, per `spec/03-error-manage/02-error-architecture/01-index.md`."*
 
 ### Violations
 

@@ -1036,7 +1036,7 @@ background: linear-gradient(
 The docs viewer supports direct file navigation via URL query parameters:
 
 ```
-/docs?file=spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md
+/docs?file=spec/02-coding-guidelines/01-cross-language/04-code-style/02-braces-and-nesting.md
 ```
 
 #### How It Works

@@ -72,7 +72,6 @@ Before making any changes to `.github/workflows` or automation scripts, you must
 #### Release Engineering (`spec/16-generic-release`)
 
 - [ ] `spec/16-generic-release/01-index.md`
-- [ ] `spec/16-generic-release/01-index.md`
 - [ ] `spec/16-generic-release/04-install-scripts.md`
 
 #### Context / Issue Logging

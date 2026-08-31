@@ -59,24 +59,17 @@ For every task, you MUST check if the following files or folders exist. If they 
 3. Error Management (Must Follow for all Coding Tasks)
 
 - /learn `spec/03-error-manage/01-index.md`
-- /learn `spec/03-error-manage/01-index.md`
-- /learn `spec/03-error-manage/01-index.md`
 - /learn *Include most of the files from the error manage directory to ensure robust error handling is implemented per task.*
 
 4. Boolean Conditions, Wrappers & Samples
 
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md`
 
 5. Code Style & File Size Limits (80-100 lines max)
 
-- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/01-index.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md`
 

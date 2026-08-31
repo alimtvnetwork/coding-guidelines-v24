@@ -141,7 +141,6 @@ Every linter must emit, to **stdout**, a single line on success:
 [<short-name>] FAIL: <one-line summary>
 [<short-name>] <N> finding(s):
   - <file>:<line>  <rule-id>  <message>
-  - <file>:<line>  <rule-id>  <message>
 
 Action: <one-line fix instruction>
 ```
