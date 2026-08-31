@@ -3,34 +3,32 @@
 Fast Version Synchronization & Changelog Guard
 Validates that version.json, package.json, and changelog.md are in 100% sync.
 Multi-folder capable, thread-safe lazy regex engine, and sub-5ms execution.
+
+All Enums, Constants, and Functions are imported directly from 02-shared-engine.py.
 """
 
 import argparse
-from enum import Enum
+from importlib import import_module
 import json
 import os
 from pathlib import Path
 import sys
 import time
 
-sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from importlib import import_module
-    engine = import_module("02-shared-engine")
-    RegexPatternType = engine.RegexPatternType
-    get_compiled_regex = engine.get_compiled_regex
-    ExitCodeType = engine.ExitCodeType
-except Exception:
-    class ExitCodeType(int, Enum):
-        SUCCESS = 0
-        VIOLATIONS_FOUND = 1
-    RegexPatternType = None
-    get_compiled_regex = None
-
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-def check_version_sync(root_dir: str = ".") -> int:
+sys.path.insert(0, str(Path(__file__).parent))
+engine = import_module("02-shared-engine")
+
+RegexPatternType = engine.RegexPatternType
+get_compiled_regex = engine.get_compiled_regex
+ExitCodeType = engine.ExitCodeType
+DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
+
+def check_version_sync(root_dir: str = CURRENT_DIR) -> int:
     """Checks version parity across version.json, package.json, and changelog.md."""
     start_time = time.perf_counter()
     errors = []
@@ -47,14 +45,14 @@ def check_version_sync(root_dir: str = ".") -> int:
 
     if has_version_json:
         try:
-            with open(version_json_p, "r", encoding="utf-8") as f:
+            with open(version_json_p, "r", encoding=DEFAULT_ENCODING) as f:
                 v_data = json.load(f)
                 canonical_version = v_data.get("version")
         except Exception as e:
             errors.append(f"version.json parse error: {e}")
     elif has_package_json:
         try:
-            with open(package_json_p, "r", encoding="utf-8") as f:
+            with open(package_json_p, "r", encoding=DEFAULT_ENCODING) as f:
                 p_data = json.load(f)
                 canonical_version = p_data.get("version")
         except Exception as e:
@@ -68,7 +66,7 @@ def check_version_sync(root_dir: str = ".") -> int:
     # 1. Compare with package.json
     if has_package_json:
         try:
-            with open(package_json_p, "r", encoding="utf-8") as f:
+            with open(package_json_p, "r", encoding=DEFAULT_ENCODING) as f:
                 p_data = json.load(f)
                 pkg_ver = p_data.get("version")
                 is_version_match = (pkg_ver == canonical_version)
@@ -80,7 +78,7 @@ def check_version_sync(root_dir: str = ".") -> int:
     # 2. Compare with changelog.md latest entry
     if has_changelog:
         try:
-            with open(changelog_p, "r", encoding="utf-8") as f:
+            with open(changelog_p, "r", encoding=DEFAULT_ENCODING) as f:
                 changelog_text = f.read()
             re_changelog = get_compiled_regex(RegexPatternType.CHANGELOG_HEADER)
             match = re_changelog.search(changelog_text)
@@ -97,7 +95,7 @@ def check_version_sync(root_dir: str = ".") -> int:
 
     has_errors = len(errors) > 0
     if has_errors:
-        print(f"\n❌ Version synchronization failed in '{root_dir}' ({elapsed_ms:.2f}ms):")
+        print(f"{LINE_SEPARATOR}❌ Version synchronization failed in '{root_dir}' ({elapsed_ms:.2f}ms):")
         for err in errors:
             print(f"  ::error::{err}")
         return ExitCodeType.VIOLATIONS_FOUND.value
@@ -107,11 +105,11 @@ def check_version_sync(root_dir: str = ".") -> int:
 
 def main():
     parser = argparse.ArgumentParser(description="Check version synchronization across folders")
-    parser.add_argument("path", nargs="?", default=".", help="Root directory containing version files")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Root directory containing version files")
     parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify root directory")
     args = parser.parse_args()
 
-    target_path = args.opt_path or args.path or "."
+    target_path = args.opt_path or args.path or CURRENT_DIR
     sys.exit(check_version_sync(target_path))
 
 if __name__ == "__main__":

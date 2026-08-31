@@ -26,6 +26,7 @@ get_compiled_regex_group = engine.get_compiled_regex_group
 DEFAULT_CODE_EXTENSIONS = engine.DEFAULT_CODE_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def find_explicit_true_violations(content: str) -> list[tuple[int, str]]:
     """Inspects lines for explicit true comparisons."""
@@ -59,7 +60,7 @@ def audit_file_naming(file_path: Path) -> tuple[str, list[tuple[int, str]]]:
         return (norm_p, [])
 
 def run_naming_auditor(
-    target_dir: str = ".",
+    target_dir: str = CURRENT_DIR,
     extensions: set[str] | tuple | None = None
 ) -> int:
     """Executes naming and boolean convention check across target directory."""
@@ -85,12 +86,12 @@ def run_naming_auditor(
 
 def main():
     parser = argparse.ArgumentParser(description="Audit boolean conventions and naming across folders")
-    parser.add_argument("path", nargs="?", default=".", help="Root directory or folder to scan")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Root directory or folder to scan")
     parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify target directory")
     parser.add_argument("--ext", help="Comma-separated extensions to scan (e.g. .ts,.go,.py)")
     args = parser.parse_args()
 
-    target_path = args.opt_path or args.path or "."
+    target_path = args.opt_path or args.path or CURRENT_DIR
     sys.exit(run_naming_auditor(target_dir=target_path, extensions=args.ext))
 
 if __name__ == "__main__":

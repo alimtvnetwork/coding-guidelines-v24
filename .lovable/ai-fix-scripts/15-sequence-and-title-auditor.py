@@ -29,9 +29,10 @@ RegexPatternType = engine.RegexPatternType
 get_compiled_regex = engine.get_compiled_regex
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def audit_directory_sequences(
-    target_dir: str = ".",
+    target_dir: str = CURRENT_DIR,
     is_fix_mode: bool = False
 ) -> tuple[list[str], list[str]]:
     """Audits sequence numbering and # H1 headers in markdown files."""
@@ -44,7 +45,6 @@ def audit_directory_sequences(
         dirs[:] = [d for d in dirs if not is_ignored_directory(d)]
         norm_dir = normalize_rel_path(root)
 
-        # Collect numbered markdown files
         numbered_files = []
         for f in files:
             m = re_num.match(f)
@@ -84,7 +84,7 @@ def audit_directory_sequences(
 
     return seq_issues, title_issues
 
-def run_sequence_auditor(target_dir: str = ".", is_fix_mode: bool = False) -> int:
+def run_sequence_auditor(target_dir: str = CURRENT_DIR, is_fix_mode: bool = False) -> int:
     """Executes sequence and title audit across target directory."""
     seq_issues, title_issues = audit_directory_sequences(target_dir, is_fix_mode=is_fix_mode)
 
@@ -113,12 +113,12 @@ def run_sequence_auditor(target_dir: str = ".", is_fix_mode: bool = False) -> in
 
 def main():
     parser = argparse.ArgumentParser(description="Audit file sequence numbering and H1 title alignment")
-    parser.add_argument("path", nargs="?", default=".", help="Root directory to audit")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Root directory to audit")
     parser.add_argument("--dir", "--path", "-p", dest="opt_dir", help="Directory to audit")
     parser.add_argument("--fix", action="store_true", help="Auto-fix H1 title numbers in markdown files")
     args = parser.parse_args()
 
-    target_path = args.opt_dir or args.path or "."
+    target_path = args.opt_dir or args.path or CURRENT_DIR
     sys.exit(run_sequence_auditor(target_dir=target_path, is_fix_mode=args.fix))
 
 if __name__ == "__main__":

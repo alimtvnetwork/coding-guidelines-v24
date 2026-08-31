@@ -42,6 +42,7 @@ DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 UTF8_SIG_ENCODING = engine.UTF8_SIG_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def run_git_mv_or_rename(src_path: Path, dst_path: Path) -> bool:
     """Attempts git mv first; falls back to standard filesystem rename with Windows case-hop."""
@@ -76,7 +77,7 @@ def parse_except_patterns(except_str: str | None) -> set[str]:
 
 # --- Core Feature 1: Lowercase Renamer ---
 
-def lowercase_directory(target_dir: str = ".", except_patterns: str | None = None) -> int:
+def lowercase_directory(target_dir: str = CURRENT_DIR, except_patterns: str | None = None) -> int:
     """Recursively renames files and directories to lowercase."""
     custom_ignores = parse_except_patterns(except_patterns)
     re_upper = get_compiled_regex(RegexPatternType.UPPERCASE)
@@ -86,7 +87,6 @@ def lowercase_directory(target_dir: str = ".", except_patterns: str | None = Non
     for root, dirs, files in os.walk(target_dir, topdown=False):
         dirs[:] = [d for d in dirs if not is_ignored_directory(d, custom_excludes=custom_ignores)]
 
-        # 1. Rename files to lowercase
         for f in files:
             if re_upper.search(f):
                 src = Path(root) / f
@@ -97,7 +97,6 @@ def lowercase_directory(target_dir: str = ".", except_patterns: str | None = Non
                     print(f"  ✓ Renamed file: {normalize_rel_path(src)} -> {dst.name}")
                     renamed_count += 1
 
-        # 2. Rename directories to lowercase
         for d in dirs:
             if re_upper.search(d):
                 src = Path(root) / d
@@ -183,7 +182,7 @@ def fix_sequences_in_folder(
 
     return renamed_count
 
-def fix_sequences_recursive(target_dir: str = ".", **kwargs) -> int:
+def fix_sequences_recursive(target_dir: str = CURRENT_DIR, **kwargs) -> int:
     """Recursively fixes file sequencing across directories."""
     total_renamed = 0
     start_time = time.perf_counter()
@@ -200,7 +199,7 @@ def fix_sequences_recursive(target_dir: str = ".", **kwargs) -> int:
 
 # --- Core Feature 3: Fix Encoding & Line Endings ---
 
-def fix_encoding_and_newlines(target_dir: str = ".", extensions: tuple | set | None = None) -> int:
+def fix_encoding_and_newlines(target_dir: str = CURRENT_DIR, extensions: tuple | set | None = None) -> int:
     """Aggressively normalizes file encodings to UTF-8 without BOM and strict UNIX LF."""
     exts = normalize_extensions(extensions) or DEFAULT_TEXT_EXTENSIONS
     fixed_count = 0
@@ -238,12 +237,12 @@ def main():
 
     # Lowercase sub-command
     p_lower = subparsers.add_parser("lowercase", help="Convert files and folders to lowercase")
-    p_lower.add_argument("path", nargs="?", default=".", help="Directory to process")
+    p_lower.add_argument("path", nargs="?", default=CURRENT_DIR, help="Directory to process")
     p_lower.add_argument("--except", dest="except_patterns", help="Comma-separated patterns to ignore")
 
     # Fix sequences sub-command
     p_seq = subparsers.add_parser("fix-seq-files", help="Re-sequence numbered files")
-    p_seq.add_argument("path", nargs="?", default=".", help="Directory to process")
+    p_seq.add_argument("path", nargs="?", default=CURRENT_DIR, help="Directory to process")
     p_seq.add_argument("--order-by-time", action="store_true", help="Order by modification time")
     p_seq.add_argument("--order-by-az", action="store_true", help="Order alphabetically")
     p_seq.add_argument("--keep-old-order", action="store_true", default=True, help="Preserve existing order where possible")
@@ -251,7 +250,7 @@ def main():
 
     # Fix encoding sub-command
     p_enc = subparsers.add_parser("fix-encoding", help="Normalize UTF-8 encoding and UNIX LF line endings")
-    p_enc.add_argument("path", nargs="?", default=".", help="Directory to process")
+    p_enc.add_argument("path", nargs="?", default=CURRENT_DIR, help="Directory to process")
     p_enc.add_argument("--ext", help="Comma-separated file extensions to process (e.g. .md,.ts,.py)")
 
     args = parser.parse_args()

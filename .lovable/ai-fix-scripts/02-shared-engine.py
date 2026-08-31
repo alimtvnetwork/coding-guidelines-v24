@@ -5,8 +5,8 @@ Dual-Platform Engine (100% Native Unix & Windows Support)
 
 Features:
 1. Centralized Configuration Maps, Language Manifests, Subsystem Hints, and Top-Level Enums:
-   - EncodingType, LanguageType, SubsystemType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType.
-2. Centralized Encodings, Separators, Tokens, and Paths.
+   - EncodingType, LanguageType, SubsystemType, ScanModeType, SeverityType, ExitCodeType, RegexPatternType, CacheKeyType.
+2. Centralized Encodings, Separators, Tokens, Paths, and Default Literals (CURRENT_DIR, CACHE_KEY_FILES).
 3. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
 4. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
@@ -81,6 +81,28 @@ class SubsystemType(str, Enum):
     TESTS = "TESTS"
     UNKNOWN = "UNKNOWN"
 
+class CacheKeyType(str, Enum):
+    """Enumeration for standardized cache and topology JSON keys."""
+    FILES = "files"
+    TIMESTAMP = "timestamp"
+    TOTAL_FILES = "total_files"
+    VERSION = "version"
+    GENERATED_AT = "generatedAt"
+    EXPIRES_AT = "expiresAt"
+    TTL_SECONDS = "ttlSeconds"
+    SCAN_DURATION_MS = "scanDurationMs"
+    ROOT_PATH = "rootPath"
+    MANIFESTS = "manifests"
+    LANGUAGE_DISTRIBUTION = "languageDistribution"
+    LANGUAGE_ROOTS = "languageRoots"
+    SUBSYSTEMS = "subsystems"
+    ROOTS = "roots"
+    ENTRYPOINTS = "entrypoints"
+    SCHEMA_FILES = "schemaFiles"
+    WORKFLOWS = "workflows"
+    SPEC_ROOTS = "specRoots"
+    TEST_RUNNERS = "testRunners"
+
 class ScanModeType(str, Enum):
     """Enumeration for file scanning modes."""
     CHECK = "CHECK"
@@ -125,19 +147,41 @@ class RegexPatternType(str, Enum):
     PLACEHOLDER_TOKEN = "PLACEHOLDER_TOKEN"
     NON_ALPHANUMERIC = "NON_ALPHANUMERIC"
 
-# --- Centralized Constants for Encodings, Separators & Tokens ---
+# --- Centralized Constants for Encodings, Separators, Tokens & Default Literals ---
 DEFAULT_ENCODING = EncodingType.UTF8.value
 UTF8_SIG_ENCODING = EncodingType.UTF8_SIG.value
 UTF16_ENCODING = EncodingType.UTF16.value
 UTF16_LE_ENCODING = EncodingType.UTF16_LE.value
 UTF16_BE_ENCODING = EncodingType.UTF16_BE.value
 
+CURRENT_DIR = "."
+EMPTY_STRING = ""
 LINE_SEPARATOR = "\n"
 CARRIAGE_RETURN = "\r"
 CRLF_SEPARATOR = "\r\n"
 TAB_CHAR = "\t"
 PATH_SEPARATOR = "/"
 WINDOWS_PATH_SEPARATOR = "\\"
+
+CACHE_KEY_FILES = CacheKeyType.FILES.value
+CACHE_KEY_TOTAL_FILES = CacheKeyType.TOTAL_FILES.value
+CACHE_KEY_TIMESTAMP = CacheKeyType.TIMESTAMP.value
+CACHE_KEY_VERSION = CacheKeyType.VERSION.value
+CACHE_KEY_GENERATED_AT = CacheKeyType.GENERATED_AT.value
+CACHE_KEY_EXPIRES_AT = CacheKeyType.EXPIRES_AT.value
+CACHE_KEY_TTL_SECONDS = CacheKeyType.TTL_SECONDS.value
+CACHE_KEY_SCAN_DURATION_MS = CacheKeyType.SCAN_DURATION_MS.value
+CACHE_KEY_ROOT_PATH = CacheKeyType.ROOT_PATH.value
+CACHE_KEY_MANIFESTS = CacheKeyType.MANIFESTS.value
+CACHE_KEY_LANGUAGE_DISTRIBUTION = CacheKeyType.LANGUAGE_DISTRIBUTION.value
+CACHE_KEY_LANGUAGE_ROOTS = CacheKeyType.LANGUAGE_ROOTS.value
+CACHE_KEY_SUBSYSTEMS = CacheKeyType.SUBSYSTEMS.value
+CACHE_KEY_ROOTS = CacheKeyType.ROOTS.value
+CACHE_KEY_ENTRYPOINTS = CacheKeyType.ENTRYPOINTS.value
+CACHE_KEY_SCHEMA_FILES = CacheKeyType.SCHEMA_FILES.value
+CACHE_KEY_WORKFLOWS = CacheKeyType.WORKFLOWS.value
+CACHE_KEY_SPEC_ROOTS = CacheKeyType.SPEC_ROOTS.value
+CACHE_KEY_TEST_RUNNERS = CacheKeyType.TEST_RUNNERS.value
 
 # --- Module-Level Directory & File Constants ---
 CACHE_BASE_DIR = Path("tmp/cache")
@@ -400,15 +444,15 @@ def is_binary_file(file_path: Path) -> bool:
 
 def is_allowed_large_file(file_path: str | Path) -> bool:
     """Checks if file is on the explicit waiver list for large generated assets."""
-    norm = normalize_rel_path(file_path).lstrip("./")
-    return norm in {normalize_rel_path(f).lstrip("./") for f in ALLOWED_LARGE_FILES}
+    norm = normalize_rel_path(file_path).lstrip(f"{CURRENT_DIR}{PATH_SEPARATOR}")
+    return norm in {normalize_rel_path(f).lstrip(f"{CURRENT_DIR}{PATH_SEPARATOR}") for f in ALLOWED_LARGE_FILES}
 
 def normalize_rel_path(path: str | Path) -> str:
     """Converts a path into a canonical relative POSIX path using PATH_SEPARATOR."""
     re_slash = get_compiled_regex(RegexPatternType.WINDOWS_BACKSLASH)
     re_lead = get_compiled_regex(RegexPatternType.LEADING_DOT_SLASH)
     p_str = re_slash.sub(PATH_SEPARATOR, str(path))
-    return re_lead.sub("", p_str)
+    return re_lead.sub(EMPTY_STRING, p_str)
 
 def normalize_extensions(extensions: tuple | set | list | str | None) -> set[str] | None:
     """Normalizes custom extensions into a lowercased set with leading dots."""
@@ -452,7 +496,7 @@ def read_file_safe(
 def read_file_lf(path: str | Path, encoding: str = DEFAULT_ENCODING) -> str:
     """Reads a text file ensuring strict UNIX LF. Returns empty string if file does not exist."""
     content = read_file_safe(path, encoding=encoding)
-    return content if content is not None else ""
+    return content if content is not None else EMPTY_STRING
 
 def write_file_lf(
     path: str | Path,
@@ -468,7 +512,6 @@ def write_file_lf(
     p.parent.mkdir(parents=True, exist_ok=True)
     temp_path = p.with_name(f"{p.name}.tmp_{os.getpid()}_{int(time.time()*1000)}")
 
-    # Preserve executable permissions if original file exists on Unix
     original_mode = None
     if p.exists():
         try:
@@ -514,7 +557,6 @@ def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_
     lock_fd = None
 
     if IS_FCNTL_AVAILABLE:
-        # Native Unix POSIX flock
         try:
             lock_fd = open(lock_file, "w")
             while time.time() - start_time < timeout:
@@ -537,7 +579,6 @@ def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_
                 except Exception:
                     pass
     else:
-        # Windows native O_EXCL with stale lock eviction
         while time.time() - start_time < timeout:
             try:
                 if lock_file.exists():
@@ -578,7 +619,7 @@ def load_repo_cache() -> dict[str, Any]:
                 with open(target, "r", encoding=DEFAULT_ENCODING) as f:
                     data = json.load(f)
                     if isinstance(data, dict):
-                        if "files" in data:
+                        if CACHE_KEY_FILES in data:
                             return data
             except Exception:
                 pass
@@ -608,19 +649,19 @@ def save_repo_cache(cache_data: dict[str, Any]) -> None:
 
 def stream_cached_files(
     cache_data: dict[str, Any],
-    root_dir: str = ".",
+    root_dir: str = CURRENT_DIR,
     extensions: set[str] | tuple | None = None,
     custom_excludes: set[str] | None = None
 ) -> Generator[Path, None, None]:
     """Phase 1: Streams valid files from cache first. Automatically skips missing/deleted/excluded files."""
-    file_list = cache_data.get("files", [])
+    file_list = cache_data.get(CACHE_KEY_FILES, [])
     norm_root = normalize_rel_path(root_dir).rstrip(PATH_SEPARATOR)
     ext_set = normalize_extensions(extensions)
 
     for rel_path in file_list:
         norm_p = normalize_rel_path(rel_path)
         if norm_root:
-            if norm_root != ".":
+            if norm_root != CURRENT_DIR:
                 if not norm_p.startswith(norm_root + PATH_SEPARATOR):
                     if norm_p != norm_root:
                         continue
@@ -637,7 +678,7 @@ def stream_cached_files(
         yield p
 
 def stream_directory_files(
-    root_dir: str = ".",
+    root_dir: str = CURRENT_DIR,
     extensions: set[str] | tuple | None = None,
     custom_excludes: set[str] | None = None
 ) -> Generator[Path, None, None]:
@@ -649,7 +690,6 @@ def stream_directory_files(
     visited_inodes: set[tuple[int, int]] = set()
 
     for root, dirs, files in os.walk(root_dir, followlinks=False):
-        # Prevent Unix symlink recursion loops
         try:
             st = os.stat(root)
             inode_key = (st.st_dev, st.st_ino)
@@ -672,7 +712,7 @@ def stream_directory_files(
 
 def process_repository_files(
     processor_fn: Callable[[Path], Any],
-    root_dir: str = ".",
+    root_dir: str = CURRENT_DIR,
     extensions: set[str] | tuple | list | str | None = None,
     is_use_cache: bool = True,
     custom_excludes: set[str] | None = None
@@ -690,9 +730,8 @@ def process_repository_files(
     results = []
     norm_exts = normalize_extensions(extensions)
 
-    # Phase 1: Process cached files first
     if cache_data:
-        if "files" in cache_data:
+        if CACHE_KEY_FILES in cache_data:
             for p in stream_cached_files(cache_data, root_dir=root_dir, extensions=norm_exts, custom_excludes=custom_excludes):
                 norm_p = normalize_rel_path(p)
                 if norm_p not in processed_paths:
@@ -701,7 +740,6 @@ def process_repository_files(
                     if res is not None:
                         results.append(res)
 
-    # Phase 2: Stream live directory files (catches new/untracked files)
     for p in stream_directory_files(root_dir=root_dir, extensions=norm_exts, custom_excludes=custom_excludes):
         norm_p = normalize_rel_path(p)
         if norm_p not in processed_paths:

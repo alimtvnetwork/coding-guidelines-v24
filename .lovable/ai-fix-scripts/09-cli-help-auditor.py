@@ -26,6 +26,7 @@ get_compiled_regex = engine.get_compiled_regex
 DEFAULT_CLI_EXTENSIONS = engine.DEFAULT_CLI_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def audit_go_cobra_commands(content: str) -> list[tuple[str, str]]:
     """Detects Go Cobra commands missing Short or Example descriptions."""
@@ -82,7 +83,7 @@ def audit_single_file_cli(file_path: Path) -> list[tuple[str, str]]:
     return []
 
 def run_cli_auditor(
-    target_dir: str = ".",
+    target_dir: str = CURRENT_DIR,
     is_strict: bool = False,
     extensions: set[str] | tuple | None = None
 ) -> int:
@@ -111,13 +112,13 @@ def run_cli_auditor(
 
 def main():
     parser = argparse.ArgumentParser(description="Audit CLI commands for help descriptions across folders")
-    parser.add_argument("path", nargs="?", default=".", help="Directory to audit")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Directory to audit")
     parser.add_argument("--dir", "--path", "-p", dest="opt_dir", help="Directory to audit")
     parser.add_argument("--ext", help="Comma-separated extensions to scan (e.g. .go,.py)")
     parser.add_argument("--strict", action="store_true", help="Fail with exit code 1 on warnings")
     args = parser.parse_args()
 
-    target_path = args.opt_dir or args.path or "."
+    target_path = args.opt_dir or args.path or CURRENT_DIR
     sys.exit(run_cli_auditor(target_dir=target_path, is_strict=args.strict, extensions=args.ext))
 
 if __name__ == "__main__":

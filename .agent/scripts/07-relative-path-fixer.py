@@ -27,6 +27,7 @@ get_compiled_regex_group = engine.get_compiled_regex_group
 DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def sanitize_content_paths(content: str) -> tuple[str, int]:
     """Replaces absolute repository paths with clean relative paths."""
@@ -71,7 +72,7 @@ def audit_file_paths(file_path: Path, is_fix_mode: bool = False) -> tuple[str, l
         return (norm_p, [])
 
 def run_path_auditor(
-    target_dir: str = ".",
+    target_dir: str = CURRENT_DIR,
     is_fix_mode: bool = False,
     extensions: set[str] | tuple | None = None
 ) -> int:
@@ -98,13 +99,13 @@ def run_path_auditor(
 
 def main():
     parser = argparse.ArgumentParser(description="Audit and fix absolute paths across target folders")
-    parser.add_argument("path", nargs="?", default=".", help="Root directory or folder to scan")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Root directory or folder to scan")
     parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify target directory")
     parser.add_argument("--fix", action="store_true", help="Auto-fix recognized path patterns")
     parser.add_argument("--ext", help="Comma-separated extensions to scan (e.g. .md,.ts,.py)")
     args = parser.parse_args()
 
-    target_path = args.opt_path or args.path or "."
+    target_path = args.opt_path or args.path or CURRENT_DIR
     sys.exit(run_path_auditor(target_dir=target_path, is_fix_mode=args.fix, extensions=args.ext))
 
 if __name__ == "__main__":

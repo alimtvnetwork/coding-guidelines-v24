@@ -26,6 +26,7 @@ get_compiled_regex = engine.get_compiled_regex
 DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def clean_file_content(content: str) -> str:
     """Strips trailing whitespace per line and guarantees a single final newline."""
@@ -55,7 +56,7 @@ def process_file_newlines(file_path: Path, is_fix_mode: bool = False) -> tuple[s
     return (norm_p, False)
 
 def run_newline_auditor(
-    target_dir: str = ".",
+    target_dir: str = CURRENT_DIR,
     is_fix_mode: bool = False,
     extensions: set[str] | tuple | None = None
 ) -> int:
@@ -83,13 +84,13 @@ def run_newline_auditor(
 
 def main():
     parser = argparse.ArgumentParser(description="Fix trailing whitespace and newlines across folders")
-    parser.add_argument("path", nargs="?", default=".", help="Root directory or subfolder to scan")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Root directory or subfolder to scan")
     parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify target directory")
     parser.add_argument("--fix", action="store_true", help="Auto-fix whitespace issues in-place")
     parser.add_argument("--ext", help="Comma-separated extensions to scan (e.g. .md,.ts,.py)")
     args = parser.parse_args()
 
-    target_path = args.opt_path or args.path or "."
+    target_path = args.opt_path or args.path or CURRENT_DIR
     sys.exit(run_newline_auditor(target_dir=target_path, is_fix_mode=args.fix, extensions=args.ext))
 
 if __name__ == "__main__":

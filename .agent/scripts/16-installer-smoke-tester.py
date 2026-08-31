@@ -24,6 +24,7 @@ RegexPatternType = engine.RegexPatternType
 get_compiled_regex = engine.get_compiled_regex
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def test_bash_installer(script_path: Path) -> list[str]:
     """Smoke tests a bash installer script."""
@@ -65,7 +66,7 @@ def test_powershell_installer(script_path: Path) -> list[str]:
 
     return issues
 
-def run_installer_smoke_tests(target_dir: str = ".") -> int:
+def run_installer_smoke_tests(target_dir: str = CURRENT_DIR) -> int:
     """Discovers and tests all installer scripts in target directory."""
     root = Path(target_dir)
     all_issues = []
@@ -97,11 +98,11 @@ def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Smoke test installer scripts across target directory")
-    parser.add_argument("path", nargs="?", default=".", help="Root directory to search for installer scripts")
+    parser.add_argument("path", nargs="?", default=CURRENT_DIR, help="Root directory to search for installer scripts")
     parser.add_argument("--path", "-p", dest="opt_path", help="Alternative flag to specify target directory")
     args = parser.parse_args()
 
-    target_path = args.opt_path or args.path or "."
+    target_path = args.opt_path or args.path or CURRENT_DIR
     sys.exit(run_installer_smoke_tests(target_dir=target_path))
 
 if __name__ == "__main__":

@@ -39,8 +39,11 @@ DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
 PATH_SEPARATOR = engine.PATH_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
+EMPTY_STRING = engine.EMPTY_STRING
+CACHE_KEY_FILES = engine.CACHE_KEY_FILES
 
-def list_folder_contents(folder_path: str = ".", extensions: tuple | set | None = None) -> None:
+def list_folder_contents(folder_path: str = CURRENT_DIR, extensions: tuple | set | None = None) -> None:
     """Lists files and child directories within a folder."""
     start_time = time.perf_counter()
     norm_folder = normalize_rel_path(folder_path).rstrip(PATH_SEPARATOR)
@@ -49,11 +52,11 @@ def list_folder_contents(folder_path: str = ".", extensions: tuple | set | None 
     files_in_folder = []
     subfolders = set()
 
-    has_cache = bool(cache and "files" in cache)
+    has_cache = bool(cache and CACHE_KEY_FILES in cache)
     if has_cache:
-        for f_path in cache["files"]:
+        for f_path in cache[CACHE_KEY_FILES]:
             norm_f = normalize_rel_path(f_path)
-            prefix = norm_folder + PATH_SEPARATOR if norm_folder and norm_folder != "." else ""
+            prefix = norm_folder + PATH_SEPARATOR if norm_folder and norm_folder != CURRENT_DIR else EMPTY_STRING
             if prefix and not norm_f.startswith(prefix):
                 continue
             rel_to_folder = norm_f[len(prefix):] if prefix else norm_f
@@ -65,7 +68,7 @@ def list_folder_contents(folder_path: str = ".", extensions: tuple | set | None 
                     continue
                 files_in_folder.append(norm_f)
     else:
-        p_folder = Path(norm_folder if norm_folder else ".")
+        p_folder = Path(norm_folder if norm_folder else CURRENT_DIR)
         if p_folder.exists() and p_folder.is_dir():
             for item in p_folder.iterdir():
                 if is_ignored_directory(item.name):
@@ -113,7 +116,7 @@ def read_single_file(file_path: str, max_bytes: int = 100000) -> None:
     print(content)
     print("-" * 80)
 
-def search_files_by_pattern(pattern: str, target_dir: str = ".", is_regex: bool = False) -> None:
+def search_files_by_pattern(pattern: str, target_dir: str = CURRENT_DIR, is_regex: bool = False) -> None:
     """Fast regex or literal content pattern search across target folder."""
     start_time = time.perf_counter()
     cache = load_repo_cache()
@@ -121,9 +124,9 @@ def search_files_by_pattern(pattern: str, target_dir: str = ".", is_regex: bool 
     norm_root = normalize_rel_path(target_dir).rstrip(PATH_SEPARATOR)
 
     matches = []
-    file_list = cache.get("files", []) if (cache and "files" in cache) else []
+    file_list = cache.get(CACHE_KEY_FILES, []) if (cache and CACHE_KEY_FILES in cache) else []
     if not file_list:
-        p_root = Path(norm_root if norm_root else ".")
+        p_root = Path(norm_root if norm_root else CURRENT_DIR)
         if p_root.exists():
             for root, dirs, files in os.walk(p_root):
                 dirs[:] = [d for d in dirs if not is_ignored_directory(d)]
@@ -132,7 +135,7 @@ def search_files_by_pattern(pattern: str, target_dir: str = ".", is_regex: bool 
 
     for f_str in file_list:
         norm_f = normalize_rel_path(f_str)
-        prefix = norm_root + PATH_SEPARATOR if norm_root and norm_root != "." else ""
+        prefix = norm_root + PATH_SEPARATOR if norm_root and norm_root != CURRENT_DIR else EMPTY_STRING
         if prefix and not norm_f.startswith(prefix):
             continue
         p = Path(norm_f)
@@ -160,7 +163,7 @@ def main():
     parser.add_argument("--list-folder", "-l", help="List directory contents and subfolders")
     parser.add_argument("--read-file", "-r", help="Read target text file contents")
     parser.add_argument("--search-pattern", "-s", help="Search content pattern across files")
-    parser.add_argument("--path", "-p", default=".", help="Root directory for search or listing")
+    parser.add_argument("--path", "-p", default=CURRENT_DIR, help="Root directory for search or listing")
     parser.add_argument("--ext", help="Comma-separated extensions filter (e.g. .md,.ts,.py)")
     parser.add_argument("--max-bytes", type=int, default=100000, help="Maximum bytes to read (default 100KB)")
     parser.add_argument("--regex", action="store_true", help="Treat search pattern as regular expression")

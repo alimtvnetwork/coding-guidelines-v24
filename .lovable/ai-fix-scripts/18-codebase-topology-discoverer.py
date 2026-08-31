@@ -5,8 +5,8 @@ Automatically inspects any codebase (Go, Rust, Python, TypeScript, PHP, C#, SQL)
 classifies subsystems (Backend, Database, Frontend, CI/CD, Docs), and maintains
 a high-speed TTL-cached topology map in tmp/cache/paths/codebase-topology-cache.json.
 
-All Enums, Language Manifests, Subsystem Hints, and Cache Paths are imported
-cleanly from 02-shared-engine.py as the single source of truth.
+All Enums, Cache Keys, Default Directories, Constants, and Functions are imported
+directly from 02-shared-engine.py as the single source of truth.
 
 Usage:
   python .lovable/ai-fix-scripts/18-codebase-topology-discoverer.py [--summary]
@@ -35,6 +35,7 @@ LanguageType = engine.LanguageType
 SubsystemType = engine.SubsystemType
 EncodingType = engine.EncodingType
 ExitCodeType = engine.ExitCodeType
+CacheKeyType = engine.CacheKeyType
 
 # Centralized Configurations & Manifests
 LANGUAGE_MANIFESTS = engine.LANGUAGE_MANIFESTS
@@ -48,7 +49,29 @@ DEFAULT_TTL_SECONDS = engine.DEFAULT_TTL_SECONDS
 DEFAULT_ENCODING = engine.DEFAULT_ENCODING
 LINE_SEPARATOR = engine.LINE_SEPARATOR
 PATH_SEPARATOR = engine.PATH_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
+EMPTY_STRING = engine.EMPTY_STRING
 CACHE_PATHS_DIR = engine.CACHE_PATHS_DIR
+
+# Centralized Cache Keys
+CACHE_KEY_FILES = engine.CACHE_KEY_FILES
+CACHE_KEY_TOTAL_FILES = engine.CACHE_KEY_TOTAL_FILES
+CACHE_KEY_VERSION = engine.CACHE_KEY_VERSION
+CACHE_KEY_GENERATED_AT = engine.CACHE_KEY_GENERATED_AT
+CACHE_KEY_EXPIRES_AT = engine.CACHE_KEY_EXPIRES_AT
+CACHE_KEY_TTL_SECONDS = engine.CACHE_KEY_TTL_SECONDS
+CACHE_KEY_SCAN_DURATION_MS = engine.CACHE_KEY_SCAN_DURATION_MS
+CACHE_KEY_ROOT_PATH = engine.CACHE_KEY_ROOT_PATH
+CACHE_KEY_MANIFESTS = engine.CACHE_KEY_MANIFESTS
+CACHE_KEY_LANGUAGE_DISTRIBUTION = engine.CACHE_KEY_LANGUAGE_DISTRIBUTION
+CACHE_KEY_LANGUAGE_ROOTS = engine.CACHE_KEY_LANGUAGE_ROOTS
+CACHE_KEY_SUBSYSTEMS = engine.CACHE_KEY_SUBSYSTEMS
+CACHE_KEY_ROOTS = engine.CACHE_KEY_ROOTS
+CACHE_KEY_ENTRYPOINTS = engine.CACHE_KEY_ENTRYPOINTS
+CACHE_KEY_SCHEMA_FILES = engine.CACHE_KEY_SCHEMA_FILES
+CACHE_KEY_WORKFLOWS = engine.CACHE_KEY_WORKFLOWS
+CACHE_KEY_SPEC_ROOTS = engine.CACHE_KEY_SPEC_ROOTS
+CACHE_KEY_TEST_RUNNERS = engine.CACHE_KEY_TEST_RUNNERS
 
 # Centralized Utility Functions
 process_repository_files = engine.process_repository_files
@@ -79,7 +102,7 @@ def match_language_manifest(filename: str) -> LanguageType | None:
                 return lang
     return None
 
-def detect_manifests(root_dir: str = ".") -> dict[str, list[str]]:
+def detect_manifests(root_dir: str = CURRENT_DIR) -> dict[str, list[str]]:
     """Detects top-level and submodule package manifests using centralized rules."""
     detected: dict[str, list[str]] = {lang.value: [] for lang in LanguageType}
 
@@ -94,19 +117,18 @@ def detect_manifests(root_dir: str = ".") -> dict[str, list[str]]:
 
     return {k: v for k, v in detected.items() if v}
 
-def classify_codebase_subsystems(root_dir: str = ".") -> dict[str, dict[str, Any]]:
+def classify_codebase_subsystems(root_dir: str = CURRENT_DIR) -> dict[str, dict[str, Any]]:
     """Scans and categorizes directory roots into functional subsystems dynamically."""
     subsystems: dict[str, dict[str, Any]] = {
-        SubsystemType.BACKEND.value: {"roots": set(), "entrypoints": []},
-        SubsystemType.DATABASE.value: {"roots": set(), "schemaFiles": []},
-        SubsystemType.FRONTEND.value: {"roots": set(), "entrypoints": []},
-        SubsystemType.CICD.value: {"roots": set(), "workflows": []},
-        SubsystemType.DOCS.value: {"roots": set(), "specRoots": []},
-        SubsystemType.CLI.value: {"roots": set(), "entrypoints": []},
-        SubsystemType.TESTS.value: {"roots": set(), "testRunners": []},
+        SubsystemType.BACKEND.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_ENTRYPOINTS: []},
+        SubsystemType.DATABASE.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_SCHEMA_FILES: []},
+        SubsystemType.FRONTEND.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_ENTRYPOINTS: []},
+        SubsystemType.CICD.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_WORKFLOWS: []},
+        SubsystemType.DOCS.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_SPEC_ROOTS: []},
+        SubsystemType.CLI.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_ENTRYPOINTS: []},
+        SubsystemType.TESTS.value: {CACHE_KEY_ROOTS: set(), CACHE_KEY_TEST_RUNNERS: []},
     }
 
-    # Inverted hint lookup: hint -> set of Subsystems
     hint_to_subsystems: dict[str, set[str]] = {}
     for subsys_enum, hints in SUBSYSTEM_DIR_HINTS.items():
         for h in hints:
@@ -120,15 +142,13 @@ def classify_codebase_subsystems(root_dir: str = ".") -> dict[str, dict[str, Any
         norm_dir = normalize_rel_path(root)
         dir_parts_lower = {p.lower() for p in Path(root).parts}
 
-        # Dynamically classify directory by matching hint keywords
         for part in dir_parts_lower:
             matched_subsystems = hint_to_subsystems.get(part)
             has_matches = bool(matched_subsystems)
             if has_matches:
                 for subsys_name in matched_subsystems:
-                    subsystems[subsys_name]["roots"].add(norm_dir)
+                    subsystems[subsys_name][CACHE_KEY_ROOTS].add(norm_dir)
 
-        # File-level classification
         for f in files:
             norm_file = normalize_rel_path(os.path.join(root, f))
             ext = os.path.splitext(f)[1].lower()
@@ -136,25 +156,24 @@ def classify_codebase_subsystems(root_dir: str = ".") -> dict[str, dict[str, Any
 
             is_sql_schema = (ext == ".sql" or "schema" in f_lower or "migration" in f_lower)
             if is_sql_schema:
-                subsystems[SubsystemType.DATABASE.value]["schemaFiles"].append(norm_file)
+                subsystems[SubsystemType.DATABASE.value][CACHE_KEY_SCHEMA_FILES].append(norm_file)
 
             is_entrypoint = (f in SUBSYSTEM_ENTRYPOINTS)
             if is_entrypoint:
-                subsystems[SubsystemType.BACKEND.value]["entrypoints"].append(norm_file)
+                subsystems[SubsystemType.BACKEND.value][CACHE_KEY_ENTRYPOINTS].append(norm_file)
 
             is_cli = ("cli" in f_lower or f.startswith("cmd") or "command" in f_lower)
             if is_cli:
-                subsystems[SubsystemType.CLI.value]["entrypoints"].append(norm_file)
+                subsystems[SubsystemType.CLI.value][CACHE_KEY_ENTRYPOINTS].append(norm_file)
 
             is_test_file = ("test" in f_lower or f.startswith("test_") or f.endswith("_test.go") or f.endswith(".test.ts"))
             if is_test_file:
-                subsystems[SubsystemType.TESTS.value]["testRunners"].append(norm_file)
+                subsystems[SubsystemType.TESTS.value][CACHE_KEY_TEST_RUNNERS].append(norm_file)
 
             is_workflow = (ext in {".yml", ".yaml"} and ".github" in norm_file)
             if is_workflow:
-                subsystems[SubsystemType.CICD.value]["workflows"].append(norm_file)
+                subsystems[SubsystemType.CICD.value][CACHE_KEY_WORKFLOWS].append(norm_file)
 
-    # Convert sets to sorted lists for JSON serialization
     serialized: dict[str, dict[str, Any]] = {}
     for st_name, data in subsystems.items():
         serialized[st_name] = {
@@ -163,7 +182,7 @@ def classify_codebase_subsystems(root_dir: str = ".") -> dict[str, dict[str, Any
         }
     return serialized
 
-def build_topology_map(root_dir: str = ".", ttl_seconds: int = DEFAULT_TTL_SECONDS) -> dict[str, Any]:
+def build_topology_map(root_dir: str = CURRENT_DIR, ttl_seconds: int = DEFAULT_TTL_SECONDS) -> dict[str, Any]:
     """Builds complete topology map with timestamps and TTL expiry information."""
     start_time = time.perf_counter()
     now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -195,17 +214,17 @@ def build_topology_map(root_dir: str = ".", ttl_seconds: int = DEFAULT_TTL_SECON
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
     return {
-        "version": "1.0.0",
-        "generatedAt": now_utc.isoformat(),
-        "expiresAt": expires_at.isoformat(),
-        "ttlSeconds": ttl_seconds,
-        "scanDurationMs": round(elapsed_ms, 2),
-        "totalFiles": total_files,
-        "rootPath": normalize_rel_path(root_dir),
-        "manifests": manifests,
-        "languageDistribution": dict(sorted(lang_file_counts.items(), key=lambda x: x[1], reverse=True)),
-        "languageRoots": {k: sorted(list(v)) for k, v in lang_file_roots.items()},
-        "subsystems": subsystems,
+        CACHE_KEY_VERSION: "1.0.0",
+        CACHE_KEY_GENERATED_AT: now_utc.isoformat(),
+        CACHE_KEY_EXPIRES_AT: expires_at.isoformat(),
+        CACHE_KEY_TTL_SECONDS: ttl_seconds,
+        CACHE_KEY_SCAN_DURATION_MS: round(elapsed_ms, 2),
+        CACHE_KEY_TOTAL_FILES: total_files,
+        CACHE_KEY_ROOT_PATH: normalize_rel_path(root_dir),
+        CACHE_KEY_MANIFESTS: manifests,
+        CACHE_KEY_LANGUAGE_DISTRIBUTION: dict(sorted(lang_file_counts.items(), key=lambda x: x[1], reverse=True)),
+        CACHE_KEY_LANGUAGE_ROOTS: {k: sorted(list(v)) for k, v in lang_file_roots.items()},
+        CACHE_KEY_SUBSYSTEMS: subsystems,
     }
 
 # --- TTL Cache Management ---
@@ -218,7 +237,7 @@ def load_cached_topology() -> dict[str, Any] | None:
                 with open(cache_p, "r", encoding=DEFAULT_ENCODING) as f:
                     data = json.load(f)
                 if isinstance(data, dict):
-                    expires_str = data.get("expiresAt")
+                    expires_str = data.get(CACHE_KEY_EXPIRES_AT)
                     if expires_str:
                         expires_at = datetime.datetime.fromisoformat(expires_str)
                         now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -242,7 +261,7 @@ def save_topology_cache(topology_data: dict[str, Any]) -> None:
             pass
 
 def get_or_create_topology(
-    root_dir: str = ".",
+    root_dir: str = CURRENT_DIR,
     is_force_refresh: bool = False,
     ttl_seconds: int = DEFAULT_TTL_SECONDS
 ) -> dict[str, Any]:
@@ -262,15 +281,14 @@ def get_or_create_topology(
 def query_topology(query_term: str, topology: dict[str, Any]) -> None:
     """Searches topology for language or subsystem matches and outputs routing paths."""
     q_clean = query_term.strip().lower()
-    subsystems = topology.get("subsystems", {})
-    manifests = topology.get("manifests", {})
-    lang_dist = topology.get("languageDistribution", {})
-    lang_roots = topology.get("languageRoots", {})
+    subsystems = topology.get(CACHE_KEY_SUBSYSTEMS, {})
+    manifests = topology.get(CACHE_KEY_MANIFESTS, {})
+    lang_dist = topology.get(CACHE_KEY_LANGUAGE_DISTRIBUTION, {})
+    lang_roots = topology.get(CACHE_KEY_LANGUAGE_ROOTS, {})
 
     print(f"{LINE_SEPARATOR}⚡ Topology Routing Query for: `{query_term}`{LINE_SEPARATOR}")
     found = False
 
-    # Resolve Alias from Centralized Map
     matched_target = QUERY_ALIASES.get(q_clean)
 
     # 1. Match Subsystems
@@ -282,7 +300,7 @@ def query_topology(query_term: str, topology: dict[str, Any]) -> None:
         if is_subsys_match:
             found = True
             print(f"📦 Subsystem: [{subsys_name}]")
-            roots = info.get("roots", [])
+            roots = info.get(CACHE_KEY_ROOTS, [])
             has_roots = bool(roots)
             if has_roots:
                 print("   📁 Directory Roots:")
@@ -291,7 +309,7 @@ def query_topology(query_term: str, topology: dict[str, Any]) -> None:
                 if len(roots) > 15:
                     print(f"      ... and {len(roots) - 15} more roots.")
             for k, v in info.items():
-                if k != "roots" and isinstance(v, list) and v:
+                if k != CACHE_KEY_ROOTS and isinstance(v, list) and v:
                     print(f"   📄 {k}:")
                     for item in v[:10]:
                         print(f"      • {item}")
@@ -332,20 +350,20 @@ def query_topology(query_term: str, topology: dict[str, Any]) -> None:
 def print_topology_summary(topology: dict[str, Any]) -> None:
     """Prints a clear, high-density terminal summary of the codebase topology."""
     print("================================================================================")
-    print(f"🌐 Polyglot Codebase Topology Map (Generated: {topology['generatedAt']})")
-    print(f"⏱️ TTL Expiry: {topology['expiresAt']} | Scan Time: {topology['scanDurationMs']}ms")
+    print(f"🌐 Polyglot Codebase Topology Map (Generated: {topology[CACHE_KEY_GENERATED_AT]})")
+    print(f"⏱️ TTL Expiry: {topology[CACHE_KEY_EXPIRES_AT]} | Scan Time: {topology[CACHE_KEY_SCAN_DURATION_MS]}ms")
     print("================================================================================")
 
     print(f"{LINE_SEPARATOR}📊 Polyglot Language Breakdown:")
-    for lang, count in topology.get("languageDistribution", {}).items():
-        man = topology.get("manifests", {}).get(lang, [])
-        man_str = f" (Manifests: {', '.join(man[:2])})" if man else ""
+    for lang, count in topology.get(CACHE_KEY_LANGUAGE_DISTRIBUTION, {}).items():
+        man = topology.get(CACHE_KEY_MANIFESTS, {}).get(lang, [])
+        man_str = f" (Manifests: {', '.join(man[:2])})" if man else EMPTY_STRING
         print(f"   • {lang:<14} : {count:>5} files{man_str}")
 
     print(f"{LINE_SEPARATOR}🏛️ Subsystem Map & Navigation Roots:")
-    subsystems = topology.get("subsystems", {})
+    subsystems = topology.get(CACHE_KEY_SUBSYSTEMS, {})
     for subsys_name, data in subsystems.items():
-        roots = data.get("roots", [])
+        roots = data.get(CACHE_KEY_ROOTS, [])
         if roots:
             display_roots = ", ".join(roots[:4])
             if len(roots) > 4:
@@ -371,7 +389,7 @@ def main():
     parser.add_argument("--refresh", "-r", action="store_true", help="Force regenerate topology cache")
     parser.add_argument("--ttl", type=int, default=DEFAULT_TTL_SECONDS, help="TTL cache duration in seconds (default: 1800)")
     parser.add_argument("--json", "-j", action="store_true", help="Output raw JSON topology map")
-    parser.add_argument("--path", "-p", default=".", help="Root directory to discover (default: .)")
+    parser.add_argument("--path", "-p", default=CURRENT_DIR, help="Root directory to discover (default: .)")
     args = parser.parse_args()
 
     topology = get_or_create_topology(

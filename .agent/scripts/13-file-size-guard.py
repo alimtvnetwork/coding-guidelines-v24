@@ -25,10 +25,11 @@ normalize_rel_path = engine.normalize_rel_path
 normalize_extensions = engine.normalize_extensions
 ExitCodeType = engine.ExitCodeType
 LINE_SEPARATOR = engine.LINE_SEPARATOR
+CURRENT_DIR = engine.CURRENT_DIR
 
 def audit_file_sizes(
     max_kb: int = DEFAULT_MAX_FILE_KB,
-    target_dir: str = ".",
+    target_dir: str = CURRENT_DIR,
     allowed_exts: set[str] | None = None
 ) -> int:
     """Scans files and checks sizes against threshold across target directory."""
@@ -79,7 +80,7 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Audit repository file sizes across folders")
     parser.add_argument("--max-kb", type=int, default=DEFAULT_MAX_FILE_KB, help="Maximum allowed file size in KB")
-    parser.add_argument("--path", "-p", default=".", help="Root path or folder to audit")
+    parser.add_argument("--path", "-p", default=CURRENT_DIR, help="Root path or folder to audit")
     parser.add_argument("--ext", help="Optional comma-separated extension filter (e.g. .json,.zip)")
     args = parser.parse_args()
 
