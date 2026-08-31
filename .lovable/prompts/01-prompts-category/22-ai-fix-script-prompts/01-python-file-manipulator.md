@@ -9,14 +9,14 @@
 
 You are an expert Python Developer AI. Your task is to write and maintain a standalone, reusable Python script that handles mass file renaming (lowercasing), sequence fixing, and encoding normalization across any target directory. This script will act as an autonomous tool for other AIs and developers to organize files without needing a compiled binary.
 
-**Target Path:** `.lovable/ai-fix-scripts/01-file-manipulator.py`
+**Target Path:** `.lovable/ai-fix-scripts/03-file-manipulator.py`
 
 ---
 
 ## 🔍 Pre-Flight AI Checklist (Before Modifying or Rewriting Any Script)
 
 Before modifying or creating any Python tool in `.lovable/ai-fix-scripts/` or `.agent/scripts/`, the AI agent MUST inspect these two files first:
-1. **`.lovable/ai-fix-scripts/00-shared-engine.py`**: The canonical library containing all centralized constants, Enums (`UPPER_CASE` members matching string values), file locking, two-phase caching, and lazy regex memoization.
+1. **`.lovable/ai-fix-scripts/02-shared-engine.py`**: The canonical library containing all centralized constants, Enums (`UPPER_CASE` members matching string values), file locking, two-phase caching, and lazy regex memoization.
 2. **`.lovable/ai-fix-scripts/01-index.md`**: The master registry of existing tools, parameters, and benchmark speeds.
 
 ### Canonical Library Import Pattern:
@@ -27,7 +27,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
-    engine = import_module("00-shared-engine")
+    engine = import_module("02-shared-engine")
     process_repository_files = engine.process_repository_files
     read_file_safe = engine.read_file_safe
     write_file_lf = engine.write_file_lf
@@ -71,7 +71,7 @@ except Exception:
 
 **Command Pattern**:
 ```bash
-python .lovable/ai-fix-scripts/01-file-manipulator.py lowercase <target_directory> [flags]
+python .lovable/ai-fix-scripts/03-file-manipulator.py lowercase <target_directory> [flags]
 ```
 
 **Requirements**:
@@ -86,7 +86,7 @@ python .lovable/ai-fix-scripts/01-file-manipulator.py lowercase <target_director
 
 **Command Pattern**:
 ```bash
-python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files <target_directory> [flags]
+python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files <target_directory> [flags]
 ```
 
 **Requirements**:
@@ -105,7 +105,7 @@ python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files <target_dire
 
 **Command Pattern**:
 ```bash
-python .lovable/ai-fix-scripts/01-file-manipulator.py fix-encoding <target_directory> [flags]
+python .lovable/ai-fix-scripts/03-file-manipulator.py fix-encoding <target_directory> [flags]
 ```
 
 **Requirements**:
@@ -120,13 +120,13 @@ python .lovable/ai-fix-scripts/01-file-manipulator.py fix-encoding <target_direc
 Before completing this task, you MUST verify:
 
 - [ ] Checked `00-shared-engine.py` and `01-index.md` before writing code.
-- [ ] Saved the script precisely to `.lovable/ai-fix-scripts/01-file-manipulator.py` and synced to `.agent/scripts/`.
+- [ ] Saved the script precisely to `.lovable/ai-fix-scripts/03-file-manipulator.py` and synced to `.agent/scripts/`.
 - [ ] Used `RegexPatternType` with UPPER_CASE members (`UPPERCASE`, `SEQ_PREFIX`, `CRLF`).
 - [ ] Used `argparse` for subcommands (`lowercase`, `fix-seq-files`, and `fix-encoding`) with detailed examples.
 - [ ] Pruned `node_modules`, `.git`, `.gitmap` via `is_ignored_directory()`.
 - [ ] Attempted `git mv` where applicable to preserve history.
 - [ ] Handled Windows long paths via `normalize_rel_path()`.
-- [ ] Ensured all 18 CI gates pass via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+- [ ] Ensured all 18 CI gates pass via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
 
 ## No Automatic Releases (Strict Policy)
 

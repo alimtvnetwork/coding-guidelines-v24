@@ -23,7 +23,7 @@ N = total self-loop steps budget that the agents will perform.
 5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
+8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
@@ -205,7 +205,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
 ## Strict In-Repository Execution & `.lovable/` Bounding Mandate
 
@@ -229,7 +229,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
-- [ ] **Native Naming Autofixer:** If you need to scan and fix boolean naming or bare `ok` identifiers, use `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <file>` or create and index `.lovable/ai-fix-scripts/05-naming-autofixer.py`.
+- [ ] **Native Naming Autofixer:** If you need to scan and fix boolean naming or bare `ok` identifiers, use `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <file>` or create and index `.lovable/ai-fix-scripts/08-naming-autofixer.py`.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
 - [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming (e.g., `05-naming-autofixer.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
@@ -254,7 +254,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-enum-and-boolean.mjs` or `python linter-scripts/check-boolean-guidelines.py` exited with code 0.
-- [ ] Local CI runner `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 
 ---
 
@@ -278,13 +278,13 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 1. **Linter Script:** `linter-scripts/check-enum-and-boolean.mjs` (or `linter-scripts/validate-guidelines.py`)
 2. **Local Run Command:** `python linter-scripts/validate-guidelines.py`
-3. **Autofixer Command:** `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <file>`
+3. **Autofixer Command:** `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <file>`
 4. **CI/CD Integration (`.github/workflows/ci.yml`):**
    ```yaml
    - name: Validate Naming & Boolean Conventions
      run: python linter-scripts/validate-guidelines.py
    ```
-5. **Runner Registration (`.lovable/ai-fix-scripts/03-cicd-local-runner.py`):**
+5. **Runner Registration (`.lovable/ai-fix-scripts/06-cicd-local-runner.py`):**
    ```python
    JOBS = {
        "Naming & Boolean Check": [sys.executable, "linter-scripts/validate-guidelines.py"],

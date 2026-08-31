@@ -19,7 +19,7 @@ N = total self-loop steps budget that the agents will perform.
 4. [ ] /goal Phase 1 (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or stopping.
 5. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Spawn exactly 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
 6. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.lovable/plans/last-failure.md` and `.lovable/memory/issues/`; subsequent agents MUST read the failure log first to remediate root causes.
-7. [ ] /goal Phase 2 (Quality Gate Verification): Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before finishing.
+7. [ ] /goal Phase 2 (Quality Gate Verification): Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before finishing.
 8. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 9. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 10. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
@@ -79,7 +79,7 @@ Before writing any source code changes, you MUST execute Phase 1:
    - Rollback dirty changes and write the failure error log to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
    - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 5. **Progress & Completion:** Move completed subtasks to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
-6. **Local CI Verification:** Run `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` and ensure all quality gates exit with code 0 (`exit 0`).
+6. **Local CI Verification:** Run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` and ensure all quality gates exit with code 0 (`exit 0`).
 
 ---
 
@@ -88,7 +88,7 @@ Before writing any source code changes, you MUST execute Phase 1:
 - [ ] `/goal` **Reuse First:** Scanned and learned `.lovable/ai-fix-scripts/01-index.md` before writing temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts executed strictly within the codebase repository root.
 - [ ] **Strict .lovable/ Folder Storage:** All helper scripts, local runners, and linters stored in `.lovable/ai-fix-scripts/`.
-- [ ] **Native File Manipulator:** Use `python .lovable/ai-fix-scripts/01-file-manipulator.py <command>` for mass file operations.
+- [ ] **Native File Manipulator:** Use `python .lovable/ai-fix-scripts/03-file-manipulator.py <command>` for mass file operations.
 - [ ] **Go Generate Sync:** If Go constants or enums are modified, run `go generate ./...` in the relevant package and commit generated files.
 
 ---
@@ -144,4 +144,4 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.

@@ -8,7 +8,7 @@
 1. [ ] `/goal` Block collision-prone identifiers and enforce positive naming conventions.
 2. [ ] `/learn` Read `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/05-baseline-diff-lint-gate.md` to prevent new lint errors.
 3. [ ] `/goal` Ensure every guard emits standard `::error file=...,line=...::` annotations.
-4. [ ] `/learn` Verify local guard executions via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+4. [ ] `/learn` Verify local guard executions via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
 
 ---
 

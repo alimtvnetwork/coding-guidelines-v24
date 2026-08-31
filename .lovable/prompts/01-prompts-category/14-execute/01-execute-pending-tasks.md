@@ -29,7 +29,7 @@ Before executing the tasks below, you must check if this prompt is already insta
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
-- [ ] **Native File Manipulator & Fast Reader:** If you need to perform mass file renaming, sequence fixing, rapid file reading, or cached searching, you MUST natively use `python .lovable/ai-fix-scripts/14-fast-file-reader.py` (for fast reads/listing), `08-fast-file-scanner.py` (for repo-wide indexing), and `09-fast-cached-grep.py` (for parallel cached searches) rather than writing new scripts from scratch.
+- [ ] **Native File Manipulator & Fast Reader:** If you need to perform mass file renaming, sequence fixing, rapid file reading, or cached searching, you MUST natively use `python .lovable/ai-fix-scripts/17-fast-file-reader.py` (for fast reads/listing), `08-fast-file-scanner.py` (for repo-wide indexing), and `09-fast-cached-grep.py` (for parallel cached searches) rather than writing new scripts from scratch.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
 - [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
@@ -190,7 +190,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 

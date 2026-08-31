@@ -275,7 +275,7 @@ Before finalizing any code modification, you MUST manually verify the following:
 ## End of Tunnel Checklist
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
-- [ ] **Local CI Runner Clean:** `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] **Local CI Runner Clean:** `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 - [ ] **All Scripts & Workflows Verified:** All tests, builds, and query wrappers run without errors.
 - [ ] **RCA Documented:** Memory files written to `.lovable/cicd-issues/` and `.lovable/memory/issues/`.
 - [ ] **Antigravity Skill Updated:** Verified `.agents/skills/ci-cd-fix/skill.md` is present and synchronized with the latest rules.

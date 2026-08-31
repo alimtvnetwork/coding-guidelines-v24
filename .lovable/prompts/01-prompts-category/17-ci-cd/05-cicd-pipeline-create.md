@@ -21,7 +21,7 @@ N = total self-loop steps budget for end-to-end CI/CD creation and cross-platfor
 5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
+8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `spec/12-cicd-pipeline-workflows/` for domain-specific architectural specifications.
 10. [ ] /learn Ingest `spec/02-coding-guidelines/06-cicd-integration/` for domain-specific architectural specifications.
 11. [ ] /learn Ingest `spec/11-powershell-integration/` for domain-specific architectural specifications.
@@ -164,14 +164,14 @@ If custom checks or guideline validations are required:
 
 ### Step 3: Check for Existing Script & Force Override
 
-- Check if `.lovable/ai-fix-scripts/03-cicd-local-runner.py` already exists.
+- Check if `.lovable/ai-fix-scripts/06-cicd-local-runner.py` already exists.
 - **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script from scratch**, regardless of whether the file already exists on disk.
 - If it EXISTS and the user did **not** specify `force`: proceed to verification.
 - If it is MISSING or `force` was requested: generate the script following the worker pool architecture below.
 
 ### Step 4: Write `03-cicd-local-runner.py` (Worker Pool & Log Aggregation Architecture)
 
-Generate `.lovable/ai-fix-scripts/03-cicd-local-runner.py` following these architectural requirements:
+Generate `.lovable/ai-fix-scripts/06-cicd-local-runner.py` following these architectural requirements:
 
 1. **Round-Robin Worker Process / Thread Pool Architecture:** Runs tasks (tests, linters, builds) concurrently using `concurrent.futures.ThreadPoolExecutor(max_workers=3)` (2–3 concurrent tasks).
 2. **Enqueuing Announcement:** The script MUST announce upfront how many tasks it has enqueued across the worker pool (e.g. `[INFO] Enqueued 20 quality gates across 3 concurrent workers...`).
@@ -316,7 +316,7 @@ Execute the local runner and resolve every failure singly using self-looping tur
 
 ```text
 LOOP:
-    1. Execute: python .lovable/ai-fix-scripts/03-cicd-local-runner.py
+    1. Execute: python .lovable/ai-fix-scripts/06-cicd-local-runner.py
     2. IF exit code == 0:
            SUCCESS -> Proceed to Stage & Commit.
     3. IF exit code != 0:
@@ -366,9 +366,9 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 - [ ] **Specs Ingested:** Read `index.md` or `00-overview.md` and all subfiles across `spec/12-cicd-pipeline-workflows/` and `spec/02-coding-guidelines/06-cicd-integration/`.
 - [ ] **Cross-Platform Python-First:** All automation, build, test, and linter scripts written in Python 3.
-- [ ] **Local Runner Configured:** `.lovable/ai-fix-scripts/03-cicd-local-runner.py` created and tested with batching.
+- [ ] **Local Runner Configured:** `.lovable/ai-fix-scripts/06-cicd-local-runner.py` created and tested with batching.
 - [ ] **Workflows Generated:** `.github/workflows/ci.yml` and `.github/workflows/release.yml` created.
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed NO linters, static analysis tools, or test scripts were disabled, commented out, or bypassed with `|| true`.
-- [ ] **Local Runner 100% Green:** `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] **Local Runner 100% Green:** `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 - [ ] **Strict Lowercase Filenames:** All generated files use strictly lowercase naming.
 - [ ] **Stage, Commit & Push:** Grouped fixes into clean commit and pushed to remote branch.

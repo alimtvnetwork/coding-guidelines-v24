@@ -26,7 +26,7 @@ N = total self-loop steps budget that the agents will perform.
 8. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
 9. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 10. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-11. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
+11. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 12. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 13. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
@@ -103,7 +103,7 @@ A project that runs hundreds of autonomous agent turns quickly produces dozens o
 3. Build an AST / topic cluster mapping table in `.lovable/plans/pending/XX-completed-plans-consolidation.md`.
 4. Create the consolidated milestone documents.
 5. Execute `git rm` on the superseded micro-task files.
-6. Re-sequence all remaining files in `.lovable/plans/completed/` using `python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files`.
+6. Re-sequence all remaining files in `.lovable/plans/completed/` using `python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files`.
 7. Update `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md`.
 8. Verify all relative links with `python linter-scripts/check-relative-paths.py`.
 
@@ -172,7 +172,7 @@ Every consolidated file generated inside `.lovable/plans/completed/` MUST adhere
 2. **Remove Merged Sources:** Use `git rm` to cleanly delete the old micro-task files.
 3. **Re-Sequence Numeric Prefixes:** Run the automated re-sequencer:
    ```bash
-   python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files .lovable/plans/completed/
+   python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files .lovable/plans/completed/
    ```
    Ensure all files are strictly lowercase with monotonic `01-`, `02-`, `03-` prefixes.
 4. **Update Indexes:** Synchronize `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md` with the new file list.
@@ -206,7 +206,7 @@ You MUST verify and check off every item during Phase 2:
 
 - [ ] **Consolidated Files Created:** Generated unified milestone summaries matching the standard template in `.lovable/plans/completed/`.
 - [ ] **Merged Files Cleanly Removed:** Executed `git rm` on superseded micro-task files.
-- [ ] **Continuous Monotonic Re-Sequencing:** Executed `python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files .lovable/plans/completed/` to ensure contiguous `01-`, `02-`, `03-` numbering without gaps.
+- [ ] **Continuous Monotonic Re-Sequencing:** Executed `python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files .lovable/plans/completed/` to ensure contiguous `01-`, `02-`, `03-` numbering without gaps.
 - [ ] **Strict Lowercase Naming:** Verified all filenames in `.lovable/plans/completed/` use lowercase alphanumeric characters and hyphens.
 - [ ] **Index Documentation Synchronized:** Updated `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md` to reflect the updated file catalog.
 - [ ] **Universal File Hygiene:** Verified Unix LF line endings (`\n`), UTF-8 (no BOM), and single terminating newline at EOF across all created/modified files.
@@ -238,8 +238,8 @@ You MUST verify and check off every item during Phase 2:
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
-- [ ] **Automated File Sequencing & Normalization:** Use `python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files <dir>` to re-sequence completed plan files monotonically.
-- [ ] **Relative Path Normalization:** Use `python .lovable/ai-fix-scripts/04-relative-path-fixer.py .` to ensure all links in consolidated documents are strictly relative Git paths.
+- [ ] **Automated File Sequencing & Normalization:** Use `python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files <dir>` to re-sequence completed plan files monotonically.
+- [ ] **Relative Path Normalization:** Use `python .lovable/ai-fix-scripts/07-relative-path-fixer.py .` to ensure all links in consolidated documents are strictly relative Git paths.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
 - [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming. For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
@@ -260,7 +260,7 @@ You MUST verify and check off every item during Phase 2:
 - [ ] **Markdown Heading Spacing:** Exactly one blank line before and after headings (no leading blank line on line 1).
 - [ ] **Zero Double Blank Lines:** No `\n\n\n` anywhere in markdown.
 - [ ] `python linter-scripts/check-relative-paths.py` and `python linter-scripts/check-markdown-header-spacing.py` exited with code 0.
-- [ ] Local CI runner `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 
 ---
 

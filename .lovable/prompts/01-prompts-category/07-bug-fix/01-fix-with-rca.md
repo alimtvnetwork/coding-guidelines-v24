@@ -60,7 +60,7 @@ esponse.isFail).
 - [ ] **Magic Strings/Numbers:** Extracted all magic strings/numbers into named constants.
 - [ ] **Blank Lines:** One blank line before every
 eturn/	hrow. One blank line after closing }. Never two blank lines in a row.
-- [ ] **Native File Manipulator:** If I needed to perform mass file renaming, .md lowercase enforcement, sequence number re-ordering, or encoding fixes, I natively used python .lovable/ai-fix-scripts/01-file-manipulator.py <command>.
+- [ ] **Native File Manipulator:** If I needed to perform mass file renaming, .md lowercase enforcement, sequence number re-ordering, or encoding fixes, I natively used python .lovable/ai-fix-scripts/03-file-manipulator.py <command>.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Verification:** I ran local tests and builds to ensure the fix actually resolves the issue.
 

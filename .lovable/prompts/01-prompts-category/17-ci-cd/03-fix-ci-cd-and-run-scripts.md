@@ -6,13 +6,13 @@ Trigger Keywords & Aliases: `fix with RCA`, `FRCA : Fix with RCA`, `fix`, `fix, 
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
-- **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script `.lovable/ai-fix-scripts/03-cicd-local-runner.py` from scratch**, regardless of whether the file already exists on disk.
+- **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script `.lovable/ai-fix-scripts/06-cicd-local-runner.py` from scratch**, regardless of whether the file already exists on disk.
 
 ```text
 N = 200
 ```
 
-/goal Perform a Root Cause Analysis (RCA) on all failing run scripts and CI/CD workflows, update `.lovable/ai-fix-scripts/03-cicd-local-runner.py` with any newly added pipeline steps from screenshots or workflow files, zero in on each error singly using self-looping, persist the RCA into `.lovable/cicd-issues/` and `.lovable/strictly-avoid.md`, implement universal query wrappers with explicit success/failure boolean results and automated error logging, verify clean builds, commit logically, and push to git.
+/goal Perform a Root Cause Analysis (RCA) on all failing run scripts and CI/CD workflows, update `.lovable/ai-fix-scripts/06-cicd-local-runner.py` with any newly added pipeline steps from screenshots or workflow files, zero in on each error singly using self-looping, persist the RCA into `.lovable/cicd-issues/` and `.lovable/strictly-avoid.md`, implement universal query wrappers with explicit success/failure boolean results and automated error logging, verify clean builds, commit logically, and push to git.
 
 /learn Ingest recent Root Cause Analysis (RCA) records from `.lovable/cicd-issues/`, `.lovable/issues/`, `spec/02-coding-guidelines/02-canonical-size-tier.md`, `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`, `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md`, and `spec/03-error-manage/` so previous mistakes and anti-patterns are never repeated.
 
@@ -42,7 +42,7 @@ N = 200
 > [!IMPORTANT]
 > **If the user provides any image or screenshot showing a CI/CD pipeline name, failing workflow, or error log:**
 >
-> 1. **FIRST ACTION — Update Python Runner:** Locate the pipeline/job in `.github/workflows/*.yml` (or repo CI configs) to find whatever new jobs, steps, or linters were added, and **immediately update `.lovable/ai-fix-scripts/03-cicd-local-runner.py`** to include them in the `JOBS` dictionary.
+> 1. **FIRST ACTION — Update Python Runner:** Locate the pipeline/job in `.github/workflows/*.yml` (or repo CI configs) to find whatever new jobs, steps, or linters were added, and **immediately update `.lovable/ai-fix-scripts/06-cicd-local-runner.py`** to include them in the `JOBS` dictionary.
 > 2. **SECOND ACTION — Singly-Done Self-Loop Execution:** Run the Python script iteratively, zeroing in on one failing error at a time using strictly bounded self-loop turns until all checks exit with code 0 (`exit 0`).
 
 ### Bounded Single-Step Self-Loop Sequence (Singly Done — No Overloaded Steps)
@@ -54,12 +54,12 @@ Every step must be **singly done** using bounded self-looping turns:
   2. Scan `.github/workflows/*.yml` to identify the corresponding shell commands and dependencies.
 
 - **Self-Loop Step 2 (FIRST ACTION: Update Python Runner Script):**
-  1. Open `.lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+  1. Open `.lovable/ai-fix-scripts/06-cicd-local-runner.py`.
   2. If new jobs/steps are found in workflows, strip Docker wrappers and register the new commands in the `JOBS` dictionary.
   3. Save the runner script and verify syntax.
 
 - **Self-Loop Step 3 (Execute Runner & Baseline Failures):**
-  1. Run `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+  1. Run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
   2. If exit code = 0, proceed to End of Tunnel. If exit code != 0, zero in on the first specific failure.
 
 - **Self-Loop Step 4 (RCA & Zero In on Error):**
@@ -68,10 +68,10 @@ Every step must be **singly done** using bounded self-looping turns:
 
 - **Self-Loop Step 5 (Surgical Code Fix):**
   1. Open the specific file and line, apply minimal surgical fix.
-  2. Run `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <modified-files>`.
+  2. Run `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <modified-files>`.
 
 - **Self-Loop Step 6 (Re-Verify & Loop):**
-  1. Re-run `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+  1. Re-run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
   2. If resolved and more errors remain, self-loop to Step 4 to zero in on the next error until exit code = 0.
 
 ---
@@ -176,7 +176,7 @@ Before finalizing any code modification, you MUST manually verify the following:
 ## End of Tunnel Checklist
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
-- [ ] **Local CI Runner Clean:** `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] **Local CI Runner Clean:** `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 - [ ] **All Scripts & Workflows Verified:** All tests, builds, and query wrappers run without errors.
 - [ ] **RCA Documented:** Memory files written to `.lovable/cicd-issues/` and `.lovable/memory/issues/`.
 - [ ] **Antigravity Skill Updated:** Verified `.agents/skills/ci-cd-fix/skill.md` is present and synchronized with the latest rules.

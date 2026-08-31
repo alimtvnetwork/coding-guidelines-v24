@@ -184,9 +184,9 @@ AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildI
 
 | Task | Recommended AI Command | Speed |
 |---|---|:---:|
-| **List Folder Files** | `python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <dir>` | **<1ms** |
-| **Fast Safe File Read** | `python .lovable/ai-fix-scripts/14-fast-file-reader.py --read-file <path>` | **<1ms** |
-| **Search File Paths** | `python .lovable/ai-fix-scripts/14-fast-file-reader.py --search-pattern "<term>"` | **<2ms** |
-| **Full Repo File Index** | `python .lovable/ai-fix-scripts/08-fast-file-scanner.py --lang ts,go --path spec/` | **~14ms** |
-| **Parallel Content Grep** | `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>"` | **~12ms** |
-| **File Manipulation CLI** | `python .lovable/ai-fix-scripts/01-file-manipulator.py <cmd> <dir>` | **~15ms** |
+| **List Folder Files** | `python .lovable/ai-fix-scripts/17-fast-file-reader.py --list-folder <dir>` | **<1ms** |
+| **Fast Safe File Read** | `python .lovable/ai-fix-scripts/17-fast-file-reader.py --read-file <path>` | **<1ms** |
+| **Search File Paths** | `python .lovable/ai-fix-scripts/17-fast-file-reader.py --search-pattern "<term>"` | **<2ms** |
+| **Full Repo File Index** | `python .lovable/ai-fix-scripts/11-fast-file-scanner.py --lang ts,go --path spec/` | **~14ms** |
+| **Parallel Content Grep** | `python .lovable/ai-fix-scripts/12-fast-cached-grep.py --pattern "<text>"` | **~12ms** |
+| **File Manipulation CLI** | `python .lovable/ai-fix-scripts/03-file-manipulator.py <cmd> <dir>` | **~15ms** |

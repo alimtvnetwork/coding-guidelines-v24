@@ -8,7 +8,7 @@
 - [ ] `/goal` Read and understand all numbered specifications under `11-powershell-integration/`.
 - [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
-- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+- [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
 
 
 > **Spec Version:** 2.25.0  

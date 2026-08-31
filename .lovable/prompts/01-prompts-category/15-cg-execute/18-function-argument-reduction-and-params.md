@@ -24,7 +24,7 @@ N = total self-loop steps budget that the agents will perform.
 7. [ ] /goal Phase 2 (Step C): Eliminate all bare "void" functions in Go domain/service logic by mandating `*apperror.AppError` returns for side-effect operations and `Result[T]` for data operations.
 8. [ ] /goal Phase 2 (Step D): Convert all external/framework standard `error` returns to `*apperror.AppError` context wrappers (`apperror.WrapSimple(err, caller)`).
 9. [ ] /goal Phase 2 (Step E): Execute local linters (`python linter-scripts/check-function-lengths.py`, `check-newline-styling.py`) to verify 0 remaining violations.
-10. [ ] /goal Phase 2 (Step F): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
+10. [ ] /goal Phase 2 (Step F): Execute local CI quality gates via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 11. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 12. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 13. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
@@ -389,7 +389,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
 ---
 
@@ -415,7 +415,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
-- [ ] **Automated Naming & Style Fixers:** Use `python .lovable/ai-fix-scripts/05-naming-autofixer.py` and `02-guideline-autofixer.py` to audit boolean prefixes and newlines.
+- [ ] **Automated Naming & Style Fixers:** Use `python .lovable/ai-fix-scripts/08-naming-autofixer.py` and `02-guideline-autofixer.py` to audit boolean prefixes and newlines.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
 - [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming. For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
@@ -444,7 +444,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Zero Nested `if`:** All conditionals flattened to depth 0 using guard clauses and early returns.
 - [ ] **Function Sizing:** All functions <= 8 lines preferred (hard cap 15 lines).
 - [ ] `python linter-scripts/check-newline-styling.py` and `python linter-scripts/check-function-lengths.py` exited with code 0.
-- [ ] Local CI runner `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 
 ---
 
@@ -472,7 +472,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 1. **Linter Scripts:** `linter-scripts/check-function-lengths.py`, `linter-scripts/check-mws-error-codes.py`, `linter-scripts/check-newline-styling.py`
 2. **Local Run Command:** `python linter-scripts/check-function-lengths.py`
-3. **Autofixer Command:** `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <file>`
+3. **Autofixer Command:** `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <file>`
 4. **CI/CD Integration (`.github/workflows/ci.yml`):**
    ```yaml
    - name: Validate Function Arguments & AppError Envelopes
@@ -481,7 +481,7 @@ To guarantee full execution without stopping after planning mode, the master orc
        python linter-scripts/check-mws-error-codes.py
        python linter-scripts/check-newline-styling.py
    ```
-5. **Runner Registration (`.lovable/ai-fix-scripts/03-cicd-local-runner.py`):**
+5. **Runner Registration (`.lovable/ai-fix-scripts/06-cicd-local-runner.py`):**
    ```python
    JOBS = {
        "Function Signatures & Params Check": [sys.executable, "linter-scripts/check-function-lengths.py"],

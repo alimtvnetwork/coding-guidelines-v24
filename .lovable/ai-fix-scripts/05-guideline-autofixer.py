@@ -12,8 +12,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
-    newline_mod = import_module("02-newline-fixer")
-    naming_mod = import_module("05-naming-autofixer")
+    newline_mod = import_module("04-newline-fixer")
+    naming_mod = import_module("08-naming-autofixer")
     run_newline_auditor = newline_mod.run_newline_auditor
     run_naming_auditor = naming_mod.run_naming_auditor
 except Exception as e:

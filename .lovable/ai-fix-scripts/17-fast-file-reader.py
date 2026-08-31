@@ -5,9 +5,9 @@ Provides AI agents with sub-millisecond file listing, reading, and searching usi
 Multi-folder capable, customizable extensions, and thread-safe lazy regex engine.
 
 Usage:
-  python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <path> [--ext .md,.ts]
-  python .lovable/ai-fix-scripts/14-fast-file-reader.py --read-file <path>
-  python .lovable/ai-fix-scripts/14-fast-file-reader.py --search-pattern <text> [--path <dir>] [--ext .md,.ts]
+  python .lovable/ai-fix-scripts/17-fast-file-reader.py --list-folder <path> [--ext .md,.ts]
+  python .lovable/ai-fix-scripts/17-fast-file-reader.py --read-file <path>
+  python .lovable/ai-fix-scripts/17-fast-file-reader.py --search-pattern <text> [--path <dir>] [--ext .md,.ts]
 """
 
 import argparse
@@ -19,7 +19,7 @@ import time
 sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
-    engine = import_module("00-shared-engine")
+    engine = import_module("02-shared-engine")
     load_repo_cache = engine.load_repo_cache
     read_file_safe = engine.read_file_safe
     normalize_rel_path = engine.normalize_rel_path

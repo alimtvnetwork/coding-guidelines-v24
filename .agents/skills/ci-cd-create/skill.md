@@ -60,7 +60,7 @@ PHASE_2_STEPS = N / 2  (Steps 151 .. 300: Workflow Generation, Python Linter Ver
 ## End of Tunnel Checklist
 
 - [ ] All CI/CD specs (`spec/12-cicd-pipeline-workflows/`, `spec/02-coding-guidelines/06-cicd-integration/`) read and followed.
-- [ ] Python cross-platform runner `.lovable/ai-fix-scripts/03-cicd-local-runner.py` created and verified.
+- [ ] Python cross-platform runner `.lovable/ai-fix-scripts/06-cicd-local-runner.py` created and verified.
 - [ ] All linters in `linter-scripts/` verified and passing without bypass.
 - [ ] GitHub Actions workflows created in `.github/workflows/`.
 - [ ] Local runner exited with code 0 on all jobs.

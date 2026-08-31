@@ -52,7 +52,7 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 ## Checklist (execute phase)
 
-0. Automated Pre-Pass: Run `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <target-dir>` to automatically clean up return new lines (R13-R16) and remove explicit `== true` checks.
+0. Automated Pre-Pass: Run `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <target-dir>` to automatically clean up return new lines (R13-R16) and remove explicit `== true` checks.
 1. Read pending tasks from the `.lovable/plans/subtasks/01-coding-guideline-fixes/` folder.
 2. For each task:
    - Locate the affected source file.

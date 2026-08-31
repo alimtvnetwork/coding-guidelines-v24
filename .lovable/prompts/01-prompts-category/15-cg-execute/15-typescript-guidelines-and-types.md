@@ -23,7 +23,7 @@ N = total self-loop steps budget that the agents will perform.
 5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
+8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
@@ -240,7 +240,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
 ## Strict In-Repository Execution & `.lovable/` Bounding Mandate
 
@@ -264,8 +264,8 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
-- [ ] **Automated Naming & Style Fixers:** Use `python .lovable/ai-fix-scripts/05-naming-autofixer.py` and `02-guideline-autofixer.py` to audit boolean prefixes and newlines.
-- [ ] **Relative Path Normalization:** Use `python .lovable/ai-fix-scripts/04-relative-path-fixer.py .` to ensure all links in documentation and specs are strictly relative Git paths.
+- [ ] **Automated Naming & Style Fixers:** Use `python .lovable/ai-fix-scripts/08-naming-autofixer.py` and `02-guideline-autofixer.py` to audit boolean prefixes and newlines.
+- [ ] **Relative Path Normalization:** Use `python .lovable/ai-fix-scripts/07-relative-path-fixer.py .` to ensure all links in documentation and specs are strictly relative Git paths.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
 - [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming. For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
@@ -291,7 +291,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Zero Nested `if`:** All conditionals flattened to depth 0 using guard clauses and early returns.
 - [ ] **Function Sizing:** All functions <= 8 lines preferred (hard cap 15 lines).
 - [ ] `tsc --noEmit` and `npx eslint .` exited with code 0.
-- [ ] Local CI runner `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` exited with code 0.
+- [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 
 ---
 
@@ -320,4 +320,4 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 1. **Type Checker:** `npx tsc --noEmit`
 2. **ESLint Command:** `npx eslint "src/**/*.{ts,tsx}"`
-3. **Local CI Runner:** `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`
+3. **Local CI Runner:** `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`

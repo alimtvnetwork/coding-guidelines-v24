@@ -48,8 +48,8 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | **Python Standards** | `spec/02-coding-guidelines/06-python/` | Strict type hints, `@dataclass`, `pydantic` |
 | **C# / Java Standards** | `spec/02-coding-guidelines/07-csharp/` | `I` prefix interfaces, PascalCase properties |
 | **Error Management** | `spec/03-error-manage/` | `AppError` wrapping, universal response envelopes |
-| **Auto-Fixer Script** | `.lovable/ai-fix-scripts/02-guideline-autofixer.py` | Universal multi-language auto-fixer for blank lines & booleans |
-| **File Manipulator** | `.lovable/ai-fix-scripts/01-file-manipulator.py` | Mass renaming, sequence sorting, encoding fixes |
+| **Auto-Fixer Script** | `.lovable/ai-fix-scripts/05-guideline-autofixer.py` | Universal multi-language auto-fixer for blank lines & booleans |
+| **File Manipulator** | `.lovable/ai-fix-scripts/03-file-manipulator.py` | Mass renaming, sequence sorting, encoding fixes |
 | **Go Linter** | `linter-scripts/validate-guidelines.go` | Automated AST/regex validator (CODE-RED-001 through CODE-RED-027) |
 | **Python Linter** | `linter-scripts/validate-guidelines.py` | Python validator mirror for guideline enforcement |
 | **Global Rules** | `agents.md` | Always-on workspace constraints for Antigravity agents |
@@ -85,7 +85,7 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 
 ## 2. The Return New Line & Whitespace Concept (Mandatory)
 
-The return new line and whitespace standard governs readability and clean code structure. This is mechanically checked by Rule R13–R20 and auto-fixed by `.lovable/ai-fix-scripts/02-guideline-autofixer.py`.
+The return new line and whitespace standard governs readability and clean code structure. This is mechanically checked by Rule R13–R20 and auto-fixed by `.lovable/ai-fix-scripts/05-guideline-autofixer.py`.
 
 ### Rule R13: Blank Line Before `return` / `throw` / `raise`
 
@@ -252,7 +252,7 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 When tasked with auditing, reviewing, or fixing coding guidelines across a codebase, follow these sequential steps:
 
 1. **Step 1: Automated Pre-Pass:**
-   - Run `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <target-dir>` to automatically correct blank lines (R13-R16), remove `== true` checks, and trim trailing whitespace.
+   - Run `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <target-dir>` to automatically correct blank lines (R13-R16), remove `== true` checks, and trim trailing whitespace.
 2. **Step 2: Run Linters for Violations:**
    - Execute `go run linter-scripts/validate-guidelines.go -path <target-dir>` or `python linter-scripts/validate-guidelines.py --path <target-dir>` to produce the findings report.
 3. **Step 3: Sequential Manual Fixes (Bounded Micro-Tasks):**
@@ -298,7 +298,7 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **No Magic Constants (R8):** All magic strings/numbers are extracted to named constants.
 - [ ] **Strict Lowercase Filenames:** All generated or modified files use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, and citations in plans, subtasks, memory logs, and comments are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] **Tooling Execution:** I ran `.lovable/ai-fix-scripts/02-guideline-autofixer.py` and verified clean output with `linter-scripts/validate-guidelines.go`.
+- [ ] **Tooling Execution:** I ran `.lovable/ai-fix-scripts/05-guideline-autofixer.py` and verified clean output with `linter-scripts/validate-guidelines.go`.
 - [ ] **File Change Summary:** I provided a detailed summary in chat of what files changed, what changed inside them, and why.
 
 ---

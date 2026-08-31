@@ -21,7 +21,7 @@ N = total self-loop steps budget that the agents will perform.
 5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` with exit code 0 (`exit 0`).
+8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
@@ -126,13 +126,13 @@ Every prompt in this suite operates using a strict two-phase loop budget:
 2. **Violation Scan:** Perform a comprehensive scan across all active codebase files using grep and AST inspection to detect violations specific to the guideline section.
 3. **Master Spec Creation:** Write `.lovable/plans/pending/XX-<slug>-audit.md` capturing the full violation ledger, affected files, line numbers, and acceptance criteria.
 4. **Subtask Decomposition:** Break down the master plan into granular subtasks in `.lovable/plans/subtasks/XX-<slug>/01-task.md`, `02-task.md`, etc.
-5. **Linter Hook Verification:** Check if the automated linter script exists in `linter-scripts/`. If missing, generate the linter script and connect it to `.lovable/ai-fix-scripts/03-cicd-local-runner.py` and CI/CD pipelines.
+5. **Linter Hook Verification:** Check if the automated linter script exists in `linter-scripts/`. If missing, generate the linter script and connect it to `.lovable/ai-fix-scripts/06-cicd-local-runner.py` and CI/CD pipelines.
 
 ### Phase 2: Autonomous Code Refactoring & Verification (Steps N/2+1 to N)
 
 1. **Subtask Execution:** Sequentially execute each subtask by actively opening files and rewriting code to resolve violations cleanly.
-2. **Linter & Autofixer Verification:** Run `python .lovable/ai-fix-scripts/02-guideline-autofixer.py <modified-files>` and the section's dedicated linter script in `linter-scripts/`.
-3. **Local CI Quality Gate:** Execute `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` to ensure all build, typecheck, lint, and test suites pass 100% green (`exit 0`).
+2. **Linter & Autofixer Verification:** Run `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <modified-files>` and the section's dedicated linter script in `linter-scripts/`.
+3. **Local CI Quality Gate:** Execute `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` to ensure all build, typecheck, lint, and test suites pass 100% green (`exit 0`).
 4. **Plan Lifecycle Completion:** Move `.lovable/plans/pending/XX-<slug>-audit.md` to `.lovable/plans/completed/XX-<slug>-audit.md` and update `.lovable/plans/01-index.md`.
 5. **Stage & Commit:** Group changes into clean commits (e.g. `refactor(guidelines): enforce <section> rules`).
 
@@ -195,4 +195,4 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python .lovable/ai-fix-scripts/03-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.

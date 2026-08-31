@@ -44,7 +44,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 15. Anti-hallucination and clarifying questions: If any file, spec, or user intent is ambiguous or missing, the AI MUST NOT guess or hallucinate. It must ask clarifying questions or record an open ambiguity in `01-new-ambiguity/01-<slug>.md`.
 
-16. Fast Cached Exploration: When reading repository files or discovering directories for context ingestion, use `python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <dir>` or `08-fast-file-scanner.py` (<15ms via `tmp/cache/`) rather than slow raw recursive PowerShell commands.
+16. Fast Cached Exploration: When reading repository files or discovering directories for context ingestion, use `python .lovable/ai-fix-scripts/17-fast-file-reader.py --list-folder <dir>` or `08-fast-file-scanner.py` (<15ms via `tmp/cache/`) rather than slow raw recursive PowerShell commands.
 
 ## Working Stance
 

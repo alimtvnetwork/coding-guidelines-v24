@@ -8,7 +8,7 @@
 1. [ ] `/goal` Apply baseline diff linting to block new violations while grandfathering existing debt.
 2. [ ] `/learn` Read `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/05-baseline-diff-lint-gate.md` for algorithm details.
 3. [ ] `/goal` Ensure all guard scripts emit standard `::error file=...,line=...::` GitHub annotations.
-4. [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+4. [ ] `/learn` Run all local verification linters via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
 
 ---
 

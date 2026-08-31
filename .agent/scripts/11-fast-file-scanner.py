@@ -4,14 +4,14 @@ Fast Repository File Scanner & Caching Engine.
 Ultra-fast file scanner with multi-language filters, substring search, and persistent cache indexing in tmp/cache/.
 
 Usage:
-  python .lovable/ai-fix-scripts/08-fast-file-scanner.py [options]
+  python .lovable/ai-fix-scripts/11-fast-file-scanner.py [options]
 
 Examples:
-  python .lovable/ai-fix-scripts/08-fast-file-scanner.py
-  python .lovable/ai-fix-scripts/08-fast-file-scanner.py --lang go,ts,tsx
-  python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path spec/ --ext .md
-  python .lovable/ai-fix-scripts/08-fast-file-scanner.py --search install --stats
-  python .lovable/ai-fix-scripts/08-fast-file-scanner.py --query-cache "component"
+  python .lovable/ai-fix-scripts/11-fast-file-scanner.py
+  python .lovable/ai-fix-scripts/11-fast-file-scanner.py --lang go,ts,tsx
+  python .lovable/ai-fix-scripts/11-fast-file-scanner.py --path spec/ --ext .md
+  python .lovable/ai-fix-scripts/11-fast-file-scanner.py --search install --stats
+  python .lovable/ai-fix-scripts/11-fast-file-scanner.py --query-cache "component"
 """
 
 import argparse
@@ -26,7 +26,7 @@ import time
 sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
-    engine = import_module("00-shared-engine")
+    engine = import_module("02-shared-engine")
     DEFAULT_IGNORE_DIRS = engine.EXCLUDE_DIRS
     BINARY_EXTENSIONS = engine.BINARY_EXTENSIONS
     LANG_EXT_MAP = engine.LANG_EXT_MAP

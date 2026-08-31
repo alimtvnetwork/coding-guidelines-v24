@@ -5,9 +5,9 @@ Handles mass file renaming (lowercasing), sequence fixing, and encoding normaliz
 Zero-dependency, fast, git-aware, with multi-folder scoping and customizable extensions.
 
 Usage:
-  python .lovable/ai-fix-scripts/01-file-manipulator.py lowercase <path> [--except <patterns>]
-  python .lovable/ai-fix-scripts/01-file-manipulator.py fix-seq-files <path> [--order-by-time|--order-by-az] [--pin <mapping>]
-  python .lovable/ai-fix-scripts/01-file-manipulator.py fix-encoding <path> [--ext <extensions>]
+  python .lovable/ai-fix-scripts/03-file-manipulator.py lowercase <path> [--except <patterns>]
+  python .lovable/ai-fix-scripts/03-file-manipulator.py fix-seq-files <path> [--order-by-time|--order-by-az] [--pin <mapping>]
+  python .lovable/ai-fix-scripts/03-file-manipulator.py fix-encoding <path> [--ext <extensions>]
 """
 
 import argparse
@@ -25,7 +25,7 @@ if hasattr(sys.stdout, "reconfigure"):
 sys.path.insert(0, str(Path(__file__).parent))
 try:
     from importlib import import_module
-    engine = import_module("00-shared-engine")
+    engine = import_module("02-shared-engine")
     process_repository_files = engine.process_repository_files
     read_file_safe = engine.read_file_safe
     write_file_lf = engine.write_file_lf
