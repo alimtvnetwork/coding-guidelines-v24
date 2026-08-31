@@ -33,7 +33,7 @@
   <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="spec/health-dashboard.md"><img alt="Health Score (effective, waived per folder-ref allowlist; raw=80/100 in spec/health-dashboard.md)" src="https://img.shields.io/badge/health-100%2F100%20(A+)-22C55E?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
 </p>
 
-<p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a> · <a href="docs/author.md">Full bio</a></p>
+<p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a></p>
 
 <p align="center">
   <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.35.3<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-31<!-- /STAMP:UPDATED -->
@@ -150,7 +150,7 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24
 
 <p align="center">
   <a href="https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest">
-    <img src="docs/slides-preview.svg" alt="Animated preview of the Code-Red Review slide deck — cycling through four slides" width="720"/>
+    <img src="public/images/slides-preview.svg" alt="Animated preview of the Code-Red Review slide deck — cycling through four slides" width="720"/>
   </a>
 </p>
 
@@ -321,7 +321,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/s
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.sh | bash
 ```
 
-Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full troubleshooting matrix: [`docs/slides-installer.md`](docs/slides-installer.md).
+Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full specification: [`spec/15-distribution-and-runner/01-index.md`](spec/15-distribution-and-runner/01-index.md).
 
 <details>
 <summary>⚠️ <strong>Troubleshooting:</strong> banner shows an older version, or "Install verification FAILED"</summary>
@@ -423,7 +423,7 @@ Installs: `spec/17-consolidated-guidelines`.
 
 </details>
 
-> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior, flags, and full troubleshooting matrix see **[docs/slides-installer.md](docs/slides-installer.md)**.
+> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior and flags, see **[spec/15-distribution-and-runner/01-index.md](spec/15-distribution-and-runner/01-index.md)**.
 
 <h2 align="center">🧪 CLI Linter Pack (release-asset installer)</h2>
 
@@ -655,21 +655,8 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
   <a href="#-author">Author</a>
 </p>
 
-<p align="center"><strong>Docs Pages</strong>, full index: <a href="docs/readme.md"><code>docs/readme.md</code></a></p>
-
 <p align="center">
-  <strong>Authoritative Read-List:</strong> <a href=".lovable/what-to-read.md"><code>.lovable/what-to-read.md</code></a> · <strong>Release Map:</strong> <a href=".lovable/memory/release-architecture-map.md"><code>.lovable/memory/release-architecture-map.md</code></a>
-</p>
-
-<p align="center">
-  <a href="docs/principles.md">Principles</a> ·
-  <a href=".lovable/folder-structure.md">Folder Structure</a> ·
-  <a href="docs/author.md">Author</a> ·
-  <a href="docs/installer-fix-repo-flags.md">Installer fix-repo Flags</a> ·
-  <a href="docs/slides-installer.md">Slides Installer</a> ·
-  <a href="docs/spec-author-dx.md">Spec Author DX</a> ·
-  <a href="docs/guidelines-audit.md">Guidelines Audit</a> ·
-  <a href="docs/github-repo-metadata.md">GitHub Repo Metadata</a>
+  <strong>Authoritative Read-List:</strong> <a href=".lovable/06-what-to-read.md"><code>.lovable/06-what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".lovable/folder-structure.md"><code>.lovable/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="spec/01-index.md"><code>spec/01-index.md</code></a>
 </p>
 
 ---
@@ -678,7 +665,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center">
   Nine non-negotiables. Every spec, every linter, every PR enforces them.<br/>
-  Full reference: <a href="docs/principles.md"><code>docs/principles.md</code></a>.
+  Full reference: <a href="spec/02-coding-guidelines/01-cross-language/01-index.md"><code>spec/02-coding-guidelines/01-cross-language/01-index.md</code></a>.
 </p>
 
 | # | Principle | One-line rule |
@@ -974,7 +961,7 @@ function processUser(user: User | null): Result<void> {
 }
 ```
 
-Full case study with five more violations: [`docs/principles.md`](docs/principles.md#real-world-violations).
+Full case study with five more violations: [`spec/02-coding-guidelines/01-cross-language/01-index.md`](spec/02-coding-guidelines/01-cross-language/01-index.md).
 
 ---
 
@@ -1415,7 +1402,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 > It is published openly **not** as a general-purpose framework recommendation, but because the same rules that keep Alim's team shipping reliably can help **any team or solo developer** who wants the same discipline. If something here saves you a production incident or a debugging night, that's the bonus — the primary audience is still the team it was written for.
 
 <p align="center">
-  <a href="docs/principles.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
+  <a href="spec/02-coding-guidelines/01-cross-language/01-index.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
   <a href="spec/01-spec-authoring-guide/01-index.md"><img alt="Spec author, read guide" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20authoring%20guide-8B5CF6?style=for-the-badge"/></a>
   <a href="spec/18-wp-plugin-how-to/01-index.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
   <a href="#-for-ai-agents"><img alt="AI agent, canonical entry points" src="https://img.shields.io/badge/%F0%9F%A4%96%20AI%20Agent-Canonical%20entry%20points-FF6E3C?style=for-the-badge"/></a>
@@ -1536,20 +1523,20 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 
 ---
 
-## 📚 Documentation
+## 📚 Documentation & Specifications
 
-Deep-dives live in `docs/` (README stays under 400 lines). Full index: [`docs/readme.md`](docs/readme.md).
+The complete specification hierarchy, AI metadata, and institutional memory live in `spec/` and `.lovable/`. Full index: [`spec/01-index.md`](spec/01-index.md) and [`.lovable/01-index.md`](.lovable/01-index.md).
 
-| Doc | What's inside |
+| Resource | Purpose / Contents |
 |---|---|
-| [`docs/principles.md`](docs/principles.md) | 9 core principles · 10 CODE RED rules · cross-language rule index · AI optimization suite |
-| [`.lovable/folder-structure.md`](.lovable/folder-structure.md) | Canonical folder structure · sequence ID system · AI metadata architecture |
-| [`docs/author.md`](docs/author.md) | Author bio · Riseup Asia LLC · AI assessments · FAQ · design philosophy |
-| [`docs/installer-fix-repo-flags.md`](docs/installer-fix-repo-flags.md) | `--max-fix-repo-logs` · `INSTALL_MAX_FIX_REPO_LOGS` · `--rollback-on-fix-repo-failure` · `--full-rollback` · interaction matrix |
-| [`docs/slides-installer.md`](docs/slides-installer.md) | Slides app installer flags · packaging pipeline · offline behavior |
-| [`docs/spec-author-dx.md`](docs/spec-author-dx.md) | Spec author developer experience · tooling · workflow ergonomics |
-| [`docs/guidelines-audit.md`](docs/guidelines-audit.md) | Guidelines audit findings · drift detection · remediation log |
-| [`docs/github-repo-metadata.md`](docs/github-repo-metadata.md) | Repo description · topics · About-section sourcing rules |
+| [`spec/01-spec-authoring-guide/`](spec/01-spec-authoring-guide/01-index.md) | Spec authoring standards · templates · validation rules · metrics |
+| [`spec/02-coding-guidelines/`](spec/02-coding-guidelines/01-cross-language/01-index.md) | 9 core principles · 10 CODE RED rules · cross-language coding rules |
+| [`spec/03-error-manage/`](spec/03-error-manage/01-index.md) | Universal error handling · `apperror` package · response envelopes |
+| [`spec/04-database-conventions/`](spec/04-database-conventions/01-index.md) | Database schemas · PascalCase conventions · SQLite & WAL patterns |
+| [`spec/14-update/`](spec/14-update/01-index.md) | Self-update architecture · installer behaviors · version discovery |
+| [`spec/15-distribution-and-runner/`](spec/15-distribution-and-runner/01-index.md) | Cross-platform runners · distribution bundles · packaging pipeline |
+| [`.lovable/folder-structure.md`](.lovable/folder-structure.md) | Canonical repository folder structure · sequence IDs · AI metadata |
+| [`.lovable/01-index.md`](.lovable/01-index.md) | Master AI context router · operational guidelines · reading sequence |
 
 Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/01-index.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
@@ -1905,7 +1892,7 @@ Tracks every `.mmd` source change and the parser rule that motivated it. Use thi
 4. **Makes AI-assisted development actually work**, explicit ❌/✅ patterns parse more reliably than prose; the condensed reference fits in a single context window.
 5. **Enforces consistency across polyglot codebases**, define once, adapt per language; prevents the drift that happens when each language team invents its own conventions.
 
-Full strengths/weaknesses table, FAQ, and design philosophy: [`docs/author.md`](docs/author.md).
+Full design philosophy and author details: [alimkarim.com](https://alimkarim.com/) and [riseup-asia.com](https://riseup-asia.com/).
 
 ---
 
@@ -1916,9 +1903,9 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 > **Reference reviews:**
 >
 > - [Gemini neutral review of this repository](https://gemini.google.com/share/775a9b85bbb8) , a third-party AI assessment of the coding-guidelines philosophy and its impact on developers and AI-assisted coding.
-> - [ChatGPT neutral review of this repository](docs/chatgpt-review.md) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience (includes the original prompt + full response). Original ChatGPT share link: [chatgpt.com/s/t_69f4edc897d481918482893df897c9da](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da). Repository under review: [github.com/alimtvnetwork/coding-guidelines-v24](https://github.com/alimtvnetwork/coding-guidelines-v24).
+> - [ChatGPT neutral review of this repository](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da) , covers repo quality, fitness for AI-assisted code writing, weaknesses, security/install posture, and a neutral assessment of the author's apparent experience.
 >
-> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Full review: [`docs/chatgpt-review.md`](docs/chatgpt-review.md) · Original share: [ChatGPT link](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da) · Repo: [coding-guidelines-v24](https://github.com/alimtvnetwork/coding-guidelines-v24).
+> **ChatGPT highlights:** *"genuinely useful for AI-assisted code writing"* · *"does not stop at advice"* (enforced via linters, SARIF, CI, bundles) · *"reads like a project made by someone with strong opinions formed from repeated debugging pain"* · ⚠️ adoption cost is real for small teams , start with the compact layer · ⚠️ `curl | bash` is mitigated by SHA-256 + pinned versions but enterprise teams should still review scripts. Share: [ChatGPT link](https://chatgpt.com/s/t_69f4edc897d481918482893df897c9da).
 
 <p align="center">
   <a href="https://gemini.google.com/share/775a9b85bbb8">
@@ -1971,7 +1958,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 **Fair observation, and intentional:**
 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
-- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`docs/principles.md`](docs/principles.md)** form a < 30-minute on-ramp.
+- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`spec/02-coding-guidelines/01-cross-language/01-index.md`](spec/02-coding-guidelines/01-cross-language/01-index.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
@@ -2065,7 +2052,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 >
 > **Off the keyboard:** <a href="https://alimkarim.com/" title="Software engineer who got into computers because of gaming.">Alim</a>'s programming career was sparked by **gaming**, the first thing that made computers feel alive. He's an active **Doom** player and long-time **Minecraft** builder, and recently has been keen on game development as a side pursuit. Catch him on YouTube at <a href="https://www.youtube.com/@alim.raw.gaming"><strong>Alim Raw Gaming</strong></a> (Doom) and <a href="https://www.youtube.com/@minecraft-alim6638"><strong>Minecraft-Alim</strong></a>.
 >
-> Connect: [Personal site](https://alimkarim.com/) · [LinkedIn](https://www.linkedin.com/in/alimkarim/) · [GitHub `aukgit`](https://github.com/aukgit) · [Profile](https://github.com/aukgit/alim.karim.profile) · [GitLab `aukgit.evatix`](https://gitlab.com/aukgit.evatix) · [GitLab `aukgitlab`](https://gitlab.com/aukgitlab) · [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) · [YouTube (Doom)](https://www.youtube.com/@alim.raw.gaming) · [YouTube (Minecraft)](https://www.youtube.com/@minecraft-alim6638) · [Full bio →](docs/author-bio.md)
+> Connect: [Personal site](https://alimkarim.com/) · [LinkedIn](https://www.linkedin.com/in/alimkarim/) · [GitHub `aukgit`](https://github.com/aukgit) · [Profile](https://github.com/aukgit/alim.karim.profile) · [GitLab `aukgit.evatix`](https://gitlab.com/aukgit.evatix) · [GitLab `aukgitlab`](https://gitlab.com/aukgitlab) · [Stack Overflow](https://stackoverflow.com/users/513511/md-alim-ul-karim) · [YouTube (Doom)](https://www.youtube.com/@alim.raw.gaming) · [YouTube (Minecraft)](https://www.youtube.com/@minecraft-alim6638)
 
 | | Md. Alim Ul Karim | Riseup Asia LLC |
 |---|---|---|
@@ -2077,8 +2064,6 @@ The result: when an AI agent operates inside a repo following these rules, the g
 </div>
 
 <p align="center"><a href="https://riseup-asia.com">Top Leading Software Company in WY (2026)</a></p>
-
-Full bio, design philosophy, and FAQ: [`docs/author.md`](docs/author.md).
 
 ---
 

@@ -37,8 +37,6 @@ const TRACKED_FILES = [
   "public/health-score.json",
   "src/data/specTree.json",
   "readme.md",
-  "docs/principles.md",
-  "docs/author.md",
 ];
 
 const ROOT_CHANGELOG = "changelog.md";

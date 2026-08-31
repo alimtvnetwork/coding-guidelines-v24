@@ -162,7 +162,7 @@ function main() {
   const stats = loadStats();
   const registry = buildRegistry(stats, loadHealth());
   logRegistry(registry);
-  const targets = ["readme.md", "docs/principles.md", "docs/author.md"];
+  const targets = ["readme.md"];
   const changed = targets.filter((t) => stampFile(t, stats, registry));
   console.log(`[sync-readme-stats] v${stats.version} files=${stats.files} folders=${stats.folders} lines=${stats.lines.toLocaleString()}`);
   console.log(`[sync-readme-stats] stamped: ${changed.length ? changed.join(", ") : "(none — markers absent or already current)"}`);

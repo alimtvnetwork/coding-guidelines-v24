@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "561f722b9af27c1b574f06166ba9538a99d7a6c3",
+  "LastCommitSha": "c022a3112901f33579259f941e6ad7a6eb16aaa8",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -61,8 +61,8 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "561f722b9af27c1b574f06166ba9538a99d7a6c3",
-    "shortSha": "561f722",
+    "sha": "c022a3112901f33579259f941e6ad7a6eb16aaa8",
+    "shortSha": "c022a31",
     "branch": "main"
   },
   "stats": {

@@ -251,7 +251,7 @@ CI_JOBS_MATRIX: dict[str, list[str]] = {
     "Codegen Determinism Check": [sys.executable, "linters-cicd/codegen/scripts/verify_codegen_determinism.py"],
     "Spec Verification Coverage": ["node", "scripts/spec-verification/generate-coverage-report.mjs", "--strict", "--out", "reports/spec-verification/coverage.md"],
     "Validate Version JSON": ["node", "scripts/validate-version-json.mjs"],
-    "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md", "docs/installer-fix-repo-flags.md"],
+    "Doc Links Check": ["node", "scripts/docs/check-doc-links.mjs", "readme.md"],
     "Check File Sizes Baseline": [sys.executable, "linter-scripts/check-file-sizes.py", "--check"],
     "Newline Styling MJS Check": ["node", "linter-scripts/check-newline-styling.mjs"],
     "Spec Folder References Check": [sys.executable, "linter-scripts/check-spec-folder-refs.py"],
