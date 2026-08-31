@@ -2,7 +2,7 @@
 
 Trigger Keywords & Aliases: `cg-functions`, `cg-signatures`, `cg-return-types`, `cg-execute functions`, `audit function naming`, `fix return types`, `enforce apperror`, `enforce result envelope`, `single return type audit`, `multi-line arguments`, `function call formatting`
 
-> **Prompt Version:** 2.1.0  
+> **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ```text

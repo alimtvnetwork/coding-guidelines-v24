@@ -75,13 +75,13 @@ Organize large CLI command catalogs into distinct visual tiers using bold intent
 
 ```text
   ━━ GET STARTED ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  
+
   Scanning Repositories:
     scan .                       Recursively index Git repositories
     list                         Display tracked repository inventory
-    
+
   ━━ WORK WITH REPOS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  
+
   Cloning & Worktrees:
     clone <url>                  Clone repository with auto-tagging
     clone-all                    Parallel batch clone of inventory
@@ -96,7 +96,7 @@ func printSuperCategory(title string, body func()) {
         ruleLength = 4
     }
     rule := strings.Repeat("━", ruleLength)
-    
+
     fmt.Println()
     fmt.Println("  " + ColorMagenta + "━━ " + ColorWhite + title + ColorReset + " " + ColorMagenta + rule + ColorReset)
     body()

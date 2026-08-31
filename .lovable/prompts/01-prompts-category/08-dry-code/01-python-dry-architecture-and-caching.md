@@ -1,10 +1,10 @@
 # Python Script DRY Architecture, Enums, Pluggable Caching & Fast AI Reading Specification
 
-> **Prompt Version:** 2.0.0  
-> **Target:** `.lovable/prompts/01-prompts-category/08-dry-code/01-python-dry-architecture-and-caching.md`  
+> **Prompt Version:** 2.1.0
+> **Target:** `.lovable/prompts/01-prompts-category/08-dry-code/01-python-dry-architecture-and-caching.md`
 > **Synchronization:** Meta-Repo & AI Scripting Ecosystem
 
-/goal Standardize the architectural design of all Python CI/CD, linting, and fix scripts using top-level Enums, small decomposed functions, DRY shared engines, pluggable `tmp/cache/` storage, cross-process atomic file locking, and two-phase incremental `mtime` caching.
+/goal Standardize the architectural design of all Python CI/CD, linting, and fix scripts using top-level Enums, small decomposed functions, DRY shared engines, pre-compiled regex objects, multi-folder scoping, customizable extensions, pluggable `tmp/cache/` storage, cross-process atomic file locking, and two-phase incremental `mtime` caching.
 
 ## 🎯 Architectural Philosophy
 
@@ -12,15 +12,18 @@ All AI-authored Python scripts in this repository (`.lovable/ai-fix-scripts/` an
 
 ---
 
-## 1. Top-Level Constants & Enums
+## 1. Top-Level Constants, Enums & Pre-compiled Regexes
 
 - **Root Definition:** All configuration parameters (`EXCLUDE_DIRS`, `CACHE_BASE_DIR`, `DEFAULT_MAX_FILE_KB`) must be declared as module-level constants at the top of the file.
 - **Enum `Type` Suffix:** All Enums MUST end with the `Type` suffix (e.g., `ScanModeType`, `ExitCodeType`, `SeverityType`).
 - **Implicit Boolean Checks:** Never compare booleans against explicit `True` (BAN: `if is_valid == True:` -> MANDATORY: `if is_valid:`).
+- **Pre-compiled Regex Objects:** Compile all regular expressions at module or function initialization time (`re.compile(...)`) to avoid repetitive compilation inside tight file/line loops and maximize scanning speed.
+- **Ignore Pruning:** Ensure `EXCLUDE_DIRS` covers `.gitmap`, `.git`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts` at all subtree depths.
 
 ```python
 from enum import Enum
 from pathlib import Path
+import re
 
 # --- Module-Level Constants ---
 CACHE_BASE_DIR = Path("tmp/cache")
@@ -28,7 +31,19 @@ CACHE_PATHS_DIR = CACHE_BASE_DIR / "paths"
 CACHE_LOCKS_DIR = CACHE_BASE_DIR / "locks"
 CACHE_FILES_DIR = CACHE_BASE_DIR / "files"
 DEFAULT_MAX_FILE_KB = 2048
-EXCLUDE_DIRS = {".git", "node_modules", "dist", "build", ".venv", ".gemini", "tmp", ".system_generated"}
+
+EXCLUDE_DIRS = {
+    ".git", ".gitmap", "gitmap", ".git-map",
+    "node_modules", "dist", "build", ".venv", "venv",
+    ".gemini", "tmp", ".system_generated", "vendor",
+    ".cache", ".next", "bin", "obj", "coverage",
+    "__pycache__", ".vs", ".idea", ".agent",
+    "release-artifacts", "release-assets",
+}
+
+# --- Pre-compiled Regular Expressions ---
+RE_CRLF = re.compile(r"\r\n")
+RE_WINDOWS_BACKSLASH = re.compile(r"\\")
 
 # --- Top-Level Enums ---
 class ScanModeType(str, Enum):
@@ -50,7 +65,15 @@ class ExitCodeType(int, Enum):
 
 ---
 
-## 2. Decomposed Pure Functions (< 25 Lines Each)
+## 2. Multi-Folder Scoping & Customizable Extensions
+
+- **Multi-Folder Capability:** All scripts MUST accept a target directory (`<path>` or `--path` / `--dir`) allowing them to run on the full repository, specific submodules, or individual feature folders.
+- **Customizable File Extensions:** Supported file extensions must be customizable via `--ext` or function parameters (`extensions=...`), with robust lowercasing and leading dot normalization.
+- **Nested Directory Pruning:** When using `os.walk`, prune `dirs[:]` dynamically so nested `.git`, `.gitmap`, and `node_modules` folders inside subprojects are skipped instantly.
+
+---
+
+## 3. Decomposed Pure Functions (< 25 Lines Each)
 
 - Monolithic scripts are strictly forbidden.
 - Scripts MUST be broken down into small, composable, single-responsibility functions.
@@ -58,7 +81,7 @@ class ExitCodeType(int, Enum):
 
 ---
 
-## 3. Pluggable `tmp/cache/` Structure & Cross-Process Locking
+## 4. Pluggable `tmp/cache/` Structure & Cross-Process Locking
 
 All cache data is organized in structured, pluggable subdirectories under `tmp/cache/`:
 
@@ -73,7 +96,7 @@ All cache data is organized in structured, pluggable subdirectories under `tmp/c
 
 ---
 
-## 4. Two-Phase Incremental Caching & Missing File Tolerance
+## 5. Two-Phase Incremental Caching & Missing File Tolerance
 
 To achieve sub-15ms repository-wide execution without redundant disk I/O:
 
@@ -81,7 +104,7 @@ To achieve sub-15ms repository-wide execution without redundant disk I/O:
    - Read pre-computed file metadata (`mtime`, `size`) from `tmp/cache/repo-file-cache.json`.
    - Deliver cached files immediately (<0.1ms) so the consumer starts processing file #1 without waiting.
 2. **Phase 2 (Streaming Discovery for New / Modified Files):**
-   - Concurrently stream directory entries via `os.scandir`.
+   - Concurrently stream directory entries via `os.walk` / `os.scandir`.
    - For any newly created or modified file, stream it immediately through the pipeline.
 3. **Fault-Tolerant File Reading (Zero Crash on Deletions):**
    - If a file is deleted or missing during traversal, `read_file_safe()` returns `None` instead of raising an unhandled exception.
@@ -89,7 +112,7 @@ To achieve sub-15ms repository-wide execution without redundant disk I/O:
 
 ---
 
-## 5. High-Speed File Reading & Exploration for AI Agents
+## 6. High-Speed File Reading & Exploration for AI Agents
 
 AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildItem -Recurse`, `dir /s`, or brute-force glob searches). Instead, use the optimized Python toolchain:
 
@@ -97,26 +120,15 @@ AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildI
 |---|---|:---:|
 | **List Folder Files** | `python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <dir>` | **<1ms** |
 | **Fast Safe File Read** | `python .lovable/ai-fix-scripts/14-fast-file-reader.py --read-file <path>` | **<1ms** |
+| **Search File Paths** | `python .lovable/ai-fix-scripts/14-fast-file-reader.py --search-pattern "<term>"` | **<2ms** |
 | **Full Repo File Index** | `python .lovable/ai-fix-scripts/08-fast-file-scanner.py --lang ts,go --path spec/` | **~14ms** |
 | **Parallel Content Grep** | `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>"` | **~12ms** |
+| **File Manipulation CLI** | `python .lovable/ai-fix-scripts/01-file-manipulator.py <cmd> <dir>` | **~15ms** |
 
 ---
 
-## 6. Cross-Platform Python Mandate for CI/CD & Codegen Checks (Ban on `.sh` in CI)
+## 7. Cross-Platform Python Mandate for CI/CD & Codegen Checks (Ban on `.sh` in CI)
 
 - **Portability Contract:** All CI/CD checks, codegen determinism verifiers, fixture regenerators, and linter runners MUST be implemented as pure, cross-platform Python (`.py`) scripts using standard library modules (`pathlib`, `subprocess`, `difflib`, `tempfile`).
 - **TOTAL BAN on `.sh` in CI Workflows:** Shell scripts (`.sh`) fail or require bash emulation on Windows/PowerShell runner environments. CI workflow steps and `package.json` lifecycle scripts MUST invoke Python scripts (`python3 ... .py`) directly.
 - **Legacy Migration:** Whenever a legacy `.sh` check is encountered in CI or tests, migrate its core logic to a standalone Python script adhering to these standards, leaving only a lightweight shell forwarder if backward compatibility is required.
-
----
-
-## 7. Execution Checklist for the AI
-
-- [ ] `/goal` Ensure all scripts import traversal and caching logic from `00-shared-engine.py`.
-- [ ] `/learn` Declare module constants and `*Type` Enums at the root of the file.
-- [ ] `/goal` Keep individual functions under 25 lines following Single Responsibility Principle.
-- [ ] `/learn` Store cache and lockfiles in pluggable `tmp/cache/` directories with atomic locks.
-- [ ] `/learn` Handle missing/deleted files safely via `read_file_safe()` with zero crashes.
-- [ ] `/learn` Implement all CI/CD verifiers and fixtures as cross-platform Python scripts instead of `.sh`.
-- [ ] `/learn` Verify zero external dependencies (Python standard library only).
-- [ ] `/learn` Ensure all generated files use strict UTF-8 with UNIX LF line endings.

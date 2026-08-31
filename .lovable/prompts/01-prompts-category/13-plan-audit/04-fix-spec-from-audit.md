@@ -6,7 +6,7 @@
 
 ## Goal
 
-Fix the specification files strictly based on the latest generated audit file. The non-negotiable goal is to increase the spec score to exactly 100%. 
+Fix the specification files strictly based on the latest generated audit file. The non-negotiable goal is to increase the spec score to exactly 100%.
 You must ingest the audit, map the findings to the broken files, and execute the fixes.
 
 
@@ -14,7 +14,7 @@ You must ingest the audit, map the findings to the broken files, and execute the
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
-> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.** 
+> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.**
 > Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
 
 ## Anti-Hallucination, Micro-Tasking, & Self-Looping
@@ -26,12 +26,12 @@ You must ingest the audit, map the findings to the broken files, and execute the
 To survive massive checklists and complex codebases, you MUST operate using these three principles:
 
 1. **Phase 1: Read & Understand (Isolated Loop):** Your very first action must be purely exploratory. Do NOT write code. Break down the task, read the specific files, trace the dependencies, and understand the architectural boundary. Once you understand the scope, end your turn and self-loop to begin execution.
-2. **Phase 2: Bounded Micro-Tasking (Sequential Self-Looping):** Never attempt to execute the entire checklist in one response. Treat each checklist section or file as a strict, isolated boundary. Execute *only* the first small portion, verify it, end your turn, and self-loop to process the next portion. 
+2. **Phase 2: Bounded Micro-Tasking (Sequential Self-Looping):** Never attempt to execute the entire checklist in one response. Treat each checklist section or file as a strict, isolated boundary. Execute *only* the first small portion, verify it, end your turn, and self-loop to process the next portion.
 3. **Phase 3: Multi-Agent Parallelization:** If tasks are independent, you MUST spawn dedicated sub-agents to handle them concurrently. Give each sub-agent an extremely small, strictly defined bounding box (e.g., "Only edit File X"). Never give a sub-agent a generic or multi-file task.
 
 ## Actionable Items & Checklist
 
-- [ ] Read the latest audit file located in `spec/25-app-spec-audit/`. 
+- [ ] Read the latest audit file located in `spec/25-app-spec-audit/`.
 - [ ] Parse the Markdown Summary Table at the bottom of the audit to understand every folder, issue, and proposed fix.
 - [ ] Anti-Garbage Naming (Non-Negotiable): I have strictly verified that absolutely NO generic garbage variable names (e.g., `comp_100.go`, `temp`, `data`, `obj`, `Input100`, `TestHandleComp100`) were written. All names are highly semantic and domain-specific.
 - [ ] Temp Script Sandboxing: AI Fix Scripts (Reusable Tools): Before creating a helper script, you MUST check `.lovable/ai-fix-scripts/01-index.md` to reuse existing tools. If you generate a new script, you MUST write it to `.lovable/ai-fix-scripts/`, update `index.md` with its explanation, ensure `index.md` is linked in `what-to-read.md`, and commit the script.
@@ -45,7 +45,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 ## Execution & Self-Looping Protocol
 
-This task requires deep, multi-agent processing. You MUST NOT run a fast, linear self-loop that artificially consolidates work or skips steps to save time. 
+This task requires deep, multi-agent processing. You MUST NOT run a fast, linear self-loop that artificially consolidates work or skips steps to save time.
 
 How to self-loop and distribute tasks effectively:
 

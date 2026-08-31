@@ -39,5 +39,5 @@ Strict adherence to the design token system. No hardcoded styles.
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
-> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.** 
+> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.**
 > Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.

@@ -16,7 +16,7 @@ You MUST NOT bump versions, update changelogs, or cut a release at the end of th
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, folders skimmed, open ambiguities ignored, CI/CD issues forgotten, coding guidelines bypassed, detailed specs chopped into useless junk, uppercase README files left uncorrected, .lovable/memories/ created by accident, strictly-avoid.md overwritten, and explicit user instructions softened. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, confirm root 
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, folders skimmed, open ambiguities ignored, CI/CD issues forgotten, coding guidelines bypassed, detailed specs chopped into useless junk, uppercase README files left uncorrected, .lovable/memories/ created by accident, strictly-avoid.md overwritten, and explicit user instructions softened. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, confirm root
 eadme.md is strictly lowercase, find the root cause in one sentence, write the memory files in the right paths, preserve detailed specs verbatim, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless. Where is your attention, are you stupid? Your stupidity is going on top of my head. If I could find you, I could slap you.
 
 ## The 4-Part RCA Requirement (Mandatory Memory File)
@@ -33,7 +33,7 @@ Before you write any code to fix the problem, you MUST document the issue in .lo
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
-> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.** 
+> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.**
 > Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
 
 ## Anti-Hallucination, Micro-Tasking, & Self-Looping
@@ -45,7 +45,7 @@ Before you write any code to fix the problem, you MUST document the issue in .lo
 To survive massive checklists and complex codebases, you MUST operate using these three principles:
 
 1. **Phase 1: Read & Understand (Isolated Loop):** Your very first action must be purely exploratory. Do NOT write code. Break down the task, read the specific files, trace the dependencies, and understand the architectural boundary. Once you understand the scope, end your turn and self-loop to begin execution.
-2. **Phase 2: Bounded Micro-Tasking (Sequential Self-Looping):** Never attempt to execute the entire checklist in one response. Treat each checklist section or file as a strict, isolated boundary. Execute *only* the first small portion, verify it, end your turn, and self-loop to process the next portion. 
+2. **Phase 2: Bounded Micro-Tasking (Sequential Self-Looping):** Never attempt to execute the entire checklist in one response. Treat each checklist section or file as a strict, isolated boundary. Execute *only* the first small portion, verify it, end your turn, and self-loop to process the next portion.
 3. **Phase 3: Multi-Agent Parallelization:** If tasks are independent, you MUST spawn dedicated sub-agents to handle them concurrently. Give each sub-agent an extremely small, strictly defined bounding box (e.g., "Only edit File X"). Never give a sub-agent a generic or multi-file task.
 
 ## Execution Checklist & Strict Guidelines
@@ -53,12 +53,12 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] **RCA Document Generation:** I have created .lovable/memory/issues/XX-<slug>.md with the strict 4-part RCA structure (Why, How, Root Cause, Code Fix).
 - [ ] **Coding Guidelines & Master Consolidated File:** I have fully read and strictly enforced every file in spec/02-coding-guidelines/, as well as the master consolidated coding guideline file at .lovable/coding-guidelines/coding-guidelines.md.
 - [ ] **Error Manage Checklist:** I have fully read and enforced spec/03-error-manage/. I understand which files to follow (architecture, response envelopes) and how to follow them (never swallow errors, always wrap with context).
-- [ ] **Boolean Fixations:** All boolean variables MUST begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc. NEVER use explicit true/false comparisons (e.g., `if isReady == true` is FORBIDDEN, use `if isReady`). NEVER use negative booleans (isNotReady). NEVER invert success checks (!response.isSuccess is banned; use 
+- [ ] **Boolean Fixations:** All boolean variables MUST begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc. NEVER use explicit true/false comparisons (e.g., `if isReady == true` is FORBIDDEN, use `if isReady`). NEVER use negative booleans (isNotReady). NEVER invert success checks (!response.isSuccess is banned; use
 esponse.isFail).
 - [ ] **Anti-Garbage Naming:** I have verified that absolutely NO generic garbage variable names (	emp, data, obj) were written. All names are semantic.
 - [ ] **Function Signatures:** If a function has > 3 parameters or is > 100 chars, I have split it so there is exactly one parameter per line.
 - [ ] **Magic Strings/Numbers:** Extracted all magic strings/numbers into named constants.
-- [ ] **Blank Lines:** One blank line before every 
+- [ ] **Blank Lines:** One blank line before every
 eturn/	hrow. One blank line after closing }. Never two blank lines in a row.
 - [ ] **Native File Manipulator:** If I needed to perform mass file renaming, .md lowercase enforcement, sequence number re-ordering, or encoding fixes, I natively used python .lovable/ai-fix-scripts/01-file-manipulator.py <command>.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
@@ -66,7 +66,7 @@ eturn/	hrow. One blank line after closing }. Never two blank lines in a row.
 
 ## End of Tunnel
 
-- [ ] Once the fix is verified and the RCA document is written, commit using standard prefixes (e.g., 
+- [ ] Once the fix is verified and the RCA document is written, commit using standard prefixes (e.g.,
 ix(core): ...).
 - [ ] Push changes to git.
 - [ ] Provide the user with a summary of the RCA and exactly what code was modified.

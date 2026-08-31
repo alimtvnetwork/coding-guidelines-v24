@@ -12,9 +12,9 @@
 
 ---
 
-**Version:** 3.0.0  
-**Updated:** 2026-08-30  
-**AI Confidence:** Production-Ready  
+**Version:** 3.1.0
+**Updated:** 2026-08-31
+**AI Confidence:** Production-Ready
 **Ambiguity:** None
 
 ---
@@ -24,9 +24,10 @@
 | # | Script | Purpose | Execution Time |
 |---|--------|---------|----------------|
 | 00 | `00-shared-engine.py` | Shared engine: pluggable `tmp/cache/`, atomic locks, two-phase incremental streaming | ~2ms |
-| 02 | `02-newline-fixer.py` | Fixes trailing whitespace and missing final newlines | ~15ms |
-| 03 | `03-cicd-local-runner.py` | Runs all 8 CI quality checks locally via `ThreadPoolExecutor` | ~35ms |
-| 04 | `04-relative-path-fixer.py` | Detects and fixes absolute paths / `file:///` URIs | ~30ms |
+| 01 | `01-file-manipulator.py` | Mass lowercasing, sequence fixing, and UTF-8 LF normalization CLI | ~15ms |
+| 02 | `02-newline-fixer.py` | Fixes trailing whitespace and missing final newlines across folders | ~15ms |
+| 03 | `03-cicd-local-runner.py` | Runs all 18 CI quality checks locally via `ThreadPoolExecutor` | ~35ms |
+| 04 | `04-relative-path-fixer.py` | Detects and fixes absolute paths / `file:///` URIs across folders | ~30ms |
 | 05 | `05-naming-autofixer.py` | Enforces lowercase filenames, boolean conventions, and condition rules | ~20ms |
 | 06 | `06-cli-help-auditor.py` | Validates CLI `--help` examples against actual implementations | ~25ms |
 | 07 | `07-encoding-normalizer.py` | Normalizes all files to strict UTF-8 with UNIX LF line endings | ~35ms |
@@ -37,6 +38,51 @@
 | 12 | `12-sequence-and-title-auditor.py` | Audits and aligns numeric file sequence prefixes and `# H1` titles | ~20ms |
 | 13 | `13-installer-smoke-tester.py` | Generic installer smoke test validating script placeholders & hashes | ~8ms |
 | 14 | `14-fast-file-reader.py` | AI agent fast file reader and folder explorer using `tmp/cache/` | <1ms |
+
+---
+
+## 📖 Detailed Script Specifications
+
+<details>
+<summary><b>00-shared-engine.py — Shared Core Engine</b></summary>
+
+- **Capabilities:** Core utilities for two-phase incremental scanning, cross-process atomic file locking in `tmp/cache/locks/`, and fault-tolerant file I/O.
+- **Ignore Pruning:** Recursively prunes `.git`, `.gitmap`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts`.
+- **Pre-compiled Regex:** All path conversion and CRLF normalization regexes are pre-compiled at module load time.
+</details>
+
+<details>
+<summary><b>01-file-manipulator.py — Standalone File Manipulator CLI</b></summary>
+
+- **Subcommands:**
+  - `lowercase <path>`: Recursively converts filenames and directory names to lowercase.
+  - `fix-seq-files <path>`: Sequentially numbers files with options for `--order-by-time`, `--order-by-az`, `--keep-old-order`, and `--pin`.
+  - `fix-encoding <path>`: Normalizes files to UTF-8 without BOM and strict UNIX LF.
+</details>
+
+<details>
+<summary><b>08-fast-file-scanner.py — Ultra-Fast File Scanner & Cache Indexer</b></summary>
+
+- **Usage:** `python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path <dir> --lang <languages> --ext <extensions>`
+- **Cache Persistence:** Writes dual caches to `tmp/cache/repo-file-cache.json` and `tmp/repo-file-cache.json`.
+- **Instant Query:** `python .lovable/ai-fix-scripts/08-fast-file-scanner.py --query-cache "<term>"` executes in <1ms without disk scanning.
+</details>
+
+<details>
+<summary><b>09-fast-cached-grep.py — Parallel Cached Grepper</b></summary>
+
+- **Usage:** `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>" --path <dir> --lang ts,go`
+- **Pre-compiled Regex:** Pre-compiles search expressions prior to worker thread dispatch.
+</details>
+
+<details>
+<summary><b>14-fast-file-reader.py — AI Agent Fast File Reader</b></summary>
+
+- **Usage:**
+  - `python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <dir> [--ext .md,.ts]`
+  - `python .lovable/ai-fix-scripts/14-fast-file-reader.py --read-file <path>`
+  - `python .lovable/ai-fix-scripts/14-fast-file-reader.py --search-pattern <text> [--path <dir>]`
+</details>
 
 ---
 

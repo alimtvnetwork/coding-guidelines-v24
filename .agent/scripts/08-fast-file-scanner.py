@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Fast Repository File Scanner & Caching Engine.
-Ultra-fast file scanner with multi-language filters, substring search, and persistent cache indexing in tmp/.
+Ultra-fast file scanner with multi-language filters, substring search, and persistent cache indexing in tmp/cache/.
 
 Usage:
   python .lovable/ai-fix-scripts/08-fast-file-scanner.py [options]
@@ -18,6 +18,7 @@ import argparse
 import datetime
 import json
 import os
+from pathlib import Path
 import re
 import sys
 import time
@@ -25,9 +26,12 @@ import time
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-# Common directories and patterns to ignore
+# Common directories and patterns to ignore (including nested .git, .gitmap, node_modules)
 DEFAULT_IGNORE_DIRS = {
     ".git",
+    ".gitmap",
+    "gitmap",
+    ".git-map",
     "node_modules",
     "dist",
     "build",
@@ -39,6 +43,9 @@ DEFAULT_IGNORE_DIRS = {
     ".gemini",
     ".agent",
     "release-artifacts",
+    "release-assets",
+    "tmp",
+    ".system_generated",
     "bin",
     "obj",
     "coverage",
@@ -92,28 +99,15 @@ LANG_EXT_MAP = {
     "cpp": [".cpp", ".hpp", ".cc", ".cxx"],
 }
 
+# Pre-compiled regexes
+RE_NON_ALPHANUMERIC = re.compile(r"[^a-zA-Z0-9_-]+")
+RE_BACKSLASH = re.compile(r"\\")
+RE_LEADING_DOT_SLASH = re.compile(r"^\./")
 
 def parse_args():
     parser = argparse.ArgumentParser(
         description="High-performance repository file scanner and cache indexer.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  Scan all text/source files and generate tmp/ caches:
-    python .lovable/ai-fix-scripts/08-fast-file-scanner.py
-
-  Filter by languages (comma-separated):
-    python .lovable/ai-fix-scripts/08-fast-file-scanner.py --lang go,ts,tsx
-
-  Filter by specific folder and extension:
-    python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path spec/ --ext .md
-
-  Search for specific keyword in file paths:
-    python .lovable/ai-fix-scripts/08-fast-file-scanner.py --search install --stats
-
-  Instant cache query (reads tmp/ cache in <1ms without disk walk):
-    python .lovable/ai-fix-scripts/08-fast-file-scanner.py --query-cache "button"
-        """,
     )
     parser.add_argument("--path", "-p", default=".", help="Subdirectory or root to scan (default: .)")
     parser.add_argument("--lang", "-l", help="Language filter alias (e.g. go, ts, py, md, or comma-separated go,ts)")
@@ -130,32 +124,32 @@ Examples:
 
     return parser.parse_args()
 
-
-def resolve_extensions(lang_arg, ext_arg):
+def resolve_extensions(lang_arg: str | None, ext_arg: str | None) -> set[str] | None:
     allowed_exts = set()
     if lang_arg:
         for lang in lang_arg.split(","):
             cleaned = lang.strip().lower()
             if cleaned in LANG_EXT_MAP:
                 allowed_exts.update(LANG_EXT_MAP[cleaned])
-            else:
+            elif cleaned:
                 ext_form = f".{cleaned}" if not cleaned.startswith(".") else cleaned
                 allowed_exts.add(ext_form)
 
     if ext_arg:
         for e in ext_arg.split(","):
             cleaned = e.strip().lower()
-            ext_form = f".{cleaned}" if not cleaned.startswith(".") else cleaned
-            allowed_exts.add(ext_form)
+            if cleaned:
+                ext_form = f".{cleaned}" if not cleaned.startswith(".") else cleaned
+                allowed_exts.add(ext_form)
 
     return allowed_exts if allowed_exts else None
 
-
-def scan_files(scan_root, allowed_exts, search_term, include_hidden):
+def scan_files(scan_root: str, allowed_exts: set[str] | None, search_term: str | None, include_hidden: bool):
     matched_files = []
     ext_counts = {}
 
     WHITELISTED_DOT_DIRS = {".lovable", ".github"}
+    search_re = re.compile(re.escape(search_term), re.IGNORECASE) if search_term else None
 
     for root, dirs, files in os.walk(scan_root):
         if not include_hidden:
@@ -167,41 +161,44 @@ def scan_files(scan_root, allowed_exts, search_term, include_hidden):
             dirs[:] = [d for d in dirs if d not in DEFAULT_IGNORE_DIRS]
 
         for filename in sorted(files):
-            if not include_hidden and filename.startswith(".") and not filename.startswith(".lovable"):
-                continue
+            if not include_hidden:
+                if filename.startswith("."):
+                    if not filename.startswith(".lovable"):
+                        continue
 
             ext = os.path.splitext(filename)[1].lower()
             if ext in BINARY_EXTENSIONS:
                 continue
 
-            if allowed_exts and ext not in allowed_exts:
-                continue
+            if allowed_exts:
+                if ext not in allowed_exts:
+                    continue
 
-            rel_path = os.path.relpath(os.path.join(root, filename), ".").replace("\\", "/")
+            full_rel = os.path.relpath(os.path.join(root, filename), ".").replace("\\", "/")
+            if search_re:
+                if not search_re.search(full_rel):
+                    continue
 
-            if search_term and search_term.lower() not in rel_path.lower():
-                continue
-
-            matched_files.append(rel_path)
+            matched_files.append(full_rel)
             ext_counts[ext] = ext_counts.get(ext, 0) + 1
 
     return matched_files, ext_counts
 
-
 def get_cache_filenames(args):
     slug_parts = []
-    if args.path and args.path != ".":
-        clean_p = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.path).strip("_")
-        if clean_p:
-            slug_parts.append(clean_p)
+    if args.path:
+        if args.path != ".":
+            clean_p = RE_NON_ALPHANUMERIC.sub("_", args.path).strip("_")
+            if clean_p:
+                slug_parts.append(clean_p)
     if args.lang:
-        clean_l = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.lang).strip("_")
+        clean_l = RE_NON_ALPHANUMERIC.sub("_", args.lang).strip("_")
         slug_parts.append(f"lang-{clean_l}")
     if args.ext:
-        clean_e = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.ext).strip("_")
+        clean_e = RE_NON_ALPHANUMERIC.sub("_", args.ext).strip("_")
         slug_parts.append(f"ext-{clean_e}")
     if args.search:
-        clean_s = re.sub(r"[^a-zA-Z0-9_-]+", "_", args.search).strip("_")
+        clean_s = RE_NON_ALPHANUMERIC.sub("_", args.search).strip("_")
         slug_parts.append(f"search-{clean_s}")
 
     slug = "-".join(slug_parts) if slug_parts else "all"
@@ -212,9 +209,9 @@ def get_cache_filenames(args):
 
     return json_path, txt_path, all_txt_path
 
-
 def write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, args, scan_duration_ms):
     os.makedirs("tmp", exist_ok=True)
+    os.makedirs("tmp/cache/paths", exist_ok=True)
     cache_data = {
         "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "scanRoot": args.path,
@@ -228,6 +225,7 @@ def write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, a
         },
         "cacheFiles": {
             "jsonCache": json_path,
+            "primaryCache": "tmp/cache/repo-file-cache.json",
             "filterTextList": txt_path,
             "globalTextList": all_txt_path,
         },
@@ -237,9 +235,16 @@ def write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, a
         "files": matched_files,
     }
 
-    # 1. Main JSON Cache
+    # 1. Main JSON Cache (dual path in tmp/ and tmp/cache/)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(cache_data, f, indent=2)
+
+    primary_path = Path("tmp/cache/repo-file-cache.json")
+    try:
+        with open(primary_path, "w", encoding="utf-8") as f:
+            json.dump(cache_data, f, indent=2)
+    except Exception:
+        pass
 
     # 2. Filter-specific text file
     with open(txt_path, "w", encoding="utf-8") as f:
@@ -247,33 +252,43 @@ def write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, a
             f.write(fp + "\n")
 
     # 3. Global text list (if scanning full repo)
-    if args.path == "." and not args.lang and not args.ext and not args.search:
-        with open(all_txt_path, "w", encoding="utf-8") as f:
-            for fp in matched_files:
-                f.write(fp + "\n")
+    if args.path == ".":
+        if not args.lang:
+            if not args.ext:
+                if not args.search:
+                    with open(all_txt_path, "w", encoding="utf-8") as f:
+                        for fp in matched_files:
+                            f.write(fp + "\n")
 
+def query_cached_index(query_term: str):
+    cache_paths = ["tmp/cache/repo-file-cache.json", "tmp/repo-file-cache.json"]
+    matched_files = []
+    for cp in cache_paths:
+        if os.path.exists(cp):
+            try:
+                with open(cp, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                matched_files = data.get("files", [])
+                if matched_files:
+                    break
+            except Exception:
+                pass
 
-def query_cached_index(query_term):
-    cache_path = "tmp/repo-file-cache.json"
-    if not os.path.exists(cache_path):
-        print(f"⚠️ Cache not found at `{cache_path}`. Running quick scan to generate cache...")
+    if not matched_files:
+        print("⚠️ Cache not found. Running quick scan to generate cache...")
         matched_files, _ = scan_files(".", None, None, False)
-        os.makedirs("tmp", exist_ok=True)
-        with open(cache_path, "w", encoding="utf-8") as f:
+        os.makedirs("tmp/cache", exist_ok=True)
+        with open("tmp/cache/repo-file-cache.json", "w", encoding="utf-8") as f:
             json.dump({"files": matched_files}, f)
-    else:
-        with open(cache_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        matched_files = data.get("files", [])
 
-    results = [f for f in matched_files if query_term.lower() in f.lower()]
+    q_re = re.compile(re.escape(query_term), re.IGNORECASE)
+    results = [f for f in matched_files if q_re.search(f)]
     print(f"⚡ Instant Cache Query for `{query_term}`: found **{len(results)}** matches in pre-computed index:\n")
     for idx, r in enumerate(results[:100], 1):
         print(f"   {idx:>3}. {r}")
     if len(results) > 100:
         print(f"   ... and {len(results) - 100} more matches.")
     sys.exit(0)
-
 
 def main():
     args = parse_args()
@@ -292,6 +307,10 @@ def main():
     if not args.no_cache:
         write_caches(json_path, txt_path, all_txt_path, matched_files, ext_counts, args, scan_duration_ms)
 
+    if args.check:
+        print(f"✅ Fast File Scanner Check PASSED: {len(matched_files)} files indexed in {scan_duration_ms:.2f}ms")
+        sys.exit(0)
+
     # Print clean summary & results to console
     print("================================================================================")
     print(f"⚡ Fast Repository File Scanner: scanned in {scan_duration_ms:.2f}ms")
@@ -301,6 +320,7 @@ def main():
     if not args.no_cache:
         print("\n💾 TEMP FOLDER CACHE INVENTORY:")
         print(f"   • Full JSON Cache : `{json_path}`")
+        print(f"   • Primary Pluggable: `tmp/cache/repo-file-cache.json`")
         print(f"   • Specific Filter : `{txt_path}`")
         print(f"   • Global List     : `{all_txt_path}`")
 
@@ -323,7 +343,6 @@ def main():
     print(f"   simply read `{txt_path}` or `{json_path}` directly.")
     print("================================================================================")
     sys.exit(0)
-
 
 if __name__ == "__main__":
     main()

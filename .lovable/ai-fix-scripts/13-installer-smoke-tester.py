@@ -5,10 +5,13 @@ Validates install.sh and install.ps1 scripts:
 1. Validates placeholder resolution (no residual PLACEHOLDER strings).
 2. Verifies URL schema, fallback download mechanisms, and SHA256 checksum checks.
 3. Ensures non-destructive rename-first upgrade handling.
+Multi-folder capable and pre-compiled regex engine.
 """
 
 import argparse
+from enum import Enum
 import os
+from pathlib import Path
 import re
 import sys
 import time
@@ -16,17 +19,25 @@ import time
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-def smoke_test_installers(dist_dir="dist"):
+# --- Top-Level Enums & Constants ---
+class ExitCodeType(int, Enum):
+    SUCCESS = 0
+    VIOLATIONS_FOUND = 1
+
+# Pre-compiled regular expressions
+RE_PLACEHOLDER_TOKEN = re.compile(r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*")
+
+def smoke_test_installers(dist_dir: str = ".") -> int:
+    """Smoke tests installer scripts in the target directory or root."""
     start_time = time.perf_counter()
     errors = []
     checked_files = 0
 
-    candidates = ["install.sh", "install.ps1"]
+    candidates = ["install.sh", "install.ps1", "release-install.sh", "release-install.ps1"]
     for fname in candidates:
         fp = os.path.join(dist_dir, fname) if dist_dir != "." else fname
         if not os.path.exists(fp):
-            # check root if not in dist
-            if os.path.exists(fname):
+            if dist_dir != "." and os.path.exists(fname):
                 fp = fname
             else:
                 continue
@@ -36,38 +47,42 @@ def smoke_test_installers(dist_dir="dist"):
             content = f.read()
 
         # 1. Check for unreplaced placeholder tokens
-        placeholders = re.findall(r"[A-Z0-9_]*PLACEHOLDER[A-Z0-9_]*", content)
+        placeholders = RE_PLACEHOLDER_TOKEN.findall(content)
         if placeholders:
             errors.append(f"Unreplaced placeholders in {fp}: {set(placeholders)}")
 
         # 2. Check for checksum verification pattern
-        if "sha256" not in content.lower() and "hash" not in content.lower():
+        content_lower = content.lower()
+        if "sha256" not in content_lower and "hash" not in content_lower:
             errors.append(f"Installer {fp} missing SHA256 checksum verification routine")
 
         # 3. Check for rename-first / safe overwrite
-        if ".old" not in content and "old" not in content.lower():
+        if ".old" not in content and "old" not in content_lower:
             errors.append(f"Installer {fp} missing rename-first upgrade handling")
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
     if checked_files == 0:
-        print("ℹ️ No install.sh or install.ps1 found to smoke-test (skipping).")
-        return 0
+        print(f"ℹ️ No installer scripts found in '{dist_dir}' to smoke-test (skipping).")
+        return ExitCodeType.SUCCESS.value
 
     if errors:
-        print(f"\n❌ Installer smoke testing failed ({elapsed_ms:.2f}ms):")
+        print(f"\n❌ Installer smoke testing failed in '{dist_dir}' ({elapsed_ms:.2f}ms):")
         for err in errors:
             print(f"  ::error::{err}")
-        return 1
-    else:
-        print(f"✅ Installer smoke tests passed for {checked_files} script(s) ({elapsed_ms:.2f}ms)")
-        return 0
+        return ExitCodeType.VIOLATIONS_FOUND.value
+
+    print(f"✅ Installer smoke tests passed for {checked_files} script(s) in '{dist_dir}' ({elapsed_ms:.2f}ms)")
+    return ExitCodeType.SUCCESS.value
 
 def main():
-    parser = argparse.ArgumentParser(description="Smoke test install scripts")
-    parser.add_argument("--dir", type=str, default=".", help="Directory containing install scripts")
+    parser = argparse.ArgumentParser(description="Smoke test install scripts across directories")
+    parser.add_argument("path", nargs="?", default=".", help="Directory containing install scripts")
+    parser.add_argument("--dir", "--path", "-p", dest="opt_dir", help="Directory containing install scripts")
     args = parser.parse_args()
-    sys.exit(smoke_test_installers(args.dir))
+
+    target_path = args.opt_dir or args.path or "."
+    sys.exit(smoke_test_installers(target_path))
 
 if __name__ == "__main__":
     main()

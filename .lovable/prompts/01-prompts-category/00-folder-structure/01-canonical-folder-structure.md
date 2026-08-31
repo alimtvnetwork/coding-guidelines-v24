@@ -21,7 +21,7 @@ All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-
   .lovable/
     what-to-read.md                    # priority reading list for read-memory
     strictly-avoid.md                  # universal anti-patterns
-    
+
     coding-guidelines/
       coding-guidelines.md             # mirror of spec source of truth
 
@@ -43,7 +43,7 @@ All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-
         XX-<slug>.md                   # finished plans (moved, not copied)
 
     temp-agents/                       # agent lifecycle state management
-      XX-agent-state.md                
+      XX-agent-state.md
 
     issues/                            # app-level bugs and blockers
       XX-<slug>.md
@@ -96,17 +96,17 @@ All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-
 - 	emp-agents/ - Explicit state files where agents record their current step and crash logs.
 - issues/ and cicd-issues/ - Runtime bugs and pipeline failures.
 - Audits/ - One folder per recent-work audit run (distinct from app-spec audit).
-- 
+-
 
 elease/issues/ - Only issues discovered during release.
 
-- Ambiguous-questions/ - Open questions raised by any prompt. 
+- Ambiguous-questions/ - Open questions raised by any prompt.
 - Assets/ - Any binary or image. Reference by relative path with a caption.
 - prompts/ - Only touched when a prompt body itself changes.
 
 ## Hard bans
 
-- No Ambiguities/, questions/, Blockers/, 	odo/, 
+- No Ambiguities/, questions/, Blockers/, 	odo/,
 otes/, or any folder name not listed above.
 - No subfolders inside .lovable/memory/. Flat files ONLY.
 - No per-turn mirror files under .lovable/prompts/.

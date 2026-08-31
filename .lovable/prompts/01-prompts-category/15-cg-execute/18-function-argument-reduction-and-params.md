@@ -2,7 +2,7 @@
 
 Trigger Keywords & Aliases: `cg-argument-reduction`, `cg-params`, `cg-struct-params`, `cg-execute params`, `audit function arguments`, `reduce arguments`, `struct parameters`, `mandatory apperror return`, `parameter objects`, `no void functions`
 
-> **Prompt Version:** 2.1.0  
+> **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ```text

@@ -41,8 +41,9 @@ If you cannot do that, keep reading. Do not start work.
 The `.lovable/` folder, specs, and entire codebase can be massive. To process this information with zero blind spots and sub-second latency:
 
 1. Fast Cached Directory Discovery:
-   - Use `python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path spec/` or `python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder spec/` to enumerate repository structures in <15ms via `tmp/cache/`.
-   - Use `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>"` for parallel multi-threaded content grepping across cached files.
+   - Use `python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path <dir> [--ext <extensions>]` or `python .lovable/ai-fix-scripts/14-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` to enumerate repository structures in <15ms via `tmp/cache/`.
+   - Use `python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "<text>" [--path <dir>] [--ext <extensions>]` for parallel multi-threaded content grepping using pre-compiled regexes.
+   - Use `python .lovable/ai-fix-scripts/01-file-manipulator.py lowercase <dir>` or `fix-encoding <dir>` for rapid mass file management.
 
 2. Autonomous looping enforcement:
    - The AI agent MUST autonomously loop through all directories and files across `spec/`, `.lovable/`, and application source trees.
@@ -144,7 +145,7 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 | 2   | `.lovable/folder-03-structure.md`                | Canonical architectural map of all `.lovable/` folders, scripts, and naming conventions.                                                  |
 | 3   | `.lovable/strictly-avoid.md`                          | Hard prohibitions (CODE RED) — append-only, never truncate.                                                                               |
 | 4   | `.lovable/coding-guidelines/coding-guidelines.md`     | Master single source of truth for cross-language coding guidelines, `Result[T]` envelopes, and `is`/`has` booleans.                       |
-| 5   | `.lovable/ai-fix-scripts/`                            | Automated Python utilities (`03-cicd-local-runner.py`, `08-fast-file-scanner.py`, `09-fast-cached-grep.py`, `01-index.md`). Pre-warms `tmp/` file caches for rapid zero-overhead file discovery. |
+| 5   | `.lovable/ai-fix-scripts/`                            | Automated Python utilities (`01-file-manipulator.py`, `03-cicd-local-runner.py`, `08-fast-file-scanner.py`, `09-fast-cached-grep.py`, `01-index.md`). Pre-warms `tmp/cache/` file caches for rapid zero-overhead file discovery across folders. |
 | 6   | `.lovable/prompts.md` + `.lovable/prompts/`           | Canonical prompt index and mirrored execution prompts (`cg-execute/`, `execute/`, `ci-cd/`).                                              |
 | 7   | `.lovable/memory/01-index.md`                         | Master index of institutional knowledge. Then read every file it references recursively.                                                 |
 | 8   | `.lovable/plans/01-index.md`                             | Master index of all plans (pending + completed + subtasks). Read this before touching individual plan files.                               |
@@ -278,7 +279,7 @@ Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guideli
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
-> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.** 
+> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.**
 > Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
 
 ## Anti-Hallucination Contract
