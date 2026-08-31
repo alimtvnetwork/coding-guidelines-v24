@@ -15,7 +15,7 @@ You are an expert Python Developer AI. Your task is to write and maintain a stan
 
 ## 🔍 Pre-Flight AI Checklist (Before Modifying or Rewriting Any Script)
 
-Before modifying or creating any Python tool in `.lovable/ai-fix-scripts/` or `.agent/scripts/`, the AI agent MUST inspect these two files first:
+Before modifying or creating any Python tool in `.lovable/ai-fix-scripts/` or `.agents/scripts/`, the AI agent MUST inspect these two files first:
 1. **`.lovable/ai-fix-scripts/02-shared-engine.py`**: The canonical library containing all centralized constants, Enums (`UPPER_CASE` members matching string values), file locking, two-phase caching, and lazy regex memoization.
 2. **`.lovable/ai-fix-scripts/01-index.md`**: The master registry of existing tools, parameters, and benchmark speeds.
 
@@ -63,7 +63,7 @@ except Exception:
 9. **Nested Ignore Pruning**: Prune `.git`, `.gitmap`, `node_modules`, `dist`, `build`, `.venv`, `.gemini`, `tmp`, `.system_generated`, and `release-artifacts` at all subtree depths including nested subprojects.
 10. **Windows Long Paths & Case-Hop**: Normalize paths and safely handle Windows NTFS case-only renames with an intermediate hop.
 11. **Git Awareness**: Attempt `git mv` via subprocess first, gracefully falling back to standard `shutil.move` / `os.rename`.
-12. **Update Index & Mirror**: Document usage in `.lovable/ai-fix-scripts/01-index.md` and sync changes to `.agent/scripts/`.
+12. **Update Index & Mirror**: Document usage in `.lovable/ai-fix-scripts/01-index.md` and sync changes to `.agents/scripts/`.
 
 ---
 
@@ -120,7 +120,7 @@ python .lovable/ai-fix-scripts/03-file-manipulator.py fix-encoding <target_direc
 Before completing this task, you MUST verify:
 
 - [ ] Checked `00-shared-engine.py` and `01-index.md` before writing code.
-- [ ] Saved the script precisely to `.lovable/ai-fix-scripts/03-file-manipulator.py` and synced to `.agent/scripts/`.
+- [ ] Saved the script precisely to `.lovable/ai-fix-scripts/03-file-manipulator.py` and synced to `.agents/scripts/`.
 - [ ] Used `RegexPatternType` with UPPER_CASE members (`UPPERCASE`, `SEQ_PREFIX`, `CRLF`).
 - [ ] Used `argparse` for subcommands (`lowercase`, `fix-seq-files`, and `fix-encoding`) with detailed examples.
 - [ ] Pruned `node_modules`, `.git`, `.gitmap` via `is_ignored_directory()`.

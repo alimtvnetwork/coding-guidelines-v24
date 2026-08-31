@@ -150,5 +150,5 @@ The `spec/` directory is organized into numbered tiers:
 1. **Strict Relative Paths:** All internal markdown links, citations, and subtask paths MUST use relative paths starting from the repository root (e.g. `.lovable/plans/pending/01-task.md`, `spec/02-coding-guidelines/01-index.md`). Absolute filesystem paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
 2. **Strict Lowercase:** All generated files and directories MUST be lowercase.
 3. **Plurality Invariants:** Always `.lovable/memory/` (singular), `.lovable/plans/` (plural), `.lovable/prompts/` (plural), `.lovable/suggestions/` (plural).
-4. **Mirror Parity:** Every script in `.lovable/ai-fix-scripts/` MUST have an exact mirror in `.agent/scripts/`.
+4. **Mirror Parity:** Every script in `.lovable/ai-fix-scripts/` MUST have an exact mirror in `.agents/scripts/`.
 5. **Quality Gates:** Before concluding any engineering task, execute `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` to confirm all 18 quality checks pass.

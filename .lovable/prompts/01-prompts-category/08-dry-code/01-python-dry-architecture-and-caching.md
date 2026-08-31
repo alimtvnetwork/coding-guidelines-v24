@@ -8,7 +8,7 @@
 
 ## 🎯 Architectural Philosophy
 
-All AI-authored Python scripts in this repository (`.lovable/ai-fix-scripts/` and `.agent/scripts/`) MUST strictly adhere to the following principles:
+All AI-authored Python scripts in this repository (`.lovable/ai-fix-scripts/` and `.agents/scripts/`) MUST strictly adhere to the following principles:
 
 ---
 

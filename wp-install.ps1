@@ -557,7 +557,7 @@ function Verify-Install {
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
 function Scaffold-LovableFolders {
-    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues", ".agent/skills", ".agent/scripts")) {
+    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues", ".agents/skills", ".agents/scripts")) {
         $dp = Join-Path $Target $d
         if (-not (Test-Path -LiteralPath $dp)) {
             New-Item -ItemType Directory -Path $dp -Force | Out-Null

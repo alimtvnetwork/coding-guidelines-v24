@@ -639,7 +639,7 @@ fi
 
 echo ""
 scaffold_lovable_folders() {
-  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues" ".agent/skills" ".agent/scripts"; do
+  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues" ".agents/skills" ".agents/scripts"; do
     local dp="${TARGET}/${d}"
     mkdir -p "${dp}"
     if [ -z "$(ls -A "${dp}" 2>/dev/null)" ]; then

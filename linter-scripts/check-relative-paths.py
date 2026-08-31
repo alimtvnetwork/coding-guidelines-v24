@@ -22,7 +22,7 @@ ALLOWLIST_FILES = {
     ".github/workflows/goreleaser-smoke.yml",  # contains comment explaining Windows file:/// URL format
     "linter-scripts/check-relative-paths.py",
     ".lovable/ai-fix-scripts/04-relative-path-fixer.py",
-    ".agent/scripts/04-relative-path-fixer.py",
+    ".agents/scripts/04-relative-path-fixer.py",
 }
 
 
