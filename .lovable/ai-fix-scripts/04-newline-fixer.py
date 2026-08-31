@@ -22,34 +22,38 @@ try:
     RegexPatternType = engine.RegexPatternType
     get_compiled_regex = engine.get_compiled_regex
     DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
+    DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+    LINE_SEPARATOR = engine.LINE_SEPARATOR
 except Exception:
     ExitCodeType = None
     RegexPatternType = None
     get_compiled_regex = None
     DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
+    DEFAULT_ENCODING = "utf-8"
+    LINE_SEPARATOR = "\n"
 
 def clean_file_content(content: str) -> str:
     """Strips trailing whitespace per line and guarantees a single final newline."""
     re_crlf = get_compiled_regex(RegexPatternType.CRLF)
-    normalized = re_crlf.sub("\n", content)
-    lines = [line.rstrip() for line in normalized.split("\n")]
+    normalized = re_crlf.sub(LINE_SEPARATOR, content)
+    lines = [line.rstrip() for line in normalized.split(LINE_SEPARATOR)]
     while lines:
         if lines[-1]:
             break
         lines.pop()
-    return "\n".join(lines) + "\n"
+    return LINE_SEPARATOR.join(lines) + LINE_SEPARATOR
 
 def process_file_newlines(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
     """Checks and optionally fixes newlines and trailing whitespace in a single file."""
     norm_p = normalize_rel_path(file_path)
     try:
-        raw = read_file_lf(file_path)
+        raw = read_file_lf(file_path, encoding=DEFAULT_ENCODING)
         if not raw:
             return (norm_p, False)
         cleaned = clean_file_content(raw)
         if raw != cleaned:
             if is_fix_mode:
-                write_file_lf(file_path, cleaned)
+                write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
             return (norm_p, True)
     except Exception:
         pass

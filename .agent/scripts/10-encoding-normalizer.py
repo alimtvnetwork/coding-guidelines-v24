@@ -20,9 +20,13 @@ try:
     normalize_rel_path = engine.normalize_rel_path
     ExitCodeType = engine.ExitCodeType
     DEFAULT_TEXT_EXTENSIONS = engine.DEFAULT_TEXT_EXTENSIONS
+    DEFAULT_ENCODING = engine.DEFAULT_ENCODING
+    LINE_SEPARATOR = engine.LINE_SEPARATOR
 except Exception:
     ExitCodeType = None
     DEFAULT_TEXT_EXTENSIONS = (".md", ".py", ".ts")
+    DEFAULT_ENCODING = "utf-8"
+    LINE_SEPARATOR = "\n"
 
 def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[str, bool]:
     """Audits and converts CRLF/BOM in a file to clean UTF-8 LF."""
@@ -40,7 +44,7 @@ def normalize_single_file(file_path: Path, is_fix_mode: bool = False) -> tuple[s
         if has_bom or has_crlf:
             if is_fix_mode:
                 text = raw_bytes.decode("utf-8-sig", errors="replace")
-                write_file_lf(file_path, text)
+                write_file_lf(file_path, text, encoding=DEFAULT_ENCODING)
             return (norm_p, True)
     except Exception:
         pass

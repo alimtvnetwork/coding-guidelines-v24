@@ -4,18 +4,19 @@ Shared Core Engine for AI Repository Tooling, CI Fix Scripts & High-Speed Cachin
 Dual-Platform Engine (100% Native Unix & Windows Support)
 
 Features:
-1. Centralized Configuration Maps and Top-Level Enums (PascalCase class, UPPER_CASE members mirroring string values).
-2. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
-3. Dual-Mode Cross-Process Locking:
+1. Centralized Constants for Encodings, Separators, Tokens, and Configuration Maps.
+2. Top-Level Enums (PascalCase class, UPPER_CASE members mirroring string values).
+3. Thread-Safe Lazy Regex Registry (Singleton Double-Checked Locking).
+4. Dual-Mode Cross-Process Locking:
    - POSIX: Kernel-level `fcntl.flock` (automatic cleanup on process kill/crash).
    - Windows: Atomic `os.O_CREAT | os.O_EXCL` with PID timestamp & stale-lock recovery.
-4. Unix Symlink & Cycle Guard: Inode tracking (st_dev, st_ino) preventing infinite recursion.
-5. Unix Permission Preservation: Preserves executable bits (chmod +x / st_mode) across atomic writes.
-6. Universal Line Ending Normalizer: Aggressively converts CRLF (\\r\\n) and legacy Mac CR (\\r) to clean UNIX LF (\\n).
-7. Memory-Safe Chunked Binary Probe: Inspects first 8KB for null-bytes without loading large blobs into RAM.
-8. Two-phase incremental mtime-based file streaming (cache-first + parallel scan).
-9. Pluggable cache layout in tmp/cache/ (paths, locks, files).
-10. Fault-tolerant file reader handling missing/deleted files gracefully (zero crash).
+5. Unix Symlink & Cycle Guard: Inode tracking (st_dev, st_ino) preventing infinite recursion.
+6. Unix Permission Preservation: Preserves executable bits (chmod +x / st_mode) across atomic writes.
+7. Universal Line Ending Normalizer: Aggressively converts CRLF (\\r\\n) and legacy Mac CR (\\r) to clean UNIX LF (\\n).
+8. Memory-Safe Chunked Binary Probe: Inspects first 8KB for null-bytes without loading large blobs into RAM.
+9. Two-phase incremental mtime-based file streaming (cache-first + parallel scan).
+10. Pluggable cache layout in tmp/cache/ (paths, locks, files).
+11. Fault-tolerant file reader handling missing/deleted files gracefully (zero crash).
 """
 
 from collections.abc import Generator
@@ -40,6 +41,19 @@ except ImportError:
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
+
+# --- Centralized Constants for Encodings, Separators & Tokens ---
+DEFAULT_ENCODING = "utf-8"
+UTF16_ENCODING = "utf-16"
+UTF16_LE_ENCODING = "utf-16le"
+UTF16_BE_ENCODING = "utf-16be"
+
+LINE_SEPARATOR = "\n"
+CARRIAGE_RETURN = "\r"
+CRLF_SEPARATOR = "\r\n"
+TAB_CHAR = "\t"
+PATH_SEPARATOR = "/"
+WINDOWS_PATH_SEPARATOR = "\\"
 
 # --- Module-Level Directory & File Constants ---
 CACHE_BASE_DIR = Path("tmp/cache")
@@ -266,10 +280,10 @@ def is_allowed_large_file(file_path: str | Path) -> bool:
     return norm in {normalize_rel_path(f).lstrip("./") for f in ALLOWED_LARGE_FILES}
 
 def normalize_rel_path(path: str | Path) -> str:
-    """Converts a path into a canonical relative POSIX path."""
+    """Converts a path into a canonical relative POSIX path using PATH_SEPARATOR."""
     re_slash = get_compiled_regex(RegexPatternType.WINDOWS_BACKSLASH)
     re_lead = get_compiled_regex(RegexPatternType.LEADING_DOT_SLASH)
-    p_str = re_slash.sub("/", str(path))
+    p_str = re_slash.sub(PATH_SEPARATOR, str(path))
     return re_lead.sub("", p_str)
 
 def normalize_extensions(extensions: tuple | set | list | str | None) -> set[str] | None:
@@ -288,11 +302,15 @@ def normalize_extensions(extensions: tuple | set | list | str | None) -> set[str
         normalized.add(clean)
     return normalized if normalized else None
 
-def read_file_safe(path: str | Path, max_bytes: int = MAX_READ_SIZE_BYTES) -> str | None:
+def read_file_safe(
+    path: str | Path,
+    max_bytes: int = MAX_READ_SIZE_BYTES,
+    encoding: str = DEFAULT_ENCODING
+) -> str | None:
     """
     Memory-safe and fault-tolerant file reader.
     Handles missing or deleted files gracefully with zero crashes.
-    Normalizes both CRLF (\\r\\n) and legacy Mac CR (\\r) to UNIX LF (\\n).
+    Normalizes both CRLF (\\r\\n) and legacy Mac CR (\\r) to strict UNIX LF (\\n).
     """
     try:
         p = Path(path)
@@ -301,20 +319,25 @@ def read_file_safe(path: str | Path, max_bytes: int = MAX_READ_SIZE_BYTES) -> st
         if not p.is_file():
             return None
         re_univ_nl = get_compiled_regex(RegexPatternType.UNIVERSAL_LINE_ENDING)
-        with open(p, "r", encoding="utf-8", errors="replace") as f:
+        with open(p, "r", encoding=encoding, errors="replace") as f:
             raw_text = f.read(max_bytes)
-            return re_univ_nl.sub("\n", raw_text)
+            return re_univ_nl.sub(LINE_SEPARATOR, raw_text)
     except (FileNotFoundError, PermissionError, OSError):
         return None
 
-def read_file_lf(path: str | Path) -> str:
+def read_file_lf(path: str | Path, encoding: str = DEFAULT_ENCODING) -> str:
     """Reads a text file ensuring strict UNIX LF. Returns empty string if file does not exist."""
-    content = read_file_safe(path)
+    content = read_file_safe(path, encoding=encoding)
     return content if content is not None else ""
 
-def write_file_lf(path: str | Path, content: str) -> bool:
+def write_file_lf(
+    path: str | Path,
+    content: str,
+    encoding: str = DEFAULT_ENCODING
+) -> bool:
     """
-    Atomic write ensuring UTF-8 encoding, strict UNIX LF, and Unix permission preservation.
+    Atomic write ensuring strict UNIX LF line endings and Unix permission preservation.
+    Encodes file according to the specified encoding constant (default: utf-8 without BOM).
     Preserves original executable bits (chmod +x / st_mode) on Linux/macOS.
     """
     p = Path(path)
@@ -331,9 +354,9 @@ def write_file_lf(path: str | Path, content: str) -> bool:
 
     try:
         re_univ_nl = get_compiled_regex(RegexPatternType.UNIVERSAL_LINE_ENDING)
-        lf_content = re_univ_nl.sub("\n", content)
+        lf_content = re_univ_nl.sub(LINE_SEPARATOR, content)
         with open(temp_path, "wb") as f:
-            f.write(lf_content.encode("utf-8"))
+            f.write(lf_content.encode(encoding))
 
         if original_mode is not None:
             try:
@@ -402,7 +425,7 @@ def atomic_cache_lock(lock_name: str = "repo-cache.lock", timeout: float = LOCK_
                             pass
 
                 fd = os.open(str(lock_file), os.O_CREAT | os.O_EXCL | os.O_RDWR)
-                os.write(fd, f"pid={os.getpid()}\ntime={time.time()}".encode("utf-8"))
+                os.write(fd, f"pid={os.getpid()}{LINE_SEPARATOR}time={time.time()}".encode(DEFAULT_ENCODING))
                 os.close(fd)
                 is_acquired = True
                 break
@@ -428,7 +451,7 @@ def load_repo_cache() -> dict[str, Any]:
     for target in (PRIMARY_CACHE_FILE, LEGACY_CACHE_FILE):
         if target.exists():
             try:
-                with open(target, "r", encoding="utf-8") as f:
+                with open(target, "r", encoding=DEFAULT_ENCODING) as f:
                     data = json.load(f)
                     if isinstance(data, dict):
                         if "files" in data:
@@ -443,7 +466,7 @@ def save_repo_cache(cache_data: dict[str, Any]) -> None:
     with atomic_cache_lock("repo-cache-write.lock"):
         temp_primary = PRIMARY_CACHE_FILE.with_suffix(".json.tmp")
         try:
-            with open(temp_primary, "w", encoding="utf-8") as f:
+            with open(temp_primary, "w", encoding=DEFAULT_ENCODING) as f:
                 json.dump(cache_data, f, indent=2)
             temp_primary.replace(PRIMARY_CACHE_FILE)
         except Exception:
@@ -451,7 +474,7 @@ def save_repo_cache(cache_data: dict[str, Any]) -> None:
 
         try:
             temp_legacy = LEGACY_CACHE_FILE.with_suffix(".json.tmp")
-            with open(temp_legacy, "w", encoding="utf-8") as f:
+            with open(temp_legacy, "w", encoding=DEFAULT_ENCODING) as f:
                 json.dump(cache_data, f, indent=2)
             temp_legacy.replace(LEGACY_CACHE_FILE)
         except Exception:
@@ -467,14 +490,14 @@ def stream_cached_files(
 ) -> Generator[Path, None, None]:
     """Phase 1: Streams valid files from cache first. Automatically skips missing/deleted/excluded files."""
     file_list = cache_data.get("files", [])
-    norm_root = normalize_rel_path(root_dir).rstrip("/")
+    norm_root = normalize_rel_path(root_dir).rstrip(PATH_SEPARATOR)
     ext_set = normalize_extensions(extensions)
 
     for rel_path in file_list:
         norm_p = normalize_rel_path(rel_path)
         if norm_root:
             if norm_root != ".":
-                if not norm_p.startswith(norm_root + "/"):
+                if not norm_p.startswith(norm_root + PATH_SEPARATOR):
                     if norm_p != norm_root:
                         continue
         if is_ignored_path(norm_p, custom_excludes=custom_excludes):
