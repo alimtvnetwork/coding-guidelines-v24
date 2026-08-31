@@ -25,9 +25,9 @@ You are the sole orchestrator. Your job is to complete ALL pending tasks without
 
 - Make a Great Plan: Analyze all pending tasks and devise a comprehensive execution plan. Tasks exceeding 7 steps must be decomposed into `plans/subtasks/XX-<slug>/`.
 - Do NOT Ask Questions: Do not stop to ask the user for permission. Do not stop to ask clarifying questions.
-- File Collision Locking Matrix (`active-locks.json`): Register active target files in `.lovable/temp/active-locks.json` so parallel tasks touch completely disjoint files.
+- File Collision Locking Matrix (`active-locks.json`): Register active target files in `.lovable/01-index.md` so parallel tasks touch completely disjoint files.
 - Self-Loop: Self-loop continuously until every single pending task in the queue is verifiably completed.
-- 3-Strike Rollback: If an agent fails unit tests or builds 3 consecutive times, automatically rollback dirty working tree (`git checkout -- <files>`), log failure context to `.lovable/memory/last-failure.md`, and advance to the next disjoint task.
+- 3-Strike Rollback: If an agent fails unit tests or builds 3 consecutive times, automatically rollback dirty working tree (`git checkout -- <files>`), log failure context to `.lovable/plan.md`, and advance to the next disjoint task.
 
 ## 3. High-Stakes Code Standards & Root Cause Analysis
 
@@ -47,19 +47,19 @@ You MUST follow the project's strict coding guidelines located in `spec/02-codin
 2. Code Style & File Size Limits (80-100 lines max)
 *(Enforces strict size limitations: e.g., React components < 100 lines, functions < 15 lines, and basic formatting)*
 
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md` (Flatten logic to avoid nested ifs)
 - `spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md`
 
 3. Boolean Conditions & Positive Framing
 *(Dictates strict is/has prefixes, absolute ban on negative words like `not`/`no`, and extraction of complex logic)*
 
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`
 - `spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md` (Bans passing true/false as raw parameters)
 
@@ -124,7 +124,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 - [ ] Self-loop continuously until every pending task is completed; do not stop until the queue is completely empty.
 - [ ] Audited `.lovable/plans/pending/` and re-sequenced task filenames to `01-`, `02-`, etc., if incorrectly named.
-- [ ] Grouped tasks into Execution Waves and checked `.lovable/temp/active-locks.json` for file collisions.
+- [ ] Grouped tasks into Execution Waves and checked `.lovable/01-index.md` for file collisions.
 - [ ] Executed autonomously via continuous self-looping without stopping to ask user questions.
 - [ ] Audited code against Master Consolidated Guide, Code Style Limits (<15 lines/func, <100 lines/comp), Boolean positive framing, and Immutability rules.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back with `git checkout` and logged to `last-failure.md`.

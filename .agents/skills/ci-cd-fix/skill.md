@@ -10,7 +10,7 @@ Trigger Keywords & Aliases: `fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`, `cic
 
 /goal Autonomously diagnose, update or create the local Python CI/CD runner script (`.lovable/ai-fix-scripts/06-cicd-local-runner.py`) from repository workflows or screenshot pipeline names, and fix all failures by executing a singly-done self-looping sequence (zeroing in on one failure at a time) until the runner exits with code 0 without stopping.
 
-/learn Ingest recent RCAs from `.lovable/cicd-issues/`, `.lovable/issues/`, `spec/02-coding-guidelines/02-canonical-size-tier.md`, `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`, `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md`, and `spec/03-error-manage/` before touching any code so past mistakes are never repeated.
+/learn Ingest recent RCAs from `.lovable/cicd-issues/`, `.lovable/issues/`, `spec/02-coding-guidelines/02-canonical-size-tier.md`, `spec/02-coding-guidelines/01-cross-language/01-index.md`, `spec/02-coding-guidelines/01-cross-language/01-index.md`, and `spec/03-error-manage/` before touching any code so past mistakes are never repeated.
 
 ---
 
@@ -38,9 +38,9 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
-> 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/plans/subtasks/01-task.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
->    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md)`
->    - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md)`
+> 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
+>    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
+>    - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md)`
 > 4. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 > 5. **Cross-Platform Python CI Mandate (TOTAL BAN on new `.sh` scripts in CI):** All newly created or refactored CI/CD verification tools, determinism checks, fixtures, and linter jobs MUST be implemented in pure, cross-platform Python (`.py`). Legacy `.sh` scripts must be converted to `.py` scripts so all pipelines run natively across Linux, macOS, and Windows without relying on bash emulation.
 
@@ -73,7 +73,7 @@ Every step must be **singly done** using bounded self-looping turns:
 
 - **Self-Loop Step 4 (RCA & Zero In on Error):**
   1. Write 4-part RCA in `.lovable/memory/issues/XX-<slug>.md`.
-  2. Register in `.lovable/memory/issues/index.md` and `.lovable/strictly-avoid.md`.
+  2. Register in `.lovable/01-index.md` and `.lovable/strictly-avoid.md`.
 
 - **Self-Loop Step 5 (Surgical Code Fix):**
   1. Open the specific file and line, apply minimal surgical fix.
@@ -108,7 +108,7 @@ Spend up to PHASE_1_STEPS self-loop iterations reading in this order:
    - Azure Pipelines: `azure-pipelines.yml`
    - Bitbucket: `bitbucket-pipelines.yml`
    - CircleCI: `.circleci/config.yml`
-   - Custom runners: `Makefile`, `scripts/ci.sh`, `run.sh`, `run.ps1`
+   - Custom runners: `Makefile`, `.lovable/ai-fix-scripts/06-cicd-local-runner.py`, `run.sh`, `run.ps1`
 2. **Language configuration:** `.nvmrc`, `.python-version`, `go.mod`, `pyproject.toml`, `tsconfig.json`, lockfiles
 3. **For every CI/CD job, record:**
    - `runs-on` image (e.g., `ubuntu-latest`, `node:20-alpine`)

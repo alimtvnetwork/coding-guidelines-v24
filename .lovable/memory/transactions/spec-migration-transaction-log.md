@@ -35,7 +35,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/01-spec-authoring-guide/14-version-schema.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/02-canonical-size-tier.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/03-03-coding-style-checklist.md`
-- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/01-cross-language/01-index.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/02-coding-guidelines/05-05-consolidated-review-guide.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/03-error-manage/02-improvements.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/03-error-manage/03-03-structure.md`
@@ -101,7 +101,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/18-blue-green-deployment.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/19-flaky-test-quarantine.md`
-- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/20-contract-testing.md`
+- RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/01-index.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/21-e2e-testing-pattern.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/22-known-issues-and-fixes.md`
 - RENAME: `spec/19-main-worker-service/29-29-plan.md` -> `spec/12-cicd-pipeline-workflows/23-lint-gating-rules.md`
@@ -279,7 +279,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `spec/12-cicd-pipeline-workflows/23-lint-gating-rules.md` -> `spec/12-cicd-pipeline-workflows/18-lint-gating-rules.md`
 - RENAME: `spec/12-cicd-pipeline-workflows/18-blue-green-deployment.md` -> `spec/12-cicd-pipeline-workflows/19-blue-green-deployment.md`
 - RENAME: `spec/12-cicd-pipeline-workflows/19-flaky-test-quarantine.md` -> `spec/12-cicd-pipeline-workflows/20-flaky-test-quarantine.md`
-- RENAME: `spec/12-cicd-pipeline-workflows/20-contract-testing.md` -> `spec/12-cicd-pipeline-workflows/21-contract-testing.md`
+- RENAME: `spec/12-cicd-pipeline-workflows/01-index.md` -> `spec/12-cicd-pipeline-workflows/21-contract-testing.md`
 - RENAME: `spec/12-cicd-pipeline-workflows/21-e2e-testing-pattern.md` -> `spec/12-cicd-pipeline-workflows/22-e2e-testing-pattern.md`
 - UPDATE: Updated `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/01-index.md`
 - UPDATE: Updated `spec/12-cicd-pipeline-workflows/01-index.md` with consolidated 22-item inventory

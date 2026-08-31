@@ -28,9 +28,9 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
 > 3. **Worker Pool & Log Aggregation Architecture:** All local runners and test orchestrators must use a concurrent worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without cancelling sibling workers, and print a consolidated final summary with full stdout/stderr error logs for failed jobs.
 > 4. **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script from scratch**, regardless of whether the file already exists on disk.
-> 5. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/plans/subtasks/01-task.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
->    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md)`
->    - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md)`
+> 5. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
+>    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
+>    - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md)`
 > 6. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 
 ---
@@ -45,13 +45,13 @@ Before making any changes to `.github/workflows` or automation scripts, you must
 
 #### PowerShell & Orchestration (`spec/11-powershell-integration`)
 
-- [ ] `spec/11-powershell-integration/00-overview.md`
+- [ ] `spec/11-powershell-integration/01-index.md`
 - [ ] `spec/11-powershell-integration/04-script-reference.md`
 - [ ] `spec/11-powershell-integration/05-integration-guide.md`
 
 #### CI/CD Pipeline Workflows (`spec/12-cicd-pipeline-workflows`)
 
-- [ ] `spec/12-cicd-pipeline-workflows/00-overview.md`
+- [ ] `spec/12-cicd-pipeline-workflows/01-index.md`
 - [ ] `spec/12-cicd-pipeline-workflows/02-ci-pipeline.md`
 - [ ] `spec/12-cicd-pipeline-workflows/05-release-pipeline.md`
 - [ ] `spec/12-cicd-pipeline-workflows/07-install-script-generation.md`
@@ -59,7 +59,7 @@ Before making any changes to `.github/workflows` or automation scripts, you must
 
 #### CLI & Build (`spec/13-generic-cli`)
 
-- [ ] `spec/13-generic-cli/00-overview.md`
+- [ ] `spec/13-generic-cli/01-index.md`
 - [ ] `spec/13-generic-cli/11-build-deploy.md`
 - [ ] `spec/13-generic-cli/18-batch-execution.md`
 
@@ -71,8 +71,8 @@ Before making any changes to `.github/workflows` or automation scripts, you must
 
 #### Release Engineering (`spec/16-generic-release`)
 
-- [ ] `spec/16-generic-release/00-overview.md`
-- [ ] `spec/16-generic-release/04-release-pipeline.md`
+- [ ] `spec/16-generic-release/01-index.md`
+- [ ] `spec/16-generic-release/01-index.md`
 - [ ] `spec/16-generic-release/04-install-scripts.md`
 
 #### Context / Issue Logging

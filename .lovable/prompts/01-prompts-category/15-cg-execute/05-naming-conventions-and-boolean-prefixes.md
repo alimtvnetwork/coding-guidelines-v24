@@ -27,9 +27,9 @@ N = total self-loop steps budget that the agents will perform.
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
-13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
-14. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/02-boolean-principles.md` for implicit positive booleans and anti-negative rules.
+12. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
+14. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` for implicit positive booleans and anti-negative rules.
 15. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/10-function-naming.md` for semantic verb and predicate prefix standards.
 16. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md` for domain-specific architectural specifications.
 17. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` for domain-specific architectural specifications.
@@ -187,7 +187,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 1. 2-Agent Concurrency & Strict `.lovable/` Bounding
 
 - **2-Agent Limit (Max 2 Threads Each):** When dispatching work, spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/XX/01-task.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
@@ -203,7 +203,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
@@ -239,7 +239,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
@@ -263,7 +263,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/02-boolean-principles.md`, `spec/02-coding-guidelines/01-cross-language/10-function-naming.md`, `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md`, `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`, and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`, `spec/02-coding-guidelines/01-cross-language/10-function-naming.md`, `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md`, `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`, and `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] Zero Bare `ok`: All type assertions and map lookups use affirmative boolean names (`isAppErr`, `isFound`).
 - [ ] Positive Booleans & Inverted Guards: All booleans use affirmative names (`hasColors`, `hasPayload`); guard clauses invert condition (`if (!hasColors)`).
 

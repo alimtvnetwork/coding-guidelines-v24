@@ -29,8 +29,8 @@ N = total self-loop steps budget that the agents will perform.
 12. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 13. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-15. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
-16. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
+15. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+16. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 17. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/04-code-style/` for domain-specific architectural specifications.
 18. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md` for newline styling examples.
 19. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
@@ -516,7 +516,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 1. 2-Agent Concurrency & Strict `.lovable/` Bounding
 
 - **2-Agent Limit (Max 2 Threads Each):** When dispatching work, spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/XX/01-task.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Micro-Batch Subtask Partitioning (Steps 1 .. N/2)
@@ -569,7 +569,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint batches verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint batches verified against `.lovable/01-index.md`.
 - [ ] **Micro-Batch Sizing:** Each subtask is bounded to exactly 5–8 files.
 - [ ] **Real Source Edits:** Verified with `git diff --stat` that actual source code files (`*.go`, `*.ts`, etc.) have newline insertions.
 - [ ] Completed batch tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.

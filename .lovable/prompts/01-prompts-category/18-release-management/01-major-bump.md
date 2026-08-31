@@ -53,9 +53,9 @@ You must update `version.json`, `changelog.md`, and `readme.md` at a minimum dur
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
 > 3. **Worker Pool & Log Aggregation Architecture:** Pre-release quality gates and test orchestrators must run concurrently using a worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without cancelling sibling workers, and print a consolidated final summary with full stdout/stderr error logs.
 > 4. **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python release scripts (`bump_versions.py`, `03-cicd-local-runner.py`) from scratch**, regardless of whether the file already exists on disk.
-> 5. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/plans/subtasks/01-task.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
->    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md)`
->    - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md)`
+> 5. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
+>    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
+>    - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md)`
 > 6. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 
 ---
@@ -81,7 +81,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 ## Execution Checklist
 
 - Test File Ban: You MUST NOT read, scan, or modify test files (e.g., `*_test.*`, `*.spec.*`, `test/*`) when discovering or updating versions. Test files contain mock data, and updating mock data corrupts the tests.
-- Release Architecture Memory: You must dynamically build a map of how the release works in this codebase (where the version lives, how it propagates) and write it to `.lovable/memory/release-architecture-map.md`. You must then enqueue this file inside `.lovable/memory/what-to-read.md` and link it in the root `readme.md`.
+- Release Architecture Memory: You must dynamically build a map of how the release works in this codebase (where the version lives, how it propagates) and write it to `.lovable/memory/01-index.md`. You must then enqueue this file inside `.lovable/what-to-read.md` and link it in the root `readme.md`.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] Version Inheritance: If `version.json` contains components (e.g. `frontend`) set to `"inherit"`, DO NOT modify them. They automatically scale with the global version. Always bump the global root `"version"` property unless explicitly asked to bump a sub-component.
 - [ ] Discover current version from disk.

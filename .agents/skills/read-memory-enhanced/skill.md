@@ -32,7 +32,7 @@ The `.lovable/` folder, specs, and codebase can be massive. To process this info
 - **Specific Titling:** When spawning a sub-agent for reading, you must give it a highly specific title reflecting exactly what it is reading (e.g., `Reading Auth Specs` or `Scanning API Memory`). Do not use generic names. If an agent switches tasks, its title must change.
 - **Micro-Tasking:** Assign sub-agents small, granular folders/files to read rather than asking one agent to read the entire codebase.
 - You are allowed to write to the `.lovable/` directory to enhance project memory after reading. This includes:
-  - Writing summaries of what you learned and understood into `.lovable/memory/learned/XX-<slug>.md` (or `.lovable/learned.md`), including the number of files read, to maintain context.
+  - Writing summaries of what you learned and understood into `.lovable/memory/learned/XX-<slug>.md` (or `.lovable/01-index.md`), including the number of files read, to maintain context.
   - Updating `.lovable/what-to-read.md` based on your progress to guide future reading workflows.
   - Documenting any problems or issues you discover in the codebase into `.lovable/issues/` or `.lovable/suggestions.md`.
   - Updating existing memory files, capturing open ambiguities, or updating plans.
@@ -46,7 +46,7 @@ The `.lovable/` folder, specs, and codebase can be massive. To process this info
 Walk `.lovable/` recursively. Every file matters. Missing files are noted, not silently skipped. In particular:
 | # | Path | What you get |
 | --- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | `.lovable/overview.md` | Project summary, stack, nav map |
+| 1 | `.lovable/01-index.md` | Project summary, stack, nav map |
 | 2 | `.lovable/strictly-avoid.md` | Hard prohibitions (CODE RED) |
 | 3 | `.lovable/user-preferences` | How the human wants you to behave |
 | 4 | `.lovable/what-to-read.md` | Authoritative reading order for this project. If it exists, it overrides the generic order in this prompt. Read it first and follow it. |
@@ -116,7 +116,7 @@ Only open a spec folder when the current task needs it.
 | App-specific DB schema | `spec/23-app-db/` |
 | App-specific UI + design system | `spec/24-app-ui-design-system/` |
 Inside each folder: `00-overview.md` → numbered files → `99-consistency-report.md`.
-Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `spec/coding-guidelines/`, `coding-guidelines/`, `spec/XX-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
+Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines/coding-guidelines.md`, `spec/coding-guidelines/`, `coding-guidelines/`, `spec/XX-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
 ---
 
 ## Anti-Hallucination Contract

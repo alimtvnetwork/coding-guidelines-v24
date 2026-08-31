@@ -124,9 +124,9 @@ jobs:
         run: |
           test -f linter-scripts/validate-guidelines.go             || { echo "::error::validate-guidelines.go missing"; exit 1; }
           test -f linter-scripts/validate-guidelines.py             || { echo "::error::validate-guidelines.py missing"; exit 1; }
-          test -f linter-scripts/check-axios-version.sh             || { echo "::error::check-axios-version.sh missing"; exit 1; }
+          test -f linter-scripts/check-axios-version.py             || { echo "::error::check-axios-version.py missing"; exit 1; }
           test -f linter-scripts/check-spec-folder-refs.py          || { echo "::error::check-spec-folder-refs.py missing"; exit 1; }
-          test -f linter-scripts/check-forbidden-spec-paths.sh      || { echo "::error::check-forbidden-spec-paths.sh missing"; exit 1; }
+          test -f linter-scripts/check-forbidden-spec-paths.py      || { echo "::error::check-forbidden-spec-paths.py missing"; exit 1; }
           test -f linter-scripts/check-forbidden-strings.py         || { echo "::error::check-forbidden-strings.py missing"; exit 1; }
           test -f linter-scripts/check-readme-install-section.py    || { echo "::error::check-readme-install-section.py missing"; exit 1; }
           test -f linter-scripts/check-placeholder-comments.py      || { echo "::error::check-placeholder-comments.py missing"; exit 1; }
@@ -134,6 +134,7 @@ jobs:
           test -f linter-scripts/forbidden-strings.toml             || { echo "::error::forbidden-strings.toml missing"; exit 1; }
           test -f linter-scripts/check-newline-styling.py           || { echo "::error::check-newline-styling.py missing"; exit 1; }
           test -f linter-scripts/check-newline-styling.mjs          || { echo "::error::check-newline-styling.mjs missing"; exit 1; }
+          test -f linter-scripts/check-sequence-integrity.py        || { echo "::error::check-sequence-integrity.py missing"; exit 1; }
 
       - name: Run Go validator (spec)
         run: go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
@@ -142,7 +143,7 @@ jobs:
         run: python3 linter-scripts/validate-guidelines.py spec || true
 
       - name: Run Axios version check
-        run: bash linter-scripts/check-axios-version.sh
+        run: python3 linter-scripts/check-axios-version.py
 
       - name: Run newline-concept Python linter
         run: python3 linter-scripts/check-newline-styling.py
@@ -153,8 +154,11 @@ jobs:
       - name: Check spec folder references (stale-link guard)
         run: python3 linter-scripts/check-spec-folder-refs.py
 
+      - name: Check sequence and internal link integrity
+        run: python3 linter-scripts/check-sequence-integrity.py
+
       - name: Check forbidden spec paths (re-split + merge-proposal guard)
-        run: bash linter-scripts/check-forbidden-spec-paths.sh
+        run: python3 linter-scripts/check-forbidden-spec-paths.py
 
       - name: Check forbidden strings (TOML-driven rename guards)
         run: python3 linter-scripts/check-forbidden-strings.py
@@ -731,7 +735,7 @@ jobs:
       - name: Run guard against real run.sh / run.ps1 (emit report)
         env:
           RUNNER_GUARD_REPORT: ${{ github.workspace }}/reports/runner-guard-report.md
-        run: bash linter-scripts/check-runner-dispatch-antipatterns.sh
+        run: python3 linter-scripts/check-runner-dispatch-antipatterns.py
 
       - name: Publish report to GitHub Step Summary
         if: always()

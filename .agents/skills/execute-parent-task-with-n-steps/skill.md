@@ -36,11 +36,11 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 - **Strict Relative Git Paths Mandate (TOTAL BAN on Absolute Paths / `file:///` URIs):**
   When breaking down tasks into subtasks (`.lovable/plans/subtasks/XX-<slug>/*.md`), writing specs, updating memory logs (`.lovable/memory/issues/`), or citing guidelines, ALL file paths and markdown links MUST be **strictly relative to the git repository root**. NEVER write absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`) into any committed or created files.
   - ❌ **BAD (Absolute path / file URI):**
-    `- [SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md)`
-    `- [Target File](file:///absolute/path/to/gitmap/cmd/ssh_login_install_cmd.go)`
+    `- [SSH Commands](file:///absolute/path/to/...)`
+    `- [Target File](file:///absolute/path/to/cmd/main.go)`
   - ✅ **GOOD (Strict relative Git path):**
-    `- [SSH Commands](.lovable/spec/commands/01-ssh-commands.md)`
-    `- [Target File](gitmap/cmd/ssh_login_install_cmd.go)`
+    `- [SSH Commands](spec/13-generic-cli/01-index.md)`
+    `- Target File: cmd/main.go`
 - **Create a Task-Specific Rule Set:** Before executing, analyze the specific task domain and explicitly write down 3-5 custom rules or constraints unique to this task inside the spec file. This prevents domain-specific regressions and forces sub-agents to follow exact architectures.
 - Subtasks: You MUST break the plan down and create detailed subtask files inside `.lovable/plans/subtasks/XX-<slug>/`. Every subtask file must contain actionable, microscopic instructions with strictly relative Git paths.
 
@@ -61,7 +61,7 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] Staged files sanitized of artifact zips and temporary scratch files.

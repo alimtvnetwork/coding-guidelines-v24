@@ -39,13 +39,13 @@ description: >-
 > **STRICT RELATIVE GIT PATHS ONLY — NO ABSOLUTE PATHS / NO `file:///` URIs:**
 >
 > When generating plans, subtasks (`.lovable/plans/subtasks/`), memory issue logs (`.lovable/memory/issues/`), specs, code comments, or citations:
-> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/spec/commands/01-ssh-commands.md`, `cmd/main.go`).
+> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `spec/03-error-manage/01-index.md`, `[SSH Commands](spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
 > 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 >
 > **Examples:**
-> - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
+> - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...) — Why: Defines behavior.`
 > - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
-> - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
+> - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
 > - ✅ **GOOD:** `Target File: cmd/login.go`
 
 - Temp Script Sandboxing: AI Fix Scripts (Reusable Tools): Before creating a helper script, you MUST check `.lovable/ai-fix-scripts/01-index.md` to reuse existing tools. If you generate a new script, you MUST write it to `.lovable/ai-fix-scripts/`, update `index.md` with its explanation, ensure `index.md` is linked in `what-to-read.md`, and commit the script.
@@ -59,7 +59,7 @@ description: >-
 ## Phase 1: Load Pending Tasks & Project State
 
 1. [ ] Check git status first. The working tree must be clean and committed before executing anything.
-2. [ ] Read  and /learn `.lovable/memory/01-index.md` and `.lovable/memory/what-to-read.md`. Verify root readme is strictly lowercase `readme.md`.
+2. [ ] Read  and /learn `.lovable/memory/01-index.md` and `.lovable/what-to-read.md`. Verify root readme is strictly lowercase `readme.md`.
 3. [ ] Read and /learn `.lovable/plans/01-index.md`. Then read every file in `.lovable/plans/pending/XX-<slug>.md` and all associated subtasks in `.lovable/plans/subtasks/XX-<slug>/` (Note: for coding guidelines, check `.lovable/plans/subtasks/01-coding-guideline-fixes/` or other synced folder structures).
 4. [ ] Group pending tasks into sequenced Execution Waves:
    - Wave 1: Schemas, DB, and query wrappers
@@ -72,7 +72,7 @@ description: >-
 
 1. Spawn sub-agents (MAXIMUM 2 concurrent):
    - Assign subtasks to up to 2 parallel sub-agents (and ONLY if there are too many tasks to handle sequentially) to accelerate execution.
-   - Maintain active file paths in `.lovable/temp/active-locks.json`. Parallel sub-agents must never touch the same files simultaneously.
+   - Maintain active file paths in `.lovable/01-index.md`. Parallel sub-agents must never touch the same files simultaneously.
    - Assign each sub-agent a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service`). Do not use generic names. If an agent switches tasks, its title must change.
    - Context Diet: When spawning a subagent, DO NOT paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction (e.g., "Read subtask file `.lovable/plans/subtasks/XX-slug/01-task.md` and execute it"). The subagent MUST read the necessary files itself. Passing massive payloads instantly causes hallucination and memory blowout.
    - Ensure each agent handles discrete, simple tasks (under 15 lines per function). Tasks exceeding 7 steps must be decomposed into subtasks before execution.
@@ -85,7 +85,7 @@ description: >-
 3. Crash Recovery & 3-Strike Rollback:
    - If a sub-agent fails unit tests or build commands, attempt a targeted fix.
    - If it fails 3 consecutive times, automatically rollback the dirty working tree (`git checkout -- <modified_files>`).
-   - Log the root cause to `.lovable/memory/last-failure.md` and `.lovable/issues/`.
+   - Log the root cause to `.lovable/plan.md` and `.lovable/issues/`.
    - Proceed to the next disjoint task after rollback.
 
 ---
@@ -148,13 +148,13 @@ Past execution turns were sloppy and failed to pin READMEs or bump versions. To 
 - [ ] Test File Ban: I have strictly excluded all test files (`*test*`, `*.spec.*`) from version scanning.
 - [ ] Root readme.md (lowercase always) Pinning (FATAL): I have pinned the latest release version into the root `readme.md` file! I have verified badges and install snippets match the new version.
 - [ ] Changelog Formatting: I have updated the changelog exactly according to the `version.json` format.
-- [ ] Release Architecture Map: I have maintained `.lovable/memory/release-architecture-map.md`, enqueued it in `what-to-read.md`, and linked it in the root `readme.md`.
+- [ ] Release Architecture Map: I have maintained `.lovable/memory/01-index.md`, enqueued it in `what-to-read.md`, and linked it in the root `readme.md`.
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] Staged files sanitized of artifact zips and temporary scratch files.

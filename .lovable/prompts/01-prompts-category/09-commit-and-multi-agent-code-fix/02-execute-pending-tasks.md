@@ -25,9 +25,9 @@ You are the sole orchestrator. Your job is to complete ALL pending tasks without
 
 - Make a Great Plan: Analyze all pending tasks and devise a comprehensive execution plan. Tasks exceeding 7 steps must be decomposed into `plans/subtasks/XX-<slug>/`.
 - Do NOT Ask Questions: Do not stop to ask the user for permission. Do not stop to ask clarifying questions.
-- File Collision Locking Matrix (`active-locks.json`): Register active target files in `.lovable/temp/active-locks.json` so parallel tasks touch completely disjoint files.
+- File Collision Locking Matrix (`active-locks.json`): Register active target files in `.lovable/01-index.md` so parallel tasks touch completely disjoint files.
 - Self-Loop: Self-loop continuously until every single pending task in the queue is verifiably completed.
-- 3-Strike Rollback: If an agent fails unit tests or builds 3 consecutive times, automatically rollback dirty working tree (`git checkout -- <files>`), log failure context to `.lovable/memory/last-failure.md`, and advance to the next disjoint task.
+- 3-Strike Rollback: If an agent fails unit tests or builds 3 consecutive times, automatically rollback dirty working tree (`git checkout -- <files>`), log failure context to `.lovable/plan.md`, and advance to the next disjoint task.
 
 ## 3. High-Stakes Code Standards & Root Cause Analysis
 
@@ -85,7 +85,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 - [ ] Self-loop continuously until every pending task is completed; do not stop until the queue is completely empty.
 - [ ] Audited `.lovable/plans/pending/` and re-sequenced task filenames to `01-`, `02-`, etc., if incorrectly named.
-- [ ] Grouped tasks into Execution Waves and checked `.lovable/temp/active-locks.json` for file collisions.
+- [ ] Grouped tasks into Execution Waves and checked `.lovable/01-index.md` for file collisions.
 - [ ] Executed autonomously via continuous self-looping without stopping to ask user questions.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back with `git checkout` and logged to `last-failure.md`.
 - [ ] Followed all high-stakes code standards (Enums with `Type` suffix, `PascalCase` values, explicit `isFail` checks, no magic strings, DRY code).

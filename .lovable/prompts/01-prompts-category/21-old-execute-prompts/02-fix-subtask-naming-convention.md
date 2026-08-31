@@ -39,18 +39,18 @@ You MUST follow the project's strict coding guidelines. These files are located 
 
 2. Code Style & File Size Limits (80-100 lines max)
 
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
-- `spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md`
 - `spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md`
 
 3. Boolean Conditions & Samples
 
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`
 - `spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md`
 

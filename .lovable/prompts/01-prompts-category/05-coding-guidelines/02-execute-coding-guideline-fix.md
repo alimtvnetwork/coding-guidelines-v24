@@ -11,10 +11,10 @@
 Context & References:
 
 - /learn master cross-language coding guidelines: `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/`
-- /learn braces, nesting, and conditions: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` & `02-conditions-and-extraction.md`
-- /learn function size caps (< 8 lines): `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- /learn boolean naming & inverse rules: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md` & `12-no-negatives.md`
-- /learn error management & logging: `spec/03-error-manage/00-overview.md`
+- /learn braces, nesting, and conditions: `spec/02-coding-guidelines/01-cross-language/01-index.md` & `02-conditions-and-extraction.md`
+- /learn function size caps (< 8 lines): `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- /learn boolean naming & inverse rules: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` & `12-no-negatives.md`
+- /learn error management & logging: `spec/03-error-manage/01-index.md`
 - /learn language-specific rules in `spec/02-coding-guidelines/` (Go wrapped booleans: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`)
 
 /goal - Apply concrete fixes for all violations listed in the pending tasks.
@@ -87,17 +87,17 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 ## Actionable Items & Checklist
 
 - [ ] Read and adhere to: `.lovable/coding-guidelines/coding-guidelines.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - [ ] Read and adhere to: `spec/02-coding-guidelines/03-golang/09-wrapped-boolean-results.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`
-- [ ] Read and adhere to: `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md`
-- [ ] Read and adhere to: `spec/03-error-manage/00-overview.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- [ ] Read and adhere to: `spec/03-error-manage/01-index.md`
 - [ ] Read the overarching main task plan.
 - [ ] Ensure the git repository starts completely clean.
 - [ ] Complete all work on the current branch only.

@@ -39,13 +39,13 @@ Run again if said: go, continue, or next
 > **STRICT RELATIVE GIT PATHS ONLY — NO ABSOLUTE PATHS / NO `file:///` URIs:**
 >
 > When generating plans, subtasks (`.lovable/plans/subtasks/`), memory issue logs (`.lovable/memory/issues/`), specs, code comments, or citations:
-> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/spec/commands/01-ssh-commands.md`, `cmd/main.go`).
+> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `spec/03-error-manage/01-index.md`, `[SSH Commands](spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
 > 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 >
 > **Examples:**
-> - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
+> - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...) — Why: Defines behavior.`
 > - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
-> - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md) — Why: Defines behavior.`
+> - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
 > - ✅ **GOOD:** `Target File: cmd/login.go`
 
 - If a spec file, folder, or task is missing or ambiguous, do NOT guess or invent a rule.
@@ -70,7 +70,7 @@ Run again if said: go, continue, or next
    - Each agent is assigned a chunk of simple, small micro-tasks (under 15 lines per function) to complete sequentially in its own context.
    - Tasks exceeding 7 steps must be decomposed into subtasks.
 3. File collision locking matrix (`active-locks.json`):
-   - Register active target files in `.lovable/temp/active-locks.json`.
+   - Register active target files in `.lovable/01-index.md`.
    - Ensure parallel tasks touch completely disjoint files to prevent git merge conflicts.
 4. Temp folder logging and specific titling (mandatory):
    - Spawn the sub-agent with a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service` or `Fixing DB Query Wrapper`). Do not use generic names. If an agent switches chunks, its title must change.
@@ -78,7 +78,7 @@ Run again if said: go, continue, or next
 5. Crash identification and 3-strike rollback:
    - If an agent fails or crashes, inspect its state in `.lovable/temp/`.
    - If an agent fails 3 times, automatically revert dirty changes (`git checkout -- <files>`).
-   - Log root cause to `.lovable/memory/last-failure.md` and `.lovable/issues/`.
+   - Log root cause to `.lovable/plan.md` and `.lovable/issues/`.
    - Restart a new agent for the next disjoint chunk.
 
 ## Phase 3: Code Quality (Non-Negotiable)
@@ -141,13 +141,13 @@ Past execution turns were sloppy and failed to pin READMEs or bump versions. To 
 - [ ] Test File Ban: I have strictly excluded all test files (`*test*`, `*.spec.*`) from version scanning.
 - [ ] Root readme.md (lowercase always) Pinning (FATAL): I have pinned the latest release version into the root `readme.md` file! I have verified badges and install snippets match the new version.
 - [ ] Changelog Formatting: I have updated the changelog exactly according to the `version.json` format.
-- [ ] Release Architecture Map: I have maintained `.lovable/memory/release-architecture-map.md`, enqueued it in `what-to-read.md`, and linked it in the root `readme.md`.
+- [ ] Release Architecture Map: I have maintained `.lovable/memory/01-index.md`, enqueued it in `what-to-read.md`, and linked it in the root `readme.md`.
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] `.gitignore` verified to exclude `.lovable/temp/` and garbage collection executed.
-- [ ] Strictly up to 3 agents spawned, each assigned disjoint files tracked in `.lovable/temp/active-locks.json`.
+- [ ] Strictly up to 3 agents spawned, each assigned disjoint files tracked in `.lovable/01-index.md`.
 - [ ] Pre-flight state written to `.lovable/temp/` for every agent.
 - [ ] 3-Strike rollback honored with `git checkout` and logged to `last-failure.md`.
 - [ ] Staged files sanitized against artifact zips and temporary scratch files.

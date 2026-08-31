@@ -7,7 +7,7 @@ type: standard
 # Generic Installer Behavior (Cross-Repo Standard)
 
 **Canonical spec:** `spec/14-update/27-generic-installer-behavior.md` v1.0.0
-**Plan:** `.lovable/plans/installer-behavior-rollout.md`
+**Plan:** `.lovable/plans/01-index.md`
 
 Applies to EVERY installer in EVERY repo: `install.*`, `release-install.*`,
 `quick-install.*`, `error-manage-install.*`, `linters-install.*`,

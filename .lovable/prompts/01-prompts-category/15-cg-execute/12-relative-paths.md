@@ -27,8 +27,8 @@ N = total self-loop steps budget that the agents will perform.
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
-13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
+12. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
 16. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
@@ -60,17 +60,17 @@ All markdown links, citations, subtask paths, and file references MUST start fro
 #### ❌ INVALID (Absolute Path / File URI):
 
 ```markdown
-- [SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines required behavior.
+- [SSH Commands](file:///absolute/path/to/...) — Why: Defines required behavior.
 - [App Error Docs](file:///absolute/path/to/spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
-- [gitmap/cmd/ssh_login_install_cmd.go](file:///absolute/path/to/gitmap/cmd/ssh_login_install_cmd.go) — Why: Target file.
+- [cmd/main.go](file:///absolute/path/to/cmd/main.go) — Why: Target file.
 ```
 
 #### ✅ VALID (Strict Relative Git Path):
 
 ```markdown
-- [SSH Commands](.lovable/spec/commands/01-ssh-commands.md) — Why: Defines required behavior.
+- [SSH Commands](spec/13-generic-cli/01-index.md) — Why: Defines required behavior.
 - [App Error Docs](spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
-- [gitmap/cmd/ssh_login_install_cmd.go](gitmap/cmd/ssh_login_install_cmd.go) — Why: Target file.
+- [cmd/main.go](cmd/main.go) — Why: Target file.
 ```
 
 ---
@@ -84,7 +84,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 1. 2-Agent Concurrency & Strict `.lovable/` Bounding
 
 - **2-Agent Limit (Max 2 Threads Each):** When dispatching work, spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/XX/01-task.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
@@ -100,7 +100,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
@@ -136,7 +136,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
@@ -155,7 +155,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines/coding-guidelines.md`.
 
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)

@@ -79,7 +79,7 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
 8. Memory persistence:
    - You are allowed to write to the `.lovable/` directory to enhance project memory after reading.
    - Write summaries of what you learned into `.lovable/memory/learned/01-<slug>.md` (or `.lovable/memory/01-<slug>.md`), including file counts, to maintain context.
-   - Update `.lovable/memory/what-to-read.md` based on your progress to guide future reading workflows.
+   - Update `.lovable/what-to-read.md` based on your progress to guide future reading workflows.
    - Document any discovered bugs into `.lovable/issues/01-<slug>.md` or `.lovable/suggestions.md`.
    - Capture open ambiguities or update execution plans.
 
@@ -100,12 +100,12 @@ To guarantee institutional memory and prevent regressions across all workflows (
 
 1. General Issue / Bug RCAs:
    - Path: `.lovable/issues/01-<slug>.md` (sequenced as `01-`, `02-`, etc.)
-   - Index: Registered in `.lovable/issues/index.md` (or `.lovable/plans/01-index.md`)
+   - Index: Registered in `.lovable/01-index.md` (or `.lovable/plans/01-index.md`)
    - Mandatory Structure: Error description, exact file/line location, Root Cause Analysis (one-sentence root cause + deep analysis), fix strategy, and prevention checklist.
 
 2. CI/CD Failure RCAs:
    - Path: `.lovable/cicd-issues/01-<slug>.md` (sequenced as `01-`, `02-`, etc.)
-   - Index: Registered in `.lovable/cicd-issues/index.md` (or `.lovable/cicd-index.md`)
+   - Index: Registered in `.lovable/cicd-index.md` (or `.lovable/cicd-index.md`)
    - Mandatory Structure: Raw pipeline error snippet, Root Cause Analysis, resolution applied, and "What NOT to Repeat" rules.
 
 3. Retrospectives & Architectural Failure Learnings:
@@ -129,7 +129,7 @@ To guarantee institutional memory and prevent regressions across all workflows (
 
 ### 1.0 Read `what-to-read.md` and Confirm Root `readme.md` Lowercase (Auto-Fix & Commit)
 
-1. Read `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`). This is the authoritative reading order for the project and overrides any generic order. Follow every file and order it specifies.
+1. Read `.lovable/what-to-read.md` (or `.lovable/what-to-read.md`). This is the authoritative reading order for the project and overrides any generic order. Follow every file and order it specifies.
 2. Root `readme.md` lowercase verification and auto-fix:
    - Verify that the root readme file is strictly named lowercase `readme.md`.
    - If an uppercase `README.md` exists or the casing is incorrect on disk or in git, immediately rename it to `readme.md`, remove the stale uppercase file, commit the change (`fix: ensure root readme is strictly lowercase readme.md`), and push to git without asking or second-guessing.
@@ -141,12 +141,12 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 
 > [!IMPORTANT]
 > **MANDATORY `.lovable/*.md` FLAGGING & AUDIT RULE:**
-> Every single `.md` file discovered directly in `.lovable/` (e.g. `.lovable/folder-03-structure.md`, `.lovable/prompts.md`, `.lovable/strictly-avoid.md`, `.lovable/project.json`) or inside any nested subdirectory MUST be actively read, cataloged, and flagged in the memory log. If an unindexed or orphan markdown file is found, immediately raise a flag in the context log and register it into `.lovable/memory/01-index.md` or `.lovable/plans/01-index.md`.
+> Every single `.md` file discovered directly in `.lovable/` (e.g. `.lovable/folder-structure.md`, `.lovable/prompts.md`, `.lovable/strictly-avoid.md`, `version.json`) or inside any nested subdirectory MUST be actively read, cataloged, and flagged in the memory log. If an unindexed or orphan markdown file is found, immediately raise a flag in the context log and register it into `.lovable/memory/01-index.md` or `.lovable/plans/01-index.md`.
 
 | #   | Path                                                  | What you get                                                                                                                                |
 | --- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | `.lovable/memory/what-to-read.md`                     | Authoritative reading order for this project. Read it first and follow all referenced files.                                            |
-| 2   | `.lovable/folder-03-structure.md`                | Canonical architectural map of all `.lovable/` folders, scripts, and naming conventions.                                                  |
+| 1   | `.lovable/what-to-read.md`                     | Authoritative reading order for this project. Read it first and follow all referenced files.                                            |
+| 2   | `.lovable/folder-structure.md`                | Canonical architectural map of all `.lovable/` folders, scripts, and naming conventions.                                                  |
 | 3   | `.lovable/strictly-avoid.md`                          | Hard prohibitions (CODE RED) — append-only, never truncate.                                                                               |
 | 4   | `.lovable/coding-guidelines/coding-guidelines.md`     | Master single source of truth for cross-language coding guidelines, `Result[T]` envelopes, and `is`/`has` booleans.                       |
 | 5   | `.lovable/ai-fix-scripts/`                            | Automated Python utilities (`01-file-manipulator.py`, `03-cicd-local-runner.py`, `08-fast-file-scanner.py`, `09-fast-cached-grep.py`, `01-index.md`). Pre-warms `tmp/cache/` file caches for rapid zero-overhead file discovery across folders. |
@@ -155,7 +155,7 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 | 8   | `.lovable/plans/01-index.md`                             | Master index of all plans (pending + completed + subtasks). Read this before touching individual plan files.                               |
 | 9   | `.lovable/plans/pending/`                             | Active plans, `01-<slug>.md` — read all and list out each pending item.                                                                   |
 | 10  | `.lovable/plans/subtasks/`                            | Granular 5–8 file batch files (`batch-01.md`, etc.) linked from parent plans.                                                              |
-| 11  | `.lovable/plans/last-failure.md`                      | Instant recovery state from the most recent run failure.                                                                                   |
+| 11  | `.lovable/plan.md`                      | Instant recovery state from the most recent run failure.                                                                                   |
 | 12  | `.lovable/plans/completed/`                           | Historical completed plans and execution logs.                                                                                              |
 | 13  | `.lovable/issues/`                                    | General bugs and regressions — read and list out pending bugs.                                                                             |
 | 14  | `.lovable/cicd-issues/`                               | CI/CD-specific failures — read and list out pending CI/CD issues.                                                                           |
@@ -368,7 +368,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 /goal Complete the checklist properly until done can do self-looping.
 
-1. [ ] /learn `.lovable/memory/what-to-read.md` (or `.lovable/what-to-read.md`) first and followed its order in full.
+1. [ ] /learn `.lovable/what-to-read.md` (or `.lovable/what-to-read.md`) first and followed its order in full.
 2. [ ] Confirmed root readme is strictly lowercase `readme.md` (auto-fixed, committed, and pushed if uppercase or missing).
 3. [ ] /learn the root `readme.md` file (casing rules, architecture, entry points).
 4. [ ] Walked `.lovable/` recursively, no folder or file skipped silently, and flagged all `.lovable/*.md` files.
@@ -397,15 +397,15 @@ Then stop. No next-step suggestions, no exploratory questions.
 /goal Complete the checklist properly until done can do self-looping.
 
 1. [ ] /learn the coding guidelines in: `.lovable/coding-guidelines/coding-guidelines.md` and create memory.
-2. [ ] /learn the condition extraction in: `spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md` and create memory.
-3. [ ] /learn the formatting and braces in: `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md` and create memory.
-4. [ ] /learn the multi-line formatting in: `spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md` and create memory.
-5. [ ] /learn the boolean guidelines in: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md` and create memory.
-6. [ ] /learn the anti-hallucination rules in: `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` and create memory.
-7. [ ] /learn the error management architecture in: `spec/03-error-manage/00-overview.md` (and related error manage files) and create memory.
+2. [ ] /learn the condition extraction in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+3. [ ] /learn the formatting and braces in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+4. [ ] /learn the multi-line formatting in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+5. [ ] /learn the boolean guidelines in: `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` and create memory.
+6. [ ] /learn the anti-hallucination rules in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+7. [ ] /learn the error management architecture in: `spec/03-error-manage/01-index.md` (and related error manage files) and create memory.
 8. [ ] /learn all recent Root Cause Analysis (RCA) files in `.lovable/issues/`, `.lovable/cicd-issues/`, and `spec/03-error-manage/01-error-resolution/03-retrospectives/` to prevent recurring errors.
 9. [ ] /learn all hard prohibitions in `.lovable/strictly-avoid.md` and verify zero violations.
-10. [ ] /learn the enum standards and fixes in: `spec/17-consolidated-guidelines/07-enum-standards.md` and `spec/02-coding-guidelines/06-ai-optimization/05-enum-naming-quick-reference.md` and create memory.
+10. [ ] /learn the enum standards and fixes in: `spec/17-consolidated-guidelines/07-enum-standards.md` and `spec/17-consolidated-guidelines/07-enum-standards.md` and create memory.
 11. [ ] /learn ALL other single-file specs in `spec/02-coding-guidelines/` and create memory.
 12. [ ] /learn the overarching main task plan.
 13. [ ] Ensure the git repository starts completely clean.

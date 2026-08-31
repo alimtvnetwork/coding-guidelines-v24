@@ -34,7 +34,7 @@ You are the orchestrator. If your sub-agents fail, hallucinate, or go into infin
 - Specific Titling: Spawn each dedicated sub-agent with a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service` or `Fixing DB Connection`). Do not use generic names. If an agent switches tasks, its title must change.
 - Micro-Tasking: Ensure agents are assigned simple, small micro-tasks rather than larger monolithic ones.
 - Spawn a dedicated sub-agent for each independent chunk simultaneously (MAXIMUM 2-3 concurrently).
-- File Collision Locking Matrix (`active-locks.json`): Check `.lovable/temp/active-locks.json` so parallel subagents touch completely disjoint files.
+- File Collision Locking Matrix (`active-locks.json`): Check `.lovable/01-index.md` so parallel subagents touch completely disjoint files.
 - Do not wait sequentially like an idiot.
 
 ## 4. Sub-Agent Lifecycle & Status Tracking (Non-negotiable)
@@ -51,7 +51,7 @@ Every sub-agent that is spawned MUST follow this lifecycle without exception:
   - Update the corresponding step in the parent plan file `.lovable/plans/pending/01-<slug>.md` with `✅ Done` on that step entry.
   - Explicitly signal completion to the main orchestrator. Silence is not completion. A sub-agent that does not update its file has NOT completed its task.
 - Sub-agents do NOT commit. They only write to the file system.
-- If a sub-agent stalls, gives garbage, or fails 3 times, rollback its dirty files (`git checkout -- <files>`), log root cause to `.lovable/memory/last-failure.md`, and spawn a new one.
+- If a sub-agent stalls, gives garbage, or fails 3 times, rollback its dirty files (`git checkout -- <files>`), log root cause to `.lovable/plan.md`, and spawn a new one.
 
 ## 5. Coding Standards: Booleans, Enums & Wrappers
 
@@ -110,7 +110,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] Derive `<slug>` from plan filename itself (e.g., `01-auth-refactor.md` → `01-auth-refactor`).
 - [ ] Confirm subtask files exist under `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md` for each step needing parallel execution.
 - [ ] Verified anti-hallucination: stopped and asked clarifying questions if files/specs were missing.
-- [ ] Managed parallel subagents with specific titling and disjoint file locking via `.lovable/temp/active-locks.json`.
+- [ ] Managed parallel subagents with specific titling and disjoint file locking via `.lovable/01-index.md`.
 - [ ] Sub-agents updated subtask files and parent plan steps to `✅ Done`.
 - [ ] Staged files sanitized: absolutely NO artifact zip archives, test data, or binaries staged.
 - [ ] Fast-forward commit created and pushed without rewriting published Git history.

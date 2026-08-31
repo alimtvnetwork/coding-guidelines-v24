@@ -31,7 +31,7 @@ spec", "run audit v<N>".
 - It reads the spec and writes one dated audit file. That is all.
 - It never edits, fixes, renames, splits or reformats a file it audits. Audit,
   then fix in a separate run. Auditing and fixing in the same pass is a hard
-  failure (`spec/25-app-spec-audit/00-overview.md` §4 AUD-004g).
+  failure (`spec/01-spec-authoring-guide/01-index.md` §4 AUD-004g).
 - It never writes application code, never runs a migration, never commits.
 - It never edits an earlier dated audit file. A new run is a new file; the
   superseded run gets a `> STALE — superseded by <audit-file>` banner as its
@@ -74,7 +74,7 @@ If a spec proposes creating temporary scripts (e.g., CSJ, Python) for fixing or 
 
 ## RULE 1 - working stance
 
-Read as the blind-AI persona in `spec/25-app-spec-audit/00-overview.md` §1: never
+Read as the blind-AI persona in `spec/01-spec-authoring-guide/01-index.md` §1: never
 asks a question, takes the first matching rule, treats SHOULD as optional, cannot
 infer intent, trusts diagrams over prose, has only the delivered folder, and stops
 at the first heading that looks like an answer. Scoring the spec as a cooperative
@@ -141,7 +141,7 @@ Overall Score Math: The Overall score must be calculated as the strict arithmeti
 
 Each dimension gets a score, the evidence that produced it, and at least one
 remedy row in the improvement set. Point costs come from
-`spec/25-app-spec-audit/01-scoring-rubric.md`.
+`spec/01-spec-authoring-guide/01-index.md`.
 
 | #   | Dimension                      | The question it answers                                                                                          |
 | --- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
@@ -188,7 +188,7 @@ condition-styling sub-file is listed individually:
 | test naming + structure         | .../01-cross-language/14-test-naming-and-03-structure.md                          | yes/no                  | none       |
 | file/folder naming              | spec/02-coding-guidelines/08-file-folder-naming/<language>.md                  | yes/no                  | none       |
 | language rules (go/php/ts)      | spec/02-coding-guidelines/03-golang|04-php|02-typescript/...                   | yes/no                  | none       |
-| error architecture              | spec/03-error-manage/02-error-architecture/00-overview.md                      | yes/no                  | none       |
+| error architecture              | spec/03-error-manage/01-index.md                      | yes/no                  | none       |
 | error code registry             | spec/03-error-manage/03-error-code-registry/                                   | yes/no                  | none       |
 | database conventions            | spec/04-database-conventions/                                                  | yes/no                  | none       |
 | ci pipeline + guards            | spec/12-cicd-pipeline-workflows/02-ci-pipeline.md, 03-reusable-ci-guards/      | yes/no                  | none       |
@@ -198,7 +198,7 @@ Consolidated mirrors under `spec/17-consolidated-guidelines/` (notably
 `05-coding-guidelines.md`, `06-error-management.md`,
 `18-cicd-pipeline-workflows.md`, `34-compiled-simple-coding-guidelines.md`,
 `03-strictly-avoid-quickref.md`) and
-`spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md` are checked for
+`spec/02-coding-guidelines/01-cross-language/01-index.md` are checked for
 drift against their authority. A mirror that contradicts its authority is a
 Consistency finding; the mirror is never treated as the authority. Any topic
 appearing in two authoritative files is a duplicate-authority finding, cost per
@@ -218,7 +218,7 @@ wc -l < /tmp/links.txt
 
 # index vs filesystem, both directions
 
-rg -n '\| *[0-9]{2} *\|' spec/21-app/00-overview.md
+rg -n '\| *[0-9]{2} *\|' spec/21-app/01-index.md
 ``
 
 The audit prints exactly these numbers:
@@ -251,7 +251,7 @@ job is the same finding.
 
 ## RULE 4 — phase order (skipping a phase invalidates the audit)
 
-Follow `spec/25-app-spec-audit/03-audit-procedure.md` §1, with the inventory as
+Follow `spec/01-spec-authoring-guide/01-index.md` §1, with the inventory as
 phase 1:
 
 1. File inventory (RULE 2) and scope declaration.
@@ -351,7 +351,7 @@ Ambiguity: <band>
 
 ``
 
-Also update `spec/25-app-spec-audit/00-overview.md` §Index with the new row and
+Also update `spec/01-spec-authoring-guide/01-index.md` §Index with the new row and
 `98-changelog.md` with a one-line entry, and add the `> STALE` banner to the
 superseded run. Those three are the only files outside `audit-file` this run may
 touch.
@@ -400,7 +400,7 @@ At the very bottom of the audit file, you MUST generate a beautifully formatted 
 
 | Folder / Subfolder / File | Identified Issue (Meaningful details) | Proposed Fix |
 | :--- | :--- | :--- |
-| `spec/21-app/00-overview.md` | Lacks determinism in feature X (score impact -5) | Rewrite line 42 to strictly define X |
+| `spec/21-app/01-index.md` | Lacks determinism in feature X (score impact -5) | Rewrite line 42 to strictly define X |
 | ... | ... | ... |
 
 ---

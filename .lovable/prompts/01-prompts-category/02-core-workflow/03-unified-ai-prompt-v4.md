@@ -26,7 +26,7 @@ Read and synthesize existing repository context from the Lovable memory folder a
 Before producing any report or analysis, the AI must:
 
 1. Scan the repository tree rapidly using `python .lovable/ai-fix-scripts/11-fast-file-scanner.py` or `python .lovable/ai-fix-scripts/17-fast-file-reader.py` (which leverage pre-warmed `tmp/cache/` in <15ms) instead of slow manual shell scans. Do not read contents inside folders marked skipped, ignored, deprecated, generated, archived, or otherwise excluded.
-2. Read workflow memory - specifically `.lovable/memory/workflow/01-29-plan.md` - to understand what has been done and what is pending. This avoids repeated work.
+2. Read workflow memory - specifically `.lovable/plan.md` - to understand what has been done and what is pending. This avoids repeated work.
 3. Read all relevant memory files under `.lovable/memory/`, including workflow, suggestions, rules, decisions, history, issue references, and any protocol or process files present.
 
 /goal 1. Reconstruct project requirements by reading:
@@ -64,17 +64,17 @@ Before producing any report or analysis, the AI must:
 
 ### Deliverable 2: Lovable suggestions workflow (filesystem contract)
 
-All suggestions must be tracked in a single file: `.lovable/memory/suggestions/01-suggestions.md`. If the file grows beyond manageable size (50+ items), suggestions may be split per project.
+All suggestions must be tracked in a single file: `.lovable/suggestions.md`. If the file grows beyond manageable size (50+ items), suggestions may be split per project.
 
 Suggestion entry fields: suggestionId, createdAt, source (Lovable), affectedProject, description, rationale, proposed change, acceptance criteria, status (open, inProgress, done), completion notes.
 
 Completion handling - When a suggestion is completed, update its status to done. Optionally move completed items to `completed/` subfolder.
 
-### Deliverable 3: 29-plan.md future work roadmap
+### Deliverable 3: .lovable/plan.md future work roadmap
 
-`.lovable/memory/workflow/01-29-plan.md` is the canonical workflow tracker. Root `29-plan.md` (if created) is a summarized AI handoff roadmap only. It must not contradict the canonical plan.
+`.lovable/plan.md` is the canonical workflow tracker. Root `.lovable/plan.md` (if created) is a summarized AI handoff roadmap only. It must not contradict the canonical plan.
 
-29-plan.md requirements:
+.lovable/plan.md requirements:
 
 1. A prioritized backlog of tasks
 2. Grouping by phase and by project
@@ -83,11 +83,11 @@ Completion handling - When a suggestion is completed, update its status to done.
 
 ### Required Part 1 artifacts
 
-- `.lovable/memory/workflow/01-29-plan.md`
-- `.lovable/memory/suggestions/01-suggestions.md`
-- `.lovable/memory/history/01-decisions.md` - create the `history/` folder if it does not exist
-- `.lovable/memory/01-working-rules.md` - if new rules or constraints are discovered
-- Root `29-plan.md` - only if a handoff roadmap is needed
+- `.lovable/plan.md`
+- `.lovable/suggestions.md`
+- `.lovable/memory/01-index.md` - create the `history/` folder if it does not exist
+- `.lovable/strictly-avoid.md` - if new rules or constraints are discovered
+- Root `.lovable/plan.md` - only if a handoff roadmap is needed
 - Update memory issue references if analysis uncovers prior unresolved issue patterns
 
 ### Interaction rule
@@ -169,7 +169,7 @@ Memory update is mandatory. If memory is not updated the fix is incomplete.
 
 ### Decision logging
 
-All important decisions must be written to `.lovable/memory/history/01-decisions.md`. If the `history/` folder does not exist, create it and use this file as the canonical decision log.
+All important decisions must be written to `.lovable/memory/01-index.md`. If the `history/` folder does not exist, create it and use this file as the canonical decision log.
 
 Required entries: architecture changes, spec interpretation decisions, rejected approaches and why, trade-off resolutions.
 
@@ -232,7 +232,7 @@ The AI must follow this sequence strictly. Steps must not be skipped or reordere
 
 1. Scan the entire repository tree.
 2. Read Lovable memory folders.
-3. Read workflow tracker `.lovable/memory/workflow/01-29-plan.md`.
+3. Read workflow tracker `.lovable/plan.md`.
 4. Read specification folders.
 5. Reconstruct project context.
 6. Produce the reliability and failure-chance report.
@@ -268,7 +268,7 @@ Then ask the user to select the task number.
 
 If a blocker prevents reliable implementation or specification updates:
 
-1. Record the blocker in `.lovable/memory/workflow/01-29-plan.md`
+1. Record the blocker in `.lovable/plan.md`
 2. Document it in the relevant spec or issue file
 3. Explain the minimum information or change required to unblock progress
 4. Avoid guessing past the blocker
@@ -291,7 +291,7 @@ Always write or update specs before any implementation. Never implement until th
 
 ### Ambiguity handling
 
-If the specification is ambiguous, the AI must document the ambiguity in the relevant spec file and in `.lovable/memory/history/01-decisions.md` before implementing a solution. Do not silently resolve ambiguity.
+If the specification is ambiguous, the AI must document the ambiguity in the relevant spec file and in `.lovable/memory/01-index.md` before implementing a solution. Do not silently resolve ambiguity.
 
 ### Repository scan requirement
 
@@ -314,7 +314,7 @@ Any changes to code must bump at least the minor version. The `.release` folder 
 
 ### File naming
 
-- Use stable canonical filenames such as `01-29-plan.md`, `01-suggestions.md`, `01-decisions.md` for singleton tracker files.
+- Use stable canonical filenames such as `01-.lovable/plan.md`, `01-suggestions.md`, `01-decisions.md` for singleton tracker files.
 - Use `{seq}-{slug}.md` for repeating records such as issues and failing test write-ups.
 - Keep folder file counts small.
 - Plans and suggestions are tracked in single files and updated in place unless explicitly split by scale.
@@ -331,7 +331,7 @@ A task is done only when:
 2. Issue documented (if applicable)
 3. Memory updated
 4. Acceptance criteria added or verified
-5. Plan status updated in `.lovable/memory/workflow/01-29-plan.md`
+5. Plan status updated in `.lovable/plan.md`
 6. Decision log updated (if a decision was made)
 
 ---

@@ -40,7 +40,7 @@ Inside the prompts folder, these prompts which I have shared here should go as a
 - [ ] For any code-related prompt, add the standard footer: read spec folders `02`, `03`, `04` before writing code; error management must be followed; code must be DRY.
 - [ ] Files/links supplied with a prompt: assets/images -> `assets/`, specs -> `spec/` (app spec in `spec/21/`). Ask when placement is unclear.
 - [ ] Commit after storing each prompt.
-- [ ] Keep the root `readme.md`, `.lovable/memory/what-to-read.md`, and `.lovable/memory/prompt-library.md` in sync so any AI can discover the structure.
+- [ ] Keep the root `readme.md`, `.lovable/what-to-read.md`, and `.lovable/prompts.md` in sync so any AI can discover the structure.
 
 ## Folder Structure
 

@@ -61,14 +61,14 @@
 | File | Title | Version |
 |------|-------|---------|
 | `spec/02-coding-guidelines/01-index.md` | Coding Guidelines | 2.0.0 |
-| `spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md` | Consolidated Review Guide — Condensed |  |
+| `spec/02-coding-guidelines/01-cross-language/01-index.md` | Consolidated Review Guide — Condensed |  |
 | `spec/02-coding-guidelines/05-05-consolidated-review-guide.md` | Consolidated Code Review Guide | 1.0.0 |
 | `spec/02-coding-guidelines/01-index.md` | Coding Guidelines | 2.4.0 |
 | `spec/02-coding-guidelines/97-acceptance-criteria.md` | Coding Guidelines — Acceptance Criteria | 1.0.0 |
 | `spec/02-coding-guidelines/99-consistency-report.md` | Consistency Report — Coding Guidelines | 2.6.0 |
 | `spec/02-coding-guidelines/01-cross-language/01-index.md` | Cross-Language Coding Guidelines | 1.4.0 |
 | `spec/02-coding-guidelines/01-cross-language/01-issues-and-fixes-log.md` | Issues & Fixes Log — Historical Reference | 1.0.0 |
-| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles.md` | Boolean Principles |  |
+| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` | Boolean Principles |  |
 | `spec/02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md` | Casting Elimination Patterns | 2.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/05-cross-spec-contradiction-checks.md` | Cross-Spec Contradiction Check Process | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md` | Cross-Language Rule: Reduce Cyclomatic Complexity to Near-Zero | 1.0.0 |
@@ -115,7 +115,7 @@
 | `spec/02-coding-guidelines/01-cross-language/04-code-style/99-consistency-report.md` | Consistency Report: Code Style | 1.0.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-index.md` | Master Coding Guidelines | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/01-naming-and-database.md` | Master Coding Guidelines — Naming conventions, database naming, file naming | 2.1.0 |
-| `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/02-boolean-and-enum.md` | Master Coding Guidelines — Boolean standards, isDefined guards, enum standards | 2.1.0 |
+| `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` | Master Coding Guidelines — Boolean standards, isDefined guards, enum standards | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/03-code-style-and-errors.md` | Master Coding Guidelines — Code style formatting, error handling | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/04-type-safety.md` | Master Coding Guidelines — Type safety, single return value, no casting | 2.1.0 |
 | `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/05-magic-strings-and-organization.md` | Master Coding Guidelines — Magic strings, file organization, array keys | 2.1.0 |
@@ -206,7 +206,7 @@
 | `spec/02-coding-guidelines/05-rust/98-changelog.md` | Changelog: Rust Standards | 1.0.0 |
 | `spec/02-coding-guidelines/05-rust/99-consistency-report.md` | Consistency Report — Rust Coding Standards | 1.1.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/01-index.md` | AI Optimization | 1.1.0 |
-| `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` | Anti-Hallucination Rules | 1.0.0 |
+| `spec/02-coding-guidelines/01-cross-language/01-index.md` | Anti-Hallucination Rules | 1.0.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/02-ai-quick-reference-checklist.md` | AI Quick Reference Checklist | 2.1.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md` | Common AI Mistakes | 1.0.0 |
 | `spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md` | Condensed Master Coding Guidelines — AI Context Reference | 1.2.0 |
@@ -260,7 +260,7 @@
 | `spec/03-error-manage/01-error-resolution/00-error-documentation-guideline.md` | Error Documentation Guideline | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/01-index.md` | Error Resolution | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/01-cross-reference-diagram.md` | Error Resolution Cross-Reference Diagram | 1.0.0 |
-| `spec/03-error-manage/01-error-resolution/02-debugging-cheat-sheet.md` | Debugging Cheat Sheet | 1.0.0 |
+| `spec/03-error-manage/01-index.md` | Debugging Cheat Sheet | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/99-consistency-report.md` | Consistency Report: Error Resolution | 1.0.0 |
 | `spec/03-error-manage/01-error-resolution/03-retrospectives/01-index.md` | Retrospectives | 1.1.0 |
 | `spec/03-error-manage/01-error-resolution/03-retrospectives/01-health-endpoint-mismatch.md` | 01 — Health Endpoint Format Mismatch | 1.0.0 |
@@ -280,8 +280,8 @@
 | `spec/03-error-manage/01-error-resolution/app-issues/error-management-file-path-and-missing-file-code-red-rule.md` | 🔴 Code Red: File Path and Missing File Error Logging Rule | 1.0.0 |
 | `spec/03-error-manage/02-error-architecture/01-index.md` | Error Architecture | 1.0.0 |
 | `spec/03-error-manage/02-error-architecture/01-error-handling-reference.md` | Error Handling — Cross-Stack Specification | 2.0.0 |
-| `spec/03-error-manage/02-error-architecture/02-go-delegation-fix.md` | Go Backend Fix: Missing Delegation Fields | 1.0.0 |
-| `spec/03-error-manage/02-error-architecture/03-notification-colors.md` | Notification & Toast Color System |  |
+| `spec/03-error-manage/01-index.md` | Go Backend Fix: Missing Delegation Fields | 1.0.0 |
+| `spec/03-error-manage/01-index.md` | Notification & Toast Color System |  |
 | `spec/03-error-manage/02-error-architecture/99-consistency-report.md` | Consistency Report: Error Architecture | 2.0.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-index.md` | Error Modal | 1.1.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats.md` | ⚠️ THIS FILE HAS BEEN SPLIT INTO A SUBFOLDER |  |
@@ -298,7 +298,7 @@
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/04-error-log-txt.md` | error.log.txt (Backend Error Log) | 3.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/05-full-log-txt.md` | log.txt (Backend Full Log) | 3.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/06-error-log-with-delegated-info.md` | Backend error.log.txt with Delegated Server Info | 3.2.0 |
-| `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/07-envelope-error-response.md` | Envelope Error Response (JSON) | 3.2.0 |
+| `spec/03-error-manage/01-index.md` | Envelope Error Response (JSON) | 3.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/08-session-diagnostics.md` | Session Diagnostics (JSON) | 3.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/09-generator-code-reference.md` | Generator Code Reference | 3.2.0 |
 | `spec/03-error-manage/02-error-architecture/04-error-modal/01-copy-formats/99-consistency-report.md` | Consistency Report: Copy Formats | 1.0.0 |

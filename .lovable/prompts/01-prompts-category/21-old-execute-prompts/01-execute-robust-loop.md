@@ -60,7 +60,7 @@
    - Spawn a maximum of 2 to 3 sub-agents concurrently. Never exceed this limit.
 
 2. File collision locking matrix (`active-locks.json`):
-   - Register active target files in `.lovable/temp/active-locks.json` before spawning an agent.
+   - Register active target files in `.lovable/01-index.md` before spawning an agent.
    - When assigning tasks in parallel, ensure the tasks touch completely different files or components.
    - If two tasks share a dependency or file, sequence them sequentially to eliminate git merge conflicts.
 
@@ -76,7 +76,7 @@
    - Deadlocks: If an agent hangs without updating its state for an extended period, terminate it and retry.
    - Revamp and restart: If an agent crashes, read its state from `.lovable/temp/`. Reason about the failure, fix the issue, and restart.
    - 3-strike rule and automatic rollback: If a specific micro-task fails unit tests or crashes 3 times, STOP retrying. Automatically rollback the dirty files (`git checkout -- <modified_files>`). Mark the task as `Status: blocked` in `plans/pending/`. Proceed to the next disjoint task.
-   - Persistent failure log: Whenever a task hits 3 strikes, write the exact failure context, stack traces, and attempted fixes to `.lovable/memory/last-failure.md` and `.lovable/issues/`. When the user later says "continue", read this file first to resume recovery.
+   - Persistent failure log: Whenever a task hits 3 strikes, write the exact failure context, stack traces, and attempted fixes to `.lovable/plan.md` and `.lovable/issues/`. When the user later says "continue", read this file first to resume recovery.
 
 6. End-to-end tests are banned:
    - Do not run end-to-end tests that make live API calls.
@@ -103,7 +103,7 @@ As tasks are completed:
 1. Use `mv` to move the completed task file from `.lovable/plans/pending/` to `.lovable/plans/completed/`.
 2. Open the moved file and flip `Status: pending` to `Status: completed`.
 3. Immediately update `.lovable/plans/01-index.md` to reflect the completed status and new file location.
-4. Once an agent successfully finishes its task and you have verified it, remove its entry from `.lovable/temp/active-locks.json` and delete its state file from `.lovable/temp/`.
+4. Once an agent successfully finishes its task and you have verified it, remove its entry from `.lovable/01-index.md` and delete its state file from `.lovable/temp/`.
 
 ---
 
@@ -123,7 +123,7 @@ At the end of every single iteration of your execution loop:
 
 - [ ] `.lovable/temp/` verified in `.gitignore` and orphaned state garbage-collected.
 - [ ] Dependencies and prerequisites verified before starting tasks.
-- [ ] Parallel assignments verified disjoint using `.lovable/temp/active-locks.json`.
+- [ ] Parallel assignments verified disjoint using `.lovable/01-index.md`.
 - [ ] Maximum of 2-3 sub-agents spawned concurrently with specific titling.
 - [ ] Pre-flight state written to `.lovable/temp/` for every agent before it started.
 - [ ] 3-Strike rollback honored: failed changes reverted via `git checkout` and logged to `last-failure.md`.

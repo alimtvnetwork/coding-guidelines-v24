@@ -27,8 +27,8 @@ N = total self-loop steps budget that the agents will perform.
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
-13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
+12. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/04-database-conventions/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
@@ -79,19 +79,19 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Functions <= 8 lines preferred (hard cap 15 lines). Files <= 100 lines coding max (recommended <= 80 lines). Zero line compression.
-- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Absolute zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
-- [ ] **`spec/04-database-conventions/00-overview.md`**
+- [ ] **`spec/04-database-conventions/01-index.md`**
   - **Why:** Authoritative database architectural foundation.
   - **How:** All schema definitions, migrations, and queries must follow SQLite-first, strongly-typed conventions.
-- [ ] **`spec/04-database-conventions/03-naming-conventions.md`**
+- [ ] **`spec/04-database-conventions/01-index.md`**
   - **Why:** Strict casing and primary key rules.
   - **How:** Tables and entities in **PascalCase** (`UserAccount`), columns and fields in **camelCase** (`userId`, `createdAt`), primary keys MUST be `{TableName}Id` integer auto-increment (`UserAccountId`). No UUID primary keys.
 - [ ] **`spec/04-database-conventions/03-schema-design.md`**
@@ -116,8 +116,8 @@ You MUST read, follow, and mechanically verify every single specification file b
 
 Code standards must be mechanically enforced by automated linters. You MUST verify or create the linter and connect it to CI:
 
-- [ ] **Linter Script Identification:** Check if `linter-scripts/check-schema-guidelines.py` exists in the repository.
-- [ ] **Auto-Create Linter if Missing:** If no dedicated schema linter exists, create `linter-scripts/check-schema-guidelines.py` that AST-scans SQL files, migrations, and ORM entities for:
+- [ ] **Linter Script Identification:** Check if `linter-scripts/validate-guidelines.py` exists in the repository.
+- [ ] **Auto-Create Linter if Missing:** If no dedicated schema linter exists, create `linter-scripts/validate-guidelines.py` that AST-scans SQL files, migrations, and ORM entities for:
   1. Snake_case table or column names.
   2. Primary keys not matching `{TableName}Id` integer convention.
   3. Missing foreign key constraints or missing index declarations.
@@ -125,11 +125,11 @@ Code standards must be mechanically enforced by automated linters. You MUST veri
   5. Files exceeding 100 coding lines.
 - [ ] **Local Linter Command:** Execute and verify the linter locally:
   ```bash
-  python linter-scripts/check-schema-guidelines.py
+  python linter-scripts/validate-guidelines.py
   ```
 - [ ] **CI/CD Local Runner Connection:** Register the linter script inside `.lovable/ai-fix-scripts/06-cicd-local-runner.py` under the `JOBS` dictionary:
   ```python
-  JOBS["lint:schema"] = ["python", "linter-scripts/check-schema-guidelines.py"]
+  JOBS["lint:schema"] = ["python", "linter-scripts/validate-guidelines.py"]
   ```
 - [ ] **GitHub Actions Workflow Connection:** Verify that `.github/workflows/ci.yml` contains a dedicated step running the schema linter.
 
@@ -154,7 +154,7 @@ WHILE (STEP < PHASE_2_STEPS):
        - Decompose files <= 100 coding lines (recommended <= 80) and functions <= 8 lines.
        - Update JSON serializers to output PascalCase payload keys.
     3. Run the schema linter:
-          python linter-scripts/check-schema-guidelines.py
+          python linter-scripts/validate-guidelines.py
     4. Run database unit and integration test suites.
     5. Run the local CI runner:
           python .lovable/ai-fix-scripts/06-cicd-local-runner.py
@@ -194,7 +194,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 1. 2-Agent Concurrency & Strict `.lovable/` Bounding
 
 - **2-Agent Limit (Max 2 Threads Each):** When dispatching work, spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/XX/01-task.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
@@ -210,14 +210,14 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] All table names are PascalCase.
@@ -229,7 +229,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] File Size: Files <= 100 lines coding max (recommended <= 80 lines).
 - [ ] NO Line-Compression Cheating: No single-line `if/else`, no deleted blank lines (R13-R16).
 - [ ] Mermaid ERD diagram updated in schema docs.
-- [ ] `python linter-scripts/check-schema-guidelines.py` exited with code 0.
+- [ ] `python linter-scripts/validate-guidelines.py` exited with code 0.
 - [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 
 ---
@@ -265,7 +265,7 @@ Before you commit code or end your turn, you MUST mechanically check off these i
 - [ ] Pre-Commit Diff Proof (Disk Reality Check): I have executed `git status --porcelain` and `git diff --stat` and verified that every file I claim to have modified is actually listed as modified in the terminal output before committing.
 - [ ] Zero Truncation / No Placeholder Search: I ran a regex search for `TODO`, `FIXME`, `\[.*\]`, `// ...`, and `/* ... */` in my modified files and confirmed I left zero placeholders or truncated stubs behind. I actually wrote the complete implementation.
 - [ ] Verifiable Tool Execution: I did not fabricate test/linter passes. I executed the actual linter script and test runner via tool calls and captured `exit code 0`.
-- [ ] Spec Citation Grounding: Every refactoring action cites the exact authoritative rule in `spec/` (e.g. `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`).
+- [ ] Spec Citation Grounding: Every refactoring action cites the exact authoritative rule in `spec/` (e.g. `spec/02-coding-guidelines/01-cross-language/01-index.md`).
 - [ ] Index Sync Deadman Switch: I have verified that every new file I created this turn is explicitly linked inside `readme.md` and enqueued in `.lovable/what-to-read.md`. I did not leave any orphaned files.
 - [ ] Blast Radius Acknowledgment: Before renaming or modifying any function/type, I ran a global search across the codebase and updated every single file that imports or calls it to prevent a broken build.
 

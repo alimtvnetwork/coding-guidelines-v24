@@ -173,18 +173,18 @@ into "the boolean folder" fails.
 ``text
 | Topic                            | Single source file                                                          | Duplicates found |
 | canonical size tier              | spec/02-coding-guidelines/02-canonical-size-tier.md                         | none             |
-| boolean naming prefixes          | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md      | none |
-| boolean guards + extraction      | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md | none |
+| boolean naming prefixes          | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md      | none |
+| boolean guards + extraction      | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md | none |
 | boolean params + conditions      | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/03-parameters-and-conditions.md | none |
 | boolean exemptions + api         | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/05-exemptions-and-api.md   | none |
-| boolean quick reference          | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md      | none |
+| boolean quick reference          | spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md      | none |
 | boolean flag methods             | spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md      | none             |
 | no negatives                     | spec/02-coding-guidelines/01-cross-language/12-no-negatives.md              | none             |
-| braces + nesting                 | spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md | none      |
-| conditions + extraction (style)  | spec/02-coding-guidelines/01-cross-language/04-code-style/02-conditions-and-extraction.md | none |
-| blank lines + spacing            | spec/02-coding-guidelines/01-cross-language/04-code-style/03-blank-lines-and-spacing.md | none |
-| function + type size             | spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md | none  |
-| multi-line formatting            | spec/02-coding-guidelines/01-cross-language/04-code-style/05-multi-line-formatting.md | none   |
+| braces + nesting                 | spec/02-coding-guidelines/01-cross-language/01-index.md | none      |
+| conditions + extraction (style)  | spec/02-coding-guidelines/01-cross-language/01-index.md | none |
+| blank lines + spacing            | spec/02-coding-guidelines/01-cross-language/01-index.md | none |
+| function + type size             | spec/02-coding-guidelines/01-cross-language/01-index.md | none  |
+| multi-line formatting            | spec/02-coding-guidelines/01-cross-language/01-index.md | none   |
 | code-style checklist             | spec/02-coding-guidelines/01-cross-language/04-code-style/07-checklist.md   | none             |
 | nesting resolution               | spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md | none           |
 | cyclomatic complexity            | spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md     | none             |
@@ -193,14 +193,14 @@ into "the boolean folder" fails.
 | null-pointer safety              | spec/02-coding-guidelines/01-cross-language/19-null-pointer-safety.md       | none             |
 | naming + casing (keys)           | spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md     | none             |
 | file/folder naming               | spec/02-coding-guidelines/08-file-folder-naming/<language>.md               | none             |
-| testing                          | spec/02-coding-guidelines/01-cross-language/14-test-naming-and-03-structure.md | none             |
-| error handling + codes           | spec/03-error-manage/02-error-architecture/00-overview.md                   | none             |
+| testing                          | spec/02-coding-guidelines/01-cross-language/01-index.md | none             |
+| error handling + codes           | spec/03-error-manage/01-index.md                   | none             |
 | error code registry              | spec/03-error-manage/03-error-code-registry/                                | none             |
-| logging + stack traces           | spec/21-app/07-error-and-logging/02-logging-and-stack-traces.md             | none             |
+| logging + stack traces           | spec/21-app/01-index.md             | none             |
 | serialization/determinism        | spec/21-app/04-json-contract/                                               | none             |
 | ci/cd verification               | spec/12-cicd-pipeline-workflows/02-ci-pipeline.md                           | none             |
 | ci guards                        | spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/00-overview.md        | none             |
-| contract + e2e testing           | spec/12-cicd-pipeline-workflows/20-contract-testing.md, 21-e2e-testing-pattern.md | none       |
+| contract + e2e testing           | spec/12-cicd-pipeline-workflows/01-index.md, 21-e2e-testing-pattern.md | none       |
 | static analysis / sarif          | spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md          | none             |
 ``
 
@@ -211,7 +211,7 @@ Consolidated mirrors that MAY be cited as a reading aid, never as the authority:
 - `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md`
 - `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
 - `spec/17-consolidated-guidelines/03-strictly-avoid-quickref.md`
-- `spec/02-coding-guidelines/04-04-consolidated-review-guide-condensed.md`
+- `spec/02-coding-guidelines/01-cross-language/01-index.md`
 
 When a consolidated mirror and a numbered guideline folder disagree, the numbered
 folder wins and the disagreement is filed under RULE 9.
@@ -422,10 +422,10 @@ changes code names the pipeline check that guards it:
   (`01-forbidden-name-guard.md`, `04-baseline-diff-lint-gate.md`,
   `06-matrix-test-aggregator.md`).
 - Contract and end-to-end layers:
-  `spec/12-cicd-pipeline-workflows/20-contract-testing.md` and
+  `spec/12-cicd-pipeline-workflows/01-index.md` and
   `21-e2e-testing-pattern.md`.
-- Local mirrors of the CI gates: `linter-scripts/run.sh` / `run.ps1`, plus the
-  specific `linter-scripts/check-*.py|sh|mjs` scripts the task can break.
+- Local mirrors of the CI gates: `.lovable/ai-fix-scripts/06-cicd-local-runner.py`, plus the
+  specific `linter-scripts/check-*.py|mjs` scripts the task can break.
 - The plan carries a `## CI/CD verification` section mapping each domain to the
   jobs that must be green before the batch commits. A task whose verification
   command has no CI counterpart is an incomplete task.
@@ -508,10 +508,10 @@ citations:
   language_guideline: "<path(s)>"
   boolean_styling: "spec/02-coding-guidelines/01-cross-language/02-boolean-principles/<file>.md"
   folder_naming: "spec/02-coding-guidelines/08-file-folder-naming/<file>.md"
-  error_architecture: "spec/03-error-manage/02-error-architecture/00-overview.md"
-  error_codes: "spec/21-app/07-error-and-logging/01-error-code-allocation.md"
-  logging_traces: "spec/21-app/07-error-and-logging/02-logging-and-stack-traces.md"
-  response_envelope: "spec/21-app/07-error-and-logging/03-response-envelope.md"
+  error_architecture: "spec/03-error-manage/01-index.md"
+  error_codes: "spec/21-app/01-index.md"
+  logging_traces: "spec/21-app/01-index.md"
+  response_envelope: "spec/21-app/01-index.md"
   golden_fixture: "spec/21-app/fixtures/<file>.example.json"
   strictly_avoid: ".lovable/strictly-avoid.md"
   database: "spec/04-database-conventions/..."
@@ -568,13 +568,13 @@ but all twelve must be present somewhere in the file.
 | --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Deciding app-spec section          | `spec/21-app/...` file plus section, e.g. `04-json-contract/02-section-and-asset-schema.md §Section`                                                                                                                                                                                                                                                                                                                         |
 | 2   | Canonical size tier                | `spec/02-coding-guidelines/02-canonical-size-tier.md`                                                                                                                                                                                                                                                                                                                                                                        |
-| 3   | Language guideline for this domain | Go: `spec/02-coding-guidelines/03-golang/00-overview.md` + the specific rule file (`02-boolean-standards.md`, `05-defer-rules.md`, `09-wrapped-boolean-results.md`). PHP: `04-php/00-overview.md` + `02-forbidden-patterns.md`, `03-naming-conventions.md`, `05-response-array-standard.md`. TS/React: `02-typescript/08-typescript-standards-reference.md` + `12-discriminated-union-patterns.md`, `14-state-management.md` |
+| 3   | Language guideline for this domain | Go: `spec/02-coding-guidelines/01-cross-language/01-index.md` + the specific rule file (`02-boolean-standards.md`, `05-defer-rules.md`, `09-wrapped-boolean-results.md`). PHP: `04-php/00-overview.md` + `02-forbidden-patterns.md`, `03-naming-conventions.md`, `05-response-array-standard.md`. TS/React: `02-typescript/08-typescript-standards-reference.md` + `12-discriminated-union-patterns.md`, `14-state-management.md` |
 | 4   | File and folder naming             | `spec/02-coding-guidelines/08-file-folder-naming/` — `03-golang.md`, `02-php-wordpress.md`, or `04-typescript-javascript.md` for the language this task writes                                                                                                                                                                                                                                                               |
-| 5   | Error architecture                 | `spec/03-error-manage/02-error-architecture/00-overview.md` plus `06-apperror-package/` (Go) or `05-response-envelope/` (transport)                                                                                                                                                                                                                                                                                          |
-| 6   | Error code range                   | `spec/21-app/07-error-and-logging/01-error-code-allocation.md` — quote the symbolic and numeric codes this task may emit                                                                                                                                                                                                                                                                                                     |
-| 7   | Logging and stack traces           | `spec/21-app/07-error-and-logging/02-logging-and-stack-traces.md` for anything that can fail                                                                                                                                                                                                                                                                                                                                 |
-| 8   | Response envelope                  | `spec/21-app/07-error-and-logging/03-response-envelope.md` for any REST or CLI output surface                                                                                                                                                                                                                                                                                                                                |
-| 9   | Golden fixture                     | `spec/21-app/fixtures/<file>.example.json` plus `spec/21-app/fixtures/conventions.md` for any task touching a wire format                                                                                                                                                                                                                                                                                                    |
+| 5   | Error architecture                 | `spec/03-error-manage/01-index.md` plus `06-apperror-package/` (Go) or `05-response-envelope/` (transport)                                                                                                                                                                                                                                                                                          |
+| 6   | Error code range                   | `spec/21-app/01-index.md` — quote the symbolic and numeric codes this task may emit                                                                                                                                                                                                                                                                                                     |
+| 7   | Logging and stack traces           | `spec/21-app/01-index.md` for anything that can fail                                                                                                                                                                                                                                                                                                                                 |
+| 8   | Response envelope                  | `spec/21-app/01-index.md` for any REST or CLI output surface                                                                                                                                                                                                                                                                                                                                |
+| 9   | Golden fixture                     | `spec/21-app/fixtures/<file>.example.json` plus `spec/21-app/01-index.md` for any task touching a wire format                                                                                                                                                                                                                                                                                                    |
 | 10  | Strictly-avoid rules               | `.lovable/strictly-avoid.md` — name the specific rules this task could break, not the whole file                                                                                                                                                                                                                                                                                                                             |
 | 11  | Exact target files                 | Repo-relative paths, created or edited, in the header                                                                                                                                                                                                                                                                                                                                                                        |
 | 12  | Exact symbols                      | Struct / class / function / component names with signatures or field lists                                                                                                                                                                                                                                                                                                                                                   |

@@ -133,34 +133,34 @@ For every task, you MUST check if the following files or folders exist. If they 
 
 1. Root Memory Guidelines
 
-- /learn `.lovable/coding-guidelines/coding-guidelines.md` (and/or `.lovable/memory/coding-guidelines.md`)
+- /learn `.lovable/coding-guidelines/coding-guidelines.md` (and/or `.lovable/coding-guidelines/coding-guidelines.md`)
 
 2. Master Consolidated Guide & Coding Guidelines
 
 - /learn `spec/17-consolidated-guidelines/05-coding-guidelines.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/00-overview.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
 
 3. Error Management (Must Follow for all Coding Tasks)
 
-- /learn `spec/03-error-manage/01-error-resolution/00-overview.md`
-- /learn `spec/03-error-manage/02-error-architecture/00-overview.md`
-- /learn `spec/03-error-manage/02-error-architecture/01-error-handling-reference.md`
+- /learn `spec/03-error-manage/01-index.md`
+- /learn `spec/03-error-manage/01-index.md`
+- /learn `spec/03-error-manage/01-index.md`
 - /learn *Include most of the files from the error manage directory to ensure robust error handling is implemented per task.*
 
 4. Boolean Conditions, Wrappers & Samples
 
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md`
 
 5. Code Style & File Size Limits (80-100 lines max)
 
-- /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`
-- /learn `spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
+- /learn `spec/02-coding-guidelines/01-cross-language/01-index.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md`
 - /learn `spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md`
 

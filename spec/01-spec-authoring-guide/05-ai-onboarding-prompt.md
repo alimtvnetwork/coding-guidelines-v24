@@ -31,7 +31,7 @@
 
 | Order | File | What You Learn |
 |-------|------|----------------|
-| 1 | `.lovable/overview.md` | Project summary, tech stack, navigation map |
+| 1 | `.lovable/01-index.md` | Project summary, tech stack, navigation map |
 | 2 | `.lovable/strictly-avoid.md` | **Hard prohibitions** — violating ANY of these is a critical failure |
 | 3 | `.lovable/user-preferences` | How the human expects you to communicate and behave |
 | 4 | `.lovable/memory/01-index.md` | Index of all institutional knowledge files |
@@ -242,7 +242,7 @@ Then **stop and wait** for instructions. Do not suggest next steps. Do not ask e
 
 - `.lovable/prompts/01-read-prompt.md` — Quick-access copy of this protocol
 - `.lovable/prompt.md` — Prompt index referencing all available prompts
-- `.lovable/overview.md` — Shorter always-present onboarding doc
+- `.lovable/01-index.md` — Shorter always-present onboarding doc
 
 ---
 

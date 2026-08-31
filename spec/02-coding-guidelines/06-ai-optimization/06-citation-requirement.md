@@ -14,17 +14,17 @@ Whenever an AI agent generates code, creates plans (`.lovable/plans/pending/`), 
 #### ❌ INVALID (Absolute Path / File URI):
 
 ```markdown
-- [SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md) — Why: Defines required behavior.
+- [SSH Commands](file:///absolute/path/to/...) — Why: Defines required behavior.
 - [App Error Docs](file:///absolute/path/to/spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
-- [gitmap/cmd/ssh_login_install_cmd.go](file:///absolute/path/to/gitmap/cmd/ssh_login_install_cmd.go) — Why: Target file.
+- [cmd/main.go](file:///absolute/path/to/cmd/main.go) — Why: Target file.
 ```
 
 #### ✅ VALID (Strict Relative Git Path):
 
 ```markdown
-- [SSH Commands](.lovable/spec/commands/01-ssh-commands.md) — Why: Defines required behavior.
+- [SSH Commands](spec/13-generic-cli/01-index.md) — Why: Defines required behavior.
 - [App Error Docs](spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
-- [gitmap/cmd/ssh_login_install_cmd.go](gitmap/cmd/ssh_login_install_cmd.go) — Why: Target file.
+- [cmd/main.go](cmd/main.go) — Why: Target file.
 ```
 ### Why This is Required
 

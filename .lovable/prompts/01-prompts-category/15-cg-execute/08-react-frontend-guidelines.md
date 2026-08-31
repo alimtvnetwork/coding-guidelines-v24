@@ -27,8 +27,8 @@ N = total self-loop steps budget that the agents will perform.
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-12. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
-13. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
+12. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/02-typescript/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `spec/07-design-system/` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
@@ -88,22 +88,22 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/02-coding-guidelines/02-canonical-size-tier.md`**
   - **Why:** Universal size limits across all languages.
   - **How:** Components <= 80 lines recommended (max 100 lines). Functions <= 8 lines preferred (max 15 lines). Max 100 lines for any file. Zero line-compression cheating.
-- [ ] **`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Comprehensive catalog of forbidden vs required generation patterns.
   - **How:** Strictly follow AH-N1 to AH-T2 rules. Zero ghost diffs, zero truncation stubs (`// ...`), zero unverified claims.
-- [ ] **`spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Grounded rule enforcement and traceability.
   - **How:** Cite authoritative spec files for every code modification made.
-- [ ] **`spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Zero tolerance for nested conditionals.
   - **How:** Flatten all nested `if` statements with guard clauses and early returns.
-- [ ] **`spec/02-coding-guidelines/02-typescript/08-typescript-standards-reference.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Authoritative TypeScript standards.
   - **How:** Strict typing, zero `any`, explicit function return types, and discriminated unions for polymorphic data.
-- [ ] **`spec/02-coding-guidelines/02-typescript/14-state-management.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Immutable state & hook conventions.
   - **How:** Custom React hooks MUST NOT return tuples (`[state, setState]` is banned). Custom hooks MUST return named property objects (`{ userProfile, isLoading, onUpdate }`).
-- [ ] **`spec/02-coding-guidelines/02-typescript/09-promise-await-patterns.md`**
+- [ ] **`spec/02-coding-guidelines/01-cross-language/01-index.md`**
   - **Why:** Async lifecycle safety in React.
   - **How:** Handle all async flows with `try/catch` and `AppError` wrappers; avoid unhandled promises in `useEffect`.
 - [ ] **`spec/07-design-system/02-design-principles.md`**
@@ -112,7 +112,7 @@ You MUST read, follow, and mechanically verify every single specification file b
 - [ ] **`spec/07-design-system/03-theme-variable-architecture.md`**
   - **Why:** Theme token usage.
   - **How:** Zero hardcoded hex color codes in components. Consume CSS theme custom properties and semantic tokens.
-- [ ] **`spec/03-error-manage/02-error-architecture/04-error-modal/02-react-components/02-error-store.md`**
+- [ ] **`spec/03-error-manage/01-index.md`**
   - **Why:** Centralized UI error modal.
   - **How:** Route all unhandled UI exceptions and API error responses to the global error store; display via standard error modal.
 
@@ -122,8 +122,8 @@ You MUST read, follow, and mechanically verify every single specification file b
 
 Code standards must be mechanically enforced by automated linters. You MUST verify or create the linter and connect it to CI:
 
-- [ ] **Linter Script Identification:** Check if `linter-scripts/check-frontend-guidelines.mjs` exists in the repository.
-- [ ] **Auto-Create Linter if Missing:** If no dedicated frontend linter exists, create `linter-scripts/check-frontend-guidelines.mjs` that AST-scans `.tsx` and `.jsx` files for:
+- [ ] **Linter Script Identification:** Check if `linter-scripts/check-enum-and-boolean.mjs` exists in the repository.
+- [ ] **Auto-Create Linter if Missing:** If no dedicated frontend linter exists, create `linter-scripts/check-enum-and-boolean.mjs` that AST-scans `.tsx` and `.jsx` files for:
   1. Component file line counts exceeding 80–100 lines.
   2. Functions and hooks exceeding 8–15 lines.
   3. Nested `if` statements.
@@ -133,13 +133,13 @@ Code standards must be mechanically enforced by automated linters. You MUST veri
   7. Direct state mutations (`state.items.push()` or `state.prop = x`).
 - [ ] **Local Linter Command:** Execute and verify the linter locally:
   ```bash
-  node linter-scripts/check-frontend-guidelines.mjs
+  node linter-scripts/check-enum-and-boolean.mjs
   # And verify standard ESLint:
   npm run lint
   ```
 - [ ] **CI/CD Local Runner Connection:** Register the linter script inside `.lovable/ai-fix-scripts/06-cicd-local-runner.py` under the `JOBS` dictionary:
   ```python
-  JOBS["lint:frontend"] = ["node", "linter-scripts/check-frontend-guidelines.mjs"]
+  JOBS["lint:frontend"] = ["node", "linter-scripts/check-enum-and-boolean.mjs"]
   ```
 - [ ] **GitHub Actions Workflow Connection:** Verify that `.github/workflows/ci.yml` contains a dedicated step running the frontend linter.
 
@@ -166,7 +166,7 @@ WHILE (STEP < PHASE_2_STEPS):
        - Eliminate redundant useEffect by computing derived state inline.
        - Enforce immutable state updates across all handlers.
     3. Run the frontend linter:
-          node linter-scripts/check-frontend-guidelines.mjs
+          node linter-scripts/check-enum-and-boolean.mjs
     4. Run frontend unit tests and type checks.
     5. Run the local CI runner:
           python .lovable/ai-fix-scripts/06-cicd-local-runner.py
@@ -206,7 +206,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 1. 2-Agent Concurrency & Strict `.lovable/` Bounding
 
 - **2-Agent Limit (Max 2 Threads Each):** When dispatching work, spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/XX/01-task.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
@@ -222,14 +222,14 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] Git working tree is clean before new code changes.
-- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/temp/active-locks.json`.
+- [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
 - [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] All `.tsx`/`.jsx` component files are <= 80–100 lines.
@@ -238,7 +238,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] NO Line-Compression Cheating: No single-line `if/else`, no deleted blank lines (R13-R16).
 - [ ] Custom hooks return named objects `{ data, isLoading }`, not tuples.
 - [ ] No redundant `useEffect` for derived computations.
-- [ ] `node linter-scripts/check-frontend-guidelines.mjs` exited with code 0.
+- [ ] `node linter-scripts/check-enum-and-boolean.mjs` exited with code 0.
 - [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
 
 ---
@@ -272,7 +272,7 @@ Before you commit code or end your turn, you MUST mechanically check off these i
 - [ ] Pre-Commit Diff Proof (Disk Reality Check): I have executed `git status --porcelain` and `git diff --stat` and verified that every file I claim to have modified is actually listed as modified in the terminal output before committing.
 - [ ] Zero Truncation / No Placeholder Search: I ran a regex search for `TODO`, `FIXME`, `\[.*\]`, `// ...`, and `/* ... */` in my modified files and confirmed I left zero placeholders or truncated stubs behind. I actually wrote the complete implementation.
 - [ ] Verifiable Tool Execution: I did not fabricate test/linter passes. I executed the actual linter script and test runner via tool calls and captured `exit code 0`.
-- [ ] Spec Citation Grounding: Every refactoring action cites the exact authoritative rule in `spec/` (e.g. `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`).
+- [ ] Spec Citation Grounding: Every refactoring action cites the exact authoritative rule in `spec/` (e.g. `spec/02-coding-guidelines/01-cross-language/01-index.md`).
 - [ ] Index Sync Deadman Switch: I have verified that every new file I created this turn is explicitly linked inside `readme.md` and enqueued in `.lovable/what-to-read.md`. I did not leave any orphaned files.
 - [ ] Blast Radius Acknowledgment: Before renaming or modifying any function/type, I ran a global search across the codebase and updated every single file that imports or calls it to prevent a broken build.
 

@@ -12,7 +12,7 @@ N = 400
 
 N = total self-loop steps budget across the codebase. The user may override this number when triggering the prompt (e.g., N = 100 or N = 200).
 
-- [ ] /goal First N/2 steps (Phase 1): Deeply scan the entire codebase file-by-file, dividing N steps across files with 30-50 nested atomic checks per file, scoring guideline compliance from 0 to 100, and writing the master audit report to `spec/26-coding-guideline-audit/01-audit-report.md`.
+- [ ] /goal First N/2 steps (Phase 1): Deeply scan the entire codebase file-by-file, dividing N steps across files with 30-50 nested atomic checks per file, scoring guideline compliance from 0 to 100, and writing the master audit report to `spec/01-spec-authoring-guide/01-index.md`.
 - [ ] /goal Second N/2 steps (Phase 2): Enqueue all identified gaps into `.lovable/plans/pending/XX-coding-guidelines-audit.md`, break them down into microscopic atomic subtasks inside `.lovable/plans/subtasks/XX-coding-guidelines/`, and register them in `.lovable/plans/01-index.md`.
 - [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` (HIGH PRIORITY FIRST), `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, and `.lovable/strictly-avoid.md` before taking action.
 
@@ -50,8 +50,8 @@ You MUST verify and audit every item on this checklist across every file and fun
 
 - [ ] **Master Consolidated File (`.lovable/coding-guidelines/coding-guidelines.md`):** Read and enforce all 29 cross-language chapters and language-specific sections.
 - [ ] **Consolidated Review Spec (`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`):** Cross-verify against root spec truth.
-- [ ] **Anti-Hallucination & AI Optimization (`spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md`):** Rule AH-N1 (Abbreviation casing: `Id`, `Url`, `Api`), AH-O1 (Zero placeholder/truncation stubs), AH-E1 (Implicit booleans).
-- [ ] **Citation Requirement (`spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md`):** Every audit finding MUST cite the exact rule code and spec file path.
+- [ ] **Anti-Hallucination & AI Optimization (`spec/02-coding-guidelines/01-cross-language/01-index.md`):** Rule AH-N1 (Abbreviation casing: `Id`, `Url`, `Api`), AH-O1 (Zero placeholder/truncation stubs), AH-E1 (Implicit booleans).
+- [ ] **Citation Requirement (`spec/02-coding-guidelines/01-cross-language/01-index.md`):** Every audit finding MUST cite the exact rule code and spec file path.
 
 ### Tier 2: Sizing, Nesting & Code Hygiene
 
@@ -61,13 +61,13 @@ You MUST verify and audit every item on this checklist across every file and fun
   - **React Components (`.tsx`):** Hard cap 100 lines max per component file.
   - **Class / Struct:** Hard cap 120 lines max.
   - **Anti-Line Compression Cheating:** STRICTLY BAN collapsing whitespace, removing indentation, merging if/else onto single lines, or stripping formatting to cheat line limits.
-- [ ] **Braces & Nesting (`spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md`):** Zero nested if statements. Invert conditions into guard clauses and early returns. Maximum cyclomatic complexity 5 or less.
+- [ ] **Braces & Nesting (`spec/02-coding-guidelines/01-cross-language/01-index.md`):** Zero nested if statements. Invert conditions into guard clauses and early returns. Maximum cyclomatic complexity 5 or less.
 - [ ] **Return New Line Standards (R13–R16):** Exactly one blank line before every `return`/`throw`/`raise` (unless sole statement in block). Exactly one blank line after closing `}`. Never two consecutive blank lines.
 - [ ] **Function Signatures (R4, R5, R9):** Functions with more than 3 parameters or signatures over 100 characters MUST be formatted with exactly one parameter per line.
 
 ### Tier 3: Boolean Principles & Logic
 
-- [ ] **Implicit Positive Booleans (`spec/02-coding-guidelines/01-cross-language/02-boolean-principles.md`):** NEVER evaluate `== true` or `== false`. Implicit checks only (`if isReady`).
+- [ ] **Implicit Positive Booleans (`spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`):** NEVER evaluate `== true` or `== false`. Implicit checks only (`if isReady`).
 - [ ] **No Mixed Polarity:** NEVER combine positive and negative checks in the same condition (e.g., `if isA && !isB` is FORBIDDEN; extract to named boolean `isAWithoutB`).
 - [ ] **No Inverted Success Checks (`spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`):** Ban `!response.isSuccess` or `!isFound`. Always use positive/inverse naming: `response.isFail`, `isMissing`.
 - [ ] **Boolean Prefixes:** All booleans MUST start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must`.
@@ -83,7 +83,7 @@ You MUST verify and audit every item on this checklist across every file and fun
 
 ### Tier 5: Constants, Enums & Schema
 
-- [ ] **Centralized Enums & Constants (`spec/02-coding-guidelines/01-cross-language/15-master-coding-guidelines/02-boolean-and-enum.md`):**
+- [ ] **Centralized Enums & Constants (`spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`):**
   - Zero magic strings or raw numeric literals.
   - All Enum names MUST end with the suffix `Type` (e.g., `UserRoleType`, `PaymentStatusType`).
   - TypeScript string unions (`type Role = "admin" | "user"`) are banned.
@@ -164,7 +164,7 @@ For every file, perform the exhaustive check sequence:
 ### Step 3: Write Master Audit Report
 
 Save the final comprehensive report to:
-`spec/26-coding-guideline-audit/01-audit-report.md`
+`spec/01-spec-authoring-guide/01-index.md`
 
 #### Report Structure Template:
 
@@ -277,7 +277,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] **Master Guidelines Read:** I have consulted `.lovable/coding-guidelines/coding-guidelines.md` at high priority.
 - [ ] **Exhaustive Violation Ledger:** Maintained the exact table `| Id | File Path | Line | Function / Component | Rule Code | Exact Snippet | Severity | Planned Remediation |`.
 - [ ] **0-100 Score Calculated:** Mathematically computed the score for every file and module.
-- [ ] **Audit Report Saved:** Report written to `spec/26-coding-guideline-audit/01-audit-report.md`.
+- [ ] **Audit Report Saved:** Report written to `spec/01-spec-authoring-guide/01-index.md`.
 - [ ] **Plans & Subtasks Enqueued:** Master plan written to `.lovable/plans/pending/` and atomic subtasks created in `.lovable/plans/subtasks/`.
 - [ ] **Strict Lowercase Filenames:** All generated files use strictly lowercase naming.
 - [ ] **No Code Modification in Audit Phase:** Ensured application source code was not modified during the audit.

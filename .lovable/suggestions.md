@@ -267,7 +267,7 @@
 
 - Promoted four `####` headings to `###` to keep level progression contiguous after the new `h2`. Verified 31 balanced code fences and intact TOC anchors.
 
-### Merged stray `.lovable/plans/installer-behavior-rollout.md` into `29-plan.md` — 2026-04-23
+### Merged stray `.lovable/plans/01-index.md` into `29-plan.md` — 2026-04-23
 
 - Restores single-file convention; full rollout phases now live as a section inside `29-plan.md`.
 

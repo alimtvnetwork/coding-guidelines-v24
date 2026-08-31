@@ -19,8 +19,8 @@ N = total self-loop steps budget. The user may override this number when trigger
 3. [ ] /learn Ingest `.lovable/cicd-issues/` for domain-specific architectural specifications.
 4. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 5. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-6. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md` for hallucination prevention and micro-tasking.
-7. [ ] /learn Ingest `spec/02-coding-guidelines/06-ai-optimization/05-citation-requirement.md` for strict relative path citation requirements.
+6. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+7. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 8. [ ] /learn Ingest `spec/03-error-manage/` for error handling architectures and AppError.
 9. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
@@ -62,9 +62,9 @@ Before any execution, check if this prompt is installed as a native Antigravity 
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
-> 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/02-coding-guidelines/04-error-handling.md`, `.lovable/plans/subtasks/01-task.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
->    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/.lovable/spec/commands/01-ssh-commands.md)`
->    - ✅ **GOOD:** `[SSH Commands](.lovable/spec/commands/01-ssh-commands.md)`
+> 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
+>    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
+>    - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md)`
 > 4. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 
 ---
@@ -106,7 +106,7 @@ Every step must be **singly done** using bounded self-looping turns. Do NOT try 
   1. For the zeroed-in failure, write a mandatory 4-part RCA file:
      - Path: `.lovable/memory/issues/XX-<slug>.md` (next sequential number)
      - Sections: **Why it happened / How it happened / Root Cause / Code Fix**
-  2. Update `.lovable/memory/issues/index.md` and `.lovable/cicd-issues/index.md`.
+  2. Update `.lovable/01-index.md` and `.lovable/cicd-index.md`.
   3. Append any newly identified anti-pattern to `.lovable/strictly-avoid.md`.
 
 - **Self-Loop Step 5 (Surgical Code Fix):**
@@ -148,7 +148,7 @@ Spend up to PHASE_1_STEPS self-loop iterations reading the codebase in this orde
    - Azure Pipelines: `azure-pipelines.yml`
    - Bitbucket Pipelines: `bitbucket-pipelines.yml`
    - CircleCI: `.circleci/config.yml`
-   - Any custom runner scripts: `Makefile`, `scripts/ci.sh`, `run.sh`, `run.ps1`
+   - Any custom runner scripts: `Makefile`, `.lovable/ai-fix-scripts/06-cicd-local-runner.py`, `run.sh`, `run.ps1`
    - Project lockfiles: `package-lock.json`, `go.sum`, `poetry.lock`, `bun.lockb` (to detect toolchain versions)
    - Language config: `.nvmrc`, `.python-version`, `go.mod`, `pyproject.toml`, `tsconfig.json`
 
@@ -420,7 +420,7 @@ The plan task file MUST contain:
 - [ ] pending
 ```
 
-Update `.lovable/plans/pending/index.md` to register the new task entry immediately.
+Update `.lovable/plans/01-index.md` to register the new task entry immediately.
 
 ### B. Record in CI/CD Issues
 
@@ -453,7 +453,7 @@ The CI/CD issue file MUST contain:
 Enqueued at `.lovable/plans/pending/XX-cicd-<slug>.md`
 ```
 
-Update `.lovable/cicd-issues/index.md` in the same operation. Never delete existing entries.
+Update `.lovable/cicd-index.md` in the same operation. Never delete existing entries.
 
 ---
 

@@ -1,13 +1,13 @@
 ---
 name: Fast File Indexing & Caching Strategy
-description: Explains how AI agents leverage .lovable/ai-fix-scripts/08-fast-file-scanner.py and 09-fast-cached-grep.py to index and search repository files in tmp/ cache for rapid retrieval and zero-overhead discovery.
+description: Explains how AI agents leverage .lovable/ai-fix-scripts/11-fast-file-scanner.py and 09-fast-cached-grep.py to index and search repository files in tmp/ cache for rapid retrieval and zero-overhead discovery.
 type: standard
 ---
 
 # Fast File Indexing & Caching Strategy
 
-**Scanner Tool:** `.lovable/ai-fix-scripts/08-fast-file-scanner.py`
-**Grepper Tool:** `.lovable/ai-fix-scripts/09-fast-cached-grep.py`
+**Scanner Tool:** `.lovable/ai-fix-scripts/11-fast-file-scanner.py`
+**Grepper Tool:** `.lovable/ai-fix-scripts/12-fast-cached-grep.py`
 **Cache Outputs:** `tmp/repo-file-cache.json`, `tmp/file-list-all.txt`, `tmp/file-list-<slug>.txt`, `tmp/grep-results.json`
 **Tags:** `#file-scanner`, `#cached-grep`, `#caching`, `#performance`, `#ai-workflow`
 
@@ -21,13 +21,13 @@ Before embarking on multi-file audits, refactoring passes, or cross-spec updates
 
 ```bash
 # Scan full repository:
-python .lovable/ai-fix-scripts/08-fast-file-scanner.py
+python .lovable/ai-fix-scripts/11-fast-file-scanner.py
 
 # Scan specific language files:
-python .lovable/ai-fix-scripts/08-fast-file-scanner.py --lang go,ts,tsx
+python .lovable/ai-fix-scripts/11-fast-file-scanner.py --lang go,ts,tsx
 
 # Scan specifications only:
-python .lovable/ai-fix-scripts/08-fast-file-scanner.py --path spec/ --ext .md
+python .lovable/ai-fix-scripts/11-fast-file-scanner.py --path spec/ --ext .md
 ```
 
 ## 3. Cached File Contract
@@ -44,10 +44,10 @@ Agents can query the pre-computed index in sub-millisecond time:
 
 ```bash
 # Instant file path lookup from pre-computed cache:
-python .lovable/ai-fix-scripts/08-fast-file-scanner.py --query-cache "slides"
+python .lovable/ai-fix-scripts/11-fast-file-scanner.py --query-cache "slides"
 
 # Parallel cached content grepping:
-python .lovable/ai-fix-scripts/09-fast-cached-grep.py --pattern "AppError"
+python .lovable/ai-fix-scripts/12-fast-cached-grep.py --pattern "AppError"
 ```
 
 ## 5. Agent Consumption Pattern in Python Scripts

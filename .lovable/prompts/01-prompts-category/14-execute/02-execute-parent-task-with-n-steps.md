@@ -15,10 +15,10 @@ N = total self-loop steps budget that the agents will perform.
 
 1. [ ] /goal Phase 1 (Planning & Spec Generation, Steps 1..N/2): Spawn exactly 2 planning subagents (max 2 threads each) to scan the codebase and draft `.lovable/plans/pending/XX-<slug>.md`.
 2. [ ] /goal Phase 1 (Subtask Decomposition): Decompose the master plan into microscopic, actionable subtasks in `.lovable/plans/subtasks/XX-<slug>/*.md`.
-3. [ ] /goal Phase 1 (Strict Folder Bounding): Restrict all planning logs, active locks, and status reports strictly within `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`).
+3. [ ] /goal Phase 1 (Strict Folder Bounding): Restrict all planning logs, active locks, and status reports strictly within `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`).
 4. [ ] /goal Phase 1 (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or stopping.
 5. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Spawn exactly 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
-6. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.lovable/plans/last-failure.md` and `.lovable/memory/issues/`; subsequent agents MUST read the failure log first to remediate root causes.
+6. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.lovable/plan.md` and `.lovable/memory/issues/`; subsequent agents MUST read the failure log first to remediate root causes.
 7. [ ] /goal Phase 2 (Quality Gate Verification): Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before finishing.
 8. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 9. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
@@ -51,7 +51,7 @@ Before executing the tasks below, you must check if this prompt is already insta
 /goal You are the master orchestrator. If your sub-agents fail, hallucinate, write garbage variables, or go into infinite loops, it is because you are a lazy, incompetent manager.
 
 - **Strict 2-Agent Limit (Max 2 Threads Each):** When dispatching work in Phase 1 (planning) or Phase 2 (execution), you MUST spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents are strictly restricted to writing planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents are strictly restricted to writing planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** When spawning a subagent, DO NOT paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction (e.g., "Read subtask file `.lovable/plans/subtasks/XX-slug/01-task.md` and execute it"). The subagent MUST read the necessary files itself.
 - **Fail Fast & Kill Stalls:** If a sub-agent stalls or provides garbage code, kill it immediately, rollback its dirty working tree, and spawn a new one.
 
@@ -73,10 +73,10 @@ Before writing any source code changes, you MUST execute Phase 1:
 ## 3. Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
 
 1. **Parallel Dispatch:** Spawn 2 execution subagents (max 2 threads each) assigned to disjoint subtasks from `.lovable/plans/subtasks/XX-<slug>/`.
-2. **File Locking:** Verify subagents operate on distinct files using `.lovable/temp/active-locks.json`.
+2. **File Locking:** Verify subagents operate on distinct files using `.lovable/01-index.md`.
 3. **Execution & Coding Guidelines:** Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 4. **Failure Memory & Feedback Loop:** If a subagent fails:
-   - Rollback dirty changes and write the failure error log to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
+   - Rollback dirty changes and write the failure error log to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
    - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 5. **Progress & Completion:** Move completed subtasks to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 6. **Local CI Verification:** Run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` and ensure all quality gates exit with code 0 (`exit 0`).
@@ -126,7 +126,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 1. 2-Agent Concurrency & Strict `.lovable/` Bounding
 
 - **2-Agent Limit (Max 2 Threads Each):** When dispatching work, spawn **at most 2 sub-agents concurrently**, with **no more than 2 threads per agent**.
-- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/temp/active-locks.json`, `.lovable/memory/issues/`).
+- **Strict Folder Bounding (`.lovable/`):** Subagents can ONLY write planning files, subtasks, status reports, and logs inside `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`, `.lovable/memory/issues/`).
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/XX/01-task.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
@@ -142,6 +142,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plans/last-failure.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.

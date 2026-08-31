@@ -180,7 +180,7 @@ Notes:
 
 8. Instruction Persistence (file system, not memory store)
 
-   a. Save this instruction to `.lovable/prompts/02-logo-create.md` in the project repo
+   a. Save this instruction to `.lovable/prompts/01-prompts-category/10-ui-and-design/01-logo-create.md` in the project repo
 
    b. Add an entry to `.lovable/prompts.md` index file with triggers: `create logo`, `make logo`, `logo`, `create icon`
 
@@ -196,7 +196,7 @@ Not applicable for this task (asset generation only). If a registry of generated
 
 1. Upload paths: `Projects/{Seq}-{PascalCaseProjectName}/icons-svg/`, `Projects/{Seq}-{PascalCaseProjectName}/icons-image/`, repo root for favicon
 
-2. Prompt paths: `.lovable/prompts/02-logo-create.md` and `.lovable/prompts.md` (index)
+2. Prompt paths: `.lovable/prompts/01-prompts-category/10-ui-and-design/01-logo-create.md` and `.lovable/prompts.md` (index)
 
 3. Log paths: not required for this task
 
@@ -214,7 +214,7 @@ Not applicable for this task (asset generation only). If a registry of generated
 
 6. Project `README.md` renders all assets correctly when viewed on GitHub (relative paths, no broken links).
 
-7. Instruction saved at `.lovable/prompts/02-logo-create.md` and indexed in `.lovable/prompts.md`.
+7. Instruction saved at `.lovable/prompts/01-prompts-category/10-ui-and-design/01-logo-create.md` and indexed in `.lovable/prompts.md`.
 
 8. No entries for this instruction are written to `mem://` memory; project file system is the single source of truth.
 

@@ -27,7 +27,7 @@ Before you do anything else, you must ensure the git repository is in a complete
 Read the overarching big plan of the main task from `.lovable/plans/pending/XX-<slug>.md`. You must follow this plan strictly.
 
 - Make sure the plan is EXTREMELY extensive, explicitly detailing where to make changes and how to make changes, so that sub-agents can execute their tasks easily. This is non-negotiable.
-- The `<slug>` is derived directly from the plan filename. If the plan file is `03-auth-refactor.md`, then the corresponding spec task file is `.lovable/spec/tasks/03-auth-refactor.md` and subtasks live under `.lovable/plans/subtasks/03-auth-refactor/SS-<subslug>.md`. Never guess or invent a slug — read the filename.
+- The `<slug>` is derived directly from the plan filename. If the plan file is `03-auth-refactor.md`, then the corresponding spec task file is `.lovable/plans/01-index.md` and subtasks live under `.lovable/plans/subtasks/03-auth-refactor/SS-<subslug>.md`. Never guess or invent a slug — read the filename.
 - Use the maximum enforcement guidelines to execute this plan.
 - Loop through its defined subtasks and spawn sub-agents to speed up the work.
 - Do not just write randomly to `.lovable`. You must follow the exact plan and write protocols: tasks go into `.lovable/spec/tasks/XX-<slug>.md` and plans go into `.lovable/plans/pending/XX-<slug>.md`.
@@ -88,9 +88,9 @@ You MUST follow the project's strict coding guidelines. These files are located 
 2. Code Style & File Size Limits (80-100 lines max)
 *(Enforces strict size limitations: e.g., React components < 100 lines, functions < 15 lines, and basic formatting)*
 
-- spec/02-coding-guidelines/01-cross-language/04-code-style/04-function-and-type-size.md
-- spec/02-coding-guidelines/01-cross-language/04-code-style/01-braces-and-nesting.md
-- spec/02-coding-guidelines/01-cross-language/04-code-style/00-overview.md
+- spec/02-coding-guidelines/01-cross-language/01-index.md
+- spec/02-coding-guidelines/01-cross-language/01-index.md
+- spec/02-coding-guidelines/01-cross-language/01-index.md
 - spec/02-coding-guidelines/01-cross-language/20-nesting-resolution-patterns.md (Flatten logic to avoid nested ifs)
 - spec/02-coding-guidelines/01-cross-language/06-cyclomatic-complexity.md
 
@@ -99,10 +99,10 @@ You MUST follow the project's strict coding guidelines. These files are located 
 ot/
 o, and extraction of complex logic)*
 
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/00-overview.md
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-naming-prefixes.md
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/02-guards-and-extraction.md
-- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/04-quick-reference.md
+- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
+- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
+- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
+- spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md
 - spec/02-coding-guidelines/01-cross-language/12-no-negatives.md
 - spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md (Bans passing true/false as raw parameters)
 

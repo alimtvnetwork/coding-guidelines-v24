@@ -28,7 +28,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 8. Ambiguity moves, never copies. Answered file goes from `01-new-ambiguity/` to `02-ambiguity-resolved/` with a `## Resolution` block appended and `Status: resolved` flipped in the same move.
 
-9. Root `readme.md` and `.lovable/memory/what-to-read.md` stay in sync. Same file list, same order, no drift. Every write-memory run updates both.
+9. Root `readme.md` and `.lovable/what-to-read.md` stay in sync. Same file list, same order, no drift. Every write-memory run updates both.
 
 10. Root `readme.md` lowercase enforcement: Ensure the root readme is strictly named lowercase `readme.md`. If an uppercase `README.md` exists or casing is incorrect, fix it immediately to `readme.md`, delete the uppercase file, commit, and push to git without asking.
 
@@ -67,11 +67,11 @@ Do not repeat any of that stupidity. Writing memory IS the work this turn. Go de
 Walk `.lovable/` recursively. Read all of these if they exist; note missing and create them per the templates in this prompt:
 
 1. `.lovable/memory/01-index.md` — master memory index
-2. `.lovable/folder-03-structure.md` — canonical `.lovable/` folder map
+2. `.lovable/folder-structure.md` — canonical `.lovable/` folder map
 3. `.lovable/coding-guidelines/coding-guidelines.md` or `spec/02-coding-guidelines/` — master coding guidelines
 4. `.lovable/ai-fix-scripts/` — automation tools (`01-file-manipulator.py`, `02-guideline-autofixer.py`, `03-cicd-local-runner.py`, `index.md`)
 5. `.lovable/plans/01-index.md` and every file under `plans/pending/` (`01-<slug>.md`) and `plans/subtasks/`; skim `plans/completed/`
-6. `.lovable/plans/last-failure.md` — failure recovery record
+6. `.lovable/plan.md` — failure recovery record
 7. `.lovable/suggestions.md` and `.lovable/suggestions/01-index.md`
 8. `.lovable/strictly-avoid.md`
 9. `.lovable/cicd-index.md` and every file under `.lovable/cicd-issues/`
@@ -79,7 +79,7 @@ Walk `.lovable/` recursively. Read all of these if they exist; note missing and 
 11. `.lovable/spec/commands/` — every file
 12. `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/` — every file
 13. `.lovable/prompts.md` + `.lovable/prompts/` (including `cg-execute/`, `execute/`, `ci-cd/`)
-14. `.lovable/memory/what-to-read.md` (and ensure `.lovable/ai-fix-scripts/01-index.md` is linked)
+14. `.lovable/what-to-read.md` (and ensure `.lovable/ai-fix-scripts/01-index.md` is linked)
 15. `.agents/skills/` (`<slug>/skill.md`) and `.agents/rules/`
 16. `spec/` — recursively traverse all subfolders and nested `.md` files (`spec/01-spec-authoring-guide/`, `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/04-database-conventions/`, `spec/21-app/`).
 17. Root `readme.md` — confirm strictly lowercase `readme.md`
@@ -141,7 +141,7 @@ Flip header metadata:
 
 Resolved ambiguities are binding decisions. You will never ask about them again.
 
-Then edit `.lovable/ambiguous-questions/index.md` to reflect the move.
+Then edit `.lovable/question-and-ambiguity/01-index.md` to reflect the move.
 
 ## Phase 4: Capture New Institutional Knowledge
 
@@ -154,7 +154,7 @@ Then edit `.lovable/ambiguous-questions/index.md` to reflect the move.
 
 1. Capture user instructions verbatim without softening.
 2. Preserve detailed specs in full with 0 truncation.
-3. Update `.lovable/memory/what-to-read.md` and root `readme.md`.
+3. Update `.lovable/what-to-read.md` and root `readme.md`.
 
 ---
 
