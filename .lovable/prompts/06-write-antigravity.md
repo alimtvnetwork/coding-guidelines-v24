@@ -69,7 +69,7 @@ Walk `.lovable/` recursively. Read all of these if they exist; note missing and 
 1. `.lovable/memory/01-index.md` — master memory index
 2. `.lovable/folder-structure.md` — canonical `.lovable/` folder map
 3. `.lovable/coding-guidelines/coding-guidelines.md` or `spec/02-coding-guidelines/` — master coding guidelines
-4. `.lovable/ai-fix-scripts/` — automation tools (`01-file-manipulator.py`, `02-guideline-autofixer.py`, `03-cicd-local-runner.py`, `index.md`)
+4. `.lovable/ai-fix-scripts/` — automation tools (`01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`, `index.md`)
 5. `.lovable/plans/01-index.md` and every file under `plans/pending/` (`01-<slug>.md`) and `plans/subtasks/`; skim `plans/completed/`
 6. `.lovable/plan.md` — failure recovery record
 7. `.lovable/suggestions.md` and `.lovable/suggestions/01-index.md`

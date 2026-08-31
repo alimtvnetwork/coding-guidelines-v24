@@ -200,7 +200,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 >
 > 1. **In-Codebase Execution Only:** Whenever a Python script (runner, autofixer, linter, test aggregator) is executed or created, it MUST be executed **strictly within the repository root** (current working directory), NEVER outside the codebase or against external arbitrary directories.
 > 2. **Strict Folder Bounding (`.lovable/`):** All AI scripts, local runners, autofixers, helper utilities, memory issue logs, and planning files MUST be created inside the `.lovable/` folder:
->    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `02-guideline-autofixer.py`, `03-cicd-local-runner.py`, `04-relative-path-fixer.py`, `05-naming-autofixer.py`).
+>    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`, `07-relative-path-fixer.py`, `05-naming-autofixer.py`).
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
@@ -215,7 +215,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `.lovable/ai-fix-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`.lovable/ai-fix-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `.lovable/ai-fix-scripts/`. NEVER create scripts in root or external paths.
-- [ ] **Automated File & Hygiene Fixer:** Use `python .lovable/ai-fix-scripts/03-file-manipulator.py` and `02-guideline-autofixer.py` to normalize LF endings, remove trailing whitespace, and fix file size boundaries.
+- [ ] **Automated File & Hygiene Fixer:** Use `python .lovable/ai-fix-scripts/03-file-manipulator.py` and `05-guideline-autofixer.py` to normalize LF endings, remove trailing whitespace, and fix file size boundaries.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `.lovable/ai-fix-scripts/` and committed to Git for future reuse.
 - [ ] **Index Documentation:** I have updated `.lovable/ai-fix-scripts/01-index.md` using sequential script naming (e.g., `01-file-manipulator.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.

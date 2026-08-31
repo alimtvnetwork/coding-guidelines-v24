@@ -178,6 +178,8 @@ WHILE (STEP < PHASE_2_STEPS):
     7. When all subtasks are finished and local CI is 100% green:
           - Move .lovable/plans/pending/XX-react-frontend-audit.md to .lovable/plans/completed/
           - Update .lovable/plans/01-index.md
+          - Run plan consolidator:
+            python .lovable/ai-fix-scripts/20-plan-consolidator.py
           - Stage modified files with git add and create semantic commit:
             git commit -m "refactor(ui): decompose component hierarchy, flatten nested ifs, and enforce named hook objects"
           - BREAK and finish turn.

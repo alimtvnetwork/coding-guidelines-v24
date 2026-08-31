@@ -177,6 +177,8 @@ WHILE (STEP < PHASE_2_STEPS):
     7. When all subtasks are finished and test suite is 100% green:
           - Move .lovable/plans/pending/XX-testing-and-coverage-audit.md to .lovable/plans/completed/
           - Update .lovable/plans/01-index.md
+          - Run plan consolidator:
+            python .lovable/ai-fix-scripts/20-plan-consolidator.py
           - Stage modified files with git add and create semantic commit:
             git commit -m "test(coverage): add comprehensive positive, negative, and branch test suites"
           - BREAK and finish turn.

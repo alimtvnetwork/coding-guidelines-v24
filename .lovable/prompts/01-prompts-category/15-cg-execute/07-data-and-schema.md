@@ -166,6 +166,8 @@ WHILE (STEP < PHASE_2_STEPS):
     7. When all subtasks are finished and local CI is 100% green:
           - Move .lovable/plans/pending/XX-data-and-schema-audit.md to .lovable/plans/completed/
           - Update .lovable/plans/01-index.md
+          - Run plan consolidator:
+            python .lovable/ai-fix-scripts/20-plan-consolidator.py
           - Stage modified files with git add and create semantic commit:
             git commit -m "refactor(schema): standardize PascalCase entities, camelCase columns, and {TableName}Id keys"
           - BREAK and finish turn.

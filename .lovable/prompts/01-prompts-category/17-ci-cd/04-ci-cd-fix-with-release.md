@@ -27,7 +27,7 @@ N = total self-loop steps budget. The user may override this number when trigger
 
 
 ```text
-PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Screenshot Pipeline Discovery, Update 03-cicd-local-runner.py, Register New JOBS)
+PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Screenshot Pipeline Discovery, Update 06-cicd-local-runner.py, Register New JOBS)
 PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Singly-Done Self-Loop Fixing, Zero in on Errors, 4-Part RCA, Green Gate Verification)
 ```
 
@@ -59,7 +59,7 @@ description: >-
 >
 > 1. **In-Codebase Execution Only:** Whenever a Python script (runner, autofixer, linter, test aggregator) is executed or created, it MUST be executed **strictly within the repository root** (current working directory), NEVER outside the codebase or against external arbitrary directories.
 > 2. **Strict Folder Bounding (`.lovable/`):** All AI scripts, local runners, autofixers, helper utilities, memory issue logs, and planning files MUST be created inside the `.lovable/` folder:
->    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `02-guideline-autofixer.py`, `03-cicd-local-runner.py`).
+>    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`).
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
@@ -94,9 +94,9 @@ Every step must be **singly done** using bounded self-looping turns. Do NOT try 
   3. **If NOT covered or new steps were added:**
      - Extract all shell commands from the workflow YAML.
      - Strip all Docker wrappers (translate to native host commands).
-     - Update the `JOBS` dictionary in `03-cicd-local-runner.py` to register the new job.
+     - Update the `JOBS` dictionary in `06-cicd-local-runner.py` to register the new job.
      - Save the runner script and verify syntax.
-     - Log: `"Updated 03-cicd-local-runner.py to include newly discovered pipeline job '<name>'."`
+     - Log: `"Updated 06-cicd-local-runner.py to include newly discovered pipeline job '<name>'."`
 
 - **Self-Loop Step 3 (Execute Runner & Establish Baseline Failures):**
   1. Run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
@@ -168,7 +168,7 @@ The host machine IS the Docker container. Strip all Docker wrappers:
 - Replace Docker `env` injection with `os.environ` assignments.
 - **Skip entirely:** `docker login`, image tagging, registry pushes.
 
-### Step 4: Write `03-cicd-local-runner.py` (Worker Pool & Log Aggregation Architecture)
+### Step 4: Write `06-cicd-local-runner.py` (Worker Pool & Log Aggregation Architecture)
 
 Generate `.lovable/ai-fix-scripts/06-cicd-local-runner.py` that:
 
@@ -358,7 +358,7 @@ If any job shows ⏱ TIMEOUT:
 3. Increase `JOB_TIMEOUT_SEC` intelligently:
    - Elapsed close to the limit → increase by 50%.
    - Job hangs with no output for >30s → fix the subprocess call, not the timer.
-   - Open `03-cicd-local-runner.py`, update `JOB_TIMEOUT_SEC`, save, re-run.
+   - Open `06-cicd-local-runner.py`, update `JOB_TIMEOUT_SEC`, save, re-run.
 4. Re-run the runner. The timeout adjustment counts as one Phase 2 loop step.
 5. Document the timeout change in `.lovable/cicd-issues/`.
 
@@ -385,7 +385,7 @@ On every ❌ FAIL or ⏱ TIMEOUT, BEFORE applying any code fix, do both:
 <one-sentence description>
 
 ## Acceptance Criteria
-- [ ] `03-cicd-local-runner.py` reports ✅ PASS for job `<job-name>`
+- [ ] `06-cicd-local-runner.py` reports ✅ PASS for job `<job-name>`
 - [ ] No regression in any other job
 
 ## Status

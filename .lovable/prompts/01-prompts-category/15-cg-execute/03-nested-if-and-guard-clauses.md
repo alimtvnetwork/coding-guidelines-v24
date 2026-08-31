@@ -206,6 +206,9 @@ Code standards must be mechanically enforced by automated linters. You MUST veri
   python linter-scripts/validate-guidelines.py
   # Run automated autofixer:
   python .lovable/ai-fix-scripts/05-guideline-autofixer.py <modified-files>
+          python .lovable/ai-fix-scripts/08-naming-autofixer.py <modified-files>
+          python .lovable/ai-fix-scripts/04-newline-fixer.py <modified-files>
+          python .lovable/ai-fix-scripts/07-relative-path-fixer.py <modified-files>
   ```
 - [ ] **CI/CD Local Runner Connection:** Register the linter script inside `.lovable/ai-fix-scripts/06-cicd-local-runner.py` under the `JOBS` dictionary:
   ```python
@@ -238,6 +241,9 @@ WHILE (STEP < PHASE_2_STEPS):
           python linter-scripts/validate-guidelines.py
     4. Run the guideline autofixer:
           python .lovable/ai-fix-scripts/05-guideline-autofixer.py <modified-files>
+          python .lovable/ai-fix-scripts/08-naming-autofixer.py <modified-files>
+          python .lovable/ai-fix-scripts/04-newline-fixer.py <modified-files>
+          python .lovable/ai-fix-scripts/07-relative-path-fixer.py <modified-files>
     5. Run the local CI runner:
           python .lovable/ai-fix-scripts/06-cicd-local-runner.py
     6. IF any check fails:
@@ -248,6 +254,8 @@ WHILE (STEP < PHASE_2_STEPS):
     7. When all subtasks are finished and local CI is 100% green:
           - Move .lovable/plans/pending/XX-nested-if-audit.md to .lovable/plans/completed/
           - Update .lovable/plans/01-index.md
+          - Run plan consolidator:
+            python .lovable/ai-fix-scripts/20-plan-consolidator.py
           - Stage modified files with git add and create semantic commit:
             git commit -m "refactor(control-flow): eliminate nested ifs and introduce guard clauses"
           - BREAK and finish turn.

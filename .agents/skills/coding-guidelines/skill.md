@@ -223,7 +223,7 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 
 | Rule | Machine-Checkable Rule | Severity | Auto-Fixable Script |
 | :--- | :--- | :--- | :--- |
-| **R1** | Acronyms PascalCase (`Id`, `Url`, `Ip`, `Json`), never all-caps | Must Fix | Yes (`02-guideline-autofixer.py`) |
+| **R1** | Acronyms PascalCase (`Id`, `Url`, `Ip`, `Json`), never all-caps | Must Fix | Yes (`05-guideline-autofixer.py`) |
 | **R2** | JSON / serialization keys are PascalCase (`{"UserId": "...", "IsActive": true}`) | Must Fix | Yes |
 | **R3** | Boolean naming starts with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc | Must Fix | Yes |
 | **R4** | Signature > 3 params or > 100 chars -> one param per line | Must Fix | Yes |
@@ -235,13 +235,13 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 | **R10** | No boolean positional parameters -> use named struct or enum | Suggestion | No |
 | **R11** | Go: `ctx` first parameter. C#: `cancellationToken` last parameter | Must Fix | Yes |
 | **R12** | Return values documented; multi-return meanings unambiguous | Suggestion | No |
-| **R13** | One blank line before `return`/`throw`, unless sole statement in block | Must Fix | Yes (`02-guideline-autofixer.py`) |
-| **R14** | One blank line after closing `}`, unless followed by `}`, `else`, `catch`, etc. | Must Fix | Yes (`02-guideline-autofixer.py`) |
-| **R15** | Never two blank lines in a row anywhere | Must Fix | Yes (`02-guideline-autofixer.py`) |
-| **R16** | No blank line immediately after `{` or before `}` | Must Fix | Yes (`02-guideline-autofixer.py`) |
-| **R17** | Exactly one blank line between top-level declarations | Must Fix | Yes (`02-guideline-autofixer.py`) |
+| **R13** | One blank line before `return`/`throw`, unless sole statement in block | Must Fix | Yes (`05-guideline-autofixer.py`) |
+| **R14** | One blank line after closing `}`, unless followed by `}`, `else`, `catch`, etc. | Must Fix | Yes (`05-guideline-autofixer.py`) |
+| **R15** | Never two blank lines in a row anywhere | Must Fix | Yes (`05-guideline-autofixer.py`) |
+| **R16** | No blank line immediately after `{` or before `}` | Must Fix | Yes (`05-guideline-autofixer.py`) |
+| **R17** | Exactly one blank line between top-level declarations | Must Fix | Yes (`05-guideline-autofixer.py`) |
 | **R18** | Import grouping: stdlib -> third-party -> first-party absolute -> relative | Must Fix | Yes |
-| **R19** | Trailing newline at EOF; no trailing whitespace | Must Fix | Yes (`02-guideline-autofixer.py`) |
+| **R19** | Trailing newline at EOF; no trailing whitespace | Must Fix | Yes (`05-guideline-autofixer.py`) |
 | **R20** | No section-separator blank lines inside functions (refactor instead) | Suggestion | No |
 | **R21** | No comments on struct fields unless explaining units or non-obvious defaults | Must Fix | No |
 
