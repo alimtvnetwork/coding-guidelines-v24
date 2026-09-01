@@ -4,7 +4,6 @@ package apperror
 func SuccessResult[T any](val T) Result[T] {
 	return Result[T]{
 		Value: val,
-		Data:  val,
 	}
 }
 

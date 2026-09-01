@@ -37,6 +37,10 @@ func TestResultMonadicSuccess(t *testing.T) {
 		t.Fatal("expected success status")
 	}
 
+	if res.Data() != "data-payload" {
+		t.Fatalf("expected data-payload from Data(), got %s", res.Data())
+	}
+
 	val, err := res.Unwrap()
 	if err != nil || val != "data-payload" {
 		t.Fatalf("expected data-payload, got %s", val)
