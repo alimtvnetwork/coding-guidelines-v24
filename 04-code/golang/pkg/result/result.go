@@ -1,6 +1,9 @@
 package result
 
-import "coding-guidelines/common/pkg/appfault"
+import (
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
+)
 
 // Result re-exports appfault.Result for direct import compatibility.
 type Result[T any] = appfault.Result[T]
@@ -25,7 +28,7 @@ func NewFailure[T any](err error) Result[T] {
 	return appfault.NewFailure[T](err)
 }
 
-// NewFailureWithType creates a failed Result with explicit error code.
-func NewFailureWithType[T any](errCode string, msg string, caller string) Result[T] {
-	return appfault.NewFailureWithType[T](errCode, msg, caller)
+// NewFailureWithType creates a failed Result with explicit error type.
+func NewFailureWithType[T any](errType errtype.Variation, msg string, caller string) Result[T] {
+	return appfault.NewFailureWithType[T](errType, msg, caller)
 }

@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
@@ -38,7 +39,7 @@ func (c *WordPressClient) ActivateRemotePlugin(
 	slug string,
 ) result.Result[RemoteActivationResponse] {
 	if len(slug) == 0 {
-		return result.NewFailureWithType[RemoteActivationResponse]("E1001", "slug cannot be empty", "wp.client")
+		return result.NewFailureWithType[RemoteActivationResponse](errtype.Validation, "slug cannot be empty", "wp.client")
 	}
 
 	url := fmt.Sprintf("%s/wp-json/riseup/v1/plugins/%s/activate", c.baseUrl, slug)
@@ -46,7 +47,8 @@ func (c *WordPressClient) ActivateRemotePlugin(
 	// Simulated remote HTTP request failure
 	if slug == "broken-plugin" {
 		rawErr := errors.New("HTTP 502 Bad Gateway from upstream NGINX")
-		appErr := appfault.WrapWithDetails(rawErr, "wp.client.activate", "E3003", "delegated remote activation failed", "wp.client", appfault.ErrorTypeExecution, appfault.SeverityError, nil).
+		appErr := appfault.Wrap(rawErr, errtype.Network, "delegated remote activation failed").
+			WithOp("wp.client.activate").
 			WithUrl(url).
 			WithStatusCode(502).
 			WithSiteId(siteId).

@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-// formatBasicError returns formatted code, type, op, and message.
+// formatBasicError returns formatted type name, code, and message.
 func formatBasicError(e *AppError) string {
-	return fmt.Sprintf("[%s:%s] %s: %s", e.Code, e.Type, e.Op, e.Message)
+	return fmt.Sprintf("[%s:%d] %s", e.Type.Name(), e.Type.Code(), e.Message)
 }
 
 // appendCallerAndCause appends caller site and cause to formatted string.
@@ -34,7 +34,7 @@ func (e *AppError) Error() string {
 
 // appendHeader writes diagnostic header info.
 func appendHeader(b *strings.Builder, e *AppError) {
-	b.WriteString(fmt.Sprintf("ERROR: [%s:%s] %s: %s\n", e.Code, e.Type, e.Op, e.Message))
+	b.WriteString(fmt.Sprintf("ERROR: [%s:%d] %s\n", e.Type.Name(), e.Type.Code(), e.Message))
 	if len(e.Caller) > 0 {
 		b.WriteString(fmt.Sprintf("CALLER: %s\n", e.Caller))
 	}
@@ -71,11 +71,11 @@ func (e *AppError) FullString() string {
 // appendMarkdownCauseAndStack writes cause and codeblock stack trace.
 func appendMarkdownCauseAndStack(b *strings.Builder, cause error, stack string) {
 	if cause != nil {
-		b.WriteString(fmt.Sprintf("- **Cause:** %v\n", cause))
+		b.WriteString(fmt.Sprintf("- **Cause:** `%v`\n", cause))
 	}
 
 	if len(stack) > 0 {
-		b.WriteString("\n`\n" + stack + "`\n")
+		b.WriteString("\n```\n" + stack + "```\n")
 	}
 }
 
@@ -86,7 +86,7 @@ func (e *AppError) ToClipboard() string {
 	}
 
 	var b strings.Builder
-	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Code:** %s\n- **Type:** %s\n- **Op:** %s\n- **Message:** %s\n", e.Code, e.Type, e.Op, e.Message))
+	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Type:** `%s (%d)`\n- **Message:** %s\n", e.Type.Name(), e.Type.Code(), e.Message))
 	appendMarkdownCauseAndStack(&b, e.Cause, e.Stack)
 
 	return b.String()
@@ -95,6 +95,6 @@ func (e *AppError) ToClipboard() string {
 // DisplayError prints a terminal banner representation.
 func (e *AppError) DisplayError() {
 	if e != nil {
-		fmt.Printf("❌ [%s:%s] %s: %s (at %s)\n", e.Code, e.Type, e.Op, e.Message, e.Caller)
+		fmt.Printf("❌ [%s:%d] %s (at %s)\n", e.Type.Name(), e.Type.Code(), e.Message, e.Caller)
 	}
 }

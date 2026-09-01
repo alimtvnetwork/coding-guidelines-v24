@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
@@ -30,11 +31,11 @@ func NewPluginRepository(db *sql.DB) *PluginRepository {
 // checkSpecialPluginIds simulates database failure states for test cases.
 func checkSpecialPluginIds(id int64) *appfault.AppError {
 	if id == 404 {
-		return appfault.NewWithDetails("repo.find", appfault.ErrDatabaseNotFound.String(), "plugin record not found", "repo", appfault.ErrorTypeNotFound, appfault.SeverityWarn, nil)
+		return appfault.New(errtype.NotFound, "plugin record not found").WithOp("repo.find")
 	}
 
 	if id == 500 {
-		return appfault.WrapSimple(errors.New("connection reset by peer"), "repo.find")
+		return appfault.Wrap(errors.New("connection reset by peer"), errtype.Database, "connection failed").WithOp("repo.find")
 	}
 
 	return nil

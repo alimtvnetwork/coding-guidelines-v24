@@ -14,10 +14,8 @@ func appendYamlLine(b *strings.Builder, key, val string) {
 
 // appendBasicYamlFields appends basic header fields to YAML builder.
 func appendBasicYamlFields(b *strings.Builder, m AppErrorDataModel) {
-	appendYamlLine(b, "Op", m.Op)
-	appendYamlLine(b, "Code", m.Code)
-	appendYamlLine(b, "Type", string(m.Type))
-	appendYamlLine(b, "Severity", string(m.Severity))
+	b.WriteString(fmt.Sprintf("Type: %d\n", m.Type.Code()))
+	appendYamlLine(b, "TypeName", m.Type.Name())
 	appendYamlLine(b, "Message", m.Message)
 }
 

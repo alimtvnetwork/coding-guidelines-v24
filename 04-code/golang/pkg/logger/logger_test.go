@@ -6,12 +6,13 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/logger"
 )
 
 func TestLoggerConsoleOutput(t *testing.T) {
 	buf := &bytes.Buffer{}
-	opts := logger.DefaultOptions().WithOutput(buf).WithLevel(logger.LevelDebug)
+	opts := logger.DefaultOptions().WithOutput(buf).WithJson(false)
 	log := logger.New(opts)
 
 	log.Info("test info message")
@@ -22,15 +23,12 @@ func TestLoggerConsoleOutput(t *testing.T) {
 
 func TestLoggerAppErrorLogging(t *testing.T) {
 	buf := &bytes.Buffer{}
-	opts := logger.DefaultOptions().WithOutput(buf).WithJson(true)
-	log := logger.New(opts)
-
-	appErr := appfault.NewWithDetails("db.find", "E2004", "record missing", "repo", appfault.ErrorTypeNotFound, appfault.SeverityError, nil).
-		WithSiteId(101)
+	log := logger.New(logger.DefaultOptions().WithOutput(buf).WithJson(true))
+	appErr := appfault.New(errtype.NotFound, "record missing").WithOp("db.find").WithSiteId(101)
 	log.LogError(appErr)
 
 	output := buf.String()
-	if !strings.Contains(output, "record missing") || !strings.Contains(output, "E2004") {
+	if !strings.Contains(output, "record missing") || !strings.Contains(output, "NotFound") {
 		t.Fatalf("expected JSON log to contain error details, got %s", output)
 	}
 }
@@ -48,8 +46,8 @@ func TestLoggerLevelFilterIgnored(t *testing.T) {
 func TestLoggerLevelFilterMatched(t *testing.T) {
 	buf := &bytes.Buffer{}
 	log := logger.New(logger.DefaultOptions().WithOutput(buf).WithLevel(logger.LevelWarn))
-	log.Warn("warn message")
-	if !strings.Contains(buf.String(), "warn message") {
-		t.Fatalf("expected output for WARN level, got %s", buf.String())
+	log.Warn("warning message")
+	if !strings.Contains(buf.String(), "warning message") {
+		t.Fatalf("expected warning message in log output, got %s", buf.String())
 	}
 }

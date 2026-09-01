@@ -86,7 +86,7 @@ func (l *Logger) LogError(err *appfault.AppError) {
 		stack = err.Stack
 	}
 
-	l.write(LevelError, err.Message, err.Code, err.Ctx, stack)
+	l.write(LevelError, err.Message, err.Type.Name(), err.Ctx, stack)
 }
 
 // Fatal logs a fatal error and terminates execution.

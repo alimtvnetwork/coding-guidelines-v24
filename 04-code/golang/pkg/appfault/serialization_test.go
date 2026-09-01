@@ -6,13 +6,16 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 )
 
 // createSampleAppError helper for serialization testing.
 func createSampleAppError() (*appfault.AppError, error) {
 	rawErr := errors.New("underlying socket closed")
-	orig := appfault.WrapWithDetails(rawErr, "net.dial", "E3001", "dial timeout", "network", appfault.ErrorTypeExecution, appfault.SeverityError, map[string]any{"port": 8080})
-	orig.WithStatusCode(504)
+	orig := appfault.Wrap(rawErr, errtype.Network, "dial timeout").
+		WithOp("net.dial").
+		WithStatusCode(504).
+		WithContext("port", 8080)
 
 	return orig, rawErr
 }
@@ -20,7 +23,7 @@ func createSampleAppError() (*appfault.AppError, error) {
 func TestAppErrorSerializationRoundtrip(t *testing.T) {
 	orig, rawErr := createSampleAppError()
 	restored, err := appfault.FromJSON([]byte(orig.ToJSONString()))
-	if err != nil || restored.Op != orig.Op || restored.StatusCode != 504 {
+	if err != nil || restored.Type != orig.Type || restored.StatusCode != 504 {
 		t.Fatalf("JSON restore mismatch or error: %v, %+v", err, restored)
 	}
 
@@ -30,10 +33,10 @@ func TestAppErrorSerializationRoundtrip(t *testing.T) {
 }
 
 func TestAppErrorYAMLSerialization(t *testing.T) {
-	appErr := appfault.NewSimple("auth.login", "E1001").WithStatusCode(401)
+	appErr := appfault.New(errtype.Unauthorized, "invalid credentials").WithStatusCode(401)
 	yamlStr := appErr.ToYAMLString()
 
-	if !strings.Contains(yamlStr, "Op: \"auth.login\"") || !strings.Contains(yamlStr, "StatusCode: 401") {
+	if !strings.Contains(yamlStr, "Type: 10") || !strings.Contains(yamlStr, "StatusCode: 401") {
 		t.Fatalf("unexpected YAML string: %s", yamlStr)
 	}
 }

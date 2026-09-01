@@ -1,5 +1,7 @@
 package appfault
 
+import "coding-guidelines/common/pkg/errtype"
+
 // Unwrap returns the underlying root cause error.
 func (e *AppError) Unwrap() error {
 	if e == nil {
@@ -9,45 +11,39 @@ func (e *AppError) Unwrap() error {
 	return e.Cause
 }
 
-// HasError returns true if the receiver is non-nil.
-func (e *AppError) HasError() bool {
-	return e != nil
-}
-
-// HasNoError returns true if the receiver is nil.
+// HasNoError returns true if the receiver is nil or Type is None.
 func (e *AppError) HasNoError() bool {
-	return e == nil
+	if e == nil {
+		return true
+	}
+
+	return e.Type.IsNone()
 }
 
-// HasValidError returns true if the receiver is non-nil and has an error code.
+// HasValidError returns true if the receiver is non-nil and has a valid error type.
 func (e *AppError) HasValidError() bool {
 	if e == nil {
 		return false
 	}
 
-	return len(e.Code) > 0
+	return e.Type.HasError()
 }
 
-// IsValid returns true if the error is populated with an error code.
+// IsValid returns true if the error is populated with a non-None type.
 func (e *AppError) IsValid() bool {
 	return e.HasValidError()
 }
 
-// IsErrorCode checks if the error code matches the target string.
-func (e *AppError) IsErrorCode(code string) bool {
+// Is checks if the error type matches the target Variation.
+func (e *AppError) Is(target errtype.Variation) bool {
 	if e == nil {
-		return false
+		return target == errtype.None
 	}
 
-	return e.Code == code
+	return e.Type == target
 }
 
-// IsCode is an alias for IsErrorCode.
-func (e *AppError) IsCode(code string) bool {
-	return e.IsErrorCode(code)
-}
-
-// IsCodeType checks if the error code matches the target ErrorCodeType.
-func (e *AppError) IsCodeType(code ErrorCodeType) bool {
-	return e.IsErrorCode(code.String())
+// IsType is an alias for Is.
+func (e *AppError) IsType(target errtype.Variation) bool {
+	return e.Is(target)
 }

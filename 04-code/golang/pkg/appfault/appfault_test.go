@@ -4,17 +4,19 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
-func TestAppErrorCreationAndDetails(t *testing.T) {
-	appErr := appfault.NewWithDetails("repo.find", "E2004", "not found", "repo", appfault.ErrorTypeNotFound, appfault.SeverityWarn, nil)
-	if !appErr.IsErrorCode("E2004") || !appErr.HasValidError() {
-		t.Fatalf("expected code E2004, got %s", appErr.GetCode())
+func TestAppErrorCreationAndNilSafety(t *testing.T) {
+	var nilErr *appfault.AppError
+	if nilErr.HasError() || !nilErr.IsSuccess() || appfault.New(errtype.None, "") != nil {
+		t.Fatal("expected nil AppError and None constructor to be IsSuccess")
 	}
 
-	if appErr.GetOp() != "repo.find" {
-		t.Fatalf("expected op repo.find, got %s", appErr.GetOp())
+	appErr := appfault.New(errtype.NotFound, "record not found").WithOp("repo.find").WithSeverity(appfault.SeverityWarn)
+	if !appErr.Is(errtype.NotFound) || !appErr.HasValidError() {
+		t.Fatalf("expected NotFound error, got %v", appErr.GetType())
 	}
 }
 
@@ -48,7 +50,7 @@ func TestResultMonadicOperations(t *testing.T) {
 		t.Fatal("expected success result")
 	}
 
-	failRes := result.NewFailureWithType[string]("E1001", "bad input", "validator")
+	failRes := result.NewFailureWithType[string](errtype.Validation, "bad input", "validator")
 	if !failRes.IsFailed() || failRes.UnwrapOr("fallback") != "fallback" {
 		t.Fatal("expected failed result with fallback")
 	}

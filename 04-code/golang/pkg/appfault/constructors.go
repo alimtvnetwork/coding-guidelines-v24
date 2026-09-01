@@ -1,71 +1,73 @@
 package appfault
 
-// NewSimple creates an error with automatic caller and stack trace capture.
-func NewSimple(op, code string) *AppError {
-	return New(op, code, nil)
+import "coding-guidelines/common/pkg/errtype"
+
+// New creates an AppError for a given error type variation and message.
+// If errType is errtype.None, it returns nil (no error allocated).
+func New(errType errtype.Variation, message string) *AppError {
+	if errType == errtype.None {
+		return nil
+	}
+
+	return NewWithContext(errType, message, nil)
 }
 
-// New creates a standard AppError with caller, stack trace, and context map.
-func New(op, code string, ctx map[string]any) *AppError {
-	return NewWithDetails(op, code, "", "", ErrorTypeExecution, SeverityError, ctx)
+// NewValidationError creates a validation error.
+func NewValidationError(message string) *AppError {
+	return New(errtype.Validation, message)
 }
 
-// NewValidationError creates a specialized validation AppError.
-func NewValidationError(msg string) *AppError {
-	return NewWithDetails("validation", ErrValidation.String(), msg, "", ErrorTypeValidation, SeverityError, nil)
-}
-
-// createAppErrorInstance sets up the base AppError struct.
-func createAppErrorInstance(op, code, msg, creator string, errType ErrorType, sev SeverityType) *AppError {
+// createAppErrorInstance constructs the AppError capturing stack trace.
+func createAppErrorInstance(errType errtype.Variation, message string) *AppError {
 	trace := CaptureStackTrace(3)
 
 	return &AppError{
-		Op:       op,
-		Code:     code,
-		Type:     errType,
-		Severity: sev,
-		Creator:  creator,
-		Message:  msg,
-		Caller:   trace.CallerLine(),
-		Stack:    trace.String(),
+		Type:    errType,
+		Message: message,
+		Caller:  trace.CallerLine(),
+		Stack:   trace.String(),
 	}
 }
 
-// NewWithDetails provides full-fidelity AppError construction.
-func NewWithDetails(op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *AppError {
-	e := createAppErrorInstance(op, code, msg, creator, errType, sev)
+// NewWithContext constructs an AppError with an initial context map.
+func NewWithContext(errType errtype.Variation, message string, ctx map[string]any) *AppError {
+	if errType == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(errType, message)
 	e.Ctx = ensureContextMap(ctx)
 
 	return e
 }
 
-// WrapSimple wraps an existing error with default code and operation label.
-func WrapSimple(err error, op string) *AppError {
-	return Wrap(err, op, nil)
-}
-
-// Wrap wraps an existing error with operation label and context map.
-func Wrap(err error, op string, ctx map[string]any) *AppError {
+// Wrap wraps an existing error with an error type variation and custom message.
+// If err is nil, it returns nil (no allocation).
+func Wrap(err error, errType errtype.Variation, message string) *AppError {
 	if err == nil {
 		return nil
 	}
 
-	return WrapWithDetails(err, op, ErrUnknown.String(), err.Error(), "", ErrorTypeExecution, SeverityError, ctx)
-}
-
-// WrapWithDetails wraps an error preserving the underlying root cause.
-func WrapWithDetails(err error, op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *AppError {
-	if err == nil {
+	e := New(errType, message)
+	if e == nil {
 		return nil
 	}
 
-	e := NewWithDetails(op, code, msg, creator, errType, sev, ctx)
 	e.Cause = err
 
 	return e
 }
 
-// ensureContextMap safely returns a non-nil ContextMap.
+// WrapSimple wraps a raw error into an Execution error type.
+func WrapSimple(err error) *AppError {
+	if err == nil {
+		return nil
+	}
+
+	return Wrap(err, errtype.Execution, err.Error())
+}
+
+// ensureContextMap safely converts a map[string]any to ContextMap.
 func ensureContextMap(ctx map[string]any) ContextMap {
 	if ctx == nil {
 		return NewContextMap()
