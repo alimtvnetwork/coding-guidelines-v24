@@ -1,3 +1,3 @@
 module coding-guidelines/common
 
-go 1.22
+go 1.23

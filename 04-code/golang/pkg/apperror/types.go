@@ -1,6 +1,28 @@
 package apperror
 
-// ErrorCodeType represents standardized error codes across the platform.
+// ErrorType categorizes error domains.
+type ErrorType string
+
+const (
+	ErrorTypeValidation   ErrorType = "VALIDATION"
+	ErrorTypePrecondition ErrorType = "PRECONDITION"
+	ErrorTypeNotFound     ErrorType = "NOT_FOUND"
+	ErrorTypeExecution    ErrorType = "EXECUTION"
+	ErrorTypeAbort        ErrorType = "ABORT"
+	ErrorTypeInternal     ErrorType = "INTERNAL"
+)
+
+// SeverityType indicates the severity level of an error.
+type SeverityType string
+
+const (
+	SeverityInfo  SeverityType = "INFO"
+	SeverityWarn  SeverityType = "WARN"
+	SeverityError SeverityType = "ERROR"
+	SeverityFatal SeverityType = "FATAL"
+)
+
+// ErrorCodeType represents standard system error codes.
 type ErrorCodeType string
 
 const (
@@ -22,12 +44,12 @@ const (
 	ErrGitExec           ErrorCodeType = "E7001"
 )
 
-// String returns the string representation of the ErrorCodeType.
+// String returns the string representation of ErrorCodeType.
 func (c ErrorCodeType) String() string {
 	return string(c)
 }
 
-// IsValid returns true when the error code string is non-empty.
+// IsValid returns true if the error code is non-empty.
 func (c ErrorCodeType) IsValid() bool {
 	return len(c) > 0
 }

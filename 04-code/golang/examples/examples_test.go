@@ -13,24 +13,24 @@ import (
 func TestDatabaseQuerySuccess(t *testing.T) {
 	repo := examples.NewPluginRepository(nil)
 	res := repo.FindById(context.Background(), 1)
-	if !res.IsSafe() {
+	if !res.IsSuccess() || res.IsFailed() {
 		t.Fatal("expected successful db query")
 	}
 
-	if res.Value().Slug != "seo-optimizer" {
-		t.Fatalf("expected slug 'seo-optimizer', got %s", res.Value().Slug)
+	if res.Value.Slug != "seo-optimizer" {
+		t.Fatalf("expected slug 'seo-optimizer', got %s", res.Value.Slug)
 	}
 }
 
 func TestDatabaseQueryNotFound(t *testing.T) {
 	repo := examples.NewPluginRepository(nil)
 	res := repo.FindById(context.Background(), 404)
-	if !res.HasError() {
+	if !res.IsFailed() || !res.HasValidError() {
 		t.Fatal("expected error for 404 id")
 	}
 
-	if res.AppError().Code() != apperror.ErrDatabaseNotFound {
-		t.Fatalf("expected ErrDatabaseNotFound, got %s", res.AppError().Code())
+	if !res.Fault().IsErrorCode(apperror.ErrDatabaseNotFound.String()) {
+		t.Fatalf("expected ErrDatabaseNotFound, got %s", res.Fault().GetCode())
 	}
 }
 
@@ -45,23 +45,23 @@ func newTestWorkflowService(buf *bytes.Buffer) *examples.PluginWorkflowService {
 func TestWorkflowServiceSuccess(t *testing.T) {
 	svc := newTestWorkflowService(&bytes.Buffer{})
 	res := svc.ActivateWorkflow(context.Background(), 10, 1)
-	if !res.IsSafe() {
+	if !res.IsSuccess() {
 		t.Fatal("expected workflow to succeed")
 	}
 
-	if res.Value().PluginSummary.Slug != "seo-optimizer" {
-		t.Fatalf("expected plugin slug 'seo-optimizer', got %s", res.Value().PluginSummary.Slug)
+	if res.Value.PluginSummary.Slug != "seo-optimizer" {
+		t.Fatalf("expected plugin slug 'seo-optimizer', got %s", res.Value.PluginSummary.Slug)
 	}
 }
 
 func TestWorkflowServicePropagatesErrorWithoutRewrapping(t *testing.T) {
 	svc := newTestWorkflowService(&bytes.Buffer{})
 	res := svc.ActivateWorkflow(context.Background(), 10, 404)
-	if !res.HasError() {
+	if !res.IsFailed() {
 		t.Fatal("expected workflow to fail when plugin is not found in db")
 	}
 
-	if res.AppError().Code() != apperror.ErrDatabaseNotFound {
-		t.Fatalf("expected original ErrDatabaseNotFound code, got %s", res.AppError().Code())
+	if !res.Fault().IsErrorCode(apperror.ErrDatabaseNotFound.String()) {
+		t.Fatalf("expected original ErrDatabaseNotFound code, got %s", res.Fault().GetCode())
 	}
 }

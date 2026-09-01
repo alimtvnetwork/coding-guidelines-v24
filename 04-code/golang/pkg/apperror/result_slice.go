@@ -1,89 +1,74 @@
 package apperror
 
-// ResultSlice wraps a generic slice collection with explicit status and Fault.
+// ResultSlice wraps a generic slice collection with monadic error state.
 type ResultSlice[T any] struct {
-	isSuccess bool
-	isFailed  bool
-	items     []T
-	fault     *Fault
+	Items    []T    `json:"items,omitempty"`
+	Err      *Fault `json:"err,omitempty"`
+	AppError error  `json:"appError,omitempty"`
 }
 
-// OkSlice creates a successful ResultSlice from items.
+// OkSlice creates a successful ResultSlice.
 func OkSlice[T any](items []T) ResultSlice[T] {
 	return ResultSlice[T]{
-		isSuccess: true,
-		isFailed:  false,
-		items:     items,
+		Items: items,
 	}
 }
 
 // FailSlice creates a failed ResultSlice from a Fault.
 func FailSlice[T any](err *Fault) ResultSlice[T] {
 	return ResultSlice[T]{
-		isSuccess: false,
-		isFailed:  true,
-		fault:     err,
+		Err:      err,
+		AppError: err,
 	}
 }
 
-// FailSliceWrap wraps a raw error into a Fault and returns a failed ResultSlice.
-func FailSliceWrap[T any](cause error, code ErrorCodeType, message string) ResultSlice[T] {
-	return FailSlice[T](Wrap(cause, code, message))
+// IsSuccess returns true if no error is present.
+func (rs ResultSlice[T]) IsSuccess() bool {
+	return rs.Err == nil && rs.AppError == nil
 }
 
-// HasError returns true if the collection query failed.
+// IsFailed returns true if an error is present.
+func (rs ResultSlice[T]) IsFailed() bool {
+	return rs.Err != nil || rs.AppError != nil
+}
+
+// HasError returns true if an error is present.
 func (rs ResultSlice[T]) HasError() bool {
-	return rs.isFailed
+	return rs.IsFailed()
 }
 
-// IsSafe returns true if the operation succeeded with no error.
-func (rs ResultSlice[T]) IsSafe() bool {
-	return rs.isSuccess
-}
-
-// HasItems returns true if the slice contains at least one element.
+// HasItems returns true if the slice contains elements and is safe.
 func (rs ResultSlice[T]) HasItems() bool {
-	return len(rs.items) > 0
+	if rs.IsFailed() {
+		return false
+	}
+
+	return len(rs.Items) > 0
 }
 
-// IsEmpty returns true if the slice contains zero elements.
-func (rs ResultSlice[T]) IsEmpty() bool {
-	return len(rs.items) == 0
-}
-
-// Count returns the total number of items in the collection.
+// Count returns the number of items.
 func (rs ResultSlice[T]) Count() int {
-	return len(rs.items)
-}
-
-// Items returns the raw slice of items or nil if in error state.
-func (rs ResultSlice[T]) Items() []T {
-	if rs.isFailed {
-		return nil
+	if rs.IsFailed() {
+		return 0
 	}
 
-	return rs.items
+	return len(rs.Items)
 }
 
-// First returns a Result containing the first item or empty.
+// First returns the first element or empty.
 func (rs ResultSlice[T]) First() Result[T] {
-	if rs.isFailed {
-		return Fail[T](rs.fault)
+	if rs.IsFailed() {
+		return Fail[T](rs.Err)
 	}
 
-	if len(rs.items) == 0 {
-		return FailNew[T](ErrDatabaseNotFound, "slice is empty")
+	if len(rs.Items) == 0 {
+		return FailNew[T]("slice.first", ErrDatabaseNotFound.String(), "slice is empty")
 	}
 
-	return Ok(rs.items[0])
+	return Ok(rs.Items[0])
 }
 
-// Fault returns the underlying *Fault or nil.
+// Fault returns the underlying *Fault.
 func (rs ResultSlice[T]) Fault() *Fault {
-	return rs.fault
-}
-
-// AppError returns the underlying *Fault (alias for Fault()).
-func (rs ResultSlice[T]) AppError() *Fault {
-	return rs.fault
+	return rs.Err
 }

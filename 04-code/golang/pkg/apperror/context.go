@@ -6,7 +6,11 @@ func (f *Fault) WithContext(key string, value any) *Fault {
 		return nil
 	}
 
-	f.context[key] = value
+	if f.Ctx == nil {
+		f.Ctx = make(map[string]any)
+	}
+
+	f.Ctx[key] = value
 
 	return f
 }
@@ -52,12 +56,12 @@ func (f *Fault) WithPluginContext(pluginId int64, slug string) *Fault {
 
 // Context returns a copy of the underlying diagnostic metadata map.
 func (f *Fault) Context() map[string]any {
-	if f == nil {
+	if f == nil || f.Ctx == nil {
 		return map[string]any{}
 	}
 
-	copied := make(map[string]any, len(f.context))
-	for k, v := range f.context {
+	copied := make(map[string]any, len(f.Ctx))
+	for k, v := range f.Ctx {
 		copied[k] = v
 	}
 

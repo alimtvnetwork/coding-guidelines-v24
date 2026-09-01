@@ -25,9 +25,9 @@ func TestLoggerAppErrorLogging(t *testing.T) {
 	opts := logger.DefaultOptions().WithOutput(buf).WithJson(true)
 	log := logger.New(opts)
 
-	appErr := apperror.New(apperror.ErrDatabaseNotFound, "record missing").
+	fault := apperror.NewWithDetails("db.find", "E2004", "record missing", "repo", apperror.ErrorTypeNotFound, apperror.SeverityError, nil).
 		WithSiteId(101)
-	log.LogError(appErr)
+	log.LogError(fault)
 
 	output := buf.String()
 	if !strings.Contains(output, "record missing") || !strings.Contains(output, "E2004") {

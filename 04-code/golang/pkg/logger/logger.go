@@ -32,13 +32,9 @@ func (l *Logger) format(entry LogEntry) string {
 	return formatConsole(entry)
 }
 
-// write dispatches the formatted log entry to the configured output writer.
-func (l *Logger) write(level LogLevel, msg string, code string, ctx map[string]any, stack string) {
-	if !level.IsEnabled(l.opts.Level) {
-		return
-	}
-
-	entry := LogEntry{
+// createLogEntry builds structured entry payload.
+func createLogEntry(level LogLevel, msg, code string, ctx map[string]any, stack string) LogEntry {
+	return LogEntry{
 		Timestamp:  time.Now(),
 		Level:      level.String(),
 		Message:    msg,
@@ -46,6 +42,15 @@ func (l *Logger) write(level LogLevel, msg string, code string, ctx map[string]a
 		Context:    ctx,
 		StackTrace: stack,
 	}
+}
+
+// write dispatches the formatted log entry to the configured output writer.
+func (l *Logger) write(level LogLevel, msg string, code string, ctx map[string]any, stack string) {
+	if !level.IsEnabled(l.opts.Level) {
+		return
+	}
+
+	entry := createLogEntry(level, msg, code, ctx, stack)
 
 	fmt.Fprint(l.opts.Output, l.format(entry))
 }
@@ -78,10 +83,10 @@ func (l *Logger) LogError(err *apperror.Fault) {
 
 	var stack string
 	if l.opts.IsStackTrace {
-		stack = err.StackTrace().String()
+		stack = err.Stack
 	}
 
-	l.write(LevelError, err.Message(), err.Code().String(), err.Context(), stack)
+	l.write(LevelError, err.Message, err.Code, err.Ctx, stack)
 }
 
 // Fatal logs a fatal error and terminates execution.

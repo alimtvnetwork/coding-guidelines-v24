@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"coding-guidelines/common/pkg/apperror"
+	"coding-guidelines/common/pkg/result"
 )
 
 // PluginSummary represents an active plugin record in the system.
@@ -26,32 +27,35 @@ func NewPluginRepository(db *sql.DB) *PluginRepository {
 	return &PluginRepository{db: db}
 }
 
-// validatePluginId checks input and simulates database error states.
-func validatePluginId(id int64) *apperror.Fault {
-	if id <= 0 {
-		return apperror.New(apperror.ErrValidation, "plugin id must be positive")
-	}
-
+// checkSpecialPluginIds simulates database failure states for test cases.
+func checkSpecialPluginIds(id int64) *apperror.Fault {
 	if id == 404 {
-		return apperror.New(apperror.ErrDatabaseNotFound, "plugin record not found")
+		return apperror.NewWithDetails("repo.find", apperror.ErrDatabaseNotFound.String(), "plugin record not found", "repo", apperror.ErrorTypeNotFound, apperror.SeverityWarn, nil)
 	}
 
 	if id == 500 {
-		rawErr := errors.New("connection reset by peer")
-
-		return apperror.Wrap(rawErr, apperror.ErrDatabaseQuery, "query execution failed")
+		return apperror.WrapSimple(errors.New("connection reset by peer"), "repo.find")
 	}
 
 	return nil
 }
 
-// FindById queries a single plugin record by ID.
-func (r *PluginRepository) FindById(ctx context.Context, id int64) apperror.Result[PluginSummary] {
-	if err := validatePluginId(id); err != nil {
-		return apperror.Fail[PluginSummary](err)
+// validatePluginId checks input and simulates database error states.
+func validatePluginId(id int64) *apperror.Fault {
+	if id <= 0 {
+		return apperror.NewValidationError("plugin id must be positive")
 	}
 
-	return apperror.Ok(PluginSummary{
+	return checkSpecialPluginIds(id)
+}
+
+// FindById queries a single plugin record by ID.
+func (r *PluginRepository) FindById(ctx context.Context, id int64) result.Result[PluginSummary] {
+	if err := validatePluginId(id); err != nil {
+		return result.FailureResult[PluginSummary](err)
+	}
+
+	return result.SuccessResult(PluginSummary{
 		ID:       id,
 		Slug:     "seo-optimizer",
 		Name:     "SEO Optimizer Pro",
