@@ -37,7 +37,7 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 >    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`).
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
->    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
+>    - Coding Guidelines Mirror: `.lovable/coding-guidelines.md`.
 > 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
 >    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
 >    - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md)`

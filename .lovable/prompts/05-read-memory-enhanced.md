@@ -14,7 +14,7 @@ Autonomously self-loop and read:
 
 - /learn the entire codebase as a whole to create memory.
 - /learn the root `readme.md` to create memory.
-- /learn the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines/` and all files they reference) to create memory.
+- /learn the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines.md` and all files they reference) to create memory.
 - /learn every single folder, subfolder, and nested markdown file in the `spec/` directory (specifically `spec/02-coding-guidelines/`, `spec/03-error-manage/`, enum fixes, database conventions) to create memory.
 - /learn all recent Root Cause Analysis (RCA) records, retrospectives, and past failure post-mortems in `.lovable/issues/01-<slug>.md`, `.lovable/cicd-issues/01-<slug>.md`, and `spec/03-error-manage/01-error-resolution/03-retrospectives/` to ensure past mistakes are never repeated.
 - /learn all hard prohibitions in `.lovable/strictly-avoid.md`.

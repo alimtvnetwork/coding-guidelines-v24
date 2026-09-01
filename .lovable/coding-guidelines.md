@@ -13,7 +13,7 @@ This is a standalone file. Follow every rule below without consulting any other 
 Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
 
 1. `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (source of truth).
-2. `.lovable/coding-guidelines/coding-guidelines.md` (mirror for Lovable agent search).
+2. `.lovable/coding-guidelines.md` (mirror for Lovable agent search).
 3. `.cursorrules` (mirror for Cursor and other IDE agents).
 
 If any mirror is missing or out of date, run `node scripts/sync-guidelines.mjs` before writing code. Missing mirrors are the top cause of "AI cannot find the coding guideline" search failures.
@@ -53,7 +53,7 @@ auto-reject on the same tier as RULE 0.
 15. Boolean Return Wrapper: If a function returns multiple values (tuples or native multi-returns) and one is a boolean, do not return a raw boolean (e.g. `(int, bool)`). Return a wrapper object, struct, or class to provide clear context (e.g. `{ data, isSuccess }`).
 16. Strict Conditional Joins: Never mix logical operators (e.g., OR with AND) and keep `if` conditions to a maximum of one join (two operands). Extract complex logic into named boolean variables.
 17. No Mixed Polarity: Never mix positive and negative conditions in a single conditional join (e.g., `if (a && !b)` is forbidden, use all positive variables).
-18. This coding guideline file MUST be mirrored to `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` at every edit. The mirror script `scripts/sync-guidelines.mjs` is the only allowed writer. Missing or stale mirrors are a build-fail: agent search tools index the mirror, not the spec folder, so a missing mirror means the guideline effectively does not exist for the AI. Never hand-edit the mirrors; always edit the source file and re-run the sync.
+18. This coding guideline file MUST be mirrored to `.lovable/coding-guidelines.md` and `.cursorrules` at every edit. The mirror script `scripts/sync-guidelines.mjs` is the only allowed writer. Missing or stale mirrors are a build-fail: agent search tools index the mirror, not the spec folder, so a missing mirror means the guideline effectively does not exist for the AI. Never hand-edit the mirrors; always edit the source file and re-run the sync.
 19. **Version Source of Truth & Inheritance (Non-Negotiable)**: Do not hardcode version numbers in multiple files. There MUST be a single `version.json` file in the root of the repo (delivered via the coding guidelines installer and enqueued in `.lovable/what-to-read.md`). It contains the repository's root version information, description, self-explaining metadata (`_purpose`, `_instructions`), and sub-package sections (`backend`, `frontend`, `cli`, `linters`). Sub-package sections can use `"inherit"` to automatically resolve to the global root version, or declare independent version tracks. Every language implementation (Go, TypeScript, Python, PHP, C#, Rust, shell) MUST import/read this root `version.json` file to get its version at build/run time. To make a new release or change the version across any component, you MUST only change this root `version.json` and run the project's sync command (`npm run sync`).
 20. **No Inline Definitions**: Never define an enum, type, struct, or interface inline alongside business logic or its first usage. They must be extracted into their own dedicated file (e.g. `src/enums/UserRoleType.ts`).
 21. **Enum Guideline & Naming**: Every enum name MUST end with the suffix `Type` (e.g. `UserRoleType`, not `UserRole`), except in Rust where standard PascalCase is preferred without a suffix.
@@ -66,14 +66,10 @@ auto-reject on the same tier as RULE 0.
 
 ## Boolean Naming
 
-1. Every boolean starts with one of these prefixes: `is`, `has`, `can`, `should`, `was`, `will`, `did`, `must`.
-2. Positive framing only. `isEnabled` yes, `isNotDisabled` no. `hasAccess` yes, `hasNoAccess` no.
-3. If the natural name is negative, invert it: replace `isNotReady` with `isReady` and flip the check site.
-4. State prefixes match tense: `is*` for current state, `has*` for possession or completion, `was*` for past state, `will*` for future/pending, `did*` for a completed action.
-5. Capability prefixes: `can*` for permission or feasibility, `should*` for policy or recommendation, `must*` for hard requirements.
-6. Never use `flag`, `bool`, `check`, or bare adjectives as boolean names. `enabled` alone is not allowed, use `isEnabled`.
-7. No boolean flag parameters on functions. Split into two named functions instead. `render(true)` is wrong, `renderExpanded()` and `renderCollapsed()` are right.
-8. Booleans that come back from questions to the user or from external systems get normalized to the same prefix rules at the boundary, never leak the raw name into internal code.
+1. **Prefixes:** Every boolean variable, function, parameter, struct field, JSON key, or property MUST begin with `is` or `has` ONLY (`Is` / `Has` for PascalCase; e.g. `isValid`, `hasAccess`, `isReady`, `hasData`); all other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc.) and negative names are strictly **BANNED**.
+2. **Positive Framing:** Never use negative names (`isNotReady`, `disableCache` are banned). Invert to positive equivalents (`isReady`, `isCacheEnabled`).
+3. **No Inverted Success:** Never check `!response.isSuccess`. Use `response.isFail`.
+4. **No Explicit True Checks (TOTAL BAN):** Never write `if isReady == true` or `if (hasMatch === true)`. Positive booleans MUST be implicit: `if isReady { ... }`.
 
 ---
 

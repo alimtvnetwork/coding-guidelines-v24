@@ -182,7 +182,7 @@ jobs:
 
       - name: Check Lovable prompts loaded (index ↔ .lovable/prompts/* sync)
         # Enforces the "read all prompts before generating code" contract
-        # from .lovable/coding-guidelines/coding-guidelines.md by
+        # from .lovable/coding-guidelines.md by
         # verifying .lovable/prompts.md exists and references every
         # prompt file on disk. Catches orphans + dangling references.
         run: python3 linter-scripts/check-prompts-loaded.py
@@ -646,7 +646,7 @@ jobs:
         # >=0.95 READY, >=0.80 WATCH, <0.80 NOT READY. Added in v5.128.
         run: node scripts/tests/branch-protection-soak.test.mjs
       - name: Check coding-guideline mirrors in sync (Hard Rule 13)
-        # Enforces spec/17-.../31-*.md (source) == .lovable/coding-guidelines/coding-guidelines.md
+        # Enforces spec/17-.../31-*.md (source) == .lovable/coding-guidelines.md
         # and == .cursorrules, byte-for-byte. Missing/stale mirrors are a build-fail
         # per Hard Rule #13 (v5.129), because agent search indexes the mirror,
         # not the spec tree. Added in v5.130.

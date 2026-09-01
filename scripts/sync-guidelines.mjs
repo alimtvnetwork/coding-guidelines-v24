@@ -5,7 +5,7 @@
 // Single source of truth: spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md
 //
 // Mirrors:
-//   1. .lovable/coding-guidelines/coding-guidelines.md   (exact body copy + auto-gen banner)
+//   1. .lovable/coding-guidelines.md   (exact body copy + auto-gen banner)
 //   2. .cursorrules                                       (Hard Rules block injected between markers)
 //
 // Usage:
@@ -22,7 +22,7 @@ const ROOT = resolve(__dirname, "..");
 
 const CANONICAL = resolve(ROOT, "spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md");
 const LOVABLE_MIRROR = resolve(ROOT, ".lovable/coding-guidelines.md");
-const LOVABLE_NESTED_MIRROR = resolve(ROOT, ".lovable/coding-guidelines/coding-guidelines.md");
+const LOVABLE_NESTED_MIRROR = resolve(ROOT, ".lovable/coding-guidelines.md");
 const CURSORRULES = resolve(ROOT, ".cursorrules");
 
 const BANNER = [

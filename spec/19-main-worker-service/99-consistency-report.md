@@ -87,7 +87,7 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 | `spec/05-split-db-architecture/` | ✅ exists |
 | `spec/06-seedable-config-architecture/` | ✅ exists |
 | `spec/14-update/` | ✅ exists |
-| `.lovable/coding-guidelines/coding-guidelines.md` | ✅ exists |
+| `.lovable/coding-guidelines.md` | ✅ exists |
 | `mem://architecture/error-handling` | ✅ in memory index |
 | `mem://architecture/caching-policy` | ✅ in memory index |
 | `mem://features/self-update-architecture` | ✅ in memory index |
@@ -177,7 +177,7 @@ Last verified: 2026-05-04 — 4.1: 0 matches in non-meta files (`02-architecture
 | Generic error rules | `spec/03-error-manage/` | NO ✅ — `08-` adds only Main↔Worker patterns |
 | Self-update mechanism | `spec/14-update/` | NO ✅ — `09-` is pointer-only |
 | DB schema conventions | `spec/04-database-conventions/` | NO ✅ — `03-` references and applies |
-| Coding metrics | `.lovable/coding-guidelines/coding-guidelines.md` | NO ✅ — applied via examples |
+| Coding metrics | `.lovable/coding-guidelines.md` | NO ✅ — applied via examples |
 
 ---
 

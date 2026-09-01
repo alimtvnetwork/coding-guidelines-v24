@@ -10,7 +10,7 @@ FILES_TO_BUMP = [
     "package.json",
     "prompt-version.template.json",
     "readme.md",
-    ".lovable/coding-guidelines/coding-guidelines.md",
+    ".lovable/coding-guidelines.md",
     "linter-scripts/validate-guidelines.go",
     "linter-scripts/validate-guidelines.py",
     "spec/14-update/28-worker-push-instruction.md",

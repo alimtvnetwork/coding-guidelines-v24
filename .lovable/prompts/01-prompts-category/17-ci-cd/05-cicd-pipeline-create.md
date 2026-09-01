@@ -118,7 +118,7 @@ For every specification folder below, AI agents MUST read `index.md` or `00-over
 >    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`).
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
->    - Coding Guidelines Mirror: `.lovable/coding-guidelines/`.
+>    - Coding Guidelines Mirror: `.lovable/coding-guidelines.md`.
 > 3. **Python-First Cross-Platform Automation:** All CI/CD build scripts, test runners, validation checks, and linters MUST be written in **Python 3** (`subprocess`, `sys`, `os`, `pathlib`, `concurrent.futures`, `json`, `shutil`) ensuring identical, deterministic execution across **Windows, Linux, and macOS**. Shell scripts (`.sh`, `.ps1`) must ONLY act as lightweight one-line entrypoints invoking Python.
 > 4. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
 >    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`

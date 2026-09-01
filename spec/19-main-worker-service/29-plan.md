@@ -85,7 +85,7 @@ Each phase is one user `next` cycle.
 - Seedable-Config mechanics → `spec/06-seedable-config-architecture/`
 - Error handling generics → `spec/03-error-manage/`
 - Self-update mechanism → `spec/14-update/` (this spec only points)
-- Coding rules → `.lovable/coding-guidelines/coding-guidelines.md`
+- Coding rules → `.lovable/coding-guidelines.md`
 
 ---
 

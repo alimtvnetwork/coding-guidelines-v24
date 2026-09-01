@@ -161,7 +161,7 @@ A literal AI MUST read every numbered file 00→24 before scoping work. The map 
 
 This spec inherits and does not redefine:
 
-- `.lovable/coding-guidelines/coding-guidelines.md` — function length, zero-nesting, positive booleans, PascalCase, enum-for-Type/Status/Category/Kind
+- `.lovable/coding-guidelines.md` — function length, zero-nesting, positive booleans, PascalCase, enum-for-Type/Status/Category/Kind
 - `spec/03-error-manage/` — generic error rules (catch → log → rethrow; `apperror` wrapping; explicit file/op context)
 - `spec/04-database-conventions/` — DB schema + REST header rules (PascalCase, `{TableName}Id`, no UUIDs as PKs, `X-Correlation-Id` / `X-Idempotency-Key` / `X-Auth-Action`)
 - `spec/05-split-db-architecture/` — 6-tier split-DB model (Worker uses 4, Main uses 3 per FU-1)

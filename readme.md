@@ -74,7 +74,7 @@
 
 <p align="center"><sub><strong>Problem it solves:</strong> inconsistent code, swallowed errors, and AI-generated diffs that drift from house style. <strong>How:</strong> explicit numeric rules + standalone spec files + ready-to-run installers and CI checks. <strong>Tradeoffs:</strong> opinionated defaults, real adoption cost, best rolled out in waves (see <a href="ci-guards.example.yaml">CI guards example</a>).</sub></p>
 
-<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="quickstart.md">quickstart.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
+<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="quickstart.md">quickstart.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines.md"><code>.lovable/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
 
 
 <h2 align="center">⚡ Install in One Line</h2>
@@ -253,16 +253,16 @@ Every installer below copies the listed **folders** (recursively, preserving str
 
 | Installer | Folders copied | Top-level files copied |
 |---|---|---|
-| **`install.{sh,ps1}`** (generic / "s-installer") | `spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
-| **`cli-install.{sh,ps1}`** | `spec/11-powershell-integration/`, `spec/12-cicd-pipeline-workflows/`, `spec/13-generic-cli/`, `spec/14-update/`, `spec/15-distribution-and-runner/`, `spec/16-generic-release/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
-| **`consolidated-install.{sh,ps1}`** | `spec/01-spec-authoring-guide/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines/` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`install.{sh,ps1}`** (generic / "s-installer") | `spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`cli-install.{sh,ps1}`** | `spec/11-powershell-integration/`, `spec/12-cicd-pipeline-workflows/`, `spec/13-generic-cli/`, `spec/14-update/`, `spec/15-distribution-and-runner/`, `spec/16-generic-release/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`consolidated-install.{sh,ps1}`** | `spec/01-spec-authoring-guide/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 
 > Notes:
 >
 > - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
 > - **`version.json`** is smartly merged. The installer injects a `codingGuideline` object into the target repo's `version.json` with version tracking and prompt references, rather than overwriting the file.
-> - **`.lovable/coding-guidelines/`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - **`.lovable/coding-guidelines.md`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
 > - **`spec-coding-guideline/`** is an internal-only repository specification folder for `coding-guidelines-v24` (housing internal slide deck specs) and is excluded from bundle exports to prevent collisions in consumer repositories.
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
@@ -606,7 +606,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | You are… | Start with | Then add |
 |---|---|---|
 | **Solo developer** | The [10 Practical Rules](#-start-here-10-practical-rules) above + the [Consolidated Guidelines bundle](#consolidated-consolidated-guidelines) | [13 Hard Rules](#-compact-rule-set-13-hard-rules) when you want enforcement |
-| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
+| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
 | **Team lead** | The [Linters bundle](#linters-linters--cicd-linter-pack) + the [Error Management spec](#%EF%B8%8F-error-management-summary) | A staged rollout using [`ci-guards.example.yaml`](ci-guards.example.yaml) |
 | **Production maintainer** | The [Full-Repo Install](#%EF%B8%8F-full-repo-install-scripts) + CI integration | Gradual enforcement via the [Adoption Levels](#-adoption-levels) roadmap |
 | **New contributor / reviewer** | The [10 Practical Rules](#-start-here-10-practical-rules) + the [PR Review Checklist](#-pr-review-checklist) | Skim [CODE-RED rules](#-code-red-non-negotiable-rules) before approving |
@@ -755,7 +755,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center">
   Want the <strong>absolute minimum</strong>? The entire ruleset is distilled into one file:<br/>
-  <a href="./.lovable/coding-guidelines/coding-guidelines.md"><code>.lovable/coding-guidelines/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
+  <a href="./.lovable/coding-guidelines.md"><code>.lovable/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
   Drop it into Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
 </p>
 
@@ -1449,7 +1449,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 3. **Follow existing conventions** — naming, folder layout, import style — over your defaults. The repo's style wins.
 4. **Do not invent** APIs, folders, config keys, file names, environment variables, or library functions. If unsure, search or ask.
 5. **Read the .lovable/prompts.md index** to understand the workflow and execution prompts required for this project.
-6. **Follow AI Execution Rules** from .lovable/coding-guidelines/coding-guidelines.md if present.
+6. **Follow AI Execution Rules** from .lovable/coding-guidelines.md if present.
 
 **While writing code:**
 
@@ -1547,7 +1547,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.129.0
 
-- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
+- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
 - React rule #7 rewritten from one line into full guidance. Explains WHY mutation breaks React (reconciler uses referential inequality), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`), when to reach for `structuredClone` (deep copies), when Immer is acceptable, and the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 
 ### What's new in v5.128.0
@@ -1854,7 +1854,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.50.0
 
-- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
+- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
 - **New scripts:** `npm run sync:guidelines` (write) and `npm run sync:guidelines:check` (verify, non-zero exit on drift). Closes Plan SS-01 step 4.
 
 ### What's new in v5.49.0
@@ -1960,7 +1960,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
 - For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`spec/02-coding-guidelines/01-cross-language/01-index.md`](spec/02-coding-guidelines/01-cross-language/01-index.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
-- **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines/coding-guidelines.md`](.lovable/coding-guidelines/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
+- **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
 - **Install just that compact layer** (skip the other 95%) with the dedicated bundle installer:
 

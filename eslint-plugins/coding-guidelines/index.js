@@ -227,7 +227,7 @@ function resolveFunctionName(node) {
 // ═══════════════════════════════════════════════════════════════
 // Shared: waiver directive parser
 //
-// Syntax (documented in .lovable/coding-guidelines/coding-guidelines.md):
+// Syntax (documented in .lovable/coding-guidelines.md):
 //   // lint-allow: <rule-key> reason="..." [max=N]
 //   /* lint-allow: <rule-key> reason="..." [max=N] */
 //
@@ -333,7 +333,7 @@ const preferFunctionLines = {
     type: "problem",
     docs: { description: "Function bodies must not exceed 8 lines (CODE-RED-005, strict)" },
     messages: {
-      tooLong: '🔴 CODE-RED-005: Function "{{name}}" has {{actual}} effective lines (max {{prefer}}). Extract helpers — strict 8-line cap per .lovable/coding-guidelines/coding-guidelines.md rule #1.',
+      tooLong: '🔴 CODE-RED-005: Function "{{name}}" has {{actual}} effective lines (max {{prefer}}). Extract helpers — strict 8-line cap per .lovable/coding-guidelines.md rule #1.',
     },
     schema: [{
       type: "object",

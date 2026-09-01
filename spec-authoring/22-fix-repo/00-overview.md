@@ -42,7 +42,7 @@ P1 bug and bring them back into alignment with this folder.
 ## Cross-references
 
 - Coding guidelines (function size, booleans, error handling):
-  `.lovable/coding-guidelines/coding-guidelines.md`
+  `.lovable/coding-guidelines.md`
 - URL-handling rule (saved to memory):
   `.lovable/memory/features/fix-repo-url-handling.md`
 - The original verbatim brief that drove this spec was archived

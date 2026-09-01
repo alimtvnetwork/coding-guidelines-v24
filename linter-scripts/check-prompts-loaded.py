@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 check-prompts-loaded.py — Verify that the prompt-loading contract from
-``.lovable/coding-guidelines/coding-guidelines.md`` actually holds on
+``.lovable/coding-guidelines.md`` actually holds on
 disk: the index file ``.lovable/prompts.md`` must exist, and every
 prompt file under ``.lovable/prompts/`` must be referenced by it.
 
@@ -112,7 +112,7 @@ def main() -> int:
     if not index_path.is_file():
         sys.stderr.write(
             f"ERROR: prompt index not found at {index_path}.\n"
-            "       Create it per .lovable/coding-guidelines/coding-guidelines.md.\n"
+            "       Create it per .lovable/coding-guidelines.md.\n"
         )
         return EXIT_ERROR
     if not prompts_dir.is_dir():
