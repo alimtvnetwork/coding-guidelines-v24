@@ -139,6 +139,9 @@ jobs:
       - name: Run Go validator (spec)
         run: go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
 
+      - name: Run Go Base Unit Tests (04-code/golang)
+        run: go test -v -C 04-code/golang ./...
+
       - name: Run Python validator (spec)
         run: python3 linter-scripts/validate-guidelines.py spec || true
 
