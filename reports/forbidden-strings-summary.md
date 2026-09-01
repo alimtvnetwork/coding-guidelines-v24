@@ -23,7 +23,7 @@
 
 ## `SPEC19-NO-IMPL`
 
-- **Description:** Forbidden Spec/19 implementation phrases. spec/19-main-worker-service is spec-only.
+- **Description:** Forbidden Spec/19 implementation phrases. 02-spec/19-main-worker-service is spec-only.
 - **Pattern:** `<redacted: see linter-scripts/forbidden-strings.toml>`
 - **Status:** ✅ clean (0 findings)
 

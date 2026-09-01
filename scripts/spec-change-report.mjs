@@ -172,7 +172,7 @@ function runValidator() {
 function runCrossLinkChecker() {
   const r = spawnSync(
     "python3",
-    ["linter-scripts/check-spec-cross-links.py", "--root", "spec", "--repo-root", "."],
+    ["linter-scripts/check-spec-cross-links.py", "--root", "02-spec", "--repo-root", "."],
     { cwd: REPO_ROOT, encoding: "utf8" }
   );
   return { stdout: r.stdout || "", stderr: r.stderr || "", status: r.status ?? 0 };

@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 31: Immutable-first (Rust-style) assignment.
  *
- * Source: spec/17/31 line 35. Assign every variable once at declaration.
+ * Source: 02-spec/17/31 line 35. Assign every variable once at declaration.
  * Never reassign except loop indices. Prefer const/final/val. Build result
  * objects with spread or copy, never in-place mutation.
  */
@@ -52,7 +52,7 @@ export default function ImmutableFirstSlide() {
         <ActionPanel
           slideId="29-immutable-first"
           symptom="A pricing helper reassigns `totals` field by field, then a caller mutates `order.items` in place with `push` and `sort`. Two screens later, an unrelated component re-renders with a re-sorted list because it shared the same array reference. The bug reproduces only after a specific click order and takes an afternoon to trace."
-          rule="Assign every variable once at declaration with `const` (TS/JS), `final` (Dart/Java), `val` (Kotlin/Scala), or `let` without `mut` (Rust). Never reassign except loop indices. Build result objects with spread or `structuredClone`; never mutate arrays or objects returned by hooks, props, or shared state. Per spec/17/31 line 35."
+          rule="Assign every variable once at declaration with `const` (TS/JS), `final` (Dart/Java), `val` (Kotlin/Scala), or `let` without `mut` (Rust). Never reassign except loop indices. Build result objects with spread or `structuredClone`; never mutate arrays or objects returned by hooks, props, or shared state. Per 02-spec/17/31 line 35."
           doThis="Compute the final value first, then bind it once. Replace `let x; if (...) x = a; else x = b;` with a ternary or an extracted helper. Before calling `sort`, `reverse`, or `splice`, copy with `[...arr]` or `arr.slice()`. If you genuinely need mutation for perf (very large arrays in a tight loop), isolate it inside one function and comment why."
         />
       </div>

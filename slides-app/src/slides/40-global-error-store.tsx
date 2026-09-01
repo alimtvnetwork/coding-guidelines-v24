@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 42: Global error store + single top-level modal.
  *
- * Source: spec/17/31 line 80. One store, one modal, fed by apiCall.
+ * Source: 02-spec/17/31 line 80. One store, one modal, fed by apiCall.
  */
 
 const BEFORE = `// Every feature invents its own local error surface.
@@ -66,7 +66,7 @@ export default function GlobalErrorStoreSlide() {
         <ActionPanel
           slideId="40-global-error-store"
           symptom="A checkout POST fails. The user sees a red toast, then an inline alert under the button, then a modal from the payment provider iframe. They dismiss the toast and route away, but the alert copy is still on screen for two seconds before the next page mounts. Meanwhile the on-call has no idea which of the three surfaces the user actually clicked, because none of them logged the error id."
-          rule="Every user-facing error goes through ONE global error store fed by the shared `apiCall` parser (ERR-005). The store holds at most one active error, tagged with `code`, `requestId`, and `at`. A SINGLE ErrorModal component mounted at the app root reads the store and renders it, with copy chosen by `code` from a shared registry (ERR-004). Feature components never call `toast.error`, never keep their own `useState` for errors, and never render their own alerts. On route change the store clears automatically. Every `push` logs at `error` level with the full context per LOG-002. Per spec/17/31 line 80."
+          rule="Every user-facing error goes through ONE global error store fed by the shared `apiCall` parser (ERR-005). The store holds at most one active error, tagged with `code`, `requestId`, and `at`. A SINGLE ErrorModal component mounted at the app root reads the store and renders it, with copy chosen by `code` from a shared registry (ERR-004). Feature components never call `toast.error`, never keep their own `useState` for errors, and never render their own alerts. On route change the store clears automatically. Every `push` logs at `error` level with the full context per LOG-002. Per 02-spec/17/31 line 80."
           doThis="Create `src/lib/errorStore.ts` with `current`, `push(e)`, and `clear()`. Wire `apiCall` (ERR-005) to call `errorStore.getState().push(parseError(body))` on failure, with `code` from the ERR-004 registry and `requestId` from the response envelope. Mount the ErrorModal component exactly once in `src/app/AppRoot.tsx`, above the router. Add a router subscription that calls `clear()` on route change. Add an ESLint rule (or CI grep) banning `toast.error(` and local error state outside `src/lib/errorStore.ts` and `src/app/ErrorModal.tsx`. Migrate existing feature components in one PR, delete their local alerts, and confirm the single modal receives the failure in DevTools."
         />
       </div>

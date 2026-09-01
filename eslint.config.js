@@ -26,7 +26,7 @@ export default tseslint.config(
 
       // ═══════════════════════════════════════════════════════════════
       // 🔴 CANONICAL SIZE TIER (single source of truth)
-      // Canonical doc: spec/02-coding-guidelines/00-canonical-size-tier.md
+      // Canonical doc: 02-spec/02-coding-guidelines/00-canonical-size-tier.md
       // ┌────────────────────────────┬──────────────┬─────────┐
       // │ Metric                     │ Limit        │ Level   │
       // ├────────────────────────────┼──────────────┼─────────┤

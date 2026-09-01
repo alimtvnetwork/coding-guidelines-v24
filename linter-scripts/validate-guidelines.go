@@ -4,7 +4,7 @@
 //
 // A Go port of validate-guidelines.py that validates Go, PHP, TypeScript,
 // and Rust source files against the coding guidelines defined in
-// spec/02-coding-guidelines/03-coding-guidelines-spec/.
+// 02-spec/02-coding-guidelines/03-coding-guidelines-spec/.
 //
 // Usage:
 //
@@ -494,7 +494,7 @@ func checkGoSpecific(lines []string, path string) []Violation {
 				Rule:     "CODE-RED-026",
 				Severity: "CODE-RED",
 				Message: "Function returns bare `error`. Service functions MUST return *apperror.AppError or apperror.Result[T]." +
-					" See spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md",
+					" See 02-spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md",
 				CodeSnippet: truncate(stripped, 120),
 			})
 		}
@@ -525,7 +525,7 @@ func checkGoSpecific(lines []string, path string) []Violation {
 				Severity: "CODE-RED",
 				Message: "Raw error value passed to terminal/log output. Wrap in *AppError first." +
 					" Use appErr.DisplayError for terminal output and appErr.FullString() for internal logs." +
-					" See CODE-RED-027 in spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md",
+					" See CODE-RED-027 in 02-spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md",
 				CodeSnippet: truncate(stripped, 120),
 			})
 		}

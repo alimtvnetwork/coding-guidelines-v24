@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 39: Log context requirements.
  *
- * Source: spec/17/31 line 77. Every log carries operation name,
+ * Source: 02-spec/17/31 line 77. Every log carries operation name,
  * request/session id, and key inputs. Never secrets, never PII
  * beyond a user id.
  */
@@ -66,7 +66,7 @@ export default function LogContextSlide() {
         <ActionPanel
           slideId="37-log-context"
           symptom="Support gets a ticket referencing a failed checkout at 14:07 UTC. Grep for the user id returns nothing because every log line just says `error: failed`. Meanwhile the compliance scanner flagged 12k log entries containing full card numbers and bearer tokens because someone spread `req.body` and `req.headers` into a log call. Both problems come from the same missing rule: nobody defined what a log line must and must not carry."
-          rule="Every log line carries these keys: `op` (dotted operation name like `checkout.charge`), `requestId` (and `sessionId` when present), the primary entity id for the operation (`orderId`, `userId`, `messageId`), and a small set of safe scalar inputs relevant to debugging (amount, currency, attempt, upstream, `code`). Never log passwords, tokens, full card numbers, CVV, full email, full address, or any header that carries an auth token. `userId` is the only PII allowed, and only because it is the correlation key. Per spec/17/31 line 77."
+          rule="Every log line carries these keys: `op` (dotted operation name like `checkout.charge`), `requestId` (and `sessionId` when present), the primary entity id for the operation (`orderId`, `userId`, `messageId`), and a small set of safe scalar inputs relevant to debugging (amount, currency, attempt, upstream, `code`). Never log passwords, tokens, full card numbers, CVV, full email, full address, or any header that carries an auth token. `userId` is the only PII allowed, and only because it is the correlation key. Per 02-spec/17/31 line 77."
           doThis="Add a `createLogger(op)` factory in `src/lib/logger.ts` that closes over `op` and requires `requestId` on every call, so the shape cannot regress. Add a redaction allowlist: only whitelisted keys pass through, everything else is dropped with a `[redacted]` marker. Add a CI grep that fails the build on `log\\.\\w+\\(.*req\\.(body|headers)` and `log\\.\\w+\\(.*(password|cvv|cardNumber|authorization)`. Sweep existing sites once and re-emit them through the factory."
         />
       </div>

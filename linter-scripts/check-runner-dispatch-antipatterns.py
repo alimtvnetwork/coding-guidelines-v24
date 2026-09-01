@@ -5,7 +5,7 @@ Runner Dispatch Anti-Patterns Guard (Cross-Platform Python)
 Fails CI if run.sh or run.ps1 reintroduce forbidden dispatch anti-patterns
 in the fix-repo dispatch region.
 
-Spec: spec/15-distribution-and-runner/06-fix-repo-forwarding.md
+Spec: 02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md
 
 Usage:
     python linter-scripts/check-runner-dispatch-antipatterns.py

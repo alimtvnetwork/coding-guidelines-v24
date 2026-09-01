@@ -11,7 +11,7 @@ Multi-task session covering CI/CD documentation, "other repo" templates (GitLab/
 - ✅ Refactored `InstallSection.tsx` (337 → < 100 lines) into `src/components/landing/install/{HighlightedCommand,CopyButton,BundleCard}.tsx`.
 - ✅ Refactored `fuzzyMatch.ts` — `let → const`, extracted `buildPreviewWindow`, added `isResultEmpty` guard.
 - ✅ Refactored `useSearchKeyboard.ts` — eliminated raw `!fn()` operator.
-- ✅ Refactored `readme.md` + `spec/17-consolidated-guidelines/05-coding-guidelines.md` example: positive booleans (`hasGoodStanding`, `isActive`), named guards (`isUserMissing`, `isAdmin`), `=== false` instead of `!`, multi-line braced `if`, blank lines before `return`.
+- ✅ Refactored `readme.md` + `02-spec/17-consolidated-guidelines/05-coding-guidelines.md` example: positive booleans (`hasGoodStanding`, `isActive`), named guards (`isUserMissing`, `isAdmin`), `=== false` instead of `!`, multi-line braced `if`, blank lines before `return`.
 - ✅ Version bumps: `3.79.0` → `3.80.0` → `3.81.0` (`package.json` + `version.json`).
 - ✅ Final validator run: **0 violations** across 612 files / 131,966 lines.
 
@@ -25,7 +25,7 @@ Multi-task session covering CI/CD documentation, "other repo" templates (GitLab/
 - `src/components/docs/search/fuzzyMatch.ts`
 - `src/components/docs/search/useSearchKeyboard.ts`
 - `readme.md`
-- `spec/17-consolidated-guidelines/05-coding-guidelines.md`
+- `02-spec/17-consolidated-guidelines/05-coding-guidelines.md`
 - `package.json`, `version.json`
 
 ## Pending after session

@@ -14,7 +14,7 @@ Locks in the behavior verified end-to-end by `run-all.sh` in v4.11.0
 silently regress the v1 contract.
 
 Spec:
-- spec/04-database-conventions/03-naming-conventions.md  Rules 2 & 9
+- 02-spec/04-database-conventions/03-naming-conventions.md  Rules 2 & 9
 - linters-cicd/checks/boolean-column-negative/sql.py
 """
 

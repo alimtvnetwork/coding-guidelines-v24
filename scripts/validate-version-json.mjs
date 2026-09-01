@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Validates version.json against the PascalCase schema defined in
-// spec/01-spec-authoring-guide/14-version-schema.md.
+// 02-spec/01-spec-authoring-guide/14-version-schema.md.
 //
 // Exit codes:
 //   0 — valid
@@ -120,7 +120,7 @@ function reportAndExit(errors, path) {
   }
   console.error(`✗ version.json failed schema validation: ${path}`);
   for (const msg of errors) console.error(`  - ${msg}`);
-  console.error(`\n${errors.length} violation(s). See spec/01-spec-authoring-guide/14-version-schema.md`);
+  console.error(`\n${errors.length} violation(s). See 02-spec/01-spec-authoring-guide/14-version-schema.md`);
   process.exit(2);
 }
 

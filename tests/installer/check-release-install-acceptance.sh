@@ -2,7 +2,7 @@
 # =====================================================================
 # check-release-install-acceptance.sh — exit-code acceptance tests.
 #
-# Validates spec/14-update/25-release-pinned-installer.md §F (Failure
+# Validates 02-spec/14-update/25-release-pinned-installer.md §F (Failure
 # Modes) and §AC (Acceptance Criteria) for release-install.sh:
 #
 #   AC.1 → exit 1 when no version is resolvable

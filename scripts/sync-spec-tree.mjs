@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const SPEC_ROOT = resolve(ROOT, "spec");
+const SPEC_ROOT = resolve(ROOT, "02-spec");
 const AUTHORING_ROOT = resolve(ROOT, "spec-authoring");
 // Authoring sub-folders surfaced as proper folder nodes under a synthetic
 // "spec-authoring" parent. Add new authoring modules here as they ship.

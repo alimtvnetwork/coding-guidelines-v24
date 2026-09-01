@@ -2,7 +2,7 @@
 // ci-config.mjs — Zero-dep loader for ci-guards.yaml (or .json).
 //
 // Validates the unified config schema documented in
-//   spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md
+//   02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md
 // and emits one of three output formats:
 //   --emit env      shell `export VAR=...` lines (default)
 //   --emit json     resolved config as JSON

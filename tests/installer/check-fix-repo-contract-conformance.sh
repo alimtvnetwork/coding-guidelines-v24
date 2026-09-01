@@ -3,7 +3,7 @@
 # check-fix-repo-contract-conformance.sh
 #
 # Asserts that run.sh and run.ps1 conform to the shared runner-contract
-# document at spec/15-distribution-and-runner/06-fix-repo-forwarding.md.
+# document at 02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md.
 #
 # Checks:
 #   1. The contract document exists and references both runners.
@@ -20,7 +20,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 
-CONTRACT="$REPO_ROOT/spec/15-distribution-and-runner/06-fix-repo-forwarding.md"
+CONTRACT="$REPO_ROOT/02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md"
 RUN_SH="$REPO_ROOT/run.sh"
 RUN_PS1="$REPO_ROOT/run.ps1"
 HELP_SH="$REPO_ROOT/scripts/runner-help.txt"

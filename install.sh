@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ──────────────────────────────────────────────────────────────────────
-# install.sh — Download spec/linters/scripts from a GitHub repo
+# install.sh — Download 02-spec/linters/scripts from a GitHub repo
 #
-# Conforms to: spec/14-update/27-generic-installer-behavior.md
+# Conforms to: 02-spec/14-update/27-generic-installer-behavior.md
 #
 # Quick start (defaults from install-config.json):
 #   ./install.sh
@@ -12,7 +12,7 @@
 #   --repo owner/repo            Override source repo
 #   --branch main                Override branch (ignored if --version given)
 #   --version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
-#   --folders spec,linters       Comma-separated folder list (subpaths OK: spec/14-update)
+#   --folders spec,linters       Comma-separated folder list (subpaths OK: 02-spec/14-update)
 #   --dest /path/to/dir          Install destination (default: cwd)
 #   --log-dir /path or rel       Where to write fix-repo logs (default: <dest>/.install-logs;
 #                                env: INSTALL_LOG_DIR)
@@ -283,7 +283,7 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v24}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines" ".lovable/what-to-read.md" "version.json")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("02-spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines" ".lovable/what-to-read.md" "version.json")
 
 # Top-level files always pulled alongside the folders. These are repo-root
 # scripts (not contained in any installed folder) that users need locally to

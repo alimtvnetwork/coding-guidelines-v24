@@ -123,7 +123,7 @@ existing alphabetic-by-ID order:
 "YOUR-RULE-001": {
   "name": "YourRuleNameInPascalCase",
   "level": "warning",
-  "spec": "<spec-section-relative-to-spec-root>.md",
+  "02-spec": "<spec-section-relative-to-spec-root>.md",
   "languages": {
     "php": "checks/<your-slug>/php.py"
   }

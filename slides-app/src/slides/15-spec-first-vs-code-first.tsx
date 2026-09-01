@@ -29,7 +29,7 @@ const CODE_FIRST: PrPayload = {
 const SPEC_FIRST: PrPayload = {
   kicker: "PR #483 · spec-first (accepted)",
   files: [
-    "spec/12-payments/07-refund-flow.md   +64 / -0",
+    "02-spec/12-payments/07-refund-flow.md   +64 / -0",
     "03-issues/482-partial-refund.md      +18 / -0",
     "src/services/payments/refund.ts      +48 / -6",
     "src/hooks/useRefund.ts               +22 / -3",

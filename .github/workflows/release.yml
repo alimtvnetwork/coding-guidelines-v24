@@ -176,7 +176,7 @@ jobs:
       # Substitute `__VERSION_PLACEHOLDER__` with the concrete tag and
       # stage the baked copies as release assets. The originals in the
       # repo keep the placeholder verbatim so future releases re-bake
-      # cleanly. Spec: spec/14-update/25-release-pinned-installer.md
+      # cleanly. Spec: 02-spec/14-update/25-release-pinned-installer.md
       - name: Bake version into release-install scripts
         env:
           VERSION: ${{ steps.version.outputs.version }}
@@ -321,12 +321,12 @@ jobs:
 
             | Bundle | Spec folders |
             |---|---|
-            | `error-manage` | spec/01-spec-authoring-guide, spec/03-error-manage |
-            | `splitdb` | spec/04-database-conventions, spec/05-split-db-architecture, spec/06-seedable-config-architecture |
+            | `error-manage` | 02-spec/01-spec-authoring-guide, 02-spec/03-error-manage |
+            | `splitdb` | 02-spec/04-database-conventions, 02-spec/05-split-db-architecture, 02-spec/06-seedable-config-architecture |
             | `slides` | spec-slides, slides-app |
             | `linters` | linters, linters-cicd |
             | `cli` | spec/11 → spec/16 |
-            | `wp` | spec/18-wp-plugin-how-to |
+            | `wp` | 02-spec/18-wp-plugin-how-to |
             | `consolidated` | spec/01, spec/03, spec/17 |
 
             **Bash example (error-manage):**

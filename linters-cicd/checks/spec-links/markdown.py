@@ -13,7 +13,7 @@ Out of scope:
   * Setext headings (`Foo\\n===`). The spec uses ATX exclusively.
   * Links inside fenced code blocks (``` or ~~~).
 
-Spec: spec/04-database-conventions/* (cross-link Rule 9 / Rules 10–12)
+Spec: 02-spec/04-database-conventions/* (cross-link Rule 9 / Rules 10–12)
 Naming: SPEC-LINK-001 (warning level — broken cross-refs degrade docs but
         do not block builds; CI may upgrade to error via SARIF rules).
 """

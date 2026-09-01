@@ -28,7 +28,7 @@ across sessions.
 
 - On every task that touches `readme.txt`, re-read this file silently and obey.
 - If a workflow seems to need a time refresh, **do nothing and say nothing** unless the user has asked in that exact turn.
-- Cross-reference: `.lovable/strictly-avoid.md` → "readme.txt — time suggestions" and `spec/01-spec-authoring-guide/11-exceptions.md` → Strictly Prohibited section.
+- Cross-reference: `.lovable/strictly-avoid.md` → "readme.txt — time suggestions" and `02-spec/01-spec-authoring-guide/11-exceptions.md` → Strictly Prohibited section.
 
 ## Memory directive
 

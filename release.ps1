@@ -14,7 +14,7 @@ $version = $packageJson.version
 $distDir = Join-Path $PSScriptRoot "release-artifacts"
 $releaseName = "coding-guidelines-v$version"
 $stagingDir = Join-Path $distDir $releaseName
-$requiredPaths = @("spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1", ".lovable/coding-guidelines", ".lovable/prompts")
+$requiredPaths = @("02-spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1", ".lovable/coding-guidelines", ".lovable/prompts")
 
 function Test-RequiredPaths {
     $isMissing = $false
@@ -42,7 +42,7 @@ function Initialize-Staging {
 }
 
 function Copy-ReleaseFiles {
-    Copy-Item -Path (Join-Path $PSScriptRoot "spec") -Destination (Join-Path $stagingDir "spec") -Recurse -Force
+    Copy-Item -Path (Join-Path $PSScriptRoot "02-spec") -Destination (Join-Path $stagingDir "02-spec") -Recurse -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "linters") -Destination (Join-Path $stagingDir "linters") -Recurse -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "linter-scripts") -Destination (Join-Path $stagingDir "linter-scripts") -Recurse -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "install.sh") -Destination (Join-Path $stagingDir "install.sh") -Force
@@ -66,7 +66,7 @@ function New-ReleaseArchives {
 }
 
 function Invoke-BakeReleaseInstallers {
-    # Spec: spec/14-update/25-release-pinned-installer.md §Release-Time Build Step
+    # Spec: 02-spec/14-update/25-release-pinned-installer.md §Release-Time Build Step
     # Substitute __VERSION_PLACEHOLDER__ with the resolved tag (prefixed
     # with `v`) and write standalone copies into $distDir for upload as
     # release assets.

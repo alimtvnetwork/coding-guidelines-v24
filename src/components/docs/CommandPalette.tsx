@@ -2,7 +2,7 @@
  * Command Palette for the Docs Viewer.
  *
  * Opens with Ctrl/Cmd+J. The top-pinned action jumps directly to
- * `spec/00-overview.md` resolved from the flat file list, so it works even
+ * `02-spec/00-overview.md` resolved from the flat file list, so it works even
  * when the sidebar tree is stale or collapsed.
  */
 import { useEffect, useCallback, useMemo } from "react";
@@ -84,7 +84,7 @@ function QuickJumpGroup({ overviewFile, onPick }: QuickJumpProps) {
   return (
     <CommandGroup heading="Quick Jump">
       <CommandItem
-        value="open-spec-overview spec/00-overview.md root index master"
+        value="open-spec-overview 02-spec/00-overview.md root index master"
         disabled={!overviewFile}
         onSelect={() => overviewFile && onPick(overviewFile)}
         className="gap-2"

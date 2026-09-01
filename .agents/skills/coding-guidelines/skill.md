@@ -12,7 +12,7 @@ description: >-
 
 /goal You are the Chief Software Architect and Code Reviewer. Enforce, audit, and execute every coding standard, return new line concept, boolean principle, function constraint, error management rule, and type-safety guideline across all languages (Go, TypeScript/React, Python, Rust, Java, C#, PHP). Zero hallucination, zero drive-by refactoring, zero tolerance for guideline violations.
 
-/learn Ingest, understand, and internalize all coding standards from `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, and `.lovable/coding-guidelines.md` before reading, modifying, or creating any code.
+/learn Ingest, understand, and internalize all coding standards from `02-spec/02-coding-guidelines/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, and `.lovable/coding-guidelines.md` before reading, modifying, or creating any code.
 
 ---
 
@@ -31,7 +31,7 @@ Before executing or auditing code, check if this coding standard is installed as
 Your very first action when reviewing or writing code must be purely exploratory:
 
 1. **Explore & Map:** Read the target files, trace dependencies, inspect existing types, and understand the architectural boundary.
-2. **Consult Spec References:** Read the relevant language-specific guideline in `spec/02-coding-guidelines/` before writing any replacement code.
+2. **Consult Spec References:** Read the relevant language-specific guideline in `02-spec/02-coding-guidelines/` before writing any replacement code.
 3. **End Turn & Self-Loop:** Once the scope and violations are cataloged, end your turn and self-loop into execution.
 
 ---
@@ -43,22 +43,22 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | Component | Path / Location | Purpose |
 | :--- | :--- | :--- |
 | **Master Guideline** | `.lovable/coding-guidelines.md` | Single standalone source of truth for AI agents |
-| **Consolidated Spec** | `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` | Authoritative root spec matching .lovable mirror |
-| **Cross-Language Specs** | `spec/02-coding-guidelines/01-cross-language/` | Detailed chapters (00-overview through 29-no-generated-artifacts) |
-| **Newline Examples** | `spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md` | Canonical Before/After examples for return new lines |
-| **TypeScript / React** | `spec/02-coding-guidelines/02-typescript/` | Strict TS, immutability, React hook guards |
-| **Go Standards** | `spec/02-coding-guidelines/03-golang/` | Result types, enum bytes with iota, error wrapping |
-| **PHP Standards** | `spec/02-coding-guidelines/04-php/` | Enum methods `->isEqual()`, typing rules |
-| **Python Standards** | `spec/02-coding-guidelines/01-cross-language/` | Strict type hints, `@dataclass`, `pydantic` |
-| **C# / Java Standards** | `spec/02-coding-guidelines/07-csharp/` | `I` prefix interfaces, PascalCase properties |
-| **Error Management** | `spec/03-error-manage/` | `AppError` wrapping, universal response envelopes |
-| **Shared Core Engine** | `.lovable/ai-fix-scripts/02-shared-engine.py` | Universal streaming engine with lazy regex registry and two-phase mtime caching |
-| **Local CI Runner** | `.lovable/ai-fix-scripts/06-cicd-local-runner.py` | Parallel local quality gate runner (18 checks) |
-| **Fast File Scanner** | `.lovable/ai-fix-scripts/11-fast-file-scanner.py` | Multi-language fast file scanner (<15ms) and cache builder |
-| **Path Fixer** | `.lovable/ai-fix-scripts/07-relative-path-fixer.py` | Relative path detector and sanitizer |
-| **Naming Guard** | `.lovable/ai-fix-scripts/08-naming-autofixer.py` | Boolean naming and implicit condition validator |
-| **Encoding Normalizer**| `.lovable/ai-fix-scripts/10-encoding-normalizer.py` | UTF-8 and strict UNIX LF line ending normalizer |
-| **Size Guard** | `.lovable/ai-fix-scripts/13-file-size-guard.py` | Binary blob and file size threshold checker |
+| **Consolidated Spec** | `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` | Authoritative root spec matching .lovable mirror |
+| **Cross-Language Specs** | `02-spec/02-coding-guidelines/01-cross-language/` | Detailed chapters (00-overview through 29-no-generated-artifacts) |
+| **Newline Examples** | `02-spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md` | Canonical Before/After examples for return new lines |
+| **TypeScript / React** | `02-spec/02-coding-guidelines/02-typescript/` | Strict TS, immutability, React hook guards |
+| **Go Standards** | `02-spec/02-coding-guidelines/03-golang/` | Result types, enum bytes with iota, error wrapping |
+| **PHP Standards** | `02-spec/02-coding-guidelines/04-php/` | Enum methods `->isEqual()`, typing rules |
+| **Python Standards** | `02-spec/02-coding-guidelines/01-cross-language/` | Strict type hints, `@dataclass`, `pydantic` |
+| **C# / Java Standards** | `02-spec/02-coding-guidelines/07-csharp/` | `I` prefix interfaces, PascalCase properties |
+| **Error Management** | `02-spec/03-error-manage/` | `AppError` wrapping, universal response envelopes |
+| **Shared Core Engine** | `03-ai-scripts/02-shared-engine.py` | Universal streaming engine with lazy regex registry and two-phase mtime caching |
+| **Local CI Runner** | `03-ai-scripts/06-cicd-local-runner.py` | Parallel local quality gate runner (18 checks) |
+| **Fast File Scanner** | `03-ai-scripts/11-fast-file-scanner.py` | Multi-language fast file scanner (<15ms) and cache builder |
+| **Path Fixer** | `03-ai-scripts/07-relative-path-fixer.py` | Relative path detector and sanitizer |
+| **Naming Guard** | `03-ai-scripts/08-naming-autofixer.py` | Boolean naming and implicit condition validator |
+| **Encoding Normalizer**| `03-ai-scripts/10-encoding-normalizer.py` | UTF-8 and strict UNIX LF line ending normalizer |
+| **Size Guard** | `03-ai-scripts/13-file-size-guard.py` | Binary blob and file size threshold checker |
 | **Global Rules** | `agents.md` | Always-on workspace constraints for Antigravity agents |
 | **Version Truth** | `version.json` | Root version source of truth dynamically read across all languages |
 | **Antigravity Skills** | `.agents/skills/` | On-demand skill runbooks for progressive disclosure |
@@ -295,7 +295,7 @@ try {
 export function useUser(userId: string): [UserProfile | null, boolean] {
     const [user, setUser] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     function updateUserAge(newAge: number) {
         user.age = newAge; // Silent bug: in-place state mutation!
         setUser(user);
@@ -441,7 +441,7 @@ interface UserDto {
 
 ## 2. The Return New Line & Whitespace Concept (Mandatory)
 
-The return new line and whitespace standard governs readability and clean code structure. This is mechanically checked by Rule R13–R20 and auto-fixed by `.lovable/ai-fix-scripts/05-guideline-autofixer.py`.
+The return new line and whitespace standard governs readability and clean code structure. This is mechanically checked by Rule R13–R20 and auto-fixed by `03-ai-scripts/05-guideline-autofixer.py`.
 
 ### Rule R13: Blank Line Before `return` / `throw` / `raise`
 
@@ -566,7 +566,7 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 
 ---
 
-## 5. Error Management (`spec/03-error-manage/`)
+## 5. Error Management (`02-spec/03-error-manage/`)
 
 - **Never Swallow Errors:** Every `catch` or error check must log with context and rethrow/return.
 - **Wrap with Context:** Use `apperror.Wrap(err, "operationName", contextMap)` in Go, or `new AppError("message", { cause, op, context })` in TypeScript.
@@ -610,10 +610,10 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 1. **Step 1: Automated Pre-Pass (Deterministic AST Autofixers):**
    - Run the autofixers to instantly eliminate 85% of mechanical violations:
      ```bash
-     python .lovable/ai-fix-scripts/05-guideline-autofixer.py <target-dir>
-     python .lovable/ai-fix-scripts/08-naming-autofixer.py <target-dir>
-     python .lovable/ai-fix-scripts/04-newline-fixer.py <target-dir>
-     python .lovable/ai-fix-scripts/07-relative-path-fixer.py <target-dir>
+     python 03-ai-scripts/05-guideline-autofixer.py <target-dir>
+     python 03-ai-scripts/08-naming-autofixer.py <target-dir>
+     python 03-ai-scripts/04-newline-fixer.py <target-dir>
+     python 03-ai-scripts/07-relative-path-fixer.py <target-dir>
      ```
 2. **Step 2: Run Linters for Violations:**
    - Execute `python linter-scripts/validate-guidelines.py` and `python linter-scripts/check-boolean-guidelines.py` to identify remaining violations.
@@ -621,7 +621,7 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
    - Address remaining non-autofixable violations (R5 param structs, R6 dead params, R7 error context, R8 magic constants) file by file.
    - Respect the 15-line function cap and flatten all nested conditionals.
 4. **Step 4: Local CI/CD Pipeline Quality Gate:**
-   - Execute `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` ensuring all 19 quality gates pass 100% green (`exit 0`).
+   - Execute `python 03-ai-scripts/06-cicd-local-runner.py` ensuring all 19 quality gates pass 100% green (`exit 0`).
 5. **Step 5: File Change Summary:**
    - Output a detailed summary in chat listing exactly which files changed, what changed, and why.
 
@@ -660,8 +660,8 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **Error Handling (R7):** All errors are wrapped with context (`apperror.Wrap`) and not swallowed.
 - [ ] **No Magic Constants (R8):** All magic strings/numbers are extracted to named constants.
 - [ ] **Strict Lowercase Filenames:** All generated or modified files use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
-- [ ] **Tooling Execution:** I ran `.lovable/ai-fix-scripts/05-guideline-autofixer.py` and verified clean output with `python linter-scripts/validate-guidelines.py`.
-- [ ] **Local CI Runner:** All 19 quality gates pass cleanly via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with `exit 0`.
+- [ ] **Tooling Execution:** I ran `03-ai-scripts/05-guideline-autofixer.py` and verified clean output with `python linter-scripts/validate-guidelines.py`.
+- [ ] **Local CI Runner:** All 19 quality gates pass cleanly via `python 03-ai-scripts/06-cicd-local-runner.py` with `exit 0`.
 - [ ] **File Change Summary:** I provided a detailed summary in chat of what files changed, what changed inside them, and why.
 
 ---

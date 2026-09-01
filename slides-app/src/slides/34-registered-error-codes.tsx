@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 36: Registered error codes.
  *
- * Source: spec/17/31 line 79. Every user-visible error carries a stable
+ * Source: 02-spec/17/31 line 79. Every user-visible error carries a stable
  * code from a central registry. No ad-hoc codes invented at the throw site.
  */
 
@@ -56,7 +56,7 @@ export default function RegisteredErrorCodesSlide() {
         <ActionPanel
           slideId="34-registered-error-codes"
           symptom="A customer reports 'payment failed', support searches the logs for `payment_failed` and finds nothing because the code was thrown as `PaymentFailed` on Tuesday and `payment_failed_2` on Wednesday. The UI banner is the fallback 'Something went wrong', so the user has no idea whether to retry, edit their card, or contact their bank. Every incident becomes a code archaeology dig."
-          rule="Every user-visible error uses a code from a single central registry (for example `src/errors/registry.ts` exporting `ErrorCodes` plus an `ErrorCode` union type). Throw sites reference `ErrorCodes.CheckoutInvalidCard`, never a string literal. UI mapping is an exhaustive `switch` on `ErrorCode` so the TypeScript compiler fails the build when a new code lands without a matching branch. Per spec/17/31 line 79 and the error-management digest."
+          rule="Every user-visible error uses a code from a single central registry (for example `src/errors/registry.ts` exporting `ErrorCodes` plus an `ErrorCode` union type). Throw sites reference `ErrorCodes.CheckoutInvalidCard`, never a string literal. UI mapping is an exhaustive `switch` on `ErrorCode` so the TypeScript compiler fails the build when a new code lands without a matching branch. Per 02-spec/17/31 line 79 and the error-management digest."
           doThis="Create `src/errors/registry.ts` (or extend the existing one) and add every new code there with a PascalCase name that includes its feature prefix (`CheckoutInvalidCard`, not `InvalidCard`). Import `ErrorCodes` at the throw site. In the UI, type the switch parameter as `ErrorCode` and add a `never`-typed default branch so missing cases fail type-check. Reject any PR that types an error code as a bare string."
         />
       </div>

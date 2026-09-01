@@ -72,7 +72,7 @@ one waiver per line:
 
 # Comments start with `#` (only at line start; anchor `#` inside entries is preserved)
 
-spec/path/to/file.md:42:./missing-target.md
+02-spec/path/to/file.md:42:./missing-target.md
 spec/other.md:99:./file.md#missing-section
 ```
 

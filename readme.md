@@ -30,15 +30,15 @@
 </p>
 
 <p align="center">
-  <!-- STAMP:PLATFORM_BADGES --><a href="spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="spec/health-dashboard.md"><img alt="Health Score (effective, waived per folder-ref allowlist; raw=80/100 in spec/health-dashboard.md)" src="https://img.shields.io/badge/health-100%2F100%20(A+)-22C55E?style=flat-square"/></a> <a href="spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
+  <!-- STAMP:PLATFORM_BADGES --><a href="02-spec/02-coding-guidelines/"><img alt="Languages" src="https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square"/></a> <a href="#-bundle-installers"><img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square"/></a> <a href="02-spec/health-dashboard.md"><img alt="Health Score (effective, waived per folder-ref allowlist; raw=80/100 in 02-spec/health-dashboard.md)" src="https://img.shields.io/badge/health-100%2F100%20(A+)-22C55E?style=flat-square"/></a> <a href="02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md"><img alt="Blind AI Audit" src="https://img.shields.io/badge/blind%20AI%20audit-99.8%2F100-FF6E3C?style=flat-square"/></a> <a href="#-contributing"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square"/></a><!-- /STAMP:PLATFORM_BADGES -->
 </p>
 
 <p align="center"><strong>By <a href="https://alimkarim.com/">Md. Alim Ul Karim</a></strong>, Chief Software Engineer, <a href="https://riseup-asia.com/">Riseup Asia LLC</a> · <a href="https://www.linkedin.com/in/alimkarim">LinkedIn</a> · <a href="https://stackoverflow.com/users/513511/md-alim-ul-karim">SO</a> · <a href="https://github.com/alimtvnetwork">GitHub</a></p>
 
 <p align="center">
-  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.35.3<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-08-31<!-- /STAMP:UPDATED -->
+  <em>Stats:</em> <!-- STAMP:FOLDERS -->23<!-- /STAMP:FOLDERS --> top-level folders · v<!-- STAMP:VERSION -->6.35.3<!-- /STAMP:VERSION --> · updated <!-- STAMP:UPDATED -->2026-09-01<!-- /STAMP:UPDATED -->
   <!-- STAMP:FILES -->693<!-- /STAMP:FILES -->
-  <!-- STAMP:LINES -->148,598<!-- /STAMP:LINES -->
+  <!-- STAMP:LINES -->148,586<!-- /STAMP:LINES -->
 </p>
 
 <p align="center"><sub><strong>📦 Two version tracks (intentional):</strong> the <strong>repo / spec version</strong> shown above (<code>v6.15.0</code>) covers all 23 spec folders, docs, bundles, and installers. The <strong>linter pack version</strong> shown in <a href="quickstart.md">quickstart.md</a> (currently <code>v3.79.0</code>) is the standalone <a href="linters-cicd/"><code>linters-cicd/</code></a> bundle that external repos pin in CI. They move on different cadences so spec-only edits don't force every downstream pipeline to re-pin. See <a href="quickstart.md#-two-version-tracks">Two version tracks</a> for the full table.</sub></p>
@@ -243,7 +243,7 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24
 
 ### 📋 Per-Bundle Install Reference
 
-Copy-paste commands for every supported bundle. Each block lists the **exact script path** in this repo and the **flags** the script accepts. All bundle installers conform to [spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md), no flags are *required* (defaults install to the current directory in IMPLICIT mode), but `--version <tag>` is the recommended flag for CI use to pin the install.
+Copy-paste commands for every supported bundle. Each block lists the **exact script path** in this repo and the **flags** the script accepts. All bundle installers conform to [02-spec/14-update/27-generic-installer-behavior.md](02-spec/14-update/27-generic-installer-behavior.md), no flags are *required* (defaults install to the current directory in IMPLICIT mode), but `--version <tag>` is the recommended flag for CI use to pin the install.
 
 **Common flags** (all bundle installers): `--version <tag>` (pin to a release), `--target <dir>` / `--dest <dir>` (install destination, default cwd), `--use-local-archive <path>` (offline install), `--offline` (refuse network), `--no-main-fallback` (refuse main-branch fallback in PINNED mode), `--no-discovery` (forbid V→V+N discovery), `--no-open` (skip auto-open of entry file, slides only), `-h` / `--help` (show full reference and exit). Run any installer with `--help` for the full scope-tagged matrix.
 
@@ -254,12 +254,12 @@ Every installer below copies the listed **folders** (recursively, preserving str
 | Installer | Folders copied | Top-level files copied |
 |---|---|---|
 | **`install.{sh,ps1}`** (generic / "s-installer") | `spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
-| **`cli-install.{sh,ps1}`** | `spec/11-powershell-integration/`, `spec/12-cicd-pipeline-workflows/`, `spec/13-generic-cli/`, `spec/14-update/`, `spec/15-distribution-and-runner/`, `spec/16-generic-release/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
-| **`consolidated-install.{sh,ps1}`** | `spec/01-spec-authoring-guide/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`cli-install.{sh,ps1}`** | `02-spec/11-powershell-integration/`, `02-spec/12-cicd-pipeline-workflows/`, `02-spec/13-generic-cli/`, `02-spec/14-update/`, `02-spec/15-distribution-and-runner/`, `02-spec/16-generic-release/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`consolidated-install.{sh,ps1}`** | `02-spec/01-spec-authoring-guide/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 
 > Notes:
 >
-> - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
+> - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
 > - **`version.json`** is smartly merged. The installer injects a `codingGuideline` object into the target repo's `version.json` with version tracking and prompt references, rather than overwriting the file.
 > - **`.lovable/coding-guidelines.md`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
@@ -283,7 +283,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/e
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/error-manage-install.sh | bash
 ```
 
-Installs: `spec/01-spec-authoring-guide`, `spec/03-error-manage`.
+Installs: `02-spec/01-spec-authoring-guide`, `02-spec/03-error-manage`.
 
 </details>
 
@@ -302,7 +302,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/s
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/splitdb-install.sh | bash
 ```
 
-Installs: `spec/04-database-conventions`, `spec/05-split-db-architecture`, `spec/06-seedable-config-architecture`.
+Installs: `02-spec/04-database-conventions`, `02-spec/05-split-db-architecture`, `02-spec/06-seedable-config-architecture`.
 
 </details>
 
@@ -321,7 +321,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/s
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.sh | bash
 ```
 
-Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full specification: [`spec/15-distribution-and-runner/01-index.md`](spec/15-distribution-and-runner/01-index.md).
+Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full specification: [`02-spec/15-distribution-and-runner/01-index.md`](02-spec/15-distribution-and-runner/01-index.md).
 
 <details>
 <summary>⚠️ <strong>Troubleshooting:</strong> banner shows an older version, or "Install verification FAILED"</summary>
@@ -381,7 +381,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/c
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/cli-install.sh | bash
 ```
 
-Installs: `spec/11-powershell-integration`, `spec/12-cicd-pipeline-workflows`, `spec/13-generic-cli`, `spec/14-update`, `spec/15-distribution-and-runner`, `spec/16-generic-release`.
+Installs: `02-spec/11-powershell-integration`, `02-spec/12-cicd-pipeline-workflows`, `02-spec/13-generic-cli`, `02-spec/14-update`, `02-spec/15-distribution-and-runner`, `02-spec/16-generic-release`.
 
 </details>
 
@@ -400,7 +400,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/w
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/wp-install.sh | bash
 ```
 
-Installs: `spec/18-wp-plugin-how-to`.
+Installs: `02-spec/18-wp-plugin-how-to`.
 
 </details>
 
@@ -419,11 +419,11 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/c
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/consolidated-install.sh | bash
 ```
 
-Installs: `spec/17-consolidated-guidelines`.
+Installs: `02-spec/17-consolidated-guidelines`.
 
 </details>
 
-> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[spec/14-update/27-generic-installer-behavior.md](spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior and flags, see **[spec/15-distribution-and-runner/01-index.md](spec/15-distribution-and-runner/01-index.md)**.
+> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[02-spec/14-update/27-generic-installer-behavior.md](02-spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior and flags, see **[02-spec/15-distribution-and-runner/01-index.md](02-spec/15-distribution-and-runner/01-index.md)**.
 
 <h2 align="center">🧪 CLI Linter Pack (release-asset installer)</h2>
 
@@ -503,7 +503,7 @@ SHA-256 verified, idempotent, releases-only, see [`linters-cicd/install.sh`](lin
 
 #### ⚠️ `-NoVerify` / `-n` Risks & Exit-Code Contract
 
-Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The loud-warning behavior is mandated by **[spec §9, Security Considerations](spec/14-update/27-generic-installer-behavior.md#9-security-considerations)**, and the exit-code contract is normative under **[spec §8, Exit Codes (Normative)](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)**. The text below is **byte-identical** to what the installer emits, keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
+Both installers print a **prominent yellow warning banner** at runtime when SHA-256 verification is disabled. The loud-warning behavior is mandated by **[spec §9, Security Considerations](02-spec/14-update/27-generic-installer-behavior.md#9-security-considerations)**, and the exit-code contract is normative under **[spec §8, Exit Codes (Normative)](02-spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)**. The text below is **byte-identical** to what the installer emits, keep this section in sync with `linters-cicd/install.ps1` and `linters-cicd/install.sh` so operators can match what they see in their terminal.
 
 **PowerShell**, exact runtime output of `install.ps1 -NoVerify`:
 
@@ -545,7 +545,7 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
     ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-##### Exit-code contract, see [spec §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)
+##### Exit-code contract, see [spec §8](02-spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative)
 
 | Exit | Meaning                                                    | With `-NoVerify` / `-n`                |
 |-----:|------------------------------------------------------------|----------------------------------------|
@@ -555,7 +555,7 @@ Both installers print a **prominent yellow warning banner** at runtime when SHA-
 | `3`  | Pinned release / asset not found (PINNED MODE)             | Same                                   |
 | `4`  | **Verification failed (checksum mismatch)**                | **Never raised**, verification is off |
 
-> Source of truth: [`spec/14-update/27-generic-installer-behavior.md` §8](spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative). Codes `0,5` are reserved by the spec and MUST NOT be redefined.
+> Source of truth: [`02-spec/14-update/27-generic-installer-behavior.md` §8](02-spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative). Codes `0,5` are reserved by the spec and MUST NOT be redefined.
 
 ##### ✅ Recommended: re-run WITH verification
 
@@ -656,7 +656,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 </p>
 
 <p align="center">
-  <strong>Authoritative Read-List:</strong> <a href=".lovable/06-what-to-read.md"><code>.lovable/06-what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".lovable/folder-structure.md"><code>.lovable/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="spec/01-index.md"><code>spec/01-index.md</code></a>
+  <strong>Authoritative Read-List:</strong> <a href=".lovable/what-to-read.md"><code>.lovable/what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".lovable/folder-structure.md"><code>.lovable/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="02-spec/01-index.md"><code>02-spec/01-index.md</code></a>
 </p>
 
 ---
@@ -665,7 +665,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center">
   Nine non-negotiables. Every spec, every linter, every PR enforces them.<br/>
-  Full reference: <a href="spec/02-coding-guidelines/01-cross-language/01-index.md"><code>spec/02-coding-guidelines/01-cross-language/01-index.md</code></a>.
+  Full reference: <a href="02-spec/02-coding-guidelines/01-cross-language/01-index.md"><code>02-spec/02-coding-guidelines/01-cross-language/01-index.md</code></a>.
 </p>
 
 | # | Principle | One-line rule |
@@ -705,10 +705,10 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 **Where the full walkthrough lives in the document hierarchy:**
 
 1. **Root README** → [Real-world Code Red Violations](#-real-world-example-code-red-violations), quick before/after for each rule above.
-2. **Cross-language specs** → [`spec/02-coding-guidelines/01-cross-language/`](spec/02-coding-guidelines/01-cross-language/), language-agnostic rule definitions (magic values, immutability, types folder).
-3. **Go-specific specs** → [`spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md), Code Red vs Dangerous classification.
-4. **Error architecture** → [`spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/`](spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/), `apperror` constructors and `apperrtype` enum registry.
-5. **AI quick reference** → [`spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md`](spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md), sub-200-line distillation for AI context windows.
+2. **Cross-language specs** → [`02-spec/02-coding-guidelines/01-cross-language/`](02-spec/02-coding-guidelines/01-cross-language/), language-agnostic rule definitions (magic values, immutability, types folder).
+3. **Go-specific specs** → [`02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md), Code Red vs Dangerous classification.
+4. **Error architecture** → [`02-spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/`](02-spec/03-error-manage/04-error-manage-spec/02-error-architecture/06-apperror-package/), `apperror` constructors and `apperrtype` enum registry.
+5. **AI quick reference** → [`02-spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md`](02-spec/02-coding-guidelines/03-coding-guidelines-spec/06-ai-optimization/04-condensed-master-guidelines.md), sub-200-line distillation for AI context windows.
 6. **Linters** → [`linter-scripts/`](linter-scripts/), automated enforcement that mirrors the rules above.
 
 ---
@@ -724,7 +724,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | 🟡 **STYLE** | **Improves consistency** across files, teams, and AI output. Teams may adapt. | Lints; non-blocking. | Yes, team-level decision. |
 | 🟢 **BEST PRACTICE** | **Recommended pattern.** Not a strict law — a default that pays off long-term. | Documented; not linted. | Yes, freely. |
 
-<p align="center"><sub>The full taxonomy lives in <a href="spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md"><code>spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md</code></a>. The PR template asks reviewers to label any guideline-skip with the severity above.</sub></p>
+<p align="center"><sub>The full taxonomy lives in <a href="02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md"><code>02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md</code></a>. The PR template asks reviewers to label any guideline-skip with the severity above.</sub></p>
 
 ---
 
@@ -760,7 +760,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 </p>
 
 <p align="center">
-  <em>The consolidated layer is intentionally compact, only <strong>33 files</strong> in <a href="spec/17-consolidated-guidelines/"><code>spec/17-consolidated-guidelines/</code></a>, ~5% of the repo, covering 100% of the enforceable rule classes.</em>
+  <em>The consolidated layer is intentionally compact, only <strong>33 files</strong> in <a href="02-spec/17-consolidated-guidelines/"><code>02-spec/17-consolidated-guidelines/</code></a>, ~5% of the repo, covering 100% of the enforceable rule classes.</em>
 </p>
 
 **Hard Rules (verbatim from the compact file):**
@@ -896,7 +896,7 @@ log.error("failed");
 log.error("uploadAvatar failed", { userId, fileSize, cause: err.message });
 ````
 
-<p align="center"><sub>More examples per language live in <a href="spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md"><code>03-common-ai-mistakes.md</code></a> (top-15 mistakes with before/after).</sub></p>
+<p align="center"><sub>More examples per language live in <a href="02-spec/02-coding-guidelines/06-ai-optimization/03-common-ai-mistakes.md"><code>03-common-ai-mistakes.md</code></a> (top-15 mistakes with before/after).</sub></p>
 
 ---
 
@@ -961,7 +961,7 @@ function processUser(user: User | null): Result<void> {
 }
 ```
 
-Full case study with five more violations: [`spec/02-coding-guidelines/01-cross-language/01-index.md`](spec/02-coding-guidelines/01-cross-language/01-index.md).
+Full case study with five more violations: [`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md).
 
 ---
 
@@ -1118,7 +1118,7 @@ func NewType(errorType apperrtype.ErrorType) *AppError {
 > - Keep the registry as the single source of truth for `Code` and `Message`.
 > - Use descriptive local names in examples; do not teach `err` / `ERR` as the preferred naming style.
 
-> 📖 Full error type enum specification: [`05-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md)
+> 📖 Full error type enum specification: [`05-apperrtype-enums.md`](02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md)
 
 **CODE-RED-005 & 006, `fmt.Errorf()` and `(T, error)` returns (before/after):**
 
@@ -1203,7 +1203,7 @@ if response.StatusCode != http.StatusOK {
 | `SiteError` / `WrapSiteError` | `WithSiteId` | `SiteNotFound`, `SiteBlocked` |
 | `EndpointError` / `WrapEndpointError` | `WithEndpoint` + `WithMethod` + `WithStatusCode` | `WPResponseInvalid`, `WPRateLimited` |
 
-> 📖 Full constructor reference: [`02-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md)
+> 📖 Full constructor reference: [`02-apperror-struct.md`](02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md)
 
 **CODE-RED-007, String-based enum (before/after):**
 
@@ -1326,11 +1326,11 @@ return &Response{
 
 **TypeScript/JS class-first:** Prefer classes over loose exported functions when state or dependencies are shared. Pure utilities (`formatDate`, `slugify`) can remain as standalone exports.
 
-> 📖 Full specification with all language examples: [`26-magic-values-and-immutability.md`](spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md)
+> 📖 Full specification with all language examples: [`26-magic-values-and-immutability.md`](02-spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md)
 >
-> 📖 Mutation avoidance details: [`18-code-mutation-avoidance.md`](spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md)
+> 📖 Mutation avoidance details: [`18-code-mutation-avoidance.md`](02-spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md)
 >
-> 📖 Types folder convention: [`27-types-folder-convention.md`](spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md)
+> 📖 Types folder convention: [`27-types-folder-convention.md`](02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md)
 
 ### Spec References
 
@@ -1338,13 +1338,13 @@ Quick-navigation index of every spec and linter file referenced in the CODE-RED 
 
 | # | Topic | Path |
 |---|---|---|
-| 1 | `apperrtype` enum registry | [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md) |
-| 2 | `AppError` struct + domain constructors | [`spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md`](spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md) |
-| 3 | Magic values & immutability | [`spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md`](spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md) |
-| 4 | Code mutation avoidance | [`spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md`](spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md) |
-| 5 | `types/` folder convention | [`spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md`](spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md) |
-| 6 | Go code severity taxonomy (Code Red vs Dangerous) | [`spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md) |
-| 7 | AI condensed master guidelines | [`spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md`](spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md) |
+| 1 | `apperrtype` enum registry | [`02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md`](02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/06-apperrtype-enums.md) |
+| 2 | `AppError` struct + domain constructors | [`02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md`](02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/03-apperror-struct.md) |
+| 3 | Magic values & immutability | [`02-spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md`](02-spec/02-coding-guidelines/01-cross-language/26-magic-values-and-immutability.md) |
+| 4 | Code mutation avoidance | [`02-spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md`](02-spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md) |
+| 5 | `types/` folder convention | [`02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md`](02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md) |
+| 6 | Go code severity taxonomy (Code Red vs Dangerous) | [`02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md`](02-spec/02-coding-guidelines/03-golang/07-code-severity-taxonomy.md) |
+| 7 | AI condensed master guidelines | [`02-spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md`](02-spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md) |
 | 8 | Linter (Go) | [`linter-scripts/validate-guidelines.go`](linter-scripts/validate-guidelines.go) |
 | 9 | Linter (Python) | [`linter-scripts/validate-guidelines.py`](linter-scripts/validate-guidelines.py) |
 
@@ -1360,7 +1360,7 @@ Quick-navigation index of every spec and linter file referenced in the CODE-RED 
 | **Log structurally** | One `Log.Error(err, fields)` per boundary, no console spam. | `structured-logging` spec |
 | **Map to UI** | UI translates `Code` → user-visible message. Error `Code` is the contract. | `error-code` registry |
 
-Full architecture: [`spec/03-error-manage/01-index.md`](spec/03-error-manage/01-index.md) · spec: [`spec/02-coding-guidelines/03-error-handling/`](spec/02-coding-guidelines/03-error-handling/).
+Full architecture: [`02-spec/03-error-manage/01-index.md`](02-spec/03-error-manage/01-index.md) · spec: [`02-spec/02-coding-guidelines/03-error-handling/`](02-spec/02-coding-guidelines/03-error-handling/).
 
 ---
 
@@ -1383,7 +1383,7 @@ type PageResult<T>  = Result<{ Items: readonly T[]; Total: number }>;
 // C#:   Result<T>               / Task<Result<T>>
 ```
 
-Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError`, `Map`, `AndThen`) work uniformly. Spec: [`spec/02-coding-guidelines/03-error-handling/04-result-types.md`](spec/02-coding-guidelines/03-error-handling/04-result-types.md).
+Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError`, `Map`, `AndThen`) work uniformly. Spec: [`02-spec/02-coding-guidelines/03-error-handling/04-result-types.md`](02-spec/02-coding-guidelines/03-error-handling/04-result-types.md).
 
 ---
 
@@ -1402,9 +1402,9 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 > It is published openly **not** as a general-purpose framework recommendation, but because the same rules that keep Alim's team shipping reliably can help **any team or solo developer** who wants the same discipline. If something here saves you a production incident or a debugging night, that's the bonus — the primary audience is still the team it was written for.
 
 <p align="center">
-  <a href="spec/02-coding-guidelines/01-cross-language/01-index.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
-  <a href="spec/01-spec-authoring-guide/01-index.md"><img alt="Spec author, read guide" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20authoring%20guide-8B5CF6?style=for-the-badge"/></a>
-  <a href="spec/18-wp-plugin-how-to/01-index.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
+  <a href="02-spec/02-coding-guidelines/01-cross-language/01-index.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
+  <a href="02-spec/01-spec-authoring-guide/01-index.md"><img alt="Spec author, read guide" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20authoring%20guide-8B5CF6?style=for-the-badge"/></a>
+  <a href="02-spec/18-wp-plugin-how-to/01-index.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
   <a href="#-for-ai-agents"><img alt="AI agent, canonical entry points" src="https://img.shields.io/badge/%F0%9F%A4%96%20AI%20Agent-Canonical%20entry%20points-FF6E3C?style=for-the-badge"/></a>
 </p>
 
@@ -1428,11 +1428,11 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <a href="llm.md"><img alt="llm.md, repository map" src="https://img.shields.io/badge/llm.md-Repository%20map-3B82F6?style=for-the-badge&logo=readthedocs&logoColor=white"/></a>
   <a href="bundles.json"><img alt="bundles.json, machine-readable catalogue" src="https://img.shields.io/badge/bundles.json-Bundle%20catalogue-10B981?style=for-the-badge&logo=json&logoColor=white"/></a>
   <a href="version.json"><img alt="version.json, live counts" src="https://img.shields.io/badge/version.json-Live%20counts-F59E0B?style=for-the-badge&logo=semver&logoColor=white"/></a>
-  <a href="spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
-  <a href="spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
-  <a href="spec/17-consolidated-guidelines/01-index.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
+  <a href="02-spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
+  <a href="02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
+  <a href="02-spec/17-consolidated-guidelines/01-index.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
   <a href=".lovable/memory/01-index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
-  <a href=".lovable/prompts/01-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
+  <a href="01-prompts/01-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
 </p>
 
 
@@ -1463,7 +1463,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 9. **Run available checks** — lint, test, type-check, validation scripts — and report the actual exit codes.
 10. **Summarize** what changed, what was tested, and what was *not* verified. Be explicit about uncertainty.
 
-<sub>Skipping any step silently is itself a CODE-RED violation. The full anti-hallucination rule set lives in <a href="spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><code>spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md</code></a> (34 rules, 5 language categories).</sub>
+<sub>Skipping any step silently is itself a CODE-RED violation. The full anti-hallucination rule set lives in <a href="02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><code>02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md</code></a> (34 rules, 5 language categories).</sub>
 
 
 ## 🛠️ Full-Repo Install Scripts
@@ -1484,7 +1484,7 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24
 
 Skip the latest-version probe with `-n` (PowerShell: `... | iex` wrapped in `& ([scriptblock]::Create(...)) -n`; Bash: `... | bash -s -- -n`). Local re-runs: `.\install.ps1` or `./install.sh`.
 
-**Power-user flags** (both installers): `--repo`, `--branch`, `--version`, `--folders`, `--dest`, `--config`, `--prompt`, `--force`, `--dry-run`, `--list-versions`, `--list-folders`, `-n`. `--prompt` and `--force` are mutually exclusive. Defaults via `install-config.json`. **CI/CD repo migration** (v15 → v16): `npm run migrate:repo:dry`, see [`spec/14-update/26-repo-major-version-migrator.md`](spec/14-update/26-repo-major-version-migrator.md).
+**Power-user flags** (both installers): `--repo`, `--branch`, `--version`, `--folders`, `--dest`, `--config`, `--prompt`, `--force`, `--dry-run`, `--list-versions`, `--list-folders`, `-n`. `--prompt` and `--force` are mutually exclusive. Defaults via `install-config.json`. **CI/CD repo migration** (v15 → v16): `npm run migrate:repo:dry`, see [`02-spec/14-update/26-repo-major-version-migrator.md`](02-spec/14-update/26-repo-major-version-migrator.md).
 
 ### Repo version migration, `fix-repo`
 
@@ -1525,29 +1525,29 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 
 ## 📚 Documentation & Specifications
 
-The complete specification hierarchy, AI metadata, and institutional memory live in `spec/` and `.lovable/`. Full index: [`spec/01-index.md`](spec/01-index.md) and [`.lovable/01-index.md`](.lovable/01-index.md).
+The complete specification hierarchy, AI metadata, and institutional memory live in `02-spec/` and `.lovable/`. Full index: [`02-spec/01-index.md`](02-spec/01-index.md) and [`.lovable/01-index.md`](.lovable/01-index.md).
 
 | Resource | Purpose / Contents |
 |---|---|
-| [`spec/01-spec-authoring-guide/`](spec/01-spec-authoring-guide/01-index.md) | Spec authoring standards · templates · validation rules · metrics |
-| [`spec/02-coding-guidelines/`](spec/02-coding-guidelines/01-cross-language/01-index.md) | 9 core principles · 10 CODE RED rules · cross-language coding rules |
-| [`spec/03-error-manage/`](spec/03-error-manage/01-index.md) | Universal error handling · `apperror` package · response envelopes |
-| [`spec/04-database-conventions/`](spec/04-database-conventions/01-index.md) | Database schemas · PascalCase conventions · SQLite & WAL patterns |
-| [`spec/14-update/`](spec/14-update/01-index.md) | Self-update architecture · installer behaviors · version discovery |
-| [`spec/15-distribution-and-runner/`](spec/15-distribution-and-runner/01-index.md) | Cross-platform runners · distribution bundles · packaging pipeline |
+| [`02-spec/01-spec-authoring-guide/`](02-spec/01-spec-authoring-guide/01-index.md) | Spec authoring standards · templates · validation rules · metrics |
+| [`02-spec/02-coding-guidelines/`](02-spec/02-coding-guidelines/01-cross-language/01-index.md) | 9 core principles · 10 CODE RED rules · cross-language coding rules |
+| [`02-spec/03-error-manage/`](02-spec/03-error-manage/01-index.md) | Universal error handling · `apperror` package · response envelopes |
+| [`02-spec/04-database-conventions/`](02-spec/04-database-conventions/01-index.md) | Database schemas · PascalCase conventions · SQLite & WAL patterns |
+| [`02-spec/14-update/`](02-spec/14-update/01-index.md) | Self-update architecture · installer behaviors · version discovery |
+| [`02-spec/15-distribution-and-runner/`](02-spec/15-distribution-and-runner/01-index.md) | Cross-platform runners · distribution bundles · packaging pipeline |
 | [`.lovable/folder-structure.md`](.lovable/folder-structure.md) | Canonical repository folder structure · sequence IDs · AI metadata |
 | [`.lovable/01-index.md`](.lovable/01-index.md) | Master AI context router · operational guidelines · reading sequence |
 
-Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/health-dashboard.md) · [`consolidated index`](spec/17-consolidated-guidelines/01-index.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
+Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-spec/health-dashboard.md) · [`consolidated index`](02-spec/17-consolidated-guidelines/01-index.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
 ### What's new in v5.131.0
 
-- Enforces Hard Rule #13 (guideline mirror sync). `scripts/lint-ci.sh` steps 23+24 and the CI `sync-drift` job now run `node scripts/sync-guidelines.mjs --check` and a 14-assertion self-test at `scripts/tests/sync-guidelines.test.mjs`. Any edit to `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` that forgets `npm run sync:guidelines` fails pre-push AND PR. Closes the enforcement gap v5.129 left open.
+- Enforces Hard Rule #13 (guideline mirror sync). `scripts/lint-ci.sh` steps 23+24 and the CI `sync-drift` job now run `node scripts/sync-guidelines.mjs --check` and a 14-assertion self-test at `scripts/tests/sync-guidelines.test.mjs`. Any edit to `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` that forgets `npm run sync:guidelines` fails pre-push AND PR. Closes the enforcement gap v5.129 left open.
 - `scripts/sync-guidelines.mjs` refactored to export `diffReport`, `computeDrifts`, `buildLovableMirror`, `buildCursorRules`, `extractSection` and guarded `main()` behind an `invokedDirectly` check. Same import-safe pattern as v5.126 print-required-checks refactor.
 
 ### What's new in v5.129.0
 
-- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
+- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
 - React rule #7 rewritten from one line into full guidance. Explains WHY mutation breaks React (reconciler uses referential inequality), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`), when to reach for `structuredClone` (deep copies), when Immer is acceptable, and the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 
 ### What's new in v5.128.0
@@ -1572,7 +1572,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.124.0
 
-- OQ-A1 and OQ-A2 promoted from "default adopted" to locked spec decisions **D15** and **D16**. `spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` v1.1.0: §7 rewritten as "Resolved Decisions". D15 locks cascading semantics as simple union (no role hierarchy). D16 locks the cache-bin storage tier as per-process SQLite `:memory:` with the `RoleAccessCache` schema in §4 and the invalidation contract in §5; Redis and plain in-process map stay documented as configurable alternatives against the same four-function contract.
+- OQ-A1 and OQ-A2 promoted from "default adopted" to locked spec decisions **D15** and **D16**. `02-spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` v1.1.0: §7 rewritten as "Resolved Decisions". D15 locks cascading semantics as simple union (no role hierarchy). D16 locks the cache-bin storage tier as per-process SQLite `:memory:` with the `RoleAccessCache` schema in §4 and the invalidation contract in §5; Redis and plain in-process map stay documented as configurable alternatives against the same four-function contract.
 - `.lovable/29-plan.md`: Locked Decisions table gains D15 and D16. Open Questions section renamed to "all resolved". Root cause this closes: every blind-AI and mediocre-AI audit kept flagging these as legitimately open even though 18+ downstream chapters had already conformed to the defaults; leaving them "open" invited a future implementer to waste a phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
 
 ### What's new in v5.123.0
@@ -1610,7 +1610,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 ### What's new in v5.117.0
 
 - Visual baseline coverage guard. `scripts/validate-visual-baselines.mjs` parses `DECK` in `slides-app/src/deck/registry.ts` and asserts a matching `slide-NN-chromium-linux.png` exists under `slides-app/tests/visual.spec.ts-snapshots/`. First run surfaced the real state: 0 of 70 baselines committed, meaning every previous visual CI run was silently green. Wired advisory into `.husky/pre-push` and `.github/workflows/slides-visual.yml` today; flips to `--strict` (blocking) after the initial baseline set is baked via workflow_dispatch. Npm scripts: `slides:validate-baselines` (advisory) and `slides:validate-baselines:strict`.
-- Plan hygiene. `.lovable/29-plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
+- Plan hygiene. `.lovable/29-plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `02-spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
 
 ### What's new in v5.116.0
 
@@ -1644,16 +1644,16 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.109.0
 
-- SS-02 tasks 60-61: closes React & TypeScript (Section G) and opens Accessibility (Section H). Slide 58 `REACT-012` (hard) bans placeholder type names (`Data`, `Info`, `Config`, `Payload`, `Options`, `Params`, and 14 others bare); if you cannot name it, split until you can. Slide 59 `A11Y-001` (hard) is the Section H chapter opener: WCAG 2.2 AA is the shipping floor, with ten non-negotiable minimums (keyboard reach, visible focus, programmatic labels, 4.5:1 contrast, no colour-only info, reduced-motion, focus trap + restore, live regions, alt text, sequential headings, 24x24 hit targets). Enforced by custom `no-placeholder-type-names` ESLint rule, `eslint-plugin-jsx-a11y` strict, axe-core CI (since v5.54.0), and a design-token contrast gate. New deck section `a11y` inserted between React and Data & Schema. Per spec/17/31 line 112 and WCAG 2.2 AA. 61 slides validated.
+- SS-02 tasks 60-61: closes React & TypeScript (Section G) and opens Accessibility (Section H). Slide 58 `REACT-012` (hard) bans placeholder type names (`Data`, `Info`, `Config`, `Payload`, `Options`, `Params`, and 14 others bare); if you cannot name it, split until you can. Slide 59 `A11Y-001` (hard) is the Section H chapter opener: WCAG 2.2 AA is the shipping floor, with ten non-negotiable minimums (keyboard reach, visible focus, programmatic labels, 4.5:1 contrast, no colour-only info, reduced-motion, focus trap + restore, live regions, alt text, sequential headings, 24x24 hit targets). Enforced by custom `no-placeholder-type-names` ESLint rule, `eslint-plugin-jsx-a11y` strict, axe-core CI (since v5.54.0), and a design-token contrast gate. New deck section `a11y` inserted between React and Data & Schema. Per 02-spec/17/31 line 112 and WCAG 2.2 AA. 61 slides validated.
 
 ### What's new in v5.108.0
 
-- SS-02 tasks 58-59: React types-and-generics pair. Slide 56 `REACT-010` (hard) requires named generic parameters (`TItem`, `TKey`) and named aliases for every composite type; bare `T`/`U`/`K`/`V` and inline `Map`/`Array`/object composites are banned in application code. Slide 57 `REACT-011` (hard) moves prop types and event handler types into a sibling `types.ts`, with shared cross-component types in `src/types/<domain>.ts`; anonymous prop object literals on component signatures are rejected. Enforced by `@typescript-eslint/naming-convention` (`typeParameter` `^T[A-Z]`), custom `no-inline-composite` and `no-inline-props-type` rules, and a `pnpm gen:component` scaffold. Per spec/17/31 lines 110-111. 59 slides validated.
+- SS-02 tasks 58-59: React types-and-generics pair. Slide 56 `REACT-010` (hard) requires named generic parameters (`TItem`, `TKey`) and named aliases for every composite type; bare `T`/`U`/`K`/`V` and inline `Map`/`Array`/object composites are banned in application code. Slide 57 `REACT-011` (hard) moves prop types and event handler types into a sibling `types.ts`, with shared cross-component types in `src/types/<domain>.ts`; anonymous prop object literals on component signatures are rejected. Enforced by `@typescript-eslint/naming-convention` (`typeParameter` `^T[A-Z]`), custom `no-inline-composite` and `no-inline-props-type` rules, and a `pnpm gen:component` scaffold. Per 02-spec/17/31 lines 110-111. 59 slides validated.
 
 
 ### What's new in v5.107.0
 
-- SS-02 tasks 56-57: React hook-shape pair. Slide 54 `REACT-008` (hard) requires every custom hook to start with `use`, return a named object type (never a bare tuple), and call hooks unconditionally (guards live inside the hook body). Slide 55 `REACT-009` (hard) bans tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. Only the built-in `useState` pair is tolerated. Enforced by `eslint-plugin-react-hooks`, `@typescript-eslint/consistent-type-definitions`, and custom `hook-name-prefix` / `hook-return-named-type` / `no-tuple-return` / `action-shape` rules. Per spec/17/31 lines 108-109. 57 slides validated.
+- SS-02 tasks 56-57: React hook-shape pair. Slide 54 `REACT-008` (hard) requires every custom hook to start with `use`, return a named object type (never a bare tuple), and call hooks unconditionally (guards live inside the hook body). Slide 55 `REACT-009` (hard) bans tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. Only the built-in `useState` pair is tolerated. Enforced by `eslint-plugin-react-hooks`, `@typescript-eslint/consistent-type-definitions`, and custom `hook-name-prefix` / `hook-return-named-type` / `no-tuple-return` / `action-shape` rules. Per 02-spec/17/31 lines 108-109. 57 slides validated.
 
 
 ### What's new in v5.106.0
@@ -1662,98 +1662,98 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.104.0
 
-- SS-02 task 51: one effect, one concern, always with cleanup (`REACT-003`, hard). Split unrelated subscriptions/fetches into separate effects; every acquired resource returns a cleanup (`socket.close()`, `clearInterval`, `AbortController.abort()`). Enforced by custom ESLint rules `one-concern-per-effect` and `require-effect-cleanup`, plus dev-only `useTrackedEffect` that logs `react.effect.leak` on non-zero unmount balance. Per spec/17/31 lines 102-103. 51 slides validated.
+- SS-02 task 51: one effect, one concern, always with cleanup (`REACT-003`, hard). Split unrelated subscriptions/fetches into separate effects; every acquired resource returns a cleanup (`socket.close()`, `clearInterval`, `AbortController.abort()`). Enforced by custom ESLint rules `one-concern-per-effect` and `require-effect-cleanup`, plus dev-only `useTrackedEffect` that logs `react.effect.leak` on non-zero unmount balance. Per 02-spec/17/31 lines 102-103. 51 slides validated.
 
 ### What's new in v5.101.0
 
-- SS-02 task 48: ERD required on DB PRs (`SCHEMA-006`, hard). Every PR touching a migration, ORM schema, or DDL file ships a Mermaid ERD under `docs/erd/**` covering every added/altered table. CI gate `erd-required` blocks merges when the diagram is missing or fails to render. Per spec/17/31 line 93 (rule 8). 48 slides validated.
+- SS-02 task 48: ERD required on DB PRs (`SCHEMA-006`, hard). Every PR touching a migration, ORM schema, or DDL file ships a Mermaid ERD under `docs/erd/**` covering every added/altered table. CI gate `erd-required` blocks merges when the diagram is missing or fails to render. Per 02-spec/17/31 line 93 (rule 8). 48 slides validated.
 
 ### What's new in v5.100.0
 
-- SS-02 task 47: SQLite default + ORM + explicit joins/PK/FK (`SCHEMA-005`, hard). One engine across dev/CI/prod; ORM models own the schema with `primaryKey({ autoIncrement: true })` and `.references(...)`; queries use `.innerJoin(..., on)` or parameterized SQL only. Raw SQL strings live only in a whitelisted `db/raw/*.sql` folder. Per spec/17/31 line 93. 47 slides validated.
+- SS-02 task 47: SQLite default + ORM + explicit joins/PK/FK (`SCHEMA-005`, hard). One engine across dev/CI/prod; ORM models own the schema with `primaryKey({ autoIncrement: true })` and `.references(...)`; queries use `.innerJoin(..., on)` or parameterized SQL only. Raw SQL strings live only in a whitelisted `db/raw/*.sql` folder. Per 02-spec/17/31 line 93. 47 slides validated.
 
 ### What's new in v5.99.0
 
-- SS-02 task 46: Nullable narrative columns (`SCHEMA-004`, hard). Entity/ref tables carry `Description TEXT NULL`, transactional tables carry `Notes TEXT NULL` + `Comments TEXT NULL`, all nullable, no `DEFAULT`. Join tables exempt. Enforced by `MISSING-DESC-001` and `DB-FREETEXT-001`. Per spec/17/31 line 92. 46 slides validated.
+- SS-02 task 46: Nullable narrative columns (`SCHEMA-004`, hard). Entity/ref tables carry `Description TEXT NULL`, transactional tables carry `Notes TEXT NULL` + `Comments TEXT NULL`, all nullable, no `DEFAULT`. Join tables exempt. Enforced by `MISSING-DESC-001` and `DB-FREETEXT-001`. Per 02-spec/17/31 line 92. 46 slides validated.
 
 ### What's new in v5.98.0
 
-- SS-02 task 45: Join-table naming and composite PK (`SCHEMA-003`, hard). Join tables are `{A}{B}` with composite PK `({A}Id, {B}Id)`, no surrogate, no `Description`/`Notes`. `Status`/`Type`/`Category` resolve through a registered enum + join table (time key for history), never a free-form string column. Per spec/17/31 line 91. 45 slides validated.
+- SS-02 task 45: Join-table naming and composite PK (`SCHEMA-003`, hard). Join tables are `{A}{B}` with composite PK `({A}Id, {B}Id)`, no surrogate, no `Description`/`Notes`. `Status`/`Type`/`Category` resolve through a registered enum + join table (time key for history), never a free-form string column. Per 02-spec/17/31 line 91. 45 slides validated.
 
 
 ### What's new in v5.97.0
 
-- SS-02 task 44: `{TableName}Id` INTEGER PKs (`SCHEMA-002`, hard). Every PK is `{Table}Id INTEGER PRIMARY KEY AUTOINCREMENT`, FKs reuse the exact PK name, no UUIDs, no bare `id`. Enforced by migration linter, FK-name linter, and PR checklist; public unguessable identifiers move to `PublicId TEXT UNIQUE`. Per spec/17/31 line 90 and `mem://architecture/database-schema`. 44 slides validated.
+- SS-02 task 44: `{TableName}Id` INTEGER PKs (`SCHEMA-002`, hard). Every PK is `{Table}Id INTEGER PRIMARY KEY AUTOINCREMENT`, FKs reuse the exact PK name, no UUIDs, no bare `id`. Enforced by migration linter, FK-name linter, and PR checklist; public unguessable identifiers move to `PublicId TEXT UNIQUE`. Per 02-spec/17/31 line 90 and `mem://architecture/database-schema`. 44 slides validated.
 
 
 ### What's new in v5.96.0
 
-- SS-02 task 43: Data & Schema chapter opener (`SCHEMA-001`, hard) opens a new `data-schema` section. PascalCase tables/types/entities/JSON keys, camelCase columns/fields, single entity name across DB, API, and TypeScript. Per spec/17/31 lines 87 to 89. 43 slides validated.
+- SS-02 task 43: Data & Schema chapter opener (`SCHEMA-001`, hard) opens a new `data-schema` section. PascalCase tables/types/entities/JSON keys, camelCase columns/fields, single entity name across DB, API, and TypeScript. Per 02-spec/17/31 lines 87 to 89. 43 slides validated.
 
 
 ### What's new in v5.95.0
 
-- SS-02 task 42: Global error store + single modal slide (`ERR-006`, hard). One `errorStore` fed by `apiCall` (ERR-005), a single top-level `ErrorModal` rendering copy from the ERR-004 registry, `log.error` on every push per LOG-002. No per-feature toasts or local error state. Per spec/17/31 line 80. 42 slides validated.
+- SS-02 task 42: Global error store + single modal slide (`ERR-006`, hard). One `errorStore` fed by `apiCall` (ERR-005), a single top-level `ErrorModal` rendering copy from the ERR-004 registry, `log.error` on every push per LOG-002. No per-feature toasts or local error state. Per 02-spec/17/31 line 80. 42 slides validated.
 
 ### What's new in v5.94.0
 
-- SS-02 task 41: Retrospective on repeats slide (`RCA-002`, hard) requiring a stop-and-RCA on the second occurrence of a bug class before any third fix, per spec/17/31 line 79. 41 slides validated.
+- SS-02 task 41: Retrospective on repeats slide (`RCA-002`, hard) requiring a stop-and-RCA on the second occurrence of a bug class before any third fix, per 02-spec/17/31 line 79. 41 slides validated.
 
 ### What's new in v5.93.0
 
-- SS-02 task 40: Verify both directions integration check slide (`INT-001`, hard) requiring curl + frontend field assertion + UI screenshot on the same payload before marking any integration ticket done, per spec/17/31 line 78. 40 slides validated.
+- SS-02 task 40: Verify both directions integration check slide (`INT-001`, hard) requiring curl + frontend field assertion + UI screenshot on the same payload before marking any integration ticket done, per 02-spec/17/31 line 78. 40 slides validated.
 
 ### What's new in v5.92.0
 
-- SS-02 task 39: Log context requirements slide (`LOG-002`, hard) mandating `op`, `requestId`, `userId`, and safe scalar inputs while banning secrets and PII beyond `userId` per spec/17/31 line 77. 39 slides validated.
+- SS-02 task 39: Log context requirements slide (`LOG-002`, hard) mandating `op`, `requestId`, `userId`, and safe scalar inputs while banning secrets and PII beyond `userId` per 02-spec/17/31 line 77. 39 slides validated.
 
 ### What's new in v5.91.0
 
-- SS-02 task 38: Log-level severity map slide (`LOG-001`, hard) locking in `debug`/`info`/`warn`/`error`/`fatal` semantics per spec/17/31 line 76. 38 slides validated.
+- SS-02 task 38: Log-level severity map slide (`LOG-001`, hard) locking in `debug`/`info`/`warn`/`error`/`fatal` semantics per 02-spec/17/31 line 76. 38 slides validated.
 
 ### What's new in v5.90.0
 
-- SS-02 task 37: Universal response envelope slide (`ERR-005`, hard) covering the `{ data, errors[], meta }` shape and the single shared `apiCall` parser per spec/17/31 line 80. 37 slides validated.
+- SS-02 task 37: Universal response envelope slide (`ERR-005`, hard) covering the `{ data, errors[], meta }` shape and the single shared `apiCall` parser per 02-spec/17/31 line 80. 37 slides validated.
 
 ### What's new in v5.89.0
 
-- SS-02 task 36: Registered error codes slide (`ERR-004`, hard) covering the central `ErrorCodes` registry, typed union, and exhaustive UI switch per spec/17/31 line 79. 36 slides validated.
+- SS-02 task 36: Registered error codes slide (`ERR-004`, hard) covering the central `ErrorCodes` registry, typed union, and exhaustive UI switch per 02-spec/17/31 line 79. 36 slides validated.
 
 ### What's new in v5.88.0
 
-- SS-02 task 35: Assets folder convention slide (`ASSET-001`, hard) covering the `assets/NN-folder/NN-file.ext` tree and no `-final`/`-v2` suffixes per spec/17/31 rule 12. 35 slides validated.
+- SS-02 task 35: Assets folder convention slide (`ASSET-001`, hard) covering the `assets/NN-folder/NN-file.ext` tree and no `-final`/`-v2` suffixes per 02-spec/17/31 rule 12. 35 slides validated.
 
 ### What's new in v5.87.0
 
-- SS-02 task 34: Mermaid-first for 3+ components slide (`COMP-001`, hard) covering the "diagram before the third .tsx" trigger per spec/17/31 rule 10. 34 slides validated.
+- SS-02 task 34: Mermaid-first for 3+ components slide (`COMP-001`, hard) covering the "diagram before the third .tsx" trigger per 02-spec/17/31 rule 10. 34 slides validated.
 
 ### What's new in v5.86.0
 
-- SS-02 task 33: DRY extract-now slide (`DRY-001`, hard) covering the two-site trigger and extract-to-helper pattern per spec/17/31 line 33. 33 slides validated.
+- SS-02 task 33: DRY extract-now slide (`DRY-001`, hard) covering the two-site trigger and extract-to-helper pattern per 02-spec/17/31 line 33. 33 slides validated.
 
 ### What's new in v5.85.0
 
-- SS-02 task 32: dedicated definitions file slide (`DEF-001`, hard) covering extraction of types/enums/constants into their own file per spec/17/31 line 32. 32 slides validated.
+- SS-02 task 32: dedicated definitions file slide (`DEF-001`, hard) covering extraction of types/enums/constants into their own file per 02-spec/17/31 line 32. 32 slides validated.
 
 ### What's new in v5.84.0
 
-- SS-02 task 31: immutable-first slide (`IMMUT-001`, hard) covering assign-once, spread-copy, and no in-place mutation per spec/17/31 line 35. Originally-planned task 31 (two-operand + positive guards) skipped as duplicate of shipped slides 08/09. 31 slides validated.
+- SS-02 task 31: immutable-first slide (`IMMUT-001`, hard) covering assign-once, spread-copy, and no in-place mutation per 02-spec/17/31 line 35. Originally-planned task 31 (two-operand + positive guards) skipped as duplicate of shipped slides 08/09. 31 slides validated.
 
 ### What's new in v5.83.0
 
-- SS-02 task 30: function length slide (`FUNC-001`, hard) covering the 8/15 rule, count method, and exact `lint-allow: function-length` waiver form per spec/17/31 line 25. 30 slides validated.
+- SS-02 task 30: function length slide (`FUNC-001`, hard) covering the 8/15 rule, count method, and exact `lint-allow: function-length` waiver form per 02-spec/17/31 line 25. 30 slides validated.
 
 ### What's new in v5.82.0
 
-- SS-02 task 29: file-size tier slide (`SIZE-001`, hard) covering the 100/120/300 line caps with extract triggers per spec/17/31 line 30. 29 slides validated.
+- SS-02 task 29: file-size tier slide (`SIZE-001`, hard) covering the 100/120/300 line caps with extract triggers per 02-spec/17/31 line 30. 29 slides validated.
 
 ### What's new in v5.81.0
 
-- SS-02 task 28: line-gap discipline slide (`STYLE-001`, hard) covering grouped imports and blank-line rules per spec/17/31 lines 53 to 62. 28 slides validated.
+- SS-02 task 28: line-gap discipline slide (`STYLE-001`, hard) covering grouped imports and blank-line rules per 02-spec/17/31 lines 53 to 62. 28 slides validated.
 
 ### What's new in v5.78.0
 
-- **Boolean naming slide (SS-02 task 25).** New [`slides-app/src/slides/23-boolean-naming.tsx`](slides-app/src/slides/23-boolean-naming.tsx) (ruleId `BOOL-002`, hard) codifies [spec/17/31 §Boolean Naming](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) lines 40-49: prefixes `is` / `has` / `can` / `should` / `was` / `will` / `did` / `must`, positive framing only, no bare adjectives or `flag` / `bool` / `check`. Before/after `<CodeDiff>` inverts a triple-negative guard to a readable positive form. SRA validator now passes 25 slides.
+- **Boolean naming slide (SS-02 task 25).** New [`slides-app/src/slides/23-boolean-naming.tsx`](slides-app/src/slides/23-boolean-naming.tsx) (ruleId `BOOL-002`, hard) codifies [02-spec/17/31 §Boolean Naming](02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) lines 40-49: prefixes `is` / `has` / `can` / `should` / `was` / `will` / `did` / `must`, positive framing only, no bare adjectives or `flag` / `bool` / `check`. Before/after `<CodeDiff>` inverts a triple-negative guard to a readable positive form. SRA validator now passes 25 slides.
 
 ### What's new in v5.77.0
 
@@ -1761,7 +1761,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.76.0
 
-- **DB schema naming slide (SS-02 task 23).** New [`slides-app/src/slides/21-db-schema-naming.tsx`](slides-app/src/slides/21-db-schema-naming.tsx) (ruleId `NAM-002`, hard) teaches the schema rules from [spec/17/31 §Data and Schema](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md): PascalCase singular entities, camelCase fields, `{TableName}Id` INTEGER auto-increment PKs, no UUIDs. Ships a before/after `<CodeDiff>` SQL migration plus an `<ActionPanel>` symptom/rule/action. SRA validator now passes 23 slides.
+- **DB schema naming slide (SS-02 task 23).** New [`slides-app/src/slides/21-db-schema-naming.tsx`](slides-app/src/slides/21-db-schema-naming.tsx) (ruleId `NAM-002`, hard) teaches the schema rules from [02-spec/17/31 §Data and Schema](02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md): PascalCase singular entities, camelCase fields, `{TableName}Id` INTEGER auto-increment PKs, no UUIDs. Ships a before/after `<CodeDiff>` SQL migration plus an `<ActionPanel>` symptom/rule/action. SRA validator now passes 23 slides.
 
 ### What's new in v5.75.0
 
@@ -1769,15 +1769,15 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.74.0
 
-- **Trust-boundary teaser slide (SS-02 task 22).** New [`slides-app/src/slides/19-trust-boundaries-teaser.tsx`](slides-app/src/slides/19-trust-boundaries-teaser.tsx) (ruleId `MUST-007`, hard) surfaces the one-way trust gradient from spec/19 chs. [26](spec/19-main-worker-service/27-trust-boundaries-and-isolation.md) and [27](spec/19-main-worker-service/28-git-backup-targets.md): Main > Worker > Backup > Git. Three Allowed vs Forbidden cards cover Main→Worker, Worker→Backup, and Worker→Git; footer `<CalloutQuote>` cites ch. 26 §2. SRA validator now passes 21 slides.
+- **Trust-boundary teaser slide (SS-02 task 22).** New [`slides-app/src/slides/19-trust-boundaries-teaser.tsx`](slides-app/src/slides/19-trust-boundaries-teaser.tsx) (ruleId `MUST-007`, hard) surfaces the one-way trust gradient from spec/19 chs. [26](02-spec/19-main-worker-service/27-trust-boundaries-and-isolation.md) and [27](02-spec/19-main-worker-service/28-git-backup-targets.md): Main > Worker > Backup > Git. Three Allowed vs Forbidden cards cover Main→Worker, Worker→Backup, and Worker→Git; footer `<CalloutQuote>` cites ch. 26 §2. SRA validator now passes 21 slides.
 
 ### What's new in v5.73.0
 
-- **Version-bump myth-buster slide (SS-02 task 21).** New [`slides-app/src/slides/18-version-bump-myth-buster.tsx`](slides-app/src/slides/18-version-bump-myth-buster.tsx) (ruleId `MUST-006`, hard) refutes four common misreads of the v1.2 workflow update in a Myth vs Reality grid, closing with a `<CalloutQuote>` from spec/17/31 §Must Follow: "If it shipped, it has a version. If it has a version, it has a changelog line." SRA validator now passes 20 slides.
+- **Version-bump myth-buster slide (SS-02 task 21).** New [`slides-app/src/slides/18-version-bump-myth-buster.tsx`](slides-app/src/slides/18-version-bump-myth-buster.tsx) (ruleId `MUST-006`, hard) refutes four common misreads of the v1.2 workflow update in a Myth vs Reality grid, closing with a `<CalloutQuote>` from 02-spec/17/31 §Must Follow: "If it shipped, it has a version. If it has a version, it has a changelog line." SRA validator now passes 20 slides.
 
 ### What's new in v5.72.0
 
-- **Method-doc decision tree slide (SS-02 task 20).** New [`slides-app/src/slides/17-method-doc-decision-tree.tsx`](slides-app/src/slides/17-method-doc-decision-tree.tsx) (ruleId `MUST-005`, warn) renders the 5-step checklist from spec/17/31 §"Method Documentation" as a horizontal decision tree: Q1 rename? → Skip · Q2 split? → Skip · Q3 restates signature? → Delete · Q4 WHY-or-example? → Keep 1-2 lines · Q5 godoc wired? → One-liner. Default outcome is NO DOC. SRA validator now passes 19 slides.
+- **Method-doc decision tree slide (SS-02 task 20).** New [`slides-app/src/slides/17-method-doc-decision-tree.tsx`](slides-app/src/slides/17-method-doc-decision-tree.tsx) (ruleId `MUST-005`, warn) renders the 5-step checklist from 02-spec/17/31 §"Method Documentation" as a horizontal decision tree: Q1 rename? → Skip · Q2 split? → Skip · Q3 restates signature? → Delete · Q4 WHY-or-example? → Keep 1-2 lines · Q5 godoc wired? → One-liner. Default outcome is NO DOC. SRA validator now passes 19 slides.
 
 ### What's new in v5.71.0
 
@@ -1785,7 +1785,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.70.0
 
-- **Spec-first vs code-first PR contrast slide (SS-02 task 18).** New [`slides-app/src/slides/15-spec-first-vs-code-first.tsx`](slides-app/src/slides/15-spec-first-vs-code-first.tsx) (ruleId `MUST-003`, hard) shows two PR payloads side by side: PR #482 (code-first, rejected) touches only `src/`; PR #483 (spec-first, accepted) lands the same code diff alongside a `spec/12-payments/` entry, an `03-issues/` entry, and tests. Makes the failure mode of code-only PRs visible instead of abstract. SRA validator now passes 17 slides.
+- **Spec-first vs code-first PR contrast slide (SS-02 task 18).** New [`slides-app/src/slides/15-spec-first-vs-code-first.tsx`](slides-app/src/slides/15-spec-first-vs-code-first.tsx) (ruleId `MUST-003`, hard) shows two PR payloads side by side: PR #482 (code-first, rejected) touches only `src/`; PR #483 (spec-first, accepted) lands the same code diff alongside a `02-spec/12-payments/` entry, an `03-issues/` entry, and tests. Makes the failure mode of code-only PRs visible instead of abstract. SRA validator now passes 17 slides.
 
 ### What's new in v5.69.0
 
@@ -1793,7 +1793,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.68.0
 
-- **"Must Follow" opener slide (SS-02 task 16).** New [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx) (ruleId `MUST-001`, hard severity) opens the Principles section with the 5 non-negotiables distilled from `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` §Must Follow: read first, one-sentence root cause, minimum correct fix, verify in the logs, ship the trail. Uses `<ActionPanel>` so the SRA structural validator passes; palette search `must-follow` now returns it.
+- **"Must Follow" opener slide (SS-02 task 16).** New [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx) (ruleId `MUST-001`, hard severity) opens the Principles section with the 5 non-negotiables distilled from `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` §Must Follow: read first, one-sentence root cause, minimum correct fix, verify in the logs, ship the trail. Uses `<ActionPanel>` so the SRA structural validator passes; palette search `must-follow` now returns it.
 
 ### What's new in v5.67.0
 
@@ -1854,7 +1854,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.50.0
 
-- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
+- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
 - **New scripts:** `npm run sync:guidelines` (write) and `npm run sync:guidelines:check` (verify, non-zero exit on drift). Closes Plan SS-01 step 4.
 
 ### What's new in v5.49.0
@@ -1864,7 +1864,7 @@ Live spec tree: [`spec/`](spec/) (22 folders) · [`health-dashboard`](spec/healt
 
 ### What's new in v5.45.0
 
-- **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md`](spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md).
+- **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md`](02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md).
 - **Diagram pipeline at full coverage** — all 23 `spec/**/{diagrams,images}/*.mmd` sources now render cleanly via `node scripts/render-diagrams.mjs` (mermaid-cli 11.4.2). Two pre-existing mermaid-v11 parser issues fixed: `;`-as-separator in `seq-incremental-backup.mmd`, and unquoted `@` token in `ci-pipeline-flow.mmd`.
 - **Sole residual −1** = the intentional v2.0 `Backup.Snapshot.Restore.*` freeze, guarded by `MAIN-900-01 SpecContradiction`.
 
@@ -1874,8 +1874,8 @@ Tracks every `.mmd` source change and the parser rule that motivated it. Use thi
 
 | Diagram | Change | Why (mermaid-v11 rule) |
 |---|---|---|
-| [`spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`](spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd) | Replaced `;` inside a sequenceDiagram message (`Advance local cursor; mark envelope Acked` → `Advance local cursor and mark envelope Acked`) | **Semicolon separator rule** — mermaid-v11 treats `;` as a statement terminator even inside message text, splitting one message into two malformed statements. Use `and`, `,`, or `·` instead. |
-| [`spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`](spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd) | Quoted every node label so tokens like `actions/checkout@v6` parse cleanly (`A[actions/checkout@v6]` → `A["actions/checkout@v6"]`) | **Quoting rule for special tokens** — mermaid-v11's flowchart lexer rejects `@`, `:`, `(`, `)`, `/` and other punctuation in unquoted node labels. Always wrap labels containing non-alphanumerics in `"..."`. |
+| [`02-spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`](02-spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd) | Replaced `;` inside a sequenceDiagram message (`Advance local cursor; mark envelope Acked` → `Advance local cursor and mark envelope Acked`) | **Semicolon separator rule** — mermaid-v11 treats `;` as a statement terminator even inside message text, splitting one message into two malformed statements. Use `and`, `,`, or `·` instead. |
+| [`02-spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`](02-spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd) | Quoted every node label so tokens like `actions/checkout@v6` parse cleanly (`A[actions/checkout@v6]` → `A["actions/checkout@v6"]`) | **Quoting rule for special tokens** — mermaid-v11's flowchart lexer rejects `@`, `:`, `(`, `)`, `/` and other punctuation in unquoted node labels. Always wrap labels containing non-alphanumerics in `"..."`. |
 
 > **Pre-render gate:** `npm run diagrams:validate` (lint-ci step 14) parses every `.mmd` against mermaid v11 before PNGs are committed, so future regressions of either rule fail CI instead of slipping through.
 
@@ -1958,10 +1958,10 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 **Fair observation, and intentional:**
 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
-- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`spec/02-coding-guidelines/01-cross-language/01-index.md`](spec/02-coding-guidelines/01-cross-language/01-index.md)** form a < 30-minute on-ramp.
-- For AI: every file in **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
+- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md)** form a < 30-minute on-ramp.
+- For AI: every file in **[`02-spec/17-consolidated-guidelines/`](02-spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
-- **Compact by design:** the consolidated layer is small. **[`spec/17-consolidated-guidelines/`](spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
+- **Compact by design:** the consolidated layer is small. **[`02-spec/17-consolidated-guidelines/`](02-spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
 - **Install just that compact layer** (skip the other 95%) with the dedicated bundle installer:
 
   ```powershell
@@ -2025,10 +2025,10 @@ The result: when an AI agent operates inside a repo following these rules, the g
 ## 🤝 Contributing
 
 1. Pick the correct parent folder (numeric prefix decides position).
-2. Use the [Non-CLI Module Template](spec/01-spec-authoring-guide/05-non-cli-module-template.md) and include `01-index.md` + `99-consistency-report.md`.
+2. Use the [Non-CLI Module Template](02-spec/01-spec-authoring-guide/05-non-cli-module-template.md) and include `01-index.md` + `99-consistency-report.md`.
 3. Bump the version, add a changelog entry, then run `npm run sync` to refresh `version.json`, `specTree.json`, and the README stamps.
-4. Run all local quality gates via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
-5. Pre-warm repository file caches via `python .lovable/ai-fix-scripts/08-fast-file-scanner.py` for sub-millisecond AI file lookups.
+4. Run all local quality gates via `python 03-ai-scripts/03-cicd-local-runner.py`.
+5. Pre-warm repository file caches via `python 03-ai-scripts/08-fast-file-scanner.py` for sub-millisecond AI file lookups.
 
 ---
 
@@ -2074,7 +2074,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 
 ### Compiling & Syncing Prompts
 
-Prompts are authored and maintained directly inside `.lovable/prompts/01-prompts-category/`. To compile and sync structured prompts into the top-level flat prompt directory (`.lovable/prompts/*.md`), run the prompt compilation script:
+Prompts are authored and maintained directly inside `01-prompts/`. To compile and sync structured prompts into the top-level flat prompt directory (`01-prompts/*.md`), run the prompt compilation script:
 
 **Windows (PowerShell)**:
 ```powershell

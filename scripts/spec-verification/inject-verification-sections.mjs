@@ -50,7 +50,7 @@ const VERIFICATION_HEADING = "## Verification";
 const TODAY = new Date().toISOString().slice(0, 10);
 
 function parseArgs(argv) {
-  const args = { root: "spec", dryRun: false, only: null, json: false, mode: "overview-only", strip: false };
+  const args = { root: "02-spec", dryRun: false, only: null, json: false, mode: "overview-only", strip: false };
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--dry-run") args.dryRun = true;
@@ -166,13 +166,13 @@ function replaceOrAppend(content, newSection) {
 function shouldSkip(fullPath, relPath, mode) {
   const base = basename(fullPath).toLowerCase();
   if (SKIP_BASENAMES.has(base)) return true;
-  // Spec-root files (e.g. spec/01-index.md) own their own bespoke
+  // Spec-root files (e.g. 02-02-spec/01-index.md) own their own bespoke
   // verification logic — never touch them.
   if (relPath.split(sep).length === 1) return true;
   // overview-only mode: only touch each folder's 01-index.md.
   if (mode === "overview-only") {
     if (base !== "01-index.md") return true;
-    // Only the top-level overview (e.g. spec/04-database-conventions/01-index.md
+    // Only the top-level overview (e.g. 02-spec/04-database-conventions/01-index.md
     // — depth 2). Skip nested 01-index.md files in subfolders.
     if (relPath.split(sep).length !== 2) return true;
   }

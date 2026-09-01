@@ -8,7 +8,7 @@ Implementation notes:
   - Uses signal.SIGALRM. Linux/macOS only. On Windows the context is a
     no-op (the watchdog already enforces the wall-clock limit).
   - Must not be nested. SIGALRM has only one slot.
-  - Default 2 s aligns with spec/02-coding-guidelines/06-cicd-integration/07-performance.md.
+  - Default 2 s aligns with 02-spec/02-coding-guidelines/06-cicd-integration/07-performance.md.
 """
 
 from __future__ import annotations

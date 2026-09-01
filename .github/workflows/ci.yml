@@ -180,7 +180,7 @@ jobs:
         # Spec: .lovable/memory/constraints/install-command-formatting.md
         run: python3 linter-scripts/check-readme-install-section.py
 
-      - name: Check Lovable prompts loaded (index ↔ .lovable/prompts/* sync)
+      - name: Check Lovable prompts loaded (index ↔ 01-prompts/* sync)
         # Enforces the "read all prompts before generating code" contract
         # from .lovable/coding-guidelines.md by
         # verifying .lovable/prompts.md exists and references every
@@ -188,7 +188,7 @@ jobs:
         run: python3 linter-scripts/check-prompts-loaded.py
 
       - name: Check tunable constants (T1–T4 — single-source-of-truth, seed parity)
-        # Enforces the §6 contract in spec/19-main-worker-service/15-tunable-constants.md:
+        # Enforces the §6 contract in 02-spec/19-main-worker-service/15-tunable-constants.md:
         #   T1 every numeric+unit literal is catalogued or waivered
         #   T2 §2 keys are unique
         #   T3 §4 config.seed.json defaults match §2 catalogue (parity)
@@ -357,7 +357,7 @@ jobs:
       - name: Guard release-install.* against /releases/latest calls
         # Static guard: release-install.sh and release-install.ps1 MUST NOT
         # invoke api.github.com or releases/latest. Per
-        # spec/14-update/25-release-pinned-installer.md they always run in
+        # 02-spec/14-update/25-release-pinned-installer.md they always run in
         # PINNED MODE and resolve the version from CLI / env / baked-in
         # placeholder only.
         run: bash tests/installer/check-no-latest-api.sh
@@ -365,14 +365,14 @@ jobs:
       - name: release-install.sh exit-code acceptance (spec §F + §AC)
         # Verifies failure modes 1 (no version) and 2 (invalid semver)
         # AND the ratified $INSTALLER_VERSION env-var precedence-2 path.
-        # Spec: spec/14-update/25-release-pinned-installer.md §B.2 + §F
+        # Spec: 02-spec/14-update/25-release-pinned-installer.md §B.2 + §F
         run: bash tests/installer/check-release-install-acceptance.sh
 
       - name: release.sh bake-output integration (spec §Release-Time Build Step)
         # Runs ./release.sh end-to-end and asserts the baked
         # release-install.{sh,ps1} have no placeholder, carry the
         # resolved tag, and are listed in checksums.txt.
-        # Spec: spec/14-update/25-release-pinned-installer.md
+        # Spec: 02-spec/14-update/25-release-pinned-installer.md
         run: bash tests/installer/check-release-bake.sh
 
       - name: Bundle installer conformance (14 files, spec §3/§7/§8)
@@ -381,14 +381,14 @@ jobs:
         # --no-main-fallback/--use-local-archive/-h/--help (PS1: -Help
         # bridge) plus EXIT CODES doc and the §7 mode banner, and that
         # no line invokes a network client against /releases/latest.
-        # Spec: spec/14-update/27-generic-installer-behavior.md
+        # Spec: 02-spec/14-update/27-generic-installer-behavior.md
         run: bash tests/installer/check-bundle-installers.sh
 
       - name: Root installer §27 conformance (install.sh / install.ps1 / linters-cicd)
         # Asserts root + linters-cicd installers expose --no-discovery,
         # --no-main-fallback, --offline (--use-local-archive), the §7
         # banner with mode:/source: lines, and the §8 EXIT CODES header.
-        # Spec: spec/14-update/27-generic-installer-behavior.md
+        # Spec: 02-spec/14-update/27-generic-installer-behavior.md
         run: bash tests/installer/check-root-install-acceptance.sh
 
       - name: BOOL-NEG-001 unit tests (linters-cicd)
@@ -598,7 +598,7 @@ jobs:
       - name: Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)
         # Mirror of scripts/lint-ci.sh step 14. Uses node built-ins only,
         # passes when no PNGs exist (adoption is opt-in per
-        # spec/19-main-worker-service/diagrams/readme.md), fails only when
+        # 02-spec/19-main-worker-service/diagrams/readme.md), fails only when
         # a committed *.png is older than its *.mmd source. Closes
         # spec/19 audit-09 §2.2 end-to-end (local + CI parity).
         run: node scripts/render-diagrams.mjs --check
@@ -646,7 +646,7 @@ jobs:
         # >=0.95 READY, >=0.80 WATCH, <0.80 NOT READY. Added in v5.128.
         run: node scripts/tests/branch-protection-soak.test.mjs
       - name: Check coding-guideline mirrors in sync (Hard Rule 13)
-        # Enforces spec/17-.../31-*.md (source) == .lovable/coding-guidelines.md
+        # Enforces 02-spec/17-.../31-*.md (source) == .lovable/coding-guidelines.md
         # and == .cursorrules, byte-for-byte. Missing/stale mirrors are a build-fail
         # per Hard Rule #13 (v5.129), because agent search indexes the mirror,
         # not the spec tree. Added in v5.130.

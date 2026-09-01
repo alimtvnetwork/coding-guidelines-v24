@@ -1,7 +1,7 @@
 # Canonical Folder Structure Specification
 
-> **Target:** `.lovable/folder-structure.md`  
-> **Authority:** Single Source of Truth for `.lovable/` Ecosystem & Repository Organization  
+> **Target:** `.lovable/folder-structure.md`
+> **Authority:** Single Source of Truth for `.lovable/` Ecosystem & Repository Organization
 > **Version:** 4.0.0
 
 This document defines the authoritative canonical structure of the repository, including the `.lovable/` AI metadata layer and the `spec/` specification tree. All AI agents MUST strictly adhere to this architecture when reading, indexing, or writing files.
@@ -10,7 +10,7 @@ This document defines the authoritative canonical structure of the repository, i
 
 ## 1. The `XX-<slug>` Deterministic Prefixing System
 
-To maintain deterministic sorting and avoid ambiguity across operating systems, every file and directory within structured modules (`.lovable/plans/`, `.lovable/prompts/`, `.lovable/ai-fix-scripts/`, `spec/`) MUST follow the two-digit zero-padded numeric prefix:
+To maintain deterministic sorting and avoid ambiguity across operating systems, every file and directory within structured modules (`.lovable/plans/`, `01-prompts/`, `03-ai-scripts/`, `spec/`) MUST follow the two-digit zero-padded numeric prefix:
 
 - **Format:** `XX-<slug-name>.ext` or `XX-<slug-name>/`
 - **Prefix Range:** Starts at `01-` (or `00-` for root configuration indexes) and increments sequentially (`01-`, `02-`, ...).
@@ -122,33 +122,33 @@ The `spec/` directory is organized into numbered tiers:
 
 | Tier | Module Directory | Focus Area |
 |:---:|---|---|
-| **01** | `spec/01-spec-authoring-guide/` | Meta-guide on writing and maintaining specifications |
-| **02** | `spec/02-coding-guidelines/` | Cross-language standards (TypeScript, Go, PHP, Rust, C#) |
-| **03** | `spec/03-error-manage/` | Error envelopes, application errors, and error codes |
-| **04** | `spec/04-database-conventions/` | Database schema conventions, ORM mappings, views |
-| **05** | `spec/05-split-db-architecture/` | Split database pattern (operational vs. config DBs) |
-| **06** | `spec/06-seedable-config-architecture/` | Seedable configuration with versioned changelogs |
-| **07** | `spec/07-design-system/` | Design tokens, component hierarchies, dark mode |
-| **08** | `spec/08-docs-viewer-ui/` | Documentation viewer UI and slide presentation system |
-| **09** | `spec/09-code-block-system/` | Syntax highlighting pipeline and code block copy/run |
-| **10** | `spec/10-research/` | Technology evaluations and benchmark studies |
-| **11** | `spec/11-powershell-integration/` | Cross-platform PowerShell automation standards |
-| **12** | `spec/12-cicd-pipeline-workflows/` | CI/CD workflows, GitHub Actions, and quality gates |
-| **13** | `spec/13-generic-cli/` | Generic CLI UX, exit codes, and flag semantics |
-| **14** | `spec/14-update/` | CLI self-update architecture and release delivery |
-| **15** | `spec/15-distribution-and-runner/` | Cross-platform installers, runners, and forwarding |
-| **16** | `spec/16-generic-release/` | Universal release pipeline blueprint and asset matrices |
-| **17** | `spec/17-consolidated-guidelines/` | Single-file AI summaries of all major spec modules |
-| **18** | `spec/18-wp-plugin-how-to/` | WordPress plugin architecture and REST APIs |
-| **19** | `spec/19-main-worker-service/` | Split-tier worker service and proxy nodes |
-| **21+**| `spec/21-app/` ... `spec/24-app-ui-design-system/` | App-specific workflows, UI components, and domain DBs |
+| **01** | `02-spec/01-spec-authoring-guide/` | Meta-guide on writing and maintaining specifications |
+| **02** | `02-spec/02-coding-guidelines/` | Cross-language standards (TypeScript, Go, PHP, Rust, C#) |
+| **03** | `02-spec/03-error-manage/` | Error envelopes, application errors, and error codes |
+| **04** | `02-spec/04-database-conventions/` | Database schema conventions, ORM mappings, views |
+| **05** | `02-spec/05-split-db-architecture/` | Split database pattern (operational vs. config DBs) |
+| **06** | `02-spec/06-seedable-config-architecture/` | Seedable configuration with versioned changelogs |
+| **07** | `02-spec/07-design-system/` | Design tokens, component hierarchies, dark mode |
+| **08** | `02-spec/08-docs-viewer-ui/` | Documentation viewer UI and slide presentation system |
+| **09** | `02-spec/09-code-block-system/` | Syntax highlighting pipeline and code block copy/run |
+| **10** | `02-spec/10-research/` | Technology evaluations and benchmark studies |
+| **11** | `02-spec/11-powershell-integration/` | Cross-platform PowerShell automation standards |
+| **12** | `02-spec/12-cicd-pipeline-workflows/` | CI/CD workflows, GitHub Actions, and quality gates |
+| **13** | `02-spec/13-generic-cli/` | Generic CLI UX, exit codes, and flag semantics |
+| **14** | `02-spec/14-update/` | CLI self-update architecture and release delivery |
+| **15** | `02-spec/15-distribution-and-runner/` | Cross-platform installers, runners, and forwarding |
+| **16** | `02-spec/16-generic-release/` | Universal release pipeline blueprint and asset matrices |
+| **17** | `02-spec/17-consolidated-guidelines/` | Single-file AI summaries of all major spec modules |
+| **18** | `02-spec/18-wp-plugin-how-to/` | WordPress plugin architecture and REST APIs |
+| **19** | `02-spec/19-main-worker-service/` | Split-tier worker service and proxy nodes |
+| **21+**| `02-spec/21-app/` ... `02-spec/24-app-ui-design-system/` | App-specific workflows, UI components, and domain DBs |
 
 ---
 
 ## 4. Governance & Synchronization Invariants
 
-1. **Strict Relative Paths:** All internal markdown links, citations, and subtask paths MUST use relative paths starting from the repository root (e.g. `.lovable/plans/pending/01-task.md`, `spec/02-coding-guidelines/01-index.md`). Absolute filesystem paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
+1. **Strict Relative Paths:** All internal markdown links, citations, and subtask paths MUST use relative paths starting from the repository root (e.g. `.lovable/plans/pending/01-task.md`, `02-spec/02-coding-guidelines/01-index.md`). Absolute filesystem paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
 2. **Strict Lowercase:** All generated files and directories MUST be lowercase.
-3. **Plurality Invariants:** Always `.lovable/memory/` (singular), `.lovable/plans/` (plural), `.lovable/prompts/` (plural), `.lovable/suggestions/` (plural).
-4. **Mirror Parity:** Every script in `.lovable/ai-fix-scripts/` MUST have an exact mirror in `.agents/scripts/`.
-5. **Quality Gates:** Before concluding any engineering task, execute `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` to confirm all 18 quality checks pass.
+3. **Plurality Invariants:** Always `.lovable/memory/` (singular), `.lovable/plans/` (plural), `01-prompts/` (plural), `.lovable/suggestions/` (plural).
+4. **Mirror Parity:** Every script in `03-ai-scripts/` MUST have an exact mirror in `.agents/scripts/`.
+5. **Quality Gates:** Before concluding any engineering task, execute `python 03-ai-scripts/06-cicd-local-runner.py` to confirm all 18 quality checks pass.

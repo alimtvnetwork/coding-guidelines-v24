@@ -2,7 +2,7 @@
   "repo": "alimtvnetwork/coding-guidelines-v24",
   "branch": "main",
   "folders": [
-    "spec",
+    "02-spec",
     "linters",
     "linter-scripts",
     "linters-cicd",

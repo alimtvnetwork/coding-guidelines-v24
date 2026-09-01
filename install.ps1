@@ -1,15 +1,15 @@
 <#
 .SYNOPSIS
-    Download spec/linters/scripts from a GitHub repo with rich install controls.
+    Download 02-spec/linters/scripts from a GitHub repo with rich install controls.
 
 .DESCRIPTION
-    Conforms to: spec/14-update/27-generic-installer-behavior.md
+    Conforms to: 02-spec/14-update/27-generic-installer-behavior.md
 
     Power-user flags:
       -Repo owner/repo            Override source repo
       -Branch main                Override branch (ignored if -Version given)
       -Version vX.Y.Z             Install a specific release tag (PINNED MODE, §4)
-      -Folders spec,linters       Explicit folder list (subpaths OK: spec/14-update)
+      -Folders spec,linters       Explicit folder list (subpaths OK: 02-spec/14-update)
       -Dest /path               Install destination (default: cwd)
       -ConfigFile my-config.json  Use custom config file
       -Prompt                     Ask before overwriting each existing file (y/n/a/s)
@@ -35,7 +35,7 @@
 
 .EXAMPLE
     .\install.ps1
-    .\install.ps1 -Version v1.22.0 -Folders spec/14-update -Prompt
+    .\install.ps1 -Version v1.22.0 -Folders 02-spec/14-update -Prompt
     .\install.ps1 -DryRun
     irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/install.ps1 | iex
 #>
@@ -258,7 +258,7 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines", ".lovable/what-to-read.md", "version.json") }
+    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("02-spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines", ".lovable/what-to-read.md", "version.json") }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }

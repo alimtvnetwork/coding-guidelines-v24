@@ -6,7 +6,7 @@ escape hatch for queries the builder can't express. The first argument
 MUST be a single string literal; all dynamic values MUST flow through
 the second argument as bound parameters (:name or ? placeholders).
 
-Spec: spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
+Spec: 02-spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
 """
 from __future__ import annotations
 

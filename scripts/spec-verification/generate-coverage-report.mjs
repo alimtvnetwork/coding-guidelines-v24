@@ -54,7 +54,7 @@ const VALID_MODES = ["overview-only", "all-files"];
 
 function parseArgs(argv) {
   const args = {
-    root: "spec",
+    root: "02-spec",
     mode: "overview-only",
     json: false,
     out: null,

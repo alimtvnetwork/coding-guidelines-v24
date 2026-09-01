@@ -55,12 +55,12 @@
       4  verification failed (required artifacts missing after extraction)
       5  inner installer / handoff rejected
 
-    SPEC: spec/14-update/27-generic-installer-behavior.md
+    SPEC: 02-spec/14-update/27-generic-installer-behavior.md
 
     Folder mapping (src in repo → dest under target):
-      spec/04-database-conventions → spec/04-database-conventions
-      spec/05-split-db-architecture → spec/05-split-db-architecture
-      spec/06-seedable-config-architecture → spec/06-seedable-config-architecture
+      02-spec/04-database-conventions → 02-spec/04-database-conventions
+      02-spec/05-split-db-architecture → 02-spec/05-split-db-architecture
+      02-spec/06-seedable-config-architecture → 02-spec/06-seedable-config-architecture
       version.json → version.json
       .lovable/what-to-read.md → .lovable/what-to-read.md
       .lovable/memory → .lovable/memory
@@ -174,7 +174,7 @@ function Stop-Install {
 
 
 $BundleName = "splitdb"
-$BundleMapping = "spec/04-database-conventions|spec/04-database-conventions,spec/05-split-db-architecture|spec/05-split-db-architecture,spec/06-seedable-config-architecture|spec/06-seedable-config-architecture,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory"
+$BundleMapping = "02-spec/04-database-conventions|02-spec/04-database-conventions,02-spec/05-split-db-architecture|02-spec/05-split-db-architecture,02-spec/06-seedable-config-architecture|02-spec/06-seedable-config-architecture,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory"
 $ArchiveStableName = "splitdb"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v24"
@@ -334,10 +334,16 @@ function Copy-Mapping {
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
+        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+            if (Test-Path $destPath) {
+                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
+                continue
+            }
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
-            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+            if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
                 # Inject promptArchitectByRiseupAsia tracking block into target version.json
                 $targetVersionFile = Join-Path $Target "version.json"
                 try {

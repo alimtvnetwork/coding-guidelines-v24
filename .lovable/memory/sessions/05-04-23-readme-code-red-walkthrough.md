@@ -17,7 +17,7 @@
    - Type aliases for common generic Result shapes
 2. **CODE-RED Rules summary section** — 8-row table mapping `CODE-RED-001..023` with the canonical spec link and a quick "where the walkthrough lives" pointer.
 3. **Markdown hierarchy fix** — promoted four `####` headings to `###` after the new `h2` to keep heading levels contiguous (no level skips). Verified balanced code fences (31 pairs) and TOC anchors.
-4. **Spec References index** — 9-row table at the end of the walkthrough indexing every referenced spec/linter file for quick navigation. Fixed broken link for "AI condensed master guidelines" → `spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md`.
+4. **Spec References index** — 9-row table at the end of the walkthrough indexing every referenced spec/linter file for quick navigation. Fixed broken link for "AI condensed master guidelines" → `02-spec/02-coding-guidelines/06-ai-optimization/04-condensed-master-guidelines.md`.
 5. **Sync** — ran `npm run sync` after each version bump to refresh `version.json`, `public/health-score.json`, `src/data/specTree.json`.
 
 ## Files Edited

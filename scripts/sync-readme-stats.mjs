@@ -84,7 +84,7 @@ function buildRegistry(stats, health) {
   // Render the EFFECTIVE (waived) score in the badge — the score that the
   // folder-ref linter actually enforces (gitmap-v3 sibling refs are
   // intentionally not synced per `mem://constraints/avoid-app-sync`).
-  // The raw score remains in spec/health-dashboard.md for full audit trail.
+  // The raw score remains in 02-spec/health-dashboard.md for full audit trail.
   const effScore = health.effectiveScore ?? health.overallScore;
   const effGrade = health.effectiveGrade ?? health.grade;
   const healthLabel = effScore != null
@@ -102,17 +102,17 @@ function buildRegistry(stats, health) {
       href: "llm.md" },
     { id: "languages", row: "platform", enabled: true,
       alt: "Languages", src: "https://img.shields.io/badge/languages-Go%20%7C%20TS%20%7C%20PHP%20%7C%20Rust%20%7C%20C%23-EC4899?style=flat-square",
-      href: "spec/02-coding-guidelines/" },
+      href: "02-spec/02-coding-guidelines/" },
     { id: "platform", row: "platform", enabled: true,
       alt: "Platform", src: "https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-6366F1?style=flat-square",
       href: "#-bundle-installers" },
     { id: "health", row: "platform", enabled: true,
-      alt: "Health Score (effective, waived per folder-ref allowlist; raw=80/100 in spec/health-dashboard.md)",
+      alt: "Health Score (effective, waived per folder-ref allowlist; raw=80/100 in 02-spec/health-dashboard.md)",
       src: `https://img.shields.io/badge/health-${healthLabel}-${healthColor(effScore)}?style=flat-square`,
-      href: "spec/health-dashboard.md" },
+      href: "02-spec/health-dashboard.md" },
     { id: "blind-audit", row: "platform", enabled: true,
       alt: "Blind AI Audit", src: `https://img.shields.io/badge/blind%20AI%20audit-${auditScore}-FF6E3C?style=flat-square`,
-      href: "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md" },
+      href: "02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md" },
     { id: "prs", row: "platform", enabled: true,
       alt: "PRs Welcome", src: "https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square",
       href: "#-contributing" },

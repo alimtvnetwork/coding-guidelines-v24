@@ -10,7 +10,7 @@ Centralizing these here means the SQL and Go scanners cannot drift on
 what counts as a violation or what hint they suggest. Tests in
 ``linters-cicd/tests/test_boolean_naming_lib.py`` lock the contract.
 
-Spec: spec/04-database-conventions/03-naming-conventions.md  Rules 2, 8, 9
+Spec: 02-spec/04-database-conventions/03-naming-conventions.md  Rules 2, 8, 9
 """
 
 from __future__ import annotations

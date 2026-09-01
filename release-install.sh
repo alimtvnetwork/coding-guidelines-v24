@@ -7,7 +7,7 @@
 # (baked at release time) or the version explicitly passed via
 # --version.
 #
-# Spec: spec/14-update/25-release-pinned-installer.md
+# Spec: 02-spec/14-update/25-release-pinned-installer.md
 #
 # Quick start:
 #   curl -fsSL https://github.com/<owner>/<repo>/releases/download/vX.Y.Z/release-install.sh | bash
@@ -25,7 +25,7 @@
 #   2  invalid version string (semver regex failed)
 #   3  pinned release / asset not found (404)
 #   4  verification failed (raised by the inner installer; see
-#      spec/14-update/27-generic-installer-behavior.md §8)
+#      02-spec/14-update/27-generic-installer-behavior.md §8)
 #   5  inner installer rejected pinning handshake
 # ──────────────────────────────────────────────────────────────────────
 
@@ -125,8 +125,8 @@ EXIT CODES (spec §8 + release-install §4 details)
   5  inner installer rejected the pinning handshake
 
 SPEC
-  spec/14-update/25-release-pinned-installer.md  (this script)
-  spec/14-update/27-generic-installer-behavior.md (§3, §4, §7, §8)
+  02-spec/14-update/25-release-pinned-installer.md  (this script)
+  02-spec/14-update/27-generic-installer-behavior.md (§3, §4, §7, §8)
 HELP
   exit 0
 }

@@ -11,17 +11,17 @@
 CI fails with:
 
 ```
-[missing-file] spec/26-spec-outsides/09-pipeline/10-known-issues-and-fixes.md:347
-  text:   spec/17-consolidated-guidelines/16-cicd.md
+[missing-file] 02-spec/26-spec-outsides/09-pipeline/10-known-issues-and-fixes.md:347
+  text:   02-spec/17-consolidated-guidelines/16-cicd.md
   target: ../12-consolidated-guidelines/16-cicd.md
-  detail: .../spec/26-spec-outsides/12-consolidated-guidelines/16-cicd.md
+  detail: .../02-spec/26-spec-outsides/12-consolidated-guidelines/16-cicd.md
 ```
 
 …plus several similar errors for `../01-app/...`, `../02-app-issues/...`.
 
 ## Root Cause
 
-The link checker resolves relative paths from the **referencing file's parent directory**, not from the spec root. A link `../12-consolidated-guidelines/16-cicd.md` written inside `spec/26-spec-outsides/09-pipeline/...` resolves to `spec/26-spec-outsides/12-consolidated-guidelines/16-cicd.md` — which does not exist.
+The link checker resolves relative paths from the **referencing file's parent directory**, not from the spec root. A link `../12-consolidated-guidelines/16-cicd.md` written inside `02-spec/26-spec-outsides/09-pipeline/...` resolves to `02-spec/26-spec-outsides/12-consolidated-guidelines/16-cicd.md` — which does not exist.
 
 The author intended a repo-root-relative path.
 

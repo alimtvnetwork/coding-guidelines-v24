@@ -24,7 +24,7 @@ repository's `version.json`, via a required `promptArchitectByRiseupAsia` block.
 
 ### D2 — Installer smart-merge update (generate-bundle-installers.mjs)
 
-- [x] Bash installer: inject `promptArchitectByRiseupAsia` block when copying `.lovable/prompts/`
+- [x] Bash installer: inject `promptArchitectByRiseupAsia` block when copying `01-prompts/`
 - [x] PowerShell installer: same
 - [x] Both must read `prompt-sync-config.json` mappings to build `fileMapping` array
 - [x] Must NOT overwrite existing `promptArchitectByRiseupAsia` block — only add/update

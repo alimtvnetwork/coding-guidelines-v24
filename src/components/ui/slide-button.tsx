@@ -43,7 +43,7 @@ export interface SlideButtonProps
  * the hover text slides up from below. Pure CSS3 transitions,
  * no JS animation libraries.
  *
- * @see spec/06-design-system/11-button-system.md
+ * @see 02-spec/06-design-system/11-button-system.md
  */
 const SlideButton = React.forwardRef<HTMLButtonElement, SlideButtonProps>(
   ({ className, variant, size, defaultText, hoverText, ...props }, ref) => {

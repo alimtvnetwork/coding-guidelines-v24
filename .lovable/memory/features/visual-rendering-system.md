@@ -8,7 +8,7 @@
 
 ## Overview
 
-Complete reference for how the docs viewer renders markdown content visually. Covers tree structures, code blocks, heading animations, inline elements, and the TOC scroll-spy system. Full specification at `spec/08-docs-viewer-ui/02-features/07-visual-rendering-guide.md`.
+Complete reference for how the docs viewer renders markdown content visually. Covers tree structures, code blocks, heading animations, inline elements, and the TOC scroll-spy system. Full specification at `02-spec/08-docs-viewer-ui/02-features/07-visual-rendering-guide.md`.
 
 ---
 
@@ -87,8 +87,8 @@ Complete reference for how the docs viewer renders markdown content visually. Co
 
 | Reference | Location |
 |-----------|----------|
-| Full Spec | `spec/08-docs-viewer-ui/02-features/07-visual-rendering-guide.md` |
-| Theme Spec | `spec/08-docs-viewer-ui/02-features/06-ui-theme-animations.md` |
+| Full Spec | `02-spec/08-docs-viewer-ui/02-features/07-visual-rendering-guide.md` |
+| Theme Spec | `02-spec/08-docs-viewer-ui/02-features/06-ui-theme-animations.md` |
 | CSS Source | `src/index.css` |
 | Monaco Editor | `src/components/MonacoMarkdownEditor.tsx` |
 | Split View | `src/pages/DocsViewerComponents.tsx` |

@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 40: Verify both directions before shipping an integration.
  *
- * Source: spec/17/31 line 78. Curl the backend AND inspect the
+ * Source: 02-spec/17/31 line 78. Curl the backend AND inspect the
  * frontend detection logic. One side is not enough.
  */
 
@@ -53,7 +53,7 @@ export default function VerifyBothDirectionsSlide() {
         <ActionPanel
           slideId="38-verify-both-directions"
           symptom="A ticket says checkout is broken. The backend author says `curl /api/orders` returns 200. The frontend author says the spinner resolves. Both are technically correct, but the backend renamed `id` to `orderId` and the frontend still reads `.id`, so users see an empty list. Nobody ran BOTH sides on the same payload before merging, so the contract mismatch shipped with no error and no log line."
-          rule="Before marking any integration ticket done, produce three artifacts on the SAME payload and attach them to the PR: (1) a `curl` command with the actual request id and the raw response body, (2) the frontend parsing code path with a runtime assertion on the specific field names the UI reads, and (3) a screenshot of the rendered UI showing the value. Backend-only verification is not verification. Frontend-only verification is not verification. Per spec/17/31 line 78."
+          rule="Before marking any integration ticket done, produce three artifacts on the SAME payload and attach them to the PR: (1) a `curl` command with the actual request id and the raw response body, (2) the frontend parsing code path with a runtime assertion on the specific field names the UI reads, and (3) a screenshot of the rendered UI showing the value. Backend-only verification is not verification. Frontend-only verification is not verification. Per 02-spec/17/31 line 78."
           doThis="Add a PR template checkbox: `Integration verified both directions (curl output + frontend field assertion + UI screenshot attached)`. For each integration PR, paste the curl command with `x-request-id`, paste the raw response, link the exact frontend line that reads each field, and attach the UI screenshot. Reviewers reject PRs that have only one side. For long-lived integrations, keep a tiny `scripts/verify/<name>.sh` that runs the curl and prints the assertion, so the next author can re-verify in one command."
         />
       </div>

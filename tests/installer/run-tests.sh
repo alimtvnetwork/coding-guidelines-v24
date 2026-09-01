@@ -3,7 +3,7 @@
 # run-tests.sh — installer behavior test harness.
 #
 # Verifies the two normative properties from
-# spec/14-update/27-generic-installer-behavior.md:
+# 02-spec/14-update/27-generic-installer-behavior.md:
 #
 #   T1 (PINNED) — when --version is supplied and the release archive
 #                 404s, the installer MUST exit non-zero and MUST NOT

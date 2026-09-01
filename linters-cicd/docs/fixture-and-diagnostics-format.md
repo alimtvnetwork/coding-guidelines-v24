@@ -294,7 +294,7 @@ Top-level shape (abbreviated):
               "id": "TEMPLATE-001",
               "name": "LeftoverDebugCall",
               "shortDescription": { "text": "Remove var_dump() / print_r() / error_log() debug calls before merging to main." },
-              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/spec/02-coding-guidelines/02-coding-guidelines/06-cicd-integration/02-plugin-model.md"
+              "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/02-spec/02-coding-guidelines/02-coding-guidelines/06-cicd-integration/02-plugin-model.md"
             }
           ]
         }
@@ -509,7 +509,7 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .
 
 - Starter kit: [`linters-cicd/checks/_template/readme.md`](../checks/_template/readme.md)
 - Pack overview: [`linters-cicd/readme.md`](../readme.md)
-- SARIF contract: `spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md`
-- Plugin model:   `spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md`
-- Performance:    `spec/02-coding-guidelines/06-cicd-integration/07-performance.md`
-- FAQ:            `spec/02-coding-guidelines/06-cicd-integration/98-faq.md`
+- SARIF contract: `02-spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md`
+- Plugin model:   `02-spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md`
+- Performance:    `02-spec/02-coding-guidelines/06-cicd-integration/07-performance.md`
+- FAQ:            `02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md`

@@ -1,9 +1,9 @@
 # Main + Worker Service Spec — AI-Blind Implementation Readiness
 
 **Date:** 2026-05-07
-**Subject:** `spec/19-main-worker-service/` (28 numbered chapters + 4 meta + audit/diagrams/images/fixtures)
+**Subject:** `02-spec/19-main-worker-service/` (28 numbered chapters + 4 meta + audit/diagrams/images/fixtures)
 **Project version at audit:** v5.45.0
-**Predecessor audits:** `spec/19-main-worker-service/audit/06-` … `15-` (most recent: `15-blind-ai-readiness-2026-05-07-v6.md`, **99/100**)
+**Predecessor audits:** `02-spec/19-main-worker-service/audit/06-` … `15-` (most recent: `15-blind-ai-readiness-2026-05-07-v6.md`, **99/100**)
 **Audited by:** Lovable AI gap-analysis pass — mediocre/literal-AI persona
 **Persona modeled:** the *dumbest plausible AI coder* — never asks, picks the first matching rule, treats `MUST` as hard-fail and `SHOULD` as ignored, cannot reconcile contradictions, cannot infer omissions.
 

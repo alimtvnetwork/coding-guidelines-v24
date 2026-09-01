@@ -8,9 +8,9 @@ description: >-
 
 Trigger Keywords & Aliases: `fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`, `cicd fix`
 
-/goal Autonomously diagnose, update or create the local Python CI/CD runner script (`.lovable/ai-fix-scripts/06-cicd-local-runner.py`) from repository workflows or screenshot pipeline names, and fix all failures by executing a singly-done self-looping sequence (zeroing in on one failure at a time) until the runner exits with code 0 without stopping.
+/goal Autonomously diagnose, update or create the local Python CI/CD runner script (`03-ai-scripts/06-cicd-local-runner.py`) from repository workflows or screenshot pipeline names, and fix all failures by executing a singly-done self-looping sequence (zeroing in on one failure at a time) until the runner exits with code 0 without stopping.
 
-/learn Ingest recent RCAs from `.lovable/cicd-issues/`, `.lovable/issues/`, `spec/02-coding-guidelines/02-canonical-size-tier.md`, `spec/02-coding-guidelines/01-cross-language/01-index.md`, `spec/02-coding-guidelines/01-cross-language/01-index.md`, and `spec/03-error-manage/` before touching any code so past mistakes are never repeated.
+/learn Ingest recent RCAs from `.lovable/cicd-issues/`, `.lovable/issues/`, `02-spec/02-coding-guidelines/02-canonical-size-tier.md`, `02-spec/02-coding-guidelines/01-cross-language/01-index.md`, `02-spec/02-coding-guidelines/01-cross-language/01-index.md`, and `02-spec/03-error-manage/` before touching any code so past mistakes are never repeated.
 
 ---
 
@@ -34,13 +34,13 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 >
 > 1. **In-Codebase Execution Only:** Whenever a Python script (runner, autofixer, linter, test aggregator) is executed or created, it MUST be executed **strictly within the repository root** (current working directory), NEVER outside the codebase or against external arbitrary directories.
 > 2. **Strict Folder Bounding (`.lovable/`):** All AI scripts, local runners, autofixers, helper utilities, memory issue logs, and planning files MUST be created inside the `.lovable/` folder:
->    - Python AI Scripts: `.lovable/ai-fix-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`).
+>    - Python AI Scripts: `03-ai-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`).
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines.md`.
-> 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
+> 3. **Strict Relative Git Paths (TOTAL BAN on Absolute Paths / `file:///` URIs):** All file paths, markdown links, citations, and subtask paths inside plans, RCA logs (`.lovable/memory/issues/`), scripts, and code comments MUST be strictly relative paths from the git root (e.g., `02-spec/03-error-manage/01-index.md`, `.lovable/plans/01-index.md`, `cmd/main.go`). NEVER write absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`).
 >    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
->    - ✅ **GOOD:** `[SSH Commands](spec/13-generic-cli/01-index.md)`
+>    - ✅ **GOOD:** `[SSH Commands](02-spec/13-generic-cli/01-index.md)`
 > 4. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 > 5. **Cross-Platform Python CI Mandate (TOTAL BAN on new `.sh` scripts in CI):** All newly created or refactored CI/CD verification tools, determinism checks, fixtures, and linter jobs MUST be implemented in pure, cross-platform Python (`.py`). Legacy `.sh` scripts must be converted to `.py` scripts so all pipelines run natively across Linux, macOS, and Windows without relying on bash emulation.
 
@@ -51,7 +51,7 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 > [!IMPORTANT]
 > **If the user provides any image or screenshot showing a CI/CD pipeline name, failing workflow, or error log:**
 >
-> 1. **FIRST ACTION — Update Python Runner:** Locate the pipeline/job in `.github/workflows/*.yml` (or repo CI configs) to find whatever new jobs, steps, or linters were added, and **immediately update `.lovable/ai-fix-scripts/06-cicd-local-runner.py`** to include them in the `JOBS` dictionary.
+> 1. **FIRST ACTION — Update Python Runner:** Locate the pipeline/job in `.github/workflows/*.yml` (or repo CI configs) to find whatever new jobs, steps, or linters were added, and **immediately update `03-ai-scripts/06-cicd-local-runner.py`** to include them in the `JOBS` dictionary.
 > 2. **SECOND ACTION — Singly-Done Self-Loop Execution:** Run the Python script iteratively, zeroing in on one failing error at a time using strictly bounded self-loop turns until all checks exit with code 0 (`exit 0`).
 
 ### Bounded Single-Step Self-Loop Sequence (Singly Done — No Overloaded Steps)
@@ -63,12 +63,12 @@ Every step must be **singly done** using bounded self-looping turns:
   2. Scan `.github/workflows/*.yml` to identify the corresponding shell commands and dependencies.
 
 - **Self-Loop Step 2 (FIRST ACTION: Update Python Runner Script):**
-  1. Open `.lovable/ai-fix-scripts/06-cicd-local-runner.py`.
+  1. Open `03-ai-scripts/06-cicd-local-runner.py`.
   2. If new jobs/steps are found in workflows, strip Docker wrappers and register the new commands in the `JOBS` dictionary.
   3. Save the runner script and verify syntax.
 
 - **Self-Loop Step 3 (Execute Runner & Baseline Failures):**
-  1. Run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
+  1. Run `python 03-ai-scripts/06-cicd-local-runner.py`.
   2. If exit code = 0, proceed to End of Tunnel. If exit code != 0, zero in on the first specific failure.
 
 - **Self-Loop Step 4 (RCA & Zero In on Error):**
@@ -77,10 +77,10 @@ Every step must be **singly done** using bounded self-looping turns:
 
 - **Self-Loop Step 5 (Surgical Code Fix):**
   1. Open the specific file and line, apply minimal surgical fix.
-  2. Run `python .lovable/ai-fix-scripts/05-guideline-autofixer.py <modified-files>`.
+  2. Run `python 03-ai-scripts/05-guideline-autofixer.py <modified-files>`.
 
 - **Self-Loop Step 6 (Re-Verify & Loop):**
-  1. Re-run `python .lovable/ai-fix-scripts/06-cicd-local-runner.py`.
+  1. Re-run `python 03-ai-scripts/06-cicd-local-runner.py`.
   2. If resolved and more errors remain, self-loop to Step 4 to zero in on the next error until exit code = 0.
 
 ---
@@ -88,12 +88,12 @@ Every step must be **singly done** using bounded self-looping turns:
 ## Phase 1: Local Runner Script Generation (Steps 1 to PHASE_1_STEPS)
 
 > [!IMPORTANT]
-> **This phase is dedicated ONLY to creating `.lovable/ai-fix-scripts/06-cicd-local-runner.py`.**
+> **This phase is dedicated ONLY to creating `03-ai-scripts/06-cicd-local-runner.py`.**
 > Do NOT fix code in this phase. Read, understand, and generate the script.
 
 ### Step 1: Check for Existing Script & Force Override
 
-- Check if `.lovable/ai-fix-scripts/06-cicd-local-runner.py` already exists.
+- Check if `03-ai-scripts/06-cicd-local-runner.py` already exists.
 - **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script from scratch**, regardless of whether the file already exists on disk.
 - If it EXISTS and the user did **not** say `force`: skip to Phase 2.
 - If MISSING or `force` was requested: execute Steps 2–4 for up to PHASE_1_STEPS iterations.
@@ -108,7 +108,7 @@ Spend up to PHASE_1_STEPS self-loop iterations reading in this order:
    - Azure Pipelines: `azure-pipelines.yml`
    - Bitbucket: `bitbucket-pipelines.yml`
    - CircleCI: `.circleci/config.yml`
-   - Custom runners: `Makefile`, `.lovable/ai-fix-scripts/06-cicd-local-runner.py`, `run.sh`, `run.ps1`
+   - Custom runners: `Makefile`, `03-ai-scripts/06-cicd-local-runner.py`, `run.sh`, `run.ps1`
 2. **Language configuration:** `.nvmrc`, `.python-version`, `go.mod`, `pyproject.toml`, `tsconfig.json`, lockfiles
 3. **For every CI/CD job, record:**
    - `runs-on` image (e.g., `ubuntu-latest`, `node:20-alpine`)
@@ -130,7 +130,7 @@ The host machine IS the Docker container. Strip all Docker wrappers:
 
 ### Step 4: Write `06-cicd-local-runner.py` (Worker Pool & Log Aggregation Architecture)
 
-Generate `.lovable/ai-fix-scripts/06-cicd-local-runner.py` that:
+Generate `03-ai-scripts/06-cicd-local-runner.py` that:
 
 1. **Round-Robin Worker Process / Thread Pool Architecture:** Runs tasks (tests, linters, builds) concurrently using `concurrent.futures.ThreadPoolExecutor(max_workers=3)` (2–3 concurrent tasks).
 2. **Enqueuing Announcement:** The script MUST announce upfront how many tasks it has enqueued across the worker pool (e.g. `[INFO] Enqueued 20 quality gates across 3 concurrent workers...`).
@@ -145,7 +145,7 @@ Generate `.lovable/ai-fix-scripts/06-cicd-local-runner.py` that:
 #!/usr/bin/env python3
 """Auto-generated CI/CD local runner with concurrent worker pool and log aggregation.
 Do not edit manually. Re-generate by running:
-python .lovable/ai-fix-scripts/06-cicd-local-runner.py --rebuild
+python 03-ai-scripts/06-cicd-local-runner.py --rebuild
 """
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeout
 import os
@@ -271,7 +271,7 @@ STEP = 0
 WHILE (STEP < PHASE_2_STEPS):
     STEP += 1
 
-    1. Run: python .lovable/ai-fix-scripts/06-cicd-local-runner.py
+    1. Run: python 03-ai-scripts/06-cicd-local-runner.py
     2. Capture exit_code and full output.
 
     IF exit_code == 0:
@@ -281,7 +281,7 @@ WHILE (STEP < PHASE_2_STEPS):
         3. Parse failure: identify exact failing job, error message, file, and line.
         4. Document 4-part RCA in .lovable/memory/issues/XX-<slug>.md
         5. Apply the minimal surgical code fix.
-        6. Run: python .lovable/ai-fix-scripts/05-guideline-autofixer.py <modified-files>
+        6. Run: python 03-ai-scripts/05-guideline-autofixer.py <modified-files>
         7. Loop immediately to step 1. DO NOT stop.
 
 IF STEP >= PHASE_2_STEPS AND exit_code != 0:
@@ -338,7 +338,7 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 ## End of Tunnel Checklist
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
-- [ ] `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
+- [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0.
 - [ ] All failures documented in `.lovable/memory/issues/XX-<slug>.md`.
 - [ ] Changes committed: `fix(ci): resolve <summary>`.
 - [ ] Pushed to the current branch.

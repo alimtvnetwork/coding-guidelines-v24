@@ -55,17 +55,18 @@
       4  verification failed (required artifacts missing after extraction)
       5  inner installer / handoff rejected
 
-    SPEC: spec/14-update/27-generic-installer-behavior.md
+    SPEC: 02-spec/14-update/27-generic-installer-behavior.md
 
     Folder mapping (src in repo → dest under target):
-      spec/01-spec-authoring-guide → spec/01-spec-authoring-guide
-      spec/03-error-manage → spec/03-error-manage
-      spec/17-consolidated-guidelines → spec/17-consolidated-guidelines
+      02-spec/01-spec-authoring-guide → 02-spec/01-spec-authoring-guide
+      02-spec/03-error-manage → 02-spec/03-error-manage
+      02-spec/17-consolidated-guidelines → 02-spec/17-consolidated-guidelines
       version.json → version.json
       .lovable/what-to-read.md → .lovable/what-to-read.md
       .lovable/memory → .lovable/memory
-      .lovable/coding-guidelines → .lovable/coding-guidelines
-      .lovable/prompts → .lovable/prompts
+      .lovable/coding-guidelines.md → .lovable/coding-guidelines.md
+      01-prompts → 01-prompts
+      03-ai-scripts → 03-ai-scripts
       .lovable/plans → .lovable/plans
       .lovable/issues → .lovable/issues
       .lovable/cicd-issues → .lovable/cicd-issues
@@ -182,7 +183,7 @@ function Stop-Install {
 
 
 $BundleName = "consolidated"
-$BundleMapping = "spec/01-spec-authoring-guide|spec/01-spec-authoring-guide,spec/03-error-manage|spec/03-error-manage,spec/17-consolidated-guidelines|spec/17-consolidated-guidelines,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory,.lovable/coding-guidelines|.lovable/coding-guidelines,.lovable/prompts|.lovable/prompts,.lovable/plans|.lovable/plans,.lovable/issues|.lovable/issues,.lovable/cicd-issues|.lovable/cicd-issues,.agents/skills|.agents/skills,.agents/scripts|.agents/scripts,.lovable/strictly-avoid.md|.lovable/strictly-avoid.md"
+$BundleMapping = "02-spec/01-spec-authoring-guide|02-spec/01-spec-authoring-guide,02-spec/03-error-manage|02-spec/03-error-manage,02-spec/17-consolidated-guidelines|02-spec/17-consolidated-guidelines,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory,.lovable/coding-guidelines.md|.lovable/coding-guidelines.md,01-prompts|01-prompts,03-ai-scripts|03-ai-scripts,.lovable/plans|.lovable/plans,.lovable/issues|.lovable/issues,.lovable/cicd-issues|.lovable/cicd-issues,.agents/skills|.agents/skills,.agents/scripts|.agents/scripts,.lovable/strictly-avoid.md|.lovable/strictly-avoid.md"
 $ArchiveStableName = "consolidated"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v24"
@@ -342,10 +343,16 @@ function Copy-Mapping {
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
+        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+            if (Test-Path $destPath) {
+                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
+                continue
+            }
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
-            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+            if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
                 # Inject promptArchitectByRiseupAsia tracking block into target version.json
                 $targetVersionFile = Join-Path $Target "version.json"
                 try {

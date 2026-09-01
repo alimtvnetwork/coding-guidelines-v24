@@ -1,7 +1,7 @@
 name: Validate version.json
 
 # Enforces the PascalCase schema in
-# spec/01-spec-authoring-guide/17-version-schema.md.
+# 02-spec/01-spec-authoring-guide/17-version-schema.md.
 # Fails the build when version.json is missing required keys, has an
 # invalid Author.Role, or is otherwise out of contract.
 

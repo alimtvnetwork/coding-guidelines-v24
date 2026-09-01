@@ -3,7 +3,7 @@
     linters-cicd installer (one-liner)
 
 .DESCRIPTION
-    Conforms to: spec/14-update/27-generic-installer-behavior.md
+    Conforms to: 02-spec/14-update/27-generic-installer-behavior.md
 
       irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 
@@ -47,7 +47,7 @@ function Show-Usage {
 ============================================================
 linters-cicd installer (one-liner)
 
-Conforms to: spec/14-update/27-generic-installer-behavior.md
+Conforms to: 02-spec/14-update/27-generic-installer-behavior.md
 
   irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.ps1 | iex
 

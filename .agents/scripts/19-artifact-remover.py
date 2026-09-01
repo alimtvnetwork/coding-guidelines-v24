@@ -9,22 +9,22 @@ directly from 02-shared-engine.py as the single source of truth.
 
 Usage:
   # 1. Preview specific file or glob pattern
-  python .lovable/ai-fix-scripts/19-artifact-remover.py tests/visual/baselines/plan69/run.png --dry-run
+  python 03-ai-scripts/19-artifact-remover.py tests/visual/baselines/plan69/run.png --dry-run
 
   # 2. Remove specific file with interactive confirmation
-  python .lovable/ai-fix-scripts/19-artifact-remover.py tests/visual/baselines/plan69/run.png
+  python 03-ai-scripts/19-artifact-remover.py tests/visual/baselines/plan69/run.png
 
   # 3. Clean all pycache and test cache artifacts
-  python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-pycache [--force]
+  python 03-ai-scripts/19-artifact-remover.py --clean-pycache [--force]
 
   # 4. Clean temporary files (.tmp, .log, .swp, .bak, .DS_Store)
-  python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-temp [--force]
+  python 03-ai-scripts/19-artifact-remover.py --clean-temp [--force]
 
   # 5. Clean unapproved binary files and blobs
-  python .lovable/ai-fix-scripts/19-artifact-remover.py --clean-binaries [--force]
+  python 03-ai-scripts/19-artifact-remover.py --clean-binaries [--force]
 
   # 6. Add custom paths, extensions, or glob patterns dynamically
-  python .lovable/ai-fix-scripts/19-artifact-remover.py --add-path build/,dist/ --add-ext .tmp,.log --force
+  python 03-ai-scripts/19-artifact-remover.py --add-path build/,dist/ --add-ext .tmp,.log --force
 """
 
 import argparse

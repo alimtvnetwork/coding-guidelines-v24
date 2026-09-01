@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 38: Log-level severity map.
  *
- * Source: spec/17/31 line 76. Five levels, strict semantics.
+ * Source: 02-spec/17/31 line 76. Five levels, strict semantics.
  * debug = trace, info = lifecycle, warn = recoverable,
  * error = user-visible failure, fatal = process exit only.
  */
@@ -60,7 +60,7 @@ export default function LogLevelSeveritySlide() {
         <ActionPanel
           slideId="36-log-level-severity"
           symptom="The error dashboard shows 40k events per hour, 95 percent are successful retries or lifecycle chatter. On-call has muted the channel, so when the payment worker actually died last Tuesday nobody saw the fatal for 90 minutes. New engineers copy whatever level the nearest line used, so calibration drifts further every sprint."
-          rule="Pick the level by asking: what should a human do about this log line? Nothing, that is `debug`. Just know it happened, that is `info`. Retry worked but keep an eye on it, that is `warn`. A user saw a failure or a request did not complete, that is `error`. The process is about to exit and on-call should be paged, that is `fatal`. Fatal is followed by process termination, always. Per spec/17/31 line 76."
+          rule="Pick the level by asking: what should a human do about this log line? Nothing, that is `debug`. Just know it happened, that is `info`. Retry worked but keep an eye on it, that is `warn`. A user saw a failure or a request did not complete, that is `error`. The process is about to exit and on-call should be paged, that is `fatal`. Fatal is followed by process termination, always. Per 02-spec/17/31 line 76."
           doThis="Add the five-line severity map to `src/lib/logger.ts` as a top-of-file comment so every author sees it. In code review, reject any `log.error` where a retry succeeded, any `log.warn` for startup or shutdown, any `log.fatal` that is not immediately followed by `process.exit` or an unrecoverable crash. Sweep the current codebase once with `rg 'log\\.(warn|error|fatal)'` and re-calibrate the top 20 noisiest sites first."
         />
       </div>

@@ -117,7 +117,7 @@ export interface SlideEntry {
   section: SlideSection;
   /** Optional severity; set for rule slides so `RuleBadge` can render it. */
   severity?: RuleSeverityType;
-  /** Optional rule id from `spec/17/31`, e.g. "NAM-001". */
+  /** Optional rule id from `02-spec/17/31`, e.g. "NAM-001". */
   ruleId?: string;
   /**
    * Optional max sub-step index for staged reveals. When set to N, the slide
@@ -207,7 +207,7 @@ export const DECK: readonly SlideEntry[] = [
   { id: "05-logging", title: "Structured logging", section: "errors", severity: "warn", ruleId: "ERR-002", tags: ["observability", "log", "context", "surface errors"], component: StructuredLogging },
   { id: "06-magic-strings", title: "Magic strings", section: "errors", severity: "hard", ruleId: "ERR-003", tags: ["constants", "enum", "literals"], component: MagicStrings },
 
-  { id: "10-spec-first", title: "Spec-first workflow", section: "workflow", severity: "style", ruleId: "WF-001", tags: ["spec", "process", "planning"], component: SpecFirst },
+  { id: "10-spec-first", title: "Spec-first workflow", section: "workflow", severity: "style", ruleId: "WF-001", tags: ["02-spec", "process", "planning"], component: SpecFirst },
   { id: "11-cache-invalidation", title: "Cache invalidation", section: "workflow", severity: "warn", ruleId: "WF-002", tags: ["cache", "ttl", "invalidate", "keys"], component: CacheInvalidation },
   { id: "60-test-pyramid", title: "Test pyramid", section: "workflow", severity: "hard", ruleId: "WF-003", tags: ["tests", "unit", "integration", "e2e", "pyramid"], component: TestPyramid },
   { id: "61-pr-template", title: "PR template", section: "workflow", severity: "hard", ruleId: "WF-004", tags: ["pr", "template", "checklist", "review"], component: PrTemplate },

@@ -55,7 +55,7 @@
       4  verification failed (required artifacts missing after extraction)
       5  inner installer / handoff rejected
 
-    SPEC: spec/14-update/27-generic-installer-behavior.md
+    SPEC: 02-spec/14-update/27-generic-installer-behavior.md
 
     Folder mapping (src in repo → dest under target):
       linters → linters
@@ -333,10 +333,16 @@ function Copy-Mapping {
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
+        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+            if (Test-Path $destPath) {
+                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
+                continue
+            }
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
-            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+            if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
                 # Inject promptArchitectByRiseupAsia tracking block into target version.json
                 $targetVersionFile = Join-Path $Target "version.json"
                 try {

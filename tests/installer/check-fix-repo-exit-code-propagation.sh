@@ -2,7 +2,7 @@
 # Verifies run.sh (and run.ps1 if pwsh available) propagate fix-repo's
 # non-zero exit code unchanged to the caller.
 #
-# Spec: spec/15-distribution-and-runner/06-fix-repo-forwarding.md
+# Spec: 02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"

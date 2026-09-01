@@ -12,7 +12,7 @@ The `specTree.json` data file stored markdown content with **3 backticks** (````
 
 ### Affected File
 
-- `spec/01-spec-authoring-guide/06-cli-module-template.md` — contains a `````markdown` block (4 backticks) wrapping a template that itself contains ``` blocks (3 backticks).
+- `02-spec/01-spec-authoring-guide/06-cli-module-template.md` — contains a `````markdown` block (4 backticks) wrapping a template that itself contains ``` blocks (3 backticks).
 
 ### Why the Parser Logic Was Correct
 
@@ -58,5 +58,5 @@ When updating `specTree.json` content, always read from the source `.md` file ra
 | Markdown parser pipeline | `src/components/markdown/markdownParser.ts` |
 | Checklist builder | `src/components/markdown/checklistBuilder.ts` |
 | Spec data source | `src/data/specTree.json` |
-| CLI module template | `spec/01-spec-authoring-guide/06-cli-module-template.md` |
-| Visual rendering guide | `spec/08-docs-viewer-ui/02-features/07-visual-rendering-guide.md` |
+| CLI module template | `02-spec/01-spec-authoring-guide/06-cli-module-template.md` |
+| Visual rendering guide | `02-spec/08-docs-viewer-ui/02-features/07-visual-rendering-guide.md` |

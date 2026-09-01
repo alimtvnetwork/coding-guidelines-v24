@@ -7,7 +7,7 @@ import { CodeDiff } from "@/components/CodeDiff";
  * reducer state, action, context value, and function argument bag gets a
  * named type or interface.
  *
- * Source: spec/17/31 line 109.
+ * Source: 02-spec/17/31 line 109.
  */
 
 const BEFORE = `// Tuples everywhere. Positional. Anonymous. Fragile.
@@ -54,7 +54,7 @@ export default function NoTuplesAsPublicShapesSlide() {
     <SlideLayout
       eyebrow="Rule 57 · TypeScript · no tuples as public shapes"
       title="Tuples are laziness in a trench coat. Every hook return, prop bundle, reducer state, reducer action, context value, and argument bag gets a name."
-      subtitle="spec/17/31 line 109: no tuples as public shapes. If a value has two or more fields or gets destructured at the call site, it needs a name. `useUser(): [User, boolean, Error]` is wrong; `useUser(): UserQueryResult` with `{ user, isLoading, error }` is right."
+      subtitle="02-spec/17/31 line 109: no tuples as public shapes. If a value has two or more fields or gets destructured at the call site, it needs a name. `useUser(): [User, boolean, Error]` is wrong; `useUser(): UserQueryResult` with `{ user, isLoading, error }` is right."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 4 }}>
         <CodeDiff
@@ -67,7 +67,7 @@ export default function NoTuplesAsPublicShapesSlide() {
         <ActionPanel
           slideId="55-no-tuples-public-shapes"
           symptom="A refactor to add a `refetch` function to `useUser` broke 47 call sites and shipped in prod because 'the types were fine.' They were: every `[u, l, e] = useUser()` compiled, they just now bound `refetch` to `e` and the error handler to nothing. Post-mortem: (1) tuple returns have no field names, so IDE tooltips show `[User | null, boolean, Error | null]` with no clue which is which; (2) call sites use ad-hoc local names (`[u, l, e]`, `[user, loading, err]`, `[data, isFetching, error]`), so grep and refactor tools cannot correlate; (3) action tuples force stringly-typed dispatch like `dispatch(['set', ...])` that skips exhaustive-switch coverage. All three symptoms share one root cause: public shapes without names."
-          rule="spec/17/31 line 109 is absolute: no tuples as public shapes. 'Public' means anything crossing a module boundary: exported function returns, exported function parameters, exported types, context values, reducer states, reducer actions, prop objects, event payloads, custom hook returns. If a value has two or more fields or gets destructured at the call site, it gets a named `type` or `interface`. React's own the built-in useState pair is the ONE tuple exception in the codebase, tolerated because (a) React owns it, (b) both positions are heavily conventionalized (`[value, setValue]`), and (c) the second slot is always a setter. Custom hooks do not get to piggy-back on that exception, they wrap it. Tuples remain fine strictly for local, non-exported returns of arity 2 where both positions are conventional and named at the destructure site."
+          rule="02-spec/17/31 line 109 is absolute: no tuples as public shapes. 'Public' means anything crossing a module boundary: exported function returns, exported function parameters, exported types, context values, reducer states, reducer actions, prop objects, event payloads, custom hook returns. If a value has two or more fields or gets destructured at the call site, it gets a named `type` or `interface`. React's own the built-in useState pair is the ONE tuple exception in the codebase, tolerated because (a) React owns it, (b) both positions are heavily conventionalized (`[value, setValue]`), and (c) the second slot is always a setter. Custom hooks do not get to piggy-back on that exception, they wrap it. Tuples remain fine strictly for local, non-exported returns of arity 2 where both positions are conventional and named at the destructure site."
           doThis="Enforce mechanically: (1) ESLint `@typescript-eslint/consistent-type-definitions: [error, type]` for consistency, plus a project rule `custom/no-tuple-return` that flags any exported function whose return type is a tuple literal `[A, B, ...]` with an exception for `useState`-style hooks; (2) TypeScript rule `custom/named-hook-return` (pairs with REACT-008) rejects anonymous object returns like an anonymous object return and requires a named alias; (3) reducer actions get a `kind: 'PascalCase'` discriminant, enforced by `custom/action-shape` that walks any type ending in `Action` and requires `kind: string` present; (4) codemod `scripts/codemods/tuple-to-object.ts` walks exported `use*`, `create*`, `make*` returns, infers field names from JSDoc or falls back to `a`/`b`/`c` with a TODO comment; (5) code review reflex: any `[a, b]` in an exported signature is rejected unless it wraps `useState`. When you cannot name a field, the field is doing two things, split it."
         />
       </div>

@@ -22,14 +22,14 @@ When a release occurs, the version string (both plain `1.X.X` and prefixed `v1.X
 - `.lovable/coding-guidelines.md`
 - `linter-scripts/validate-guidelines.go`
 - `linter-scripts/validate-guidelines.py`
-- `spec/14-update/28-worker-push-instruction.md`
-- `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
-- `spec/19-main-worker-service/diagrams/seq-push-update.mmd`
-- `spec/19-main-worker-service/11-worker-bootstrap-protocol.md`
-- `spec/19-main-worker-service/15-rbac-and-status-seed.md`
-- `spec/19-main-worker-service/16-tunable-constants.md`
-- `spec/19-main-worker-service/17-update-channels.md`
-- `spec/19-main-worker-service/26-inherited-rules.md`
+- `02-spec/14-update/28-worker-push-instruction.md`
+- `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
+- `02-spec/19-main-worker-service/diagrams/seq-push-update.mmd`
+- `02-spec/19-main-worker-service/11-worker-bootstrap-protocol.md`
+- `02-spec/19-main-worker-service/15-rbac-and-status-seed.md`
+- `02-spec/19-main-worker-service/16-tunable-constants.md`
+- `02-spec/19-main-worker-service/17-update-channels.md`
+- `02-spec/19-main-worker-service/26-inherited-rules.md`
 
 ## Automation Script
 

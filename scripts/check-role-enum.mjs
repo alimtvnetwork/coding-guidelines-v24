@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const SPEC = resolve(ROOT, "spec/01-spec-authoring-guide/14-version-schema.md");
+const SPEC = resolve(ROOT, "02-spec/01-spec-authoring-guide/14-version-schema.md");
 const COMMITTED = resolve(ROOT, "src/constants/roleEnum.ts");
 
 const SECTION_RE = /## §6 — `Role` Enum([\s\S]*?)(?=\n## §|\n---)/;
@@ -42,7 +42,7 @@ function parseRoles(section) {
 function renderExpected(roles) {
   const lines = [
     "// AUTO-GENERATED — do not edit by hand.",
-    "// Source: spec/01-spec-authoring-guide/14-version-schema.md §6",
+    "// Source: 02-spec/01-spec-authoring-guide/14-version-schema.md §6",
     "// Regenerate: npm run gen:role-enum",
     "",
     "export const ROLE_VALUES = [",
@@ -71,7 +71,7 @@ function readCommitted() {
 
 function reportDrift(expected, actual) {
   console.error("✗ src/constants/roleEnum.ts is out of sync with the spec.");
-  console.error("  Spec source: spec/01-spec-authoring-guide/14-version-schema.md §6");
+  console.error("  Spec source: 02-spec/01-spec-authoring-guide/14-version-schema.md §6");
   console.error("  Fix: run `npm run gen:role-enum` and commit the result.");
   console.error(`  Expected ${expected.length} bytes, found ${actual.length} bytes.`);
 }

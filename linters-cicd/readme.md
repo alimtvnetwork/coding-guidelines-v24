@@ -3,7 +3,7 @@
 Portable, language-agnostic CI/CD checks for the **CODE RED** rules from
 this repository's coding guidelines. Drop into any pipeline with one line.
 
-> **Spec:** [`spec/02-coding-guidelines/06-cicd-integration/`](../spec/02-coding-guidelines/06-cicd-integration/01-index.md)
+> **Spec:** [`02-spec/02-coding-guidelines/06-cicd-integration/`](../02-spec/02-coding-guidelines/06-cicd-integration/01-index.md)
 
 ---
 
@@ -122,7 +122,7 @@ trigger a fix-up commit, a workflow rewrite, or a retry loop:
 | `STYLE-*` findings (warning severity) | Non-blocking style hints | Report, do not auto-fix |
 | `__pycache__/` files appearing under `linters-cicd/` | Python bytecode cache | Do **not** commit; add to `.gitignore` if missing |
 | Lines starting with `::debug::` (GitHub) | Action debug stream | Ignore unless reproducing a failure |
-| `coding-guidelines.sarif` size > 1 MB | Large but valid | Ignore unless > 10 MB (then see [`99-troubleshooting.md`](../spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md)) |
+| `coding-guidelines.sarif` size > 1 MB | Large but valid | Ignore unless > 10 MB (then see [`99-troubleshooting.md`](../02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md)) |
 | Pre-existing version-drift warnings in repo READMEs | Unrelated to this pack | Ignore |
 
 ### Hard "do not" list for the AI
@@ -163,7 +163,7 @@ no file under `linters-cicd/` has been modified.
 
 Future phases add PHP, Python, Rust, and any language you ask for —
 plugin model documented in
-[`02-plugin-model.md`](../spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md).
+[`02-plugin-model.md`](../02-spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md).
 
 ### Adding your own rule
 
@@ -260,7 +260,7 @@ either point `--path` at the source root, drop unused entries from
 ## Output
 
 SARIF 2.1.0 by default, plain text via `--format text`. The contract is
-in [`01-sarif-contract.md`](../spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md).
+in [`01-sarif-contract.md`](../02-spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md).
 
 ---
 
@@ -278,7 +278,7 @@ in [`01-sarif-contract.md`](../spec/02-coding-guidelines/06-cicd-integration/01-
 
 Both `install.sh` (`-n` flag) and `install.ps1` (`-NoVerify` switch) follow
 the same exit-code contract from
-[spec §8 — Exit Codes (Normative)](../spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative).
+[spec §8 — Exit Codes (Normative)](../02-spec/14-update/27-generic-installer-behavior.md#8-exit-codes-normative).
 
 | Code | Meaning | Raised when verification is **ON** (default) | Raised when verification is **OFF** (`-n` / `-NoVerify`) |
 |------|---------|----------------------------------------------|-----------------------------------------------------------|
@@ -322,7 +322,7 @@ curl -fsSL .../install.sh | bash -s -- -n
 
 The PowerShell installer additionally prints a loud multi-line warning
 banner on every `-NoVerify` run — see
-[spec §9 — Security Considerations](../spec/14-update/27-generic-installer-behavior.md#9-security-considerations).
+[spec §9 — Security Considerations](../02-spec/14-update/27-generic-installer-behavior.md#9-security-considerations).
 
 ---
 

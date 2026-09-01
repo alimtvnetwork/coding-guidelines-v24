@@ -16,7 +16,7 @@ Error: Codegen drift detected for lang=go
 ```
 
 ## 2. How It Happened
-When spec sequences in `spec/04-database-conventions/` were renumbered from `01-naming-conventions.md` to `03-naming-conventions.md`, the code generation emitters (`go_emitter.py`, `php_emitter.py`, `ts_emitter.py`) were correctly updated to cite `03-naming-conventions.md` in file headers. However, the committed fixtures in `linters-cicd/codegen/fixtures/expected/` had not yet been regenerated. Furthermore, verification relied on Bash scripts (`.sh`) which lack native Windows/PowerShell support.
+When spec sequences in `02-spec/04-database-conventions/` were renumbered from `01-naming-conventions.md` to `03-naming-conventions.md`, the code generation emitters (`go_emitter.py`, `php_emitter.py`, `ts_emitter.py`) were correctly updated to cite `03-naming-conventions.md` in file headers. However, the committed fixtures in `linters-cicd/codegen/fixtures/expected/` had not yet been regenerated. Furthermore, verification relied on Bash scripts (`.sh`) which lack native Windows/PowerShell support.
 
 ## 3. Root Cause
 1. Committed expected fixtures in `linters-cicd/codegen/fixtures/expected/` contained outdated header comments citing `01-naming-conventions.md`.
@@ -28,5 +28,5 @@ When spec sequences in `spec/04-database-conventions/` were renumbered from `01-
    - `linters-cicd/codegen/scripts/regen_codegen_fixtures.py`
 2. **Fixture Regeneration:** Executed `regen_codegen_fixtures.py` to synchronize all expected fixtures (`User.generated.go`, `User.generated.php`, `User.generated.ts`).
 3. **CI & NPM Integration:** Updated `.github/workflows/ci.yml` and `package.json` to invoke the Python scripts directly.
-4. **Local Runner Quality Gate:** Registered `Codegen Determinism Check` in `.lovable/ai-fix-scripts/03-cicd-local-runner.py`.
-5. **Prompt Rule Hardened:** Mandated in `.lovable/prompts/01-prompts-category/08-dry-code/01-python-dry-architecture-and-caching.md` and `17-ci-cd/04-ci-cd-fix-with-release.md` that all CI verifiers must be written in cross-platform Python rather than `.sh`.
+4. **Local Runner Quality Gate:** Registered `Codegen Determinism Check` in `03-ai-scripts/03-cicd-local-runner.py`.
+5. **Prompt Rule Hardened:** Mandated in `01-prompts/08-dry-code/01-python-dry-architecture-and-caching.md` and `17-ci-cd/04-ci-cd-fix-with-release.md` that all CI verifiers must be written in cross-platform Python rather than `.sh`.

@@ -40,13 +40,13 @@ export default function VersionBumpMythBusterSlide() {
     <SlideLayout
       eyebrow="Principle · Release hygiene"
       title="Version bump: still required. Every PR. No exceptions."
-      subtitle="The v1.2 update simplified the workflow. It did not delete the bump. §Must Follow in spec/17/31 (v1.4.0) still lists it as auto-reject on violation."
+      subtitle="The v1.2 update simplified the workflow. It did not delete the bump. §Must Follow in 02-spec/17/31 (v1.4.0) still lists it as auto-reject on violation."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 4 }}>
         <ActionPanel
           slideId="18-version-bump-myth-buster"
           symptom="PRs land without a version bump or changelog entry, citing 'the v1.2 update made it optional'. Downstream pins break silently because two different code states share one version string."
-          rule="Every merged PR bumps package.json (patch / minor / major per SemVer intent) AND adds a changelog.md entry in the same commit. Non-negotiable per spec/17/31 §Must Follow (v1.4.0, line 16)."
+          rule="Every merged PR bumps package.json (patch / minor / major per SemVer intent) AND adds a changelog.md entry in the same commit. Non-negotiable per 02-spec/17/31 §Must Follow (v1.4.0, line 16)."
           doThis="Add the bump + changelog to your PR template checklist. Reviewer rejects on missing bump the same way they reject on a failing test. Run `node scripts/sync-version.mjs` after editing package.json."
         />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -98,7 +98,7 @@ export default function VersionBumpMythBusterSlide() {
         </div>
         <CalloutQuote
           quote="If it shipped, it has a version. If it has a version, it has a changelog line."
-          attribution="spec/17/31 §Must Follow"
+          attribution="02-spec/17/31 §Must Follow"
           accent="primary"
         />
       </div>

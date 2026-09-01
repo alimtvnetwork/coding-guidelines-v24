@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 23: DB schema naming.
  *
- * Sourced from spec/17/31 §"Data and Schema Rules" (lines 84-92):
+ * Sourced from 02-spec/17/31 §"Data and Schema Rules" (lines 84-92):
  *   - Tables/entities: PascalCase
  *   - Fields/columns:  camelCase
  *   - JSON keys:       PascalCase
@@ -42,7 +42,7 @@ export default function DbSchemaNamingSlide() {
         <ActionPanel
           slideId="21-db-schema-naming"
           symptom="A migration lands `users.id UUID`, `Email_Address` and `CreatedAt` on the same table. The ORM now needs per-column aliases and joins read as guesswork."
-          rule="Tables and entities PascalCase (singular). Columns camelCase. Primary key `{TableName}Id`, INTEGER PRIMARY KEY AUTOINCREMENT. No UUIDs. JSON keys PascalCase per spec/17/31 §Data and Schema."
+          rule="Tables and entities PascalCase (singular). Columns camelCase. Primary key `{TableName}Id`, INTEGER PRIMARY KEY AUTOINCREMENT. No UUIDs. JSON keys PascalCase per 02-spec/17/31 §Data and Schema."
           doThis="Rename the table to singular PascalCase, add a `{Table}Id` integer PK, and lowercase the first letter of every column. Fix as you touch each migration, do not bulk-rewrite."
         />
       </div>

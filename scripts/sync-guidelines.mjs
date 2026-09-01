@@ -2,7 +2,7 @@
 // ============================================================
 // sync-guidelines.mjs
 // ============================================================
-// Single source of truth: spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md
+// Single source of truth: 02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md
 //
 // Mirrors:
 //   1. .lovable/coding-guidelines.md   (exact body copy + auto-gen banner)
@@ -20,14 +20,13 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-const CANONICAL = resolve(ROOT, "spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md");
+const CANONICAL = resolve(ROOT, "02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md");
 const LOVABLE_MIRROR = resolve(ROOT, ".lovable/coding-guidelines.md");
-const LOVABLE_NESTED_MIRROR = resolve(ROOT, ".lovable/coding-guidelines.md");
 const CURSORRULES = resolve(ROOT, ".cursorrules");
 
 const BANNER = [
   "<!-- AUTO-GENERATED FILE. DO NOT EDIT DIRECTLY. -->",
-  "<!-- Source: spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->",
+  "<!-- Source: 02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->",
   "<!-- Regenerate with: npm run sync:guidelines -->",
   "",
   "",
@@ -59,7 +58,7 @@ function buildCursorRules(canonical, currentCursor) {
   const hardRules = extractSection(canonical, "Hard Rules (Zero Tolerance)");
   const block = [
     CURSOR_BEGIN,
-    "<!-- Auto-generated from spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->",
+    "<!-- Auto-generated from 02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md -->",
     "<!-- Edit the canonical file then run `npm run sync:guidelines`. -->",
     "",
     "## Hard Rules (Zero Tolerance, canonical)",
@@ -121,7 +120,6 @@ function main() {
 
   if (drifts.length === 0) { console.log("OK guideline mirrors already in sync"); return; }
   writeFileSync(LOVABLE_MIRROR, nextLovable);
-  writeFileSync(LOVABLE_NESTED_MIRROR, nextLovable);
   writeFileSync(CURSORRULES, nextCursor);
   console.log(`✓ synced ${drifts.length} guideline mirror(s):`);
   for (const d of drifts) console.log(`  - ${d}`);

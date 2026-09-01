@@ -6,19 +6,19 @@ import versionInfo from "../../version.json";
 import { InstallSection } from "@/components/landing/InstallSection";
 
 const codeRedRules = [
-  { rule: "No nested if statements", desc: "Flatten all conditionals — zero nesting allowed", icon: Ban, docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/01-braces-and-nesting.md" },
-  { rule: "Boolean naming: is/has prefix", desc: "Every boolean must start with is or has", icon: ToggleLeft, docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/01-naming-prefixes.md" },
-  { rule: "No magic strings or numbers", desc: "Use enums or typed constants for all repeated values", icon: Hash, docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/13-strict-typing.md" },
-  { rule: "Max 15 lines per function", desc: "Error-handling lines exempt; extract helpers otherwise", icon: Ruler, docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/04-function-and-type-size.md" },
-  { rule: "No any in TypeScript", desc: "Use unknown at parse boundaries with immediate narrowing", icon: ShieldAlert, docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/13-strict-typing.md" },
-  { rule: "Result guard before access", desc: "Always check error state before using returned data", icon: ShieldCheck, docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/15-master-coding-guidelines/02-boolean-and-enum.md" },
+  { rule: "No nested if statements", desc: "Flatten all conditionals — zero nesting allowed", icon: Ban, docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/01-braces-and-nesting.md" },
+  { rule: "Boolean naming: is/has prefix", desc: "Every boolean must start with is or has", icon: ToggleLeft, docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/01-naming-prefixes.md" },
+  { rule: "No magic strings or numbers", desc: "Use enums or typed constants for all repeated values", icon: Hash, docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/13-strict-typing.md" },
+  { rule: "Max 15 lines per function", desc: "Error-handling lines exempt; extract helpers otherwise", icon: Ruler, docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/04-function-and-type-size.md" },
+  { rule: "No any in TypeScript", desc: "Use unknown at parse boundaries with immediate narrowing", icon: ShieldAlert, docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/13-strict-typing.md" },
+  { rule: "Result guard before access", desc: "Always check error state before using returned data", icon: ShieldCheck, docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/15-master-coding-guidelines/02-boolean-and-enum.md" },
 ];
 
 const quickReference = [
-  { category: "Naming", items: ["PascalCase: Components, Types, Enums, DB tables", "camelCase: functions, variables, utilities", "Abbreviations: Id, Url, Json, Api (not ID, URL)"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/22-variable-naming-conventions.md" },
-  { category: "Booleans", items: ["Always is/has prefix", "No negative words (not, no, non)", "Max 2 operands per expression"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/00-overview.md" },
-  { category: "Database", items: ["PascalCase tables & columns (quoted)", "{TableName}Id INTEGER PRIMARY KEY", "Double-quoted identifiers in SQL"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/10-database-conventions/02-naming-conventions.md" },
-  { category: "Functions", items: ["Max 3 parameters (use options object for 4+)", "Max 15 lines per body", "Max 300 lines per file"], docPath: "spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/04-function-and-type-size.md" },
+  { category: "Naming", items: ["PascalCase: Components, Types, Enums, DB tables", "camelCase: functions, variables, utilities", "Abbreviations: Id, Url, Json, Api (not ID, URL)"], docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/22-variable-naming-conventions.md" },
+  { category: "Booleans", items: ["Always is/has prefix", "No negative words (not, no, non)", "Max 2 operands per expression"], docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/00-overview.md" },
+  { category: "Database", items: ["PascalCase tables & columns (quoted)", "{TableName}Id INTEGER PRIMARY KEY", "Double-quoted identifiers in SQL"], docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/10-database-conventions/02-naming-conventions.md" },
+  { category: "Functions", items: ["Max 3 parameters (use options object for 4+)", "Max 15 lines per body", "Max 300 lines per file"], docPath: "02-spec/02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/04-function-and-type-size.md" },
 ];
 
 const specSections = [

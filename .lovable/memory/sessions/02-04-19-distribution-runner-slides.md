@@ -19,11 +19,11 @@ Investigation revealed **most of this was already built**:
 
 ### Real gaps (now fixed)
 
-1. `install-config.json` did NOT include `linters-cicd` in its default folders array → fresh installs missed it. **Fixed** — now `["spec","linters","linter-scripts","linters-cicd"]`.
+1. `install-config.json` did NOT include `linters-cicd` in its default folders array → fresh installs missed it. **Fixed** — now `["02-spec","linters","linter-scripts","linters-cicd"]`.
 2. Root `run.ps1` / `run.sh` had no sub-command surface — only forwarded to the Go validator. **Fixed** — added `lint` (legacy default), `slides`, and `help` sub-commands.
-3. No spec documented the install/runner/release contract end-to-end. **Fixed** — created `spec/15-distribution-and-runner/` with five files.
+3. No spec documented the install/runner/release contract end-to-end. **Fixed** — created `02-spec/15-distribution-and-runner/` with five files.
 
-### Spec created — `spec/15-distribution-and-runner/`
+### Spec created — `02-spec/15-distribution-and-runner/`
 
 | File | Purpose |
 |------|---------|
@@ -63,11 +63,11 @@ All five files are v1.0.0, dated 2026-04-19, owned by Md. Alim Ul Karim.
 
 ### Created (specs)
 
-- `spec/15-distribution-and-runner/00-overview.md`
-- `spec/15-distribution-and-runner/02-install-contract.md`
-- `spec/15-distribution-and-runner/03-runner-contract.md`
-- `spec/15-distribution-and-runner/04-release-pipeline.md`
-- `spec/15-distribution-and-runner/05-install-config.md`
+- `02-spec/15-distribution-and-runner/00-overview.md`
+- `02-spec/15-distribution-and-runner/02-install-contract.md`
+- `02-spec/15-distribution-and-runner/03-runner-contract.md`
+- `02-spec/15-distribution-and-runner/04-release-pipeline.md`
+- `02-spec/15-distribution-and-runner/05-install-config.md`
 
 ### Created (memory)
 

@@ -7,7 +7,7 @@ attacker-chosen column or table names. Any orderBy()/groupBy() call
 whose first argument is not a string literal or an allow-list lookup
 is flagged.
 
-Spec: spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
+Spec: 02-spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
 """
 from __future__ import annotations
 

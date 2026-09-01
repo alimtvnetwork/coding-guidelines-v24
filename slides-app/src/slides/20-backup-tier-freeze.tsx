@@ -51,7 +51,7 @@ export default function BackupTierFreezeSlide() {
           slideId="20-backup-tier-freeze"
           symptom="A PR proposes replacing the `TBD` / defaults-only rows in spec/19 ch. 20 with concrete v2.0.0 values so 'the AI can just implement it'."
           rule="Backup tier stays frozen until Phase 12 (Backup consolidation) closes. Defaults in ch. 20 §7 are guidance. Contract-grade materialization ships as v2.1 with the ch. 24 threat model."
-          doThis="Reject the PR. If a value must be pinned early, file it in a non-active proposal doc under spec/19/audit and cite MAIN-900-01. Do NOT edit the authoritative chapter."
+          doThis="Reject the PR. If a value must be pinned early, file it in a non-active proposal doc under 02-spec/19/audit and cite MAIN-900-01. Do NOT edit the authoritative chapter."
         />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           {COLUMNS.map((col) => (

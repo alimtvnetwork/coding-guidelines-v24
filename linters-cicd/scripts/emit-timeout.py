@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Emit a TOOL-TIMEOUT SARIF document for a check that exceeded its budget.
 
-Spec: spec/02-coding-guidelines/06-cicd-integration/07-performance.md §3
+Spec: 02-spec/02-coding-guidelines/06-cicd-integration/07-performance.md §3
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ TIMEOUT_RULE = {
     },
     "helpUri": (
         "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/"
-        "spec/02-coding-guidelines/06-cicd-integration/07-performance.md"
+        "02-spec/02-coding-guidelines/06-cicd-integration/07-performance.md"
     ),
 }
 

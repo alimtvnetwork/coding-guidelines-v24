@@ -6,7 +6,7 @@
 #   - uses: <org>/<repo>/.github/workflow-templates@v1   # remote
 #
 # All inputs are optional; defaults match the canonical ci-guards.yaml
-# layout described in spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/.
+# layout described in 02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/.
 
 name: "Reusable CI Guards"
 description: "Run forbidden-name, naming-baseline, collision, lint-diff, lint-suggest, and test-summary guards."

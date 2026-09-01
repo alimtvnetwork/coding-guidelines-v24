@@ -6,7 +6,7 @@
 # JSON output, baseline handling, verbosity) regardless of which
 # underlying language tooling each guard wraps.
 #
-# See spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/07-shared-cli-wrapper.md
+# See 02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/07-shared-cli-wrapper.md
 
 set -uo pipefail
 

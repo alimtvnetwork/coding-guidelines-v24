@@ -14,7 +14,7 @@ Why this rule?
     fix — perfect example payload.
 
 Spec stub:
-    spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md
+    02-spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md
 """
 from __future__ import annotations
 

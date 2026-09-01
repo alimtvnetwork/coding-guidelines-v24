@@ -3,7 +3,7 @@
     WordPress Plugin How-To Spec — bundle installer (wp).
 
 .DESCRIPTION
-    Installs the WordPress plugin authoring spec into spec/18-wp-plugin-how-to.
+    Installs the WordPress plugin authoring spec into 02-spec/18-wp-plugin-how-to.
 
     MODE DISPATCH (spec §3 — chosen at startup, never switched mid-run)
 
@@ -55,10 +55,10 @@
       4  verification failed (required artifacts missing after extraction)
       5  inner installer / handoff rejected
 
-    SPEC: spec/14-update/27-generic-installer-behavior.md
+    SPEC: 02-spec/14-update/27-generic-installer-behavior.md
 
     Folder mapping (src in repo → dest under target):
-      spec/18-wp-plugin-how-to → spec/18-wp-plugin-how-to
+      02-spec/18-wp-plugin-how-to → 02-spec/18-wp-plugin-how-to
       version.json → version.json
       .lovable/what-to-read.md → .lovable/what-to-read.md
       .lovable/memory → .lovable/memory
@@ -172,7 +172,7 @@ function Stop-Install {
 
 
 $BundleName = "wp"
-$BundleMapping = "spec/18-wp-plugin-how-to|spec/18-wp-plugin-how-to,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory"
+$BundleMapping = "02-spec/18-wp-plugin-how-to|02-spec/18-wp-plugin-how-to,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory"
 $ArchiveStableName = "wp"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v24"
@@ -332,10 +332,16 @@ function Copy-Mapping {
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
+        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+            if (Test-Path $destPath) {
+                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
+                continue
+            }
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
-            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+            if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
                 # Inject promptArchitectByRiseupAsia tracking block into target version.json
                 $targetVersionFile = Join-Path $Target "version.json"
                 try {

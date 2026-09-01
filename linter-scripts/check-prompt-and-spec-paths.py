@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Linter: check-prompt-and-spec-paths.py
-Scans .lovable/prompts/, spec/, .lovable/, and .agents/ for relative file path references
+Scans 01-prompts/, spec/, .lovable/, and .agents/ for relative file path references
 in markdown links and backticks, verifying that all referenced paths exist on disk.
 """
 
@@ -13,7 +13,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SCAN_DIRS = [
-    REPO_ROOT / '.lovable' / 'prompts',
+    REPO_ROOT / '01-prompts',
     REPO_ROOT / '.agents' / 'skills',
 ]
 
@@ -52,7 +52,7 @@ IGNORE_TERMS = {
     "enums/user_role_type.go", "constants/http_constants.go", "src/enums/user-role-type.ts",
     "src/Enums/", "src/Enums/OrderStatusType.php", "enums/user_role_type.py",
     "cmd/user.go", "src/cli/audit.ts", "scripts/deploy.py",
-    "spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
+    "02-spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
     "01-cross-language/18-code-mutation-avoidance.md"
 }
 

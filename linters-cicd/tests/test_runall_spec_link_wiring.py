@@ -20,7 +20,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RUN_ALL = REPO_ROOT / "linters-cicd" / "run-all.sh"
-SPEC_DIR = REPO_ROOT / "spec"
+SPEC_DIR = REPO_ROOT / "02-spec"
 
 
 class TestRunAllSpecLinkWiring(unittest.TestCase):

@@ -56,7 +56,7 @@ function SpecOverviewButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      title="Jump to spec/00-overview.md (works even if the sidebar tree is stale)"
+      title="Jump to 02-spec/00-overview.md (works even if the sidebar tree is stale)"
       className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary transition-colors text-sm font-medium shrink-0"
     >
       <BookOpen className="h-4 w-4 shrink-0" />

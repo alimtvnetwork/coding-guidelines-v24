@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 28: Line-gap and whitespace discipline.
  *
- * Source: spec/17/31 §"Line-Gap and Whitespace Style" lines 53-62.
+ * Source: 02-spec/17/31 §"Line-Gap and Whitespace Style" lines 53-62.
  *   1. Blank line before every return / throw (unless only statement).
  *   2. Blank line after closing `}` (unless next is `}` / else / case / catch).
  *   3. Never two blank lines in a row.
@@ -76,7 +76,7 @@ export default function LineGapDisciplineSlide() {
         <ActionPanel
           slideId="26-line-gap-discipline"
           symptom="A reviewer opens the diff and sees imports jumbled across origins, a blank line right after `function loadUser(id) {`, no blank line before `return parse(raw)`, and two adjacent function declarations glued together. Reading rhythm collapses; real logic changes are hidden by whitespace churn."
-          rule="Group imports as stdlib, third-party, first-party absolute, first-party relative, with one blank line between groups. One blank line before every `return` or `throw` unless it is the only statement in the block. Blank line after a closing `}` unless the next line is `}`, `else`, `case`, or `catch`. No blank line right after `{` or right before `}`. Never two blank lines in a row. Per spec/17/31 lines 55 to 62."
+          rule="Group imports as stdlib, third-party, first-party absolute, first-party relative, with one blank line between groups. One blank line before every `return` or `throw` unless it is the only statement in the block. Blank line after a closing `}` unless the next line is `}`, `else`, `case`, or `catch`. No blank line right after `{` or right before `}`. Never two blank lines in a row. Per 02-spec/17/31 lines 55 to 62."
           doThis="When you touch a file, fix the whitespace in the same diff: reorder and regroup imports, insert the return/throw blank, delete accidental double blanks, remove the blank after opening braces. If you feel the urge to add section-separator blanks inside one function, split the function instead."
         />
       </div>

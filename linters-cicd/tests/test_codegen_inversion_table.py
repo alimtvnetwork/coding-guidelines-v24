@@ -3,7 +3,7 @@
 
 Asserts the contract documented in
 ``linters-cicd/codegen/inversion_table.py`` and
-``spec/04-database-conventions/03-naming-conventions.md`` (Rule 9):
+``02-spec/04-database-conventions/03-naming-conventions.md`` (Rule 9):
 
 1.  **Bijection on the explicit table** — every (positive, negative)
     pair in ``_FORWARD`` must satisfy ``invert(invert(x)) == x`` in
@@ -128,7 +128,7 @@ class TestFallbackContract(unittest.TestCase):
     def test_fallback_does_not_collapse_double_negative(self) -> None:
         # Documented one-way fallback: re-inverting a fallback result
         # produces "NotNot"/"NoNo". This is by design — do not "fix"
-        # without updating spec/04-database-conventions/01-...md Rule 9.
+        # without updating 02-spec/04-database-conventions/01-...md Rule 9.
         self.assertEqual(invert_name("IsNotFoo"), "IsNotNotFoo")
         self.assertEqual(invert_name("HasNoBar"), "HasNoNoBar")
 

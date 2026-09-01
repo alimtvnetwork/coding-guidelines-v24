@@ -3,7 +3,7 @@
 # check-root-install-acceptance.sh
 #
 # Validates root install.sh / install.ps1 / linters-cicd/install.sh
-# against spec/14-update/27-generic-installer-behavior.md:
+# against 02-spec/14-update/27-generic-installer-behavior.md:
 #   §5.3 — --no-discovery / --no-main-fallback / --offline flags
 #   §7   — startup banner with mode: / source: lines
 #   §8   — exit-code header documents 0–5

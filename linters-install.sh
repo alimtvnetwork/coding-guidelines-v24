@@ -14,7 +14,7 @@
 #
 # Run with -h or --help for the full flag reference (scope-tagged).
 #
-# Spec: spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
+# Spec: 02-spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
 #
 #
 # Folder mapping (src in repo → dest under target):
@@ -173,7 +173,7 @@ EXIT CODES (spec §8)
   5  inner installer / handoff rejected
 
 SPEC
-  spec/14-update/27-generic-installer-behavior.md
+  02-spec/14-update/27-generic-installer-behavior.md
 HELP
 }
 
@@ -378,10 +378,16 @@ merge_path(sys.argv[1], sys.argv[2])
       echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
       continue
     fi
+    if [[ "${dest}" == *".lovable/plans"* || "${dest}" == *".lovable/what-to-read.md"* ]]; then
+      if [[ -e "${TARGET}/${dest}" ]]; then
+        echo "  ℹ️  ${TARGET}/${dest} already exists (skipping overwrite to preserve project state)"
+        continue
+      fi
+    fi
     if [[ -d "${archive_root}/${src}" ]]; then
       mkdir -p "${TARGET}/${dest}"
       cp -R "${archive_root}/${src}/." "${TARGET}/${dest}/"
-      if [[ "${src}" == ".lovable/prompts" || "${src}" == ".lovable/prompts/" ]]; then
+      if [[ "${src}" == "01-prompts" || "${src}" == "01-prompts/" ]]; then
         # Inject promptArchitectByRiseupAsia tracking block into target version.json
         local target_version_file="${TARGET}/version.json"
         python3 -c "

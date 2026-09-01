@@ -2,8 +2,8 @@
 
 **Level:** error
 **Linter version:** 1.1.0 (refactored to share `_lib/free_text_columns.py`)
-**Spec:** [`spec/04-database-conventions/03-schema-design.md`](../../../spec/04-database-conventions/03-schema-design.md) §6
-**Naming source:** [`02-naming-conventions.md`](../../../spec/04-database-conventions/03-naming-conventions.md) Rules 10 / 11 (v3.5.0)
+**Spec:** [`02-spec/04-database-conventions/03-schema-design.md`](../../../02-spec/04-database-conventions/03-schema-design.md) §6
+**Naming source:** [`02-naming-conventions.md`](../../../02-spec/04-database-conventions/03-naming-conventions.md) Rules 10 / 11 (v3.5.0)
 
 ## What it flags
 

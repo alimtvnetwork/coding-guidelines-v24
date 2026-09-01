@@ -40,7 +40,7 @@ const TRACKED_FILES = [
 ];
 
 const ROOT_CHANGELOG = "changelog.md";
-const SPEC19_CHANGELOG = "spec/19-main-worker-service/98-changelog.md";
+const SPEC19_CHANGELOG = "02-spec/19-main-worker-service/98-changelog.md";
 
 // ----- Argument parsing ---------------------------------------------------
 

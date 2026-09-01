@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 52: no raw `for` or `forEach` in render or derived state.
  *
- * Source: spec/17/31 line 104.
+ * Source: 02-spec/17/31 line 104.
  */
 
 const BEFORE = `// Raw for + forEach mutating arrays declared during render.
@@ -56,7 +56,7 @@ export default function NoRawForInRenderSlide() {
     <SlideLayout
       eyebrow="Rule 52 · React · no raw `for` or `forEach` in render"
       title="Use `map`, `filter`, `reduce`, `flatMap`, `Array.from`. Iteration returns an expression, never mutates."
-      subtitle="spec/17/31 line 104: avoid raw `for` and `forEach` in render or derived state. Iteration must produce a value, not push into an array declared during render. `for` is only acceptable for early-exit performance on very large arrays with a comment explaining why."
+      subtitle="02-spec/17/31 line 104: avoid raw `for` and `forEach` in render or derived state. Iteration must produce a value, not push into an array declared during render. `for` is only acceptable for early-exit performance on very large arrays with a comment explaining why."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 4 }}>
         <CodeDiff
@@ -69,7 +69,7 @@ export default function NoRawForInRenderSlide() {
         <ActionPanel
           slideId="50-no-raw-for-in-render"
           symptom="`InvoiceTable` renders 60 times per second when the parent hovers, `Grid` (wrapped in `React.memo`) re-renders every one of those, and DevTools Profiler blames 'props changed: rows, totals'. The offending code is a `for` loop that pushes into `const rows: Row[] = []` declared during render, plus a `forEach` that mutates `totalsByCurrency`. A later PR added `if (inv.Status === 'draft') continue;` inside the `for` to hide draft invoices, and QA still cannot figure out why one specific draft still appears (answer: a second `continue` earlier in the loop short-circuited past the filter). The `useMemo` wrapping `rows` gives a false sense of caching because `rows` is a fresh array reference on every render."
-          rule="spec/17/31 line 104 forbids raw `for` and `forEach` in render or derived state. Every iteration in render, in a `useMemo`, in a selector, or in a derived-state helper must be an expression: `map`, `filter`, `reduce`, `flatMap`, `Array.from`, or `Object.entries().map(...)`. Never declare an array or object during render and mutate it. `for` is only acceptable when (a) the array is very large, (b) you need early-exit performance, and (c) a comment explains both. `forEach` is never acceptable in render because it returns nothing and encourages mutation. This rule pairs with line 105 (never mutate state/props/hook returns) and line 106 (stable keys) as the React-render-correctness trio."
+          rule="02-spec/17/31 line 104 forbids raw `for` and `forEach` in render or derived state. Every iteration in render, in a `useMemo`, in a selector, or in a derived-state helper must be an expression: `map`, `filter`, `reduce`, `flatMap`, `Array.from`, or `Object.entries().map(...)`. Never declare an array or object during render and mutate it. `for` is only acceptable when (a) the array is very large, (b) you need early-exit performance, and (c) a comment explains both. `forEach` is never acceptable in render because it returns nothing and encourages mutation. This rule pairs with line 105 (never mutate state/props/hook returns) and line 106 (stable keys) as the React-render-correctness trio."
           doThis="Ship the enforcement in one PR: (1) ESLint rule `no-raw-loop-in-render` that flags `ForStatement`, `ForOfStatement`, `ForInStatement`, and `CallExpression[callee.property.name='forEach']` inside any function whose name is PascalCase (component) or starts with `use` (hook) or is the callback of `useMemo`/`useCallback`; (2) auto-fix suggestions to `map`/`filter`/`reduce`; (3) waiver comment `// eslint-disable-next-line no-raw-loop-in-render -- perf: early exit on N over 10k, see BENCH-042` required with a benchmark link; (4) codemod `scripts/codemods/for-to-map.ts` for the initial sweep; (5) DevTools Profiler check on the top 20 hot components, confirm `React.memo` bailouts stop firing on unrelated parent renders. Reviewers reject any new `for` or `forEach` in a `.tsx` file without the waiver comment."
         />
       </div>

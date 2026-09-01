@@ -4,8 +4,8 @@ Forbidden Spec Paths Guard (Cross-Platform Python)
 ==================================================
 Fails CI on any of these violations:
   1. Re-appearance of deprecated folders under spec/:
-       - spec/14-generic-update/
-       - spec/15-self-update-app-update/
+       - 02-spec/14-generic-update/
+       - 02-spec/15-self-update-app-update/
   2. Any MERGE-PROPOSAL.md (case-insensitive) under spec/.
   3. Any uppercase letters in .md filenames under spec/ or release-artifacts/.
 
@@ -16,7 +16,7 @@ Usage:
 import os
 import sys
 
-SPEC_ROOT = "spec"
+SPEC_ROOT = "02-spec"
 RELEASE_ROOT = "release-artifacts"
 FORBIDDEN_DIRS = [
     os.path.join(SPEC_ROOT, "14-generic-update"),
@@ -28,7 +28,7 @@ def check_forbidden_dirs() -> list[str]:
     violations = []
     for d in FORBIDDEN_DIRS:
         if os.path.exists(d):
-            violations.append(f"Forbidden folder present: {d} (merged into spec/14-update/, must not re-appear)")
+            violations.append(f"Forbidden folder present: {d} (merged into 02-spec/14-update/, must not re-appear)")
     return violations
 
 
@@ -71,7 +71,7 @@ def main():
         for v in violations:
             print(f"  ::error::{v}")
         print("\nFixes:")
-        print("  - Consolidated update home: spec/14-update/")
+        print("  - Consolidated update home: 02-spec/14-update/")
         print("  - Markdown filenames must be all lowercase (e.g. readme.md).")
         sys.exit(1)
 

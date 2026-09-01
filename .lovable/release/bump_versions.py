@@ -13,14 +13,14 @@ FILES_TO_BUMP = [
     ".lovable/coding-guidelines.md",
     "linter-scripts/validate-guidelines.go",
     "linter-scripts/validate-guidelines.py",
-    "spec/14-update/28-worker-push-instruction.md",
-    "spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
-    "spec/19-main-worker-service/diagrams/seq-push-update.mmd",
-    "spec/19-main-worker-service/11-worker-bootstrap-protocol.md",
-    "spec/19-main-worker-service/15-rbac-and-status-seed.md",
-    "spec/19-main-worker-service/16-tunable-constants.md",
-    "spec/19-main-worker-service/17-update-channels.md",
-    "spec/19-main-worker-service/26-inherited-rules.md"
+    "02-spec/14-update/28-worker-push-instruction.md",
+    "02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
+    "02-spec/19-main-worker-service/diagrams/seq-push-update.mmd",
+    "02-spec/19-main-worker-service/11-worker-bootstrap-protocol.md",
+    "02-spec/19-main-worker-service/15-rbac-and-status-seed.md",
+    "02-spec/19-main-worker-service/16-tunable-constants.md",
+    "02-spec/19-main-worker-service/17-update-channels.md",
+    "02-spec/19-main-worker-service/26-inherited-rules.md"
 ]
 
 def get_current_version():
@@ -101,7 +101,7 @@ def build_release_notes_file(new_version):
     repo_slug = get_repo_slug()
     repo_name = repo_slug.split('/')[-1] if '/' in repo_slug else repo_slug
 
-    is_binary_repo = os.path.exists("linter-scripts/installer-templates") or os.path.exists("spec/16-generic-release")
+    is_binary_repo = os.path.exists("linter-scripts/installer-templates") or os.path.exists("02-spec/16-generic-release")
 
     lines = [f"# {repo_name} {v_string}\n"]
     lines.append("## Quick Install (One-Liners)\n")

@@ -1,5 +1,5 @@
 # golangci-lint configuration
-# Enforces CODE RED coding guidelines from spec/02-coding-guidelines/
+# Enforces CODE RED coding guidelines from 02-spec/02-coding-guidelines/
 #
 # Usage: golangci-lint run
 # Docs:  https://golangci-lint.run/usage/configuration/
@@ -34,7 +34,7 @@ linters:
     - errorlint       # Error wrapping best practices
     # CODE-RED-026: *AppError return type enforcement (custom, via validate-guidelines.go)
     # CODE-RED-027: No raw terminal/log error output (custom, via validate-guidelines.go)
-    # See: spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md
+    # See: 02-spec/03-error-manage/02-error-architecture/06-apperror-package/08-go-apperror-linter-spec.md
 
     # ── General quality ───────────────────────────────────────────
     - gosimple

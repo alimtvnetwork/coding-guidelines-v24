@@ -9,7 +9,7 @@ Three layers, choose what fits:
 | Starter workflows | [`starters/`](./starters/) | Copy/paste a complete workflow per language |
 
 All three ultimately call `bash scripts/ci-runner.sh`, which dispatches the
-six guards from `spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/`.
+six guards from `02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/`.
 
 ---
 
@@ -66,6 +66,6 @@ jobs:
 
 ## Spec
 
-- [09-workflow-templates.md](../../spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/09-workflow-templates.md) — full reference + design rationale
-- [07-shared-cli-wrapper.md](../../spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/07-shared-cli-wrapper.md) — runner contract
-- [08-config-schema.md](../../spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md) — `ci-guards.yaml` schema
+- [09-workflow-templates.md](../../02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/09-workflow-templates.md) — full reference + design rationale
+- [07-shared-cli-wrapper.md](../../02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/07-shared-cli-wrapper.md) — runner contract
+- [08-config-schema.md](../../02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md) — `ci-guards.yaml` schema

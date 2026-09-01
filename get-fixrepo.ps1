@@ -50,7 +50,7 @@ function Get-Manifest {
         @{ Remote = 'scripts/fix-repo/FileScan.ps1';                Local = 'scripts/fix-repo/FileScan.ps1' },
         @{ Remote = 'scripts/fix-repo/Rewrite.ps1';                 Local = 'scripts/fix-repo/Rewrite.ps1' },
         @{ Remote = 'scripts/fix-repo/Config.ps1';                  Local = 'scripts/fix-repo/Config.ps1' },
-        @{ Remote = 'spec/02-coding-guidelines/06-cicd-integration/08-fix-repo-and-installers/01-fix-repo-contract.md'; Local = 'fix-repo-contract.md' }
+        @{ Remote = '02-spec/02-coding-guidelines/06-cicd-integration/08-fix-repo-and-installers/01-fix-repo-contract.md'; Local = 'fix-repo-contract.md' }
     )
 }
 

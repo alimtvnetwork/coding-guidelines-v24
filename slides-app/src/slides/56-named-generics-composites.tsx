@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 58: name every generic parameter and every composite type.
  *
- * Source: spec/17/31 line 110.
+ * Source: 02-spec/17/31 line 110.
  */
 
 const BEFORE = `// Inline composites. Single-letter generics. Nothing to grep, nothing to hover.
@@ -63,7 +63,7 @@ export default function NamedGenericsAndCompositesSlide() {
     <SlideLayout
       eyebrow="Rule 58 · TypeScript · name every generic parameter and every composite"
       title="Inline `Map` of anonymous arrays is wrong. Extract `UsersById`. Bare `T`/`U` are wrong. Use `TItem`/`TKey`."
-      subtitle="spec/17/31 line 110: name every generic parameter and every composite type. Bare `T`, `U`, `K`, `V` are laziness in application code. Inline composites hide domain meaning and defeat rename refactors."
+      subtitle="02-spec/17/31 line 110: name every generic parameter and every composite type. Bare `T`, `U`, `K`, `V` are laziness in application code. Inline composites hide domain meaning and defeat rename refactors."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 4 }}>
         <CodeDiff
@@ -76,8 +76,8 @@ export default function NamedGenericsAndCompositesSlide() {
         <ActionPanel
           slideId="56-named-generics-composites"
           symptom="Two-week refactor to add an email field to the user record leaked bugs in five places, all traceable to inline composites. The same map-of-array-of-inline-user shape was repeated in four hooks; adding email to one shape did not add it to the other three, so lookups typechecked in only one file. A generic function with bare parameter names had a call site that passed a compound key by accident, and nothing complained because the inferred key was a tuple and tuple-key Map lookup silently misses. IDE hover on any variable typed as the inline map shape shows a 200-character blob that engineers stopped reading. Root cause across all three: composite types without names and generic parameters without names."
-          rule="spec/17/31 line 110 is absolute. Two parts. (1) Every composite type gets a name. Composite means: any object type with 2+ fields, any array of a composite, any Map, Set, Record, or Promise of a composite, any union of 2+ non-primitive members, any function type used more than once. Declare it once as a `type` alias and import it everywhere. Inline anonymous composites in signatures are banned. (2) Every generic parameter gets a meaningful name in application code. Prefer TItem, TKey, TResponse, TError, TProps, TState, TAction, TDeps, TResult. Never bare T, U, K, V. Utility library code (fp-ts, ts-toolbelt) is the only exception, and this codebase is not that. The T-prefix disambiguates generics from concrete types in call-site hovers. Domain aliases pair with NAM-001 (PascalCase for types) and REACT-009 (no anonymous shapes)."
-          doThis="Enforce mechanically: (1) ESLint `@typescript-eslint/naming-convention` with a `typeParameter` selector requiring `^T[A-Z]` prefix, so bare `T` or `U` fails; (2) custom rule `no-inline-composite` that flags any inline object type literal with 2+ properties, any inline array of composite, any inline Map, Set, or Record whose value or key is a composite, with autofix suggesting an extracted alias name; (3) code review reflex: if a hover tooltip wraps in the IDE, the type needs a name; (4) place domain aliases in `src/types/<domain>.ts` (`src/types/user.ts`, `src/types/order.ts`) and import them; component-local types go in a sibling `types.ts` (see REACT-011); (5) when you cannot name a composite, split it until you can (spec/17/31 line 112). Rule of thumb: if you would grep for this shape, it needs a name."
+          rule="02-spec/17/31 line 110 is absolute. Two parts. (1) Every composite type gets a name. Composite means: any object type with 2+ fields, any array of a composite, any Map, Set, Record, or Promise of a composite, any union of 2+ non-primitive members, any function type used more than once. Declare it once as a `type` alias and import it everywhere. Inline anonymous composites in signatures are banned. (2) Every generic parameter gets a meaningful name in application code. Prefer TItem, TKey, TResponse, TError, TProps, TState, TAction, TDeps, TResult. Never bare T, U, K, V. Utility library code (fp-ts, ts-toolbelt) is the only exception, and this codebase is not that. The T-prefix disambiguates generics from concrete types in call-site hovers. Domain aliases pair with NAM-001 (PascalCase for types) and REACT-009 (no anonymous shapes)."
+          doThis="Enforce mechanically: (1) ESLint `@typescript-eslint/naming-convention` with a `typeParameter` selector requiring `^T[A-Z]` prefix, so bare `T` or `U` fails; (2) custom rule `no-inline-composite` that flags any inline object type literal with 2+ properties, any inline array of composite, any inline Map, Set, or Record whose value or key is a composite, with autofix suggesting an extracted alias name; (3) code review reflex: if a hover tooltip wraps in the IDE, the type needs a name; (4) place domain aliases in `src/types/<domain>.ts` (`src/types/user.ts`, `src/types/order.ts`) and import them; component-local types go in a sibling `types.ts` (see REACT-011); (5) when you cannot name a composite, split it until you can (02-spec/17/31 line 112). Rule of thumb: if you would grep for this shape, it needs a name."
         />
       </div>
     </SlideLayout>

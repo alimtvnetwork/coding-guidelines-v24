@@ -23,7 +23,7 @@ This was a long, single-day session that produced multiple linked deliverables a
 - Symmetric inversion table: `invert(invert(x)) == x`. Domain-specific pairs (`HasAccess` ↔ `IsUnauthorized`, `HasChildren` ↔ `IsSingle`) preferred over `Has-No-*` fallbacks.
 - Outputs go to `<basename>.generated.<ext>` companion files; source never modified.
 
-### Spec changes — `spec/04-database-conventions/03-naming-conventions.md`
+### Spec changes — `02-spec/04-database-conventions/03-naming-conventions.md`
 
 - **v3.2.0 → v3.3.0** — Rule 2 clarification (single-negative roots like `IsDisabled` are NOT forbidden, only explicit `Not`/`No` prefixes are). Added Rule 9 (Auto-Generated Inverted Computed Fields) with code-generation contract.
 - **v3.3.0 → v3.4.0** — Rule 8 restructured into a **three-bucket table** (Forbidden / Positive / 🟦 Approved Inverse of Positive). Reframed `HasNoAccess` → `IsUnauthorized`, `HasNoChildren` → `IsSingle`, `HasNoLicense` → `HasInvalidLicense`.
@@ -31,13 +31,13 @@ This was a long, single-day session that produced multiple linked deliverables a
 
 ### Spec changes — schema design + cross-links
 
-- `spec/04-database-conventions/03-schema-design.md` v3.3.0 — added §6 "Mandatory Descriptive Columns" with table-category classification matrix.
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` — added "Database ↔ Code Inverse Pattern (Rule 9)" callout linking to the canonical Rule 9 spec, the codegen tool, and BOOL-NEG-001.
-- `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` v2.2.0 — added "Database-Backed Inverses (Rule 9)" subsection.
+- `02-spec/04-database-conventions/03-schema-design.md` v3.3.0 — added §6 "Mandatory Descriptive Columns" with table-category classification matrix.
+- `02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` — added "Database ↔ Code Inverse Pattern (Rule 9)" callout linking to the canonical Rule 9 spec, the codegen tool, and BOOL-NEG-001.
+- `02-spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` v2.2.0 — added "Database-Backed Inverses (Rule 9)" subsection.
 
 ### CI/CD spec
 
-- Created `spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md` covering python3 detection, tree-sitter install failures, SARIF size limits, false-positive triage, and TOML parse errors. Updated `00-overview.md` document inventory.
+- Created `02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md` covering python3 detection, tree-sitter install failures, SARIF size limits, false-positive triage, and TOML parse errors. Updated `00-overview.md` document inventory.
 
 ### Earlier in the same session
 
@@ -66,8 +66,8 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `linters-cicd/codegen/emitters/{__init__,go_emitter,php_emitter,ts_emitter}.py`
 - `linters-cicd/codegen/readme.md`
 - `linters-cicd/scripts/emit-timeout.py`
-- `spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md`
-- `.lovable/prompts/03-write-prompt.md`
+- `02-spec/02-coding-guidelines/06-cicd-integration/99-troubleshooting.md`
+- `01-prompts/03-write-prompt.md`
 - `.lovable/memory/sessions/2026-04-19-perf-boolean-naming-schema.md` (this file)
 - `.lovable/memory/avoid/01-avoid-per-task-folders.md`
 
@@ -78,10 +78,10 @@ This was a long, single-day session that produced multiple linked deliverables a
 - `linters-cicd/checks/_lib/walker.py`
 - `linters-cicd/checks/_lib/cli.py`
 - `linters-cicd/checks/registry.json`
-- `spec/04-database-conventions/03-naming-conventions.md` (v3.2.0 → v3.5.0)
-- `spec/04-database-conventions/03-schema-design.md` (v3.2.0 → v3.3.0)
-- `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
-- `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` (v2.1.0 → v2.2.0)
+- `02-spec/04-database-conventions/03-naming-conventions.md` (v3.2.0 → v3.5.0)
+- `02-spec/04-database-conventions/03-schema-design.md` (v3.2.0 → v3.3.0)
+- `02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`
+- `02-spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` (v2.1.0 → v2.2.0)
 - `src/data/specTree.json` (regenerated multiple times)
 - `.lovable/29-plan.md`, `.lovable/suggestions.md`, `.lovable/strictly-avoid.md`, `.lovable/memory/01-index.md`
 

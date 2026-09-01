@@ -6,7 +6,7 @@
 
 This is the **single, canonical** specification for how the strict 8-line
 function-length rule is measured and enforced. All other surfaces
-(`spec/.../06-rules-mapping.md`, `.lovable/coding-guidelines.md`,
+(`02-spec/.../06-rules-mapping.md`, `.lovable/coding-guidelines.md`,
 the root `readme.md`, the rule docstrings) link **here**. If you change
 the threshold or counting rules, update this file first; the others must
 follow.
@@ -136,7 +136,7 @@ they are by definition one expression and cannot exceed the cap.
 There is **no waiver mechanism** for CODE-RED-005 today. A future
 `// CODE-RED-005-WAIVER: <reason>` pattern is reserved but not
 implemented; introducing it requires updating §1 of this file and the
-mapping table in `spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`.
+mapping table in `02-spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`.
 
 If you need to ship code that exceeds 8 lines today and refactor is
 not viable, the supported escape hatches are:
@@ -173,7 +173,7 @@ fixture to 8 lines — it is the canary.
 
 ## 7. Cross-references (must agree with this file)
 
-- `spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md` —
+- `02-spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md` —
   registry-level mapping table.
 - `.lovable/coding-guidelines.md` — Rule #1
   developer-facing summary.

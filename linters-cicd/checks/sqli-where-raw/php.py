@@ -6,7 +6,7 @@ Flags two patterns:
   warning — whereRaw('literal') with NO placeholders AND no params array
              (looks like an identifier splice — easy to weaponize later)
 
-Spec: spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
+Spec: 02-spec/18-wp-plugin-how-to/20-micro-orm-and-root-db.md
 """
 from __future__ import annotations
 

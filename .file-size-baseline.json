@@ -7,7 +7,7 @@
     },
     {
       "path": "scripts/generate-bundle-installers.mjs",
-      "lines": 1552
+      "lines": 1564
     },
     {
       "path": "linter-scripts/validate-guidelines.py",

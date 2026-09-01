@@ -6,7 +6,7 @@
 //   2. Renders all spec/**/{diagrams,images}/*.mmd → sibling PNGs.
 //   3. Verifies drift-check passes (no stale PNGs).
 //   4. Writes a new audit baseline doc under
-//      spec/19-main-worker-service/audit/<NN>-baseline-diagram-pngs-<DATE>.md
+//      02-spec/19-main-worker-service/audit/<NN>-baseline-diagram-pngs-<DATE>.md
 //      capturing source/png counts, rendered/skipped/failed, and the
 //      version/commit context.
 //

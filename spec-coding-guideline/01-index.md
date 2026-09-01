@@ -8,7 +8,7 @@
 - [ ] `/goal` Maintain internal repository-specific specifications without polluting consumer bundles.
 - [ ] `/learn` Adhere to Vite build pipeline and verify packaging to `slides-app/dist.zip`.
 - [ ] `/goal` Verify zero explicit `true` boolean checks across slide components.
-- [ ] `/learn` Run quality gate verification via `python .lovable/ai-fix-scripts/03-cicd-local-runner.py`.
+- [ ] `/learn` Run quality gate verification via `python 03-ai-scripts/03-cicd-local-runner.py`.
 
 ## Directory Contents
 

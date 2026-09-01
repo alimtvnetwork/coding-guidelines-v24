@@ -15,11 +15,11 @@ Created: 2026-07-19
 
 ## Context
 
-User requested (a) a 3-theme repo improvement summary and (b) a 60-100 task plan to evolve `slides-app/` into a slide-per-rule teaching deck for `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (v1.4.0), with the built deck attached to every release.
+User requested (a) a 3-theme repo improvement summary and (b) a 60-100 task plan to evolve `slides-app/` into a slide-per-rule teaching deck for `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (v1.4.0), with the built deck attached to every release.
 
 Captured inputs:
-- Command: .lovable/spec/commands/01-slides-attached-to-release.md
-- Command: .lovable/spec/commands/02-improvement-audit-cadence.md
+- Command: .lovable/02-spec/commands/01-slides-attached-to-release.md
+- Command: .lovable/02-spec/commands/02-improvement-audit-cadence.md
 
 Prior pending scan: `.lovable/plans/` did not exist before this turn, so no prior pending tasks were carried over. `.lovable/cicd-issues/` items (01-07) are separate CI-lint issues, unrelated to the slides overhaul, and stay in their existing tracker.
 

@@ -12,7 +12,7 @@ type: feature
 - `readme.md` **Bundle Installers** section — 7-row matrix with bash + PowerShell one-liners, "pick a bundle by goal" table, traits list. Links to `bundles.json`.
 - TOC entry added.
 - All 7 bundles verified present: error-manage, splitdb, slides, linters, cli, wp, consolidated. Each has `<bundle>-install.sh` + `<bundle>-install.ps1` + spec folders + `bundles.json` registration.
-- New consolidated files registered in `spec/17-consolidated-guidelines/00-overview.md`: 28 (distribution-and-runner), 29 (blind-ai-audit-v3), 30 (readme improvement suggestions).
+- New consolidated files registered in `02-spec/17-consolidated-guidelines/00-overview.md`: 28 (distribution-and-runner), 29 (blind-ai-audit-v3), 30 (readme improvement suggestions).
 
 **Shipped in v3.56.0 (Phases A–E):**
 - `readme.md` rewritten 1397 → **243 lines** (well under 400-line target). Hand-edited content moved into `docs/architecture.md`, `docs/principles.md`, `docs/author.md`.
@@ -25,7 +25,7 @@ type: feature
 - Phase E a11y: all images use `<img>` with `width="960"` and descriptive alt text; centred via `<p align="center">`.
 
 **Known pre-existing issues (not regressions):**
-- `spec/17-consolidated-guidelines/00-overview.md` references `31-distribution-and-runner.md` and `32-blind-ai-audit-v3.md` — neither file exists yet. These were registered as planned content from prior phases but were never authored. Either create the files or remove the index entries.
+- `02-spec/17-consolidated-guidelines/00-overview.md` references `31-distribution-and-runner.md` and `32-blind-ai-audit-v3.md` — neither file exists yet. These were registered as planned content from prior phases but were never authored. Either create the files or remove the index entries.
 
 ## How to regenerate the GIFs
 

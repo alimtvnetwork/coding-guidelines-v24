@@ -8,8 +8,8 @@ Splitting the logic here keeps the two rules in lockstep on
 classification, scope, join-table detection, and column lookup so they
 can never drift apart on those concerns.
 
-Spec: spec/04-database-conventions/03-schema-design.md §6 (v3.4.0)
-Naming: spec/04-database-conventions/03-naming-conventions.md Rules 10/11/12
+Spec: 02-spec/04-database-conventions/03-schema-design.md §6 (v3.4.0)
+Naming: 02-spec/04-database-conventions/03-naming-conventions.md Rules 10/11/12
 """
 
 from __future__ import annotations

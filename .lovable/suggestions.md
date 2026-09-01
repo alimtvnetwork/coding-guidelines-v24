@@ -25,7 +25,7 @@
 ### Playwright spec for Cmd/Ctrl+J → Spec Overview
 
 - **Status:** Pending **Priority:** Low **Added:** 2026-04-27
-- Add an E2E test that opens the Docs Viewer, presses `Cmd+J`, selects the pinned "Open Spec Overview" item, and asserts `spec/00-overview.md` becomes the active file. Guards the resilience-to-stale-tree guarantee.
+- Add an E2E test that opens the Docs Viewer, presses `Cmd+J`, selects the pinned "Open Spec Overview" item, and asserts `02-spec/00-overview.md` becomes the active file. Guards the resilience-to-stale-tree guarantee.
 
 ### Unit test for `findSpecOverviewFile` fallback
 
@@ -91,7 +91,7 @@
 ### Author 8 real Mermaid diagrams (currently placeholders)
 
 - **Status:** Pending **Priority:** Medium **Added:** 2026-04-24
-- `spec/13-generic-cli/images/` and `spec/14-update/images/` — placeholder SVGs only.
+- `02-spec/13-generic-cli/images/` and `02-spec/14-update/images/` — placeholder SVGs only.
 
 ### Real-repo run of orchestrator with new flags
 

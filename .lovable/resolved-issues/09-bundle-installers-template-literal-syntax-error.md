@@ -23,5 +23,5 @@ PowerShell newline escape characters (`` `n ``) and Bash variable interpolations
 
 ## 4. Code Fix & Prevention Rule
 1. **Fix Applied:** Escaped all PowerShell backticks (`\`n\`n`) and Bash template expressions (`\${src}`, `\${TARGET}`, `\${dest}`) in `scripts/generate-bundle-installers.mjs`.
-2. **Local CI Verification:** Registered `node scripts/generate-bundle-installers.mjs` into `.lovable/ai-fix-scripts/03-cicd-local-runner.py` under the `Bundle Installer Generation` quality gate.
+2. **Local CI Verification:** Registered `node scripts/generate-bundle-installers.mjs` into `03-ai-scripts/03-cicd-local-runner.py` under the `Bundle Installer Generation` quality gate.
 3. **Prevention Rule:** Any shell script embedded inside a JavaScript template literal MUST strictly escape all backticks (`` \` ``) and dollar-bracket interpolations (`\${...}`).

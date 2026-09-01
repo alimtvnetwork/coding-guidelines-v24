@@ -1,5 +1,5 @@
 /**
- * Resolves the canonical spec overview file (`spec/00-overview.md`) directly
+ * Resolves the canonical spec overview file (`02-spec/00-overview.md`) directly
  * from the flat `allFiles` list. This intentionally bypasses the sidebar tree
  * so the user can jump to the overview even when the tree is stale, collapsed,
  * or visually out-of-sync.
@@ -7,7 +7,7 @@
 import type { SpecNode } from "@/types/spec";
 import { SpecEntryType } from "@/constants/enums";
 
-export const SPEC_OVERVIEW_PATH = "spec/00-overview.md";
+export const SPEC_OVERVIEW_PATH = "02-spec/00-overview.md";
 const OVERVIEW_FILENAME = "00-overview.md";
 
 function isFile(node: SpecNode): boolean {

@@ -34,12 +34,12 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const SPEC_ROOT = resolve(ROOT, "spec");
+const SPEC_ROOT = resolve(ROOT, "02-spec");
 const VERSION_PATH = resolve(ROOT, "version.json");
 const PKG_PATH = resolve(ROOT, "package.json");
 const AUTHORS_PATH = resolve(ROOT, "version-authors.json");
 
-// ---------- canonical Role enum (spec/01-spec-authoring-guide/14-version-schema.md §6) ----------
+// ---------- canonical Role enum (02-spec/01-spec-authoring-guide/14-version-schema.md §6) ----------
 
 const VALID_ROLES = new Set([
   "PrimaryAuthor",
@@ -304,7 +304,7 @@ function buildFolderEntries() {
 
 function rootFileStats() {
   // Top-level .md files in spec/ that don't belong to any NN-* folder
-  // (e.g. spec/01-index.md, spec/spec-index.md, spec/health-dashboard.md).
+  // (e.g. 02-02-spec/01-index.md, 02-spec/spec-index.md, 02-spec/health-dashboard.md).
   let entries;
   try { entries = readdirSync(SPEC_ROOT); } catch { return { fileCount: 0, lineCount: 0, byteCount: 0 }; }
 

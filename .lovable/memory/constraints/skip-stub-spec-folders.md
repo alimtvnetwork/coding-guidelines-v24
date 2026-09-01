@@ -10,10 +10,10 @@ The following four spec folders are **intentional stubs** and must be **excluded
 
 | Folder | Lines | Reason |
 |--------|-------|--------|
-| `spec/21-app/` | 33 | Placeholder, no app-specific specs yet |
-| `spec/22-app-issues/` | 33 | Placeholder, no issues documented yet |
-| `spec/23-app-db/` | 51 | Placeholder, no schema/acceptance criteria |
-| `spec/24-app-ui-design-system/` | 50 | Placeholder, no UI specs yet |
+| `02-spec/21-app/` | 33 | Placeholder, no app-specific specs yet |
+| `02-spec/22-app-issues/` | 33 | Placeholder, no issues documented yet |
+| `02-spec/23-app-db/` | 51 | Placeholder, no schema/acceptance criteria |
+| `02-spec/24-app-ui-design-system/` | 50 | Placeholder, no UI specs yet |
 
 **Why:** These are reserved namespaces for future app-specific content. They score <20 in audits but that is **expected and acceptable** — they are scaffolding, not real specs.
 

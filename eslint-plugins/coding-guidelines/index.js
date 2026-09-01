@@ -2,7 +2,7 @@
  * ESLint Plugin: Coding Guidelines Enforcement
  *
  * Custom rules that enforce the project's CODE RED coding standards.
- * See: spec/02-coding-guidelines/03-coding-guidelines-spec/
+ * See: 02-spec/02-coding-guidelines/03-coding-guidelines-spec/
  *
  * Rules:
  *   coding-guidelines/no-nested-if          — Zero nested if (CODE RED)

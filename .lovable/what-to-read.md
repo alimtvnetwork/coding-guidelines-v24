@@ -28,11 +28,11 @@
 
 ## Before writing a spec
 
-- `spec/01-spec-authoring-guide/`, why: follow authoring format
+- `02-spec/01-spec-authoring-guide/`, why: follow authoring format
 
 ## Before adding a unit test
 
-- `spec/02-coding-guidelines/`, why: testing conventions
+- `02-spec/02-coding-guidelines/`, why: testing conventions
 
 ## See also
 

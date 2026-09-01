@@ -10,10 +10,10 @@
 **Mode:** SPEC ONLY. No implementation code. Per user verbatim §Important.5, "No implementation right now. Job is to write the spec only."
 
 **Scope folders:**
-- `spec/19-main-worker-service/` — primary
-- `spec/04-database-conventions/` — DateTime INTEGER, enum tables Id/Code/Label
-- `spec/05-split-db-architecture/` — DateTime INTEGER propagation
-- `spec/19-main-worker-service/diagrams/` — ER diagram updates
+- `02-spec/19-main-worker-service/` — primary
+- `02-spec/04-database-conventions/` — DateTime INTEGER, enum tables Id/Code/Label
+- `02-spec/05-split-db-architecture/` — DateTime INTEGER propagation
+- `02-spec/19-main-worker-service/diagrams/` — ER diagram updates
 
 **Stack-agnostic.** Default examples in Laravel/PHP per existing spec.
 
@@ -59,10 +59,10 @@ All prior open questions (OQ-A1..A4) have been resolved and promoted to locked d
 
 ### Phase 2 — Global DB Convention Updates
 
-- `spec/04-database-conventions/03-naming-conventions.md` — DateTime = INTEGER (epoch seconds, UTC).
-- `spec/04-database-conventions/03-schema-design.md` — enum tables shape `Id/Code/Label`.
-- `spec/05-split-db-architecture/` — propagate INTEGER DateTime convention.
-- `spec/19-main-worker-service/04-main-db-schema.md` — flip all `*At TEXT` → `*At INTEGER`.
+- `02-spec/04-database-conventions/03-naming-conventions.md` — DateTime = INTEGER (epoch seconds, UTC).
+- `02-spec/04-database-conventions/03-schema-design.md` — enum tables shape `Id/Code/Label`.
+- `02-spec/05-split-db-architecture/` — propagate INTEGER DateTime convention.
+- `02-spec/19-main-worker-service/04-main-db-schema.md` — flip all `*At TEXT` → `*At INTEGER`.
 - Update `Company` to `(CompanyId, Slug, Name, ...)`.
 
 ### Phase 3 — Move Users off Main

@@ -2,7 +2,7 @@
 # =====================================================================
 # check-no-latest-api.sh — static guard test.
 #
-# Asserts the property from spec/14-update/25-release-pinned-installer.md:
+# Asserts the property from 02-spec/14-update/25-release-pinned-installer.md:
 #   release-install.sh and release-install.ps1 MUST NOT call the GitHub
 #   "releases/latest" API (or any api.github.com endpoint that resolves
 #   "latest"). Comments and help text mentioning "/releases/latest" are

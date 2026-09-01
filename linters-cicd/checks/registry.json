@@ -2,7 +2,7 @@
   "CODE-RED-001": {
     "name": "NoNestedIf",
     "level": "error",
-    "spec": "01-cross-language/04-code-style/01-index.md",
+    "02-spec": "01-cross-language/04-code-style/01-index.md",
     "languages": {
       "go": "checks/nested-if/go.py",
       "typescript": "checks/nested-if/typescript.py",
@@ -14,7 +14,7 @@
   "CODE-RED-002": {
     "name": "BooleanNaming",
     "level": "error",
-    "spec": "01-cross-language/02-boolean-principles/01-index.md",
+    "02-spec": "01-cross-language/02-boolean-principles/01-index.md",
     "languages": {
       "go": "checks/boolean-naming/go.py",
       "typescript": "checks/boolean-naming/typescript.py",
@@ -24,7 +24,7 @@
   "CODE-RED-003": {
     "name": "MagicStrings",
     "level": "error",
-    "spec": "01-cross-language/04-code-style/01-index.md",
+    "02-spec": "01-cross-language/04-code-style/01-index.md",
     "languages": {
       "go": "checks/magic-strings/go.py",
       "typescript": "checks/magic-strings/typescript.py",
@@ -34,7 +34,7 @@
   "CODE-RED-004": {
     "name": "FunctionLength",
     "level": "error",
-    "spec": "01-cross-language/04-code-style/01-index.md",
+    "02-spec": "01-cross-language/04-code-style/01-index.md",
     "languages": {
       "go": "checks/function-length/go.py",
       "typescript": "checks/function-length/typescript.py",
@@ -44,7 +44,7 @@
   "CODE-RED-005": {
     "name": "FunctionLengthPrefer8",
     "level": "error",
-    "spec": "01-cross-language/04-code-style/01-index.md",
+    "02-spec": "01-cross-language/04-code-style/01-index.md",
     "languages": {
       "go": "checks/function-length-prefer8/go.py",
       "typescript": "checks/function-length-prefer8/typescript.py",
@@ -56,7 +56,7 @@
   "CODE-RED-006": {
     "name": "FileLength",
     "level": "error",
-    "spec": "01-cross-language/04-code-style/01-index.md",
+    "02-spec": "01-cross-language/04-code-style/01-index.md",
     "languages": {
       "universal": "checks/file-length/universal.py"
     }
@@ -64,7 +64,7 @@
   "CODE-RED-008": {
     "name": "PositiveConditions",
     "level": "error",
-    "spec": "01-cross-language/12-no-negatives.md",
+    "02-spec": "01-cross-language/12-no-negatives.md",
     "languages": {
       "go": "checks/positive-conditions/go.py",
       "typescript": "checks/positive-conditions/typescript.py"
@@ -73,7 +73,7 @@
   "STYLE-002": {
     "name": "NoElseAfterReturn",
     "level": "warning",
-    "spec": "01-cross-language/04-code-style/01-index.md",
+    "02-spec": "01-cross-language/04-code-style/01-index.md",
     "languages": {
       "go": "checks/no-else-after-return/go.py",
       "typescript": "checks/no-else-after-return/typescript.py"
@@ -82,14 +82,14 @@
   "STYLE-099": {
     "name": "SuppressionWithoutReason",
     "level": "warning",
-    "spec": "02-coding-guidelines/06-cicd-integration/98-faq.md",
+    "02-spec": "02-coding-guidelines/06-cicd-integration/98-faq.md",
     "synthetic": true,
     "languages": {}
   },
   "BOOL-NEG-001": {
     "name": "BooleanColumnNegativePrefix",
     "level": "error",
-    "spec": "04-database-conventions/02-naming-conventions.md",
+    "02-spec": "04-database-conventions/02-naming-conventions.md",
     "languages": {
       "sql": "checks/boolean-column-negative/sql.py",
       "go": "checks/boolean-column-negative/go.py"
@@ -98,7 +98,7 @@
   "DB-FREETEXT-001": {
     "name": "FreeTextColumnsRequired",
     "level": "error",
-    "spec": "04-database-conventions/03-schema-design.md",
+    "02-spec": "04-database-conventions/03-schema-design.md",
     "languages": {
       "sql": "checks/free-text-columns/sql.py"
     }
@@ -106,7 +106,7 @@
   "MISSING-DESC-001": {
     "name": "MissingOrInvalidFreeTextColumns",
     "level": "error",
-    "spec": "04-database-conventions/03-schema-design.md",
+    "02-spec": "04-database-conventions/03-schema-design.md",
     "languages": {
       "sql": "checks/missing-desc/sql.py"
     }
@@ -114,7 +114,7 @@
   "SPEC-LINK-001": {
     "name": "BrokenSpecCrossLink",
     "level": "error",
-    "spec": "04-database-conventions/02-naming-conventions.md",
+    "02-spec": "04-database-conventions/02-naming-conventions.md",
     "languages": {
       "markdown": "checks/spec-links/markdown.py"
     }
@@ -122,7 +122,7 @@
   "SQLI-RAW-001": {
     "name": "RawExecuteConcatenation",
     "level": "error",
-    "spec": "18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
+    "02-spec": "18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
     "languages": {
       "php": "checks/sqli-raw-execute/php.py",
       "typescript": "checks/sqli-raw-execute/typescript.py"
@@ -131,7 +131,7 @@
   "SQLI-RAW-002": {
     "name": "WhereRawWithoutStrictParams",
     "level": "error",
-    "spec": "18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
+    "02-spec": "18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
     "languages": {
       "php": "checks/sqli-where-raw/php.py",
       "typescript": "checks/sqli-where-raw/typescript.py"
@@ -140,7 +140,7 @@
   "SQLI-ORDER-001": {
     "name": "UnvalidatedOrderOrGroupByIdentifier",
     "level": "error",
-    "spec": "18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
+    "02-spec": "18-wp-plugin-how-to/20-micro-orm-and-root-db.md",
     "languages": {
       "php": "checks/sqli-order-group-by/php.py",
       "typescript": "checks/sqli-order-group-by/typescript.py"
@@ -149,7 +149,7 @@
   "CODE-RED-009": {
     "name": "ConditionalMagicStrings",
     "level": "error",
-    "spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
+    "02-spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
     "languages": {
       "go": "checks/conditional-magic-strings/go.py",
       "typescript": "checks/conditional-magic-strings/typescript.py"
@@ -158,7 +158,7 @@
   "CODE-RED-010": {
     "name": "EnumSuffix",
     "level": "error",
-    "spec": "17-consolidated-guidelines/07-enum-standards.md",
+    "02-spec": "17-consolidated-guidelines/07-enum-standards.md",
     "languages": {
       "go": "checks/enum-suffix/go.py",
       "typescript": "checks/enum-suffix/typescript.py",
@@ -170,7 +170,7 @@
   "CODE-RED-011": {
     "name": "LowercaseReadme",
     "level": "error",
-    "spec": "01-cross-language/08-file-folder-naming/01-index.md",
+    "02-spec": "01-cross-language/08-file-folder-naming/01-index.md",
     "languages": {
       "markdown": "checks/lowercase-readme/markdown.py"
     }
@@ -178,7 +178,7 @@
   "CODE-RED-012": {
     "name": "BooleanReturnWrapper",
     "level": "error",
-    "spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
+    "02-spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
     "languages": {
       "go": "checks/boolean-return-wrapper/go.py",
       "typescript": "checks/boolean-return-wrapper/typescript.py",
@@ -190,7 +190,7 @@
   "CODE-RED-013": {
     "name": "InvertedComplexConditions",
     "level": "error",
-    "spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
+    "02-spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
     "languages": {
       "go": "checks/inverted-complex-conditions/go.py",
       "typescript": "checks/inverted-complex-conditions/typescript.py",
@@ -202,7 +202,7 @@
   "CODE-RED-014": {
     "name": "StrictBooleanConditions",
     "level": "error",
-    "spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
+    "02-spec": "17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md",
     "languages": {
       "go": "checks/strict-boolean-conditions/go.py",
       "typescript": "checks/strict-boolean-conditions/typescript.py",

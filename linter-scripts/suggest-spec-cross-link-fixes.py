@@ -323,7 +323,7 @@ def apply_fixes(sugs: list[dict], min_conf: float) -> tuple[int, int]:
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Suggest or auto-fix broken spec cross-references.")
-    p.add_argument("--root", default="spec")
+    p.add_argument("--root", default="02-spec")
     p.add_argument("--repo-root", default=".")
     p.add_argument("--apply", action="store_true", help="Rewrite files in place when confidence >= threshold")
     p.add_argument("--min-confidence", type=float, default=DEFAULT_MIN_CONFIDENCE)

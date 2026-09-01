@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 53: never mutate state, props, or arrays/objects returned by hooks.
  *
- * Source: spec/17/31 line 105.
+ * Source: 02-spec/17/31 line 105.
  */
 
 const BEFORE = `// Mutating state, props, and a React Query cache entry in place.
@@ -64,7 +64,7 @@ export default function NoMutateStatePropsHookReturnsSlide() {
     <SlideLayout
       eyebrow="Rule 53 · React · never mutate state, props, or hook returns"
       title="Build a new value with spread or `structuredClone`. Reference equality is React's contract, not yours."
-      subtitle="spec/17/31 line 105: never mutate state, props, or arrays/objects returned by hooks. React, React Query, Zustand, and every memo boundary rely on reference equality to decide what re-renders and what is cached. Mutation silently corrupts the cache and skips renders."
+      subtitle="02-spec/17/31 line 105: never mutate state, props, or arrays/objects returned by hooks. React, React Query, Zustand, and every memo boundary rely on reference equality to decide what re-renders and what is cached. Mutation silently corrupts the cache and skips renders."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 4 }}>
         <CodeDiff
@@ -77,7 +77,7 @@ export default function NoMutateStatePropsHookReturnsSlide() {
         <ActionPanel
           slideId="51-no-mutate-state-props-hook-returns"
           symptom="`TaskBoard` has three interlocking bugs. (1) Adding a task does nothing on screen because `tasks.push(next); setTasks(tasks)` passes the same reference and React bails out; a junior 'fixed' it with `setTasks([...tasks])`, which now works for add but hides the deeper issue. (2) Renaming a task updates the list header but the row itself keeps the old title until the page reloads, because the task object was mutated in place and the row is `React.memo`-wrapped on the task reference. (3) Users on the sidebar are alphabetized after visiting the board even when other pages want insertion order, because `users?.sort(...)` mutated the React Query cache entry. Bonus: `board.Meta.LastViewedAt = Date.now()` on a prop occasionally throws in strict-mode dev builds and never in prod, so it hides in staging."
-          rule="spec/17/31 line 105 is absolute: never mutate state, props, or arrays/objects returned by hooks. Build a new value with spread, `map`, `filter`, `structuredClone`, or an immutable helper (Immer produce, `use-immer`). This covers `useState` values, `useReducer` state, function props, component props, `useQuery` data, `useSWR` data, `useContext` values, and anything returned by a custom hook. The rule pairs with line 104 (no raw `for`/`forEach` in render, which encourages mutation) and line 106 (stable keys, which relies on stable references). Reference equality is React's contract for bailouts, `React.memo`, `useMemo`, `useCallback`, and dep arrays; mutation invalidates that contract silently and the resulting bugs cost days to diagnose."
+          rule="02-spec/17/31 line 105 is absolute: never mutate state, props, or arrays/objects returned by hooks. Build a new value with spread, `map`, `filter`, `structuredClone`, or an immutable helper (Immer produce, `use-immer`). This covers `useState` values, `useReducer` state, function props, component props, `useQuery` data, `useSWR` data, `useContext` values, and anything returned by a custom hook. The rule pairs with line 104 (no raw `for`/`forEach` in render, which encourages mutation) and line 106 (stable keys, which relies on stable references). Reference equality is React's contract for bailouts, `React.memo`, `useMemo`, `useCallback`, and dep arrays; mutation invalidates that contract silently and the resulting bugs cost days to diagnose."
           doThis="Enforce it mechanically: (1) mark every state and hook return `readonly` at the type level (`useState<readonly Task[]>`, `type UsersQueryResult = { data: readonly User[] | undefined }`) so mutation is a compile error; (2) enable ESLint `functional/immutable-data` or `no-param-reassign` with `{ props: true }` scoped to `.tsx` files; (3) custom ESLint rule `no-mutate-hook-return` that flags `.push`, `.pop`, `.shift`, `.splice`, `.sort`, `.reverse`, and direct assignment on identifiers that came out of a hook (`useState`, `useQuery`, `useContext`, or any `use*`); (4) codemod pass `scripts/codemods/mutation-to-spread.ts` for the initial sweep, followed by human review; (5) React Query `defaultOptions.queries.structuralSharing: true` stays on, and a runtime dev-only `Object.freeze` on query results in development to make mutation throw loudly. Reviewers reject any `.push`/`.sort`/direct-assignment on state, props, or hook returns without a spread-copy first."
         />
       </div>

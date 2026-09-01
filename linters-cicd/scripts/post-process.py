@@ -7,7 +7,7 @@ Applies, in order:
   3. --exclude-rules filtering
   4. --baseline subtraction (or --refresh-baseline write-back)
 
-Spec: spec/02-coding-guidelines/06-cicd-integration/98-faq.md
+Spec: 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ STYLE_099_RULE = {
     "id": "STYLE-099",
     "name": "SuppressionWithoutReason",
     "shortDescription": {"text": "codeguidelines:disable= comment is missing a reason after the em dash"},
-    "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/spec/02-coding-guidelines/06-cicd-integration/98-faq.md",
+    "helpUri": "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md",
 }
 
 

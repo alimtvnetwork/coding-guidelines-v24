@@ -1,7 +1,7 @@
 # WP Plugin Spec — AI-Blind Implementation Readiness
 
 **Date:** 2026-04-26
-**Subject:** `spec/18-wp-plugin-how-to/`
+**Subject:** `02-spec/18-wp-plugin-how-to/`
 **Audited by:** Lovable AI gap-analysis pass
 
 ---

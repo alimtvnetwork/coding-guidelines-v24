@@ -164,7 +164,7 @@ so behavior is identical across platforms.
 | Exit `2` (tool error) | Re-run with `--check-timeout 60` and `--jobs 1` to isolate the failing check. |
 | Too many findings on first run | Snapshot a baseline: `--refresh-baseline .codeguidelines-baseline.sarif`, commit it, then use `--baseline` going forward. |
 
-Full spec: [`spec/02-coding-guidelines/06-cicd-integration/`](./spec/02-coding-guidelines/06-cicd-integration/).
+Full spec: [`02-spec/02-coding-guidelines/06-cicd-integration/`](./02-spec/02-coding-guidelines/06-cicd-integration/).
 
 ---
 

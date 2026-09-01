@@ -4,7 +4,7 @@ import { ActionPanel } from "@/components/ActionPanel";
 /**
  * SS-02 task 20: Method-documentation decision tree.
  *
- * Encodes the 5-step checklist from spec/17/31 §"Method Documentation".
+ * Encodes the 5-step checklist from 02-spec/17/31 §"Method Documentation".
  * Default answer is NO DOC; a doc comment is the exceptional outcome that
  * survives only when refactor, split, and signature-restate checks all fail.
  */
@@ -168,7 +168,7 @@ export default function MethodDocDecisionTreeSlide() {
             color: "hsl(var(--fg-muted))",
           }}
         >
-          Reference · spec/17-consolidated-guidelines/31 §Method Documentation (checklist Q1-Q5). Same rules for Go, TS, PHP, Rust, C#, PowerShell, Python; only the comment syntax changes.
+          Reference · 02-spec/17-consolidated-guidelines/31 §Method Documentation (checklist Q1-Q5). Same rules for Go, TS, PHP, Rust, C#, PowerShell, Python; only the comment syntax changes.
         </div>
       </div>
     </SlideLayout>

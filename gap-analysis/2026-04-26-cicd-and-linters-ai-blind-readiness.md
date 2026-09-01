@@ -22,7 +22,7 @@
 
 ## 1. What a blind AI WILL get right
 
-Given only this repo's documentation (`linters-cicd/readme.md`, `examples/other-repo-integration/`, `spec/02-coding-guidelines/06-cicd-integration/`, `spec/12-cicd-pipeline-workflows/`):
+Given only this repo's documentation (`linters-cicd/readme.md`, `examples/other-repo-integration/`, `02-spec/02-coding-guidelines/06-cicd-integration/`, `02-spec/12-cicd-pipeline-workflows/`):
 
 | Capability | Source |
 |------------|--------|
@@ -69,7 +69,7 @@ An AI integrating the pack into a long-lived repo needs a story for "how do I ke
 
 ### 2.4 Custom-rule onboarding is buried
 
-`spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md` defines the plugin model, but a blind AI tasked with "add a rule that flags `console.log` in production TS" has no copy-paste skeleton. The existing rule directories (`linters-cicd/checks/boolean-naming/`, etc.) are the only template — and they're undocumented as templates.
+`02-spec/02-coding-guidelines/06-cicd-integration/02-plugin-model.md` defines the plugin model, but a blind AI tasked with "add a rule that flags `console.log` in production TS" has no copy-paste skeleton. The existing rule directories (`linters-cicd/checks/boolean-naming/`, etc.) are the only template — and they're undocumented as templates.
 
 **Fix:** Add `linters-cicd/checks/_template/` with a 30-line skeleton + README walking through "how to add a rule in 10 minutes". The CI smoke-tests in `tests/pipeline/` should grow to cover the template too.
 

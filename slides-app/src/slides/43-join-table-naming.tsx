@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 45: Join-table naming and composite PK.
  *
- * Source: spec/17/31 line 91 (Type/Status/Category via N-M join tables) and
+ * Source: 02-spec/17/31 line 91 (Type/Status/Category via N-M join tables) and
  * `mem://architecture/database-schema` (join tables exempt from Description/Notes).
  */
 
@@ -29,7 +29,7 @@ CREATE TABLE UserRole (
 );
 
 -- Type/Status/Category resolve through a registered enum + join table,
--- never a free-form string column on the parent (spec/17/31 line 91).
+-- never a free-form string column on the parent (02-spec/17/31 line 91).
 CREATE TABLE OrderStatus (
   OrderId          INTEGER NOT NULL REFERENCES "Order"(OrderId),
   StatusEnumId     INTEGER NOT NULL REFERENCES StatusEnum(StatusEnumId),
@@ -55,7 +55,7 @@ export default function JoinTableNamingSlide() {
         <ActionPanel
           slideId="43-join-table-naming"
           symptom="A permissions bug: user Ada shows two 'admin' rows in the audit console. Support blames the UI. The UI blames the API. The API blames the DB. Nobody catches that `user_roles` allows duplicate `(user_id, role_id)` pairs because the PK is a surrogate `user_role_id`. Meanwhile `Order.Status = 'shipping'` (typo of 'shipped') passes every check because the column is a free-form string, and the analytics dashboard silently drops the row."
-          rule="Pure many-to-many join tables are named `{A}{B}` in PascalCase (alphabetical or domain-natural order, pick one and stick with it) and have a composite primary key `({A}Id, {B}Id)`, both columns `NOT NULL` and FK-referencing their parent's `{Table}Id`. No surrogate PK. No `Description`, no `Notes`, no `Comments` (join tables are exempt per `mem://architecture/database-schema`). `Type`, `Status`, `Category`, and `Kind` on any entity resolve through a registered enum table plus a join table, never a free-form string column on the parent (spec/17/31 line 91). When the relationship carries history (status over time), the PK extends with the time key: `(OrderId, StatusEnumId, EffectiveAt)`."
+          rule="Pure many-to-many join tables are named `{A}{B}` in PascalCase (alphabetical or domain-natural order, pick one and stick with it) and have a composite primary key `({A}Id, {B}Id)`, both columns `NOT NULL` and FK-referencing their parent's `{Table}Id`. No surrogate PK. No `Description`, no `Notes`, no `Comments` (join tables are exempt per `mem://architecture/database-schema`). `Type`, `Status`, `Category`, and `Kind` on any entity resolve through a registered enum table plus a join table, never a free-form string column on the parent (02-spec/17/31 line 91). When the relationship carries history (status over time), the PK extends with the time key: `(OrderId, StatusEnumId, EffectiveAt)`."
           doThis="Enforce in the migration linter: (1) reject any table whose name matches two known entity names concatenated but has an extra surrogate PK; (2) reject any join table that declares `Description`, `Notes`, or `Comments`; (3) reject any column named `Type`, `Status`, `Category`, or `Kind` typed `TEXT` on a non-enum table, and require the join-table + enum pattern instead. On violation, log `schema.join.violation` with the table, offending column, and the rule number, and block the PR. Add a PR checklist item: 'Join table is `{A}{B}`, composite PK, no narrative columns; Status/Type/Category use enum + join'."
         />
       </div>

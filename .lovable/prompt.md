@@ -25,7 +25,7 @@ Central index of all AI prompts available in this project. Reference this file t
 
 ## Adding New Prompts
 
-1. Create the file in `.lovable/prompts/` with numeric prefix: `NN-descriptive-name.md`
+1. Create the file in `01-prompts/` with numeric prefix: `NN-descriptive-name.md`
 2. Add an entry to this index table
 3. Bump the version of this file
 

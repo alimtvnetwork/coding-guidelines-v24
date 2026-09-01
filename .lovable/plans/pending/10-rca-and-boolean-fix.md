@@ -14,6 +14,6 @@
 
 ## Subtasks
 - **Subtask 1:** Update .lovable/strictly-avoid.md with a TOTAL BAN on == true / === true.
-- **Subtask 2:** Update spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md to formally document this.
-- **Subtask 3:** Update spec/02-coding-guidelines/03-golang/02-boolean-standards.md to cover this and the go generate requirement.
-- **Subtask 4:** Update .lovable/prompts/ (e.g., 15-commit-fix.md and 10-execute-batched-loop.md) to explicitly mention go generate after constant changes and ban == true.
+- **Subtask 2:** Update 02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md to formally document this.
+- **Subtask 3:** Update 02-spec/02-coding-guidelines/03-golang/02-boolean-standards.md to cover this and the go generate requirement.
+- **Subtask 4:** Update 01-prompts/ (e.g., 15-commit-fix.md and 10-execute-batched-loop.md) to explicitly mention go generate after constant changes and ban == true.

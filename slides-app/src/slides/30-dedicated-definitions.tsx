@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 32: Dedicated definitions file.
  *
- * Source: spec/17/31 line 32. Types, enums, constants, and interfaces get
+ * Source: 02-spec/17/31 line 32. Types, enums, constants, and interfaces get
  * their own file, not inline next to the first use. Applies to every
  * language; the file layout below uses TypeScript as the illustration.
  */
@@ -72,7 +72,7 @@ export default function DedicatedDefinitionsSlide() {
         <ActionPanel
           slideId="30-dedicated-definitions"
           symptom="A second screen needs `OrderStatusType`, so it imports it from `OrderCard.tsx`. Now the card file cannot be renamed or deleted without breaking unrelated modules. Circular imports appear the moment a util also wants the type. Reviewers stop noticing because 'it works.'"
-          rule="Types, enums, interfaces, and typed constants each live in a dedicated file, not inline next to the first use. Colocate as `types.ts` / `constants.ts` next to the feature; promote to `src/types/` or `src/constants/` when shared across features. Per spec/17/31 line 32 and rule 13 for React prop types."
+          rule="Types, enums, interfaces, and typed constants each live in a dedicated file, not inline next to the first use. Colocate as `types.ts` / `constants.ts` next to the feature; promote to `src/types/` or `src/constants/` when shared across features. Per 02-spec/17/31 line 32 and rule 13 for React prop types."
           doThis="Create `types.ts` and `constants.ts` the moment you write the first non-trivial type or literal. Import types with `import type` so bundlers can drop them. When you catch an inline `type Props = {...}` on a component signature during review, request extraction before approving. No 'we will extract it later.'"
         />
       </div>

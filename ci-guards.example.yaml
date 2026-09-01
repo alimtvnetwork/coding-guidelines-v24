@@ -2,7 +2,7 @@
 #
 # Every key is OPTIONAL; omitted sections fall back to documented defaults.
 # Schema reference:
-#   spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md
+#   02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/08-config-schema.md
 #
 # This file is consumed by:
 #   scripts/ci-config.mjs       -> validates + emits env vars

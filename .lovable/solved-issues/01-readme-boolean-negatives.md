@@ -13,7 +13,7 @@ Renamed `user.banned` → `user.hasGoodStanding` and `user.active` → `user.isA
 
 ## Learning
 
-The Boolean Principles spec (`spec/02-coding-guidelines/01-cross-language/02-boolean-principles`) applies to **every** code sample in markdown, not just production source. Always re-run `bash linters-cicd/run-all.sh`.
+The Boolean Principles spec (`02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles`) applies to **every** code sample in markdown, not just production source. Always re-run `bash linters-cicd/run-all.sh`.
 
 ## What NOT to repeat
 

@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 34: Mermaid-first for 3+ components.
  *
- * Source: spec/17/31 line 42 (rule 10). Any feature with three or
+ * Source: 02-spec/17/31 line 42 (rule 10). Any feature with three or
  * more components gets a Mermaid component diagram before code.
  */
 
@@ -54,7 +54,7 @@ export default function MermaidFirstComponentsSlide() {
         <ActionPanel
           slideId="32-mermaid-first-components"
           symptom="A checkout PR lands four new components in one folder. Two weeks later, totals disagree between `PaymentPanel` and `OrderSummary` because both recompute from their own slice of state, and nobody can point to a single diagram that says which component owns what. Refactor takes a full sprint because the ownership was never written down."
-          rule="Any feature with three or more components requires a Mermaid component diagram committed to the feature folder (for example `docs/checkout/components.mmd`) before any `.tsx` is written. The diagram names each component, marks the state owner, and draws arrows for data flow. PRs that add a third component without updating or adding the diagram fail review. Per spec/17/31 line 42 rule 10."
+          rule="Any feature with three or more components requires a Mermaid component diagram committed to the feature folder (for example `docs/checkout/components.mmd`) before any `.tsx` is written. The diagram names each component, marks the state owner, and draws arrows for data flow. PRs that add a third component without updating or adding the diagram fail review. Per 02-spec/17/31 line 42 rule 10."
           doThis="On the third component, stop coding. Open a `.mmd` file in the feature folder, sketch the graph as `flowchart TD`, mark the store or hook that owns state, and draw arrows only for reads and writes that actually exist. Open the PR with the diagram alone first, get review on ownership, then land the components. Re-render the PNG via `npm run diagrams:render` so the diagram stays visible in the readme."
         />
       </div>

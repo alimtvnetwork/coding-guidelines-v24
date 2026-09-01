@@ -14,16 +14,16 @@
 #
 # Run with -h or --help for the full flag reference (scope-tagged).
 #
-# Spec: spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
+# Spec: 02-spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
 #
 #
 # Folder mapping (src in repo → dest under target):
-#   spec/11-powershell-integration → spec/11-powershell-integration
-#   spec/12-cicd-pipeline-workflows → spec/12-cicd-pipeline-workflows
-#   spec/13-generic-cli → spec/13-generic-cli
-#   spec/14-update → spec/14-update
-#   spec/15-distribution-and-runner → spec/15-distribution-and-runner
-#   spec/16-generic-release → spec/16-generic-release
+#   02-spec/11-powershell-integration → 02-spec/11-powershell-integration
+#   02-spec/12-cicd-pipeline-workflows → 02-spec/12-cicd-pipeline-workflows
+#   02-spec/13-generic-cli → 02-spec/13-generic-cli
+#   02-spec/14-update → 02-spec/14-update
+#   02-spec/15-distribution-and-runner → 02-spec/15-distribution-and-runner
+#   02-spec/16-generic-release → 02-spec/16-generic-release
 #   version.json → version.json
 #   .lovable/what-to-read.md → .lovable/what-to-read.md
 #   .lovable/memory → .lovable/memory
@@ -74,7 +74,7 @@ trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
 trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
 
 BUNDLE_NAME="cli"
-BUNDLE_MAPPING="spec/11-powershell-integration|spec/11-powershell-integration spec/12-cicd-pipeline-workflows|spec/12-cicd-pipeline-workflows spec/13-generic-cli|spec/13-generic-cli spec/14-update|spec/14-update spec/15-distribution-and-runner|spec/15-distribution-and-runner spec/16-generic-release|spec/16-generic-release version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory"
+BUNDLE_MAPPING="02-spec/11-powershell-integration|02-spec/11-powershell-integration 02-spec/12-cicd-pipeline-workflows|02-spec/12-cicd-pipeline-workflows 02-spec/13-generic-cli|02-spec/13-generic-cli 02-spec/14-update|02-spec/14-update 02-spec/15-distribution-and-runner|02-spec/15-distribution-and-runner 02-spec/16-generic-release|02-spec/16-generic-release version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory"
 ARCHIVE_STABLE_NAME="cli"
 RELEASE_BASE="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 REPO_SLUG="alimtvnetwork/coding-guidelines-v24"
@@ -177,7 +177,7 @@ EXIT CODES (spec §8)
   5  inner installer / handoff rejected
 
 SPEC
-  spec/14-update/27-generic-installer-behavior.md
+  02-spec/14-update/27-generic-installer-behavior.md
 HELP
 }
 
@@ -382,10 +382,16 @@ merge_path(sys.argv[1], sys.argv[2])
       echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
       continue
     fi
+    if [[ "${dest}" == *".lovable/plans"* || "${dest}" == *".lovable/what-to-read.md"* ]]; then
+      if [[ -e "${TARGET}/${dest}" ]]; then
+        echo "  ℹ️  ${TARGET}/${dest} already exists (skipping overwrite to preserve project state)"
+        continue
+      fi
+    fi
     if [[ -d "${archive_root}/${src}" ]]; then
       mkdir -p "${TARGET}/${dest}"
       cp -R "${archive_root}/${src}/." "${TARGET}/${dest}/"
-      if [[ "${src}" == ".lovable/prompts" || "${src}" == ".lovable/prompts/" ]]; then
+      if [[ "${src}" == "01-prompts" || "${src}" == "01-prompts/" ]]; then
         # Inject promptArchitectByRiseupAsia tracking block into target version.json
         local target_version_file="${TARGET}/version.json"
         python3 -c "

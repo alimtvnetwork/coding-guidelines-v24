@@ -1,20 +1,20 @@
 ---
 name: Prompt Synchronization Architecture
-description: Internal, self-contained prompt categorization in .lovable/prompts/01-prompts-category/ compiled to top-level .lovable/prompts/ via prompt-sync-config.json.
+description: Internal, self-contained prompt categorization in 01-prompts/ compiled to top-level 01-prompts/ via prompt-sync-config.json.
 type: standard
 ---
 
 # Prompt Synchronization Architecture
 
-**Authoritative Source:** `.lovable/prompts/01-prompts-category/`
-**Compiled Output:** `.lovable/prompts/*.md` (flat prompt files)
+**Authoritative Source:** `01-prompts/`
+**Compiled Output:** `01-prompts/*.md` (flat prompt files)
 **Configuration:** `scripts/prompt-sync-config.json`
 **Execution Script:** `scripts/update-prompts.ps1` / `scripts/update-prompts.sh`
 
 ## 1. Internal, Self-Contained Source of Truth
 
 To eliminate external repository sync overhead, all system and AI execution prompts are authored, versioned, and edited exclusively inside this repository under:
-`.lovable/prompts/01-prompts-category/`
+`01-prompts/`
 
 Categorized folders include:
 - `00-folder-structure/`
@@ -43,7 +43,7 @@ Categorized folders include:
 
 ## 2. Compilation and Flat Mirroring
 
-Top-level AI tools and command shortcuts read from flat, sequentially numbered prompts in `.lovable/prompts/` (e.g. `01-unified-ai-prompt-v4.md`, `02-next-steps.md`, `05-read-memory-enhanced.md`, etc.).
+Top-level AI tools and command shortcuts read from flat, sequentially numbered prompts in `01-prompts/` (e.g. `01-unified-ai-prompt-v4.md`, `02-next-steps.md`, `05-read-memory-enhanced.md`, etc.).
 
 ### Synchronization Command:
 ```powershell
@@ -59,6 +59,6 @@ or on Linux/macOS:
 
 ## 3. Strict Rules for AI Agents
 
-1. **Modify the Source First:** Never edit `.lovable/prompts/*.md` directly without updating the corresponding source file in `.lovable/prompts/01-prompts-category/`.
+1. **Modify the Source First:** Never edit `01-prompts/*.md` directly without updating the corresponding source file in `01-prompts/`.
 2. **Compile After Edits:** Always execute `scripts/update-prompts.ps1` (or `scripts/update-prompts.sh`) to re-sync the flat prompts and run the linter validation.
 3. **No External Clone:** Never attempt to git clone external prompt repositories to update local prompts; this repository is fully self-contained.

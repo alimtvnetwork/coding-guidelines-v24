@@ -14,13 +14,13 @@
 #
 # Run with -h or --help for the full flag reference (scope-tagged).
 #
-# Spec: spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
+# Spec: 02-spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
 #
 #
 # Folder mapping (src in repo → dest under target):
-#   spec/04-database-conventions → spec/04-database-conventions
-#   spec/05-split-db-architecture → spec/05-split-db-architecture
-#   spec/06-seedable-config-architecture → spec/06-seedable-config-architecture
+#   02-spec/04-database-conventions → 02-spec/04-database-conventions
+#   02-spec/05-split-db-architecture → 02-spec/05-split-db-architecture
+#   02-spec/06-seedable-config-architecture → 02-spec/06-seedable-config-architecture
 #   version.json → version.json
 #   .lovable/what-to-read.md → .lovable/what-to-read.md
 #   .lovable/memory → .lovable/memory
@@ -71,7 +71,7 @@ trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
 trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
 
 BUNDLE_NAME="splitdb"
-BUNDLE_MAPPING="spec/04-database-conventions|spec/04-database-conventions spec/05-split-db-architecture|spec/05-split-db-architecture spec/06-seedable-config-architecture|spec/06-seedable-config-architecture version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory"
+BUNDLE_MAPPING="02-spec/04-database-conventions|02-spec/04-database-conventions 02-spec/05-split-db-architecture|02-spec/05-split-db-architecture 02-spec/06-seedable-config-architecture|02-spec/06-seedable-config-architecture version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory"
 ARCHIVE_STABLE_NAME="splitdb"
 RELEASE_BASE="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 REPO_SLUG="alimtvnetwork/coding-guidelines-v24"
@@ -174,7 +174,7 @@ EXIT CODES (spec §8)
   5  inner installer / handoff rejected
 
 SPEC
-  spec/14-update/27-generic-installer-behavior.md
+  02-spec/14-update/27-generic-installer-behavior.md
 HELP
 }
 
@@ -379,10 +379,16 @@ merge_path(sys.argv[1], sys.argv[2])
       echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
       continue
     fi
+    if [[ "${dest}" == *".lovable/plans"* || "${dest}" == *".lovable/what-to-read.md"* ]]; then
+      if [[ -e "${TARGET}/${dest}" ]]; then
+        echo "  ℹ️  ${TARGET}/${dest} already exists (skipping overwrite to preserve project state)"
+        continue
+      fi
+    fi
     if [[ -d "${archive_root}/${src}" ]]; then
       mkdir -p "${TARGET}/${dest}"
       cp -R "${archive_root}/${src}/." "${TARGET}/${dest}/"
-      if [[ "${src}" == ".lovable/prompts" || "${src}" == ".lovable/prompts/" ]]; then
+      if [[ "${src}" == "01-prompts" || "${src}" == "01-prompts/" ]]; then
         # Inject promptArchitectByRiseupAsia tracking block into target version.json
         local target_version_file="${TARGET}/version.json"
         python3 -c "

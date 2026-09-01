@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 50: `useEffect` is the last resort, guards are positive booleans.
  *
- * Source: spec/17/31 lines 99-101.
+ * Source: 02-spec/17/31 lines 99-101.
  */
 
 const BEFORE = `// Four effects, negative inline guards, effects used to derive state.
@@ -58,7 +58,7 @@ export default function EffectLastResortSlide() {
     <SlideLayout
       eyebrow="Rule 50 · React · effects are the last resort"
       title="Default is zero effects. Every remaining guard is a positively named boolean, extracted above the effect."
-      subtitle="spec/17/31 lines 99-101: do not use `useEffect` to derive state, transform props, or react to user events. Use derived values, `useMemo`, or event handlers. When an effect is truly required (network, timer, subscription, DOM API), the condition is a positively named boolean, never an inline negative."
+      subtitle="02-spec/17/31 lines 99-101: do not use `useEffect` to derive state, transform props, or react to user events. Use derived values, `useMemo`, or event handlers. When an effect is truly required (network, timer, subscription, DOM API), the condition is a positively named boolean, never an inline negative."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 4 }}>
         <CodeDiff
@@ -71,7 +71,7 @@ export default function EffectLastResortSlide() {
         <ActionPanel
           slideId="48-effect-last-resort"
           symptom="`OrderPanel` has four `useEffect`s: one derives `total` from `order.items`, one derives `canCheckout` from `user` behind `!user || (!user.isVerified && !user.hasPaymentMethod)`, one sets a banner in response to a click, one fetches a quote with no dependency array and no cleanup. Symptoms in prod: totals flash the wrong value on first paint, checkout button flickers disabled then enabled, quote endpoint receives 6 requests per mount, and a stale banner from a previous order leaks into the next one. Nobody can tell which effect owns the banner state."
-          rule="spec/17/31 lines 99-101 fix this in three parts. (1) Default `useEffect` count is zero. Add one only to synchronize with an external system: network, timer, subscription, DOM API. Deriving state, transforming props, or reacting to user events are NOT external systems, they are `useMemo`, plain expressions, or event handlers. (2) When an effect is truly required, the condition is a positively named boolean like `isReadyToSync` or `hasFreshData`, extracted above the effect. (3) No inline negatives, no nested ternaries, no `!x && y` in the effect body or in its dependency guard. If the natural check is negative, invert into a positive helper and early-return on the positive path."
+          rule="02-spec/17/31 lines 99-101 fix this in three parts. (1) Default `useEffect` count is zero. Add one only to synchronize with an external system: network, timer, subscription, DOM API. Deriving state, transforming props, or reacting to user events are NOT external systems, they are `useMemo`, plain expressions, or event handlers. (2) When an effect is truly required, the condition is a positively named boolean like `isReadyToSync` or `hasFreshData`, extracted above the effect. (3) No inline negatives, no nested ternaries, no `!x && y` in the effect body or in its dependency guard. If the natural check is negative, invert into a positive helper and early-return on the positive path."
           doThis="Land the enforcement now: (1) custom ESLint rule `no-derive-state-in-effect` that flags any `useEffect` whose body only calls `setState` from props or other state, autofix suggestion is `useMemo` or a plain const; (2) custom rule `no-negative-effect-guard` that flags `!` at the top of an effect body or a boolean expression containing `!` inside an effect condition, requires the guard to be a named identifier; (3) custom rule `require-effect-cleanup-when-async` that flags `useEffect(() =` bodies calling `fetch`/`setInterval`/`addEventListener` without returning a cleanup; (4) codemod `scripts/extract-effect-guard.mjs` that lifts inline conditions into a `getIs*` helper above the component; (5) CI log line `react.effect.violation` with `{ file, line, rule, effectIndex }` so repeats become measurable. PR checklist: 'Every new `useEffect`: name the external system it syncs with, name the positive guard, show the cleanup.'"
         />
       </div>

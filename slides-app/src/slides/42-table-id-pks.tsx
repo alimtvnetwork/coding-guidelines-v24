@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 44: `{TableName}Id` integer PKs. No UUIDs.
  *
- * Source: spec/17/31 line 90 and `mem://architecture/database-schema`.
+ * Source: 02-spec/17/31 line 90 and `mem://architecture/database-schema`.
  */
 
 const BEFORE = `-- Every table invents its own PK name and type.
@@ -56,8 +56,8 @@ export default function TableIdPksSlide() {
         <ActionPanel
           slideId="42-table-id-pks"
           symptom="A support engineer opens `OrderItem` in the admin console and sees `order_item_uuid: 'a7f3...'` and `user_id: 'b91c...'`. They cannot tell which user without running a second query, and the UUIDs are impossible to read out loud on a call. Meanwhile the query planner picks a full scan because the UUID index no longer fits in memory, and p95 latency doubles. The engineer opens a ticket that says 'DB is slow', which lands on a queue with 40 others just like it, and nobody connects it to the PK type."
-          rule="Every table's primary key is named `{TableName}Id` and typed `INTEGER PRIMARY KEY AUTOINCREMENT` (or the platform equivalent, e.g. `BIGSERIAL` on Postgres). Foreign keys reuse the exact PK name on the child side, so `OrderItem.UserProfileId` references `UserProfile.UserProfileId`. No UUIDs, no `id`, no `uuid`, no `order_item_uuid`. Per spec/17/31 line 90 and `mem://architecture/database-schema`. Public identifiers that must be unguessable (share links, invite tokens) live in a separate `PublicId TEXT UNIQUE` column, never as the PK."
-          doThis="Enforce the rule in three places so nothing slips: (1) a migration linter that rejects any `CREATE TABLE` whose PK column is not `{TableName}Id` INTEGER, and logs `schema.pk.violation` with the table and offending column; (2) an FK-name linter that fails when the child column does not match the referenced PK name exactly; (3) a code-review checklist item on every schema PR: 'PK is `{Table}Id INTEGER`, FKs reuse the name, no UUID PKs'. When a legacy table cannot be renamed today, add a waiver line in `spec/17/31` with the ticket ID and the migration date. Never grant a silent exemption."
+          rule="Every table's primary key is named `{TableName}Id` and typed `INTEGER PRIMARY KEY AUTOINCREMENT` (or the platform equivalent, e.g. `BIGSERIAL` on Postgres). Foreign keys reuse the exact PK name on the child side, so `OrderItem.UserProfileId` references `UserProfile.UserProfileId`. No UUIDs, no `id`, no `uuid`, no `order_item_uuid`. Per 02-spec/17/31 line 90 and `mem://architecture/database-schema`. Public identifiers that must be unguessable (share links, invite tokens) live in a separate `PublicId TEXT UNIQUE` column, never as the PK."
+          doThis="Enforce the rule in three places so nothing slips: (1) a migration linter that rejects any `CREATE TABLE` whose PK column is not `{TableName}Id` INTEGER, and logs `schema.pk.violation` with the table and offending column; (2) an FK-name linter that fails when the child column does not match the referenced PK name exactly; (3) a code-review checklist item on every schema PR: 'PK is `{Table}Id INTEGER`, FKs reuse the name, no UUID PKs'. When a legacy table cannot be renamed today, add a waiver line in `02-spec/17/31` with the ticket ID and the migration date. Never grant a silent exemption."
         />
       </div>
     </SlideLayout>

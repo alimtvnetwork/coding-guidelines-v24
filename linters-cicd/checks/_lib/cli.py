@@ -8,7 +8,7 @@ The version string is `coding-guidelines/<rule-slug> <X.Y.Z>` where
 `--exclude-paths` accepts a CSV of fnmatch globs (e.g.
 `vendor/**,**/*.gen.go`) which checks pass through to `walk_files`.
 
-Spec: spec/02-coding-guidelines/06-cicd-integration/98-faq.md §4
+Spec: 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md §4
 """
 
 from __future__ import annotations

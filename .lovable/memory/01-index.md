@@ -29,11 +29,11 @@ Updated: 2026-04-27
 - 🔴 Docs sidebar tree diagnostics: opt-in via `localStorage["lovable.tree-diagnostics.enabled"]="1"`. Logs prefixed `[tree:<category>]`. Off by default. Never enable by default. The Lovable IDE file tree is platform UI — NOT instrumentable from project code; do not conflate it with the in-app docs sidebar. See mem://sessions/2026-04-27-tree-diagnostics-logging.
 
 - [Fast File Indexing & Caching Strategy](standards/05-fast-file-indexing-and-caching.md) — Pre-computed file scanning and index caching in `tmp/` via `08-fast-file-scanner.py` for rapid multi-step lookups.
-- [Prompt Synchronization Architecture](standards/04-prompt-synchronization-architecture.md) — All prompts authored in `.lovable/prompts/01-prompts-category/` and compiled to flat `.lovable/prompts/*.md` via `scripts/update-prompts.ps1` without external Git clones.
+- [Prompt Synchronization Architecture](standards/04-prompt-synchronization-architecture.md) — All prompts authored in `01-prompts/` and compiled to flat `01-prompts/*.md` via `scripts/update-prompts.ps1` without external Git clones.
 - [Version Source of Truth Standard](standards/version-source-of-truth.md) — Canonical `version.json` standard at repo root.
 - [Release Ceremony](preferences/release-ceremony.md) — Triggers "release"/"bump version"/"bump version + add changelog + pin to root readme". Full ceremony: pick bump tier → sync all version pins (version.json, manifest.json, src/shared/constants.ts, readme.md, standalone-scripts SDK + instruction.ts files) → changelog.md entry → pin root readme → aggregate-prompts if prompt sources touched → verify no stale refs. No confirmation, no plan mode.
 - [Install Command Formatting](mem://constraints/install-command-formatting) — One-line installs, no inline comments, per-platform headers, mirror InstallSection.tsx order.
-- [readme.txt Timestamp TOTAL BAN](mem://constraints/readme-txt-timestamp-total-ban) — No script/spec/doc/suggestion of any timestamp generator for readme.txt. Hard prohibition.
+- [readme.txt Timestamp TOTAL BAN](mem://constraints/readme-txt-timestamp-total-ban) — No script/02-spec/doc/suggestion of any timestamp generator for readme.txt. Hard prohibition.
 - [No readme.txt Time Instructions](mem://constraints/no-readme-time-instructions) — Never produce instructions/docs/how-to-run for the readme.txt Malaysia date-time generator.
 - [2026-04-24 Batch Cleanup + Rebrand](mem://sessions/2026-04-24-batch-cleanup-and-rebrand) — Slug rebrand to v16, Release & Migration UI lock, 11 plan items closed (B5/B6/B7/B8/B10/B11/09/10/12/B2 + UI).
 - [Blank Line Between If Guards](mem://constraints/blank-line-between-if-guards) — Rule 5 applied to all markdown snippets and source code.

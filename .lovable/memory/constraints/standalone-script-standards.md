@@ -102,7 +102,7 @@ If the value comes from `document.evaluate`, narrow with a **user-defined type g
 
 ## 7. Blank line before every `return`
 
-When a `return` statement is preceded by other statements in the same block, insert exactly **one** blank line before it. (This matches `release-artifacts/coding-guidelines-v24.4.0/spec/02-coding-guidelines/01-cross-language/04-code-style/04-blank-lines-and-spacing.md`, Rule 4.)
+When a `return` statement is preceded by other statements in the same block, insert exactly **one** blank line before it. (This matches `release-artifacts/coding-guidelines-v24.4.0/02-spec/02-coding-guidelines/01-cross-language/04-code-style/04-blank-lines-and-spacing.md`, Rule 4.)
 
 ## 8. Hiding pattern — class toggle + CSS transition only
 
@@ -126,7 +126,7 @@ That is the entire hide sequence. No `rAF`, no `setTimeout` fallback chains.
 
 Before writing or editing any standalone script, the AI MUST:
 
-1. Read the coding-guideline spec for the target repo (e.g. `spec/02-coding-guidelines/01-cross-language/04-code-style/`).
+1. Read the coding-guideline spec for the target repo (e.g. `02-spec/02-coding-guidelines/01-cross-language/04-code-style/`).
 2. Read the existing files in the same `standalone-scripts/` directory to confirm the established structure (`src/index.ts` + `src/<Feature>.ts` + `src/styles.ts` + `src/types.ts`).
 3. Verify none of the rules above are violated — explicitly grep the produced source for `!important`, `as unknown`, `catch {`, `catch (_)`, and bare string literals in attribute/event positions.
 4. Only then write the file.

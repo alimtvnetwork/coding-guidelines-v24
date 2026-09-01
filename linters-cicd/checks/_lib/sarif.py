@@ -1,7 +1,7 @@
 """
 SARIF 2.1.0 emitter — shared by every check script in linters-cicd/checks/.
 
-Contract: see spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md
+Contract: see 02-spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from typing import Iterable, Literal
 
 
 SCHEMA_URL = "https://json.schemastore.org/sarif-2.1.0.json"
-HELP_BASE = "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/spec/02-coding-guidelines"
+HELP_BASE = "https://github.com/alimtvnetwork/coding-guidelines-v24/blob/main/02-spec/02-coding-guidelines"
 
 Level = Literal["error", "warning", "note"]
 

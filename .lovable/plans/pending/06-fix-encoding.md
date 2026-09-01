@@ -5,7 +5,7 @@
 ## Acceptance Criteria
 1. Fix all .md (and other text) file encodings to UTF-8 without BOM.
 2. Standardize line endings to use only \n (LF) everywhere.
-3. Update the spec/02-coding-guidelines/03-03-coding-style-checklist.md to explicitly state these encoding and line ending rules.
+3. Update the 02-spec/02-coding-guidelines/03-03-coding-style-checklist.md to explicitly state these encoding and line ending rules.
 4. Execute release and sync processes smoothly without failing.
 
 ## Subtasks

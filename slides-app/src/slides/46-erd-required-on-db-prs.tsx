@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 48: Any PR touching the database ships with a Mermaid ERD.
  *
- * Source: spec/17/31 line 93 (rule 8 in Data & Schema).
+ * Source: 02-spec/17/31 line 93 (rule 8 in Data & Schema).
  */
 
 const BEFORE = `# PR #4821: "Add referral program"
@@ -72,7 +72,7 @@ export default function ErdRequiredOnDbPrsSlide() {
         <ActionPanel
           slideId="46-erd-required-on-db-prs"
           symptom="Someone opens a PR that adds a `Referral` table with two FKs to `Customer` (referrer and referee) plus a child `ReferralReward` table, and the review is 62 lines of `CREATE TABLE` DDL across three files with no diagram. Reviewers can't tell whether `Referral` joins `Customer` once or twice, or whether `ReferralReward` hangs off `Referral` or `Customer`. It merges in four minutes. Two weeks later analytics reports doubled reward totals because a join was written against the wrong cardinality, and the fix requires a data-repair migration on 180k rows."
-          rule="Any pull request whose diff touches a migration, an ORM schema file, or a raw DDL file must include a Mermaid ERD (`.mmd` file under `docs/erd/`) that covers every table added or altered. The ERD shows PKs, FKs (with direction and cardinality), and the narrative columns (`Description` / `Notes` / `Comments`). If the change modifies an existing table, the existing ERD is updated in the same commit. Per spec/17/31 line 93 (Data & Schema rule 8). Reviewers approve only after opening the rendered diagram: the diagram, not the DDL, is the review artifact."
+          rule="Any pull request whose diff touches a migration, an ORM schema file, or a raw DDL file must include a Mermaid ERD (`.mmd` file under `docs/erd/`) that covers every table added or altered. The ERD shows PKs, FKs (with direction and cardinality), and the narrative columns (`Description` / `Notes` / `Comments`). If the change modifies an existing table, the existing ERD is updated in the same commit. Per 02-spec/17/31 line 93 (Data & Schema rule 8). Reviewers approve only after opening the rendered diagram: the diagram, not the DDL, is the review artifact."
           doThis="Enforce with a required CI check `erd-required`: (1) parse the diff for any file matching `migrations/**`, `**/db/schema/**`, or `**/*.sql`; (2) extract every table name added or altered; (3) fail the check when any of those tables is missing from `docs/erd/**.mmd`, and print the missing table names in the check output; (4) also fail when a listed `.mmd` doesn't render via `mermaid-cli` in CI. Log `erd.required.missing` with `{ pr, table, migrationFile }` on failure. PR template: 'ERD updated? path: `docs/erd/<area>.mmd`'. Reviewer checklist: 'I opened the rendered diagram and confirmed FK direction, cardinality, and narrative columns'. On violation, block the merge until the diagram lands."
         />
       </div>

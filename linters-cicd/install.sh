@@ -2,7 +2,7 @@
 # ============================================================
 # linters-cicd installer (one-liner)
 #
-# Conforms to: spec/14-update/27-generic-installer-behavior.md
+# Conforms to: 02-spec/14-update/27-generic-installer-behavior.md
 #
 #   curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/latest/download/install.sh | bash
 #

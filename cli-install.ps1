@@ -55,15 +55,15 @@
       4  verification failed (required artifacts missing after extraction)
       5  inner installer / handoff rejected
 
-    SPEC: spec/14-update/27-generic-installer-behavior.md
+    SPEC: 02-spec/14-update/27-generic-installer-behavior.md
 
     Folder mapping (src in repo → dest under target):
-      spec/11-powershell-integration → spec/11-powershell-integration
-      spec/12-cicd-pipeline-workflows → spec/12-cicd-pipeline-workflows
-      spec/13-generic-cli → spec/13-generic-cli
-      spec/14-update → spec/14-update
-      spec/15-distribution-and-runner → spec/15-distribution-and-runner
-      spec/16-generic-release → spec/16-generic-release
+      02-spec/11-powershell-integration → 02-spec/11-powershell-integration
+      02-spec/12-cicd-pipeline-workflows → 02-spec/12-cicd-pipeline-workflows
+      02-spec/13-generic-cli → 02-spec/13-generic-cli
+      02-spec/14-update → 02-spec/14-update
+      02-spec/15-distribution-and-runner → 02-spec/15-distribution-and-runner
+      02-spec/16-generic-release → 02-spec/16-generic-release
       version.json → version.json
       .lovable/what-to-read.md → .lovable/what-to-read.md
       .lovable/memory → .lovable/memory
@@ -177,7 +177,7 @@ function Stop-Install {
 
 
 $BundleName = "cli"
-$BundleMapping = "spec/11-powershell-integration|spec/11-powershell-integration,spec/12-cicd-pipeline-workflows|spec/12-cicd-pipeline-workflows,spec/13-generic-cli|spec/13-generic-cli,spec/14-update|spec/14-update,spec/15-distribution-and-runner|spec/15-distribution-and-runner,spec/16-generic-release|spec/16-generic-release,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory"
+$BundleMapping = "02-spec/11-powershell-integration|02-spec/11-powershell-integration,02-spec/12-cicd-pipeline-workflows|02-spec/12-cicd-pipeline-workflows,02-spec/13-generic-cli|02-spec/13-generic-cli,02-spec/14-update|02-spec/14-update,02-spec/15-distribution-and-runner|02-spec/15-distribution-and-runner,02-spec/16-generic-release|02-spec/16-generic-release,version.json|version.json,.lovable/what-to-read.md|.lovable/what-to-read.md,.lovable/memory|.lovable/memory"
 $ArchiveStableName = "cli"
 $ReleaseBase = "https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 $RepoSlug = "alimtvnetwork/coding-guidelines-v24"
@@ -337,10 +337,16 @@ function Copy-Mapping {
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
+        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+            if (Test-Path $destPath) {
+                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
+                continue
+            }
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
-            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+            if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
                 # Inject promptArchitectByRiseupAsia tracking block into target version.json
                 $targetVersionFile = Join-Path $Target "version.json"
                 try {

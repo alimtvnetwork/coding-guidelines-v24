@@ -1,6 +1,6 @@
 """Inline source-line suppression parser.
 
-Spec: spec/02-coding-guidelines/06-cicd-integration/98-faq.md §1
+Spec: 02-spec/02-coding-guidelines/06-cicd-integration/98-faq.md §1
 
 Recognized syntax (in any single-line comment):
     codeguidelines:disable=RULE-ID[,RULE-ID...] — reason text

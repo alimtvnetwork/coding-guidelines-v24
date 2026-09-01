@@ -62,7 +62,7 @@ def main():
         sys.exit(0)
     else:
         print(f"[WARNING] Axios {current} is not in the approved list ({', '.join(sorted(APPROVED_VERSIONS))})")
-        print("          This version has not been verified. Please review spec/01-app/axios-version-control/")
+        print("          This version has not been verified. Please review 02-spec/01-app/axios-version-control/")
         sys.exit(1)
 
 

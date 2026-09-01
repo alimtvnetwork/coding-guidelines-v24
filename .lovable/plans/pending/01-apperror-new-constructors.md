@@ -4,7 +4,7 @@
 
 ## Acceptance Criteria
 
-1. Provide detailed API definition in the spec/03-error-manage architecture specs for the new Apperror.New.* namespaced creator methods.
+1. Provide detailed API definition in the 02-spec/03-error-manage architecture specs for the new Apperror.New.* namespaced creator methods.
 2. Define Apperror.New.Error(errortype, error): If error == nil, returns
 il. Otherwise wraps the error with the enum variant.
 3. Define Apperror.New.UsingErrorMsg(errortype, error, msg): If error == nil, returns
@@ -26,5 +26,5 @@ The Apperror package will expose a global New variable (or struct namespace) pro
 
 ## Subtasks
 
-- 01-update-spec.md: Update spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md and 09-ai-action-plan-apperror-methods.md.
+- 01-update-spec.md: Update 02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/02-apperror-struct.md and 09-ai-action-plan-apperror-methods.md.
 - 02-release.md: Run sync and release v6.27.0.

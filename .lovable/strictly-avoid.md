@@ -2,12 +2,12 @@
 
 Items in this file MUST NEVER be suggested, recommended, asked about, or built again.
 
-## spec/19-main-worker-service implementation — TOTAL BAN
+## 02-spec/19-main-worker-service implementation — TOTAL BAN
 
-🔴 **NEVER write, scaffold, propose, or suggest implementation code for `spec/19-main-worker-service/` (the Main-Worker Service).**
+🔴 **NEVER write, scaffold, propose, or suggest implementation code for `02-spec/19-main-worker-service/` (the Main-Worker Service).**
 
 This repo is **spec-only** for Spec/19. Allowed work:
-- ✅ Authoring / editing markdown under `spec/19-main-worker-service/**`
+- ✅ Authoring / editing markdown under `02-spec/19-main-worker-service/**`
 - ✅ Audits, consistency reports, changelogs, diagrams, glossary
 - ✅ Cross-spec references that *describe* the worker
 
@@ -170,5 +170,5 @@ Absolute filesystem paths (e.g., `/absolute/path/to/...`, `/Users/.../`, `/home/
 
 🔴 **NEVER create or store specifications inside `.lovable/spec/`.**
 - All canonical specifications must live under the root `spec/` directory.
-- All repo-specific / application-specific specifications must reside under `spec/21-app/`.
+- All repo-specific / application-specific specifications must reside under `02-spec/21-app/`.
 - The `.lovable/` directory is reserved exclusively for AI metadata (`memory/`, `plans/`, `prompts/`, `ai-fix-scripts/`, `assets/`, `procedures/`, `suggestions/`, `question-and-ambiguity/`).

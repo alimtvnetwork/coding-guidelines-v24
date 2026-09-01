@@ -24,7 +24,7 @@ fix-repo  base=coding-guidelines  current=v18  mode=--3
 targets:  v15, v16, v17
 host:     github.com  owner=alimtvnetwork
 
-modified: spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md (4 replacements)
+modified: 02-spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md (4 replacements)
 modified: readme.md (12 replacements)
 ...
 

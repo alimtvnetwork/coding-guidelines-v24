@@ -73,7 +73,7 @@ pm run sync triggers five core synchronization scripts in sequence:
    Stamps versions, folder counts, file counts, and update timestamps into
 eadme.md and docs/*.md.
 5. **scripts/sync-guidelines.mjs**:
-   Mirrors spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines.md.
+   Mirrors 02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines.md.
 
 ## 4. Release Ceremony Flow
 
@@ -87,7 +87,7 @@ A complete release follows these strict steps:
    - Run
 ode scripts/release.mjs --tier minor --scope "<headline>" --skip-slides.
    - Updates package.json, runs
-pm run sync, prepends changelog.md and spec/19-main-worker-service/98-changelog.md.
+pm run sync, prepends changelog.md and 02-spec/19-main-worker-service/98-changelog.md.
 3. **Drift Verification**:
    - Run
 ode scripts/sync-check.mjs --fix to verify 0 drift across all 7 sync-managed files.

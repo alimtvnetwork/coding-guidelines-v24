@@ -102,7 +102,7 @@ class IterMarkdownFilesFollowsFileSymlinks(unittest.TestCase):
         outside.mkdir()
         target = outside / "REAL.MD"
         target.write_text("# real\n", encoding="utf-8")
-        scanned = self.root / "spec"
+        scanned = self.root / "02-spec"
         scanned.mkdir()
         link = scanned / "LINKED.MD"
         link.symlink_to(target)
@@ -121,7 +121,7 @@ class IterMarkdownFilesFollowsFileSymlinks(unittest.TestCase):
         # semantics.
         target = self.root / "real.md"
         target.write_text("# real\n", encoding="utf-8")
-        scanned = self.root / "spec"
+        scanned = self.root / "02-spec"
         scanned.mkdir()
         (scanned / "Mirror.Md").symlink_to(target)
 
@@ -136,7 +136,7 @@ class IterMarkdownFilesFollowsFileSymlinks(unittest.TestCase):
         # for the non-symlink analogue).
         target = self.root / "real.MD"
         target.write_text("# real\n", encoding="utf-8")
-        scanned = self.root / "spec"
+        scanned = self.root / "02-spec"
         scanned.mkdir()
         (scanned / "alias.txt").symlink_to(target)
 
@@ -153,7 +153,7 @@ class IterMarkdownFilesFollowsFileSymlinks(unittest.TestCase):
         outside = self.root / "vendor_dir"
         outside.mkdir()
         (outside / "DEEP.MD").write_text("# deep\n", encoding="utf-8")
-        scanned = self.root / "spec"
+        scanned = self.root / "02-spec"
         scanned.mkdir()
         (scanned / "linkdir").symlink_to(outside,
                                           target_is_directory=True)
@@ -208,11 +208,11 @@ class CliEndToEndSymlinkedUppercaseMd(unittest.TestCase):
             "(relative/path/to/spec.txt)\n",
             encoding="utf-8",
         )
-        spec = self.root / "spec"
+        spec = self.root / "02-spec"
         spec.mkdir()
         (spec / "LINKED.MD").symlink_to(target)
 
-        proc = _run("--root", "spec", "--repo-root", str(self.root),
+        proc = _run("--root", "02-spec", "--repo-root", str(self.root),
                     "--json", cwd=self.root)
         self.assertEqual(proc.returncode, 1,
             msg=f"stdout={proc.stdout!r} stderr={proc.stderr!r}")
@@ -242,11 +242,11 @@ class CliEndToEndSymlinkedUppercaseMd(unittest.TestCase):
         vendor.mkdir()
         (vendor / "CLEAN.MD").write_text(
             "# Clean\n\nNo placeholders.\n", encoding="utf-8")
-        spec = self.root / "spec"
+        spec = self.root / "02-spec"
         spec.mkdir()
         (spec / "MIRROR.MD").symlink_to(vendor / "CLEAN.MD")
 
-        proc = _run("--root", "spec", "--repo-root", str(self.root),
+        proc = _run("--root", "02-spec", "--repo-root", str(self.root),
                     "--json", cwd=self.root)
         self.assertEqual(proc.returncode, 0,
             msg=f"stdout={proc.stdout!r} stderr={proc.stderr!r}")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inverted-field codegen — Rule 9 (spec/04-database-conventions/02-naming-conventions.md).
+"""Inverted-field codegen — Rule 9 (02-spec/04-database-conventions/02-naming-conventions.md).
 
 Given a source file containing a Go struct, PHP class, or TypeScript class
 with ``Is*``/``Has*`` db-tagged fields, emit the inverted computed-property

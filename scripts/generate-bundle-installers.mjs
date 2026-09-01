@@ -78,7 +78,7 @@ function bashScript(bundle) {
 #
 # Run with -h or --help for the full flag reference (scope-tagged).
 #
-# Spec: spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
+# Spec: 02-spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
 ${autoOpenLine}
 ${prebuiltNote}
 # Folder mapping (src in repo → dest under target):
@@ -233,7 +233,7 @@ EXIT CODES (spec §8)
   5  inner installer / handoff rejected
 
 SPEC
-  spec/14-update/27-generic-installer-behavior.md
+  02-spec/14-update/27-generic-installer-behavior.md
 HELP
 }
 
@@ -433,10 +433,16 @@ merge_path(sys.argv[1], sys.argv[2])
       echo "  ✔️ \${src} -> \${TARGET}/\${dest} (smart merged)"
       continue
     fi
+    if [[ "\${dest}" == *".lovable/plans"* || "\${dest}" == *".lovable/what-to-read.md"* ]]; then
+      if [[ -e "\${TARGET}/\${dest}" ]]; then
+        echo "  ℹ️  \${TARGET}/\${dest} already exists (skipping overwrite to preserve project state)"
+        continue
+      fi
+    fi
     if [[ -d "\${archive_root}/\${src}" ]]; then
       mkdir -p "\${TARGET}/\${dest}"
       cp -R "\${archive_root}/\${src}/." "\${TARGET}/\${dest}/"
-      if [[ "\${src}" == ".lovable/prompts" || "\${src}" == ".lovable/prompts/" ]]; then
+      if [[ "\${src}" == "01-prompts" || "\${src}" == "01-prompts/" ]]; then
         # Inject promptArchitectByRiseupAsia tracking block into target version.json
         local target_version_file="\${TARGET}/version.json"
         python3 -c "
@@ -895,7 +901,7 @@ function powershellScript(bundle) {
       4  verification failed (required artifacts missing after extraction)
       5  inner installer / handoff rejected
 
-    SPEC: spec/14-update/27-generic-installer-behavior.md
+    SPEC: 02-spec/14-update/27-generic-installer-behavior.md
 ${autoOpenLine}${prebuiltLine}
     Folder mapping (src in repo → dest under target):
       ${mappingComment}
@@ -1169,10 +1175,16 @@ function Copy-Mapping {
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
             continue
         }
+        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+            if (Test-Path $destPath) {
+                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
+                continue
+            }
+        }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
-            if ($pair.Src -eq ".lovable/prompts" -or $pair.Src -eq ".lovable/prompts/") {
+            if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
                 # Inject promptArchitectByRiseupAsia tracking block into target version.json
                 $targetVersionFile = Join-Path $Target "version.json"
                 try {

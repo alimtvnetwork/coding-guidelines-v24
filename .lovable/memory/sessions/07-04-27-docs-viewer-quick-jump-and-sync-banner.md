@@ -9,7 +9,7 @@
 
 ### 1. Command Palette + prominent "Spec Overview" jump (Cmd/Ctrl+J)
 
-- New helper `src/components/docs/specOverviewJump.ts` — exports `findSpecOverviewFile(allFiles)` and `SPEC_OVERVIEW_PATH = "spec/00-overview.md"`. Resolves directly from the flat `allFiles` list (which `useSpecData` derives from `src/data/specTree.json`), so it works **even when the sidebar tree is stale or collapsed**. Falls back to a name-based match if the exact path is missing.
+- New helper `src/components/docs/specOverviewJump.ts` — exports `findSpecOverviewFile(allFiles)` and `SPEC_OVERVIEW_PATH = "02-spec/00-overview.md"`. Resolves directly from the flat `allFiles` list (which `useSpecData` derives from `src/data/specTree.json`), so it works **even when the sidebar tree is stale or collapsed**. Falls back to a name-based match if the exact path is missing.
 - New component `src/components/docs/CommandPalette.tsx` using shadcn `Command`/`CommandDialog`. Top-pinned "Open Spec Overview" item, then per-folder `00-overview.md` quick links, then a fuzzy-searchable file list (capped at 30 for perf).
 - New global keybind: `Cmd+J` / `Ctrl+J` opens the palette (`useCommandPaletteShortcut`). Added `KeyboardKeyType.J = "j"` to `src/constants/enums.ts`.
 - Prominent header button `SpecOverviewButton` added in `src/pages/DocsViewerComponents.tsx` next to the existing search bar — primary-tinted, displays platform-aware kbd hint (`⌘J` / `Ctrl+J`).
@@ -67,4 +67,4 @@
 
 ## Pickup point for next AI
 
-All changes shipped + verified. No pending follow-ups from this session. Suggested follow-on (if desired): Playwright spec for `Cmd+J → Open Spec Overview → spec/00-overview.md becomes active`.
+All changes shipped + verified. No pending follow-ups from this session. Suggested follow-on (if desired): Playwright spec for `Cmd+J → Open Spec Overview → 02-spec/00-overview.md becomes active`.

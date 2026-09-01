@@ -88,7 +88,7 @@ scripts/fix-repo/RepoIdentity.ps1::scripts/fix-repo/RepoIdentity.ps1
 scripts/fix-repo/FileScan.ps1::scripts/fix-repo/FileScan.ps1
 scripts/fix-repo/Rewrite.ps1::scripts/fix-repo/Rewrite.ps1
 scripts/fix-repo/Config.ps1::scripts/fix-repo/Config.ps1
-spec/02-coding-guidelines/06-cicd-integration/08-fix-repo-and-installers/01-fix-repo-contract.md::fix-repo-contract.md
+02-spec/02-coding-guidelines/06-cicd-integration/08-fix-repo-and-installers/01-fix-repo-contract.md::fix-repo-contract.md
 EOF
 }
 

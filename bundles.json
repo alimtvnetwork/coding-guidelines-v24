@@ -21,12 +21,12 @@
       "audience": "backend",
       "folders": [
         {
-          "src": "spec/01-spec-authoring-guide",
-          "dest": "spec/01-spec-authoring-guide"
+          "src": "02-spec/01-spec-authoring-guide",
+          "dest": "02-spec/01-spec-authoring-guide"
         },
         {
-          "src": "spec/03-error-manage",
-          "dest": "spec/03-error-manage"
+          "src": "02-spec/03-error-manage",
+          "dest": "02-spec/03-error-manage"
         },
         {
           "src": "version.json",
@@ -65,16 +65,16 @@
       "audience": "backend",
       "folders": [
         {
-          "src": "spec/04-database-conventions",
-          "dest": "spec/04-database-conventions"
+          "src": "02-spec/04-database-conventions",
+          "dest": "02-spec/04-database-conventions"
         },
         {
-          "src": "spec/05-split-db-architecture",
-          "dest": "spec/05-split-db-architecture"
+          "src": "02-spec/05-split-db-architecture",
+          "dest": "02-spec/05-split-db-architecture"
         },
         {
-          "src": "spec/06-seedable-config-architecture",
-          "dest": "spec/06-seedable-config-architecture"
+          "src": "02-spec/06-seedable-config-architecture",
+          "dest": "02-spec/06-seedable-config-architecture"
         },
         {
           "src": "version.json",
@@ -214,28 +214,28 @@
       "audience": "devops",
       "folders": [
         {
-          "src": "spec/11-powershell-integration",
-          "dest": "spec/11-powershell-integration"
+          "src": "02-spec/11-powershell-integration",
+          "dest": "02-spec/11-powershell-integration"
         },
         {
-          "src": "spec/12-cicd-pipeline-workflows",
-          "dest": "spec/12-cicd-pipeline-workflows"
+          "src": "02-spec/12-cicd-pipeline-workflows",
+          "dest": "02-spec/12-cicd-pipeline-workflows"
         },
         {
-          "src": "spec/13-generic-cli",
-          "dest": "spec/13-generic-cli"
+          "src": "02-spec/13-generic-cli",
+          "dest": "02-spec/13-generic-cli"
         },
         {
-          "src": "spec/14-update",
-          "dest": "spec/14-update"
+          "src": "02-spec/14-update",
+          "dest": "02-spec/14-update"
         },
         {
-          "src": "spec/15-distribution-and-runner",
-          "dest": "spec/15-distribution-and-runner"
+          "src": "02-spec/15-distribution-and-runner",
+          "dest": "02-spec/15-distribution-and-runner"
         },
         {
-          "src": "spec/16-generic-release",
-          "dest": "spec/16-generic-release"
+          "src": "02-spec/16-generic-release",
+          "dest": "02-spec/16-generic-release"
         },
         {
           "src": "version.json",
@@ -258,7 +258,7 @@
     {
       "name": "wp",
       "title": "WordPress Plugin How-To Spec",
-      "description": "Installs the WordPress plugin authoring spec into spec/18-wp-plugin-how-to.",
+      "description": "Installs the WordPress plugin authoring spec into 02-spec/18-wp-plugin-how-to.",
       "intent": [
         "wordpress",
         "wp plugin",
@@ -271,8 +271,8 @@
       "audience": "wp-plugin",
       "folders": [
         {
-          "src": "spec/18-wp-plugin-how-to",
-          "dest": "spec/18-wp-plugin-how-to"
+          "src": "02-spec/18-wp-plugin-how-to",
+          "dest": "02-spec/18-wp-plugin-how-to"
         },
         {
           "src": "version.json",
@@ -307,16 +307,16 @@
       "audience": "ai-agent",
       "folders": [
         {
-          "src": "spec/01-spec-authoring-guide",
-          "dest": "spec/01-spec-authoring-guide"
+          "src": "02-spec/01-spec-authoring-guide",
+          "dest": "02-spec/01-spec-authoring-guide"
         },
         {
-          "src": "spec/03-error-manage",
-          "dest": "spec/03-error-manage"
+          "src": "02-spec/03-error-manage",
+          "dest": "02-spec/03-error-manage"
         },
         {
-          "src": "spec/17-consolidated-guidelines",
-          "dest": "spec/17-consolidated-guidelines"
+          "src": "02-spec/17-consolidated-guidelines",
+          "dest": "02-spec/17-consolidated-guidelines"
         },
         {
           "src": "version.json",
@@ -331,12 +331,16 @@
           "dest": ".lovable/memory"
         },
         {
-          "src": ".lovable/coding-guidelines",
-          "dest": ".lovable/coding-guidelines"
+          "src": ".lovable/coding-guidelines.md",
+          "dest": ".lovable/coding-guidelines.md"
         },
         {
-          "src": ".lovable/prompts",
-          "dest": ".lovable/prompts"
+          "src": "01-prompts",
+          "dest": "01-prompts"
+        },
+        {
+          "src": "03-ai-scripts",
+          "dest": "03-ai-scripts"
         },
         {
           "src": ".lovable/plans",

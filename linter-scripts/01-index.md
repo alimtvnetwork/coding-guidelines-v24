@@ -13,8 +13,8 @@
    - Exit `0`: All rules satisfied / Clean pass.
    - Exit `1`: Policy violation / Failing check.
 3. **Integration with Shared AI Toolchain:**
-   - Internal linters leverage the centralized cache, file-locking primitives, and compiled regular expressions in `.lovable/ai-fix-scripts/02-shared-engine.py`.
-   - All quality gates are enqueued and executed concurrently via `.lovable/ai-fix-scripts/06-cicd-local-runner.py`.
+   - Internal linters leverage the centralized cache, file-locking primitives, and compiled regular expressions in `03-ai-scripts/02-shared-engine.py`.
+   - All quality gates are enqueued and executed concurrently via `03-ai-scripts/06-cicd-local-runner.py`.
 
 ---
 
@@ -22,7 +22,7 @@
 
 | Script | Language | Purpose & Scope | CI Automated |
 |---|---|---|---|
-| [`check-sequence-integrity.py`](check-sequence-integrity.py) | Python 3 | Verifies sequential numbering, broken file links, and prompt references across `.lovable/prompts/`, `.lovable/plans/`, and `.agents/skills/`. | ✅ Yes |
+| [`check-sequence-integrity.py`](check-sequence-integrity.py) | Python 3 | Verifies sequential numbering, broken file links, and prompt references across `01-prompts/`, `.lovable/plans/`, and `.agents/skills/`. | ✅ Yes |
 | [`check-relative-paths.py`](check-relative-paths.py) | Python 3 | Enforces strict relative git paths and bans absolute filesystem paths / `file:///` URIs. | ✅ Yes |
 | [`check-boolean-guidelines.py`](check-boolean-guidelines.py) | Python 3 | Audits codebase for boolean naming conventions (`is`, `has`), bans explicit `== true`, and detects inverted success checks. | ✅ Yes |
 | [`check-enum-and-boolean.py`](check-enum-and-boolean.py) | Python 3 | Validates `Type` suffix on enum identifiers and enforces positive implicit guards. | ✅ Yes |
@@ -47,7 +47,7 @@
 
 Run all internal linters concurrently:
 ```bash
-python .lovable/ai-fix-scripts/06-cicd-local-runner.py
+python 03-ai-scripts/06-cicd-local-runner.py
 ```
 
 Run a specific linter individually:

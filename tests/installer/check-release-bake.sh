@@ -9,7 +9,7 @@
 #   4. Both baked files carry the resolved tag (vX.Y.Z from package.json)
 #   5. checksums.txt lists both baked installers
 #
-# Spec: spec/14-update/25-release-pinned-installer.md §Release-Time
+# Spec: 02-spec/14-update/25-release-pinned-installer.md §Release-Time
 #       Build Step (Job Sequence Job 2.b).
 #
 # Exit: 0 all pass, 1 any fail.

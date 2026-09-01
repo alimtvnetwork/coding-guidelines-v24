@@ -2,7 +2,7 @@
 # =====================================================================
 # wp-install.sh — WordPress Plugin How-To Spec
 #
-# Installs the WordPress plugin authoring spec into spec/18-wp-plugin-how-to.
+# Installs the WordPress plugin authoring spec into 02-spec/18-wp-plugin-how-to.
 #
 # Mode dispatch (spec §3 — chosen at startup, never switched mid-run):
 #   PINNED   = --version <tag> OR --use-local-archive <path>
@@ -14,11 +14,11 @@
 #
 # Run with -h or --help for the full flag reference (scope-tagged).
 #
-# Spec: spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
+# Spec: 02-spec/14-update/27-generic-installer-behavior.md §3, §7, §8.
 #
 #
 # Folder mapping (src in repo → dest under target):
-#   spec/18-wp-plugin-how-to → spec/18-wp-plugin-how-to
+#   02-spec/18-wp-plugin-how-to → 02-spec/18-wp-plugin-how-to
 #   version.json → version.json
 #   .lovable/what-to-read.md → .lovable/what-to-read.md
 #   .lovable/memory → .lovable/memory
@@ -69,7 +69,7 @@ trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
 trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
 
 BUNDLE_NAME="wp"
-BUNDLE_MAPPING="spec/18-wp-plugin-how-to|spec/18-wp-plugin-how-to version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory"
+BUNDLE_MAPPING="02-spec/18-wp-plugin-how-to|02-spec/18-wp-plugin-how-to version.json|version.json .lovable/what-to-read.md|.lovable/what-to-read.md .lovable/memory|.lovable/memory"
 ARCHIVE_STABLE_NAME="wp"
 RELEASE_BASE="https://github.com/alimtvnetwork/coding-guidelines-v24/releases"
 REPO_SLUG="alimtvnetwork/coding-guidelines-v24"
@@ -172,7 +172,7 @@ EXIT CODES (spec §8)
   5  inner installer / handoff rejected
 
 SPEC
-  spec/14-update/27-generic-installer-behavior.md
+  02-spec/14-update/27-generic-installer-behavior.md
 HELP
 }
 
@@ -377,10 +377,16 @@ merge_path(sys.argv[1], sys.argv[2])
       echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
       continue
     fi
+    if [[ "${dest}" == *".lovable/plans"* || "${dest}" == *".lovable/what-to-read.md"* ]]; then
+      if [[ -e "${TARGET}/${dest}" ]]; then
+        echo "  ℹ️  ${TARGET}/${dest} already exists (skipping overwrite to preserve project state)"
+        continue
+      fi
+    fi
     if [[ -d "${archive_root}/${src}" ]]; then
       mkdir -p "${TARGET}/${dest}"
       cp -R "${archive_root}/${src}/." "${TARGET}/${dest}/"
-      if [[ "${src}" == ".lovable/prompts" || "${src}" == ".lovable/prompts/" ]]; then
+      if [[ "${src}" == "01-prompts" || "${src}" == "01-prompts/" ]]; then
         # Inject promptArchitectByRiseupAsia tracking block into target version.json
         local target_version_file="${TARGET}/version.json"
         python3 -c "

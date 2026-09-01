@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 51: one effect, one concern, always with cleanup.
  *
- * Source: spec/17/31 lines 102-103.
+ * Source: 02-spec/17/31 lines 102-103.
  */
 
 const BEFORE = `// One effect doing three things, none of them cleaned up.
@@ -68,7 +68,7 @@ export default function OneEffectOneConcernSlide() {
     <SlideLayout
       eyebrow="Rule 51 · React · one effect, one concern, always cleaned up"
       title="Split unrelated subscriptions and fetches into separate effects. Every effect that acquires a resource returns a cleanup."
-      subtitle="spec/17/31 lines 102-103: if an effect does two unrelated things, split it. Every effect that acquires a resource (socket, timer, subscription, fetch, DOM listener) must return a cleanup function. No exceptions."
+      subtitle="02-spec/17/31 lines 102-103: if an effect does two unrelated things, split it. Every effect that acquires a resource (socket, timer, subscription, fetch, DOM listener) must return a cleanup function. No exceptions."
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 4 }}>
         <CodeDiff
@@ -81,7 +81,7 @@ export default function OneEffectOneConcernSlide() {
         <ActionPanel
           slideId="49-one-effect-one-concern"
           symptom="`LiveDashboard` has one `useEffect` that (a) opens `new WebSocket(...)`, (b) starts `setInterval(..., 1000)`, and (c) fires `fetch('/api/.../seed')`, all keyed on `roomId`. There is no `return`. Prod symptoms: memory grows 4MB per room switch, the clock speeds up (2x, 3x, 5x) as users navigate, React logs `Warning: Can't perform a React state update on an unmounted component` on every route change, and the server sees duplicate WS connections from the same user. Nobody can tell whether the leak is the socket, the timer, or the fetch because the concerns are tangled."
-          rule="spec/17/31 lines 102-103 are two rules that always ship together. (1) One effect, one concern. If an effect does two unrelated things, split it. Never combine unrelated subscriptions or fetches in one effect body, even if the dependency arrays look the same. (2) Every effect that acquires a resource must return a cleanup function. Sockets get `.close()`. Intervals get `clearInterval`. Subscriptions get `unsubscribe`. DOM listeners get `removeEventListener`. Fetches get `AbortController` and abort on unmount. No exceptions, not for 'small' effects, not for 'always-mounted' components, not for mount-only fetches."
+          rule="02-spec/17/31 lines 102-103 are two rules that always ship together. (1) One effect, one concern. If an effect does two unrelated things, split it. Never combine unrelated subscriptions or fetches in one effect body, even if the dependency arrays look the same. (2) Every effect that acquires a resource must return a cleanup function. Sockets get `.close()`. Intervals get `clearInterval`. Subscriptions get `unsubscribe`. DOM listeners get `removeEventListener`. Fetches get `AbortController` and abort on unmount. No exceptions, not for 'small' effects, not for 'always-mounted' components, not for mount-only fetches."
           doThis="Land the enforcement now: (1) custom ESLint rule `one-concern-per-effect` that flags any effect body containing two or more of `new WebSocket`, `setInterval`, `setTimeout`, `addEventListener`, `fetch`, `subscribe`, and demands a split; (2) custom ESLint rule `require-effect-cleanup` that flags any effect creating a socket/interval/timeout/listener/AbortController without a matching cleanup in the returned function; (3) a runtime dev-only wrapper `useTrackedEffect` in `src/lib/effects.ts` that counts live resources per component and logs `react.effect.leak` with `{ component, resource, count }` when a component unmounts with a non-zero balance; (4) PR checklist line: 'For every new effect: what one concern, what cleanup, verified in devtools that resource count returns to zero.' Reviewers reject any effect body with two acquisitions or no return."
         />
       </div>

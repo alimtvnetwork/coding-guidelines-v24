@@ -5,7 +5,7 @@ against repo-relative posix paths (e.g. `vendor/**`, `**/*.gen.go`).
 Patterns may target directories or individual files; matching short-circuits
 on the first hit.
 
-Spec: spec/02-coding-guidelines/06-cicd-integration/07-performance.md §2
+Spec: 02-spec/02-coding-guidelines/06-cicd-integration/07-performance.md §2
 """
 
 from __future__ import annotations

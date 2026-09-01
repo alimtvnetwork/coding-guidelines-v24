@@ -50,7 +50,7 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 | 2 | `.lovable/strictly-avoid.md` | Hard prohibitions (CODE RED) |
 | 3 | `.lovable/user-preferences` | How the human wants you to behave |
 | 4 | `.lovable/what-to-read.md` | Authoritative reading order for this project. If it exists, it overrides the generic order in this prompt. Read it first and follow it. |
-| 5 | `.lovable/prompt.md` + `.lovable/prompts/` | Canonical prompts (Read, Plan, etc.). "Read memory" = run this prompt. |
+| 5 | `.lovable/prompt.md` + `01-prompts/` | Canonical prompts (Read, Plan, etc.). "Read memory" = run this prompt. |
 | 6 | `.lovable/memory/01-index.md` | Index of institutional knowledge. Then read every file it references, recursively. |
 | 7 | `.lovable/plans/01-index.md` | Roll-up of all plans (pending + completed + subtasks). Read this before touching individual plan files. |
 | 8 | `.lovable/plans/pending/` | Active plans, `XX-<slug>.md` |
@@ -82,12 +82,12 @@ If any answer is fuzzy, go back and reread. Do not proceed.
 
 ## Phase 2 - Consolidated guidelines
 
-Read `spec/17-consolidated-guidelines/` in numeric order (`01-*.md` through `18-*.md`). Each file is a self-contained policy document. Missing folder: note it and continue.
+Read `02-spec/17-consolidated-guidelines/` in numeric order (`01-*.md` through `18-*.md`). Each file is a self-contained policy document. Missing folder: note it and continue.
 ---
 
 ## Phase 3 - Spec authoring rules
 
-Read `spec/01-spec-authoring-guide/` in numeric order. You should come out knowing:
+Read `02-spec/01-spec-authoring-guide/` in numeric order. You should come out knowing:
 - file and folder naming conventions,
 - required files per spec folder (`00-overview.md`, `99-consistency-report.md`),
 - the `.lovable/` layout (see Phase 1.1),
@@ -99,24 +99,24 @@ Read `spec/01-spec-authoring-guide/` in numeric order. You should come out knowi
 Only open a spec folder when the current task needs it.
 | Task involves… | Read |
 | ---------------------------------------- | --------------------------------------- |
-| Writing or reviewing code | `spec/02-coding-guidelines/` |
-| Error handling | `spec/03-error-manage/` |
-| Database schema or queries | `spec/04-database-conventions/` |
-| SQLite / multi-DB architecture | `spec/05-split-db-architecture/` |
-| Config systems | `spec/06-seedable-config-architecture/` |
-| UI theming, CSS variables, design tokens | `spec/07-design-system/` |
-| Documentation viewer features | `spec/08-docs-viewer-ui/` |
-| Code block rendering | `spec/09-code-block-system/` |
-| PowerShell scripts | `spec/11-powershell-integration/` |
-| CI/CD pipelines | `spec/12-cicd-pipeline-workflows/` |
-| CLI self-update | `spec/14-update/` |
-| WordPress plugins | `spec/18-wp-plugin-how-to/` |
-| App-specific features | `spec/21-app/` |
-| Known app bugs | `spec/22-app-issues/` |
-| App-specific DB schema | `spec/23-app-db/` |
-| App-specific UI + design system | `spec/24-app-ui-design-system/` |
+| Writing or reviewing code | `02-spec/02-coding-guidelines/` |
+| Error handling | `02-spec/03-error-manage/` |
+| Database schema or queries | `02-spec/04-database-conventions/` |
+| SQLite / multi-DB architecture | `02-spec/05-split-db-architecture/` |
+| Config systems | `02-spec/06-seedable-config-architecture/` |
+| UI theming, CSS variables, design tokens | `02-spec/07-design-system/` |
+| Documentation viewer features | `02-spec/08-docs-viewer-ui/` |
+| Code block rendering | `02-spec/09-code-block-system/` |
+| PowerShell scripts | `02-spec/11-powershell-integration/` |
+| CI/CD pipelines | `02-spec/12-cicd-pipeline-workflows/` |
+| CLI self-update | `02-spec/14-update/` |
+| WordPress plugins | `02-spec/18-wp-plugin-how-to/` |
+| App-specific features | `02-spec/21-app/` |
+| Known app bugs | `02-spec/22-app-issues/` |
+| App-specific DB schema | `02-spec/23-app-db/` |
+| App-specific UI + design system | `02-spec/24-app-ui-design-system/` |
 Inside each folder: `00-overview.md` → numbered files → `99-consistency-report.md`.
-Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `spec/02-coding-guidelines/`, `coding-guidelines/`, `spec/03-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
+Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `02-spec/02-coding-guidelines/`, `coding-guidelines/`, `02-spec/03-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
 ---
 
 ## Anti-Hallucination Contract
@@ -140,7 +140,7 @@ New info discovered
 ├─ Idea, not yet approved?
 │ YES → .lovable/suggestions.md
 ├─ New user command / convention?
-│ YES → .lovable/spec/commands/XX-<slug>.md
+│ YES → .lovable/02-spec/commands/XX-<slug>.md
 ├─ Bug / regression?
 │ YES → .lovable/issues/XX-<slug>.md (or .lovable/cicd-issues/ if CI/CD)
 ├─ New or changed plan?
@@ -196,8 +196,8 @@ Then stop. No next-step suggestions, no exploratory questions.
 - [ ] Read every file in `.lovable/spec/commands/`
 - [ ] Read every file in `.lovable/issues/` and `.lovable/cicd-issues/`
 - [ ] Read every file in `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/`
-- [ ] Read `spec/17-consolidated-guidelines/` in numeric order (or noted missing)
-- [ ] Read `spec/01-spec-authoring-guide/` in numeric order (or noted missing)
+- [ ] Read `02-spec/17-consolidated-guidelines/` in numeric order (or noted missing)
+- [ ] Read `02-spec/01-spec-authoring-guide/` in numeric order (or noted missing)
 - [ ] Can name CODE RED rules, naming conventions, error-handling philosophy without guessing
 - [ ] Can list every pending plan slug from memory
 - [ ] Checked whether the repo contains explicit tone, strictly-avoid, or prior-stupidity instructions and applied them without softening

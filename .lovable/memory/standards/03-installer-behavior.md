@@ -1,12 +1,12 @@
 ---
 name: Generic Installer Behavior
-description: Two-mode installer contract — PINNED (exact tag, no fallback, no cross-repo) vs IMPLICIT (latest → V→V+20 parallel discovery → main). Repo-agnostic; canonical spec at spec/14-update/27-generic-installer-behavior.md.
+description: Two-mode installer contract — PINNED (exact tag, no fallback, no cross-repo) vs IMPLICIT (latest → V→V+20 parallel discovery → main). Repo-agnostic; canonical spec at 02-spec/14-update/27-generic-installer-behavior.md.
 type: standard
 ---
 
 # Generic Installer Behavior (Cross-Repo Standard)
 
-**Canonical spec:** `spec/14-update/27-generic-installer-behavior.md` v1.0.0
+**Canonical spec:** `02-spec/14-update/27-generic-installer-behavior.md` v1.0.0
 **Plan:** `.lovable/plans/01-index.md`
 
 Applies to EVERY installer in EVERY repo: `install.*`, `release-install.*`,
@@ -56,6 +56,6 @@ Source order, stop at first success:
 
 ## How to apply to a new repo
 
-Hand the AI just `spec/14-update/27-generic-installer-behavior.md`. It is
+Hand the AI just `02-spec/14-update/27-generic-installer-behavior.md`. It is
 self-contained, repo-agnostic (uses `{owner}`, `{repo-base}`, `{N}`), and
 §11 contains the step-by-step adoption checklist.

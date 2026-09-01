@@ -23,8 +23,8 @@
     If two sources disagree, a warning is emitted and the higher-
     precedence value wins.
 
-    Spec: spec/14-update/25-release-pinned-installer.md
-    Generic installer contract: spec/14-update/27-generic-installer-behavior.md
+    Spec: 02-spec/14-update/25-release-pinned-installer.md
+    Generic installer contract: 02-spec/14-update/27-generic-installer-behavior.md
 
 .PARAMETER Version
     [PINNED only — required if no baked tag] Install exactly this tag.

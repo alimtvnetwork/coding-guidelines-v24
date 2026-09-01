@@ -29,7 +29,7 @@ type: feature
 
 ## Spec §27 Conformance (added v4.9.0)
 
-`release-install.{sh,ps1}` is one of **18 installers** in this repo (root × 2, bundle × 14, linters-cicd × 1, release-pinned × 2 from baked template) covered by **`spec/14-update/27-generic-installer-behavior.md`**:
+`release-install.{sh,ps1}` is one of **18 installers** in this repo (root × 2, bundle × 14, linters-cicd × 1, release-pinned × 2 from baked template) covered by **`02-spec/14-update/27-generic-installer-behavior.md`**:
 
 - §5.3 — flags: `--no-discovery`, `--no-main-fallback`, `--offline` (alias `--use-local-archive`).
 - §7 — startup banner with `mode:` (pinned/implicit), `source:` (tag-tarball/branch-tarball/release-asset), `version:`, `repo:`, `dest:`.
@@ -41,5 +41,5 @@ type: feature
 - `tests/installer/check-release-install-acceptance.sh` — 5 assertions (release-pinned)
 
 **Specs:**
-- `spec/14-update/25-release-pinned-installer.md` v1.0.0 (this feature)
-- `spec/14-update/27-generic-installer-behavior.md` (cross-bundle contract)
+- `02-spec/14-update/25-release-pinned-installer.md` v1.0.0 (this feature)
+- `02-spec/14-update/27-generic-installer-behavior.md` (cross-bundle contract)

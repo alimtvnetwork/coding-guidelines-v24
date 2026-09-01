@@ -8,7 +8,7 @@
 
 ## Overview
 
-The `spec/02-coding-guidelines/` folder contains **5 overlapping source folders** plus an enum spec, each representing different iterations/formats of the same coding standards. The goal is to consolidate these into a single, authoritative, AI-optimized coding guideline that prevents hallucination and gives AI agents everything needed to write best-practice code.
+The `02-spec/02-coding-guidelines/` folder contains **5 overlapping source folders** plus an enum spec, each representing different iterations/formats of the same coding standards. The goal is to consolidate these into a single, authoritative, AI-optimized coding guideline that prevents hallucination and gives AI agents everything needed to write best-practice code.
 
 ---
 
@@ -53,7 +53,7 @@ The `spec/02-coding-guidelines/` folder contains **5 overlapping source folders*
 | Issue | Location |
 |-------|----------|
 | References to `../01-general-spec/`, `../18-error-resolution/`, `../31-generic-enforce/` — these don't exist in current `spec/` tree | `03-coding-guidelines-spec/00-overview.md` |
-| References use `spec/02-coding-guidelines/` paths but folder is now `spec/02-coding-guidelines/` | Various |
+| References use `02-spec/02-coding-guidelines/` paths but folder is now `02-spec/02-coding-guidelines/` | Various |
 
 ---
 
@@ -69,7 +69,7 @@ The `spec/02-coding-guidelines/` folder contains **5 overlapping source folders*
 | T-004 | Create `00-overview.md` for `04-coding-guidelines-wpon/` | High |
 | T-005 | Create `00-overview.md` for `05-coding-guidelines-workflowy/` (currently has `00-master-coding-guidelines.md` which serves as overview but doesn't follow template) | Medium |
 | T-006 | Create `99-consistency-report.md` for folders missing it | Medium |
-| T-007 | Create root `00-overview.md` for `spec/02-coding-guidelines/` if missing | High |
+| T-007 | Create root `00-overview.md` for `02-spec/02-coding-guidelines/` if missing | High |
 
 ### Phase 2: Audit Content Overlap & Unique Content
 
@@ -110,7 +110,7 @@ The `spec/02-coding-guidelines/` folder contains **5 overlapping source folders*
 | T-025 | Move `04-coding-guidelines-wpon/` content to archive | Medium |
 | T-026 | Move `05-coding-guidelines-workflowy/` content to archive | Medium |
 | T-027 | Update all cross-references across the spec tree | High |
-| T-028 | Update `spec/02-coding-guidelines/` root `00-overview.md` to reflect new structure | High |
+| T-028 | Update `02-spec/02-coding-guidelines/` root `00-overview.md` to reflect new structure | High |
 | T-029 | Run consistency report validation on entire `02-coding-guidelines/` tree | High |
 
 ### Phase 6: Quality Assurance
@@ -139,6 +139,6 @@ The `spec/02-coding-guidelines/` folder contains **5 overlapping source folders*
 
 | Reference | Location |
 |-----------|----------|
-| Spec Authoring Guide | `../../spec/01-spec-authoring-guide/00-overview.md` |
-| Current Coding Guidelines | `../../spec/02-coding-guidelines/00-overview.md` |
+| Spec Authoring Guide | `../../02-spec/01-spec-authoring-guide/00-overview.md` |
+| Current Coding Guidelines | `../../02-spec/02-coding-guidelines/00-overview.md` |
 | Naming Compliance Issues | `../project/naming-compliance-issues.md` |

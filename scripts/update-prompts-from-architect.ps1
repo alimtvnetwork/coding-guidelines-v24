@@ -1,4 +1,4 @@
 $ErrorActionPreference = "Stop"
 
-# Forwarding wrapper: Prompts are now compiled internally from .lovable/prompts/01-prompts-category/
+# Forwarding wrapper: Prompts are now compiled internally from 01-prompts/
 & "$PSScriptRoot/update-prompts.ps1" @args

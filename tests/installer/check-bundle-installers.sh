@@ -4,7 +4,7 @@
 #
 # For every bundle declared in bundles.json, asserts that the matching
 # pair {<name>-install.sh, <name>-install.ps1} exist at the repo root
-# and conform to spec/14-update/27-generic-installer-behavior.md:
+# and conform to 02-spec/14-update/27-generic-installer-behavior.md:
 #
 #   STRUCTURAL (spec §3, §7, §8):
 #     - bash:  usage(), --version, --no-discovery, --no-main-fallback,
@@ -48,7 +48,7 @@ check_sh() {
   fi
   for needle in 'usage()' '--version' '--no-discovery' '--no-main-fallback' \
                 '--use-local-archive' '-h|--help' 'EXIT CODES (spec §8)' \
-                'mode:    ' 'spec/14-update/27-generic-installer-behavior'; do
+                'mode:    ' '02-spec/14-update/27-generic-installer-behavior'; do
     require "$file" "$needle" "$(basename "$file")"
   done
 }
@@ -58,7 +58,7 @@ check_ps1() {
   for needle in '-Version' '-NoDiscovery' '-NoMainFallback' \
                 '-UseLocalArchive' '[switch]$Help' 'Get-Help $PSCommandPath' \
                 'EXIT CODES' 'mode:    ' \
-                'spec/14-update/27-generic-installer-behavior'; do
+                '02-spec/14-update/27-generic-installer-behavior'; do
     require "$file" "$needle" "$(basename "$file")"
   done
 }

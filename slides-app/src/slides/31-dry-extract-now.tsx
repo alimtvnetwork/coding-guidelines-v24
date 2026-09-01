@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 33: DRY extract-now.
  *
- * Source: spec/17/31 line 33. Duplicate logic across two sites means
+ * Source: 02-spec/17/31 line 33. Duplicate logic across two sites means
  * extract it now, not later. Two is the trigger, not three.
  */
 
@@ -54,7 +54,7 @@ export default function DryExtractNowSlide() {
         <ActionPanel
           slideId="31-dry-extract-now"
           symptom="A tax fix lands in `CartSummary.tsx` but `InvoicePreview.tsx` still shows the un-rounded value because the same subtotal-plus-tax-plus-shipping block was copy-pasted. QA catches it three sprints later on a customer refund. Nobody remembered the second copy existed."
-          rule="Duplicate logic across two sites is the trigger to extract, not three. Extract to a named helper in the correct feature folder, replace both call sites, and delete the inline copies in the same PR. Magic numbers move to named constants at the same time. Per spec/17/31 line 33 and rule 7."
+          rule="Duplicate logic across two sites is the trigger to extract, not three. Extract to a named helper in the correct feature folder, replace both call sites, and delete the inline copies in the same PR. Magic numbers move to named constants at the same time. Per 02-spec/17/31 line 33 and rule 7."
           doThis="On second write, stop and extract. Name the helper by the verb it performs (`computeOrderTotals`, `formatInvoiceLine`), colocate with its feature, and export a named type for the return value. If the two copies have small differences, parameterize; if they diverge in intent, name them separately (`computeCartTotals` vs `computeInvoiceTotals`) so future drift is deliberate."
         />
       </div>

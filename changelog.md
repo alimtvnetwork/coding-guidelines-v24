@@ -186,7 +186,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added / Changed / Fixed
 
-- Updated AI prompts across `.lovable/prompts/` from `prompt-architect-v2`.
+- Updated AI prompts across `01-prompts/` from `prompt-architect-v2`.
 - Added `alim.karim.profile` repository link to Connect sections in `readme.md`, `docs/author.md`, and `docs/author-bio.md`.
 - Regenerated all 14 bundle installer scripts (`*-install.sh` and `*-install.ps1`) for v6.21.0.
 - Regenerated sync-managed files `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, and `docs/author.md`.
@@ -209,7 +209,7 @@ To pin your repository to this exact version, run the following one-liner:
 - Enqueued `version.json`, `standards/version-source-of-truth.md`, and `release-architecture-map.md` in `.lovable/what-to-read.md`.
 - Created `.lovable/memory/release-architecture-map.md` and `.lovable/memory/standards/version-source-of-truth.md`.
 - Added `.lovable/memory` to all 7 bundles in `bundles.json` and regenerated 14 bundle installer scripts.
-- Updated Rule 19 in `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` and synced mirrors.
+- Updated Rule 19 in `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` and synced mirrors.
 
 ---
 
@@ -235,7 +235,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed — Update prompts & fix linter rules
 
-- Re-synced 18 AI prompts in `.lovable/prompts/` from `prompt-architect-v2` repository using `scripts/update-prompts-from-architect.ps1`.
+- Re-synced 18 AI prompts in `01-prompts/` from `prompt-architect-v2` repository using `scripts/update-prompts-from-architect.ps1`.
 - Fixed false positive forbidden string detections in `linter-scripts/forbidden-strings.toml` caused by `changelog.md` casing rename.
 - Resolved Windows Unicode crashes in `forbidden-strings-summary.py` by forcing `utf-8` stdout.
 - Fixed `src/test/slides-deck.test.ts` to assert against `deck/registry.ts` instead of `deck.ts` following refactor.
@@ -305,7 +305,7 @@ To pin your repository to this exact version, run the following one-liner:
 - `.github/workflows/branch-protection-drift.yml`: new nightly job (06:17 UTC, `workflow_dispatch` also) that runs `node scripts/branch-protection-diff.mjs` against the live `main` branch protection and posts the classified diff into the run summary. Self-skips when `GH_ADMIN_TOKEN` secret is absent (forks, unprivileged clones) so it never causes false-positive noise. Closes the second open backlog item from the v5.130 handoff: mechanical, always-on detection when GitHub protections drift from `.github/branch-protection.expected.json`. Root cause it addresses: `scripts/branch-protection-diff.mjs` (v5.127) is only useful if someone remembers to run it; a nightly workflow makes drift detection a property of the repo, not a habit of an operator.
 - `linter-scripts/check-file-sizes.py`: new linter enforcing spec/17 Hard Rule #6 (any file 300 lines, `.tsx` 100 lines). Discovers `src/`, `slides-app/src/`, `scripts/`, `linter-scripts/`; excludes vendored/generated (`*.d.ts`, `*_pb.ts`, `src/components/ui/` shadcn primitives, build dirs). Supports top-of-file waivers (`// lint-allow: file-size reason="..." max=N`, ceiling 600). Ratchet baseline written to `.file-size-baseline.json` (55 pre-existing entries pinned): any NEW file over cap or any pinned file that GROWS past its baseline fails `--check`; shrinking is always accepted. `--strict` ignores the baseline. Wired into `scripts/lint-ci.sh` (steps 25+26) and `.github/workflows/ci.yml` `sync-drift` job.
 - `linter-scripts/tests/check-file-sizes.test.py`: 10 self-test assertions locking the contract: pinned-only passes, growth fails with `GREW from N`, NEW files fail with `NEW`, waivers within ceiling clear a violation, waivers over ceiling exit 2, `--strict` fails even when baseline is clean. Prevents a linter refactor from silently green-lighting drift.
-- Root cause this closes: Hard Rule #6 has existed in `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` since v1.0 but had zero enforcement, so files like `slides-app/src/App.tsx` (913 lines) and `src/components/ui/sidebar.tsx` (650 lines) drifted past cap unchallenged. The ratchet lets us pin the current mess without a big-bang refactor while guaranteeing no new violations land. Same "rule with teeth" pattern established in v5.130 for Hard Rule #13.
+- Root cause this closes: Hard Rule #6 has existed in `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` since v1.0 but had zero enforcement, so files like `slides-app/src/App.tsx` (913 lines) and `src/components/ui/sidebar.tsx` (650 lines) drifted past cap unchallenged. The ratchet lets us pin the current mess without a big-bang refactor while guaranteeing no new violations land. Same "rule with teeth" pattern established in v5.130 for Hard Rule #13.
 
 ---
 
@@ -313,7 +313,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added, enforce Hard Rule #13 (guideline mirror sync) in lint-ci and CI + self-test
 
-- `scripts/lint-ci.sh` steps 23+24 and `.github/workflows/ci.yml` `sync-drift` job: wired `node scripts/sync-guidelines.mjs --check` and `node scripts/tests/sync-guidelines.test.mjs`. Any hand-edit to `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` that forgets to re-run `npm run sync:guidelines` now fails pre-push AND PR checks. Closes the enforcement gap opened in v5.129: Hard Rule #13 was documentation-only theatre without a CI gate.
+- `scripts/lint-ci.sh` steps 23+24 and `.github/workflows/ci.yml` `sync-drift` job: wired `node scripts/sync-guidelines.mjs --check` and `node scripts/tests/sync-guidelines.test.mjs`. Any hand-edit to `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` that forgets to re-run `npm run sync:guidelines` now fails pre-push AND PR checks. Closes the enforcement gap opened in v5.129: Hard Rule #13 was documentation-only theatre without a CI gate.
 - `scripts/sync-guidelines.mjs`: refactored to export pure helpers (`diffReport`, `computeDrifts`, `buildLovableMirror`, `buildCursorRules`, `extractSection`) and guarded `main()` behind an `invokedDirectly` check so importing the module in tests does not touch the real mirrors or exit the process. Same pattern as v5.126 `print-required-checks.mjs` refactor.
 - `scripts/tests/sync-guidelines.test.mjs`: 14 assertions locking the contract. Covers `diffReport` (identical, single-char, empty, line-count message format), `extractSection` (pull body, stop at next heading or `---`, throw on missing heading), `computeDrifts` (clean, lovable-only drift, cursor-only drift including missing markers, both drifted), end-to-end spawn of `--check` (exits 0 with "OK" on clean repo), and an implicit assertion that the import guard prevented `main()` from running at module import time.
 - `scripts/check-lint-ci-drift.mjs` verified no drift: `ci.yml` mirrors `lint-ci.sh` with both new steps present in both places.
@@ -324,7 +324,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed, coding guideline 31 v1.5.0: hard rule for mirror sync + expanded React mutation guidance
 
-- `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` bumped to v1.5.0. Added a "Canonical locations" block near the top naming all three required paths (`spec/17-.../31-*.md` as source, `.lovable/coding-guidelines.md` and `.cursorrules` as mirrors) and pointing at `scripts/sync-guidelines.mjs` as the only allowed writer. This closes the recurring symptom "sometimes the spec folder is visible to search, sometimes it isn't": agent search indexes the mirror, not the spec tree, so a missing mirror made the guideline effectively invisible.
+- `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` bumped to v1.5.0. Added a "Canonical locations" block near the top naming all three required paths (`02-spec/17-.../31-*.md` as source, `.lovable/coding-guidelines.md` and `.cursorrules` as mirrors) and pointing at `scripts/sync-guidelines.mjs` as the only allowed writer. This closes the recurring symptom "sometimes the spec folder is visible to search, sometimes it isn't": agent search indexes the mirror, not the spec tree, so a missing mirror made the guideline effectively invisible.
 - Promoted the mirror requirement to Hard Rule #13 (Zero Tolerance): missing or stale mirrors are a build-fail; never hand-edit mirrors; always edit source and re-run the sync script. Root cause this closes: v1.4.0 documented sync only in the release notes, not inside the guideline itself, so any AI reading only file 31 had no reason to keep the mirrors alive.
 - React rule #7 rewritten from a one-line "never mutate, use spread or structuredClone" into a full guidance paragraph. Explains WHY (React reconciler uses referential inequality, so in-place mutation silently drops updates), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`, `Object.freeze` for constants), when to use `structuredClone` (deep copies for nested state / form drafts), when Immer is acceptable (only when a reducer would otherwise be unreadable, output still a fresh reference), and three concrete rules of thumb including the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 - Ran `node scripts/sync-guidelines.mjs`: both mirrors now match source byte-for-byte (198 lines / 66 lines respectively). Verified with `node scripts/sync-version.mjs` at v5.129.0.
@@ -372,7 +372,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed, OQ-A1 and OQ-A2 promoted to locked decisions D15/D16
 
-- `spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` bumped to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". Header `Resolves:` line now cites D15 and D16.
+- `02-spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` bumped to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". Header `Resolves:` line now cites D15 and D16.
 - D15 (locked): cascading semantics is simple union. No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Reopening would invalidate `WORKER-900-02 EmptyEffectiveAccessSet` and the JWT `AccessItem.Code[]` embedding in §2.
 - D16 (locked): cache-bin storage tier is per-process SQLite `:memory:` with the `RoleAccessCache` / `RoleCacheCatalogVersion` schema in §4 and the invalidation contract in §5. Redis and plain in-process map remain configurable alternatives against the same four-function contract; they are not defaults and MUST NOT be assumed by Phase 6+ implementers.
 - `.lovable/29-plan.md`: added D15 and D16 rows to the Locked Decisions table. "Open Questions (carried forward)" section renamed to "Open Questions (all resolved)" with OQ-A1/A2 struck through and linked to their new D-numbers. OQ-A3 and OQ-A4 were already resolved (Phase 8 and Phase 11).
@@ -486,7 +486,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Fixed — Stale open question in `.lovable/29-plan.md`
 
-- OQ-A3 (Zip password "known pattern") was resolved in Phase 8 by `spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack) but the Open Questions block was never swept, so the item kept surfacing in every remaining-work list. Marked resolved with a pointer to the spec section.
+- OQ-A3 (Zip password "known pattern") was resolved in Phase 8 by `02-spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack) but the Open Questions block was never swept, so the item kept surfacing in every remaining-work list. Marked resolved with a pointer to the spec section.
 
 ## [5.116.0] - 2026-07-19
 
@@ -561,7 +561,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added — SS-02 tasks 60-61: REACT-012 name-or-split, A11Y-001 accessibility floor (Section H opener)
 
-- Slide 58 `slides-app/src/slides/58-name-or-split.tsx` (`REACT-012`, hard). If you cannot invent a domain name for a type, split until you can. Banned placeholder names: `Data`, `Info`, `Config`, `Options`, `Params`, `Payload`, `Response`, `Request`, `Result`, `Thing`, `Item`, `Value`, `Entry`, `Record`, `Object`, `Details`, `Meta`, `State`, `Props`, `Args` (bare). Enforced by custom `no-placeholder-type-names` ESLint rule + PR-review label `type-names-are-domain-nouns`. Per spec/17/31 line 112.
+- Slide 58 `slides-app/src/slides/58-name-or-split.tsx` (`REACT-012`, hard). If you cannot invent a domain name for a type, split until you can. Banned placeholder names: `Data`, `Info`, `Config`, `Options`, `Params`, `Payload`, `Response`, `Request`, `Result`, `Thing`, `Item`, `Value`, `Entry`, `Record`, `Object`, `Details`, `Meta`, `State`, `Props`, `Args` (bare). Enforced by custom `no-placeholder-type-names` ESLint rule + PR-review label `type-names-are-domain-nouns`. Per 02-spec/17/31 line 112.
 - Slide 59 `slides-app/src/slides/59-a11y-floor.tsx` (`A11Y-001`, hard). Chapter H opener: WCAG 2.2 AA is the shipping floor for every UI. Ten non-negotiable minimums: keyboard reach, visible focus, programmatic labels, 4.5:1 contrast, no colour-only info, reduced-motion respect, modal focus trap + restore, live regions, alt text, sequential headings, 24x24 hit targets. Enforced by `axe-core` in CI (existing since v5.54.0), `eslint-plugin-jsx-a11y` strict, Storybook a11y addon, and a design-token contrast gate.
 - New deck section `a11y` (Accessibility) inserted between `react` and `data-schema` in `slides-app/src/deck/registry.ts`; `react` section description updated (a11y moved out).
 - Registry: 61 slides, SRA validator green.
@@ -573,8 +573,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added — SS-02 tasks 58-59: REACT-010 named generics & composites, REACT-011 types.ts colocation
 
-- Slide 56 `slides-app/src/slides/56-named-generics-composites.tsx` (`REACT-010`, hard). Every composite type gets a named alias; every generic parameter uses a meaningful `T`-prefixed name (`TItem`, `TKey`, `TResponse`). Bare `T`, `U`, `K`, `V` and inline object/map/record composites are banned in application code. Enforced by `@typescript-eslint/naming-convention` on `typeParameter` plus custom `no-inline-composite`. Per spec/17/31 line 110.
-- Slide 57 `slides-app/src/slides/57-types-file-colocation.tsx` (`REACT-011`, hard). Prop types and event handler types live in a sibling `types.ts`; shared cross-component types live in `src/types/<domain>.ts`. Anonymous prop object literals on component signatures are banned. Standard component folder: `{ComponentName}.tsx`, `types.ts`, `index.ts`. Enforced by custom `no-inline-props-type` rule + `pnpm gen:component` scaffold. Per spec/17/31 line 111.
+- Slide 56 `slides-app/src/slides/56-named-generics-composites.tsx` (`REACT-010`, hard). Every composite type gets a named alias; every generic parameter uses a meaningful `T`-prefixed name (`TItem`, `TKey`, `TResponse`). Bare `T`, `U`, `K`, `V` and inline object/map/record composites are banned in application code. Enforced by `@typescript-eslint/naming-convention` on `typeParameter` plus custom `no-inline-composite`. Per 02-spec/17/31 line 110.
+- Slide 57 `slides-app/src/slides/57-types-file-colocation.tsx` (`REACT-011`, hard). Prop types and event handler types live in a sibling `types.ts`; shared cross-component types live in `src/types/<domain>.ts`. Anonymous prop object literals on component signatures are banned. Standard component folder: `{ComponentName}.tsx`, `types.ts`, `index.ts`. Enforced by custom `no-inline-props-type` rule + `pnpm gen:component` scaffold. Per 02-spec/17/31 line 111.
 - Registry: 59 slides, SRA validator green.
 - Bumped `package.json` from `5.107.0` → `5.108.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -584,8 +584,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added — SS-02 tasks 56-57: REACT-008 custom hook shape, REACT-009 no tuples as public shapes
 
-- Slide 54 `slides-app/src/slides/54-custom-hook-shape.tsx` (`REACT-008`, hard). Any function that calls a hook is a hook: name starts with `use`, return a named `type` (never a bare tuple), hooks called unconditionally at the top level (guards live inside the hook body, not around the call). Enforced by `eslint-plugin-react-hooks` plus custom `hook-name-prefix` and `hook-return-named-type` rules. Per spec/17/31 line 108.
-- Slide 55 `slides-app/src/slides/55-no-tuples-public-shapes.tsx` (`REACT-009`, hard). No tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. The only tolerated tuple is React's built-in `useState` pair. Enforced by `@typescript-eslint/consistent-type-definitions` and custom `no-tuple-return` + `action-shape` rules; codemod `scripts/codemods/tuple-to-object.ts` for the sweep. Per spec/17/31 line 109.
+- Slide 54 `slides-app/src/slides/54-custom-hook-shape.tsx` (`REACT-008`, hard). Any function that calls a hook is a hook: name starts with `use`, return a named `type` (never a bare tuple), hooks called unconditionally at the top level (guards live inside the hook body, not around the call). Enforced by `eslint-plugin-react-hooks` plus custom `hook-name-prefix` and `hook-return-named-type` rules. Per 02-spec/17/31 line 108.
+- Slide 55 `slides-app/src/slides/55-no-tuples-public-shapes.tsx` (`REACT-009`, hard). No tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. The only tolerated tuple is React's built-in `useState` pair. Enforced by `@typescript-eslint/consistent-type-definitions` and custom `no-tuple-return` + `action-shape` rules; codemod `scripts/codemods/tuple-to-object.ts` for the sweep. Per 02-spec/17/31 line 109.
 - Registry: 57 slides, SRA validator green.
 - Bumped `package.json` from `5.106.0` → `5.107.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -596,8 +596,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added — SS-02 tasks 54-55: REACT-006 stable unique keys, REACT-007 component files under 100 lines
 
-- Slide 52 `slides-app/src/slides/52-stable-unique-keys.tsx` (`REACT-006`, hard). Keys derive from the row's own identifier (`{TableName}Id`), never the array index (which reorders scramble child state), never a per-render `crypto.randomUUID()` (which remounts every row and wipes focus/animation). ESLint `react/no-array-index-key: error` plus custom `react/no-unstable-key` rule flagging `Math.random`, `crypto.randomUUID`, `Date.now`, `performance.now`, and `generate*Id`/`create*Id`/`make*Id` calls inside `key={...}`. Codemod `scripts/codemods/index-key-to-id.ts` for the initial sweep. Per spec/17/31 line 106.
-- Slide 53 `slides-app/src/slides/53-component-file-size.tsx` (`REACT-007`, hard). React `.tsx` files stay under 100 lines (stricter than SIZE-001's 300 because JSX+hooks pack ~3x density and memo boundaries only work at component boundaries). Extract in order: leaf JSX blocks, derivation `useMemo`s + fetch clusters into named custom hooks, long handlers into sibling helpers, column defs/schemas into non-React data files. ESLint `max-lines: { max: 100 }` scoped to `**/*.tsx`; waiver via `lint-allow: file-length reason='...' max=N`. Per spec/17/31 line 107.
+- Slide 52 `slides-app/src/slides/52-stable-unique-keys.tsx` (`REACT-006`, hard). Keys derive from the row's own identifier (`{TableName}Id`), never the array index (which reorders scramble child state), never a per-render `crypto.randomUUID()` (which remounts every row and wipes focus/animation). ESLint `react/no-array-index-key: error` plus custom `react/no-unstable-key` rule flagging `Math.random`, `crypto.randomUUID`, `Date.now`, `performance.now`, and `generate*Id`/`create*Id`/`make*Id` calls inside `key={...}`. Codemod `scripts/codemods/index-key-to-id.ts` for the initial sweep. Per 02-spec/17/31 line 106.
+- Slide 53 `slides-app/src/slides/53-component-file-size.tsx` (`REACT-007`, hard). React `.tsx` files stay under 100 lines (stricter than SIZE-001's 300 because JSX+hooks pack ~3x density and memo boundaries only work at component boundaries). Extract in order: leaf JSX blocks, derivation `useMemo`s + fetch clusters into named custom hooks, long handlers into sibling helpers, column defs/schemas into non-React data files. ESLint `max-lines: { max: 100 }` scoped to `**/*.tsx`; waiver via `lint-allow: file-length reason='...' max=N`. Per 02-spec/17/31 line 107.
 - Registry: 55 slides, SRA validator green.
 - Bumped `package.json` from `5.105.0` → `5.106.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -608,8 +608,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added — SS-02 tasks 52-53: REACT-004 no raw for/forEach in render, REACT-005 never mutate state/props/hook returns
 
-- Slide 50 `slides-app/src/slides/50-no-raw-for-in-render.tsx` (`REACT-004`, hard). Bans raw `for`/`forEach` in render or derived state; iteration must be an expression (`map`/`filter`/`reduce`/`flatMap`/`Array.from`). Enforced by ESLint `no-raw-loop-in-render`; waiver requires benchmark link. Per spec/17/31 line 104.
-- Slide 51 `slides-app/src/slides/51-no-mutate-state-props-hook-returns.tsx` (`REACT-005`, hard). Forbids mutating state, props, or arrays/objects returned by hooks; new values via spread/`structuredClone` only. `readonly` state and hook-return types, ESLint `no-mutate-hook-return`, dev-only `Object.freeze` on query results. Per spec/17/31 line 105.
+- Slide 50 `slides-app/src/slides/50-no-raw-for-in-render.tsx` (`REACT-004`, hard). Bans raw `for`/`forEach` in render or derived state; iteration must be an expression (`map`/`filter`/`reduce`/`flatMap`/`Array.from`). Enforced by ESLint `no-raw-loop-in-render`; waiver requires benchmark link. Per 02-spec/17/31 line 104.
+- Slide 51 `slides-app/src/slides/51-no-mutate-state-props-hook-returns.tsx` (`REACT-005`, hard). Forbids mutating state, props, or arrays/objects returned by hooks; new values via spread/`structuredClone` only. `readonly` state and hook-return types, ESLint `no-mutate-hook-return`, dev-only `Object.freeze` on query results. Per 02-spec/17/31 line 105.
 - Registry: 53 slides, SRA validator green.
 - Fixed pre-existing tsc build blockers in slides 27, 28, 44 (JSX attribute strings with invalid `\"` escapes replaced with `'`).
 - Bumped `package.json` from `5.104.0` → `5.105.0`.
@@ -623,7 +623,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 - New slide `slides-app/src/slides/49-one-effect-one-concern.tsx` registered as `REACT-003` (hard) in `react`. Before/after contrasts a `LiveDashboard` mega-effect (websocket + interval + fetch, no return) against three effects, one concern each, with `socket.close()`, `clearInterval`, and `AbortController.abort()` cleanups.
 - Enforcement path: custom ESLint rules `one-concern-per-effect` and `require-effect-cleanup`; dev-only `useTrackedEffect` in `src/lib/effects.ts` logs `react.effect.leak` with `{ component, resource, count }` on non-zero unmount balance.
-- Cites spec/17/31 lines 102-103.
+- Cites 02-spec/17/31 lines 102-103.
 - Validator confirms 51 slides follow Symptom/Rule/Action.
 
 ## [5.103.0] - 2026-07-19
@@ -632,16 +632,16 @@ To pin your repository to this exact version, run the following one-liner:
 
 - New slide `slides-app/src/slides/48-effect-last-resort.tsx` registered as `REACT-002` (hard) in `react`. Before/after contrasts a four-effect `OrderPanel` (derive-state effect, negative inline guard `!user || (!user.isVerified && !user.hasPaymentMethod)`, click-driven effect, no-cleanup fetch) against a zero-effect version using `useMemo`, an extracted positive `getIsCheckoutReady`, and a normal `handleQuoteClick` event handler.
 - Enforcement path: custom ESLint rules `no-derive-state-in-effect`, `no-negative-effect-guard`, `require-effect-cleanup-when-async`; codemod `scripts/extract-effect-guard.mjs`; CI log `react.effect.violation` with `{ file, line, rule, effectIndex }`.
-- Cites spec/17/31 lines 99-101.
+- Cites 02-spec/17/31 lines 99-101.
 - Validator confirms 50 slides follow Symptom/Rule/Action.
 
 ## [5.102.0] - 2026-07-19
 
 ### Changed: SS-02 task 49: React & TypeScript chapter opener (REACT-001)
 
-- New slide `slides-app/src/slides/47-react-chapter-opener.tsx` registered as `REACT-001` (hard) in `react`. Before/after contrasts an effect-driven component (derive-state effect, no-cleanup fetch, inline prop type) against a derived-value + named-type + composed-shells layout. Maps the next 13 slides to spec/17/31 lines 97-112.
+- New slide `slides-app/src/slides/47-react-chapter-opener.tsx` registered as `REACT-001` (hard) in `react`. Before/after contrasts an effect-driven component (derive-state effect, no-cleanup fetch, inline prop type) against a derived-value + named-type + composed-shells layout. Maps the next 13 slides to 02-spec/17/31 lines 97-112.
 - Enforcement path: ESLint (`react-hooks/exhaustive-deps`, `react/jsx-key`, `@typescript-eslint/no-explicit-any`) plus custom `no-inline-prop-types`, `no-tuple-hook-return`, `no-negative-effect-guard`, `max-lines-per-component: 100`; CI job `react-shape-audit` logs `react.shape.violation` with `{ file, rule, line }` and blocks merges on any hard rule.
-- Cites spec/17/31 lines 97-112.
+- Cites 02-spec/17/31 lines 97-112.
 - Validator confirms 49 slides follow Symptom/Rule/Action.
 
 ## [5.101.0] - 2026-07-19
@@ -650,7 +650,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 - New slide `slides-app/src/slides/46-erd-required-on-db-prs.tsx` registered as `SCHEMA-006` (hard) in `data-schema`. Before/after contrasts a PR with 62 lines of raw DDL and no picture against the same PR shipping `docs/erd/referral.mmd` with cardinality, FK direction, and narrative columns visible.
 - Enforcement path: required CI check `erd-required` parses the diff for `migrations/**`, `**/db/schema/**`, `**/*.sql`, extracts every added/altered table, and fails when any is missing from `docs/erd/**.mmd` or when a listed `.mmd` fails to render via `mermaid-cli`. Violations log `erd.required.missing` with `{ pr, table, migrationFile }`.
-- Cites spec/17/31 line 93 (Data & Schema rule 8).
+- Cites 02-spec/17/31 line 93 (Data & Schema rule 8).
 - Validator confirms 48 slides follow Symptom/Rule/Action.
 
 ## [5.100.0] - 2026-07-19
@@ -659,7 +659,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 - New slide `slides-app/src/slides/45-sqlite-orm-explicit-joins.tsx` registered as `SCHEMA-005` (hard) in `data-schema`. Before/after contrasts raw concatenated SQL with implicit `FROM a, b WHERE ...` join against an ORM model (Drizzle shown) with `primaryKey({ autoIncrement: true })`, `.references(() => Parent.PK)`, and `.innerJoin(..., on)`.
 - Enforcement path: migration linter fails on `{Other}Id` columns without a matching `REFERENCES`; code linter bans raw SQL outside a whitelisted `db/raw/*.sql` folder; CI runs the suite against SQLite only. Violations log `schema.fk.missing`.
-- Cites spec/17/31 line 93.
+- Cites 02-spec/17/31 line 93.
 - Validator confirms 47 slides follow Symptom/Rule/Action.
 
 ## [5.99.0] - 2026-07-19
@@ -668,7 +668,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 - New slide `slides-app/src/slides/44-nullable-narrative-columns.tsx` registered as `SCHEMA-004` (hard) in `data-schema`. Before/after contrasts a `Customer` with no narrative column and an `Order` with `NOT NULL DEFAULT ''`/`'n/a'` against `Description TEXT NULL` on entity/ref tables and `Notes`+`Comments TEXT NULL` on transactional. Join tables remain exempt (SCHEMA-003).
 - Enforcement path: `MISSING-DESC-001` (presence + Rule 12 + waivers) and `DB-FREETEXT-001` linters (see `mem://sessions/2026-04-sql-linter-rules`); violations log `schema.narrative.violation`.
-- Cites spec/17/31 line 92 and `mem://architecture/database-schema`.
+- Cites 02-spec/17/31 line 92 and `mem://architecture/database-schema`.
 - Validator confirms 46 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.98.0` to `5.99.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -678,7 +678,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 45: Join-table naming and composite PK (SCHEMA-003)
 
-- New slide `slides-app/src/slides/43-join-table-naming.tsx` registered as `SCHEMA-003` (hard) in `data-schema`. Before/after contrasts `user_roles` with a surrogate `user_role_id` and narrative columns against `UserRole` with composite PK `(UserId, RoleId)` and no `Description`/`Notes`. Also demonstrates the `Status`/`Type`/`Category` pattern (registered enum + join table with time key), per spec/17/31 line 91.
+- New slide `slides-app/src/slides/43-join-table-naming.tsx` registered as `SCHEMA-003` (hard) in `data-schema`. Before/after contrasts `user_roles` with a surrogate `user_role_id` and narrative columns against `UserRole` with composite PK `(UserId, RoleId)` and no `Description`/`Notes`. Also demonstrates the `Status`/`Type`/`Category` pattern (registered enum + join table with time key), per 02-spec/17/31 line 91.
 - Enforcement path: migration linter rejects surrogate PKs on `{A}{B}` join tables, narrative columns on join tables, and `Status/Type/Category/Kind TEXT` columns on non-enum tables; violations log `schema.join.violation`.
 - Cites `mem://architecture/database-schema` (join tables exempt from Description/Notes/Comments).
 - Validator confirms 45 slides follow Symptom/Rule/Action.
@@ -691,8 +691,8 @@ To pin your repository to this exact version, run the following one-liner:
 ### Changed: SS-02 task 44: `{TableName}Id` INTEGER PKs, no UUIDs (SCHEMA-002)
 
 - New slide `slides-app/src/slides/42-table-id-pks.tsx` registered as `SCHEMA-002` (hard) in the `data-schema` section. Before/after contrasts mixed PK names (`id`, `order_item_uuid`) and TEXT UUID storage against `{TableName}Id INTEGER PRIMARY KEY AUTOINCREMENT` with FKs that reuse the exact PK name, so joins read like English and grep finds every producer/consumer.
-- Enforcement path: migration linter for PK name and INTEGER type, FK-name linter, and PR checklist item; legacy exemptions require a spec/17/31 waiver line with ticket + migration date. Public unguessable identifiers move to a separate `PublicId TEXT UNIQUE` column, never the PK.
-- Cites spec/17/31 line 90 and `mem://architecture/database-schema`.
+- Enforcement path: migration linter for PK name and INTEGER type, FK-name linter, and PR checklist item; legacy exemptions require a 02-spec/17/31 waiver line with ticket + migration date. Public unguessable identifiers move to a separate `PublicId TEXT UNIQUE` column, never the PK.
+- Cites 02-spec/17/31 line 90 and `mem://architecture/database-schema`.
 - Validator confirms 44 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.96.0` to `5.97.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -702,7 +702,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 43: Data & Schema chapter opener slide (SCHEMA-001)
 
-- New slide `slides-app/src/slides/41-data-schema-chapter-opener.tsx` registered as `SCHEMA-001` (hard) under a new `data-schema` section. Before/after contrasts `user_profiles` + snake_case JSON + a third TypeScript casing against a single PascalCase entity `UserProfile` flowing unchanged through DB, JSON, and TypeScript, with camelCase columns/fields. Enforcement: migration linter regex, API contract test, and schema-driven codegen; violations log `schema.naming.violation` and block the PR. Cites spec/17/31 lines 87 to 89.
+- New slide `slides-app/src/slides/41-data-schema-chapter-opener.tsx` registered as `SCHEMA-001` (hard) under a new `data-schema` section. Before/after contrasts `user_profiles` + snake_case JSON + a third TypeScript casing against a single PascalCase entity `UserProfile` flowing unchanged through DB, JSON, and TypeScript, with camelCase columns/fields. Enforcement: migration linter regex, API contract test, and schema-driven codegen; violations log `schema.naming.violation` and block the PR. Cites 02-spec/17/31 lines 87 to 89.
 - Added `data-schema` to `SlideSection` union and `SECTIONS` in `slides-app/src/deck/registry.ts`.
 - Validator confirms 43 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.95.0` to `5.96.0`.
@@ -714,7 +714,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 42: Global error store + single modal slide (ERR-006)
 
-- New slide `slides-app/src/slides/40-global-error-store.tsx` registered as `ERR-006` (hard) under section `errors`. Before/after contrasts per-feature `useState<string|null>` + `toast.error` + inline `Alert` (same failure shown 3x or 0x, stale after route change) against `src/lib/errorStore.ts` (`current` + `push` + `clear`), a single top-level `ErrorModal` fed by the `apiCall` parser (ERR-005), copy chosen from the ERR-004 registry, and `log.error` on every push per LOG-002. Cites spec/17/31 line 80.
+- New slide `slides-app/src/slides/40-global-error-store.tsx` registered as `ERR-006` (hard) under section `errors`. Before/after contrasts per-feature `useState<string|null>` + `toast.error` + inline `Alert` (same failure shown 3x or 0x, stale after route change) against `src/lib/errorStore.ts` (`current` + `push` + `clear`), a single top-level `ErrorModal` fed by the `apiCall` parser (ERR-005), copy chosen from the ERR-004 registry, and `log.error` on every push per LOG-002. Cites 02-spec/17/31 line 80.
 - Validator confirms 42 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.94.0` to `5.95.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -725,7 +725,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 41: Retrospective on repeats slide (RCA-002)
 
-- New slide `slides-app/src/slides/39-retrospective-on-repeats.tsx` registered as `RCA-002` (hard) under section `errors`. Before/after contrasts three sprints of copy-pasted `try/catch` toasts against a second-occurrence stop, an RCA under `docs/rca/YYYY-MM-DD-{slug}.md` naming symptom + root cause + class fix (`apiCall<T>()` per ERR-005) + prevention (CI grep on raw `.json()`) + owners, and a single migration PR that closes the class. Cites spec/17/31 line 79.
+- New slide `slides-app/src/slides/39-retrospective-on-repeats.tsx` registered as `RCA-002` (hard) under section `errors`. Before/after contrasts three sprints of copy-pasted `try/catch` toasts against a second-occurrence stop, an RCA under `docs/rca/YYYY-MM-DD-{slug}.md` naming symptom + root cause + class fix (`apiCall<T>()` per ERR-005) + prevention (CI grep on raw `.json()`) + owners, and a single migration PR that closes the class. Cites 02-spec/17/31 line 79.
 - Validator confirms 41 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.93.0` to `5.94.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -736,7 +736,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 40: Verify both directions integration check slide (INT-001)
 
-- New slide `slides-app/src/slides/38-verify-both-directions.tsx` registered as `INT-001` (hard) under section `errors`. Before/after contrasts a one-sided check (curl returns 200, ship it) that misses a backend rename of `id` to `orderId` and ships an empty UI list, against a three-artifact PR (curl with `x-request-id` + raw body, frontend runtime assertion on the exact field names, UI screenshot) run on the same payload. Cites spec/17/31 line 78.
+- New slide `slides-app/src/slides/38-verify-both-directions.tsx` registered as `INT-001` (hard) under section `errors`. Before/after contrasts a one-sided check (curl returns 200, ship it) that misses a backend rename of `id` to `orderId` and ships an empty UI list, against a three-artifact PR (curl with `x-request-id` + raw body, frontend runtime assertion on the exact field names, UI screenshot) run on the same payload. Cites 02-spec/17/31 line 78.
 - Validator confirms 40 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.92.0` to `5.93.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -747,7 +747,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 39: Log context requirements slide (LOG-002)
 
-- New slide `slides-app/src/slides/37-log-context.tsx` registered as `LOG-002` (hard) under section `errors`. Before/after contrasts bare `log.error("failed")` and `{...req.body}` dumps that leak PAN, CVV, passwords, and bearer tokens against a named `op`, `requestId`, `userId`, and hand-picked safe inputs (amount, currency, last4, registered code). Cites spec/17/31 line 77.
+- New slide `slides-app/src/slides/37-log-context.tsx` registered as `LOG-002` (hard) under section `errors`. Before/after contrasts bare `log.error("failed")` and `{...req.body}` dumps that leak PAN, CVV, passwords, and bearer tokens against a named `op`, `requestId`, `userId`, and hand-picked safe inputs (amount, currency, last4, registered code). Cites 02-spec/17/31 line 77.
 - Validator confirms 39 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.91.0` to `5.92.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -758,7 +758,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 38: Log-level severity map slide (LOG-001)
 
-- New slide `slides-app/src/slides/36-log-level-severity.tsx` registered as `LOG-001` (hard) under section `errors`. Before/after contrasts everything-at-error noise against strict semantics: `debug` for trace, `info` for lifecycle, `warn` for recoverable, `error` for user-visible failure, `fatal` only when the process is about to exit. Cites spec/17/31 line 76.
+- New slide `slides-app/src/slides/36-log-level-severity.tsx` registered as `LOG-001` (hard) under section `errors`. Before/after contrasts everything-at-error noise against strict semantics: `debug` for trace, `info` for lifecycle, `warn` for recoverable, `error` for user-visible failure, `fatal` only when the process is about to exit. Cites 02-spec/17/31 line 76.
 - Validator confirms 38 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.90.0` to `5.91.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -769,7 +769,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 37: Universal response envelope slide (ERR-005)
 
-- New slide `slides-app/src/slides/35-response-envelope.tsx` registered as `ERR-005` (hard) under section `errors`. Before/after contrasts two routes with two shapes plus per-caller try/catch against one `{ data, errors[], meta }` envelope and one shared `apiCall` parser that logs errors with `requestId` and throws typed `AppError`. Cites spec/17/31 line 80.
+- New slide `slides-app/src/slides/35-response-envelope.tsx` registered as `ERR-005` (hard) under section `errors`. Before/after contrasts two routes with two shapes plus per-caller try/catch against one `{ data, errors[], meta }` envelope and one shared `apiCall` parser that logs errors with `requestId` and throws typed `AppError`. Cites 02-spec/17/31 line 80.
 - Validator confirms 37 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.89.0` to `5.90.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -780,7 +780,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 36: Registered error codes slide (ERR-004)
 
-- New slide `slides-app/src/slides/34-registered-error-codes.tsx` registered as `ERR-004` (hard) under section `errors`. Before/after contrasts four ad-hoc spellings of the same error (`bad-input`, `BAD_INPUT`, `payment_failed_2`, `PaymentFailed`) with a central `ErrorCodes` registry, typed `ErrorCode` union, and an exhaustive UI switch. Cites spec/17/31 line 79.
+- New slide `slides-app/src/slides/34-registered-error-codes.tsx` registered as `ERR-004` (hard) under section `errors`. Before/after contrasts four ad-hoc spellings of the same error (`bad-input`, `BAD_INPUT`, `payment_failed_2`, `PaymentFailed`) with a central `ErrorCodes` registry, typed `ErrorCode` union, and an exhaustive UI switch. Cites 02-spec/17/31 line 79.
 - Validator confirms 36 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.88.0` to `5.89.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -791,7 +791,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 35: Assets folder convention slide (ASSET-001)
 
-- New slide `slides-app/src/slides/33-assets-folder-convention.tsx` registered as `ASSET-001` (hard) under section `structure`. Before/after contrasts scattered `src/img/`, `public/icons/`, and per-component assets with version-suffixed filenames (`logo-final-v2.svg`) against a single `assets/NN-folder/NN-file.ext` tree with two-digit sequence prefixes. Cites spec/17/31 line 44 rule 12.
+- New slide `slides-app/src/slides/33-assets-folder-convention.tsx` registered as `ASSET-001` (hard) under section `structure`. Before/after contrasts scattered `src/img/`, `public/icons/`, and per-component assets with version-suffixed filenames (`logo-final-v2.svg`) against a single `assets/NN-folder/NN-file.ext` tree with two-digit sequence prefixes. Cites 02-spec/17/31 line 44 rule 12.
 - Validator confirms 35 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.87.0` to `5.88.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -802,7 +802,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 34: Mermaid-first for 3+ components slide (COMP-001)
 
-- New slide `slides-app/src/slides/32-mermaid-first-components.tsx` registered as `COMP-001` (hard) under section `structure`. Before/after shows a checkout feature shipped without a diagram (state ownership drifts across four components) versus committing `docs/checkout/components.mmd` first so the store owns state and leaf components are read-only. Cites spec/17/31 line 42 rule 10.
+- New slide `slides-app/src/slides/32-mermaid-first-components.tsx` registered as `COMP-001` (hard) under section `structure`. Before/after shows a checkout feature shipped without a diagram (state ownership drifts across four components) versus committing `docs/checkout/components.mmd` first so the store owns state and leaf components are read-only. Cites 02-spec/17/31 line 42 rule 10.
 - Validator confirms 34 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.86.0` to `5.87.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -813,7 +813,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 33: DRY extract-now slide (DRY-001)
 
-- New slide `slides-app/src/slides/31-dry-extract-now.tsx` registered as `DRY-001` (hard) under section `structure`. Before/after shows the same order-totals math copy-pasted into `CartSummary.tsx` and `InvoicePreview.tsx` with drift (lost rounding, flipped boundary), then extracted to `computeOrderTotals` with named constants. Cites spec/17/31 line 33 and rule 7.
+- New slide `slides-app/src/slides/31-dry-extract-now.tsx` registered as `DRY-001` (hard) under section `structure`. Before/after shows the same order-totals math copy-pasted into `CartSummary.tsx` and `InvoicePreview.tsx` with drift (lost rounding, flipped boundary), then extracted to `computeOrderTotals` with named constants. Cites 02-spec/17/31 line 33 and rule 7.
 - Validator confirms 33 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.85.0` to `5.86.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -824,7 +824,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 32: dedicated definitions file slide (DEF-001)
 
-- New slide `slides-app/src/slides/30-dedicated-definitions.tsx` registered as `DEF-001` (hard) under section `structure`. Before/after extracts an inlined `OrderStatus` type, `OrderCardProps` interface, and two constants out of a component file into colocated `types.ts` and `constants.ts`. Cites spec/17/31 line 32 and React rule 13.
+- New slide `slides-app/src/slides/30-dedicated-definitions.tsx` registered as `DEF-001` (hard) under section `structure`. Before/after extracts an inlined `OrderStatus` type, `OrderCardProps` interface, and two constants out of a component file into colocated `types.ts` and `constants.ts`. Cites 02-spec/17/31 line 32 and React rule 13.
 - Validator confirms 32 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.84.0` to `5.85.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -835,7 +835,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 31: immutable-first slide (IMMUT-001)
 
-- New slide `slides-app/src/slides/29-immutable-first.tsx` registered as `IMMUT-001` (hard) under section `structure`. Before/after replaces `let`-based staged reassignment and in-place `push`/`sort` on a shared array with `const` at declaration and `[...arr].sort(...)` spread-copy. Cites spec/17/31 line 35.
+- New slide `slides-app/src/slides/29-immutable-first.tsx` registered as `IMMUT-001` (hard) under section `structure`. Before/after replaces `let`-based staged reassignment and in-place `push`/`sort` on a shared array with `const` at declaration and `[...arr].sort(...)` spread-copy. Cites 02-spec/17/31 line 35.
 - Pivot note: originally scheduled task 31 (two-operand max + positive guards) is already covered by shipped slides `08-two-operand-max.tsx` (CF-002) and `09-positively-named-guards.tsx` (CF-003). Task 31 reallocated to immutable-first, which was an unfilled hard-rule gap.
 - Validator confirms 31 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.83.0` to `5.84.0`.
@@ -847,7 +847,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 30: function length slide (FUNC-001)
 
-- New slide `slides-app/src/slides/28-function-length.tsx` registered as `FUNC-001` (hard) under section `structure`. Before/after refactor from a 16 line orchestrator to a 4 line one plus extracted helpers, plus the exact `// lint-allow: function-length reason="..." max=N` waiver form. Cites spec/17/31 line 25.
+- New slide `slides-app/src/slides/28-function-length.tsx` registered as `FUNC-001` (hard) under section `structure`. Before/after refactor from a 16 line orchestrator to a 4 line one plus extracted helpers, plus the exact `// lint-allow: function-length reason="..." max=N` waiver form. Cites 02-spec/17/31 line 25.
 - Validator confirms 30 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.82.0` to `5.83.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -858,7 +858,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 29: file-size tier slide (SIZE-001)
 
-- New slide `slides-app/src/slides/27-file-size-tiers.tsx` registered as `SIZE-001` (hard) under section `structure`. Three-card layout for the 100 line .tsx, 120 line class, and 300 line fallback caps with trigger and extract-to guidance. Cites spec/17/31 line 30.
+- New slide `slides-app/src/slides/27-file-size-tiers.tsx` registered as `SIZE-001` (hard) under section `structure`. Three-card layout for the 100 line .tsx, 120 line class, and 300 line fallback caps with trigger and extract-to guidance. Cites 02-spec/17/31 line 30.
 - Validator confirms 29 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.81.0` to `5.82.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -869,7 +869,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed: SS-02 task 28: line-gap discipline slide (STYLE-001)
 
-- New slide `slides-app/src/slides/26-line-gap-discipline.tsx` registered as `STYLE-001` (hard) under section `structure`. TypeScript before/after covers grouped imports (stdlib, third-party, first-party absolute, relative), blank line before `return` / `throw`, no double blanks, no blank after `{`. Cites spec/17/31 lines 53 to 62.
+- New slide `slides-app/src/slides/26-line-gap-discipline.tsx` registered as `STYLE-001` (hard) under section `structure`. TypeScript before/after covers grouped imports (stdlib, third-party, first-party absolute, relative), blank line before `return` / `throw`, no double blanks, no blank after `{`. Cites 02-spec/17/31 lines 53 to 62.
 - Validator confirms 28 slides follow Symptom/Rule/Action.
 - Bumped `package.json` from `5.80.0` to `5.81.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -880,7 +880,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed — SS-02 task 27: enum standards slide (ENUM-001)
 
-- New slide `slides-app/src/slides/25-enum-standards.tsx` registered as `ENUM-001` (hard). Cross-language before/after (TS / Go / PHP) with a Symptom/Rule/Action panel; cites spec/17/31 lines 31, 168, 171.
+- New slide `slides-app/src/slides/25-enum-standards.tsx` registered as `ENUM-001` (hard). Cross-language before/after (TS / Go / PHP) with a Symptom/Rule/Action panel; cites 02-spec/17/31 lines 31, 168, 171.
 - Bumped `package.json` from `5.79.0` → `5.80.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
 
@@ -890,7 +890,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed — SS-02 task 26: no boolean parameters slide (BOOL-003)
 
-- New slide `slides-app/src/slides/24-no-boolean-parameters.tsx` registered as `BOOL-003` (hard). Splits `render(true)` into `renderExpanded()` / `renderCollapsed()` with a `<CodeDiff>` and Symptom/Rule/Action panel; cites spec/17/31 line 48.
+- New slide `slides-app/src/slides/24-no-boolean-parameters.tsx` registered as `BOOL-003` (hard). Splits `render(true)` into `renderExpanded()` / `renderCollapsed()` with a `<CodeDiff>` and Symptom/Rule/Action panel; cites 02-spec/17/31 line 48.
 - Bumped `package.json` from `5.78.0` → `5.79.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
 
@@ -946,7 +946,7 @@ To pin your repository to this exact version, run the following one-liner:
 ### Added - SS-02 task 21: Version-bump myth-buster slide
 
 - New slide [`slides-app/src/slides/18-version-bump-myth-buster.tsx`](slides-app/src/slides/18-version-bump-myth-buster.tsx), registered as `18-version-bump-myth-buster` in the `principles` section (ruleId `MUST-006`, severity `hard`) after `17-method-doc-decision-tree` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
-- Layout: `<ActionPanel>` header plus a 2x2 Myth vs Reality grid killing the four common misreads of the v1.2 workflow update ("bump is optional", "docs-only PRs skip it", "CI's job", "changelog later"). Footer `<CalloutQuote>` cites spec/17/31 §Must Follow (v1.4.0, line 16). All four rebuttals resolve back to the non-negotiable line in the compiled guideline.
+- Layout: `<ActionPanel>` header plus a 2x2 Myth vs Reality grid killing the four common misreads of the v1.2 workflow update ("bump is optional", "docs-only PRs skip it", "CI's job", "changelog later"). Footer `<CalloutQuote>` cites 02-spec/17/31 §Must Follow (v1.4.0, line 16). All four rebuttals resolve back to the non-negotiable line in the compiled guideline.
 - Root cause of prior gap: informal chat readouts of the v1.2 workflow simplification were being cited as "the bump is no longer required", but §Must Follow in the current v1.4.0 compiled guideline still lists it as auto-reject on violation. Deck had no artifact refuting the myth.
 - Verification: `node scripts/validate-slides-sra.mjs` reports "OK: 20 slide(s)" (was 19). Palette search `version`, `semver`, `changelog`, `v1.2`, or `myth` returns the new slide.
 
@@ -955,7 +955,7 @@ To pin your repository to this exact version, run the following one-liner:
 ### Added - SS-02 task 20: Method-documentation decision tree slide
 
 - New slide [`slides-app/src/slides/17-method-doc-decision-tree.tsx`](slides-app/src/slides/17-method-doc-decision-tree.tsx), registered as `17-method-doc-decision-tree` in the `principles` section (ruleId `MUST-005`, severity `warn`) after `16-comments-lie-code-does-not` in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts).
-- Layout: `<ActionPanel>` header plus a 5-column horizontal decision tree encoding Q1-Q5 from spec/17/31 §"Method Documentation": Q1 rename? / Q2 split? / Q3 restate signature? / Q4 WHY-or-example? / Q5 godoc wired?. Each node shows the yes-branch outcome (Skip / Delete / Keep 1-2 lines / One-liner) with an accent-tinted panel. Footer cites the source file and notes cross-language applicability (Go, TS, PHP, Rust, C#, PowerShell, Python).
+- Layout: `<ActionPanel>` header plus a 5-column horizontal decision tree encoding Q1-Q5 from 02-spec/17/31 §"Method Documentation": Q1 rename? / Q2 split? / Q3 restate signature? / Q4 WHY-or-example? / Q5 godoc wired?. Each node shows the yes-branch outcome (Skip / Delete / Keep 1-2 lines / One-liner) with an accent-tinted panel. Footer cites the source file and notes cross-language applicability (Go, TS, PHP, Rust, C#, PowerShell, Python).
 - Root cause of prior gap: the compiled guideline documented the 5-step checklist in prose only. Readers had to remember ordering (refactor-first, then delete-restatements, then keep with WHY) instead of seeing it as a tree.
 - Verification: `node scripts/validate-slides-sra.mjs` reports "OK: 19 slide(s)" (was 18). Palette search `decision tree`, `godoc`, or `checklist` returns the new slide.
 
@@ -996,7 +996,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added - SS-02 task 16: "Must Follow" opener slide
 
-- New slide [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx), registered in the `principles` section as `13-must-follow` (ruleId `MUST-001`, severity `hard`) in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Distills §"Must Follow and without negotiation" of `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` into 5 non-negotiables: (1) Read first, guess never; (2) One-sentence root cause; (3) Minimum correct fix; (4) Verify in the logs; (5) Ship the trail (remaining tasks + version + changelog + release notes).
+- New slide [`slides-app/src/slides/13-must-follow.tsx`](slides-app/src/slides/13-must-follow.tsx), registered in the `principles` section as `13-must-follow` (ruleId `MUST-001`, severity `hard`) in [`slides-app/src/deck/registry.ts`](slides-app/src/deck/registry.ts). Distills §"Must Follow and without negotiation" of `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` into 5 non-negotiables: (1) Read first, guess never; (2) One-sentence root cause; (3) Minimum correct fix; (4) Verify in the logs; (5) Ship the trail (remaining tasks + version + changelog + release notes).
 - Slide carries the S→R→A pattern via `<ActionPanel>` (satisfies `scripts/validate-slides-sra.mjs`) and renders the 5 non-negotiables as a 2-column numbered grid using design tokens (`hsl(var(--bg-raised))`, `hsl(var(--accent))`, `var(--font-mono)`).
 - Root cause of prior gap: SS-02 backlog task 16 was open because the principles section had 3 aphorism slides (`01a`/`01b`/`01c`) but no distilled Must-Follow checklist tied to file 31; blind-follow readers had to reconstruct the 5 rules from a rant paragraph.
 - Verification: `bun run build` succeeds (offline contract intact, 38 files, 1833 KB, `dist.zip` 0.96 MB); `node scripts/validate-slides-sra.mjs` reports "OK: 15 slide(s) follow the Symptom -> Rule -> Action pattern" (was 14). Palette search for "must-follow" now returns the new slide.
@@ -1130,7 +1130,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added - SS-02 tasks 1 + 4: sectioned deck registry + RuleBadge
 
-- New `slides-app/src/deck/registry.ts` introduces `SlideSection` (opening, principles, naming, control-flow, errors, react, workflow, closing), `SlideSectionMeta`, `groupBySection()`, and per-slide `severity` + `ruleId` metadata mapped to `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`.
+- New `slides-app/src/deck/registry.ts` introduces `SlideSection` (opening, principles, naming, control-flow, errors, react, workflow, closing), `SlideSectionMeta`, `groupBySection()`, and per-slide `severity` + `ruleId` metadata mapped to `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`.
 - New `slides-app/src/components/RuleBadge.tsx` renders a compact Hard/Warn/Style pill using `.slide-badge` chrome tokens (nowrap, 20px) with dot indicator and optional rule id suffix.
 - `slides-app/src/deck.ts` now re-exports from the registry (backward compatible; no consumer touched).
 - Root cause of the prior gap: flat `deck.ts` array had no section or severity metadata, forcing every new content slide to reinvent grouping and badge chrome.
@@ -1239,8 +1239,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Fixed — Mermaid v11 parser failures eliminated; diagram pipeline at 100% coverage; readme "What's new" section added.
 
-- `spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`: replaced `;` (mermaid-v11 statement separator) with `and` in message text.
-- `spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`: quoted all node labels so `@` tokens (e.g. `actions/checkout@v6`) parse cleanly.
+- `02-spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`: replaced `;` (mermaid-v11 statement separator) with `and` in message text.
+- `02-spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`: quoted all node labels so `@` tokens (e.g. `actions/checkout@v6`) parse cleanly.
 - `node scripts/render-diagrams.mjs` now reports `rendered=2 skipped=21 failed=0` — full coverage.
 - `readme.md`: new "What's new in v5.45.0" subsection under the spec-tree block; `changelog.md` link corrected to `changelog.md`.
 - Bumped `package.json` from `5.44.0` → `5.45.0`. Sync artifacts regenerated.
@@ -1251,7 +1251,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed — Audit-15 (blind-AI readiness v6) shipped; spec/19 promoted 98 → 99/100 (A+).
 
-- New audit `spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md`.
+- New audit `02-spec/19-main-worker-service/audit/15-blind-ai-readiness-2026-05-07-v6.md`.
 - Closes audit-12 §2.2 (baseline diagram PNGs) for 8/9 spec/19 diagrams; 1 residual `seq-incremental-backup.mmd` mermaid-v11 parser issue quarantined as renderer-only follow-up.
 - Sole remaining −1 is the intentional v2.0 backup-tier deferral (`MAIN-900-01 SpecContradiction` safe-fail).
 - All 12/12 non-Go `lint-ci.sh` steps GREEN; MWS catalogue stable at 89 codes; 0 stale folder refs.
@@ -1265,8 +1265,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 - Installed `@mermaid-js/mermaid-cli@11.4.2` as a dev dependency and ran `node scripts/render-diagrams.mjs`.
 - Rendered 20 new PNGs across `spec/**/{diagrams,images}/`; 26 total baseline PNGs now committed.
-- 2 sources have pre-existing mermaid-v11 parser errors (tracked separately): `spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`, `spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`.
-- New audit `spec/19-main-worker-service/audit/14-baseline-diagram-pngs-2026-05-07.md`.
+- 2 sources have pre-existing mermaid-v11 parser errors (tracked separately): `02-spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`, `02-spec/19-main-worker-service/diagrams/seq-incremental-backup.mmd`.
+- New audit `02-spec/19-main-worker-service/audit/14-baseline-diagram-pngs-2026-05-07.md`.
 - Spec/19 SPEC-ONLY constraint preserved (only renderer output committed). Backup-tier deferral unchanged.
 - Bumped `package.json` from `5.42.0` → `5.43.0`. Sync-managed artifacts regenerated.
 
@@ -1577,7 +1577,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 ### Removed
 
-- **`spec/19-ai-reliability/`** — folder removed at user request along
+- **`02-spec/19-ai-reliability/`** — folder removed at user request along
   with all dependent artifacts: `scripts/replay-repro.sh`,
   `linters-cicd/scripts/check-context-hygiene.py`,
   `tests/release-install/`, the `--gctx-log` flag in
@@ -1613,7 +1613,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
     list, so each GitHub Release page now ships
     `release-install.sh` and `release-install.ps1` as first-class
     assets pinned to that exact tag. Implements the deferred wiring
-    step from `spec/14-update/25-release-pinned-installer.md` §6.
+    step from `02-spec/14-update/25-release-pinned-installer.md` §6.
 
 ## [3.21.0] - 2026-04-21
 
@@ -1621,7 +1621,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 - **`release-install.sh` and `release-install.ps1`** — pinned-version
   installers for GitHub Release pages. Implementation of
-  `spec/14-update/25-release-pinned-installer.md`.
+  `02-spec/14-update/25-release-pinned-installer.md`.
   - Version source priority: `--version` / `-Version` argument →
     baked-in `__VERSION_PLACEHOLDER__` (substituted at release time) →
     fatal exit 1.
@@ -1647,7 +1647,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 ### Removed
 
 - **Stale `LEGACY-CDN-DOMAIN` allowlist entries.** Removed
-  `spec/15-domain-migration/` and `docs/legacy-domains.md` from the
+  `02-spec/15-domain-migration/` and `docs/legacy-domains.md` from the
   rule's allowlist in `linter-scripts/forbidden-strings.toml` — neither
   path exists in the repository, so they could only mask future
   legitimate findings. Allowlist is now empty for this rule. Added
@@ -1692,7 +1692,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
   path references (`movie-cli-v1`) that should be `movie-cli-v2` per the
   global namespace standard.
   - Pattern: `movie-cli-v1\b`
-  - Allowlist: `spec/14-update/24-install-script-version-probe.md` (legitimate
+  - Allowlist: `02-spec/14-update/24-install-script-version-probe.md` (legitimate
     historical migration docs).
   - Added to `linter-scripts/forbidden-strings.toml` as the second `[[rule]]`
     demonstrating the TOML-driven scanner's extensibility.
@@ -1745,7 +1745,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 - Both rules share classifier, column detection, join-table heuristic,
   and scope rules — they cannot drift apart.
 - Added a guidance note to
-  `spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`:
+  `02-spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md`:
   enable **only one** of the two rules in CI to avoid duplicate findings.
 
 ### Why this approach
@@ -1768,7 +1768,7 @@ the canonical superset.
   `-- linter-waive-file: MISSING-DESC-001 reason="..."`. The
   `reason="..."` clause is **mandatory** — bare waivers are ignored so
   silent suppressions can't pass review. Documented in
-  `spec/04-database-conventions/03-schema-design.md` §6.6 and
+  `02-spec/04-database-conventions/03-schema-design.md` §6.6 and
   `linters-cicd/checks/missing-desc/readme.md`.
 
 ### Audited & cleaned
@@ -1776,7 +1776,7 @@ the canonical superset.
 - **Spec tree audit (115 violations → 0 unwaived).** Every `CREATE TABLE`
   inside ` ```sql ` markdown fences across `spec/` was audited against
   Rules 10/11/12.
-  - **Fixed in place:** `spec/17-consolidated-guidelines/25-app-database.md`
+  - **Fixed in place:** `02-spec/17-consolidated-guidelines/25-app-database.md`
     — entity / lookup / transactional / migration templates now
     demonstrate `Description` and `Notes`+`Comments` correctly, and a
     new §4.4 *Transactional Table Template* was added.
@@ -1797,7 +1797,7 @@ the canonical superset.
 
 - **`DB-FREETEXT-001`** SQL linter (`linters-cicd/checks/free-text-columns/sql.py`)
   — flags `CREATE TABLE` statements missing the required nullable free-text
-  columns per `spec/04-database-conventions/03-schema-design.md` §6 and Naming
+  columns per `02-spec/04-database-conventions/03-schema-design.md` §6 and Naming
   Rules 10/11/12 (v3.5.0):
   - Entity / reference / lookup / master-data tables must declare
     `Description TEXT NULL`.
@@ -1808,7 +1808,7 @@ the canonical superset.
     `Notes TEXT NULL`.
   - Pure join/pivot tables (no `{TableName}Id` PK) are exempt.
 - Registered in `linters-cicd/checks/registry.json` and documented in
-  `spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md` under a
+  `02-spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md` under a
   new **Database rules** section. Verified against good/bad fixtures (4
   expected findings on bad, 0 on good).
 
@@ -1832,7 +1832,7 @@ the canonical superset.
   - **`install.sh` one-liner** with SHA-256 verification and `-d`/`-v`/`-n` flags.
   - Ready-to-paste CI templates for GitHub Actions, GitLab CI, Azure DevOps,
     Bitbucket Pipelines, Jenkins, plus a pre-commit hook.
-- **`spec/02-coding-guidelines/06-cicd-integration/`** — full spec for the
+- **`02-spec/02-coding-guidelines/06-cicd-integration/`** — full spec for the
   linter pack: SARIF contract, plugin model, language roadmap (Phase 2 = PHP,
   Phase 3 = Python + Rust, Phase 4+ on request), CI templates inventory,
   distribution model, rules mapping, and acceptance criteria.
@@ -1875,7 +1875,7 @@ the canonical superset.
   The result-scan loop iterates highest → lowest so the first hit accepted is
   already the winner — no second pass, no per-iteration sort.
   - Documented as a portable trick in
-    [`spec/14-update/24-install-script-version-probe.md`](spec/14-update/24-install-script-version-probe.md)
+    [`02-spec/14-update/24-install-script-version-probe.md`](02-spec/14-update/24-install-script-version-probe.md)
     so any other CLI's installer can adopt it.
 - **Indented PowerShell output** — every `Write-Step / OK / Warn / Err / Dim / Plain`
   call (and the banner / summary blocks) now share a 4-space left gutter for a
@@ -1892,7 +1892,7 @@ the canonical superset.
 
 - README's flag table updated with the full alias list:
   `--no-probe`, `--no-latest`, `-n` ↔ `-NoProbe`, `-NoLatest`, `-n`.
-- New section in `spec/14-update/24-install-script-version-probe.md`:
+- New section in `02-spec/14-update/24-install-script-version-probe.md`:
   *"Probe ordering optimization (middle-out + descending result scan)"* —
   explains why ordering still matters under degraded parallelism (corporate
   proxies, throttled CI runners, low-fd shells) and provides reference
@@ -1908,7 +1908,7 @@ the canonical superset.
   two "skip latest probe" command cards.
 - `readme.md` — Reordered Option 1 (PowerShell first), added `-n` variants,
   expanded flag table.
-- `spec/14-update/24-install-script-version-probe.md` — middle-out ordering spec.
+- `02-spec/14-update/24-install-script-version-probe.md` — middle-out ordering spec.
 - `package.json`, `version.json` — bumped to `3.8.0`.
 
 ---

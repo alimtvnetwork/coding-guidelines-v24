@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Generate public/health-score.json — a machine-readable digest of
-// spec/health-dashboard.md and the latest blind-AI audit. Wired into
+// 02-spec/health-dashboard.md and the latest blind-AI audit. Wired into
 // `npm run sync` so the README's health-score badge always matches the
 // JSON a remote consumer can fetch.
 //
@@ -22,8 +22,8 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const VERSION_PATH = resolve(ROOT, "version.json");
-const DASHBOARD_PATH = resolve(ROOT, "spec/health-dashboard.md");
-const AUDIT_PATH = resolve(ROOT, "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md");
+const DASHBOARD_PATH = resolve(ROOT, "02-spec/health-dashboard.md");
+const AUDIT_PATH = resolve(ROOT, "02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md");
 const OUT_PATH = resolve(ROOT, "public/health-score.json");
 
 function readDashboardScore() {
@@ -80,8 +80,8 @@ function buildPayload() {
     },
     blindAiAudit: audit,
     sources: [
-      "spec/health-dashboard.md",
-      "spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md",
+      "02-spec/health-dashboard.md",
+      "02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md",
       "version.json",
     ],
   };

@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO="alimtvnetwork/coding-guidelines-v24"
 RELEASE_VERSION_INPUT="${RELEASE_VERSION:-}"
-REQUIRED_PATHS=("spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1" ".lovable/coding-guidelines" ".lovable/prompts")
+REQUIRED_PATHS=("02-spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1" ".lovable/coding-guidelines" ".lovable/prompts")
 
 step() { printf '\033[0;36m▸ %s\033[0m\n' "$1"; }
 ok() { printf '\033[0;32m✅ %s\033[0m\n' "$1"; }
@@ -77,7 +77,7 @@ create_archives() {
 }
 
 bake_release_installers() {
-  # Spec: spec/14-update/25-release-pinned-installer.md §Release-Time Build Step
+  # Spec: 02-spec/14-update/25-release-pinned-installer.md §Release-Time Build Step
   # Take the canonical release-install.{sh,ps1} from repo root, substitute
   # __VERSION_PLACEHOLDER__ with the resolved tag (prefixed with `v`), and
   # write standalone copies to $DIST_DIR for upload as release assets.

@@ -5,7 +5,7 @@ import { CodeDiff } from "@/components/CodeDiff";
 /**
  * SS-02 task 35: Assets folder convention.
  *
- * Source: spec/17/31 line 44 (rule 12). Assets live at
+ * Source: 02-spec/17/31 line 44 (rule 12). Assets live at
  * assets/<NN-folder>/<NN-file>.<ext> with two-digit sequence prefixes.
  */
 
@@ -59,7 +59,7 @@ export default function AssetsFolderConventionSlide() {
         <ActionPanel
           slideId="33-assets-folder-convention"
           symptom="A designer ships a new logo. Two weeks later the marketing page renders `logo-final.svg`, the app header renders `logo-final-v2.svg`, and the favicon still points at `logo.svg`. Nobody can answer 'which one is current' without opening three folders. A rebrand PR then breaks half the surfaces because assets were split between `src/img/`, `public/icons/`, and per-component folders."
-          rule="All assets live under a single top-level `assets/` tree. Every folder gets a two-digit sequence prefix (`01-icons/`, `02-logos/`). Every file inside gets its own two-digit prefix (`01-wordmark.svg`, `02-monogram.svg`). No version suffixes in filenames (no `-final`, `-v2`, `-copy`, `-old`). If a file is replaced, edit it in place and let git own the history. Per spec/17/31 line 44 rule 12."
+          rule="All assets live under a single top-level `assets/` tree. Every folder gets a two-digit sequence prefix (`01-icons/`, `02-logos/`). Every file inside gets its own two-digit prefix (`01-wordmark.svg`, `02-monogram.svg`). No version suffixes in filenames (no `-final`, `-v2`, `-copy`, `-old`). If a file is replaced, edit it in place and let git own the history. Per 02-spec/17/31 line 44 rule 12."
           doThis="On any PR that adds or replaces an asset: place it under the correct `assets/NN-folder/` subtree, pick the next free `NN-` prefix for the filename, and update every import to the new path in the same PR. If you find yourself typing `-final` or `-v2`, stop, overwrite the current file, and let the git diff speak. Reject PRs that add assets outside `assets/` or without the sequence prefix."
         />
       </div>

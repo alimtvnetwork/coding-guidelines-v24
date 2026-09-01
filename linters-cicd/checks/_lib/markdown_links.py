@@ -18,7 +18,7 @@ do not produce false positives. ATX headings (`# Foo`) are recognised;
 setext (`Foo\n===`) is **not** recognised — spec uses ATX exclusively
 per documentation-standards memory.
 
-Spec: spec/02-coding-guidelines/06-cicd-integration/* (new SPEC-LINK-001 rule)
+Spec: 02-spec/02-coding-guidelines/06-cicd-integration/* (new SPEC-LINK-001 rule)
 """
 
 from __future__ import annotations

@@ -72,8 +72,8 @@ function useDownloadAll(tree: SpecNode[]) {
 
   const handleDownload = useCallback(() => {
     const rootNode: SpecNode = {
-      name: "spec",
-      path: "spec",
+      name: "02-spec",
+      path: "02-spec",
       type: SpecNodeType.Folder,
       children: tree,
     };
