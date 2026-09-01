@@ -536,21 +536,7 @@ return nil
 
 ## 3. Boolean Principles (P1–P9)
 
-### DOs vs NO-NOs (Allowed vs Forbidden Boolean Prefixes)
-
-| Category | Prefix Pattern | Examples (DOs vs NO-NOs) | Refactoring Rule |
-| :--- | :--- | :--- | :--- |
-| ✅ **DO (Allowed)** | `is...` | `isValid`, `isReady`, `isFail`, `isEnabled`, `isExecutable`, `isProcessed`, `isFinished`, `isSaveRequired` | Use `is` for state, status, capability, or passive condition. |
-| ✅ **DO (Allowed)** | `has...` | `hasAccess`, `hasData`, `hasPermission`, `hasToken`, `hasExpired` | Use `has` for possession, membership, or flags. |
-| ❌ **NO-NO (Banned)** | `can...` | ❌ `canExecute`, `canSubmit`, `canProceed` | **BANNED!** Refactor to `isExecutable`, `isSubmittable`, `hasPermission`. |
-| ❌ **NO-NO (Banned)** | `should...` | ❌ `shouldRetry`, `shouldRender`, `shouldUpdate` | **BANNED!** Refactor to `isRetryRequired`, `isRenderable`, `isUpdatePending`. |
-| ❌ **NO-NO (Banned)** | `was...` | ❌ `wasProcessed`, `wasDeleted`, `wasSuccess` | **BANNED!** Refactor to `isProcessed`, `isDeleted`, `isSuccess`. |
-| ❌ **NO-NO (Banned)** | `will...` | ❌ `willUpdate`, `willExpire`, `willChange` | **BANNED!** Refactor to `isPendingUpdate`, `isExpiring`, `isChanging`. |
-| ❌ **NO-NO (Banned)** | `did...` | ❌ `didFinish`, `didFail`, `didLoad` | **BANNED!** Refactor to `isFinished`, `isFail`, `isLoaded`. |
-| ❌ **NO-NO (Banned)** | `must...` | ❌ `mustSave`, `mustAuthenticate` | **BANNED!** Refactor to `isSaveMandatory`, `isAuthRequired`. |
-| ❌ **NO-NO (Banned)** | `not...` / Negatives | ❌ `isNotReady`, `hasNoData`, `disableCache` | **BANNED!** Refactor to positive `isReady`, `hasData`, `isCacheEnabled`. |
-
-1. **Prefixes:** Every boolean variable, function, parameter, or struct field MUST start with `is` or `has` ONLY. All other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, `does`, etc.) are strictly BANNED.
+1. **Prefixes:** Every boolean variable, function, parameter, or struct field MUST start with `is` or `has` ONLY (e.g. `isValid`, `hasAccess`, `isReady`, `hasData`); all other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc.) are strictly BANNED.
 2. **Positive Framing:** Never use negative names (`isNotReady`, `disableCache` are banned). Invert to positive equivalents (`isReady`, `isCacheEnabled`).
 3. **No Inverted Success:** Never check `!response.isSuccess`. Use `response.isFail`.
 4. **No Explicit True Checks (TOTAL BAN):** Never write `if isReady == true` or `if (hasMatch === true)`. Positive booleans MUST be implicit: `if isReady { ... }`.
