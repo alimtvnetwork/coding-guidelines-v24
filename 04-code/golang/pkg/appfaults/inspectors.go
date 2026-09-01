@@ -1,0 +1,57 @@
+package appfaults
+
+import "coding-guidelines/common/pkg/appfault"
+
+// HasError returns true if collection contains at least one active error.
+func (c *Collection) HasError() bool {
+	return c != nil && len(c.items) > 0
+}
+
+// IsSuccess returns true if collection is nil or contains zero errors.
+func (c *Collection) IsSuccess() bool {
+	return !c.HasError()
+}
+
+// IsEmpty returns true if collection contains no errors.
+func (c *Collection) IsEmpty() bool {
+	return c.IsSuccess()
+}
+
+// Count returns the number of active errors in the collection.
+func (c *Collection) Count() int {
+	if c == nil {
+		return 0
+	}
+
+	return len(c.items)
+}
+
+// Items returns a defensive copy of the underlying slice.
+func (c *Collection) Items() []*appfault.AppError {
+	if c == nil || len(c.items) == 0 {
+		return []*appfault.AppError{}
+	}
+
+	copied := make([]*appfault.AppError, len(c.items))
+	copy(copied, c.items)
+
+	return copied
+}
+
+// First returns the first AppError or nil if empty.
+func (c *Collection) First() *appfault.AppError {
+	if !c.HasError() {
+		return nil
+	}
+
+	return c.items[0]
+}
+
+// Last returns the last AppError or nil if empty.
+func (c *Collection) Last() *appfault.AppError {
+	if !c.HasError() {
+		return nil
+	}
+
+	return c.items[len(c.items)-1]
+}
