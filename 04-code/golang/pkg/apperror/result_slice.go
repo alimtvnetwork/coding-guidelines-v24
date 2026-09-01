@@ -1,11 +1,11 @@
 package apperror
 
-// ResultSlice wraps a generic slice collection with explicit status and AppError.
+// ResultSlice wraps a generic slice collection with explicit status and Fault.
 type ResultSlice[T any] struct {
 	isSuccess bool
 	isFailed  bool
 	items     []T
-	appErr    *AppError
+	fault     *Fault
 }
 
 // OkSlice creates a successful ResultSlice from items.
@@ -17,16 +17,16 @@ func OkSlice[T any](items []T) ResultSlice[T] {
 	}
 }
 
-// FailSlice creates a failed ResultSlice from an AppError.
-func FailSlice[T any](err *AppError) ResultSlice[T] {
+// FailSlice creates a failed ResultSlice from a Fault.
+func FailSlice[T any](err *Fault) ResultSlice[T] {
 	return ResultSlice[T]{
 		isSuccess: false,
 		isFailed:  true,
-		appErr:    err,
+		fault:     err,
 	}
 }
 
-// FailSliceWrap wraps a raw error into an AppError and returns a failed ResultSlice.
+// FailSliceWrap wraps a raw error into a Fault and returns a failed ResultSlice.
 func FailSliceWrap[T any](cause error, code ErrorCodeType, message string) ResultSlice[T] {
 	return FailSlice[T](Wrap(cause, code, message))
 }
@@ -68,7 +68,7 @@ func (rs ResultSlice[T]) Items() []T {
 // First returns a Result containing the first item or empty.
 func (rs ResultSlice[T]) First() Result[T] {
 	if rs.isFailed {
-		return Fail[T](rs.appErr)
+		return Fail[T](rs.fault)
 	}
 
 	if len(rs.items) == 0 {
@@ -78,7 +78,12 @@ func (rs ResultSlice[T]) First() Result[T] {
 	return Ok(rs.items[0])
 }
 
-// AppError returns the underlying *AppError or nil.
-func (rs ResultSlice[T]) AppError() *AppError {
-	return rs.appErr
+// Fault returns the underlying *Fault or nil.
+func (rs ResultSlice[T]) Fault() *Fault {
+	return rs.fault
+}
+
+// AppError returns the underlying *Fault (alias for Fault()).
+func (rs ResultSlice[T]) AppError() *Fault {
+	return rs.fault
 }

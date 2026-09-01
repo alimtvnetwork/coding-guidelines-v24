@@ -1,11 +1,11 @@
 package apperror
 
-// ResultMap wraps a generic key-value map with explicit status and AppError.
+// ResultMap wraps a generic key-value map with explicit status and Fault.
 type ResultMap[K comparable, V any] struct {
 	isSuccess bool
 	isFailed  bool
 	data      map[K]V
-	appErr    *AppError
+	fault     *Fault
 }
 
 // OkMap creates a successful ResultMap holding map data.
@@ -17,16 +17,16 @@ func OkMap[K comparable, V any](data map[K]V) ResultMap[K, V] {
 	}
 }
 
-// FailMap creates a failed ResultMap from an AppError.
-func FailMap[K comparable, V any](err *AppError) ResultMap[K, V] {
+// FailMap creates a failed ResultMap from a Fault.
+func FailMap[K comparable, V any](err *Fault) ResultMap[K, V] {
 	return ResultMap[K, V]{
 		isSuccess: false,
 		isFailed:  true,
-		appErr:    err,
+		fault:     err,
 	}
 }
 
-// FailMapWrap wraps a raw error into an AppError and returns a failed ResultMap.
+// FailMapWrap wraps a raw error into a Fault and returns a failed ResultMap.
 func FailMapWrap[K comparable, V any](cause error, code ErrorCodeType, message string) ResultMap[K, V] {
 	return FailMap[K, V](Wrap(cause, code, message))
 }
@@ -63,7 +63,7 @@ func (rm ResultMap[K, V]) Items() map[K]V {
 // Get retrieves a key's value as a Result[V].
 func (rm ResultMap[K, V]) Get(key K) Result[V] {
 	if rm.isFailed {
-		return Fail[V](rm.appErr)
+		return Fail[V](rm.fault)
 	}
 
 	val, ok := rm.data[key]
@@ -85,7 +85,12 @@ func (rm ResultMap[K, V]) Has(key K) bool {
 	return ok
 }
 
-// AppError returns the underlying *AppError or nil.
-func (rm ResultMap[K, V]) AppError() *AppError {
-	return rm.appErr
+// Fault returns the underlying *Fault or nil.
+func (rm ResultMap[K, V]) Fault() *Fault {
+	return rm.fault
+}
+
+// AppError returns the underlying *Fault (alias for Fault()).
+func (rm ResultMap[K, V]) AppError() *Fault {
+	return rm.fault
 }

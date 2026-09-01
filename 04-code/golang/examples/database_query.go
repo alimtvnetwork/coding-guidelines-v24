@@ -27,7 +27,7 @@ func NewPluginRepository(db *sql.DB) *PluginRepository {
 }
 
 // validatePluginId checks input and simulates database error states.
-func validatePluginId(id int64) *apperror.AppError {
+func validatePluginId(id int64) *apperror.Fault {
 	if id <= 0 {
 		return apperror.New(apperror.ErrValidation, "plugin id must be positive")
 	}

@@ -195,21 +195,32 @@ Every `error()` and `logException()` call automatically captures:
 
 ## Tier 2: Go Backend Error Handling
 
-### `apperror` Package
+### `apperror` Package & `*apperror.Fault` Return Type
 
-All errors crossing service boundaries must use `apperror`:
+All structured errors crossing service boundaries in Go must use `*apperror.Fault` (or `apperror.Result[T]`):
 
 ```go
+// Functions returning structured error metadata use *apperror.Fault
+func validateSlug(slug string) *apperror.Fault {
+    if len(slug) == 0 {
+        return apperror.NewValidationError("slug cannot be empty")
+    }
+
+    return nil
+}
+
 // Wrap existing errors with code and context
 return apperror.Wrap(err, apperror.ErrSyncCheck, "failed to upload plugin").
     WithPluginContext(pluginId, pluginSlug).
     WithEndpoint(requestUrl)
 
-// Create new errors
+// Create new faults
 return apperror.New(
     apperror.ErrFileRead, "invalid plugin slug",
 )
 ```
+
+> **AI Migration Note:** Legacy code and specs referencing `*apperror.AppError` must be migrated to `*apperror.Fault`. The `apperror` package provides `type AppError = Fault` to maintain backward compatibility during the transition.
 
 **Forbidden:** `fmt.Errorf` for errors leaving a service (no stack trace).
 

@@ -49,9 +49,11 @@ return apperror.Wrap(
 )
 ```
 
-### Rule 2: AppError-Only — No Raw `error` in Application Code
+### Rule 2: Fault-Only — No Raw `error` in Application Code
 
-**All application code MUST use `*apperror.AppError` instead of Go's raw `error` type.** The standard `error` interface is only acceptable at framework boundaries — the moment you receive a raw `error` from a framework, stdlib call, or third-party library, you **must immediately wrap it** into an `AppError`.
+**All application code MUST use `*apperror.Fault` instead of Go's raw `error` type.** The standard `error` interface is only acceptable at framework boundaries — the moment you receive a raw `error` from a framework, stdlib call, or third-party library, you **must immediately wrap it** into a `Fault`.
+
+> **AI Migration Note:** When reading or updating older code or specs referencing `*apperror.AppError`, convert the return type to `*apperror.Fault`. The `apperror` package maintains `type AppError = Fault` as an alias.
 
 ```go
 // ❌ FORBIDDEN: Returning raw error from application code

@@ -6,12 +6,12 @@ import (
 )
 
 // Error implements the standard Go error interface.
-func (e *AppError) Error() string {
-	if e == nil {
+func (f *Fault) Error() string {
+	if f == nil {
 		return ""
 	}
 
-	return fmt.Sprintf("[%s] %s", e.code, e.message)
+	return fmt.Sprintf("[%s] %s", f.code, f.message)
 }
 
 // appendContext formats context map entries into the string builder.
@@ -33,16 +33,16 @@ func appendHeader(b *strings.Builder, code ErrorCodeType, msg string, cause erro
 }
 
 // FullString returns a comprehensive diagnostic dump of the error.
-func (e *AppError) FullString() string {
-	if e == nil {
+func (f *Fault) FullString() string {
+	if f == nil {
 		return ""
 	}
 
 	var b strings.Builder
-	appendHeader(&b, e.code, e.message, e.cause)
-	appendContext(&b, e.context)
-	if !e.stackTrace.IsEmpty() {
-		b.WriteString("STACK TRACE:\n" + e.stackTrace.String())
+	appendHeader(&b, f.code, f.message, f.cause)
+	appendContext(&b, f.context)
+	if !f.stackTrace.IsEmpty() {
+		b.WriteString("STACK TRACE:\n" + f.stackTrace.String())
 	}
 
 	return b.String()
@@ -67,24 +67,24 @@ func appendMarkdownContext(b *strings.Builder, ctx map[string]any) {
 }
 
 // ToClipboard returns a Markdown-formatted error report for AI analysis.
-func (e *AppError) ToClipboard() string {
-	if e == nil {
+func (f *Fault) ToClipboard() string {
+	if f == nil {
 		return ""
 	}
 
 	var b strings.Builder
-	appendMarkdownHeader(&b, e.code, e.message, e.cause)
-	appendMarkdownContext(&b, e.context)
-	if !e.stackTrace.IsEmpty() {
-		b.WriteString("\n```\n" + e.stackTrace.String() + "```\n")
+	appendMarkdownHeader(&b, f.code, f.message, f.cause)
+	appendMarkdownContext(&b, f.context)
+	if !f.stackTrace.IsEmpty() {
+		b.WriteString("\n```\n" + f.stackTrace.String() + "```\n")
 	}
 
 	return b.String()
 }
 
 // DisplayError prints a human-readable banner representation to stdout.
-func (e *AppError) DisplayError() {
-	if e != nil {
-		fmt.Printf("❌ [%s] %s (at %s)\n", e.code, e.message, e.stackTrace.CallerLine())
+func (f *Fault) DisplayError() {
+	if f != nil {
+		fmt.Printf("❌ [%s] %s (at %s)\n", f.code, f.message, f.stackTrace.CallerLine())
 	}
 }

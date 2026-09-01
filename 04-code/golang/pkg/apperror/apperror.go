@@ -1,7 +1,7 @@
 package apperror
 
-// AppError is the universal structured error type carrying code, context, and stack trace.
-type AppError struct {
+// Fault is the universal structured error type carrying code, context, and stack trace.
+type Fault struct {
 	code       ErrorCodeType
 	message    string
 	cause      error
@@ -10,9 +10,12 @@ type AppError struct {
 	context    map[string]any
 }
 
-// New creates a new AppError with code, message, and automatic stack trace.
-func New(code ErrorCodeType, message string) *AppError {
-	return &AppError{
+// AppError is retained as a type alias for Fault to ease backwards compatibility.
+type AppError = Fault
+
+// New creates a new Fault with code, message, and automatic stack trace.
+func New(code ErrorCodeType, message string) *Fault {
+	return &Fault{
 		code:       code,
 		message:    message,
 		stackTrace: captureStackTrace(2),
@@ -20,18 +23,18 @@ func New(code ErrorCodeType, message string) *AppError {
 	}
 }
 
-// NewValidationError creates an AppError specialized for validation failures.
-func NewValidationError(message string) *AppError {
+// NewValidationError creates a Fault specialized for validation failures.
+func NewValidationError(message string) *Fault {
 	return New(ErrValidation, message)
 }
 
 // Wrap wraps a raw error with an ErrorCodeType, message, and captured stack trace.
-func Wrap(cause error, code ErrorCodeType, message string) *AppError {
+func Wrap(cause error, code ErrorCodeType, message string) *Fault {
 	if cause == nil {
 		return nil
 	}
 
-	return &AppError{
+	return &Fault{
 		code:       code,
 		message:    message,
 		cause:      cause,
@@ -41,31 +44,31 @@ func Wrap(cause error, code ErrorCodeType, message string) *AppError {
 }
 
 // Code returns the standardized ErrorCodeType.
-func (e *AppError) Code() ErrorCodeType {
-	return e.code
+func (f *Fault) Code() ErrorCodeType {
+	return f.code
 }
 
 // Message returns the human-readable error message.
-func (e *AppError) Message() string {
-	return e.message
+func (f *Fault) Message() string {
+	return f.message
 }
 
 // Cause returns the underlying wrapped error or nil.
-func (e *AppError) Cause() error {
-	return e.cause
+func (f *Fault) Cause() error {
+	return f.cause
 }
 
 // StackTrace returns the structured call stack frames.
-func (e *AppError) StackTrace() StackTrace {
-	return e.stackTrace
+func (f *Fault) StackTrace() StackTrace {
+	return f.stackTrace
 }
 
 // StatusCode returns the attached HTTP status code or 0.
-func (e *AppError) StatusCode() int {
-	return e.statusCode
+func (f *Fault) StatusCode() int {
+	return f.statusCode
 }
 
 // IsCode returns true if the error code matches target code.
-func (e *AppError) IsCode(target ErrorCodeType) bool {
-	return e.code == target
+func (f *Fault) IsCode(target ErrorCodeType) bool {
+	return f.code == target
 }

@@ -88,6 +88,7 @@ If this repository has a `02-spec/xx-error-manage/` folder, that folder is bindi
 
 - Never swallow. Every `catch` logs the operation name and the key inputs, then rethrows or returns a typed error.
 - Wrap, do not lose. Wrap the original error with an operation label and context (`apperror.Wrap(err, "op", ctx)` in Go, `throw new AppError(cause, { op, ctx })` in TS). The original stack must survive.
+- Go Return Type: Use `*apperror.Fault` for structured Go errors and `Result[T].Fault()` / `Result[T].AppError()`. Migrate legacy `*apperror.AppError` references to `*apperror.Fault`.
 - Every variable needs to be captured in a error log, path, value, numbers with meaningful ways to debug except for direct SQL injections.
 - Typed errors only. No `throw "string"`, no bare `panic("msg")`. Use a typed error class or result type with a registered code.
 - Registered codes. Every user-visible error has a stable code. No ad-hoc codes invented at the throw site.

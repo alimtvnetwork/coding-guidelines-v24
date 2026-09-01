@@ -1,63 +1,63 @@
 package apperror
 
-// WithContext attaches a generic key-value pair to the AppError context.
-func (e *AppError) WithContext(key string, value any) *AppError {
-	if e == nil {
+// WithContext attaches a generic key-value pair to the Fault context.
+func (f *Fault) WithContext(key string, value any) *Fault {
+	if f == nil {
 		return nil
 	}
 
-	e.context[key] = value
+	f.context[key] = value
 
-	return e
+	return f
 }
 
 // WithUrl attaches a request URL to the diagnostic context.
-func (e *AppError) WithUrl(url string) *AppError {
-	return e.WithContext("url", url)
+func (f *Fault) WithUrl(url string) *Fault {
+	return f.WithContext("url", url)
 }
 
 // WithStatusCode attaches an HTTP status code to the error.
-func (e *AppError) WithStatusCode(statusCode int) *AppError {
-	if e != nil {
-		e.statusCode = statusCode
+func (f *Fault) WithStatusCode(statusCode int) *Fault {
+	if f != nil {
+		f.statusCode = statusCode
 	}
 
-	return e.WithContext("statusCode", statusCode)
+	return f.WithContext("statusCode", statusCode)
 }
 
 // WithEndpoint attaches an API endpoint path to the context.
-func (e *AppError) WithEndpoint(endpoint string) *AppError {
-	return e.WithContext("endpoint", endpoint)
+func (f *Fault) WithEndpoint(endpoint string) *Fault {
+	return f.WithContext("endpoint", endpoint)
 }
 
 // WithSiteId attaches a target Site ID to the context.
-func (e *AppError) WithSiteId(siteId int64) *AppError {
-	return e.WithContext("siteId", siteId)
+func (f *Fault) WithSiteId(siteId int64) *Fault {
+	return f.WithContext("siteId", siteId)
 }
 
 // WithSnapshotId attaches a snapshot identifier to the context.
-func (e *AppError) WithSnapshotId(snapshotId string) *AppError {
-	return e.WithContext("snapshotId", snapshotId)
+func (f *Fault) WithSnapshotId(snapshotId string) *Fault {
+	return f.WithContext("snapshotId", snapshotId)
 }
 
 // WithSlug attaches a plugin or entity slug to the context.
-func (e *AppError) WithSlug(slug string) *AppError {
-	return e.WithContext("slug", slug)
+func (f *Fault) WithSlug(slug string) *Fault {
+	return f.WithContext("slug", slug)
 }
 
 // WithPluginContext attaches both plugin ID and slug simultaneously.
-func (e *AppError) WithPluginContext(pluginId int64, slug string) *AppError {
-	return e.WithContext("pluginId", pluginId).WithSlug(slug)
+func (f *Fault) WithPluginContext(pluginId int64, slug string) *Fault {
+	return f.WithContext("pluginId", pluginId).WithSlug(slug)
 }
 
 // Context returns a copy of the underlying diagnostic metadata map.
-func (e *AppError) Context() map[string]any {
-	if e == nil {
+func (f *Fault) Context() map[string]any {
+	if f == nil {
 		return map[string]any{}
 	}
 
-	copied := make(map[string]any, len(e.context))
-	for k, v := range e.context {
+	copied := make(map[string]any, len(f.context))
+	for k, v := range f.context {
 		copied[k] = v
 	}
 

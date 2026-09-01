@@ -1,11 +1,11 @@
 package apperror
 
-// Result wraps a single generic value bundled with explicit status and AppError.
+// Result wraps a single generic value bundled with explicit status and Fault.
 type Result[T any] struct {
 	isSuccess bool
 	isFailed  bool
 	value     T
-	appErr    *AppError
+	fault     *Fault
 }
 
 // Ok creates a successful Result holding a valid value.
@@ -17,21 +17,21 @@ func Ok[T any](value T) Result[T] {
 	}
 }
 
-// Fail creates a failed Result from an existing AppError.
-func Fail[T any](err *AppError) Result[T] {
+// Fail creates a failed Result from an existing Fault.
+func Fail[T any](err *Fault) Result[T] {
 	return Result[T]{
 		isSuccess: false,
 		isFailed:  true,
-		appErr:    err,
+		fault:     err,
 	}
 }
 
-// FailWrap wraps a raw error into an AppError and returns a failed Result.
+// FailWrap wraps a raw error into a Fault and returns a failed Result.
 func FailWrap[T any](cause error, code ErrorCodeType, message string) Result[T] {
 	return Fail[T](Wrap(cause, code, message))
 }
 
-// FailNew creates a new AppError and returns a failed Result.
+// FailNew creates a new Fault and returns a failed Result.
 func FailNew[T any](code ErrorCodeType, message string) Result[T] {
 	return Fail[T](New(code, message))
 }
@@ -49,7 +49,7 @@ func (r Result[T]) IsSafe() bool {
 // Value returns the inner value or panics if the result is in an error state.
 func (r Result[T]) Value() T {
 	if r.isFailed {
-		panic("called Value() on failed Result: " + r.appErr.Error())
+		panic("called Value() on failed Result: " + r.fault.Error())
 	}
 
 	return r.value
@@ -64,15 +64,20 @@ func (r Result[T]) ValueOr(fallback T) T {
 	return r.value
 }
 
-// AppError returns the underlying *AppError or nil.
-func (r Result[T]) AppError() *AppError {
-	return r.appErr
+// Fault returns the underlying *Fault or nil.
+func (r Result[T]) Fault() *Fault {
+	return r.fault
+}
+
+// AppError returns the underlying *Fault (alias for Fault()).
+func (r Result[T]) AppError() *Fault {
+	return r.fault
 }
 
 // Unwrap bridges Result[T] back to Go's standard (T, error) tuple at framework boundaries.
 func (r Result[T]) Unwrap() (T, error) {
 	if r.isFailed {
-		return r.value, r.appErr
+		return r.value, r.fault
 	}
 
 	return r.value, nil

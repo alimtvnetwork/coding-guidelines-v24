@@ -45,3 +45,9 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - ❌ **BAD:** `Target File: /absolute/path/to/...\cmd\login.go`
   - ✅ **GOOD:** `[SSH Commands](.lovable/02-spec/commands/01-ssh-commands.md)`
   - ✅ **GOOD:** `Target File: cmd/login.go`
+
+## 6. Go Error Return Type: `*apperror.Fault` (Migration Standard)
+
+- **Structured Go Fault Type:** In all Go packages, functions returning structured failure metadata MUST use `*apperror.Fault` as their return type (e.g. `func validate() *apperror.Fault`).
+- **Result Containers:** `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` provide `.Fault()` (and backward-compatible `.AppError()`) returning `*apperror.Fault`.
+- **AI Migration Rule:** When encountering legacy code or specs referencing `*apperror.AppError`, AI agents MUST update the type to `*apperror.Fault`. Package `apperror` provides `type AppError = Fault` to guarantee non-breaking compatibility during ongoing migrations.

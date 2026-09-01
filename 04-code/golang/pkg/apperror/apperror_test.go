@@ -7,24 +7,24 @@ import (
 	"coding-guidelines/common/pkg/apperror"
 )
 
-func TestAppErrorCreation(t *testing.T) {
-	appErr := apperror.New(apperror.ErrValidation, "invalid input")
-	if !appErr.IsCode(apperror.ErrValidation) {
-		t.Fatalf("expected ErrValidation, got %s", appErr.Code())
+func TestFaultCreation(t *testing.T) {
+	fault := apperror.New(apperror.ErrValidation, "invalid input")
+	if !fault.IsCode(apperror.ErrValidation) {
+		t.Fatalf("expected ErrValidation, got %s", fault.Code())
 	}
 
-	if appErr.StackTrace().IsEmpty() {
+	if fault.StackTrace().IsEmpty() {
 		t.Fatal("expected non-empty stack trace")
 	}
 }
 
-func TestAppErrorWrap(t *testing.T) {
+func TestFaultWrap(t *testing.T) {
 	rawErr := errors.New("raw connection lost")
-	appErr := apperror.Wrap(rawErr, apperror.ErrDatabaseQuery, "query failed").
+	fault := apperror.Wrap(rawErr, apperror.ErrDatabaseQuery, "query failed").
 		WithUrl("https://db.local:5432").
 		WithStatusCode(500)
-	if appErr.StatusCode() != 500 {
-		t.Fatalf("expected status code 500, got %d", appErr.StatusCode())
+	if fault.StatusCode() != 500 {
+		t.Fatalf("expected status code 500, got %d", fault.StatusCode())
 	}
 }
 
@@ -46,8 +46,8 @@ func TestResultFailureAndWrap(t *testing.T) {
 		t.Fatal("expected result to have error and not be safe")
 	}
 
-	if res.AppError().Code() != apperror.ErrFileNotFound {
-		t.Fatalf("expected ErrFileNotFound, got %s", res.AppError().Code())
+	if res.Fault().Code() != apperror.ErrFileNotFound {
+		t.Fatalf("expected ErrFileNotFound, got %s", res.Fault().Code())
 	}
 }
 
