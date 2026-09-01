@@ -70,4 +70,9 @@ __pycache__/
 
 .lovable/temp-scripts/
 /tmp
+tmp/
+.tmp/
+*.db
+*.sqlite
+*.sqlite3
 *.code-workspace
