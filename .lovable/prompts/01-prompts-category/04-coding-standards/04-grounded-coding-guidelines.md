@@ -97,7 +97,238 @@ function saveRecord(options: SaveRecordOptions): SaveRecordResult {
 
 ---
 
-### B. Parameter Structs & Signature Splitting (R4, R5, R9)
+### B. Function Decomposition Blueprint (15-Line Limit & Logic Drift Prevention)
+- **Rule:** Functions MUST be <= 8 lines preferred, hard cap of <= 15 lines.
+- **Decomposition Formula:** Decompose complex functions into 3 distinct, single-responsibility helper stages:
+  1. **Stage 1 (Precondition Guard):** `validateInputParams(params)`
+  2. **Stage 2 (Pure Core Transformation):** `processBusinessLogic(data)`
+  3. **Stage 3 (Response Envelope & Assembly):** `buildResponseEnvelope(data)`
+
+```go
+// ❌ BAD (Monolithic 45-line function with nested loops and inline validation)
+func ProcessUserOrder(ctx context.Context, orderId string, items []OrderItem, isExpedited bool) (*OrderResult, error) {
+    if orderId == "" || len(items) == 0 {
+        return nil, errors.New("invalid payload")
+    }
+    total := 0
+    for _, item := range items {
+        if item.Price <= 0 {
+            return nil, errors.New("negative price")
+        }
+        total += item.Price
+    }
+    if isExpedited {
+        total += 15
+    }
+    return &OrderResult{Total: total}, nil
+}
+
+// ✅ GOOD (Decomposed into clean <= 8-line functions with zero logic drift)
+type ProcessOrderParams struct {
+    OrderId     string      `json:"OrderId"`
+    Items       []OrderItem `json:"Items"`
+    IsExpedited bool        `json:"IsExpedited"`
+}
+
+func ProcessUserOrder(ctx context.Context, params ProcessOrderParams) (*OrderResult, error) {
+    if err := validateOrderParams(params); err != nil {
+        return nil, apperror.Wrap(err, "ProcessUserOrder.Validate", nil)
+    }
+
+    totalAmount, err := calculateOrderTotal(params.Items, params.IsExpedited)
+    if err != nil {
+        return nil, apperror.Wrap(err, "ProcessUserOrder.Calculate", nil)
+    }
+
+    return buildOrderResult(params.OrderId, totalAmount), nil
+}
+
+func validateOrderParams(params ProcessOrderParams) error {
+    if params.OrderId == "" || len(params.Items) == 0 {
+        return apperror.New("invalid order payload")
+    }
+
+    return nil
+}
+
+func calculateOrderTotal(items []OrderItem, isExpedited bool) (int, error) {
+    total := 0
+    for _, item := range items {
+        if item.Price <= 0 {
+            return 0, apperror.New("negative item price detected")
+        }
+        total += item.Price
+    }
+    if isExpedited {
+        total += 15
+    }
+
+    return total, nil
+}
+
+func buildOrderResult(orderId string, total int) *OrderResult {
+    return &OrderResult{
+        OrderId:     orderId,
+        TotalAmount: total,
+    }
+}
+```
+
+---
+
+### C. Circular Dependency Prevention Protocol (Leaf Type Architecture)
+- **Rules:** Types, Enums, Structs, and Error Codes must live in a dedicated **Leaf Package** (e.g. `domain/types`, `types/`, `models/`).
+- Leaf packages must NEVER import services, handlers, or repositories.
+
+```typescript
+// ❌ BAD (Service file circularly importing types from handler, or vice-versa)
+// src/services/UserService.ts
+import { UserHandlerRequest } from '../handlers/UserHandler'; // Circular import cycle!
+
+// ✅ GOOD (Strict Leaf Type extraction)
+// src/types/UserTypes.ts  <-- Pure leaf file: NO imports from handlers/services
+export enum UserRoleType {
+  Admin = "Admin",
+  Member = "Member",
+}
+export interface UserProfileDto {
+  UserId: string;
+  Role: UserRoleType;
+}
+
+// src/services/UserService.ts
+import type { UserProfileDto } from '../types/UserTypes';
+```
+
+---
+
+### D. Polyglot Grounding: Rust, C#, PHP, Java
+- **Rust:** PascalCase enums without `Type` suffix, exhaustive pattern matching, `Result<T, AppError>`, zero `unwrap()` or `panic!()`.
+- **C# / .NET:** `I` prefix interfaces, PascalCase properties, `CancellationToken` as last parameter, `ValueTask<Result<T>>`.
+- **PHP 8.1+:** BackedEnums + `HasEnumHelpers` trait, typed `AppException`, strict return types.
+
+```rust
+// ❌ BAD (Missing error context, unwrap panic, raw string matches)
+fn parse_status(raw: &str) -> String {
+    let status: UserStatus = raw.parse().unwrap();
+    if status == "ACTIVE" { ... }
+}
+
+// ✅ GOOD (Rust: Exhaustive pattern matching, Result envelope, no unwrap)
+pub enum UserRole {
+    Admin,
+    Member,
+    Guest,
+}
+
+pub fn handle_role(role: UserRole) -> Result<PermissionLevel, AppError> {
+    match role {
+        UserRole::Admin => Ok(PermissionLevel::Full),
+        UserRole::Member => Ok(PermissionLevel::Standard),
+        UserRole::Guest => Ok(PermissionLevel::Restricted),
+    }
+}
+```
+
+```csharp
+// ❌ BAD (Missing I interface prefix, camelCase serialization, missing cancellation token)
+public interface UserService {
+    Task<User> GetUser(string id);
+}
+
+// ✅ GOOD (C#: I interface prefix, PascalCase DTOs, CancellationToken as last parameter)
+public interface IUserService {
+    ValueTask<Result<UserDto>> GetUserAsync(string userId, CancellationToken cancellationToken = default);
+}
+
+public sealed record UserDto(
+    string UserId,
+    string EmailAddress,
+    bool IsActive
+);
+```
+
+```php
+<?php
+// ❌ BAD (PHP: Magic string status, missing Type suffix, swallowed catch)
+enum UserRole {
+    case Admin;
+}
+try {
+    $db->save();
+} catch (Exception $e) {}
+
+// ✅ GOOD (PHP 8.1+: Backed Enum with Type suffix, HasEnumHelpers, typed AppException)
+namespace App\Enums;
+
+enum UserRoleType: string {
+    use HasEnumHelpers;
+
+    case Admin = 'ADMIN';
+    case Member = 'MEMBER';
+}
+
+try {
+    $userRepo->save($user);
+} catch (Throwable $cause) {
+    throw new AppException('User save failed', ['UserId' => $user->getId()], $cause);
+}
+```
+
+---
+
+### E. Deep React Immutability & Component Topology
+- **Rules:**
+  1. Custom hooks MUST return named property objects (`{ userProfile, isPending, onUpdate }`), NEVER tuples `[state, setState]`.
+  2. Deep state immutability via `structuredClone` (no in-place mutations on nested state arrays/objects).
+  3. Component sizing cap (<= 80–100 lines) with clean child component decomposition.
+  4. Zero `useEffect` for derived state or inline negative checks.
+
+```tsx
+// ❌ BAD (Tuple hook return, in-place state mutation, inline useEffect filter)
+export function useUser(userId: string): [UserProfile | null, boolean] {
+    const [user, setUser] = useState<UserProfile | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    function updateUserAge(newAge: number) {
+        user.age = newAge; // Silent bug: in-place state mutation!
+        setUser(user);
+    }
+    return [user, isLoading];
+}
+
+// ✅ GOOD (Named property object return, structuredClone / fresh reference creation)
+export interface UseUserResult {
+    userProfile: UserProfile | null;
+    isLoading: boolean;
+    onUpdateAge: (newAge: number) => void;
+}
+
+export function useUser(userId: string): UseUserResult {
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const onUpdateAge = (newAge: number): void => {
+        if (!userProfile) {
+            return;
+        }
+
+        const nextProfile = structuredClone(userProfile);
+        nextProfile.age = newAge;
+        setUserProfile(nextProfile);
+    };
+
+    return {
+        userProfile,
+        isLoading,
+        onUpdateAge,
+    };
+}
+```
+
+---
+
+### F. Parameter Structs & Signature Splitting (R4, R5, R9)
 - **Rules:** If a function has > 3 parameters, split to one per line. If a function has > 4 parameters or 2+ adjacent parameters of the same type, group into a dedicated parameter struct with PascalCase JSON tags.
 
 ```go
@@ -417,11 +648,14 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **No Mixed Polarity (P5):** No mixed positive and negative conditions in `if` statements.
 - [ ] **Acronyms & PascalCase (R1, R2):** All acronyms (`Id`, `Url`, `Ip`, `Json`) and serialization keys use PascalCase.
 - [ ] **Boolean Prefixes (R3):** All booleans start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc. No negative boolean names.
-- [ ] **Function Length & Signatures (R4, R5):** All functions <= 15 lines. Signatures > 3 params are split. Signatures > 4 params or adjacent same types use parameter structs.
+- [ ] **Function Decomposition & Signatures (R4, R5):** All functions <= 15 lines decomposed via 3-Stage Blueprint (Guard -> Core Logic -> Envelope) without logic drift; parameter structs for > 3 arguments.
+- [ ] **Circular Dependency Prevention:** All extracted types/enums reside in leaf packages (`domain/types` or `types/`) with zero circular dependency cycles.
+- [ ] **Polyglot & React Compliance:** Rust match expressions, C# Task/records, PHP BackedEnums, React structuredClone & object hook returns.
 - [ ] **Error Handling (R7):** All errors are wrapped with context (`apperror.Wrap`) and not swallowed.
 - [ ] **No Magic Constants (R8):** All magic strings/numbers are extracted to named constants.
 - [ ] **Strict Lowercase Filenames:** All generated or modified files use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
-- [ ] **Tooling Execution:** I ran `.lovable/ai-fix-scripts/05-guideline-autofixer.py` and verified clean output with `linter-scripts/validate-guidelines.go`.
+- [ ] **Tooling Execution:** I ran `.lovable/ai-fix-scripts/05-guideline-autofixer.py` and verified clean output with `python linter-scripts/validate-guidelines.py`.
+- [ ] **Local CI Runner:** All 19 quality gates pass cleanly via `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` with `exit 0`.
 - [ ] **File Change Summary:** I provided a detailed summary in chat of what files changed, what changed inside them, and why.
 
 ---
