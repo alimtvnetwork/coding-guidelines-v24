@@ -2,17 +2,17 @@ package appfault
 
 // AppError is the universal structured error type carrying full diagnostics.
 type AppError struct {
-	Op         string         `json:"op,omitempty"`
-	Code       string         `json:"code,omitempty"`
-	Type       ErrorType      `json:"type,omitempty"`
-	Severity   SeverityType   `json:"severity,omitempty"`
-	Creator    string         `json:"creator,omitempty"`
-	Message    string         `json:"message,omitempty"`
-	Caller     string         `json:"caller,omitempty"`
-	Stack      string         `json:"stack,omitempty"`
-	Ctx        map[string]any `json:"ctx,omitempty"`
-	Cause      error          `json:"cause,omitempty"`
-	statusCode int
+	Op         string       `json:"Op,omitempty" yaml:"Op,omitempty"`
+	Code       string       `json:"Code,omitempty" yaml:"Code,omitempty"`
+	Type       ErrorType    `json:"Type,omitempty" yaml:"Type,omitempty"`
+	Severity   SeverityType `json:"Severity,omitempty" yaml:"Severity,omitempty"`
+	Creator    string       `json:"Creator,omitempty" yaml:"Creator,omitempty"`
+	Message    string       `json:"Message,omitempty" yaml:"Message,omitempty"`
+	Caller     string       `json:"Caller,omitempty" yaml:"Caller,omitempty"`
+	Stack      string       `json:"Stack,omitempty" yaml:"Stack,omitempty"`
+	Ctx        ContextMap   `json:"Ctx,omitempty" yaml:"Ctx,omitempty"`
+	Cause      error        `json:"Cause,omitempty" yaml:"Cause,omitempty"`
+	StatusCode int          `json:"StatusCode,omitempty" yaml:"StatusCode,omitempty"`
 }
 
 // Fault is retained as a type alias for AppError for backward compatibility.
@@ -45,11 +45,11 @@ func (e *AppError) GetOp() string {
 	return e.Op
 }
 
-// StatusCode returns the attached HTTP status code or 0.
-func (e *AppError) StatusCode() int {
+// GetStatusCode returns the attached HTTP status code or 0.
+func (e *AppError) GetStatusCode() int {
 	if e == nil {
 		return 0
 	}
 
-	return e.statusCode
+	return e.StatusCode
 }

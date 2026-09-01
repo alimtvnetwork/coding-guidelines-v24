@@ -17,11 +17,10 @@ func Ok[T any](val T) Result[T] {
 	return SuccessResult(val)
 }
 
-// FailureResult creates a failed Result from a AppError.
+// FailureResult creates a failed Result from an AppError.
 func FailureResult[T any](err *AppError) Result[T] {
 	return Result[T]{
-		Err:    err,
-		AppErr: err,
+		AppError: err,
 	}
 }
 
@@ -44,13 +43,13 @@ func NewFailureWithType[T any](errCode string, msg string, caller string) Result
 		Caller:   caller,
 		Type:     ErrorTypeExecution,
 		Severity: SeverityError,
-		Ctx:      make(map[string]any),
+		Ctx:      NewContextMap(),
 	}
 
 	return FailureResult[T](e)
 }
 
-// Fail creates a failed Result from a AppError.
+// Fail creates a failed Result from an AppError.
 func Fail[T any](err *AppError) Result[T] {
 	return FailureResult[T](err)
 }

@@ -2,9 +2,8 @@ package appfault
 
 // ResultSlice wraps a generic slice collection with monadic error state.
 type ResultSlice[T any] struct {
-	Items  []T       `json:"items,omitempty"`
-	Err    *AppError `json:"err,omitempty"`
-	AppErr error     `json:"appError,omitempty"`
+	Items    []T       `json:"Items,omitempty" yaml:"Items,omitempty"`
+	AppError *AppError `json:"AppError,omitempty" yaml:"AppError,omitempty"`
 }
 
 // OkSlice creates a successful ResultSlice.
@@ -14,22 +13,21 @@ func OkSlice[T any](items []T) ResultSlice[T] {
 	}
 }
 
-// FailSlice creates a failed ResultSlice from a AppError.
+// FailSlice creates a failed ResultSlice from an AppError.
 func FailSlice[T any](err *AppError) ResultSlice[T] {
 	return ResultSlice[T]{
-		Err:    err,
-		AppErr: err,
+		AppError: err,
 	}
 }
 
 // IsSuccess returns true if no error is present.
 func (rs ResultSlice[T]) IsSuccess() bool {
-	return rs.Err == nil && rs.AppErr == nil
+	return rs.AppError == nil
 }
 
 // IsFailed returns true if an error is present.
 func (rs ResultSlice[T]) IsFailed() bool {
-	return rs.Err != nil || rs.AppErr != nil
+	return rs.AppError != nil
 }
 
 // HasError returns true if an error is present.
@@ -46,7 +44,7 @@ func (rs ResultSlice[T]) HasItems() bool {
 	return len(rs.Items) > 0
 }
 
-// Count returns the number of items.
+// Count returns the number of items or 0 if failed.
 func (rs ResultSlice[T]) Count() int {
 	if rs.IsFailed() {
 		return 0
@@ -55,25 +53,22 @@ func (rs ResultSlice[T]) Count() int {
 	return len(rs.Items)
 }
 
-// First returns the first element or empty.
-func (rs ResultSlice[T]) First() Result[T] {
-	if rs.IsFailed() {
-		return Fail[T](rs.Err)
-	}
-
-	if len(rs.Items) == 0 {
-		return FailNew[T]("slice.first", ErrDatabaseNotFound.String(), "slice is empty")
-	}
-
-	return Ok(rs.Items[0])
+// Length is an alias for Count.
+func (rs ResultSlice[T]) Length() int {
+	return rs.Count()
 }
 
-// AppError returns the underlying *AppError.
-func (rs ResultSlice[T]) AppError() *AppError {
-	return rs.Err
-}
-
-// Fault returns the underlying *AppError (alias for AppError()).
+// Fault returns the underlying *AppError.
 func (rs ResultSlice[T]) Fault() *AppError {
-	return rs.Err
+	return rs.AppError
+}
+
+// Error returns the underlying *AppError.
+func (rs ResultSlice[T]) Error() *AppError {
+	return rs.AppError
+}
+
+// Unwrap unpacks the ([]T, *AppError) tuple.
+func (rs ResultSlice[T]) Unwrap() ([]T, *AppError) {
+	return rs.Items, rs.AppError
 }

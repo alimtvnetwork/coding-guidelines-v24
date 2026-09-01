@@ -2,12 +2,12 @@ package appfault
 
 // IsSuccess returns true if no error is present.
 func (r Result[T]) IsSuccess() bool {
-	return r.Err == nil && r.AppErr == nil
+	return r.AppError == nil
 }
 
 // IsFailed returns true if an error is present.
 func (r Result[T]) IsFailed() bool {
-	return r.Err != nil || r.AppErr != nil
+	return r.AppError != nil
 }
 
 // IsFailure is an alias for IsFailed.
@@ -32,11 +32,11 @@ func (r Result[T]) HasNoError() bool {
 
 // HasValidError returns true if the embedded error has a valid code.
 func (r Result[T]) HasValidError() bool {
-	if r.Err == nil {
+	if r.AppError == nil {
 		return false
 	}
 
-	return r.Err.HasValidError()
+	return r.AppError.HasValidError()
 }
 
 // IsSafe returns true if the operation succeeded with no error.
@@ -46,7 +46,7 @@ func (r Result[T]) IsSafe() bool {
 
 // Unwrap unpacks the (Value, *AppError) tuple.
 func (r Result[T]) Unwrap() (T, *AppError) {
-	return r.Value, r.Err
+	return r.Value, r.AppError
 }
 
 // UnwrapOr returns the inner value if successful, or defaultVal on failure.

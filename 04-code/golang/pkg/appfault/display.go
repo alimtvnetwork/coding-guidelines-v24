@@ -45,9 +45,9 @@ func appendHeader(b *strings.Builder, e *AppError) {
 }
 
 // appendContextAndStack writes context map and stack trace.
-func appendContextAndStack(b *strings.Builder, ctx map[string]any, stack string) {
+func appendContextAndStack(b *strings.Builder, ctx ContextMap, stack string) {
 	if len(ctx) > 0 {
-		b.WriteString(fmt.Sprintf("CONTEXT: %v\n", ctx))
+		b.WriteString(fmt.Sprintf("CONTEXT: %s\n", ctx.Format()))
 	}
 
 	if len(stack) > 0 {
@@ -71,11 +71,11 @@ func (e *AppError) FullString() string {
 // appendMarkdownCauseAndStack writes cause and codeblock stack trace.
 func appendMarkdownCauseAndStack(b *strings.Builder, cause error, stack string) {
 	if cause != nil {
-		b.WriteString(fmt.Sprintf("- **Cause:** `%v`\n", cause))
+		b.WriteString(fmt.Sprintf("- **Cause:** %v\n", cause))
 	}
 
 	if len(stack) > 0 {
-		b.WriteString("\n```\n" + stack + "```\n")
+		b.WriteString("\n`\n" + stack + "`\n")
 	}
 }
 
@@ -86,7 +86,7 @@ func (e *AppError) ToClipboard() string {
 	}
 
 	var b strings.Builder
-	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Code:** `%s`\n- **Type:** `%s`\n- **Op:** `%s`\n- **Message:** %s\n", e.Code, e.Type, e.Op, e.Message))
+	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Code:** %s\n- **Type:** %s\n- **Op:** %s\n- **Message:** %s\n", e.Code, e.Type, e.Op, e.Message))
 	appendMarkdownCauseAndStack(&b, e.Cause, e.Stack)
 
 	return b.String()

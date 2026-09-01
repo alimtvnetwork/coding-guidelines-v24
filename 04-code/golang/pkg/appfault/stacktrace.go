@@ -8,18 +8,35 @@ import (
 
 // StackFrame holds metadata for a single caller frame.
 type StackFrame struct {
-	Function string `json:"function"`
-	File     string `json:"file"`
-	Line     int    `json:"line"`
+	Function string `json:"Function,omitempty" yaml:"Function,omitempty"`
+	File     string `json:"File,omitempty" yaml:"File,omitempty"`
+	Line     int    `json:"Line,omitempty" yaml:"Line,omitempty"`
+}
+
+// NewStackFrame constructs a StackFrame with line-by-line assignment.
+func NewStackFrame(function string, file string, line int) StackFrame {
+	frame := StackFrame{}
+	frame.Function = function
+	frame.File = file
+	frame.Line = line
+
+	return frame
 }
 
 // StackTrace is a collection of structured call frames.
 type StackTrace []StackFrame
 
+// NewStackTrace creates a StackTrace from a slice of StackFrames.
+func NewStackTrace(frames ...StackFrame) StackTrace {
+	return StackTrace(frames)
+}
+
 // appendFrameIfApp appends frame if not in runtime.
 func appendFrameIfApp(trace StackTrace, f runtime.Frame) StackTrace {
 	if isAppFrame(f.File) {
-		return append(trace, StackFrame{Function: f.Function, File: f.File, Line: f.Line})
+		frame := NewStackFrame(f.Function, f.File, f.Line)
+
+		return append(trace, frame)
 	}
 
 	return trace
@@ -39,8 +56,8 @@ func parseFrames(frames *runtime.Frames) StackTrace {
 	return trace
 }
 
-// captureStackTrace captures caller frames starting at skip offset.
-func captureStackTrace(skip int) StackTrace {
+// CaptureStackTrace captures caller frames starting at skip offset.
+func CaptureStackTrace(skip int) StackTrace {
 	pc := make([]uintptr, 32)
 	n := runtime.Callers(skip+1, pc)
 	if n == 0 {
@@ -48,6 +65,13 @@ func captureStackTrace(skip int) StackTrace {
 	}
 
 	return parseFrames(runtime.CallersFrames(pc[:n]))
+}
+
+// CaptureCaller captures the top caller line string, reusing CaptureStackTrace.
+func CaptureCaller(skip int) string {
+	trace := CaptureStackTrace(skip + 1)
+
+	return trace.CallerLine()
 }
 
 // isAppFrame filters out runtime frames.

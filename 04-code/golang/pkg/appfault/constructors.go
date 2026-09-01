@@ -17,7 +17,7 @@ func NewValidationError(msg string) *AppError {
 
 // createAppErrorInstance sets up the base AppError struct.
 func createAppErrorInstance(op, code, msg, creator string, errType ErrorType, sev SeverityType) *AppError {
-	trace := captureStackTrace(3)
+	trace := CaptureStackTrace(3)
 
 	return &AppError{
 		Op:       op,
@@ -34,7 +34,7 @@ func createAppErrorInstance(op, code, msg, creator string, errType ErrorType, se
 // NewWithDetails provides full-fidelity AppError construction.
 func NewWithDetails(op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *AppError {
 	e := createAppErrorInstance(op, code, msg, creator, errType, sev)
-	e.Ctx = ensureContext(ctx)
+	e.Ctx = ensureContextMap(ctx)
 
 	return e
 }
@@ -65,11 +65,16 @@ func WrapWithDetails(err error, op, code, msg, creator string, errType ErrorType
 	return e
 }
 
-// ensureContext safely returns a non-nil context map.
-func ensureContext(ctx map[string]any) map[string]any {
+// ensureContextMap safely returns a non-nil ContextMap.
+func ensureContextMap(ctx map[string]any) ContextMap {
 	if ctx == nil {
-		return make(map[string]any)
+		return NewContextMap()
 	}
 
-	return ctx
+	cm := NewContextMapWithCapacity(len(ctx))
+	for k, v := range ctx {
+		cm[k] = v
+	}
+
+	return cm
 }

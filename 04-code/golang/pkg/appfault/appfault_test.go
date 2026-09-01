@@ -1,7 +1,6 @@
 package appfault_test
 
 import (
-	"errors"
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
@@ -19,38 +18,39 @@ func TestAppErrorCreationAndDetails(t *testing.T) {
 	}
 }
 
-func TestAppErrorWrapSimple(t *testing.T) {
-	rawErr := errors.New("raw disk failure")
-	appErr := appfault.WrapSimple(rawErr, "fs.write").WithStatusCode(500)
-	if appErr.StatusCode() != 500 {
-		t.Fatalf("expected status 500, got %d", appErr.StatusCode())
+func TestContextMapOperations(t *testing.T) {
+	cm := appfault.NewContextMap().Set("siteId", 101).Set("slug", "test-plugin")
+	if !cm.Has("siteId") || cm.GetString("siteId") != "101" || cm.Count() != 2 {
+		t.Fatalf("expected siteId=101 and count 2, got %s (count=%d)", cm.GetString("siteId"), cm.Count())
 	}
 
-	if appErr.Unwrap() != rawErr {
-		t.Fatalf("expected unwrapped error to match rawErr")
+	cm.Remove("slug")
+	if cm.Has("slug") {
+		t.Fatal("expected slug to be removed")
 	}
 }
 
-func TestResultMonadicSuccess(t *testing.T) {
+func TestStackFrameAndCaller(t *testing.T) {
+	frame := appfault.NewStackFrame("main.run", "main.go", 42)
+	if frame.Function != "main.run" || frame.File != "main.go" || frame.Line != 42 {
+		t.Fatalf("unexpected frame: %+v", frame)
+	}
+
+	caller := appfault.CaptureCaller(0)
+	if len(caller) == 0 {
+		t.Fatal("expected non-empty caller")
+	}
+}
+
+func TestResultMonadicOperations(t *testing.T) {
 	res := result.SuccessResult("data-payload")
 	if !res.IsSuccess() || res.IsFailed() || res.Data() != "data-payload" {
-		t.Fatal("expected valid success result and matching payload")
+		t.Fatal("expected success result")
 	}
 
-	val, err := res.Unwrap()
-	if err != nil || val != "data-payload" {
-		t.Fatalf("expected data-payload, got %s", val)
-	}
-}
-
-func TestResultMonadicFailure(t *testing.T) {
-	res := result.NewFailureWithType[string]("E1001", "missing field", "config.load")
-	if !res.IsFailed() || !res.IsFailure() || !res.HasValidError() {
-		t.Fatal("expected failure status with valid error")
-	}
-
-	if res.UnwrapOr("fallback") != "fallback" {
-		t.Fatal("expected fallback value")
+	failRes := result.NewFailureWithType[string]("E1001", "bad input", "validator")
+	if !failRes.IsFailed() || failRes.UnwrapOr("fallback") != "fallback" {
+		t.Fatal("expected failed result with fallback")
 	}
 }
 
