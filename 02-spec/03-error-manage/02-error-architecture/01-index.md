@@ -12,7 +12,7 @@
 
 ## Keywords
 
-`error-architecture` · `error-handling` · `error-modal` · `response-envelope` · `apperror` · `logging` · `notifications` · `delegation`
+`error-architecture` · `error-handling` · `error-modal` · `response-envelope` · `appfault` · `logging` · `notifications` · `delegation`
 
 ---
 
@@ -30,7 +30,7 @@
 
 ## Purpose
 
-Cross-stack error handling architecture spanning React → Go → Delegated Server (PHP/3rd-party). Covers the three-tier error flow, error modal specification, response envelope format, Go `apperror` package, logging/diagnostics, and notification color tokens.
+Cross-stack error handling architecture spanning React → Go → Delegated Server (PHP/3rd-party). Covers the three-tier error flow, error modal specification, response envelope format, Go `appfault` package, logging/diagnostics, and notification color tokens.
 
 ---
 
@@ -61,7 +61,7 @@ Cross-stack error handling architecture spanning React → Go → Delegated Serv
 
 ```
 Tier 1: Delegated Server (PHP/other) → structured error responses, stack traces
-Tier 2: Go Backend → apperror package, DelegatedRequestServer, session logging
+Tier 2: Go Backend → appfault package, DelegatedRequestServer, session logging
 Tier 3: Frontend (React) → Error store, Global Error Modal, toast notifications
 ```
 

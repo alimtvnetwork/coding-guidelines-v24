@@ -77,7 +77,7 @@ isValid := pathutil.IsFileValid(absZipPath)
 if !isValid {
     pathutil.Remove(absZipPath)
 
-    return "", apperror.New(apperror.ErrZipInvalid, "zip file invalid after creation")
+    return "", appfault.NewSimple("zip.create", "zip file invalid after creation")
 }
 
 return absZipPath, nil

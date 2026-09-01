@@ -241,7 +241,7 @@ A function that declares an `error` return type MUST return the actual error ins
    // ❌ FORBIDDEN: Handling exit inside leaf function and returning nil
    func ExecuteOperation(items []string) error {
        if len(items) == 0 {
-           err := apperror.NewValidationError("items cannot be empty")
+           err := appfault.NewValidationError("items cannot be empty")
            exitHandler.HandleError(err, 1) // ❌ Banned internal exit call
            return nil                      // ❌ Deceptive return
        }
@@ -252,7 +252,7 @@ A function that declares an `error` return type MUST return the actual error ins
    // ✅ REQUIRED: Return error directly with proper newline gaps
    func ExecuteOperation(items []string) error {
        if len(items) == 0 {
-           return apperror.NewValidationError("items cannot be empty")
+           return appfault.NewValidationError("items cannot be empty")
        }
 
        return nil
@@ -303,7 +303,7 @@ func (c *Client) doRequest(
 	method string,
 	url string,
 	body any,
-) apperror.Result[*http.Response] {
+) result.Result[*http.Response] {
     // ... execute request ...
 
     if resp.StatusCode >= 400 {
@@ -321,9 +321,11 @@ func (c *Client) doRequest(
         // Attach to the request context for envelope builder to pick up
         context = stdctx.WithValue(context, delegatedServerKey, delegated)
 
-        return resp, apperror.Wrap(err, apperror.ErrWpConnect, "delegated request failed").
+        appErr := appfault.Wrap(err, "wp.client.do_request", map[string]any{"method": method, "url": url}).
             WithEndpoint(url).
             WithStatusCode(resp.StatusCode)
+
+        return result.FailureResult[*http.Response](appErr)
     }
 }
 ```

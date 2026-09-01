@@ -51,16 +51,16 @@ func (s *Service) fetchFromDelegatedServer(
 	context stdctx.Context,
 	site *models.Site,
 	path string,
-) apperror.Result[*Envelope] {
+) result.Result[*Envelope] {
     delegatedUrl := fmt.Sprintf("%s/wp-json/%s", site.Url, path)
 
-    result := s.executeDelegatedRequest(context, delegatedUrl)
+    res := s.executeDelegatedRequest(context, delegatedUrl)
 
-    if result.HasError() {
-        return apperror.Fail[*Envelope](result.Error())
+    if res.IsFailed() {
+        return result.FailureResult[*Envelope](res.AppError())
     }
 
-    resp, bodyBytes := result.Value().Response, result.Value().Body
+    resp, bodyBytes := res.Value.Response, res.Value.Body
     defer resp.Body.Close()
 
     return s.buildDelegatedEnvelope(delegatedUrl, path, resp.StatusCode, bodyBytes)
@@ -70,7 +70,7 @@ func (s *Service) buildDelegatedEnvelope(
     delegatedUrl, path string,
     statusCode int,
     bodyBytes []byte,
-) apperror.Result[*Envelope] {
+) result.Result[*Envelope] {
     envelope := NewEnvelope()
     envelope.Attributes.RequestDelegatedAt = delegatedUrl
 
@@ -80,30 +80,30 @@ func (s *Service) buildDelegatedEnvelope(
 
     // Success path — RequestDelegatedAt is still set so frontend knows a hop occurred
     // ... parse Results ...
-    return apperror.Succeed(envelope)
+    return result.SuccessResult(envelope)
 }
 
-func (s *Service) executeDelegatedRequest(context stdctx.Context, url string) apperror.Result[DelegatedRequestResult] {
+func (s *Service) executeDelegatedRequest(context stdctx.Context, url string) result.Result[DelegatedRequestResult] {
     req, err := http.NewRequestWithContext(context, http.MethodGet, url, nil)
 
     if err != nil {
-        return apperror.Fail[DelegatedRequestResult](
-            apperror.Wrap(err, apperror.ErrWpConnect, "failed to build delegated request"),
+        return result.FailureResult[DelegatedRequestResult](
+            appfault.Wrap(err, "http.build_request", map[string]any{"url": url}),
         )
     }
 
     resp, err := s.httpClient.Do(req)
 
     if err != nil {
-        return apperror.Fail[DelegatedRequestResult](
-            apperror.Wrap(err, apperror.ErrWpConnect, "failed to reach delegated server").
+        return result.FailureResult[DelegatedRequestResult](
+            appfault.Wrap(err, "http.do_request", map[string]any{"url": url}).
                 WithEndpoint(url),
         )
     }
 
     bodyBytes, _ := io.ReadAll(resp.Body)
 
-    return apperror.Succeed(DelegatedRequestResult{
+    return result.SuccessResult(DelegatedRequestResult{
         Response: resp,
         Body:     bodyBytes,
     })
@@ -114,7 +114,7 @@ func (s *Service) buildDelegatedErrorEnvelope(
     delegatedUrl, path string,
     statusCode int,
     bodyBytes []byte,
-) apperror.Result[*Envelope] {
+) result.Result[*Envelope] {
     var parsed DelegatedResponseBody
     _ = json.Unmarshal(bodyBytes, &parsed)
 
@@ -123,9 +123,8 @@ func (s *Service) buildDelegatedErrorEnvelope(
         DelegatedRequestServer: s.newDelegatedServer(delegatedUrl, statusCode, bodyBytes, &parsed),
     }
 
-    return apperror.Fail[*Envelope](
-        apperror.New(
-        "E3001", fmt.Sprintf("delegated request failed with status %d", statusCode),
+    return result.FailureResult[*Envelope](
+        appfault.NewSimple("delegated.request", fmt.Sprintf("delegated request failed with status %d", statusCode)),
     )
 }
 

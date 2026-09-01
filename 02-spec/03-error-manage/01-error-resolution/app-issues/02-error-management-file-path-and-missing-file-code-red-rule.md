@@ -117,16 +117,23 @@ The failure reason **must** be specific. Acceptable values include:
 
 ```go
 // ✅ Correct — exact path + reason
-apperror.New(apperrtype.FileNotFound,
+appfault.NewWithDetails(
+    "ThemeInstaller.Read",
+    appfault.ErrFileNotFound.String(),
     "File does not exist",
-    apperror.WithField("path", filePath),
-    apperror.WithField("operation", "Read"),
-    apperror.WithField("reason", "FileDoesNotExist"),
-    apperror.WithField("module", "ThemeInstaller"),
+    "theme_installer",
+    appfault.ErrorTypeNotFound,
+    appfault.SeverityError,
+    map[string]any{
+        "path":      filePath,
+        "operation": "Read",
+        "reason":    "FileDoesNotExist",
+        "module":    "ThemeInstaller",
+    },
 )
 
 // 🔴 VIOLATION — generic message, no path, no reason
-apperror.New(apperrtype.FileNotFound, "file not found")
+appfault.NewSimple("ThemeInstaller.Read", "file not found")
 ```
 
 ### 5.2 TypeScript

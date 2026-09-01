@@ -39,16 +39,11 @@ Post-incident retrospectives and lessons learned.
 
 | File |
 |------|
-| 01-health-endpoint-mismatch.md |
-| 02-retry-debounce-dedup-fixes.md |
-| 03-zip-finalization-before-return.md |
-| 04-activation-endpoint-mismatch.md |
-| 99-consistency-report.md |
-
-| 01-health-endpoint-mismatch.md |
-| 02-retry-debounce-dedup-fixes.md |
-| 03-zip-finalization-before-return.md |
-| 04-activation-endpoint-mismatch.md |
+| 02-health-endpoint-mismatch.md |
+| 03-retry-debounce-dedup-fixes.md |
+| 04-zip-finalization-before-return.md |
+| 05-activation-endpoint-mismatch.md |
+| 06-appfault-package-migration.md |
 | 99-consistency-report.md |
 ---
 

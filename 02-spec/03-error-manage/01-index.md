@@ -87,7 +87,7 @@ Frontend detection logic MUST use HTTP status codes (2xx) as the primary indicat
 All errors use the three-tier architecture documented in [02-error-architecture/01-error-handling-reference.md](./02-error-architecture/02-error-handling-reference.md):
 
 - **Tier 1:** Delegated Server (PHP/other) — structured error responses
-- **Tier 2:** Go Backend — `apperror` package with stack traces
+- **Tier 2:** Go Backend — `appfault` package with stack traces
 - **Tier 3:** Frontend — Error store, Global Error Modal
 
 ---
@@ -145,9 +145,9 @@ _Auto-generated section — see `02-spec/03-error-manage/97-acceptance-criteria.
 
 ### AC-ERR-001: Error-management conformance: Index
 
-**Given** Audit error-handling sites for use of the `apperror` package, error codes, and explicit file/path logging.
+**Given** Audit error-handling sites for use of the `appfault` package, error codes, and explicit file/path logging.
 **When** Run the verification command shown below.
-**Then** Every error site uses `apperror.Wrap`/`apperror.New` with a registered code; no bare `errors.New` or swallowed errors remain.
+**Then** Every error site uses `appfault.Wrap`/`appfault.New` with a registered code; no bare `errors.New` or swallowed errors remain.
 
 **Verification command:**
 
