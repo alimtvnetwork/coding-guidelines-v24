@@ -1,6 +1,9 @@
 package appfaults
 
-import "coding-guidelines/common/pkg/appfault"
+import (
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
+)
 
 // Collection holds an ordered slice of AppError pointers.
 type Collection struct {
@@ -32,11 +35,11 @@ func NewFromFaults(faults ...*appfault.AppError) *Collection {
 	return c
 }
 
-// NewFromErrors wraps raw Go errors into AppError instances.
-func NewFromErrors(errs ...error) *Collection {
+// NewFromErrors wraps raw Go errors into AppError instances with an explicit error type.
+func NewFromErrors(errType errtype.Variation, errs ...error) *Collection {
 	c := NewWithCapacity(len(errs))
 	for _, err := range errs {
-		c.AddError(err)
+		c.AddError(errType, err)
 	}
 
 	return c

@@ -26,15 +26,13 @@ func FailureResult[T any](err *AppError) Result[T] {
 	}
 }
 
-// NewFailure creates a failed Result from a raw error.
-func NewFailure[T any](err error) Result[T] {
-	if err == nil {
+// NewFailure creates a failed Result from an explicit type and cause error.
+func NewFailure[T any](errType errtype.Variation, cause error) Result[T] {
+	if cause == nil || errType == errtype.None {
 		return Result[T]{}
 	}
 
-	e := WrapSimple(err)
-
-	return FailureResult[T](e)
+	return FailureResult[T](WrapType(errType, cause))
 }
 
 // NewFailureWithType creates a failed Result with explicit type and caller.
@@ -55,8 +53,8 @@ func Fail[T any](err *AppError) Result[T] {
 }
 
 // FailWrap wraps a raw error into a failed Result.
-func FailWrap[T any](cause error, errType errtype.Variation, msg string) Result[T] {
-	return FailureResult[T](Wrap(cause, errType, msg))
+func FailWrap[T any](errType errtype.Variation, cause error, msg string) Result[T] {
+	return FailureResult[T](Wrap(errType, cause, msg))
 }
 
 // FailNew creates a new AppError and returns a failed Result.

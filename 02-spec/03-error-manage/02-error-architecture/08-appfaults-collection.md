@@ -1,7 +1,7 @@
 # Specification: `appfaults` Error Collection Architecture
 
-**Version:** 3.3.0  
-**Status:** Draft Specification (Pending Review)  
+**Version:** 3.3.1  
+**Status:** Complete & Enforced  
 **Package:** `04-code/golang/pkg/appfaults`  
 **Reference Implementations:** `https://gitlab.com/auk-go/errorwrapper` (`errwrappers.Collection`, `errwrappers.MutexCollection`)
 
@@ -9,102 +9,58 @@
 
 ## 1. Executive Summary & Purpose
 
-In multi-step workflows, batch validations, data pipeline migrations, and concurrent task executions, a single function often encounters multiple errors rather than failing on the very first issue.
-
-The **`appfaults`** package provides a first-class, memory-efficient collection type (`appfaults.Collection` / `appfaults.AppFaults`) for aggregating, filtering, transforming, and propagating multiple `*appfault.AppError` instances across application layers and Go context (`context.Context`).
+In multi-step workflows, batch validations, and concurrent pipelines, functions frequently encounter multiple errors. The **`appfaults`** package provides an error collection type (`appfaults.Collection` / `appfaults.AppFaults`) for aggregating, filtering, transforming, and propagating multiple `*appfault.AppError` instances across application layers and Go context (`context.Context`).
 
 ---
 
-## 2. Core Architecture & Interfaces
+## 2. Core Rule: Mandatory Error Type First
 
-### 2.1 Collection Structs
-
-```go
-package appfaults
-
-import (
-	"sync"
-	"coding-guidelines/common/pkg/appfault"
-	"coding-guidelines/common/pkg/errtype"
-)
-
-// Collection holds an ordered slice of AppError pointers.
-type Collection struct {
-	items []*appfault.AppError
-}
-
-// AppFaults is an alias for Collection for domain consistency.
-type AppFaults = Collection
-
-// MutexCollection provides concurrency-safe operations over Collection.
-type MutexCollection struct {
-	sync.RWMutex
-	inner Collection
-}
-```
+1. **Explicit Error Type First:**
+   - Every error construction or wrapping method MUST accept `errtype.Variation` as its first parameter:
+     - `appfault.New(errType, msg)`
+     - `appfault.NewType(errType)`
+     - `appfault.Wrap(errType, cause, msg)`
+     - `appfault.WrapType(errType, cause)`
+2. **Missing Cause & Nil Safety:**
+   - If `cause == nil` or `errType == errtype.None`, constructors return `nil` without allocating memory or stack traces.
+   - Collections ignore `nil` and `errtype.None` additions, preventing dummy errors.
 
 ---
 
-## 3. Method Specifications
+## 3. Collection Mutators & Methods
 
-### 3.1 Constructors
-
-| Constructor | Signature | Description |
-| :--- | :--- | :--- |
-| `New()` | `func New() *Collection` | Creates an empty, non-nil error collection. |
-| `NewWithCapacity(n)` | `func NewWithCapacity(capacity int) *Collection` | Preallocates backing slice capacity. |
-| `NewFromFaults(faults...)` | `func NewFromFaults(faults ...*appfault.AppError) *Collection` | Constructs collection filtering out nil errors. |
-| `NewFromErrors(errs...)` | `func NewFromErrors(errs ...error) *Collection` | Wraps raw Go errors into `AppError` and stores. |
-| `NewMutexCollection()` | `func NewMutexCollection() *MutexCollection` | Creates a thread-safe mutex-wrapped collection. |
-
-### 3.2 Mutators & Aggregation
+### 3.1 `Collection` & `MutexCollection` Mutators
 
 | Method | Signature | Description |
 | :--- | :--- | :--- |
 | `Add(err)` | `func (c *Collection) Add(err *appfault.AppError) *Collection` | Appends error if non-nil and `HasError()` is true. |
-| `AddError(err)` | `func (c *Collection) AddError(err error) *Collection` | Wraps raw error and appends if non-nil. |
-| `AddAll(faults...)` | `func (c *Collection) AddAll(faults ...*appfault.AppError) *Collection` | Appends multiple errors in order. |
-| `Merge(other)` | `func (c *Collection) Merge(other *Collection) *Collection` | Ingests all items from another collection. |
-| `Clear()` | `func (c *Collection) Clear() *Collection` | Resets the collection to empty. |
+| `AddType(errType)` | `func (c *Collection) AddType(errType errtype.Variation) *Collection` | Creates error from type and appends. |
+| `AddTypeMsg(errType, msg)` | `func (c *Collection) AddTypeMsg(errType errtype.Variation, msg string) *Collection` | Creates error from type + message. |
+| `AddTypeMsgf(errType, fmt, args...)` | `func (c *Collection) AddTypeMsgf(errType errtype.Variation, format string, args ...any) *Collection` | Formatted message error. |
+| `AddError(errType, cause)` | `func (c *Collection) AddError(errType errtype.Variation, cause error) *Collection` | Wraps cause with type (message is `cause.Error()`). |
+| `AddErrorMsg(errType, cause, msg)` | `func (c *Collection) AddErrorMsg(errType errtype.Variation, cause error, msg string) *Collection` | Wraps cause with type + custom message. |
+| `AddWithContext(errType, msg, ctx)` | `func (c *Collection) AddWithContext(errType errtype.Variation, msg string, ctx map[string]any) *Collection` | Creates error with context map. |
+| `AddAll(faults...)` | `func (c *Collection) AddAll(faults ...*appfault.AppError) *Collection` | Appends multiple AppErrors. |
+| `Merge(other)` | `func (c *Collection) Merge(other *Collection) *Collection` | Ingests items from another collection. |
+| `Clear()` | `func (c *Collection) Clear() *Collection` | Resets the collection. |
 
-### 3.3 Status & Introspection
+### 3.2 Status & Inspection
 
 | Method | Signature | Semantics / Behavior |
 | :--- | :--- | :--- |
-| `HasError()` | `func (c *Collection) HasError() bool` | Returns `true` if collection contains $\ge 1$ active errors. Returns `false` if `c == nil` or empty. |
-| `IsSuccess()` | `func (c *Collection) IsSuccess() bool` | Returns `true` if `c == nil` or `Count() == 0` (no errors). |
+| `HasError()` | `func (c *Collection) HasError() bool` | Returns `true` if $\ge 1$ errors. Returns `false` if `c == nil` or empty. |
+| `IsSuccess()` | `func (c *Collection) IsSuccess() bool` | Returns `true` if `c == nil` or `Count() == 0`. |
 | `IsEmpty()` | `func (c *Collection) IsEmpty() bool` | Alias for `!c.HasError()`. |
 | `Count()` | `func (c *Collection) Count() int` | Returns total number of active errors. |
 | `Items()` | `func (c *Collection) Items() []*appfault.AppError` | Returns copy of backing slice. |
 | `First()` | `func (c *Collection) First() *appfault.AppError` | Returns first error or `nil`. |
 | `Last()` | `func (c *Collection) Last() *appfault.AppError` | Returns last error or `nil`. |
 
-### 3.4 Filtering & Transformation
-
-```go
-// Filter returns a new Collection containing items that satisfy predicate.
-func (c *Collection) Filter(predicate func(*appfault.AppError) bool) *Collection
-
-// FilterByType returns errors matching a specific errtype.Variation.
-func (c *Collection) FilterByType(errType errtype.Variation) *Collection
-
-// ToAppError merges the collection into a single composite AppError.
-func (c *Collection) ToAppError(compositeType errtype.Variation, msg string) *appfault.AppError
-
-// Errors converts collection into a standard []error slice.
-func (c *Collection) Errors() []error
-```
-
 ---
 
 ## 4. Context Integration (`context.Context`)
 
-`appfaults` attaches directly to Go `context.Context` to aggregate errors across middleware, interceptors, and nested routines without passing mutable collectors through every function signature:
-
 ```go
-// Key for context error collection storage
-type contextKey struct{}
-
 // WithFaults creates a child context holding a dedicated AppFaults collector.
 func WithFaults(ctx context.Context) (context.Context, *Collection)
 
@@ -119,19 +75,5 @@ func RecordContextError(ctx context.Context, err *appfault.AppError) bool
 
 ## 5. Serialization & Diagnostics
 
-- **JSON Output:** Serializes collection to PascalCase array:
-  ```json
-  [
-    {
-      "Type": 2,
-      "Message": "email format is invalid",
-      "Caller": "validator.go:28"
-    },
-    {
-      "Type": 2,
-      "Message": "password too short",
-      "Caller": "validator.go:34"
-    }
-  ]
-  ```
-- **Formatted Summary:** `Format()` provides newline-separated diagnostic logs with bullet points for user-facing and AI analysis.
+- **JSON Output:** `json.Marshal(coll)` serializes to a JSON array of `AppError` objects.
+- **Formatted String:** `coll.Format()` returns numbered bullet points for diagnostics.

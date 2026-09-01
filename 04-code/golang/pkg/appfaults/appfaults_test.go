@@ -17,15 +17,29 @@ func TestCollectionBasicOperations(t *testing.T) {
 		t.Fatal("expected empty collection to be success")
 	}
 
-	c.Add(appfault.New(errtype.Validation, "bad field")).AddError(errors.New("io issue"))
-	if !c.HasError() || c.Count() != 2 {
-		t.Fatalf("expected 2 items, got %d", c.Count())
+	c.AddType(errtype.Validation).AddTypeMsg(errtype.Database, "db failed")
+	c.AddError(errtype.IO, errors.New("io error")).AddErrorMsg(errtype.Network, errors.New("sock"), "conn drop")
+	c.AddTypeMsgf(errtype.Timeout, "timed out after %ds", 5)
+
+	if !c.HasError() || c.Count() != 5 {
+		t.Fatalf("expected 5 items, got %d", c.Count())
+	}
+}
+
+func TestCollectionNilAndNoneSafety(t *testing.T) {
+	c := appfaults.New()
+	c.Add(nil).AddType(errtype.None).AddTypeMsg(errtype.None, "skip")
+	c.AddError(errtype.None, errors.New("skip")).AddError(errtype.IO, nil)
+	c.AddErrorMsg(errtype.None, errors.New("skip"), "skip").AddErrorMsg(errtype.IO, nil, "skip")
+
+	if c.HasError() || c.Count() != 0 {
+		t.Fatalf("expected 0 items after adding nils and None variations, got %d", c.Count())
 	}
 }
 
 func TestCollectionFilterAndTransform(t *testing.T) {
 	c := appfaults.New()
-	c.Add(appfault.New(errtype.Validation, "err1")).Add(appfault.New(errtype.Database, "err2"))
+	c.AddTypeMsg(errtype.Validation, "err1").AddTypeMsg(errtype.Database, "err2")
 
 	filtered := c.FilterByType(errtype.Validation)
 	if filtered.Count() != 1 || filtered.First().GetType() != errtype.Validation {
@@ -40,9 +54,9 @@ func TestCollectionFilterAndTransform(t *testing.T) {
 
 func TestMutexCollectionThreadSafety(t *testing.T) {
 	mc := appfaults.NewMutexCollection()
-	mc.Add(appfault.New(errtype.NotFound, "missing"))
-	if !mc.HasError() || mc.Count() != 1 {
-		t.Fatalf("expected 1 item in MutexCollection, got %d", mc.Count())
+	mc.AddType(errtype.NotFound).AddError(errtype.IO, errors.New("file missing"))
+	if !mc.HasError() || mc.Count() != 2 {
+		t.Fatalf("expected 2 items in MutexCollection, got %d", mc.Count())
 	}
 }
 

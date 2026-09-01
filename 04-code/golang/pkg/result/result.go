@@ -23,9 +23,9 @@ func FailureResult[T any](err *appfault.AppError) Result[T] {
 	return appfault.FailureResult[T](err)
 }
 
-// NewFailure creates a failed Result from a raw error.
-func NewFailure[T any](err error) Result[T] {
-	return appfault.NewFailure[T](err)
+// NewFailure creates a failed Result from an explicit error type and cause.
+func NewFailure[T any](errType errtype.Variation, cause error) Result[T] {
+	return appfault.NewFailure[T](errType, cause)
 }
 
 // NewFailureWithType creates a failed Result with explicit error type.

@@ -12,9 +12,13 @@ func New(errType errtype.Variation, message string) *AppError {
 	return NewWithContext(errType, message, nil)
 }
 
-// NewValidationError creates a validation error.
-func NewValidationError(message string) *AppError {
-	return New(errtype.Validation, message)
+// NewType creates an AppError using default type name as message.
+func NewType(errType errtype.Variation) *AppError {
+	if errType == errtype.None {
+		return nil
+	}
+
+	return New(errType, errType.Name())
 }
 
 // createAppErrorInstance constructs the AppError capturing stack trace.
@@ -41,10 +45,10 @@ func NewWithContext(errType errtype.Variation, message string, ctx map[string]an
 	return e
 }
 
-// Wrap wraps an existing error with an error type variation and custom message.
-// If err is nil, it returns nil (no allocation).
-func Wrap(err error, errType errtype.Variation, message string) *AppError {
-	if err == nil {
+// Wrap wraps an existing cause with an explicit errtype and custom message.
+// If cause is nil or errType is None, it returns nil (no allocation).
+func Wrap(errType errtype.Variation, cause error, message string) *AppError {
+	if cause == nil || errType == errtype.None {
 		return nil
 	}
 
@@ -53,18 +57,18 @@ func Wrap(err error, errType errtype.Variation, message string) *AppError {
 		return nil
 	}
 
-	e.Cause = err
+	e.Cause = cause
 
 	return e
 }
 
-// WrapSimple wraps a raw error into an Execution error type.
-func WrapSimple(err error) *AppError {
-	if err == nil {
+// WrapType wraps an existing cause using cause.Error() as message.
+func WrapType(errType errtype.Variation, cause error) *AppError {
+	if cause == nil || errType == errtype.None {
 		return nil
 	}
 
-	return Wrap(err, errtype.Execution, err.Error())
+	return Wrap(errType, cause, cause.Error())
 }
 
 // ensureContextMap safely converts a map[string]any to ContextMap.

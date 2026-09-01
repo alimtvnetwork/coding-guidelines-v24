@@ -1,6 +1,11 @@
 package appfaults
 
-import "coding-guidelines/common/pkg/appfault"
+import (
+	"fmt"
+
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
+)
 
 // Add appends an AppError if it is non-nil and has an active error.
 func (c *Collection) Add(err *appfault.AppError) *Collection {
@@ -13,13 +18,34 @@ func (c *Collection) Add(err *appfault.AppError) *Collection {
 	return c
 }
 
-// AddError wraps a standard error and appends it.
-func (c *Collection) AddError(err error) *Collection {
-	if c == nil || err == nil {
-		return c
-	}
+// AddType creates an AppError from an errtype and appends it.
+func (c *Collection) AddType(errType errtype.Variation) *Collection {
+	return c.Add(appfault.NewType(errType))
+}
 
-	return c.Add(appfault.WrapSimple(err))
+// AddTypeMsg creates an AppError with message and appends it.
+func (c *Collection) AddTypeMsg(errType errtype.Variation, msg string) *Collection {
+	return c.Add(appfault.New(errType, msg))
+}
+
+// AddTypeMsgf creates an AppError with formatted message and appends it.
+func (c *Collection) AddTypeMsgf(errType errtype.Variation, format string, args ...any) *Collection {
+	return c.Add(appfault.New(errType, fmt.Sprintf(format, args...)))
+}
+
+// AddError wraps a cause error with an explicit errtype and appends it.
+func (c *Collection) AddError(errType errtype.Variation, cause error) *Collection {
+	return c.Add(appfault.WrapType(errType, cause))
+}
+
+// AddErrorMsg wraps a cause error with an explicit errtype, custom message and appends it.
+func (c *Collection) AddErrorMsg(errType errtype.Variation, cause error, msg string) *Collection {
+	return c.Add(appfault.Wrap(errType, cause, msg))
+}
+
+// AddWithContext creates an AppError with context map and appends it.
+func (c *Collection) AddWithContext(errType errtype.Variation, msg string, ctx map[string]any) *Collection {
+	return c.Add(appfault.NewWithContext(errType, msg, ctx))
 }
 
 // AddAll appends multiple AppErrors in order.

@@ -35,7 +35,7 @@ func checkSpecialPluginIds(id int64) *appfault.AppError {
 	}
 
 	if id == 500 {
-		return appfault.Wrap(errors.New("connection reset by peer"), errtype.Database, "connection failed").WithOp("repo.find")
+		return appfault.Wrap(errtype.Database, errors.New("connection reset by peer"), "connection failed").WithOp("repo.find")
 	}
 
 	return nil
@@ -44,7 +44,7 @@ func checkSpecialPluginIds(id int64) *appfault.AppError {
 // validatePluginId checks input and simulates database error states.
 func validatePluginId(id int64) *appfault.AppError {
 	if id <= 0 {
-		return appfault.NewValidationError("plugin id must be positive")
+		return appfault.New(errtype.Validation, "plugin id must be positive")
 	}
 
 	return checkSpecialPluginIds(id)

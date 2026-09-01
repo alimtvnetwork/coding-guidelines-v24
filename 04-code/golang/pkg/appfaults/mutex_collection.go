@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 )
 
 // MutexCollection provides concurrency-safe operations over a Collection.
@@ -28,11 +29,29 @@ func (mc *MutexCollection) Add(err *appfault.AppError) *MutexCollection {
 	return mc
 }
 
-// AddError safely wraps and appends a standard error.
-func (mc *MutexCollection) AddError(err error) *MutexCollection {
+// AddType safely adds an error by type.
+func (mc *MutexCollection) AddType(errType errtype.Variation) *MutexCollection {
 	mc.Lock()
 	defer mc.Unlock()
-	mc.inner.AddError(err)
+	mc.inner.AddType(errType)
+
+	return mc
+}
+
+// AddTypeMsg safely adds an error by type and message.
+func (mc *MutexCollection) AddTypeMsg(errType errtype.Variation, msg string) *MutexCollection {
+	mc.Lock()
+	defer mc.Unlock()
+	mc.inner.AddTypeMsg(errType, msg)
+
+	return mc
+}
+
+// AddError safely wraps and appends a standard error with explicit type.
+func (mc *MutexCollection) AddError(errType errtype.Variation, cause error) *MutexCollection {
+	mc.Lock()
+	defer mc.Unlock()
+	mc.inner.AddError(errType, cause)
 
 	return mc
 }

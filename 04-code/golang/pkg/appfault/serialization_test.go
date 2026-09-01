@@ -12,7 +12,7 @@ import (
 // createSampleAppError helper for serialization testing.
 func createSampleAppError() (*appfault.AppError, error) {
 	rawErr := errors.New("underlying socket closed")
-	orig := appfault.Wrap(rawErr, errtype.Network, "dial timeout").
+	orig := appfault.Wrap(errtype.Network, rawErr, "dial timeout").
 		WithOp("net.dial").
 		WithStatusCode(504).
 		WithContext("port", 8080)

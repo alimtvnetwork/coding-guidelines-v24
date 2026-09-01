@@ -47,7 +47,7 @@ func (c *WordPressClient) ActivateRemotePlugin(
 	// Simulated remote HTTP request failure
 	if slug == "broken-plugin" {
 		rawErr := errors.New("HTTP 502 Bad Gateway from upstream NGINX")
-		appErr := appfault.Wrap(rawErr, errtype.Network, "delegated remote activation failed").
+		appErr := appfault.Wrap(errtype.Network, rawErr, "delegated remote activation failed").
 			WithOp("wp.client.activate").
 			WithUrl(url).
 			WithStatusCode(502).

@@ -5,6 +5,25 @@
 
 ---
 
+## v2.3.1 — 2026-09-01
+
+### Mandatory Error Type First & Extended Collection Mutators
+
+#### Changed — `pkg/appfault` Constructors
+- Mandated `errtype.Variation` as the first argument in `Wrap(errType, cause, msg)` and `WrapType(errType, cause)`.
+- Added `NewType(errType)` creating AppErrors with default type names.
+- Guaranteed nil return when `cause == nil` or `errType == None`.
+
+#### Added — `pkg/appfaults` Extended Mutators
+- `AddType(errType)`: Adds error from enum type.
+- `AddTypeMsg(errType, msg)`: Adds error from enum type + message.
+- `AddTypeMsgf(errType, fmt, args...)`: Formatted message error.
+- `AddError(errType, cause)`: Wraps cause error with explicit type.
+- `AddErrorMsg(errType, cause, msg)`: Wraps cause error with explicit type and message.
+- `AddWithContext(errType, msg, ctx)`: Adds error with custom context map.
+
+---
+
 ## v2.3.0 — 2026-09-01
 
 ### Dedicated `errtype` Package & Integer-Backed Enums
