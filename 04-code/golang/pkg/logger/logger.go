@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"coding-guidelines/common/pkg/apperror"
+	"coding-guidelines/common/pkg/appfault"
 )
 
 // Logger provides structured, leveled logging with AppError integration.
@@ -75,8 +75,8 @@ func (l *Logger) Error(msg string) {
 	l.write(LevelError, msg, "", nil, "")
 }
 
-// LogError logs a structured Fault with code, context, and optional stack trace.
-func (l *Logger) LogError(err *apperror.Fault) {
+// LogError logs a structured AppError with code, context, and optional stack trace.
+func (l *Logger) LogError(err *appfault.AppError) {
 	if err == nil {
 		return
 	}

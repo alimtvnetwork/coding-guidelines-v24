@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"coding-guidelines/common/pkg/apperror"
+	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/logger"
 )
 
@@ -25,9 +25,9 @@ func TestLoggerAppErrorLogging(t *testing.T) {
 	opts := logger.DefaultOptions().WithOutput(buf).WithJson(true)
 	log := logger.New(opts)
 
-	fault := apperror.NewWithDetails("db.find", "E2004", "record missing", "repo", apperror.ErrorTypeNotFound, apperror.SeverityError, nil).
+	appErr := appfault.NewWithDetails("db.find", "E2004", "record missing", "repo", appfault.ErrorTypeNotFound, appfault.SeverityError, nil).
 		WithSiteId(101)
-	log.LogError(fault)
+	log.LogError(appErr)
 
 	output := buf.String()
 	if !strings.Contains(output, "record missing") || !strings.Contains(output, "E2004") {

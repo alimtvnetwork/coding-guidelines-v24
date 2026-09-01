@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/examples"
-	"coding-guidelines/common/pkg/apperror"
+	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/logger"
 )
 
@@ -29,7 +29,7 @@ func TestDatabaseQueryNotFound(t *testing.T) {
 		t.Fatal("expected error for 404 id")
 	}
 
-	if !res.Fault().IsErrorCode(apperror.ErrDatabaseNotFound.String()) {
+	if !res.Fault().IsErrorCode(appfault.ErrDatabaseNotFound.String()) {
 		t.Fatalf("expected ErrDatabaseNotFound, got %s", res.Fault().GetCode())
 	}
 }
@@ -61,7 +61,7 @@ func TestWorkflowServicePropagatesErrorWithoutRewrapping(t *testing.T) {
 		t.Fatal("expected workflow to fail when plugin is not found in db")
 	}
 
-	if !res.Fault().IsErrorCode(apperror.ErrDatabaseNotFound.String()) {
+	if !res.Fault().IsErrorCode(appfault.ErrDatabaseNotFound.String()) {
 		t.Fatalf("expected original ErrDatabaseNotFound code, got %s", res.Fault().GetCode())
 	}
 }

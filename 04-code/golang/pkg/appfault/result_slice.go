@@ -1,10 +1,10 @@
-package apperror
+package appfault
 
 // ResultSlice wraps a generic slice collection with monadic error state.
 type ResultSlice[T any] struct {
-	Items    []T    `json:"items,omitempty"`
-	Err      *Fault `json:"err,omitempty"`
-	AppError error  `json:"appError,omitempty"`
+	Items  []T       `json:"items,omitempty"`
+	Err    *AppError `json:"err,omitempty"`
+	AppErr error     `json:"appError,omitempty"`
 }
 
 // OkSlice creates a successful ResultSlice.
@@ -14,22 +14,22 @@ func OkSlice[T any](items []T) ResultSlice[T] {
 	}
 }
 
-// FailSlice creates a failed ResultSlice from a Fault.
-func FailSlice[T any](err *Fault) ResultSlice[T] {
+// FailSlice creates a failed ResultSlice from a AppError.
+func FailSlice[T any](err *AppError) ResultSlice[T] {
 	return ResultSlice[T]{
-		Err:      err,
-		AppError: err,
+		Err:    err,
+		AppErr: err,
 	}
 }
 
 // IsSuccess returns true if no error is present.
 func (rs ResultSlice[T]) IsSuccess() bool {
-	return rs.Err == nil && rs.AppError == nil
+	return rs.Err == nil && rs.AppErr == nil
 }
 
 // IsFailed returns true if an error is present.
 func (rs ResultSlice[T]) IsFailed() bool {
-	return rs.Err != nil || rs.AppError != nil
+	return rs.Err != nil || rs.AppErr != nil
 }
 
 // HasError returns true if an error is present.
@@ -68,7 +68,12 @@ func (rs ResultSlice[T]) First() Result[T] {
 	return Ok(rs.Items[0])
 }
 
-// Fault returns the underlying *Fault.
-func (rs ResultSlice[T]) Fault() *Fault {
+// AppError returns the underlying *AppError.
+func (rs ResultSlice[T]) AppError() *AppError {
+	return rs.Err
+}
+
+// Fault returns the underlying *AppError (alias for AppError()).
+func (rs ResultSlice[T]) Fault() *AppError {
 	return rs.Err
 }

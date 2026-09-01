@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"coding-guidelines/common/pkg/apperror"
+	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/result"
 )
 
@@ -46,13 +46,13 @@ func (c *WordPressClient) ActivateRemotePlugin(
 	// Simulated remote HTTP request failure
 	if slug == "broken-plugin" {
 		rawErr := errors.New("HTTP 502 Bad Gateway from upstream NGINX")
-		fault := apperror.WrapWithDetails(rawErr, "wp.client.activate", "E3003", "delegated remote activation failed", "wp.client", apperror.ErrorTypeExecution, apperror.SeverityError, nil).
+		appErr := appfault.WrapWithDetails(rawErr, "wp.client.activate", "E3003", "delegated remote activation failed", "wp.client", appfault.ErrorTypeExecution, appfault.SeverityError, nil).
 			WithUrl(url).
 			WithStatusCode(502).
 			WithSiteId(siteId).
 			WithSlug(slug)
 
-		return result.FailureResult[RemoteActivationResponse](fault)
+		return result.FailureResult[RemoteActivationResponse](appErr)
 	}
 
 	return result.SuccessResult(RemoteActivationResponse{

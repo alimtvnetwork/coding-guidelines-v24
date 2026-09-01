@@ -1,4 +1,4 @@
-package apperror
+package appfault
 
 // ErrorType categorizes error domains.
 type ErrorType string

@@ -195,32 +195,30 @@ Every `error()` and `logException()` call automatically captures:
 
 ## Tier 2: Go Backend Error Handling
 
-### `apperror` Package & `*apperror.Fault` Return Type
+### `appfault` Package & `*appfault.AppError` Return Type
 
-All structured errors crossing service boundaries in Go must use `*apperror.Fault` (or `apperror.Result[T]`):
+All structured errors crossing service boundaries in Go must use `*appfault.AppError` (package `appfault`) or `result.Result[T]`:
 
 ```go
-// Functions returning structured error metadata use *apperror.Fault
-func validateSlug(slug string) *apperror.Fault {
+// Functions returning structured error metadata use *appfault.AppError
+func validateSlug(slug string) *appfault.AppError {
     if len(slug) == 0 {
-        return apperror.NewValidationError("slug cannot be empty")
+        return appfault.NewValidationError("slug cannot be empty")
     }
 
     return nil
 }
 
 // Wrap existing errors with code and context
-return apperror.Wrap(err, apperror.ErrSyncCheck, "failed to upload plugin").
+return appfault.Wrap(err, "wp.plugin.upload", map[string]any{"slug": pluginSlug}).
     WithPluginContext(pluginId, pluginSlug).
     WithEndpoint(requestUrl)
 
-// Create new faults
-return apperror.New(
-    apperror.ErrFileRead, "invalid plugin slug",
-)
+// Create new errors
+return appfault.NewSimple("wp.plugin.validate", appfault.ErrFileRead.String())
 ```
 
-> **AI Migration Note:** Legacy code and specs referencing `*apperror.AppError` must be migrated to `*apperror.Fault`. The `apperror` package provides `type AppError = Fault` to maintain backward compatibility during the transition.
+> **AI Migration Note:** Package `appfault` eliminates package stutter (`appfault.AppError`). For backward compatibility, `appfault` provides `type Fault = AppError` and package `apperror` provides alias forwarders to `appfault`.
 
 **Forbidden:** `fmt.Errorf` for errors leaving a service (no stack trace).
 

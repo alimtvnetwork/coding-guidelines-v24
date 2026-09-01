@@ -1,10 +1,10 @@
-package apperror
+package appfault
 
 // ResultMap wraps a generic key-value map with monadic error state.
 type ResultMap[K comparable, V any] struct {
-	Data     map[K]V `json:"data,omitempty"`
-	Err      *Fault  `json:"err,omitempty"`
-	AppError error   `json:"appError,omitempty"`
+	Data   map[K]V   `json:"data,omitempty"`
+	Err    *AppError `json:"err,omitempty"`
+	AppErr error     `json:"appError,omitempty"`
 }
 
 // OkMap creates a successful ResultMap.
@@ -14,22 +14,22 @@ func OkMap[K comparable, V any](data map[K]V) ResultMap[K, V] {
 	}
 }
 
-// FailMap creates a failed ResultMap from a Fault.
-func FailMap[K comparable, V any](err *Fault) ResultMap[K, V] {
+// FailMap creates a failed ResultMap from a AppError.
+func FailMap[K comparable, V any](err *AppError) ResultMap[K, V] {
 	return ResultMap[K, V]{
-		Err:      err,
-		AppError: err,
+		Err:    err,
+		AppErr: err,
 	}
 }
 
 // IsSuccess returns true if no error is present.
 func (rm ResultMap[K, V]) IsSuccess() bool {
-	return rm.Err == nil && rm.AppError == nil
+	return rm.Err == nil && rm.AppErr == nil
 }
 
 // IsFailed returns true if an error is present.
 func (rm ResultMap[K, V]) IsFailed() bool {
-	return rm.Err != nil || rm.AppError != nil
+	return rm.Err != nil || rm.AppErr != nil
 }
 
 // HasError returns true if an error is present.
@@ -71,7 +71,12 @@ func (rm ResultMap[K, V]) Count() int {
 	return len(rm.Data)
 }
 
-// Fault returns the underlying *Fault.
-func (rm ResultMap[K, V]) Fault() *Fault {
+// AppError returns the underlying *AppError.
+func (rm ResultMap[K, V]) AppError() *AppError {
+	return rm.Err
+}
+
+// Fault returns the underlying *AppError (alias for AppError()).
+func (rm ResultMap[K, V]) Fault() *AppError {
 	return rm.Err
 }

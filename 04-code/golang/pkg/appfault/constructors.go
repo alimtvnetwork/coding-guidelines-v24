@@ -1,25 +1,25 @@
-package apperror
+package appfault
 
 // NewSimple creates an error with automatic caller and stack trace capture.
-func NewSimple(op, code string) *Fault {
+func NewSimple(op, code string) *AppError {
 	return New(op, code, nil)
 }
 
-// New creates a standard Fault with caller, stack trace, and context map.
-func New(op, code string, ctx map[string]any) *Fault {
+// New creates a standard AppError with caller, stack trace, and context map.
+func New(op, code string, ctx map[string]any) *AppError {
 	return NewWithDetails(op, code, "", "", ErrorTypeExecution, SeverityError, ctx)
 }
 
-// NewValidationError creates a specialized validation Fault.
-func NewValidationError(msg string) *Fault {
+// NewValidationError creates a specialized validation AppError.
+func NewValidationError(msg string) *AppError {
 	return NewWithDetails("validation", ErrValidation.String(), msg, "", ErrorTypeValidation, SeverityError, nil)
 }
 
-// createFaultInstance sets up the base Fault struct.
-func createFaultInstance(op, code, msg, creator string, errType ErrorType, sev SeverityType) *Fault {
+// createAppErrorInstance sets up the base AppError struct.
+func createAppErrorInstance(op, code, msg, creator string, errType ErrorType, sev SeverityType) *AppError {
 	trace := captureStackTrace(3)
 
-	return &Fault{
+	return &AppError{
 		Op:       op,
 		Code:     code,
 		Type:     errType,
@@ -31,21 +31,21 @@ func createFaultInstance(op, code, msg, creator string, errType ErrorType, sev S
 	}
 }
 
-// NewWithDetails provides full-fidelity Fault construction.
-func NewWithDetails(op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *Fault {
-	f := createFaultInstance(op, code, msg, creator, errType, sev)
-	f.Ctx = ensureContext(ctx)
+// NewWithDetails provides full-fidelity AppError construction.
+func NewWithDetails(op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *AppError {
+	e := createAppErrorInstance(op, code, msg, creator, errType, sev)
+	e.Ctx = ensureContext(ctx)
 
-	return f
+	return e
 }
 
 // WrapSimple wraps an existing error with default code and operation label.
-func WrapSimple(err error, op string) *Fault {
+func WrapSimple(err error, op string) *AppError {
 	return Wrap(err, op, nil)
 }
 
 // Wrap wraps an existing error with operation label and context map.
-func Wrap(err error, op string, ctx map[string]any) *Fault {
+func Wrap(err error, op string, ctx map[string]any) *AppError {
 	if err == nil {
 		return nil
 	}
@@ -54,15 +54,15 @@ func Wrap(err error, op string, ctx map[string]any) *Fault {
 }
 
 // WrapWithDetails wraps an error preserving the underlying root cause.
-func WrapWithDetails(err error, op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *Fault {
+func WrapWithDetails(err error, op, code, msg, creator string, errType ErrorType, sev SeverityType, ctx map[string]any) *AppError {
 	if err == nil {
 		return nil
 	}
 
-	f := NewWithDetails(op, code, msg, creator, errType, sev, ctx)
-	f.Cause = err
+	e := NewWithDetails(op, code, msg, creator, errType, sev, ctx)
+	e.Cause = err
 
-	return f
+	return e
 }
 
 // ensureContext safely returns a non-nil context map.

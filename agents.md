@@ -46,8 +46,9 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - ✅ **GOOD:** `[SSH Commands](.lovable/02-spec/commands/01-ssh-commands.md)`
   - ✅ **GOOD:** `Target File: cmd/login.go`
 
-## 6. Go Error Return Type: `*apperror.Fault` (Migration Standard)
+## 6. Go Error Return Type: `*appfault.AppError` (Standard)
 
-- **Structured Go Fault Type:** In all Go packages, functions returning structured failure metadata MUST use `*apperror.Fault` as their return type (e.g. `func validate() *apperror.Fault`).
-- **Result Containers:** `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` provide `.Fault()` (and backward-compatible `.AppError()`) returning `*apperror.Fault`.
-- **AI Migration Rule:** When encountering legacy code or specs referencing `*apperror.AppError`, AI agents MUST update the type to `*apperror.Fault`. Package `apperror` provides `type AppError = Fault` to guarantee non-breaking compatibility during ongoing migrations.
+- **Structured Go AppError Type:** In all Go packages, functions returning structured failure metadata MUST use `*appfault.AppError` as their return type (e.g. `func validate() *appfault.AppError`).
+- **Package Naming Convention:** Use package `appfault` (`04-code/golang/pkg/appfault`) with struct `AppError` to eliminate redundant package-stutter (e.g. `appfault.AppError` instead of `apperror.AppError`).
+- **Result Containers:** `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` provide `.AppError()` and `.Fault()` returning `*appfault.AppError`.
+- **AI Migration Rule:** When encountering legacy code or specs referencing `*apperror.AppError` or `*apperror.Fault`, AI agents MUST update the import to `pkg/appfault` and type to `*appfault.AppError`. Package `appfault` provides `type Fault = AppError`, and package `apperror` provides alias forwarders for non-breaking compatibility.

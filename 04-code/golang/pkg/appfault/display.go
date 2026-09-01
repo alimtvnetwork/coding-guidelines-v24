@@ -1,4 +1,4 @@
-package apperror
+package appfault
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 )
 
 // formatBasicError returns formatted code, type, op, and message.
-func formatBasicError(f *Fault) string {
-	return fmt.Sprintf("[%s:%s] %s: %s", f.Code, f.Type, f.Op, f.Message)
+func formatBasicError(e *AppError) string {
+	return fmt.Sprintf("[%s:%s] %s: %s", e.Code, e.Type, e.Op, e.Message)
 }
 
 // appendCallerAndCause appends caller site and cause to formatted string.
@@ -24,23 +24,23 @@ func appendCallerAndCause(base, caller string, cause error) string {
 }
 
 // Error implements the standard Go error interface.
-func (f *Fault) Error() string {
-	if f == nil {
+func (e *AppError) Error() string {
+	if e == nil {
 		return ""
 	}
 
-	return appendCallerAndCause(formatBasicError(f), f.Caller, f.Cause)
+	return appendCallerAndCause(formatBasicError(e), e.Caller, e.Cause)
 }
 
 // appendHeader writes diagnostic header info.
-func appendHeader(b *strings.Builder, f *Fault) {
-	b.WriteString(fmt.Sprintf("ERROR: [%s:%s] %s: %s\n", f.Code, f.Type, f.Op, f.Message))
-	if len(f.Caller) > 0 {
-		b.WriteString(fmt.Sprintf("CALLER: %s\n", f.Caller))
+func appendHeader(b *strings.Builder, e *AppError) {
+	b.WriteString(fmt.Sprintf("ERROR: [%s:%s] %s: %s\n", e.Code, e.Type, e.Op, e.Message))
+	if len(e.Caller) > 0 {
+		b.WriteString(fmt.Sprintf("CALLER: %s\n", e.Caller))
 	}
 
-	if f.Cause != nil {
-		b.WriteString(fmt.Sprintf("CAUSE: %v\n", f.Cause))
+	if e.Cause != nil {
+		b.WriteString(fmt.Sprintf("CAUSE: %v\n", e.Cause))
 	}
 }
 
@@ -55,15 +55,15 @@ func appendContextAndStack(b *strings.Builder, ctx map[string]any, stack string)
 	}
 }
 
-// FullString returns a comprehensive diagnostic dump of the Fault.
-func (f *Fault) FullString() string {
-	if f == nil {
+// FullString returns a comprehensive diagnostic dump of the AppError.
+func (e *AppError) FullString() string {
+	if e == nil {
 		return ""
 	}
 
 	var b strings.Builder
-	appendHeader(&b, f)
-	appendContextAndStack(&b, f.Ctx, f.Stack)
+	appendHeader(&b, e)
+	appendContextAndStack(&b, e.Ctx, e.Stack)
 
 	return b.String()
 }
@@ -80,21 +80,21 @@ func appendMarkdownCauseAndStack(b *strings.Builder, cause error, stack string) 
 }
 
 // ToClipboard returns a Markdown formatted report for AI analysis.
-func (f *Fault) ToClipboard() string {
-	if f == nil {
+func (e *AppError) ToClipboard() string {
+	if e == nil {
 		return ""
 	}
 
 	var b strings.Builder
-	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Code:** `%s`\n- **Type:** `%s`\n- **Op:** `%s`\n- **Message:** %s\n", f.Code, f.Type, f.Op, f.Message))
-	appendMarkdownCauseAndStack(&b, f.Cause, f.Stack)
+	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Code:** `%s`\n- **Type:** `%s`\n- **Op:** `%s`\n- **Message:** %s\n", e.Code, e.Type, e.Op, e.Message))
+	appendMarkdownCauseAndStack(&b, e.Cause, e.Stack)
 
 	return b.String()
 }
 
 // DisplayError prints a terminal banner representation.
-func (f *Fault) DisplayError() {
-	if f != nil {
-		fmt.Printf("❌ [%s:%s] %s: %s (at %s)\n", f.Code, f.Type, f.Op, f.Message, f.Caller)
+func (e *AppError) DisplayError() {
+	if e != nil {
+		fmt.Printf("❌ [%s:%s] %s: %s (at %s)\n", e.Code, e.Type, e.Op, e.Message, e.Caller)
 	}
 }

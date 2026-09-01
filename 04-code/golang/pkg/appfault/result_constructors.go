@@ -1,4 +1,4 @@
-package apperror
+package appfault
 
 // SuccessResult creates a successful Result holding a valid payload.
 func SuccessResult[T any](val T) Result[T] {
@@ -17,11 +17,11 @@ func Ok[T any](val T) Result[T] {
 	return SuccessResult(val)
 }
 
-// FailureResult creates a failed Result from a Fault.
-func FailureResult[T any](err *Fault) Result[T] {
+// FailureResult creates a failed Result from a AppError.
+func FailureResult[T any](err *AppError) Result[T] {
 	return Result[T]{
-		Err:      err,
-		AppError: err,
+		Err:    err,
+		AppErr: err,
 	}
 }
 
@@ -31,14 +31,14 @@ func NewFailure[T any](err error) Result[T] {
 		return Result[T]{}
 	}
 
-	f := WrapSimple(err, "operation")
+	e := WrapSimple(err, "operation")
 
-	return FailureResult[T](f)
+	return FailureResult[T](e)
 }
 
 // NewFailureWithType creates a failed Result with explicit code and caller.
 func NewFailureWithType[T any](errCode string, msg string, caller string) Result[T] {
-	f := &Fault{
+	e := &AppError{
 		Code:     errCode,
 		Message:  msg,
 		Caller:   caller,
@@ -47,11 +47,11 @@ func NewFailureWithType[T any](errCode string, msg string, caller string) Result
 		Ctx:      make(map[string]any),
 	}
 
-	return FailureResult[T](f)
+	return FailureResult[T](e)
 }
 
-// Fail creates a failed Result from a Fault.
-func Fail[T any](err *Fault) Result[T] {
+// Fail creates a failed Result from a AppError.
+func Fail[T any](err *AppError) Result[T] {
 	return FailureResult[T](err)
 }
 
@@ -60,9 +60,9 @@ func FailWrap[T any](cause error, op string, ctx map[string]any) Result[T] {
 	return FailureResult[T](Wrap(cause, op, ctx))
 }
 
-// FailNew creates a new Fault and returns a failed Result.
+// FailNew creates a new AppError and returns a failed Result.
 func FailNew[T any](op, code, msg string) Result[T] {
-	f := NewWithDetails(op, code, msg, "", ErrorTypeExecution, SeverityError, nil)
+	e := NewWithDetails(op, code, msg, "", ErrorTypeExecution, SeverityError, nil)
 
-	return FailureResult[T](f)
+	return FailureResult[T](e)
 }

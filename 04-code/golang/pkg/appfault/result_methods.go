@@ -1,13 +1,13 @@
-package apperror
+package appfault
 
 // IsSuccess returns true if no error is present.
 func (r Result[T]) IsSuccess() bool {
-	return r.Err == nil && r.AppError == nil
+	return r.Err == nil && r.AppErr == nil
 }
 
 // IsFailed returns true if an error is present.
 func (r Result[T]) IsFailed() bool {
-	return r.Err != nil || r.AppError != nil
+	return r.Err != nil || r.AppErr != nil
 }
 
 // IsFailure is an alias for IsFailed.
@@ -44,8 +44,8 @@ func (r Result[T]) IsSafe() bool {
 	return r.IsSuccess()
 }
 
-// Unwrap unpacks the (Value, *Fault) tuple.
-func (r Result[T]) Unwrap() (T, *Fault) {
+// Unwrap unpacks the (Value, *AppError) tuple.
+func (r Result[T]) Unwrap() (T, *AppError) {
 	return r.Value, r.Err
 }
 

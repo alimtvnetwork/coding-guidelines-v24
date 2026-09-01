@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"coding-guidelines/common/pkg/apperror"
+	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/result"
 )
 
@@ -28,22 +28,22 @@ func NewPluginRepository(db *sql.DB) *PluginRepository {
 }
 
 // checkSpecialPluginIds simulates database failure states for test cases.
-func checkSpecialPluginIds(id int64) *apperror.Fault {
+func checkSpecialPluginIds(id int64) *appfault.AppError {
 	if id == 404 {
-		return apperror.NewWithDetails("repo.find", apperror.ErrDatabaseNotFound.String(), "plugin record not found", "repo", apperror.ErrorTypeNotFound, apperror.SeverityWarn, nil)
+		return appfault.NewWithDetails("repo.find", appfault.ErrDatabaseNotFound.String(), "plugin record not found", "repo", appfault.ErrorTypeNotFound, appfault.SeverityWarn, nil)
 	}
 
 	if id == 500 {
-		return apperror.WrapSimple(errors.New("connection reset by peer"), "repo.find")
+		return appfault.WrapSimple(errors.New("connection reset by peer"), "repo.find")
 	}
 
 	return nil
 }
 
 // validatePluginId checks input and simulates database error states.
-func validatePluginId(id int64) *apperror.Fault {
+func validatePluginId(id int64) *appfault.AppError {
 	if id <= 0 {
-		return apperror.NewValidationError("plugin id must be positive")
+		return appfault.NewValidationError("plugin id must be positive")
 	}
 
 	return checkSpecialPluginIds(id)
@@ -64,11 +64,11 @@ func (r *PluginRepository) FindById(ctx context.Context, id int64) result.Result
 }
 
 // ListActive retrieves all active plugins as a ResultSlice.
-func (r *PluginRepository) ListActive(ctx context.Context) apperror.ResultSlice[PluginSummary] {
+func (r *PluginRepository) ListActive(ctx context.Context) appfault.ResultSlice[PluginSummary] {
 	items := []PluginSummary{
 		{ID: 1, Slug: "cache-booster", Name: "Cache Booster", IsActive: true},
 		{ID: 2, Slug: "security-shield", Name: "Security Shield", IsActive: true},
 	}
 
-	return apperror.OkSlice(items)
+	return appfault.OkSlice(items)
 }
