@@ -534,8 +534,8 @@ final class Result
 1. **Action Functions (Verb + Noun):**
    - Every function performing an action MUST start with a clear, active verb: `fetchUser()`, `calculateTax()`, `renderHelpRow()`, `validatePayload()`.
    - Ban vague garbage names: `handle()`, `process()`, `doStuff()`, `manage()`, `temp()`.
-2. **Boolean Predicate Functions (is and has only (can, should, was, etc. are banned), `was`):**
-   - Every function returning a boolean MUST begin with an affirmative prefix: `isValid()`, `hasPermissions()`, `canExecute()`, `shouldRetry()`.
+2. **Boolean Predicate Functions (`is` and `has` ONLY):**
+   - Every function returning a boolean MUST begin with `is` or `has` ONLY: `isValid()`, `hasPermissions()`, `isExecutable()`, `isRetryRequired()`. All other prefixes (`can...`, `should...`, `was...`, `will...`, `did...`, `must...`) are **strictly BANNED**.
    - Negative prefixes (`isNotReady()`, `hasNoData()`) are **strictly prohibited**. Frame positively (`isReady()`, `hasData()`) and invert at the call site (`if !isReady { ... }`).
 
 ---

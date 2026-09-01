@@ -51,15 +51,26 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 Naming clarity is the backbone of robust code. Vague identifiers, bare `ok` variables, and negative boolean flags cause cognitive fatigue and obscure critical edge-case bugs.
 
-### 1. Mandatory Boolean Prefix Rule
+### 1. Mandatory Boolean Prefix Rule (DOs vs NO-NOs)
 
-Every boolean variable, parameter, struct field, or property MUST begin with one of the approved affirmative prefixes:
-is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, `must` (PascalCase is and has only (can, should, was, etc. are banned) for exported symbols).
+Every boolean variable, parameter, struct field, or property MUST begin with `is` or `has` ONLY (PascalCase `Is` / `Has` for exported symbols). All other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc.) are **strictly BANNED**.
 
-- Go: `isValid`, `hasPermission`, `canExecute`, `shouldRetry` (or `IsValid`, `HasPermission`).
-- TypeScript/JavaScript: `isLoaded`, `hasColors`, `hasPayload`, `canSubmit`.
-- Python: `is_valid`, `has_permission`, `can_proceed`.
-- C#: `IsValid`, `HasAccess`, `CanExecute`.
+| Category | Prefix Pattern | Examples (DOs vs NO-NOs) | Refactoring Rule |
+| :--- | :--- | :--- | :--- |
+| ✅ **DO (Allowed)** | `is...` | `isValid`, `isReady`, `isFail`, `isEnabled`, `isExecutable`, `isProcessed`, `isFinished`, `isSaveRequired` | Use `is` for state, status, capability, or passive condition. |
+| ✅ **DO (Allowed)** | `has...` | `hasAccess`, `hasData`, `hasPermission`, `hasToken`, `hasExpired` | Use `has` for possession, membership, or flags. |
+| ❌ **NO-NO (Banned)** | `can...` | ❌ `canExecute`, `canSubmit`, `canProceed` | **BANNED!** Refactor to `isExecutable`, `isSubmittable`, `hasPermission`. |
+| ❌ **NO-NO (Banned)** | `should...` | ❌ `shouldRetry`, `shouldRender`, `shouldUpdate` | **BANNED!** Refactor to `isRetryRequired`, `isRenderable`, `isUpdatePending`. |
+| ❌ **NO-NO (Banned)** | `was...` | ❌ `wasProcessed`, `wasDeleted`, `wasSuccess` | **BANNED!** Refactor to `isProcessed`, `isDeleted`, `isSuccess`. |
+| ❌ **NO-NO (Banned)** | `will...` | ❌ `willUpdate`, `willExpire`, `willChange` | **BANNED!** Refactor to `isPendingUpdate`, `isExpiring`, `isChanging`. |
+| ❌ **NO-NO (Banned)** | `did...` | ❌ `didFinish`, `didFail`, `didLoad` | **BANNED!** Refactor to `isFinished`, `isFail`, `isLoaded`. |
+| ❌ **NO-NO (Banned)** | `must...` | ❌ `mustSave`, `mustAuthenticate` | **BANNED!** Refactor to `isSaveMandatory`, `isAuthRequired`. |
+| ❌ **NO-NO (Banned)** | `not...` / Negatives | ❌ `isNotReady`, `hasNoData`, `disableCache` | **BANNED!** Refactor to positive `isReady`, `hasData`, `isCacheEnabled`. |
+
+- Go: `isValid`, `hasPermission`, `isExecutable`, `isRetryRequired` (or `IsValid`, `HasPermission`).
+- TypeScript/JavaScript: `isLoaded`, `hasColors`, `hasPayload`, `isSubmittable`.
+- Python: `is_valid`, `has_permission`, `is_ready_to_proceed`.
+- C#: `IsValid`, `HasAccess`, `IsExecutable`.
 
 ---
 
