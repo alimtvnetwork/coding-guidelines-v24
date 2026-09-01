@@ -33,7 +33,7 @@ N = total self-loop steps budget that the agents will perform.
 16. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 17. [ ] /learn Ingest `spec/03-error-manage/01-index.md` for universal AppError wrapping and error envelopes.
 18. [ ] /learn Ingest `spec/03-error-manage/01-index.md` for Result[T] and standardized API envelopes.
-19. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+19. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 20. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
@@ -616,7 +616,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 - [ ] Git working tree is clean before new code changes.
 - [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
-- [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
+- [ ] Completed tasks were `mv`'d to `plans/completed/` and `.lovable/plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
 - [ ] **Multi-Line Definitions (Rule 9a):** All function/method definitions with >2 parameters are formatted with exactly one parameter per line and trailing commas.
@@ -643,7 +643,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines.md`.
 - [ ] Rule 9a/9b Multi-Line Formatting: Verified one parameter/argument per line for all definitions and call sites with >2 arguments.
 - [ ] Result Envelope: Enforced `Result[T]` with `IsSuccess()`, `IsFailed()`, `HasError()`, `HasNoError()`, and `*AppError` across domain services.
 - [ ] LF Line Endings & UTF-8 (No BOM): Verified Unix LF and UTF-8 across all files.

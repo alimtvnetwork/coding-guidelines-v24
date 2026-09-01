@@ -34,7 +34,7 @@ N = total self-loop steps budget that the agents will perform.
 16. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md` for domain-specific architectural specifications.
 17. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md` for domain-specific architectural specifications.
 18. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
-19. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+19. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 20. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 
@@ -239,7 +239,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 - [ ] Git working tree is clean before new code changes.
 - [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
-- [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
+- [ ] Completed tasks were `mv`'d to `plans/completed/` and `.lovable/plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
 - [ ] **Zero Bare `ok` Identifiers:** Absolutely zero bare `ok` variables in type assertions, map lookups, or status returns. All renamed to `isAppErr`, `isFound`, `hasValue`, etc.
@@ -247,10 +247,10 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Inverted Guard Clauses:** Negative checks handled via inverted guard returns (`if (!hasColors) return null;`).
 - [ ] **Boolean Prefixes:** All booleans begin with is or has ONLY (all other prefixes like can, should, was, will, did, must are banned).
 - [ ] **PascalCase Acronyms:** All acronyms formatted as `UserId`, `ApiUrl`, `JsonData`.
-- [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines.md`.
 
 
-1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
+1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-enum-and-boolean.mjs` or `python linter-scripts/check-boolean-guidelines.py` exited with code 0.
 - [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
@@ -262,7 +262,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`, `spec/02-coding-guidelines/01-cross-language/10-function-naming.md`, `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md`, `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`, and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`, `spec/02-coding-guidelines/01-cross-language/10-function-naming.md`, `spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md`, `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`, and `.lovable/coding-guidelines.md`.
 - [ ] Zero Bare `ok`: All type assertions and map lookups use affirmative boolean names (`isAppErr`, `isFound`).
 - [ ] Positive Booleans & Inverted Guards: All booleans use affirmative names (`hasColors`, `hasPayload`); guard clauses invert condition (`if (!hasColors)`).
 

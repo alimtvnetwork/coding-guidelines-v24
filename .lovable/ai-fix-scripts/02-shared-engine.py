@@ -256,6 +256,7 @@ CI_JOBS_MATRIX: dict[str, list[str]] = {
     "Newline Styling MJS Check": ["node", "linter-scripts/check-newline-styling.mjs"],
     "Spec Folder References Check": [sys.executable, "linter-scripts/check-spec-folder-refs.py"],
     "Sequence Integrity Check": [sys.executable, "linter-scripts/check-sequence-integrity.py"],
+    "Prompt & Spec Path Integrity Check": [sys.executable, "linter-scripts/check-prompt-and-spec-paths.py"],
     "Linters CI/CD Test Suite": [sys.executable, "linters-cicd/tests/run.py"],
 }
 

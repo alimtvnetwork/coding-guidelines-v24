@@ -33,7 +33,7 @@ N = total self-loop steps budget that the agents will perform.
 16. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 17. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/04-code-style/` for domain-specific architectural specifications.
 18. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md` for newline styling examples.
-19. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+19. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 20. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
@@ -572,7 +572,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Sub-agents are actively assigned disjoint batches verified against `.lovable/01-index.md`.
 - [ ] **Micro-Batch Sizing:** Each subtask is bounded to exactly 5–8 files.
 - [ ] **Real Source Edits:** Verified with `git diff --stat` that actual source code files (`*.go`, `*.ts`, etc.) have newline insertions.
-- [ ] Completed batch tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
+- [ ] Completed batch tasks were `mv`'d to `plans/completed/` and `.lovable/plans/01-index.md` was updated.
 - [ ] **Blank Line Before `if`:** Verified blank line before every `if` statement across all modified files.
 - [ ] **Blank Line After `}`:** Verified blank line after every closing brace `}` followed by code.
 - [ ] **Blank Line Before `return`:** Verified blank line before every `return`/`throw` in multi-line blocks.

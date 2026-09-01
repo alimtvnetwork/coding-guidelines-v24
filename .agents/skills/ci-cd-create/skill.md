@@ -10,7 +10,7 @@ Trigger Keywords & Aliases: `create-ci-cd`, `cicd-create`, `create cicd`, `setup
 
 /goal Autonomously design, create, and verify complete cross-platform Python CI/CD pipelines, local runners, and GitHub Actions workflows by following specifications in `spec/12-cicd-pipeline-workflows/` and `spec/02-coding-guidelines/06-cicd-integration/`, maintaining a continuous N-step self-loop until all jobs exit code 0.
 
-/learn Ingest `spec/12-cicd-pipeline-workflows/`, `spec/02-coding-guidelines/06-cicd-integration/`, `spec/11-powershell-integration/`, `spec/14-update/`, `spec/15-distribution-and-runner/`, `spec/16-generic-release/`, `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md`, and `.lovable/coding-guidelines/coding-guidelines.md` before writing code.
+/learn Ingest `spec/12-cicd-pipeline-workflows/`, `spec/02-coding-guidelines/06-cicd-integration/`, `spec/11-powershell-integration/`, `spec/14-update/`, `spec/15-distribution-and-runner/`, `spec/16-generic-release/`, `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md`, and `.lovable/coding-guidelines.md` before writing code.
 
 ---
 

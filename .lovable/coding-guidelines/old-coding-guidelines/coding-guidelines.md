@@ -13,7 +13,7 @@ This is a standalone file. Follow every rule below without consulting any other 
 Canonical locations (all three must exist and match, byte-for-byte, via `scripts/sync-guidelines.mjs`):
 
 1. `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (source of truth).
-2. `.lovable/coding-guidelines/coding-guidelines.md` (mirror for Lovable agent search).
+2. `.lovable/coding-guidelines.md` (mirror for Lovable agent search).
 3. `.cursorrules` (mirror for Cursor and other IDE agents).
 
 If any mirror is missing or out of date, run `node scripts/sync-guidelines.mjs` before writing code. Missing mirrors are the top cause of "AI cannot find the coding guideline" search failures.
@@ -53,7 +53,7 @@ auto-reject on the same tier as RULE 0.
 15. Boolean Return Wrapper: If a function returns multiple values (tuples or native multi-returns) and one is a boolean, do not return a raw boolean (e.g. `(int, bool)`). Return a wrapper object, struct, or class to provide clear context (e.g. `{ data, isSuccess }`).
 16. Strict Conditional Joins: Never mix logical operators (e.g., OR with AND) and keep `if` conditions to a maximum of one join (two operands). Extract complex logic into named boolean variables.
 17. No Mixed Polarity: Never mix positive and negative conditions in a single conditional join (e.g., `if (a && !b)` is forbidden, use all positive variables).
-18. This coding guideline file MUST be mirrored to `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` at every edit. The mirror script `scripts/sync-guidelines.mjs` is the only allowed writer. Missing or stale mirrors are a build-fail: agent search tools index the mirror, not the spec folder, so a missing mirror means the guideline effectively does not exist for the AI. Never hand-edit the mirrors; always edit the source file and re-run the sync.
+18. This coding guideline file MUST be mirrored to `.lovable/coding-guidelines.md` and `.cursorrules` at every edit. The mirror script `scripts/sync-guidelines.mjs` is the only allowed writer. Missing or stale mirrors are a build-fail: agent search tools index the mirror, not the spec folder, so a missing mirror means the guideline effectively does not exist for the AI. Never hand-edit the mirrors; always edit the source file and re-run the sync.
 19. **Version Source of Truth & Inheritance (Non-Negotiable)**: Do not hardcode version numbers in multiple files. There MUST be a single `version.json` file in the root of the repo (delivered via the coding guidelines installer and enqueued in `.lovable/what-to-read.md`). It contains the repository's root version information, description, self-explaining metadata (`_purpose`, `_instructions`), and sub-package sections (`backend`, `frontend`, `cli`, `linters`). Sub-package sections can use `"inherit"` to automatically resolve to the global root version, or declare independent version tracks. Every language implementation (Go, TypeScript, Python, PHP, C#, Rust, shell) MUST import/read this root `version.json` file to get its version at build/run time. To make a new release or change the version across any component, you MUST only change this root `version.json` and run the project's sync command (`npm run sync`).
 20. **No Inline Definitions**: Never define an enum, type, struct, or interface inline alongside business logic or its first usage. They must be extracted into their own dedicated file (e.g. `src/enums/UserRoleType.ts`).
 21. **Enum Guideline & Naming**: Every enum name MUST end with the suffix `Type` (e.g. `UserRoleType`, not `UserRole`), except in Rust where standard PascalCase is preferred without a suffix.
@@ -213,7 +213,7 @@ The same rules apply to TypeScript, PHP, Rust, C#, PowerShell, and Python. Only 
 
 # Coding Guidelines
 
-> NOTE: Conflict with folder-level `spec/02-coding-guidelines/`, `spec/coding-guidelines/`, `spec/03-error-manage` or similar guideline folders. The folder-level spec wins over this file if those exist.
+> NOTE: Conflict with folder-level `spec/02-coding-guidelines/`, `spec/02-coding-guidelines/`, `spec/03-error-manage` or similar guideline folders. The folder-level spec wins over this file if those exist.
 > However, if they do not exist, follow the rules below strictly.
 
 ## Core Rules & Non-Negotiable Checklist for AI

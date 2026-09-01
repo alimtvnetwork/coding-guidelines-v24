@@ -12,7 +12,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 ## Hard Rules (Non-Negotiable, Auto-Reject on Violation)
 
-1. Folder is `.lovable/memory/`, NEVER `.lovable/memories/` or `memories/`. A single file written to `memories/` is an immediate failure.
+1. Folder is `.lovable/memory/`, NEVER `.lovable/memory/` or `memories/`. A single file written to `memories/` is an immediate failure.
 
 2. Every new memory file under `.lovable/memory/` MUST be registered in `.lovable/memory/01-index.md` in the same operation.
 
@@ -34,7 +34,7 @@ Memory in chat is lost the moment the turn finishes. Memory in `.lovable/` is pe
 
 11. Nothing executes this turn beyond writing to the `.lovable` folder, root `readme.md` lowercase fixing, and `mv`. No application source code changes, no refactoring, no installs, no migrations.
 
-12. Recent conversation and directive capture: All recent conversations, instructions, user directives, decisions, and session progress MUST be recorded as a spec or conversation summary inside `.lovable/memory/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md` and added to `memory/01-index.md`.
+12. Recent conversation and directive capture: All recent conversations, instructions, user directives, decisions, and session progress MUST be recorded as a spec or conversation summary inside `.lovable/memory/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md` and added to `.lovable/memory/01-index.md`.
 
 13. Pending tasks single source of truth: All active plans and pending tasks are consolidated strictly under `.lovable/plans/pending/01-<slug>.md` (with two-digit sequence prefixes `01-`, `02-`, etc.) and `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md`.
 
@@ -52,8 +52,8 @@ The AI running this prompt has been a stupid fuck on prior runs:
 
 - Dumped session summaries into chat and called it "memory".
 - Left `.lovable/memory/` half-empty.
-- Created `.lovable/memories/` by accident.
-- Forgot to update `plans/01-index.md` and `what-to-read.md`.
+- Created `.lovable/memory/` by accident.
+- Forgot to update `.lovable/plans/01-index.md` and `what-to-read.md`.
 - Silently overwrote `strictly-avoid.md`.
 - Dropped user directives that were stated verbatim in the session.
 - Paraphrased specs instead of quoting them.
@@ -70,7 +70,7 @@ Walk `.lovable/` recursively. Read all of these if they exist; note missing and 
 
 1. `.lovable/memory/01-index.md` — master memory index
 2. `.lovable/folder-structure.md` — canonical `.lovable/` folder map
-3. `.lovable/coding-guidelines/coding-guidelines.md` or `spec/02-coding-guidelines/` — master coding guidelines
+3. `.lovable/coding-guidelines.md` or `spec/02-coding-guidelines/` — master coding guidelines
 4. `.lovable/ai-fix-scripts/` — automation tools (`01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`, `index.md`)
 5. `.lovable/plans/01-index.md` and every file under `plans/pending/` (`01-<slug>.md`) and `plans/subtasks/`; skim `plans/completed/`
 6. `.lovable/plan.md` — failure recovery record
@@ -154,8 +154,8 @@ Then edit `.lovable/question-and-ambiguity/01-index.md` to reflect the move.
 
 1. Verbatim spec capture and learning persistence:
    - Every sizeable user directive, decision, architectural rule, or spec from the session is saved verbatim under `.lovable/memory/01-<slug>.md` or `.lovable/memory/learned/01-<slug>.md`.
-   - Reference from `memory/01-index.md`.
-   - Reflect in `.lovable/plan.md` / `plans/01-index.md` if it changes the roadmap.
+   - Reference from `.lovable/memory/01-index.md`.
+   - Reflect in `.lovable/plan.md` / `.lovable/plans/01-index.md` if it changes the roadmap.
    - Never paraphrase. Quote the user.
 
 2. Consolidation policy:
@@ -214,8 +214,8 @@ Memory update complete.
 1. [ ] Walked `.lovable/` recursively; read every pre-flight file that exists; noted the missing ones.
 2. [ ] Audited the session for Done / Pending / Learned / Wrong / Recent Directives.
 3. [ ] Every new memory file placed under a topic folder, never at the memory root.
-4. [ ] `memory/01-index.md` updated in the same op as every new/moved memory file.
-5. [ ] Plans lifecycle honored: `pending/` -> `completed/` via `mv`, `plans/01-index.md` updated.
+4. [ ] `.lovable/memory/01-index.md` updated in the same op as every new/moved memory file.
+5. [ ] Plans lifecycle honored: `pending/` -> `completed/` via `mv`, `.lovable/plans/01-index.md` updated.
 6. [ ] `suggestions.md` tracker updated; verbatim captures under `.lovable/suggestions/` with `index.md`.
 7. [ ] Issues routed correctly: `pending-issues/` / `solved-issues/` / `cicd-issues/`; `cicd-index.md` updated; no duplicates.
 8. [ ] `strictly-avoid.md` appended (not overwritten) with links to solved files.
@@ -225,7 +225,7 @@ Memory update complete.
 12. [ ] Ambiguities moved via `mv` from `01-new-ambiguity/` to `02-ambiguity-resolved/` with `## Resolution` block.
 13. [ ] `.lovable/what-to-read.md` present, changelog-prepended with UTC ISO 8601 timestamp, list in sync with Pre-flight and `readme.md`.
 14. [ ] Root `readme.md` updated: folder structure, canonical read-list pointer, in sync with `what-to-read.md`.
-15. [ ] `coding-guidelines.md` and `prompts/index.md` (or `prompts.md`) present.
+15. [ ] `coding-guidelines.md` and `.lovable/prompts/01-prompts-category/01-prompt-library-setup/01-prompt-library-setup.md` (or `prompts.md`) present.
 16. [ ] Final response block emitted verbatim with real numbers, not `[X]` placeholders.
 17. [ ] No em dashes, no softened wording, no execution beyond file writes, lowercase readme fix, and `mv`.
 
@@ -250,7 +250,7 @@ Memory update complete.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
 
 ---
 

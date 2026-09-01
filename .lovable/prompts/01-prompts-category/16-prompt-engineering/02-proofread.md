@@ -13,7 +13,7 @@
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
 
 ## RULE 0 - REWRITE ONLY, NEVER EXECUTE (MUST)
 
@@ -99,7 +99,7 @@ Canonical sources, read all three, they must be byte-for-byte in sync:
 
 1. `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` (source of truth, v1.5.0 or later).
 
-2. `.lovable/coding-guidelines/coding-guidelines.md` (Lovable agent mirror).
+2. `.lovable/coding-guidelines.md` (Lovable agent mirror).
 
 3. `.cursorrules` (Cursor and other IDE agents).
 
@@ -303,7 +303,7 @@ Same rules for TypeScript, PHP, Rust, C#, PowerShell, Python. Only comment synta
 
 6. If the answer is not in the source of truth, the mirrors, or `spec/xx-coding-guidelines/` or `spec/xx-error-manage/`, ask. Do not invent.
 
-Write or update `.lovable/coding-guidelines/coding-guidelines.md` and `.cursorrules` via `scripts/sync-guidelines.mjs`. Never hand-edit the mirrors.
+Write or update `.lovable/coding-guidelines.md` and `.cursorrules` via `scripts/sync-guidelines.mjs`. Never hand-edit the mirrors.
 
 ## File system references (include only these, exclude everything else unless asked)
 
@@ -368,7 +368,7 @@ If any box is unchecked, do not reply. Fix it first.
 
 ## Conversation archive (per-feature index)
 
-When the user's input clearly belongs to a feature, mirror the cleaned conversation to `/conversation/xx-feature/xx-title-of-conv.md` and update `/conversation/index.md`. `xx` is a two-digit sequence. This is the ONLY archive location for user conversation content. Never scatter copies elsewhere.
+When the user's input clearly belongs to a feature, mirror the cleaned conversation to `/conversation/xx-feature/xx-title-of-conv.md` and update `.lovable/prompts/01-prompts-category/16-prompt-engineering/01-conversation-log.md`. `xx` is a two-digit sequence. This is the ONLY archive location for user conversation content. Never scatter copies elsewhere.
 
 ## Issue placement
 

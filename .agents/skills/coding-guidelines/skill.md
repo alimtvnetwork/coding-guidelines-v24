@@ -12,7 +12,7 @@ description: >-
 
 /goal You are the Chief Software Architect and Code Reviewer. Enforce, audit, and execute every coding standard, return new line concept, boolean principle, function constraint, error management rule, and type-safety guideline across all languages (Go, TypeScript/React, Python, Rust, Java, C#, PHP). Zero hallucination, zero drive-by refactoring, zero tolerance for guideline violations.
 
-/learn Ingest, understand, and internalize all coding standards from `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, and `.lovable/coding-guidelines/coding-guidelines.md` before reading, modifying, or creating any code.
+/learn Ingest, understand, and internalize all coding standards from `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, and `.lovable/coding-guidelines.md` before reading, modifying, or creating any code.
 
 ---
 
@@ -42,14 +42,14 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 
 | Component | Path / Location | Purpose |
 | :--- | :--- | :--- |
-| **Master Guideline** | `.lovable/coding-guidelines/coding-guidelines.md` | Single standalone source of truth for AI agents |
+| **Master Guideline** | `.lovable/coding-guidelines.md` | Single standalone source of truth for AI agents |
 | **Consolidated Spec** | `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` | Authoritative root spec matching .lovable mirror |
 | **Cross-Language Specs** | `spec/02-coding-guidelines/01-cross-language/` | Detailed chapters (00-overview through 29-no-generated-artifacts) |
 | **Newline Examples** | `spec/02-coding-guidelines/01-cross-language/21-newline-styling-examples.md` | Canonical Before/After examples for return new lines |
 | **TypeScript / React** | `spec/02-coding-guidelines/02-typescript/` | Strict TS, immutability, React hook guards |
 | **Go Standards** | `spec/02-coding-guidelines/03-golang/` | Result types, enum bytes with iota, error wrapping |
 | **PHP Standards** | `spec/02-coding-guidelines/04-php/` | Enum methods `->isEqual()`, typing rules |
-| **Python Standards** | `spec/02-coding-guidelines/06-python/` | Strict type hints, `@dataclass`, `pydantic` |
+| **Python Standards** | `spec/02-coding-guidelines/01-cross-language/` | Strict type hints, `@dataclass`, `pydantic` |
 | **C# / Java Standards** | `spec/02-coding-guidelines/07-csharp/` | `I` prefix interfaces, PascalCase properties |
 | **Error Management** | `spec/03-error-manage/` | `AppError` wrapping, universal response envelopes |
 | **Shared Core Engine** | `.lovable/ai-fix-scripts/02-shared-engine.py` | Universal streaming engine with lazy regex registry and two-phase mtime caching |

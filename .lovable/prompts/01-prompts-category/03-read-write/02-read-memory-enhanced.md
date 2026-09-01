@@ -84,7 +84,7 @@ The `.lovable/` folder, specs, and entire codebase can be massive. To process th
    - Capture open ambiguities or update execution plans.
 
 9. Missing spec file protocol:
-   - If a spec folder contains only `.gitkeep` or missing reference files, check the full names in `01-prompts-category/02-coding-standards/01-coding-guidelines.md` or existing plans.
+   - If a spec folder contains only `.gitkeep` or missing reference files, check the full names in `.lovable/prompts/01-prompts-category/04-coding-standards/01-coding-guidelines.md` or existing plans.
    - Use available guidelines in the prompt library.
    - If critical information is absent, explicitly ask the user for the file.
 
@@ -148,7 +148,7 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 | 1   | `.lovable/what-to-read.md`                     | Authoritative reading order for this project. Read it first and follow all referenced files.                                            |
 | 2   | `.lovable/folder-structure.md`                | Canonical architectural map of all `.lovable/` folders, scripts, and naming conventions.                                                  |
 | 3   | `.lovable/strictly-avoid.md`                          | Hard prohibitions (CODE RED) — append-only, never truncate.                                                                               |
-| 4   | `.lovable/coding-guidelines/coding-guidelines.md`     | Master single source of truth for cross-language coding guidelines, `Result[T]` envelopes, and `is`/`has` booleans.                       |
+| 4   | `.lovable/coding-guidelines.md`     | Master single source of truth for cross-language coding guidelines, `Result[T]` envelopes, and `is`/`has` booleans.                       |
 | 5   | `.lovable/ai-fix-scripts/`                            | Automated Python utilities (`01-file-manipulator.py`, `06-cicd-local-runner.py`, `08-fast-file-scanner.py`, `09-fast-cached-grep.py`, `01-index.md`). Pre-warms `tmp/cache/` file caches for rapid zero-overhead file discovery across folders. |
 | 6   | `.lovable/prompts.md` + `.lovable/prompts/`           | Canonical prompt index and mirrored execution prompts (`cg-execute/`, `execute/`, `ci-cd/`).                                              |
 | 7   | `.lovable/memory/01-index.md`                         | Master index of institutional knowledge. Then read every file it references recursively.                                                 |
@@ -177,7 +177,7 @@ Whenever the AI agent reads prompts or coding guidelines during memory ingestion
    - Ensures any agent in the ecosystem can activate the skill on demand.
 
 2. **Auto-Generate Antigravity Rules for Coding Guidelines:**
-   - For all coding guidelines ingested from `.lovable/coding-guidelines/coding-guidelines.md` or `spec/02-coding-guidelines/`, synthesize and write authoritative agent rules into `.agents/rules/<slug>.md` and inject essential constraints into `AGENTS.md`.
+   - For all coding guidelines ingested from `.lovable/coding-guidelines.md` or `spec/02-coding-guidelines/`, synthesize and write authoritative agent rules into `.agents/rules/<slug>.md` and inject essential constraints into `AGENTS.md`.
    - Core rules enforced:
      - **Strict Boolean Standard:** `is and has only (can, should, was, etc. are banned)`.
      - **No Bare Void in Go:** Functions must return `Result[T]` or `*apperror.AppError`.
@@ -192,7 +192,7 @@ Whenever the AI agent reads prompts or coding guidelines during memory ingestion
 Systematically loop through the `spec/` folder, dynamically matching canonical hyphenated names (numbers may vary between projects):
 
 - `spec/01-spec-authoring-guide/`: Spec authoring conventions, required files, format requirements.
-- `spec/02-coding-guidelines/` (or `01-prompts-category/02-coding-standards/01-coding-guidelines.md`): Zero-tolerance coding standards, function size caps (8 lines preferred, 15 max), boolean naming (`is*`, `has*`, positive framing), immutable patterns, DRY priority 1.
+- `spec/02-coding-guidelines/` (or `.lovable/prompts/01-prompts-category/04-coding-standards/01-coding-guidelines.md`): Zero-tolerance coding standards, function size caps (8 lines preferred, 15 max), boolean naming (`is*`, `has*`, positive framing), immutable patterns, DRY priority 1.
 - `spec/03-error-manage/`: Error management philosophy — never swallow errors, log operation name and key inputs on every catch, wrap errors without losing cause, typed errors only, universal response envelopes (`{ data, errors[], meta }`).
 - `spec/04-database-conventions/`: Database schema, table naming (PascalCase), columns (camelCase), primary keys (`{Table}Id`), SQLite/ORM rules, ERD requirements.
 - `spec/05-split-db-architecture/` through `spec/19-main-worker-service/`: Architectural specs for config, design system, docs viewer, code blocks, CLI, workflows, and release.
@@ -235,7 +235,7 @@ If any answer is fuzzy, go back and reread by looping through the files again. D
 
 ## Phase 2: Consolidated Guidelines
 
-Read `spec/17-consolidated-guidelines/` (or `spec/12-consolidated-guidelines/`) in numeric order (`01-*.md` through `18-*.md`). Each file is a self-contained policy document. Missing folder: note it and continue.
+Read `spec/17-consolidated-guidelines/` (or `spec/17-consolidated-guidelines/`) in numeric order (`01-*.md` through `18-*.md`). Each file is a self-contained policy document. Missing folder: note it and continue.
 
 ---
 
@@ -275,7 +275,7 @@ Only open a spec folder when the current task needs it.
 
 Inside each folder: `00-overview.md` -> numbered files -> `99-consistency-report.md`.
 
-Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines/coding-guidelines.md`, `spec/coding-guidelines/`, `coding-guidelines/`, `spec/XX-error-manage/`, `01-prompts-category/02-coding-standards/01-coding-guidelines.md`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
+Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `spec/02-coding-guidelines/`, `coding-guidelines/`, `spec/03-error-manage/`, `.lovable/prompts/01-prompts-category/04-coding-standards/01-coding-guidelines.md`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
 
 ---
 
@@ -383,7 +383,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 13. [ ] Verified runtime dependencies and package compatibility.
 14. [ ] Recursively traversed and read every subfolder, nested markdown file (`*.md`), overview, and consistency report within `spec/` (e.g. `spec/01-spec-authoring-guide/`, `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/04-database-conventions/`, `spec/21-app/`, etc.).
 15. [ ] Autonomously surveyed and looped through the entire codebase as a whole (all application code, entry points, routes, components, state stores, utilities, and configuration files).
-16. [ ] /learn `spec/17-consolidated-guidelines/` (or `spec/12-consolidated-guidelines/`) in numeric order (or noted missing).
+16. [ ] /learn `spec/17-consolidated-guidelines/` (or `spec/17-consolidated-guidelines/`) in numeric order (or noted missing).
 17. [ ] /learn `spec/01-spec-authoring-guide/` in numeric order (or noted missing).
 18. [ ] Can name CODE RED rules, naming conventions, error-handling philosophy without guessing.
 19. [ ] Can list every pending plan slug and subtask from memory.
@@ -396,7 +396,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 /goal Complete the checklist properly until done can do self-looping.
 
-1. [ ] /learn the coding guidelines in: `.lovable/coding-guidelines/coding-guidelines.md` and create memory.
+1. [ ] /learn the coding guidelines in: `.lovable/coding-guidelines.md` and create memory.
 2. [ ] /learn the condition extraction in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
 3. [ ] /learn the formatting and braces in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
 4. [ ] /learn the multi-line formatting in: `spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
@@ -417,7 +417,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
 
 ---
 

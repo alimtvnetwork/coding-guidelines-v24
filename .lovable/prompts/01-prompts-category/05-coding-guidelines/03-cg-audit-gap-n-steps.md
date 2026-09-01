@@ -14,7 +14,7 @@ N = total self-loop steps budget across the codebase. The user may override this
 
 - [ ] /goal First N/2 steps (Phase 1): Deeply scan the entire codebase file-by-file, dividing N steps across files with 30-50 nested atomic checks per file, scoring guideline compliance from 0 to 100, and writing the master audit report to `spec/01-spec-authoring-guide/01-index.md`.
 - [ ] /goal Second N/2 steps (Phase 2): Enqueue all identified gaps into `.lovable/plans/pending/XX-coding-guidelines-audit.md`, break them down into microscopic atomic subtasks inside `.lovable/plans/subtasks/XX-coding-guidelines/`, and register them in `.lovable/plans/01-index.md`.
-- [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` (HIGH PRIORITY FIRST), `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, and `.lovable/strictly-avoid.md` before taking action.
+- [ ] /learn Ingest `.lovable/coding-guidelines.md` (HIGH PRIORITY FIRST), `spec/02-coding-guidelines/`, `spec/03-error-manage/`, `spec/17-consolidated-guidelines/`, and `.lovable/strictly-avoid.md` before taking action.
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Deep File-by-File Gap Audit & 0-100 Scoring Report)
@@ -48,7 +48,7 @@ You MUST verify and audit every item on this checklist across every file and fun
 
 ### Tier 1: Master Consolidated Guidelines (Highest Priority)
 
-- [ ] **Master Consolidated File (`.lovable/coding-guidelines/coding-guidelines.md`):** Read and enforce all 29 cross-language chapters and language-specific sections.
+- [ ] **Master Consolidated File (`.lovable/coding-guidelines.md`):** Read and enforce all 29 cross-language chapters and language-specific sections.
 - [ ] **Consolidated Review Spec (`spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`):** Cross-verify against root spec truth.
 - [ ] **Anti-Hallucination & AI Optimization (`spec/02-coding-guidelines/01-cross-language/01-index.md`):** Rule AH-N1 (Abbreviation casing: `Id`, `Url`, `Api`), AH-O1 (Zero placeholder/truncation stubs), AH-E1 (Implicit booleans).
 - [ ] **Citation Requirement (`spec/02-coding-guidelines/01-cross-language/01-index.md`):** Every audit finding MUST cite the exact rule code and spec file path.
@@ -274,7 +274,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 ## Pre-Reply / Loop Checklist (Must Verify Every Turn)
 
 - [ ] **Echo Back the Spec:** I have verified the exact acceptance criteria and rules.
-- [ ] **Master Guidelines Read:** I have consulted `.lovable/coding-guidelines/coding-guidelines.md` at high priority.
+- [ ] **Master Guidelines Read:** I have consulted `.lovable/coding-guidelines.md` at high priority.
 - [ ] **Exhaustive Violation Ledger:** Maintained the exact table `| Id | File Path | Line | Function / Component | Rule Code | Exact Snippet | Severity | Planned Remediation |`.
 - [ ] **0-100 Score Calculated:** Mathematically computed the score for every file and module.
 - [ ] **Audit Report Saved:** Report written to `spec/01-spec-authoring-guide/01-index.md`.

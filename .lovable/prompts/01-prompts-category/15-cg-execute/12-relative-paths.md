@@ -30,7 +30,7 @@ N = total self-loop steps budget that the agents will perform.
 12. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
 13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
-15. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+15. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 16. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 
@@ -61,7 +61,7 @@ All markdown links, citations, subtask paths, and file references MUST start fro
 
 ```markdown
 - [SSH Commands](file:///absolute/path/to/...) — Why: Defines required behavior.
-- [App Error Docs](file:///absolute/path/to/spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
+- [App Error Docs](file:///absolute/path/to/spec/03-error-manage/01-index.md) — Why: Standards for returning results.
 - [cmd/main.go](file:///absolute/path/to/cmd/main.go) — Why: Target file.
 ```
 
@@ -69,7 +69,7 @@ All markdown links, citations, subtask paths, and file references MUST start fro
 
 ```markdown
 - [SSH Commands](spec/13-generic-cli/01-index.md) — Why: Defines required behavior.
-- [App Error Docs](spec/05-coding-guidelines/04-error-handling.md) — Why: Standards for returning results.
+- [App Error Docs](spec/03-error-manage/01-index.md) — Why: Standards for returning results.
 - [cmd/main.go](cmd/main.go) — Why: Target file.
 ```
 
@@ -137,13 +137,13 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 - [ ] Git working tree is clean before new code changes.
 - [ ] Sub-agents are actively assigned disjoint files verified against `.lovable/01-index.md`.
-- [ ] Completed tasks were `mv`'d to `plans/completed/` and `plans/01-index.md` was updated.
+- [ ] Completed tasks were `mv`'d to `plans/completed/` and `.lovable/plans/01-index.md` was updated.
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
-- [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines.md`.
 
 
-1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
+1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-relative-paths.py` exited with code 0.
 - [ ] Local CI runner `python .lovable/ai-fix-scripts/06-cicd-local-runner.py` exited with code 0.
@@ -155,7 +155,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
-- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: I have fully read and strictly enforced `spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines.md`.
 
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)

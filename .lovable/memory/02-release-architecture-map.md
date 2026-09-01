@@ -73,7 +73,7 @@ pm run sync triggers five core synchronization scripts in sequence:
    Stamps versions, folder counts, file counts, and update timestamps into
 eadme.md and docs/*.md.
 5. **scripts/sync-guidelines.mjs**:
-   Mirrors spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines/coding-guidelines.md.
+   Mirrors spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md to .cursorrules and .lovable/coding-guidelines.md.
 
 ## 4. Release Ceremony Flow
 

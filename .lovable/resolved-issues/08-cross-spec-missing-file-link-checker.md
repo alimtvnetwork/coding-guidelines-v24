@@ -12,7 +12,7 @@ CI fails with:
 
 ```
 [missing-file] spec/26-spec-outsides/09-pipeline/10-known-issues-and-fixes.md:347
-  text:   spec/12-consolidated-guidelines/16-cicd.md
+  text:   spec/17-consolidated-guidelines/16-cicd.md
   target: ../12-consolidated-guidelines/16-cicd.md
   detail: .../spec/26-spec-outsides/12-consolidated-guidelines/16-cicd.md
 ```

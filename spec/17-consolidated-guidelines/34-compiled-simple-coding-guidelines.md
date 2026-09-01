@@ -468,16 +468,9 @@ public sealed record UserDto(string Id, string ApiUrl, bool IsActive);
 
 ---
 
-## 4. R3 — Boolean naming: `is` or `has`
+## 4. R3 — Boolean naming: `is` or `has` ONLY
 
-Every boolean — variable, parameter, struct field, JSON key, and boolean-returning function —
-**must** start with `is` or `has` (`Is` / `Has` when the identifier is Pascal-cased).
-
-- State / classification → `is`: `isEnabled`, `isStatic`, `isDryRun`, `isTlsVerified`.
-- Possession / presence → `has`: `hasSubnetMask`, `hasRetries`, `hasAdminRole`.
-
-Banned: `enabled`, `active`, `legacy`, `flag`, `verifyPeer`, `useTls`, `ok`, `done`, `valid`,
-`retries` (when boolean), and any bare adjective or noun.
+1. **Prefixes:** Every boolean variable, function, parameter, struct field, JSON key, or property MUST begin with `is` or `has` ONLY (`Is` / `Has` for PascalCase; e.g. `isValid`, `hasAccess`, `isReady`, `hasData`); all other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc.) and negative names are strictly **BANNED**.
 
 ```go
 // BEFORE

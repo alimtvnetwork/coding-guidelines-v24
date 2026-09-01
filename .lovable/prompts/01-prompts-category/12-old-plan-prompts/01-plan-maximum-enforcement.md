@@ -30,7 +30,7 @@ Planning IS the work. Go deep: read the repo, reconcile prior state, think end-t
 ## Lifecycle
 
 - New plan: write to `.lovable/plans/pending/01-<slug>.md` with `Status: pending`. Update `.lovable/plans/01-index.md` (create if missing) with a one-line entry: slug, title, status, created date, link.
-- Done: `mv` to `.lovable/plans/completed/01-<slug>.md`, flip `Status: completed` in the same move, update `plans/01-index.md`. Never copy. Never duplicate.
+- Done: `mv` to `.lovable/plans/completed/01-<slug>.md`, flip `Status: completed` in the same move, update `.lovable/plans/01-index.md`. Never copy. Never duplicate.
 
 ## Release policy (READ THIS, IT IS LAW)
 
@@ -71,7 +71,7 @@ Route user input into the correct file BEFORE writing the plan, then link it fro
 | Command, new convention, "always do X", new CLI         | `.lovable/spec/commands/01-<slug>.md`         |
 | Bug, regression, broken behavior                        | `.lovable/issues/01-<slug>.md`                |
 | CI/CD-specific failure                                  | `.lovable/cicd-issues/01-<slug>.md`           |
-| Institutional knowledge (pattern, convention, decision) | `.lovable/memory/` + update `memory/01-index.md` |
+| Institutional knowledge (pattern, convention, decision) | `.lovable/memory/` + update `.lovable/memory/01-index.md` |
 | "Never do this again"                                   | `.lovable/strictly-avoid.md`                  |
 | Idea, not yet approved                                  | `.lovable/suggestions.md`                     |
 
@@ -81,7 +81,7 @@ Create missing folders on demand.
 
 Every attachment is REQUIRED input. Never leave one only in chat.
 
-1. Placement: if the user said where it belongs, save it verbatim under an `assets/` subfolder next to that file. Otherwise best-fit: UI/design reference to `assets/`; bug artifact to matching issue's `assets/`; ambiguity clarification to matching ambiguity's `assets/`; project-wide asset to `.lovable/assets/<slug>/` and note in `memory/01-index.md`.
+1. Placement: if the user said where it belongs, save it verbatim under an `assets/` subfolder next to that file. Otherwise best-fit: UI/design reference to `assets/`; bug artifact to matching issue's `assets/`; ambiguity clarification to matching ambiguity's `assets/`; project-wide asset to `.lovable/assets/<slug>/` and note in `.lovable/memory/01-index.md`.
 2. Name: lowercase-hyphenated, keep the original extension.
 3. Reference: the plan lists every asset in an `## Attachments` section, one bullet per file, with a one-line caption stating what the AI should take from it.
 4. Provenance: note when and by whom in the plan/spec.
@@ -127,7 +127,7 @@ For every task, you MUST check if the following files or folders exist. If they 
 
 1. Root Memory Guidelines
 
-- /learn `.lovable/coding-guidelines/coding-guidelines.md` (and/or `.lovable/coding-guidelines/coding-guidelines.md`)
+- /learn `.lovable/coding-guidelines.md` (and/or `.lovable/coding-guidelines.md`)
 
 2. Master Consolidated Guide & Coding Guidelines
 
@@ -181,7 +181,7 @@ For every task, you MUST check if the following files or folders exist. If they 
 ## Checklist before replying (every box)
 
 - [ ] `5` steps resolved; read this prompt end-to-end
-- [ ] Scanned `.lovable/` recursively; read `plans/01-index.md`, every `pending/` file, `memory/01-index.md` and referenced files, every open ambiguity, relevant `spec/<NN>-<slug>/`, error-management specs for code tasks; skimmed `completed/`
+- [ ] Scanned `.lovable/` recursively; read `.lovable/plans/01-index.md`, every `pending/` file, `.lovable/memory/01-index.md` and referenced files, every open ambiguity, relevant `spec/<NN>-<slug>/`, error-management specs for code tasks; skimmed `completed/`
 - [ ] Listed prior unresolved pending tasks for the plan
 - [ ] Captured new commands / issues / cicd-issues / ambiguities / memory / strictly-avoid to their files; moved answered ambiguities to `02-ambiguity-resolved/` with `## Resolution`
 - [ ] Verified anti-hallucination: stopped and asked clarifying questions if files/specs were missing
@@ -286,7 +286,7 @@ If you write this excuse, you are a lazy, stupid fuck and you are violating RULE
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
 
 ---
 

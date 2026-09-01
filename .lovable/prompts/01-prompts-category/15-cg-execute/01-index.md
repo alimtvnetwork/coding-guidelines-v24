@@ -29,7 +29,7 @@ N = total self-loop steps budget that the agents will perform.
 13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
 14. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `spec/03-error-manage/` for error handling architectures and AppError.
-16. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 
@@ -122,7 +122,7 @@ Every prompt in this suite operates using a strict two-phase loop budget:
 
 ### Phase 1: Scan, Spec & Subtasks (Steps 1 to N/2)
 
-1. **Memory Ingestion:** Ingest `.lovable/coding-guidelines/coding-guidelines.md`, `.lovable/strictly-avoid.md`, and recent issues in `.lovable/memory/issues/`.
+1. **Memory Ingestion:** Ingest `.lovable/coding-guidelines.md`, `.lovable/strictly-avoid.md`, and recent issues in `.lovable/memory/issues/`.
 2. **High-Speed Violation Scan:** Run `python .lovable/ai-fix-scripts/11-fast-file-scanner.py --check` and `python .lovable/ai-fix-scripts/12-fast-cached-grep.py "<pattern>"` to detect AST violations across the codebase in milliseconds.
 3. **Master Spec Creation:** Write `.lovable/plans/pending/XX-<slug>-audit.md` capturing the full violation ledger, affected files, line numbers, and acceptance criteria.
 4. **Subtask Decomposition:** Break down the master plan into granular subtasks in `.lovable/plans/subtasks/XX-<slug>/01-task.md`, `02-task.md`, etc.

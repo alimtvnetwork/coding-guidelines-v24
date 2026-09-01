@@ -21,7 +21,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
 const CANONICAL = resolve(ROOT, "spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md");
-const LOVABLE_MIRROR = resolve(ROOT, ".lovable/coding-guidelines/coding-guidelines.md");
+const LOVABLE_MIRROR = resolve(ROOT, ".lovable/coding-guidelines.md");
+const LOVABLE_NESTED_MIRROR = resolve(ROOT, ".lovable/coding-guidelines/coding-guidelines.md");
 const CURSORRULES = resolve(ROOT, ".cursorrules");
 
 const BANNER = [
@@ -120,6 +121,7 @@ function main() {
 
   if (drifts.length === 0) { console.log("OK guideline mirrors already in sync"); return; }
   writeFileSync(LOVABLE_MIRROR, nextLovable);
+  writeFileSync(LOVABLE_NESTED_MIRROR, nextLovable);
   writeFileSync(CURSORRULES, nextCursor);
   console.log(`✓ synced ${drifts.length} guideline mirror(s):`);
   for (const d of drifts) console.log(`  - ${d}`);

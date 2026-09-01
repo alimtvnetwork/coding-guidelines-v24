@@ -6,7 +6,7 @@ description: >-
 
 # Error Management & Architecture Coding Guidelines (`cg-error-management`)
 
-This skill provides autonomous audit, refactoring, and validation of repository-wide error handling based on `spec/03-error-manage/` and `.lovable/coding-guidelines/coding-guidelines.md`.
+This skill provides autonomous audit, refactoring, and validation of repository-wide error handling based on `spec/03-error-manage/` and `.lovable/coding-guidelines.md`.
 
 ## Core Invariants
 

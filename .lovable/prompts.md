@@ -5,7 +5,7 @@
 
 This index is the canonical entry point for the prompts that govern how
 Lovable reads, writes, and updates project memory. It is referenced from
-`.lovable/coding-guidelines/coding-guidelines.md` as a required read
+`.lovable/coding-guidelines.md` as a required read
 before generating any code.
 
 The companion linter `linter-scripts/check-prompts-loaded.py` enforces
@@ -16,7 +16,7 @@ Add an entry here whenever a new prompt file is introduced.
 
 Read these in order before writing or modifying code:
 
-1. `.lovable/coding-guidelines/coding-guidelines.md` - project-wide rules
+1. `.lovable/coding-guidelines.md` - project-wide rules
 2. `.lovable/prompts.md` (this file) - prompt index
 3. Every prompt referenced in the table below
 

@@ -13,7 +13,7 @@
 - `.lovable/memory/01-index.md`, why: core memory index
 - `.lovable/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
 - `.lovable/memory/01-index.md`, why: architectural map of version propagation, sync pipeline, and release ceremony
-- `.lovable/coding-guidelines/coding-guidelines.md`, why: baseline rules and coding standards
+- `.lovable/coding-guidelines.md`, why: baseline rules and coding standards
 - `.lovable/plans/01-index.md`, why: active roadmap and pending tasks
 - `.lovable/strictly-avoid.md`, why: hard constraints and anti-patterns
 - `.lovable/question-and-ambiguity/01-new-ambiguity/`, why: open questions

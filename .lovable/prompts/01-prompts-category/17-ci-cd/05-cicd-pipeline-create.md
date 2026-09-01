@@ -29,7 +29,7 @@ N = total self-loop steps budget for end-to-end CI/CD creation and cross-platfor
 13. [ ] /learn Ingest `spec/15-distribution-and-runner/` for domain-specific architectural specifications.
 14. [ ] /learn Ingest `spec/16-generic-release/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md` for domain-specific architectural specifications.
-16. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 

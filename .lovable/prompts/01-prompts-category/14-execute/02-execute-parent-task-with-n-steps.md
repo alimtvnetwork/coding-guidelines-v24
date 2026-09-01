@@ -24,7 +24,7 @@ N = total self-loop steps budget that the agents will perform.
 9. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 10. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
 11. [ ] /learn Ingest `spec/03-error-manage/` for error handling architectures and AppError.
-12. [ ] /learn Ingest `.lovable/coding-guidelines/coding-guidelines.md` for master consolidated coding guidelines.
+12. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 13. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
@@ -97,7 +97,7 @@ Before writing any source code changes, you MUST execute Phase 1:
 
 /goal You MUST verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
-- [ ] Master Guidelines: Fully enforced every file in `spec/02-coding-guidelines/` and `.lovable/coding-guidelines/coding-guidelines.md`.
+- [ ] Master Guidelines: Fully enforced every file in `spec/02-coding-guidelines/` and `.lovable/coding-guidelines.md`.
 - [ ] Error Management: Enforced `spec/03-error-manage/` using domain-specific `AppError`, never generic error.
 - [ ] Boolean Conventions: All booleans begin with is or has ONLY (all other prefixes like can, should, was, will, did, must are banned). NO negatives (`!isSuccess` is banned; use `isFail`).
 - [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.

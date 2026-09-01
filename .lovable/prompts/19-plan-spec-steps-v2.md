@@ -6,7 +6,7 @@
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memories/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
 
 
 
@@ -238,7 +238,7 @@ link that file from the plan's `## Context`. Chat is not storage.
 | Command, convention, "always do X", new CLI          | `.lovable/spec/commands/01-<slug>.md`         |
 | Bug, regression, broken behavior                    | `.lovable/issues/01-<slug>.md`                |
 | CI/CD-specific failure                               | `.lovable/cicd-issues/01-<slug>.md`           |
-| Institutional knowledge (pattern, decision)          | `.lovable/memory/` + update `memory/01-index.md` |
+| Institutional knowledge (pattern, decision)          | `.lovable/memory/` + update `.lovable/memory/01-index.md` |
 | "Never do this again"                                | `.lovable/strictly-avoid.md`                  |
 | Idea, not yet approved                               | `.lovable/suggestions.md`                     |
 
@@ -246,7 +246,7 @@ Create missing folders on demand. Attachments:
 
 - Every attached image or file is REQUIRED input; never leave one only in chat.
 - Save verbatim under an `assets/` subfolder next to the file it belongs to;
-  project-wide assets go to `.lovable/assets/<slug>/` and get a `memory/01-index.md`
+  project-wide assets go to `.lovable/assets/<slug>/` and get a `.lovable/memory/01-index.md`
   note.
 - Names are lowercase-hyphenated with the original extension (RULE 0A).
 - The plan carries an `## Attachments` section: one bullet per file with a
@@ -707,7 +707,7 @@ in section 2.
 - [ ] RULE 0C respected: audit slots exist with correct names and empty bodies; no audit was scored during authoring; no task contains an audit step.
 - [ ] RULE 0D footer present verbatim in every task file; plan file states one step per run and self-loop; no task implies batching steps.
 - [ ] RULE 0C ceilings stated: max 2 agents, max 3 threads per agent, nowhere exceeded or contradicted.
-- [ ] Consolidated Coding Guidelines (Mandatory): I have explicitly cited the master consolidated coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md` in the plan and marked it as mandatory reading for all execution agents.
+- [ ] Consolidated Coding Guidelines (Mandatory): I have explicitly cited the master consolidated coding guideline file at `.lovable/coding-guidelines.md` in the plan and marked it as mandatory reading for all execution agents.
 - [ ] RULE 0E coding-guideline single-file checklist filled in with real paths, every boolean/condition-styling sub-file listed individually, every topic single-source, duplicates column reads "none".
 - [ ] Anti-Garbage Naming (Non-Negotiable): I have strictly verified that absolutely NO generic garbage variable names (e.g., `comp_100.go`, `temp`, `data`, `obj`, `Input100`, `TestHandleComp100`) were written. All names are highly semantic and domain-specific.
 - [ ] Execution model confirmed: exactly one step per run, self-loop after Verify, no line anywhere in the plan or a task implies batching two steps.

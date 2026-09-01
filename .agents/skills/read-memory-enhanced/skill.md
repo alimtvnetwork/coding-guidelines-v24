@@ -116,7 +116,7 @@ Only open a spec folder when the current task needs it.
 | App-specific DB schema | `spec/23-app-db/` |
 | App-specific UI + design system | `spec/24-app-ui-design-system/` |
 Inside each folder: `00-overview.md` → numbered files → `99-consistency-report.md`.
-Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines/coding-guidelines.md`, `spec/coding-guidelines/`, `coding-guidelines/`, `spec/XX-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
+Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `spec/02-coding-guidelines/`, `coding-guidelines/`, `spec/03-error-manage/`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
 ---
 
 ## Anti-Hallucination Contract
@@ -196,7 +196,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 - [ ] Read every file in `.lovable/spec/commands/`
 - [ ] Read every file in `.lovable/issues/` and `.lovable/cicd-issues/`
 - [ ] Read every file in `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/`
-- [ ] Read `spec/12-consolidated-guidelines/` in numeric order (or noted missing)
+- [ ] Read `spec/17-consolidated-guidelines/` in numeric order (or noted missing)
 - [ ] Read `spec/01-spec-authoring-guide/` in numeric order (or noted missing)
 - [ ] Can name CODE RED rules, naming conventions, error-handling philosophy without guessing
 - [ ] Can list every pending plan slug from memory
