@@ -2,6 +2,7 @@ package logger_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -49,5 +50,18 @@ func TestLoggerLevelFilterMatched(t *testing.T) {
 	log.Warn("warning message")
 	if !strings.Contains(buf.String(), "warning message") {
 		t.Fatalf("expected warning message in log output, got %s", buf.String())
+	}
+}
+
+func TestLogLevelEnumAndJSON(t *testing.T) {
+	lvl := logger.LevelWarn
+	data, err := json.Marshal(lvl)
+	if err != nil || string(data) != "\"Warn\"" || lvl.Name() != "Warn" {
+		t.Fatalf("expected \"Warn\" JSON, got %s", string(data))
+	}
+
+	var parsed logger.LogLevel
+	if err := json.Unmarshal([]byte("\"Error\""), &parsed); err != nil || parsed != logger.LevelError {
+		t.Fatalf("expected LevelError, got %v", parsed)
 	}
 }
