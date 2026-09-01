@@ -21,15 +21,14 @@ func NewType(errType errtype.Variation) *AppError {
 	return New(errType, errType.Name())
 }
 
-// createAppErrorInstance constructs the AppError capturing stack trace.
+// createAppErrorInstance constructs the AppError capturing stack and caller objects.
 func createAppErrorInstance(errType errtype.Variation, message string) *AppError {
-	trace := CaptureStackTrace(3)
-
 	return &AppError{
-		Type:    errType,
-		Message: message,
-		Caller:  trace.CallerLine(),
-		Stack:   trace.String(),
+		errType: errType,
+		message: message,
+		caller:  CaptureCallerInfo(3),
+		stack:   CaptureStackTrace(3),
+		ctx:     NewContextMap(),
 	}
 }
 
@@ -40,7 +39,7 @@ func NewWithContext(errType errtype.Variation, message string, ctx map[string]an
 	}
 
 	e := createAppErrorInstance(errType, message)
-	e.Ctx = ensureContextMap(ctx)
+	e.ctx = ensureContextMap(ctx)
 
 	return e
 }
@@ -57,7 +56,7 @@ func Wrap(errType errtype.Variation, cause error, message string) *AppError {
 		return nil
 	}
 
-	e.Cause = cause
+	e.cause = cause
 
 	return e
 }

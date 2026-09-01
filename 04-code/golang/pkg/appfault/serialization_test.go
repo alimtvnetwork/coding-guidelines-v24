@@ -19,15 +19,26 @@ func createSampleAppError() (*appfault.AppError, error) {
 	return orig, rawErr
 }
 
+func assertRestoredMatches(t *testing.T, restored *appfault.AppError, orig *appfault.AppError, rawErr error) {
+	if restored.Type() != orig.Type() || restored.StatusCode() != 504 {
+		t.Fatalf("JSON restore mismatch: %+v", restored)
+	}
+
+	if restored.Cause() == nil || restored.Cause().Error() != rawErr.Error() {
+		t.Fatalf("expected cause '%s', got '%v'", rawErr.Error(), restored.Cause())
+	}
+}
+
 func TestAppErrorSerializationRoundtrip(t *testing.T) {
 	orig, rawErr := createSampleAppError()
 	restored, err := appfault.FromJSON([]byte(orig.ToJSONString()))
-	if err != nil || restored.Type != orig.Type || restored.StatusCode != 504 {
-		t.Fatalf("JSON restore mismatch: %v, %+v", err, restored)
+	if err != nil {
+		t.Fatalf("unexpected unmarshal error: %v", err)
 	}
 
-	if restored.Cause == nil || restored.Cause.Error() != rawErr.Error() {
-		t.Fatalf("expected cause '%s', got '%v'", rawErr.Error(), restored.Cause)
+	assertRestoredMatches(t, restored, orig, rawErr)
+	if restored.Caller().IsEmpty() {
+		t.Fatal("expected non-empty caller")
 	}
 }
 

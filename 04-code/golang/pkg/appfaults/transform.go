@@ -39,12 +39,11 @@ func (c *Collection) ToAppError(errType errtype.Variation, title string) *appfau
 
 	compositeMsg := fmt.Sprintf("%s (%d faults):\n%s", title, c.Count(), c.Format())
 	first := c.First()
-	appErr := appfault.New(errType, compositeMsg)
-	if first != nil && first.Cause != nil {
-		appErr.Cause = first.Cause
+	if first != nil && first.Cause() != nil {
+		return appfault.Wrap(errType, first.Cause(), compositeMsg)
 	}
 
-	return appErr
+	return appfault.New(errType, compositeMsg)
 }
 
 // Errors converts all items into a standard []error slice.

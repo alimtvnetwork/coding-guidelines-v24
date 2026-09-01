@@ -6,11 +6,11 @@ func (e *AppError) WithContext(key string, value any) *AppError {
 		return nil
 	}
 
-	if e.Ctx == nil {
-		e.Ctx = NewContextMap()
+	if e.ctx == nil {
+		e.ctx = NewContextMap()
 	}
 
-	e.Ctx.Set(key, value)
+	e.ctx.Set(key, value)
 
 	return e
 }
@@ -38,7 +38,7 @@ func (e *AppError) WithUrl(url string) *AppError {
 // WithStatusCode attaches an HTTP status code to the error.
 func (e *AppError) WithStatusCode(statusCode int) *AppError {
 	if e != nil {
-		e.StatusCode = statusCode
+		e.statusCode = statusCode
 	}
 
 	return e.WithContext("StatusCode", statusCode)
@@ -71,9 +71,9 @@ func (e *AppError) WithPluginContext(pluginId int64, slug string) *AppError {
 
 // Context returns a copy of the underlying diagnostic metadata ContextMap.
 func (e *AppError) Context() ContextMap {
-	if e == nil || e.Ctx == nil {
+	if e == nil || e.ctx == nil {
 		return NewContextMap()
 	}
 
-	return e.Ctx.Clone()
+	return e.ctx.Clone()
 }

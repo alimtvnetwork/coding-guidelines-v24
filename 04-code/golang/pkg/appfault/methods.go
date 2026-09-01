@@ -8,7 +8,12 @@ func (e *AppError) Unwrap() error {
 		return nil
 	}
 
-	return e.Cause
+	return e.cause
+}
+
+// Cause is an alias for Unwrap.
+func (e *AppError) Cause() error {
+	return e.Unwrap()
 }
 
 // HasNoError returns true if the receiver is nil or Type is None.
@@ -17,7 +22,7 @@ func (e *AppError) HasNoError() bool {
 		return true
 	}
 
-	return e.Type.IsNone()
+	return e.errType.IsNone()
 }
 
 // HasValidError returns true if the receiver is non-nil and has a valid error type.
@@ -26,7 +31,7 @@ func (e *AppError) HasValidError() bool {
 		return false
 	}
 
-	return e.Type.HasError()
+	return e.errType.HasError()
 }
 
 // IsValid returns true if no error is present (valid / healthy state).
@@ -50,7 +55,7 @@ func (e *AppError) Is(target errtype.Variation) bool {
 		return target == errtype.None
 	}
 
-	return e.Type == target
+	return e.errType == target
 }
 
 // IsType is an alias for Is.

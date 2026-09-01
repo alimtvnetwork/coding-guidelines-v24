@@ -8,13 +8,13 @@ import (
 
 // writeCompileDetails writes message, caller and context to builder.
 func (e *AppError) writeCompileDetails(b *strings.Builder) {
-	b.WriteString(fmt.Sprintf("%sMessage: %s%s", IndentTab, e.Message, Newline))
-	if len(e.Caller) > 0 {
-		b.WriteString(fmt.Sprintf("%sCaller:  %s%s", IndentTab, e.Caller, Newline))
+	b.WriteString(fmt.Sprintf("%sMessage: %s%s", IndentTab, e.message, Newline))
+	if !e.caller.IsEmpty() {
+		b.WriteString(fmt.Sprintf("%sCaller:  %s%s", IndentTab, e.caller.String(), Newline))
 	}
 
-	if len(e.Ctx) > 0 {
-		b.WriteString(fmt.Sprintf("%sContext: %s%s", IndentTab, e.Ctx.Format(), Newline))
+	if len(e.ctx) > 0 {
+		b.WriteString(fmt.Sprintf("%sContext: %s%s", IndentTab, e.ctx.Format(), Newline))
 	}
 }
 
@@ -26,7 +26,7 @@ func (e *AppError) Compile() string {
 
 	var b strings.Builder
 	b.WriteString(HeaderPrefix)
-	b.WriteString(fmt.Sprintf("%s (Code: %d)%s", e.Type.Name(), e.Type.Code(), Newline))
+	b.WriteString(fmt.Sprintf("%s (Code: %d)%s", e.errType.Name(), e.errType.Code(), Newline))
 	e.writeCompileDetails(&b)
 
 	return b.String()
@@ -39,8 +39,8 @@ func (e *AppError) CompileWithStack() string {
 	}
 
 	compiled := e.Compile()
-	if len(e.Stack) > 0 {
-		return fmt.Sprintf("%s%sStack Trace:%s%s%s", compiled, SectionPrefix, Newline, e.Stack, Newline)
+	if len(e.stack) > 0 {
+		return fmt.Sprintf("%s%sStack Trace:%s%s%s", compiled, SectionPrefix, Newline, e.stack.String(), Newline)
 	}
 
 	return compiled

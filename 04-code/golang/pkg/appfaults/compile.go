@@ -17,7 +17,7 @@ func (c *Collection) Compile() string {
 	var b strings.Builder
 	b.WriteString(fmt.Sprintf("%sFault Collection (%d items):%s", appfault.HeaderPrefix, c.Count(), appfault.Newline))
 	for idx, item := range c.items {
-		b.WriteString(fmt.Sprintf("%s[%d] [%s:%d] %s%s", appfault.IndentTab, idx+1, item.Type.Name(), item.Type.Code(), item.Message, appfault.Newline))
+		b.WriteString(fmt.Sprintf("%s[%d] [%s:%d] %s%s", appfault.IndentTab, idx+1, item.Type().Name(), item.Type().Code(), item.Message(), appfault.Newline))
 	}
 
 	return b.String()

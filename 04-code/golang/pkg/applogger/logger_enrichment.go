@@ -7,11 +7,10 @@ import (
 
 // enrichErrorContext copies all fields from AppError to Logger context.
 func (l *appLogger) enrichErrorContext(err *appfault.AppError) Logger {
-	enriched := l.WithContext("ErrorType", err.Type.Name()).WithContext("ErrorCode", err.Type.Code())
-	if err.Ctx != nil {
-		for k, v := range err.Ctx {
-			enriched = enriched.WithContext(k, v)
-		}
+	enriched := l.WithContext("ErrorType", err.Type().Name()).WithContext("ErrorCode", err.Type().Code())
+	ctx := err.Context()
+	for k, v := range ctx {
+		enriched = enriched.WithContext(k, v)
 	}
 
 	return enriched
@@ -21,7 +20,7 @@ func (l *appLogger) enrichErrorContext(err *appfault.AppError) Logger {
 func (l *appLogger) LogError(err *appfault.AppError) {
 	if err != nil {
 		enriched := l.enrichErrorContext(err)
-		enriched.(*appLogger).write(LevelError, err.Message, err.Stack)
+		enriched.(*appLogger).write(LevelError, err.Message(), err.StackTrace().String())
 	}
 }
 
@@ -59,18 +58,10 @@ func (l *appLogger) WithFields(fields map[string]any) Logger {
 
 // Sync flushes the underlying sink.
 func (l *appLogger) Sync() error {
-	if l.sink != nil {
-		return l.sink.Sync()
-	}
-
-	return nil
+	return l.sink.Sync()
 }
 
-// Close closes the underlying sink.
+// Close flushes and releases resources held by sink.
 func (l *appLogger) Close() error {
-	if l.sink != nil {
-		return l.sink.Close()
-	}
-
-	return nil
+	return l.sink.Close()
 }

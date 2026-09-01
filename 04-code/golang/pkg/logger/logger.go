@@ -83,10 +83,10 @@ func (l *Logger) LogError(err *appfault.AppError) {
 
 	var stack string
 	if l.opts.IsStackTrace {
-		stack = err.Stack
+		stack = err.StackTrace().String()
 	}
 
-	l.write(LevelError, err.Message, err.Type.Name(), err.Ctx, stack)
+	l.write(LevelError, err.Message(), err.Type().Name(), err.Context(), stack)
 }
 
 // Fatal logs a fatal error and terminates execution.

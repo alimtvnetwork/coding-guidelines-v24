@@ -7,7 +7,7 @@ import (
 
 // formatBasicError returns formatted type name, code, and message.
 func formatBasicError(e *AppError) string {
-	return fmt.Sprintf("[%s:%d] %s", e.Type.Name(), e.Type.Code(), e.Message)
+	return fmt.Sprintf("[%s:%d] %s", e.errType.Name(), e.errType.Code(), e.message)
 }
 
 // appendCallerAndCause appends caller site and cause to formatted string.
@@ -29,29 +29,29 @@ func (e *AppError) Error() string {
 		return ""
 	}
 
-	return appendCallerAndCause(formatBasicError(e), e.Caller, e.Cause)
+	return appendCallerAndCause(formatBasicError(e), e.caller.String(), e.cause)
 }
 
 // appendHeader writes diagnostic header info.
 func appendHeader(b *strings.Builder, e *AppError) {
-	b.WriteString(fmt.Sprintf("ERROR: [%s:%d] %s\n", e.Type.Name(), e.Type.Code(), e.Message))
-	if len(e.Caller) > 0 {
-		b.WriteString(fmt.Sprintf("CALLER: %s\n", e.Caller))
+	b.WriteString(fmt.Sprintf("ERROR: [%s:%d] %s\n", e.errType.Name(), e.errType.Code(), e.message))
+	if !e.caller.IsEmpty() {
+		b.WriteString(fmt.Sprintf("CALLER: %s\n", e.caller.String()))
 	}
 
-	if e.Cause != nil {
-		b.WriteString(fmt.Sprintf("CAUSE: %v\n", e.Cause))
+	if e.cause != nil {
+		b.WriteString(fmt.Sprintf("CAUSE: %v\n", e.cause))
 	}
 }
 
 // appendContextAndStack writes context map and stack trace.
-func appendContextAndStack(b *strings.Builder, ctx ContextMap, stack string) {
+func appendContextAndStack(b *strings.Builder, ctx ContextMap, stack StackTrace) {
 	if len(ctx) > 0 {
 		b.WriteString(fmt.Sprintf("CONTEXT: %s\n", ctx.Format()))
 	}
 
 	if len(stack) > 0 {
-		b.WriteString("STACK TRACE:\n" + stack)
+		b.WriteString("STACK TRACE:\n" + stack.String())
 	}
 }
 
@@ -63,19 +63,19 @@ func (e *AppError) FullString() string {
 
 	var b strings.Builder
 	appendHeader(&b, e)
-	appendContextAndStack(&b, e.Ctx, e.Stack)
+	appendContextAndStack(&b, e.ctx, e.stack)
 
 	return b.String()
 }
 
 // appendMarkdownCauseAndStack writes cause and codeblock stack trace.
-func appendMarkdownCauseAndStack(b *strings.Builder, cause error, stack string) {
+func appendMarkdownCauseAndStack(b *strings.Builder, cause error, stack StackTrace) {
 	if cause != nil {
 		b.WriteString(fmt.Sprintf("- **Cause:** `%v`\n", cause))
 	}
 
 	if len(stack) > 0 {
-		b.WriteString("\n```\n" + stack + "```\n")
+		b.WriteString("\n```\n" + stack.String() + "```\n")
 	}
 }
 
@@ -86,8 +86,8 @@ func (e *AppError) ToClipboard() string {
 	}
 
 	var b strings.Builder
-	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Type:** `%s (%d)`\n- **Message:** %s\n", e.Type.Name(), e.Type.Code(), e.Message))
-	appendMarkdownCauseAndStack(&b, e.Cause, e.Stack)
+	b.WriteString(fmt.Sprintf("### Error Report\n\n- **Type:** `%s (%d)`\n- **Message:** %s\n", e.errType.Name(), e.errType.Code(), e.message))
+	appendMarkdownCauseAndStack(&b, e.cause, e.stack)
 
 	return b.String()
 }
@@ -95,6 +95,6 @@ func (e *AppError) ToClipboard() string {
 // DisplayError prints a terminal banner representation.
 func (e *AppError) DisplayError() {
 	if e != nil {
-		fmt.Printf("❌ [%s:%d] %s (at %s)\n", e.Type.Name(), e.Type.Code(), e.Message, e.Caller)
+		fmt.Printf("❌ [%s:%d] %s (at %s)\n", e.errType.Name(), e.errType.Code(), e.message, e.caller.String())
 	}
 }
