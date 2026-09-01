@@ -8,6 +8,16 @@ All notable changes to the Golang Standards specification are documented here.
 
 ---
 
+## v2.2.0 — 2026-09-01
+
+### Added — Integer-Backed Enums & PascalCase Serialization Standard
+
+- Enforced integer underlying types (`byte`, `uint16`, `uint32`) for all Go enums.
+- Mandated PascalCase string outputs (`"Info"`, `"Warn"`, `"Error"`, `"Critical"`, `"Fatal"`) via `String()` and custom JSON/YAML marshaling (`MarshalJSON()`, `UnmarshalJSON()`).
+- Documented in retrospective `02-spec/03-error-manage/01-error-resolution/03-retrospectives/07-golang-integer-enums-and-pascal-serialization.md`.
+
+---
+
 ## v2.1.0 — 2026-03-31
 
 ### Changed

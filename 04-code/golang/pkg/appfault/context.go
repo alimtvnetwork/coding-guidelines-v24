@@ -20,14 +20,14 @@ func (e *AppError) WithOp(op string) *AppError {
 	return e.WithContext("Op", op)
 }
 
-// WithSeverity attaches a severity level to the diagnostic context.
-func (e *AppError) WithSeverity(severity string) *AppError {
-	return e.WithContext("Severity", severity)
+// WithSeverity attaches a typed severity level to the diagnostic context.
+func (e *AppError) WithSeverity(severity SeverityType) *AppError {
+	return e.WithContext("Severity", severity.Name())
 }
 
-// WithPriority attaches a priority level (e.g. Critical, High) to the context.
-func (e *AppError) WithPriority(priority string) *AppError {
-	return e.WithContext("Priority", priority)
+// WithPriority attaches a typed priority level to the context.
+func (e *AppError) WithPriority(priority PriorityType) *AppError {
+	return e.WithContext("Priority", priority.Name())
 }
 
 // WithUrl attaches a request URL to the diagnostic context.
