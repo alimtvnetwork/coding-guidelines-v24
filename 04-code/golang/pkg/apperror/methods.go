@@ -42,7 +42,12 @@ func (f *Fault) IsErrorCode(code string) bool {
 	return f.Code == code
 }
 
-// IsCode checks if the error code matches the target ErrorCodeType.
-func (f *Fault) IsCode(code ErrorCodeType) bool {
+// IsCode is an alias for IsErrorCode.
+func (f *Fault) IsCode(code string) bool {
+	return f.IsErrorCode(code)
+}
+
+// IsCodeType checks if the error code matches the target ErrorCodeType.
+func (f *Fault) IsCodeType(code ErrorCodeType) bool {
 	return f.IsErrorCode(code.String())
 }
