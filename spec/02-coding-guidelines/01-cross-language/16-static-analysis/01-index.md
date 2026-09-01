@@ -58,7 +58,7 @@ These coding guidelines apply to **all** languages. Each language-specific doc m
 | Guideline | Spec Source | Enforcement Category |
 |-----------|-------------|---------------------|
 | Zero nested `if` | [Code Style §R2](../04-code-style/02-braces-and-nesting.md) | Complexity / nesting |
-| Boolean naming (`is/has/can/should/was/will`) | [Boolean Principles](../02-boolean-principles/01-index.md) | Naming convention |
+| Boolean naming (`is/has only (all other prefixes banned)`) | [Boolean Principles](../02-boolean-principles/01-index.md) | Naming convention |
 | No magic strings | [Master §5](../15-master-coding-guidelines/06-magic-strings-and-organization.md) | Literal detection |
 | Max 15-line functions | [Code Style §R6](../04-code-style/05-function-and-type-size.md) | Function size |
 | No else after return | [Code Style §R7](../04-code-style/02-braces-and-nesting.md) | Control flow |

@@ -133,7 +133,7 @@ def check_nested_if(lines: List[str], filepath: str) -> List[Violation]:
 
 
 def check_boolean_naming(lines: List[str], filepath: str, lang: str) -> List[Violation]:
-    """CODE-RED-002: is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc."""
+    """CODE-RED-002: is and has only (can, should, was, etc. are banned)."""
     violations = []
     prefixes = ("is", "has")
     exempt = {"ok", "done", "found", "exists", "err", "error", "true", "false"}
@@ -163,7 +163,7 @@ def check_boolean_naming(lines: List[str], filepath: str, lang: str) -> List[Vio
                 line=i + 1,
                 rule="CODE-RED-002",
                 severity="CODE-RED",
-                message=f'Boolean variable "${name}": is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc.',
+                message=f'Boolean variable "${name}": is and has only (can, should, was, etc. are banned).',
                 code_snippet=line.strip()[:120],
             ))
 

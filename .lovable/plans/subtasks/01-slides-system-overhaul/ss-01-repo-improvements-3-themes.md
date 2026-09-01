@@ -13,7 +13,7 @@ Symptom: rules live in `.cursorrules`, `spec/02-coding-guidelines/`, `spec/17-co
 
 Follow-ups:
 - Generate `.cursorrules`, `.lovable/coding-guidelines/coding-guidelines.md`, and the slides deck content from `spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` via a `scripts/sync-guidelines.mjs` step; fail CI on drift.
-- Add ESLint rules for the still-unenforced hard rules: boolean naming prefix (is/has/can/should), no-else-after-return, positive-condition guard, max 2 operands per boolean expression, magic-string as error (not warn).
+- Add ESLint rules for the still-unenforced hard rules: boolean naming prefix (is/has only), no-else-after-return, positive-condition guard, max 2 operands per boolean expression, magic-string as error (not warn).
 - Extend `linters/golangci-lint`, `linters/phpcs`, `linters/sonarqube`, `linters/stylecop` with equivalents so cross-language parity matches the unified tier in `spec/02-coding-guidelines/02-canonical-size-tier.md`.
 
 ## Theme 2 — Slides deck as the canonical teaching surface

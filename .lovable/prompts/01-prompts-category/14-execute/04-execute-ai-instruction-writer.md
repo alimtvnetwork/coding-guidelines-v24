@@ -109,7 +109,7 @@ You MUST verify every item on this checklist before committing any code. If a su
 
 - [ ] **Master Guidelines:** I have fully read and strictly enforced every file in `spec/02-coding-guidelines/` and `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] **Error Management:** I have read and enforced `spec/03-error-manage/`. I used `AppError`/`AppException` and did not swallow errors.
-- [ ] **Boolean Conventions:** All booleans begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc (e.g., `isFail`, `hasData`). NO negatives (`!isSuccess` is banned, use `isFail`).
+- [ ] **Boolean Conventions:** All booleans begin with is or has ONLY (all other prefixes like can, should, was, will, did, must are banned) (e.g., `isFail`, `hasData`). NO negatives (`!isSuccess` is banned, use `isFail`).
 - [ ] **Semantic Naming:** Absolutely NO generic garbage names (`temp`, `data`, `obj`, `comp_100`). All unit tests are behavior-driven (e.g., `TestUpdateUser_RejectsInvalidEmail`).
 - [ ] **Formatting:** Signatures > 3 parameters or > 100 chars are split to one parameter per line. Newlines around every Markdown header (MD022) and lists are surrounded by blank lines (MD032).
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.

@@ -18,7 +18,7 @@ export const categories: CheckCategory[] = [
       { id: "n2", label: "Types/Classes/Components: PascalCase (SnapshotManager)" },
       { id: "n3", label: 'JSON/API keys: PascalCase ("PluginSlug", not "pluginSlug")' },
       { id: "n4", label: "Abbreviations: First-letter-only (Id, Url, Api, Http, Json)" },
-      { id: "n5", label: "Booleans: is/has/can/should/was prefix, no negative words", isCodeRed: true },
+      { id: "n5", label: "Booleans: is/has only prefix, no negative words", isCodeRed: true },
     ],
   },
   {

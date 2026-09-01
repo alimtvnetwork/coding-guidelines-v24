@@ -179,7 +179,7 @@ Whenever the AI agent reads prompts or coding guidelines during memory ingestion
 2. **Auto-Generate Antigravity Rules for Coding Guidelines:**
    - For all coding guidelines ingested from `.lovable/coding-guidelines/coding-guidelines.md` or `spec/02-coding-guidelines/`, synthesize and write authoritative agent rules into `.agents/rules/<slug>.md` and inject essential constraints into `AGENTS.md`.
    - Core rules enforced:
-     - **Strict Boolean Standard:** `is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc`.
+     - **Strict Boolean Standard:** `is and has only (can, should, was, etc. are banned)`.
      - **No Bare Void in Go:** Functions must return `Result[T]` or `*apperror.AppError`.
      - **Parameter Structs:** Banned loose >2-3 parameters; use `*Params` structs.
      - **Vertical Line Gaps:** Mandatory blank lines before `if`, after `}`, before `return`, and around multiline struct calls.

@@ -70,7 +70,7 @@ You MUST verify and audit every item on this checklist across every file and fun
 - [ ] **Implicit Positive Booleans (`spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`):** NEVER evaluate `== true` or `== false`. Implicit checks only (`if isReady`).
 - [ ] **No Mixed Polarity:** NEVER combine positive and negative checks in the same condition (e.g., `if isA && !isB` is FORBIDDEN; extract to named boolean `isAWithoutB`).
 - [ ] **No Inverted Success Checks (`spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`):** Ban `!response.isSuccess` or `!isFound`. Always use positive/inverse naming: `response.isFail`, `isMissing`.
-- [ ] **Boolean Prefixes:** All booleans MUST start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must`.
+- [ ] **Boolean Prefixes:** All booleans MUST start with is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, or `must`.
 
 ### Tier 4: Error Management & Architecture
 

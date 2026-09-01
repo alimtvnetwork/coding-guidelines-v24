@@ -68,7 +68,7 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 ## 1. High-Contrast Code Standards (❌ BAD vs ✅ GOOD Grounded Examples)
 
 ### A. Boolean Evaluation & Naming (P1–P6, R3)
-- **Rules:** Positive affirmative prefixes only (`is`, `has`, `can`, `should`, `was`, `will`, `did`, `must`). TOTAL BAN on explicit `== true` / `=== true` checks. No mixed polarity (`if a && !b`). No inverted success checks (`!isSuccess`).
+- **Rules:** Positive affirmative prefixes ONLY (`is` and `has`). TOTAL BAN on all other prefixes (`can`, `should`, `was`, `will`, `did`, `must` are strictly BANNED). TOTAL BAN on explicit `== true` / `=== true` checks. No mixed polarity (`if a && !b`). No inverted success checks (`!isSuccess`).
 
 ```go
 // ❌ BAD (Explicit true comparison, negative naming, mixed polarity)
@@ -536,7 +536,7 @@ return nil
 
 ## 3. Boolean Principles (P1–P9)
 
-1. **Prefixes:** Every boolean variable, function, parameter, or struct field MUST start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must` (e.g. `isValid`, `hasAccess`, `canExecute`).
+1. **Prefixes:** Every boolean variable, function, parameter, or struct field MUST start with is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, or `must` (e.g. `isValid`, `hasAccess`, `canExecute`).
 2. **Positive Framing:** Never use negative names (`isNotReady`, `disableCache` are banned). Invert to positive equivalents (`isReady`, `isCacheEnabled`).
 3. **No Inverted Success:** Never check `!response.isSuccess`. Use `response.isFail`.
 4. **No Explicit True Checks (TOTAL BAN):** Never write `if isReady == true` or `if (hasMatch === true)`. Positive booleans MUST be implicit: `if isReady { ... }`.
@@ -581,7 +581,7 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 | :--- | :--- | :--- | :--- |
 | **R1** | Acronyms PascalCase (`Id`, `Url`, `Ip`, `Json`), never all-caps | Must Fix | Yes (`05-guideline-autofixer.py`) |
 | **R2** | JSON / serialization keys are PascalCase (`{"UserId": "...", "IsActive": true}`) | Must Fix | Yes |
-| **R3** | Boolean naming starts with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc | Must Fix | Yes |
+| **R3** | Boolean naming starts with is or has only (all other prefixes banned) | Must Fix | Yes |
 | **R4** | Signature > 3 params or > 100 chars -> one param per line | Must Fix | Yes |
 | **R5** | > 4 params or adjacent same-type params -> group into param struct | Must Fix | No (AI manual refactor) |
 | **R6** | Every parameter is used, or discarded as `_` with explanatory comment | Must Fix | No (AI manual refactor) |
@@ -653,7 +653,7 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **No Explicit True Checks (P4):** Absolutely zero `== true`, `=== true`, `!= false`, `!== false` comparisons exist.
 - [ ] **No Mixed Polarity (P5):** No mixed positive and negative conditions in `if` statements.
 - [ ] **Acronyms & PascalCase (R1, R2):** All acronyms (`Id`, `Url`, `Ip`, `Json`) and serialization keys use PascalCase.
-- [ ] **Boolean Prefixes (R3):** All booleans start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc. No negative boolean names.
+- [ ] **Boolean Prefixes (R3):** All booleans start with is or has only (all other prefixes banned). No negative boolean names.
 - [ ] **Function Decomposition & Signatures (R4, R5):** All functions <= 15 lines decomposed via 3-Stage Blueprint (Guard -> Core Logic -> Envelope) without logic drift; parameter structs for > 3 arguments.
 - [ ] **Circular Dependency Prevention:** All extracted types/enums reside in leaf packages (`domain/types` or `types/`) with zero circular dependency cycles.
 - [ ] **Polyglot & React Compliance:** Rust match expressions, C# Task/records, PHP BackedEnums, React structuredClone & object hook returns.

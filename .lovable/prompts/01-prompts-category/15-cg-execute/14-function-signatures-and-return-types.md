@@ -534,7 +534,7 @@ final class Result
 1. **Action Functions (Verb + Noun):**
    - Every function performing an action MUST start with a clear, active verb: `fetchUser()`, `calculateTax()`, `renderHelpRow()`, `validatePayload()`.
    - Ban vague garbage names: `handle()`, `process()`, `doStuff()`, `manage()`, `temp()`.
-2. **Boolean Predicate Functions (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`):**
+2. **Boolean Predicate Functions (is and has only (can, should, was, etc. are banned), `was`):**
    - Every function returning a boolean MUST begin with an affirmative prefix: `isValid()`, `hasPermissions()`, `canExecute()`, `shouldRetry()`.
    - Negative prefixes (`isNotReady()`, `hasNoData()`) are **strictly prohibited**. Frame positively (`isReady()`, `hasData()`) and invert at the call site (`if !isReady { ... }`).
 
@@ -622,7 +622,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Multi-Line Definitions (Rule 9a):** All function/method definitions with >2 parameters are formatted with exactly one parameter per line and trailing commas.
 - [ ] **Multi-Line Invocations (Rule 9b):** All function/method call sites with >2 arguments are formatted with exactly one argument per line and trailing commas.
 - [ ] **No Boolean Flag Parameters:** No boolean parameters used to switch behavior; split into distinct methods.
-- [ ] **Semantic Naming:** All functions start with active verbs; all boolean functions start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc.
+- [ ] **Semantic Naming:** All functions start with active verbs; all boolean functions start with is and has only (can, should, was, etc. are banned).
 - [ ] **Single Return Types:** Multi-value `(T, error)` returns refactored to single `Result[T]` envelopes in services with complete predicate methods (`IsSuccess()`, `IsFailed()`, `HasError()`, `HasNoError()`, `HasValidError()`).
 - [ ] **Universal `AppError`:** Zero generic `error` or `fmt.Errorf()` returns in domain logic.
 - [ ] **LF Line Endings (`\n`):** All files use Unix LF line endings. Zero CRLF (`\r\n`).

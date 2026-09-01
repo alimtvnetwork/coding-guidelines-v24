@@ -76,7 +76,7 @@ golangci-lint bundles 100+ linters. We enable only those that enforce our coding
 
 | Guideline | Spec Source | Linter | Rule / Setting |
 |-----------|-------------|--------|----------------|
-| Boolean naming (`is/has/can/should/was/will`) | [Boolean Principles](../02-boolean-principles/01-index.md) | `revive` | `var-naming` + custom regex |
+| Boolean naming (`is/has only (all other prefixes banned)`) | [Boolean Principles](../02-boolean-principles/01-index.md) | `revive` | `var-naming` + custom regex |
 | PascalCase keys (API/DB) | [Key Naming](../11-key-naming-pascalcase.md) | `revive` | `var-naming` |
 | No raw negation (`!fn()`) | [No Negatives](../12-no-negatives.md) | `gocritic` | `unslice` / code review |
 | No boolean flag params | [Function Naming](../10-function-naming.md) | `revive` | `flag-parameter` |

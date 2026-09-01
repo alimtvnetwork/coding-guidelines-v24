@@ -11,7 +11,7 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, discover, plan, refactor, and format all function signatures across the codebase, enforcing argument reduction via dedicated value-based parameter Structs/DTOs for signatures with >2–3 parameters, affirmative boolean prefixing (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc) on all struct fields, mandatory `*apperror.AppError` returns (eliminating bare "void" functions in Go), wrapping external framework errors into `*AppError`, and single `Result[T]` return envelopes until 100% green without stopping.
+/goal Autonomously scan, discover, plan, refactor, and format all function signatures across the codebase, enforcing argument reduction via dedicated value-based parameter Structs/DTOs for signatures with >2–3 parameters, affirmative boolean prefixing (is and has only (can, should, was, etc. are banned)) on all struct fields, mandatory `*apperror.AppError` returns (eliminating bare "void" functions in Go), wrapping external framework errors into `*AppError`, and single `Result[T]` return envelopes until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
@@ -20,7 +20,7 @@ N = total self-loop steps budget that the agents will perform.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/XX-argument-reduction/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated parameter linter and register in `.lovable/ai-fix-scripts/01-index.md`.
 5. [ ] /goal Phase 2 (Step A): Refactor multi-argument functions (>2–3 params) by encapsulating parameters into dedicated value-based Structs (`TrackResultParams`, `CloneOptions`) or parameter objects.
-6. [ ] /goal Phase 2 (Step B): Enforce strict boolean prefixes (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc) on all struct fields and queued tasks (e.g. `safePull` -> `isSafePull`).
+6. [ ] /goal Phase 2 (Step B): Enforce strict boolean prefixes (is and has only (can, should, was, etc. are banned)) on all struct fields and queued tasks (e.g. `safePull` -> `isSafePull`).
 7. [ ] /goal Phase 2 (Step C): Eliminate all bare "void" functions in Go domain/service logic by mandating `*apperror.AppError` returns for side-effect operations and `Result[T]` for data operations.
 8. [ ] /goal Phase 2 (Step D): Convert all external/framework standard `error` returns to `*apperror.AppError` context wrappers (`apperror.WrapSimple(err, caller)`).
 9. [ ] /goal Phase 2 (Step E): Execute local linters (`python linter-scripts/check-function-lengths.py`, `check-newline-styling.py`) to verify 0 remaining violations.
@@ -430,7 +430,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] 3-strike rule respected: failed tasks cleanly rolled back and logged to `last-failure.md`.
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
 - [ ] **Argument Reduction via Structs:** All functions with >2–3 parameters encapsulated into value-based parameter structs (`*Params`).
-- [ ] **Boolean Prefix Compliance:** All struct fields and boolean parameters use affirmative prefixes (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc).
+- [ ] **Boolean Prefix Compliance:** All struct fields and boolean parameters use affirmative prefixes (is and has only (can, should, was, etc. are banned)).
 - [ ] **Mandatory AppError Returns:** Zero bare "void" functions in Go domain/service logic; all side-effect functions return `*apperror.AppError`.
 - [ ] **Framework Error Conversion:** All standard library / framework errors converted and wrapped into `*apperror.AppError`.
 - [ ] **Single Return Types:** Multi-value `(T, error)` returns refactored to single `Result[T]` envelopes.

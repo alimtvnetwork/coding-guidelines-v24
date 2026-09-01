@@ -141,7 +141,7 @@ Also binding if present, treat as strict extensions:
 
 ### Boolean naming
 
-1. Every boolean starts with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must`.
+1. Every boolean starts with is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, or `must`.
 
 2. Positive framing only. `isEnabled` yes, `isNotDisabled` no. `hasAccess` yes, `hasNoAccess` no.
 

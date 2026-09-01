@@ -508,7 +508,7 @@ Run `.lovable/ai-fix-scripts/05-guideline-autofixer.py` on all modified files, t
 - [ ] **Return New Line (R13-R16):** One blank line before every `return`/`throw` (unless sole statement). One blank line after closing `}`. Never two blank lines in a row.
 - [ ] **No Explicit True Checks:** NEVER write `== true` or `=== true`. Write `if isReady`, not `if isReady == true`.
 - [ ] **No Mixed Polarity:** NEVER write `if isA && !isB`. Extract to a named boolean.
-- [ ] **Boolean Prefixes:** All boolean variables start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must`.
+- [ ] **Boolean Prefixes:** All boolean variables start with is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, or `must`.
 - [ ] **Error Handling:** No swallowed errors. Every propagated error is wrapped with `apperror.Wrap(err, "opName", ctx)`.
 - [ ] **Strict Lowercase Files:** All generated/modified files use strictly lowercase naming.
 - [ ] **Go Generate Sync:** If Go constants, enums, or stringers were modified, run `go generate ./...` and commit generated files.

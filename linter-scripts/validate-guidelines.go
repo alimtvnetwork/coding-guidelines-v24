@@ -13,7 +13,7 @@
 // Rules Enforced:
 //
 //	CODE-RED-001  No nested if statements
-//	CODE-RED-002  Boolean naming (is/has/can/should/was prefix)         [P1]
+//	CODE-RED-002  Boolean naming (is/has only prefix)         [P1]
 //	CODE-RED-003  No magic strings in comparisons
 //	CODE-RED-004  Max 15 lines per function
 //	CODE-RED-005  No fmt.Errorf() in Go (use apperror)
@@ -220,7 +220,7 @@ func checkBooleanNaming(lines []string, path string, lang string) []Violation {
 				Line:        i + 1,
 				Rule:        "CODE-RED-002",
 				Severity:    "CODE-RED",
-				Message:     fmt.Sprintf(`Boolean variable "%s" must start with is/has/can/should/was/will.`, name),
+				Message:     fmt.Sprintf(`Boolean variable "%s" must start with is/has only (all other prefixes banned).`, name),
 				CodeSnippet: truncate(strings.TrimSpace(line), 120),
 			})
 		}

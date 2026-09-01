@@ -60,7 +60,7 @@ Maps every cross-language coding guideline to its **PHP_CodeSniffer (PHPCS)** an
 
 | Guideline | Spec Source | PHPCS Sniff | Setting |
 |-----------|-------------|-------------|---------|
-| Boolean naming (`is/has/can/should/was/will`) | [Boolean Principles](../02-boolean-principles/01-index.md) | `SlevomatCodingStandard.Variables.UnusedVariable` + custom sniff | regex pattern |
+| Boolean naming (`is/has only (all other prefixes banned)`) | [Boolean Principles](../02-boolean-principles/01-index.md) | `SlevomatCodingStandard.Variables.UnusedVariable` + custom sniff | regex pattern |
 | PascalCase keys (API/DB) | [Key Naming](../11-key-naming-pascalcase.md) | custom sniff | `PascalCase` enforcement |
 | No boolean flag params | [Function Naming](../10-function-naming.md) | `SlevomatCodingStandard.Functions.FunctionLength` | code review |
 | No raw negation (`!fn()`) | [No Negatives](../12-no-negatives.md) | custom sniff | `!$this->isValid()` detection |

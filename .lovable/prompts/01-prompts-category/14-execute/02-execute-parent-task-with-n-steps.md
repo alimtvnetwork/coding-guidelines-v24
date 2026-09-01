@@ -99,7 +99,7 @@ Before writing any source code changes, you MUST execute Phase 1:
 
 - [ ] Master Guidelines: Fully enforced every file in `spec/02-coding-guidelines/` and `.lovable/coding-guidelines/coding-guidelines.md`.
 - [ ] Error Management: Enforced `spec/03-error-manage/` using domain-specific `AppError`, never generic error.
-- [ ] Boolean Conventions: All booleans begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc. NO negatives (`!isSuccess` is banned; use `isFail`).
+- [ ] Boolean Conventions: All booleans begin with is or has ONLY (all other prefixes like can, should, was, will, did, must are banned). NO negatives (`!isSuccess` is banned; use `isFail`).
 - [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
 - [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.
 - [ ] Line Endings & Encoding: Strictly Unix LF (`\n`) and UTF-8 without BOM.

@@ -53,7 +53,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] **RCA Document Generation:** I have created .lovable/memory/issues/XX-<slug>.md with the strict 4-part RCA structure (Why, How, Root Cause, Code Fix).
 - [ ] **Coding Guidelines & Master Consolidated File:** I have fully read and strictly enforced every file in spec/02-coding-guidelines/, as well as the master consolidated coding guideline file at .lovable/coding-guidelines/coding-guidelines.md.
 - [ ] **Error Manage Checklist:** I have fully read and enforced spec/03-error-manage/. I understand which files to follow (architecture, response envelopes) and how to follow them (never swallow errors, always wrap with context).
-- [ ] **Boolean Fixations:** All boolean variables MUST begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc. NEVER use explicit true/false comparisons (e.g., `if isReady == true` is FORBIDDEN, use `if isReady`). NEVER use negative booleans (isNotReady). NEVER invert success checks (!response.isSuccess is banned; use
+- [ ] **Boolean Fixations:** All boolean variables MUST begin with is and has only (can, should, was, etc. are banned). NEVER use explicit true/false comparisons (e.g., `if isReady == true` is FORBIDDEN, use `if isReady`). NEVER use negative booleans (isNotReady). NEVER invert success checks (!response.isSuccess is banned; use
 esponse.isFail).
 - [ ] **Anti-Garbage Naming:** I have verified that absolutely NO generic garbage variable names (	emp, data, obj) were written. All names are semantic.
 - [ ] **Function Signatures:** If a function has > 3 parameters or is > 100 chars, I have split it so there is exactly one parameter per line.

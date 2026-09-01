@@ -628,7 +628,7 @@ Include: previous version, new version, step number and name, command run, full 
 - [ ] **Return New Line (R13-R16):** Blank line before `return`/`throw` (unless sole statement). Blank line after `}`. Never two blank lines in a row.
 - [ ] **No Explicit True Checks:** Never `== true`. Write `if isReady`.
 - [ ] **No Mixed Polarity:** Never `if isA && !isB`. Extract to a named boolean.
-- [ ] **Boolean Prefixes:** All booleans start with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, or `must`.
+- [ ] **Boolean Prefixes:** All booleans start with is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, or `must`.
 - [ ] **Error Handling:** No swallowed errors. Wrap with `apperror.Wrap(err, "opName", ctx)`.
 - [ ] **Strict Lowercase Files:** All generated/modified files use strictly lowercase naming.
 - [ ] **Go Generate Sync:** If Go constants, enums, or stringers were modified, run `go generate ./...` and commit generated files.

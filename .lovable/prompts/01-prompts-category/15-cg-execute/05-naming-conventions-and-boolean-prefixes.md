@@ -12,7 +12,7 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, plan, refactor, and fix all variable and boolean naming violations across the codebase, directly modifying source files to replace bare `ok` identifiers, eliminate negative boolean variables (`hasNo*`, `isNot*`), enforce affirmative prefixes (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc), apply positive framing with inverted `if` guard clauses, and normalize acronym casing until 100% green without stopping.
+/goal Autonomously scan, plan, refactor, and fix all variable and boolean naming violations across the codebase, directly modifying source files to replace bare `ok` identifiers, eliminate negative boolean variables (`hasNo*`, `isNot*`), enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), apply positive framing with inverted `if` guard clauses, and normalize acronym casing until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
@@ -54,7 +54,7 @@ Naming clarity is the backbone of robust code. Vague identifiers, bare `ok` vari
 ### 1. Mandatory Boolean Prefix Rule
 
 Every boolean variable, parameter, struct field, or property MUST begin with one of the approved affirmative prefixes:
-is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, `must` (PascalCase is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc for exported symbols).
+is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, `must` (PascalCase is and has only (can, should, was, etc. are banned) for exported symbols).
 
 - Go: `isValid`, `hasPermission`, `canExecute`, `shouldRetry` (or `IsValid`, `HasPermission`).
 - TypeScript/JavaScript: `isLoaded`, `hasColors`, `hasPayload`, `canSubmit`.
@@ -246,7 +246,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Zero Bare `ok` Identifiers:** Absolutely zero bare `ok` variables in type assertions, map lookups, or status returns. All renamed to `isAppErr`, `isFound`, `hasValue`, etc.
 - [ ] **Positive Boolean Framing:** All booleans named positively (`hasColors`, `hasPayload`, `isReady`). Zero `hasNo*` or `isNot*` variables.
 - [ ] **Inverted Guard Clauses:** Negative checks handled via inverted guard returns (`if (!hasColors) return null;`).
-- [ ] **Boolean Prefixes:** All booleans begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc.
+- [ ] **Boolean Prefixes:** All booleans begin with is or has ONLY (all other prefixes like can, should, was, will, did, must are banned).
 - [ ] **PascalCase Acronyms:** All acronyms formatted as `UserId`, `ApiUrl`, `JsonData`.
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines/coding-guidelines.md`.
 

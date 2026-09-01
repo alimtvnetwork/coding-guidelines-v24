@@ -244,7 +244,7 @@ Each rule includes: ❌ Forbidden pattern | ✅ Required pattern | 📖 Why
 |---|----------|-----------|
 | C1 | Function max = 15 lines (error lines exempt) | 03's rule is clearer and more practical |
 | C2 | File max = 300 lines (Go hard limit 400) | 120 lines (01) is too restrictive |
-| C3 | Boolean prefixes: `is/has/can/should/was` | 03's list is canonical |
+| C3 | Boolean prefixes: `is/has only` | 03's list is canonical |
 | C5 | Go getters: `Field()` not `GetField()` | Merge into 03's Go section explicitly |
 | C6 | Newline rules: Use 03's rule IDs + 01's examples | Best of both |
 | C7 | Master guideline: 03 v1.2.0 is canonical, 05 v3.0.0 archived | 03 has more content |

@@ -39,7 +39,7 @@ Maps cross-language coding guidelines to **ESLint rules** for **Node.js server-s
 |---|-----------|-------------|--------|----------|-------|
 | 1 | Zero nested `if` | `max-depth` | core | `error` | Configure: `max: 1` |
 | 2 | No else after return | `no-else-return` | core | `error` | `allowElseIf: false` |
-| 3 | Boolean naming (`is/has/can/should/was/will`) | `@typescript-eslint/naming-convention` | typescript-eslint | `warn` | Filter: `booleanPrefix: ['is','has','can','should','was','will']` |
+| 3 | Boolean naming (`is/has only (all other prefixes banned)`) | `@typescript-eslint/naming-convention` | typescript-eslint | `warn` | Filter: `booleanPrefix: ['is','has','can','should','was','will']` |
 | 4 | No magic strings | `no-magic-numbers` | core | `error` | `ignore: [-1, 0, 1, 2]`, `ignoreEnums: true` |
 | 5 | Max 15-line functions | `max-lines-per-function` | core | `error` | `max: 15`, `skipBlankLines: true`, `skipComments: true` |
 | 6 | Max 3 parameters | `max-params` | core | `error` | `max: 3` |

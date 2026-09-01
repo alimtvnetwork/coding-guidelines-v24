@@ -46,7 +46,7 @@ def scan(path: Path, root: str) -> list[Finding]:
                     Finding(
                         rule_id=RULE.id,
                         level="error",
-                        message=f"Boolean '{name}' must start with is/has/can/should/was/will.",
+                        message=f"Boolean '{name}' must start with is/has only (all other prefixes banned).",
                         file_path=relpath(path, root),
                         start_line=i,
                         start_column=m.start(1) + 1,

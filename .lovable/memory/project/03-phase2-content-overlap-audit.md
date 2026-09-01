@@ -97,7 +97,7 @@ Content that exists in multiple sources (03 is the canonical version):
 |---|-------|----------|----------|------------|
 | C1 | **Function line limit** | 01: "8 lines ideal, 15 worst, 25 max (broken-fix-code)" | 03: "max 15 lines (error lines exempt)" | Use 03's rule (15 max, error lines exempt) — clearer |
 | C2 | **File size limit** | 01: "struct/class/file ≤ 120 lines" | 03: "300 lines (Go hard limit 400)" | Use 03's rule (300) — 120 is too restrictive for real code |
-| C3 | **Boolean prefixes** | 01: "Is/Has/Can/Should/Does" | 03: "is/has/can/should/was" | Use 03's list (lowercase, `was` instead of `Does`) |
+| C3 | **Boolean prefixes** | 01: "Is/Has/Can/Should/Does" | 03: "is/has only" | Use 03's list (lowercase, `was` instead of `Does`) |
 | C4 | **Max function params** | 01: "max 3, frameworks exempt" | 03: "max 3" (same + options object pattern) | Aligned — 03 adds the options object solution |
 | C5 | **Go getter naming** | 01: "Field() not GetField()" | 03: not explicitly stated | Merge 01's explicit getter rule into 03 |
 | C6 | **Newline rules** | 01: very detailed (8+ examples) | 03: R4/R5/R10/R12/R13 (rule-based) | Merge 01's examples into 03's rules |

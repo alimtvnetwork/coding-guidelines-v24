@@ -12,7 +12,7 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, plan, refactor, and fix all boolean naming, double negatives, mixed polarity, and complex condition violations across the codebase, modifying source files directly to enforce affirmative prefixes (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc), implicit evaluation (no `== true`), positive framing (no `!isSuccess`), and discrete condition decomposition until 100% green without stopping.
+/goal Autonomously scan, plan, refactor, and fix all boolean naming, double negatives, mixed polarity, and complex condition violations across the codebase, modifying source files directly to enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), implicit evaluation (no `== true`), positive framing (no `!isSuccess`), and discrete condition decomposition until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
@@ -208,7 +208,7 @@ You MUST read, follow, and mechanically verify every single specification file b
   - **How:** No negative variable names. No `!isSuccess` checks.
 - [ ] **`spec/02-coding-guidelines/01-cross-language/22-variable-naming-conventions.md`**
   - **Why:** Mandatory affirmative boolean prefixes.
-  - **How:** All booleans MUST begin with is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc, `was`, `will`, `did`, `must`.
+  - **How:** All booleans MUST begin with is and has only (can, should, was, etc. are banned), `was`, `will`, `did`, `must`.
 - [ ] **`spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md`**
   - **Why:** Prevents cryptic boolean argument calls.
   - **How:** Split boolean flag methods into semantic distinct functions.

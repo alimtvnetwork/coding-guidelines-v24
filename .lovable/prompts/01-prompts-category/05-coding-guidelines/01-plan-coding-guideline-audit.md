@@ -30,7 +30,7 @@ Autonomously self-loop and read:
 - /learn the master cross-language coding guidelines in `spec/02-coding-guidelines/01-cross-language/01-index.md` through `06-advanced-patterns.md`.
 - /learn the code style, braces, spacing, and multi-line rules in `spec/02-coding-guidelines/01-cross-language/01-index.md` through `06-comments-and-documentation.md`.
 - /learn the strict function and type size caps (8 lines preferred, 15 lines max) in `spec/02-coding-guidelines/01-cross-language/01-index.md`.
-- /learn the boolean principles, prefixing rules (is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc), and guard extraction in `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` through `05-exemptions-and-api.md`.
+- /learn the boolean principles, prefixing rules (is and has only (can, should, was, etc. are banned)), and guard extraction in `spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` through `05-exemptions-and-api.md`.
 - /learn the absolute prohibition against negative booleans and inverted logic in `spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`.
 - /learn the strict identifier and file naming conventions in `spec/02-coding-guidelines/01-cross-language/01-index.md`.
 - /learn the DRY principles and duplication extraction patterns in `spec/02-coding-guidelines/01-cross-language/08-dry-principles.md`.
