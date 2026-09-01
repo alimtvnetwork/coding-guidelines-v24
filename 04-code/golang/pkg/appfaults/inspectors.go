@@ -7,19 +7,34 @@ func (c *Collection) HasError() bool {
 	return c != nil && len(c.items) > 0
 }
 
+// HasNoError returns true if collection contains zero errors or is nil.
+func (c *Collection) HasNoError() bool {
+	return c == nil || len(c.items) == 0
+}
+
+// HasNullError returns true if collection is nil or empty.
+func (c *Collection) HasNullError() bool {
+	return c.HasNoError()
+}
+
+// IsNull returns true if collection pointer is nil.
+func (c *Collection) IsNull() bool {
+	return c == nil
+}
+
 // IsSuccess returns true if collection is nil or contains zero errors.
 func (c *Collection) IsSuccess() bool {
-	return !c.HasError()
+	return c.HasNoError()
 }
 
 // IsEmpty returns true if collection contains no errors.
 func (c *Collection) IsEmpty() bool {
-	return c.IsSuccess()
+	return c.HasNoError()
 }
 
 // IsValid returns true if collection is in a healthy valid state (no errors).
 func (c *Collection) IsValid() bool {
-	return c.IsEmpty()
+	return c.HasNoError()
 }
 
 // IsInvalid returns true if collection has active errors.
@@ -43,7 +58,7 @@ func (c *Collection) Count() int {
 
 // Items returns a defensive copy of the underlying slice.
 func (c *Collection) Items() []*appfault.AppError {
-	if c == nil || len(c.items) == 0 {
+	if c.IsEmpty() {
 		return []*appfault.AppError{}
 	}
 
@@ -55,7 +70,7 @@ func (c *Collection) Items() []*appfault.AppError {
 
 // First returns the first AppError or nil if empty.
 func (c *Collection) First() *appfault.AppError {
-	if !c.HasError() {
+	if c.IsEmpty() {
 		return nil
 	}
 
@@ -64,7 +79,7 @@ func (c *Collection) First() *appfault.AppError {
 
 // Last returns the last AppError or nil if empty.
 func (c *Collection) Last() *appfault.AppError {
-	if !c.HasError() {
+	if c.IsEmpty() {
 		return nil
 	}
 

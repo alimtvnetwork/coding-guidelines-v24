@@ -44,7 +44,6 @@ func (e *AppError) GetType() errtype.Variation {
 }
 
 // HasError returns true if the AppError exists and is not errtype.None.
-// Note: If e is nil, it returns false (indicating no error / success).
 func (e *AppError) HasError() bool {
 	if e == nil {
 		return false
@@ -53,8 +52,26 @@ func (e *AppError) HasError() bool {
 	return e.Type.HasError()
 }
 
+// HasNullError returns true if e is nil or represents no error.
+func (e *AppError) HasNullError() bool {
+	if e == nil {
+		return true
+	}
+
+	return e.Type.IsNone()
+}
+
+// IsNull returns true if e is nil.
+func (e *AppError) IsNull() bool {
+	return e == nil
+}
+
+// IsEmpty returns true if e is nil or Type is None.
+func (e *AppError) IsEmpty() bool {
+	return e.HasNullError()
+}
+
 // IsSuccess returns true if no error is present (e is nil or Type is None).
-// Note: When e is nil or Type == errtype.None, this represents a successful operation.
 func (e *AppError) IsSuccess() bool {
-	return !e.HasError()
+	return e.HasNullError()
 }

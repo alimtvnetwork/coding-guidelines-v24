@@ -33,7 +33,7 @@ func (c *Collection) FilterByType(target errtype.Variation) *Collection {
 
 // ToAppError merges collection errors into a single composite AppError.
 func (c *Collection) ToAppError(errType errtype.Variation, title string) *appfault.AppError {
-	if !c.HasError() {
+	if c.IsEmpty() {
 		return nil
 	}
 
@@ -49,7 +49,7 @@ func (c *Collection) ToAppError(errType errtype.Variation, title string) *appfau
 
 // Errors converts all items into a standard []error slice.
 func (c *Collection) Errors() []error {
-	if !c.HasError() {
+	if c.IsEmpty() {
 		return []error{}
 	}
 
@@ -63,7 +63,7 @@ func (c *Collection) Errors() []error {
 
 // ErrorString compiles errors into a joined string.
 func (c *Collection) ErrorString() string {
-	if !c.HasError() {
+	if c.IsEmpty() {
 		return ""
 	}
 

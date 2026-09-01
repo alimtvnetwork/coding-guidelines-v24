@@ -9,7 +9,6 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-// createSampleAppError helper for serialization testing.
 func createSampleAppError() (*appfault.AppError, error) {
 	rawErr := errors.New("underlying socket closed")
 	orig := appfault.Wrap(errtype.Network, rawErr, "dial timeout").
@@ -24,7 +23,7 @@ func TestAppErrorSerializationRoundtrip(t *testing.T) {
 	orig, rawErr := createSampleAppError()
 	restored, err := appfault.FromJSON([]byte(orig.ToJSONString()))
 	if err != nil || restored.Type != orig.Type || restored.StatusCode != 504 {
-		t.Fatalf("JSON restore mismatch or error: %v, %+v", err, restored)
+		t.Fatalf("JSON restore mismatch: %v, %+v", err, restored)
 	}
 
 	if restored.Cause == nil || restored.Cause.Error() != rawErr.Error() {
@@ -38,5 +37,32 @@ func TestAppErrorYAMLSerialization(t *testing.T) {
 
 	if !strings.Contains(yamlStr, "Type: 10") || !strings.Contains(yamlStr, "StatusCode: 401") {
 		t.Fatalf("unexpected YAML string: %s", yamlStr)
+	}
+}
+
+type sampleUser struct {
+	Name string
+	Age  int
+}
+
+func TestGenericJSONHelpers(t *testing.T) {
+	u := sampleUser{Name: "Alice", Age: 30}
+	jsonStr, appErr := appfault.SerializeToJSONString(u)
+	if appErr != nil || len(jsonStr) == 0 {
+		t.Fatalf("failed to serialize sampleUser: %v", appErr)
+	}
+
+	restored, err := appfault.DeserializeFromJSONString[sampleUser](jsonStr)
+	if err != nil || restored.Name != "Alice" || restored.Age != 30 {
+		t.Fatalf("failed to deserialize sampleUser: %v", err)
+	}
+}
+
+func TestAppErrorCompilation(t *testing.T) {
+	appErr := appfault.New(errtype.Database, "query failed").WithOp("db.exec")
+	compiled := appErr.Compile()
+
+	if !strings.Contains(compiled, "Database") || !strings.Contains(compiled, "query failed") {
+		t.Fatalf("unexpected compiled output: %s", compiled)
 	}
 }
