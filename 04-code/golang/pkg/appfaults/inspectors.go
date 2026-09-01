@@ -17,6 +17,21 @@ func (c *Collection) IsEmpty() bool {
 	return c.IsSuccess()
 }
 
+// IsValid returns true if collection is in a healthy valid state (no errors).
+func (c *Collection) IsValid() bool {
+	return c.IsEmpty()
+}
+
+// IsInvalid returns true if collection has active errors.
+func (c *Collection) IsInvalid() bool {
+	return c.HasError()
+}
+
+// IsFailed returns true if collection has active errors.
+func (c *Collection) IsFailed() bool {
+	return c.HasError()
+}
+
 // Count returns the number of active errors in the collection.
 func (c *Collection) Count() int {
 	if c == nil {

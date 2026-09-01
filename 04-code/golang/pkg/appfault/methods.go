@@ -29,9 +29,19 @@ func (e *AppError) HasValidError() bool {
 	return e.Type.HasError()
 }
 
-// IsValid returns true if the error is populated with a non-None type.
+// IsValid returns true if no error is present (valid / healthy state).
 func (e *AppError) IsValid() bool {
-	return e.HasValidError()
+	return e.IsSuccess()
+}
+
+// IsInvalid returns true if an active error is present.
+func (e *AppError) IsInvalid() bool {
+	return e.HasError()
+}
+
+// IsFailed returns true if an active error is present.
+func (e *AppError) IsFailed() bool {
+	return e.HasError()
 }
 
 // Is checks if the error type matches the target Variation.

@@ -58,6 +58,16 @@ func (v Variation) IsNoError() bool {
 	return v.IsNone()
 }
 
+// IsValid returns true if the Variation represents NoError / None (healthy/valid state).
+func (v Variation) IsValid() bool {
+	return v == None
+}
+
+// IsInvalid returns true if the Variation represents an active error type.
+func (v Variation) IsInvalid() bool {
+	return v != None
+}
+
 // Is returns true if this Variation matches the target.
 func (v Variation) Is(target Variation) bool {
 	return v == target
