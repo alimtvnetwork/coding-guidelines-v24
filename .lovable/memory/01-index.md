@@ -29,6 +29,7 @@ Updated: 2026-04-27
 - 🔴 Docs sidebar tree diagnostics: opt-in via `localStorage["lovable.tree-diagnostics.enabled"]="1"`. Logs prefixed `[tree:<category>]`. Off by default. Never enable by default. The Lovable IDE file tree is platform UI — NOT instrumentable from project code; do not conflate it with the in-app docs sidebar. See mem://sessions/2026-04-27-tree-diagnostics-logging.
 
 - [Project Context & Learned Guidelines](learned/01-project-context-and-guidelines.md) — Comprehensive ingestion of repo identity, CODE RED rules, coding guidelines, error philosophy, and active plans.
+- [Pluggable Logger & Uber Zap Architecture](learned/02-logger-swapping-and-uber-zap-architecture.md) — Architecture and code samples for dynamic Log Changer, Formatter/Writer pipeline, context.Context tracing, and Uber Zap integration.
 - [Fast File Indexing & Caching Strategy](standards/05-fast-file-indexing-and-caching.md) — Pre-computed file scanning and index caching in `tmp/` via `08-fast-file-scanner.py` for rapid multi-step lookups.
 - [Prompt Synchronization Architecture](standards/04-prompt-synchronization-architecture.md) — All prompts authored in `01-prompts/` and compiled to flat `01-prompts/*.md` via `scripts/update-prompts.ps1` without external Git clones.
 - [Version Source of Truth Standard](standards/version-source-of-truth.md) — Canonical `version.json` standard at repo root.
