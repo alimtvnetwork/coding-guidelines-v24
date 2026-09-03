@@ -256,7 +256,9 @@ CI_JOBS_MATRIX: dict[str, list[str]] = {
     "Newline Styling MJS Check": ["node", "linter-scripts/check-newline-styling.mjs"],
     "Spec Folder References Check": [sys.executable, "linter-scripts/check-spec-folder-refs.py"],
     "Sequence Integrity Check": [sys.executable, "linter-scripts/check-sequence-integrity.py"],
+    "Prompt & Spec Path Integrity Check": [sys.executable, "linter-scripts/check-prompt-and-spec-paths.py"],
     "Linters CI/CD Test Suite": [sys.executable, "linters-cicd/tests/run.py"],
+    "Go Base Test Suite": ["go", "test", "-C", "04-code/golang", "./..."],
 }
 
 # --- Module-Level Directory & File Constants ---
@@ -649,7 +651,17 @@ def write_file_lf(
             except Exception:
                 pass
 
-        temp_path.replace(p)
+        try:
+            temp_path.replace(p)
+        except PermissionError:
+            with open(p, "wb") as f:
+                f.write(lf_content.encode(encoding))
+            if temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
+
         return True
     except Exception:
         if temp_path.exists():

@@ -53,6 +53,9 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | **Naming Guard** | `03-ai-scripts/08-naming-autofixer.py` | Boolean naming and implicit condition validator |
 | **Encoding Normalizer**| `03-ai-scripts/10-encoding-normalizer.py` | UTF-8 and strict UNIX LF line ending normalizer |
 | **Size Guard** | `03-ai-scripts/13-file-size-guard.py` | Binary blob and file size threshold checker |
+| **Go Code Formatter** | `03-ai-scripts/26-go-code-formatter.py` | Cross-platform Go code formatter via gofmt with staged support |
+| **Spelling Auditor** | `03-ai-scripts/27-misspell-auditor.py` | Audits and auto-fixes British to American English spelling |
+| **Go Preflight CI** | `03-ai-scripts/28-go-preflight-ci.py` | Runs local Go test and golangci-lint preflight verification |
 | **Global Rules** | `agents.md` | Always-on workspace constraints for Antigravity agents |
 | **Version Truth** | `version.json` | Root version source of truth dynamically read across all languages |
 | **Antigravity Skills** | `.agents/skills/` | On-demand skill runbooks for progressive disclosure |

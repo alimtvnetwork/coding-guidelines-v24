@@ -193,7 +193,7 @@ def archive_plan(plan_name: str, is_force_mode: bool = False, is_dry_run_mode: b
     if not is_force_mode:
         is_confirmed = confirm_action(f"Are you sure you want to archive `{src.name}` to completed/?")
         if not is_confirmed:
-            print("❌ Operation cancelled.")
+            print("❌ Operation canceled.")
             return ExitCodeType.SUCCESS.value
 
     # Move file via git mv or rename
@@ -236,7 +236,7 @@ def run_full_consolidation(
     if not is_force_mode:
         is_confirmed = confirm_action("Do you want to proceed with plans consolidation and re-sequencing?")
         if not is_confirmed:
-            print("❌ Operation cancelled.")
+            print("❌ Operation canceled.")
             return ExitCodeType.SUCCESS.value
 
     if is_auto_backup:

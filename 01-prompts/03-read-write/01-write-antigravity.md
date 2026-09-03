@@ -85,6 +85,7 @@ Walk `.lovable/` recursively. Read all of these if they exist; note missing and 
 15. `.agents/skills/` (`<slug>/skill.md`) and `.agents/rules/`
 16. `02-spec/` — recursively traverse all subfolders and nested `.md` files (`02-spec/01-spec-authoring-guide/`, `02-spec/02-coding-guidelines/`, `02-spec/03-error-manage/`, `02-spec/04-database-conventions/`, `02-spec/21-app/`).
 17. Root `readme.md` — confirm strictly lowercase `readme.md`
+18. `05-changes-history/` — every task transaction log (`XX-<task-slug>/01-transaction-log.md`) and master index `01-index.md`
 
 ## Phase 1: Audit the Session (Internal)
 

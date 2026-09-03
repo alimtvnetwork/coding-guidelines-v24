@@ -156,7 +156,7 @@ def audit_file(file_path: Path, repo_root: Path) -> list[tuple[int, str, str]]:
 
 
 def main() -> int:
-    repo_root = Path(__file__).resolve().parent.parent.parent
+    repo_root = Path(__file__).resolve().parent.parent
     total_files = 0
     total_violations = 0
 

@@ -384,7 +384,7 @@ def run_artifact_remover(
         print(f"{LINE_SEPARATOR}⚠️ Safety Notice: Action will move items to the OS Trash Bin and unstage from Git.")
         is_confirmed = confirm_action(f"Proceed with moving {len(artifacts)} item(s) ({format_bytes(total_bytes)}) to the Trash Bin?")
         if not is_confirmed:
-            print("❌ Operation cancelled by user. No files were touched.")
+            print("❌ Operation canceled by user. No files were touched.")
             return ExitCodeType.SUCCESS.value
 
     # Execute Safe Removal

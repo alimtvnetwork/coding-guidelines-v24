@@ -651,7 +651,17 @@ def write_file_lf(
             except Exception:
                 pass
 
-        temp_path.replace(p)
+        try:
+            temp_path.replace(p)
+        except PermissionError:
+            with open(p, "wb") as f:
+                f.write(lf_content.encode(encoding))
+            if temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
+
         return True
     except Exception:
         if temp_path.exists():
