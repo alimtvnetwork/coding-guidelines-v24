@@ -5,31 +5,31 @@ import (
 	"sync"
 )
 
-// WriterOptions configures the pluggable writer.
-type WriterOptions struct {
+// WriterOptions configures the pluggable writer for payload type T.
+type WriterOptions[T any] struct {
 	Name         string
-	Streamer     StreamerInterface
-	FormatMethod FormatFunc
-	WriteMethod  WriteFunc
+	Streamer     StreamerInterface[T]
+	FormatMethod FormatFunc[T]
+	WriteMethod  WriteFunc[T]
 }
 
-// PluggableWriter provides a composable write engine with swappable methods.
-type PluggableWriter struct {
+// PluggableWriter provides a composable write engine over type T with swappable methods.
+type PluggableWriter[T any] struct {
 	mu           sync.RWMutex
 	name         string
-	streamer     StreamerInterface
-	formatMethod FormatFunc
-	writeMethod  WriteFunc
+	streamer     StreamerInterface[T]
+	formatMethod FormatFunc[T]
+	writeMethod  WriteFunc[T]
 }
 
-// NewPluggableWriter constructs a pluggable writer.
-func NewPluggableWriter(opts WriterOptions) *PluggableWriter {
+// NewPluggableWriter constructs a pluggable writer over generic type T.
+func NewPluggableWriter[T any](opts WriterOptions[T]) *PluggableWriter[T] {
 	name := opts.Name
 	if name == "" {
 		name = "pluggable-writer"
 	}
 
-	w := &PluggableWriter{
+	w := &PluggableWriter[T]{
 		name:         name,
 		streamer:     opts.Streamer,
 		formatMethod: opts.FormatMethod,
@@ -44,12 +44,12 @@ func NewPluggableWriter(opts WriterOptions) *PluggableWriter {
 }
 
 // Name returns the writer identifier.
-func (w *PluggableWriter) Name() string {
+func (w *PluggableWriter[T]) Name() string {
 	return w.name
 }
 
 // Write delegates to the active writeMethod function under read-lock.
-func (w *PluggableWriter) Write(ctx context.Context, payload any) error {
+func (w *PluggableWriter[T]) Write(ctx context.Context, payload T) error {
 	w.mu.RLock()
 	fn := w.writeMethod
 	w.mu.RUnlock()
@@ -58,7 +58,7 @@ func (w *PluggableWriter) Write(ctx context.Context, payload any) error {
 }
 
 // SetWriteMethod hot-swaps the write method at runtime.
-func (w *PluggableWriter) SetWriteMethod(fn WriteFunc) {
+func (w *PluggableWriter[T]) SetWriteMethod(fn WriteFunc[T]) {
 	if fn == nil {
 		return
 	}
@@ -68,7 +68,7 @@ func (w *PluggableWriter) SetWriteMethod(fn WriteFunc) {
 }
 
 // SetFormatMethod hot-swaps the formatter function at runtime.
-func (w *PluggableWriter) SetFormatMethod(fn FormatFunc) {
+func (w *PluggableWriter[T]) SetFormatMethod(fn FormatFunc[T]) {
 	if fn == nil {
 		return
 	}
@@ -78,31 +78,31 @@ func (w *PluggableWriter) SetFormatMethod(fn FormatFunc) {
 }
 
 // SetStreamer hot-swaps the underlying streamer at runtime.
-func (w *PluggableWriter) SetStreamer(s StreamerInterface) {
+func (w *PluggableWriter[T]) SetStreamer(s StreamerInterface[T]) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	w.streamer = s
 }
 
 // Streamer returns the attached streamer under read-lock.
-func (w *PluggableWriter) Streamer() StreamerInterface {
+func (w *PluggableWriter[T]) Streamer() StreamerInterface[T] {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
 	return w.streamer
 }
 
-// AsWriter returns the self-binding WriterInterface.
-func (w *PluggableWriter) AsWriter() WriterInterface {
+// AsWriter returns the self-binding WriterInterface[T].
+func (w *PluggableWriter[T]) AsWriter() WriterInterface[T] {
 	return w
 }
 
 // AsInterfacer returns the self-binding Interfacer.
-func (w *PluggableWriter) AsInterfacer() Interfacer {
+func (w *PluggableWriter[T]) AsInterfacer() Interfacer {
 	return w
 }
 
 // Sync flushes the underlying streamer if attached.
-func (w *PluggableWriter) Sync() error {
+func (w *PluggableWriter[T]) Sync() error {
 	w.mu.RLock()
 	s := w.streamer
 	w.mu.RUnlock()
@@ -114,7 +114,7 @@ func (w *PluggableWriter) Sync() error {
 }
 
 // Close closes the underlying streamer if attached.
-func (w *PluggableWriter) Close() error {
+func (w *PluggableWriter[T]) Close() error {
 	w.mu.Lock()
 	s := w.streamer
 	w.mu.Unlock()
@@ -125,32 +125,16 @@ func (w *PluggableWriter) Close() error {
 	return nil
 }
 
-func (w *PluggableWriter) defaultWrite(ctx context.Context, payload any) error {
+func (w *PluggableWriter[T]) defaultWrite(ctx context.Context, payload T) error {
 	w.mu.RLock()
 	s := w.streamer
-	formatter := w.formatMethod
 	w.mu.RUnlock()
 
-	// If a custom formatter is provided, transform the payload first
-	if formatter != nil {
-		formattedBytes, err := formatter(payload)
-		if err != nil {
-			return err
-		}
-		if s != nil {
-			return s.Stream(ctx, formattedBytes)
-		}
-		return nil
-	}
-
-	// Forward directly to attached streamer
 	if s != nil {
 		return s.Stream(ctx, payload)
 	}
 
-	// No streamer attached: silent discard
 	return nil
 }
 
-// Ensure interface satisfaction at compile-time
-var _ WriterInterface = (*PluggableWriter)(nil)
+var _ WriterInterface[any] = (*PluggableWriter[any])(nil)

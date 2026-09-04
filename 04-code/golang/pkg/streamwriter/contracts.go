@@ -2,6 +2,7 @@ package streamwriter
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"time"
 )
@@ -11,37 +12,37 @@ type Interfacer interface {
 	AsInterfacer() Interfacer
 }
 
-// WriterInterface defines universal write operations with self-binding.
-type WriterInterface interface {
+// WriterInterface defines universal write operations over generic type T with self-binding.
+type WriterInterface[T any] interface {
 	Interfacer
 	Name() string
-	Write(ctx context.Context, payload any) error
-	AsWriter() WriterInterface
+	Write(ctx context.Context, payload T) error
+	AsWriter() WriterInterface[T]
 	Sync() error
 	Close() error
 }
 
-// StreamerInterface defines streaming operations with locking introspection and self-binding.
-type StreamerInterface interface {
+// StreamerInterface defines streaming operations over generic type T with locking introspection.
+type StreamerInterface[T any] interface {
 	Interfacer
 	Name() string
-	Stream(ctx context.Context, payload any) error
-	AsStreamer() StreamerInterface
-	AsWriter() WriterInterface
+	Stream(ctx context.Context, payload T) error
+	AsStreamer() StreamerInterface[T]
+	AsWriter() WriterInterface[T]
 	IsLocked() bool
 	Destination() io.Writer
 	Sync() error
 	Close() error
 }
 
-// StreamFunc defines the swappable signature for writing/streaming to a destination.
-type StreamFunc func(ctx context.Context, payload any, dest io.Writer) error
+// StreamFunc defines the swappable function signature for streaming data of type T.
+type StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) error
 
-// WriteFunc defines the swappable function signature for write operations.
-type WriteFunc func(ctx context.Context, payload any) error
+// WriteFunc defines the swappable function signature for write operations over type T.
+type WriteFunc[T any] func(ctx context.Context, payload T) error
 
-// FormatFunc defines the serialization transformation from payload to bytes.
-type FormatFunc func(payload any) ([]byte, error)
+// FormatFunc defines the serialization transformation from payload T to bytes.
+type FormatFunc[T any] func(payload T) ([]byte, error)
 
 // LogLevel defines standardized severity tiers.
 type LogLevel int
@@ -81,3 +82,21 @@ type LogRecord struct {
 	TraceID   string          `json:"traceId,omitempty"`
 	UserID    string          `json:"userId,omitempty"`
 }
+
+// Compile satisfies the Compilable interface for LogRecord with deterministic ordering.
+func (r LogRecord) Compile() string {
+	res := fmt.Sprintf("[%s] %-5s: %s", r.Timestamp.Format("15:04:05.000"), r.Level.String(), r.Message)
+	if r.TraceID != "" {
+		res += fmt.Sprintf(" [trace=%s]", r.TraceID)
+	}
+	if r.UserID != "" {
+		res += fmt.Sprintf(" [user=%s]", r.UserID)
+	}
+	if len(r.Fields) > 0 {
+		res += fmt.Sprintf(" fields=%s", Compile(r.Fields))
+	}
+	return res
+}
+
+// Ensure LogRecord implements Compilable at compile-time.
+var _ Compilable = LogRecord{}

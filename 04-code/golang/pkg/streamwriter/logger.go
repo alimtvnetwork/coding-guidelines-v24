@@ -6,21 +6,21 @@ import (
 	"time"
 )
 
-// Logger coordinates multiple writers and streamers with fluent chaining.
-type Logger struct {
+// Logger coordinates multiple generic writers and streamers over type T.
+type Logger[T any] struct {
 	mu      sync.RWMutex
-	writers []WriterInterface
+	writers []WriterInterface[T]
 }
 
-// NewLogger creates an empty Logger in silent mode (0 writers, 0 allocations).
-func NewLogger() *Logger {
-	return &Logger{
-		writers: make([]WriterInterface, 0),
+// NewLogger creates an empty generic Logger in silent mode (0 writers, 0 allocations).
+func NewLogger[T any]() *Logger[T] {
+	return &Logger[T]{
+		writers: make([]WriterInterface[T], 0),
 	}
 }
 
 // AddWriter fluently registers a single writer.
-func (l *Logger) AddWriter(w WriterInterface) *Logger {
+func (l *Logger[T]) AddWriter(w WriterInterface[T]) *Logger[T] {
 	if w == nil {
 		return l
 	}
@@ -31,7 +31,7 @@ func (l *Logger) AddWriter(w WriterInterface) *Logger {
 }
 
 // AddWriters fluently registers multiple writers in one call.
-func (l *Logger) AddWriters(ws ...WriterInterface) *Logger {
+func (l *Logger[T]) AddWriters(ws ...WriterInterface[T]) *Logger[T] {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	for _, w := range ws {
@@ -43,7 +43,7 @@ func (l *Logger) AddWriters(ws ...WriterInterface) *Logger {
 }
 
 // AddStreamer fluently registers a streamer (adapting it via AsWriter()).
-func (l *Logger) AddStreamer(s StreamerInterface) *Logger {
+func (l *Logger[T]) AddStreamer(s StreamerInterface[T]) *Logger[T] {
 	if s == nil {
 		return l
 	}
@@ -54,7 +54,7 @@ func (l *Logger) AddStreamer(s StreamerInterface) *Logger {
 }
 
 // ClearWriters removes all registered writers (switches to silent mode).
-func (l *Logger) ClearWriters() *Logger {
+func (l *Logger[T]) ClearWriters() *Logger[T] {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	l.writers = l.writers[:0]
@@ -62,10 +62,10 @@ func (l *Logger) ClearWriters() *Logger {
 }
 
 // RemoveWriter removes a registered writer by name.
-func (l *Logger) RemoveWriter(name string) *Logger {
+func (l *Logger[T]) RemoveWriter(name string) *Logger[T] {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	filtered := make([]WriterInterface, 0, len(l.writers))
+	filtered := make([]WriterInterface[T], 0, len(l.writers))
 	for _, w := range l.writers {
 		if w.Name() != name {
 			filtered = append(filtered, w)
@@ -76,20 +76,21 @@ func (l *Logger) RemoveWriter(name string) *Logger {
 }
 
 // WriterCount returns the number of active writers.
-func (l *Logger) WriterCount() int {
+func (l *Logger[T]) WriterCount() int {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
 	return len(l.writers)
 }
 
-// Emit sends an arbitrary payload (log-based or non-log-based) to all active writers.
-func (l *Logger) Emit(ctx context.Context, payload any) error {
+// Emit sends a generic payload T to all active writers.
+func (l *Logger[T]) Emit(ctx context.Context, payload T) error {
 	l.mu.RLock()
+	// Zero-allocation silent guard
 	if len(l.writers) == 0 {
 		l.mu.RUnlock()
 		return nil
 	}
-	active := make([]WriterInterface, len(l.writers))
+	active := make([]WriterInterface[T], len(l.writers))
 	copy(active, l.writers)
 	l.mu.RUnlock()
 
@@ -103,30 +104,30 @@ func (l *Logger) Emit(ctx context.Context, payload any) error {
 	return firstErr
 }
 
-// Info emits a structured LevelInfo log record to all writers.
-func (l *Logger) Info(ctx context.Context, msg string, fields ...map[string]any) error {
-	return l.dispatch(ctx, LevelInfo, msg, fields...)
+// Info emits a LevelInfo structured record if T can represent it.
+func (l *Logger[T]) Info(ctx context.Context, msg string, fields ...map[string]any) error {
+	return l.dispatchRecord(ctx, LevelInfo, msg, fields...)
 }
 
-// Error emits a structured LevelError log record to all writers.
-func (l *Logger) Error(ctx context.Context, msg string, fields ...map[string]any) error {
-	return l.dispatch(ctx, LevelError, msg, fields...)
+// Error emits a LevelError structured record if T can represent it.
+func (l *Logger[T]) Error(ctx context.Context, msg string, fields ...map[string]any) error {
+	return l.dispatchRecord(ctx, LevelError, msg, fields...)
 }
 
-// Debug emits a structured LevelDebug log record to all writers.
-func (l *Logger) Debug(ctx context.Context, msg string, fields ...map[string]any) error {
-	return l.dispatch(ctx, LevelDebug, msg, fields...)
+// Debug emits a LevelDebug structured record if T can represent it.
+func (l *Logger[T]) Debug(ctx context.Context, msg string, fields ...map[string]any) error {
+	return l.dispatchRecord(ctx, LevelDebug, msg, fields...)
 }
 
-// Warn emits a structured LevelWarn log record to all writers.
-func (l *Logger) Warn(ctx context.Context, msg string, fields ...map[string]any) error {
-	return l.dispatch(ctx, LevelWarn, msg, fields...)
+// Warn emits a LevelWarn structured record if T can represent it.
+func (l *Logger[T]) Warn(ctx context.Context, msg string, fields ...map[string]any) error {
+	return l.dispatchRecord(ctx, LevelWarn, msg, fields...)
 }
 
 // Sync flushes all active writers.
-func (l *Logger) Sync() error {
+func (l *Logger[T]) Sync() error {
 	l.mu.RLock()
-	active := make([]WriterInterface, len(l.writers))
+	active := make([]WriterInterface[T], len(l.writers))
 	copy(active, l.writers)
 	l.mu.RUnlock()
 
@@ -137,7 +138,7 @@ func (l *Logger) Sync() error {
 }
 
 // Close closes all active writers.
-func (l *Logger) Close() error {
+func (l *Logger[T]) Close() error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	for _, w := range l.writers {
@@ -147,9 +148,8 @@ func (l *Logger) Close() error {
 	return nil
 }
 
-func (l *Logger) dispatch(ctx context.Context, lvl LogLevel, msg string, fields ...map[string]any) error {
+func (l *Logger[T]) dispatchRecord(ctx context.Context, lvl LogLevel, msg string, fields ...map[string]any) error {
 	l.mu.RLock()
-	// Zero-allocation silent guard: if no writers, return immediately
 	if len(l.writers) == 0 {
 		l.mu.RUnlock()
 		return nil
@@ -184,5 +184,15 @@ func (l *Logger) dispatch(ctx context.Context, lvl LogLevel, msg string, fields 
 		UserID:    userID,
 	}
 
-	return l.Emit(ctx, record)
+	// Case 1: T is any or LogRecord
+	if payload, isOk := any(record).(T); isOk {
+		return l.Emit(ctx, payload)
+	}
+
+	// Case 2: T is string (compiled representation)
+	if strPayload, isOk := any(record.Compile()).(T); isOk {
+		return l.Emit(ctx, strPayload)
+	}
+
+	return nil
 }

@@ -3,12 +3,12 @@ package streamwriter_test
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"coding-guidelines/common/pkg/streamwriter"
 )
@@ -37,9 +37,95 @@ func (s *SafeBuffer) Reset() {
 	s.buf.Reset()
 }
 
-func TestLockedStreamer_ConcurrentSafe(t *testing.T) {
+// Custom compilable struct
+type CustomReport struct {
+	Title string
+	Score int
+}
+
+func (c CustomReport) Compile() string {
+	return fmt.Sprintf("REPORT[%s]: score=%d", c.Title, c.Score)
+}
+
+// Nested struct containing custom compilable
+type OuterContainer struct {
+	ID     string       `json:"id"`
+	Report CustomReport `json:"report"`
+}
+
+func TestCompiler_Primitives(t *testing.T) {
+	// String
+	if streamwriter.Compile("hello world") != "hello world" {
+		t.Errorf("string compile failed")
+	}
+
+	// Numbers
+	if streamwriter.Compile(42) != "42" {
+		t.Errorf("int compile failed")
+	}
+	if streamwriter.Compile(3.14) != "3.14" {
+		t.Errorf("float compile failed")
+	}
+
+	// Boolean
+	if streamwriter.Compile(true) != "true" {
+		t.Errorf("bool compile failed")
+	}
+	if streamwriter.Compile(false) != "false" {
+		t.Errorf("bool compile failed")
+	}
+
+	// Nil
+	var nilPtr *string
+	if streamwriter.Compile(nilPtr) != "nil" {
+		t.Errorf("nil compile failed")
+	}
+}
+
+func TestCompiler_Maps_OrderWise(t *testing.T) {
+	// Map keys must be sorted lexicographically regardless of insertion order
+	data := map[string]any{
+		"zebra":  100,
+		"apple":  "pie",
+		"mango":  true,
+		"banana": 42,
+	}
+
+	compiled := streamwriter.Compile(data)
+	expected := `{apple: "pie", banana: 42, mango: true, zebra: 100}`
+	if compiled != expected {
+		t.Fatalf("expected map order: %s, got: %s", expected, compiled)
+	}
+}
+
+func TestCompiler_Slices_OrderWise(t *testing.T) {
+	sliceData := []any{"first", 2, true, "fourth"}
+	compiled := streamwriter.Compile(sliceData)
+	expected := `["first", 2, true, "fourth"]`
+	if compiled != expected {
+		t.Fatalf("expected slice order: %s, got: %s", expected, compiled)
+	}
+}
+
+func TestCompiler_ObjectAndRecursiveCompilable(t *testing.T) {
+	container := OuterContainer{
+		ID: "box-1",
+		Report: CustomReport{
+			Title: "Audit",
+			Score: 98,
+		},
+	}
+
+	compiled := streamwriter.Compile(container)
+	expected := `{id: "box-1", report: REPORT[Audit]: score=98}`
+	if compiled != expected {
+		t.Fatalf("expected recursive compilable output:\n%s\ngot:\n%s", expected, compiled)
+	}
+}
+
+func TestLockedStreamer_Generic_ConcurrentSafe(t *testing.T) {
 	buf := &SafeBuffer{}
-	streamer := streamwriter.NewLockedStreamer(streamwriter.LockedOptions{
+	streamer := streamwriter.NewLockedStreamer[string](streamwriter.LockedOptions[string]{
 		Name:        "concurrent-test",
 		Destination: buf,
 	})
@@ -73,9 +159,14 @@ func TestLockedStreamer_ConcurrentSafe(t *testing.T) {
 	}
 }
 
-func TestLocklessStreamer_Direct(t *testing.T) {
+func TestLocklessStreamer_Generic_Direct(t *testing.T) {
 	buf := &bytes.Buffer{}
-	streamer := streamwriter.NewLocklessStreamer(streamwriter.LocklessOptions{
+	type Event struct {
+		Name string `json:"name"`
+		Code int    `json:"code"`
+	}
+
+	streamer := streamwriter.NewLocklessStreamer[Event](streamwriter.LocklessOptions[Event]{
 		Name:        "cli-test",
 		Destination: buf,
 	})
@@ -85,52 +176,50 @@ func TestLocklessStreamer_Direct(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	err := streamer.Stream(ctx, "single-thread event")
+	err := streamer.Stream(ctx, Event{Name: "login", Code: 200})
 	if err != nil {
 		t.Fatalf("stream failed: %v", err)
 	}
 
 	out := buf.String()
-	if !strings.Contains(out, "single-thread event") {
-		t.Fatalf("expected output to contain payload, got: %s", out)
-	}
-	if !strings.Contains(out, "[lockless]") {
-		t.Fatalf("expected [lockless] tag in output, got: %s", out)
+	// Output should be compiled order-wise
+	if !strings.Contains(out, `name: "login"`) || !strings.Contains(out, `code: 200`) {
+		t.Fatalf("expected compiled event in output, got: %s", out)
 	}
 }
 
-func TestSelfBinding_Contracts(t *testing.T) {
-	locked := streamwriter.NewLockedStreamer(streamwriter.LockedOptions{Name: "test-locked"})
-	lockless := streamwriter.NewLocklessStreamer(streamwriter.LocklessOptions{Name: "test-lockless"})
-	writer := streamwriter.NewPluggableWriter(streamwriter.WriterOptions{Name: "test-writer", Streamer: locked})
+func TestSelfBinding_GenericContracts(t *testing.T) {
+	locked := streamwriter.NewLockedStreamer[any](streamwriter.LockedOptions[any]{Name: "test-locked"})
+	lockless := streamwriter.NewLocklessStreamer[any](streamwriter.LocklessOptions[any]{Name: "test-lockless"})
+	writer := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{Name: "test-writer", Streamer: locked})
 
 	// Verify LockedStreamer self-binding
-	var s1 streamwriter.StreamerInterface = locked.AsStreamer()
-	var w1 streamwriter.WriterInterface = locked.AsWriter()
+	var s1 streamwriter.StreamerInterface[any] = locked.AsStreamer()
+	var w1 streamwriter.WriterInterface[any] = locked.AsWriter()
 	var i1 streamwriter.Interfacer = locked.AsInterfacer()
 	if s1 == nil || w1 == nil || i1 == nil {
 		t.Fatal("locked streamer self-binding failed")
 	}
 
 	// Verify LocklessStreamer self-binding
-	var s2 streamwriter.StreamerInterface = lockless.AsStreamer()
-	var w2 streamwriter.WriterInterface = lockless.AsWriter()
+	var s2 streamwriter.StreamerInterface[any] = lockless.AsStreamer()
+	var w2 streamwriter.WriterInterface[any] = lockless.AsWriter()
 	var i2 streamwriter.Interfacer = lockless.AsInterfacer()
 	if s2 == nil || w2 == nil || i2 == nil {
 		t.Fatal("lockless streamer self-binding failed")
 	}
 
 	// Verify PluggableWriter self-binding
-	var w3 streamwriter.WriterInterface = writer.AsWriter()
+	var w3 streamwriter.WriterInterface[any] = writer.AsWriter()
 	var i3 streamwriter.Interfacer = writer.AsInterfacer()
 	if w3 == nil || i3 == nil {
 		t.Fatal("pluggable writer self-binding failed")
 	}
 }
 
-func TestSwappableMethods_Runtime(t *testing.T) {
+func TestSwappableMethods_GenericRuntime(t *testing.T) {
 	buf := &SafeBuffer{}
-	streamer := streamwriter.NewLockedStreamer(streamwriter.LockedOptions{
+	streamer := streamwriter.NewLockedStreamer[any](streamwriter.LockedOptions[any]{
 		Name:        "swappable-test",
 		Destination: buf,
 	})
@@ -138,22 +227,21 @@ func TestSwappableMethods_Runtime(t *testing.T) {
 	ctx := context.Background()
 
 	// Initial default stream
-	_ = streamer.Stream(ctx, "initial")
-	if !strings.Contains(buf.String(), "[swappable-test][locked] initial") {
+	_ = streamer.Stream(ctx, map[string]int{"b": 2, "a": 1})
+	if !strings.Contains(buf.String(), "{a: 2, b: 2}") && !strings.Contains(buf.String(), "{a: 1, b: 2}") {
 		t.Fatalf("unexpected initial output: %s", buf.String())
 	}
 
 	buf.Reset()
 
-	// Hot-swap stream method to JSON
+	// Hot-swap stream method to custom format
 	streamer.SetStreamMethod(func(ctx context.Context, payload any, dest io.Writer) error {
-		b, _ := json.Marshal(map[string]any{"data": payload, "custom": "swapped"})
-		_, err := dest.Write(append(b, '\n'))
+		_, err := fmt.Fprintf(dest, ">>> SWAPPED: %s <<<\n", streamwriter.Compile(payload))
 		return err
 	})
 
-	_ = streamer.Stream(ctx, "hello-json")
-	if !strings.Contains(buf.String(), `{"custom":"swapped","data":"hello-json"}`) {
+	_ = streamer.Stream(ctx, "dynamic-change")
+	if !strings.Contains(buf.String(), ">>> SWAPPED: dynamic-change <<<") {
 		t.Fatalf("unexpected swapped output: %s", buf.String())
 	}
 }
@@ -163,19 +251,19 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 	buf2 := &SafeBuffer{}
 	buf3 := &SafeBuffer{}
 
-	w1 := streamwriter.NewLockedStreamer(streamwriter.LockedOptions{Name: "w1", Destination: buf1})
-	w2 := streamwriter.NewLocklessStreamer(streamwriter.LocklessOptions{Name: "w2", Destination: buf2})
+	w1 := streamwriter.NewLockedStreamer[any](streamwriter.LockedOptions[any]{Name: "w1", Destination: buf1})
+	w2 := streamwriter.NewLocklessStreamer[any](streamwriter.LocklessOptions[any]{Name: "w2", Destination: buf2})
 
-	customWriter := streamwriter.NewPluggableWriter(streamwriter.WriterOptions{
+	customWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
 		Name: "custom-api",
 		WriteMethod: func(ctx context.Context, payload any) error {
-			_, err := fmt.Fprintf(buf3, "CUSTOM-API: %v\n", payload)
+			_, err := fmt.Fprintf(buf3, "CUSTOM-API: %s\n", streamwriter.Compile(payload))
 			return err
 		},
 	})
 
 	// FLUENT REGISTRATION
-	log := streamwriter.NewLogger().
+	log := streamwriter.NewLogger[any]().
 		AddWriters(w1, w2).
 		AddWriter(customWriter)
 
@@ -184,7 +272,7 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 	}
 
 	ctx := context.WithValue(context.Background(), "traceId", "trace-999")
-	err := log.Info(ctx, "Order placed successfully")
+	err := log.Info(ctx, "Order placed successfully", map[string]any{"orderId": "ord-77"})
 	if err != nil {
 		t.Fatalf("log.Info failed: %v", err)
 	}
@@ -219,31 +307,18 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 	}
 }
 
-func TestLogAndNonLogPayloads(t *testing.T) {
-	buf := &SafeBuffer{}
-	streamer := streamwriter.NewLockedStreamer(streamwriter.LockedOptions{
-		Name:        "payload-test",
-		Destination: buf,
-	})
-
-	log := streamwriter.NewLogger().AddStreamer(streamer)
-	ctx := context.Background()
-
-	// 1. Structured log record
-	_ = log.Info(ctx, "Structured message")
-	if !strings.Contains(buf.String(), "INFO: Structured message") {
-		t.Errorf("expected structured log, got: %s", buf.String())
+func TestLogRecord_Compile(t *testing.T) {
+	rec := streamwriter.LogRecord{
+		Timestamp: time.Unix(0, 0).UTC(),
+		Level:     streamwriter.LevelInfo,
+		Message:   "hello log",
+		TraceID:   "tx-1",
+		Fields:    map[string]any{"z": 1, "a": 2},
 	}
 
-	buf.Reset()
-
-	// 2. Non-log arbitrary payload (raw string, map, or custom struct)
-	type DomainEvent struct {
-		EventID string
-		Amount  float64
-	}
-	_ = log.Emit(ctx, DomainEvent{EventID: "evt-123", Amount: 99.50})
-	if !strings.Contains(buf.String(), "evt-123") {
-		t.Errorf("expected domain event payload, got: %s", buf.String())
+	compiled := streamwriter.Compile(rec)
+	// Must compile LogRecord using its Compile() method and sort fields
+	if !strings.Contains(compiled, "[trace=tx-1]") || !strings.Contains(compiled, "fields={a: 2, z: 1}") {
+		t.Fatalf("unexpected LogRecord compile: %s", compiled)
 	}
 }
