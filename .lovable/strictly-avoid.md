@@ -172,3 +172,67 @@ Absolute filesystem paths (e.g., `/absolute/path/to/...`, `/Users/.../`, `/home/
 - All canonical specifications must live under the root `spec/` directory.
 - All repo-specific / application-specific specifications must reside under `02-spec/21-app/`.
 - The `.lovable/` directory is reserved exclusively for AI metadata (`memory/`, `plans/`, `prompts/`, `ai-fix-scripts/`, `assets/`, `procedures/`, `suggestions/`, `question-and-ambiguity/`).
+
+---
+
+## Go Interface Suffix — TOTAL BAN
+
+🔴 **NEVER suffix Go interfaces with `Interface` (e.g., `WriterInterface`, `StreamerInterface`).**
+
+Forbidden:
+- ❌ `type WriterInterface[T any] interface`
+- ❌ `type StreamerInterface[T any] interface`
+- ❌ `type HandlerInterface interface`
+
+Allowed work:
+- ✅ Idiomatic Go `-er` interfaces: `type Writer[T any] interface`, `type Streamer[T any] interface`, `type Reader interface`, `type Formatter[T any] interface`.
+
+**Why:** Go conventions mandate concise, idiomatic `-er` naming for single- or few-method interfaces representing behavior. Suffixing with `Interface` is an anti-pattern imported from other languages and strictly prohibited in this repository.
+
+---
+
+## Uppercase ID Acronym in Identifiers — TOTAL BAN
+
+🔴 **NEVER use all-caps `ID` in variable names, struct fields, method names, or function parameters.**
+
+Forbidden:
+- ❌ `UserID`, `OrderID`, `AccountID`, `TraceID`, `ID`
+- ❌ `GetID()`, `SetID()`, `traceID`
+
+Allowed work:
+- ✅ PascalCase `Id`: `UserId`, `OrderId`, `AccountId`, `TraceId`, `Id`
+- ✅ camelCase `id`: `userId`, `orderId`, `accountId`, `traceId`, `id`
+
+**Why:** Acronym casing must be normalized to `Id` in PascalCase and `id` in camelCase across all languages to eliminate capitalization inconsistencies and pass repository naming linters.
+
+---
+
+## Boolean Fields Without Positive Prefixes — TOTAL BAN
+
+🔴 **NEVER define boolean fields, variables, or properties without an explicit positive prefix (`is`, `has`, `should`, `can`).**
+
+Forbidden:
+- ❌ `Active bool`, `Success bool`, `Match bool`, `Ready bool`
+- ❌ `active: boolean`, `success: boolean`
+
+Allowed work:
+- ✅ `IsActive bool`, `IsSuccess bool`, `HasMatch bool`, `IsReady bool`
+- ✅ `isActive: boolean`, `isSuccess: boolean`
+
+**Why:** Bare boolean identifiers violate the repository's positive-polarity naming convention and impair readability in conditional guard clauses.
+
+---
+
+## Noisy Passing Quality Gate Output in CI Runners — TOTAL BAN
+
+🔴 **NEVER flood developer terminals with stdout/stderr logs from passing quality gates in local CI test runners.**
+
+Forbidden:
+- ❌ Dumping passing command outputs to the console when all gates succeed.
+- ❌ Interleaving asynchronous stdout streams from parallel workers across terminal lines.
+
+Allowed work:
+- ✅ Real-time single-line status ticker for completion progress (`[ 1/21] ✅ [PASS] <Gate> (<duration>s)`).
+- ✅ Selective log suppression: print stdout/stderr ONLY for gates that exit with a non-zero status code or timeout.
+- ✅ Full verbose logs emitted ONLY when the user explicitly passes the `--all` (`-a`) flag.
+

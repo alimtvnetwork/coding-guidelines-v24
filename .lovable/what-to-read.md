@@ -1,10 +1,11 @@
 # What to Read
 
 > Canonical map of what the AI must read before working on this project.
-> Last updated: 2026-08-09T18:21:37Z
+> Last updated: 2026-09-04T17:39:00Z
 
 ## Changelog
 
+- 2026-09-04T17:39:00Z, Memory write: parallel multi-worker CI/CD local runner, selective log filtering, streamwriter contracts, and naming standards.
 - 2026-08-09T18:21:37Z, Memory write: code red refactor and strict absolute path avoidance.
 
 ## Before any task (always)
@@ -12,12 +13,15 @@
 - `version.json`, why: single source of truth for the repository version, backend/frontend sections, and sub-package version tracks. All codebases must import this file for version information.
 - `.lovable/memory/01-index.md`, why: core memory index
 - `.lovable/memory/learned/01-project-context-and-guidelines.md`, why: canonical learned memory of repo identity, CODE RED rules, coding guidelines, error philosophy, and active plans
+- `.lovable/memory/learned/03-parallel-cicd-runner-and-log-filtering.md`, why: parallel local runner concurrency, duration tracking, and log suppression standard
+- `.lovable/memory/learned/04-streamwriter-contracts-and-naming-standards.md`, why: streamwriter contracts, reentrant locker, monadic Bytes[T], JsonResult multi-source ingestion, boolean prefixes, and Id naming standard
 - `.lovable/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
 - `.lovable/memory/01-index.md`, why: architectural map of version propagation, sync pipeline, and release ceremony
 - `.lovable/coding-guidelines.md`, why: baseline rules and coding standards
 - `.lovable/plans/01-index.md`, why: active roadmap and pending tasks
 - `.lovable/strictly-avoid.md`, why: hard constraints and anti-patterns
 - `.lovable/question-and-ambiguity/01-new-ambiguity/`, why: open questions
+
 
 ## Before writing code
 
