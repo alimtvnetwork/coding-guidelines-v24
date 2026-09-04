@@ -10,7 +10,7 @@ import (
 // WriterOptions configures the pluggable writer for payload type T.
 type WriterOptions[T any] struct {
 	Name         string
-	Streamer     StreamerInterface[T]
+	Streamer     Streamer[T]
 	FormatMethod FormatFunc[T]
 	WriteMethod  WriteFunc[T]
 }
@@ -19,7 +19,7 @@ type WriterOptions[T any] struct {
 type PluggableWriter[T any] struct {
 	mu           sync.RWMutex
 	name         string
-	streamer     StreamerInterface[T]
+	streamer     Streamer[T]
 	formatMethod FormatFunc[T]
 	writeMethod  WriteFunc[T]
 }
@@ -80,21 +80,21 @@ func (w *PluggableWriter[T]) SetFormatMethod(fn FormatFunc[T]) {
 }
 
 // SetStreamer hot-swaps the underlying streamer at runtime.
-func (w *PluggableWriter[T]) SetStreamer(s StreamerInterface[T]) {
+func (w *PluggableWriter[T]) SetStreamer(s Streamer[T]) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	w.streamer = s
 }
 
 // Streamer returns the attached streamer under read-lock.
-func (w *PluggableWriter[T]) Streamer() StreamerInterface[T] {
+func (w *PluggableWriter[T]) Streamer() Streamer[T] {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
 	return w.streamer
 }
 
-// AsWriter returns the self-binding WriterInterface[T].
-func (w *PluggableWriter[T]) AsWriter() WriterInterface[T] {
+// AsWriter returns the self-binding Writer[T].
+func (w *PluggableWriter[T]) AsWriter() Writer[T] {
 	return w
 }
 
@@ -147,4 +147,4 @@ func (w *PluggableWriter[T]) defaultWrite(ctx context.Context, payload T) *appfa
 	return nil
 }
 
-var _ WriterInterface[any] = (*PluggableWriter[any])(nil)
+var _ Writer[any] = (*PluggableWriter[any])(nil)

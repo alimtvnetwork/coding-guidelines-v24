@@ -17,7 +17,7 @@ type LocklessOptions[T any] struct {
 	StreamMethod StreamFunc[T]
 }
 
-// LocklessStreamer implements StreamerInterface[T] with zero lock overhead and AppError.
+// LocklessStreamer implements Streamer[T] with zero lock overhead and AppError.
 type LocklessStreamer[T any] struct {
 	name         string
 	destination  io.Writer
@@ -58,7 +58,7 @@ func (s *LocklessStreamer[T]) Stream(ctx context.Context, payload T) *appfault.A
 	return s.streamMethod(ctx, payload, s.destination)
 }
 
-// Write satisfies WriterInterface[T] by delegating to Stream.
+// Write satisfies Writer[T] by delegating to Stream.
 func (s *LocklessStreamer[T]) Write(ctx context.Context, payload T) *appfault.AppError {
 	return s.Stream(ctx, payload)
 }
@@ -87,13 +87,13 @@ func (s *LocklessStreamer[T]) Destination() io.Writer {
 	return s.destination
 }
 
-// AsStreamer returns the self-binding StreamerInterface[T].
-func (s *LocklessStreamer[T]) AsStreamer() StreamerInterface[T] {
+// AsStreamer returns the self-binding Streamer[T].
+func (s *LocklessStreamer[T]) AsStreamer() Streamer[T] {
 	return s
 }
 
-// AsWriter returns the self-binding WriterInterface[T].
-func (s *LocklessStreamer[T]) AsWriter() WriterInterface[T] {
+// AsWriter returns the self-binding Writer[T].
+func (s *LocklessStreamer[T]) AsWriter() Writer[T] {
 	return s
 }
 
@@ -132,4 +132,5 @@ func (s *LocklessStreamer[T]) defaultStream(ctx context.Context, payload T, dest
 	return nil
 }
 
-var _ StreamerInterface[any] = (*LocklessStreamer[any])(nil)
+var _ Streamer[any] = (*LocklessStreamer[any])(nil)
+var _ Writer[any] = (*LocklessStreamer[any])(nil)

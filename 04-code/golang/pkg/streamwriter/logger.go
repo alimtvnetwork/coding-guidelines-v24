@@ -11,18 +11,18 @@ import (
 // Logger coordinates multiple generic writers and streamers over type T with AppError returns.
 type Logger[T any] struct {
 	mu      sync.RWMutex
-	writers []WriterInterface[T]
+	writers []Writer[T]
 }
 
 // NewLogger creates an empty generic Logger in silent mode (0 writers, 0 allocations).
 func NewLogger[T any]() *Logger[T] {
 	return &Logger[T]{
-		writers: make([]WriterInterface[T], 0),
+		writers: make([]Writer[T], 0),
 	}
 }
 
 // AddWriter fluently registers a single writer.
-func (l *Logger[T]) AddWriter(w WriterInterface[T]) *Logger[T] {
+func (l *Logger[T]) AddWriter(w Writer[T]) *Logger[T] {
 	if w == nil {
 		return l
 	}
@@ -33,7 +33,7 @@ func (l *Logger[T]) AddWriter(w WriterInterface[T]) *Logger[T] {
 }
 
 // AddWriters fluently registers multiple writers in one call.
-func (l *Logger[T]) AddWriters(ws ...WriterInterface[T]) *Logger[T] {
+func (l *Logger[T]) AddWriters(ws ...Writer[T]) *Logger[T] {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	for _, w := range ws {
@@ -45,7 +45,7 @@ func (l *Logger[T]) AddWriters(ws ...WriterInterface[T]) *Logger[T] {
 }
 
 // AddStreamer fluently registers a streamer (adapting it via AsWriter()).
-func (l *Logger[T]) AddStreamer(s StreamerInterface[T]) *Logger[T] {
+func (l *Logger[T]) AddStreamer(s Streamer[T]) *Logger[T] {
 	if s == nil {
 		return l
 	}
@@ -67,7 +67,7 @@ func (l *Logger[T]) ClearWriters() *Logger[T] {
 func (l *Logger[T]) RemoveWriter(name string) *Logger[T] {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	filtered := make([]WriterInterface[T], 0, len(l.writers))
+	filtered := make([]Writer[T], 0, len(l.writers))
 	for _, w := range l.writers {
 		if w.Name() != name {
 			filtered = append(filtered, w)
@@ -92,7 +92,7 @@ func (l *Logger[T]) Emit(ctx context.Context, payload T) *appfault.AppError {
 		l.mu.RUnlock()
 		return nil
 	}
-	active := make([]WriterInterface[T], len(l.writers))
+	active := make([]Writer[T], len(l.writers))
 	copy(active, l.writers)
 	l.mu.RUnlock()
 
@@ -129,7 +129,7 @@ func (l *Logger[T]) Warn(ctx context.Context, msg string, fields ...map[string]a
 // Sync flushes all active writers, returning *appfault.AppError.
 func (l *Logger[T]) Sync() *appfault.AppError {
 	l.mu.RLock()
-	active := make([]WriterInterface[T], len(l.writers))
+	active := make([]Writer[T], len(l.writers))
 	copy(active, l.writers)
 	l.mu.RUnlock()
 

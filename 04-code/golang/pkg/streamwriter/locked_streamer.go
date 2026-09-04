@@ -18,7 +18,7 @@ type LockedOptions[T any] struct {
 	StreamMethod StreamFunc[T]
 }
 
-// LockedStreamer implements StreamerInterface[T] with mutex synchronization and AppError.
+// LockedStreamer implements Streamer[T] with mutex synchronization and AppError.
 type LockedStreamer[T any] struct {
 	mu           sync.RWMutex
 	name         string
@@ -63,7 +63,7 @@ func (s *LockedStreamer[T]) Stream(ctx context.Context, payload T) *appfault.App
 	return s.streamMethod(ctx, payload, s.destination)
 }
 
-// Write satisfies WriterInterface[T] by delegating to Stream.
+// Write satisfies Writer[T] by delegating to Stream.
 func (s *LockedStreamer[T]) Write(ctx context.Context, payload T) *appfault.AppError {
 	return s.Stream(ctx, payload)
 }
@@ -100,13 +100,13 @@ func (s *LockedStreamer[T]) Destination() io.Writer {
 	return s.destination
 }
 
-// AsStreamer returns the self-binding StreamerInterface[T].
-func (s *LockedStreamer[T]) AsStreamer() StreamerInterface[T] {
+// AsStreamer returns the self-binding Streamer[T].
+func (s *LockedStreamer[T]) AsStreamer() Streamer[T] {
 	return s
 }
 
-// AsWriter returns the self-binding WriterInterface[T].
-func (s *LockedStreamer[T]) AsWriter() WriterInterface[T] {
+// AsWriter returns the self-binding Writer[T].
+func (s *LockedStreamer[T]) AsWriter() Writer[T] {
 	return s
 }
 
@@ -153,4 +153,5 @@ func (s *LockedStreamer[T]) defaultStream(ctx context.Context, payload T, dest i
 	return nil
 }
 
-var _ StreamerInterface[any] = (*LockedStreamer[any])(nil)
+var _ Streamer[any] = (*LockedStreamer[any])(nil)
+var _ Writer[any] = (*LockedStreamer[any])(nil)

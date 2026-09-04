@@ -238,23 +238,23 @@ func TestSelfBinding_GenericContracts(t *testing.T) {
 	writer := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{Name: "test-writer", Streamer: locked})
 
 	// Verify LockedStreamer self-binding
-	var s1 streamwriter.StreamerInterface[any] = locked.AsStreamer()
-	var w1 streamwriter.WriterInterface[any] = locked.AsWriter()
+	var s1 streamwriter.Streamer[any] = locked.AsStreamer()
+	var w1 streamwriter.Writer[any] = locked.AsWriter()
 	var i1 streamwriter.Interfacer = locked.AsInterfacer()
 	if s1 == nil || w1 == nil || i1 == nil {
 		t.Fatal("locked streamer self-binding failed")
 	}
 
 	// Verify LocklessStreamer self-binding
-	var s2 streamwriter.StreamerInterface[any] = lockless.AsStreamer()
-	var w2 streamwriter.WriterInterface[any] = lockless.AsWriter()
+	var s2 streamwriter.Streamer[any] = lockless.AsStreamer()
+	var w2 streamwriter.Writer[any] = lockless.AsWriter()
 	var i2 streamwriter.Interfacer = lockless.AsInterfacer()
 	if s2 == nil || w2 == nil || i2 == nil {
 		t.Fatal("lockless streamer self-binding failed")
 	}
 
 	// Verify PluggableWriter self-binding
-	var w3 streamwriter.WriterInterface[any] = writer.AsWriter()
+	var w3 streamwriter.Writer[any] = writer.AsWriter()
 	var i3 streamwriter.Interfacer = writer.AsInterfacer()
 	if w3 == nil || i3 == nil {
 		t.Fatal("pluggable writer self-binding failed")

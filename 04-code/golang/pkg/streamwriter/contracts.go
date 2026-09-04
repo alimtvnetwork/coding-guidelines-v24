@@ -14,23 +14,23 @@ type Interfacer interface {
 	AsInterfacer() Interfacer
 }
 
-// WriterInterface defines universal write operations over generic type T with AppError.
-type WriterInterface[T any] interface {
+// Writer defines universal write operations over generic type T with AppError.
+type Writer[T any] interface {
 	Interfacer
 	Name() string
 	Write(ctx context.Context, payload T) *appfault.AppError
-	AsWriter() WriterInterface[T]
+	AsWriter() Writer[T]
 	Sync() *appfault.AppError
 	Close() *appfault.AppError
 }
 
-// StreamerInterface defines streaming operations over generic type T with AppError.
-type StreamerInterface[T any] interface {
+// Streamer defines streaming operations over generic type T with AppError.
+type Streamer[T any] interface {
 	Interfacer
 	Name() string
 	Stream(ctx context.Context, payload T) *appfault.AppError
-	AsStreamer() StreamerInterface[T]
-	AsWriter() WriterInterface[T]
+	AsStreamer() Streamer[T]
+	AsWriter() Writer[T]
 	IsLocked() bool
 	Destination() io.Writer
 	Sync() *appfault.AppError
