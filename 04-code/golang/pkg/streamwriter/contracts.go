@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"time"
+
+	"coding-guidelines/common/pkg/appfault"
 )
 
 // Interfacer represents the self-binding contract returning its own interface.
@@ -12,37 +14,37 @@ type Interfacer interface {
 	AsInterfacer() Interfacer
 }
 
-// WriterInterface defines universal write operations over generic type T with self-binding.
+// WriterInterface defines universal write operations over generic type T with AppError.
 type WriterInterface[T any] interface {
 	Interfacer
 	Name() string
-	Write(ctx context.Context, payload T) error
+	Write(ctx context.Context, payload T) *appfault.AppError
 	AsWriter() WriterInterface[T]
-	Sync() error
-	Close() error
+	Sync() *appfault.AppError
+	Close() *appfault.AppError
 }
 
-// StreamerInterface defines streaming operations over generic type T with locking introspection.
+// StreamerInterface defines streaming operations over generic type T with AppError.
 type StreamerInterface[T any] interface {
 	Interfacer
 	Name() string
-	Stream(ctx context.Context, payload T) error
+	Stream(ctx context.Context, payload T) *appfault.AppError
 	AsStreamer() StreamerInterface[T]
 	AsWriter() WriterInterface[T]
 	IsLocked() bool
 	Destination() io.Writer
-	Sync() error
-	Close() error
+	Sync() *appfault.AppError
+	Close() *appfault.AppError
 }
 
-// StreamFunc defines the swappable function signature for streaming data of type T.
-type StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) error
+// StreamFunc defines the swappable function signature returning *appfault.AppError.
+type StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) *appfault.AppError
 
-// WriteFunc defines the swappable function signature for write operations over type T.
-type WriteFunc[T any] func(ctx context.Context, payload T) error
+// WriteFunc defines the swappable function signature returning *appfault.AppError.
+type WriteFunc[T any] func(ctx context.Context, payload T) *appfault.AppError
 
-// FormatFunc defines the serialization transformation from payload T to bytes.
-type FormatFunc[T any] func(payload T) ([]byte, error)
+// FormatFunc defines the serialization transformation returning Bytes[T].
+type FormatFunc[T any] func(payload T) Bytes[T]
 
 // LogLevel defines standardized severity tiers.
 type LogLevel int

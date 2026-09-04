@@ -4,9 +4,11 @@ import (
 	"context"
 	"sync"
 	"time"
+
+	"coding-guidelines/common/pkg/appfault"
 )
 
-// Logger coordinates multiple generic writers and streamers over type T.
+// Logger coordinates multiple generic writers and streamers over type T with AppError returns.
 type Logger[T any] struct {
 	mu      sync.RWMutex
 	writers []WriterInterface[T]
@@ -82,8 +84,8 @@ func (l *Logger[T]) WriterCount() int {
 	return len(l.writers)
 }
 
-// Emit sends a generic payload T to all active writers.
-func (l *Logger[T]) Emit(ctx context.Context, payload T) error {
+// Emit sends a generic payload T to all active writers, returning *appfault.AppError.
+func (l *Logger[T]) Emit(ctx context.Context, payload T) *appfault.AppError {
 	l.mu.RLock()
 	// Zero-allocation silent guard
 	if len(l.writers) == 0 {
@@ -94,7 +96,7 @@ func (l *Logger[T]) Emit(ctx context.Context, payload T) error {
 	copy(active, l.writers)
 	l.mu.RUnlock()
 
-	var firstErr error
+	var firstErr *appfault.AppError
 	for _, w := range active {
 		err := w.Write(ctx, payload)
 		if err != nil && firstErr == nil {
@@ -104,51 +106,58 @@ func (l *Logger[T]) Emit(ctx context.Context, payload T) error {
 	return firstErr
 }
 
-// Info emits a LevelInfo structured record if T can represent it.
-func (l *Logger[T]) Info(ctx context.Context, msg string, fields ...map[string]any) error {
+// Info emits a LevelInfo structured record if T can represent it, returning *appfault.AppError.
+func (l *Logger[T]) Info(ctx context.Context, msg string, fields ...map[string]any) *appfault.AppError {
 	return l.dispatchRecord(ctx, LevelInfo, msg, fields...)
 }
 
-// Error emits a LevelError structured record if T can represent it.
-func (l *Logger[T]) Error(ctx context.Context, msg string, fields ...map[string]any) error {
+// Error emits a LevelError structured record if T can represent it, returning *appfault.AppError.
+func (l *Logger[T]) Error(ctx context.Context, msg string, fields ...map[string]any) *appfault.AppError {
 	return l.dispatchRecord(ctx, LevelError, msg, fields...)
 }
 
-// Debug emits a LevelDebug structured record if T can represent it.
-func (l *Logger[T]) Debug(ctx context.Context, msg string, fields ...map[string]any) error {
+// Debug emits a LevelDebug structured record if T can represent it, returning *appfault.AppError.
+func (l *Logger[T]) Debug(ctx context.Context, msg string, fields ...map[string]any) *appfault.AppError {
 	return l.dispatchRecord(ctx, LevelDebug, msg, fields...)
 }
 
-// Warn emits a LevelWarn structured record if T can represent it.
-func (l *Logger[T]) Warn(ctx context.Context, msg string, fields ...map[string]any) error {
+// Warn emits a LevelWarn structured record if T can represent it, returning *appfault.AppError.
+func (l *Logger[T]) Warn(ctx context.Context, msg string, fields ...map[string]any) *appfault.AppError {
 	return l.dispatchRecord(ctx, LevelWarn, msg, fields...)
 }
 
-// Sync flushes all active writers.
-func (l *Logger[T]) Sync() error {
+// Sync flushes all active writers, returning *appfault.AppError.
+func (l *Logger[T]) Sync() *appfault.AppError {
 	l.mu.RLock()
 	active := make([]WriterInterface[T], len(l.writers))
 	copy(active, l.writers)
 	l.mu.RUnlock()
 
+	var firstErr *appfault.AppError
 	for _, w := range active {
-		_ = w.Sync()
+		if err := w.Sync(); err != nil && firstErr == nil {
+			firstErr = err
+		}
 	}
-	return nil
+	return firstErr
 }
 
-// Close closes all active writers.
-func (l *Logger[T]) Close() error {
+// Close closes all active writers, returning *appfault.AppError.
+func (l *Logger[T]) Close() *appfault.AppError {
 	l.mu.Lock()
 	defer l.mu.Unlock()
+
+	var firstErr *appfault.AppError
 	for _, w := range l.writers {
-		_ = w.Close()
+		if err := w.Close(); err != nil && firstErr == nil {
+			firstErr = err
+		}
 	}
 	l.writers = l.writers[:0]
-	return nil
+	return firstErr
 }
 
-func (l *Logger[T]) dispatchRecord(ctx context.Context, lvl LogLevel, msg string, fields ...map[string]any) error {
+func (l *Logger[T]) dispatchRecord(ctx context.Context, lvl LogLevel, msg string, fields ...map[string]any) *appfault.AppError {
 	l.mu.RLock()
 	if len(l.writers) == 0 {
 		l.mu.RUnlock()

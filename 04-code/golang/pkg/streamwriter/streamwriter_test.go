@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/streamwriter"
 )
 
@@ -53,6 +55,50 @@ type OuterContainer struct {
 	Report CustomReport `json:"report"`
 }
 
+func TestBytesWrapper(t *testing.T) {
+	raw := []byte("hello bytes")
+	payload := "original-payload"
+
+	// 1. Successful Bytes
+	b := streamwriter.NewBytes(raw, payload)
+	if !b.IsValid() {
+		t.Errorf("expected IsValid() to be true")
+	}
+	if b.HasError() {
+		t.Errorf("expected HasError() to be false")
+	}
+	if b.String() != "hello bytes" {
+		t.Errorf("unexpected string: %s", b.String())
+	}
+	if b.Len() != len(raw) {
+		t.Errorf("unexpected len: %d", b.Len())
+	}
+	if b.Payload() != payload {
+		t.Errorf("unexpected payload: %v", b.Payload())
+	}
+	if b.AppError() != nil {
+		t.Errorf("expected nil AppError")
+	}
+
+	unwrappedData, unwrappedErr := b.Unwrap()
+	if string(unwrappedData) != "hello bytes" || unwrappedErr != nil {
+		t.Errorf("unwrap failed")
+	}
+
+	// 2. Failed Bytes with AppError
+	appErr := appfault.New(errtype.Validation, "validation failed")
+	errBytes := streamwriter.NewBytesError[string](appErr)
+	if errBytes.IsValid() {
+		t.Errorf("expected IsValid() to be false on error")
+	}
+	if !errBytes.HasError() {
+		t.Errorf("expected HasError() to be true on error")
+	}
+	if errBytes.AppError() == nil {
+		t.Errorf("expected non-nil AppError")
+	}
+}
+
 func TestCompiler_Primitives(t *testing.T) {
 	// String
 	if streamwriter.Compile("hello world") != "hello world" {
@@ -83,7 +129,6 @@ func TestCompiler_Primitives(t *testing.T) {
 }
 
 func TestCompiler_Maps_OrderWise(t *testing.T) {
-	// Map keys must be sorted lexicographically regardless of insertion order
 	data := map[string]any{
 		"zebra":  100,
 		"apple":  "pie",
@@ -142,9 +187,9 @@ func TestLockedStreamer_Generic_ConcurrentSafe(t *testing.T) {
 		wg.Add(1)
 		go func(idx int) {
 			defer wg.Done()
-			err := streamer.Stream(ctx, fmt.Sprintf("goroutine-%d", idx))
-			if err != nil {
-				t.Errorf("stream failed: %v", err)
+			appErr := streamer.Stream(ctx, fmt.Sprintf("goroutine-%d", idx))
+			if appErr != nil {
+				t.Errorf("stream failed: %v", appErr)
 			}
 		}(i)
 	}
@@ -176,13 +221,12 @@ func TestLocklessStreamer_Generic_Direct(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	err := streamer.Stream(ctx, Event{Name: "login", Code: 200})
-	if err != nil {
-		t.Fatalf("stream failed: %v", err)
+	appErr := streamer.Stream(ctx, Event{Name: "login", Code: 200})
+	if appErr != nil {
+		t.Fatalf("stream failed: %v", appErr)
 	}
 
 	out := buf.String()
-	// Output should be compiled order-wise
 	if !strings.Contains(out, `name: "login"`) || !strings.Contains(out, `code: 200`) {
 		t.Fatalf("expected compiled event in output, got: %s", out)
 	}
@@ -234,10 +278,13 @@ func TestSwappableMethods_GenericRuntime(t *testing.T) {
 
 	buf.Reset()
 
-	// Hot-swap stream method to custom format
-	streamer.SetStreamMethod(func(ctx context.Context, payload any, dest io.Writer) error {
+	// Hot-swap stream method returning *appfault.AppError
+	streamer.SetStreamMethod(func(ctx context.Context, payload any, dest io.Writer) *appfault.AppError {
 		_, err := fmt.Fprintf(dest, ">>> SWAPPED: %s <<<\n", streamwriter.Compile(payload))
-		return err
+		if err != nil {
+			return appfault.Wrap(errtype.IO, err, "failed swap write")
+		}
+		return nil
 	})
 
 	_ = streamer.Stream(ctx, "dynamic-change")
@@ -256,9 +303,12 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 
 	customWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
 		Name: "custom-api",
-		WriteMethod: func(ctx context.Context, payload any) error {
+		WriteMethod: func(ctx context.Context, payload any) *appfault.AppError {
 			_, err := fmt.Fprintf(buf3, "CUSTOM-API: %s\n", streamwriter.Compile(payload))
-			return err
+			if err != nil {
+				return appfault.Wrap(errtype.IO, err, "custom api write failed")
+			}
+			return nil
 		},
 	})
 
@@ -272,9 +322,9 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 	}
 
 	ctx := context.WithValue(context.Background(), "traceId", "trace-999")
-	err := log.Info(ctx, "Order placed successfully", map[string]any{"orderId": "ord-77"})
-	if err != nil {
-		t.Fatalf("log.Info failed: %v", err)
+	appErr := log.Info(ctx, "Order placed successfully", map[string]any{"orderId": "ord-77"})
+	if appErr != nil {
+		t.Fatalf("log.Info failed: %v", appErr)
 	}
 
 	// Verify emission across all 3 destinations
@@ -317,7 +367,6 @@ func TestLogRecord_Compile(t *testing.T) {
 	}
 
 	compiled := streamwriter.Compile(rec)
-	// Must compile LogRecord using its Compile() method and sort fields
 	if !strings.Contains(compiled, "[trace=tx-1]") || !strings.Contains(compiled, "fields={a: 2, z: 1}") {
 		t.Fatalf("unexpected LogRecord compile: %s", compiled)
 	}

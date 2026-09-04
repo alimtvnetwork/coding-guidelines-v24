@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 )
 
 // LocklessOptions configures the zero-overhead lockless streamer for payload type T.
@@ -14,7 +17,7 @@ type LocklessOptions[T any] struct {
 	StreamMethod StreamFunc[T]
 }
 
-// LocklessStreamer implements StreamerInterface[T] with zero lock overhead.
+// LocklessStreamer implements StreamerInterface[T] with zero lock overhead and AppError.
 type LocklessStreamer[T any] struct {
 	name         string
 	destination  io.Writer
@@ -50,13 +53,13 @@ func (s *LocklessStreamer[T]) Name() string {
 	return s.name
 }
 
-// Stream executes directly with zero mutex operations.
-func (s *LocklessStreamer[T]) Stream(ctx context.Context, payload T) error {
+// Stream executes directly with zero mutex operations, returning *appfault.AppError.
+func (s *LocklessStreamer[T]) Stream(ctx context.Context, payload T) *appfault.AppError {
 	return s.streamMethod(ctx, payload, s.destination)
 }
 
 // Write satisfies WriterInterface[T] by delegating to Stream.
-func (s *LocklessStreamer[T]) Write(ctx context.Context, payload T) error {
+func (s *LocklessStreamer[T]) Write(ctx context.Context, payload T) *appfault.AppError {
 	return s.Stream(ctx, payload)
 }
 
@@ -100,26 +103,33 @@ func (s *LocklessStreamer[T]) AsInterfacer() Interfacer {
 }
 
 // Sync flushes the underlying destination if supported.
-func (s *LocklessStreamer[T]) Sync() error {
+func (s *LocklessStreamer[T]) Sync() *appfault.AppError {
 	if syncer, isOk := s.destination.(interface{ Sync() error }); isOk {
-		return syncer.Sync()
+		if err := syncer.Sync(); err != nil {
+			return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s sync failed", s.name))
+		}
 	}
 	return nil
 }
 
 // Close closes the underlying destination if it implements io.Closer.
-func (s *LocklessStreamer[T]) Close() error {
+func (s *LocklessStreamer[T]) Close() *appfault.AppError {
 	if closer, isOk := s.destination.(io.Closer); isOk {
-		return closer.Close()
+		if err := closer.Close(); err != nil {
+			return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s close failed", s.name))
+		}
 	}
 	return nil
 }
 
-func (s *LocklessStreamer[T]) defaultStream(ctx context.Context, payload T, dest io.Writer) error {
+func (s *LocklessStreamer[T]) defaultStream(ctx context.Context, payload T, dest io.Writer) *appfault.AppError {
 	compiled := Compile(payload)
 	line := fmt.Sprintf("[%s][lockless] %s\n", s.name, compiled)
 	_, err := dest.Write([]byte(line))
-	return err
+	if err != nil {
+		return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s write failed", s.name))
+	}
+	return nil
 }
 
 var _ StreamerInterface[any] = (*LocklessStreamer[any])(nil)

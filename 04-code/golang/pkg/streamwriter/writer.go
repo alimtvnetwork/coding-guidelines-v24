@@ -3,6 +3,8 @@ package streamwriter
 import (
 	"context"
 	"sync"
+
+	"coding-guidelines/common/pkg/appfault"
 )
 
 // WriterOptions configures the pluggable writer for payload type T.
@@ -13,7 +15,7 @@ type WriterOptions[T any] struct {
 	WriteMethod  WriteFunc[T]
 }
 
-// PluggableWriter provides a composable write engine over type T with swappable methods.
+// PluggableWriter provides a composable write engine over type T with AppError returns.
 type PluggableWriter[T any] struct {
 	mu           sync.RWMutex
 	name         string
@@ -48,8 +50,8 @@ func (w *PluggableWriter[T]) Name() string {
 	return w.name
 }
 
-// Write delegates to the active writeMethod function under read-lock.
-func (w *PluggableWriter[T]) Write(ctx context.Context, payload T) error {
+// Write delegates to the active writeMethod function under read-lock, returning *appfault.AppError.
+func (w *PluggableWriter[T]) Write(ctx context.Context, payload T) *appfault.AppError {
 	w.mu.RLock()
 	fn := w.writeMethod
 	w.mu.RUnlock()
@@ -102,7 +104,7 @@ func (w *PluggableWriter[T]) AsInterfacer() Interfacer {
 }
 
 // Sync flushes the underlying streamer if attached.
-func (w *PluggableWriter[T]) Sync() error {
+func (w *PluggableWriter[T]) Sync() *appfault.AppError {
 	w.mu.RLock()
 	s := w.streamer
 	w.mu.RUnlock()
@@ -114,7 +116,7 @@ func (w *PluggableWriter[T]) Sync() error {
 }
 
 // Close closes the underlying streamer if attached.
-func (w *PluggableWriter[T]) Close() error {
+func (w *PluggableWriter[T]) Close() *appfault.AppError {
 	w.mu.Lock()
 	s := w.streamer
 	w.mu.Unlock()
@@ -125,10 +127,18 @@ func (w *PluggableWriter[T]) Close() error {
 	return nil
 }
 
-func (w *PluggableWriter[T]) defaultWrite(ctx context.Context, payload T) error {
+func (w *PluggableWriter[T]) defaultWrite(ctx context.Context, payload T) *appfault.AppError {
 	w.mu.RLock()
 	s := w.streamer
+	formatter := w.formatMethod
 	w.mu.RUnlock()
+
+	if formatter != nil {
+		bytesResult := formatter(payload)
+		if bytesResult.HasError() {
+			return bytesResult.AppError()
+		}
+	}
 
 	if s != nil {
 		return s.Stream(ctx, payload)

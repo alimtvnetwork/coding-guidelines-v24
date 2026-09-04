@@ -6,6 +6,9 @@ import (
 	"io"
 	"os"
 	"sync"
+
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 )
 
 // LockedOptions configures the thread-safe locked streamer for payload type T.
@@ -15,7 +18,7 @@ type LockedOptions[T any] struct {
 	StreamMethod StreamFunc[T]
 }
 
-// LockedStreamer implements StreamerInterface[T] with mutex synchronization.
+// LockedStreamer implements StreamerInterface[T] with mutex synchronization and AppError.
 type LockedStreamer[T any] struct {
 	mu           sync.RWMutex
 	name         string
@@ -52,8 +55,8 @@ func (s *LockedStreamer[T]) Name() string {
 	return s.name
 }
 
-// Stream executes the swappable stream method under mutex lock.
-func (s *LockedStreamer[T]) Stream(ctx context.Context, payload T) error {
+// Stream executes the swappable stream method under mutex lock, returning *appfault.AppError.
+func (s *LockedStreamer[T]) Stream(ctx context.Context, payload T) *appfault.AppError {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -61,7 +64,7 @@ func (s *LockedStreamer[T]) Stream(ctx context.Context, payload T) error {
 }
 
 // Write satisfies WriterInterface[T] by delegating to Stream.
-func (s *LockedStreamer[T]) Write(ctx context.Context, payload T) error {
+func (s *LockedStreamer[T]) Write(ctx context.Context, payload T) *appfault.AppError {
 	return s.Stream(ctx, payload)
 }
 
@@ -113,34 +116,41 @@ func (s *LockedStreamer[T]) AsInterfacer() Interfacer {
 }
 
 // Sync flushes the underlying destination if supported.
-func (s *LockedStreamer[T]) Sync() error {
+func (s *LockedStreamer[T]) Sync() *appfault.AppError {
 	s.mu.RLock()
 	dest := s.destination
 	s.mu.RUnlock()
 
 	if syncer, isOk := dest.(interface{ Sync() error }); isOk {
-		return syncer.Sync()
+		if err := syncer.Sync(); err != nil {
+			return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s sync failed", s.name))
+		}
 	}
 	return nil
 }
 
 // Close closes the underlying destination if it implements io.Closer.
-func (s *LockedStreamer[T]) Close() error {
+func (s *LockedStreamer[T]) Close() *appfault.AppError {
 	s.mu.Lock()
 	dest := s.destination
 	s.mu.Unlock()
 
 	if closer, isOk := dest.(io.Closer); isOk {
-		return closer.Close()
+		if err := closer.Close(); err != nil {
+			return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s close failed", s.name))
+		}
 	}
 	return nil
 }
 
-func (s *LockedStreamer[T]) defaultStream(ctx context.Context, payload T, dest io.Writer) error {
+func (s *LockedStreamer[T]) defaultStream(ctx context.Context, payload T, dest io.Writer) *appfault.AppError {
 	compiled := Compile(payload)
 	line := fmt.Sprintf("[%s][locked] %s\n", s.name, compiled)
 	_, err := dest.Write([]byte(line))
-	return err
+	if err != nil {
+		return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s write failed", s.name))
+	}
+	return nil
 }
 
 var _ StreamerInterface[any] = (*LockedStreamer[any])(nil)
