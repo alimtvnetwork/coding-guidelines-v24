@@ -31,6 +31,7 @@ func NewLocklessStreamer[T any](opts LocklessOptions[T]) *LocklessStreamer[T] {
 	if name == "" {
 		name = "lockless-streamer"
 	}
+
 	dest := opts.Destination
 	if dest == nil {
 		dest = os.Stdout
@@ -46,6 +47,7 @@ func NewLocklessStreamer[T any](opts LocklessOptions[T]) *LocklessStreamer[T] {
 	} else {
 		s.streamMethod = s.defaultStream
 	}
+
 	return s
 }
 
@@ -111,6 +113,7 @@ func (s *LocklessStreamer[T]) Sync() *appfault.AppError {
 			return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s sync failed", s.name))
 		}
 	}
+
 	return nil
 }
 
@@ -121,6 +124,7 @@ func (s *LocklessStreamer[T]) Close() *appfault.AppError {
 			return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s close failed", s.name))
 		}
 	}
+
 	return nil
 }
 
@@ -131,6 +135,7 @@ func (s *LocklessStreamer[T]) defaultStream(ctx context.Context, payload T, dest
 	if err != nil {
 		return appfault.Wrap(errtype.IO, err, fmt.Sprintf("streamer %s write failed", s.name))
 	}
+
 	return nil
 }
 

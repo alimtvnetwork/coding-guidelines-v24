@@ -61,6 +61,7 @@ func NewBytesError[T any](appErr *appfault.AppError) Bytes[T] {
 			code = appErr.StatusCode()
 		}
 	}
+
 	return Bytes[T]{
 		status:     false,
 		statusCode: code,
@@ -76,6 +77,7 @@ func NewBytesErrorWithPayload[T any](appErr *appfault.AppError, payload T) Bytes
 			code = appErr.StatusCode()
 		}
 	}
+
 	return Bytes[T]{
 		payload:    payload,
 		status:     false,
@@ -149,6 +151,7 @@ func (b Bytes[T]) IsSuccess() bool {
 	if b.appError != nil {
 		return false
 	}
+
 	return b.status
 }
 

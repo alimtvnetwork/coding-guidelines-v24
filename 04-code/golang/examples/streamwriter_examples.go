@@ -58,14 +58,17 @@ func RunLoggerExample(dest io.Writer) *appfault.AppError {
 			if traceVal := ctx.Value("traceId"); traceVal != nil {
 				trace = fmt.Sprintf("[%v] ", traceVal)
 			}
+
 			outDest := w.Destination()
 			if outDest == nil {
 				outDest = os.Stdout
 			}
+
 			_, err := fmt.Fprintf(outDest, "[%s] %s%s\n", w.Name(), trace, streamwriter.Compile(payload))
 			if err != nil {
 				return appfault.Wrap(errtype.IO, err, "audit write failed")
 			}
+
 			return nil
 		},
 	})
@@ -164,6 +167,7 @@ func RunJsonExample(dest io.Writer) *appfault.AppError {
 	if appErr != nil {
 		return appErr
 	}
+
 	fmt.Fprintf(dest, "--- Unmarshaled Account: %s (%s) ---\n", directAcc.Username, directAcc.Role)
 
 	// 8. Type-Casting: Convert between matching structures without manual mappings
@@ -171,6 +175,7 @@ func RunJsonExample(dest io.Writer) *appfault.AppError {
 		Id       string `json:"id"`
 		Username string `json:"username"`
 	}
+
 	profileRes := streamwriter.Cast[PublicProfile](account)
 	if !profileRes.IsValid() {
 		return profileRes.AppError()
@@ -181,6 +186,7 @@ func RunJsonExample(dest io.Writer) *appfault.AppError {
 	if appErr != nil {
 		return appErr
 	}
+
 	fmt.Fprintf(dest, "--- Casted Public Profile: %s [%s] ---\n", directTarget.Username, directTarget.Id)
 
 	// 9. Extended JsonPayloadResult: Embedding JsonResult with strongly-typed payload T
@@ -232,6 +238,7 @@ func RunStreamerExample(dest io.Writer) *appfault.AppError {
 			})
 		}(i)
 	}
+
 	wg.Wait()
 
 	// 3. LocklessStreamer for high-throughput single-producer scenarios
@@ -271,10 +278,12 @@ func RunStreamerExample(dest io.Writer) *appfault.AppError {
 		if outDest == nil {
 			outDest = os.Stdout
 		}
+
 		_, err := fmt.Fprintf(outDest, "[%s][swapped] %s\n", w.Name(), payload)
 		if err != nil {
 			return appfault.Wrap(errtype.IO, err, "swapped write failed")
 		}
+
 		return nil
 	})
 	_ = batchWriter.Write(ctx, "Message sent via runtime swapped method")

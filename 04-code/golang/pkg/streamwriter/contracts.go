@@ -89,12 +89,15 @@ func (r LogRecord) Compile() string {
 	if r.TraceId != "" {
 		res += fmt.Sprintf(" [trace=%s]", r.TraceId)
 	}
+
 	if r.UserId != "" {
 		res += fmt.Sprintf(" [user=%s]", r.UserId)
 	}
+
 	if len(r.Fields) > 0 {
 		res += fmt.Sprintf(" fields=%s", Compile(r.Fields))
 	}
+
 	return res
 }
 

@@ -72,6 +72,7 @@ func (p JsonPayloadResult[T]) ToBytes() Bytes[T] {
 	if p.appError != nil {
 		return NewBytesErrorWithPayload(p.appError, p.payload)
 	}
+
 	return NewBytes(p.data, p.payload)
 }
 
@@ -111,6 +112,7 @@ func (jsonSourceSingleton) FromSerializer(serializer func() ([]byte, *appfault.A
 			appError: appfault.New(errtype.Validation, "serializer closure cannot be nil"),
 		}
 	}
+
 	data, appErr := serializer()
 	if appErr != nil {
 		return JsonResult{
@@ -118,6 +120,7 @@ func (jsonSourceSingleton) FromSerializer(serializer func() ([]byte, *appfault.A
 			appError: appErr,
 		}
 	}
+
 	return NewJsonResultWithBytes(data)
 }
 
@@ -128,6 +131,7 @@ func (jsonSourceSingleton) FromBytesEnvelope(wb any) JsonResult {
 			appError: appfault.New(errtype.Validation, "wrapped bytes envelope cannot be nil"),
 		}
 	}
+
 	if rawProvider, ok := wb.(interface{ Raw() []byte }); ok {
 		raw := rawProvider.Raw()
 		if errProvider, ok := wb.(interface{ AppError() *appfault.AppError }); ok {
@@ -138,8 +142,10 @@ func (jsonSourceSingleton) FromBytesEnvelope(wb any) JsonResult {
 				}
 			}
 		}
+
 		return NewJsonResultWithBytes(raw)
 	}
+
 	return FromAny(wb)
 }
 
@@ -159,10 +165,12 @@ func (jsonSourceSingleton) Cast(source any, targetPtr any) *appfault.AppError {
 	if err != nil {
 		return appfault.Wrap(errtype.Validation, err, "failed to marshal source for type cast")
 	}
+
 	err = json.Unmarshal(data, targetPtr)
 	if err != nil {
 		return appfault.Wrap(errtype.Validation, err, "failed to unmarshal into target pointer during cast")
 	}
+
 	return nil
 }
 
@@ -215,6 +223,7 @@ func (typedJsonSource[T]) FromError(appErr *appfault.AppError, payload ...T) Jso
 	if len(payload) > 0 {
 		p = payload[0]
 	}
+
 	return WithPayload(NewJsonResultError(appErr), p)
 }
 
@@ -260,6 +269,7 @@ func FromAny(source any) JsonResult {
 			data: []byte("null"),
 		}
 	}
+
 	switch v := source.(type) {
 	case JsonResult:
 		return v
@@ -269,6 +279,7 @@ func FromAny(source any) JsonResult {
 				appError: appfault.New(errtype.Validation, "nil JsonResult pointer provided"),
 			}
 		}
+
 		return *v
 	case []byte:
 		return JsonSource.FromBytes(v)
@@ -307,6 +318,7 @@ func Cast[Target any](source any) JsonResult {
 			appError: appfault.Wrap(errtype.Validation, err, "failed to marshal source for type cast"),
 		}
 	}
+
 	var target Target
 	err = json.Unmarshal(data, &target)
 	if err != nil {
@@ -315,6 +327,7 @@ func Cast[Target any](source any) JsonResult {
 			appError: appfault.Wrap(errtype.Validation, err, "failed to unmarshal into target type during cast"),
 		}
 	}
+
 	return JsonResult{
 		data: data,
 	}
@@ -327,6 +340,7 @@ func CastWithPayload[Target any](source any) JsonPayloadResult[Target] {
 	if res.IsValid() {
 		_ = json.Unmarshal(res.data, &target)
 	}
+
 	return JsonPayloadResult[Target]{
 		JsonResult: res,
 		payload:    target,
@@ -344,13 +358,16 @@ func UnmarshalAs[Target any](j JsonResult) (Target, *appfault.AppError) {
 	if j.appError != nil {
 		return target, j.appError
 	}
+
 	if len(j.data) == 0 {
 		return target, appfault.New(errtype.Validation, "cannot unmarshal empty JSON result")
 	}
+
 	err := json.Unmarshal(j.data, &target)
 	if err != nil {
 		return target, appfault.Wrap(errtype.Validation, err, "failed to unmarshal JSON into target")
 	}
+
 	return target, nil
 }
 
@@ -362,6 +379,7 @@ func NewJsonResult(val any) JsonResult {
 			appError: appfault.Wrap(errtype.Validation, err, "failed to marshal payload into JSON"),
 		}
 	}
+
 	return JsonResult{
 		data: data,
 	}
@@ -375,6 +393,7 @@ func NewJsonResultWithBytes(data []byte) JsonResult {
 			appError: appfault.New(errtype.Validation, "invalid JSON byte sequence provided"),
 		}
 	}
+
 	return JsonResult{
 		data: data,
 	}
@@ -392,12 +411,14 @@ func NewJsonResultFromReader(r io.Reader) JsonResult {
 			appError: appfault.New(errtype.Validation, "reader cannot be nil"),
 		}
 	}
+
 	data, err := io.ReadAll(r)
 	if err != nil {
 		return JsonResult{
 			appError: appfault.Wrap(errtype.IO, err, "failed to read stream data"),
 		}
 	}
+
 	return NewJsonResultWithBytes(data)
 }
 
@@ -412,15 +433,19 @@ func NewJsonResultError(appErr *appfault.AppError) JsonResult {
 func NewJSONResult(val any) JsonResult {
 	return NewJsonResult(val)
 }
+
 func NewJSONResultWithBytes(data []byte) JsonResult {
 	return NewJsonResultWithBytes(data)
 }
+
 func NewJSONResultFromString(jsonStr string) JsonResult {
 	return NewJsonResultFromString(jsonStr)
 }
+
 func NewJSONResultFromReader(r io.Reader) JsonResult {
 	return NewJsonResultFromReader(r)
 }
+
 func NewJSONResultError(appErr *appfault.AppError) JsonResult {
 	return NewJsonResultError(appErr)
 }
@@ -501,6 +526,7 @@ func (j JsonResult) StatusCode() int {
 		if j.appError.StatusCode() != 0 {
 			return j.appError.StatusCode()
 		}
+
 		switch j.appError.GetType() {
 		case errtype.Validation, errtype.Precondition:
 			return 400
@@ -516,6 +542,7 @@ func (j JsonResult) StatusCode() int {
 			return 500
 		}
 	}
+
 	return 200
 }
 
@@ -527,6 +554,7 @@ func (j JsonResult) Unwrap() ([]byte, *appfault.AppError) {
 // Pretty returns formatted and indented JSON.
 func (j JsonResult) Pretty() string {
 	str, _ := j.PrettyOrError()
+
 	return str
 }
 
@@ -535,17 +563,20 @@ func (j JsonResult) PrettyOrError() (string, *appfault.AppError) {
 	if len(j.data) == 0 {
 		return "{}", nil
 	}
+
 	var out bytes.Buffer
 	err := json.Indent(&out, j.data, "", "  ")
 	if err != nil {
 		return string(j.data), appfault.Wrap(errtype.Validation, err, "failed to format pretty JSON")
 	}
+
 	return out.String(), nil
 }
 
 // Compact returns minified JSON without whitespace.
 func (j JsonResult) Compact() string {
 	str, _ := j.CompactOrError()
+
 	return str
 }
 
@@ -554,11 +585,13 @@ func (j JsonResult) CompactOrError() (string, *appfault.AppError) {
 	if len(j.data) == 0 {
 		return "{}", nil
 	}
+
 	var out bytes.Buffer
 	err := json.Compact(&out, j.data)
 	if err != nil {
 		return string(j.data), appfault.Wrap(errtype.Validation, err, "failed to minify compact JSON")
 	}
+
 	return out.String(), nil
 }
 
@@ -567,13 +600,16 @@ func (j JsonResult) Unmarshal(dest any) *appfault.AppError {
 	if j.appError != nil {
 		return j.appError
 	}
+
 	if len(j.data) == 0 {
 		return appfault.New(errtype.Validation, "cannot unmarshal empty JSON result")
 	}
+
 	err := json.Unmarshal(j.data, dest)
 	if err != nil {
 		return appfault.Wrap(errtype.Validation, err, "failed to unmarshal JSON into destination")
 	}
+
 	return nil
 }
 
@@ -582,6 +618,7 @@ func (j JsonResult) ToBytes() Bytes[any] {
 	if j.appError != nil {
 		return NewBytesErrorWithPayload(j.appError, any(j.data))
 	}
+
 	return NewBytes(j.data, any(j.data))
 }
 

@@ -52,6 +52,7 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 			return compilable.Compile()
 		}
 	}
+
 	if v.Kind() != reflect.Ptr && v.CanAddr() {
 		if compilable, isComp := v.Addr().Interface().(Compilable); isComp {
 			return compilable.Compile()
@@ -64,6 +65,7 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 		if isNested {
 			return strconv.Quote(v.String())
 		}
+
 		return v.String()
 
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
@@ -82,12 +84,14 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 		if v.Bool() {
 			return "true"
 		}
+
 		return "false"
 
 	case reflect.Ptr, reflect.Interface:
 		if v.IsNil() {
 			return "nil"
 		}
+
 		return c.compileRecursive(v.Elem(), depth+1, isNested)
 
 	case reflect.Slice, reflect.Array:
@@ -95,11 +99,13 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 		if length == 0 {
 			return "[]"
 		}
+
 		var elements []string
 		for i := 0; i < length; i++ {
 			elemStr := c.compileRecursive(v.Index(i), depth+1, true)
 			elements = append(elements, elemStr)
 		}
+
 		return "[" + strings.Join(elements, ", ") + "]"
 
 	case reflect.Map:
@@ -130,6 +136,7 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 			valStr := c.compileRecursive(v.MapIndex(entry.keyVal), depth+1, true)
 			pairs = append(pairs, entry.keyStr+": "+valStr)
 		}
+
 		return "{" + strings.Join(pairs, ", ") + "}"
 
 	case reflect.Struct:
@@ -156,6 +163,7 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 				if parts[0] == "-" {
 					continue
 				}
+
 				if parts[0] != "" {
 					fieldName = parts[0]
 				}

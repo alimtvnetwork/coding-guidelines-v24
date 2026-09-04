@@ -49,6 +49,7 @@ func NewPluggableWriter[T any](opts WriterOptions[T]) *PluggableWriter[T] {
 	} else {
 		w.writeMethod = w.defaultWrite
 	}
+
 	return w
 }
 
@@ -64,9 +65,11 @@ func (w *PluggableWriter[T]) Destination() io.Writer {
 	if w.destination != nil {
 		return w.destination
 	}
+
 	if w.streamer != nil {
 		return w.streamer.Destination()
 	}
+
 	return nil
 }
 
@@ -81,6 +84,7 @@ func (w *PluggableWriter[T]) SetDestination(dest io.Writer) {
 func (w *PluggableWriter[T]) FormatMethod() FormatFunc[T] {
 	w.configMu.RLock()
 	defer w.configMu.RUnlock()
+
 	return w.formatMethod
 }
 
@@ -102,6 +106,7 @@ func (w *PluggableWriter[T]) SetWriteMethod(fn WriteFunc[T]) {
 	if fn == nil {
 		return
 	}
+
 	w.configMu.Lock()
 	defer w.configMu.Unlock()
 	w.writeMethod = fn
@@ -112,6 +117,7 @@ func (w *PluggableWriter[T]) SetFormatMethod(fn FormatFunc[T]) {
 	if fn == nil {
 		return
 	}
+
 	w.configMu.Lock()
 	defer w.configMu.Unlock()
 	w.formatMethod = fn
@@ -128,6 +134,7 @@ func (w *PluggableWriter[T]) SetStreamer(s Streamer[T]) {
 func (w *PluggableWriter[T]) Streamer() Streamer[T] {
 	w.configMu.RLock()
 	defer w.configMu.RUnlock()
+
 	return w.streamer
 }
 
@@ -155,6 +162,7 @@ func (w *PluggableWriter[T]) Sync() *appfault.AppError {
 	if s != nil {
 		return s.Sync()
 	}
+
 	return nil
 }
 
@@ -167,6 +175,7 @@ func (w *PluggableWriter[T]) Close() *appfault.AppError {
 	if s != nil {
 		return s.Close()
 	}
+
 	return nil
 }
 
