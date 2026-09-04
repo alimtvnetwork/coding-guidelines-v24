@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "f68847daa8d3ab0d5be8935295c6d323a1d2d7bd",
+  "LastCommitSha": "45bcdb46f3c3daa02293fcecd8e587bbb740e64f",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -57,19 +57,19 @@
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
   "version": "6.35.3",
-  "updated": "2026-09-01",
+  "updated": "2026-09-05",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "f68847daa8d3ab0d5be8935295c6d323a1d2d7bd",
-    "shortSha": "f68847d",
+    "sha": "45bcdb46f3c3daa02293fcecd8e587bbb740e64f",
+    "shortSha": "45bcdb4",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 693,
-    "totalLines": 148586,
+    "totalFiles": 697,
+    "totalLines": 149126,
     "totalFolders": 23,
-    "totalBytes": 5282790,
+    "totalBytes": 5304459,
     "rootFiles": 6
   },
   "folders": [
@@ -96,8 +96,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
       "fileCount": 216,
-      "lineCount": 34401,
-      "byteCount": 1079196
+      "lineCount": 34413,
+      "byteCount": 1079965
     },
     {
       "path": "03-error-manage",
@@ -108,9 +108,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 121,
-      "lineCount": 19687,
-      "byteCount": 725102
+      "fileCount": 125,
+      "lineCount": 20214,
+      "byteCount": 745791
     },
     {
       "path": "04-database-conventions",
@@ -291,8 +291,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 36,
-      "lineCount": 16828,
-      "byteCount": 613846
+      "lineCount": 16829,
+      "byteCount": 614059
     },
     {
       "path": "18-wp-plugin-how-to",
