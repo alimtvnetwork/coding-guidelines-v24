@@ -33,28 +33,62 @@ func (l *appLogger) write(lvl LogLevel, msg string, stack string) {
 	}
 }
 
-func (l *appLogger) Debug(args ...any) { l.write(LevelDebug, fmt.Sprint(args...), "") }
-func (l *appLogger) Info(args ...any)  { l.write(LevelInfo, fmt.Sprint(args...), "") }
-func (l *appLogger) Warn(args ...any)  { l.write(LevelWarn, fmt.Sprint(args...), "") }
-func (l *appLogger) Error(args ...any) { l.write(LevelError, fmt.Sprint(args...), "") }
-func (l *appLogger) Fatal(args ...any) { l.write(LevelFatal, fmt.Sprint(args...), "") }
+func (l *appLogger) Debug(args ...any) Logger {
+	l.write(LevelDebug, fmt.Sprint(args...), "")
 
-func (l *appLogger) Debugf(format string, args ...any) {
+	return l
+}
+
+func (l *appLogger) Info(args ...any) Logger {
+	l.write(LevelInfo, fmt.Sprint(args...), "")
+
+	return l
+}
+
+func (l *appLogger) Warn(args ...any) Logger {
+	l.write(LevelWarn, fmt.Sprint(args...), "")
+
+	return l
+}
+
+func (l *appLogger) Error(args ...any) Logger {
+	l.write(LevelError, fmt.Sprint(args...), "")
+
+	return l
+}
+
+func (l *appLogger) Fatal(args ...any) Logger {
+	l.write(LevelFatal, fmt.Sprint(args...), "")
+
+	return l
+}
+
+func (l *appLogger) Debugf(format string, args ...any) Logger {
 	l.write(LevelDebug, fmt.Sprintf(format, args...), "")
+
+	return l
 }
 
-func (l *appLogger) Infof(format string, args ...any) {
+func (l *appLogger) Infof(format string, args ...any) Logger {
 	l.write(LevelInfo, fmt.Sprintf(format, args...), "")
+
+	return l
 }
 
-func (l *appLogger) Warnf(format string, args ...any) {
+func (l *appLogger) Warnf(format string, args ...any) Logger {
 	l.write(LevelWarn, fmt.Sprintf(format, args...), "")
+
+	return l
 }
 
-func (l *appLogger) Errorf(format string, args ...any) {
+func (l *appLogger) Errorf(format string, args ...any) Logger {
 	l.write(LevelError, fmt.Sprintf(format, args...), "")
+
+	return l
 }
 
-func (l *appLogger) Fatalf(format string, args ...any) {
+func (l *appLogger) Fatalf(format string, args ...any) Logger {
 	l.write(LevelFatal, fmt.Sprintf(format, args...), "")
+
+	return l
 }

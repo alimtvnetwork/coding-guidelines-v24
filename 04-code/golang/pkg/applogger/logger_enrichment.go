@@ -17,20 +17,24 @@ func (l *appLogger) enrichErrorContext(err *appfault.AppError) Logger {
 }
 
 // LogError logs a structured AppError.
-func (l *appLogger) LogError(err *appfault.AppError) {
+func (l *appLogger) LogError(err *appfault.AppError) Logger {
 	if err != nil {
 		enriched := l.enrichErrorContext(err)
 		enriched.(*appLogger).write(LevelError, err.Message(), err.StackTrace().String())
 	}
+
+	return l
 }
 
 // LogFaults logs an entire collection of AppErrors.
-func (l *appLogger) LogFaults(faults *appfaults.Collection) {
+func (l *appLogger) LogFaults(faults *appfaults.Collection) Logger {
 	if faults != nil && faults.HasError() {
 		for _, item := range faults.Items() {
 			l.LogError(item)
 		}
 	}
+
+	return l
 }
 
 // WithContext returns a child logger with key-value attached.
