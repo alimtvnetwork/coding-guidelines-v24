@@ -132,3 +132,101 @@ func TestFilePermType_ParseAndConvert(t *testing.T) {
 		t.Fatalf("expected FilePermExecutable, got: %v", fromMode)
 	}
 }
+
+func TestFileOpType_Enums(t *testing.T) {
+	if FileOpReadOnly.Name() != "ReadOnly" {
+		t.Fatalf("unexpected name: %s", FileOpReadOnly.Name())
+	}
+
+	if FileOpDelete.Name() != "Delete" {
+		t.Fatalf("unexpected name: %s", FileOpDelete.Name())
+	}
+
+	if !FileOpDelete.IsDelete() {
+		t.Fatalf("expected FileOpDelete to be delete")
+	}
+
+	if !FileOpReadOnly.IsReadOnly() {
+		t.Fatalf("expected FileOpReadOnly to be read only")
+	}
+
+	if !FileOpAppend.IsAppend() {
+		t.Fatalf("expected FileOpAppend to be append")
+	}
+
+	if FileOpCreate.OpenMode() != FileOpenCreateNew {
+		t.Fatalf("expected FileOpenCreateNew open mode")
+	}
+}
+
+func TestFileutil_DeleteAndStat(t *testing.T) {
+	tmpDir := t.TempDir()
+	filePath := filepath.Join(tmpDir, "sample.txt")
+
+	writeRes := WriteFile(filePath, []byte("hello world"), FilePermStandard)
+	if writeRes.IsFailed() {
+		t.Fatalf("write failed: %v", writeRes.Fault())
+	}
+
+	readRes := ReadFile(filePath)
+	if readRes.IsFailed() {
+		t.Fatalf("read failed: %v", readRes.Fault())
+	}
+
+	if string(readRes.Data()) != "hello world" {
+		t.Fatalf("unexpected content: %s", string(readRes.Data()))
+	}
+
+	statRes := Stat(filePath)
+	if statRes.IsFailed() {
+		t.Fatalf("stat failed: %v", statRes.Fault())
+	}
+
+	sizeRes := FileSize(filePath)
+	if sizeRes.IsFailed() {
+		t.Fatalf("size failed: %v", sizeRes.Fault())
+	}
+
+	if sizeRes.Data() != int64(11) {
+		t.Fatalf("expected size 11, got %d", sizeRes.Data())
+	}
+
+	delRes := DeleteFile(filePath)
+	if delRes.IsFailed() {
+		t.Fatalf("delete failed: %v", delRes.Fault())
+	}
+
+	statAfter := Stat(filePath)
+	if statAfter.IsSuccess() {
+		t.Fatalf("expected failure after delete")
+	}
+}
+
+func TestFileutil_ExecuteOp(t *testing.T) {
+	tmpDir := t.TempDir()
+	filePath := filepath.Join(tmpDir, "op_test.txt")
+
+	createRes := ExecuteOp(filePath, FileOpCreateAppend, FilePermStandard, []byte("step1\n"))
+	if createRes.IsFailed() {
+		t.Fatalf("create failed: %v", createRes.Fault())
+	}
+
+	appendRes := ExecuteOp(filePath, FileOpAppend, FilePermStandard, []byte("step2\n"))
+	if appendRes.IsFailed() {
+		t.Fatalf("append failed: %v", appendRes.Fault())
+	}
+
+	readRes := ExecuteOp(filePath, FileOpReadOnly, FilePermStandard, nil)
+	if readRes.IsFailed() {
+		t.Fatalf("read op failed: %v", readRes.Fault())
+	}
+
+	if string(readRes.Data()) != "step1\nstep2\n" {
+		t.Fatalf("unexpected content: %s", string(readRes.Data()))
+	}
+
+	delRes := ExecuteOp(filePath, FileOpDelete, FilePermStandard, nil)
+	if delRes.IsFailed() {
+		t.Fatalf("delete op failed: %v", delRes.Fault())
+	}
+}

@@ -104,3 +104,123 @@ func WriteFile(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 
 	return result.WrapSuccess(true)
 }
+
+// DeleteFile deletes the file at the specified path.
+func DeleteFile(path string) result.Wrap[bool] {
+	if len(path) == 0 {
+		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
+	}
+
+	err := os.Remove(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return result.WrapFailure[bool](appfault.Wrap(errtype.NotFound, err, "file not found: "+path))
+		}
+
+		if os.IsPermission(err) {
+			return result.WrapFailure[bool](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+		}
+
+		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to delete file: "+path))
+	}
+
+	return result.WrapSuccess(true)
+}
+
+// Remove is an alias for DeleteFile.
+func Remove(path string) result.Wrap[bool] {
+	return DeleteFile(path)
+}
+
+// RemoveAll recursively removes path and any children it contains.
+func RemoveAll(path string) result.Wrap[bool] {
+	if len(path) == 0 {
+		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
+	}
+
+	err := os.RemoveAll(path)
+	if err != nil {
+		if os.IsPermission(err) {
+			return result.WrapFailure[bool](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+		}
+
+		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to remove path: "+path))
+	}
+
+	return result.WrapSuccess(true)
+}
+
+// ReadFile reads the entire file content into a byte slice.
+func ReadFile(path string) result.Wrap[[]byte] {
+	return ReadAll(path)
+}
+
+// Stat returns file information for the path.
+func Stat(path string) result.Wrap[os.FileInfo] {
+	if len(path) == 0 {
+		return result.WrapFailure[os.FileInfo](appfault.New(errtype.Validation, "path cannot be empty"))
+	}
+
+	info, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return result.WrapFailure[os.FileInfo](appfault.Wrap(errtype.NotFound, err, "file not found: "+path))
+		}
+
+		if os.IsPermission(err) {
+			return result.WrapFailure[os.FileInfo](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+		}
+
+		return result.WrapFailure[os.FileInfo](appfault.Wrap(errtype.IO, err, "failed to stat file: "+path))
+	}
+
+	return result.WrapSuccess(info)
+}
+
+// FileSize returns the size of the file in bytes.
+func FileSize(path string) result.Wrap[int64] {
+	statRes := Stat(path)
+	if statRes.IsFailed() {
+		return result.WrapFailure[int64](statRes.Fault())
+	}
+
+	return result.WrapSuccess(statRes.Data().Size())
+}
+
+// ExecuteOp executes an enum-driven file operation (read, write, append, create, delete).
+func ExecuteOp(
+	path string,
+	op FileOpType,
+	perm FilePermType,
+	data []byte,
+) result.Wrap[[]byte] {
+	if op.IsDelete() {
+		delRes := DeleteFile(path)
+		if delRes.IsFailed() {
+			return result.WrapFailure[[]byte](delRes.Fault())
+		}
+
+		return result.WrapSuccess[[]byte](nil)
+	}
+
+	if op.IsReadOnly() {
+		return ReadAll(path)
+	}
+
+	openRes := OpenFile(path, op.OpenMode(), perm)
+	if openRes.IsFailed() {
+		return result.WrapFailure[[]byte](openRes.Fault())
+	}
+
+	file := openRes.Data()
+	defer file.Close()
+
+	if len(data) > 0 {
+		_, writeErr := file.Write(data)
+		if writeErr != nil {
+			return result.WrapFailure[[]byte](appfault.Wrap(errtype.IO, writeErr, "failed to write during op: "+path))
+		}
+	}
+
+	return result.WrapSuccess(data)
+}
