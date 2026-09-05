@@ -3,11 +3,11 @@ package applogger
 import (
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/appfaults"
-	"coding-guidelines/common/pkg/logger"
+	"coding-guidelines/common/pkg/enum/logleveltype"
 )
 
-// LogLevel aliases logger.LogLevel.
-type LogLevel = logger.LogLevel
+// LogLevel aliases logleveltype.Variant.
+type LogLevel = logleveltype.Variant
 
 // LogEntry represents a structured log event payload.
 type LogEntry struct {

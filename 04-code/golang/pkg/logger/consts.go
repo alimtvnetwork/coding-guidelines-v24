@@ -1,13 +1,18 @@
 package logger
 
-// LogLevel enum constants defining severity ranking for structured log messages.
+import (
+	"coding-guidelines/common/pkg/enum/logleveltype"
+)
+
+// LogLevel enum constants aliased from logleveltype.
 const (
-	LevelUnknown LogLevel = iota
-	LevelDebug
-	LevelInfo
-	LevelWarn
-	LevelError
-	LevelFatal
+	LevelUnknown LogLevel = logleveltype.Unknown
+	LevelInvalid LogLevel = logleveltype.Invalid
+	LevelDebug   LogLevel = logleveltype.Debug
+	LevelInfo    LogLevel = logleveltype.Info
+	LevelWarn    LogLevel = logleveltype.Warn
+	LevelError   LogLevel = logleveltype.Error
+	LevelFatal   LogLevel = logleveltype.Fatal
 )
 
 // LogFormatterFunc formats a LogEntry into a serialized string representation.

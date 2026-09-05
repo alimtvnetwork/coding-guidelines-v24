@@ -1,15 +1,18 @@
 package applogger
 
-import "coding-guidelines/common/pkg/logger"
+import (
+	"coding-guidelines/common/pkg/enum/logleveltype"
+)
 
-// LogLevel constants mirrored from package logger.
+// LogLevel constants mirrored from package logleveltype.
 const (
-	LevelUnknown = logger.LevelUnknown
-	LevelDebug   = logger.LevelDebug
-	LevelInfo    = logger.LevelInfo
-	LevelWarn    = logger.LevelWarn
-	LevelError   = logger.LevelError
-	LevelFatal   = logger.LevelFatal
+	LevelUnknown = logleveltype.Unknown
+	LevelInvalid = logleveltype.Invalid
+	LevelDebug   = logleveltype.Debug
+	LevelInfo    = logleveltype.Info
+	LevelWarn    = logleveltype.Warn
+	LevelError   = logleveltype.Error
+	LevelFatal   = logleveltype.Fatal
 )
 
 // DriverType selects the backend implementation.
