@@ -4,6 +4,13 @@
 
 ---
 
+## v6.36.0 — 2026-09-05 (Package architecture, streaming writers, base enums, and comment cleanup)
+
+**Scope:** Version bump (`6.35.3` → `6.36.0`). Package architecture, streaming writers, base enums, and comment cleanup.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
 ## v6.35.3 — 2026-08-30 (Routine)
 
 **Scope:** Version bump (`6.35.2` → `6.35.3`). Routine.

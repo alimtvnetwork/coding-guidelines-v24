@@ -176,11 +176,10 @@ function readChangelog(relativePath) {
 
 function findInsertionIndex(content) {
   // Insert immediately after the first `---` separator that follows the
-  // top header block. Falls back to end-of-header if no separator found.
-  const marker = "\n---\n";
-  const idx = content.indexOf(marker);
-  if (idx < 0) return content.length;
-  return idx + marker.length;
+  // top header block. Supports both CRLF and LF.
+  const m = content.match(/\r?\n---\r?\n/);
+  if (!m) return content.length;
+  return m.index + m[0].length;
 }
 
 function prependChangelogEntry(relativePath, entry) {

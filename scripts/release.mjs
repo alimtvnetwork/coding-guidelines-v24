@@ -97,10 +97,11 @@ function defaultScope(tier) {
 }
 
 function runBump(args, nextVersion) {
+  const scopeVal = args.scope ?? defaultScope(args.tier);
   const bumpArgs = [
     "scripts/bump-version.mjs",
     "--version", nextVersion,
-    "--scope", args.scope ?? defaultScope(args.tier),
+    "--scope", process.platform === "win32" ? `"${scopeVal}"` : scopeVal,
     "--target", args.target,
   ];
   if (args.dryRun) bumpArgs.push("--dry-run");
