@@ -1,5 +1,7 @@
 package appfault
 
+import "fmt"
+
 // IsSuccess returns true if no error is present.
 func (r Result[T]) IsSuccess() bool {
 	return r.AppError == nil
@@ -61,4 +63,42 @@ func (r Result[T]) UnwrapOr(defaultVal T) T {
 	}
 
 	return r.Value
+}
+
+// ResultFormatter formats a generic Result[T] container into a string.
+type ResultFormatter[T any] func(r Result[T]) string
+
+// DefaultResultFormatter formats Result[T]: error banner if failed, or data value if success.
+func DefaultResultFormatter[T any](r Result[T]) string {
+	if r.IsFailed() {
+		return r.AppError.Format(DefaultFaultFormatter)
+	}
+
+	return fmt.Sprintf("✅ [OK] %v", r.Value)
+}
+
+// Print outputs the result representation to standard output.
+func (r Result[T]) Print() {
+	fmt.Println(r.Format(nil))
+}
+
+// PrintFault outputs the fault representation to standard output if failed.
+func (r Result[T]) PrintFault() {
+	if r.IsFailed() {
+		r.AppError.Print()
+	}
+}
+
+// Format formats the Result using a custom or default formatter.
+func (r Result[T]) Format(formatter ResultFormatter[T]) string {
+	if formatter != nil {
+		return formatter(r)
+	}
+
+	return DefaultResultFormatter(r)
+}
+
+// PrintWith outputs the result using a custom formatter.
+func (r Result[T]) PrintWith(formatter ResultFormatter[T]) {
+	fmt.Println(r.Format(formatter))
 }

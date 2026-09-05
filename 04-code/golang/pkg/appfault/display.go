@@ -98,3 +98,47 @@ func (e *AppError) DisplayError() {
 		fmt.Printf("❌ [%s:%d] %s (at %s)\n", e.errType.Name(), e.errType.Code(), e.message, e.caller.String())
 	}
 }
+
+// FaultFormatter defines a custom formatting function for AppError.
+type FaultFormatter func(e *AppError) string
+
+// DefaultFaultFormatter formats the error into a clean, human-readable terminal line.
+func DefaultFaultFormatter(e *AppError) string {
+	if e == nil {
+		return ""
+	}
+
+	callerInfo := ""
+	if !e.caller.IsEmpty() {
+		callerInfo = fmt.Sprintf(" (at %s)", e.caller.String())
+	}
+
+	return fmt.Sprintf("❌ [%s:%d] %s%s", e.errType.Name(), e.errType.Code(), e.message, callerInfo)
+}
+
+// Print outputs the default formatted fault representation to standard output.
+func (e *AppError) Print() {
+	if e != nil {
+		fmt.Println(e.Format(DefaultFaultFormatter))
+	}
+}
+
+// Format formats the AppError using a specified or default formatter.
+func (e *AppError) Format(formatter FaultFormatter) string {
+	if e == nil {
+		return ""
+	}
+
+	if formatter != nil {
+		return formatter(e)
+	}
+
+	return DefaultFaultFormatter(e)
+}
+
+// PrintWith outputs the error using a customized formatter.
+func (e *AppError) PrintWith(formatter FaultFormatter) {
+	if e != nil {
+		fmt.Println(e.Format(formatter))
+	}
+}
