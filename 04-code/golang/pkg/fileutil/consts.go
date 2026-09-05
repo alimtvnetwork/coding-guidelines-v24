@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
 // Default I/O chunk and buffer size constants (64 KB).
@@ -12,22 +13,16 @@ const (
 	DefaultBufferSize = DefaultChunkSize
 )
 
-// FileOpenModeType enum constants specifying filesystem open flags.
+// FileOpenModeType enum constants aliased from openfiletype.
 const (
-	// FileOpenReadOnly opens the file in read-only mode.
-	FileOpenReadOnly FileOpenModeType = iota
-	// FileOpenWriteOnly opens the file in write-only mode.
-	FileOpenWriteOnly
-	// FileOpenReadWrite opens the file for reading and writing.
-	FileOpenReadWrite
-	// FileOpenAppend opens the file for appending data.
-	FileOpenAppend
-	// FileOpenCreateAppend creates the file if missing and appends writes.
-	FileOpenCreateAppend
-	// FileOpenCreateTruncate creates or truncates the file for writing.
-	FileOpenCreateTruncate
-	// FileOpenCreateNew creates a new file atomically, failing if it exists.
-	FileOpenCreateNew
+	FileOpenInvalid        FileOpenModeType = openfiletype.Invalid
+	FileOpenReadOnly       FileOpenModeType = openfiletype.ReadOnly
+	FileOpenWriteOnly      FileOpenModeType = openfiletype.WriteOnly
+	FileOpenReadWrite      FileOpenModeType = openfiletype.ReadWrite
+	FileOpenAppend         FileOpenModeType = openfiletype.Append
+	FileOpenCreateAppend   FileOpenModeType = openfiletype.CreateAppend
+	FileOpenCreateTruncate FileOpenModeType = openfiletype.CreateTruncate
+	FileOpenCreateNew      FileOpenModeType = openfiletype.CreateNew
 )
 
 // FileOpType enum constants representing file operations.

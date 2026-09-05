@@ -2,57 +2,13 @@ package fileutil
 
 import (
 	"fmt"
-	"os"
+
+	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
 // FileOpenModeType specifies the filesystem open flags for file descriptors.
-type FileOpenModeType byte
-
-var openModeNames = [...]string{
-	"ReadOnly",
-	"WriteOnly",
-	"ReadWrite",
-	"Append",
-	"CreateAppend",
-	"CreateTruncate",
-	"CreateNew",
-}
-
-// Flags maps the enum to standard os.OpenFile integer flags.
-func (m FileOpenModeType) Flags() int {
-	switch m {
-	case FileOpenWriteOnly:
-		return os.O_WRONLY
-	case FileOpenReadWrite:
-		return os.O_RDWR
-	case FileOpenAppend:
-		return os.O_WRONLY | os.O_APPEND
-	case FileOpenCreateAppend:
-		return os.O_CREATE | os.O_WRONLY | os.O_APPEND
-	case FileOpenCreateTruncate:
-		return os.O_CREATE | os.O_WRONLY | os.O_TRUNC
-	case FileOpenCreateNew:
-		return os.O_CREATE | os.O_EXCL | os.O_WRONLY
-	case FileOpenReadOnly:
-		return os.O_RDONLY
-	default:
-		return os.O_RDONLY
-	}
-}
-
-// Name returns the PascalCase representation of the open mode.
-func (m FileOpenModeType) Name() string {
-	if int(m) < len(openModeNames) {
-		return openModeNames[m]
-	}
-
-	return fmt.Sprintf("FileOpenMode(%d)", byte(m))
-}
-
-// String implements fmt.Stringer.
-func (m FileOpenModeType) String() string {
-	return m.Name()
-}
+// Aliased to openfiletype.Variant for backward compatibility.
+type FileOpenModeType = openfiletype.Variant
 
 // FileOpType represents standard file operation choices (read, write, append, create, delete).
 type FileOpType byte
