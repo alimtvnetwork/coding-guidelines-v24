@@ -82,6 +82,21 @@ func (v Variant) IsCreateNew() bool {
 	return v == CreateNew
 }
 
+// IsReadOrCreateOnly checks if mode is ReadOrCreateOnly.
+func (v Variant) IsReadOrCreateOnly() bool {
+	return v == ReadOrCreateOnly
+}
+
+// IsWriteOrCreateOnly checks if mode is WriteOrCreateOnly.
+func (v Variant) IsWriteOrCreateOnly() bool {
+	return v == WriteOrCreateOnly
+}
+
+// IsReadWriteOrCreateOnly checks if mode is ReadWriteOrCreateOnly.
+func (v Variant) IsReadWriteOrCreateOnly() bool {
+	return v == ReadWriteOrCreateOnly
+}
+
 // MarshalJSON implements json.Marshaler serializing the variant as a PascalCase string.
 func (v Variant) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.Name())

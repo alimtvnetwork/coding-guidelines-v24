@@ -15,14 +15,17 @@ const (
 
 // FileOpenModeType enum constants aliased from openfiletype.
 const (
-	FileOpenInvalid        FileOpenModeType = openfiletype.Invalid
-	FileOpenReadOnly       FileOpenModeType = openfiletype.ReadOnly
-	FileOpenWriteOnly      FileOpenModeType = openfiletype.WriteOnly
-	FileOpenReadWrite      FileOpenModeType = openfiletype.ReadWrite
-	FileOpenAppend         FileOpenModeType = openfiletype.Append
-	FileOpenCreateAppend   FileOpenModeType = openfiletype.CreateAppend
-	FileOpenCreateTruncate FileOpenModeType = openfiletype.CreateTruncate
-	FileOpenCreateNew      FileOpenModeType = openfiletype.CreateNew
+	FileOpenInvalid               FileOpenModeType = openfiletype.Invalid
+	FileOpenReadOnly              FileOpenModeType = openfiletype.ReadOnly
+	FileOpenWriteOnly             FileOpenModeType = openfiletype.WriteOnly
+	FileOpenReadWrite             FileOpenModeType = openfiletype.ReadWrite
+	FileOpenAppend                FileOpenModeType = openfiletype.Append
+	FileOpenCreateAppend          FileOpenModeType = openfiletype.CreateAppend
+	FileOpenCreateTruncate        FileOpenModeType = openfiletype.CreateTruncate
+	FileOpenCreateNew             FileOpenModeType = openfiletype.CreateNew
+	FileOpenReadOrCreateOnly      FileOpenModeType = openfiletype.ReadOrCreateOnly
+	FileOpenWriteOrCreateOnly     FileOpenModeType = openfiletype.WriteOrCreateOnly
+	FileOpenReadWriteOrCreateOnly FileOpenModeType = openfiletype.ReadWriteOrCreateOnly
 )
 
 // FileOpType enum constants representing file operations.

@@ -25,6 +25,15 @@ const (
 
 	// CreateNew creates a new file atomically, failing if it already exists (os.O_CREATE | os.O_EXCL | os.O_WRONLY).
 	CreateNew
+
+	// ReadOrCreateOnly opens the file in read-only mode, creating it if it does not exist (os.O_RDONLY | os.O_CREATE).
+	ReadOrCreateOnly
+
+	// WriteOrCreateOnly opens the file in write-only mode, creating it if it does not exist (os.O_WRONLY | os.O_CREATE).
+	WriteOrCreateOnly
+
+	// ReadWriteOrCreateOnly opens the file in read-write mode, creating it if it does not exist (os.O_RDWR | os.O_CREATE).
+	ReadWriteOrCreateOnly
 )
 
 // VariantPredicate defines a filter or condition check over a Variant.

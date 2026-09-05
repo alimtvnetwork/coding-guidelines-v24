@@ -26,6 +26,9 @@ Following the repository's modular enum design, `openfiletype` provides:
 | `CreateAppend` | `5` | `os.O_CREATE \| os.O_WRONLY \| os.O_APPEND` | Create file if missing and append data |
 | `CreateTruncate` | `6` | `os.O_CREATE \| os.O_WRONLY \| os.O_TRUNC` | Create or truncate file for overwriting |
 | `CreateNew` | `7` | `os.O_CREATE \| os.O_EXCL \| os.O_WRONLY` | Create new file atomically; fail if exists |
+| `ReadOrCreateOnly` | `8` | `os.O_RDONLY \| os.O_CREATE` | Open existing for read or create if missing |
+| `WriteOrCreateOnly` | `9` | `os.O_WRONLY \| os.O_CREATE` | Open existing for write or create if missing |
+| `ReadWriteOrCreateOnly` | `10` | `os.O_RDWR \| os.O_CREATE` | Open existing for read/write or create if missing |
 
 ---
 

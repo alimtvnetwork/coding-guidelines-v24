@@ -54,6 +54,18 @@ func TestEnums_NamesAndFlags(t *testing.T) {
 		t.Fatalf("unexpected name: %s", FileOpenCreateAppend.Name())
 	}
 
+	if FileOpenReadOrCreateOnly.Name() != "ReadOrCreateOnly" {
+		t.Fatalf("unexpected name: %s", FileOpenReadOrCreateOnly.Name())
+	}
+
+	if FileOpenWriteOrCreateOnly.Name() != "WriteOrCreateOnly" {
+		t.Fatalf("unexpected name: %s", FileOpenWriteOrCreateOnly.Name())
+	}
+
+	if FileOpenReadWriteOrCreateOnly.Name() != "ReadWriteOrCreateOnly" {
+		t.Fatalf("unexpected name: %s", FileOpenReadWriteOrCreateOnly.Name())
+	}
+
 	if FilePermStandard.Mode() != os.FileMode(0644) {
 		t.Fatalf("unexpected mode: %v", FilePermStandard.Mode())
 	}

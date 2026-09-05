@@ -40,6 +40,9 @@ func TestVariantsAndFlags(t *testing.T) {
 		{openfiletype.CreateAppend, "CreateAppend", os.O_CREATE | os.O_WRONLY | os.O_APPEND},
 		{openfiletype.CreateTruncate, "CreateTruncate", os.O_CREATE | os.O_WRONLY | os.O_TRUNC},
 		{openfiletype.CreateNew, "CreateNew", os.O_CREATE | os.O_EXCL | os.O_WRONLY},
+		{openfiletype.ReadOrCreateOnly, "ReadOrCreateOnly", os.O_RDONLY | os.O_CREATE},
+		{openfiletype.WriteOrCreateOnly, "WriteOrCreateOnly", os.O_WRONLY | os.O_CREATE},
+		{openfiletype.ReadWriteOrCreateOnly, "ReadWriteOrCreateOnly", os.O_RDWR | os.O_CREATE},
 	}
 
 	for _, tc := range tests {
@@ -81,6 +84,21 @@ func TestCheckers(t *testing.T) {
 	if !cn.IsCreateNew() {
 		t.Fatalf("expected IsCreateNew true")
 	}
+
+	roco := openfiletype.ReadOrCreateOnly
+	if !roco.IsReadOrCreateOnly() {
+		t.Fatalf("expected IsReadOrCreateOnly true")
+	}
+
+	woco := openfiletype.WriteOrCreateOnly
+	if !woco.IsWriteOrCreateOnly() {
+		t.Fatalf("expected IsWriteOrCreateOnly true")
+	}
+
+	rwoco := openfiletype.ReadWriteOrCreateOnly
+	if !rwoco.IsReadWriteOrCreateOnly() {
+		t.Fatalf("expected IsReadWriteOrCreateOnly true")
+	}
 }
 
 func TestParse(t *testing.T) {
@@ -93,6 +111,21 @@ func TestParse(t *testing.T) {
 		t.Fatalf("expected CreateAppend, got %v", res.Data())
 	}
 
+	resRO := openfiletype.Parse("readorcreateonly")
+	if resRO.IsFailed() || resRO.Data() != openfiletype.ReadOrCreateOnly {
+		t.Fatalf("expected ReadOrCreateOnly, got %v", resRO.Data())
+	}
+
+	resWO := openfiletype.Parse("WriteOrCreateOnly")
+	if resWO.IsFailed() || resWO.Data() != openfiletype.WriteOrCreateOnly {
+		t.Fatalf("expected WriteOrCreateOnly, got %v", resWO.Data())
+	}
+
+	resRWO := openfiletype.Parse("READWRITEORCREATEONLY")
+	if resRWO.IsFailed() || resRWO.Data() != openfiletype.ReadWriteOrCreateOnly {
+		t.Fatalf("expected ReadWriteOrCreateOnly, got %v", resRWO.Data())
+	}
+
 	badRes := openfiletype.Parse("invalid-mode-string")
 	if badRes.IsSuccess() {
 		t.Fatalf("expected failure on bad string")
@@ -101,13 +134,13 @@ func TestParse(t *testing.T) {
 
 func TestAllAndValues(t *testing.T) {
 	all := openfiletype.All()
-	if len(all) != 7 {
-		t.Fatalf("expected 7 valid variants, got %d", len(all))
+	if len(all) != 10 {
+		t.Fatalf("expected 10 valid variants, got %d", len(all))
 	}
 
 	values := openfiletype.Values()
-	if len(values) != 7 {
-		t.Fatalf("expected 7 string values, got %d", len(values))
+	if len(values) != 10 {
+		t.Fatalf("expected 10 string values, got %d", len(values))
 	}
 }
 

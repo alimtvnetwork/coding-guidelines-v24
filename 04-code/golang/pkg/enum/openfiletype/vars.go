@@ -10,26 +10,32 @@ import (
 
 // variantLabels maps each variant to its canonical PascalCase display name.
 var variantLabels = [...]string{
-	Invalid:        "Invalid",
-	ReadOnly:       "ReadOnly",
-	WriteOnly:      "WriteOnly",
-	ReadWrite:      "ReadWrite",
-	Append:         "Append",
-	CreateAppend:   "CreateAppend",
-	CreateTruncate: "CreateTruncate",
-	CreateNew:      "CreateNew",
+	Invalid:               "Invalid",
+	ReadOnly:              "ReadOnly",
+	WriteOnly:             "WriteOnly",
+	ReadWrite:             "ReadWrite",
+	Append:                "Append",
+	CreateAppend:          "CreateAppend",
+	CreateTruncate:        "CreateTruncate",
+	CreateNew:             "CreateNew",
+	ReadOrCreateOnly:      "ReadOrCreateOnly",
+	WriteOrCreateOnly:     "WriteOrCreateOnly",
+	ReadWriteOrCreateOnly: "ReadWriteOrCreateOnly",
 }
 
 // openFlags maps each variant to standard os.OpenFile integer flags.
 var openFlags = [...]int{
-	Invalid:        os.O_RDONLY,
-	ReadOnly:       os.O_RDONLY,
-	WriteOnly:      os.O_WRONLY,
-	ReadWrite:      os.O_RDWR,
-	Append:         os.O_WRONLY | os.O_APPEND,
-	CreateAppend:   os.O_CREATE | os.O_WRONLY | os.O_APPEND,
-	CreateTruncate: os.O_CREATE | os.O_WRONLY | os.O_TRUNC,
-	CreateNew:      os.O_CREATE | os.O_EXCL | os.O_WRONLY,
+	Invalid:               os.O_RDONLY,
+	ReadOnly:              os.O_RDONLY,
+	WriteOnly:             os.O_WRONLY,
+	ReadWrite:             os.O_RDWR,
+	Append:                os.O_WRONLY | os.O_APPEND,
+	CreateAppend:          os.O_CREATE | os.O_WRONLY | os.O_APPEND,
+	CreateTruncate:        os.O_CREATE | os.O_WRONLY | os.O_TRUNC,
+	CreateNew:             os.O_CREATE | os.O_EXCL | os.O_WRONLY,
+	ReadOrCreateOnly:      os.O_RDONLY | os.O_CREATE,
+	WriteOrCreateOnly:     os.O_WRONLY | os.O_CREATE,
+	ReadWriteOrCreateOnly: os.O_RDWR | os.O_CREATE,
 }
 
 // All returns a slice of all valid variants (excluding Invalid).
