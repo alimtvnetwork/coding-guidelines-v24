@@ -7,7 +7,6 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// variantLabels maps each variant to its canonical PascalCase display name.
 var variantLabels = [...]string{
 	Invalid: "Unknown",
 	Debug:   "Debug",
@@ -17,7 +16,6 @@ var variantLabels = [...]string{
 	Fatal:   "Fatal",
 }
 
-// All returns a slice of all valid variants (excluding Invalid/Unknown).
 func All() []Variant {
 	items := make([]Variant, 0, len(variantLabels)-1)
 	for i := 1; i < len(variantLabels); i++ {
@@ -27,7 +25,6 @@ func All() []Variant {
 	return items
 }
 
-// Values returns all valid string labels.
 func Values() []string {
 	names := make([]string, 0, len(variantLabels)-1)
 	for _, label := range variantLabels[1:] {
@@ -37,7 +34,6 @@ func Values() []string {
 	return names
 }
 
-// Parse converts a string to a Variant using case-insensitive lookup.
 func Parse(s string) result.Wrap[Variant] {
 	trimmed := strings.TrimSpace(s)
 	if len(trimmed) == 0 {

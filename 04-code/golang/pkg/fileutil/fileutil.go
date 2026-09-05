@@ -9,7 +9,6 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// OpenFile opens or creates a file using explicit mode and permission enums.
 func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*os.File] {
 	if len(path) == 0 {
 		return result.WrapFailure[*os.File](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -44,12 +43,10 @@ func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) result.
 	return result.WrapSuccess(f)
 }
 
-// Open opens a file in read-only mode with standard permissions.
 func Open(path string) result.Wrap[*os.File] {
 	return OpenFile(path, FileOpenReadOnly, FilePermStandard)
 }
 
-// EnsureDir recursively creates a directory path if missing.
 func EnsureDir(path string, perm FilePermType) result.Wrap[bool] {
 	if len(path) == 0 {
 		return result.WrapFailure[bool](appfault.New(errtype.Validation, "directory path cannot be empty"))
@@ -63,7 +60,6 @@ func EnsureDir(path string, perm FilePermType) result.Wrap[bool] {
 	return result.WrapSuccess(true)
 }
 
-// ReadAll reads entire file content into byte slice.
 func ReadAll(path string) result.Wrap[[]byte] {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -77,7 +73,6 @@ func ReadAll(path string) result.Wrap[[]byte] {
 	return result.WrapSuccess(data)
 }
 
-// ReadString reads entire file content as a string.
 func ReadString(path string) result.Wrap[string] {
 	res := ReadAll(path)
 	if res.IsFailed() {
@@ -87,7 +82,6 @@ func ReadString(path string) result.Wrap[string] {
 	return result.WrapSuccess(string(res.Data()))
 }
 
-// WriteFile writes data to a file replacing its content.
 func WriteFile(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 	wrap := OpenFile(path, FileOpenCreateTruncate, perm)
 	if wrap.IsFailed() {
@@ -105,7 +99,6 @@ func WriteFile(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 	return result.WrapSuccess(true)
 }
 
-// DeleteFile deletes the file at the specified path.
 func DeleteFile(path string) result.Wrap[bool] {
 	if len(path) == 0 {
 		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -127,12 +120,10 @@ func DeleteFile(path string) result.Wrap[bool] {
 	return result.WrapSuccess(true)
 }
 
-// Remove is an alias for DeleteFile.
 func Remove(path string) result.Wrap[bool] {
 	return DeleteFile(path)
 }
 
-// RemoveAll recursively removes path and any children it contains.
 func RemoveAll(path string) result.Wrap[bool] {
 	if len(path) == 0 {
 		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -150,12 +141,10 @@ func RemoveAll(path string) result.Wrap[bool] {
 	return result.WrapSuccess(true)
 }
 
-// ReadFile reads the entire file content into a byte slice.
 func ReadFile(path string) result.Wrap[[]byte] {
 	return ReadAll(path)
 }
 
-// Stat returns file information for the path.
 func Stat(path string) result.Wrap[os.FileInfo] {
 	if len(path) == 0 {
 		return result.WrapFailure[os.FileInfo](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -177,7 +166,6 @@ func Stat(path string) result.Wrap[os.FileInfo] {
 	return result.WrapSuccess(info)
 }
 
-// FileSize returns the size of the file in bytes.
 func FileSize(path string) result.Wrap[int64] {
 	statRes := Stat(path)
 	if statRes.IsFailed() {
@@ -187,7 +175,6 @@ func FileSize(path string) result.Wrap[int64] {
 	return result.WrapSuccess(statRes.Data().Size())
 }
 
-// ExecuteOp executes an enum-driven file operation (read, write, append, create, delete).
 func ExecuteOp(
 	path string,
 	op FileOpType,

@@ -7,14 +7,12 @@ import (
 	"coding-guidelines/common/pkg/appfault"
 )
 
-// appLogger is the standard implementation of Logger.
 type appLogger struct {
 	minLevel LogLevel
 	sink     LogSink
 	fields   appfault.ContextMap
 }
 
-// createEntry formats a LogEntry from input fields.
 func (l *appLogger) createEntry(lvl LogLevel, msg, stack string) LogEntry {
 	return LogEntry{
 		Timestamp: time.Now().UTC().Format(time.RFC3339),
@@ -26,7 +24,6 @@ func (l *appLogger) createEntry(lvl LogLevel, msg, stack string) LogEntry {
 	}
 }
 
-// write creates a LogEntry and writes it to the sink.
 func (l *appLogger) write(lvl LogLevel, msg string, stack string) {
 	if lvl.IsEnabled(l.minLevel) && l.sink != nil {
 		_ = l.sink.WriteEntry(l.createEntry(lvl, msg, stack))

@@ -8,7 +8,6 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// variantLabels maps each variant to its canonical PascalCase display name.
 var variantLabels = [...]string{
 	Invalid:               "Invalid",
 	ReadOnly:              "ReadOnly",
@@ -23,7 +22,6 @@ var variantLabels = [...]string{
 	ReadWriteOrCreateOnly: "ReadWriteOrCreateOnly",
 }
 
-// openFlags maps each variant to standard os.OpenFile integer flags.
 var openFlags = [...]int{
 	Invalid:               os.O_RDONLY,
 	ReadOnly:              os.O_RDONLY,
@@ -38,7 +36,6 @@ var openFlags = [...]int{
 	ReadWriteOrCreateOnly: os.O_RDWR | os.O_CREATE,
 }
 
-// All returns a slice of all valid variants (excluding Invalid).
 func All() []Variant {
 	items := make([]Variant, 0, len(variantLabels)-1)
 	for i := 1; i < len(variantLabels); i++ {
@@ -48,7 +45,6 @@ func All() []Variant {
 	return items
 }
 
-// Values returns all valid string labels.
 func Values() []string {
 	names := make([]string, 0, len(variantLabels)-1)
 	for _, label := range variantLabels[1:] {
@@ -58,7 +54,6 @@ func Values() []string {
 	return names
 }
 
-// Parse converts a string to a Variant using case-insensitive lookup.
 func Parse(s string) result.Wrap[Variant] {
 	trimmed := strings.TrimSpace(s)
 	if len(trimmed) == 0 {

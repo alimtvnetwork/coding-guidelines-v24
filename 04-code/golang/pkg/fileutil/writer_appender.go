@@ -14,7 +14,6 @@ import (
 	"coding-guidelines/common/pkg/streamwriter"
 )
 
-// FileWriteModeType specifies the behavior strategy for FileWriter.
 type FileWriteModeType uint8
 
 var writeModeNames = map[FileWriteModeType]string{
@@ -23,7 +22,6 @@ var writeModeNames = map[FileWriteModeType]string{
 	FileWriteModeTruncate: "Truncate",
 }
 
-// Name returns the PascalCase mode name.
 func (m FileWriteModeType) Name() string {
 	if name, ok := writeModeNames[m]; ok {
 		return name
@@ -32,19 +30,16 @@ func (m FileWriteModeType) Name() string {
 	return fmt.Sprintf("FileWriteMode(%d)", uint8(m))
 }
 
-// String implements fmt.Stringer.
 func (m FileWriteModeType) String() string {
 	return m.Name()
 }
 
-// IsValid returns true if the mode is recognized.
 func (m FileWriteModeType) IsValid() bool {
 	_, ok := writeModeNames[m]
 
 	return ok
 }
 
-// FileWriterOptions configures FileWriter behavior.
 type FileWriterOptions struct {
 	Path        string
 	Mode        FileWriteModeType
@@ -52,7 +47,6 @@ type FileWriterOptions struct {
 	SyncOnWrite bool
 }
 
-// FileWriter provides a configurable, behavior-shifting file output engine.
 type FileWriter struct {
 	mu          sync.RWMutex
 	path        string
@@ -62,7 +56,6 @@ type FileWriter struct {
 	file        *os.File
 }
 
-// NewFileWriterEngine constructs a new FileWriter with default FileWriteModeDirect and FilePermStandard.
 func NewFileWriterEngine(path string) *FileWriter {
 	return &FileWriter{
 		path:        path,
@@ -72,7 +65,6 @@ func NewFileWriterEngine(path string) *FileWriter {
 	}
 }
 
-// NewFileWriterWithOptions constructs a FileWriter with custom options.
 func NewFileWriterWithOptions(opts FileWriterOptions) *FileWriter {
 	perm := opts.Perm
 	if perm == 0 {
@@ -92,7 +84,6 @@ func NewFileWriterWithOptions(opts FileWriterOptions) *FileWriter {
 	}
 }
 
-// Name returns the writer name for streamwriter compatibility.
 func (w *FileWriter) Name() string {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
@@ -100,7 +91,6 @@ func (w *FileWriter) Name() string {
 	return fmt.Sprintf("file-writer[%s]", filepath.Base(w.path))
 }
 
-// Path returns the configured target file path.
 func (w *FileWriter) Path() string {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
@@ -108,7 +98,6 @@ func (w *FileWriter) Path() string {
 	return w.path
 }
 
-// Mode returns the active write strategy mode.
 func (w *FileWriter) Mode() FileWriteModeType {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
@@ -116,7 +105,6 @@ func (w *FileWriter) Mode() FileWriteModeType {
 	return w.mode
 }
 
-// SetMode dynamically shifts the file writing behavior strategy.
 func (w *FileWriter) SetMode(mode FileWriteModeType) *FileWriter {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -125,7 +113,6 @@ func (w *FileWriter) SetMode(mode FileWriteModeType) *FileWriter {
 	return w
 }
 
-// SetPerm dynamically shifts the file permission bitmask.
 func (w *FileWriter) SetPerm(perm FilePermType) *FileWriter {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -134,7 +121,6 @@ func (w *FileWriter) SetPerm(perm FilePermType) *FileWriter {
 	return w
 }
 
-// SetSyncOnWrite dynamically shifts the fsync behavior flag.
 func (w *FileWriter) SetSyncOnWrite(isSync bool) *FileWriter {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -143,7 +129,6 @@ func (w *FileWriter) SetSyncOnWrite(isSync bool) *FileWriter {
 	return w
 }
 
-// Write executes a write using the active behavior mode, returning *appfault.AppError.
 func (w *FileWriter) Write(ctx context.Context, payload []byte) *appfault.AppError {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -195,12 +180,10 @@ func (w *FileWriter) writeDirect(payload []byte, flags int) *appfault.AppError {
 	return nil
 }
 
-// WriteString writes a string payload to the target file.
 func (w *FileWriter) WriteString(ctx context.Context, text string) *appfault.AppError {
 	return w.Write(ctx, []byte(text))
 }
 
-// WriteStd satisfies io.Writer compatibility.
 func (w *FileWriter) WriteStd(p []byte) (n int, err error) {
 	appErr := w.Write(context.Background(), p)
 	if appErr != nil {
@@ -210,7 +193,6 @@ func (w *FileWriter) WriteStd(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-// StdWriter returns an io.WriteCloser adapter for standard library stream compatibility.
 func (w *FileWriter) StdWriter() io.WriteCloser {
 	return &fileWriterStdAdapter{writer: w}
 }
@@ -232,7 +214,6 @@ func (s *fileWriterStdAdapter) Close() error {
 	return nil
 }
 
-// Sync flushes pending OS buffers if an active file descriptor is open.
 func (w *FileWriter) Sync() *appfault.AppError {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
@@ -246,7 +227,6 @@ func (w *FileWriter) Sync() *appfault.AppError {
 	return nil
 }
 
-// Close closes open file handles if active.
 func (w *FileWriter) Close() *appfault.AppError {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -262,22 +242,18 @@ func (w *FileWriter) Close() *appfault.AppError {
 	return nil
 }
 
-// Lock satisfies sync.Locker.
 func (w *FileWriter) Lock() {
 	w.mu.Lock()
 }
 
-// Unlock satisfies sync.Locker.
 func (w *FileWriter) Unlock() {
 	w.mu.Unlock()
 }
 
-// AsWriter returns streamwriter.Writer[[]byte] representation.
 func (w *FileWriter) AsWriter() streamwriter.Writer[[]byte] {
 	return w
 }
 
-// FileAppender provides a dedicated, continuous appending engine with auto-create.
 type FileAppender struct {
 	mu            sync.Mutex
 	path          string
@@ -287,7 +263,6 @@ type FileAppender struct {
 	bytesAppended atomic.Int64
 }
 
-// NewFileAppender constructs a FileAppender for continuous journal or log appending.
 func NewFileAppender(path string, perm FilePermType) *FileAppender {
 	if perm == 0 {
 		perm = FilePermStandard
@@ -300,12 +275,10 @@ func NewFileAppender(path string, perm FilePermType) *FileAppender {
 	}
 }
 
-// Path returns target file path.
 func (a *FileAppender) Path() string {
 	return a.path
 }
 
-// SetAutoSync dynamically shifts auto-sync behavior.
 func (a *FileAppender) SetAutoSync(isAuto bool) *FileAppender {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -314,7 +287,6 @@ func (a *FileAppender) SetAutoSync(isAuto bool) *FileAppender {
 	return a
 }
 
-// ensureOpen opens the target file in append mode if not already open.
 func (a *FileAppender) ensureOpen() error {
 	if a.file != nil {
 		return nil
@@ -335,7 +307,6 @@ func (a *FileAppender) ensureOpen() error {
 	return nil
 }
 
-// Append writes data to the end of the file, returning *appfault.AppError.
 func (a *FileAppender) Append(ctx context.Context, data []byte) *appfault.AppError {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -360,12 +331,10 @@ func (a *FileAppender) Append(ctx context.Context, data []byte) *appfault.AppErr
 	return nil
 }
 
-// AppendString appends a string to the file.
 func (a *FileAppender) AppendString(ctx context.Context, text string) *appfault.AppError {
 	return a.Append(ctx, []byte(text))
 }
 
-// WriteStd satisfies io.Writer compatibility.
 func (a *FileAppender) WriteStd(p []byte) (n int, err error) {
 	appErr := a.Append(context.Background(), p)
 	if appErr != nil {
@@ -375,7 +344,6 @@ func (a *FileAppender) WriteStd(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-// StdWriter returns an io.WriteCloser adapter for standard library stream compatibility.
 func (a *FileAppender) StdWriter() io.WriteCloser {
 	return &appenderStdAdapter{appender: a}
 }
@@ -397,12 +365,10 @@ func (s *appenderStdAdapter) Close() error {
 	return nil
 }
 
-// BytesAppended returns the total number of bytes written via this appender.
 func (a *FileAppender) BytesAppended() int64 {
 	return a.bytesAppended.Load()
 }
 
-// Sync forces all pending writes to disk.
 func (a *FileAppender) Sync() *appfault.AppError {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -416,7 +382,6 @@ func (a *FileAppender) Sync() *appfault.AppError {
 	return nil
 }
 
-// Close flushes and closes the active file descriptor.
 func (a *FileAppender) Close() *appfault.AppError {
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -432,27 +397,22 @@ func (a *FileAppender) Close() *appfault.AppError {
 	return nil
 }
 
-// Lock satisfies sync.Locker.
 func (a *FileAppender) Lock() {
 	a.mu.Lock()
 }
 
-// Unlock satisfies sync.Locker.
 func (a *FileAppender) Unlock() {
 	a.mu.Unlock()
 }
 
-// Name returns streamwriter identifier.
 func (a *FileAppender) Name() string {
 	return fmt.Sprintf("file-appender[%s]", filepath.Base(a.path))
 }
 
-// Write satisfies streamwriter.Writer[[]byte].
 func (a *FileAppender) Write(ctx context.Context, payload []byte) *appfault.AppError {
 	return a.Append(ctx, payload)
 }
 
-// AsWriter returns streamwriter.Writer[[]byte] representation.
 func (a *FileAppender) AsWriter() streamwriter.Writer[[]byte] {
 	return a
 }

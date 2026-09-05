@@ -22,8 +22,6 @@ var chunkBufferPool = sync.Pool{
 	},
 }
 
-// WriteAtomic writes data to path atomically using a temporary file and sync-before-rename.
-// Guarantees zero partial/corrupted files during crashes or power loss.
 func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 	if len(path) == 0 {
 		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -83,7 +81,6 @@ func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] 
 	return result.WrapSuccess(true)
 }
 
-// ReadChunked streams a file in chunks using a fixed buffer size, calling onChunk for each block.
 func ReadChunked(path string, chunkSize int, onChunk ChunkCallbackFunc) result.Wrap[int64] {
 	if len(path) == 0 {
 		return result.WrapFailure[int64](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -135,7 +132,6 @@ func ReadChunked(path string, chunkSize int, onChunk ChunkCallbackFunc) result.W
 	return result.WrapSuccess(totalBytes)
 }
 
-// WriteChunked streams data from an io.Reader into a file using chunked buffering.
 func WriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize int) result.Wrap[int64] {
 	if len(path) == 0 {
 		return result.WrapFailure[int64](appfault.New(errtype.Validation, "path cannot be empty"))
@@ -193,7 +189,6 @@ func WriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize i
 	return result.WrapSuccess(totalWritten)
 }
 
-// NewFileWriter creates a streamwriter.PluggableWriter attached to an opened file using enum mode and perm.
 func NewFileWriter(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
 	openRes := OpenFile(path, openMode, perm)
 	if openRes.IsFailed() {

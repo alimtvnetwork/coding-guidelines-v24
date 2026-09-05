@@ -6,11 +6,8 @@ import (
 	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
-// FileOpenModeType specifies the filesystem open flags for file descriptors.
-// Aliased to openfiletype.Variant for backward compatibility.
 type FileOpenModeType = openfiletype.Variant
 
-// FileOpType represents standard file operation choices (read, write, append, create, delete).
 type FileOpType byte
 
 var fileOpNames = [...]string{
@@ -24,7 +21,6 @@ var fileOpNames = [...]string{
 	"Delete",
 }
 
-// Name returns the PascalCase representation of the file operation.
 func (o FileOpType) Name() string {
 	if int(o) < len(fileOpNames) {
 		return fileOpNames[o]
@@ -33,22 +29,18 @@ func (o FileOpType) Name() string {
 	return fmt.Sprintf("FileOp(%d)", byte(o))
 }
 
-// String implements fmt.Stringer.
 func (o FileOpType) String() string {
 	return o.Name()
 }
 
-// IsDelete returns true if the operation is a deletion.
 func (o FileOpType) IsDelete() bool {
 	return o == FileOpDelete
 }
 
-// IsReadOnly returns true if the operation is read-only.
 func (o FileOpType) IsReadOnly() bool {
 	return o == FileOpReadOnly
 }
 
-// IsAppend returns true if the operation is append or create-append.
 func (o FileOpType) IsAppend() bool {
 	if o == FileOpAppend {
 		return true
@@ -57,7 +49,6 @@ func (o FileOpType) IsAppend() bool {
 	return o == FileOpCreateAppend
 }
 
-// OpenMode returns the corresponding FileOpenModeType for the operation.
 func (o FileOpType) OpenMode() FileOpenModeType {
 	switch o {
 	case FileOpWriteOnly:

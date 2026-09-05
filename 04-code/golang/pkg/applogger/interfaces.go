@@ -6,10 +6,8 @@ import (
 	"coding-guidelines/common/pkg/enum/logleveltype"
 )
 
-// LogLevel aliases logleveltype.Variant.
 type LogLevel = logleveltype.Variant
 
-// LogEntry represents a structured log event payload.
 type LogEntry struct {
 	Timestamp string              `json:"Timestamp" yaml:"Timestamp"`
 	Level     LogLevel            `json:"Level" yaml:"Level"`
@@ -19,14 +17,12 @@ type LogEntry struct {
 	Stack     string              `json:"Stack,omitempty" yaml:"Stack,omitempty"`
 }
 
-// LogSink defines the driver interface for persistent destinations.
 type LogSink interface {
 	WriteEntry(entry LogEntry) error
 	Sync() error
 	Close() error
 }
 
-// Logger is the unified logging interface.
 type Logger interface {
 	Debug(args ...any) Logger
 	Info(args ...any) Logger
