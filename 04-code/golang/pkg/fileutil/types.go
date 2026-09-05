@@ -8,23 +8,6 @@ import (
 // FileOpenModeType specifies the filesystem open flags for file descriptors.
 type FileOpenModeType byte
 
-const (
-	// FileOpenReadOnly opens the file in read-only mode.
-	FileOpenReadOnly FileOpenModeType = iota
-	// FileOpenWriteOnly opens the file in write-only mode.
-	FileOpenWriteOnly
-	// FileOpenReadWrite opens the file for reading and writing.
-	FileOpenReadWrite
-	// FileOpenAppend opens the file for appending data.
-	FileOpenAppend
-	// FileOpenCreateAppend creates the file if missing and appends writes.
-	FileOpenCreateAppend
-	// FileOpenCreateTruncate creates or truncates the file for writing.
-	FileOpenCreateTruncate
-	// FileOpenCreateNew creates a new file atomically, failing if it exists.
-	FileOpenCreateNew
-)
-
 var openModeNames = [...]string{
 	"ReadOnly",
 	"WriteOnly",
@@ -73,25 +56,6 @@ func (m FileOpenModeType) String() string {
 
 // FileOpType represents standard file operation choices (read, write, append, create, delete).
 type FileOpType byte
-
-const (
-	// FileOpReadOnly represents reading an existing file.
-	FileOpReadOnly FileOpType = iota
-	// FileOpWriteOnly represents writing to a file.
-	FileOpWriteOnly
-	// FileOpReadWrite represents reading and writing to a file.
-	FileOpReadWrite
-	// FileOpAppend represents appending data to an existing or new file.
-	FileOpAppend
-	// FileOpCreate represents creating a new file atomically.
-	FileOpCreate
-	// FileOpCreateAppend represents creating a file if missing and appending writes.
-	FileOpCreateAppend
-	// FileOpCreateTruncate represents creating or truncating a file for writing.
-	FileOpCreateTruncate
-	// FileOpDelete represents deleting/removing a file.
-	FileOpDelete
-)
 
 var fileOpNames = [...]string{
 	"ReadOnly",

@@ -116,9 +116,6 @@ func (r Result[T]) UnwrapOr(defaultVal T) T {
 	return r.Value
 }
 
-// ResultFormatter formats a generic Result[T] container into a string.
-type ResultFormatter[T any] func(r Result[T]) string
-
 // DefaultResultFormatter formats Result[T]: error banner if failed, or data value if success.
 func DefaultResultFormatter[T any](r Result[T]) string {
 	if r.IsFailed() {

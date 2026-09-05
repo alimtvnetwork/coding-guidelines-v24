@@ -8,15 +8,6 @@ import (
 // LogLevel defines the byte-backed severity ranking for structured log messages.
 type LogLevel byte
 
-const (
-	LevelUnknown LogLevel = iota
-	LevelDebug
-	LevelInfo
-	LevelWarn
-	LevelError
-	LevelFatal
-)
-
 var levelNames = [...]string{"Unknown", "Debug", "Info", "Warn", "Error", "Fatal"}
 
 // Name returns the PascalCase string representation of the log level.

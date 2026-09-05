@@ -9,15 +9,6 @@ import (
 // LogLevel aliases logger.LogLevel.
 type LogLevel = logger.LogLevel
 
-const (
-	LevelUnknown = logger.LevelUnknown
-	LevelDebug   = logger.LevelDebug
-	LevelInfo    = logger.LevelInfo
-	LevelWarn    = logger.LevelWarn
-	LevelError   = logger.LevelError
-	LevelFatal   = logger.LevelFatal
-)
-
 // LogEntry represents a structured log event payload.
 type LogEntry struct {
 	Timestamp string              `json:"Timestamp" yaml:"Timestamp"`

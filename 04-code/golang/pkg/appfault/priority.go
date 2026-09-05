@@ -8,14 +8,6 @@ import (
 // PriorityType represents an integer-backed priority level (byte).
 type PriorityType byte
 
-const (
-	PriorityUnknown PriorityType = iota
-	PriorityLow
-	PriorityNormal
-	PriorityHigh
-	PriorityCritical
-)
-
 var priorityNames = [...]string{"Unknown", "Low", "Normal", "High", "Critical"}
 
 // Name returns the PascalCase string representation.

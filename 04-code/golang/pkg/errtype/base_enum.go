@@ -37,15 +37,6 @@ func (v Variation) IsEnum() bool {
 // ProcessStateType represents a string-backed enum conforming to BaseEnum.
 type ProcessStateType string
 
-const (
-	ProcessStatePending   ProcessStateType = "Pending"
-	ProcessStateRunning   ProcessStateType = "Running"
-	ProcessStateCompleted ProcessStateType = "Completed"
-	ProcessStateFailed    ProcessStateType = "Failed"
-	ProcessStateCancelled ProcessStateType = "Cancelled"
-	ProcessStateUnknown   ProcessStateType = "Unknown"
-)
-
 var processStateRegistry = map[ProcessStateType]bool{
 	ProcessStatePending:   true,
 	ProcessStateRunning:   true,
@@ -130,14 +121,6 @@ func ParseProcessState(val string) ProcessStateType {
 
 // LogLevelType represents an integer-backed enum conforming to NumberEnum and BaseEnum.
 type LogLevelType uint16
-
-const (
-	LogLevelDebug LogLevelType = 1
-	LogLevelInfo  LogLevelType = 2
-	LogLevelWarn  LogLevelType = 3
-	LogLevelError LogLevelType = 4
-	LogLevelFatal LogLevelType = 5
-)
 
 var logLevelNames = map[LogLevelType]string{
 	LogLevelDebug: "Debug",

@@ -38,11 +38,5 @@ type Streamer[T any] interface {
 	Close() *appfault.AppError
 }
 
-// WriteMethodFunc defines an injected write method that accepts self as the first parameter.
-type WriteMethodFunc func(ctx context.Context, self Writer, payload any) *appfault.AppError
-
-// StreamMethodFunc defines an injected streamer method that accepts self as the first parameter.
-type StreamMethodFunc[T any] func(ctx context.Context, self Streamer[T], payload T) *appfault.AppError
-
 // BaseWriterWrap encapsulates Result/Wrap containing *BaseWriter.
 type BaseWriterWrap = result.Wrap[*BaseWriter]

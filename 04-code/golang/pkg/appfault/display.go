@@ -99,9 +99,6 @@ func (e *AppError) DisplayError() {
 	}
 }
 
-// FaultFormatter defines a custom formatting function for AppError.
-type FaultFormatter func(e *AppError) string
-
 // DefaultFaultFormatter formats the error into a clean, human-readable terminal line.
 func DefaultFaultFormatter(e *AppError) string {
 	if e == nil {

@@ -182,7 +182,7 @@ func (w *BoundFileWriter) Unlock() {
 
 // WithLock executes a batch of operations under a single mutex lock.
 // This allows callers to perform multiple writes/appends atomically without interleaving.
-func (w *BoundFileWriter) WithLock(ctx context.Context, fn func(w *BoundFileWriter) *appfault.AppError) *appfault.AppError {
+func (w *BoundFileWriter) WithLock(ctx context.Context, fn BoundFileActionFunc) *appfault.AppError {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 

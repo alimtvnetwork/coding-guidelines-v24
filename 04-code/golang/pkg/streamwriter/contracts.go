@@ -34,13 +34,6 @@ type Streamer[T any] interface {
 	Close() *appfault.AppError
 }
 
-// StreamFunc defines the swappable function signature returning *appfault.AppError.
-type StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) *appfault.AppError
-
-// WriteFunc defines the swappable function signature returning *appfault.AppError.
-// It receives the attached streamer as the first parameter, the active context, the current writer object, and the generic payload.
-type WriteFunc[T any] func(streamer Streamer[T], ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError
-
 // AnyWriter is the first-class non-generic alias for PluggableWriter[any].
 type AnyWriter = PluggableWriter[any]
 
@@ -50,19 +43,8 @@ type AnyStreamer = Streamer[any]
 // AnyLogger is the first-class non-generic alias for Logger[any].
 type AnyLogger = Logger[any]
 
-// FormatFunc defines the serialization transformation returning Bytes[T].
-type FormatFunc[T any] func(payload T) Bytes[T]
-
 // LogLevel defines standardized severity tiers.
 type LogLevel int
-
-const (
-	LevelDebug LogLevel = iota
-	LevelInfo
-	LevelWarn
-	LevelError
-	LevelFatal
-)
 
 func (l LogLevel) String() string {
 	switch l {

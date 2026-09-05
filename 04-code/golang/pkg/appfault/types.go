@@ -8,15 +8,6 @@ import (
 // SeverityType represents an integer-backed severity level (byte).
 type SeverityType byte
 
-const (
-	SeverityUnknown SeverityType = iota
-	SeverityInfo
-	SeverityWarn
-	SeverityError
-	SeverityCritical
-	SeverityFatal
-)
-
 var severityNames = [...]string{"Unknown", "Info", "Warn", "Error", "Critical", "Fatal"}
 
 // Name returns the PascalCase string representation.

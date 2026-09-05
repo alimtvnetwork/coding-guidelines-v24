@@ -16,7 +16,7 @@ type AsyncWriterOptions struct {
 	BufferSize    int           // Channel buffer size (default: 256)
 	FlushInterval time.Duration // Maximum interval between flushes (default: 50ms)
 	DropOnFull    bool          // If true, drops items when buffer is full; if false, blocks until space is available
-	OnError       func(err *appfault.AppError)
+	OnError       ErrorHandlerFunc
 }
 
 // AsyncWriter wraps any Writer[T] with a non-blocking buffered ring channel and worker goroutine.

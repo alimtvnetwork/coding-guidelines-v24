@@ -12,23 +12,6 @@ import (
 // PayloadKind identifies the classification of an incoming generic payload.
 type PayloadKind byte
 
-const (
-	// PayloadNil indicates a nil or uninitialized payload.
-	PayloadNil PayloadKind = iota
-	// PayloadBytes indicates raw byte slice ([]byte).
-	PayloadBytes
-	// PayloadString indicates a string payload.
-	PayloadString
-	// PayloadError indicates a structured *appfault.AppError or standard error.
-	PayloadError
-	// PayloadMap indicates a key-value map.
-	PayloadMap
-	// PayloadStruct indicates a struct or pointer to struct.
-	PayloadStruct
-	// PayloadPrimitive indicates a scalar primitive (int, bool, float).
-	PayloadPrimitive
-)
-
 var payloadKindNames = [...]string{
 	"Nil",
 	"Bytes",

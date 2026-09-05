@@ -14,11 +14,6 @@ import (
 	"coding-guidelines/common/pkg/streamwriter"
 )
 
-const (
-	// DefaultBufferSize defines standard 64KB buffer for chunked I/O.
-	DefaultBufferSize = 64 * 1024
-)
-
 var chunkBufferPool = sync.Pool{
 	New: func() any {
 		b := make([]byte, DefaultBufferSize)
@@ -89,7 +84,7 @@ func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] 
 }
 
 // ReadChunked streams a file in chunks using a fixed buffer size, calling onChunk for each block.
-func ReadChunked(path string, chunkSize int, onChunk func(chunk []byte) *appfault.AppError) result.Wrap[int64] {
+func ReadChunked(path string, chunkSize int, onChunk ChunkCallbackFunc) result.Wrap[int64] {
 	if len(path) == 0 {
 		return result.WrapFailure[int64](appfault.New(errtype.Validation, "path cannot be empty"))
 	}

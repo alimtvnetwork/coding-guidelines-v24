@@ -17,15 +17,6 @@ import (
 // FileWriteModeType specifies the behavior strategy for FileWriter.
 type FileWriteModeType uint8
 
-const (
-	// FileWriteModeDirect writes directly in-place to the target file.
-	FileWriteModeDirect FileWriteModeType = 1
-	// FileWriteModeAtomic writes to a temp file and atomically renames.
-	FileWriteModeAtomic FileWriteModeType = 2
-	// FileWriteModeTruncate creates or truncates the file before writing.
-	FileWriteModeTruncate FileWriteModeType = 3
-)
-
 var writeModeNames = map[FileWriteModeType]string{
 	FileWriteModeDirect:   "Direct",
 	FileWriteModeAtomic:   "Atomic",
