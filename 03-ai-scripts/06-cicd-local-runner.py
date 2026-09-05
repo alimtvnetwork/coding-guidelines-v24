@@ -48,9 +48,7 @@ LINE_SEPARATOR = engine.LINE_SEPARATOR
 DEFAULT_MAX_WORKERS = engine.DEFAULT_MAX_WORKERS
 CI_JOBS_MATRIX = engine.CI_JOBS_MATRIX
 
-# Default worker concurrency: scales with CPU cores but capped at 8 to avoid disk/IO thrashing.
-# Configurable via this variable, the CICD_WORKERS env var, or the --workers CLI argument.
-DEFAULT_CONCURRENCY_WORKERS: int = int(os.environ.get("CICD_WORKERS") or min(os.cpu_count() or 4, 8))
+DEFAULT_CONCURRENCY_WORKERS = engine.DEFAULT_CONCURRENCY_WORKERS
 
 
 @dataclass

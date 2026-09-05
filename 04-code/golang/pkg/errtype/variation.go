@@ -48,4 +48,7 @@ const (
 
 	// Unknown represents an unclassified error state.
 	Unknown Variation = 13
+
+	// Serialization represents data serialization, deserialization, or encoding failures.
+	Serialization Variation = 14
 )

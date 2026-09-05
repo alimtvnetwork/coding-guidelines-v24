@@ -569,26 +569,28 @@ func TestSelfBinding_GenericContracts(t *testing.T) {
 	lockless := streamwriter.NewLocklessStreamer[any](streamwriter.LocklessOptions[any]{Name: "test-lockless"})
 	writer := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{Name: "test-writer", Streamer: locked})
 
-	// Verify LockedStreamer self-binding and Locker
-	var s1 streamwriter.Streamer[any] = locked.AsStreamer()
-	var w1 streamwriter.Writer[any] = locked.AsWriter()
-	var l1 sync.Locker = locked
-	if s1 == nil || w1 == nil || l1 == nil {
+	// Static check of sync.Locker compliance
+	var _ sync.Locker = locked
+	var _ sync.Locker = lockless
+	var _ sync.Locker = writer
+
+	// Verify LockedStreamer self-binding
+	s1 := locked.AsStreamer()
+	w1 := locked.AsWriter()
+	if s1 == nil || w1 == nil {
 		t.Fatal("locked streamer self-binding failed")
 	}
 
-	// Verify LocklessStreamer self-binding and Locker
-	var s2 streamwriter.Streamer[any] = lockless.AsStreamer()
-	var w2 streamwriter.Writer[any] = lockless.AsWriter()
-	var l2 sync.Locker = lockless
-	if s2 == nil || w2 == nil || l2 == nil {
+	// Verify LocklessStreamer self-binding
+	s2 := lockless.AsStreamer()
+	w2 := lockless.AsWriter()
+	if s2 == nil || w2 == nil {
 		t.Fatal("lockless streamer self-binding failed")
 	}
 
-	// Verify PluggableWriter self-binding and Locker
-	var w3 streamwriter.Writer[any] = writer.AsWriter()
-	var l3 sync.Locker = writer
-	if w3 == nil || l3 == nil {
+	// Verify PluggableWriter self-binding
+	w3 := writer.AsWriter()
+	if w3 == nil {
 		t.Fatal("pluggable writer self-binding failed")
 	}
 }
@@ -721,7 +723,7 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 	customWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
 		Name:        "custom-api",
 		Destination: buf3,
-		WriteMethod: func(ctx context.Context, w *streamwriter.PluggableWriter[any], payload any) *appfault.AppError {
+		WriteMethod: func(s streamwriter.Streamer[any], ctx context.Context, w *streamwriter.PluggableWriter[any], payload any) *appfault.AppError {
 			_, err := fmt.Fprintf(w.Destination(), "CUSTOM-API: %s\n", streamwriter.Compile(payload))
 			if err != nil {
 				return appfault.Wrap(errtype.IO, err, "custom api write failed")
@@ -740,7 +742,10 @@ func TestCompositeLogger_FluentChaining(t *testing.T) {
 		t.Fatalf("expected 3 writers, got %d", log.WriterCount())
 	}
 
-	ctx := context.WithValue(context.Background(), "traceId", "trace-999")
+	type traceKeyType string
+	const traceKey traceKeyType = "traceId"
+
+	ctx := context.WithValue(context.Background(), traceKey, "trace-999")
 	appErr := log.Info(ctx, "Order placed successfully", map[string]any{"orderId": "ord-77"})
 	if appErr != nil {
 		t.Fatalf("log.Info failed: %v", appErr)
@@ -798,7 +803,7 @@ func TestPluggableWriterWithCurrentObject(t *testing.T) {
 	writer := streamwriter.NewPluggableWriter[string](streamwriter.WriterOptions[string]{
 		Name:        "custom-worker",
 		Destination: buf,
-		WriteMethod: func(ctx context.Context, w *streamwriter.PluggableWriter[string], payload string) *appfault.AppError {
+		WriteMethod: func(s streamwriter.Streamer[string], ctx context.Context, w *streamwriter.PluggableWriter[string], payload string) *appfault.AppError {
 			dest := w.Destination()
 			if dest == nil {
 				t.Fatalf("expected writer destination to be non-nil")
@@ -831,7 +836,7 @@ func TestPluggableWriterWithCurrentObject(t *testing.T) {
 	}
 
 	// Runtime swap
-	writer.SetWriteMethod(func(ctx context.Context, w *streamwriter.PluggableWriter[string], payload string) *appfault.AppError {
+	writer.SetWriteMethod(func(s streamwriter.Streamer[string], ctx context.Context, w *streamwriter.PluggableWriter[string], payload string) *appfault.AppError {
 		_, err := fmt.Fprintf(w.Destination(), "[swapped-%s] -> %s\n", w.Name(), payload)
 		if err != nil {
 			return appfault.Wrap(errtype.IO, err, "swapped write failed")
@@ -847,5 +852,103 @@ func TestPluggableWriterWithCurrentObject(t *testing.T) {
 
 	if !strings.Contains(buf.String(), "[swapped-custom-worker] -> second task") {
 		t.Fatalf("unexpected buffer output after swap: %s", buf.String())
+	}
+}
+
+func TestBytesAndJsonResult_NullSafety(t *testing.T) {
+	// 1. Zero-value Bytes[string]
+	var zeroBytes streamwriter.Bytes[string]
+
+	if !zeroBytes.IsNull() {
+		t.Fatal("expected zeroBytes.IsNull() to be true")
+	}
+
+	if !zeroBytes.IsEmpty() {
+		t.Fatal("expected zeroBytes.IsEmpty() to be true")
+	}
+
+	if !zeroBytes.HasZero() {
+		t.Fatal("expected zeroBytes.HasZero() to be true")
+	}
+
+	if !zeroBytes.IsZero() {
+		t.Fatal("expected zeroBytes.IsZero() to be true")
+	}
+
+	if !zeroBytes.HasNull() {
+		t.Fatal("expected zeroBytes.HasNull() to be true")
+	}
+
+	clonedBytes := zeroBytes.Clone()
+	if !clonedBytes.IsNull() {
+		t.Fatal("expected clonedBytes.IsNull() to be true")
+	}
+
+	popBytes := streamwriter.NewBytes([]byte("hello"), "world")
+	concatBytes := zeroBytes.Concat(popBytes)
+	if string(concatBytes.Bytes()) != "hello" {
+		t.Fatalf("expected concatenated bytes 'hello', got %q", string(concatBytes.Bytes()))
+	}
+
+	// 2. Zero-value JsonResult
+	var zeroJson streamwriter.JsonResult
+
+	if !zeroJson.IsNull() {
+		t.Fatal("expected zeroJson.IsNull() to be true")
+	}
+
+	if !zeroJson.IsEmpty() {
+		t.Fatal("expected zeroJson.IsEmpty() to be true")
+	}
+
+	if !zeroJson.HasZero() {
+		t.Fatal("expected zeroJson.HasZero() to be true")
+	}
+
+	if !zeroJson.IsZero() {
+		t.Fatal("expected zeroJson.IsZero() to be true")
+	}
+
+	if !zeroJson.HasNull() {
+		t.Fatal("expected zeroJson.HasNull() to be true")
+	}
+
+	clonedJson := zeroJson.Clone()
+	if !clonedJson.IsNull() {
+		t.Fatal("expected clonedJson.IsNull() to be true")
+	}
+
+	popJson := streamwriter.JsonSource.FromBytes([]byte(`{"k":"v"}`))
+	concatJson := zeroJson.Concat(popJson)
+	if string(concatJson.Bytes()) != `{"k":"v"}` {
+		t.Fatalf("expected concatenated json '{\"k\":\"v\"}', got %q", string(concatJson.Bytes()))
+	}
+
+	// 3. Zero-value JsonPayloadResult
+	var zeroPayloadJson streamwriter.JsonPayloadResult[string]
+
+	if !zeroPayloadJson.IsNull() {
+		t.Fatal("expected zeroPayloadJson.IsNull() to be true")
+	}
+
+	if !zeroPayloadJson.IsEmpty() {
+		t.Fatal("expected zeroPayloadJson.IsEmpty() to be true")
+	}
+
+	if !zeroPayloadJson.HasZero() {
+		t.Fatal("expected zeroPayloadJson.HasZero() to be true")
+	}
+
+	if !zeroPayloadJson.IsZero() {
+		t.Fatal("expected zeroPayloadJson.IsZero() to be true")
+	}
+
+	if !zeroPayloadJson.HasNull() {
+		t.Fatal("expected zeroPayloadJson.HasNull() to be true")
+	}
+
+	clonedPayloadJson := zeroPayloadJson.Clone()
+	if !clonedPayloadJson.IsNull() {
+		t.Fatal("expected clonedPayloadJson.IsNull() to be true")
 	}
 }

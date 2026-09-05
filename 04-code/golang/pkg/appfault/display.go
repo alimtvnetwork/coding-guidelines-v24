@@ -136,6 +136,114 @@ func (e *AppError) Format(formatter FaultFormatter) string {
 	return DefaultFaultFormatter(e)
 }
 
+// FormatStdout produces a rich terminal banner with icon, HTTP status, and caller info.
+func FormatStdout(e *AppError) string {
+	if e == nil {
+		return ""
+	}
+
+	var b strings.Builder
+	b.WriteString(fmt.Sprintf("❌ ERROR [%s:%d] %s (HTTP %d)", e.errType.Name(), e.errType.Code(), e.message, e.StatusCode()))
+	if !e.caller.IsEmpty() {
+		b.WriteString(fmt.Sprintf("\n   Caller:  %s", e.caller.String()))
+	}
+
+	if e.cause != nil {
+		b.WriteString(fmt.Sprintf("\n   Cause:   %v", e.cause))
+	}
+
+	if len(e.ctx) > 0 {
+		b.WriteString(fmt.Sprintf("\n   Context: %s", e.ctx.Format()))
+	}
+
+	return b.String()
+}
+
+// FormatJson produces a structured, indented JSON representation of the error.
+func FormatJson(e *AppError) string {
+	if e == nil {
+		return "{}"
+	}
+
+	return e.ToJsonString()
+}
+
+// FormatJSON is an alias for FormatJson.
+func FormatJSON(e *AppError) string {
+	return FormatJson(e)
+}
+
+// FormatTextLog produces a single-line structured log string suitable for file logging.
+func FormatTextLog(e *AppError) string {
+	if e == nil {
+		return ""
+	}
+
+	callerStr := "unknown"
+	if !e.caller.IsEmpty() {
+		callerStr = e.caller.String()
+	}
+
+	logLine := fmt.Sprintf("[ERROR] [%s:%d] status=%d caller=%q msg=%q",
+		e.errType.Name(), e.errType.Code(), e.StatusCode(), callerStr, e.message)
+
+	if e.cause != nil {
+		logLine += fmt.Sprintf(" cause=%q", e.cause.Error())
+	}
+
+	if len(e.ctx) > 0 {
+		logLine += fmt.Sprintf(" ctx=%q", e.ctx.Format())
+	}
+
+	return logLine
+}
+
+// FormatStdout returns the rich terminal banner formatting.
+func (e *AppError) FormatStdout() string {
+	return FormatStdout(e)
+}
+
+// FormatJson returns the formatted JSON string.
+func (e *AppError) FormatJson() string {
+	return FormatJson(e)
+}
+
+// FormatJSON is an alias for FormatJson.
+func (e *AppError) FormatJSON() string {
+	return e.FormatJson()
+}
+
+// FormatTextLog returns the structured single-line log format.
+func (e *AppError) FormatTextLog() string {
+	return FormatTextLog(e)
+}
+
+// PrintStdout prints the error formatted for console stdout.
+func (e *AppError) PrintStdout() {
+	if e != nil {
+		fmt.Println(e.FormatStdout())
+	}
+}
+
+// PrintJson prints the error formatted as JSON.
+func (e *AppError) PrintJson() {
+	if e != nil {
+		fmt.Println(e.FormatJson())
+	}
+}
+
+// PrintJSON is an alias for PrintJson.
+func (e *AppError) PrintJSON() {
+	e.PrintJson()
+}
+
+// PrintLog prints the error formatted as a structured log line.
+func (e *AppError) PrintLog() {
+	if e != nil {
+		fmt.Println(e.FormatTextLog())
+	}
+}
+
 // PrintWith outputs the error using a customized formatter.
 func (e *AppError) PrintWith(formatter FaultFormatter) {
 	if e != nil {

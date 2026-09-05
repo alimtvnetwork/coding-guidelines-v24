@@ -21,6 +21,11 @@ func NewLogger[T any]() *Logger[T] {
 	}
 }
 
+// NewAnyLogger creates a universal AnyLogger (*Logger[any]) in silent mode.
+func NewAnyLogger() *AnyLogger {
+	return NewLogger[any]()
+}
+
 // AddWriter fluently registers a single writer.
 func (l *Logger[T]) AddWriter(w Writer[T]) *Logger[T] {
 	if w == nil {

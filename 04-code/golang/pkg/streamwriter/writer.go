@@ -53,6 +53,11 @@ func NewPluggableWriter[T any](opts WriterOptions[T]) *PluggableWriter[T] {
 	return w
 }
 
+// NewAnyWriter constructs a non-generic AnyWriter (*PluggableWriter[any]) with smart payload dispatch.
+func NewAnyWriter(opts WriterOptions[any]) *AnyWriter {
+	return NewPluggableWriter[any](opts)
+}
+
 // Name returns the writer identifier.
 func (w *PluggableWriter[T]) Name() string {
 	return w.name
@@ -96,9 +101,10 @@ func (w *PluggableWriter[T]) Write(ctx context.Context, payload T) *appfault.App
 
 	w.configMu.RLock()
 	fn := w.writeMethod
+	s := w.streamer
 	w.configMu.RUnlock()
 
-	return fn(ctx, w, payload)
+	return fn(s, ctx, w, payload)
 }
 
 // SetWriteMethod hot-swaps the write method at runtime.
@@ -179,9 +185,8 @@ func (w *PluggableWriter[T]) Close() *appfault.AppError {
 	return nil
 }
 
-func (w *PluggableWriter[T]) defaultWrite(ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError {
+func (w *PluggableWriter[T]) defaultWrite(streamer Streamer[T], ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError {
 	w.configMu.RLock()
-	s := w.streamer
 	formatter := w.formatMethod
 	dest := w.destination
 	w.configMu.RUnlock()
@@ -193,8 +198,8 @@ func (w *PluggableWriter[T]) defaultWrite(ctx context.Context, writer *Pluggable
 		}
 	}
 
-	if s != nil {
-		return s.Stream(ctx, payload)
+	if streamer != nil {
+		return streamer.Stream(ctx, payload)
 	}
 
 	if dest != nil {

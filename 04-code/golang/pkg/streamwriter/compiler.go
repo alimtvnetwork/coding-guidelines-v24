@@ -95,6 +95,14 @@ func (c *Compiler) compileRecursive(v reflect.Value, depth int, isNested bool) s
 		return c.compileRecursive(v.Elem(), depth+1, isNested)
 
 	case reflect.Slice, reflect.Array:
+		if v.Type().Elem().Kind() == reflect.Uint8 {
+			if v.CanInterface() {
+				if b, ok := v.Interface().([]byte); ok {
+					return string(b)
+				}
+			}
+		}
+
 		length := v.Len()
 		if length == 0 {
 			return "[]"

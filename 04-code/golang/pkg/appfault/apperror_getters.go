@@ -16,13 +16,17 @@ func (e *AppError) Message() string {
 	return e.GetMessage()
 }
 
-// GetStatusCode returns the attached HTTP status code or 0.
+// GetStatusCode returns the attached HTTP status code or falls back to errType.HttpStatus().
 func (e *AppError) GetStatusCode() int {
 	if e == nil {
 		return 0
 	}
 
-	return e.statusCode
+	if e.statusCode != 0 {
+		return e.statusCode
+	}
+
+	return e.errType.HttpStatus()
 }
 
 // StatusCode is an alias for GetStatusCode.
@@ -44,7 +48,16 @@ func (e *AppError) Type() errtype.Variation {
 	return e.GetType()
 }
 
-// Caller returns the structured CallerInfo object.
+// Code returns the 16-bit uint16 error code (or 0 if receiver is nil).
+func (e *AppError) Code() uint16 {
+	if e == nil {
+		return 0
+	}
+
+	return e.errType.Code()
+}
+
+// Caller returns the structured CallerInfo object by value.
 func (e *AppError) Caller() CallerInfo {
 	if e == nil {
 		return CallerInfo{}

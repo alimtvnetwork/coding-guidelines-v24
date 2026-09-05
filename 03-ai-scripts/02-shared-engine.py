@@ -22,7 +22,9 @@ Features:
 """
 
 from collections.abc import Generator, Iterable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import contextmanager
+from dataclasses import asdict, dataclass
 from enum import Enum
 import json
 import os
@@ -187,7 +189,7 @@ DEFAULT_MAX_WORKERS = 4
 # Standard Installer Script File Names & Exclusions
 INSTALLER_BASH_NAME = "install.sh"
 INSTALLER_PWSH_NAME = "install.ps1"
-INSTALLER_EXCLUDE_PARTS = ("node_modules", ".git", "dist", "build")
+INSTALLER_EXCLUDE_PARTS = ("node_modules", ".git", "dist", "build", "release-artifacts", "release-assets")
 
 # Standard Git Command String Constants
 GIT_EXECUTABLE = "git"
@@ -852,7 +854,8 @@ def process_repository_files(
     root_dir: str = CURRENT_DIR,
     extensions: set[str] | tuple | list | str | None = None,
     is_use_cache: bool = True,
-    custom_excludes: set[str] | None = None
+    custom_excludes: set[str] | None = None,
+    workers: int = 1,
 ) -> dict[str, Any]:
     """
     Two-Phase Universal Pipeline:
@@ -860,10 +863,12 @@ def process_repository_files(
     2. Streams and discovers new / modified files on disk.
     3. Gracefully skips missing or removed files during processing.
     4. Executes processor_fn on each unique file and aggregates statistics.
+    5. Supports worker pool concurrency when workers > 1.
     """
     start_time = time.perf_counter()
     cache_data = load_repo_cache() if is_use_cache else {}
     processed_paths: set[str] = set()
+    unique_paths: list[Path] = []
     results = []
     norm_exts = normalize_extensions(extensions)
 
@@ -873,14 +878,28 @@ def process_repository_files(
                 norm_p = normalize_rel_path(p)
                 if norm_p not in processed_paths:
                     processed_paths.add(norm_p)
-                    res = processor_fn(p)
-                    if res is not None:
-                        results.append(res)
+                    unique_paths.append(p)
 
     for p in stream_directory_files(root_dir=root_dir, extensions=norm_exts, custom_excludes=custom_excludes):
         norm_p = normalize_rel_path(p)
         if norm_p not in processed_paths:
             processed_paths.add(norm_p)
+            unique_paths.append(p)
+
+    is_multithreaded = (workers > 1 and len(unique_paths) > 1)
+    if is_multithreaded:
+        effective_workers = min(workers, len(unique_paths))
+        with ThreadPoolExecutor(max_workers=effective_workers) as executor:
+            futures = [executor.submit(processor_fn, p) for p in unique_paths]
+            for future in as_completed(futures):
+                try:
+                    res = future.result()
+                    if res is not None:
+                        results.append(res)
+                except Exception:
+                    pass
+    else:
+        for p in unique_paths:
             res = processor_fn(p)
             if res is not None:
                 results.append(res)
@@ -892,3 +911,124 @@ def process_repository_files(
         "results": results,
         "elapsed_ms": elapsed_ms,
     }
+
+
+def process_repository_files_parallel(
+    processor_fn: Callable[[Path], Any],
+    root_dir: str = CURRENT_DIR,
+    extensions: set[str] | tuple | list | str | None = None,
+    is_use_cache: bool = True,
+    custom_excludes: set[str] | None = None,
+    workers: int | None = None,
+) -> dict[str, Any]:
+    """Runs process_repository_files concurrently using worker group scaled to CPU cores."""
+    concurrency = workers if workers is not None else DEFAULT_CONCURRENCY_WORKERS
+    return process_repository_files(
+        processor_fn=processor_fn,
+        root_dir=root_dir,
+        extensions=extensions,
+        is_use_cache=is_use_cache,
+        custom_excludes=custom_excludes,
+        workers=concurrency,
+    )
+
+
+# --- Base Worker Group & Concurrency Engine ---
+
+# Default worker concurrency: scales with CPU cores but capped at 8 to avoid disk/IO thrashing.
+# Configurable via this variable, the CI_MAX_WORKERS / CICD_WORKERS env var, or CLI arguments.
+DEFAULT_CONCURRENCY_WORKERS: int = int(
+    os.environ.get("CI_MAX_WORKERS")
+    or os.environ.get("CICD_WORKERS")
+    or min(8, os.cpu_count() or 4)
+)
+
+
+@dataclass
+class WorkItemResult:
+    """Represents the execution outcome of an individual worker item."""
+    name: str
+    is_success: bool
+    output: str
+    duration_sec: float
+    return_code: int = 0
+    data: Any = None
+
+
+@dataclass
+class WorkGroupSummary:
+    """Complete summary of a work group execution."""
+    total_items: int
+    passed_count: int
+    failed_count: int
+    wall_duration_sec: float
+    results: list[WorkItemResult]
+    has_failures: bool
+    exit_code: int
+
+
+def run_worker_pool(
+    items: Iterable[Any],
+    worker_fn: Callable[[Any], WorkItemResult],
+    worker_count: int = DEFAULT_CONCURRENCY_WORKERS,
+    is_sync: bool = False,
+    on_item_complete: Callable[[WorkItemResult, int, int], None] | None = None
+) -> WorkGroupSummary:
+    """
+    Universal thread-safe worker pool engine for AI scripts and CI test runners.
+    Executes tasks concurrently across CPU threads or sequentially if is_sync is True.
+    Protects IO via bounded worker pool concurrency, captures exceptions, and yields WorkGroupSummary.
+    """
+    item_list = list(items)
+    total_items = len(item_list)
+    start_time = time.perf_counter()
+    results: list[WorkItemResult] = []
+
+    effective_workers = 1 if is_sync else max(1, min(worker_count, total_items or 1))
+
+    if is_sync:
+        for idx, item in enumerate(item_list, 1):
+            res = worker_fn(item)
+            results.append(res)
+            if on_item_complete:
+                on_item_complete(res, idx, total_items)
+    else:
+        with ThreadPoolExecutor(max_workers=effective_workers) as executor:
+            future_to_item = {
+                executor.submit(worker_fn, item): item
+                for item in item_list
+            }
+            completed_count = 0
+            for future in as_completed(future_to_item):
+                completed_count += 1
+                try:
+                    res = future.result()
+                except Exception as exc:
+                    item = future_to_item[future]
+                    res = WorkItemResult(
+                        name=str(item),
+                        is_success=False,
+                        output=f"Worker exception: {exc}",
+                        duration_sec=0.0,
+                        return_code=-1
+                    )
+                results.append(res)
+                if on_item_complete:
+                    on_item_complete(res, completed_count, total_items)
+
+    wall_duration = time.perf_counter() - start_time
+    passed_count = sum(1 for r in results if r.is_success)
+    failed_count = sum(1 for r in results if not r.is_success)
+    has_failures = (failed_count > 0)
+    exit_code = ExitCodeType.VIOLATIONS_FOUND.value if has_failures else ExitCodeType.SUCCESS.value
+
+    return WorkGroupSummary(
+        total_items=total_items,
+        passed_count=passed_count,
+        failed_count=failed_count,
+        wall_duration_sec=wall_duration,
+        results=results,
+        has_failures=has_failures,
+        exit_code=exit_code
+    )
+

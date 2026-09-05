@@ -98,3 +98,32 @@ func TestStreamwriterStreamerExample(t *testing.T) {
 		t.Errorf("expected hot-swapped write output")
 	}
 }
+
+func TestDemonstrateAdvancedFileAndPayloadIntelligence(t *testing.T) {
+	buf := &bytes.Buffer{}
+	appErr := examples.DemonstrateAdvancedFileAndPayloadIntelligence(buf)
+	if appErr != nil {
+		t.Fatalf("DemonstrateAdvancedFileAndPayloadIntelligence failed: %v", appErr)
+	}
+
+	out := buf.String()
+	if !strings.Contains(out, "Direct binary stream without Base64 encoding") {
+		t.Errorf("expected direct binary stream in output")
+	}
+
+	if !strings.Contains(out, "❌ ERROR [Validation:2]") {
+		t.Errorf("expected validation banner in output")
+	}
+
+	if !strings.Contains(out, `"Function": "HandleRegistration"`) {
+		t.Errorf("expected caller function in json output")
+	}
+
+	if !strings.Contains(out, `caller="auth/service.go:55 (HandleRegistration)"`) {
+		t.Errorf("expected caller in text log output")
+	}
+
+	if !strings.Contains(out, "Read") || !strings.Contains(out, "chunk(s)") {
+		t.Errorf("expected chunked read output")
+	}
+}

@@ -38,8 +38,17 @@ type Streamer[T any] interface {
 type StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) *appfault.AppError
 
 // WriteFunc defines the swappable function signature returning *appfault.AppError.
-// It receives the active context, the current writer object, and the generic payload.
-type WriteFunc[T any] func(ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError
+// It receives the attached streamer as the first parameter, the active context, the current writer object, and the generic payload.
+type WriteFunc[T any] func(streamer Streamer[T], ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError
+
+// AnyWriter is the first-class non-generic alias for PluggableWriter[any].
+type AnyWriter = PluggableWriter[any]
+
+// AnyStreamer is the first-class non-generic alias for Streamer[any].
+type AnyStreamer = Streamer[any]
+
+// AnyLogger is the first-class non-generic alias for Logger[any].
+type AnyLogger = Logger[any]
 
 // FormatFunc defines the serialization transformation returning Bytes[T].
 type FormatFunc[T any] func(payload T) Bytes[T]

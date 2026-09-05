@@ -11,6 +11,7 @@ import (
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
+	"coding-guidelines/common/pkg/fileutil"
 	"coding-guidelines/common/pkg/streamwriter"
 )
 
@@ -53,7 +54,7 @@ func RunLoggerExample(dest io.Writer) *appfault.AppError {
 	auditWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
 		Name:        "audit-api-writer",
 		Destination: dest,
-		WriteMethod: func(ctx context.Context, w *streamwriter.PluggableWriter[any], payload any) *appfault.AppError {
+		WriteMethod: func(s streamwriter.Streamer[any], ctx context.Context, w *streamwriter.PluggableWriter[any], payload any) *appfault.AppError {
 			trace := ""
 			if traceVal := ctx.Value("traceId"); traceVal != nil {
 				trace = fmt.Sprintf("[%v] ", traceVal)
@@ -273,7 +274,7 @@ func RunStreamerExample(dest io.Writer) *appfault.AppError {
 	batchWriter.Unlock()
 
 	// 5. Runtime Method Swapping: Hot-swap write behavior dynamically
-	batchWriter.SetWriteMethod(func(ctx context.Context, w *streamwriter.PluggableWriter[string], payload string) *appfault.AppError {
+	batchWriter.SetWriteMethod(func(s streamwriter.Streamer[string], ctx context.Context, w *streamwriter.PluggableWriter[string], payload string) *appfault.AppError {
 		outDest := w.Destination()
 		if outDest == nil {
 			outDest = os.Stdout
@@ -287,6 +288,62 @@ func RunStreamerExample(dest io.Writer) *appfault.AppError {
 		return nil
 	})
 	_ = batchWriter.Write(ctx, "Message sent via runtime swapped method")
+
+	return nil
+}
+
+// DemonstrateAdvancedFileAndPayloadIntelligence showcases AnyWriter, byte dispatch without Base64, and atomic file I/O.
+func DemonstrateAdvancedFileAndPayloadIntelligence(dest io.Writer) *appfault.AppError {
+	ctx := context.Background()
+
+	// 1. Universal AnyWriter with Payload Intelligence
+	anyWriter := streamwriter.NewAnyWriter(streamwriter.WriterOptions[any]{
+		Name:        "smart-dispatcher",
+		Destination: dest,
+	})
+
+	// Send raw bytes - preserved directly without Base64 encoding
+	rawBytes := []byte("Direct binary stream without Base64 encoding")
+	if err := anyWriter.Write(ctx, rawBytes); err != nil {
+		return err
+	}
+
+	// 2. Multi-Destination Error Formatting
+	errObj := appfault.New(errtype.Validation, "Invalid email address entered").
+		WithStatusCode(400).
+		WithCaller(appfault.CallerInfo{File: "auth/service.go", Line: 55, Function: "HandleRegistration"}).
+		WithContext("email", "bad-format")
+
+	_, _ = fmt.Fprintln(dest, "\n--- Stdout Banner Format ---")
+	_, _ = fmt.Fprintln(dest, errObj.FormatStdout())
+
+	_, _ = fmt.Fprintln(dest, "\n--- Structured JSON Format ---")
+	_, _ = fmt.Fprintln(dest, errObj.FormatJSON())
+
+	_, _ = fmt.Fprintln(dest, "\n--- Single-Line Text Log Format ---")
+	_, _ = fmt.Fprintln(dest, errObj.FormatTextLog())
+
+	// 3. Atomic File Writing
+	tempTarget := "tmp/demonstration-atomic.txt"
+	atomRes := fileutil.WriteAtomic(tempTarget, []byte("Atomic file write payload"), fileutil.FilePermStandard)
+	if atomRes.IsFailed() {
+		return atomRes.Fault()
+	}
+
+	defer fileutil.DeleteFile(tempTarget)
+
+	// 4. Chunked File Streaming
+	chunkCount := 0
+	readRes := fileutil.ReadChunked(tempTarget, 1024, func(chunk []byte) *appfault.AppError {
+		chunkCount++
+
+		return nil
+	})
+	if readRes.IsFailed() {
+		return readRes.Fault()
+	}
+
+	_, _ = fmt.Fprintf(dest, "\nRead %d bytes in %d chunk(s)\n", readRes.Data(), chunkCount)
 
 	return nil
 }

@@ -16,6 +16,10 @@ type WrappedJson interface {
 	String() string
 	Len() int
 	IsEmpty() bool
+	IsNull() bool
+	HasZero() bool
+	IsZero() bool
+	HasNull() bool
 	Payload() any
 	Value() any
 	AppError() *appfault.AppError
@@ -74,6 +78,32 @@ func (p JsonPayloadResult[T]) ToBytes() Bytes[T] {
 	}
 
 	return NewBytes(p.data, p.payload)
+}
+
+// Clone returns a deep copy of JsonPayloadResult[T].
+func (p JsonPayloadResult[T]) Clone() JsonPayloadResult[T] {
+	return JsonPayloadResult[T]{
+		JsonResult: p.JsonResult.Clone(),
+		payload:    p.payload,
+	}
+}
+
+// Concat safely combines two JsonPayloadResult[T] instances without panic.
+// If the receiver is empty or null, it returns other.Clone().
+// If other is empty or null, it returns p.Clone().
+func (p JsonPayloadResult[T]) Concat(other JsonPayloadResult[T]) JsonPayloadResult[T] {
+	if p.IsNull() || p.IsEmpty() {
+		return other.Clone()
+	}
+
+	if other.IsNull() || other.IsEmpty() {
+		return p.Clone()
+	}
+
+	return JsonPayloadResult[T]{
+		JsonResult: p.JsonResult.Concat(other.JsonResult),
+		payload:    other.payload,
+	}
 }
 
 // jsonSourceSingleton acts as the struct-as-namespace factory for multi-source JsonResult construction.
@@ -473,6 +503,67 @@ func (j JsonResult) Len() int {
 // IsEmpty returns true if the JSON bytes are empty.
 func (j JsonResult) IsEmpty() bool {
 	return len(j.data) == 0
+}
+
+// IsNull returns true if JSON data is empty and no AppError is present.
+func (j JsonResult) IsNull() bool {
+	return len(j.data) == 0 && j.appError == nil
+}
+
+// HasZero returns true if JSON data is empty and no AppError is present.
+func (j JsonResult) HasZero() bool {
+	return j.IsEmpty()
+}
+
+// IsZero returns true if JSON data is empty and no AppError is present.
+func (j JsonResult) IsZero() bool {
+	return j.IsEmpty()
+}
+
+// HasNull returns true if appError is nil or represents no error.
+func (j JsonResult) HasNull() bool {
+	if j.appError == nil {
+		return true
+	}
+
+	return j.appError.HasNullError()
+}
+
+// Clone returns a deep copy of JsonResult.
+func (j JsonResult) Clone() JsonResult {
+	var copied []byte
+	if j.data != nil {
+		copied = make([]byte, len(j.data))
+		copy(copied, j.data)
+	}
+
+	return JsonResult{
+		data:     copied,
+		appError: j.appError.Clone(),
+	}
+}
+
+// Concat safely merges two JsonResult envelopes without panic.
+// If the receiver is empty or null, it returns other.Clone().
+// If other is empty or null, it returns j.Clone().
+func (j JsonResult) Concat(other JsonResult) JsonResult {
+	if j.IsNull() || j.IsEmpty() {
+		return other.Clone()
+	}
+
+	if other.IsNull() || other.IsEmpty() {
+		return j.Clone()
+	}
+
+	mergedErr := appfault.Merge(j.appError, other.appError)
+	mergedData := make([]byte, len(j.data)+len(other.data))
+	copy(mergedData, j.data)
+	copy(mergedData[len(j.data):], other.data)
+
+	return JsonResult{
+		data:     mergedData,
+		appError: mergedErr,
+	}
 }
 
 // Payload returns the data slice for WrappedBytes compatibility.
