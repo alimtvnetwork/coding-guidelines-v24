@@ -1,6 +1,6 @@
 # Plan: Rename Overviews and Enhance Installers
 
-**Status:** PENDING
+**Status:** COMPLETED
 
 ## Acceptance Criteria
 

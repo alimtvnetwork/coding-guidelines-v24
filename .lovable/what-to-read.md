@@ -44,27 +44,17 @@
 ## See also
 
 - Root `readme.md` (must stay in sync with this file)
-- .lovable/plans/pending/01-apperror-new-constructors.md
-- .lovable/plans/subtasks/01-apperror-new-constructors/01-update-spec.md
-- .lovable/plans/subtasks/01-apperror-new-constructors/02-release.md
-- .lovable/plans/pending/02-apperror-human-logger-methods.md
-- .lovable/plans/subtasks/02-apperror-human-logger-methods/01-update-display-specs.md
-- .lovable/plans/subtasks/02-apperror-human-logger-methods/02-release.md
-- .lovable/plans/pending/03-guideline-prompt-and-installer-upgrade.md
-- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/01-format-overview-prompt.md
-- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/02-upgrade-installer-scripts.md
-- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/03-generate-02-improvements.md
-- .lovable/plans/subtasks/03-guideline-prompt-and-installer-upgrade/04-release.md
-- .lovable/plans/pending/04-rename-overviews-and-installer-json.md
-- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/01-rename-and-update-refs.md
-- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/02-enhance-installers.md
-- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/03-update-readme.md
-- .lovable/plans/subtasks/04-rename-overviews-and-installer-json/04-release.md
-- .lovable/plans/pending/05-fix-encoding.md
-- .lovable/plans/subtasks/05-fix-encoding/01-normalize-encoding.md
-- .lovable/plans/subtasks/05-fix-encoding/02-update-checklist.md
-- .lovable/plans/subtasks/05-fix-encoding/03-release-6.31.0.md
-- .lovable/plans/pending/06-trailing-newlines-and-ai-scripts.md
-- .lovable/plans/pending/07-lowercase-changelog.md
-- .lovable/plans/pending/08-update-prompts-and-release.md
-- .lovable/plans/pending/09-rca-and-boolean-fix.md
+- .lovable/plans/01-index.md
+- .lovable/plans/pending/02-slides-system-overhaul.md
+- .lovable/plans/pending/04-guideline-prompt-and-installer-upgrade.md
+- .lovable/plans/pending/09-update-prompts-and-release.md
+- .lovable/plans/pending/11-code-red-refactor-remediation.md
+- .lovable/plans/completed/01-apperror-new-constructors.md
+- .lovable/plans/completed/03-apperror-human-logger-methods.md
+- .lovable/plans/completed/05-rename-overviews-and-installer-json.md
+- .lovable/plans/completed/06-fix-encoding.md
+- .lovable/plans/completed/07-trailing-newlines-and-ai-scripts.md
+- .lovable/plans/completed/08-lowercase-changelog.md
+- .lovable/plans/completed/10-rca-and-boolean-fix.md
+- .lovable/plans/completed/12-prompt-architect-version-tracking.md
+- .lovable/plans/completed/13-cicd-pipeline-consolidation-and-owner-review.md

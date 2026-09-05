@@ -2088,12 +2088,12 @@ Prompts are authored and maintained directly inside `01-prompts/`. To compile an
 
 This compiles all categorized prompts using `scripts/prompt-sync-config.json` and verifies that the prompt registry index remains 100% in sync.
 
-- [Plan: AppError Constructors](.lovable/plans/pending/01-apperror-new-constructors.md)
-- [Plan: AppError Human & Logger Methods](.lovable/plans/pending/03-apperror-human-logger-methods.md)
+- [Plan: AppError Constructors](.lovable/plans/completed/01-apperror-new-constructors.md)
+- [Plan: AppError Human & Logger Methods](.lovable/plans/completed/03-apperror-human-logger-methods.md)
 - [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/04-guideline-prompt-and-installer-upgrade.md)
-- [Plan: Normalize Encoding](.lovable/plans/pending/06-fix-encoding.md)
-  - [Plan: Rename Overviews and JSON Installer](.lovable/plans/pending/05-rename-overviews-and-installer-json.md)
-- [Plan: Trailing Newlines & AI Scripts](.lovable/plans/pending/07-trailing-newlines-and-ai-scripts.md)
-- [Plan: Lowercase changelog.md](.lovable/plans/pending/08-lowercase-changelog.md)
+- [Plan: Normalize Encoding](.lovable/plans/completed/06-fix-encoding.md)
+  - [Plan: Rename Overviews and JSON Installer](.lovable/plans/completed/05-rename-overviews-and-installer-json.md)
+- [Plan: Trailing Newlines & AI Scripts](.lovable/plans/completed/07-trailing-newlines-and-ai-scripts.md)
+- [Plan: Lowercase changelog.md](.lovable/plans/completed/08-lowercase-changelog.md)
 - [Plan: Update Prompts and Release](.lovable/plans/pending/09-update-prompts-and-release.md)
-- [Plan: RCA & Boolean Fix](.lovable/plans/pending/10-rca-and-boolean-fix.md)
+- [Plan: RCA & Boolean Fix](.lovable/plans/completed/10-rca-and-boolean-fix.md)

@@ -76,3 +76,5 @@ tmp/
 *.sqlite
 *.sqlite3
 *.code-workspace
+.lovable/temp/
+.lovable/temp-agents/

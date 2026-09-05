@@ -1,6 +1,6 @@
 # Plan: Normalize Encoding and Line Endings
 
-**Status:** PENDING
+**Status:** COMPLETED
 
 ## Acceptance Criteria
 1. Fix all .md (and other text) file encodings to UTF-8 without BOM.
