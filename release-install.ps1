@@ -68,12 +68,12 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference    = "SilentlyContinue"
 
 $Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "installer-logs"
-try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { Write-Warning "  ⚠️  failed to create crash log directory: $($_.Exception.Message)" }
 $Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("release-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
 
 function Write-InstallLog {
     param([string]$Line)
-    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { Write-Warning "  ⚠️  failed to write install log: $($_.Exception.Message)" }
 }
 Write-InstallLog "# release-install crash log"
 Write-InstallLog ("# started: " + (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))

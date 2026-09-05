@@ -86,7 +86,7 @@ function Wait-SlidesReady {
         try {
             $r = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop
             if ($r.StatusCode -lt 500) { return $true }
-        } catch { }
+        } catch { Write-Verbose "Polling $Url attempt $i: $($_.Exception.Message)" }
     }
     return $false
 }

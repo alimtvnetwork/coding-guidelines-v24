@@ -119,7 +119,7 @@ if ($MaxFixRepoLogs -lt 0) {
 # to know about Get-Help. Print to stdout and exit 0 BEFORE any side
 # effects (no folder creation, no banner, no download).
 if ($Help) {
-    try { Get-Help $PSCommandPath -Full } catch { Write-Host (Get-Content -LiteralPath $PSCommandPath -ErrorAction SilentlyContinue | Select-Object -First 100) }
+    try { Get-Help $PSCommandPath -Full } catch { Write-Warning "  ⚠️  Get-Help failed: $($_.Exception.Message)"; Write-Host (Get-Content -LiteralPath $PSCommandPath -ErrorAction SilentlyContinue | Select-Object -First 100) }
     return
 }
 
@@ -142,12 +142,12 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference    = "SilentlyContinue"
 
 $Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "installer-logs"
-try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { Write-Warning "  ⚠️  failed to create crash log directory: $($_.Exception.Message)" }
 $Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("linters-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
 
 function Write-InstallLog {
     param([string]$Line)
-    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { Write-Warning "  ⚠️  failed to write install log: $($_.Exception.Message)" }
 }
 
 # Header always written so the log is useful even on early failures.
@@ -277,7 +277,7 @@ function Copy-Mapping {
                 if ($existingVer.codingGuideline.version) { $prevVersion = $existingVer.codingGuideline.version }
                 if ($existingVer.codingGuideline.installedFiles) { $prevInstalledFiles = @($existingVer.codingGuideline.installedFiles) }
             }
-        } catch {}
+        } catch { Write-Warning "  ⚠️  failed to parse existing version.json: $($_.Exception.Message)" }
     }
     $newInstalledFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($pair in (Get-MappingPairs)) {
@@ -298,7 +298,7 @@ function Copy-Mapping {
         if (-not $newInstalledFiles.Contains($oldFile) -and $oldFile -ne "version.json" -and -not ($oldFile -like ".lovable/*") -and -not ($oldFile -like ".git/*")) {
             $oldPath = Join-Path $Target $oldFile
             if (Test-Path $oldPath) {
-                try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch {}
+                try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch { Write-Warning "  ⚠️  failed to remove obsolete file $oldFile: $($_.Exception.Message)" }
             }
         }
     }
@@ -313,7 +313,7 @@ function Copy-Mapping {
             try {
                 $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json; $destData = @{}
                 if (Test-Path $destPath) {
-                    try { $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json; if ($prevVersion -eq "unknown" -and $destData.codingGuideline -and $destData.codingGuideline.version) { $prevVersion = $destData.codingGuideline.version } } catch {}
+                    try { $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json; if ($prevVersion -eq "unknown" -and $destData.codingGuideline -and $destData.codingGuideline.version) { $prevVersion = $destData.codingGuideline.version } } catch { Write-Warning "  ⚠️  failed to parse $destPath: $($_.Exception.Message)" }
                 }
                 $finalGuidelineVersion = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
                 $guidelineData = @{
@@ -355,7 +355,7 @@ function Copy-Mapping {
                     $srcVerFile = Join-Path $root "version.json"; $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
                     $paVersion = if ($verData -and $verData.Version) { $verData.Version } elseif ($verData -and $verData.version) { $verData.version } else { "" }
                     $paCommit = if ($verData -and $verData.LastCommitSha) { $verData.LastCommitSha } else { "" }
-                    $destVersionData = if (Test-Path $targetVersionFile) { try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} } } else { [PSCustomObject]@{} }
+                    $destVersionData = if (Test-Path $targetVersionFile) { try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { Write-Warning "  ⚠️  failed to parse $targetVersionFile: $($_.Exception.Message)"; [PSCustomObject]@{} } } else { [PSCustomObject]@{} }
                     $paBlock = @{ author = @{ name = "Md. Alim Ul Karim"; title = "Chief Software Engineer"; url = "https://github.com/aukgit/alim.karim.profile" }; sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); version = $paVersion; lastCommit = $paCommit; fileMapping = $fileMapping }
                     $destVersionData | Add-Member -NotePropertyName "promptArchitectByRiseupAsia" -NotePropertyValue $paBlock -Force
                     $destVersionData | ConvertTo-Json -Depth 10 | Set-Content -Path $targetVersionFile -Encoding UTF8

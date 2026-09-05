@@ -586,7 +586,7 @@ if ($upload) {
         try {
             $wpConfigData = Get-Content $wpConfig -Raw | ConvertFrom-Json
             Write-Host "  Site:   $($wpConfigData.wordPressSiteURL)" -ForegroundColor Gray
-        } catch {}
+        } catch { Write-Warning "  ⚠️  failed to read config $wpConfig: $($_.Exception.Message)" }
     }
     Write-Host ""
 

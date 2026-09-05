@@ -206,7 +206,7 @@ function Invoke-LatestVersionProbe {
         try {
             $r = $tasks[$n].GetAwaiter().GetResult()
             if ($r.IsSuccessStatusCode) { $hits += $n }
-        } catch { }
+        } catch { Write-Dim "Probe v$n failed: $($_.Exception.Message)" }
     }
     $client.Dispose()
     $hits   = @($hits | Sort-Object -Descending)
@@ -571,7 +571,7 @@ try {
         }
         if ($RollbackOnFixRepoFailure) {
             $isGitRepo = $false
-            try { & git -C $Dest rev-parse --git-dir 2>$null | Out-Null; if ($LASTEXITCODE -eq 0) { $isGitRepo = $true } } catch {}
+            try { & git -C $Dest rev-parse --git-dir 2>$null | Out-Null; if ($LASTEXITCODE -eq 0) { $isGitRepo = $true } } catch { Write-Dim "git rev-parse probe failed: $($_.Exception.Message)" }
             if (-not $isGitRepo) {
                 Write-Warn "-RollbackOnFixRepoFailure: $Dest is not a git repo; rollback disabled."
                 $RollbackOnFixRepoFailure = $false

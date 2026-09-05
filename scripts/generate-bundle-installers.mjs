@@ -354,14 +354,14 @@ if os.path.exists(target_ver_file):
         with open(target_ver_file, 'r', encoding='utf-8') as f:
             tdata = json.load(f); cg = tdata.get('codingGuideline', {})
             prev_version = cg.get('version', 'unknown'); old_installed = cg.get('installedFiles', [])
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read existing version.json: {e}', file=sys.stderr)
 removed_files = []
 for old_f in old_installed:
     if old_f not in new_installed_sorted and old_f != 'version.json' and not old_f.startswith(('.lovable/', '.git/')):
         old_path = os.path.join(target, old_f)
         if os.path.exists(old_path) and os.path.isfile(old_path):
             try: os.remove(old_path); removed_files.append(old_f); print(f'  🗑️  removed obsolete file: {old_f}')
-            except Exception: pass
+            except Exception as e: print(f'  ⚠️  failed to remove obsolete file {old_f}: {e}', file=sys.stderr)
 with open(state_path, 'w', encoding='utf-8') as f:
     json.dump({'installedFiles': new_installed_sorted, 'removedFiles': sorted(removed_files), 'previousVersion': prev_version}, f, indent=2)
 " "\${archive_root}" "\${TARGET}" "\${BUNDLE_MAPPING}" "\${install_state_file}"
@@ -381,20 +381,20 @@ import sys, json, os
 src_file, dest_file, state_file = sys.argv[1:4]
 try:
     with open(src_file) as f: src_data = json.load(f)
-except Exception: sys.exit(0)
+except Exception as e: print(f'  ⚠️  failed to read src_file {src_file}: {e}', file=sys.stderr); sys.exit(0)
 dest_data, prev_version, installed_files = {}, 'unknown', []
 if os.path.exists(state_file):
     try:
         with open(state_file, 'r', encoding='utf-8') as sf:
             sdata = json.load(sf)
             installed_files, prev_version = sdata.get('installedFiles', []), sdata.get('previousVersion', 'unknown')
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read state_file {state_file}: {e}', file=sys.stderr)
 if os.path.exists(dest_file):
     try:
         with open(dest_file) as f: dest_data = json.load(f)
         if prev_version == 'unknown' and 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
             prev_version = dest_data['codingGuideline']['version']
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read dest_file {dest_file}: {e}', file=sys.stderr)
 dest_data['codingGuideline'] = {
     'repositoryUrl': src_data.get('RepoUrl', src_data.get('repositoryUrl', '')),
     'lastCommit': src_data.get('LastCommitSha', src_data.get('git', {}).get('sha', '')),
@@ -450,19 +450,19 @@ import sys, json, os, datetime
 src_dir, archive_root, dest_file, config_file = sys.argv[1:5]
 try:
     with open(config_file) as f: cfg = json.load(f)
-except Exception: cfg = {}
+except Exception as e: print(f'  ⚠️  failed to read config_file {config_file}: {e}', file=sys.stderr); cfg = {}
 file_mapping = [{'source': m['source'], 'target': m['target']} for m in cfg.get('mappings', [])]
 version, last_commit, src_ver_file = '', '', os.path.join(archive_root, 'version.json')
 if os.path.exists(src_ver_file):
     try:
         with open(src_ver_file) as f:
             vdata = json.load(f); version = vdata.get('Version', vdata.get('version', '')); last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read {src_ver_file}: {e}', file=sys.stderr)
 dest_data = {}
 if os.path.exists(dest_file):
     try:
         with open(dest_file) as f: dest_data = json.load(f)
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read {dest_file}: {e}', file=sys.stderr)
 dest_data['promptArchitectByRiseupAsia'] = {
     'author': {'name': 'Md. Alim Ul Karim', 'title': 'Chief Software Engineer', 'url': 'https://github.com/aukgit/alim.karim.profile'},
     'sourceRepository': 'https://github.com/alimtvnetwork/prompt-architect-v2',
@@ -470,7 +470,7 @@ dest_data['promptArchitectByRiseupAsia'] = {
     'version': version, 'lastCommit': last_commit, 'fileMapping': file_mapping
 }
 with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent=2)
-" "\${archive_root}/\${src}" "\${archive_root}" "\${target_version_file}" "\${archive_root}/../scripts/prompt-sync-config.json" 2>/dev/null || true
+" "\${archive_root}/\${src}" "\${archive_root}" "\${target_version_file}" "\${archive_root}/../scripts/prompt-sync-config.json" || true
         echo "  ✓ promptArchitectByRiseupAsia block injected into \${target_version_file}"
       fi
     else
@@ -488,13 +488,13 @@ state = {}
 if os.path.exists(state_file):
     try:
         with open(state_file, 'r', encoding='utf-8') as f: state = json.load(f)
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read {state_file}: {e}', file=sys.stderr)
 target_ver_file, ver = os.path.join(target, 'version.json'), ''
 if os.path.exists(target_ver_file):
     try:
         with open(target_ver_file, 'r', encoding='utf-8') as f:
             ver = json.load(f).get('codingGuideline', {}).get('version', '')
-    except Exception: pass
+    except Exception as e: print(f'  ⚠️  failed to read {target_ver_file}: {e}', file=sys.stderr)
 summary = {
     'bundle': bundle_name, 'version': ver,
     'previousVersion': state.get('previousVersion', 'unknown'),
@@ -976,7 +976,7 @@ if ($MaxFixRepoLogs -lt 0) {
 # to know about Get-Help. Print to stdout and exit 0 BEFORE any side
 # effects (no folder creation, no banner, no download).
 if ($Help) {
-    try { Get-Help $PSCommandPath -Full } catch { Write-Host (Get-Content -LiteralPath $PSCommandPath -ErrorAction SilentlyContinue | Select-Object -First 100) }
+    try { Get-Help $PSCommandPath -Full } catch { Write-Warning "  ⚠️  Get-Help failed: $($_.Exception.Message)"; Write-Host (Get-Content -LiteralPath $PSCommandPath -ErrorAction SilentlyContinue | Select-Object -First 100) }
     return
 }
 
@@ -999,12 +999,12 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference    = "SilentlyContinue"
 
 $Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "installer-logs"
-try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { Write-Warning "  ⚠️  failed to create crash log directory: $($_.Exception.Message)" }
 $Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("${bundle.name}-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
 
 function Write-InstallLog {
     param([string]$Line)
-    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { Write-Warning "  ⚠️  failed to write install log: $($_.Exception.Message)" }
 }
 
 # Header always written so the log is useful even on early failures.
@@ -1134,7 +1134,7 @@ function Copy-Mapping {
                 if ($existingVer.codingGuideline.version) { $prevVersion = $existingVer.codingGuideline.version }
                 if ($existingVer.codingGuideline.installedFiles) { $prevInstalledFiles = @($existingVer.codingGuideline.installedFiles) }
             }
-        } catch {}
+        } catch { Write-Warning "  ⚠️  failed to parse existing version.json: $($_.Exception.Message)" }
     }
     $newInstalledFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($pair in (Get-MappingPairs)) {
@@ -1155,7 +1155,7 @@ function Copy-Mapping {
         if (-not $newInstalledFiles.Contains($oldFile) -and $oldFile -ne "version.json" -and -not ($oldFile -like ".lovable/*") -and -not ($oldFile -like ".git/*")) {
             $oldPath = Join-Path $Target $oldFile
             if (Test-Path $oldPath) {
-                try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch {}
+                try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch { Write-Warning "  ⚠️  failed to remove obsolete file $oldFile: $($_.Exception.Message)" }
             }
         }
     }
@@ -1170,7 +1170,7 @@ function Copy-Mapping {
             try {
                 $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json; $destData = @{}
                 if (Test-Path $destPath) {
-                    try { $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json; if ($prevVersion -eq "unknown" -and $destData.codingGuideline -and $destData.codingGuideline.version) { $prevVersion = $destData.codingGuideline.version } } catch {}
+                    try { $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json; if ($prevVersion -eq "unknown" -and $destData.codingGuideline -and $destData.codingGuideline.version) { $prevVersion = $destData.codingGuideline.version } } catch { Write-Warning "  ⚠️  failed to parse $destPath: $($_.Exception.Message)" }
                 }
                 $finalGuidelineVersion = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
                 $guidelineData = @{
@@ -1212,7 +1212,7 @@ function Copy-Mapping {
                     $srcVerFile = Join-Path $root "version.json"; $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
                     $paVersion = if ($verData -and $verData.Version) { $verData.Version } elseif ($verData -and $verData.version) { $verData.version } else { "" }
                     $paCommit = if ($verData -and $verData.LastCommitSha) { $verData.LastCommitSha } else { "" }
-                    $destVersionData = if (Test-Path $targetVersionFile) { try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} } } else { [PSCustomObject]@{} }
+                    $destVersionData = if (Test-Path $targetVersionFile) { try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { Write-Warning "  ⚠️  failed to parse $targetVersionFile: $($_.Exception.Message)"; [PSCustomObject]@{} } } else { [PSCustomObject]@{} }
                     $paBlock = @{ author = @{ name = "Md. Alim Ul Karim"; title = "Chief Software Engineer"; url = "https://github.com/aukgit/alim.karim.profile" }; sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); version = $paVersion; lastCommit = $paCommit; fileMapping = $fileMapping }
                     $destVersionData | Add-Member -NotePropertyName "promptArchitectByRiseupAsia" -NotePropertyValue $paBlock -Force
                     $destVersionData | ConvertTo-Json -Depth 10 | Set-Content -Path $targetVersionFile -Encoding UTF8
