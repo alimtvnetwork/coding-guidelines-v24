@@ -1,40 +1,6 @@
 #!/usr/bin/env node
-// =====================================================================
-// generate-bundle-installers.mjs
-//
-// Emits per-bundle one-liner installers (.sh / .ps1) at the repo root.
-// Reads bundle definitions from bundles.json (single source of truth).
-//
-// Generated installers support THREE install paths:
-//
-//   1. Versioned install (--version vX.Y.Z) → fetch the stable-named
-//      release archive (`<stableName>.tar.gz` / `.zip`) and extract
-//      with src→dest folder remapping. No git checkout required.
-//
-//   2. Main-branch install (default, no --version) → download a
-//      tarball/zip directly from `refs/heads/main` (codeload.github.com)
-//      and extract the same src→dest mapping. No git, no probe, no
-//      delegation. This is the new default — works behind firewalls
-//      that block the install.sh latest-version probe.
-//
-//   3. Auto-open (when bundle declares `autoOpen.entry`) → after a
-//      successful install, open the declared HTML entry in the user's
-//      default browser (macOS: open, Linux: xdg-open, Windows: start).
-//      Suppress with --no-open.
-//
-// Cross-platform notes:
-//   • Bash script uses POSIX-compatible parameter expansion and quotes
-//     every variable to survive paths with spaces. Tested on macOS bash
-//     3.2 and Linux bash 4+.
-//   • PowerShell script uses Invoke-WebRequest + Expand-Archive which
-//     ship with both Windows PowerShell 5.1 and PowerShell Core 7+.
-//
-// Source of truth: bundles.json. Edit the manifest, run this script,
-// commit the regenerated <bundle>-install.{sh,ps1} files.
-//
-// Usage:
-//   node scripts/generate-bundle-installers.mjs
-// =====================================================================
+// generate-bundle-installers.mjs — emits per-bundle one-liner installers (.sh / .ps1)
+// Source of truth: bundles.json. Edit the manifest, re-run `node scripts/generate-bundle-installers.mjs`.
 
 import { writeFileSync, chmodSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -365,6 +331,41 @@ extract_mapping() {
     fi
   fi
 
+  # ── Pre-scan archive to calculate installed files and purge obsolete files ──
+  local install_state_file="\${archive_root}/.install_manifest.json"
+  python3 -c "
+import sys, json, os
+extract_root, target, mapping, state_path = sys.argv[1:5]
+pairs = [p.split('|') for p in mapping.split() if '|' in p]
+new_installed = []
+for src, dest in pairs:
+    src_path = os.path.join(extract_root, src)
+    if not os.path.exists(src_path) or src == 'version.json': continue
+    if os.path.isdir(src_path):
+        for root, _, files in os.walk(src_path):
+            for file in files:
+                rel = os.path.relpath(os.path.join(root, file), src_path)
+                new_installed.append(os.path.normpath(os.path.join(dest, rel)).replace('\\\\', '/'))
+    else: new_installed.append(os.path.normpath(dest).replace('\\\\', '/'))
+new_installed_sorted = sorted(list(set(new_installed)))
+target_ver_file, old_installed, prev_version = os.path.join(target, 'version.json'), [], 'unknown'
+if os.path.exists(target_ver_file):
+    try:
+        with open(target_ver_file, 'r', encoding='utf-8') as f:
+            tdata = json.load(f); cg = tdata.get('codingGuideline', {})
+            prev_version = cg.get('version', 'unknown'); old_installed = cg.get('installedFiles', [])
+    except Exception: pass
+removed_files = []
+for old_f in old_installed:
+    if old_f not in new_installed_sorted and old_f != 'version.json' and not old_f.startswith(('.lovable/', '.git/')):
+        old_path = os.path.join(target, old_f)
+        if os.path.exists(old_path) and os.path.isfile(old_path):
+            try: os.remove(old_path); removed_files.append(old_f); print(f'  🗑️  removed obsolete file: {old_f}')
+            except Exception: pass
+with open(state_path, 'w', encoding='utf-8') as f:
+    json.dump({'installedFiles': new_installed_sorted, 'removedFiles': sorted(removed_files), 'previousVersion': prev_version}, f, indent=2)
+" "\${archive_root}" "\${TARGET}" "\${BUNDLE_MAPPING}" "\${install_state_file}"
+
   local pair src dest
   for pair in \${BUNDLE_MAPPING}; do
     src="\${pair%|*}"
@@ -377,17 +378,21 @@ extract_mapping() {
       # Handle smart merge for version.json -> codingGuideline
       python3 -c "
 import sys, json, os
-src_file = sys.argv[1]
-dest_file = sys.argv[2]
+src_file, dest_file, state_file = sys.argv[1:4]
 try:
     with open(src_file) as f: src_data = json.load(f)
 except Exception: sys.exit(0)
-dest_data = {}
-prev_version = 'unknown'
+dest_data, prev_version, installed_files = {}, 'unknown', []
+if os.path.exists(state_file):
+    try:
+        with open(state_file, 'r', encoding='utf-8') as sf:
+            sdata = json.load(sf)
+            installed_files, prev_version = sdata.get('installedFiles', []), sdata.get('previousVersion', 'unknown')
+    except Exception: pass
 if os.path.exists(dest_file):
     try:
         with open(dest_file) as f: dest_data = json.load(f)
-        if 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
+        if prev_version == 'unknown' and 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
             prev_version = dest_data['codingGuideline']['version']
     except Exception: pass
 dest_data['codingGuideline'] = {
@@ -396,10 +401,11 @@ dest_data['codingGuideline'] = {
     'version': src_data.get('Version', src_data.get('version', '')),
     'previousVersion': prev_version,
     'description': src_data.get('Description', src_data.get('description', '')),
-    'prompts': src_data.get('Prompts', src_data.get('prompts', []))
+    'prompts': src_data.get('Prompts', src_data.get('prompts', [])),
+    'installedFiles': installed_files
 }
-with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
-" "\${archive_root}/\${src}" "\${TARGET}/\${dest}"
+with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent=2)
+" "\${archive_root}/\${src}" "\${TARGET}/\${dest}" "\${install_state_file}"
       echo "  ✓ \${src} → \${TARGET}/\${dest} (merged into codingGuideline section)"
       continue
     fi
@@ -408,26 +414,20 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
 import sys, os, shutil
 def merge_file(src, dst):
     if not os.path.exists(dst):
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copy2(src, dst)
-        return
+        os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy2(src, dst); return
     with open(dst, 'r', encoding='utf-8') as f: old = f.read().splitlines()
     with open(src, 'r', encoding='utf-8') as f: new = f.read().splitlines()
-    old_set = set(old)
-    added = [line for line in new if line not in old_set]
+    added = [l for l in new if l not in set(old)]
     if added:
         with open(dst, 'a', encoding='utf-8') as f:
-            f.write('\n\n### [Auto-Merged from Coding Guidelines Update]\n')
-            f.write('\n'.join(added))
-            f.write('\n')
+            f.write('\n\n### [Auto-Merged from Coding Guidelines Update]\n' + '\n'.join(added) + '\n')
 def merge_path(src, dst):
     if os.path.isdir(src):
         for root, dirs, files in os.walk(src):
             for file in files:
                 rel = os.path.relpath(os.path.join(root, file), src)
                 merge_file(os.path.join(root, file), os.path.join(dst, rel))
-    else:
-        merge_file(src, dst)
+    else: merge_file(src, dst)
 merge_path(sys.argv[1], sys.argv[2])
 " "\${archive_root}/\${src}" "\${TARGET}/\${dest}"
       echo "  ✔️ \${src} -> \${TARGET}/\${dest} (smart merged)"
@@ -447,41 +447,29 @@ merge_path(sys.argv[1], sys.argv[2])
         local target_version_file="\${TARGET}/version.json"
         python3 -c "
 import sys, json, os, datetime
-src_dir = sys.argv[1]
-archive_root = sys.argv[2]
-dest_file = sys.argv[3]
-config_file = sys.argv[4]
+src_dir, archive_root, dest_file, config_file = sys.argv[1:5]
 try:
     with open(config_file) as f: cfg = json.load(f)
 except Exception: cfg = {}
-mappings = cfg.get('mappings', [])
-file_mapping = [{'source': m['source'], 'target': m['target']} for m in mappings]
-src_ver_file = os.path.join(archive_root, 'version.json')
-version = ''
-last_commit = ''
-try:
-    with open(src_ver_file) as f: vdata = json.load(f)
-    version = vdata.get('Version', vdata.get('version', ''))
-    last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
-except Exception: pass
+file_mapping = [{'source': m['source'], 'target': m['target']} for m in cfg.get('mappings', [])]
+version, last_commit, src_ver_file = '', '', os.path.join(archive_root, 'version.json')
+if os.path.exists(src_ver_file):
+    try:
+        with open(src_ver_file) as f:
+            vdata = json.load(f); version = vdata.get('Version', vdata.get('version', '')); last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
+    except Exception: pass
 dest_data = {}
 if os.path.exists(dest_file):
     try:
         with open(dest_file) as f: dest_data = json.load(f)
     except Exception: pass
 dest_data['promptArchitectByRiseupAsia'] = {
-    'author': {
-        'name': 'Md. Alim Ul Karim',
-        'title': 'Chief Software Engineer',
-        'url': 'https://github.com/aukgit/alim.karim.profile'
-    },
+    'author': {'name': 'Md. Alim Ul Karim', 'title': 'Chief Software Engineer', 'url': 'https://github.com/aukgit/alim.karim.profile'},
     'sourceRepository': 'https://github.com/alimtvnetwork/prompt-architect-v2',
-    'installedAt': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'version': version,
-    'lastCommit': last_commit,
-    'fileMapping': file_mapping
+    'installedAt': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'version': version, 'lastCommit': last_commit, 'fileMapping': file_mapping
 }
-with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
+with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent=2)
 " "\${archive_root}/\${src}" "\${archive_root}" "\${target_version_file}" "\${archive_root}/../scripts/prompt-sync-config.json" 2>/dev/null || true
         echo "  ✓ promptArchitectByRiseupAsia block injected into \${target_version_file}"
       fi
@@ -491,6 +479,33 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
     fi
     echo "  ✓ \${src} → \${TARGET}/\${dest}"
   done
+
+  # ── Emit install-summary.json to .lovable/ ──
+  python3 -c "
+import sys, json, os, datetime
+target, state_file, bundle_name = sys.argv[1:4]
+state = {}
+if os.path.exists(state_file):
+    try:
+        with open(state_file, 'r', encoding='utf-8') as f: state = json.load(f)
+    except Exception: pass
+target_ver_file, ver = os.path.join(target, 'version.json'), ''
+if os.path.exists(target_ver_file):
+    try:
+        with open(target_ver_file, 'r', encoding='utf-8') as f:
+            ver = json.load(f).get('codingGuideline', {}).get('version', '')
+    except Exception: pass
+summary = {
+    'bundle': bundle_name, 'version': ver,
+    'previousVersion': state.get('previousVersion', 'unknown'),
+    'installedAt': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'filesInstalled': state.get('installedFiles', []), 'filesRemoved': state.get('removedFiles', [])
+}
+lovable_dir = os.path.join(target, '.lovable')
+os.makedirs(lovable_dir, exist_ok=True)
+with open(os.path.join(lovable_dir, 'install-summary.json'), 'w', encoding='utf-8') as f: json.dump(summary, f, indent=2)
+print('  ✓ install summary written to .lovable/install-summary.json')
+" "\${TARGET}" "\${install_state_file}" "\${BUNDLE_NAME}"
 }
 
 open_entry() {
@@ -1110,124 +1125,114 @@ function Resolve-ArchiveRoot {
 function Copy-Mapping {
     param([string]$ExtractDir)
     $root = Resolve-ArchiveRoot -ExtractDir $ExtractDir
+    $targetVersionFile = Join-Path $Target "version.json"
+    $prevInstalledFiles = @(); $prevVersion = "unknown"
+    if (Test-Path $targetVersionFile) {
+        try {
+            $existingVer = Get-Content -Raw -Path $targetVersionFile -Encoding UTF8 | ConvertFrom-Json
+            if ($existingVer.codingGuideline) {
+                if ($existingVer.codingGuideline.version) { $prevVersion = $existingVer.codingGuideline.version }
+                if ($existingVer.codingGuideline.installedFiles) { $prevInstalledFiles = @($existingVer.codingGuideline.installedFiles) }
+            }
+        } catch {}
+    }
+    $newInstalledFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($pair in (Get-MappingPairs)) {
         $srcPath = Join-Path $root $pair.Src
-        if (-not (Test-Path $srcPath)) {
-            Write-Warning "  archive missing $($pair.Src) — skipping"
-            continue
+        if (-not (Test-Path $srcPath) -or $pair.Src -eq "version.json") { continue }
+        if ((Get-Item $srcPath).PSIsContainer) {
+            Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
+                $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('\\', '/')
+                $newInstalledFiles.Add((Join-Path $pair.Dest $rel).Replace('\\', '/'))
+            }
+        } else {
+            $newInstalledFiles.Add($pair.Dest.Replace('\\', '/'))
         }
+    }
+    $installedFilesSorted = if ($newInstalledFiles.Count -gt 0) { [string[]]($newInstalledFiles | Sort-Object -Unique) } else { @() }
+    $removedFiles = [System.Collections.Generic.List[string]]::new()
+    foreach ($oldFile in $prevInstalledFiles) {
+        if (-not $newInstalledFiles.Contains($oldFile) -and $oldFile -ne "version.json" -and -not ($oldFile -like ".lovable/*") -and -not ($oldFile -like ".git/*")) {
+            $oldPath = Join-Path $Target $oldFile
+            if (Test-Path $oldPath) {
+                try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch {}
+            }
+        }
+    }
+    $removedFilesSorted = if ($removedFiles.Count -gt 0) { [string[]]($removedFiles | Sort-Object -Unique) } else { @() }
+    $finalGuidelineVersion = ""
+
+    foreach ($pair in (Get-MappingPairs)) {
+        $srcPath = Join-Path $root $pair.Src
+        if (-not (Test-Path $srcPath)) { Write-Warning "  archive missing $($pair.Src) — skipping"; continue }
         $destPath = Join-Path $Target $pair.Dest
         if ($pair.Src -eq "version.json") {
             try {
-                $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json
-                $destData = @{}
-                $prevVersion = "unknown"
+                $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json; $destData = @{}
                 if (Test-Path $destPath) {
-                    try { 
-                        $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json
-                        if ($destData.codingGuideline -and $destData.codingGuideline.version) {
-                            $prevVersion = $destData.codingGuideline.version
-                        }
-                    } catch {}
+                    try { $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json; if ($prevVersion -eq "unknown" -and $destData.codingGuideline -and $destData.codingGuideline.version) { $prevVersion = $destData.codingGuideline.version } } catch {}
                 }
+                $finalGuidelineVersion = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
                 $guidelineData = @{
                     repositoryUrl = if ($srcData.RepoUrl) { $srcData.RepoUrl } else { $srcData.repositoryUrl }
                     lastCommit = if ($srcData.LastCommitSha) { $srcData.LastCommitSha } elseif ($srcData.git) { $srcData.git.sha } else { "" }
-                    version = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
-                    previousVersion = $prevVersion
+                    version = $finalGuidelineVersion; previousVersion = $prevVersion
                     description = if ($srcData.Description) { $srcData.Description } else { $srcData.description }
                     prompts = if ($srcData.Prompts) { $srcData.Prompts } elseif ($srcData.prompts) { $srcData.prompts } else { @() }
+                    installedFiles = @($installedFilesSorted)
                 }
                 $destData | Add-Member -NotePropertyName "codingGuideline" -NotePropertyValue $guidelineData -Force
                 $destData | ConvertTo-Json -Depth 10 | Set-Content -Path $destPath -Encoding UTF8
                 Write-Host "  ✓ $($pair.Src) → $destPath (merged into codingGuideline section)" -ForegroundColor Green
-            } catch {
-                Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)"
-            }
+            } catch { Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)" }
             continue
         }
         if ($pair.Src -match "\.lovable/strictly-avoid\.md" -or $pair.Src -match "\.lovable/memory") {
-            function Merge-File {
-                param($srcFile, $dstFile)
-                if (-not (Test-Path $dstFile)) {
-                    New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null
-                    Copy-Item -Path $srcFile -Destination $dstFile -Force
-                    return
-                }
-                $old = Get-Content $dstFile -Encoding UTF8
-                $new = Get-Content $srcFile -Encoding UTF8
-                if ($null -eq $old) { $old = @() }
-                if ($null -eq $new) { $new = @() }
+            function Merge-File { param($srcFile, $dstFile)
+                if (-not (Test-Path $dstFile)) { New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null; Copy-Item -Path $srcFile -Destination $dstFile -Force; return }
+                $old = @(Get-Content $dstFile -Encoding UTF8); $new = @(Get-Content $srcFile -Encoding UTF8)
                 $diff = Compare-Object -ReferenceObject $old -DifferenceObject $new | Where-Object { $_.SideIndicator -eq '=>' }
-                if ($diff) {
-                    Add-Content -Path $dstFile -Value "\`n\`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8
-                    $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 }
-                }
+                if ($diff) { Add-Content -Path $dstFile -Value "\`n\`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8; $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 } }
             }
-            if ((Get-Item $srcPath).PSIsContainer) {
-                Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
-                    $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('\')
-                    Merge-File -srcFile $_.FullName -dstFile (Join-Path $destPath $rel)
-                }
-            } else {
-                Merge-File -srcFile $srcPath -dstFile $destPath
-            }
-            Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
-            continue
+            if ((Get-Item $srcPath).PSIsContainer) { Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object { $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('\\'); Merge-File -srcFile $_.FullName -dstFile (Join-Path $destPath $rel) }
+            } else { Merge-File -srcFile $srcPath -dstFile $destPath }
+            Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green; continue
         }
         if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
-            if (Test-Path $destPath) {
-                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
-                continue
-            }
+            if (Test-Path $destPath) { Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow; continue }
         }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
             if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
-                # Inject promptArchitectByRiseupAsia tracking block into target version.json
-                $targetVersionFile = Join-Path $Target "version.json"
                 try {
-                    $configFile = Join-Path $root ".." "scripts" "prompt-sync-config.json"
+                    $targetVersionFile = Join-Path $Target "version.json"; $configFile = Join-Path $root ".." "scripts" "prompt-sync-config.json"
                     $cfg = if (Test-Path $configFile) { Get-Content -Raw $configFile | ConvertFrom-Json } else { $null }
-                    $fileMapping = if ($cfg -and $cfg.mappings) {
-                        $cfg.mappings | ForEach-Object { @{ source = $_.source; target = $_.target } }
-                    } else { @() }
-                    $srcVerFile = Join-Path $root "version.json"
-                    $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
+                    $fileMapping = if ($cfg -and $cfg.mappings) { $cfg.mappings | ForEach-Object { @{ source = $_.source; target = $_.target } } } else { @() }
+                    $srcVerFile = Join-Path $root "version.json"; $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
                     $paVersion = if ($verData -and $verData.Version) { $verData.Version } elseif ($verData -and $verData.version) { $verData.version } else { "" }
                     $paCommit = if ($verData -and $verData.LastCommitSha) { $verData.LastCommitSha } else { "" }
-                    $destVersionData = if (Test-Path $targetVersionFile) { 
-                        try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} }
-                    } else { [PSCustomObject]@{} }
-                    $paBlock = @{
-                        author = @{
-                            name  = "Md. Alim Ul Karim"
-                            title = "Chief Software Engineer"
-                            url   = "https://github.com/aukgit/alim.karim.profile"
-                        }
-                        sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"
-                        installedAt      = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
-                        version          = $paVersion
-                        lastCommit       = $paCommit
-                        fileMapping      = $fileMapping
-                    }
+                    $destVersionData = if (Test-Path $targetVersionFile) { try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} } } else { [PSCustomObject]@{} }
+                    $paBlock = @{ author = @{ name = "Md. Alim Ul Karim"; title = "Chief Software Engineer"; url = "https://github.com/aukgit/alim.karim.profile" }; sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); version = $paVersion; lastCommit = $paCommit; fileMapping = $fileMapping }
                     $destVersionData | Add-Member -NotePropertyName "promptArchitectByRiseupAsia" -NotePropertyValue $paBlock -Force
                     $destVersionData | ConvertTo-Json -Depth 10 | Set-Content -Path $targetVersionFile -Encoding UTF8
                     Write-Host "  ✓ promptArchitectByRiseupAsia block injected into $targetVersionFile" -ForegroundColor Green
-                } catch {
-                    Write-Warning "  ⚠️  failed to inject promptArchitectByRiseupAsia: $($_.Exception.Message)"
-                }
+                } catch { Write-Warning "  ⚠️  failed to inject promptArchitectByRiseupAsia: $($_.Exception.Message)" }
             }
         } else {
             $parentDir = Split-Path $destPath -Parent
-            if (-not (Test-Path $parentDir)) {
-                New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
-            }
+            if (-not (Test-Path $parentDir)) { New-Item -ItemType Directory -Path $parentDir -Force | Out-Null }
             Copy-Item -Path $srcPath -Destination $destPath -Force
         }
         Write-Host "  ✓ $($pair.Src) → $destPath" -ForegroundColor Green
     }
+
+    try {
+        $summaryDir = Join-Path $Target ".lovable"; if (-not (Test-Path $summaryDir)) { New-Item -ItemType Directory -Path $summaryDir -Force | Out-Null }
+        $summaryData = [ordered]@{ bundle = "${bundle.name}"; version = $finalGuidelineVersion; previousVersion = $prevVersion; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); filesInstalled = @($installedFilesSorted); filesRemoved = @($removedFilesSorted) }
+        $summaryData | ConvertTo-Json -Depth 5 | Set-Content -Path (Join-Path $summaryDir "install-summary.json") -Encoding UTF8
+        Write-Host "  ✓ install summary written to .lovable/install-summary.json" -ForegroundColor Green
+    } catch { Write-Warning "  ⚠️  failed to write install-summary.json: $($_.Exception.Message)" }
 }
 
 function Open-Entry {
@@ -1250,37 +1255,16 @@ function Open-Entry {
     Write-Host "  ▸ opening $entryPath"
     try {
         if ($IsWindows -or $env:OS -eq "Windows_NT") {
-            if (Get-Command Start-Process -ErrorAction SilentlyContinue) {
-                Start-Process $entryPath
-            } else {
-                Write-Warning "  ❌ 'Start-Process' not available in this PowerShell host."
-                Write-Warning "     Open the path above manually in your browser."
-            }
+            if (Get-Command Start-Process -ErrorAction SilentlyContinue) { Start-Process $entryPath } else { Write-Warning "  ❌ 'Start-Process' not available. Open the path above manually." }
         } elseif ($IsMacOS) {
-            if (Get-Command open -ErrorAction SilentlyContinue) {
-                & open $entryPath
-            } else {
-                Write-Warning "  ❌ 'open' command not found on macOS (this is unexpected)."
-                Write-Warning "     Open the path above manually in your browser."
-            }
+            if (Get-Command open -ErrorAction SilentlyContinue) { & open $entryPath } else { Write-Warning "  ❌ 'open' command not found on macOS. Open the path above manually." }
         } elseif ($IsLinux) {
-            if (Get-Command xdg-open -ErrorAction SilentlyContinue) {
-                & xdg-open $entryPath
-            } else {
-                Write-Warning "  ❌ 'xdg-open' not installed — cannot auto-launch browser."
-                Write-Warning "     Install with one of:"
-                Write-Warning "       Debian/Ubuntu : sudo apt-get install xdg-utils"
-                Write-Warning "       Fedora/RHEL   : sudo dnf install xdg-utils"
-                Write-Warning "       Arch          : sudo pacman -S xdg-utils"
-                Write-Warning "     Or open the path above manually in your browser."
-            }
+            if (Get-Command xdg-open -ErrorAction SilentlyContinue) { & xdg-open $entryPath } else { Write-Warning "  ❌ 'xdg-open' not installed. Open the path above manually." }
         } else {
-            Write-Warning "  ❌ Unknown OS — cannot auto-launch browser."
-            Write-Warning "     Open the path above manually in your browser."
+            Write-Warning "  ❌ Unknown OS — cannot auto-launch browser. Open the path above manually."
         }
     } catch {
-        Write-Warning "  ⚠️  auto-open threw an error: $($_.Exception.Message)"
-        Write-Warning "     Open the path above manually in your browser."
+        Write-Warning "  ⚠️  auto-open threw an error: $($_.Exception.Message). Open the path above manually."
     }
 }
 

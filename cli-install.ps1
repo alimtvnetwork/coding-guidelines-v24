@@ -272,124 +272,114 @@ function Resolve-ArchiveRoot {
 function Copy-Mapping {
     param([string]$ExtractDir)
     $root = Resolve-ArchiveRoot -ExtractDir $ExtractDir
+    $targetVersionFile = Join-Path $Target "version.json"
+    $prevInstalledFiles = @(); $prevVersion = "unknown"
+    if (Test-Path $targetVersionFile) {
+        try {
+            $existingVer = Get-Content -Raw -Path $targetVersionFile -Encoding UTF8 | ConvertFrom-Json
+            if ($existingVer.codingGuideline) {
+                if ($existingVer.codingGuideline.version) { $prevVersion = $existingVer.codingGuideline.version }
+                if ($existingVer.codingGuideline.installedFiles) { $prevInstalledFiles = @($existingVer.codingGuideline.installedFiles) }
+            }
+        } catch {}
+    }
+    $newInstalledFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($pair in (Get-MappingPairs)) {
         $srcPath = Join-Path $root $pair.Src
-        if (-not (Test-Path $srcPath)) {
-            Write-Warning "  archive missing $($pair.Src) — skipping"
-            continue
+        if (-not (Test-Path $srcPath) -or $pair.Src -eq "version.json") { continue }
+        if ((Get-Item $srcPath).PSIsContainer) {
+            Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
+                $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('\', '/')
+                $newInstalledFiles.Add((Join-Path $pair.Dest $rel).Replace('\', '/'))
+            }
+        } else {
+            $newInstalledFiles.Add($pair.Dest.Replace('\', '/'))
         }
+    }
+    $installedFilesSorted = if ($newInstalledFiles.Count -gt 0) { [string[]]($newInstalledFiles | Sort-Object -Unique) } else { @() }
+    $removedFiles = [System.Collections.Generic.List[string]]::new()
+    foreach ($oldFile in $prevInstalledFiles) {
+        if (-not $newInstalledFiles.Contains($oldFile) -and $oldFile -ne "version.json" -and -not ($oldFile -like ".lovable/*") -and -not ($oldFile -like ".git/*")) {
+            $oldPath = Join-Path $Target $oldFile
+            if (Test-Path $oldPath) {
+                try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch {}
+            }
+        }
+    }
+    $removedFilesSorted = if ($removedFiles.Count -gt 0) { [string[]]($removedFiles | Sort-Object -Unique) } else { @() }
+    $finalGuidelineVersion = ""
+
+    foreach ($pair in (Get-MappingPairs)) {
+        $srcPath = Join-Path $root $pair.Src
+        if (-not (Test-Path $srcPath)) { Write-Warning "  archive missing $($pair.Src) — skipping"; continue }
         $destPath = Join-Path $Target $pair.Dest
         if ($pair.Src -eq "version.json") {
             try {
-                $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json
-                $destData = @{}
-                $prevVersion = "unknown"
+                $srcData = Get-Content -Raw -Path $srcPath | ConvertFrom-Json; $destData = @{}
                 if (Test-Path $destPath) {
-                    try { 
-                        $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json
-                        if ($destData.codingGuideline -and $destData.codingGuideline.version) {
-                            $prevVersion = $destData.codingGuideline.version
-                        }
-                    } catch {}
+                    try { $destData = Get-Content -Raw -Path $destPath | ConvertFrom-Json; if ($prevVersion -eq "unknown" -and $destData.codingGuideline -and $destData.codingGuideline.version) { $prevVersion = $destData.codingGuideline.version } } catch {}
                 }
+                $finalGuidelineVersion = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
                 $guidelineData = @{
                     repositoryUrl = if ($srcData.RepoUrl) { $srcData.RepoUrl } else { $srcData.repositoryUrl }
                     lastCommit = if ($srcData.LastCommitSha) { $srcData.LastCommitSha } elseif ($srcData.git) { $srcData.git.sha } else { "" }
-                    version = if ($srcData.Version) { $srcData.Version } else { $srcData.version }
-                    previousVersion = $prevVersion
+                    version = $finalGuidelineVersion; previousVersion = $prevVersion
                     description = if ($srcData.Description) { $srcData.Description } else { $srcData.description }
                     prompts = if ($srcData.Prompts) { $srcData.Prompts } elseif ($srcData.prompts) { $srcData.prompts } else { @() }
+                    installedFiles = @($installedFilesSorted)
                 }
                 $destData | Add-Member -NotePropertyName "codingGuideline" -NotePropertyValue $guidelineData -Force
                 $destData | ConvertTo-Json -Depth 10 | Set-Content -Path $destPath -Encoding UTF8
                 Write-Host "  ✓ $($pair.Src) → $destPath (merged into codingGuideline section)" -ForegroundColor Green
-            } catch {
-                Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)"
-            }
+            } catch { Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)" }
             continue
         }
         if ($pair.Src -match ".lovable/strictly-avoid.md" -or $pair.Src -match ".lovable/memory") {
-            function Merge-File {
-                param($srcFile, $dstFile)
-                if (-not (Test-Path $dstFile)) {
-                    New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null
-                    Copy-Item -Path $srcFile -Destination $dstFile -Force
-                    return
-                }
-                $old = Get-Content $dstFile -Encoding UTF8
-                $new = Get-Content $srcFile -Encoding UTF8
-                if ($null -eq $old) { $old = @() }
-                if ($null -eq $new) { $new = @() }
+            function Merge-File { param($srcFile, $dstFile)
+                if (-not (Test-Path $dstFile)) { New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null; Copy-Item -Path $srcFile -Destination $dstFile -Force; return }
+                $old = @(Get-Content $dstFile -Encoding UTF8); $new = @(Get-Content $srcFile -Encoding UTF8)
                 $diff = Compare-Object -ReferenceObject $old -DifferenceObject $new | Where-Object { $_.SideIndicator -eq '=>' }
-                if ($diff) {
-                    Add-Content -Path $dstFile -Value "`n`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8
-                    $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 }
-                }
+                if ($diff) { Add-Content -Path $dstFile -Value "`n`n### [Auto-Merged from Coding Guidelines Update]" -Encoding UTF8; $diff | ForEach-Object { Add-Content -Path $dstFile -Value $_.InputObject -Encoding UTF8 } }
             }
-            if ((Get-Item $srcPath).PSIsContainer) {
-                Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object {
-                    $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('')
-                    Merge-File -srcFile $_.FullName -dstFile (Join-Path $destPath $rel)
-                }
-            } else {
-                Merge-File -srcFile $srcPath -dstFile $destPath
-            }
-            Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green
-            continue
+            if ((Get-Item $srcPath).PSIsContainer) { Get-ChildItem -Path $srcPath -Recurse -File | ForEach-Object { $rel = $_.FullName.Substring((Get-Item $srcPath).FullName.Length).TrimStart('\'); Merge-File -srcFile $_.FullName -dstFile (Join-Path $destPath $rel) }
+            } else { Merge-File -srcFile $srcPath -dstFile $destPath }
+            Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green; continue
         }
         if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
-            if (Test-Path $destPath) {
-                Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow
-                continue
-            }
+            if (Test-Path $destPath) { Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow; continue }
         }
         if ((Get-Item $srcPath).PSIsContainer) {
             New-Item -ItemType Directory -Path $destPath -Force | Out-Null
             Copy-Item -Path (Join-Path $srcPath '*') -Destination $destPath -Recurse -Force
             if ($pair.Src -eq "01-prompts" -or $pair.Src -eq "01-prompts/") {
-                # Inject promptArchitectByRiseupAsia tracking block into target version.json
-                $targetVersionFile = Join-Path $Target "version.json"
                 try {
-                    $configFile = Join-Path $root ".." "scripts" "prompt-sync-config.json"
+                    $targetVersionFile = Join-Path $Target "version.json"; $configFile = Join-Path $root ".." "scripts" "prompt-sync-config.json"
                     $cfg = if (Test-Path $configFile) { Get-Content -Raw $configFile | ConvertFrom-Json } else { $null }
-                    $fileMapping = if ($cfg -and $cfg.mappings) {
-                        $cfg.mappings | ForEach-Object { @{ source = $_.source; target = $_.target } }
-                    } else { @() }
-                    $srcVerFile = Join-Path $root "version.json"
-                    $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
+                    $fileMapping = if ($cfg -and $cfg.mappings) { $cfg.mappings | ForEach-Object { @{ source = $_.source; target = $_.target } } } else { @() }
+                    $srcVerFile = Join-Path $root "version.json"; $verData = if (Test-Path $srcVerFile) { Get-Content -Raw $srcVerFile | ConvertFrom-Json } else { $null }
                     $paVersion = if ($verData -and $verData.Version) { $verData.Version } elseif ($verData -and $verData.version) { $verData.version } else { "" }
                     $paCommit = if ($verData -and $verData.LastCommitSha) { $verData.LastCommitSha } else { "" }
-                    $destVersionData = if (Test-Path $targetVersionFile) { 
-                        try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} }
-                    } else { [PSCustomObject]@{} }
-                    $paBlock = @{
-                        author = @{
-                            name  = "Md. Alim Ul Karim"
-                            title = "Chief Software Engineer"
-                            url   = "https://github.com/aukgit/alim.karim.profile"
-                        }
-                        sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"
-                        installedAt      = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
-                        version          = $paVersion
-                        lastCommit       = $paCommit
-                        fileMapping      = $fileMapping
-                    }
+                    $destVersionData = if (Test-Path $targetVersionFile) { try { Get-Content -Raw $targetVersionFile | ConvertFrom-Json } catch { [PSCustomObject]@{} } } else { [PSCustomObject]@{} }
+                    $paBlock = @{ author = @{ name = "Md. Alim Ul Karim"; title = "Chief Software Engineer"; url = "https://github.com/aukgit/alim.karim.profile" }; sourceRepository = "https://github.com/alimtvnetwork/prompt-architect-v2"; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); version = $paVersion; lastCommit = $paCommit; fileMapping = $fileMapping }
                     $destVersionData | Add-Member -NotePropertyName "promptArchitectByRiseupAsia" -NotePropertyValue $paBlock -Force
                     $destVersionData | ConvertTo-Json -Depth 10 | Set-Content -Path $targetVersionFile -Encoding UTF8
                     Write-Host "  ✓ promptArchitectByRiseupAsia block injected into $targetVersionFile" -ForegroundColor Green
-                } catch {
-                    Write-Warning "  ⚠️  failed to inject promptArchitectByRiseupAsia: $($_.Exception.Message)"
-                }
+                } catch { Write-Warning "  ⚠️  failed to inject promptArchitectByRiseupAsia: $($_.Exception.Message)" }
             }
         } else {
             $parentDir = Split-Path $destPath -Parent
-            if (-not (Test-Path $parentDir)) {
-                New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
-            }
+            if (-not (Test-Path $parentDir)) { New-Item -ItemType Directory -Path $parentDir -Force | Out-Null }
             Copy-Item -Path $srcPath -Destination $destPath -Force
         }
         Write-Host "  ✓ $($pair.Src) → $destPath" -ForegroundColor Green
     }
+
+    try {
+        $summaryDir = Join-Path $Target ".lovable"; if (-not (Test-Path $summaryDir)) { New-Item -ItemType Directory -Path $summaryDir -Force | Out-Null }
+        $summaryData = [ordered]@{ bundle = "cli"; version = $finalGuidelineVersion; previousVersion = $prevVersion; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); filesInstalled = @($installedFilesSorted); filesRemoved = @($removedFilesSorted) }
+        $summaryData | ConvertTo-Json -Depth 5 | Set-Content -Path (Join-Path $summaryDir "install-summary.json") -Encoding UTF8
+        Write-Host "  ✓ install summary written to .lovable/install-summary.json" -ForegroundColor Green
+    } catch { Write-Warning "  ⚠️  failed to write install-summary.json: $($_.Exception.Message)" }
 }
 
 function Open-Entry {
@@ -412,37 +402,16 @@ function Open-Entry {
     Write-Host "  ▸ opening $entryPath"
     try {
         if ($IsWindows -or $env:OS -eq "Windows_NT") {
-            if (Get-Command Start-Process -ErrorAction SilentlyContinue) {
-                Start-Process $entryPath
-            } else {
-                Write-Warning "  ❌ 'Start-Process' not available in this PowerShell host."
-                Write-Warning "     Open the path above manually in your browser."
-            }
+            if (Get-Command Start-Process -ErrorAction SilentlyContinue) { Start-Process $entryPath } else { Write-Warning "  ❌ 'Start-Process' not available. Open the path above manually." }
         } elseif ($IsMacOS) {
-            if (Get-Command open -ErrorAction SilentlyContinue) {
-                & open $entryPath
-            } else {
-                Write-Warning "  ❌ 'open' command not found on macOS (this is unexpected)."
-                Write-Warning "     Open the path above manually in your browser."
-            }
+            if (Get-Command open -ErrorAction SilentlyContinue) { & open $entryPath } else { Write-Warning "  ❌ 'open' command not found on macOS. Open the path above manually." }
         } elseif ($IsLinux) {
-            if (Get-Command xdg-open -ErrorAction SilentlyContinue) {
-                & xdg-open $entryPath
-            } else {
-                Write-Warning "  ❌ 'xdg-open' not installed — cannot auto-launch browser."
-                Write-Warning "     Install with one of:"
-                Write-Warning "       Debian/Ubuntu : sudo apt-get install xdg-utils"
-                Write-Warning "       Fedora/RHEL   : sudo dnf install xdg-utils"
-                Write-Warning "       Arch          : sudo pacman -S xdg-utils"
-                Write-Warning "     Or open the path above manually in your browser."
-            }
+            if (Get-Command xdg-open -ErrorAction SilentlyContinue) { & xdg-open $entryPath } else { Write-Warning "  ❌ 'xdg-open' not installed. Open the path above manually." }
         } else {
-            Write-Warning "  ❌ Unknown OS — cannot auto-launch browser."
-            Write-Warning "     Open the path above manually in your browser."
+            Write-Warning "  ❌ Unknown OS — cannot auto-launch browser. Open the path above manually."
         }
     } catch {
-        Write-Warning "  ⚠️  auto-open threw an error: $($_.Exception.Message)"
-        Write-Warning "     Open the path above manually in your browser."
+        Write-Warning "  ⚠️  auto-open threw an error: $($_.Exception.Message). Open the path above manually."
     }
 }
 

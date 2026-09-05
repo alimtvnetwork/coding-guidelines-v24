@@ -305,6 +305,41 @@ extract_mapping() {
     fi
   fi
 
+  # ── Pre-scan archive to calculate installed files and purge obsolete files ──
+  local install_state_file="${archive_root}/.install_manifest.json"
+  python3 -c "
+import sys, json, os
+extract_root, target, mapping, state_path = sys.argv[1:5]
+pairs = [p.split('|') for p in mapping.split() if '|' in p]
+new_installed = []
+for src, dest in pairs:
+    src_path = os.path.join(extract_root, src)
+    if not os.path.exists(src_path) or src == 'version.json': continue
+    if os.path.isdir(src_path):
+        for root, _, files in os.walk(src_path):
+            for file in files:
+                rel = os.path.relpath(os.path.join(root, file), src_path)
+                new_installed.append(os.path.normpath(os.path.join(dest, rel)).replace('\\', '/'))
+    else: new_installed.append(os.path.normpath(dest).replace('\\', '/'))
+new_installed_sorted = sorted(list(set(new_installed)))
+target_ver_file, old_installed, prev_version = os.path.join(target, 'version.json'), [], 'unknown'
+if os.path.exists(target_ver_file):
+    try:
+        with open(target_ver_file, 'r', encoding='utf-8') as f:
+            tdata = json.load(f); cg = tdata.get('codingGuideline', {})
+            prev_version = cg.get('version', 'unknown'); old_installed = cg.get('installedFiles', [])
+    except Exception: pass
+removed_files = []
+for old_f in old_installed:
+    if old_f not in new_installed_sorted and old_f != 'version.json' and not old_f.startswith(('.lovable/', '.git/')):
+        old_path = os.path.join(target, old_f)
+        if os.path.exists(old_path) and os.path.isfile(old_path):
+            try: os.remove(old_path); removed_files.append(old_f); print(f'  🗑️  removed obsolete file: {old_f}')
+            except Exception: pass
+with open(state_path, 'w', encoding='utf-8') as f:
+    json.dump({'installedFiles': new_installed_sorted, 'removedFiles': sorted(removed_files), 'previousVersion': prev_version}, f, indent=2)
+" "${archive_root}" "${TARGET}" "${BUNDLE_MAPPING}" "${install_state_file}"
+
   local pair src dest
   for pair in ${BUNDLE_MAPPING}; do
     src="${pair%|*}"
@@ -317,17 +352,21 @@ extract_mapping() {
       # Handle smart merge for version.json -> codingGuideline
       python3 -c "
 import sys, json, os
-src_file = sys.argv[1]
-dest_file = sys.argv[2]
+src_file, dest_file, state_file = sys.argv[1:4]
 try:
     with open(src_file) as f: src_data = json.load(f)
 except Exception: sys.exit(0)
-dest_data = {}
-prev_version = 'unknown'
+dest_data, prev_version, installed_files = {}, 'unknown', []
+if os.path.exists(state_file):
+    try:
+        with open(state_file, 'r', encoding='utf-8') as sf:
+            sdata = json.load(sf)
+            installed_files, prev_version = sdata.get('installedFiles', []), sdata.get('previousVersion', 'unknown')
+    except Exception: pass
 if os.path.exists(dest_file):
     try:
         with open(dest_file) as f: dest_data = json.load(f)
-        if 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
+        if prev_version == 'unknown' and 'codingGuideline' in dest_data and 'version' in dest_data['codingGuideline']:
             prev_version = dest_data['codingGuideline']['version']
     except Exception: pass
 dest_data['codingGuideline'] = {
@@ -336,10 +375,11 @@ dest_data['codingGuideline'] = {
     'version': src_data.get('Version', src_data.get('version', '')),
     'previousVersion': prev_version,
     'description': src_data.get('Description', src_data.get('description', '')),
-    'prompts': src_data.get('Prompts', src_data.get('prompts', []))
+    'prompts': src_data.get('Prompts', src_data.get('prompts', [])),
+    'installedFiles': installed_files
 }
-with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
-" "${archive_root}/${src}" "${TARGET}/${dest}"
+with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent=2)
+" "${archive_root}/${src}" "${TARGET}/${dest}" "${install_state_file}"
       echo "  ✓ ${src} → ${TARGET}/${dest} (merged into codingGuideline section)"
       continue
     fi
@@ -348,22 +388,17 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
 import sys, os, shutil
 def merge_file(src, dst):
     if not os.path.exists(dst):
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copy2(src, dst)
-        return
+        os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy2(src, dst); return
     with open(dst, 'r', encoding='utf-8') as f: old = f.read().splitlines()
     with open(src, 'r', encoding='utf-8') as f: new = f.read().splitlines()
-    old_set = set(old)
-    added = [line for line in new if line not in old_set]
+    added = [l for l in new if l not in set(old)]
     if added:
         with open(dst, 'a', encoding='utf-8') as f:
             f.write('
 
 ### [Auto-Merged from Coding Guidelines Update]
-')
-            f.write('
-'.join(added))
-            f.write('
+' + '
+'.join(added) + '
 ')
 def merge_path(src, dst):
     if os.path.isdir(src):
@@ -371,8 +406,7 @@ def merge_path(src, dst):
             for file in files:
                 rel = os.path.relpath(os.path.join(root, file), src)
                 merge_file(os.path.join(root, file), os.path.join(dst, rel))
-    else:
-        merge_file(src, dst)
+    else: merge_file(src, dst)
 merge_path(sys.argv[1], sys.argv[2])
 " "${archive_root}/${src}" "${TARGET}/${dest}"
       echo "  ✔️ ${src} -> ${TARGET}/${dest} (smart merged)"
@@ -392,41 +426,29 @@ merge_path(sys.argv[1], sys.argv[2])
         local target_version_file="${TARGET}/version.json"
         python3 -c "
 import sys, json, os, datetime
-src_dir = sys.argv[1]
-archive_root = sys.argv[2]
-dest_file = sys.argv[3]
-config_file = sys.argv[4]
+src_dir, archive_root, dest_file, config_file = sys.argv[1:5]
 try:
     with open(config_file) as f: cfg = json.load(f)
 except Exception: cfg = {}
-mappings = cfg.get('mappings', [])
-file_mapping = [{'source': m['source'], 'target': m['target']} for m in mappings]
-src_ver_file = os.path.join(archive_root, 'version.json')
-version = ''
-last_commit = ''
-try:
-    with open(src_ver_file) as f: vdata = json.load(f)
-    version = vdata.get('Version', vdata.get('version', ''))
-    last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
-except Exception: pass
+file_mapping = [{'source': m['source'], 'target': m['target']} for m in cfg.get('mappings', [])]
+version, last_commit, src_ver_file = '', '', os.path.join(archive_root, 'version.json')
+if os.path.exists(src_ver_file):
+    try:
+        with open(src_ver_file) as f:
+            vdata = json.load(f); version = vdata.get('Version', vdata.get('version', '')); last_commit = vdata.get('LastCommitSha', vdata.get('git', {}).get('sha', ''))
+    except Exception: pass
 dest_data = {}
 if os.path.exists(dest_file):
     try:
         with open(dest_file) as f: dest_data = json.load(f)
     except Exception: pass
 dest_data['promptArchitectByRiseupAsia'] = {
-    'author': {
-        'name': 'Md. Alim Ul Karim',
-        'title': 'Chief Software Engineer',
-        'url': 'https://github.com/aukgit/alim.karim.profile'
-    },
+    'author': {'name': 'Md. Alim Ul Karim', 'title': 'Chief Software Engineer', 'url': 'https://github.com/aukgit/alim.karim.profile'},
     'sourceRepository': 'https://github.com/alimtvnetwork/prompt-architect-v2',
-    'installedAt': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-    'version': version,
-    'lastCommit': last_commit,
-    'fileMapping': file_mapping
+    'installedAt': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'version': version, 'lastCommit': last_commit, 'fileMapping': file_mapping
 }
-with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
+with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent=2)
 " "${archive_root}/${src}" "${archive_root}" "${target_version_file}" "${archive_root}/../scripts/prompt-sync-config.json" 2>/dev/null || true
         echo "  ✓ promptArchitectByRiseupAsia block injected into ${target_version_file}"
       fi
@@ -436,6 +458,33 @@ with open(dest_file, 'w') as f: json.dump(dest_data, f, indent=2)
     fi
     echo "  ✓ ${src} → ${TARGET}/${dest}"
   done
+
+  # ── Emit install-summary.json to .lovable/ ──
+  python3 -c "
+import sys, json, os, datetime
+target, state_file, bundle_name = sys.argv[1:4]
+state = {}
+if os.path.exists(state_file):
+    try:
+        with open(state_file, 'r', encoding='utf-8') as f: state = json.load(f)
+    except Exception: pass
+target_ver_file, ver = os.path.join(target, 'version.json'), ''
+if os.path.exists(target_ver_file):
+    try:
+        with open(target_ver_file, 'r', encoding='utf-8') as f:
+            ver = json.load(f).get('codingGuideline', {}).get('version', '')
+    except Exception: pass
+summary = {
+    'bundle': bundle_name, 'version': ver,
+    'previousVersion': state.get('previousVersion', 'unknown'),
+    'installedAt': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'filesInstalled': state.get('installedFiles', []), 'filesRemoved': state.get('removedFiles', [])
+}
+lovable_dir = os.path.join(target, '.lovable')
+os.makedirs(lovable_dir, exist_ok=True)
+with open(os.path.join(lovable_dir, 'install-summary.json'), 'w', encoding='utf-8') as f: json.dump(summary, f, indent=2)
+print('  ✓ install summary written to .lovable/install-summary.json')
+" "${TARGET}" "${install_state_file}" "${BUNDLE_NAME}"
 }
 
 open_entry() {
