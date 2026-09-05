@@ -196,3 +196,48 @@ func RunFileWriterAndAppenderExample(baseDir string) *appfault.AppError {
 
 	return nil
 }
+
+// RunBoundFileWriterExample demonstrates the file-specific BoundFileWriter with automatic locking,
+// appending, auto-closing, and transactional lock blocks.
+func RunBoundFileWriterExample(baseDir string) *appfault.AppError {
+	ctx := context.Background()
+	filePath := filepath.Join(baseDir, "bound-state.txt")
+
+	// 1. Create file-specific writer
+	writer := fileutil.NewBoundFileWriter(filePath)
+
+	// 2. Automatic lock write and append
+	if err := writer.WriteString(ctx, "State: Initialized\n"); err != nil {
+		return err
+	}
+
+	if err := writer.AppendString(ctx, "Event: Connection established\n"); err != nil {
+		return err
+	}
+
+	// 3. AutoClose mode: closes handle immediately after write
+	writer.SetAutoClose(true)
+	if err := writer.AppendString(ctx, "Audit: Checkpoint recorded\n"); err != nil {
+		return err
+	}
+
+	// 4. Transactional lock batch: multiple writes under single lock
+	err := writer.WithLock(ctx, func(w *fileutil.BoundFileWriter) *appfault.AppError {
+		_ = w.AppendLocked(ctx, []byte("--- Batch Header ---\n"))
+		_ = w.AppendLocked(ctx, []byte("Action: Sync A\n"))
+		_ = w.AppendLocked(ctx, []byte("Action: Sync B\n"))
+		_ = w.AppendLocked(ctx, []byte("--- Batch Footer ---\n"))
+
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	// 5. Explicit write and close
+	if err := writer.AppendAndClose(ctx, []byte("Final: Terminated\n")); err != nil {
+		return err
+	}
+
+	return nil
+}

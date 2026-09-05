@@ -76,3 +76,22 @@ func TestRunFileWriterAndAppenderExample(t *testing.T) {
 		t.Fatalf("unexpected journal output: %s", string(journal))
 	}
 }
+
+func TestRunBoundFileWriterExample(t *testing.T) {
+	tempDir := t.TempDir()
+
+	appErr := examples.RunBoundFileWriterExample(tempDir)
+	if appErr != nil {
+		t.Fatalf("bound file writer example failed: %v", appErr)
+	}
+
+	content, err := os.ReadFile(filepath.Join(tempDir, "bound-state.txt"))
+	if err != nil {
+		t.Fatalf("failed to read bound file: %v", err)
+	}
+
+	expected := "State: Initialized\nEvent: Connection established\nAudit: Checkpoint recorded\n--- Batch Header ---\nAction: Sync A\nAction: Sync B\n--- Batch Footer ---\nFinal: Terminated\n"
+	if string(content) != expected {
+		t.Fatalf("unexpected bound file content:\n%s", string(content))
+	}
+}

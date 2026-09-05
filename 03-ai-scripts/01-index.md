@@ -54,6 +54,7 @@ Follow this sequence before and during any repository modification task:
 | **26** | `26-go-code-formatter.py` | Cross-platform Go code formatter via gofmt with staged support | ~20ms | `go`, `gofmt`, `formatter`, `staged` |
 | **27** | `27-misspell-auditor.py` | Audits and auto-fixes British to American English spelling | ~15ms | `spelling`, `misspell`, `us-english`, `autofix` |
 | **28** | `28-go-preflight-ci.py` | Runs local Go test and golangci-lint preflight verification | ~35ms | `go`, `test`, `lint`, `preflight`, `ci-cd` |
+| **30** | `30-enum-generator.py` | Type-safe Go enum generator conforming to BaseEnum and NumberEnum | ~10ms | `go`, `enum`, `generator`, `base-enum`, `types` |
 
 ---
 

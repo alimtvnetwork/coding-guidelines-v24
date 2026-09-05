@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `fileutil` package provides enterprise-grade filesystem utilities, behavior-shifting file writers, continuous append loggers, atomic swap operations, and granular file permission management.
+The `fileutil` package provides enterprise-grade filesystem utilities, behavior-shifting file writers, continuous append loggers, file-specific auto-locking handlers (`BoundFileWriter`), atomic swap operations, and granular file permission management.
 
 ---
 
@@ -13,108 +13,153 @@ The `fileutil` package provides enterprise-grade filesystem utilities, behavior-
    - `FileWriteModeDirect` (default): In-place streaming directly to the target file.
    - `FileWriteModeAtomic`: Writes completely to a temporary file in the same directory, flushes buffers, and atomically swaps it using `os.Rename`. Prevents corrupted partial writes during system crashes.
    - `FileWriteModeTruncate`: Truncates existing file content prior to writing.
-2. **Dedicated Continuous `FileAppender`:**
+2. **File-Specific Auto-Locking `BoundFileWriter`:**
+   A reusable, file-bound object (`BoundFileWriter`, aliased as `SpecificFileWriter` and `FileHandler`) designed for operations on a specific file:
+   - **Automatic Locking & Unlocking:** Every `.Write()`, `.WriteString()`, `.Append()`, and `.AppendString()` automatically acquires the mutex lock and releases it upon completion.
+   - **Immediate Auto-Closing vs Persistent Reuse:**
+     - In **AutoClose mode** (`.SetAutoClose(true)` or via `.WriteAndClose()` / `.AppendAndClose()`), the file descriptor is opened, written/appended to, synced, and closed immediately after writing is done. This prevents open file descriptor leaks when writes are infrequent.
+     - In **Persistent mode** (default `autoClose: false`), the open file descriptor is retained across calls for maximum throughput and closed explicitly via `.Close()`.
+   - **Transactional Batch Blocks (`WithLock`):** Callers can execute multiple writes and appends atomically under a single lock without interleaving:
+     ```go
+     err := writer.WithLock(ctx, func(w *fileutil.BoundFileWriter) *appfault.AppError {
+         _ = w.AppendLocked(ctx, []byte("line 1\n"))
+         _ = w.AppendLocked(ctx, []byte("line 2\n"))
+         return nil
+     })
+     ```
+   - **Manual Locking (`sync.Locker`):** Exposes `.Lock()`, `.Unlock()`, `.WriteLocked()`, and `.AppendLocked()`.
+   - **Diagnostic Telemetry:** Atomic counters `.BytesWritten()`, `.BytesAppended()`, and `.WriteCount()`.
+3. **Dedicated Continuous `FileAppender`:**
    Designed for persistent append-only workflows (journals, WALs, audit logs). Provides automatic parent directory creation, persistent file handles, thread safety, auto-syncing, and atomic byte counters (`.BytesAppended()`).
-3. **Standard Library Compatibility via `StdWriter()`:**
-   Both `FileWriter` and `FileAppender` implement `streamwriter.Writer[[]byte]` directly with `*appfault.AppError` returns, and offer `.StdWriter() io.WriteCloser` adapters for seamless integration with `io.Copy`, `fmt.Fprintf`, and standard `log.SetOutput`.
-4. **Strict Permission Types (`FilePermType`):**
+4. **Standard Library Compatibility via `StdWriter()` and `StdAppender()`:**
+   All writer types implement `streamwriter.Writer[[]byte]` directly returning `*appfault.AppError`, and offer `.StdWriter() io.WriteCloser` adapters for seamless integration with `io.Copy`, `fmt.Fprintf`, and standard `log.SetOutput`.
+5. **Strict Permission Types (`FilePermType`):**
    Strongly-typed bitmasks (`FilePermStandard`, `FilePermExecutable`, `FilePermReadOnly`, `FilePermOwnerOnly`, etc.) with octal parsing and inspection helpers (`.IsReadable()`, `.IsWritable()`, `.IsExecutable()`).
 
 ---
 
-## Behavior-Shifting Flow Diagram
+## BoundFileWriter Auto-Lock & Auto-Close Flow
 
 ```mermaid
 flowchart TD
-    Client["Client Code"] --> FW["FileWriter"]
-    FW --> Strategy{"Mode Selection"}
+    Client["Client Caller"] --> Call{"Operation Call"}
     
-    Strategy -->|"FileWriteModeDirect"| Direct["Direct Write (O_CREATE | O_WRONLY)"]
-    Strategy -->|"FileWriteModeAtomic"| Atomic["Atomic Swap via Temp File"]
-    Strategy -->|"FileWriteModeTruncate"| Trunc["Truncate Write (O_CREATE | O_TRUNC)"]
+    Call -->|"Write() / Append()"| AutoLock["1. Automatically Acquire Lock (mu.Lock)"]
+    AutoLock --> EnsureDir["2. Ensure Parent Directories (os.MkdirAll)"]
+    EnsureDir --> FileOp["3. Open File / Use Open Descriptor"]
+    FileOp --> WriteData["4. Write or Append Payload"]
+    WriteData --> Fsync{"SyncOnWrite?"}
+    Fsync -->|"Yes"| DoSync["5. f.Sync()"]
+    Fsync -->|"No"| CheckClose
+    DoSync --> CheckClose{"AutoClose Active?"}
     
-    Atomic --> Temp["Write payload to .tmp-xxxx"]
-    Temp --> Fsync["fsync() buffers"]
-    Fsync --> Rename["os.Rename(temp, target)"]
-    Rename --> TargetFile["Target File on Disk"]
+    CheckClose -->|"Yes (or WriteAndClose)"| CloseHandle["6. Close File Descriptor (f.Close)"]
+    CheckClose -->|"No (Persistent)"| KeepHandle["6. Retain Descriptor for Reuse"]
     
-    Direct --> TargetFile
-    Trunc --> TargetFile
+    CloseHandle --> ReleaseLock["7. Automatically Release Lock (mu.Unlock)"]
+    KeepHandle --> ReleaseLock
+    
+    ReleaseLock --> Done["Return *appfault.AppError"]
 ```
 
 ---
 
-## FileAppender Continuous Logging (ASCII Layout)
+## BoundFileWriter Lifecycle Architecture (ASCII Layout)
 
 ```
 +-------------------------------------------------------------------------+
-|                              FileAppender                               |
-|  - path: "logs/audit.log"                                               |
+|                       BoundFileWriter / FileHandler                     |
+|  - path: "data/state.json" (specific bound file)                        |
+|  - mode: Direct | Atomic | Truncate                                     |
 |  - perm: FilePermStandard (0644)                                        |
-|  - autoSync: true / false                                               |
-|  - bytesAppended: atomic.Int64                                          |
+|  - autoClose: true (close on write) | false (reusable persistent handle)|
+|  - mu: sync.Mutex (automatic or manual locking)                         |
+|  - counters: bytesWritten, bytesAppended, writeCount                    |
 +-------------------------------------------------------------------------+
                                     |
+     +------------------------------+------------------------------+
+     |                              |                              |
+[Write Operations]          [Append Operations]          [Transactional Batch]
+- .Write(ctx, data)         - .Append(ctx, data)         - .WithLock(ctx, fn)
+- .WriteString(ctx, text)   - .AppendString(ctx, text)   - .Lock() / .Unlock()
+- .WriteAndClose(ctx, data) - .AppendAndClose(ctx, data) - .WriteLocked(ctx, data)
+- (auto lock/unlock)        - (auto lock/unlock)         - .AppendLocked(ctx, data)
+     |                              |                              |
+     +------------------------------+------------------------------+
+                                    |
                     +---------------+---------------+
                     |                               |
-    [1. Ensure Open]                                [2. Append]
-    - os.MkdirAll(dir, 0755)                        - file.Write(payload)
-    - os.OpenFile(..., O_APPEND)                    - bytesAppended.Add(n)
-                    |                               |
-                    +---------------+---------------+
-                                    |
-                            [3. Auto Sync]
-                            - file.Sync() (if autoSync active)
-                                    |
-                                    v
-                     +-----------------------------+
-                     |   Disk Storage (Audit Log)  |
-                     +-----------------------------+
+          [AutoClose: true]               [AutoClose: false]
+          - f.Close() immediately         - Retain open handle
+          - Zero dangling file handles    - High-throughput streaming
+          - Perfect for periodic writes   - Call .Close() when finished
 ```
 
 ---
 
 ## Core Types & API
 
-### 1. `FileWriter`
+### 1. `BoundFileWriter` (File-Specific Auto-Locking Writer/Appender)
 ```go
-// Creation
-writer := fileutil.NewFileWriterEngine("configs/app.json")
+// 1. Creation bound to a specific file
+writer := fileutil.NewBoundFileWriter("var/data/state.log")
 
-// Behavior shifting
-writer.SetMode(fileutil.FileWriteModeAtomic)
-writer.SetPerm(fileutil.FilePermOwnerOnly)
-writer.SetSyncOnWrite(true)
+// 2. Automatic lock write and append
+err := writer.WriteString(ctx, "State: Initialized\n")
+err = writer.AppendString(ctx, "Event: User logged in\n")
 
-// Writing
-err := writer.WriteString(ctx, `{"environment":"production"}`)
+// 3. Configure auto-close after write (closes handle immediately)
+writer.SetAutoClose(true)
+err = writer.AppendString(ctx, "Event: Periodic checkpoint\n")
+// File descriptor is now closed; no lingering file handle
 
-// Standard io.WriteCloser adapter
-stdCloser := writer.StdWriter()
+// 4. Transactional lock block (multiple writes under one lock)
+err = writer.WithLock(ctx, func(w *fileutil.BoundFileWriter) *appfault.AppError {
+    _ = w.AppendLocked(ctx, []byte("--- Batch Start ---\n"))
+    _ = w.AppendLocked(ctx, []byte("Record: 101\n"))
+    _ = w.AppendLocked(ctx, []byte("--- Batch End ---\n"))
+    return nil
+})
+
+// 5. One-off write and close
+err = writer.WriteAndClose(ctx, []byte("Final Snapshot"))
+
+// 6. Query diagnostics
+fmt.Printf("Writes: %d, Written: %d bytes, Appended: %d bytes\n",
+    writer.WriteCount(), writer.BytesWritten(), writer.BytesAppended())
 ```
 
-### 2. `FileAppender`
+### 2. `FileWriter` (Behavior Shifting)
 ```go
-// Creation with auto-directory creation
+writer := fileutil.NewFileWriterEngine("configs/app.json")
+
+// Direct write
+_ = writer.WriteString(ctx, "mode: initial\n")
+
+// Shift to atomic mode (writes to temp file, fsyncs, renames)
+writer.SetMode(fileutil.FileWriteModeAtomic)
+_ = writer.WriteString(ctx, "mode: atomic-update\n")
+
+// Shift to truncate with fsync
+writer.SetMode(fileutil.FileWriteModeTruncate).SetSyncOnWrite(true)
+_ = writer.WriteString(ctx, "mode: clean-state\n")
+```
+
+### 3. `FileAppender` (Dedicated Continuous WAL/Journal)
+```go
 appender := fileutil.NewFileAppender("var/log/audit.log", fileutil.FilePermStandard)
 appender.SetAutoSync(true)
 
-// Continuous appending
-err := appender.AppendString(ctx, "EVENT: Transaction 9912 processed\n")
-
-// Query appended volume
-bytesWritten := appender.BytesAppended()
-
-// Clean close
-err = appender.Close()
+_ = appender.AppendString(ctx, "EVENT: Transaction 9912 processed\n")
+bytesAppended := appender.BytesAppended()
+_ = appender.Close()
 ```
 
-### 3. Atomic Write Utility
+### 4. Standard Library Adapters (`io.WriteCloser`)
 ```go
-res := fileutil.WriteAtomic("data/state.json", payloadBytes, fileutil.FilePermStandard)
-if res.IsFailed() {
-    return res.Fault()
-}
+// Adapters for io.Copy, fmt.Fprintf, log.SetOutput
+stdWriter := writer.StdWriter()
+stdAppender := writer.StdAppender()
 ```
 
 ---
@@ -134,30 +179,38 @@ import (
 
 func main() {
     ctx := context.Background()
-    dir := filepath.Join(".", "tmp-data")
+    logPath := filepath.Join(".", "tmp-data", "service.log")
 
-    // 1. Initialize behavior-shifting writer
-    fw := fileutil.NewFileWriterEngine(filepath.Join(dir, "config.yaml"))
+    // 1. Initialize file-specific BoundFileWriter
+    writer := fileutil.NewBoundFileWriter(logPath)
 
-    // Direct write initial configuration
-    if err := fw.WriteString(ctx, "mode: initial\n"); err != nil {
+    // Write header with auto-lock
+    if err := writer.WriteString(ctx, "=== SERVICE AUDIT LOG ===\n"); err != nil {
         panic(err)
     }
 
-    // Shift to atomic mode for mission-critical updates
-    fw.SetMode(fileutil.FileWriteModeAtomic)
-    if err := fw.WriteString(ctx, "mode: updated-atomic\n"); err != nil {
+    // Append event with auto-lock
+    if err := writer.AppendString(ctx, "INFO: Worker pool initialized\n"); err != nil {
         panic(err)
     }
 
-    // 2. Continuous journal appender
-    appender := fileutil.NewFileAppender(filepath.Join(dir, "audit.log"), fileutil.FilePermStandard)
-    defer appender.Close()
-
-    if err := appender.AppendString(ctx, "Audit record 1: service up\n"); err != nil {
+    // Enable auto-close so file handle closes immediately after writing
+    writer.SetAutoClose(true)
+    if err := writer.AppendString(ctx, "INFO: Checkpoint flushed to disk\n"); err != nil {
         panic(err)
     }
 
-    fmt.Printf("Total audit bytes written: %d\n", appender.BytesAppended())
+    // Perform atomic multi-step batch under a single lock
+    err := writer.WithLock(ctx, func(w *fileutil.BoundFileWriter) *fileutil.BoundFileWriter {
+        _ = w.AppendLocked(ctx, []byte("TX 101: START\n"))
+        _ = w.AppendLocked(ctx, []byte("TX 101: COMMIT\n"))
+        return nil
+    })
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("Total operations: %d, Appended bytes: %d\n",
+        writer.WriteCount(), writer.BytesAppended())
 }
 ```
