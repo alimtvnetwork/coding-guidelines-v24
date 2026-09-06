@@ -34,7 +34,7 @@ Autonomously self-loop and read:
 - /learn the absolute prohibition against negative booleans and inverted logic in `02-spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`.
 - /learn the strict identifier and file naming conventions in `02-spec/02-coding-guidelines/01-cross-language/01-index.md`.
 - /learn the DRY principles and duplication extraction patterns in `02-spec/02-coding-guidelines/01-cross-language/08-dry-principles.md`.
-- /learn the error management architecture and logging diagnostics in `02-spec/03-error-manage/01-index.md` and `02-spec/03-error-manage/01-index.md`.
+- /learn the error management architecture and logging diagnostics in `02-spec/03-error-manage/01-index.md` and `02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md` as an AI skill checklist.
 - /learn the language-specific standards in `02-spec/02-coding-guidelines/` (TypeScript, Go, PHP, Rust, C#, Python, PowerShell).
 - /learn the anti-hallucination rules and common AI mistakes in `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and `03-common-ai-mistakes.md`.
 - Read `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md`.

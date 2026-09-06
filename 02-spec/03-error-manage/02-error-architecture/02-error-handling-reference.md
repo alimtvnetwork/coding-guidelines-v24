@@ -195,27 +195,40 @@ Every `error()` and `logException()` call automatically captures:
 
 ## Tier 2: Go Backend Error Handling
 
-### `appfault` Package & `*appfault.AppError` Return Type
+### `appfault` Package & `*appfault.AppError` Return Type (AI Skill Checklist)
 
-All structured errors crossing service boundaries in Go must use `*appfault.AppError` (package `appfault`) or `result.Result[T]`:
+All structured errors crossing service boundaries in Go MUST use `*appfault.AppError` (package `appfault`). Do NOT use `fmt.Errorf` or `errors.New` when returning an error from a service.
+
+**Strict Context Enrichment Checklist:**
+Every AI agent modifying or creating Go code MUST ensure `*appfault.AppError` instances include rich metadata. No error can be bypassed without injecting absolute file paths and relevant variables. 
+
+- [ ] `/goal` **Absolute Path Logging (`WithPath` / `WithFilePath`):** If an error involves a file or directory, you MUST attach the path via `.WithPath(absolutePath)` or `.WithFilePath(absolutePath)`.
+- [ ] `/goal` **Variable Logging (`WithVar` / `WithVars`):** If an error occurs due to a specific variable or state, you MUST attach the variable name and value via `.WithVar("variableName", variableValue)`.
+- [ ] `/goal` **Operation Context (`WithOp`):** Use `.WithOp("Package.Function")` to mark where the error originated.
+- [ ] `/goal` **HTTP Context (`WithStatusCode`, `WithEndpoint`):** Use `.WithStatusCode(int)` and `.WithEndpoint(url)` for networking errors.
+- [ ] `/goal` **Plugin Context (`WithPluginContext`):** Use `.WithPluginContext(pluginId, slug)` when the error relates to a specific plugin.
+
+**Example Usage:**
 
 ```go
-// Functions returning structured error metadata use *appfault.AppError
-func validateSlug(slug string) *appfault.AppError {
-    if len(slug) == 0 {
-        return appfault.NewValidationError("slug cannot be empty")
+// Creating new structured errors with full context
+func processFile(filePath string, maxSize int64) *appfault.AppError {
+    if filePath == "" {
+        return appfault.NewValidationError("file path cannot be empty").
+            WithOp("processor.processFile").
+            WithVar("maxSize", maxSize)
+    }
+
+    if err != nil {
+        // Wrapping an existing error with context
+        return appfault.Wrap(err, "file.processor.failed", map[string]any{"maxSize": maxSize}).
+            WithPath(filePath).
+            WithVar("currentSize", currentSize).
+            WithOp("processor.processFile")
     }
 
     return nil
 }
-
-// Wrap existing errors with code and context
-return appfault.Wrap(err, "wp.plugin.upload", map[string]any{"slug": pluginSlug}).
-    WithPluginContext(pluginId, pluginSlug).
-    WithEndpoint(requestUrl)
-
-// Create new errors
-return appfault.NewSimple("wp.plugin.validate", appfault.ErrFileRead.String())
 ```
 
 > **AI Migration Note:** Package `appfault` eliminates package stutter (`appfault.AppError`). For backward compatibility, `appfault` provides `type Fault = AppError` and package `apperror` provides alias forwarders to `appfault`.

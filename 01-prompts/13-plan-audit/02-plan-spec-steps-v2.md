@@ -30,14 +30,14 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 ## Variables — check if you are confused only.
 
-``text
-n            = <default = 150, if not defined> = 300 steps confirmed
+```text
+n            = <default = 150, if not defined> = 50 steps confirmed
 domains      = Cli | Plugin | Contract | Ci | Last defined Spec above
 plan-slug    = Context given above or below.
 domains      = get from the spec given or context given, ask questions if any
 min-score    = 100
 regen-score  = 100
-``
+```
 
 `n` is the step count and it is defined only on the line above. Every rule in
 this prompt refers to it as `n` and never restates a number.
@@ -79,7 +79,7 @@ Every file and folder you create or rename obeys all of these, with no exception
 
 Mechanical check, run it and print the output before saving (RULE 11):
 
-``bash
+```bash
 
 # any uppercase character, space, or underscore in an authored path = FAIL
 
@@ -88,7 +88,7 @@ git ls-files | grep -nE '(^|/)[^/]*[A-Z_ ][^/]*$' || echo "naming OK"
 # every file in an ordered folder must carry a numeric prefix
 
 ls .lovable/plans/subtasks/xx-plan-slug | grep -vE '^[0-9]{3}-' || echo "sequence OK"
-``
+```
 
 ---
 
@@ -149,12 +149,12 @@ as a footer in every task file.
 
 Mandatory footer, verbatim, at the end of every task file:
 
-``text
+```text
 ---
 
 Execution: one step per run. Self-loop after Verify passes. Max 2 agents, max 3 threads per agent.
 This task is standalone — read it plus its cited files, nothing else is assumed.
-``
+```
 
 ---
 
@@ -170,7 +170,7 @@ left blank fails the step. The boolean / condition-styling family has one file
 per sub-topic and all of them are listed — a checklist that collapses them
 into "the boolean folder" fails.
 
-``text
+```text
 | Topic                            | Single source file                                                          | Duplicates found |
 | canonical size tier              | 02-spec/02-coding-guidelines/02-canonical-size-tier.md                         | none             |
 | boolean naming prefixes          | 02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md      | none |
@@ -202,7 +202,7 @@ into "the boolean folder" fails.
 | ci guards                        | 02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/00-overview.md        | none             |
 | contract + e2e testing           | 02-spec/12-cicd-pipeline-workflows/01-index.md, 21-e2e-testing-pattern.md | none       |
 | static analysis / sarif          | 02-spec/02-coding-guidelines/06-cicd-integration/01-sarif-contract.md          | none             |
-``
+```
 
 Consolidated mirrors that MAY be cited as a reading aid, never as the authority:
 
@@ -295,7 +295,7 @@ that ends in a question mark, or that says "assume", "probably", "TBD" or
 - Open: `.lovable/ambiguous-questions/01-new-ambiguity/01-<slug>.md`
 - Answered: `.lovable/ambiguous-questions/02-ambiguity-resolved/01-<slug>.md`
 
-``markdown
+```markdown
 
 # <one-line question>
 
@@ -310,19 +310,19 @@ Blocking: <plan slug(s) or "none">
 
 ## Impact if guessed wrong
 
-``
+```
 
 When answered: `mv` the file into `02-ambiguity-resolved/`, flip
 `Status: resolved`, and append:
 
-``markdown
+```markdown
 
 ## Resolution
 
 Answered: <YYYY-MM-DD>
 Answer: <user answer>
 Applied solution: <what changed / where>
-``
+```
 
 Never leave a copy behind. A plan blocked by an open question is still written,
 with `Status: blocked-by-ambiguity` and every question file linked from Context.
@@ -335,7 +335,7 @@ Each blocked task states the interim provisional default in section 8.
 RULE 0A gives the naming law; this is the layout it applies to. Authored paths
 match this exactly:
 
-``text
+```text
 .lovable/plans/pending/01-<plan-slug>.md
 .lovable/plans/subtasks/<plan-slug>/index.md
 .lovable/plans/subtasks/<plan-slug>/001-task.md
@@ -348,7 +348,7 @@ match this exactly:
 .lovable/cicd-issues/01-<slug>.md
 .lovable/spec/commands/01-<slug>.md
 02-spec/25-app-spec-audit/NN-audit-<yyyy-mm-dd>-v<N>.md
-``
+```
 
 - Two-digit prefixes for docs, prompts, spec, audit, memory, issue and ambiguity
   files. Three-digit prefixes for subtask files.
@@ -367,7 +367,7 @@ A step that exists because something broke carries an RCA, not just a fix.
 - The task body's section 8 links that issue file and the RCA record.
 - RCA record shape, mandatory, in the issue file:
 
-``markdown
+```markdown
 
 ## Root cause analysis
 
@@ -378,7 +378,7 @@ Why it escaped: <the missing test, guard, or spec rule that let it through>
 Fix: <symbol + file changed>
 Prevention: <new test name, new lint rule, or new guideline rule + its file>
 Regression check: <runnable command + expected output>
-``
+```
 
 - Follow the retrospective and verification conventions in
   `02-spec/03-error-manage/01-error-resolution/03-retrospectives/` and
@@ -396,18 +396,16 @@ Two mechanical gates, both run with output pasted into the report (RULE 11).
 
 Missing links and references. Report absolute counts, not adjectives:
 
-``bash
+```bash
 
 # every cited spec/.lovable path in the batch must resolve
 
-rg -o --no-filename '(spec|\.lovable)/[A-Za-z0-9/._-]+' \
-  .lovable/plans/pending/01-xx-plan-slug.md .lovable/plans/subtasks/xx-plan-slug/*.md \
-  | sed 's/[.,)`]*$//' | sort -u > /tmp/cited-paths.txt
+rg -o --no-filename '(spec|\.lovable)/[A-Za-z0-9/._-]+'   .lovable/plans/pending/01-xx-plan-slug.md .lovable/plans/subtasks/xx-plan-slug/*.md   | sed 's/[.,)`]*$//' | sort -u > /tmp/cited-paths.txt
 wc -l < /tmp/cited-paths.txt                       # total citations
 while read p; do test -e "$p" || echo "MISSING $p"; done < /tmp/cited-paths.txt | tee /tmp/missing.txt
 wc -l < /tmp/missing.txt                           # must be 0
 python3 linter-scripts/check-spec-folder-refs.py   # folder-level ref integrity
-``
+```
 
 Acceptance: `missing paths = 0`, `missing sections = 0`, and every cited section
 anchor exists inside the cited file. The report prints the four numbers:
@@ -494,7 +492,7 @@ gap — handle it under RULE 9. Do not write the step vaguely and move on.
 Every file in `.lovable/plans/subtasks/xx-plan-slug/` uses exactly this shape, in
 this order, named `NNN-task.md` with a zero-padded three-digit sequence:
 
-``text
+```text
 ---
 
 plan: .lovable/plans/pending/01-xx-plan-slug.md
@@ -540,7 +538,7 @@ citations:
 
 ## 8. Notes and Open Questions
 
-``
+```
 
 Acceptance bar per section — a section that misses its bar fails the batch:
 
@@ -604,7 +602,7 @@ Every task file MUST begin with the YAML frontmatter block described in RULE 4. 
 Before the batch is saved, run both sweeps and paste the real output into the
 report:
 
-``bash
+```bash
 
 # 1. uniform length is the first smell
 
@@ -613,19 +611,18 @@ wc -l .lovable/plans/subtasks/xx-plan-slug/*.md | sort -n | head
 # 2. strip title + header lines, hash the remainder; any bucket > 1 is a FAIL
 
 for f in .lovable/plans/subtasks/xx-plan-slug/*.md; do
-  tail -n +4 "$f" | rg -v '^\*\*(Plan|Domain|Target Files|Depends On)' \
-    | sha256sum | cut -c1-12 | tr '\n' ' '; echo "$f"
+  tail -n +4 "$f" | rg -v '^\*\*(Plan|Domain|Target Files|Depends On)'     | sha256sum | cut -c1-12 | tr '
+' ' '; echo "$f"
 done | sort | uniq -c -w12 | sort -rn | head
-``
+```
 
 Gate: zero hash buckets with more than one member, and no pair above 60 percent
 similarity after the title and header lines are removed. Also sweep that every
 cited path resolves:
 
-``bash
-rg -o --no-filename 'spec/[A-Za-z0-9/._-]+' .lovable/plans/subtasks/xx-plan-slug/*.md \
-  | sed 's/[.,)`]*$//' | sort -u | while read p; do test -e "$p" || echo "MISSING $p"; done
-``
+```bash
+rg -o --no-filename 'spec/[A-Za-z0-9/._-]+' .lovable/plans/subtasks/xx-plan-slug/*.md   | sed 's/[.,)`]*$//' | sort -u | while read p; do test -e "$p" || echo "MISSING $p"; done
+```
 
 ---
 
@@ -733,7 +730,7 @@ Before printing the final report, you MUST spawn a read-only Validation Subagent
 
 A score without evidence is not a score.
 
-``text
+```text
 | Dimension          | Score | Evidence |
 | Uniqueness         |    ?? | clone buckets: 0; max pair similarity: 41% |
 | Specificity        |    ?? | 69/69 tasks name >= 3 symbols with signatures |
@@ -743,7 +740,7 @@ A score without evidence is not a score.
 | Ci coverage        |    ?? | 69/69 code tasks name a CI job or linter script |
 | Sequencing         |    ?? | acyclic; 12 roots; longest chain 6 |
 | Overall            |    ?? |  |
-``
+```
 
 Below `min-score` overall: regenerate the offending domain group before saving.
 Below `regen-score`: regenerate the whole batch from scratch. Never patch a
@@ -753,7 +750,7 @@ cloned batch — clones are regenerated, not edited.
 
 ## RULE 13 — final report format
 
-``text
+```text
 Plan: 01-xx-plan-slug.md                 Steps: n (counted twice)
 Subtasks: <count> in .lovable/plans/subtasks/xx-plan-slug/
 Clone buckets > 1: 0            Max similarity: NN%
@@ -764,7 +761,7 @@ Ci/cd verification: <jobs per domain>
 Tasks blocked on ambiguity: n (Q..)   Rca records written: n
 Self-score: Uniqueness/Specificity/Anchoring/Reference/Verifiability/Ci/Sequencing -> Overall
 Spec gaps filed: <list or none>
-``
+```
 
 ### Temp-Agent State Management Protocol (Non-Negotiable)
 
