@@ -24,7 +24,7 @@ var chunkBufferPool = sync.Pool{
 
 func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 	if len(path) == 0 {
-		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[bool](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path).WithPath(path))
 	}
 
 	dir := filepath.Dir(path)
@@ -38,7 +38,7 @@ func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] 
 
 	tmpFile, err := os.OpenFile(tmpPath, os.O_CREATE|os.O_WRONLY|os.O_EXCL, perm.Mode())
 	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to create atomic temp file: "+tmpPath))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, err, "failed to create atomic temp file", tmpPath).WithVar("targetPath", path))
 	}
 
 	writeFailed := false
@@ -48,25 +48,25 @@ func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] 
 			_ = tmpFile.Close()
 			_ = os.Remove(tmpPath)
 
-			return result.WrapFailure[bool](appfault.Wrap(errtype.IO, writeErr, "failed to write atomic data: "+tmpPath))
+			return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, writeErr, "failed to write atomic data", tmpPath).WithVar("targetPath", path))
 		}
 	}
 
 	if writeFailed {
-		return result.WrapFailure[bool](appfault.New(errtype.IO, "atomic write aborted"))
+		return result.WrapFailure[bool](appfault.New(errtype.IO, "atomic write aborted").WithPaths(tmpPath, path).WithVar("sourceTempPath", tmpPath).WithVar("destinationPath", path))
 	}
 
 	if syncErr := tmpFile.Sync(); syncErr != nil {
 		_ = tmpFile.Close()
 		_ = os.Remove(tmpPath)
 
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, syncErr, "failed to sync atomic file: "+tmpPath))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, syncErr, "failed to sync atomic file", tmpPath).WithVar("targetPath", path))
 	}
 
 	if closeErr := tmpFile.Close(); closeErr != nil {
 		_ = os.Remove(tmpPath)
 
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, closeErr, "failed to close atomic file: "+tmpPath))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, closeErr, "failed to close atomic file", tmpPath).WithVar("targetPath", path))
 	}
 
 	// On Windows, rename fails if destination exists, so we remove destination first
@@ -75,7 +75,7 @@ func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] 
 	if renameErr := os.Rename(tmpPath, path); renameErr != nil {
 		_ = os.Remove(tmpPath)
 
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, renameErr, "failed to atomically rename: "+path))
+		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, renameErr, "failed to atomically rename").WithPaths(tmpPath, path).WithVar("sourceTempPath", tmpPath).WithVar("destinationPath", path))
 	}
 
 	return result.WrapSuccess(true)
@@ -83,7 +83,7 @@ func WriteAtomic(path string, data []byte, perm FilePermType) result.Wrap[bool] 
 
 func ReadChunked(path string, chunkSize int, onChunk ChunkCallbackFunc) result.Wrap[int64] {
 	if len(path) == 0 {
-		return result.WrapFailure[int64](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[int64](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path).WithPath(path))
 	}
 
 	effectiveChunkSize := chunkSize
@@ -125,7 +125,7 @@ func ReadChunked(path string, chunkSize int, onChunk ChunkCallbackFunc) result.W
 				break
 			}
 
-			return result.WrapFailure[int64](appfault.Wrap(errtype.IO, readErr, "error reading chunk from: "+path))
+			return result.WrapFailure[int64](appfault.WrapWithPath(errtype.IO, readErr, "error reading chunk", path))
 		}
 	}
 
@@ -134,11 +134,11 @@ func ReadChunked(path string, chunkSize int, onChunk ChunkCallbackFunc) result.W
 
 func WriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize int) result.Wrap[int64] {
 	if len(path) == 0 {
-		return result.WrapFailure[int64](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[int64](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path).WithPath(path))
 	}
 
 	if reader == nil {
-		return result.WrapFailure[int64](appfault.New(errtype.Validation, "reader cannot be nil"))
+		return result.WrapFailure[int64](appfault.NewWithVar(errtype.Validation, "reader cannot be nil", "reader", reader).WithPath(path))
 	}
 
 	effectiveBufSize := bufferSize
@@ -169,7 +169,7 @@ func WriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize i
 			written, writeErr := f.Write(buf[:n])
 			totalWritten += int64(written)
 			if writeErr != nil {
-				return result.WrapFailure[int64](appfault.Wrap(errtype.IO, writeErr, "failed writing chunk to: "+path))
+				return result.WrapFailure[int64](appfault.WrapWithPath(errtype.IO, writeErr, "failed writing chunk", path))
 			}
 		}
 
@@ -178,12 +178,12 @@ func WriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize i
 				break
 			}
 
-			return result.WrapFailure[int64](appfault.Wrap(errtype.IO, readErr, "error reading source for write to: "+path))
+			return result.WrapFailure[int64](appfault.WrapWithPath(errtype.IO, readErr, "error reading source for write", path))
 		}
 	}
 
 	if syncErr := f.Sync(); syncErr != nil {
-		return result.WrapFailure[int64](appfault.Wrap(errtype.IO, syncErr, "failed syncing file: "+path))
+		return result.WrapFailure[int64](appfault.WrapWithPath(errtype.IO, syncErr, "failed syncing file", path))
 	}
 
 	return result.WrapSuccess(totalWritten)

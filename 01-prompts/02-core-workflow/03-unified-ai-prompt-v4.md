@@ -307,6 +307,7 @@ Folders marked skipped, ignored, deprecated, generated, or archived must not be 
 - Functions: 8-15 lines.
 - Files: 100-200 lines max.
 - Small, focused packages - one responsibility per package.
+- Mandatory file path & variable context in all errors: Any file, directory, or validation error MUST embed the resolved file path (`.WithPath(p)`) and variable name (`.WithVar(name, val)`). Generic error messages without target path/variable metadata are strictly banned.
 
 ### Version bumping
 
@@ -355,6 +356,7 @@ Use:
 - [ ] Ensure the git repository starts completely clean.
 - [ ] Complete all work on the current branch only.
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
+- [ ] **Error Context Verification:** Verify that every error created or wrapped embeds exact target file paths, variable names, and multi-path metadata without generic messages.
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
 

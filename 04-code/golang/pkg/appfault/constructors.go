@@ -70,6 +70,66 @@ func WrapType(errType errtype.Variation, cause error) *AppError {
 	return Wrap(errType, cause, cause.Error())
 }
 
+// NewWithPath creates an AppError embedding the target file/directory path.
+func NewWithPath(errType errtype.Variation, message string, path string) *AppError {
+	e := New(errType, message)
+	if e == nil {
+		return nil
+	}
+
+	return e.WithPath(path)
+}
+
+// NewWithVar creates an AppError embedding a named variable and its value.
+func NewWithVar(errType errtype.Variation, message string, varName string, varValue any) *AppError {
+	e := New(errType, message)
+	if e == nil {
+		return nil
+	}
+
+	return e.WithVar(varName, varValue)
+}
+
+// NewWithVars creates an AppError embedding multiple variables from a map.
+func NewWithVars(errType errtype.Variation, message string, vars map[string]any) *AppError {
+	e := New(errType, message)
+	if e == nil {
+		return nil
+	}
+
+	return e.WithVars(vars)
+}
+
+// WrapWithPath wraps an existing cause error and embeds the target file/directory path.
+func WrapWithPath(errType errtype.Variation, cause error, message string, path string) *AppError {
+	e := Wrap(errType, cause, message)
+	if e == nil {
+		return nil
+	}
+
+	return e.WithPath(path)
+}
+
+// WrapWithVar wraps an existing cause error and embeds a named variable.
+func WrapWithVar(errType errtype.Variation, cause error, message string, varName string, varValue any) *AppError {
+	e := Wrap(errType, cause, message)
+	if e == nil {
+		return nil
+	}
+
+	return e.WithVar(varName, varValue)
+}
+
+// WrapWithVars wraps an existing cause error and embeds multiple variables from a map.
+func WrapWithVars(errType errtype.Variation, cause error, message string, vars map[string]any) *AppError {
+	e := Wrap(errType, cause, message)
+	if e == nil {
+		return nil
+	}
+
+	return e.WithVars(vars)
+}
+
 // ensureContextMap safely converts a map[string]any to ContextMap.
 func ensureContextMap(ctx map[string]any) ContextMap {
 	if ctx == nil {

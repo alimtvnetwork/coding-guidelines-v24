@@ -83,6 +83,102 @@ func (e *AppError) WithCaller(caller CallerInfo) *AppError {
 	return cloned
 }
 
+// WithPath returns a new immutable AppError with the file or directory path context.
+// It sets both "Path" and "FilePath" keys so diagnostic tooling can discover either.
+func (e *AppError) WithPath(path string) *AppError {
+	if e == nil {
+		return nil
+	}
+
+	cloned := e.clone()
+	cloned.ctx.Set("Path", path)
+	cloned.ctx.Set("FilePath", path)
+
+	return cloned
+}
+
+// WithFilePath is an alias for WithPath emphasizing targeted file destinations.
+func (e *AppError) WithFilePath(filePath string) *AppError {
+	return e.WithPath(filePath)
+}
+
+// WithPaths returns a new immutable AppError recording multiple target paths.
+func (e *AppError) WithPaths(paths ...string) *AppError {
+	if e == nil {
+		return nil
+	}
+
+	cloned := e.clone()
+	cloned.ctx.Set("Paths", paths)
+	if len(paths) > 0 {
+		cloned.ctx.Set("Path", paths[0])
+		cloned.ctx.Set("FilePath", paths[0])
+	}
+
+	return cloned
+}
+
+// WithVar returns a new immutable AppError embedding a named variable and its value.
+// It sets the direct variable name key as well as tracking under the "Variables" map.
+func (e *AppError) WithVar(name string, value any) *AppError {
+	if e == nil {
+		return nil
+	}
+
+	cloned := e.clone()
+	cloned.ctx.Set(name, value)
+
+	vars, isFound := cloned.ctx.Get("Variables")
+	var varMap map[string]any
+	if isFound {
+		if existingMap, isMap := vars.(map[string]any); isMap {
+			varMap = make(map[string]any, len(existingMap)+1)
+			for k, v := range existingMap {
+				varMap[k] = v
+			}
+		}
+	}
+	if varMap == nil {
+		varMap = make(map[string]any, 1)
+	}
+	varMap[name] = value
+	cloned.ctx.Set("Variables", varMap)
+
+	return cloned
+}
+
+// WithVars returns a new immutable AppError embedding multiple variables from a map.
+func (e *AppError) WithVars(vars map[string]any) *AppError {
+	if e == nil || len(vars) == 0 {
+		return e
+	}
+
+	cloned := e.clone()
+	for k, v := range vars {
+		cloned.ctx.Set(k, v)
+	}
+
+	existingVars, isFound := cloned.ctx.Get("Variables")
+	var varMap map[string]any
+	if isFound {
+		if m, isMap := existingVars.(map[string]any); isMap {
+			varMap = make(map[string]any, len(m)+len(vars))
+			for k, v := range m {
+				varMap[k] = v
+			}
+		}
+	}
+	if varMap == nil {
+		varMap = make(map[string]any, len(vars))
+	}
+	for k, v := range vars {
+		varMap[k] = v
+	}
+	cloned.ctx.Set("Variables", varMap)
+
+	return cloned
+}
+
 // Context returns a copy of the underlying diagnostic metadata ContextMap.
 func (e *AppError) Context() ContextMap {
 	if e == nil || e.ctx == nil {

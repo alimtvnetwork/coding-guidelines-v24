@@ -26,6 +26,10 @@ func (writerWrapConstructor) FailureFromError(err *appfault.AppError) BaseWriter
 	return result.WrapFailure[*BaseWriter](err)
 }
 
+func (writerWrapConstructor) FailureFromAppError(err *appfault.AppError) BaseWriterWrap {
+	return result.WrapFailure[*BaseWriter](err)
+}
+
 func (writerWrapConstructor) FailureWithId(errType errtype.Variation, msg string) BaseWriterWrap {
 	return result.WrapFailureWithId[*BaseWriter](errType, msg)
 }

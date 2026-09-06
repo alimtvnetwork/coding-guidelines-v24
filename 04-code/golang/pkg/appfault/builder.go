@@ -99,6 +99,58 @@ func (b *AppErrorBuilder) WithCause(cause error) *AppErrorBuilder {
 	return b.SetCause(cause)
 }
 
+// WithPath embeds target path metadata into the builder context.
+func (b *AppErrorBuilder) WithPath(path string) *AppErrorBuilder {
+	b.SetContext("Path", path)
+	b.SetContext("FilePath", path)
+
+	return b
+}
+
+// WithFilePath is an alias for WithPath emphasizing file targets.
+func (b *AppErrorBuilder) WithFilePath(filePath string) *AppErrorBuilder {
+	return b.WithPath(filePath)
+}
+
+// WithPaths embeds multiple paths into the builder context.
+func (b *AppErrorBuilder) WithPaths(paths ...string) *AppErrorBuilder {
+	b.SetContext("Paths", paths)
+	if len(paths) > 0 {
+		b.SetContext("Path", paths[0])
+		b.SetContext("FilePath", paths[0])
+	}
+
+	return b
+}
+
+// WithVar embeds a named variable into the builder context and records under "Variables".
+func (b *AppErrorBuilder) WithVar(name string, value any) *AppErrorBuilder {
+	b.SetContext(name, value)
+
+	var varMap map[string]any
+	if existing, isFound := b.ctx["Variables"]; isFound {
+		if m, isMap := existing.(map[string]any); isMap {
+			varMap = m
+		}
+	}
+	if varMap == nil {
+		varMap = make(map[string]any)
+		b.ctx["Variables"] = varMap
+	}
+	varMap[name] = value
+
+	return b
+}
+
+// WithVars embeds multiple variables into the builder context.
+func (b *AppErrorBuilder) WithVars(vars map[string]any) *AppErrorBuilder {
+	for k, v := range vars {
+		b.WithVar(k, v)
+	}
+
+	return b
+}
+
 // Build freezes the builder state into a strictly immutable *AppError.
 func (b *AppErrorBuilder) Build() *AppError {
 	if b.errType == errtype.None {

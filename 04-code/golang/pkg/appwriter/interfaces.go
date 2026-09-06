@@ -10,6 +10,7 @@ import (
 
 type (
 	Writer interface {
+		Name() string
 		Write(ctx context.Context, payload any) *appfault.AppError
 		AsStreamer() Streamer[any]
 		AsWriter() Writer
@@ -28,6 +29,7 @@ type (
 	}
 
 	Streamer[T any] interface {
+		Name() string
 		Stream(ctx context.Context, payload T) *appfault.AppError
 		AsStreamer() Streamer[T]
 		AsWriter() Writer

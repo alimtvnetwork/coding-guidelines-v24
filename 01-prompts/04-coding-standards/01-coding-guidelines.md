@@ -566,7 +566,12 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 ## 5. Error Management (`02-spec/03-error-manage/`)
 
 - **Never Swallow Errors:** Every `catch` or error check must log with context and rethrow/return.
-- **Wrap with Context:** Use `apperror.Wrap(err, "operationName", contextMap)` in Go, or `new AppError("message", { cause, op, context })` in TypeScript.
+- **Mandatory File Path & Variable Context (Code Red Rule):**
+  - **Embedded File Paths:** Any error involving file operations, I/O, or directory resolution MUST embed the absolute/resolved target file path into the error context (`appfault.WrapWithPath(...)` or `.WithPath(path)`). No error can be bypassed without putting the target path into the error logs.
+  - **Preserve Variable Name:** When validating arguments, paths, or settings, the exact variable name (e.g. `opts.FilePath`, `sourceDir`, `batchSize`) MUST be recorded in the error metadata alongside its value (`.WithVar(name, val)` or `appfault.NewWithVar(...)`).
+  - **Multiple Paths Requirement:** When an operation involves multiple paths (e.g., Copy, Move, Rename, Atomic Write, Diff), all engaged paths MUST be captured with distinct variable keys (e.g., `sourcePath`, `destinationPath`, or `.WithPaths(src, dst)`).
+  - **Banned Generic Messages:** Never emit generic messages (`"file not found"`, `"write failed"`, `"invalid path"`) without the attached file path and variable identifier.
+- **Wrap with Context:** Use `appfault.Wrap(errtype.IO, err, "failed to read file").WithPath(filePath)` in Go, or `new AppError("message", { cause, op, context })` in TypeScript.
 - **Universal Response Envelope:** APIs return `{ data, errors[], meta }`.
 - **No Generic Errors:** Never throw base `Error` or `Exception`. Use domain-specific `AppError` classes with registered error codes.
 
@@ -582,7 +587,7 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 | **R4** | Signature > 3 params or > 100 chars -> one param per line | Must Fix | Yes |
 | **R5** | > 4 params or adjacent same-type params -> group into param struct | Must Fix | No (AI manual refactor) |
 | **R6** | Every parameter is used, or discarded as `_` with explanatory comment | Must Fix | No (AI manual refactor) |
-| **R7** | Every error propagated with context; no swallowed errors | Must Fix | No (AI manual refactor) |
+| **R7** | Every error propagated with context; mandatory embedded file path and variable name on all file/param errors | Must Fix | No (AI manual refactor) |
 | **R8** | No magic literals passed as arguments — extract named constants | Must Fix | No (AI manual refactor) |
 | **R9** | Call > 100 chars or > 4 args -> one argument per line | Must Fix | Yes |
 | **R10** | No boolean positional parameters -> use named struct or enum | Suggestion | No |

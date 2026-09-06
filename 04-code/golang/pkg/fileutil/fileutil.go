@@ -11,7 +11,7 @@ import (
 
 func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*os.File] {
 	if len(path) == 0 {
-		return result.WrapFailure[*os.File](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[*os.File](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path))
 	}
 
 	flags := openMode.Flags()
@@ -21,7 +21,7 @@ func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) result.
 		if len(dir) > 0 {
 			if dir != "." {
 				if err := os.MkdirAll(dir, 0755); err != nil {
-					return result.WrapFailure[*os.File](appfault.Wrap(errtype.IO, err, "failed to create parent directory: "+dir))
+					return result.WrapFailure[*os.File](appfault.WrapWithPath(errtype.IO, err, "failed to create parent directory", dir).WithVar("parentDir", dir))
 				}
 			}
 		}
@@ -30,14 +30,14 @@ func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) result.
 	f, err := os.OpenFile(path, flags, perm.Mode())
 	if err != nil {
 		if os.IsNotExist(err) {
-			return result.WrapFailure[*os.File](appfault.Wrap(errtype.NotFound, err, "file not found: "+path))
+			return result.WrapFailure[*os.File](appfault.WrapWithPath(errtype.NotFound, err, "file not found", path))
 		}
 
 		if os.IsPermission(err) {
-			return result.WrapFailure[*os.File](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+			return result.WrapFailure[*os.File](appfault.WrapWithPath(errtype.Forbidden, err, "permission denied", path))
 		}
 
-		return result.WrapFailure[*os.File](appfault.Wrap(errtype.IO, err, "failed to open file: "+path))
+		return result.WrapFailure[*os.File](appfault.WrapWithPath(errtype.IO, err, "failed to open file", path))
 	}
 
 	return result.WrapSuccess(f)
@@ -49,12 +49,12 @@ func Open(path string) result.Wrap[*os.File] {
 
 func EnsureDir(path string, perm FilePermType) result.Wrap[bool] {
 	if len(path) == 0 {
-		return result.WrapFailure[bool](appfault.New(errtype.Validation, "directory path cannot be empty"))
+		return result.WrapFailure[bool](appfault.NewWithVar(errtype.Validation, "directory path cannot be empty", "path", path))
 	}
 
 	err := os.MkdirAll(path, perm.Mode())
 	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to create directory: "+path))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, err, "failed to create directory", path))
 	}
 
 	return result.WrapSuccess(true)
@@ -64,10 +64,10 @@ func ReadAll(path string) result.Wrap[[]byte] {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return result.WrapFailure[[]byte](appfault.Wrap(errtype.NotFound, err, "file not found: "+path))
+			return result.WrapFailure[[]byte](appfault.WrapWithPath(errtype.NotFound, err, "file not found", path))
 		}
 
-		return result.WrapFailure[[]byte](appfault.Wrap(errtype.IO, err, "failed to read file: "+path))
+		return result.WrapFailure[[]byte](appfault.WrapWithPath(errtype.IO, err, "failed to read file", path))
 	}
 
 	return result.WrapSuccess(data)
@@ -93,7 +93,7 @@ func WriteFile(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 
 	_, err := f.Write(data)
 	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to write data: "+path))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, err, "failed to write data", path).WithVar("dataBytesLen", len(data)))
 	}
 
 	return result.WrapSuccess(true)
@@ -101,20 +101,20 @@ func WriteFile(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 
 func DeleteFile(path string) result.Wrap[bool] {
 	if len(path) == 0 {
-		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[bool](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path))
 	}
 
 	err := os.Remove(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return result.WrapFailure[bool](appfault.Wrap(errtype.NotFound, err, "file not found: "+path))
+			return result.WrapFailure[bool](appfault.WrapWithPath(errtype.NotFound, err, "file not found", path))
 		}
 
 		if os.IsPermission(err) {
-			return result.WrapFailure[bool](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+			return result.WrapFailure[bool](appfault.WrapWithPath(errtype.Forbidden, err, "permission denied", path))
 		}
 
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to delete file: "+path))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, err, "failed to delete file", path))
 	}
 
 	return result.WrapSuccess(true)
@@ -126,16 +126,16 @@ func Remove(path string) result.Wrap[bool] {
 
 func RemoveAll(path string) result.Wrap[bool] {
 	if len(path) == 0 {
-		return result.WrapFailure[bool](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[bool](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path))
 	}
 
 	err := os.RemoveAll(path)
 	if err != nil {
 		if os.IsPermission(err) {
-			return result.WrapFailure[bool](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+			return result.WrapFailure[bool](appfault.WrapWithPath(errtype.Forbidden, err, "permission denied", path))
 		}
 
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to remove path: "+path))
+		return result.WrapFailure[bool](appfault.WrapWithPath(errtype.IO, err, "failed to remove path", path))
 	}
 
 	return result.WrapSuccess(true)
@@ -147,20 +147,20 @@ func ReadFile(path string) result.Wrap[[]byte] {
 
 func Stat(path string) result.Wrap[os.FileInfo] {
 	if len(path) == 0 {
-		return result.WrapFailure[os.FileInfo](appfault.New(errtype.Validation, "path cannot be empty"))
+		return result.WrapFailure[os.FileInfo](appfault.NewWithVar(errtype.Validation, "path cannot be empty", "path", path))
 	}
 
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return result.WrapFailure[os.FileInfo](appfault.Wrap(errtype.NotFound, err, "file not found: "+path))
+			return result.WrapFailure[os.FileInfo](appfault.WrapWithPath(errtype.NotFound, err, "file not found", path))
 		}
 
 		if os.IsPermission(err) {
-			return result.WrapFailure[os.FileInfo](appfault.Wrap(errtype.Forbidden, err, "permission denied: "+path))
+			return result.WrapFailure[os.FileInfo](appfault.WrapWithPath(errtype.Forbidden, err, "permission denied", path))
 		}
 
-		return result.WrapFailure[os.FileInfo](appfault.Wrap(errtype.IO, err, "failed to stat file: "+path))
+		return result.WrapFailure[os.FileInfo](appfault.WrapWithPath(errtype.IO, err, "failed to stat file", path))
 	}
 
 	return result.WrapSuccess(info)
@@ -205,7 +205,7 @@ func ExecuteOp(
 	if len(data) > 0 {
 		_, writeErr := file.Write(data)
 		if writeErr != nil {
-			return result.WrapFailure[[]byte](appfault.Wrap(errtype.IO, writeErr, "failed to write during op: "+path))
+			return result.WrapFailure[[]byte](appfault.WrapWithPath(errtype.IO, writeErr, "failed to write during op", path).WithVar("op", op.Name()).WithVar("dataBytesLen", len(data)))
 		}
 	}
 
