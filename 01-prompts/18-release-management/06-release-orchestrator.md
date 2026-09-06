@@ -101,7 +101,7 @@ The release orchestrator strictly implements this end-to-end Git workflow:
 
 ## Hard Rules & Pre-Flight Checks
 
-- [ ] Repository must start with a clean working tree (`git status`). Commit or stash uncommitted changes before orchestrating.
+- [ ] You MUST resolve the Git state by committing any outstanding/current files on the working branch BEFORE running the orchestrator script. The orchestrator script will NOT stage all changes; it will only stage version-related files (`version.json`, `package.json`, `changelog.md`, `readme.md`).
 - [ ] No explicit boolean checks (`if is_success == True:` is banned; use `if is_success:`).
 - [ ] All filenames must be strictly lowercase (e.g. `readme.md`, `changelog.md`).
 - [ ] Relative Git paths only (no `file:///` URIs or absolute filesystem paths).
@@ -113,12 +113,13 @@ The release orchestrator strictly implements this end-to-end Git workflow:
 ## Actionable Execution Checklist
 
 - [ ] 1. Identify starting branch: `git rev-parse --abbrev-ref HEAD`.
-- [ ] 2. Check for `03-ai-scripts/29-release-orchestrator.py`. If missing, create it.
-- [ ] 3. Check for bump version script (`scripts/bump-version.mjs` or `.lovable/release/bump_versions.py`). If missing, bootstrap or let orchestrator handle in-place updates.
-- [ ] 4. Run `python 03-ai-scripts/29-release-orchestrator.py --tier <tier> --scope "<scope>"`.
-- [ ] 5. Verify that commit `release: vX.Y.Z` exists.
-- [ ] 6. Verify that branch `release/vX.Y.Z` points to the release commit.
-- [ ] 7. Verify that tag `vX.Y.Z` exists on the release commit.
-- [ ] 8. Verify that release branch and tag were pushed to remote.
-- [ ] 9. Verify that the active git branch is restored to the starting branch (`git branch --show-current`).
-- [ ] 10. Output release summary detailing starting branch, version bump, release branch, tag, and restored active branch.
+- [ ] 2. Resolve the Git state by committing any outstanding/current files on the working branch before proceeding.
+- [ ] 3. Check for `03-ai-scripts/29-release-orchestrator.py`. If missing, create it.
+- [ ] 4. Check for bump version script (`scripts/bump-version.mjs` or `.lovable/release/bump_versions.py`). If missing, bootstrap or let orchestrator handle in-place updates.
+- [ ] 5. Run `python 03-ai-scripts/29-release-orchestrator.py --tier <tier> --scope "<scope>"`.
+- [ ] 6. Verify that commit `release: vX.Y.Z` exists.
+- [ ] 7. Verify that branch `release/vX.Y.Z` points to the release commit.
+- [ ] 8. Verify that tag `vX.Y.Z` exists on the release commit.
+- [ ] 9. Verify that release branch and tag were pushed to remote.
+- [ ] 10. Verify that the active git branch is restored to the starting branch (`git branch --show-current`).
+- [ ] 11. Output release summary detailing starting branch, version bump, release branch, tag, and restored active branch.

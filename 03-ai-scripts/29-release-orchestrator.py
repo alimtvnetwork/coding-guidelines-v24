@@ -253,10 +253,7 @@ def stage_and_commit_release(next_version, scope, dry_run=False):
         print(f"[DRY RUN] Would stage changes and commit: '{commit_msg}'")
         return "dryrun_commit_sha"
 
-    # Stage modified files
-    run_cmd(["git", "add", "-u"])
-
-    # If any specific version file is untracked, add it
+    # Stage only release-specific files
     for vf in [VERSION_JSON, PACKAGE_JSON, CHANGELOG_MD, README_MD]:
         if vf.is_file():
             run_cmd(["git", "add", str(vf)])
@@ -278,9 +275,10 @@ def create_release_branch_and_tag(next_version, commit_sha, dry_run=False):
         print(f"[DRY RUN] Would create branch '{branch_name}' and tag '{tag_name}' at {commit_sha}")
         return branch_name, tag_name
 
-    # Create/update release branch pointing to the release commit
+    # Switch to the new release branch pointing to the release commit
     run_cmd(["git", "branch", "-f", branch_name, commit_sha])
-    print(f"[*] Created release branch: {branch_name} -> {commit_sha[:8]}")
+    run_cmd(["git", "checkout", branch_name])
+    print(f"[*] Checked out release branch: {branch_name} -> {commit_sha[:8]}")
 
     # Create annotated tag
     run_cmd(["git", "tag", "-a", tag_name, "-m", f"Release {tag_name}", commit_sha])
