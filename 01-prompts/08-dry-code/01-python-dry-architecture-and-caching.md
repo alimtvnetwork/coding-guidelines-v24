@@ -193,3 +193,6 @@ AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildI
 | **Codebase Topology Routing**| `python 03-ai-scripts/18-codebase-topology-discoverer.py --query <db\|backend\|go>` | **<1ms** |
 | **Safe Artifact Removal**| `python 03-ai-scripts/19-artifact-remover.py --clean-pycache --dry-run` | **~10ms** |
 | **Plan Consolidation**| `python 03-ai-scripts/20-plan-consolidator.py --dry-run` | **~12ms** |
+
+> [!IMPORTANT]
+> **If any fast reader script (e.g. `17-fast-file-reader.py`) is missing:** You must immediately recreate it using Python standard libraries (`os`, `sys`, `pathlib`, `re`, `argparse`, `json`). It MUST support flags: `--list-folder <path> [--ext .md,.ts]`, `--read-file <path> [--max-bytes N]`, and `--search-pattern "<regex>" [--path <dir>]`. Ensure strict UTF-8 output (`sys.stdout.reconfigure(encoding="utf-8")`) and implement local caching.

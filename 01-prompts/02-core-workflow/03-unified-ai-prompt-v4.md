@@ -23,7 +23,8 @@ Read and synthesize existing repository context from the Lovable memory folder a
 
 Before producing any report or analysis, the AI must:
 
-1. Scan the repository tree rapidly using `python 03-ai-scripts/11-fast-file-scanner.py` or `python 03-ai-scripts/17-fast-file-reader.py` (which leverage pre-warmed `tmp/cache/` in <15ms) instead of slow manual shell scans. Do not read contents inside folders marked skipped, ignored, deprecated, generated, archived, or otherwise excluded.
+1. Scan the repository tree rapidly using `python 03-ai-scripts/17-fast-file-reader.py` (which leverages pre-warmed `tmp/cache/` in <15ms) instead of slow manual shell scans. Do not read contents inside folders marked skipped, ignored, deprecated, generated, archived, or otherwise excluded.
+   - **If the script is missing:** Immediately recreate it (`03-ai-scripts/17-fast-file-reader.py`) using Python standard libraries. It MUST support flags: `--list-folder <path> [--ext .md,.ts]`, `--read-file <path> [--max-bytes N]`, and `--search-pattern "<regex>" [--path <dir>]`. Ensure strict UTF-8 output (`sys.stdout.reconfigure(encoding="utf-8")`) and implement local caching.
 2. Read workflow memory - specifically `.lovable/plan.md` - to understand what has been done and what is pending. This avoids repeated work.
 3. Read all relevant memory files under `.lovable/memory/`, including workflow, suggestions, rules, decisions, history, issue references, and any protocol or process files present.
 

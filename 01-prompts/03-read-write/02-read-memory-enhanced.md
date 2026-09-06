@@ -37,12 +37,27 @@ If you cannot do that, keep reading. Do not start work.
 
 ## Reading Strategy: Fast Cached Tools & Autonomous Looping
 
-The `.lovable/` folder, specs, and entire codebase can be massive. To process this information with zero blind spots and sub-second latency:
+The `.lovable/`, `02-spec/`, and knowledge base folders can be massive. To process this information with zero blind spots and sub-second latency:
+
+> [!TIP]
+> **FAST KNOWLEDGE BASE & FILE READING (CRITICAL MANDATE):**
+> Whenever you need to read the knowledge base, scan directories, find something, or read file contents, you MUST use the high-performance Python reader script `03-ai-scripts/17-fast-file-reader.py` instead of generic tools.
+> 
+> **How it works:**
+> - It is a standalone, dependency-free Python script designed for AI agents that provides sub-millisecond file reading and directory exploration.
+> - It leverages `tmp/cache/` (or `__pycache__` style internal memoization) for instant lookups (<1ms) and automatically falls back to live disk scanning.
+> 
+> **If the script is missing (How to recreate it):**
+> If `03-ai-scripts/17-fast-file-reader.py` is not found, you must immediately recreate it using only Python standard libraries (`os`, `sys`, `pathlib`, `re`, `argparse`, `json`).
+> - **Requirements:** Import any shared constants from `03-ai-scripts/02-shared-engine.py` if present. Ensure strict UTF-8 encoding (`sys.stdout.reconfigure(encoding="utf-8")`). Implement 2-tier caching for repeated calls.
+> - **Core CLI Flags to implement:**
+>   - `--list-folder <folder_path> [--ext .md,.ts]`: Recursively lists files matching extensions.
+>   - `--read-file <file_path> [--max-bytes N]`: Fast content extraction with bounded limits.
+>   - `--search-pattern "<regex_term>" [--path <dir>]`: Rapid content searching using compiled regex.
 
 1. Fast Cached Directory Discovery:
-   - Use `python 03-ai-scripts/11-fast-file-scanner.py --path <dir> [--ext <extensions>]` or `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` to enumerate repository structures in <15ms via `tmp/cache/`.
+   - Use `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` to enumerate repository structures in <15ms via `tmp/cache/`.
    - Use `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>" [--path <dir>] [--ext <extensions>]` for parallel multi-threaded content grepping using pre-compiled regexes.
-   - Use `python 03-ai-scripts/03-file-manipulator.py lowercase <dir>` or `fix-encoding <dir>` for rapid mass file management.
 
 2. Pre-Flight Script Authoring Checklist:
    - Inspect `03-ai-scripts/02-shared-engine.py` for centralized constants, `RegexPatternType` Enums with PascalCase members, and lazy regex memoization.
