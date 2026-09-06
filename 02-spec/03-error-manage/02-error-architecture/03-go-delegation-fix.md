@@ -1,6 +1,5 @@
 # Go Backend Fix: Missing Delegation Fields
 
-
 **Version:** 3.2.0
 **Last Updated:** 2026-04-16
 

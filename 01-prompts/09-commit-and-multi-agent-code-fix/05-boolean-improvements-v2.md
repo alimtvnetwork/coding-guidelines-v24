@@ -1,7 +1,5 @@
 # Boolean Optimization & Complexity Reduction (v2) — Coding Guideline (must follow)
 
-
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -188,8 +186,6 @@ This verification happens ONCE at the very end, after all commits and pushes are
 - Finish your job ONLY when everything is green, pushed, and verified.
 
 Update the memory so this mistake is not repeated.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

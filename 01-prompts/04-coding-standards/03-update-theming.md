@@ -1,6 +1,5 @@
 # Theme System Refactoring & CSS Variables Update — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -29,7 +28,6 @@ All theming changes must be centralized in the configuration files. No inline st
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

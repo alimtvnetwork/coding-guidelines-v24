@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `consolidate-plans`, `consolidate completed plans`, `clean completed plans`, `resequence completed plans`, `merge plans`, `archive completed plans`, `cleanup plans completed`, `memory consolidation`, `backup and consolidate plans`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -35,7 +34,6 @@ N = total self-loop steps budget that the agents will perform.
 17. [ ] /learn Ingest `02-spec/02-coding-guidelines/08-file-folder-naming/` for lowercase naming and continuous file sequencing.
 18. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 19. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Create Backup Branch, Scan Completed Plans, Cluster by Domain, Spec in .lovable/plans/pending/, Subtasks)

@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-enums`, `cg-constants`, `cg-execute enums`, `audit constants`, `fix enums`, `eliminate magic strings`, `eliminate magic numbers`, `enforce enum suffix`, `constants and enums audit`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -33,7 +32,6 @@ N = total self-loop steps budget that the agents will perform.
 15. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Codebase for Enum/Constant Violations, Write .lovable/plans/pending/ Spec, Create .lovable/plans/subtasks/, Verify/Create Linter Hook)
@@ -392,7 +390,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Dedicated Definition Files:** All enums/constants housed in dedicated modules.
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `02-spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines.md`.
 
-
 1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-enum-guidelines.py` and `node linter-scripts/check-enum-and-boolean.mjs` exited with code 0.
@@ -408,7 +405,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Master Guidelines: I have fully read and strictly enforced `02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md` and `.lovable/coding-guidelines.md`.
 - [ ] Enum Suffix: Every enum ends with `Type`.
 - [ ] Zero Magic Literals: Zero raw magic strings or magic numbers at business logic call sites.
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

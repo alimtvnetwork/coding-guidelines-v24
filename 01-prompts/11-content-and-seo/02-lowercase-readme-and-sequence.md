@@ -1,6 +1,5 @@
 # Lowercase Filename Enforcement & Sequence Re-Ordering — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -50,8 +49,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 title: Lowercase Readme And Sequence Slugs
 slug: lowercase-readme-and-sequence
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

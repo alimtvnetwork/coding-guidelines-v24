@@ -2,7 +2,6 @@
 
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
-
 > **Purpose:** Define enum patterns, coding style, and naming conventions for WordPress plugins.
 
 ---

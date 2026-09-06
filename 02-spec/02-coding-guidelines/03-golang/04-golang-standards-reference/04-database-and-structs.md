@@ -26,7 +26,6 @@ type Project struct {
 
 ---
 
-
 ---
 
 ## Database Wrapper — `pkg/dbutil`
@@ -58,7 +57,6 @@ res := dbutil.Exec(ctx, db, query, args...)
 ```
 
 ---
-
 
 ---
 

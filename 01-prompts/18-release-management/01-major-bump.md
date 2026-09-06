@@ -1,6 +1,5 @@
 # Major Version Bump — Release Management (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -38,7 +37,6 @@ You must update `version.json`, `changelog.md`, and `readme.md` at a minimum dur
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 #
-
 
 ## Strict In-Repository Execution & `.lovable/` Bounding Mandate
 
@@ -93,7 +91,6 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] Execute `git commit -m "chore(release): bump version to <new_version>"`
 - [ ] Execute `git push`
 - [ ] AVOID: Do NOT create a git tag (e.g., `git tag`). Tags are managed externally by Git Map.
-
 
 ## Install Section (Non-Negotiable)
 

@@ -30,9 +30,6 @@ Run again if said: go, continue, or next
 
 5. Violation of any rule below is auto-reject on the same tier as RULE 0.
 
-
-
-
 ## Anti-Hallucination & Relative Path Rules
 
 > [!CAUTION]
@@ -133,7 +130,6 @@ Every time you return a response or complete a loop iteration, explicitly output
 - [x] Magic strings/numbers extracted to constants.
 - [x] Action Summary Checklist (Anti-Hallucination): I have output a detailed `- [x]` checklist summarizing exactly what I accomplished this turn to ensure no steps were hallucinated or skipped (e.g. `- [x] Created schema`, `- [x] Pinned README`).
 
-
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
 - [ ] `.gitignore` verified to exclude `.lovable/temp/` and garbage collection executed.
@@ -145,12 +141,6 @@ Every time you return a response or complete a loop iteration, explicitly output
 - [ ] Completed task files `mv`'d and `.lovable/plans/01-index.md` updated.
 - [ ] Fast-forward commit created and pushed without rewriting git history.
 - [ ] Output window explicitly lists "Done", "Pending", and remaining task names.
-
-
-
-
-
-
 
 ## Actionable Items & Checklist
 
@@ -203,7 +193,6 @@ If you write this excuse, you are a lazy, stupid fuck and you are violating RULE
 > [!CAUTION]
 > **This is a WOR (Without Release) workflow.**
 > You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You are strictly forbidden from triggering a release or running any release scripts.
-
 
 ## MUST FOLLOW NON-NEGOTIABLE
 

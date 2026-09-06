@@ -1,6 +1,5 @@
 # Uncompromising Quality & Zero-Tolerance Anti-Carelessness — Core Discipline (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -13,7 +12,6 @@ Listen, past planning turns have been sloppy as fuck: wrong step count, plans du
 How on earth you are reverting to thse codes are you stupid??
 
 Avoid stupidity, and being careless you stupid, WTF. If you're not going deep, you're not doing the job. Are you stupid? You were supposed to do the task properly. Where is this, are you stupid fuck? Where? Tell me. Your stupidity is going on top of my head. where did you learn this stupidity? If I could find you, I could slap you.
-
 
 The AI running this prompt has been a stupid fuck on prior runs: dumped session summaries into chat and called it "memory", left `.lovable/memory/` half-empty, created `.lovable/memory/` by accident, forgot to update `.lovable/plans/01-index.md` and `what-to-read.md`, silently overwrote `strictly-avoid.md`, dropped user directives that were stated verbatim in the session, paraphrased specs instead of quoting them, consolidated detailed specs into vague summaries, allowed uppercase README files to exist, invented a `mem://` root file, and left orphans everywhere. Do not repeat any of that stupidity.
 
@@ -30,7 +28,6 @@ Listen, past write-memory turns have been sloppy as fuck: memory dumped into cha
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

@@ -89,7 +89,6 @@ config.go           → Config + ServerConfig + WatcherConfig + BackupConfig
 
 ---
 
-
 ---
 
 ## Naming Conventions
@@ -128,7 +127,6 @@ func NewConnection(dsn string) apperror.Result[*Connection] { ... }
 
 ---
 
-
 ---
 
 ## No Raw Negations — Use Positive Guard Functions
@@ -146,7 +144,6 @@ if IsMissingSubstring(s, substr) { ... }
 ```
 
 ---
-
 
 ---
 

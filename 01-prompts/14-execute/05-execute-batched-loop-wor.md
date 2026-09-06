@@ -1,6 +1,5 @@
 # Batched Loop Execution Without Release (WOR) — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -36,7 +35,6 @@ Before executing the tasks below, you must check if this prompt is already insta
 - [ ] **Index Documentation:** I have updated `03-ai-scripts/01-index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
 5. Violation of any rule below is auto-reject on the same tier as RULE 0.
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
@@ -146,7 +144,6 @@ Every time you return a response or complete a loop iteration, explicitly output
 - [x] Magic strings/numbers extracted to constants.
 - [x] Action Summary Checklist (Anti-Hallucination): I have output a detailed `- [x]` checklist summarizing exactly what I accomplished this turn to ensure no steps were hallucinated or skipped (e.g. `- [x] Created schema`, `- [x] Pinned README`).
 
-
 ---
 
 ## Continuous 2-Phase Self-Loop & 2-Agent Concurrency Architecture
@@ -187,8 +184,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Completed task files `mv`'d and `.lovable/plans/01-index.md` updated.
 - [ ] Fast-forward commit created and pushed without rewriting git history.
 - [ ] Output window explicitly lists "Done", "Pending", and remaining task names.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
@@ -259,7 +254,6 @@ If you write this excuse, you are a lazy, stupid fuck and you are violating RULE
 > [!CAUTION]
 > **This is a WOR (Without Release) workflow.**
 > You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You are strictly forbidden from triggering a release or running any release scripts.
-
 
 ## MUST FOLLOW NON-NEGOTIABLE
 

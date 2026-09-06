@@ -1,6 +1,5 @@
 # Subtask Naming Normalization & Sequence Repair — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -81,8 +80,6 @@ Listen, past turns have been sloppy as fuck: wrong file names, leaving broken re
 - [ ] Update `.lovable/memory/01-index.md` with the new memory file.
 - [ ] Audit your work against the Master Consolidated Guide, Code Style, Boolean Conditions, and Variable Naming rules.
 - [ ] Make a single logical Git commit including all changes and push it to the repository immediately.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

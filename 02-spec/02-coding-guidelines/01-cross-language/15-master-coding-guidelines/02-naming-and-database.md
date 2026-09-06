@@ -27,7 +27,6 @@ This is the **master reference**. Every rule here is enforced across all languag
 
 ---
 
-
 ---
 
 ## 1. Naming Conventions
@@ -125,7 +124,6 @@ UserProfile.tsx      →  contains function UserProfile
 - Go `runtime.GOOS` comparisons (`"windows"`, `"darwin"`)
 
 ---
-
 
 ---
 

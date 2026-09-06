@@ -1,11 +1,9 @@
 # React Component Modernization & Responsive Styling — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 When applying UI fixes or updates to a React component, follow these rules strictly:
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

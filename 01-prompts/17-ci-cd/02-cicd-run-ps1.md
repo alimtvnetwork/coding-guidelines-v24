@@ -1,11 +1,9 @@
 # PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 You are responsible for creating or fixing CI/CD pipelines (e.g., GitHub Actions workflows) and dynamic execution scripts (e.g., `run.ps1`, `run.sh`, `run.config.json`).
-
 
 ## No Automatic Releases (Strict Policy)
 
@@ -204,8 +202,6 @@ After completing the pipeline and run script creation, you MUST follow this chec
 - [ ] Audit that coding guidelines from the aspect folder and error manage folder have been followed across all changed files.
 - [ ] Finish the job only when everything is green, pushed, and fully verified.
 
-
-
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 
 Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/XX-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
@@ -214,7 +210,6 @@ Before you write any code to fix the problem, you MUST document the issue in `.l
 2. **How it happened:** The technical execution flow that triggered the bug.
 3. **Root Cause:** The exact file, line, and dependency responsible for the failure.
 4. **Code Fix:** The exact code snippets showing what needed to be changed to fix the root cause.
-
 
 ## STRICT AVOIDANCE: Never Disable CLI Linting, Static Analysis, or CI/CD Checks (No Shortcut Cheating)
 

@@ -68,7 +68,6 @@ This mirrors industry best practices. For example, .NET's `char` type exposes `I
 
 ---
 
-
 ---
 
 ## Principle 2: Never Use Negative Words in Boolean Names

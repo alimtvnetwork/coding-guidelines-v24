@@ -118,7 +118,6 @@ func Something() int {
 func Something() int {
     doSomething()
 
-
     return constants.One
 }
 ```

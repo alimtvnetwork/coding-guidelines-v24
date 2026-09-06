@@ -339,8 +339,6 @@ sed -i "s|VERSION_PLACEHOLDER|${VERSION}|g; s|REPO_PLACEHOLDER|${GITHUB_REPOSITO
 
 ---
 
-
-
 ---
 
 ### Issue #13 — Release Skew & Out-of-Band Tagging
@@ -375,7 +373,6 @@ A `git tag vX.Y.Z` was pushed out-of-band to trigger a release before `version.j
 **Prevention rule:**
 
 🔴 **Source control dictates the tag; tags NEVER dictate source control.** Always run `npm run sync` and push to the `main` branch before creating any release tag.
-
 
 ## Standing Rules (apply to every CI/CD change)
 

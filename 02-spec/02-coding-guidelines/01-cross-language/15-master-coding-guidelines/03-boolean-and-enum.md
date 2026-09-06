@@ -82,7 +82,6 @@ These Go patterns are **exempt** from the no-negation rule:
 
 ---
 
-
 ---
 
 ## 3.1 `isDefined` / `isDefinedAndValid` — Positive Null/Existence Guards
@@ -155,7 +154,6 @@ if (isDefined(config)) {
 | hasError | `result.HasError()` | `$result->hasError()` | Operation failed |
 
 ---
-
 
 ---
 

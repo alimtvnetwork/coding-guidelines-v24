@@ -37,7 +37,6 @@
 
 ---
 
-
 ---
 
 ## Database Wrapper — `TypedQuery`

@@ -1,6 +1,5 @@
 # Inventory Audit of Pending Tasks — Read-Only Proposal (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -169,8 +168,6 @@ Would you like to start the continuous self-loop to execute and resolve these pe
 - [ ] DO NOT use negative question phrasing or double negatives.
 
 ---
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

@@ -1,6 +1,5 @@
 # Social Media Content Generation & Copywriting — Content Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -35,8 +34,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 ## Must Follow
 
 Do not generate generic marketing fluff. Keep it punchy, relevant to developers/tech audience, and directly address the value proposition.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

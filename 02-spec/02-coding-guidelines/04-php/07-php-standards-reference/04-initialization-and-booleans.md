@@ -39,7 +39,6 @@ class MyPlugin {
 
 ---
 
-
 ---
 
 ## Boolean Logic
@@ -123,7 +122,6 @@ if ($hasPermission) { ... }
 3. **Never create new trivial wrapper helpers** — if the check is a single native operator (`!`, `empty()`, `=== null`), use PHP directly. Only create helpers for multi-step checks with safety guards.
 
 ---
-
 
 ---
 

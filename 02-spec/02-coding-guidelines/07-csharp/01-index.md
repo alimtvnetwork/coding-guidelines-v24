@@ -51,7 +51,6 @@ C#-specific coding standards that extend the [cross-language guidelines](../01-c
 | 98-changelog.md |
 | 99-consistency-report.md |
 
-
 | 01-naming-and-conventions.md |
 | 02-method-design.md |
 | 03-error-handling.md |

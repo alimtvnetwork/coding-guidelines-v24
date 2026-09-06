@@ -627,7 +627,6 @@ The ecosystem uses **two complementary error code systems**:
 
 ---
 
-
 ## AI Implementation Examples & Non-Negotiable Checklist (`auk-go/errorwrapper`)
 
 To ensure AI agents properly construct the `errtype` structure without hallucination, you MUST use the following files from `auk-go/errorwrapper` as your canonical reference. **Do not just copy URLs; you must read them and strictly implement the following non-negotiable checklist for each file.**

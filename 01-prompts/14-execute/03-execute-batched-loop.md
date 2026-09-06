@@ -1,6 +1,5 @@
 # Batched Loop Execution with 3 Sub-Agents — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -36,7 +35,6 @@ Before executing the tasks below, you must check if this prompt is already insta
 - [ ] **Index Documentation:** I have updated `03-ai-scripts/01-index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
 5. Violation of any rule below is auto-reject on the same tier as RULE 0.
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
@@ -197,8 +195,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Completed task files `mv`'d and `.lovable/plans/01-index.md` updated.
 - [ ] Fast-forward commit created and pushed without rewriting git history.
 - [ ] Output window explicitly lists "Done", "Pending", and remaining task names.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

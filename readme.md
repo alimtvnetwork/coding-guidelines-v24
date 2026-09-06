@@ -76,7 +76,6 @@
 
 <p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="quickstart.md">quickstart.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines.md"><code>.lovable/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
 
-
 <h2 align="center">⚡ Install in One Line</h2>
 
 <p align="center">
@@ -167,7 +166,6 @@ curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24
 <p align="center">
   <sub>17 slides · runs offline by double-clicking <code>index.html</code> · MIT licensed · source under <a href="slides-app/"><code>slides-app/</code></a></sub>
 </p>
-
 
 ### 🪟 Windows · PowerShell
 
@@ -267,7 +265,6 @@ Every installer below copies the listed **folders** (recursively, preserving str
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
 
-
 <details>
 <summary><strong>error-manage</strong>, Error Management Spec · script: <a href="error-manage-install.sh"><code>error-manage-install.sh</code></a> / <a href="error-manage-install.ps1"><code>error-manage-install.ps1</code></a></summary>
 
@@ -345,7 +342,6 @@ Two symptoms come from the same root cause — the cached / fetched copy of the 
 </details>
 
 </details>
-
 
 <details>
 <summary><strong>linters</strong>, Linters + CI/CD Linter Pack · script: <a href="linters-install.sh"><code>linters-install.sh</code></a> / <a href="linters-install.ps1"><code>linters-install.ps1</code></a></summary>
@@ -598,7 +594,6 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 ---
 
-
 <h2 align="center">🧭 Which Path Should I Follow?</h2>
 
 <p align="center"><sub>This repo offers many bundles, installers, and spec layers. Pick the path that matches your role today — you can always graduate to a deeper level later (see <a href="#-adoption-levels">Adoption Levels</a>).</sub></p>
@@ -614,7 +609,6 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 <p align="center"><sub>Not sure? Start with the 10 Practical Rules and the Consolidated bundle. That alone covers ~80% of the daily value.</sub></p>
 
 ---
-
 
 <h2 align="center">📈 Adoption Levels</h2>
 
@@ -821,7 +815,6 @@ try {
 ```
 
 ---
-
 
 <h2 align="center">🟢🔴 Bad vs Good — Quick Examples</h2>
 
@@ -1435,7 +1428,6 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <a href="01-prompts/01-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
 </p>
 
-
 <p align="center"><strong>"Which bundle?"</strong>, fetch <code>bundles.json</code>, match <code>intent</code>+<code>audience</code> to a bundle <code>name</code>, return its one-liner.</p>
 
 ### ✅ AI Agent Checklist
@@ -1464,7 +1456,6 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 10. **Summarize** what changed, what was tested, and what was *not* verified. Be explicit about uncertainty.
 
 <sub>Skipping any step silently is itself a CODE-RED violation. The full anti-hallucination rule set lives in <a href="02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><code>02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md</code></a> (34 rules, 5 language categories).</sub>
-
 
 ## 🛠️ Full-Repo Install Scripts
 
@@ -1650,11 +1641,9 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 - SS-02 tasks 58-59: React types-and-generics pair. Slide 56 `REACT-010` (hard) requires named generic parameters (`TItem`, `TKey`) and named aliases for every composite type; bare `T`/`U`/`K`/`V` and inline `Map`/`Array`/object composites are banned in application code. Slide 57 `REACT-011` (hard) moves prop types and event handler types into a sibling `types.ts`, with shared cross-component types in `src/types/<domain>.ts`; anonymous prop object literals on component signatures are rejected. Enforced by `@typescript-eslint/naming-convention` (`typeParameter` `^T[A-Z]`), custom `no-inline-composite` and `no-inline-props-type` rules, and a `pnpm gen:component` scaffold. Per 02-spec/17/31 lines 110-111. 59 slides validated.
 
-
 ### What's new in v5.107.0
 
 - SS-02 tasks 56-57: React hook-shape pair. Slide 54 `REACT-008` (hard) requires every custom hook to start with `use`, return a named object type (never a bare tuple), and call hooks unconditionally (guards live inside the hook body). Slide 55 `REACT-009` (hard) bans tuples as public shapes: every exported hook return, prop bundle, reducer state, reducer action (with `kind: 'PascalCase'` discriminant), context value, and argument bag gets a named type. Only the built-in `useState` pair is tolerated. Enforced by `eslint-plugin-react-hooks`, `@typescript-eslint/consistent-type-definitions`, and custom `hook-name-prefix` / `hook-return-named-type` / `no-tuple-return` / `action-shape` rules. Per 02-spec/17/31 lines 108-109. 57 slides validated.
-
 
 ### What's new in v5.106.0
 
@@ -1680,16 +1669,13 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 - SS-02 task 45: Join-table naming and composite PK (`SCHEMA-003`, hard). Join tables are `{A}{B}` with composite PK `({A}Id, {B}Id)`, no surrogate, no `Description`/`Notes`. `Status`/`Type`/`Category` resolve through a registered enum + join table (time key for history), never a free-form string column. Per 02-spec/17/31 line 91. 45 slides validated.
 
-
 ### What's new in v5.97.0
 
 - SS-02 task 44: `{TableName}Id` INTEGER PKs (`SCHEMA-002`, hard). Every PK is `{Table}Id INTEGER PRIMARY KEY AUTOINCREMENT`, FKs reuse the exact PK name, no UUIDs, no bare `id`. Enforced by migration linter, FK-name linter, and PR checklist; public unguessable identifiers move to `PublicId TEXT UNIQUE`. Per 02-spec/17/31 line 90 and `mem://architecture/database-schema`. 44 slides validated.
 
-
 ### What's new in v5.96.0
 
 - SS-02 task 43: Data & Schema chapter opener (`SCHEMA-001`, hard) opens a new `data-schema` section. PascalCase tables/types/entities/JSON keys, camelCase columns/fields, single entity name across DB, API, and TypeScript. Per 02-spec/17/31 lines 87 to 89. 43 slides validated.
-
 
 ### What's new in v5.95.0
 
@@ -1848,7 +1834,6 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 ### What's new in v5.51.0
 
-
 - **Slides deck a11y guardrail** — new [`slides-app/tests/a11y.spec.ts`](slides-app/tests/a11y.spec.ts) runs `@axe-core/playwright` against every slide (`#/0` … `#/15`) with WCAG 2.1 A/AA rules. Wired into [`.github/workflows/slides-smoke.yml`](.github/workflows/slides-smoke.yml) alongside the existing boot smoke test. Closes Plan SS-01 step 5.
 - **Rationale over visual-regression baselines** — a11y scans catch contrast, ARIA, and heading-order regressions with no baseline PNGs to maintain (avoids repo bloat after the 45 MB diet in v5.47.0).
 
@@ -1878,7 +1863,6 @@ Tracks every `.mmd` source change and the parser rule that motivated it. Use thi
 | [`02-spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd`](02-spec/12-cicd-pipeline-workflows/images/ci-pipeline-flow.mmd) | Quoted every node label so tokens like `actions/checkout@v6` parse cleanly (`A[actions/checkout@v6]` → `A["actions/checkout@v6"]`) | **Quoting rule for special tokens** — mermaid-v11's flowchart lexer rejects `@`, `:`, `(`, `)`, `/` and other punctuation in unquoted node labels. Always wrap labels containing non-alphanumerics in `"..."`. |
 
 > **Pre-render gate:** `npm run diagrams:validate` (lint-ci step 14) parses every `.mmd` against mermaid v11 before PNGs are committed, so future regressions of either rule fail CI instead of slipping through.
-
 
 ---
 
@@ -1912,7 +1896,6 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
     <img src="public/images/gemini-review.png" alt="Gemini neutral review excerpt: Impact on Developers and Impact on AI Development" width="720"/>
   </a>
 </p>
-
 
 #### 1. *"PascalCase JSON keys are opinionated."*
 
@@ -2070,7 +2053,6 @@ The result: when an AI agent operates inside a repo following these rules, the g
 *This README is auto-stamped by [`scripts/sync-readme-stats.mjs`](scripts/sync-readme-stats.mjs). The numbers above are pulled from [`version.json`](version.json) on every `npm run sync`. Hand-editing the stamped values is safe but will be overwritten on the next sync.*
 
 ---
-
 
 ### Compiling & Syncing Prompts
 

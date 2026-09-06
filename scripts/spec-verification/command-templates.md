@@ -71,7 +71,6 @@ The recommended template for each common verification need:
 | `meta:full-ci` | Sync drift, lint, and unit tests all pass — equivalent to the merge-blocking CI gate. | `npm run sync && npm run lint && npm run test` |
 | `meta:spec-health` | Spec tree is structurally valid AND every internal cross-reference resolves. | `python3 linter-scripts/check-spec-folder-refs.py && python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .` |
 
-
 ---
 
 ## 3. Where each template is used

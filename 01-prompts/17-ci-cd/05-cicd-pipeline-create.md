@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `create-ci-cd`, `cicd-create`, `create cicd`, `setup cicd pipeline`, `build ci-cd pipeline`, `cicd create python`, `05-cicd-pipeline-create`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -31,7 +30,6 @@ N = total self-loop steps budget for end-to-end CI/CD creation and cross-platfor
 15. [ ] /learn Ingest `02-spec/17-consolidated-guidelines/18-cicd-pipeline-workflows.md` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. 150: Spec Ingestion, Python Automation Design, Local Runner Setup)

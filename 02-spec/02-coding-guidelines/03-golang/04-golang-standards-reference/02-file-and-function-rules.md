@@ -28,7 +28,6 @@ Every `.go` file MUST be named in **PascalCase** matching its primary definition
 
 ---
 
-
 ---
 
 ## File Size — Target 300 Lines (Soft Limit 400)
@@ -36,7 +35,6 @@ Every `.go` file MUST be named in **PascalCase** matching its primary definition
 Every `.go` file targets **300 lines**. Up to **400 lines is acceptable** but must include a top-of-file comment: `// NOTE: Needs refactor — exceeds 300-line target`.
 
 ---
-
 
 ---
 
@@ -68,7 +66,6 @@ func ProcessUpload(ctx context.Context, req UploadRequest) error {
 ```
 
 ---
-
 
 ---
 
@@ -103,7 +100,6 @@ if hasIssue {
 
 ---
 
-
 ---
 
 ## Abbreviation Casing — First Letter Only
@@ -135,7 +131,6 @@ Abbreviations in identifiers are treated as regular words — only capitalize th
 These interface method names are mandated by Go's standard library and MUST retain their original spelling. All other identifiers follow the abbreviation rule.
 
 ---
-
 
 ---
 

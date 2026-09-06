@@ -2,7 +2,6 @@
 
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
-
 > **Parent:** [Error Modal Spec](../01-index.md)
 > **Version:** 3.2.0
 > **Updated:** 2026-03-31
@@ -97,7 +96,6 @@ See [01-compact-report.md § Backend error.log.txt Section](./02-compact-report.
 | File |
 |------|
 | 99-consistency-report.md |
-
 
 ## Cross-References
 

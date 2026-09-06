@@ -56,6 +56,7 @@ Follow this sequence before and during any repository modification task:
 | **28** | `28-go-preflight-ci.py` | Runs local Go test and golangci-lint preflight verification | ~35ms | `go`, `test`, `lint`, `preflight`, `ci-cd` |
 | **29** | `29-release-orchestrator.py` | Autonomous release lifecycle: bump, commit, release branch, tag, and original branch revert | ~20ms | `release`, `orchestrator`, `git-branch`, `tag`, `semver`, `revert-branch` |
 | **30** | `30-enum-generator.py` | Type-safe Go enum generator conforming to BaseEnum and NumberEnum | ~10ms | `go`, `enum`, `generator`, `base-enum`, `types` |
+| **31** | `31-md-gap-fixer.py` | Fixes multiple consecutive empty lines (3+ newlines) into exactly 1 empty line in markdown files | ~8ms | `markdown`, `formatting`, `newlines`, `gaps`, `cleanup` |
 
 ---
 

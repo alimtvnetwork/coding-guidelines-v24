@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-relative-paths`, `cg-execute relative-paths`, `audit relative paths`, `fix absolute paths`, `fix file paths`, `fix full paths`, `fix paths`, `relative paths audit`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -32,7 +31,6 @@ N = total self-loop steps budget that the agents will perform.
 14. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 16. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Codebase for Absolute Paths, Write .lovable/plans/pending/ Spec, Create .lovable/plans/subtasks/, Verify/Create Linter Hook)
@@ -142,7 +140,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `02-spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines.md`.
 
-
 1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-relative-paths.py` exited with code 0.
@@ -156,7 +153,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
 - [ ] Master Guidelines: I have fully read and strictly enforced `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines.md`.
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

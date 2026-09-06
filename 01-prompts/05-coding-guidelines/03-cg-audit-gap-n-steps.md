@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-audit`, `audit gap`, `cg audit gap`, `cg-audit-gap`, `audit coding guidelines`, `verify coding guidelines`, `cg-audit-gap-n-steps`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 

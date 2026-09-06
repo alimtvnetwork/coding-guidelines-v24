@@ -1,6 +1,5 @@
 # SEO Content Optimization & Meta Tag Auditing — Content Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -37,8 +36,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 ## Must Follow
 
 Do not add marketing jargon or filler. Focus strictly on technical SEO improvements and semantic HTML.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

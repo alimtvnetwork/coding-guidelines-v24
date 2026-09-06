@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-boolean`, `cg-execute boolean`, `audit boolean`, `fix boolean negatives`, `fix complex conditions`, `affirmative booleans`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -34,7 +33,6 @@ N = total self-loop steps budget that the agents will perform.
 16. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 17. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 18. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Codebase for Boolean Violations, Write .lovable/plans/pending/ Spec, Create .lovable/plans/subtasks/, Verify/Create Linter Hook)
@@ -357,7 +355,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Function Limits: <= 8 lines preferred, <= 15 lines max.
 - [ ] File Limits: <= 100 lines coding max (recommended <= 80 lines).
 - [ ] Anti-Compression: Zero single-line `if/else` or compressed whitespace tricks.
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

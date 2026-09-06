@@ -10,7 +10,6 @@
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
 - [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
 
-
 > **Spec Version:** 2.25.0
 > **Script Version:** 2.25.0
 > **Updated:** 2026-03-19

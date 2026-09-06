@@ -6,7 +6,6 @@ description: >-
 
 # Standards Compliance & Coding Rules Audit — V2 (Grounded & Multi-Language)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 

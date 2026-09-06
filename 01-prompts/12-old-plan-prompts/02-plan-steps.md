@@ -1,6 +1,5 @@
 # Legacy Step-by-Step Task Decomposition — Planning Spec (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -166,8 +165,6 @@ Coding tasks (Go, Python, PHP, TS, any backend):
 If any box is unchecked, do not reply. Fix it first.
 
 ---
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

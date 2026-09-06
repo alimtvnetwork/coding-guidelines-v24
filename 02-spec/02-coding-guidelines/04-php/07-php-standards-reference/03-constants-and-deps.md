@@ -63,7 +63,6 @@ $url = rest_url(REST_URL_UPLOAD);
 
 ---
 
-
 ---
 
 ## Dependency Checks
@@ -90,7 +89,6 @@ if (ErrorChecker::isInvalidPdoExtension()) {
 Throttle repeated initialization errors to prevent log bloat.
 
 ---
-
 
 ---
 

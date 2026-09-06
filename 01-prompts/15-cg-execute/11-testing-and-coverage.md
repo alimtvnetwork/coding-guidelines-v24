@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-test`, `cg-execute test`, `audit tests`, `add integration tests`, `enforce test coverage`, `write e2e tests`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -33,7 +32,6 @@ N = total self-loop steps budget that the agents will perform.
 15. [ ] /learn Ingest `02-spec/04-database-conventions/05-testing-strategy.md` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Function-by-Function, Write .lovable/plans/pending/ Spec, Create .lovable/plans/subtasks/, Verify/Create Coverage Hook)
@@ -258,7 +256,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Test Naming: Three-part convention strictly adhered to (`TestUnit_Scenario_Outcome`).
 - [ ] Zero Generic Test Names: Absolutely NO generic test names like `TestHandleComp100` or `Test1`.
 - [ ] Function Sizing: Functions decomposed to <= 8 lines before writing branch tests.
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

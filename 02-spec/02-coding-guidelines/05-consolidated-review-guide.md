@@ -161,7 +161,6 @@ When you need the opposite of a boolean, **do not negate** — use the inverse n
 6. **No `else` after `return`/`throw`/`continue`/`break`**.
 7. **Keep cyclomatic complexity low** — one path through the function, guard and exit early.
 
-
 ### Mandatory Linter Rules for Booleans
 
 To ensure these rules are not violated, the project's custom linter (e.g., `validate-guidelines.go`) MUST actively disable and flag the following patterns:

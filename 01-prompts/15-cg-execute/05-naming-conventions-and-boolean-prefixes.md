@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-naming`, `cg-execute naming`, `audit naming`, `fix boolean naming`, `fix naming conventions`, `fix ok boolean`, `affirmative naming`, `positive boolean naming`, `naming conventions audit`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -36,7 +35,6 @@ N = total self-loop steps budget that the agents will perform.
 18. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 19. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 20. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Codebase for Naming Violations, Write .lovable/plans/pending/ Spec, Create .lovable/plans/subtasks/, Verify/Create Linter Hook)
@@ -249,7 +247,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **PascalCase Acronyms:** All acronyms formatted as `UserId`, `ApiUrl`, `JsonData`.
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `02-spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines.md`.
 
-
 1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-enum-and-boolean.mjs` or `python linter-scripts/check-boolean-guidelines.py` exited with code 0.
@@ -265,7 +262,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Master Guidelines: I have fully read and strictly enforced `02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md`, `02-spec/02-coding-guidelines/01-cross-language/10-function-naming.md`, `02-spec/02-coding-guidelines/01-cross-language/11-key-naming-pascalcase.md`, `02-spec/02-coding-guidelines/01-cross-language/12-no-negatives.md`, and `.lovable/coding-guidelines.md`.
 - [ ] Zero Bare `ok`: All type assertions and map lookups use affirmative boolean names (`isAppErr`, `isFound`).
 - [ ] Positive Booleans & Inverted Guards: All booleans use affirmative names (`hasColors`, `hasPayload`); guard clauses invert condition (`if (!hasColors)`).
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

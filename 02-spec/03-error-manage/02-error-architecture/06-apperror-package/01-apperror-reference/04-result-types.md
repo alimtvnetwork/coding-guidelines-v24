@@ -52,7 +52,6 @@ func FailNew[T any](code, message string) Result[T]
 
 ---
 
-
 ---
 
 ## 4. ResultSlice[T] — Collection Wrapper
@@ -96,7 +95,6 @@ func FailSliceNew[T any](code, message string) ResultSlice[T]
 | Mutate | `Append(items...)` | — | Adds items; no-op if in error state |
 
 ---
-
 
 ---
 

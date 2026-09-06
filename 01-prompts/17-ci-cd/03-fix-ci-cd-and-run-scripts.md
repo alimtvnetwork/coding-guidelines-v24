@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `fix with RCA`, `FRCA : Fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`, `fix run scripts`, `force rebuild`, `force create`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -104,8 +103,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 Read and follow spec folders `02`, `03` and `04` before writing any code. Error management must be followed. Code must be DRY.
 
-
-
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 
 Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/XX-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
@@ -114,7 +111,6 @@ Before you write any code to fix the problem, you MUST document the issue in `.l
 2. **How it happened:** The technical execution flow that triggered the bug.
 3. **Root Cause:** The exact file, line, and dependency responsible for the failure.
 4. **Code Fix:** The exact code snippets showing what needed to be changed to fix the root cause.
-
 
 ## STRICT AVOIDANCE: Never Disable CLI Linting, Static Analysis, or CI/CD Checks (No Shortcut Cheating)
 

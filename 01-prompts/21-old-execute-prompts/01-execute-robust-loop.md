@@ -1,6 +1,5 @@
 # Resilient Multi-Agent Loop Execution — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -24,7 +23,6 @@
 - [ ] **Index Documentation:** I have updated `03-ai-scripts/01-index.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 
 4. Violation of any rule below is auto-reject on the same tier as RULE 0.
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
@@ -135,8 +133,6 @@ At the end of every single iteration of your execution loop:
 - [ ] Completed tasks listed out explicitly in the response.
 
 ---
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

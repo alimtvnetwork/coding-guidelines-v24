@@ -29,7 +29,6 @@ bool needs to have prefix and Id needs to be Id not ID, fix those
         },
     })
 
-
 this func hsould take the current object in the func to proceed with so that we can use other properties from that section ,clear>>>>
 ```
 

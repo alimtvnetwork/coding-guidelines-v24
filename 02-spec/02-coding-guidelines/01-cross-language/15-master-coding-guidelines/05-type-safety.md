@@ -32,7 +32,6 @@ func ProcessData(data PluginDetails) apperror.Result[PluginSummary] { ... }
 
 ---
 
-
 ---
 
 ## 7.1 Single Return Value Rule (Go)
@@ -117,7 +116,6 @@ Name the return struct after the operation + `Outcome` or `Output`:
 | `ValidateConfig` | `ValidationOutput` |
 
 ---
-
 
 ---
 

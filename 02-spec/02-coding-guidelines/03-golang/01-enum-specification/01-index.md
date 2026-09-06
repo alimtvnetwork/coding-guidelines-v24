@@ -2,7 +2,6 @@
 
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
-
 **Version:** 3.2.0
 **Status:** Complete
 **Updated:** 2026-04-16
@@ -11,7 +10,6 @@
 **Error Range:** N/A (Cross-cutting standard)
 
 ---
-
 
 ## Keywords
 
@@ -28,7 +26,6 @@
 | Ambiguity assigned | ✅ |
 | Keywords present | ✅ |
 | Scoring table present | ✅ |
-
 
 ## Purpose
 
@@ -150,7 +147,6 @@ internal/enums/
 | File |
 |------|
 | 99-consistency-report.md |
-
 
 ## Cross-References
 

@@ -10,9 +10,7 @@
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
 - [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
 
-
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
-
 
 **Version:** 3.2.0
 **Updated:** 2026-04-16
@@ -121,7 +119,6 @@ This folder consolidates content previously located at:
 | 97-acceptance-criteria.md |
 | 98-changelog.md |
 | 99-consistency-report.md |
-
 
 ## Cross-References
 

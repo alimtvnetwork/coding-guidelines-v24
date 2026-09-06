@@ -75,7 +75,6 @@ All 6 diagrams carry the **NON-AUTHORITATIVE PROJECTION** banner (v1.0.0); spec 
 
 **Total: 39 files** (22 root + 7 diagrams + 5 images + 5 audit).
 
-
 ---
 
 ## 2. Cross-spec references (must exist)

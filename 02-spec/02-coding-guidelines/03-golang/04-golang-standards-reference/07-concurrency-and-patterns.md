@@ -35,7 +35,6 @@ func (s *PublishService) Upload(ctx context.Context, req UploadRequest) error { 
 
 ---
 
-
 ---
 
 ## Forbidden Patterns
@@ -64,7 +63,6 @@ func (s *PublishService) Upload(ctx context.Context, req UploadRequest) error { 
 
 ---
 
-
 ---
 
 ## Import Organization — 3 Groups
@@ -85,7 +83,6 @@ import (
 ```
 
 ---
-
 
 ---
 

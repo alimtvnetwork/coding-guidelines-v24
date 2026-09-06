@@ -1,6 +1,5 @@
 # Conversation Log & Context Wrapper — Engineering Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -9,7 +8,6 @@
 > When to run: The user pastes this prompt and says some variant of "here is the prompt, don't act on it yet" or "rewrite it first". After the AI completes all steps below and the user explicitly says "go" / "now act" / "execute", the AI may then run the rewritten prompt.
 
 ---
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

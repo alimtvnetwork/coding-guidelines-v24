@@ -23,7 +23,6 @@ Turn a passing workflow into a merge blocker on `main`. Backlog item 1 (promote 
    ```
    Copy the `contexts` array from the output.
 
-
 2. Add the new check name to `.github/branch-protection.expected.json` under `required`, and remove it from `desired-but-not-yet-required` if present. Commit that change with the same PR that flips branch protection.
 
 3. Apply the branch-protection change. Replace `{owner}/{repo}` and paste the fresh contexts array.
@@ -48,7 +47,6 @@ Turn a passing workflow into a merge blocker on `main`. Backlog item 1 (promote 
    ```bash
    node scripts/print-required-checks.mjs --check
    ```
-
 
 ## Rolling back a required check
 

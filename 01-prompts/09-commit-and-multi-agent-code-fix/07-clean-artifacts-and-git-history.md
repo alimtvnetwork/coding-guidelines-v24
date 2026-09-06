@@ -1,6 +1,5 @@
 # Artifact Sanitization & Git History Preservation — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -82,8 +81,6 @@ When the developer indicates that a file should be removed:
 
 ---
 
-
-
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
@@ -111,7 +108,6 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
-
 
 ## No Automatic Releases (Strict Policy)
 

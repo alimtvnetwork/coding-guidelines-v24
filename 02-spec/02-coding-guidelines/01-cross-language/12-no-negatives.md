@@ -282,7 +282,6 @@ a second column.
 
 ## When Raw `!` Is Still Acceptable
 
-
 Raw negation is **only** acceptable for:
 
 1. **Simple boolean variable checks** where the variable is already a positively named `is_*`/`has_*` boolean:

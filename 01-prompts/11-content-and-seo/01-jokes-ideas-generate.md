@@ -1,6 +1,5 @@
 # Humor Generation & Content Ideation — Content Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -111,8 +110,6 @@ Blocking: jokes-strategies ({{role}} @ {{company}})
 ```
 
 When answered: `mv` from `01-new-ambiguity/` to `02-ambiguity-resolved/`, flip `Status: resolved`, and append a `## Resolution` block (`Answered:`, `Answer:`, `Applied solution:`). Never leave a copy behind. If `{{role}}` or `{{company}}` is unknown, file the question and STOP, do not invent a brand.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

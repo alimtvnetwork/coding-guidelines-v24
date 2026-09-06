@@ -1,6 +1,5 @@
 # Bug Fix with 4-Part RCA & Regression Verification — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -27,8 +26,6 @@ Before you write any code to fix the problem, you MUST document the issue in .lo
 2. **How it happened:** The technical execution flow that triggered the bug.
 3. **Root Cause:** The exact file, line, and dependency responsible for the failure.
 4. **Code Fix:** The exact code snippets showing what needed to be changed to fix the root cause.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

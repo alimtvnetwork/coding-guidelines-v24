@@ -1,6 +1,5 @@
 # Specification Remediation from Audit Findings — Planning Spec (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -8,8 +7,6 @@
 
 Fix the specification files strictly based on the latest generated audit file. The non-negotiable goal is to increase the spec score to exactly 100%.
 You must ingest the audit, map the findings to the broken files, and execute the fixes.
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

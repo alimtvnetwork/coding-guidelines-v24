@@ -1,6 +1,5 @@
 # Coding Guideline Execution Suite (`cg-execute`) — Index & Catalog (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -31,7 +30,6 @@ N = total self-loop steps budget that the agents will perform.
 15. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
 16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan, Spec with Violation Ledger in .lovable/plans/pending/, Subtasks, Linter Hook)
@@ -64,8 +62,6 @@ Prompts are sequenced according to priority. Error management, control-flow flat
 | **16** | [`16-multi-language-enums-and-traits.md`](./16-multi-language-enums-and-traits.md) | Multi-Language Enums, Traits & Pattern Matching | `cg-enums-traits`, `cg-enums`, `cg-execute enums`, `audit enums` | PHP 8.1+ Backed Enums + `HasEnumHelpers` trait, Rust ADT Enums + exhaustive `match`, Go custom enums + stringers, `*Type` suffixes | `check-enum-guidelines.py`, `05-guideline-autofixer.py` |
 | **17** | [`17-terminal-ui-and-cli-styling.md`](./17-terminal-ui-and-cli-styling.md) | Terminal UI, CLI Styling, Lipgloss & Animation Architecture | `cg-terminal-ui`, `cg-cli-style`, `cg-lipgloss`, `audit terminal ui` | Bright bold 9X ANSI palette, Catppuccin pastel cycling, 2-column width caps (max width 26), intent banners, clone spinners, version footers | `09-cli-help-auditor.py` |
 | **18** | [`18-function-argument-reduction-and-params.md`](./18-function-argument-reduction-and-params.md) | Argument Reduction, Parameter Structs & Return Architecture | `cg-argument-reduction`, `cg-params`, `cg-struct-params`, `cg-execute params` | Parameter structs (`*Params`) for >2–3 args, value-based passing, affirmative boolean fields (`is`/`has`), mandatory `*apperror.AppError` returns (zero void in Go), framework error conversion | `check-function-lengths.py`, `check-error-management.py` |
-
-
 
 ---
 

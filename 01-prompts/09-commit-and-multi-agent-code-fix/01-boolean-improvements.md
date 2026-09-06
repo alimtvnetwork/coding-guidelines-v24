@@ -1,6 +1,5 @@
 # Boolean Logic Modernization & Guard Inversion — Coding Guideline (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -83,8 +82,6 @@ This verification happens ONCE at the very end, after all commits and pushes are
 
 ---
 
-
-
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
@@ -118,7 +115,6 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 ---
-
 
 ## No Automatic Releases (Strict Policy)
 

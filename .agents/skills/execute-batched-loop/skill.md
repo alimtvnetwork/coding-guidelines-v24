@@ -30,9 +30,6 @@ Run again if said: go, continue, or next
 
 5. Violation of any rule below is auto-reject on the same tier as RULE 0.
 
-
-
-
 ## Anti-Hallucination & Relative Path Rules
 
 > [!CAUTION]
@@ -155,12 +152,6 @@ Past execution turns were sloppy and failed to pin READMEs or bump versions. To 
 - [ ] Completed task files `mv`'d and `.lovable/plans/01-index.md` updated.
 - [ ] Fast-forward commit created and pushed without rewriting git history.
 - [ ] Output window explicitly lists "Done", "Pending", and remaining task names.
-
-
-
-
-
-
 
 ## Actionable Items & Checklist
 

@@ -10,9 +10,7 @@
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
 - [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
 
-
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
-
 
 **Spec:** `19-main-worker-service`
 **Version:** 1.1.0
@@ -55,7 +53,6 @@ The single best one-page summary is image 04. See [`images/readme.md`](./images/
 ![Full EndPointService overview](./images/04-endpoint-service-full-overview.png)
 
 ---
-
 
 Define a two-tier server topology where a **Main Server** acts as a coordinator (Kubernetes-master analogy) and one or more **Worker Servers** hold all business logic. The Main serves the UI and the React frontend's edge endpoints; Workers do the heavy lifting under their own split-DB.
 

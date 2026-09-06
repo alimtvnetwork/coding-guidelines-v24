@@ -1,6 +1,5 @@
 # Release Deployment & Version Bump — Release Management (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -32,7 +31,6 @@ Deviations (only when the trigger explicitly says so):
 When in doubt: MINOR.
 
 ## Hard rules (MUST)
-
 
 - [ ] Changelog Formatting (version.json): You MUST read the `"changelog"` configuration from `version.json` (e.g., `file_path` and `format`). If it exists, you MUST follow its exact instructions for where to write the changelog and how to format the header. If it does not exist, fallback to the hardcoded format below.
 - [ ] Root README Pinning (Fatal if missed): You MUST pin the latest release version into the root `readme.md` file. It is a fatal failure if you skip updating the badges or version pins in the root README file!
@@ -118,7 +116,6 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    PowerShell: `Invoke-WebRequest -Uri https://raw.githubusercontent.com/<owner>/<repo>/vX.Y.Z/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "vX.Y.Z"`
 
    *(Note: You MUST dynamically discover the `<owner>/<repo>` by running `git config --get remote.origin.url`. Do not hardcode Prompt Architect URLs unless you are actually in the Prompt Architect repository.)*
-
 
    ### Added / Changed / Fixed / Removed
 
@@ -244,7 +241,6 @@ When answered: `mv` from `01-new-ambiguity/` to `02-ambiguity-resolved/`, flip `
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 #
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

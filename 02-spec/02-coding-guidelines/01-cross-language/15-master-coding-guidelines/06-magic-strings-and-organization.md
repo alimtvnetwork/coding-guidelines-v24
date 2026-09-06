@@ -75,7 +75,6 @@ if participant.Status == entitystatus.Active { ... }
 
 ---
 
-
 ---
 
 ## 9. File & Function Organization
@@ -94,7 +93,6 @@ if participant.Status == entitystatus.Active { ... }
 - Import order: stdlib → internal → third-party (3 groups, blank-line separated)
 
 ---
-
 
 ---
 

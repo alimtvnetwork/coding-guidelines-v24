@@ -81,7 +81,6 @@ func ProcessUpload(ctx context.Context, req Request) error {
 
 ---
 
-
 ---
 
 ## 6. Error Handling

@@ -911,7 +911,6 @@ Linter verification (4/4 green): `check-mws-error-codes` (R1-R4 — 52 codes ver
 
 ## v1.0.0 — 2026-05-04
 
-
 Initial authoring. Phases 1–4 of the spec roadmap complete.
 
 ### Added

@@ -1,6 +1,5 @@
 # Multi-Agent Task Dispatcher & Subtask Execution — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -61,8 +60,6 @@ Once ALL pending tasks have been completed and marked `✅ Done`:
 
 ---
 
-
-
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
@@ -98,7 +95,6 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 ---
 
-
 ## No Automatic Releases (Strict Policy)
 
 You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
@@ -113,8 +109,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 - slug: execute-pending-tasks
 - status: active
-
-
 
 ## 5. Anti-Hallucination & Blast Radius Checklist (Mandatory for Every Turn)
 

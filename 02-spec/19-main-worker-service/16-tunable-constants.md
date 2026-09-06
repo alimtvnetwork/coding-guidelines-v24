@@ -435,7 +435,6 @@ Failure = build break.
 
 **Linter follow-up (FU-16):** `check-tunable-constants.py` to assert sliding TTL ≤ absolute max (T4 invariant).
 
-
 ---
 
 ## 8. Cross-references

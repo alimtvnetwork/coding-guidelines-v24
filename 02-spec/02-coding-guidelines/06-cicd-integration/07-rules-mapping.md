@@ -46,7 +46,6 @@ if CODE-RED-005 is ever disabled by a per-file override.
 > If this table and that README ever disagree, **the README wins** and
 > this table is the bug.
 
-
 ---
 
 ## Soft preferences (annotate — SARIF `warning`)

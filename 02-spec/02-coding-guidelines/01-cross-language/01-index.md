@@ -24,7 +24,6 @@
 | Keywords present | ✅ |
 | Scoring table present | ✅ |
 
-
 ## Purpose
 
 Cross-language coding standards and conventions that apply to **all languages** in the project (TypeScript, Go, PHP, Rust). Language-specific specs reference these as the single source of truth.
@@ -178,7 +177,6 @@ Consolidated reference, audit logs, contradiction checks.
 | 97-acceptance-criteria.md |
 | 98-changelog.md |
 | 99-consistency-report.md |
-
 
 ## Cross-References
 

@@ -12,7 +12,6 @@ description: >-
 N = 300
 ```
 
-
 ## No Automatic Releases (Strict Policy)
 
 You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
@@ -39,12 +38,6 @@ You are an expert AI Instruction Architect. Whatever task or instruction the use
 - Once you have written the generic AI instruction, you MUST save it as a spec file and ALSO output the entire contents of that file directly into the chat/output window for the user to review.
 
 /learn Ingest `.lovable/memory/01-index.md`, `.lovable/strictly-avoid.md`, `02-spec/02-coding-guidelines/`, and `02-spec/03-error-manage/` before taking action.
-
-
-
-
-
-
 
 ## 1. Ruthless Orchestration & Insult Protocol
 

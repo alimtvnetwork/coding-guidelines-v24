@@ -1,6 +1,5 @@
 # Standards Compliance & Coding Rules Audit — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 

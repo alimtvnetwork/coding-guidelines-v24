@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-cli`, `cg-help`, `cg-execute cli`, `audit cli commands`, `audit help text`, `cli help parity`, `enforce cli help`, `fix cli help`, `cli help ui audit`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -32,7 +31,6 @@ N = total self-loop steps budget that the agents will perform.
 14. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/` for domain-specific architectural specifications.
 15. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 16. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Discover Commands, Check Help Parity, Write .lovable/plans/pending/ Ledger Spec, Subtasks, Auditor Script)
@@ -155,7 +153,6 @@ func init() {
     sshCmd.AddCommand(sshTestCmd)
 }
 ```
-
 
 ---
 
@@ -387,7 +384,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Function Sizing:** All functions <= 8 lines preferred (hard cap 15 lines).
 - [ ] Coding Guidelines & Master Consolidated File: I have fully read, checked, and strictly enforced every file in `02-spec/02-coding-guidelines/`, as well as the master consolidated coding guideline file at `.lovable/coding-guidelines.md`.
 
-
 1. [ ] /learn and apply as a /goal `.lovable/coding-guidelines.md` and also make sure the agent rules are created in the repo to read in the future quickly.
 
 - [ ] `python linter-scripts/check-newline-styling.py` and `python linter-scripts/check-markdown-header-spacing.py` exited with code 0.
@@ -407,7 +403,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Blank Line After `}`: Verified blank line after every closing brace `}` followed by code.
 - [ ] Blank Line Before `return`: Verified blank line before every `return`/`throw` in multi-line blocks.
 - [ ] Zero Nested `if`: Zero nested `if` statements (depth > 1).
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

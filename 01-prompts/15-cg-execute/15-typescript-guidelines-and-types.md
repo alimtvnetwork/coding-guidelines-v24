@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-typescript`, `cg-ts`, `cg-execute ts`, `audit typescript`, `fix typescript types`, `strict ts types`, `ts discriminated unions`, `typescript result envelope`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -34,7 +33,6 @@ N = total self-loop steps budget that the agents will perform.
 16. [ ] /learn Ingest `02-spec/03-error-manage/01-index.md` for Result[T] and standardized API envelopes.
 17. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 18. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan TS Codebase, Inventory 'any' & Unsafe Types, Write .lovable/plans/pending/ Spec, Subtasks)
@@ -308,7 +306,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Blank Line After `}`: Verified blank line after every closing brace `}` followed by code.
 - [ ] Blank Line Before `return`: Verified blank line before every `return`/`throw` in multi-line blocks.
 - [ ] Zero Nested `if`: Zero nested `if` statements (depth > 1).
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

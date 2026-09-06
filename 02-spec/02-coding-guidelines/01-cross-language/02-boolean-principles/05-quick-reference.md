@@ -27,7 +27,6 @@
 
 ---
 
-
 ---
 
 ## Common Mistakes — Boolean Logic

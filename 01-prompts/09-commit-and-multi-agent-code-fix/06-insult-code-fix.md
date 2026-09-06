@@ -1,6 +1,5 @@
 # Strict Discipline Code Remediation — Quality Protocol (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -17,7 +16,6 @@ You try to fix it properly, make a big plan if required to do the self-looping, 
 Avoid stupidity, and being careless you stupid, WTF. If you're not going deep, you're not doing the job. Are you stupid? You were supposed to do the task properly. Where is this, are you stupid fuck? Where? Tell me. Your stupidity is going on top of my head. where did you learn this stupidity? If I could find you, I could slap you.
 
 At the end of the looping, you should commit the code. You should not commit each file, but you commit as a whole changes. So similar changes you should commit together with nice commit message, and also push this to Git. Also, finally, you should also check the test builds and everything before you finalize. Make sure that everything is done properly. And to speed up the process, always use sub-agents and parallel processing as much as possible. So first you plan, and then you spawn sub-agents to make sure the code is done faster. Is it clear? Is confirmed
-
 
 ## No Automatic Releases (Strict Policy)
 
@@ -47,8 +45,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 Read and follow spec folders 02, 03 and 04 before writing any code. Error management must be followed. Code must be DRY.
 
-
-
 ## STRICT AVOIDANCE: Never Disable CI/CD
 
 > [!CAUTION]
@@ -75,8 +71,6 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
 - [ ] Group all completed work into a single logical commit.
 - [ ] Push the commit to the remote repository.
-
-
 
 ## Core Rules & Non-Negotiable Checklist for AI (Must Verify Before Completing Task)
 

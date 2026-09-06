@@ -2,7 +2,6 @@
 
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
-
 **Version:** 3.2.0
 **Status:** Active
 **Updated:** 2026-04-16
@@ -35,7 +34,6 @@ TypeScript-specific coding standards, enum definitions, and type safety enforcem
 
 ---
 
-
 | # | File | Category | Description |
 |---|------|----------|-------------|
 | 01 | [01-connection-status-enum.md](./02-connection-status-enum.md) | Enum | Connection status enum definition |
@@ -60,7 +58,6 @@ TypeScript-specific coding standards, enum definitions, and type safety enforcem
 | File |
 |------|
 | 99-consistency-report.md |
-
 
 ## Cross-References
 

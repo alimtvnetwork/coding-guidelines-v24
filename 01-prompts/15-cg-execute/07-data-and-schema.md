@@ -2,7 +2,6 @@
 
 Trigger Keywords & Aliases: `cg-schema`, `cg-execute schema`, `audit schema`, `fix schema guidelines`, `enforce database standards`
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -33,7 +32,6 @@ N = total self-loop steps budget that the agents will perform.
 15. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Codebase, Write .lovable/plans/pending/ Spec, Create .lovable/plans/subtasks/, Verify/Create Linter Hook)
@@ -250,7 +248,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Column Casing: camelCase columns, PascalCase tables, PascalCase JSON keys.
 - [ ] Semantic Naming: Absolutely NO generic garbage names (`temp`, `data`, `obj`).
 - [ ] Mermaid ERD: Current ERD diagram present in schema documentation.
-
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

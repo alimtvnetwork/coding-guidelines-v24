@@ -1,7 +1,5 @@
 # Atomic Commit Organization & Working Tree Sanitization — Workflow (must follow)
 
-
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -108,10 +106,6 @@ To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` d
 - On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.
 - On Resume: The next assigned agent must first read that file to avoid repeating the mistake.
 - On Success: Update the file to `STATUS: DONE` and immediately update the master plan.
-
-
-
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

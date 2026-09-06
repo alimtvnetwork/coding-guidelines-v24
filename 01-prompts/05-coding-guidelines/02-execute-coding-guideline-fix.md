@@ -1,6 +1,5 @@
 # Guideline Fix Execution & Linter Remediation — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -110,7 +109,6 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 slug: execute-coding-guideline-fix
 status: active
 ---
-
 
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 

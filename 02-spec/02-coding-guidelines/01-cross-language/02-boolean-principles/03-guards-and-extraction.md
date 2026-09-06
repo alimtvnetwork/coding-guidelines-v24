@@ -54,7 +54,6 @@ For the full guard function inventory, see [no-negatives.md](../12-no-negatives.
 
 ---
 
-
 ---
 
 ## Principle 4: Extract Complex Boolean Expressions

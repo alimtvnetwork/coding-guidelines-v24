@@ -16,7 +16,6 @@
 
 ---
 
-
 ---
 
 ## 12. Cross-Language Enum Synchronization
@@ -31,7 +30,6 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 6. Update admin templates referencing the enum
 
 ---
-
 
 ---
 
@@ -51,7 +49,6 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 
 ---
 
-
 ---
 
 ## 14. Lazy Evaluation
@@ -69,7 +66,6 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 
 ---
 
-
 ---
 
 ## 15. Regex Usage
@@ -85,7 +81,6 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 | RX5 | TS: use regex literals for static patterns; `new RegExp()` only for dynamic |
 
 ---
-
 
 ---
 
@@ -103,7 +98,6 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 **Exemptions:** lazy evaluation/caching, loop accumulation (`append`), builder pattern, design pattern implementations.
 
 ---
-
 
 ---
 
@@ -123,7 +117,6 @@ See also §3.1 for the `isDefined`/`isDefinedAndValid` guard pattern.
 
 ---
 
-
 ---
 
 ## 18. Nesting Resolution
@@ -139,7 +132,6 @@ See also §3.1 for the `isDefined`/`isDefinedAndValid` guard pattern.
 | NR5 | Exception: one loop with a single `if` inside is acceptable |
 
 ---
-
 
 ---
 
@@ -159,7 +151,6 @@ Supplements Code Style rules R4, R5, R10, R12, R13 with detailed before/after ex
 | NL6 | Use `constants.NewLineUnix` (`"\n"`) in 90% of cases — `constants.NewLine` only for OS-specific needs |
 
 ---
-
 
 ---
 

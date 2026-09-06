@@ -49,7 +49,6 @@ The `apperror` package provides **structured application errors with mandatory s
 
 ---
 
-
 ---
 
 ## 1. StackTrace

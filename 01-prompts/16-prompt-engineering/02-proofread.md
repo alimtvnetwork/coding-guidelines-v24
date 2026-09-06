@@ -1,7 +1,5 @@
 # Proofreading & Semantic Consistency Verification — Quality Protocol (must follow)
 
-
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 

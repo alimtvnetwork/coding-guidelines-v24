@@ -1,6 +1,5 @@
 # Memory Retrieval & Project Context Ingestion — Workflow (must follow)
 
-
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -278,7 +277,6 @@ Inside each folder: `00-overview.md` -> numbered files -> `99-consistency-report
 Fallbacks when the canonical numbered folder is absent: `.lovable/coding-guidelines.md`, `02-spec/02-coding-guidelines/`, `coding-guidelines/`, `02-spec/03-error-manage/`, `01-prompts/04-coding-standards/01-coding-guidelines.md`. Numbered folder wins on conflict; call the conflict out in the plan's Context.
 
 ---
-
 
 ## STRICT AVOIDANCE: Never Disable CI/CD
 

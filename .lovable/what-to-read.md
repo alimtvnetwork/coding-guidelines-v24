@@ -24,7 +24,6 @@
 - `.lovable/strictly-avoid.md`, why: hard constraints and anti-patterns
 - `.lovable/question-and-ambiguity/01-new-ambiguity/`, why: open questions
 
-
 ## Before writing code
 
 - `spec/`, why: understand feature specifications
