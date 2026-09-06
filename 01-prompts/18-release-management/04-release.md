@@ -97,8 +97,8 @@ Past release turns were sloppy: guessed the version, bumped PATCH instead of MIN
    You MUST NEVER use `rg`, `grep`, or `find` to globally search the entire repository for version strings.
 
    You MUST follow this strict chain:
-   1. **Primary:** Run `.lovable/release/bump_versions.py --type <major|minor|patch> --create-release`. The `--create-release` flag is REQUIRED during official releases so the script handles the git branching (`release/vX.Y.Z`), tagging, pushing, and GitHub/GitLab CLI (`gh` / `glab`) release creation.
-   2. **Fallback 1 (Read Docs):** If script is missing, read `.lovable/release/release-method.md` to learn which files contain versions. Generate `bump_versions.py` and run it.
+   1. **Primary:** Run `python 03-ai-scripts/29-release-orchestrator.py --tier <minor|patch|major>` (see `01-prompts/18-release-management/06-release-orchestrator.md`). This handles SemVer bumping, release commit, `release/vX.Y.Z` branch creation, tagging, pushing, and restores the original starting branch. Alternatively, run `.lovable/release/bump_versions.py --type <major|minor|patch> --create-release`.
+   2. **Fallback 1 (Read Docs):** If script is missing, read `.lovable/release/release-method.md` to learn which files contain versions. Generate `29-release-orchestrator.py` or `bump_versions.py` and run it.
 
    - **CRITICAL ADAPTATION RULE:** The `bump_versions.py` script is shipped via the installer as a baseline. When you run this command on a NEW project for the first time, you MUST review and update its internal `FILES_TO_BUMP` array to match the target repository's architecture before running it.
 3. **Fallback 2 (Efficient Search):**
