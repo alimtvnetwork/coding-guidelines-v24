@@ -27,6 +27,7 @@ Context & References:
   - No code mutation – only apply fixes, never introduce new bugs.
   - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested if statements, no magic values.
   - Style: Ensure a blank line before every `return` statement.
+  - Mandatory File Path & Variable Context: Any error created or returned when operating on files, paths, or variables must embed the target path via `.WithPath(path)` / `WrapWithPath(..., path)` and variable context via `.WithVar(name, value)` (Rule R7).
   - Golang Single Return & Wrapped Booleans: Strictly return a single parameter (bundle multiple returns into a struct). No raw booleans returned in Go. Return a single Result struct (bundling Data, AppError, and Status together) with two flags (`IsSuccess` and `IsFailed`) managed by a constructor (`NewSuccess`/`NewFailure`).
   - Example usage (Note the explicit variable name `paymentStatus`, no short names like `res`):
     ```go

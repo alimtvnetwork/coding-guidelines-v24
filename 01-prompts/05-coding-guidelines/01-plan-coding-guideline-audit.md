@@ -48,6 +48,7 @@ You must dedicate this immense processing power to uncover:
 - Every inverted boolean (`!isSuccess`).
 - Every magic string or number.
 - Every swallowed error or generic `catch {}`.
+- Every error without file path or variable context (`WithPath`, `WithVar`) — Rule R7.
 - Every missing Enum or `Type` suffix.
 - Every monolithic function exceeding 15 lines.
 - Every nested `if` statement.
