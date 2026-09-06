@@ -15,6 +15,23 @@ Listen, past runs of these turns have been sloppy: wrong step counts, partial ta
 
 ---
 
+## Phase 0: Antigravity Skill Bootstrap (Memory Optimization)
+
+Before any execution, check if this prompt is installed as a native Antigravity Skill.
+
+1. Check if `.agents/skills/release-orchestrator/skill.md` exists.
+2. If it does NOT exist, create it now. Write the core instructions of this prompt to `.agents/skills/release-orchestrator/skill.md` with frontmatter:
+   ```yaml
+   ---
+   name: release-orchestrator
+   description: >-
+     Execute full automated release orchestration, semantic version bumping, branch management, and tag creation using Python scripts.
+   ---
+   ```
+3. Once installed, load it on-demand via progressive disclosure for all future runs.
+
+---
+
 ## RULE 0: Version Calculation Standard
 
 1. Read the canonical version source for this repo (`version.json` or `package.json`).
