@@ -10,6 +10,10 @@ type (
 
 	Result[T any] = Wrap[T]
 
+	ResultSlice[T any] = appfault.ResultSlice[T]
+
+	ResultMap[K comparable, V any] = appfault.ResultMap[K, V]
+
 	// SimpleVerifier combines all core state and status checkers into a single verification contract.
 	SimpleVerifier = appfault.SimpleVerifier
 
@@ -121,4 +125,24 @@ func ResultToBytes[T any](r Result[T]) Result[[]byte] {
 // ResultToJSON serializes result data or fault using typecast.ToJSON.
 func ResultToJSON[T any](r Result[T]) Result[[]byte] {
 	return appfault.ResultToJSON[T](r)
+}
+
+// OkSlice creates a successful ResultSlice.
+func OkSlice[T any](items []T) ResultSlice[T] {
+	return appfault.OkSlice(items)
+}
+
+// FailSlice creates a failed ResultSlice from an AppError.
+func FailSlice[T any](err *appfault.AppError) ResultSlice[T] {
+	return appfault.FailSlice[T](err)
+}
+
+// OkMap creates a successful ResultMap.
+func OkMap[K comparable, V any](data map[K]V) ResultMap[K, V] {
+	return appfault.OkMap(data)
+}
+
+// FailMap creates a failed ResultMap from an AppError.
+func FailMap[K comparable, V any](err *appfault.AppError) ResultMap[K, V] {
+	return appfault.FailMap[K, V](err)
 }

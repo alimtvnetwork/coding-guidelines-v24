@@ -1,5 +1,11 @@
 package appfault
 
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
+
 // ResultMap wraps a generic key-value map with monadic error state.
 type ResultMap[K comparable, V any] struct {
 	Data     map[K]V   `json:",omitempty" yaml:",omitempty"`
@@ -120,4 +126,95 @@ func (rm ResultMap[K, V]) Error() *AppError {
 // Unwrap unpacks the (map[K]V, *AppError) tuple.
 func (rm ResultMap[K, V]) Unwrap() (map[K]V, *AppError) {
 	return rm.Data, rm.AppError
+}
+
+func collectMapKeys[K comparable, V any](data map[K]V) []K {
+	keys := make([]K, 0, len(data))
+	for k := range data {
+		keys = append(keys, k)
+	}
+
+	return keys
+}
+
+// Keys returns a slice of map keys, sorted deterministically by string representation.
+func (rm ResultMap[K, V]) Keys() []K {
+	if rm.IsFailed() || len(rm.Data) == 0 {
+		return []K{}
+	}
+
+	keys := collectMapKeys(rm.Data)
+	sort.Slice(keys, func(i, j int) bool {
+		return fmt.Sprint(keys[i]) < fmt.Sprint(keys[j])
+	})
+
+	return keys
+}
+
+// Values returns a slice of map values ordered according to Keys().
+func (rm ResultMap[K, V]) Values() []V {
+	if rm.IsFailed() || len(rm.Data) == 0 {
+		return []V{}
+	}
+
+	vals := make([]V, 0, len(rm.Data))
+	for _, k := range rm.Keys() {
+		vals = append(vals, rm.Data[k])
+	}
+
+	return vals
+}
+
+// Filter returns a new ResultMap containing entries that satisfy predicate.
+func (rm ResultMap[K, V]) Filter(predicate func(key K, val V) bool) ResultMap[K, V] {
+	if rm.IsFailed() || predicate == nil {
+		return rm
+	}
+
+	filtered := make(map[K]V)
+	for k, v := range rm.Data {
+		if predicate(k, v) {
+			filtered[k] = v
+		}
+	}
+
+	return OkMap(filtered)
+}
+
+// ForEach iterates over map entries passing key and value to fn.
+func (rm ResultMap[K, V]) ForEach(fn func(key K, val V)) ResultMap[K, V] {
+	if rm.IsFailed() || fn == nil {
+		return rm
+	}
+
+	for _, k := range rm.Keys() {
+		fn(k, rm.Data[k])
+	}
+
+	return rm
+}
+
+func buildMapBlock[K comparable, V any](rm ResultMap[K, V]) string {
+	var b strings.Builder
+	b.WriteString("{\n")
+	for _, k := range rm.Keys() {
+		b.WriteString(fmt.Sprintf("  %v: %+v\n", k, rm.Data[k]))
+	}
+
+	b.WriteString("}")
+
+	return b.String()
+}
+
+// FormatStruct formats map key-values in aligned block or error banner.
+func (rm ResultMap[K, V]) FormatStruct() string {
+	if rm.IsFailed() {
+		return rm.AppError.FormatStdout()
+	}
+
+	if len(rm.Data) == 0 {
+		return "{}"
+	}
+
+	return buildMapBlock(rm)
 }

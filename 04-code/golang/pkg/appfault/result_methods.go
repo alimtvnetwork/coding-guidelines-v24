@@ -1,6 +1,9 @@
 package appfault
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // IsSuccess returns true if no error is present.
 func (r Result[T]) IsSuccess() bool {
@@ -216,4 +219,34 @@ func (r Result[T]) PrintJSON() {
 // PrintLog prints the result formatted as a structured log line.
 func (r Result[T]) PrintLog() {
 	fmt.Println(r.FormatTextLog())
+}
+
+// FormatStruct formats struct or primitive payload or error banner.
+func (r Result[T]) FormatStruct() string {
+	if r.IsFailed() {
+		return r.AppError.FormatStdout()
+	}
+
+	return fmt.Sprintf("%+v", r.Value)
+}
+
+func payloadToMap(val any) map[string]any {
+	bytes, err := json.Marshal(val)
+	if err != nil {
+		return nil
+	}
+
+	var result map[string]any
+	_ = json.Unmarshal(bytes, &result)
+
+	return result
+}
+
+// ToMap converts payload into map[string]any via JSON serialization.
+func (r Result[T]) ToMap() map[string]any {
+	if r.IsFailed() {
+		return nil
+	}
+
+	return payloadToMap(r.Value)
 }

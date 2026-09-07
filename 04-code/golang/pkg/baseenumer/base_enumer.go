@@ -12,18 +12,8 @@ type (
 		IsEnum() bool
 	}
 
-	// NumberEnumer defines the interface for numeric-backed enumerations.
-	NumberEnumer interface {
-		BaseEnumer
-		Int() int
-		Code() uint16
-	}
-
 	// BaseEnum is an alias for BaseEnumer.
 	BaseEnum = BaseEnumer
-
-	// NumberEnum is an alias for NumberEnumer.
-	NumberEnum = NumberEnumer
 )
 
 // ToEnum finds an enum by name in any slice of BaseEnumer.

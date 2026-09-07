@@ -1,5 +1,10 @@
 package appfault
 
+import (
+	"fmt"
+	"strings"
+)
+
 // ResultSlice wraps a generic slice collection with monadic error state.
 type ResultSlice[T any] struct {
 	Items    []T       `json:",omitempty" yaml:",omitempty"`
@@ -110,4 +115,73 @@ func (rs ResultSlice[T]) Error() *AppError {
 // Unwrap unpacks the ([]T, *AppError) tuple.
 func (rs ResultSlice[T]) Unwrap() ([]T, *AppError) {
 	return rs.Items, rs.AppError
+}
+
+// Filter returns a new ResultSlice containing items that satisfy predicate.
+func (rs ResultSlice[T]) Filter(predicate func(item T) bool) ResultSlice[T] {
+	if rs.IsFailed() || predicate == nil {
+		return rs
+	}
+
+	filtered := make([]T, 0, len(rs.Items))
+	for _, item := range rs.Items {
+		if predicate(item) {
+			filtered = append(filtered, item)
+		}
+	}
+
+	return OkSlice(filtered)
+}
+
+// ForEach iterates over all items passing index and item to fn.
+func (rs ResultSlice[T]) ForEach(fn func(index int, item T)) ResultSlice[T] {
+	if rs.IsFailed() || fn == nil {
+		return rs
+	}
+
+	for i, item := range rs.Items {
+		fn(i, item)
+	}
+
+	return rs
+}
+
+// ForEachBreak iterates over items passing index and item to fn, stopping early if fn returns true.
+func (rs ResultSlice[T]) ForEachBreak(fn func(index int, item T) bool) ResultSlice[T] {
+	if rs.IsFailed() || fn == nil {
+		return rs
+	}
+
+	for i, item := range rs.Items {
+		if fn(i, item) {
+			break
+		}
+	}
+
+	return rs
+}
+
+func buildSliceBlock[T any](items []T) string {
+	var b strings.Builder
+	b.WriteString("[\n")
+	for i, item := range items {
+		b.WriteString(fmt.Sprintf("  [%d] %+v\n", i, item))
+	}
+
+	b.WriteString("]")
+
+	return b.String()
+}
+
+// FormatStruct formats slice items in aligned block or error banner.
+func (rs ResultSlice[T]) FormatStruct() string {
+	if rs.IsFailed() {
+		return rs.AppError.FormatStdout()
+	}
+
+	if len(rs.Items) == 0 {
+		return "[]"
+	}
+
+	return buildSliceBlock(rs.Items)
 }
