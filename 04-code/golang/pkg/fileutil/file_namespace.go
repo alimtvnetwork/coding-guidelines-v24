@@ -5,8 +5,6 @@ import (
 
 	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/enum/openfiletype"
-	"coding-guidelines/common/pkg/result"
-	"coding-guidelines/common/pkg/streamwriter"
 )
 
 type fileNamespace struct {
@@ -140,15 +138,15 @@ func (filePathCreator) FromParts(elem ...string) *PathWrapper {
 
 // StreamWriter creators
 
-func (fileStreamWriterCreator) Any(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
+func (fileStreamWriterCreator) Any(path string, openMode FileOpenModeType, perm FilePermType) FileWriterResult {
 	return NewFileWriter(path, openMode, perm)
 }
 
-func (fileStreamWriterCreator) Append(path string, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
+func (fileStreamWriterCreator) Append(path string, perm FilePermType) FileWriterResult {
 	return NewFileWriter(path, openfiletype.CreateAppend, perm)
 }
 
-func (fileStreamWriterCreator) Truncate(path string, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
+func (fileStreamWriterCreator) Truncate(path string, perm FilePermType) FileWriterResult {
 	return NewFileWriter(path, openfiletype.CreateTruncate, perm)
 }
 
@@ -170,7 +168,7 @@ func (fileNewCreator) PathWrapper(raw string) *PathWrapper {
 	return NewPath(raw)
 }
 
-func (fileNewCreator) StreamWriterAny(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
+func (fileNewCreator) StreamWriterAny(path string, openMode FileOpenModeType, perm FilePermType) FileWriterResult {
 	return NewFileWriter(path, openMode, perm)
 }
 

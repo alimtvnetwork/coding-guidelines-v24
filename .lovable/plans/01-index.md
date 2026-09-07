@@ -11,6 +11,7 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
+- [27-direct-result-types-consolidation.md](completed/27-direct-result-types-consolidation.md): Direct Concrete Result Types Consolidation Across Enum Packages and FileUtil.
 - [26-prune-enum-const-aliases-and-enumer-types.md](completed/26-prune-enum-const-aliases-and-enumer-types.md): Eliminate Redundant Enum Const Aliases & Prune Over-Engineered Enumer Types.
 - [25-enum-packages-isolation.md](completed/25-enum-packages-isolation.md): Dedicated Enum Packages Isolation (`fileoptype`, `filewritemodetype`, `severitytype`, `prioritytype`).
 - [24-filepermtype-enum-package.md](completed/24-filepermtype-enum-package.md): FilePermType Enum Package Isolation (`pkg/enum/filepermtype`).

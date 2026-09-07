@@ -6,6 +6,8 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
+type Result = result.Wrap[Variant]
+
 var (
 	variantLabels = [...]string{
 		Invalid:   "Unknown",
@@ -27,7 +29,7 @@ func Values() []string {
 	return baseenumer.SliceValues(variantLabels[:])
 }
 
-func Parse(s string) result.Wrap[Variant] {
+func Parse(s string) Result {
 	v, trimmed, ok := baseenumer.ParseLookup(s, variantMap)
 	if !ok {
 		if len(trimmed) == 0 {

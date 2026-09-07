@@ -4,12 +4,11 @@ import (
 	"os"
 
 	"coding-guidelines/common/pkg/enum/filepermtype"
-	"coding-guidelines/common/pkg/result"
 )
 
 type FilePermType = filepermtype.Variant
 
-func ParsePerm(octalStr string) result.Wrap[FilePermType] {
+func ParsePerm(octalStr string) FilePermResult {
 	return filepermtype.ParsePerm(octalStr)
 }
 

@@ -9,6 +9,8 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
+type Result = result.Wrap[Variant]
+
 var (
 	allVariants = []Variant{
 		None,
@@ -69,7 +71,7 @@ func Values() []string {
 	return append([]string(nil), allValues...)
 }
 
-func Parse(octalStr string) result.Wrap[Variant] {
+func Parse(octalStr string) Result {
 	trimmed := strings.TrimSpace(octalStr)
 	if len(trimmed) == 0 {
 		return result.WrapFailureWithId[Variant](errtype.Validation, "octal string cannot be empty")
@@ -83,7 +85,7 @@ func Parse(octalStr string) result.Wrap[Variant] {
 	return result.WrapSuccess(Variant(val))
 }
 
-func ParsePerm(octalStr string) result.Wrap[Variant] {
+func ParsePerm(octalStr string) Result {
 	return Parse(octalStr)
 }
 

@@ -58,5 +58,5 @@ file, err := OpenTarget("data.log", openfiletype.CreateAppend)
 - `.IsInvalid() bool` - Checks if variant is zero-value or undefined.
 - `.IsReadOnly() bool`, `.IsCreateAppend() bool`, etc. - Positive boolean predicates.
 - `All() []Variant` - Returns slice of all valid variants.
-- `Parse(s string) result.Wrap[Variant]` - Case-insensitive string parser returning `result.Wrap`.
+- `Parse(s string) Result` - Case-insensitive string parser returning `Result` (`result.Wrap[Variant]`).
 - `MarshalJSON()` / `UnmarshalJSON()` - PascalCase JSON serialization.

@@ -9,6 +9,8 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
+type Result = result.Wrap[Variant]
+
 var (
 	variantLabels = [...]string{
 		Zero:  "Zero",
@@ -61,7 +63,7 @@ func Values() []string {
 	return append([]string(nil), allValues...)
 }
 
-func Parse(s string) result.Wrap[Variant] {
+func Parse(s string) Result {
 	v, trimmed, ok := baseenumer.ParseLookup(s, variantMap)
 	if ok {
 		return result.WrapSuccess(v)

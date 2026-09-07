@@ -262,7 +262,7 @@ func WriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize i
 	return executeWriteChunked(path, perm, reader, bufferSize)
 }
 
-func NewFileWriter(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
+func NewFileWriter(path string, openMode FileOpenModeType, perm FilePermType) FileWriterResult {
 	openRes := OpenFile(path, openMode, perm)
 	if openRes.IsFailed() {
 		return result.WrapFailure[*streamwriter.PluggableWriter[any]](openRes.Fault())

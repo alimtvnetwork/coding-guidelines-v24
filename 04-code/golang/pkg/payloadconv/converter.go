@@ -8,9 +8,12 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
+// BytesResult wraps a byte slice payload result.
+type BytesResult = result.Wrap[[]byte]
+
 // ToBytes smartly converts any generic payload into a byte array for writing.
 // It avoids variable mutation and uses early returns.
-func ToBytes(payload any) result.Wrap[[]byte] {
+func ToBytes(payload any) BytesResult {
 	if payload == nil {
 		return result.Success([]byte{})
 	}

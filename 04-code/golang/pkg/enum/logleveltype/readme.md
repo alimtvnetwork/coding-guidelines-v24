@@ -53,5 +53,5 @@ if logleveltype.Info.IsEnabled(logleveltype.Debug) {
 - `.IsDebug() bool`, `.IsInfo() bool`, etc. - Positive boolean predicates.
 - `All() []Variant` - Returns slice of all valid variants (`Debug` through `Fatal`).
 - `Values() []string` - Returns slice of valid variant names.
-- `Parse(s string) result.Wrap[Variant]` - Case-insensitive string parser returning `result.Wrap`.
+- `Parse(s string) Result` - Case-insensitive string parser returning `Result` (`result.Wrap[Variant]`).
 - `MarshalJSON()` / `UnmarshalJSON()` - PascalCase JSON serialization with string and byte fallback.
