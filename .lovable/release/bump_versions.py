@@ -32,6 +32,8 @@ def set_current_version(new_version):
     with open("version.json", "r+", encoding="utf-8") as f:
         data = json.load(f)
         data["version"] = new_version
+        if "Version" in data:
+            data["Version"] = new_version
         if "releaseDate" in data:
             data["releaseDate"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
         f.seek(0)
@@ -68,6 +70,13 @@ def update_files(old_version, new_version):
             with open(file_path, "w", encoding="utf-8", newline='\n') as f:
                 f.write(new_content)
             print(f"Bumped version in {file_path}")
+
+    # Synchronize all generated manifests and spec trees via npm run sync
+    try:
+        print("[*] Running npm run sync to update spec trees, manifests, and badges...")
+        subprocess.run(["npm", "run", "sync"], check=True)
+    except Exception as e:
+        print(f"Warning running npm run sync: {e}")
 
 def get_repo_slug():
     """Extracts owner/repo from git remote origin url."""
