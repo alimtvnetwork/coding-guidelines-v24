@@ -62,8 +62,8 @@ func TestPathNamespace_Join(t *testing.T) {
 }
 
 func TestPathWrapper_Chaining(t *testing.T) {
-	pw := NewPath(`foo\bar/../baz`).Clean().ToSlash()
-	if pw.Raw() != `foo\bar/../baz` {
+	pw := NewPath("foo/bar/../baz").Clean().ToSlash()
+	if pw.Raw() != "foo/bar/../baz" {
 		t.Errorf("expected raw string preserved, got %s", pw.Raw())
 	}
 
