@@ -3,7 +3,6 @@ package typecast
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"reflect"
 	"strings"
 )
@@ -206,7 +205,8 @@ func ReflectTo[T any](payload any) (T, error) {
 	return target, err
 }
 
-// CastTo safely casts a generic payload into the target type T using type assertion.
+// CastTo safely casts a generic payload into the target type T using fast type assertion,
+// falling back to reflection (ReflectTo) if direct type assertion fails.
 func CastTo[T any](payload any) (T, error) {
 	var target T
 
@@ -214,12 +214,12 @@ func CastTo[T any](payload any) (T, error) {
 		return target, errors.New("cannot cast nil payload to target type")
 	}
 
-	v, ok := payload.(T)
-	if !ok {
-		return target, fmt.Errorf("type assertion to %T failed for payload of type %T", target, payload)
+	v, isOk := payload.(T)
+	if isOk {
+		return v, nil
 	}
 
-	return v, nil
+	return ReflectTo[T](payload)
 }
 
 // ToBytes converts a payload into a byte slice, handling bytes, string, string slice, error, and JSON fallback.

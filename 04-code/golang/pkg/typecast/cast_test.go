@@ -343,7 +343,7 @@ func TestReflectTo(t *testing.T) {
 	}
 }
 
-func TestCastTo(t *testing.T) {
+func TestCastTo_DirectAssertion(t *testing.T) {
 	v1, err := CastTo[int](42)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -352,8 +352,34 @@ func TestCastTo(t *testing.T) {
 	if v1 != 42 {
 		t.Fatalf("expected 42, got %v", v1)
 	}
+}
 
-	_, err = CastTo[myIntType](42)
+func TestCastTo_ReflectionFallback_Pointer(t *testing.T) {
+	val := 100
+	v, err := CastTo[int](&val)
+	if err != nil {
+		t.Fatalf("unexpected error with pointer reflection fallback: %v", err)
+	}
+
+	if v != 100 {
+		t.Fatalf("expected 100, got %v", v)
+	}
+}
+
+func TestCastTo_ReflectionFallback_JSON(t *testing.T) {
+	raw := []byte(`{"name":"Alice"}`)
+	p, err := CastTo[samplePerson](raw)
+	if err != nil {
+		t.Fatalf("unexpected error with JSON reflection fallback: %v", err)
+	}
+
+	if p.Name != "Alice" {
+		t.Fatalf("expected Alice, got %s", p.Name)
+	}
+}
+
+func TestCastTo_Errors(t *testing.T) {
+	_, err := CastTo[myIntType](42)
 	if err == nil {
 		t.Fatal("expected error casting int to myIntType")
 	}
