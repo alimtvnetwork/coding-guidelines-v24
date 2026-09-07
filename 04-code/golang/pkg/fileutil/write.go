@@ -1,6 +1,8 @@
 package fileutil
 
 import (
+	"os"
+
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/payloadconv"
@@ -28,14 +30,7 @@ func WriteLocked(path string, payload any, perm FilePermType) result.Wrap[bool] 
 	return Write(path, payload, perm)
 }
 
-// WriteBytes writes raw byte slice to the specified path.
-func WriteBytes(path string, data []byte, perm FilePermType) result.Wrap[bool] {
-	fRes := CreateFile(path, perm)
-	if fRes.HasError() {
-		return result.WrapFailure[bool](fRes.Fault())
-	}
-
-	f := fRes.Data()
+func writeBytesToFile(f *os.File, data []byte, path string) result.Wrap[bool] {
 	defer f.Close()
 
 	_, err := f.Write(data)
@@ -44,6 +39,16 @@ func WriteBytes(path string, data []byte, perm FilePermType) result.Wrap[bool] {
 	}
 
 	return result.WrapSuccess(true)
+}
+
+// WriteBytes writes raw byte slice to the specified path.
+func WriteBytes(path string, data []byte, perm FilePermType) result.Wrap[bool] {
+	fRes := CreateFile(path, perm)
+	if fRes.HasError() {
+		return result.WrapFailure[bool](fRes.Fault())
+	}
+
+	return writeBytesToFile(fRes.Data(), data, path)
 }
 
 // WriteBytesLocked writes raw byte slice with an exclusive file-path lock.
@@ -84,4 +89,14 @@ func WriteJSON(path string, data any, perm FilePermType) result.Wrap[bool] {
 // WriteJSONLocked serializes and writes any struct or map as indented JSON with an exclusive lock.
 func WriteJSONLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
 	return ExportJSONLocked(path, data, perm)
+}
+
+// WriteYAML serializes and writes any struct or map as YAML.
+func WriteYAML(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportYAML(path, data, perm)
+}
+
+// WriteYAMLLocked serializes and writes any struct or map as YAML with an exclusive lock.
+func WriteYAMLLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportYAMLLocked(path, data, perm)
 }

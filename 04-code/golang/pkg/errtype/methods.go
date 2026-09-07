@@ -35,6 +35,7 @@ var (
 		DataMismatch:         "DataMismatch",
 		RecordMismatch:       "RecordMismatch",
 		VerificationMismatch: "VerificationMismatch",
+		TypeMismatch:         "TypeMismatch",
 	}
 
 	variationMap = compileVariationMap()
@@ -117,7 +118,7 @@ func (v Variation) HttpStatus() int {
 	case None:
 		return 200
 
-	case Validation, Precondition, Serialization, Mismatch, DatabaseMismatch, DataMismatch, RecordMismatch, VerificationMismatch:
+	case Validation, Precondition, Serialization, Mismatch, DatabaseMismatch, DataMismatch, RecordMismatch, VerificationMismatch, TypeMismatch:
 		return 400
 
 	case Unauthorized:

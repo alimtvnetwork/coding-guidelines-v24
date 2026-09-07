@@ -11,6 +11,8 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
+- [14-generic-typecast-and-result-checkers.md](completed/14-generic-typecast-and-result-checkers.md): Bulletproof typecast conversions, reflection performance optimization, Result and AppError generic casting, and Checker interface contracts.
+
 - [01-apperror-new-constructors.md](completed/01-apperror-new-constructors.md): Go AppError namespace constructors.
 - [03-apperror-human-logger-methods.md](completed/03-apperror-human-logger-methods.md): Human-readable logger methods on AppError.
 - [05-rename-overviews-and-installer-json.md](completed/05-rename-overviews-and-installer-json.md): Rename overviews and installer JSON configurations.

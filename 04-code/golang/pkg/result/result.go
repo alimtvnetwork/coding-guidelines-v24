@@ -74,3 +74,33 @@ func NewFailure[T any](errType errtype.Variation, cause error) Result[T] {
 func NewFailureWithType[T any](errType errtype.Variation, msg string, caller string) Result[T] {
 	return appfault.NewFailureWithType[T](errType, msg, caller)
 }
+
+// CastTo safely casts a generic payload into target type T.
+func CastTo[T any](source any) (T, *appfault.AppError) {
+	return appfault.CastTo[T](source)
+}
+
+// ReflectTo dynamically casts a generic payload into target type T.
+func ReflectTo[T any](source any) (T, *appfault.AppError) {
+	return appfault.ReflectTo[T](source)
+}
+
+// CastResult converts Result[T] to Result[U] via reflection.
+func CastResult[T any, U any](r Result[T]) Result[U] {
+	return appfault.CastResult[T, U](r)
+}
+
+// CastContextPayload retrieves a key from an AppError context and casts to T.
+func CastContextPayload[T any](e *appfault.AppError, key string) (T, *appfault.AppError) {
+	return appfault.CastContextPayload[T](e, key)
+}
+
+// ResultToBytes serializes result data or fault using typecast.ToBytes.
+func ResultToBytes[T any](r Result[T]) Result[[]byte] {
+	return appfault.ResultToBytes[T](r)
+}
+
+// ResultToJSON serializes result data or fault using typecast.ToJSON.
+func ResultToJSON[T any](r Result[T]) Result[[]byte] {
+	return appfault.ResultToJSON[T](r)
+}

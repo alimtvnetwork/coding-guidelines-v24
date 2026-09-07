@@ -60,6 +60,7 @@ const (
 	DataMismatch         Variation = 22
 	RecordMismatch       Variation = 23
 	VerificationMismatch Variation = 24
+	TypeMismatch         Variation = 25
 )
 
 // ProcessStateType constants conforming to BaseEnum.

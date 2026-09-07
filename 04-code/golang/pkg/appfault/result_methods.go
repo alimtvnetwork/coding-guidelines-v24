@@ -27,6 +27,11 @@ func (r Result[T]) IsValid() bool {
 	return r.IsSuccess()
 }
 
+// IsDefined returns true if the operation succeeded with no error.
+func (r Result[T]) IsDefined() bool {
+	return r.IsSuccess()
+}
+
 // HasError returns true if an error is present.
 func (r Result[T]) HasError() bool {
 	return r.IsFailed()

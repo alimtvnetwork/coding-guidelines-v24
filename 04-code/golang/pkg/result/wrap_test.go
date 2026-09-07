@@ -235,3 +235,72 @@ func TestLegacyCompatibility(t *testing.T) {
 		t.Fatalf("expected NewFailureWithType to fail")
 	}
 }
+
+func TestReExportedCastTo(t *testing.T) {
+	val, err := result.CastTo[string]("re-exported")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if val != "re-exported" {
+		t.Fatalf("expected re-exported, got %s", val)
+	}
+
+	_, err2 := result.CastTo[int]("not-int")
+	if err2 == nil {
+		t.Fatal("expected type mismatch error")
+	}
+}
+
+func TestReExportedReflectTo(t *testing.T) {
+	val, err := result.ReflectTo[int](42)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if val != 42 {
+		t.Fatalf("expected 42, got %d", val)
+	}
+
+	_, err2 := result.ReflectTo[int]("not-int")
+	if err2 == nil {
+		t.Fatal("expected reflection error")
+	}
+}
+
+func TestReExportedCastResult(t *testing.T) {
+	r := result.Success("result-cast")
+	res := result.CastResult[string, string](r)
+	if res.IsFailed() {
+		t.Fatalf("unexpected fault: %v", res.Fault())
+	}
+
+	if res.Data() != "result-cast" {
+		t.Fatalf("expected result-cast, got %s", res.Data())
+	}
+}
+
+func TestReExportedCastContextPayload(t *testing.T) {
+	appErr := appfault.New(errtype.Generic, "ctx-err").WithContext("key", "val")
+	val, err := result.CastContextPayload[string](appErr, "key")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if val != "val" {
+		t.Fatalf("expected val, got %s", val)
+	}
+}
+
+func TestReExportedResultToBytesAndJSON(t *testing.T) {
+	r := result.Success("test-bytes")
+	bRes := result.ResultToBytes(r)
+	if bRes.IsFailed() {
+		t.Fatalf("unexpected fault: %v", bRes.Fault())
+	}
+
+	jRes := result.ResultToJSON(r)
+	if jRes.IsFailed() {
+		t.Fatalf("unexpected fault: %v", jRes.Fault())
+	}
+}

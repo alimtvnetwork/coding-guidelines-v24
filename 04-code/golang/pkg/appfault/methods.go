@@ -49,6 +49,11 @@ func (e *AppError) IsFailed() bool {
 	return e.HasError()
 }
 
+// IsFailure returns true if an active error is present.
+func (e *AppError) IsFailure() bool {
+	return e.IsFailed()
+}
+
 // Is checks if the error type matches the target Variation.
 func (e *AppError) Is(target errtype.Variation) bool {
 	if e == nil {

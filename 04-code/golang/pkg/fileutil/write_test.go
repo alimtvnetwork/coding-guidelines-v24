@@ -6,55 +6,90 @@ import (
 	"testing"
 )
 
-func TestUnifiedWrite(t *testing.T) {
+type samplePerson struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
+func TestWrite_StructAsJSON(t *testing.T) {
 	tmp := t.TempDir()
+	path := filepath.Join(tmp, "person.json")
+	p := samplePerson{Name: "Charlie", Age: 25}
 
-	t.Run("Write Any Struct as JSON", func(t *testing.T) {
-		path := filepath.Join(tmp, "person.json")
-		type Person struct {
-			Name string `json:"name"`
-			Age  int    `json:"age"`
-		}
+	res := Write(path, p, FilePermStandard)
+	if res.IsFailure() {
+		t.Fatalf("Write struct failed: %v", res.Fault().Error())
+	}
 
-		p := Person{Name: "Charlie", Age: 25}
+	verifyJSONOutput(t, path)
+}
 
-		res := Write(path, p, FilePermStandard)
-		if res.IsFailure() {
-			t.Fatalf("Write struct failed: %v", res.Fault().Error())
-		}
+func verifyJSONOutput(t *testing.T, path string) {
+	txtRes := ReadText(path)
+	if txtRes.IsFailure() {
+		t.Fatalf("ReadText failed: %v", txtRes.Fault().Error())
+	}
 
-		txtRes := ReadText(path)
-		if txtRes.IsFailure() || !strings.Contains(txtRes.Data(), `"name": "Charlie"`) {
-			t.Fatalf("Expected JSON output in file, got %s", txtRes.Data())
-		}
-	})
+	if !strings.Contains(txtRes.Data(), `"name": "Charlie"`) {
+		t.Fatalf("Expected JSON output in file, got %s", txtRes.Data())
+	}
+}
 
-	t.Run("Write Any Array as Lines", func(t *testing.T) {
-		path := filepath.Join(tmp, "lines.txt")
-		lines := []string{"first line", "second line"}
+func TestWrite_ArrayAsLines(t *testing.T) {
+	tmp := t.TempDir()
+	path := filepath.Join(tmp, "lines.txt")
+	lines := []string{"first line", "second line"}
 
-		res := Write(path, lines, FilePermStandard)
-		if res.IsFailure() {
-			t.Fatalf("Write lines failed: %v", res.Fault().Error())
-		}
+	res := Write(path, lines, FilePermStandard)
+	if res.IsFailure() {
+		t.Fatalf("Write lines failed: %v", res.Fault().Error())
+	}
 
-		readRes := ReadLines(path)
-		if readRes.IsFailure() || len(readRes.Data()) != 2 {
-			t.Fatalf("Expected 2 lines, got %v", readRes.Data())
-		}
-	})
+	verifyLinesOutput(t, path)
+}
 
-	t.Run("Write String and Bytes", func(t *testing.T) {
-		pathStr := filepath.Join(tmp, "text.txt")
-		resStr := WriteString(pathStr, "pure string", FilePermStandard)
-		if resStr.IsFailure() {
-			t.Fatalf("WriteString failed: %v", resStr.Fault().Error())
-		}
+func verifyLinesOutput(t *testing.T, path string) {
+	readRes := ReadLines(path)
+	if readRes.IsFailure() {
+		t.Fatalf("ReadLines failed: %v", readRes.Fault().Error())
+	}
 
-		pathByte := filepath.Join(tmp, "bytes.bin")
-		resByte := WriteBytesLocked(pathByte, []byte("byte content"), FilePermStandard)
-		if resByte.IsFailure() {
-			t.Fatalf("WriteBytesLocked failed: %v", resByte.Fault().Error())
-		}
-	})
+	if len(readRes.Data()) != 2 {
+		t.Fatalf("Expected 2 lines, got %v", readRes.Data())
+	}
+}
+
+func TestWrite_StringAndBytes(t *testing.T) {
+	tmp := t.TempDir()
+	pathStr := filepath.Join(tmp, "text.txt")
+	resStr := WriteString(pathStr, "pure string", FilePermStandard)
+	if resStr.IsFailure() {
+		t.Fatalf("WriteString failed: %v", resStr.Fault().Error())
+	}
+
+	testWriteBytesLocked(t, tmp)
+}
+
+func testWriteBytesLocked(t *testing.T, tmp string) {
+	pathByte := filepath.Join(tmp, "bytes.bin")
+	resByte := WriteBytesLocked(pathByte, []byte("byte content"), FilePermStandard)
+	if resByte.IsFailure() {
+		t.Fatalf("WriteBytesLocked failed: %v", resByte.Fault().Error())
+	}
+}
+
+func TestWrite_YAMLAndYAMLLocked(t *testing.T) {
+	tmp := t.TempDir()
+	pathYaml := filepath.Join(tmp, "config.yaml")
+	data := map[string]string{"env": "production"}
+
+	res := WriteYAML(pathYaml, data, FilePermStandard)
+	if res.IsFailure() {
+		t.Fatalf("WriteYAML failed: %v", res.Fault().Error())
+	}
+
+	resLocked := WriteYAMLLocked(pathYaml, data, FilePermStandard)
+	if resLocked.IsFailure() {
+		t.Fatalf("WriteYAMLLocked failed: %v", resLocked.Fault().Error())
+	}
 }

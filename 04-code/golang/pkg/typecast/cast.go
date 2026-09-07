@@ -5,6 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
+)
+
+var (
+	emptyBytesType        = reflect.TypeOf([]byte(nil))
+	emptyBytesPointerType = reflect.TypeOf((*[]byte)(nil))
 )
 
 var (
@@ -14,72 +20,178 @@ var (
 	ErrTypeMismatch          = errors.New("types are not compatible for reflection set")
 )
 
-// ReflectSetTo precisely and dynamically transfers the value of 'from' into 'toPointer'
-// using Go's reflection API. It supports pointer-to-pointer, value-to-pointer, and 
-// automatic JSON marshaling/unmarshaling for byte slices.
+// ReflectSetTo precisely and dynamically transfers the value of 'from' into 'toPointer'.
 func ReflectSetTo(from, toPointer any) error {
-	// 1. Null check bypass (both nil)
 	if from == nil && toPointer == nil {
 		return nil
 	}
 
-	// 2. Validate destination is a non-nil pointer
 	if toPointer == nil {
 		return ErrInvalidNullPointer
 	}
 
-	rightRfType := reflect.TypeOf(toPointer)
-	if rightRfType.Kind() != reflect.Ptr {
-		return ErrTypeMismatch
-	}
-
-	// 3. Validate source is not nil (since dest is not nil)
 	if from == nil {
 		return ErrInvalidValueType
 	}
 
-	leftRfType := reflect.TypeOf(from)
-	leftRv := reflect.ValueOf(from)
-	rightRv := reflect.ValueOf(toPointer)
+	done, err := fastPathSet(from, toPointer)
+	if done {
+		return err
+	}
 
-	// 4. Same pointer types — direct set
+	return reflectFallbackSet(from, toPointer)
+}
+
+func fastPathSet(from, toPointer any) (bool, error) {
+	done, err := fastPathPrimitive(from, toPointer)
+	if done {
+		return true, err
+	}
+
+	return fastPathBytesOrUnmarshal(from, toPointer)
+}
+
+func fastPathPrimitive(from, toPointer any) (bool, error) {
+	switch dest := toPointer.(type) {
+	case *string:
+		return true, setPrimitive(from, dest)
+	case *int:
+		return true, setPrimitive(from, dest)
+	case *int64:
+		return true, setPrimitive(from, dest)
+	case *bool:
+		return true, setPrimitive(from, dest)
+	case *float64:
+		return true, setPrimitive(from, dest)
+	}
+
+	return false, nil
+}
+
+func setFromPtr[T any](fromPtr *T, dest *T) error {
+	if fromPtr == nil {
+		return ErrInvalidValueType
+	}
+
+	*dest = *fromPtr
+
+	return nil
+}
+
+func setPrimitive[T any](from any, dest *T) error {
+	if dest == nil {
+		return ErrInvalidNullPointer
+	}
+
+	if v, ok := from.(T); ok {
+		*dest = v
+
+		return nil
+	}
+
+	if v, ok := from.(*T); ok {
+		return setFromPtr(v, dest)
+	}
+
+	if b, ok := from.([]byte); ok {
+		return json.Unmarshal(b, dest)
+	}
+
+	return ErrTypeMismatch
+}
+
+func fastPathBytesOrUnmarshal(from, toPointer any) (bool, error) {
+	if dest, ok := toPointer.(*[]byte); ok {
+		return true, setBytes(from, dest)
+	}
+
+	if b, ok := from.([]byte); ok {
+		return fastPathUnmarshal(b, toPointer)
+	}
+
+	return false, nil
+}
+
+func marshalToBytes(from any, dest *[]byte) error {
+	rawBytes, err := json.Marshal(from)
+	if err != nil {
+		return err
+	}
+
+	*dest = rawBytes
+
+	return nil
+}
+
+func setBytes(from any, dest *[]byte) error {
+	if dest == nil {
+		return ErrInvalidNullPointer
+	}
+
+	if b, ok := from.([]byte); ok {
+		*dest = b
+
+		return nil
+	}
+
+	if b, ok := from.(*[]byte); ok {
+		return setFromPtr(b, dest)
+	}
+
+	return marshalToBytes(from, dest)
+}
+
+func fastPathUnmarshal(b []byte, toPointer any) (bool, error) {
+	rightRfType := reflect.TypeOf(toPointer)
+	if rightRfType.Kind() != reflect.Ptr {
+		return true, ErrDestinationNotPointer
+	}
+
+	if reflect.ValueOf(toPointer).IsNil() {
+		return true, ErrInvalidNullPointer
+	}
+
+	return true, json.Unmarshal(b, toPointer)
+}
+
+func checkPointers(from, toPointer any) error {
+	rightRfType := reflect.TypeOf(toPointer)
+	if rightRfType.Kind() != reflect.Ptr {
+		return ErrDestinationNotPointer
+	}
+
+	if reflect.ValueOf(toPointer).IsNil() {
+		return ErrInvalidNullPointer
+	}
+
+	leftRv := reflect.ValueOf(from)
+	if leftRv.Kind() == reflect.Ptr && leftRv.IsNil() {
+		return ErrInvalidValueType
+	}
+
+	return nil
+}
+
+func reflectFallbackSet(from, toPointer any) error {
+	err := checkPointers(from, toPointer)
+	if err != nil {
+		return err
+	}
+
+	leftRfType := reflect.TypeOf(from)
+	rightRfType := reflect.TypeOf(toPointer)
+	rightRv := reflect.ValueOf(toPointer)
+	leftRv := reflect.ValueOf(from)
+
 	if leftRfType == rightRfType {
 		rightRv.Elem().Set(leftRv.Elem())
+
 		return nil
 	}
 
-	// 5. Non-pointer source, pointer destination of same base type
-	if leftRfType.Kind() != reflect.Ptr && leftRfType == rightRfType.Elem() {
+	if leftRfType == rightRfType.Elem() {
 		rightRv.Elem().Set(leftRv)
-		return nil
-	}
 
-	// 6. Byte-slice based marshaling/unmarshaling
-	var emptyBytes []byte
-	emptyBytesType := reflect.TypeOf(emptyBytes)
-	emptyBytesPointerType := reflect.TypeOf(&emptyBytes)
-
-	isLeftBytes := leftRfType == emptyBytesType
-	isRightBytesPointer := rightRfType == emptyBytesPointerType
-
-	if !(leftRfType == rightRfType || isLeftBytes || isRightBytesPointer) {
-		return ErrTypeMismatch
-	}
-
-	// Case: []byte → other type (unmarshal)
-	if isLeftBytes {
-		return json.Unmarshal(from.([]byte), toPointer)
-	}
-
-	// Case: other type → *[]byte (marshal)
-	if isRightBytesPointer {
-		rawBytes, err := json.Marshal(from)
-		if err != nil {
-			return fmt.Errorf("failed to marshal source to bytes: %w", err)
-		}
-
-		bytesPtr := toPointer.(*[]byte)
-		*bytesPtr = rawBytes
 		return nil
 	}
 
@@ -90,6 +202,7 @@ func ReflectSetTo(from, toPointer any) error {
 func ReflectTo[T any](payload any) (T, error) {
 	var target T
 	err := ReflectSetTo(payload, &target)
+
 	return target, err
 }
 
@@ -107,4 +220,46 @@ func CastTo[T any](payload any) (T, error) {
 	}
 
 	return v, nil
+}
+
+// ToBytes converts a payload into a byte slice, handling bytes, string, string slice, error, and JSON fallback.
+func ToBytes(payload any) ([]byte, error) {
+	if payload == nil {
+		return []byte{}, nil
+	}
+
+	switch v := payload.(type) {
+	case []byte:
+		return v, nil
+	case string:
+		return []byte(v), nil
+	case []string:
+		return []byte(strings.Join(v, "\n")), nil
+	case error:
+		return []byte(v.Error()), nil
+	default:
+		return json.Marshal(v)
+	}
+}
+
+// ToJSON formats payload as indented JSON with trailing newline.
+func ToJSON(payload any) ([]byte, error) {
+	b, err := json.MarshalIndent(payload, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+
+	b = append(b, '\n')
+
+	return b, nil
+}
+
+// ToJSONString formats payload as indented JSON string.
+func ToJSONString(payload any) (string, error) {
+	b, err := json.MarshalIndent(payload, "", "  ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
 }
