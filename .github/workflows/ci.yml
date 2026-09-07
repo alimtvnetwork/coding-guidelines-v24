@@ -76,6 +76,7 @@ jobs:
       PLACEHOLDER_DIFF_BASE_REF: ${{ inputs.placeholder_diff_base_ref || '' }}
       PLACEHOLDER_DISABLE_CACHE: ${{ inputs.placeholder_disable_cache || false }}
       GOEXPERIMENT: aliastypeparams
+      GODEBUG: gotypesalias=1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -90,7 +91,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.23"
+          go-version: "1.24"
           cache: false
 
       - name: Cache Go build and module cache
@@ -99,9 +100,9 @@ jobs:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-1.23-${{ hashFiles('linter-scripts/**/*.go') }}
+          key: ${{ runner.os }}-go-1.24-${{ hashFiles('linter-scripts/**/*.go') }}
           restore-keys: |
-            ${{ runner.os }}-go-1.23-
+            ${{ runner.os }}-go-1.24-
 
       - name: Setup Python
         uses: actions/setup-python@v5

@@ -20,6 +20,7 @@
  * pipeline) are listed in IGNORED_CI_STEPS with a one-line reason.
  */
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 
 const CI_YAML = ".github/workflows/ci.yml";
 const LINT_CI = "scripts/lint-ci.sh";
@@ -66,6 +67,8 @@ const IGNORED_CI_STEPS = new Map([
   ["Publish report to GitHub Step Summary", "runner-guard reporting"],
   ["Upload runner-guard-report.md", "artifact upload — infra"],
   ["Check tunable constants (T1–T4 — single-source-of-truth, seed parity)", "runs in the tunable-constants job scope"],
+  ["Run Go Base Unit Tests (04-code/golang)", "Go unit tests for common base packages"],
+  ["Check sequence and internal link integrity", "runs via python3 linter-scripts/check-sequence-integrity.py"],
 ]);
 
 
@@ -146,5 +149,5 @@ function main() {
 export { IGNORED_CI_STEPS };
 
 // Only run main() when invoked directly (not when imported by tests).
-const invokedDirectly = import.meta.url === `file://${process.argv[1]}`;
+const invokedDirectly = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (invokedDirectly) main();
