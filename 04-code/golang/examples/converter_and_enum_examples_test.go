@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/examples"
-	"coding-guidelines/common/pkg/errtype"
+	"coding-guidelines/common/pkg/errtype/processstatetype"
 )
 
 func TestRunBytesLifecycleExample(t *testing.T) {
@@ -41,7 +41,7 @@ func TestRunReflectConverterExample(t *testing.T) {
 		t.Fatalf("reflect converter example failed: %v", appErr)
 	}
 
-	if profile == nil || profile.ID != "cust-300" || profile.Status != errtype.ProcessStateCompleted {
+	if profile == nil || profile.ID != "cust-300" || profile.Status != processstatetype.Completed {
 		t.Fatalf("unexpected profile: %+v", profile)
 	}
 }

@@ -7,6 +7,8 @@ import (
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
+	"coding-guidelines/common/pkg/errtype/logleveltype"
+	"coding-guidelines/common/pkg/errtype/processstatetype"
 	"coding-guidelines/common/pkg/fileutil"
 	"coding-guidelines/common/pkg/streamwriter"
 )
@@ -16,7 +18,7 @@ type CustomerProfile struct {
 	ID     string                   `json:"id"`
 	Name   string                   `json:"name"`
 	Email  string                   `json:"email"`
-	Status errtype.ProcessStateType `json:"status"`
+	Status processstatetype.Variant `json:"status"`
 	Tier   string                   `json:"tier"`
 }
 
@@ -27,7 +29,7 @@ func RunBytesLifecycleExample() (streamwriter.Bytes[CustomerProfile], *appfault.
 		ID:     "cust-100",
 		Name:   "Alice Smith",
 		Email:  "alice@example.com",
-		Status: errtype.ProcessStateRunning,
+		Status: processstatetype.Running,
 		Tier:   "Gold",
 	}
 
@@ -122,28 +124,28 @@ func RunReflectConverterExample() (*CustomerProfile, *appfault.AppError) {
 
 // RunEnumOperationsExample demonstrates BaseEnum, NumberEnum, and generic ToEnum helpers.
 func RunEnumOperationsExample() *appfault.AppError {
-	// 1. String-backed BaseEnum (ProcessStateType)
-	state := errtype.ProcessStateRunning
+	// 1. String-backed BaseEnum (processstatetype)
+	state := processstatetype.Running
 	if state.Name() != "Running" || state.ValueString() != "Running" {
 		return appfault.New(errtype.Generic, fmt.Sprintf("invalid string enum: %s", state))
 	}
 
 	// 2. Lookup via generic ToEnum helper
-	allStates := errtype.AllProcessStates()
+	allStates := processstatetype.All()
 	foundState, ok := errtype.ToEnum("pending", allStates)
-	if !ok || foundState != errtype.ProcessStatePending {
+	if !ok || foundState != processstatetype.Pending {
 		return appfault.New(errtype.Generic, "ToEnum lookup failed for pending")
 	}
 
-	// 3. Number-backed NumberEnum (LogLevelType)
-	level := errtype.LogLevelWarn
+	// 3. Number-backed NumberEnum (logleveltype)
+	level := logleveltype.Warn
 	if level.Code() != 3 || level.Name() != "Warn" {
 		return appfault.New(errtype.Generic, fmt.Sprintf("invalid number enum: %s", level))
 	}
 
-	allLevels := errtype.AllLogLevels()
+	allLevels := logleveltype.All()
 	foundLevel, ok := errtype.ToEnum("Error", allLevels)
-	if !ok || foundLevel != errtype.LogLevelError {
+	if !ok || foundLevel != logleveltype.Error {
 		return appfault.New(errtype.Generic, "ToEnum lookup failed for Error")
 	}
 

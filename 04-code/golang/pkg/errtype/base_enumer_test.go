@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/errtype"
+	"coding-guidelines/common/pkg/errtype/logleveltype"
+	"coding-guidelines/common/pkg/errtype/processstatetype"
 )
 
 func TestBaseEnum_VariationConforms(t *testing.T) {
@@ -37,20 +39,17 @@ func TestBaseEnum_VariationConforms(t *testing.T) {
 }
 
 func TestToEnum_GenericHelper(t *testing.T) {
-	// Search by name
-	foundState, ok := errtype.ToEnum("Completed", errtype.AllProcessStates())
-	if !ok || foundState != errtype.ProcessStateCompleted {
-		t.Fatalf("expected ToEnum to find ProcessStateCompleted, got %v, ok=%v", foundState, ok)
+	foundState, ok := errtype.ToEnum("Completed", processstatetype.All())
+	if !ok || foundState != processstatetype.Completed {
+		t.Fatalf("expected ToEnum to find Completed, got %v, ok=%v", foundState, ok)
 	}
 
-	// Search by value string for number enum
-	foundLvl, ok := errtype.ToEnum("4", errtype.AllLogLevels())
-	if !ok || foundLvl != errtype.LogLevelError {
-		t.Fatalf("expected ToEnum to find LogLevelError by '4', got %v, ok=%v", foundLvl, ok)
+	foundLvl, ok := errtype.ToEnum("4", logleveltype.All())
+	if !ok || foundLvl != logleveltype.Error {
+		t.Fatalf("expected ToEnum to find Error by '4', got %v, ok=%v", foundLvl, ok)
 	}
 
-	// Unknown enum search
-	_, ok = errtype.ToEnum("non-existent", errtype.AllProcessStates())
+	_, ok = errtype.ToEnum("non-existent", processstatetype.All())
 	if ok {
 		t.Fatal("expected non-existent enum to return ok=false")
 	}

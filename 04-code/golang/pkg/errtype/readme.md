@@ -23,11 +23,11 @@ The `errtype` package provides strongly-typed enumerations, standardized error c
 4. **Automated Enum Generation:**
    Enums are generated and synchronized using `03-ai-scripts/30-enum-generator.py`, guaranteeing complete boilerplate implementation (registries, stringifiers, JSON handlers, parse functions, slice generators).
 5. **1:1 File & Package Isolation:**
-   Each enum type resides in its own dedicated source file matching its snake_case name:
-   - `process_state_type.go` & `process_state_type_test.go` (`ProcessStateType`)
-   - `log_level_type.go` & `log_level_type_test.go` (`LogLevelType`)
-   - `variation.go` & `methods.go` (`Variation`)
-   - `base_enumer.go` & `base_enumer_test.go` (`BaseEnumer` interfaces & `ToEnum`)
+   Each enum type resides in its own dedicated package or source file matching its snake_case/package name:
+   - Dedicated subpackage `logleveltype/` (`pkg/errtype/logleveltype/`): `variant.go` & `variant_test.go` (`LogLevelType`)
+   - Dedicated subpackage `processstatetype/` (`pkg/errtype/processstatetype/`): `variant.go` & `variant_test.go` (`ProcessStateType`)
+   - Root `variation.go` & `methods.go` (`Variation` error type codes)
+   - Root `base_enumer.go` & `base_enumer_test.go` (`BaseEnumer` interfaces & `ToEnum`)
    - Canonical package `pkg/enum/processstatetype/` provides standalone byte-backed process states.
 
 ---
@@ -97,7 +97,9 @@ Standard classification codes mapped to HTTP status codes:
 
 ### 2. `ProcessStateType` (String-backed Lifecycle Enum)
 ```go
-state := errtype.ProcessStateRunning
+import "coding-guidelines/common/pkg/errtype/processstatetype"
+
+state := processstatetype.Running
 
 // Inspection
 if state.IsValid() {
@@ -105,7 +107,7 @@ if state.IsValid() {
 }
 
 // Slice of all states
-all := errtype.AllProcessStates()
+all := processstatetype.All()
 
 // Generic lookup
 found, ok := errtype.ToEnum("completed", all)
@@ -113,7 +115,9 @@ found, ok := errtype.ToEnum("completed", all)
 
 ### 3. `LogLevelType` (Number-backed Logger Level Enum)
 ```go
-level := errtype.LogLevelInfo
+import "coding-guidelines/common/pkg/errtype/logleveltype"
+
+level := logleveltype.Info
 fmt.Printf("Level Code: %d, Name: %s\n", level.Code(), level.Name())
 ```
 
