@@ -6,15 +6,15 @@ import (
 )
 
 type lockEntry struct {
-	mu       *sync.RWMutex
+	lock     *sync.RWMutex
 	refCount int
 }
 
 var (
 	// fileLocksMap stores the read/write mutexes and their reference counts mapped by absolute path.
 	fileLocksMap = make(map[string]*lockEntry)
-	// fileLocksMu protects the map itself from concurrent mutation.
-	fileLocksMu sync.Mutex
+	// fileLocksLock protects the map itself from concurrent mutation.
+	fileLocksLock sync.Mutex
 )
 
 func getAbsPath(path string) string {
@@ -30,16 +30,16 @@ func fetchOrInitEntry(absPath string) *sync.RWMutex {
 	if entry, exists := fileLocksMap[absPath]; exists {
 		entry.refCount++
 
-		return entry.mu
+		return entry.lock
 	}
 
-	mu := &sync.RWMutex{}
+	lock := &sync.RWMutex{}
 	fileLocksMap[absPath] = &lockEntry{
-		mu:       mu,
+		lock:     lock,
 		refCount: 1,
 	}
 
-	return mu
+	return lock
 }
 
 // GetFileLock retrieves or initializes a sync.RWMutex for the specified file path,
@@ -47,8 +47,8 @@ func fetchOrInitEntry(absPath string) *sync.RWMutex {
 func GetFileLock(path string) *sync.RWMutex {
 	absPath := getAbsPath(path)
 
-	fileLocksMu.Lock()
-	defer fileLocksMu.Unlock()
+	fileLocksLock.Lock()
+	defer fileLocksLock.Unlock()
 
 	return fetchOrInitEntry(absPath)
 }
@@ -67,16 +67,16 @@ func decrementLockEntry(absPath string) {
 func ReleaseFileLock(path string) {
 	absPath := getAbsPath(path)
 
-	fileLocksMu.Lock()
-	defer fileLocksMu.Unlock()
+	fileLocksLock.Lock()
+	defer fileLocksLock.Unlock()
 
 	decrementLockEntry(absPath)
 }
 
 // ActiveLockCount returns the number of active locked paths in the map.
 func ActiveLockCount() int {
-	fileLocksMu.Lock()
-	defer fileLocksMu.Unlock()
+	fileLocksLock.Lock()
+	defer fileLocksLock.Unlock()
 
 	return len(fileLocksMap)
 }
@@ -85,8 +85,8 @@ func ActiveLockCount() int {
 func GetLockRefCount(path string) int {
 	absPath := getAbsPath(path)
 
-	fileLocksMu.Lock()
-	defer fileLocksMu.Unlock()
+	fileLocksLock.Lock()
+	defer fileLocksLock.Unlock()
 
 	if entry, exists := fileLocksMap[absPath]; exists {
 		return entry.refCount

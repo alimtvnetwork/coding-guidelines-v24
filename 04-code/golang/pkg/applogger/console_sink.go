@@ -10,7 +10,7 @@ import (
 
 // ConsoleSink outputs log entries to an io.Writer (e.g. os.Stdout).
 type ConsoleSink struct {
-	mu      sync.Mutex
+	lock    sync.Mutex
 	writer  io.Writer
 	useJSON bool
 }
@@ -51,8 +51,8 @@ func (cs *ConsoleSink) writeJSON(e LogEntry) error {
 
 // WriteEntry writes the log entry to the console.
 func (cs *ConsoleSink) WriteEntry(e LogEntry) error {
-	cs.mu.Lock()
-	defer cs.mu.Unlock()
+	cs.lock.Lock()
+	defer cs.lock.Unlock()
 
 	if cs.useJSON {
 		return cs.writeJSON(e)

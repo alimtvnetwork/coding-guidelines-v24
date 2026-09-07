@@ -13,7 +13,7 @@ import (
 
 // FileSink writes log entries to a file path.
 type FileSink struct {
-	mu       sync.Mutex
+	lock     sync.Mutex
 	filePath string
 	file     *os.File
 }
@@ -40,8 +40,8 @@ func NewFileSink(filePath string) (*FileSink, error) {
 
 // WriteEntry serializes and writes entry to file.
 func (fs *FileSink) WriteEntry(e LogEntry) error {
-	fs.mu.Lock()
-	defer fs.mu.Unlock()
+	fs.lock.Lock()
+	defer fs.lock.Unlock()
 
 	b, err := json.Marshal(e)
 	if err != nil {
@@ -55,8 +55,8 @@ func (fs *FileSink) WriteEntry(e LogEntry) error {
 
 // Sync flushes the file buffer to disk.
 func (fs *FileSink) Sync() error {
-	fs.mu.Lock()
-	defer fs.mu.Unlock()
+	fs.lock.Lock()
+	defer fs.lock.Unlock()
 	if fs.file != nil {
 		return fs.file.Sync()
 	}
@@ -66,8 +66,8 @@ func (fs *FileSink) Sync() error {
 
 // Close closes the file descriptor.
 func (fs *FileSink) Close() error {
-	fs.mu.Lock()
-	defer fs.mu.Unlock()
+	fs.lock.Lock()
+	defer fs.lock.Unlock()
 	if fs.file != nil {
 		err := fs.file.Close()
 		fs.file = nil

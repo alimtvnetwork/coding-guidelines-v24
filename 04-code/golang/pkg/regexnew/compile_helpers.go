@@ -12,7 +12,7 @@ func Create(regularExpressionPattern string) appfault.Result[*regexp.Regexp] {
 	return lz.Compile()
 }
 
-// CreateLock calls Create protected by regexMutex.
+// CreateLock calls Create protected by regexLock.
 func CreateLock(regularExpressionPattern string) appfault.Result[*regexp.Regexp] {
 	lz := New.LazyLock(regularExpressionPattern)
 
@@ -33,8 +33,8 @@ func CreateApplicableLock(regularExpressionPattern string) (
 	res appfault.Result[*regexp.Regexp],
 	isApplicable bool,
 ) {
-	regexMutex.Lock()
-	defer regexMutex.Unlock()
+	regexLock.Lock()
+	defer regexLock.Unlock()
 
 	lz := New.LazyLock(regularExpressionPattern)
 	res = lz.Compile()
@@ -59,7 +59,7 @@ func CreateMustLockIf(isLock bool, regularExpressionSyntax string) *regexp.Regex
 	return CreateMust(regularExpressionSyntax)
 }
 
-// NewMustLock compiles or retrieves a cached regex under regexMutex, panicking on error.
+// NewMustLock compiles or retrieves a cached regex under regexLock, panicking on error.
 func NewMustLock(regularExpressionSyntax string) *regexp.Regexp {
 	lz := New.LazyLock(regularExpressionSyntax)
 

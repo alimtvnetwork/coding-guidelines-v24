@@ -94,7 +94,7 @@ flowchart TD
 |  - mode: Direct | Atomic | Truncate                                     |
 |  - perm: FilePermStandard (0644)                                        |
 |  - autoClose: true (close on write) | false (reusable persistent handle)|
-|  - mu: sync.Mutex (automatic or manual locking)                         |
+|  - lock: sync.Mutex (automatic or manual locking)                         |
 |  - counters: bytesWritten, bytesAppended, writeCount                    |
 +-------------------------------------------------------------------------+
                                     |

@@ -26,7 +26,7 @@ type (
 	}
 
 	BoundFileWriter struct {
-		mu            sync.Mutex
+		lock          sync.Mutex
 		path          string
 		mode          FileWriteModeType
 		perm          FilePermType
@@ -82,54 +82,54 @@ func (w *BoundFileWriter) Path() string {
 }
 
 func (w *BoundFileWriter) Mode() FileWriteModeType {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.mode
 }
 
 func (w *BoundFileWriter) Perm() FilePermType {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.perm
 }
 
 func (w *BoundFileWriter) SetMode(mode FileWriteModeType) *BoundFileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.mode = mode
 
 	return w
 }
 
 func (w *BoundFileWriter) SetPerm(perm FilePermType) *BoundFileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.perm = perm
 
 	return w
 }
 
 func (w *BoundFileWriter) SetSyncOnWrite(isSync bool) *BoundFileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.syncOnWrite = isSync
 
 	return w
 }
 
 func (w *BoundFileWriter) SetAutoClose(isAuto bool) *BoundFileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.autoClose = isAuto
 
 	return w
 }
 
 func (w *BoundFileWriter) IsOpen() bool {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.file != nil
 }
@@ -153,16 +153,16 @@ func (w *BoundFileWriter) ResetCounters() {
 }
 
 func (w *BoundFileWriter) Lock() {
-	w.mu.Lock()
+	w.lock.Lock()
 }
 
 func (w *BoundFileWriter) Unlock() {
-	w.mu.Unlock()
+	w.lock.Unlock()
 }
 
 func (w *BoundFileWriter) WithLock(ctx context.Context, fn BoundFileActionFunc) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	if fn == nil {
 		return nil
@@ -172,8 +172,8 @@ func (w *BoundFileWriter) WithLock(ctx context.Context, fn BoundFileActionFunc) 
 }
 
 func (w *BoundFileWriter) Write(ctx context.Context, payload []byte) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.writeInternal(payload, w.autoClose)
 }
@@ -187,15 +187,15 @@ func (w *BoundFileWriter) WriteLocked(ctx context.Context, payload []byte) *appf
 }
 
 func (w *BoundFileWriter) WriteAndClose(ctx context.Context, payload []byte) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.writeInternal(payload, true)
 }
 
 func (w *BoundFileWriter) Append(ctx context.Context, payload []byte) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.appendInternal(payload, w.autoClose)
 }
@@ -209,8 +209,8 @@ func (w *BoundFileWriter) AppendLocked(ctx context.Context, payload []byte) *app
 }
 
 func (w *BoundFileWriter) AppendAndClose(ctx context.Context, payload []byte) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	return w.appendInternal(payload, true)
 }
@@ -347,8 +347,8 @@ func (w *BoundFileWriter) appendInternal(payload []byte, closeAfter bool) *appfa
 }
 
 func (w *BoundFileWriter) Sync() *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	if w.file != nil {
 		if err := w.file.Sync(); err != nil {
@@ -360,8 +360,8 @@ func (w *BoundFileWriter) Sync() *appfault.AppError {
 }
 
 func (w *BoundFileWriter) Close() *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	if w.file != nil {
 		err := w.file.Close()

@@ -10,6 +10,8 @@ Master directory of architectural and execution plans.
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 ## Completed Plans
 
+- [29-rename-mutex-to-lock.md](completed/29-rename-mutex-to-lock.md): Rename `mu` and `mutex` to `lock` Repo-Wide.
+
 - [28-dry-enum-marshaling-and-scaffolder.md](completed/28-dry-enum-marshaling-and-scaffolder.md): DRY Enum Marshaling in `pkg/baseenumer` & Smart Multi-File Enum Scaffolder.
 
 - [27-direct-result-types-consolidation.md](completed/27-direct-result-types-consolidation.md): Direct Concrete Result Types Consolidation Across Enum Packages and FileUtil.

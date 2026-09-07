@@ -20,8 +20,8 @@ type (
 	}
 
 	PluggableWriter[T any] struct {
-		mu           ReentrantMutex
-		configMu     sync.RWMutex
+		lock         ReentrantLock
+		configLock   sync.RWMutex
 		name         string
 		destination  io.Writer
 		streamer     Streamer[T]
@@ -65,8 +65,8 @@ func (w *PluggableWriter[T]) Name() string {
 
 // Destination returns the destination io.Writer under read-lock, falling back to attached streamer if present.
 func (w *PluggableWriter[T]) Destination() io.Writer {
-	w.configMu.RLock()
-	defer w.configMu.RUnlock()
+	w.configLock.RLock()
+	defer w.configLock.RUnlock()
 	if w.destination != nil {
 		return w.destination
 	}
@@ -80,15 +80,15 @@ func (w *PluggableWriter[T]) Destination() io.Writer {
 
 // SetDestination hot-swaps the destination at runtime.
 func (w *PluggableWriter[T]) SetDestination(dest io.Writer) {
-	w.configMu.Lock()
-	defer w.configMu.Unlock()
+	w.configLock.Lock()
+	defer w.configLock.Unlock()
 	w.destination = dest
 }
 
 // FormatMethod returns the attached formatter function under read-lock.
 func (w *PluggableWriter[T]) FormatMethod() FormatFunc[T] {
-	w.configMu.RLock()
-	defer w.configMu.RUnlock()
+	w.configLock.RLock()
+	defer w.configLock.RUnlock()
 
 	return w.formatMethod
 }
@@ -96,13 +96,13 @@ func (w *PluggableWriter[T]) FormatMethod() FormatFunc[T] {
 // Write delegates to the active writeMethod function under lock, returning *appfault.AppError.
 // It passes the current writer object (w) into writeMethod to grant access to properties.
 func (w *PluggableWriter[T]) Write(ctx context.Context, payload T) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
-	w.configMu.RLock()
+	w.configLock.RLock()
 	fn := w.writeMethod
 	s := w.streamer
-	w.configMu.RUnlock()
+	w.configLock.RUnlock()
 
 	return fn(s, ctx, w, payload)
 }
@@ -113,8 +113,8 @@ func (w *PluggableWriter[T]) SetWriteMethod(fn WriteFunc[T]) {
 		return
 	}
 
-	w.configMu.Lock()
-	defer w.configMu.Unlock()
+	w.configLock.Lock()
+	defer w.configLock.Unlock()
 	w.writeMethod = fn
 }
 
@@ -124,22 +124,22 @@ func (w *PluggableWriter[T]) SetFormatMethod(fn FormatFunc[T]) {
 		return
 	}
 
-	w.configMu.Lock()
-	defer w.configMu.Unlock()
+	w.configLock.Lock()
+	defer w.configLock.Unlock()
 	w.formatMethod = fn
 }
 
 // SetStreamer hot-swaps the underlying streamer at runtime.
 func (w *PluggableWriter[T]) SetStreamer(s Streamer[T]) {
-	w.configMu.Lock()
-	defer w.configMu.Unlock()
+	w.configLock.Lock()
+	defer w.configLock.Unlock()
 	w.streamer = s
 }
 
 // Streamer returns the attached streamer under read-lock.
 func (w *PluggableWriter[T]) Streamer() Streamer[T] {
-	w.configMu.RLock()
-	defer w.configMu.RUnlock()
+	w.configLock.RLock()
+	defer w.configLock.RUnlock()
 
 	return w.streamer
 }
@@ -151,19 +151,19 @@ func (w *PluggableWriter[T]) AsWriter() Writer[T] {
 
 // Lock locks the writer for exclusive access, satisfying sync.Locker.
 func (w *PluggableWriter[T]) Lock() {
-	w.mu.Lock()
+	w.lock.Lock()
 }
 
 // Unlock unlocks the writer, satisfying sync.Locker.
 func (w *PluggableWriter[T]) Unlock() {
-	w.mu.Unlock()
+	w.lock.Unlock()
 }
 
 // Sync flushes the underlying streamer if attached.
 func (w *PluggableWriter[T]) Sync() *appfault.AppError {
-	w.configMu.RLock()
+	w.configLock.RLock()
 	s := w.streamer
-	w.configMu.RUnlock()
+	w.configLock.RUnlock()
 
 	if s != nil {
 		return s.Sync()
@@ -174,9 +174,9 @@ func (w *PluggableWriter[T]) Sync() *appfault.AppError {
 
 // Close closes the underlying streamer if attached.
 func (w *PluggableWriter[T]) Close() *appfault.AppError {
-	w.configMu.Lock()
+	w.configLock.Lock()
 	s := w.streamer
-	w.configMu.Unlock()
+	w.configLock.Unlock()
 
 	if s != nil {
 		return s.Close()
@@ -186,10 +186,10 @@ func (w *PluggableWriter[T]) Close() *appfault.AppError {
 }
 
 func (w *PluggableWriter[T]) defaultWrite(streamer Streamer[T], ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError {
-	w.configMu.RLock()
+	w.configLock.RLock()
 	formatter := w.formatMethod
 	dest := w.destination
-	w.configMu.RUnlock()
+	w.configLock.RUnlock()
 
 	if formatter != nil {
 		bytesResult := formatter(payload)

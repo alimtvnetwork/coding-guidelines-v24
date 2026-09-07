@@ -8,20 +8,20 @@ import (
 )
 
 // MutexCollection provides concurrency-safe operations over a Collection.
-type MutexCollection struct {
+type LockCollection struct {
 	sync.RWMutex
 	inner *Collection
 }
 
 // NewMutexCollection creates a thread-safe error collection.
-func NewMutexCollection() *MutexCollection {
-	return &MutexCollection{
+func NewLockCollection() *LockCollection {
+	return &LockCollection{
 		inner: New(),
 	}
 }
 
 // Add safely appends an error to the collection.
-func (mc *MutexCollection) Add(err *appfault.AppError) *MutexCollection {
+func (mc *LockCollection) Add(err *appfault.AppError) *LockCollection {
 	mc.Lock()
 	defer mc.Unlock()
 	mc.inner.Add(err)
@@ -30,7 +30,7 @@ func (mc *MutexCollection) Add(err *appfault.AppError) *MutexCollection {
 }
 
 // AddType safely adds an error by type.
-func (mc *MutexCollection) AddType(errType errtype.Variation) *MutexCollection {
+func (mc *LockCollection) AddType(errType errtype.Variation) *LockCollection {
 	mc.Lock()
 	defer mc.Unlock()
 	mc.inner.AddType(errType)
@@ -39,7 +39,7 @@ func (mc *MutexCollection) AddType(errType errtype.Variation) *MutexCollection {
 }
 
 // AddTypeMsg safely adds an error by type and message.
-func (mc *MutexCollection) AddTypeMsg(errType errtype.Variation, msg string) *MutexCollection {
+func (mc *LockCollection) AddTypeMsg(errType errtype.Variation, msg string) *LockCollection {
 	mc.Lock()
 	defer mc.Unlock()
 	mc.inner.AddTypeMsg(errType, msg)
@@ -48,7 +48,7 @@ func (mc *MutexCollection) AddTypeMsg(errType errtype.Variation, msg string) *Mu
 }
 
 // AddError safely wraps and appends a standard error with explicit type.
-func (mc *MutexCollection) AddError(errType errtype.Variation, cause error) *MutexCollection {
+func (mc *LockCollection) AddError(errType errtype.Variation, cause error) *LockCollection {
 	mc.Lock()
 	defer mc.Unlock()
 	mc.inner.AddError(errType, cause)
@@ -57,7 +57,7 @@ func (mc *MutexCollection) AddError(errType errtype.Variation, cause error) *Mut
 }
 
 // HasError safely checks if any error is stored.
-func (mc *MutexCollection) HasError() bool {
+func (mc *LockCollection) HasError() bool {
 	mc.RLock()
 	defer mc.RUnlock()
 
@@ -65,12 +65,12 @@ func (mc *MutexCollection) HasError() bool {
 }
 
 // IsSuccess safely checks if collection is empty.
-func (mc *MutexCollection) IsSuccess() bool {
+func (mc *LockCollection) IsSuccess() bool {
 	return !mc.HasError()
 }
 
 // Count safely returns the item count.
-func (mc *MutexCollection) Count() int {
+func (mc *LockCollection) Count() int {
 	mc.RLock()
 	defer mc.RUnlock()
 
@@ -78,9 +78,17 @@ func (mc *MutexCollection) Count() int {
 }
 
 // Snapshot safely returns a cloned Collection.
-func (mc *MutexCollection) Snapshot() *Collection {
+func (mc *LockCollection) Snapshot() *Collection {
 	mc.RLock()
 	defer mc.RUnlock()
 
 	return NewFromFaults(mc.inner.items...)
+}
+
+// MutexCollection is an alias for LockCollection for backward compatibility.
+type MutexCollection = LockCollection
+
+// NewMutexCollection creates a thread-safe error collection (backward compatible).
+func NewMutexCollection() *LockCollection {
+	return NewLockCollection()
 }

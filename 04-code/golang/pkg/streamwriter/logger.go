@@ -10,7 +10,7 @@ import (
 
 // Logger coordinates multiple generic writers and streamers over type T with AppError returns.
 type Logger[T any] struct {
-	mu      sync.RWMutex
+	lock    sync.RWMutex
 	writers []Writer[T]
 }
 
@@ -32,8 +32,8 @@ func (l *Logger[T]) AddWriter(w Writer[T]) *Logger[T] {
 		return l
 	}
 
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.lock.Lock()
+	defer l.lock.Unlock()
 	l.writers = append(l.writers, w.AsWriter())
 
 	return l
@@ -41,8 +41,8 @@ func (l *Logger[T]) AddWriter(w Writer[T]) *Logger[T] {
 
 // AddWriters fluently registers multiple writers in one call.
 func (l *Logger[T]) AddWriters(ws ...Writer[T]) *Logger[T] {
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.lock.Lock()
+	defer l.lock.Unlock()
 	for _, w := range ws {
 		if w != nil {
 			l.writers = append(l.writers, w.AsWriter())
@@ -58,8 +58,8 @@ func (l *Logger[T]) AddStreamer(s Streamer[T]) *Logger[T] {
 		return l
 	}
 
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.lock.Lock()
+	defer l.lock.Unlock()
 	l.writers = append(l.writers, s.AsWriter())
 
 	return l
@@ -67,8 +67,8 @@ func (l *Logger[T]) AddStreamer(s Streamer[T]) *Logger[T] {
 
 // ClearWriters removes all registered writers (switches to silent mode).
 func (l *Logger[T]) ClearWriters() *Logger[T] {
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.lock.Lock()
+	defer l.lock.Unlock()
 	l.writers = l.writers[:0]
 
 	return l
@@ -76,8 +76,8 @@ func (l *Logger[T]) ClearWriters() *Logger[T] {
 
 // RemoveWriter removes a registered writer by name.
 func (l *Logger[T]) RemoveWriter(name string) *Logger[T] {
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.lock.Lock()
+	defer l.lock.Unlock()
 	filtered := make([]Writer[T], 0, len(l.writers))
 	for _, w := range l.writers {
 		if w.Name() != name {
@@ -92,25 +92,25 @@ func (l *Logger[T]) RemoveWriter(name string) *Logger[T] {
 
 // WriterCount returns the number of active writers.
 func (l *Logger[T]) WriterCount() int {
-	l.mu.RLock()
-	defer l.mu.RUnlock()
+	l.lock.RLock()
+	defer l.lock.RUnlock()
 
 	return len(l.writers)
 }
 
 // Emit sends a generic payload T to all active writers, returning *appfault.AppError.
 func (l *Logger[T]) Emit(ctx context.Context, payload T) *appfault.AppError {
-	l.mu.RLock()
+	l.lock.RLock()
 	// Zero-allocation silent guard
 	if len(l.writers) == 0 {
-		l.mu.RUnlock()
+		l.lock.RUnlock()
 
 		return nil
 	}
 
 	active := make([]Writer[T], len(l.writers))
 	copy(active, l.writers)
-	l.mu.RUnlock()
+	l.lock.RUnlock()
 
 	var firstErr *appfault.AppError
 	for _, w := range active {
@@ -145,10 +145,10 @@ func (l *Logger[T]) Warn(ctx context.Context, msg string, fields ...map[string]a
 
 // Sync flushes all active writers, returning *appfault.AppError.
 func (l *Logger[T]) Sync() *appfault.AppError {
-	l.mu.RLock()
+	l.lock.RLock()
 	active := make([]Writer[T], len(l.writers))
 	copy(active, l.writers)
-	l.mu.RUnlock()
+	l.lock.RUnlock()
 
 	var firstErr *appfault.AppError
 	for _, w := range active {
@@ -162,8 +162,8 @@ func (l *Logger[T]) Sync() *appfault.AppError {
 
 // Close closes all active writers, returning *appfault.AppError.
 func (l *Logger[T]) Close() *appfault.AppError {
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.lock.Lock()
+	defer l.lock.Unlock()
 
 	var firstErr *appfault.AppError
 	for _, w := range l.writers {
@@ -178,14 +178,14 @@ func (l *Logger[T]) Close() *appfault.AppError {
 }
 
 func (l *Logger[T]) dispatchRecord(ctx context.Context, lvl LogLevel, msg string, fields ...map[string]any) *appfault.AppError {
-	l.mu.RLock()
+	l.lock.RLock()
 	if len(l.writers) == 0 {
-		l.mu.RUnlock()
+		l.lock.RUnlock()
 
 		return nil
 	}
 
-	l.mu.RUnlock()
+	l.lock.RUnlock()
 
 	traceId := ""
 	userId := ""

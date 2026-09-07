@@ -25,7 +25,7 @@ type (
 	}
 
 	FileWriter struct {
-		mu          sync.RWMutex
+		lock        sync.RWMutex
 		path        string
 		mode        FileWriteModeType
 		perm        FilePermType
@@ -63,53 +63,53 @@ func NewFileWriterWithOptions(opts FileWriterOptions) *FileWriter {
 }
 
 func (w *FileWriter) Name() string {
-	w.mu.RLock()
-	defer w.mu.RUnlock()
+	w.lock.RLock()
+	defer w.lock.RUnlock()
 
 	return fmt.Sprintf("file-writer[%s]", filepath.Base(w.path))
 }
 
 func (w *FileWriter) Path() string {
-	w.mu.RLock()
-	defer w.mu.RUnlock()
+	w.lock.RLock()
+	defer w.lock.RUnlock()
 
 	return w.path
 }
 
 func (w *FileWriter) Mode() FileWriteModeType {
-	w.mu.RLock()
-	defer w.mu.RUnlock()
+	w.lock.RLock()
+	defer w.lock.RUnlock()
 
 	return w.mode
 }
 
 func (w *FileWriter) SetMode(mode FileWriteModeType) *FileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.mode = mode
 
 	return w
 }
 
 func (w *FileWriter) SetPerm(perm FilePermType) *FileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.perm = perm
 
 	return w
 }
 
 func (w *FileWriter) SetSyncOnWrite(isSync bool) *FileWriter {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 	w.syncOnWrite = isSync
 
 	return w
 }
 
 func (w *FileWriter) Write(ctx context.Context, payload []byte) *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	if w.path == "" {
 		return appfault.New(errtype.Precondition, "file path cannot be empty")
@@ -193,8 +193,8 @@ func (s *fileWriterStdAdapter) Close() error {
 }
 
 func (w *FileWriter) Sync() *appfault.AppError {
-	w.mu.RLock()
-	defer w.mu.RUnlock()
+	w.lock.RLock()
+	defer w.lock.RUnlock()
 
 	if w.file != nil {
 		if err := w.file.Sync(); err != nil {
@@ -206,8 +206,8 @@ func (w *FileWriter) Sync() *appfault.AppError {
 }
 
 func (w *FileWriter) Close() *appfault.AppError {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	if w.file != nil {
 		err := w.file.Close()
@@ -221,11 +221,11 @@ func (w *FileWriter) Close() *appfault.AppError {
 }
 
 func (w *FileWriter) Lock() {
-	w.mu.Lock()
+	w.lock.Lock()
 }
 
 func (w *FileWriter) Unlock() {
-	w.mu.Unlock()
+	w.lock.Unlock()
 }
 
 func (w *FileWriter) AsWriter() streamwriter.Writer[[]byte] {
@@ -233,7 +233,7 @@ func (w *FileWriter) AsWriter() streamwriter.Writer[[]byte] {
 }
 
 type FileAppender struct {
-	mu            sync.Mutex
+	lock          sync.Mutex
 	path          string
 	perm          FilePermType
 	autoSync      bool
@@ -258,8 +258,8 @@ func (a *FileAppender) Path() string {
 }
 
 func (a *FileAppender) SetAutoSync(isAuto bool) *FileAppender {
-	a.mu.Lock()
-	defer a.mu.Unlock()
+	a.lock.Lock()
+	defer a.lock.Unlock()
 	a.autoSync = isAuto
 
 	return a
@@ -286,8 +286,8 @@ func (a *FileAppender) ensureOpen() error {
 }
 
 func (a *FileAppender) Append(ctx context.Context, data []byte) *appfault.AppError {
-	a.mu.Lock()
-	defer a.mu.Unlock()
+	a.lock.Lock()
+	defer a.lock.Unlock()
 
 	if err := a.ensureOpen(); err != nil {
 		return appfault.Wrap(errtype.IO, err, "failed to open appender target file")
@@ -348,8 +348,8 @@ func (a *FileAppender) BytesAppended() int64 {
 }
 
 func (a *FileAppender) Sync() *appfault.AppError {
-	a.mu.Lock()
-	defer a.mu.Unlock()
+	a.lock.Lock()
+	defer a.lock.Unlock()
 
 	if a.file != nil {
 		if err := a.file.Sync(); err != nil {
@@ -361,8 +361,8 @@ func (a *FileAppender) Sync() *appfault.AppError {
 }
 
 func (a *FileAppender) Close() *appfault.AppError {
-	a.mu.Lock()
-	defer a.mu.Unlock()
+	a.lock.Lock()
+	defer a.lock.Unlock()
 
 	if a.file != nil {
 		err := a.file.Close()
@@ -376,11 +376,11 @@ func (a *FileAppender) Close() *appfault.AppError {
 }
 
 func (a *FileAppender) Lock() {
-	a.mu.Lock()
+	a.lock.Lock()
 }
 
 func (a *FileAppender) Unlock() {
-	a.mu.Unlock()
+	a.lock.Unlock()
 }
 
 func (a *FileAppender) Name() string {

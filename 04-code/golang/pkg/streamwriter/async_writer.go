@@ -29,7 +29,7 @@ type (
 		closeOnce sync.Once
 		doneChan  chan struct{}
 		wg        sync.WaitGroup
-		mu        ReentrantMutex
+		lock      ReentrantLock
 	}
 
 	AnyAsyncWriter = AsyncWriter[any]
@@ -87,12 +87,12 @@ func (aw *AsyncWriter[T]) AsWriter() Writer[T] {
 
 // Lock acquires the synchronization lock.
 func (aw *AsyncWriter[T]) Lock() {
-	aw.mu.Lock()
+	aw.lock.Lock()
 }
 
 // Unlock releases the synchronization lock.
 func (aw *AsyncWriter[T]) Unlock() {
-	aw.mu.Unlock()
+	aw.lock.Unlock()
 }
 
 // Write enqueues a payload into the async buffer without blocking the caller.

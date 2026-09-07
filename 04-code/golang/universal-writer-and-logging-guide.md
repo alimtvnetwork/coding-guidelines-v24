@@ -375,7 +375,7 @@ func HandleFailure(ctx context.Context, log *streamwriter.AnyLogger, appErr *app
 
 ## 4. Runtime Swapping of Formats and Write Methods
 
-`PluggableWriter` provides thread-safe runtime mutation of write methods, destinations, and formatters via internal read-write locks (`configMu` and reentrant `mu`).
+`PluggableWriter` provides thread-safe runtime mutation of write methods, destinations, and formatters via internal read-write locks (`configLock` and reentrant `lock`).
 
 ### 4.1 Hot-Swapping the Write Method
 

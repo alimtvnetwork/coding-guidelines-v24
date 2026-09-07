@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	globalFaultWriter   FaultWriter = &PipelineFaultWriter{Steps: DefaultFormatPipeline}
-	globalFaultWriterMu sync.RWMutex
+	globalFaultWriter     FaultWriter = &PipelineFaultWriter{Steps: DefaultFormatPipeline}
+	globalFaultWriterLock sync.RWMutex
 )
 
 // FaultFormatStep defines a single step in the fault formatting pipeline.
@@ -89,8 +89,8 @@ func (w *PipelineFaultWriter) WriteFault(out io.Writer, e *AppError) *AppError {
 
 // SetGlobalFaultWriter registers a custom FaultWriter globally.
 func SetGlobalFaultWriter(writer FaultWriter) {
-	globalFaultWriterMu.Lock()
-	defer globalFaultWriterMu.Unlock()
+	globalFaultWriterLock.Lock()
+	defer globalFaultWriterLock.Unlock()
 
 	if writer != nil {
 		globalFaultWriter = writer
@@ -99,8 +99,8 @@ func SetGlobalFaultWriter(writer FaultWriter) {
 
 // GetGlobalFaultWriter returns the currently configured global FaultWriter.
 func GetGlobalFaultWriter() FaultWriter {
-	globalFaultWriterMu.RLock()
-	defer globalFaultWriterMu.RUnlock()
+	globalFaultWriterLock.RLock()
+	defer globalFaultWriterLock.RUnlock()
 
 	return globalFaultWriter
 }

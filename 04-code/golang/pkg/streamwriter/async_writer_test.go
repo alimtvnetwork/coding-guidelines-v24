@@ -14,7 +14,7 @@ import (
 
 // MockTargetWriter records written items and flushes for test verification.
 type MockTargetWriter[T any] struct {
-	mu       sync.Mutex
+	lock     sync.Mutex
 	items    []T
 	synced   int
 	closed   bool
@@ -30,16 +30,16 @@ func (m *MockTargetWriter[T]) AsWriter() streamwriter.Writer[T] {
 }
 
 func (m *MockTargetWriter[T]) Lock() {
-	m.mu.Lock()
+	m.lock.Lock()
 }
 
 func (m *MockTargetWriter[T]) Unlock() {
-	m.mu.Unlock()
+	m.lock.Unlock()
 }
 
 func (m *MockTargetWriter[T]) Write(ctx context.Context, payload T) *appfault.AppError {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.lock.Lock()
+	defer m.lock.Unlock()
 
 	if m.failNext {
 		return appfault.New(errtype.Internal, "simulated write failure")
@@ -51,8 +51,8 @@ func (m *MockTargetWriter[T]) Write(ctx context.Context, payload T) *appfault.Ap
 }
 
 func (m *MockTargetWriter[T]) Sync() *appfault.AppError {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.lock.Lock()
+	defer m.lock.Unlock()
 
 	m.synced++
 
@@ -60,8 +60,8 @@ func (m *MockTargetWriter[T]) Sync() *appfault.AppError {
 }
 
 func (m *MockTargetWriter[T]) Close() *appfault.AppError {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.lock.Lock()
+	defer m.lock.Unlock()
 
 	m.closed = true
 
@@ -69,8 +69,8 @@ func (m *MockTargetWriter[T]) Close() *appfault.AppError {
 }
 
 func (m *MockTargetWriter[T]) Items() []T {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.lock.Lock()
+	defer m.lock.Unlock()
 
 	copied := make([]T, len(m.items))
 	copy(copied, m.items)
@@ -114,9 +114,9 @@ func TestAsyncWriter_BasicFlow(t *testing.T) {
 		t.Fatalf("close error: %v", err)
 	}
 
-	mock.mu.Lock()
+	mock.lock.Lock()
 	closed := mock.closed
-	mock.mu.Unlock()
+	mock.lock.Unlock()
 
 	if !closed {
 		t.Errorf("expected target to be closed")

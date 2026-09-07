@@ -30,10 +30,10 @@ func AppendBytes(path string, data []byte, perm FilePermType) BoolResult {
 }
 
 func AppendBytesLocked(path string, data []byte, perm FilePermType) BoolResult {
-	mu := GetFileLock(path)
+	lock := GetFileLock(path)
 	defer ReleaseFileLock(path)
-	mu.Lock()
-	defer mu.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
 	return AppendBytes(path, data, perm)
 }
@@ -43,10 +43,10 @@ func AppendString(path string, content string, perm FilePermType) BoolResult {
 }
 
 func AppendStringLocked(path string, content string, perm FilePermType) BoolResult {
-	mu := GetFileLock(path)
+	lock := GetFileLock(path)
 	defer ReleaseFileLock(path)
-	mu.Lock()
-	defer mu.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
 	return AppendString(path, content, perm)
 }
@@ -60,10 +60,10 @@ func AppendLines(path string, lines []string, perm FilePermType) BoolResult {
 }
 
 func AppendLinesLocked(path string, lines []string, perm FilePermType) BoolResult {
-	mu := GetFileLock(path)
+	lock := GetFileLock(path)
 	defer ReleaseFileLock(path)
-	mu.Lock()
-	defer mu.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
 	return AppendLines(path, lines, perm)
 }

@@ -17,27 +17,27 @@ import (
 
 // SafeBuffer wraps bytes.Buffer with mutex for test inspections
 type SafeBuffer struct {
-	mu  sync.Mutex
-	buf bytes.Buffer
+	lock sync.Mutex
+	buf  bytes.Buffer
 }
 
 func (s *SafeBuffer) Write(p []byte) (n int, err error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
 	return s.buf.Write(p)
 }
 
 func (s *SafeBuffer) String() string {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
 	return s.buf.String()
 }
 
 func (s *SafeBuffer) Reset() {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 	s.buf.Reset()
 }
 

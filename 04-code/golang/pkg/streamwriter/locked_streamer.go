@@ -19,7 +19,7 @@ type (
 	}
 
 	LockedStreamer[T any] struct {
-		mu           ReentrantMutex
+		lock         ReentrantLock
 		name         string
 		destination  io.Writer
 		streamMethod StreamFunc[T]
@@ -59,8 +59,8 @@ func (s *LockedStreamer[T]) Name() string {
 
 // Stream executes the swappable stream method under mutex lock, returning *appfault.AppError.
 func (s *LockedStreamer[T]) Stream(ctx context.Context, payload T) *appfault.AppError {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
 	return s.streamMethod(ctx, payload, s.destination)
 }
@@ -76,8 +76,8 @@ func (s *LockedStreamer[T]) SetStreamMethod(fn StreamFunc[T]) {
 		return
 	}
 
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 	s.streamMethod = fn
 }
 
@@ -87,8 +87,8 @@ func (s *LockedStreamer[T]) SetDestination(dest io.Writer) {
 		return
 	}
 
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 	s.destination = dest
 }
 
@@ -99,8 +99,8 @@ func (s *LockedStreamer[T]) IsLocked() bool {
 
 // Destination returns the active destination under lock.
 func (s *LockedStreamer[T]) Destination() io.Writer {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
 	return s.destination
 }
@@ -117,19 +117,19 @@ func (s *LockedStreamer[T]) AsWriter() Writer[T] {
 
 // Lock locks the streamer for exclusive access, satisfying sync.Locker.
 func (s *LockedStreamer[T]) Lock() {
-	s.mu.Lock()
+	s.lock.Lock()
 }
 
 // Unlock unlocks the streamer, satisfying sync.Locker.
 func (s *LockedStreamer[T]) Unlock() {
-	s.mu.Unlock()
+	s.lock.Unlock()
 }
 
 // Sync flushes the underlying destination if supported.
 func (s *LockedStreamer[T]) Sync() *appfault.AppError {
-	s.mu.Lock()
+	s.lock.Lock()
 	dest := s.destination
-	s.mu.Unlock()
+	s.lock.Unlock()
 
 	if syncer, isOk := dest.(interface{ Sync() error }); isOk {
 		if err := syncer.Sync(); err != nil {
@@ -142,9 +142,9 @@ func (s *LockedStreamer[T]) Sync() *appfault.AppError {
 
 // Close closes the underlying destination if it implements io.Closer.
 func (s *LockedStreamer[T]) Close() *appfault.AppError {
-	s.mu.Lock()
+	s.lock.Lock()
 	dest := s.destination
-	s.mu.Unlock()
+	s.lock.Unlock()
 
 	if closer, isOk := dest.(io.Closer); isOk {
 		if err := closer.Close(); err != nil {

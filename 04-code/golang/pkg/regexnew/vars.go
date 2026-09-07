@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	regexMutex       = sync.Mutex{}
+	regexLock        = sync.Mutex{}
 	lazyRegexLock    = sync.Mutex{}
 	lazyRegexOnceMap = lazyRegexMap{
 		items: make(

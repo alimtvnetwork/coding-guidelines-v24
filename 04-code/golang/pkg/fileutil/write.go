@@ -21,10 +21,10 @@ func Write(path string, payload any, perm FilePermType) BoolResult {
 
 // WriteLocked writes any generic payload with an exclusive file-path lock.
 func WriteLocked(path string, payload any, perm FilePermType) BoolResult {
-	mu := GetFileLock(path)
+	lock := GetFileLock(path)
 	defer ReleaseFileLock(path)
-	mu.Lock()
-	defer mu.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
 	return Write(path, payload, perm)
 }
@@ -51,10 +51,10 @@ func WriteBytes(path string, data []byte, perm FilePermType) BoolResult {
 
 // WriteBytesLocked writes raw byte slice with an exclusive file-path lock.
 func WriteBytesLocked(path string, data []byte, perm FilePermType) BoolResult {
-	mu := GetFileLock(path)
+	lock := GetFileLock(path)
 	defer ReleaseFileLock(path)
-	mu.Lock()
-	defer mu.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
 	return WriteBytes(path, data, perm)
 }

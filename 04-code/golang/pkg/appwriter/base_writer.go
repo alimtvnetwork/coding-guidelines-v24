@@ -16,7 +16,7 @@ type BaseWriter struct {
 	closer    io.Closer
 	syncer    interface{ Sync() error }
 	isLocked  bool
-	mu        sync.RWMutex
+	lock      sync.RWMutex
 	writeFunc WriteMethodFunc
 }
 
@@ -53,14 +53,14 @@ func (w *BaseWriter) IsLocked() bool {
 // Lock acquires the mutual exclusion lock if lock mode is enabled.
 func (w *BaseWriter) Lock() {
 	if w.isLocked {
-		w.mu.Lock()
+		w.lock.Lock()
 	}
 }
 
 // Unlock releases the mutual exclusion lock if lock mode is enabled.
 func (w *BaseWriter) Unlock() {
 	if w.isLocked {
-		w.mu.Unlock()
+		w.lock.Unlock()
 	}
 }
 
@@ -69,14 +69,14 @@ func (w *BaseWriter) Unlock() {
 // to safely inspect writer status, metrics, or telemetry without blocking each other.
 func (w *BaseWriter) SharedLockerLock() {
 	if w.isLocked {
-		w.mu.RLock()
+		w.lock.RLock()
 	}
 }
 
 // SharedLockerUnlock releases the shared read lock (RUnlock) if lock mode is enabled.
 func (w *BaseWriter) SharedLockerUnlock() {
 	if w.isLocked {
-		w.mu.RUnlock()
+		w.lock.RUnlock()
 	}
 }
 

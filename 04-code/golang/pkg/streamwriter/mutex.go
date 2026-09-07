@@ -9,14 +9,14 @@ import (
 )
 
 // ReentrantMutex allows the same goroutine to acquire the lock multiple times without deadlocking.
-type ReentrantMutex struct {
-	mu        sync.Mutex
+type ReentrantLock struct {
+	lock      sync.Mutex
 	owner     atomic.Int64
 	recursion int32
 }
 
 // Lock acquires the mutex or increments the recursion count if already owned by current goroutine.
-func (m *ReentrantMutex) Lock() {
+func (m *ReentrantLock) Lock() {
 	gid := getGoroutineId()
 	if m.owner.Load() == gid {
 		m.recursion++
@@ -24,13 +24,13 @@ func (m *ReentrantMutex) Lock() {
 		return
 	}
 
-	m.mu.Lock()
+	m.lock.Lock()
 	m.owner.Store(gid)
 	m.recursion = 1
 }
 
 // Unlock decrements the recursion count or releases the mutex when count reaches zero.
-func (m *ReentrantMutex) Unlock() {
+func (m *ReentrantLock) Unlock() {
 	gid := getGoroutineId()
 	if m.owner.Load() != gid {
 		return
@@ -40,7 +40,7 @@ func (m *ReentrantMutex) Unlock() {
 	if m.recursion <= 0 {
 		m.recursion = 0
 		m.owner.Store(0)
-		m.mu.Unlock()
+		m.lock.Unlock()
 	}
 }
 
@@ -66,3 +66,6 @@ func getGoroutineId() int64 {
 
 	return id
 }
+
+// ReentrantMutex is an alias for ReentrantLock for backward compatibility.
+type ReentrantMutex = ReentrantLock

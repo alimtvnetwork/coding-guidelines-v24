@@ -8,8 +8,8 @@ import (
 
 // SQLiteSink writes structured log entries to an SQLite table.
 type SQLiteSink struct {
-	mu sync.Mutex
-	db *sql.DB
+	lock sync.Mutex
+	db   *sql.DB
 }
 
 // NewSQLiteSink creates and initializes the SQLite logging table.
@@ -39,8 +39,8 @@ func (ss *SQLiteSink) WriteEntry(e LogEntry) error {
 		return nil
 	}
 
-	ss.mu.Lock()
-	defer ss.mu.Unlock()
+	ss.lock.Lock()
+	defer ss.lock.Unlock()
 
 	fieldsJSON, _ := json.Marshal(e.Fields)
 	query := `INSERT INTO app_logs (timestamp, level, message, caller, fields_json, stack_trace) VALUES (?, ?, ?, ?, ?, ?)`

@@ -52,6 +52,14 @@ func TestCollectionFilterAndTransform(t *testing.T) {
 	}
 }
 
+func TestLockCollectionThreadSafety(t *testing.T) {
+	lc := appfaults.NewLockCollection()
+	lc.AddType(errtype.NotFound).AddError(errtype.IO, errors.New("file missing"))
+	if !lc.HasError() || lc.Count() != 2 {
+		t.Fatalf("expected 2 items in LockCollection, got %d", lc.Count())
+	}
+}
+
 func TestMutexCollectionThreadSafety(t *testing.T) {
 	mc := appfaults.NewMutexCollection()
 	mc.AddType(errtype.NotFound).AddError(errtype.IO, errors.New("file missing"))

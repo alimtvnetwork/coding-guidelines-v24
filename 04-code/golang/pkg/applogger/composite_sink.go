@@ -4,7 +4,7 @@ import "sync"
 
 // CompositeSink broadcasts log entries to multiple sinks.
 type CompositeSink struct {
-	mu    sync.RWMutex
+	lock  sync.RWMutex
 	sinks []LogSink
 }
 
@@ -21,8 +21,8 @@ func (cs *CompositeSink) AddSink(sink LogSink) *CompositeSink {
 		return cs
 	}
 
-	cs.mu.Lock()
-	defer cs.mu.Unlock()
+	cs.lock.Lock()
+	defer cs.lock.Unlock()
 	cs.sinks = append(cs.sinks, sink)
 
 	return cs
@@ -30,8 +30,8 @@ func (cs *CompositeSink) AddSink(sink LogSink) *CompositeSink {
 
 // WriteEntry forwards the entry to all configured sinks.
 func (cs *CompositeSink) WriteEntry(e LogEntry) error {
-	cs.mu.RLock()
-	defer cs.mu.RUnlock()
+	cs.lock.RLock()
+	defer cs.lock.RUnlock()
 
 	for _, sink := range cs.sinks {
 		_ = sink.WriteEntry(e)
@@ -42,8 +42,8 @@ func (cs *CompositeSink) WriteEntry(e LogEntry) error {
 
 // Sync flushes all inner sinks.
 func (cs *CompositeSink) Sync() error {
-	cs.mu.RLock()
-	defer cs.mu.RUnlock()
+	cs.lock.RLock()
+	defer cs.lock.RUnlock()
 
 	for _, sink := range cs.sinks {
 		_ = sink.Sync()
@@ -54,8 +54,8 @@ func (cs *CompositeSink) Sync() error {
 
 // Close closes all inner sinks.
 func (cs *CompositeSink) Close() error {
-	cs.mu.Lock()
-	defer cs.mu.Unlock()
+	cs.lock.Lock()
+	defer cs.lock.Unlock()
 
 	for _, sink := range cs.sinks {
 		_ = sink.Close()
