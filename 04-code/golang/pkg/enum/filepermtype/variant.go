@@ -45,34 +45,6 @@ const (
 	SetgidExec           Variant = 02755
 )
 
-const (
-	FilePermNone                 = None
-	FilePermOwnerReadOnly        = OwnerReadOnly
-	FilePermOwnerWriteOnly       = OwnerWriteOnly
-	FilePermOwnerExecOnly        = OwnerExecOnly
-	FilePermOwnerReadWrite       = OwnerReadWrite
-	FilePermPrivate              = Private
-	FilePermOwnerAll             = OwnerAll
-	FilePermOwnerExec            = OwnerExec
-	FilePermGroupReadOnly        = GroupReadOnly
-	FilePermGroupWriteOnly       = GroupWriteOnly
-	FilePermGroupReadWrite       = GroupReadWrite
-	FilePermGroupExec            = GroupExec
-	FilePermGroupAll             = GroupAll
-	FilePermReadOnly             = ReadOnly
-	FilePermPublicReadOnly       = PublicReadOnly
-	FilePermPublicWriteOnly      = PublicWriteOnly
-	FilePermStandard             = Standard
-	FilePermGroupSharedOtherRead = GroupSharedOtherRead
-	FilePermPublicReadWrite      = PublicReadWrite
-	FilePermExecutable           = Executable
-	FilePermGroupSharedDir       = GroupSharedDir
-	FilePermPublicAll            = PublicAll
-	FilePermStickyDir            = StickyDir
-	FilePermSetuidExec           = SetuidExec
-	FilePermSetgidExec           = SetgidExec
-)
-
 var knownNames = map[Variant]string{
 	None:                 "None(0000)",
 	OwnerReadOnly:        "OwnerReadOnly(0400)",

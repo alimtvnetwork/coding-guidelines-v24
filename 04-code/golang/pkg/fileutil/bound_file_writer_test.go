@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/fileutil"
 )
 
@@ -164,11 +165,11 @@ func TestBoundFileWriter_ModeShifting(t *testing.T) {
 	_ = writer.WriteString(ctx, "Direct Content\n")
 
 	// 2. Shift to Atomic mode
-	writer.SetMode(fileutil.FileWriteModeAtomic)
+	writer.SetMode(filewritemodetype.Atomic)
 	_ = writer.WriteString(ctx, "Atomic Swapped\n")
 
 	// 3. Shift to Truncate mode with fsync
-	writer.SetMode(fileutil.FileWriteModeTruncate).SetSyncOnWrite(true)
+	writer.SetMode(filewritemodetype.Truncate).SetSyncOnWrite(true)
 	_ = writer.WriteString(ctx, "Truncated Single Line")
 
 	_ = writer.Close()

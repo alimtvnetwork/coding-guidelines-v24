@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 )
 
@@ -201,7 +203,7 @@ func ensureParentDirOf(path string) BoolResult {
 		return BoolSuccess(true)
 	}
 
-	return EnsureDir(dir, FilePermExecutable)
+	return EnsureDir(dir, filepermtype.Executable)
 }
 
 func (f *FilePathOps) EnsureParentDir() BoolResult {
@@ -226,7 +228,7 @@ func (f *FilePathOps) CreateIfNotExist(perm FilePermType) FileResult {
 		return FileFailureFault(dirRes.Fault())
 	}
 
-	return OpenFile(f.absPath, FileOpenReadWriteOrCreateOnly, perm)
+	return OpenFile(f.absPath, openfiletype.ReadWriteOrCreateOnly, perm)
 }
 
 func (f *FilePathOps) createAndClose(perm FilePermType) BoolResult {

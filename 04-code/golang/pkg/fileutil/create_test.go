@@ -4,10 +4,12 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 func verifyCreateDir(t *testing.T, dirPath string) {
-	resDir := CreateDir(dirPath, FilePermExecutable)
+	resDir := CreateDir(dirPath, filepermtype.Executable)
 	if resDir.HasError() {
 		t.Fatalf("Expected CreateDir to succeed, got %v", resDir.Fault().Error())
 	}
@@ -19,7 +21,7 @@ func verifyCreateDir(t *testing.T, dirPath string) {
 }
 
 func verifyCreateFile(t *testing.T, filePath string) {
-	resFile := CreateFile(filePath, FilePermStandard)
+	resFile := CreateFile(filePath, filepermtype.Standard)
 	if resFile.HasError() {
 		t.Fatalf("Expected CreateFile to succeed, got %v", resFile.Fault().Error())
 	}

@@ -23,13 +23,6 @@ const (
 	Truncate
 )
 
-const (
-	FileWriteModeInvalid  = Invalid
-	FileWriteModeDirect   = Direct
-	FileWriteModeAtomic   = Atomic
-	FileWriteModeTruncate = Truncate
-)
-
 var (
 	_ baseenumer.BaseEnumer   = Variant(0)
 	_ baseenumer.ByteEnumer   = Variant(0)

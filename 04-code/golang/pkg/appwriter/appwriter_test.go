@@ -8,6 +8,8 @@ import (
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/appwriter"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/fileutil"
 )
@@ -16,8 +18,8 @@ func initTestFileWriter(t *testing.T, logPath string) *appwriter.BaseWriter {
 	wrap := appwriter.NewFileWriter(appwriter.FileWriterOptions{
 		Name:     "test-logger",
 		FilePath: logPath,
-		OpenMode: fileutil.FileOpenCreateAppend,
-		PermMode: fileutil.FilePermStandard,
+		OpenMode: openfiletype.CreateAppend,
+		PermMode: filepermtype.Standard,
 		IsLocked: true,
 	})
 	if wrap.IsFailed() {
@@ -91,7 +93,7 @@ func verifyEmptyPathFault(t *testing.T, fault *appfault.AppError) {
 }
 
 func TestWrapWriterFailureFromWrap(t *testing.T) {
-	failedFile := fileutil.OpenFile("", fileutil.FileOpenReadOnly, fileutil.FilePermStandard)
+	failedFile := fileutil.OpenFile("", openfiletype.ReadOnly, filepermtype.Standard)
 	writerWrap := appwriter.WrapWriterFailureFromWrap(failedFile)
 	if writerWrap.IsSuccess() {
 		t.Fatalf("expected failed writer wrap")
@@ -106,8 +108,8 @@ func initSharedLockerWriter(t *testing.T, logPath string) *appwriter.BaseWriter 
 	wrap := appwriter.NewFileWriter(appwriter.FileWriterOptions{
 		Name:     "shared-locker-test",
 		FilePath: logPath,
-		OpenMode: fileutil.FileOpenCreateAppend,
-		PermMode: fileutil.FilePermStandard,
+		OpenMode: openfiletype.CreateAppend,
+		PermMode: filepermtype.Standard,
 		IsLocked: true,
 	})
 	if wrap.IsFailed() {

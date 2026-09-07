@@ -8,8 +8,10 @@ Master directory of architectural and execution plans.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
+
 ## Completed Plans
 
+- [26-prune-enum-const-aliases-and-enumer-types.md](completed/26-prune-enum-const-aliases-and-enumer-types.md): Eliminate Redundant Enum Const Aliases & Prune Over-Engineered Enumer Types.
 - [25-enum-packages-isolation.md](completed/25-enum-packages-isolation.md): Dedicated Enum Packages Isolation (`fileoptype`, `filewritemodetype`, `severitytype`, `prioritytype`).
 - [24-filepermtype-enum-package.md](completed/24-filepermtype-enum-package.md): FilePermType Enum Package Isolation (`pkg/enum/filepermtype`).
 - [23-errtype-enum-folder-isolation.md](completed/23-errtype-enum-folder-isolation.md): Errtype Enum Folder Isolation (`logleveltype` & `processstatetype`).

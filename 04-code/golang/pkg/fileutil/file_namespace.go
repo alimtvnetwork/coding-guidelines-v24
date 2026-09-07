@@ -3,6 +3,8 @@ package fileutil
 import (
 	"path/filepath"
 
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/result"
 	"coding-guidelines/common/pkg/streamwriter"
 )
@@ -66,7 +68,7 @@ func (fileWriterCreator) WithOptions(opts FileWriterOptions) *FileWriter {
 func (fileWriterCreator) Atomic(path string, perm FilePermType) *FileWriter {
 	return NewFileWriterWithOptions(FileWriterOptions{
 		Path: path,
-		Mode: FileWriteModeAtomic,
+		Mode: filewritemodetype.Atomic,
 		Perm: perm,
 	})
 }
@@ -74,7 +76,7 @@ func (fileWriterCreator) Atomic(path string, perm FilePermType) *FileWriter {
 func (fileWriterCreator) Direct(path string, perm FilePermType) *FileWriter {
 	return NewFileWriterWithOptions(FileWriterOptions{
 		Path: path,
-		Mode: FileWriteModeDirect,
+		Mode: filewritemodetype.Direct,
 		Perm: perm,
 	})
 }
@@ -82,7 +84,7 @@ func (fileWriterCreator) Direct(path string, perm FilePermType) *FileWriter {
 func (fileWriterCreator) Truncate(path string, perm FilePermType) *FileWriter {
 	return NewFileWriterWithOptions(FileWriterOptions{
 		Path: path,
-		Mode: FileWriteModeTruncate,
+		Mode: filewritemodetype.Truncate,
 		Perm: perm,
 	})
 }
@@ -143,11 +145,11 @@ func (fileStreamWriterCreator) Any(path string, openMode FileOpenModeType, perm 
 }
 
 func (fileStreamWriterCreator) Append(path string, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
-	return NewFileWriter(path, FileOpenCreateAppend, perm)
+	return NewFileWriter(path, openfiletype.CreateAppend, perm)
 }
 
 func (fileStreamWriterCreator) Truncate(path string, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
-	return NewFileWriter(path, FileOpenCreateTruncate, perm)
+	return NewFileWriter(path, openfiletype.CreateTruncate, perm)
 }
 
 // Shortcut helpers on fileNewCreator

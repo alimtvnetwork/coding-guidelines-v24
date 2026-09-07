@@ -23,14 +23,6 @@ const (
 	Fatal Variant = 5
 )
 
-const (
-	LogLevelDebug = Debug
-	LogLevelInfo  = Info
-	LogLevelWarn  = Warn
-	LogLevelError = Error
-	LogLevelFatal = Fatal
-)
-
 var (
 	logLevelNames = map[Variant]string{
 		Debug: "Debug",
@@ -186,7 +178,6 @@ func ParseLogLevel(val string) Variant {
 var (
 	_ baseenumer.BaseEnumer   = Variant(0)
 	_ baseenumer.NumberEnumer = Variant(0)
-	_ baseenumer.IntEnumer    = Variant(0)
 	_ json.Marshaler          = Variant(0)
 	_ json.Unmarshaler        = (*Variant)(nil)
 )

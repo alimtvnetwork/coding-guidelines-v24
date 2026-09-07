@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
@@ -52,7 +54,7 @@ func decodeJsonItems[T any](decoder *json.Decoder, path string, handler func(T) 
 // StreamJson sequentially decodes a massive JSON array from a file, passing each element to the handler.
 // This prevents excessive RAM usage when dealing with huge datasets.
 func StreamJson[T any](path string, handler func(T) *appfault.AppError) BoolResult {
-	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	fRes := OpenFile(path, openfiletype.ReadOnly, filepermtype.Standard)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
 	}

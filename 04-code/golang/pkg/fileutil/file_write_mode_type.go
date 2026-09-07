@@ -7,13 +7,6 @@ import (
 
 type FileWriteModeType = filewritemodetype.Variant
 
-const (
-	FileWriteModeInvalid  = filewritemodetype.Invalid
-	FileWriteModeDirect   = filewritemodetype.Direct
-	FileWriteModeAtomic   = filewritemodetype.Atomic
-	FileWriteModeTruncate = filewritemodetype.Truncate
-)
-
 func ParseFileWriteMode(s string) result.Wrap[FileWriteModeType] {
 	return filewritemodetype.Parse(s)
 }

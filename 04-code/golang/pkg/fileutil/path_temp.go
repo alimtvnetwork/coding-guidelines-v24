@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
@@ -205,9 +206,9 @@ func CreateTempDir(dir string, pattern string, perm FilePermType) StringResult {
 }
 
 func TempFile(pattern string) FileResult {
-	return CreateTempFile("", pattern, FilePermStandard)
+	return CreateTempFile("", pattern, filepermtype.Standard)
 }
 
 func TempDir(pattern string) StringResult {
-	return CreateTempDir("", pattern, FilePermStandard)
+	return CreateTempDir("", pattern, filepermtype.Standard)
 }

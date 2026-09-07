@@ -24,14 +24,6 @@ const (
 	Critical
 )
 
-const (
-	PriorityUnknown  = Unknown
-	PriorityLow      = Low
-	PriorityNormal   = Normal
-	PriorityHigh     = High
-	PriorityCritical = Critical
-)
-
 var (
 	_ baseenumer.BaseEnumer   = Variant(0)
 	_ baseenumer.ByteEnumer   = Variant(0)

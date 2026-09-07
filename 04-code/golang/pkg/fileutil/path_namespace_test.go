@@ -3,6 +3,8 @@ package fileutil
 import (
 	"strings"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 func TestPathNamespace_Temp(t *testing.T) {
@@ -115,7 +117,7 @@ func TestPathWrapper_FileOps_Exists(t *testing.T) {
 func TestPathWrapper_FileOps_WriteAndRead(t *testing.T) {
 	tmpDir := t.TempDir()
 	p := NewPath(tmpDir).Join("testfile.txt")
-	wRes := p.WriteString("hello pathwrapper", FilePermStandard)
+	wRes := p.WriteString("hello pathwrapper", filepermtype.Standard)
 	if wRes.IsFailure() {
 		t.Fatalf("WriteString failed: %v", wRes.Fault())
 	}

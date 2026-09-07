@@ -4,6 +4,9 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
 func testFilePathOpsConstructorsRel(t *testing.T) {
@@ -151,7 +154,7 @@ func testEnsureParentDirSuccess(t *testing.T, dir string) {
 func testEnsureFileCreation(t *testing.T, dir string) {
 	nestedFile := filepath.Join(dir, "x", "y", "z.txt")
 	ops := NewFilePathOps(nestedFile)
-	res := ops.EnsureFile(FilePermStandard)
+	res := ops.EnsureFile(filepermtype.Standard)
 	if !res.IsSuccess() {
 		t.Fatalf("EnsureFile failed: %v", res.Fault())
 	}
@@ -164,9 +167,9 @@ func testEnsureFileCreation(t *testing.T, dir string) {
 func testEnsureFileNoTruncate(t *testing.T, dir string) {
 	filePath := filepath.Join(dir, "exist.txt")
 	ops := NewFilePathOps(filePath)
-	_ = ops.WriteString("initial data", FilePermStandard)
+	_ = ops.WriteString("initial data", filepermtype.Standard)
 
-	res := ops.EnsureFile(FilePermStandard)
+	res := ops.EnsureFile(filepermtype.Standard)
 	if !res.IsSuccess() {
 		t.Fatalf("EnsureFile on existing file failed: %v", res.Fault())
 	}
@@ -180,7 +183,7 @@ func testEnsureFileNoTruncate(t *testing.T, dir string) {
 func testCreateIfNotExist(t *testing.T, dir string) {
 	filePath := filepath.Join(dir, "new_or_exist.txt")
 	ops := NewFilePathOps(filePath)
-	res := ops.CreateIfNotExist(FilePermStandard)
+	res := ops.CreateIfNotExist(filepermtype.Standard)
 	if !res.IsSuccess() {
 		t.Fatalf("CreateIfNotExist failed: %v", res.Fault())
 	}
@@ -202,7 +205,7 @@ func TestFilePathOps_SafetyOps(t *testing.T) {
 
 func testWriteAndReadBytes(t *testing.T, ops *FilePathOps) {
 	data := []byte("hello bytes")
-	wRes := ops.WriteBytes(data, FilePermStandard)
+	wRes := ops.WriteBytes(data, filepermtype.Standard)
 	if !wRes.IsSuccess() {
 		t.Fatalf("WriteBytes failed: %v", wRes.Fault())
 	}
@@ -214,7 +217,7 @@ func testWriteAndReadBytes(t *testing.T, ops *FilePathOps) {
 }
 
 func testWriteAndReadString(t *testing.T, ops *FilePathOps) {
-	wRes := ops.WriteString("hello string", FilePermStandard)
+	wRes := ops.WriteString("hello string", filepermtype.Standard)
 	if !wRes.IsSuccess() {
 		t.Fatalf("WriteString failed: %v", wRes.Fault())
 	}
@@ -227,7 +230,7 @@ func testWriteAndReadString(t *testing.T, ops *FilePathOps) {
 
 func testWriteAndReadLines(t *testing.T, ops *FilePathOps) {
 	lines := []string{"line1", "line2"}
-	wRes := ops.WriteLines(lines, FilePermStandard)
+	wRes := ops.WriteLines(lines, filepermtype.Standard)
 	if !wRes.IsSuccess() {
 		t.Fatalf("WriteLines failed: %v", wRes.Fault())
 	}
@@ -239,7 +242,7 @@ func testWriteAndReadLines(t *testing.T, ops *FilePathOps) {
 }
 
 func testWriteAtomic(t *testing.T, ops *FilePathOps) {
-	wRes := ops.WriteAtomic([]byte("atomic payload"), FilePermStandard)
+	wRes := ops.WriteAtomic([]byte("atomic payload"), filepermtype.Standard)
 	if !wRes.IsSuccess() {
 		t.Fatalf("WriteAtomic failed: %v", wRes.Fault())
 	}
@@ -251,18 +254,18 @@ func testWriteAtomic(t *testing.T, ops *FilePathOps) {
 }
 
 func testAppendBytesAndString(t *testing.T, ops *FilePathOps) {
-	_ = ops.WriteBytes([]byte("base"), FilePermStandard)
-	if !ops.AppendBytes([]byte("_byte"), FilePermStandard).IsSuccess() {
+	_ = ops.WriteBytes([]byte("base"), filepermtype.Standard)
+	if !ops.AppendBytes([]byte("_byte"), filepermtype.Standard).IsSuccess() {
 		t.Fatalf("AppendBytes failed")
 	}
 
-	if !ops.AppendString("_str", FilePermStandard).IsSuccess() {
+	if !ops.AppendString("_str", filepermtype.Standard).IsSuccess() {
 		t.Fatalf("AppendString failed")
 	}
 }
 
 func testAppendLinesAndVerify(t *testing.T, ops *FilePathOps) {
-	if !ops.AppendLines([]string{"_line"}, FilePermStandard).IsSuccess() {
+	if !ops.AppendLines([]string{"_line"}, filepermtype.Standard).IsSuccess() {
 		t.Fatalf("AppendLines failed")
 	}
 
@@ -282,7 +285,7 @@ func testStatAndOpen(t *testing.T, ops *FilePathOps) {
 		t.Fatalf("Stat failed: %v", sRes.Fault())
 	}
 
-	openRes := ops.Open(FileOpenReadOnly, FilePermStandard)
+	openRes := ops.Open(openfiletype.ReadOnly, filepermtype.Standard)
 	if !openRes.IsSuccess() {
 		t.Fatalf("Open failed: %v", openRes.Fault())
 	}
@@ -344,11 +347,11 @@ func testNilSafetyModifiers(t *testing.T) {
 
 func testNilSafetyOperations(t *testing.T) {
 	var nilOps *FilePathOps
-	if nilOps.EnsureParentDir().IsSuccess() || nilOps.EnsureFile(FilePermStandard).IsSuccess() {
+	if nilOps.EnsureParentDir().IsSuccess() || nilOps.EnsureFile(filepermtype.Standard).IsSuccess() {
 		t.Fatalf("nil safety operations should fail safely")
 	}
 
-	if nilOps.ReadBytes().IsSuccess() || nilOps.WriteBytes([]byte("x"), FilePermStandard).IsSuccess() {
+	if nilOps.ReadBytes().IsSuccess() || nilOps.WriteBytes([]byte("x"), filepermtype.Standard).IsSuccess() {
 		t.Fatalf("nil read/write should fail safely")
 	}
 

@@ -3,6 +3,8 @@ package fileutil
 import (
 	"path/filepath"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 type dummyData struct {
@@ -17,7 +19,7 @@ func TestParsersAndExporters(t *testing.T) {
 		path := filepath.Join(tmp, "lines.txt")
 		lines := []string{"hello", "world"}
 
-		expRes := ExportLines(path, lines, FilePermStandard)
+		expRes := ExportLines(path, lines, filepermtype.Standard)
 		if expRes.HasError() {
 			t.Fatalf("Failed to export lines: %v", expRes.Fault().Error())
 		}
@@ -37,7 +39,7 @@ func TestParsersAndExporters(t *testing.T) {
 		path := filepath.Join(tmp, "data.json")
 		data := dummyData{Name: "Alice", Age: 30}
 
-		expRes := ExportJSON(path, data, FilePermStandard)
+		expRes := ExportJSON(path, data, filepermtype.Standard)
 		if expRes.HasError() {
 			t.Fatalf("Failed to export JSON: %v", expRes.Fault().Error())
 		}
@@ -52,7 +54,7 @@ func TestParsersAndExporters(t *testing.T) {
 		path := filepath.Join(tmp, "data.yaml")
 		data := dummyData{Name: "Bob", Age: 40}
 
-		expRes := ExportYAML(path, data, FilePermStandard)
+		expRes := ExportYAML(path, data, filepermtype.Standard)
 		if expRes.HasError() {
 			t.Fatalf("Failed to export YAML: %v", expRes.Fault().Error())
 		}

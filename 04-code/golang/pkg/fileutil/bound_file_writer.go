@@ -10,6 +10,8 @@ import (
 	"sync/atomic"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/streamwriter"
 )
@@ -40,8 +42,8 @@ type (
 func NewBoundFileWriter(path string) *BoundFileWriter {
 	return &BoundFileWriter{
 		path:        path,
-		mode:        FileWriteModeDirect,
-		perm:        FilePermStandard,
+		mode:        filewritemodetype.Direct,
+		perm:        filepermtype.Standard,
 		syncOnWrite: false,
 		autoClose:   false,
 	}
@@ -58,12 +60,12 @@ func NewFileHandler(path string) *BoundFileWriter {
 func NewBoundFileWriterWithOptions(opts BoundFileWriterOptions) *BoundFileWriter {
 	perm := opts.Perm
 	if perm == 0 {
-		perm = FilePermStandard
+		perm = filepermtype.Standard
 	}
 
 	mode := opts.Mode
 	if mode == 0 {
-		mode = FileWriteModeDirect
+		mode = filewritemodetype.Direct
 	}
 
 	return &BoundFileWriter{
@@ -219,7 +221,7 @@ func (w *BoundFileWriter) writeInternal(payload []byte, closeAfter bool) *appfau
 		return appfault.New(errtype.Precondition, "file path cannot be empty")
 	}
 
-	if w.mode == FileWriteModeAtomic {
+	if w.mode == filewritemodetype.Atomic {
 		res := WriteAtomic(w.path, payload, w.perm)
 		if res.IsFailed() {
 			return res.Fault()
@@ -232,7 +234,7 @@ func (w *BoundFileWriter) writeInternal(payload []byte, closeAfter bool) *appfau
 	}
 
 	flags := os.O_CREATE | os.O_WRONLY
-	if w.mode == FileWriteModeTruncate {
+	if w.mode == filewritemodetype.Truncate {
 		flags |= os.O_TRUNC
 	}
 

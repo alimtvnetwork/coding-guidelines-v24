@@ -8,13 +8,15 @@ import (
 
 	"gopkg.in/yaml.v3"
 
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
 // ReadText reads the entire file content as a string.
 func ReadText(path string) StringResult {
-	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	fRes := OpenFile(path, openfiletype.ReadOnly, filepermtype.Standard)
 	if fRes.HasError() {
 		return result.WrapFailure[string](fRes.Fault())
 	}
@@ -45,7 +47,7 @@ func scanLines(r io.Reader, path string) LinesResult {
 
 // ReadLines reads the file and splits it into a string array by lines.
 func ReadLines(path string) LinesResult {
-	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	fRes := OpenFile(path, openfiletype.ReadOnly, filepermtype.Standard)
 	if fRes.HasError() {
 		return result.WrapFailure[[]string](fRes.Fault())
 	}
@@ -58,7 +60,7 @@ func ReadLines(path string) LinesResult {
 // ReadJson parses a JSON file into the specified type T.
 func ReadJson[T any](path string) result.Wrap[T] {
 	var val T
-	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	fRes := OpenFile(path, openfiletype.ReadOnly, filepermtype.Standard)
 	if fRes.HasError() {
 		return result.WrapFailure[T](fRes.Fault())
 	}
@@ -94,7 +96,7 @@ func unmarshalYaml[T any](f io.Reader, path string) result.Wrap[T] {
 
 // ReadYaml parses a YAML file into the specified type T.
 func ReadYaml[T any](path string) result.Wrap[T] {
-	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	fRes := OpenFile(path, openfiletype.ReadOnly, filepermtype.Standard)
 	if fRes.HasError() {
 		return result.WrapFailure[T](fRes.Fault())
 	}

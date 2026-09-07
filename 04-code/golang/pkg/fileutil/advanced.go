@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 	"coding-guidelines/common/pkg/streamwriter"
@@ -99,7 +101,7 @@ func WriteAtomic(path string, data []byte, perm FilePermType) BoolResult {
 	}
 
 	dir := filepath.Dir(path)
-	if ensureRes := EnsureDir(dir, FilePermStandard); ensureRes.IsFailed() {
+	if ensureRes := EnsureDir(dir, filepermtype.Standard); ensureRes.IsFailed() {
 		return result.WrapFailure[bool](ensureRes.Fault())
 	}
 
@@ -235,7 +237,7 @@ func writeAllChunks(f *os.File, path string, reader io.Reader, buf []byte) Int64
 }
 
 func executeWriteChunked(path string, perm FilePermType, reader io.Reader, bufferSize int) Int64Result {
-	openRes := OpenFile(path, FileOpenCreateTruncate, perm)
+	openRes := OpenFile(path, openfiletype.CreateTruncate, perm)
 	if openRes.IsFailed() {
 		return result.WrapFailure[int64](openRes.Fault())
 	}

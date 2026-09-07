@@ -5,17 +5,18 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/severitytype"
 )
 
 func TestSeverityTypeEnumAndJSON(t *testing.T) {
-	sev := appfault.SeverityError
+	sev := severitytype.Error
 	data, err := json.Marshal(sev)
 	if err != nil || string(data) != "\"Error\"" || sev.Name() != "Error" {
 		t.Fatalf("expected \"Error\" JSON, got %s", string(data))
 	}
 
 	var parsed appfault.SeverityType
-	if err := json.Unmarshal([]byte("\"Critical\""), &parsed); err != nil || parsed != appfault.SeverityCritical {
+	if err := json.Unmarshal([]byte("\"Critical\""), &parsed); err != nil || parsed != severitytype.Critical {
 		t.Fatalf("expected SeverityCritical, got %v", parsed)
 	}
 }
@@ -35,7 +36,7 @@ func TestSeverityType_UnmarshalJSON_Invalid(t *testing.T) {
 		t.Fatalf("expected nil error on null, got %v", err)
 	}
 
-	if sev != appfault.SeverityUnknown {
+	if sev != severitytype.Unknown {
 		t.Fatalf("expected SeverityUnknown on null, got %v", sev)
 	}
 
@@ -43,7 +44,7 @@ func TestSeverityType_UnmarshalJSON_Invalid(t *testing.T) {
 		t.Fatalf("expected nil error on numeric 2, got %v", err)
 	}
 
-	if sev != appfault.SeverityWarn {
+	if sev != severitytype.Warn {
 		t.Fatalf("expected SeverityWarn on numeric 2, got %v", sev)
 	}
 }

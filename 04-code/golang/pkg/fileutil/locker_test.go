@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 	"sync"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 func runConcurrentWriters(path string, count int, wg *sync.WaitGroup) {
@@ -11,7 +13,7 @@ func runConcurrentWriters(path string, count int, wg *sync.WaitGroup) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			ExportTextLocked(path, "locked content", FilePermStandard)
+			ExportTextLocked(path, "locked content", filepermtype.Standard)
 		}()
 	}
 }

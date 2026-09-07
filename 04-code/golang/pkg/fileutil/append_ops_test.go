@@ -3,6 +3,8 @@ package fileutil
 import (
 	"path/filepath"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 func verifyAppendedText(t *testing.T, path string, expected string) {
@@ -36,8 +38,8 @@ func TestAppendBytes(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_bytes.txt")
 
-	res1 := AppendBytes(path, []byte("hello "), FilePermStandard)
-	res2 := AppendBytes(path, []byte("world"), FilePermStandard)
+	res1 := AppendBytes(path, []byte("hello "), filepermtype.Standard)
+	res2 := AppendBytes(path, []byte("world"), filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() {
 		t.Fatalf("append bytes failed: %v / %v", res1.Fault(), res2.Fault())
 	}
@@ -49,8 +51,8 @@ func TestAppendBytesLocked(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_bytes_locked.txt")
 
-	res1 := AppendBytesLocked(path, []byte("part1 "), FilePermStandard)
-	res2 := AppendBytesLocked(path, []byte("part2"), FilePermStandard)
+	res1 := AppendBytesLocked(path, []byte("part1 "), filepermtype.Standard)
+	res2 := AppendBytesLocked(path, []byte("part2"), filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() {
 		t.Fatalf("append bytes locked failed: %v / %v", res1.Fault(), res2.Fault())
 	}
@@ -62,8 +64,8 @@ func TestAppendString(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_string.txt")
 
-	res1 := AppendString(path, "first ", FilePermStandard)
-	res2 := AppendString(path, "second", FilePermStandard)
+	res1 := AppendString(path, "first ", filepermtype.Standard)
+	res2 := AppendString(path, "second", filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() {
 		t.Fatalf("append string failed: %v / %v", res1.Fault(), res2.Fault())
 	}
@@ -75,8 +77,8 @@ func TestAppendStringLocked(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_string_locked.txt")
 
-	res1 := AppendStringLocked(path, "lock_a ", FilePermStandard)
-	res2 := AppendStringLocked(path, "lock_b", FilePermStandard)
+	res1 := AppendStringLocked(path, "lock_a ", filepermtype.Standard)
+	res2 := AppendStringLocked(path, "lock_b", filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() {
 		t.Fatalf("append string locked failed: %v / %v", res1.Fault(), res2.Fault())
 	}
@@ -88,8 +90,8 @@ func TestAppendLines(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_lines.txt")
 
-	res1 := AppendLines(path, []string{"row1", "row2"}, FilePermStandard)
-	res2 := AppendLines(path, []string{"row3"}, FilePermStandard)
+	res1 := AppendLines(path, []string{"row1", "row2"}, filepermtype.Standard)
+	res2 := AppendLines(path, []string{"row3"}, filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() {
 		t.Fatalf("append lines failed: %v / %v", res1.Fault(), res2.Fault())
 	}
@@ -101,8 +103,8 @@ func TestAppendLinesLocked(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_lines_locked.txt")
 
-	res1 := AppendLinesLocked(path, []string{"alpha", "beta"}, FilePermStandard)
-	res2 := AppendLinesLocked(path, []string{"gamma"}, FilePermStandard)
+	res1 := AppendLinesLocked(path, []string{"alpha", "beta"}, filepermtype.Standard)
+	res2 := AppendLinesLocked(path, []string{"gamma"}, filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() {
 		t.Fatalf("append lines locked failed: %v / %v", res1.Fault(), res2.Fault())
 	}
@@ -111,9 +113,9 @@ func TestAppendLinesLocked(t *testing.T) {
 }
 
 func TestAppendEmptyPathFailures(t *testing.T) {
-	resBytes := AppendBytes("", []byte("x"), FilePermStandard)
-	resStr := AppendString("", "x", FilePermStandard)
-	resLines := AppendLines("", []string{"x"}, FilePermStandard)
+	resBytes := AppendBytes("", []byte("x"), filepermtype.Standard)
+	resStr := AppendString("", "x", filepermtype.Standard)
+	resLines := AppendLines("", []string{"x"}, filepermtype.Standard)
 
 	if !resBytes.IsFailed() || !resStr.IsFailed() || !resLines.IsFailed() {
 		t.Fatalf("expected empty path failure across all append variants")

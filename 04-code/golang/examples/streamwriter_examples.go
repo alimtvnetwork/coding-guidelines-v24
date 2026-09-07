@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/fileutil"
 	"coding-guidelines/common/pkg/streamwriter"
@@ -325,7 +326,7 @@ func DemonstrateAdvancedFileAndPayloadIntelligence(dest io.Writer) *appfault.App
 
 	// 3. Atomic File Writing
 	tempTarget := filepath.Join(os.TempDir(), "demonstration-atomic.txt")
-	atomRes := fileutil.WriteAtomic(tempTarget, []byte("Atomic file write payload"), fileutil.FilePermStandard)
+	atomRes := fileutil.WriteAtomic(tempTarget, []byte("Atomic file write payload"), filepermtype.Standard)
 	if atomRes.IsFailed() {
 		return atomRes.Fault()
 	}

@@ -10,12 +10,4 @@ type (
 
 	// NumberEnum is an alias for NumberEnumer.
 	NumberEnum = NumberEnumer
-
-	// IntEnumer defines the interface for integer-backed enumerations.
-	IntEnumer interface {
-		NumberEnumer
-	}
-
-	// IntEnum is an alias for IntEnumer.
-	IntEnum = IntEnumer
 )

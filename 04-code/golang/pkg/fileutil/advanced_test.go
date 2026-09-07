@@ -8,12 +8,14 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/fileutil"
 )
 
 func verifyInitialAtomicWrite(t *testing.T, targetFile string) {
 	initialData := []byte("first atomic revision")
-	res := fileutil.WriteAtomic(targetFile, initialData, fileutil.FilePermStandard)
+	res := fileutil.WriteAtomic(targetFile, initialData, filepermtype.Standard)
 	if res.IsFailed() {
 		t.Fatalf("WriteAtomic failed: %v", res.Fault())
 	}
@@ -26,7 +28,7 @@ func verifyInitialAtomicWrite(t *testing.T, targetFile string) {
 
 func verifyUpdatedAtomicWrite(t *testing.T, targetFile string) {
 	updatedData := []byte("second atomic revision - updated cleanly")
-	res := fileutil.WriteAtomic(targetFile, updatedData, fileutil.FilePermStandard)
+	res := fileutil.WriteAtomic(targetFile, updatedData, filepermtype.Standard)
 	if res.IsFailed() {
 		t.Fatalf("WriteAtomic overwrite failed: %v", res.Fault())
 	}
@@ -80,7 +82,7 @@ func TestReadChunked(t *testing.T) {
 
 	targetFile := filepath.Join(tempDir, "chunked.bin")
 	payload := bytes.Repeat([]byte("0123456789ABCDEF"), 1024)
-	if res := fileutil.WriteFile(targetFile, payload, fileutil.FilePermStandard); res.IsFailed() {
+	if res := fileutil.WriteFile(targetFile, payload, filepermtype.Standard); res.IsFailed() {
 		t.Fatalf("WriteFile failed: %v", res.Fault())
 	}
 
@@ -89,7 +91,7 @@ func TestReadChunked(t *testing.T) {
 
 func performWriteChunked(t *testing.T, targetFile string, payload []byte) {
 	reader := bytes.NewReader(payload)
-	res := fileutil.WriteChunked(targetFile, fileutil.FilePermStandard, reader, 2048)
+	res := fileutil.WriteChunked(targetFile, filepermtype.Standard, reader, 2048)
 	if res.IsFailed() || res.Data() != int64(len(payload)) {
 		t.Fatalf("WriteChunked failed: %v", res)
 	}
@@ -125,7 +127,7 @@ func verifyFileWriterOutput(t *testing.T, targetFile string) {
 }
 
 func performFileWriterOperations(t *testing.T, targetFile string) {
-	writerRes := fileutil.NewFileWriter(targetFile, fileutil.FileOpenCreateAppend, fileutil.FilePermStandard)
+	writerRes := fileutil.NewFileWriter(targetFile, openfiletype.CreateAppend, filepermtype.Standard)
 	if writerRes.IsFailed() {
 		t.Fatalf("NewFileWriter failed: %v", writerRes.Fault())
 	}

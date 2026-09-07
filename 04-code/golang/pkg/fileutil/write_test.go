@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 type samplePerson struct {
@@ -16,7 +18,7 @@ func TestWrite_StructAsJSON(t *testing.T) {
 	path := filepath.Join(tmp, "person.json")
 	p := samplePerson{Name: "Charlie", Age: 25}
 
-	res := Write(path, p, FilePermStandard)
+	res := Write(path, p, filepermtype.Standard)
 	if res.IsFailure() {
 		t.Fatalf("Write struct failed: %v", res.Fault().Error())
 	}
@@ -40,7 +42,7 @@ func TestWrite_ArrayAsLines(t *testing.T) {
 	path := filepath.Join(tmp, "lines.txt")
 	lines := []string{"first line", "second line"}
 
-	res := Write(path, lines, FilePermStandard)
+	res := Write(path, lines, filepermtype.Standard)
 	if res.IsFailure() {
 		t.Fatalf("Write lines failed: %v", res.Fault().Error())
 	}
@@ -62,7 +64,7 @@ func verifyLinesOutput(t *testing.T, path string) {
 func TestWrite_StringAndBytes(t *testing.T) {
 	tmp := t.TempDir()
 	pathStr := filepath.Join(tmp, "text.txt")
-	resStr := WriteString(pathStr, "pure string", FilePermStandard)
+	resStr := WriteString(pathStr, "pure string", filepermtype.Standard)
 	if resStr.IsFailure() {
 		t.Fatalf("WriteString failed: %v", resStr.Fault().Error())
 	}
@@ -72,7 +74,7 @@ func TestWrite_StringAndBytes(t *testing.T) {
 
 func testWriteBytesLocked(t *testing.T, tmp string) {
 	pathByte := filepath.Join(tmp, "bytes.bin")
-	resByte := WriteBytesLocked(pathByte, []byte("byte content"), FilePermStandard)
+	resByte := WriteBytesLocked(pathByte, []byte("byte content"), filepermtype.Standard)
 	if resByte.IsFailure() {
 		t.Fatalf("WriteBytesLocked failed: %v", resByte.Fault().Error())
 	}
@@ -83,12 +85,12 @@ func TestWrite_YAMLAndYAMLLocked(t *testing.T) {
 	pathYaml := filepath.Join(tmp, "config.yaml")
 	data := map[string]string{"env": "production"}
 
-	res := WriteYAML(pathYaml, data, FilePermStandard)
+	res := WriteYAML(pathYaml, data, filepermtype.Standard)
 	if res.IsFailure() {
 		t.Fatalf("WriteYAML failed: %v", res.Fault().Error())
 	}
 
-	resLocked := WriteYAMLLocked(pathYaml, data, FilePermStandard)
+	resLocked := WriteYAMLLocked(pathYaml, data, filepermtype.Standard)
 	if resLocked.IsFailure() {
 		t.Fatalf("WriteYAMLLocked failed: %v", resLocked.Fault().Error())
 	}

@@ -6,6 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	"coding-guidelines/common/pkg/enum/fileoptype"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 )
 
@@ -29,7 +32,7 @@ func verifyWriteAndRead(t *testing.T, filePath string, f *os.File) {
 func TestOpenFile_CreateAppend(t *testing.T) {
 	tmpDir := t.TempDir()
 	filePath := filepath.Join(tmpDir, "nested", "test.log")
-	res := OpenFile(filePath, FileOpenCreateAppend, FilePermStandard)
+	res := OpenFile(filePath, openfiletype.CreateAppend, filepermtype.Standard)
 	if res.IsFailed() {
 		t.Fatalf("expected success, got error: %v", res.Fault())
 	}
@@ -39,7 +42,7 @@ func TestOpenFile_CreateAppend(t *testing.T) {
 
 func TestOpenFile_NotFound(t *testing.T) {
 	nonExistent := filepath.Join(t.TempDir(), "missing.txt")
-	res := OpenFile(nonExistent, FileOpenReadOnly, FilePermStandard)
+	res := OpenFile(nonExistent, openfiletype.ReadOnly, filepermtype.Standard)
 	if res.IsSuccess() {
 		t.Fatalf("expected failure for non-existent file")
 	}
@@ -54,30 +57,30 @@ func TestOpenFile_NotFound(t *testing.T) {
 }
 
 func checkOpenEnumNames(t *testing.T) {
-	if FileOpenCreateAppend.Flags() == 0 {
-		t.Fatalf("expected non-zero flags for FileOpenCreateAppend")
+	if openfiletype.CreateAppend.Flags() == 0 {
+		t.Fatalf("expected non-zero flags for CreateAppend")
 	}
 
-	if FileOpenCreateAppend.Name() != "CreateAppend" {
-		t.Fatalf("unexpected name: %s", FileOpenCreateAppend.Name())
+	if openfiletype.CreateAppend.Name() != "CreateAppend" {
+		t.Fatalf("unexpected name: %s", openfiletype.CreateAppend.Name())
 	}
 
-	if FileOpenReadOrCreateOnly.Name() != "ReadOrCreateOnly" {
-		t.Fatalf("unexpected name: %s", FileOpenReadOrCreateOnly.Name())
+	if openfiletype.ReadOrCreateOnly.Name() != "ReadOrCreateOnly" {
+		t.Fatalf("unexpected name: %s", openfiletype.ReadOrCreateOnly.Name())
 	}
 }
 
 func checkPermEnumModes(t *testing.T) {
-	if FileOpenWriteOrCreateOnly.Name() != "WriteOrCreateOnly" {
-		t.Fatalf("unexpected name: %s", FileOpenWriteOrCreateOnly.Name())
+	if openfiletype.WriteOrCreateOnly.Name() != "WriteOrCreateOnly" {
+		t.Fatalf("unexpected name: %s", openfiletype.WriteOrCreateOnly.Name())
 	}
 
-	if FileOpenReadWriteOrCreateOnly.Name() != "ReadWriteOrCreateOnly" {
-		t.Fatalf("unexpected name: %s", FileOpenReadWriteOrCreateOnly.Name())
+	if openfiletype.ReadWriteOrCreateOnly.Name() != "ReadWriteOrCreateOnly" {
+		t.Fatalf("unexpected name: %s", openfiletype.ReadWriteOrCreateOnly.Name())
 	}
 
-	if FilePermStandard.Mode() != os.FileMode(0644) {
-		t.Fatalf("unexpected mode: %v", FilePermStandard.Mode())
+	if filepermtype.Standard.Mode() != os.FileMode(0644) {
+		t.Fatalf("unexpected mode: %v", filepermtype.Standard.Mode())
 	}
 }
 
@@ -87,22 +90,22 @@ func TestEnums_NamesAndFlags(t *testing.T) {
 }
 
 func checkPermStringsStandard(t *testing.T) {
-	if FilePermStandard.OctalString() != "0644" {
-		t.Fatalf("expected 0644, got: %s", FilePermStandard.OctalString())
+	if filepermtype.Standard.OctalString() != "0644" {
+		t.Fatalf("expected 0644, got: %s", filepermtype.Standard.OctalString())
 	}
 
-	if FilePermStandard.PosixString() != "rw-r--r--" {
-		t.Fatalf("expected rw-r--r--, got: %s", FilePermStandard.PosixString())
+	if filepermtype.Standard.PosixString() != "rw-r--r--" {
+		t.Fatalf("expected rw-r--r--, got: %s", filepermtype.Standard.PosixString())
 	}
 }
 
 func checkPermStringsSpecial(t *testing.T) {
-	if FilePermExecutable.PosixString() != "rwxr-xr-x" {
-		t.Fatalf("expected rwxr-xr-x, got: %s", FilePermExecutable.PosixString())
+	if filepermtype.Executable.PosixString() != "rwxr-xr-x" {
+		t.Fatalf("expected rwxr-xr-x, got: %s", filepermtype.Executable.PosixString())
 	}
 
-	if FilePermPrivate.PosixString() != "rw-------" {
-		t.Fatalf("expected rw-------, got: %s", FilePermPrivate.PosixString())
+	if filepermtype.Private.PosixString() != "rw-------" {
+		t.Fatalf("expected rw-------, got: %s", filepermtype.Private.PosixString())
 	}
 }
 
@@ -112,21 +115,21 @@ func TestFilePermType_StringsAndOctal(t *testing.T) {
 }
 
 func TestFilePermType_Inspections(t *testing.T) {
-	if !FilePermPrivate.IsPrivate() {
-		t.Fatalf("expected FilePermPrivate to be private")
+	if !filepermtype.Private.IsPrivate() {
+		t.Fatalf("expected filepermtype.Private to be private")
 	}
 
-	if !FilePermStandard.IsPublic() {
-		t.Fatalf("expected FilePermStandard to be public")
+	if !filepermtype.Standard.IsPublic() {
+		t.Fatalf("expected filepermtype.Standard to be public")
 	}
 
-	if !FilePermExecutable.IsExecutable() {
-		t.Fatalf("expected FilePermExecutable to be executable")
+	if !filepermtype.Executable.IsExecutable() {
+		t.Fatalf("expected filepermtype.Executable to be executable")
 	}
 }
 
 func TestFilePermType_Modifiers(t *testing.T) {
-	standard := FilePermStandard
+	standard := filepermtype.Standard
 	if standard.WithPrivate().OctalString() != "0600" {
 		t.Fatalf("expected 0600 after WithPrivate")
 	}
@@ -142,13 +145,13 @@ func TestFilePermType_Modifiers(t *testing.T) {
 
 func checkParsePermValid(t *testing.T) {
 	wrap := ParsePerm("0644")
-	if wrap.IsFailed() || wrap.Data() != FilePermStandard {
+	if wrap.IsFailed() || wrap.Data() != filepermtype.Standard {
 		t.Fatalf("unexpected result for 0644: %v", wrap)
 	}
 
 	fromMode := FromFileMode(os.FileMode(0755))
-	if fromMode != FilePermExecutable {
-		t.Fatalf("expected FilePermExecutable, got: %v", fromMode)
+	if fromMode != filepermtype.Executable {
+		t.Fatalf("expected filepermtype.Executable, got: %v", fromMode)
 	}
 }
 
@@ -162,21 +165,21 @@ func TestFilePermType_ParseAndConvert(t *testing.T) {
 }
 
 func checkFileOpTypeNames(t *testing.T) {
-	if FileOpReadOnly.Name() != "ReadOnly" {
-		t.Fatalf("unexpected name: %s", FileOpReadOnly.Name())
+	if fileoptype.ReadOnly.Name() != "ReadOnly" {
+		t.Fatalf("unexpected name: %s", fileoptype.ReadOnly.Name())
 	}
 
-	if FileOpDelete.Name() != "Delete" {
-		t.Fatalf("unexpected name: %s", FileOpDelete.Name())
+	if fileoptype.Delete.Name() != "Delete" {
+		t.Fatalf("unexpected name: %s", fileoptype.Delete.Name())
 	}
 }
 
 func checkFileOpTypePredicates(t *testing.T) {
-	if !FileOpDelete.IsDelete() || !FileOpReadOnly.IsReadOnly() {
+	if !fileoptype.Delete.IsDelete() || !fileoptype.ReadOnly.IsReadOnly() {
 		t.Fatalf("unexpected predicate result")
 	}
 
-	if !FileOpAppend.IsAppend() || FileOpCreate.OpenMode() != FileOpenCreateNew {
+	if !fileoptype.Append.IsAppend() || fileoptype.Create.OpenMode() != openfiletype.CreateNew {
 		t.Fatalf("unexpected append or openmode")
 	}
 }
@@ -187,7 +190,7 @@ func TestFileOpType_Enums(t *testing.T) {
 }
 
 func checkWriteAndRead(t *testing.T, path string) {
-	writeRes := WriteFile(path, []byte("hello world"), FilePermStandard)
+	writeRes := WriteFile(path, []byte("hello world"), filepermtype.Standard)
 	if writeRes.IsFailed() {
 		t.Fatalf("write failed: %v", writeRes.Fault())
 	}
@@ -229,15 +232,15 @@ func TestFileutil_DeleteAndStat(t *testing.T) {
 }
 
 func checkExecuteOpWriteRead(t *testing.T, path string) {
-	if res := ExecuteOp(path, FileOpCreateAppend, FilePermStandard, []byte("step1\n")); res.IsFailed() {
+	if res := ExecuteOp(path, fileoptype.CreateAppend, filepermtype.Standard, []byte("step1\n")); res.IsFailed() {
 		t.Fatalf("create failed: %v", res.Fault())
 	}
 
-	if res := ExecuteOp(path, FileOpAppend, FilePermStandard, []byte("step2\n")); res.IsFailed() {
+	if res := ExecuteOp(path, fileoptype.Append, filepermtype.Standard, []byte("step2\n")); res.IsFailed() {
 		t.Fatalf("append failed: %v", res.Fault())
 	}
 
-	readRes := ExecuteOp(path, FileOpReadOnly, FilePermStandard, nil)
+	readRes := ExecuteOp(path, fileoptype.ReadOnly, filepermtype.Standard, nil)
 	if readRes.IsFailed() || string(readRes.Data()) != "step1\nstep2\n" {
 		t.Fatalf("unexpected read: %v", readRes)
 	}
@@ -247,7 +250,7 @@ func TestFileutil_ExecuteOp(t *testing.T) {
 	filePath := filepath.Join(t.TempDir(), "op_test.txt")
 	checkExecuteOpWriteRead(t, filePath)
 
-	delRes := ExecuteOp(filePath, FileOpDelete, FilePermStandard, nil)
+	delRes := ExecuteOp(filePath, fileoptype.Delete, filepermtype.Standard, nil)
 	if delRes.IsFailed() {
 		t.Fatalf("delete op failed: %v", delRes.Fault())
 	}

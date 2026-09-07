@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/severitytype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
@@ -14,7 +15,7 @@ func TestAppErrorCreationAndNilSafety(t *testing.T) {
 		t.Fatal("expected nil AppError and None constructor to be IsSuccess")
 	}
 
-	appErr := appfault.New(errtype.NotFound, "record not found").WithOp("repo.find").WithSeverity(appfault.SeverityWarn)
+	appErr := appfault.New(errtype.NotFound, "record not found").WithOp("repo.find").WithSeverity(severitytype.Warn)
 	if !appErr.Is(errtype.NotFound) || !appErr.HasValidError() {
 		t.Fatalf("expected NotFound error, got %v", appErr.GetType())
 	}

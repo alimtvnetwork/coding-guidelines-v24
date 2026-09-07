@@ -5,6 +5,8 @@ import (
 	"io"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/fileutil"
 	"coding-guidelines/common/pkg/payloadconv"
@@ -21,11 +23,11 @@ type FileWriterOptions struct {
 
 func resolveFileModes(openMode fileutil.FileOpenModeType, permMode fileutil.FilePermType) (fileutil.FileOpenModeType, fileutil.FilePermType) {
 	if openMode == 0 {
-		openMode = fileutil.FileOpenCreateAppend
+		openMode = openfiletype.CreateAppend
 	}
 
 	if permMode == 0 {
-		permMode = fileutil.FilePermStandard
+		permMode = filepermtype.Standard
 	}
 
 	return openMode, permMode

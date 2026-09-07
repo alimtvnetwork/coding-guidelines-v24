@@ -209,5 +209,4 @@ func (v Variation) IsEnum() bool {
 var (
 	_ BaseEnumer   = Variation(0)
 	_ NumberEnumer = Variation(0)
-	_ IntEnumer    = Variation(0)
 )

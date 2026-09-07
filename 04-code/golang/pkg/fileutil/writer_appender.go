@@ -10,6 +10,8 @@ import (
 	"sync/atomic"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/streamwriter"
 )
@@ -35,8 +37,8 @@ type (
 func NewFileWriterEngine(path string) *FileWriter {
 	return &FileWriter{
 		path:        path,
-		mode:        FileWriteModeDirect,
-		perm:        FilePermStandard,
+		mode:        filewritemodetype.Direct,
+		perm:        filepermtype.Standard,
 		syncOnWrite: false,
 	}
 }
@@ -44,12 +46,12 @@ func NewFileWriterEngine(path string) *FileWriter {
 func NewFileWriterWithOptions(opts FileWriterOptions) *FileWriter {
 	perm := opts.Perm
 	if perm == 0 {
-		perm = FilePermStandard
+		perm = filepermtype.Standard
 	}
 
 	mode := opts.Mode
 	if mode == 0 {
-		mode = FileWriteModeDirect
+		mode = filewritemodetype.Direct
 	}
 
 	return &FileWriter{
@@ -114,7 +116,7 @@ func (w *FileWriter) Write(ctx context.Context, payload []byte) *appfault.AppErr
 	}
 
 	switch w.mode {
-	case FileWriteModeAtomic:
+	case filewritemodetype.Atomic:
 		res := WriteAtomic(w.path, payload, w.perm)
 		if res.IsFailed() {
 			return res.Fault()
@@ -122,7 +124,7 @@ func (w *FileWriter) Write(ctx context.Context, payload []byte) *appfault.AppErr
 
 		return nil
 
-	case FileWriteModeTruncate:
+	case filewritemodetype.Truncate:
 		return w.writeDirect(payload, os.O_CREATE|os.O_TRUNC|os.O_WRONLY)
 
 	default:
@@ -241,7 +243,7 @@ type FileAppender struct {
 
 func NewFileAppender(path string, perm FilePermType) *FileAppender {
 	if perm == 0 {
-		perm = FilePermStandard
+		perm = filepermtype.Standard
 	}
 
 	return &FileAppender{

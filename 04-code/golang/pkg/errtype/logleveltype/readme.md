@@ -1,6 +1,6 @@
 # Package `errtype/logleveltype`: Number-Backed Log Severity Enum
 
-`coding-guidelines/common/pkg/errtype/logleveltype` provides a strongly-typed, `uint16`-backed log level enumeration conforming to `baseenumer.NumberEnumer` and `baseenumer.IntEnumer`.
+`coding-guidelines/common/pkg/errtype/logleveltype` provides a strongly-typed, `uint16`-backed log level enumeration conforming to `baseenumer.NumberEnumer`.
 
 ---
 
@@ -8,7 +8,7 @@
 
 - **Dedicated Package:** `logleveltype` located in `04-code/golang/pkg/errtype/logleveltype/`.
 - **Underlying Type:** `type Variant uint16` (aliased to `LogLevelType`).
-- **Interface Conformance:** Conforms to `baseenumer.BaseEnumer`, `baseenumer.NumberEnumer`, `baseenumer.IntEnumer`, `json.Marshaler`, `json.Unmarshaler`.
+- **Interface Conformance:** Conforms to `baseenumer.BaseEnumer`, `baseenumer.NumberEnumer`, `json.Marshaler`, `json.Unmarshaler`.
 - **Constants:** `Debug` (1), `Info` (2), `Warn` (3), `Error` (4), `Fatal` (5).
 
 ---

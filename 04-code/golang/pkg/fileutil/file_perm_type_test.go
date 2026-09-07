@@ -3,11 +3,11 @@ package fileutil_test
 import (
 	"testing"
 
-	"coding-guidelines/common/pkg/fileutil"
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 func TestFilePermType_Basics(t *testing.T) {
-	p := fileutil.FilePermStandard
+	p := filepermtype.Standard
 	if p.Uint32() != 0644 {
 		t.Fatalf("expected uint32 0644, got %o", p.Uint32())
 	}
@@ -26,7 +26,7 @@ func TestFilePermType_Basics(t *testing.T) {
 }
 
 func TestFilePermType_Predicates(t *testing.T) {
-	std := fileutil.FilePermStandard
+	std := filepermtype.Standard
 	if !std.IsPublic() {
 		t.Fatalf("expected Standard perm to be public")
 	}
@@ -39,14 +39,14 @@ func TestFilePermType_Predicates(t *testing.T) {
 		t.Fatalf("expected Standard perm to not be executable")
 	}
 
-	exec := fileutil.FilePermExecutable
+	exec := filepermtype.Executable
 	if !exec.IsExecutable() {
 		t.Fatalf("expected Executable perm to be executable")
 	}
 }
 
 func TestFilePermType_Mutators(t *testing.T) {
-	std := fileutil.FilePermStandard
+	std := filepermtype.Standard
 	priv := std.WithPrivate()
 	if !priv.IsPrivate() {
 		t.Fatalf("expected WithPrivate to result in private perm")

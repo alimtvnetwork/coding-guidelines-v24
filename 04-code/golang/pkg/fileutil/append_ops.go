@@ -4,6 +4,7 @@ import (
 	"os"
 	"strings"
 
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 )
 
@@ -20,7 +21,7 @@ func appendBytesToFile(f *os.File, data []byte, path string) BoolResult {
 }
 
 func AppendBytes(path string, data []byte, perm FilePermType) BoolResult {
-	fRes := OpenFile(path, FileOpenCreateAppend, perm)
+	fRes := OpenFile(path, openfiletype.CreateAppend, perm)
 	if fRes.HasError() {
 		return BoolFailureFault(fRes.Fault())
 	}

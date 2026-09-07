@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/errtype"
 )
 
@@ -71,7 +73,7 @@ func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) FileRes
 }
 
 func Open(path string) FileResult {
-	return OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	return OpenFile(path, openfiletype.ReadOnly, filepermtype.Standard)
 }
 
 func EnsureDir(path string, perm FilePermType) BoolResult {
@@ -113,7 +115,7 @@ func ReadString(path string) StringResult {
 }
 
 func WriteFile(path string, data []byte, perm FilePermType) BoolResult {
-	wrap := OpenFile(path, FileOpenCreateTruncate, perm)
+	wrap := OpenFile(path, openfiletype.CreateTruncate, perm)
 	if wrap.IsFailed() {
 		return BoolFailureFault(wrap.Fault())
 	}

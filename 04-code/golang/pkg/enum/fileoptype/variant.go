@@ -29,18 +29,6 @@ const (
 	Delete
 )
 
-const (
-	FileOpInvalid        = Invalid
-	FileOpReadOnly       = ReadOnly
-	FileOpWriteOnly      = WriteOnly
-	FileOpReadWrite      = ReadWrite
-	FileOpAppend         = Append
-	FileOpCreate         = Create
-	FileOpCreateAppend   = CreateAppend
-	FileOpCreateTruncate = CreateTruncate
-	FileOpDelete         = Delete
-)
-
 var (
 	_ baseenumer.BaseEnumer   = Variant(0)
 	_ baseenumer.ByteEnumer   = Variant(0)

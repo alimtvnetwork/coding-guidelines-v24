@@ -3,10 +3,13 @@ package fileutil
 import (
 	"path/filepath"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
 func testOpenReadOnlyAndTruncate(t *testing.T, path string) {
-	truncRes := File.Open.Truncate(path, FilePermStandard)
+	truncRes := File.Open.Truncate(path, filepermtype.Standard)
 	if !truncRes.IsSuccess() {
 		t.Fatalf("Open.Truncate failed: %v", truncRes.Fault())
 	}
@@ -22,14 +25,14 @@ func testOpenReadOnlyAndTruncate(t *testing.T, path string) {
 }
 
 func testOpenAppendAndRW(t *testing.T, path string) {
-	appRes := File.Open.CreateAppend(path, FilePermStandard)
+	appRes := File.Open.CreateAppend(path, filepermtype.Standard)
 	if !appRes.IsSuccess() {
 		t.Fatalf("Open.CreateAppend failed: %v", appRes.Fault())
 	}
 
 	defer appRes.Data().Close()
 
-	rwRes := File.Open.ReadWrite(path, FilePermStandard)
+	rwRes := File.Open.ReadWrite(path, filepermtype.Standard)
 	if !rwRes.IsSuccess() {
 		t.Fatalf("Open.ReadWrite failed: %v", rwRes.Fault())
 	}
@@ -44,7 +47,7 @@ func TestFileOpenOperations(t *testing.T) {
 	testOpenReadOnlyAndTruncate(t, path)
 	testOpenAppendAndRW(t, path)
 
-	fileRes := File.Open.File(path, FileOpenReadOnly, FilePermStandard)
+	fileRes := File.Open.File(path, openfiletype.ReadOnly, filepermtype.Standard)
 	if !fileRes.IsSuccess() {
 		t.Fatalf("Open.File failed: %v", fileRes.Fault())
 	}
@@ -53,21 +56,21 @@ func TestFileOpenOperations(t *testing.T) {
 }
 
 func testCreateFileAndDir(t *testing.T, dir string) {
-	fRes := File.Create.File(filepath.Join(dir, "new.txt"), FilePermStandard)
+	fRes := File.Create.File(filepath.Join(dir, "new.txt"), filepermtype.Standard)
 	if !fRes.IsSuccess() {
 		t.Fatalf("Create.File failed: %v", fRes.Fault())
 	}
 
 	defer fRes.Data().Close()
 
-	dRes := File.Create.Dir(filepath.Join(dir, "sub"), FilePermStandard)
+	dRes := File.Create.Dir(filepath.Join(dir, "sub"), filepermtype.Standard)
 	if !dRes.IsSuccess() {
 		t.Fatalf("Create.Dir failed: %v", dRes.Fault())
 	}
 }
 
 func testCreateEnsureAndTemp(t *testing.T, dir string) {
-	ensureRes := File.Create.EnsureDir(filepath.Join(dir, "ensured"), FilePermStandard)
+	ensureRes := File.Create.EnsureDir(filepath.Join(dir, "ensured"), filepermtype.Standard)
 	if !ensureRes.IsSuccess() {
 		t.Fatalf("Create.EnsureDir failed: %v", ensureRes.Fault())
 	}
@@ -93,13 +96,13 @@ func TestFileCreateOperations(t *testing.T) {
 
 func testWriteBytesAndString(t *testing.T, dir string) {
 	bPath := filepath.Join(dir, "bytes.txt")
-	bRes := File.Write.Bytes(bPath, []byte("data"), FilePermStandard)
+	bRes := File.Write.Bytes(bPath, []byte("data"), filepermtype.Standard)
 	if !bRes.IsSuccess() {
 		t.Fatalf("Write.Bytes failed: %v", bRes.Fault())
 	}
 
 	sPath := filepath.Join(dir, "str.txt")
-	sRes := File.Write.String(sPath, "string_content", FilePermStandard)
+	sRes := File.Write.String(sPath, "string_content", filepermtype.Standard)
 	if !sRes.IsSuccess() {
 		t.Fatalf("Write.String failed: %v", sRes.Fault())
 	}
@@ -107,13 +110,13 @@ func testWriteBytesAndString(t *testing.T, dir string) {
 
 func testWriteLinesAndAtomic(t *testing.T, dir string) {
 	lPath := filepath.Join(dir, "lines.txt")
-	lRes := File.Write.Lines(lPath, []string{"l1", "l2"}, FilePermStandard)
+	lRes := File.Write.Lines(lPath, []string{"l1", "l2"}, filepermtype.Standard)
 	if !lRes.IsSuccess() {
 		t.Fatalf("Write.Lines failed: %v", lRes.Fault())
 	}
 
 	aPath := filepath.Join(dir, "atomic.txt")
-	aRes := File.Write.Atomic(aPath, []byte("atomic_val"), FilePermStandard)
+	aRes := File.Write.Atomic(aPath, []byte("atomic_val"), filepermtype.Standard)
 	if !aRes.IsSuccess() {
 		t.Fatalf("Write.Atomic failed: %v", aRes.Fault())
 	}
@@ -122,12 +125,12 @@ func testWriteLinesAndAtomic(t *testing.T, dir string) {
 func testWriteJsonAndYaml(t *testing.T, dir string) {
 	payload := map[string]string{"key": "val"}
 	jPath := filepath.Join(dir, "data.json")
-	if !File.Write.Json(jPath, payload, FilePermStandard).IsSuccess() {
+	if !File.Write.Json(jPath, payload, filepermtype.Standard).IsSuccess() {
 		t.Fatalf("Write.Json failed")
 	}
 
 	yPath := filepath.Join(dir, "data.yaml")
-	if !File.Write.Yaml(yPath, payload, FilePermStandard).IsSuccess() {
+	if !File.Write.Yaml(yPath, payload, filepermtype.Standard).IsSuccess() {
 		t.Fatalf("Write.Yaml failed")
 	}
 }
@@ -139,7 +142,7 @@ func TestFileWriteOperations(t *testing.T) {
 	testWriteJsonAndYaml(t, dir)
 
 	anyPath := filepath.Join(dir, "any.txt")
-	if !File.Write.Any(anyPath, "any_val", FilePermStandard).IsSuccess() {
+	if !File.Write.Any(anyPath, "any_val", filepermtype.Standard).IsSuccess() {
 		t.Fatalf("Write.Any failed")
 	}
 }
@@ -148,14 +151,14 @@ func TestFileAppendOperations(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "append_ns.txt")
 
-	res1 := File.Append.String(path, "step1 ", FilePermStandard)
-	res2 := File.Append.Bytes(path, []byte("step2 "), FilePermStandard)
-	res3 := File.Append.Lines(path, []string{"step3"}, FilePermStandard)
+	res1 := File.Append.String(path, "step1 ", filepermtype.Standard)
+	res2 := File.Append.Bytes(path, []byte("step2 "), filepermtype.Standard)
+	res3 := File.Append.Lines(path, []string{"step3"}, filepermtype.Standard)
 	if !res1.IsSuccess() || !res2.IsSuccess() || !res3.IsSuccess() {
 		t.Fatalf("File.Append operations failed")
 	}
 
-	if !File.Append.BytesLocked(path, []byte(" lock"), FilePermStandard).IsSuccess() {
+	if !File.Append.BytesLocked(path, []byte(" lock"), filepermtype.Standard).IsSuccess() {
 		t.Fatalf("File.Append.BytesLocked failed")
 	}
 }
@@ -169,7 +172,7 @@ func verifyReadNsData(t *testing.T, lRes LinesResult) {
 func TestFileReadOperations(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "read_ns.txt")
-	_ = File.Write.Lines(path, []string{"first line", "second line"}, FilePermStandard)
+	_ = File.Write.Lines(path, []string{"first line", "second line"}, filepermtype.Standard)
 
 	bRes := File.Read.Bytes(path)
 	sRes := File.Read.String(path)
@@ -204,12 +207,12 @@ func testNewWriters(t *testing.T, dir string) {
 }
 
 func testNewAppender(t *testing.T, dir string) {
-	app := New.Appender.Default(filepath.Join(dir, "app.txt"), FilePermStandard)
+	app := New.Appender.Default(filepath.Join(dir, "app.txt"), filepermtype.Standard)
 	if app == nil {
 		t.Fatalf("New.Appender.Default returned nil")
 	}
 
-	autoApp := New.Appender.AutoSync(filepath.Join(dir, "app_auto.txt"), FilePermStandard)
+	autoApp := New.Appender.AutoSync(filepath.Join(dir, "app_auto.txt"), filepermtype.Standard)
 	if autoApp == nil {
 		t.Fatalf("New.Appender.AutoSync returned nil")
 	}
@@ -229,7 +232,7 @@ func testNewPath(t *testing.T) {
 
 func testNewStreamWriter(t *testing.T, dir string) {
 	path := filepath.Join(dir, "sw.txt")
-	swRes := New.StreamWriter.Append(path, FilePermStandard)
+	swRes := New.StreamWriter.Append(path, filepermtype.Standard)
 	if !swRes.IsSuccess() {
 		t.Fatalf("New.StreamWriter.Append failed: %v", swRes.Fault())
 	}
@@ -240,7 +243,7 @@ func testNewStreamWriter(t *testing.T, dir string) {
 }
 
 func testNewShortcuts(t *testing.T, path string) {
-	if New.FileWriter(path) == nil || New.FileAppender(path, FilePermStandard) == nil {
+	if New.FileWriter(path) == nil || New.FileAppender(path, filepermtype.Standard) == nil {
 		t.Fatalf("New writer/appender shortcuts failed")
 	}
 
@@ -275,8 +278,8 @@ func TestBackwardCompatibility(t *testing.T) {
 	p1 := filepath.Join(dir, "compat1.txt")
 	p2 := filepath.Join(dir, "compat2.txt")
 
-	_ = WriteBytes(p1, []byte("hello"), FilePermStandard)
-	_ = File.Write.Bytes(p2, []byte("hello"), FilePermStandard)
+	_ = WriteBytes(p1, []byte("hello"), filepermtype.Standard)
+	_ = File.Write.Bytes(p2, []byte("hello"), filepermtype.Standard)
 	verifyCompatText(t, p1, p2)
 }
 

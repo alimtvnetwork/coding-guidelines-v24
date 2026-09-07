@@ -25,15 +25,6 @@ const (
 	Fatal
 )
 
-const (
-	SeverityUnknown  = Unknown
-	SeverityInfo     = Info
-	SeverityWarn     = Warn
-	SeverityError    = Error
-	SeverityCritical = Critical
-	SeverityFatal    = Fatal
-)
-
 var (
 	_ baseenumer.BaseEnumer   = Variant(0)
 	_ baseenumer.ByteEnumer   = Variant(0)

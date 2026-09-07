@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 type user struct {
@@ -23,7 +24,7 @@ func TestStreamJSON(t *testing.T) {
 		{ID: 3, Name: "Charlie"},
 	}
 
-	ExportJSON(path, users, FilePermStandard)
+	ExportJSON(path, users, filepermtype.Standard)
 
 	var count int
 	res := StreamJSON(path, func(u user) *appfault.AppError {

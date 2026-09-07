@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"coding-guidelines/common/pkg/enum/filepermtype"
 )
 
 func TestUserTempDir(t *testing.T) {
@@ -36,7 +38,7 @@ func TestUserTempPath(t *testing.T) {
 }
 
 func TestCreateTempFile(t *testing.T) {
-	res := CreateTempFile("", "test-file-*.txt", FilePermStandard)
+	res := CreateTempFile("", "test-file-*.txt", filepermtype.Standard)
 	if res.IsFailed() {
 		t.Fatalf("CreateTempFile failed: %v", res.Fault())
 	}
@@ -66,7 +68,7 @@ func TestTempFile(t *testing.T) {
 }
 
 func TestCreateTempDir(t *testing.T) {
-	res := CreateTempDir("", "test-dir-*", FilePermStandard)
+	res := CreateTempDir("", "test-dir-*", filepermtype.Standard)
 	if res.IsFailed() {
 		t.Fatalf("CreateTempDir failed: %v", res.Fault())
 	}

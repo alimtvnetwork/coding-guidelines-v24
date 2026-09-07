@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/fileutil"
 )
 
@@ -17,8 +19,8 @@ func TestFileWriter_BehaviorShifting(t *testing.T) {
 	ctx := context.Background()
 
 	// 1. Initial behavior: Direct Write
-	if writer.Mode() != fileutil.FileWriteModeDirect {
-		t.Fatalf("expected initial mode FileWriteModeDirect, got %v", writer.Mode())
+	if writer.Mode() != filewritemodetype.Direct {
+		t.Fatalf("expected initial mode Direct, got %v", writer.Mode())
 	}
 
 	err := writer.WriteString(ctx, "Direct Content 1\n")
@@ -32,9 +34,9 @@ func TestFileWriter_BehaviorShifting(t *testing.T) {
 	}
 
 	// 2. Behavior shift: Switch to Atomic Mode
-	writer.SetMode(fileutil.FileWriteModeAtomic)
-	if writer.Mode() != fileutil.FileWriteModeAtomic {
-		t.Fatalf("expected shifted mode FileWriteModeAtomic")
+	writer.SetMode(filewritemodetype.Atomic)
+	if writer.Mode() != filewritemodetype.Atomic {
+		t.Fatalf("expected shifted mode Atomic")
 	}
 
 	err = writer.WriteString(ctx, "Atomic Swapped Content\n")
@@ -48,7 +50,7 @@ func TestFileWriter_BehaviorShifting(t *testing.T) {
 	}
 
 	// 3. Behavior shift: Switch to Truncate Mode with sync
-	writer.SetMode(fileutil.FileWriteModeTruncate).SetSyncOnWrite(true)
+	writer.SetMode(filewritemodetype.Truncate).SetSyncOnWrite(true)
 	err = writer.WriteString(ctx, "Truncated Content")
 	if err != nil {
 		t.Fatalf("truncate write failed: %v", err)
@@ -64,7 +66,7 @@ func TestFileAppender_ContinuousAppend(t *testing.T) {
 	tempDir := t.TempDir()
 	targetPath := filepath.Join(tempDir, "nested", "sub", "appended.log")
 
-	appender := fileutil.NewFileAppender(targetPath, fileutil.FilePermStandard)
+	appender := fileutil.NewFileAppender(targetPath, filepermtype.Standard)
 	ctx := context.Background()
 
 	// 1. Append creates nested directory and file automatically
@@ -120,7 +122,7 @@ func TestFileWriterAndAppender_StdWriterAdapter(t *testing.T) {
 		t.Fatalf("std writer close failed: %v", err)
 	}
 
-	appender := fileutil.NewFileAppender(filePath, fileutil.FilePermStandard)
+	appender := fileutil.NewFileAppender(filePath, filepermtype.Standard)
 	stdApp := appender.StdWriter()
 
 	n, err = stdApp.Write([]byte("Standard Appender Line\n"))

@@ -6,6 +6,8 @@ import (
 	"os"
 	"sync"
 
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/fileutil"
 )
 
@@ -18,7 +20,7 @@ type FileSink struct {
 
 // openLogFile opens file using enum-driven fileutil utility wrapper.
 func openLogFile(filePath string) (*os.File, error) {
-	wrap := fileutil.OpenFile(filePath, fileutil.FileOpenCreateAppend, fileutil.FilePermStandard)
+	wrap := fileutil.OpenFile(filePath, openfiletype.CreateAppend, filepermtype.Standard)
 	if wrap.IsFailed() {
 		return nil, wrap.Fault()
 	}

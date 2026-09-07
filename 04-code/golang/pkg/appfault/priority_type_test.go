@@ -5,17 +5,18 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/prioritytype"
 )
 
 func TestPriorityTypeEnumAndJSON(t *testing.T) {
-	pri := appfault.PriorityHigh
+	pri := prioritytype.High
 	data, err := json.Marshal(pri)
 	if err != nil || string(data) != "\"High\"" || pri.Name() != "High" {
 		t.Fatalf("expected \"High\" JSON, got %s", string(data))
 	}
 
 	var parsed appfault.PriorityType
-	if err := json.Unmarshal([]byte("\"Low\""), &parsed); err != nil || parsed != appfault.PriorityLow {
+	if err := json.Unmarshal([]byte("\"Low\""), &parsed); err != nil || parsed != prioritytype.Low {
 		t.Fatalf("expected PriorityLow, got %v", parsed)
 	}
 }
@@ -35,7 +36,7 @@ func TestPriorityType_UnmarshalJSON_Invalid(t *testing.T) {
 		t.Fatalf("expected nil error on null, got %v", err)
 	}
 
-	if pri != appfault.PriorityUnknown {
+	if pri != prioritytype.Unknown {
 		t.Fatalf("expected PriorityUnknown on null, got %v", pri)
 	}
 
@@ -43,7 +44,7 @@ func TestPriorityType_UnmarshalJSON_Invalid(t *testing.T) {
 		t.Fatalf("expected nil error on numeric 1, got %v", err)
 	}
 
-	if pri != appfault.PriorityLow {
+	if pri != prioritytype.Low {
 		t.Fatalf("expected PriorityLow on numeric 1, got %v", pri)
 	}
 }

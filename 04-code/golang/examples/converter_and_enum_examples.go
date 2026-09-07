@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/errtype/logleveltype"
 	"coding-guidelines/common/pkg/errtype/processstatetype"
@@ -165,19 +167,19 @@ func RunFileWriterAndAppenderExample(baseDir string) *appfault.AppError {
 	}
 
 	// Shift behavior to Atomic swap
-	writer.SetMode(fileutil.FileWriteModeAtomic)
+	writer.SetMode(filewritemodetype.Atomic)
 	if appErr := writer.WriteString(ctx, "Version 2: Atomic Swap\n"); appErr != nil {
 		return appErr
 	}
 
 	// Shift behavior to Truncate with fsync
-	writer.SetMode(fileutil.FileWriteModeTruncate).SetSyncOnWrite(true)
+	writer.SetMode(filewritemodetype.Truncate).SetSyncOnWrite(true)
 	if appErr := writer.WriteString(ctx, "Version 3: Truncated Clean State\n"); appErr != nil {
 		return appErr
 	}
 
 	// 2. Continuous FileAppender (auto directory creation, auto-sync, bytes counter)
-	appender := fileutil.NewFileAppender(appenderPath, fileutil.FilePermStandard)
+	appender := fileutil.NewFileAppender(appenderPath, filepermtype.Standard)
 	appender.SetAutoSync(true)
 
 	if appErr := appender.AppendString(ctx, "LOG ENTRY 1: Service started\n"); appErr != nil {
