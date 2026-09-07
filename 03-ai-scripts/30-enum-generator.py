@@ -103,12 +103,19 @@ def resolve_target_dir(pkg: str, raw_dir: str | None) -> str:
     return f"04-code/golang/pkg/enum/{pkg}"
 
 
+def resolve_pkg_name(raw_pkg: str | None, name: str) -> str:
+    if raw_pkg:
+        return raw_pkg.strip().lower()
+    low = name.strip().lower()
+    return low if low.endswith("type") else f"{low}type"
+
+
 def normalize_config(raw: dict[str, Any]) -> dict[str, Any]:
     name = raw["name"].strip()
     items = build_items_list(raw.get("items", []))
     if not items:
         raise ValueError("At least one enum item must be provided")
-    pkg = (raw.get("package") or f"{name.lower()}type").strip().lower()
+    pkg = resolve_pkg_name(raw.get("package"), name)
     tmeta = resolve_type_metadata(raw.get("type", "byte"), raw.get("zero_value", "Invalid"))
     tdir = resolve_target_dir(pkg, raw.get("target_dir"))
     return {"name": name, "items": items, "package": pkg, "target_dir": tdir, **tmeta}
