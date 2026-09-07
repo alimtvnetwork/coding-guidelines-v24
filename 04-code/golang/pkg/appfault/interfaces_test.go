@@ -24,6 +24,24 @@ var (
 	_ IsDefinedChecker = (*AppError)(nil)
 	_ DefinableChecker = (*AppError)(nil)
 	_ StatusChecker    = (*AppError)(nil)
+
+	_ IsSuccessChecker = ResultSlice[string]{}
+	_ IsFailureChecker = ResultSlice[string]{}
+	_ IsInvalidChecker = ResultSlice[string]{}
+	_ IsNullChecker    = ResultSlice[string]{}
+	_ IsEmptyChecker   = ResultSlice[string]{}
+	_ IsDefinedChecker = ResultSlice[string]{}
+	_ DefinableChecker = ResultSlice[string]{}
+	_ StatusChecker    = ResultSlice[string]{}
+
+	_ IsSuccessChecker = ResultMap[string, int]{}
+	_ IsFailureChecker = ResultMap[string, int]{}
+	_ IsInvalidChecker = ResultMap[string, int]{}
+	_ IsNullChecker    = ResultMap[string, int]{}
+	_ IsEmptyChecker   = ResultMap[string, int]{}
+	_ IsDefinedChecker = ResultMap[string, int]{}
+	_ DefinableChecker = ResultMap[string, int]{}
+	_ StatusChecker    = ResultMap[string, int]{}
 )
 
 func TestResultSuccessCheckers(t *testing.T) {

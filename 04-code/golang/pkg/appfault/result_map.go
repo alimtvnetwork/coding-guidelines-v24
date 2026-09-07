@@ -30,6 +30,35 @@ func (rm ResultMap[K, V]) IsFailed() bool {
 	return rm.AppError != nil
 }
 
+// IsFailure returns true if an error is present.
+func (rm ResultMap[K, V]) IsFailure() bool {
+	return rm.IsFailed()
+}
+
+// IsInvalid returns true if an error is present.
+func (rm ResultMap[K, V]) IsInvalid() bool {
+	return rm.IsFailed()
+}
+
+// IsNull returns true if no error is present.
+func (rm ResultMap[K, V]) IsNull() bool {
+	return rm.AppError == nil
+}
+
+// IsEmpty returns true if no active error is present (or map is empty).
+func (rm ResultMap[K, V]) IsEmpty() bool {
+	if rm.AppError == nil {
+		return len(rm.Data) == 0
+	}
+
+	return rm.AppError.IsEmpty()
+}
+
+// IsDefined returns true if operation succeeded.
+func (rm ResultMap[K, V]) IsDefined() bool {
+	return rm.IsSuccess()
+}
+
 // HasError returns true if an error is present.
 func (rm ResultMap[K, V]) HasError() bool {
 	return rm.IsFailed()

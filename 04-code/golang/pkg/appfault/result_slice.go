@@ -30,6 +30,35 @@ func (rs ResultSlice[T]) IsFailed() bool {
 	return rs.AppError != nil
 }
 
+// IsFailure returns true if an error is present.
+func (rs ResultSlice[T]) IsFailure() bool {
+	return rs.IsFailed()
+}
+
+// IsInvalid returns true if an error is present.
+func (rs ResultSlice[T]) IsInvalid() bool {
+	return rs.IsFailed()
+}
+
+// IsNull returns true if no error is present.
+func (rs ResultSlice[T]) IsNull() bool {
+	return rs.AppError == nil
+}
+
+// IsEmpty returns true if no active error is present (or items are empty).
+func (rs ResultSlice[T]) IsEmpty() bool {
+	if rs.AppError == nil {
+		return len(rs.Items) == 0
+	}
+
+	return rs.AppError.IsEmpty()
+}
+
+// IsDefined returns true if operation succeeded.
+func (rs ResultSlice[T]) IsDefined() bool {
+	return rs.IsSuccess()
+}
+
 // HasError returns true if an error is present.
 func (rs ResultSlice[T]) HasError() bool {
 	return rs.IsFailed()
