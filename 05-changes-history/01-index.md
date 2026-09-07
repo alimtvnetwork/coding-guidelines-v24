@@ -1,7 +1,7 @@
 # Transaction History & Task Log Index
 
-> **Location:** `05-changes-history/`  
-> **Purpose:** Canonical persistent audit trail of all repository modifications, architectural tasks, cross-repo synchronizations, and system changes.  
+> **Location:** `05-changes-history/`
+> **Purpose:** Canonical persistent audit trail of all repository modifications, architectural tasks, cross-repo synchronizations, and system changes.
 > **Rule:** Every AI work session must record its operations in a dedicated, numbered subfolder so that subsequent AI agents can immediately understand the project trajectory, decisions made, and pending steps.
 
 ---

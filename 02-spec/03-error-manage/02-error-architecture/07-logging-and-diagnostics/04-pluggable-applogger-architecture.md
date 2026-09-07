@@ -1,8 +1,8 @@
 # Specification: `applogger` Pluggable Logger Architecture
 
-**Version:** 3.3.0  
-**Status:** Draft Specification (Pending Review)  
-**Package:** `04-code/golang/pkg/applogger`  
+**Version:** 3.3.0
+**Status:** Draft Specification (Pending Review)
+**Package:** `04-code/golang/pkg/applogger`
 **Reference Implementations:** `D:\work\03-aukgo\core\coreinterface\loggerinf\` (`Logger`, `StandardLogger`, `BasePersistentLogger`)
 
 ---

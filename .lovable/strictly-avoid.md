@@ -235,4 +235,3 @@ Allowed work:
 - ✅ Real-time single-line status ticker for completion progress (`[ 1/21] ✅ [PASS] <Gate> (<duration>s)`).
 - ✅ Selective log suppression: print stdout/stderr ONLY for gates that exit with a non-zero status code or timeout.
 - ✅ Full verbose logs emitted ONLY when the user explicitly passes the `--all` (`-a`) flag.
-

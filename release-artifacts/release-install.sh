@@ -7,7 +7,7 @@
 # (baked at release time) or the version explicitly passed via
 # --version.
 #
-# Spec: spec/14-update/25-release-pinned-installer.md
+# Spec: 02-spec/14-update/25-release-pinned-installer.md
 #
 # Quick start:
 #   curl -fsSL https://github.com/<owner>/<repo>/releases/download/vX.Y.Z/release-install.sh | bash
@@ -25,7 +25,7 @@
 #   2  invalid version string (semver regex failed)
 #   3  pinned release / asset not found (404)
 #   4  verification failed (raised by the inner installer; see
-#      spec/14-update/27-generic-installer-behavior.md §8)
+#      02-spec/14-update/27-generic-installer-behavior.md §8)
 #   5  inner installer rejected pinning handshake
 # ──────────────────────────────────────────────────────────────────────
 
@@ -66,10 +66,10 @@ trap '__installer_on_err "$LINENO" "$BASH_COMMAND"' ERR
 trap '__installer_log "[exit] rc=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)"' EXIT
 
 # ── Build-time substitution target ────────────────────────────────
-# The release workflow replaces the literal string `v6.35.3`
+# The release workflow replaces the literal string `v6.37.0`
 # with the concrete tag (e.g. v3.21.0) when uploading this file as a
 # release asset. Unbaked checkouts keep the placeholder verbatim.
-BAKED_VERSION="v6.35.3"
+BAKED_VERSION="v6.37.0"
 
 REPO="alimtvnetwork/coding-guidelines-v24"
 SEMVER_RE='^v?[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9.]+)?$'
@@ -104,7 +104,7 @@ MODE DISPATCH (spec §3)
 RESOLUTION ORDER (highest precedence first, spec §4.3)
   1. --version <tag>    (CLI flag)
   2. $INSTALLER_VERSION (env var, if set)
-  3. v6.35.3 baked at release-asset build time
+  3. v6.37.0 baked at release-asset build time
   If two sources disagree, a warning is emitted and the higher-precedence
   value wins.
 
@@ -125,8 +125,8 @@ EXIT CODES (spec §8 + release-install §4 details)
   5  inner installer rejected the pinning handshake
 
 SPEC
-  spec/14-update/25-release-pinned-installer.md  (this script)
-  spec/14-update/27-generic-installer-behavior.md (§3, §4, §7, §8)
+  02-spec/14-update/25-release-pinned-installer.md  (this script)
+  02-spec/14-update/27-generic-installer-behavior.md (§3, §4, §7, §8)
 HELP
   exit 0
 }
@@ -146,10 +146,10 @@ done
 # Precedence (spec §B.2 + ratified env-var extension §B.2.b'):
 #   1. --version flag
 #   2. $INSTALLER_VERSION env var
-#   3. Baked v6.35.3
+#   3. Baked v6.37.0
 resolve_version() {
   if [[ -n "$ARG_VERSION" ]]; then
-    if [[ "$BAKED_VERSION" != "v6.35.3" \
+    if [[ "$BAKED_VERSION" != "v6.37.0" \
           && "$BAKED_VERSION" != "$ARG_VERSION" ]]; then
       warn "Argument version ($ARG_VERSION) overrides baked-in ($BAKED_VERSION)."
     fi
@@ -157,14 +157,14 @@ resolve_version() {
     return 0
   fi
   if [[ -n "${INSTALLER_VERSION:-}" ]]; then
-    if [[ "$BAKED_VERSION" != "v6.35.3" \
+    if [[ "$BAKED_VERSION" != "v6.37.0" \
           && "$BAKED_VERSION" != "$INSTALLER_VERSION" ]]; then
       warn "Env INSTALLER_VERSION ($INSTALLER_VERSION) overrides baked-in ($BAKED_VERSION)."
     fi
     echo "$INSTALLER_VERSION"
     return 0
   fi
-  if [[ "$BAKED_VERSION" != "v6.35.3" ]]; then
+  if [[ "$BAKED_VERSION" != "v6.37.0" ]]; then
     echo "$BAKED_VERSION"
     return 0
   fi

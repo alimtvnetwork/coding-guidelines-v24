@@ -1,9 +1,9 @@
 # Memory: Pluggable Logger Architecture, Log Changer, and Uber Zap Migration
 
-> Status: Active Proposal & Reference Architecture  
-> Ingested: 2026-09-03  
-> Category: `pkg/applogger` Core Architecture  
-> Related Ambiguity: `.lovable/ambiguous-questions/01-new-ambiguity/01-pluggable-logger-backend-and-uber-zap-migration.md`  
+> Status: Active Proposal & Reference Architecture
+> Ingested: 2026-09-03
+> Category: `pkg/applogger` Core Architecture
+> Related Ambiguity: `.lovable/ambiguous-questions/01-new-ambiguity/01-pluggable-logger-backend-and-uber-zap-migration.md`
 
 ---
 

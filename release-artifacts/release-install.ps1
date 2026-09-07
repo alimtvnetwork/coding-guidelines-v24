@@ -19,12 +19,12 @@
     RESOLUTION ORDER (highest precedence first, spec §4.3):
       1. -Version <tag>          (CLI flag)
       2. $env:INSTALLER_VERSION  (env var, if set)
-      3. v6.35.3 baked at release-asset build time
+      3. v6.37.0 baked at release-asset build time
     If two sources disagree, a warning is emitted and the higher-
     precedence value wins.
 
-    Spec: spec/14-update/25-release-pinned-installer.md
-    Generic installer contract: spec/14-update/27-generic-installer-behavior.md
+    Spec: 02-spec/14-update/25-release-pinned-installer.md
+    Generic installer contract: 02-spec/14-update/27-generic-installer-behavior.md
 
 .PARAMETER Version
     [PINNED only — required if no baked tag] Install exactly this tag.
@@ -68,12 +68,12 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference    = "SilentlyContinue"
 
 $Script:__InstallCrashLogDir = Join-Path ([System.IO.Path]::GetTempPath()) "installer-logs"
-try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { }
+try { New-Item -ItemType Directory -Path $Script:__InstallCrashLogDir -Force | Out-Null } catch { Write-Warning "  ⚠️  failed to create crash log directory: $($_.Exception.Message)" }
 $Script:__InstallCrashLogFile = Join-Path $Script:__InstallCrashLogDir ("release-install-" + (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ") + ".log")
 
 function Write-InstallLog {
     param([string]$Line)
-    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { }
+    try { Add-Content -LiteralPath $Script:__InstallCrashLogFile -Value $Line -ErrorAction SilentlyContinue } catch { Write-Warning "  ⚠️  failed to write install log: $($_.Exception.Message)" }
 }
 Write-InstallLog "# release-install crash log"
 Write-InstallLog ("# started: " + (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))
@@ -96,9 +96,9 @@ try {
 
 
 # ── Build-time substitution target ────────────────────────────────
-# The release workflow replaces v6.35.3 with the concrete
+# The release workflow replaces v6.37.0 with the concrete
 # tag (e.g. v3.21.0) when uploading this file as a release asset.
-$BakedVersion = "v6.35.3"
+$BakedVersion = "v6.37.0"
 
 $Repo     = "alimtvnetwork/coding-guidelines-v24"
 $SemverRe = '^v?\d+\.\d+\.\d+(-[A-Za-z0-9.]+)?$'
@@ -120,21 +120,21 @@ if ($Help) {
 # Precedence (spec §B.2 + ratified env-var extension §B.2.b'):
 #   1. -Version flag
 #   2. $env:INSTALLER_VERSION
-#   3. Baked v6.35.3
+#   3. Baked v6.37.0
 function Resolve-PinnedVersion {
     if ($Version) {
-        if ($BakedVersion -ne "v6.35.3" -and $BakedVersion -ne $Version) {
+        if ($BakedVersion -ne "v6.37.0" -and $BakedVersion -ne $Version) {
             Write-Warn "Argument -Version ($Version) overrides baked-in ($BakedVersion)."
         }
         return $Version
     }
     if ($env:INSTALLER_VERSION) {
-        if ($BakedVersion -ne "v6.35.3" -and $BakedVersion -ne $env:INSTALLER_VERSION) {
+        if ($BakedVersion -ne "v6.37.0" -and $BakedVersion -ne $env:INSTALLER_VERSION) {
             Write-Warn "Env INSTALLER_VERSION ($($env:INSTALLER_VERSION)) overrides baked-in ($BakedVersion)."
         }
         return $env:INSTALLER_VERSION
     }
-    if ($BakedVersion -ne "v6.35.3") {
+    if ($BakedVersion -ne "v6.37.0") {
         return $BakedVersion
     }
     return $null

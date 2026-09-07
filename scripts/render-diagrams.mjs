@@ -18,12 +18,12 @@
 
 import { existsSync, statSync, readFileSync, writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
-import { join, relative, dirname, resolve } from 'node:path';
+import { join, relative, dirname, resolve, basename } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
-const SPEC_ROOT = join(ROOT, 'spec');
+const SPEC_ROOT = existsSync(join(ROOT, '02-spec')) ? join(ROOT, '02-spec') : join(ROOT, 'spec');
 const ARGS = process.argv.slice(2);
 const HELP = ARGS.includes('--help') || ARGS.includes('-h');
 const CHECK_ONLY = ARGS.includes('--check');
@@ -96,7 +96,7 @@ async function findMmdFiles(dir, acc = []) {
     }
     const isMmd = entry.isFile() && entry.name.endsWith('.mmd');
     if (!isMmd) continue;
-    if (!isDiagramsDir(dirname(full).split('/').pop())) continue;
+    if (!isDiagramsDir(basename(dirname(full)))) continue;
     if (ONLY_FILTER && !full.includes(ONLY_FILTER)) continue;
     if (STAGED_SET && !STAGED_SET.has(full)) continue;
     acc.push(full);

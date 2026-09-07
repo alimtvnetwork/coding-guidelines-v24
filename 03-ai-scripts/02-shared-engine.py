@@ -1041,4 +1041,3 @@ def run_worker_pool(
         has_failures=has_failures,
         exit_code=exit_code
     )
-

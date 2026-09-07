@@ -40,13 +40,13 @@ def process_file(file_path: Path, is_fix_mode: bool) -> tuple[str, bool]:
         raw = read_file_lf(file_path, encoding=DEFAULT_ENCODING)
         if not raw:
             return (norm_p, False)
-        
+
         cleaned = fix_gaps(raw)
         has_changes = (raw != cleaned)
-        
+
         if not has_changes:
             return (norm_p, False)
-            
+
         if is_fix_mode:
             write_file_lf(file_path, cleaned, encoding=DEFAULT_ENCODING)
         return (norm_p, True)
@@ -78,12 +78,12 @@ def main():
             print(f"  - {v}")
         if len(violations) > 15:
             print(f"  ... and {len(violations) - 15} more.")
-        
+
         if not is_fix_mode:
             sys.exit(ExitCodeType.VIOLATIONS_FOUND.value)
     else:
         print(f"All {stats['total_files']} files in '{target_dir}' have clean gaps ({stats['elapsed_ms']:.2f}ms).")
-    
+
     sys.exit(ExitCodeType.SUCCESS.value)
 
 if __name__ == "__main__":

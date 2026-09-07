@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO="alimtvnetwork/coding-guidelines-v24"
 RELEASE_VERSION_INPUT="${RELEASE_VERSION:-}"
-REQUIRED_PATHS=("02-spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1" ".lovable/coding-guidelines" ".lovable/prompts")
+REQUIRED_PATHS=("02-spec" "linters" "linter-scripts" "install.sh" "install.ps1" "install-config.json" "readme.md" "release-install.sh" "release-install.ps1")
 
 step() { printf '\033[0;36m▸ %s\033[0m\n' "$1"; }
 ok() { printf '\033[0;32m✅ %s\033[0m\n' "$1"; }
@@ -55,7 +55,13 @@ prepare_staging_dir() {
 }
 
 copy_release_files() {
-  cp -R spec "$STAGING_DIR/spec"
+  cp -R 02-spec "$STAGING_DIR/02-spec"
+  cp -R 02-spec "$STAGING_DIR/spec"
+  if [[ -d "01-prompts" ]]; then
+    cp -R 01-prompts "$STAGING_DIR/01-prompts"
+    mkdir -p "$STAGING_DIR/.lovable"
+    cp -R 01-prompts "$STAGING_DIR/.lovable/prompts"
+  fi
   cp -R linters "$STAGING_DIR/linters"
   cp -R linter-scripts "$STAGING_DIR/linter-scripts"
   cp install.sh "$STAGING_DIR/install.sh"
@@ -63,8 +69,12 @@ copy_release_files() {
   cp install-config.json "$STAGING_DIR/install-config.json"
   cp readme.md "$STAGING_DIR/readme.md"
   mkdir -p "$STAGING_DIR/.lovable"
-  cp -R .lovable/coding-guidelines "$STAGING_DIR/.lovable/coding-guidelines"
-  cp -R .lovable/prompts "$STAGING_DIR/.lovable/prompts"
+  if [[ -f ".lovable/coding-guidelines.md" ]]; then
+    cp .lovable/coding-guidelines.md "$STAGING_DIR/.lovable/coding-guidelines.md"
+  fi
+  if [[ -d "02-spec/02-coding-guidelines" ]]; then
+    cp -R 02-spec/02-coding-guidelines "$STAGING_DIR/.lovable/coding-guidelines"
+  fi
 }
 
 create_archives() {
@@ -72,7 +82,13 @@ create_archives() {
   local tar_path="$DIST_DIR/$ARCHIVE_BASENAME.tar.gz"
 
   rm -f "$zip_path" "$tar_path"
-  (cd "$DIST_DIR" && zip -qr "$ARCHIVE_BASENAME.zip" "$ARCHIVE_BASENAME")
+  if command -v zip >/dev/null 2>&1; then
+    (cd "$DIST_DIR" && zip -qr "$ARCHIVE_BASENAME.zip" "$ARCHIVE_BASENAME")
+  elif command -v powershell.exe >/dev/null 2>&1; then
+    powershell.exe -NoProfile -Command "Compress-Archive -Path '$DIST_DIR/$ARCHIVE_BASENAME/*' -DestinationPath '$zip_path' -Force"
+  elif command -v python >/dev/null 2>&1; then
+    (cd "$DIST_DIR" && python -m zipfile -c "$ARCHIVE_BASENAME.zip" "$ARCHIVE_BASENAME")
+  fi
   tar -C "$DIST_DIR" -czf "$tar_path" "$ARCHIVE_BASENAME"
 }
 

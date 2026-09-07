@@ -140,7 +140,7 @@ jobs:
         run: go run linter-scripts/validate-guidelines.go --path spec --max-lines 15
 
       - name: Run Go Base Unit Tests (04-code/golang)
-        run: go test -v -C 04-code/golang ./...
+        run: go test -C 04-code/golang -v ./...
 
       - name: Run Python validator (spec)
         run: python3 linter-scripts/validate-guidelines.py spec || true
@@ -504,12 +504,12 @@ jobs:
             || { echo "::error::check-spec-cross-links.py missing"; exit 1; }
 
       - name: Validate spec internal cross-references
-        # Walks spec/, parses every markdown link, fails on any broken link
+        # Walks 02-spec/, parses every markdown link, fails on any broken link
         # or missing heading anchor. Waivers live in
         # linter-scripts/spec-cross-links.allowlist (baseline).
         run: |
           python3 linter-scripts/check-spec-cross-links.py \
-            --root spec \
+            --root 02-spec \
             --repo-root . \
             --github
 
@@ -530,13 +530,13 @@ jobs:
         if: always()
         run: |
           python3 linter-scripts/suggest-spec-cross-link-fixes.py \
-            --root spec \
+            --root 02-spec \
             --repo-root . \
             --github \
             --json > /tmp/spec-cross-links-suggestions.json || true
           echo "--- Human-readable summary ---"
           python3 linter-scripts/suggest-spec-cross-link-fixes.py \
-            --root spec \
+            --root 02-spec \
             --repo-root . || true
 
       - name: Upload suggestions JSON
@@ -692,7 +692,7 @@ jobs:
         id: discover
         run: |
           set -euo pipefail
-          count=$(find spec -type f -name '*.mmd' 2>/dev/null | wc -l | tr -d ' ')
+          count=$(find 02-spec -type f -name '*.mmd' 2>/dev/null | wc -l | tr -d ' ')
           echo "count=$count" >> "$GITHUB_OUTPUT"
           echo "Found $count .mmd file(s)."
 
@@ -722,7 +722,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: spec-diagrams-png
-          path: spec/**/*.png
+          path: 02-spec/**/*.png
           if-no-files-found: ignore
           retention-days: 14
 

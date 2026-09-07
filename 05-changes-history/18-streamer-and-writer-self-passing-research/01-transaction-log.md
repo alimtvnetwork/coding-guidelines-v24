@@ -1,9 +1,9 @@
 # Transaction Log: Streamer & Writer Self-Passing Architecture & Interface Naming Guidelines
 
-> **Directory:** `05-changes-history/18-streamer-and-writer-self-passing-research/`  
-> **Date:** 2026-09-04  
-> **Topic:** Streamer & Writer Refinements, Self-Passing Injected Methods (`self`), Lock/Unlock Controls, AppError Return Standard, and Cross-Language Interface Naming  
-> **Status:** Completed  
+> **Directory:** `05-changes-history/18-streamer-and-writer-self-passing-research/`
+> **Date:** 2026-09-04
+> **Topic:** Streamer & Writer Refinements, Self-Passing Injected Methods (`self`), Lock/Unlock Controls, AppError Return Standard, and Cross-Language Interface Naming
+> **Status:** Completed
 
 ---
 

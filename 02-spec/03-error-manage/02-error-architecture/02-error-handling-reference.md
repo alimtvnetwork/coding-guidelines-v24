@@ -200,7 +200,7 @@ Every `error()` and `logException()` call automatically captures:
 All structured errors crossing service boundaries in Go MUST use `*appfault.AppError` (package `appfault`). Do NOT use `fmt.Errorf` or `errors.New` when returning an error from a service.
 
 **Strict Context Enrichment Checklist:**
-Every AI agent modifying or creating Go code MUST ensure `*appfault.AppError` instances include rich metadata. No error can be bypassed without injecting absolute file paths and relevant variables. 
+Every AI agent modifying or creating Go code MUST ensure `*appfault.AppError` instances include rich metadata. No error can be bypassed without injecting absolute file paths and relevant variables.
 
 - [ ] `/goal` **Absolute Path Logging (`WithPath` / `WithFilePath`):** If an error involves a file or directory, you MUST attach the path via `.WithPath(absolutePath)` or `.WithFilePath(absolutePath)`.
 - [ ] `/goal` **Variable Logging (`WithVar` / `WithVars`):** If an error occurs due to a specific variable or state, you MUST attach the variable name and value via `.WithVar("variableName", variableValue)`.

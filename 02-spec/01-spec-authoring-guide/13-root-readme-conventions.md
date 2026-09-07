@@ -253,7 +253,7 @@ Before tagging a release, verify **all** of the following on the root
 ## §10 — Cross-References
 
 - Sync script: [`scripts/sync-readme-stats.mjs`](../../scripts/sync-readme-stats.mjs)
-- Long-form docs: [`docs/principles.md`](../../docs/principles.md), [`docs/architecture.md`](../../docs/architecture.md), [`docs/author.md`](../../docs/author.md)
+- Long-form docs: `docs/principles.md`, `docs/architecture.md`, `docs/author.md`
 - Sibling-repo reference implementation: `gitmap-v6` root README
 - Folder structure rules: [`02-folder-structure.md`](./02-folder-structure.md)
 - Naming conventions: [`03-naming-conventions.md`](./03-naming-conventions.md)

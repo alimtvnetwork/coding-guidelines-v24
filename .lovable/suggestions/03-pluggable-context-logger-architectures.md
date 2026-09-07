@@ -1,10 +1,10 @@
 # Pluggable & Context-Aware Logger Architecture Proposals
 
-> Status: Pending Review  
-> Author: Antigravity AI  
-> Date: 2026-09-03  
-> Target Component: `04-code/golang/pkg/applogger` and `04-code/golang/pkg/logger`  
-> Reference Spec: `02-spec/03-error-manage/02-error-architecture/07-logging-and-diagnostics/04-pluggable-applogger-architecture.md`  
+> Status: Pending Review
+> Author: Antigravity AI
+> Date: 2026-09-03
+> Target Component: `04-code/golang/pkg/applogger` and `04-code/golang/pkg/logger`
+> Reference Spec: `02-spec/03-error-manage/02-error-architecture/07-logging-and-diagnostics/04-pluggable-applogger-architecture.md`
 
 ---
 
