@@ -3,7 +3,6 @@ package logleveltype
 import (
 	"encoding/json"
 	"fmt"
-	"sort"
 	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
@@ -88,70 +87,11 @@ func (l Variant) IsCompare(target Variant) bool {
 }
 
 func (l Variant) MarshalJSON() ([]byte, error) {
-	return json.Marshal(l.Name())
+	return baseenumer.MarshalJSON(l.Name())
 }
 
 func (l *Variant) UnmarshalJSON(data []byte) error {
-	trimmed := strings.TrimSpace(string(data))
-	if len(trimmed) == 0 || trimmed == "null" {
-		*l = Variant(0)
-
-		return nil
-	}
-
-	return l.unmarshalData(data)
-}
-
-func (l *Variant) unmarshalData(data []byte) error {
-	var raw string
-	if err := json.Unmarshal(data, &raw); err == nil {
-		return l.unmarshalString(raw)
-	}
-
-	var code uint16
-	if err := json.Unmarshal(data, &code); err != nil {
-		return err
-	}
-
-	candidate := Variant(code)
-	if !candidate.IsValid() {
-		return fmt.Errorf("invalid LogLevelType numeric code %d", code)
-	}
-
-	*l = candidate
-
-	return nil
-}
-
-func (l *Variant) unmarshalString(raw string) error {
-	trimmed := strings.TrimSpace(raw)
-	if len(trimmed) == 0 || strings.EqualFold(trimmed, "null") {
-		*l = Variant(0)
-
-		return nil
-	}
-
-	parsed := Parse(trimmed)
-	if !parsed.IsValid() {
-		names := sortedNames()
-
-		return fmt.Errorf("unknown LogLevelType %q, supported: [%s]", raw, strings.Join(names, ", "))
-	}
-
-	*l = parsed
-
-	return nil
-}
-
-func sortedNames() []string {
-	names := make([]string, 0, len(logLevelNames))
-	for _, name := range logLevelNames {
-		names = append(names, name)
-	}
-
-	sort.Strings(names)
-
-	return names
+	return baseenumer.UnmarshalIntegerJSON(data, l, "logleveltype", variantMap, 5, 0)
 }
 
 func All() []Variant {

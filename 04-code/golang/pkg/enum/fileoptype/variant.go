@@ -3,7 +3,6 @@ package fileoptype
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/enum/openfiletype"
@@ -152,47 +151,9 @@ func (v Variant) ValueString() string {
 }
 
 func (v Variant) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.Name())
+	return baseenumer.MarshalJSON(v.Name())
 }
 
 func (v *Variant) UnmarshalJSON(data []byte) error {
-	trimmed := strings.TrimSpace(string(data))
-	if len(trimmed) == 0 || trimmed == "null" {
-		*v = Invalid
-
-		return nil
-	}
-
-	return v.unmarshalData(data)
-}
-
-func (v *Variant) unmarshalData(data []byte) error {
-	var str string
-	if err := json.Unmarshal(data, &str); err == nil {
-		return v.unmarshalString(str)
-	}
-
-	var raw byte
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-
-	if int(raw) >= len(variantLabels) {
-		return baseenumer.FormatNumericRangeError("fileoptype", raw, len(variantLabels)-1)
-	}
-
-	*v = Variant(raw)
-
-	return nil
-}
-
-func (v *Variant) unmarshalString(str string) error {
-	res := Parse(str)
-	if res.IsSuccess() {
-		*v = res.Data()
-
-		return nil
-	}
-
-	return res.Fault()
+	return baseenumer.UnmarshalIntegerJSON(data, v, "fileoptype", variantMap, len(variantLabels)-1, Invalid)
 }

@@ -85,26 +85,11 @@ func (s Variant) IsCompare(target Variant) bool {
 }
 
 func (s Variant) MarshalJSON() ([]byte, error) {
-	return json.Marshal(string(s))
+	return baseenumer.MarshalJSON(string(s))
 }
 
 func (s *Variant) UnmarshalJSON(data []byte) error {
-	trimmed := strings.TrimSpace(string(data))
-	if len(trimmed) == 0 || trimmed == "null" {
-		*s = Unknown
-
-		return nil
-	}
-
-	var raw string
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-
-	parsed := Parse(raw)
-	*s = parsed
-
-	return nil
+	return baseenumer.UnmarshalStringJSON(data, s, "processstatetype", processStateMap, Unknown)
 }
 
 func All() []Variant {

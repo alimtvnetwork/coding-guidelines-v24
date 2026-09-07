@@ -3,7 +3,6 @@ package severitytype
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 )
@@ -110,47 +109,9 @@ func (v Variant) ValueString() string {
 }
 
 func (v Variant) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.Name())
+	return baseenumer.MarshalJSON(v.Name())
 }
 
 func (v *Variant) UnmarshalJSON(data []byte) error {
-	trimmed := strings.TrimSpace(string(data))
-	if len(trimmed) == 0 || trimmed == "null" {
-		*v = Unknown
-
-		return nil
-	}
-
-	return v.unmarshalData(data)
-}
-
-func (v *Variant) unmarshalData(data []byte) error {
-	var str string
-	if err := json.Unmarshal(data, &str); err == nil {
-		return v.unmarshalString(str)
-	}
-
-	var raw byte
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-
-	if int(raw) >= len(variantLabels) {
-		return baseenumer.FormatNumericRangeError("SeverityType", raw, len(variantLabels)-1)
-	}
-
-	*v = Variant(raw)
-
-	return nil
-}
-
-func (v *Variant) unmarshalString(str string) error {
-	val, ok := Parse(str)
-	if ok {
-		*v = val
-
-		return nil
-	}
-
-	return fmt.Errorf("unknown SeverityType %q, supported: [%s]", str, strings.Join(variantLabels[:], ", "))
+	return baseenumer.UnmarshalIntegerJSON(data, v, "severitytype", variantMap, len(variantLabels)-1, Unknown)
 }

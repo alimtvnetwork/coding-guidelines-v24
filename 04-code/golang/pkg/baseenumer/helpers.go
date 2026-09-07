@@ -7,16 +7,10 @@ import (
 	"strings"
 )
 
-// IntegerVarianter represents integer-like types used for enum variants.
-type IntegerVarianter interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
-}
-
 // CompileMap builds a fast lookup map for an enumeration from a slice of variant labels.
 // It maps the raw label, lowercase label, uppercase label, and numeric string index to the typed variant,
 // as well as standard aliases ("unknown", "invalid", "UNKNOWN", "INVALID") to the invalid zero-variant.
-func CompileMap[V IntegerVarianter](labels []string, invalid V) map[string]V {
+func CompileMap[V IntNumber](labels []string, invalid V) map[string]V {
 	m := make(map[string]V, (len(labels)*4)+4)
 	for i, label := range labels {
 		v := V(i)
@@ -46,7 +40,7 @@ func SliceValues(labels []string) []string {
 }
 
 // SliceVariants extracts all valid typed variant values excluding index 0.
-func SliceVariants[V IntegerVarianter](labels []string) []V {
+func SliceVariants[V IntNumber](labels []string) []V {
 	if len(labels) <= 1 {
 		return []V{}
 	}

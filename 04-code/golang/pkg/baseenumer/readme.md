@@ -31,13 +31,18 @@ Extends `BaseEnumer` for numeric-backed enumerations:
 ### `ToEnum[T BaseEnumer](val string, all []T) (T, bool)`
 Case-insensitively searches a slice of `BaseEnumer` instances by `Name()` or `ValueString()`.
 
+## Type Constraints (`types.go`)
+
+- `IntNumber`: Type constraint matching all signed and unsigned integer types (`~int`, `~int8`, `~int16`, `~int32`, `~int64`, `~uint`, `~uint8`, `~uint16`, `~uint32`, `~uint64`, `~uintptr`).
+- `IntegerVarianter`: Backward-compatible alias for `IntNumber`.
+
 ## Generic Enum Helpers (`helpers.go`)
 
 Reusable, zero-dependency generic utilities to eliminate boilerplate across concrete enum packages:
 
-- `CompileMap[V IntegerVarianter](labels []string, invalid V) map[string]V`: Generates lookup maps mapping name, uppercase, lowercase, numeric string, and `unknown`/`invalid` to typed variants.
+- `CompileMap[V IntNumber](labels []string, invalid V) map[string]V`: Generates lookup maps mapping name, uppercase, lowercase, numeric string, and `unknown`/`invalid` to typed variants.
 - `SliceValues(labels []string) []string`: Extracts all valid variant label strings excluding index 0 (`Invalid`/`Unknown`).
-- `SliceVariants[V IntegerVarianter](labels []string) []V`: Extracts all valid typed variant values excluding index 0.
+- `SliceVariants[V IntNumber](labels []string) []V`: Extracts all valid typed variant values excluding index 0.
 - `FormatNameValue(name string, val any) string`: Produces canonical `"Name(Value)"` formatting.
 - `IsBetween[T cmp.Ordered](val, min, max T) bool`: Closed range boundary check `min <= val && val <= max`.
 - `IsNotBetween[T cmp.Ordered](val, min, max T) bool`: Closed range boundary check `val < min || val > max`.
@@ -45,3 +50,12 @@ Reusable, zero-dependency generic utilities to eliminate boilerplate across conc
 - `FormatParseError(typeName, raw string, supportedVariants []string) string`: Canonical error string generator.
 - `FormatEmptyParseError(typeName string) string`: Canonical empty input error string generator.
 - `FormatNumericRangeError(typeName string, raw any, max int) error`: Canonical numeric out-of-range error generator.
+
+## Generic JSON Marshaling Helpers (`json_marshaling.go`)
+
+Reusable generic JSON serialization and deserialization functions:
+
+- `MarshalJSON(name string) ([]byte, error)`: Standard JSON string marshaler for enum names.
+- `UnmarshalIntegerJSON[V IntNumber](data []byte, target *V, typeName string, variantMap map[string]V, maxValid int, zero V) error`: Unified integer- and byte-backed JSON unmarshaler handling strings, numeric strings, numbers, nulls, and empty values.
+- `UnmarshalStringJSON[V ~string](data []byte, target *V, typeName string, variantMap map[string]V, zero V) error`: Unified string-backed JSON unmarshaler handling string values, nulls, and empty values.
+

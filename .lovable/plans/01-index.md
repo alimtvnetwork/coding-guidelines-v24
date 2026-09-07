@@ -8,8 +8,9 @@ Master directory of architectural and execution plans.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
-
 ## Completed Plans
+
+- [28-dry-enum-marshaling-and-scaffolder.md](completed/28-dry-enum-marshaling-and-scaffolder.md): DRY Enum Marshaling in `pkg/baseenumer` & Smart Multi-File Enum Scaffolder.
 
 - [27-direct-result-types-consolidation.md](completed/27-direct-result-types-consolidation.md): Direct Concrete Result Types Consolidation Across Enum Packages and FileUtil.
 - [26-prune-enum-const-aliases-and-enumer-types.md](completed/26-prune-enum-const-aliases-and-enumer-types.md): Eliminate Redundant Enum Const Aliases & Prune Over-Engineered Enumer Types.

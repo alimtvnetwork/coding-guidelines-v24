@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 )
@@ -209,45 +208,11 @@ func (p Variant) ValueString() string {
 }
 
 func (p Variant) MarshalJSON() ([]byte, error) {
-	return json.Marshal(p.OctalString())
+	return baseenumer.MarshalJSON(p.OctalString())
 }
 
 func (p *Variant) UnmarshalJSON(data []byte) error {
-	trimmed := strings.TrimSpace(string(data))
-	if len(trimmed) == 0 || trimmed == "null" {
-		*p = Standard
-
-		return nil
-	}
-
-	return p.unmarshalData(data)
-}
-
-func (p *Variant) unmarshalData(data []byte) error {
-	var raw string
-	if err := json.Unmarshal(data, &raw); err == nil {
-		return p.unmarshalString(raw)
-	}
-
-	var num uint32
-	if err := json.Unmarshal(data, &num); err != nil {
-		return err
-	}
-
-	*p = Variant(num)
-
-	return nil
-}
-
-func (p *Variant) unmarshalString(raw string) error {
-	res := Parse(raw)
-	if res.IsSuccess() {
-		*p = res.Data()
-
-		return nil
-	}
-
-	return res.Fault()
+	return baseenumer.UnmarshalIntegerJSON(data, p, "filepermtype", nil, 07777, Standard)
 }
 
 var (

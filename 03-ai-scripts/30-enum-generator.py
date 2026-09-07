@@ -1,315 +1,517 @@
 #!/usr/bin/env python3
 """
-30-enum-generator.py — Generates type-safe Go enums conforming to BaseEnum.
+30-enum-generator.py — Multi-file type-safe Go enum scaffolder conforming to repo standards.
 
-Generates idiomatic Go enum types that implement:
-  - BaseEnum (Name, String, ValueString, IsValid, IsEnum)
-  - NumberEnum (for integer-backed enums: Int, Code)
-  - IsCompare(target)
-  - json.Marshaler (MarshalJSON)
-  - json.Unmarshaler (UnmarshalJSON)
-  - All*() slice of all values
-  - Parse*(string) case-insensitive parser
+Scaffolds 4 standard files in a dedicated package folder (04-code/golang/pkg/enum/{name}type/):
+  - variant.go: Enum type, constants, predicates, DRY JSON serialization.
+  - vars.go: Labels array, baseenumer.CompileMap, All(), Values(), Parse() Result.
+  - variant_test.go: Complete unit tests (interfaces, properties, predicates, names, JSON roundtrips).
+  - readme.md: Package documentation.
 
-Usage:
-  python 03-ai-scripts/30-enum-generator.py --name ConnectionState --type string --members Disconnected,Connecting,Connected,Reconnecting --package connection
-  python 03-ai-scripts/30-enum-generator.py --name Priority --type int --members Low,Medium,High,Critical --package task
-  python 03-ai-scripts/30-enum-generator.py --name DeliveryMode --members Fast,Standard,Scheduled --out 04-code/golang/pkg/streamwriter/delivery_mode.go
+Supports:
+  - Backing types: byte (default), int (uint16), string
+  - Input modes: CLI comma-separated items, JSON config file (--config), inline JSON (--json)
+  - Flags: --dry-run, --overwrite
 """
 
 from __future__ import annotations
 
 import argparse
 from importlib import import_module
+import json
 from pathlib import Path
 import sys
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parent))
 engine = import_module("02-shared-engine")
 
-ExitCodeType = engine.ExitCodeType
+EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
+EXIT_USAGE_ERROR = 2
+
+write_file_lf = engine.write_file_lf
 
 
-def generate_string_enum(name: str, pkg: str, members: list[str]) -> str:
-    enum_type = f"{name}Type" if not name.endswith("Type") else name
-    registry_name = f"{enum_type[0].lower() + enum_type[1:]}Registry"
-    all_func = f"All{name}s" if not name.endswith("s") else f"All{name}"
-    parse_func = f"Parse{name}"
+def parse_cli_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Multi-file type-safe Go enum scaffolder")
+    parser.add_argument("--name", "-n", help="Enum base name (e.g. DeliveryMode, ProcessState)")
+    parser.add_argument("--type", "-t", choices=["byte", "uint8", "uint16", "int", "string"], default="byte")
+    parser.add_argument("--items", "-m", help="Comma-separated member names (e.g. Fast,Standard,Slow)")
+    parser.add_argument("--zero-value", "-z", default="Invalid", help="Zero-value label (Invalid or Unknown)")
+    parser.add_argument("--package", "-p", help="Target Go package name (defaults to {name.lower()}type)")
+    parser.add_argument("--target-dir", "-d", help="Target directory relative to git root")
+    parser.add_argument("--config", "-c", help="Path to JSON config file")
+    parser.add_argument("--json", help="Inline JSON config string or '-' for stdin")
+    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing files if present")
+    parser.add_argument("--dry-run", action="store_true", help="Preview generated files without writing")
+    return parser.parse_args()
 
-    lines = [
-        f"package {pkg}",
-        "",
-        'import (',
-        '\t"encoding/json"',
-        '\t"strings"',
-        ')',
-        "",
-        f"// {enum_type} represents string-backed enum values conforming to BaseEnum.",
-        f"type {enum_type} string",
-        "",
-        "const (",
+
+def load_input_source(args: argparse.Namespace) -> dict[str, Any] | None:
+    if args.config:
+        return json.loads(Path(args.config).read_text(encoding="utf-8"))
+    if args.json:
+        raw = sys.stdin.read() if args.json == "-" else args.json
+        return json.loads(raw)
+    return None
+
+
+def load_raw_config(args: argparse.Namespace) -> dict[str, Any]:
+    cfg = load_input_source(args)
+    if cfg:
+        return cfg
+    if not args.name or not args.items:
+        raise ValueError("Either --config/--json or --name and --items required")
+    return {
+        "name": args.name,
+        "type": args.type,
+        "items": args.items,
+        "zero_value": args.zero_value,
+        "package": args.package,
+        "target_dir": args.target_dir,
+    }
+
+
+def build_items_list(raw_items: Any) -> list[str]:
+    if isinstance(raw_items, list):
+        return [str(i).strip() for i in raw_items if str(i).strip()]
+    if isinstance(raw_items, str):
+        return [i.strip() for i in raw_items.split(",") if i.strip()]
+    return []
+
+
+def resolve_type_metadata(backing_type: str, zero_value: str) -> dict[str, Any]:
+    norm_type = backing_type.lower()
+    is_byte = norm_type in ("byte", "uint8")
+    is_str = norm_type == "string"
+    is_int = norm_type in ("int", "uint16")
+    underlying = "string" if is_str else ("uint16" if is_int else "byte")
+    zero = "Unknown" if is_str else zero_value
+    return {
+        "is_byte": is_byte,
+        "is_string": is_str,
+        "is_int": is_int,
+        "underlying": underlying,
+        "zero_value": zero,
+    }
+
+
+def resolve_target_dir(pkg: str, raw_dir: str | None) -> str:
+    if raw_dir:
+        return raw_dir
+    return f"04-code/golang/pkg/enum/{pkg}"
+
+
+def normalize_config(raw: dict[str, Any]) -> dict[str, Any]:
+    name = raw["name"].strip()
+    items = build_items_list(raw.get("items", []))
+    if not items:
+        raise ValueError("At least one enum item must be provided")
+    pkg = (raw.get("package") or f"{name.lower()}type").strip().lower()
+    tmeta = resolve_type_metadata(raw.get("type", "byte"), raw.get("zero_value", "Invalid"))
+    tdir = resolve_target_dir(pkg, raw.get("target_dir"))
+    return {"name": name, "items": items, "package": pkg, "target_dir": tdir, **tmeta}
+
+
+def build_variant_header(ctx: dict[str, Any]) -> list[str]:
+    imports = ['\t"encoding/json"']
+    if not ctx["is_string"]:
+        imports.append('\t"fmt"')
+    imports.extend(['', '\t"coding-guidelines/common/pkg/baseenumer"'])
+    return [f"package {ctx['package']}", "", "import ("] + imports + [")", ""]
+
+
+def build_variant_consts(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        lines = ["const (", f'\t{ctx["zero_value"]} Variant = ""']
+        for item in ctx["items"]:
+            lines.append(f'\t{item} Variant = "{item}"')
+        return lines + [")", ""]
+    lines = ["const (", f"\t{ctx['zero_value']} Variant = iota"]
+    for item in ctx["items"]:
+        lines.append(f"\t{item}")
+    return lines + [")", ""]
+
+
+def resolve_assertion_types(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return ['\t_ baseenumer.BaseEnumer = Variant("")', '\t_ baseenumer.StringEnumer = Variant("")']
+    lines = ["\t_ baseenumer.BaseEnumer = Variant(0)"]
+    if ctx["is_byte"]:
+        lines.append("\t_ baseenumer.ByteEnumer = Variant(0)")
+    lines.append("\t_ baseenumer.NumberEnumer = Variant(0)")
+    return lines
+
+
+def build_variant_assertions(ctx: dict[str, Any]) -> list[str]:
+    m_zero = 'Variant("")' if ctx["is_string"] else "Variant(0)"
+    lines = ["var ("] + resolve_assertion_types(ctx)
+    lines.extend([f"\t_ json.Marshaler = {m_zero}", "\t_ json.Unmarshaler = (*Variant)(nil)", ")", ""])
+    return lines
+
+
+def build_variant_byte_methods(ctx: dict[str, Any]) -> list[str]:
+    if not ctx["is_byte"]:
+        return []
+    return [
+        "func (v Variant) Byte() byte {\n\treturn byte(v)\n}\n",
+        "func (v Variant) ValueByte() byte {\n\treturn byte(v)\n}\n",
+        "func (v Variant) Bytes() []byte {\n\treturn []byte{byte(v)}\n}\n",
     ]
 
-    for m in members:
-        lines.append(f'\t{name}{m} {enum_type} = "{m}"')
 
-    lines.append(f'\t{name}Unknown {enum_type} = "Unknown"')
-    lines.append(")")
-    lines.append("")
+def build_variant_int_methods(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return ["func (v Variant) Value() string {\n\treturn string(v)\n}\n"]
+    return [
+        "func (v Variant) Int() int {\n\treturn int(v)\n}\n",
+        "func (v Variant) Code() uint16 {\n\treturn uint16(v)\n}\n",
+    ]
 
-    lines.append(f"var {registry_name} = map[{enum_type}]bool{{")
-    for m in members:
-        lines.append(f"\t{name}{m}: true,")
 
-    lines.append("}")
-    lines.append("")
+def build_string_predicates() -> list[str]:
+    return [
+        "func (v Variant) IsValid() bool {\n\treturn variantRegistry[v]\n}\n",
+        "func (v Variant) IsEnum() bool {\n\treturn variantRegistry[v]\n}\n",
+    ]
 
-    lines.extend([
-        f"// Name returns the uppercase identifier.",
-        f"func (e {enum_type}) Name() string {{",
-        "\treturn string(e)",
-        "}",
-        "",
-        f"// String implements fmt.Stringer.",
-        f"func (e {enum_type}) String() string {{",
-        "\treturn string(e)",
-        "}",
-        "",
-        f"// ValueString returns the string representation of value.",
-        f"func (e {enum_type}) ValueString() string {{",
-        "\treturn string(e)",
-        "}",
-        "",
-        f"// Value returns the raw string value.",
-        f"func (e {enum_type}) Value() string {{",
-        "\treturn string(e)",
-        "}",
-        "",
-        f"// IsValid returns true if this enum value is recognized.",
-        f"func (e {enum_type}) IsValid() bool {{",
-        f"\treturn {registry_name}[e]",
-        "}",
-        "",
-        f"// IsEnum returns true if this enum exists in the registry.",
-        f"func (e {enum_type}) IsEnum() bool {{",
-        f"\treturn {registry_name}[e]",
-        "}",
-        "",
-        f"// IsCompare checks equality against another {enum_type}.",
-        f"func (e {enum_type}) IsCompare(target {enum_type}) bool {{",
-        "\treturn e == target",
-        "}",
-        "",
-        f"// MarshalJSON implements json.Marshaler.",
-        f"func (e {enum_type}) MarshalJSON() ([]byte, error) {{",
-        "\treturn json.Marshal(string(e))",
-        "}",
-        "",
-        f"// UnmarshalJSON implements json.Unmarshaler.",
-        f"func (e *{enum_type}) UnmarshalJSON(data []byte) error {{",
-        "\tvar raw string",
-        "\tif err := json.Unmarshal(data, &raw); err != nil {",
-        "\t\treturn err",
-        "\t}",
-        "",
-        f"\t*e = {parse_func}(raw)",
-        "",
-        "\treturn nil",
-        "}",
-        "",
-        f"// {all_func} returns all valid {enum_type} values.",
-        f"func {all_func}() []{enum_type} {{",
-        f"\treturn []{enum_type}{{",
+
+def build_numeric_predicates(first: str, last: str) -> list[str]:
+    return [
+        f"func (v Variant) IsValid() bool {{\n\treturn baseenumer.IsBetween(v, {first}, {last})\n}}\n",
+        f"func (v Variant) IsInvalid() bool {{\n\treturn baseenumer.IsNotBetween(v, {first}, {last})\n}}\n",
+        "func (v Variant) IsEnum() bool {\n\treturn v.IsValid()\n}\n",
+    ]
+
+
+def build_variant_predicates(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return build_string_predicates()
+    return build_numeric_predicates(ctx["items"][0], ctx["items"][-1])
+
+
+def build_item_checker(item: str) -> str:
+    return f"func (v Variant) Is{item}() bool {{\n\treturn v == {item}\n}}\n"
+
+
+def build_variant_item_checkers(ctx: dict[str, Any]) -> list[str]:
+    lines = []
+    if ctx["zero_value"] != "Invalid":
+        lines.append(build_item_checker(ctx["zero_value"]))
+    for item in ctx["items"]:
+        lines.append(build_item_checker(item))
+    return lines
+
+
+def build_string_formatting() -> list[str]:
+    return [
+        "func (v Variant) Name() string {\n\treturn string(v)\n}\n",
+        "func (v Variant) Label() string {\n\treturn v.Name()\n}\n",
+        "func (v Variant) String() string {\n\treturn v.Name()\n}\n",
+        "func (v Variant) ValueString() string {\n\treturn string(v)\n}\n",
+    ]
+
+
+def build_numeric_formatting(ctx: dict[str, Any]) -> list[str]:
+    u, name = ctx["underlying"], ctx["name"]
+    return [
+        f"func (v Variant) Name() string {{\n\tif int(v) < len(variantLabels) {{\n\t\treturn variantLabels[v]\n\t}}\n\treturn fmt.Sprintf(\"{name}(%d)\", {u}(v))\n}}\n",
+        "func (v Variant) Label() string {\n\treturn v.Name()\n}\n",
+        "func (v Variant) String() string {\n\treturn v.Name()\n}\n",
+        f"func (v Variant) ValueString() string {{\n\treturn baseenumer.FormatNameValue(v.Name(), {u}(v))\n}}\n",
+    ]
+
+
+def build_variant_formatting(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return build_string_formatting()
+    return build_numeric_formatting(ctx)
+
+
+def build_string_json(pkg: str, zero: str) -> list[str]:
+    return [
+        "func (v Variant) MarshalJSON() ([]byte, error) {\n\treturn baseenumer.MarshalJSON(string(v))\n}\n",
+        f'func (v *Variant) UnmarshalJSON(data []byte) error {{\n\treturn baseenumer.UnmarshalStringJSON(data, v, "{pkg}", variantMap, {zero})\n}}\n',
+    ]
+
+
+def build_numeric_json(pkg: str, zero: str) -> list[str]:
+    return [
+        "func (v Variant) MarshalJSON() ([]byte, error) {\n\treturn baseenumer.MarshalJSON(v.Name())\n}\n",
+        f'func (v *Variant) UnmarshalJSON(data []byte) error {{\n\treturn baseenumer.UnmarshalIntegerJSON(data, v, "{pkg}", variantMap, len(variantLabels)-1, {zero})\n}}\n',
+    ]
+
+
+def build_variant_json(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return build_string_json(ctx["package"], ctx["zero_value"])
+    return build_numeric_json(ctx["package"], ctx["zero_value"])
+
+
+def build_variant_type_section(ctx: dict[str, Any]) -> list[str]:
+    return [
+        f"type (\n\tVariant {ctx['underlying']}\n\n\t{ctx['name']}Type = Variant\n\n\tVariantPredicate func(v Variant) bool\n)\n"
+    ]
+
+
+def generate_variant_go(ctx: dict[str, Any]) -> str:
+    parts = [
+        build_variant_header(ctx), build_variant_type_section(ctx),
+        build_variant_consts(ctx), build_variant_assertions(ctx),
+        build_variant_byte_methods(ctx), build_variant_int_methods(ctx),
+        build_variant_predicates(ctx), build_variant_item_checkers(ctx),
+        build_variant_formatting(ctx), build_variant_json(ctx),
+    ]
+    return "\n".join(line for chunk in parts for line in chunk)
+
+
+def build_vars_header(ctx: dict[str, Any]) -> list[str]:
+    imports = ['\t"strings"'] if ctx["is_string"] else []
+    imports.extend([
+        '\t"coding-guidelines/common/pkg/baseenumer"',
+        '\t"coding-guidelines/common/pkg/errtype"',
+        '\t"coding-guidelines/common/pkg/result"',
     ])
+    return [f"package {ctx['package']}", "", "import ("] + imports + [")", "", "type Result = result.Wrap[Variant]", ""]
 
-    for m in members:
-        lines.append(f"\t\t{name}{m},")
 
-    lines.extend([
+def build_string_registry(items: list[str]) -> list[str]:
+    lines = ["\tvariantRegistry = map[Variant]bool{"]
+    lines.extend(f"\t\t{item}: true," for item in items)
+    return lines + ["\t}", ""]
+
+
+def build_string_compile_map() -> list[str]:
+    return [
+        "func compileVariantMap() map[string]Variant {",
+        "\tm := make(map[string]Variant, len(allVariants)*4)",
+        "\tfor _, v := range allVariants {",
+        "\t\ts := string(v)",
+        "\t\tm[s] = v\n\t\tm[strings.ToLower(s)] = v\n\t\tm[strings.ToUpper(s)] = v",
+        "\t\tm[baseenumer.FormatNameValue(s, s)] = v",
         "\t}",
+        "\treturn m",
         "}",
         "",
-        f"// {parse_func} parses string into {enum_type} case-insensitively.",
-        f"func {parse_func}(val string) {enum_type} {{",
-        f"\tfor _, candidate := range {all_func}() {{",
-        "\t\tif strings.EqualFold(string(candidate), strings.TrimSpace(val)) {",
-        "\t\t\treturn candidate",
-        "\t\t}",
+    ]
+
+
+def build_string_vars_data(ctx: dict[str, Any]) -> list[str]:
+    items_lines = [f"\t\t{item}," for item in ctx["items"]]
+    lines = ["var (", "\tallVariants = []Variant{", f"\t\t{ctx['zero_value']},"]
+    lines.extend(items_lines)
+    lines.extend(["\t}", ""] + build_string_registry(ctx["items"]))
+    lines.extend(["\tvariantMap = compileVariantMap()", ")", ""] + build_string_compile_map())
+    return lines
+
+
+def build_numeric_vars_data(ctx: dict[str, Any]) -> list[str]:
+    lines = ["var (", "\tvariantLabels = [...]string{", f'\t\t{ctx["zero_value"]}: "{ctx["zero_value"]}",']
+    lines.extend(f'\t\t{item}: "{item}",' for item in ctx["items"])
+    lines.extend(["\t}", "", f"\tvariantMap = baseenumer.CompileMap(variantLabels[:], {ctx['zero_value']})", ")", ""])
+    return lines
+
+
+def build_vars_data(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return build_string_vars_data(ctx)
+    return build_numeric_vars_data(ctx)
+
+
+def build_string_vars_helpers() -> list[str]:
+    return [
+        "func All() []Variant {\n\treturn append([]Variant(nil), allVariants[1:]...)\n}\n",
+        "func Values() []string {\n\tres := make([]string, 0, len(allVariants)-1)\n\tfor _, v := range All() {\n\t\tres = append(res, string(v))\n\t}\n\treturn res\n}\n",
+    ]
+
+
+def build_numeric_vars_helpers() -> list[str]:
+    return [
+        "func All() []Variant {\n\treturn baseenumer.SliceVariants[Variant](variantLabels[:])\n}\n",
+        "func Values() []string {\n\treturn baseenumer.SliceValues(variantLabels[:])\n}\n",
+    ]
+
+
+def build_vars_helpers(ctx: dict[str, Any]) -> list[str]:
+    if ctx["is_string"]:
+        return build_string_vars_helpers()
+    return build_numeric_vars_helpers()
+
+
+def build_vars_parser(ctx: dict[str, Any]) -> list[str]:
+    n = ctx["name"]
+    return [
+        "func Parse(s string) Result {",
+        "\tv, trimmed, ok := baseenumer.ParseLookup(s, variantMap)",
+        "\tif len(trimmed) == 0 {",
+        f'\t\treturn result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("{n}"))',
         "\t}",
-        "",
-        f"\treturn {name}Unknown",
+        "\tif ok {\n\t\treturn result.WrapSuccess(v)\n\t}",
+        f'\treturn result.WrapFailureWithId[Variant](errtype.NotFound, baseenumer.FormatParseError("{n}", s, Values()))',
         "}",
         "",
-    ])
+    ]
 
+
+def generate_vars_go(ctx: dict[str, Any]) -> str:
+    lines = build_vars_header(ctx)
+    lines.extend(build_vars_data(ctx))
+    lines.extend(build_vars_helpers(ctx))
+    lines.extend(build_vars_parser(ctx))
     return "\n".join(lines)
 
 
-def generate_int_enum(name: str, pkg: str, members: list[str]) -> str:
-    enum_type = f"{name}Type" if not name.endswith("Type") else name
-    names_map = f"{enum_type[0].lower() + enum_type[1:]}Names"
-    all_func = f"All{name}s" if not name.endswith("s") else f"All{name}"
-    parse_func = f"Parse{name}"
-
-    lines = [
-        f"package {pkg}",
+def build_test_header(ctx: dict[str, Any]) -> list[str]:
+    return [
+        f"package {ctx['package']}_test",
         "",
         'import (',
         '\t"encoding/json"',
-        '\t"fmt"',
-        '\t"strings"',
-        ')',
+        '\t"testing"',
         "",
-        f"// {enum_type} represents integer-backed enum values conforming to BaseEnum and NumberEnum.",
-        f"type {enum_type} uint16",
+        '\t"coding-guidelines/common/pkg/baseenumer"',
+        f'\t"coding-guidelines/common/pkg/enum/{ctx["package"]}"',
+        ")",
         "",
-        "const (",
     ]
 
-    for idx, m in enumerate(members, start=1):
-        lines.append(f"\t{name}{m} {enum_type} = {idx}")
 
-    lines.append(")")
-    lines.append("")
+def resolve_test_interface_lines(ctx: dict[str, Any], first: str) -> list[str]:
+    pkg = ctx["package"]
+    if ctx["is_byte"]:
+        return [f"\tvar _ baseenumer.ByteEnumer = {pkg}.{first}", f"\tvar _ baseenumer.NumberEnumer = {pkg}.{first}"]
+    if ctx["is_string"]:
+        return [f"\tvar _ baseenumer.StringEnumer = {pkg}.{first}"]
+    return [f"\tvar _ baseenumer.NumberEnumer = {pkg}.{first}"]
 
-    lines.append(f"var {names_map} = map[{enum_type}]string{{")
-    for m in members:
-        lines.append(f'\t{name}{m}: "{m}",')
 
-    lines.append("}")
-    lines.append("")
+def build_test_interfaces(ctx: dict[str, Any]) -> list[str]:
+    pkg, first = ctx["package"], ctx["items"][0]
+    lines = [f"func Test{ctx['name']}Type_Interfaces(t *testing.T) {{", f"\tvar _ baseenumer.BaseEnumer = {pkg}.{first}"]
+    lines.extend(resolve_test_interface_lines(ctx, first))
+    lines.extend([f"\tvar _ json.Marshaler = {pkg}.{first}", f"\tvar _ json.Unmarshaler = (*{pkg}.Variant)(nil)", "}", ""])
+    return lines
 
-    lines.extend([
-        f"// Name returns the uppercase identifier.",
-        f"func (e {enum_type}) Name() string {{",
-        f"\tif name, ok := {names_map}[e]; ok {{",
-        "\t\treturn name",
-        "\t}",
-        "",
-        f'\treturn fmt.Sprintf("{name}(%d)", uint16(e))',
-        "}",
-        "",
-        f"// String implements fmt.Stringer.",
-        f"func (e {enum_type}) String() string {{",
-        "\treturn e.Name()",
-        "}",
-        "",
-        f"// ValueString returns code as string.",
-        f"func (e {enum_type}) ValueString() string {{",
-        '\treturn fmt.Sprintf("%d", uint16(e))',
-        "}",
-        "",
-        f"// Code returns uint16 code value.",
-        f"func (e {enum_type}) Code() uint16 {{",
-        "\treturn uint16(e)",
-        "}",
-        "",
-        f"// Int returns int representation.",
-        f"func (e {enum_type}) Int() int {{",
-        "\treturn int(e)",
-        "}",
-        "",
-        f"// IsValid returns true if this enum value is registered.",
-        f"func (e {enum_type}) IsValid() bool {{",
-        f"\t_, ok := {names_map}[e]",
-        "",
-        "\treturn ok",
-        "}",
-        "",
-        f"// IsEnum returns true if this enum exists in the registry.",
-        f"func (e {enum_type}) IsEnum() bool {{",
-        f"\t_, ok := {names_map}[e]",
-        "",
-        "\treturn ok",
-        "}",
-        "",
-        f"// IsCompare checks equality against another {enum_type}.",
-        f"func (e {enum_type}) IsCompare(target {enum_type}) bool {{",
-        "\treturn e == target",
-        "}",
-        "",
-        f"// MarshalJSON implements json.Marshaler.",
-        f"func (e {enum_type}) MarshalJSON() ([]byte, error) {{",
-        "\treturn json.Marshal(e.Name())",
-        "}",
-        "",
-        f"// UnmarshalJSON implements json.Unmarshaler.",
-        f"func (e *{enum_type}) UnmarshalJSON(data []byte) error {{",
-        "\tvar raw string",
-        "\tif err := json.Unmarshal(data, &raw); err == nil {",
-        f"\t\t*e = {parse_func}(raw)",
-        "",
-        "\t\treturn nil",
-        "\t}",
-        "",
-        "\tvar code uint16",
-        "\tif err := json.Unmarshal(data, &code); err != nil {",
-        "\t\treturn err",
-        "\t}",
-        "",
-        f"\t*e = {enum_type}(code)",
-        "",
-        "\treturn nil",
-        "}",
-        "",
-        f"// {all_func} returns all valid {enum_type} values.",
-        f"func {all_func}() []{enum_type} {{",
-        f"\treturn []{enum_type}{{",
-    ])
 
-    for m in members:
-        lines.append(f"\t\t{name}{m},")
+def build_numeric_test_properties(pkg: str, first: str, is_byte: bool) -> list[str]:
+    lines = []
+    if is_byte:
+        lines.append(f"\tif {pkg}.{first}.Byte() != 1 {{\n\t\tt.Fatalf(\"expected 1 from Byte()\")\n\t}}")
+    lines.append(f"\tif {pkg}.{first}.Int() != 1 || {pkg}.{first}.Code() != 1 {{\n\t\tt.Fatalf(\"expected 1 from Int/Code\")\n\t}}")
+    return lines
 
-    lines.extend([
-        "\t}",
+
+def build_test_properties(ctx: dict[str, Any]) -> list[str]:
+    pkg, first = ctx["package"], ctx["items"][0]
+    lines = [f"func Test{ctx['name']}Type_Properties(t *testing.T) {{"]
+    if not ctx["is_string"]:
+        lines.extend(build_numeric_test_properties(pkg, first, ctx["is_byte"]))
+    lines.extend([f"\tif !{pkg}.{first}.IsValid() {{\n\t\tt.Fatalf(\"expected {first} to be valid\")\n\t}}", "}", ""])
+    return lines
+
+
+def build_test_predicates(ctx: dict[str, Any]) -> list[str]:
+    pkg, first, zero = ctx["package"], ctx["items"][0], ctx["zero_value"]
+    return [
+        f"func Test{ctx['name']}Type_Predicates(t *testing.T) {{",
+        f'\tif !{pkg}.{first}.Is{first}() {{\n\t\tt.Fatalf("expected Is{first}() to be true")\n\t}}',
+        f'\tif {pkg}.{first}.Is{zero}() {{\n\t\tt.Fatalf("expected Is{zero}() to be false for {first}")\n\t}}',
         "}",
         "",
-        f"// {parse_func} parses string into {enum_type} case-insensitively.",
-        f"func {parse_func}(val string) {enum_type} {{",
-        "\tcleaned := strings.TrimSpace(val)",
-        f"\tfor code, name := range {names_map} {{",
-        "\t\tif strings.EqualFold(name, cleaned) {",
-        "\t\t\treturn code",
-        "\t\t}",
-        "\t}",
-        "",
-        "\treturn 0",
+    ]
+
+
+def build_test_names_and_vars(ctx: dict[str, Any]) -> list[str]:
+    pkg, first = ctx["package"], ctx["items"][0]
+    return [
+        f"func Test{ctx['name']}Type_VarsAndParse(t *testing.T) {{",
+        f'\tall := {pkg}.All()\n\tif len(all) != {len(ctx["items"])} {{\n\t\tt.Fatalf("expected {len(ctx["items"])} variants, got %d", len(all))\n\t}}',
+        f'\tres := {pkg}.Parse("{first}")\n\tif !res.IsSuccess() || res.Data() != {pkg}.{first} {{\n\t\tt.Fatalf("expected successful Parse for {first}")\n\t}}',
         "}",
         "",
-    ])
+    ]
 
+
+def build_test_json(ctx: dict[str, Any]) -> list[str]:
+    pkg, first, zero = ctx["package"], ctx["items"][0], ctx["zero_value"]
+    return [
+        f"func Test{ctx['name']}Type_JSON(t *testing.T) {{",
+        f'\tdata, err := json.Marshal({pkg}.{first})\n\tif err != nil || string(data) != `"{first}"` {{\n\t\tt.Fatalf("marshal failed: %v", err)\n\t}}',
+        f'\tvar v {pkg}.Variant\n\tif err := json.Unmarshal([]byte(`"{first}"`), &v); err != nil || v != {pkg}.{first} {{\n\t\tt.Fatalf("unmarshal failed: %v", err)\n\t}}',
+        f'\tif err := json.Unmarshal([]byte(`null`), &v); err != nil || v != {pkg}.{zero} {{\n\t\tt.Fatalf("unmarshal null failed: %v", err)\n\t}}',
+        "}",
+        "",
+    ]
+
+
+def generate_variant_test_go(ctx: dict[str, Any]) -> str:
+    lines = build_test_header(ctx)
+    lines.extend(build_test_interfaces(ctx))
+    lines.extend(build_test_properties(ctx))
+    lines.extend(build_test_predicates(ctx))
+    lines.extend(build_test_names_and_vars(ctx))
+    lines.extend(build_test_json(ctx))
     return "\n".join(lines)
+
+
+def generate_readme_md(ctx: dict[str, Any]) -> str:
+    members = ", ".join(f"`{item}`" for item in ctx["items"])
+    p, u, n = ctx["package"], ctx["underlying"], ctx["name"]
+    return (
+        f"# `{p}` Package\n\n"
+        f"`{p}` provides a type-safe {u}-backed enumeration for {n} variants ({members}).\n\n"
+        "## Key Features\n\n"
+        "- **Zero Circular Dependencies:** Directly imports only `baseenumer`, `result`, `errtype`, and standard libraries.\n"
+        "- **Direct Result Return:** `Parse(s string) Result` returns canonical `type Result = result.Wrap[Variant]`.\n"
+        "- **High-Speed Lookups:** Precompiled lookup table via `baseenumer.CompileMap`.\n"
+        "- **DRY JSON Marshaling:** Uses `baseenumer.MarshalJSON` and `baseenumer.UnmarshalIntegerJSON` / `UnmarshalStringJSON`.\n"
+    )
+
+
+def render_bundle(ctx: dict[str, Any]) -> dict[str, str]:
+    return {
+        "variant.go": generate_variant_go(ctx),
+        "vars.go": generate_vars_go(ctx),
+        "variant_test.go": generate_variant_test_go(ctx),
+        "readme.md": generate_readme_md(ctx),
+    }
+
+
+def execute_dry_run(target_dir: Path, bundle: dict[str, str]) -> int:
+    print(f"[DRY-RUN] Target directory: {target_dir}")
+    for filename, content in bundle.items():
+        rel_file = target_dir / filename
+        print(f"[DRY-RUN] Would create {rel_file} ({len(content.splitlines())} lines)")
+    return EXIT_SUCCESS
+
+
+def write_bundle(target_dir: Path, bundle: dict[str, str], overwrite: bool) -> int:
+    target_dir.mkdir(parents=True, exist_ok=True)
+    for filename, content in bundle.items():
+        dest = target_dir / filename
+        if dest.exists() and not overwrite:
+            print(f"Error: {dest} already exists. Use --overwrite to replace.", file=sys.stderr)
+            return EXIT_USAGE_ERROR
+        write_file_lf(dest, content)
+        print(f"Created: {dest}")
+    return EXIT_SUCCESS
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate type-safe Go enum conforming to BaseEnum")
-    parser.add_argument("--name", required=True, help="Base name of the enum (e.g. ProcessState, Priority)")
-    parser.add_argument("--type", choices=["string", "int"], default="string", help="Backing type (default: string)")
-    parser.add_argument("--members", required=True, help="Comma-separated member names (e.g. Pending,Running,Failed)")
-    parser.add_argument("--package", default="enums", help="Target Go package name (default: enums)")
-    parser.add_argument("--out", help="Optional output file path")
+    args = parse_cli_args()
+    try:
+        raw_cfg = load_raw_config(args)
+        cfg = normalize_config(raw_cfg)
+    except Exception as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return EXIT_USAGE_ERROR
 
-    args = parser.parse_args()
-    members = [m.strip() for m in args.members.split(",") if m.strip()]
-
-    if not members:
-        print("Error: at least one member name must be provided", file=sys.stderr)
-        return ExitCodeType.ARGUMENT_ERROR.value
-
-    if args.type == "string":
-        code = generate_string_enum(args.name, args.package, members)
-    else:
-        code = generate_int_enum(args.name, args.package, members)
-
-    if args.out:
-        out_path = Path(args.out)
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(code, encoding="utf-8")
-        print(f"Generated enum {args.name} in {out_path}")
-    else:
-        print(code)
-
-    return ExitCodeType.SUCCESS.value
+    target_dir = Path(cfg["target_dir"])
+    bundle = render_bundle(cfg)
+    if args.dry_run:
+        return execute_dry_run(target_dir, bundle)
+    return write_bundle(target_dir, bundle, args.overwrite)
 
 
 if __name__ == "__main__":

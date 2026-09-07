@@ -1,9 +1,7 @@
 package openfiletype
 
 import (
-	"encoding/json"
 	"os"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 )
@@ -101,39 +99,9 @@ func (v Variant) IsReadWriteOrCreateOnly() bool {
 }
 
 func (v Variant) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.Name())
+	return baseenumer.MarshalJSON(v.Name())
 }
 
 func (v *Variant) UnmarshalJSON(data []byte) error {
-	trimmed := strings.TrimSpace(string(data))
-	if len(trimmed) == 0 || trimmed == "null" {
-		*v = Invalid
-
-		return nil
-	}
-
-	var str string
-	if err := json.Unmarshal(data, &str); err == nil {
-		res := Parse(str)
-		if res.IsSuccess() {
-			*v = res.Data()
-
-			return nil
-		}
-
-		return res.Fault()
-	}
-
-	var raw byte
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-
-	if int(raw) >= len(variantLabels) {
-		return baseenumer.FormatNumericRangeError("openfiletype", raw, len(variantLabels)-1)
-	}
-
-	*v = Variant(raw)
-
-	return nil
+	return baseenumer.UnmarshalIntegerJSON(data, v, "openfiletype", variantMap, len(variantLabels)-1, Invalid)
 }
