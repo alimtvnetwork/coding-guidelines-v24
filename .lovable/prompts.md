@@ -87,6 +87,7 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 | `18-release-management` | [`18-release-management/03-patch-bump.md`](../01-prompts/18-release-management/03-patch-bump.md) | Patch Version Bump — Release Management (must follow) |
 | `18-release-management` | [`18-release-management/04-release.md`](../01-prompts/18-release-management/04-release.md) | Release Deployment & Version Bump — Release Management (must follow) |
 | `18-release-management` | [`18-release-management/05-version-bump-docs.md`](../01-prompts/18-release-management/05-version-bump-docs.md) | Version Bump Documentation Update — Release Management (must follow) |
+| `18-release-management` | [`18-release-management/06-release-orchestrator.md`](../01-prompts/18-release-management/06-release-orchestrator.md) | Automated Release Orchestrator & Branch Lifecycle — Release Management (must follow) |
 | `19-insults` | [`19-insults/01-raw-insults.md`](../01-prompts/19-insults/01-raw-insults.md) | Uncompromising Quality & Zero-Tolerance Anti-Carelessness — Core Discipline (must follow) |
 | `19-insults` | [`19-insults/02-consolidated-insults-v2.md`](../01-prompts/19-insults/02-consolidated-insults-v2.md) | Consolidated Discipline & Rigorous Code Quality Protocol — Core Discipline (must follow) |
 | `20-memory-consolidate` | [`20-memory-consolidate/01-consolidate-completed-plans.md`](../01-prompts/20-memory-consolidate/01-consolidate-completed-plans.md) | Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow) |

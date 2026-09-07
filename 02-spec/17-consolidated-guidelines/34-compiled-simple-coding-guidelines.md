@@ -57,6 +57,9 @@ auto-reject on the same tier as RULE 0.
 23. **No Magic Strings**: Every state or status comparison must check against a named enum symbol. Never compare against raw strings like `status === 'ACTIVE'`.
 24. **Pattern Matching**: Switch or match statements on enums MUST be exhaustive (or include a default/fallback branch that throws or handles the error safely).
 25. **AI Trigger: Update Prompts**: If the user instructs to "update prompts from prompt architect" (or similar wording), you MUST immediately execute `pwsh scripts/update-prompts-from-architect.ps1` (or `.sh` on Unix) to pull the latest AI prompt files from the prompt-architect showcase into `01-prompts/`. After updating, you must run `npm run sync` and push the changes.
+26. **No Intermediate Variable Mutation (Return-from-Function Pattern)**: Never declare a zero-valued or unassigned variable before a `switch` or `if/else` block and reassign it across cases (e.g. `var data []byte; switch ...: case ...: data = v`). Instead, encapsulate the conversion/mapping into a pure helper function that immediately returns from each branch, or use a dedicated conversion package.
+27. **Standalone Payload Conversion Architecture (`payloadconv`)**: Polymorphic conversions of generic payloads (`any` to `[]byte`, JSON, line-by-line slices) must be isolated in a dedicated conversion package (e.g. `payloadconv`). Slices of strings MUST format line-by-line with newlines; structs and maps MUST serialize as indented JSON with a trailing newline.
+28. **Unified File Writing & Concurrency Locking Standard (`fileutil`)**: File writing operations must provide a unified entry point (`Write` accepting any payload) alongside explicit typed writers (`WriteJSON`, `WriteLines`, `WriteString`). Concurrent writes must support file-path-based mutex locking with automatic reference-counted eviction (`ReleaseFileLock`) to guarantee zero memory leaks and prevent race conditions.
 
 ---
 

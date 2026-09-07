@@ -25,6 +25,7 @@ func (e *AppError) GetStatusCode() int {
 	if e.statusCode != 0 {
 		return e.statusCode
 	}
+
 	return e.errType.HttpStatus()
 }
 
@@ -56,8 +57,6 @@ func (e *AppError) Code() uint16 {
 	return e.errType.Code()
 }
 
-
-
 // StackTrace returns the structured call stack frames.
 func (e *AppError) StackTrace() StackTrace {
 	if e == nil {
@@ -72,5 +71,6 @@ func (e *AppError) Caller() string {
 	if e == nil {
 		return ""
 	}
+
 	return e.stack.CallerLine()
 }

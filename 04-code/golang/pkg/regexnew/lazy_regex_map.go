@@ -49,6 +49,7 @@ func (it *lazyRegexMap) Has(keyName string) bool {
 	}
 
 	_, has := it.items[keyName]
+
 	return has
 }
 
