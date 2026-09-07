@@ -22,6 +22,13 @@ The `errtype` package provides strongly-typed enumerations, standardized error c
    ```
 4. **Automated Enum Generation:**
    Enums are generated and synchronized using `03-ai-scripts/30-enum-generator.py`, guaranteeing complete boilerplate implementation (registries, stringifiers, JSON handlers, parse functions, slice generators).
+5. **1:1 File & Package Isolation:**
+   Each enum type resides in its own dedicated source file matching its snake_case name:
+   - `process_state_type.go` & `process_state_type_test.go` (`ProcessStateType`)
+   - `log_level_type.go` & `log_level_type_test.go` (`LogLevelType`)
+   - `variation.go` & `methods.go` (`Variation`)
+   - `base_enumer.go` & `base_enumer_test.go` (`BaseEnumer` interfaces & `ToEnum`)
+   - Canonical package `pkg/enum/processstatetype/` provides standalone byte-backed process states.
 
 ---
 

@@ -10,6 +10,15 @@ import (
 // PriorityType represents an integer-backed priority level (byte).
 type PriorityType byte
 
+// Priority level constants.
+const (
+	PriorityUnknown PriorityType = iota
+	PriorityLow
+	PriorityNormal
+	PriorityHigh
+	PriorityCritical
+)
+
 var (
 	priorityNames = [...]string{"Unknown", "Low", "Normal", "High", "Critical"}
 	priorityMap   = compilePriorityMap()

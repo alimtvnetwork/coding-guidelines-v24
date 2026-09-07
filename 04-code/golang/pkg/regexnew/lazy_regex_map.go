@@ -108,7 +108,7 @@ func (it *lazyRegexMap) createLazyRegex(
 	creatorFunc func(pattern string) (*regexp.Regexp, error),
 ) *LazyRegex {
 	return &LazyRegex{
-		expression:  patternName,
-		compiler: creatorFunc,
+		expression: patternName,
+		compiler:   creatorFunc,
 	}
 }

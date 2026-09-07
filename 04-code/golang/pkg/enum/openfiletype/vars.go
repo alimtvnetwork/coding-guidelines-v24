@@ -71,11 +71,8 @@ func All() []Variant {
 
 func Values() []string {
 	names := make([]string, 0, len(variantLabels)-1)
-	for _, label := range variantLabels[1:] {
-		names = append(names, label)
-	}
 
-	return names
+	return append(names, variantLabels[1:]...)
 }
 
 func Parse(s string) result.Wrap[Variant] {

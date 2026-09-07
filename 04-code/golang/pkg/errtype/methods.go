@@ -10,20 +10,20 @@ import (
 
 var (
 	variationNames = map[Variation]string{
-		None:          "None",
-		Generic:       "Generic",
-		Validation:    "Validation",
-		NotFound:      "NotFound",
-		Precondition:  "Precondition",
-		Execution:     "Execution",
-		Database:      "Database",
-		Network:       "Network",
-		Timeout:       "Timeout",
-		IO:            "IO",
-		Unauthorized:  "Unauthorized",
-		Forbidden:     "Forbidden",
-		Internal:      "Internal",
-		Unknown:       "Unknown",
+		None:                 "None",
+		Generic:              "Generic",
+		Validation:           "Validation",
+		NotFound:             "NotFound",
+		Precondition:         "Precondition",
+		Execution:            "Execution",
+		Database:             "Database",
+		Network:              "Network",
+		Timeout:              "Timeout",
+		IO:                   "IO",
+		Unauthorized:         "Unauthorized",
+		Forbidden:            "Forbidden",
+		Internal:             "Internal",
+		Unknown:              "Unknown",
 		Serialization:        "Serialization",
 		FileNotFound:         "FileNotFound",
 		DictionaryNotFound:   "DictionaryNotFound",
@@ -193,3 +193,21 @@ func (v *Variation) UnmarshalJSON(data []byte) error {
 
 	return fmt.Errorf("unknown Variation %q, supported: [%s]", name, strings.Join(names, ", "))
 }
+
+// ValueString returns the string representation of the variation code.
+func (v Variation) ValueString() string {
+	return fmt.Sprintf("%d", uint16(v))
+}
+
+// IsEnum returns true if the Variation is one of the recognized standard variations.
+func (v Variation) IsEnum() bool {
+	_, ok := variationNames[v]
+
+	return ok
+}
+
+var (
+	_ BaseEnumer   = Variation(0)
+	_ NumberEnumer = Variation(0)
+	_ IntEnumer    = Variation(0)
+)

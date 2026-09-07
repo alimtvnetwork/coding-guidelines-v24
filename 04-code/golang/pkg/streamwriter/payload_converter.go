@@ -9,29 +9,6 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-// PayloadKind identifies the classification of an incoming generic payload.
-type PayloadKind byte
-
-var payloadKindNames = [...]string{
-	"Nil",
-	"Bytes",
-	"String",
-	"Error",
-	"Map",
-	"Struct",
-	"Primitive",
-}
-
-// String implements fmt.Stringer for PayloadKind.
-func (k PayloadKind) String() string {
-	idx := int(k)
-	if idx < len(payloadKindNames) {
-		return payloadKindNames[idx]
-	}
-
-	return fmt.Sprintf("PayloadKind(%d)", idx)
-}
-
 // InspectPayload determines the classification of any incoming payload.
 func InspectPayload(payload any) PayloadKind {
 	if payload == nil {

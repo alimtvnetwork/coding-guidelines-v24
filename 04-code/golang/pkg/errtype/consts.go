@@ -63,25 +63,6 @@ const (
 	TypeMismatch         Variation = 25
 )
 
-// ProcessStateType constants conforming to BaseEnum.
-const (
-	ProcessStatePending   ProcessStateType = "Pending"
-	ProcessStateRunning   ProcessStateType = "Running"
-	ProcessStateCompleted ProcessStateType = "Completed"
-	ProcessStateFailed    ProcessStateType = "Failed"
-	ProcessStateCancelled ProcessStateType = "Cancelled"
-	ProcessStateUnknown   ProcessStateType = "Unknown"
-)
-
-// LogLevelType constants conforming to NumberEnum and BaseEnum.
-const (
-	LogLevelDebug LogLevelType = 1
-	LogLevelInfo  LogLevelType = 2
-	LogLevelWarn  LogLevelType = 3
-	LogLevelError LogLevelType = 4
-	LogLevelFatal LogLevelType = 5
-)
-
 type (
 	VariationPredicate func(v Variation) bool
 

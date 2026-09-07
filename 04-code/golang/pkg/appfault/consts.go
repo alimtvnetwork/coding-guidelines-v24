@@ -10,25 +10,6 @@ const (
 	Newline       = "\n"
 )
 
-// Priority level constants.
-const (
-	PriorityUnknown PriorityType = iota
-	PriorityLow
-	PriorityNormal
-	PriorityHigh
-	PriorityCritical
-)
-
-// Severity level constants.
-const (
-	SeverityUnknown SeverityType = iota
-	SeverityInfo
-	SeverityWarn
-	SeverityError
-	SeverityCritical
-	SeverityFatal
-)
-
 type (
 	FaultFormatter func(e *AppError) string
 

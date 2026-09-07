@@ -1,4 +1,4 @@
-package logleveltype
+package processstatetype
 
 import (
 	"fmt"
@@ -11,12 +11,12 @@ import (
 
 var (
 	variantLabels = [...]string{
-		Invalid: "Unknown",
-		Debug:   "Debug",
-		Info:    "Info",
-		Warn:    "Warn",
-		Error:   "Error",
-		Fatal:   "Fatal",
+		Invalid:   "Unknown",
+		Pending:   "Pending",
+		Running:   "Running",
+		Completed: "Completed",
+		Failed:    "Failed",
+		Cancelled: "Cancelled",
 	}
 
 	variantMap = compileVariantMap()
@@ -58,7 +58,7 @@ func Values() []string {
 func Parse(s string) result.Wrap[Variant] {
 	trimmed := strings.TrimSpace(s)
 	if len(trimmed) == 0 {
-		return result.WrapFailureWithId[Variant](errtype.Validation, "cannot parse empty string as logleveltype")
+		return result.WrapFailureWithId[Variant](errtype.Validation, "cannot parse empty string as processstatetype")
 	}
 
 	if v, ok := variantMap[strings.ToLower(trimmed)]; ok {
@@ -67,6 +67,6 @@ func Parse(s string) result.Wrap[Variant] {
 
 	return result.WrapFailureWithId[Variant](
 		errtype.NotFound,
-		fmt.Sprintf("unknown logleveltype variant %q, supported variants: [%s]", s, strings.Join(Values(), ", ")),
+		fmt.Sprintf("unknown processstatetype variant %q, supported variants: [%s]", s, strings.Join(Values(), ", ")),
 	)
 }

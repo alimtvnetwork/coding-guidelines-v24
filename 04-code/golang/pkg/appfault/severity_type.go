@@ -10,6 +10,16 @@ import (
 // SeverityType represents an integer-backed severity level (byte).
 type SeverityType byte
 
+// Severity level constants.
+const (
+	SeverityUnknown SeverityType = iota
+	SeverityInfo
+	SeverityWarn
+	SeverityError
+	SeverityCritical
+	SeverityFatal
+)
+
 var (
 	severityNames = [...]string{"Unknown", "Info", "Warn", "Error", "Critical", "Fatal"}
 	severityMap   = compileSeverityMap()

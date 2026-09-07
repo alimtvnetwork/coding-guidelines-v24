@@ -15,16 +15,6 @@ const (
 	LevelFatal
 )
 
-const (
-	PayloadNil PayloadKind = iota
-	PayloadBytes
-	PayloadString
-	PayloadError
-	PayloadMap
-	PayloadStruct
-	PayloadPrimitive
-)
-
 type (
 	StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) *appfault.AppError
 

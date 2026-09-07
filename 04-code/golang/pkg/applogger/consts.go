@@ -14,16 +14,6 @@ const (
 	LevelFatal   = logleveltype.Fatal
 )
 
-type DriverType byte
-
-const (
-	DriverConsole DriverType = iota
-	DriverFile
-	DriverSQLite
-	DriverZap
-	DriverComposite
-)
-
 const createLogsTableSQL = `CREATE TABLE IF NOT EXISTS app_logs (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	timestamp TEXT NOT NULL,

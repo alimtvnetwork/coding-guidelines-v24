@@ -394,7 +394,7 @@ func (it *LazyRegex) compiledRegex() (*regexp.Regexp, error) {
 		return it.regex, nil
 	}
 
-		res := it.Compile()
+	res := it.Compile()
 	if res.AppError != nil {
 		return res.Value, res.AppError
 	}

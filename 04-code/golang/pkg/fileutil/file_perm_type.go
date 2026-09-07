@@ -11,6 +11,34 @@ import (
 
 type FilePermType uint32
 
+const (
+	FilePermNone                 FilePermType = 0000
+	FilePermOwnerReadOnly        FilePermType = 0400
+	FilePermOwnerWriteOnly       FilePermType = 0200
+	FilePermOwnerExecOnly        FilePermType = 0100
+	FilePermOwnerReadWrite       FilePermType = 0600
+	FilePermPrivate              FilePermType = 0600
+	FilePermOwnerAll             FilePermType = 0700
+	FilePermOwnerExec            FilePermType = 0700
+	FilePermGroupReadOnly        FilePermType = 0440
+	FilePermGroupWriteOnly       FilePermType = 0220
+	FilePermGroupReadWrite       FilePermType = 0660
+	FilePermGroupExec            FilePermType = 0750
+	FilePermGroupAll             FilePermType = 0770
+	FilePermReadOnly             FilePermType = 0444
+	FilePermPublicReadOnly       FilePermType = 0444
+	FilePermPublicWriteOnly      FilePermType = 0222
+	FilePermStandard             FilePermType = 0644
+	FilePermGroupSharedOtherRead FilePermType = 0664
+	FilePermPublicReadWrite      FilePermType = 0666
+	FilePermExecutable           FilePermType = 0755
+	FilePermGroupSharedDir       FilePermType = 0775
+	FilePermPublicAll            FilePermType = 0777
+	FilePermStickyDir            FilePermType = 01777
+	FilePermSetuidExec           FilePermType = 04755
+	FilePermSetgidExec           FilePermType = 02755
+)
+
 func (p FilePermType) Mode() os.FileMode {
 	if p == 0 {
 		return os.FileMode(FilePermStandard)
