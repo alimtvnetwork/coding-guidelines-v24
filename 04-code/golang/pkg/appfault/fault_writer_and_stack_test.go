@@ -14,17 +14,21 @@ type customTestWriter struct {
 	captured string
 }
 
-func (w *customTestWriter) WriteFault(out io.Writer, e *AppError) error {
+func (w *customTestWriter) WriteFault(out io.Writer, e *AppError) *AppError {
 	w.captured = fmt.Sprintf("CUSTOM: %s - %s", e.errType.Name(), e.message)
 	_, err := fmt.Fprint(out, w.captured)
 
-	return err
+	if err != nil {
+		return Wrap(errtype.Internal, err, "failed to write")
+	}
+
+	return nil
 }
 
 func TestCustomFaultWriter(t *testing.T) {
 	writer := &customTestWriter{}
 	SetGlobalFaultWriter(writer)
-	defer SetGlobalFaultWriter(&defaultFaultWriter{})
+	defer SetGlobalFaultWriter(&PipelineFaultWriter{Steps: DefaultFormatPipeline})
 
 	err := New(errtype.Validation, "bad parameter")
 	var buf bytes.Buffer
@@ -64,8 +68,8 @@ func TestStackFramesSelfFormat(t *testing.T) {
 }
 
 func TestIsDefinerAndIsEmptyer(t *testing.T) {
-	var definer IsDefiner
-	var emptyer IsEmptyer
+	var definer IsDefinedChecker
+	var emptyer IsEmptyChecker
 
 	// 1. AppError
 	err := New(errtype.Database, "connection timeout")
@@ -126,30 +130,38 @@ func TestContextMapEnhancements(t *testing.T) {
 	}
 
 	// JSON roundtrip
-	jsonBytes, jsonErr := cm.ToJSON()
-	if jsonErr != nil {
-		t.Fatalf("ToJSON failed: %v", jsonErr)
+	jsonRes := cm.ToJSON()
+	if jsonRes.Fault() != nil {
+		t.Fatalf("ToJSON failed: %v", jsonRes.Fault())
 	}
 
-	restored, restoreErr := ContextMapFromJSON(jsonBytes)
-	if restoreErr != nil {
-		t.Fatalf("FromJSON failed: %v", restoreErr)
+	jsonBytes := jsonRes.Data()
+
+	restoredRes := ContextMapFromJSON(jsonBytes)
+	if restoredRes.Fault() != nil {
+		t.Fatalf("FromJSON failed: %v", restoredRes.Fault())
 	}
+
+	restored := restoredRes.Data()
 
 	if restored.GetString("a_key") != "val_a" {
 		t.Errorf("Restored value mismatch: %s", restored.GetString("a_key"))
 	}
 
 	// YAML roundtrip
-	yamlBytes, yamlErr := cm.ToYAML()
-	if yamlErr != nil {
-		t.Fatalf("ToYAML failed: %v", yamlErr)
+	yamlRes := cm.ToYAML()
+	if yamlRes.Fault() != nil {
+		t.Fatalf("ToYAML failed: %v", yamlRes.Fault())
 	}
 
-	restoredYaml, yamlRestoreErr := ContextMapFromYAML(yamlBytes)
-	if yamlRestoreErr != nil {
-		t.Fatalf("FromYAML failed: %v", yamlRestoreErr)
+	yamlBytes := yamlRes.Data()
+
+	restoredYamlRes := ContextMapFromYAML(yamlBytes)
+	if restoredYamlRes.Fault() != nil {
+		t.Fatalf("FromYAML failed: %v", restoredYamlRes.Fault())
 	}
+
+	restoredYaml := restoredYamlRes.Data()
 
 	if restoredYaml.GetString("b_key") != "val_b" {
 		t.Errorf("YAML Restored mismatch")

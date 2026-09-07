@@ -3,25 +3,25 @@ package appfault
 import "io"
 
 type (
-	// IsDefiner checks whether an object represents a defined, non-empty, non-null state.
-	IsDefiner interface {
+	// IsDefinedChecker checks whether an object represents a defined, non-empty, non-null state.
+	IsDefinedChecker interface {
 		IsDefined() bool
 	}
 
-	// IsEmptyer checks whether an object represents an empty or zero state.
-	IsEmptyer interface {
+	// IsEmptyChecker checks whether an object represents an empty or zero state.
+	IsEmptyChecker interface {
 		IsEmpty() bool
 	}
 
 	// DefinableChecker combines both emptiness and definition predicates.
 	DefinableChecker interface {
-		IsDefiner
-		IsEmptyer
+		IsDefinedChecker
+		IsEmptyChecker
 	}
 
 	// FaultWriter writes an AppError to an io.Writer output.
 	FaultWriter interface {
-		WriteFault(w io.Writer, e *AppError) error
+		WriteFault(w io.Writer, e *AppError) *AppError
 	}
 
 	// FaultRenderer formats an AppError into a string.

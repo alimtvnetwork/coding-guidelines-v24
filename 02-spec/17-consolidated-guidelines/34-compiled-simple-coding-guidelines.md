@@ -60,6 +60,8 @@ auto-reject on the same tier as RULE 0.
 26. **No Intermediate Variable Mutation (Return-from-Function Pattern)**: Never declare a zero-valued or unassigned variable before a `switch` or `if/else` block and reassign it across cases (e.g. `var data []byte; switch ...: case ...: data = v`). Instead, encapsulate the conversion/mapping into a pure helper function that immediately returns from each branch, or use a dedicated conversion package.
 27. **Standalone Payload Conversion Architecture (`payloadconv`)**: Polymorphic conversions of generic payloads (`any` to `[]byte`, JSON, line-by-line slices) must be isolated in a dedicated conversion package (e.g. `payloadconv`). Slices of strings MUST format line-by-line with newlines; structs and maps MUST serialize as indented JSON with a trailing newline.
 28. **Unified File Writing & Concurrency Locking Standard (`fileutil`)**: File writing operations must provide a unified entry point (`Write` accepting any payload) alongside explicit typed writers (`WriteJSON`, `WriteLines`, `WriteString`). Concurrent writes must support file-path-based mutex locking with automatic reference-counted eviction (`ReleaseFileLock`) to guarantee zero memory leaks and prevent race conditions.
+29. **Strict Return Types for Errors (`appfault` Standard)**: Custom serializers or formatters that write or serialize `AppError` payloads MUST return `Result[T]` wrappers or `*AppError` natively. Never return the standard generic Go `error` type (e.g. `(T, error)`) from these internal pipelines, as it leads to cycle joins and disjointed error architectures.
+30. **Pipeline Formatting for Complex Outputs**: When generating multi-line console output or formatting rich diagnostic data (e.g., `FaultWriter`), prefer an array-of-steps (Pipeline) approach over directly streaming to an `io.Writer`. This ensures the formatting steps are highly traceable, composable, and customizable via dependency injection.
 
 ---
 
@@ -471,6 +473,7 @@ public sealed record UserDto(string Id, string ApiUrl, bool IsActive);
 ## 4. R3 — Boolean naming: `is` or `has` ONLY
 
 1. **Prefixes:** Every boolean variable, function, parameter, struct field, JSON key, or property MUST begin with `is` or `has` ONLY (`Is` / `Has` for PascalCase; e.g. `isValid`, `hasAccess`, `isReady`, `hasData`); all other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc.) and negative names are strictly **BANNED**.
+2. **Boolean Interface Naming:** Interfaces that define boolean predicates MUST end with the `Checker` suffix (e.g., `IsDefinedChecker`, `IsEmptyChecker`) rather than just the generic `er` suffix (e.g. `IsDefiner`). This ensures grammatical correctness.
 
 ```go
 // BEFORE

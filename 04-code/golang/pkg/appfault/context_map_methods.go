@@ -6,6 +6,8 @@ import (
 	"sort"
 	"strings"
 
+	"coding-guidelines/common/pkg/errtype"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -96,58 +98,68 @@ func (cm ContextMap) ToMap() map[string]any {
 }
 
 // ToJSON exports the ContextMap as indented JSON bytes.
-func (cm ContextMap) ToJSON() ([]byte, error) {
-	return json.MarshalIndent(cm, "", "  ")
+func (cm ContextMap) ToJSON() Result[[]byte] {
+	b, err := json.MarshalIndent(cm, "", "  ")
+	if err != nil {
+		return FailureResult[[]byte](Wrap(errtype.Internal, err, "failed to serialize context map to JSON"))
+	}
+
+	return SuccessResult(b)
 }
 
 // ToJSONString exports the ContextMap as a JSON string.
 func (cm ContextMap) ToJSONString() string {
-	b, err := cm.ToJSON()
-	if err != nil {
+	res := cm.ToJSON()
+	if res.Fault() != nil {
 		return "{}"
 	}
 
-	return string(b)
+	return string(res.Data())
 }
 
 // ToYAML exports the ContextMap as YAML bytes.
-func (cm ContextMap) ToYAML() ([]byte, error) {
-	return yaml.Marshal(cm)
+func (cm ContextMap) ToYAML() Result[[]byte] {
+	b, err := yaml.Marshal(cm)
+	if err != nil {
+		return FailureResult[[]byte](Wrap(errtype.Internal, err, "failed to serialize context map to YAML"))
+	}
+
+	return SuccessResult(b)
 }
 
 // ToYAMLString exports the ContextMap as a YAML string.
 func (cm ContextMap) ToYAMLString() string {
-	b, err := cm.ToYAML()
-	if err != nil {
+	res := cm.ToYAML()
+	if res.Fault() != nil {
 		return ""
 	}
 
-	return string(b)
+	return string(res.Data())
 }
 
 // ContextMapFromJSON parses a ContextMap from JSON bytes.
-func ContextMapFromJSON(data []byte) (ContextMap, error) {
+func ContextMapFromJSON(data []byte) Result[ContextMap] {
 	var cm ContextMap
 	if err := json.Unmarshal(data, &cm); err != nil {
-		return nil, err
+		return FailureResult[ContextMap](Wrap(errtype.Internal, err, "failed to parse context map from JSON"))
 	}
 
-	return cm, nil
+	return SuccessResult(cm)
 }
 
 // ContextMapFromJSONString parses a ContextMap from a JSON string.
-func ContextMapFromJSONString(s string) (ContextMap, error) {
+func ContextMapFromJSONString(s string) Result[ContextMap] {
 	return ContextMapFromJSON([]byte(s))
 }
 
 // ContextMapFromYAML parses a ContextMap from YAML bytes.
-func ContextMapFromYAML(data []byte) (ContextMap, error) {
+func ContextMapFromYAML(data []byte) Result[ContextMap] {
 	var cm ContextMap
 	if err := yaml.Unmarshal(data, &cm); err != nil {
-		return nil, err
+		return FailureResult[ContextMap](Wrap(errtype.Internal, err, "failed to parse context map from YAML"))
 	}
 
-	return cm, nil
+	return SuccessResult(cm)
 }
 
 // Format formats the map as a human-readable comma-separated string.

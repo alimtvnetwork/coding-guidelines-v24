@@ -6,24 +6,85 @@ import (
 	"os"
 	"strings"
 	"sync"
+
+	"coding-guidelines/common/pkg/errtype"
 )
 
 var (
-	globalFaultWriter   FaultWriter = &defaultFaultWriter{}
+	globalFaultWriter   FaultWriter = &PipelineFaultWriter{Steps: DefaultFormatPipeline}
 	globalFaultWriterMu sync.RWMutex
 )
 
-// defaultFaultWriter writes formatted terminal banner to output.
-type defaultFaultWriter struct{}
+// FaultFormatStep defines a single step in the fault formatting pipeline.
+type FaultFormatStep func(e *AppError) string
 
-func (w *defaultFaultWriter) WriteFault(out io.Writer, e *AppError) error {
+// DefaultFormatPipeline is the standard sequence for formatting faults.
+var DefaultFormatPipeline = []FaultFormatStep{
+	formatBannerStep,
+	formatCallerStep,
+	formatCauseStep,
+	formatContextStep,
+	formatStackStep,
+}
+
+func formatBannerStep(e *AppError) string {
+	return fmt.Sprintf("❌ ERROR [%s:%d] %s (HTTP %d)", e.errType.Name(), e.errType.Code(), e.message, e.StatusCode())
+}
+
+func formatCallerStep(e *AppError) string {
+	if e.stack.IsDefined() {
+		return fmt.Sprintf("\n   Caller:  %s", e.stack.CallerLine())
+	}
+
+	return ""
+}
+
+func formatCauseStep(e *AppError) string {
+	if e.cause != nil {
+		return fmt.Sprintf("\n   Cause:   %v", e.cause)
+	}
+
+	return ""
+}
+
+func formatContextStep(e *AppError) string {
+	if e.ctx.IsDefined() {
+		return fmt.Sprintf("\n   Context: %s", e.ctx.Format())
+	}
+
+	return ""
+}
+
+func formatStackStep(e *AppError) string {
+	if e.stack.IsDefined() {
+		return fmt.Sprintf("\n   Stack:\n%s", e.stack.Format("     "))
+	}
+
+	return ""
+}
+
+// PipelineFaultWriter writes formatted faults using a slice of processing steps.
+type PipelineFaultWriter struct {
+	Steps []FaultFormatStep
+}
+
+// WriteFault executes the formatting pipeline and writes the result.
+func (w *PipelineFaultWriter) WriteFault(out io.Writer, e *AppError) *AppError {
 	if e == nil {
 		return nil
 	}
 
-	_, err := fmt.Fprintln(out, e.FormatStdout())
+	var b strings.Builder
+	for _, step := range w.Steps {
+		b.WriteString(step(e))
+	}
 
-	return err
+	_, err := fmt.Fprintln(out, b.String())
+	if err != nil {
+		return Wrap(errtype.Internal, err, "failed to write fault")
+	}
+
+	return nil
 }
 
 // SetGlobalFaultWriter registers a custom FaultWriter globally.
@@ -153,7 +214,7 @@ func DefaultFaultFormatter(e *AppError) string {
 }
 
 // WriteTo writes the AppError to the specified io.Writer using the configured global FaultWriter.
-func (e *AppError) WriteTo(w io.Writer) error {
+func (e *AppError) WriteTo(w io.Writer) *AppError {
 	if e == nil {
 		return nil
 	}
