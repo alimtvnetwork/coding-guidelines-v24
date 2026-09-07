@@ -1,35 +1,19 @@
 package fileutil
 
-import "fmt"
-
-type FileWriteModeType uint8
-
-const (
-	FileWriteModeDirect   FileWriteModeType = 1
-	FileWriteModeAtomic   FileWriteModeType = 2
-	FileWriteModeTruncate FileWriteModeType = 3
+import (
+	"coding-guidelines/common/pkg/enum/filewritemodetype"
+	"coding-guidelines/common/pkg/result"
 )
 
-var writeModeNames = map[FileWriteModeType]string{
-	FileWriteModeDirect:   "Direct",
-	FileWriteModeAtomic:   "Atomic",
-	FileWriteModeTruncate: "Truncate",
-}
+type FileWriteModeType = filewritemodetype.Variant
 
-func (m FileWriteModeType) Name() string {
-	if name, ok := writeModeNames[m]; ok {
-		return name
-	}
+const (
+	FileWriteModeInvalid  = filewritemodetype.Invalid
+	FileWriteModeDirect   = filewritemodetype.Direct
+	FileWriteModeAtomic   = filewritemodetype.Atomic
+	FileWriteModeTruncate = filewritemodetype.Truncate
+)
 
-	return fmt.Sprintf("FileWriteMode(%d)", uint8(m))
-}
-
-func (m FileWriteModeType) String() string {
-	return m.Name()
-}
-
-func (m FileWriteModeType) IsValid() bool {
-	_, ok := writeModeNames[m]
-
-	return ok
+func ParseFileWriteMode(s string) result.Wrap[FileWriteModeType] {
+	return filewritemodetype.Parse(s)
 }

@@ -1,81 +1,24 @@
 package fileutil
 
-import "fmt"
-
-type FileOpType byte
-
-const (
-	FileOpReadOnly FileOpType = iota
-	FileOpWriteOnly
-	FileOpReadWrite
-	FileOpAppend
-	FileOpCreate
-	FileOpCreateAppend
-	FileOpCreateTruncate
-	FileOpDelete
+import (
+	"coding-guidelines/common/pkg/enum/fileoptype"
+	"coding-guidelines/common/pkg/result"
 )
 
-var fileOpNames = [...]string{
-	"ReadOnly",
-	"WriteOnly",
-	"ReadWrite",
-	"Append",
-	"Create",
-	"CreateAppend",
-	"CreateTruncate",
-	"Delete",
-}
+type FileOpType = fileoptype.Variant
 
-func (o FileOpType) Name() string {
-	if int(o) < len(fileOpNames) {
-		return fileOpNames[o]
-	}
+const (
+	FileOpInvalid        = fileoptype.Invalid
+	FileOpReadOnly       = fileoptype.ReadOnly
+	FileOpWriteOnly      = fileoptype.WriteOnly
+	FileOpReadWrite      = fileoptype.ReadWrite
+	FileOpAppend         = fileoptype.Append
+	FileOpCreate         = fileoptype.Create
+	FileOpCreateAppend   = fileoptype.CreateAppend
+	FileOpCreateTruncate = fileoptype.CreateTruncate
+	FileOpDelete         = fileoptype.Delete
+)
 
-	return fmt.Sprintf("FileOp(%d)", byte(o))
-}
-
-func (o FileOpType) String() string {
-	return o.Name()
-}
-
-func (o FileOpType) IsDelete() bool {
-	return o == FileOpDelete
-}
-
-func (o FileOpType) IsReadOnly() bool {
-	return o == FileOpReadOnly
-}
-
-func (o FileOpType) IsAppend() bool {
-	if o == FileOpAppend {
-		return true
-	}
-
-	return o == FileOpCreateAppend
-}
-
-func (o FileOpType) createOpenMode() FileOpenModeType {
-	switch o {
-	case FileOpCreate:
-		return FileOpenCreateNew
-	case FileOpCreateAppend:
-		return FileOpenCreateAppend
-	case FileOpCreateTruncate:
-		return FileOpenCreateTruncate
-	default:
-		return FileOpenReadOnly
-	}
-}
-
-func (o FileOpType) OpenMode() FileOpenModeType {
-	switch o {
-	case FileOpWriteOnly:
-		return FileOpenWriteOnly
-	case FileOpReadWrite:
-		return FileOpenReadWrite
-	case FileOpAppend:
-		return FileOpenAppend
-	default:
-		return o.createOpenMode()
-	}
+func ParseFileOp(s string) result.Wrap[FileOpType] {
+	return fileoptype.Parse(s)
 }

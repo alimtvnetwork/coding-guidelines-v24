@@ -10,6 +10,7 @@ Master directory of architectural and execution plans.
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 ## Completed Plans
 
+- [25-enum-packages-isolation.md](completed/25-enum-packages-isolation.md): Dedicated Enum Packages Isolation (`fileoptype`, `filewritemodetype`, `severitytype`, `prioritytype`).
 - [24-filepermtype-enum-package.md](completed/24-filepermtype-enum-package.md): FilePermType Enum Package Isolation (`pkg/enum/filepermtype`).
 - [23-errtype-enum-folder-isolation.md](completed/23-errtype-enum-folder-isolation.md): Errtype Enum Folder Isolation (`logleveltype` & `processstatetype`).
 - [22-bytetype-package-and-baseenumer-consolidation.md](completed/22-bytetype-package-and-baseenumer-consolidation.md): Canonical ByteType Package & BaseEnumer Generic Helpers Consolidation.
