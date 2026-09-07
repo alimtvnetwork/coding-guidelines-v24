@@ -6,7 +6,6 @@ import (
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/result"
 )
 
 func isValidParentDir(dir string) bool {
@@ -15,6 +14,14 @@ func isValidParentDir(dir string) bool {
 	}
 
 	return dir != "."
+}
+
+func makeParentDir(dir string) *appfault.AppError {
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return appfault.WrapFile(errtype.IO, err, dir, "failed to create parent directory")
+	}
+
+	return nil
 }
 
 func ensureParentDir(path string, flags int) *appfault.AppError {
@@ -27,11 +34,7 @@ func ensureParentDir(path string, flags int) *appfault.AppError {
 		return nil
 	}
 
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return appfault.WrapFile(errtype.IO, err, dir, "failed to create parent directory")
-	}
-
-	return nil
+	return makeParentDir(dir)
 }
 
 func openFileError(err error, path string) FileResult {
@@ -46,21 +49,25 @@ func openFileError(err error, path string) FileResult {
 	return FileFailure(errtype.IO, err, path, "failed to open file")
 }
 
+func openOSFile(path string, flags int, perm FilePermType) FileResult {
+	f, err := os.OpenFile(path, flags, perm.Mode())
+	if err != nil {
+		return openFileError(err, path)
+	}
+
+	return FileSuccess(f)
+}
+
 func OpenFile(path string, openMode FileOpenModeType, perm FilePermType) FileResult {
 	if len(path) == 0 {
 		return FileFailureMsg(errtype.Validation, path, "path cannot be empty")
 	}
 
 	if err := ensureParentDir(path, openMode.Flags()); err != nil {
-		return result.WrapFailure[*os.File](err)
+		return FileFailure(errtype.IO, err, path, "failed to create parent directory")
 	}
 
-	f, err := os.OpenFile(path, openMode.Flags(), perm.Mode())
-	if err != nil {
-		return openFileError(err, path)
-	}
-
-	return FileSuccess(f)
+	return openOSFile(path, openMode.Flags(), perm)
 }
 
 func Open(path string) FileResult {
@@ -99,7 +106,7 @@ func ReadAll(path string) BytesResult {
 func ReadString(path string) StringResult {
 	res := ReadAll(path)
 	if res.IsFailed() {
-		return result.WrapFailure[string](res.Fault())
+		return StringFailureFault(res.Fault())
 	}
 
 	return StringSuccess(string(res.Data()))
@@ -108,7 +115,7 @@ func ReadString(path string) StringResult {
 func WriteFile(path string, data []byte, perm FilePermType) BoolResult {
 	wrap := OpenFile(path, FileOpenCreateTruncate, perm)
 	if wrap.IsFailed() {
-		return result.WrapFailure[bool](wrap.Fault())
+		return BoolFailureFault(wrap.Fault())
 	}
 
 	defer wrap.Data().Close()
@@ -200,7 +207,7 @@ func Stat(path string) FileInfoResult {
 func FileSize(path string) Int64Result {
 	statRes := Stat(path)
 	if statRes.IsFailed() {
-		return result.WrapFailure[int64](statRes.Fault())
+		return Int64FailureFault(statRes.Fault())
 	}
 
 	return Int64Success(statRes.Data().Size())
@@ -221,20 +228,24 @@ func writeOpData(f *os.File, path string, data []byte) BytesResult {
 func executeWriteOp(path string, op FileOpType, perm FilePermType, data []byte) BytesResult {
 	openRes := OpenFile(path, op.OpenMode(), perm)
 	if openRes.IsFailed() {
-		return result.WrapFailure[[]byte](openRes.Fault())
+		return BytesFailureFault(openRes.Fault())
 	}
 
 	return writeOpData(openRes.Data(), path, data)
 }
 
+func executeDeleteOp(path string) BytesResult {
+	delRes := DeleteFile(path)
+	if delRes.IsFailed() {
+		return BytesFailureFault(delRes.Fault())
+	}
+
+	return BytesSuccess(nil)
+}
+
 func ExecuteOp(path string, op FileOpType, perm FilePermType, data []byte) BytesResult {
 	if op.IsDelete() {
-		delRes := DeleteFile(path)
-		if delRes.IsFailed() {
-			return result.WrapFailure[[]byte](delRes.Fault())
-		}
-
-		return BytesSuccess(nil)
+		return executeDeleteOp(path)
 	}
 
 	if op.IsReadOnly() {

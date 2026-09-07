@@ -41,6 +41,10 @@ The `fileutil` package provides enterprise-grade filesystem utilities, behavior-
    Standardized path normalization (`Clean()`, `Normalize()`, `NormalizeToSlash()`, `ToSlash()`, `ToBackslash()`, `ToNative()`, `DeduplicateSeparators()`, `HasLongPathPrefix()`, `TrimLongPathPrefix()`, `ToLongPath()`) and inspection helpers (`Ext()`, `ExtNoDot()`, `HasExt()`, `Base()`, `Stem()`, `StemFull()`, `Slug()`, `Dir()`, `Split()`, `Parent()`, `ParentN()`, `IsAbs()`, `IsRel()`).
 8. **Namespace Grouping & Fluent Path Builder:**
    The `Path` singleton organizes APIs into focused sub-namespaces (`Path.Temp.*`, `Path.Env.*`, `Path.Norm.*`, `Path.Info.*`, and `Path.Join(...)`). The fluent builder `NewPath(raw)` provides a chainable `*PathWrapper` supporting transformations, inspections, and direct file I/O (`Exists()`, `Stat()`, `Read()`, `WriteString()`).
+9. **Unified Operational Namespace (`fileutil.File`):**
+   Groups all operational file I/O into cohesive sub-operation namespaces (`File.Open.*`, `File.Create.*`, `File.Write.*`, `File.Append.*`, `File.Read.*`, and `File.Path.*`), maintaining zero heap allocations and 100% backward compatibility with top-level package functions.
+10. **Coredata Creator Pattern Conformance (`fileutil.New`):**
+    Adopting the zero-allocation creator pattern from `coredata` (`corestr`), constructor methods are organized under `fileutil.New` (`New.Writer.*`, `New.Appender.*`, `New.BoundWriter.*`, `New.Path.*`, `New.StreamWriter.*`), providing structured builders and intuitive discoverability.
 
 ---
 
@@ -211,6 +215,64 @@ if !path.Exists().Data() {
     _ = path.WriteString("{\"status\":\"ok\"}\n", fileutil.FilePermStandard)
 }
 content := path.ReadString().Data()
+```
+
+---
+
+## Operational Namespace (`fileutil.File`)
+
+The `File` singleton consolidates all operational file I/O into organized, zero-allocation sub-operation namespaces:
+
+```go
+// Open operations
+fileRes := fileutil.File.Open.ReadOnly("data/config.yaml")
+appendRes := fileutil.File.Open.CreateAppend("data/events.log", fileutil.FilePermStandard)
+
+// Create operations
+newFile := fileutil.File.Create.File("data/new.txt", fileutil.FilePermStandard)
+dirRes := fileutil.File.Create.EnsureDir("data/nested/dir", fileutil.FilePermStandard)
+
+// Write operations (with concrete Result types)
+fileutil.File.Write.String("data/note.txt", "Hello World", fileutil.FilePermStandard)
+fileutil.File.Write.Lines("data/lines.txt", []string{"row1", "row2"}, fileutil.FilePermStandard)
+fileutil.File.Write.Json("data/state.json", stateObj, fileutil.FilePermStandard)
+fileutil.File.Write.Atomic("data/atomic.bin", payloadBytes, fileutil.FilePermStandard)
+
+// Append operations
+fileutil.File.Append.String("data/events.log", "user login\n", fileutil.FilePermStandard)
+fileutil.File.Append.BytesLocked("data/counter.bin", deltaBytes, fileutil.FilePermStandard)
+
+// Read operations
+linesRes := fileutil.File.Read.Lines("data/lines.txt")
+textRes := fileutil.File.Read.Text("data/note.txt")
+
+// Path operations (integrated Path namespace)
+ext := fileutil.File.Path.Info.Ext("data/note.txt")
+cleanPath := fileutil.File.Path.Norm.Clean("data//note.txt")
+```
+
+---
+
+## Creator Namespace (`fileutil.New`)
+
+Matching the `coredata` creator pattern (`corestr`), `fileutil.New` groups all constructor engines into cohesive sub-creators:
+
+```go
+// Writers
+writer := fileutil.New.Writer.Default("data/stream.log")
+atomicWriter := fileutil.New.Writer.Atomic("data/critical.json", fileutil.FilePermStandard)
+
+// Continuous Appenders
+appender := fileutil.New.Appender.AutoSync("data/wal.log", fileutil.FilePermStandard)
+
+// Bound File Handlers
+handler := fileutil.New.BoundWriter.AutoClose("data/intermittent.log", fileutil.FilePermStandard)
+
+// Fluent Path Wrappers
+pw := fileutil.New.Path.Default("data/config.yaml")
+
+// StreamWriters
+streamWriter := fileutil.New.StreamWriter.Append("data/stream.log", fileutil.FilePermStandard)
 ```
 
 ---
