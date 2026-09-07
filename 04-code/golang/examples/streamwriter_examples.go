@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -323,7 +324,7 @@ func DemonstrateAdvancedFileAndPayloadIntelligence(dest io.Writer) *appfault.App
 	_, _ = fmt.Fprintln(dest, errObj.FormatTextLog())
 
 	// 3. Atomic File Writing
-	tempTarget := "tmp/demonstration-atomic.txt"
+	tempTarget := filepath.Join(os.TempDir(), "demonstration-atomic.txt")
 	atomRes := fileutil.WriteAtomic(tempTarget, []byte("Atomic file write payload"), fileutil.FilePermStandard)
 	if atomRes.IsFailed() {
 		return atomRes.Fault()

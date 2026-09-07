@@ -10,7 +10,7 @@ func TestCreateDirAndFile(t *testing.T) {
 	tmp := t.TempDir()
 
 	dirPath := filepath.Join(tmp, "sub")
-	resDir := CreateDir(dirPath, FilePermStandard)
+	resDir := CreateDir(dirPath, FilePermExecutable)
 	if resDir.HasError() {
 		t.Fatalf("Expected CreateDir to succeed, got %v", resDir.Fault().Error())
 	}
