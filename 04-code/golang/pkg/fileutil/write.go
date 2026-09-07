@@ -81,22 +81,42 @@ func WriteLinesLocked(path string, lines []string, perm FilePermType) result.Wra
 	return ExportLinesLocked(path, lines, perm)
 }
 
-// WriteJSON serializes and writes any struct or map as indented JSON.
+// WriteJson serializes and writes any struct or map as indented JSON.
+func WriteJson(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportJson(path, data, perm)
+}
+
+// WriteJsonLocked serializes and writes any struct or map as indented JSON with an exclusive lock.
+func WriteJsonLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportJsonLocked(path, data, perm)
+}
+
+// WriteYaml serializes and writes any struct or map as YAML.
+func WriteYaml(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportYaml(path, data, perm)
+}
+
+// WriteYamlLocked serializes and writes any struct or map as YAML with an exclusive lock.
+func WriteYamlLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportYamlLocked(path, data, perm)
+}
+
+// WriteJSON is an alias for WriteJson.
 func WriteJSON(path string, data any, perm FilePermType) result.Wrap[bool] {
-	return ExportJSON(path, data, perm)
+	return WriteJson(path, data, perm)
 }
 
-// WriteJSONLocked serializes and writes any struct or map as indented JSON with an exclusive lock.
+// WriteJSONLocked is an alias for WriteJsonLocked.
 func WriteJSONLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
-	return ExportJSONLocked(path, data, perm)
+	return WriteJsonLocked(path, data, perm)
 }
 
-// WriteYAML serializes and writes any struct or map as YAML.
+// WriteYAML is an alias for WriteYaml.
 func WriteYAML(path string, data any, perm FilePermType) result.Wrap[bool] {
-	return ExportYAML(path, data, perm)
+	return WriteYaml(path, data, perm)
 }
 
-// WriteYAMLLocked serializes and writes any struct or map as YAML with an exclusive lock.
+// WriteYAMLLocked is an alias for WriteYamlLocked.
 func WriteYAMLLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
-	return ExportYAMLLocked(path, data, perm)
+	return WriteYamlLocked(path, data, perm)
 }

@@ -242,8 +242,8 @@ func ToBytes(payload any) ([]byte, error) {
 	}
 }
 
-// ToJSON formats payload as indented JSON with trailing newline.
-func ToJSON(payload any) ([]byte, error) {
+// ToJson formats payload as indented JSON with trailing newline.
+func ToJson(payload any) ([]byte, error) {
 	b, err := json.MarshalIndent(payload, "", "  ")
 	if err != nil {
 		return nil, err
@@ -254,12 +254,22 @@ func ToJSON(payload any) ([]byte, error) {
 	return b, nil
 }
 
-// ToJSONString formats payload as indented JSON string.
-func ToJSONString(payload any) (string, error) {
+// ToJsonString formats payload as indented JSON string.
+func ToJsonString(payload any) (string, error) {
 	b, err := json.MarshalIndent(payload, "", "  ")
 	if err != nil {
 		return "", err
 	}
 
 	return string(b), nil
+}
+
+// ToJSON is an alias for ToJson.
+func ToJSON(payload any) ([]byte, error) {
+	return ToJson(payload)
+}
+
+// ToJSONString is an alias for ToJsonString.
+func ToJSONString(payload any) (string, error) {
+	return ToJsonString(payload)
 }

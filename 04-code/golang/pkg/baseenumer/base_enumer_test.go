@@ -62,71 +62,83 @@ func (m mockByteEnum) Bytes() []byte {
 	return []byte{byte(m)}
 }
 
-type mockUTF16Enum uint16
+type mockUtf16Enum uint16
 
-func (m mockUTF16Enum) Name() string {
-	return "MockUTF16"
+type mockUTF16Enum = mockUtf16Enum
+
+func (m mockUtf16Enum) Name() string {
+	return "MockUtf16"
 }
 
-func (m mockUTF16Enum) String() string {
-	return "MockUTF16"
+func (m mockUtf16Enum) String() string {
+	return "MockUtf16"
 }
 
-func (m mockUTF16Enum) ValueString() string {
+func (m mockUtf16Enum) ValueString() string {
 	return "65"
 }
 
-func (m mockUTF16Enum) IsValid() bool {
+func (m mockUtf16Enum) IsValid() bool {
 	return m > 0
 }
 
-func (m mockUTF16Enum) IsEnum() bool {
+func (m mockUtf16Enum) IsEnum() bool {
 	return m > 0
 }
 
-func (m mockUTF16Enum) UTF16() uint16 {
+func (m mockUtf16Enum) Utf16() uint16 {
 	return uint16(m)
 }
 
-func (m mockUTF16Enum) ValueUTF16() uint16 {
+func (m mockUtf16Enum) ValueUtf16() uint16 {
 	return uint16(m)
 }
 
-func (m mockUTF16Enum) Code() uint16 {
+func (m mockUtf16Enum) UTF16() uint16 {
 	return uint16(m)
 }
 
-type mockUTF32Enum rune
-
-func (m mockUTF32Enum) Name() string {
-	return "MockUTF32"
+func (m mockUtf16Enum) ValueUTF16() uint16 {
+	return uint16(m)
 }
 
-func (m mockUTF32Enum) String() string {
-	return "MockUTF32"
+func (m mockUtf16Enum) Code() uint16 {
+	return uint16(m)
 }
 
-func (m mockUTF32Enum) ValueString() string {
+type mockUtf32Enum rune
+
+type mockUTF32Enum = mockUtf32Enum
+
+func (m mockUtf32Enum) Name() string {
+	return "MockUtf32"
+}
+
+func (m mockUtf32Enum) String() string {
+	return "MockUtf32"
+}
+
+func (m mockUtf32Enum) ValueString() string {
 	return string(m)
 }
 
-func (m mockUTF32Enum) IsValid() bool {
+func (m mockUtf32Enum) IsValid() bool {
 	return m > 0
 }
 
-func (m mockUTF32Enum) IsEnum() bool {
+func (m mockUtf32Enum) IsEnum() bool {
 	return m > 0
 }
 
-func (m mockUTF32Enum) Rune() rune {
+func (m mockUtf32Enum) Rune() rune {
 	return rune(m)
 }
 
-func (m mockUTF32Enum) ValueRune() rune {
+func (m mockUtf32Enum) ValueRune() rune {
 	return rune(m)
 }
 
-func (m mockUTF32Enum) Int32() int32 {
+func (m mockUtf32Enum) Int32() int32 {
 	return int32(m)
 }
 
@@ -169,18 +181,24 @@ var (
 	_ baseenumer.BaseEnumer = mockByteEnum(0)
 	_ baseenumer.ByteEnumer = mockByteEnum(0)
 	_ baseenumer.ByteEnum   = mockByteEnum(0)
+	_ baseenumer.Utf8Enumer = mockByteEnum(0)
+	_ baseenumer.Utf8Enum   = mockByteEnum(0)
 	_ baseenumer.UTF8Enumer = mockByteEnum(0)
 	_ baseenumer.UTF8Enum   = mockByteEnum(0)
 
-	_ baseenumer.BaseEnumer  = mockUTF16Enum(0)
-	_ baseenumer.UTF16Enumer = mockUTF16Enum(0)
-	_ baseenumer.UTF16Enum   = mockUTF16Enum(0)
+	_ baseenumer.BaseEnumer  = mockUtf16Enum(0)
+	_ baseenumer.Utf16Enumer = mockUtf16Enum(0)
+	_ baseenumer.Utf16Enum   = mockUtf16Enum(0)
+	_ baseenumer.UTF16Enumer = mockUtf16Enum(0)
+	_ baseenumer.UTF16Enum   = mockUtf16Enum(0)
 
-	_ baseenumer.BaseEnumer  = mockUTF32Enum(0)
-	_ baseenumer.UTF32Enumer = mockUTF32Enum(0)
-	_ baseenumer.UTF32Enum   = mockUTF32Enum(0)
-	_ baseenumer.RuneEnumer  = mockUTF32Enum(0)
-	_ baseenumer.RuneEnum    = mockUTF32Enum(0)
+	_ baseenumer.BaseEnumer  = mockUtf32Enum(0)
+	_ baseenumer.Utf32Enumer = mockUtf32Enum(0)
+	_ baseenumer.Utf32Enum   = mockUtf32Enum(0)
+	_ baseenumer.UTF32Enumer = mockUtf32Enum(0)
+	_ baseenumer.UTF32Enum   = mockUtf32Enum(0)
+	_ baseenumer.RuneEnumer  = mockUtf32Enum(0)
+	_ baseenumer.RuneEnum    = mockUtf32Enum(0)
 
 	_ baseenumer.BaseEnumer   = mockNumberEnum(0)
 	_ baseenumer.NumberEnumer = mockNumberEnum(0)
@@ -246,7 +264,7 @@ func TestByteEnumer_Methods(t *testing.T) {
 }
 
 func TestByteEnumer_Validity(t *testing.T) {
-	var be baseenumer.UTF8Enumer = mockByteEnum(65)
+	var be baseenumer.Utf8Enumer = mockByteEnum(65)
 	if !be.IsValid() {
 		t.Fatal("expected IsValid() to be true")
 	}
@@ -256,14 +274,14 @@ func TestByteEnumer_Validity(t *testing.T) {
 	}
 }
 
-func TestUTF16Enumer_Methods(t *testing.T) {
-	var ue baseenumer.UTF16Enumer = mockUTF16Enum(123)
-	if ue.UTF16() != 123 {
-		t.Fatalf("expected UTF16() == 123, got %d", ue.UTF16())
+func TestUtf16Enumer_Methods(t *testing.T) {
+	var ue baseenumer.Utf16Enumer = mockUtf16Enum(123)
+	if ue.Utf16() != 123 {
+		t.Fatalf("expected Utf16() == 123, got %d", ue.Utf16())
 	}
 
-	if ue.ValueUTF16() != 123 {
-		t.Fatalf("expected ValueUTF16() == 123, got %d", ue.ValueUTF16())
+	if ue.ValueUtf16() != 123 {
+		t.Fatalf("expected ValueUtf16() == 123, got %d", ue.ValueUtf16())
 	}
 
 	if ue.Code() != 123 {
@@ -271,8 +289,8 @@ func TestUTF16Enumer_Methods(t *testing.T) {
 	}
 }
 
-func TestUTF16Enumer_Validity(t *testing.T) {
-	var ue baseenumer.UTF16Enum = mockUTF16Enum(123)
+func TestUtf16Enumer_Validity(t *testing.T) {
+	var ue baseenumer.Utf16Enum = mockUtf16Enum(123)
 	if !ue.IsValid() {
 		t.Fatal("expected IsValid() to be true")
 	}
@@ -282,8 +300,8 @@ func TestUTF16Enumer_Validity(t *testing.T) {
 	}
 }
 
-func TestUTF32Enumer_Methods(t *testing.T) {
-	var ue baseenumer.UTF32Enumer = mockUTF32Enum('A')
+func TestUtf32Enumer_Methods(t *testing.T) {
+	var ue baseenumer.Utf32Enumer = mockUtf32Enum('A')
 	if ue.Rune() != 'A' {
 		t.Fatalf("expected Rune() == 'A', got %c", ue.Rune())
 	}
@@ -298,7 +316,7 @@ func TestUTF32Enumer_Methods(t *testing.T) {
 }
 
 func TestRuneEnumer_Validity(t *testing.T) {
-	var re baseenumer.RuneEnumer = mockUTF32Enum('A')
+	var re baseenumer.RuneEnumer = mockUtf32Enum('A')
 	if !re.IsValid() {
 		t.Fatal("expected IsValid() to be true")
 	}

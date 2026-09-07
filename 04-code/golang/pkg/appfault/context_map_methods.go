@@ -117,8 +117,8 @@ func (cm ContextMap) ToJSONString() string {
 	return string(res.Data())
 }
 
-// ToYAML exports the ContextMap as YAML bytes.
-func (cm ContextMap) ToYAML() Result[[]byte] {
+// ToYaml exports the ContextMap as YAML bytes.
+func (cm ContextMap) ToYaml() Result[[]byte] {
 	b, err := yaml.Marshal(cm)
 	if err != nil {
 		return FailureResult[[]byte](Wrap(errtype.Internal, err, "failed to serialize context map to YAML"))
@@ -127,14 +127,24 @@ func (cm ContextMap) ToYAML() Result[[]byte] {
 	return SuccessResult(b)
 }
 
-// ToYAMLString exports the ContextMap as a YAML string.
-func (cm ContextMap) ToYAMLString() string {
-	res := cm.ToYAML()
+// ToYAML is an alias for ToYaml.
+func (cm ContextMap) ToYAML() Result[[]byte] {
+	return cm.ToYaml()
+}
+
+// ToYamlString exports the ContextMap as a YAML string.
+func (cm ContextMap) ToYamlString() string {
+	res := cm.ToYaml()
 	if res.Fault() != nil {
 		return ""
 	}
 
 	return string(res.Data())
+}
+
+// ToYAMLString is an alias for ToYamlString.
+func (cm ContextMap) ToYAMLString() string {
+	return cm.ToYamlString()
 }
 
 // ContextMapFromJSON parses a ContextMap from JSON bytes.
@@ -152,14 +162,19 @@ func ContextMapFromJSONString(s string) Result[ContextMap] {
 	return ContextMapFromJSON([]byte(s))
 }
 
-// ContextMapFromYAML parses a ContextMap from YAML bytes.
-func ContextMapFromYAML(data []byte) Result[ContextMap] {
+// ContextMapFromYaml parses a ContextMap from YAML bytes.
+func ContextMapFromYaml(data []byte) Result[ContextMap] {
 	var cm ContextMap
 	if err := yaml.Unmarshal(data, &cm); err != nil {
 		return FailureResult[ContextMap](Wrap(errtype.Internal, err, "failed to parse context map from YAML"))
 	}
 
 	return SuccessResult(cm)
+}
+
+// ContextMapFromYAML is an alias for ContextMapFromYaml.
+func ContextMapFromYAML(data []byte) Result[ContextMap] {
+	return ContextMapFromYaml(data)
 }
 
 // Format formats the map as a human-readable comma-separated string.

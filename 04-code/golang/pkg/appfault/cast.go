@@ -71,17 +71,22 @@ func ResultToBytes[T any](r Result[T]) Result[[]byte] {
 	return SuccessResult(b)
 }
 
-// ResultToJSON serializes result data or fault using typecast.ToJSON.
-func ResultToJSON[T any](r Result[T]) Result[[]byte] {
+// ResultToJson serializes result data or fault using typecast.ToJson.
+func ResultToJson[T any](r Result[T]) Result[[]byte] {
 	var payload any = r.Data()
 	if r.IsFailed() {
 		payload = r.Fault()
 	}
 
-	b, err := typecast.ToJSON(payload)
+	b, err := typecast.ToJson(payload)
 	if err != nil {
 		return FailureResult[[]byte](Wrap(errtype.Serialization, err, err.Error()))
 	}
 
 	return SuccessResult(b)
+}
+
+// ResultToJSON is an alias for ResultToJson.
+func ResultToJSON[T any](r Result[T]) Result[[]byte] {
+	return ResultToJson[T](r)
 }

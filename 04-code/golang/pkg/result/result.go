@@ -122,9 +122,14 @@ func ResultToBytes[T any](r Result[T]) Result[[]byte] {
 	return appfault.ResultToBytes[T](r)
 }
 
-// ResultToJSON serializes result data or fault using typecast.ToJSON.
+// ResultToJson serializes result data or fault using typecast.ToJson.
+func ResultToJson[T any](r Result[T]) Result[[]byte] {
+	return appfault.ResultToJson[T](r)
+}
+
+// ResultToJSON is an alias for ResultToJson.
 func ResultToJSON[T any](r Result[T]) Result[[]byte] {
-	return appfault.ResultToJSON[T](r)
+	return appfault.ResultToJson[T](r)
 }
 
 // OkSlice creates a successful ResultSlice.

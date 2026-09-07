@@ -24,24 +24,34 @@ func ReadLinesLocked(path string) result.Wrap[[]string] {
 	return ReadLines(path)
 }
 
-// ReadJSONLocked acquires a read lock for the file before executing ReadJSON.
-func ReadJSONLocked[T any](path string) result.Wrap[T] {
+// ReadJsonLocked acquires a read lock for the file before executing ReadJson.
+func ReadJsonLocked[T any](path string) result.Wrap[T] {
 	mu := GetFileLock(path)
 	defer ReleaseFileLock(path)
 	mu.RLock()
 	defer mu.RUnlock()
 
-	return ReadJSON[T](path)
+	return ReadJson[T](path)
 }
 
-// ReadYAMLLocked acquires a read lock for the file before executing ReadYAML.
-func ReadYAMLLocked[T any](path string) result.Wrap[T] {
+// ReadYamlLocked acquires a read lock for the file before executing ReadYaml.
+func ReadYamlLocked[T any](path string) result.Wrap[T] {
 	mu := GetFileLock(path)
 	defer ReleaseFileLock(path)
 	mu.RLock()
 	defer mu.RUnlock()
 
-	return ReadYAML[T](path)
+	return ReadYaml[T](path)
+}
+
+// ReadJSONLocked is an alias for ReadJsonLocked.
+func ReadJSONLocked[T any](path string) result.Wrap[T] {
+	return ReadJsonLocked[T](path)
+}
+
+// ReadYAMLLocked is an alias for ReadYamlLocked.
+func ReadYAMLLocked[T any](path string) result.Wrap[T] {
+	return ReadYamlLocked[T](path)
 }
 
 // ExportTextLocked acquires an exclusive write lock for the file before executing ExportText.
@@ -64,22 +74,32 @@ func ExportLinesLocked(path string, lines []string, perm FilePermType) result.Wr
 	return ExportLines(path, lines, perm)
 }
 
-// ExportJSONLocked acquires an exclusive write lock for the file before executing ExportJSON.
-func ExportJSONLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+// ExportJsonLocked acquires an exclusive write lock for the file before executing ExportJson.
+func ExportJsonLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
 	mu := GetFileLock(path)
 	defer ReleaseFileLock(path)
 	mu.Lock()
 	defer mu.Unlock()
 
-	return ExportJSON(path, data, perm)
+	return ExportJson(path, data, perm)
 }
 
-// ExportYAMLLocked acquires an exclusive write lock for the file before executing ExportYAML.
-func ExportYAMLLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+// ExportYamlLocked acquires an exclusive write lock for the file before executing ExportYaml.
+func ExportYamlLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
 	mu := GetFileLock(path)
 	defer ReleaseFileLock(path)
 	mu.Lock()
 	defer mu.Unlock()
 
-	return ExportYAML(path, data, perm)
+	return ExportYaml(path, data, perm)
+}
+
+// ExportJSONLocked is an alias for ExportJsonLocked.
+func ExportJSONLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportJsonLocked(path, data, perm)
+}
+
+// ExportYAMLLocked is an alias for ExportYamlLocked.
+func ExportYAMLLocked(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportYamlLocked(path, data, perm)
 }

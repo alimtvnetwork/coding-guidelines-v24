@@ -54,8 +54,8 @@ func ReadLines(path string) result.Wrap[[]string] {
 	return result.WrapSuccess(lines)
 }
 
-// ReadJSON parses a JSON file into the specified type T.
-func ReadJSON[T any](path string) result.Wrap[T] {
+// ReadJson parses a JSON file into the specified type T.
+func ReadJson[T any](path string) result.Wrap[T] {
 	var val T
 	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
 	if fRes.HasError() {
@@ -73,8 +73,13 @@ func ReadJSON[T any](path string) result.Wrap[T] {
 	return result.WrapSuccess(val)
 }
 
-// ReadYAML parses a YAML file into the specified type T.
-func ReadYAML[T any](path string) result.Wrap[T] {
+// ReadJSON is an alias for ReadJson.
+func ReadJSON[T any](path string) result.Wrap[T] {
+	return ReadJson[T](path)
+}
+
+// ReadYaml parses a YAML file into the specified type T.
+func ReadYaml[T any](path string) result.Wrap[T] {
 	var val T
 	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
 	if fRes.HasError() {
@@ -98,4 +103,9 @@ func ReadYAML[T any](path string) result.Wrap[T] {
 	}
 
 	return result.WrapSuccess(val)
+}
+
+// ReadYAML is an alias for ReadYaml.
+func ReadYAML[T any](path string) result.Wrap[T] {
+	return ReadYaml[T](path)
 }

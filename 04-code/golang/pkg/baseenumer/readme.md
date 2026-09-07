@@ -18,23 +18,23 @@ Extends `BaseEnumer` for byte-backed enumerations:
 - `ValueByte() byte`: Returns the byte value.
 - `Bytes() []byte`: Returns the byte slice representation.
 
-### `UTF8Enumer` (Alias: `UTF8Enum`)
+### `Utf8Enumer` (Alias: `Utf8Enum`, `UTF8Enumer`, `UTF8Enum`)
 Extends `ByteEnumer` for UTF-8 byte-backed enumerations.
 
-### `UTF16Enumer` (Alias: `UTF16Enum`)
+### `Utf16Enumer` (Alias: `Utf16Enum`, `UTF16Enumer`, `UTF16Enum`)
 Extends `BaseEnumer` for UTF-16 code-unit-backed enumerations:
-- `UTF16() uint16`: Returns the uint16 code unit.
-- `ValueUTF16() uint16`: Returns the uint16 code unit value.
+- `Utf16() uint16`: Returns the uint16 code unit.
+- `ValueUtf16() uint16`: Returns the uint16 code unit value.
 - `Code() uint16`: Returns the uint16 code value.
 
-### `UTF32Enumer` (Alias: `UTF32Enum`)
+### `Utf32Enumer` (Alias: `Utf32Enum`, `UTF32Enumer`, `UTF32Enum`)
 Extends `BaseEnumer` for UTF-32 / rune-backed enumerations:
 - `Rune() rune`: Returns the rune character.
 - `ValueRune() rune`: Returns the rune value.
 - `Int32() int32`: Returns the int32 code point.
 
 ### `RuneEnumer` (Alias: `RuneEnum`)
-Extends `UTF32Enumer` for rune-backed enumerations.
+Extends `Utf32Enumer` for rune-backed enumerations.
 
 ### `StringEnumer` (Alias: `StringEnum`)
 Extends `BaseEnumer` for string-backed enumerations.

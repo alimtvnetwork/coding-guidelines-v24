@@ -179,10 +179,10 @@ func TestResultToBytes_Fault(t *testing.T) {
 	}
 }
 
-func TestResultToJSON_Success(t *testing.T) {
+func TestResultToJson_Success(t *testing.T) {
 	payload := castTestPayload{Name: "David", Age: 40}
 	r := appfault.SuccessResult(payload)
-	res := appfault.ResultToJSON(r)
+	res := appfault.ResultToJson(r)
 	if res.IsFailed() {
 		t.Fatalf("unexpected failure: %v", res.Fault())
 	}
@@ -190,12 +190,17 @@ func TestResultToJSON_Success(t *testing.T) {
 	if !strings.Contains(string(res.Data()), `"name": "David"`) {
 		t.Fatalf("expected David in JSON, got %s", string(res.Data()))
 	}
+
+	resAlias := appfault.ResultToJSON(r)
+	if !strings.Contains(string(resAlias.Data()), `"name": "David"`) {
+		t.Fatalf("expected David in alias ResultToJSON, got %s", string(resAlias.Data()))
+	}
 }
 
-func TestResultToJSON_Fault(t *testing.T) {
+func TestResultToJson_Fault(t *testing.T) {
 	appErr := appfault.New(errtype.Forbidden, "permission denied")
 	r := appfault.FailureResult[castTestPayload](appErr)
-	res := appfault.ResultToJSON(r)
+	res := appfault.ResultToJson(r)
 	if res.IsFailed() {
 		t.Fatalf("unexpected failure: %v", res.Fault())
 	}

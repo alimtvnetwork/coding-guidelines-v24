@@ -12,11 +12,17 @@ type (
 	// ByteEnum is an alias for ByteEnumer.
 	ByteEnum = ByteEnumer
 
-	// UTF8Enumer defines the interface for UTF-8 byte-backed enumerations.
-	UTF8Enumer interface {
+	// Utf8Enumer defines the interface for UTF-8 byte-backed enumerations.
+	Utf8Enumer interface {
 		ByteEnumer
 	}
 
-	// UTF8Enum is an alias for UTF8Enumer.
-	UTF8Enum = UTF8Enumer
+	// Utf8Enum is an alias for Utf8Enumer.
+	Utf8Enum = Utf8Enumer
+
+	// UTF8Enumer is an alias for backwards compatibility.
+	UTF8Enumer = Utf8Enumer
+
+	// UTF8Enum is an alias for backwards compatibility.
+	UTF8Enum = Utf8Enum
 )

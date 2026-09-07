@@ -17,7 +17,7 @@ PowerShell:
 
 ### Added
 
-- Modular BaseEnum family in `04-code/golang/pkg/baseenumer/`: `byte_enumer.go` (`ByteEnumer`, `ByteEnum`, `UTF8Enumer`, `UTF8Enum`), `utf16_enumer.go` (`UTF16Enumer`, `UTF16Enum`), `utf32_enumer.go` (`UTF32Enumer`, `UTF32Enum`, `RuneEnumer`, `RuneEnum`), `string_enumer.go` (`StringEnumer`, `StringEnum`), `number_enumer.go` (`NumberEnumer`, `NumberEnum`, `IntEnumer`, `IntEnum`).
+- Modular BaseEnum family in `04-code/golang/pkg/baseenumer/`: `byte_enumer.go` (`ByteEnumer`, `ByteEnum`, `Utf8Enumer`, `Utf8Enum`), `utf16_enumer.go` (`Utf16Enumer`, `Utf16Enum`), `utf32_enumer.go` (`Utf32Enumer`, `Utf32Enum`, `RuneEnumer`, `RuneEnum`), `string_enumer.go` (`StringEnumer`, `StringEnum`), `number_enumer.go` (`NumberEnumer`, `NumberEnum`, `IntEnumer`, `IntEnum`).
 - Coredata collection combinators on `ResultSlice[T]` (`Filter`, `ForEach`, `ForEachBreak`) in `04-code/golang/pkg/appfault/result_slice.go`.
 - Coredata collection combinators on `ResultMap[K, V]` (`Keys`, `Values`, `Filter`, `ForEach`) in `04-code/golang/pkg/appfault/result_map.go`.
 - Dynamic struct formatting and map inspection: `FormatStruct()` on `Result[T]`, `ResultSlice[T]`, `ResultMap[K, V]`, and `ToMap()` on `Result[T]`.

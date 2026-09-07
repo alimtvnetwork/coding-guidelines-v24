@@ -22,22 +22,40 @@ type (
 	// ByteEnum is an alias for ByteEnumer.
 	ByteEnum = baseenumer.ByteEnum
 
-	// UTF8Enumer defines the interface for UTF-8 byte-backed enumerations (forwarded from baseenumer).
+	// Utf8Enumer defines the interface for UTF-8 byte-backed enumerations (forwarded from baseenumer).
+	Utf8Enumer = baseenumer.Utf8Enumer
+
+	// Utf8Enum is an alias for Utf8Enumer.
+	Utf8Enum = baseenumer.Utf8Enum
+
+	// UTF8Enumer is an alias for backwards compatibility.
 	UTF8Enumer = baseenumer.UTF8Enumer
 
-	// UTF8Enum is an alias for UTF8Enumer.
+	// UTF8Enum is an alias for backwards compatibility.
 	UTF8Enum = baseenumer.UTF8Enum
 
-	// UTF16Enumer defines the interface for UTF-16 code-unit-backed enumerations (forwarded from baseenumer).
+	// Utf16Enumer defines the interface for UTF-16 code-unit-backed enumerations (forwarded from baseenumer).
+	Utf16Enumer = baseenumer.Utf16Enumer
+
+	// Utf16Enum is an alias for Utf16Enumer.
+	Utf16Enum = baseenumer.Utf16Enum
+
+	// UTF16Enumer is an alias for backwards compatibility.
 	UTF16Enumer = baseenumer.UTF16Enumer
 
-	// UTF16Enum is an alias for UTF16Enumer.
+	// UTF16Enum is an alias for backwards compatibility.
 	UTF16Enum = baseenumer.UTF16Enum
 
-	// UTF32Enumer defines the interface for UTF-32 / rune-backed enumerations (forwarded from baseenumer).
+	// Utf32Enumer defines the interface for UTF-32 / rune-backed enumerations (forwarded from baseenumer).
+	Utf32Enumer = baseenumer.Utf32Enumer
+
+	// Utf32Enum is an alias for Utf32Enumer.
+	Utf32Enum = baseenumer.Utf32Enum
+
+	// UTF32Enumer is an alias for backwards compatibility.
 	UTF32Enumer = baseenumer.UTF32Enumer
 
-	// UTF32Enum is an alias for UTF32Enumer.
+	// UTF32Enum is an alias for backwards compatibility.
 	UTF32Enum = baseenumer.UTF32Enum
 
 	// RuneEnumer defines the interface for rune-backed enumerations (forwarded from baseenumer).

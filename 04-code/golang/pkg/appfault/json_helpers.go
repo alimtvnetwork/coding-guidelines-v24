@@ -6,8 +6,8 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-// SerializeToJSON serializes any value to JSON bytes returning *AppError on failure.
-func SerializeToJSON(val any) ([]byte, *AppError) {
+// SerializeToJson serializes any value to JSON bytes returning *AppError on failure.
+func SerializeToJson(val any) ([]byte, *AppError) {
 	data, err := json.Marshal(val)
 	if err != nil {
 		return nil, Wrap(errtype.Execution, err, "failed to marshal value to json")
@@ -16,9 +16,9 @@ func SerializeToJSON(val any) ([]byte, *AppError) {
 	return data, nil
 }
 
-// SerializeToJSONString serializes any value to a JSON string returning *AppError on failure.
-func SerializeToJSONString(val any) (string, *AppError) {
-	data, appErr := SerializeToJSON(val)
+// SerializeToJsonString serializes any value to a JSON string returning *AppError on failure.
+func SerializeToJsonString(val any) (string, *AppError) {
+	data, appErr := SerializeToJson(val)
 	if appErr != nil {
 		return "", appErr
 	}
@@ -26,8 +26,8 @@ func SerializeToJSONString(val any) (string, *AppError) {
 	return string(data), nil
 }
 
-// DeserializeFromJSON parses JSON bytes into target value returning *AppError on failure.
-func DeserializeFromJSON[T any](data []byte) (T, *AppError) {
+// DeserializeFromJson parses JSON bytes into target value returning *AppError on failure.
+func DeserializeFromJson[T any](data []byte) (T, *AppError) {
 	var target T
 	if err := json.Unmarshal(data, &target); err != nil {
 		return target, Wrap(errtype.Validation, err, "failed to unmarshal json data")
@@ -36,7 +36,27 @@ func DeserializeFromJSON[T any](data []byte) (T, *AppError) {
 	return target, nil
 }
 
-// DeserializeFromJSONString parses JSON string into target value returning *AppError on failure.
+// DeserializeFromJsonString parses JSON string into target value returning *AppError on failure.
+func DeserializeFromJsonString[T any](str string) (T, *AppError) {
+	return DeserializeFromJson[T]([]byte(str))
+}
+
+// SerializeToJSON is an alias for SerializeToJson.
+func SerializeToJSON(val any) ([]byte, *AppError) {
+	return SerializeToJson(val)
+}
+
+// SerializeToJSONString is an alias for SerializeToJsonString.
+func SerializeToJSONString(val any) (string, *AppError) {
+	return SerializeToJsonString(val)
+}
+
+// DeserializeFromJSON is an alias for DeserializeFromJson.
+func DeserializeFromJSON[T any](data []byte) (T, *AppError) {
+	return DeserializeFromJson[T](data)
+}
+
+// DeserializeFromJSONString is an alias for DeserializeFromJsonString.
 func DeserializeFromJSONString[T any](str string) (T, *AppError) {
-	return DeserializeFromJSON[T]([]byte(str))
+	return DeserializeFromJsonString[T](str)
 }

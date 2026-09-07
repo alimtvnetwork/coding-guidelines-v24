@@ -39,8 +39,8 @@ func ExportLines(path string, lines []string, perm FilePermType) result.Wrap[boo
 	return ExportText(path, content, perm)
 }
 
-// ExportJSON writes a data structure to a file as formatted JSON.
-func ExportJSON(path string, data any, perm FilePermType) result.Wrap[bool] {
+// ExportJson writes a data structure to a file as formatted JSON.
+func ExportJson(path string, data any, perm FilePermType) result.Wrap[bool] {
 	fRes := CreateFile(path, perm)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
@@ -59,8 +59,13 @@ func ExportJSON(path string, data any, perm FilePermType) result.Wrap[bool] {
 	return result.WrapSuccess(true)
 }
 
-// ExportYAML writes a data structure to a file as YAML.
-func ExportYAML(path string, data any, perm FilePermType) result.Wrap[bool] {
+// ExportJSON is an alias for ExportJson.
+func ExportJSON(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportJson(path, data, perm)
+}
+
+// ExportYaml writes a data structure to a file as YAML.
+func ExportYaml(path string, data any, perm FilePermType) result.Wrap[bool] {
 	fRes := CreateFile(path, perm)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
@@ -79,4 +84,9 @@ func ExportYAML(path string, data any, perm FilePermType) result.Wrap[bool] {
 	}
 
 	return result.WrapSuccess(true)
+}
+
+// ExportYAML is an alias for ExportYaml.
+func ExportYAML(path string, data any, perm FilePermType) result.Wrap[bool] {
+	return ExportYaml(path, data, perm)
 }

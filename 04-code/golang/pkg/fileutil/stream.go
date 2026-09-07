@@ -8,9 +8,9 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// StreamJSON sequentially decodes a massive JSON array from a file, passing each element to the handler.
+// StreamJson sequentially decodes a massive JSON array from a file, passing each element to the handler.
 // This prevents excessive RAM usage when dealing with huge datasets.
-func StreamJSON[T any](path string, handler func(T) *appfault.AppError) result.Wrap[bool] {
+func StreamJson[T any](path string, handler func(T) *appfault.AppError) result.Wrap[bool] {
 	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
@@ -49,4 +49,9 @@ func StreamJSON[T any](path string, handler func(T) *appfault.AppError) result.W
 	}
 
 	return result.WrapSuccess(true)
+}
+
+// StreamJSON is an alias for StreamJson.
+func StreamJSON[T any](path string, handler func(T) *appfault.AppError) result.Wrap[bool] {
+	return StreamJson[T](path, handler)
 }

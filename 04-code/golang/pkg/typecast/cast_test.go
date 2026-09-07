@@ -275,9 +275,9 @@ func TestToBytes_Nil(t *testing.T) {
 	}
 }
 
-func TestToJSON_Success(t *testing.T) {
+func TestToJson_Success(t *testing.T) {
 	p := samplePerson{Name: "Alice"}
-	b, err := ToJSON(p)
+	b, err := ToJson(p)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -286,19 +286,24 @@ func TestToJSON_Success(t *testing.T) {
 	if string(b) != expected {
 		t.Fatalf("expected %q, got %q", expected, string(b))
 	}
+
+	bAlias, _ := ToJSON(p)
+	if string(bAlias) != expected {
+		t.Fatalf("expected alias ToJSON %q, got %q", expected, string(bAlias))
+	}
 }
 
-func TestToJSON_Error(t *testing.T) {
+func TestToJson_Error(t *testing.T) {
 	ch := make(chan int)
-	_, err := ToJSON(ch)
+	_, err := ToJson(ch)
 	if err == nil {
 		t.Fatal("expected error for unmarshalable type")
 	}
 }
 
-func TestToJSONString_Success(t *testing.T) {
+func TestToJsonString_Success(t *testing.T) {
 	p := samplePerson{Name: "Alice"}
-	s, err := ToJSONString(p)
+	s, err := ToJsonString(p)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -307,11 +312,16 @@ func TestToJSONString_Success(t *testing.T) {
 	if s != expected {
 		t.Fatalf("expected %q, got %q", expected, s)
 	}
+
+	sAlias, _ := ToJSONString(p)
+	if sAlias != expected {
+		t.Fatalf("expected alias ToJSONString %q, got %q", expected, sAlias)
+	}
 }
 
-func TestToJSONString_Error(t *testing.T) {
+func TestToJsonString_Error(t *testing.T) {
 	ch := make(chan int)
-	_, err := ToJSONString(ch)
+	_, err := ToJsonString(ch)
 	if err == nil {
 		t.Fatal("expected error for unmarshalable type")
 	}
