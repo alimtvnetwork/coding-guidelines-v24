@@ -8,9 +8,9 @@ Master directory of architectural and execution plans.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
-
 ## Completed Plans
 
+- [15-simple-verifier-consolidation.md](completed/15-simple-verifier-consolidation.md): Unified SimpleVerifier and SimpleVerifyChecker contracts, AsSimpleVerifier/AsSimpleVerifyChecker methods, and compile-time static type assertions.
 - [14-generic-typecast-and-result-checkers.md](completed/14-generic-typecast-and-result-checkers.md): Bulletproof typecast conversions, reflection performance optimization, Result and AppError generic casting, and Checker interface contracts.
 
 - [01-apperror-new-constructors.md](completed/01-apperror-new-constructors.md): Go AppError namespace constructors.

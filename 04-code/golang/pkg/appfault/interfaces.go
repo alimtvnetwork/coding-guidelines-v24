@@ -60,6 +60,22 @@ type (
 	// SimpleVerifyChecker is an alias for SimpleVerifier adhering to the Checker suffix convention.
 	SimpleVerifyChecker = SimpleVerifier
 
+	// SimpleVerifierProvider produces a SimpleVerifier instance.
+	SimpleVerifierProvider interface {
+		AsSimpleVerifier() SimpleVerifier
+	}
+
+	// SimpleVerifyCheckerProvider produces a SimpleVerifier instance adhering to the Checker suffix convention.
+	SimpleVerifyCheckerProvider interface {
+		AsSimpleVerifyChecker() SimpleVerifier
+	}
+
+	// SimpleVerifiable is an alias for SimpleVerifierProvider.
+	SimpleVerifiable = SimpleVerifierProvider
+
+	// SimpleVerifyCheckable is an alias for SimpleVerifyCheckerProvider.
+	SimpleVerifyCheckable = SimpleVerifyCheckerProvider
+
 	// FaultWriter writes an AppError to an io.Writer output.
 	FaultWriter interface {
 		WriteFault(w io.Writer, e *AppError) *AppError

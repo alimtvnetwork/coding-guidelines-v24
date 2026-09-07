@@ -248,4 +248,33 @@ func (b Bytes[T]) Unwrap() ([]byte, *appfault.AppError) {
 	return b.data, b.appError
 }
 
+// IsFailure returns true if the Bytes envelope represents a failure.
+func (b Bytes[T]) IsFailure() bool {
+	return !b.IsSuccess()
+}
+
+// IsInvalid returns true if an active AppError is present.
+func (b Bytes[T]) IsInvalid() bool {
+	return b.appError != nil
+}
+
+// IsDefined returns true if the Bytes envelope is successful.
+func (b Bytes[T]) IsDefined() bool {
+	return b.IsSuccess()
+}
+
+// AsSimpleVerifier returns the Bytes envelope conforming to SimpleVerifier.
+func (b Bytes[T]) AsSimpleVerifier() appfault.SimpleVerifier {
+	return b
+}
+
+// AsSimpleVerifyChecker returns the Bytes envelope conforming to SimpleVerifier adhering to the Checker convention.
+func (b Bytes[T]) AsSimpleVerifyChecker() appfault.SimpleVerifier {
+	return b
+}
+
 var _ WrappedByter[any] = Bytes[any]{}
+var _ appfault.SimpleVerifier = Bytes[any]{}
+var _ appfault.SimpleVerifyChecker = Bytes[any]{}
+var _ appfault.SimpleVerifiable = Bytes[any]{}
+var _ appfault.SimpleVerifyCheckable = Bytes[any]{}

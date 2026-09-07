@@ -64,6 +64,11 @@ func (rs ResultSlice[T]) AsSimpleVerifier() SimpleVerifier {
 	return rs
 }
 
+// AsSimpleVerifyChecker returns the ResultSlice conforming to SimpleVerifier.
+func (rs ResultSlice[T]) AsSimpleVerifyChecker() SimpleVerifier {
+	return rs
+}
+
 // HasError returns true if an error is present.
 func (rs ResultSlice[T]) HasError() bool {
 	return rs.IsFailed()

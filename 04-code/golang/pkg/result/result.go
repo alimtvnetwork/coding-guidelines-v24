@@ -15,6 +15,18 @@ type (
 
 	// SimpleVerifyChecker is an alias for SimpleVerifier adhering to the Checker convention.
 	SimpleVerifyChecker = appfault.SimpleVerifyChecker
+
+	// SimpleVerifierProvider provides AsSimpleVerifier.
+	SimpleVerifierProvider = appfault.SimpleVerifierProvider
+
+	// SimpleVerifyCheckerProvider provides AsSimpleVerifyChecker.
+	SimpleVerifyCheckerProvider = appfault.SimpleVerifyCheckerProvider
+
+	// SimpleVerifiable provides AsSimpleVerifier.
+	SimpleVerifiable = appfault.SimpleVerifiable
+
+	// SimpleVerifyCheckable provides AsSimpleVerifyChecker.
+	SimpleVerifyCheckable = appfault.SimpleVerifyCheckable
 )
 
 func WrapSuccess[T any](data T) Wrap[T] {

@@ -59,6 +59,11 @@ func (e *AppError) AsSimpleVerifier() SimpleVerifier {
 	return e
 }
 
+// AsSimpleVerifyChecker returns the AppError conforming to SimpleVerifier adhering to the Checker convention.
+func (e *AppError) AsSimpleVerifyChecker() SimpleVerifier {
+	return e
+}
+
 // Is checks if the error type matches the target Variation.
 func (e *AppError) Is(target errtype.Variation) bool {
 	if e == nil {

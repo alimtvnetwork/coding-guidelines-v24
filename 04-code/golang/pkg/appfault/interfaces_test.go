@@ -16,6 +16,16 @@ var (
 	_ SimpleVerifyChecker = (*AppError)(nil)
 	_ SimpleVerifyChecker = ResultSlice[string]{}
 	_ SimpleVerifyChecker = ResultMap[string, int]{}
+
+	_ SimpleVerifiable = Result[string]{}
+	_ SimpleVerifiable = (*AppError)(nil)
+	_ SimpleVerifiable = ResultSlice[string]{}
+	_ SimpleVerifiable = ResultMap[string, int]{}
+
+	_ SimpleVerifyCheckable = Result[string]{}
+	_ SimpleVerifyCheckable = (*AppError)(nil)
+	_ SimpleVerifyCheckable = ResultSlice[string]{}
+	_ SimpleVerifyCheckable = ResultMap[string, int]{}
 )
 
 func TestResultSuccessCheckers(t *testing.T) {
@@ -135,5 +145,49 @@ func TestAsSimpleVerifier_Map(t *testing.T) {
 
 	if v.IsEmpty() {
 		t.Fatal("expected ResultMap AsSimpleVerifier not to be empty")
+	}
+}
+
+func TestAsSimpleVerifyChecker_Result(t *testing.T) {
+	var v SimpleVerifier = Result[string]{Value: "data"}.AsSimpleVerifyChecker()
+	if !v.IsSuccess() {
+		t.Fatal("expected Result AsSimpleVerifyChecker to be success")
+	}
+
+	if !v.IsDefined() {
+		t.Fatal("expected Result AsSimpleVerifyChecker to be defined")
+	}
+}
+
+func TestAsSimpleVerifyChecker_Error(t *testing.T) {
+	var v SimpleVerifier = New(errtype.Validation, "err").AsSimpleVerifyChecker()
+	if !v.IsFailure() {
+		t.Fatal("expected AppError AsSimpleVerifyChecker to be failure")
+	}
+
+	if !v.IsInvalid() {
+		t.Fatal("expected AppError AsSimpleVerifyChecker to be invalid")
+	}
+}
+
+func TestAsSimpleVerifyChecker_Slice(t *testing.T) {
+	var v SimpleVerifier = OkSlice([]string{"a"}).AsSimpleVerifyChecker()
+	if !v.IsSuccess() {
+		t.Fatal("expected ResultSlice AsSimpleVerifyChecker to be success")
+	}
+
+	if v.IsEmpty() {
+		t.Fatal("expected ResultSlice AsSimpleVerifyChecker not to be empty")
+	}
+}
+
+func TestAsSimpleVerifyChecker_Map(t *testing.T) {
+	var v SimpleVerifier = OkMap(map[string]int{"k": 1}).AsSimpleVerifyChecker()
+	if !v.IsSuccess() {
+		t.Fatal("expected ResultMap AsSimpleVerifyChecker to be success")
+	}
+
+	if v.IsEmpty() {
+		t.Fatal("expected ResultMap AsSimpleVerifyChecker not to be empty")
 	}
 }

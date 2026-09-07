@@ -102,6 +102,16 @@ func (p JsonPayloadResult[T]) Concat(other JsonPayloadResult[T]) JsonPayloadResu
 	}
 }
 
+// AsSimpleVerifier returns the JsonPayloadResult conforming to SimpleVerifier.
+func (p JsonPayloadResult[T]) AsSimpleVerifier() appfault.SimpleVerifier {
+	return p
+}
+
+// AsSimpleVerifyChecker returns the JsonPayloadResult conforming to SimpleVerifier adhering to the Checker convention.
+func (p JsonPayloadResult[T]) AsSimpleVerifyChecker() appfault.SimpleVerifier {
+	return p
+}
+
 // jsonSourceSingleton acts as the struct-as-namespace factory for multi-source JsonResult construction.
 type jsonSourceSingleton struct{}
 
@@ -602,6 +612,31 @@ func (j JsonResult) IsSuccess() bool {
 	return j.appError == nil
 }
 
+// IsFailure dynamically evaluates true if an AppError is present.
+func (j JsonResult) IsFailure() bool {
+	return j.appError != nil
+}
+
+// IsInvalid dynamically evaluates true if an active AppError is present.
+func (j JsonResult) IsInvalid() bool {
+	return j.appError != nil
+}
+
+// IsDefined dynamically evaluates true if the JsonResult is successful.
+func (j JsonResult) IsDefined() bool {
+	return j.IsSuccess()
+}
+
+// AsSimpleVerifier returns the JsonResult conforming to SimpleVerifier.
+func (j JsonResult) AsSimpleVerifier() appfault.SimpleVerifier {
+	return j
+}
+
+// AsSimpleVerifyChecker returns the JsonResult conforming to SimpleVerifier adhering to the Checker convention.
+func (j JsonResult) AsSimpleVerifyChecker() appfault.SimpleVerifier {
+	return j
+}
+
 // Status dynamically evaluates true if no AppError is present.
 func (j JsonResult) Status() bool {
 	return j.appError == nil
@@ -715,3 +750,11 @@ var _ WrappedByter[any] = JsonPayloadResult[any]{}
 var _ WrappedBytes[any] = JsonResult{}
 var _ WrappedJson = JsonResult{}
 var _ WrappedBytes[any] = JsonPayloadResult[any]{}
+var _ appfault.SimpleVerifier = JsonResult{}
+var _ appfault.SimpleVerifyChecker = JsonResult{}
+var _ appfault.SimpleVerifiable = JsonResult{}
+var _ appfault.SimpleVerifyCheckable = JsonResult{}
+var _ appfault.SimpleVerifier = JsonPayloadResult[any]{}
+var _ appfault.SimpleVerifyChecker = JsonPayloadResult[any]{}
+var _ appfault.SimpleVerifiable = JsonPayloadResult[any]{}
+var _ appfault.SimpleVerifyCheckable = JsonPayloadResult[any]{}

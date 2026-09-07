@@ -304,3 +304,16 @@ func TestReExportedResultToBytesAndJSON(t *testing.T) {
 		t.Fatalf("unexpected fault: %v", jRes.Fault())
 	}
 }
+
+func TestReExportedSimpleVerifiable(t *testing.T) {
+	r := result.Success("test")
+	var v result.SimpleVerifiable = r
+	if !v.AsSimpleVerifier().IsSuccess() {
+		t.Fatal("expected success")
+	}
+
+	var vc result.SimpleVerifyCheckable = r
+	if !vc.AsSimpleVerifyChecker().IsSuccess() {
+		t.Fatal("expected success")
+	}
+}

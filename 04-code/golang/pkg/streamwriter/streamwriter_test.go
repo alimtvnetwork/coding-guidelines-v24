@@ -952,3 +952,107 @@ func TestBytesAndJsonResult_NullSafety(t *testing.T) {
 		t.Fatal("expected clonedPayloadJson.IsNull() to be true")
 	}
 }
+
+var (
+	_ appfault.SimpleVerifier        = streamwriter.Bytes[any]{}
+	_ appfault.SimpleVerifyChecker   = streamwriter.Bytes[any]{}
+	_ appfault.SimpleVerifiable      = streamwriter.Bytes[any]{}
+	_ appfault.SimpleVerifyCheckable = streamwriter.Bytes[any]{}
+
+	_ appfault.SimpleVerifier        = streamwriter.JsonResult{}
+	_ appfault.SimpleVerifyChecker   = streamwriter.JsonResult{}
+	_ appfault.SimpleVerifiable      = streamwriter.JsonResult{}
+	_ appfault.SimpleVerifyCheckable = streamwriter.JsonResult{}
+
+	_ appfault.SimpleVerifier        = streamwriter.JsonPayloadResult[any]{}
+	_ appfault.SimpleVerifyChecker   = streamwriter.JsonPayloadResult[any]{}
+	_ appfault.SimpleVerifiable      = streamwriter.JsonPayloadResult[any]{}
+	_ appfault.SimpleVerifyCheckable = streamwriter.JsonPayloadResult[any]{}
+)
+
+func TestBytes_AsSimpleVerifier_Success(t *testing.T) {
+	b := streamwriter.NewBytes([]byte("ok"), "payload")
+	var v appfault.SimpleVerifier = b.AsSimpleVerifier()
+	if !v.IsSuccess() {
+		t.Fatal("expected Bytes verifier to be success")
+	}
+
+	if !v.IsDefined() {
+		t.Fatal("expected Bytes verifier to be defined")
+	}
+}
+
+func TestBytes_AsSimpleVerifier_Error(t *testing.T) {
+	appErr := appfault.New(errtype.Validation, "bad input")
+	b := streamwriter.NewBytesError[string](appErr)
+	var v appfault.SimpleVerifier = b.AsSimpleVerifier()
+	if !v.IsFailure() {
+		t.Fatal("expected Bytes verifier to be failure")
+	}
+
+	if !v.IsInvalid() {
+		t.Fatal("expected Bytes verifier to be invalid")
+	}
+}
+
+func TestBytes_AsSimpleVerifyChecker(t *testing.T) {
+	b := streamwriter.NewBytes([]byte("content"), 123)
+	var c appfault.SimpleVerifyChecker = b.AsSimpleVerifyChecker()
+	if !c.IsSuccess() {
+		t.Fatal("expected Bytes checker to be success")
+	}
+
+	if c.IsInvalid() {
+		t.Fatal("expected Bytes checker to be valid")
+	}
+}
+
+func TestJsonResult_AsSimpleVerifier_Success(t *testing.T) {
+	j := streamwriter.NewJsonResult(map[string]int{"code": 1})
+	var v appfault.SimpleVerifier = j.AsSimpleVerifier()
+	if !v.IsSuccess() {
+		t.Fatal("expected JsonResult verifier to be success")
+	}
+
+	if !v.IsDefined() {
+		t.Fatal("expected JsonResult verifier to be defined")
+	}
+}
+
+func TestJsonResult_AsSimpleVerifier_Error(t *testing.T) {
+	appErr := appfault.New(errtype.Validation, "invalid json")
+	j := streamwriter.NewJsonResultError(appErr)
+	var v appfault.SimpleVerifier = j.AsSimpleVerifier()
+	if !v.IsFailure() {
+		t.Fatal("expected JsonResult verifier to be failure")
+	}
+
+	if !v.IsInvalid() {
+		t.Fatal("expected JsonResult verifier to be invalid")
+	}
+}
+
+func TestJsonResult_AsSimpleVerifyChecker(t *testing.T) {
+	j := streamwriter.NewJsonResult("valid")
+	var c appfault.SimpleVerifyChecker = j.AsSimpleVerifyChecker()
+	if !c.IsSuccess() {
+		t.Fatal("expected JsonResult checker to be success")
+	}
+
+	if c.IsInvalid() {
+		t.Fatal("expected JsonResult checker to be valid")
+	}
+}
+
+func TestJsonPayloadResult_AsSimpleVerifier(t *testing.T) {
+	p := streamwriter.WithPayload(streamwriter.NewJsonResult("payload"), "data")
+	var v appfault.SimpleVerifier = p.AsSimpleVerifier()
+	if !v.IsSuccess() {
+		t.Fatal("expected JsonPayloadResult verifier to be success")
+	}
+
+	var c appfault.SimpleVerifyChecker = p.AsSimpleVerifyChecker()
+	if !c.IsDefined() {
+		t.Fatal("expected JsonPayloadResult checker to be defined")
+	}
+}

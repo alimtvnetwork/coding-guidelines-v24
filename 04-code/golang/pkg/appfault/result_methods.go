@@ -37,6 +37,11 @@ func (r Result[T]) AsSimpleVerifier() SimpleVerifier {
 	return r
 }
 
+// AsSimpleVerifyChecker returns the Result conforming to SimpleVerifier.
+func (r Result[T]) AsSimpleVerifyChecker() SimpleVerifier {
+	return r
+}
+
 // HasError returns true if an error is present.
 func (r Result[T]) HasError() bool {
 	return r.IsFailed()
