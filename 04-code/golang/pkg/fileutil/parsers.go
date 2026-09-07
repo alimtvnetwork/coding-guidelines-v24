@@ -8,50 +8,51 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
 // ReadText reads the entire file content as a string.
-func ReadText(path string) result.Wrap[string] {
+func ReadText(path string) StringResult {
 	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
 	if fRes.HasError() {
 		return result.WrapFailure[string](fRes.Fault())
 	}
 
-	f := fRes.Data()
-	defer f.Close()
+	defer fRes.Data().Close()
 
-	content, err := io.ReadAll(f)
+	content, err := io.ReadAll(fRes.Data())
 	if err != nil {
-		return result.WrapFailure[string](appfault.Wrap(errtype.IO, err, "failed to read file content: "+path))
+		return StringFailure(errtype.IO, err, path, "failed to read file content")
 	}
 
-	return result.WrapSuccess(string(content))
+	return StringSuccess(string(content))
 }
 
-// ReadLines reads the file and splits it into a string array by lines.
-func ReadLines(path string) result.Wrap[[]string] {
-	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
-	if fRes.HasError() {
-		return result.WrapFailure[[]string](fRes.Fault())
-	}
-
-	f := fRes.Data()
-	defer f.Close()
-
+func scanLines(r io.Reader, path string) LinesResult {
 	var lines []string
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
 
 	if err := scanner.Err(); err != nil {
-		return result.WrapFailure[[]string](appfault.Wrap(errtype.IO, err, "error scanning file lines: "+path))
+		return LinesFailure(errtype.IO, err, path, "error scanning file lines")
 	}
 
-	return result.WrapSuccess(lines)
+	return LinesSuccess(lines)
+}
+
+// ReadLines reads the file and splits it into a string array by lines.
+func ReadLines(path string) LinesResult {
+	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
+	if fRes.HasError() {
+		return result.WrapFailure[[]string](fRes.Fault())
+	}
+
+	defer fRes.Data().Close()
+
+	return scanLines(fRes.Data(), path)
 }
 
 // ReadJson parses a JSON file into the specified type T.
@@ -62,12 +63,10 @@ func ReadJson[T any](path string) result.Wrap[T] {
 		return result.WrapFailure[T](fRes.Fault())
 	}
 
-	f := fRes.Data()
-	defer f.Close()
+	defer fRes.Data().Close()
 
-	err := json.NewDecoder(f).Decode(&val)
-	if err != nil {
-		return result.WrapFailure[T](appfault.Wrap(errtype.Serialization, err, "failed to decode JSON from: "+path))
+	if err := json.NewDecoder(fRes.Data()).Decode(&val); err != nil {
+		return result.WrapFailureFile[T](errtype.Serialization, err, path, "failed to decode JSON")
 	}
 
 	return result.WrapSuccess(val)
@@ -78,31 +77,31 @@ func ReadJSON[T any](path string) result.Wrap[T] {
 	return ReadJson[T](path)
 }
 
+func unmarshalYaml[T any](f io.Reader, path string) result.Wrap[T] {
+	var val T
+	content, err := io.ReadAll(f)
+	if err != nil {
+		return result.WrapFailureFile[T](errtype.IO, err, path, "failed to read file for YAML decoding")
+	}
+
+	content = bytes.TrimPrefix(content, []byte("\xef\xbb\xbf"))
+	if err := yaml.Unmarshal(content, &val); err != nil {
+		return result.WrapFailureFile[T](errtype.Serialization, err, path, "failed to decode YAML")
+	}
+
+	return result.WrapSuccess(val)
+}
+
 // ReadYaml parses a YAML file into the specified type T.
 func ReadYaml[T any](path string) result.Wrap[T] {
-	var val T
 	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
 	if fRes.HasError() {
 		return result.WrapFailure[T](fRes.Fault())
 	}
 
-	f := fRes.Data()
-	defer f.Close()
+	defer fRes.Data().Close()
 
-	content, err := io.ReadAll(f)
-	if err != nil {
-		return result.WrapFailure[T](appfault.Wrap(errtype.IO, err, "failed to read file for YAML decoding: "+path))
-	}
-
-	// Remove BOM if present, which yaml.v3 doesn't handle natively sometimes
-	content = bytes.TrimPrefix(content, []byte("\xef\xbb\xbf"))
-
-	err = yaml.Unmarshal(content, &val)
-	if err != nil {
-		return result.WrapFailure[T](appfault.Wrap(errtype.Serialization, err, "failed to decode YAML from: "+path))
-	}
-
-	return result.WrapSuccess(val)
+	return unmarshalYaml[T](fRes.Data(), path)
 }
 
 // ReadYAML is an alias for ReadYaml.

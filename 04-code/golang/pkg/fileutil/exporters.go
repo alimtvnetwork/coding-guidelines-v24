@@ -2,91 +2,92 @@ package fileutil
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 
-	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
 // ExportText writes a string to a file, overwriting if it exists.
-func ExportText(path string, content string, perm FilePermType) result.Wrap[bool] {
+func ExportText(path string, content string, perm FilePermType) BoolResult {
 	fRes := CreateFile(path, perm)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
 	}
 
-	f := fRes.Data()
-	defer f.Close()
+	defer fRes.Data().Close()
 
-	_, err := f.WriteString(content)
-	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.IO, err, "failed to write text to file: "+path))
+	if _, err := fRes.Data().WriteString(content); err != nil {
+		return BoolFailure(errtype.IO, err, path, "failed to write text to file")
 	}
 
-	return result.WrapSuccess(true)
+	return BoolSuccess(true)
 }
 
 // ExportLines writes an array of strings to a file, separated by newlines.
-func ExportLines(path string, lines []string, perm FilePermType) result.Wrap[bool] {
-	content := strings.Join(lines, "\n") + "\n"
+func ExportLines(path string, lines []string, perm FilePermType) BoolResult {
 	if len(lines) == 0 {
-		content = ""
+		return ExportText(path, "", perm)
 	}
 
-	return ExportText(path, content, perm)
+	return ExportText(path, strings.Join(lines, "\n")+"\n", perm)
 }
 
-// ExportJson writes a data structure to a file as formatted JSON.
-func ExportJson(path string, data any, perm FilePermType) result.Wrap[bool] {
-	fRes := CreateFile(path, perm)
-	if fRes.HasError() {
-		return result.WrapFailure[bool](fRes.Fault())
-	}
-
-	f := fRes.Data()
+func encodeJsonToFile(f *os.File, data any, path string) BoolResult {
 	defer f.Close()
 
 	encoder := json.NewEncoder(f)
 	encoder.SetIndent("", "  ")
-	err := encoder.Encode(data)
-	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.Serialization, err, "failed to encode JSON to: "+path))
+	if err := encoder.Encode(data); err != nil {
+		return BoolFailure(errtype.Serialization, err, path, "failed to encode JSON")
 	}
 
-	return result.WrapSuccess(true)
+	return BoolSuccess(true)
 }
 
-// ExportJSON is an alias for ExportJson.
-func ExportJSON(path string, data any, perm FilePermType) result.Wrap[bool] {
-	return ExportJson(path, data, perm)
-}
-
-// ExportYaml writes a data structure to a file as YAML.
-func ExportYaml(path string, data any, perm FilePermType) result.Wrap[bool] {
+// ExportJson writes a data structure to a file as formatted JSON.
+func ExportJson(path string, data any, perm FilePermType) BoolResult {
 	fRes := CreateFile(path, perm)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
 	}
 
-	f := fRes.Data()
+	return encodeJsonToFile(fRes.Data(), data, path)
+}
+
+// ExportJSON is an alias for ExportJson.
+func ExportJSON(path string, data any, perm FilePermType) BoolResult {
+	return ExportJson(path, data, perm)
+}
+
+func encodeYamlToFile(f *os.File, data any, path string) BoolResult {
 	defer f.Close()
 
 	encoder := yaml.NewEncoder(f)
 	defer encoder.Close()
 
 	encoder.SetIndent(2)
-	err := encoder.Encode(data)
-	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.Serialization, err, "failed to encode YAML to: "+path))
+	if err := encoder.Encode(data); err != nil {
+		return BoolFailure(errtype.Serialization, err, path, "failed to encode YAML")
 	}
 
-	return result.WrapSuccess(true)
+	return BoolSuccess(true)
+}
+
+// ExportYaml writes a data structure to a file as YAML.
+func ExportYaml(path string, data any, perm FilePermType) BoolResult {
+	fRes := CreateFile(path, perm)
+	if fRes.HasError() {
+		return result.WrapFailure[bool](fRes.Fault())
+	}
+
+	return encodeYamlToFile(fRes.Data(), data, path)
 }
 
 // ExportYAML is an alias for ExportYaml.
-func ExportYAML(path string, data any, perm FilePermType) result.Wrap[bool] {
+func ExportYAML(path string, data any, perm FilePermType) BoolResult {
 	return ExportYaml(path, data, perm)
 }

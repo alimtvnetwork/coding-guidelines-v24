@@ -84,3 +84,33 @@ func NewFailureWithCause[T any](errType errtype.Variation, cause error, msg stri
 func FailureFromWrap[T any, U any](failed Result[U]) Result[T] {
 	return FailureResult[T](failed.AppError)
 }
+
+// NewFailureWithFile creates a failed Result with file context and root cause error.
+func NewFailureWithFile[T any](variation errtype.Variation, cause error, path string, msg string) Result[T] {
+	return FailureResult[T](WrapFile(variation, cause, path, msg))
+}
+
+// NewFailureWithPath creates a failed Result with path context and root cause error.
+func NewFailureWithPath[T any](variation errtype.Variation, cause error, path string, msg string) Result[T] {
+	return FailureResult[T](WrapPath(variation, cause, path, msg))
+}
+
+// NewFailureWithVar creates a failed Result with variable context and root cause error.
+func NewFailureWithVar[T any](variation errtype.Variation, cause error, key string, val any, msg string) Result[T] {
+	return FailureResult[T](WrapVar(variation, cause, key, val, msg))
+}
+
+// FailurePath creates a failed Result with path context.
+func FailurePath[T any](variation errtype.Variation, path string, msg string) Result[T] {
+	return FailureResult[T](NewPath(variation, path, msg))
+}
+
+// FailureFile creates a failed Result with file context.
+func FailureFile[T any](variation errtype.Variation, path string, msg string) Result[T] {
+	return FailureResult[T](NewFile(variation, path, msg))
+}
+
+// FailureVar creates a failed Result with variable context.
+func FailureVar[T any](variation errtype.Variation, key string, val any, msg string) Result[T] {
+	return FailureResult[T](NewVar(variation, key, val, msg))
+}

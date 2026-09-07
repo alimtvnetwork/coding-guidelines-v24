@@ -317,3 +317,76 @@ func TestReExportedSimpleVerifiable(t *testing.T) {
 		t.Fatal("expected success")
 	}
 }
+
+func TestReExportedWrapFailurePathAndFile(t *testing.T) {
+	cause := errors.New("cannot read file")
+	wPath := result.WrapFailurePath[string](errtype.IO, cause, "/app/config.json", "io error")
+	if wPath.IsSuccess() || wPath.Fault().Context().GetString("Path") != "/app/config.json" {
+		t.Fatalf("expected failure with Path context")
+	}
+
+	wFile := result.WrapFailureFile[int](errtype.IO, cause, "/app/data.bin", "file error")
+	if wFile.IsSuccess() || wFile.Fault().Context().GetString("Path") != "/app/data.bin" {
+		t.Fatalf("expected failure with File context")
+	}
+}
+
+func TestReExportedWrapFailureVar(t *testing.T) {
+	cause := errors.New("var err")
+	wVar := result.WrapFailureVar[bool](errtype.Validation, cause, "retryLimit", 5, "invalid")
+	if wVar.IsSuccess() || !wVar.Fault().Context().Has("retryLimit") {
+		t.Fatalf("expected failure with Var context")
+	}
+
+	if wVar.Fault().Unwrap() != cause {
+		t.Fatalf("expected root cause preserved")
+	}
+}
+
+func TestReExportedFailurePathAndFile(t *testing.T) {
+	fPath := result.FailurePath[string](errtype.NotFound, "/missing/dir", "dir not found")
+	if fPath.IsSuccess() || fPath.Fault().Context().GetString("Path") != "/missing/dir" {
+		t.Fatalf("expected failure with Path context")
+	}
+
+	fFile := result.FailureFile[int](errtype.IO, "/dev/null", "cannot open")
+	if fFile.IsSuccess() || fFile.Fault().Context().GetString("Path") != "/dev/null" {
+		t.Fatalf("expected failure with File context")
+	}
+}
+
+func TestReExportedFailureVar(t *testing.T) {
+	fVar := result.FailureVar[string](errtype.Generic, "region", "us-west", "bad region")
+	if fVar.IsSuccess() || fVar.Fault().Context().GetString("region") != "us-west" {
+		t.Fatalf("expected failure with Var context")
+	}
+
+	if fVar.Fault().Message() != "bad region" {
+		t.Fatalf("expected message preserved")
+	}
+}
+
+func TestReExportedNewFailureWithPathAndFile(t *testing.T) {
+	cause := errors.New("permission denied")
+	nfPath := result.NewFailureWithPath[string](errtype.Unauthorized, cause, "/root", "no access")
+	if nfPath.IsSuccess() || nfPath.Fault().Context().GetString("Path") != "/root" {
+		t.Fatalf("expected failure with Path context")
+	}
+
+	nfFile := result.NewFailureWithFile[int](errtype.IO, cause, "/etc/secret", "secret err")
+	if nfFile.IsSuccess() || nfFile.Fault().Context().GetString("Path") != "/etc/secret" {
+		t.Fatalf("expected failure with File context")
+	}
+}
+
+func TestReExportedNewFailureWithVar(t *testing.T) {
+	cause := errors.New("timeout")
+	nfVar := result.NewFailureWithVar[string](errtype.Timeout, cause, "ttl", 30, "timeout expired")
+	if nfVar.IsSuccess() || !nfVar.Fault().Context().Has("ttl") {
+		t.Fatalf("expected failure with Var context")
+	}
+
+	if nfVar.Fault().Type() != errtype.Timeout {
+		t.Fatalf("expected Timeout error type")
+	}
+}

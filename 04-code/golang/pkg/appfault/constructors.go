@@ -82,6 +82,81 @@ func WrapType(errType errtype.Variation, cause error, skipFrames ...int) *AppErr
 	return e
 }
 
+// WrapFile wraps an existing cause with file path context.
+func WrapFile(variation errtype.Variation, cause error, path string, msg string, skipFrames ...int) *AppError {
+	if cause == nil || variation == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(variation, msg, calculateFrameSkip(skipFrames...))
+	e.cause = cause
+	e.ctx = NewContextMapWithCapacity(1).Set("Path", path)
+
+	return e
+}
+
+// NewFile creates an AppError with file path context.
+func NewFile(variation errtype.Variation, path string, msg string, skipFrames ...int) *AppError {
+	if variation == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(variation, msg, calculateFrameSkip(skipFrames...))
+	e.ctx = NewContextMapWithCapacity(1).Set("Path", path)
+
+	return e
+}
+
+// WrapPath wraps an existing cause with path context.
+func WrapPath(variation errtype.Variation, cause error, path string, msg string, skipFrames ...int) *AppError {
+	if cause == nil || variation == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(variation, msg, calculateFrameSkip(skipFrames...))
+	e.cause = cause
+	e.ctx = NewContextMapWithCapacity(1).Set("Path", path)
+
+	return e
+}
+
+// NewPath creates an AppError with path context.
+func NewPath(variation errtype.Variation, path string, msg string, skipFrames ...int) *AppError {
+	if variation == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(variation, msg, calculateFrameSkip(skipFrames...))
+	e.ctx = NewContextMapWithCapacity(1).Set("Path", path)
+
+	return e
+}
+
+// WrapVar wraps an existing cause with variable context.
+func WrapVar(variation errtype.Variation, cause error, key string, val any, msg string, skipFrames ...int) *AppError {
+	if cause == nil || variation == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(variation, msg, calculateFrameSkip(skipFrames...))
+	e.cause = cause
+	e.ctx = NewContextMapWithCapacity(1).Set(key, val)
+
+	return e
+}
+
+// NewVar creates an AppError with variable context.
+func NewVar(variation errtype.Variation, key string, val any, msg string, skipFrames ...int) *AppError {
+	if variation == errtype.None {
+		return nil
+	}
+
+	e := createAppErrorInstance(variation, msg, calculateFrameSkip(skipFrames...))
+	e.ctx = NewContextMapWithCapacity(1).Set(key, val)
+
+	return e
+}
+
 // ensureContextMap safely converts a map[string]any to ContextMap.
 func ensureContextMap(ctx map[string]any) ContextMap {
 	if ctx == nil {

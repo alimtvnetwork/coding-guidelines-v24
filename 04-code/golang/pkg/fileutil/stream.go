@@ -8,50 +8,70 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
+func isDelimArrayStart(t json.Token) bool {
+	delim, ok := t.(json.Delim)
+	if !ok {
+		return false
+	}
+
+	return delim == '['
+}
+
+func verifyArrayStart(decoder *json.Decoder, path string) *appfault.AppError {
+	t, err := decoder.Token()
+	if err != nil {
+		return appfault.WrapFile(errtype.Serialization, err, path, "failed to read JSON array start")
+	}
+
+	if !isDelimArrayStart(t) {
+		return appfault.NewFile(errtype.Serialization, path, "StreamJSON requires root element to be a JSON array")
+	}
+
+	return nil
+}
+
+func decodeJsonItems[T any](decoder *json.Decoder, path string, handler func(T) *appfault.AppError) *appfault.AppError {
+	for decoder.More() {
+		var item T
+		if err := decoder.Decode(&item); err != nil {
+			return appfault.WrapFile(errtype.Serialization, err, path, "failed to decode array element")
+		}
+
+		if err := handler(item); err != nil {
+			return err
+		}
+	}
+
+	if _, err := decoder.Token(); err != nil {
+		return appfault.WrapFile(errtype.Serialization, err, path, "failed to read JSON array end")
+	}
+
+	return nil
+}
+
 // StreamJson sequentially decodes a massive JSON array from a file, passing each element to the handler.
 // This prevents excessive RAM usage when dealing with huge datasets.
-func StreamJson[T any](path string, handler func(T) *appfault.AppError) result.Wrap[bool] {
+func StreamJson[T any](path string, handler func(T) *appfault.AppError) BoolResult {
 	fRes := OpenFile(path, FileOpenReadOnly, FilePermStandard)
 	if fRes.HasError() {
 		return result.WrapFailure[bool](fRes.Fault())
 	}
 
-	f := fRes.Data()
-	defer f.Close()
+	defer fRes.Data().Close()
 
-	decoder := json.NewDecoder(f)
-
-	// Read the opening bracket
-	t, err := decoder.Token()
-	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.Serialization, err, "failed to read JSON array start in: "+path))
+	decoder := json.NewDecoder(fRes.Data())
+	if err := verifyArrayStart(decoder, path); err != nil {
+		return result.WrapFailure[bool](err)
 	}
 
-	if delim, ok := t.(json.Delim); !ok || delim != '[' {
-		return result.WrapFailureWithId[bool](errtype.Serialization, "StreamJSON requires the root element to be a JSON array")
+	if err := decodeJsonItems(decoder, path, handler); err != nil {
+		return result.WrapFailure[bool](err)
 	}
 
-	for decoder.More() {
-		var item T
-		if err := decoder.Decode(&item); err != nil {
-			return result.WrapFailure[bool](appfault.Wrap(errtype.Serialization, err, "failed to decode array element in: "+path))
-		}
-
-		if err := handler(item); err != nil {
-			return result.WrapFailure[bool](err)
-		}
-	}
-
-	// Read the closing bracket
-	_, err = decoder.Token()
-	if err != nil {
-		return result.WrapFailure[bool](appfault.Wrap(errtype.Serialization, err, "failed to read JSON array end in: "+path))
-	}
-
-	return result.WrapSuccess(true)
+	return BoolSuccess(true)
 }
 
 // StreamJSON is an alias for StreamJson.
-func StreamJSON[T any](path string, handler func(T) *appfault.AppError) result.Wrap[bool] {
+func StreamJSON[T any](path string, handler func(T) *appfault.AppError) BoolResult {
 	return StreamJson[T](path, handler)
 }

@@ -2,14 +2,24 @@ package fileutil
 
 import (
 	"fmt"
+	"os"
 
 	"coding-guidelines/common/pkg/enum/openfiletype"
+	"coding-guidelines/common/pkg/result"
 )
 
 type (
 	FileOpenModeType = openfiletype.Variant
 
 	FileOpType byte
+
+	FileResult     = result.Wrap[*os.File]
+	BytesResult    = result.Wrap[[]byte]
+	StringResult   = result.Wrap[string]
+	LinesResult    = result.Wrap[[]string]
+	BoolResult     = result.Wrap[bool]
+	FileInfoResult = result.Wrap[os.FileInfo]
+	Int64Result    = result.Wrap[int64]
 )
 
 var fileOpNames = [...]string{
@@ -51,14 +61,8 @@ func (o FileOpType) IsAppend() bool {
 	return o == FileOpCreateAppend
 }
 
-func (o FileOpType) OpenMode() FileOpenModeType {
+func (o FileOpType) createOpenMode() FileOpenModeType {
 	switch o {
-	case FileOpWriteOnly:
-		return FileOpenWriteOnly
-	case FileOpReadWrite:
-		return FileOpenReadWrite
-	case FileOpAppend:
-		return FileOpenAppend
 	case FileOpCreate:
 		return FileOpenCreateNew
 	case FileOpCreateAppend:
@@ -67,5 +71,18 @@ func (o FileOpType) OpenMode() FileOpenModeType {
 		return FileOpenCreateTruncate
 	default:
 		return FileOpenReadOnly
+	}
+}
+
+func (o FileOpType) OpenMode() FileOpenModeType {
+	switch o {
+	case FileOpWriteOnly:
+		return FileOpenWriteOnly
+	case FileOpReadWrite:
+		return FileOpenReadWrite
+	case FileOpAppend:
+		return FileOpenAppend
+	default:
+		return o.createOpenMode()
 	}
 }

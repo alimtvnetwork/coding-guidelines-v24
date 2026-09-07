@@ -70,6 +70,26 @@ func (e *AppError) WithPluginContext(pluginId int64, slug string) *AppError {
 	return e.WithContext("PluginId", pluginId).WithSlug(slug)
 }
 
+// WithVar returns a new immutable AppError with the variable context attached.
+func (e *AppError) WithVar(key string, value any) *AppError {
+	return e.WithContext(key, value)
+}
+
+// WithPath returns a new immutable AppError with the filesystem or resource path context attached.
+func (e *AppError) WithPath(path string) *AppError {
+	return e.WithContext("Path", path)
+}
+
+// WithFilePath returns a new immutable AppError with the file path context attached.
+func (e *AppError) WithFilePath(path string) *AppError {
+	return e.WithPath(path)
+}
+
+// WithField returns a new immutable AppError with a single field context attached.
+func (e *AppError) WithField(key string, value any) *AppError {
+	return e.WithContext(key, value)
+}
+
 // Context returns a copy of the underlying diagnostic metadata ContextMap.
 func (e *AppError) Context() ContextMap {
 	if e == nil || e.ctx == nil {

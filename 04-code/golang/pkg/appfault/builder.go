@@ -73,6 +73,26 @@ func (b *AppErrorBuilder) WithContext(key string, value any) *AppErrorBuilder {
 	return b.SetContext(key, value)
 }
 
+// WithVar sets a variable context key-value pair on the builder.
+func (b *AppErrorBuilder) WithVar(key string, value any) *AppErrorBuilder {
+	return b.SetContext(key, value)
+}
+
+// WithPath sets the Path context on the builder.
+func (b *AppErrorBuilder) WithPath(path string) *AppErrorBuilder {
+	return b.SetContext("Path", path)
+}
+
+// WithFilePath sets the file Path context on the builder.
+func (b *AppErrorBuilder) WithFilePath(path string) *AppErrorBuilder {
+	return b.WithPath(path)
+}
+
+// WithField sets a field context key-value pair on the builder.
+func (b *AppErrorBuilder) WithField(key string, value any) *AppErrorBuilder {
+	return b.SetContext(key, value)
+}
+
 // WithCause is a fluent alias for SetCause.
 func (b *AppErrorBuilder) WithCause(cause error) *AppErrorBuilder {
 	return b.SetCause(cause)

@@ -77,6 +77,36 @@ func FailureWithCause[T any](errType errtype.Variation, cause error, msg string)
 	return appfault.NewFailureWithCause[T](errType, cause, msg)
 }
 
+// WrapFailurePath wraps a failure with path context and root cause error.
+func WrapFailurePath[T any](variation errtype.Variation, cause error, path string, msg string) Wrap[T] {
+	return appfault.NewFailureWithPath[T](variation, cause, path, msg)
+}
+
+// WrapFailureFile wraps a failure with file context and root cause error.
+func WrapFailureFile[T any](variation errtype.Variation, cause error, path string, msg string) Wrap[T] {
+	return appfault.NewFailureWithFile[T](variation, cause, path, msg)
+}
+
+// WrapFailureVar wraps a failure with a single variable context and root cause error.
+func WrapFailureVar[T any](variation errtype.Variation, cause error, key string, val any, msg string) Wrap[T] {
+	return appfault.NewFailureWithVar[T](variation, cause, key, val, msg)
+}
+
+// FailurePath creates a failed Result with path context.
+func FailurePath[T any](variation errtype.Variation, path string, msg string) Wrap[T] {
+	return appfault.FailurePath[T](variation, path, msg)
+}
+
+// FailureFile creates a failed Result with file context.
+func FailureFile[T any](variation errtype.Variation, path string, msg string) Wrap[T] {
+	return appfault.FailureFile[T](variation, path, msg)
+}
+
+// FailureVar creates a failed Result with variable context.
+func FailureVar[T any](variation errtype.Variation, key string, val any, msg string) Wrap[T] {
+	return appfault.FailureVar[T](variation, key, val, msg)
+}
+
 func SuccessResult[T any](val T) Result[T] {
 	return appfault.SuccessResult(val)
 }
@@ -95,6 +125,21 @@ func NewFailure[T any](errType errtype.Variation, cause error) Result[T] {
 
 func NewFailureWithType[T any](errType errtype.Variation, msg string, caller string) Result[T] {
 	return appfault.NewFailureWithType[T](errType, msg, caller)
+}
+
+// NewFailureWithPath creates a failed Result with path context and root cause error.
+func NewFailureWithPath[T any](variation errtype.Variation, cause error, path string, msg string) Result[T] {
+	return appfault.NewFailureWithPath[T](variation, cause, path, msg)
+}
+
+// NewFailureWithFile creates a failed Result with file context and root cause error.
+func NewFailureWithFile[T any](variation errtype.Variation, cause error, path string, msg string) Result[T] {
+	return appfault.NewFailureWithFile[T](variation, cause, path, msg)
+}
+
+// NewFailureWithVar creates a failed Result with variable context and root cause error.
+func NewFailureWithVar[T any](variation errtype.Variation, cause error, key string, val any, msg string) Result[T] {
+	return appfault.NewFailureWithVar[T](variation, cause, key, val, msg)
 }
 
 // CastTo safely casts a generic payload into target type T.
