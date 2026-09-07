@@ -10,6 +10,7 @@ Master directory of architectural and execution plans.
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 ## Completed Plans
 
+- [18-modular-filepath-util-and-cross-platform-temp.md](completed/18-modular-filepath-util-and-cross-platform-temp.md): Modular Filepath Utilities, Cross-Platform User Temp Path, Environment Variable Expansion, and Namespace Grouping.
 - [17-structured-fileutil-context-and-concrete-results.md](completed/17-structured-fileutil-context-and-concrete-results.md): Structured fileutil context injection, path error constructors, and concrete result type aliases.
 - [16-coredata-wrap-and-baseenumer-expansion.md](completed/16-coredata-wrap-and-baseenumer-expansion.md): Modular BaseEnum family (byte/utf8, utf16, utf32/rune, string, number/int) and coredata collection combinators & dynamic struct formatting.
 - [15-simple-verifier-consolidation.md](completed/15-simple-verifier-consolidation.md): Unified SimpleVerifier and SimpleVerifyChecker contracts, AsSimpleVerifier/AsSimpleVerifyChecker methods, and compile-time static type assertions.

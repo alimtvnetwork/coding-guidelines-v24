@@ -35,6 +35,12 @@ The `fileutil` package provides enterprise-grade filesystem utilities, behavior-
    All writer types implement `streamwriter.Writer[[]byte]` directly returning `*appfault.AppError`, and offer `.StdWriter() io.WriteCloser` adapters for seamless integration with `io.Copy`, `fmt.Fprintf`, and standard `log.SetOutput`.
 5. **Strict Permission Types (`FilePermType`):**
    Strongly-typed bitmasks (`FilePermStandard`, `FilePermExecutable`, `FilePermReadOnly`, `FilePermOwnerOnly`, etc.) with octal parsing and inspection helpers (`.IsReadable()`, `.IsWritable()`, `.IsExecutable()`).
+6. **Cross-Platform User Temp & Environment Expansion:**
+   Multi-tier fallback temp directory resolution (`UserTempDir()`, `UserTempPath()`, `CreateTempFile()`, `CreateTempDir()`) and pure Go environment variable and tilde expansion (`Expand()`, `ExpandEnv()`, `ExpandTilde()`) supporting `$VAR`, `${VAR}`, Windows `%VAR%`, and `~`.
+7. **Modular Path Normalization & Inspection:**
+   Standardized path normalization (`Clean()`, `Normalize()`, `NormalizeToSlash()`, `ToSlash()`, `ToBackslash()`, `ToNative()`, `DeduplicateSeparators()`, `HasLongPathPrefix()`, `TrimLongPathPrefix()`, `ToLongPath()`) and inspection helpers (`Ext()`, `ExtNoDot()`, `HasExt()`, `Base()`, `Stem()`, `StemFull()`, `Slug()`, `Dir()`, `Split()`, `Parent()`, `ParentN()`, `IsAbs()`, `IsRel()`).
+8. **Namespace Grouping & Fluent Path Builder:**
+   The `Path` singleton organizes APIs into focused sub-namespaces (`Path.Temp.*`, `Path.Env.*`, `Path.Norm.*`, `Path.Info.*`, and `Path.Join(...)`). The fluent builder `NewPath(raw)` provides a chainable `*PathWrapper` supporting transformations, inspections, and direct file I/O (`Exists()`, `Stat()`, `Read()`, `WriteString()`).
 
 ---
 
@@ -162,6 +168,51 @@ stdWriter := writer.StdWriter()
 stdAppender := writer.StdAppender()
 ```
 
+### 5. `Path` Namespace Singleton
+Organizes modular filepath functions into intuitive sub-namespaces:
+```go
+// Temp utilities
+tempDir := fileutil.Path.Temp.UserTempDir()
+tempFile := fileutil.Path.Temp.CreateTempFile("", "prefix-*.log", fileutil.FilePermStandard)
+
+// Environment expansion
+expanded := fileutil.Path.Env.Expand("~/configs/%APP_ENV%.yaml")
+
+// Path normalization
+norm := fileutil.Path.Norm.NormalizeToSlash(`C:\Users\test\\data\..\state.json`)
+
+// Path inspection
+ext := fileutil.Path.Info.Ext("document.pdf")
+stem := fileutil.Path.Info.Stem("archive.tar.gz")      // "archive.tar"
+stemFull := fileutil.Path.Info.StemFull("archive.tar.gz") // "archive"
+slug := fileutil.Path.Info.Slug("My Report (v2)!.md")     // "my-report-v2"
+parent := fileutil.Path.Info.ParentN("a/b/c/d", 2)       // "a/b"
+
+// Quick Join
+joined := fileutil.Path.Join("var", "log", "app.log")
+```
+
+### 6. Fluent `NewPath` Builder (`PathWrapper`)
+Enables chainable transformations, inspections, and direct file operations:
+```go
+// Chain transformations
+path := fileutil.NewPath(`~/%PROJECT%/data\..\output.json`).
+    Expand().
+    Clean().
+    ToSlash()
+
+// Inspect properties
+fmt.Println("Base:", path.Base())
+fmt.Println("Stem:", path.Stem())
+fmt.Println("IsAbs:", path.IsAbs())
+
+// Direct file I/O operations
+if !path.Exists().Data() {
+    _ = path.WriteString("{\"status\":\"ok\"}\n", fileutil.FilePermStandard)
+}
+content := path.ReadString().Data()
+```
+
 ---
 
 ## Usage Example
@@ -172,6 +223,7 @@ package main
 import (
     "context"
     "fmt"
+    "log"
     "path/filepath"
 
     "coding-guidelines/common/pkg/fileutil"
@@ -186,18 +238,21 @@ func main() {
 
     // Write header with auto-lock
     if err := writer.WriteString(ctx, "=== SERVICE AUDIT LOG ===\n"); err != nil {
-        panic(err)
+        log.Printf("write failed: %v\n", err)
+        return
     }
 
     // Append event with auto-lock
     if err := writer.AppendString(ctx, "INFO: Worker pool initialized\n"); err != nil {
-        panic(err)
+        log.Printf("append failed: %v\n", err)
+        return
     }
 
     // Enable auto-close so file handle closes immediately after writing
     writer.SetAutoClose(true)
     if err := writer.AppendString(ctx, "INFO: Checkpoint flushed to disk\n"); err != nil {
-        panic(err)
+        log.Printf("append failed: %v\n", err)
+        return
     }
 
     // Perform atomic multi-step batch under a single lock
@@ -207,7 +262,8 @@ func main() {
         return nil
     })
     if err != nil {
-        panic(err)
+        log.Printf("batch failed: %v\n", err)
+        return
     }
 
     fmt.Printf("Total operations: %d, Appended bytes: %d\n",
