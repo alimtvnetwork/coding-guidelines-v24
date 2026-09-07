@@ -9,6 +9,12 @@ type (
 	Wrap[T any] = appfault.Result[T]
 
 	Result[T any] = Wrap[T]
+
+	// SimpleVerifier combines all core state and status checkers into a single verification contract.
+	SimpleVerifier = appfault.SimpleVerifier
+
+	// SimpleVerifyChecker is an alias for SimpleVerifier adhering to the Checker convention.
+	SimpleVerifyChecker = appfault.SimpleVerifyChecker
 )
 
 func WrapSuccess[T any](data T) Wrap[T] {

@@ -7,41 +7,15 @@ import (
 )
 
 var (
-	_ IsSuccessChecker = Result[string]{}
-	_ IsFailureChecker = Result[string]{}
-	_ IsInvalidChecker = Result[string]{}
-	_ IsNullChecker    = Result[string]{}
-	_ IsEmptyChecker   = Result[string]{}
-	_ IsDefinedChecker = Result[string]{}
-	_ DefinableChecker = Result[string]{}
-	_ StatusChecker    = Result[string]{}
+	_ SimpleVerifier = Result[string]{}
+	_ SimpleVerifier = (*AppError)(nil)
+	_ SimpleVerifier = ResultSlice[string]{}
+	_ SimpleVerifier = ResultMap[string, int]{}
 
-	_ IsSuccessChecker = (*AppError)(nil)
-	_ IsFailureChecker = (*AppError)(nil)
-	_ IsInvalidChecker = (*AppError)(nil)
-	_ IsNullChecker    = (*AppError)(nil)
-	_ IsEmptyChecker   = (*AppError)(nil)
-	_ IsDefinedChecker = (*AppError)(nil)
-	_ DefinableChecker = (*AppError)(nil)
-	_ StatusChecker    = (*AppError)(nil)
-
-	_ IsSuccessChecker = ResultSlice[string]{}
-	_ IsFailureChecker = ResultSlice[string]{}
-	_ IsInvalidChecker = ResultSlice[string]{}
-	_ IsNullChecker    = ResultSlice[string]{}
-	_ IsEmptyChecker   = ResultSlice[string]{}
-	_ IsDefinedChecker = ResultSlice[string]{}
-	_ DefinableChecker = ResultSlice[string]{}
-	_ StatusChecker    = ResultSlice[string]{}
-
-	_ IsSuccessChecker = ResultMap[string, int]{}
-	_ IsFailureChecker = ResultMap[string, int]{}
-	_ IsInvalidChecker = ResultMap[string, int]{}
-	_ IsNullChecker    = ResultMap[string, int]{}
-	_ IsEmptyChecker   = ResultMap[string, int]{}
-	_ IsDefinedChecker = ResultMap[string, int]{}
-	_ DefinableChecker = ResultMap[string, int]{}
-	_ StatusChecker    = ResultMap[string, int]{}
+	_ SimpleVerifyChecker = Result[string]{}
+	_ SimpleVerifyChecker = (*AppError)(nil)
+	_ SimpleVerifyChecker = ResultSlice[string]{}
+	_ SimpleVerifyChecker = ResultMap[string, int]{}
 )
 
 func TestResultSuccessCheckers(t *testing.T) {
@@ -117,5 +91,49 @@ func TestNilAppErrorCheckers(t *testing.T) {
 
 	if !nilErr.IsNull() {
 		t.Fatal("expected null")
+	}
+}
+
+func TestAsSimpleVerifier_Result(t *testing.T) {
+	var v SimpleVerifier = Result[string]{Value: "data"}.AsSimpleVerifier()
+	if !v.IsSuccess() {
+		t.Fatal("expected Result AsSimpleVerifier to be success")
+	}
+
+	if !v.IsDefined() {
+		t.Fatal("expected Result AsSimpleVerifier to be defined")
+	}
+}
+
+func TestAsSimpleVerifier_Error(t *testing.T) {
+	var v SimpleVerifier = New(errtype.Validation, "err").AsSimpleVerifier()
+	if !v.IsFailure() {
+		t.Fatal("expected AppError AsSimpleVerifier to be failure")
+	}
+
+	if !v.IsInvalid() {
+		t.Fatal("expected AppError AsSimpleVerifier to be invalid")
+	}
+}
+
+func TestAsSimpleVerifier_Slice(t *testing.T) {
+	var v SimpleVerifier = OkSlice([]string{"a"}).AsSimpleVerifier()
+	if !v.IsSuccess() {
+		t.Fatal("expected ResultSlice AsSimpleVerifier to be success")
+	}
+
+	if v.IsEmpty() {
+		t.Fatal("expected ResultSlice AsSimpleVerifier not to be empty")
+	}
+}
+
+func TestAsSimpleVerifier_Map(t *testing.T) {
+	var v SimpleVerifier = OkMap(map[string]int{"k": 1}).AsSimpleVerifier()
+	if !v.IsSuccess() {
+		t.Fatal("expected ResultMap AsSimpleVerifier to be success")
+	}
+
+	if v.IsEmpty() {
+		t.Fatal("expected ResultMap AsSimpleVerifier not to be empty")
 	}
 }

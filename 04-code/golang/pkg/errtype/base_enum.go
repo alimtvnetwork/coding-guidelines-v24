@@ -5,25 +5,22 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"coding-guidelines/common/pkg/baseenumer"
 )
 
 type (
-	BaseEnumer interface {
-		Name() string
-		String() string
-		ValueString() string
-		IsValid() bool
-		IsEnum() bool
-	}
+	// BaseEnumer defines the interface for all type-safe enumerations (forwarded from baseenumer).
+	BaseEnumer = baseenumer.BaseEnumer
 
-	NumberEnumer interface {
-		BaseEnumer
-		Int() int
-		Code() uint16
-	}
+	// NumberEnumer defines the interface for numeric-backed enumerations (forwarded from baseenumer).
+	NumberEnumer = baseenumer.NumberEnumer
 
-	BaseEnum   = BaseEnumer
-	NumberEnum = NumberEnumer
+	// BaseEnum is an alias for BaseEnumer.
+	BaseEnum = baseenumer.BaseEnum
+
+	// NumberEnum is an alias for NumberEnumer.
+	NumberEnum = baseenumer.NumberEnum
 )
 
 // ValueString returns the string representation of the variation code.
@@ -299,18 +296,9 @@ func ParseLogLevel(val string) LogLevelType {
 	return 0
 }
 
-// ToEnum finds an enum by name in any slice of BaseEnumer.
+// ToEnum finds an enum by name in any slice of BaseEnumer (delegates to baseenumer.ToEnum).
 func ToEnum[T BaseEnumer](val string, all []T) (T, bool) {
-	cleaned := strings.TrimSpace(val)
-	for _, item := range all {
-		if strings.EqualFold(item.Name(), cleaned) || strings.EqualFold(item.ValueString(), cleaned) {
-			return item, true
-		}
-	}
-
-	var zero T
-
-	return zero, false
+	return baseenumer.ToEnum(val, all)
 }
 
 var _ BaseEnumer = Variation(0)

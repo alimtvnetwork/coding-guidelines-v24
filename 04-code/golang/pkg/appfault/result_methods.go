@@ -32,6 +32,11 @@ func (r Result[T]) IsDefined() bool {
 	return r.IsSuccess()
 }
 
+// AsSimpleVerifier returns the Result conforming to SimpleVerifier.
+func (r Result[T]) AsSimpleVerifier() SimpleVerifier {
+	return r
+}
+
 // HasError returns true if an error is present.
 func (r Result[T]) HasError() bool {
 	return r.IsFailed()

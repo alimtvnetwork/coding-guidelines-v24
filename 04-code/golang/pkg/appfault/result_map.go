@@ -59,6 +59,11 @@ func (rm ResultMap[K, V]) IsDefined() bool {
 	return rm.IsSuccess()
 }
 
+// AsSimpleVerifier returns the ResultMap conforming to SimpleVerifier.
+func (rm ResultMap[K, V]) AsSimpleVerifier() SimpleVerifier {
+	return rm
+}
+
 // HasError returns true if an error is present.
 func (rm ResultMap[K, V]) HasError() bool {
 	return rm.IsFailed()

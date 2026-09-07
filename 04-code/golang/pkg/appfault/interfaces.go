@@ -45,6 +45,21 @@ type (
 		IsFailureChecker
 	}
 
+	// SimpleVerifier combines all core state and status checkers into a single verification contract.
+	SimpleVerifier interface {
+		IsSuccessChecker
+		IsFailureChecker
+		IsInvalidChecker
+		IsNullChecker
+		IsEmptyChecker
+		IsDefinedChecker
+		DefinableChecker
+		StatusChecker
+	}
+
+	// SimpleVerifyChecker is an alias for SimpleVerifier adhering to the Checker suffix convention.
+	SimpleVerifyChecker = SimpleVerifier
+
 	// FaultWriter writes an AppError to an io.Writer output.
 	FaultWriter interface {
 		WriteFault(w io.Writer, e *AppError) *AppError

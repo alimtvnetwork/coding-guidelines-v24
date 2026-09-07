@@ -54,6 +54,11 @@ func (e *AppError) IsFailure() bool {
 	return e.IsFailed()
 }
 
+// AsSimpleVerifier returns the AppError conforming to SimpleVerifier.
+func (e *AppError) AsSimpleVerifier() SimpleVerifier {
+	return e
+}
+
 // Is checks if the error type matches the target Variation.
 func (e *AppError) Is(target errtype.Variation) bool {
 	if e == nil {
