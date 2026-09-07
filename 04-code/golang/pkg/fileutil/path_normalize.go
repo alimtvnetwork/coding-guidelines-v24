@@ -112,18 +112,22 @@ func DeduplicateSeparators(path string) string {
 	return sb.String()
 }
 
+func cleanNative(p string) string {
+	if HasLongPathPrefix(p) {
+		trimmed := TrimLongPathPrefix(p)
+
+		return `\\?\` + filepath.Clean(trimmed)
+	}
+
+	return filepath.Clean(p)
+}
+
 func Clean(path string) string {
 	if len(path) == 0 {
 		return "."
 	}
 
-	if HasLongPathPrefix(path) {
-		trimmed := TrimLongPathPrefix(path)
-
-		return `\\?\` + filepath.Clean(trimmed)
-	}
-
-	return filepath.Clean(path)
+	return cleanNative(ToNative(path))
 }
 
 func Normalize(path string) StringResult {
