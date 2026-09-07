@@ -18,28 +18,28 @@ import (
 
 type (
 	FileWriterOptions struct {
-		Path        string
-		Mode        FileWriteModeType
-		Perm        FilePermType
-		SyncOnWrite bool
+		Path          string
+		Mode          FileWriteModeType
+		Perm          FilePermType
+		IsSyncOnWrite bool
 	}
 
 	FileWriter struct {
-		lock        sync.RWMutex
-		path        string
-		mode        FileWriteModeType
-		perm        FilePermType
-		syncOnWrite bool
-		file        *os.File
+		lock          sync.RWMutex
+		path          string
+		mode          FileWriteModeType
+		perm          FilePermType
+		isSyncOnWrite bool
+		file          *os.File
 	}
 )
 
 func NewFileWriterEngine(path string) *FileWriter {
 	return &FileWriter{
-		path:        path,
-		mode:        filewritemodetype.Direct,
-		perm:        filepermtype.Standard,
-		syncOnWrite: false,
+		path:          path,
+		mode:          filewritemodetype.Direct,
+		perm:          filepermtype.Standard,
+		isSyncOnWrite: false,
 	}
 }
 
@@ -55,10 +55,10 @@ func NewFileWriterWithOptions(opts FileWriterOptions) *FileWriter {
 	}
 
 	return &FileWriter{
-		path:        opts.Path,
-		mode:        mode,
-		perm:        perm,
-		syncOnWrite: opts.SyncOnWrite,
+		path:          opts.Path,
+		mode:          mode,
+		perm:          perm,
+		isSyncOnWrite: opts.IsSyncOnWrite,
 	}
 }
 
@@ -99,10 +99,17 @@ func (w *FileWriter) SetPerm(perm FilePermType) *FileWriter {
 	return w
 }
 
-func (w *FileWriter) SetSyncOnWrite(isSync bool) *FileWriter {
+func (w *FileWriter) IsSyncOnWrite() bool {
+	w.lock.RLock()
+	defer w.lock.RUnlock()
+
+	return w.isSyncOnWrite
+}
+
+func (w *FileWriter) SetSyncOnWrite(isSyncOnWrite bool) *FileWriter {
 	w.lock.Lock()
 	defer w.lock.Unlock()
-	w.syncOnWrite = isSync
+	w.isSyncOnWrite = isSyncOnWrite
 
 	return w
 }
@@ -149,7 +156,7 @@ func (w *FileWriter) writeDirect(payload []byte, flags int) *appfault.AppError {
 		return appfault.Wrap(errtype.IO, err, "failed to write payload to file")
 	}
 
-	if w.syncOnWrite {
+	if w.isSyncOnWrite {
 		if err := f.Sync(); err != nil {
 			return appfault.Wrap(errtype.IO, err, "failed to sync file to storage")
 		}
@@ -236,7 +243,7 @@ type FileAppender struct {
 	lock          sync.Mutex
 	path          string
 	perm          FilePermType
-	autoSync      bool
+	isAutoSync    bool
 	file          *os.File
 	bytesAppended atomic.Int64
 }
@@ -247,9 +254,9 @@ func NewFileAppender(path string, perm FilePermType) *FileAppender {
 	}
 
 	return &FileAppender{
-		path:     path,
-		perm:     perm,
-		autoSync: false,
+		path:       path,
+		perm:       perm,
+		isAutoSync: false,
 	}
 }
 
@@ -257,10 +264,17 @@ func (a *FileAppender) Path() string {
 	return a.path
 }
 
-func (a *FileAppender) SetAutoSync(isAuto bool) *FileAppender {
+func (a *FileAppender) IsAutoSync() bool {
 	a.lock.Lock()
 	defer a.lock.Unlock()
-	a.autoSync = isAuto
+
+	return a.isAutoSync
+}
+
+func (a *FileAppender) SetAutoSync(isAutoSync bool) *FileAppender {
+	a.lock.Lock()
+	defer a.lock.Unlock()
+	a.isAutoSync = isAutoSync
 
 	return a
 }
@@ -300,7 +314,7 @@ func (a *FileAppender) Append(ctx context.Context, data []byte) *appfault.AppErr
 
 	a.bytesAppended.Add(int64(n))
 
-	if a.autoSync {
+	if a.isAutoSync {
 		if err := a.file.Sync(); err != nil {
 			return appfault.Wrap(errtype.IO, err, "failed to sync appender file")
 		}

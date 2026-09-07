@@ -70,7 +70,7 @@ func IsNotBetween[T cmp.Ordered](val, min, max T) bool {
 
 // ParseLookup looks up a string in a variant map after trimming whitespace and lowercasing.
 // It returns the resolved variant, trimmed string, and whether the lookup succeeded.
-func ParseLookup[V any](s string, variantMap map[string]V) (val V, trimmed string, ok bool) {
+func ParseLookup[V any](s string, variantMap map[string]V) (val V, trimmed string, isOk bool) {
 	trimmed = strings.TrimSpace(s)
 	if len(trimmed) == 0 {
 		var zero V

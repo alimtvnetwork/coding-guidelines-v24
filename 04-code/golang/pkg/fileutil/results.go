@@ -24,8 +24,8 @@ func FileFailureFault(fault *appfault.AppError) FileResult {
 	return result.WrapFailure[*os.File](fault)
 }
 
-func BoolSuccess(val bool) BoolResult {
-	return result.WrapSuccess(val)
+func BoolSuccess(isSuccess bool) BoolResult {
+	return result.WrapSuccess(isSuccess)
 }
 
 func BoolFailure(variation errtype.Variation, err error, path string, msg string) BoolResult {

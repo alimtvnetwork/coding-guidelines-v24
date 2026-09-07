@@ -10,7 +10,7 @@ type Config struct {
 	ZapLogger    ZapLoggerInterface
 	Sinks        []LogSink
 	IsStackTrace bool
-	UseJSON      bool
+	IsUseJSON    bool
 }
 
 // createSinkFromDriver instantiates the requested driver sink.
@@ -23,9 +23,9 @@ func createSinkFromDriver(cfg Config) (LogSink, error) {
 	case DriverComposite:
 		return NewCompositeSink(cfg.Sinks...), nil
 	case DriverConsole:
-		return NewConsoleSink(os.Stdout, cfg.UseJSON), nil
+		return NewConsoleSink(os.Stdout, cfg.IsUseJSON), nil
 	default:
-		return NewConsoleSink(os.Stdout, cfg.UseJSON), nil
+		return NewConsoleSink(os.Stdout, cfg.IsUseJSON), nil
 	}
 }
 
@@ -46,9 +46,9 @@ func New(cfg Config) (Logger, error) {
 // Default returns a standard Console logger at Info level.
 func Default() Logger {
 	l, _ := New(Config{
-		MinLevel: LevelInfo,
-		Driver:   DriverConsole,
-		UseJSON:  false,
+		MinLevel:  LevelInfo,
+		Driver:    DriverConsole,
+		IsUseJSON: false,
 	})
 
 	return l

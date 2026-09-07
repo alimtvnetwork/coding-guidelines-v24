@@ -14,11 +14,11 @@ import (
 
 // MockTargetWriter records written items and flushes for test verification.
 type MockTargetWriter[T any] struct {
-	lock     sync.Mutex
-	items    []T
-	synced   int
-	closed   bool
-	failNext bool
+	lock       sync.Mutex
+	items      []T
+	synced     int
+	isClosed   bool
+	isFailNext bool
 }
 
 func (m *MockTargetWriter[T]) Name() string {
@@ -41,7 +41,7 @@ func (m *MockTargetWriter[T]) Write(ctx context.Context, payload T) *appfault.Ap
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	if m.failNext {
+	if m.isFailNext {
 		return appfault.New(errtype.Internal, "simulated write failure")
 	}
 
@@ -63,7 +63,7 @@ func (m *MockTargetWriter[T]) Close() *appfault.AppError {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	m.closed = true
+	m.isClosed = true
 
 	return nil
 }
@@ -115,10 +115,10 @@ func TestAsyncWriter_BasicFlow(t *testing.T) {
 	}
 
 	mock.lock.Lock()
-	closed := mock.closed
+	isClosed := mock.isClosed
 	mock.lock.Unlock()
 
-	if !closed {
+	if !isClosed {
 		t.Errorf("expected target to be closed")
 	}
 }
@@ -129,7 +129,7 @@ func TestAsyncWriter_DropOnFull(t *testing.T) {
 		Name:          "drop-writer",
 		BufferSize:    2,
 		FlushInterval: 500 * time.Millisecond,
-		DropOnFull:    true,
+		IsDropOnFull:  true,
 	}
 
 	aw := streamwriter.NewAsyncWriter[int](mock, opts)
@@ -153,7 +153,7 @@ func TestAsyncWriter_OnErrorCallback(t *testing.T) {
 	var errorCaptured atomic.Bool
 
 	mock := &MockTargetWriter[string]{
-		failNext: true,
+		isFailNext: true,
 	}
 
 	opts := streamwriter.AsyncWriterOptions{

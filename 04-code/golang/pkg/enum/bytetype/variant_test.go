@@ -198,9 +198,9 @@ func TestAllAndValues(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	tests := []struct {
-		input    string
-		expected bytetype.Variant
-		success  bool
+		input     string
+		expected  bytetype.Variant
+		isSuccess bool
 	}{
 		{"Zero", bytetype.Zero, true},
 		{"zero", bytetype.Zero, true},
@@ -218,7 +218,7 @@ func TestParse(t *testing.T) {
 
 	for _, tc := range tests {
 		res := bytetype.Parse(tc.input)
-		if tc.success {
+		if tc.isSuccess {
 			if !res.IsSuccess() || res.Data() != tc.expected {
 				t.Errorf("parse %q failed: %v", tc.input, res.Fault())
 			}

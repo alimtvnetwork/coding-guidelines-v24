@@ -11,8 +11,8 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-func newTestConsoleLogger(buf *bytes.Buffer, useJSON bool) applogger.Logger {
-	sink := applogger.NewConsoleSink(buf, useJSON)
+func newTestConsoleLogger(buf *bytes.Buffer, isUseJSON bool) applogger.Logger {
+	sink := applogger.NewConsoleSink(buf, isUseJSON)
 	cfg := applogger.Config{
 		MinLevel: applogger.LevelDebug,
 		Driver:   applogger.DriverComposite,

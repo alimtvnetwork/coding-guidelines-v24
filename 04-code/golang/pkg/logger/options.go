@@ -33,15 +33,15 @@ func (o LoggerOptions) WithLevel(level LogLevel) LoggerOptions {
 }
 
 // WithJson enables or disables JSON output formatting.
-func (o LoggerOptions) WithJson(enabled bool) LoggerOptions {
-	o.IsJson = enabled
+func (o LoggerOptions) WithJson(isEnabled bool) LoggerOptions {
+	o.IsJson = isEnabled
 
 	return o
 }
 
 // WithStackTrace enables or disables stack trace inclusion on errors.
-func (o LoggerOptions) WithStackTrace(enabled bool) LoggerOptions {
-	o.IsStackTrace = enabled
+func (o LoggerOptions) WithStackTrace(isEnabled bool) LoggerOptions {
+	o.IsStackTrace = isEnabled
 
 	return o
 }

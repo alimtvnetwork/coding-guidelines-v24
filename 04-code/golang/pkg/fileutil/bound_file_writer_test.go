@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/enum/filepermtype"
 	"coding-guidelines/common/pkg/enum/filewritemodetype"
 	"coding-guidelines/common/pkg/fileutil"
 )
@@ -225,5 +226,66 @@ func TestBoundFileWriter_StdWriterAndAppender(t *testing.T) {
 	expected := "Standard Writer\nStandard Appender\n"
 	if readErr != nil || string(content) != expected {
 		t.Fatalf("unexpected adapter content: %s", string(content))
+	}
+}
+
+func TestBoundFileWriter_ParamConstructors_ModePerm(t *testing.T) {
+	wMode := fileutil.NewBoundFileWriterWithMode("test.txt", filewritemodetype.Atomic)
+	if wMode.Mode() != filewritemodetype.Atomic {
+		t.Fatalf("expected atomic mode, got %v", wMode.Mode())
+	}
+
+	wPerm := fileutil.NewBoundFileWriterWithPerm("test.txt", filepermtype.Private)
+	if wPerm.Perm() != filepermtype.Private {
+		t.Fatalf("expected private perm, got %v", wPerm.Perm())
+	}
+}
+
+func TestBoundFileWriter_ParamConstructors_Flags(t *testing.T) {
+	wSync := fileutil.NewBoundFileWriterWithSync("test.txt", true)
+	if !wSync.IsSyncOnWrite() {
+		t.Fatal("expected syncOnWrite true")
+	}
+
+	wClose := fileutil.NewBoundFileWriterWithAutoClose("test.txt", true)
+	if !wClose.IsAutoClose() {
+		t.Fatal("expected autoClose true")
+	}
+}
+
+func TestBoundFileWriter_ConfigConstructor(t *testing.T) {
+	w := fileutil.NewBoundFileWriterConfig(
+		"config.txt",
+		filewritemodetype.Truncate,
+		filepermtype.Executable,
+		true,
+		true,
+	)
+	assertConfigWriter(t, w)
+}
+
+func assertConfigWriter(t *testing.T, w *fileutil.BoundFileWriter) {
+	if w.Mode() != filewritemodetype.Truncate || w.Perm() != filepermtype.Executable {
+		t.Fatal("unexpected mode or perm")
+	}
+
+	if !w.IsSyncOnWrite() || !w.IsAutoClose() {
+		t.Fatal("expected sync and autoClose true")
+	}
+}
+
+func TestBoundFileWriter_FluentActionMutators(t *testing.T) {
+	w := fileutil.NewBoundFileWriter("fluent.txt").
+		WithMode(filewritemodetype.Atomic).
+		WithPerm(filepermtype.Standard).
+		EnableSyncOnWrite().
+		EnableAutoClose()
+	if !w.IsSyncOnWrite() || !w.IsAutoClose() {
+		t.Fatal("expected enabled sync and autoClose")
+	}
+
+	w.DisableSyncOnWrite().DisableAutoClose()
+	if w.IsSyncOnWrite() || w.IsAutoClose() {
+		t.Fatal("expected disabled sync and autoClose")
 	}
 }

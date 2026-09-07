@@ -61,14 +61,14 @@ func TestReflectSetTo_PrimitiveString(t *testing.T) {
 }
 
 func TestReflectSetTo_PrimitiveBool(t *testing.T) {
-	var dest bool
-	err := ReflectSetTo(true, &dest)
+	var isDest bool
+	err := ReflectSetTo(true, &isDest)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if !dest {
-		t.Fatalf("expected true, got %v", dest)
+	if !isDest {
+		t.Fatalf("expected true, got %v", isDest)
 	}
 }
 

@@ -33,7 +33,7 @@ type (
 	Bytes[T any] struct {
 		data       []byte
 		payload    T
-		status     bool
+		isStatus   bool
 		statusCode int
 		appError   *appfault.AppError
 	}
@@ -44,17 +44,17 @@ func NewBytes[T any](data []byte, payload T) Bytes[T] {
 	return Bytes[T]{
 		data:       data,
 		payload:    payload,
-		status:     true,
+		isStatus:   true,
 		statusCode: 200,
 	}
 }
 
 // NewBytesWithStatus creates a Bytes envelope with custom status flag and code.
-func NewBytesWithStatus[T any](data []byte, payload T, status bool, code int) Bytes[T] {
+func NewBytesWithStatus[T any](data []byte, payload T, isStatus bool, code int) Bytes[T] {
 	return Bytes[T]{
 		data:       data,
 		payload:    payload,
-		status:     status,
+		isStatus:   isStatus,
 		statusCode: code,
 	}
 }
@@ -69,7 +69,7 @@ func NewBytesError[T any](appErr *appfault.AppError) Bytes[T] {
 	}
 
 	return Bytes[T]{
-		status:     false,
+		isStatus:   false,
 		statusCode: code,
 		appError:   appErr,
 	}
@@ -86,7 +86,7 @@ func NewBytesErrorWithPayload[T any](appErr *appfault.AppError, payload T) Bytes
 
 	return Bytes[T]{
 		payload:    payload,
-		status:     false,
+		isStatus:   false,
 		statusCode: code,
 		appError:   appErr,
 	}
@@ -152,7 +152,7 @@ func (b Bytes[T]) Clone() Bytes[T] {
 	return Bytes[T]{
 		data:       copiedData,
 		payload:    b.payload,
-		status:     b.status,
+		isStatus:   b.isStatus,
 		statusCode: b.statusCode,
 		appError:   b.appError.Clone(),
 	}
@@ -183,7 +183,7 @@ func (b Bytes[T]) Concat(other Bytes[T]) Bytes[T] {
 	return Bytes[T]{
 		data:       mergedData,
 		payload:    other.payload,
-		status:     b.status && other.status,
+		isStatus:   b.isStatus && other.isStatus,
 		statusCode: statusCode,
 		appError:   mergedErr,
 	}
@@ -230,12 +230,12 @@ func (b Bytes[T]) IsSuccess() bool {
 		return false
 	}
 
-	return b.status
+	return b.isStatus
 }
 
 // Status returns the boolean status flag.
 func (b Bytes[T]) Status() bool {
-	return b.status
+	return b.isStatus
 }
 
 // StatusCode returns the numeric status code.

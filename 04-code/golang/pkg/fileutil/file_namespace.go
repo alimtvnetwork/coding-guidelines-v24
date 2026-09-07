@@ -120,9 +120,9 @@ func (fileBoundWriterCreator) Handler(path string) *BoundFileWriter {
 
 func (fileBoundWriterCreator) AutoClose(path string, perm FilePermType) *BoundFileWriter {
 	return NewBoundFileWriterWithOptions(BoundFileWriterOptions{
-		Path:      path,
-		Perm:      perm,
-		AutoClose: true,
+		Path:        path,
+		Perm:        perm,
+		IsAutoClose: true,
 	})
 }
 

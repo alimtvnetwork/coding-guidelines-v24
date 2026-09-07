@@ -8,7 +8,10 @@ Master directory of architectural and execution plans.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
+
 ## Completed Plans
+
+- [30-boolean-prefix-and-bound-writer-params.md](completed/30-boolean-prefix-and-bound-writer-params.md): Boolean Naming Standardization (`is`/`has` Prefixes) & BoundFileWriter Parameter Actions.
 
 - [29-rename-mutex-to-lock.md](completed/29-rename-mutex-to-lock.md): Rename `mu` and `mutex` to `lock` Repo-Wide.
 

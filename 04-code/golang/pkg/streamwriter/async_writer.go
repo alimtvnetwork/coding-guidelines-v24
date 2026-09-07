@@ -15,7 +15,7 @@ type (
 		Name          string
 		BufferSize    int           // Channel buffer size (default: 256)
 		FlushInterval time.Duration // Maximum interval between flushes (default: 50ms)
-		DropOnFull    bool          // If true, drops items when buffer is full; if false, blocks until space is available
+		IsDropOnFull  bool          // If true, drops items when buffer is full; if false, blocks until space is available
 		OnError       ErrorHandlerFunc
 	}
 
@@ -101,7 +101,7 @@ func (aw *AsyncWriter[T]) Write(ctx context.Context, payload T) *appfault.AppErr
 		return appfault.New(errtype.Precondition, "async writer is closed")
 	}
 
-	if aw.opts.DropOnFull {
+	if aw.opts.IsDropOnFull {
 		select {
 		case aw.queue <- payload:
 			return nil

@@ -18,11 +18,11 @@ import (
 
 type (
 	BoundFileWriterOptions struct {
-		Path        string
-		Mode        FileWriteModeType
-		Perm        FilePermType
-		SyncOnWrite bool
-		AutoClose   bool
+		Path          string
+		Mode          FileWriteModeType
+		Perm          FilePermType
+		IsSyncOnWrite bool
+		IsAutoClose   bool
 	}
 
 	BoundFileWriter struct {
@@ -30,8 +30,8 @@ type (
 		path          string
 		mode          FileWriteModeType
 		perm          FilePermType
-		syncOnWrite   bool
-		autoClose     bool
+		isSyncOnWrite bool
+		isAutoClose   bool
 		file          *os.File
 		bytesWritten  atomic.Int64
 		bytesAppended atomic.Int64
@@ -41,11 +41,55 @@ type (
 
 func NewBoundFileWriter(path string) *BoundFileWriter {
 	return &BoundFileWriter{
-		path:        path,
-		mode:        filewritemodetype.Direct,
-		perm:        filepermtype.Standard,
-		syncOnWrite: false,
-		autoClose:   false,
+		path:          path,
+		mode:          filewritemodetype.Direct,
+		perm:          filepermtype.Standard,
+		isSyncOnWrite: false,
+		isAutoClose:   false,
+	}
+}
+
+func NewBoundFileWriterWithMode(path string, mode FileWriteModeType) *BoundFileWriter {
+	w := NewBoundFileWriter(path)
+	w.mode = mode
+
+	return w
+}
+
+func NewBoundFileWriterWithPerm(path string, perm FilePermType) *BoundFileWriter {
+	w := NewBoundFileWriter(path)
+	w.perm = perm
+
+	return w
+}
+
+func NewBoundFileWriterWithSync(path string, isSyncOnWrite bool) *BoundFileWriter {
+	w := NewBoundFileWriter(path)
+	w.isSyncOnWrite = isSyncOnWrite
+
+	return w
+}
+
+func NewBoundFileWriterWithAutoClose(path string, isAutoClose bool) *BoundFileWriter {
+	w := NewBoundFileWriter(path)
+	w.isAutoClose = isAutoClose
+
+	return w
+}
+
+func NewBoundFileWriterConfig(
+	path string,
+	mode FileWriteModeType,
+	perm FilePermType,
+	isSyncOnWrite bool,
+	isAutoClose bool,
+) *BoundFileWriter {
+	return &BoundFileWriter{
+		path:          path,
+		mode:          mode,
+		perm:          perm,
+		isSyncOnWrite: isSyncOnWrite,
+		isAutoClose:   isAutoClose,
 	}
 }
 
@@ -69,11 +113,11 @@ func NewBoundFileWriterWithOptions(opts BoundFileWriterOptions) *BoundFileWriter
 	}
 
 	return &BoundFileWriter{
-		path:        opts.Path,
-		mode:        mode,
-		perm:        perm,
-		syncOnWrite: opts.SyncOnWrite,
-		autoClose:   opts.AutoClose,
+		path:          opts.Path,
+		mode:          mode,
+		perm:          perm,
+		isSyncOnWrite: opts.IsSyncOnWrite,
+		isAutoClose:   opts.IsAutoClose,
 	}
 }
 
@@ -111,20 +155,66 @@ func (w *BoundFileWriter) SetPerm(perm FilePermType) *BoundFileWriter {
 	return w
 }
 
-func (w *BoundFileWriter) SetSyncOnWrite(isSync bool) *BoundFileWriter {
+func (w *BoundFileWriter) IsSyncOnWrite() bool {
 	w.lock.Lock()
 	defer w.lock.Unlock()
-	w.syncOnWrite = isSync
+
+	return w.isSyncOnWrite
+}
+
+func (w *BoundFileWriter) IsAutoClose() bool {
+	w.lock.Lock()
+	defer w.lock.Unlock()
+
+	return w.isAutoClose
+}
+
+func (w *BoundFileWriter) SetSyncOnWrite(isSyncOnWrite bool) *BoundFileWriter {
+	w.lock.Lock()
+	defer w.lock.Unlock()
+	w.isSyncOnWrite = isSyncOnWrite
 
 	return w
 }
 
-func (w *BoundFileWriter) SetAutoClose(isAuto bool) *BoundFileWriter {
+func (w *BoundFileWriter) SetAutoClose(isAutoClose bool) *BoundFileWriter {
 	w.lock.Lock()
 	defer w.lock.Unlock()
-	w.autoClose = isAuto
+	w.isAutoClose = isAutoClose
 
 	return w
+}
+
+func (w *BoundFileWriter) WithMode(mode FileWriteModeType) *BoundFileWriter {
+	return w.SetMode(mode)
+}
+
+func (w *BoundFileWriter) WithPerm(perm FilePermType) *BoundFileWriter {
+	return w.SetPerm(perm)
+}
+
+func (w *BoundFileWriter) WithSyncOnWrite(isSyncOnWrite bool) *BoundFileWriter {
+	return w.SetSyncOnWrite(isSyncOnWrite)
+}
+
+func (w *BoundFileWriter) WithAutoClose(isAutoClose bool) *BoundFileWriter {
+	return w.SetAutoClose(isAutoClose)
+}
+
+func (w *BoundFileWriter) EnableSyncOnWrite() *BoundFileWriter {
+	return w.SetSyncOnWrite(true)
+}
+
+func (w *BoundFileWriter) DisableSyncOnWrite() *BoundFileWriter {
+	return w.SetSyncOnWrite(false)
+}
+
+func (w *BoundFileWriter) EnableAutoClose() *BoundFileWriter {
+	return w.SetAutoClose(true)
+}
+
+func (w *BoundFileWriter) DisableAutoClose() *BoundFileWriter {
+	return w.SetAutoClose(false)
 }
 
 func (w *BoundFileWriter) IsOpen() bool {
@@ -175,7 +265,7 @@ func (w *BoundFileWriter) Write(ctx context.Context, payload []byte) *appfault.A
 	w.lock.Lock()
 	defer w.lock.Unlock()
 
-	return w.writeInternal(payload, w.autoClose)
+	return w.writeInternal(payload, w.isAutoClose)
 }
 
 func (w *BoundFileWriter) WriteString(ctx context.Context, text string) *appfault.AppError {
@@ -197,7 +287,7 @@ func (w *BoundFileWriter) Append(ctx context.Context, payload []byte) *appfault.
 	w.lock.Lock()
 	defer w.lock.Unlock()
 
-	return w.appendInternal(payload, w.autoClose)
+	return w.appendInternal(payload, w.isAutoClose)
 }
 
 func (w *BoundFileWriter) AppendString(ctx context.Context, text string) *appfault.AppError {
@@ -216,7 +306,7 @@ func (w *BoundFileWriter) AppendAndClose(ctx context.Context, payload []byte) *a
 }
 
 // writeInternal executes the write logic under an existing lock.
-func (w *BoundFileWriter) writeInternal(payload []byte, closeAfter bool) *appfault.AppError {
+func (w *BoundFileWriter) writeInternal(payload []byte, isCloseAfter bool) *appfault.AppError {
 	if w.path == "" {
 		return appfault.New(errtype.Precondition, "file path cannot be empty")
 	}
@@ -254,7 +344,7 @@ func (w *BoundFileWriter) writeInternal(payload []byte, closeAfter bool) *appfau
 		return appfault.Wrap(errtype.IO, err, "failed to write payload to bound file")
 	}
 
-	if w.syncOnWrite {
+	if w.isSyncOnWrite {
 		if err := f.Sync(); err != nil {
 			f.Close()
 
@@ -265,7 +355,7 @@ func (w *BoundFileWriter) writeInternal(payload []byte, closeAfter bool) *appfau
 	w.bytesWritten.Add(int64(len(payload)))
 	w.writeCount.Add(1)
 
-	if closeAfter {
+	if isCloseAfter {
 		if err := f.Close(); err != nil {
 			return appfault.Wrap(errtype.IO, err, "failed to close bound file after write")
 		}
@@ -287,7 +377,7 @@ func (w *BoundFileWriter) writeInternal(payload []byte, closeAfter bool) *appfau
 	return nil
 }
 
-func (w *BoundFileWriter) appendInternal(payload []byte, closeAfter bool) *appfault.AppError {
+func (w *BoundFileWriter) appendInternal(payload []byte, isCloseAfter bool) *appfault.AppError {
 	if w.path == "" {
 		return appfault.New(errtype.Precondition, "file path cannot be empty")
 	}
@@ -309,7 +399,7 @@ func (w *BoundFileWriter) appendInternal(payload []byte, closeAfter bool) *appfa
 
 	n, writeErr := f.Write(payload)
 	if writeErr != nil {
-		if closeAfter {
+		if isCloseAfter {
 			f.Close()
 			w.file = nil
 		}
@@ -317,9 +407,9 @@ func (w *BoundFileWriter) appendInternal(payload []byte, closeAfter bool) *appfa
 		return appfault.Wrap(errtype.IO, writeErr, "failed to append payload to bound file")
 	}
 
-	if w.syncOnWrite {
+	if w.isSyncOnWrite {
 		if err := f.Sync(); err != nil {
-			if closeAfter {
+			if isCloseAfter {
 				f.Close()
 				w.file = nil
 			}
@@ -331,7 +421,7 @@ func (w *BoundFileWriter) appendInternal(payload []byte, closeAfter bool) *appfa
 	w.bytesAppended.Add(int64(n))
 	w.writeCount.Add(1)
 
-	if closeAfter {
+	if isCloseAfter {
 		closeErr := f.Close()
 		w.file = nil
 		if closeErr != nil {

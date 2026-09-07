@@ -10,20 +10,20 @@ import (
 
 // ConsoleSink outputs log entries to an io.Writer (e.g. os.Stdout).
 type ConsoleSink struct {
-	lock    sync.Mutex
-	writer  io.Writer
-	useJSON bool
+	lock      sync.Mutex
+	writer    io.Writer
+	isUseJSON bool
 }
 
 // NewConsoleSink constructs a ConsoleSink.
-func NewConsoleSink(writer io.Writer, useJSON bool) *ConsoleSink {
+func NewConsoleSink(writer io.Writer, isUseJSON bool) *ConsoleSink {
 	if writer == nil {
 		writer = os.Stdout
 	}
 
 	return &ConsoleSink{
-		writer:  writer,
-		useJSON: useJSON,
+		writer:    writer,
+		isUseJSON: isUseJSON,
 	}
 }
 
@@ -54,7 +54,7 @@ func (cs *ConsoleSink) WriteEntry(e LogEntry) error {
 	cs.lock.Lock()
 	defer cs.lock.Unlock()
 
-	if cs.useJSON {
+	if cs.isUseJSON {
 		return cs.writeJSON(e)
 	}
 
