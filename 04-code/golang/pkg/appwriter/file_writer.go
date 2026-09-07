@@ -50,7 +50,12 @@ func NewFileWriter(opts FileWriterOptions) BaseWriterWrap {
 }
 
 func fileWriteFunc(ctx context.Context, self Writer, payload any) *appfault.AppError {
-	data := payloadconv.ToBytesMust(payload)
+	res := payloadconv.ToBytes(payload)
+	if res.IsFailure() {
+		return res.Fault()
+	}
+
+	data := res.Data()
 
 	_, err := self.Destination().Write(data)
 	if err != nil {

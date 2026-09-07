@@ -39,13 +39,3 @@ func ToBytes(payload any) result.Wrap[[]byte] {
 		return result.Success(b)
 	}
 }
-
-// ToBytesMust is a convenience wrapper that panics on failure, useful if you know the type is valid.
-func ToBytesMust(payload any) []byte {
-	res := ToBytes(payload)
-	if res.IsFailure() {
-		panic(res.Fault().Error())
-	}
-
-	return res.Data()
-}
