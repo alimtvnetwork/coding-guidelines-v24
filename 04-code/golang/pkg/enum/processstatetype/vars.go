@@ -1,10 +1,7 @@
 package processstatetype
 
 import (
-	"fmt"
-	"strconv"
-	"strings"
-
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
@@ -19,54 +16,29 @@ var (
 		Cancelled: "Cancelled",
 	}
 
-	variantMap = compileVariantMap()
+	variantMap = baseenumer.CompileMap(variantLabels[:], Invalid)
 )
 
-func compileVariantMap() map[string]Variant {
-	m := make(map[string]Variant, (len(variantLabels)*4)+4)
-	for i, label := range variantLabels {
-		v := Variant(i)
-		m[label] = v
-		m[strings.ToLower(label)] = v
-		m[strings.ToUpper(label)] = v
-		m[strconv.Itoa(i)] = v
-	}
-
-	m["unknown"] = Invalid
-	m["invalid"] = Invalid
-	m["UNKNOWN"] = Invalid
-	m["INVALID"] = Invalid
-
-	return m
-}
-
 func All() []Variant {
-	items := make([]Variant, 0, len(variantLabels)-1)
-	for i := 1; i < len(variantLabels); i++ {
-		items = append(items, Variant(i))
-	}
-
-	return items
+	return baseenumer.SliceVariants[Variant](variantLabels[:])
 }
 
 func Values() []string {
-	names := make([]string, 0, len(variantLabels)-1)
-
-	return append(names, variantLabels[1:]...)
+	return baseenumer.SliceValues(variantLabels[:])
 }
 
 func Parse(s string) result.Wrap[Variant] {
-	trimmed := strings.TrimSpace(s)
-	if len(trimmed) == 0 {
-		return result.WrapFailureWithId[Variant](errtype.Validation, "cannot parse empty string as processstatetype")
+	v, trimmed, ok := baseenumer.ParseLookup(s, variantMap)
+	if !ok {
+		if len(trimmed) == 0 {
+			return result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("processstatetype"))
+		}
+
+		return result.WrapFailureWithId[Variant](
+			errtype.NotFound,
+			baseenumer.FormatParseError("processstatetype", s, Values()),
+		)
 	}
 
-	if v, ok := variantMap[strings.ToLower(trimmed)]; ok {
-		return result.WrapSuccess(v)
-	}
-
-	return result.WrapFailureWithId[Variant](
-		errtype.NotFound,
-		fmt.Sprintf("unknown processstatetype variant %q, supported variants: [%s]", s, strings.Join(Values(), ", ")),
-	)
+	return result.WrapSuccess(v)
 }

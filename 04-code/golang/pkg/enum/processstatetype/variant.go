@@ -2,8 +2,9 @@ package processstatetype
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
+
+	"coding-guidelines/common/pkg/baseenumer"
 )
 
 type (
@@ -28,7 +29,7 @@ func (v Variant) Name() string {
 		return variantLabels[v]
 	}
 
-	return fmt.Sprintf("ProcessState(%d)", byte(v))
+	return baseenumer.FormatNameValue("ProcessState", byte(v))
 }
 
 func (v Variant) Label() string {
@@ -40,11 +41,11 @@ func (v Variant) String() string {
 }
 
 func (v Variant) IsValid() bool {
-	return v > Invalid && int(v) < len(variantLabels)
+	return baseenumer.IsBetween(v, Pending, Cancelled)
 }
 
 func (v Variant) IsInvalid() bool {
-	return v <= Invalid || int(v) >= len(variantLabels)
+	return baseenumer.IsNotBetween(v, Pending, Cancelled)
 }
 
 func (v Variant) IsPending() bool {
@@ -97,7 +98,7 @@ func (v *Variant) UnmarshalJSON(data []byte) error {
 	}
 
 	if int(raw) >= len(variantLabels) {
-		return fmt.Errorf("invalid processstatetype numeric value %d, supported range: 0..%d", raw, len(variantLabels)-1)
+		return baseenumer.FormatNumericRangeError("processstatetype", raw, len(variantLabels)-1)
 	}
 
 	*v = Variant(raw)

@@ -51,3 +51,18 @@ Extends `NumberEnumer` for integer-backed enumerations.
 
 ### `ToEnum[T BaseEnumer](val string, all []T) (T, bool)`
 Case-insensitively searches a slice of `BaseEnumer` instances by `Name()` or `ValueString()`.
+
+## Generic Enum Helpers (`helpers.go`)
+
+Reusable, zero-dependency generic utilities to eliminate boilerplate across concrete enum packages:
+
+- `CompileMap[V IntegerVarianter](labels []string, invalid V) map[string]V`: Generates lookup maps mapping name, uppercase, lowercase, numeric string, and `unknown`/`invalid` to typed variants.
+- `SliceValues(labels []string) []string`: Extracts all valid variant label strings excluding index 0 (`Invalid`/`Unknown`).
+- `SliceVariants[V IntegerVarianter](labels []string) []V`: Extracts all valid typed variant values excluding index 0.
+- `FormatNameValue(name string, val any) string`: Produces canonical `"Name(Value)"` formatting.
+- `IsBetween[T cmp.Ordered](val, min, max T) bool`: Closed range boundary check `min <= val && val <= max`.
+- `IsNotBetween[T cmp.Ordered](val, min, max T) bool`: Closed range boundary check `val < min || val > max`.
+- `ParseLookup[V any](s string, variantMap map[string]V) (val V, trimmed string, ok bool)`: Fast trimmed lowercase map lookup.
+- `FormatParseError(typeName, raw string, supportedVariants []string) string`: Canonical error string generator.
+- `FormatEmptyParseError(typeName string) string`: Canonical empty input error string generator.
+- `FormatNumericRangeError(typeName string, raw any, max int) error`: Canonical numeric out-of-range error generator.

@@ -1,11 +1,9 @@
 package openfiletype
 
 import (
-	"fmt"
 	"os"
-	"strconv"
-	"strings"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
@@ -39,54 +37,29 @@ var (
 		ReadWriteOrCreateOnly: os.O_RDWR | os.O_CREATE,
 	}
 
-	variantMap = compileVariantMap()
+	variantMap = baseenumer.CompileMap(variantLabels[:], Invalid)
 )
 
-func compileVariantMap() map[string]Variant {
-	m := make(map[string]Variant, (len(variantLabels)*4)+4)
-	for i, label := range variantLabels {
-		v := Variant(i)
-		m[label] = v
-		m[strings.ToLower(label)] = v
-		m[strings.ToUpper(label)] = v
-		m[strconv.Itoa(i)] = v
-	}
-
-	m["unknown"] = Invalid
-	m["invalid"] = Invalid
-	m["UNKNOWN"] = Invalid
-	m["INVALID"] = Invalid
-
-	return m
-}
-
 func All() []Variant {
-	items := make([]Variant, 0, len(variantLabels)-1)
-	for i := 1; i < len(variantLabels); i++ {
-		items = append(items, Variant(i))
-	}
-
-	return items
+	return baseenumer.SliceVariants[Variant](variantLabels[:])
 }
 
 func Values() []string {
-	names := make([]string, 0, len(variantLabels)-1)
-
-	return append(names, variantLabels[1:]...)
+	return baseenumer.SliceValues(variantLabels[:])
 }
 
 func Parse(s string) result.Wrap[Variant] {
-	trimmed := strings.TrimSpace(s)
+	v, trimmed, ok := baseenumer.ParseLookup(s, variantMap)
 	if len(trimmed) == 0 {
-		return result.WrapFailureWithId[Variant](errtype.Validation, "cannot parse empty string as openfiletype")
+		return result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("openfiletype"))
 	}
 
-	if v, ok := variantMap[strings.ToLower(trimmed)]; ok {
+	if ok {
 		return result.WrapSuccess(v)
 	}
 
 	return result.WrapFailureWithId[Variant](
 		errtype.NotFound,
-		fmt.Sprintf("unknown openfiletype variant %q, supported variants: [%s]", s, strings.Join(Values(), ", ")),
+		baseenumer.FormatParseError("openfiletype", s, Values()),
 	)
 }

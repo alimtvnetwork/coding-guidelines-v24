@@ -2,9 +2,10 @@ package openfiletype
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
+
+	"coding-guidelines/common/pkg/baseenumer"
 )
 
 type (
@@ -40,7 +41,7 @@ func (v Variant) Name() string {
 		return variantLabels[v]
 	}
 
-	return fmt.Sprintf("OpenFile(%d)", byte(v))
+	return baseenumer.FormatNameValue("OpenFile", byte(v))
 }
 
 func (v Variant) Label() string {
@@ -52,11 +53,11 @@ func (v Variant) String() string {
 }
 
 func (v Variant) IsValid() bool {
-	return v > Invalid && int(v) < len(variantLabels)
+	return baseenumer.IsBetween(v, ReadOnly, ReadWriteOrCreateOnly)
 }
 
 func (v Variant) IsInvalid() bool {
-	return v <= Invalid || int(v) >= len(variantLabels)
+	return baseenumer.IsNotBetween(v, ReadOnly, ReadWriteOrCreateOnly)
 }
 
 func (v Variant) IsReadOnly() bool {
@@ -129,7 +130,7 @@ func (v *Variant) UnmarshalJSON(data []byte) error {
 	}
 
 	if int(raw) >= len(variantLabels) {
-		return fmt.Errorf("invalid openfiletype numeric value %d, supported range: 0..%d", raw, len(variantLabels)-1)
+		return baseenumer.FormatNumericRangeError("openfiletype", raw, len(variantLabels)-1)
 	}
 
 	*v = Variant(raw)

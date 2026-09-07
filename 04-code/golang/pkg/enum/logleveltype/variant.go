@@ -2,8 +2,9 @@ package logleveltype
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
+
+	"coding-guidelines/common/pkg/baseenumer"
 )
 
 type (
@@ -28,7 +29,7 @@ func (v Variant) Name() string {
 		return variantLabels[v]
 	}
 
-	return fmt.Sprintf("LogLevel(%d)", byte(v))
+	return baseenumer.FormatNameValue("LogLevel", byte(v))
 }
 
 func (v Variant) Label() string {
@@ -40,11 +41,11 @@ func (v Variant) String() string {
 }
 
 func (v Variant) IsValid() bool {
-	return v > Invalid && int(v) < len(variantLabels)
+	return baseenumer.IsBetween(v, Debug, Fatal)
 }
 
 func (v Variant) IsInvalid() bool {
-	return v <= Invalid || int(v) >= len(variantLabels)
+	return baseenumer.IsNotBetween(v, Debug, Fatal)
 }
 
 func (v Variant) IsEnabled(threshold Variant) bool {
@@ -101,7 +102,7 @@ func (v *Variant) UnmarshalJSON(data []byte) error {
 	}
 
 	if int(raw) >= len(variantLabels) {
-		return fmt.Errorf("invalid logleveltype numeric value %d, supported range: 0..%d", raw, len(variantLabels)-1)
+		return baseenumer.FormatNumericRangeError("logleveltype", raw, len(variantLabels)-1)
 	}
 
 	*v = Variant(raw)
