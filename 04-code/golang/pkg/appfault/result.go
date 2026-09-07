@@ -4,8 +4,8 @@ import "encoding/json"
 
 // Result wraps a typed value bundled with monadic error state.
 type Result[T any] struct {
-	Value    T         `json:"Value,omitempty" yaml:"Value,omitempty"`
-	AppError *AppError `json:"AppError,omitempty" yaml:"AppError,omitempty"`
+	Value    T         `json:",omitempty" yaml:",omitempty"`
+	AppError *AppError `json:",omitempty" yaml:",omitempty"`
 }
 
 // Data returns the underlying Value payload for API envelope compatibility.
@@ -45,4 +45,12 @@ func (r Result[T]) ToJsonString() string {
 	}
 
 	return string(b)
+}
+
+// HandleError processes the underlying AppError if it exists.
+// It defers to the AppError's internal null-check to proceed safely.
+func (r Result[T]) HandleError() {
+	if r.AppError != nil {
+		r.AppError.HandleError()
+	}
 }

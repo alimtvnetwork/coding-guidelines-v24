@@ -13,7 +13,7 @@ The `errtype` package provides strongly-typed enumerations, standardized error c
    - `BaseEnumer` (alias `BaseEnum`): `Name() string`, `String() string`, `ValueString() string`, `IsValid() bool`, `IsEnum() bool`, `IsCompare() bool`, `MarshalJSON()`, `UnmarshalJSON()`.
    - `NumberEnumer` (alias `NumberEnum`): Extends `BaseEnumer` with numeric accessors: `Code() uint16`, `Int() int`, and `HttpStatus() int`.
 2. **String & Numeric Implementations:**
-   - **String-backed enums** (e.g. `ProcessStateType`): Backed by `string`, providing zero-allocation human-readable string values (`Pending`, `Running`, `Completed`, `Failed`, `Cancelled`).
+   - **String-backed enums** (e.g. `ProcessStateType`): Backed by `string`, providing zero-allocation human-readable string values (`Pending`, `Running`, `Completed`, `Failed`, `Canceled`).
    - **Number-backed enums** (e.g. `Variation`, `LogLevelType`): Backed by `uint16`, providing efficient integer serialization and HTTP status mapping.
 3. **Generic Lookup Helper (`ToEnum`):**
    A type-safe generic helper allows looking up any `BaseEnumer` from a string case-insensitively:
@@ -31,13 +31,13 @@ The `errtype` package provides strongly-typed enumerations, standardized error c
 flowchart TD
     BaseInterface["BaseEnumer Interface\n(Name, String, ValueString, IsValid, IsEnum, IsCompare, JSON)"]
     NumberInterface["NumberEnumer Interface\n(Code, Int, HttpStatus)"]
-    
+
     BaseInterface --> NumberInterface
-    
+
     BaseInterface --> ProcessState["ProcessStateType (string-backed)\nPending, Running, Completed, Failed"]
     NumberInterface --> ErrorVariation["Variation (uint16-backed)\nValidation, NotFound, Precondition, IO, Timeout"]
     NumberInterface --> LogLevel["LogLevelType (uint16-backed)\nTrace, Debug, Info, Warn, Error, Fatal"]
-    
+
     GenericHelper["ToEnum[T BaseEnumer](val, all)"] -.-> BaseInterface
 ```
 

@@ -2,11 +2,11 @@ package appwriter
 
 import (
 	"context"
-	"fmt"
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/fileutil"
+	"coding-guidelines/common/pkg/payloadconv"
 )
 
 // FileWriterOptions specifies configuration for file-backed writers.
@@ -21,10 +21,7 @@ type FileWriterOptions struct {
 // NewFileWriter creates a file writer using fileutil enums and wrap constructors.
 func NewFileWriter(opts FileWriterOptions) BaseWriterWrap {
 	if len(opts.FilePath) == 0 {
-		appErr := appfault.NewWithVar(errtype.Validation, "file path cannot be empty", "opts.FilePath", opts.FilePath).
-			WithPath(opts.FilePath)
-
-		return WrapWriter.Failure(appErr)
+		return WrapWriter.FailureWithId(errtype.Validation, "file path cannot be empty")
 	}
 
 	openMode := opts.OpenMode
@@ -52,25 +49,12 @@ func NewFileWriter(opts FileWriterOptions) BaseWriterWrap {
 	return WrapWriter.Success(writer)
 }
 
-// fileWriteFunc writes payload bytes or formatted string directly to destination.
 func fileWriteFunc(ctx context.Context, self Writer, payload any) *appfault.AppError {
-	var data []byte
-	switch v := payload.(type) {
-	case []byte:
-		data = v
-	case string:
-		data = []byte(v)
-	default:
-		data = []byte(fmt.Sprint(v))
-	}
+	data := payloadconv.ToBytesMust(payload)
 
-	targetPath := self.Name()
 	_, err := self.Destination().Write(data)
 	if err != nil {
-		appErr := appfault.WrapWithPath(errtype.IO, err, "failed to write payload to file destination", targetPath).
-			WithVar("payloadBytesLen", len(data))
-
-		return appErr
+		return appfault.Wrap(errtype.IO, err, "failed to write payload to file destination")
 	}
 
 	return nil

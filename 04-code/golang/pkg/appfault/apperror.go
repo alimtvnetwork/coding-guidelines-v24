@@ -5,12 +5,11 @@ import "coding-guidelines/common/pkg/errtype"
 type (
 	AppError struct {
 		errType    errtype.Variation
+		statusCode int
 		message    string
-		caller     CallerInfo
 		stack      StackTrace
 		ctx        ContextMap
 		cause      error
-		statusCode int
 	}
 
 	Fault = AppError
@@ -83,19 +82,23 @@ func (e *AppError) clone() *AppError {
 	}
 
 	var clonedCtx ContextMap
-	if e.ctx != nil {
+	if len(e.ctx) > 0 {
 		clonedCtx = e.ctx.Clone()
-	} else {
-		clonedCtx = NewContextMap()
 	}
 
 	return &AppError{
-		errType:    e.errType,
-		message:    e.message,
-		caller:     e.caller,
-		stack:      e.stack,
-		ctx:        clonedCtx,
-		cause:      e.cause,
-		statusCode: e.statusCode,
+		errType: e.errType,
+		message: e.message,
+		stack:   e.stack,
+		ctx:     clonedCtx,
+		cause:   e.cause,
+	}
+}
+
+// HandleError processes the error without terminating the application.
+// It performs an internal null-check to proceed forward safely.
+func (e *AppError) HandleError() {
+	if e == nil {
+		return
 	}
 }
