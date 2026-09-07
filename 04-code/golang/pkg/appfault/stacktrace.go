@@ -14,7 +14,9 @@ type (
 		Line     int    `json:",omitempty" yaml:",omitempty"`
 	}
 
-	StackTrace []StackFrame
+	StackFrames []StackFrame
+
+	StackTrace = StackFrames
 )
 
 func NewStackFrame(function string, file string, line int) StackFrame {
@@ -78,23 +80,42 @@ func isAppFrame(file string) bool {
 	return !strings.Contains(file, "runtime/")
 }
 
+// IsDefined reports true if the collection contains at least one frame.
+func (st StackFrames) IsDefined() bool {
+	return len(st) > 0
+}
+
+// IsEmpty reports true if the collection has zero frames.
+func (st StackFrames) IsEmpty() bool {
+	return len(st) == 0
+}
+
 // CallerLine returns a compact "file:line" string of the top frame.
-func (st StackTrace) CallerLine() string {
-	if len(st) == 0 {
+func (st StackFrames) CallerLine() string {
+	if st.IsEmpty() {
 		return "unknown:0"
 	}
 
 	return fmt.Sprintf("%s:%d", st[0].File, st[0].Line)
 }
 
-// String formats the multi-line stack trace.
-func (st StackTrace) String() string {
+// Format formats each frame with the provided indentation prefix.
+func (st StackFrames) Format(indent string) string {
+	if st.IsEmpty() {
+		return ""
+	}
+
 	var builder strings.Builder
 	for idx, frame := range st {
-		builder.WriteString(fmt.Sprintf("#%d %s\n   %s:%d\n", idx, frame.Function, frame.File, frame.Line))
+		builder.WriteString(fmt.Sprintf("%s#%d %s\n%s   %s:%d\n", indent, idx, frame.Function, indent, frame.File, frame.Line))
 	}
 
 	return builder.String()
+}
+
+// String formats the multi-line stack trace with default indentation.
+func (st StackFrames) String() string {
+	return st.Format("")
 }
 
 // ToJson exports StackTrace as indented JSON bytes.

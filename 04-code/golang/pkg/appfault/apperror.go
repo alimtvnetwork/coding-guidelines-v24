@@ -24,6 +24,11 @@ func (e *AppError) HasError() bool {
 	return e.errType.HasError()
 }
 
+// IsDefined returns true if the AppError is non-nil and represents an active error.
+func (e *AppError) IsDefined() bool {
+	return e.HasError()
+}
+
 // HasNullError returns true if e is nil or represents no error.
 func (e *AppError) HasNullError() bool {
 	if e == nil {

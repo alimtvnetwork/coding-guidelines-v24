@@ -2,6 +2,28 @@ package appfault
 
 import "coding-guidelines/common/pkg/errtype"
 
+// DefaultFrameSkip defines standard runtime stack frame skip depth.
+const DefaultFrameSkip = 3
+
+// calculateFrameSkip calculates caller frame offset from default and optional user skip.
+func calculateFrameSkip(skipFrames ...int) int {
+	if len(skipFrames) == 0 {
+		return DefaultFrameSkip
+	}
+
+	return DefaultFrameSkip + skipFrames[0]
+}
+
+// createAppErrorInstance constructs the AppError capturing stack trace at the calculated skip.
+func createAppErrorInstance(errType errtype.Variation, message string, skip int) *AppError {
+	return &AppError{
+		errType: errType,
+		message: message,
+		stack:   CaptureStackTrace(skip),
+		ctx:     nil,
+	}
+}
+
 // New creates an AppError for a given error type variation and message.
 // If errType is errtype.None, it returns nil (no error allocated).
 func New(errType errtype.Variation, message string, skipFrames ...int) *AppError {
@@ -9,12 +31,7 @@ func New(errType errtype.Variation, message string, skipFrames ...int) *AppError
 		return nil
 	}
 
-	skip := 3
-	if len(skipFrames) > 0 {
-		skip += skipFrames[0]
-	}
-
-	return NewWithContext(errType, message, nil, skip-3) // pass relative skip
+	return createAppErrorInstance(errType, message, calculateFrameSkip(skipFrames...))
 }
 
 // NewType creates an AppError using default type name as message.
@@ -23,22 +40,7 @@ func NewType(errType errtype.Variation, skipFrames ...int) *AppError {
 		return nil
 	}
 
-	skip := 3
-	if len(skipFrames) > 0 {
-		skip += skipFrames[0]
-	}
-
-	return New(errType, errType.Name(), skip-3)
-}
-
-// createAppErrorInstance constructs the AppError capturing stack trace.
-func createAppErrorInstance(errType errtype.Variation, message string, skip int) *AppError {
-	return &AppError{
-		errType: errType,
-		message: message,
-		stack:   CaptureStackTrace(skip),
-		ctx:     nil, // We will not allocate ContextMap yet
-	}
+	return createAppErrorInstance(errType, errType.Name(), calculateFrameSkip(skipFrames...))
 }
 
 // NewWithContext constructs an AppError with an initial context map.
@@ -47,12 +49,7 @@ func NewWithContext(errType errtype.Variation, message string, ctx map[string]an
 		return nil
 	}
 
-	skip := 3
-	if len(skipFrames) > 0 {
-		skip += skipFrames[0]
-	}
-
-	e := createAppErrorInstance(errType, message, skip)
+	e := createAppErrorInstance(errType, message, calculateFrameSkip(skipFrames...))
 	if ctx != nil && len(ctx) > 0 {
 		e.ctx = ensureContextMap(ctx)
 	}
@@ -67,16 +64,7 @@ func Wrap(errType errtype.Variation, cause error, message string, skipFrames ...
 		return nil
 	}
 
-	skip := 3
-	if len(skipFrames) > 0 {
-		skip += skipFrames[0]
-	}
-
-	e := New(errType, message, skip-3)
-	if e == nil {
-		return nil
-	}
-
+	e := createAppErrorInstance(errType, message, calculateFrameSkip(skipFrames...))
 	e.cause = cause
 
 	return e
@@ -88,12 +76,10 @@ func WrapType(errType errtype.Variation, cause error, skipFrames ...int) *AppErr
 		return nil
 	}
 
-	skip := 3
-	if len(skipFrames) > 0 {
-		skip += skipFrames[0]
-	}
+	e := createAppErrorInstance(errType, cause.Error(), calculateFrameSkip(skipFrames...))
+	e.cause = cause
 
-	return Wrap(errType, cause, cause.Error(), skip-3)
+	return e
 }
 
 // ensureContextMap safely converts a map[string]any to ContextMap.

@@ -2,8 +2,47 @@ package appfault
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"strings"
+	"sync"
 )
+
+var (
+	globalFaultWriter   FaultWriter = &defaultFaultWriter{}
+	globalFaultWriterMu sync.RWMutex
+)
+
+// defaultFaultWriter writes formatted terminal banner to output.
+type defaultFaultWriter struct{}
+
+func (w *defaultFaultWriter) WriteFault(out io.Writer, e *AppError) error {
+	if e == nil {
+		return nil
+	}
+
+	_, err := fmt.Fprintln(out, e.FormatStdout())
+
+	return err
+}
+
+// SetGlobalFaultWriter registers a custom FaultWriter globally.
+func SetGlobalFaultWriter(writer FaultWriter) {
+	globalFaultWriterMu.Lock()
+	defer globalFaultWriterMu.Unlock()
+
+	if writer != nil {
+		globalFaultWriter = writer
+	}
+}
+
+// GetGlobalFaultWriter returns the currently configured global FaultWriter.
+func GetGlobalFaultWriter() FaultWriter {
+	globalFaultWriterMu.RLock()
+	defer globalFaultWriterMu.RUnlock()
+
+	return globalFaultWriter
+}
 
 // formatBasicError returns formatted type name, code, and message.
 func formatBasicError(e *AppError) string {
@@ -35,7 +74,7 @@ func (e *AppError) Error() string {
 // appendHeader writes diagnostic header info.
 func appendHeader(b *strings.Builder, e *AppError) {
 	b.WriteString(fmt.Sprintf("ERROR: [%s:%d] %s\n", e.errType.Name(), e.errType.Code(), e.message))
-	if len(e.stack) > 0 {
+	if e.stack.IsDefined() {
 		b.WriteString(fmt.Sprintf("CALLER: %s\n", e.stack.CallerLine()))
 	}
 
@@ -46,11 +85,11 @@ func appendHeader(b *strings.Builder, e *AppError) {
 
 // appendContextAndStack writes context map and stack trace.
 func appendContextAndStack(b *strings.Builder, ctx ContextMap, stack StackTrace) {
-	if len(ctx) > 0 {
+	if ctx.IsDefined() {
 		b.WriteString(fmt.Sprintf("CONTEXT: %s\n", ctx.Format()))
 	}
 
-	if len(stack) > 0 {
+	if stack.IsDefined() {
 		b.WriteString("STACK TRACE:\n" + stack.String())
 	}
 }
@@ -74,7 +113,7 @@ func appendMarkdownCauseAndStack(b *strings.Builder, cause error, stack StackTra
 		b.WriteString(fmt.Sprintf("- **Cause:** `%v`\n", cause))
 	}
 
-	if len(stack) > 0 {
+	if stack.IsDefined() {
 		b.WriteString("\n```\n" + stack.String() + "```\n")
 	}
 }
@@ -106,17 +145,26 @@ func DefaultFaultFormatter(e *AppError) string {
 	}
 
 	callerInfo := ""
-	if len(e.stack) > 0 {
+	if e.stack.IsDefined() {
 		callerInfo = fmt.Sprintf(" (at %s)", e.stack.CallerLine())
 	}
 
 	return fmt.Sprintf("❌ [%s:%d] %s%s", e.errType.Name(), e.errType.Code(), e.message, callerInfo)
 }
 
-// Print outputs the default formatted fault representation to standard output.
+// WriteTo writes the AppError to the specified io.Writer using the configured global FaultWriter.
+func (e *AppError) WriteTo(w io.Writer) error {
+	if e == nil {
+		return nil
+	}
+
+	return GetGlobalFaultWriter().WriteFault(w, e)
+}
+
+// Print outputs the fault representation to standard output using the configured global FaultWriter.
 func (e *AppError) Print() {
 	if e != nil {
-		fmt.Println(e.Format(DefaultFaultFormatter))
+		_ = e.WriteTo(os.Stdout)
 	}
 }
 
@@ -141,7 +189,7 @@ func FormatStdout(e *AppError) string {
 
 	var b strings.Builder
 	b.WriteString(fmt.Sprintf("❌ ERROR [%s:%d] %s (HTTP %d)", e.errType.Name(), e.errType.Code(), e.message, e.StatusCode()))
-	if len(e.stack) > 0 {
+	if e.stack.IsDefined() {
 		b.WriteString(fmt.Sprintf("\n   Caller:  %s", e.stack.CallerLine()))
 	}
 
@@ -149,7 +197,7 @@ func FormatStdout(e *AppError) string {
 		b.WriteString(fmt.Sprintf("\n   Cause:   %v", e.cause))
 	}
 
-	if len(e.ctx) > 0 {
+	if e.ctx.IsDefined() {
 		b.WriteString(fmt.Sprintf("\n   Context: %s", e.ctx.Format()))
 	}
 
@@ -177,7 +225,7 @@ func FormatTextLog(e *AppError) string {
 	}
 
 	callerStr := "unknown"
-	if len(e.stack) > 0 {
+	if e.stack.IsDefined() {
 		callerStr = e.stack.CallerLine()
 	}
 
@@ -188,7 +236,7 @@ func FormatTextLog(e *AppError) string {
 		logLine += fmt.Sprintf(" cause=%q", e.cause.Error())
 	}
 
-	if len(e.ctx) > 0 {
+	if e.ctx.IsDefined() {
 		logLine += fmt.Sprintf(" ctx=%q", e.ctx.Format())
 	}
 

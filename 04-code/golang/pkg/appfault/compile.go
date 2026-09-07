@@ -9,11 +9,11 @@ import (
 // writeCompileDetails writes message, caller and context to builder.
 func (e *AppError) writeCompileDetails(b *strings.Builder) {
 	b.WriteString(fmt.Sprintf("%sMessage: %s%s", IndentTab, e.message, Newline))
-	if len(e.stack) > 0 {
+	if e.stack.IsDefined() {
 		b.WriteString(fmt.Sprintf("%sCaller:  %s%s", IndentTab, e.stack.CallerLine(), Newline))
 	}
 
-	if len(e.ctx) > 0 {
+	if e.ctx.IsDefined() {
 		b.WriteString(fmt.Sprintf("%sContext: %s%s", IndentTab, e.ctx.Format(), Newline))
 	}
 }
@@ -39,8 +39,8 @@ func (e *AppError) CompileWithStack() string {
 	}
 
 	compiled := e.Compile()
-	if len(e.stack) > 0 {
-		return fmt.Sprintf("%s%sStack Trace:%s%s%s", compiled, SectionPrefix, Newline, e.stack.String(), Newline)
+	if e.stack.IsDefined() {
+		return fmt.Sprintf("%s%sStack Trace:%s%s", compiled, SectionPrefix, Newline, e.stack.Format(IndentTab))
 	}
 
 	return compiled
