@@ -262,6 +262,15 @@ CI_JOBS_MATRIX: dict[str, list[str]] = {
     "Linters CI/CD Test Suite": [sys.executable, "linters-cicd/tests/run.py"],
     "Interface Naming Check": [sys.executable, "linter-scripts/check-interface-naming.py"],
     "Go Base Test Suite": ["go", "test", "-C", "04-code/golang", "./..."],
+    "Axios Version Security Check": [sys.executable, "linter-scripts/check-axios-version.py"],
+    "Forbidden Spec Paths Check": [sys.executable, "linter-scripts/check-forbidden-spec-paths.py"],
+    "Placeholder Comments Check": [sys.executable, "linter-scripts/check-placeholder-comments.py"],
+    "Tunable Constants Check": [sys.executable, "linter-scripts/check-tunable-constants.py"],
+    "Runner Dispatch Guard Check": [sys.executable, "linter-scripts/check-runner-dispatch-antipatterns.py"],
+    "Lint CI Drift Self-Test": ["node", "scripts/tests/check-lint-ci-drift.test.mjs"],
+    "Required Checks Self-Test": ["node", "scripts/tests/print-required-checks.test.mjs"],
+    "Sync Guidelines Self-Test": ["node", "scripts/tests/sync-guidelines.test.mjs"],
+    "File Sizes Baseline Self-Test": [sys.executable, "linter-scripts/tests/check-file-sizes.test.py"],
 }
 
 # --- Module-Level Directory & File Constants ---
