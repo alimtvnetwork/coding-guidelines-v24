@@ -45,6 +45,17 @@ The `fileutil` package provides enterprise-grade filesystem utilities, behavior-
    Groups all operational file I/O into cohesive sub-operation namespaces (`File.Open.*`, `File.Create.*`, `File.Write.*`, `File.Append.*`, `File.Read.*`, and `File.Path.*`), maintaining zero heap allocations and 100% backward compatibility with top-level package functions.
 10. **Coredata Creator Pattern Conformance (`fileutil.New`):**
     Adopting the zero-allocation creator pattern from `coredata` (`corestr`), constructor methods are organized under `fileutil.New` (`New.Writer.*`, `New.Appender.*`, `New.BoundWriter.*`, `New.Path.*`, `New.StreamWriter.*`), providing structured builders and intuitive discoverability.
+11. **1:1 Struct-to-Filename Alignment:**
+    Every operation and bound struct is housed in a dedicated file matching its exact snake_case name:
+    - `appendOps` in `append_ops.go`
+    - `openOps` in `open_ops.go`
+    - `createOps` in `create_ops.go`
+    - `readOps` in `read_ops.go`
+    - `writeOps` in `write_ops.go`
+    - `FilePathOps` in `file_path_ops.go`
+    - `fileNamespace` in `file_namespace.go`
+12. **Path-Bound Operations (`FilePathOps`):**
+    Encapsulates `workDir`, `relPath`, and `absPath` into an immutable target object (`File.Target(path)` or `File.At(workDir, relPath)`). Eliminates the need to repeatedly pass file paths or handles, enforces pre-flight parent directory creation (`EnsureParentDir()`), provides safe file existence checks (`EnsureFile()`), and executes bound operations (`ReadString()`, `WriteString()`, `AppendLines()`) directly against `absPath`.
 
 ---
 
@@ -274,6 +285,138 @@ pw := fileutil.New.Path.Default("data/config.yaml")
 // StreamWriters
 streamWriter := fileutil.New.StreamWriter.Append("data/stream.log", fileutil.FilePermStandard)
 ```
+
+---
+
+## Bound File Path Operations (`fileutil.FilePathOps`)
+
+For scenarios where multiple operations are executed against a specific file path, `FilePathOps` eliminates repetitive path passing while enforcing directory safety and immutability:
+
+### Instantiation
+
+```go
+// 1. Target by path (auto-resolves workDir and relPath against working directory)
+target := fileutil.File.Target("configs/app.json")
+
+// 2. Target with explicit workDir and relPath breakdown
+item := fileutil.File.At("var/data", "metrics.log")
+
+// 3. Creator equivalents via fileutil.New
+target2 := fileutil.New.Target("configs/app.json")
+item2 := fileutil.New.At("var/data", "metrics.log")
+```
+
+### Immutable Path Transformations
+
+Modifications do not mutate the receiver; they return a newly allocated clone:
+
+```go
+// Relocate to a temporary working directory (e.g. for unit tests or sandbox runs)
+sandboxTarget := target.WithWorkDir(t.TempDir())
+
+// Switch relative target
+altTarget := target.WithRelPath("configs/app.dev.json")
+
+// Append subpath segments
+subLog := item.Join("2026", "audit.log")
+```
+
+### Pre-Flight Safety Checks
+
+Eliminates filesystem missing folder errors before I/O begins:
+
+```go
+// Ensure parent directory exists (creates with 0755 if missing)
+dirRes := target.EnsureParentDir()
+
+// Ensure file exists (creates parent directories and empty file if missing; does not truncate)
+fileRes := target.EnsureFile(fileutil.FilePermStandard)
+
+// Create file only if it does not exist yet (returns FileResult)
+openRes := target.CreateIfNotExist(fileutil.FilePermStandard)
+```
+
+### Zero-Path Bound File Operations
+
+Call file operations directly without passing the path or file descriptor:
+
+```go
+// Direct read
+content := target.ReadString()
+lines := target.ReadLines()
+
+// Direct write (auto-ensures parent directories)
+_ = target.WriteString(`{"status":"ready"}`, fileutil.FilePermStandard)
+_ = target.WriteAtomic(dataBytes, fileutil.FilePermStandard)
+
+// Direct append
+_ = target.AppendString("new event\n", fileutil.FilePermStandard)
+_ = target.AppendLines([]string{"line 1", "line 2"}, fileutil.FilePermStandard)
+
+// Existence and inspection
+if target.Exists() {
+    statRes := target.Stat()
+    fmt.Printf("File size: %d bytes\n", statRes.Data().Size())
+}
+
+// Cleanup
+_ = target.Delete()
+```
+
+---
+
+## AI Agent Skill: fileutil Operational Playbook
+
+> [!IMPORTANT]
+> When operating within this repository, AI agents MUST follow this operational playbook to guarantee error-free, safe, and portable filesystem manipulation.
+
+### Rule 1: Choose the Right Abstraction Layer
+1. **One-off independent operations:** Use `fileutil.File.<Op>.<Method>` (e.g., `fileutil.File.Read.Bytes(path)`, `fileutil.File.Write.String(path, text, perm)`).
+2. **Multi-step operations on a single file:** Use `fileutil.File.Target(path)` (`FilePathOps`) to bind the path once and chain reads, writes, and pre-flight checks without repeating the path.
+3. **Continuous / transactional writes under concurrency:** Use `fileutil.New.BoundWriter.AutoClose(path, perm)` or `NewBoundFileWriter(path)` with `.WithLock(...)`.
+4. **Append-only log streams:** Use `fileutil.New.Appender.AutoSync(path, perm)`.
+
+### Rule 2: Always Pre-Flight Parent Directories
+- **Banned:** Blindly calling open/write without creating parent directories (risking runtime `ENOENT` failures).
+- **Mandated:** When initializing a file or before reading from a potentially fresh path, call:
+  ```go
+  target := fileutil.File.Target(path)
+  if err := target.EnsureParentDir(); err.IsFailed() {
+      return err.Fault()
+  }
+  ```
+
+### Rule 3: Enforce Immutability on Path Transformations
+- `FilePathOps` is strictly immutable. Calling `.WithWorkDir(...)`, `.WithRelPath(...)`, or `.Join(...)` returns a new pointer.
+- **Never** expect in-place mutation:
+  ```go
+  // CORRECT:
+  subTarget := target.Join("subdir", "file.txt")
+
+  // WRONG:
+  target.Join("subdir", "file.txt") // target is NOT modified!
+  ```
+
+### Rule 4: Handle Concrete Results, Never Raw Errors
+- All operations return concrete envelopes (`BoolResult`, `FileResult`, `BytesResult`, `StringResult`, `LinesResult`, `FileInfoResult`).
+- Always check `.IsSuccess()` or `.IsFailed()`, and return `.Fault()` (`*appfault.AppError`):
+  ```go
+  res := target.WriteString(content, fileutil.FilePermStandard)
+  if res.IsFailed() {
+      return res.Fault()
+  }
+  ```
+
+### Rule 5: 1:1 Struct-to-Filename Codebase Navigation
+When locating or adding Go structs in `pkg/fileutil`, adhere strictly to lowercase snake_case naming matching the primary struct:
+- Struct `appendOps` -> `append_ops.go`
+- Struct `openOps` -> `open_ops.go`
+- Struct `createOps` -> `create_ops.go`
+- Struct `readOps` -> `read_ops.go`
+- Struct `writeOps` -> `write_ops.go`
+- Struct `FilePathOps` -> `file_path_ops.go`
+- Struct `fileNamespace` -> `file_namespace.go`
+- Struct `BoundFileWriter` -> `bound_file_writer.go`
 
 ---
 

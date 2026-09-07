@@ -171,3 +171,27 @@ func (fileNewCreator) PathWrapper(raw string) *PathWrapper {
 func (fileNewCreator) StreamWriterAny(path string, openMode FileOpenModeType, perm FilePermType) result.Wrap[*streamwriter.PluggableWriter[any]] {
 	return NewFileWriter(path, openMode, perm)
 }
+
+func (fileNamespace) Target(path string) *FilePathOps {
+	return NewFilePathOps(path)
+}
+
+func (fileNamespace) At(workDir, relPath string) *FilePathOps {
+	return NewFilePathOpsAt(workDir, relPath)
+}
+
+func (fileNewCreator) Target(path string) *FilePathOps {
+	return NewFilePathOps(path)
+}
+
+func (fileNewCreator) At(workDir, relPath string) *FilePathOps {
+	return NewFilePathOpsAt(workDir, relPath)
+}
+
+func (fileNewCreator) FilePathOps(path string) *FilePathOps {
+	return NewFilePathOps(path)
+}
+
+func (fileNewCreator) FilePathOpsAt(workDir, relPath string) *FilePathOps {
+	return NewFilePathOpsAt(workDir, relPath)
+}

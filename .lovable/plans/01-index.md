@@ -10,6 +10,7 @@ Master directory of architectural and execution plans.
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
 ## Completed Plans
 
+- [20-fileutil-filename-matching-and-bound-path-ops.md](completed/20-fileutil-filename-matching-and-bound-path-ops.md): Fileutil Struct-Filename Alignment, Bound FilePathOps, and AI Skill Playbook.
 - [19-fileutil-struct-grouping-and-modular-decomposition.md](completed/19-fileutil-struct-grouping-and-modular-decomposition.md): Fileutil Struct Grouping & Creator Modular Decomposition.
 - [18-modular-filepath-util-and-cross-platform-temp.md](completed/18-modular-filepath-util-and-cross-platform-temp.md): Modular Filepath Utilities, Cross-Platform User Temp Path, Environment Variable Expansion, and Namespace Grouping.
 - [17-structured-fileutil-context-and-concrete-results.md](completed/17-structured-fileutil-context-and-concrete-results.md): Structured fileutil context injection, path error constructors, and concrete result type aliases.

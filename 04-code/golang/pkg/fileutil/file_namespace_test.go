@@ -182,7 +182,7 @@ func TestFileReadOperations(t *testing.T) {
 	verifyReadNsData(t, lRes)
 }
 
-func testNewWriters(t *testing.T, dir string) {
+func testNewFileWriterEngines(t *testing.T, dir string) {
 	w := New.Writer.Default(filepath.Join(dir, "w.txt"))
 	if w == nil {
 		t.Fatalf("New.Writer.Default returned nil")
@@ -192,6 +192,10 @@ func testNewWriters(t *testing.T, dir string) {
 	if optsWriter == nil {
 		t.Fatalf("New.Writer.WithOptions returned nil")
 	}
+}
+
+func testNewWriters(t *testing.T, dir string) {
+	testNewFileWriterEngines(t, dir)
 
 	bw := New.BoundWriter.Default(filepath.Join(dir, "bw.txt"))
 	if bw == nil {
@@ -274,4 +278,83 @@ func TestBackwardCompatibility(t *testing.T) {
 	_ = WriteBytes(p1, []byte("hello"), FilePermStandard)
 	_ = File.Write.Bytes(p2, []byte("hello"), FilePermStandard)
 	verifyCompatText(t, p1, p2)
+}
+
+func testFileTarget(t *testing.T, dir string) {
+	path := filepath.Join(dir, "target.txt")
+	target := File.Target(path)
+	if target == nil {
+		t.Fatalf("File.Target returned nil")
+	}
+
+	if target.AbsPath() != path {
+		t.Fatalf("unexpected target AbsPath: %q", target.AbsPath())
+	}
+}
+
+func testFileAt(t *testing.T, dir string) {
+	at := File.At(dir, "sub/at.txt")
+	if at == nil {
+		t.Fatalf("File.At returned nil")
+	}
+
+	if at.RelPath() != filepath.Clean("sub/at.txt") {
+		t.Fatalf("unexpected at RelPath: %q", at.RelPath())
+	}
+}
+
+func testNewTarget(t *testing.T, dir string) {
+	path := filepath.Join(dir, "new_target.txt")
+	target := New.Target(path)
+	if target == nil {
+		t.Fatalf("New.Target returned nil")
+	}
+
+	if target.AbsPath() != path {
+		t.Fatalf("unexpected target AbsPath: %q", target.AbsPath())
+	}
+}
+
+func testNewAt(t *testing.T, dir string) {
+	at := New.At(dir, "sub/new_at.txt")
+	if at == nil {
+		t.Fatalf("New.At returned nil")
+	}
+
+	if at.RelPath() != filepath.Clean("sub/new_at.txt") {
+		t.Fatalf("unexpected at RelPath: %q", at.RelPath())
+	}
+}
+
+func testNewFilePathOps(t *testing.T, dir string) {
+	path := filepath.Join(dir, "fp_ops.txt")
+	ops := New.FilePathOps(path)
+	if ops == nil {
+		t.Fatalf("New.FilePathOps returned nil")
+	}
+
+	if ops.AbsPath() != path {
+		t.Fatalf("unexpected ops AbsPath: %q", ops.AbsPath())
+	}
+}
+
+func testNewFilePathOpsAt(t *testing.T, dir string) {
+	opsAt := New.FilePathOpsAt(dir, "sub.txt")
+	if opsAt == nil {
+		t.Fatalf("New.FilePathOpsAt returned nil")
+	}
+
+	if opsAt.WorkDir() != filepath.Clean(dir) {
+		t.Fatalf("unexpected opsAt WorkDir: %q", opsAt.WorkDir())
+	}
+}
+
+func TestFileAndNewFilePathOps(t *testing.T) {
+	dir := t.TempDir()
+	testFileTarget(t, dir)
+	testFileAt(t, dir)
+	testNewTarget(t, dir)
+	testNewAt(t, dir)
+	testNewFilePathOps(t, dir)
+	testNewFilePathOpsAt(t, dir)
 }
