@@ -93,24 +93,36 @@ func TestFileWriteModeType_Vars(t *testing.T) {
 		t.Fatalf("expected 3 valid values, got %d", len(vals))
 	}
 
-	parsed := filewritemodetype.Parse("Atomic")
-	if parsed.IsFailed() || parsed.Data() != filewritemodetype.Atomic {
+	parsed, isOk := filewritemodetype.Parse("Atomic")
+	if !isOk || parsed != filewritemodetype.Atomic {
 		t.Fatalf("expected Atomic parse success")
 	}
 
-	parsedLower := filewritemodetype.Parse("truncate")
-	if parsedLower.IsFailed() || parsedLower.Data() != filewritemodetype.Truncate {
+	parsedLower, isLowerOk := filewritemodetype.Parse("truncate")
+	if !isLowerOk || parsedLower != filewritemodetype.Truncate {
 		t.Fatalf("expected truncate parse success")
 	}
 
-	empty := filewritemodetype.Parse("   ")
-	if !empty.IsFailed() {
+	_, isEmptyOk := filewritemodetype.Parse("   ")
+	if isEmptyOk {
 		t.Fatalf("expected empty parse error")
 	}
 
-	invalid := filewritemodetype.Parse("NonExistent")
-	if !invalid.IsFailed() {
+	_, isInvalidOk := filewritemodetype.Parse("NonExistent")
+	if isInvalidOk {
 		t.Fatalf("expected invalid parse error")
+	}
+
+	if filewritemodetype.ParseOrZero("Atomic") != filewritemodetype.Atomic {
+		t.Fatalf("ParseOrZero Atomic failed")
+	}
+
+	if filewritemodetype.ParseOrInvalid("bogus") != filewritemodetype.Invalid {
+		t.Fatalf("ParseOrInvalid bogus failed")
+	}
+
+	if filewritemodetype.ParseOrUnknown("bogus") != filewritemodetype.Invalid {
+		t.Fatalf("ParseOrUnknown bogus failed")
 	}
 }
 

@@ -235,3 +235,21 @@ Allowed work:
 - ✅ Real-time single-line status ticker for completion progress (`[ 1/21] ✅ [PASS] <Gate> (<duration>s)`).
 - ✅ Selective log suppression: print stdout/stderr ONLY for gates that exit with a non-zero status code or timeout.
 - ✅ Full verbose logs emitted ONLY when the user explicitly passes the `--all` (`-a`) flag.
+
+---
+
+## High-Level Result/Error Wrappers in Enum Packages — TOTAL BAN
+
+🔴 **NEVER import `pkg/result` or `pkg/errtype` inside Go enum packages under `pkg/enum/`.**
+
+Forbidden:
+- ❌ `import "coding-guidelines/common/pkg/result"` in `pkg/enum/**`
+- ❌ `type Result = result.Wrap[Variant]` in enum packages
+- ❌ `func Parse(s string) Result` returning `result.Wrap[Variant]` from leaf enum packages
+
+Allowed work:
+- ✅ Enum packages must be foundational leaf packages returning `(Variant, bool)`.
+- ✅ Provide `ParseOrZero`, `ParseOrInvalid`, or `ParseOrUnknown` returning fallback variant.
+- ✅ Higher-level consumer packages (e.g. `pkg/fileutil`) may wrap enum values into `result.Wrap` if their APIs require it.
+
+**Why:** `pkg/result` imports `pkg/appfault`, and `pkg/appfault` imports enums (`severitytype`, `prioritytype`). When enum packages import `result`, it creates an unresolvable circular import cycle (`appfault` -> `enum` -> `result` -> `appfault`).

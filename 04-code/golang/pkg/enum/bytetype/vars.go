@@ -4,11 +4,7 @@ import (
 	"strconv"
 
 	"coding-guidelines/common/pkg/baseenumer"
-	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/result"
 )
-
-type Result = result.Wrap[Variant]
 
 var (
 	allVariants = []Variant{Zero, One, Two, Three, Max}
@@ -26,27 +22,41 @@ func Values() []string {
 	return basicEnum.Values()
 }
 
-func Parse(s string) Result {
+func Parse(s string) (Variant, bool) {
 	v, trimmed, isOk := basicEnum.ParseLookup(s)
 	if isOk {
-		return result.WrapSuccess(v)
+		return v, true
 	}
 
-	return parseFallback(s, trimmed)
+	return parseFallback(trimmed)
 }
 
-func parseFallback(original, trimmed string) Result {
+func parseFallback(trimmed string) (Variant, bool) {
 	if len(trimmed) == 0 {
-		return result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("bytetype"))
+		return Zero, false
 	}
 
 	parsed, err := strconv.ParseUint(trimmed, 10, 8)
 	if err != nil {
-		return result.WrapFailureWithId[Variant](
-			errtype.NotFound,
-			baseenumer.FormatParseError("bytetype", original, Values()),
-		)
+		return Zero, false
 	}
 
-	return result.WrapSuccess(Variant(parsed))
+	return Variant(parsed), true
+}
+
+func ParseOrZero(s string) Variant {
+	v, isOk := Parse(s)
+	if isOk {
+		return v
+	}
+
+	return Zero
+}
+
+func ParseOrInvalid(s string) Variant {
+	return ParseOrZero(s)
+}
+
+func ParseOrUnknown(s string) Variant {
+	return ParseOrZero(s)
 }

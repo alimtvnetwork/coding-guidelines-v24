@@ -60,16 +60,36 @@ func TestBasicIntegerEnum_AllAndValues(t *testing.T) {
 
 func TestBasicIntegerEnum_Parse(t *testing.T) {
 	b := baseenumer.NewBasicInteger(sampleByteLabels[:], sampleByteInvalid)
-	if val, err := b.Parse("Active"); err != nil || val != sampleByteActive {
+	if val, ok := b.Parse("Active"); !ok || val != sampleByteActive {
+		t.Fatalf("expected Active with true, got %v, ok: %v", val, ok)
+	}
+
+	if _, ok := b.Parse(""); ok {
+		t.Fatal("expected false on empty parse")
+	}
+
+	if _, ok := b.Parse("NonExistent"); ok {
+		t.Fatal("expected false on unknown parse")
+	}
+
+	if val := b.ParseOrZero("Active"); val != sampleByteActive {
+		t.Fatalf("expected Active, got %v", val)
+	}
+
+	if val := b.ParseOrZero("NonExistent"); val != sampleByteInvalid {
+		t.Fatalf("expected invalid zero value, got %v", val)
+	}
+
+	if val, err := b.ParseErr("Active"); err != nil || val != sampleByteActive {
 		t.Fatalf("expected Active, got %v, err: %v", val, err)
 	}
 
-	if _, err := b.Parse(""); err == nil {
-		t.Fatal("expected error on empty parse")
+	if _, err := b.ParseErr(""); err == nil {
+		t.Fatal("expected error on empty parseErr")
 	}
 
-	if _, err := b.Parse("NonExistent"); err == nil {
-		t.Fatal("expected error on unknown parse")
+	if _, err := b.ParseErr("NonExistent"); err == nil {
+		t.Fatal("expected error on unknown parseErr")
 	}
 }
 
@@ -137,16 +157,36 @@ func TestBasicStringEnum_AllAndValues(t *testing.T) {
 
 func TestBasicStringEnum_Parse(t *testing.T) {
 	b := baseenumer.NewBasicString(sampleStringVariants, sampleStringUnknown)
-	if val, err := b.Parse("Alpha"); err != nil || val != sampleStringAlpha {
+	if val, ok := b.Parse("Alpha"); !ok || val != sampleStringAlpha {
+		t.Fatalf("expected Alpha with true, got %v, ok: %v", val, ok)
+	}
+
+	if _, ok := b.Parse(""); ok {
+		t.Fatal("expected false on empty parse")
+	}
+
+	if _, ok := b.Parse("NonExistent"); ok {
+		t.Fatal("expected false on unknown parse")
+	}
+
+	if val := b.ParseOrZero("Alpha"); val != sampleStringAlpha {
+		t.Fatalf("expected Alpha, got %v", val)
+	}
+
+	if val := b.ParseOrZero("NonExistent"); val != sampleStringUnknown {
+		t.Fatalf("expected unknown zero value, got %v", val)
+	}
+
+	if val, err := b.ParseErr("Alpha"); err != nil || val != sampleStringAlpha {
 		t.Fatalf("expected Alpha, got %v, err: %v", val, err)
 	}
 
-	if _, err := b.Parse(""); err == nil {
-		t.Fatal("expected error on empty parse")
+	if _, err := b.ParseErr(""); err == nil {
+		t.Fatal("expected error on empty parseErr")
 	}
 
-	if _, err := b.Parse("NonExistent"); err == nil {
-		t.Fatal("expected error on unknown parse")
+	if _, err := b.ParseErr("NonExistent"); err == nil {
+		t.Fatal("expected error on unknown parseErr")
 	}
 }
 
@@ -227,20 +267,40 @@ func TestBasicSparseIntegerEnum_AllAndValues(t *testing.T) {
 
 func TestBasicSparseIntegerEnum_Parse(t *testing.T) {
 	b := baseenumer.NewBasicSparseInteger(sampleSparseVariants, sampleSparseNames, sampleSparseZero, 50)
-	if val, err := b.Parse("Ten"); err != nil || val != sampleSparseTen {
+	if val, ok := b.Parse("Ten"); !ok || val != sampleSparseTen {
+		t.Fatalf("expected Ten with true, got %v, ok: %v", val, ok)
+	}
+
+	if val, ok := b.Parse("50"); !ok || val != sampleSparseFifty {
+		t.Fatalf("expected Fifty from numeric string, got %v, ok: %v", val, ok)
+	}
+
+	if _, ok := b.Parse(""); ok {
+		t.Fatal("expected false on empty parse")
+	}
+
+	if _, ok := b.Parse("UnknownVariant"); ok {
+		t.Fatal("expected false on unknown parse")
+	}
+
+	if val := b.ParseOrZero("Ten"); val != sampleSparseTen {
+		t.Fatalf("expected Ten, got %v", val)
+	}
+
+	if val := b.ParseOrZero("UnknownVariant"); val != sampleSparseZero {
+		t.Fatalf("expected zero value, got %v", val)
+	}
+
+	if val, err := b.ParseErr("Ten"); err != nil || val != sampleSparseTen {
 		t.Fatalf("expected Ten, got %v, err: %v", val, err)
 	}
 
-	if val, err := b.Parse("50"); err != nil || val != sampleSparseFifty {
-		t.Fatalf("expected Fifty from numeric string, got %v, err: %v", val, err)
+	if _, err := b.ParseErr(""); err == nil {
+		t.Fatal("expected error on empty parseErr")
 	}
 
-	if _, err := b.Parse(""); err == nil {
-		t.Fatal("expected error on empty parse")
-	}
-
-	if _, err := b.Parse("UnknownVariant"); err == nil {
-		t.Fatal("expected error on unknown parse")
+	if _, err := b.ParseErr("UnknownVariant"); err == nil {
+		t.Fatal("expected error on unknown parseErr")
 	}
 }
 

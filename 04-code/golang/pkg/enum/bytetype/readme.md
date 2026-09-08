@@ -42,9 +42,9 @@ isGt := three.IsGreater(1)     // true
 isBt := three.IsBetween(1, 5)  // true
 
 // Parsing
-res := bytetype.Parse("two")
-if res.IsSuccess() {
-    v := res.Data()            // bytetype.Two
+v, isOk := bytetype.Parse("two")
+if isOk {
+    // v == bytetype.Two
 }
 ```
 
@@ -59,5 +59,5 @@ if res.IsSuccess() {
 - **Comparisons:** `IsEqual`, `IsEqualInt`, `IsGreater`, `IsGreaterInt`, `IsGreaterEqual`, `IsGreaterEqualInt`, `IsLess`, `IsLessInt`, `IsLessEqual`, `IsLessEqualInt`, `IsBetween`, `IsBetweenInt`, `IsValueEqual`, `IsNameEqual`, `IsAnyNamesOf`
 - **Arithmetic:** `Add(byte) Variant`, `Subtract(byte) Variant`
 - **Package Functions:** `New(byte) Variant`, `GetSet(bool, Variant, Variant) Variant`, `GetSetVariant(bool, byte, byte) Variant`, `String([]byte) string`
-- **Catalog & Parse:** `All() []Variant`, `Values() []string`, `Parse(string) Result`
+- **Catalog & Parse:** `All() []Variant`, `Values() []string`, `Parse(string) (Variant, bool)`, `ParseOrZero(string) Variant`
 - **JSON Serialization:** `MarshalJSON() ([]byte, error)`, `UnmarshalJSON([]byte) error`

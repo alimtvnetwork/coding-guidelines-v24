@@ -47,5 +47,7 @@ func CanExecute(state processstatetype.Variant) bool {
 - `.IsPending() bool`, `.IsRunning() bool`, etc. - Positive boolean predicates.
 - `All() []Variant` - Returns slice of all valid variants (`Pending` through `Cancelled`).
 - `Values() []string` - Returns slice of valid variant names.
-- `Parse(s string) Result` - Case-insensitive string parser returning `Result` (`result.Wrap[Variant]`).
+- `Parse(s string) (Variant, bool)` - Case-insensitive string parser returning the typed variant and success boolean.
+- `ParseOrInvalid(s string) Variant` / `ParseOrUnknown(s string) Variant` - String parser returning `Invalid` (0) on failure.
 - `MarshalJSON()` / `UnmarshalJSON()` - PascalCase JSON serialization with string and byte fallback.
+

@@ -7,10 +7,5 @@ import (
 type LogLevel = logleveltype.Variant
 
 func ParseLogLevel(s string) LogLevel {
-	res := logleveltype.Parse(s)
-	if res.IsSuccess() {
-		return res.Data()
-	}
-
-	return LevelUnknown
+	return logleveltype.ParseOrUnknown(s)
 }

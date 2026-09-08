@@ -103,33 +103,36 @@ func TestCheckers(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	res := openfiletype.Parse("createappend")
-	if res.IsFailed() {
-		t.Fatalf("expected parse to succeed: %v", res.Fault())
+	v, isOk := openfiletype.Parse("createappend")
+	if !isOk {
+		t.Fatalf("expected parse to succeed")
 	}
 
-	if res.Data() != openfiletype.CreateAppend {
-		t.Fatalf("expected CreateAppend, got %v", res.Data())
+	if v != openfiletype.CreateAppend {
+		t.Fatalf("expected CreateAppend, got %v", v)
 	}
 
-	resRO := openfiletype.Parse("readorcreateonly")
-	if resRO.IsFailed() || resRO.Data() != openfiletype.ReadOrCreateOnly {
-		t.Fatalf("expected ReadOrCreateOnly, got %v", resRO.Data())
+	vRO, isOkRO := openfiletype.Parse("readorcreateonly")
+	if !isOkRO || vRO != openfiletype.ReadOrCreateOnly {
+		t.Fatalf("expected ReadOrCreateOnly, got %v", vRO)
 	}
 
-	resWO := openfiletype.Parse("WriteOrCreateOnly")
-	if resWO.IsFailed() || resWO.Data() != openfiletype.WriteOrCreateOnly {
-		t.Fatalf("expected WriteOrCreateOnly, got %v", resWO.Data())
+	vWO, isOkWO := openfiletype.Parse("WriteOrCreateOnly")
+	if !isOkWO || vWO != openfiletype.WriteOrCreateOnly {
+		t.Fatalf("expected WriteOrCreateOnly, got %v", vWO)
 	}
 
-	resRWO := openfiletype.Parse("READWRITEORCREATEONLY")
-	if resRWO.IsFailed() || resRWO.Data() != openfiletype.ReadWriteOrCreateOnly {
-		t.Fatalf("expected ReadWriteOrCreateOnly, got %v", resRWO.Data())
+	vRWO, isOkRWO := openfiletype.Parse("READWRITEORCREATEONLY")
+	if !isOkRWO || vRWO != openfiletype.ReadWriteOrCreateOnly {
+		t.Fatalf("expected ReadWriteOrCreateOnly, got %v", vRWO)
 	}
 
-	badRes := openfiletype.Parse("invalid-mode-string")
-	if badRes.IsSuccess() {
+	if _, isBadOk := openfiletype.Parse("invalid-mode-string"); isBadOk {
 		t.Fatalf("expected failure on bad string")
+	}
+
+	if fallback := openfiletype.ParseOrInvalid("invalid-mode-string"); fallback != openfiletype.Invalid {
+		t.Fatalf("expected Invalid fallback, got %v", fallback)
 	}
 }
 

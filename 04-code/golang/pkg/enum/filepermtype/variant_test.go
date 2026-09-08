@@ -119,24 +119,36 @@ func TestFilePermType_AllAndValues(t *testing.T) {
 }
 
 func TestFilePermType_Parse(t *testing.T) {
-	res := filepermtype.Parse("0644")
-	if !res.IsSuccess() || res.Data() != filepermtype.Standard {
+	val, isOk := filepermtype.Parse("0644")
+	if !isOk || val != filepermtype.Standard {
 		t.Fatalf("parse 0644 failed")
 	}
 
-	resAlias := filepermtype.ParsePerm("0755")
-	if !resAlias.IsSuccess() || resAlias.Data() != filepermtype.Executable {
+	valAlias, isOkAlias := filepermtype.ParsePerm("0755")
+	if !isOkAlias || valAlias != filepermtype.Executable {
 		t.Fatalf("parse 0755 failed")
 	}
 
-	emptyRes := filepermtype.Parse("")
-	if emptyRes.IsSuccess() {
+	_, isEmptyOk := filepermtype.Parse("")
+	if isEmptyOk {
 		t.Fatalf("expected failure on empty string")
 	}
 
-	invalidRes := filepermtype.Parse("invalid-octal")
-	if invalidRes.IsSuccess() {
+	_, isInvalidOk := filepermtype.Parse("invalid-octal")
+	if isInvalidOk {
 		t.Fatalf("expected failure on invalid octal")
+	}
+
+	if filepermtype.ParseOrZero("0644") != filepermtype.Standard {
+		t.Fatalf("ParseOrZero 0644 failed")
+	}
+
+	if filepermtype.ParseOrInvalid("bogus") != filepermtype.None {
+		t.Fatalf("ParseOrInvalid bogus failed")
+	}
+
+	if filepermtype.ParseOrUnknown("bogus") != filepermtype.None {
+		t.Fatalf("ParseOrUnknown bogus failed")
 	}
 }
 

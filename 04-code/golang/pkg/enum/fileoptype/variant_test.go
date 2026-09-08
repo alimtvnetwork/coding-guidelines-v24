@@ -128,24 +128,36 @@ func TestFileOpType_Vars(t *testing.T) {
 		t.Fatalf("expected 8 valid values, got %d", len(vals))
 	}
 
-	parsed := fileoptype.Parse("Delete")
-	if parsed.IsFailed() || parsed.Data() != fileoptype.Delete {
+	parsed, isOk := fileoptype.Parse("Delete")
+	if !isOk || parsed != fileoptype.Delete {
 		t.Fatalf("expected Delete parse success")
 	}
 
-	parsedLower := fileoptype.Parse("createappend")
-	if parsedLower.IsFailed() || parsedLower.Data() != fileoptype.CreateAppend {
+	parsedLower, isLowerOk := fileoptype.Parse("createappend")
+	if !isLowerOk || parsedLower != fileoptype.CreateAppend {
 		t.Fatalf("expected createappend parse success")
 	}
 
-	empty := fileoptype.Parse("   ")
-	if !empty.IsFailed() {
+	_, isEmptyOk := fileoptype.Parse("   ")
+	if isEmptyOk {
 		t.Fatalf("expected empty parse error")
 	}
 
-	invalid := fileoptype.Parse("NonExistent")
-	if !invalid.IsFailed() {
+	_, isInvalidOk := fileoptype.Parse("NonExistent")
+	if isInvalidOk {
 		t.Fatalf("expected invalid parse error")
+	}
+
+	if fileoptype.ParseOrZero("Delete") != fileoptype.Delete {
+		t.Fatalf("ParseOrZero Delete failed")
+	}
+
+	if fileoptype.ParseOrInvalid("bogus") != fileoptype.Invalid {
+		t.Fatalf("ParseOrInvalid bogus failed")
+	}
+
+	if fileoptype.ParseOrUnknown("bogus") != fileoptype.Invalid {
+		t.Fatalf("ParseOrUnknown bogus failed")
 	}
 }
 

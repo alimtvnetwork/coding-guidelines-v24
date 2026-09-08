@@ -13,8 +13,7 @@ var (
 		Critical: "Critical",
 	}
 
-	basicEnum  = baseenumer.NewBasicInteger(variantLabels[:], Unknown)
-	variantMap = basicEnum.Map()
+	basicEnum = baseenumer.NewBasicInteger(variantLabels[:], Unknown)
 )
 
 func All() []Variant {
@@ -34,16 +33,17 @@ func Max() Variant {
 }
 
 func Parse(s string) (Variant, bool) {
-	v, _, ok := baseenumer.ParseLookup(s, variantMap)
-
-	return v, ok
+	return basicEnum.Parse(s)
 }
 
 func ParseOrUnknown(s string) Variant {
-	v, ok := Parse(s)
-	if ok {
-		return v
-	}
+	return basicEnum.ParseOrZero(s)
+}
 
-	return Unknown
+func ParseOrZero(s string) Variant {
+	return basicEnum.ParseOrZero(s)
+}
+
+func ParseOrInvalid(s string) Variant {
+	return basicEnum.ParseOrZero(s)
 }

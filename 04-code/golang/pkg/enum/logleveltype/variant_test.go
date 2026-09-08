@@ -108,23 +108,31 @@ func TestIsEnabled(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	res := logleveltype.Parse("warn")
-	if res.IsFailed() {
-		t.Fatalf("expected parse to succeed: %v", res.Fault())
+	val, isOk := logleveltype.Parse("warn")
+	if !isOk || val != logleveltype.Warn {
+		t.Fatalf("expected Warn, got %v", val)
 	}
 
-	if res.Data() != logleveltype.Warn {
-		t.Fatalf("expected Warn, got %v", res.Data())
+	valUnknown, isUnknownOk := logleveltype.Parse("unknown")
+	if !isUnknownOk || valUnknown != logleveltype.Unknown {
+		t.Fatalf("expected Unknown, got %v", valUnknown)
 	}
 
-	resUnknown := logleveltype.Parse("unknown")
-	if resUnknown.IsFailed() || resUnknown.Data() != logleveltype.Unknown {
-		t.Fatalf("expected Unknown, got %v", resUnknown.Data())
-	}
-
-	badRes := logleveltype.Parse("nonexistent-level")
-	if badRes.IsSuccess() {
+	_, isBadOk := logleveltype.Parse("nonexistent-level")
+	if isBadOk {
 		t.Fatalf("expected failure on bad string")
+	}
+
+	if logleveltype.ParseOrZero("warn") != logleveltype.Warn {
+		t.Fatalf("ParseOrZero warn failed")
+	}
+
+	if logleveltype.ParseOrInvalid("bogus") != logleveltype.Invalid {
+		t.Fatalf("ParseOrInvalid bogus failed")
+	}
+
+	if logleveltype.ParseOrUnknown("bogus") != logleveltype.Unknown {
+		t.Fatalf("ParseOrUnknown bogus failed")
 	}
 }
 

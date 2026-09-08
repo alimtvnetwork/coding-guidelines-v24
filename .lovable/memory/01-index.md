@@ -37,6 +37,7 @@ Updated: 2026-04-27
 - [Parallel CI/CD Runner & Selective Log Filtering](learned/03-parallel-cicd-runner-and-log-filtering.md) — Concurrency workgroups via ThreadPoolExecutor, duration metrics, and clean log suppression.
 - [StreamWriter Contracts & Naming Standards](learned/04-streamwriter-contracts-and-naming-standards.md) — Idiomatic -er interfaces, ReentrantMutex, Bytes[T], JsonResult multi-source ingestion, boolean prefixes, and Id naming standard.
 - [Codebase Topology & Skills Architecture](learned/05-codebase-topology-and-skills-architecture.md) — Comprehensive topology ingestion, 28 AI Python scripts catalog, Antigravity skills inventory, and CI/CD quality gate enforcement.
+- [Leaf Enums & Baseenumer Parse Helpers](learned/06-leaf-enums-and-baseenumer-parse-helpers.md) — Leaf enum architecture, elimination of result/errtype import cycles, and baseenumer Parse/ParseOrZero methods.
 - [Fast File Indexing & Caching Strategy](standards/05-fast-file-indexing-and-caching.md) — Pre-computed file scanning and index caching in `tmp/` via `08-fast-file-scanner.py` for rapid multi-step lookups.
 - [Prompt Synchronization Architecture](standards/04-prompt-synchronization-architecture.md) — All prompts authored in `01-prompts/` and compiled to flat `01-prompts/*.md` via `scripts/update-prompts.ps1` without external Git clones.
 - [Version Source of Truth Standard](standards/version-source-of-truth.md) — Canonical `version.json` standard at repo root.

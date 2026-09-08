@@ -88,8 +88,25 @@ func (b *BasicIntegerEnum[V]) Values() []string {
 	return SliceValues(b.labels)
 }
 
-// Parse parses a string into an enum variant, returning an error if unrecognized.
-func (b *BasicIntegerEnum[V]) Parse(s string) (V, error) {
+// Parse parses a string into an enum variant, returning whether the parse succeeded.
+func (b *BasicIntegerEnum[V]) Parse(s string) (V, bool) {
+	v, _, isOk := ParseLookup(s, b.variantMap)
+
+	return v, isOk
+}
+
+// ParseOrZero parses a string and returns the variant, or zero value if unrecognized.
+func (b *BasicIntegerEnum[V]) ParseOrZero(s string) V {
+	v, _, isOk := ParseLookup(s, b.variantMap)
+	if isOk {
+		return v
+	}
+
+	return b.zero
+}
+
+// ParseErr parses a string into an enum variant, returning an error if unrecognized.
+func (b *BasicIntegerEnum[V]) ParseErr(s string) (V, error) {
 	v, trimmed, isOk := ParseLookup(s, b.variantMap)
 	if len(trimmed) == 0 {
 		return b.zero, errors.New(FormatEmptyParseError(b.typeName))
@@ -284,8 +301,25 @@ func (b *BasicStringEnum[V]) Values() []string {
 	return res
 }
 
-// Parse parses a string into an enum variant, returning an error if unrecognized.
-func (b *BasicStringEnum[V]) Parse(s string) (V, error) {
+// Parse parses a string into an enum variant, returning whether the parse succeeded.
+func (b *BasicStringEnum[V]) Parse(s string) (V, bool) {
+	v, _, isOk := ParseLookup(s, b.variantMap)
+
+	return v, isOk
+}
+
+// ParseOrZero parses a string and returns the variant, or zero value if unrecognized.
+func (b *BasicStringEnum[V]) ParseOrZero(s string) V {
+	v, _, isOk := ParseLookup(s, b.variantMap)
+	if isOk {
+		return v
+	}
+
+	return b.zero
+}
+
+// ParseErr parses a string into an enum variant, returning an error if unrecognized.
+func (b *BasicStringEnum[V]) ParseErr(s string) (V, error) {
 	v, trimmed, isOk := ParseLookup(s, b.variantMap)
 	if len(trimmed) == 0 {
 		return b.zero, errors.New(FormatEmptyParseError(b.typeName))

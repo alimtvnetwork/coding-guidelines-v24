@@ -119,24 +119,32 @@ func TestParse_Success(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		res := processstatetype.Parse(tc.input)
-		if !res.IsSuccess() {
-			t.Fatalf("expected parse %q to succeed, got %v", tc.input, res.Fault())
+		v, isOk := processstatetype.Parse(tc.input)
+		if !isOk {
+			t.Fatalf("expected parse %q to succeed", tc.input)
 		}
 
-		if res.Data() != tc.expected {
-			t.Fatalf("expected %v, got %v", tc.expected, res.Data())
+		if v != tc.expected {
+			t.Fatalf("expected %v, got %v", tc.expected, v)
 		}
 	}
 }
 
 func TestParse_Failure(t *testing.T) {
-	if res := processstatetype.Parse(""); res.IsSuccess() {
+	if _, isOk := processstatetype.Parse(""); isOk {
 		t.Fatalf("expected empty string to fail")
 	}
 
-	if res := processstatetype.Parse("invalid_variant"); res.IsSuccess() {
+	if _, isOk := processstatetype.Parse("invalid_variant"); isOk {
 		t.Fatalf("expected invalid variant to fail")
+	}
+
+	if v := processstatetype.ParseOrInvalid("invalid_variant"); v != processstatetype.Invalid {
+		t.Fatalf("expected Invalid fallback, got %v", v)
+	}
+
+	if v := processstatetype.ParseOrUnknown("invalid_variant"); v != processstatetype.Unknown {
+		t.Fatalf("expected Unknown fallback, got %v", v)
 	}
 }
 

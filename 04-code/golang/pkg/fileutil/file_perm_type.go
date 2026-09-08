@@ -4,12 +4,19 @@ import (
 	"os"
 
 	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/errtype"
+	"coding-guidelines/common/pkg/result"
 )
 
 type FilePermType = filepermtype.Variant
 
 func ParsePerm(octalStr string) FilePermResult {
-	return filepermtype.ParsePerm(octalStr)
+	val, isOk := filepermtype.ParsePerm(octalStr)
+	if !isOk {
+		return result.WrapFailureWithId[FilePermType](errtype.Validation, "invalid octal permission: "+octalStr)
+	}
+
+	return result.WrapSuccess(val)
 }
 
 func FromFileMode(mode os.FileMode) FilePermType {

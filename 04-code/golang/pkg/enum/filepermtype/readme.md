@@ -33,8 +33,8 @@ priv := perm.WithPrivate()      // 0600
 exec := perm.WithExecutable()   // 0755
 
 // Parsing
-res := filepermtype.Parse("0644")
-if res.IsSuccess() {
-    v := res.Data()
+v, isOk := filepermtype.Parse("0644")
+if isOk {
+    // v == filepermtype.Standard
 }
 ```

@@ -231,16 +231,27 @@ func TestParse(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		res := bytetype.Parse(tc.input)
-		if tc.isSuccess {
-			if !res.IsSuccess() || res.Data() != tc.expected {
-				t.Errorf("parse %q failed: %v", tc.input, res.Fault())
-			}
-		} else {
-			if res.IsSuccess() {
-				t.Errorf("parse %q expected failure", tc.input)
-			}
+		val, isOk := bytetype.Parse(tc.input)
+		if isOk != tc.isSuccess {
+			t.Fatalf("parse %q isOk expected %v, got %v", tc.input, tc.isSuccess, isOk)
 		}
+
+		if isOk && val != tc.expected {
+			t.Fatalf("parse %q expected %v, got %v", tc.input, tc.expected, val)
+		}
+
+		orZero := bytetype.ParseOrZero(tc.input)
+		if isOk && orZero != tc.expected {
+			t.Fatalf("ParseOrZero %q expected %v, got %v", tc.input, tc.expected, orZero)
+		}
+	}
+
+	if bytetype.ParseOrInvalid("bogus") != bytetype.Zero {
+		t.Fatalf("ParseOrInvalid bogus expected Zero")
+	}
+
+	if bytetype.ParseOrUnknown("bogus") != bytetype.Zero {
+		t.Fatalf("ParseOrUnknown bogus expected Zero")
 	}
 }
 

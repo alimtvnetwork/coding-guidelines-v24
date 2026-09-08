@@ -2,11 +2,7 @@ package processstatetype
 
 import (
 	"coding-guidelines/common/pkg/baseenumer"
-	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/result"
 )
-
-type Result = result.Wrap[Variant]
 
 var (
 	variantLabels = [...]string{
@@ -18,8 +14,7 @@ var (
 		Cancelled: "Cancelled",
 	}
 
-	basicEnum  = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
-	variantMap = basicEnum.Map()
+	basicEnum = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
 )
 
 func All() []Variant {
@@ -38,18 +33,14 @@ func Max() Variant {
 	return basicEnum.Max()
 }
 
-func Parse(s string) Result {
-	v, trimmed, ok := baseenumer.ParseLookup(s, variantMap)
-	if len(trimmed) == 0 {
-		return result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("processstatetype"))
-	}
+func Parse(s string) (Variant, bool) {
+	return basicEnum.Parse(s)
+}
 
-	if ok {
-		return result.WrapSuccess(v)
-	}
+func ParseOrInvalid(s string) Variant {
+	return basicEnum.ParseOrZero(s)
+}
 
-	return result.WrapFailureWithId[Variant](
-		errtype.NotFound,
-		baseenumer.FormatParseError("processstatetype", s, Values()),
-	)
+func ParseOrUnknown(s string) Variant {
+	return basicEnum.ParseOrZero(s)
 }

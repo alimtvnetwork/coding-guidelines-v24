@@ -11,18 +11,13 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
+- [14-reduce-baseenumer-and-remove-enum-result-wrap.md](completed/14-reduce-baseenumer-and-remove-enum-result-wrap.md): Reduce baseenumer boilerplate and remove enum Result wrap to eliminate import cycles.
 - [33-enum-min-max-methods-and-baseenumer-enhancement.md](completed/33-enum-min-max-methods-and-baseenumer-enhancement.md): Enum Min/Max Methods and BaseEnumer Enhancement.
-
 - [32-codebase-and-prompt-improvements.md](completed/32-codebase-and-prompt-improvements.md): Codebase, AI Scripts, and Prompts Improvements.
-
 - [31-basic-enum-reusability-and-reflection-unmarshal.md](completed/31-basic-enum-reusability-and-reflection-unmarshal.md): BasicEnum Reusability & Reflection-Based Type Name Resolution.
-
 - [30-boolean-prefix-and-bound-writer-params.md](completed/30-boolean-prefix-and-bound-writer-params.md): Boolean Naming Standardization (`is`/`has` Prefixes) & BoundFileWriter Parameter Actions.
-
 - [29-rename-mutex-to-lock.md](completed/29-rename-mutex-to-lock.md): Rename `mu` and `mutex` to `lock` Repo-Wide.
-
 - [28-dry-enum-marshaling-and-scaffolder.md](completed/28-dry-enum-marshaling-and-scaffolder.md): DRY Enum Marshaling in `pkg/baseenumer` & Smart Multi-File Enum Scaffolder.
-
 - [27-direct-result-types-consolidation.md](completed/27-direct-result-types-consolidation.md): Direct Concrete Result Types Consolidation Across Enum Packages and FileUtil.
 - [26-prune-enum-const-aliases-and-enumer-types.md](completed/26-prune-enum-const-aliases-and-enumer-types.md): Eliminate Redundant Enum Const Aliases & Prune Over-Engineered Enumer Types.
 - [25-enum-packages-isolation.md](completed/25-enum-packages-isolation.md): Dedicated Enum Packages Isolation (`fileoptype`, `filewritemodetype`, `severitytype`, `prioritytype`).
@@ -37,7 +32,6 @@ Master directory of architectural and execution plans.
 - [16-coredata-wrap-and-baseenumer-expansion.md](completed/16-coredata-wrap-and-baseenumer-expansion.md): Modular BaseEnum family (byte/utf8, utf16, utf32/rune, string, number/int) and coredata collection combinators & dynamic struct formatting.
 - [15-simple-verifier-consolidation.md](completed/15-simple-verifier-consolidation.md): Unified SimpleVerifier and SimpleVerifyChecker contracts, AsSimpleVerifier/AsSimpleVerifyChecker methods, and compile-time static type assertions.
 - [14-generic-typecast-and-result-checkers.md](completed/14-generic-typecast-and-result-checkers.md): Bulletproof typecast conversions, reflection performance optimization, Result and AppError generic casting, and Checker interface contracts.
-
 - [01-apperror-new-constructors.md](completed/01-apperror-new-constructors.md): Go AppError namespace constructors.
 - [03-apperror-human-logger-methods.md](completed/03-apperror-human-logger-methods.md): Human-readable logger methods on AppError.
 - [05-rename-overviews-and-installer-json.md](completed/05-rename-overviews-and-installer-json.md): Rename overviews and installer JSON configurations.

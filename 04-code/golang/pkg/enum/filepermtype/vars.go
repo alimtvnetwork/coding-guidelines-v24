@@ -6,11 +6,7 @@ import (
 	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
-	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/result"
 )
-
-type Result = result.Wrap[Variant]
 
 var (
 	allVariants = []Variant{
@@ -82,22 +78,39 @@ func Max() Variant {
 	return basicEnum.Max()
 }
 
-func Parse(octalStr string) Result {
+func Parse(octalStr string) (Variant, bool) {
 	trimmed := strings.TrimSpace(octalStr)
 	if len(trimmed) == 0 {
-		return result.WrapFailureWithId[Variant](errtype.Validation, "octal string cannot be empty")
+		return None, false
 	}
 
 	val, err := strconv.ParseUint(trimmed, 8, 32)
 	if err != nil {
-		return result.WrapFailureWithCause[Variant](errtype.Validation, err, "invalid octal permission: "+octalStr)
+		return None, false
 	}
 
-	return result.WrapSuccess(Variant(val))
+	return Variant(val), true
 }
 
-func ParsePerm(octalStr string) Result {
+func ParsePerm(octalStr string) (Variant, bool) {
 	return Parse(octalStr)
+}
+
+func ParseOrZero(octalStr string) Variant {
+	v, isOk := Parse(octalStr)
+	if isOk {
+		return v
+	}
+
+	return None
+}
+
+func ParseOrInvalid(octalStr string) Variant {
+	return ParseOrZero(octalStr)
+}
+
+func ParseOrUnknown(octalStr string) Variant {
+	return ParseOrZero(octalStr)
 }
 
 func FromFileMode(mode os.FileMode) Variant {

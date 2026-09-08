@@ -21,9 +21,9 @@ type (
 	BoolResult          = result.Wrap[bool]
 	FileInfoResult      = result.Wrap[os.FileInfo]
 	Int64Result         = result.Wrap[int64]
-	FilePermResult      = filepermtype.Result
-	FileOpResult        = fileoptype.Result
-	FileWriteModeResult = filewritemodetype.Result
-	FileOpenModeResult  = openfiletype.Result
+	FilePermResult      = result.Wrap[filepermtype.Variant]
+	FileOpResult        = result.Wrap[fileoptype.Variant]
+	FileWriteModeResult = result.Wrap[filewritemodetype.Variant]
+	FileOpenModeResult  = result.Wrap[openfiletype.Variant]
 	FileWriterResult    = result.Wrap[*streamwriter.PluggableWriter[any]]
 )
