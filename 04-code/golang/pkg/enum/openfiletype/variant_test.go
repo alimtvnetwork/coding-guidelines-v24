@@ -100,6 +100,20 @@ func TestCheckers(t *testing.T) {
 	if !rwoco.IsReadWriteOrCreateOnly() {
 		t.Fatalf("expected IsReadWriteOrCreateOnly true")
 	}
+
+	rw := openfiletype.ReadWrite
+	if !rw.IsReadWrite() {
+		t.Fatalf("expected IsReadWrite true")
+	}
+
+	app := openfiletype.Append
+	if !app.IsAppend() {
+		t.Fatalf("expected IsAppend true")
+	}
+
+	if ro.Label() != "ReadOnly" {
+		t.Fatalf("expected Label ReadOnly, got %s", ro.Label())
+	}
 }
 
 func TestParse(t *testing.T) {
@@ -133,6 +147,21 @@ func TestParse(t *testing.T) {
 
 	if fallback := openfiletype.ParseOrInvalid("invalid-mode-string"); fallback != openfiletype.Invalid {
 		t.Fatalf("expected Invalid fallback, got %v", fallback)
+	}
+
+	if fallback := openfiletype.ParseOrUnknown("invalid-mode-string"); fallback != openfiletype.Invalid {
+		t.Fatalf("expected Invalid fallback on unknown, got %v", fallback)
+	}
+}
+
+func TestOutOfBounds(t *testing.T) {
+	bogus := openfiletype.Variant(99)
+	if bogus.Name() != "OpenFile(99)" {
+		t.Fatalf("expected OpenFile(99), got %s", bogus.Name())
+	}
+
+	if bogus.Flags() != 0 {
+		t.Fatalf("expected 0 flags for out of bounds, got %d", bogus.Flags())
 	}
 }
 

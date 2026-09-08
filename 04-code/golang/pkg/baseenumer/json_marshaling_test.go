@@ -118,6 +118,34 @@ func TestUnmarshalStringJSON_NullAndErrors(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected error on non-existent string variant, got nil")
 	}
+
+	err = baseenumer.UnmarshalStringJSONWithName([]byte(`"NonExistent"`), &target, "CustomString", testStringMap, testStringUnknown)
+	if err == nil {
+		t.Fatalf("expected error with custom name, got nil")
+	}
+}
+
+func TestUnmarshalIntegerJSON_NamedAndErrors(t *testing.T) {
+	var target testByteEnum
+	err := baseenumer.UnmarshalIntegerJSONWithName([]byte(`99`), &target, "CustomByte", testByteMap, 2, testByteInvalid)
+	if err == nil {
+		t.Fatalf("expected error for numeric out of range with name, got nil")
+	}
+
+	err = baseenumer.UnmarshalIntegerJSONWithName([]byte(`"99"`), &target, "CustomByte", testByteMap, 2, testByteInvalid)
+	if err == nil {
+		t.Fatalf("expected error for numeric string out of range, got nil")
+	}
+
+	err = baseenumer.UnmarshalIntegerJSON([]byte(`"not-a-number"`), &target, testByteMap, 2, testByteInvalid)
+	if err == nil {
+		t.Fatalf("expected error for non-numeric unknown string, got nil")
+	}
+
+	err = baseenumer.UnmarshalIntegerJSON([]byte(`{invalid-json`), &target, testByteMap, 2, testByteInvalid)
+	if err == nil {
+		t.Fatalf("expected error on invalid json, got nil")
+	}
 }
 
 func TestResolveTypeName(t *testing.T) {

@@ -56,6 +56,11 @@ func TestVariantsAndLabels(t *testing.T) {
 			t.Errorf("expected %s to be valid", tc.expectedName)
 		}
 	}
+
+	custom := logleveltype.Variant(99)
+	if custom.Name() != "LogLevel(99)" {
+		t.Fatalf("unexpected custom name: %s", custom.Name())
+	}
 }
 
 func TestCheckers(t *testing.T) {

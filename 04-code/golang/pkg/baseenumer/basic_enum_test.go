@@ -539,3 +539,22 @@ func TestMinMaxer_InterfaceConformance(t *testing.T) {
 		t.Fatal("unexpected str MinMaxer Max")
 	}
 }
+
+func TestBasicSparseIntegerEnum_BoundaryPredicates(t *testing.T) {
+	b := baseenumer.NewBasicSparseInteger(sampleSparseVariants, sampleSparseNames, sampleSparseZero, 50)
+	if !b.IsMin(sampleSparseZero) || b.IsMin(sampleSparseTen) {
+		t.Fatalf("sparse IsMin failed")
+	}
+
+	if !b.IsMax(sampleSparseFifty) || b.IsMax(sampleSparseTen) {
+		t.Fatalf("sparse IsMax failed")
+	}
+
+	if !b.IsInRange(sampleSparseTen, sampleSparseZero, sampleSparseFifty) {
+		t.Fatalf("sparse IsInRange failed for valid range")
+	}
+
+	if b.IsInRange(sampleSparseFifty+1, sampleSparseZero, sampleSparseFifty) {
+		t.Fatalf("sparse IsInRange succeeded for out of range")
+	}
+}

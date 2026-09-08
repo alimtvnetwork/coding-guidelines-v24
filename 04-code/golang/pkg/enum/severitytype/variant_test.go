@@ -126,6 +126,14 @@ func TestSeverityType_Vars(t *testing.T) {
 	if vUnknown != severitytype.Unknown {
 		t.Fatalf("expected ParseOrUnknown to return Unknown")
 	}
+
+	if severitytype.ParseOrZero("Critical") != severitytype.Critical {
+		t.Fatalf("expected ParseOrZero Critical success")
+	}
+
+	if severitytype.ParseOrInvalid("NonExistent") != severitytype.Unknown {
+		t.Fatalf("expected ParseOrInvalid to return Unknown")
+	}
 }
 
 func TestSeverityType_JSON(t *testing.T) {

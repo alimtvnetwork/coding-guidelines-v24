@@ -122,6 +122,14 @@ func TestPriorityType_Vars(t *testing.T) {
 	if vUnknown != prioritytype.Unknown {
 		t.Fatalf("expected ParseOrUnknown to return Unknown")
 	}
+
+	if prioritytype.ParseOrZero("Critical") != prioritytype.Critical {
+		t.Fatalf("expected ParseOrZero Critical success")
+	}
+
+	if prioritytype.ParseOrInvalid("NonExistent") != prioritytype.Unknown {
+		t.Fatalf("expected ParseOrInvalid to return Unknown")
+	}
 }
 
 func TestPriorityType_JSON(t *testing.T) {

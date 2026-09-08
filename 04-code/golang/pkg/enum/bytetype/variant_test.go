@@ -150,6 +150,10 @@ func TestNamingAndFormatting(t *testing.T) {
 		t.Fatalf("naming failed")
 	}
 
+	if bytetype.One.Name() != "One" || bytetype.Three.Name() != "Three" {
+		t.Fatalf("One and Three name failed")
+	}
+
 	if bytetype.Max.Name() != "Max" {
 		t.Fatalf("Max name failed")
 	}

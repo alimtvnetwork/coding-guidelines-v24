@@ -11,6 +11,7 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
+- [15-comprehensive-tests-for-enums-and-baseenumer.md](completed/15-comprehensive-tests-for-enums-and-baseenumer.md): Comprehensive tests for all enums, baseenumer, and helper methods.
 - [14-reduce-baseenumer-and-remove-enum-result-wrap.md](completed/14-reduce-baseenumer-and-remove-enum-result-wrap.md): Reduce baseenumer boilerplate and remove enum Result wrap to eliminate import cycles.
 - [33-enum-min-max-methods-and-baseenumer-enhancement.md](completed/33-enum-min-max-methods-and-baseenumer-enhancement.md): Enum Min/Max Methods and BaseEnumer Enhancement.
 - [32-codebase-and-prompt-improvements.md](completed/32-codebase-and-prompt-improvements.md): Codebase, AI Scripts, and Prompts Improvements.

@@ -85,6 +85,11 @@ func TestFilePermType_Mutators(t *testing.T) {
 	if !withExec.IsExecutable() || withExec.Uint32() != 0755 {
 		t.Fatalf("expected WithExecutable 0755, got %o", withExec.Uint32())
 	}
+
+	execAgain := withExec.WithExecutable()
+	if execAgain != withExec {
+		t.Fatalf("expected WithExecutable to be idempotent")
+	}
 }
 
 func TestFilePermType_Naming(t *testing.T) {
