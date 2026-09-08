@@ -1635,7 +1635,7 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 ### What's new in v5.109.0
 
-- SS-02 tasks 60-61: closes React & TypeScript (Section G) and opens Accessibility (Section H). Slide 58 `REACT-012` (hard) bans placeholder type names (`Data`, `Info`, `Config`, `Payload`, `Options`, `Params`, and 14 others bare); if you cannot name it, split until you can. Slide 59 `A11Y-001` (hard) is the Section H chapter opener: WCAG 2.2 AA is the shipping floor, with ten non-negotiable minimums (keyboard reach, visible focus, programmatic labels, 4.5:1 contrast, no colour-only info, reduced-motion, focus trap + restore, live regions, alt text, sequential headings, 24x24 hit targets). Enforced by custom `no-placeholder-type-names` ESLint rule, `eslint-plugin-jsx-a11y` strict, axe-core CI (since v5.54.0), and a design-token contrast gate. New deck section `a11y` inserted between React and Data & Schema. Per 02-spec/17/31 line 112 and WCAG 2.2 AA. 61 slides validated.
+- SS-02 tasks 60-61: closes React & TypeScript (Section G) and opens Accessibility (Section H). Slide 58 `REACT-012` (hard) bans placeholder type names (`Data`, `Info`, `Config`, `Payload`, `Options`, `Params`, and 14 others bare); if you cannot name it, split until you can. Slide 59 `A11Y-001` (hard) is the Section H chapter opener: WCAG 2.2 AA is the shipping floor, with ten non-negotiable minimums (keyboard reach, visible focus, programmatic labels, 4.5:1 contrast, no color-only info, reduced-motion, focus trap + restore, live regions, alt text, sequential headings, 24x24 hit targets). Enforced by custom `no-placeholder-type-names` ESLint rule, `eslint-plugin-jsx-a11y` strict, axe-core CI (since v5.54.0), and a design-token contrast gate. New deck section `a11y` inserted between React and Data & Schema. Per 02-spec/17/31 line 112 and WCAG 2.2 AA. 61 slides validated.
 
 ### What's new in v5.108.0
 
@@ -2070,12 +2070,7 @@ Prompts are authored and maintained directly inside `01-prompts/`. To compile an
 
 This compiles all categorized prompts using `scripts/prompt-sync-config.json` and verifies that the prompt registry index remains 100% in sync.
 
-- [Plan: AppError Constructors](.lovable/plans/completed/01-apperror-new-constructors.md)
-- [Plan: AppError Human & Logger Methods](.lovable/plans/completed/03-apperror-human-logger-methods.md)
+- [Milestone 01: Repository Hygiene, Scripts & Versioning](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)
+- [Milestone 03: AppError & Fault Architecture](.lovable/plans/completed/03-apperror-and-fault-architecture.md)
 - [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/04-guideline-prompt-and-installer-upgrade.md)
-- [Plan: Normalize Encoding](.lovable/plans/completed/06-fix-encoding.md)
-  - [Plan: Rename Overviews and JSON Installer](.lovable/plans/completed/05-rename-overviews-and-installer-json.md)
-- [Plan: Trailing Newlines & AI Scripts](.lovable/plans/completed/07-trailing-newlines-and-ai-scripts.md)
-- [Plan: Lowercase changelog.md](.lovable/plans/completed/08-lowercase-changelog.md)
 - [Plan: Update Prompts and Release](.lovable/plans/pending/09-update-prompts-and-release.md)
-- [Plan: RCA & Boolean Fix](.lovable/plans/completed/10-rca-and-boolean-fix.md)

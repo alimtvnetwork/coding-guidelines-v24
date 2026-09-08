@@ -1,6 +1,6 @@
 # Subtask 03: Prompt Suite Modernization and Standardization
 
-**Plan:** [32-codebase-and-prompt-improvements.md](.lovable/plans/completed/32-codebase-and-prompt-improvements.md)  
+**Plan:** [01-repository-hygiene-scripts-and-versioning.md](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)  
 **Status:** Completed  
 **Disjoint File Scope:**
 - `01-prompts/15-cg-execute/18-function-argument-reduction-and-params.md`

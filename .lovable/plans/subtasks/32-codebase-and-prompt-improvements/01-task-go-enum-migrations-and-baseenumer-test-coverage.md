@@ -1,6 +1,6 @@
 # Subtask 01: Go Enum Migrations and BaseEnumer Test Coverage
 
-**Plan:** [32-codebase-and-prompt-improvements.md](.lovable/plans/completed/32-codebase-and-prompt-improvements.md)  
+**Plan:** [01-repository-hygiene-scripts-and-versioning.md](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)  
 **Status:** Completed  
 **Disjoint File Scope:**
 - `04-code/golang/pkg/baseenumer/basic_enum.go`

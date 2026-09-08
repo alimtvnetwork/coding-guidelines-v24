@@ -1,6 +1,6 @@
 # Subtask 02: AI Scripts Details Documentation and Indexing
 
-**Plan:** [32-codebase-and-prompt-improvements.md](.lovable/plans/completed/32-codebase-and-prompt-improvements.md)  
+**Plan:** [01-repository-hygiene-scripts-and-versioning.md](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)  
 **Status:** Completed  
 **Disjoint File Scope:**
 - `03-ai-scripts/01-index.md`

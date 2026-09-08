@@ -8,4 +8,4 @@ Execute the complete quality validation pipeline across all modified packages an
 2. `python 03-ai-scripts/26-go-code-formatter.py` (Format all Go code)
 3. `python 03-ai-scripts/06-cicd-local-runner.py --all` (All CI gates pass)
 4. `npm run sync` and `node scripts/sync-check.mjs` (Package sync validation)
-5. Move Plan 28 to `.lovable/plans/completed/28-dry-enum-marshaling-and-scaffolder.md` and update `.lovable/plans/01-index.md`.
+5. Consolidate Plan 28 into `.lovable/plans/completed/06-enum-architecture-and-baseenumer-foundation.md` and update `.lovable/plans/01-index.md`.

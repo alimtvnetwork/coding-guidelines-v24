@@ -1,6 +1,6 @@
 # Subtask 02: Scaffolder Boundary and Improvement Upgrades
 
-**Plan:** [33-enum-min-max-methods-and-baseenumer-enhancement.md](.lovable/plans/completed/33-enum-min-max-methods-and-baseenumer-enhancement.md)  
+**Plan:** [06-enum-architecture-and-baseenumer-foundation.md](.lovable/plans/completed/06-enum-architecture-and-baseenumer-foundation.md)  
 **Status:** Complete  
 **Disjoint File Scope:**
 - `03-ai-scripts/30-enum-generator.py`
