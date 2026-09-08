@@ -236,24 +236,24 @@ def build_variant_formatting(ctx: dict[str, Any]) -> list[str]:
     return build_numeric_formatting(ctx)
 
 
-def build_string_json(pkg: str, zero: str) -> list[str]:
+def build_string_json() -> list[str]:
     return [
         "func (v Variant) MarshalJSON() ([]byte, error) {\n\treturn baseenumer.MarshalJSON(string(v))\n}\n",
-        f'func (v *Variant) UnmarshalJSON(data []byte) error {{\n\treturn baseenumer.UnmarshalStringJSON(data, v, "{pkg}", variantMap, {zero})\n}}\n',
+        "func (v *Variant) UnmarshalJSON(data []byte) error {\n\treturn basicEnum.UnmarshalJSON(data, v)\n}\n",
     ]
 
 
-def build_numeric_json(pkg: str, zero: str) -> list[str]:
+def build_numeric_json() -> list[str]:
     return [
         "func (v Variant) MarshalJSON() ([]byte, error) {\n\treturn baseenumer.MarshalJSON(v.Name())\n}\n",
-        f'func (v *Variant) UnmarshalJSON(data []byte) error {{\n\treturn baseenumer.UnmarshalIntegerJSON(data, v, "{pkg}", variantMap, len(variantLabels)-1, {zero})\n}}\n',
+        "func (v *Variant) UnmarshalJSON(data []byte) error {\n\treturn basicEnum.UnmarshalJSON(data, v)\n}\n",
     ]
 
 
 def build_variant_json(ctx: dict[str, Any]) -> list[str]:
     if ctx["is_string"]:
-        return build_string_json(ctx["package"], ctx["zero_value"])
-    return build_numeric_json(ctx["package"], ctx["zero_value"])
+        return build_string_json()
+    return build_numeric_json()
 
 
 def build_variant_type_section(ctx: dict[str, Any]) -> list[str]:
@@ -274,12 +274,11 @@ def generate_variant_go(ctx: dict[str, Any]) -> str:
 
 
 def build_vars_header(ctx: dict[str, Any]) -> list[str]:
-    imports = ['\t"strings"'] if ctx["is_string"] else []
-    imports.extend([
+    imports = [
         '\t"coding-guidelines/common/pkg/baseenumer"',
         '\t"coding-guidelines/common/pkg/errtype"',
         '\t"coding-guidelines/common/pkg/result"',
-    ])
+    ]
     return [f"package {ctx['package']}", "", "import ("] + imports + [")", "", "type Result = result.Wrap[Variant]", ""]
 
 
@@ -289,34 +288,31 @@ def build_string_registry(items: list[str]) -> list[str]:
     return lines + ["\t}", ""]
 
 
-def build_string_compile_map() -> list[str]:
-    return [
-        "func compileVariantMap() map[string]Variant {",
-        "\tm := make(map[string]Variant, len(allVariants)*4)",
-        "\tfor _, v := range allVariants {",
-        "\t\ts := string(v)",
-        "\t\tm[s] = v\n\t\tm[strings.ToLower(s)] = v\n\t\tm[strings.ToUpper(s)] = v",
-        "\t\tm[baseenumer.FormatNameValue(s, s)] = v",
-        "\t}",
-        "\treturn m",
-        "}",
-        "",
-    ]
-
-
 def build_string_vars_data(ctx: dict[str, Any]) -> list[str]:
     items_lines = [f"\t\t{item}," for item in ctx["items"]]
     lines = ["var (", "\tallVariants = []Variant{", f"\t\t{ctx['zero_value']},"]
     lines.extend(items_lines)
     lines.extend(["\t}", ""] + build_string_registry(ctx["items"]))
-    lines.extend(["\tvariantMap = compileVariantMap()", ")", ""] + build_string_compile_map())
+    lines.extend([
+        f"\tbasicEnum = baseenumer.NewBasicString(allVariants, {ctx['zero_value']})",
+        "\tvariantMap = basicEnum.Map()",
+        ")",
+        "",
+    ])
     return lines
 
 
 def build_numeric_vars_data(ctx: dict[str, Any]) -> list[str]:
     lines = ["var (", "\tvariantLabels = [...]string{", f'\t\t{ctx["zero_value"]}: "{ctx["zero_value"]}",']
     lines.extend(f'\t\t{item}: "{item}",' for item in ctx["items"])
-    lines.extend(["\t}", "", f"\tvariantMap = baseenumer.CompileMap(variantLabels[:], {ctx['zero_value']})", ")", ""])
+    lines.extend([
+        "\t}",
+        "",
+        f"\tbasicEnum = baseenumer.NewBasicInteger(variantLabels[:], {ctx['zero_value']})",
+        "\tvariantMap = basicEnum.Map()",
+        ")",
+        "",
+    ])
     return lines
 
 
@@ -328,15 +324,15 @@ def build_vars_data(ctx: dict[str, Any]) -> list[str]:
 
 def build_string_vars_helpers() -> list[str]:
     return [
-        "func All() []Variant {\n\treturn append([]Variant(nil), allVariants[1:]...)\n}\n",
-        "func Values() []string {\n\tres := make([]string, 0, len(allVariants)-1)\n\tfor _, v := range All() {\n\t\tres = append(res, string(v))\n\t}\n\treturn res\n}\n",
+        "func All() []Variant {\n\treturn basicEnum.All()\n}\n",
+        "func Values() []string {\n\treturn basicEnum.Values()\n}\n",
     ]
 
 
 def build_numeric_vars_helpers() -> list[str]:
     return [
-        "func All() []Variant {\n\treturn baseenumer.SliceVariants[Variant](variantLabels[:])\n}\n",
-        "func Values() []string {\n\treturn baseenumer.SliceValues(variantLabels[:])\n}\n",
+        "func All() []Variant {\n\treturn basicEnum.All()\n}\n",
+        "func Values() []string {\n\treturn basicEnum.Values()\n}\n",
     ]
 
 
@@ -346,16 +342,15 @@ def build_vars_helpers(ctx: dict[str, Any]) -> list[str]:
     return build_numeric_vars_helpers()
 
 
-def build_vars_parser(ctx: dict[str, Any]) -> list[str]:
-    n = ctx["name"]
+def build_vars_parser() -> list[str]:
     return [
         "func Parse(s string) Result {",
-        "\tv, trimmed, ok := baseenumer.ParseLookup(s, variantMap)",
-        "\tif len(trimmed) == 0 {",
-        f'\t\treturn result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("{n}"))',
+        "\tv, err := basicEnum.Parse(s)",
+        "\tif err != nil {",
+        "\t\treturn result.WrapFailureWithId[Variant](errtype.Validation, err.Error())",
         "\t}",
-        "\tif ok {\n\t\treturn result.WrapSuccess(v)\n\t}",
-        f'\treturn result.WrapFailureWithId[Variant](errtype.NotFound, baseenumer.FormatParseError("{n}", s, Values()))',
+        "",
+        "\treturn result.WrapSuccess(v)",
         "}",
         "",
     ]
@@ -365,7 +360,7 @@ def generate_vars_go(ctx: dict[str, Any]) -> str:
     lines = build_vars_header(ctx)
     lines.extend(build_vars_data(ctx))
     lines.extend(build_vars_helpers(ctx))
-    lines.extend(build_vars_parser(ctx))
+    lines.extend(build_vars_parser())
     return "\n".join(lines)
 
 

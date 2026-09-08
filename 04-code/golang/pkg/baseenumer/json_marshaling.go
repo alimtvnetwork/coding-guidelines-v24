@@ -12,8 +12,21 @@ func MarshalJSON(name string) ([]byte, error) {
 	return json.Marshal(name)
 }
 
-// UnmarshalIntegerJSON unmarshals JSON data into an integer-backed enum variant.
+// UnmarshalIntegerJSON unmarshals JSON data into an integer-backed enum variant with auto-resolved type name.
 func UnmarshalIntegerJSON[V IntNumber](
+	data []byte,
+	target *V,
+	variantMap map[string]V,
+	maxValid int,
+	zero V,
+) error {
+	typeName := ResolveTypeName(target)
+
+	return UnmarshalIntegerJSONWithName(data, target, typeName, variantMap, maxValid, zero)
+}
+
+// UnmarshalIntegerJSONWithName unmarshals JSON data into an integer-backed enum with an explicit type name.
+func UnmarshalIntegerJSONWithName[V IntNumber](
 	data []byte,
 	target *V,
 	typeName string,
@@ -35,8 +48,20 @@ func UnmarshalIntegerJSON[V IntNumber](
 	return unmarshalIntegerNumeric(data, target, typeName, maxValid)
 }
 
-// UnmarshalStringJSON unmarshals JSON data into a string-backed enum variant.
+// UnmarshalStringJSON unmarshals JSON data into a string-backed enum variant with auto-resolved type name.
 func UnmarshalStringJSON[V ~string](
+	data []byte,
+	target *V,
+	variantMap map[string]V,
+	zero V,
+) error {
+	typeName := ResolveTypeName(target)
+
+	return UnmarshalStringJSONWithName(data, target, typeName, variantMap, zero)
+}
+
+// UnmarshalStringJSONWithName unmarshals JSON data into a string-backed enum with an explicit type name.
+func UnmarshalStringJSONWithName[V ~string](
 	data []byte,
 	target *V,
 	typeName string,

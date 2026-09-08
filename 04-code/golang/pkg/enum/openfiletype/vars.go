@@ -39,15 +39,16 @@ var (
 		ReadWriteOrCreateOnly: os.O_RDWR | os.O_CREATE,
 	}
 
-	variantMap = baseenumer.CompileMap(variantLabels[:], Invalid)
+	basicEnum  = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
+	variantMap = basicEnum.Map()
 )
 
 func All() []Variant {
-	return baseenumer.SliceVariants[Variant](variantLabels[:])
+	return basicEnum.All()
 }
 
 func Values() []string {
-	return baseenumer.SliceValues(variantLabels[:])
+	return basicEnum.Values()
 }
 
 func Parse(s string) Result {

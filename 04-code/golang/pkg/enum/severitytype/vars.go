@@ -14,15 +14,16 @@ var (
 		Fatal:    "Fatal",
 	}
 
-	variantMap = baseenumer.CompileMap(variantLabels[:], Unknown)
+	basicEnum  = baseenumer.NewBasicInteger(variantLabels[:], Unknown)
+	variantMap = basicEnum.Map()
 )
 
 func All() []Variant {
-	return baseenumer.SliceVariants[Variant](variantLabels[:])
+	return basicEnum.All()
 }
 
 func Values() []string {
-	return baseenumer.SliceValues(variantLabels[:])
+	return basicEnum.Values()
 }
 
 func Parse(s string) (Variant, bool) {

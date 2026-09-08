@@ -212,7 +212,7 @@ func (p Variant) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Variant) UnmarshalJSON(data []byte) error {
-	return baseenumer.UnmarshalIntegerJSON(data, p, "filepermtype", nil, 07777, Standard)
+	return baseenumer.UnmarshalIntegerJSON(data, p, nil, 07777, Standard)
 }
 
 var (

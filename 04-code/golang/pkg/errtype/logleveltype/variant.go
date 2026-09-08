@@ -91,7 +91,7 @@ func (l Variant) MarshalJSON() ([]byte, error) {
 }
 
 func (l *Variant) UnmarshalJSON(data []byte) error {
-	return baseenumer.UnmarshalIntegerJSON(data, l, "logleveltype", variantMap, 5, 0)
+	return baseenumer.UnmarshalIntegerJSON(data, l, variantMap, 5, 0)
 }
 
 func All() []Variant {

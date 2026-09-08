@@ -89,7 +89,7 @@ func (s Variant) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Variant) UnmarshalJSON(data []byte) error {
-	return baseenumer.UnmarshalStringJSON(data, s, "processstatetype", processStateMap, Unknown)
+	return baseenumer.UnmarshalStringJSON(data, s, processStateMap, Unknown)
 }
 
 func All() []Variant {

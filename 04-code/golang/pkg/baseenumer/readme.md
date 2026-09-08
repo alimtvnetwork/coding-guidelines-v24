@@ -49,13 +49,21 @@ Reusable, zero-dependency generic utilities to eliminate boilerplate across conc
 - `ParseLookup[V any](s string, variantMap map[string]V) (val V, trimmed string, ok bool)`: Fast trimmed lowercase map lookup.
 - `FormatParseError(typeName, raw string, supportedVariants []string) string`: Canonical error string generator.
 - `FormatEmptyParseError(typeName string) string`: Canonical empty input error string generator.
-- `FormatNumericRangeError(typeName string, raw any, max int) error`: Canonical numeric out-of-range error generator.
+- `ResolveTypeName[V any](target *V) string`: Derives clean type/package names using reflection, eliminating manual string arguments.
 
 ## Generic JSON Marshaling Helpers (`json_marshaling.go`)
 
 Reusable generic JSON serialization and deserialization functions:
 
 - `MarshalJSON(name string) ([]byte, error)`: Standard JSON string marshaler for enum names.
-- `UnmarshalIntegerJSON[V IntNumber](data []byte, target *V, typeName string, variantMap map[string]V, maxValid int, zero V) error`: Unified integer- and byte-backed JSON unmarshaler handling strings, numeric strings, numbers, nulls, and empty values.
-- `UnmarshalStringJSON[V ~string](data []byte, target *V, typeName string, variantMap map[string]V, zero V) error`: Unified string-backed JSON unmarshaler handling string values, nulls, and empty values.
+- `UnmarshalIntegerJSON[V IntNumber](data []byte, target *V, variantMap map[string]V, maxValid int, zero V) error`: Unified integer- and byte-backed JSON unmarshaler with auto-resolved type name.
+- `UnmarshalStringJSON[V ~string](data []byte, target *V, variantMap map[string]V, zero V) error`: Unified string-backed JSON unmarshaler with auto-resolved type name.
+- `UnmarshalIntegerJSONWithName` / `UnmarshalStringJSONWithName`: Explicit type name variants for custom overrides.
+
+## Basic Enum Engine (`basic_enum.go`)
+
+Universal generic enum manager structs that encapsulate labels, lookup maps, bounds, zero values, and reflection-derived type names:
+
+- `BasicIntegerEnum[V IntNumber]`: Reusable manager for integer- and byte-backed enums (`NewBasicInteger(labels, zero)`). Provides 2-parameter `UnmarshalJSON(data, target)`, `All()`, `Values()`, `Parse(s)`.
+- `BasicStringEnum[V ~string]`: Reusable manager for string-backed enums (`NewBasicString(variants, zero)`). Provides 2-parameter `UnmarshalJSON(data, target)`, `All()`, `Values()`, `Parse(s)`.
 

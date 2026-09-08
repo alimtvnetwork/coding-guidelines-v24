@@ -108,5 +108,5 @@ func (v Variant) MarshalJSON() ([]byte, error) {
 }
 
 func (v *Variant) UnmarshalJSON(data []byte) error {
-	return baseenumer.UnmarshalIntegerJSON(data, v, "prioritytype", variantMap, len(variantLabels)-1, Unknown)
+	return basicEnum.UnmarshalJSON(data, v)
 }

@@ -11,6 +11,8 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
+- [31-basic-enum-reusability-and-reflection-unmarshal.md](completed/31-basic-enum-reusability-and-reflection-unmarshal.md): BasicEnum Reusability & Reflection-Based Type Name Resolution.
+
 - [30-boolean-prefix-and-bound-writer-params.md](completed/30-boolean-prefix-and-bound-writer-params.md): Boolean Naming Standardization (`is`/`has` Prefixes) & BoundFileWriter Parameter Actions.
 
 - [29-rename-mutex-to-lock.md](completed/29-rename-mutex-to-lock.md): Rename `mu` and `mutex` to `lock` Repo-Wide.
