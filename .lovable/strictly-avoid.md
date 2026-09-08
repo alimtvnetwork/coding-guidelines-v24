@@ -253,3 +253,65 @@ Allowed work:
 - ✅ Higher-level consumer packages (e.g. `pkg/fileutil`) may wrap enum values into `result.Wrap` if their APIs require it.
 
 **Why:** `pkg/result` imports `pkg/appfault`, and `pkg/appfault` imports enums (`severitytype`, `prioritytype`). When enum packages import `result`, it creates an unresolvable circular import cycle (`appfault` -> `enum` -> `result` -> `appfault`).
+
+---
+
+## Executing Staged Prompts Without User Confirmation — TOTAL BAN
+
+🔴 **NEVER execute, implement, or begin coding on follow-up tasks when running the Conversation Log & Context Wrapper workflow.**
+
+Forbidden:
+- ❌ Commencing execution on rewritten follow-up instructions staged in `prompts/`.
+- ❌ Modifying codebase files, generating features, or running migrations before the user reviews the staging report.
+
+Allowed work:
+- ✅ Persist conversation history to `conversation/`.
+- ✅ Rewrite and stage instructions into `prompts/NNN-<slug>.md`.
+- ✅ Register staged prompts in `01-prompts/01-prompt-library-setup/01-prompt-library-setup.md`.
+- ✅ Acknowledge with "Understood - staging only, not executing." and halt until explicit user "go" confirmation.
+
+**Why:** Staging must remain strictly decoupled from execution to allow human-in-the-loop review of rewritten specifications and guard against misaligned automated actions.
+
+---
+
+## Writing to `memories/` Instead of `.lovable/memory/` — TOTAL BAN
+
+🔴 **NEVER create or write files to a root `memories/` directory.**
+
+Forbidden:
+- ❌ Writing memory logs, learned rules, or session indices to `memories/`.
+
+Allowed work:
+- ✅ All project memory, learned patterns, standards, and indices MUST reside strictly under `.lovable/memory/`.
+
+**Why:** Creating divergent memory directories fractures institutional knowledge and prevents downstream tooling and installers from finding project context.
+
+---
+
+## Consolidating or Summarizing Detailed Architectural Specs — TOTAL BAN
+
+🔴 **NEVER consolidate, summarize, abbreviate, or reduce detailed architectural specifications or domain specs (e.g. `02-spec/21-app/`).**
+
+Forbidden:
+- ❌ Summarizing detailed specs into high-level bullet points.
+- ❌ Truncating code contracts, database schema definitions, or error structures during consolidation.
+
+Allowed work:
+- ✅ Ephemeral task checklists and routine milestone plans may be consolidated into milestone summaries.
+- ✅ Detailed specifications, domain rules, and non-negotiable requirements MUST be preserved with 100% fidelity and full granularity.
+
+**Why:** Lossy consolidation destroys technical contracts, edge-case definitions, and precision required by autonomous agents.
+
+---
+
+## Uppercase Root `README.md` File — TOTAL BAN
+
+🔴 **NEVER create or permit an uppercase `README.md` file at repository root.**
+
+Forbidden:
+- ❌ Uppercase `README.md` or mixed-case `ReadMe.md`.
+
+Allowed work:
+- ✅ Root readme MUST be strictly lowercase `readme.md`.
+- ✅ If an uppercase variant is detected, rename immediately to lowercase `readme.md`.
+

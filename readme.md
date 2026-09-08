@@ -2070,7 +2070,16 @@ Prompts are authored and maintained directly inside `01-prompts/`. To compile an
 
 This compiles all categorized prompts using `scripts/prompt-sync-config.json` and verifies that the prompt registry index remains 100% in sync.
 
-- [Milestone 01: Repository Hygiene, Scripts & Versioning](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)
-- [Milestone 03: AppError & Fault Architecture](.lovable/plans/completed/03-apperror-and-fault-architecture.md)
+- [Plan: Slides System Overhaul](.lovable/plans/pending/02-slides-system-overhaul.md)
 - [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/04-guideline-prompt-and-installer-upgrade.md)
 - [Plan: Update Prompts and Release](.lovable/plans/pending/09-update-prompts-and-release.md)
+- [Plan: Code Red Refactor Remediation](.lovable/plans/pending/11-code-red-refactor-remediation.md)
+- [Milestone 01: Repository Hygiene, Scripts & Versioning](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)
+- [Milestone 02: CI/CD Pipeline & Quality Automation](.lovable/plans/completed/02-cicd-pipeline-and-quality-automation.md)
+- [Milestone 03: AppError & Fault Architecture](.lovable/plans/completed/03-apperror-and-fault-architecture.md)
+- [Milestone 04: Typecast, Results & Verification Systems](.lovable/plans/completed/04-typecast-results-and-verification-systems.md)
+- [Milestone 05: FileUtil Concurrency & I/O Architecture](.lovable/plans/completed/05-fileutil-concurrency-and-io-architecture.md)
+- [Milestone 06: Enum Architecture & BaseEnumer Foundation](.lovable/plans/completed/06-enum-architecture-and-baseenumer-foundation.md)
+- [Milestone 07: Completed Plans Consolidation](.lovable/plans/completed/07-completed-plans-consolidation.md)
+- [Milestone 08: Split SQLite Logging, Rotating, LazyOnce & Errcmd](.lovable/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md)
+- [Milestone 12: Task Retention, Line Streaming, Atomic File Writes & ApiManager](.lovable/plans/completed/12-task-retention-errcmd-streaming-atomic-fileutil-lazyonce-apimanager.md)

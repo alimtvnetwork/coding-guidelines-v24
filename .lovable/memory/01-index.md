@@ -38,6 +38,9 @@ Updated: 2026-04-27
 - [StreamWriter Contracts & Naming Standards](learned/04-streamwriter-contracts-and-naming-standards.md) — Idiomatic -er interfaces, ReentrantMutex, Bytes[T], JsonResult multi-source ingestion, boolean prefixes, and Id naming standard.
 - [Codebase Topology & Skills Architecture](learned/05-codebase-topology-and-skills-architecture.md) — Comprehensive topology ingestion, 28 AI Python scripts catalog, Antigravity skills inventory, and CI/CD quality gate enforcement.
 - [Leaf Enums & Baseenumer Parse Helpers](learned/06-leaf-enums-and-baseenumer-parse-helpers.md) — Leaf enum architecture, elimination of result/errtype import cycles, and baseenumer Parse/ParseOrZero methods.
+- [Split SQLite Logging & Task DB Migration](learned/07-split-sqlite-logging-and-task-db-migration.md) — Split SQLite logging architecture, configurable directories, task DB auto-repair/migrations, and log rotation.
+- [Task Retention, Line Streaming & Extensible ApiManager](learned/08-task-retention-streaming-atomic-apimanager.md) — Task retention pruning, query filtering, live line streaming, atomic file writes, lazyonce reset/context, and ApiManager spec.
+- [Conversation Log & Context Wrapper Protocol](learned/09-conversation-log-and-context-wrapper-protocol.md) — Conversation log persistence protocol, verbatim user capturing, prompt staging into prompts/, and zero-execution boundary.
 - [Fast File Indexing & Caching Strategy](standards/05-fast-file-indexing-and-caching.md) — Pre-computed file scanning and index caching in `tmp/` via `08-fast-file-scanner.py` for rapid multi-step lookups.
 - [Prompt Synchronization Architecture](standards/04-prompt-synchronization-architecture.md) — All prompts authored in `01-prompts/` and compiled to flat `01-prompts/*.md` via `scripts/update-prompts.ps1` without external Git clones.
 - [Version Source of Truth Standard](standards/version-source-of-truth.md) — Canonical `version.json` standard at repo root.
@@ -96,7 +99,10 @@ Updated: 2026-04-27
 - [2026-04-23 README Code-Red Walkthrough](mem://sessions/2026-04-23-readme-code-red-walkthrough) — Session log.
 - [Installer Behavior Standards](mem://standards/installer-behavior) — Canonical installer UX rules.
 - [Suggestions Tracker (memory mirror)](mem://suggestions/01-suggestions-tracker) — Mirrors `.lovable/suggestions.md` highlights.
-- [Plan Tracker (workflow)](mem://workflow/01-plan-tracker) — Workflow-state mirror of `.lovable/29-plan.md`.
+- [Plan Tracker (workflow)](mem://workflow/01-plan-tracker) — Workflow-state mirror of `.lovable/plan.md`.
+- [Grounded Coding Guidelines Mirror Standard](standards/06-coding-guidelines-mirror.md) — Canonical authoring, tri-location sync (.lovable/coding-guidelines.md, .cursorrules), and hard rules enforcement.
+- [Workflow: Conversation Log & Context Wrapper](workflow/03-conversation-log-and-context-wrapper.md) — Lifecycle tracking for conversation history persistence, memory audit, prompt staging, and human-in-the-loop review.
+- [Session 2026-09-09 Conversation Log Staging & Memory Persistence](sessions/09-2026-09-09-conversation-log-staging-and-persistence.md) — Session log for conversation logging, prompt staging, memory persistence, and quality verification.
 - [Milestone 06 Enum Architecture](.lovable/plans/completed/06-enum-architecture-and-baseenumer-foundation.md) — Milestone 06: Comprehensive Enum Architecture, Min/Max boundary methods, BoundedEnumer interface, and BaseEnumer foundation.
 - [Session 2026-08-09 Code Red Refactor](mem://sessions/08-2026-08-09-code-red-refactor) — Enum enforcement and boolean fix.
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
