@@ -26,6 +26,28 @@ const (
 	ReadWriteOrCreateOnly
 )
 
+var _ baseenumer.BoundedEnumer[Variant] = Variant(0)
+
+func (v Variant) Min() Variant {
+	return basicEnum.Min()
+}
+
+func (v Variant) Max() Variant {
+	return basicEnum.Max()
+}
+
+func (v Variant) IsMin() bool {
+	return basicEnum.IsMin(v)
+}
+
+func (v Variant) IsMax() bool {
+	return basicEnum.IsMax(v)
+}
+
+func (v Variant) IsInRange(min, max Variant) bool {
+	return baseenumer.IsBetween(v, min, max)
+}
+
 func (v Variant) Flags() int {
 	if int(v) < len(openFlags) {
 		return openFlags[v]

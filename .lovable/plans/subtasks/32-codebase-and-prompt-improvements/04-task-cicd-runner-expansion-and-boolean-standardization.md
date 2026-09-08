@@ -1,6 +1,6 @@
 # Subtask 04: CI/CD Runner Expansion and Boolean Standardization
 
-**Plan:** [32-codebase-and-prompt-improvements.md](.lovable/plans/pending/32-codebase-and-prompt-improvements.md)  
+**Plan:** [32-codebase-and-prompt-improvements.md](.lovable/plans/completed/32-codebase-and-prompt-improvements.md)  
 **Status:** Completed  
 **Disjoint File Scope:**
 - `03-ai-scripts/02-shared-engine.py`

@@ -70,6 +70,26 @@ func (l Variant) IsCompare(target Variant) bool {
 	return l == target
 }
 
+func (l Variant) Min() Variant {
+	return basicEnum.Min()
+}
+
+func (l Variant) Max() Variant {
+	return basicEnum.Max()
+}
+
+func (l Variant) IsMin() bool {
+	return basicEnum.IsMin(l)
+}
+
+func (l Variant) IsMax() bool {
+	return basicEnum.IsMax(l)
+}
+
+func (l Variant) IsInRange(min, max Variant) bool {
+	return baseenumer.IsBetween(l, min, max)
+}
+
 func (l Variant) MarshalJSON() ([]byte, error) {
 	return baseenumer.MarshalJSON(l.Name())
 }
@@ -90,6 +110,14 @@ func Values() []string {
 	return basicEnum.Values()
 }
 
+func Min() Variant {
+	return basicEnum.Min()
+}
+
+func Max() Variant {
+	return basicEnum.Max()
+}
+
 func Parse(val string) Variant {
 	v, _, isOk := basicEnum.ParseLookup(val)
 	if isOk {
@@ -104,8 +132,9 @@ func ParseLogLevel(val string) Variant {
 }
 
 var (
-	_ baseenumer.BaseEnumer   = Variant(0)
-	_ baseenumer.NumberEnumer = Variant(0)
-	_ json.Marshaler          = Variant(0)
-	_ json.Unmarshaler        = (*Variant)(nil)
+	_ baseenumer.BaseEnumer             = Variant(0)
+	_ baseenumer.NumberEnumer           = Variant(0)
+	_ baseenumer.BoundedEnumer[Variant] = Variant(0)
+	_ json.Marshaler                    = Variant(0)
+	_ json.Unmarshaler                  = (*Variant)(nil)
 )

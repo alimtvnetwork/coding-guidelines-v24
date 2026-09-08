@@ -11,11 +11,12 @@ import (
 
 func TestFileOpType_Interfaces(t *testing.T) {
 	var (
-		_ baseenumer.BaseEnumer   = fileoptype.ReadOnly
-		_ baseenumer.ByteEnumer   = fileoptype.ReadOnly
-		_ baseenumer.NumberEnumer = fileoptype.ReadOnly
-		_ json.Marshaler          = fileoptype.ReadOnly
-		_ json.Unmarshaler        = (*fileoptype.Variant)(nil)
+		_ baseenumer.BaseEnumer                        = fileoptype.ReadOnly
+		_ baseenumer.ByteEnumer                        = fileoptype.ReadOnly
+		_ baseenumer.NumberEnumer                      = fileoptype.ReadOnly
+		_ baseenumer.BoundedEnumer[fileoptype.Variant] = fileoptype.ReadOnly
+		_ json.Marshaler                               = fileoptype.ReadOnly
+		_ json.Unmarshaler                             = (*fileoptype.Variant)(nil)
 	)
 }
 
@@ -173,5 +174,37 @@ func TestFileOpType_JSON(t *testing.T) {
 
 	if err := json.Unmarshal([]byte(`"UnknownOp"`), &v); err == nil {
 		t.Fatalf("expected error for invalid op name")
+	}
+}
+
+func TestFileOpType_Boundaries(t *testing.T) {
+	var _ baseenumer.BoundedEnumer[fileoptype.Variant] = fileoptype.Variant(0)
+
+	minVal, maxVal := fileoptype.Min(), fileoptype.Max()
+	if minVal != fileoptype.Invalid || maxVal != fileoptype.Delete {
+		t.Fatalf("expected min %v, max %v", fileoptype.Invalid, fileoptype.Delete)
+	}
+
+	if minVal.Min() != minVal || maxVal.Max() != maxVal {
+		t.Fatalf("receiver Min/Max mismatch")
+	}
+}
+
+func TestFileOpType_BoundaryPredicates(t *testing.T) {
+	minVal, maxVal := fileoptype.Min(), fileoptype.Max()
+	if !minVal.IsMin() || !maxVal.IsMax() {
+		t.Fatalf("boundary predicates failed")
+	}
+
+	if maxVal.IsMin() || minVal.IsMax() {
+		t.Fatalf("inverse boundary predicates failed")
+	}
+
+	if !minVal.IsInRange(minVal, maxVal) || !fileoptype.ReadOnly.IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange failed for valid range")
+	}
+
+	if fileoptype.Variant(99).IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }

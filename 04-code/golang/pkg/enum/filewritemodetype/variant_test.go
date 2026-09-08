@@ -10,11 +10,12 @@ import (
 
 func TestFileWriteModeType_Interfaces(t *testing.T) {
 	var (
-		_ baseenumer.BaseEnumer   = filewritemodetype.Direct
-		_ baseenumer.ByteEnumer   = filewritemodetype.Direct
-		_ baseenumer.NumberEnumer = filewritemodetype.Direct
-		_ json.Marshaler          = filewritemodetype.Direct
-		_ json.Unmarshaler        = (*filewritemodetype.Variant)(nil)
+		_ baseenumer.BaseEnumer                               = filewritemodetype.Direct
+		_ baseenumer.ByteEnumer                               = filewritemodetype.Direct
+		_ baseenumer.NumberEnumer                             = filewritemodetype.Direct
+		_ baseenumer.BoundedEnumer[filewritemodetype.Variant] = filewritemodetype.Direct
+		_ json.Marshaler                                      = filewritemodetype.Direct
+		_ json.Unmarshaler                                    = (*filewritemodetype.Variant)(nil)
 	)
 }
 
@@ -138,5 +139,37 @@ func TestFileWriteModeType_JSON(t *testing.T) {
 
 	if err := json.Unmarshal([]byte(`"UnknownMode"`), &v); err == nil {
 		t.Fatalf("expected error for invalid mode name")
+	}
+}
+
+func TestFileWriteModeType_Boundaries(t *testing.T) {
+	var _ baseenumer.BoundedEnumer[filewritemodetype.Variant] = filewritemodetype.Variant(0)
+
+	minVal, maxVal := filewritemodetype.Min(), filewritemodetype.Max()
+	if minVal != filewritemodetype.Invalid || maxVal != filewritemodetype.Truncate {
+		t.Fatalf("expected min %v, max %v", filewritemodetype.Invalid, filewritemodetype.Truncate)
+	}
+
+	if minVal.Min() != minVal || maxVal.Max() != maxVal {
+		t.Fatalf("receiver Min/Max mismatch")
+	}
+}
+
+func TestFileWriteModeType_BoundaryPredicates(t *testing.T) {
+	minVal, maxVal := filewritemodetype.Min(), filewritemodetype.Max()
+	if !minVal.IsMin() || !maxVal.IsMax() {
+		t.Fatalf("boundary predicates failed")
+	}
+
+	if maxVal.IsMin() || minVal.IsMax() {
+		t.Fatalf("inverse boundary predicates failed")
+	}
+
+	if !minVal.IsInRange(minVal, maxVal) || !filewritemodetype.Direct.IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange failed for valid range")
+	}
+
+	if filewritemodetype.Variant(99).IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }

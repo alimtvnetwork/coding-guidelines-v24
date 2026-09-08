@@ -26,6 +26,14 @@ func Values() []string {
 	return basicEnum.Values()
 }
 
+func Min() Variant {
+	return basicEnum.Min()
+}
+
+func Max() Variant {
+	return basicEnum.Max()
+}
+
 func Parse(s string) (Variant, bool) {
 	v, _, ok := baseenumer.ParseLookup(s, variantMap)
 

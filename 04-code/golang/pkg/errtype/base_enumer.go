@@ -28,6 +28,21 @@ type (
 
 	// NumberEnum is an alias for NumberEnumer.
 	NumberEnum = baseenumer.NumberEnum
+
+	// MinMaxer defines boundary value retrieval for enums (forwarded from baseenumer).
+	MinMaxer[V any] = baseenumer.MinMaxer[V]
+
+	// MinMax is an alias for MinMaxer (forwarded from baseenumer).
+	MinMax[V any] = baseenumer.MinMax[V]
+
+	// BoundedEnumer defines boundary checks for enum instances (forwarded from baseenumer).
+	BoundedEnumer[V any] = baseenumer.BoundedEnumer[V]
+
+	// BoundedEnum is an alias for BoundedEnumer (forwarded from baseenumer).
+	BoundedEnum[V any] = baseenumer.BoundedEnum[V]
+
+	// Bounder defines range checking for enum instances (forwarded from baseenumer).
+	Bounder[V any] = baseenumer.Bounder[V]
 )
 
 // ToEnum finds an enum by name in any slice of BaseEnumer (delegates to baseenumer.ToEnum).

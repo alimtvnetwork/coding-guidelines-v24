@@ -4,8 +4,21 @@ import (
 	"encoding/json"
 	"testing"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/errtype/processstatetype"
 )
+
+func TestProcessStateType_Interfaces(t *testing.T) {
+	var (
+		_ baseenumer.BaseEnumer                              = processstatetype.Running
+		_ baseenumer.StringEnumer                            = processstatetype.Running
+		_ baseenumer.MinMaxer[processstatetype.Variant]      = processstatetype.Running
+		_ baseenumer.BoundedEnumer[processstatetype.Variant] = processstatetype.Running
+		_ baseenumer.Bounder[processstatetype.Variant]       = processstatetype.Running
+		_ json.Marshaler                                     = processstatetype.Running
+		_ json.Unmarshaler                                   = (*processstatetype.Variant)(nil)
+	)
+}
 
 func TestProcessStateType_Lifecycle(t *testing.T) {
 	state := processstatetype.Running
@@ -99,5 +112,55 @@ func TestProcessStateType_Values(t *testing.T) {
 	vals := processstatetype.Values()
 	if len(vals) != 5 {
 		t.Fatalf("expected 5 values, got %d", len(vals))
+	}
+}
+
+func TestProcessStateType_Boundary(t *testing.T) {
+	if processstatetype.Min() != processstatetype.Pending {
+		t.Fatalf("expected Min to be Pending")
+	}
+
+	if processstatetype.Max() != processstatetype.Cancelled {
+		t.Fatalf("expected Max to be Cancelled")
+	}
+
+	if !processstatetype.Pending.IsMin() {
+		t.Fatalf("expected Pending.IsMin() to be true")
+	}
+
+	if processstatetype.Running.IsMin() {
+		t.Fatalf("expected Running.IsMin() to be false")
+	}
+}
+
+func TestProcessStateType_BoundaryMax(t *testing.T) {
+	if !processstatetype.Cancelled.IsMax() {
+		t.Fatalf("expected Cancelled.IsMax() to be true")
+	}
+
+	if processstatetype.Failed.IsMax() {
+		t.Fatalf("expected Failed.IsMax() to be false")
+	}
+
+	if processstatetype.Running.Min() != processstatetype.Pending {
+		t.Fatalf("expected Running.Min() to be Pending")
+	}
+
+	if processstatetype.Running.Max() != processstatetype.Cancelled {
+		t.Fatalf("expected Running.Max() to be Cancelled")
+	}
+}
+
+func TestProcessStateType_IsInRange(t *testing.T) {
+	if !processstatetype.Completed.IsInRange(processstatetype.Cancelled, processstatetype.Running) {
+		t.Fatalf("expected Completed to be in range [Cancelled, Running]")
+	}
+
+	if processstatetype.Unknown.IsInRange(processstatetype.Cancelled, processstatetype.Running) {
+		t.Fatalf("expected Unknown to not be in range [Cancelled, Running]")
+	}
+
+	if !processstatetype.Running.IsInRange(processstatetype.Pending, processstatetype.Running) {
+		t.Fatalf("expected Running to be in range [Pending, Running]")
 	}
 }

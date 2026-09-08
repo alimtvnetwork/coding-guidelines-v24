@@ -26,6 +26,20 @@ Extends `BaseEnumer` for numeric-backed enumerations:
 - `Int() int`: Returns the integer value.
 - `Code() uint16`: Returns the numeric unsigned 16-bit code.
 
+### `MinMaxer[V any]` (Alias: `MinMax[V any]`)
+Defines boundary value retrieval for enumerations:
+- `Min() V`: Returns the minimum valid variant.
+- `Max() V`: Returns the maximum valid variant.
+
+### `BoundedEnumer[V any]` (Alias: `BoundedEnum[V any]`)
+Extends `MinMaxer[V]` for boundary checks on enum instances:
+- `IsMin() bool`: Reports whether the instance equals the minimum variant.
+- `IsMax() bool`: Reports whether the instance equals the maximum variant.
+
+### `Bounder[V any]`
+Extends `BoundedEnumer[V]` with range checking:
+- `IsInRange(min, max V) bool`: Reports whether the instance falls within `[min, max]`.
+
 ## Utilities
 
 ### `ToEnum[T BaseEnumer](val string, all []T) (T, bool)`
@@ -64,6 +78,17 @@ Reusable generic JSON serialization and deserialization functions:
 
 Universal generic enum manager structs that encapsulate labels, lookup maps, bounds, zero values, and reflection-derived type names:
 
-- `BasicIntegerEnum[V IntNumber]`: Reusable manager for integer- and byte-backed enums (`NewBasicInteger(labels, zero)`). Provides 2-parameter `UnmarshalJSON(data, target)`, `All()`, `Values()`, `Parse(s)`.
-- `BasicStringEnum[V ~string]`: Reusable manager for string-backed enums (`NewBasicString(variants, zero)`). Provides 2-parameter `UnmarshalJSON(data, target)`, `All()`, `Values()`, `Parse(s)`.
+- `BasicIntegerEnum[V IntNumber]`: Reusable manager for integer- and byte-backed enums (`NewBasicInteger(labels, zero)`, `NewBasicSparseInteger(variants, names, zero, maxValid)`). Provides 2-parameter `UnmarshalJSON(data, target)`, `All()`, `Values()`, `Parse(s)`, and boundary methods:
+  - `Min() V`: Returns the zero-value lower bound.
+  - `Max() V`: Returns the upper valid bound.
+  - `IsMin(v V) bool`: Reports whether variant equals `Min()`.
+  - `IsMax(v V) bool`: Reports whether variant equals `Max()`.
+  - `IsInRange(v, min, max V) bool`: Reports whether variant is within `[min, max]`.
+- `BasicStringEnum[V ~string]`: Reusable manager for string-backed enums (`NewBasicString(variants, zero)`). Provides 2-parameter `UnmarshalJSON(data, target)`, `All()`, `Values()`, `Parse(s)`, and boundary methods:
+  - `Min() V`: Returns the first valid variant bound.
+  - `Max() V`: Returns the last valid variant bound.
+  - `IsMin(v V) bool`: Reports whether variant equals `Min()`.
+  - `IsMax(v V) bool`: Reports whether variant equals `Max()`.
+  - `IsInRange(v, min, max V) bool`: Reports whether variant is within `[min, max]`.
+  - `WithMinMax(min, max V) *BasicStringEnum[V]`: Overrides the computed min/max bounds.
 

@@ -96,6 +96,7 @@ Updated: 2026-04-27
 - [Installer Behavior Standards](mem://standards/installer-behavior) — Canonical installer UX rules.
 - [Suggestions Tracker (memory mirror)](mem://suggestions/01-suggestions-tracker) — Mirrors `.lovable/suggestions.md` highlights.
 - [Plan Tracker (workflow)](mem://workflow/01-plan-tracker) — Workflow-state mirror of `.lovable/29-plan.md`.
+- [Plan 33 Enum Min/Max Methods](.lovable/plans/completed/33-enum-min-max-methods-and-baseenumer-enhancement.md) — Plan 33: Enum Min/Max boundary methods, BoundedEnumer interface, and scaffolder upgrades.
 - [Session 2026-08-09 Code Red Refactor](mem://sessions/08-2026-08-09-code-red-refactor) — Enum enforcement and boolean fix.
 - [Absolute Paths Ban](mem://specs/01-absolute-paths-ban) — Direct user mandate to use standalone relative paths.
 - [Avoid Absolute File System Paths](mem://avoid/03-absolute-file-system-paths) — Do not use file:/// absolute paths.

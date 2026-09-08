@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/enum/processstatetype"
 )
 
@@ -176,5 +177,37 @@ func TestJSON_UnmarshalNullAndNumeric(t *testing.T) {
 
 	if v != processstatetype.Running {
 		t.Fatalf("expected Running on numeric 2, got %v", v)
+	}
+}
+
+func TestBoundaries(t *testing.T) {
+	var _ baseenumer.BoundedEnumer[processstatetype.Variant] = processstatetype.Variant(0)
+
+	minVal, maxVal := processstatetype.Min(), processstatetype.Max()
+	if minVal != processstatetype.Invalid || maxVal != processstatetype.Cancelled {
+		t.Fatalf("expected min %v, max %v", processstatetype.Invalid, processstatetype.Cancelled)
+	}
+
+	if minVal.Min() != minVal || maxVal.Max() != maxVal {
+		t.Fatalf("receiver Min/Max mismatch")
+	}
+}
+
+func TestBoundaryPredicates(t *testing.T) {
+	minVal, maxVal := processstatetype.Min(), processstatetype.Max()
+	if !minVal.IsMin() || !maxVal.IsMax() {
+		t.Fatalf("boundary predicates failed")
+	}
+
+	if maxVal.IsMin() || minVal.IsMax() {
+		t.Fatalf("inverse boundary predicates failed")
+	}
+
+	if !minVal.IsInRange(minVal, maxVal) || !processstatetype.Pending.IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange failed for valid range")
+	}
+
+	if processstatetype.Variant(99).IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }

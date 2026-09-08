@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/errtype/logleveltype"
 )
 
@@ -107,5 +108,37 @@ func TestLogLevelType_Values(t *testing.T) {
 	vals := logleveltype.Values()
 	if len(vals) != 5 {
 		t.Fatalf("expected 5 values, got %d", len(vals))
+	}
+}
+
+func TestLogLevelType_Boundaries(t *testing.T) {
+	var _ baseenumer.BoundedEnumer[logleveltype.Variant] = logleveltype.Variant(0)
+
+	minVal, maxVal := logleveltype.Min(), logleveltype.Max()
+	if minVal != logleveltype.Variant(0) || maxVal != logleveltype.Fatal {
+		t.Fatalf("expected min %v, max %v", logleveltype.Variant(0), logleveltype.Fatal)
+	}
+
+	if minVal.Min() != minVal || maxVal.Max() != maxVal {
+		t.Fatalf("receiver Min/Max mismatch")
+	}
+}
+
+func TestLogLevelType_BoundaryPredicates(t *testing.T) {
+	minVal, maxVal := logleveltype.Min(), logleveltype.Max()
+	if !minVal.IsMin() || !maxVal.IsMax() {
+		t.Fatalf("boundary predicates failed")
+	}
+
+	if maxVal.IsMin() || minVal.IsMax() {
+		t.Fatalf("inverse boundary predicates failed")
+	}
+
+	if !minVal.IsInRange(minVal, maxVal) || !logleveltype.Debug.IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange failed for valid range")
+	}
+
+	if logleveltype.Variant(99).IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }

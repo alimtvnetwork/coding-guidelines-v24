@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
@@ -61,14 +62,24 @@ var (
 		"SetuidExec",
 		"SetgidExec",
 	}
+
+	basicEnum = baseenumer.NewBasicSparseInteger(allVariants, allValues, None, 07777)
 )
 
 func All() []Variant {
-	return append([]Variant(nil), allVariants...)
+	return basicEnum.All()
 }
 
 func Values() []string {
-	return append([]string(nil), allValues...)
+	return basicEnum.Values()
+}
+
+func Min() Variant {
+	return basicEnum.Min()
+}
+
+func Max() Variant {
+	return basicEnum.Max()
 }
 
 func Parse(octalStr string) Result {

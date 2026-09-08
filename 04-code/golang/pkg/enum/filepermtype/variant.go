@@ -207,6 +207,26 @@ func (p Variant) ValueString() string {
 	return p.OctalString()
 }
 
+func (p Variant) Min() Variant {
+	return basicEnum.Min()
+}
+
+func (p Variant) Max() Variant {
+	return basicEnum.Max()
+}
+
+func (p Variant) IsMin() bool {
+	return basicEnum.IsMin(p)
+}
+
+func (p Variant) IsMax() bool {
+	return basicEnum.IsMax(p)
+}
+
+func (p Variant) IsInRange(min, max Variant) bool {
+	return baseenumer.IsBetween(p, min, max)
+}
+
 func (p Variant) MarshalJSON() ([]byte, error) {
 	return baseenumer.MarshalJSON(p.OctalString())
 }
@@ -216,8 +236,11 @@ func (p *Variant) UnmarshalJSON(data []byte) error {
 }
 
 var (
-	_ baseenumer.BaseEnumer   = Variant(0)
-	_ baseenumer.NumberEnumer = Variant(0)
-	_ json.Marshaler          = Variant(0)
-	_ json.Unmarshaler        = (*Variant)(nil)
+	_ baseenumer.BaseEnumer             = Variant(0)
+	_ baseenumer.NumberEnumer           = Variant(0)
+	_ baseenumer.MinMaxer[Variant]      = Variant(0)
+	_ baseenumer.BoundedEnumer[Variant] = Variant(0)
+	_ baseenumer.Bounder[Variant]       = Variant(0)
+	_ json.Marshaler                    = Variant(0)
+	_ json.Unmarshaler                  = (*Variant)(nil)
 )

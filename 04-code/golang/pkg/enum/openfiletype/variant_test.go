@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
@@ -195,5 +196,37 @@ func TestUnmarshalJSON_InvalidCases(t *testing.T) {
 
 	if v != openfiletype.ReadOnly {
 		t.Fatalf("expected ReadOnly on numeric 1, got %v", v)
+	}
+}
+
+func TestBoundaries(t *testing.T) {
+	var _ baseenumer.BoundedEnumer[openfiletype.Variant] = openfiletype.Variant(0)
+
+	minVal, maxVal := openfiletype.Min(), openfiletype.Max()
+	if minVal != openfiletype.Invalid || maxVal != openfiletype.ReadWriteOrCreateOnly {
+		t.Fatalf("expected min %v, max %v", openfiletype.Invalid, openfiletype.ReadWriteOrCreateOnly)
+	}
+
+	if minVal.Min() != minVal || maxVal.Max() != maxVal {
+		t.Fatalf("receiver Min/Max mismatch")
+	}
+}
+
+func TestBoundaryPredicates(t *testing.T) {
+	minVal, maxVal := openfiletype.Min(), openfiletype.Max()
+	if !minVal.IsMin() || !maxVal.IsMax() {
+		t.Fatalf("boundary predicates failed")
+	}
+
+	if maxVal.IsMin() || minVal.IsMax() {
+		t.Fatalf("inverse boundary predicates failed")
+	}
+
+	if !minVal.IsInRange(minVal, maxVal) || !openfiletype.ReadOnly.IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange failed for valid range")
+	}
+
+	if openfiletype.Variant(99).IsInRange(minVal, maxVal) {
+		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }

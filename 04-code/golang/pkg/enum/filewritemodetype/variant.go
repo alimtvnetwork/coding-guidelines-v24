@@ -23,11 +23,12 @@ const (
 )
 
 var (
-	_ baseenumer.BaseEnumer   = Variant(0)
-	_ baseenumer.ByteEnumer   = Variant(0)
-	_ baseenumer.NumberEnumer = Variant(0)
-	_ json.Marshaler          = Variant(0)
-	_ json.Unmarshaler        = (*Variant)(nil)
+	_ baseenumer.BaseEnumer             = Variant(0)
+	_ baseenumer.ByteEnumer             = Variant(0)
+	_ baseenumer.NumberEnumer           = Variant(0)
+	_ baseenumer.BoundedEnumer[Variant] = Variant(0)
+	_ json.Marshaler                    = Variant(0)
+	_ json.Unmarshaler                  = (*Variant)(nil)
 )
 
 func (v Variant) Byte() byte {
@@ -60,6 +61,26 @@ func (v Variant) IsInvalid() bool {
 
 func (v Variant) IsEnum() bool {
 	return v.IsValid()
+}
+
+func (v Variant) Min() Variant {
+	return basicEnum.Min()
+}
+
+func (v Variant) Max() Variant {
+	return basicEnum.Max()
+}
+
+func (v Variant) IsMin() bool {
+	return basicEnum.IsMin(v)
+}
+
+func (v Variant) IsMax() bool {
+	return basicEnum.IsMax(v)
+}
+
+func (v Variant) IsInRange(min, max Variant) bool {
+	return baseenumer.IsBetween(v, min, max)
 }
 
 func (v Variant) IsDirect() bool {

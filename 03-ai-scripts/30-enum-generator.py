@@ -154,8 +154,16 @@ def resolve_assertion_types(ctx: dict[str, Any]) -> list[str]:
 def build_variant_assertions(ctx: dict[str, Any]) -> list[str]:
     m_zero = 'Variant("")' if ctx["is_string"] else "Variant(0)"
     lines = ["var ("] + resolve_assertion_types(ctx)
-    lines.extend([f"\t_ json.Marshaler = {m_zero}", "\t_ json.Unmarshaler = (*Variant)(nil)", ")", ""])
+    lines.extend([
+        f"\t_ baseenumer.MinMaxer[Variant] = {m_zero}",
+        f"\t_ baseenumer.BoundedEnumer[Variant] = {m_zero}",
+        f"\t_ json.Marshaler = {m_zero}",
+        "\t_ json.Unmarshaler = (*Variant)(nil)",
+        ")",
+        "",
+    ])
     return lines
+
 
 
 def build_variant_byte_methods(ctx: dict[str, Any]) -> list[str]:
@@ -196,6 +204,19 @@ def build_variant_predicates(ctx: dict[str, Any]) -> list[str]:
     if ctx["is_string"]:
         return build_string_predicates()
     return build_numeric_predicates(ctx["items"][0], ctx["items"][-1])
+
+
+def build_variant_boundary_methods() -> list[str]:
+    return [
+        "func (v Variant) Min() Variant {\n\treturn basicEnum.Min()\n}\n",
+        "func (v Variant) Max() Variant {\n\treturn basicEnum.Max()\n}\n",
+        "func (v Variant) IsMin() bool {\n\treturn basicEnum.IsMin(v)\n}\n",
+        "func (v Variant) IsMax() bool {\n\treturn basicEnum.IsMax(v)\n}\n",
+        "func (v Variant) IsInRange(min, max Variant) bool {\n\treturn baseenumer.IsBetween(v, min, max)\n}\n",
+    ]
+
+
+build_variant_body = build_variant_boundary_methods
 
 
 def build_item_checker(item: str) -> str:
@@ -267,8 +288,9 @@ def generate_variant_go(ctx: dict[str, Any]) -> str:
         build_variant_header(ctx), build_variant_type_section(ctx),
         build_variant_consts(ctx), build_variant_assertions(ctx),
         build_variant_byte_methods(ctx), build_variant_int_methods(ctx),
-        build_variant_predicates(ctx), build_variant_item_checkers(ctx),
-        build_variant_formatting(ctx), build_variant_json(ctx),
+        build_variant_predicates(ctx), build_variant_boundary_methods(),
+        build_variant_item_checkers(ctx), build_variant_formatting(ctx),
+        build_variant_json(ctx),
     ]
     return "\n".join(line for chunk in parts for line in chunk)
 
@@ -290,7 +312,7 @@ def build_string_registry(items: list[str]) -> list[str]:
 
 def build_string_vars_data(ctx: dict[str, Any]) -> list[str]:
     items_lines = [f"\t\t{item}," for item in ctx["items"]]
-    lines = ["var (", "\tallVariants = []Variant{", f"\t\t{ctx['zero_value']},"]
+    lines = ["var (", "\tallVariants = []Variant{"]
     lines.extend(items_lines)
     lines.extend(["\t}", ""] + build_string_registry(ctx["items"]))
     lines.extend([
@@ -326,6 +348,8 @@ def build_string_vars_helpers() -> list[str]:
     return [
         "func All() []Variant {\n\treturn basicEnum.All()\n}\n",
         "func Values() []string {\n\treturn basicEnum.Values()\n}\n",
+        "func Min() Variant {\n\treturn basicEnum.Min()\n}\n",
+        "func Max() Variant {\n\treturn basicEnum.Max()\n}\n",
     ]
 
 
@@ -333,6 +357,8 @@ def build_numeric_vars_helpers() -> list[str]:
     return [
         "func All() []Variant {\n\treturn basicEnum.All()\n}\n",
         "func Values() []string {\n\treturn basicEnum.Values()\n}\n",
+        "func Min() Variant {\n\treturn basicEnum.Min()\n}\n",
+        "func Max() Variant {\n\treturn basicEnum.Max()\n}\n",
     ]
 
 
@@ -342,25 +368,28 @@ def build_vars_helpers(ctx: dict[str, Any]) -> list[str]:
     return build_numeric_vars_helpers()
 
 
-def build_vars_parser() -> list[str]:
-    return [
-        "func Parse(s string) Result {",
-        "\tv, err := basicEnum.Parse(s)",
-        "\tif err != nil {",
-        "\t\treturn result.WrapFailureWithId[Variant](errtype.Validation, err.Error())",
-        "\t}",
-        "",
-        "\treturn result.WrapSuccess(v)",
-        "}",
-        "",
-    ]
+build_vars_body = build_vars_helpers
+
+
+def build_vars_parser(ctx: dict[str, Any]) -> list[str]:
+    p = ctx["package"]
+    err_val = f'return result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("{p}"))'
+    err_nf = f'return result.WrapFailureWithId[Variant](errtype.NotFound, baseenumer.FormatParseError("{p}", s, Values()))'
+    body = (
+        f"func Parse(s string) Result {{\n"
+        f"\tv, trimmed, isOk := baseenumer.ParseLookup(s, variantMap)\n"
+        f"\tif len(trimmed) == 0 {{\n\t\t{err_val}\n\t}}\n\n"
+        f"\tif isOk {{\n\t\treturn result.WrapSuccess(v)\n\t}}\n\n"
+        f"\t{err_nf}\n}}"
+    )
+    return [body, ""]
 
 
 def generate_vars_go(ctx: dict[str, Any]) -> str:
     lines = build_vars_header(ctx)
     lines.extend(build_vars_data(ctx))
     lines.extend(build_vars_helpers(ctx))
-    lines.extend(build_vars_parser())
+    lines.extend(build_vars_parser(ctx))
     return "\n".join(lines)
 
 
@@ -392,7 +421,14 @@ def build_test_interfaces(ctx: dict[str, Any]) -> list[str]:
     pkg, first = ctx["package"], ctx["items"][0]
     lines = [f"func Test{ctx['name']}Type_Interfaces(t *testing.T) {{", f"\tvar _ baseenumer.BaseEnumer = {pkg}.{first}"]
     lines.extend(resolve_test_interface_lines(ctx, first))
-    lines.extend([f"\tvar _ json.Marshaler = {pkg}.{first}", f"\tvar _ json.Unmarshaler = (*{pkg}.Variant)(nil)", "}", ""])
+    lines.extend([
+        f"\tvar _ baseenumer.MinMaxer[{pkg}.Variant] = {pkg}.{first}",
+        f"\tvar _ baseenumer.BoundedEnumer[{pkg}.Variant] = {pkg}.{first}",
+        f"\tvar _ json.Marshaler = {pkg}.{first}",
+        f"\tvar _ json.Unmarshaler = (*{pkg}.Variant)(nil)",
+        "}",
+        "",
+    ])
     return lines
 
 
@@ -413,6 +449,15 @@ def build_test_properties(ctx: dict[str, Any]) -> list[str]:
     return lines
 
 
+def build_test_boundaries(ctx: dict[str, Any]) -> list[str]:
+    p, n = ctx["package"], ctx["name"]
+    chk_rec = 'if minVal.Min() != minVal || maxVal.Max() != maxVal {\n\t\tt.Fatalf("receiver Min/Max mismatch")\n\t}'
+    chk_pred = 'if !minVal.IsMin() || !maxVal.IsMax() {\n\t\tt.Fatalf("boundary predicates failed")\n\t}'
+    chk_rng = 'if !minVal.IsInRange(minVal, maxVal) {\n\t\tt.Fatalf("IsInRange failed")\n\t}'
+    body = f"func Test{n}Type_Boundaries(t *testing.T) {{\n\tminVal, maxVal := {p}.Min(), {p}.Max()\n\t{chk_rec}\n\t{chk_pred}\n\t{chk_rng}\n}}"
+    return [body, ""]
+
+
 def build_test_predicates(ctx: dict[str, Any]) -> list[str]:
     pkg, first, zero = ctx["package"], ctx["items"][0], ctx["zero_value"]
     return [
@@ -430,6 +475,8 @@ def build_test_names_and_vars(ctx: dict[str, Any]) -> list[str]:
         f"func Test{ctx['name']}Type_VarsAndParse(t *testing.T) {{",
         f'\tall := {pkg}.All()\n\tif len(all) != {len(ctx["items"])} {{\n\t\tt.Fatalf("expected {len(ctx["items"])} variants, got %d", len(all))\n\t}}',
         f'\tres := {pkg}.Parse("{first}")\n\tif !res.IsSuccess() || res.Data() != {pkg}.{first} {{\n\t\tt.Fatalf("expected successful Parse for {first}")\n\t}}',
+        f'\tif {pkg}.Parse("").IsSuccess() {{\n\t\tt.Fatalf("expected failure for empty string")\n\t}}',
+        f'\tif {pkg}.Parse("invalid_variant_value").IsSuccess() {{\n\t\tt.Fatalf("expected failure for bad variant")\n\t}}',
         "}",
         "",
     ]
@@ -451,6 +498,7 @@ def generate_variant_test_go(ctx: dict[str, Any]) -> str:
     lines = build_test_header(ctx)
     lines.extend(build_test_interfaces(ctx))
     lines.extend(build_test_properties(ctx))
+    lines.extend(build_test_boundaries(ctx))
     lines.extend(build_test_predicates(ctx))
     lines.extend(build_test_names_and_vars(ctx))
     lines.extend(build_test_json(ctx))
@@ -468,6 +516,7 @@ def generate_readme_md(ctx: dict[str, Any]) -> str:
         "- **Direct Result Return:** `Parse(s string) Result` returns canonical `type Result = result.Wrap[Variant]`.\n"
         "- **High-Speed Lookups:** Precompiled lookup table via `baseenumer.CompileMap`.\n"
         "- **DRY JSON Marshaling:** Uses `baseenumer.MarshalJSON` and `baseenumer.UnmarshalIntegerJSON` / `UnmarshalStringJSON`.\n"
+        "- **Boundary Operations:** First-class `Min()`, `Max()`, `IsMin()`, `IsMax()`, and `IsInRange(min, max Variant) bool` conforming to `baseenumer.BoundedEnumer[Variant]`.\n"
     )
 
 
@@ -481,22 +530,25 @@ def render_bundle(ctx: dict[str, Any]) -> dict[str, str]:
 
 
 def execute_dry_run(target_dir: Path, bundle: dict[str, str]) -> int:
-    print(f"[DRY-RUN] Target directory: {target_dir}")
+    norm_dir = target_dir.as_posix()
+    print(f"[DRY-RUN] Target directory: {norm_dir}")
     for filename, content in bundle.items():
-        rel_file = target_dir / filename
+        rel_file = f"{norm_dir}/{filename}"
         print(f"[DRY-RUN] Would create {rel_file} ({len(content.splitlines())} lines)")
     return EXIT_SUCCESS
 
 
-def write_bundle(target_dir: Path, bundle: dict[str, str], overwrite: bool) -> int:
+def write_bundle(target_dir: Path, bundle: dict[str, str], is_overwrite: bool) -> int:
     target_dir.mkdir(parents=True, exist_ok=True)
+    norm_dir = target_dir.as_posix()
     for filename, content in bundle.items():
         dest = target_dir / filename
-        if dest.exists() and not overwrite:
-            print(f"Error: {dest} already exists. Use --overwrite to replace.", file=sys.stderr)
-            return EXIT_USAGE_ERROR
+        if not is_overwrite:
+            if dest.exists():
+                print(f"Error: {norm_dir}/{filename} already exists. Use --overwrite to replace.", file=sys.stderr)
+                return EXIT_USAGE_ERROR
         write_file_lf(dest, content)
-        print(f"Created: {dest}")
+        print(f"Created: {norm_dir}/{filename}")
     return EXIT_SUCCESS
 
 

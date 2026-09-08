@@ -286,3 +286,196 @@ func TestCompileSparseIntegerMap_MismatchedLengths(t *testing.T) {
 		t.Fatal("expected non-empty map")
 	}
 }
+
+func TestBasicIntegerEnum_MinMax(t *testing.T) {
+	b := baseenumer.NewBasicInteger(sampleByteLabels[:], sampleByteInvalid)
+	if b.Min() != sampleByteInvalid {
+		t.Fatalf("expected Min %v, got %v", sampleByteInvalid, b.Min())
+	}
+
+	if b.Max() != sampleByteInactive {
+		t.Fatalf("expected Max %v, got %v", sampleByteInactive, b.Max())
+	}
+
+	assertIntegerPredicates(t, b)
+}
+
+func assertIntegerPredicates(t *testing.T, b *baseenumer.BasicIntegerEnum[sampleByteEnum]) {
+	if !b.IsMin(sampleByteInvalid) {
+		t.Fatal("expected IsMin to be true for Min")
+	}
+
+	if b.IsMin(sampleByteActive) {
+		t.Fatal("expected IsMin to be false for Active")
+	}
+
+	if !b.IsMax(sampleByteInactive) {
+		t.Fatal("expected IsMax to be true for Max")
+	}
+
+	if b.IsMax(sampleByteActive) {
+		t.Fatal("expected IsMax to be false for Active")
+	}
+}
+
+func TestBasicIntegerEnum_IsInRange(t *testing.T) {
+	b := baseenumer.NewBasicInteger(sampleByteLabels[:], sampleByteInvalid)
+	if !b.IsInRange(sampleByteActive, b.Min(), b.Max()) {
+		t.Fatal("expected Active to be in range [Min, Max]")
+	}
+
+	if b.IsInRange(sampleByteEnum(99), b.Min(), b.Max()) {
+		t.Fatal("expected 99 to not be in range [Min, Max]")
+	}
+
+	if !b.IsInRange(sampleByteActive, sampleByteActive, sampleByteInactive) {
+		t.Fatal("expected Active to be in range [Active, Inactive]")
+	}
+
+	if b.IsInRange(sampleByteInvalid, sampleByteActive, sampleByteInactive) {
+		t.Fatal("expected Invalid to not be in range [Active, Inactive]")
+	}
+}
+
+func TestBasicSparseIntegerEnum_MinMax(t *testing.T) {
+	b := baseenumer.NewBasicSparseInteger(sampleSparseVariants, sampleSparseNames, sampleSparseZero, 50)
+	if b.Min() != sampleSparseZero {
+		t.Fatalf("expected Min %v, got %v", sampleSparseZero, b.Min())
+	}
+
+	if b.Max() != sampleSparseFifty {
+		t.Fatalf("expected Max %v, got %v", sampleSparseFifty, b.Max())
+	}
+
+	assertSparsePredicates(t, b)
+}
+
+func assertSparsePredicates(t *testing.T, b *baseenumer.BasicIntegerEnum[sampleSparseEnum]) {
+	if !b.IsMin(sampleSparseZero) {
+		t.Fatal("expected IsMin to be true for Zero")
+	}
+
+	if b.IsMin(sampleSparseTen) {
+		t.Fatal("expected IsMin to be false for Ten")
+	}
+
+	if !b.IsMax(sampleSparseFifty) {
+		t.Fatal("expected IsMax to be true for Fifty")
+	}
+
+	if b.IsMax(sampleSparseTen) {
+		t.Fatal("expected IsMax to be false for Ten")
+	}
+}
+
+func TestBasicSparseIntegerEnum_IsInRange(t *testing.T) {
+	b := baseenumer.NewBasicSparseInteger(sampleSparseVariants, sampleSparseNames, sampleSparseZero, 50)
+	if !b.IsInRange(sampleSparseTen, b.Min(), b.Max()) {
+		t.Fatal("expected Ten to be in range [Min, Max]")
+	}
+
+	if b.IsInRange(sampleSparseEnum(100), b.Min(), b.Max()) {
+		t.Fatal("expected 100 to not be in range [Min, Max]")
+	}
+
+	if !b.IsInRange(sampleSparseTen, sampleSparseTen, sampleSparseFifty) {
+		t.Fatal("expected Ten to be in range [Ten, Fifty]")
+	}
+
+	if b.IsInRange(sampleSparseZero, sampleSparseTen, sampleSparseFifty) {
+		t.Fatal("expected Zero to not be in range [Ten, Fifty]")
+	}
+}
+
+func TestBasicStringEnum_MinMax(t *testing.T) {
+	b := baseenumer.NewBasicString(sampleStringVariants, sampleStringUnknown)
+	if b.Min() != sampleStringAlpha {
+		t.Fatalf("expected Min %v, got %v", sampleStringAlpha, b.Min())
+	}
+
+	if b.Max() != sampleStringBeta {
+		t.Fatalf("expected Max %v, got %v", sampleStringBeta, b.Max())
+	}
+
+	assertStringPredicates(t, b)
+}
+
+func assertStringPredicates(t *testing.T, b *baseenumer.BasicStringEnum[sampleStringEnum]) {
+	if !b.IsMin(sampleStringAlpha) {
+		t.Fatal("expected IsMin to be true for Alpha")
+	}
+
+	if b.IsMin(sampleStringBeta) {
+		t.Fatal("expected IsMin to be false for Beta")
+	}
+
+	if !b.IsMax(sampleStringBeta) {
+		t.Fatal("expected IsMax to be true for Beta")
+	}
+
+	if b.IsMax(sampleStringAlpha) {
+		t.Fatal("expected IsMax to be false for Alpha")
+	}
+}
+
+func TestBasicStringEnum_IsInRange(t *testing.T) {
+	b := baseenumer.NewBasicString(sampleStringVariants, sampleStringUnknown)
+	if !b.IsInRange(sampleStringAlpha, b.Min(), b.Max()) {
+		t.Fatal("expected Alpha to be in range [Min, Max]")
+	}
+
+	if b.IsInRange(sampleStringEnum("Gamma"), b.Min(), b.Max()) {
+		t.Fatal("expected Gamma to not be in range [Min, Max]")
+	}
+
+	if !b.IsInRange(sampleStringBeta, sampleStringAlpha, sampleStringBeta) {
+		t.Fatal("expected Beta to be in range [Alpha, Beta]")
+	}
+
+	if b.IsInRange(sampleStringEnum("000"), sampleStringAlpha, sampleStringBeta) {
+		t.Fatal("expected 000 to not be in range [Alpha, Beta]")
+	}
+}
+
+func TestBasicStringEnum_WithMinMax(t *testing.T) {
+	b := baseenumer.NewBasicString(sampleStringVariants, sampleStringUnknown)
+	b.WithMinMax(sampleStringBeta, sampleStringBeta)
+	if b.Min() != sampleStringBeta {
+		t.Fatalf("expected Min to be overridden to Beta, got %v", b.Min())
+	}
+
+	if b.Max() != sampleStringBeta {
+		t.Fatalf("expected Max to be overridden to Beta, got %v", b.Max())
+	}
+}
+
+func TestBasicStringEnum_EmptyVariants(t *testing.T) {
+	b := baseenumer.NewBasicString([]sampleStringEnum{}, sampleStringUnknown)
+	if b.Min() != sampleStringUnknown {
+		t.Fatalf("expected Min to be Unknown for empty, got %v", b.Min())
+	}
+
+	if b.Max() != sampleStringUnknown {
+		t.Fatalf("expected Max to be Unknown for empty, got %v", b.Max())
+	}
+}
+
+func TestMinMaxer_InterfaceConformance(t *testing.T) {
+	var intEngine baseenumer.MinMaxer[sampleByteEnum] = baseenumer.NewBasicInteger(sampleByteLabels[:], sampleByteInvalid)
+	if intEngine.Min() != sampleByteInvalid {
+		t.Fatal("unexpected int MinMaxer Min")
+	}
+
+	if intEngine.Max() != sampleByteInactive {
+		t.Fatal("unexpected int MinMaxer Max")
+	}
+
+	var strEngine baseenumer.MinMaxer[sampleStringEnum] = baseenumer.NewBasicString(sampleStringVariants, sampleStringUnknown)
+	if strEngine.Min() != sampleStringAlpha {
+		t.Fatal("unexpected str MinMaxer Min")
+	}
+
+	if strEngine.Max() != sampleStringBeta {
+		t.Fatal("unexpected str MinMaxer Max")
+	}
+}

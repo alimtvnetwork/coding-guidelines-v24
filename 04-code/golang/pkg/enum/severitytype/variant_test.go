@@ -10,11 +10,14 @@ import (
 
 func TestSeverityType_Interfaces(t *testing.T) {
 	var (
-		_ baseenumer.BaseEnumer   = severitytype.Error
-		_ baseenumer.ByteEnumer   = severitytype.Error
-		_ baseenumer.NumberEnumer = severitytype.Error
-		_ json.Marshaler          = severitytype.Error
-		_ json.Unmarshaler        = (*severitytype.Variant)(nil)
+		_ baseenumer.BaseEnumer                          = severitytype.Error
+		_ baseenumer.ByteEnumer                          = severitytype.Error
+		_ baseenumer.NumberEnumer                        = severitytype.Error
+		_ baseenumer.MinMaxer[severitytype.Variant]      = severitytype.Error
+		_ baseenumer.BoundedEnumer[severitytype.Variant] = severitytype.Error
+		_ baseenumer.Bounder[severitytype.Variant]       = severitytype.Error
+		_ json.Marshaler                                 = severitytype.Error
+		_ json.Unmarshaler                               = (*severitytype.Variant)(nil)
 	)
 }
 
@@ -150,5 +153,55 @@ func TestSeverityType_JSON(t *testing.T) {
 
 	if err := json.Unmarshal([]byte(`"UnknownSeverity"`), &v); err == nil {
 		t.Fatalf("expected error for invalid severity name")
+	}
+}
+
+func TestSeverityType_Boundary(t *testing.T) {
+	if severitytype.Min() != severitytype.Unknown {
+		t.Fatalf("expected Min to be Unknown")
+	}
+
+	if severitytype.Max() != severitytype.Fatal {
+		t.Fatalf("expected Max to be Fatal")
+	}
+
+	if !severitytype.Unknown.IsMin() {
+		t.Fatalf("expected Unknown.IsMin() to be true")
+	}
+
+	if severitytype.Fatal.IsMin() {
+		t.Fatalf("expected Fatal.IsMin() to be false")
+	}
+}
+
+func TestSeverityType_BoundaryMax(t *testing.T) {
+	if !severitytype.Fatal.IsMax() {
+		t.Fatalf("expected Fatal.IsMax() to be true")
+	}
+
+	if severitytype.Unknown.IsMax() {
+		t.Fatalf("expected Unknown.IsMax() to be false")
+	}
+
+	if severitytype.Error.Min() != severitytype.Unknown {
+		t.Fatalf("expected Error.Min() to be Unknown")
+	}
+
+	if severitytype.Error.Max() != severitytype.Fatal {
+		t.Fatalf("expected Error.Max() to be Fatal")
+	}
+}
+
+func TestSeverityType_IsInRange(t *testing.T) {
+	if !severitytype.Error.IsInRange(severitytype.Info, severitytype.Fatal) {
+		t.Fatalf("expected Error to be in range [Info, Fatal]")
+	}
+
+	if severitytype.Unknown.IsInRange(severitytype.Info, severitytype.Fatal) {
+		t.Fatalf("expected Unknown to not be in range [Info, Fatal]")
+	}
+
+	if !severitytype.Fatal.IsInRange(severitytype.Unknown, severitytype.Fatal) {
+		t.Fatalf("expected Fatal to be in range [Unknown, Fatal]")
 	}
 }

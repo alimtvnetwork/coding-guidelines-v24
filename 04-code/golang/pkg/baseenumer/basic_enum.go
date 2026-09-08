@@ -13,6 +13,8 @@ type BasicIntegerEnum[V IntNumber] struct {
 	variantMap map[string]V
 	maxValid   int
 	zero       V
+	min        V
+	max        V
 	typeName   string
 }
 
@@ -28,6 +30,8 @@ func NewBasicInteger[V IntNumber](labels []string, zero V) *BasicIntegerEnum[V] 
 		variantMap: vMap,
 		maxValid:   maxVal,
 		zero:       zero,
+		min:        zero,
+		max:        V(maxVal),
 		typeName:   tName,
 	}
 }
@@ -49,6 +53,8 @@ func NewBasicSparseInteger[V IntNumber](
 		variantMap: vMap,
 		maxValid:   maxValid,
 		zero:       zero,
+		min:        zero,
+		max:        V(maxValid),
 		typeName:   tName,
 	}
 }
@@ -121,6 +127,31 @@ func (b *BasicIntegerEnum[V]) MaxValid() int {
 	return b.maxValid
 }
 
+// Min returns the minimum variant.
+func (b *BasicIntegerEnum[V]) Min() V {
+	return b.min
+}
+
+// Max returns the maximum variant.
+func (b *BasicIntegerEnum[V]) Max() V {
+	return b.max
+}
+
+// IsMin reports whether the given variant is equal to Min.
+func (b *BasicIntegerEnum[V]) IsMin(v V) bool {
+	return v == b.min
+}
+
+// IsMax reports whether the given variant is equal to Max.
+func (b *BasicIntegerEnum[V]) IsMax(v V) bool {
+	return v == b.max
+}
+
+// IsInRange reports whether the given variant falls within [min, max].
+func (b *BasicIntegerEnum[V]) IsInRange(v, min, max V) bool {
+	return IsBetween(v, min, max)
+}
+
 // CompileSparseIntegerMap builds a fast lookup map for sparse integer enum variants.
 func CompileSparseIntegerMap[V IntNumber](variants []V, names []string, zero V) map[string]V {
 	count := len(variants)
@@ -179,7 +210,36 @@ type BasicStringEnum[V ~string] struct {
 	variants   []V
 	variantMap map[string]V
 	zero       V
+	min        V
+	max        V
 	typeName   string
+}
+
+func isNonEmptyVariant[V ~string](v, zero V) bool {
+	if string(v) == "" {
+		return false
+	}
+
+	if v == zero {
+		return false
+	}
+
+	return true
+}
+
+func computeStringMinMax[V ~string](variants []V, zero V) (V, V) {
+	valid := make([]V, 0, len(variants))
+	for _, v := range variants {
+		if isNonEmptyVariant(v, zero) {
+			valid = append(valid, v)
+		}
+	}
+
+	if len(valid) == 0 {
+		return zero, zero
+	}
+
+	return valid[0], valid[len(valid)-1]
 }
 
 // NewBasicString initializes a BasicStringEnum from variant slice and zero-value variant.
@@ -187,11 +247,14 @@ func NewBasicString[V ~string](variants []V, zero V) *BasicStringEnum[V] {
 	vMap := CompileStringMap(variants, zero)
 	var dummy V
 	tName := ResolveTypeName(&dummy)
+	minVal, maxVal := computeStringMinMax(variants, zero)
 
 	return &BasicStringEnum[V]{
 		variants:   variants,
 		variantMap: vMap,
 		zero:       zero,
+		min:        minVal,
+		max:        maxVal,
 		typeName:   tName,
 	}
 }
@@ -213,7 +276,7 @@ func (b *BasicStringEnum[V]) All() []V {
 func (b *BasicStringEnum[V]) Values() []string {
 	res := make([]string, 0, len(b.variants))
 	for _, v := range b.variants {
-		if string(v) != "" && v != b.zero {
+		if isNonEmptyVariant(v, b.zero) {
 			res = append(res, string(v))
 		}
 	}
@@ -254,3 +317,41 @@ func (b *BasicStringEnum[V]) TypeName() string {
 func (b *BasicStringEnum[V]) Zero() V {
 	return b.zero
 }
+
+// Min returns the minimum valid variant.
+func (b *BasicStringEnum[V]) Min() V {
+	return b.min
+}
+
+// Max returns the maximum valid variant.
+func (b *BasicStringEnum[V]) Max() V {
+	return b.max
+}
+
+// IsMin reports whether the given variant is equal to Min.
+func (b *BasicStringEnum[V]) IsMin(v V) bool {
+	return v == b.min
+}
+
+// IsMax reports whether the given variant is equal to Max.
+func (b *BasicStringEnum[V]) IsMax(v V) bool {
+	return v == b.max
+}
+
+// IsInRange reports whether the given variant falls within [min, max].
+func (b *BasicStringEnum[V]) IsInRange(v, min, max V) bool {
+	return IsBetween(v, min, max)
+}
+
+// WithMinMax overrides the minimum and maximum variants.
+func (b *BasicStringEnum[V]) WithMinMax(min, max V) *BasicStringEnum[V] {
+	b.min = min
+	b.max = max
+
+	return b
+}
+
+var (
+	_ MinMaxer[int]    = (*BasicIntegerEnum[int])(nil)
+	_ MinMaxer[string] = (*BasicStringEnum[string])(nil)
+)

@@ -4,8 +4,22 @@ import (
 	"encoding/json"
 	"testing"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/enum/bytetype"
 )
+
+func TestByteType_Interfaces(t *testing.T) {
+	var (
+		_ baseenumer.BaseEnumer                      = bytetype.One
+		_ baseenumer.ByteEnumer                      = bytetype.One
+		_ baseenumer.NumberEnumer                    = bytetype.One
+		_ baseenumer.MinMaxer[bytetype.Variant]      = bytetype.One
+		_ baseenumer.BoundedEnumer[bytetype.Variant] = bytetype.One
+		_ baseenumer.Bounder[bytetype.Variant]       = bytetype.One
+		_ json.Marshaler                             = bytetype.One
+		_ json.Unmarshaler                           = (*bytetype.Variant)(nil)
+	)
+}
 
 func TestConstantsAndAliases(t *testing.T) {
 	if bytetype.Zero != 0 || bytetype.Min != 0 {
@@ -262,5 +276,47 @@ func TestJSONRoundtrip(t *testing.T) {
 
 	if nullDecoded != bytetype.Zero {
 		t.Fatalf("expected Zero for null, got %v", nullDecoded)
+	}
+}
+
+func TestByteType_Boundary(t *testing.T) {
+	if bytetype.One.Min() != bytetype.Min {
+		t.Fatalf("expected One.Min() to be Min")
+	}
+
+	if bytetype.One.Max() != bytetype.Max {
+		t.Fatalf("expected One.Max() to be Max")
+	}
+
+	if !bytetype.Min.IsMin() {
+		t.Fatalf("expected Min.IsMin() to be true")
+	}
+
+	if bytetype.Max.IsMin() {
+		t.Fatalf("expected Max.IsMin() to be false")
+	}
+}
+
+func TestByteType_BoundaryMax(t *testing.T) {
+	if !bytetype.Max.IsMax() {
+		t.Fatalf("expected Max.IsMax() to be true")
+	}
+
+	if bytetype.Min.IsMax() {
+		t.Fatalf("expected Min.IsMax() to be false")
+	}
+}
+
+func TestByteType_IsInRange(t *testing.T) {
+	if !bytetype.Two.IsInRange(bytetype.One, bytetype.Three) {
+		t.Fatalf("expected Two to be in range [One, Three]")
+	}
+
+	if bytetype.Zero.IsInRange(bytetype.One, bytetype.Three) {
+		t.Fatalf("expected Zero to not be in range [One, Three]")
+	}
+
+	if !bytetype.Max.IsInRange(bytetype.Min, bytetype.Max) {
+		t.Fatalf("expected Max to be in range [Min, Max]")
 	}
 }

@@ -10,11 +10,14 @@ import (
 
 func TestPriorityType_Interfaces(t *testing.T) {
 	var (
-		_ baseenumer.BaseEnumer   = prioritytype.High
-		_ baseenumer.ByteEnumer   = prioritytype.High
-		_ baseenumer.NumberEnumer = prioritytype.High
-		_ json.Marshaler          = prioritytype.High
-		_ json.Unmarshaler        = (*prioritytype.Variant)(nil)
+		_ baseenumer.BaseEnumer                          = prioritytype.High
+		_ baseenumer.ByteEnumer                          = prioritytype.High
+		_ baseenumer.NumberEnumer                        = prioritytype.High
+		_ baseenumer.MinMaxer[prioritytype.Variant]      = prioritytype.High
+		_ baseenumer.BoundedEnumer[prioritytype.Variant] = prioritytype.High
+		_ baseenumer.Bounder[prioritytype.Variant]       = prioritytype.High
+		_ json.Marshaler                                 = prioritytype.High
+		_ json.Unmarshaler                               = (*prioritytype.Variant)(nil)
 	)
 }
 
@@ -146,5 +149,55 @@ func TestPriorityType_JSON(t *testing.T) {
 
 	if err := json.Unmarshal([]byte(`"UnknownPriority"`), &v); err == nil {
 		t.Fatalf("expected error for invalid priority name")
+	}
+}
+
+func TestPriorityType_Boundary(t *testing.T) {
+	if prioritytype.Min() != prioritytype.Unknown {
+		t.Fatalf("expected Min to be Unknown")
+	}
+
+	if prioritytype.Max() != prioritytype.Critical {
+		t.Fatalf("expected Max to be Critical")
+	}
+
+	if !prioritytype.Unknown.IsMin() {
+		t.Fatalf("expected Unknown.IsMin() to be true")
+	}
+
+	if prioritytype.Critical.IsMin() {
+		t.Fatalf("expected Critical.IsMin() to be false")
+	}
+}
+
+func TestPriorityType_BoundaryMax(t *testing.T) {
+	if !prioritytype.Critical.IsMax() {
+		t.Fatalf("expected Critical.IsMax() to be true")
+	}
+
+	if prioritytype.Unknown.IsMax() {
+		t.Fatalf("expected Unknown.IsMax() to be false")
+	}
+
+	if prioritytype.High.Min() != prioritytype.Unknown {
+		t.Fatalf("expected High.Min() to be Unknown")
+	}
+
+	if prioritytype.High.Max() != prioritytype.Critical {
+		t.Fatalf("expected High.Max() to be Critical")
+	}
+}
+
+func TestPriorityType_IsInRange(t *testing.T) {
+	if !prioritytype.Normal.IsInRange(prioritytype.Low, prioritytype.Critical) {
+		t.Fatalf("expected Normal to be in range [Low, Critical]")
+	}
+
+	if prioritytype.Unknown.IsInRange(prioritytype.Low, prioritytype.Critical) {
+		t.Fatalf("expected Unknown to not be in range [Low, Critical]")
+	}
+
+	if !prioritytype.Critical.IsInRange(prioritytype.Unknown, prioritytype.Critical) {
+		t.Fatalf("expected Critical to be in range [Unknown, Critical]")
 	}
 }

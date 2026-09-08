@@ -11,6 +11,8 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
+- [33-enum-min-max-methods-and-baseenumer-enhancement.md](completed/33-enum-min-max-methods-and-baseenumer-enhancement.md): Enum Min/Max Methods and BaseEnumer Enhancement.
+
 - [32-codebase-and-prompt-improvements.md](completed/32-codebase-and-prompt-improvements.md): Codebase, AI Scripts, and Prompts Improvements.
 
 - [31-basic-enum-reusability-and-reflection-unmarshal.md](completed/31-basic-enum-reusability-and-reflection-unmarshal.md): BasicEnum Reusability & Reflection-Based Type Name Resolution.

@@ -5,8 +5,21 @@ import (
 	"os"
 	"testing"
 
+	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/enum/filepermtype"
 )
+
+func TestFilePermType_Interfaces(t *testing.T) {
+	var (
+		_ baseenumer.BaseEnumer                          = filepermtype.Standard
+		_ baseenumer.NumberEnumer                        = filepermtype.Standard
+		_ baseenumer.MinMaxer[filepermtype.Variant]      = filepermtype.Standard
+		_ baseenumer.BoundedEnumer[filepermtype.Variant] = filepermtype.Standard
+		_ baseenumer.Bounder[filepermtype.Variant]       = filepermtype.Standard
+		_ json.Marshaler                                 = filepermtype.Standard
+		_ json.Unmarshaler                               = (*filepermtype.Variant)(nil)
+	)
+}
 
 func TestFilePermType_Basics(t *testing.T) {
 	p := filepermtype.Standard
@@ -171,5 +184,56 @@ func TestFilePermType_JSON(t *testing.T) {
 
 	if nullDecoded != filepermtype.Standard {
 		t.Fatalf("expected Standard on null, got %v", nullDecoded)
+	}
+}
+
+func TestFilePermType_Boundary(t *testing.T) {
+	if filepermtype.Min() != filepermtype.None {
+		t.Fatalf("expected Min to be None (0000)")
+	}
+
+	if filepermtype.Max() != filepermtype.Variant(07777) {
+		t.Fatalf("expected Max to be 07777")
+	}
+
+	if !filepermtype.None.IsMin() {
+		t.Fatalf("expected None.IsMin() to be true")
+	}
+
+	if filepermtype.Standard.IsMin() {
+		t.Fatalf("expected Standard.IsMin() to be false")
+	}
+}
+
+func TestFilePermType_BoundaryMax(t *testing.T) {
+	maxVal := filepermtype.Variant(07777)
+	if !maxVal.IsMax() {
+		t.Fatalf("expected 07777.IsMax() to be true")
+	}
+
+	if filepermtype.None.IsMax() {
+		t.Fatalf("expected None.IsMax() to be false")
+	}
+
+	if filepermtype.Standard.Min() != filepermtype.None {
+		t.Fatalf("expected Standard.Min() to be None")
+	}
+
+	if filepermtype.Standard.Max() != maxVal {
+		t.Fatalf("expected Standard.Max() to be 07777")
+	}
+}
+
+func TestFilePermType_IsInRange(t *testing.T) {
+	if !filepermtype.Standard.IsInRange(filepermtype.None, filepermtype.Variant(07777)) {
+		t.Fatalf("expected Standard to be in range [None, 07777]")
+	}
+
+	if filepermtype.Variant(010000).IsInRange(filepermtype.None, filepermtype.Variant(07777)) {
+		t.Fatalf("expected 010000 to not be in range [None, 07777]")
+	}
+
+	if !filepermtype.None.IsInRange(filepermtype.None, filepermtype.Standard) {
+		t.Fatalf("expected None to be in range [None, Standard]")
 	}
 }
