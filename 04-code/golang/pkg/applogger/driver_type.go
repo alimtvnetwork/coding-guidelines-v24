@@ -10,6 +10,7 @@ const (
 	DriverSQLite
 	DriverZap
 	DriverComposite
+	DriverRotatingFile
 )
 
 var driverNames = [...]string{
@@ -18,6 +19,7 @@ var driverNames = [...]string{
 	"SQLite",
 	"Zap",
 	"Composite",
+	"RotatingFile",
 }
 
 func (d DriverType) Name() string {

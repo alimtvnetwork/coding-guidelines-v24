@@ -18,3 +18,4 @@ Master directory of architectural and execution plans.
 - [05-fileutil-concurrency-and-io-architecture.md](completed/05-fileutil-concurrency-and-io-architecture.md): Modular file operations, path context injection, cross-platform temp hierarchy, `FilePathOps` bound struct, and lock concurrency.
 - [06-enum-architecture-and-baseenumer-foundation.md](completed/06-enum-architecture-and-baseenumer-foundation.md): Modular 1:1 enum isolation, dedicated packages, DRY JSON marshaling, Min/Max boundaries, leaf enum parse helpers, cycle elimination, and 100% test coverage.
 - [07-completed-plans-consolidation.md](completed/07-completed-plans-consolidation.md): Completed plans consolidation, safety backup & milestone resequencing.
+- [08-split-sqlite-logging-rotating-lazyonce-errcmd.md](completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md): Split SQLite DB logging, configurable text file rotation, generic LazyOnce, and errcmd integration.

@@ -9,6 +9,7 @@ type Config struct {
 	FilePath     string
 	ZapLogger    ZapLoggerInterface
 	Sinks        []LogSink
+	Rotation     RotationConfig
 	IsStackTrace bool
 	IsUseJSON    bool
 }
@@ -18,6 +19,8 @@ func createSinkFromDriver(cfg Config) (LogSink, error) {
 	switch cfg.Driver {
 	case DriverFile:
 		return NewFileSink(cfg.FilePath)
+	case DriverRotatingFile:
+		return NewRotatingFileSink(cfg.Rotation)
 	case DriverZap:
 		return NewZapAdapter(cfg.ZapLogger), nil
 	case DriverComposite:
