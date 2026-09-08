@@ -1,9 +1,11 @@
 package lazyonce
 
 import (
+	"context"
 	"sync"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/result"
 )
 
@@ -41,9 +43,60 @@ func (o *LazyOnce1[TInput, TOutput]) Value(input TInput) (TOutput, *appfault.App
 	return o.cachedValue, o.cachedFault
 }
 
+// ValueContext evaluates the initializer respecting context deadlines.
+func (o *LazyOnce1[TInput, TOutput]) ValueContext(
+	ctx context.Context,
+	input TInput,
+) (TOutput, *appfault.AppError) {
+	if ctx == nil {
+		return o.Value(input)
+	}
+
+	if ctx.Err() != nil {
+		var zero TOutput
+
+		return zero, appfault.Wrap(errtype.Timeout, ctx.Err(), "context cancelled before evaluation")
+	}
+
+	return o.awaitContext(ctx, input)
+}
+
+func (o *LazyOnce1[TInput, TOutput]) awaitContext(
+	ctx context.Context,
+	input TInput,
+) (TOutput, *appfault.AppError) {
+	resCh := make(chan evalResult[TOutput], 1)
+	go func() {
+		v, f := o.Value(input)
+		resCh <- evalResult[TOutput]{val: v, fault: f}
+	}()
+
+	select {
+	case <-ctx.Done():
+		var zero TOutput
+
+		return zero, appfault.Wrap(errtype.Timeout, ctx.Err(), "context cancelled during evaluation")
+	case res := <-resCh:
+		return res.val, res.fault
+	}
+}
+
 // Result executes the initializer on the first call and returns a Result container.
 func (o *LazyOnce1[TInput, TOutput]) Result(input TInput) result.Result[TOutput] {
 	val, fault := o.Value(input)
+	if fault != nil {
+		return result.Failure[TOutput](fault)
+	}
+
+	return result.Success[TOutput](val)
+}
+
+// ResultContext executes the initializer respecting context cancellation.
+func (o *LazyOnce1[TInput, TOutput]) ResultContext(
+	ctx context.Context,
+	input TInput,
+) result.Result[TOutput] {
+	val, fault := o.ValueContext(ctx, input)
 	if fault != nil {
 		return result.Failure[TOutput](fault)
 	}

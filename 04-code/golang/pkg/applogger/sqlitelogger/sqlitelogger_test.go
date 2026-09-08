@@ -1013,3 +1013,150 @@ func TestMigrationEngine_DirectExecutionErrors(t *testing.T) {
 		t.Fatal("expected error on RecordMigrationVersion with fail_exec")
 	}
 }
+
+func TestSplitDBManager_PruneTasks(t *testing.T) {
+	tempDir := t.TempDir()
+	mgr, fault := sqlitelogger.NewSplitDBManager(tempDir, getMockOpener())
+	if fault != nil {
+		t.Fatalf("unexpected fault creating manager: %s", fault.Message())
+	}
+
+	defer mgr.Close()
+
+	setupPruneTaskFiles(t, mgr.TasksDir())
+	_, _ = mgr.GetTaskDb("task-old")
+
+	pruned, pFault := mgr.PruneTasks(24 * time.Hour)
+	if pFault != nil {
+		t.Fatalf("unexpected fault during prune: %s", pFault.Message())
+	}
+
+	verifyPrunedFiles(t, mgr.TasksDir(), pruned)
+}
+
+func setupPruneTaskFiles(t *testing.T, tasksDir string) {
+	oldFile := filepath.Join(tasksDir, "task-old.db")
+	recentFile := filepath.Join(tasksDir, "task-recent.db")
+	_ = os.WriteFile(oldFile, []byte("old db"), 0o600)
+	_ = os.WriteFile(oldFile+"-wal", []byte("wal"), 0o600)
+	_ = os.WriteFile(oldFile+"-shm", []byte("shm"), 0o600)
+	_ = os.WriteFile(recentFile, []byte("recent db"), 0o600)
+
+	oldTime := time.Now().Add(-48 * time.Hour)
+	if err := os.Chtimes(oldFile, oldTime, oldTime); err != nil {
+		t.Fatalf("failed to set mtime: %v", err)
+	}
+}
+
+func verifyPrunedFiles(t *testing.T, tasksDir string, pruned int) {
+	if pruned != 1 {
+		t.Fatalf("expected 1 pruned, got %d", pruned)
+	}
+
+	oldFile := filepath.Join(tasksDir, "task-old.db")
+	if _, err := os.Stat(oldFile); !os.IsNotExist(err) {
+		t.Fatalf("expected old db file to be deleted")
+	}
+
+	recentFile := filepath.Join(tasksDir, "task-recent.db")
+	if _, err := os.Stat(recentFile); err != nil {
+		t.Fatalf("expected recent db file to exist: %v", err)
+	}
+}
+
+func TestSplitDBManager_PruneTaskCount(t *testing.T) {
+	tempDir := t.TempDir()
+	mgr, fault := sqlitelogger.NewSplitDBManager(tempDir, getMockOpener())
+	if fault != nil {
+		t.Fatalf("unexpected fault creating manager: %s", fault.Message())
+	}
+
+	defer mgr.Close()
+
+	createNumberedTaskFiles(t, mgr.TasksDir(), 5)
+
+	pruned, pFault := mgr.PruneTaskCount(3)
+	if pFault != nil {
+		t.Fatalf("unexpected fault during prune count: %s", pFault.Message())
+	}
+
+	if pruned != 2 {
+		t.Fatalf("expected 2 pruned, got %d", pruned)
+	}
+
+	verifyRemainingTaskCount(t, mgr.TasksDir(), 3)
+}
+
+func createNumberedTaskFiles(t *testing.T, tasksDir string, count int) {
+	baseTime := time.Now().Add(-10 * time.Hour)
+	for i := 1; i <= count; i++ {
+		name := fmt.Sprintf("task-%d.db", i)
+		p := filepath.Join(tasksDir, name)
+		_ = os.WriteFile(p, []byte("db"), 0o600)
+		mTime := baseTime.Add(time.Duration(i) * time.Hour)
+		if err := os.Chtimes(p, mTime, mTime); err != nil {
+			t.Fatalf("failed to set time: %v", err)
+		}
+	}
+}
+
+func verifyRemainingTaskCount(t *testing.T, tasksDir string, expected int) {
+	entries, _ := os.ReadDir(tasksDir)
+	dbCount := 0
+	for _, e := range entries {
+		if filepath.Ext(e.Name()) == ".db" {
+			dbCount++
+		}
+	}
+
+	if dbCount != expected {
+		t.Fatalf("expected %d remaining dbs, found %d", expected, dbCount)
+	}
+}
+
+func TestSplitDBManager_PruneTaskCount_NoExcess(t *testing.T) {
+	tempDir := t.TempDir()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, getMockOpener())
+	defer mgr.Close()
+
+	createNumberedTaskFiles(t, mgr.TasksDir(), 2)
+
+	pruned, fault := mgr.PruneTaskCount(5)
+	if fault != nil {
+		t.Fatalf("unexpected fault: %s", fault.Message())
+	}
+
+	if pruned != 0 {
+		t.Fatalf("expected 0 pruned, got %d", pruned)
+	}
+}
+
+func TestSplitDBManager_QueryWithFilterOptions(t *testing.T) {
+	tempDir := t.TempDir()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, getMockOpener())
+	defer mgr.Close()
+
+	_ = mgr.WriteMain(sqlitelogger.TaskLogEntry{Level: "ERROR", Message: "err1"})
+	_ = mgr.WriteTask("filter-task", sqlitelogger.TaskLogEntry{Level: "INFO", Message: "info1"})
+
+	filter := sqlitelogger.FilterOptions{
+		Level:     "ERROR",
+		StartTime: "2026-01-01T00:00:00Z",
+		EndTime:   "2026-01-02T00:00:00Z",
+		Limit:     10,
+		Offset:    0,
+	}
+
+	mainLogs, mFault := mgr.QueryMainLogs(filter)
+	if mFault != nil {
+		t.Fatalf("unexpected fault in QueryMainLogs: %s", mFault.Message())
+	}
+
+	_ = mainLogs
+	taskLogs, tFault := mgr.QueryTaskLogs("filter-task", filter)
+	if tFault != nil {
+		t.Fatalf("unexpected fault in QueryTaskLogs: %s", tFault.Message())
+	}
+
+	_ = taskLogs
+}

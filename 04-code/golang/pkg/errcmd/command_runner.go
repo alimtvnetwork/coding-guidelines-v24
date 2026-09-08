@@ -3,7 +3,11 @@ package errcmd
 import (
 	"bytes"
 	"context"
+	"fmt"
+	"os"
 	"os/exec"
+	"strings"
+	"sync"
 	"time"
 
 	"coding-guidelines/common/pkg/appfault"
@@ -24,12 +28,16 @@ type CommandResult struct {
 
 // CommandRunner orchestrates command execution with integrated SQLite and file logging.
 type CommandRunner struct {
-	builder    *ScriptBuilder
-	taskId     string
-	taskLogger *sqlitelogger.TaskLogger
-	splitMgr   *sqlitelogger.SplitDBManager
-	fileSink   applogger.LogSink
-	timeout    time.Duration
+	builder       *ScriptBuilder
+	taskId        string
+	taskLogger    *sqlitelogger.TaskLogger
+	splitMgr      *sqlitelogger.SplitDBManager
+	fileSink      applogger.LogSink
+	timeout       time.Duration
+	stdoutHandler func(line string)
+	stderrHandler func(line string)
+	env           map[string]string
+	cwd           string
 }
 
 // NewRunner initializes a CommandRunner with the specified script builder.
@@ -82,33 +90,141 @@ func (r *CommandRunner) WithTimeout(d time.Duration) *CommandRunner {
 	return r
 }
 
+// WithStdoutHandler binds a streaming callback for each standard output line.
+func (r *CommandRunner) WithStdoutHandler(handler func(line string)) *CommandRunner {
+	r.stdoutHandler = handler
+
+	return r
+}
+
+// WithStderrHandler binds a streaming callback for each standard error line.
+func (r *CommandRunner) WithStderrHandler(handler func(line string)) *CommandRunner {
+	r.stderrHandler = handler
+
+	return r
+}
+
+// WithEnv configures environment variables to be injected into the process.
+func (r *CommandRunner) WithEnv(env map[string]string) *CommandRunner {
+	r.env = env
+
+	return r
+}
+
+// WithCwd sets the working directory for command execution.
+func (r *CommandRunner) WithCwd(dir string) *CommandRunner {
+	r.cwd = dir
+
+	return r
+}
+
 // Run executes the script, captures output streams, and logs results to databases and sinks.
 func (r *CommandRunner) Run(ctx context.Context) (*CommandResult, *appfault.AppError) {
-	cmd, fault := r.builder.BuildCommand()
+	cmd, cancel, fault := r.prepareCommand(ctx)
 	if fault != nil {
 		return nil, fault
 	}
 
-	execCtx, cancel := context.WithTimeout(ctx, r.timeout)
 	defer cancel()
 
-	cmdWithCtx := exec.CommandContext(execCtx, cmd.Path, cmd.Args[1:]...)
-	cmdWithCtx.Dir = cmd.Dir
-	cmdWithCtx.Env = cmd.Env
-
 	var stdoutBuf, stderrBuf bytes.Buffer
-	cmdWithCtx.Stdout = &stdoutBuf
-	cmdWithCtx.Stderr = &stderrBuf
-
-	r.logStart(r.builder.ScriptText())
-	startTime := time.Now()
-	err := cmdWithCtx.Run()
-	durationMs := time.Since(startTime).Milliseconds()
-
+	outWriter := newLineStreamWriter(&stdoutBuf, r.createStdoutHandler())
+	errWriter := newLineStreamWriter(&stderrBuf, r.createStderrHandler())
+	durationMs, err := r.executeWithStreams(cmd, outWriter, errWriter)
 	res := r.buildResult(err, &stdoutBuf, &stderrBuf, durationMs)
 	r.logCompletion(res)
 
 	return res, res.Fault
+}
+
+func (r *CommandRunner) prepareCommand(
+	ctx context.Context,
+) (*exec.Cmd, context.CancelFunc, *appfault.AppError) {
+	cmd, fault := r.builder.BuildCommand()
+	if fault != nil {
+		return nil, nil, fault
+	}
+
+	execCtx, cancel := context.WithTimeout(ctx, r.timeout)
+	cmdWithCtx := exec.CommandContext(execCtx, cmd.Path, cmd.Args[1:]...)
+	cmdWithCtx.Dir = cmd.Dir
+	cmdWithCtx.Env = cmd.Env
+	r.applyProcessContext(cmdWithCtx)
+
+	return cmdWithCtx, cancel, nil
+}
+
+func (r *CommandRunner) executeWithStreams(
+	cmd *exec.Cmd,
+	outWriter, errWriter *lineStreamWriter,
+) (int64, error) {
+	cmd.Stdout = outWriter
+	cmd.Stderr = errWriter
+	r.logStart(r.builder.ScriptText())
+	startTime := time.Now()
+	err := cmd.Run()
+	durationMs := time.Since(startTime).Milliseconds()
+	outWriter.Flush()
+	errWriter.Flush()
+
+	return durationMs, err
+}
+
+func (r *CommandRunner) createStdoutHandler() func(string) {
+	hasReceiver := r.stdoutHandler != nil || r.taskLogger != nil
+	if !hasReceiver {
+		return nil
+	}
+
+	return func(line string) {
+		if r.stdoutHandler != nil {
+			r.stdoutHandler(line)
+		}
+
+		if r.taskLogger != nil {
+			_ = r.taskLogger.Log("INFO", line)
+		}
+	}
+}
+
+func (r *CommandRunner) createStderrHandler() func(string) {
+	hasReceiver := r.stderrHandler != nil || r.taskLogger != nil
+	if !hasReceiver {
+		return nil
+	}
+
+	return func(line string) {
+		if r.stderrHandler != nil {
+			r.stderrHandler(line)
+		}
+
+		if r.taskLogger != nil {
+			_ = r.taskLogger.Log("ERROR", line)
+		}
+	}
+}
+
+func (r *CommandRunner) applyProcessContext(cmd *exec.Cmd) {
+	if r.cwd != "" {
+		cmd.Dir = r.cwd
+	}
+
+	if len(r.env) > 0 {
+		cmd.Env = mergeEnvironment(cmd.Env, r.env)
+	}
+}
+
+func mergeEnvironment(base []string, overrides map[string]string) []string {
+	envList := base
+	if len(envList) == 0 {
+		envList = os.Environ()
+	}
+
+	for k, v := range overrides {
+		envList = append(envList, fmt.Sprintf("%s=%s", k, v))
+	}
+
+	return envList
 }
 
 // buildResult constructs the CommandResult from outputs and execution status.
@@ -194,5 +310,61 @@ func (r *CommandRunner) logCompletion(res *CommandResult) {
 			Level:     level,
 			Message:   r.builder.ScriptText(),
 		})
+	}
+}
+
+// lineStreamWriter buffers raw bytes and passes complete lines to a handler.
+type lineStreamWriter struct {
+	buf     *bytes.Buffer
+	handler func(string)
+	pending bytes.Buffer
+	lock    sync.Mutex
+}
+
+func newLineStreamWriter(buf *bytes.Buffer, handler func(string)) *lineStreamWriter {
+	return &lineStreamWriter{
+		buf:     buf,
+		handler: handler,
+	}
+}
+
+func (w *lineStreamWriter) Write(p []byte) (int, error) {
+	w.lock.Lock()
+	defer w.lock.Unlock()
+
+	if w.buf != nil {
+		w.buf.Write(p)
+	}
+
+	if w.handler == nil {
+		return len(p), nil
+	}
+
+	return w.processLines(p)
+}
+
+func (w *lineStreamWriter) processLines(p []byte) (int, error) {
+	w.pending.Write(p)
+	for {
+		line, err := w.pending.ReadString('\n')
+		if err != nil {
+			w.pending.WriteString(line)
+			break
+		}
+
+		cleanLine := strings.TrimRight(line, "\r\n")
+		w.handler(cleanLine)
+	}
+
+	return len(p), nil
+}
+
+func (w *lineStreamWriter) Flush() {
+	w.lock.Lock()
+	defer w.lock.Unlock()
+
+	if w.handler != nil && w.pending.Len() > 0 {
+		w.handler(w.pending.String())
+		w.pending.Reset()
 	}
 }

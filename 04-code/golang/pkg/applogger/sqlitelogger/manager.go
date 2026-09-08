@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
+	"time"
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/enum/filepermtype"
@@ -386,18 +388,13 @@ func (m *SplitDBManager) QueryMainLogs(filter FilterOptions) ([]TaskLogEntry, *a
 	return m.queryLogs(db, filter)
 }
 
-// queryLogs performs row scanning for log queries.
+// queryLogs performs row scanning for log queries with dynamic filtering.
 func (m *SplitDBManager) queryLogs(
 	db *sql.DB,
 	filter FilterOptions,
 ) ([]TaskLogEntry, *appfault.AppError) {
-	limit := filter.Limit
-	if limit <= 0 {
-		limit = 100
-	}
-
-	query := "SELECT id, task_id, timestamp, level, message, caller, fields_json, stack_trace, duration_ms, status FROM logs ORDER BY id DESC LIMIT ?"
-	rows, err := db.Query(query, limit)
+	query, args := buildLogsQuery(filter)
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		return nil, appfault.Wrap(errtype.Database, err, "failed to execute log query")
 	}
@@ -405,6 +402,49 @@ func (m *SplitDBManager) queryLogs(
 	defer rows.Close()
 
 	return scanLogRows(rows)
+}
+
+// buildLogsQuery constructs dynamic SQL and parameter bindings from filter options.
+func buildLogsQuery(f FilterOptions) (string, []any) {
+	base := "SELECT id, task_id, timestamp, level, message, caller, fields_json, stack_trace, duration_ms, status FROM logs WHERE 1=1"
+	query, args := appendFilterConditions(base, f)
+	limit := normalizeLimit(f.Limit)
+	query += " ORDER BY id DESC LIMIT ? OFFSET ?"
+	args = append(args, limit, f.Offset)
+
+	return query, args
+}
+
+// appendFilterConditions appends WHERE clauses for level, startTime, and endTime.
+func appendFilterConditions(base string, f FilterOptions) (string, []any) {
+	q := base
+	var args []any
+
+	if f.Level != "" {
+		q += " AND level = ?"
+		args = append(args, f.Level)
+	}
+
+	if f.StartTime != "" {
+		q += " AND timestamp >= ?"
+		args = append(args, f.StartTime)
+	}
+
+	if f.EndTime != "" {
+		q += " AND timestamp <= ?"
+		args = append(args, f.EndTime)
+	}
+
+	return q, args
+}
+
+// normalizeLimit ensures query limit is positive with a standard default of 100.
+func normalizeLimit(limit int) int {
+	if limit <= 0 {
+		return 100
+	}
+
+	return limit
 }
 
 // scanLogRows parses rows into TaskLogEntry slice.
@@ -563,4 +603,119 @@ func (m *SplitDBManager) RepairMainDb() *appfault.AppError {
 	}
 
 	return RepairDatabase(db)
+}
+
+// PruneTasks removes task databases whose files are older than maxAge.
+func (m *SplitDBManager) PruneTasks(maxAge time.Duration) (int, *appfault.AppError) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+
+	entries, err := os.ReadDir(m.tasksDir)
+	if err != nil {
+		return 0, appfault.Wrap(errtype.IO, err, "failed to read tasks dir")
+	}
+
+	cutoff := time.Now().Add(-maxAge)
+
+	return m.pruneExpiredEntries(entries, cutoff)
+}
+
+// pruneExpiredEntries inspects directory entries and deletes files older than cutoff.
+func (m *SplitDBManager) pruneExpiredEntries(entries []os.DirEntry, cutoff time.Time) (int, *appfault.AppError) {
+	prunedCount := 0
+	for _, entry := range entries {
+		if !strings.HasSuffix(entry.Name(), ".db") {
+			continue
+		}
+
+		info, err := entry.Info()
+		if err == nil && info.ModTime().Before(cutoff) {
+			taskId := strings.TrimSuffix(entry.Name(), ".db")
+			m.removeTaskDatabaseFiles(taskId)
+			prunedCount++
+		}
+	}
+
+	return prunedCount, nil
+}
+
+// removeTaskDatabaseFiles closes connections and removes primary and temporary SQLite files.
+func (m *SplitDBManager) removeTaskDatabaseFiles(taskId string) {
+	if db, exists := m.taskDbs[taskId]; exists {
+		_ = db.Close()
+		delete(m.taskDbs, taskId)
+	}
+
+	basePath := m.resolveTaskDbPathUnsafe(taskId)
+	_ = os.Remove(basePath)
+	_ = os.Remove(basePath + "-wal")
+	_ = os.Remove(basePath + "-shm")
+}
+
+// PruneTaskCount enforces an upper bound on task databases, deleting oldest first.
+func (m *SplitDBManager) PruneTaskCount(maxDbs int) (int, *appfault.AppError) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+
+	files, fault := m.collectTaskFilesByAge()
+	if fault != nil {
+		return 0, fault
+	}
+
+	excessCount := len(files) - maxDbs
+	if excessCount <= 0 {
+		return 0, nil
+	}
+
+	return m.pruneExcessFiles(files[:excessCount]), nil
+}
+
+type taskFileInfo struct {
+	taskId  string
+	modTime time.Time
+}
+
+// collectTaskFilesByAge discovers and sorts task files by modification timestamp.
+func (m *SplitDBManager) collectTaskFilesByAge() ([]taskFileInfo, *appfault.AppError) {
+	entries, err := os.ReadDir(m.tasksDir)
+	if err != nil {
+		return nil, appfault.Wrap(errtype.IO, err, "failed to read tasks dir")
+	}
+
+	var files []taskFileInfo
+	for _, e := range entries {
+		if item, ok := extractTaskFileInfo(e); ok {
+			files = append(files, item)
+		}
+	}
+
+	sort.Slice(files, func(i, j int) bool { return files[i].modTime.Before(files[j].modTime) })
+
+	return files, nil
+}
+
+// extractTaskFileInfo parses metadata from a database directory entry.
+func extractTaskFileInfo(e os.DirEntry) (taskFileInfo, bool) {
+	if !strings.HasSuffix(e.Name(), ".db") {
+		return taskFileInfo{}, false
+	}
+
+	info, err := e.Info()
+	if err != nil {
+		return taskFileInfo{}, false
+	}
+
+	return taskFileInfo{
+		taskId:  strings.TrimSuffix(e.Name(), ".db"),
+		modTime: info.ModTime(),
+	}, true
+}
+
+// pruneExcessFiles deletes the specified excess task files and cleans up memory state.
+func (m *SplitDBManager) pruneExcessFiles(excess []taskFileInfo) int {
+	for _, f := range excess {
+		m.removeTaskDatabaseFiles(f.taskId)
+	}
+
+	return len(excess)
 }

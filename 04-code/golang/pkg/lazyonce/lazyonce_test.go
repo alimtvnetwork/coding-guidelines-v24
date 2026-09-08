@@ -1,6 +1,8 @@
 package lazyonce_test
 
 import (
+	"context"
+	"fmt"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -145,5 +147,98 @@ func TestLazyOnce2_TwoParameters(t *testing.T) {
 
 	if atomic.LoadInt32(&callCount) != 1 {
 		t.Fatalf("expected 1 execution, got %d", callCount)
+	}
+}
+
+func TestLazyOnce_ContextSuccessAndCancellation(t *testing.T) {
+	lazy := lazyonce.New(func() (string, *appfault.AppError) {
+		return "ctx-val", nil
+	})
+
+	val, fault := lazy.ValueContext(context.Background())
+	if fault != nil || val != "ctx-val" {
+		t.Fatalf("expected ctx-val, got %s, %v", val, fault)
+	}
+
+	cancelledCtx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	lazyNew := lazyonce.New(func() (string, *appfault.AppError) {
+		return "should not run", nil
+	})
+
+	_, cFault := lazyNew.ValueContext(cancelledCtx)
+	if cFault == nil {
+		t.Fatal("expected timeout fault on cancelled context")
+	}
+}
+
+func TestLazyOnce_ResultContext(t *testing.T) {
+	lazy := lazyonce.New(func() (int, *appfault.AppError) {
+		return 999, nil
+	})
+
+	res := lazy.ResultContext(context.Background())
+	if !res.IsSuccess() || res.Data() != 999 {
+		t.Fatalf("expected 999, got %v", res)
+	}
+
+	resNil := lazy.ResultContext(nil)
+	if !resNil.IsSuccess() || resNil.Data() != 999 {
+		t.Fatalf("expected 999 with nil context")
+	}
+}
+
+func TestLazyOnce1_ContextAndReset(t *testing.T) {
+	var count int32
+	lazy := lazyonce.New1(func(multiplier int) (int, *appfault.AppError) {
+		atomic.AddInt32(&count, 1)
+
+		return multiplier * 2, nil
+	})
+
+	val, fault := lazy.ValueContext(context.Background(), 10)
+	if fault != nil || val != 20 {
+		t.Fatalf("expected 20, got %d", val)
+	}
+
+	res := lazy.ResultContext(context.Background(), 10)
+	if res.Data() != 20 {
+		t.Fatalf("expected 20")
+	}
+
+	testLazyOnce1Reset(t, lazy)
+}
+
+func testLazyOnce1Reset(t *testing.T, lazy *lazyonce.LazyOnce1[int, int]) {
+	lazy.Reset()
+	if lazy.IsEvaluated() {
+		t.Fatal("expected not evaluated after reset")
+	}
+
+	val, _ := lazy.Value(5)
+	if val != 10 {
+		t.Fatalf("expected 10 after reset, got %d", val)
+	}
+}
+
+func TestLazyOnce2_ContextAndReset(t *testing.T) {
+	lazy := lazyonce.New2(func(s string, n int) (string, *appfault.AppError) {
+		return fmt.Sprintf("%s:%d", s, n), nil
+	})
+
+	val, fault := lazy.ValueContext(context.Background(), "port", 8080)
+	if fault != nil || val != "port:8080" {
+		t.Fatalf("expected port:8080, got %s", val)
+	}
+
+	res := lazy.ResultContext(context.Background(), "port", 8080)
+	if res.Data() != "port:8080" {
+		t.Fatalf("expected port:8080 from ResultContext")
+	}
+
+	lazy.Reset()
+	if lazy.IsEvaluated() {
+		t.Fatal("expected not evaluated after reset")
 	}
 }

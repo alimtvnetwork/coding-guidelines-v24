@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -221,4 +222,105 @@ func TestCommandLogger_Helpers(t *testing.T) {
 	}
 
 	_ = os.Getenv
+}
+
+func TestCommandRunner_StreamingStdout(t *testing.T) {
+	builder := errcmd.NewScriptBuilder().
+		AddLine("echo 'stream-line-1'").
+		AddLine("echo 'stream-line-2'")
+
+	var lines []string
+	var mu sync.Mutex
+	runner := errcmd.NewRunner(builder).
+		WithStdoutHandler(func(line string) {
+			mu.Lock()
+			lines = append(lines, line)
+			mu.Unlock()
+		}).
+		WithTimeout(10 * time.Second)
+
+	res, fault := runner.Run(context.Background())
+	if fault != nil {
+		t.Fatalf("run failed: %s", fault.Message())
+	}
+
+	verifyStreamingLines(t, lines, res)
+}
+
+func verifyStreamingLines(t *testing.T, lines []string, res *errcmd.CommandResult) {
+	if len(lines) == 0 {
+		t.Fatal("expected streamed stdout lines, got none")
+	}
+
+	foundLine := false
+	for _, l := range lines {
+		if strings.Contains(l, "stream-line-1") {
+			foundLine = true
+			break
+		}
+	}
+
+	if !foundLine {
+		t.Fatalf("expected stream-line-1 in lines: %v", lines)
+	}
+
+	_ = res
+}
+
+func TestCommandRunner_WithEnvAndCwd(t *testing.T) {
+	tempDir := t.TempDir()
+	builder := errcmd.NewScriptBuilder()
+	if runtime.GOOS == "windows" {
+		builder.AddLine("echo $env:STREAM_VAR")
+	} else {
+		builder.AddLine("echo $STREAM_VAR")
+	}
+
+	runner := errcmd.NewRunner(builder).
+		WithCwd(tempDir).
+		WithEnv(map[string]string{"STREAM_VAR": "custom_value_42"}).
+		WithTimeout(10 * time.Second)
+
+	res, fault := runner.Run(context.Background())
+	if fault != nil {
+		t.Fatalf("run with env/cwd failed: %s", fault.Message())
+	}
+
+	if !strings.Contains(res.Stdout, "custom_value_42") {
+		t.Fatalf("expected custom_value_42 in stdout, got %s", res.Stdout)
+	}
+}
+
+func TestCommandRunner_WithStderrHandler(t *testing.T) {
+	builder := errcmd.NewScriptBuilder()
+	if runtime.GOOS == "windows" {
+		builder.AddLine("[Console]::Error.WriteLine('custom-stderr-line')")
+	} else {
+		builder.AddLine("echo 'custom-stderr-line' >&2")
+	}
+
+	var errLines []string
+	var mu sync.Mutex
+	runner := errcmd.NewRunner(builder).
+		WithStderrHandler(func(line string) {
+			mu.Lock()
+			errLines = append(errLines, line)
+			mu.Unlock()
+		}).
+		WithTimeout(10 * time.Second)
+
+	res, _ := runner.Run(context.Background())
+	verifyStderrLines(t, errLines, res)
+}
+
+func verifyStderrLines(t *testing.T, errLines []string, res *errcmd.CommandResult) {
+	if len(errLines) == 0 {
+		t.Fatal("expected streamed stderr lines, got none")
+	}
+
+	if !strings.Contains(errLines[0], "custom-stderr-line") {
+		t.Fatalf("expected custom-stderr-line, got %v", errLines)
+	}
+
+	_ = res
 }
