@@ -9,15 +9,18 @@ set -euo pipefail
 required=(
   linter-scripts/validate-guidelines.go
   linter-scripts/validate-guidelines.py
-  linter-scripts/check-axios-version.sh
+  linter-scripts/check-axios-version.py
   linter-scripts/check-spec-folder-refs.py
-  linter-scripts/check-forbidden-spec-paths.sh
+  linter-scripts/check-forbidden-spec-paths.py
   linter-scripts/check-forbidden-strings.py
   linter-scripts/check-readme-install-section.py
   linter-scripts/check-placeholder-comments.py
   linter-scripts/check-prompts-loaded.py
   linter-scripts/check-spec-cross-links.py
   linter-scripts/forbidden-strings.toml
+  linter-scripts/check-newline-styling.py
+  linter-scripts/check-newline-styling.mjs
+  linter-scripts/check-sequence-integrity.py
 )
 
 missing=0
