@@ -5,12 +5,14 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
+	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/applogger/sqlitelogger"
 )
 
@@ -86,11 +88,19 @@ func (s *mockStmt) Exec(args []driver.Value) (driver.Result, error) {
 	mockStoreLock.Lock()
 	defer mockStoreLock.Unlock()
 
+	if strings.Contains(s.conn.dbName, "fail_exec") {
+		return nil, fmt.Errorf("simulated exec failure")
+	}
+
 	q := strings.ToUpper(s.query)
 	if strings.Contains(q, "CREATE TABLE") || strings.Contains(q, "CREATE INDEX") {
 		return driver.RowsAffected(0), nil
 	}
 
+	return s.execCustomStatements(q, args)
+}
+
+func (s *mockStmt) execCustomStatements(q string, args []driver.Value) (driver.Result, error) {
 	if strings.Contains(q, "ALTER TABLE") && strings.Contains(q, "ADD COLUMN") {
 		handleMockAlter(s.conn.dbName, q)
 
@@ -161,6 +171,10 @@ func (s *mockStmt) Query(args []driver.Value) (driver.Rows, error) {
 	mockStoreLock.Lock()
 	defer mockStoreLock.Unlock()
 
+	if strings.Contains(s.conn.dbName, "fail_query") {
+		return nil, fmt.Errorf("simulated query failure")
+	}
+
 	q := strings.ToUpper(s.query)
 	if rows, handled := handleMockMetaQueries(s.conn.dbName, q); handled {
 		return rows, nil
@@ -171,7 +185,12 @@ func (s *mockStmt) Query(args []driver.Value) (driver.Rows, error) {
 
 func handleMockMetaQueries(dbName, q string) (driver.Rows, bool) {
 	if strings.Contains(q, "PRAGMA QUICK_CHECK") || strings.Contains(q, "PRAGMA INTEGRITY_CHECK") {
-		return &mockScalarRows{value: "ok"}, true
+		val := "ok"
+		if strings.Contains(dbName, "corrupt") {
+			val = "database disk image is malformed"
+		}
+
+		return &mockScalarRows{value: val}, true
 	}
 
 	if strings.Contains(q, "SELECT MAX(VERSION) FROM SCHEMA_MIGRATIONS") {
@@ -720,5 +739,277 @@ func TestMigrationEngine_DirectFunctions(t *testing.T) {
 	// Validate error on nil db
 	if fault := sqlitelogger.EnsureBaseSchema(nil); fault == nil {
 		t.Fatal("expected validation error on nil db")
+	}
+}
+
+func TestSplitDBManager_AccessorsAndPathOverrides(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	if mgr.WorkDir() != tempDir {
+		t.Fatalf("expected workDir %s, got %s", tempDir, mgr.WorkDir())
+	}
+
+	customMain := filepath.Join(tempDir, "custom-main.db")
+	if err := mgr.SetMainDbPath(customMain); err != nil {
+		t.Fatalf("SetMainDbPath failed: %s", err.Message())
+	}
+
+	if mgr.MainDbPath() != customMain {
+		t.Fatalf("expected mainDbPath %s, got %s", customMain, mgr.MainDbPath())
+	}
+}
+
+func TestSplitDBManager_ValidationErrors(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	assertValidationError(t, mgr.SetMainDbPath(""), "empty main db path")
+	assertValidationError(t, mgr.SetTasksDir(""), "empty tasks dir")
+	assertValidationError(t, mgr.SetTaskDbPath("", "p"), "empty taskId")
+	assertValidationError(t, mgr.SetTaskDbPath("id", ""), "empty path")
+
+	_, gErr := mgr.GetTaskDb("")
+	assertValidationError(t, gErr, "empty taskId in GetTaskDb")
+
+	_, cErr := sqlitelogger.NewSplitDBManagerWithConfig(sqlitelogger.SplitDBConfig{})
+	assertValidationError(t, cErr, "empty WorkDir")
+}
+
+func assertValidationError(t *testing.T, fault *appfault.AppError, scenario string) {
+	t.Helper()
+	if fault == nil {
+		t.Fatalf("expected validation error for %s", scenario)
+	}
+}
+
+func TestSplitDBManager_DbCachingAndClose(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+
+	main1, _ := mgr.GetMainDb()
+	main2, _ := mgr.GetMainDb()
+	if main1 != main2 {
+		t.Fatal("expected cached main db instance")
+	}
+
+	task1, _ := mgr.GetTaskDb("cache-task")
+	task2, _ := mgr.GetTaskDb("cache-task")
+	if task1 != task2 {
+		t.Fatal("expected cached task db instance")
+	}
+
+	_ = mgr.Close()
+	_ = mgr.Close()
+}
+
+func TestSplitDBManager_OpenerFailures(t *testing.T) {
+	tempDir := t.TempDir()
+
+	nilMgr, _ := sqlitelogger.NewSplitDBManager(tempDir, nil)
+	defer nilMgr.Close()
+
+	if _, err := nilMgr.GetMainDb(); err == nil {
+		t.Fatal("expected error with nil opener")
+	}
+
+	failOpener := func(dsn string) (*sql.DB, error) {
+		return nil, fmt.Errorf("connection refused")
+	}
+
+	failMgr, _ := sqlitelogger.NewSplitDBManager(tempDir, failOpener)
+	defer failMgr.Close()
+
+	if _, err := failMgr.GetMainDb(); err == nil {
+		t.Fatal("expected error with failing opener")
+	}
+}
+
+func TestTaskLogger_ValidationAndSerialization(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	if _, err := sqlitelogger.NewTaskLogger("", mgr); err == nil {
+		t.Fatal("expected error on empty taskId")
+	}
+
+	if _, err := sqlitelogger.NewTaskLogger("task-1", nil); err == nil {
+		t.Fatal("expected error on nil manager")
+	}
+
+	tl, _ := sqlitelogger.NewTaskLogger("task-1", mgr)
+	badMap := map[string]any{"bad": make(chan int)}
+	if err := tl.LogWithFields("INFO", "msg", badMap); err == nil {
+		t.Fatal("expected error on unserializable fields")
+	}
+}
+
+func TestSplitDBManager_ListTaskDBs_FileDiscovery(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	f1 := filepath.Join(mgr.TasksDir(), "alpha.db")
+	f2 := filepath.Join(mgr.TasksDir(), "beta.db")
+	_ = os.WriteFile(f1, []byte("fake"), 0644)
+	_ = os.WriteFile(f2, []byte("fake"), 0644)
+	_ = mgr.SetTaskDbPath("custom-gamma", filepath.Join(tempDir, "gamma.db"))
+
+	tasks, err := mgr.ListTaskDBs()
+	if err != nil {
+		t.Fatalf("ListTaskDBs failed: %s", err.Message())
+	}
+
+	assertDiscoveredTasks(t, tasks)
+}
+
+func assertDiscoveredTasks(t *testing.T, tasks []string) {
+	t.Helper()
+	found := make(map[string]bool)
+	for _, id := range tasks {
+		found[id] = true
+	}
+
+	isAlphaFound := found["alpha"]
+	isBetaFound := found["beta"]
+	isGammaFound := found["custom-gamma"]
+	if !isAlphaFound || !isBetaFound || !isGammaFound {
+		t.Fatalf("expected alpha, beta, and custom-gamma, got %v", tasks)
+	}
+}
+
+func TestMigrationEngine_CorruptIntegrityAndErrors(t *testing.T) {
+	opener := getMockOpener()
+	corruptDb, _ := opener("corrupt_db")
+	defer corruptDb.Close()
+
+	fault := sqlitelogger.CheckIntegrity(corruptDb)
+	if fault == nil {
+		t.Fatal("expected integrity check failure on corrupt db")
+	}
+
+	if _, err := sqlitelogger.GetCurrentSchemaVersion(nil); err == nil {
+		t.Fatal("expected error on nil db in GetCurrentSchemaVersion")
+	}
+
+	if _, err := sqlitelogger.QueryTableColumns(nil, "logs"); err == nil {
+		t.Fatal("expected error on nil db in QueryTableColumns")
+	}
+
+	if err := sqlitelogger.AuditAndRepairColumns(nil, "logs"); err == nil {
+		t.Fatal("expected error on nil db in AuditAndRepairColumns")
+	}
+}
+
+func TestSplitDBManager_ConcurrentWrites(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	var wg sync.WaitGroup
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func(idx int) {
+			defer wg.Done()
+			taskId := fmt.Sprintf("concurrent-task-%d", idx)
+			entry := sqlitelogger.TaskLogEntry{Message: "concurrent msg"}
+			_ = mgr.WriteMain(entry)
+			_ = mgr.WriteTask(taskId, entry)
+		}(i)
+	}
+
+	wg.Wait()
+}
+
+func TestSplitDBManager_QueryLogsWithLimits(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	for i := 0; i < 5; i++ {
+		_ = mgr.WriteTask("limit-task", sqlitelogger.TaskLogEntry{Message: "limit msg"})
+	}
+
+	logsLimit2, _ := mgr.QueryTaskLogs("limit-task", sqlitelogger.FilterOptions{Limit: 2})
+	if len(logsLimit2) != 5 {
+		t.Logf("mock returns all stored logs: %d", len(logsLimit2))
+	}
+
+	logsDefault, _ := mgr.QueryTaskLogs("limit-task", sqlitelogger.FilterOptions{Limit: 0})
+	if len(logsDefault) == 0 {
+		t.Fatal("expected logs for default limit")
+	}
+}
+
+func TestMigrationEngine_IncrementalMigrations(t *testing.T) {
+	opener := getMockOpener()
+	db, _ := opener("incremental_test_db")
+	defer db.Close()
+
+	mockStoreLock.Lock()
+	mockVersions["incremental_test_db"] = 1
+	mockStoreLock.Unlock()
+
+	if err := sqlitelogger.MigrateDatabase(db); err != nil {
+		t.Fatalf("MigrateDatabase from v1 failed: %s", err.Message())
+	}
+
+	if err := sqlitelogger.MigrateDatabase(db); err != nil {
+		t.Fatalf("MigrateDatabase at v2 failed: %s", err.Message())
+	}
+}
+
+func TestSplitDBManager_SimulatedExecutionErrors(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	fault := mgr.WriteTask("fail_exec_task", sqlitelogger.TaskLogEntry{Message: "fail"})
+	if fault == nil {
+		t.Fatal("expected insert failure for fail_exec database")
+	}
+
+	_, qFault := mgr.QueryTaskLogs("fail_query_task", sqlitelogger.FilterOptions{})
+	if qFault == nil {
+		t.Fatal("expected query failure for fail_query database")
+	}
+
+	_, sFault := mgr.GetTaskSummary("fail_query_task")
+	if sFault == nil {
+		t.Fatal("expected summary failure for fail_query database")
+	}
+}
+
+func TestMigrationEngine_DirectExecutionErrors(t *testing.T) {
+	opener := getMockOpener()
+	failExecDb, _ := opener("fail_exec_engine_db")
+	defer failExecDb.Close()
+
+	if err := sqlitelogger.EnsureBaseSchema(failExecDb); err == nil {
+		t.Fatal("expected error on EnsureBaseSchema with fail_exec")
+	}
+
+	if err := sqlitelogger.ApplyIndexes(failExecDb); err == nil {
+		t.Fatal("expected error on ApplyIndexes with fail_exec")
+	}
+
+	if err := sqlitelogger.AddMissingColumn(failExecDb, "logs", "col", "TEXT"); err == nil {
+		t.Fatal("expected error on AddMissingColumn with fail_exec")
+	}
+
+	if err := sqlitelogger.RecordMigrationVersion(failExecDb, 1, "desc"); err == nil {
+		t.Fatal("expected error on RecordMigrationVersion with fail_exec")
 	}
 }

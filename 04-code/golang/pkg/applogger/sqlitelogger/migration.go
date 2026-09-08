@@ -91,6 +91,10 @@ func GetCurrentSchemaVersion(db *sql.DB) (int, *appfault.AppError) {
 
 // RecordMigrationVersion records an executed schema upgrade in schema_migrations.
 func RecordMigrationVersion(db *sql.DB, version int, description string) *appfault.AppError {
+	if db == nil {
+		return appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	stmt := "INSERT OR REPLACE INTO schema_migrations (version, description, applied_at) VALUES (?, ?, ?)"
 	now := time.Now().UTC().Format(time.RFC3339)
 
@@ -106,6 +110,10 @@ func RecordMigrationVersion(db *sql.DB, version int, description string) *appfau
 
 // ApplyIndexes creates all performance indexes for log queries and diagnostics.
 func ApplyIndexes(db *sql.DB) *appfault.AppError {
+	if db == nil {
+		return appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	for _, idxSql := range requiredIndexes {
 		if _, err := db.Exec(idxSql); err != nil {
 			return appfault.Wrap(errtype.Database, err, "failed to apply index")
@@ -117,6 +125,10 @@ func ApplyIndexes(db *sql.DB) *appfault.AppError {
 
 // QueryTableColumns fetches discovered column names for a given SQLite table.
 func QueryTableColumns(db *sql.DB, tableName string) (map[string]bool, *appfault.AppError) {
+	if db == nil {
+		return nil, appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	query := fmt.Sprintf("PRAGMA table_info(%s)", tableName)
 	rows, err := db.Query(query)
 	if err != nil {
@@ -148,6 +160,10 @@ func scanColumnNames(rows *sql.Rows) (map[string]bool, *appfault.AppError) {
 
 // AddMissingColumn issues an ALTER TABLE command to add a missing column.
 func AddMissingColumn(db *sql.DB, tableName, colName, colType string) *appfault.AppError {
+	if db == nil {
+		return appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	alterSql := fmt.Sprintf("ALTER TABLE %s ADD COLUMN %s %s", tableName, colName, colType)
 	if _, err := db.Exec(alterSql); err != nil {
 		msg := fmt.Sprintf("failed to add column %s", colName)
@@ -160,6 +176,10 @@ func AddMissingColumn(db *sql.DB, tableName, colName, colType string) *appfault.
 
 // AuditAndRepairColumns ensures all required columns exist in the target table.
 func AuditAndRepairColumns(db *sql.DB, tableName string) *appfault.AppError {
+	if db == nil {
+		return appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	cols, fault := QueryTableColumns(db, tableName)
 	if fault != nil {
 		return fault
@@ -190,20 +210,31 @@ func applyMissingColumns(db *sql.DB, tableName string, cols map[string]bool) *ap
 
 // CheckIntegrity runs a quick integrity check on the SQLite database.
 func CheckIntegrity(db *sql.DB) *appfault.AppError {
+	if db == nil {
+		return appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	var checkResult string
 	row := db.QueryRow("PRAGMA quick_check")
 	if err := row.Scan(&checkResult); err != nil {
-		isIgnorable := err == sql.ErrNoRows
-		if isIgnorable {
-			return nil
-		}
-
-		return appfault.Wrap(errtype.Database, err, "failed to run integrity check")
+		return handleIntegrityScanError(err)
 	}
 
-	isHealthy := strings.ToLower(checkResult) == "ok"
+	return validateIntegrityResult(checkResult)
+}
+
+func handleIntegrityScanError(err error) *appfault.AppError {
+	if err == sql.ErrNoRows {
+		return nil
+	}
+
+	return appfault.Wrap(errtype.Database, err, "failed to run integrity check")
+}
+
+func validateIntegrityResult(res string) *appfault.AppError {
+	isHealthy := strings.ToLower(res) == "ok"
 	if !isHealthy {
-		return appfault.New(errtype.Database, fmt.Sprintf("database integrity failure: %s", checkResult))
+		return appfault.New(errtype.Database, fmt.Sprintf("database integrity failure: %s", res))
 	}
 
 	return nil
@@ -244,6 +275,10 @@ func applyPendingMigrations(db *sql.DB, currentVersion int) *appfault.AppError {
 
 // RepairDatabase validates integrity, recreates tables, adds missing columns and indexes.
 func RepairDatabase(db *sql.DB) *appfault.AppError {
+	if db == nil {
+		return appfault.New(errtype.Validation, "database connection cannot be nil")
+	}
+
 	_ = CheckIntegrity(db)
 
 	if fault := EnsureBaseSchema(db); fault != nil {
