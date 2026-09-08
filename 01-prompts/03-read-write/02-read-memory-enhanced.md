@@ -19,7 +19,7 @@ Autonomously self-loop and read:
 - /learn all hard prohibitions in `.lovable/strictly-avoid.md`.
 - Read every pending task across `.lovable/plans/pending/01-<slug>.md`, `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md`, `.lovable/issues/`, and `.lovable/cicd-issues/`, listing them out in full.
 
-Note on spec folder naming: Spec folders follow the hyphenated pattern `spec/<NN>-<slug>/` where `<NN>` is a sequence prefix and `<slug>` is the descriptive name. These numbers and folder placements are not rigidly fixed and may switch or be reorganized between projects. This canonical layout represents the general architecture the AI must dynamically discover, inspect, and read in full.
+Note on spec folder naming: Spec folders follow the hyphenated pattern `02-spec/<NN>-<slug>/` where `<NN>` is a sequence prefix and `<slug>` is the descriptive name. These numbers and folder placements are not rigidly fixed and may switch or be reorganized between projects. This canonical layout represents the general architecture the AI must dynamically discover, inspect, and read in full.
 
 You are done reading when you can, without guessing:
 
@@ -194,7 +194,7 @@ Whenever the AI agent reads prompts or coding guidelines during memory ingestion
    - For all coding guidelines ingested from `.lovable/coding-guidelines.md` or `02-spec/02-coding-guidelines/`, synthesize and write authoritative agent rules into `.agents/rules/<slug>.md` and inject essential constraints into `AGENTS.md`.
    - Core rules enforced:
      - **Strict Boolean Standard:** `is and has only (can, should, was, etc. are banned)`.
-     - **No Bare Void in Go:** Functions must return `Result[T]` or `*apperror.AppError`.
+     - **No Bare Void in Go:** Functions must return `Result[T]` or `*appfault.AppError`.
      - **Parameter Structs:** Banned loose >2-3 parameters; use `*Params` structs.
      - **Vertical Line Gaps:** Mandatory blank lines before `if`, after `}`, before `return`, and around multiline struct calls.
      - **5–8 Files Micro-Batching:** All refactors broken into bounded subtasks.

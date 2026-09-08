@@ -2,7 +2,6 @@ package bytetype
 
 import (
 	"strconv"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 	"coding-guidelines/common/pkg/errtype"
@@ -12,63 +11,31 @@ import (
 type Result = result.Wrap[Variant]
 
 var (
-	variantLabels = [...]string{
-		Zero:  "Zero",
-		One:   "One",
-		Two:   "Two",
-		Three: "Three",
-	}
-
 	allVariants = []Variant{Zero, One, Two, Three, Max}
 
 	allValues = []string{"Zero", "One", "Two", "Three", "Max"}
 
-	variantMap = compileVariantMap()
+	basicEnum = baseenumer.NewBasicSparseInteger(allVariants, allValues, Zero, 255)
 )
 
-func compileVariantMap() map[string]Variant {
-	m := make(map[string]Variant, 32)
-	populateStandardVariants(m)
-	populateAliases(m)
-
-	return m
-}
-
-func populateStandardVariants(m map[string]Variant) {
-	for i, label := range variantLabels {
-		v := Variant(i)
-		m[label] = v
-		m[strings.ToLower(label)] = v
-		m[strings.ToUpper(label)] = v
-		m[strconv.Itoa(i)] = v
-	}
-}
-
-func populateAliases(m map[string]Variant) {
-	m["max"] = Max
-	m["MAX"] = Max
-	m["Max"] = Max
-	m["255"] = Max
-	m["min"] = Min
-	m["MIN"] = Min
-	m["unknown"] = Unknown
-	m["invalid"] = Invalid
-}
-
 func All() []Variant {
-	return append([]Variant(nil), allVariants...)
+	return basicEnum.All()
 }
 
 func Values() []string {
-	return append([]string(nil), allValues...)
+	return basicEnum.Values()
 }
 
 func Parse(s string) Result {
-	v, trimmed, ok := baseenumer.ParseLookup(s, variantMap)
-	if ok {
+	v, trimmed, isOk := basicEnum.ParseLookup(s)
+	if isOk {
 		return result.WrapSuccess(v)
 	}
 
+	return parseFallback(s, trimmed)
+}
+
+func parseFallback(original, trimmed string) Result {
 	if len(trimmed) == 0 {
 		return result.WrapFailureWithId[Variant](errtype.Validation, baseenumer.FormatEmptyParseError("bytetype"))
 	}
@@ -77,7 +44,7 @@ func Parse(s string) Result {
 	if err != nil {
 		return result.WrapFailureWithId[Variant](
 			errtype.NotFound,
-			baseenumer.FormatParseError("bytetype", s, Values()),
+			baseenumer.FormatParseError("bytetype", original, Values()),
 		)
 	}
 

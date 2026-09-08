@@ -95,7 +95,7 @@ ls .lovable/plans/subtasks/xx-plan-slug | grep -vE '^[0-9]{3}-' || echo "sequenc
 
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `03-ai-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`03-ai-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
-- [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
+- [ ] **Strict 03-ai-scripts/ Tooling Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
 - [ ] **Native File Manipulator:** If you need to perform mass file renaming, `.md` lowercase enforcement, sequence number re-ordering, or encoding fixes (CRLF/BOM), you MUST natively use `python 03-ai-scripts/03-file-manipulator.py <command>` rather than writing a new script from scratch.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `03-ai-scripts/` and committed to Git for future reuse.
@@ -627,7 +627,7 @@ rg -o --no-filename 'spec/[A-Za-z0-9/._-]+' .lovable/plans/subtasks/xx-plan-slug
 | Banned                                       | Why                                            | Rewrite                                                                 |
 | -------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------- |
 | "If this is the Scaffold phase…"             | Body works for any task, so it teaches nothing | Name the structs this phase declares                                    |
-| "Write the business logic"                   | Zero information                               | "Implement `func (q *Frontier) Enqueue(e Entry) apperror.Result[bool]`" |
+| "Write the business logic"                   | Zero information                               | "Implement `func (q *Frontier) Enqueue(e Entry) appfault.Result[bool]`" |
 | "Step 4 of 69"                               | Ordering is not content                        | State the outcome                                                       |
 | "the relevant file", "the model layer"       | Unresolvable                                   | Exact repo-relative path                                                |
 | "implemented correctly", "works as expected" | Unverifiable                                   | A command plus expected output                                          |

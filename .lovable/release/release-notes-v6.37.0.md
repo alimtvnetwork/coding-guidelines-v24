@@ -12,7 +12,6 @@ irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v6.
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v6.37.0/install.sh | bash
 ```
 
-
 ## [v6.37.0] 2026-09-07 Modular BaseEnum Family, Coredata Combinators, and CI/CD Pipeline Expansion
 
 ### Install Coding Guidelines v6.37.0

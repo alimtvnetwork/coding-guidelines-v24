@@ -102,3 +102,10 @@ func TestLogLevelType_All(t *testing.T) {
 		t.Fatalf("expected 5 levels from AllLogLevels, got %d", len(allAlias))
 	}
 }
+
+func TestLogLevelType_Values(t *testing.T) {
+	vals := logleveltype.Values()
+	if len(vals) != 5 {
+		t.Fatalf("expected 5 values, got %d", len(vals))
+	}
+}

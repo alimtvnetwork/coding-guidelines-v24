@@ -94,3 +94,10 @@ func TestProcessStateType_All(t *testing.T) {
 		t.Fatalf("expected 5 states from AllProcessStates, got %d", len(allAlias))
 	}
 }
+
+func TestProcessStateType_Values(t *testing.T) {
+	vals := processstatetype.Values()
+	if len(vals) != 5 {
+		t.Fatalf("expected 5 values, got %d", len(vals))
+	}
+}

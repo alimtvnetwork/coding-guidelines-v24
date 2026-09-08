@@ -1,6 +1,6 @@
 # Python Script DRY Architecture, Enums, Pluggable Caching & Fast AI Reading Specification
 
-> **Prompt Version:** 2.5.0
+> **Prompt Version:** 2.1.0
 > **Target:** `01-prompts/08-dry-code/01-python-dry-architecture-and-caching.md`
 > **Synchronization:** Meta-Repo & AI Scripting Ecosystem
 
@@ -187,7 +187,7 @@ AI agents and subagents should avoid slow, recursive shell commands (`Get-ChildI
 | **List Folder Files** | `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir>` | **<1ms** |
 | **Fast Safe File Read** | `python 03-ai-scripts/17-fast-file-reader.py --read-file <path>` | **<1ms** |
 | **Search File Paths** | `python 03-ai-scripts/17-fast-file-reader.py --search-pattern "<term>"` | **<2ms** |
-| **Full Repo File Index** | `python 03-ai-scripts/11-fast-file-scanner.py --lang ts,go --path spec/` | **~14ms** |
+| **Full Repo File Index** | `python 03-ai-scripts/11-fast-file-scanner.py --lang ts,go --path 02-spec/` | **~14ms** |
 | **Parallel Content Grep** | `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>"` | **~12ms** |
 | **File Manipulation CLI** | `python 03-ai-scripts/03-file-manipulator.py <cmd> <dir>` | **~15ms** |
 | **Codebase Topology Routing**| `python 03-ai-scripts/18-codebase-topology-discoverer.py --query <db\|backend\|go>` | **<1ms** |

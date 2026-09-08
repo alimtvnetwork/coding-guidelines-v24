@@ -1,6 +1,6 @@
 # Argument Reduction, Parameter Structs & Return Architecture — Coding Guideline (must follow)
 
-Trigger Keywords & Aliases: `cg-argument-reduction`, `cg-params`, `cg-struct-params`, `cg-execute params`, `audit function arguments`, `reduce arguments`, `struct parameters`, `mandatory apperror return`, `parameter objects`, `no void functions`
+Trigger Keywords & Aliases: `cg-argument-reduction`, `cg-params`, `cg-struct-params`, `cg-execute params`, `audit function arguments`, `reduce arguments`, `struct parameters`, `mandatory appfault return`, `parameter objects`, `no void functions`
 
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
@@ -11,18 +11,18 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, discover, plan, refactor, and format all function signatures across the codebase, enforcing argument reduction via dedicated value-based parameter Structs/DTOs for signatures with >2–3 parameters, affirmative boolean prefixing (is and has only (can, should, was, etc. are banned)) on all struct fields, mandatory `*apperror.AppError` returns (eliminating bare "void" functions in Go), wrapping external framework errors into `*AppError`, and single `Result[T]` return envelopes until 100% green without stopping.
+/goal Autonomously scan, discover, plan, refactor, and format all function signatures across the codebase, enforcing argument reduction via dedicated value-based parameter Structs/DTOs for signatures with >2–3 parameters, affirmative boolean prefixing (is and has only (can, should, was, etc. are banned)) on all struct fields, mandatory `*appfault.AppError` returns (eliminating bare "void" functions in Go), wrapping external framework errors into `*AppError`, and single `Result[T]` return envelopes until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all functions with >2–3 loose parameters, functions with unformatted boolean parameters (missing `is`/`has` prefix), bare "void" functions in Go returning nothing, and functions returning raw stdlib `error` instead of `*apperror.AppError`.
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all functions with >2–3 loose parameters, functions with unformatted boolean parameters (missing `is`/`has` prefix), bare "void" functions in Go returning nothing, and functions returning raw stdlib `error` instead of `*appfault.AppError`.
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/XX-argument-reduction-audit.md` with an exhaustive Parameter & Return Ledger table.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/XX-argument-reduction/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated parameter linter and register in `03-ai-scripts/01-index.md`.
 5. [ ] /goal Phase 2 (Step A): Refactor multi-argument functions (>2–3 params) by encapsulating parameters into dedicated value-based Structs (`TrackResultParams`, `CloneOptions`) or parameter objects.
 6. [ ] /goal Phase 2 (Step B): Enforce strict boolean prefixes (is and has only (can, should, was, etc. are banned)) on all struct fields and queued tasks (e.g. `safePull` -> `isSafePull`).
-7. [ ] /goal Phase 2 (Step C): Eliminate all bare "void" functions in Go domain/service logic by mandating `*apperror.AppError` returns for side-effect operations and `Result[T]` for data operations.
-8. [ ] /goal Phase 2 (Step D): Convert all external/framework standard `error` returns to `*apperror.AppError` context wrappers (`apperror.WrapSimple(err, caller)`).
+7. [ ] /goal Phase 2 (Step C): Eliminate all bare "void" functions in Go domain/service logic by mandating `*appfault.AppError` returns for side-effect operations and `Result[T]` for data operations.
+8. [ ] /goal Phase 2 (Step D): Convert all external/framework standard `error` returns to `*appfault.AppError` context wrappers (`appfault.WrapSimple(err, caller)`).
 9. [ ] /goal Phase 2 (Step E): Execute local linters (`python linter-scripts/check-function-lengths.py`, `check-newline-styling.py`) to verify 0 remaining violations.
 10. [ ] /goal Phase 2 (Step F): Execute local CI quality gates via `python 03-ai-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
 11. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
@@ -77,7 +77,7 @@ func trackResult(
 package cloner
 
 import (
-    "gitmap/apperror"
+    "pkg/appfault"
     "gitmap/model"
 )
 
@@ -91,10 +91,10 @@ type TrackResultParams struct {
 }
 
 // TrackResult updates progress based on clone/pull outcome and returns any processing error.
-func TrackResult(params TrackResultParams) *apperror.AppError {
+func TrackResult(params TrackResultParams) *appfault.AppError {
     if params.Progress == nil {
-        return apperror.New(
-            apperror.ErrCodeValidationFailed,
+        return appfault.New(
+            appfault.ErrCodeValidationFailed,
             "progress tracker cannot be nil",
             "TrackResult",
         )
@@ -148,9 +148,9 @@ If a parameter or struct field cannot be immediately refactored across the entir
 
 In Go, **99.99% of functions MUST have a return type**. Bare "void" functions (`func DoWork()`) that return nothing are strictly prohibited in domain, business logic, service, and utility layers.
 
-#### 4a. Side-Effect & Mutation Functions (Return `*apperror.AppError`)
+#### 4a. Side-Effect & Mutation Functions (Return `*appfault.AppError`)
 
-If a function performs an action, I/O operation, or state mutation that produces no return data, it **MUST return `*apperror.AppError`**:
+If a function performs an action, I/O operation, or state mutation that produces no return data, it **MUST return `*appfault.AppError`**:
 
 ```go
 // ❌ FORBIDDEN: Bare void function swallows or ignores potential execution failures
@@ -159,11 +159,11 @@ func SaveConfig(cfg *Config) {
     os.WriteFile("config.json", data, 0644)
 }
 
-// ✅ REQUIRED: Returns *apperror.AppError with complete contextual wrapping
-func SaveConfig(cfg *Config) *apperror.AppError {
+// ✅ REQUIRED: Returns *appfault.AppError with complete contextual wrapping
+func SaveConfig(cfg *Config) *appfault.AppError {
     if cfg == nil {
-        return apperror.New(
-            apperror.ErrCodeValidationFailed,
+        return appfault.New(
+            appfault.ErrCodeValidationFailed,
             "configuration cannot be nil",
             "SaveConfig",
         )
@@ -172,11 +172,11 @@ func SaveConfig(cfg *Config) *apperror.AppError {
     data, marshalErr := json.Marshal(cfg)
 
     if marshalErr != nil {
-        return apperror.WrapSimple(marshalErr, "SaveConfig.Marshal")
+        return appfault.WrapSimple(marshalErr, "SaveConfig.Marshal")
     }
 
     if writeErr := os.WriteFile("config.json", data, 0644); writeErr != nil {
-        return apperror.WrapSimple(writeErr, "SaveConfig.WriteFile")
+        return appfault.WrapSimple(writeErr, "SaveConfig.WriteFile")
     }
 
     return nil
@@ -190,17 +190,17 @@ func SaveConfig(cfg *Config) *apperror.AppError {
 Whenever code calls standard library functions (`os.*`, `io.*`, `exec.*`, `json.*`) or third-party packages that return standard `error`:
 
 1. **Never return standard `error` directly** from domain or service layers.
-2. **Always convert and wrap immediately** into `*apperror.AppError` using `apperror.WrapSimple(err, caller)` or `apperror.New(ErrCode, msg, caller)`:
+2. **Always convert and wrap immediately** into `*appfault.AppError` using `appfault.WrapSimple(err, caller)` or `appfault.New(ErrCode, msg, caller)`:
 
 ```go
-// ✅ REQUIRED: Converting framework error to *apperror.AppError
+// ✅ REQUIRED: Converting framework error to *appfault.AppError
 cmd := exec.Command("git", "status")
 output, cmdErr := cmd.CombinedOutput()
 
 if cmdErr != nil {
-    return apperror.WrapWithDetails(
+    return appfault.WrapWithDetails(
         cmdErr,
-        apperror.ErrCodeGitExecutionFailed,
+        appfault.ErrCodeGitExecutionFailed,
         string(output),
         "ExecuteGitStatus",
     )
@@ -217,8 +217,8 @@ If a function computes or retrieves data, return the single `Result[T]` envelope
 // ✅ REQUIRED: Single Result[T] envelope return
 func LoadConfig(path string) Result[*Config] {
     if path == "" {
-        appErr := apperror.New(
-            apperror.ErrCodeValidationFailed,
+        appErr := appfault.New(
+            appfault.ErrCodeValidationFailed,
             "config path is required",
             "LoadConfig",
         )
@@ -228,13 +228,13 @@ func LoadConfig(path string) Result[*Config] {
     data, readErr := os.ReadFile(path)
 
     if readErr != nil {
-        appErr := apperror.WrapSimple(readErr, "LoadConfig.ReadFile")
+        appErr := appfault.WrapSimple(readErr, "LoadConfig.ReadFile")
         return FailureResult[*Config](appErr)
     }
 
     var cfg Config
     if unmarshalErr := json.Unmarshal(data, &cfg); unmarshalErr != nil {
-        appErr := apperror.WrapSimple(unmarshalErr, "LoadConfig.Unmarshal")
+        appErr := appfault.WrapSimple(unmarshalErr, "LoadConfig.Unmarshal")
         return FailureResult[*Config](appErr)
     }
 
@@ -359,7 +359,7 @@ In Phase 1, you MUST generate `.lovable/plans/pending/XX-argument-reduction-audi
 |---|---|:---:|:---:|---|---|---|:---:|
 | `trackResult` | `gitmap/cloner/runners.go` | 118 | 5 | `(p, res, rec, dir, safePull)` | >3 loose params, bare void | Create `TrackResultParams`, return `*AppError` | PENDING |
 | `dispatchTask` | `src/cluster/exec.go` | 64 | 4 | `(ctx, cmd, timeout, force)` | >3 loose params, `force` bool | Create `DispatchTaskParams`, `isForce` | PENDING |
-| `cleanupTemp` | `src/storage/temp.go` | 210 | 1 | `(path string)` (void) | Bare void function | Return `*apperror.AppError` | PENDING |
+| `cleanupTemp` | `src/storage/temp.go` | 210 | 1 | `(path string)` (void) | Bare void function | Return `*appfault.AppError` | PENDING |
 ```
 
 ---
@@ -414,7 +414,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `03-ai-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`03-ai-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
-- [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
+- [ ] **Strict 03-ai-scripts/ Tooling Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
 - [ ] **Automated Naming & Style Fixers:** Use `python 03-ai-scripts/08-naming-autofixer.py` and `05-guideline-autofixer.py` to audit boolean prefixes and newlines.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `03-ai-scripts/` and committed to Git for future reuse.
@@ -431,8 +431,8 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
 - [ ] **Argument Reduction via Structs:** All functions with >2–3 parameters encapsulated into value-based parameter structs (`*Params`).
 - [ ] **Boolean Prefix Compliance:** All struct fields and boolean parameters use affirmative prefixes (is and has only (can, should, was, etc. are banned)).
-- [ ] **Mandatory AppError Returns:** Zero bare "void" functions in Go domain/service logic; all side-effect functions return `*apperror.AppError`.
-- [ ] **Framework Error Conversion:** All standard library / framework errors converted and wrapped into `*apperror.AppError`.
+- [ ] **Mandatory AppError Returns:** Zero bare "void" functions in Go domain/service logic; all side-effect functions return `*appfault.AppError`.
+- [ ] **Framework Error Conversion:** All standard library / framework errors converted and wrapped into `*appfault.AppError`.
 - [ ] **Single Return Types:** Multi-value `(T, error)` returns refactored to single `Result[T]` envelopes.
 - [ ] **Multi-Line Formatting (Rule 9a/9b):** All definitions and call sites with >2 arguments formatted one argument per line with trailing commas.
 - [ ] **LF Line Endings (`\n`):** All files use Unix LF line endings. Zero CRLF (`\r\n`).
@@ -455,15 +455,15 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
 - [ ] Master Guidelines: I have fully read and strictly enforced `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and `.lovable/coding-guidelines.md`.
 - [ ] Parameter Structs: Enforced parameter structs (`*Params`) for all functions with >2–3 parameters.
-- [ ] Zero Void in Go: Enforced `*apperror.AppError` returns for all side-effect functions in Go.
-- [ ] Framework Error Conversion: Converted all stdlib/framework `error` instances to `*apperror.AppError`.
+- [ ] Zero Void in Go: Enforced `*appfault.AppError` returns for all side-effect functions in Go.
+- [ ] Framework Error Conversion: Converted all stdlib/framework `error` instances to `*appfault.AppError`.
 - [ ] Result Envelope: Enforced `Result[T]` with complete predicate methods across domain services.
 - [ ] LF Line Endings & UTF-8 (No BOM): Verified Unix LF and UTF-8 across all files.
 - [ ] Blank Line Before `if`: Verified blank line before every `if` statement across all modified files.
 - [ ] Blank Line After `}`: Verified blank line after every closing brace `}` followed by code.
 - [ ] Blank Line Before `return`: Verified blank line before every `return`/`throw` in multi-line blocks.
 - [ ] Zero Nested `if`: Zero nested `if` statements (depth > 1).
-- [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
+- [ ] /learn the section as a /goal [AI Fix Scripts Catalog](03-ai-scripts/01-index.md)
 - [ ] Action Summary: I have output a detailed `- [x]` checklist summarizing exactly what I accomplished this turn to prove I did not hallucinate.
 
 ---

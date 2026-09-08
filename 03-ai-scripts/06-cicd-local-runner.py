@@ -73,12 +73,27 @@ class PipelineSummary:
     exit_code: int
 
 
+CI_JOB_DEFAULT_ARGS: dict[str, list[str]] = {
+    "Sequence & Title Check": ["01-prompts"],
+    "Boolean Naming Check": ["04-code"],
+    "Misspell Check": ["--staged"],
+}
+
+
+def resolve_job_command(job_name: str, command: list[str]) -> list[str]:
+    """Resolves command with safe default targets if not explicitly specified."""
+    if job_name in CI_JOB_DEFAULT_ARGS and len(command) <= 2:
+        return [*command, *CI_JOB_DEFAULT_ARGS[job_name]]
+    return list(command)
+
+
 def execute_ci_job(job_name: str, command: list[str]) -> JobResult:
     """Executes a single validation check asynchronously and records output and duration."""
     start_time = time.perf_counter()
+    effective_cmd = resolve_job_command(job_name, command)
     try:
         res = subprocess.run(
-            command,
+            effective_cmd,
             capture_output=True,
             text=True,
             encoding=DEFAULT_ENCODING,

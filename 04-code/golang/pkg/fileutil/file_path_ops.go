@@ -175,7 +175,7 @@ func (f *FilePathOps) Ext() string {
 	return filepath.Ext(f.absPath)
 }
 
-func (f *FilePathOps) Exists() bool {
+func (f *FilePathOps) IsExists() bool {
 	if f == nil {
 		return false
 	}
@@ -187,6 +187,10 @@ func (f *FilePathOps) Exists() bool {
 	_, err := os.Stat(f.absPath)
 
 	return err == nil
+}
+
+func (f *FilePathOps) Exists() bool {
+	return f.IsExists()
 }
 
 func (f *FilePathOps) Stat() FileInfoResult {
@@ -247,7 +251,7 @@ func (f *FilePathOps) EnsureFile(perm FilePermType) BoolResult {
 		return BoolFailureMsg(errtype.Validation, "", "nil FilePathOps")
 	}
 
-	if f.Exists() {
+	if f.IsExists() {
 		return BoolSuccess(true)
 	}
 

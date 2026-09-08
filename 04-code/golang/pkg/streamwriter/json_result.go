@@ -28,6 +28,7 @@ type (
 		HasError() bool
 		IsValid() bool
 		IsSuccess() bool
+		IsStatus() bool
 		Status() bool
 		StatusCode() int
 		Unwrap() ([]byte, *appfault.AppError)
@@ -637,9 +638,14 @@ func (j JsonResult) AsSimpleVerifyChecker() appfault.SimpleVerifier {
 	return j
 }
 
+// IsStatus dynamically evaluates true if no AppError is present.
+func (j JsonResult) IsStatus() bool {
+	return j.appError == nil
+}
+
 // Status dynamically evaluates true if no AppError is present.
 func (j JsonResult) Status() bool {
-	return j.appError == nil
+	return j.IsStatus()
 }
 
 // StatusCode returns the numeric status code derived from appError or 200.

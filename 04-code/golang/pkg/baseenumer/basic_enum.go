@@ -2,12 +2,14 @@ package baseenumer
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
 // BasicIntegerEnum encapsulates reusable enum operations for integer-backed enums.
 type BasicIntegerEnum[V IntNumber] struct {
 	labels     []string
+	variants   []V
 	variantMap map[string]V
 	maxValid   int
 	zero       V
@@ -30,6 +32,27 @@ func NewBasicInteger[V IntNumber](labels []string, zero V) *BasicIntegerEnum[V] 
 	}
 }
 
+// NewBasicSparseInteger initializes a BasicIntegerEnum for sparse non-contiguous enums.
+func NewBasicSparseInteger[V IntNumber](
+	variants []V,
+	names []string,
+	zero V,
+	maxValid int,
+) *BasicIntegerEnum[V] {
+	vMap := CompileSparseIntegerMap(variants, names, zero)
+	var dummy V
+	tName := ResolveTypeName(&dummy)
+
+	return &BasicIntegerEnum[V]{
+		labels:     names,
+		variants:   variants,
+		variantMap: vMap,
+		maxValid:   maxValid,
+		zero:       zero,
+		typeName:   tName,
+	}
+}
+
 // UnmarshalJSON unmarshals JSON data into target using encapsulated metadata.
 func (b *BasicIntegerEnum[V]) UnmarshalJSON(data []byte, target *V) error {
 	return UnmarshalIntegerJSONWithName(data, target, b.typeName, b.variantMap, b.maxValid, b.zero)
@@ -37,11 +60,25 @@ func (b *BasicIntegerEnum[V]) UnmarshalJSON(data []byte, target *V) error {
 
 // All returns all valid enum variants.
 func (b *BasicIntegerEnum[V]) All() []V {
+	if len(b.variants) > 0 {
+		res := make([]V, len(b.variants))
+		copy(res, b.variants)
+
+		return res
+	}
+
 	return SliceVariants[V](b.labels)
 }
 
 // Values returns all valid string labels (excluding index 0).
 func (b *BasicIntegerEnum[V]) Values() []string {
+	if len(b.variants) > 0 {
+		res := make([]string, len(b.labels))
+		copy(res, b.labels)
+
+		return res
+	}
+
 	return SliceValues(b.labels)
 }
 
@@ -82,6 +119,39 @@ func (b *BasicIntegerEnum[V]) Zero() V {
 // MaxValid returns the maximum valid index.
 func (b *BasicIntegerEnum[V]) MaxValid() int {
 	return b.maxValid
+}
+
+// CompileSparseIntegerMap builds a fast lookup map for sparse integer enum variants.
+func CompileSparseIntegerMap[V IntNumber](variants []V, names []string, zero V) map[string]V {
+	count := len(variants)
+	if len(names) < count {
+		count = len(names)
+	}
+
+	m := make(map[string]V, (count*4)+6)
+	populateSparseEntries(m, variants[:count], names[:count])
+	populateSparseAliases(m, zero)
+
+	return m
+}
+
+func populateSparseEntries[V IntNumber](m map[string]V, variants []V, names []string) {
+	for i, v := range variants {
+		name := names[i]
+		m[name] = v
+		m[strings.ToLower(name)] = v
+		m[strings.ToUpper(name)] = v
+		m[fmt.Sprintf("%d", v)] = v
+	}
+}
+
+func populateSparseAliases[V any](m map[string]V, zero V) {
+	m["unknown"] = zero
+	m["invalid"] = zero
+	m["UNKNOWN"] = zero
+	m["INVALID"] = zero
+	m["min"] = zero
+	m["MIN"] = zero
 }
 
 // CompileStringMap builds a fast lookup map for string enum variants.

@@ -3,7 +3,6 @@ package logleveltype
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 )
@@ -23,7 +22,8 @@ const (
 )
 
 var (
-	logLevelNames = map[Variant]string{
+	variantLabels = [...]string{
+		0:     "Unknown",
 		Debug: "Debug",
 		Info:  "Info",
 		Warn:  "Warn",
@@ -31,24 +31,12 @@ var (
 		Fatal: "Fatal",
 	}
 
-	variantMap = compileVariantMap()
+	basicEnum = baseenumer.NewBasicInteger(variantLabels[:], Variant(0))
 )
 
-func compileVariantMap() map[string]Variant {
-	m := make(map[string]Variant, len(logLevelNames)*4)
-	for lvl, name := range logLevelNames {
-		m[name] = lvl
-		m[strings.ToLower(name)] = lvl
-		m[strings.ToUpper(name)] = lvl
-		m[fmt.Sprintf("%d", uint16(lvl))] = lvl
-	}
-
-	return m
-}
-
 func (l Variant) Name() string {
-	if name, ok := logLevelNames[l]; ok {
-		return name
+	if int(l) >= int(Debug) && int(l) <= int(Fatal) {
+		return variantLabels[l]
 	}
 
 	return fmt.Sprintf("LogLevel(%d)", uint16(l))
@@ -71,15 +59,11 @@ func (l Variant) Int() int {
 }
 
 func (l Variant) IsValid() bool {
-	_, ok := logLevelNames[l]
-
-	return ok
+	return l >= Debug && l <= Fatal
 }
 
 func (l Variant) IsEnum() bool {
-	_, ok := logLevelNames[l]
-
-	return ok
+	return l.IsValid()
 }
 
 func (l Variant) IsCompare(target Variant) bool {
@@ -91,21 +75,25 @@ func (l Variant) MarshalJSON() ([]byte, error) {
 }
 
 func (l *Variant) UnmarshalJSON(data []byte) error {
-	return baseenumer.UnmarshalIntegerJSON(data, l, variantMap, 5, 0)
+	return basicEnum.UnmarshalJSON(data, l)
 }
 
 func All() []Variant {
-	return []Variant{Debug, Info, Warn, Error, Fatal}
+	return basicEnum.All()
 }
 
 func AllLogLevels() []Variant {
 	return All()
 }
 
+func Values() []string {
+	return basicEnum.Values()
+}
+
 func Parse(val string) Variant {
-	cleaned := strings.ToLower(strings.TrimSpace(val))
-	if lvl, ok := variantMap[cleaned]; ok {
-		return lvl
+	v, _, isOk := basicEnum.ParseLookup(val)
+	if isOk {
+		return v
 	}
 
 	return 0

@@ -33,6 +33,13 @@ type (
 		Close() *appfault.AppError
 	}
 
+	Statuser interface {
+		IsStatus() bool
+		Status() bool
+	}
+
+	StatusChecker = Statuser
+
 	AnyWriter = PluggableWriter[any]
 
 	AnyStreamer = Streamer[any]
@@ -91,3 +98,9 @@ func (r LogRecord) Compile() string {
 var _ StringCompiler = LogRecord{}
 var _ StreamCompiler = LogRecord{}
 var _ Compilable = LogRecord{}
+
+// Ensure JsonResult and Bytes implement Statuser at compile-time.
+var _ Statuser = JsonResult{}
+var _ Statuser = Bytes[any]{}
+var _ StatusChecker = JsonResult{}
+var _ StatusChecker = Bytes[any]{}

@@ -238,7 +238,7 @@ TEMP_ARTIFACT_FILENAMES: tuple[str, ...] = (
     ".DS_Store", "Thumbs.db", "desktop.ini", ".directory"
 )
 
-# Centralized 18 CI Quality Gate Job Definitions
+# Centralized 36 CI Quality Gate Job Definitions
 CI_JOBS_MATRIX: dict[str, list[str]] = {
     "Relative Path Check": [sys.executable, "linter-scripts/check-relative-paths.py"],
     "Prompts Loaded Check": [sys.executable, "linter-scripts/check-prompts-loaded.py"],
@@ -271,6 +271,11 @@ CI_JOBS_MATRIX: dict[str, list[str]] = {
     "Required Checks Self-Test": ["node", "scripts/tests/print-required-checks.test.mjs"],
     "Sync Guidelines Self-Test": ["node", "scripts/tests/sync-guidelines.test.mjs"],
     "File Sizes Baseline Self-Test": [sys.executable, "linter-scripts/tests/check-file-sizes.test.py"],
+    "Markdown Gap Check": [sys.executable, "03-ai-scripts/31-md-gap-fixer.py"],
+    "Sequence & Title Check": [sys.executable, "03-ai-scripts/15-sequence-and-title-auditor.py"],
+    "Sequence Integrity Check (AI Scripts)": [sys.executable, "03-ai-scripts/21-sequence-integrity-linter.py"],
+    "Misspell Check": [sys.executable, "03-ai-scripts/27-misspell-auditor.py"],
+    "Boolean Naming Check": [sys.executable, "03-ai-scripts/08-naming-autofixer.py"],
 }
 
 # --- Module-Level Directory & File Constants ---

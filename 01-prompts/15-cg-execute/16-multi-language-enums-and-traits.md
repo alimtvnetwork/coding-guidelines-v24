@@ -169,34 +169,130 @@ impl TaskStatusType {
 
 ---
 
-### 3. Go Custom Type Enums & Stringers
+### 3. Go Type-Safe Multi-File Enums & `BasicEnum` Integration
 
-In Go, enums are declared with custom named types ending in `Type`, grouped in `const` blocks, and placed in a dedicated `enums/` package:
+In Go, enums MUST be scaffolded using `03-ai-scripts/30-enum-generator.py` into dedicated, self-contained package folders (`04-code/golang/pkg/enum/{name.lower()}type/` or `internal/enums/{name.lower()}type/`). Each enum is decomposed into a strict **4-file architecture**:
 
+1. **`variant.go`**: Core type declaration (`Variant byte`), type alias (`type OrderStatusType = Variant`), `iota` constants starting with `Invalid Variant = iota`, compile-time interface assertions, value/code methods, affirmative item predicates (`IsPending()`, `IsCompleted()`), formatting methods, and DRY JSON serialization.
+2. **`vars.go`**: Canonical `Result` alias (`type Result = result.Wrap[Variant]`), `variantLabels` array, `baseenumer.NewBasicInteger` (or `NewBasicString` / `NewBasicSparseInteger`) integration, `All()`, `Values()`, and monadic `Parse(s string) Result`.
+3. **`variant_test.go`**: 100% test coverage validating interfaces, properties, item predicates, parse lookups, and JSON roundtrips.
+4. **`readme.md`**: Package documentation detailing zero circular dependencies, direct Result returns, high-speed lookups, and DRY JSON marshaling.
+
+#### Automated Scaffolding Command:
+```bash
+python 03-ai-scripts/30-enum-generator.py --name OrderStatus --type byte --items Pending,Processing,Completed,Cancelled --zero-value Invalid
+```
+
+#### `variant.go` (Core Type, Constants, & Methods):
 ```go
-package enums
+package orderstatustype
 
-// OrderStatusType defines discrete order lifecycle states.
-type OrderStatusType string
+import (
+    "encoding/json"
+    "fmt"
 
-const (
-    OrderStatusPending    OrderStatusType = "pending"
-    OrderStatusProcessing OrderStatusType = "processing"
-    OrderStatusCompleted  OrderStatusType = "completed"
-    OrderStatusCancelled  OrderStatusType = "cancelled"
+    "coding-guidelines/common/pkg/baseenumer"
 )
 
-func (s OrderStatusType) IsValid() bool {
-    switch s {
-    case OrderStatusPending, OrderStatusProcessing, OrderStatusCompleted, OrderStatusCancelled:
-        return true
-    default:
-        return false
+type (
+    Variant byte
+
+    OrderStatusType = Variant
+
+    VariantPredicate func(v Variant) bool
+)
+
+const (
+    Invalid Variant = iota // zero value is always Invalid
+    Pending
+    Processing
+    Completed
+    Cancelled
+)
+
+var (
+    _ baseenumer.BaseEnumer   = Variant(0)
+    _ baseenumer.ByteEnumer   = Variant(0)
+    _ baseenumer.NumberEnumer = Variant(0)
+    _ json.Marshaler          = Variant(0)
+    _ json.Unmarshaler        = (*Variant)(nil)
+)
+
+func (v Variant) Byte() byte       { return byte(v) }
+func (v Variant) ValueByte() byte  { return byte(v) }
+func (v Variant) Bytes() []byte    { return []byte{byte(v)} }
+func (v Variant) Int() int         { return int(v) }
+func (v Variant) Code() uint16     { return uint16(v) }
+
+func (v Variant) IsValid() bool   { return baseenumer.IsBetween(v, Pending, Cancelled) }
+func (v Variant) IsInvalid() bool { return baseenumer.IsNotBetween(v, Pending, Cancelled) }
+func (v Variant) IsEnum() bool    { return v.IsValid() }
+
+func (v Variant) IsPending() bool    { return v == Pending }
+func (v Variant) IsProcessing() bool { return v == Processing }
+func (v Variant) IsCompleted() bool  { return v == Completed }
+func (v Variant) IsCancelled() bool  { return v == Cancelled }
+
+func (v Variant) Name() string {
+    if int(v) < len(variantLabels) {
+        return variantLabels[v]
     }
+    return fmt.Sprintf("OrderStatus(%d)", byte(v))
 }
 
-func (s OrderStatusType) IsTerminal() bool {
-    return s == OrderStatusCompleted || s == OrderStatusCancelled
+func (v Variant) Label() string       { return v.Name() }
+func (v Variant) String() string      { return v.Name() }
+func (v Variant) ValueString() string { return baseenumer.FormatNameValue(v.Name(), byte(v)) }
+
+func (v Variant) MarshalJSON() ([]byte, error) {
+    return baseenumer.MarshalJSON(v.Name())
+}
+
+func (v *Variant) UnmarshalJSON(data []byte) error {
+    return basicEnum.UnmarshalJSON(data, v)
+}
+```
+
+#### `vars.go` (`BasicEnum` Engine & Monadic Parser):
+```go
+package orderstatustype
+
+import (
+    "coding-guidelines/common/pkg/baseenumer"
+    "coding-guidelines/common/pkg/errtype"
+    "coding-guidelines/common/pkg/result"
+)
+
+type Result = result.Wrap[Variant]
+
+var (
+    variantLabels = [...]string{
+        Invalid:    "Invalid",
+        Pending:    "Pending",
+        Processing: "Processing",
+        Completed:  "Completed",
+        Cancelled:  "Cancelled",
+    }
+
+    basicEnum  = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
+    variantMap = basicEnum.Map()
+)
+
+func All() []Variant {
+    return basicEnum.All()
+}
+
+func Values() []string {
+    return basicEnum.Values()
+}
+
+func Parse(s string) Result {
+    v, err := basicEnum.Parse(s)
+    if err != nil {
+        return result.WrapFailureWithId[Variant](errtype.Validation, err.Error())
+    }
+
+    return result.WrapSuccess(v)
 }
 ```
 
@@ -230,7 +326,7 @@ In Phase 1, you MUST generate `.lovable/plans/pending/XX-enums-and-traits-audit.
 |---|:---:|---|---|---|---|:---:|
 | `app/Models/Order.php` | 24 | `$status` | Loose string literal `'pending'` | PHP | Backed Enum `OrderStatusType` + `HasEnumHelpers` | PENDING |
 | `src/task.rs` | 52 | `status_code: u8` | Numeric status code `0, 1, 2` | Rust | ADT Enum `TaskStatusType` with payload | PENDING |
-| `pkg/api/order.go` | 18 | `Status string` | Raw unvalidated string | Go | Custom `enums.OrderStatusType` + `.IsValid()` | PENDING |
+| `pkg/api/order.go` | 18 | `Status string` | Raw unvalidated string | Go | Dedicated `orderstatustype.Variant` + `BasicEnum` | PENDING |
 ```
 
 ---
@@ -285,7 +381,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `03-ai-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`03-ai-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
-- [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
+- [ ] **Strict 03-ai-scripts/ Tooling Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
 - [ ] **Automated Naming & Style Fixers:** Use `python 03-ai-scripts/08-naming-autofixer.py` and `05-guideline-autofixer.py` to audit boolean prefixes and newlines.
 - [ ] **Go Generate Sync:** If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `03-ai-scripts/` and committed to Git for future reuse.
@@ -329,6 +425,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Blank Line Before `return`: Verified blank line before every `return`/`throw` in multi-line blocks.
 - [ ] Zero Nested `if`: Zero nested `if` statements (depth > 1).
 
-1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
+1. [ ] /learn the section as a /goal [AI Fix Scripts Catalog](03-ai-scripts/01-index.md)
 
 - [ ] Action Summary: I have output a detailed `- [x]` checklist summarizing exactly what I accomplished this turn to prove I did not hallucinate.

@@ -1,6 +1,6 @@
 # Python File Manipulator CLI Specification — Tooling Spec (must follow)
 
-> **Prompt Version:** 2.4.0
+> **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 /goal Autonomously generate and maintain a robust, dependency-free Python CLI tool to handle mass file renaming, sequencing, and encoding normalization across any specified folder.

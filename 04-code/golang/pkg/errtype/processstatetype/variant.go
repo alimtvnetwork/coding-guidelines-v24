@@ -2,7 +2,6 @@ package processstatetype
 
 import (
 	"encoding/json"
-	"strings"
 
 	"coding-guidelines/common/pkg/baseenumer"
 )
@@ -32,29 +31,16 @@ const (
 )
 
 var (
-	processStateRegistry = map[Variant]bool{
-		Pending:   true,
-		Running:   true,
-		Completed: true,
-		Failed:    true,
-		Cancelled: true,
+	allVariants = []Variant{
+		Pending,
+		Running,
+		Completed,
+		Failed,
+		Cancelled,
 	}
 
-	processStateMap = compileProcessStateMap()
+	basicEnum = baseenumer.NewBasicString(allVariants, Unknown)
 )
-
-func compileProcessStateMap() map[string]Variant {
-	states := All()
-	m := make(map[string]Variant, len(states)*3)
-	for _, state := range states {
-		str := string(state)
-		m[str] = state
-		m[strings.ToLower(str)] = state
-		m[strings.ToUpper(str)] = state
-	}
-
-	return m
-}
 
 func (s Variant) Name() string {
 	return string(s)
@@ -73,11 +59,16 @@ func (s Variant) Value() string {
 }
 
 func (s Variant) IsValid() bool {
-	return processStateRegistry[s]
+	switch s {
+	case Pending, Running, Completed, Failed, Cancelled:
+		return true
+	default:
+		return false
+	}
 }
 
 func (s Variant) IsEnum() bool {
-	return processStateRegistry[s]
+	return s.IsValid()
 }
 
 func (s Variant) IsCompare(target Variant) bool {
@@ -89,27 +80,25 @@ func (s Variant) MarshalJSON() ([]byte, error) {
 }
 
 func (s *Variant) UnmarshalJSON(data []byte) error {
-	return baseenumer.UnmarshalStringJSON(data, s, processStateMap, Unknown)
+	return basicEnum.UnmarshalJSON(data, s)
 }
 
 func All() []Variant {
-	return []Variant{
-		Pending,
-		Running,
-		Completed,
-		Failed,
-		Cancelled,
-	}
+	return basicEnum.All()
 }
 
 func AllProcessStates() []Variant {
 	return All()
 }
 
+func Values() []string {
+	return basicEnum.Values()
+}
+
 func Parse(val string) Variant {
-	cleaned := strings.ToLower(strings.TrimSpace(val))
-	if state, ok := processStateMap[cleaned]; ok {
-		return state
+	v, _, isOk := basicEnum.ParseLookup(val)
+	if isOk {
+		return v
 	}
 
 	return Unknown

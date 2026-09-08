@@ -23,6 +23,7 @@ type (
 		HasError() bool
 		IsValid() bool
 		IsSuccess() bool
+		IsStatus() bool
 		Status() bool
 		StatusCode() int
 		Unwrap() ([]byte, *appfault.AppError)
@@ -233,9 +234,14 @@ func (b Bytes[T]) IsSuccess() bool {
 	return b.isStatus
 }
 
+// IsStatus returns the boolean status flag.
+func (b Bytes[T]) IsStatus() bool {
+	return b.isStatus
+}
+
 // Status returns the boolean status flag.
 func (b Bytes[T]) Status() bool {
-	return b.isStatus
+	return b.IsStatus()
 }
 
 // StatusCode returns the numeric status code.

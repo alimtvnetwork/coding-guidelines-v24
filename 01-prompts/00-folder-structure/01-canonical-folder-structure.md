@@ -1,6 +1,6 @@
 # Canonical Folder Structure & Sizing Rules — Architecture Spec (must follow)
 
-> **Prompt Version:** 3.0.0
+> **Prompt Version:** 2.1.0
 > **Synchronization:** Single Source of Truth Mirror for `.lovable/folder-structure.md`
 > **Target:** `01-prompts/00-folder-structure/01-canonical-folder-structure.md`
 
@@ -10,7 +10,7 @@ All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-
 
 ```text
 /                                      # Root of the repository
-  spec/                                # Canonical layered specifications (source of truth)
+  02-spec/                             # Canonical layered specifications (source of truth)
     01-spec-authoring-guide/           # Meta-guide for writing and maintaining specs
     02-coding-guidelines/              # Detailed cross-language coding architectures
     03-error-manage/                   # Error management, envelopes, error codes
