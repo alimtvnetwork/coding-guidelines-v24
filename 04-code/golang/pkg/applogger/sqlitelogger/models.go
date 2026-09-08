@@ -36,3 +36,15 @@ type TaskSummary struct {
 	ErrorCount    int    `json:"errorCount"`
 	LastTimestamp string `json:"lastTimestamp"`
 }
+
+// TaskDbPathResolverFunc calculates the filesystem path for a task database.
+type TaskDbPathResolverFunc func(tasksDir, taskId string) string
+
+// SplitDBConfig provides configurable path overrides for SplitDBManager.
+type SplitDBConfig struct {
+	WorkDir            string
+	MainDbPath         string
+	TasksDir           string
+	TaskDbPathResolver TaskDbPathResolverFunc
+	Opener             DBOpenerFunc
+}

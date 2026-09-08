@@ -341,3 +341,80 @@ func TestTaskLogger_Telemetry(t *testing.T) {
 		t.Fatalf("log execution failed: %s", err.Message())
 	}
 }
+
+func TestSplitDBManager_CustomPathOverrides(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+	customTasksDir := filepath.Join(tempDir, "custom-tasks-folder")
+
+	mgr, fault := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	if fault != nil {
+		t.Fatalf("failed to create manager: %s", fault.Message())
+	}
+
+	defer mgr.Close()
+
+	// 1. Test SetTasksDir
+	if err := mgr.SetTasksDir(customTasksDir); err != nil {
+		t.Fatalf("SetTasksDir failed: %s", err.Message())
+	}
+
+	if mgr.TasksDir() != customTasksDir {
+		t.Fatalf("expected TasksDir %s, got %s", customTasksDir, mgr.TasksDir())
+	}
+
+	defaultResolved := mgr.ResolveTaskDbPath("task-001")
+	expectedDefault := filepath.Join(customTasksDir, "task-001.db")
+	if defaultResolved != expectedDefault {
+		t.Fatalf("expected %s, got %s", expectedDefault, defaultResolved)
+	}
+
+	// 2. Test SetTaskDbPath (explicit path for specific task)
+	explicitPath := filepath.Join(tempDir, "isolated-task-99.db")
+	if err := mgr.SetTaskDbPath("task-99", explicitPath); err != nil {
+		t.Fatalf("SetTaskDbPath failed: %s", err.Message())
+	}
+
+	if mgr.ResolveTaskDbPath("task-99") != explicitPath {
+		t.Fatalf("expected explicit path %s, got %s", explicitPath, mgr.ResolveTaskDbPath("task-99"))
+	}
+
+	// 3. Test SetTaskDbPathResolver (custom naming strategy)
+	customResolver := func(tasksDir, taskId string) string {
+		return filepath.Join(tasksDir, "nested", taskId, "task.db")
+	}
+
+	if err := mgr.SetTaskDbPathResolver(customResolver); err != nil {
+		t.Fatalf("SetTaskDbPathResolver failed: %s", err.Message())
+	}
+
+	resolvedNested := mgr.ResolveTaskDbPath("task-nested-1")
+	expectedNested := filepath.Join(customTasksDir, "nested", "task-nested-1", "task.db")
+	if resolvedNested != expectedNested {
+		t.Fatalf("expected nested path %s, got %s", expectedNested, resolvedNested)
+	}
+
+	// 4. Test NewSplitDBManagerWithConfig
+	cfg := sqlitelogger.SplitDBConfig{
+		WorkDir:            tempDir,
+		MainDbPath:         filepath.Join(tempDir, "custom-main.db"),
+		TasksDir:           filepath.Join(tempDir, "config-tasks"),
+		TaskDbPathResolver: customResolver,
+		Opener:             opener,
+	}
+
+	cfgMgr, cfgFault := sqlitelogger.NewSplitDBManagerWithConfig(cfg)
+	if cfgFault != nil {
+		t.Fatalf("NewSplitDBManagerWithConfig failed: %s", cfgFault.Message())
+	}
+
+	defer cfgMgr.Close()
+
+	if cfgMgr.MainDbPath() != cfg.MainDbPath {
+		t.Fatalf("expected mainDbPath %s, got %s", cfg.MainDbPath, cfgMgr.MainDbPath())
+	}
+
+	if cfgMgr.TasksDir() != cfg.TasksDir {
+		t.Fatalf("expected tasksDir %s, got %s", cfg.TasksDir, cfgMgr.TasksDir())
+	}
+}

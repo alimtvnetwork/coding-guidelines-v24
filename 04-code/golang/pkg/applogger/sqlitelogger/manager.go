@@ -33,13 +33,15 @@ const (
 
 // SplitDBManager orchestrates primary and task-isolated SQLite log databases.
 type SplitDBManager struct {
-	lock       sync.RWMutex
-	workDir    string
-	mainDbPath string
-	tasksDir   string
-	mainDb     *sql.DB
-	taskDbs    map[string]*sql.DB
-	opener     DBOpenerFunc
+	lock        sync.RWMutex
+	workDir     string
+	mainDbPath  string
+	tasksDir    string
+	resolver    TaskDbPathResolverFunc
+	customPaths map[string]string
+	mainDb      *sql.DB
+	taskDbs     map[string]*sql.DB
+	opener      DBOpenerFunc
 }
 
 // NewSplitDBManager instantiates a SplitDBManager for a given work directory.
@@ -47,16 +49,36 @@ func NewSplitDBManager(
 	workDir string,
 	opener DBOpenerFunc,
 ) (*SplitDBManager, *appfault.AppError) {
-	if workDir == "" {
-		return nil, appfault.New(errtype.Validation, "workDir cannot be empty")
+	return NewSplitDBManagerWithConfig(SplitDBConfig{
+		WorkDir: workDir,
+		Opener:  opener,
+	})
+}
+
+// NewSplitDBManagerWithConfig instantiates a SplitDBManager with configurable paths.
+func NewSplitDBManagerWithConfig(cfg SplitDBConfig) (*SplitDBManager, *appfault.AppError) {
+	if cfg.WorkDir == "" {
+		return nil, appfault.New(errtype.Validation, "WorkDir cannot be empty")
+	}
+
+	mainDbPath := cfg.MainDbPath
+	if mainDbPath == "" {
+		mainDbPath = filepath.Join(cfg.WorkDir, defaultMainDbName)
+	}
+
+	tasksDir := cfg.TasksDir
+	if tasksDir == "" {
+		tasksDir = filepath.Join(cfg.WorkDir, tasksDirName)
 	}
 
 	mgr := &SplitDBManager{
-		workDir:    workDir,
-		mainDbPath: filepath.Join(workDir, defaultMainDbName),
-		tasksDir:   filepath.Join(workDir, tasksDirName),
-		taskDbs:    make(map[string]*sql.DB),
-		opener:     opener,
+		workDir:     cfg.WorkDir,
+		mainDbPath:  mainDbPath,
+		tasksDir:    tasksDir,
+		resolver:    cfg.TaskDbPathResolver,
+		customPaths: make(map[string]string),
+		taskDbs:     make(map[string]*sql.DB),
+		opener:      cfg.Opener,
 	}
 
 	return mgr, mgr.Init()
@@ -75,6 +97,30 @@ func (m *SplitDBManager) Init() *appfault.AppError {
 	return nil
 }
 
+// WorkDir returns the configured base directory for logs.
+func (m *SplitDBManager) WorkDir() string {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+
+	return m.workDir
+}
+
+// TasksDir returns the active directory holding task SQLite databases.
+func (m *SplitDBManager) TasksDir() string {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+
+	return m.tasksDir
+}
+
+// MainDbPath returns the absolute or relative path to the main logs database.
+func (m *SplitDBManager) MainDbPath() string {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+
+	return m.mainDbPath
+}
+
 // SetMainDbPath overrides the default main database location.
 func (m *SplitDBManager) SetMainDbPath(customPath string) *appfault.AppError {
 	m.lock.Lock()
@@ -87,6 +133,69 @@ func (m *SplitDBManager) SetMainDbPath(customPath string) *appfault.AppError {
 	m.mainDbPath = customPath
 
 	return nil
+}
+
+// SetTasksDir overrides the directory holding task SQLite databases.
+func (m *SplitDBManager) SetTasksDir(customDir string) *appfault.AppError {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+
+	if customDir == "" {
+		return appfault.New(errtype.Validation, "customDir cannot be empty")
+	}
+
+	m.tasksDir = customDir
+	dirRes := fileutil.EnsureDir(customDir, filepermtype.Standard)
+	if dirRes.IsFailed() {
+		return dirRes.Fault()
+	}
+
+	return nil
+}
+
+// SetTaskDbPath assigns an explicit custom database file path for a specific task.
+func (m *SplitDBManager) SetTaskDbPath(taskId, customPath string) *appfault.AppError {
+	if taskId == "" || customPath == "" {
+		return appfault.New(errtype.Validation, "taskId and customPath cannot be empty")
+	}
+
+	m.lock.Lock()
+	defer m.lock.Unlock()
+
+	m.customPaths[taskId] = customPath
+
+	return nil
+}
+
+// SetTaskDbPathResolver configures a custom naming algorithm for task databases.
+func (m *SplitDBManager) SetTaskDbPathResolver(resolver TaskDbPathResolverFunc) *appfault.AppError {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+
+	m.resolver = resolver
+
+	return nil
+}
+
+// ResolveTaskDbPath computes the target database path for a given task ID.
+func (m *SplitDBManager) ResolveTaskDbPath(taskId string) string {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+
+	return m.resolveTaskDbPathUnsafe(taskId)
+}
+
+// resolveTaskDbPathUnsafe resolves path without acquiring mutex (caller must hold lock).
+func (m *SplitDBManager) resolveTaskDbPathUnsafe(taskId string) string {
+	if custom, hasCustom := m.customPaths[taskId]; hasCustom && custom != "" {
+		return custom
+	}
+
+	if m.resolver != nil {
+		return m.resolver(m.tasksDir, taskId)
+	}
+
+	return filepath.Join(m.tasksDir, fmt.Sprintf("%s.db", taskId))
 }
 
 // GetMainDb lazily opens and returns the global logs database connection.
@@ -121,7 +230,9 @@ func (m *SplitDBManager) GetTaskDb(taskId string) (*sql.DB, *appfault.AppError) 
 		return existing, nil
 	}
 
-	taskPath := filepath.Join(m.tasksDir, fmt.Sprintf("%s.db", taskId))
+	taskPath := m.resolveTaskDbPathUnsafe(taskId)
+	_ = fileutil.EnsureDir(filepath.Dir(taskPath), filepermtype.Standard)
+
 	db, fault := m.openDbInternal(taskPath)
 	if fault != nil {
 		return nil, fault
@@ -203,22 +314,29 @@ func (m *SplitDBManager) insertLogEntry(
 	return nil
 }
 
-// ListTaskDBs returns a slice of all active task IDs discovered in tasksDir.
+// ListTaskDBs returns a slice of all active task IDs discovered in tasksDir and custom paths.
 func (m *SplitDBManager) ListTaskDBs() ([]string, *appfault.AppError) {
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 
-	entries, err := os.ReadDir(m.tasksDir)
-	if err != nil {
-		return nil, appfault.Wrap(errtype.IO, err, "failed to read tasks directory")
+	taskIdsMap := make(map[string]bool)
+	for id := range m.customPaths {
+		taskIdsMap[id] = true
 	}
 
-	taskIds := make([]string, 0, len(entries))
-	for _, entry := range entries {
-		name := entry.Name()
-		if strings.HasSuffix(name, ".db") {
-			taskIds = append(taskIds, strings.TrimSuffix(name, ".db"))
+	entries, err := os.ReadDir(m.tasksDir)
+	if err == nil {
+		for _, entry := range entries {
+			name := entry.Name()
+			if strings.HasSuffix(name, ".db") {
+				taskIdsMap[strings.TrimSuffix(name, ".db")] = true
+			}
 		}
+	}
+
+	taskIds := make([]string, 0, len(taskIdsMap))
+	for id := range taskIdsMap {
+		taskIds = append(taskIds, id)
 	}
 
 	return taskIds, nil
@@ -304,7 +422,7 @@ func (m *SplitDBManager) GetTaskSummary(taskId string) (*TaskSummary, *appfault.
 
 	summary := &TaskSummary{
 		TaskId: taskId,
-		DbPath: filepath.Join(m.tasksDir, fmt.Sprintf("%s.db", taskId)),
+		DbPath: m.ResolveTaskDbPath(taskId),
 	}
 
 	row := db.QueryRow("SELECT COUNT(*), COALESCE(MAX(timestamp), '') FROM logs")
