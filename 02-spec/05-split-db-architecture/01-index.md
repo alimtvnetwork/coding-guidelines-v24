@@ -68,6 +68,8 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 | 02.03 | `02-features/03-database-flow-diagrams.md` | Visual architecture diagrams |
 | 02.04 | `02-features/04-rbac-casbin.md` | Role-Based Access Control with Casbin |
 | 02.05 | `02-features/05-user-scoped-isolation.md` | User-scoped database isolation patterns |
+| 02.06 | `02-features/07-task-retention-and-query-filtering.md` | Task database retention pruning and dynamic query filtering |
+| 02.07 | `02-features/08-api-manager-and-remote-logging.md` | Remote API logging sink architecture and rotation policy |
 | 03 | `03-issues/01-index.md` | Issues tracker |
 | 97 | `97-acceptance-criteria.md` | Acceptance criteria |
 | 97b | `97-changelog.md` | Changelog |
@@ -88,7 +90,9 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 │   ├── 02-reset-api-standard.md
 │   ├── 03-database-flow-diagrams.md
 │   ├── 04-rbac-casbin.md
-│   └── 05-user-scoped-isolation.md
+│   ├── 05-user-scoped-isolation.md
+│   ├── 07-task-retention-and-query-filtering.md
+│   └── 08-api-manager-and-remote-logging.md
 ├── 03-issues/
 │   └── 01-index.md                ← Issues tracker
 ├── 97-acceptance-criteria.md

@@ -15,6 +15,8 @@
 | 03 | [03-database-flow-diagrams.md](./04-database-flow-diagrams.md) | Visual architecture diagrams for all CLIs | ✅ Active |
 | 04 | [04-rbac-casbin.md](./05-rbac-casbin.md) | Role-Based Access Control with Casbin | ✅ Active |
 | 05 | [05-user-scoped-isolation.md](./06-user-scoped-isolation.md) | User-scoped database isolation patterns | ✅ Active |
+| 06 | [07-task-retention-and-query-filtering.md](./07-task-retention-and-query-filtering.md) | Task database retention pruning and dynamic query filtering | ✅ Active |
+| 07 | [08-api-manager-and-remote-logging.md](./08-api-manager-and-remote-logging.md) | Remote API logging sink architecture and rotation policy | ✅ Active |
 
 ---
 

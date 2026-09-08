@@ -5,7 +5,9 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"io"
+	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"testing"
 
@@ -102,6 +104,83 @@ func TestExamples_CommandRunWithTelemetry(t *testing.T) {
 	if !res.Data().IsSuccess {
 		t.Fatalf("expected command success")
 	}
+}
 
-	_ = filepath.Join
+func TestExamples_TaskRetentionAndFiltering(t *testing.T) {
+	tempDir := t.TempDir()
+	pruned, logs, fault := examples.ExampleTaskRetentionAndFiltering(tempDir, getExOpener())
+	if fault != nil {
+		t.Fatalf("ExampleTaskRetentionAndFiltering failed: %s", fault.Message())
+	}
+
+	if pruned != 0 {
+		t.Fatalf("expected 0 pruned, got %d", pruned)
+	}
+
+	_ = logs
+}
+
+func TestExamples_LiveStreamingCommand(t *testing.T) {
+	tempDir := t.TempDir()
+	ctx := context.Background()
+	res, captured, fault := examples.ExampleLiveStreamingCommand(ctx, tempDir)
+	if fault != nil {
+		t.Fatalf("ExampleLiveStreamingCommand failed: %s", fault.Message())
+	}
+
+	if !res.IsSuccess {
+		t.Fatal("expected command success")
+	}
+
+	verifyCapturedLines(t, captured)
+}
+
+func verifyCapturedLines(t *testing.T, lines []string) {
+	if len(lines) == 0 {
+		t.Fatal("expected captured lines")
+	}
+
+	if !strings.Contains(lines[0], "stream step") {
+		t.Fatalf("unexpected line: %s", lines[0])
+	}
+}
+
+func TestExamples_AtomicFileWrite(t *testing.T) {
+	tempDir := t.TempDir()
+	target := filepath.Join(tempDir, "atomic_sample.txt")
+	content := []byte("atomic sample data")
+
+	fault := examples.ExampleAtomicFileWrite(target, content)
+	if fault != nil {
+		t.Fatalf("ExampleAtomicFileWrite failed: %s", fault.Message())
+	}
+
+	data, err := os.ReadFile(target)
+	if err != nil || string(data) != string(content) {
+		t.Fatalf("atomic file write content mismatch")
+	}
+}
+
+func TestExamples_LazyOnceContextAndReset(t *testing.T) {
+	ctx := context.Background()
+	val, fault := examples.ExampleLazyOnceContextAndReset(ctx)
+	if fault != nil {
+		t.Fatalf("ExampleLazyOnceContextAndReset failed: %s", fault.Message())
+	}
+
+	if val != "initialized-service-instance" {
+		t.Fatalf("unexpected val: %s", val)
+	}
+}
+
+func TestExamples_ApiManagerRemoteLogging(t *testing.T) {
+	mgr, err := examples.ExampleApiManagerRemoteLogging("https://logs.example.internal")
+	if err != nil {
+		t.Fatalf("ExampleApiManagerRemoteLogging failed: %v", err)
+	}
+
+	defer mgr.Close()
+	if mgr.BufferedCount() != 0 {
+		t.Fatalf("expected 0 initial buffered logs")
+	}
 }
