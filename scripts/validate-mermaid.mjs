@@ -12,7 +12,7 @@
 
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
-import { join, relative, dirname } from 'node:path';
+import { join, relative, dirname, basename } from 'node:path';
 import { JSDOM } from 'jsdom';
 
 // Mermaid v11 calls DOMPurify.addHook during parse; provide a browser-like
@@ -27,7 +27,7 @@ globalThis.Node = dom.window.Node;
 const mermaid = (await import('mermaid')).default;
 
 const ROOT = process.cwd();
-const SPEC_ROOT = join(ROOT, 'spec');
+const SPEC_ROOT = existsSync(join(ROOT, '02-spec')) ? join(ROOT, '02-spec') : join(ROOT, 'spec');
 const ARGS = process.argv.slice(2);
 const ONLY_INDEX = ARGS.indexOf('--only');
 const ONLY_FILTER = ONLY_INDEX >= 0 ? ARGS[ONLY_INDEX + 1] : null;
@@ -39,7 +39,7 @@ async function findMmd(dir, acc = []) {
     const full = join(dir, e.name);
     if (e.isDirectory()) { await findMmd(full, acc); continue; }
     if (!e.name.endsWith('.mmd')) continue;
-    if (!DIAGRAM_DIRS.has(dirname(full).split('/').pop())) continue;
+    if (!DIAGRAM_DIRS.has(basename(dirname(full)))) continue;
     if (ONLY_FILTER && !full.includes(ONLY_FILTER)) continue;
     acc.push(full);
   }
