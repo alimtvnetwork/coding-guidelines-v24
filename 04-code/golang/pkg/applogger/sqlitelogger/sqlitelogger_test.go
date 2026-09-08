@@ -31,8 +31,22 @@ type mockRowData struct {
 var (
 	mockStoreLock sync.Mutex
 	mockStore     = make(map[string][]mockRowData)
+	mockVersions  = make(map[string]int64)
+	mockColumns   = make(map[string][]string)
 	initMockOnce  sync.Once
 )
+
+func getMockTableCols(dbName string) []string {
+	cols, exists := mockColumns[dbName]
+	if exists {
+		return cols
+	}
+
+	return []string{
+		"id", "task_id", "timestamp", "level", "message",
+		"caller", "fields_json", "stack_trace", "duration_ms", "status",
+	}
+}
 
 type mockDriver struct{}
 
@@ -73,27 +87,24 @@ func (s *mockStmt) Exec(args []driver.Value) (driver.Result, error) {
 	defer mockStoreLock.Unlock()
 
 	q := strings.ToUpper(s.query)
-	if strings.Contains(q, "CREATE TABLE") {
+	if strings.Contains(q, "CREATE TABLE") || strings.Contains(q, "CREATE INDEX") {
 		return driver.RowsAffected(0), nil
 	}
 
-	if strings.Contains(q, "INSERT INTO LOGS") {
-		rows := mockStore[s.conn.dbName]
-		newId := int64(len(rows) + 1)
-		row := mockRowData{
-			id:         newId,
-			taskId:     fmt.Sprint(args[0]),
-			timestamp:  fmt.Sprint(args[1]),
-			level:      fmt.Sprint(args[2]),
-			message:    fmt.Sprint(args[3]),
-			caller:     fmt.Sprint(args[4]),
-			fieldsJson: fmt.Sprint(args[5]),
-			stackTrace: fmt.Sprint(args[6]),
-			durationMs: args[7].(int64),
-			status:     fmt.Sprint(args[8]),
-		}
+	if strings.Contains(q, "ALTER TABLE") && strings.Contains(q, "ADD COLUMN") {
+		handleMockAlter(s.conn.dbName, q)
 
-		mockStore[s.conn.dbName] = append(rows, row)
+		return driver.RowsAffected(1), nil
+	}
+
+	if strings.Contains(q, "INSERT OR REPLACE INTO SCHEMA_MIGRATIONS") {
+		handleMockVersionInsert(s.conn.dbName, args)
+
+		return driver.RowsAffected(1), nil
+	}
+
+	if strings.Contains(q, "INSERT INTO LOGS") {
+		handleMockLogInsert(s.conn.dbName, args)
 
 		return driver.RowsAffected(1), nil
 	}
@@ -101,13 +112,81 @@ func (s *mockStmt) Exec(args []driver.Value) (driver.Result, error) {
 	return driver.RowsAffected(0), nil
 }
 
+func handleMockAlter(dbName, q string) {
+	parts := strings.Fields(q)
+	for i, p := range parts {
+		if p == "COLUMN" && i+1 < len(parts) {
+			newCol := strings.ToLower(parts[i+1])
+			current := getMockTableCols(dbName)
+			mockColumns[dbName] = append(current, newCol)
+
+			break
+		}
+	}
+}
+
+func handleMockVersionInsert(dbName string, args []driver.Value) {
+	if len(args) == 0 {
+		return
+	}
+
+	switch v := args[0].(type) {
+	case int:
+		mockVersions[dbName] = int64(v)
+	case int64:
+		mockVersions[dbName] = v
+	}
+}
+
+func handleMockLogInsert(dbName string, args []driver.Value) {
+	rows := mockStore[dbName]
+	newId := int64(len(rows) + 1)
+	row := mockRowData{
+		id:         newId,
+		taskId:     fmt.Sprint(args[0]),
+		timestamp:  fmt.Sprint(args[1]),
+		level:      fmt.Sprint(args[2]),
+		message:    fmt.Sprint(args[3]),
+		caller:     fmt.Sprint(args[4]),
+		fieldsJson: fmt.Sprint(args[5]),
+		stackTrace: fmt.Sprint(args[6]),
+		durationMs: args[7].(int64),
+		status:     fmt.Sprint(args[8]),
+	}
+
+	mockStore[dbName] = append(rows, row)
+}
+
 func (s *mockStmt) Query(args []driver.Value) (driver.Rows, error) {
 	mockStoreLock.Lock()
 	defer mockStoreLock.Unlock()
 
 	q := strings.ToUpper(s.query)
-	rows := mockStore[s.conn.dbName]
+	if rows, handled := handleMockMetaQueries(s.conn.dbName, q); handled {
+		return rows, nil
+	}
 
+	return handleMockDataQueries(s.conn.dbName, q)
+}
+
+func handleMockMetaQueries(dbName, q string) (driver.Rows, bool) {
+	if strings.Contains(q, "PRAGMA QUICK_CHECK") || strings.Contains(q, "PRAGMA INTEGRITY_CHECK") {
+		return &mockScalarRows{value: "ok"}, true
+	}
+
+	if strings.Contains(q, "SELECT MAX(VERSION) FROM SCHEMA_MIGRATIONS") {
+		return &mockVersionRows{version: mockVersions[dbName]}, true
+	}
+
+	if strings.Contains(q, "PRAGMA TABLE_INFO") {
+		return &mockTableInfoRows{cols: getMockTableCols(dbName)}, true
+	}
+
+	return nil, false
+}
+
+func handleMockDataQueries(dbName, q string) (driver.Rows, error) {
+	rows := mockStore[dbName]
 	if strings.Contains(q, "SELECT COUNT(*), COALESCE(MAX(TIMESTAMP)") {
 		lastTs := ""
 		if len(rows) > 0 {
@@ -118,17 +197,89 @@ func (s *mockStmt) Query(args []driver.Value) (driver.Rows, error) {
 	}
 
 	if strings.Contains(q, "SELECT COUNT(*) FROM LOGS WHERE LEVEL") {
-		errCount := int64(0)
-		for _, r := range rows {
-			if r.level == "ERROR" || r.level == "FATAL" {
-				errCount++
-			}
-		}
-
-		return &mockCountRows{count: errCount}, nil
+		return &mockCountRows{count: countErrors(rows)}, nil
 	}
 
 	return &mockLogRows{data: append([]mockRowData(nil), rows...), idx: 0}, nil
+}
+
+func countErrors(rows []mockRowData) int64 {
+	errCount := int64(0)
+	for _, r := range rows {
+		if r.level == "ERROR" || r.level == "FATAL" {
+			errCount++
+		}
+	}
+
+	return errCount
+}
+
+type mockScalarRows struct {
+	value driver.Value
+	done  bool
+}
+
+func (r *mockScalarRows) Columns() []string { return []string{"result"} }
+func (r *mockScalarRows) Close() error      { return nil }
+func (r *mockScalarRows) Next(dest []driver.Value) error {
+	if r.done {
+		return io.EOF
+	}
+
+	r.done = true
+	dest[0] = r.value
+
+	return nil
+}
+
+type mockVersionRows struct {
+	version int64
+	done    bool
+}
+
+func (r *mockVersionRows) Columns() []string { return []string{"max_ver"} }
+func (r *mockVersionRows) Close() error      { return nil }
+func (r *mockVersionRows) Next(dest []driver.Value) error {
+	if r.done {
+		return io.EOF
+	}
+
+	r.done = true
+	if r.version > 0 {
+		dest[0] = r.version
+	} else {
+		dest[0] = nil
+	}
+
+	return nil
+}
+
+type mockTableInfoRows struct {
+	cols []string
+	idx  int
+}
+
+func (r *mockTableInfoRows) Columns() []string {
+	return []string{"cid", "name", "type", "notnull", "dflt_value", "pk"}
+}
+
+func (r *mockTableInfoRows) Close() error { return nil }
+
+func (r *mockTableInfoRows) Next(dest []driver.Value) error {
+	if r.idx >= len(r.cols) {
+		return io.EOF
+	}
+
+	colName := r.cols[r.idx]
+	r.idx++
+	dest[0] = int64(r.idx)
+	dest[1] = colName
+	dest[2] = "TEXT"
+	dest[3] = int64(0)
+	dest[4] = nil
+	dest[5] = int64(0)
+
+	return nil
 }
 
 type mockSummaryRows struct {
@@ -416,5 +567,158 @@ func TestSplitDBManager_CustomPathOverrides(t *testing.T) {
 
 	if cfgMgr.TasksDir() != cfg.TasksDir {
 		t.Fatalf("expected tasksDir %s, got %s", cfg.TasksDir, cfgMgr.TasksDir())
+	}
+}
+
+func TestSplitDBManager_TaskDbAutoMigrationAndRepair(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+
+	mgr, fault := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	if fault != nil {
+		t.Fatalf("failed to create manager: %s", fault.Message())
+	}
+
+	defer mgr.Close()
+
+	// Pre-populate mock column store with an outdated legacy schema (missing columns)
+	legacyPath := mgr.ResolveTaskDbPath("legacy-task-01")
+	mockStoreLock.Lock()
+	mockColumns[legacyPath] = []string{"id", "task_id", "timestamp", "level", "message"}
+	mockStoreLock.Unlock()
+
+	// Opening or interacting with the task DB should auto-fix and migrate it
+	db, getFault := mgr.GetTaskDb("legacy-task-01")
+	if getFault != nil {
+		t.Fatalf("GetTaskDb failed: %s", getFault.Message())
+	}
+
+	if db == nil {
+		t.Fatal("expected non-nil db connection")
+	}
+
+	// Verify missing columns were audited and added
+	mockStoreLock.Lock()
+	updatedCols := mockColumns[legacyPath]
+	ver := mockVersions[legacyPath]
+	mockStoreLock.Unlock()
+
+	if len(updatedCols) <= 5 {
+		t.Fatalf("expected auto-repaired columns, got %v", updatedCols)
+	}
+
+	if ver != int64(sqlitelogger.CurrentSchemaVersion) {
+		t.Fatalf("expected schema version %d, got %d", sqlitelogger.CurrentSchemaVersion, ver)
+	}
+}
+
+func TestSplitDBManager_ExplicitMigrationMethods(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+
+	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, opener)
+	defer mgr.Close()
+
+	// Seed task databases
+	_ = mgr.WriteTask("task-mig-1", sqlitelogger.TaskLogEntry{Message: "msg 1"})
+	_ = mgr.WriteTask("task-mig-2", sqlitelogger.TaskLogEntry{Message: "msg 2"})
+
+	// Explicit task migration
+	if err := mgr.MigrateTaskDb("task-mig-1"); err != nil {
+		t.Fatalf("MigrateTaskDb failed: %s", err.Message())
+	}
+
+	// Explicit task repair
+	if err := mgr.RepairTaskDb("task-mig-1"); err != nil {
+		t.Fatalf("RepairTaskDb failed: %s", err.Message())
+	}
+
+	// Migrate and repair all discovered task DBs
+	if err := mgr.MigrateAllTaskDbs(); err != nil {
+		t.Fatalf("MigrateAllTaskDbs failed: %s", err.Message())
+	}
+
+	if err := mgr.RepairAllTaskDbs(); err != nil {
+		t.Fatalf("RepairAllTaskDbs failed: %s", err.Message())
+	}
+
+	// Main DB migration and repair
+	if err := mgr.MigrateMainDb(); err != nil {
+		t.Fatalf("MigrateMainDb failed: %s", err.Message())
+	}
+
+	if err := mgr.RepairMainDb(); err != nil {
+		t.Fatalf("RepairMainDb failed: %s", err.Message())
+	}
+}
+
+func TestSplitDBManager_ManualMigrationToggle(t *testing.T) {
+	tempDir := t.TempDir()
+	opener := getMockOpener()
+
+	cfg := sqlitelogger.SplitDBConfig{
+		WorkDir:               tempDir,
+		Opener:                opener,
+		IsManualMigrationOnly: true,
+	}
+
+	mgr, fault := sqlitelogger.NewSplitDBManagerWithConfig(cfg)
+	if fault != nil {
+		t.Fatalf("NewSplitDBManagerWithConfig failed: %s", fault.Message())
+	}
+
+	defer mgr.Close()
+
+	isManual := mgr.IsManualMigrationOnly()
+	if !isManual {
+		t.Fatal("expected IsManualMigrationOnly to be true")
+	}
+
+	mgr.SetManualMigrationOnly(false)
+	isManualAfter := mgr.IsManualMigrationOnly()
+	if isManualAfter {
+		t.Fatal("expected IsManualMigrationOnly to be false after toggle")
+	}
+}
+
+func TestMigrationEngine_DirectFunctions(t *testing.T) {
+	opener := getMockOpener()
+	db, err := opener("memory_test_db")
+	if err != nil {
+		t.Fatalf("failed to open mock db: %v", err)
+	}
+
+	defer db.Close()
+
+	if fault := sqlitelogger.EnsureBaseSchema(db); fault != nil {
+		t.Fatalf("EnsureBaseSchema failed: %s", fault.Message())
+	}
+
+	if fault := sqlitelogger.ApplyIndexes(db); fault != nil {
+		t.Fatalf("ApplyIndexes failed: %s", fault.Message())
+	}
+
+	if fault := sqlitelogger.CheckIntegrity(db); fault != nil {
+		t.Fatalf("CheckIntegrity failed: %s", fault.Message())
+	}
+
+	ver, vFault := sqlitelogger.GetCurrentSchemaVersion(db)
+	if vFault != nil {
+		t.Fatalf("GetCurrentSchemaVersion failed: %s", vFault.Message())
+	}
+
+	_ = ver
+
+	if fault := sqlitelogger.MigrateDatabase(db); fault != nil {
+		t.Fatalf("MigrateDatabase failed: %s", fault.Message())
+	}
+
+	if fault := sqlitelogger.RepairDatabase(db); fault != nil {
+		t.Fatalf("RepairDatabase failed: %s", fault.Message())
+	}
+
+	// Validate error on nil db
+	if fault := sqlitelogger.EnsureBaseSchema(nil); fault == nil {
+		t.Fatal("expected validation error on nil db")
 	}
 }

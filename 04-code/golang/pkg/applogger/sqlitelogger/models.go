@@ -42,9 +42,17 @@ type TaskDbPathResolverFunc func(tasksDir, taskId string) string
 
 // SplitDBConfig provides configurable path overrides for SplitDBManager.
 type SplitDBConfig struct {
-	WorkDir            string
-	MainDbPath         string
-	TasksDir           string
-	TaskDbPathResolver TaskDbPathResolverFunc
-	Opener             DBOpenerFunc
+	WorkDir               string
+	MainDbPath            string
+	TasksDir              string
+	TaskDbPathResolver    TaskDbPathResolverFunc
+	Opener                DBOpenerFunc
+	IsManualMigrationOnly bool
+}
+
+// SchemaMigration records applied migration metadata.
+type SchemaMigration struct {
+	Version     int    `json:"version"`
+	Description string `json:"description"`
+	AppliedAt   string `json:"appliedAt"`
 }

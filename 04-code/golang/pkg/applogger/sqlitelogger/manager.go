@@ -33,15 +33,16 @@ const (
 
 // SplitDBManager orchestrates primary and task-isolated SQLite log databases.
 type SplitDBManager struct {
-	lock        sync.RWMutex
-	workDir     string
-	mainDbPath  string
-	tasksDir    string
-	resolver    TaskDbPathResolverFunc
-	customPaths map[string]string
-	mainDb      *sql.DB
-	taskDbs     map[string]*sql.DB
-	opener      DBOpenerFunc
+	lock                  sync.RWMutex
+	workDir               string
+	mainDbPath            string
+	tasksDir              string
+	resolver              TaskDbPathResolverFunc
+	customPaths           map[string]string
+	mainDb                *sql.DB
+	taskDbs               map[string]*sql.DB
+	opener                DBOpenerFunc
+	isManualMigrationOnly bool
 }
 
 // NewSplitDBManager instantiates a SplitDBManager for a given work directory.
@@ -72,13 +73,14 @@ func NewSplitDBManagerWithConfig(cfg SplitDBConfig) (*SplitDBManager, *appfault.
 	}
 
 	mgr := &SplitDBManager{
-		workDir:     cfg.WorkDir,
-		mainDbPath:  mainDbPath,
-		tasksDir:    tasksDir,
-		resolver:    cfg.TaskDbPathResolver,
-		customPaths: make(map[string]string),
-		taskDbs:     make(map[string]*sql.DB),
-		opener:      cfg.Opener,
+		workDir:               cfg.WorkDir,
+		mainDbPath:            mainDbPath,
+		tasksDir:              tasksDir,
+		resolver:              cfg.TaskDbPathResolver,
+		customPaths:           make(map[string]string),
+		taskDbs:               make(map[string]*sql.DB),
+		opener:                cfg.Opener,
+		isManualMigrationOnly: cfg.IsManualMigrationOnly,
 	}
 
 	return mgr, mgr.Init()
@@ -243,22 +245,41 @@ func (m *SplitDBManager) GetTaskDb(taskId string) (*sql.DB, *appfault.AppError) 
 	return db, nil
 }
 
-// openDbInternal opens a database connection and creates tables if needed.
-func (m *SplitDBManager) openDbInternal(dbPath string) (*sql.DB, *appfault.AppError) {
-	if m.opener == nil {
+// openConnection safely invokes the opener function and wraps errors.
+func openConnection(opener DBOpenerFunc, dbPath string) (*sql.DB, *appfault.AppError) {
+	if opener == nil {
 		return nil, appfault.New(errtype.Internal, "database opener func is not registered")
 	}
 
-	db, err := m.opener(dbPath)
+	db, err := opener(dbPath)
 	if err != nil {
 		return nil, appfault.Wrap(errtype.Database, err, "failed to open database at "+dbPath)
 	}
 
-	_, execErr := db.Exec(createTableSql)
-	if execErr != nil {
+	return db, nil
+}
+
+// applyAutoMigration executes schema repairs and migrations if not configured for manual only.
+func applyAutoMigration(db *sql.DB, isManual bool) *appfault.AppError {
+	isAuto := !isManual
+	if isAuto {
+		return MigrateAndRepairDatabase(db)
+	}
+
+	return nil
+}
+
+// openDbInternal opens a database connection and ensures tables, migrations, and repairs.
+func (m *SplitDBManager) openDbInternal(dbPath string) (*sql.DB, *appfault.AppError) {
+	db, fault := openConnection(m.opener, dbPath)
+	if fault != nil {
+		return nil, fault
+	}
+
+	if aFault := applyAutoMigration(db, m.isManualMigrationOnly); aFault != nil {
 		_ = db.Close()
 
-		return nil, appfault.Wrap(errtype.Database, execErr, "failed to initialize tables at "+dbPath)
+		return nil, aFault
 	}
 
 	return db, nil
@@ -454,4 +475,92 @@ func (m *SplitDBManager) Close() *appfault.AppError {
 	}
 
 	return nil
+}
+
+// IsManualMigrationOnly returns true if automatic migration on DB open is disabled.
+func (m *SplitDBManager) IsManualMigrationOnly() bool {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+
+	return m.isManualMigrationOnly
+}
+
+// SetManualMigrationOnly sets whether database auto-migration on open is bypassed.
+func (m *SplitDBManager) SetManualMigrationOnly(isManual bool) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+
+	m.isManualMigrationOnly = isManual
+}
+
+// MigrateTaskDb runs schema migrations and repairs on a specific task database.
+func (m *SplitDBManager) MigrateTaskDb(taskId string) *appfault.AppError {
+	db, fault := m.GetTaskDb(taskId)
+	if fault != nil {
+		return fault
+	}
+
+	return MigrateAndRepairDatabase(db)
+}
+
+// RepairTaskDb executes integrity verification and column repair on a task database.
+func (m *SplitDBManager) RepairTaskDb(taskId string) *appfault.AppError {
+	db, fault := m.GetTaskDb(taskId)
+	if fault != nil {
+		return fault
+	}
+
+	return RepairDatabase(db)
+}
+
+// MigrateAllTaskDbs discovers and runs migrations on all available task databases.
+func (m *SplitDBManager) MigrateAllTaskDbs() *appfault.AppError {
+	taskIds, fault := m.ListTaskDBs()
+	if fault != nil {
+		return fault
+	}
+
+	for _, id := range taskIds {
+		if mFault := m.MigrateTaskDb(id); mFault != nil {
+			return mFault
+		}
+	}
+
+	return nil
+}
+
+// RepairAllTaskDbs discovers and runs repairs on all available task databases.
+func (m *SplitDBManager) RepairAllTaskDbs() *appfault.AppError {
+	taskIds, fault := m.ListTaskDBs()
+	if fault != nil {
+		return fault
+	}
+
+	for _, id := range taskIds {
+		if rFault := m.RepairTaskDb(id); rFault != nil {
+			return rFault
+		}
+	}
+
+	return nil
+}
+
+// MigrateMainDb executes migrations on the global logs database.
+func (m *SplitDBManager) MigrateMainDb() *appfault.AppError {
+	db, fault := m.GetMainDb()
+	if fault != nil {
+		return fault
+	}
+
+	return MigrateAndRepairDatabase(db)
+}
+
+// RepairMainDb executes integrity checks and repairs on the global logs database.
+func (m *SplitDBManager) RepairMainDb() *appfault.AppError {
+	db, fault := m.GetMainDb()
+	if fault != nil {
+		return fault
+	}
+
+	return RepairDatabase(db)
 }
