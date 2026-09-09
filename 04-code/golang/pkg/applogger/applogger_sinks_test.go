@@ -23,7 +23,12 @@ func (m *mockZapLogger) Sync() error       { return nil }
 func TestFileSinkLogger(t *testing.T) {
 	logFile := filepath.Join(t.TempDir(), "test.log")
 	cfg := applogger.Config{MinLevel: applogger.LevelInfo, Driver: applogger.DriverFile, FilePath: logFile}
-	l, _ := applogger.New(cfg)
+	res := applogger.New(cfg)
+	if res.IsFailed() {
+		t.Fatalf("applogger.New failed: %v", res.Fault())
+	}
+
+	l := res.Data()
 	l.Info("file log message")
 	_ = l.Close()
 
@@ -36,7 +41,12 @@ func TestFileSinkLogger(t *testing.T) {
 func TestZapAdapterDriver(t *testing.T) {
 	mockZap := &mockZapLogger{}
 	cfg := applogger.Config{MinLevel: applogger.LevelInfo, Driver: applogger.DriverZap, ZapLogger: mockZap}
-	l, _ := applogger.New(cfg)
+	res := applogger.New(cfg)
+	if res.IsFailed() {
+		t.Fatalf("applogger.New failed: %v", res.Fault())
+	}
+
+	l := res.Data()
 	l.Info("test zap info")
 	l.Error("test zap error")
 

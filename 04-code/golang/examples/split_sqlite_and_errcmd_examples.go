@@ -52,14 +52,12 @@ func ExampleSplitSQLiteLogging(
 }
 
 // ExampleRotatingFileLogger demonstrates creating a rotating text logger with 2MB limit and archiving.
-func ExampleRotatingFileLogger(logDir string) (applogger.Logger, error) {
-	logFilePath := filepath.Join(logDir, "app-service.log")
-
+func ExampleRotatingFileLogger(logDir string) result.Wrap[applogger.Logger] {
 	cfg := applogger.Config{
 		MinLevel: applogger.LevelInfo,
 		Driver:   applogger.DriverRotatingFile,
 		Rotation: applogger.RotationConfig{
-			FilePath:         logFilePath,
+			FilePath:         filepath.Join(logDir, "app-service.log"),
 			MaxSizeBytes:     applogger.DefaultMaxSizeBytes, // 2 MB threshold
 			MaxBackups:       applogger.DefaultMaxBackups,   // 20 logs retained
 			IsArchiveEnabled: true,
@@ -73,22 +71,17 @@ func ExampleRotatingFileLogger(logDir string) (applogger.Logger, error) {
 
 // ExampleLazyOnceUsage demonstrates 0-param, 1-param, and 2-param memoization.
 func ExampleLazyOnceUsage() (string, int, *appfault.AppError) {
-	// Zero-param lazy initialization
-	lazyConfig := lazyonce.New(func() (string, *appfault.AppError) {
-		return "loaded-db-connection-string", nil
-	})
-
+	lazyConfig := lazyonce.New(func() (string, *appfault.AppError) { return "loaded-db-connection-string", nil })
 	cfgVal, cfgFault := lazyConfig.Value()
 	if cfgFault != nil {
 		return "", 0, cfgFault
 	}
 
-	// Single-param lazy initialization
-	lazyWorker := lazyonce.New1(func(workerCount int) (int, *appfault.AppError) {
-		return workerCount * 2, nil
-	})
-
-	workerTotal, _ := lazyWorker.Value(4)
+	lazyWorker := lazyonce.New1(func(n int) (int, *appfault.AppError) { return n * 2, nil })
+	workerTotal, workerFault := lazyWorker.Value(4)
+	if workerFault != nil {
+		return "", 0, workerFault
+	}
 
 	return cfgVal, workerTotal, nil
 }
@@ -186,23 +179,19 @@ func ExampleLazyOnceContextAndReset(ctx context.Context) (string, *appfault.AppE
 	return val, nil
 }
 
+func isBatchReady(batch []applogger.LogEntry, elapsed time.Duration, c applogger.ApiConfig) bool {
+	return len(batch) >= c.BatchSize || elapsed >= c.FlushInterval
+}
+
 // ExampleApiManagerRemoteLogging configures remote logging with custom headers and flush intervals.
-func ExampleApiManagerRemoteLogging(endpoint string) (*applogger.ApiManager, error) {
+func ExampleApiManagerRemoteLogging(endpoint string) result.Wrap[*applogger.ApiManager] {
 	cfg := applogger.ApiConfig{
-		Endpoint:      endpoint,
-		Headers:       map[string]string{"Authorization": "Bearer secret-token"},
-		BatchSize:     50,
-		FlushInterval: 10 * time.Second,
+		Endpoint:       endpoint,
+		Headers:        map[string]string{"Authorization": "Bearer secret-token"},
+		BatchSize:      50,
+		FlushInterval:  10 * time.Second,
+		RotationPolicy: isBatchReady,
 	}
 
-	mgr, err := applogger.NewApiManager(cfg)
-	if err != nil {
-		return nil, err
-	}
-
-	mgr.SetRotationPolicy(func(batch []applogger.LogEntry, elapsed time.Duration, c applogger.ApiConfig) bool {
-		return len(batch) >= c.BatchSize || elapsed >= c.FlushInterval
-	})
-
-	return mgr, nil
+	return applogger.NewApiManager(cfg)
 }

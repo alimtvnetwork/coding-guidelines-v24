@@ -679,11 +679,24 @@ func (j JsonResult) Unwrap() ([]byte, *appfault.AppError) {
 	return j.data, j.appError
 }
 
-// Pretty returns formatted and indented JSON.
+// Pretty returns formatted and indented JSON, falling back to raw data on formatting error.
 func (j JsonResult) Pretty() string {
-	str, _ := j.PrettyOrError()
+	str, err := j.PrettyOrError()
+	if err != nil {
+		return string(j.data)
+	}
 
 	return str
+}
+
+// PrettyResult returns formatted and indented JSON in a result wrapper.
+func (j JsonResult) PrettyResult() appfault.Result[string] {
+	str, err := j.PrettyOrError()
+	if err != nil {
+		return appfault.Fail[string](err)
+	}
+
+	return appfault.Ok(str)
 }
 
 // PrettyOrError returns formatted JSON or an AppError if indentation fails.
@@ -701,11 +714,24 @@ func (j JsonResult) PrettyOrError() (string, *appfault.AppError) {
 	return out.String(), nil
 }
 
-// Compact returns minified JSON without whitespace.
+// Compact returns minified JSON without whitespace, falling back to raw data on error.
 func (j JsonResult) Compact() string {
-	str, _ := j.CompactOrError()
+	str, err := j.CompactOrError()
+	if err != nil {
+		return string(j.data)
+	}
 
 	return str
+}
+
+// CompactResult returns minified JSON in a result wrapper.
+func (j JsonResult) CompactResult() appfault.Result[string] {
+	str, err := j.CompactOrError()
+	if err != nil {
+		return appfault.Fail[string](err)
+	}
+
+	return appfault.Ok(str)
 }
 
 // CompactOrError returns minified JSON or an AppError if compaction fails.

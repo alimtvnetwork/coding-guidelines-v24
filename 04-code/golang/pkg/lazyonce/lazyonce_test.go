@@ -78,8 +78,8 @@ func TestLazyOnce_Reset(t *testing.T) {
 		return int(count), nil
 	})
 
-	val1, _ := lazy.Value()
-	if val1 != 1 {
+	val1, fault1 := lazy.Value()
+	if fault1 != nil || val1 != 1 {
 		t.Fatalf("expected 1, got %d", val1)
 	}
 
@@ -88,8 +88,8 @@ func TestLazyOnce_Reset(t *testing.T) {
 		t.Fatalf("expected not evaluated after reset")
 	}
 
-	val2, _ := lazy.Value()
-	if val2 != 2 {
+	val2, fault2 := lazy.Value()
+	if fault2 != nil || val2 != 2 {
 		t.Fatalf("expected 2, got %d", val2)
 	}
 }
@@ -107,8 +107,8 @@ func TestLazyOnce1_SingleParameter(t *testing.T) {
 		t.Fatalf("expected 50, got %d", val1)
 	}
 
-	val2, _ := lazy.Value(99)
-	if val2 != 50 {
+	val2, fault2 := lazy.Value(99)
+	if fault2 != nil || val2 != 50 {
 		t.Fatalf("expected cached 50, got %d", val2)
 	}
 
@@ -135,8 +135,8 @@ func TestLazyOnce2_TwoParameters(t *testing.T) {
 		t.Fatalf("expected hello!, got %s", val1)
 	}
 
-	val2, _ := lazy.Value("ignored", 0)
-	if val2 != "hello!" {
+	val2, fault2 := lazy.Value("ignored", 0)
+	if fault2 != nil || val2 != "hello!" {
 		t.Fatalf("expected cached hello!, got %s", val2)
 	}
 
@@ -216,8 +216,8 @@ func testLazyOnce1Reset(t *testing.T, lazy *lazyonce.LazyOnce1[int, int]) {
 		t.Fatal("expected not evaluated after reset")
 	}
 
-	val, _ := lazy.Value(5)
-	if val != 10 {
+	val, fault := lazy.Value(5)
+	if fault != nil || val != 10 {
 		t.Fatalf("expected 10 after reset, got %d", val)
 	}
 }

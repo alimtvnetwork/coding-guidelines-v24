@@ -1,6 +1,10 @@
 package applogger
 
-import "os"
+import (
+	"os"
+
+	"coding-guidelines/common/pkg/result"
+)
 
 // Config configures the logger instance.
 type Config struct {
@@ -15,44 +19,55 @@ type Config struct {
 }
 
 // createSinkFromDriver instantiates the requested driver sink.
-func createSinkFromDriver(cfg Config) (LogSink, error) {
+func createSinkFromDriver(cfg Config) result.Wrap[LogSink] {
 	switch cfg.Driver {
 	case DriverFile:
-		return NewFileSink(cfg.FilePath)
+		res := NewFileSink(cfg.FilePath)
+		if res.IsFailed() {
+			return result.FailureFromWrap[LogSink](res)
+		}
+
+		return result.WrapSuccess[LogSink](res.Data())
 	case DriverRotatingFile:
-		return NewRotatingFileSink(cfg.Rotation)
+		res := NewRotatingFileSink(cfg.Rotation)
+		if res.IsFailed() {
+			return result.FailureFromWrap[LogSink](res)
+		}
+
+		return result.WrapSuccess[LogSink](res.Data())
 	case DriverZap:
-		return NewZapAdapter(cfg.ZapLogger), nil
+		return result.WrapSuccess[LogSink](NewZapAdapter(cfg.ZapLogger))
 	case DriverComposite:
-		return NewCompositeSink(cfg.Sinks...), nil
-	case DriverConsole:
-		return NewConsoleSink(os.Stdout, cfg.IsUseJSON), nil
+		return result.WrapSuccess[LogSink](NewCompositeSink(cfg.Sinks...))
 	default:
-		return NewConsoleSink(os.Stdout, cfg.IsUseJSON), nil
+		return result.WrapSuccess[LogSink](NewConsoleSink(os.Stdout, cfg.IsUseJSON))
 	}
 }
 
 // New constructs a Logger using the requested configuration and sink driver.
-func New(cfg Config) (Logger, error) {
-	sink, err := createSinkFromDriver(cfg)
-	if err != nil {
-		return nil, err
+func New(cfg Config) result.Wrap[Logger] {
+	sinkRes := createSinkFromDriver(cfg)
+	if sinkRes.IsFailed() {
+		return result.FailureFromWrap[Logger](sinkRes)
 	}
 
-	return &appLogger{
+	return result.WrapSuccess[Logger](&appLogger{
 		minLevel: cfg.MinLevel,
-		sink:     sink,
+		sink:     sinkRes.Data(),
 		fields:   nil,
-	}, nil
+	})
 }
 
-// Default returns a standard Console logger at Info level.
-func Default() Logger {
-	l, _ := New(Config{
+// Default returns a standard Console logger at Info level wrapped in a Result.
+func Default() result.Wrap[Logger] {
+	return New(Config{
 		MinLevel:  LevelInfo,
 		Driver:    DriverConsole,
 		IsUseJSON: false,
 	})
+}
 
-	return l
+// MustDefault returns a standard Console logger at Info level.
+func MustDefault() Logger {
+	return Default().Data()
 }

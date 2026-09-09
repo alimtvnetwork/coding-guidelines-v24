@@ -12,6 +12,7 @@ import (
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/applogger"
 	"coding-guidelines/common/pkg/enum/logleveltype"
+	"coding-guidelines/common/pkg/errtype"
 )
 
 type mockSenderRecord struct {
@@ -31,7 +32,10 @@ func TestApiSink_BatchRotation(t *testing.T) {
 		payload []byte,
 	) *appfault.AppError {
 		var entries []applogger.LogEntry
-		_ = json.Unmarshal(payload, &entries)
+		if err := json.Unmarshal(payload, &entries); err != nil {
+			return appfault.Wrap(errtype.Serialization, err, "failed to unmarshal payload")
+		}
+
 		mu.Lock()
 		sentBatches = append(sentBatches, entries)
 		mu.Unlock()
@@ -39,12 +43,17 @@ func TestApiSink_BatchRotation(t *testing.T) {
 		return nil
 	}
 
-	sink, _ := applogger.NewApiSink(applogger.ApiConfig{
+	sinkRes := applogger.NewApiSink(applogger.ApiConfig{
 		Endpoint:      "https://example.com/logs",
 		BatchSize:     3,
 		FlushInterval: 0,
 		Sender:        mockSender,
 	})
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to create api sink: %v", sinkRes.Fault())
+	}
+
+	sink := sinkRes.Data()
 	defer sink.Close()
 
 	for i := 0; i < 5; i++ {
@@ -73,7 +82,7 @@ func TestApiSink_CustomRotationPolicy(t *testing.T) {
 		return false
 	}
 
-	sink, _ := applogger.NewApiSink(applogger.ApiConfig{
+	sinkRes := applogger.NewApiSink(applogger.ApiConfig{
 		BatchSize:      100,
 		RotationPolicy: policy,
 		Sender: func(ctx context.Context, endpoint string, h map[string]string, p []byte) *appfault.AppError {
@@ -82,6 +91,11 @@ func TestApiSink_CustomRotationPolicy(t *testing.T) {
 			return nil
 		},
 	})
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to create api sink: %v", sinkRes.Fault())
+	}
+
+	sink := sinkRes.Data()
 	defer sink.Close()
 
 	_ = sink.WriteEntry(applogger.LogEntry{Level: logleveltype.Info, Message: "normal"})
@@ -96,10 +110,15 @@ func TestApiSink_CustomRotationPolicy(t *testing.T) {
 }
 
 func TestApiSink_SenderOverrideAndHeaders(t *testing.T) {
-	sink, _ := applogger.NewApiSink(applogger.ApiConfig{
+	sinkRes := applogger.NewApiSink(applogger.ApiConfig{
 		Endpoint: "http://api.local/logs",
 		Headers:  map[string]string{"X-Auth": "token-123"},
 	})
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to create api sink: %v", sinkRes.Fault())
+	}
+
+	sink := sinkRes.Data()
 	defer sink.Close()
 
 	capturedHeader := ""
@@ -137,13 +156,14 @@ func TestApiSink_DefaultHttpSender(t *testing.T) {
 }
 
 func TestApiManager_AliasConstructor(t *testing.T) {
-	mgr, err := applogger.NewApiManager(applogger.ApiConfig{
+	mgrRes := applogger.NewApiManager(applogger.ApiConfig{
 		Endpoint: "http://localhost:8080",
 	})
-	if err != nil || mgr == nil {
-		t.Fatalf("failed to create api manager: %v", err)
+	if mgrRes.IsFailed() || mgrRes.Data() == nil {
+		t.Fatalf("failed to create api manager: %v", mgrRes.Fault())
 	}
 
+	mgr := mgrRes.Data()
 	defer mgr.Close()
 	if mgr.BufferedCount() != 0 {
 		t.Fatalf("expected 0 buffered entries")

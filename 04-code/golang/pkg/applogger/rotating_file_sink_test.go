@@ -20,11 +20,12 @@ func TestRotatingFileSink_RotatesOnSizeThreshold(t *testing.T) {
 		IsArchiveEnabled: false,
 	}
 
-	sink, err := applogger.NewRotatingFileSink(cfg)
-	if err != nil {
-		t.Fatalf("failed to create sink: %v", err)
+	sinkRes := applogger.NewRotatingFileSink(cfg)
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to create sink: %v", sinkRes.Fault())
 	}
 
+	sink := sinkRes.Data()
 	defer sink.Close()
 
 	entry := applogger.LogEntry{
@@ -66,11 +67,12 @@ func TestRotatingFileSink_ArchivesAndCompresses(t *testing.T) {
 		IsCompress:       true,
 	}
 
-	sink, err := applogger.NewRotatingFileSink(cfg)
-	if err != nil {
-		t.Fatalf("failed to create sink: %v", err)
+	sinkRes := applogger.NewRotatingFileSink(cfg)
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to create sink: %v", sinkRes.Fault())
 	}
 
+	sink := sinkRes.Data()
 	defer sink.Close()
 
 	entry := applogger.LogEntry{
@@ -118,11 +120,12 @@ func TestRotatingFileSink_PrunesExcessBackups(t *testing.T) {
 		IsArchiveEnabled: false,
 	}
 
-	sink, err := applogger.NewRotatingFileSink(cfg)
-	if err != nil {
-		t.Fatalf("failed to create sink: %v", err)
+	sinkRes := applogger.NewRotatingFileSink(cfg)
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to create sink: %v", sinkRes.Fault())
 	}
 
+	sink := sinkRes.Data()
 	defer sink.Close()
 
 	entry := applogger.LogEntry{
@@ -160,10 +163,12 @@ func TestRotatingFileSink_DriverCreation(t *testing.T) {
 		},
 	}
 
-	l, err := applogger.New(cfg)
-	if err != nil {
-		t.Fatalf("failed to create logger with DriverRotatingFile: %v", err)
+	loggerRes := applogger.New(cfg)
+	if loggerRes.IsFailed() {
+		t.Fatalf("failed to create logger with DriverRotatingFile: %v", loggerRes.Fault())
 	}
+
+	l := loggerRes.Data()
 
 	l.Info("testing rotating file driver")
 	_ = l.Close()

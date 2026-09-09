@@ -287,8 +287,8 @@ func TestToJson_Success(t *testing.T) {
 		t.Fatalf("expected %q, got %q", expected, string(b))
 	}
 
-	bAlias, _ := ToJSON(p)
-	if string(bAlias) != expected {
+	bAlias, errAlias := ToJSON(p)
+	if errAlias != nil || string(bAlias) != expected {
 		t.Fatalf("expected alias ToJSON %q, got %q", expected, string(bAlias))
 	}
 }
@@ -313,8 +313,8 @@ func TestToJsonString_Success(t *testing.T) {
 		t.Fatalf("expected %q, got %q", expected, s)
 	}
 
-	sAlias, _ := ToJSONString(p)
-	if sAlias != expected {
+	sAlias, errAlias := ToJSONString(p)
+	if errAlias != nil || sAlias != expected {
 		t.Fatalf("expected alias ToJSONString %q, got %q", expected, sAlias)
 	}
 }

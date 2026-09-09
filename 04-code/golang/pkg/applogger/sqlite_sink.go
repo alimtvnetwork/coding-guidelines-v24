@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"sync"
+
+	"coding-guidelines/common/pkg/errtype"
+	"coding-guidelines/common/pkg/result"
 )
 
 // SQLiteSink writes structured log entries to an SQLite table.
@@ -13,13 +16,13 @@ type SQLiteSink struct {
 }
 
 // NewSQLiteSink creates and initializes the SQLite logging table.
-func NewSQLiteSink(db *sql.DB) (*SQLiteSink, error) {
+func NewSQLiteSink(db *sql.DB) result.Wrap[*SQLiteSink] {
 	sink := &SQLiteSink{db: db}
 	if err := sink.initTable(); err != nil {
-		return nil, err
+		return result.WrapFailureWithCause[*SQLiteSink](errtype.Database, err, "failed to initialize SQLite logs table")
 	}
 
-	return sink, nil
+	return result.WrapSuccess(sink)
 }
 
 // initTable ensures the log table exists.
@@ -42,11 +45,15 @@ func (ss *SQLiteSink) WriteEntry(e LogEntry) error {
 	ss.lock.Lock()
 	defer ss.lock.Unlock()
 
-	fieldsJSON, _ := json.Marshal(e.Fields)
-	query := `INSERT INTO app_logs (timestamp, level, message, caller, fields_json, stack_trace) VALUES (?, ?, ?, ?, ?, ?)`
-	_, err := ss.db.Exec(query, e.Timestamp, e.Level.Name(), e.Message, e.Caller, string(fieldsJSON), e.Stack)
+	fieldsJSON, err := json.Marshal(e.Fields)
+	if err != nil {
+		return err
+	}
 
-	return err
+	query := `INSERT INTO app_logs (timestamp, level, message, caller, fields_json, stack_trace) VALUES (?, ?, ?, ?, ?, ?)`
+	_, execErr := ss.db.Exec(query, e.Timestamp, e.Level.Name(), e.Message, e.Caller, string(fieldsJSON), e.Stack)
+
+	return execErr
 }
 
 // Sync is a no-op for SQLite transactions.

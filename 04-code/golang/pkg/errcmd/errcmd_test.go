@@ -6,7 +6,6 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"io"
-	"os"
 	"runtime"
 	"strings"
 	"sync"
@@ -173,55 +172,55 @@ func TestSafeDefer_ClosesAndRecovers(t *testing.T) {
 	}
 }
 
+func initTestTelemetryRunner(t *testing.T, tempDir string) (*errcmd.CommandRunner, *sqlitelogger.SplitDBManager) {
+	mgr, fault := sqlitelogger.NewSplitDBManager(tempDir, getCmdMockOpener())
+	if fault != nil {
+		t.Fatalf("failed to create db mgr: %v", fault)
+	}
+
+	taskLogger, tFault := sqlitelogger.NewTaskLogger("task-runner-01", mgr)
+	if tFault != nil {
+		t.Fatalf("failed to create task logger: %v", tFault)
+	}
+
+	builder := errcmd.NewScriptBuilder().AddLine("echo 'telemetry-ok'")
+	runner := errcmd.NewRunner(builder).WithTaskLogger(taskLogger).WithSplitDB(mgr, "task-runner-01").WithTimeout(10 * time.Second)
+
+	return runner, mgr
+}
+
 func TestCommandRunner_ExecutionAndTelemetry(t *testing.T) {
-	tempDir := t.TempDir()
-	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, getCmdMockOpener())
+	runner, mgr := initTestTelemetryRunner(t, t.TempDir())
 	defer mgr.Close()
 
-	taskLogger, _ := sqlitelogger.NewTaskLogger("task-runner-01", mgr)
-
-	// Build a cross-platform command
-	builder := errcmd.NewScriptBuilder().
-		AddLine("echo 'telemetry-ok'")
-
-	runner := errcmd.NewRunner(builder).
-		WithTaskLogger(taskLogger).
-		WithSplitDB(mgr, "task-runner-01").
-		WithTimeout(10 * time.Second)
-
-	ctx := context.Background()
-	res, fault := runner.Run(ctx)
+	res, fault := runner.Run(context.Background())
 	if fault != nil {
 		t.Fatalf("command failed unexpectedly: %s", fault.Message())
 	}
 
-	if !res.IsSuccess || res.ExitCode != 0 {
-		t.Fatalf("expected success, got exit=%d, out=%s, err=%s", res.ExitCode, res.Stdout, res.Stderr)
-	}
-
-	if !strings.Contains(res.Stdout, "telemetry-ok") {
-		t.Fatalf("expected output to contain telemetry-ok, got %s", res.Stdout)
+	if !res.IsSuccess || res.ExitCode != 0 || !strings.Contains(res.Stdout, "telemetry-ok") {
+		t.Fatalf("expected success with telemetry-ok, got exit=%d, out=%s", res.ExitCode, res.Stdout)
 	}
 }
 
 func TestCommandLogger_Helpers(t *testing.T) {
 	tempDir := t.TempDir()
-	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, getCmdMockOpener())
+	mgr, fault := sqlitelogger.NewSplitDBManager(tempDir, getCmdMockOpener())
+	if fault != nil {
+		t.Fatalf("failed to create db mgr: %v", fault)
+	}
+
 	defer mgr.Close()
 
-	taskLogger, _ := sqlitelogger.NewTaskLogger("helper-task", mgr)
-	ctx := context.Background()
-
-	res, fault := errcmd.RunAutoWithTaskLog(ctx, "echo 'auto-test'", taskLogger)
-	if fault != nil {
-		t.Fatalf("auto run failed: %s", fault.Message())
+	taskLogger, tFault := sqlitelogger.NewTaskLogger("helper-task", mgr)
+	if tFault != nil {
+		t.Fatalf("failed to create task logger: %v", tFault)
 	}
 
-	if !res.IsSuccess {
-		t.Fatalf("expected success on auto run")
+	res, runFault := errcmd.RunAutoWithTaskLog(context.Background(), "echo 'auto-test'", taskLogger)
+	if runFault != nil || !res.IsSuccess {
+		t.Fatalf("auto run failed: %v", runFault)
 	}
-
-	_ = os.Getenv
 }
 
 func TestCommandRunner_StreamingStdout(t *testing.T) {
@@ -309,7 +308,11 @@ func TestCommandRunner_WithStderrHandler(t *testing.T) {
 		}).
 		WithTimeout(10 * time.Second)
 
-	res, _ := runner.Run(context.Background())
+	res, fault := runner.Run(context.Background())
+	if fault != nil {
+		t.Fatalf("runner.Run failed: %v", fault)
+	}
+
 	verifyStderrLines(t, errLines, res)
 }
 

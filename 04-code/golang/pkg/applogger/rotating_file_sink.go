@@ -13,7 +13,9 @@ import (
 	"time"
 
 	"coding-guidelines/common/pkg/enum/filepermtype"
+	"coding-guidelines/common/pkg/errtype"
 	"coding-guidelines/common/pkg/fileutil"
+	"coding-guidelines/common/pkg/result"
 )
 
 // RotatingFileSink manages an active log file with size-based rotation.
@@ -25,18 +27,19 @@ type RotatingFileSink struct {
 }
 
 // NewRotatingFileSink initializes a rotating file sink from configuration.
-func NewRotatingFileSink(cfg RotationConfig) (*RotatingFileSink, error) {
+func NewRotatingFileSink(cfg RotationConfig) result.Wrap[*RotatingFileSink] {
 	cfg.Normalize()
-	if err := fileutil.EnsureDir(filepath.Dir(cfg.FilePath), filepermtype.Standard).Fault(); err != nil {
-		return nil, err
+	resDir := fileutil.EnsureDir(filepath.Dir(cfg.FilePath), filepermtype.Standard)
+	if resDir.IsFailed() {
+		return result.FailureFromWrap[*RotatingFileSink](resDir)
 	}
 
 	sink := &RotatingFileSink{cfg: cfg}
 	if err := sink.openActiveFile(); err != nil {
-		return nil, err
+		return result.WrapFailureWithCause[*RotatingFileSink](errtype.IO, err, "failed to open active rotating log file")
 	}
 
-	return sink, nil
+	return result.WrapSuccess(sink)
 }
 
 // openActiveFile opens or creates the active log file and seeds currentSize.

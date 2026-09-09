@@ -28,10 +28,12 @@ func TestRotatingFileSink_E2E_RotationAndCompression(t *testing.T) {
 		IsCompress:       true,
 	}
 
-	sink, err := applogger.NewRotatingFileSink(cfg)
-	if err != nil {
-		t.Fatalf("failed to instantiate rotating sink: %v", err)
+	sinkRes := applogger.NewRotatingFileSink(cfg)
+	if sinkRes.IsFailed() {
+		t.Fatalf("failed to instantiate rotating sink: %v", sinkRes.Fault())
 	}
+
+	sink := sinkRes.Data()
 
 	writeBatchOfEntries(t, sink, 8)
 	_ = sink.Sync()

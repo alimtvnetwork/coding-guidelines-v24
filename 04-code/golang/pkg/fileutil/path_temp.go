@@ -91,7 +91,10 @@ func hostTempCandidates() []string {
 		return darwinTempCandidates(os.Getenv)
 	}
 
-	home, _ := os.UserHomeDir()
+	home, err := os.UserHomeDir()
+	if err != nil {
+		home = ""
+	}
 
 	return linuxTempCandidates(os.Getenv, home, isDirectoryExists)
 }

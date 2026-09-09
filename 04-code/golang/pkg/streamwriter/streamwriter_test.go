@@ -1056,3 +1056,22 @@ func TestJsonPayloadResult_AsSimpleVerifier(t *testing.T) {
 		t.Fatal("expected JsonPayloadResult checker to be defined")
 	}
 }
+
+func TestJsonResult_PrettyAndCompactResult(t *testing.T) {
+	raw := []byte(`{"name":"Alice","age":30}`)
+	res := streamwriter.NewJsonResultWithBytes(raw)
+
+	pRes := res.PrettyResult()
+	if pRes.AppError != nil || !strings.Contains(pRes.Data(), "\n") {
+		t.Fatalf("expected formatted pretty JSON, got: %s", pRes.Data())
+	}
+
+	cRes := res.CompactResult()
+	if cRes.AppError != nil || strings.Contains(cRes.Data(), "\n") {
+		t.Fatalf("expected compact JSON, got: %s", cRes.Data())
+	}
+
+	if res.Pretty() == "" || res.Compact() == "" {
+		t.Fatalf("expected non-empty pretty and compact string outputs")
+	}
+}

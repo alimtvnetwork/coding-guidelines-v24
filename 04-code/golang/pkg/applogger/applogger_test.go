@@ -19,9 +19,12 @@ func newTestConsoleLogger(buf *bytes.Buffer, isUseJSON bool) applogger.Logger {
 		Sinks:    []applogger.LogSink{sink},
 	}
 
-	l, _ := applogger.New(cfg)
+	res := applogger.New(cfg)
+	if res.IsFailed() {
+		panic(res.Fault())
+	}
 
-	return l
+	return res.Data()
 }
 
 func TestConsoleSinkLogger(t *testing.T) {

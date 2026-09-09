@@ -56,8 +56,8 @@ func TestFileWriter_BehaviorShifting(t *testing.T) {
 		t.Fatalf("truncate write failed: %v", err)
 	}
 
-	content, _ = os.ReadFile(targetPath)
-	if string(content) != "Truncated Content" {
+	content, readErr = os.ReadFile(targetPath)
+	if readErr != nil || string(content) != "Truncated Content" {
 		t.Fatalf("unexpected content after truncate shift: %s", string(content))
 	}
 }

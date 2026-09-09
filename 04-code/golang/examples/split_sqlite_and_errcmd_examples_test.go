@@ -70,11 +70,12 @@ func TestExamples_SplitSQLiteLogging(t *testing.T) {
 
 func TestExamples_RotatingFileLogger(t *testing.T) {
 	tempDir := t.TempDir()
-	l, err := examples.ExampleRotatingFileLogger(tempDir)
-	if err != nil {
-		t.Fatalf("ExampleRotatingFileLogger failed: %v", err)
+	res := examples.ExampleRotatingFileLogger(tempDir)
+	if res.IsFailed() {
+		t.Fatalf("ExampleRotatingFileLogger failed: %v", res.Fault())
 	}
 
+	l := res.Data()
 	l.Info("example log message")
 	_ = l.Close()
 }
@@ -91,18 +92,16 @@ func TestExamples_LazyOnceUsage(t *testing.T) {
 }
 
 func TestExamples_CommandRunWithTelemetry(t *testing.T) {
-	tempDir := t.TempDir()
-	mgr, _ := sqlitelogger.NewSplitDBManager(tempDir, getExOpener())
-	defer mgr.Close()
-
-	ctx := context.Background()
-	res := examples.ExampleCommandRunWithTelemetry(ctx, "deploy-task-01", mgr)
-	if res.IsFailed() {
-		t.Fatalf("ExampleCommandRunWithTelemetry failed: %s", res.Fault().Message())
+	mgr, fault := sqlitelogger.NewSplitDBManager(t.TempDir(), getExOpener())
+	if fault != nil {
+		t.Fatalf("failed to create db mgr: %v", fault)
 	}
 
-	if !res.Data().IsSuccess {
-		t.Fatalf("expected command success")
+	defer mgr.Close()
+
+	res := examples.ExampleCommandRunWithTelemetry(context.Background(), "deploy-task-01", mgr)
+	if res.IsFailed() || !res.Data().IsSuccess {
+		t.Fatalf("expected command success, fault: %v", res.Fault())
 	}
 }
 
@@ -174,11 +173,12 @@ func TestExamples_LazyOnceContextAndReset(t *testing.T) {
 }
 
 func TestExamples_ApiManagerRemoteLogging(t *testing.T) {
-	mgr, err := examples.ExampleApiManagerRemoteLogging("https://logs.example.internal")
-	if err != nil {
-		t.Fatalf("ExampleApiManagerRemoteLogging failed: %v", err)
+	res := examples.ExampleApiManagerRemoteLogging("https://logs.example.internal")
+	if res.IsFailed() {
+		t.Fatalf("ExampleApiManagerRemoteLogging failed: %v", res.Fault())
 	}
 
+	mgr := res.Data()
 	defer mgr.Close()
 	if mgr.BufferedCount() != 0 {
 		t.Fatalf("expected 0 initial buffered logs")
