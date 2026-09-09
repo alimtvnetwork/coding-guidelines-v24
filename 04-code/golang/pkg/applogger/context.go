@@ -9,35 +9,68 @@ type ContextKey string
 
 const (
 	// RequestIDKey is the standard context key for request tracking.
-	RequestIDKey ContextKey = "request_id"
+	RequestIDKey ContextKey = "RequestId"
 	// TraceIDKey is the standard context key for distributed trace tracking.
-	TraceIDKey ContextKey = "trace_id"
+	TraceIDKey ContextKey = "TraceId"
 	// UserIDKey is the standard context key for the authenticated user ID.
-	UserIDKey ContextKey = "user_id"
+	UserIDKey ContextKey = "UserId"
+
+	// RequestIdKey is a PascalCase alias for RequestIDKey.
+	RequestIdKey = RequestIDKey
+	// TraceIdKey is a PascalCase alias for TraceIDKey.
+	TraceIdKey = TraceIDKey
+	// UserIdKey is a PascalCase alias for UserIDKey.
+	UserIdKey = UserIDKey
 )
 
-// ExtractContextFields retrieves standard observability fields from the context.
-// It returns a map of available fields, skipping any that are not present.
+// ExtractContextFields retrieves standard observability fields from context.
 func ExtractContextFields(ctx context.Context) map[string]any {
 	fields := make(map[string]any)
-
-	if reqID, ok := ctx.Value(RequestIDKey).(string); ok && reqID != "" {
-		fields[string(RequestIDKey)] = reqID
-	}
-
-	if traceID, ok := ctx.Value(TraceIDKey).(string); ok && traceID != "" {
-		fields[string(TraceIDKey)] = traceID
-	}
-
-	if userID, ok := ctx.Value(UserIDKey).(string); ok && userID != "" {
-		fields[string(UserIDKey)] = userID
-	}
+	extractField(ctx, RequestIDKey, fields, "RequestID", "request_id")
+	extractField(ctx, TraceIDKey, fields, "TraceID", "trace_id")
+	extractField(ctx, UserIDKey, fields, "UserID", "user_id")
 
 	return fields
 }
 
+// extractField sets the field value if found in context.
+func extractField(ctx context.Context, key ContextKey, fields map[string]any, alts ...string) {
+	val := resolveContextValue(ctx, key, alts...)
+	if val != "" {
+		fields[string(key)] = val
+	}
+}
+
+// resolveContextValue searches for a string value by key and alternate names.
+func resolveContextValue(ctx context.Context, key ContextKey, alts ...string) string {
+	if val, ok := ctx.Value(key).(string); ok && val != "" {
+		return val
+	}
+
+	if val, ok := ctx.Value(string(key)).(string); ok && val != "" {
+		return val
+	}
+
+	return resolveFallbackValues(ctx, alts...)
+}
+
+// resolveFallbackValues checks alternate key variants in context.
+func resolveFallbackValues(ctx context.Context, alts ...string) string {
+	for _, alt := range alts {
+		if val, ok := ctx.Value(alt).(string); ok && val != "" {
+			return val
+		}
+
+		if val, ok := ctx.Value(ContextKey(alt)).(string); ok && val != "" {
+			return val
+		}
+	}
+
+	return ""
+}
+
 // FromContext creates a child Logger that inherits standard observability fields
-// (like request_id, trace_id, and user_id) directly from the provided context.Context.
+// (like RequestId, TraceId, and UserId) directly from the provided context.Context.
 // If the context is nil, it simply returns the unmodified logger.
 func FromContext(ctx context.Context, logger Logger) Logger {
 	if ctx == nil || logger == nil {
@@ -49,7 +82,5 @@ func FromContext(ctx context.Context, logger Logger) Logger {
 		return logger
 	}
 
-	childLogger := logger.WithFields(fields)
-
-	return childLogger
+	return logger.WithFields(fields)
 }
