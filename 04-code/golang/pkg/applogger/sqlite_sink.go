@@ -16,13 +16,13 @@ type SQLiteSink struct {
 }
 
 // NewSQLiteSink creates and initializes the SQLite logging table.
-func NewSQLiteSink(db *sql.DB) result.Wrap[*SQLiteSink] {
+func NewSQLiteSink(db *sql.DB) SQLiteSinkResult {
 	sink := &SQLiteSink{db: db}
 	if err := sink.initTable(); err != nil {
 		return result.WrapFailureWithCause[*SQLiteSink](errtype.Database, err, "failed to initialize SQLite logs table")
 	}
 
-	return result.WrapSuccess(sink)
+	return SQLiteSinkSuccess(sink)
 }
 
 // initTable ensures the log table exists.

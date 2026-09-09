@@ -11,7 +11,6 @@ import (
 
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/result"
 )
 
 // ApiLogSenderFunc defines pluggable network transmission for serialized log batches.
@@ -74,7 +73,7 @@ type ApiSink struct {
 type ApiManager = ApiSink
 
 // NewApiSink constructs an active remote API logging sink.
-func NewApiSink(cfg ApiConfig) result.Wrap[*ApiSink] {
+func NewApiSink(cfg ApiConfig) ApiSinkResult {
 	cfg.normalize()
 	sink := &ApiSink{
 		cfg:            cfg,
@@ -87,11 +86,11 @@ func NewApiSink(cfg ApiConfig) result.Wrap[*ApiSink] {
 
 	sink.startBackgroundFlusher()
 
-	return result.WrapSuccess(sink)
+	return ApiSinkSuccess(sink)
 }
 
 // NewApiManager instantiates an ApiManager instance.
-func NewApiManager(cfg ApiConfig) result.Wrap[*ApiManager] {
+func NewApiManager(cfg ApiConfig) ApiManagerResult {
 	return NewApiSink(cfg)
 }
 

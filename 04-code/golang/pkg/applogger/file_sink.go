@@ -9,7 +9,6 @@ import (
 	"coding-guidelines/common/pkg/enum/filepermtype"
 	"coding-guidelines/common/pkg/enum/openfiletype"
 	"coding-guidelines/common/pkg/fileutil"
-	"coding-guidelines/common/pkg/result"
 )
 
 // FileSink writes log entries to a file path.
@@ -20,18 +19,18 @@ type FileSink struct {
 }
 
 // openLogFile opens file using enum-driven fileutil utility wrapper.
-func openLogFile(filePath string) result.Wrap[*os.File] {
+func openLogFile(filePath string) fileutil.FileResult {
 	return fileutil.OpenFile(filePath, openfiletype.CreateAppend, filepermtype.Standard)
 }
 
 // NewFileSink creates and opens a log file sink.
-func NewFileSink(filePath string) result.Wrap[*FileSink] {
+func NewFileSink(filePath string) FileSinkResult {
 	wrap := openLogFile(filePath)
 	if wrap.IsFailed() {
-		return result.FailureFromWrap[*FileSink](wrap)
+		return FileSinkFailure(wrap)
 	}
 
-	return result.WrapSuccess(&FileSink{filePath: filePath, file: wrap.Data()})
+	return FileSinkSuccess(&FileSink{filePath: filePath, file: wrap.Data()})
 }
 
 // WriteEntry serializes and writes entry to file.

@@ -1,10 +1,6 @@
 package applogger
 
-import (
-	"os"
-
-	"coding-guidelines/common/pkg/result"
-)
+import "os"
 
 // Config configures the logger instance.
 type Config struct {
@@ -19,39 +15,39 @@ type Config struct {
 }
 
 // createSinkFromDriver instantiates the requested driver sink.
-func createSinkFromDriver(cfg Config) result.Wrap[LogSink] {
+func createSinkFromDriver(cfg Config) LogSinkResult {
 	switch cfg.Driver {
 	case DriverFile:
 		res := NewFileSink(cfg.FilePath)
 		if res.IsFailed() {
-			return result.FailureFromWrap[LogSink](res)
+			return LogSinkFailure(res)
 		}
 
-		return result.WrapSuccess[LogSink](res.Data())
+		return LogSinkSuccess(res.Data())
 	case DriverRotatingFile:
 		res := NewRotatingFileSink(cfg.Rotation)
 		if res.IsFailed() {
-			return result.FailureFromWrap[LogSink](res)
+			return LogSinkFailure(res)
 		}
 
-		return result.WrapSuccess[LogSink](res.Data())
+		return LogSinkSuccess(res.Data())
 	case DriverZap:
-		return result.WrapSuccess[LogSink](NewZapAdapter(cfg.ZapLogger))
+		return LogSinkSuccess(NewZapAdapter(cfg.ZapLogger))
 	case DriverComposite:
-		return result.WrapSuccess[LogSink](NewCompositeSink(cfg.Sinks...))
+		return LogSinkSuccess(NewCompositeSink(cfg.Sinks...))
 	default:
-		return result.WrapSuccess[LogSink](NewConsoleSink(os.Stdout, cfg.IsUseJSON))
+		return LogSinkSuccess(NewConsoleSink(os.Stdout, cfg.IsUseJSON))
 	}
 }
 
 // New constructs a Logger using the requested configuration and sink driver.
-func New(cfg Config) result.Wrap[Logger] {
+func New(cfg Config) LoggerResult {
 	sinkRes := createSinkFromDriver(cfg)
 	if sinkRes.IsFailed() {
-		return result.FailureFromWrap[Logger](sinkRes)
+		return LoggerFailure(sinkRes)
 	}
 
-	return result.WrapSuccess[Logger](&appLogger{
+	return LoggerSuccess(&appLogger{
 		minLevel: cfg.MinLevel,
 		sink:     sinkRes.Data(),
 		fields:   nil,
@@ -59,7 +55,7 @@ func New(cfg Config) result.Wrap[Logger] {
 }
 
 // Default returns a standard Console logger at Info level wrapped in a Result.
-func Default() result.Wrap[Logger] {
+func Default() LoggerResult {
 	return New(Config{
 		MinLevel:  LevelInfo,
 		Driver:    DriverConsole,

@@ -27,11 +27,11 @@ type RotatingFileSink struct {
 }
 
 // NewRotatingFileSink initializes a rotating file sink from configuration.
-func NewRotatingFileSink(cfg RotationConfig) result.Wrap[*RotatingFileSink] {
+func NewRotatingFileSink(cfg RotationConfig) RotatingFileSinkResult {
 	cfg.Normalize()
 	resDir := fileutil.EnsureDir(filepath.Dir(cfg.FilePath), filepermtype.Standard)
 	if resDir.IsFailed() {
-		return result.FailureFromWrap[*RotatingFileSink](resDir)
+		return RotatingFileSinkFailure(resDir)
 	}
 
 	sink := &RotatingFileSink{cfg: cfg}
@@ -39,7 +39,7 @@ func NewRotatingFileSink(cfg RotationConfig) result.Wrap[*RotatingFileSink] {
 		return result.WrapFailureWithCause[*RotatingFileSink](errtype.IO, err, "failed to open active rotating log file")
 	}
 
-	return result.WrapSuccess(sink)
+	return RotatingFileSinkSuccess(sink)
 }
 
 // openActiveFile opens or creates the active log file and seeds currentSize.
