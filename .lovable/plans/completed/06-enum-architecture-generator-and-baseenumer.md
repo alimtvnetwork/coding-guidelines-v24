@@ -1,13 +1,12 @@
-# Milestone Summary: Enum Architecture & BaseEnumer Foundation
+# Milestone Summary: Enum Architecture, Scaffolder CLI & BaseEnumer Foundation
 
-## 1. Executive Overview & Scope
+## 1. Executive Overview & Consolidated Tasks
 
-- **Milestone Theme:** Modular 1:1 Enum Isolation, Dedicated Packages, DRY Marshaling, Min/Max Boundaries, Leaf Parse Helpers, Cycle Elimination & 100% Test Coverage
-- **Original Subtasks Merged:** `21-repo-wide-enum-isolation.md`, `22-bytetype-package-and-baseenumer-consolidation.md`, `23-errtype-enum-folder-isolation.md`, `24-filepermtype-enum-package.md`, `25-enum-packages-isolation.md`, `26-prune-enum-const-aliases-and-enumer-types.md`, `27-direct-result-types-consolidation.md`, `28-dry-enum-marshaling-and-scaffolder.md`, `31-basic-enum-reusability-and-reflection-unmarshal.md`, `33-enum-min-max-methods-and-baseenumer-enhancement.md`, `14-reduce-baseenumer-and-remove-enum-result-wrap.md`, `15-comprehensive-tests-for-enums-and-baseenumer.md`
+- **Milestone Domain:** Modular 1:1 Enum Isolation, Dedicated Packages, DRY Marshaling, Min/Max Boundaries, Leaf Parse Helpers, Cycle Elimination & Smart Scaffolder CLI
+- **Original Tasks Merged:** `06-enum-architecture-and-baseenumer-foundation.md`, Plan 36 (Enum generator parts), and subtasks `14-reduce-baseenumer...`, `15-comprehensive-tests...`, `21-repo-wide-enum...`, `22-bytetype-package...`, `23-errtype-enum...`, `24-filepermtype...`, `25-enum-packages...`, `26-prune-enum-const...`, `27-direct-result...`, `28-dry-enum...`, `31-basic-enum...`, `33-enum-min-max...`
 - **Completion Date:** 2026-09-09
 - **Status:** `COMPLETED`
-
----
+- **Core Concept & Rationale:** Establish a clean, decoupled Go enum architecture across `04-code/golang/pkg/enum/` and `pkg/baseenumer/`. Enforce 1:1 package isolation, eliminate circular import cycles by keeping enums as pure leaf packages returning `(Variant, bool)`, provide generic JSON unmarshaling, implement `BoundedEnumer[V]` boundary methods (`Min()`, `Max()`, `IsMin()`, `IsMax()`, `IsInRange()`), and provide a smart Python enum scaffolder CLI (`30-enum-generator.py`) documented in root `readme.md`.
 
 ## 2. Key Architectural Decisions & Spec Implementations
 
@@ -26,44 +25,34 @@
     - `resolve_type.go` dynamically resolves clean type names without package stutter.
   - **Boundary Methods (`BoundedEnumer[V]`):**
     - All enums implement `Min()`, `Max()`, `IsMin()`, `IsMax()`, and `IsInRange()`.
-  - **Smart Enum Scaffolder (`03-ai-scripts/30-enum-generator.py`):** Automatically scaffolds 4-file compliant enum packages (`variant.go`, `vars.go`, `variant_test.go`, `readme.md`) supporting byte, int, and string backing types.
+  - **Smart Enum Scaffolder (`03-ai-scripts/30-enum-generator.py`):**
+    - Scaffolds compliant 4-file packages (`variant.go`, `vars.go`, `variant_test.go`, `readme.md`) supporting byte, int, and string backing types.
+    - Supports `--out` and `-o` aliases with automatic directory creation and gofmt execution.
+    - Documented with a single-line command in root `readme.md`.
 
----
+## 3. Consolidated Chronological Task Execution Ledger
 
-## 3. Chronological Task Execution Ledger
-
-| Step | Subtask | Description | Key Files Modified | Status |
+| Task / Step | Scope & Description | Key Files Created / Modified | Verified Outcome | Status |
 |:---:|---|---|---|:---:|
 | 1 | Dedicated Packages | Isolated enums into dedicated packages under `pkg/enum/` | `04-code/golang/pkg/enum/**` | DONE |
 | 2 | ByteType Package | Consolidated byte constants and generic integer enum support | `pkg/enum/bytetype/` | DONE |
 | 3 | Const Alias Pruning | Eliminated redundant const aliases and over-engineered enumer types | `pkg/baseenumer/` | DONE |
 | 4 | DRY Marshaling | Implemented generic JSON unmarshaling in `pkg/baseenumer` | `pkg/baseenumer/json_marshaling.go` | DONE |
-| 5 | Smart Scaffolder | Overhauled `30-enum-generator.py` to generate 4-file multi-type enums | `03-ai-scripts/30-enum-generator.py` | DONE |
+| 5 | Smart Scaffolder | Overhauled `30-enum-generator.py` with `--out` CLI option | `03-ai-scripts/30-enum-generator.py` | DONE |
 | 6 | Min/Max Boundaries | Added `MinMaxer` and `BoundedEnumer` methods across all 11 enum packages | `pkg/baseenumer/min_maxer.go`, all enums | DONE |
 | 7 | Leaf Enum Refactor | Removed `result.Wrap` and `errtype` imports from enums to eliminate cycles | All 9 enum subpackages | DONE |
-| 8 | Comprehensive Tests | Added edge-case tests, achieving 100% statement coverage on enums | `pkg/enum/**`, `pkg/baseenumer/` | DONE |
+| 8 | CLI Documentation | Added single-line enum generator snippet to root `readme.md` | `readme.md` | DONE |
+| 9 | Comprehensive Tests | Added edge-case tests, achieving 100% statement coverage on enums | `pkg/enum/**`, `pkg/baseenumer/` | DONE |
 
----
+## 4. Unified Quality Gates & Verification Checklist
 
-## 4. Root Cause Analyses & Bug Fixes Referenced
+- [x] **Unit Tests:** 100% test pass rate across all enum packages (`pkg/enum/...`, `pkg/baseenumer/...`).
+- [x] **Function Sizing:** All functions verified <= 15 lines per function.
+- [x] **Boolean Standards:** All booleans implicitly evaluated with `is`/`has` prefixes (zero `== true`).
+- [x] **Relative Links:** All markdown paths verified strictly relative Git paths.
+- [x] **CI/CD Quality Gates:** Full runner passed all 36 quality gates via `python 03-ai-scripts/06-cicd-local-runner.py --all`.
+
+## 5. Root Cause Analyses & Bug Fixes Referenced
 
 - [`.lovable/memory/learned/06-leaf-enums-and-baseenumer-parse-helpers.md`](.lovable/memory/learned/06-leaf-enums-and-baseenumer-parse-helpers.md) — Root cause analysis on Go circular import cycles when enum packages import `result` or `errtype`.
 - [`.lovable/strictly-avoid.md`](.lovable/strictly-avoid.md) — Mandatory rule: enums must remain pure leaf packages returning `(Variant, bool)` without higher-level result wrappers.
-
----
-
-## 5. Verification & Quality Gates
-
-- **Statement Coverage Breakdown:**
-  - `pkg/enum/bytetype`: 100.0%
-  - `pkg/enum/fileoptype`: 100.0%
-  - `pkg/enum/filepermtype`: 95.8%
-  - `pkg/enum/filewritemodetype`: 100.0%
-  - `pkg/enum/logleveltype`: 100.0%
-  - `pkg/enum/openfiletype`: 100.0%
-  - `pkg/enum/prioritytype`: 100.0%
-  - `pkg/enum/processstatetype`: 100.0%
-  - `pkg/enum/severitytype`: 100.0%
-  - `pkg/baseenumer`: 97.4%
-- **Go Test Suite:** `go test ./pkg/... -count=1` passes across all 25 packages.
-- **CI/CD Local Runner:** All 36 gates pass green in `python 03-ai-scripts/06-cicd-local-runner.py`.

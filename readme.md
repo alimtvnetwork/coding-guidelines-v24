@@ -433,7 +433,7 @@ Installs: `02-spec/17-consolidated-guidelines`.
 ### 🚀 One-Line Scaffolding Command
 
 ```bash
-python 03-ai-scripts/30-enum-generator.py --name=Order --type=byte --items="Draft,Placed,Shipped,Delivered,Cancelled" --out=04-code/golang/pkg/enum/ordertype
+python 03-ai-scripts/30-enum-generator.py --name=Order --type=byte --items="Draft,Placed,Shipped,Delivered,Canceled" --out=04-code/golang/pkg/enum/ordertype
 ```
 
 > **Dry-run preview:** Append `--dry-run` to preview generated file paths and line counts without writing to disk.
@@ -2139,10 +2139,9 @@ This compiles all categorized prompts using `scripts/prompt-sync-config.json` an
 - [Plan: Code Red Refactor Remediation](.lovable/plans/pending/11-code-red-refactor-remediation.md)
 - [Milestone 01: Repository Hygiene, Scripts & Versioning](.lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md)
 - [Milestone 02: CI/CD Pipeline & Quality Automation](.lovable/plans/completed/02-cicd-pipeline-and-quality-automation.md)
-- [Milestone 03: AppError & Fault Architecture](.lovable/plans/completed/03-apperror-and-fault-architecture.md)
+- [Milestone 03: AppFault Result Monad, Dynamic Conversions & Error Architecture](.lovable/plans/completed/03-appfault-result-monad-and-error-architecture.md)
 - [Milestone 04: Typecast, Results & Verification Systems](.lovable/plans/completed/04-typecast-results-and-verification-systems.md)
-- [Milestone 05: FileUtil Concurrency & I/O Architecture](.lovable/plans/completed/05-fileutil-concurrency-and-io-architecture.md)
-- [Milestone 06: Enum Architecture & BaseEnumer Foundation](.lovable/plans/completed/06-enum-architecture-and-baseenumer-foundation.md)
-- [Milestone 07: Completed Plans Consolidation](.lovable/plans/completed/07-completed-plans-consolidation.md)
-- [Milestone 08: Split SQLite Logging, Rotating, LazyOnce & Errcmd](.lovable/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md)
-- [Milestone 12: Task Retention, Line Streaming, Atomic File Writes & ApiManager](.lovable/plans/completed/12-task-retention-errcmd-streaming-atomic-fileutil-lazyonce-apimanager.md)
+- [Milestone 05: FileUtil PathInfo, Constants & Concurrency Architecture](.lovable/plans/completed/05-fileutil-pathinfo-constants-and-io-architecture.md)
+- [Milestone 06: Enum Architecture, Scaffolder CLI & BaseEnumer Foundation](.lovable/plans/completed/06-enum-architecture-generator-and-baseenumer.md)
+- [Milestone 07: Structured AppLogger, Rotating SQLite & Writer/Streamer Subsystem](.lovable/plans/completed/07-applogger-taxonomy-streaming-and-task-db.md)
+- [Milestone 08: Completed Plans Consolidation, Safety Backup & Resequencing](.lovable/plans/completed/08-completed-plans-consolidation.md)

@@ -1,6 +1,0 @@
-# Subtask 1: Rename Overviews and References
-
-1. Find all 00-overview.md files in spec/ and subdirectories.
-2. Rename them to 01-index.md.
-3. Use a global search and replace to update all internal markdown links (00-overview.md -> 01-index.md).
-4. Append/prepend a standard block to every 01-index.md asserting it is the primary entry point for AI.

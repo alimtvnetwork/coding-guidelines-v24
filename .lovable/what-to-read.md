@@ -58,12 +58,9 @@
 - .lovable/plans/pending/11-code-red-refactor-remediation.md
 - .lovable/plans/completed/01-repository-hygiene-scripts-and-versioning.md
 - .lovable/plans/completed/02-cicd-pipeline-and-quality-automation.md
-- .lovable/plans/completed/03-apperror-and-fault-architecture.md
+- .lovable/plans/completed/03-appfault-result-monad-and-error-architecture.md
 - .lovable/plans/completed/04-typecast-results-and-verification-systems.md
-- .lovable/plans/completed/05-fileutil-concurrency-and-io-architecture.md
-- .lovable/plans/completed/06-enum-architecture-and-baseenumer-foundation.md
-- .lovable/plans/completed/07-completed-plans-consolidation.md
-- .lovable/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md
-- .lovable/plans/completed/12-task-retention-errcmd-streaming-atomic-fileutil-lazyonce-apimanager.md
-- .lovable/plans/completed/38-result-dynamic-conversions-and-coredata-parity.md
-- .lovable/plans/completed/39-recursive-map-sorting-and-result-printing.md
+- .lovable/plans/completed/05-fileutil-pathinfo-constants-and-io-architecture.md
+- .lovable/plans/completed/06-enum-architecture-generator-and-baseenumer.md
+- .lovable/plans/completed/07-applogger-taxonomy-streaming-and-task-db.md
+- .lovable/plans/completed/08-completed-plans-consolidation.md
