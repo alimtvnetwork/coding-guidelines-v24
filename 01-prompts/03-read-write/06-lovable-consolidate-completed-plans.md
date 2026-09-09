@@ -1,6 +1,6 @@
 # Lovable Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow)
 
-Trigger Keywords & Aliases: `consolidate-plans`, `consolidate completed plans`, `clean completed plans`, `resequence completed plans`, `merge plans`, `archive completed plans`, `cleanup plans completed`, `memory consolidation`, `backup and consolidate plans`
+Trigger Keywords & Aliases: `consolidate-plans`, `consolidate completed plans`, `clean completed plans`, `resequence completed plans`, `merge plans`, `archive completed plans`, `cleanup plans completed`, `memory consolidation`, `backup and consolidate plans`, `compact plans`, `reduce plan file count`, `compact completed plans`
 
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
@@ -11,33 +11,34 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously create a timestamped backup branch, scan, analyze, cluster, consolidate, and re-sequence all completed plan files within `.lovable/plans/completed/` into clean, cohesive milestone summaries, while strictly preserving 100% of architectural specifications, root-cause analyses, error contracts, and decision logs with zero data loss or truncation until 100% green without stopping.
+/goal Autonomously create a timestamped backup branch, scan, analyze, cluster, aggressively consolidate, and re-sequence all completed plan files and subtasks within `.lovable/plans/` into minimal, hyper-compact milestone summaries, combining 2, 3, or more related tasks and common checklists into single files to drastically reduce total file count while strictly preserving 100% of core architectural concepts, verified task outcomes, error contracts, and decision logs until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
 1. [ ] /goal Step 0 (Safety Backup A): Pull latest changes on the current active branch.
 2. [ ] /goal Step 0 (Safety Backup B): Create and push timestamped backup branch (`backup/plans-consolidation-YYYYMMDD-HHMMSS`).
 3. [ ] /goal Step 0 (Safety Backup C): Verify working tree remains on active branch and record rollback SHA.
-4. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all architectural violations and anti-patterns.
-5. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/` with an exhaustive Violation Ledger.
-6. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/`.
-7. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
-8. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
-9. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
-10. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-11. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python 03-ai-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
-12. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
-13. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-14. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-15. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
-16. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
-17. [ ] /learn Ingest `02-spec/02-coding-guidelines/08-file-folder-naming/` for lowercase naming and continuous file sequencing.
-18. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
-19. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
+4. [ ] /goal Phase 1 (Step A): Deeply scan `.lovable/plans/completed/` and `.lovable/plans/subtasks/` to inventory all fragmented micro-plans and subtask files.
+5. [ ] /goal Phase 1 (Step B): Build an aggressive compaction and clustering plan in `.lovable/plans/pending/` merging 2, 3, or more related tasks into single milestone files.
+6. [ ] /goal Phase 1 (Step C): Compact multi-file subtask sets and common checklists into single unified specification files.
+7. [ ] /goal Phase 1 (Step D): Verify or update the automated sequence linter and register in `03-ai-scripts/01-index.md`.
+8. [ ] /goal Phase 2 (Step A): Author high-density consolidated milestone summaries preserving all core concepts, code modifications, and verification proofs.
+9. [ ] /goal Phase 2 (Step B): Cleanly remove superseded micro-plan files and collapsed subtask folders via `git rm`.
+10. [ ] /goal Phase 2 (Step C): Execute monotonic continuous re-sequencing (`01-`, `02-`, `03-`, ...) with strictly lowercase filenames and zero sequence gaps.
+11. [ ] /goal Phase 2 (Step D): Synchronize `.lovable/plans/01-index.md`, `.lovable/what-to-read.md`, and project memory indexes.
+12. [ ] /goal Phase 2 (Step E): Execute local CI quality gates via `python 03-ai-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
+13. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
+14. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
+15. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
+16. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+17. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
+18. [ ] /learn Ingest `02-spec/02-coding-guidelines/08-file-folder-naming/` for lowercase naming and continuous file sequencing.
+19. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
+20. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
-PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Create Backup Branch, Scan Completed Plans, Cluster by Domain, Spec in .lovable/plans/pending/, Subtasks)
-PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Merge Files, Re-sequence Monotonic Prefixes, Update Plans Index, Verify Linters, Verify CI)
+PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Create Backup Branch, Scan Plans & Subtasks, Cluster by Domain, Spec Compaction in .lovable/plans/pending/)
+PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Merge Files, Collapse Subtasks, Remove Superseded via git rm, Re-sequence Monotonic Prefixes, Update Indexes, Verify CI)
 ```
 
 N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never modify them mid-execution.
@@ -74,143 +75,169 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 ---
 
-## Dedicated Section: Why, What & How of Completed Plans Consolidation
+## Dedicated Section: Aggressive File Count Reduction & Compaction Doctrine
 
-A project that runs hundreds of autonomous agent turns quickly produces dozens of micro-task files in `.lovable/plans/completed/`. If left unmanaged, this file clutter exhausts context windows, slows down memory retrieval, and fragments project history.
+A project that runs dozens of autonomous agent loops quickly accumulates scores of micro-task files and subtask folders in `.lovable/plans/completed/` and `.lovable/plans/subtasks/`. If left unmanaged, this file clutter exhausts context windows, bloats search indexes, slows down memory retrieval, and fragments project history.
 
----
-
-### 1. The Core Architecture (Why, What & How)
-
-#### A. WHY We Consolidate
-
-1. **Context Window Overflow Prevention:** AI agents loading memory or plans must not be forced to consume 50k tokens reading 80 individual 3-line task files.
-2. **Elimination of Cognitive Fragmentation:** Individual bugfix notes and micro-steps scatter information. Grouping them into milestone epics gives future agents immediate, unified domain context.
-3. **Search & Retrieval Velocity:** Consolidated documents allow instant retrieval of completed milestones without traversing dozens of orphaned filenames.
-
-#### B. WHAT We Produce
-
-1. **Unified Milestone Documents:** Cohesive documents (e.g. `01-authentication-system.md`, `02-ci-cd-pipeline.md`, `03-database-migrations.md`) replacing scattered subtasks (`01-task-a.md`, `02-task-b.md`).
-2. **Zero-Loss Architectural Ledger:** Every domain contract, interface constraint, error envelope, and RCA link is preserved verbatim.
-3. **Monotonic, Continuous Numbering:** The entire directory `.lovable/plans/completed/` is ordered strictly continuously (`01-`, `02-`, `03-`, ...) with lowercase names and zero sequence gaps.
-
-#### C. HOW We Execute (Mechanics)
-
-1. Execute Step 0: Create and push `backup/plans-consolidation-YYYYMMDD-HHMMSS`.
-2. Scan `.lovable/plans/completed/` and `.lovable/plans/01-index.md`.
-3. Build an AST / topic cluster mapping table in `.lovable/plans/pending/XX-completed-plans-consolidation.md`.
-4. Create the consolidated milestone documents.
-5. Execute `git rm` on the superseded micro-task files.
-6. Re-sequence all remaining files in `.lovable/plans/completed/` using `python 03-ai-scripts/03-file-manipulator.py fix-seq-files`.
-7. Update `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md`.
-8. Verify all relative links with `python linter-scripts/check-relative-paths.py`.
+The primary directive of this workflow is **aggressive file count minimization**: compact the file count down to as minimal as possible while keeping 100% of the core concept and architectural substance intact.
 
 ---
 
-### 2. Standard Consolidated Milestone Template
+### 1. The Core Compaction Principles
 
-Every consolidated file generated inside `.lovable/plans/completed/` MUST adhere to this uniform layout:
+#### A. Combine 2, 3, or More Related Tasks into Single Files
+- **Mandatory Clustering:** NEVER leave isolated, single-step micro-plans. If tasks relate to the same subsystem, package, or architectural theme, you MUST combine 2, 3, or more of them into a single consolidated milestone summary file.
+- **Example Clusters:**
+  - *Logger Enhancements + Named Writers + Typed Streamers* $
+ightarrow$ Merge Plans 34, 36, 37 into `XX-applogger-taxonomy-and-named-writers.md`.
+  - *Enum Migrations + Min/Max Methods + Generator CLI* $
+ightarrow$ Merge Plans 31, 32, 33 into `XX-enum-architecture-and-baseenumer-modernization.md`.
+  - *Path Constants + FolderInfo + PathInfo Object* $
+ightarrow$ Merge Plans 35, 36 into `XX-fileutil-pathinfo-and-constants.md`.
+  - *Dynamic Conversions + Reflection Casting + Pretty YAML* $
+ightarrow$ Merge Subtasks 38.1, 38.2, 38.3 into `XX-result-dynamic-conversions-and-coredata-parity.md`.
+
+#### B. Compact Common Checklists into Single Consolidated Sections
+- **Checklist Deduplication:** Repetitive checklist items (e.g. unit tests passed, function size <= 15 lines, implicit booleans, zero CI/CD disablement, relative links) must NOT be duplicated across separate files.
+- **Single-File Checklist:** Consolidate all common verification, quality gate, and task acceptance checklists into a **single unified table or checklist** within the consolidated document.
+
+#### C. Collapse Subtask Sprawl into Single Files
+- **Eliminate Subtask Folder Bloat:** When a completed plan has a dedicated folder in `.lovable/plans/subtasks/` containing multiple individual files (`01-task.md`, `02-task.md`, `03-task.md`), you MUST:
+  1. Fold the contents, code changes, and verification proof of all subtasks directly into the single consolidated milestone document in `.lovable/plans/completed/`.
+  2. If subtask documentation is explicitly retained, compact all subtask steps into a **single consolidated subtask file** (`01-consolidated-tasks.md`) rather than keeping sprawling multi-file directories.
+  3. Cleanly delete superseded micro-subtask files via `git rm`.
+
+#### D. Keep the Main Concept (Zero Concept Loss)
+Compaction is NOT deletion of knowledge. You must strictly preserve:
+1. **The Core Architectural Problem & Design:** Why the change was made and what design pattern was established.
+2. **Key Codebase Modifications:** Which packages, structs, interfaces, methods, or scripts were added or modified.
+3. **API & Error Contracts:** Explicit signatures, interface rules (e.g. `*appfault.AppError`, `BasicEnum`, `PathInfo`), and data models.
+4. **Verification Proof:** Test commands executed, coverage notes, and CI runner exit status (`exit 0`).
+5. **Traceability Links:** Strictly relative Git paths to specifications (`02-spec/`) and RCA logs (`.lovable/memory/issues/`).
+
+#### E. Quantifiable Reduction Metric
+- Aim for a **60% to 80% reduction** in total plan and subtask file count.
+- Transforming 40 individual files into 6–8 dense, high-clarity milestone summaries is the benchmark of success.
+
+---
+
+### 2. Standard Compact Milestone Template
+
+Every consolidated file generated inside `.lovable/plans/completed/` MUST adhere to this uniform, high-density layout:
 
 ```markdown
-# Milestone Summary: [Feature / Epic Name]
+# Milestone Summary: [Consolidated Epic / Feature Name]
 
-## 1. Executive Overview & Scope
+## 1. Executive Overview & Consolidated Tasks
 
-- **Milestone Theme:** [Domain / Capability area]
-- **Original Subtasks Merged:** `XX-task-a.md`, `XX-task-b.md`, `XX-task-c.md`
+- **Milestone Domain:** [Subsystem / Capability area, e.g. Logging, Enums, File Utilities]
+- **Original Tasks Merged:** `XX-task-a.md`, `XX-task-b.md`, `XX-task-c.md` (and related subtask files)
 - **Completion Date:** [ISO Date]
 - **Status:** `COMPLETED`
+- **Core Concept & Rationale:** [2-4 sentences explaining the architectural problem solved and the design established]
 
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/path/to/spec.md`](02-spec/path/to/spec.md) — [Why: Specific rule implemented]
-- **Core Architecture Contracts:** [Verbatim constraints, types, and invariants]
+  - [`02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md`](02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md) — [Why: Specific rule implemented]
+- **Core Architecture Contracts:** [Verbatim types, function signatures, error returns (`*appfault.AppError`), and invariants]
 
-## 3. Chronological Task Execution Ledger
+## 3. Consolidated Chronological Task Execution Ledger
 
-| Step | Subtask | Description | Key Files Modified | Status |
+| Task / Step | Scope & Description | Key Files Created / Modified | Verified Outcome | Status |
 |:---:|---|---|---|:---:|
-| 1 | Initial Design | Created domain models and interfaces | `src/models/auth.ts` | DONE |
-| 2 | Implementation | Added service handler and unit tests | `src/services/auth.ts` | DONE |
+| 1 | Initial Architecture & Interfaces | `04-code/golang/pkg/appfault/result.go` | Defined core contracts and types | DONE |
+| 2 | Implementation & Dynamic Methods | `04-code/golang/pkg/appfault/result_dynamic_strings.go` | Added dynamic converters and helpers | DONE |
+| 3 | Serialization & Formatting | `04-code/golang/pkg/appfault/result_dynamic_output.go` | JSON/YAML marshaling implemented | DONE |
 
-## 4. Root Cause Analyses & Bug Fixes Referenced
+## 4. Unified Quality Gates & Verification Checklist
+
+- [x] **Unit Tests:** `go test ./pkg/appfault/... -v` passed with 100% green.
+- [x] **Function Sizing:** All functions verified <= 15 lines per function.
+- [x] **Boolean Standards:** All booleans implicitly evaluated with `is`/`has` prefixes (zero `== true`).
+- [x] **Relative Links:** All markdown references verified strictly relative Git paths.
+- [x] **CI/CD Quality Gates:** All quality gates passed via `python 03-ai-scripts/06-cicd-local-runner.py --all`.
+
+## 5. Root Cause Analyses & Bug Fixes Referenced
 
 - [`.lovable/memory/issues/XX-rca.md`](.lovable/memory/issues/XX-rca.md) — Root cause analysis and resolution details.
-
-## 5. Verification & Quality Gates
-
-- **Unit Tests:** Passed with 100% branch coverage.
-- **Linters:** `python linter-scripts/check-relative-paths.py` exited with code 0.
 ```
 
 ---
 
 ### 3. Step-by-Step Consolidation Workflow (Phase 1 & Phase 2)
 
-#### Phase 1: Scan, Inventory & Cluster Mapping (Steps 1 to N/2)
+#### Phase 1: Scan, Inventory & Compaction Planning (Steps 1 to N/2)
 
-1. **Step 0 Safety Backup:** Pull latest commits, create and push `backup/plans-consolidation-YYYYMMDD-HHMMSS`.
-2. **Inventory Scan:** List all files currently in `.lovable/plans/completed/`.
-3. **Domain Clustering:** Identify natural groupings by feature, sprint, or component.
-4. **Master Audit Spec:** Write `.lovable/plans/pending/XX-completed-plans-consolidation.md` containing the inventory mapping table:
+1. **Step 0 Safety Backup:** Pull latest commits, create and push `backup/plans-consolidation-YYYYMMDD-HHMMSS`. Record rollback command.
+2. **Inventory Scan:** List all files currently in `.lovable/plans/completed/` and all directories in `.lovable/plans/subtasks/`. Count total files before compaction.
+3. **Aggressive Domain Clustering:** Group 2, 3, or more related micro-plans into natural cohesive clusters (e.g. by package, feature, or subsystem).
+4. **Master Compaction Spec:** Write `.lovable/plans/pending/XX-completed-plans-consolidation.md` containing the full clustering table:
 
 ```markdown
-| Source Files to Merge | Proposed Consolidated File | Domain / Epic Theme | Items Preserved | Status |
-|---|---|---|---|:---:|
-| `01-task-a.md`, `02-task-b.md` | `01-auth-system.md` | Authentication | Models, JWT, Middleware | PENDING |
-| `03-fix-a.md`, `04-fix-b.md` | `02-ci-cd-pipeline.md` | CI/CD Automation | GitHub Actions, Linters | PENDING |
+| Source Files & Subtasks to Merge | Proposed Consolidated File | Domain / Epic Theme | File Count Before | File Count After | Status |
+|---|---|---|:---:|:---:|:---:|
+| `34-logger.md`, `36-writers.md`, `37-streamers.md` | `01-applogger-taxonomy.md` | Logging Subsystem | 9 files | 1 file | PENDING |
+| `31-enums.md`, `32-prompts.md`, `33-minmax.md` | `02-enum-architecture.md` | Enum Subsystem | 12 files | 1 file | PENDING |
 ```
 
-5. **Decompose Subtasks:** Create `.lovable/plans/subtasks/XX-completed-plans/01-task.md`, `02-task.md`, etc.
+5. **Subtask Plan:** Document the exact order of milestone document creation and file deletion.
 
-#### Phase 2: Merge, Re-Sequence, Index & Verify (Steps N/2+1 to N)
+#### Phase 2: Merge, Collapse Subtasks, Re-Sequence, Index & Verify (Steps N/2+1 to N)
 
-1. **Write Consolidated Documents:** Create the target markdown files in `.lovable/plans/completed/`.
-2. **Remove Merged Sources:** Use `git rm` to cleanly delete the old micro-task files.
-3. **Re-Sequence Numeric Prefixes:** Run the automated re-sequencer:
+1. **Write Consolidated Milestone Documents:** Author each consolidated file in `.lovable/plans/completed/` following the Compact Milestone Template.
+2. **Collapse Subtasks:** Fold subtask content into the milestone summary. Cleanly remove the old subtask folders and files using `git rm`.
+3. **Clean Removal of Merged Sources:** Use `git rm` on all superseded micro-plan files in `.lovable/plans/completed/`.
+4. **Re-Sequence Numeric Prefixes:** Run the automated re-sequencer to establish continuous monotonic numbering:
    ```bash
    python 03-ai-scripts/03-file-manipulator.py fix-seq-files .lovable/plans/completed/
    ```
    Ensure all files are strictly lowercase with monotonic `01-`, `02-`, `03-` prefixes.
-4. **Update Indexes:** Synchronize `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md` with the new file list.
-5. **Verify Formatting & Linters:**
+5. **Synchronize Indexes:** Update `.lovable/plans/01-index.md` and `.lovable/what-to-read.md` with the new compact list of milestones.
+6. **Verify Formatting & Linters:**
    ```bash
-   python linter-scripts/check-relative-paths.py
-   python linter-scripts/check-markdown-header-spacing.py
-   npx markdownlint "**/*.md" --ignore "node_modules/**"
+   python 03-ai-scripts/21-sequence-integrity-linter.py
+   python 03-ai-scripts/22-doc-path-linter.py
+   python 03-ai-scripts/31-md-gap-fixer.py
+   python 03-ai-scripts/06-cicd-local-runner.py --all
    ```
+7. **Calculate & Report File Count Reduction:** Compare total file count before vs. after consolidation and log the reduction ratio.
 
 ---
 
-## 4. Phase 1 Actionable Checklist (Discovery, Audit & Planning)
+## 4. Phase 1 Actionable Checklist (Discovery, Audit & Compaction Planning)
 
 You MUST verify and check off every item during Phase 1:
 
 - [ ] **Step 0 Safety Backup Created & Pushed:** Pulled latest commits, created `backup/plans-consolidation-YYYYMMDD-HHMMSS`, pushed to origin, and documented the rollback SHA.
-- [ ] **Completed Plans Directory Scanned:** Recursively inspected all files in `.lovable/plans/completed/`.
-- [ ] **Domain & Feature Clusters Identified:** Grouped isolated tasks into coherent milestones (e.g. Auth, DB, CI/CD, UI).
-- [ ] **Zero-Data-Loss Audit:** Verified that no core architectural rules, schema models, error envelopes, or RCA logs will be discarded during consolidation.
-- [ ] **Master Audit Spec Written:** Created `.lovable/plans/pending/XX-completed-plans-consolidation.md` containing the full mapping ledger table and backup rollback recipe.
-- [ ] **Subtasks Generated:** Created discrete subtasks in `.lovable/plans/subtasks/XX-completed-plans/`.
-- [ ] **Strict Relative Git Paths:** All markdown links in the consolidation spec use relative Git paths (zero `file:///` URIs, zero drive letters).
+- [ ] **Completed Plans & Subtasks Scanned:** Recursively inspected all files in `.lovable/plans/completed/` and `.lovable/plans/subtasks/`. Recorded baseline file count.
+- [ ] **Aggressive Clusters Identified:** Grouped 2, 3, or more related micro-plans into cohesive, high-density milestone epics (aiming for >= 60% file reduction).
+- [ ] **Zero-Concept-Loss Verified:** Confirmed that all core concepts, architectural decisions, code changes, error contracts, and verification proofs will be preserved in full.
+- [ ] **Master Compaction Spec Written:** Created `.lovable/plans/pending/XX-completed-plans-consolidation.md` containing the mapping ledger table and backup rollback recipe.
+- [ ] **Subtask Collapse Designed:** Planned the elimination of multi-file subtask folders by inlining steps into the consolidated milestone document.
+- [ ] **Strict Relative Git Paths:** All markdown links in the compaction spec use strictly relative Git paths (zero `file:///` URIs, zero drive letters).
 - [ ] **No Premature Deletion:** Verified that Phase 1 only creates planning specs and makes zero file deletions.
 
 ---
 
-## 5. Phase 2 Actionable Checklist (Execution, Re-Sequencing & Verification)
+## 5. Phase 2 Actionable Checklist (Execution, Compaction, Re-Sequencing & Verification)
 
 You MUST verify and check off every item during Phase 2:
 
-- [ ] **Consolidated Files Created:** Generated unified milestone summaries matching the standard template in `.lovable/plans/completed/`.
-- [ ] **Merged Files Cleanly Removed:** Executed `git rm` on superseded micro-task files.
+- [ ] **High-Density Milestone Files Created:** Authored unified milestone summaries matching the Compact Milestone Template in `.lovable/plans/completed/`.
+- [ ] **Subtasks Inlined & Folders Collapsed:** Folded granular subtask steps and execution tables directly into the consolidated milestone files.
+- [ ] **Superseded Files Cleanly Removed:** Executed `git rm` on all superseded micro-plan files and collapsed subtask directories.
 - [ ] **Continuous Monotonic Re-Sequencing:** Executed `python 03-ai-scripts/03-file-manipulator.py fix-seq-files .lovable/plans/completed/` to ensure contiguous `01-`, `02-`, `03-` numbering without gaps.
 - [ ] **Strict Lowercase Naming:** Verified all filenames in `.lovable/plans/completed/` use lowercase alphanumeric characters and hyphens.
-- [ ] **Index Documentation Synchronized:** Updated `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md` to reflect the updated file catalog.
-- [ ] **Universal File Hygiene:** Verified Unix LF line endings (`\n`), UTF-8 (no BOM), and single terminating newline at EOF across all created/modified files.
-- [ ] **Markdown Spacing Compliance:** Verified exactly one blank line before and after headings (MD022/MD032) and zero double blank lines (`\n\n\n`).
-- [ ] **Linter Verification:** Executed `python linter-scripts/check-relative-paths.py` and `python linter-scripts/check-markdown-header-spacing.py` with exit code 0.
-- [ ] **Disk Reality Check:** Verified working tree status with `git status --porcelain` and `git diff --stat`.
+- [ ] **Index Documentation Synchronized:** Updated `.lovable/plans/01-index.md` and `.lovable/what-to-read.md` to reflect the compact file catalog.
+- [ ] **Universal File Hygiene:** Verified Unix LF line endings (`
+`), UTF-8 (no BOM), and single terminating newline at EOF across all created/modified files.
+- [ ] **Markdown Spacing Compliance:** Verified exactly one blank line before and after headings (MD022/MD032) and zero double blank lines (`
+
+`).
+- [ ] **Linter Verification:** Executed `python 03-ai-scripts/21-sequence-integrity-linter.py` and `python 03-ai-scripts/22-doc-path-linter.py` with exit code 0.
+- [ ] **CI/CD Quality Gates:** Local CI runner `python 03-ai-scripts/06-cicd-local-runner.py --all` exited with code 0.
+- [ ] **Disk Reality Check & Net Metrics:** Verified working tree status with `git status --porcelain` and reported total files eliminated.
 
 ---
 
@@ -221,7 +248,7 @@ You MUST verify and check off every item during Phase 2:
 >
 > 1. **In-Codebase Execution Only:** Whenever a Python script (runner, autofixer, linter, test aggregator) is executed or created, it MUST be executed **strictly within the repository root** (current working directory), NEVER outside the codebase or against external arbitrary directories.
 > 2. **Strict Folder Bounding (`.lovable/`):** All AI scripts, local runners, autofixers, helper utilities, memory issue logs, and planning files MUST be created inside the `.lovable/` folder:
->    - Python AI Scripts: `03-ai-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`, `07-relative-path-fixer.py`, `09-cli-help-auditor.py`).
+>    - Python AI Scripts: `03-ai-scripts/` (e.g. `01-file-manipulator.py`, `05-guideline-autofixer.py`, `06-cicd-local-runner.py`, `07-relative-path-fixer.py`, `21-sequence-integrity-linter.py`).
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines.md`.
@@ -235,7 +262,7 @@ You MUST verify and check off every item during Phase 2:
 
 - [ ] `/goal` **Reuse First:** I have rigorously scanned and `/learn`ed `03-ai-scripts/01-index.md` to check if a helper script already exists before writing any new temporary code.
 - [ ] **Strict In-Repository Execution:** All Python scripts (`03-ai-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
-- [ ] **Strict .lovable/ Folder Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
+- [ ] **Strict 03-ai-scripts/ Tooling Storage:** All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
 - [ ] **Automated File Sequencing & Normalization:** Use `python 03-ai-scripts/03-file-manipulator.py fix-seq-files <dir>` to re-sequence completed plan files monotonically.
 - [ ] **Relative Path Normalization:** Use `python 03-ai-scripts/07-relative-path-fixer.py .` to ensure all links in consolidated documents are strictly relative Git paths.
 - [ ] **Commit & Track:** All new helper scripts were written strictly to `03-ai-scripts/` and committed to Git for future reuse.
@@ -247,18 +274,26 @@ You MUST verify and check off every item during Phase 2:
 
 - [ ] Git working tree is clean before new file modifications.
 - [ ] **Step 0 Safety Backup Verified:** Timestamped backup branch `backup/plans-consolidation-YYYYMMDD-HHMMSS` exists on origin.
-- [ ] **Spec Protection:** I have manually verified that NONE of the merged files contained critical architectural constraints, domain specifications, or non-negotiable rules that were omitted or summarized away.
-- [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in consolidated files are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
+- [ ] **Spec & Concept Protection:** I have manually verified that NONE of the merged files lost critical architectural concepts, domain models, contracts, or non-negotiable rules.
+- [ ] **Aggressive File Reduction:** Total plan and subtask file count has been reduced significantly (combining 2, 3, or more related tasks into single files).
+- [ ] **Checklist Compaction:** Common checklists are consolidated into a single unified section per milestone file, avoiding multi-file duplication.
+- [ ] **Subtask Folder Collapse:** Fragmented subtask directories have been folded into single files or inlined into milestone summaries.
+- [ ] **Strict Relative Git Paths:** All file paths, markdown links, citations, and subtask references in consolidated files are strictly relative to the git repository root. Zero absolute paths (`/absolute/path/to/...`) or `file:///` URIs.
 - [ ] **Strict Lowercase Naming:** Every file in `.lovable/plans/completed/` uses strictly lowercase letters (e.g. `01-auth-system.md`).
 - [ ] **Monotonic Sequencing:** File prefixes in `.lovable/plans/completed/` are continuous and monotonic (`01-`, `02-`, `03-`, ...) without gaps or duplicates.
-- [ ] **Index Synchronization:** Both `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md` reflect the consolidated files and remove deleted entries.
-- [ ] **LF Line Endings (`\n`):** All files use Unix LF line endings. Zero CRLF (`\r\n`).
+- [ ] **Index Synchronization:** Both `.lovable/plans/01-index.md` and `.lovable/what-to-read.md` reflect the consolidated files and remove deleted entries.
+- [ ] **LF Line Endings (`
+`):** All files use Unix LF line endings. Zero CRLF (`
+`).
 - [ ] **UTF-8 Encoding (No BOM):** All files encoded in UTF-8 without BOM.
-- [ ] **Single Trailing Newline:** Every file ends with exactly one terminating newline (`\n`).
+- [ ] **Single Trailing Newline:** Every file ends with exactly one terminating newline (`
+`).
 - [ ] **Markdown Heading Spacing:** Exactly one blank line before and after headings (no leading blank line on line 1).
-- [ ] **Zero Double Blank Lines:** No `\n\n\n` anywhere in markdown.
-- [ ] `python linter-scripts/check-relative-paths.py` and `python linter-scripts/check-markdown-header-spacing.py` exited with code 0.
-- [ ] Local CI runner `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0.
+- [ ] **Zero Double Blank Lines:** No `
+
+` anywhere in markdown.
+- [ ] `python 03-ai-scripts/21-sequence-integrity-linter.py` and `python 03-ai-scripts/22-doc-path-linter.py` exited with code 0.
+- [ ] Local CI runner `python 03-ai-scripts/06-cicd-local-runner.py --all` exited with code 0.
 
 ---
 
@@ -269,8 +304,9 @@ You MUST verify and check off every item during Phase 2:
 - [ ] Strict Relative Git Paths: All file paths, markdown links, citations, and subtask references in plans, specs, and memory logs are strictly relative to the git repository root. Zero absolute paths or `file:///` URIs.
 - [ ] Master Guidelines: I have fully read and strictly enforced `02-spec/02-coding-guidelines/08-file-folder-naming/` and `.lovable/coding-guidelines.md`.
 - [ ] Backup Integrity: Verified `backup/plans-consolidation-YYYYMMDD-HHMMSS` branch exists on origin before touching plans.
-- [ ] Spec Preservation: Zero truncation, zero placeholder stubs (`TODO`, `[N]`, `// ...`).
+- [ ] Concept & Spec Preservation: Zero concept loss, zero truncation, zero placeholder stubs (`TODO`, `[N]`, `// ...`).
 - [ ] Monotonic Sequence: Verified sequential `01-`, `02-`, `03-` numbering across `.lovable/plans/completed/`.
+- [ ] Compaction Proven: Proved that multiple micro-tasks were combined into high-density files with measurable file count reduction.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
