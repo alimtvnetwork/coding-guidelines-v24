@@ -270,7 +270,7 @@ subtask of `plan-file` has moved out of `.lovable/plans/pending/` into
 `.lovable/plans/completed/` with `Status: completed`. At that moment, and only
 then:
 
-- Bump the MINOR version per the release ceremony in `01-prompts/19-release-management/04-release.md`.
+- Bump the MINOR version per the release ceremony in `01-prompts/17-release-management/04-release.md`.
 - Add one changelog entry covering the whole plan, never a single task.
 - Update release notes.
 - Pin the new version in the root `readme.md`.

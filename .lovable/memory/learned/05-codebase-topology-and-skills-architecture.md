@@ -59,8 +59,8 @@ All prompt workflows are mapped to first-class Antigravity skills:
 | `autonomous-qa-and-testing` | Autonomous QA test execution and quality gate verification | `01-prompts/06-testing-and-qa/01-autonomous-qa-and-testing-v4.md` |
 | `cg-boolean-and-naming` | Audits boolean naming (`is`/`has`), implicit checks, and enums | `01-prompts/15-cg-execute/04-booleans-and-complex-conditions.md` |
 | `cg-error-management` | Universal error management and `*appfault.AppError` compliance | `01-prompts/15-cg-execute/02-error-management.md` |
-| `ci-cd-create` | Cross-platform CI/CD pipeline and linter authoring | `01-prompts/17-ci-cd/05-cicd-pipeline-create.md` |
-| `ci-cd-fix` | 4-Part RCA and pipeline failure diagnosis | `01-prompts/17-ci-cd/01-ci-cd-fix.md` |
+| `ci-cd-create` | Cross-platform CI/CD pipeline and linter authoring | `01-prompts/16-ci-cd/05-cicd-pipeline-create.md` |
+| `ci-cd-fix` | 4-Part RCA and pipeline failure diagnosis | `01-prompts/16-ci-cd/01-ci-cd-fix.md` |
 | `clean-artifacts-and-git-history` | Cleans generated test reports, pycache, and preserves git hygiene | `01-prompts/09-commit-and-multi-agent-code-fix/07-clean-artifacts-and-git-history.md` |
 | `coding-guidelines` | Core coding guideline review and zero-nesting enforcement | `01-prompts/04-coding-standards/01-coding-guidelines.md` |
 | `execute-ai-instruction-writer` | Generates structured AI instructions and specifications | `01-prompts/14-execute/04-execute-ai-instruction-writer.md` |
@@ -73,7 +73,7 @@ All prompt workflows are mapped to first-class Antigravity skills:
 | `inventory-pending-tasks` | Discovers, catalogs, and sequences all pending plans and subtasks | `01-prompts/13-plan-audit/01-inventory-pending-tasks.md` |
 | `plan-coding-guideline-audit` | Plans structured coding guideline audits against `02-spec/` | `01-prompts/05-coding-guidelines/01-plan-coding-guideline-audit.md` |
 | `read-memory-enhanced` | Loads project identity, CODE RED rules, specs, and plans | `01-prompts/03-read-write/02-read-memory-enhanced.md` |
-| `release-management` | SemVer version bumps, package sync, and release ceremony | `01-prompts/18-release-management/04-release.md` |
+| `release-management` | SemVer version bumps, package sync, and release ceremony | `01-prompts/17-release-management/04-release.md` |
 | `write-antigravity` | Authors and updates Antigravity agent configurations and rules | `01-prompts/03-read-write/01-write-antigravity.md` |
 | `write-memory` | Persists session decisions, learned conventions, and index updates | `01-prompts/03-read-write/03-write-memory.md` |
 
