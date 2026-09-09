@@ -229,6 +229,11 @@ func (s *ApiSink) DriverType() DriverType {
 	return DriverApi
 }
 
+// Name returns the sink identifier name.
+func (s *ApiSink) Name() string {
+	return "api"
+}
+
 func defaultRotationPolicy(batch []LogEntry, elapsed time.Duration, cfg ApiConfig) bool {
 	if len(batch) >= cfg.BatchSize {
 		return true

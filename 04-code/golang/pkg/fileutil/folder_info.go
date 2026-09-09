@@ -344,3 +344,72 @@ func (f *FolderInfo) RemoveAll() BoolResult {
 
 	return RemoveAll(f.path)
 }
+
+func (f *FolderInfo) Normalize() *FolderInfo {
+	if f == nil {
+		return NewFolderInfo(CurrentDir)
+	}
+
+	res := Normalize(f.path)
+	if res.IsSuccess() {
+		return NewFolderInfo(res.Data())
+	}
+
+	return NewFolderInfo(f.path)
+}
+
+func (f *FolderInfo) Up() *FolderInfo {
+	return f.Parent()
+}
+
+func (f *FolderInfo) UpN(levels int) *FolderInfo {
+	if f == nil {
+		return NewFolderInfo(CurrentDir)
+	}
+
+	return NewFolderInfo(ParentN(f.path, levels))
+}
+
+func (f *FolderInfo) Cd(relPath string) *FolderInfo {
+	if f == nil {
+		return NewFolderInfo(relPath)
+	}
+
+	return NewFolderInfo(filepath.Join(f.path, relPath))
+}
+
+func (f *FolderInfo) WalkFolders(walkFn func(dirPath string) *appfault.AppError) *appfault.AppError {
+	return f.WalkDirectories(walkFn)
+}
+
+func (f *FolderInfo) Find(pattern string) ResultSlice[string] {
+	if f == nil {
+		return result.FailSlice[string](appfault.NewFile(errtype.Validation, "", "nil folder info"))
+	}
+
+	return findMatchingPaths(f.path, pattern)
+}
+
+func (f *FolderInfo) FindFiles(pattern string) ResultSlice[*FileInfo] {
+	if f == nil {
+		return result.FailSlice[*FileInfo](appfault.NewFile(errtype.Validation, "", "nil folder info"))
+	}
+
+	return findMatchingFiles(f.path, pattern)
+}
+
+func (f *FolderInfo) FindFolders(pattern string) ResultSlice[*FolderInfo] {
+	if f == nil {
+		return result.FailSlice[*FolderInfo](appfault.NewFile(errtype.Validation, "", "nil folder info"))
+	}
+
+	return findMatchingFolders(f.path, pattern)
+}
+
+func (f *FolderInfo) Filter(filterFn FileFilterFunc) ResultSlice[string] {
+	if f == nil {
+		return result.FailSlice[string](appfault.NewFile(errtype.Validation, "", "nil folder info"))
+	}
+
+	return filterMatchingPaths(f.path, filterFn)
+}

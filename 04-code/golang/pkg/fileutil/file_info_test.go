@@ -128,3 +128,22 @@ func TestPathInfo_Object(t *testing.T) {
 
 	testPathInfoConversions(t, filePath, dir)
 }
+
+func TestFileInfo_NavigationAndNormalize(t *testing.T) {
+	dir := t.TempDir()
+	filePath := filepath.Join(dir, "my_report.final.pdf")
+	_ = WriteString(filePath, "data", filepermtype.Standard)
+	fi := NewFileInfo(filePath)
+
+	if fi.Normalize().Name() != "my_report.final.pdf" {
+		t.Fatalf("unexpected normalized name")
+	}
+
+	if fi.StemFull() != "my_report" || fi.Slug() != "my-report-final" {
+		t.Fatalf("unexpected stemFull (%s) or slug (%s)", fi.StemFull(), fi.Slug())
+	}
+
+	if fi.Up().Path() != filepath.Clean(dir) || fi.Parent().Path() != filepath.Clean(dir) {
+		t.Fatalf("unexpected parent folder from fi.Up()")
+	}
+}

@@ -212,3 +212,8 @@ func (s *RotatingFileSink) FilePath() string {
 func (s *RotatingFileSink) DriverType() DriverType {
 	return DriverRotatingFile
 }
+
+// Name returns the sink identifier name.
+func (s *RotatingFileSink) Name() string {
+	return "rotating_file"
+}

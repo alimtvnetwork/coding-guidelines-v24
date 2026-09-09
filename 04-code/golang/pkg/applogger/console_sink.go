@@ -73,3 +73,8 @@ func (cs *ConsoleSink) Close() error { return nil }
 func (cs *ConsoleSink) DriverType() DriverType {
 	return DriverConsole
 }
+
+// Name returns the sink identifier name.
+func (cs *ConsoleSink) Name() string {
+	return "console"
+}

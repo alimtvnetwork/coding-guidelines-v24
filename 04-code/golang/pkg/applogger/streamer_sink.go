@@ -74,6 +74,11 @@ func (s *StreamerSink) DriverType() DriverType {
 	return DriverStreamer
 }
 
+// Name returns the sink identifier name.
+func (s *StreamerSink) Name() string {
+	return "streamer"
+}
+
 // WriteEntry serializes entry to JSON and routes to the underlying streamer.
 func (s *StreamerSink) WriteEntry(e LogEntry) error {
 	s.lock.Lock()

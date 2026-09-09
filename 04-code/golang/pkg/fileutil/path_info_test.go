@@ -1,6 +1,8 @@
 package fileutil
 
 import (
+	"os"
+	"strings"
 	"testing"
 )
 
@@ -126,5 +128,65 @@ func TestIsAbsWindowsDrive(t *testing.T) {
 
 	if IsRel(absWin) {
 		t.Error("expected C:\\Windows\\System32 not to be relative")
+	}
+}
+
+func TestPathInfo_ObjectBasicsAndTransforms(t *testing.T) {
+	pi := NewPathInfo("nested/dir/my-report.final.pdf")
+	if pi.Name() != "my-report.final.pdf" || pi.Base() != "my-report.final.pdf" {
+		t.Fatalf("unexpected name: %s", pi.Name())
+	}
+
+	if pi.Stem() != "my-report.final" || pi.StemFull() != "my-report" {
+		t.Fatalf("unexpected stem: %s, stemFull: %s", pi.Stem(), pi.StemFull())
+	}
+
+	if pi.Ext() != ".pdf" || pi.ExtNoDot() != "pdf" || !pi.HasExt("pdf") {
+		t.Fatalf("unexpected ext: %s", pi.Ext())
+	}
+
+	if ToSlash(pi.Clean().Path()) != "nested/dir/my-report.final.pdf" {
+		t.Fatalf("unexpected clean path: %s", pi.Clean().Path())
+	}
+}
+
+func TestPathInfo_Navigation(t *testing.T) {
+	pi := NewPathInfo("a/b/c/d")
+	up := pi.Up()
+	if ToSlash(up.Path()) != "a/b/c" {
+		t.Fatalf("unexpected Up: %s", up.Path())
+	}
+
+	up2 := pi.UpN(2)
+	if ToSlash(up2.Path()) != "a/b" {
+		t.Fatalf("unexpected UpN(2): %s", up2.Path())
+	}
+
+	sub := up.Cd("sub").Join("file.txt")
+	if ToSlash(sub.Path()) != "a/b/c/sub/file.txt" {
+		t.Fatalf("unexpected Cd/Join: %s", sub.Path())
+	}
+}
+
+func TestPathInfo_FindAndFilter(t *testing.T) {
+	dir := t.TempDir()
+	createTestStructure(t, dir)
+	pi := NewPathInfo(dir)
+
+	files := pi.FindFiles("*.txt")
+	if !files.IsSuccess() || files.Count() < 1 {
+		t.Fatalf("expected FindFiles to find txt, got count %d", files.Count())
+	}
+
+	folders := pi.FindFolders("dir*")
+	if !folders.IsSuccess() || folders.Count() < 2 {
+		t.Fatalf("expected FindFolders to find 2 dirs, got %d", folders.Count())
+	}
+
+	filtered := pi.Filter(func(path string, info os.FileInfo) bool {
+		return strings.HasSuffix(path, ".log")
+	})
+	if !filtered.IsSuccess() || filtered.Count() < 1 {
+		t.Fatalf("expected Filter to find .log, got %d", filtered.Count())
 	}
 }

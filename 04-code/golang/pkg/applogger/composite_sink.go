@@ -116,3 +116,26 @@ func (cs *CompositeSink) EndpointPath() string {
 func (cs *CompositeSink) EndPointPath() string {
 	return cs.EndpointPath()
 }
+
+// Name returns the sink identifier name.
+func (cs *CompositeSink) Name() string {
+	return "composite"
+}
+
+// Writers returns a safe cloned slice of registered sinks.
+func (cs *CompositeSink) Writers() []LogSink {
+	return cs.Sinks()
+}
+
+// WriterNames returns the names of all child sinks.
+func (cs *CompositeSink) WriterNames() []string {
+	sinks := cs.Sinks()
+	names := make([]string, 0, len(sinks))
+	for _, s := range sinks {
+		if s != nil {
+			names = append(names, s.Name())
+		}
+	}
+
+	return names
+}

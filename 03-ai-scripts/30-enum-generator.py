@@ -40,7 +40,7 @@ def parse_cli_args() -> argparse.Namespace:
     parser.add_argument("--items", "-m", help="Comma-separated member names (e.g. Fast,Standard,Slow)")
     parser.add_argument("--zero-value", "-z", default="Invalid", help="Zero-value label (Invalid or Unknown)")
     parser.add_argument("--package", "-p", help="Target Go package name (defaults to {name.lower()}type)")
-    parser.add_argument("--target-dir", "-d", help="Target directory relative to git root")
+    parser.add_argument("--out", "-o", "--target-dir", "-d", dest="target_dir", help="Target output folder")
     parser.add_argument("--config", "-c", help="Path to JSON config file")
     parser.add_argument("--json", help="Inline JSON config string or '-' for stdin")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing files if present")
@@ -103,9 +103,13 @@ def resolve_target_dir(pkg: str, raw_dir: str | None) -> str:
     return f"04-code/golang/pkg/enum/{pkg}"
 
 
-def resolve_pkg_name(raw_pkg: str | None, name: str) -> str:
+def resolve_pkg_name(raw_pkg: str | None, name: str, raw_dir: str | None = None) -> str:
     if raw_pkg:
         return raw_pkg.strip().lower()
+    if raw_dir:
+        folder = Path(raw_dir.strip().replace("\\", "/")).name.lower()
+        if folder.endswith("type"):
+            return folder
     low = name.strip().lower()
     return low if low.endswith("type") else f"{low}type"
 
@@ -115,10 +119,11 @@ def normalize_config(raw: dict[str, Any]) -> dict[str, Any]:
     items = build_items_list(raw.get("items", []))
     if not items:
         raise ValueError("At least one enum item must be provided")
-    pkg = resolve_pkg_name(raw.get("package"), name)
+    pkg = resolve_pkg_name(raw.get("package"), name, raw.get("target_dir"))
     tmeta = resolve_type_metadata(raw.get("type", "byte"), raw.get("zero_value", "Invalid"))
     tdir = resolve_target_dir(pkg, raw.get("target_dir"))
     return {"name": name, "items": items, "package": pkg, "target_dir": tdir, **tmeta}
+
 
 
 def build_variant_header(ctx: dict[str, Any]) -> list[str]:
@@ -553,18 +558,43 @@ def execute_dry_run(target_dir: Path, bundle: dict[str, str]) -> int:
     return EXIT_SUCCESS
 
 
+def check_overwrite_conflict(dest: Path, is_overwrite: bool) -> bool:
+    if is_overwrite:
+        return False
+    return dest.exists()
+
+
+def run_code_formatter(target_dir: Path) -> None:
+    formatter = Path(__file__).parent / "26-go-code-formatter.py"
+    if not formatter.exists():
+        return
+    try:
+        import subprocess
+        subprocess.run(
+            [sys.executable, str(formatter), str(target_dir)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except Exception:
+        pass
+
+
 def write_bundle(target_dir: Path, bundle: dict[str, str], is_overwrite: bool) -> int:
     target_dir.mkdir(parents=True, exist_ok=True)
     norm_dir = target_dir.as_posix()
     for filename, content in bundle.items():
         dest = target_dir / filename
-        if not is_overwrite:
-            if dest.exists():
-                print(f"Error: {norm_dir}/{filename} already exists. Use --overwrite to replace.", file=sys.stderr)
-                return EXIT_USAGE_ERROR
+        has_conflict = check_overwrite_conflict(dest, is_overwrite)
+        if has_conflict:
+            print(f"Error: {norm_dir}/{filename} already exists. Use --overwrite.", file=sys.stderr)
+            return EXIT_USAGE_ERROR
         write_file_lf(dest, content)
         print(f"Created: {norm_dir}/{filename}")
+    run_code_formatter(target_dir)
+    print(f"✔ Successfully generated {len(bundle)} files in {norm_dir}")
     return EXIT_SUCCESS
+
 
 
 def main() -> int:

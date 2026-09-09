@@ -170,3 +170,56 @@ func (f *FileInfo) Delete() BoolResult {
 
 	return DeleteFile(f.path)
 }
+
+func (f *FileInfo) Normalize() *FileInfo {
+	if f == nil {
+		return NewFileInfo(CurrentDir)
+	}
+
+	res := Normalize(f.path)
+	if res.IsSuccess() {
+		return NewFileInfo(res.Data())
+	}
+
+	return NewFileInfo(f.path)
+}
+
+func (f *FileInfo) StemFull() string {
+	if f == nil {
+		return ""
+	}
+
+	return StemFull(f.path)
+}
+
+func (f *FileInfo) Slug() string {
+	if f == nil {
+		return ""
+	}
+
+	return Slug(f.path)
+}
+
+func (f *FileInfo) Up() *FolderInfo {
+	return f.Folder()
+}
+
+func (f *FileInfo) UpN(levels int) *FolderInfo {
+	if f == nil {
+		return NewFolderInfo(CurrentDir)
+	}
+
+	return NewFolderInfo(ParentN(f.path, levels))
+}
+
+func (f *FileInfo) Dir() string {
+	if f == nil {
+		return ""
+	}
+
+	return Dir(f.path)
+}
+
+func (f *FileInfo) Parent() *FolderInfo {
+	return f.Folder()
+}

@@ -82,3 +82,8 @@ func (fs *FileSink) FilePath() string {
 func (fs *FileSink) DriverType() DriverType {
 	return DriverFile
 }
+
+// Name returns the sink identifier name.
+func (fs *FileSink) Name() string {
+	return "file"
+}

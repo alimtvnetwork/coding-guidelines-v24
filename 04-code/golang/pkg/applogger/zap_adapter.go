@@ -74,3 +74,8 @@ func (za *ZapAdapter) Close() error {
 func (za *ZapAdapter) DriverType() DriverType {
 	return DriverZap
 }
+
+// Name returns the sink identifier name.
+func (za *ZapAdapter) Name() string {
+	return "zap"
+}

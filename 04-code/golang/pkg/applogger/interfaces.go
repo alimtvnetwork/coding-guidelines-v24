@@ -19,6 +19,7 @@ type (
 	}
 
 	LogSinker interface {
+		Name() string
 		WriteEntry(entry LogEntry) error
 		Sync() error
 		Close() error
@@ -36,6 +37,15 @@ type (
 
 	DriverTypeProvider interface {
 		DriverType() DriverType
+	}
+
+	WritersProvider interface {
+		Writers() []LogSink
+		WriterNames() []string
+	}
+
+	StreamersProvider interface {
+		Streamers() []any
 	}
 
 	Logger interface {
@@ -62,5 +72,8 @@ type (
 		AddWriters(writers ...LogSink) Logger
 		AddStreamer(streamer any) Logger
 		Type() DriverType
+		Writers() []LogSink
+		WriterNames() []string
+		Streamers() []any
 	}
 )

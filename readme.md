@@ -421,6 +421,69 @@ Installs: `02-spec/17-consolidated-guidelines`.
 
 > **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[02-spec/14-update/27-generic-installer-behavior.md](02-spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior and flags, see **[02-spec/15-distribution-and-runner/01-index.md](02-spec/15-distribution-and-runner/01-index.md)**.
 
+---
+
+<h2 align="center">⚡ Instant Type-Safe Go Enum Generator in One Line</h2>
+
+<p align="center">
+  Scaffold a complete, production-ready, 4-file type-safe Go enum package in <strong>one single command</strong>.<br/>
+  Enforces zero-nesting, compile-time interface assertions, DRY JSON serialization, and sub-15-line functions automatically.
+</p>
+
+### 🚀 One-Line Scaffolding Command
+
+```bash
+python 03-ai-scripts/30-enum-generator.py --name=Order --type=byte --items="Draft,Placed,Shipped,Delivered,Cancelled" --out=04-code/golang/pkg/enum/ordertype
+```
+
+> **Dry-run preview:** Append `--dry-run` to preview generated file paths and line counts without writing to disk.
+
+### 📋 CLI Options Reference
+
+| Flag | Short | Default | Description |
+|---|---|---|---|
+| `--name` | `-n` | *(Required)* | PascalCase base entity name (e.g. `Order`, `ProcessState`). |
+| `--type` | `-t` | `byte` | Backing primitive: `byte`, `uint8`, `uint16`, `int`, or `string`. |
+| `--items` | `-m` | *(Required)* | Comma-separated variant names (e.g. `Draft,Placed,Shipped`). |
+| `--out` | `-o` | `04-code/golang/pkg/enum/{pkg}` | Output directory relative to git root. Automatically creates directory. |
+| `--zero-value` | `-z` | `Invalid` | Zero-value sentinel label (`Invalid` or `Unknown`). |
+| `--package` | `-p` | `{name.lower()}type` | Target Go package name. Auto-inferred from `--out` if omitted. |
+| `--dry-run` | — | `false` | Preview generated files and line metrics without touching disk. |
+| `--overwrite` | — | `false` | Overwrite existing files if the package already exists. |
+
+### 📦 What Gets Generated (4 Standard Files)
+
+Every invocation generates a dedicated, self-contained Go package adhering strictly to repository guidelines:
+
+```text
+04-code/golang/pkg/enum/ordertype/
+├── variant.go         # Type definition, typed consts, predicates, boundary methods, JSON serialization
+├── vars.go            # Precompiled lookup map, All(), Values(), Min(), Max(), Parse() Result
+├── variant_test.go    # 100% test coverage: interfaces, properties, boundaries, JSON round-trips
+└── readme.md          # Package documentation, invariants, zero-circular-dependency guarantees
+```
+
+#### How the Generated Code Adheres to Repository Standards:
+
+1. **`variant.go` — Type Safety & Immutability:**
+   - **Compile-Time Assertions:** Verifies compliance against `baseenumer.BaseEnumer`, `ByteEnumer`, `NumberEnumer`, `MinMaxer[Variant]`, `BoundedEnumer[Variant]`, `json.Marshaler`, and `json.Unmarshaler`.
+   - **Explicit Conversions:** Implements `Value()`, `Byte()`, `ValueByte()`, `Bytes()`, `Int()`, and `Code()`.
+   - **Boundary Predicates:** Implements `Min()`, `Max()`, `IsMin()`, `IsMax()`, and `IsInRange(min, max Variant) bool`.
+   - **Domain Predicates:** Implements positive `IsDraft()`, `IsPlaced()`, etc. Never returns negated booleans.
+   - **DRY JSON Marshaling:** Uses `baseenumer.MarshalJSON` and `basicEnum.UnmarshalJSON` with zero reflection.
+
+2. **`vars.go` — Zero Magic Strings & Single-Value Returns:**
+   - **Fast Map Lookup:** Compiles label slices into bidirectional lookup tables via `baseenumer.NewBasicInteger`.
+   - **Single-Value Returns (CODE-RED-006):** `Parse(s string) Result` returns `result.Wrap[Variant]` with typed `errtype.Validation` (empty input) and `errtype.NotFound` (invalid variant).
+
+3. **`variant_test.go` — Comprehensive Verification:**
+   - Covers interfaces, properties, variant predicates, stringers, boundary ranges, and JSON round-trips (including `null` and out-of-bounds numbers).
+
+4. **Automated Formatting:**
+   - Automatically executes `03-ai-scripts/26-go-code-formatter.py` upon generation, ensuring 100% `gofmt` compliance.
+
+---
+
 <h2 align="center">🧪 CLI Linter Pack (release-asset installer)</h2>
 
 <p align="center">

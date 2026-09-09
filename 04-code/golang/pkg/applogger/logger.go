@@ -196,3 +196,45 @@ func (l *appLogger) AddStreamer(streamer any) Logger {
 
 	return cloned
 }
+
+func (l *appLogger) Writers() []LogSink {
+	return extractBaseSinks(l.sink)
+}
+
+func (l *appLogger) WriterNames() []string {
+	writers := l.Writers()
+	names := make([]string, 0, len(writers))
+	for _, w := range writers {
+		if w != nil {
+			names = append(names, w.Name())
+		}
+	}
+
+	return names
+}
+
+func extractSinkStreamers(writers []LogSink) []any {
+	var collected []any
+	for _, w := range writers {
+		if ss, isOk := w.(*StreamerSink); isOk {
+			if st := ss.Streamer(); st != nil {
+				collected = append(collected, st)
+			}
+		}
+	}
+
+	return collected
+}
+
+func (l *appLogger) Streamers() []any {
+	collected := extractSinkStreamers(l.Writers())
+	if len(collected) > 0 {
+		return collected
+	}
+
+	if l.streamer != nil {
+		return []any{l.streamer}
+	}
+
+	return nil
+}

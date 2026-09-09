@@ -153,3 +153,52 @@ func TestLogger_AddStreamer(t *testing.T) {
 		t.Fatalf("expected non-nil logger from nil streamer add")
 	}
 }
+
+func TestLogger_WritersAndWriterNames(t *testing.T) {
+	buf1, buf2 := &bytes.Buffer{}, &bytes.Buffer{}
+	l := newTestConsoleLogger(buf1, false)
+	sink2 := applogger.NewConsoleSink(buf2, false)
+	multi := l.AddWriters(sink2)
+
+	writers := multi.Writers()
+	if len(writers) != 2 {
+		t.Fatalf("expected 2 writers, got %d", len(writers))
+	}
+
+	names := multi.WriterNames()
+	if len(names) != 2 || names[0] != "console" || names[1] != "console" {
+		t.Fatalf("unexpected writer names: %v", names)
+	}
+}
+
+func TestLogger_StreamersIntrospection(t *testing.T) {
+	buf, streamBuf := &bytes.Buffer{}, &bytes.Buffer{}
+	l := newTestConsoleLogger(buf, false)
+	streamLogger := l.AddStreamer(streamBuf)
+
+	streamers := streamLogger.Streamers()
+	if len(streamers) != 1 {
+		t.Fatalf("expected 1 streamer, got %d", len(streamers))
+	}
+
+	if streamers[0] != streamBuf {
+		t.Fatalf("expected stream buffer instance in streamers list")
+	}
+}
+
+func TestSinks_NameMethod(t *testing.T) {
+	cs := applogger.NewConsoleSink(nil, false)
+	if cs.Name() != "console" {
+		t.Errorf("expected console, got %s", cs.Name())
+	}
+
+	ss := applogger.NewStreamerSink(&bytes.Buffer{})
+	if ss.Name() != "streamer" {
+		t.Errorf("expected streamer, got %s", ss.Name())
+	}
+
+	comp := applogger.NewCompositeSink(cs, ss)
+	if comp.Name() != "composite" {
+		t.Errorf("expected composite, got %s", comp.Name())
+	}
+}

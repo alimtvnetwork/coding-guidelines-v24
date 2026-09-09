@@ -66,3 +66,8 @@ func (ss *SQLiteSink) Close() error { return nil }
 func (ss *SQLiteSink) DriverType() DriverType {
 	return DriverSQLite
 }
+
+// Name returns the sink identifier name.
+func (ss *SQLiteSink) Name() string {
+	return "sqlite"
+}

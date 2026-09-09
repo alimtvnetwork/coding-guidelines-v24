@@ -234,3 +234,43 @@ func TestFolderInfo_Actions(t *testing.T) {
 		t.Fatalf("expected RemoveAll to delete folder and contents")
 	}
 }
+
+func TestFolderInfo_FindAndFilter(t *testing.T) {
+	dir := t.TempDir()
+	createTestStructure(t, dir)
+	fi := NewFolderInfo(dir)
+
+	files := fi.FindFiles("*.txt")
+	if !files.IsSuccess() || files.Count() != 1 {
+		t.Fatalf("expected 1 txt file, got %d", files.Count())
+	}
+
+	dirs := fi.FindFolders("dir*")
+	if !dirs.IsSuccess() || dirs.Count() != 2 {
+		t.Fatalf("expected 2 folders, got %d", dirs.Count())
+	}
+
+	paths := fi.Find("*.log")
+	if !paths.IsSuccess() || paths.Count() != 1 {
+		t.Fatalf("expected 1 log file path, got %d", paths.Count())
+	}
+}
+
+func TestFolderInfo_NormalizeAndNav(t *testing.T) {
+	dir := t.TempDir()
+	child := filepath.Join(dir, "nested", "leaf")
+	_ = EnsureDir(child, filepermtype.Standard)
+	fi := NewFolderInfo(child)
+
+	if fi.Normalize().Name() != "leaf" {
+		t.Fatalf("unexpected normalized name")
+	}
+
+	if fi.Up().Name() != "nested" {
+		t.Fatalf("unexpected Up name: %s", fi.Up().Name())
+	}
+
+	if fi.UpN(2).Name() != filepath.Base(dir) {
+		t.Fatalf("unexpected UpN(2) name")
+	}
+}

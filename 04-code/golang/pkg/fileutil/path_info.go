@@ -193,3 +193,11 @@ func (pathInfoNamespace) FileInfo(path string) *FileInfo {
 func (pathInfoNamespace) Inspect(path string) *PathInfo {
 	return NewPathInfo(path)
 }
+
+func (pathInfoNamespace) New(path string) *PathInfo {
+	return NewPathInfo(path)
+}
+
+func (pathInfoNamespace) From(path string) *PathInfo {
+	return NewPathInfo(path)
+}
