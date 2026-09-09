@@ -9,7 +9,6 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 ## Prompts Matrix
 
 | Category | Prompt File | Purpose |
-|---|---|---|
 | `00-folder-structure` | [`00-folder-structure/01-canonical-folder-structure.md`](../01-prompts/00-folder-structure/01-canonical-folder-structure.md) | Canonical Folder Structure & Sizing Rules — Architecture Spec (must follow) |
 | `01-prompt-library-setup` | [`01-prompt-library-setup/01-prompt-library-setup.md`](../01-prompts/01-prompt-library-setup/01-prompt-library-setup.md) | Library Setup & Prompt Architecture Scaffold — Setup Spec (must follow) |
 | `02-core-workflow` | [`02-core-workflow/01-next-steps.md`](../01-prompts/02-core-workflow/01-next-steps.md) | Next Steps Planning & Sprint Prioritization — Workflow (must follow) |
@@ -18,10 +17,10 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 | `03-read-write` | [`03-read-write/01-write-antigravity.md`](../01-prompts/03-read-write/01-write-antigravity.md) | Antigravity Customization Architecture & Rule Authoring — Workflow (must follow) |
 | `03-read-write` | [`03-read-write/02-read-memory-enhanced.md`](../01-prompts/03-read-write/02-read-memory-enhanced.md) | Memory Retrieval & Project Context Ingestion — Workflow (must follow) |
 | `03-read-write` | [`03-read-write/03-write-memory.md`](../01-prompts/03-read-write/03-write-memory.md) | Memory Persistence & Issue Logging — Workflow (must follow) |
+| `04-coding-standards/old-coding-guidelines` | [`04-coding-standards/old-coding-guidelines/01-coding-guidelines.md`](../01-prompts/04-coding-standards/old-coding-guidelines/01-coding-guidelines.md) | Standards Compliance & Coding Rules Audit — Workflow (must follow) |
 | `04-coding-standards` | [`04-coding-standards/01-coding-guidelines.md`](../01-prompts/04-coding-standards/01-coding-guidelines.md) | Standards Compliance & Coding Rules Audit — V2 (Grounded & Multi-Language) |
 | `04-coding-standards` | [`04-coding-standards/02-theming-guidelines.md`](../01-prompts/04-coding-standards/02-theming-guidelines.md) | Theming Architecture & Color Palette Guidelines — Coding Guideline (must follow) |
 | `04-coding-standards` | [`04-coding-standards/03-update-theming.md`](../01-prompts/04-coding-standards/03-update-theming.md) | Theme System Refactoring & CSS Variables Update — Workflow (must follow) |
-| `04-coding-standards/old-coding-guidelines` | [`04-coding-standards/old-coding-guidelines/01-coding-guidelines.md`](../01-prompts/04-coding-standards/old-coding-guidelines/01-coding-guidelines.md) | Standards Compliance & Coding Rules Audit — Workflow (must follow) |
 | `05-coding-guidelines` | [`05-coding-guidelines/01-plan-coding-guideline-audit.md`](../01-prompts/05-coding-guidelines/01-plan-coding-guideline-audit.md) | Audit Planning for Coding Guidelines — Planning Spec (must follow) |
 | `05-coding-guidelines` | [`05-coding-guidelines/02-execute-coding-guideline-fix.md`](../01-prompts/05-coding-guidelines/02-execute-coding-guideline-fix.md) | Guideline Fix Execution & Linter Remediation — Workflow (must follow) |
 | `05-coding-guidelines` | [`05-coding-guidelines/03-cg-audit-gap-n-steps.md`](../01-prompts/05-coding-guidelines/03-cg-audit-gap-n-steps.md) | Gap Analysis & N-Step Guideline Audit — Planning Spec (must follow) |
@@ -75,22 +74,22 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 | `15-cg-execute` | [`15-cg-execute/16-multi-language-enums-and-traits.md`](../01-prompts/15-cg-execute/16-multi-language-enums-and-traits.md) | Multi-Language Enums, Traits & Pattern Matching — Coding Guideline (must follow) |
 | `15-cg-execute` | [`15-cg-execute/17-terminal-ui-and-cli-styling.md`](../01-prompts/15-cg-execute/17-terminal-ui-and-cli-styling.md) | Terminal UI, CLI Styling, Lipgloss & Animations — Coding Guideline (must follow) |
 | `15-cg-execute` | [`15-cg-execute/18-function-argument-reduction-and-params.md`](../01-prompts/15-cg-execute/18-function-argument-reduction-and-params.md) | Argument Reduction, Parameter Structs & Return Architecture — Coding Guideline (must follow) |
-| `16-prompt-engineering` | [`16-prompt-engineering/01-conversation-log.md`](../01-prompts/16-prompt-engineering/01-conversation-log.md) | Conversation Log & Context Wrapper — Engineering Workflow (must follow) |
-| `16-prompt-engineering` | [`16-prompt-engineering/02-proofread.md`](../01-prompts/16-prompt-engineering/02-proofread.md) | Proofreading & Semantic Consistency Verification — Quality Protocol (must follow) |
-| `17-ci-cd` | [`17-ci-cd/01-ci-cd-fix.md`](../01-prompts/17-ci-cd/01-ci-cd-fix.md) | CI/CD Fix Loop with 4-Part RCA & Local Runner — Workflow (must follow) |
-| `17-ci-cd` | [`17-ci-cd/02-cicd-run-ps1.md`](../01-prompts/17-ci-cd/02-cicd-run-ps1.md) | PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow) |
-| `17-ci-cd` | [`17-ci-cd/03-fix-ci-cd-and-run-scripts.md`](../01-prompts/17-ci-cd/03-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
-| `17-ci-cd` | [`17-ci-cd/04-ci-cd-fix-with-release.md`](../01-prompts/17-ci-cd/04-ci-cd-fix-with-release.md) | Release-Triggered CI/CD Fix Loop — Workflow (must follow) |
-| `17-ci-cd` | [`17-ci-cd/05-cicd-pipeline-create.md`](../01-prompts/17-ci-cd/05-cicd-pipeline-create.md) | Pipeline Architecture & Cross-Platform Python Automation — Workflow (must follow) |
-| `18-release-management` | [`18-release-management/01-major-bump.md`](../01-prompts/18-release-management/01-major-bump.md) | Major Version Bump — Release Management (must follow) |
-| `18-release-management` | [`18-release-management/02-minor-bump.md`](../01-prompts/18-release-management/02-minor-bump.md) | Minor Version Bump — Release Management (must follow) |
-| `18-release-management` | [`18-release-management/03-patch-bump.md`](../01-prompts/18-release-management/03-patch-bump.md) | Patch Version Bump — Release Management (must follow) |
-| `18-release-management` | [`18-release-management/04-release.md`](../01-prompts/18-release-management/04-release.md) | Release Deployment & Version Bump — Release Management (must follow) |
-| `18-release-management` | [`18-release-management/05-version-bump-docs.md`](../01-prompts/18-release-management/05-version-bump-docs.md) | Version Bump Documentation Update — Release Management (must follow) |
-| `18-release-management` | [`18-release-management/06-release-orchestrator.md`](../01-prompts/18-release-management/06-release-orchestrator.md) | Automated Release Orchestrator & Branch Lifecycle — Release Management (must follow) |
-| `19-insults` | [`19-insults/01-raw-insults.md`](../01-prompts/19-insults/01-raw-insults.md) | Uncompromising Quality & Zero-Tolerance Anti-Carelessness — Core Discipline (must follow) |
-| `19-insults` | [`19-insults/02-consolidated-insults-v2.md`](../01-prompts/19-insults/02-consolidated-insults-v2.md) | Consolidated Discipline & Rigorous Code Quality Protocol — Core Discipline (must follow) |
-| `20-memory-consolidate` | [`20-memory-consolidate/01-consolidate-completed-plans.md`](../01-prompts/20-memory-consolidate/01-consolidate-completed-plans.md) | Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow) |
+| `16-rewrite` | [`16-rewrite/01-conversation-log.md`](../01-prompts/16-rewrite/01-conversation-log.md) | Conversation Log & Context Wrapper — Engineering Workflow (must follow) |
+| `16-rewrite` | [`16-rewrite/02-proofread.md`](../01-prompts/16-rewrite/02-proofread.md) | Proofreading & Semantic Consistency Verification — Quality Protocol (must follow) |
+| `17-rewrite-memory` | [`17-rewrite-memory/01-consolidate-completed-plans.md`](../01-prompts/17-rewrite-memory/01-consolidate-completed-plans.md) | Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow) |
+| `18-ci-cd` | [`18-ci-cd/01-ci-cd-fix.md`](../01-prompts/18-ci-cd/01-ci-cd-fix.md) | CI/CD Fix Loop with 4-Part RCA & Local Runner — Workflow (must follow) |
+| `18-ci-cd` | [`18-ci-cd/02-cicd-run-ps1.md`](../01-prompts/18-ci-cd/02-cicd-run-ps1.md) | PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow) |
+| `18-ci-cd` | [`18-ci-cd/03-fix-ci-cd-and-run-scripts.md`](../01-prompts/18-ci-cd/03-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
+| `18-ci-cd` | [`18-ci-cd/04-ci-cd-fix-with-release.md`](../01-prompts/18-ci-cd/04-ci-cd-fix-with-release.md) | Release-Triggered CI/CD Fix Loop — Workflow (must follow) |
+| `18-ci-cd` | [`18-ci-cd/05-cicd-pipeline-create.md`](../01-prompts/18-ci-cd/05-cicd-pipeline-create.md) | Pipeline Architecture & Cross-Platform Python Automation — Workflow (must follow) |
+| `19-release-management` | [`19-release-management/01-major-bump.md`](../01-prompts/19-release-management/01-major-bump.md) | Major Version Bump — Release Management (must follow) |
+| `19-release-management` | [`19-release-management/02-minor-bump.md`](../01-prompts/19-release-management/02-minor-bump.md) | Minor Version Bump — Release Management (must follow) |
+| `19-release-management` | [`19-release-management/03-patch-bump.md`](../01-prompts/19-release-management/03-patch-bump.md) | Patch Version Bump — Release Management (must follow) |
+| `19-release-management` | [`19-release-management/04-release.md`](../01-prompts/19-release-management/04-release.md) | Release Deployment & Version Bump — Release Management (must follow) |
+| `19-release-management` | [`19-release-management/05-version-bump-docs.md`](../01-prompts/19-release-management/05-version-bump-docs.md) | Version Bump Documentation Update — Release Management (must follow) |
+| `19-release-management` | [`19-release-management/06-release-orchestrator.md`](../01-prompts/19-release-management/06-release-orchestrator.md) | Automated Release Orchestrator & Branch Lifecycle — Release Management (must follow) |
+| `20-insults` | [`20-insults/01-raw-insults.md`](../01-prompts/20-insults/01-raw-insults.md) | Uncompromising Quality & Zero-Tolerance Anti-Carelessness — Core Discipline (must follow) |
+| `20-insults` | [`20-insults/02-consolidated-insults-v2.md`](../01-prompts/20-insults/02-consolidated-insults-v2.md) | Consolidated Discipline & Rigorous Code Quality Protocol — Core Discipline (must follow) |
 | `21-old-execute-prompts` | [`21-old-execute-prompts/01-execute-robust-loop.md`](../01-prompts/21-old-execute-prompts/01-execute-robust-loop.md) | Resilient Multi-Agent Loop Execution — Workflow (must follow) |
 | `21-old-execute-prompts` | [`21-old-execute-prompts/02-fix-subtask-naming-convention.md`](../01-prompts/21-old-execute-prompts/02-fix-subtask-naming-convention.md) | Subtask Naming Normalization & Sequence Repair — Workflow (must follow) |
 | `22-ai-fix-script-prompts` | [`22-ai-fix-script-prompts/01-python-file-manipulator.md`](../01-prompts/22-ai-fix-script-prompts/01-python-file-manipulator.md) | Python File Manipulator CLI Specification — Tooling Spec (must follow) |

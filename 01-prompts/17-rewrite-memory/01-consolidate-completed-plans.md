@@ -1,4 +1,4 @@
-# Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow)
+# Lovable Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow)
 
 Trigger Keywords & Aliases: `consolidate-plans`, `consolidate completed plans`, `clean completed plans`, `resequence completed plans`, `merge plans`, `archive completed plans`, `cleanup plans completed`, `memory consolidation`, `backup and consolidate plans`
 
