@@ -17,6 +17,10 @@ var (
 	basicEnum = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
 )
 
+func init() {
+	basicEnum.RegisterAlias("Canceled", Cancelled)
+}
+
 func All() []Variant {
 	return basicEnum.All()
 }

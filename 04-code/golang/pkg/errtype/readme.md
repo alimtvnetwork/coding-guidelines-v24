@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `errtype` package provides strongly-typed enumerations, standardized error classification codes, and universal enum interfaces (`BaseEnumer`, `NumberEnumer` with backward-compatible aliases `BaseEnum`, `NumberEnum`) across the repository. It includes automated Python tooling (`03-ai-scripts/30-enum-generator.py`) to generate robust, JSON-compatible Go enums.
+The `errtype` package provides strongly-typed standardized error classification codes (`Variation`), HTTP status mappings, and universal enum interfaces (`BaseEnumer`, `NumberEnumer` with backward-compatible aliases `BaseEnum`, `NumberEnum`) across the repository. Domain-specific enumerations reside in dedicated packages under `pkg/enum/` (e.g. `pkg/enum/logleveltype/`, `pkg/enum/processstatetype/`).
 
 ---
 
@@ -12,23 +12,19 @@ The `errtype` package provides strongly-typed enumerations, standardized error c
    All enum types adhere to standard Go interfaces conforming to the idiomatic `er` suffix convention:
    - `BaseEnumer` (alias `BaseEnum`): `Name() string`, `String() string`, `ValueString() string`, `IsValid() bool`, `IsEnum() bool`, `IsCompare() bool`, `MarshalJSON()`, `UnmarshalJSON()`.
    - `NumberEnumer` (alias `NumberEnum`): Extends `BaseEnumer` with numeric accessors: `Code() uint16`, `Int() int`, and `HttpStatus() int`.
-2. **String & Numeric Implementations:**
-   - **String-backed enums** (e.g. `ProcessStateType`): Backed by `string`, providing zero-allocation human-readable string values (`Pending`, `Running`, `Completed`, `Failed`, `Canceled`).
-   - **Number-backed enums** (e.g. `Variation`, `LogLevelType`): Backed by `uint16`, providing efficient integer serialization and HTTP status mapping.
+2. **Dedicated Enum Hierarchy in `pkg/enum/`:**
+   Domain-specific enums are housed in dedicated packages under `pkg/enum/` (`logleveltype`, `processstatetype`, `fileoptype`, `filepermtype`, etc.) using `03-ai-scripts/30-enum-generator.py`.
 3. **Generic Lookup Helper (`ToEnum`):**
-   A type-safe generic helper allows looking up any `BaseEnumer` from a string case-insensitively:
+   A type-safe generic helper allows looking up any `BaseEnumer` by name, label, or numeric value string case-insensitively:
    ```go
-   found, ok := errtype.ToEnum("running", errtype.AllProcessStates())
+   found, ok := errtype.ToEnum("running", processstatetype.All())
    ```
-4. **Automated Enum Generation:**
-   Enums are generated and synchronized using `03-ai-scripts/30-enum-generator.py`, guaranteeing complete boilerplate implementation (registries, stringifiers, JSON handlers, parse functions, slice generators).
-5. **1:1 File & Package Isolation:**
-   Each enum type resides in its own dedicated package or source file matching its snake_case/package name:
-   - Dedicated subpackage `logleveltype/` (`pkg/errtype/logleveltype/`): `variant.go` & `variant_test.go` (`LogLevelType`)
-   - Dedicated subpackage `processstatetype/` (`pkg/errtype/processstatetype/`): `variant.go` & `variant_test.go` (`ProcessStateType`)
-   - Root `variation.go` & `methods.go` (`Variation` error type codes)
-   - Root `base_enumer.go` & `base_enumer_test.go` (`BaseEnumer` interfaces & `ToEnum`)
-   - Canonical package `pkg/enum/processstatetype/` provides standalone byte-backed process states.
+4. **1:1 File & Package Isolation:**
+   Each enum type resides in its own dedicated package under `pkg/enum/`:
+   - Dedicated package `pkg/enum/logleveltype/`: `variant.go`, `vars.go`, `variant_test.go` (`LogLevelType`)
+   - Dedicated package `pkg/enum/processstatetype/`: `variant.go`, `vars.go`, `variant_test.go` (`ProcessStateType`)
+   - Root `variation.go` & `methods.go`: `Variation` error classification codes
+   - Root `base_enumer.go` & `base_enumer_test.go`: `BaseEnumer` forwarded interfaces and `ToEnum`
 
 ---
 
@@ -41,34 +37,11 @@ flowchart TD
 
     BaseInterface --> NumberInterface
 
-    BaseInterface --> ProcessState["ProcessStateType (string-backed)\nPending, Running, Completed, Failed"]
-    NumberInterface --> ErrorVariation["Variation (uint16-backed)\nValidation, NotFound, Precondition, IO, Timeout"]
-    NumberInterface --> LogLevel["LogLevelType (uint16-backed)\nTrace, Debug, Info, Warn, Error, Fatal"]
+    BaseInterface --> ProcessState["pkg/enum/processstatetype\nPending, Running, Completed, Failed, Cancelled"]
+    NumberInterface --> ErrorVariation["pkg/errtype.Variation\nValidation, NotFound, Precondition, IO, Timeout"]
+    NumberInterface --> LogLevel["pkg/enum/logleveltype\nDebug, Info, Warn, Error, Fatal"]
 
     GenericHelper["ToEnum[T BaseEnumer](val, all)"] -.-> BaseInterface
-```
-
----
-
-## Enum Memory Layout & Serialization (ASCII Layout)
-
-```
-+-------------------------------------------------------------------------+
-|                       BaseEnum Interface Contract                       |
-|  - Name() string: "Running"                                             |
-|  - ValueString() string: "Running" (string) or "2" (numeric)            |
-|  - IsValid() bool: validated against internal registry map             |
-|  - IsEnum() bool: true if registered                                    |
-|  - MarshalJSON() ([]byte, error): JSON-ready representation             |
-|  - UnmarshalJSON(data []byte) error: string or integer deserializer    |
-+-------------------------------------------------------------------------+
-                                    |
-                    +---------------+---------------+
-                    |                               |
-    [String-backed Enum]                    [Number-backed Enum]
-    type ProcessStateType string            type Variation uint16
-    - JSON: `"Running"`                     - JSON: `2` or `"Validation"`
-    - Memory: 16-byte string header         - Memory: 2-byte unsigned integer
 ```
 
 ---
@@ -95,28 +68,24 @@ Standard classification codes mapped to HTTP status codes:
 | `Unknown` | 13 | Unknown | 500 Internal Server Error |
 | `Serialization` | 14 | Serialization | 400 Bad Request |
 
-### 2. `ProcessStateType` (String-backed Lifecycle Enum)
+### 2. Domain Enums (`pkg/enum/`)
 ```go
-import "coding-guidelines/common/pkg/errtype/processstatetype"
+import (
+    "coding-guidelines/common/pkg/enum/logleveltype"
+    "coding-guidelines/common/pkg/enum/processstatetype"
+    "coding-guidelines/common/pkg/errtype"
+)
 
+// ProcessState
 state := processstatetype.Running
-
-// Inspection
 if state.IsValid() {
     fmt.Printf("State: %s\n", state.Name())
 }
 
-// Slice of all states
-all := processstatetype.All()
+allStates := processstatetype.All()
+found, ok := errtype.ToEnum("completed", allStates)
 
-// Generic lookup
-found, ok := errtype.ToEnum("completed", all)
-```
-
-### 3. `LogLevelType` (Number-backed Logger Level Enum)
-```go
-import "coding-guidelines/common/pkg/errtype/logleveltype"
-
+// LogLevel
 level := logleveltype.Info
 fmt.Printf("Level Code: %d, Name: %s\n", level.Code(), level.Name())
 ```
@@ -128,19 +97,10 @@ fmt.Printf("Level Code: %d, Name: %s\n", level.Code(), level.Name())
 Generate new enums or regenerate existing ones using the Python script `03-ai-scripts/30-enum-generator.py`:
 
 ```bash
-# Generate a string-backed enum
+# Generate a byte-backed enum in pkg/enum/
 python 03-ai-scripts/30-enum-generator.py \
-  --name DeploymentStatus \
-  --type string \
-  --package errtype \
-  --members Pending InProgress Succeeded Failed RolledBack \
-  --out 04-code/golang/pkg/errtype/deployment_status_enum.go
-
-# Generate a uint16-backed number enum
-python 03-ai-scripts/30-enum-generator.py \
-  --name PriorityLevel \
-  --type int \
-  --package errtype \
-  --members Low Medium High Critical \
-  --out 04-code/golang/pkg/errtype/priority_level_enum.go
+  --name taskstatus \
+  --type byte \
+  --items "Pending,Running,Completed,Failed" \
+  --target 04-code/golang/pkg/enum/taskstatustype
 ```

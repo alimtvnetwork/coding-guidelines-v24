@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"coding-guidelines/common/examples"
-	"coding-guidelines/common/pkg/errtype/processstatetype"
+	"coding-guidelines/common/pkg/enum/processstatetype"
 )
 
 func TestRunBytesLifecycleExample(t *testing.T) {

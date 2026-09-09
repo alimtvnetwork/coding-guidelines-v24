@@ -3,9 +3,9 @@ package errtype_test
 import (
 	"testing"
 
+	"coding-guidelines/common/pkg/enum/logleveltype"
+	"coding-guidelines/common/pkg/enum/processstatetype"
 	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/errtype/logleveltype"
-	"coding-guidelines/common/pkg/errtype/processstatetype"
 )
 
 func TestBaseEnum_VariationConforms(t *testing.T) {

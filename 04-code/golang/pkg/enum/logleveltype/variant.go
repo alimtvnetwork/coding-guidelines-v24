@@ -7,6 +7,8 @@ import (
 type (
 	Variant byte
 
+	LogLevelType = Variant
+
 	VariantPredicate func(v Variant) bool
 )
 

@@ -8,9 +8,9 @@ import (
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/enum/filepermtype"
 	"coding-guidelines/common/pkg/enum/filewritemodetype"
+	"coding-guidelines/common/pkg/enum/logleveltype"
+	"coding-guidelines/common/pkg/enum/processstatetype"
 	"coding-guidelines/common/pkg/errtype"
-	"coding-guidelines/common/pkg/errtype/logleveltype"
-	"coding-guidelines/common/pkg/errtype/processstatetype"
 	"coding-guidelines/common/pkg/fileutil"
 	"coding-guidelines/common/pkg/streamwriter"
 )
@@ -126,10 +126,10 @@ func RunReflectConverterExample() (*CustomerProfile, *appfault.AppError) {
 
 // RunEnumOperationsExample demonstrates BaseEnum, NumberEnum, and generic ToEnum helpers.
 func RunEnumOperationsExample() *appfault.AppError {
-	// 1. String-backed BaseEnum (processstatetype)
+	// 1. ProcessState enum (processstatetype)
 	state := processstatetype.Running
-	if state.Name() != "Running" || state.ValueString() != "Running" {
-		return appfault.New(errtype.Generic, fmt.Sprintf("invalid string enum: %s", state))
+	if state.Name() != "Running" || !state.IsValid() {
+		return appfault.New(errtype.Generic, fmt.Sprintf("invalid enum state: %s", state))
 	}
 
 	// 2. Lookup via generic ToEnum helper

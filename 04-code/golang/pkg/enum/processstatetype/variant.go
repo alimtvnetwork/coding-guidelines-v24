@@ -7,6 +7,8 @@ import (
 type (
 	Variant byte
 
+	ProcessStateType = Variant
+
 	VariantPredicate func(v Variant) bool
 )
 
@@ -19,7 +21,10 @@ const (
 	Cancelled
 )
 
-const Unknown = Invalid
+const (
+	Unknown  = Invalid
+	Canceled = Cancelled
+)
 
 var (
 	_ baseenumer.BaseEnumer             = Variant(0)
@@ -130,6 +135,10 @@ func (v Variant) IsFailed() bool {
 
 func (v Variant) IsCancelled() bool {
 	return v == Cancelled
+}
+
+func (v Variant) IsCanceled() bool {
+	return v.IsCancelled()
 }
 
 func (v Variant) MarshalJSON() ([]byte, error) {

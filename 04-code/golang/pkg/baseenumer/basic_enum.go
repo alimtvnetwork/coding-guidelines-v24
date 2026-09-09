@@ -139,6 +139,13 @@ func (b *BasicIntegerEnum[V]) Zero() V {
 	return b.zero
 }
 
+// RegisterAlias registers an additional string alias mapping to a variant.
+func (b *BasicIntegerEnum[V]) RegisterAlias(alias string, v V) {
+	b.variantMap[alias] = v
+	b.variantMap[strings.ToLower(alias)] = v
+	b.variantMap[strings.ToUpper(alias)] = v
+}
+
 // MaxValid returns the maximum valid index.
 func (b *BasicIntegerEnum[V]) MaxValid() int {
 	return b.maxValid
@@ -350,6 +357,13 @@ func (b *BasicStringEnum[V]) TypeName() string {
 // Zero returns the zero-value variant.
 func (b *BasicStringEnum[V]) Zero() V {
 	return b.zero
+}
+
+// RegisterAlias registers an additional string alias mapping to a variant.
+func (b *BasicStringEnum[V]) RegisterAlias(alias string, v V) {
+	b.variantMap[alias] = v
+	b.variantMap[strings.ToLower(alias)] = v
+	b.variantMap[strings.ToUpper(alias)] = v
 }
 
 // Min returns the minimum valid variant.
