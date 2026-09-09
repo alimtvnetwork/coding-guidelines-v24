@@ -2,7 +2,8 @@
 name: read-memory-enhanced
 description: >-
   Executes the enhanced "Read Memory" protocol. Use this skill BEFORE touching the codebase to
-  aggressively and defensively load the project's identity, CODE RED rules, specs, pending plans,
+  aggressively and defensively load the project's identity, inspect the last 10 git commits to
+  understand recent file changes, follow what-to-read.md, CODE RED rules, specs, pending plans,
   and ambiguities.
 ---
 
@@ -16,9 +17,13 @@ Read both folders in full during Phase 1. Surface open-ambiguity counts and slug
 
 ## Goal
 
-Before you touch this project, load its identity into your head: who it is, what it forbids, what it has already decided, and what work is in flight.
+Before you touch this project, load its identity into your head: who it is, what it forbids, what it has already decided, what work is in flight, and what recent changes were made.
+Inspect the last 10 git commits (`git log -n 10 --stat`) to understand the latest file changes and working context.
+Read `.lovable/what-to-read.md` first as the authoritative reading priority order.
 The specs and the `.lovable/` folder are the single source of truth. Your training data is not. If the two disagree, the repo wins, every time.
 You are done reading when you can, without guessing:
+- summarize the last 10 git commits, what files were changed, and their architectural intent,
+- confirm `.lovable/what-to-read.md` was read first and followed in full,
 - name the CODE RED rules,
 - name the naming, error-handling, and DB conventions,
 - list what is currently in `.lovable/plans/pending/`,
@@ -39,9 +44,15 @@ The `.lovable/` folder, specs, and codebase can be massive. To process this info
 - CRITICAL: You MUST NOT refactor, edit, or write any application source code. This is a read and analysis phase only.
 ---
 
-## Phase 1 - Load the project
+## Phase 1 - Load the project & git history
 
-### 1.1 Read the whole `.lovable/` folder
+### 1.0 Read the last 10 git commits & file changes (MANDATORY)
+Run `git log -n 10 --stat` to view the last 10 commits, their commit messages, and the exact files modified, added, or deleted. Analyze what was touched recently and the architectural intent behind recent changes so you do not revert recent progress or repeat past bugs.
+
+### 1.1 Read what-to-read.md first (Authoritative Order)
+Read `.lovable/what-to-read.md` first. Follow every file and priority sequence it specifies before reading other files.
+
+### 1.2 Read the whole `.lovable/` folder
 
 Walk `.lovable/` recursively. Every file matters. Missing files are noted, not silently skipped. In particular:
 | # | Path | What you get |
@@ -167,6 +178,8 @@ Hard rules:
 After Phases 1-3, reply exactly:
 ```
 ✅ Onboarding complete.
+- Recent git commits inspected: [10] (from git log -n 10 --stat)
+- What-to-read followed: [yes] (from .lovable/what-to-read.md)
 - Memory files read: [X]
 - Consolidated guidelines read: [Y]
 - Spec authoring files read: [Z]
@@ -175,6 +188,7 @@ After Phases 1-3, reply exactly:
 - Open ambiguities: [K] (from .lovable/ambiguous-questions/01-new-ambiguity/)
 - Resolved ambiguities on file: [R] (from .lovable/ambiguous-questions/02-ambiguity-resolved/)
 I understand:
+- Latest commit changes: [brief summary of recent file changes and architectural intent from the last 10 commits]
 - CODE RED rules: [top 3-5]
 - Naming conventions: [brief]
 - Error handling: [one sentence]
@@ -188,6 +202,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 ## Pre-reply checklist (all must be true)
 
+- [ ] Inspected the last 10 git commits via `git log -n 10 --stat` to understand recent file changes
 - [ ] Read `.lovable/what-to-read.md` first if it exists, followed its order
 - [ ] Walked `.lovable/` recursively, no folder skipped silently
 - [ ] Read `.lovable/memory/01-index.md` and every file it points at

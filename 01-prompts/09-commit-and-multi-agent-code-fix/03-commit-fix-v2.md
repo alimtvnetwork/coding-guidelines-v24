@@ -13,11 +13,13 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 
 ## 1. Initial State: Clean the Git Tree First
 
-Before you do anything else, you must ensure the git repository is in a completely clean state.
+Before you do anything else, you must ensure the git repository is in a completely clean state:
 
 - Run `git status`.
 - If there are uncommitted changes, commit them or stash them.
 - If there are git issues, resolve them immediately.
+- Run `git log -n 10 --stat` to inspect the last 10 commits and understand recent file modifications and latest working context.
+- Read `.lovable/what-to-read.md` to follow the project's prioritized reading order.
 - Do not start any task work until the working tree is pristine.
 
 ## 2. Big Plan & Execution Routing

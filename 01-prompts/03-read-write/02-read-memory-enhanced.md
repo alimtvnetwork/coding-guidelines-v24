@@ -1,16 +1,18 @@
-# Memory Retrieval & Project Context Ingestion — Workflow (must follow)
+# Memory Retrieval, Git Commit History & Project Context Ingestion — Workflow (must follow)
 
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
-/goal Load the project's identity, specifications, conventions, active plans, and recent Root Cause Analysis (RCA) records into your context before starting any task. Never repeat a logged past failure.
+/goal Load the project's identity, specifications, conventions, active plans, recent git commit history, and Root Cause Analysis (RCA) records into your context before starting any task. Never repeat a logged past failure.
 
 /learn Ingest and internalize all past learnings, user corrections, patterns, coding rules, error philosophies, RCA logs, and project specifications from `.lovable/memory/learned/`, `.lovable/memory/`, `.lovable/issues/`, `.lovable/cicd-issues/`, and `.lovable/strictly-avoid.md` so Antigravity operates with zero hallucination.
 
-The specs, `.lovable/` folder, `what-to-read.md`, root `readme.md`, and the codebase as a whole are the single source of truth. Your training data is not. If the two disagree, the repo wins, every time.
+The specs, `.lovable/` folder, `what-to-read.md`, recent git commit history, root `readme.md`, and the codebase as a whole are the single source of truth. Your training data is not. If the two disagree, the repo wins, every time.
 
 Autonomously self-loop and read:
 
+- /learn the last 10 git commits (via `git log -n 10 --stat` and diffs) to understand what changes were made across the files so you understand the latest changes and can work with them seamlessly.
+- /learn `.lovable/what-to-read.md` first as the authoritative reading priority list before exploring the rest of the codebase.
 - /learn the entire codebase as a whole to create memory.
 - /learn the root `readme.md` to create memory.
 - /learn the entire `.lovable/` folder (especially `what-to-read.md`, `.lovable/coding-guidelines.md` and all files they reference) to create memory.
@@ -23,6 +25,8 @@ Note on spec folder naming: Spec folders follow the hyphenated pattern `02-spec/
 
 You are done reading when you can, without guessing:
 
+- Summarize the last 10 git commits, what files were changed, and their architectural intent.
+- Confirm `.lovable/what-to-read.md` was read first and followed in full.
 - Name the CODE RED rules.
 - Name the naming, error-handling, and DB conventions.
 - List what is currently in `.lovable/plans/pending/` (sequenced as `01-`, `02-`) and every active subtask.
@@ -139,17 +143,36 @@ To guarantee institutional memory and prevent regressions across all workflows (
 
 ---
 
-## Phase 1: Load the Project
+## Phase 1: Load the Project & Recent Git History
 
-### 1.0 Read `what-to-read.md` and Confirm Root `readme.md` Lowercase (Auto-Fix & Commit)
+### 1.0 Read the Last 10 Git Commits & File Changes (MANDATORY)
 
-1. Read `.lovable/what-to-read.md` (or `.lovable/what-to-read.md`). This is the authoritative reading order for the project and overrides any generic order. Follow every file and order it specifies.
-2. Root `readme.md` lowercase verification and auto-fix:
+Before touching any code, drafting plans, or executing tasks, the AI MUST inspect the recent git history to ground its context in the latest repository state:
+
+1. Run `git log -n 10 --stat` to view the last 10 commits, their commit messages, and the exact files modified, added, or deleted.
+2. Understand what changes were made to the files:
+   - Identify which packages, specifications, scripts, or documentation were recently edited or introduced.
+   - For any complex, architectural, or ambiguous changes, run `git show <commit-sha> --stat` or inspect specific diffs (`git diff <commit-sha>~1 <commit-sha> -- <file>`) to understand the underlying implementation logic.
+   - Ensure you do NOT revert recently added features, re-introduce anti-patterns that were just removed, or contradict recently established conventions.
+3. Formulate an internal summary of:
+   - What features, refactors, or bug fixes were completed across the last 10 commits.
+   - Which files and packages are currently in active development.
+   - Why those changes were made (architectural motivations and rationale).
+
+### 1.1 Read `what-to-read.md` First (Authoritative Priority List)
+
+1. Read `.lovable/what-to-read.md` in full before reading other files.
+2. Follow the exact prioritized reading order defined in `.lovable/what-to-read.md` (e.g. `version.json`, `.lovable/memory/01-index.md`, learned memories, coding guidelines, active plans).
+3. The reading sequence in `what-to-read.md` overrides any generic assumptions or ad-hoc file exploration.
+
+### 1.2 Confirm Root `readme.md` Lowercase (Auto-Fix & Commit)
+
+1. Root `readme.md` lowercase verification and auto-fix:
    - Verify that the root readme file is strictly named lowercase `readme.md`.
    - If an uppercase `README.md` exists or the casing is incorrect on disk or in git, immediately rename it to `readme.md`, remove the stale uppercase file, commit the change (`fix: ensure root readme is strictly lowercase readme.md`), and push to git without asking or second-guessing.
    - Read the root `readme.md` file for architecture, casing rules, repository layout, and AI entry points.
 
-### 1.1 Read the Whole `.lovable/` Folder & Flag Markdown Files
+### 1.3 Read the Whole `.lovable/` Folder & Flag Markdown Files
 
 Walk `.lovable/` recursively. Every file matters. Missing files are noted, not silently skipped.
 
@@ -353,6 +376,8 @@ After Phases 1-3, reply exactly:
 ```
 Onboarding complete.
 
+- Recent git commits inspected: [10] (from git log -n 10 --stat)
+- What-to-read followed: [yes] (from .lovable/what-to-read.md)
 - Memory files read: [X]
 - Consolidated guidelines read: [Y]
 - Spec authoring files read: [Z]
@@ -362,6 +387,7 @@ Onboarding complete.
 - Resolved ambiguities on file: [R]  (from .lovable/ambiguous-questions/02-ambiguity-resolved/)
 
 I understand:
+- Latest commit changes: [brief summary of recent file changes and architectural intent from the last 10 commits]
 - CODE RED rules: [top 3-5]
 - Naming conventions: [brief]
 - Error handling: [one sentence]
@@ -381,52 +407,55 @@ Then stop. No next-step suggestions, no exploratory questions.
 
 /goal Complete the checklist properly until done can do self-looping.
 
-1. [ ] /learn `.lovable/what-to-read.md` (or `.lovable/what-to-read.md`) first and followed its order in full.
-2. [ ] Confirmed root readme is strictly lowercase `readme.md` (auto-fixed, committed, and pushed if uppercase or missing).
-3. [ ] /learn the root `readme.md` file (casing rules, architecture, entry points).
-4. [ ] Walked `.lovable/` recursively, no folder or file skipped silently, and flagged all `.lovable/*.md` files.
-5. [ ] /learn `.lovable/memory/01-index.md` and every file it points at.
-6. [ ] /learn `.lovable/plans/01-index.md`, every file in `pending/` (sequenced as `01-`, `02-`), and all active subtasks.
-7. [ ] Skimmed `.lovable/plans/completed/` for recent history.
-8. [ ] /learn every file in `.lovable/spec/commands/`.
-9. [ ] /learn every file in `.lovable/issues/` and `.lovable/cicd-issues/`.
-10. [ ] /learn every file in `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/`.
-11. [ ] Scanned for broken links or missing docs and surfaced them under open ambiguities.
-12. [ ] Ingested active schema models, DB column conventions, and API route shapes.
-13. [ ] Verified runtime dependencies and package compatibility.
-14. [ ] Recursively traversed and read every subfolder, nested markdown file (`*.md`), overview, and consistency report within `02-spec/` (e.g. `02-spec/01-spec-authoring-guide/`, `02-spec/02-coding-guidelines/`, `02-spec/03-error-manage/`, `02-spec/04-database-conventions/`, `02-spec/21-app/`, etc.).
-15. [ ] Autonomously surveyed and looped through the entire codebase as a whole (all application code, entry points, routes, components, state stores, utilities, and configuration files).
-16. [ ] /learn `02-spec/17-consolidated-guidelines/` (or `02-spec/17-consolidated-guidelines/`) in numeric order (or noted missing).
-17. [ ] /learn `02-spec/01-spec-authoring-guide/` in numeric order (or noted missing).
-18. [ ] Can name CODE RED rules, naming conventions, error-handling philosophy without guessing.
-19. [ ] Can list every pending plan slug and subtask from memory.
-20. [ ] Checked whether the repo contains explicit tone, strictly-avoid, or prior-stupidity instructions and applied them without softening.
-21. [ ] Did not replace hard user wording with polite generic language.
-22. [ ] Emitted the Completion Confirmation block verbatim, then stopped.
-23. [ ] Confirmed that reading remained strictly read-only regarding the codebase (no source code refactored, only memory and lowercase readme auto-fix updated).
+1. [ ] Inspected the last 10 git commits (messages, file change stats, and diffs via `git log -n 10 --stat`) to understand recent modifications and file evolutions.
+2. [ ] /learn `.lovable/what-to-read.md` first and followed its prioritized reading sequence in full.
+3. [ ] Confirmed root readme is strictly lowercase `readme.md` (auto-fixed, committed, and pushed if uppercase or missing).
+4. [ ] /learn the root `readme.md` file (casing rules, architecture, entry points).
+5. [ ] Walked `.lovable/` recursively, no folder or file skipped silently, and flagged all `.lovable/*.md` files.
+6. [ ] /learn `.lovable/memory/01-index.md` and every file it points at.
+7. [ ] /learn `.lovable/plans/01-index.md`, every file in `pending/` (sequenced as `01-`, `02-`), and all active subtasks.
+8. [ ] Skimmed `.lovable/plans/completed/` for recent history.
+9. [ ] /learn every file in `.lovable/spec/commands/`.
+10. [ ] /learn every file in `.lovable/issues/` and `.lovable/cicd-issues/`.
+11. [ ] /learn every file in `.lovable/ambiguous-questions/01-new-ambiguity/` and `02-ambiguity-resolved/`.
+12. [ ] Scanned for broken links or missing docs and surfaced them under open ambiguities.
+13. [ ] Ingested active schema models, DB column conventions, and API route shapes.
+14. [ ] Verified runtime dependencies and package compatibility.
+15. [ ] Recursively traversed and read every subfolder, nested markdown file (`*.md`), overview, and consistency report within `02-spec/` (e.g. `02-spec/01-spec-authoring-guide/`, `02-spec/02-coding-guidelines/`, `02-spec/03-error-manage/`, `02-spec/04-database-conventions/`, `02-spec/21-app/`, etc.).
+16. [ ] Autonomously surveyed and looped through the entire codebase as a whole (all application code, entry points, routes, components, state stores, utilities, and configuration files).
+17. [ ] /learn `02-spec/17-consolidated-guidelines/` (or `02-spec/17-consolidated-guidelines/`) in numeric order (or noted missing).
+18. [ ] /learn `02-spec/01-spec-authoring-guide/` in numeric order (or noted missing).
+19. [ ] Can name CODE RED rules, naming conventions, error-handling philosophy without guessing.
+20. [ ] Can list every pending plan slug and subtask from memory.
+21. [ ] Checked whether the repo contains explicit tone, strictly-avoid, or prior-stupidity instructions and applied them without softening.
+22. [ ] Did not replace hard user wording with polite generic language.
+23. [ ] Emitted the Completion Confirmation block verbatim, then stopped.
+24. [ ] Confirmed that reading remained strictly read-only regarding the codebase (no source code refactored, only memory and lowercase readme auto-fix updated).
 
 ## Actionable Items & Checklist
 
 /goal Complete the checklist properly until done can do self-looping.
 
-1. [ ] /learn the coding guidelines in: `.lovable/coding-guidelines.md` and create memory.
-2. [ ] /learn the condition extraction in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
-3. [ ] /learn the formatting and braces in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
-4. [ ] /learn the multi-line formatting in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
-5. [ ] /learn the boolean guidelines in: `02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` and create memory.
-6. [ ] /learn the anti-hallucination rules in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
-7. [ ] /learn the error management architecture in: `02-spec/03-error-manage/01-index.md` (and related error manage files) and create memory.
-8. [ ] /learn all recent Root Cause Analysis (RCA) files in `.lovable/issues/`, `.lovable/cicd-issues/`, and `02-spec/03-error-manage/01-error-resolution/03-retrospectives/` to prevent recurring errors.
-9. [ ] /learn all hard prohibitions in `.lovable/strictly-avoid.md` and verify zero violations.
-10. [ ] /learn the enum standards and fixes in: `02-spec/17-consolidated-guidelines/07-enum-standards.md` and `02-spec/17-consolidated-guidelines/07-enum-standards.md` and create memory.
-11. [ ] /learn ALL other single-file specs in `02-spec/02-coding-guidelines/` and create memory.
-12. [ ] /learn the overarching main task plan.
-13. [ ] Ensure the git repository starts completely clean.
-14. [ ] /goal Complete all work on the current branch only.
-15. [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
-16. [ ] Group all completed work into a single logical commit.
-17. [ ] Push the commit to the remote repository.
-18. [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
+1. [ ] Inspect the last 10 git commits via `git log -n 10 --stat` to understand recent file changes and ensure seamless continuity with the latest code state.
+2. [ ] /learn `.lovable/what-to-read.md` and follow all prioritized reading entries before exploring the codebase.
+3. [ ] /learn the coding guidelines in: `.lovable/coding-guidelines.md` and create memory.
+4. [ ] /learn the condition extraction in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+5. [ ] /learn the formatting and braces in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+6. [ ] /learn the multi-line formatting in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+7. [ ] /learn the boolean guidelines in: `02-spec/02-coding-guidelines/01-cross-language/02-boolean-principles/01-index.md` and create memory.
+8. [ ] /learn the anti-hallucination rules in: `02-spec/02-coding-guidelines/01-cross-language/01-index.md` and create memory.
+9. [ ] /learn the error management architecture in: `02-spec/03-error-manage/01-index.md` (and related error manage files) and create memory.
+10. [ ] /learn all recent Root Cause Analysis (RCA) files in `.lovable/issues/`, `.lovable/cicd-issues/`, and `02-spec/03-error-manage/01-error-resolution/03-retrospectives/` to prevent recurring errors.
+11. [ ] /learn all hard prohibitions in `.lovable/strictly-avoid.md` and verify zero violations.
+12. [ ] /learn the enum standards and fixes in: `02-spec/17-consolidated-guidelines/07-enum-standards.md` and `02-spec/17-consolidated-guidelines/07-enum-standards.md` and create memory.
+13. [ ] /learn ALL other single-file specs in `02-spec/02-coding-guidelines/` and create memory.
+14. [ ] /learn the overarching main task plan.
+15. [ ] Ensure the git repository starts completely clean.
+16. [ ] /goal Complete all work on the current branch only.
+17. [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
+18. [ ] Group all completed work into a single logical commit.
+19. [ ] Push the commit to the remote repository.
+20. [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
