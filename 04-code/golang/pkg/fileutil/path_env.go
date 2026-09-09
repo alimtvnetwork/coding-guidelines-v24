@@ -231,3 +231,17 @@ func Expand(path string) StringResult {
 
 	return ExpandEnv(tildeRes.Data())
 }
+
+type pathEnvNamespace struct{}
+
+func (pathEnvNamespace) Expand(path string) StringResult {
+	return Expand(path)
+}
+
+func (pathEnvNamespace) ExpandEnv(path string) StringResult {
+	return ExpandEnv(path)
+}
+
+func (pathEnvNamespace) ExpandTilde(path string) StringResult {
+	return ExpandTilde(path)
+}

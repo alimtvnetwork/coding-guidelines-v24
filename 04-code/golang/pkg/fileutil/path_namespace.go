@@ -7,19 +7,12 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-type (
-	pathTempNamespace struct{}
-	pathEnvNamespace  struct{}
-	pathNormNamespace struct{}
-	pathInfoNamespace struct{}
-
-	pathNamespace struct {
-		Temp pathTempNamespace
-		Env  pathEnvNamespace
-		Norm pathNormNamespace
-		Info pathInfoNamespace
-	}
-)
+type pathNamespace struct {
+	Temp pathTempNamespace
+	Env  pathEnvNamespace
+	Norm pathNormNamespace
+	Info pathInfoNamespace
+}
 
 var Path = pathNamespace{
 	Temp: pathTempNamespace{},
@@ -30,122 +23,6 @@ var Path = pathNamespace{
 
 func (pathNamespace) Join(elem ...string) string {
 	return filepath.Join(elem...)
-}
-
-func (pathTempNamespace) UserTempDir() StringResult {
-	return UserTempDir()
-}
-
-func (pathTempNamespace) UserTempPath(subpath ...string) StringResult {
-	return UserTempPath(subpath...)
-}
-
-func (pathTempNamespace) TempFile(pattern string) FileResult {
-	return TempFile(pattern)
-}
-
-func (pathTempNamespace) TempDir(pattern string) StringResult {
-	return TempDir(pattern)
-}
-
-func (pathTempNamespace) CreateTempFile(dir string, pattern string, perm FilePermType) FileResult {
-	return CreateTempFile(dir, pattern, perm)
-}
-
-func (pathTempNamespace) CreateTempDir(dir string, pattern string, perm FilePermType) StringResult {
-	return CreateTempDir(dir, pattern, perm)
-}
-
-func (pathEnvNamespace) Expand(path string) StringResult {
-	return Expand(path)
-}
-
-func (pathEnvNamespace) ExpandEnv(path string) StringResult {
-	return ExpandEnv(path)
-}
-
-func (pathEnvNamespace) ExpandTilde(path string) StringResult {
-	return ExpandTilde(path)
-}
-
-func (pathNormNamespace) Clean(path string) string {
-	return Clean(path)
-}
-
-func (pathNormNamespace) Normalize(path string) StringResult {
-	return Normalize(path)
-}
-
-func (pathNormNamespace) NormalizeToSlash(path string) StringResult {
-	return NormalizeToSlash(path)
-}
-
-func (pathNormNamespace) ToSlash(path string) string {
-	return ToSlash(path)
-}
-
-func (pathNormNamespace) ToBackslash(path string) string {
-	return ToBackslash(path)
-}
-
-func (pathNormNamespace) ToNative(path string) string {
-	return ToNative(path)
-}
-
-func (pathNormNamespace) Deduplicate(path string) string {
-	return DeduplicateSeparators(path)
-}
-
-func (pathInfoNamespace) Ext(path string) string {
-	return Ext(path)
-}
-
-func (pathInfoNamespace) ExtNoDot(path string) string {
-	return ExtNoDot(path)
-}
-
-func (pathInfoNamespace) HasExt(path string, ext string) bool {
-	return HasExt(path, ext)
-}
-
-func (pathInfoNamespace) Base(path string) string {
-	return Base(path)
-}
-
-func (pathInfoNamespace) Stem(path string) string {
-	return Stem(path)
-}
-
-func (pathInfoNamespace) StemFull(path string) string {
-	return StemFull(path)
-}
-
-func (pathInfoNamespace) Slug(path string) string {
-	return Slug(path)
-}
-
-func (pathInfoNamespace) Dir(path string) string {
-	return Dir(path)
-}
-
-func (pathInfoNamespace) Split(path string) (string, string) {
-	return Split(path)
-}
-
-func (pathInfoNamespace) Parent(path string) string {
-	return Parent(path)
-}
-
-func (pathInfoNamespace) ParentN(path string, levels int) string {
-	return ParentN(path, levels)
-}
-
-func (pathInfoNamespace) IsAbs(path string) bool {
-	return IsAbs(path)
-}
-
-func (pathInfoNamespace) IsRel(path string) bool {
-	return IsRel(path)
 }
 
 type PathWrapper struct {
@@ -317,4 +194,18 @@ func (p *PathWrapper) Write(data any, perm FilePermType) BoolResult {
 
 func (p *PathWrapper) WriteString(content string, perm FilePermType) BoolResult {
 	return WriteString(p.path, content, perm)
+}
+
+type filePathCreator struct{}
+
+func (filePathCreator) Default(raw string) *PathWrapper {
+	return NewPath(raw)
+}
+
+func (filePathCreator) FromParts(elem ...string) *PathWrapper {
+	return NewPath(filepath.Join(elem...))
+}
+
+func (fileNewCreator) PathWrapper(raw string) *PathWrapper {
+	return NewPath(raw)
 }

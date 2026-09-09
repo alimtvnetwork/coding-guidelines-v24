@@ -361,3 +361,27 @@ func (f *FilePathOps) Delete() BoolResult {
 
 	return DeleteFile(f.absPath)
 }
+
+func (fileNamespace) Target(path string) *FilePathOps {
+	return NewFilePathOps(path)
+}
+
+func (fileNamespace) At(workDir, relPath string) *FilePathOps {
+	return NewFilePathOpsAt(workDir, relPath)
+}
+
+func (fileNewCreator) Target(path string) *FilePathOps {
+	return NewFilePathOps(path)
+}
+
+func (fileNewCreator) At(workDir, relPath string) *FilePathOps {
+	return NewFilePathOpsAt(workDir, relPath)
+}
+
+func (fileNewCreator) FilePathOps(path string) *FilePathOps {
+	return NewFilePathOps(path)
+}
+
+func (fileNewCreator) FilePathOpsAt(workDir, relPath string) *FilePathOps {
+	return NewFilePathOpsAt(workDir, relPath)
+}

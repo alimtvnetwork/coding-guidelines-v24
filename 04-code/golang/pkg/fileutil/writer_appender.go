@@ -415,3 +415,62 @@ var _ streamwriter.Writer[[]byte] = (*FileAppender)(nil)
 var _ sync.Locker = (*FileAppender)(nil)
 var _ io.WriteCloser = (*fileWriterStdAdapter)(nil)
 var _ io.WriteCloser = (*appenderStdAdapter)(nil)
+
+type fileWriterCreator struct{}
+
+func (fileWriterCreator) Default(path string) *FileWriter {
+	return NewFileWriterEngine(path)
+}
+
+func (fileWriterCreator) Engine(path string) *FileWriter {
+	return NewFileWriterEngine(path)
+}
+
+func (fileWriterCreator) WithOptions(opts FileWriterOptions) *FileWriter {
+	return NewFileWriterWithOptions(opts)
+}
+
+func (fileWriterCreator) Atomic(path string, perm FilePermType) *FileWriter {
+	return NewFileWriterWithOptions(FileWriterOptions{
+		Path: path,
+		Mode: filewritemodetype.Atomic,
+		Perm: perm,
+	})
+}
+
+func (fileWriterCreator) Direct(path string, perm FilePermType) *FileWriter {
+	return NewFileWriterWithOptions(FileWriterOptions{
+		Path: path,
+		Mode: filewritemodetype.Direct,
+		Perm: perm,
+	})
+}
+
+func (fileWriterCreator) Truncate(path string, perm FilePermType) *FileWriter {
+	return NewFileWriterWithOptions(FileWriterOptions{
+		Path: path,
+		Mode: filewritemodetype.Truncate,
+		Perm: perm,
+	})
+}
+
+func (fileNewCreator) FileWriter(path string) *FileWriter {
+	return NewFileWriterEngine(path)
+}
+
+type fileAppenderCreator struct{}
+
+func (fileAppenderCreator) Default(path string, perm FilePermType) *FileAppender {
+	return NewFileAppender(path, perm)
+}
+
+func (fileAppenderCreator) AutoSync(path string, perm FilePermType) *FileAppender {
+	appender := NewFileAppender(path, perm)
+	appender.SetAutoSync(true)
+
+	return appender
+}
+
+func (fileNewCreator) FileAppender(path string, perm FilePermType) *FileAppender {
+	return NewFileAppender(path, perm)
+}

@@ -514,3 +514,33 @@ func (s *boundWriterStdAdapter) Close() error {
 var _ streamwriter.Writer[[]byte] = (*BoundFileWriter)(nil)
 var _ sync.Locker = (*BoundFileWriter)(nil)
 var _ io.WriteCloser = (*boundWriterStdAdapter)(nil)
+
+type fileBoundWriterCreator struct{}
+
+func (fileBoundWriterCreator) Default(path string) *BoundFileWriter {
+	return NewBoundFileWriter(path)
+}
+
+func (fileBoundWriterCreator) WithOptions(opts BoundFileWriterOptions) *BoundFileWriter {
+	return NewBoundFileWriterWithOptions(opts)
+}
+
+func (fileBoundWriterCreator) Specific(path string) *BoundFileWriter {
+	return NewSpecificFileWriter(path)
+}
+
+func (fileBoundWriterCreator) Handler(path string) *BoundFileWriter {
+	return NewFileHandler(path)
+}
+
+func (fileBoundWriterCreator) AutoClose(path string, perm FilePermType) *BoundFileWriter {
+	return NewBoundFileWriterWithOptions(BoundFileWriterOptions{
+		Path:        path,
+		Perm:        perm,
+		IsAutoClose: true,
+	})
+}
+
+func (fileNewCreator) BoundFileWriter(path string) *BoundFileWriter {
+	return NewBoundFileWriter(path)
+}

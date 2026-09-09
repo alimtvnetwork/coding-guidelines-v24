@@ -77,3 +77,21 @@ func StreamJson[T any](path string, handler func(T) *appfault.AppError) BoolResu
 func StreamJSON[T any](path string, handler func(T) *appfault.AppError) BoolResult {
 	return StreamJson[T](path, handler)
 }
+
+type fileStreamWriterCreator struct{}
+
+func (fileStreamWriterCreator) Any(path string, openMode FileOpenModeType, perm FilePermType) FileWriterResult {
+	return NewFileWriter(path, openMode, perm)
+}
+
+func (fileStreamWriterCreator) Append(path string, perm FilePermType) FileWriterResult {
+	return NewFileWriter(path, openfiletype.CreateAppend, perm)
+}
+
+func (fileStreamWriterCreator) Truncate(path string, perm FilePermType) FileWriterResult {
+	return NewFileWriter(path, openfiletype.CreateTruncate, perm)
+}
+
+func (fileNewCreator) StreamWriterAny(path string, openMode FileOpenModeType, perm FilePermType) FileWriterResult {
+	return NewFileWriter(path, openMode, perm)
+}

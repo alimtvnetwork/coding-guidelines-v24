@@ -127,3 +127,20 @@ func TestPathWrapper_FileOps_WriteAndRead(t *testing.T) {
 		t.Errorf("unexpected read result: %v", rRes.Data())
 	}
 }
+
+func TestFilePathCreator(t *testing.T) {
+	p1 := New.Path.Default("foo/bar")
+	if p1 == nil || p1.String() != "foo/bar" {
+		t.Errorf("unexpected p1: %v", p1)
+	}
+
+	p2 := New.Path.FromParts("a", "b", "c")
+	if p2 == nil || !strings.HasSuffix(p2.ToSlash().String(), "a/b/c") {
+		t.Errorf("unexpected p2: %v", p2)
+	}
+
+	p3 := New.PathWrapper("direct")
+	if p3 == nil || p3.String() != "direct" {
+		t.Errorf("unexpected p3: %v", p3)
+	}
+}

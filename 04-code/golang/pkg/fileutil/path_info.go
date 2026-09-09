@@ -117,9 +117,59 @@ func IsAbs(path string) bool {
 }
 
 func IsRel(path string) bool {
-	if IsAbs(path) {
-		return false
-	}
+	return !IsAbs(path)
+}
 
-	return true
+type pathInfoNamespace struct{}
+
+func (pathInfoNamespace) Ext(path string) string {
+	return Ext(path)
+}
+
+func (pathInfoNamespace) ExtNoDot(path string) string {
+	return ExtNoDot(path)
+}
+
+func (pathInfoNamespace) HasExt(path string, ext string) bool {
+	return HasExt(path, ext)
+}
+
+func (pathInfoNamespace) Base(path string) string {
+	return Base(path)
+}
+
+func (pathInfoNamespace) Stem(path string) string {
+	return Stem(path)
+}
+
+func (pathInfoNamespace) StemFull(path string) string {
+	return StemFull(path)
+}
+
+func (pathInfoNamespace) Slug(path string) string {
+	return Slug(path)
+}
+
+func (pathInfoNamespace) Dir(path string) string {
+	return Dir(path)
+}
+
+func (pathInfoNamespace) Split(path string) (string, string) {
+	return Split(path)
+}
+
+func (pathInfoNamespace) Parent(path string) string {
+	return Parent(path)
+}
+
+func (pathInfoNamespace) ParentN(path string, levels int) string {
+	return ParentN(path, levels)
+}
+
+func (pathInfoNamespace) IsAbs(path string) bool {
+	return IsAbs(path)
+}
+
+func (pathInfoNamespace) IsRel(path string) bool {
+	return IsRel(path)
 }

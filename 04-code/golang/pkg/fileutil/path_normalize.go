@@ -145,3 +145,33 @@ func NormalizeToSlash(path string) StringResult {
 
 	return StringSuccess(deduped)
 }
+
+type pathNormNamespace struct{}
+
+func (pathNormNamespace) Clean(path string) string {
+	return Clean(path)
+}
+
+func (pathNormNamespace) Normalize(path string) StringResult {
+	return Normalize(path)
+}
+
+func (pathNormNamespace) NormalizeToSlash(path string) StringResult {
+	return NormalizeToSlash(path)
+}
+
+func (pathNormNamespace) ToSlash(path string) string {
+	return ToSlash(path)
+}
+
+func (pathNormNamespace) ToBackslash(path string) string {
+	return ToBackslash(path)
+}
+
+func (pathNormNamespace) ToNative(path string) string {
+	return ToNative(path)
+}
+
+func (pathNormNamespace) Deduplicate(path string) string {
+	return DeduplicateSeparators(path)
+}

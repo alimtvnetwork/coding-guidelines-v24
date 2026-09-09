@@ -215,3 +215,29 @@ func TempFile(pattern string) FileResult {
 func TempDir(pattern string) StringResult {
 	return CreateTempDir("", pattern, filepermtype.Standard)
 }
+
+type pathTempNamespace struct{}
+
+func (pathTempNamespace) UserTempDir() StringResult {
+	return UserTempDir()
+}
+
+func (pathTempNamespace) UserTempPath(subpath ...string) StringResult {
+	return UserTempPath(subpath...)
+}
+
+func (pathTempNamespace) TempFile(pattern string) FileResult {
+	return TempFile(pattern)
+}
+
+func (pathTempNamespace) TempDir(pattern string) StringResult {
+	return TempDir(pattern)
+}
+
+func (pathTempNamespace) CreateTempFile(dir string, pattern string, perm FilePermType) FileResult {
+	return CreateTempFile(dir, pattern, perm)
+}
+
+func (pathTempNamespace) CreateTempDir(dir string, pattern string, perm FilePermType) StringResult {
+	return CreateTempDir(dir, pattern, perm)
+}
