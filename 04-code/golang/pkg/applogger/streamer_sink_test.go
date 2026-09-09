@@ -308,3 +308,43 @@ func testStreamwriterSink(t *testing.T, sink *StreamerSink, buf *bytes.Buffer) {
 		t.Fatalf("unexpected close error: %v", err)
 	}
 }
+
+func TestStreamerSink_LogStreamerInterface(t *testing.T) {
+	buf := &bytes.Buffer{}
+	sink := NewStreamerSink(buf)
+
+	var streamer LogStreamer = sink
+	if streamer.Name() != "streamer" {
+		t.Fatalf("expected name streamer, got %s", streamer.Name())
+	}
+
+	if streamer.Destination() != buf {
+		t.Fatalf("expected destination to match buffer")
+	}
+
+	if sink.Unwrap() != buf {
+		t.Fatalf("expected unwrap to match buffer")
+	}
+
+	testStreamerMethods(t, streamer, buf)
+}
+
+func testStreamerMethods(t *testing.T, s LogStreamer, buf *bytes.Buffer) {
+	entry := LogEntry{Message: "stream-entry-direct"}
+	if err := s.StreamEntry(entry); err != nil {
+		t.Fatalf("unexpected stream entry error: %v", err)
+	}
+
+	fault := s.Stream(context.Background(), "raw-stream-payload")
+	if fault != nil {
+		t.Fatalf("unexpected stream fault: %v", fault)
+	}
+
+	if !strings.Contains(buf.String(), "stream-entry-direct") {
+		t.Fatalf("expected buffer to contain stream entry")
+	}
+
+	if !strings.Contains(buf.String(), "raw-stream-payload") {
+		t.Fatalf("expected buffer to contain raw stream payload")
+	}
+}

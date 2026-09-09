@@ -181,8 +181,25 @@ func TestLogger_StreamersIntrospection(t *testing.T) {
 		t.Fatalf("expected 1 streamer, got %d", len(streamers))
 	}
 
-	if streamers[0] != streamBuf {
-		t.Fatalf("expected stream buffer instance in streamers list")
+	assertStreamerProperties(t, streamers[0], streamBuf)
+}
+
+func assertStreamerProperties(t *testing.T, st applogger.Streamer, streamBuf *bytes.Buffer) {
+	if st.Name() != "streamer" || st.Destination() != streamBuf {
+		t.Fatalf("unexpected streamer name or destination")
+	}
+
+	if st.Streamer() != streamBuf || st.Unwrap() != streamBuf {
+		t.Fatalf("unexpected underlying streamer")
+	}
+
+	entry := applogger.LogEntry{Message: "stream test message"}
+	if err := st.StreamEntry(entry); err != nil {
+		t.Fatalf("failed to stream entry: %v", err)
+	}
+
+	if !strings.Contains(streamBuf.String(), "stream test message") {
+		t.Fatalf("expected stream buffer to receive entry")
 	}
 }
 

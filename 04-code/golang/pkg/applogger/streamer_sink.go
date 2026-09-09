@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/errtype"
 )
 
 type (
@@ -51,8 +52,12 @@ type StreamerSink struct {
 	streamer any
 }
 
-// Compile-time check that StreamerSink implements LogSink.
-var _ LogSink = (*StreamerSink)(nil)
+// Compile-time check that StreamerSink implements LogSink, LogStreamer, and Streamer.
+var (
+	_ LogSink     = (*StreamerSink)(nil)
+	_ LogStreamer = (*StreamerSink)(nil)
+	_ Streamer    = (*StreamerSink)(nil)
+)
 
 // NewStreamerSink creates a new StreamerSink instance.
 func NewStreamerSink(streamer any) *StreamerSink {
@@ -69,14 +74,79 @@ func (s *StreamerSink) Streamer() any {
 	return s.streamer
 }
 
+// Unwrap returns the underlying raw streamer object.
+func (s *StreamerSink) Unwrap() any {
+	return s.Streamer()
+}
+
+// Destination returns the underlying destination io.Writer if available.
+func (s *StreamerSink) Destination() io.Writer {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	if w, isWriter := s.streamer.(io.Writer); isWriter {
+		return w
+	}
+
+	if dp, isDest := s.streamer.(interface{ Destination() io.Writer }); isDest {
+		return dp.Destination()
+	}
+
+	return nil
+}
+
 // DriverType returns DriverStreamer for introspection.
 func (s *StreamerSink) DriverType() DriverType {
 	return DriverStreamer
 }
 
-// Name returns the sink identifier name.
+// Name returns the sink identifier name, preferring the inner streamer name if present.
 func (s *StreamerSink) Name() string {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	if np, isNamed := s.streamer.(interface{ Name() string }); isNamed {
+		if name := np.Name(); name != "" {
+			return name
+		}
+	}
+
 	return "streamer"
+}
+
+// StreamEntry satisfies the LogStreamer interface.
+func (s *StreamerSink) StreamEntry(e LogEntry) error {
+	return s.WriteEntry(e)
+}
+
+// Stream sends an arbitrary payload to the underlying streamer.
+func (s *StreamerSink) Stream(ctx context.Context, payload any) *appfault.AppError {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	if s.streamer == nil {
+		return appfault.New(errtype.Validation, "streamer is nil")
+	}
+
+	return s.dispatchPayload(ctx, payload)
+}
+
+func (s *StreamerSink) dispatchPayload(ctx context.Context, payload any) *appfault.AppError {
+	if str, isStr := payload.(string); isStr {
+		if err := s.dispatchStreamWithContext(ctx, []byte(str)); err != nil {
+			return appfault.Wrap(errtype.IO, err, "failed to stream payload")
+		}
+
+		return nil
+	}
+
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return appfault.Wrap(errtype.Validation, err, "failed to marshal payload")
+	}
+
+	if err := s.dispatchStreamWithContext(ctx, b); err != nil {
+		return appfault.Wrap(errtype.IO, err, "failed to stream payload")
+	}
+
+	return nil
 }
 
 // WriteEntry serializes entry to JSON and routes to the underlying streamer.
@@ -96,7 +166,10 @@ func (s *StreamerSink) WriteEntry(e LogEntry) error {
 }
 
 func (s *StreamerSink) dispatchStream(b []byte) error {
-	ctx := context.Background()
+	return s.dispatchStreamWithContext(context.Background(), b)
+}
+
+func (s *StreamerSink) dispatchStreamWithContext(ctx context.Context, b []byte) error {
 	str := string(b)
 	if err, hasHandled := s.streamStringFault(ctx, str); hasHandled {
 		return err

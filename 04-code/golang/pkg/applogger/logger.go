@@ -213,27 +213,31 @@ func (l *appLogger) WriterNames() []string {
 	return names
 }
 
-func extractSinkStreamers(writers []LogSink) []any {
-	var collected []any
+func extractSinkStreamers(writers []LogSink) []Streamer {
+	var collected []Streamer
 	for _, w := range writers {
 		if ss, isOk := w.(*StreamerSink); isOk {
-			if st := ss.Streamer(); st != nil {
-				collected = append(collected, st)
-			}
+			collected = append(collected, ss)
+		} else if st, isStreamer := w.(Streamer); isStreamer {
+			collected = append(collected, st)
 		}
 	}
 
 	return collected
 }
 
-func (l *appLogger) Streamers() []any {
+func (l *appLogger) Streamers() []Streamer {
 	collected := extractSinkStreamers(l.Writers())
 	if len(collected) > 0 {
 		return collected
 	}
 
 	if l.streamer != nil {
-		return []any{l.streamer}
+		if st, isStreamer := l.streamer.(Streamer); isStreamer {
+			return []Streamer{st}
+		}
+
+		return []Streamer{NewStreamerSink(l.streamer)}
 	}
 
 	return nil

@@ -23,3 +23,4 @@ Master directory of architectural and execution plans.
 - [34-logger-enhancements-and-types.md](completed/34-logger-enhancements-and-types.md): Logger driver taxonomy, sink introspection, universal streamer bridge, and fluent chaining.
 - [35-fileutil-constants-and-path-info-architecture.md](completed/35-fileutil-constants-and-path-info-architecture.md): Fileutil constants centralization, path namespace clarification, and .NET-style FolderInfo/FileInfo/PathInfo architecture.
 - [36-named-writers-object-pathinfo-and-enum-generator.md](completed/36-named-writers-object-pathinfo-and-enum-generator.md): Logger named writers & introspection, object-oriented PathInfo/FolderInfo search & navigation, and enum generator CLI in readme.md.
+- [37-typed-streamer-objects-for-logger.md](completed/37-typed-streamer-objects-for-logger.md): Typed streamer objects and interfaces for Logger introspection.

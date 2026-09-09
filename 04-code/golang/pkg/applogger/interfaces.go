@@ -1,6 +1,9 @@
 package applogger
 
 import (
+	"context"
+	"io"
+
 	"coding-guidelines/common/pkg/appfault"
 	"coding-guidelines/common/pkg/appfaults"
 	"coding-guidelines/common/pkg/enum/logleveltype"
@@ -27,6 +30,20 @@ type (
 
 	LogSink = LogSinker
 
+	LogStreamer interface {
+		Name() string
+		StreamEntry(entry LogEntry) error
+		Stream(ctx context.Context, payload any) *appfault.AppError
+		Destination() io.Writer
+		Sync() error
+		Close() error
+		Streamer() any
+		Unwrap() any
+	}
+
+	LogStream = LogStreamer
+	Streamer  = LogStreamer
+
 	FilePathProvider interface {
 		FilePath() string
 	}
@@ -45,7 +62,7 @@ type (
 	}
 
 	StreamersProvider interface {
-		Streamers() []any
+		Streamers() []Streamer
 	}
 
 	Logger interface {
@@ -74,6 +91,6 @@ type (
 		Type() DriverType
 		Writers() []LogSink
 		WriterNames() []string
-		Streamers() []any
+		Streamers() []Streamer
 	}
 )
