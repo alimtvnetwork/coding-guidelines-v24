@@ -31,6 +31,18 @@ type (
 
 	// SimpleVerifyCheckable provides AsSimpleVerifyChecker.
 	SimpleVerifyCheckable = appfault.SimpleVerifyCheckable
+
+	// ResultInspecter inspects a result container's value, failure status, and error payload.
+	ResultInspecter = appfault.ResultInspecter
+
+	// ResultInspector inspects a result container's value, failure status, and error payload.
+	ResultInspector = appfault.ResultInspector
+
+	// ResultUnwrapper is an alias for ResultInspecter.
+	ResultUnwrapper = appfault.ResultUnwrapper
+
+	// ResultCarrier is an alias for ResultInspecter.
+	ResultCarrier = appfault.ResultCarrier
 )
 
 func WrapSuccess[T any](data T) Wrap[T] {
@@ -196,3 +208,12 @@ func OkMap[K comparable, V any](data map[K]V) ResultMap[K, V] {
 func FailMap[K comparable, V any](err *appfault.AppError) ResultMap[K, V] {
 	return appfault.FailMap[K, V](err)
 }
+
+var (
+	FormatValue             = appfault.FormatValue
+	UnwrapRecursive         = appfault.UnwrapRecursive
+	FormatSortedJson        = appfault.FormatSortedJson
+	FormatSortedJSON        = appfault.FormatSortedJSON
+	FormatSortedCompactJson = appfault.FormatSortedCompactJson
+	FormatSortedCompactJSON = appfault.FormatSortedCompactJSON
+)

@@ -370,6 +370,35 @@ func WrapWriterFailureWithCause(errType errtype.Variation, cause error, msg stri
 func WrapWriterFailureFromWrap[U any](failed result.Wrap[U]) BaseWriterWrap
 ```
 
+### 4.5 Recursive Value Formatting & Deterministic Map Key Sorting (`FormatValue`)
+
+When stringifying or serializing results, `FormatValue` provides recursive introspection, deterministic lexicographical key sorting, and monadic Result unwrapping:
+
+```go
+// 1. Recursive Monadic Unwrapping:
+// Unwraps inner Result monads automatically:
+m := map[string]any{
+    "user": appfault.SuccessResult("alice"),
+    "code": appfault.FailureResult[int](appfault.New(errtype.Validation, "invalid code")),
+}
+str := appfault.FormatValue(m)
+// Evaluates to: map[code:[Error: invalid code] user:alice]
+// Notice: keys "code" and "user" are deterministically sorted!
+
+// 2. Indented Sorted JSON:
+jsonStr := appfault.FormatSortedJson(m)
+// Valid multiline JSON with 2-space indentation and sorted keys at every nesting level
+
+// 3. Deep Unwrapping (UnwrapRecursive):
+plain := appfault.UnwrapRecursive(m)
+// Produces standard map[string]any with plain Go primitives and error descriptors
+```
+
+`Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` all implement `ResultInspector`:
+- `ValueAny() any`
+- `IsFailed() bool`
+- `AppError() *AppError`
+
 ---
 
 ## 5. Enum-Driven File I/O Engine (`pkg/fileutil`)

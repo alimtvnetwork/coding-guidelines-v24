@@ -390,3 +390,49 @@ func TestReExportedNewFailureWithVar(t *testing.T) {
 		t.Fatalf("expected Timeout error type")
 	}
 }
+
+func TestReExportedResultInspector(t *testing.T) {
+	var insp result.ResultInspector = result.Success("inspect-val")
+	if insp.IsFailed() {
+		t.Fatal("expected success")
+	}
+
+	if insp.ValueAny() != "inspect-val" {
+		t.Fatalf("unexpected ValueAny: %v", insp.ValueAny())
+	}
+
+	var unwrapper result.ResultUnwrapper = result.OkSlice([]int{1, 2})
+	if unwrapper.IsFailed() {
+		t.Fatal("expected slice success")
+	}
+
+	var carrier result.ResultCarrier = result.OkMap(map[string]int{"k": 1})
+	if carrier.IsFailed() {
+		t.Fatal("expected map success")
+	}
+}
+
+func TestReExportedFormatValueAndUnwrap(t *testing.T) {
+	data := map[string]any{"b": 2, "a": result.Success(1)}
+	if got := result.FormatValue(data); got != "map[a:1 b:2]" {
+		t.Fatalf("unexpected FormatValue: %s", got)
+	}
+
+	unwrapped := result.UnwrapRecursive(data)
+	if unwrapped == nil {
+		t.Fatal("expected non-nil unwrapped")
+	}
+}
+
+func TestReExportedJsonFormatters(t *testing.T) {
+	data := map[string]any{"b": 2, "a": 1}
+	jsonStr := result.FormatSortedJson(data)
+	if result.FormatSortedJSON(data) != jsonStr {
+		t.Fatal("expected FormatSortedJSON to match FormatSortedJson")
+	}
+
+	compact := result.FormatSortedCompactJson(data)
+	if result.FormatSortedCompactJSON(data) != compact {
+		t.Fatal("expected FormatSortedCompactJSON to match FormatSortedCompactJson")
+	}
+}

@@ -1,33 +1,15 @@
 package appfault
 
 import (
-	"fmt"
 	"strings"
 )
-
-func stringifyDirect(val any) (string, bool) {
-	switch v := val.(type) {
-	case string:
-		return v, true
-	case []byte:
-		return string(v), true
-	case fmt.Stringer:
-		return v.String(), true
-	default:
-		return "", false
-	}
-}
 
 func stringifyValue(val any) string {
 	if val == nil {
 		return ""
 	}
 
-	if s, isOk := stringifyDirect(val); isOk {
-		return s
-	}
-
-	return fmt.Sprintf("%v", val)
+	return FormatValue(val)
 }
 
 func splitNormalizedLines(raw string) []string {

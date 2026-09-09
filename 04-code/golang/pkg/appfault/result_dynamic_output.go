@@ -1,7 +1,6 @@
 package appfault
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"gopkg.in/yaml.v3"
@@ -16,18 +15,13 @@ func (r Result[T]) String() string {
 	return stringifyValue(r.value)
 }
 
-// PrettyJson returns the payload or error formatted as indented JSON string.
+// PrettyJson returns the payload or error formatted as indented JSON string with sorted keys.
 func (r Result[T]) PrettyJson() string {
 	if r.IsFailed() {
 		return r.appError.FormatJson()
 	}
 
-	bytes, err := json.MarshalIndent(r.value, "", "  ")
-	if err != nil {
-		return "{}"
-	}
-
-	return string(bytes)
+	return FormatSortedJson(r.value)
 }
 
 // ToJsonPretty is an alias for PrettyJson.
@@ -35,19 +29,25 @@ func (r Result[T]) ToJsonPretty() string {
 	return r.PrettyJson()
 }
 
-// PrettyMap returns the payload converted to a map and formatted as indented JSON.
-func (r Result[T]) PrettyMap() string {
-	m := r.ToMap()
+func formatMapPayload(m map[string]any) string {
 	if m == nil {
 		return "{}"
 	}
 
-	bytes, err := json.MarshalIndent(m, "", "  ")
-	if err != nil {
+	return FormatSortedJson(m)
+}
+
+// PrettyMap returns the payload converted to a map and formatted as indented JSON with sorted keys.
+func (r Result[T]) PrettyMap() string {
+	if r.IsFailed() {
 		return "{}"
 	}
 
-	return string(bytes)
+	if r.IsMap() {
+		return FormatSortedJson(r.value)
+	}
+
+	return formatMapPayload(r.ToMap())
 }
 
 // ToYaml serializes the result value (or error) to YAML string.

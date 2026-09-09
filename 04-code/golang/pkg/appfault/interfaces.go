@@ -85,4 +85,20 @@ type (
 	FaultRenderer interface {
 		RenderFault(e *AppError) string
 	}
+
+	// ResultInspecter inspects a result container's value, failure status, and error payload.
+	ResultInspecter interface {
+		ValueAny() any
+		IsFailed() bool
+		AppError() *AppError
+	}
+
+	// ResultInspector is an alias for ResultInspecter.
+	ResultInspector = ResultInspecter
+
+	// ResultUnwrapper is an alias for ResultInspecter.
+	ResultUnwrapper = ResultInspecter
+
+	// ResultCarrier is an alias for ResultInspecter.
+	ResultCarrier = ResultInspecter
 )

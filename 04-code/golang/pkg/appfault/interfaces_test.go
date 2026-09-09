@@ -1,7 +1,10 @@
 package appfault
 
 import (
+	"encoding/json"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 
 	"coding-guidelines/common/pkg/errtype"
 )
@@ -26,6 +29,18 @@ var (
 	_ SimpleVerifyCheckable = (*AppError)(nil)
 	_ SimpleVerifyCheckable = ResultSlice[string]{}
 	_ SimpleVerifyCheckable = ResultMap[string, int]{}
+
+	_ ResultInspector = Result[string]{}
+	_ ResultInspector = ResultSlice[string]{}
+	_ ResultInspector = ResultMap[string, any]{}
+
+	_ ResultUnwrapper = Result[string]{}
+	_ ResultUnwrapper = ResultSlice[string]{}
+	_ ResultUnwrapper = ResultMap[string, any]{}
+
+	_ ResultCarrier = Result[string]{}
+	_ ResultCarrier = ResultSlice[string]{}
+	_ ResultCarrier = ResultMap[string, any]{}
 )
 
 func TestResultSuccessCheckers(t *testing.T) {
@@ -189,5 +204,172 @@ func TestAsSimpleVerifyChecker_Map(t *testing.T) {
 
 	if v.IsEmpty() {
 		t.Fatal("expected ResultMap AsSimpleVerifyChecker not to be empty")
+	}
+}
+
+func assertInspectorSuccess(t *testing.T, inspector ResultInspector) {
+	if inspector.IsFailed() {
+		t.Fatal("expected success, got isFailed true")
+	}
+
+	if inspector.AppError() != nil {
+		t.Fatal("expected nil AppError on success")
+	}
+}
+
+func assertInspectorFailure(t *testing.T, inspector ResultInspector) {
+	if !inspector.IsFailed() {
+		t.Fatal("expected failure, got isFailed false")
+	}
+
+	if inspector.AppError() == nil {
+		t.Fatal("expected non-nil AppError on failure")
+	}
+}
+
+func testInspectorResult(t *testing.T) {
+	okRes := SuccessResult("test-result")
+	assertInspectorSuccess(t, okRes)
+	if okRes.ValueAny() != "test-result" {
+		t.Fatalf("unexpected ValueAny: %v", okRes.ValueAny())
+	}
+
+	failRes := FailureResult[string](New(errtype.Validation, "bad result"))
+	assertInspectorFailure(t, failRes)
+}
+
+func testInspectorSlice(t *testing.T) {
+	okSlice := OkSlice([]string{"alpha", "beta"})
+	assertInspectorSuccess(t, okSlice)
+	if okSlice.ValueAny() == nil {
+		t.Fatal("expected non-nil ValueAny")
+	}
+
+	failSlice := FailSlice[string](New(errtype.Validation, "bad slice"))
+	assertInspectorFailure(t, failSlice)
+	if failSlice.Fault() == nil {
+		t.Fatal("expected non-nil Fault")
+	}
+}
+
+func testInspectorMap(t *testing.T) {
+	okMap := OkMap(map[string]any{"k": "v"})
+	assertInspectorSuccess(t, okMap)
+	if okMap.ValueAny() == nil {
+		t.Fatal("expected non-nil ValueAny")
+	}
+
+	failMap := FailMap[string, any](New(errtype.Validation, "bad map"))
+	assertInspectorFailure(t, failMap)
+	if failMap.Fault() == nil {
+		t.Fatal("expected non-nil Fault")
+	}
+}
+
+func TestResultInspectorConformance(t *testing.T) {
+	testInspectorResult(t)
+	testInspectorSlice(t)
+	testInspectorMap(t)
+}
+
+func TestResultSlice_JsonRoundtrip(t *testing.T) {
+	orig := OkSlice([]string{"x", "y"})
+	data, err := json.Marshal(orig)
+	if err != nil {
+		t.Fatalf("marshal failed: %v", err)
+	}
+
+	var res ResultSlice[string]
+	if err := json.Unmarshal(data, &res); err != nil {
+		t.Fatalf("unmarshal failed: %v", err)
+	}
+
+	if res.Count() != 2 {
+		t.Fatalf("expected count 2, got %d", res.Count())
+	}
+}
+
+func TestResultSlice_YamlRoundtrip(t *testing.T) {
+	orig := OkSlice([]string{"x", "y"})
+	data, err := yaml.Marshal(orig)
+	if err != nil {
+		t.Fatalf("yaml marshal failed: %v", err)
+	}
+
+	var res ResultSlice[string]
+	if err := yaml.Unmarshal(data, &res); err != nil {
+		t.Fatalf("yaml unmarshal failed: %v", err)
+	}
+
+	if res.Count() != 2 {
+		t.Fatalf("expected count 2, got %d", res.Count())
+	}
+}
+
+func TestResultSlice_FailureSerializationRoundtrip(t *testing.T) {
+	orig := FailSlice[string](New(errtype.Validation, "slice fail"))
+	data, err := json.Marshal(orig)
+	if err != nil {
+		t.Fatalf("marshal failed: %v", err)
+	}
+
+	var res ResultSlice[string]
+	if err := json.Unmarshal(data, &res); err != nil {
+		t.Fatalf("unmarshal failed: %v", err)
+	}
+
+	if !res.IsFailed() {
+		t.Fatal("expected failure on unmarshaled failed slice")
+	}
+}
+
+func TestResultMap_JsonRoundtrip(t *testing.T) {
+	orig := OkMap(map[string]int{"one": 1, "two": 2})
+	data, err := json.Marshal(orig)
+	if err != nil {
+		t.Fatalf("marshal failed: %v", err)
+	}
+
+	var res ResultMap[string, int]
+	if err := json.Unmarshal(data, &res); err != nil {
+		t.Fatalf("unmarshal failed: %v", err)
+	}
+
+	if res.Count() != 2 {
+		t.Fatalf("expected count 2, got %d", res.Count())
+	}
+}
+
+func TestResultMap_YamlRoundtrip(t *testing.T) {
+	orig := OkMap(map[string]int{"one": 1, "two": 2})
+	data, err := yaml.Marshal(orig)
+	if err != nil {
+		t.Fatalf("yaml marshal failed: %v", err)
+	}
+
+	var res ResultMap[string, int]
+	if err := yaml.Unmarshal(data, &res); err != nil {
+		t.Fatalf("yaml unmarshal failed: %v", err)
+	}
+
+	if res.Count() != 2 {
+		t.Fatalf("expected count 2, got %d", res.Count())
+	}
+}
+
+func TestResultMap_FailureSerializationRoundtrip(t *testing.T) {
+	orig := FailMap[string, int](New(errtype.NotFound, "map fail"))
+	data, err := json.Marshal(orig)
+	if err != nil {
+		t.Fatalf("marshal failed: %v", err)
+	}
+
+	var res ResultMap[string, int]
+	if err := json.Unmarshal(data, &res); err != nil {
+		t.Fatalf("unmarshal failed: %v", err)
+	}
+
+	if !res.IsFailed() {
+		t.Fatal("expected failure on unmarshaled failed map")
 	}
 }

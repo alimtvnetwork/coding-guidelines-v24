@@ -64,6 +64,11 @@ func (r Result[T]) Value() T {
 	return r.value
 }
 
+// ValueAny returns the underlying value payload as an any interface.
+func (r Result[T]) ValueAny() any {
+	return r.value
+}
+
 // Data returns the underlying value payload for API envelope compatibility.
 func (r Result[T]) Data() T {
 	return r.value
