@@ -33,3 +33,15 @@ var New = &fileNewCreator{
 	Path:         filePathCreator{},
 	StreamWriter: fileStreamWriterCreator{},
 }
+
+func (fileNamespace) Folder(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (fileNamespace) FolderInfo(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (fileNamespace) FileInfo(path string) *FileInfo {
+	return NewFileInfo(path)
+}

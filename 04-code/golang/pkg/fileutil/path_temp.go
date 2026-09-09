@@ -38,7 +38,7 @@ func appendCacheTmp(list []string, home string, dirExists pathExistsFunc) []stri
 		return list
 	}
 
-	cacheTmp := filepath.Join(home, ".cache", "tmp")
+	cacheTmp := filepath.Join(home, DirCache, DirTmp)
 	if dirExists(cacheTmp) {
 		return append(list, cacheTmp)
 	}
@@ -48,29 +48,29 @@ func appendCacheTmp(list []string, home string, dirExists pathExistsFunc) []stri
 
 func windowsTempCandidates(getenv envLookupFunc) []string {
 	var list []string
-	list = appendEnvVal(list, getenv("TEMP"))
-	list = appendEnvVal(list, getenv("TMP"))
-	list = appendEnvSubpath(list, getenv("LOCALAPPDATA"), "Temp")
-	list = appendEnvSubpath(list, getenv("USERPROFILE"), "AppData", "Local", "Temp")
+	list = appendEnvVal(list, getenv(EnvTemp))
+	list = appendEnvVal(list, getenv(EnvTmp))
+	list = appendEnvSubpath(list, getenv(EnvLocalAppData), DirTemp)
+	list = appendEnvSubpath(list, getenv(EnvUserProfile), DirAppData, DirLocal, DirTemp)
 
 	return append(list, os.TempDir())
 }
 
 func darwinTempCandidates(getenv envLookupFunc) []string {
 	var list []string
-	list = appendEnvVal(list, getenv("TMPDIR"))
+	list = appendEnvVal(list, getenv(EnvTmpDir))
 	list = append(list, os.TempDir())
 
-	return append(list, "/tmp")
+	return append(list, UnixTempDir)
 }
 
 func linuxTempCandidates(getenv envLookupFunc, home string, dirExists pathExistsFunc) []string {
 	var list []string
-	list = appendEnvVal(list, getenv("TMPDIR"))
-	list = appendEnvVal(list, getenv("XDG_RUNTIME_DIR"))
+	list = appendEnvVal(list, getenv(EnvTmpDir))
+	list = appendEnvVal(list, getenv(EnvXdgRuntimeDir))
 	list = appendCacheTmp(list, home, dirExists)
 
-	return append(list, "/tmp")
+	return append(list, UnixTempDir)
 }
 
 func isDirectoryExists(path string) bool {
@@ -83,11 +83,11 @@ func isDirectoryExists(path string) bool {
 }
 
 func hostTempCandidates() []string {
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == OSWindows {
 		return windowsTempCandidates(os.Getenv)
 	}
 
-	if runtime.GOOS == "darwin" {
+	if runtime.GOOS == OSDarwin {
 		return darwinTempCandidates(os.Getenv)
 	}
 
@@ -109,7 +109,7 @@ func ensureCandidateDir(cand string) error {
 		return os.ErrInvalid
 	}
 
-	return os.MkdirAll(cand, 0755)
+	return os.MkdirAll(cand, DefaultDirPerm)
 }
 
 func selectTempDir(candidates []string) (string, error) {

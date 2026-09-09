@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	slugNonAlphaNumRegex = regexp.MustCompile(`[^a-z0-9-]+`)
-	slugDashesRegex      = regexp.MustCompile(`-{2,}`)
+	slugNonAlphaNumRegex = regexp.MustCompile(PatternSlugNonAlphaNum)
+	slugDashesRegex      = regexp.MustCompile(PatternSlugDashes)
 )
 
 func Ext(path string) string {
@@ -16,11 +16,11 @@ func Ext(path string) string {
 }
 
 func ExtNoDot(path string) string {
-	return strings.TrimPrefix(Ext(path), ".")
+	return strings.TrimPrefix(Ext(path), ExtDot)
 }
 
 func HasExt(path string, ext string) bool {
-	cleanExpected := strings.TrimPrefix(ext, ".")
+	cleanExpected := strings.TrimPrefix(ext, ExtDot)
 
 	return strings.EqualFold(ExtNoDot(path), cleanExpected)
 }
@@ -40,8 +40,8 @@ func Stem(path string) string {
 }
 
 func findFirstExtDot(base string) int {
-	if strings.HasPrefix(base, ".") {
-		idx := strings.Index(base[1:], ".")
+	if strings.HasPrefix(base, ExtDot) {
+		idx := strings.Index(base[1:], ExtDot)
 		if idx >= 0 {
 			return idx + 1
 		}
@@ -49,12 +49,12 @@ func findFirstExtDot(base string) int {
 		return -1
 	}
 
-	return strings.Index(base, ".")
+	return strings.Index(base, ExtDot)
 }
 
 func StemFull(path string) string {
 	base := Base(path)
-	if base == "." || base == ".." {
+	if base == CurrentDir || base == ParentDir {
 		return base
 	}
 
@@ -69,10 +69,10 @@ func StemFull(path string) string {
 func Slug(path string) string {
 	name := Stem(path)
 	slug := strings.ToLower(name)
-	slug = slugNonAlphaNumRegex.ReplaceAllString(slug, "-")
-	slug = slugDashesRegex.ReplaceAllString(slug, "-")
+	slug = slugNonAlphaNumRegex.ReplaceAllString(slug, SlugHyphen)
+	slug = slugDashesRegex.ReplaceAllString(slug, SlugHyphen)
 
-	return strings.Trim(slug, "-")
+	return strings.Trim(slug, SlugHyphen)
 }
 
 func Dir(path string) string {
@@ -109,7 +109,7 @@ func IsAbs(path string) bool {
 		return true
 	}
 
-	if strings.HasPrefix(path, "/") {
+	if strings.HasPrefix(path, SepSlash) {
 		return true
 	}
 
@@ -172,4 +172,24 @@ func (pathInfoNamespace) IsAbs(path string) bool {
 
 func (pathInfoNamespace) IsRel(path string) bool {
 	return IsRel(path)
+}
+
+func (pathInfoNamespace) Folder(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (pathInfoNamespace) FolderInfo(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (pathInfoNamespace) File(path string) *FileInfo {
+	return NewFileInfo(path)
+}
+
+func (pathInfoNamespace) FileInfo(path string) *FileInfo {
+	return NewFileInfo(path)
+}
+
+func (pathInfoNamespace) Inspect(path string) *PathInfo {
+	return NewPathInfo(path)
 }

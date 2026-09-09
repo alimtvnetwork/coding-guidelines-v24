@@ -38,7 +38,7 @@ func newAbsFilePathOps(cleanPath string) *FilePathOps {
 
 func newRelFilePathOps(cleanPath string) *FilePathOps {
 	return &FilePathOps{
-		workDir: ".",
+		workDir: CurrentDir,
 		relPath: cleanPath,
 		absPath: resolveAbs(cleanPath),
 	}
@@ -46,7 +46,7 @@ func newRelFilePathOps(cleanPath string) *FilePathOps {
 
 func NewFilePathOps(path string) *FilePathOps {
 	if len(path) == 0 {
-		return newRelFilePathOps(".")
+		return newRelFilePathOps(CurrentDir)
 	}
 
 	cleanPath := filepath.Clean(path)
@@ -66,13 +66,20 @@ func resolveAtAbs(w, r string) string {
 }
 
 func NewFilePathOpsAt(workDir, relPath string) *FilePathOps {
-	w := filepath.Clean(workDir)
-	r := filepath.Clean(relPath)
+	cleanRel := filepath.Clean(relPath)
+	cleanWork := filepath.Clean(workDir)
+	var absPath string
+
+	if filepath.IsAbs(cleanRel) {
+		absPath = cleanRel
+	} else {
+		absPath = filepath.Join(cleanWork, cleanRel)
+	}
 
 	return &FilePathOps{
-		workDir: w,
-		relPath: r,
-		absPath: resolveAtAbs(w, r),
+		workDir: cleanWork,
+		relPath: cleanRel,
+		absPath: absPath,
 	}
 }
 
@@ -90,7 +97,7 @@ func (f *FilePathOps) Clone() *FilePathOps {
 
 func (f *FilePathOps) WithWorkDir(dir string) *FilePathOps {
 	if f == nil {
-		return NewFilePathOpsAt(dir, ".")
+		return NewFilePathOpsAt(dir, CurrentDir)
 	}
 
 	return NewFilePathOpsAt(dir, f.relPath)

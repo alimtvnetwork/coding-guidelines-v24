@@ -1,6 +1,7 @@
 package fileutil
 
 import (
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -142,5 +143,27 @@ func TestFilePathCreator(t *testing.T) {
 	p3 := New.PathWrapper("direct")
 	if p3 == nil || p3.String() != "direct" {
 		t.Errorf("unexpected p3: %v", p3)
+	}
+}
+
+func TestPathAndFile_FolderAndFileInfo(t *testing.T) {
+	dir := t.TempDir()
+	filePath := filepath.Join(dir, "f.txt")
+
+	if Path.Folder(dir) == nil || Path.FolderInfo(dir) == nil {
+		t.Fatalf("expected Path.Folder to return FolderInfo")
+	}
+
+	if Path.File(filePath) == nil || Path.FileInfo(filePath) == nil {
+		t.Fatalf("expected Path.File to return FileInfo")
+	}
+
+	if Path.Inspect(dir) == nil || File.Folder(dir) == nil || File.FileInfo(filePath) == nil {
+		t.Fatalf("expected Path.Inspect and File.* to return info objects")
+	}
+
+	pw := NewPath(dir)
+	if pw.Folder() == nil || pw.File() == nil || pw.Inspect() == nil {
+		t.Fatalf("expected PathWrapper methods to return info objects")
 	}
 }

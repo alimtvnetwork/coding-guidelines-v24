@@ -25,6 +25,26 @@ func (pathNamespace) Join(elem ...string) string {
 	return filepath.Join(elem...)
 }
 
+func (pathNamespace) Folder(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (pathNamespace) FolderInfo(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (pathNamespace) File(path string) *FileInfo {
+	return NewFileInfo(path)
+}
+
+func (pathNamespace) FileInfo(path string) *FileInfo {
+	return NewFileInfo(path)
+}
+
+func (pathNamespace) Inspect(path string) *PathInfo {
+	return NewPathInfo(path)
+}
+
 type PathWrapper struct {
 	raw  string
 	path string
@@ -196,6 +216,18 @@ func (p *PathWrapper) WriteString(content string, perm FilePermType) BoolResult 
 	return WriteString(p.path, content, perm)
 }
 
+func (p *PathWrapper) Folder() *FolderInfo {
+	return NewFolderInfo(p.path)
+}
+
+func (p *PathWrapper) File() *FileInfo {
+	return NewFileInfo(p.path)
+}
+
+func (p *PathWrapper) Inspect() *PathInfo {
+	return NewPathInfo(p.path)
+}
+
 type filePathCreator struct{}
 
 func (filePathCreator) Default(raw string) *PathWrapper {
@@ -206,6 +238,26 @@ func (filePathCreator) FromParts(elem ...string) *PathWrapper {
 	return NewPath(filepath.Join(elem...))
 }
 
+func (filePathCreator) Folder(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (filePathCreator) File(path string) *FileInfo {
+	return NewFileInfo(path)
+}
+
 func (fileNewCreator) PathWrapper(raw string) *PathWrapper {
 	return NewPath(raw)
+}
+
+func (fileNewCreator) Folder(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (fileNewCreator) FolderInfo(path string) *FolderInfo {
+	return NewFolderInfo(path)
+}
+
+func (fileNewCreator) FileInfo(path string) *FileInfo {
+	return NewFileInfo(path)
 }

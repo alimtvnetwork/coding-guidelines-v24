@@ -26,4 +26,9 @@ type (
 	FileWriteModeResult = result.Wrap[filewritemodetype.Variant]
 	FileOpenModeResult  = result.Wrap[openfiletype.Variant]
 	FileWriterResult    = result.Wrap[*streamwriter.PluggableWriter[any]]
+
+	ResultSlice[T any] = result.ResultSlice[T]
+	FolderInfoResult   = result.Wrap[*FolderInfo]
+	FileInfoObjResult  = result.Wrap[*FileInfo]
+	PathInfoResult     = result.Wrap[*PathInfo]
 )

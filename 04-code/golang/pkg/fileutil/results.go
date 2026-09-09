@@ -119,3 +119,27 @@ func Int64FailureMsg(variation errtype.Variation, path string, msg string) Int64
 func Int64FailureFault(fault *appfault.AppError) Int64Result {
 	return result.WrapFailure[int64](fault)
 }
+
+func FolderSliceSuccess(items []*FolderInfo) ResultSlice[*FolderInfo] {
+	return result.OkSlice(items)
+}
+
+func FolderSliceFailure(err *appfault.AppError) ResultSlice[*FolderInfo] {
+	return result.FailSlice[*FolderInfo](err)
+}
+
+func FileInfoSliceSuccess(items []*FileInfo) ResultSlice[*FileInfo] {
+	return result.OkSlice(items)
+}
+
+func FileInfoSliceFailure(err *appfault.AppError) ResultSlice[*FileInfo] {
+	return result.FailSlice[*FileInfo](err)
+}
+
+func StringSliceSuccess(items []string) ResultSlice[string] {
+	return result.OkSlice(items)
+}
+
+func StringSliceFailure(err *appfault.AppError) ResultSlice[string] {
+	return result.FailSlice[string](err)
+}

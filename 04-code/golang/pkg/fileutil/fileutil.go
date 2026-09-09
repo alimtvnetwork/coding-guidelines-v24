@@ -15,11 +15,11 @@ func isValidParentDir(dir string) bool {
 		return false
 	}
 
-	return dir != "."
+	return dir != CurrentDir
 }
 
 func makeParentDir(dir string) *appfault.AppError {
-	if err := os.MkdirAll(dir, 0755); err != nil {
+	if err := os.MkdirAll(dir, DefaultDirPerm); err != nil {
 		return appfault.WrapFile(errtype.IO, err, dir, "failed to create parent directory")
 	}
 

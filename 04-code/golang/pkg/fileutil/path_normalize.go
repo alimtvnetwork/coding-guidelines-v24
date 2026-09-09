@@ -7,15 +7,15 @@ import (
 )
 
 func ToSlash(path string) string {
-	return strings.ReplaceAll(path, "\\", "/")
+	return strings.ReplaceAll(path, SepBackslash, SepSlash)
 }
 
 func ToBackslash(path string) string {
-	return strings.ReplaceAll(path, "/", "\\")
+	return strings.ReplaceAll(path, SepSlash, SepBackslash)
 }
 
 func ToNative(path string) string {
-	if os.PathSeparator == '/' {
+	if os.PathSeparator == CharSlash {
 		return ToSlash(path)
 	}
 
@@ -23,12 +23,12 @@ func ToNative(path string) string {
 }
 
 func HasLongPathPrefix(path string) bool {
-	return strings.HasPrefix(path, `\\?\`)
+	return strings.HasPrefix(path, PrefixWinLongPath)
 }
 
 func TrimLongPathPrefix(path string) string {
 	if HasLongPathPrefix(path) {
-		return strings.TrimPrefix(path, `\\?\`)
+		return strings.TrimPrefix(path, PrefixWinLongPath)
 	}
 
 	return path
@@ -51,7 +51,7 @@ func isWindowsDriveAbs(p string) bool {
 		return false
 	}
 
-	return p[1] == ':' && (p[2] == '\\' || p[2] == '/')
+	return p[1] == CharColon && (p[2] == CharBackslash || p[2] == CharSlash)
 }
 
 func ToLongPath(path string) string {
@@ -59,31 +59,31 @@ func ToLongPath(path string) string {
 		return path
 	}
 
-	if strings.HasPrefix(path, `\\`) {
-		return `\\?\UNC\` + strings.TrimPrefix(path, `\\`)
+	if strings.HasPrefix(path, PrefixUNC) {
+		return PrefixWinUNCLongPath + strings.TrimPrefix(path, PrefixUNC)
 	}
 
 	if isWindowsDriveAbs(path) {
-		return `\\?\` + ToBackslash(path)
+		return PrefixWinLongPath + ToBackslash(path)
 	}
 
 	return path
 }
 
 func findDedupePrefix(path string) (string, int) {
-	if strings.HasPrefix(path, `\\?\`) {
-		return `\\?\`, 4
+	if strings.HasPrefix(path, PrefixWinLongPath) {
+		return PrefixWinLongPath, len(PrefixWinLongPath)
 	}
 
-	if strings.HasPrefix(path, `\\`) {
-		return `\\`, 2
+	if strings.HasPrefix(path, PrefixUNC) {
+		return PrefixUNC, len(PrefixUNC)
 	}
 
 	return "", 0
 }
 
 func isSeparatorByte(c byte) bool {
-	return c == '/' || c == '\\'
+	return c == CharSlash || c == CharBackslash
 }
 
 func appendNonDuplicate(sb *strings.Builder, path string, i int) {
@@ -115,12 +115,12 @@ func DeduplicateSeparators(path string) string {
 func cleanLongPath(path string) string {
 	trimmed := TrimLongPathPrefix(path)
 
-	return `\\?\` + filepath.Clean(trimmed)
+	return PrefixWinLongPath + filepath.Clean(trimmed)
 }
 
 func Clean(path string) string {
 	if len(path) == 0 {
-		return "."
+		return CurrentDir
 	}
 
 	if HasLongPathPrefix(path) {

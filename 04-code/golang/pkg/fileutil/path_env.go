@@ -67,7 +67,7 @@ func lookupEnv(key string) (string, bool) {
 	lowerKey := strings.ToLower(key)
 
 	for _, env := range os.Environ() {
-		idx := strings.IndexByte(env, '=')
+		idx := strings.IndexByte(env, CharEqual)
 		if idx > 0 && strings.ToLower(env[:idx]) == lowerKey {
 			return env[idx+1:], true
 		}
@@ -77,7 +77,7 @@ func lookupEnv(key string) (string, bool) {
 }
 
 func parseWindowsVar(s string, start int) (string, int, bool) {
-	end := strings.IndexByte(s[start+1:], '%')
+	end := strings.IndexByte(s[start+1:], CharPercent)
 	if end < 0 {
 		return "", start, false
 	}
@@ -92,7 +92,7 @@ func parseWindowsVar(s string, start int) (string, int, bool) {
 }
 
 func parsePosixBraced(s string, start int) (string, int, bool) {
-	end := strings.IndexByte(s[start+2:], '}')
+	end := strings.IndexByte(s[start+2:], CharRightBrace)
 	if end < 0 {
 		return "", start, false
 	}
@@ -125,7 +125,7 @@ func parsePosixIdent(s string, start int) (string, int, bool) {
 }
 
 func scanDollar(s string, idx int, b *strings.Builder) int {
-	if idx+1 < len(s) && s[idx+1] == '{' {
+	if idx+1 < len(s) && s[idx+1] == CharLeftBrace {
 		name, next, ok := parsePosixBraced(s, idx)
 		if ok {
 			val, _ := lookupEnv(name)
@@ -143,7 +143,7 @@ func scanDollar(s string, idx int, b *strings.Builder) int {
 		return next
 	}
 
-	b.WriteByte('$')
+	b.WriteByte(CharDollar)
 
 	return idx + 1
 }
@@ -157,7 +157,7 @@ func scanPercent(s string, idx int, b *strings.Builder) int {
 		return next
 	}
 
-	b.WriteByte('%')
+	b.WriteByte(CharPercent)
 
 	return idx + 1
 }
@@ -169,9 +169,9 @@ func expandEnvString(path string) string {
 	idx := 0
 	for idx < len(path) {
 		switch path[idx] {
-		case '%':
+		case CharPercent:
 			idx = scanPercent(path, idx, &b)
-		case '$':
+		case CharDollar:
 			idx = scanDollar(path, idx, &b)
 		default:
 			b.WriteByte(path[idx])
@@ -191,11 +191,11 @@ func ExpandEnv(path string) StringResult {
 }
 
 func hasTildePrefix(path string) bool {
-	if strings.HasPrefix(path, "~/") {
+	if strings.HasPrefix(path, PrefixTildeSlash) {
 		return true
 	}
 
-	return strings.HasPrefix(path, "~\\")
+	return strings.HasPrefix(path, PrefixTildeBackslash)
 }
 
 func resolveHomePath(raw string, sub string) StringResult {
@@ -212,12 +212,12 @@ func resolveHomePath(raw string, sub string) StringResult {
 }
 
 func ExpandTilde(path string) StringResult {
-	if path == "~" {
+	if path == HomeTilde {
 		return resolveHomePath(path, "")
 	}
 
 	if hasTildePrefix(path) {
-		return resolveHomePath(path, path[2:])
+		return resolveHomePath(path, path[len(PrefixTildeSlash):])
 	}
 
 	return StringSuccess(path)
