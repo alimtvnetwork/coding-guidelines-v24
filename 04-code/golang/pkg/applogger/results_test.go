@@ -65,3 +65,22 @@ func TestResults_LoggerConstructors(t *testing.T) {
 		t.Fatal("unexpected LogSinkResult state")
 	}
 }
+
+func TestResults_StreamerSinkConstructors(t *testing.T) {
+	rawFail := result.WrapFailure[int](appfault.New(errtype.IO, "stream err"))
+
+	streamSuccess := applogger.StreamerSinkSuccess(nil)
+	if streamSuccess.IsFailed() {
+		t.Fatal("expected success StreamerSinkResult")
+	}
+
+	streamFail := applogger.StreamerSinkFailure(rawFail)
+	if !streamFail.IsFailed() {
+		t.Fatal("expected failed StreamerSinkResult")
+	}
+
+	faultFail := applogger.StreamerSinkFailureFault(appfault.New(errtype.IO, "stream fault"))
+	if !faultFail.IsFailed() {
+		t.Fatal("expected failed StreamerSinkResult from fault")
+	}
+}

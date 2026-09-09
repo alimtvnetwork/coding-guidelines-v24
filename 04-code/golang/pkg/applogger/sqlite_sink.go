@@ -61,3 +61,8 @@ func (ss *SQLiteSink) Sync() error { return nil }
 
 // Close closes the underlying db connection if needed.
 func (ss *SQLiteSink) Close() error { return nil }
+
+// DriverType returns the driver type.
+func (ss *SQLiteSink) DriverType() DriverType {
+	return DriverSQLite
+}

@@ -72,3 +72,13 @@ func (fs *FileSink) Close() error {
 
 	return nil
 }
+
+// FilePath returns the destination file path.
+func (fs *FileSink) FilePath() string {
+	return fs.filePath
+}
+
+// DriverType returns the driver type for this sink.
+func (fs *FileSink) DriverType() DriverType {
+	return DriverFile
+}

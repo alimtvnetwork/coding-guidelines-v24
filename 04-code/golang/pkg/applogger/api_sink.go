@@ -209,6 +209,26 @@ func (s *ApiSink) BufferedCount() int {
 	return len(s.buffer)
 }
 
+// Endpoint returns the configured remote endpoint.
+func (s *ApiSink) Endpoint() string {
+	return s.cfg.Endpoint
+}
+
+// EndpointPath returns the configured remote endpoint.
+func (s *ApiSink) EndpointPath() string {
+	return s.cfg.Endpoint
+}
+
+// EndPointPath returns the configured remote endpoint.
+func (s *ApiSink) EndPointPath() string {
+	return s.cfg.Endpoint
+}
+
+// DriverType returns the driver type.
+func (s *ApiSink) DriverType() DriverType {
+	return DriverApi
+}
+
 func defaultRotationPolicy(batch []LogEntry, elapsed time.Duration, cfg ApiConfig) bool {
 	if len(batch) >= cfg.BatchSize {
 		return true

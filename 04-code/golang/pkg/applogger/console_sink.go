@@ -68,3 +68,8 @@ func (cs *ConsoleSink) Sync() error { return nil }
 
 // Close closes the console sink.
 func (cs *ConsoleSink) Close() error { return nil }
+
+// DriverType returns the driver type.
+func (cs *ConsoleSink) DriverType() DriverType {
+	return DriverConsole
+}

@@ -26,6 +26,18 @@ type (
 
 	LogSink = LogSinker
 
+	FilePathProvider interface {
+		FilePath() string
+	}
+
+	EndpointPathProvider interface {
+		EndpointPath() string
+	}
+
+	DriverTypeProvider interface {
+		DriverType() DriverType
+	}
+
 	Logger interface {
 		Debug(args ...any) Logger
 		Info(args ...any) Logger
@@ -43,5 +55,12 @@ type (
 		WithFields(fields map[string]any) Logger
 		Sync() error
 		Close() error
+		FilePath() string
+		EndpointPath() string
+		EndPointPath() string
+		Clone() Logger
+		AddWriters(writers ...LogSink) Logger
+		AddStreamer(streamer any) Logger
+		Type() DriverType
 	}
 )

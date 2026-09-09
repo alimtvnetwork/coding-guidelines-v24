@@ -25,6 +25,10 @@ type (
 	ApiManagerResult = result.Wrap[*ApiManager]
 	ApiManagerWrap   = ApiManagerResult
 
+	// StreamerSink direct result and wrap types
+	StreamerSinkResult = result.Wrap[*StreamerSink]
+	StreamerSinkWrap   = StreamerSinkResult
+
 	// Logger and LogSink direct result and wrap types
 	LoggerResult  = result.Wrap[Logger]
 	LoggerWrap    = LoggerResult

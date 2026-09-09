@@ -63,3 +63,56 @@ func (cs *CompositeSink) Close() error {
 
 	return nil
 }
+
+// DriverType returns the driver type.
+func (cs *CompositeSink) DriverType() DriverType {
+	return DriverComposite
+}
+
+// Sinks returns a safe cloned slice of registered sinks.
+func (cs *CompositeSink) Sinks() []LogSink {
+	cs.lock.RLock()
+	defer cs.lock.RUnlock()
+
+	cloned := make([]LogSink, len(cs.sinks))
+	copy(cloned, cs.sinks)
+
+	return cloned
+}
+
+// FilePath traverses sinks for FilePathProvider and returns the first non-empty path.
+func (cs *CompositeSink) FilePath() string {
+	cs.lock.RLock()
+	defer cs.lock.RUnlock()
+
+	for _, s := range cs.sinks {
+		if acc, isOk := s.(FilePathProvider); isOk {
+			if path := acc.FilePath(); len(path) > 0 {
+				return path
+			}
+		}
+	}
+
+	return ""
+}
+
+// EndpointPath traverses sinks for EndpointPathProvider and returns the first non-empty endpoint.
+func (cs *CompositeSink) EndpointPath() string {
+	cs.lock.RLock()
+	defer cs.lock.RUnlock()
+
+	for _, s := range cs.sinks {
+		if acc, isOk := s.(EndpointPathProvider); isOk {
+			if ep := acc.EndpointPath(); len(ep) > 0 {
+				return ep
+			}
+		}
+	}
+
+	return ""
+}
+
+// EndPointPath traverses sinks for EndpointPathAccessor and returns the first non-empty endpoint.
+func (cs *CompositeSink) EndPointPath() string {
+	return cs.EndpointPath()
+}

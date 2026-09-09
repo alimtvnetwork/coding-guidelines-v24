@@ -20,3 +20,4 @@ Master directory of architectural and execution plans.
 - [07-completed-plans-consolidation.md](completed/07-completed-plans-consolidation.md): Completed plans consolidation, safety backup & milestone resequencing.
 - [08-split-sqlite-logging-rotating-lazyonce-errcmd.md](completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md): Split SQLite DB logging, configurable text file rotation, generic LazyOnce, and errcmd integration.
 - [12-task-retention-errcmd-streaming-atomic-fileutil-lazyonce-apimanager.md](completed/12-task-retention-errcmd-streaming-atomic-fileutil-lazyonce-apimanager.md): Task retention, errcmd streaming, atomic file writes, lazyonce context, and api manager.
+- [34-logger-enhancements-and-types.md](completed/34-logger-enhancements-and-types.md): Logger driver taxonomy, sink introspection, universal streamer bridge, and fluent chaining.

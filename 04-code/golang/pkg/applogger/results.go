@@ -74,3 +74,18 @@ func LogSinkSuccess(sink LogSink) LogSinkResult {
 func LogSinkFailure[U any](failed result.Wrap[U]) LogSinkResult {
 	return result.FailureFromWrap[LogSink](failed)
 }
+
+// StreamerSinkSuccess constructs a successful StreamerSinkResult.
+func StreamerSinkSuccess(sink *StreamerSink) StreamerSinkResult {
+	return result.WrapSuccess(sink)
+}
+
+// StreamerSinkFailure propagates an existing failed Result into a StreamerSinkResult.
+func StreamerSinkFailure[U any](failed result.Wrap[U]) StreamerSinkResult {
+	return result.FailureFromWrap[*StreamerSink](failed)
+}
+
+// StreamerSinkFailureFault creates a failed StreamerSinkResult from an AppError.
+func StreamerSinkFailureFault(fault *appfault.AppError) StreamerSinkResult {
+	return result.WrapFailure[*StreamerSink](fault)
+}

@@ -77,3 +77,79 @@ func TestLoggerChaining(t *testing.T) {
 		t.Fatalf("expected chained log output, got %s", out)
 	}
 }
+
+func TestLogger_SinkIntrospection(t *testing.T) {
+	cfg := applogger.Config{
+		MinLevel:  applogger.LevelInfo,
+		Driver:    applogger.DriverApi,
+		Endpoint:  "https://api.example.com/logs",
+		IsUseJSON: true,
+	}
+
+	logRes := applogger.New(cfg)
+	if logRes.IsFailed() {
+		t.Fatalf("expected logger success, got fault: %v", logRes.Fault())
+	}
+
+	l := logRes.Data()
+	if l.Type() != applogger.DriverApi {
+		t.Errorf("expected DriverApi, got %v", l.Type())
+	}
+
+	if l.EndpointPath() != "https://api.example.com/logs" {
+		t.Errorf("expected endpoint, got %s", l.EndpointPath())
+	}
+
+	if l.EndPointPath() != l.EndpointPath() {
+		t.Errorf("expected EndPointPath alias match")
+	}
+}
+
+func TestLogger_Clone(t *testing.T) {
+	buf := &bytes.Buffer{}
+	l := newTestConsoleLogger(buf, false)
+	l2 := l.Clone()
+	if l2 == nil {
+		t.Fatalf("expected non-nil cloned logger")
+	}
+
+	child := l2.WithContext("worker", "1")
+	child.Infof("worker log")
+	if !strings.Contains(buf.String(), "worker log") {
+		t.Errorf("expected log output from cloned logger")
+	}
+}
+
+func TestLogger_AddWriters(t *testing.T) {
+	buf1 := &bytes.Buffer{}
+	buf2 := &bytes.Buffer{}
+	l := newTestConsoleLogger(buf1, false)
+	sink2 := applogger.NewConsoleSink(buf2, false)
+
+	multi := l.AddWriters(sink2)
+	multi.Infof("multicast message")
+
+	hasBuf1 := strings.Contains(buf1.String(), "multicast message")
+	hasBuf2 := strings.Contains(buf2.String(), "multicast message")
+	if !hasBuf1 || !hasBuf2 {
+		t.Fatalf("expected multicast write to both buffers")
+	}
+}
+
+func TestLogger_AddStreamer(t *testing.T) {
+	buf1 := &bytes.Buffer{}
+	streamBuf := &bytes.Buffer{}
+	l := newTestConsoleLogger(buf1, false)
+
+	streamLogger := l.AddStreamer(streamBuf)
+	streamLogger.Infof("stream hello")
+
+	if !strings.Contains(streamBuf.String(), "stream hello") {
+		t.Fatalf("expected stream buffer to receive log entry, got %s", streamBuf.String())
+	}
+
+	nilStreamer := l.AddStreamer(nil)
+	if nilStreamer == nil {
+		t.Fatalf("expected non-nil logger from nil streamer add")
+	}
+}

@@ -202,3 +202,13 @@ func (s *RotatingFileSink) Close() error {
 
 	return nil
 }
+
+// FilePath returns the configured file path of the sink.
+func (s *RotatingFileSink) FilePath() string {
+	return s.cfg.FilePath
+}
+
+// DriverType returns the driver type.
+func (s *RotatingFileSink) DriverType() DriverType {
+	return DriverRotatingFile
+}

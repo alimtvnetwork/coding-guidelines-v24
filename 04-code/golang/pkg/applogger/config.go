@@ -7,6 +7,8 @@ type Config struct {
 	MinLevel     LogLevel
 	Driver       DriverType
 	FilePath     string
+	Endpoint     string
+	ApiConfig    ApiConfig
 	ZapLogger    ZapLoggerInterface
 	Sinks        []LogSink
 	Rotation     RotationConfig
@@ -14,27 +16,53 @@ type Config struct {
 	IsUseJSON    bool
 }
 
+func makeFileSink(path string) LogSinkResult {
+	res := NewFileSink(path)
+	if res.IsFailed() {
+		return LogSinkFailure(res)
+	}
+
+	return LogSinkSuccess(res.Data())
+}
+
+func makeRotatingSink(rot RotationConfig) LogSinkResult {
+	res := NewRotatingFileSink(rot)
+	if res.IsFailed() {
+		return LogSinkFailure(res)
+	}
+
+	return LogSinkSuccess(res.Data())
+}
+
+func makeApiSink(cfg Config) LogSinkResult {
+	apiCfg := cfg.ApiConfig
+	if apiCfg.Endpoint == "" && cfg.Endpoint != "" {
+		apiCfg.Endpoint = cfg.Endpoint
+	}
+
+	res := NewApiSink(apiCfg)
+	if res.IsFailed() {
+		return LogSinkFailure(res)
+	}
+
+	return LogSinkSuccess(res.Data())
+}
+
 // createSinkFromDriver instantiates the requested driver sink.
 func createSinkFromDriver(cfg Config) LogSinkResult {
 	switch cfg.Driver {
 	case DriverFile:
-		res := NewFileSink(cfg.FilePath)
-		if res.IsFailed() {
-			return LogSinkFailure(res)
-		}
-
-		return LogSinkSuccess(res.Data())
+		return makeFileSink(cfg.FilePath)
 	case DriverRotatingFile:
-		res := NewRotatingFileSink(cfg.Rotation)
-		if res.IsFailed() {
-			return LogSinkFailure(res)
-		}
-
-		return LogSinkSuccess(res.Data())
+		return makeRotatingSink(cfg.Rotation)
 	case DriverZap:
 		return LogSinkSuccess(NewZapAdapter(cfg.ZapLogger))
 	case DriverComposite:
 		return LogSinkSuccess(NewCompositeSink(cfg.Sinks...))
+	case DriverApi:
+		return makeApiSink(cfg)
+	case DriverJsonWriterLogger:
+		return LogSinkSuccess(NewConsoleSink(os.Stdout, true))
 	default:
 		return LogSinkSuccess(NewConsoleSink(os.Stdout, cfg.IsUseJSON))
 	}
@@ -48,9 +76,12 @@ func New(cfg Config) LoggerResult {
 	}
 
 	return LoggerSuccess(&appLogger{
-		minLevel: cfg.MinLevel,
-		sink:     sinkRes.Data(),
-		fields:   nil,
+		minLevel:     cfg.MinLevel,
+		sink:         sinkRes.Data(),
+		fields:       nil,
+		driverType:   cfg.Driver,
+		filePath:     cfg.FilePath,
+		endpointPath: cfg.Endpoint,
 	})
 }
 

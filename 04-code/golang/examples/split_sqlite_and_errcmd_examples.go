@@ -2,6 +2,7 @@ package examples
 
 import (
 	"context"
+	"io"
 	"path/filepath"
 	"time"
 
@@ -194,4 +195,22 @@ func ExampleApiManagerRemoteLogging(endpoint string) result.Wrap[*applogger.ApiM
 	}
 
 	return applogger.NewApiManager(cfg)
+}
+
+// ExampleLoggerIntrospectionAndChaining demonstrates driver introspection, path accessors, and streamer chaining.
+func ExampleLoggerIntrospectionAndChaining(endpoint string, writer io.Writer) applogger.Logger {
+	cfg := applogger.Config{
+		MinLevel: applogger.LevelInfo,
+		Driver:   applogger.DriverApi,
+		Endpoint: endpoint,
+	}
+
+	logger := applogger.New(cfg).Data()
+	if logger.Type() == applogger.DriverApi {
+		_ = logger.EndpointPath()
+	}
+
+	cloned := logger.Clone().WithContext("service", "billing")
+
+	return cloned.AddStreamer(writer)
 }

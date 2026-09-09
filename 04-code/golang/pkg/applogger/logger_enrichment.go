@@ -36,9 +36,13 @@ func (l *appLogger) LogFaults(faults *appfaults.Collection) Logger {
 
 func (l *appLogger) WithContext(key string, val any) Logger {
 	return &appLogger{
-		minLevel: l.minLevel,
-		sink:     l.sink,
-		fields:   l.fields.Clone().Set(key, val),
+		minLevel:     l.minLevel,
+		sink:         l.sink,
+		fields:       l.fields.Clone().Set(key, val),
+		driverType:   l.driverType,
+		filePath:     l.filePath,
+		endpointPath: l.endpointPath,
+		streamer:     l.streamer,
 	}
 }
 
@@ -49,9 +53,13 @@ func (l *appLogger) WithFields(fields map[string]any) Logger {
 	}
 
 	return &appLogger{
-		minLevel: l.minLevel,
-		sink:     l.sink,
-		fields:   cloned,
+		minLevel:     l.minLevel,
+		sink:         l.sink,
+		fields:       cloned,
+		driverType:   l.driverType,
+		filePath:     l.filePath,
+		endpointPath: l.endpointPath,
+		streamer:     l.streamer,
 	}
 }
 

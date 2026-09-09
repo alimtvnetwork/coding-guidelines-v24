@@ -69,3 +69,8 @@ func (za *ZapAdapter) Sync() error {
 func (za *ZapAdapter) Close() error {
 	return za.Sync()
 }
+
+// DriverType returns the driver type.
+func (za *ZapAdapter) DriverType() DriverType {
+	return DriverZap
+}
