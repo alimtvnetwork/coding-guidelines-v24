@@ -8,7 +8,7 @@ import (
 // IsMatchLock compiles regex under lock and returns whether comparing matches.
 func IsMatchLock(regex, comparing string) bool {
 	res := CreateLock(regex)
-	regEx := res.Value
+	regEx := res.Value()
 	if regEx != nil && regEx.MatchString(comparing) {
 		return true
 	}
@@ -24,8 +24,8 @@ func IsMatchFailed(regex, comparing string) bool {
 // MatchError returns nil on match or a validation error.
 func MatchError(regex, comparing string) error {
 	res := Create(regex)
-	regEx := res.Value
-	err := res.AppError
+	regEx := res.Value()
+	err := res.AppError()
 	if regEx != nil && regEx.MatchString(comparing) {
 		return nil
 	}
@@ -36,8 +36,8 @@ func MatchError(regex, comparing string) error {
 // MatchErrorLock returns nil on match or a validation error under lock.
 func MatchErrorLock(regex, comparing string) error {
 	res := CreateLock(regex)
-	regEx := res.Value
-	err := res.AppError
+	regEx := res.Value()
+	err := res.AppError()
 	if regEx != nil && regEx.MatchString(comparing) {
 		return nil
 	}
@@ -51,8 +51,8 @@ func MatchUsingFuncErrorLock(
 	matchFunc RegexValidationFunc,
 ) error {
 	res := CreateLock(regex)
-	regEx := res.Value
-	err := res.AppError
+	regEx := res.Value()
+	err := res.AppError()
 	if regEx != nil && matchFunc != nil && matchFunc(regEx, comparing) {
 		return nil
 	}
@@ -66,8 +66,8 @@ func MatchUsingCustomizeErrorFuncLock(
 	customErr CustomizeErr,
 ) error {
 	res := CreateLock(regex)
-	regEx := res.Value
-	err := res.AppError
+	regEx := res.Value()
+	err := res.AppError()
 	if regEx != nil && regEx.MatchString(comparing) {
 		return nil
 	}

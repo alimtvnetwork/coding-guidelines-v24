@@ -29,7 +29,7 @@ var (
 )
 
 func TestResultSuccessCheckers(t *testing.T) {
-	okRes := Result[string]{Value: "data"}
+	okRes := SuccessResult("data")
 	if !okRes.IsSuccess() {
 		t.Fatal("expected success")
 	}
@@ -105,7 +105,7 @@ func TestNilAppErrorCheckers(t *testing.T) {
 }
 
 func TestAsSimpleVerifier_Result(t *testing.T) {
-	var v SimpleVerifier = Result[string]{Value: "data"}.AsSimpleVerifier()
+	var v SimpleVerifier = SuccessResult("data").AsSimpleVerifier()
 	if !v.IsSuccess() {
 		t.Fatal("expected Result AsSimpleVerifier to be success")
 	}
@@ -149,7 +149,7 @@ func TestAsSimpleVerifier_Map(t *testing.T) {
 }
 
 func TestAsSimpleVerifyChecker_Result(t *testing.T) {
-	var v SimpleVerifier = Result[string]{Value: "data"}.AsSimpleVerifyChecker()
+	var v SimpleVerifier = SuccessResult("data").AsSimpleVerifyChecker()
 	if !v.IsSuccess() {
 		t.Fatal("expected Result AsSimpleVerifyChecker to be success")
 	}

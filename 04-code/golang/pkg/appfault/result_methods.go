@@ -7,12 +7,12 @@ import (
 
 // IsSuccess returns true if no error is present.
 func (r Result[T]) IsSuccess() bool {
-	return r.AppError == nil
+	return r.appError == nil
 }
 
 // IsFailed returns true if an error is present.
 func (r Result[T]) IsFailed() bool {
-	return r.AppError != nil
+	return r.appError != nil
 }
 
 // IsFailure is an alias for IsFailed.
@@ -57,11 +57,11 @@ func (r Result[T]) HasNoError() bool {
 
 // HasValidError returns true if the embedded error has a valid code.
 func (r Result[T]) HasValidError() bool {
-	if r.AppError == nil {
+	if r.appError == nil {
 		return false
 	}
 
-	return r.AppError.HasValidError()
+	return r.appError.HasValidError()
 }
 
 // IsSafe returns true if the operation succeeded with no error.
@@ -71,11 +71,11 @@ func (r Result[T]) IsSafe() bool {
 
 // IsEmpty returns true if no active error is present (or error is zero/empty).
 func (r Result[T]) IsEmpty() bool {
-	if r.AppError == nil {
+	if r.appError == nil {
 		return true
 	}
 
-	return r.AppError.IsEmpty()
+	return r.appError.IsEmpty()
 }
 
 // HasZero returns true if error is nil or represents a zero-value/None error state.
@@ -90,7 +90,7 @@ func (r Result[T]) IsZero() bool {
 
 // IsNull returns true if the embedded AppError pointer is nil.
 func (r Result[T]) IsNull() bool {
-	return r.AppError == nil
+	return r.appError == nil
 }
 
 // HasNull returns true if the embedded AppError is nil or represents no error.
@@ -101,28 +101,28 @@ func (r Result[T]) HasNull() bool {
 // Clone returns a deep copy of Result with its AppError safely cloned.
 func (r Result[T]) Clone() Result[T] {
 	return Result[T]{
-		Value:    r.Value,
-		AppError: r.AppError.Clone(),
+		value:    r.value,
+		appError: r.appError.Clone(),
 	}
 }
 
 // Concat combines errors from two results into an immutable Result.
 func (r Result[T]) Concat(other Result[T]) Result[T] {
-	mergedErr := Merge(r.AppError, other.AppError)
-	val := other.Value
+	mergedErr := Merge(r.appError, other.appError)
+	val := other.value
 	if r.IsSuccess() && other.IsFailed() {
-		val = r.Value
+		val = r.value
 	}
 
 	return Result[T]{
-		Value:    val,
-		AppError: mergedErr,
+		value:    val,
+		appError: mergedErr,
 	}
 }
 
 // Unwrap unpacks the (Value, *AppError) tuple.
 func (r Result[T]) Unwrap() (T, *AppError) {
-	return r.Value, r.AppError
+	return r.value, r.appError
 }
 
 // UnwrapOr returns the inner value if successful, or defaultVal on failure.
@@ -131,16 +131,16 @@ func (r Result[T]) UnwrapOr(defaultVal T) T {
 		return defaultVal
 	}
 
-	return r.Value
+	return r.value
 }
 
 // DefaultResultFormatter formats Result[T]: error banner if failed, or data value if success.
 func DefaultResultFormatter[T any](r Result[T]) string {
 	if r.IsFailed() {
-		return r.AppError.Format(DefaultFaultFormatter)
+		return r.appError.Format(DefaultFaultFormatter)
 	}
 
-	return fmt.Sprintf("✅ [OK] %v", r.Value)
+	return fmt.Sprintf("✅ [OK] %v", r.value)
 }
 
 // Print outputs the result representation to standard output.
@@ -151,7 +151,7 @@ func (r Result[T]) Print() {
 // PrintFault outputs the fault representation to standard output if failed.
 func (r Result[T]) PrintFault() {
 	if r.IsFailed() {
-		r.AppError.Print()
+		r.appError.Print()
 	}
 }
 
@@ -172,19 +172,19 @@ func (r Result[T]) PrintWith(formatter ResultFormatter[T]) {
 // FormatStdout formats the Result: rich error banner if failed, or success message if ok.
 func (r Result[T]) FormatStdout() string {
 	if r.IsFailed() {
-		return r.AppError.FormatStdout()
+		return r.appError.FormatStdout()
 	}
 
-	return fmt.Sprintf("✅ SUCCESS: %v", r.Value)
+	return fmt.Sprintf("✅ SUCCESS: %v", r.value)
 }
 
 // FormatJson formats the Result: JSON error if failed, or marshaled value JSON.
 func (r Result[T]) FormatJson() string {
 	if r.IsFailed() {
-		return r.AppError.FormatJson()
+		return r.appError.FormatJson()
 	}
 
-	return fmt.Sprintf(`{"success":true,"data":%v}`, r.Value)
+	return fmt.Sprintf(`{"success":true,"data":%v}`, r.value)
 }
 
 // FormatJSON is an alias for FormatJson.
@@ -195,10 +195,10 @@ func (r Result[T]) FormatJSON() string {
 // FormatTextLog formats the Result: structured log error if failed, or log info if ok.
 func (r Result[T]) FormatTextLog() string {
 	if r.IsFailed() {
-		return r.AppError.FormatTextLog()
+		return r.appError.FormatTextLog()
 	}
 
-	return fmt.Sprintf("[INFO] status=200 msg=%q", fmt.Sprintf("%v", r.Value))
+	return fmt.Sprintf("[INFO] status=200 msg=%q", fmt.Sprintf("%v", r.value))
 }
 
 // PrintStdout prints the result formatted for stdout.
@@ -224,10 +224,10 @@ func (r Result[T]) PrintLog() {
 // FormatStruct formats struct or primitive payload or error banner.
 func (r Result[T]) FormatStruct() string {
 	if r.IsFailed() {
-		return r.AppError.FormatStdout()
+		return r.appError.FormatStdout()
 	}
 
-	return fmt.Sprintf("%+v", r.Value)
+	return fmt.Sprintf("%+v", r.value)
 }
 
 func payloadToMap(val any) map[string]any {
@@ -248,5 +248,5 @@ func (r Result[T]) ToMap() map[string]any {
 		return nil
 	}
 
-	return payloadToMap(r.Value)
+	return payloadToMap(r.value)
 }

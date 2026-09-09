@@ -201,8 +201,8 @@ func TestLegacyCompatibility(t *testing.T) {
 		t.Fatalf("expected legacy success")
 	}
 
-	if s.Value != "legacy-data" {
-		t.Fatalf("expected legacy-data, got %s", s.Value)
+	if s.Value() != "legacy-data" {
+		t.Fatalf("expected legacy-data, got %s", s.Value())
 	}
 
 	// NewSuccess

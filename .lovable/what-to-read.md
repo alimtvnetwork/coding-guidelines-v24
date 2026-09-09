@@ -65,3 +65,4 @@
 - .lovable/plans/completed/07-completed-plans-consolidation.md
 - .lovable/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md
 - .lovable/plans/completed/12-task-retention-errcmd-streaming-atomic-fileutil-lazyonce-apimanager.md
+- .lovable/plans/completed/38-result-dynamic-conversions-and-coredata-parity.md

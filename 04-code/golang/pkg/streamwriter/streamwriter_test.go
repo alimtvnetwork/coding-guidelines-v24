@@ -1062,12 +1062,12 @@ func TestJsonResult_PrettyAndCompactResult(t *testing.T) {
 	res := streamwriter.NewJsonResultWithBytes(raw)
 
 	pRes := res.PrettyResult()
-	if pRes.AppError != nil || !strings.Contains(pRes.Data(), "\n") {
+	if pRes.IsFailed() || !strings.Contains(pRes.Data(), "\n") {
 		t.Fatalf("expected formatted pretty JSON, got: %s", pRes.Data())
 	}
 
 	cRes := res.CompactResult()
-	if cRes.AppError != nil || strings.Contains(cRes.Data(), "\n") {
+	if cRes.IsFailed() || strings.Contains(cRes.Data(), "\n") {
 		t.Fatalf("expected compact JSON, got: %s", cRes.Data())
 	}
 

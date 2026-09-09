@@ -38,7 +38,7 @@ func CreateApplicableLock(regularExpressionPattern string) (
 
 	lz := New.LazyLock(regularExpressionPattern)
 	res = lz.Compile()
-	isApplicable = res.AppError == nil && res.Value != nil
+	isApplicable = res.IsSuccess() && res.Value() != nil
 
 	return res, isApplicable
 }

@@ -17,8 +17,8 @@ func TestDatabaseQuerySuccess(t *testing.T) {
 		t.Fatal("expected successful db query")
 	}
 
-	if res.Value.Slug != "seo-optimizer" {
-		t.Fatalf("expected slug 'seo-optimizer', got %s", res.Value.Slug)
+	if res.Value().Slug != "seo-optimizer" {
+		t.Fatalf("expected slug 'seo-optimizer', got %s", res.Value().Slug)
 	}
 }
 
@@ -49,8 +49,8 @@ func TestWorkflowServiceSuccess(t *testing.T) {
 		t.Fatal("expected workflow to succeed")
 	}
 
-	if res.Value.PluginSummary.Slug != "seo-optimizer" {
-		t.Fatalf("expected plugin slug 'seo-optimizer', got %s", res.Value.PluginSummary.Slug)
+	if res.Value().PluginSummary.Slug != "seo-optimizer" {
+		t.Fatalf("expected plugin slug 'seo-optimizer', got %s", res.Value().PluginSummary.Slug)
 	}
 }
 

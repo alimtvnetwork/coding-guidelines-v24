@@ -48,7 +48,7 @@ func (s *PluginWorkflowService) ActivateWorkflow(
 		return result.WrapFailureFromWrap[WorkflowResult](pluginRes)
 	}
 
-	plugin := pluginRes.Value
+	plugin := pluginRes.Value()
 
 	// Step 2: Call Remote Delegated Endpoint
 	remoteRes := s.client.ActivateRemotePlugin(ctx, siteId, plugin.Slug)
@@ -64,6 +64,6 @@ func (s *PluginWorkflowService) ActivateWorkflow(
 
 	return result.WrapSuccess(WorkflowResult{
 		PluginSummary: plugin,
-		RemoteData:    remoteRes.Value,
+		RemoteData:    remoteRes.Value(),
 	})
 }

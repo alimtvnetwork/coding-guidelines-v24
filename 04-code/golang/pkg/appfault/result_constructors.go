@@ -4,7 +4,17 @@ import "coding-guidelines/common/pkg/errtype"
 
 // SuccessResult creates a successful Result wrapping a value.
 func SuccessResult[T any](val T) Result[T] {
-	return Result[T]{Value: val, AppError: nil}
+	return Result[T]{value: val, appError: nil}
+}
+
+// NewResult creates a Result with value and appError.
+func NewResult[T any](val T, appErr *AppError) Result[T] {
+	return Result[T]{value: val, appError: appErr}
+}
+
+// ResultOf creates a Result with value and appError.
+func ResultOf[T any](val T, appErr *AppError) Result[T] {
+	return Result[T]{value: val, appError: appErr}
 }
 
 // NewSuccess creates a successful Result wrapping a value.
@@ -14,7 +24,7 @@ func NewSuccess[T any](data T) Result[T] {
 
 // FailureResult creates a failed Result with a structured AppError.
 func FailureResult[T any](err *AppError) Result[T] {
-	return Result[T]{AppError: err}
+	return Result[T]{appError: err}
 }
 
 // Ok is an alias for SuccessResult.
@@ -82,7 +92,7 @@ func NewFailureWithCause[T any](errType errtype.Variation, cause error, msg stri
 
 // FailureFromWrap creates a failed Result propagating the AppError from another Result.
 func FailureFromWrap[T any, U any](failed Result[U]) Result[T] {
-	return FailureResult[T](failed.AppError)
+	return FailureResult[T](failed.appError)
 }
 
 // NewFailureWithFile creates a failed Result with file context and root cause error.

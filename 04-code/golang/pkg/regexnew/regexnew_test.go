@@ -99,8 +99,8 @@ func TestLazyRegex_LifecycleAndCompilation(t *testing.T) {
 	}
 
 	res_comp := lz.Compile()
-	compiled := res_comp.Value
-	err := res_comp.AppError
+	compiled := res_comp.Value()
+	err := res_comp.AppError()
 	if err != nil {
 		t.Fatalf("unexpected compilation error: %v", err)
 	}
@@ -122,8 +122,8 @@ func TestLazyRegex_LifecycleAndCompilation(t *testing.T) {
 	}
 
 	res_comp2 := lz.Compile()
-	secondCompiled := res_comp2.Value
-	err = res_comp2.AppError
+	secondCompiled := res_comp2.Value()
+	err = res_comp2.AppError()
 	if err != nil {
 		t.Fatalf("second compile error: %v", err)
 	}
@@ -222,9 +222,9 @@ func TestNewCreator_GlobalDeduplication(t *testing.T) {
 	}
 
 	res_comp3 := Create(pattern)
-	compiled1 := res_comp3.Value
+	compiled1 := res_comp3.Value()
 	res_comp4 := CreateLock(pattern)
-	compiled2 := res_comp4.Value
+	compiled2 := res_comp4.Value()
 
 	if compiled1 != compiled2 {
 		t.Errorf("expected Create and CreateLock to return identical pre-compiled regex")
@@ -374,20 +374,16 @@ func TestLazyRegex_CompileBuilder(t *testing.T) {
 		t.Errorf("expected HasError to be true")
 	}
 
-	if res.Value != nil {
+	if res.Value() != nil {
 		t.Errorf("expected nil Regexp on failure")
 	}
 
-	if res.AppError == nil {
-		t.Fatalf("expected non-nil AppBuilder on invalid pattern")
-	}
-
-	if res.AppError == nil {
+	if res.AppError() == nil {
 		t.Fatalf("expected non-nil AppError on invalid pattern")
 	}
 
-	if res.AppError.Message() != "lazy regex compilation failed" {
-		t.Errorf("unexpected message: %s", res.AppError.Message())
+	if res.AppError().Message() != "lazy regex compilation failed" {
+		t.Errorf("unexpected message: %s", res.AppError().Message())
 	}
 
 	valid := New.LazyLock(`^\w+$`)
@@ -400,7 +396,7 @@ func TestLazyRegex_CompileBuilder(t *testing.T) {
 		t.Errorf("expected no error on valid regex")
 	}
 
-	if validRes.Value == nil {
+	if validRes.Value() == nil {
 		t.Errorf("expected non-nil Regexp on success")
 	}
 }
@@ -536,8 +532,8 @@ func TestLazyRegex_CheckExistingCompiledFirst(t *testing.T) {
 	}
 
 	res_comp5 := lr.Compile()
-	re3 := res_comp5.Value
-	err := res_comp5.AppError
+	re3 := res_comp5.Value()
+	err := res_comp5.AppError()
 	if err != nil || re3 != re1 {
 		t.Errorf("expected Compile to return existing compiled instance")
 	}
@@ -547,7 +543,7 @@ func TestLazyRegex_CheckExistingCompiledFirst(t *testing.T) {
 	}
 
 	res := lr.CompileBuilder()
-	if !res.IsSuccess() || res.Value != re1 {
+	if !res.IsSuccess() || res.Value() != re1 {
 		t.Errorf("expected CompileBuilder to return existing compiled regex")
 	}
 

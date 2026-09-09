@@ -278,6 +278,24 @@ wrap.IsSuccess()     // bool: true if AppError == nil
 wrap.IsFailed()      // bool: true if AppError != nil
 wrap.Data()          // returns Value (type T)
 wrap.Value()         // returns Value (type T)
+wrap.Payload()       // returns Value (type T)
+wrap.Result()        // returns Value (type T)
+wrap.Lines()         // []string: lines from string, bytes, or []string
+wrap.LinesResult()   // ResultSlice[string]: monadic slice of lines
+wrap.Split(sep)      // []string: split string by delimiter
+wrap.SplitResult(sep)// ResultSlice[string]: monadic split
+wrap.SplitAt(pos)    // (string, string): split string at character position
+wrap.Int()           // (int, bool): convert to int
+wrap.IntDefault(def) // int: convert to int with fallback
+wrap.Int64()         // (int64, bool): convert to int64
+wrap.Float64()       // (float64, bool): convert to float64
+wrap.ReflectTo(&dest)// *appfault.AppError: dynamic reflection transfer
+wrap.Type()          // reflect.Type: type metadata
+wrap.TypeName()      // string: qualified type name
+wrap.Length()        // int: length of collection/string/map
+wrap.IsNumber()      // bool: numeric predicate
+wrap.PrettyJson()    // string: indented JSON
+wrap.ToYaml()        // (string, error): YAML serialization
 wrap.Fault()         // returns *appfault.AppError
 wrap.Unwrap()        // returns (T, *appfault.AppError)
 wrap.UnwrapOr(def)   // returns T if success, or def if failed

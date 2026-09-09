@@ -24,3 +24,4 @@ Master directory of architectural and execution plans.
 - [35-fileutil-constants-and-path-info-architecture.md](completed/35-fileutil-constants-and-path-info-architecture.md): Fileutil constants centralization, path namespace clarification, and .NET-style FolderInfo/FileInfo/PathInfo architecture.
 - [36-named-writers-object-pathinfo-and-enum-generator.md](completed/36-named-writers-object-pathinfo-and-enum-generator.md): Logger named writers & introspection, object-oriented PathInfo/FolderInfo search & navigation, and enum generator CLI in readme.md.
 - [37-typed-streamer-objects-for-logger.md](completed/37-typed-streamer-objects-for-logger.md): Typed streamer objects and interfaces for Logger introspection.
+- [38-result-dynamic-conversions-and-coredata-parity.md](completed/38-result-dynamic-conversions-and-coredata-parity.md): Result[T] rich conversions, string line splitting, number conversions, reflection casting, and coredynamic parity.

@@ -269,7 +269,7 @@ func (it *LazyRegex) MatchError(matchingPattern string) error {
 	}
 
 	res := it.Compile()
-	regEx := res.Value
+	regEx := res.Value()
 	compiledErr := res.Error()
 	if regEx != nil && regEx.MatchString(matchingPattern) {
 		return nil
@@ -292,7 +292,7 @@ func (it *LazyRegex) MatchUsingFuncError(
 	}
 
 	res := it.Compile()
-	regEx := res.Value
+	regEx := res.Value()
 	compiledErr := res.Error()
 	if regEx != nil && matchFunc != nil && matchFunc(regEx, comparing) {
 		return nil
@@ -312,7 +312,7 @@ func (it *LazyRegex) IsMatch(comparing string) bool {
 	}
 
 	res := it.Compile()
-	regEx := res.Value
+	regEx := res.Value()
 	compiledErr := res.Error()
 	if regEx == nil || compiledErr != nil {
 		return false
@@ -328,7 +328,7 @@ func (it *LazyRegex) IsMatchBytes(comparingBytes []byte) bool {
 	}
 
 	res := it.Compile()
-	regEx := res.Value
+	regEx := res.Value()
 	compiledErr := res.Error()
 	if regEx == nil || compiledErr != nil {
 		return false
@@ -356,7 +356,7 @@ func (it *LazyRegex) FirstMatchLine(
 	}
 
 	res := it.Compile()
-	regEx := res.Value
+	regEx := res.Value()
 	compiledErr := res.Error()
 	if regEx == nil || compiledErr != nil {
 		return "", true
@@ -395,11 +395,11 @@ func (it *LazyRegex) compiledRegex() (*regexp.Regexp, error) {
 	}
 
 	res := it.Compile()
-	if res.AppError != nil {
-		return res.Value, res.AppError
+	if res.IsFailed() {
+		return res.Value(), res.AppError()
 	}
 
-	return res.Value, nil
+	return res.Value(), nil
 }
 
 // FindString returns the leftmost match in s.
