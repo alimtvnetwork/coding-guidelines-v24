@@ -23,7 +23,7 @@ func TestFilePermType_Interfaces(t *testing.T) {
 
 func TestFilePermType_Basics(t *testing.T) {
 	p := filepermtype.Standard
-	if p.Uint32() != 0644 {
+	if p.Uint32() != 0644 || p.Value() != 0644 {
 		t.Fatalf("expected uint32 0644, got %o", p.Uint32())
 	}
 
@@ -31,14 +31,17 @@ func TestFilePermType_Basics(t *testing.T) {
 		t.Fatalf("expected int/code 0644")
 	}
 
-	if p.OctalString() != "0644" {
+	if p.OctalString() != "0644" || filepermtype.OctalString(p) != "0644" {
 		t.Fatalf("expected octal '0644', got %s", p.OctalString())
 	}
 
-	if p.PosixString() != "rw-r--r--" {
+	if p.PosixString() != "rw-r--r--" || filepermtype.PosixString(p) != "rw-r--r--" {
 		t.Fatalf("expected posix 'rw-r--r--', got %s", p.PosixString())
 	}
+}
 
+func TestFilePermType_Modes(t *testing.T) {
+	p := filepermtype.Standard
 	if p.Mode() != 0644 {
 		t.Fatalf("expected mode 0644, got %v", p.Mode())
 	}
@@ -46,6 +49,11 @@ func TestFilePermType_Basics(t *testing.T) {
 	var zero filepermtype.Variant
 	if zero.Mode() != 0644 {
 		t.Fatalf("expected zero mode to default to Standard")
+	}
+
+	sticky := filepermtype.StickyDir
+	if sticky.OctalString() != "01777" || filepermtype.OctalString(sticky) != "01777" {
+		t.Fatalf("expected 01777 from sticky")
 	}
 }
 
@@ -113,12 +121,12 @@ func TestFilePermType_Naming(t *testing.T) {
 
 func TestFilePermType_AllAndValues(t *testing.T) {
 	all := filepermtype.All()
-	if len(all) == 0 {
+	if len(all) == 0 || len(filepermtype.Standard.All()) != len(all) {
 		t.Fatalf("expected non-empty All")
 	}
 
 	vals := filepermtype.Values()
-	if len(vals) != len(all) {
+	if len(vals) != len(all) || len(filepermtype.Standard.Values()) != len(vals) {
 		t.Fatalf("expected matching lengths for All and Values")
 	}
 }

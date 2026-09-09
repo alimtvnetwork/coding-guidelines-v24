@@ -185,3 +185,20 @@ func TestFileWriteModeType_BoundaryPredicates(t *testing.T) {
 		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }
+
+func TestFileWriteModeType_ValueAndCollections(t *testing.T) {
+	d := filewritemodetype.Direct
+	if d.Value() != 1 {
+		t.Fatalf("expected 1 from Value(), got %d", d.Value())
+	}
+
+	all := filewritemodetype.All()
+	if len(all) != 3 || len(d.All()) != 3 {
+		t.Fatalf("expected 3 variants, got %d", len(all))
+	}
+
+	vals := filewritemodetype.Values()
+	if len(vals) != 3 || len(d.Values()) != 3 {
+		t.Fatalf("expected 3 values, got %d", len(vals))
+	}
+}

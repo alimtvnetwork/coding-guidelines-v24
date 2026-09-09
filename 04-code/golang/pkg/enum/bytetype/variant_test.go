@@ -335,3 +335,15 @@ func TestByteType_IsInRange(t *testing.T) {
 		t.Fatalf("expected Max to be in range [Min, Max]")
 	}
 }
+
+func TestByteType_AllAndValues(t *testing.T) {
+	all := bytetype.All()
+	if len(all) != 5 || len(bytetype.One.All()) != 5 {
+		t.Fatalf("expected 5 variants from All")
+	}
+
+	vals := bytetype.Values()
+	if len(vals) != 5 || len(bytetype.One.Values()) != 5 {
+		t.Fatalf("expected 5 values from Values")
+	}
+}

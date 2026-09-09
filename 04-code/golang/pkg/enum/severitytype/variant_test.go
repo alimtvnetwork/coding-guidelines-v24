@@ -213,3 +213,20 @@ func TestSeverityType_IsInRange(t *testing.T) {
 		t.Fatalf("expected Fatal to be in range [Unknown, Fatal]")
 	}
 }
+
+func TestSeverityType_ValueAndCollections(t *testing.T) {
+	e := severitytype.Error
+	if e.Value() != 3 {
+		t.Fatalf("expected 3 from Value(), got %d", e.Value())
+	}
+
+	all := severitytype.All()
+	if len(all) != 5 || len(e.All()) != 5 {
+		t.Fatalf("expected 5 variants from All")
+	}
+
+	vals := severitytype.Values()
+	if len(vals) != 5 || len(e.Values()) != 5 {
+		t.Fatalf("expected 5 values from Values")
+	}
+}

@@ -209,3 +209,20 @@ func TestPriorityType_IsInRange(t *testing.T) {
 		t.Fatalf("expected Critical to be in range [Unknown, Critical]")
 	}
 }
+
+func TestPriorityType_ValueAndCollections(t *testing.T) {
+	h := prioritytype.High
+	if h.Value() != 3 {
+		t.Fatalf("expected 3 from Value(), got %d", h.Value())
+	}
+
+	all := prioritytype.All()
+	if len(all) != 4 || len(h.All()) != 4 {
+		t.Fatalf("expected 4 variants from All")
+	}
+
+	vals := prioritytype.Values()
+	if len(vals) != 4 || len(h.Values()) != 4 {
+		t.Fatalf("expected 4 values from Values")
+	}
+}

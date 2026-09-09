@@ -58,6 +58,18 @@ func (l Variant) Int() int {
 	return int(l)
 }
 
+func (l Variant) Value() uint16 {
+	return uint16(l)
+}
+
+func (l Variant) All() []Variant {
+	return All()
+}
+
+func (l Variant) Values() []string {
+	return Values()
+}
+
 func (l Variant) IsValid() bool {
 	return l >= Debug && l <= Fatal
 }

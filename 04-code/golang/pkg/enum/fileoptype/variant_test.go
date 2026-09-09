@@ -220,3 +220,20 @@ func TestFileOpType_BoundaryPredicates(t *testing.T) {
 		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }
+
+func TestFileOpType_ValueAndCollections(t *testing.T) {
+	ro := fileoptype.ReadOnly
+	if ro.Value() != 1 {
+		t.Fatalf("expected 1 from Value(), got %d", ro.Value())
+	}
+
+	all := fileoptype.All()
+	if len(all) != 8 || len(ro.All()) != 8 {
+		t.Fatalf("expected 8 variants, got %d", len(all))
+	}
+
+	vals := fileoptype.Values()
+	if len(vals) != 8 || len(ro.Values()) != 8 {
+		t.Fatalf("expected 8 values, got %d", len(vals))
+	}
+}

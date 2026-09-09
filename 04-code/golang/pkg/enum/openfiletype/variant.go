@@ -26,7 +26,44 @@ const (
 	ReadWriteOrCreateOnly
 )
 
-var _ baseenumer.BoundedEnumer[Variant] = Variant(0)
+var (
+	_ baseenumer.BaseEnumer             = Variant(0)
+	_ baseenumer.ByteEnumer             = Variant(0)
+	_ baseenumer.NumberEnumer           = Variant(0)
+	_ baseenumer.BoundedEnumer[Variant] = Variant(0)
+)
+
+func (v Variant) Value() byte {
+	return byte(v)
+}
+
+func (v Variant) Byte() byte {
+	return byte(v)
+}
+
+func (v Variant) ValueByte() byte {
+	return byte(v)
+}
+
+func (v Variant) Bytes() []byte {
+	return []byte{byte(v)}
+}
+
+func (v Variant) Int() int {
+	return int(v)
+}
+
+func (v Variant) Code() uint16 {
+	return uint16(v)
+}
+
+func (v Variant) All() []Variant {
+	return All()
+}
+
+func (v Variant) Values() []string {
+	return Values()
+}
 
 func (v Variant) Min() Variant {
 	return basicEnum.Min()
@@ -72,12 +109,20 @@ func (v Variant) String() string {
 	return v.Name()
 }
 
+func (v Variant) ValueString() string {
+	return baseenumer.FormatNameValue(v.Name(), byte(v))
+}
+
 func (v Variant) IsValid() bool {
 	return baseenumer.IsBetween(v, ReadOnly, ReadWriteOrCreateOnly)
 }
 
 func (v Variant) IsInvalid() bool {
 	return baseenumer.IsNotBetween(v, ReadOnly, ReadWriteOrCreateOnly)
+}
+
+func (v Variant) IsEnum() bool {
+	return v.IsValid()
 }
 
 func (v Variant) IsReadOnly() bool {

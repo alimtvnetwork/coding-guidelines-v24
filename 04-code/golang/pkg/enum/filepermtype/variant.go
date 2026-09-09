@@ -76,6 +76,18 @@ func (p Variant) Mode() os.FileMode {
 	return os.FileMode(p)
 }
 
+func (p Variant) Value() uint32 {
+	return uint32(p)
+}
+
+func (p Variant) All() []Variant {
+	return All()
+}
+
+func (p Variant) Values() []string {
+	return Values()
+}
+
 func (p Variant) Uint32() uint32 {
 	return uint32(p)
 }
@@ -89,61 +101,55 @@ func (p Variant) Code() uint16 {
 }
 
 func (p Variant) OctalString() string {
+	if p < MaxStandardPerm {
+		return octalStringTable[p]
+	}
+
 	return fmt.Sprintf("0%o", uint32(p))
 }
 
 func (p Variant) PosixString() string {
-	chars := []byte("---------")
-	flags := []uint32{0400, 0200, 0100, 0040, 0020, 0010, 0004, 0002, 0001}
-	rwx := "rwxrwxrwx"
-
-	for idx, flag := range flags {
-		if (uint32(p) & flag) != 0 {
-			chars[idx] = rwx[idx]
-		}
-	}
-
-	return string(chars)
+	return posixStringTable[uint32(p)&MaskStandard]
 }
 
 func (p Variant) IsPrivate() bool {
-	return (uint32(p) & 0077) == 0
+	return (uint32(p) & MaskGroupOther) == 0
 }
 
 func (p Variant) IsPublic() bool {
-	return (uint32(p) & 0007) != 0
+	return (uint32(p) & MaskOtherOnly) != 0
 }
 
 func (p Variant) IsExecutable() bool {
-	return (uint32(p) & 0111) != 0
+	return (uint32(p) & MaskExecAll) != 0
 }
 
 func (p Variant) IsOwnerReadable() bool {
-	return (uint32(p) & 0400) != 0
+	return (uint32(p) & MaskOwnerRead) != 0
 }
 
 func (p Variant) IsOwnerWritable() bool {
-	return (uint32(p) & 0200) != 0
+	return (uint32(p) & MaskOwnerWrite) != 0
 }
 
 func (p Variant) IsGroupReadable() bool {
-	return (uint32(p) & 0040) != 0
+	return (uint32(p) & MaskGroupRead) != 0
 }
 
 func (p Variant) IsGroupWritable() bool {
-	return (uint32(p) & 0020) != 0
+	return (uint32(p) & MaskGroupWrite) != 0
 }
 
 func (p Variant) IsOtherReadable() bool {
-	return (uint32(p) & 0004) != 0
+	return (uint32(p) & MaskOtherRead) != 0
 }
 
 func (p Variant) IsOtherWritable() bool {
-	return (uint32(p) & 0002) != 0
+	return (uint32(p) & MaskOtherWrite) != 0
 }
 
 func (p Variant) IsValid() bool {
-	return p <= 07777
+	return p <= Variant(MaskAllPermBits)
 }
 
 func (p Variant) IsEnum() bool {
@@ -151,11 +157,11 @@ func (p Variant) IsEnum() bool {
 }
 
 func (p Variant) WithPrivate() Variant {
-	return Variant(uint32(p) & 0700)
+	return Variant(uint32(p) & MaskOwnerAll)
 }
 
 func (p Variant) WithReadOnly() Variant {
-	return Variant(uint32(p) &^ 0222)
+	return Variant(uint32(p) &^ MaskWriteAll)
 }
 
 func (p Variant) WithExecutable() Variant {
@@ -168,24 +174,24 @@ func (p Variant) WithExecutable() Variant {
 }
 
 func applyOwnerExec(bits uint32) uint32 {
-	if (bits & 0400) != 0 {
-		return bits | 0100
+	if (bits & MaskOwnerRead) != 0 {
+		return bits | MaskOwnerExec
 	}
 
 	return bits
 }
 
 func applyGroupExec(bits uint32) uint32 {
-	if (bits & 0040) != 0 {
-		return bits | 0010
+	if (bits & MaskGroupRead) != 0 {
+		return bits | MaskGroupExec
 	}
 
 	return bits
 }
 
 func applyOtherExec(bits uint32) uint32 {
-	if (bits & 0004) != 0 {
-		return bits | 0001
+	if (bits & MaskOtherRead) != 0 {
+		return bits | MaskOtherExec
 	}
 
 	return bits

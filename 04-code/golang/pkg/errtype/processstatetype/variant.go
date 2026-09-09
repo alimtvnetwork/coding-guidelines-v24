@@ -58,6 +58,14 @@ func (s Variant) Value() string {
 	return string(s)
 }
 
+func (s Variant) All() []Variant {
+	return All()
+}
+
+func (s Variant) Values() []string {
+	return Values()
+}
+
 func (s Variant) IsValid() bool {
 	switch s {
 	case Pending, Running, Completed, Failed, Cancelled:

@@ -8,6 +8,17 @@ import (
 	"coding-guidelines/common/pkg/enum/processstatetype"
 )
 
+func TestProcessStateType_Interfaces(t *testing.T) {
+	var (
+		_ baseenumer.BaseEnumer                              = processstatetype.Pending
+		_ baseenumer.ByteEnumer                              = processstatetype.Pending
+		_ baseenumer.NumberEnumer                            = processstatetype.Pending
+		_ baseenumer.BoundedEnumer[processstatetype.Variant] = processstatetype.Pending
+		_ json.Marshaler                                     = processstatetype.Pending
+		_ json.Unmarshaler                                   = (*processstatetype.Variant)(nil)
+	)
+}
+
 func TestInvalidZeroValue(t *testing.T) {
 	var zero processstatetype.Variant
 	if zero != processstatetype.Invalid {
@@ -222,5 +233,26 @@ func TestBoundaryPredicates(t *testing.T) {
 
 	if processstatetype.Variant(99).IsInRange(minVal, maxVal) {
 		t.Fatalf("IsInRange succeeded for out-of-range value")
+	}
+}
+
+func TestProcessStateType_ValueAndCollections(t *testing.T) {
+	p := processstatetype.Pending
+	if p.Value() != 1 || p.Byte() != 1 || p.ValueByte() != 1 {
+		t.Fatalf("expected 1 from Byte/Value methods")
+	}
+
+	if p.Int() != 1 || p.Code() != 1 || len(p.Bytes()) != 1 {
+		t.Fatalf("expected 1 from Int/Code/Bytes")
+	}
+
+	all := processstatetype.All()
+	if len(all) != 5 || len(p.All()) != 5 {
+		t.Fatalf("expected 5 variants from All")
+	}
+
+	vals := processstatetype.Values()
+	if len(vals) != 5 || len(p.Values()) != 5 {
+		t.Fatalf("expected 5 values from Values")
 	}
 }

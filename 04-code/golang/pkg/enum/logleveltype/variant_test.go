@@ -8,6 +8,17 @@ import (
 	"coding-guidelines/common/pkg/enum/logleveltype"
 )
 
+func TestLogLevelType_Interfaces(t *testing.T) {
+	var (
+		_ baseenumer.BaseEnumer                          = logleveltype.Debug
+		_ baseenumer.ByteEnumer                          = logleveltype.Debug
+		_ baseenumer.NumberEnumer                        = logleveltype.Debug
+		_ baseenumer.BoundedEnumer[logleveltype.Variant] = logleveltype.Debug
+		_ json.Marshaler                                 = logleveltype.Debug
+		_ json.Unmarshaler                               = (*logleveltype.Variant)(nil)
+	)
+}
+
 func TestInvalidZeroValue(t *testing.T) {
 	var zero logleveltype.Variant
 	if zero != logleveltype.Invalid {
@@ -236,5 +247,26 @@ func TestBoundaryPredicates(t *testing.T) {
 
 	if logleveltype.Variant(99).IsInRange(minVal, maxVal) {
 		t.Fatalf("IsInRange succeeded for out-of-range value")
+	}
+}
+
+func TestLogLevelType_ValueAndCollections(t *testing.T) {
+	d := logleveltype.Debug
+	if d.Value() != 1 || d.Byte() != 1 || d.ValueByte() != 1 {
+		t.Fatalf("expected 1 from Byte/Value methods")
+	}
+
+	if d.Int() != 1 || d.Code() != 1 || len(d.Bytes()) != 1 {
+		t.Fatalf("expected 1 from Int/Code/Bytes")
+	}
+
+	all := logleveltype.All()
+	if len(all) != 5 || len(d.All()) != 5 {
+		t.Fatalf("expected 5 variants from All")
+	}
+
+	vals := logleveltype.Values()
+	if len(vals) != 5 || len(d.Values()) != 5 {
+		t.Fatalf("expected 5 values from Values")
 	}
 }

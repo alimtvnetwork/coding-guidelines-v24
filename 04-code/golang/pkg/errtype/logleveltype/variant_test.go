@@ -142,3 +142,20 @@ func TestLogLevelType_BoundaryPredicates(t *testing.T) {
 		t.Fatalf("IsInRange succeeded for out-of-range value")
 	}
 }
+
+func TestLogLevelType_ValueAndCollections(t *testing.T) {
+	d := logleveltype.Debug
+	if d.Value() != 1 {
+		t.Fatalf("expected 1 from Value(), got %d", d.Value())
+	}
+
+	all := logleveltype.All()
+	if len(all) != 5 || len(d.All()) != 5 {
+		t.Fatalf("expected 5 variants from All")
+	}
+
+	vals := logleveltype.Values()
+	if len(vals) != 5 || len(d.Values()) != 5 {
+		t.Fatalf("expected 5 values from Values")
+	}
+}

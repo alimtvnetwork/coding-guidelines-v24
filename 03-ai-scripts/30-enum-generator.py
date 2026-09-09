@@ -170,6 +170,7 @@ def build_variant_byte_methods(ctx: dict[str, Any]) -> list[str]:
     if not ctx["is_byte"]:
         return []
     return [
+        "func (v Variant) Value() byte {\n\treturn byte(v)\n}\n",
         "func (v Variant) Byte() byte {\n\treturn byte(v)\n}\n",
         "func (v Variant) ValueByte() byte {\n\treturn byte(v)\n}\n",
         "func (v Variant) Bytes() []byte {\n\treturn []byte{byte(v)}\n}\n",
@@ -180,8 +181,16 @@ def build_variant_int_methods(ctx: dict[str, Any]) -> list[str]:
     if ctx["is_string"]:
         return ["func (v Variant) Value() string {\n\treturn string(v)\n}\n"]
     return [
+        f"func (v Variant) Value() {ctx['underlying']} {{\n\treturn {ctx['underlying']}(v)\n}}\n",
         "func (v Variant) Int() int {\n\treturn int(v)\n}\n",
         "func (v Variant) Code() uint16 {\n\treturn uint16(v)\n}\n",
+    ]
+
+
+def build_variant_collection_methods() -> list[str]:
+    return [
+        "func (v Variant) All() []Variant {\n\treturn All()\n}\n",
+        "func (v Variant) Values() []string {\n\treturn Values()\n}\n",
     ]
 
 
@@ -288,6 +297,7 @@ def generate_variant_go(ctx: dict[str, Any]) -> str:
         build_variant_header(ctx), build_variant_type_section(ctx),
         build_variant_consts(ctx), build_variant_assertions(ctx),
         build_variant_byte_methods(ctx), build_variant_int_methods(ctx),
+        build_variant_collection_methods(),
         build_variant_predicates(ctx), build_variant_boundary_methods(),
         build_variant_item_checkers(ctx), build_variant_formatting(ctx),
         build_variant_json(ctx),
@@ -435,8 +445,10 @@ def build_test_interfaces(ctx: dict[str, Any]) -> list[str]:
 def build_numeric_test_properties(pkg: str, first: str, is_byte: bool) -> list[str]:
     lines = []
     if is_byte:
-        lines.append(f"\tif {pkg}.{first}.Byte() != 1 {{\n\t\tt.Fatalf(\"expected 1 from Byte()\")\n\t}}")
-    lines.append(f"\tif {pkg}.{first}.Int() != 1 || {pkg}.{first}.Code() != 1 {{\n\t\tt.Fatalf(\"expected 1 from Int/Code\")\n\t}}")
+        lines.append(f'\tif {pkg}.{first}.Byte() != 1 || {pkg}.{first}.Value() != 1 {{\n\t\tt.Fatalf("expected 1 from Byte/Value()")\n\t}}')
+    else:
+        lines.append(f'\tif {pkg}.{first}.Value() != 1 {{\n\t\tt.Fatalf("expected 1 from Value()")\n\t}}')
+    lines.append(f'\tif {pkg}.{first}.Int() != 1 || {pkg}.{first}.Code() != 1 {{\n\t\tt.Fatalf("expected 1 from Int/Code")\n\t}}')
     return lines
 
 
@@ -445,6 +457,8 @@ def build_test_properties(ctx: dict[str, Any]) -> list[str]:
     lines = [f"func Test{ctx['name']}Type_Properties(t *testing.T) {{"]
     if not ctx["is_string"]:
         lines.extend(build_numeric_test_properties(pkg, first, ctx["is_byte"]))
+    else:
+        lines.append(f'\tif {pkg}.{first}.Value() != "{first}" {{\n\t\tt.Fatalf("expected {first} from Value()")\n\t}}')
     lines.extend([f"\tif !{pkg}.{first}.IsValid() {{\n\t\tt.Fatalf(\"expected {first} to be valid\")\n\t}}", "}", ""])
     return lines
 
@@ -470,10 +484,11 @@ def build_test_predicates(ctx: dict[str, Any]) -> list[str]:
 
 
 def build_test_names_and_vars(ctx: dict[str, Any]) -> list[str]:
-    pkg, first = ctx["package"], ctx["items"][0]
+    pkg, first, n = ctx["package"], ctx["items"][0], len(ctx["items"])
     return [
         f"func Test{ctx['name']}Type_VarsAndParse(t *testing.T) {{",
-        f'\tall := {pkg}.All()\n\tif len(all) != {len(ctx["items"])} {{\n\t\tt.Fatalf("expected {len(ctx["items"])} variants, got %d", len(all))\n\t}}',
+        f'\tall := {pkg}.All()\n\tif len(all) != {n} || len({pkg}.{first}.All()) != {n} {{\n\t\tt.Fatalf("expected {n} variants, got %d", len(all))\n\t}}',
+        f'\tvals := {pkg}.Values()\n\tif len(vals) != {n} || len({pkg}.{first}.Values()) != {n} {{\n\t\tt.Fatalf("expected {n} values, got %d", len(vals))\n\t}}',
         f'\tres := {pkg}.Parse("{first}")\n\tif !res.IsSuccess() || res.Data() != {pkg}.{first} {{\n\t\tt.Fatalf("expected successful Parse for {first}")\n\t}}',
         f'\tif {pkg}.Parse("").IsSuccess() {{\n\t\tt.Fatalf("expected failure for empty string")\n\t}}',
         f'\tif {pkg}.Parse("invalid_variant_value").IsSuccess() {{\n\t\tt.Fatalf("expected failure for bad variant")\n\t}}',

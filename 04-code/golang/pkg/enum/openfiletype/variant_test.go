@@ -9,6 +9,17 @@ import (
 	"coding-guidelines/common/pkg/enum/openfiletype"
 )
 
+func TestOpenFileType_Interfaces(t *testing.T) {
+	var (
+		_ baseenumer.BaseEnumer                          = openfiletype.ReadOnly
+		_ baseenumer.ByteEnumer                          = openfiletype.ReadOnly
+		_ baseenumer.NumberEnumer                        = openfiletype.ReadOnly
+		_ baseenumer.BoundedEnumer[openfiletype.Variant] = openfiletype.ReadOnly
+		_ json.Marshaler                                 = openfiletype.ReadOnly
+		_ json.Unmarshaler                               = (*openfiletype.Variant)(nil)
+	)
+}
+
 func TestInvalidZeroValue(t *testing.T) {
 	var zero openfiletype.Variant
 	if zero != openfiletype.Invalid {
@@ -260,5 +271,26 @@ func TestBoundaryPredicates(t *testing.T) {
 
 	if openfiletype.Variant(99).IsInRange(minVal, maxVal) {
 		t.Fatalf("IsInRange succeeded for out-of-range value")
+	}
+}
+
+func TestOpenFileType_ValueAndCollections(t *testing.T) {
+	ro := openfiletype.ReadOnly
+	if ro.Value() != 1 || ro.Byte() != 1 || ro.ValueByte() != 1 {
+		t.Fatalf("expected 1 from Byte/Value methods")
+	}
+
+	if ro.Int() != 1 || ro.Code() != 1 || len(ro.Bytes()) != 1 {
+		t.Fatalf("expected 1 from Int/Code/Bytes")
+	}
+
+	all := openfiletype.All()
+	if len(all) != 10 || len(ro.All()) != 10 {
+		t.Fatalf("expected 10 variants from All")
+	}
+
+	vals := openfiletype.Values()
+	if len(vals) != 10 || len(ro.Values()) != 10 {
+		t.Fatalf("expected 10 values from Values")
 	}
 }

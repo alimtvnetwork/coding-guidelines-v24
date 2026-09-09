@@ -164,3 +164,20 @@ func TestProcessStateType_IsInRange(t *testing.T) {
 		t.Fatalf("expected Running to be in range [Pending, Running]")
 	}
 }
+
+func TestProcessStateType_ValueAndCollections(t *testing.T) {
+	p := processstatetype.Pending
+	if p.Value() != "Pending" {
+		t.Fatalf("expected 'Pending' from Value(), got %s", p.Value())
+	}
+
+	all := processstatetype.All()
+	if len(all) != 5 || len(p.All()) != 5 {
+		t.Fatalf("expected 5 variants from All")
+	}
+
+	vals := processstatetype.Values()
+	if len(vals) != 5 || len(p.Values()) != 5 {
+		t.Fatalf("expected 5 values from Values")
+	}
+}

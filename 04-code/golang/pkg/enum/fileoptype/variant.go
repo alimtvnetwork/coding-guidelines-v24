@@ -41,6 +41,18 @@ func (v Variant) Byte() byte {
 	return byte(v)
 }
 
+func (v Variant) Value() byte {
+	return byte(v)
+}
+
+func (v Variant) All() []Variant {
+	return All()
+}
+
+func (v Variant) Values() []string {
+	return Values()
+}
+
 func (v Variant) ValueByte() byte {
 	return byte(v)
 }
