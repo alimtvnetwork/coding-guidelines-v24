@@ -37,8 +37,14 @@
 | 4 | CI/CD Pipeline Modernization | Implemented 12 parallel quality gates with worker pools | `03-ai-scripts/06-cicd-local-runner.py` | DONE |
 | 5 | Local Quality Guard Linters | Built gap linter, sequence integrity linter, and path linter | `03-ai-scripts/21-sequence-integrity-linter.py` | DONE |
 | 6 | Release Skew Remediation | Fixed release pipeline tags, commit formatting, and drift | `.github/workflows/` | DONE |
-| 7 | Safety Backup Execution | Created timestamped backup branch on remote with rollback SHA | Git remote branch | DONE |
-| 8 | Plan & Subtask Compaction | Compressed historical micro-tasks down to consolidated milestones | `.lovable/plans/completed/` | DONE |
+| 7 | Safety Backup Execution | Created timestamped backup branch on remote with rollback SHA | Remote git branch | DONE |
+| 8 | Baseline Inventory Audit | Audited 15 plan files and 131 micro-subtask files (146 total) | `.lovable/plans/` | DONE |
+| 9 | Domain Cluster Planning | Designed cohesive milestone clusters in pending plan spec | `.lovable/plans/pending/` | DONE |
+| 10 | Milestone Summaries Authoring | Authored high-density milestone files matching template | `.lovable/plans/completed/` | DONE |
+| 11 | Subtask Collapse & Deletion | Folded subtasks into milestones and removed old files via `git rm` | `.lovable/plans/subtasks/` | DONE |
+| 12 | Monotonic Resequencing | Re-sequenced completed plan files contiguously (`01-` to `04-`) | `.lovable/plans/completed/` | DONE |
+| 13 | Index Synchronization | Updated `.lovable/plans/01-index.md` and `.lovable/what-to-read.md` | `.lovable/` indexes | DONE |
+| 14 | Linters & CI Verification | Ran sequence integrity, doc path linters, and full CI runner | Quality gates | DONE |
 
 ## 4. Unified Quality Gates & Verification Checklist
 
