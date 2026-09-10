@@ -7,12 +7,11 @@
 
 ```text
 N = 100
-PHASE_1_STEPS = 50   (Audit Ingestion, Finding Matrix & Subtask Decomposition)
-PHASE_2_STEPS = 40   (Parallel Multi-Agent Spec Remediation)
-PHASE_3_STEPS = 10   (Quality Gate Verification, Gap Removal & Archive)
+PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Audit Ingestion, Finding Matrix & Subtask Decomposition)
+PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Parallel Remediation, CI Verification & Gap Removal)
 ```
 
-N, PHASE_1_STEPS, PHASE_2_STEPS, and PHASE_3_STEPS are read-only. Never modify them mid-execution.
+N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never modify them mid-execution.
 
 ---
 
@@ -41,7 +40,7 @@ Before executing the tasks below, you must check if this prompt is already insta
 
 You MUST execute this task via a strict 4-Phase continuous loop. Do not skip steps.
 
-### Phase 1: Audit Ingestion & 1:1 Finding Matrix (Steps 1 .. 50)
+### Phase 1: Audit Ingestion & 1:1 Finding Matrix (Steps 1 to PHASE_1_STEPS)
 
 1. **Locate Latest Audit:** Scan `02-spec/25-app-spec-audit/` using `03-ai-scripts/17-fast-file-reader.py` and select the file with the highest numerical sequence prefix (`NN-audit-*.md`).
 2. **Exhaustive Finding Parsing:** Parse the Markdown Summary Table at the bottom of the audit file. Extract every single row without skipping a single issue.
@@ -60,7 +59,7 @@ You MUST execute this task via a strict 4-Phase continuous loop. Do not skip ste
    ```
 5. **MANDATORY AUTO-LOOP (DO NOT STOP):** As soon as Phase 1 completes, the master orchestrator **MUST NOT STOP or ask the user for permission**. It MUST immediately self-loop and transition directly into Phase 2.
 
-### Phase 2: Parallel Multi-Agent Remediation (Steps 51 .. 90)
+### Phase 2: Parallel Multi-Agent Remediation (Steps PHASE_1_STEPS+1 to N)
 
 1. **Parallel Dispatch:** Use the `invoke_subagent` tool to spawn up to 2 execution subagents concurrently (max 2 threads each), assigning disjoint subtasks from `.lovable/plans/subtasks/xx-spec-fix/`.
 2. **Minimal Context Diet:** Provide subagents with minimal instructions (e.g., "Read `.lovable/plans/subtasks/xx-spec-fix/01-<slug>.md` and execute the fixes on the specified spec file").
@@ -68,13 +67,13 @@ You MUST execute this task via a strict 4-Phase continuous loop. Do not skip ste
 4. **Failure Protocol:** If a subagent fails, record the error in `.lovable/memory/issues/xx-spec-fix-failure.md`. The next subagent must read the failure log first to remediate.
 5. **Mark Reconciliation Ledger:** As subtasks finish, mark the corresponding findings in `.lovable/plans/pending/xx-spec-remediation.md` as `[x]`.
 
-### Phase 3: Quality Gate & Cross-Link Verification (Steps 91 .. 95)
+### Phase 3: Quality Gate & Cross-Link Verification (Validation Gate)
 
 1. **Cross-Link Integrity:** Run `python linter-scripts/check-spec-cross-links.py` to ensure no internal links were broken by the spec edits.
 2. **Markdown Standards:** Run `python 03-ai-scripts/31-md-gap-fixer.py --fix` and verify spacing.
 3. **Full CI Runner:** Run `python 03-ai-scripts/06-cicd-local-runner.py` ensuring all 36 quality gates exit with code 0 (`exit 0`).
 
-### Phase 4: Audit Gap Removal & Final Archive (Steps 96 .. 100)
+### Phase 4: Audit Gap Removal & Final Archive (End of Loop)
 
 > **CRITICAL (NON-NEGOTIABLE):** The audit gap MUST be officially closed on disk before concluding.
 
