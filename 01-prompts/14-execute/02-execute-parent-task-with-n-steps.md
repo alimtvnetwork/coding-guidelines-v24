@@ -6,7 +6,7 @@
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
 
 ```text
-N = 30
+N = 130
 ```
 
 N = total self-loop steps budget that the agents will perform.
