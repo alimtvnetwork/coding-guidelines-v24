@@ -91,4 +91,3 @@ Universal generic enum manager structs that encapsulate labels, lookup maps, bou
   - `IsMax(v V) bool`: Reports whether variant equals `Max()`.
   - `IsInRange(v, min, max V) bool`: Reports whether variant is within `[min, max]`.
   - `WithMinMax(min, max V) *BasicStringEnum[V]`: Overrides the computed min/max bounds.
-

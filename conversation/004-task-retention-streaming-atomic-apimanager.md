@@ -15,48 +15,48 @@ Topic: Task database retention pruning, real-time command line streaming, atomic
 
 ### 2.
 
-> do all these by self looping 
-> 
+> do all these by self looping
+>
 > Option 1: Add Task Retention (PruneTasks) & Query Filtering to sqlitelogger.
 > Option 2: Add Live Line Streaming (WithStdoutHandler) & Env/Cwd to errcmd.
 > Option 3: Implement Atomic File Writes (AtomicWriteFile) in fileutil.
 > Option 4: Add Reset() & Context Support to lazyonce.
-> 
+>
 > and also write tests for e2e testing for logger rotating, keeping data na also similar fashion I want for ApiManager whcih can send logs to api endpoint and possibility to extend or change the way it does the rotating etc, can you please do it
-> 
+>
 > also write as spec for now
-> 
+>
 > # Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
-> 
+>
 > > **Prompt Version:** 2.1.0
 > > **Synchronization:** Main Meta-Repo & Connected Workspaces
-> 
+>
 > /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
-> 
+>
 > ```text
 > N = 100
 > ```
 
 ### 3.
 
-> do all these by self looping 
-> 
+> do all these by self looping
+>
 > Option 1: Add Task Retention (PruneTasks) & Query Filtering to sqlitelogger.
 > Option 2: Add Live Line Streaming (WithStdoutHandler) & Env/Cwd to errcmd.
 > Option 3: Implement Atomic File Writes (AtomicWriteFile) in fileutil.
 > Option 4: Add Reset() & Context Support to lazyonce.
-> 
+>
 > and also write tests for e2e testing for logger rotating, keeping data na also similar fashion I want for ApiManager whcih can send logs to api endpoint and possibility to extend or change the way it does the rotating etc, can you please do it
-> 
+>
 > also write as spec for now
-> 
+>
 > # Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
-> 
+>
 > > **Prompt Version:** 2.1.0
 > > **Synchronization:** Main Meta-Repo & Connected Workspaces
-> 
+>
 > /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
-> 
+>
 > ```text
 > N = 100
 > ```

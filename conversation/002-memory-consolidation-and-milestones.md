@@ -12,18 +12,18 @@ Topic: Safety backup branch creation, completed plans consolidation into milesto
 ### 1.
 
 > # Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow)
-> 
+>
 > Trigger Keywords & Aliases: `consolidate-plans`, `consolidate completed plans`, `clean completed plans`, `resequence completed plans`, `merge plans`, `archive completed plans`, `cleanup plans completed`, `memory consolidation`, `backup and consolidate plans`
-> 
+>
 > > **Prompt Version:** 2.1.0
 > > **Synchronization:** Main Meta-Repo & Connected Workspaces
-> 
+>
 > ```text
 > N = 200
 > ```
-> 
+>
 > N = total self-loop steps budget that the agents will perform.
-> 
+>
 > /goal Autonomously create a timestamped backup branch, scan, analyze, cluster, consolidate, and re-sequence all completed plan files within `.lovable/plans/completed/` into clean, cohesive milestone summaries, while strictly preserving 100% of architectural specifications, root-cause analyses, error contracts, and decision logs with zero data loss or truncation until 100% green without stopping.
 
 ---

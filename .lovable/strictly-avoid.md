@@ -314,4 +314,3 @@ Forbidden:
 Allowed work:
 - ✅ Root readme MUST be strictly lowercase `readme.md`.
 - ✅ If an uppercase variant is detected, rename immediately to lowercase `readme.md`.
-

@@ -12,14 +12,14 @@ Topic: Split SQLite log architecture, configurable task paths, automatic schema 
 ### 1.
 
 > D:\wp-work\riseup-asia\03-aukgo\errorwrapper\errcmd
-> 
-> 
+>
+>
 > Okay, so for the, um, SQLite DB on the logging part, there could be two different things. One, that we could, um, we, we could actually have task by task logging, uh, with a separate DB. That means there could be a main DB just like the split DB concept. So, uh, the main DB about the log that could have the logs DB or that could also be changeable from the loggers. Default one would be there. So inside where it is keeping, so there should be a work directory or DB directory. So in that DB directory, uh, it should have a logs.db. Uh, but also inside that, you can have a task DB, tasks folder. Inside these folders, it can have each task by task logs DB, which can be retrieved by, uh, API methods, and that means there should be methods to retrieve all of these. Um, and also, you should look into the split DB concept, uh, so that you understand how it's going to work. And also rotation, uh, for the text-based logging, we need to have the rotation for--
 
 ### 2.
 
 > make sure abd cnfirm if these paths are chanbale
-> 
+>
 > <workDir>/tasks/<
 
 ### 3.

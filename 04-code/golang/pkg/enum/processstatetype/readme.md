@@ -50,4 +50,3 @@ func CanExecute(state processstatetype.Variant) bool {
 - `Parse(s string) (Variant, bool)` - Case-insensitive string parser returning the typed variant and success boolean.
 - `ParseOrInvalid(s string) Variant` / `ParseOrUnknown(s string) Variant` - String parser returning `Invalid` (0) on failure.
 - `MarshalJSON()` / `UnmarshalJSON()` - PascalCase JSON serialization with string and byte fallback.
-
