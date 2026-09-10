@@ -23,9 +23,9 @@ N = is the number of steps that the agents will perform
 
 /goal You are the master orchestrator. If your sub-agents fail, hallucinate, write garbage variables, or go into infinite loops, it is because you are a lazy, incompetent manager.
 
-- You must give sub-agents strict, microscopic instructions.
+- You must give sub-agents clear, lean instructions focused on the domain task itself rather than writing massive generic prompts.
 - If a sub-agent stalls or provides garbage code, kill it immediately, rollback its dirty working tree, and spawn a new one.
-- Context Diet: When spawning a subagent, DO NOT paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction (e.g., "Read subtask file `.lovable/plans/subtasks/XX-slug/01-task.md` and execute it"). The subagent MUST read the necessary files itself.
+- Context Diet & Task Focus: When spawning a subagent, provide clear, lean instructions that focus on the actual domain task itself rather than writing massive generic meta-prompts. DO NOT paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction. The subagent MUST read the necessary files itself.
 
 ## 2. Phase 1: Write the Implementation Spec & Subtasks FIRST
 
@@ -42,7 +42,7 @@ Before doing anything else, you MUST write a highly detailed execution spec.
     `- [SSH Commands](02-spec/13-generic-cli/01-index.md)`
     `- Target File: cmd/main.go`
 - **Create a Task-Specific Rule Set:** Before executing, analyze the specific task domain and explicitly write down 3-5 custom rules or constraints unique to this task inside the spec file. This prevents domain-specific regressions and forces sub-agents to follow exact architectures.
-- Subtasks: You MUST break the plan down and create detailed subtask files inside `.lovable/plans/subtasks/XX-<slug>/`. Every subtask file must contain actionable, microscopic instructions with strictly relative Git paths.
+- Subtasks: You MUST break the plan down into a lean set of focused subtask files inside `.lovable/plans/subtasks/XX-<slug>/`. Every subtask file must contain actionable instructions focused on the domain task itself (Task Focus Over Meta-Prompting) with strictly relative Git paths.
 
 ## 3. Non-Negotiable Core Rules (Auto-Reject on Violation)
 
