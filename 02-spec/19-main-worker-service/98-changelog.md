@@ -4,6 +4,13 @@
 
 ---
 
+## v6.38.0 — 2026-09-10 (Tracer OS temp backup and recycle bin, single-file guideline checklist, audit purge)
+
+**Scope:** Version bump (`6.37.0` → `6.38.0`). Tracer OS temp backup and recycle bin, single-file guideline checklist, audit purge.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
 ## v6.36.0 — 2026-09-05 (Package architecture, streaming writers, base enums, and comment cleanup)
 
 **Scope:** Version bump (`6.35.3` → `6.36.0`). Package architecture, streaming writers, base enums, and comment cleanup.
