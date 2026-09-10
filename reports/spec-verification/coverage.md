@@ -1,7 +1,7 @@
 # Spec Verification Coverage Report
 
 - **Mode:** `overview-only`
-- **Generated:** 2026-09-10T14:57:36.987Z
+- **Generated:** 2026-09-10T14:59:44.437Z
 - **Coverage:** 22 / 22 expected files (100%)
 
 ## Totals

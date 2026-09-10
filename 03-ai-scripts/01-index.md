@@ -913,7 +913,12 @@ Provides a high-performance auditing and recovery tool to trace files deleted th
 
 #### What It Does
 - Deeply inspects Git deletion history (`git log --diff-filter=D`) across the repository or targeted subdirectories.
-- Provides built-in fast presets: `--preset-lovable` (for `.lovable/` markdown files) and `--preset-spec` (for `02-spec/` markdown files).
+- Provides built-in fast presets:
+  - `--preset-audit` (or `--audit`, `--spec-audit`): Targets spec audit reports directory (`02-spec/25-app-spec-audit/`).
+  - `--preset-lovable` (or `--lovable`): Targets `.lovable/` folder.
+  - `--preset-plans` (or `--plans`): Targets `.lovable/plans/`.
+  - `--preset-subtasks` (or `--subtasks`): Targets `.lovable/plans/subtasks/`.
+  - `--preset-spec` (or `--spec`): Targets `02-spec/`.
 - Displays a structured, numbered pre-flight report with deletion commit SHA, date, author, commit message, pre-deletion file size, and current on-disk presence.
 - Supports selective filtering via numbered ranges/lists (`--include 1-5`, `--exclude 2,4`) and glob patterns (`--exclude-pattern`).
 - Restores removed files from pre-deletion commits either in-place (`--restore`) or into a staging directory (`--restore-to <dir>`).
@@ -921,13 +926,16 @@ Provides a high-performance auditing and recovery tool to trace files deleted th
 
 #### CLI Usage & Examples
 ```bash
+# Pre-flight inspection of removed audit files in 02-spec/25-app-spec-audit/
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-audit
+
 # Pre-flight inspection of removed markdown files in .lovable/
 python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable
 
-# Pre-flight inspection of removed markdown files in 02-spec/
-python 03-ai-scripts/32-git-history-file-tracer.py --preset-spec
+# Pre-flight inspection of removed subtasks in .lovable/plans/subtasks/
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-subtasks
 
-# Custom path and extension scan
+# Custom path and extension scan from repository root
 python 03-ai-scripts/32-git-history-file-tracer.py --path 04-code/ --ext .go,.ts
 
 # Filter by numbering: include items 1 to 5 and exclude item 3

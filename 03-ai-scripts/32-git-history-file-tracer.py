@@ -65,7 +65,10 @@ is_ignored_directory = engine.is_ignored_directory
 
 RECORD_DELIMITER = "TRACE_COMMIT_RECORD"
 PRESET_LOVABLE_PATH = ".lovable"
+PRESET_PLANS_PATH = ".lovable/plans"
+PRESET_SUBTASKS_PATH = ".lovable/plans/subtasks"
 PRESET_SPEC_PATH = "02-spec"
+PRESET_AUDIT_PATH = "02-spec/25-app-spec-audit"
 DEFAULT_MD_EXT = {".md"}
 
 
@@ -113,6 +116,18 @@ def parse_index_spec(spec_str: str | None, max_bound: int) -> set[int]:
 
 def resolve_scope_and_extensions(args: argparse.Namespace) -> tuple[str, set[str]]:
     """Resolves target directory path and file extension filter based on presets or arguments."""
+    is_audit = bool(args.preset_audit)
+    if is_audit:
+        return PRESET_AUDIT_PATH, DEFAULT_MD_EXT
+
+    is_plans = bool(args.preset_plans)
+    if is_plans:
+        return PRESET_PLANS_PATH, DEFAULT_MD_EXT
+
+    is_subtasks = bool(args.preset_subtasks)
+    if is_subtasks:
+        return PRESET_SUBTASKS_PATH, DEFAULT_MD_EXT
+
     is_lovable = bool(args.preset_lovable)
     if is_lovable:
         return PRESET_LOVABLE_PATH, DEFAULT_MD_EXT
@@ -466,11 +481,14 @@ Examples:
     )
 
     group_scope = parser.add_argument_group("Scope & Presets")
-    group_scope.add_argument("--path", default=CURRENT_DIR, help="Target directory path to inspect (default: '.')")
+    group_scope.add_argument("--path", default=CURRENT_DIR, help="Target directory path to inspect from repository root (default: '.')")
     group_scope.add_argument("--ext", help="Comma-separated file extensions to filter (e.g. '.md', '.go,.ts')")
     group_scope.add_argument("--pattern", help="Glob pattern to match file names/paths (e.g. '*plan*', 'ss-*')")
-    group_scope.add_argument("--preset-lovable", "--lovable", dest="preset_lovable", action="store_true", help="Shortcut: target '.lovable/' directory for removed '.md' files")
-    group_scope.add_argument("--preset-spec", "--spec", dest="preset_spec", action="store_true", help="Shortcut: target '02-spec/' directory for removed '.md' files")
+    group_scope.add_argument("--preset-audit", "--audit", "--spec-audit", dest="preset_audit", action="store_true", help=f"Shortcut: target spec audit folder '{PRESET_AUDIT_PATH}/' for removed '.md' files")
+    group_scope.add_argument("--preset-plans", "--plans", dest="preset_plans", action="store_true", help=f"Shortcut: target plans directory '{PRESET_PLANS_PATH}/' for removed '.md' files")
+    group_scope.add_argument("--preset-subtasks", "--subtasks", dest="preset_subtasks", action="store_true", help=f"Shortcut: target subtasks directory '{PRESET_SUBTASKS_PATH}/' for removed '.md' files")
+    group_scope.add_argument("--preset-lovable", "--lovable", dest="preset_lovable", action="store_true", help=f"Shortcut: target '{PRESET_LOVABLE_PATH}/' for removed '.md' files")
+    group_scope.add_argument("--preset-spec", "--spec", dest="preset_spec", action="store_true", help=f"Shortcut: target '{PRESET_SPEC_PATH}/' for removed '.md' files")
 
     group_select = parser.add_argument_group("Filtering & Selection")
     group_select.add_argument("--include", help="Comma-separated list or ranges of numbers to target (e.g. '1,3,5-8')")
