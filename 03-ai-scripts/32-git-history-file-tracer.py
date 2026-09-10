@@ -38,8 +38,10 @@ from importlib import import_module
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
+import tempfile
 import time
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -416,15 +418,153 @@ def execute_restore_action(records: list[DeletedFileRecord], restore_dir: str | 
     return restored_count
 
 
+def _trash_windows(target_path: Path) -> bool:
+    """Uses Windows PowerShell VisualBasic FileSystem to send to Recycle Bin."""
+    try:
+        abs_str = str(target_path.resolve()).replace("\\", "\\\\")
+        method = "DeleteDirectory" if target_path.is_dir() else "DeleteFile"
+        ps_cmd = f"Add-Type -AssemblyName Microsoft.VisualBasic; [Microsoft.VisualBasic.FileIO.FileSystem]::{method}('{abs_str}', 'OnlyErrorDialogs', 'SendToRecycleBin')"
+        res = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", ps_cmd], capture_output=True, text=True)
+
+        is_success = bool(res.returncode == 0 and not target_path.exists())
+        return is_success
+    except Exception:
+        return False
+
+
+def _trash_posix(target_path: Path) -> bool:
+    """Uses macOS trash or Linux gio/trash-put to move files to OS trash."""
+    resolved = str(target_path.resolve())
+    tools = ["trash"] if sys.platform == "darwin" else ["gio", "trash-put"]
+    for tool in tools:
+        try:
+            cmd = ["gio", "trash", resolved] if tool == "gio" else [tool, resolved]
+            res = subprocess.run(cmd, capture_output=True)
+
+            is_moved = bool(res.returncode == 0 and not target_path.exists())
+            if is_moved:
+                return True
+        except Exception:
+            continue
+
+    return False
+
+
+def send_to_trash_bin(target_path: Path) -> bool:
+    """Safely moves a file or directory to the OS Recycle / Trash Bin with fallbacks."""
+    is_missing = bool(not target_path.exists())
+    if is_missing:
+        return False
+
+    try:
+        import send2trash
+        send2trash.send2trash(str(target_path.resolve()))
+        return True
+    except Exception:
+        pass
+
+    is_windows = bool(sys.platform == "win32")
+    if is_windows and _trash_windows(target_path):
+        return True
+
+    is_posix = bool(sys.platform == "darwin" or sys.platform.startswith("linux"))
+    if is_posix and _trash_posix(target_path):
+        return True
+
+    is_dir = target_path.is_dir()
+    if is_dir:
+        shutil.rmtree(target_path)
+    else:
+        target_path.unlink()
+
+    return True
+
+
+def _backup_single_record(rec: DeletedFileRecord, backup_base: Path) -> bool:
+    """Backs up a single record to the OS temp directory from disk or git history."""
+    dest_file = backup_base / rec.file_path
+    dest_file.parent.mkdir(parents=True, exist_ok=True)
+    local_path = Path(rec.file_path)
+
+    is_local_file = local_path.is_file()
+    if is_local_file:
+        shutil.copy2(local_path, dest_file)
+        return True
+
+    has_parent = bool(rec.parent_commit)
+    if has_parent:
+        try:
+            res = subprocess.run(
+                [GIT_EXECUTABLE, "cat-file", "-p", f"{rec.parent_commit}:{rec.file_path}"],
+                capture_output=True,
+                check=True,
+            )
+            with open(dest_file, "wb") as f:
+                f.write(res.stdout)
+            return True
+        except Exception:
+            pass
+
+    return False
+
+
+def create_temp_directory_backup(records: list[DeletedFileRecord]) -> Path:
+    """Creates a full physical backup of all targeted files in the OS temp directory."""
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    backup_base = Path(tempfile.gettempdir()) / f"git-history-tracer-backup-{timestamp}"
+    backup_base.mkdir(parents=True, exist_ok=True)
+
+    backed_up = sum(1 for rec in records if _backup_single_record(rec, backup_base))
+
+    print(f"🛡️  Created OS temp directory safety backup ({backed_up} files):")
+    print(f"    📂 {backup_base}")
+    return backup_base
+
+
+def execute_delete_action(records: list[DeletedFileRecord]) -> int:
+    """Safely deletes on-disk files using the OS Recycle Bin after temp backup."""
+    backup_base = create_temp_directory_backup(records)
+    trashed_count = 0
+
+    print(f"🗑️  Moving {len(records)} targeted file(s) to the OS Recycle / Trash Bin...")
+    for rec in records:
+        target_path = Path(rec.file_path)
+        is_on_disk = target_path.exists()
+        if is_on_disk:
+            is_recycled = send_to_trash_bin(target_path)
+            if is_recycled:
+                print(f"  🗑️ Sent to Recycle Bin: {rec.file_path}")
+                trashed_count += 1
+            else:
+                print(f"  ❌ Failed to recycle: {rec.file_path}")
+        else:
+            print(f"  ⏭️ Already removed from disk: {rec.file_path}")
+
+    print("-" * 80)
+    print(f"🎉 Working tree cleanup complete: {trashed_count} file(s) sent to OS Recycle Bin.")
+    print(f"🛡️  OS Temp Backup Location: {backup_base}")
+    print("=" * 80)
+    return trashed_count
+
+
 def execute_purge_action(records: list[DeletedFileRecord], force: bool) -> int:
-    """Permanently purges the specified files from Git history using git-filter-repo or filter-branch."""
+    """Permanently purges specified files from Git history with OS temp backup & recycle bin cleanup."""
     is_confirmed = bool(force)
     if not is_confirmed:
         print("[ERROR] History purge requires explicit confirmation via `--confirm-purge`.")
         print("        Purging rewrites Git history across commits, branches, and tags.")
         return 0
 
+    backup_base = create_temp_directory_backup(records)
     backup_branch = create_safety_backup_branch()
+
+    recycled_count = 0
+    for rec in records:
+        target_path = Path(rec.file_path)
+        is_on_disk = target_path.exists()
+        if is_on_disk and send_to_trash_bin(target_path):
+            recycled_count += 1
+
     paths_to_purge = [rec.file_path for rec in records]
     print(f"🔥 Initiating full Git history purge for {len(paths_to_purge)} file(s)...")
 
@@ -439,14 +579,21 @@ def execute_purge_action(records: list[DeletedFileRecord], force: bool) -> int:
         subprocess.run([GIT_EXECUTABLE, "reflog", "expire", "--expire=now", "--all"], check=True)
         subprocess.run([GIT_EXECUTABLE, "gc", "--prune=now", "--aggressive"], check=True)
         print(f"🎉 History purge complete. {len(paths_to_purge)} file(s) erased across all branches and tags.")
-        if backup_branch:
-            print(f"ℹ️  To roll back if needed: `git reset --hard {backup_branch}`")
+        has_recycled = bool(recycled_count > 0)
+        if has_recycled:
+            print(f"🗑️  Working tree files sent to OS Recycle Bin: {recycled_count}")
+        print(f"🛡️  OS Temp Directory Backup: {backup_base}")
+        has_backup_branch = bool(backup_branch)
+        if has_backup_branch:
+            print(f"ℹ️  To roll back Git history if needed: `git reset --hard {backup_branch}`")
         return len(paths_to_purge)
     except FileNotFoundError:
         print("[ERROR] `git-filter-repo` executable not found. Install via `pip install git-filter-repo`.")
+        print(f"🛡️  Your files remain safely backed up at: {backup_base}")
         return 0
     except subprocess.CalledProcessError as err:
         print(f"[ERROR] History purge failed: {err.stderr if err.stderr else err}")
+        print(f"🛡️  Your files remain safely backed up at: {backup_base}")
         return 0
 
 
@@ -475,6 +622,9 @@ Examples:
   # Restore selected files in-place into repository:
   python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1 --restore
 
+  # Move selected files from working tree to OS Recycle Bin (with OS temp backup):
+  python 03-ai-scripts/32-git-history-file-tracer.py --preset-audit --delete
+
   # Permanently purge selected files from all Git history (branches, tags):
   python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,2 --purge --confirm-purge
 """,
@@ -499,6 +649,7 @@ Examples:
     group_action.add_argument("--preflight", "--plan", action="store_true", default=True, help="(Default) Pre-flight dry run")
     group_action.add_argument("--restore", action="store_true", help="Restore selected removed files in-place")
     group_action.add_argument("--restore-to", help="Restore selected files into a specific directory")
+    group_action.add_argument("--delete", "--remove", "--trash", dest="delete", action="store_true", help="Move selected files from working tree to OS Recycle Bin (after OS temp backup)")
     group_action.add_argument("--purge", action="store_true", help="Permanently purge selected files from Git history")
     group_action.add_argument("--confirm-purge", action="store_true", help="Required safety confirmation flag for --purge")
 
@@ -540,6 +691,11 @@ def main() -> int:
             for r in selected_records
         ]
         print(json.dumps(output_data, indent=2))
+        return ExitCodeType.SUCCESS.value
+
+    is_delete_requested = bool(args.delete)
+    if is_delete_requested:
+        execute_delete_action(selected_records)
         return ExitCodeType.SUCCESS.value
 
     is_purge_requested = bool(args.purge)

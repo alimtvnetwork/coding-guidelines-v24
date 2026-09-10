@@ -922,7 +922,8 @@ Provides a high-performance auditing and recovery tool to trace files deleted th
 - Displays a structured, numbered pre-flight report with deletion commit SHA, date, author, commit message, pre-deletion file size, and current on-disk presence.
 - Supports selective filtering via numbered ranges/lists (`--include 1-5`, `--exclude 2,4`) and glob patterns (`--exclude-pattern`).
 - Restores removed files from pre-deletion commits either in-place (`--restore`) or into a staging directory (`--restore-to <dir>`).
-- Safely purges deleted files from entire Git history across all refs/tags (`--purge --confirm-purge`) with automatic pre-purge safety backup branches.
+- Safely moves working tree files to the OS Recycle Bin / Trash (`--delete`, `--remove`, `--trash`) after creating a full physical backup in the OS temporary directory.
+- Safely purges deleted files from entire Git history across all refs/tags (`--purge --confirm-purge`) with automatic pre-purge safety backup branches and OS temp directory backups.
 
 #### CLI Usage & Examples
 ```bash
@@ -946,6 +947,9 @@ python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,
 
 # Restore selected files in-place into repository working tree
 python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1 --restore
+
+# Safely move working tree files to OS Recycle Bin (with OS temp backup)
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-audit --delete
 
 # Permanently purge selected removed files from all Git history (all branches and tags)
 python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,2 --purge --confirm-purge
