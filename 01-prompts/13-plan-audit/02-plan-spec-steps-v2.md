@@ -759,11 +759,19 @@ Self-score: Uniqueness/Specificity/Anchoring/Reference/Verifiability/Ci/Sequenci
 Spec gaps filed: <list or none>
 ```
 
-### Temp-Agent State Management Protocol (Non-Negotiable)
+### Temp-Agent Isolated Task Directory & Communication Protocol (Non-Negotiable)
 
-To ensure agents do not lose context, you MUST use the `.lovable/temp-agents/` directory for tracking sub-agent tasks.
+To prevent cross-task pollution and ensure seamless agent communication, every task MUST create a dedicated subfolder in `.lovable/temp-agents/xx-<task-name>/`:
 
-- On Start: The sub-agent creates `.lovable/temp-agents/<task-name>.md` and writes the objective and `STATUS: IN_PROGRESS`.
-- On Error/Crash: If an agent breaks or fails, append the exact error and cause to the file, then append `STATUS: FAILED` before closing.
-- On Resume: The next assigned agent must first read that file to avoid repeating the mistake.
-- On Success: Update the file to `STATUS: DONE` and immediately update the master plan.
+1. **Per-Task Isolation:** On task start, the assigned subagent creates its isolated directory `.lovable/temp-agents/xx-<task-name>/`.
+2. **State & Progress Tracking:** Create `.lovable/temp-agents/xx-<task-name>/state.md` documenting:
+   - `TASK_NAME`: `<task-name>`
+   - `STATUS`: `IN_PROGRESS` | `DONE` | `FAILED`
+   - `ASSIGNED_AGENT`: Agent identifier and thread index
+   - `CURRENT_STEP`: Detailed micro-step description
+3. **Inter-Agent Communication & Handoff:**
+   - All intermediate findings, scratch outputs, and dependency handoffs between agents working on this task MUST be written inside `.lovable/temp-agents/xx-<task-name>/`.
+   - Sibling or successor agents MUST inspect this dedicated folder before resuming work or fixing errors.
+4. **On Error/Crash:** Append the exact error, root cause, and `STATUS: FAILED` to `.lovable/temp-agents/xx-<task-name>/state.md` before exiting.
+5. **On Success:** Mark `STATUS: DONE` in `.lovable/temp-agents/xx-<task-name>/state.md`, aggregate findings to the master plan, and clean up or archive the folder.
+

@@ -52,6 +52,8 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 | `12-old-plan-prompts` | [`12-old-plan-prompts/03-plan-steps-by-groups.md`](../01-prompts/12-old-plan-prompts/03-plan-steps-by-groups.md) | Legacy Grouped Task Decomposition — Planning Spec (must follow) |
 | `12-old-plan-prompts` | [`12-old-plan-prompts/04-plan-maximum-enforcement-v5.md`](../01-prompts/12-old-plan-prompts/04-plan-maximum-enforcement-v5.md) | Legacy High-Discipline Planning Protocol (v5) — Planning Spec (must follow) |
 | `12-old-plan-prompts` | [`12-old-plan-prompts/05-plan-spec-steps.md`](../01-prompts/12-old-plan-prompts/05-plan-spec-steps.md) | Legacy Specification Planning Engine — Planning Spec (must follow) |
+| `12-old-plan-prompts` | [`12-old-plan-prompts/06-audit-app-spec-old.md`](../01-prompts/12-old-plan-prompts/06-audit-app-spec-old.md) | Legacy Application Specification Audit — Quality Protocol |
+| `12-old-plan-prompts` | [`12-old-plan-prompts/07-fix-spec-from-audit-old.md`](../01-prompts/12-old-plan-prompts/07-fix-spec-from-audit-old.md) | Legacy Specification Remediation from Audit — Planning Spec |
 | `13-plan-audit` | [`13-plan-audit/01-inventory-pending-tasks.md`](../01-prompts/13-plan-audit/01-inventory-pending-tasks.md) | Inventory Audit of Pending Tasks — Read-Only Proposal (must follow) |
 | `13-plan-audit` | [`13-plan-audit/02-plan-spec-steps-v2.md`](../01-prompts/13-plan-audit/02-plan-spec-steps-v2.md) | Specification Decomposition & Subtask Planning (v2) — Planning Spec (must follow) |
 | `13-plan-audit` | [`13-plan-audit/03-audit-app-spec.md`](../01-prompts/13-plan-audit/03-audit-app-spec.md) | Application Specification Blind-AI Audit — Quality Protocol (must follow) |

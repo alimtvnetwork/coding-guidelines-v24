@@ -13,9 +13,7 @@ audit-date     = <Current system date: YYYY-MM-DD>
 audit-time     = <Current system time: HH:MM:SS>
 audit-version  = <Auto-incremented run number. Check `02-spec/25-app-spec-audit/`. If a previous audit exists, increment the version. If NOT, you MUST execute `rm -rf 02-spec/25-app-spec-audit/*` to clear the folder completely, then start at `v1`.>
 audit-file     = 02-spec/25-app-spec-audit/NN-audit-<audit-date>-v<audit-version>.md
-scope          = 02-spec/21-app/ | spec/*-app* | spec/*-design* | <target spec folders>
-AUDIT_DIR      = 02-spec/25-app-spec-audit/
-TARGET_SPEC_DIR = 02-spec/21-app/
+scope          = spec/*-app* | spec/*-design* | .lovable/plans/pending | <auto-discover any recently modified spec folders>
 min-score      = 100
 ``
 
