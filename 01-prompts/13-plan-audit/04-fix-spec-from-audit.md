@@ -6,7 +6,7 @@
 /goal Autonomously ingest the latest specification audit file from `02-spec/25-app-spec-audit/`, decompose every finding into an exhaustive 1:1 remediation checklist, spawn parallel subagents to fix the specifications, verify 100% compliance, and remove the audit gap at the final stage.
 
 ```text
-N = 100
+N = 200
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Audit Ingestion, Finding Matrix & Subtask Decomposition)
 PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Parallel Remediation, CI Verification & Gap Removal)
 ```
