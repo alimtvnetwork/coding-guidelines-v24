@@ -57,6 +57,7 @@ Follow this sequence before and during any repository modification task:
 | **29** | `29-release-orchestrator.py` | Autonomous release lifecycle: bump, commit, release branch, tag, and original branch revert | ~20ms | `release`, `orchestrator`, `git-branch`, `tag`, `semver`, `revert-branch` |
 | **30** | `30-enum-generator.py` | Multi-file Go enum scaffolder (variant, vars, test, readme) with byte/int/string & CLI/JSON modes | ~10ms | `go`, `enum`, `scaffolder`, `base-enum`, `generator` |
 | **31** | `31-md-gap-fixer.py` | Fixes multiple consecutive empty lines (3+ newlines) into exactly 1 empty line in markdown files | ~8ms | `markdown`, `formatting`, `newlines`, `gaps`, `cleanup` |
+| **32** | `32-git-history-file-tracer.py` | Traces, pre-flights, restores, or permanently purges removed files from Git history | ~40ms | `git`, `history`, `tracer`, `restore`, `purge`, `filter-repo`, `preflight` |
 
 ---
 
@@ -900,6 +901,46 @@ python 03-ai-scripts/31-md-gap-fixer.py 03-ai-scripts/ --fix
 
 # Auto-fix single markdown file in-place
 python 03-ai-scripts/31-md-gap-fixer.py 03-ai-scripts/01-index.md --fix
+```
+
+</details>
+
+<details>
+<summary><strong>32 — <code>32-git-history-file-tracer.py</code>: Git History Removed File Tracer, Restorer & Purger</strong></summary>
+
+#### Why It Exists
+Provides a high-performance auditing and recovery tool to trace files deleted throughout Git history. It prevents accidental knowledge loss during plan compaction, enables fast restoration of removed files to working tree or staging folders, and provides an administrative purge mechanism to permanently scrub deleted files from all Git commits, branches, and tags.
+
+#### What It Does
+- Deeply inspects Git deletion history (`git log --diff-filter=D`) across the repository or targeted subdirectories.
+- Provides built-in fast presets: `--preset-lovable` (for `.lovable/` markdown files) and `--preset-spec` (for `02-spec/` markdown files).
+- Displays a structured, numbered pre-flight report with deletion commit SHA, date, author, commit message, pre-deletion file size, and current on-disk presence.
+- Supports selective filtering via numbered ranges/lists (`--include 1-5`, `--exclude 2,4`) and glob patterns (`--exclude-pattern`).
+- Restores removed files from pre-deletion commits either in-place (`--restore`) or into a staging directory (`--restore-to <dir>`).
+- Safely purges deleted files from entire Git history across all refs/tags (`--purge --confirm-purge`) with automatic pre-purge safety backup branches.
+
+#### CLI Usage & Examples
+```bash
+# Pre-flight inspection of removed markdown files in .lovable/
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable
+
+# Pre-flight inspection of removed markdown files in 02-spec/
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-spec
+
+# Custom path and extension scan
+python 03-ai-scripts/32-git-history-file-tracer.py --path 04-code/ --ext .go,.ts
+
+# Filter by numbering: include items 1 to 5 and exclude item 3
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1-5 --exclude 3
+
+# Restore selected files to a staging directory
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,2 --restore-to tmp/recovery/
+
+# Restore selected files in-place into repository working tree
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1 --restore
+
+# Permanently purge selected removed files from all Git history (all branches and tags)
+python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,2 --purge --confirm-purge
 ```
 
 </details>
