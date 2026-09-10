@@ -100,3 +100,5 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 
 - Every file under `01-prompts/` is indexed here.
 - Verified by `linter-scripts/check-prompts-loaded.py`.
+| `14-execute` | [`14-execute/06-execute-parent-task-with-n-steps-v2.md`](../01-prompts/14-execute/06-execute-parent-task-with-n-steps-v2.md) | [V2] Parent Task N-Step Continuous Loop & Multi-Agent Orchestration |
+| `14-execute` | [`14-execute/07-execute-batched-loop-v2.md`](../01-prompts/14-execute/07-execute-batched-loop-v2.md) | [V2] Batched Loop & Execution Wave Orchestration |
