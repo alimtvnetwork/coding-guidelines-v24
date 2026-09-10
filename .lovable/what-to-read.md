@@ -58,9 +58,9 @@
 - .lovable/plans/pending/11-code-red-refactor-remediation.md
 - .lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md
 - .lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md
-- .lovable/plans/completed/02-appfault-result-monad-and-verification-systems.md
-- .lovable/plans/completed/02-appfault-result-monad-and-verification-systems.md
-- .lovable/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md
-- .lovable/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md
-- .lovable/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md
+- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
+- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
+- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
+- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
+- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
 - .lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md

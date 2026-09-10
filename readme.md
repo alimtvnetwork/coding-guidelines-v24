@@ -2138,6 +2138,4 @@ This compiles all categorized prompts using `scripts/prompt-sync-config.json` an
 - [Plan: Update Prompts and Release](.lovable/plans/pending/09-update-prompts-and-release.md)
 - [Plan: Code Red Refactor Remediation](.lovable/plans/pending/11-code-red-refactor-remediation.md)
 - [Milestone 01: Repository Infrastructure, CI/CD Quality Automation & Plan Consolidation](.lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md)
-- [Milestone 02: AppFault Result Monad, Dynamic Conversions & Verification Systems](.lovable/plans/completed/02-appfault-result-monad-and-verification-systems.md)
-- [Milestone 03: File Utilities, PathInfo & Modular Enum Architecture](.lovable/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md)
-- [Milestone 04: Structured AppLogger, Rotating SQLite & Writer/Streamer Subsystem](.lovable/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md)
+- [Milestone 02: Go Core Architecture: AppFault Monad, System Primitives, Enums & AppLogger](.lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md)
