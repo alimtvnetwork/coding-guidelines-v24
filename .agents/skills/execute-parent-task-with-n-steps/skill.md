@@ -32,9 +32,9 @@ N = is the number of steps that the agents will perform
 Before doing anything else, you MUST write a highly detailed execution spec.
 
 - What to write: Break down the parent task into a detailed architectural plan, code review guides, and embedded coding guidelines.
-- Where to save it: Save this master plan into `.lovable/plans/pending/XX-<slug>.md`. Do not hallucinate folders.
+- Where to save it: Save this master plan into `.lovable/plans/pending/xx-<slug>.md`. Do not hallucinate folders.
 - **Strict Relative Git Paths Mandate (TOTAL BAN on Absolute Paths / `file:///` URIs):**
-  When breaking down tasks into subtasks (`.lovable/plans/subtasks/XX-<slug>/*.md`), writing specs, updating memory logs (`.lovable/memory/issues/`), or citing guidelines, ALL file paths and markdown links MUST be **strictly relative to the git repository root**. NEVER write absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`) into any committed or created files.
+  When breaking down tasks into subtasks (`.lovable/plans/subtasks/xx-<slug>/*.md`), writing specs, updating memory logs (`.lovable/memory/issues/`), or citing guidelines, ALL file paths and markdown links MUST be **strictly relative to the git repository root**. NEVER write absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///...`) into any committed or created files.
   - ❌ **BAD (Absolute path / file URI):**
     `- [SSH Commands](file:///absolute/path/to/...)`
     `- [Target File](file:///absolute/path/to/cmd/main.go)`
@@ -42,11 +42,11 @@ Before doing anything else, you MUST write a highly detailed execution spec.
     `- [SSH Commands](02-spec/13-generic-cli/01-index.md)`
     `- Target File: cmd/main.go`
 - **Create a Task-Specific Rule Set:** Before executing, analyze the specific task domain and explicitly write down 3-5 custom rules or constraints unique to this task inside the spec file. This prevents domain-specific regressions and forces sub-agents to follow exact architectures.
-- Subtasks: You MUST break the plan down into a lean set of focused subtask files inside `.lovable/plans/subtasks/XX-<slug>/`. Every subtask file must contain actionable instructions focused on the domain task itself (Task Focus Over Meta-Prompting) with strictly relative Git paths.
+- Subtasks: You MUST break the plan down into a lean set of focused subtask files inside `.lovable/plans/subtasks/xx-<slug>/`. Every subtask file must contain actionable instructions focused on the domain task itself (Task Focus Over Meta-Prompting) with strictly relative Git paths.
 
 ## 3. Non-Negotiable Core Rules (Auto-Reject on Violation)
 
-1. Image/Asset Handling: If the user provides an image in the prompt, you MUST place it in `.lovable/assets/<category>/XX-<slug>.<ext>`. NEVER place images in random root directories.
+1. Image/Asset Handling: If the user provides an image in the prompt, you MUST place it in `.lovable/assets/<category>/xx-<slug>.<ext>`. NEVER place images in random root directories.
 
 ## AI Fix Scripts Memory (Reusable Tooling)
 

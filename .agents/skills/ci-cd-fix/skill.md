@@ -72,7 +72,7 @@ Every step must be **singly done** using bounded self-looping turns:
   2. If exit code = 0, proceed to End of Tunnel. If exit code != 0, zero in on the first specific failure.
 
 - **Self-Loop Step 4 (RCA & Zero In on Error):**
-  1. Write 4-part RCA in `.lovable/memory/issues/XX-<slug>.md`.
+  1. Write 4-part RCA in `.lovable/memory/issues/xx-<slug>.md`.
   2. Register in `.lovable/01-index.md` and `.lovable/strictly-avoid.md`.
 
 - **Self-Loop Step 5 (Surgical Code Fix):**
@@ -279,7 +279,7 @@ WHILE (STEP < PHASE_2_STEPS):
 
     ELSE:
         3. Parse failure: identify exact failing job, error message, file, and line.
-        4. Document 4-part RCA in .lovable/memory/issues/XX-<slug>.md
+        4. Document 4-part RCA in .lovable/memory/issues/xx-<slug>.md
         5. Apply the minimal surgical code fix.
         6. Run: python 03-ai-scripts/05-guideline-autofixer.py <modified-files>
         7. Loop immediately to step 1. DO NOT stop.
@@ -294,7 +294,7 @@ IF STEP >= PHASE_2_STEPS AND exit_code != 0:
 
 ## Phase 3: 4-Part RCA Requirement
 
-For each distinct failure write `.lovable/memory/issues/XX-<slug>.md` with:
+For each distinct failure write `.lovable/memory/issues/xx-<slug>.md` with:
 
 1. **Why it happened:** High-level architectural reason.
 2. **How it happened:** Exact execution flow that triggered the error.
@@ -339,7 +339,7 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
 - [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0.
-- [ ] All failures documented in `.lovable/memory/issues/XX-<slug>.md`.
+- [ ] All failures documented in `.lovable/memory/issues/xx-<slug>.md`.
 - [ ] Changes committed: `fix(ci): resolve <summary>`.
 - [ ] Pushed to the current branch.
 - [ ] File change summary posted in chat (file, what changed, why).

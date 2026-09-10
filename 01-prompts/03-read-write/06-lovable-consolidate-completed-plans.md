@@ -102,7 +102,7 @@ ightarrow$ Merge Subtasks 38.1, 38.2, 38.3 into `XX-result-dynamic-conversions-a
 - **Single-File Checklist:** Consolidate all common verification, quality gate, and task acceptance checklists into a **single unified table or checklist** within the consolidated document.
 
 #### C. Collapse Subtask Sprawl into Single Files
-- **Eliminate Subtask Folder Bloat:** When a completed plan has a dedicated folder in `.lovable/plans/subtasks/` containing multiple individual files (`01-task.md`, `02-task.md`, `03-task.md`), you MUST:
+- **Eliminate Subtask Folder Bloat:** When a completed plan has a dedicated folder in `.lovable/plans/subtasks/` containing multiple individual files (`01-<subtask-title>.md`, `02-<subtask-title>.md`, `03-task.md`), you MUST:
   1. Fold the contents, code changes, and verification proof of all subtasks directly into the single consolidated milestone document in `.lovable/plans/completed/`.
   2. If subtask documentation is explicitly retained, compact all subtask steps into a **single consolidated subtask file** (`01-consolidated-tasks.md`) rather than keeping sprawling multi-file directories.
   3. Cleanly delete superseded micro-subtask files via `git rm`.

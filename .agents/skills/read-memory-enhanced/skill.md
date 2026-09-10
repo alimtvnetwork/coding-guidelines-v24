@@ -11,8 +11,8 @@ description: >-
 
 ## Ambiguity folder path (non-negotiable)
 
-- Open questions: `.lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md`
-- Answered questions: `.lovable/ambiguous-questions/02-ambiguity-resolved/XX-<slug>.md`
+- Open questions: `.lovable/ambiguous-questions/01-new-ambiguity/xx-<slug>.md`
+- Answered questions: `.lovable/ambiguous-questions/02-ambiguity-resolved/xx-<slug>.md`
 Read both folders in full during Phase 1. Surface open-ambiguity counts and slugs in the Completion Confirmation block. Treat resolved-ambiguity files as binding project decisions, do not re-litigate them. If an open ambiguity is relevant to the incoming task, stop and surface it before doing work; never guess past it.
 
 ## Goal
@@ -37,7 +37,7 @@ The `.lovable/` folder, specs, and codebase can be massive. To process this info
 - **Specific Titling:** When spawning a sub-agent for reading, you must give it a highly specific title reflecting exactly what it is reading (e.g., `Reading Auth Specs` or `Scanning API Memory`). Do not use generic names. If an agent switches tasks, its title must change.
 - **Micro-Tasking:** Assign sub-agents small, granular folders/files to read rather than asking one agent to read the entire codebase.
 - You are allowed to write to the `.lovable/` directory to enhance project memory after reading. This includes:
-  - Writing summaries of what you learned and understood into `.lovable/memory/learned/XX-<slug>.md` (or `.lovable/01-index.md`), including the number of files read, to maintain context.
+  - Writing summaries of what you learned and understood into `.lovable/memory/learned/xx-<slug>.md` (or `.lovable/01-index.md`), including the number of files read, to maintain context.
   - Updating `.lovable/what-to-read.md` based on your progress to guide future reading workflows.
   - Documenting any problems or issues you discover in the codebase into `.lovable/issues/` or `.lovable/suggestions.md`.
   - Updating existing memory files, capturing open ambiguities, or updating plans.
@@ -64,11 +64,11 @@ Walk `.lovable/` recursively. Every file matters. Missing files are noted, not s
 | 5 | `.lovable/prompt.md` + `01-prompts/` | Canonical prompts (Read, Plan, etc.). "Read memory" = run this prompt. |
 | 6 | `.lovable/memory/01-index.md` | Index of institutional knowledge. Then read every file it references, recursively. |
 | 7 | `.lovable/plans/01-index.md` | Roll-up of all plans (pending + completed + subtasks). Read this before touching individual plan files. |
-| 8 | `.lovable/plans/pending/` | Active plans, `XX-<slug>.md` |
+| 8 | `.lovable/plans/pending/` | Active plans, `xx-<slug>.md` |
 | 9 | `.lovable/plans/completed/` | Recent history, skim only |
-| 10 | `.lovable/plans/subtasks/XX-<slug>/` | Depth files linked from a parent plan |
+| 10 | `.lovable/plans/subtasks/xx-<slug>/` | Depth files linked from a parent plan |
 | 11 | `.lovable/suggestions.md` | Ideas not yet approved |
-| 12 | `.lovable/spec/commands/` | User commands and conventions, `XX-<slug>.md` |
+| 12 | `.lovable/spec/commands/` | User commands and conventions, `xx-<slug>.md` |
 | 13 | `.lovable/issues/` | General bugs and regressions |
 | 14 | `.lovable/cicd-issues/` | CI/CD-specific failures. Read ALL of these before any code change so you do not repeat the same mistakes. |
 | 15 | `.lovable/ambiguous-questions/01-new-ambiguity/` | Open questions currently blocking work. If any exist, surface them in the completion block, do NOT guess past them. |
@@ -151,15 +151,15 @@ New info discovered
 ├─ Idea, not yet approved?
 │ YES → .lovable/suggestions.md
 ├─ New user command / convention?
-│ YES → .lovable/02-spec/commands/XX-<slug>.md
+│ YES → .lovable/02-spec/commands/xx-<slug>.md
 ├─ Bug / regression?
-│ YES → .lovable/issues/XX-<slug>.md (or .lovable/cicd-issues/ if CI/CD)
+│ YES → .lovable/issues/xx-<slug>.md (or .lovable/cicd-issues/ if CI/CD)
 ├─ New or changed plan?
-│ YES → .lovable/plans/pending/XX-<slug>.md + update .lovable/plans/01-index.md
+│ YES → .lovable/plans/pending/xx-<slug>.md + update .lovable/plans/01-index.md
 ├─ Ambiguity / unclear requirement blocking progress?
-│ YES → .lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md
+│ YES → .lovable/ambiguous-questions/01-new-ambiguity/xx-<slug>.md
 ├─ User just answered a previously-open ambiguity?
-│ YES → mv the file to .lovable/ambiguous-questions/02-ambiguity-resolved/XX-<slug>.md,
+│ YES → mv the file to .lovable/ambiguous-questions/02-ambiguity-resolved/xx-<slug>.md,
 │ append `## Resolution` (answer + applied solution), flip Status: resolved
 └─ None of the above → do not persist.
 ```

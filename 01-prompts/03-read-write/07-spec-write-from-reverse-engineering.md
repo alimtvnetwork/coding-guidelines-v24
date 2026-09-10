@@ -28,7 +28,7 @@ N = total self-loop steps budget that the agents will perform (default: 80 steps
 9. [ ] /goal Phase 2 (Parallel File Reverse Engineering, Steps N/2+1..N): Dispatch 2–3 execution sub-agents in parallel on disjoint file sets to analyze code semantics, exported types, data flow, functions, and external dependencies.
 10. [ ] /goal Phase 2 (Component Specification Generation): Write dedicated, modular specification files under `02-spec/21-app/` (e.g., `02-spec/21-app/XX-core-engine.md`, `02-spec/21-app/XX-data-models.md`, `02-spec/21-app/XX-api-contracts.md`) documenting all reverse-engineered logic.
 11. [ ] /goal Phase 3 (Master Index Synthesis): Author `02-spec/21-app/01-index.md` summarizing the overall application architecture, behavior, technology stack, architectural health score, and component topology.
-12. [ ] /goal Phase 3 (Security Audit & Risk Assessment): Identify hardcoded credentials, unauthenticated endpoints, input sanitization flaws, and dependency vulnerabilities, publishing an exhaustive risk evaluation in `02-spec/21-app/XX-security-and-risks.md`.
+12. [ ] /goal Phase 3 (Security Audit & Risk Assessment): Identify hardcoded credentials, unauthenticated endpoints, input sanitization flaws, and dependency vulnerabilities, publishing an exhaustive risk evaluation in `02-spec/21-app/xx-security-and-risks.md`.
 13. [ ] /goal Phase 3 (Final Structure Communication): Output a clean, viewable markdown/ASCII folder tree in the final chat response illustrating the complete generated specification layout.
 14. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 15. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
@@ -58,9 +58,9 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 2. **Spec Directory Conventions:**
    - Locate the primary specification folder (e.g., `02-spec/`, `<spec>/`, or create `02-spec/` if none exists).
    - Create or populate the application-specific spec folder: `<spec-root>/21-app/` (e.g. `02-spec/21-app/`).
-   - If sibling folders for issues exist or are needed, reference `<spec-root>/22-app-issues/` or create `02-spec/21-app/XX-security-and-risks.md`.
+   - If sibling folders for issues exist or are needed, reference `<spec-root>/22-app-issues/` or create `02-spec/21-app/xx-security-and-risks.md`.
 3. **Strict Lowercase File Naming:**
-   - All files created MUST use strictly lowercase characters, hyphens, and numeric prefixes (e.g., `01-index.md`, `XX-security-and-risks.md`, `XX-core-architecture.md`). Uppercase letters are strictly banned.
+   - All files created MUST use strictly lowercase characters, hyphens, and numeric prefixes (e.g., `01-index.md`, `xx-security-and-risks.md`, `XX-core-architecture.md`). Uppercase letters are strictly banned.
 4. **Strict Relative Git Paths:**
    - All markdown links and citations MUST be relative paths from repository root (e.g., `02-spec/21-app/01-index.md`). NEVER write absolute paths (`C:\...`, `/home/...`) or `file:///` URIs.
 
@@ -156,9 +156,9 @@ Spawn 2 to 3 sub-agents concurrently (max 2 threads each) to process the assigne
      - **Error Handling:** Fault paths, error types returned, and recovery mechanisms.
 2. **Modular Spec Authoring (`02-spec/21-app/`):**
    - Group related files into coherent domain specifications:
-     - `02-spec/21-app/XX-domain-models.md`
-     - `02-spec/21-app/XX-service-layer.md`
-     - `02-spec/21-app/XX-api-endpoints-and-protocols.md`
+     - `02-spec/21-app/xx-domain-models.md`
+     - `02-spec/21-app/xx-service-layer.md`
+     - `02-spec/21-app/xx-api-endpoints-and-protocols.md`
      - `02-spec/21-app/XX-database-and-persistence.md`
 3. **Micro-Tasking Execution:**
    - Subagents must process 3 to 5 files per turn, updating their status and self-looping until their entire partition is documented.
@@ -177,7 +177,7 @@ The index file must provide an executive synthesis:
 - **System Topography Diagram:** ASCII or Mermaid diagram illustrating component interactions and data flow.
 - **Specification Directory Index:** Complete table of contents linking to all generated module specs.
 
-### 2. Security Audit & Risk Evaluation (`02-spec/21-app/XX-security-and-risks.md`)
+### 2. Security Audit & Risk Evaluation (`02-spec/21-app/xx-security-and-risks.md`)
 Every reverse-engineered codebase must undergo a thorough security inspection:
 - **Hardcoded Secrets & Sensitive Data:** Scan for embedded API keys, JWT secrets, passwords, private keys, or exposed test tokens.
 - **Authentication & Authorization Posture:** Analyze session handling, token validation, permission checks, and privilege escalation risks.

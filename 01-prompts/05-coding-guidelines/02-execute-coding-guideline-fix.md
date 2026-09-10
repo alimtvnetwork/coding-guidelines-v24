@@ -112,7 +112,7 @@ status: active
 
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 
-Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/XX-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
+Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/xx-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
 
 1. **Why it happened:** The high-level business, logical, or architectural breakdown of the failure.
 2. **How it happened:** The technical execution flow that triggered the bug.

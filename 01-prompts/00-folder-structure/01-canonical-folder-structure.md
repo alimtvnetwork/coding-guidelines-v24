@@ -48,8 +48,8 @@ All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-
 
     plans/                             # Micro-task execution center
       01-index.md                      # Master registry of active and completed plans
-      pending/                         # High-level active parent plans (XX-<slug>.md)
-      subtasks/                        # Bounded micro-tasks (XX-<slug>/01-step.md)
+      pending/                         # High-level active parent plans (xx-<slug>.md)
+      subtasks/                        # Bounded micro-tasks (xx-<slug>/01-step.md)
       completed/                       # Archived completed parent plans & subtasks
 
     memory/                            # Long-term institutional cognitive memory (SINGULAR)

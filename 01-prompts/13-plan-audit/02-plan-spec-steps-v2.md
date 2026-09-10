@@ -335,8 +335,8 @@ match this exactly:
 ```text
 .lovable/plans/pending/01-<plan-slug>.md
 .lovable/plans/subtasks/<plan-slug>/index.md
-.lovable/plans/subtasks/<plan-slug>/001-task.md
-.lovable/plans/subtasks/<plan-slug>/002-task.md   ... NNN-task.md
+.lovable/plans/subtasks/<plan-slug>/001-<subtask-title>.md
+.lovable/plans/subtasks/<plan-slug>/002-<subtask-title>.md   ... NNN-task.md
 .lovable/plans/completed/01-<plan-slug>.md
 .lovable/plans/01-index.md
 .lovable/ambiguous-questions/01-new-ambiguity/01-<slug>.md

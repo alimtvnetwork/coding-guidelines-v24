@@ -151,9 +151,9 @@ After completing the pipeline and run script creation, you MUST follow this chec
 ### 4.1. Pre-flight & Planning
 
 - [ ] Ensure the git repository starts completely clean. If dirty, commit, stash, or fix git issues before writing any new code.
-- [ ] Read the overarching main task plan from `.lovable/plans/pending/XX-<slug>.md` to understand what needs to be executed.
+- [ ] Read the overarching main task plan from `.lovable/plans/pending/xx-<slug>.md` to understand what needs to be executed.
 - [ ] Derive the `<slug>` from the plan filename itself (e.g., plan file `03-auth-refactor.md` → slug is `03-auth-refactor`). Never invent a slug.
-- [ ] Confirm subtask files exist under `.lovable/plans/subtasks/XX-<slug>/SS-<subslug>.md` for each step that needs parallel execution. Create them if missing, following the plan prompt structure.
+- [ ] Confirm subtask files exist under `.lovable/plans/subtasks/xx-<slug>/SS-<subslug>.md` for each step that needs parallel execution. Create them if missing, following the plan prompt structure.
 - [ ] Ensure the plan is highly extensive, explicitly detailing where and how to make changes so sub-agents can easily execute tasks (Non-negotiable).
 - [ ] Direct subtasks to `.lovable/plans/subtasks/01-<slug>/01-<subslug>.md` and update plans in `.lovable/plans/pending/01-<slug>.md`. Do not write randomly into `.lovable`.
 - [ ] Read the memory files and the spec folder coding guidelines + error manage guidelines before touching code.
@@ -204,7 +204,7 @@ After completing the pipeline and run script creation, you MUST follow this chec
 
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 
-Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/XX-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
+Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/xx-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
 
 1. **Why it happened:** The high-level business, logical, or architectural breakdown of the failure.
 2. **How it happened:** The technical execution flow that triggered the bug.

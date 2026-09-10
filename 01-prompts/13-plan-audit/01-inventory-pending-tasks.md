@@ -23,15 +23,15 @@ To ensure zero blind spots, the AI must systematically inspect the following aut
     workflow/                                   # Workflow state markers
   plans/
     index.md                                    # Roll-up index of all plans (pending & completed)
-    pending/XX-<slug>.md                        # Active, pending parent execution plans
-    completed/XX-<slug>.md                      # Historical completed plans (reference only)
-    subtasks/XX-<slug>/SS-<subslug>.md          # Granular subtasks linked to parent plans
+    pending/xx-<slug>.md                        # Active, pending parent execution plans
+    completed/xx-<slug>.md                      # Historical completed plans (reference only)
+    subtasks/xx-<slug>/SS-<subslug>.md          # Granular subtasks linked to parent plans
   issues/                                       # General pending bug reports
   pending-issues/                               # Active issues queue
   cicd-issues/                                  # CI/CD specific failures & blockers
   ambiguous-questions/
-    01-new-ambiguity/XX-<slug>.md               # Blocking & non-blocking open questions
-    02-ambiguity-resolved/XX-<slug>.md          # Binding resolved decisions
+    01-new-ambiguity/xx-<slug>.md               # Blocking & non-blocking open questions
+    02-ambiguity-resolved/xx-<slug>.md          # Binding resolved decisions
   suggestions.md                                # Suggestions tracker
   prompts.md                                    # Canonical prompt registry
 spec/
@@ -61,7 +61,7 @@ readme.md                                       # Root repository guide (strictl
    - Small change (1-2 files, 1 verification step): 2-3 steps.
    - Standard task (multi-file, logic + UI/backend, test): 4-7 steps.
    - Cross-cutting task (schema + API + UI + full tests): 8-15 steps.
-   - Automatic Subtask Decomposition Alert: When a pending task exceeds 7 steps, flag it with `[DECOMPOSITION REQUIRED]` to split it into `.lovable/plans/subtasks/XX-<slug>/` before entering the execution queue.
+   - Automatic Subtask Decomposition Alert: When a pending task exceeds 7 steps, flag it with `[DECOMPOSITION REQUIRED]` to split it into `.lovable/plans/subtasks/xx-<slug>/` before entering the execution queue.
 4. Ambiguity Impact Severity Scoring:
    - High Blast Radius: Blocks multiple core plans or schemas.
    - Medium Blast Radius: Blocks a single isolated feature.

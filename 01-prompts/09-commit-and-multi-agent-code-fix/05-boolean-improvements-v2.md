@@ -22,13 +22,13 @@ Before you do anything else, you must ensure the git repository is in a complete
 
 ## 2. Big Plan & Execution Routing
 
-Read the overarching big plan of the main task from `.lovable/plans/pending/XX-<slug>.md`. You must follow this plan strictly.
+Read the overarching big plan of the main task from `.lovable/plans/pending/xx-<slug>.md`. You must follow this plan strictly.
 
 - Make sure the plan is EXTREMELY extensive, explicitly detailing where to make changes and how to make changes, so that sub-agents can execute their tasks easily. This is non-negotiable.
 - The `<slug>` is derived directly from the plan filename. If the plan file is `03-auth-refactor.md`, then the corresponding spec task file is `.lovable/plans/01-index.md` and subtasks live under `.lovable/plans/subtasks/03-auth-refactor/SS-<subslug>.md`. Never guess or invent a slug — read the filename.
 - Use the maximum enforcement guidelines to execute this plan.
 - Loop through its defined subtasks and spawn sub-agents to speed up the work.
-- Do not just write randomly to `.lovable`. You must follow the exact plan and write protocols: tasks go into `.lovable/spec/tasks/XX-<slug>.md` and plans go into `.lovable/plans/pending/XX-<slug>.md`.
+- Do not just write randomly to `.lovable`. You must follow the exact plan and write protocols: tasks go into `.lovable/spec/tasks/xx-<slug>.md` and plans go into `.lovable/plans/pending/xx-<slug>.md`.
 
 ## 3. Ruthless Orchestration
 
@@ -42,16 +42,16 @@ You are the orchestrator. If your sub-agents fail, hallucinate, or go into infin
 
 ## 4. Sub-Agent Lifecycle & Status Tracking (Non-negotiable)
 
-The plan file at `.lovable/plans/pending/XX-<slug>.md` and the subtask files under `.lovable/plans/subtasks/XX-<slug>/SS-<subslug>.md` are the SINGLE source of truth for all coordination between the main agent and sub-agents. Every status update MUST go there. This is how the main agent knows what is running, what is done, and when to proceed.
+The plan file at `.lovable/plans/pending/xx-<slug>.md` and the subtask files under `.lovable/plans/subtasks/xx-<slug>/SS-<subslug>.md` are the SINGLE source of truth for all coordination between the main agent and sub-agents. Every status update MUST go there. This is how the main agent knows what is running, what is done, and when to proceed.
 
 Every sub-agent that is spawned MUST follow this lifecycle without exception:
 
-- Step 1 — Read: The sub-agent reads its assigned subtask file at `.lovable/plans/subtasks/XX-<slug>/SS-<subslug>.md`. It must understand the full scope, acceptance criteria, and affected files before touching any code. It also checks the parent plan at `.lovable/plans/pending/XX-<slug>.md` for overall context.
+- Step 1 — Read: The sub-agent reads its assigned subtask file at `.lovable/plans/subtasks/xx-<slug>/SS-<subslug>.md`. It must understand the full scope, acceptance criteria, and affected files before touching any code. It also checks the parent plan at `.lovable/plans/pending/xx-<slug>.md` for overall context.
 - Step 2 — Mark In Progress: Immediately upon starting, the sub-agent updates its subtask file, flipping its status to `🔄 In Progress` and recording a timestamp. The main agent uses this to track which agents are actively running.
 - Step 3 — Work: The sub-agent executes its task. It may only run a MAXIMUM of 2-3 async operations at a time. No more.
 - Step 4 — Mark Done & Signal: Once the task is complete, the sub-agent MUST:
-  - Update its subtask file at `.lovable/plans/subtasks/XX-<slug>/SS-<subslug>.md` flipping status to `✅ Done`, listing every file it changed, and writing a one-line summary of what was done.
-  - Update the corresponding step in the parent plan file `.lovable/plans/pending/XX-<slug>.md` with `✅ Done` on that step entry.
+  - Update its subtask file at `.lovable/plans/subtasks/xx-<slug>/SS-<subslug>.md` flipping status to `✅ Done`, listing every file it changed, and writing a one-line summary of what was done.
+  - Update the corresponding step in the parent plan file `.lovable/plans/pending/xx-<slug>.md` with `✅ Done` on that step entry.
   - Explicitly signal completion to the main orchestrator. Silence is not completion. A sub-agent that does not update its file has NOT completed its task.
 - Sub-agents do NOT commit. They only write to the file system.
 - If a sub-agent stalls, gives garbage, or fails to update its status file, kill it immediately and spawn a new one.
@@ -140,7 +140,7 @@ function getUserFromDb(id): Result<User> {
 
 ### Wrapper Memory Tracking
 
-Write the exact filepath of this generic wrapper into `.lovable/coding-guidelines.md` and create a spec file at `.lovable/memory/XX-response-wrapper.md` so that the next AI will know exactly where it exists.
+Write the exact filepath of this generic wrapper into `.lovable/coding-guidelines.md` and create a spec file at `.lovable/memory/xx-response-wrapper.md` so that the next AI will know exactly where it exists.
 
 ### Complex Conditions
 
@@ -210,11 +210,11 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 ### 1. Pre-flight & Planning
 
 - [ ] Ensure the git repository starts completely clean. If dirty, commit, stash, or fix git issues before writing any new code.
-- [ ] Read the overarching main task plan from `.lovable/plans/pending/XX-<slug>.md` to understand what needs to be executed.
+- [ ] Read the overarching main task plan from `.lovable/plans/pending/xx-<slug>.md` to understand what needs to be executed.
 - [ ] Derive the `<slug>` from the plan filename itself (e.g., plan file `03-auth-refactor.md` → slug is `03-auth-refactor`). Never invent a slug.
-- [ ] Confirm subtask files exist under `.lovable/plans/subtasks/XX-<slug>/SS-<subslug>.md` for each step that needs parallel execution. Create them if missing, following the plan prompt structure.
+- [ ] Confirm subtask files exist under `.lovable/plans/subtasks/xx-<slug>/SS-<subslug>.md` for each step that needs parallel execution. Create them if missing, following the plan prompt structure.
 - [ ] Ensure the plan is highly extensive, explicitly detailing where and how to make changes so sub-agents can easily execute tasks (Non-negotiable).
-- [ ] Write the tasks as a spec file in `.lovable/spec/tasks/XX-<slug>.md` and update plans in `.lovable/plans/pending/XX-<slug>.md`.
+- [ ] Write the tasks as a spec file in `.lovable/spec/tasks/xx-<slug>.md` and update plans in `.lovable/plans/pending/xx-<slug>.md`.
 - [ ] Read the memory files, the boolean coding guidelines in the spec folder, and the error manage guidelines before touching code.
 - [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
 
@@ -246,7 +246,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - [ ] Ensure a generic result wrapper type exists that exposes both `isFail` and `isSuccess`. Reuse it if it exists; do not duplicate code.
 - [ ] Ensure logging happens INSIDE the data-fetching method, not in the caller. The logger must be injected, not globally imported.
 - [ ] Ensure the error manage guideline in the `02-spec/` folder is read and followed precisely for all logging.
-- [ ] Ensure the exact location of the generic wrapper is recorded in `.lovable/coding-guidelines.md` and `.lovable/memory/XX-response-wrapper.md`.
+- [ ] Ensure the exact location of the generic wrapper is recorded in `.lovable/coding-guidelines.md` and `.lovable/memory/xx-response-wrapper.md`.
 - [ ] Never mix `AND` and `OR` in the same condition. Break complex conditions into named intermediate constant variables.
 - [ ] Prefix every boolean and intermediate variable with `is` or `has`.
 - [ ] Ensure boolean naming rules are written in `.lovable/coding-guidelines.md` in simple, readable language.

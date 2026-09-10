@@ -52,12 +52,12 @@ You are the master orchestrator. If your sub-agents fail, hallucinate, write gar
 Before doing anything else, you MUST write a highly detailed, generic AI Instruction Spec.
 
 - **What to write:** This spec should be a generic instruction prompt that *other* AIs (or CLI tools) can read to implement the user's requested feature on their own codebase. It must include strict checklists and avoid hardcoding our specific project paths unless necessary.
-- **Where to save it:** Save this spec into `.lovable/plans/pending/XX-<slug>.md`. Do not hallucinate folders.
+- **Where to save it:** Save this spec into `.lovable/plans/pending/xx-<slug>.md`. Do not hallucinate folders.
 - **Output:** You MUST output the entire contents of this generated spec directly into the chat window so the user can copy and share it with other libraries.
 
 ## 3. Non-Negotiable Core Rules (Auto-Reject on Violation)
 
-1. Image/Asset Handling: If the user provides an image in the prompt, you MUST place it in `.lovable/assets/<category>/XX-<slug>.<ext>`. NEVER place images in random root directories.
+1. Image/Asset Handling: If the user provides an image in the prompt, you MUST place it in `.lovable/assets/<category>/xx-<slug>.<ext>`. NEVER place images in random root directories.
 
 ## AI Fix Scripts Memory (Reusable Tooling)
 

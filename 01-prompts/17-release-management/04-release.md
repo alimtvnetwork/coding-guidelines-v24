@@ -222,8 +222,8 @@ Listen, past release turns were sloppy. You must clean and sync the Git working 
 
 Ambiguity is not a license to guess. It is a file to write.
 
-- Open: `.lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md`
-- Answered: `.lovable/ambiguous-questions/02-ambiguity-resolved/XX-<slug>.md`
+- Open: `.lovable/ambiguous-questions/01-new-ambiguity/xx-<slug>.md`
+- Answered: `.lovable/ambiguous-questions/02-ambiguity-resolved/xx-<slug>.md`
 
 New question file shape:
 

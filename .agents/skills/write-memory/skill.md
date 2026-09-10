@@ -12,7 +12,7 @@ Persist what happened this turn so the next AI knows everything without guessing
 1. Folder is `.lovable/memory/`, NEVER `memories/`.
 2. Every new memory file under `.lovable/memory/` MUST be registered in `.lovable/memory/01-index.md` in the same operation.
 3. Every plan added, moved, or completed MUST update `.lovable/plans/01-index.md` in the same operation.
-4. Ambiguity files are NEVER duplicated. Open questions go to `.lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md`. When answered, the file is MOVED (`mv`) to `.lovable/ambiguous-questions/02-ambiguity-resolved/XX-<slug>.md` with a `## Resolution` block appended.
+4. Ambiguity files are NEVER duplicated. Open questions go to `.lovable/ambiguous-questions/01-new-ambiguity/xx-<slug>.md`. When answered, the file is MOVED (`mv`) to `.lovable/ambiguous-questions/02-ambiguity-resolved/xx-<slug>.md` with a `## Resolution` block appended.
 5. Never overwrite `.lovable/strictly-avoid.md`. Append only. If a rule was already there, do not duplicate it.
 6. When updating existing files (especially indexes, `strictly-avoid.md`, `suggestions.md`), preserve all unrelated content. No silent truncation.
 7. Strict Relative Git Paths: NEVER write absolute filesystem paths or `file:///` URIs into markdown files, plans, or code comments.
@@ -25,19 +25,19 @@ Persist what happened this turn so the next AI knows everything without guessing
 ```
 New info discovered
 ├─ Institutional knowledge (pattern / convention / decision)?
-│  YES → .lovable/memory/learned/XX-<slug>.md + update .lovable/memory/01-index.md
+│  YES → .lovable/memory/learned/xx-<slug>.md + update .lovable/memory/01-index.md
 ├─ Must never happen again?
 │  YES → append to .lovable/strictly-avoid.md
 ├─ Idea, not yet approved?
 │  YES → .lovable/suggestions.md
 ├─ Bug / regression?
-│  YES → .lovable/issues/XX-<slug>.md (or .lovable/cicd-issues/ if CI/CD)
+│  YES → .lovable/issues/xx-<slug>.md (or .lovable/cicd-issues/ if CI/CD)
 ├─ New or changed plan?
-│  YES → .lovable/plans/pending/XX-<slug>.md + update .lovable/plans/01-index.md
+│  YES → .lovable/plans/pending/xx-<slug>.md + update .lovable/plans/01-index.md
 ├─ Ambiguity / unclear requirement blocking progress?
-│  YES → .lovable/ambiguous-questions/01-new-ambiguity/XX-<slug>.md
+│  YES → .lovable/ambiguous-questions/01-new-ambiguity/xx-<slug>.md
 └─ User answered an open ambiguity?
-   YES → mv to .lovable/ambiguous-questions/02-ambiguity-resolved/XX-<slug>.md + append ## Resolution
+   YES → mv to .lovable/ambiguous-questions/02-ambiguity-resolved/xx-<slug>.md + append ## Resolution
 ```
 
 ## Completion Confirmation

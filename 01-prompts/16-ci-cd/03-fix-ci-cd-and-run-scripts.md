@@ -70,7 +70,7 @@ Every step must be **singly done** using bounded self-looping turns:
   2. If exit code = 0, proceed to End of Tunnel. If exit code != 0, zero in on the first specific failure.
 
 - **Self-Loop Step 4 (RCA & Zero In on Error):**
-  1. Write 4-part RCA in `.lovable/memory/issues/XX-<slug>.md`.
+  1. Write 4-part RCA in `.lovable/memory/issues/xx-<slug>.md`.
   2. Register in `.lovable/01-index.md` and `.lovable/strictly-avoid.md`.
 
 - **Self-Loop Step 5 (Surgical Code Fix):**
@@ -113,7 +113,7 @@ Read and follow spec folders `02`, `03` and `04` before writing any code. Error 
 
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 
-Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/XX-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
+Before you write any code to fix the problem, you MUST document the issue in `.lovable/memory/issues/xx-<slug>.md` (where XX is the next available sequential number). The file MUST contain these exact four sections:
 
 1. **Why it happened:** The high-level business, logical, or architectural breakdown of the failure.
 2. **How it happened:** The technical execution flow that triggered the bug.

@@ -319,7 +319,7 @@ LOOP:
            SUCCESS -> Proceed to Stage & Commit.
     3. IF exit code != 0:
            Zero in on the first failing job.
-           Document 4-part RCA in .lovable/memory/issues/XX-<slug>.md.
+           Document 4-part RCA in .lovable/memory/issues/xx-<slug>.md.
            Apply surgical fix to source code or python script.
            Re-verify with 06-cicd-local-runner.py.
            Repeat loop.

@@ -45,7 +45,7 @@ N = 200 (Default loop limit. User can override.)
 ## Phase 2: Autonomous Execution Loop
 
 1. Spawn dedicated sub-agents to handle the subtasks (MAXIMUM 3 concurrent agents).
-2. Context Diet: When spawning a subagent, DO NOT paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction (e.g., "Read subtask file `.lovable/plans/subtasks/XX-qa-coverage/01-task.md` and execute it"). The subagent MUST read the necessary files itself.
+2. Context Diet: When spawning a subagent, DO NOT paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction (e.g., "Read subtask file `.lovable/plans/subtasks/XX-qa-coverage/01-<subtask-title>.md` and execute it"). The subagent MUST read the necessary files itself.
 3. Subagents must follow the AAA pattern (Arrange, Act, Assert).
 4. Subagents must verify tests locally before marking the task `[Done]`.
 5. Loop continuously until every subtask in the master plan is marked `[Done]`.

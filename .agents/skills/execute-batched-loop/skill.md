@@ -71,7 +71,7 @@ Run again if said: go, continue, or next
    - Ensure parallel tasks touch completely disjoint files to prevent git merge conflicts.
 4. Temp folder logging and specific titling (mandatory):
    - Spawn the sub-agent with a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service` or `Fixing DB Query Wrapper`). Do not use generic names. If an agent switches chunks, its title must change.
-   - Log its assigned chunk of tasks to `.lovable/temp/XX-agent-state.md`.
+   - Log its assigned chunk of tasks to `.lovable/temp/xx-agent-state.md`.
 5. Crash identification and 3-strike rollback:
    - If an agent fails or crashes, inspect its state in `.lovable/temp/`.
    - If an agent fails 3 times, automatically revert dirty changes (`git checkout -- <files>`).

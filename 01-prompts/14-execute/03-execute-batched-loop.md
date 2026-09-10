@@ -87,7 +87,7 @@ Before executing the tasks below, you must check if this prompt is already insta
    - Ensure parallel tasks touch completely disjoint files to prevent git merge conflicts.
 4. Temp folder logging and specific titling (mandatory):
    - Spawn the sub-agent with a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service` or `Fixing DB Query Wrapper`). Do not use generic names. If an agent switches chunks, its title must change.
-   - Log its assigned chunk of tasks to `.lovable/temp/XX-agent-state.md`.
+   - Log its assigned chunk of tasks to `.lovable/temp/xx-agent-state.md`.
 5. Crash identification and 3-strike rollback:
    - If an agent fails or crashes, inspect its state in `.lovable/temp/`.
    - If an agent fails 3 times, automatically revert dirty changes (`git checkout -- <files>`).
@@ -172,8 +172,8 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
 
 - Spawn 2 planning subagents to scan the codebase for target guideline violations.
-- Write the master architectural specification in `.lovable/plans/pending/XX-audit.md` with an exhaustive Violation Ledger table.
-- **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/XX/01-task.md`, `02-task.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
+- Write the master architectural specification in `.lovable/plans/pending/xx-audit.md` with an exhaustive Violation Ledger table.
+- **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/xx-<parent-slug>/01-<subtask-title>.md`, `02-<subtask-title>.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
 - **MANDATORY AUTO-LOOP (DO NOT STOP):** Once Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for confirmation**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
 
 ### 3. Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
@@ -182,7 +182,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 

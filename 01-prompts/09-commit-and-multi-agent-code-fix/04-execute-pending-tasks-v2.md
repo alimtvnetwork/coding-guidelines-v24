@@ -22,7 +22,7 @@ Before starting execution, you must ensure the queue of pending tasks is properl
 
 You are the sole orchestrator. Your job is to complete ALL pending tasks without stopping.
 
-- Make a Great Plan: Analyze all pending tasks and devise a comprehensive execution plan. Tasks exceeding 7 steps must be decomposed into `plans/subtasks/XX-<slug>/`.
+- Make a Great Plan: Analyze all pending tasks and devise a comprehensive execution plan. Tasks exceeding 7 steps must be decomposed into `plans/subtasks/xx-<slug>/`.
 - Do NOT Ask Questions: Do not stop to ask the user for permission. Do not stop to ask clarifying questions.
 - File Collision Locking Matrix (`active-locks.json`): Register active target files in `.lovable/01-index.md` so parallel tasks touch completely disjoint files.
 - Self-Loop: Self-loop continuously until every single pending task in the queue is verifiably completed.

@@ -46,8 +46,8 @@ Generate the folder structure, the `.lovable/plans/pending/` files, and the `.lo
 Your self-loop must strictly follow this structure:
 
 1. Roll-up Index: Update `.lovable/plans/01-index.md`.
-2. Parent Plan: Create `.lovable/plans/pending/XX-<slug>.md`.
-3. Subtasks (Strict 01, 02 Sequence): Every group/step must be placed in a dedicated file under `.lovable/plans/subtasks/XX-<slug>/`.
+2. Parent Plan: Create `.lovable/plans/pending/xx-<slug>.md`.
+3. Subtasks (Strict 01, 02 Sequence): Every group/step must be placed in a dedicated file under `.lovable/plans/subtasks/xx-<slug>/`.
    - The subtasks MUST follow a strict zero-padded numeric sequence: `01`, `02`, `03`, etc.
 
 ## 5. High-Stakes Code Standards, Error Management & Guidelines
@@ -109,7 +109,7 @@ Each step or group that completes MUST immediately commit and fix the Git. Follo
 - [ ] Group tasks logically for independent sub-agents, ensuring each group contains full context for a standalone sub-agent.
 - [ ] Ensure each group can work and commit standalone.
 - [ ] Self-loop `N` times to write detailed specs and task files.
-- [ ] Ensure subtask files are named exactly XX-<subslug>.md where XX is the sequence.
+- [ ] Ensure subtask files are named exactly xx-<subslug>.md where XX is the sequence.
 - [ ] Audit the plan against the Master Consolidated Guide, Code Style, Boolean Conditions, and Variable Naming rules.
 - [ ] Ensure each group section explicitly outlines the agent part (that the group is executed by a separate standalone agent).
 - [ ] Ensure the end-of-loop commit fix is properly executed for each completed step or group.

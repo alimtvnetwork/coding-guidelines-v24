@@ -20,7 +20,7 @@ eadme.md is strictly lowercase, find the root cause in one sentence, write the m
 
 ## The 4-Part RCA Requirement (Mandatory Memory File)
 
-Before you write any code to fix the problem, you MUST document the issue in .lovable/memory/issues/XX-<slug>.md (where XX is the next available sequential number). The file MUST contain these exact four sections:
+Before you write any code to fix the problem, you MUST document the issue in .lovable/memory/issues/xx-<slug>.md (where XX is the next available sequential number). The file MUST contain these exact four sections:
 
 1. **Why it happened:** The high-level business, logical, or architectural breakdown of the failure.
 2. **How it happened:** The technical execution flow that triggered the bug.
@@ -47,7 +47,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 
 ## Execution Checklist & Strict Guidelines
 
-- [ ] **RCA Document Generation:** I have created .lovable/memory/issues/XX-<slug>.md with the strict 4-part RCA structure (Why, How, Root Cause, Code Fix).
+- [ ] **RCA Document Generation:** I have created .lovable/memory/issues/xx-<slug>.md with the strict 4-part RCA structure (Why, How, Root Cause, Code Fix).
 - [ ] **Coding Guidelines & Master Consolidated File:** I have fully read and strictly enforced every file in 02-spec/02-coding-guidelines/, as well as the master consolidated coding guideline file at .lovable/coding-guidelines.md.
 - [ ] **Error Manage Checklist:** I have fully read and enforced 02-spec/03-error-manage/. I understand which files to follow (architecture, response envelopes) and how to follow them (never swallow errors, always wrap with context).
 - [ ] **Boolean Fixations:** All boolean variables MUST begin with is and has only (can, should, was, etc. are banned). NEVER use explicit true/false comparisons (e.g., `if isReady == true` is FORBIDDEN, use `if isReady`). NEVER use negative booleans (isNotReady). NEVER invert success checks (!response.isSuccess is banned; use

@@ -57,7 +57,7 @@ description: >-
 
 1. [ ] Check git status first. The working tree must be clean and committed before executing anything.
 2. [ ] Read  and /learn `.lovable/memory/01-index.md` and `.lovable/what-to-read.md`. Verify root readme is strictly lowercase `readme.md`.
-3. [ ] Read and /learn `.lovable/plans/01-index.md`. Then read every file in `.lovable/plans/pending/XX-<slug>.md` and all associated subtasks in `.lovable/plans/subtasks/XX-<slug>/` (Note: for coding guidelines, check `.lovable/plans/subtasks/01-coding-guideline-fixes/` or other synced folder structures).
+3. [ ] Read and /learn `.lovable/plans/01-index.md`. Then read every file in `.lovable/plans/pending/xx-<slug>.md` and all associated subtasks in `.lovable/plans/subtasks/xx-<slug>/` (Note: for coding guidelines, check `.lovable/plans/subtasks/01-coding-guideline-fixes/` or other synced folder structures).
 4. [ ] Group pending tasks into sequenced Execution Waves:
    - Wave 1: Schemas, DB, and query wrappers
    - Wave 2: Business logic and services
@@ -94,7 +94,7 @@ As tasks are completed:
 1. Use `mv` to move the completed task file from `.lovable/plans/pending/` to `.lovable/plans/completed/`.
 2. Open the moved file and flip `Status: pending` to `Status: completed`.
 3. Immediately update `.lovable/plans/01-index.md` to reflect the completed status and new file location.
-4. If new patterns or conventions are established, record them in `.lovable/memory/<topic>/XX-<slug>.md` and update `.lovable/memory/01-index.md`. Detailed specs must never be shortened.
+4. If new patterns or conventions are established, record them in `.lovable/memory/<topic>/xx-<slug>.md` and update `.lovable/memory/01-index.md`. Detailed specs must never be shortened.
 
 ---
 

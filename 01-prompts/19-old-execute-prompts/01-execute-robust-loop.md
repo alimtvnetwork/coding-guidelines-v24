@@ -43,12 +43,12 @@
 1. Check git status first. The working tree must be clean. Confirm root readme is strictly lowercase `readme.md`.
 2. Ensure `.lovable/temp/` is added to your project's `.gitignore` file.
 3. Wipe any old, orphaned state files in `.lovable/temp/` from previous incomplete runs before starting fresh.
-4. Read `.lovable/plans/01-index.md` and load tasks from `.lovable/plans/pending/XX-<slug>.md`. Sequence them into Execution Waves:
+4. Read `.lovable/plans/01-index.md` and load tasks from `.lovable/plans/pending/xx-<slug>.md`. Sequence them into Execution Waves:
    - Wave 1: Schemas, DB, and query wrappers
    - Wave 2: Core logic
    - Wave 3: UI and documentation
 5. Do not start a task if its prerequisite tasks are not marked `Status: completed`.
-6. Break tasks down so each agent handles a simple, small micro-task (under 15 lines per function). Monolithic tasks with more than 7 steps must be decomposed into `.lovable/plans/subtasks/XX-<slug>/`.
+6. Break tasks down so each agent handles a simple, small micro-task (under 15 lines per function). Monolithic tasks with more than 7 steps must be decomposed into `.lovable/plans/subtasks/xx-<slug>/`.
 
 ---
 
@@ -64,7 +64,7 @@
 
 3. Pre-flight logging and specific titling:
    - Before spawning a sub-agent, assign it a highly specific title reflecting its exact task (e.g., `Refactoring Auth Service` or `Fixing DB Query Wrapper`). Do not use generic names. If an agent switches tasks, its title must change.
-   - Write `.lovable/temp/XX-agent-state.md` documenting which sub-agent is running, its assigned micro-task, and instructions.
+   - Write `.lovable/temp/xx-agent-state.md` documenting which sub-agent is running, its assigned micro-task, and instructions.
 
 4. Continuous self-looping:
    - Loop yourself to monitor sub-agent progress.

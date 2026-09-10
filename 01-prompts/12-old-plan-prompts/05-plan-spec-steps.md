@@ -35,8 +35,8 @@ Generate the folder structure and the `.lovable/plans/pending/` files immediatel
 Your self-loop must strictly follow this structure:
 
 1. Roll-up Index: Update `.lovable/plans/01-index.md`.
-2. Parent Plan: Create `.lovable/plans/pending/XX-<slug>.md`.
-3. Detailed Steps (Strict 01, 02 Sequence): Every step must be detailed inside the parent plan or placed in a dedicated file under `.lovable/plans/subtasks/XX-<slug>/` if it requires more depth.
+2. Parent Plan: Create `.lovable/plans/pending/xx-<slug>.md`.
+3. Detailed Steps (Strict 01, 02 Sequence): Every step must be detailed inside the parent plan or placed in a dedicated file under `.lovable/plans/subtasks/xx-<slug>/` if it requires more depth.
    - Any subtasks MUST follow a strict zero-padded numeric sequence: `01`, `02`, `03`, etc.
 
 ## 4. High-Stakes Code Standards, Error Management & Guidelines
@@ -96,7 +96,7 @@ Each step that completes MUST immediately commit and fix the Git. Follow these e
 - [ ] Save all provided images to `assets/`, rename them contextually, and link them in the markdown.
 - [ ] Write tasks using your high-powered brain, detailing explicitly where the code is, what the issue is, and how to change it.
 - [ ] Self-loop `N` times to write detailed specs and task files.
-- [ ] Ensure subtask files are named exactly XX-<subslug>.md where XX is the sequence.
+- [ ] Ensure subtask files are named exactly xx-<subslug>.md where XX is the sequence.
 - [ ] Check if the dynamic reading files exist. If so, enforce them in the task checklist.
 - [ ] Ensure the end-of-loop commit fix is properly executed for each completed step.
 - [ ] Update `.lovable/plans/01-index.md` and populate `.lovable/plans/pending/`.

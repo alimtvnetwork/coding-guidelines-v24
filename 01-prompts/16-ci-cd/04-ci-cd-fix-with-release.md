@@ -107,7 +107,7 @@ Every step must be **singly done** using bounded self-looping turns. Do NOT try 
 
 - **Self-Loop Step 4 (RCA & Zero In on the Specific Error):**
   1. For the zeroed-in failure, write a mandatory 4-part RCA file:
-     - Path: `.lovable/memory/issues/XX-<slug>.md` (next sequential number)
+     - Path: `.lovable/memory/issues/xx-<slug>.md` (next sequential number)
      - Sections: **Why it happened / How it happened / Root Cause / Code Fix**
   2. Update `.lovable/01-index.md` and `.lovable/cicd-index.md`.
   3. Append any newly identified anti-pattern to `.lovable/strictly-avoid.md`.
@@ -321,8 +321,8 @@ WHILE (STEP < PHASE_2_STEPS):
     ELSE:
         3. Parse failure: identify exact failing job, error message, file, and line.
         4. Enqueue into .lovable/plans/pending/XX-cicd-<slug>.md (see Error Enqueuing section).
-        5. Record in .lovable/cicd-issues/XX-<slug>.md and update index.
-        6. Document 4-part RCA in .lovable/memory/issues/XX-<slug>.md.
+        5. Record in .lovable/cicd-issues/xx-<slug>.md and update index.
+        6. Document 4-part RCA in .lovable/memory/issues/xx-<slug>.md.
         7. Apply the minimal surgical code fix.
         8. Run: python 03-ai-scripts/05-guideline-autofixer.py <modified-files>
         9. Loop immediately to step 1. DO NOT stop.
@@ -395,7 +395,7 @@ On every ❌ FAIL or ⏱ TIMEOUT, BEFORE applying any code fix, do both:
 
 Update `.lovable/plans/01-index.md` immediately.
 
-### B. Record in CI/CD Issues (`.lovable/cicd-issues/XX-<slug>.md`)
+### B. Record in CI/CD Issues (`.lovable/cicd-issues/xx-<slug>.md`)
 
 ```markdown
 # CI/CD Issue: <short failure description>
@@ -430,7 +430,7 @@ Update `.lovable/cicd-index.md` in the same operation. Never delete existing ent
 
 - [ ] **Full runner pass:** Run `python 03-ai-scripts/06-cicd-local-runner.py` one final time. Exit code MUST be 0.
 - [ ] **No open plan tasks from this run:** All `.lovable/plans/pending/XX-cicd-*.md` files created in this run are marked `resolved` or closed.
-- [ ] **All RCA files written:** Every failure encountered has a `.lovable/memory/issues/XX-<slug>.md` with all 4 sections.
+- [ ] **All RCA files written:** Every failure encountered has a `.lovable/memory/issues/xx-<slug>.md` with all 4 sections.
 - [ ] **Coding standards pass:** Run `python 03-ai-scripts/05-guideline-autofixer.py` on all modified files. Zero violations remain.
 - [ ] **Git working tree is clean:** Run `git status`. No untracked or unstaged files. Commit any remaining changes with `fix(ci): final pre-release fixes`.
 
@@ -565,7 +565,7 @@ PowerShell:
 
 ### Issues (only if any step failed)
 
-- [XX-<slug>](.lovable/release/issues/XX-vX.Y.Z-<slug>.md) short description
+- [xx-<slug>](.lovable/release/issues/XX-vX.Y.Z-<slug>.md) short description
 ```
 
 Dynamically discover `<owner>/<repo>` by running `git config --get remote.origin.url`. Do NOT hardcode URLs.

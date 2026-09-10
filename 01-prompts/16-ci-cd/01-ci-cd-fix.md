@@ -106,7 +106,7 @@ Every step must be **singly done** using bounded self-looping turns. Do NOT try 
 
 - **Self-Loop Step 4 (RCA & Zero In on the Specific Error):**
   1. For the zeroed-in failure, write a mandatory 4-part RCA file:
-     - Path: `.lovable/memory/issues/XX-<slug>.md` (next sequential number)
+     - Path: `.lovable/memory/issues/xx-<slug>.md` (next sequential number)
      - Sections: **Why it happened / How it happened / Root Cause / Code Fix**
   2. Update `.lovable/01-index.md` and `.lovable/cicd-index.md`.
   3. Append any newly identified anti-pattern to `.lovable/strictly-avoid.md`.
@@ -336,7 +336,7 @@ WHILE (STEP < PHASE_2_STEPS):
 
     ELSE:
         3. Parse the failure output: identify the exact failing job, error message, file, and line.
-        4. Document 4-part RCA in .lovable/memory/issues/XX-<slug>.md
+        4. Document 4-part RCA in .lovable/memory/issues/xx-<slug>.md
         5. Apply the minimal surgical code fix to the codebase.
         6. Run the guideline autofixer on modified files:
               python 03-ai-scripts/05-guideline-autofixer.py <modified-files>
@@ -429,7 +429,7 @@ Update `.lovable/plans/01-index.md` to register the new task entry immediately.
 Create a CI/CD issue record at:
 
 ```text
-.lovable/cicd-issues/XX-<slug>.md
+.lovable/cicd-issues/xx-<slug>.md
 ```
 
 The CI/CD issue file MUST contain:
@@ -461,7 +461,7 @@ Update `.lovable/cicd-index.md` in the same operation. Never delete existing ent
 
 ## Phase 3: 4-Part RCA Requirement (Mandatory Memory File)
 
-For each distinct failure type encountered in Phase 2, write a memory file at `.lovable/memory/issues/XX-<slug>.md` with exactly four sections:
+For each distinct failure type encountered in Phase 2, write a memory file at `.lovable/memory/issues/xx-<slug>.md` with exactly four sections:
 
 1. **Why it happened:** High-level architectural reason for the failure.
 2. **How it happened:** Exact execution flow that triggered the error.

@@ -73,7 +73,7 @@ Before executing the tasks below, you must check if this prompt is already insta
 
 1. [ ] Check git status first. The working tree must be clean and committed before executing anything.
 2. [ ] Read  and /learn `.lovable/memory/01-index.md` and `.lovable/what-to-read.md`. Verify root readme is strictly lowercase `readme.md`.
-3. [ ] Read and /learn `.lovable/plans/01-index.md`. Then read every file in `.lovable/plans/pending/XX-<slug>.md` and all associated subtasks in `.lovable/plans/subtasks/XX-<slug>/` (Note: for coding guidelines, check `.lovable/plans/subtasks/01-coding-guideline-fixes/` or other synced folder structures).
+3. [ ] Read and /learn `.lovable/plans/01-index.md`. Then read every file in `.lovable/plans/pending/xx-<slug>.md` and all associated subtasks in `.lovable/plans/subtasks/xx-<slug>/` (Note: for coding guidelines, check `.lovable/plans/subtasks/01-coding-guideline-fixes/` or other synced folder structures).
 4. [ ] Group pending tasks into sequenced Execution Waves:
    - Wave 1: Schemas, DB, and query wrappers
    - Wave 2: Business logic and services
@@ -110,7 +110,7 @@ As tasks are completed:
 1. Use `mv` to move the completed task file from `.lovable/plans/pending/` to `.lovable/plans/completed/`.
 2. Open the moved file and flip `Status: pending` to `Status: completed`.
 3. Immediately update `.lovable/plans/01-index.md` to reflect the completed status and new file location.
-4. If new patterns or conventions are established, record them in `.lovable/memory/<topic>/XX-<slug>.md` and update `.lovable/memory/01-index.md`. Detailed specs must never be shortened.
+4. If new patterns or conventions are established, record them in `.lovable/memory/<topic>/xx-<slug>.md` and update `.lovable/memory/01-index.md`. Detailed specs must never be shortened.
 
 ---
 
@@ -177,8 +177,8 @@ To guarantee full execution without stopping after planning mode, the master orc
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
 
 - Spawn 2 planning subagents to scan the codebase for target guideline violations.
-- Write the master architectural specification in `.lovable/plans/pending/XX-audit.md` with an exhaustive Violation Ledger table.
-- **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/XX/01-task.md`, `02-task.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
+- Write the master architectural specification in `.lovable/plans/pending/xx-audit.md` with an exhaustive Violation Ledger table.
+- **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/xx-<parent-slug>/01-<subtask-title>.md`, `02-<subtask-title>.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
 - **MANDATORY AUTO-LOOP (DO NOT STOP):** Once Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for confirmation**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
 
 ### 3. Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
@@ -187,7 +187,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, universal `*AppError` wrapping, Unix LF line endings).
 - Move completed subtasks from `.lovable/plans/subtasks/` to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
 - **Failure Memory & Feedback Loop:** If a subagent fails:
-  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/XX-failure.md`.
+  - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 - Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
 
