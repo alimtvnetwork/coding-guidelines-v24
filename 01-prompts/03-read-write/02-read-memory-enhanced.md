@@ -68,9 +68,10 @@ The `.lovable/`, `02-spec/`, and knowledge base folders can be massive. To proce
    - Inspect `03-ai-scripts/01-index.md` for tool inventory and performance baselines.
 
 3. Autonomous looping enforcement:
-   - The AI agent MUST autonomously loop through all directories and files across `02-spec/`, `.lovable/`, and application source trees.
-   - Do not stop after one high-level glance.
+   - The AI agent MUST take at least 50 distinct steps to autonomously self-loop through all directories and files across `02-spec/`, `.lovable/`, and application source trees.
+   - Do not stop after one high-level glance. You must deeply explore and learn.
    - Systematically iterate through each directory layer.
+   - **Crucial Rule:** You MUST author or update an Antigravity skill (`.agents/skills/<slug>/skill.md`) for every major spec/prompt you read to persist it as an agent capability.
 
 2. Deep recursive spec traversal:
    - The AI must recursively inspect every subfolder and all nested `.md` files in `02-spec/` (`00-overview.md`, numbered specs `01-*.md`, `99-consistency-report.md`, `spec-index.md`, subdirectories).

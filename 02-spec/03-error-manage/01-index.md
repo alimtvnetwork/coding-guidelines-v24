@@ -3,12 +3,22 @@
 > **/goal** Master and enforce the architectural standards, specifications, and CI/CD validation rules for 03 Error Manage.
 > **/learn** Read the sequentially ordered specification files in this directory, follow the actionable CI/CD checklist, and apply mandatory rules before generating code.
 
-## 🎯 Actionable CI/CD & Agent Checklist
+## 🎯 Actionable CI/CD & Agent Checklist (Learnable Items)
 
-- [ ] `/goal` Read and understand all numbered specifications under `03-error-manage/`.
+- [ ] `/goal` **Read and understand** all numbered specifications under `03-error-manage/`.
+- [ ] `/learn` **Skill Creation:** You MUST automatically author or update an Antigravity skill (`.agents/skills/cg-error-management/skill.md`) after reading this specification so this knowledge becomes a reusable capability.
+- [ ] `/learn` **Looping Enforcement:** Take at least 50 distinct steps to self-loop and thoroughly digest all files in this module. Do not skim.
 - [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
 - [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
+
+## 🤖 How AI Should Write Error Management Code (Without Package Source)
+
+Even if you do not have the source code for the `appfault` package, you MUST generate code adhering to this pattern:
+1. **Never swallow errors.** Always wrap them and return.
+2. **Go Backend Tier:** Use `appfault.Wrap(err, "ContextMessage")` or `appfault.New("ErrorMessage")` for all failures. Provide typed error codes. Never use raw `errors.New()`.
+3. **API Response:** Structure all HTTP responses using the Universal Response Envelope (see [02-error-architecture/05-response-envelope/01-index.md](./02-error-architecture/05-response-envelope/01-index.md)).
+4. **Skill Lookup:** Check `.agents/skills/cg-error-management/skill.md` for execution rules before refactoring error logic.
 
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
