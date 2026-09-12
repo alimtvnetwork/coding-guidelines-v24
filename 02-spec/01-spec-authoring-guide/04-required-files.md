@@ -7,7 +7,7 @@
 
 ## Overview
 
-Every spec module (top-level folder under `spec/`) must contain a minimum set of files to pass the health dashboard audit. This document defines those requirements and explains the purpose of each mandatory file.
+Every spec module (top-level folder under `02-spec/`) must contain a minimum set of files to pass the health dashboard audit. This document defines those requirements and explains the purpose of each mandatory file.
 
 ---
 

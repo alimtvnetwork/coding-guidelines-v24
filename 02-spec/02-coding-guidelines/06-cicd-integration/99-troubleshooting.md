@@ -425,7 +425,7 @@ python3 -c "import tomllib; print(tomllib.loads(open('.codeguidelines.toml').rea
 A `tomllib.TOMLDecodeError` traceback pinpoints the exact line and
 column.
 
-### Reference config (copy + customise)
+### Reference config (copy + customize)
 
 ```toml
 

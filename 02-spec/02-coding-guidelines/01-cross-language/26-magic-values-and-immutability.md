@@ -124,7 +124,7 @@ if ($order->status === 'completed') { ... }
 enum OrderStatus: string {
     case Pending = 'pending';
     case Completed = 'completed';
-    case Cancelled = 'cancelled';
+    case canceled = 'canceled';
 }
 
 if ($order->status->isEqual(OrderStatus::Completed)) { ... }

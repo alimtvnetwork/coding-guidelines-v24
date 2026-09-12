@@ -247,7 +247,7 @@ interface WsState { status: 'connected' | 'disconnected'; }
 |------|--------|
 | `ConnectionStatus` | Connected, Disconnected, Connecting, Reconnecting, Error |
 | `EntityStatus` | Active, Inactive, Pending, Archived |
-| `ExecutionStatus` | Pending, Running, Completed, Failed, Cancelled |
+| `ExecutionStatus` | Pending, Running, Completed, Failed, canceled |
 | `ExportStatus` | Pending, Processing, Completed, Failed |
 | `HttpMethod` | Get, Post, Put, Patch, Delete |
 | `MessageStatus` | Pending, Streaming, Completed, Error |
@@ -561,7 +561,7 @@ values:
 
 | Generator | Reads | Emits | Output Path Pattern |
 |-----------|-------|-------|---------------------|
-| `gen-go-enums.mjs` | `spec/**/enums/*.yaml` | Go file with `iota` block, `String()`, `ParseEnum()`, `MarshalJSON`, `UnmarshalJSON` | `internal/<package>/<enum_name>_generated.go` |
+| `gen-go-enums.mjs` | `02-spec/**/enums/*.yaml` | Go file with `iota` block, `String()`, `ParseEnum()`, `MarshalJSON`, `UnmarshalJSON` | `internal/<package>/<enum_name>_generated.go` |
 | `gen-ts-enums.mjs` | same | TS union type, `parse()`, `is<Name>()` guard, JSON I/O | `src/lib/enums/<enumName>.generated.ts` |
 | `gen-php-enums.mjs` | same | PHP 8.1 backed enum with `from()`, `tryFrom()`, `cases()` | `src/Enums/<EnumName>.php` |
 | `gen-rust-enums.mjs` | same | Rust `enum` with `FromStr`, `Display`, `Serialize`, `Deserialize` derives | `src/enums/<enum_name>_generated.rs` |

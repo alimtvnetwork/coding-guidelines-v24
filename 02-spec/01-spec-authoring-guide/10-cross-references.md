@@ -130,7 +130,7 @@ To write the correct relative path, count directory levels:
 
 The health dashboard scanner (`linter-scripts/generate-dashboard-data.cjs`) validates all markdown links:
 
-1. **Scans** every `.md` file in `spec/` and `.lovable/memories/`
+1. **Scans** every `.md` file in `02-spec/` and `.lovable/memories/`
 2. **Extracts** all markdown link patterns (`[text]\(path)` syntax)
 3. **Resolves** relative paths from the source file's location
 4. **Checks** that the target file exists on disk

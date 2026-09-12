@@ -30,7 +30,7 @@
 
 ### 4. Spec folder visibility incident
 
-- User reported `spec/` folder missing from the file tree. Verified via `ls -la spec/` that all 29 entries (modules `01-spec-authoring-guide` … `24-app-ui-design-system`) are intact and bidirectionally synced with GitHub. Diagnosed as a UI/file-tree caching artifact — recommended refresh / hard reload / `Cmd+P` file search.
+- User reported `02-spec/` folder missing from the file tree. Verified via `ls -la spec/` that all 29 entries (modules `01-spec-authoring-guide` … `24-app-ui-design-system`) are intact and bidirectionally synced with GitHub. Diagnosed as a UI/file-tree caching artifact — recommended refresh / hard reload / `Cmd+P` file search.
 
 ---
 

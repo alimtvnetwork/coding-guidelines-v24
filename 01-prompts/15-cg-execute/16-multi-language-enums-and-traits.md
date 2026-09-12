@@ -69,7 +69,7 @@ enum OrderStatusType: string
     case Pending    = 'pending';
     case Processing = 'processing';
     case Completed  = 'completed';
-    case Cancelled  = 'cancelled';
+    case canceled  = 'canceled';
 
     public function label(): string
     {
@@ -77,14 +77,14 @@ enum OrderStatusType: string
             self::Pending    => 'Pending Payment',
             self::Processing => 'Processing Shipment',
             self::Completed  => 'Order Completed',
-            self::Cancelled  => 'Order Cancelled',
+            self::canceled  => 'Order canceled',
         };
     }
 
     public function isTerminal(): bool
     {
         return match ($this) {
-            self::Completed, self::Cancelled => true,
+            self::Completed, self::canceled => true,
             self::Pending, self::Processing  => false,
         };
     }
@@ -181,7 +181,7 @@ In Go, enums MUST be scaffolded using `03-ai-scripts/30-enum-generator.py` into 
 #### Automated Scaffolding Command:
 
 ```bash
-python 03-ai-scripts/30-enum-generator.py --name OrderStatus --type byte --items Pending,Processing,Completed,Cancelled --zero-value Invalid
+python 03-ai-scripts/30-enum-generator.py --name OrderStatus --type byte --items Pending,Processing,Completed,canceled --zero-value Invalid
 ```
 
 #### `variant.go` (Core Type, Constants, & Methods):
@@ -209,7 +209,7 @@ const (
     Pending
     Processing
     Completed
-    Cancelled
+    canceled
 )
 
 var (
@@ -226,14 +226,14 @@ func (v Variant) Bytes() []byte    { return []byte{byte(v)} }
 func (v Variant) Int() int         { return int(v) }
 func (v Variant) Code() uint16     { return uint16(v) }
 
-func (v Variant) IsValid() bool   { return baseenumer.IsBetween(v, Pending, Cancelled) }
-func (v Variant) IsInvalid() bool { return baseenumer.IsNotBetween(v, Pending, Cancelled) }
+func (v Variant) IsValid() bool   { return baseenumer.IsBetween(v, Pending, canceled) }
+func (v Variant) IsInvalid() bool { return baseenumer.IsNotBetween(v, Pending, canceled) }
 func (v Variant) IsEnum() bool    { return v.IsValid() }
 
 func (v Variant) IsPending() bool    { return v == Pending }
 func (v Variant) IsProcessing() bool { return v == Processing }
 func (v Variant) IsCompleted() bool  { return v == Completed }
-func (v Variant) IsCancelled() bool  { return v == Cancelled }
+func (v Variant) IsCancelled() bool  { return v == canceled }
 
 func (v Variant) Name() string {
     if int(v) < len(variantLabels) {
@@ -274,7 +274,7 @@ var (
         Pending:    "Pending",
         Processing: "Processing",
         Completed:  "Completed",
-        Cancelled:  "Cancelled",
+        canceled:  "canceled",
     }
 
     basicEnum  = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
@@ -308,13 +308,13 @@ export const OrderStatusType = {
     Pending: 'pending',
     Processing: 'processing',
     Completed: 'completed',
-    Cancelled: 'cancelled',
+    canceled: 'canceled',
 } as const;
 
 export type OrderStatusType = (typeof OrderStatusType)[keyof typeof OrderStatusType];
 
 export function isTerminalStatus(status: OrderStatusType): boolean {
-    return status === OrderStatusType.Completed || status === OrderStatusType.Cancelled;
+    return status === OrderStatusType.Completed || status === OrderStatusType.canceled;
 }
 ```
 
@@ -374,7 +374,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines.md`.
-> 3. **Worker Pool & Log Aggregation Architecture:** All local runners and test orchestrators must use a concurrent worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without cancelling sibling workers, and print a consolidated final summary with full stdout/stderr error logs for failed jobs.
+> 3. **Worker Pool & Log Aggregation Architecture:** All local runners and test orchestrators must use a concurrent worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without canceling sibling workers, and print a consolidated final summary with full stdout/stderr error logs for failed jobs.
 > 4. **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script from scratch**, regardless of whether the file already exists on disk.
 > 5. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 

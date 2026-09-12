@@ -373,7 +373,7 @@ var variantLabels = [...]string{
 
 **Prevention:** `variantLabels` must use PascalCase strings matching the constant names. Protocol-driven enums (`content_type`, `endpoint`, `header`, `response_key`, `response_message`) are exempt.
 
-**v2.1.0 Update (2026-02-25):** The dual-table pattern (`variantStrings` + `variantLabels`) is now fully deprecated. All enums must use a single `variantLabels` table with PascalCase values. `Label()` delegates to `String()`. `Parse()` must use `strings.EqualFold()` for case-insensitive matching. Migration notices added to `spec/08`, `spec/10`, `spec/13` enum architecture files.
+**v2.1.0 Update (2026-02-25):** The dual-table pattern (`variantStrings` + `variantLabels`) is now fully deprecated. All enums must use a single `variantLabels` table with PascalCase values. `Label()` delegates to `String()`. `Parse()` must use `strings.EqualFold()` for case-insensitive matching. Migration notices added to `02-spec/08`, `02-spec/10`, `02-spec/13` enum architecture files.
 
 ---
 

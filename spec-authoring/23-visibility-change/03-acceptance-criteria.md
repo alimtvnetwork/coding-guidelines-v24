@@ -33,5 +33,5 @@ A feature is accepted when **all** of the following are true.
 ## Sync
 
 - [ ] `npm run sync` runs clean after the change.
-- [ ] `spec/` (canonical mirror of `spec-authoring/`) updated if the project's sync workflow promotes 23-visibility-change.
+- [ ] `02-spec/` (canonical mirror of `spec-authoring/`) updated if the project's sync workflow promotes 23-visibility-change.
 - [ ] Health-score JSON regenerated.

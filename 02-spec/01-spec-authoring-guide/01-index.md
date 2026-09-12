@@ -200,7 +200,7 @@ App and WordPress projects use `02-fundamentals.md` as the first content file, t
 
 ## File Naming Convention (Quick Reference)
 
-All files and folders in `spec/` and `.lovable/` MUST use **lowercase kebab-case**:
+All files and folders in `02-spec/` and `.lovable/` MUST use **lowercase kebab-case**:
 
 ```
 ✅ 01-backend/                   ✅ 01-index.md
@@ -237,7 +237,7 @@ See [10-cross-references.md](./10-cross-references.md) for full syntax and examp
 
 ## Reliability Check Report
 
-Every module MUST include a **reliability risk assessment** to evaluate implementation feasibility before coding begins. Reports are stored in `02-spec/validation-reports/` or inline within the module. The only allowed exception: pure-documentation modules with no implementable surface (e.g. `spec/_template.md`, `02-spec/folder-structure-root.md`) MAY omit the assessment when an `<!-- AUTHORING-WAIVER: documentation-only -->` comment is present near the title.
+Every module MUST include a **reliability risk assessment** to evaluate implementation feasibility before coding begins. Reports are stored in `02-spec/validation-reports/` or inline within the module. The only allowed exception: pure-documentation modules with no implementable surface (e.g. `02-spec/_template.md`, `02-spec/folder-structure-root.md`) MAY omit the assessment when an `<!-- AUTHORING-WAIVER: documentation-only -->` comment is present near the title.
 
 ### What It Covers
 
@@ -325,7 +325,7 @@ The memory folder includes dedicated folders for tracking work items:
 
 | Content | Location |
 |---------|----------|
-| Formal specifications, APIs, data models | `spec/` |
+| Formal specifications, APIs, data models | `02-spec/` |
 | Architectural decisions, conventions, patterns | `.lovable/memories/` |
 | Execution plans and batch tracking | `.lovable/29-plan.md` |
 | Suggestion tracking | `.lovable/memories/suggestions/` |
@@ -406,7 +406,7 @@ When asked to "follow the spec authoring guideline and fix the folder structure,
 
 1. Every folder has `01-index.md`
 2. Top-level folders have `99-consistency-report.md`
-3. Root `spec/` has `01-index.md` and `99-consistency-report.md` (plus `folder-structure-root.md` as a redirect)
+3. Root `02-spec/` has `01-index.md` and `99-consistency-report.md` (plus `folder-structure-root.md` as a redirect)
 
 ### Step 5 — Update Cross-References
 
@@ -459,7 +459,7 @@ _Auto-generated section — see `02-spec/01-spec-authoring-guide/97-acceptance-c
 
 ### AC-SAG-001: Conformance check for spec authoring rule: Index
 
-**Given** Run the spec-structure linter against `spec/`.
+**Given** Run the spec-structure linter against `02-spec/`.
 **When** Run the verification command shown below.
 **Then** Every folder MUST contain a valid `01-index.md`, follow kebab-case numeric prefixes, and resolve all internal links.
 

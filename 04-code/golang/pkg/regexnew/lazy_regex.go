@@ -79,6 +79,7 @@ func (it *LazyRegex) Compile() appfault.Result[*regexp.Regexp] {
 	if it.isCompiled && it.compiledErr != nil {
 		return appfault.Fail[*regexp.Regexp](appfault.NewAppBuilder(errtype.Execution, "lazy regex compilation failed").SetCause(it.compiledErr).Build())
 	}
+
 	if it.isCompiled {
 		return appfault.NewSuccess(it.regex)
 	}

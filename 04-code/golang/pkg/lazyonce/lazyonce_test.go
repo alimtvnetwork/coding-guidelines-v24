@@ -169,7 +169,7 @@ func TestLazyOnce_ContextSuccessAndCancellation(t *testing.T) {
 
 	_, cFault := lazyNew.ValueContext(cancelledCtx)
 	if cFault == nil {
-		t.Fatal("expected timeout fault on cancelled context")
+		t.Fatal("expected timeout fault on canceled context")
 	}
 }
 

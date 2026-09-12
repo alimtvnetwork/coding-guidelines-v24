@@ -31,7 +31,7 @@ When invoked with no flags, both installers MUST pull the following four folders
 
 | Folder | Mandatory | Purpose |
 |--------|-----------|---------|
-| `spec/` | yes | Full coding-guidelines spec tree (568+ files) |
+| `02-spec/` | yes | Full coding-guidelines spec tree (568+ files) |
 | `linters/` | yes | Language-specific lint plugins, ESLint configs, tree-sitter queries |
 | `linter-scripts/` | yes | Legacy orchestrator (validator wrappers, helper scripts) |
 | `linters-cicd/` | yes | Python check suite, registry, `run-all.sh`, baseline |

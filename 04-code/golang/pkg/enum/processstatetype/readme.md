@@ -23,7 +23,7 @@ Following the repository's modular enum design, `processstatetype` provides:
 | `Running` | `2` | `"Running"` | Actively executing |
 | `Completed` | `3` | `"Completed"` | Successfully completed execution |
 | `Failed` | `4` | `"Failed"` | Execution terminated with errors |
-| `Cancelled` | `5` | `"Cancelled"` | Execution aborted or cancelled |
+| `canceled` | `5` | `"canceled"` | Execution aborted or canceled |
 
 ---
 
@@ -45,7 +45,7 @@ func CanExecute(state processstatetype.Variant) bool {
 - `.IsValid() bool` - Checks if variant is within valid defined range (`> Invalid`).
 - `.IsInvalid() bool` - Checks if variant is zero-value or undefined.
 - `.IsPending() bool`, `.IsRunning() bool`, etc. - Positive boolean predicates.
-- `All() []Variant` - Returns slice of all valid variants (`Pending` through `Cancelled`).
+- `All() []Variant` - Returns slice of all valid variants (`Pending` through `canceled`).
 - `Values() []string` - Returns slice of valid variant names.
 - `Parse(s string) (Variant, bool)` - Case-insensitive string parser returning the typed variant and success boolean.
 - `ParseOrInvalid(s string) Variant` / `ParseOrUnknown(s string) Variant` - String parser returning `Invalid` (0) on failure.

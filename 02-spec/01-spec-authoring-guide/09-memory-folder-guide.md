@@ -170,9 +170,9 @@ suggestions.md (summary) → suggestions/ (details) → suggestions/completed/
 
 ---
 
-## Relationship to `spec/`
+## Relationship to `02-spec/`
 
-| Aspect | `spec/` | `.lovable/` |
+| Aspect | `02-spec/` | `.lovable/` |
 |--------|---------|-------------|
 | Purpose | Formal specifications | Institutional knowledge & AI context |
 | Naming | Numeric prefix **required** | Numeric prefix **optional** |

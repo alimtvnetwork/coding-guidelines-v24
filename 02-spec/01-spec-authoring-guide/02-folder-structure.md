@@ -7,7 +7,7 @@
 
 ## Overview
 
-The `spec/` directory is the canonical location for all project specifications. It uses a **numbered folder hierarchy** organized into functional layers. This document explains the complete tree layout, how modules are grouped, and how the numbering scheme works.
+The `02-spec/` directory is the canonical location for all project specifications. It uses a **numbered folder hierarchy** organized into functional layers. This document explains the complete tree layout, how modules are grouped, and how the numbering scheme works.
 
 ---
 
@@ -69,7 +69,7 @@ No app-specific content may appear in the 01–20 range. No foundational princip
 3. **Sequential numbering** — New folders use the next available number. Gaps are acceptable for historical reasons.
 4. **Lowercase kebab-case** — All folder names: `{NN}-{kebab-case-name}/` (zero-padded, lowercase, hyphens only).
 5. **Every folder needs `01-index.md`** — Every root folder MUST contain a `01-index.md` as its entry point.
-6. **Cross-references must be updated after restructuring** — Grep `spec/` for old paths, update all references, run link scanner.
+6. **Cross-references must be updated after restructuring** — Grep `02-spec/` for old paths, update all references, run link scanner.
 
 ### Validation Checklist
 

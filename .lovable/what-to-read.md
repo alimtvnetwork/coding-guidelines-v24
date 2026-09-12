@@ -34,11 +34,11 @@
 
 ## Before writing code
 
-- `spec/`, why: understand feature specifications
+- `02-spec/`, why: understand feature specifications
 
 ## Before adding a feature
 
-- `spec/`, why: ensure it fits within existing specs
+- `02-spec/`, why: ensure it fits within existing specs
 
 ## Before writing a spec
 

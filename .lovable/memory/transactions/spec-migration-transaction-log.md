@@ -284,7 +284,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - UPDATE: Updated `02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/01-index.md`
 - UPDATE: Updated `02-spec/12-cicd-pipeline-workflows/01-index.md` with consolidated 22-item inventory
 - RESOLVE: Marked OQ-1 as resolved in `02-spec/19-main-worker-service/29-plan.md`
-- RENAME: `spec/_template.md` -> `02-02-spec/02-_template.md`
+- RENAME: `02-spec/_template.md` -> `02-02-spec/02-_template.md`
 - RENAME: `02-spec/folder-structure-root.md` -> `02-spec/03-folder-structure-root.md`
 - RENAME: `02-spec/health-dashboard.md` -> `02-spec/04-health-dashboard.md`
 - RENAME: `02-spec/spec-index.md` -> `02-spec/05-spec-index.md`

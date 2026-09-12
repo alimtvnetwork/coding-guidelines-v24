@@ -10,7 +10,7 @@
 
 ## Purpose
 
-This file is a **bidirectional index** between every numbered source-spec subfolder under `spec/` and the consolidated guideline files under `02-spec/17-consolidated-guidelines/`. It exists so that any AI handed the consolidated folder can answer two questions instantly:
+This file is a **bidirectional index** between every numbered source-spec subfolder under `02-spec/` and the consolidated guideline files under `02-spec/17-consolidated-guidelines/`. It exists so that any AI handed the consolidated folder can answer two questions instantly:
 
 1. **"Which source folder owns this rule?"** — given a topic, find the canonical spec.
 2. **"Where in the consolidated docs is this folder summarized?"** — given a source folder, find every consolidated reference and any blind-spots.

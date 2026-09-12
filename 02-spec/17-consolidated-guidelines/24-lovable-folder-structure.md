@@ -153,7 +153,7 @@ Enforcement: see `18-database-conventions.md` §18 (rule presence) and §19 (wai
 
 | Rule | Pattern |
 |------|---------|
-| Spec changes | Spec-First — edit `spec/` then implement |
+| Spec changes | Spec-First — edit `02-spec/` then implement |
 | Bug fixes | Issue-First — create `03-issues/<issue>.md` then fix |
 | `.lovable/` structure | Single-file convention — `plan.md`, `suggestions.md`, `strictly-avoid.md` each hold their full history. **Never** create per-task folders |
 | Multi-step requests | Break into discrete tasks. Wait for "next" prompt to continue |

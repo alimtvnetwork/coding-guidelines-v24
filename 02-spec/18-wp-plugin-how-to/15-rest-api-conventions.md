@@ -673,7 +673,7 @@ Every plugin maintains an `endpoints.json` file in `data/` that documents all re
 
 1. **Human-readable documentation** — developers can scan all endpoints in one place
 2. **Machine-consumable** — admin UI can render endpoint tables from this data
-3. **Synchronised with `EndpointType`** — every enum case should have a matching entry
+3. **synchronized with `EndpointType`** — every enum case should have a matching entry
 
 ### File location
 
@@ -749,7 +749,7 @@ plugin-slug/
 | Rule | Detail |
 |------|--------|
 | Every `EndpointType` case must have a matching entry | Except internal-only cases like `WpJson` |
-| Update `endpoints.json` when adding/removing endpoints | Keep synchronised with code |
+| Update `endpoints.json` when adding/removing endpoints | Keep synchronized with code |
 | `version` field matches the file's revision | Bump when endpoints change |
 | Categories match the grouping in §14.2 | Consistent across code and documentation |
 
@@ -983,7 +983,7 @@ private function executeOpenapi(WP_REST_Request $request): WP_REST_Response
 | Request body fields | `RequestFieldType` enum; snake_case | §14.8 |
 | Response keys | `ResponseKeyType` enum; PascalCase | §14.9 |
 | Controller org | One handler trait per endpoint; group by domain subfolder | §14.10 |
-| Endpoint registry | `data/endpoints.json` file; synchronised with `EndpointType` | §14.11 |
+| Endpoint registry | `data/endpoints.json` file; synchronized with `EndpointType` | §14.11 |
 | Standard endpoints | Status (required), List+paginate, Action+validate, Two-phase confirm | §14.12 |
 | Dynamic segments | WordPress regex capture groups in `EndpointType` values | §14.13 |
 

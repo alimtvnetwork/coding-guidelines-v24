@@ -237,14 +237,14 @@ enum OrderStatusType: string {
     case Pending = 'pending';
     case Processing = 'processing';
     case Completed = 'completed';
-    case Cancelled = 'cancelled';
+    case canceled = 'canceled';
 
     public function label(): string {
         return match($this) {
             self::Pending => 'Pending Review',
             self::Processing => 'In Processing',
             self::Completed => 'Order Completed',
-            self::Cancelled => 'Order Cancelled',
+            self::canceled => 'Order canceled',
         };
     }
 }
@@ -360,7 +360,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 >    - RCA & Issue Logs: `.lovable/memory/issues/` and `.lovable/cicd-issues/`.
 >    - Execution Plans & Subtasks: `.lovable/plans/pending/`, `.lovable/plans/subtasks/`.
 >    - Coding Guidelines Mirror: `.lovable/coding-guidelines.md`.
-> 3. **Worker Pool & Log Aggregation Architecture:** All local runners and test orchestrators must use a concurrent worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without cancelling sibling workers, and print a consolidated final summary with full stdout/stderr error logs for failed jobs.
+> 3. **Worker Pool & Log Aggregation Architecture:** All local runners and test orchestrators must use a concurrent worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without canceling sibling workers, and print a consolidated final summary with full stdout/stderr error logs for failed jobs.
 > 4. **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script from scratch**, regardless of whether the file already exists on disk.
 > 5. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
 

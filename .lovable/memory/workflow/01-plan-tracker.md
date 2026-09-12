@@ -45,7 +45,7 @@
 | 05 | ~~Wire codegen into CI (`git diff --exit-code`)~~ | — | ✅ Done — CI step "Verify codegen determinism" (.github/workflows/ci.yml) |
 | 06 | Linter for missing `Description`/`Notes`/`Comments` | Medium | Rules 10–12 |
 | 07 | Strengthen BOOL-NEG-001 with replacement hints | Low | |
-| 08 | Cross-link link-checker over `spec/` | Low | |
+| 08 | Cross-link link-checker over `02-spec/` | Low | |
 | 09 | Mobile responsiveness | Low | |
 | 10 | Author 8 real Mermaid diagrams (13-generic-cli + 14-update) | Medium | Placeholders only |
 | 11 | ~~Real-repo run of orchestrator with `--strict --total-timeout --split-by severity`~~ | — | ✅ Done v4.25.0 — `tests/pipeline/check-orchestrator-flags.sh` |

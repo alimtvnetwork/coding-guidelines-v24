@@ -10,7 +10,7 @@
 
 This repository is a **specification-driven documentation and automation system** designed for multi-language software engineering environments (Go, Rust, Python, TypeScript, PHP, C#, SQL). It consists of:
 
-- **Formal Specifications (`spec/`):** Layered hierarchy of 20 core fundamental modules and application modules covering coding guidelines, error management envelopes, database patterns, CLI contracts, design systems, and CI/CD pipelines.
+- **Formal Specifications (`02-spec/`):** Layered hierarchy of 20 core fundamental modules and application modules covering coding guidelines, error management envelopes, database patterns, CLI contracts, design systems, and CI/CD pipelines.
 - **Persistent AI Fix Toolchain (`03-ai-scripts/`):** Ultra-fast, dual-platform Python automation engine providing deterministic file manipulation, path sanitization, naming validation, and local CI verification.
 - **Institutional Memory (`.lovable/memory/`):** Long-term cognitive storage tracking system architecture decisions, non-negotiable constraints, and root cause analyses.
 - **Plan & Micro-Task Engine (`.lovable/plans/`):** Bounded task decomposition center (`pending/`, `subtasks/`, `completed/`).
@@ -22,7 +22,7 @@ This repository is a **specification-driven documentation and automation system*
 
 | Location | Purpose | Key Entrypoint |
 |---|---|---|
-| `spec/` | Formal cross-language specifications & standards | `02-02-spec/01-index.md` |
+| `02-spec/` | Formal cross-language specifications & standards | `02-02-spec/01-index.md` |
 | `03-ai-scripts/` | Reusable high-speed Python automation toolchain | `03-ai-scripts/01-index.md` |
 | `.lovable/memory/` | Institutional knowledge base & CODE RED constraints | `.lovable/memory/01-index.md` |
 | `.lovable/plans/` | Active roadmap, parent task specs & subtasks | `.lovable/plans/01-index.md` |

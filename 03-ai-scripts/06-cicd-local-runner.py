@@ -26,6 +26,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 import datetime
+import hashlib
 from importlib import import_module
 import json
 import os
@@ -34,7 +35,7 @@ import re
 import subprocess
 import sys
 import time
-from typing import Callable
+from typing import Any, Callable
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -89,9 +90,331 @@ def resolve_job_command(job_name: str, command: list[str]) -> list[str]:
     return list(command)
 
 
-TMP_CACHE_DIR = Path(".lovable/temp")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+TMP_CACHE_DIR = REPO_ROOT / ".lovable" / "temp"
 FAILURES_DIR = TMP_CACHE_DIR / "failures"
 RUNNER_ETA_FILE = TMP_CACHE_DIR / "runner-eta.json"
+TEST_INVENTORY_PATH = REPO_ROOT / ".lovable" / "test-inventory.json"
+
+
+def compute_file_hash(filepath: Path) -> str:
+    """Computes a 16-character SHA-256 hash for a file."""
+    if not filepath.is_file():
+        return ""
+    try:
+        data = filepath.read_bytes()
+        return hashlib.sha256(data).hexdigest()[:16]
+    except OSError:
+        return ""
+
+
+def build_or_update_test_inventory(repo_root: Path, force: bool = False) -> dict[str, Any]:
+    """Ensures test inventory exists and is up to date."""
+    if TEST_INVENTORY_PATH.is_file() and not force:
+        try:
+            return json.loads(TEST_INVENTORY_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    inv_script = repo_root / "03-ai-scripts" / "33-test-inventory-generator.py"
+    if inv_script.is_file():
+        cmd = [sys.executable, str(inv_script)]
+        if force:
+            cmd.append("--force-run-all")
+        subprocess.run(cmd, cwd=repo_root, capture_output=True, text=True, encoding="utf-8")
+        if TEST_INVENTORY_PATH.is_file():
+            try:
+                return json.loads(TEST_INVENTORY_PATH.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    return {"tests": {}, "summary": {}}
+
+
+def run_package_tests_worker(
+    pkg: str, pkg_tests: list[dict[str, Any]], repo_root: Path, timeout_sec: int = 120
+) -> tuple[int, int, str, dict[str, dict[str, Any]]]:
+    """Worker function executing a batch of tests within a package using go test -json."""
+    rel_in_go = pkg
+    if rel_in_go.startswith("04-code/golang/"):
+        rel_in_go = "./" + rel_in_go[len("04-code/golang/"):]
+    elif rel_in_go == "04-code/golang":
+        rel_in_go = "."
+    elif rel_in_go.startswith("cli/"):
+        rel_in_go = "./" + rel_in_go[len("cli/"):]
+    elif rel_in_go == "cli":
+        rel_in_go = "."
+    else:
+        rel_in_go = f"./{rel_in_go}"
+
+    cmd = ["go", "test", "-json", rel_in_go, "-count=1"]
+    test_funcs = [t["test_func"] for t in pkg_tests]
+    if len(test_funcs) <= 25:
+        run_regex = "^(" + "|".join(test_funcs) + ")$"
+        cmd.extend(["-run", run_regex])
+
+    cwd = repo_root / "04-code" / "golang"
+    if not cwd.is_dir():
+        cwd = repo_root / "cli"
+    if not cwd.is_dir():
+        cwd = repo_root
+
+    test_env = dict(os.environ)
+    test_env["GOTMPDIR"] = str(TMP_CACHE_DIR)
+    test_env["TMPDIR"] = str(TMP_CACHE_DIR)
+    test_env["TEMP"] = str(TMP_CACHE_DIR)
+    test_env["TMP"] = str(TMP_CACHE_DIR)
+
+    try:
+        proc = subprocess.run(
+            cmd, cwd=cwd, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=timeout_sec,
+            env=test_env
+        )
+    except subprocess.TimeoutExpired:
+        for t in pkg_tests:
+            fail_log = FAILURES_DIR / f"{t['id'].replace('/', '_')}.log"
+            fail_log.write_text(f"Timeout expired after {timeout_sec}s for test {t['id']}", encoding="utf-8")
+        return 0, len(pkg_tests), f"Timeout expired after {timeout_sec}s", {}
+    except Exception as exc:
+        for t in pkg_tests:
+            fail_log = FAILURES_DIR / f"{t['id'].replace('/', '_')}.log"
+            fail_log.write_text(f"Execution error: {exc}", encoding="utf-8")
+        return 0, len(pkg_tests), str(exc), {}
+
+    test_results: dict[str, dict[str, Any]] = {}
+    test_output_map: dict[str, list[str]] = {}
+    passed = 0
+    failed = 0
+    raw_stdout = proc.stdout or ""
+
+    for line in raw_stdout.splitlines():
+        line_str = line.strip()
+        if not line_str:
+            continue
+        try:
+            data = json.loads(line_str)
+            action = data.get("Action")
+            tname = data.get("Test")
+            if tname:
+                tid = f"{pkg}.{tname}"
+                test_output_map.setdefault(tid, []).append(data.get("Output", ""))
+                if action == "pass":
+                    passed += 1
+                    test_results[tid] = {"status": "passed", "elapsed": float(data.get("Elapsed", 0.0))}
+                elif action == "fail":
+                    failed += 1
+                    test_results[tid] = {"status": "failed", "elapsed": float(data.get("Elapsed", 0.0))}
+        except Exception:
+            pass
+
+    for t in pkg_tests:
+        tid = t["id"]
+        if tid not in test_results:
+            if proc.returncode == 0:
+                passed += 1
+                test_results[tid] = {"status": "passed", "elapsed": 0.0}
+            else:
+                failed += 1
+                test_results[tid] = {"status": "failed", "elapsed": 0.0}
+
+    # Write failure logs only for failing tests; passing tests are completely silent
+    failure_snippets: list[str] = []
+    for tid, res_info in test_results.items():
+        if res_info["status"] == "failed":
+            fail_log = FAILURES_DIR / f"{tid.replace('/', '_')}.log"
+            err_content = "".join(test_output_map.get(tid, [])) or f"Test {tid} failed with exit code {proc.returncode}"
+            fail_log.write_text(err_content, encoding="utf-8")
+            failure_snippets.append(f"[{tid}] {err_content.strip()}")
+
+    out_summary = "\n".join(failure_snippets) if failed > 0 else ""
+    return passed, failed, out_summary, test_results
+
+
+def filter_tests_by_package_or_file(tests: dict[str, Any], queries: list[str], repo_root: Path) -> list[dict[str, Any]]:
+    """Filters inventory tests based on code file paths, code file names, or Go package names."""
+    matched_ids: set[str] = set()
+    for q_raw in queries:
+        q = q_raw.strip().replace("\\", "/").rstrip("/")
+        if not q:
+            continue
+        q_base = os.path.basename(q)
+        for tid, t in tests.items():
+            pkg = t.get("package", "").replace("\\", "/")
+            tf = t.get("target_file", "").replace("\\", "/")
+            test_f = t.get("test_file", "").replace("\\", "/")
+
+            if pkg == q or pkg.endswith("/" + q) or pkg.split("/")[-1] == q:
+                matched_ids.add(tid)
+                continue
+            if tf == q or test_f == q or tf.endswith("/" + q) or test_f.endswith("/" + q):
+                matched_ids.add(tid)
+                continue
+            if os.path.basename(tf) == q_base or os.path.basename(test_f) == q_base:
+                matched_ids.add(tid)
+                continue
+    return [tests[tid] for tid in matched_ids if tid in tests]
+
+
+def run_smart_go_tests(
+    name: str = "Go Base Test Suite",
+    timeout_sec: int = 120,
+    force: bool = False,
+    package_filter: list[str] | str | None = None
+) -> JobResult:
+    """Executes Go tests with dual worker queues (slow: 4w x 2 tests; fast: 4w x 4 tests in 100-chunks)."""
+    start_time = time.monotonic()
+    repo_root = REPO_ROOT
+    inventory = build_or_update_test_inventory(repo_root, force=force)
+    tests = inventory.get("tests", {})
+
+    if package_filter:
+        queries = [package_filter] if isinstance(package_filter, str) else list(package_filter)
+        target_tests = filter_tests_by_package_or_file(tests, queries, repo_root)
+        if not target_tests:
+            elapsed = round(time.monotonic() - start_time, 2)
+            out_msg = f"[WARN] No unit tests found matching package/file query: {', '.join(queries)}"
+            return JobResult(
+                name=name, is_success=True, output=out_msg, duration_sec=elapsed, return_code=0
+            )
+        dirty_tests = target_tests
+    else:
+        dirty_tests = [t for t in tests.values() if t.get("needs_run", True) or force]
+
+    if not dirty_tests:
+        elapsed = round(time.monotonic() - start_time, 2)
+        total_tests = len(tests)
+        out_msg = f"[CACHED] All {total_tests} Go unit tests skipped (0 target functions or tests modified)"
+        return JobResult(
+            name=name, is_success=True, output=out_msg, duration_sec=elapsed, return_code=0
+        )
+
+    slow_threshold = float(os.environ.get("GITMAP_SLOW_TEST_THRESHOLD") or os.environ.get("CG_SLOW_TEST_THRESHOLD", "4.0"))
+    slow_tests = [
+        t for t in dirty_tests
+        if t.get("tier") in ("slow", "heavy")
+        or t.get("is_slow", False)
+        or float(t.get("duration_sec", 0.0)) >= slow_threshold
+    ]
+    fast_tests = [t for t in dirty_tests if t not in slow_tests]
+
+    total_dirty = len(dirty_tests)
+    passed_count = 0
+    failed_count = 0
+    error_outputs: list[str] = []
+
+    slow_dur = sum(float(t.get("duration_sec", 4.0)) for t in slow_tests)
+    fast_dur = sum(float(t.get("duration_sec", 0.005)) for t in fast_tests)
+    slow_eta = slow_dur / 8.0   # 4 workers * 2 tests
+    fast_eta = fast_dur / 16.0  # 4 workers * 4 tests
+    total_test_eta = max(1.0, round(slow_eta + fast_eta, 1))
+
+    # Live ETA file update
+    update_runner_eta("running", 0.0, total_test_eta, total_test_eta, total_dirty, 0)
+
+    # Queue 1: Slow Tests Pool (4 workers, 2 tests per batch)
+    if slow_tests:
+        slow_batches = [slow_tests[i:i + 2] for i in range(0, len(slow_tests), 2)]
+        worker_limit = min(4, len(slow_batches))
+        with ThreadPoolExecutor(max_workers=worker_limit) as executor:
+            futures = {}
+            for batch in slow_batches:
+                batch_pkg_map: dict[str, list[dict[str, Any]]] = {}
+                for t in batch:
+                    batch_pkg_map.setdefault(t["package"], []).append(t)
+                for pkg, b_tests in batch_pkg_map.items():
+                    fut = executor.submit(run_package_tests_worker, pkg, b_tests, repo_root, timeout_sec)
+                    futures[fut] = (pkg, b_tests)
+
+            for fut in as_completed(futures):
+                pkg, b_tests = futures[fut]
+                try:
+                    pkg_passed, pkg_failed, pkg_out, test_results = fut.result()
+                    passed_count += pkg_passed
+                    failed_count += pkg_failed
+                    if pkg_failed > 0:
+                        error_outputs.append(f"[{pkg}] {pkg_out}")
+                    for tid, res_info in test_results.items():
+                        if tid in tests:
+                            tests[tid]["duration_sec"] = res_info["elapsed"]
+                            tests[tid]["last_status"] = res_info["status"]
+                            tests[tid]["last_run_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                            tests[tid]["needs_run"] = (res_info["status"] != "passed")
+                            tests[tid]["code_hash"] = compute_file_hash(repo_root / tests[tid].get("target_file", ""))
+                            tests[tid]["test_hash"] = compute_file_hash(repo_root / tests[tid].get("test_file", ""))
+                            if res_info["elapsed"] >= slow_threshold:
+                                tests[tid]["is_slow"] = True
+                                tests[tid]["tier"] = "slow"
+                except Exception as ex:
+                    failed_count += len(b_tests)
+                    error_outputs.append(f"[{pkg}] Slow worker exception: {ex}")
+
+    # Queue 2: Fast Tests Pool (4 workers, 4 tests per batch, chunks of 100 tests)
+    if fast_tests:
+        chunk_size = 100
+        for chunk_start in range(0, len(fast_tests), chunk_size):
+            chunk = fast_tests[chunk_start:chunk_start + chunk_size]
+            sub_batches = [chunk[i:i + 4] for i in range(0, len(chunk), 4)]
+            worker_limit = min(4, len(sub_batches))
+            with ThreadPoolExecutor(max_workers=worker_limit) as executor:
+                futures = {}
+                for sbatch in sub_batches:
+                    batch_pkg_map = {}
+                    for t in sbatch:
+                        batch_pkg_map.setdefault(t["package"], []).append(t)
+                    for pkg, b_tests in batch_pkg_map.items():
+                        fut = executor.submit(run_package_tests_worker, pkg, b_tests, repo_root, timeout_sec)
+                        futures[fut] = (pkg, b_tests)
+
+                for fut in as_completed(futures):
+                    pkg, b_tests = futures[fut]
+                    try:
+                        pkg_passed, pkg_failed, pkg_out, test_results = fut.result()
+                        passed_count += pkg_passed
+                        failed_count += pkg_failed
+                        if pkg_failed > 0:
+                            error_outputs.append(f"[{pkg}] {pkg_out}")
+                        for tid, res_info in test_results.items():
+                            if tid in tests:
+                                tests[tid]["duration_sec"] = res_info["elapsed"]
+                                tests[tid]["last_status"] = res_info["status"]
+                                tests[tid]["last_run_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                                tests[tid]["needs_run"] = (res_info["status"] != "passed")
+                                tests[tid]["code_hash"] = compute_file_hash(repo_root / tests[tid].get("target_file", ""))
+                                tests[tid]["test_hash"] = compute_file_hash(repo_root / tests[tid].get("test_file", ""))
+                                if res_info["elapsed"] >= slow_threshold:
+                                    tests[tid]["is_slow"] = True
+                                    tests[tid]["tier"] = "slow"
+                    except Exception as ex:
+                        failed_count += len(b_tests)
+                        error_outputs.append(f"[{pkg}] Fast worker exception: {ex}")
+
+            # Update live telemetry after each 100-test chunk
+            cur_elapsed = round(time.monotonic() - start_time, 1)
+            rem = max(1.0, round(total_test_eta - cur_elapsed, 1))
+            update_runner_eta("running", cur_elapsed, total_test_eta, rem, total_dirty, passed_count + failed_count)
+
+    elapsed = round(time.monotonic() - start_time, 2)
+    update_runner_eta(
+        "completed" if failed_count == 0 else "failed",
+        elapsed, total_test_eta, 0.0, total_dirty, passed_count + failed_count
+    )
+
+    inventory["summary"]["dirty"] = failed_count
+    inventory["summary"]["cached"] = len(tests) - failed_count
+    try:
+        TEST_INVENTORY_PATH.write_text(json.dumps(inventory, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+    if failed_count > 0:
+        err_text = "\n".join(error_outputs)
+        return JobResult(
+            name=name, is_success=False, output=err_text, duration_sec=elapsed, return_code=1
+        )
+
+    out_msg = f"Passed {passed_count} tests ({len(slow_tests)} slow [4w x 2], {len(fast_tests)} fast [4w x 4 in 100-chunks]) in {elapsed}s ({len(tests) - total_dirty} tests cached)"
+    return JobResult(
+        name=name, is_success=True, output=out_msg, duration_sec=elapsed, return_code=0
+    )
 
 
 def update_runner_eta(status: str, elapsed: float, total_est: float, remaining: float, total_jobs: int, completed: int) -> None:
@@ -114,6 +437,8 @@ def update_runner_eta(status: str, elapsed: float, total_est: float, remaining: 
 
 def execute_ci_job(job_name: str, command: list[str]) -> JobResult:
     """Executes a single validation check asynchronously and records output and duration."""
+    if job_name == "Go Base Test Suite":
+        return run_smart_go_tests(name=job_name)
     TMP_CACHE_DIR.mkdir(parents=True, exist_ok=True)
     FAILURES_DIR.mkdir(parents=True, exist_ok=True)
     start_time = time.perf_counter()
@@ -513,6 +838,12 @@ Examples:
         dest="changed_only",
         help="Run quality gates scoped strictly to files modified in .lovable/temp/recent-file-changes.json."
     )
+    parser.add_argument(
+        "--pkg", "--package", "-p", "--target-file",
+        nargs="*",
+        dest="package_filter",
+        help="Run specific Go test package or file based on relative path or package name."
+    )
     return parser.parse_args()
 
 
@@ -648,6 +979,15 @@ def main():
     cached_code = check_recent_run_cache(CICD_LAST_RUN_CACHE, sig)
     if cached_code is not None:
         sys.exit(cached_code)
+
+    if getattr(args, "package_filter", None):
+        res = run_smart_go_tests(name="Go Package Tests", package_filter=args.package_filter)
+        if res.is_success:
+            print(f"✔ {res.output}")
+            sys.exit(0)
+        else:
+            print(f"❌ {res.output}")
+            sys.exit(1)
 
     target_jobs = None
     if args.changed_only:

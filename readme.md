@@ -251,7 +251,7 @@ Every installer below copies the listed **folders** (recursively, preserving str
 
 | Installer | Folders copied | Top-level files copied |
 |---|---|---|
-| **`install.{sh,ps1}`** (generic / "s-installer") | `spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`install.{sh,ps1}`** (generic / "s-installer") | `02-spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 | **`cli-install.{sh,ps1}`** | `02-spec/11-powershell-integration/`, `02-spec/12-cicd-pipeline-workflows/`, `02-spec/13-generic-cli/`, `02-spec/14-update/`, `02-spec/15-distribution-and-runner/`, `02-spec/16-generic-release/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 | **`consolidated-install.{sh,ps1}`** | `02-spec/01-spec-authoring-guide/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 
@@ -653,7 +653,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 9. **Add tests for success, failure, and edge cases.** A test that only covers the happy path is not a test of behavior.
 10. **When a rule feels harmful, document the exception clearly.** See [When You May Break a Rule](#-when-you-may-break-a-rule) for the format.
 
-<p align="center"><sub>These 10 rules are the surface of the full standard. The <a href="#-code-red-non-negotiable-rules">CODE-RED rules</a>, <a href="#-compact-rule-set-13-hard-rules">13 Hard Rules</a>, and the per-language specs in <a href="spec/"><code>spec/</code></a> formalize and enforce them.</sub></p>
+<p align="center"><sub>These 10 rules are the surface of the full standard. The <a href="#-code-red-non-negotiable-rules">CODE-RED rules</a>, <a href="#-compact-rule-set-13-hard-rules">13 Hard Rules</a>, and the per-language specs in <a href="02-spec/"><code>spec/</code></a> formalize and enforce them.</sub></p>
 
 ---
 
@@ -734,7 +734,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | 5 | **Tiered Function & File Metrics** | Functions: ≤8 best, ≤15 max, ≤25 framework-only · files < 300 · React components < 100. |
 | 6 | **PascalCase Everywhere** | Identifiers, DB columns, JSON keys, types. Acronyms stay full-caps. |
 | 7 | **No Magic Strings** | Constants, enums, or typed action discriminators, never inline strings. |
-| 8 | **Spec-First Workflow** | Spec the change in `spec/` before writing code. |
+| 8 | **Spec-First Workflow** | Spec the change in `02-spec/` before writing code. |
 | 9 | **Cache Invalidation by Contract** | Explicit TTLs, deterministic keys, invalidate on mutation. |
 
 ---
@@ -834,7 +834,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 10. Keep code DRY, reusability is the highest-priority concern.
 11. React/TypeScript components must be as small and reusable as possible. For multi-component features, plan first and produce a Mermaid component diagram.
 12. Use Enums (typed) for any `Type`, `Kind`, `Status`, `Category` field.
-13. If a `spec/**/error-manage/` folder exists, every error handler MUST follow those guidelines exactly. No exceptions.
+13. If a `02-spec/**/error-manage/` folder exists, every error handler MUST follow those guidelines exactly. No exceptions.
 
 **Plus a Data & Schema layer (8 rules)** and an **Error & Logging layer (3 rules)** in the same file. Total surface area: one file, three sections, full coverage for any AI agent's system prompt.
 
@@ -1913,7 +1913,7 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 ### What's new in v5.45.0
 
 - **Spec/19 blind-AI readiness promoted 98 → 99/100 (A+)** — see [`02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md`](02-spec/17-consolidated-guidelines/32-blind-ai-audit-v3.md).
-- **Diagram pipeline at full coverage** — all 23 `spec/**/{diagrams,images}/*.mmd` sources now render cleanly via `node scripts/render-diagrams.mjs` (mermaid-cli 11.4.2). Two pre-existing mermaid-v11 parser issues fixed: `;`-as-separator in `seq-incremental-backup.mmd`, and unquoted `@` token in `ci-pipeline-flow.mmd`.
+- **Diagram pipeline at full coverage** — all 23 `02-spec/**/{diagrams,images}/*.mmd` sources now render cleanly via `node scripts/render-diagrams.mjs` (mermaid-cli 11.4.2). Two pre-existing mermaid-v11 parser issues fixed: `;`-as-separator in `seq-incremental-backup.mmd`, and unquoted `@` token in `ci-pipeline-flow.mmd`.
 - **Sole residual −1** = the intentional v2.0 `Backup.Snapshot.Restore.*` freeze, guarded by `MAIN-900-01 SpecContradiction`.
 
 #### Diagram changelog (mermaid-v11 fixes)

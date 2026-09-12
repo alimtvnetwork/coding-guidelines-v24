@@ -9,7 +9,7 @@
 
 ## Overview
 
-The Docs Viewer (`/docs`) is a React-based specification browser that renders markdown files from the `spec/` folder tree. This document covers the core architecture and shared design decisions for all UI enhancements.
+The Docs Viewer (`/docs`) is a React-based specification browser that renders markdown files from the `02-spec/` folder tree. This document covers the core architecture and shared design decisions for all UI enhancements.
 
 ---
 

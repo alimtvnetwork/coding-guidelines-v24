@@ -55,7 +55,7 @@ if ! grep -q "watchdog: canceled" "$WORK/s1.log"; then
     sed 's/^/    /' "$WORK/s1.log" >&2
     FAIL=1
 else
-    echo "  ✅ watchdog cancelled cleanly on fast completion (rc=$S1_RC)"
+    echo "  ✅ watchdog canceled cleanly on fast completion (rc=$S1_RC)"
 fi
 
 # ──────────────────────────────────────────────────────────────
@@ -75,7 +75,7 @@ bash "$RUN_ALL" \
 S2_RC=$?
 
 # Either the watchdog fired ("fired" + "exceeded") OR the run was
-# fast enough that it cancelled cleanly. Both are valid signals
+# fast enough that it canceled cleanly. Both are valid signals
 # of a working watchdog, so we accept either as long as the
 # debug-timeout line is present (proves --debug-timeout works).
 if grep -q "watchdog: fired" "$WORK/s2.log"; then
@@ -85,7 +85,7 @@ if grep -q "watchdog: fired" "$WORK/s2.log"; then
         FAIL=1
     fi
 elif grep -q "watchdog: canceled" "$WORK/s2.log"; then
-    echo "  ✅ run completed in <1s on this host — watchdog cancelled (rc=$S2_RC)"
+    echo "  ✅ run completed in <1s on this host — watchdog canceled (rc=$S2_RC)"
 else
     echo "::error::Scenario 2: --debug-timeout produced no watchdog status" >&2
     sed 's/^/    /' "$WORK/s2.log" >&2

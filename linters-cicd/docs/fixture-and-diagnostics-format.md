@@ -111,7 +111,7 @@ the findings list. See §6.3.
 The orchestrator (`run-all.sh`) and the test runner deliberately
 walk only the paths you pass via `--path`. Your fixtures are never
 scanned by the production rule pack because the registry points at
-`spec/`, `src/`, etc. — not at `linters-cicd/checks/*/fixtures/`.
+`02-spec/`, `src/`, etc. — not at `linters-cicd/checks/*/fixtures/`.
 
 If you ever need to exclude fixtures explicitly (e.g. when running
 `run-all.sh` against the whole repo), use:

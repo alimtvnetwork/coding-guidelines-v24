@@ -73,7 +73,7 @@ The script scans these file globs and replaces exact matches of `--from` with `-
 - `public/health-score.json`
 - `src/data/specTree.json`
 - `docs/**/*.md`
-- `spec/**/*.md`
+- `02-spec/**/*.md`
 - `scripts/**/*.{mjs,js,sh,ps1}`
 - `linter-scripts/**/*.{py,sh,ps1}`
 - `*.ps1`, `*.sh` at repo root (install scripts)

@@ -77,6 +77,7 @@ func GetCurrentSchemaVersion(db *sql.DB) (int, *appfault.AppError) {
 	if isNoRows {
 		return 0, nil
 	}
+
 	if err != nil {
 		return 0, appfault.Wrap(errtype.Database, err, "failed to query schema version")
 	}

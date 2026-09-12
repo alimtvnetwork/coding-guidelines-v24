@@ -353,11 +353,11 @@ These exceptions are permanent and tracked in `02-spec/01-spec-authoring-guide/1
 
 | # | Exception | Scope |
 |---|-----------|-------|
-| 1 | Non-contiguous module numbers (gaps allowed, never backfill) | `spec/` |
+| 1 | Non-contiguous module numbers (gaps allowed, never backfill) | `02-spec/` |
 | 2 | `readme.md` without numeric prefix | Project-wide |
-| 3 | Non-markdown data files (`.json`) | `spec/` modules |
+| 3 | Non-markdown data files (`.json`) | `02-spec/` modules |
 | 4 | Legacy `C-XXX` suggestion file names | `suggestions/completed/` |
-| 5 | Dual-purpose prefix `02` | `spec/` root |
+| 5 | Dual-purpose prefix `02` | `02-spec/` root |
 | 6 | Memory folders without numeric prefixes | `.lovable/memory/` |
 | 7 | CLI module without `02-frontend/` folder | Headless CLIs |
 | 8 | Extra CLI subfolders beyond core 3 | Complex CLIs |
@@ -400,8 +400,8 @@ This section is the **single canonical reference** for how versions are bumped a
 | # | Script | Reads | Writes | When to Run |
 |---|--------|-------|--------|-------------|
 | 1 | `scripts/sync-version.mjs` | `package.json`, git HEAD | `version.json` (top-level + per-folder stats) | After **any** version bump or spec change |
-| 2 | `scripts/sync-spec-tree.mjs` | `spec/**/*.md` | `src/data/specTree.json` | After **any** spec file add/rename/delete |
-| 3 | `linter-scripts/generate-dashboard-data.cjs` | `version.json`, `spec/**/*.md` | `02-spec/dashboard-data.json` | After #1 and #2 (CI runs this automatically) |
+| 2 | `scripts/sync-spec-tree.mjs` | `02-spec/**/*.md` | `src/data/specTree.json` | After **any** spec file add/rename/delete |
+| 3 | `linter-scripts/generate-dashboard-data.cjs` | `version.json`, `02-spec/**/*.md` | `02-spec/dashboard-data.json` | After #1 and #2 (CI runs this automatically) |
 
 ### X.2 Mandatory Execution Order
 
@@ -425,7 +425,7 @@ This section is the **single canonical reference** for how versions are bumped a
 | `version` | `package.json` | Auto |
 | `name`, `description` | `package.json` | Manual (in `package.json`) |
 | `git.commit`, `git.branch`, `git.updated` | `git rev-parse` | Auto |
-| `stats.totalFiles`, `totalLines`, `totalFolders`, `totalBytes` | `spec/**` walk | Auto |
+| `stats.totalFiles`, `totalLines`, `totalFolders`, `totalBytes` | `02-spec/**` walk | Auto |
 | `folders[].fileCount`, `lineCount`, `byteCount` | per-folder walk | Auto |
 | `folders[].aiConfidence`, `ambiguity` | spec frontmatter | Auto (read from `## Scoring` table) |
 

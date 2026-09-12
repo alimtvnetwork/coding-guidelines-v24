@@ -7,7 +7,7 @@
 
 ## Highlights
 
-This was a long, single-day session that produced multiple linked deliverables across `spec/` and `linters-cicd/`. The work centered on three themes: **CI/CD performance & UX flags**, **boolean column naming overhaul**, and **mandatory descriptive columns**.
+This was a long, single-day session that produced multiple linked deliverables across `02-spec/` and `linters-cicd/`. The work centered on three themes: **CI/CD performance & UX flags**, **boolean column naming overhaul**, and **mandatory descriptive columns**.
 
 ### linters-cicd evolution
 

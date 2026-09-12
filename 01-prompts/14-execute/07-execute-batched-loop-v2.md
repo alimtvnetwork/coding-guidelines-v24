@@ -55,14 +55,14 @@ Before executing the tasks below, you must check if this prompt is already insta
 >
 > When generating plans, subtasks (`.lovable/plans/subtasks/`), memory issue logs (`.lovable/memory/issues/`), specs, code comments, or citations:
 >
-> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/01-index.md`, `[SSH Commands](02-spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
+> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/01-index.md`, `[SSH Commands]`02-spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
 > 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 >
 > **Examples:**
 >
 > - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...) — Why: Defines behavior.`
 > - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
-> - ✅ **GOOD:** `[SSH Commands](02-spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
+> - ✅ **GOOD:** `[SSH Commands]`02-spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
 > - ✅ **GOOD:** `Target File: cmd/login.go`
 
 - If a spec file, folder, or task is missing or ambiguous, do NOT guess or invent a rule.
@@ -115,8 +115,8 @@ When a chunk of tasks is completed by the agents, do the following before starti
 1. Use `mv` to move the completed task files from `.lovable/plans/pending/` to `.lovable/plans/completed/`.
 2. Open the moved files and change `Status: pending` to `Status: completed`.
 3. Update `.lovable/plans/01-index.md` to reflect the new file locations.
-4. Artifact sanitizer: Audit staged files. Purge unapproved artifact zip archives, temporary scratch files, or test outputs before committing.
-5. Lovable git history guard: Run local tests (no live API calls). Commit code with a clear descriptive message. Never rewrite published git history (no force push, no rebasing, no squash). Push to git cleanly without failure.
+4. Artifact sanitizer: Audit staged files. Purge unapproved artifact zip archives, temporary scratch files, or test outputs before committing. All runner temp artifacts and failure logs belong in `.lovable/temp/failures/`; passing tests produce zero filesystem artifacts and remain silent.
+5. Smart Test Runner & Lovable git history guard: If testing is required, utilize the centralized test inventory (`.lovable/test-inventory.json`) with dual-queue workers (slow: 4w x 2 tests; fast: 4w x 4 tests in 100-test chunks). When tests run, AI agents read `.lovable/temp/runner-eta.json` and sleep for the estimated duration rather than burning tokens in active loops. Commit code with a clear descriptive message. Never rewrite published git history (no force push, no rebasing, no squash). Push to git cleanly without failure.
 
 ## Phase 5: Output Window Stats (Mandatory Every Loop)
 
@@ -138,7 +138,7 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 ## Compliance Checklist (must follow non negociable)
 
-- [x] Coding Guidelines enforced (02-spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines.md).
+- [x] Coding Guidelines enforced `02-spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines.md).
 - [x] Boolean conventions used (is/has prefixes, no negatives).
 - [x] No garbage variable names used.
 - [x] No magic strings or numbers.
@@ -179,7 +179,7 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
 
 1. **Scan & Discover:** Use the `invoke_subagent` tool to spawn exactly 2 planning subagents. Their role is to deeply scan the codebase for target changes.
 2. **Master Spec Generation:** Save the master architectural plan into `.lovable/plans/pending/xx-<slug>.md`. Write down 3–5 custom rules or constraints unique to this task inside the spec file.
-3. **Lean Subtask Decomposition:** Break down the master plan into granular, single-responsibility subtask files in `.lovable/plans/subtasks/xx-<slug>/01-<subtask>.md`. 
+3. **Lean Subtask Decomposition:** Break down the master plan into granular, single-responsibility subtask files in `.lovable/plans/subtasks/xx-<slug>/01-<subtask>.md`.
    *Subtasks MUST follow this lean template to prevent bloat:*
    > `# Subtask: [Name]`
    > `**Target Files:** [Relative paths]`
@@ -235,14 +235,14 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
 >
 > When generating plans, subtasks (`.lovable/plans/subtasks/`), memory issue logs (`.lovable/memory/issues/`), specs, code comments, or citations:
 >
-> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/01-index.md`, `[SSH Commands](02-spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
+> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/01-index.md`, `[SSH Commands]`02-spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
 > 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 >
 > **Examples:**
 >
 > - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...) — Why: Defines behavior.`
 > - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
-> - ✅ **GOOD:** `[SSH Commands](02-spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
+> - ✅ **GOOD:** `[SSH Commands]`02-spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
 > - ✅ **GOOD:** `Target File: cmd/login.go`
 
 - If a spec file, folder, or task is missing or ambiguous, do NOT guess or invent a rule.
@@ -318,7 +318,7 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 ## Compliance Checklist (must follow non negociable)
 
-- [x] Coding Guidelines enforced (02-spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines.md).
+- [x] Coding Guidelines enforced `02-spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines.md).
 - [x] Boolean conventions used (is/has prefixes, no negatives).
 - [x] No garbage variable names used.
 - [x] No magic strings or numbers.
@@ -347,5 +347,4 @@ Past execution turns were sloppy and failed to pin READMEs or bump versions. To 
 
 ## 2. MUST FOLLOW NON-NEGOTIABLE
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests prior to release (with test execution disabled during mid-loop refactoring via --no-tests unless explicitly commanded by the repository owner), group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
-
+Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.lovable/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.

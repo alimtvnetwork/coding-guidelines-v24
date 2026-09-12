@@ -201,7 +201,7 @@ room). Every entry below specifies the **exact teaching point**, the
 - **Title:** "Spec → Issue → Code"
 - **Teaching point:** No code change without a spec entry or issue. Show the
   flow as a 3-step diagram.
-- **Visual:** Horizontal arrow diagram: `spec/<area>/NN-name.md` → `03-issues/`
+- **Visual:** Horizontal arrow diagram: `02-spec/<area>/NN-name.md` → `03-issues/`
   → PR. Each box pulses sequentially.
 
 ---

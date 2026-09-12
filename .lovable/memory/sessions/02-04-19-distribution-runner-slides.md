@@ -14,7 +14,7 @@ Investigation revealed **most of this was already built**:
 - ✅ Root `install.sh` / `install.ps1` already exist (full-featured, with middle-out version probe, prompt/force/dry-run modes, listing modes).
 - ✅ Root `run.ps1` / `run.sh` already exist (forwarded to `linter-scripts/run.ps1`).
 - ✅ `slides-app/` standalone Vite app already exists with build + package + preview scripts.
-- ✅ `spec-slides/` (separate from `spec/`) already documents the slides architecture.
+- ✅ `spec-slides/` (separate from `02-spec/`) already documents the slides architecture.
 - ✅ `.github/workflows/release.yml` **already** packages `linters-cicd` as `coding-guidelines-linters-vX.Y.Z.zip`, packages `slides-app/dist.zip` as `coding-guidelines-slides-vX.Y.Z.zip`, and publishes `install.sh`/`install.ps1`/`linters-install.sh`/`install-config.json`/`checksums.txt`.
 
 ### Real gaps (now fixed)

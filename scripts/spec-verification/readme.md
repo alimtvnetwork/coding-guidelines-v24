@@ -1,7 +1,7 @@
 # Spec Verification Injector
 
 Batch generator that inserts (or refreshes) a topic-appropriate
-`## Verification` section into every prose markdown file under `spec/`.
+`## Verification` section into every prose markdown file under `02-spec/`.
 
 ## Why
 
@@ -14,7 +14,7 @@ section from a **folder profile**.
 
 | File | Purpose |
 |------|---------|
-| `inject-verification-sections.mjs` | The injector. Walks `spec/`, replaces or appends `## Verification`. |
+| `inject-verification-sections.mjs` | The injector. Walks `02-spec/`, replaces or appends `## Verification`. |
 | `profiles.mjs` | One profile per top-level spec folder (tag, Given/When/Then templates, command). |
 
 ## Usage

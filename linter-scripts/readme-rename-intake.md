@@ -62,7 +62,7 @@ table, CSV export). Use it when wiring a dashboard, writing a
 |---|---|---|
 | `matched` | Path is under `--root`, has an allow-listed extension, and the post-state file exists on disk. Counted in the linted set. | `under --root, extension allowed, file present on disk` |
 | `ignored-extension` | Path is under `--root` but its suffix isn't in the allowlist (e.g. a `.txt` change while linting `.md`). | `extension '<.ext or (none)>' not in allowlist <sorted list>` |
-| `ignored-out-of-root` | Path resolves outside `--root` (e.g. a top-level `readme.md` change while linting `spec/`). | `path is outside --root <resolved-abs-path>` |
+| `ignored-out-of-root` | Path resolves outside `--root` (e.g. a top-level `readme.md` change while linting `02-spec/`). | `path is outside --root <resolved-abs-path>` |
 | `ignored-missing` | Post-state path no longer exists on disk — typically reverted in a later commit of the same push, or filtered out by `.gitignore` on checkout. | `post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)` |
 | `ignored-deleted` | A `D`-status row, **or** the OLD side of a rename/copy: there is no post-state file to scan. `reason` is per-source — see [next sub-section](#ignored-deleted-reason-format). | (per-source — see below) |
 
@@ -109,8 +109,8 @@ A	outside/x.md
 A	spec/missing.md
 ```
 
-Disk state: `spec/keep.md` exists, the rename's `spec/new.md` and
-the new `spec/missing.md` do **not** (simulating a revert-on-push),
+Disk state: `02-spec/keep.md` exists, the rename's `02-spec/new.md` and
+the new `02-spec/missing.md` do **not** (simulating a revert-on-push),
 and the linter is invoked with `--root spec` from a working
 directory whose absolute path is `/repo` (the linter resolves
 `--root` to an absolute path before printing it in the
@@ -122,19 +122,19 @@ course differ).
 ```json
 [
   {
-    "path": "spec/keep.md",
+    "path": "02-spec/keep.md",
     "status": "matched",
     "reason": "under --root, extension allowed, file present on disk",
     "similarity": null
   },
   {
-    "path": "spec/new.md",
+    "path": "02-spec/new.md",
     "status": "ignored-missing",
     "reason": "post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",
-    "similarity": {"kind": "R", "score": 90, "old_path": "spec/old.md"}
+    "similarity": {"kind": "R", "score": 90, "old_path": "02-spec/old.md"}
   },
   {
-    "path": "spec/notes.txt",
+    "path": "02-spec/notes.txt",
     "status": "ignored-extension",
     "reason": "extension '.txt' not in allowlist ['.md']",
     "similarity": null
@@ -146,13 +146,13 @@ course differ).
     "similarity": null
   },
   {
-    "path": "spec/missing.md",
+    "path": "02-spec/missing.md",
     "status": "ignored-missing",
     "reason": "post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",
     "similarity": null
   },
   {
-    "path": "spec/gone.md",
+    "path": "02-spec/gone.md",
     "status": "ignored-deleted",
     "reason": "--changed-files payload row shaped `D\\tpath`: explicit delete marker, no post-state to lint",
     "similarity": null
@@ -326,10 +326,10 @@ STDERR audit is:
     "similarity": {"kind": "R", "score": 92, "old_path": "docs/old-name.md"}
   },
   {
-    "path": "spec/copy.md",
+    "path": "02-spec/copy.md",
     "status": "matched",
     "reason": "in --root and extension allowed",
-    "similarity": {"kind": "C", "score": 75, "old_path": "spec/template.md"}
+    "similarity": {"kind": "C", "score": 75, "old_path": "02-spec/template.md"}
   },
   {
     "path": "readme.md",
@@ -392,22 +392,22 @@ so test code can `json.load()` it without copy-paste drift.
     "similarity": {"kind": "R", "score": 92, "old_path": "docs/old-name.md"}
   },
   {
-    "path": "spec/copy.md",
+    "path": "02-spec/copy.md",
     "status": "matched",
     "reason": "under --root, extension allowed, file present on disk",
-    "similarity": {"kind": "C", "score": 75, "old_path": "spec/template.md"}
+    "similarity": {"kind": "C", "score": 75, "old_path": "02-spec/template.md"}
   },
   {
-    "path": "spec/renamed-no-score.md",
+    "path": "02-spec/renamed-no-score.md",
     "status": "matched",
     "reason": "under --root, extension allowed, file present on disk",
-    "similarity": {"kind": "R", "score": null, "old_path": "spec/old.md"}
+    "similarity": {"kind": "R", "score": null, "old_path": "02-spec/old.md"}
   },
   {
-    "path": "spec/copy-no-score.md",
+    "path": "02-spec/copy-no-score.md",
     "status": "matched",
     "reason": "under --root, extension allowed, file present on disk",
-    "similarity": {"kind": "C", "score": null, "old_path": "spec/src.md"}
+    "similarity": {"kind": "C", "score": null, "old_path": "02-spec/src.md"}
   },
   {
     "path": "readme.md",
@@ -416,19 +416,19 @@ so test code can `json.load()` it without copy-paste drift.
     "similarity": null
   },
   {
-    "path": "spec/notes.txt",
+    "path": "02-spec/notes.txt",
     "status": "ignored-extension",
     "reason": "extension '.txt' not in allowlist ['.md']",
-    "similarity": {"kind": "R", "score": 88, "old_path": "spec/legacy.txt"}
+    "similarity": {"kind": "R", "score": 88, "old_path": "02-spec/legacy.txt"}
   },
   {
-    "path": "spec/draft.txt",
+    "path": "02-spec/draft.txt",
     "status": "ignored-extension",
     "reason": "extension '.txt' not in allowlist ['.md']",
-    "similarity": {"kind": "R", "score": null, "old_path": "spec/sketch.txt"}
+    "similarity": {"kind": "R", "score": null, "old_path": "02-spec/sketch.txt"}
   },
   {
-    "path": "spec/scratch.txt",
+    "path": "02-spec/scratch.txt",
     "status": "ignored-extension",
     "reason": "extension '.txt' not in allowlist ['.md']",
     "similarity": null
@@ -437,13 +437,13 @@ so test code can `json.load()` it without copy-paste drift.
     "path": "tools/moved-here.md",
     "status": "ignored-out-of-root",
     "reason": "path is outside --root spec",
-    "similarity": {"kind": "R", "score": 95, "old_path": "spec/moved-from-here.md"}
+    "similarity": {"kind": "R", "score": 95, "old_path": "02-spec/moved-from-here.md"}
   },
   {
     "path": "tools/cloned-here.md",
     "status": "ignored-out-of-root",
     "reason": "path is outside --root spec",
-    "similarity": {"kind": "C", "score": null, "old_path": "spec/cloned-from-here.md"}
+    "similarity": {"kind": "C", "score": null, "old_path": "02-spec/cloned-from-here.md"}
   },
   {
     "path": "docs/outside.md",
@@ -452,19 +452,19 @@ so test code can `json.load()` it without copy-paste drift.
     "similarity": null
   },
   {
-    "path": "spec/missing-rename.md",
+    "path": "02-spec/missing-rename.md",
     "status": "ignored-missing",
     "reason": "post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",
-    "similarity": {"kind": "R", "score": 81, "old_path": "spec/old-missing-name.md"}
+    "similarity": {"kind": "R", "score": 81, "old_path": "02-spec/old-missing-name.md"}
   },
   {
-    "path": "spec/missing.md",
+    "path": "02-spec/missing.md",
     "status": "ignored-missing",
     "reason": "post-state path is not on disk (reverted later in the push, or filtered by .gitignore on checkout)",
     "similarity": null
   },
   {
-    "path": "spec/deleted.md",
+    "path": "02-spec/deleted.md",
     "status": "ignored-deleted",
     "reason": "git diff reported D (deleted)",
     "similarity": null
@@ -488,7 +488,7 @@ recorded. Treat `score: 0` as "git observed and rated 0% similar"
 - **Unknown statuses** are never emitted today — the closed vocabulary
   is enforced at the renderer. New statuses, if added, will land in a
   major version bump and be announced in `changelog.md`.
-- **`--dedupe-changed-files`** runs before serialisation; the JSON
+- **`--dedupe-changed-files`** runs before serialization; the JSON
   array contains at most one record per `path` when that flag is set,
   with first-seen-wins semantics applied to the `similarity` record
   too.

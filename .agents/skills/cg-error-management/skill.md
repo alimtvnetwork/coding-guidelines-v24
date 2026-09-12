@@ -18,7 +18,6 @@ This skill provides autonomous audit, refactoring, and validation of repository-
 6. **No Releases**: Strictly forbidden from bumping versions or cutting releases at the end of this task.
 7. **Atomic Change Tracking**: Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
 
-
 ## Routine Execution Policy
 
 - **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns or micro-batch loops. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.

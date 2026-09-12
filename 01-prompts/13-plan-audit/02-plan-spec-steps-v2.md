@@ -617,7 +617,7 @@ similarity after the title and header lines are removed. Also sweep that every
 cited path resolves:
 
 ```bash
-rg -o --no-filename 'spec/[A-Za-z0-9/._-]+' .lovable/plans/subtasks/xx-plan-slug/*.md   | sed 's/[.,)`]*$//' | sort -u | while read p; do test -e "$p" || echo "MISSING $p"; done
+rg -o --no-filename `02-spec/[A-Za-z0-9/._-]+' .lovable/plans/subtasks/xx-plan-slug/*.md   | sed 's/[.,)`]*$//' | sort -u | while read p; do test -e "$p" || echo "MISSING $p"; done
 ```
 
 ---

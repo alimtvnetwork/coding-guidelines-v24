@@ -14,7 +14,7 @@ node scripts/spec-audit/run-audit.mjs
 
 ## What it does
 
-1. Walks every `spec/NN-*/` folder.
+1. Walks every `02-spec/NN-*/` folder.
 2. Sends each folder's markdown content to the Lovable AI Gateway with a strict scoring rubric.
 3. Scores 5 axes (completeness, specificity, testability, consistency, ai_implementability) 0–100.
 4. Excludes the 4 stub folders per `mem://constraints/skip-stub-spec-folders`.

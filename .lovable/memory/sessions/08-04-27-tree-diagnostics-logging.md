@@ -11,7 +11,7 @@
 
 ## Important clarification given to user
 
-The Lovable **IDE file tree** (the sidebar inside the Lovable editor that lists `src/`, `spec/`, etc.) is **not part of this project's code** — it is a Lovable platform UI feature that we cannot instrument. The earlier `spec/` visibility incident was about that IDE tree.
+The Lovable **IDE file tree** (the sidebar inside the Lovable editor that lists `src/`, `02-spec/`, etc.) is **not part of this project's code** — it is a Lovable platform UI feature that we cannot instrument. The earlier `02-spec/` visibility incident was about that IDE tree.
 
 What we **can** instrument is the **in-app docs sidebar** rendered by `src/pages/DocsViewer.tsx` (the spec navigation tree the deployed app shows). That is what this session adds logging to.
 
@@ -76,7 +76,7 @@ What we **can** instrument is the **in-app docs sidebar** rendered by `src/pages
 
 ## Pickup point for next AI
 
-All shipped + verified. If the user reports `spec/` still missing from the **in-app** sidebar, ask them to:
+All shipped + verified. If the user reports `02-spec/` still missing from the **in-app** sidebar, ask them to:
 1. Enable diagnostics: `localStorage.setItem("lovable.tree-diagnostics.enabled","1")` and reload.
 2. Open the Docs Viewer.
 3. Click "Copy logs" in the floating panel and paste back.

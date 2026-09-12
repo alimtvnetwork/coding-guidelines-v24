@@ -331,7 +331,7 @@
 
 ## v5.39.0 — 2026-05-07 (Patch D (audit-10) closure: RAG mutation-score TBD resolved at v2.0.0; ≥80% gate now binding for future executable RAG validator (deferred-by-design); audit-11 disposition updated.)
 
-**Scope:** Version bump (`5.38.0` → `5.39.0`). Spec-only — no spec/19 markdown touched (cross-corpus closure of audit-10 Patch D in `02-spec/06-seedable-config-architecture/02-features/04-rag-test-coverage-matrix.md`); audit-11 Patch D row updated to reflect re-closure at v5.39.0. No mutation tooling added inside `spec/` per `mem://constraints/spec19-no-implementation`.
+**Scope:** Version bump (`5.38.0` → `5.39.0`). Spec-only — no spec/19 markdown touched (cross-corpus closure of audit-10 Patch D in `02-spec/06-seedable-config-architecture/02-features/04-rag-test-coverage-matrix.md`); audit-11 Patch D row updated to reflect re-closure at v5.39.0. No mutation tooling added inside `02-spec/` per `mem://constraints/spec19-no-implementation`.
 **Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `src/data/specTree.json`, `readme.md`, `docs/architecture.md`, `docs/principles.md`, `docs/author.md`
 
 ---
@@ -494,7 +494,7 @@
 
 - **`24-snapshot-storage-and-restore.md` → v1.2.0**
   - §14 retitled *Open Questions — formalised dispositions* (was *logged, non-blocking*).
-  - §14.1 OQ-23-1 (snapshot dedup pyramid): rationale matrix (restore complexity, failure modes, retention sweep, operator mental model, disk savings, CODE RED footprint, forward-secrecy interaction), 3 v2.0 reopen triggers (retention >180d AND p95 size >5GB; >90% no-change days + paid feature ask; per-byte tier crossover), 4 forbidden v1.0 patterns (no non-flat storage; no `BasedOnSnapshotCatalogId` FK; no skip-empty-day optimisation; no premature error-code allocation).
+  - §14.1 OQ-23-1 (snapshot dedup pyramid): rationale matrix (restore complexity, failure modes, retention sweep, operator mental model, disk savings, CODE RED footprint, forward-secrecy interaction), 3 v2.0 reopen triggers (retention >180d AND p95 size >5GB; >90% no-change days + paid feature ask; per-byte tier crossover), 4 forbidden v1.0 patterns (no non-flat storage; no `BasedOnSnapshotCatalogId` FK; no skip-empty-day optimization; no premature error-code allocation).
   - §14.2 OQ-23-2 (partial-table / per-tenant restore): rationale matrix (ownership, cross-row consistency, re-seal, watermark realignment, mental model, forward-secrecy), 2 reopen triggers (schema-level tenant isolation contract + per-tenant PITR regulatory regime), 3 forbidden patterns (no `TenantId` filter on BE-3; no `RestoreScope` column "leaving room"; no manual SQL bypass of BE-6 audit path), CODE RED reasoning against "operators sometimes ask for it".
   - §14.3 OQ-23-3 resolution preserved.
   - §14.4 Future-work catalogue: 4 ordered v2.0 prerequisites including reservation of `25-threat-model.md` (shared with `13-jwt-delivery-contract.md` §11.3) and the `WORKER-940-05+` / `WORKER-940-10+` error-code ranges left explicitly unallocated.
@@ -878,7 +878,7 @@ Linter verification (4/4 green): `check-mws-error-codes` (R1-R4 — 52 codes ver
 - `06-auth-and-2fa.md` → **v1.1.0**: §3 bcrypt-cost env pinning (F-A-03), pepper MUST in prod (F-A-04), breach-check MUST when enabled; §4 backup-codes-at-zero policy + `X-Auth-Action: RegenerateBackupCodes` (F-A-05/F-M-06); §5 `PasswordResetRequest` always-202 anti-enumeration (F-M-07); §6 cookie-scope vs JWT-scope paragraph (F-B-12).
 - `07-core-api-endpoints.md` → **v1.1.0**: §3.1 11-row Nullable validation table (F-M-01/F-A-01); §6 rate limits promoted to MANDATORY defaults (F-A-02); §2.5 `/Workers/Register` payload (F-B-02); `/Workers/.../Update` request body (F-B-06).
 - `08-role-based-dashboards.md` → **v1.1.0**: §5 stack-agnostic 3-step access-guard contract above the Laravel example + Express equivalent (F-A-34).
-- `09-error-contract.md` → **v1.1.0**: §2 envelope +`EnvelopeVersion`/`OperationId`/`SubCode`/`FieldErrors` (F-A-12/15/16/28); §3.4 `X-Auth-Action: Reauthenticate` header (F-A-26); §5 `lastResponse` initialised via `makeNullResponse(call)` (F-A-35); §8 ErrorCode→HTTP-status mapping (F-A-31); §9 Worker→Main envelope + 3 new ErrorCodes `WorkerRegisterRejected/WorkerHeartbeatRejected/WorkerPushAckUnknownJid` (F-A-32); §10 audit-closure log.
+- `09-error-contract.md` → **v1.1.0**: §2 envelope +`EnvelopeVersion`/`OperationId`/`SubCode`/`FieldErrors` (F-A-12/15/16/28); §3.4 `X-Auth-Action: Reauthenticate` header (F-A-26); §5 `lastResponse` initialized via `makeNullResponse(call)` (F-A-35); §8 ErrorCode→HTTP-status mapping (F-A-31); §9 Worker→Main envelope + 3 new ErrorCodes `WorkerRegisterRejected/WorkerHeartbeatRejected/WorkerPushAckUnknownJid` (F-A-32); §10 audit-closure log.
 - `10-self-update-pointer.md` → **v1.2.0**: bounded sunset (3-way expiry: spec/19 v2.0.0 OR prod-green-14d OR 2026-12-31); §9 deletion checklist (F-A-09); inline tunables replaced with §15 citations.
 - `01-index.md`, `02-architecture.md` → **v1.1.0**: bumped for image-import + tunable citations.
 

@@ -37,7 +37,7 @@ flowchart TD
 
     BaseInterface --> NumberInterface
 
-    BaseInterface --> ProcessState["pkg/enum/processstatetype\nPending, Running, Completed, Failed, Cancelled"]
+    BaseInterface --> ProcessState["pkg/enum/processstatetype\nPending, Running, Completed, Failed, canceled"]
     NumberInterface --> ErrorVariation["pkg/errtype.Variation\nValidation, NotFound, Precondition, IO, Timeout"]
     NumberInterface --> LogLevel["pkg/enum/logleveltype\nDebug, Info, Warn, Error, Fatal"]
 

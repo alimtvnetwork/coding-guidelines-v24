@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "51762a8d2ec1c5e654aef0f965c99da4acda49d6",
+  "LastCommitSha": "8218f5a7e09e151cf16f5e3897e5874d327b8833",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -61,15 +61,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "51762a8d2ec1c5e654aef0f965c99da4acda49d6",
-    "shortSha": "51762a8",
+    "sha": "8218f5a7e09e151cf16f5e3897e5874d327b8833",
+    "shortSha": "8218f5a",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 699,
     "totalLines": 149231,
     "totalFolders": 23,
-    "totalBytes": 5323856,
+    "totalBytes": 5323964,
     "rootFiles": 6
   },
   "folders": [
@@ -84,7 +84,7 @@
       "ambiguity": "None",
       "fileCount": 17,
       "lineCount": 3408,
-      "byteCount": 133271
+      "byteCount": 133310
     },
     {
       "path": "02-coding-guidelines",
@@ -97,7 +97,7 @@
       "ambiguity": null,
       "fileCount": 216,
       "lineCount": 34384,
-      "byteCount": 1082327
+      "byteCount": 1082339
     },
     {
       "path": "03-error-manage",
@@ -123,7 +123,7 @@
       "ambiguity": "None",
       "fileCount": 9,
       "lineCount": 2898,
-      "byteCount": 111235
+      "byteCount": 111238
     },
     {
       "path": "05-split-db-architecture",
@@ -136,7 +136,7 @@
       "ambiguity": "Low",
       "fileCount": 16,
       "lineCount": 4218,
-      "byteCount": 175496
+      "byteCount": 175491
     },
     {
       "path": "06-seedable-config-architecture",
@@ -149,7 +149,7 @@
       "ambiguity": "Low",
       "fileCount": 19,
       "lineCount": 4817,
-      "byteCount": 155724
+      "byteCount": 155733
     },
     {
       "path": "07-design-system",
@@ -175,7 +175,7 @@
       "ambiguity": "10%",
       "fileCount": 14,
       "lineCount": 2047,
-      "byteCount": 65908
+      "byteCount": 65911
     },
     {
       "path": "09-code-block-system",
@@ -227,7 +227,7 @@
       "ambiguity": "None",
       "fileCount": 46,
       "lineCount": 8561,
-      "byteCount": 275786
+      "byteCount": 275773
     },
     {
       "path": "13-generic-cli",
@@ -253,7 +253,7 @@
       "ambiguity": "None",
       "fileCount": 43,
       "lineCount": 8932,
-      "byteCount": 291800
+      "byteCount": 291801
     },
     {
       "path": "15-distribution-and-runner",
@@ -266,7 +266,7 @@
       "ambiguity": null,
       "fileCount": 7,
       "lineCount": 907,
-      "byteCount": 36268
+      "byteCount": 36273
     },
     {
       "path": "16-generic-release",
@@ -279,7 +279,7 @@
       "ambiguity": null,
       "fileCount": 10,
       "lineCount": 2156,
-      "byteCount": 67876
+      "byteCount": 67872
     },
     {
       "path": "17-consolidated-guidelines",
@@ -292,7 +292,7 @@
       "ambiguity": "None",
       "fileCount": 36,
       "lineCount": 16904,
-      "byteCount": 620680
+      "byteCount": 620727
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -305,7 +305,7 @@
       "ambiguity": "None",
       "fileCount": 30,
       "lineCount": 17527,
-      "byteCount": 577909
+      "byteCount": 577908
     },
     {
       "path": "19-main-worker-service",
@@ -318,7 +318,7 @@
       "ambiguity": null,
       "fileCount": 35,
       "lineCount": 8315,
-      "byteCount": 506016
+      "byteCount": 506028
     },
     {
       "path": "21-app",

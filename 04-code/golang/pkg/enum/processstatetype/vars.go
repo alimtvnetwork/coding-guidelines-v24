@@ -11,14 +11,14 @@ var (
 		Running:   "Running",
 		Completed: "Completed",
 		Failed:    "Failed",
-		Cancelled: "Cancelled",
+		Canceled:  "Canceled",
 	}
 
 	basicEnum = baseenumer.NewBasicInteger(variantLabels[:], Invalid)
 )
 
 func init() {
-	basicEnum.RegisterAlias("Canceled", Cancelled)
+	basicEnum.RegisterAlias("Cancelled", Canceled)
 }
 
 func All() []Variant {

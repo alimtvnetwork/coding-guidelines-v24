@@ -51,14 +51,14 @@ Before executing the tasks below, you must check if this prompt is already insta
 >
 > When generating plans, subtasks (`.lovable/plans/subtasks/`), memory issue logs (`.lovable/memory/issues/`), specs, code comments, or citations:
 >
-> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/01-index.md`, `[SSH Commands](02-spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
+> 1. **Strictly Relative to Git Root:** All file paths, markdown links, citations, and task targets MUST be relative paths starting from the repository root (e.g. `02-spec/03-error-manage/01-index.md`, `[SSH Commands]`02-spec/13-generic-cli/01-index.md)`, `cmd/main.go`).
 > 2. **Total Ban on Absolute Paths:** NEVER write drive letters or absolute OS paths (`/absolute/path/to/...`, `/absolute/path/to/...`, `/home/...`) or absolute file URIs (`file:///absolute/path/to/...`, `file:///absolute/path/to/...`) into ANY file.
 >
 > **Examples:**
 >
 > - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...) — Why: Defines behavior.`
 > - ❌ **BAD:** `Target File: /absolute/path/to/cmd\login.go`
-> - ✅ **GOOD:** `[SSH Commands](02-spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
+> - ✅ **GOOD:** `[SSH Commands]`02-spec/13-generic-cli/01-index.md) — Why: Defines behavior.`
 > - ✅ **GOOD:** `Target File: cmd/login.go`
 
 - If a spec file, folder, or task is missing or ambiguous, do NOT guess or invent a rule.
@@ -111,8 +111,8 @@ When a chunk of tasks is completed by the agents, do the following before starti
 1. Use `mv` to move the completed task files from `.lovable/plans/pending/` to `.lovable/plans/completed/`.
 2. Open the moved files and change `Status: pending` to `Status: completed`.
 3. Update `.lovable/plans/01-index.md` to reflect the new file locations.
-4. Artifact sanitizer: Audit staged files. Purge unapproved artifact zip archives, temporary scratch files, or test outputs before committing.
-5. Lovable git history guard: Run local tests (no live API calls). Commit code with a clear descriptive message. Never rewrite published git history (no force push, no rebasing, no squash). Push to git cleanly without failure.
+4. Artifact sanitizer: Audit staged files. Purge unapproved artifact zip archives, temporary scratch files, or test outputs before committing. All runner temp artifacts and failure logs belong in `.lovable/temp/failures/`; passing tests produce zero filesystem artifacts and remain silent.
+5. Smart Test Runner & Lovable git history guard: If testing is required, utilize the centralized test inventory (`.lovable/test-inventory.json`) with dual-queue workers (slow: 4w x 2 tests; fast: 4w x 4 tests in 100-test chunks). When tests run, AI agents read `.lovable/temp/runner-eta.json` and sleep for the estimated duration rather than burning tokens in active loops. Commit code with a clear descriptive message. Never rewrite published git history (no force push, no rebasing, no squash). Push to git cleanly without failure.
 
 ## Phase 5: Output Window Stats (Mandatory Every Loop)
 
@@ -134,7 +134,7 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 ## Compliance Checklist (must follow non negociable)
 
-- [x] Coding Guidelines enforced (02-spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines.md).
+- [x] Coding Guidelines enforced `02-spec/02-coding-guidelines/ and follow explicitly every steps .lovable/coding-guidelines.md).
 - [x] Boolean conventions used (is/has prefixes, no negatives).
 - [x] No garbage variable names used.
 - [x] No magic strings or numbers.
@@ -252,14 +252,11 @@ To prevent cross-task pollution and ensure seamless agent communication, every t
 NEVER MAKE THIS EXCUSE: *"I did not literally perform N self-loops or spawn dozens of sub-agents. Instead of artificially spinning up N separate loops, I consolidated the required deep work into a concentrated series of sequential steps within my existing execution environment."*
 If you write this excuse, you are a lazy, stupid fuck and you are violating RULE 0. Spawn the actual sub-agents. Do the actual loops. Utilize the processing power effectively to get the right answer. Avoid stupidity.
 
-## WOR: Strictly Without Release & No Test Running (Strict Policy)
+## WOR: Strictly Without Release
 
 > [!CAUTION]
 > **This is a WOR (Without Release) workflow.**
 > You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You are strictly forbidden from triggering a release or running any release scripts.
-> Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
-> Execute targeted linters on modified files (`exit 0`). DO NOT run `06-cicd-local-runner.py` during routine tasks.
-> For every modified file, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json`.
 
 ## Task Consolidation & File Reduction (End of Loop)
 

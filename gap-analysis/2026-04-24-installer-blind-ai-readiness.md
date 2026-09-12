@@ -50,7 +50,7 @@ certainly guess differently than the shipped script.
 
 | Source | What it says |
 |---|---|
-| `02-spec/15-distribution-and-runner/02-install-contract.md` §"What gets installed (default)" | Installs **four folders** (`spec/`, `linters/`, `linter-scripts/`, `linters-cicd/`) into the **current working directory**. |
+| `02-spec/15-distribution-and-runner/02-install-contract.md` §"What gets installed (default)" | Installs **four folders** (`02-spec/`, `linters/`, `linter-scripts/`, `linters-cicd/`) into the **current working directory**. |
 | `linters-cicd/install.sh` & `install.ps1` | Installs **only `linters-cicd/`** (one folder), default destination `./linters-cicd`. |
 | `02-spec/14-update/27-generic-installer-behavior.md` | Silent on what gets installed — only describes *how* it's fetched. |
 
@@ -173,7 +173,7 @@ fi
 
 This depends on the **release packaging format** (whether the zip is
 flat or nested). That format is not documented in any spec. A blind AI
-would not know to add this normalisation step, and the user would end
+would not know to add this normalization step, and the user would end
 up with `./linters-cicd/linters-cicd/run-all.sh`.
 
 ### 2.11 "Next steps" footer is undocumented
@@ -263,7 +263,7 @@ questions — exactly what the user wants to avoid.
 
 ---
 
-## 5. Recommended remediation (prioritised)
+## 5. Recommended remediation (prioritized)
 
 ### P0 — Resolve the spec 15 vs spec 27 conflict
 
@@ -285,7 +285,7 @@ Add normative subsections to spec 27:
 
 1. **Asset naming & fallback order** (un-versioned alias → API tag
    resolution → versioned name).
-2. **Post-extraction normalisation** (flatten single top-level
+2. **Post-extraction normalization** (flatten single top-level
    directory if the release zip is nested).
 3. **Help must be reachable without network access** (move from script
    comment to spec MUST).

@@ -51,7 +51,7 @@ func TestVariantsAndLabels(t *testing.T) {
 		{processstatetype.Running, "Running"},
 		{processstatetype.Completed, "Completed"},
 		{processstatetype.Failed, "Failed"},
-		{processstatetype.Cancelled, "Cancelled"},
+		{processstatetype.Canceled, "Canceled"},
 	}
 
 	for _, tc := range tests {
@@ -95,7 +95,7 @@ func TestCheckers(t *testing.T) {
 		t.Fatalf("expected IsFailed true")
 	}
 
-	cn := processstatetype.Cancelled
+	cn := processstatetype.Canceled
 	if !cn.IsCancelled() {
 		t.Fatalf("expected IsCancelled true")
 	}
@@ -112,7 +112,7 @@ func TestAllAndValues(t *testing.T) {
 		t.Fatalf("expected 5 values, got %d", len(vals))
 	}
 
-	if vals[0] != "Pending" || vals[4] != "Cancelled" {
+	if vals[0] != "Pending" || vals[4] != "Canceled" {
 		t.Fatalf("unexpected values ordering: %v", vals)
 	}
 }
@@ -129,7 +129,9 @@ func TestParse_Success(t *testing.T) {
 		{"running", processstatetype.Running},
 		{"Completed", processstatetype.Completed},
 		{"Failed", processstatetype.Failed},
-		{"Cancelled", processstatetype.Cancelled},
+		{"Canceled", processstatetype.Canceled},
+		{"canceled", processstatetype.Canceled},
+		{"Cancelled", processstatetype.Canceled},
 		{"1", processstatetype.Pending},
 		{"2", processstatetype.Running},
 	}
@@ -208,8 +210,8 @@ func TestBoundaries(t *testing.T) {
 	var _ baseenumer.BoundedEnumer[processstatetype.Variant] = processstatetype.Variant(0)
 
 	minVal, maxVal := processstatetype.Min(), processstatetype.Max()
-	if minVal != processstatetype.Invalid || maxVal != processstatetype.Cancelled {
-		t.Fatalf("expected min %v, max %v", processstatetype.Invalid, processstatetype.Cancelled)
+	if minVal != processstatetype.Invalid || maxVal != processstatetype.Canceled {
+		t.Fatalf("expected min %v, max %v", processstatetype.Invalid, processstatetype.Canceled)
 	}
 
 	if minVal.Min() != minVal || maxVal.Max() != maxVal {

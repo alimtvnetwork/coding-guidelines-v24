@@ -539,7 +539,7 @@ plugin-slug/                      ← ZIP root
 └── vendor/                       ← Composer autoloader (production only)
 ```
 
-**Excluded from ZIP:** `.git/`, `.github/`, `.ai-instructions`, `tests/`, `phpunit.xml`, `phpstan.neon`, `composer.lock`, `spec/`, `*.log`, `node_modules/`
+**Excluded from ZIP:** `.git/`, `.github/`, `.ai-instructions`, `tests/`, `phpunit.xml`, `phpstan.neon`, `composer.lock`, `02-spec/`, `*.log`, `node_modules/`
 
 ### ZIP Integrity Requirements
 

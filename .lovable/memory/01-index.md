@@ -19,7 +19,7 @@ Updated: 2026-04-27
 - Naming: PascalCase for all internal IDs, DB, JSON, Types. Exceptions: Rust uses snake_case identifiers.
 - DB Schema: PascalCase naming. PKs are `{TableName}Id` (INTEGER PRIMARY KEY AUTOINCREMENT). No UUIDs.
 - DB Schema Rules 10/11/12: Entity/ref tables need `Description TEXT NULL`; transactional need `Notes`+`Comments TEXT NULL`; all must be nullable, no DEFAULT. Join tables exempt.
-- Workflow: Spec-First (`spec/`) and Issue-First (`03-issues/`).
+- Workflow: Spec-First (`02-spec/`) and Issue-First (`03-issues/`).
 - Global Namespace: Always derive module imports and repository namespaces dynamically from the repository's canonical root configuration or manifest (`package.json`, `go.mod`, `version.json`).
 - Version sync: bump package.json → `node scripts/sync-version.mjs` → `node scripts/sync-spec-tree.mjs`.
 - Execution: Break complex requests into discrete tasks. Wait for "next" prompt to continue.

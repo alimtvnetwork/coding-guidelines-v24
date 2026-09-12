@@ -18,12 +18,12 @@ const (
 	Running
 	Completed
 	Failed
-	Cancelled
+	Canceled
 )
 
 const (
-	Unknown  = Invalid
-	Canceled = Cancelled
+	Unknown   = Invalid
+	Cancelled = Canceled
 )
 
 var (
@@ -106,11 +106,11 @@ func (v Variant) ValueString() string {
 }
 
 func (v Variant) IsValid() bool {
-	return baseenumer.IsBetween(v, Pending, Cancelled)
+	return baseenumer.IsBetween(v, Pending, Canceled)
 }
 
 func (v Variant) IsInvalid() bool {
-	return baseenumer.IsNotBetween(v, Pending, Cancelled)
+	return baseenumer.IsNotBetween(v, Pending, Canceled)
 }
 
 func (v Variant) IsEnum() bool {
@@ -134,11 +134,11 @@ func (v Variant) IsFailed() bool {
 }
 
 func (v Variant) IsCancelled() bool {
-	return v == Cancelled
+	return v == Canceled
 }
 
 func (v Variant) IsCanceled() bool {
-	return v.IsCancelled()
+	return v == Canceled
 }
 
 func (v Variant) MarshalJSON() ([]byte, error) {

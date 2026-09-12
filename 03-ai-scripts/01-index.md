@@ -743,11 +743,11 @@ python 03-ai-scripts/23-coding-guideline-path-consolidator.py
 
 #### Why It Exists
 
-Migrates references from the old un-prefixed specification directory (`spec/`) to the standardized numbered directory (`02-spec/`) across all documentation, code, tests, and configuration files.
+Migrates references from the old un-prefixed specification directory (`02-spec/`) to the standardized numbered directory (`02-spec/`) across all documentation, code, tests, and configuration files.
 
 #### What It Does
 
-- Replaces slash-based (`spec/...`) and backslash-based (`spec\\...`) path patterns with `02-spec/...`.
+- Replaces slash-based (`02-spec/...`) and backslash-based (`spec\\...`) path patterns with `02-spec/...`.
 - Migrates specific known configuration and index references.
 - Reports all modified files and the count of updated paths.
 
@@ -765,7 +765,7 @@ python 03-ai-scripts/24-spec-path-migrator.py
 
 #### Why It Exists
 
-Provides a fully transactional, reversible engine to restructure repository layouts (such as migrating legacy `spec/` to `02-spec/`, `.lovable/prompts/` to `01-prompts/`, and `.lovable/ai-fix-scripts/` to `03-ai-scripts/`) with 100% undo/redo safety.
+Provides a fully transactional, reversible engine to restructure repository layouts (such as migrating legacy `02-spec/` to `02-spec/`, `.lovable/prompts/` to `01-prompts/`, and `.lovable/ai-fix-scripts/` to `03-ai-scripts/`) with 100% undo/redo safety.
 
 #### What It Does
 
@@ -831,7 +831,7 @@ python 03-ai-scripts/26-go-code-formatter.py --sync
 
 #### Why It Exists
 
-Enforces American English spelling across repository code and documentation, preventing CODE RED British English spelling regressions (e.g. `behaviour`, `colour`, `initialise`).
+Enforces American English spelling across repository code and documentation, preventing CODE RED British English spelling regressions (e.g. `behavior`, `color`, `initialize`).
 
 #### What It Does
 

@@ -55,7 +55,7 @@ func (o *LazyOnce1[TInput, TOutput]) ValueContext(
 	if ctx.Err() != nil {
 		var zero TOutput
 
-		return zero, appfault.Wrap(errtype.Timeout, ctx.Err(), "context cancelled before evaluation")
+		return zero, appfault.Wrap(errtype.Timeout, ctx.Err(), "context canceled before evaluation")
 	}
 
 	return o.awaitContext(ctx, input)
@@ -75,7 +75,7 @@ func (o *LazyOnce1[TInput, TOutput]) awaitContext(
 	case <-ctx.Done():
 		var zero TOutput
 
-		return zero, appfault.Wrap(errtype.Timeout, ctx.Err(), "context cancelled during evaluation")
+		return zero, appfault.Wrap(errtype.Timeout, ctx.Err(), "context canceled during evaluation")
 	case res := <-resCh:
 		return res.val, res.fault
 	}

@@ -52,7 +52,7 @@ production code follows — readers copy-paste these snippets.
 - When writing or reviewing any code block in markdown (readme, docs, spec
   examples), apply Rule 5 before saving.
 - When writing production code, same rule applies.
-- The CI linter validates `spec/` directory code patterns but does NOT lint
+- The CI linter validates `02-spec/` directory code patterns but does NOT lint
   markdown prose — manual diligence required for examples in `readme.md`,
   `docs/`, and release-artifacts.
 

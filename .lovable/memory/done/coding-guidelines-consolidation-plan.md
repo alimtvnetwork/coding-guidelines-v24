@@ -52,7 +52,7 @@ The `02-spec/02-coding-guidelines/` folder contains **5 overlapping source folde
 
 | Issue | Location |
 |-------|----------|
-| References to `../01-general-spec/`, `../18-error-resolution/`, `../31-generic-enforce/` — these don't exist in current `spec/` tree | `03-coding-guidelines-spec/00-overview.md` |
+| References to `../01-general-spec/`, `../18-error-resolution/`, `../31-generic-enforce/` — these don't exist in current `02-spec/` tree | `03-coding-guidelines-spec/00-overview.md` |
 | References use `02-spec/02-coding-guidelines/` paths but folder is now `02-spec/02-coding-guidelines/` | Various |
 
 ---

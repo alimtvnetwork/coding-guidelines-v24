@@ -2,7 +2,7 @@
 
 - **Status:** PASS
 - **Violations:** 0
-- **Generated:** 2026-09-12T10:30:37Z
+- **Generated:** 2026-09-12T11:22:21Z
 - **Guard:** `linter-scripts/check-runner-dispatch-antipatterns.sh`
 - **Spec:** `spec/15-distribution-and-runner/06-fix-repo-forwarding.md` §7
 

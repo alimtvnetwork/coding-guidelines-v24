@@ -1,6 +1,6 @@
 # Spec Cross-Link Checker
 
-`check-spec-cross-links.py` walks `spec/`, parses every markdown link, and
+`check-spec-cross-links.py` walks `02-spec/`, parses every markdown link, and
 fails CI if any internal link points to a missing file or a non-existent
 heading anchor.
 
@@ -32,7 +32,7 @@ python3 linter-scripts/check-spec-cross-links.py --root spec --github
 - Path must resolve to an existing file (relative to source `.md`, or absolute from repo root).
 - If `#anchor` is present, it must match an existing H1–H6 heading slug in the target file.
 - Links inside fenced code blocks (```` ``` ```` or `~~~`) are ignored — they are examples, not real references.
-- Links inside `<spec-placeholder>...</spec-placeholder>` blocks are ignored — this is the preferred placeholder format for cross-references that authors will activate later. See `spec/_template.md` §"Placeholder cross-references" for the copy-paste snippet.
+- Links inside `<spec-placeholder>...</spec-placeholder>` blocks are ignored — this is the preferred placeholder format for cross-references that authors will activate later. See `02-spec/_template.md` §"Placeholder cross-references" for the copy-paste snippet.
 - Regular HTML comments (`<!-- ... -->`) are **not** stripped: a broken link inside an ordinary comment is still flagged so license headers / TODOs that drift can't hide bugs. To opt a block out of validation, wrap it in `<spec-placeholder>` instead.
 - External URLs (`http://`, `https://`, `mailto:`, etc.) and project schemes (`mem://`, `user-uploads://`, `knowledge://`) are skipped.
 
@@ -47,7 +47,7 @@ validate placeholder syntax before commit:
 python3 linter-scripts/check-placeholder-comments.py --root spec --repo-root .
 ```
 
-It enforces the snippet shape documented in `spec/_template.md` §Placeholder cross-references and runs automatically in the pre-commit hook alongside the cross-link checker.
+It enforces the snippet shape documented in `02-spec/_template.md` §Placeholder cross-references and runs automatically in the pre-commit hook alongside the cross-link checker.
 
 Rule summary (full docs in the script header):
 
@@ -92,7 +92,7 @@ and pull request to `main`.
 same broken-link set as the checker, then proposes the closest match for
 each failure using `difflib.SequenceMatcher`:
 
-- `missing-file` → fuzzy-match against every `*.md` under `spec/` (basename
+- `missing-file` → fuzzy-match against every `*.md` under `02-spec/` (basename
   match wins ties).
 - `missing-section` → fuzzy-match the requested anchor against the slug of
   every heading in the resolved target file.

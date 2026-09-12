@@ -4,13 +4,13 @@
 > **Authority:** Single Source of Truth for `.lovable/` Ecosystem & Repository Organization
 > **Version:** 4.0.0
 
-This document defines the authoritative canonical structure of the repository, including the `.lovable/` AI metadata layer and the `spec/` specification tree. All AI agents MUST strictly adhere to this architecture when reading, indexing, or writing files.
+This document defines the authoritative canonical structure of the repository, including the `.lovable/` AI metadata layer and the `02-spec/` specification tree. All AI agents MUST strictly adhere to this architecture when reading, indexing, or writing files.
 
 ---
 
 ## 1. The `XX-<slug>` Deterministic Prefixing System
 
-To maintain deterministic sorting and avoid ambiguity across operating systems, every file and directory within structured modules (`.lovable/plans/`, `01-prompts/`, `03-ai-scripts/`, `spec/`) MUST follow the two-digit zero-padded numeric prefix:
+To maintain deterministic sorting and avoid ambiguity across operating systems, every file and directory within structured modules (`.lovable/plans/`, `01-prompts/`, `03-ai-scripts/`, `02-spec/`) MUST follow the two-digit zero-padded numeric prefix:
 
 - **Format:** `XX-<slug-name>.ext` or `XX-<slug-name>/`
 - **Prefix Range:** Starts at `01-` (or `00-` for root configuration indexes) and increments sequentially (`01-`, `02-`, ...).
@@ -113,9 +113,9 @@ To maintain deterministic sorting and avoid ambiguity across operating systems, 
 
 ---
 
-## 3. Canonical `spec/` Specification Hierarchy
+## 3. Canonical `02-spec/` Specification Hierarchy
 
-The `spec/` directory is organized into numbered tiers:
+The `02-spec/` directory is organized into numbered tiers:
 
 - **Tiers 01–20 (Core Fundamentals):** Reusable standards, architecture blueprints, database conventions, and design systems.
 - **Tiers 21+ (App-Specific Modules):** Application business logic, features, and domain-specific schemas.

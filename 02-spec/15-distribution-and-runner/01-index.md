@@ -50,7 +50,7 @@ Every GitHub Release MUST publish all of the following. Missing any one is a rel
 
 | Artifact | Source | Filename pattern | Purpose |
 |----------|--------|------------------|---------|
-| Spec + linters tree (download-on-demand) | `spec/`, `linters/`, `linter-scripts/`, `linters-cicd/` in main branch | (sourced via `codeload.github.com` archive — not a release asset) | Powers `install.sh`/`install.ps1` |
+| Spec + linters tree (download-on-demand) | `02-spec/`, `linters/`, `linter-scripts/`, `linters-cicd/` in main branch | (sourced via `codeload.github.com` archive — not a release asset) | Powers `install.sh`/`install.ps1` |
 | Linters CI/CD pack | `linters-cicd/` | `coding-guidelines-linters-vX.Y.Z.zip` | Drop-in CI artifact; consumed by `linters-install.sh` |
 | Slides deck | `slides-app/dist/` | `coding-guidelines-slides-vX.Y.Z.zip` | Offline trainer deck (double-click `index.html`) |
 | Bash installer | `install.sh` | `install.sh` | Linux/macOS one-liner |

@@ -23,7 +23,7 @@ export enum ExecutionStatus {
   Paused = "PAUSED",
   Completed = "COMPLETED",
   Failed = "FAILED",
-  Cancelled = "CANCELLED",
+  canceled = "canceled",
 }
 ```
 
@@ -71,7 +71,7 @@ interface ExecutionResult {
 const TERMINAL_STATES = new Set([
   ExecutionStatus.Completed,
   ExecutionStatus.Failed,
-  ExecutionStatus.Cancelled,
+  ExecutionStatus.canceled,
 ]);
 
 function isTerminal(status: ExecutionStatus): boolean {
@@ -101,7 +101,7 @@ function isTerminal(status: ExecutionStatus): boolean {
 |---------|-----|-----------|
 | Package | `pkg/enums/executionstatus` | `src/lib/enums/execution-status.ts` |
 | Type | `byte` iota | String enum |
-| Values | `Idle`, `Running`, `Paused`, `Completed`, `Failed`, `Cancelled` | Same |
+| Values | `Idle`, `Running`, `Paused`, `Completed`, `Failed`, `canceled` | Same |
 
 ---
 

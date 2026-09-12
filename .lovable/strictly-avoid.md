@@ -110,7 +110,7 @@ Allowed work:
 Forbidden:
 - ❌ `behavior`
 - ❌ `recognise`
-- ❌ `colour`, `initialise`
+- ❌ `color`, `initialize`
 
 Allowed work:
 - ✅ US English spelling: `behavior`, `recognize`, `color`, `initialize`
@@ -166,10 +166,10 @@ Allowed work:
 
 Absolute filesystem paths (e.g., `/absolute/path/to/...`, `/Users/.../`, `/home/...`) and absolute file URI schemes (`file:///absolute/path/to/...`, `file:///absolute/path/to/`) are **strictly forbidden** inside committed repository files, specifications, markdown plans, subtask files, code comments, and citations. All paths must be relative to the git repository root.
 
-### No `spec/` Inside `.lovable/` (Total Ban on `.lovable/spec/`)
+### No `02-spec/` Inside `.lovable/` (Total Ban on `.lovable/spec/`)
 
 🔴 **NEVER create or store specifications inside `.lovable/spec/`.**
-- All canonical specifications must live under the root `spec/` directory.
+- All canonical specifications must live under the root `02-spec/` directory.
 - All repo-specific / application-specific specifications must reside under `02-spec/21-app/`.
 - The `.lovable/` directory is reserved exclusively for AI metadata (`memory/`, `plans/`, `prompts/`, `ai-fix-scripts/`, `assets/`, `procedures/`, `suggestions/`, `question-and-ambiguity/`).
 

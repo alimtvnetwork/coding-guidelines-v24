@@ -26,7 +26,6 @@ N = total self-loop steps budget that the agents will perform.
 11. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
 12. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 13. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
-14. [ ] /goal Phase 2 (Test Inventory & Atomic Change Tracking): For every modified file, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), understanding associated tests via `.lovable/test-inventory.json`.
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: 2-Agent Planning & Subtask Generation in .lovable/plans/)
@@ -83,9 +82,10 @@ Before writing any source code changes, you MUST execute Phase 1:
 6. **Temp & Failure Directory Isolation:** All temporary files, test outputs, and runner caches MUST be isolated within `.lovable/temp/`. Creating `.tmp/` at root is strictly prohibited.
    - Dedicated Failure Directory: `.lovable/temp/failures/` is the dedicated folder where failed tests and failed quality gates write error logs (`<test-or-job-name>.log`).
    - Passing Tests Completely Silent: Passing tests must produce ZERO filesystem artifacts and remain completely silent in output logs.
-7. **Atomic Change Tracking:** Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
-8. **Local Verification:** Run targeted linters on modified files and ensure code compiles / passes lint checks with exit code 0 (`exit 0`). DO NOT run the full CI/CD runner (`06-cicd-local-runner.py`) during routine task steps.
-9. **Runner In-Flight ETA Wait Protocol:** When running background commands, the runner writes live status and remaining ETA to `.lovable/temp/runner-eta.json` (emitting in-flight heartbeats strictly every 25 seconds or more). If an agent inspects an active background job, it MUST sleep/wait for **1 minute (60 seconds) each time**, or dynamically sleep for the remaining ETA duration read from `.lovable/temp/runner-eta.json` (or based on previous total approximate delay) instead of busy-polling.
+7. **Local Verification:** Run targeted linters on modified files and ensure code compiles / passes lint checks with exit code 0 (`exit 0`). DO NOT run the full CI/CD runner (`06-cicd-local-runner.py`) during routine task steps unless explicitly commanded by repository owner.
+8. **Runner In-Flight ETA Wait Protocol:** When running background commands, the runner writes live status and remaining ETA to `.lovable/temp/runner-eta.json` (emitting in-flight heartbeats strictly every 25 seconds or more). If an agent inspects an active background job, it MUST sleep/wait for **1 minute (60 seconds) each time**, or dynamically sleep for the remaining ETA duration read from `.lovable/temp/runner-eta.json` (or based on previous total approximate delay) instead of busy-polling.
+9. **Centralized Test Inventory & Incremental Caching:** All unit tests are cataloged in `.lovable/test-inventory.json` with strictly repository-relative paths (`target_file`, `test_file`). First run executes all tests to establish baseline timings; subsequent runs execute incrementally only if target code files or test files change. Slow test threshold defaults to `4.0s` (configurable via `GITMAP_SLOW_TEST_THRESHOLD`).
+10. **Dual-Queue Worker Pools:** Slow tests run in a dedicated 4-worker pool running at most 2 tests at a time per batch. Fast tests run in a 4-worker pool running at most 4 tests at a time, pulling in chunks of 100 tests from the test inventory queue until all are complete.
 
 ---
 
@@ -154,13 +154,6 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Isolate all temporary test files, caches, and scratch directories within `.lovable/temp/`. Never create `.tmp/` at root. Failed tests/gates write to `.lovable/temp/failures/`; passing tests remain completely silent and produce zero disk files.
 - In-Flight ETA Wait Protocol: When checking background test runners, agents MUST sleep/wait for 1 minute (60s) each time, or dynamically sleep for the remaining ETA duration read from `.lovable/temp/runner-eta.json` (or based on previous total approximate delay) instead of busy-polling.
 - Record all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
-
-## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
-
-- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
-- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
-- **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time and scans unrelated files. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.
-- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
 
 ## Task Consolidation & File Reduction (End of Loop)
 
