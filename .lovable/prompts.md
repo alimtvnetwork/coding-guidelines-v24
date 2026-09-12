@@ -84,6 +84,7 @@ It is referenced from `.lovable/coding-guidelines.md` as a required read before 
 | `15-cg-execute` | [`15-cg-execute/17-terminal-ui-and-cli-styling.md`](../01-prompts/15-cg-execute/17-terminal-ui-and-cli-styling.md) | Terminal UI, CLI Styling, Lipgloss & Animations — Coding Guideline (must follow) |
 | `15-cg-execute` | [`15-cg-execute/18-function-argument-reduction-and-params.md`](../01-prompts/15-cg-execute/18-function-argument-reduction-and-params.md) | Argument Reduction, Parameter Structs & Return Architecture — Coding Guideline (must follow) |
 | `15-cg-execute` | [`15-cg-execute/19-result-wrapper-and-apperror-returns.md`](../01-prompts/15-cg-execute/19-result-wrapper-and-apperror-returns.md) | Result Wrapper Types, Collections & AppError Returns — Coding Guideline (must follow) |
+| `15-cg-execute` | [`15-cg-execute/20-extract-generic-types-to-types-go.md`](../01-prompts/15-cg-execute/20-extract-generic-types-to-types-go.md) | Extracting Generic Types, Envelopes & Models to types.go — Coding Guideline (must follow) |
 | `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix.md`](../01-prompts/16-ci-cd/01-ci-cd-fix.md) | CI/CD Fix Loop with 4-Part RCA & Local Runner — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/02-cicd-run-ps1.md`](../01-prompts/16-ci-cd/02-cicd-run-ps1.md) | PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/03-fix-ci-cd-and-run-scripts.md`](../01-prompts/16-ci-cd/03-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
