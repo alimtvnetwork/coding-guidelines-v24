@@ -173,6 +173,11 @@ md_escape() { printf '%s' "$1" | sed -e 's/|/\\|/g' -e 's/`/\\`/g'; }
 
 write_markdown_report() {
   local out="$1" status="$2" count="$3"
+  if [ "$status" = "PASS" ] && [ -f "$out" ]; then
+    if grep -q -- "- \*\*Status:\*\* PASS" "$out" && grep -q -- "- \*\*Violations:\*\* 0" "$out"; then
+      return 0
+    fi
+  fi
   {
     printf '# Runner Dispatch Guard Report\n\n'
     printf '%s\n' "- **Status:** $status"

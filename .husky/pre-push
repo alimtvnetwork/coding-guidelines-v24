@@ -14,27 +14,29 @@
 set -e
 
 # ── Ensure bash and core unix tools are in PATH (Windows / GitHub Desktop) ──
+[ -d "/usr/bin" ] && PATH="/usr/bin:$PATH"
+for _git_p in \
+  "/c/Program Files/Git/bin" \
+  "/c/Program Files/Git/usr/bin" \
+  "/c/Program Files/Git/cmd" \
+  "/c/Program Files (x86)/Git/bin" \
+  "/c/Program Files (x86)/Git/usr/bin" \
+  "/c/Program Files (x86)/Git/cmd" \
+  "C:/Program Files/Git/bin" \
+  "C:/Program Files/Git/usr/bin" \
+  "C:/Program Files/Git/cmd"; do
+  [ -d "$_git_p" ] && PATH="$_git_p:$PATH"
+done
 if ! command -v bash >/dev/null 2>&1; then
-  for _git_p in \
-    "/c/Program Files/Git/bin" \
-    "/c/Program Files/Git/usr/bin" \
-    "/c/Program Files (x86)/Git/bin" \
-    "/c/Program Files (x86)/Git/usr/bin" \
-    "C:/Program Files/Git/bin" \
-    "C:/Program Files/Git/usr/bin"; do
-    [ -d "$_git_p" ] && PATH="$_git_p:$PATH"
-  done
-  if ! command -v bash >/dev/null 2>&1; then
-    _git_cmd="$(command -v git 2>/dev/null || true)"
-    if [ -n "$_git_cmd" ]; then
-      _git_root="${_git_cmd%/*}"
-      _git_root="${_git_root%/*}"
-      [ -d "$_git_root/bin" ] && PATH="$_git_root/bin:$PATH"
-      [ -d "$_git_root/usr/bin" ] && PATH="$_git_root/usr/bin:$PATH"
-    fi
+  _git_cmd="$(command -v git 2>/dev/null || true)"
+  if [ -n "$_git_cmd" ]; then
+    _git_root="${_git_cmd%/*}"
+    _git_root="${_git_root%/*}"
+    [ -d "$_git_root/bin" ] && PATH="$_git_root/bin:$PATH"
+    [ -d "$_git_root/usr/bin" ] && PATH="$_git_root/usr/bin:$PATH"
   fi
-  export PATH
 fi
+export PATH
 
 if [ "${SKIP_PREPUSH:-0}" = "1" ]; then
   echo "  pre-push: SKIP_PREPUSH=1 set — skipping guards"
