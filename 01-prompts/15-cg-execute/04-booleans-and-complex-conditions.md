@@ -2,7 +2,7 @@
 
 Trigger Keywords & Aliases: `cg-boolean`, `cg-execute boolean`, `audit boolean`, `fix boolean negatives`, `fix complex conditions`, `affirmative booleans`, `boolean-parameter-naming`, `affirmative-boolean-parameters`, `is-stopped`, `fix-v-bool`
 
-> **Prompt Version:** 2.2.0
+> **Prompt Version:** 2.3.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ```text
@@ -11,15 +11,15 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, plan, refactor, and fix all boolean naming, double negatives, mixed polarity, single-letter boolean parameters (`v bool`, `b bool`), bare verb/noun identifiers (`stop bool` -> `isStopped bool`, `stopOnFail` -> `isStopOnFail`), and complex condition violations across the codebase, modifying source files directly to enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), implicit evaluation (no `== true`), positive framing (no `!isSuccess`), and discrete condition decomposition until 100% green without stopping.
+/goal Autonomously scan, plan, refactor, and fix all boolean naming, double negatives, mixed polarity, single-letter boolean parameters (`v bool`, `b bool`), bare verb/noun identifiers (`stop bool` -> `isStopped bool`, `stopOnFail` -> `isStopOnFail`), awkward `isExists` identifiers (`isExists` -> `isDefined`), compound negative chains (`!a || !b || c` -> discrete checks), and complex condition violations across the codebase, modifying source files directly to enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), implicit evaluation (no `== true`), positive framing (no `!isSuccess`), and discrete condition decomposition until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using AST and ripgrep to inventory all architectural violations: explicit `== true`/`== false`, negative names (`isNot*`), inverted success (`!isSuccess`), mixed polarity (`&& !`), single-letter boolean parameters (`v bool`, `b bool`), and bare un-prefixed boolean identifiers (`stop`, `pause`, `force`, `dryRun`).
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using AST and ripgrep to inventory all architectural violations: explicit `== true`/`== false`, negative names (`isNot*`), inverted success (`!isSuccess`), mixed polarity (`&& !`), single-letter boolean parameters (`v bool`, `b bool`), bare un-prefixed boolean identifiers (`stop`, `pause`, `force`, `dryRun`), awkward `isExists` identifiers, and compound negative chains (`!a || !b || c`).
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/` with an exhaustive Violation Ledger.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
-5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring: convert booleans to implicit evaluation, replace single-letter parameters (`v bool`) with affirmative names (`isStopOnFail bool`, `isStopped bool`), transform bare fields to affirmative states (`stop` -> `isStopped`), invert negatives, and split mixed polarity.
+5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring: convert booleans to implicit evaluation, replace single-letter parameters (`v bool`) with affirmative names (`isStopOnFail bool`, `isStopped bool`), transform bare fields to affirmative states (`stop` -> `isStopped`), replace `isExists` with `isDefined`, invert negatives, and decompose compound negative chains into discrete assertions.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
 8. [ ] /goal Phase 2 (Step D): Execute targeted file-level linters and verification on modified files ensuring 0 remaining violations (`exit 0`). DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
@@ -80,6 +80,16 @@ Boolean logic must be simple, readable, and unambiguous. Complex boolean chains 
      - `verbose` -> `isVerbose`
      - `header` -> `hasHeader`
      - `records` -> `hasRecords`
+
+6. **Total Ban on Awkward `IsExists` / `isExists` (Enforce `IsDefined` / `isDefined`):**
+   - **Grammatical Prohibition:** "Exists" is a verb. Combining `is` + verb `exists` (`isExists`, `isUserExist`) is grammatically broken and awkward.
+   - **Mandatory Standard:** Always use `IsDefined` / `isDefined` for existence/presence of structs, records, files, or states (or `isFound` for map lookups).
+   - Struct fields MUST be named `IsDefined bool` or `isDefined bool` (never `IsExists` or `Exists`).
+
+7. **Total Ban on Compound Negative Chains (`!a || !b || c`):**
+   - NEVER chain multiple negated conditions in an `if` expression (e.g. `if !state.IsDefined || !state.IsEmpty || state.IsRepo`). Chained inverted conditions create high cognitive load and hide which specific invariant failed.
+   - **In Test Assertions:** Break every condition into a discrete assertion (`if !state.IsDefined`, `if !state.IsEmpty`, `if state.IsRepo`) with its own distinct error message.
+   - **In Application Logic:** Extract into an affirmative composite variable (`isCloneTargetFresh := !params.State.IsDefined || params.State.IsEmpty`) or use separate early return guard clauses.
 
 ### Generic Code Patterns with Compliant Newline Gaps
 
@@ -193,6 +203,9 @@ type Result[T any] struct {
 | Struct Field | `records bool` | `hasRecords bool` | Data presence flag |
 | Method Parameter | `SetEnabled(v bool)` | `SetEnabled(isEnabled bool)` | Feature toggle parameter |
 | Method Parameter | `SetAsync(flag bool)` | `SetAsync(isAsync bool)` | Asynchronous execution flag |
+| Struct Field | `exists bool` / `isExists bool` | `isDefined bool` | Presence/defined status indicator (ban `isExists`) |
+| Method Name | `Exists() bool` / `IsExists() bool` | `IsDefined() bool` | Presence verification predicate |
+| Map Comma-Ok | `val, ok` / `val, isExists` | `val, isFound` / `val, isDefined` | Map lookup presence boolean |
 
 #### Pattern E: Implicit Checks & Discrete Guard Clauses
 
@@ -282,6 +295,71 @@ function handleResponse(response: ApiResponse) {
     }
 
     processData(response.data);
+}
+```
+
+#### Pattern F: `IsDefined` vs `IsExists` & Compound Negative Decomposition (`execute_idempotent_test.go`)
+
+Chaining inverted negative checks (such as `!state.IsExists || !state.IsEmpty || state.IsRepo`) violates both discrete assertion rules and positive logic standards. Furthermore, `isExists` is grammatically malformed (`exists` is a verb).
+
+```go
+// -----------------------------------------------------------------------------
+// ❌ ANTI-PATTERN: Awkward "IsExists", compound negatives, chained inverted checks
+// -----------------------------------------------------------------------------
+type existingRepoState struct {
+    IsExists bool // ❌ Ungrammatical: combining 'is' with verb 'exists'
+    IsEmpty  bool
+    IsRepo   bool
+}
+
+// ❌ In test assertions: Compound negative obscures which invariant failed
+func TestInspectExistingRepo_EmptyDir(t *testing.T) {
+    state := inspectExistingRepo(dir)
+    if !state.IsExists || !state.IsEmpty || state.IsRepo {
+        t.Errorf("expected empty non-repo directory: %+v", state)
+    }
+}
+
+// ❌ In application logic: Compound negative check
+func dispatchOnExists(params DispatchParams) {
+    if !params.State.IsExists || params.State.IsEmpty {
+        performFreshClone(params)
+    }
+}
+
+// -----------------------------------------------------------------------------
+// ✅ REQUIRED: Affirmative "IsDefined" + Discrete Assertions / Positive Logic
+// -----------------------------------------------------------------------------
+type existingRepoState struct {
+    IsDefined bool // ✅ Grammatically sound, affirmative presence indicator
+    IsEmpty   bool
+    IsRepo    bool
+}
+
+// ✅ In test assertions: Decompose into discrete checks (single responsibility per check)
+func TestInspectExistingRepo_EmptyDir(t *testing.T) {
+    state := inspectExistingRepo(dir)
+
+    if !state.IsDefined {
+        t.Errorf("expected directory to be defined: %+v", state)
+    }
+
+    if !state.IsEmpty {
+        t.Errorf("expected directory to be empty: %+v", state)
+    }
+
+    if state.IsRepo {
+        t.Errorf("expected non-repo directory: %+v", state)
+    }
+}
+
+// ✅ In application logic: Extract an affirmative composite predicate
+func dispatchOnExists(params DispatchParams) {
+    isCloneTargetFresh := !params.State.IsDefined || params.State.IsEmpty
+
+    if isCloneTargetFresh {
+        performFreshClone(params)
+    }
 }
 ```
 

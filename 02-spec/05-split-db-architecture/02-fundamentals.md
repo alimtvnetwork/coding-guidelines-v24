@@ -741,9 +741,9 @@ func (m *DbManager) ImportProjectFromZip(zipPath, projectSlug string, overwrite 
     projectDir := filepath.Join(m.dataDir, projectSlug)
 
     // Check if project exists
-    isProjectExists := pathutil.IsDir(projectDir)
+    isProjectDirDefined := pathutil.IsDir(projectDir)
     isReadOnly := !overwrite
-    isProjectConflict := isProjectExists && isReadOnly
+    isProjectConflict := isProjectDirDefined && isReadOnly
 
     if isProjectConflict {
         return apperror.FailNew[ImportResult](

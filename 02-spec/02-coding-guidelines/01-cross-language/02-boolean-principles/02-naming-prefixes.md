@@ -110,6 +110,10 @@ type Result[T any] struct {
 }
 ```
 
+### Ban on Awkward `isExists` / `isUserExist` (Use `isDefined` / `isFound`)
+
+"Exists" is a verb. Combining `is` with a verb (`isExists`, `IsExists`, `isUserExist`) is grammatically malformed and strictly banned. Always use `isDefined` (or `IsDefined`) for state or resource presence, and `isFound` for map/cache lookup presence.
+
 ---
 
 ---
@@ -124,6 +128,7 @@ Double negatives (`!isNot...`, `!isNotBlocked`) are the worst form and must neve
 
 | ❌ Forbidden Name | ✅ Required Name | Semantic Meaning |
 |---|---|---|
+| `isExists` / `isUserExist` | `isDefined` / `isFound` | The resource or entity exists and is defined |
 | `isNotReady` | `isPending` | The order is waiting |
 | `isNotInList` | `isAbsentFromList` | The item is absent |
 | `isNoRecentErrors` | `isErrorListClear` | The error list is clean |

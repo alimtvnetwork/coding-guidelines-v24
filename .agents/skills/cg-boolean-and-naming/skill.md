@@ -29,9 +29,11 @@ This skill governs autonomous execution for boolean conventions, semantic naming
      - `enable` / `enabled` -> `isEnabled`
      - `dryRun` -> `isDryRun`
      - `debug` -> `isDebug`
-     - `verbose` -> `isVerbose`
-     - `header` -> `hasHeader`
-     - `records` -> `hasRecords`
+      - `verbose` -> `isVerbose`
+      - `header` -> `hasHeader`
+      - `records` -> `hasRecords`
+    - **Total Ban on Awkward `isExists` / `isUserExist`:** "Exists" is a verb. Combining `is` with a verb (`isExists`, `IsExists`, `isUserExist`) is grammatically malformed and strictly banned. Always use `isDefined` (or `IsDefined`) for state or resource presence, and `isFound` for map/cache lookup presence.
+    - **Total Ban on Compound Negative Chains (`!a || !b || c`):** Chaining inverted negative checks (such as `!state.IsDefined || !state.IsEmpty || state.IsRepo`) violates both discrete assertion rules and positive logic standards. In tests, write discrete assertions; in app code, extract an affirmative composite predicate.
 
 ### Generic Code Patterns (Affirmative Naming)
 
@@ -130,6 +132,42 @@ type Result[T any] struct {
 | Option Parameter | `debug bool` | `isDebug bool` | Debug mode toggle |
 | Struct Field | `header bool` | `hasHeader bool` | Header presence indicator |
 | Option Parameter | `records bool` | `hasRecords bool` | Records presence requirement |
+| Struct Field | `exists bool` / `isExists bool` | `isDefined bool` | Presence/definition indicator (ban `isExists`) |
+| Map Comma-Ok | `val, ok` / `val, isExists` | `val, isFound` / `val, isDefined` | Map lookup presence boolean |
+
+#### Pattern E: `IsDefined` vs `IsExists` & Compound Negative Decomposition (`execute_idempotent_test.go`)
+
+```go
+// ❌ FORBIDDEN: Compound negative chain and awkward isExists in test assertions
+if !state.IsExists || !state.IsEmpty || state.IsRepo {
+    t.Errorf("expected empty non-repo directory: %+v", state)
+}
+
+// ✅ REQUIRED: Affirmative IsDefined field + discrete individual assertions
+if !state.IsDefined {
+    t.Errorf("expected directory to be defined: %+v", state)
+}
+
+if !state.IsEmpty {
+    t.Errorf("expected directory to be empty: %+v", state)
+}
+
+if state.IsRepo {
+    t.Errorf("expected non-repo directory: %+v", state)
+}
+
+// ❌ FORBIDDEN: Compound negative in application logic
+if !params.State.IsExists || params.State.IsEmpty {
+    performFreshClone(params)
+}
+
+// ✅ REQUIRED: Extract affirmative composite predicate
+isCloneTargetFresh := !params.State.IsDefined || params.State.IsEmpty
+
+if isCloneTargetFresh {
+    performFreshClone(params)
+}
+```
 
 3. **No Inverted Success Checks:**
    - Never invert positive success checks (e.g. `!response.isSuccess`).
