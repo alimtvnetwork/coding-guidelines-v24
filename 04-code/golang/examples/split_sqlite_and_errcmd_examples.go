@@ -205,7 +205,8 @@ func ExampleLoggerIntrospectionAndChaining(endpoint string, writer io.Writer) ap
 		Endpoint: endpoint,
 	}
 
-	logger := applogger.New(cfg).Data()
+	lRes := applogger.New(cfg)
+	logger := lRes.Data()
 	_ = logger.WriterNames()
 
 	cloned := logger.Clone().WithContext("service", "billing")

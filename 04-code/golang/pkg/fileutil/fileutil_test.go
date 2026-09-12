@@ -219,7 +219,8 @@ func checkDeleteAndVerify(t *testing.T, path string) {
 		t.Fatalf("delete failed: %v", delRes.Fault())
 	}
 
-	if Stat(path).IsSuccess() {
+	statRes := Stat(path)
+	if statRes.IsSuccess() {
 		t.Fatalf("expected failure after delete")
 	}
 }
@@ -305,15 +306,20 @@ func checkFileInfoResults(t *testing.T, path string) {
 }
 
 func checkSuccessConstructors(t *testing.T) {
-	if !BoolSuccess(true).Data() || string(BytesSuccess([]byte("ok")).Data()) != "ok" {
+	bRes := BoolSuccess(true)
+	bytesRes := BytesSuccess([]byte("ok"))
+	if !bRes.Data() || string(bytesRes.Data()) != "ok" {
 		t.Fatalf("BoolSuccess or BytesSuccess failed")
 	}
 
-	if StringSuccess("test").Data() != "test" || len(LinesSuccess([]string{"a"}).Data()) != 1 {
+	strRes := StringSuccess("test")
+	linesRes := LinesSuccess([]string{"a"})
+	if strRes.Data() != "test" || len(linesRes.Data()) != 1 {
 		t.Fatalf("StringSuccess or LinesSuccess failed")
 	}
 
-	if Int64Success(42).Data() != 42 {
+	intRes := Int64Success(42)
+	if intRes.Data() != 42 {
 		t.Fatalf("Int64Success failed")
 	}
 }

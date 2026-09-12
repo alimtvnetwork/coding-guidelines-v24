@@ -132,40 +132,48 @@ func TestBaseWriter_SharedLocker(t *testing.T) {
 }
 
 func verifyWrapFailuresPart1(t *testing.T, appErr *appfault.AppError) {
-	if appwriter.WrapWriter.Failure(appErr).IsSuccess() {
+	w1 := appwriter.WrapWriter.Failure(appErr)
+	if w1.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 
-	if appwriter.WrapWriter.FailureFromError(appErr).IsSuccess() {
+	w2 := appwriter.WrapWriter.FailureFromError(appErr)
+	if w2.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 
-	if appwriter.WrapWriter.FailureWithId(errtype.IO, "io error").IsSuccess() {
+	w3 := appwriter.WrapWriter.FailureWithId(errtype.IO, "io error")
+	if w3.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 }
 
 func verifyWrapFailuresPart2(t *testing.T, appErr *appfault.AppError) {
-	if appwriter.WrapWriter.FailureWithCause(errtype.IO, errors.New("underlying"), "cause error").IsSuccess() {
+	w4 := appwriter.WrapWriter.FailureWithCause(errtype.IO, errors.New("underlying"), "cause error")
+	if w4.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 
 	fail3 := appwriter.WrapWriter.FailureWithId(errtype.IO, "io error")
-	if appwriter.WrapWriter.FailureFromWrap(fail3).IsSuccess() {
+	w5 := appwriter.WrapWriter.FailureFromWrap(fail3)
+	if w5.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 
-	if appwriter.WriterWrap.Failure(appErr).IsSuccess() {
+	w6 := appwriter.WriterWrap.Failure(appErr)
+	if w6.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 
-	if appwriter.Wrap.Failure(appErr).IsSuccess() {
+	w7 := appwriter.Wrap.Failure(appErr)
+	if w7.IsSuccess() {
 		t.Fatalf("expected failure")
 	}
 }
 
 func TestWriterWrapConstructor(t *testing.T) {
-	if appwriter.WrapWriter.Success(nil).IsFailed() {
+	s := appwriter.WrapWriter.Success(nil)
+	if s.IsFailed() {
 		t.Fatalf("expected success")
 	}
 

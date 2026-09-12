@@ -185,7 +185,8 @@ func TestMapMapValues_Success(t *testing.T) {
 }
 
 func TestMapMapValues_Failure(t *testing.T) {
-	err := FailureWithId[int](errtype.NotFound, "map missing").Fault()
+	failWrap := FailureWithId[int](errtype.NotFound, "map missing")
+	err := failWrap.Fault()
 	res := MapMapValues(FailMap[string, int](err), strconv.Itoa)
 	if res.IsSuccess() {
 		t.Fatalf("expected failure, got success")

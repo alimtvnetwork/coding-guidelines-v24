@@ -1,8 +1,8 @@
 # AppError Package Reference — Result[T], ResultSlice[T], ResultMap[K,V]
 
 > **Parent:** [AppError Package Reference](./01-index.md)
-> **Version:** 1.3.0
-> **Updated:** 2026-03-31
+> **Version:** 1.4.0
+> **Updated:** 2026-09-12
 
 ---
 
@@ -151,3 +151,39 @@ func FailMapNew[K comparable, V any](code, message string) ResultMap[K, V]
 > All result wrappers — `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` — expose the underlying error via `.AppError()` (returning `*AppError`), **not** `.Error()`. This avoids collision with Go's native `error` interface method `.Error() string` and ensures callers always receive the structured `*AppError` type for direct propagation via `Fail[T]()`, `FailSlice[T]()`, etc. without interface casts. The same convention applies to `dbutil` result types (`dbutil.Result[T]`, `dbutil.ResultSet[T]`, `dbutil.ExecResult`), which also store and return `*apperror.AppError` from their `.AppError()` method to enable bridge methods like `ToAppResult()` and `ToAppResultSlice()`.
 
 ---
+
+## 6. Pointer-Attached Null Safety (*Result[T], *ResultSlice[T], *ResultMap[K, V])
+
+### 6.1 Rationale: Eliminating Nil-Receiver Runtime Panics
+
+In Go, declaring inspection methods on a value receiver (`func (r Result[T]) Method()`) panics immediately (`panic: runtime error: invalid memory address or nil pointer dereference`) when called on a `nil` pointer (`(*Result[T])(nil).IsFailure()`), because Go attempts to dereference the pointer to copy the struct by value before entering the method body.
+
+To guarantee zero runtime panics across service layers and pipelines, all inspection, query, and data accessor methods on `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` are declared on **pointer receivers**:
+- `(r *Result[T])`
+- `(rs *ResultSlice[T])`
+- `(rm *ResultMap[K, V])`
+
+Every method verifies `if r == nil` on line 1 before checking internal fields or data.
+
+### 6.2 Canonical Defaults on Nil Receiver
+
+When invoked on a `nil` pointer, methods return safe, predictable defaults:
+
+| Method | Return on `nil` Receiver | Behavior & Rationale |
+|---|---|---|
+| `IsFailure()` / `IsFailed()` / `HasError()` | `true` | Nil/uninitialized result represents a failed or missing operation. |
+| `IsSuccess()` / `IsSafe()` | `false` | A nil pointer cannot represent success. |
+| `IsEmptyError()` / `HasNoError()` | `false` | A nil pointer is not error-free. |
+| `Count()` | `0` | Zero records in a nil container. |
+| `IsEmpty()` | `true` | A nil container has zero elements. |
+| `HasRecord()` / `HasRecords()` | `false` | Cannot contain records if pointer is nil. |
+| `IsDefined()` | `false` | Cannot be defined if container is nil. |
+| `IsCountOtherThan(n)` | `true` | A nil/failed result differs from any expected record count. |
+| `AppError()` / `Fault()` | `nil` | Returns nil error safely without panicking. |
+| `Value()` / `Data()` | `zero value of T` | Safe zero fallback for type `T`. |
+| `Items()` / `Data` | `nil` | Nil slice / map fallback. |
+| `Get(key)` | `zero, false` | Reports key not found safely. |
+| `Has(key)` | `false` | Nil map contains no keys. |
+
+---
+

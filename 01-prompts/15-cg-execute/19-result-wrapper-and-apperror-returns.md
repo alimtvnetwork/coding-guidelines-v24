@@ -1,8 +1,8 @@
 # Result Wrapper Types, Collections & AppError Returns — Coding Guideline (must follow)
 
-Trigger Keywords & Aliases: `cg-result-wrapper`, `cg-apperror-returns`, `cg-execute result-wrapper`, `audit result wrapper`, `fix map return error`, `fix slice return error`, `single return object audit`, `enforce apperror returns`, `enforce result map`, `fix multi-value returns`, `is-count-other-than`, `has-record`, `is-defined`
+Trigger Keywords & Aliases: `cg-result-wrapper`, `cg-apperror-returns`, `cg-execute result-wrapper`, `audit result wrapper`, `fix map return error`, `fix slice return error`, `single return object audit`, `enforce apperror returns`, `enforce result map`, `fix multi-value returns`, `is-count-other-than`, `has-record`, `is-defined`, `result-wrapper-null-safety`, `pointer-null-safety`
 
-> **Prompt Version:** 2.2.0
+> **Prompt Version:** 2.3.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ```text
@@ -11,32 +11,33 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, discover, plan, refactor, and verify all Go functions returning multi-value error tuples (such as `(map[K]V, error)`, `([]T, error)`, or `(T, error)`), eliminating raw standard library error returns, replacing them with strongly-typed result wrappers (`ResultMap[K, V]`, `ResultSlice[T]`, `Result[T]`) and structured `*appfault.AppError` returns, guaranteeing a single return object, standardized outer-layer inspection predicates (`IsSuccess`, `IsFailure`, `HasError`, `IsEmptyError`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Data`, `Items`, `AppError`, `Fault`, `Get`, `Has`, `Count`), eliminating dual-handling, and replacing verbose `if err != nil || len(...) != N` or `IsFailure() || Count() != N` conditions with fluent `if res.IsCountOtherThan(N)` across the entire codebase until 100% green without stopping.
+/goal Autonomously scan, discover, plan, refactor, and verify all Go functions returning multi-value error tuples (such as `(map[K]V, error)`, `([]T, error)`, or `(T, error)`), eliminating raw standard library error returns, replacing them with strongly-typed result wrappers (`ResultMap[K, V]`, `ResultSlice[T]`, `Result[T]`) and structured `*appfault.AppError` returns, guaranteeing a single return object, pointer-attached null safety (`*Result[T]`, `*ResultSlice[T]`, `*ResultMap[K, V]`) with methods attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) that verify `if r == nil` before dereferencing any fields or checking errors, standardized outer-layer inspection predicates (`IsSuccess`, `IsFailure`, `HasError`, `IsEmptyError`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Data`, `Items`, `AppError`, `Fault`, `Get`, `Has`, `Count`), eliminating dual-handling, and replacing verbose `if err != nil || len(...) != N` or `IsFailure() || Count() != N` conditions with fluent `if res.IsCountOtherThan(N)` across the entire codebase until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using ripgrep to inventory all functions returning multi-value tuples `(T, error)`, `(map[K]V, error)`, `([]T, error)`, and raw stdlib `error` returns. Also inventory clumsy caller checks like `err != nil || len(...) != N` and `IsFailure() || Count() != N`.
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using ripgrep to inventory all functions returning multi-value tuples `(T, error)`, `(map[K]V, error)`, `([]T, error)`, raw stdlib `error` returns, and any Result methods declared with value receivers `func (r Result[...])` lacking pointer-attached null safety. Also inventory clumsy caller checks like `err != nil || len(...) != N` and `IsFailure() || Count() != N`.
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/XX-result-wrapper-audit.md` with an exhaustive Violation Ledger table.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/XX-result-wrapper/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
 5. [ ] /goal Phase 2 (Step A): Open each target file and refactor function signatures from multi-value returns to single `ResultMap[K, V]`, `ResultSlice[T]`, or `Result[T]` envelopes.
 6. [ ] /goal Phase 2 (Step B): Replace raw stdlib `error` returns with structured `*appfault.AppError` instances using `appfault.New()` or `appfault.Wrap()`.
-7. [ ] /goal Phase 2 (Step C): Modernize all caller call sites to utilize outer-layer inspection methods (`res.IsSuccess()`, `res.IsFailure()`, `res.IsEmpty()`, `res.HasRecord()`, `res.IsDefined()`, `res.IsCountOtherThan(N)`, `res.Get()`, `res.AppError()`), eliminating manual `err != nil || len(...) != N` boilerplate.
-8. [ ] /goal Phase 2 (Step D): Enforce <= 8–15 line function decomposition and clean blank-line spacing.
-9. [ ] /goal Phase 2 (Step E): Execute targeted file-level linters (`python linter-scripts/check-function-lengths.py`, `check-mws-error-codes.py`, `check-newline-styling.py`) to verify 0 remaining violations. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
-10. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
-11. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-12. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-13. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for single return type mandates and micro-tasking.
-14. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
-15. [ ] /learn Ingest `02-spec/03-error-manage/01-index.md` for universal AppError wrapping and error envelopes.
-16. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md` for error handling architecture and Result wrappers.
-17. [ ] /learn Ingest `02-spec/03-error-manage/03-error-code-registry/02-registry.md` for structured error code catalog.
-18. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md` for response envelope schemas.
-19. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/03-go-apperror-linter-spec.md` for Go AppError implementation specifications.
-20. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-result-types.md` for Result[T], ResultSlice[T], and ResultMap[K, V] method specifications.
-21. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
-22. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
+7. [ ] /goal Phase 2 (Step C): Enforce pointer-attached null safety on all Result wrappers: attach all inspection methods (`IsSuccess`, `IsFailure`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Count`, `AppError`, `Data`, `Items`) to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with explicit `nil` checks (`if r == nil`) guarding against nil pointer panics and returning safe defaults.
+8. [ ] /goal Phase 2 (Step D): Modernize all caller call sites to utilize outer-layer inspection methods (`res.IsSuccess()`, `res.IsFailure()`, `res.IsEmpty()`, `res.HasRecord()`, `res.IsDefined()`, `res.IsCountOtherThan(N)`, `res.Get()`, `res.AppError()`), eliminating manual `err != nil || len(...) != N` boilerplate.
+9. [ ] /goal Phase 2 (Step E): Enforce <= 8–15 line function decomposition and clean blank-line spacing.
+10. [ ] /goal Phase 2 (Step F): Execute targeted file-level linters (`python linter-scripts/check-function-lengths.py`, `check-mws-error-codes.py`, `check-newline-styling.py`) to verify 0 remaining violations. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
+11. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
+12. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
+13. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
+14. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for single return type mandates and micro-tasking.
+15. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
+16. [ ] /learn Ingest `02-spec/03-error-manage/01-index.md` for universal AppError wrapping and error envelopes.
+17. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md` for error handling architecture and Result wrappers.
+18. [ ] /learn Ingest `02-spec/03-error-manage/03-error-code-registry/02-registry.md` for structured error code catalog.
+19. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md` for response envelope schemas.
+20. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/03-go-apperror-linter-spec.md` for Go AppError implementation specifications.
+21. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-result-types.md` for Result[T], ResultSlice[T], and ResultMap[K, V] method specifications and pointer null-safety rules.
+22. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
+23. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Multi-Value Returns, Build Violation Ledger in .lovable/plans/pending/, Subtasks, Linter Hook)
@@ -181,32 +182,189 @@ func scanMacroStepsMap(rows *sql.Rows) appfault.ResultMap[string, []MacroStep] {
 
 ## The 4 Core Predicate Methods (Must Enforce)
 
-Result envelopes (`ResultSlice[T]`, `ResultMap[K, V]`, `Result[T]`) provide four core predicate methods that eliminate call-site boilerplate and compound boolean conditions:
+Result envelopes (`ResultSlice[T]`, `ResultMap[K, V]`, `Result[T]`) provide four core predicate methods that eliminate call-site boilerplate, null pointer panics, and compound boolean conditions:
 
 ### 1. `res.IsCountOtherThan(number int) bool`
 
-- **Exact Semantics:** Returns `true` if the operation failed (has error) **OR** if the record count is not equal to `number`.
-- **Purpose:** Replaces the compound check `if res.IsFailure() || res.Count() != N` with a single, intention-revealing predicate.
+- **Exact Semantics:** Returns `true` if the operation failed (has error or nil receiver) **OR** if the record count is not equal to `number`.
+- **Purpose:** Replaces the compound check `if res.IsFailure() || res.Count() != N` (and legacy `if err != nil || len(...) != N`) with a single, intention-revealing predicate.
 - **Behavior:**
-  - If `res.IsFailure()`: returns `true`.
+  - If `res == nil` or `res.IsFailure()`: returns `true`.
   - If `res.IsSuccess()`: returns `res.Count() != number`.
+- **Example:**
+  ```go
+  // ✅ Clean single-condition guard replacing err != nil || len(users) != 1
+  userRes := userRepo.FindById(userId)
+  if userRes.IsCountOtherThan(1) {
+      return appfault.New(appfault.ErrNotFound).WithMessage("expected exactly 1 user")
+  }
+  ```
 
 ### 2. `res.IsEmpty() bool`
 
-- **Exact Semantics:** Returns `true` if the collection contains `0` items/entries, or if scalar payload `T` is null/empty/zero.
-- **Purpose:** Cleanly checks for zero records after validating success.
+- **Exact Semantics:** Returns `true` if the collection contains `0` items/entries, if the scalar payload `T` is empty/null/zero, or if the receiver is `nil`.
+- **Purpose:** Cleanly checks for zero records after validating success, without fragile `len()` checks.
+- **Behavior:**
+  - If `res == nil`: returns `true`.
+  - If `res.IsFailure()`: returns `true` (failed results contain zero valid records).
+  - If `res.IsSuccess()`: returns `res.Count() == 0`.
+- **Example:**
+  ```go
+  orderRes := orderService.ListPendingOrders(ctx)
+  if orderRes.IsFailure() {
+      return orderRes.AppError()
+  }
+  if orderRes.IsEmpty() {
+      logger.Info("no pending orders to process")
+      return nil
+  }
+  ```
 
 ### 3. `res.HasRecord() bool` (and alias `res.HasRecords() bool`)
 
-- **Exact Semantics:** Returns `true` if the operation succeeded (no error) **AND** contains **more than 0 records** (`res.Count() > 0`).
-- **Purpose:** Direct check when logic requires at least one record before continuing.
+- **Exact Semantics:** Returns `true` if the operation succeeded (no error) **AND** contains **more than 0 records** (`res.Count() > 0 && !res.IsFailure()`).
+- **Purpose:** Direct positive check when business logic requires at least one record before continuing, avoiding inverted `!IsEmpty()` logic.
+- **Behavior:**
+  - If `res == nil` or `res.IsFailure()`: returns `false`.
+  - If `res.IsSuccess()`: returns `res.Count() > 0`.
+- **Example:**
+  ```go
+  itemRes := catalog.QueryItemsByCategory(catId)
+  if itemRes.HasRecord() {
+      dispatcher.EnqueueBatch(itemRes.Items)
+  }
+  ```
 
 ### 4. `res.IsDefined() bool`
 
-- **Exact Semantics:** Returns `true` if the operation succeeded (no error) **AND** has `recordCount > 0` (or data `T` is non-null/non-empty).
+- **Exact Semantics:** Returns `true` if the operation succeeded (no error) **AND** has `recordCount > 0` (or the underlying data `T` is non-null/non-empty).
 - **Distinction from `IsSuccess()`:**
   - `IsSuccess()` means "no error occurred" (an empty query returning 0 items succeeds without error).
-  - `IsDefined()` means "no error occurred AND actual data exists" (recordCount > 0 or not null).
+  - `IsDefined()` means "no error occurred AND actual data exists" (`recordCount > 0` or payload not null/empty).
+- **Behavior:**
+  - If `res == nil` or `res.IsFailure()`: returns `false`.
+  - For `Result[T]`: returns `r.defined && r.err == nil && r.value != nil`.
+  - For `ResultSlice[T]`: returns `len(rs.items) > 0 && rs.err == nil`.
+  - For `ResultMap[K, V]`: returns `len(rm.items) > 0 && rm.err == nil`.
+- **Example:**
+  ```go
+  profileRes := userProfileService.GetProfile(userId)
+  if profileRes.IsDefined() {
+      displayProfileBadge(profileRes.Value())
+  }
+  ```
+
+---
+
+## Pointer-Attached Null Safety (*Result[T], *ResultSlice[T], *ResultMap[K, V])
+
+### The Fatal Flaw of Value Receivers in Go
+
+In Go, declaring methods with a **value receiver** (`func (r Result[T]) Method()`) creates an inescapable runtime crash vulnerability:
+If a caller has a `nil` pointer to a result (`var res *Result[T] = nil`), calling `res.IsFailure()` or `res.Count()` **panics immediately** with:
+```text
+panic: runtime error: invalid memory address or nil pointer dereference
+```
+This panic happens **before the method body even begins executing**, because the Go runtime must evaluate `*res` to create a value copy for the receiver.
+
+By contrast, declaring methods with a **pointer receiver** (`func (r *Result[T]) Method()`) passes the pointer itself directly. If `r == nil`, the method body executes normally and can guard itself on line 1:
+```go
+if r == nil {
+    return true // Safe default, ZERO panic!
+}
+```
+
+Furthermore, in Go, methods declared on a pointer receiver `(r *T)` can still be called directly on an addressable value `T` (`res := Ok(val); res.IsSuccess()`) because the Go compiler automatically passes `&res`. Therefore, pointer receivers provide 100% backward compatibility while providing complete immunity against nil pointer crashes!
+
+### Canonical Nil Receiver Defaults Table
+
+When any inspection method is invoked on a `nil` pointer (`(*Result[T])(nil)`, `(*ResultSlice[T])(nil)`, or `(*ResultMap[K, V])(nil)`), it MUST never panic and MUST return these canonical safe defaults:
+
+| Method | Return on `nil` Pointer | Rationale & Semantic Behavior |
+|---|---|---|
+| `r.IsFailure()` / `r.IsFailed()` | `true` | An uninitialized/missing result is an error/failure state. |
+| `r.IsSuccess()` / `r.IsSafe()` | `false` | A nil pointer cannot represent a successful operation. |
+| `r.HasError()` | `true` | Alias for `IsFailed()`. |
+| `r.IsEmptyError()` / `r.HasNoError()` | `false` | A nil result is not error-free. |
+| `r.Count()` | `0` | A nil result contains zero records. |
+| `r.IsEmpty()` | `true` | A nil result contains no elements. |
+| `r.HasRecord()` / `r.HasRecords()` | `false` | A nil container has 0 records, never > 0. |
+| `r.IsDefined()` | `false` | A nil container has no defined data payload. |
+| `r.IsCountOtherThan(number)` | `true` | A nil/failed result differs from any expected record count. |
+| `r.AppError()` / `r.Fault()` | `nil` | Safely returns nil error without crashing. |
+| `r.Value()` / `r.Data()` | `zero value of T` | Safely returns zero value of type `T`. |
+| `rs.Items()` / `rs.Data` | `nil` | Safely returns nil slice. |
+| `rm.Get(key)` | `zero, false` | Safely returns zero value and `false` indicating missing key. |
+| `rm.Has(key)` | `false` | Key cannot exist in a nil map. |
+
+### Pointer-Attached Implementation Standard (`pkg/appfault/`)
+
+Every inspection method in `pkg/appfault` MUST follow this pointer-receiver pattern with an immediate `nil` guard:
+
+```go
+// ✅ POINTER-ATTACHED & NULL-SAFE: Inspecting nil pointer returns true, never panics!
+func (r *Result[T]) IsFailure() bool {
+    if r == nil {
+        return true
+    }
+    return r.err != nil
+}
+
+func (r *Result[T]) Count() int {
+    if r == nil || r.err != nil {
+        return 0
+    }
+    if r.defined {
+        return 1
+    }
+    return 0
+}
+
+func (r *Result[T]) IsCountOtherThan(expected int) bool {
+    if r == nil || r.IsFailure() {
+        return true
+    }
+    return r.Count() != expected
+}
+
+func (r *Result[T]) IsEmpty() bool {
+    if r == nil || r.err != nil {
+        return true
+    }
+    return !r.defined || isValueEmpty(r.value)
+}
+
+func (r *Result[T]) HasRecord() bool {
+    if r == nil || r.err != nil {
+        return false
+    }
+    return r.Count() > 0
+}
+
+func (r *Result[T]) IsDefined() bool {
+    if r == nil || r.err != nil {
+        return false
+    }
+    return r.defined && !isValueEmpty(r.value)
+}
+```
+
+### Go Addressability Rule for Callers
+
+In Go, methods declared on pointer receivers `*T` can be called on:
+1. Pointers directly: `ptr := &res; ptr.IsSuccess()` or `var ptr *Result[T]; ptr.IsFailure()`
+2. Addressable value variables: `res := store.Query(); if res.IsSuccess() { ... }` (compiler passes `&res`)
+3. Slice elements and struct fields: `results[0].IsSuccess()`, `s.result.IsSuccess()`
+
+**Important Caller Rule:** In Go, you cannot call a pointer method on an *unaddressable temporary expression* directly (e.g. `store.Query().IsSuccess()` will not compile if `Query()` returns by value). Callers MUST assign the result to a variable first:
+```go
+// ❌ COMPILE ERROR (if Query returns Result[T] by value):
+if store.Query().IsSuccess() { ... }
+
+// ✅ CORRECT: Assign to variable first (variable is addressable)
+res := store.Query()
+if res.IsSuccess() { ... }
+```
 
 ---
 
@@ -232,7 +390,7 @@ if detailRes.IsFailure() || detailRes.Count() != 1 {
 }
 
 // ------------------------------------------------------------
-// ✅ 3. CANONICAL MODERN PATTERN: Single expressive guard
+// ✅ 3. CANONICAL MODERN PATTERN: Pointer-safe single expressive guard
 // ------------------------------------------------------------
 detailRes := pipeDb.QueryDetailedErrorLogsByRunId(runId)
 if detailRes.IsCountOtherThan(1) {
@@ -275,25 +433,27 @@ if stepRes.IsDefined() {
 
 ## Standardized Outer-Layer Inspection Methods Table
 
-| Method | Return Type | Applicable To | Purpose & Exact Behavior |
+All methods below are declared on **pointer receivers** (`*Result[T]`, `*ResultSlice[T]`, `*ResultMap[K, V]`) and guarantee complete **null safety** (zero runtime panics when invoked on `nil` pointers):
+
+| Method | Return Type | Receiver | Purpose & Exact Behavior (Safe on `nil`) |
 |---|---|---|---|
-| `res.IsSuccess()` | `bool` | All Wrappers | Returns `true` if the operation succeeded with no error. |
-| `res.IsFailure()` / `res.IsFailed()` | `bool` | All Wrappers | Returns `true` if the operation encountered an error. |
-| `res.HasError()` | `bool` | All Wrappers | Alias for `IsFailed()`. Returns `true` if error is present. |
-| `res.IsEmptyError()` / `res.HasNoError()` | `bool` | All Wrappers | Returns `true` if no active error exists. |
-| `res.IsCountOtherThan(number)` | `bool` | All Wrappers | Returns `true` if operation failed OR count != number. |
-| `res.IsEmpty()` | `bool` | All Wrappers | Returns `true` if underlying collection has 0 items or payload is empty/null. |
-| `res.HasRecord()` / `res.HasRecords()` | `bool` | All Wrappers | Returns `true` if operation succeeded AND count > 0 (more than 0 records). |
-| `res.IsDefined()` | `bool` | All Wrappers | Returns `true` if operation succeeded (no error) AND recordCount > 0 / non-null. |
-| `res.Count()` | `int` | All Wrappers | Returns total number of records/entries (or 0 if failed). |
-| `res.Data` / `res.Items` / `res.Value()` | `T` / `[]T` / `map[K]V` | All Wrappers | Accesses the underlying data payload directly. |
-| `res.AppError()` / `res.Fault()` | `*appfault.AppError` | All Wrappers | Retrieves structured error context for logging, propagation, or HTTP responses. |
-| `res.Get(key)` | `(V, bool)` | `ResultMap[K, V]` | Safely retrieves map entry by key without nil-map panics. |
-| `res.Has(key)` | `bool` | `ResultMap[K, V]` | Checks whether a key exists within the result map. |
-| `res.Keys()` | `[]K` | `ResultMap[K, V]` | Returns deterministically sorted slice of all map keys. |
-| `res.Values()` | `[]V` | `ResultMap[K, V]` | Returns slice of map values ordered according to `Keys()`. |
-| `res.Filter(predicate)` | `ResultSlice[T]` | `ResultSlice[T]` | Returns filtered slice matching predicate (or self if failed). |
-| `res.ForEach(fn)` | `ResultSlice[T]` | `ResultSlice[T]` | Iterates over elements with early exit via `ForEachBreak`. |
+| `res.IsSuccess()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if operation succeeded with no error. (`false` on `nil`). |
+| `res.IsFailure()` / `res.IsFailed()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if operation encountered an error or receiver is `nil`. |
+| `res.HasError()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Alias for `IsFailed()`. Returns `true` if error is present or `nil`. |
+| `res.IsEmptyError()` / `res.HasNoError()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if receiver is non-nil and has no active error. |
+| `res.IsCountOtherThan(number)` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if operation failed (or `nil`) OR count != number. |
+| `res.IsEmpty()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if collection has 0 items, payload is empty/null, or `nil`. |
+| `res.HasRecord()` / `res.HasRecords()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if succeeded AND count > 0 (more than 0 records). |
+| `res.IsDefined()` | `bool` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns `true` if succeeded AND recordCount > 0 / non-null payload. |
+| `res.Count()` | `int` | `*Result`, `*ResultSlice`, `*ResultMap` | Returns total number of records/entries (0 if failed or `nil`). |
+| `res.Data` / `res.Items` / `res.Value()` | `T` / `[]T` / `map[K]V` | `*Result`, `*ResultSlice`, `*ResultMap` | Accesses the underlying data payload directly (zero value on `nil`). |
+| `res.AppError()` / `res.Fault()` | `*appfault.AppError` | `*Result`, `*ResultSlice`, `*ResultMap` | Retrieves structured error context (`nil` on `nil` receiver). |
+| `res.Get(key)` | `(V, bool)` | `*ResultMap[K, V]` | Safely retrieves map entry by key without nil-map panics. |
+| `res.Has(key)` | `bool` | `*ResultMap[K, V]` | Checks whether a key exists within the result map (`false` on `nil`). |
+| `res.Keys()` | `[]K` | `*ResultMap[K, V]` | Returns deterministically sorted slice of all map keys (`nil` on `nil`). |
+| `res.Values()` | `[]V` | `*ResultMap[K, V]` | Returns slice of map values ordered according to `Keys()`. |
+| `res.Filter(predicate)` | `ResultSlice[T]` | `*ResultSlice[T]` | Returns filtered slice matching predicate (or self if failed/nil). |
+| `res.ForEach(fn)` | `ResultSlice[T]` | `*ResultSlice[T]` | Iterates over elements with early exit via `ForEachBreak`. |
 
 ---
 
@@ -314,13 +474,13 @@ Before refactoring error handling in any package, the agent must study and enfor
 - [ ] **Go AppError Architecture (`02-spec/03-error-manage/02-error-architecture/06-apperror-package/03-go-apperror-linter-spec.md`):**
   - Strict enforcement of `*appfault.AppError` return types and monadic helper methods across Go packages.
 - [ ] **Result Types Specification (`02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-result-types.md`):**
-  - Mandatory implementation of `IsCountOtherThan`, `IsEmpty`, `HasRecord`, and `IsDefined` on all result containers.
+  - Mandatory implementation of pointer-attached null safety and the 4 core predicates (`IsCountOtherThan`, `IsEmpty`, `HasRecord`, `IsDefined`) on all result containers.
 
 ---
 
 ## Automated Codebase Scanning Guide
 
-Use these exact `ripgrep` regex commands to discover legacy multi-value return patterns and clumsy caller checks across the codebase:
+Use these exact `ripgrep` regex commands to discover legacy multi-value return patterns, clumsy caller checks, and value-receiver anti-patterns across the codebase:
 
 ```bash
 # 1. Find functions returning multi-value map tuples: (map[...], error)
@@ -343,6 +503,9 @@ rg --pcre2 "(err\s*!=\s*nil\s*\|\|\s*len\([^\)]+\)\s*!=\s*\d+|len\([^\)]+\)\s*!=
 
 # 7. Find transitional checks: IsFailure() || ... Count() != N
 rg --pcre2 "(IsFailure\(\)\s*\|\|\s*\w+\.Count\(\)\s*!=\s*\d+|\w+\.Count\(\)\s*!=\s*\d+\s*\|\|\s*\w+\.IsFailure\(\))"
+
+# 8. Find value receiver declarations on Result types (violates pointer null safety):
+rg --pcre2 "func\s+\([a-zA-Z0-9_]+\s+Result(?:Slice|Map)?\["
 ```
 
 ---
@@ -360,6 +523,7 @@ To survive large codebases without hitting step limits or context loss, execute 
 | | Sub-Agent 1: Codebase Scanner & Spec Architect                      | |
 | | - Runs ripgrep queries to catalog all multi-value error returns     | |
 | | - Inventories compound caller assertions (err != nil || len != N)   | |
+| | - Detects value receiver declarations lacking pointer null safety   | |
 | | - Authors master audit plan in .lovable/plans/pending/             | |
 | | - Generates granular subtasks in .lovable/plans/subtasks/           | |
 | +---------------------------------------------------------------------+ |
@@ -368,6 +532,7 @@ To survive large codebases without hitting step limits or context loss, execute 
 | +---------------------------------------------------------------------+ |
 | | Sub-Agent 2: Code Refactorer & Outer-Layer Modernizer                | |
 | | - Refactors store/repo signatures to ResultMap/ResultSlice/Result   | |
+| | - Attaches methods to pointer receivers with nil-safety guards      | |
 | | - Updates scanner functions to use appfault.OkMap / FailMap         | |
 | | - Modernizes callers with IsCountOtherThan / HasRecord / IsDefined   | |
 | | - Verifies zero regressions with targeted file linters              | |
@@ -379,6 +544,8 @@ To survive large codebases without hitting step limits or context loss, execute 
 
 ## Strictly Avoid: Anti-Patterns & Prohibitions
 
+- **NO VALUE RECEIVERS FOR RESULT INSPECTION METHODS:** NEVER define inspection methods on value receivers `func (r Result[T])`. ALL methods checking status, error, count, or data MUST be attached to pointer receivers `(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])` with mandatory `if r == nil` guards to eliminate nil-pointer dereference panics.
+- **NO UNGUARDED FIELD ACCESS ON NIL POINTERS:** Never access `.Data`, `.items`, or `.err` directly on a pointer without verifying `r == nil` or calling pointer-safe inspection methods (`res.IsFailure()`, `res.Count()`, `res.IsDefined()`).
 - **NO PIECEMEAL COMMITS:** NEVER commit 1 or 2 files in isolation. Consolidate all related changes across specs, code, and indices into a single atomic commit followed immediately by `git push origin main`.
 - **NO ROUTINE FULL CI/CD RUNS:** DO NOT run `06-cicd-local-runner.py` during normal turns. It executes 28-38 heavy validation gates across unrelated packages and wastes minutes. Run targeted linters only on modified files.
 - **NO UNIT TEST EXECUTION OF UNRELATED PACKAGES:** Only run tests for packages directly modified (e.g. `go test ./pkg/appfault/...`).
@@ -388,3 +555,4 @@ To survive large codebases without hitting step limits or context loss, execute 
 - **NO ABSOLUTE PATHS:** Never write absolute filesystem paths (`C:\...`, `/home/...`) or `file:///` URIs. Use strict relative Git paths starting from the repository root.
 - **NO UPPERCASE FILENAMES:** Every file created or edited must be strictly lowercase.
 - **NO MULTI-VALUE TUPLES:** Eliminate `(T, error)` in favor of `Result[T]`, `ResultMap[K, V]`, or `ResultSlice[T]`.
+

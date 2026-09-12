@@ -77,32 +77,48 @@ func FailMap[K comparable, V any](err *AppError) ResultMap[K, V] {
 }
 
 // IsSuccess returns true if no error is present.
-func (rm ResultMap[K, V]) IsSuccess() bool {
+func (rm *ResultMap[K, V]) IsSuccess() bool {
+	if rm == nil {
+		return false
+	}
+
 	return rm.appError == nil
 }
 
 // IsFailed returns true if an error is present.
-func (rm ResultMap[K, V]) IsFailed() bool {
+func (rm *ResultMap[K, V]) IsFailed() bool {
+	if rm == nil {
+		return true
+	}
+
 	return rm.appError != nil
 }
 
 // IsFailure returns true if an error is present.
-func (rm ResultMap[K, V]) IsFailure() bool {
+func (rm *ResultMap[K, V]) IsFailure() bool {
 	return rm.IsFailed()
 }
 
 // IsInvalid returns true if an error is present.
-func (rm ResultMap[K, V]) IsInvalid() bool {
+func (rm *ResultMap[K, V]) IsInvalid() bool {
 	return rm.IsFailed()
 }
 
 // IsNull returns true if no error is present.
-func (rm ResultMap[K, V]) IsNull() bool {
+func (rm *ResultMap[K, V]) IsNull() bool {
+	if rm == nil {
+		return true
+	}
+
 	return rm.appError == nil
 }
 
 // IsEmpty returns true if no active error is present (or map is empty).
-func (rm ResultMap[K, V]) IsEmpty() bool {
+func (rm *ResultMap[K, V]) IsEmpty() bool {
+	if rm == nil {
+		return true
+	}
+
 	if rm.appError == nil {
 		return len(rm.Data) == 0
 	}
@@ -111,8 +127,8 @@ func (rm ResultMap[K, V]) IsEmpty() bool {
 }
 
 // IsDefined returns true if the operation succeeded and contains more than 0 entries (recordCount > 0).
-func (rm ResultMap[K, V]) IsDefined() bool {
-	if rm.IsFailed() {
+func (rm *ResultMap[K, V]) IsDefined() bool {
+	if rm == nil || rm.IsFailed() {
 		return false
 	}
 
@@ -120,8 +136,8 @@ func (rm ResultMap[K, V]) IsDefined() bool {
 }
 
 // HasRecord returns true if the operation succeeded and contains more than 0 entries.
-func (rm ResultMap[K, V]) HasRecord() bool {
-	if rm.IsFailed() {
+func (rm *ResultMap[K, V]) HasRecord() bool {
+	if rm == nil || rm.IsFailed() {
 		return false
 	}
 
@@ -129,28 +145,28 @@ func (rm ResultMap[K, V]) HasRecord() bool {
 }
 
 // HasRecords is an alias for HasRecord.
-func (rm ResultMap[K, V]) HasRecords() bool {
+func (rm *ResultMap[K, V]) HasRecords() bool {
 	return rm.HasRecord()
 }
 
 // AsSimpleVerifier returns the ResultMap conforming to SimpleVerifier.
-func (rm ResultMap[K, V]) AsSimpleVerifier() SimpleVerifier {
+func (rm *ResultMap[K, V]) AsSimpleVerifier() SimpleVerifier {
 	return rm
 }
 
 // AsSimpleVerifyChecker returns the ResultMap conforming to SimpleVerifier.
-func (rm ResultMap[K, V]) AsSimpleVerifyChecker() SimpleVerifier {
+func (rm *ResultMap[K, V]) AsSimpleVerifyChecker() SimpleVerifier {
 	return rm
 }
 
 // HasError returns true if an error is present.
-func (rm ResultMap[K, V]) HasError() bool {
+func (rm *ResultMap[K, V]) HasError() bool {
 	return rm.IsFailed()
 }
 
 // Has returns true if the key exists in the map.
-func (rm ResultMap[K, V]) Has(key K) bool {
-	if rm.IsFailed() || rm.Data == nil {
+func (rm *ResultMap[K, V]) Has(key K) bool {
+	if rm == nil || rm.IsFailed() || rm.Data == nil {
 		return false
 	}
 
@@ -160,8 +176,8 @@ func (rm ResultMap[K, V]) Has(key K) bool {
 }
 
 // Get retrieves the value associated with key.
-func (rm ResultMap[K, V]) Get(key K) (V, bool) {
-	if rm.IsFailed() || rm.Data == nil {
+func (rm *ResultMap[K, V]) Get(key K) (V, bool) {
+	if rm == nil || rm.IsFailed() || rm.Data == nil {
 		var zero V
 
 		return zero, false
@@ -173,8 +189,8 @@ func (rm ResultMap[K, V]) Get(key K) (V, bool) {
 }
 
 // Count returns the number of entries in the map or 0 if failed.
-func (rm ResultMap[K, V]) Count() int {
-	if rm.IsFailed() || rm.Data == nil {
+func (rm *ResultMap[K, V]) Count() int {
+	if rm == nil || rm.IsFailed() || rm.Data == nil {
 		return 0
 	}
 
@@ -182,8 +198,8 @@ func (rm ResultMap[K, V]) Count() int {
 }
 
 // IsCountOtherThan returns true if the operation failed or its entry count differs from n.
-func (rm ResultMap[K, V]) IsCountOtherThan(n int) bool {
-	if rm.IsFailed() {
+func (rm *ResultMap[K, V]) IsCountOtherThan(n int) bool {
+	if rm == nil || rm.IsFailed() {
 		return true
 	}
 
@@ -191,27 +207,47 @@ func (rm ResultMap[K, V]) IsCountOtherThan(n int) bool {
 }
 
 // AppError returns the underlying *AppError.
-func (rm ResultMap[K, V]) AppError() *AppError {
+func (rm *ResultMap[K, V]) AppError() *AppError {
+	if rm == nil {
+		return nil
+	}
+
 	return rm.appError
 }
 
 // Fault returns the underlying *AppError (alias for AppError).
-func (rm ResultMap[K, V]) Fault() *AppError {
+func (rm *ResultMap[K, V]) Fault() *AppError {
+	if rm == nil {
+		return nil
+	}
+
 	return rm.appError
 }
 
 // Error returns the underlying *AppError.
-func (rm ResultMap[K, V]) Error() *AppError {
+func (rm *ResultMap[K, V]) Error() *AppError {
+	if rm == nil {
+		return nil
+	}
+
 	return rm.appError
 }
 
 // ValueAny returns the data map as an any interface.
-func (rm ResultMap[K, V]) ValueAny() any {
+func (rm *ResultMap[K, V]) ValueAny() any {
+	if rm == nil {
+		return nil
+	}
+
 	return rm.Data
 }
 
 // Unwrap unpacks the (map[K]V, *AppError) tuple.
-func (rm ResultMap[K, V]) Unwrap() (map[K]V, *AppError) {
+func (rm *ResultMap[K, V]) Unwrap() (map[K]V, *AppError) {
+	if rm == nil {
+		return nil, nil
+	}
+
 	return rm.Data, rm.appError
 }
 
@@ -225,8 +261,8 @@ func collectMapKeys[K comparable, V any](data map[K]V) []K {
 }
 
 // Keys returns a slice of map keys, sorted deterministically by string representation.
-func (rm ResultMap[K, V]) Keys() []K {
-	if rm.IsFailed() || len(rm.Data) == 0 {
+func (rm *ResultMap[K, V]) Keys() []K {
+	if rm == nil || rm.IsFailed() || len(rm.Data) == 0 {
 		return []K{}
 	}
 
@@ -239,8 +275,8 @@ func (rm ResultMap[K, V]) Keys() []K {
 }
 
 // Values returns a slice of map values ordered according to Keys().
-func (rm ResultMap[K, V]) Values() []V {
-	if rm.IsFailed() || len(rm.Data) == 0 {
+func (rm *ResultMap[K, V]) Values() []V {
+	if rm == nil || rm.IsFailed() || len(rm.Data) == 0 {
 		return []V{}
 	}
 
@@ -253,9 +289,12 @@ func (rm ResultMap[K, V]) Values() []V {
 }
 
 // Filter returns a new ResultMap containing entries that satisfy predicate.
-func (rm ResultMap[K, V]) Filter(predicate func(key K, val V) bool) ResultMap[K, V] {
+func (rm *ResultMap[K, V]) Filter(predicate func(key K, val V) bool) ResultMap[K, V] {
+	if rm == nil {
+		return ResultMap[K, V]{}
+	}
 	if rm.IsFailed() || predicate == nil {
-		return rm
+		return *rm
 	}
 
 	filtered := make(map[K]V)
@@ -269,19 +308,22 @@ func (rm ResultMap[K, V]) Filter(predicate func(key K, val V) bool) ResultMap[K,
 }
 
 // ForEach iterates over map entries passing key and value to fn.
-func (rm ResultMap[K, V]) ForEach(fn func(key K, val V)) ResultMap[K, V] {
+func (rm *ResultMap[K, V]) ForEach(fn func(key K, val V)) ResultMap[K, V] {
+	if rm == nil {
+		return ResultMap[K, V]{}
+	}
 	if rm.IsFailed() || fn == nil {
-		return rm
+		return *rm
 	}
 
 	for _, k := range rm.Keys() {
 		fn(k, rm.Data[k])
 	}
 
-	return rm
+	return *rm
 }
 
-func buildMapBlock[K comparable, V any](rm ResultMap[K, V]) string {
+func buildMapBlock[K comparable, V any](rm *ResultMap[K, V]) string {
 	var b strings.Builder
 	b.WriteString("{\n")
 	for _, k := range rm.Keys() {
@@ -294,11 +336,16 @@ func buildMapBlock[K comparable, V any](rm ResultMap[K, V]) string {
 }
 
 // FormatStruct formats map key-values in aligned block or error banner.
-func (rm ResultMap[K, V]) FormatStruct() string {
-	if rm.IsFailed() {
+func (rm *ResultMap[K, V]) FormatStruct() string {
+	if rm == nil {
+		return ""
+	}
+	if rm.appError != nil {
 		return rm.appError.FormatStdout()
 	}
-
+	if rm.IsFailed() {
+		return "❌ FAILURE"
+	}
 	if len(rm.Data) == 0 {
 		return "{}"
 	}
@@ -307,18 +354,30 @@ func (rm ResultMap[K, V]) FormatStruct() string {
 }
 
 // String returns a human-readable string representation of the map or error.
-func (rm ResultMap[K, V]) String() string {
-	if rm.IsFailed() {
+func (rm *ResultMap[K, V]) String() string {
+	if rm == nil {
+		return ""
+	}
+	if rm.appError != nil {
 		return rm.appError.FormatStdout()
+	}
+	if rm.IsFailed() {
+		return "❌ FAILURE"
 	}
 
 	return FormatValue(rm.Data)
 }
 
 // PrettyJson returns the map formatted as indented JSON with sorted keys.
-func (rm ResultMap[K, V]) PrettyJson() string {
-	if rm.IsFailed() {
+func (rm *ResultMap[K, V]) PrettyJson() string {
+	if rm == nil {
+		return "{}"
+	}
+	if rm.appError != nil {
 		return rm.appError.FormatJson()
+	}
+	if rm.IsFailed() {
+		return `{"success":false}`
 	}
 
 	return FormatSortedJson(rm.Data)

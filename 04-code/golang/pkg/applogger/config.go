@@ -96,5 +96,7 @@ func Default() LoggerResult {
 
 // MustDefault returns a standard Console logger at Info level.
 func MustDefault() Logger {
-	return Default().Data()
+	res := Default()
+
+	return res.Data()
 }

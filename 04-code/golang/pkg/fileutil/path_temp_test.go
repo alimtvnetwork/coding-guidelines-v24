@@ -30,7 +30,8 @@ func TestUserTempPath(t *testing.T) {
 		t.Fatalf("UserTempPath failed: %v", res.Fault())
 	}
 
-	tempDir := UserTempDir().Data()
+	uDirRes := UserTempDir()
+	tempDir := uDirRes.Data()
 	expected := filepath.Join(tempDir, "sub1", "sub2")
 	if res.Data() != expected {
 		t.Fatalf("expected %s, got %s", expected, res.Data())

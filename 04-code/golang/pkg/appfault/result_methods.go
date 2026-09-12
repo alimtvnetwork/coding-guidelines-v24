@@ -33,33 +33,41 @@ func valueRecordCount(val any) int {
 }
 
 // IsSuccess returns true if no error is present.
-func (r Result[T]) IsSuccess() bool {
+func (r *Result[T]) IsSuccess() bool {
+	if r == nil {
+		return false
+	}
+
 	return r.appError == nil
 }
 
 // IsFailed returns true if an error is present.
-func (r Result[T]) IsFailed() bool {
+func (r *Result[T]) IsFailed() bool {
+	if r == nil {
+		return true
+	}
+
 	return r.appError != nil
 }
 
 // IsFailure is an alias for IsFailed.
-func (r Result[T]) IsFailure() bool {
+func (r *Result[T]) IsFailure() bool {
 	return r.IsFailed()
 }
 
 // IsInvalid is an alias for IsFailed.
-func (r Result[T]) IsInvalid() bool {
+func (r *Result[T]) IsInvalid() bool {
 	return r.IsFailed()
 }
 
 // IsValid returns true if the operation succeeded with no error.
-func (r Result[T]) IsValid() bool {
+func (r *Result[T]) IsValid() bool {
 	return r.IsSuccess()
 }
 
 // IsDefined returns true if the operation succeeded (no error) and contains more than 0 records or non-null data T.
-func (r Result[T]) IsDefined() bool {
-	if r.IsFailed() {
+func (r *Result[T]) IsDefined() bool {
+	if r == nil || r.IsFailed() {
 		return false
 	}
 
@@ -67,8 +75,8 @@ func (r Result[T]) IsDefined() bool {
 }
 
 // HasRecord returns true if the operation succeeded and contains more than 0 records.
-func (r Result[T]) HasRecord() bool {
-	if r.IsFailed() {
+func (r *Result[T]) HasRecord() bool {
+	if r == nil || r.IsFailed() {
 		return false
 	}
 
@@ -76,13 +84,13 @@ func (r Result[T]) HasRecord() bool {
 }
 
 // HasRecords is an alias for HasRecord.
-func (r Result[T]) HasRecords() bool {
+func (r *Result[T]) HasRecords() bool {
 	return r.HasRecord()
 }
 
 // Count returns the number of records in the payload (0 if failed or empty, or length if collection).
-func (r Result[T]) Count() int {
-	if r.IsFailed() {
+func (r *Result[T]) Count() int {
+	if r == nil || r.IsFailed() {
 		return 0
 	}
 
@@ -90,8 +98,8 @@ func (r Result[T]) Count() int {
 }
 
 // IsCountOtherThan returns true if the operation failed or its record count differs from n.
-func (r Result[T]) IsCountOtherThan(n int) bool {
-	if r.IsFailed() {
+func (r *Result[T]) IsCountOtherThan(n int) bool {
+	if r == nil || r.IsFailed() {
 		return true
 	}
 
@@ -99,28 +107,28 @@ func (r Result[T]) IsCountOtherThan(n int) bool {
 }
 
 // AsSimpleVerifier returns the Result conforming to SimpleVerifier.
-func (r Result[T]) AsSimpleVerifier() SimpleVerifier {
+func (r *Result[T]) AsSimpleVerifier() SimpleVerifier {
 	return r
 }
 
 // AsSimpleVerifyChecker returns the Result conforming to SimpleVerifier.
-func (r Result[T]) AsSimpleVerifyChecker() SimpleVerifier {
+func (r *Result[T]) AsSimpleVerifyChecker() SimpleVerifier {
 	return r
 }
 
 // HasError returns true if an error is present.
-func (r Result[T]) HasError() bool {
+func (r *Result[T]) HasError() bool {
 	return r.IsFailed()
 }
 
 // HasNoError returns true if no error exists.
-func (r Result[T]) HasNoError() bool {
+func (r *Result[T]) HasNoError() bool {
 	return r.IsSuccess()
 }
 
 // HasValidError returns true if the embedded error has a valid code.
-func (r Result[T]) HasValidError() bool {
-	if r.appError == nil {
+func (r *Result[T]) HasValidError() bool {
+	if r == nil || r.appError == nil {
 		return false
 	}
 
@@ -128,12 +136,16 @@ func (r Result[T]) HasValidError() bool {
 }
 
 // IsSafe returns true if the operation succeeded with no error.
-func (r Result[T]) IsSafe() bool {
+func (r *Result[T]) IsSafe() bool {
 	return r.IsSuccess()
 }
 
 // IsEmpty returns true if no active error is present and payload has 0 records, or error is empty.
-func (r Result[T]) IsEmpty() bool {
+func (r *Result[T]) IsEmpty() bool {
+	if r == nil {
+		return true
+	}
+
 	if r.appError == nil {
 		return r.Count() == 0
 	}
@@ -142,27 +154,35 @@ func (r Result[T]) IsEmpty() bool {
 }
 
 // HasZero returns true if error is nil or represents a zero-value/None error state.
-func (r Result[T]) HasZero() bool {
+func (r *Result[T]) HasZero() bool {
 	return r.IsEmpty()
 }
 
 // IsZero returns true if error is nil or represents a zero-value/None error state.
-func (r Result[T]) IsZero() bool {
+func (r *Result[T]) IsZero() bool {
 	return r.IsEmpty()
 }
 
-// IsNull returns true if the embedded AppError pointer is nil.
-func (r Result[T]) IsNull() bool {
+// IsNull returns true if the pointer is nil or embedded AppError pointer is nil.
+func (r *Result[T]) IsNull() bool {
+	if r == nil {
+		return true
+	}
+
 	return r.appError == nil
 }
 
-// HasNull returns true if the embedded AppError is nil or represents no error.
-func (r Result[T]) HasNull() bool {
+// HasNull returns true if the pointer is nil or embedded AppError is nil or represents no error.
+func (r *Result[T]) HasNull() bool {
 	return r.IsEmpty()
 }
 
 // Clone returns a deep copy of Result with its AppError safely cloned.
-func (r Result[T]) Clone() Result[T] {
+func (r *Result[T]) Clone() Result[T] {
+	if r == nil {
+		return Result[T]{}
+	}
+
 	return Result[T]{
 		value:    r.value,
 		appError: r.appError.Clone(),
@@ -170,7 +190,11 @@ func (r Result[T]) Clone() Result[T] {
 }
 
 // Concat combines errors from two results into an immutable Result.
-func (r Result[T]) Concat(other Result[T]) Result[T] {
+func (r *Result[T]) Concat(other Result[T]) Result[T] {
+	if r == nil {
+		return other
+	}
+
 	mergedErr := Merge(r.appError, other.appError)
 	val := other.value
 	if r.IsSuccess() && other.IsFailed() {
@@ -184,13 +208,19 @@ func (r Result[T]) Concat(other Result[T]) Result[T] {
 }
 
 // Unwrap unpacks the (Value, *AppError) tuple.
-func (r Result[T]) Unwrap() (T, *AppError) {
+func (r *Result[T]) Unwrap() (T, *AppError) {
+	if r == nil {
+		var zero T
+
+		return zero, nil
+	}
+
 	return r.value, r.appError
 }
 
 // UnwrapOr returns the inner value if successful, or defaultVal on failure.
-func (r Result[T]) UnwrapOr(defaultVal T) T {
-	if r.IsFailed() {
+func (r *Result[T]) UnwrapOr(defaultVal T) T {
+	if r == nil || r.IsFailed() {
 		return defaultVal
 	}
 
@@ -207,87 +237,133 @@ func DefaultResultFormatter[T any](r Result[T]) string {
 }
 
 // Print outputs the result representation to standard output.
-func (r Result[T]) Print() {
+func (r *Result[T]) Print() {
+	if r == nil {
+		return
+	}
+
 	fmt.Println(r.Format(nil))
 }
 
 // PrintFault outputs the fault representation to standard output if failed.
-func (r Result[T]) PrintFault() {
-	if r.IsFailed() {
+func (r *Result[T]) PrintFault() {
+	if r != nil && r.IsFailed() && r.appError != nil {
 		r.appError.Print()
 	}
 }
 
 // Format formats the Result using a custom or default formatter.
-func (r Result[T]) Format(formatter ResultFormatter[T]) string {
-	if formatter != nil {
-		return formatter(r)
+func (r *Result[T]) Format(formatter ResultFormatter[T]) string {
+	if r == nil {
+		return ""
 	}
 
-	return DefaultResultFormatter(r)
+	if formatter != nil {
+		return formatter(*r)
+	}
+
+	return DefaultResultFormatter(*r)
 }
 
 // PrintWith outputs the result using a custom formatter.
-func (r Result[T]) PrintWith(formatter ResultFormatter[T]) {
-	fmt.Println(r.Format(formatter))
+func (r *Result[T]) PrintWith(formatter ResultFormatter[T]) {
+	if r != nil {
+		fmt.Println(r.Format(formatter))
+	}
 }
 
 // FormatStdout formats the Result: rich error banner if failed, or success message if ok.
-func (r Result[T]) FormatStdout() string {
-	if r.IsFailed() {
+func (r *Result[T]) FormatStdout() string {
+	if r == nil {
+		return ""
+	}
+	if r.appError != nil {
 		return r.appError.FormatStdout()
+	}
+	if r.IsFailed() {
+		return "❌ FAILURE: uninitialized error"
 	}
 
 	return fmt.Sprintf("✅ SUCCESS: %v", r.value)
 }
 
 // FormatJson formats the Result: JSON error if failed, or marshaled value JSON.
-func (r Result[T]) FormatJson() string {
-	if r.IsFailed() {
+func (r *Result[T]) FormatJson() string {
+	if r == nil {
+		return "{}"
+	}
+	if r.appError != nil {
 		return r.appError.FormatJson()
+	}
+	if r.IsFailed() {
+		return `{"success":false}`
 	}
 
 	return fmt.Sprintf(`{"success":true,"data":%v}`, r.value)
 }
 
 // FormatJSON is an alias for FormatJson.
-func (r Result[T]) FormatJSON() string {
+func (r *Result[T]) FormatJSON() string {
 	return r.FormatJson()
 }
 
 // FormatTextLog formats the Result: structured log error if failed, or log info if ok.
-func (r Result[T]) FormatTextLog() string {
-	if r.IsFailed() {
+func (r *Result[T]) FormatTextLog() string {
+	if r == nil {
+		return ""
+	}
+	if r.appError != nil {
 		return r.appError.FormatTextLog()
+	}
+	if r.IsFailed() {
+		return "[ERROR] uninitialized failure"
 	}
 
 	return fmt.Sprintf("[INFO] status=200 msg=%q", fmt.Sprintf("%v", r.value))
 }
 
 // PrintStdout prints the result formatted for stdout.
-func (r Result[T]) PrintStdout() {
+func (r *Result[T]) PrintStdout() {
+	if r == nil {
+		return
+	}
+
 	fmt.Println(r.FormatStdout())
 }
 
 // PrintJson prints the result formatted as JSON.
-func (r Result[T]) PrintJson() {
+func (r *Result[T]) PrintJson() {
+	if r == nil {
+		return
+	}
+
 	fmt.Println(r.FormatJson())
 }
 
 // PrintJSON is an alias for PrintJson.
-func (r Result[T]) PrintJSON() {
+func (r *Result[T]) PrintJSON() {
 	r.PrintJson()
 }
 
 // PrintLog prints the result formatted as a structured log line.
-func (r Result[T]) PrintLog() {
+func (r *Result[T]) PrintLog() {
+	if r == nil {
+		return
+	}
+
 	fmt.Println(r.FormatTextLog())
 }
 
 // FormatStruct formats struct or primitive payload or error banner.
-func (r Result[T]) FormatStruct() string {
-	if r.IsFailed() {
+func (r *Result[T]) FormatStruct() string {
+	if r == nil {
+		return ""
+	}
+	if r.appError != nil {
 		return r.appError.FormatStdout()
+	}
+	if r.IsFailed() {
+		return "❌ FAILURE"
 	}
 
 	return fmt.Sprintf("%+v", r.value)
@@ -306,8 +382,8 @@ func payloadToMap(val any) map[string]any {
 }
 
 // ToMap converts payload into map[string]any via JSON serialization.
-func (r Result[T]) ToMap() map[string]any {
-	if r.IsFailed() {
+func (r *Result[T]) ToMap() map[string]any {
+	if r == nil || r.IsFailed() {
 		return nil
 	}
 

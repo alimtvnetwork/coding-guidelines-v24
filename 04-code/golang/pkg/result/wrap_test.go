@@ -307,12 +307,12 @@ func TestReExportedResultToBytesAndJSON(t *testing.T) {
 
 func TestReExportedSimpleVerifiable(t *testing.T) {
 	r := result.Success("test")
-	var v result.SimpleVerifiable = r
+	var v result.SimpleVerifiable = &r
 	if !v.AsSimpleVerifier().IsSuccess() {
 		t.Fatal("expected success")
 	}
 
-	var vc result.SimpleVerifyCheckable = r
+	var vc result.SimpleVerifyCheckable = &r
 	if !vc.AsSimpleVerifyChecker().IsSuccess() {
 		t.Fatal("expected success")
 	}
@@ -392,7 +392,8 @@ func TestReExportedNewFailureWithVar(t *testing.T) {
 }
 
 func TestReExportedResultInspector(t *testing.T) {
-	var insp result.ResultInspector = result.Success("inspect-val")
+	res := result.Success("inspect-val")
+	var insp result.ResultInspector = &res
 	if insp.IsFailed() {
 		t.Fatal("expected success")
 	}
@@ -401,12 +402,14 @@ func TestReExportedResultInspector(t *testing.T) {
 		t.Fatalf("unexpected ValueAny: %v", insp.ValueAny())
 	}
 
-	var unwrapper result.ResultUnwrapper = result.OkSlice([]int{1, 2})
+	s := result.OkSlice([]int{1, 2})
+	var unwrapper result.ResultUnwrapper = &s
 	if unwrapper.IsFailed() {
 		t.Fatal("expected slice success")
 	}
 
-	var carrier result.ResultCarrier = result.OkMap(map[string]int{"k": 1})
+	m := result.OkMap(map[string]int{"k": 1})
+	var carrier result.ResultCarrier = &m
 	if carrier.IsFailed() {
 		t.Fatal("expected map success")
 	}

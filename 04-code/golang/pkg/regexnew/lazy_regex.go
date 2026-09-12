@@ -155,7 +155,8 @@ func (it *LazyRegex) OnRequiredCompiled() error {
 		return it.compiledErr
 	}
 
-	err := it.Compile().Error()
+	res := it.Compile()
+	err := res.Error()
 
 	return err
 }

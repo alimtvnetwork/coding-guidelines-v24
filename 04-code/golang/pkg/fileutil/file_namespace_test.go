@@ -125,12 +125,14 @@ func testWriteLinesAndAtomic(t *testing.T, dir string) {
 func testWriteJsonAndYaml(t *testing.T, dir string) {
 	payload := map[string]string{"key": "val"}
 	jPath := filepath.Join(dir, "data.json")
-	if !File.Write.Json(jPath, payload, filepermtype.Standard).IsSuccess() {
+	jRes := File.Write.Json(jPath, payload, filepermtype.Standard)
+	if !jRes.IsSuccess() {
 		t.Fatalf("Write.Json failed")
 	}
 
 	yPath := filepath.Join(dir, "data.yaml")
-	if !File.Write.Yaml(yPath, payload, filepermtype.Standard).IsSuccess() {
+	yRes := File.Write.Yaml(yPath, payload, filepermtype.Standard)
+	if !yRes.IsSuccess() {
 		t.Fatalf("Write.Yaml failed")
 	}
 }
@@ -142,7 +144,8 @@ func TestFileWriteOperations(t *testing.T) {
 	testWriteJsonAndYaml(t, dir)
 
 	anyPath := filepath.Join(dir, "any.txt")
-	if !File.Write.Any(anyPath, "any_val", filepermtype.Standard).IsSuccess() {
+	anyRes := File.Write.Any(anyPath, "any_val", filepermtype.Standard)
+	if !anyRes.IsSuccess() {
 		t.Fatalf("Write.Any failed")
 	}
 }
@@ -158,7 +161,8 @@ func TestFileAppendOperations(t *testing.T) {
 		t.Fatalf("File.Append operations failed")
 	}
 
-	if !File.Append.BytesLocked(path, []byte(" lock"), filepermtype.Standard).IsSuccess() {
+	lockRes := File.Append.BytesLocked(path, []byte(" lock"), filepermtype.Standard)
+	if !lockRes.IsSuccess() {
 		t.Fatalf("File.Append.BytesLocked failed")
 	}
 }

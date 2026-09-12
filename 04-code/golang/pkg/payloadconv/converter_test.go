@@ -7,19 +7,22 @@ import (
 
 func TestToBytes(t *testing.T) {
 	// Byte case
-	b := ToBytes([]byte("hello")).Data()
+	resB := ToBytes([]byte("hello"))
+	b := resB.Data()
 	if string(b) != "hello" {
 		t.Errorf("byte conversion failed")
 	}
 
 	// String case
-	s := ToBytes("world").Data()
+	resS := ToBytes("world")
+	s := resS.Data()
 	if string(s) != "world" {
 		t.Errorf("string conversion failed")
 	}
 
 	// String array case
-	arr := ToBytes([]string{"line1", "line2"}).Data()
+	resArr := ToBytes([]string{"line1", "line2"})
+	arr := resArr.Data()
 	if string(arr) != "line1\nline2\n" {
 		t.Errorf("array conversion failed, got %s", string(arr))
 	}
@@ -31,7 +34,8 @@ func TestToBytes(t *testing.T) {
 	}
 
 	p := Person{Name: "Alice", Age: 30}
-	j := ToBytes(p).Data()
+	resP := ToBytes(p)
+	j := resP.Data()
 	if !strings.Contains(string(j), `"name": "Alice"`) {
 		t.Errorf("JSON struct conversion failed, got %s", string(j))
 	}

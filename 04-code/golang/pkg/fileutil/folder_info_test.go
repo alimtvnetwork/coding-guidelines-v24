@@ -151,11 +151,13 @@ func testParentFolderContext(t *testing.T, subDir string) {
 
 func testParentFolderContextRoot(t *testing.T) {
 	rootFi := NewFolderInfo(CurrentDir)
-	if !rootFi.ParentFolderFiles().IsFailed() {
+	pFiles := rootFi.ParentFolderFiles()
+	if !pFiles.IsFailed() {
 		t.Fatalf("expected ParentFolderFiles to fail on root")
 	}
 
-	if !rootFi.ParentFolderDirectories().IsFailed() {
+	pDirs := rootFi.ParentFolderDirectories()
+	if !pDirs.IsFailed() {
 		t.Fatalf("expected ParentFolderDirectories to fail on root")
 	}
 }

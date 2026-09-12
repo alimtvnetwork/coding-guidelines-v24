@@ -165,3 +165,282 @@ func TestResult_NullSafety(t *testing.T) {
 		t.Fatal("expected merged result to be failed")
 	}
 }
+
+func TestResult_NilPointerSafety(t *testing.T) {
+	var nilRes *appfault.Result[string]
+
+	// 1. Status checks on nil *Result[T] MUST NEVER PANIC
+	if !nilRes.IsFailure() {
+		t.Fatal("expected IsFailure() to be true on nil *Result")
+	}
+
+	if !nilRes.IsFailed() {
+		t.Fatal("expected IsFailed() to be true on nil *Result")
+	}
+
+	if !nilRes.IsInvalid() {
+		t.Fatal("expected IsInvalid() to be true on nil *Result")
+	}
+
+	if !nilRes.HasError() {
+		t.Fatal("expected HasError() to be true on nil *Result")
+	}
+
+	if nilRes.IsSuccess() {
+		t.Fatal("expected IsSuccess() to be false on nil *Result")
+	}
+
+	if nilRes.IsValid() {
+		t.Fatal("expected IsValid() to be false on nil *Result")
+	}
+
+	if nilRes.HasNoError() {
+		t.Fatal("expected HasNoError() to be false on nil *Result")
+	}
+
+	if nilRes.IsSafe() {
+		t.Fatal("expected IsSafe() to be false on nil *Result")
+	}
+
+	// 2. Cardinality and definition predicates on nil *Result[T] MUST NEVER PANIC
+	if nilRes.Count() != 0 {
+		t.Fatalf("expected Count() == 0 on nil *Result, got %d", nilRes.Count())
+	}
+
+	if !nilRes.IsEmpty() {
+		t.Fatal("expected IsEmpty() to be true on nil *Result")
+	}
+
+	if nilRes.HasRecord() {
+		t.Fatal("expected HasRecord() to be false on nil *Result")
+	}
+
+	if nilRes.HasRecords() {
+		t.Fatal("expected HasRecords() to be false on nil *Result")
+	}
+
+	if nilRes.IsDefined() {
+		t.Fatal("expected IsDefined() to be false on nil *Result")
+	}
+
+	if !nilRes.IsCountOtherThan(1) {
+		t.Fatal("expected IsCountOtherThan(1) to be true on nil *Result")
+	}
+
+	if !nilRes.IsCountOtherThan(0) {
+		t.Fatal("expected IsCountOtherThan(0) to be true on nil *Result")
+	}
+
+	// 3. Payload and error access on nil *Result[T] MUST NEVER PANIC
+	if nilRes.AppError() != nil {
+		t.Fatal("expected AppError() == nil on nil *Result")
+	}
+
+	if nilRes.Fault() != nil {
+		t.Fatal("expected Fault() == nil on nil *Result")
+	}
+
+	if nilRes.Error() != nil {
+		t.Fatal("expected Error() == nil on nil *Result")
+	}
+
+	if nilRes.Data() != "" {
+		t.Fatalf("expected Data() == '' on nil *Result, got %q", nilRes.Data())
+	}
+
+	if nilRes.Value() != "" {
+		t.Fatalf("expected Value() == '' on nil *Result, got %q", nilRes.Value())
+	}
+
+	if nilRes.ValueAny() != nil {
+		t.Fatal("expected ValueAny() == nil on nil *Result")
+	}
+
+	if nilRes.ToMap() != nil {
+		t.Fatal("expected ToMap() == nil on nil *Result")
+	}
+
+	// 4. Safe operations, formatters, and printers
+	nilRes.Print()
+	nilRes.PrintFault()
+	nilRes.PrintStdout()
+	nilRes.PrintJson()
+	nilRes.PrintLog()
+	nilRes.HandleError()
+}
+
+func TestResultSlice_NilPointerSafety(t *testing.T) {
+	var nilSlice *appfault.ResultSlice[string]
+
+	// 1. Status checks on nil *ResultSlice[T] MUST NEVER PANIC
+	if !nilSlice.IsFailure() {
+		t.Fatal("expected IsFailure() to be true on nil *ResultSlice")
+	}
+
+	if !nilSlice.IsFailed() {
+		t.Fatal("expected IsFailed() to be true on nil *ResultSlice")
+	}
+
+	if !nilSlice.IsInvalid() {
+		t.Fatal("expected IsInvalid() to be true on nil *ResultSlice")
+	}
+
+	if !nilSlice.HasError() {
+		t.Fatal("expected HasError() to be true on nil *ResultSlice")
+	}
+
+	if nilSlice.IsSuccess() {
+		t.Fatal("expected IsSuccess() to be false on nil *ResultSlice")
+	}
+
+	// 2. Cardinality and definition predicates on nil *ResultSlice[T] MUST NEVER PANIC
+	if nilSlice.Count() != 0 {
+		t.Fatalf("expected Count() == 0 on nil *ResultSlice, got %d", nilSlice.Count())
+	}
+
+	if nilSlice.Length() != 0 {
+		t.Fatalf("expected Length() == 0 on nil *ResultSlice, got %d", nilSlice.Length())
+	}
+
+	if !nilSlice.IsEmpty() {
+		t.Fatal("expected IsEmpty() to be true on nil *ResultSlice")
+	}
+
+	if nilSlice.HasRecord() {
+		t.Fatal("expected HasRecord() to be false on nil *ResultSlice")
+	}
+
+	if nilSlice.HasRecords() {
+		t.Fatal("expected HasRecords() to be false on nil *ResultSlice")
+	}
+
+	if nilSlice.HasItems() {
+		t.Fatal("expected HasItems() to be false on nil *ResultSlice")
+	}
+
+	if nilSlice.IsDefined() {
+		t.Fatal("expected IsDefined() to be false on nil *ResultSlice")
+	}
+
+	if !nilSlice.IsCountOtherThan(1) {
+		t.Fatal("expected IsCountOtherThan(1) to be true on nil *ResultSlice")
+	}
+
+	if !nilSlice.IsCountOtherThan(0) {
+		t.Fatal("expected IsCountOtherThan(0) to be true on nil *ResultSlice")
+	}
+
+	// 3. Payload and error access on nil *ResultSlice[T] MUST NEVER PANIC
+	if nilSlice.AppError() != nil {
+		t.Fatal("expected AppError() == nil on nil *ResultSlice")
+	}
+
+	if nilSlice.Fault() != nil {
+		t.Fatal("expected Fault() == nil on nil *ResultSlice")
+	}
+
+	if nilSlice.ValueAny() != nil {
+		t.Fatal("expected ValueAny() == nil on nil *ResultSlice")
+	}
+
+	// 4. Safe combinators on nil *ResultSlice[T] MUST NEVER PANIC
+	filtered := nilSlice.Filter(nil)
+	if filtered.Count() != 0 {
+		t.Fatal("expected filtered nilSlice to have count 0")
+	}
+
+	nilSlice.ForEach(nil)
+	nilSlice.ForEachBreak(nil)
+}
+
+func TestResultMap_NilPointerSafety(t *testing.T) {
+	var nilMap *appfault.ResultMap[string, int]
+
+	// 1. Status checks on nil *ResultMap[K, V] MUST NEVER PANIC
+	if !nilMap.IsFailure() {
+		t.Fatal("expected IsFailure() to be true on nil *ResultMap")
+	}
+
+	if !nilMap.IsFailed() {
+		t.Fatal("expected IsFailed() to be true on nil *ResultMap")
+	}
+
+	if !nilMap.IsInvalid() {
+		t.Fatal("expected IsInvalid() to be true on nil *ResultMap")
+	}
+
+	if !nilMap.HasError() {
+		t.Fatal("expected HasError() to be true on nil *ResultMap")
+	}
+
+	if nilMap.IsSuccess() {
+		t.Fatal("expected IsSuccess() to be false on nil *ResultMap")
+	}
+
+	// 2. Cardinality and definition predicates on nil *ResultMap[K, V] MUST NEVER PANIC
+	if nilMap.Count() != 0 {
+		t.Fatalf("expected Count() == 0 on nil *ResultMap, got %d", nilMap.Count())
+	}
+
+	if !nilMap.IsEmpty() {
+		t.Fatal("expected IsEmpty() to be true on nil *ResultMap")
+	}
+
+	if nilMap.HasRecord() {
+		t.Fatal("expected HasRecord() to be false on nil *ResultMap")
+	}
+
+	if nilMap.HasRecords() {
+		t.Fatal("expected HasRecords() to be false on nil *ResultMap")
+	}
+
+	if nilMap.IsDefined() {
+		t.Fatal("expected IsDefined() to be false on nil *ResultMap")
+	}
+
+	if !nilMap.IsCountOtherThan(1) {
+		t.Fatal("expected IsCountOtherThan(1) to be true on nil *ResultMap")
+	}
+
+	if !nilMap.IsCountOtherThan(0) {
+		t.Fatal("expected IsCountOtherThan(0) to be true on nil *ResultMap")
+	}
+
+	// 3. Map lookups and getters on nil *ResultMap[K, V] MUST NEVER PANIC
+	if nilMap.Has("key") {
+		t.Fatal("expected Has('key') to be false on nil *ResultMap")
+	}
+
+	val, ok := nilMap.Get("key")
+	if ok || val != 0 {
+		t.Fatalf("expected Get('key') to return (0, false) on nil *ResultMap, got (%d, %v)", val, ok)
+	}
+
+	if len(nilMap.Keys()) != 0 {
+		t.Fatal("expected Keys() to be empty on nil *ResultMap")
+	}
+
+	if len(nilMap.Values()) != 0 {
+		t.Fatal("expected Values() to be empty on nil *ResultMap")
+	}
+
+	if nilMap.AppError() != nil {
+		t.Fatal("expected AppError() == nil on nil *ResultMap")
+	}
+
+	if nilMap.Fault() != nil {
+		t.Fatal("expected Fault() == nil on nil *ResultMap")
+	}
+
+	if nilMap.ValueAny() != nil {
+		t.Fatal("expected ValueAny() == nil on nil *ResultMap")
+	}
+
+	// 4. Safe combinators on nil *ResultMap[K, V] MUST NEVER PANIC
+	filtered := nilMap.Filter(nil)
+	if filtered.Count() != 0 {
+		t.Fatal("expected filtered nilMap to have count 0")
+	}
+
+	nilMap.ForEach(nil)
+}

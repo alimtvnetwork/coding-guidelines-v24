@@ -136,6 +136,29 @@ func formatTypedValue(val any, depth int) string {
 	return fmt.Sprintf("%v", val)
 }
 
+func tryAsResultInspector(val any) (ResultInspector, bool) {
+	if val == nil {
+		return nil, false
+	}
+
+	if ri, ok := val.(ResultInspector); ok {
+		return ri, true
+	}
+
+	rv := reflect.ValueOf(val)
+	if rv.Kind() != reflect.Struct {
+		return nil, false
+	}
+
+	ptr := reflect.New(rv.Type())
+	ptr.Elem().Set(rv)
+	if ri, ok := ptr.Interface().(ResultInspector); ok {
+		return ri, true
+	}
+
+	return nil, false
+}
+
 func formatValueWithDepth(val any, depth int) string {
 	if depth > maxFormatDepth {
 		return "..."
@@ -145,7 +168,7 @@ func formatValueWithDepth(val any, depth int) string {
 		return "<nil>"
 	}
 
-	if res, isRes := val.(ResultInspector); isRes {
+	if res, isRes := tryAsResultInspector(val); isRes {
 		return formatResultInspector(res, depth)
 	}
 
@@ -223,7 +246,7 @@ func unwrapWithDepth(val any, depth int) any {
 		return nil
 	}
 
-	if res, isRes := val.(ResultInspector); isRes {
+	if res, isRes := tryAsResultInspector(val); isRes {
 		return unwrapResultInspector(res, depth)
 	}
 

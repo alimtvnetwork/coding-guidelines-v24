@@ -54,7 +54,8 @@ func TestResult_LinesFailure(t *testing.T) {
 		t.Fatalf("expected empty lines on failure")
 	}
 
-	if fail.LinesResult().IsSuccess() {
+	linesRes := fail.LinesResult()
+	if linesRes.IsSuccess() {
 		t.Fatalf("expected failed LinesResult")
 	}
 

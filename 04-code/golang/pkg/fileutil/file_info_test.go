@@ -79,7 +79,8 @@ func testFileInfoIOWriteAndDelete(t *testing.T, fi *FileInfo) {
 		t.Fatalf("expected WriteString to succeed")
 	}
 
-	if fi.ReadString().Data() != "updated" {
+	readRes := fi.ReadString()
+	if readRes.Data() != "updated" {
 		t.Fatalf("expected updated content")
 	}
 

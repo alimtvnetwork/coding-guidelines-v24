@@ -76,32 +76,48 @@ func FailSlice[T any](err *AppError) ResultSlice[T] {
 }
 
 // IsSuccess returns true if no error is present.
-func (rs ResultSlice[T]) IsSuccess() bool {
+func (rs *ResultSlice[T]) IsSuccess() bool {
+	if rs == nil {
+		return false
+	}
+
 	return rs.appError == nil
 }
 
 // IsFailed returns true if an error is present.
-func (rs ResultSlice[T]) IsFailed() bool {
+func (rs *ResultSlice[T]) IsFailed() bool {
+	if rs == nil {
+		return true
+	}
+
 	return rs.appError != nil
 }
 
 // IsFailure returns true if an error is present.
-func (rs ResultSlice[T]) IsFailure() bool {
+func (rs *ResultSlice[T]) IsFailure() bool {
 	return rs.IsFailed()
 }
 
 // IsInvalid returns true if an error is present.
-func (rs ResultSlice[T]) IsInvalid() bool {
+func (rs *ResultSlice[T]) IsInvalid() bool {
 	return rs.IsFailed()
 }
 
 // IsNull returns true if no error is present.
-func (rs ResultSlice[T]) IsNull() bool {
+func (rs *ResultSlice[T]) IsNull() bool {
+	if rs == nil {
+		return true
+	}
+
 	return rs.appError == nil
 }
 
 // IsEmpty returns true if no active error is present (or items are empty).
-func (rs ResultSlice[T]) IsEmpty() bool {
+func (rs *ResultSlice[T]) IsEmpty() bool {
+	if rs == nil {
+		return true
+	}
+
 	if rs.appError == nil {
 		return len(rs.Items) == 0
 	}
@@ -110,8 +126,8 @@ func (rs ResultSlice[T]) IsEmpty() bool {
 }
 
 // IsDefined returns true if the operation succeeded and contains more than 0 items (recordCount > 0).
-func (rs ResultSlice[T]) IsDefined() bool {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) IsDefined() bool {
+	if rs == nil || rs.IsFailed() {
 		return false
 	}
 
@@ -119,8 +135,8 @@ func (rs ResultSlice[T]) IsDefined() bool {
 }
 
 // HasRecord returns true if the operation succeeded and contains more than 0 items.
-func (rs ResultSlice[T]) HasRecord() bool {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) HasRecord() bool {
+	if rs == nil || rs.IsFailed() {
 		return false
 	}
 
@@ -128,28 +144,28 @@ func (rs ResultSlice[T]) HasRecord() bool {
 }
 
 // HasRecords is an alias for HasRecord.
-func (rs ResultSlice[T]) HasRecords() bool {
+func (rs *ResultSlice[T]) HasRecords() bool {
 	return rs.HasRecord()
 }
 
 // AsSimpleVerifier returns the ResultSlice conforming to SimpleVerifier.
-func (rs ResultSlice[T]) AsSimpleVerifier() SimpleVerifier {
+func (rs *ResultSlice[T]) AsSimpleVerifier() SimpleVerifier {
 	return rs
 }
 
 // AsSimpleVerifyChecker returns the ResultSlice conforming to SimpleVerifier.
-func (rs ResultSlice[T]) AsSimpleVerifyChecker() SimpleVerifier {
+func (rs *ResultSlice[T]) AsSimpleVerifyChecker() SimpleVerifier {
 	return rs
 }
 
 // HasError returns true if an error is present.
-func (rs ResultSlice[T]) HasError() bool {
+func (rs *ResultSlice[T]) HasError() bool {
 	return rs.IsFailed()
 }
 
 // HasItems returns true if the slice contains elements and is safe.
-func (rs ResultSlice[T]) HasItems() bool {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) HasItems() bool {
+	if rs == nil || rs.IsFailed() {
 		return false
 	}
 
@@ -157,8 +173,8 @@ func (rs ResultSlice[T]) HasItems() bool {
 }
 
 // Count returns the number of items or 0 if failed.
-func (rs ResultSlice[T]) Count() int {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) Count() int {
+	if rs == nil || rs.IsFailed() {
 		return 0
 	}
 
@@ -166,8 +182,8 @@ func (rs ResultSlice[T]) Count() int {
 }
 
 // IsCountOtherThan returns true if the operation failed or its item count differs from n.
-func (rs ResultSlice[T]) IsCountOtherThan(n int) bool {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) IsCountOtherThan(n int) bool {
+	if rs == nil || rs.IsFailed() {
 		return true
 	}
 
@@ -175,39 +191,62 @@ func (rs ResultSlice[T]) IsCountOtherThan(n int) bool {
 }
 
 // Length is an alias for Count.
-func (rs ResultSlice[T]) Length() int {
+func (rs *ResultSlice[T]) Length() int {
 	return rs.Count()
 }
 
 // AppError returns the underlying *AppError.
-func (rs ResultSlice[T]) AppError() *AppError {
+func (rs *ResultSlice[T]) AppError() *AppError {
+	if rs == nil {
+		return nil
+	}
+
 	return rs.appError
 }
 
 // Fault returns the underlying *AppError (alias for AppError).
-func (rs ResultSlice[T]) Fault() *AppError {
+func (rs *ResultSlice[T]) Fault() *AppError {
+	if rs == nil {
+		return nil
+	}
+
 	return rs.appError
 }
 
 // Error returns the underlying *AppError.
-func (rs ResultSlice[T]) Error() *AppError {
+func (rs *ResultSlice[T]) Error() *AppError {
+	if rs == nil {
+		return nil
+	}
+
 	return rs.appError
 }
 
 // ValueAny returns the items as an any interface.
-func (rs ResultSlice[T]) ValueAny() any {
+func (rs *ResultSlice[T]) ValueAny() any {
+	if rs == nil {
+		return nil
+	}
+
 	return rs.Items
 }
 
 // Unwrap unpacks the ([]T, *AppError) tuple.
-func (rs ResultSlice[T]) Unwrap() ([]T, *AppError) {
+func (rs *ResultSlice[T]) Unwrap() ([]T, *AppError) {
+	if rs == nil {
+		return nil, nil
+	}
+
 	return rs.Items, rs.appError
 }
 
 // Filter returns a new ResultSlice containing items that satisfy predicate.
-func (rs ResultSlice[T]) Filter(predicate func(item T) bool) ResultSlice[T] {
+func (rs *ResultSlice[T]) Filter(predicate func(item T) bool) ResultSlice[T] {
+	if rs == nil {
+		return ResultSlice[T]{}
+	}
 	if rs.IsFailed() || predicate == nil {
-		return rs
+		return *rs
 	}
 
 	filtered := make([]T, 0, len(rs.Items))
@@ -221,22 +260,28 @@ func (rs ResultSlice[T]) Filter(predicate func(item T) bool) ResultSlice[T] {
 }
 
 // ForEach iterates over all items passing index and item to fn.
-func (rs ResultSlice[T]) ForEach(fn func(index int, item T)) ResultSlice[T] {
+func (rs *ResultSlice[T]) ForEach(fn func(index int, item T)) ResultSlice[T] {
+	if rs == nil {
+		return ResultSlice[T]{}
+	}
 	if rs.IsFailed() || fn == nil {
-		return rs
+		return *rs
 	}
 
 	for i, item := range rs.Items {
 		fn(i, item)
 	}
 
-	return rs
+	return *rs
 }
 
 // ForEachBreak iterates over items passing index and item to fn, stopping early if fn returns true.
-func (rs ResultSlice[T]) ForEachBreak(fn func(index int, item T) bool) ResultSlice[T] {
+func (rs *ResultSlice[T]) ForEachBreak(fn func(index int, item T) bool) ResultSlice[T] {
+	if rs == nil {
+		return ResultSlice[T]{}
+	}
 	if rs.IsFailed() || fn == nil {
-		return rs
+		return *rs
 	}
 
 	for i, item := range rs.Items {
@@ -245,7 +290,7 @@ func (rs ResultSlice[T]) ForEachBreak(fn func(index int, item T) bool) ResultSli
 		}
 	}
 
-	return rs
+	return *rs
 }
 
 func buildSliceBlock[T any](items []T) string {
@@ -261,11 +306,16 @@ func buildSliceBlock[T any](items []T) string {
 }
 
 // FormatStruct formats slice items in aligned block or error banner.
-func (rs ResultSlice[T]) FormatStruct() string {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) FormatStruct() string {
+	if rs == nil {
+		return ""
+	}
+	if rs.appError != nil {
 		return rs.appError.FormatStdout()
 	}
-
+	if rs.IsFailed() {
+		return "❌ FAILURE"
+	}
 	if len(rs.Items) == 0 {
 		return "[]"
 	}
@@ -274,18 +324,30 @@ func (rs ResultSlice[T]) FormatStruct() string {
 }
 
 // String returns a human-readable string representation of the slice or error.
-func (rs ResultSlice[T]) String() string {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) String() string {
+	if rs == nil {
+		return ""
+	}
+	if rs.appError != nil {
 		return rs.appError.FormatStdout()
+	}
+	if rs.IsFailed() {
+		return "❌ FAILURE"
 	}
 
 	return FormatValue(rs.Items)
 }
 
 // PrettyJson returns the items formatted as indented JSON with sorted keys.
-func (rs ResultSlice[T]) PrettyJson() string {
-	if rs.IsFailed() {
+func (rs *ResultSlice[T]) PrettyJson() string {
+	if rs == nil {
+		return "{}"
+	}
+	if rs.appError != nil {
 		return rs.appError.FormatJson()
+	}
+	if rs.IsFailed() {
+		return `{"success":false}`
 	}
 
 	return FormatSortedJson(rs.Items)

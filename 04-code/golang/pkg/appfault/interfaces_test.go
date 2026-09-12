@@ -10,37 +10,37 @@ import (
 )
 
 var (
-	_ SimpleVerifier = Result[string]{}
+	_ SimpleVerifier = (*Result[string])(nil)
 	_ SimpleVerifier = (*AppError)(nil)
-	_ SimpleVerifier = ResultSlice[string]{}
-	_ SimpleVerifier = ResultMap[string, int]{}
+	_ SimpleVerifier = (*ResultSlice[string])(nil)
+	_ SimpleVerifier = (*ResultMap[string, int])(nil)
 
-	_ SimpleVerifyChecker = Result[string]{}
+	_ SimpleVerifyChecker = (*Result[string])(nil)
 	_ SimpleVerifyChecker = (*AppError)(nil)
-	_ SimpleVerifyChecker = ResultSlice[string]{}
-	_ SimpleVerifyChecker = ResultMap[string, int]{}
+	_ SimpleVerifyChecker = (*ResultSlice[string])(nil)
+	_ SimpleVerifyChecker = (*ResultMap[string, int])(nil)
 
-	_ SimpleVerifiable = Result[string]{}
+	_ SimpleVerifiable = (*Result[string])(nil)
 	_ SimpleVerifiable = (*AppError)(nil)
-	_ SimpleVerifiable = ResultSlice[string]{}
-	_ SimpleVerifiable = ResultMap[string, int]{}
+	_ SimpleVerifiable = (*ResultSlice[string])(nil)
+	_ SimpleVerifiable = (*ResultMap[string, int])(nil)
 
-	_ SimpleVerifyCheckable = Result[string]{}
+	_ SimpleVerifyCheckable = (*Result[string])(nil)
 	_ SimpleVerifyCheckable = (*AppError)(nil)
-	_ SimpleVerifyCheckable = ResultSlice[string]{}
-	_ SimpleVerifyCheckable = ResultMap[string, int]{}
+	_ SimpleVerifyCheckable = (*ResultSlice[string])(nil)
+	_ SimpleVerifyCheckable = (*ResultMap[string, int])(nil)
 
-	_ ResultInspector = Result[string]{}
-	_ ResultInspector = ResultSlice[string]{}
-	_ ResultInspector = ResultMap[string, any]{}
+	_ ResultInspector = (*Result[string])(nil)
+	_ ResultInspector = (*ResultSlice[string])(nil)
+	_ ResultInspector = (*ResultMap[string, any])(nil)
 
-	_ ResultUnwrapper = Result[string]{}
-	_ ResultUnwrapper = ResultSlice[string]{}
-	_ ResultUnwrapper = ResultMap[string, any]{}
+	_ ResultUnwrapper = (*Result[string])(nil)
+	_ ResultUnwrapper = (*ResultSlice[string])(nil)
+	_ ResultUnwrapper = (*ResultMap[string, any])(nil)
 
-	_ ResultCarrier = Result[string]{}
-	_ ResultCarrier = ResultSlice[string]{}
-	_ ResultCarrier = ResultMap[string, any]{}
+	_ ResultCarrier = (*Result[string])(nil)
+	_ ResultCarrier = (*ResultSlice[string])(nil)
+	_ ResultCarrier = (*ResultMap[string, any])(nil)
 )
 
 func TestResultSuccessCheckers(t *testing.T) {
@@ -120,7 +120,8 @@ func TestNilAppErrorCheckers(t *testing.T) {
 }
 
 func TestAsSimpleVerifier_Result(t *testing.T) {
-	var v SimpleVerifier = SuccessResult("data").AsSimpleVerifier()
+	r := SuccessResult("data")
+	var v SimpleVerifier = r.AsSimpleVerifier()
 	if !v.IsSuccess() {
 		t.Fatal("expected Result AsSimpleVerifier to be success")
 	}
@@ -142,7 +143,8 @@ func TestAsSimpleVerifier_Error(t *testing.T) {
 }
 
 func TestAsSimpleVerifier_Slice(t *testing.T) {
-	var v SimpleVerifier = OkSlice([]string{"a"}).AsSimpleVerifier()
+	s := OkSlice([]string{"a"})
+	var v SimpleVerifier = s.AsSimpleVerifier()
 	if !v.IsSuccess() {
 		t.Fatal("expected ResultSlice AsSimpleVerifier to be success")
 	}
@@ -153,7 +155,8 @@ func TestAsSimpleVerifier_Slice(t *testing.T) {
 }
 
 func TestAsSimpleVerifier_Map(t *testing.T) {
-	var v SimpleVerifier = OkMap(map[string]int{"k": 1}).AsSimpleVerifier()
+	m := OkMap(map[string]int{"k": 1})
+	var v SimpleVerifier = m.AsSimpleVerifier()
 	if !v.IsSuccess() {
 		t.Fatal("expected ResultMap AsSimpleVerifier to be success")
 	}
@@ -164,7 +167,8 @@ func TestAsSimpleVerifier_Map(t *testing.T) {
 }
 
 func TestAsSimpleVerifyChecker_Result(t *testing.T) {
-	var v SimpleVerifier = SuccessResult("data").AsSimpleVerifyChecker()
+	r := SuccessResult("data")
+	var v SimpleVerifier = r.AsSimpleVerifyChecker()
 	if !v.IsSuccess() {
 		t.Fatal("expected Result AsSimpleVerifyChecker to be success")
 	}
@@ -186,7 +190,8 @@ func TestAsSimpleVerifyChecker_Error(t *testing.T) {
 }
 
 func TestAsSimpleVerifyChecker_Slice(t *testing.T) {
-	var v SimpleVerifier = OkSlice([]string{"a"}).AsSimpleVerifyChecker()
+	s := OkSlice([]string{"a"})
+	var v SimpleVerifier = s.AsSimpleVerifyChecker()
 	if !v.IsSuccess() {
 		t.Fatal("expected ResultSlice AsSimpleVerifyChecker to be success")
 	}
@@ -197,7 +202,8 @@ func TestAsSimpleVerifyChecker_Slice(t *testing.T) {
 }
 
 func TestAsSimpleVerifyChecker_Map(t *testing.T) {
-	var v SimpleVerifier = OkMap(map[string]int{"k": 1}).AsSimpleVerifyChecker()
+	m := OkMap(map[string]int{"k": 1})
+	var v SimpleVerifier = m.AsSimpleVerifyChecker()
 	if !v.IsSuccess() {
 		t.Fatal("expected ResultMap AsSimpleVerifyChecker to be success")
 	}
@@ -229,24 +235,24 @@ func assertInspectorFailure(t *testing.T, inspector ResultInspector) {
 
 func testInspectorResult(t *testing.T) {
 	okRes := SuccessResult("test-result")
-	assertInspectorSuccess(t, okRes)
+	assertInspectorSuccess(t, &okRes)
 	if okRes.ValueAny() != "test-result" {
 		t.Fatalf("unexpected ValueAny: %v", okRes.ValueAny())
 	}
 
 	failRes := FailureResult[string](New(errtype.Validation, "bad result"))
-	assertInspectorFailure(t, failRes)
+	assertInspectorFailure(t, &failRes)
 }
 
 func testInspectorSlice(t *testing.T) {
 	okSlice := OkSlice([]string{"alpha", "beta"})
-	assertInspectorSuccess(t, okSlice)
+	assertInspectorSuccess(t, &okSlice)
 	if okSlice.ValueAny() == nil {
 		t.Fatal("expected non-nil ValueAny")
 	}
 
 	failSlice := FailSlice[string](New(errtype.Validation, "bad slice"))
-	assertInspectorFailure(t, failSlice)
+	assertInspectorFailure(t, &failSlice)
 	if failSlice.Fault() == nil {
 		t.Fatal("expected non-nil Fault")
 	}
@@ -254,13 +260,13 @@ func testInspectorSlice(t *testing.T) {
 
 func testInspectorMap(t *testing.T) {
 	okMap := OkMap(map[string]any{"k": "v"})
-	assertInspectorSuccess(t, okMap)
+	assertInspectorSuccess(t, &okMap)
 	if okMap.ValueAny() == nil {
 		t.Fatal("expected non-nil ValueAny")
 	}
 
 	failMap := FailMap[string, any](New(errtype.Validation, "bad map"))
-	assertInspectorFailure(t, failMap)
+	assertInspectorFailure(t, &failMap)
 	if failMap.Fault() == nil {
 		t.Fatal("expected non-nil Fault")
 	}

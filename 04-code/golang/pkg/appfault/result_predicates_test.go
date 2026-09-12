@@ -166,7 +166,8 @@ func TestResult_PredicatesAndCount(t *testing.T) {
 }
 
 func TestResult_RecordCountChecker(t *testing.T) {
-	var checker RecordCountChecker = OkSlice([]string{"one", "two"})
+	s := OkSlice([]string{"one", "two"})
+	var checker RecordCountChecker = &s
 
 	if checker.Count() != 2 {
 		t.Fatalf("expected count 2, got %d", checker.Count())

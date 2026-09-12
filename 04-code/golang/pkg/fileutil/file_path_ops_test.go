@@ -255,22 +255,26 @@ func testWriteAtomic(t *testing.T, ops *FilePathOps) {
 
 func testAppendBytesAndString(t *testing.T, ops *FilePathOps) {
 	_ = ops.WriteBytes([]byte("base"), filepermtype.Standard)
-	if !ops.AppendBytes([]byte("_byte"), filepermtype.Standard).IsSuccess() {
+	resB := ops.AppendBytes([]byte("_byte"), filepermtype.Standard)
+	if !resB.IsSuccess() {
 		t.Fatalf("AppendBytes failed")
 	}
 
-	if !ops.AppendString("_str", filepermtype.Standard).IsSuccess() {
+	resS := ops.AppendString("_str", filepermtype.Standard)
+	if !resS.IsSuccess() {
 		t.Fatalf("AppendString failed")
 	}
 }
 
 func testAppendLinesAndVerify(t *testing.T, ops *FilePathOps) {
-	if !ops.AppendLines([]string{"_line"}, filepermtype.Standard).IsSuccess() {
+	resL := ops.AppendLines([]string{"_line"}, filepermtype.Standard)
+	if !resL.IsSuccess() {
 		t.Fatalf("AppendLines failed")
 	}
 
-	if ops.ReadString().Data() != "base_byte_str_line\n" {
-		t.Fatalf("unexpected appended content: %q", ops.ReadString().Data())
+	readRes := ops.ReadString()
+	if readRes.Data() != "base_byte_str_line\n" {
+		t.Fatalf("unexpected appended content: %q", readRes.Data())
 	}
 }
 
@@ -294,7 +298,8 @@ func testStatAndOpen(t *testing.T, ops *FilePathOps) {
 }
 
 func testDeleteAndExists(t *testing.T, ops *FilePathOps) {
-	if !ops.Delete().IsSuccess() {
+	delRes := ops.Delete()
+	if !delRes.IsSuccess() {
 		t.Fatalf("Delete failed")
 	}
 
@@ -347,15 +352,21 @@ func testNilSafetyModifiers(t *testing.T) {
 
 func testNilSafetyOperations(t *testing.T) {
 	var nilOps *FilePathOps
-	if nilOps.EnsureParentDir().IsSuccess() || nilOps.EnsureFile(filepermtype.Standard).IsSuccess() {
+	pRes := nilOps.EnsureParentDir()
+	fRes := nilOps.EnsureFile(filepermtype.Standard)
+	if pRes.IsSuccess() || fRes.IsSuccess() {
 		t.Fatalf("nil safety operations should fail safely")
 	}
 
-	if nilOps.ReadBytes().IsSuccess() || nilOps.WriteBytes([]byte("x"), filepermtype.Standard).IsSuccess() {
+	rRes := nilOps.ReadBytes()
+	wRes := nilOps.WriteBytes([]byte("x"), filepermtype.Standard)
+	if rRes.IsSuccess() || wRes.IsSuccess() {
 		t.Fatalf("nil read/write should fail safely")
 	}
 
-	if nilOps.Stat().IsSuccess() || nilOps.Delete().IsSuccess() {
+	sRes := nilOps.Stat()
+	dRes := nilOps.Delete()
+	if sRes.IsSuccess() || dRes.IsSuccess() {
 		t.Fatalf("nil stat/delete should fail safely")
 	}
 }
