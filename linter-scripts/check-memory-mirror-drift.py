@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 MEMORY = Path(".lovable/memory/01-index.md")
-MIRROR = Path("02-spec/17-consolidated-guidelines/24-lovable-folder-03-structure.md")
+MIRROR = Path("02-spec/17-consolidated-guidelines/24-lovable-folder-structure.md")
 SECTION_MARKER = "## §X Project Memory"
 
 # Distinctive tokens to search for. Each tuple is (description, keyword).
@@ -77,7 +77,7 @@ def main() -> int:
         for desc, token in missing:
             print(f"  - {desc!r}: token {token!r} not found", file=sys.stderr)
         print("", file=sys.stderr)
-        print("Action: update §X in 02-spec/17-consolidated-guidelines/24-lovable-folder-03-structure.md", file=sys.stderr)
+        print("Action: update §X in 02-spec/17-consolidated-guidelines/24-lovable-folder-structure.md", file=sys.stderr)
         print("        to mirror the latest .lovable/memory/01-index.md Core rules.", file=sys.stderr)
         return 1
 

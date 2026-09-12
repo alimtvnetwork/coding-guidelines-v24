@@ -21,16 +21,19 @@ Across recent turns, four core infrastructure enhancements and an extensible API
 ## 2. Component Specifications
 
 ### 2.1 Task Retention & Query Filtering (`sqlitelogger`)
+
 - **Pruning API:** `PruneTasks(olderThan time.Duration, keepLast int) *appfault.AppError` removes task database files older than the specified duration while preserving the N most recent task databases.
 - **Query Filter:** `TaskLogQuery` struct supporting `TaskId`, `MinLevel`, `StartTime`, `EndTime`, `SearchText`, `Limit`, and `Offset`.
 - **Zero Raw SQL Injection:** All queries use parameterized statements with verified indices on `(TaskId, Timestamp)`.
 
 ### 2.2 Live Line Streaming & Context (`errcmd`)
+
 - **Streaming Hooks:** `WithStdoutHandler(func(line string))` and `WithStderrHandler(func(line string))` allow streaming process output line-by-line in real time to terminal UI, websockets, or log collectors.
 - **Execution Options:** `WithCwd(dir string)` and `WithEnv(env []string)` allow hermetic execution environments.
 - **Context Cancellation:** Clean signal propagation (`SIGTERM`, followed by graceful `SIGKILL` on timeout).
 
 ### 2.3 Atomic File Writes (`fileutil`)
+
 - **API:** `AtomicWriteFile(filePath string, data []byte, perm os.FileMode) *appfault.AppError`.
 - **Protocol:**
   1. Write to a temporary file in the *same* filesystem directory (`<target>.tmp.<pid>.<nanos>`).
@@ -40,6 +43,7 @@ Across recent turns, four core infrastructure enhancements and an extensible API
   5. Clean up temporary file on failure using deferred cleanup.
 
 ### 2.4 LazyOnce Reset & Context Support (`lazyonce`)
+
 - **Reset Capability:** `Reset()` allows clearing the cached instance and execution flag under mutex protection, enabling hot-reloading of configuration or testing resets.
 - **Context Support:** `DoWithContext(ctx context.Context, fn func() (T, error)) (T, error)` checks context deadline before and during initialization, immediately returning context errors without caching failures.
 

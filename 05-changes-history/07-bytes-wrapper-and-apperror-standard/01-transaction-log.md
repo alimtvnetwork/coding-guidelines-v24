@@ -24,6 +24,7 @@
 ## 2. Files Created & Modified
 
 ### Source Code in `04-code/golang/pkg/streamwriter/`
+
 - `bytes.go`: Created `Bytes[T any]` struct with `.Raw()`, `.Bytes()`, `.String()`, `.Len()`, `.IsEmpty()`, `.Payload()`, `.Value()`, `.AppError()`, `.Fault()`, `.HasError()`, `.IsValid()`, and `.Unwrap()`.
 - `contracts.go`: Updated `WriterInterface[T]`, `StreamerInterface[T]`, `StreamFunc[T]`, `WriteFunc[T]`, and `FormatFunc[T]` to return `*appfault.AppError` and `Bytes[T]`.
 - `locked_streamer.go`: Updated `Stream`, `Write`, `Sync`, `Close`, and `defaultStream` to return `*appfault.AppError`.
@@ -33,10 +34,12 @@
 - `streamwriter_test.go`: Added tests for `Bytes[T]`, verified all `*appfault.AppError` return contracts.
 
 ### Research & Documentation
+
 - `research/01-index.md`: Registered research topic 07.
 - `research/07-bytes-wrapper-and-apperror-standard.md`: Complete specification of `Bytes[T]` and `*appfault.AppError`.
 
 ### Transaction History Updates
+
 - `05-changes-history/01-index.md`: Registered Task 07.
 - `05-changes-history/07-bytes-wrapper-and-apperror-standard/01-transaction-log.md`: This file.
 

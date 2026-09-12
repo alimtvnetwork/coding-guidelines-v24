@@ -60,6 +60,7 @@ type WrappedJSON[T any] interface {
 ## 3. Concrete Implementations
 
 ### `Bytes[T any]` (`bytes.go`)
+
 Represents generic byte buffers from serializers or encoders:
 ```go
 type Bytes[T any] struct {
@@ -75,6 +76,7 @@ var _ WrappedBytes[any] = Bytes[any]{}
 ```
 
 ### `JSONResult[T any]` (`json_result.go`)
+
 Specialized container for JSON payloads:
 ```go
 type JSONResult[T any] struct {
@@ -97,6 +99,7 @@ var _ WrappedJSON[any] = JSONResult[any]{}
 ## 4. Usage Patterns
 
 ### JSON Serialization & Unmarshaling
+
 ```go
 type Order struct {
     ID    string  `json:"id"`

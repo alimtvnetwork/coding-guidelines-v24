@@ -67,6 +67,7 @@
 ## 2. Files Created & Modified
 
 ### New Packages & Files
+
 - `04-code/golang/pkg/fileutil/types.go`: `FileOpenModeType` open flags enum.
 - `04-code/golang/pkg/fileutil/perm_types.go`: Comprehensive `FilePermType` POSIX permissions enum, inspection methods, modifiers, and parser.
 - `04-code/golang/pkg/fileutil/fileutil.go`: `OpenFile`, `Open`, `EnsureDir`, `ReadAll`, `ReadString`, `WriteFile`.
@@ -78,12 +79,14 @@
 - `04-code/golang/pkg/appwriter/appwriter_test.go`: Test suite for `appwriter`.
 
 ### Modified Files
+
 - `04-code/golang/pkg/result/result.go`: Added `WrapFailureWithId`, `WrapFailureWithCause`, `WrapFailureFromWrap`.
 - `04-code/golang/pkg/appfault/result_constructors.go`: Added `NewFailureWithId`, `NewFailureWithCause`, `FailureFromWrap`.
 - `04-code/golang/pkg/applogger/file_sink.go`: Replaced raw `os.OpenFile` with `fileutil.OpenFile`.
 - `05-changes-history/05-streamer-and-writer-self-passing-research/01-transaction-log.md`: This file.
 
 ### Updates to Index
+
 - `05-changes-history/01-index.md`: Registered Task 05.
 
 ---

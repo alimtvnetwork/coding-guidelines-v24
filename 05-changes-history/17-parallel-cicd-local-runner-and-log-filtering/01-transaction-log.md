@@ -23,6 +23,7 @@ python 03-ai-scripts/06-cicd-local-runner.py --failed # should show al logs or e
 ```
 
 ### Core Requirements
+
 1. **Parallel Worker Group:** Run all quality gates concurrently using a thread pool worker group instead of serial execution.
 2. **Selective Log Display:**
    - Default behavior (or `--failed` / `-f`): Display a clean real-time status ticker and concise summary table. Only dump full logs if one or more quality gates fail. If all gates pass, suppress noisy stdout/stderr.
@@ -36,6 +37,7 @@ python 03-ai-scripts/06-cicd-local-runner.py --failed # should show al logs or e
 ## 2. Architectural & Engineering Design
 
 ### 2.1 Concurrency via Worker Group (`ThreadPoolExecutor`)
+
 - The pipeline utilizes Python's `concurrent.futures.ThreadPoolExecutor`.
 - Because each CI gate spawns a separate OS subprocess (`subprocess.run`), Python's Global Interpreter Lock (GIL) is released during subprocess execution, enabling true operating system multi-process parallelism across CPU cores.
 - Worker count dynamically defaults to:
@@ -50,6 +52,7 @@ python 03-ai-scripts/06-cicd-local-runner.py --failed # should show al logs or e
   ```
 
 ### 2.2 Result Container (`JobResult`)
+
 A structured dataclass encapsulates the execution outcome of each quality gate:
 ```python
 @dataclass
@@ -62,6 +65,7 @@ class JobResult:
 ```
 
 ### 2.3 Selective Log Filtering
+
 - When running in default or `--failed` mode:
   - If `failed_count == 0`: Logs are suppressed. The runner outputs only the execution ticker, summary table, duration, and green success banner.
   - If `failed_count > 0`: Full logs for failing gates are isolated and formatted clearly with exit codes and error logs.
@@ -69,6 +73,7 @@ class JobResult:
   - Logs for all gates (passed and failed) are printed with clear demarcations.
 
 ### 2.4 Performance Improvement
+
 - **Sequential Runtime:** ~35-40 seconds across 21 gates.
 - **Parallel Worker Group Runtime:** **6.53 seconds** (8 workers on Windows), achieving a ~5.5x speedup.
 

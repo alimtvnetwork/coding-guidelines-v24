@@ -87,6 +87,7 @@ flowchart TD
 ## Core Interfaces & Types
 
 ### 1. `Streamer[T]` & `Writer[T]`
+
 ```go
 type Writer[T any] interface {
     Name() string
@@ -105,6 +106,7 @@ type Streamer[T any] interface {
 ```
 
 ### 2. `PluggableWriter[T]`
+
 ```go
 type PluggableWriter[T any] struct { ... }
 
@@ -113,10 +115,12 @@ func NewPluggableWriter[T any](opts WriterOptions[T]) *PluggableWriter[T]
 Allows dynamic shifting of writing algorithms at runtime without subclassing.
 
 ### 3. `Bytes[T]` & `JsonResult`
+
 - **`Bytes[T]`**: Encapsulates formatted raw bytes together with strongly-typed generic payload `T`, status boolean, status code, and `*appfault.AppError`.
 - **`JsonResult`**: Self-contained JSON envelope with pretty printing (`.Pretty()`), unmarshaling (`.Unmarshal(&target)`), and null checking (`.IsNull()`).
 
 ### 4. `Reflect` Singleton
+
 ```go
 // Dynamic unmarshaling directly into target pointer
 err := streamwriter.Reflect.UnmarshalTo(data, &user)

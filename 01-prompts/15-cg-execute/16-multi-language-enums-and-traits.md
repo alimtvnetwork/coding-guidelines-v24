@@ -179,11 +179,13 @@ In Go, enums MUST be scaffolded using `03-ai-scripts/30-enum-generator.py` into 
 4. **`readme.md`**: Package documentation detailing zero circular dependencies, direct Result returns, high-speed lookups, and DRY JSON marshaling.
 
 #### Automated Scaffolding Command:
+
 ```bash
 python 03-ai-scripts/30-enum-generator.py --name OrderStatus --type byte --items Pending,Processing,Completed,Cancelled --zero-value Invalid
 ```
 
 #### `variant.go` (Core Type, Constants, & Methods):
+
 ```go
 package orderstatustype
 
@@ -254,6 +256,7 @@ func (v *Variant) UnmarshalJSON(data []byte) error {
 ```
 
 #### `vars.go` (`BasicEnum` Engine & Monadic Parser):
+
 ```go
 package orderstatustype
 

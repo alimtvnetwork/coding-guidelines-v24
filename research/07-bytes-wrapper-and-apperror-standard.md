@@ -80,6 +80,7 @@ func (b Bytes[T]) Unwrap() ([]byte, *appfault.AppError) {
 ## 3. Standardized Signatures & Interface Contracts (`pkg/streamwriter/contracts.go`)
 
 ### 3.1 Function Signatures
+
 ```go
 // StreamFunc defines the swappable function signature returning *appfault.AppError.
 type StreamFunc[T any] func(ctx context.Context, payload T, dest io.Writer) *appfault.AppError
@@ -92,6 +93,7 @@ type FormatFunc[T any] func(payload T) Bytes[T]
 ```
 
 ### 3.2 Core Interface Hierarchy
+
 ```go
 type WriterInterface[T any] interface {
 	Interfacer
@@ -120,6 +122,7 @@ type StreamerInterface[T any] interface {
 ## 4. End-to-End Implementation Flow
 
 ### 4.1 Custom `FormatFunc[T]` Returning `Bytes[T]`
+
 ```go
 // Custom JSON Formatter returning Bytes[MyEvent]
 customFormatter := func(event MyEvent) streamwriter.Bytes[MyEvent] {
@@ -134,6 +137,7 @@ customFormatter := func(event MyEvent) streamwriter.Bytes[MyEvent] {
 ```
 
 ### 4.2 Handling Monadic `*appfault.AppError`
+
 ```go
 func main() {
 	ctx := context.Background()

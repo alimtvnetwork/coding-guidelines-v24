@@ -25,6 +25,7 @@
 ## 2. Files Created & Modified
 
 ### New Code Files in `04-code/golang/pkg/streamwriter/`
+
 - `contracts.go`: Interfaces (`Interfacer`, `WriterInterface`, `StreamerInterface`), function signatures (`StreamFunc`, `WriteFunc`, `FormatFunc`), and `LogRecord`.
 - `locked_streamer.go`: `LockedStreamer` with mutex synchronization and self-binding.
 - `lockless_streamer.go`: `LocklessStreamer` with zero lock overhead and self-binding.
@@ -33,10 +34,12 @@
 - `streamwriter_test.go`: Complete unit test suite verifying concurrency, direct execution, self-binding, swappable methods, fluent chaining, and dual-mode payloads.
 
 ### Research & Documentation
+
 - `research/01-index.md`: Registered research topic 05.
 - `research/05-streamer-and-writer-full-flow.md`: Comprehensive walkthrough and architecture diagram.
 
 ### Transaction History Updates
+
 - `05-changes-history/01-index.md`: Registered Task 05.
 - `05-changes-history/05-streamer-and-writer-full-flow/01-transaction-log.md`: This file.
 

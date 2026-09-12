@@ -97,6 +97,7 @@ type FormatFunc func(payload any) ([]byte, error)
 ## 3. Two Types of Streamers
 
 ### 3.1 `LockedStreamer` (Thread-Safe with Mutex)
+
 Designed for concurrent HTTP servers, gRPC handlers, and multi-goroutine background workers:
 - **Locking:** `sync.RWMutex` serializes writes to `destination`.
 - **Swappable:** `SetStreamMethod(fn)` and `SetDestination(dest)` under lock.
@@ -116,6 +117,7 @@ func (s *LockedStreamer) IsLocked() bool                 { return true }
 ```
 
 ### 3.2 `LocklessStreamer` (Zero-Lock Overhead)
+
 Designed for CLI tools, thread-confined workers, and lock-free channel consumers:
 - **Locking:** None. Zero mutex overhead.
 - **Swappable:** `SetStreamMethod(fn)` and `SetDestination(dest)`.

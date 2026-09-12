@@ -1,6 +1,7 @@
 # Conversation Log and Context Wrapper Specification
 
 ## 1. Context & Purpose
+
 This prompt defines the execution workflow for persisting session conversation histories, auditing project memory against coding standards, staging follow-up instructions into `prompts/`, and generating comprehensive audit reports without prematurely executing unconfirmed work.
 
 - **Roadmap Source of Truth:** `.lovable/plan.md`
@@ -11,6 +12,7 @@ This prompt defines the execution workflow for persisting session conversation h
 ---
 
 ## 2. Inputs & Prerequisites
+
 1. Full prior conversation turns across the active session.
 2. Verified clean working tree (`git status` exits clean).
 3. Active git branch only (no unauthorized branch switching).
@@ -20,6 +22,7 @@ This prompt defines the execution workflow for persisting session conversation h
 ## 3. Scope & Execution Checklist
 
 ### Phase 1: Conversation Persistence
+
 - [ ] Ensure repository root directory `conversation/` exists.
 - [ ] Enumerate existing files in `conversation/` and assign the next sequential zero-padded 3-digit prefix (`001`, `002`, ...).
 - [ ] Partition chat history into logical topic chunks (or one file if single-topic).
@@ -30,6 +33,7 @@ This prompt defines the execution workflow for persisting session conversation h
 - [ ] Document concrete outcomes/decisions and open threads.
 
 ### Phase 2: Memory & Standards Verification
+
 - [ ] Inspect `mem://01-index.md` (`.lovable/memory/01-index.md`).
 - [ ] Verify reference to `.lovable/coding-guidelines.md`; if missing, stage a proposed write for `mem://standards/coding-guidelines.md`.
 - [ ] Verify reference to `.lovable/plan.md`; if missing or referencing legacy paths, stage a proposed update.
@@ -38,6 +42,7 @@ This prompt defines the execution workflow for persisting session conversation h
 - [ ] **Do NOT** silently auto-create or overwrite memory files without user confirmation.
 
 ### Phase 3: Instruction Staging
+
 - [ ] Stage rewritten follow-up instructions into `prompts/NNN-<slug>.md` with 3-digit prefix.
 - [ ] Append staged instructions to `01-prompts/01-prompt-library-setup/01-prompt-library-setup.md` table without overwriting historical rows.
 - [ ] Enforce definition of done, input/output contracts, and explicit verification criteria.
@@ -45,6 +50,7 @@ This prompt defines the execution workflow for persisting session conversation h
 ---
 
 ## 4. Definition of Done
+
 1. All prior user instructions persisted verbatim in `conversation/NNN-<slug>.md`.
 2. Memory references audited and proposed writes clearly reported.
 3. Follow-up prompt staged in `prompts/` and indexed in `01-prompts/01-prompt-library-setup/01-prompt-library-setup.md`.

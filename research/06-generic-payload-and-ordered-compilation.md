@@ -22,6 +22,7 @@ This architecture addresses two fundamental requirements:
 ## 2. The `Compile` Transpilation Engine
 
 ### 2.1 The `Compilable` Interface
+
 Any object or struct can define its own transpilation output:
 ```go
 type Compilable interface {
@@ -30,6 +31,7 @@ type Compilable interface {
 ```
 
 ### 2.2 Transpilation Rules & Recursive Resolution
+
 ```go
 package streamwriter
 

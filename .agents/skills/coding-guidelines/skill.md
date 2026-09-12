@@ -67,6 +67,7 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 ## 1. High-Contrast Code Standards (❌ BAD vs ✅ GOOD Grounded Examples)
 
 ### A. Boolean Evaluation & Naming (P1–P6, R3)
+
 - **Rules:** Positive affirmative prefixes ONLY (`is` and `has`). TOTAL BAN on all other prefixes (`can`, `should`, `was`, `will`, `did`, `must` are strictly BANNED). TOTAL BAN on explicit `== true` / `=== true` checks. No mixed polarity (`if a && !b`). No inverted success checks (`!isSuccess`).
 
 ```go
@@ -103,6 +104,7 @@ function saveRecord(options: SaveRecordOptions): SaveRecordResult {
 ---
 
 ### B. Function Decomposition Blueprint (15-Line Limit & Logic Drift Prevention)
+
 - **Rule:** Functions MUST be <= 8 lines preferred, hard cap of <= 15 lines.
 - **Decomposition Formula:** Decompose complex functions into 3 distinct, single-responsibility helper stages:
   1. **Stage 1 (Precondition Guard):** `validateInputParams(params)`
@@ -182,6 +184,7 @@ func buildOrderResult(orderId string, total int) *OrderResult {
 ---
 
 ### C. Circular Dependency Prevention Protocol (Leaf Type Architecture)
+
 - **Rules:** Types, Enums, Structs, and Error Codes must live in a dedicated **Leaf Package** (e.g. `domain/types`, `types/`, `models/`).
 - Leaf packages must NEVER import services, handlers, or repositories.
 
@@ -208,6 +211,7 @@ import type { UserProfileDto } from '../types/UserTypes';
 ---
 
 ### D. Polyglot Grounding: Rust, C#, PHP, Java
+
 - **Rust:** PascalCase enums without `Type` suffix, exhaustive pattern matching, `Result<T, AppError>`, zero `unwrap()` or `panic!()`.
 - **C# / .NET:** `I` prefix interfaces, PascalCase properties, `CancellationToken` as last parameter, `ValueTask<Result<T>>`.
 - **PHP 8.1+:** BackedEnums + `HasEnumHelpers` trait, typed `AppException`, strict return types.
@@ -283,6 +287,7 @@ try {
 ---
 
 ### E. Deep React Immutability & Component Topology
+
 - **Rules:**
   1. Custom hooks MUST return named property objects (`{ userProfile, isPending, onUpdate }`), NEVER tuples `[state, setState]`.
   2. Deep state immutability via `structuredClone` (no in-place mutations on nested state arrays/objects).
@@ -334,6 +339,7 @@ export function useUser(userId: string): UseUserResult {
 ---
 
 ### F. Parameter Structs & Signature Splitting (R4, R5, R9)
+
 - **Rules:** If a function has > 3 parameters, split to one per line. If a function has > 4 parameters or 2+ adjacent parameters of the same type, group into a dedicated parameter struct with PascalCase JSON tags.
 
 ```go
@@ -361,6 +367,7 @@ func ConnectRemote(ctx context.Context, params RemoteConnectionParams) (*Client,
 ---
 
 ### C. Error Context Wrapping & Universal Envelopes (R7)
+
 - **Rules:** Never swallow errors. Wrap every error with operation context (`apperror.Wrap`). Standardize all API responses to `{ data, errors, meta }`.
 
 ```go
@@ -387,6 +394,7 @@ func GetUser(ctx context.Context, userId string) (*User, error) {
 ---
 
 ### D. Acronyms & Casing Standards (R1, R2, P8)
+
 - **Acronyms:** Standard PascalCase for acronyms: `Id`, `Url`, `Ip`, `Json`, `Api`, `Rpc` (NEVER all-caps `ID`, `URL`, `IP`, `JSON`).
 - **Enums:** Every enum type name MUST end with `Type` (e.g. `UserRoleType`, `ExitCodeType`).
 

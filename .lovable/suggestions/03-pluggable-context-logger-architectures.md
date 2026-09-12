@@ -47,6 +47,7 @@ Application Code: log.InfoContext(ctx, "event", fields)
 **Best for:** Pure Go architecture, zero third-party dependencies, full custom control.
 
 ### Contracts
+
 ```go
 package applogger
 
@@ -77,6 +78,7 @@ type LogRecord struct {
 ```
 
 ### Concrete Formatters
+
 ```go
 // JSONFormatter renders newline-delimited JSON.
 type JSONFormatter struct{}
@@ -109,6 +111,7 @@ func (f *ConsoleFormatter) Format(record *LogRecord) ([]byte, error) {
 ```
 
 ### Engine with Runtime Swapping
+
 ```go
 type Engine struct {
 	mu         sync.RWMutex
@@ -166,6 +169,7 @@ func (e *Engine) LogContext(ctx context.Context, level, msg string, fields map[s
 **Best for:** Standard Go projects, modern zero-allocation performance, official Go ecosystem alignment.
 
 ### Code
+
 ```go
 package applogger
 

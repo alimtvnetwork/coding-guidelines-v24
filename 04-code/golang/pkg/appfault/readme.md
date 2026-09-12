@@ -78,6 +78,7 @@ flowchart TD
 ## Core API & Usage Patterns
 
 ### 1. Construction & Wrapping
+
 ```go
 // New error with classification
 err := appfault.New(errtype.Validation, "invalid email format")
@@ -90,6 +91,7 @@ err = err.WithDetail("userId", "usr-9901").WithDetail("tier", "pro")
 ```
 
 ### 2. Null-Safe Receiver Checking
+
 ```go
 var err *appfault.AppError = nil
 
@@ -104,6 +106,7 @@ if !err.HasError() {
 ```
 
 ### 3. Merging with Historical Stack Tracking
+
 ```go
 var accumulated *appfault.AppError
 

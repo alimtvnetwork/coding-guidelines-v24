@@ -8,10 +8,12 @@
 ## Active Suggestions
 
 ### Pluggable & Context-Aware Logger Architecture
+
 - **Status:** Pending Review **Priority:** High **Added:** 2026-09-03
 - Full architecture proposals for decoupling Formatters (JSON, Console, Logfmt) and Writers (Stdout, File, Remote), alongside native `context.Context` extraction (`FromContext(ctx)`). See [03-pluggable-context-logger-architectures.md](.lovable/suggestions/03-pluggable-context-logger-architectures.md).
 
 ### Tree diagnostics: structured-event export
+
 - **Status:** Pending **Priority:** Low **Added:** 2026-04-27
 - Add a "Download JSON" button to `TreeDiagnosticsPanel` so the user can attach a full structured event log (not just copied console text) when reporting tree-rendering issues. Source: `src/lib/treeDiagnostics.ts`.
 

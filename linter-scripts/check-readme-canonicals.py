@@ -44,6 +44,12 @@ GITHUB_HOST_PATTERNS = [
 ]
 
 
+# Repositories legitimately referenced that belong to the author / external profiles.
+ALLOWLISTED_REPOS = {
+    "aukgit/alim.karim.profile",
+}
+
+
 def load_canonicals(args: argparse.Namespace) -> tuple[str, str, str]:
     owner = args.owner or os.environ.get("README_CANON_OWNER") or DEFAULT_OWNER
     slug = args.slug or os.environ.get("README_CANON_SLUG") or DEFAULT_SLUG
@@ -58,6 +64,8 @@ def find_github_violations(body: str, owner: str, slug: str) -> list[str]:
             for match in pattern.finditer(line):
                 found_owner = match.group("owner")
                 found_repo = match.group("repo")
+                if f"{found_owner}/{found_repo}" in ALLOWLISTED_REPOS:
+                    continue
                 owner_ok = found_owner == owner
                 repo_ok = found_repo == slug
                 if owner_ok and repo_ok:

@@ -87,6 +87,7 @@ type Result[T any] = Wrap[T]
 ## 5. Usage Patterns
 
 ### 5.1 Returning Results
+
 ```go
 import (
     "coding-guidelines/common/pkg/errtype"
@@ -113,6 +114,7 @@ func ReadConfig(path string) result.Wrap[*Config] {
 ```
 
 ### 5.2 Handling Results & Zero-Rewrap Propagation
+
 ```go
 func LoadAndApply(path string) result.Wrap[bool] {
     cfgRes := ReadConfig(path)
@@ -129,6 +131,7 @@ func LoadAndApply(path string) result.Wrap[bool] {
 ```
 
 ### 5.3 Formatting & Terminal Output
+
 `result.Wrap[T]` exposes rich formatting methods:
 ```go
 res := ReadConfig("config.json")

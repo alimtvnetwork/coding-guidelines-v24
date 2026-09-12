@@ -23,10 +23,12 @@
 ## 2. Files Created & Modified
 
 ### New Research Documents
+
 - `research/01-index.md`: Top-level index of architectural research.
 - `research/02-pluggable-writer-architecture-and-composition.md`: Comprehensive specification of the composable writer subsystem.
 
 ### Transaction History Updates
+
 - `05-changes-history/01-index.md`: Registered Task 02.
 - `05-changes-history/02-pluggable-writer-architecture-research/01-transaction-log.md`: This file.
 

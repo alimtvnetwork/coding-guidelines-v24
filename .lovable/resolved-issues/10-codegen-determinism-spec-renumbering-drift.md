@@ -8,6 +8,7 @@
 ---
 
 ## 1. Why It Happened
+
 During CI pipeline execution of `bash linters-cicd/codegen/scripts/verify-codegen-determinism.sh`, the test failed with drift detected across generated Go and PHP files:
 ```text
 Error: Codegen drift detected for lang=go
@@ -16,13 +17,16 @@ Error: Codegen drift detected for lang=go
 ```
 
 ## 2. How It Happened
+
 When spec sequences in `02-spec/04-database-conventions/` were renumbered from `01-naming-conventions.md` to `03-naming-conventions.md`, the code generation emitters (`go_emitter.py`, `php_emitter.py`, `ts_emitter.py`) were correctly updated to cite `03-naming-conventions.md` in file headers. However, the committed fixtures in `linters-cicd/codegen/fixtures/expected/` had not yet been regenerated. Furthermore, verification relied on Bash scripts (`.sh`) which lack native Windows/PowerShell support.
 
 ## 3. Root Cause
+
 1. Committed expected fixtures in `linters-cicd/codegen/fixtures/expected/` contained outdated header comments citing `01-naming-conventions.md`.
 2. Codegen verification and regeneration relied on non-portable Bash scripts (`verify-codegen-determinism.sh`, `regen-codegen-fixtures.sh`).
 
 ## 4. Code Fix & Prevention Rule
+
 1. **Shell-to-Python Conversion:** Migrated `verify-codegen-determinism.sh` and `regen-codegen-fixtures.sh` into pure, cross-platform Python scripts:
    - `linters-cicd/codegen/scripts/verify_codegen_determinism.py`
    - `linters-cicd/codegen/scripts/regen_codegen_fixtures.py`

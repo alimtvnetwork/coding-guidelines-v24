@@ -72,12 +72,12 @@ func GetCurrentSchemaVersion(db *sql.DB) (int, *appfault.AppError) {
 
 	var version sql.NullInt64
 	row := db.QueryRow("SELECT MAX(version) FROM schema_migrations")
-	if err := row.Scan(&version); err != nil {
-		isNoRows := err == sql.ErrNoRows
-		if isNoRows {
-			return 0, nil
-		}
-
+	err := row.Scan(&version)
+	isNoRows := err == sql.ErrNoRows
+	if isNoRows {
+		return 0, nil
+	}
+	if err != nil {
 		return 0, appfault.Wrap(errtype.Database, err, "failed to query schema version")
 	}
 
@@ -185,8 +185,8 @@ func AuditAndRepairColumns(db *sql.DB, tableName string) *appfault.AppError {
 		return fault
 	}
 
-	hasNoCols := len(cols) == 0
-	if hasNoCols {
+	hasCols := len(cols) > 0
+	if !hasCols {
 		return nil
 	}
 
@@ -197,11 +197,12 @@ func AuditAndRepairColumns(db *sql.DB, tableName string) *appfault.AppError {
 func applyMissingColumns(db *sql.DB, tableName string, cols map[string]bool) *appfault.AppError {
 	for _, col := range requiredColumns {
 		hasCol := cols[strings.ToLower(col.Name)]
-		isMissing := !hasCol
-		if isMissing {
-			if fault := AddMissingColumn(db, tableName, col.Name, col.Type); fault != nil {
-				return fault
-			}
+		if hasCol {
+			continue
+		}
+
+		if fault := AddMissingColumn(db, tableName, col.Name, col.Type); fault != nil {
+			return fault
 		}
 	}
 
@@ -254,20 +255,41 @@ func MigrateDatabase(db *sql.DB) *appfault.AppError {
 	return applyPendingMigrations(db, ver)
 }
 
-// applyPendingMigrations steps through unapplied version increments.
-func applyPendingMigrations(db *sql.DB, currentVersion int) *appfault.AppError {
-	if currentVersion < 1 {
-		if fault := RecordMigrationVersion(db, 1, "initialize base logs table"); fault != nil {
-			return fault
-		}
+// applyMigrationV1 records the base logs table migration.
+func applyMigrationV1(db *sql.DB) *appfault.AppError {
+	return RecordMigrationVersion(db, 1, "initialize base logs table")
+}
+
+// applyMigrationV2 creates indexes and records version 2.
+func applyMigrationV2(db *sql.DB) *appfault.AppError {
+	fault := ApplyIndexes(db)
+	if fault != nil {
+		return fault
 	}
 
-	if currentVersion < 2 {
-		if fault := ApplyIndexes(db); fault != nil {
-			return fault
-		}
+	return RecordMigrationVersion(db, 2, "create query indexes")
+}
 
-		return RecordMigrationVersion(db, 2, "create query indexes")
+// applyMigrationV1ThenV2 applies migration 1 and then migration 2 sequentially.
+func applyMigrationV1ThenV2(db *sql.DB) *appfault.AppError {
+	fault := applyMigrationV1(db)
+	if fault != nil {
+		return fault
+	}
+
+	return applyMigrationV2(db)
+}
+
+// applyPendingMigrations steps through unapplied version increments.
+func applyPendingMigrations(db *sql.DB, currentVersion int) *appfault.AppError {
+	hasV1 := currentVersion >= 1
+	if !hasV1 {
+		return applyMigrationV1ThenV2(db)
+	}
+
+	hasV2 := currentVersion >= 2
+	if !hasV2 {
+		return applyMigrationV2(db)
 	}
 
 	return nil

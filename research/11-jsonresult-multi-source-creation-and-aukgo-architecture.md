@@ -18,6 +18,7 @@ This document abstracts the architectural principles of `corejson` into a generi
 ## 2. Deep Dive: Key Patterns Discovered in `corejson`
 
 ### 2.1 The Struct-As-Namespace Pattern
+
 Rather than exposing dozens of unorganized top-level package functions, `corejson` organizes capabilities under package-level singleton structs acting as namespaces:
 - `corejson.Serialize.*`: High-level serialization engines (`ToString`, `Raw`, `UsingAny`, `Apply`).
 - `corejson.Deserialize.*`: High-level deserialization engines (`UsingBytes`, `UsingString`, `Apply`, `FromTo`).
@@ -26,6 +27,7 @@ Rather than exposing dozens of unorganized top-level package functions, `corejso
 - `corejson.CastAny.*`: Arbitrary type casting via JSON round-trip serialization.
 
 ### 2.2 Multi-Source Ingestion Hierarchy
+
 In `newResultCreator.go` and `serializerLogic.go`, a `Result` can be created from at least 10 distinct sources:
 1. **Raw Byte Slices (`[]byte`):** From existing buffers or I/O reads (`UsingBytes`).
 2. **Raw Strings (`string`):** From API payloads, logs, or CLI arguments (`UsingString`, `UsingTypePlusString`).
@@ -39,6 +41,7 @@ In `newResultCreator.go` and `serializerLogic.go`, a `Result` can be created fro
 10. **I/O Streams (`io.Reader`):** Streaming incoming network/file data into a validated JSON envelope.
 
 ### 2.3 Safe Accessors vs. Error Handling
+
 `corejson.Result` maintains three core fields:
 ```go
 type Result struct {

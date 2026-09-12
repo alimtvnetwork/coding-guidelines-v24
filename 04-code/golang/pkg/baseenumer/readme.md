@@ -5,6 +5,7 @@ The `baseenumer` package provides universal, zero-dependency interfaces and cont
 ## Interfaces
 
 ### `BaseEnumer` (Alias: `BaseEnum`)
+
 Defines the base contract for all type-safe enumerations:
 - `Name() string`: Returns the canonical string identifier of the enum.
 - `String() string`: Implements `fmt.Stringer`.
@@ -13,36 +14,43 @@ Defines the base contract for all type-safe enumerations:
 - `IsEnum() bool`: Reports whether the value exists in the registered enum set.
 
 ### `ByteEnumer` (Alias: `ByteEnum`)
+
 Extends `BaseEnumer` for byte-backed enumerations:
 - `Byte() byte`: Returns the byte value.
 - `ValueByte() byte`: Returns the byte value.
 - `Bytes() []byte`: Returns the byte slice representation.
 
 ### `StringEnumer` (Alias: `StringEnum`)
+
 Extends `BaseEnumer` for string-backed enumerations.
 
 ### `NumberEnumer` (Alias: `NumberEnum`)
+
 Extends `BaseEnumer` for numeric-backed enumerations:
 - `Int() int`: Returns the integer value.
 - `Code() uint16`: Returns the numeric unsigned 16-bit code.
 
 ### `MinMaxer[V any]` (Alias: `MinMax[V any]`)
+
 Defines boundary value retrieval for enumerations:
 - `Min() V`: Returns the minimum valid variant.
 - `Max() V`: Returns the maximum valid variant.
 
 ### `BoundedEnumer[V any]` (Alias: `BoundedEnum[V any]`)
+
 Extends `MinMaxer[V]` for boundary checks on enum instances:
 - `IsMin() bool`: Reports whether the instance equals the minimum variant.
 - `IsMax() bool`: Reports whether the instance equals the maximum variant.
 
 ### `Bounder[V any]`
+
 Extends `BoundedEnumer[V]` with range checking:
 - `IsInRange(min, max V) bool`: Reports whether the instance falls within `[min, max]`.
 
 ## Utilities
 
 ### `ToEnum[T BaseEnumer](val string, all []T) (T, bool)`
+
 Case-insensitively searches a slice of `BaseEnumer` instances by `Name()` or `ValueString()`.
 
 ## Type Constraints (`types.go`)

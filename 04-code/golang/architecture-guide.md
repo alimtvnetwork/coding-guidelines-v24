@@ -55,6 +55,7 @@ const (
 ```
 
 #### Variation Built-in Methods
+
 `errtype.Variation` provides methods mapping the 16-bit enum to names, codes, and HTTP statuses:
 
 ```go
@@ -111,6 +112,7 @@ func (c CallerInfo) IsEmpty() bool
 `*appfault.AppError` is **strictly immutable**. Once constructed, an `AppError` cannot be mutated in place, guaranteeing complete thread safety and preventing race conditions during concurrent logging or telemetry propagation.
 
 #### 1. Copy-on-Write Immutability
+
 All `With*` methods on `*AppError` return a fresh cloned instance without modifying the receiver:
 
 ```go
@@ -124,6 +126,7 @@ err422 := baseErr.WithStatusCode(422)
 ```
 
 #### 2. Mutable Staging via `AppBuilder` (`AppErrorBuilder`)
+
 For assembling errors with multiple diagnostic attributes before freezing, use `AppBuilder`:
 
 ```go
@@ -243,6 +246,7 @@ err.PrintLog()
 ```
 
 ### 3.3 Custom Formatter Function Signature
+
 ```go
 type FaultFormatter func(e *AppError) string
 ```
@@ -273,6 +277,7 @@ type Wrap[T any] = appfault.Result[T]
 ```
 
 #### Inspection Methods
+
 ```go
 wrap.IsSuccess()     // bool: true if AppError == nil
 wrap.IsFailed()      // bool: true if AppError != nil
@@ -500,6 +505,7 @@ if writerWrap.IsSuccess() {
 `streamwriter.JsonResult` provides a structured envelope around JSON data, integrating with `*appfault.AppError`.
 
 ### 6.1 Multi-Source Creation via `JsonSource`
+
 ```go
 // From struct or map
 res1 := streamwriter.JsonSource.FromPayload(map[string]any{"status": "active", "count": 10})
@@ -515,6 +521,7 @@ res4 := streamwriter.JsonSource.FromReader(resp.Body)
 ```
 
 ### 6.2 Transformation & Formatting
+
 ```go
 prettyJSON  := res1.Pretty()   // Indented with 2 spaces
 compactJSON := res1.Compact()  // Minified single-line string
@@ -529,6 +536,7 @@ if appErr := res1.Unmarshal(&target); appErr != nil {
 ```
 
 ### 6.3 Deterministic Object Compiler (`streamwriter.Compile`)
+
 Ensures reproducible string serialization with deterministically sorted keys across nested maps, slices, and structs:
 
 ```go
@@ -568,6 +576,7 @@ type Streamer[T any] interface {
 ```
 
 ### 7.2 Locked vs. Lockless Streamers
+
 - **`LockedStreamer[T]`**: Wraps destination `io.Writer` with an internal re-entrant mutex. Thread-safe for concurrent writes across goroutines.
 - **`LocklessStreamer[T]`**: Direct un-synchronized streaming for memory buffers (`bytes.Buffer`) or single-threaded workers.
 
@@ -581,6 +590,7 @@ writer := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
 ```
 
 #### 1. Swapping Formatters (`SetFormatMethod`)
+
 Transforms generic payload `T` into `Bytes[T]`:
 ```go
 writer.SetFormatMethod(func(payload any) streamwriter.Bytes[any] {
@@ -590,6 +600,7 @@ writer.SetFormatMethod(func(payload any) streamwriter.Bytes[any] {
 ```
 
 #### 2. Swapping Write Functions (`SetWriteMethod`)
+
 Receives the attached `streamer Streamer[T]`, `context.Context`, writer instance pointer `*PluggableWriter[T]`, and payload `T`:
 ```go
 writer.SetWriteMethod(func(s streamwriter.Streamer[any], ctx context.Context, w *streamwriter.PluggableWriter[any], payload any) *appfault.AppError {
@@ -608,6 +619,7 @@ writer.SetWriteMethod(func(s streamwriter.Streamer[any], ctx context.Context, w 
 ```
 
 #### 3. Swapping Destination (`SetDestination`) & Streamer (`SetStreamer`)
+
 ```go
 // Switch target from stdout to disk file at runtime
 fileWrap := fileutil.OpenFile("logs/runtime.log", fileutil.FileOpenCreateAppend, fileutil.FilePermStandard)
@@ -632,6 +644,7 @@ writer := streamwriter.NewAnyWriter(streamwriter.WriterOptions[any]{
 ```
 
 #### Reflect Converter & Byte Dispatch:
+
 In accordance with core engine guidelines (`aukgo/core`), `ExtractBytes(payload)` and `InspectPayload(payload)` enforce strict serialization rules:
 1. **Raw `[]byte` Preservation:** If payload is already `[]byte`, it is streamed directly to the destination. Calling `json.Marshal([]byte)` is strictly avoided because it transforms raw bytes into a **Base64-encoded string**.
 2. **String Bypass:** Plain strings are streamed directly as UTF-8 bytes (`[]byte(s)`), eliminating JSON quotation overhead.
@@ -643,6 +656,7 @@ In accordance with core engine guidelines (`aukgo/core`), `ExtractBytes(payload)
 ## 8. Default Destination Writers & Integration
 
 ### 8.1 Filesystem Disk Writer
+
 ```go
 fileWrap := fileutil.OpenFile("logs/audit.log", fileutil.FileOpenCreateAppend, fileutil.FilePermStandard)
 diskStreamer := streamwriter.NewLockedStreamer[any](streamwriter.StreamerOptions[any]{
@@ -656,6 +670,7 @@ diskWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[an
 ```
 
 ### 8.2 JSON Serializing Writer
+
 ```go
 jsonWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
     Name:        "json-writer",
@@ -675,6 +690,7 @@ jsonWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[an
 ```
 
 ### 8.3 REST API / HTTP Remote Sink
+
 ```go
 apiWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
     Name: "http-api-writer",
@@ -705,6 +721,7 @@ apiWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any
 ```
 
 ### 8.4 Console / Terminal Writer
+
 ```go
 consoleWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions[any]{
     Name:        "console-writer",
@@ -722,6 +739,7 @@ consoleWriter := streamwriter.NewPluggableWriter[any](streamwriter.WriterOptions
 ## 9. Fluent Composite Logging Engine (`streamwriter.Logger[T]`)
 
 ### 9.1 Multi-Writer Chaining & Fan-Out
+
 ```go
 logger := streamwriter.NewLogger[any]().
     AddWriter(consoleWriter).
@@ -732,9 +750,11 @@ count := logger.WriterCount() // Returns 3
 ```
 
 ### 9.2 Zero-Allocation Silent Mode
+
 When `logger.WriterCount() == 0`, calls to `logger.Emit(...)` return immediately with `nil`, generating 0 allocations during testing or disabled logging states.
 
 ### 9.3 Context & Trace ID Enrichment
+
 ```go
 type traceKeyType string
 const traceKey traceKeyType = "traceId"

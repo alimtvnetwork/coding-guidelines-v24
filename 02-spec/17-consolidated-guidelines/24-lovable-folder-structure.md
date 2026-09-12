@@ -104,3 +104,71 @@ This is the **standalone consolidated reference** for the `.lovable/` folder str
 ---
 
 *Consolidated .lovable folder structure — v4.0.0 — 2026-08-31*
+
+---
+
+## §X Project Memory — Active Core Rules (Mirror)
+
+This section **mirrors** the operational rules stored in `.lovable/memory/01-index.md` Core section. A blind AI receiving only the consolidated folder would otherwise miss these — and violate at least three on its first PR. This mirror is **read-only documentation** of the rules; the canonical source remains `mem://index.md`.
+
+### X.1 Code-Red Quality Rules
+
+| Rule | Enforced By |
+|------|-------------|
+| Never swallow errors. Zero-nesting (no nested `if`). Max 2 operands per condition. Positively named guard functions. | `linter-scripts/validate-guidelines.py` |
+| Functions: 8–15 lines. Files: < 300 lines. React components: < 100 lines. | `linter-scripts/validate-guidelines.py` |
+
+### X.2 Sync & Repo Rules
+
+| Rule | Notes |
+|------|-------|
+| **Never** sync `01-app`, `02-app-issues`, `03-general`, `03-tasks`, or `12-consolidated-guidelines` from upstream sibling repos | All maintained locally |
+| **Skip** from spec audits: `21-app`, `22-app-issues`, `23-app-db`, `24-app-ui-design-system` are intentional stubs | Never write 97/99 files for them; never demote to `_drafts/`; exclude from corpus averages |
+| Repo identity: `alimtvnetwork/coding-guidelines-v24` | Install scripts live at repo root (`install.ps1` / `install.sh`) |
+
+### X.3 Naming Rules
+
+| Domain | Convention | Exception |
+|--------|------------|-----------|
+| Internal IDs, DB, JSON, Types | PascalCase | Rust uses `snake_case` identifiers |
+| DB tables | PascalCase, **singular** | — |
+| DB primary keys | `{TableName}Id` (INTEGER PRIMARY KEY AUTOINCREMENT) | No UUIDs |
+
+### X.4 DB Boolean Rules
+
+- **Forbidden** prefixes: `Not`, `No`
+- **Approved Inverses** (allowed despite negative semantics): `IsDisabled`, `IsInvalid`, `IsIncomplete`, `IsUnavailable`, `IsUnread`, `IsHidden`, `IsBroken`, `IsLocked`, `IsUnpublished`, `IsUnverified`
+- Inverses are derived in code via Rule 9 codegen (never stored as separate columns)
+
+### X.5 DB Descriptive Column Rules (Rules 10/11/12)
+
+| Table Type | Required Columns |
+|------------|------------------|
+| Entity tables | `Description TEXT NULL` |
+| Transactional tables | `Notes TEXT NULL` + `Comments TEXT NULL` |
+
+Enforcement: see `18-database-conventions.md` §18 (rule presence) and §19 (waiver syntax).
+
+### X.6 Workflow Rules
+
+| Rule | Pattern |
+|------|---------|
+| Spec changes | Spec-First — edit `spec/` then implement |
+| Bug fixes | Issue-First — create `03-issues/<issue>.md` then fix |
+| `.lovable/` structure | Single-file convention — `plan.md`, `suggestions.md`, `strictly-avoid.md` each hold their full history. **Never** create per-task folders |
+| Multi-step requests | Break into discrete tasks. Wait for "next" prompt to continue |
+
+### X.7 Dependency Pinning
+
+| Package | Allowed Versions | Blocked |
+|---------|------------------|---------|
+| `axios` | `1.14.0`, `0.30.3` | `1.14.1`, `0.30.4` (security; never bump) |
+
+Enforced by `linter-scripts/check-axios-version.sh`.
+
+### X.8 Why This Mirror Exists
+
+The canonical memory lives at `mem://index.md` and is automatically loaded into every Lovable AI session. External AIs have no access to that memory — this section is the only way they will learn these rules.
+
+When updating: edit `mem://index.md` first, then sync this section. The mirror is allowed to lag by at most one minor version.
+

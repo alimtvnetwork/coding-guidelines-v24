@@ -19,6 +19,7 @@ The user provided two critical architectural directives:
 ## 2. Architectural Analysis: Why `JsonSource` Taking `any` is Superior
 
 ### 2.1 The Ergonomics of Ingestion vs Types
+
 When ingesting raw data from `[]byte`, `string`, or `io.Reader`, callers do not yet possess an instance of the structured type before parsing and validation. In a signature like `FromBytes[T](data []byte, payload T)`, callers are forced to pass an artificial dummy/zero value (e.g., `Account{}`) just to satisfy the compiler.
 
 By designing the global `JsonSource` singleton methods to accept `any`:
@@ -30,6 +31,7 @@ resReader := streamwriter.JsonSource.FromReader(reader)
 Callers can ingest raw JSON seamlessly without specifying any type parameters.
 
 ### 2.2 Go Generics Limitation (Methods Cannot Have Type Parameters)
+
 In Go, methods declared on structs cannot declare their own independent type parameters (e.g., `func (jsonSourceSingleton) FromBytes[T any](...)` produces a compilation error: `syntax error: method must have no type parameters`).
 
 Therefore, the two-tier architectural pattern solves this cleanly:

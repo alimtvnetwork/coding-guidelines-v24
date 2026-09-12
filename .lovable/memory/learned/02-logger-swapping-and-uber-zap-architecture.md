@@ -41,6 +41,7 @@ To address the limitations of hardcoded sinks, this architecture decouples the l
 ## 2. Core Contracts & Interfaces
 
 ### 2.1 Backend Contract
+
 ```go
 package applogger
 
@@ -81,6 +82,7 @@ type LogBackend interface {
 ```
 
 ### 2.2 Formatter & Writer Contracts (Pipeline Mode)
+
 ```go
 import "io"
 
@@ -98,6 +100,7 @@ type Writer = io.Writer
 ## 3. Concrete Implementation: Formatter and Writer Pipeline
 
 ### 3.1 Formatters
+
 ```go
 import (
 	"encoding/json"
@@ -164,6 +167,7 @@ func (f *ConsoleFormatter) Format(r LogRecord) ([]byte, error) {
 ```
 
 ### 3.2 PipelineBackend Implementation
+
 ```go
 import "sync"
 

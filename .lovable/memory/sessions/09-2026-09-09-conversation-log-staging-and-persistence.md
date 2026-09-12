@@ -18,6 +18,7 @@ This session spanned:
 ## 2. Key Actions Taken
 
 ### 2.1 Conversation History Persistence
+
 - Created directory `conversation/`.
 - Authored 4 sequential conversation logs:
   - `conversation/001-enum-architecture-and-cycle-elimination.md` (Turns 1–2).
@@ -26,11 +27,13 @@ This session spanned:
   - `conversation/004-task-retention-streaming-atomic-apimanager.md` (Turns 9–11).
 
 ### 2.2 Prompt Staging & Registry Indexing
+
 - Authored rewritten prompt `prompts/001-conversation-log-and-context-wrapper.md`.
 - Appended table entry into `01-prompts/01-prompt-library-setup/01-prompt-library-setup.md`.
 - Maintained zero-execution staging boundary and reported back to the user with the mandatory acknowledgment.
 
 ### 2.3 Memory Persistence & Consolidation
+
 - Authored learned memories:
   - `.lovable/memory/learned/07-split-sqlite-logging-and-task-db-migration.md`
   - `.lovable/memory/learned/08-task-retention-streaming-atomic-apimanager.md`

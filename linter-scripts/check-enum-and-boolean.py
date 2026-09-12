@@ -168,6 +168,8 @@ def check_file(filepath: Path) -> list[str]:
     ext = filepath.suffix
     if ext not in TARGET_EXTS:
         return []
+    if any(ex in filepath.parts for ex in EXCLUDE_DIRS):
+        return []
     if filepath.name.endswith('_test.go') or '.test.' in filepath.name or '.spec.' in filepath.name:
         return []
 
@@ -208,18 +210,70 @@ def check_file(filepath: Path) -> list[str]:
 
     return violations
 
-def main():
-    scanned_count = 0
-    all_violations = []
+def collect_files_to_check(args: list[str]) -> list[Path]:
+    """Collects target files based on CLI args (--staged, explicit files, or full tree)."""
+    import subprocess
 
+    if "--staged" in args:
+        try:
+            res = subprocess.run(
+                ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR"],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            paths = [ROOT_DIR / line.strip() for line in res.stdout.splitlines() if line.strip()]
+            return [
+                p for p in paths
+                if p.suffix in TARGET_EXTS and not p.name.endswith("_test.go") and p.is_file()
+            ]
+        except Exception:
+            return []
+
+    explicit_paths = [a for a in args if not a.startswith("--")]
+    if explicit_paths:
+        collected: list[Path] = []
+        for raw in explicit_paths:
+            p = Path(raw)
+            if not p.is_absolute():
+                p = ROOT_DIR / p
+            if p.is_file() and p.suffix in TARGET_EXTS and not p.name.endswith("_test.go"):
+                collected.append(p)
+            elif p.is_dir():
+                for root, dirs, files in os.walk(p):
+                    dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not any(ex in d for ex in EXCLUDE_DIRS)]
+                    for file in files:
+                        fp = Path(root) / file
+                        if fp.suffix in TARGET_EXTS and not fp.name.endswith("_test.go"):
+                            collected.append(fp)
+        return collected
+
+    # Default: walk entire ROOT_DIR
+    collected = []
     for root, dirs, files in os.walk(ROOT_DIR):
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not any(ex in d for ex in EXCLUDE_DIRS)]
         for file in files:
             p = Path(root) / file
-            if p.suffix in TARGET_EXTS and not p.name.endswith('_test.go'):
-                scanned_count += 1
-                v = check_file(p)
-                all_violations.extend(v)
+            if p.suffix in TARGET_EXTS and not p.name.endswith("_test.go"):
+                collected.append(p)
+    return collected
+
+
+def main():
+    args = sys.argv[1:]
+    target_files = collect_files_to_check(args)
+
+    if not target_files and ("--staged" in args or any(not a.startswith("--") for a in args)):
+        print("✅ PASS: No relevant source files to check for boolean/enum compliance.")
+        sys.exit(0)
+
+    scanned_count = 0
+    all_violations = []
+
+    for p in target_files:
+        scanned_count += 1
+        v = check_file(p)
+        all_violations.extend(v)
 
     print(f"Scanned {scanned_count} source files for boolean, enum, and conditional compliance.\n")
 

@@ -35,6 +35,7 @@ The user requested standardization of byte wrapping envelopes with:
 ## 3. Detailed Implementations
 
 ### `WrappedBytes[T any]` Contract
+
 ```go
 type WrappedBytes[T any] interface {
 	Raw() []byte
@@ -57,6 +58,7 @@ type WrappedBytes[T any] interface {
 ```
 
 ### `JSONResult[T any]` Container
+
 Implements both `WrappedJSON[T]` and `WrappedBytes[T]`:
 - `NewJSONResult(payload T)`: Marshals `T` into JSON bytes; sets `status: true, statusCode: 200` on success or wraps errors with `*appfault.AppError` on failure.
 - `Pretty() string`: Returns indented 2-space JSON formatting.

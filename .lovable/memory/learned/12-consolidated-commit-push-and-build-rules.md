@@ -15,21 +15,25 @@ During autonomous guideline runs, committing isolated 1-2 markdown plan files wi
 ## 2. Mandatory Rules
 
 ### Rule 1: Consolidated Atomic Commits
+
 - **NEVER** commit isolated 1-2 plan/doc markdown files alone.
 - Group all modified source files, test fixtures, and associated plan documentation into a single, cohesive, atomic commit.
 - Every commit must represent a complete unit of functional work or guideline milestone.
 
 ### Rule 2: Immediate Git Push to Remote
+
 - **ALWAYS** execute `git push origin <branch>` immediately after creating any commit.
 - Never leave local commits unpushed across turns. The local branch and `origin/main` must stay 100% synchronized.
 
 ### Rule 3: No Builds or Full CI Runner During Routine Turns
+
 - **NEVER** execute `npm run build` or `go build ./...` during routine coding guideline audits (styling, naming, booleans, enums).
 - **NEVER** execute `python 03-ai-scripts/06-cicd-local-runner.py` during routine turns.
 - Use targeted, single-file linters (e.g. `check-nested-ifs.py`, `check-boolean-guidelines.py`) for lightweight, instantaneous verification.
 - Full builds and pipeline runs are reserved strictly for explicit owner commands or the final pre-release gate.
 
 ### Rule 4: Atomic File Change Cache Recording
+
 - Whenever files are modified, record their relative paths into `.lovable/temp/recent-file-changes.json` under atomic file lock:
   ```bash
   python 03-ai-scripts/33-test-inventory-generator.py --record <files...>

@@ -23,7 +23,7 @@ export default function CorePrinciples2Slide() {
           number="04"
           progressId="01b-core-principles-2#04"
           title="Structured Error Wrapping"
-          symptom="Errors get swallowed by bare `catch {}` or re-thrown as strings, losing stack and context."
+          symptom="Errors get swallowed by bare catch blocks or re-thrown as strings, losing stack and context."
           rule="Every error that crosses a boundary is an `AppError` with stack trace and structured context."
           action="Search your PR for `catch` blocks with no `AppError`. Wrap each with context and rethrow."
           accent="primary"

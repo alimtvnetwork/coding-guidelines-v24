@@ -88,6 +88,7 @@ The primary directive of this workflow is **aggressive file count minimization**
 ### 1. The Core Compaction Principles
 
 #### A. Combine 2, 3, or More Related Tasks into Single Files
+
 - **Mandatory Clustering:** NEVER leave isolated, single-step micro-plans. If tasks relate to the same subsystem, package, or architectural theme, you MUST combine 2, 3, or more of them into a single consolidated milestone summary file.
 - **Example Clusters:**
   - *Logger Enhancements + Named Writers + Typed Streamers* $
@@ -100,16 +101,19 @@ ightarrow$ Merge Plans 35, 36 into `XX-fileutil-pathinfo-and-constants.md`.
 ightarrow$ Merge Subtasks 38.1, 38.2, 38.3 into `XX-result-dynamic-conversions-and-coredata-parity.md`.
 
 #### B. Compact Common Checklists into Single Consolidated Sections
+
 - **Checklist Deduplication:** Repetitive checklist items (e.g. unit tests passed, function size <= 15 lines, implicit booleans, zero CI/CD disablement, relative links) must NOT be duplicated across separate files.
 - **Single-File Checklist:** Consolidate all common verification, quality gate, and task acceptance checklists into a **single unified table or checklist** within the consolidated document.
 
 #### C. Collapse Subtask Sprawl into Single Files
+
 - **Eliminate Subtask Folder Bloat:** When a completed plan has a dedicated folder in `.lovable/plans/subtasks/` containing multiple individual files (`01-<subtask-title>.md`, `02-<subtask-title>.md`, `03-task.md`), you MUST:
   1. Fold the contents, code changes, and verification proof of all subtasks directly into the single consolidated milestone document in `.lovable/plans/completed/`.
   2. If subtask documentation is explicitly retained, compact all subtask steps into a **single consolidated subtask file** (`01-consolidated-tasks.md`) rather than keeping sprawling multi-file directories.
   3. Cleanly delete superseded micro-subtask files via `git rm`.
 
 #### D. Keep the Main Concept (Zero Concept Loss)
+
 Compaction is NOT deletion of knowledge. You must strictly preserve:
 1. **The Core Architectural Problem & Design:** Why the change was made and what design pattern was established.
 2. **Key Codebase Modifications:** Which packages, structs, interfaces, methods, or scripts were added or modified.
@@ -118,18 +122,22 @@ Compaction is NOT deletion of knowledge. You must strictly preserve:
 5. **Traceability Links:** Strictly relative Git paths to specifications (`02-spec/`) and RCA logs (`.lovable/memory/issues/`).
 
 #### E. Quantifiable Reduction Metric
+
 - Aim for a **60% to 80% reduction** in total plan and subtask file count.
 - Transforming 40 individual files into 6–8 dense, high-clarity milestone summaries is the benchmark of success.
 
 #### F. Prune Pure Coding Guideline Tasks (Zero Business Logic)
+
 - **Eliminate Housekeeping Clutter:** Historical micro-tasks whose sole purpose was fixing coding guidelines (e.g. whitespace formatting, adding blank lines around `if` conditions, renaming variables to add `is_`/`has_` prefixes, or adjusting function line counts with zero changes to business logic or architecture) **MUST BE COMPLETELY DROPPED/PRUNED** from the consolidated milestone execution ledgers.
 - **Why It Matters:** Consolidated milestone summaries exist to provide a dense, high-signal architectural record of domain features, error models, and business logic completed. Routine coding guideline adherence is enforced continuously by CI/CD linters—it does not warrant lingering historical task bloat.
 
 #### G. Single Master Coding Guideline Checklist (No Duplication)
+
 - **Single Authoritative Source:** NEVER duplicate verbose coding guideline checklists across multiple plan files.
 - **Reference Once:** All consolidated milestone summaries must verify compliance against the single consolidated master checklist in [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) (or `02-spec/02-coding-guidelines/`). A single unified checklist item pointing to this master file is sufficient for quality tracking.
 
 #### H. Purge Resolved Spec Audit Folders (`02-spec/25-app-spec-audit/`)
+
 - **Automated Audit Directory Cleanup:** Once architecture audits are resolved and incorporated into specifications or code, the audit reports folder `02-spec/25-app-spec-audit/` MUST be cleanly removed from the repository.
 - **Dedicated Cleanup Script:** Use `python 03-ai-scripts/32-git-history-file-tracer.py --preset-audit --delete` (or `--purge --confirm-purge`). The script automatically creates a complete backup in the OS temporary directory, moves on-disk files to the OS Recycle Bin / Trash, and prints the exact backup path for user safety.
 

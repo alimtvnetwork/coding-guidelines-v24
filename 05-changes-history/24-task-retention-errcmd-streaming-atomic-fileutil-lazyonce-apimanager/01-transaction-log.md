@@ -1,6 +1,7 @@
 # Task 24: Task Retention, errcmd Streaming, Atomic Fileutil, lazyonce Context, and ApiManager
 
 ## 1. Header & Metadata
+
 - **Date:** 2026-09-09
 - **Author/Agent:** Antigravity Master Orchestrator
 - **Status:** Completed
@@ -14,6 +15,7 @@
 ---
 
 ## 2. Context & Goals
+
 The user requested five key architectural enhancements and end-to-end integration tests:
 1. **Option 1 (sqlitelogger):** Task database retention pruning (`PruneTasks(maxAge)`, `PruneTaskCount(maxDbs)`) and dynamic query filtering (`FilterOptions` with level, start/end time, limit, offset).
 2. **Option 2 (errcmd):** Live line streaming callbacks (`WithStdoutHandler`, `WithStderrHandler`) and process context (`WithEnv`, `WithCwd`).
@@ -27,6 +29,7 @@ The user requested five key architectural enhancements and end-to-end integratio
 ## 3. Files Changed / Created
 
 ### New Source & Test Files
+
 - `04-code/golang/pkg/fileutil/atomic_write.go`:
   - Implements `AtomicWriteFile(filePath, data, perm)` and `AtomicWrite(filePath, data, perm)`.
 - `04-code/golang/pkg/fileutil/atomic_write_test.go`:
@@ -43,6 +46,7 @@ The user requested five key architectural enhancements and end-to-end integratio
   - Specification for remote API logging and rotation policies.
 
 ### Modified Files
+
 - `04-code/golang/pkg/applogger/sqlitelogger/manager.go`:
   - Added `PruneTasks(maxAge)` and `PruneTaskCount(maxDbs)`.
   - Added dynamic query filtering in `QueryMainLogs` and `QueryTaskLogs`.
@@ -65,6 +69,7 @@ The user requested five key architectural enhancements and end-to-end integratio
 ---
 
 ## 4. Architectural Decisions & Rationale
+
 1. **Synchronous Real-Time Line Streaming in errcmd:**
    Implemented `lineStreamWriter` wrapping `bytes.Buffer` and line splitting. This avoids complex pipe lifecycle issues and goroutine race conditions while providing immediate line dispatch to handlers and task loggers.
 2. **Safe Atomic Replacement in fileutil:**

@@ -22,6 +22,7 @@ All entries under `05-changes-history/` must follow strict sequential naming:
 ```
 
 ### Folder & File Rules
+
 1. **Strict Lowercase:** Every folder and file inside `05-changes-history/` must be strictly lowercase (e.g., `01-transaction-log.md`, `01-gitmap-sync-and-ai-scripts/`).
 2. **Sequential Numbering:** Two-digit zero-padded sequence prefix (`01-`, `02-`, etc.) based on execution order.
 3. **Relative Paths Only:** Never include absolute filesystem paths (`C:\...` or `file:///...`) inside log files. All paths must be relative to git root.

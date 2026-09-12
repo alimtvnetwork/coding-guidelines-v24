@@ -23,6 +23,7 @@
 ## 2. Files Created & Modified
 
 ### New & Modified Source Code in `04-code/golang/pkg/streamwriter/`
+
 - `compiler.go`: Recursive transpilation engine implementing sorted map keys, array sequence, struct field reflection, and recursive `Compilable` method resolution.
 - `contracts.go`: Parameterized `WriterInterface[T]`, `StreamerInterface[T]`, `StreamFunc[T]`, `WriteFunc[T]`, `FormatFunc[T]` over `[T any]`, and added `Compile() string` to `LogRecord`.
 - `locked_streamer.go`: Generic `LockedStreamer[T]` using `Compile(payload)`.
@@ -32,10 +33,12 @@
 - `streamwriter_test.go`: Added test cases for primitive compile, sorted map compile, slice compile, recursive compilable struct compile, and generic streamer execution.
 
 ### Research & Documentation
+
 - `research/01-index.md`: Registered research topic 06.
 - `research/06-generic-payload-and-ordered-compilation.md`: Comprehensive design blueprint and code examples.
 
 ### Transaction History Updates
+
 - `05-changes-history/01-index.md`: Registered Task 06.
 - `05-changes-history/06-generic-t-payload-and-recursive-compile/01-transaction-log.md`: This file.
 

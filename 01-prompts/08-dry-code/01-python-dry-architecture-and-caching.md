@@ -157,6 +157,7 @@ All cache data is organized in structured, pluggable subdirectories under `tmp/c
 3. **`tmp/cache/files/`**: Cached tokenized contents or AST data.
 
 ### Dual-Platform Locking & Stale Lock Recovery
+
 - **POSIX (Linux/macOS):** Native kernel `fcntl.flock(LOCK_EX | LOCK_NB)` automatically cleaned up on crash or process kill.
 - **Windows (NTFS):** Atomic `os.O_CREAT | os.O_EXCL` with PID timestamp and automatic eviction for stale locks (>15s).
 

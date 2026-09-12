@@ -46,6 +46,7 @@ Categorized folders include:
 Top-level AI tools and command shortcuts read from flat, sequentially numbered prompts in `01-prompts/` (e.g. `01-unified-ai-prompt-v4.md`, `02-next-steps.md`, `05-read-memory-enhanced.md`, etc.).
 
 ### Synchronization Command:
+
 ```powershell
 .\scripts\update-prompts.ps1
 ```
@@ -55,6 +56,7 @@ or on Linux/macOS:
 ```
 
 ### Config Variable Substitution:
+
 `scripts/prompt-sync-config.json` defines folder prefix variables (`SOURCE_PREFIX`, `TARGET_PREFIX`) that are compiled at execution time before copying files.
 
 ## 3. Strict Rules for AI Agents

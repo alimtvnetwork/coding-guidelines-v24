@@ -93,19 +93,23 @@ this func hsould take the current object in the func to proceed with so that we 
 ## 2. Core Architectural Standards Established
 
 ### 2.1 Idiomatic `-er` Interface Naming
+
 - **RULE:** Never suffix Go interfaces with `Interface` (e.g., `WriterInterface` is strictly banned).
 - Interfaces representing behaviors must use the standard Go `-er` suffix: `Writer[T]`, `Streamer[T]`, `Compiler`, `Formatter[T]`.
 
 ### 2.2 Reentrant Locker Integration (`ReentrantMutex`)
+
 - `Writer[T]` embeds `sync.Locker` (`Lock()` and `Unlock()`).
 - In complex write flows where a compound batch acquires a lock and calls helper methods that also lock, a standard `sync.Mutex` deadlocks.
 - The `streamwriter` package uses a goroutine-aware `ReentrantMutex` that tracks recursion depth and current goroutine ID, allowing safe re-entrant locking within the same goroutine while serializing access across concurrent goroutines.
 
 ### 2.3 Monadic `Bytes[T]` and `WrappedBytes`
+
 - Replaces raw `([]byte, error)` returns across low-level streaming components.
 - Provides fluent accessors: `Raw()`, `String()`, `Len()`, `IsEmpty()`, `Payload()`, `AppError()`, `Fault()`, `HasError()`, `IsValid()`, `Unwrap()`, `Value()`, `Error()`.
 
 ### 2.4 Minimalist `JsonResult` Container
+
 - Pure bytes payload:
   ```go
   type JsonResult struct {
@@ -118,18 +122,21 @@ this func hsould take the current object in the func to proceed with so that we 
 - When typed payloads are required, `JsonPayloadResult[T]` extends `JsonResult` by embedding it alongside `payload T`.
 
 ### 2.5 Strict Boolean Prefixing
+
 - All boolean struct fields and variable identifiers MUST have an explicit positive prefix:
   - `isActive` (never `active`).
   - `isSuccess` (never `success`).
   - `hasError`, `isValid`, `shouldRetry`.
 
 ### 2.6 Strict `Id` / `id` Naming (BAN on `ID`)
+
 - Acronym `ID` is completely prohibited in struct fields and variables:
   - Use `UserId`, `OrderId`, `AccountId`, `TraceId` in PascalCase.
   - Use `userId`, `orderId`, `accountId`, `traceId` in camelCase.
   - Total ban on `UserID`, `OrderID`, `AccountID`, `TraceID`.
 
 ### 2.7 Writer Self-Context Passing in `WriteFunc`
+
 - Closures passed to `NewPluggableWriter` must not be forced to capture external variables or hardcode names:
   ```go
   type WriteFunc[T any] func(ctx context.Context, writer *PluggableWriter[T], payload T) *appfault.AppError

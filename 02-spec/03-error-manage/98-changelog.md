@@ -10,11 +10,13 @@
 ### Mandatory Error Type First & Extended Collection Mutators
 
 #### Changed — `pkg/appfault` Constructors
+
 - Mandated `errtype.Variation` as the first argument in `Wrap(errType, cause, msg)` and `WrapType(errType, cause)`.
 - Added `NewType(errType)` creating AppErrors with default type names.
 - Guaranteed nil return when `cause == nil` or `errType == None`.
 
 #### Added — `pkg/appfaults` Extended Mutators
+
 - `AddType(errType)`: Adds error from enum type.
 - `AddTypeMsg(errType, msg)`: Adds error from enum type + message.
 - `AddTypeMsgf(errType, fmt, args...)`: Formatted message error.
@@ -29,11 +31,13 @@
 ### Dedicated `errtype` Package & Integer-Backed Enums
 
 #### Added — `pkg/errtype` Package
+
 - `type Variation uint16` with `None = 0` (no error / success).
 - Standard variations: `Generic (1)`, `Validation (2)`, `NotFound (3)`, `Precondition (4)`, `Execution (5)`, `Database (6)`, `Network (7)`, `Timeout (8)`, `IO (9)`, `Unauthorized (10)`, `Forbidden (11)`, `Internal (12)`, `Unknown (13)`.
 - Extensible custom error types (`const CustomErr errtype.Variation = 1001`).
 
 #### Added — Integer Enums with PascalCase Serialization
+
 - `SeverityType` (`byte`) and `PriorityType` (`byte`) enums in `pkg/appfault`.
 - PascalCase string outputs (`"Info"`, `"Warn"`, `"Error"`, `"Critical"`, `"Fatal"`) via `String()` and custom JSON/YAML marshaling.
 - Documented in retrospective `02-spec/03-error-manage/01-error-resolution/03-retrospectives/07-golang-integer-enums-and-pascal-serialization.md`.

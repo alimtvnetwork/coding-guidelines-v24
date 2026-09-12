@@ -16,6 +16,7 @@ can you please reduce this code from base enumer and also reduce the Result wrap
 ```
 
 ### Core Objectives
+
 1. **Reduce Boilerplate in Baseenumer & Enums:**
    Add `Parse(s string) (V, bool)`, `ParseOrZero(s string) V`, and `ParseErr(s string) (V, error)` directly into `BasicIntegerEnum` and `BasicStringEnum` in `pkg/baseenumer`. Remove redundant `variantMap = basicEnum.Map()` exports and manual parse error wrapping loops across all enum packages.
 2. **Eliminate Result Wrap to Prevent Import Cycles:**
@@ -30,12 +31,14 @@ can you please reduce this code from base enumer and also reduce the Result wrap
 ## 2. Architectural & Engineering Implementation
 
 ### 2.1 Baseenumer Parse Helpers (`pkg/baseenumer/basic_enum.go`)
+
 Added the following methods to `BasicIntegerEnum[V]` and `BasicStringEnum[V]`:
 - `Parse(s string) (V, bool)`: Performs trimmed lowercase lookup against internal map and returns variant and boolean indicator.
 - `ParseOrZero(s string) V`: Convenient fallback returning variant or zero-value.
 - `ParseErr(s string) (V, error)`: Error-returning alternative for legacy or specialized callers.
 
 ### 2.2 Leaf Enum Refactoring (`pkg/enum/**`)
+
 Refactored all 9 enum subpackages into pure leaf packages:
 - `processstatetype`: Removed `result`/`errtype`, implemented `Parse(s string) (Variant, bool)`, `ParseOrInvalid`, and `ParseOrUnknown`.
 - `bytetype`: Removed `result`/`errtype`, implemented `Parse(s string) (Variant, bool)` with uint8 numeric fallback, and `ParseOrZero`.
@@ -47,6 +50,7 @@ Refactored all 9 enum subpackages into pure leaf packages:
 - `prioritytype` & `severitytype`: Removed redundant `variantMap` and simplified `Parse` to call `basicEnum.Parse(s)` directly.
 
 ### 2.3 Downstream Adapters
+
 - `pkg/logger/level.go`: `ParseLogLevel(s string) LogLevel` delegates cleanly to `logleveltype.ParseOrUnknown(s)`.
 - `pkg/fileutil`: High-level domain package retains `FileOpResult`, `FilePermResult`, `FileWriteModeResult`, and `FileOpenModeResult` as `result.Wrap[Variant]`, wrapping leaf enum parser outputs within `fileutil` scope.
 

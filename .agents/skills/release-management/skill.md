@@ -8,6 +8,7 @@ description: Execute full release ceremony, SemVer version bumps, package synchr
 Conducts the standardized release ceremony for coding-guidelines-v24.
 
 ## Steps
+
 1. Determine bump tier (MINOR default, reset PATCH to 0).
 2. **Mandatory Pre-Release Unit Tests & CI/CD Verification:** Execute `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` and verify all unit test suites, AST checks, and quality gates pass 100% green (`exit 0`).
 3. **Test Inventory Validation:** Cross-reference `.lovable/temp/recent-file-changes.json` with `.lovable/test-inventory.json` to verify that all test suites covering recently modified files pass completely.

@@ -107,22 +107,26 @@ flowchart TD
 ## Subsystem Breakdown
 
 ### 1. Mutable Staging & Serialization
+
 - **`AppErrorBuilder` (`AppBuilder`)**: Mutable staging container for assembling diagnostic metadata across multiple call steps or unmarshaling error responses over network RPC / JSON.
 - Freezes into a strictly immutable `*AppError` upon `.Build()`.
 
 ### 2. Strictly Immutable Error (`*AppError`) & Error Merging
+
 - **Copy-on-Write Immutability**: All derivations (`WithStatusCode`, `WithCaller`, `WithContext`, `WithOp`) clone the instance before applying changes.
 - **Value-Based Caller Site**: `CallerInfo` is stored by value (`caller CallerInfo`) directly in `AppError` with zero heap allocation and natural immutability.
 - **Error Merging & Multi-Loop Tracking**: `Merge(prev, next)` merges chained loop errors, preserving the first error's stack trace in `"FirstErrorStackTrace"` and recording loop attempts in `"LoopCount"` and `"StackTraceHistory"`.
 - **Comprehensive Null Safety**: Nil and zero-value `*AppError` receivers never panic. Methods `IsNull()`, `IsEmpty()`, `HasZero()`, `IsZero()`, `HasNull()`, `Clone()`, and `Concat()` provide robust defensive checking.
 
 ### 3. Multi-Destination Presentation
+
 - **Stdout Banner (`FormatStdout` / `PrintStdout`)**: Rich human-readable terminal output with severity icons, HTTP status codes, caller sites, and context.
 - **Structured JSON (`FormatJson` / `PrintJson`)**: Machine-readable RFC JSON output with PascalCase fields and ISO diagnostics.
 - **Log Aggregator Line (`FormatTextLog` / `PrintLog`)**: Single-line key-value output formatted for Loki, Datadog, Fluentbit, and ELK.
 - **Hot-Swappable Custom Formatters**: Custom formatters can be plugged into `PrintWith(formatter, w)` for arbitrary output targets.
 
 ### 4. Pluggable Write Pipeline (`pkg/streamwriter`)
+
 - **First Parameter Streamer**: `WriteFunc[T]` takes `streamer Streamer[T]` as its first parameter for direct pipeline streaming access.
 - **Payload Intelligence**: `ExtractBytes` bypasses Base64 encoding for raw `[]byte` and strips surrounding quotes for strings.
 - **Reference Semantics**: All active writer structs (`*PluggableWriter`, `*Logger`, `*Streamer`, `*BaseWriter`, `*AsyncWriter`) enforce pointer semantics.

@@ -34,6 +34,7 @@ To solve this, the logging infrastructure implements a **Split SQLite Database A
 When the system opens or interacts with any task database, it MUST NOT assume the schema is current or intact.
 
 ### Non-Negotiable Contract
+
 - **Auto-Migration on Open:** Before performing any read, query, or append operation on a task database, the connection pipeline runs schema verification and auto-migration (`AutoMigrateTaskSchema(db)`).
 - **Self-Repair:** If required columns (e.g. `SpanId`, `TraceId`, `Timestamp`) or indexes are missing due to legacy versions or abnormal termination, the migration logic safely executes `ALTER TABLE` or creates missing indexes.
 - **Idempotency:** Schema migrations are strictly idempotent and non-destructive. Existing task records must never be truncated or corrupted during migration.

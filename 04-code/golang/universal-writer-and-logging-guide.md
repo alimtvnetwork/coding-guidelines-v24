@@ -559,6 +559,7 @@ Every wrapper across the core ecosystem (`Result[T]`, `Collection`, `Bytes[T]`, 
 | `JsonPayloadResult[T]` | `pkg/streamwriter` | `IsNull()`, `IsEmpty()`, `HasZero()`, `IsZero()`, `HasNull()` | `.Clone() JsonPayloadResult[T]` | `.Concat(other) JsonPayloadResult[T]` |
 
 #### Example: Zero-State and Null Defensive Pipeline
+
 ```go
 // 1. Calling methods on zero-value or null wrappers never panics:
 var zeroBytes streamwriter.Bytes[string]

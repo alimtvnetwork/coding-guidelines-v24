@@ -30,6 +30,7 @@ so no need for any status , status code, payload, clear?? Fix all
 ## 2. Architectural Refactoring
 
 ### 2.1 Stripped-Down Minimalist `JsonResult`
+
 - **Fields:** Reduced strictly to `data []byte` and `appError *appfault.AppError`.
 - **Eliminated Fields:** `status bool`, `statusCode int`, and `payload any` removed from `JsonResult`.
 - **Dynamic Calculation:**
@@ -40,6 +41,7 @@ so no need for any status , status code, payload, clear?? Fix all
   - `StatusCode() int` -> returns `appError.StatusCode()` if explicit, or infers HTTP status code via `appError.GetType()` (`Validation`/`Precondition` -> 400, `Unauthorized` -> 401, `Forbidden` -> 403, `NotFound` -> 404, `Timeout` -> 408, default 500), or 200 on success.
 
 ### 2.2 Payload Extension: `JsonPayloadResult[T any]`
+
 - Created `JsonPayloadResult[T any]` which extends `JsonResult` via struct embedding:
   ```go
   type JsonPayloadResult[T any] struct {

@@ -121,6 +121,7 @@ flowchart TD
 ## Core Types & API
 
 ### 1. `BoundFileWriter` (File-Specific Auto-Locking Writer/Appender)
+
 ```go
 // 1. Creation bound to a specific file
 writer := fileutil.NewBoundFileWriter("var/data/state.log")
@@ -151,6 +152,7 @@ fmt.Printf("Writes: %d, Written: %d bytes, Appended: %d bytes\n",
 ```
 
 ### 2. `FileWriter` (Behavior Shifting)
+
 ```go
 writer := fileutil.NewFileWriterEngine("configs/app.json")
 
@@ -167,6 +169,7 @@ _ = writer.WriteString(ctx, "mode: clean-state\n")
 ```
 
 ### 3. `FileAppender` (Dedicated Continuous WAL/Journal)
+
 ```go
 appender := fileutil.NewFileAppender("var/log/audit.log", fileutil.FilePermStandard)
 appender.SetAutoSync(true)
@@ -177,6 +180,7 @@ _ = appender.Close()
 ```
 
 ### 4. Standard Library Adapters (`io.WriteCloser`)
+
 ```go
 // Adapters for io.Copy, fmt.Fprintf, log.SetOutput
 stdWriter := writer.StdWriter()
@@ -184,6 +188,7 @@ stdAppender := writer.StdAppender()
 ```
 
 ### 5. `Path` Namespace Singleton
+
 Organizes modular filepath functions into intuitive sub-namespaces:
 ```go
 // Temp utilities
@@ -208,6 +213,7 @@ joined := fileutil.Path.Join("var", "log", "app.log")
 ```
 
 ### 6. Fluent `NewPath` Builder (`PathWrapper`)
+
 Enables chainable transformations, inspections, and direct file operations:
 ```go
 // Chain transformations
@@ -371,12 +377,14 @@ _ = target.Delete()
 > When operating within this repository, AI agents MUST follow this operational playbook to guarantee error-free, safe, and portable filesystem manipulation.
 
 ### Rule 1: Choose the Right Abstraction Layer
+
 1. **One-off independent operations:** Use `fileutil.File.<Op>.<Method>` (e.g., `fileutil.File.Read.Bytes(path)`, `fileutil.File.Write.String(path, text, perm)`).
 2. **Multi-step operations on a single file:** Use `fileutil.File.Target(path)` (`FilePathOps`) to bind the path once and chain reads, writes, and pre-flight checks without repeating the path.
 3. **Continuous / transactional writes under concurrency:** Use `fileutil.New.BoundWriter.AutoClose(path, perm)` or `NewBoundFileWriter(path)` with `.WithLock(...)`.
 4. **Append-only log streams:** Use `fileutil.New.Appender.AutoSync(path, perm)`.
 
 ### Rule 2: Always Pre-Flight Parent Directories
+
 - **Banned:** Blindly calling open/write without creating parent directories (risking runtime `ENOENT` failures).
 - **Mandated:** When initializing a file or before reading from a potentially fresh path, call:
   ```go
@@ -387,6 +395,7 @@ _ = target.Delete()
   ```
 
 ### Rule 3: Enforce Immutability on Path Transformations
+
 - `FilePathOps` is strictly immutable. Calling `.WithWorkDir(...)`, `.WithRelPath(...)`, or `.Join(...)` returns a new pointer.
 - **Never** expect in-place mutation:
   ```go
@@ -398,6 +407,7 @@ _ = target.Delete()
   ```
 
 ### Rule 4: Handle Concrete Results, Never Raw Errors
+
 - All operations return concrete envelopes (`BoolResult`, `FileResult`, `BytesResult`, `StringResult`, `LinesResult`, `FileInfoResult`).
 - Always check `.IsSuccess()` or `.IsFailed()`, and return `.Fault()` (`*appfault.AppError`):
   ```go
@@ -408,6 +418,7 @@ _ = target.Delete()
   ```
 
 ### Rule 5: 1:1 Struct-to-Filename Codebase Navigation
+
 When locating or adding Go structs in `pkg/fileutil`, adhere strictly to lowercase snake_case naming matching the primary struct:
 - Struct `appendOps` -> `append_ops.go`
 - Struct `openOps` -> `open_ops.go`

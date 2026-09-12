@@ -73,6 +73,18 @@ for script in linter-scripts/check-*.py; do
   if [[ "$script" == "linter-scripts/check-forbidden-strings.py" ]]; then
     continue
   fi
+  if [[ "$script" == "linter-scripts/check-enum-and-boolean.py" ]]; then
+    RAN=$((RAN + 1))
+    echo ""
+    echo "── $script ──"
+    if python3 "$script" --staged; then
+      echo "✅ pass"
+    else
+      echo "❌ fail: $script"
+      FAILED=$((FAILED + 1))
+    fi
+    continue
+  fi
   run_guard "$script" "python3"
 done
 shopt -u nullglob
@@ -82,21 +94,23 @@ shopt -u nullglob
 # ------------------------------------------------------------
 STAGED="$(git diff --cached --name-only --diff-filter=ACMR || true)"
 touched_specs=0
-if echo "$STAGED" | grep -qE '^(spec/|\.lovable/)'; then
+if echo "$STAGED" | grep -qE '^(spec/|02-spec/|\.lovable/)'; then
   touched_specs=1
 fi
 
 if [[ "$touched_specs" -eq 1 ]]; then
   echo ""
   echo "📚 pre-commit: spec/.lovable changes detected — running spec guards..."
-  if [[ -f linter-scripts/validate-guidelines.py ]]; then
-    run_guard "linter-scripts/validate-guidelines.py" "python3"
+  if echo "$STAGED" | grep -qE '^src/.*\.(ts|tsx|js|jsx)$'; then
+    if [[ -f linter-scripts/validate-guidelines.py ]]; then
+      run_guard "linter-scripts/validate-guidelines.py" "python3"
+    fi
   fi
   if [[ -f linter-scripts/check-spec-cross-links.py ]]; then
     RAN=$((RAN + 1))
     echo ""
     echo "── linter-scripts/check-spec-cross-links.py ──"
-    if python3 linter-scripts/check-spec-cross-links.py --root spec --repo-root .; then
+    if python3 linter-scripts/check-spec-cross-links.py --root 02-spec --repo-root .; then
       echo "✅ pass"
     else
       echo "❌ fail: linter-scripts/check-spec-cross-links.py"
@@ -107,7 +121,7 @@ if [[ "$touched_specs" -eq 1 ]]; then
     RAN=$((RAN + 1))
     echo ""
     echo "── linter-scripts/check-placeholder-comments.py ──"
-    if python3 linter-scripts/check-placeholder-comments.py --root spec --repo-root .; then
+    if python3 linter-scripts/check-placeholder-comments.py --root 02-spec --repo-root .; then
       echo "✅ pass"
     else
       echo "❌ fail: linter-scripts/check-placeholder-comments.py"

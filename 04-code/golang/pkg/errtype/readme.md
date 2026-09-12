@@ -49,6 +49,7 @@ flowchart TD
 ## Core Types & API
 
 ### 1. `Variation` (Error Type Code)
+
 Standard classification codes mapped to HTTP status codes:
 | Variation | Code | Name | HTTP Status |
 | :--- | :--- | :--- | :--- |
@@ -69,6 +70,7 @@ Standard classification codes mapped to HTTP status codes:
 | `Serialization` | 14 | Serialization | 400 Bad Request |
 
 ### 2. Domain Enums (`pkg/enum/`)
+
 ```go
 import (
     "coding-guidelines/common/pkg/enum/logleveltype"

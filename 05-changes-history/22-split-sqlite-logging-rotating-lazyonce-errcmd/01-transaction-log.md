@@ -1,6 +1,7 @@
 # Task 22: Split SQLite Logging, Rotating File Logger, LazyOnce & errcmd Integration
 
 ## 1. Header & Metadata
+
 - **Date:** 2026-09-09
 - **Author/Agent:** Antigravity Master Orchestrator
 - **Status:** Completed
@@ -14,6 +15,7 @@
 ---
 
 ## 2. Context & Goals
+
 The user required a comprehensive logging and execution architecture addressing:
 1. **Split SQLite DB Architecture:** Work directory (`workDir` / `DBDir`) hosting a primary `logs.db` for global system logs and a `tasks/` directory containing task-isolated SQLite databases (`tasks/<task-id>.db`). This architecture eliminates database file locking contention between parallel tasks and allows independent retrieval, pruning, and archiving.
 2. **Text-Based File Logging with Configurable Rotation & Archiving:** A robust `RotatingFileSink` conforming to `LogSink`, supporting configurable maximum file size (default 2 MB), retention count (default 20 logs), directory archiving, and optional gzip compression.
@@ -25,6 +27,7 @@ The user required a comprehensive logging and execution architecture addressing:
 ## 3. Files Changed / Created
 
 ### New Packages & Source Files
+
 - `04-code/golang/pkg/applogger/sqlitelogger/models.go`: Data models (`TaskLogEntry`, `FilterOptions`, `TaskSummary`, `DBOpenerFunc`).
 - `04-code/golang/pkg/applogger/sqlitelogger/manager.go`: `SplitDBManager` managing global and task SQLite databases.
 - `04-code/golang/pkg/applogger/sqlitelogger/sqlitelogger.go`: `TaskLogger` binding task-scoped logging to task DBs.
@@ -45,12 +48,14 @@ The user required a comprehensive logging and execution architecture addressing:
 - `04-code/golang/pkg/errcmd/errcmd_test.go`: Unit tests for `ScriptBuilder`, `CommandRunner`, and safe defer.
 
 ### Modifications & Examples
+
 - `04-code/golang/pkg/applogger/config.go`: Added `Rotation` config and `DriverRotatingFile` support.
 - `04-code/golang/pkg/applogger/driver_type.go`: Added `DriverRotatingFile` enum variant.
 - `04-code/golang/examples/split_sqlite_and_errcmd_examples.go`: Production-grade usage examples for all new systems.
 - `04-code/golang/examples/split_sqlite_and_errcmd_examples_test.go`: Automated tests for all example flows.
 
 ### Plans & Tracking
+
 - `.lovable/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md`: Master architectural plan.
 - `.lovable/plans/subtasks/08-split-sqlite-logging-rotating-lazyonce-errcmd/01..06`: Granular subtasks.
 - `.lovable/plans/01-index.md`: Registered completed plan 08.
@@ -58,6 +63,7 @@ The user required a comprehensive logging and execution architecture addressing:
 ---
 
 ## 4. Architectural Decisions & Rationale
+
 - **Pluggable `DBOpenerFunc`:** Allows runtime injection of pure Go SQLite drivers (`modernc.org/sqlite`), CGo drivers (`mattn/go-sqlite3`), or mock in-memory connections, making tests 100% deterministic and portable.
 - **Split DB Isolation:** Dividing logging into global `logs.db` and per-task `tasks/<task-id>.db` isolates write contention, drastically improving throughput and allowing clean per-task queries and archiving.
 - **Atomic File Rotation:** Rotation checks size before write and renames/archives the file while holding a lock, preventing log message interleaving or file corruption.
@@ -66,6 +72,7 @@ The user required a comprehensive logging and execution architecture addressing:
 ---
 
 ## 5. Verification & Quality Gate Results
+
 - `go test ./pkg/... ./examples/... -count=1`: **PASS** (28/28 packages green).
 - `python linter-scripts/check-relative-paths.py`: **PASS** (0 absolute paths across tracked files).
 - `python linter-scripts/check-sequence-integrity.py`: **PASS** (142 documents audited, 0 broken references).

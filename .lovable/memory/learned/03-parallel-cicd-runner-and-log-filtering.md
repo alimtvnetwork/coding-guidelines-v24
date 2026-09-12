@@ -24,12 +24,14 @@ python 03-ai-scripts/06-cicd-local-runner.py --failed # should show al logs or e
 ## 2. Core Architectural Decisions
 
 ### 2.1 Multi-Process Concurrency via ThreadPoolExecutor
+
 - Because quality gate steps run external subprocesses (`subprocess.run`), Python's Global Interpreter Lock (GIL) is released during I/O and process execution.
 - Using `concurrent.futures.ThreadPoolExecutor` provides true multi-core process execution across Windows and POSIX systems.
 - Worker count defaults dynamically to `min(len(target_jobs), os.cpu_count() or 8, 8)` to maximize throughput without thrashing OS schedulers.
 - Runtime speedup: Total wall-clock time dropped from **35–40 seconds** down to **6.5–8.5 seconds** across 21 gates (~5.5x faster).
 
 ### 2.2 Selective Log Filtering Protocol
+
 In large multi-gate suites (21 checks), stdout noise from passing tools clutters the console and obscures actionable errors.
 - **Default / `--failed` mode:**
   - Real-time ticker lines report progress: `[ 1/21] ✅ [PASS] <Gate Name> (<duration>s)`.
@@ -39,6 +41,7 @@ In large multi-gate suites (21 checks), stdout noise from passing tools clutters
 - **`--all` mode:** Full logs (stdout + stderr) are printed for all gates regardless of pass/fail status.
 
 ### 2.3 Structured Execution Result
+
 All checks report through an immutable dataclass:
 ```python
 @dataclass

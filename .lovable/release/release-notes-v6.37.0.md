@@ -3,11 +3,13 @@
 ## Quick Install (One-Liners)
 
 ### Windows (PowerShell 5.1+)
+
 ```powershell
 irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v6.37.0/install.ps1 | iex
 ```
 
 ### Linux / macOS (Bash)
+
 ```bash
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v6.37.0/install.sh | bash
 ```

@@ -25,6 +25,7 @@ The examples needed to showcase:
 ## 2. Implementation Summary
 
 ### 2.1 Reusable Library Examples (`04-code/golang/examples/streamwriter_examples.go`)
+
 - **Domain Models:**
   - `UserAccount`: Models domain user identity, credentials, roles, and status flags.
   - `OrderEvent`: Models transactional streaming payloads.
@@ -34,11 +35,13 @@ The examples needed to showcase:
   - `RunStreamerExample(dest io.Writer) *appfault.AppError`
 
 ### 2.2 Automated Unit Verification (`04-code/golang/examples/streamwriter_examples_test.go`)
+
 - `TestStreamwriterLoggerExample`: Verifies severity levels, structured metadata tags, context trace IDs, and custom audit writer output.
 - `TestStreamwriterJsonExample`: Verifies multi-source ingestion, formatting, deserialization, type casting, and extended payload results.
 - `TestStreamwriterStreamerExample`: Verifies locked single streaming, 8 concurrent worker streams, atomic batch transaction blocks, and hot-swapped writer execution.
 
 ### 2.3 Standalone Demonstration CLI (`04-code/golang/cmd/streamwriter-demo/main.go`)
+
 - Main entrypoint orchestrating all three examples sequentially to `os.Stdout`.
 - Executable via `go run ./cmd/streamwriter-demo/main.go`.
 

@@ -76,11 +76,10 @@ func (it *LazyRegex) Compile() appfault.Result[*regexp.Regexp] {
 	it.locker.Lock()
 	defer it.locker.Unlock()
 
+	if it.isCompiled && it.compiledErr != nil {
+		return appfault.Fail[*regexp.Regexp](appfault.NewAppBuilder(errtype.Execution, "lazy regex compilation failed").SetCause(it.compiledErr).Build())
+	}
 	if it.isCompiled {
-		if it.compiledErr != nil {
-			return appfault.Fail[*regexp.Regexp](appfault.NewAppBuilder(errtype.Execution, "lazy regex compilation failed").SetCause(it.compiledErr).Build())
-		}
-
 		return appfault.NewSuccess(it.regex)
 	}
 
@@ -127,7 +126,7 @@ func (it *LazyRegex) CompileMust() *regexp.Regexp {
 
 	res := it.Compile()
 	if res.IsFailure() {
-		panic(res.Fault().Error()) // Panic with the formatted error message
+		panic(res.Fault().Error()) // lint-allow: panic - must panic if regex fails to compile
 	}
 
 	return res.Data()
@@ -163,10 +162,9 @@ func (it *LazyRegex) OnRequiredCompiled() error {
 // OnRequiredCompiledMust triggers compilation and panics on error.
 func (it *LazyRegex) OnRequiredCompiledMust() {
 	err := it.OnRequiredCompiled()
-	if err != nil {
-		if appErr, ok := err.(*appfault.AppError); ok {
-			appErr.HandleError()
-		}
+	appErr, ok := err.(*appfault.AppError)
+	if ok {
+		appErr.HandleError()
 	}
 }
 
@@ -212,10 +210,9 @@ func (it *LazyRegex) Error() error {
 // MustBeSafe panics if compilation encountered an error.
 func (it *LazyRegex) MustBeSafe() {
 	compiledErr := it.CompiledError()
-	if compiledErr != nil {
-		if appErr, ok := compiledErr.(*appfault.AppError); ok {
-			appErr.HandleError()
-		}
+	appErr, ok := compiledErr.(*appfault.AppError)
+	if ok {
+		appErr.HandleError()
 	}
 }
 

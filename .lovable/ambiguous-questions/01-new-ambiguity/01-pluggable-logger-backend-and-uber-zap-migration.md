@@ -19,11 +19,13 @@ How should `04-code/golang/pkg/applogger` be refactored to support seamless hot-
 ## Options Considered
 
 ### Option A: Standard `log/slog` Handler Adapter (Idiomatic Go 1.21+)
+
 - **Architecture:** Adopt Go's native `slog.Logger` as the foundation. Implement custom `slog.Handler` wrappers for context extraction, and use `zapslog` (or `zapcore`) as a swappable handler.
 - **Pros:** Zero third-party dependencies for standard use; native Go standard library compatibility; ecosystem tools natively integrate.
 - **Cons:** Uber Zap features (like zero-alloc field encoders) are adapted to `slog.Record` instead of native `zap.Field`.
 
 ### Option B: Unified Dual-Mode `LogBackend` Engine (Recommended)
+
 - **Architecture:** Define a universal `LogBackend` interface. Provide two primary backend drivers:
   1. `PipelineBackend`: Decoupled `Formatter` (`JSON`, `Console`, `Logfmt`) + `io.Writer` (`Stdout`, `File`, `MultiWriter`).
   2. `ZapBackend`: Wraps `*zap.Logger` directly, mapping `context.Context` to native `zap.Field` slices.
@@ -32,6 +34,7 @@ How should `04-code/golang/pkg/applogger` be refactored to support seamless hot-
 - **Cons:** Requires maintaining the lightweight pipeline alongside the Zap adapter.
 
 ### Option C: Uber Zap as Exclusive Engine
+
 - **Architecture:** Make `go.uber.org/zap` the sole logging engine across all services, wrapping it in an `AppError` bridge.
 - **Pros:** One single logging engine; highest possible throughput.
 - **Cons:** Heavy external dependency for lightweight tools, CLI scripts, and embedded packages.

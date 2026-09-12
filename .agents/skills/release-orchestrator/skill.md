@@ -9,6 +9,7 @@ description: >-
 Execute full automated release orchestration, semantic version bumping, branch management, and tag creation using Python scripts.
 
 ## Core Directives
+
 1. Determine bump tier (MINOR default, reset PATCH to 0).
 2. Verify git clean status before release execution.
 3. **Mandatory Pre-Release Unit Tests & CI/CD Verification:** Execute `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` and verify all unit test suites, AST checks, and quality gates pass 100% green (`exit 0`).

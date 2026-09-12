@@ -110,6 +110,7 @@ The release orchestrator strictly implements this end-to-end Git workflow:
 ```
 
 ### Critical Rules for Branch Reversion:
+
 - **NEVER assume `main` or `master`:** Releases may be triggered from feature branches, bugfix branches, or release candidates. The script MUST record the starting branch and revert to that exact branch.
 - **Fail-Safe Restoration:** Even if pushing or downstream steps fail, the script's `finally:` block MUST ensure the working tree is safely checked back out to `original_branch`.
 

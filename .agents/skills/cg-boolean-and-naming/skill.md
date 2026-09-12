@@ -46,4 +46,5 @@ This skill governs autonomous execution for boolean conventions, semantic naming
 
 
 ## Routine Execution Policy
+
 - **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns or micro-batch loops. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.

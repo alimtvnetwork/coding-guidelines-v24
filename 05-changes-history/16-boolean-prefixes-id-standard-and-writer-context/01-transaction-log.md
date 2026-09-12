@@ -37,6 +37,7 @@ this func hsould take the current object in the func to proceed with so that we 
 ## 2. Architectural Changes
 
 ### 2.1 Writer Receiver/Self-Context Passing in `WriteFunc`
+
 - Previously, `WriteFunc[T any]` was defined as:
   ```go
   type WriteFunc[T any] func(ctx context.Context, payload T) *appfault.AppError
@@ -56,11 +57,13 @@ this func hsould take the current object in the func to proceed with so that we 
 - `WriterOptions[T]` now includes `Destination io.Writer` directly.
 
 ### 2.2 Strict Boolean Prefix Enforcement
+
 - All boolean struct fields and variables without positive prefixes were updated to conform to repository standards:
   - `UserAccount.Active bool` -> `UserAccount.IsActive bool` (`json:"isActive"`).
   - `RemoteActivationResponse.Success bool` -> `RemoteActivationResponse.IsSuccess bool` (`json:"isSuccess"`).
 
 ### 2.3 Strict `Id` Naming Convention (PascalCase `Id`, camelCase `id`, BAN on `ID`)
+
 - Updated all struct fields, methods, variables, and identifiers from uppercase acronym `ID` to `Id`:
   - `UserAccount.ID` -> `UserAccount.Id`
   - `OrderEvent.OrderID` -> `OrderEvent.OrderId`

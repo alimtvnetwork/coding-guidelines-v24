@@ -426,6 +426,12 @@ Examples:
         dest="run_tests",
         help="Explicitly enable test suite execution (for release verification or when explicitly requested by owner)."
     )
+    parser.add_argument(
+        "--changed-only",
+        action="store_true",
+        dest="changed_only",
+        help="Run quality gates scoped strictly to files modified in .lovable/temp/recent-file-changes.json."
+    )
     return parser.parse_args()
 
 
@@ -472,15 +478,110 @@ def save_recent_run_cache(cache_file: Path, signature: str, exit_code: int, summ
         pass
 
 
+def clean_stale_locks(max_age_sec: float = 300.0) -> None:
+    """Removes stale lock files older than max_age_sec to prevent pipeline deadlocks."""
+    lock_paths = [
+        Path(".lovable/temp/recent-file-changes.lock"),
+        Path(".lovable/temp/active-locks.json"),
+    ]
+    for lock_file in lock_paths:
+        if not lock_file.exists():
+            continue
+        try:
+            mtime = lock_file.stat().st_mtime
+            if (time.time() - mtime) > max_age_sec:
+                if lock_file.suffix == ".lock":
+                    lock_file.unlink(missing_ok=True)
+                elif lock_file.suffix == ".json":
+                    try:
+                        data = json.loads(lock_file.read_text(encoding=DEFAULT_ENCODING))
+                        if isinstance(data, dict):
+                            now = time.time()
+                            filtered = {
+                                k: v for k, v in data.items()
+                                if isinstance(v, dict) and (now - float(v.get("timestamp", now))) < max_age_sec
+                            }
+                            if len(filtered) != len(data):
+                                lock_file.write_text(json.dumps(filtered, indent=2), encoding=DEFAULT_ENCODING)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+
+RECENT_CHANGES_FILE = Path(".lovable/temp/recent-file-changes.json")
+
+
+def filter_jobs_for_changed_files(all_jobs: dict[str, list[str]]) -> dict[str, list[str]] | None:
+    """Filters CI jobs based on modified files tracked in .lovable/temp/recent-file-changes.json."""
+    if not RECENT_CHANGES_FILE.exists():
+        return None
+    try:
+        data = json.loads(RECENT_CHANGES_FILE.read_text(encoding=DEFAULT_ENCODING))
+        changed_files: list[str] = []
+        if isinstance(data, list):
+            changed_files = [str(f) for f in data]
+        elif isinstance(data, dict):
+            changed_files = [str(f) for f in data.get("files", [])]
+
+        if not changed_files:
+            return {}
+
+        has_go = any(f.endswith(".go") or "golang" in f for f in changed_files)
+        has_py = any(f.endswith(".py") or "linter-scripts" in f or "03-ai-scripts" in f for f in changed_files)
+        has_md = any(f.endswith(".md") or "02-spec" in f for f in changed_files)
+        has_web = any("slides-app" in f or "src" in f or f.endswith((".ts", ".tsx", ".jsx", ".js")) for f in changed_files)
+
+        filtered_jobs: dict[str, list[str]] = {}
+        for name, cmd in all_jobs.items():
+            name_lower = name.lower()
+            if "markdown" in name_lower or "spec" in name_lower or "link" in name_lower:
+                if has_md:
+                    filtered_jobs[name] = cmd
+            elif "go " in name_lower or "golang" in name_lower:
+                if has_go:
+                    filtered_jobs[name] = cmd
+            elif "boolean" in name_lower or "error" in name_lower or "nested if" in name_lower:
+                if has_go or has_py or has_web:
+                    filtered_jobs[name] = cmd
+            elif "web" in name_lower or "slides" in name_lower:
+                if has_web:
+                    filtered_jobs[name] = cmd
+            elif "python" in name_lower or "linter" in name_lower:
+                if has_py:
+                    filtered_jobs[name] = cmd
+            else:
+                filtered_jobs[name] = cmd
+
+        return filtered_jobs
+    except Exception:
+        return None
+
+
 def main():
     args = parse_arguments()
 
-    sig = f"no_tests={getattr(args, 'no_tests', False)},run_tests={getattr(args, 'run_tests', False)},filter={getattr(args, 'filter', '') or ''}"
+    clean_stale_locks()
+
+    sig = f"no_tests={getattr(args, 'no_tests', False)},run_tests={getattr(args, 'run_tests', False)},filter={getattr(args, 'filter', '') or ''},changed_only={getattr(args, 'changed_only', False)}"
     cached_code = check_recent_run_cache(CICD_LAST_RUN_CACHE, sig)
     if cached_code is not None:
         sys.exit(cached_code)
 
+    target_jobs = None
+    if args.changed_only:
+        scoped = filter_jobs_for_changed_files(CI_JOBS_MATRIX)
+        if scoped is not None:
+            if not scoped:
+                print("================================================================")
+                print("ℹ️  --changed-only: No modified files requiring CI validation.")
+                print("================================================================")
+                save_recent_run_cache(CICD_LAST_RUN_CACHE, sig, 0, "No relevant files modified")
+                sys.exit(0)
+            target_jobs = scoped
+
     exit_code = run_pipeline(
+        jobs=target_jobs,
         max_workers=args.workers,
         show_all=args.show_all,
         is_sync=args.is_sync,

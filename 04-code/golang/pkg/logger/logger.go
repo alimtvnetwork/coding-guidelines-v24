@@ -79,5 +79,5 @@ func (l *Logger) LogError(err *appfault.AppError) {
 
 func (l *Logger) Fatal(msg string) {
 	l.write(LevelFatal, msg, "", nil, "")
-	os.Exit(1)
+	os.Exit(1) // lint-allow: os.Exit - Logger.Fatal is standard fatal exit point
 }

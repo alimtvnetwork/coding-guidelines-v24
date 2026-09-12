@@ -18,6 +18,7 @@ To ensure 100% deterministic compliance across human developers, IDE extensions,
    `.cursorrules` (contains Hard Rules between `<!-- BEGIN:SYNC-HARD-RULES -->` and `<!-- END:SYNC-HARD-RULES -->`).
 
 ### Automated Mirroring
+
 - Manual editing of `.lovable/coding-guidelines.md` or `.cursorrules` hard rules is strictly prohibited.
 - All updates originate in `34-compiled-simple-coding-guidelines.md` and are propagated via `scripts/sync-guidelines.mjs` (run via `npm run sync`).
 - Verified in CI via `npm run sync:check`.
