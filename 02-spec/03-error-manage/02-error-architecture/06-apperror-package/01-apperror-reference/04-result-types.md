@@ -1,8 +1,8 @@
 # AppError Package Reference — Result[T], ResultSlice[T], ResultMap[K,V]
 
 > **Parent:** [AppError Package Reference](./01-index.md)
-> **Version:** 1.4.0
-> **Updated:** 2026-09-12
+> **Version:** 1.5.0
+> **Updated:** 2026-09-13
 
 ---
 
@@ -207,3 +207,12 @@ When invoked on a `nil` pointer, methods return safe, predictable defaults:
 
 ---
 
+### 6.4 Mandatory `types.go` Definition as a Single Reusable Type
+
+1. **Dedicated `types.go` per Package:**
+   - All domain payload structs (e.g. `ScheduleExportBundle`) and repeated generic Result type aliases (e.g. `type ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]`) MUST be defined in a dedicated `types.go` file within each package as a single reusable named type.
+   - Never declare unexported structs or raw generic Result envelopes inline in implementation files.
+2. **Library Package Architecture (`pkg/result/`):**
+   - Core types (`Wrap[T]`, `Result[T]`, `ResultSlice[T]`, `ResultMap[K, V]`, verifier and inspector interfaces) are defined in `types.go` as single canonical types. Implementation files contain only functions, constructors, and methods.
+
+---

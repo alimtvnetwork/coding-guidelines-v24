@@ -14,6 +14,7 @@ Autonomously refactors code violations against `02-spec/02-coding-guidelines/` i
 - **Affirmative Boolean Parameters & Fields:** Ban single-letter (`v bool`, `b bool`, `val bool`) and bare identifiers (`stop bool`, `pause bool`, `defined bool`). Rename to `isStopOnFail bool`, `isStopped bool`, `isPaused bool`, `isDefined bool`.
 - **Guard Clauses:** Invert early checks to return immediately and flatten nested blocks.
 - **Go Errors & Result Containers:** Return `*appfault.AppError` and replace multi-value error tuples with `appfault.Result[T]`, `appfault.ResultSlice[T]`, `appfault.ResultMap[K, V]`.
+- **Mandatory types.go Single Reusable Type Definition:** Centralize all domain payload structs and repeated Result aliases (e.g. `type ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]`) into a dedicated `types.go` file within the package as a single reusable named type. Never leave unexported structs or raw generic Result declarations scattered inline.
 - **Pointer Null Safety & Method Composition:** All Result inspection methods must attach to pointer receivers (`*Result[T]`) with line-1 `if r == nil` guards, composing existing methods (`r.IsFailure()`, `r.IsSuccess()`, `r.Count()`) rather than repeating raw pointer/error checks.
 - **Fluent Predicates:** Enforce `IsCountOtherThan(N)`, `IsEmpty()`, `HasRecord()`, `IsDefined()` at call sites instead of compound checks (`err != nil || len(...) != N`).
 - **No Releases:** Strictly forbidden from bumping versions or cutting releases at the end of this task.

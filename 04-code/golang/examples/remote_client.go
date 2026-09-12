@@ -11,13 +11,6 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// RemoteActivationResponse contains response data from downstream WordPress REST API.
-type RemoteActivationResponse struct {
-	IsSuccess bool   `json:"isSuccess"`
-	Message   string `json:"message"`
-	Version   string `json:"version"`
-}
-
 // WordPressClient handles proxy communication with remote WordPress instances.
 type WordPressClient struct {
 	baseUrl    string
@@ -37,7 +30,7 @@ func (c *WordPressClient) ActivateRemotePlugin(
 	ctx context.Context,
 	siteId int64,
 	slug string,
-) result.Wrap[RemoteActivationResponse] {
+) RemoteActivationResponseResult {
 	if len(slug) == 0 {
 		return result.WrapFailureWithId[RemoteActivationResponse](errtype.Validation, "slug cannot be empty")
 	}

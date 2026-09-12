@@ -5,45 +5,6 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-type (
-	Wrap[T any] = appfault.Result[T]
-
-	Result[T any] = Wrap[T]
-
-	ResultSlice[T any] = appfault.ResultSlice[T]
-
-	ResultMap[K comparable, V any] = appfault.ResultMap[K, V]
-
-	// SimpleVerifier combines all core state and status checkers into a single verification contract.
-	SimpleVerifier = appfault.SimpleVerifier
-
-	// SimpleVerifyChecker is an alias for SimpleVerifier adhering to the Checker convention.
-	SimpleVerifyChecker = appfault.SimpleVerifyChecker
-
-	// SimpleVerifierProvider provides AsSimpleVerifier.
-	SimpleVerifierProvider = appfault.SimpleVerifierProvider
-
-	// SimpleVerifyCheckerProvider provides AsSimpleVerifyChecker.
-	SimpleVerifyCheckerProvider = appfault.SimpleVerifyCheckerProvider
-
-	// SimpleVerifiable provides AsSimpleVerifier.
-	SimpleVerifiable = appfault.SimpleVerifiable
-
-	// SimpleVerifyCheckable provides AsSimpleVerifyChecker.
-	SimpleVerifyCheckable = appfault.SimpleVerifyCheckable
-
-	// ResultInspecter inspects a result container's value, failure status, and error payload.
-	ResultInspecter = appfault.ResultInspecter
-
-	// ResultInspector inspects a result container's value, failure status, and error payload.
-	ResultInspector = appfault.ResultInspector
-
-	// ResultUnwrapper is an alias for ResultInspecter.
-	ResultUnwrapper = appfault.ResultUnwrapper
-
-	// ResultCarrier is an alias for ResultInspecter.
-	ResultCarrier = appfault.ResultCarrier
-)
 
 func WrapSuccess[T any](data T) Wrap[T] {
 	return appfault.NewSuccess(data)

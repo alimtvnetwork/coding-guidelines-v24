@@ -7,12 +7,6 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// WorkflowResult represents the final combined status of the operation.
-type WorkflowResult struct {
-	PluginSummary PluginSummary            `json:"plugin"`
-	RemoteData    RemoteActivationResponse `json:"remoteData"`
-}
-
 // PluginWorkflowService orchestrates multi-step business logic across boundaries.
 type PluginWorkflowService struct {
 	repo   *PluginRepository
@@ -38,7 +32,7 @@ func (s *PluginWorkflowService) ActivateWorkflow(
 	ctx context.Context,
 	siteId int64,
 	pluginId int64,
-) result.Wrap[WorkflowResult] {
+) WorkflowResultWrap {
 	// Step 1: Query Database
 	pluginRes := s.repo.FindById(ctx, pluginId)
 	if pluginRes.IsFailed() {

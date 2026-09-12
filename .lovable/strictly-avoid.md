@@ -420,3 +420,21 @@ Allowed work:
 
 **Why:** Running heavy frontend and backend builds repeatedly slows down feedback loops and consumes significant CPU/IO resources.
 
+---
+
+## Scattered Inline Structs and Ad-Hoc Generic Result Envelopes — TOTAL BAN
+
+🔴 **NEVER declare domain payload structs or repeated generic Result envelopes inline in implementation files (`importer.go`, `store.go`, `service.go`).**
+
+Forbidden:
+- ❌ Declaring unexported domain structs (`type scheduleExportBundle struct { ... }`) inside implementation files.
+- ❌ Repeating raw generic Result declarations (`result.ResultSlice[scheduleExportBundle]`, `result.ResultMap[string, []User]`) ad-hoc across multiple function signatures.
+- ❌ Scattering type declarations across multiple implementation files instead of centralizing them in `types.go`.
+
+Allowed work:
+- ✅ Define all domain payload structs (`ScheduleExportBundle`, `PluginSummary`) in a dedicated `types.go` file within the package.
+- ✅ Define single reusable Result type aliases (`type ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]`, `type PluginSummaryResult = result.Wrap[PluginSummary]`) in `types.go` to be reused everywhere.
+- ✅ Use the single reusable named type alias in all function signatures and callers.
+
+**Why:** Scattering ad-hoc inline structs makes them inaccessible across package boundaries, and repeating complex generic instantiations creates severe code churn, bloats call sites, and violates `02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md`.
+

@@ -12,12 +12,13 @@ This skill provides autonomous audit, refactoring, and validation of repository-
 
 1. **No Bare Panics or Bare Exits**: Zero calls to `panic("...")`, `panic(err)`, or `os.Exit(...)` outside the central dispatcher (`cliexit.HandleError`).
 2. **Context-Rich `*appfault.AppError` Wrappers**: All errors MUST use structured `*appfault.AppError` from `04-code/golang/pkg/appfault` and be wrapped with `Op`, `Code`, `Type`, `Severity`, `Creator`, `Message`, `Ctx`, and `Cause`. Raw standard library `error` returns are strictly prohibited.
-3. **Single Result Container Return Types (`pkg/appfault`)**:
+3. **Single Result Container Return Types (`pkg/appfault`) & `types.go` Mandate**:
    - Multi-value returns returning errors (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) are strictly banned.
-   - Functions returning maps MUST return `appfault.ResultMap[K, V]`.
-   - Functions returning slices MUST return `appfault.ResultSlice[T]`.
-   - Functions returning single values MUST return `appfault.Result[T]`.
+   - Functions returning maps MUST return `appfault.ResultMap[K, V]` (or domain alias).
+   - Functions returning slices MUST return `appfault.ResultSlice[T]` (or domain alias).
+   - Functions returning single values MUST return `appfault.Result[T]` (or domain alias).
    - Functions with side-effects only MUST return `*appfault.AppError`.
+   - **Mandatory `types.go` Single Reusable Type Definition:** All domain payload structs (e.g. `ScheduleExportBundle`) and repeated generic Result envelopes (`type ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]`) MUST be defined in a dedicated `types.go` file within the package as a single reusable named type everywhere. Never declare ad-hoc unexported structs or raw generic Result envelopes inline in implementation files.
    - Result struct fields MUST use affirmative prefixes (e.g. `isDefined bool`, TOTAL BAN on bare `defined bool`).
 4. **Pointer-Attached Null Safety & Method Composition**:
    - All Result inspection methods MUST be attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`).

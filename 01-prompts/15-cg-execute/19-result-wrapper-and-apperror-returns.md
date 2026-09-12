@@ -1,8 +1,8 @@
 # Result Wrapper Types, Collections & AppError Returns — Coding Guideline (must follow)
 
-Trigger Keywords & Aliases: `cg-result-wrapper`, `cg-apperror-returns`, `cg-execute result-wrapper`, `audit result wrapper`, `fix map return error`, `fix slice return error`, `single return object audit`, `enforce apperror returns`, `enforce result map`, `fix multi-value returns`, `is-count-other-than`, `has-record`, `is-defined`, `result-wrapper-null-safety`, `pointer-null-safety`
+Trigger Keywords & Aliases: `cg-result-wrapper`, `cg-apperror-returns`, `cg-execute result-wrapper`, `audit result wrapper`, `fix map return error`, `fix slice return error`, `single return object audit`, `enforce apperror returns`, `enforce result map`, `fix multi-value returns`, `is-count-other-than`, `has-record`, `is-defined`, `result-wrapper-null-safety`, `pointer-null-safety`, `types-go-single-type`, `types-go-result-reuse`, `centralize-types-go`
 
-> **Prompt Version:** 2.3.0
+> **Prompt Version:** 2.4.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ```text
@@ -11,33 +11,34 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, discover, plan, refactor, and verify all Go functions returning multi-value error tuples (such as `(map[K]V, error)`, `([]T, error)`, or `(T, error)`), eliminating raw standard library error returns, replacing them with strongly-typed result wrappers (`ResultMap[K, V]`, `ResultSlice[T]`, `Result[T]`) and structured `*appfault.AppError` returns, guaranteeing a single return object, pointer-attached null safety (`*Result[T]`, `*ResultSlice[T]`, `*ResultMap[K, V]`) with methods attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) that verify `if r == nil` before dereferencing any fields or checking errors, standardized outer-layer inspection predicates (`IsSuccess`, `IsFailure`, `HasError`, `IsEmptyError`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Data`, `Items`, `AppError`, `Fault`, `Get`, `Has`, `Count`), eliminating dual-handling, and replacing verbose `if err != nil || len(...) != N` or `IsFailure() || Count() != N` conditions with fluent `if res.IsCountOtherThan(N)` across the entire codebase until 100% green without stopping.
+/goal Autonomously scan, discover, plan, refactor, and verify all Go functions returning multi-value error tuples (such as `(map[K]V, error)`, `([]T, error)`, or `(T, error)`), eliminating raw standard library error returns, centralizing all domain payload structs and Result type aliases into `types.go` within each package as single reusable types everywhere rather than scattering inline structs or raw generic Result declarations across implementation files, replacing multi-value returns with strongly-typed result wrappers (`ResultMap[K, V]`, `ResultSlice[T]`, `Result[T]`) and structured `*appfault.AppError` returns, guaranteeing a single return object, pointer-attached null safety (`*Result[T]`, `*ResultSlice[T]`, `*ResultMap[K, V]`) with methods attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) that verify `if r == nil` before dereferencing any fields or checking errors, standardized outer-layer inspection predicates (`IsSuccess`, `IsFailure`, `HasError`, `IsEmptyError`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Data`, `Items`, `AppError`, `Fault`, `Get`, `Has`, `Count`), eliminating dual-handling, and replacing verbose `if err != nil || len(...) != N` or `IsFailure() || Count() != N` conditions with fluent `if res.IsCountOtherThan(N)` across the entire codebase until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using ripgrep to inventory all functions returning multi-value tuples `(T, error)`, `(map[K]V, error)`, `([]T, error)`, raw stdlib `error` returns, and any Result methods declared with value receivers `func (r Result[...])` lacking pointer-attached null safety. Also inventory clumsy caller checks like `err != nil || len(...) != N` and `IsFailure() || Count() != N`.
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using ripgrep to inventory all functions returning multi-value tuples `(T, error)`, `(map[K]V, error)`, `([]T, error)`, raw stdlib `error` returns, and any Result methods declared with value receivers `func (r Result[...])` lacking pointer-attached null safety. Also inventory clumsy caller checks like `err != nil || len(...) != N` and `IsFailure() || Count() != N`, and scattered inline structs or raw generic Result returns lacking centralized `types.go` definitions.
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/XX-result-wrapper-audit.md` with an exhaustive Violation Ledger table.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/XX-result-wrapper/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
 5. [ ] /goal Phase 2 (Step A): Open each target file and refactor function signatures from multi-value returns to single `ResultMap[K, V]`, `ResultSlice[T]`, or `Result[T]` envelopes.
-6. [ ] /goal Phase 2 (Step B): Replace raw stdlib `error` returns with structured `*appfault.AppError` instances using `appfault.New()` or `appfault.Wrap()`.
-7. [ ] /goal Phase 2 (Step C): Enforce pointer-attached null safety on all Result wrappers: attach all inspection methods (`IsSuccess`, `IsFailure`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Count`, `AppError`, `Data`, `Items`) to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with explicit `nil` checks (`if r == nil`) guarding against nil pointer panics and returning safe defaults.
-8. [ ] /goal Phase 2 (Step D): Modernize all caller call sites to utilize outer-layer inspection methods (`res.IsSuccess()`, `res.IsFailure()`, `res.IsEmpty()`, `res.HasRecord()`, `res.IsDefined()`, `res.IsCountOtherThan(N)`, `res.Get()`, `res.AppError()`), eliminating manual `err != nil || len(...) != N` boilerplate.
-9. [ ] /goal Phase 2 (Step E): Enforce <= 8–15 line function decomposition and clean blank-line spacing.
-10. [ ] /goal Phase 2 (Step F): Execute targeted file-level linters (`python linter-scripts/check-function-lengths.py`, `check-mws-error-codes.py`, `check-newline-styling.py`) to verify 0 remaining violations. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
-11. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
-12. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-13. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-14. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for single return type mandates and micro-tasking.
-15. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for strict relative path citation requirements.
-16. [ ] /learn Ingest `02-spec/03-error-manage/01-index.md` for universal AppError wrapping and error envelopes.
-17. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md` for error handling architecture and Result wrappers.
-18. [ ] /learn Ingest `02-spec/03-error-manage/03-error-code-registry/02-registry.md` for structured error code catalog.
-19. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md` for response envelope schemas.
-20. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/03-go-apperror-linter-spec.md` for Go AppError implementation specifications.
-21. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-result-types.md` for Result[T], ResultSlice[T], and ResultMap[K, V] method specifications and pointer null-safety rules.
-22. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
-23. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
+6. [ ] /goal Phase 2 (Step B): Extract and define all domain payload structs (e.g. `ScheduleExportBundle`) and repeated generic Result envelopes (e.g. `type ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]`) into a dedicated `types.go` file within the package as a single type to be reused everywhere. Update all function signatures to return the canonical `types.go` single type alias.
+7. [ ] /goal Phase 2 (Step C): Replace raw stdlib `error` returns with structured `*appfault.AppError` instances using `appfault.New()` or `appfault.Wrap()`.
+8. [ ] /goal Phase 2 (Step D): Enforce pointer-attached null safety on all Result wrappers: attach all inspection methods (`IsSuccess`, `IsFailure`, `IsEmpty`, `HasRecord`, `IsDefined`, `IsCountOtherThan`, `Count`, `AppError`, `Data`, `Items`) to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with explicit `nil` checks (`if r == nil`) guarding against nil pointer panics and returning safe defaults.
+9. [ ] /goal Phase 2 (Step E): Modernize all caller call sites to utilize outer-layer inspection methods (`res.IsSuccess()`, `res.IsFailure()`, `res.IsEmpty()`, `res.HasRecord()`, `res.IsDefined()`, `res.IsCountOtherThan(N)`, `res.Get()`, `res.AppError()`), eliminating manual `err != nil || len(...) != N` boilerplate.
+10. [ ] /goal Phase 2 (Step F): Enforce <= 8–15 line function decomposition and clean blank-line spacing.
+11. [ ] /goal Phase 2 (Step G): Execute targeted file-level linters (`python linter-scripts/check-function-lengths.py`, `check-mws-error-codes.py`, `check-newline-styling.py`) to verify 0 remaining violations. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
+12. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
+13. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
+14. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
+15. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for single return type mandates and micro-tasking.
+16. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md` for types.go and single type definitions.
+17. [ ] /learn Ingest `02-spec/03-error-manage/01-index.md` for universal AppError wrapping and error envelopes.
+18. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md` for error handling architecture and Result wrappers.
+19. [ ] /learn Ingest `02-spec/03-error-manage/03-error-code-registry/02-registry.md` for structured error code catalog.
+20. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/05-response-envelope/05-response-envelope-reference.md` for response envelope schemas.
+21. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/03-go-apperror-linter-spec.md` for Go AppError implementation specifications.
+22. [ ] /learn Ingest `02-spec/03-error-manage/02-error-architecture/06-apperror-package/01-apperror-reference/04-result-types.md` for Result[T], ResultSlice[T], and ResultMap[K, V] method specifications and pointer null-safety rules.
+23. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
+24. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Multi-Value Returns, Build Violation Ledger in .lovable/plans/pending/, Subtasks, Linter Hook)
@@ -177,6 +178,103 @@ func scanMacroStepsMap(rows *sql.Rows) appfault.ResultMap[string, []MacroStep] {
     return appfault.OkMap(stepsMap)
 }
 ```
+
+---
+
+## Mandate: Define Types in `types.go` as a Single Reusable Type Everywhere
+
+A frequent transitional anti-pattern observed during Result wrapper refactoring is shown in this real-world diff:
+
+```diff
+- func parseImportSQLite(filePath string) ([]scheduleExportBundle, error) {
++ func parseImportSQLite(filePath string) result.ResultSlice[scheduleExportBundle] {
++ 	return result.FailSlice[scheduleExportBundle](apperror.WrapSimple(err, "parse imported sqlite"))
+```
+
+### Why the Transitional Diff is Flawed: Two Latent Violations
+
+1. **Unexported Inline Struct (`scheduleExportBundle`):**
+   The struct `scheduleExportBundle` was originally declared locally or unexported inside an implementation file (`importer.go` or `sqlite.go`). Other packages, services, test suites, or callers cannot import or reference it cleanly.
+2. **Scattered Generic Instantiations (`result.ResultSlice[scheduleExportBundle]`):**
+   Declaring raw generic returns like `result.ResultSlice[scheduleExportBundle]` ad-hoc across multiple functions forces every signature, caller, and test to repeat the verbose generic parameter. It creates severe code churn if the payload type changes.
+
+### The Grounded Solution: Dedicated `types.go` with Single Reusable Types
+
+Under Prompt Architect standards, every package managing domain models, payloads, or Result envelopes MUST define them inside a dedicated `types.go` file within the package directory as a single reusable named type.
+
+#### 1. Define Types in `types.go`:
+
+```go
+// schedule/types.go
+package schedule
+
+import (
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/result"
+)
+
+type (
+	// ScheduleExportBundle defines the exported schedule archive payload.
+	ScheduleExportBundle struct {
+		ScheduleId   string `json:"scheduleId"`
+		WorkflowName string `json:"workflowName"`
+		Payload      []byte `json:"payload"`
+	}
+
+	// ScheduleExportBundleResult is the canonical single reusable result envelope for bundle slices.
+	ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]
+
+	// ScheduleExportBundleSingleResult is the canonical single reusable result envelope for a single bundle.
+	ScheduleExportBundleSingleResult = result.Wrap[ScheduleExportBundle]
+)
+```
+
+#### 2. Use the Single Reusable Type in Implementation Files:
+
+```go
+// schedule/importer.go
+package schedule
+
+import (
+	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/result"
+)
+
+// ✅ CANONICAL: Clean, expressive signature using the single reusable type from types.go
+func parseImportSQLite(filePath string) ScheduleExportBundleResult {
+	if len(filePath) == 0 {
+		return result.FailSlice[ScheduleExportBundle](
+			appfault.New(appfault.ErrValidation).
+				WithMessage("file path cannot be empty").
+				WithOp("schedule.parseImportSQLite"),
+		)
+	}
+
+	bundles, err := readSQLiteBundles(filePath)
+	if err != nil {
+		return result.FailSlice[ScheduleExportBundle](
+			appfault.Wrap(appfault.ErrDatabaseQuery, err, "parse imported sqlite").
+				WithOp("schedule.parseImportSQLite"),
+		)
+	}
+
+	return appfault.OkSlice(bundles)
+}
+```
+
+### Twofold Scope of the `types.go` Mandate
+
+| Level | Scope & Directory | Rule & Standard |
+|---|---|---|
+| **Package / Framework Level** | `pkg/result/`, `pkg/appfault/`, `pkg/fileutil/` | Core container types (`Wrap[T]`, `Result[T]`, `ResultSlice[T]`, `ResultMap[K, V]`, verifier and inspector interfaces) MUST be declared in `types.go` as single canonical types. Implementation files (`result.go`, `combinators.go`) only contain constructors, helpers, and methods. |
+| **Domain / Service Level** | `schedule/`, `user/`, `order/`, `importer/` | Domain structs (`ScheduleExportBundle`, `PluginSummary`) and their Result aliases (`ScheduleExportBundleResult = result.ResultSlice[...]`) MUST be declared in `types.go` as single reusable types. Never scatter unexported structs or raw generic Result declarations inline. |
+
+### Architectural Benefits
+
+1. **Single Source of Truth:** All structs, enums, and Result aliases live in one predictable, standardized file (`types.go`).
+2. **Zero Generic Clutter at Call Sites:** Callers use `ScheduleExportBundleResult` instead of typing `result.ResultSlice[ScheduleExportBundle]` repeatedly across dozens of files.
+3. **Seamless Refactoring:** If the underlying envelope changes (e.g. from slice to pageable collection), modifying `types.go` updates the entire package and all callers without touching implementation files.
+4. **Strict Alignment with Specs:** Fully adheres to `02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md`.
 
 ---
 
@@ -556,6 +654,12 @@ rg --pcre2 "(IsFailure\(\)\s*\|\|\s*\w+\.Count\(\)\s*!=\s*\d+|\w+\.Count\(\)\s*!
 
 # 8. Find value receiver declarations on Result types (violates pointer null safety):
 rg --pcre2 "func\s+\([a-zA-Z0-9_]+\s+Result(?:Slice|Map)?\["
+
+# 9. Find unexported domain structs declared inline in implementation files:
+rg --pcre2 "type\s+[a-z][a-zA-Z0-9_]*\s+struct\s*\{" --glob "!*types*.go" --glob "!*_test.go"
+
+# 10. Find raw generic Result returns in non-types implementation files (should use types.go aliases):
+rg --pcre2 "func\s+[A-Za-z0-9_]+\([^\)]*\)\s+(?:result\.)?Result(?:Slice|Map)?\[" --glob "!*types*.go"
 ```
 
 ---
@@ -574,6 +678,7 @@ To survive large codebases without hitting step limits or context loss, execute 
 | | - Runs ripgrep queries to catalog all multi-value error returns     | |
 | | - Inventories compound caller assertions (err != nil || len != N)   | |
 | | - Detects value receiver declarations lacking pointer null safety   | |
+| | - Inventories unexported structs and scattered generic Result types  | |
 | | - Authors master audit plan in .lovable/plans/pending/             | |
 | | - Generates granular subtasks in .lovable/plans/subtasks/           | |
 | +---------------------------------------------------------------------+ |
@@ -581,7 +686,8 @@ To survive large codebases without hitting step limits or context loss, execute 
 | Phase 2 (Steps 101..200): SURGICAL REFACTORING                          |
 | +---------------------------------------------------------------------+ |
 | | Sub-Agent 2: Code Refactorer & Outer-Layer Modernizer                | |
-| | - Refactors store/repo signatures to ResultMap/ResultSlice/Result   | |
+| | - Creates/updates types.go with domain models & Result aliases      | |
+| | - Refactors store/repo signatures to single types.go aliases         | |
 | | - Attaches methods to pointer receivers with nil-safety guards      | |
 | | - Updates scanner functions to use appfault.OkMap / FailMap         | |
 | | - Modernizes callers with IsCountOtherThan / HasRecord / IsDefined   | |
@@ -594,6 +700,7 @@ To survive large codebases without hitting step limits or context loss, execute 
 
 ## Strictly Avoid: Anti-Patterns & Prohibitions
 
+- **NO SCATTERED INLINE STRUCTS OR AD-HOC RESULT GENERICS:** Never declare domain types or repeated generic Result envelopes inline in implementation files (e.g. `importer.go`, `store.go`, `sqlite.go`). Every payload struct and repeated Result alias MUST be defined in `types.go` within the package as a single reusable type.
 - **NO VALUE RECEIVERS FOR RESULT INSPECTION METHODS:** NEVER define inspection methods on value receivers `func (r Result[T])`. ALL methods checking status, error, count, or data MUST be attached to pointer receivers `(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])` with mandatory `if r == nil` guards to eliminate nil-pointer dereference panics.
 - **NO UNGUARDED FIELD ACCESS ON NIL POINTERS:** Never access `.Data`, `.items`, or `.err` directly on a pointer without verifying `r == nil` or calling pointer-safe inspection methods (`res.IsFailure()`, `res.Count()`, `res.IsDefined()`).
 - **NO PIECEMEAL COMMITS:** NEVER commit 1 or 2 files in isolation. Consolidate all related changes across specs, code, and indices into a single atomic commit followed immediately by `git push origin main`.
@@ -605,4 +712,5 @@ To survive large codebases without hitting step limits or context loss, execute 
 - **NO ABSOLUTE PATHS:** Never write absolute filesystem paths (`C:\...`, `/home/...`) or `file:///` URIs. Use strict relative Git paths starting from the repository root.
 - **NO UPPERCASE FILENAMES:** Every file created or edited must be strictly lowercase.
 - **NO MULTI-VALUE TUPLES:** Eliminate `(T, error)` in favor of `Result[T]`, `ResultMap[K, V]`, or `ResultSlice[T]`.
+
 

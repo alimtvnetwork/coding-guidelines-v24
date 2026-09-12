@@ -415,6 +415,7 @@ func GetUser(ctx context.Context, userId string) (*User, *appfault.AppError) {
 ### H. Result Wrapper Types, Collections & Pointer Null-Safety (pkg/appfault)
 
 - **Single Result Containers:** Replace all multi-value error tuples (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) with strongly-typed result wrappers: `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, and `appfault.Result[T]`.
+- **Mandatory `types.go` Single Reusable Type Definition:** All domain payload structs (e.g. `User`, `ScheduleExportBundle`) and repeated generic Result envelopes (`type UserSliceResult = appfault.ResultSlice[User]`) MUST be defined in a dedicated `types.go` file within the package as a single reusable named type. Never declare unexported structs or raw generic Result envelopes inline in implementation files.
 - **Affirmative Boolean Struct Fields (`isDefined bool`):** Result struct boolean fields MUST use affirmative prefixes (`isDefined bool`, TOTAL BAN on bare `defined bool`).
 - **Pointer-Attached Null Safety & Method Composition:** All Result inspection methods MUST be attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards. Methods MUST compose and reuse existing methods (`r.IsFailure()`, `r.IsSuccess()`, `r.Count()`) rather than repeating raw pointer/error checks (`r == nil || r.err != nil`).
 - **The 4 Core Predicate Methods:**
@@ -432,8 +433,15 @@ if err != nil || len(users) != 1 {
     return appfault.New(appfault.ErrNotFound).WithMessage("expected exactly 1 user")
 }
 
-// ✅ GOOD (Single ResultSlice return envelope, pointer null-safety, fluent predicate)
-func (s *Store) QueryUsers(dept string) appfault.ResultSlice[User] { ... }
+// ✅ GOOD (types.go defines single reusable type, pointer null-safety, fluent predicate)
+// types.go
+type (
+    User struct { ... }
+    UserSliceResult = appfault.ResultSlice[User]
+)
+
+// store.go
+func (s *Store) QueryUsers(dept string) UserSliceResult { ... }
 
 userRes := store.QueryUsers("engineering")
 if userRes.IsCountOtherThan(1) {
@@ -493,8 +501,8 @@ interface UserDto {
 18. **No Explicit True Checks (TOTAL BAN):** NEVER evaluate a boolean explicitly against `true` or `false` (e.g., `if isReady == true` is FORBIDDEN; write `if isReady`).
 19. **Enum Naming:** Every enum name MUST end with the suffix `Type` (e.g. `UserRoleType`), except in Rust where PascalCase is used without suffix. In Python, Enum classes use `PascalCase`, variable members use `UPPER_CASE` with underscores, and string values mirror member names exactly (e.g. `RegexPatternType.UPPERCASE = "UPPERCASE"`, `ExitCodeType.SUCCESS = 0`).
 20. **Version Source of Truth:** `version.json` at root is the sole version authority. All languages import or read this file dynamically.
-21. **Affirmative Boolean Parameter & Field Naming (TOTAL BAN on Single-Letter & Bare Names):** Never use single-letter boolean parameters (`v bool`, `b bool`, `val bool`, `flag bool`) or bare verbs/nouns (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`). Always use affirmative prefixes: `isStopOnFail bool`, `isStopped bool`, `isPaused bool`, `isForced bool`, `isDryRun bool`, `hasHeader bool`.
-22. **Result Container Return Types & Pointer Null-Safety (`pkg/appfault`):** Multi-value returns returning errors (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) are strictly banned in Go. Functions MUST return `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, or `appfault.Result[T]`, and side-effects MUST return `*appfault.AppError`. All Result inspection methods MUST attach to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards returning safe defaults. Enforce the 4 core predicates: `IsCountOtherThan(N)`, `IsEmpty()`, `HasRecord()`, `IsDefined()`.
+21. **Affirmative Boolean Parameter & Field Naming (TOTAL BAN on Single-Letter & Bare Names):** Never use single-letter boolean parameters (`v bool`, `b bool`, `val bool`, `flag bool`) or bare verbs/nouns (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`, `defined bool`). Always use affirmative prefixes: `isStopOnFail bool`, `isStopped bool`, `isPaused bool`, `isForced bool`, `isDryRun bool`, `hasHeader bool`, `isDefined bool`.
+22. **Result Container Return Types, Pointer Null-Safety & types.go Mandate (`pkg/appfault`):** Multi-value returns returning errors (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) are strictly banned in Go. Functions MUST return `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, or `appfault.Result[T]`, and side-effects MUST return `*appfault.AppError`. All domain payload structs (e.g. `User`, `ScheduleExportBundle`) and repeated generic Result aliases (`type UserSliceResult = appfault.ResultSlice[User]`) MUST be defined in a dedicated `types.go` file within each package as a single reusable named type. All Result inspection methods MUST attach to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards returning safe defaults. Enforce the 4 core predicates: `IsCountOtherThan(N)`, `IsEmpty()`, `HasRecord()`, `IsDefined()`.
 
 ---
 
@@ -730,7 +738,7 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **Function Decomposition & Signatures (R4, R5):** All functions <= 15 lines decomposed via 3-Stage Blueprint (Guard -> Core Logic -> Envelope) without logic drift; parameter structs for > 3 arguments.
 - [ ] **Circular Dependency Prevention:** All extracted types/enums reside in leaf packages (`domain/types` or `types/`) with zero circular dependency cycles.
 - [ ] **Polyglot & React Compliance:** Rust match expressions, C# Task/records, PHP BackedEnums, React structuredClone & object hook returns.
-- [ ] **Error Handling & Result Envelopes (R7):** All errors are wrapped with context (`appfault.Wrap`) and returned as `*appfault.AppError`. Single Result containers (`ResultMap`, `ResultSlice`, `Result`) with pointer-attached null safety (`*Result[T]`) and 4 core predicates (`IsCountOtherThan`, `IsEmpty`, `HasRecord`, `IsDefined`) enforced without swallowing.
+- [ ] **Error Handling & Result Envelopes (R7):** All errors are wrapped with context (`appfault.Wrap`) and returned as `*appfault.AppError`. Single Result containers (`ResultMap`, `ResultSlice`, `Result`) with pointer-attached null safety (`*Result[T]`), dedicated `types.go` single reusable type definitions for domain structs and Result aliases, and 4 core predicates (`IsCountOtherThan`, `IsEmpty`, `HasRecord`, `IsDefined`) enforced without swallowing.
 - [ ] **No Magic Constants (R8):** All magic strings/numbers are extracted to named constants.
 - [ ] **Strict Lowercase Filenames:** All generated or modified files use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
 - [ ] **Tooling Execution:** I ran `03-ai-scripts/05-guideline-autofixer.py` and verified clean output with `python linter-scripts/validate-guidelines.py`.

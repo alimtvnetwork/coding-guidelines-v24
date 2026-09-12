@@ -10,14 +10,6 @@ import (
 	"coding-guidelines/common/pkg/result"
 )
 
-// PluginSummary represents an active plugin record in the system.
-type PluginSummary struct {
-	Id       int64  `json:"id"`
-	Slug     string `json:"slug"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"isActive"`
-}
-
 // PluginRepository provides data access methods using Result wrappers.
 type PluginRepository struct {
 	db *sql.DB
@@ -50,8 +42,8 @@ func validatePluginId(id int64) *appfault.AppError {
 	return checkSpecialPluginIds(id)
 }
 
-// FindById queries a single plugin record by Id using result.Wrap.
-func (r *PluginRepository) FindById(ctx context.Context, id int64) result.Wrap[PluginSummary] {
+// FindById queries a single plugin record by Id using PluginSummaryResult.
+func (r *PluginRepository) FindById(ctx context.Context, id int64) PluginSummaryResult {
 	if err := validatePluginId(id); err != nil {
 		return result.WrapFailure[PluginSummary](err)
 	}
@@ -64,8 +56,8 @@ func (r *PluginRepository) FindById(ctx context.Context, id int64) result.Wrap[P
 	})
 }
 
-// ListActive retrieves all active plugins as a ResultSlice.
-func (r *PluginRepository) ListActive(ctx context.Context) appfault.ResultSlice[PluginSummary] {
+// ListActive retrieves all active plugins as a PluginSummarySliceResult.
+func (r *PluginRepository) ListActive(ctx context.Context) PluginSummarySliceResult {
 	items := []PluginSummary{
 		{Id: 1, Slug: "cache-booster", Name: "Cache Booster", IsActive: true},
 		{Id: 2, Slug: "security-shield", Name: "Security Shield", IsActive: true},
