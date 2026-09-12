@@ -53,7 +53,7 @@ func ExampleSplitSQLiteLogging(
 }
 
 // ExampleRotatingFileLogger demonstrates creating a rotating text logger with 2MB limit and archiving.
-func ExampleRotatingFileLogger(logDir string) result.Wrap[applogger.Logger] {
+func ExampleRotatingFileLogger(logDir string) RotatingLoggerResult {
 	cfg := applogger.Config{
 		MinLevel: applogger.LevelInfo,
 		Driver:   applogger.DriverRotatingFile,
@@ -92,7 +92,7 @@ func ExampleCommandRunWithTelemetry(
 	ctx context.Context,
 	taskId string,
 	mgr *sqlitelogger.SplitDBManager,
-) result.Result[*errcmd.CommandResult] {
+) CommandResultWrap {
 	taskLogger, fault := sqlitelogger.NewTaskLogger(taskId, mgr)
 	if fault != nil {
 		return result.Failure[*errcmd.CommandResult](fault)
@@ -185,7 +185,7 @@ func isBatchReady(batch []applogger.LogEntry, elapsed time.Duration, c applogger
 }
 
 // ExampleApiManagerRemoteLogging configures remote logging with custom headers and flush intervals.
-func ExampleApiManagerRemoteLogging(endpoint string) result.Wrap[*applogger.ApiManager] {
+func ExampleApiManagerRemoteLogging(endpoint string) ApiManagerResult {
 	cfg := applogger.ApiConfig{
 		Endpoint:       endpoint,
 		Headers:        map[string]string{"Authorization": "Bearer secret-token"},

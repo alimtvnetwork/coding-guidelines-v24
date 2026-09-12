@@ -524,30 +524,39 @@ if res.IsSuccess() { ... }
 // ------------------------------------------------------------
 // ❌ 1. LEGACY PATTERN: Raw multi-value unpacking + compound boolean
 // ------------------------------------------------------------
-details, err := pipeDb.QueryDetailedErrorLogsByRunId(runId)
-if err != nil || len(details) != 1 {
-    t.Fatalf("expected 1 detail log, got %d (err: %v)", len(details), err)
+bundles, err := parseImportSQLite(filePath)
+if err != nil || len(bundles) != 1 {
+    t.Fatalf("expected 1 bundle, got %d (err: %v)", len(bundles), err)
 }
 
 // ------------------------------------------------------------
-// ⚠️ 2. TRANSITIONAL PATTERN: Single Result envelope, but verbose manual check
+// ⚠️ 2. TRANSITIONAL PATTERN: Generic ResultSlice + unexported inline struct + verbose check
 // ------------------------------------------------------------
-detailRes := pipeDb.QueryDetailedErrorLogsByRunId(runId)
-if detailRes.IsFailure() || detailRes.Count() != 1 {
-    t.Fatalf("expected 1 detail log, got %d (err: %v)", detailRes.Count(), detailRes.AppError())
+// Function signature: func parseImportSQLite(...) result.ResultSlice[scheduleExportBundle]
+bundleRes := parseImportSQLite(filePath)
+if bundleRes.IsFailure() || bundleRes.Count() != 1 {
+    t.Fatalf("expected 1 bundle, got %d (err: %v)", bundleRes.Count(), bundleRes.AppError())
 }
 
 // ------------------------------------------------------------
-// ✅ 3. CANONICAL MODERN PATTERN: Pointer-safe single expressive guard
+// ✅ 3. CANONICAL MODERN PATTERN: Single reusable type from types.go + pointer-safe guard
 // ------------------------------------------------------------
-detailRes := pipeDb.QueryDetailedErrorLogsByRunId(runId)
-if detailRes.IsCountOtherThan(1) {
-    t.Fatalf("expected 1 detail log, got %d (err: %v)", detailRes.Count(), detailRes.AppError())
+// Defined once in types.go:
+//   type ScheduleExportBundle struct { ... }
+//   type ScheduleExportBundleResult = result.ResultSlice[ScheduleExportBundle]
+//
+// Clean function signature in importer.go:
+//   func parseImportSQLite(filePath string) ScheduleExportBundleResult
+//
+// Fluent call site:
+bundleRes := parseImportSQLite(filePath)
+if bundleRes.IsCountOtherThan(1) {
+    t.Fatalf("expected 1 bundle, got %d (err: %v)", bundleRes.Count(), bundleRes.AppError())
 }
 
-details := detailRes.Data
-if !strings.Contains(details[0].RawLogs, "PASS: Test0") {
-    t.Errorf("detail log missing raw PASS line: %s", details[0].RawLogs)
+bundles := bundleRes.Data
+if len(bundles) > 0 && !strings.Contains(string(bundles[0].Payload), "EXPORT") {
+    t.Errorf("bundle missing EXPORT payload")
 }
 ```
 

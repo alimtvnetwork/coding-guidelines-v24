@@ -2,6 +2,8 @@ package examples
 
 import (
 	"coding-guidelines/common/pkg/appfault"
+	"coding-guidelines/common/pkg/applogger"
+	"coding-guidelines/common/pkg/errcmd"
 	"coding-guidelines/common/pkg/result"
 )
 
@@ -38,4 +40,13 @@ type (
 
 	// WorkflowResultWrap is the canonical single reusable result envelope for workflow execution.
 	WorkflowResultWrap = result.Wrap[WorkflowResult]
+
+	// RotatingLoggerResult is the canonical single reusable result envelope for rotating file loggers.
+	RotatingLoggerResult = result.Wrap[applogger.Logger]
+
+	// CommandResultWrap is the canonical single reusable result envelope for command execution results.
+	CommandResultWrap = result.Result[*errcmd.CommandResult]
+
+	// ApiManagerResult is the canonical single reusable result envelope for API log managers.
+	ApiManagerResult = result.Wrap[*applogger.ApiManager]
 )
