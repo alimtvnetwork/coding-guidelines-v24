@@ -19,13 +19,14 @@ N = total self-loop steps budget that the agents will perform.
 4. [ ] /goal Phase 1 (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or stopping.
 5. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Spawn exactly 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
 6. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.lovable/plan.md` and `.lovable/memory/issues/`; subsequent agents MUST read the failure log first to remediate root causes.
-7. [ ] /goal Phase 2 (Quality Gate Verification): Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py` ensuring `exit 0` before finishing.
+7. [ ] /goal Phase 2 (Quality Gate Verification): Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py --no-tests` ensuring `exit 0` before finishing (test execution is disabled unless explicitly commanded by the repository owner).
 8. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 9. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 10. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 11. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
 12. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 13. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
+14. [ ] /goal Phase 2 (Test Inventory & Atomic Change Tracking): For every modified file, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), understanding associated tests via `.lovable/test-inventory.json`.
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: 2-Agent Planning & Subtask Generation in .lovable/plans/)
@@ -79,7 +80,8 @@ Before writing any source code changes, you MUST execute Phase 1:
    - Rollback dirty changes and write the failure error log to `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`.
    - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
 5. **Progress & Completion:** Move completed subtasks to `.lovable/plans/completed/` and update `.lovable/plans/01-index.md`.
-6. **Local CI Verification:** Run `python 03-ai-scripts/06-cicd-local-runner.py` and ensure all quality gates exit with code 0 (`exit 0`).
+6. **Atomic Change Tracking:** Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
+7. **Local Verification:** Run targeted linters on modified files and ensure code compiles / passes lint checks with exit code 0 (`exit 0`). DO NOT run the full CI/CD runner (`06-cicd-local-runner.py`) during routine task steps.
 
 ---
 
@@ -144,7 +146,15 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute targeted local linters on modified files ensuring `exit 0` before concluding. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine loops.
+- Record all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
+
+## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
+
+- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
+- **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time and scans unrelated files. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.
+- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
 
 ## Task Consolidation & File Reduction (End of Loop)
 

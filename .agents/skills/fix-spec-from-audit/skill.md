@@ -71,7 +71,8 @@ You MUST execute this task via a strict 4-Phase continuous loop. Do not skip ste
 
 1. **Cross-Link Integrity:** Run `python linter-scripts/check-spec-cross-links.py` to ensure no internal links were broken by the spec edits.
 2. **Markdown Standards:** Run `python 03-ai-scripts/31-md-gap-fixer.py --fix` and verify spacing.
-3. **Full CI Runner:** Run `python 03-ai-scripts/06-cicd-local-runner.py` ensuring all 36 quality gates exit with code 0 (`exit 0`).
+3. **Targeted Verification:** Run targeted linters and doc path checks on modified files (`exit 0`). DO NOT run `06-cicd-local-runner.py` during routine turns.
+4. **Atomic Change Tracking:** Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
 
 ### Phase 4: Audit Gap Removal & Final Archive (End of Loop)
 
@@ -103,14 +104,23 @@ To prevent cross-task pollution and ensure seamless agent communication, every t
 
 ---
 
+## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
+
+- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
+- **Targeted Quality Verification:** Execute targeted linters on modified files (`exit 0`). DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine task steps.
+- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
+
+---
+
 ## Non-Negotiable Rules (Auto-Reject on Violation)
 
 - [ ] Zero Skipped Findings: Every row in the audit Summary Table must have a corresponding code fix.
 - [ ] No Lingering Audit Files: `02-spec/25-app-spec-audit/` must be clean of the resolved audit file.
 - [ ] Strictly Unix LF (`\n`) line endings and UTF-8 encoding.
 - [ ] No absolute file paths or `file:///` URIs.
-- [ ] All 36 CI/CD gates green.
+- [ ] All CI/CD gates green via `--no-tests`.
 
 ## MUST FOLLOW NON-NEGOTIABLE
 
-Read the whole codebase, read every folder in `02-spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job.
+Read the whole codebase, read every folder in `02-spec/` and `.lovable/`, confirm root `readme.md` is strictly lowercase, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and quality gates via `--no-tests`, group commits with clear messages, and push everything to git before ending. Going deep IS the job.

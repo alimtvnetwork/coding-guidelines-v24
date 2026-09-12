@@ -314,3 +314,109 @@ Forbidden:
 Allowed work:
 - ✅ Root readme MUST be strictly lowercase `readme.md`.
 - ✅ If an uppercase variant is detected, rename immediately to lowercase `readme.md`.
+
+---
+
+## Running Tests Without Owner Explicit Command — TOTAL BAN
+
+🔴 **NEVER run unit tests, test suites, or CI test jobs (`go test`, `pytest`, `npm test`, or test jobs in CI runners) during standard development tasks or prompt execution unless explicitly commanded by the repository owner.**
+
+Forbidden:
+- ❌ Executing `go test`, `pytest`, `npm test`, or `cargo test` during standard development tasks, prompt executions, coding guideline fixes, or refactoring loops.
+- ❌ Running `python 03-ai-scripts/06-cicd-local-runner.py` without `--no-tests` during standard development; always pass `--no-tests`.
+- ❌ Adding automatic test execution steps to non-release workflows or prompts.
+
+Allowed work:
+- ✅ Run tests when the repository owner explicitly requests it in their prompt (e.g., "run tests", "execute unit tests", "fix failing tests").
+- ✅ **ALL CI/CD Fix Workflows (`ci-cd-fix`, `16-ci-cd/*`):** MUST run all unit test suites, integration tests, linters, and quality gates properly (`python 03-ai-scripts/06-cicd-local-runner.py`) to diagnose, surface, and repair pipeline failures. Skipping tests with `--no-tests` in CI/CD fix tasks is strictly prohibited.
+- ✅ **ALL Release Workflows (`release-management`, `release-orchestrator`, `01`, `03`, `07`, `16-ci-cd/04`):** MUST run all unit test suites (`--run-tests`) and verify 100% green passing before cutting any release.
+- ✅ Always use `--no-tests` (or `--skip-tests`) when running standard routine development quality gate checks (`06-cicd-local-runner.py`) unless running CI/CD fixes, release ceremonies, or explicitly instructed by the owner.
+
+**Why:** Unit test suites can be slow, resource-heavy, and disruptive during rapid iterative development loops. Running tests without explicit owner authorization wastes resources. Quality gates in standard turns focus on static analysis, linting, and structural integrity.
+
+---
+
+## Test Inventory & Atomic Recent File Changes Locking Mandate
+
+🔴 **NEVER record or modify recent file change logs without cross-platform atomic file locking, and NEVER bypass `.lovable/test-inventory.json`.**
+
+Forbidden:
+- ❌ Writing directly to `.lovable/temp/recent-file-changes.json` without acquiring `.lovable/temp/recent-file-changes.lock`.
+- ❌ Failing to release the lock or failing to handle stale locks properly.
+- ❌ Guessing or manually hard-coding test file relationships without checking `.lovable/test-inventory.json`.
+
+Allowed work:
+- ✅ Use `python 03-ai-scripts/33-test-inventory-generator.py --record <relative-path>...` to atomically record modified files and resolve associated tests.
+- ✅ Maintain and synchronize `.lovable/test-inventory.json` when adding, moving, or deleting test files by running `python 03-ai-scripts/33-test-inventory-generator.py`.
+- ✅ Ensure all recorded paths are distinct, lowercase, and strictly relative to the repository root.
+
+**Why:** Concurrent multi-agent orchestration and asynchronous script runs will corrupt `recent-file-changes.json` if writes are uncoordinated. Centralized test inventory mapping guarantees reproducible test discovery when an authorized release or targeted test fix is executed.
+
+---
+
+## Running Full CI/CD Runner During Routine Development or Coding Guideline Turns — TOTAL BAN
+
+🔴 **NEVER run `python 03-ai-scripts/06-cicd-local-runner.py` during routine development tasks, coding guideline fixes (`15-cg-execute/*`), micro-loops, or sub-agent turns.**
+
+Forbidden:
+- ❌ Running `python 03-ai-scripts/06-cicd-local-runner.py` (with or without `--no-tests`) during routine task execution loops, coding standard audits, single-file refactoring, or micro-batches.
+- ❌ Re-running the heavy 28-38 gate pipeline repeatedly for routine edits, wasting minutes across unrelated files and packages.
+- ❌ Using the full pipeline runner to verify a single guideline edit (e.g. nested-if or boolean condition) when a targeted linter is available.
+
+Allowed work:
+- ✅ Run targeted file-level linters/autofixers directly on the modified file(s) (e.g., `python linter-scripts/check-nested-ifs.py <file>`, `python 03-ai-scripts/08-naming-autofixer.py <file>`, `python linter-scripts/check-boolean-guidelines.py <file>`).
+- ✅ **Owner Explicit Command:** Run the runner if and only if the repository owner explicitly requests running the pipeline.
+- ✅ **CI/CD Fix Tasks (`ci-cd-fix`, `16-ci-cd/*`):** May run `python 03-ai-scripts/06-cicd-local-runner.py` because the primary goal of those tasks is specifically repairing CI/CD infrastructure.
+- ✅ **Release Ceremonies (`release-orchestrator`, `01`, `03`, `07`, `16-ci-cd/04`):** Run `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` as the mandatory final pre-release gate before cutting a release.
+
+**Why:** The local CI/CD runner runs up to 38 segments (linters, cross-OS compilation, snapshot builds, web builds) across the entire codebase. Executing this massive suite on every micro-turn or coding guideline edit causes immense latency, hits unrelated files, and wastes substantial developer and compute time.
+
+---
+
+## Committing Isolated 1-2 Plan/Doc Files Piecemeal — TOTAL BAN
+
+🔴 **NEVER make piecemeal commits containing only 1-2 isolated markdown plan or doc files without code changes, and NEVER make repetitive single-file micro-commits.**
+
+Forbidden:
+- ❌ Committing a single completed plan markdown file by itself without the underlying work.
+- ❌ Creating dozens of tiny 2-file commits for individual guideline prompts.
+- ❌ Polluting git history with fragmented documentation-only commits.
+
+Allowed work:
+- ✅ Commit all modified files and plans together in a single, well-scoped atomic commit.
+- ✅ Stage related source code, test files, and plans as a single unit of work.
+
+**Why:** Piecemeal 1-2 file commits pollute git commit logs, make git history difficult to navigate, and separate documentation updates from their related functional work.
+
+---
+
+## Committing Without Immediate Git Push — TOTAL BAN
+
+🔴 **NEVER leave commits unpushed on local branches. Anytime a commit is created, it MUST be pushed to GitHub immediately.**
+
+Forbidden:
+- ❌ Creating git commits and leaving them unpushed across conversational turns.
+- ❌ Accumulating local commits without pushing to the remote repository.
+
+Allowed work:
+- ✅ Always execute `git push origin <branch>` immediately after creating any commit.
+- ✅ Ensure local and remote `main` branch heads remain 100% synchronized at all times.
+
+**Why:** Unpushed commits create discrepancies between local working states and remote CI/CD / GitHub Desktop viewers, risking sync conflicts and lost progress.
+
+---
+
+## Running Builds During Routine Guideline Turns — TOTAL BAN
+
+🔴 **NEVER run full builds (`npm run build`, `go build ./...`) or packaging suites during routine coding guideline turns unless explicitly commanded by the repository owner.**
+
+Forbidden:
+- ❌ Running `npm run build` or `go build` during routine styling, naming, or guideline verification turns.
+- ❌ Triggering expensive bundle transforms and minifications on routine audits.
+
+Allowed work:
+- ✅ Run targeted linters (`check-newline-styling.py`, `check-boolean-guidelines.py`, etc.) for fast validation.
+- ✅ Run builds ONLY when explicitly requested or at the final release stage (`01-prompts/16-ci-cd/04-ci-cd-fix-with-release.md`).
+
+**Why:** Running heavy frontend and backend builds repeatedly slows down feedback loops and consumes significant CPU/IO resources.
+

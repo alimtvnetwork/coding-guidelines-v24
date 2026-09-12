@@ -957,6 +957,32 @@ python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,
 
 </details>
 
+<details>
+<summary><strong>33 — <code>33-test-inventory-generator.py</code>: Test Inventory Generator & Atomic Change Recorder</strong></summary>
+
+#### Why It Exists
+Maintains a single source of truth for repository test coverage at `.lovable/test-inventory.json` (similar to gitmap architecture) and provides a concurrency-safe atomic change tracking mechanism (`.lovable/temp/recent-file-changes.json`) with cross-platform file locking so multi-agent tasks can record file modifications without race conditions or crashes.
+
+#### What It Does
+- Discovers and parses unit tests across Go (`*_test.go`), TypeScript/JavaScript (`*.test.ts`, `*.spec.ts`), and Python (`test_*.py`).
+- Maps tests to target source files, extracts function names, and generates SHA-256 code hashes.
+- Generates and maintains `.lovable/test-inventory.json` with test counts, status tracking, and dirty flags.
+- Under file lock (`.lovable/temp/recent-file-changes.lock`), records distinct repository-relative file paths to `.lovable/temp/recent-file-changes.json` and automatically resolves all associated tests that must be executed when release verification or test fixes are explicitly requested.
+
+#### CLI Usage & Examples
+```bash
+# Scan repository and generate / update .lovable/test-inventory.json
+python 03-ai-scripts/33-test-inventory-generator.py
+
+# Safely record modified files under lock and resolve associated tests
+python 03-ai-scripts/33-test-inventory-generator.py --record "04-code/golang/pkg/appfault/appfault.go"
+
+# Query currently recorded modified files and associated test list
+python 03-ai-scripts/33-test-inventory-generator.py --query-recent
+```
+
+</details>
+
 ---
 
 ## 🏛️ Core Shared Engine Architecture (`02-shared-engine.py`)
@@ -1003,4 +1029,7 @@ DEFAULT_MAX_WORKERS = 4
 3. **Implicit Booleans:** Always evaluate positive booleans implicitly (`if is_valid:`, never `if is_valid == True:`).
 4. **Prefix Boolean Variables & Functions:** Use `is_` or `has_` prefix for all boolean variables and return functions (`is_ready`, `has_match`, `is_success`, `has_failures`).
 5. **Enums Format:** Python enums MUST use `PascalCase` class name ending in `Type`, `UPPER_CASE` members, and string values mirroring the member names.
-6. **Quality Gates:** Before completing any work session, execute `python 03-ai-scripts/06-cicd-local-runner.py` and verify all 18 checks pass.
+6. **Quality Gates & Test Execution Policy:**
+   - For standard tasks: Execute `python 03-ai-scripts/06-cicd-local-runner.py --no-tests` (test execution is strictly disabled unless explicitly commanded by the repository owner).
+   - For release tasks: Execute `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` to ensure 100% test passage before release.
+   - For CI/CD fix tasks (`ci-cd-fix`): Execute `python 03-ai-scripts/06-cicd-local-runner.py` (or `--run-tests`) to run all quality gates, linters, and unit test suites properly to catch and repair all pipeline failures.

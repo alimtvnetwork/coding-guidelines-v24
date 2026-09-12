@@ -53,7 +53,7 @@ IGNORE_TERMS = {
     "src/Enums/", "src/Enums/OrderStatusType.php", "enums/user_role_type.py",
     "cmd/user.go", "src/cli/audit.ts", "scripts/deploy.py",
     "02-spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
-    "01-cross-language/18-code-mutation-avoidance.md"
+    "01-cross-language/18-code-mutation-avoidance.md", ".lovable/temp/recent-file-changes.lock"
 }
 
 STRIP_CHARS = " `\"'(),:;[]{}"
@@ -76,7 +76,7 @@ def is_repo_path(raw: str) -> bool:
     for pfx in IGNORE_PREFIXES:
         if s.startswith(pfx):
             return False
-    if s in IGNORE_TERMS or s.endswith(".sh"):
+    if s in IGNORE_TERMS or s.endswith(".sh") or s.endswith(".lock"):
         return False
     if "<" in s or ">" in s or "*" in s or "{" in s or "}" in s or "\\\\" in s:
         return False

@@ -320,7 +320,24 @@ def revert_to_original_branch(original_branch, dry_run=False):
     print(f"[OK] Working tree successfully restored to original branch: '{restored}'")
 
 
-def orchestrate_release(tier="minor", explicit_version=None, scope=None, dry_run=False, push=True):
+def verify_pre_release_quality_gates(dry_run=False, skip_tests=False):
+    """Executes full unit test suites and CI quality gates prior to release."""
+    if skip_tests:
+        print("[!] Warning: Pre-release test execution skipped via --skip-tests flag.")
+        return
+
+    if dry_run:
+        print("[DRY RUN] Would execute full unit test suites and CI quality gates: python 03-ai-scripts/06-cicd-local-runner.py --run-tests")
+        return
+
+    print("[*] Running full pre-release unit test suites and CI quality gates (python 03-ai-scripts/06-cicd-local-runner.py --run-tests)...")
+    runner_script = REPO_ROOT / "03-ai-scripts" / "06-cicd-local-runner.py"
+    res = run_cmd([sys.executable, str(runner_script), "--run-tests"], capture_output=False)
+    if res.returncode != 0:
+        raise RuntimeError("Pre-release quality gates / unit tests failed! Releases are forbidden on failing tests.")
+
+
+def orchestrate_release(tier="minor", explicit_version=None, scope=None, dry_run=False, push=True, skip_tests=False):
     """Executes the complete release orchestration flow."""
     # 1. Capture starting branch
     original_branch = get_current_branch()
@@ -335,6 +352,9 @@ def orchestrate_release(tier="minor", explicit_version=None, scope=None, dry_run
 
     default_scope = scope or f"Release v{next_ver}"
     print(f"[*] Version Plan: {current_ver} -> {next_ver} (Tier: {tier})")
+
+    # Pre-release quality gates and full unit test execution
+    verify_pre_release_quality_gates(dry_run=dry_run, skip_tests=skip_tests)
 
     try:
         # 3. Bump version
@@ -401,6 +421,11 @@ def parse_arguments():
         action="store_true",
         help="Do not push release branch and tag to remote repository",
     )
+    parser.add_argument(
+        "--skip-tests",
+        action="store_true",
+        help="Skip pre-release unit test and quality gate verification (emergency use only)",
+    )
 
     return parser.parse_args()
 
@@ -421,6 +446,7 @@ def main():
         scope=args.scope,
         dry_run=args.dry_run,
         push=should_push,
+        skip_tests=args.skip_tests,
     )
 
 

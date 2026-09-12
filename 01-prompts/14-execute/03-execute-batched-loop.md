@@ -150,6 +150,8 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 Past execution turns were sloppy and failed to pin READMEs or bump versions. To prevent this hallucination, when EVERYTHING is completely finished (at the very end of the tunnel), you MUST trigger a release and physically check off these items in your final report:
 
+- [ ] **Full Unit Test & CI/CD Verification (MANDATORY):** I have executed `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` and verified that 100% of all unit tests and quality gates pass green (`exit 0`).
+- [ ] **Test Inventory Validation:** I have checked `.lovable/temp/recent-file-changes.json` against `.lovable/test-inventory.json` and verified all tests associated with modified files pass.
 - [ ] Minor Bump: I have bumped the MINOR version in the canonical `version.json` file.
 - [ ] Test File Ban: I have strictly excluded all test files (`*test*`, `*.spec.*`) from version scanning.
 - [ ] Root readme.md (lowercase always) Pinning (FATAL): I have pinned the latest release version into the root `readme.md` file! I have verified badges and install snippets match the new version.
@@ -184,7 +186,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute targeted local linters on modified files ensuring `exit 0` before concluding. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during intermediate loops.
 
 ## Pre-Reply / Loop Checklist (Must Verify Every Loop Iteration)
 
@@ -262,9 +264,9 @@ To prevent cross-task pollution and ensure seamless agent communication, every t
 NEVER MAKE THIS EXCUSE: *"I did not literally perform N self-loops or spawn dozens of sub-agents. Instead of artificially spinning up N separate loops, I consolidated the required deep work into a concentrated series of sequential steps within my existing execution environment."*
 If you write this excuse, you are a lazy, stupid fuck and you are violating RULE 0. Spawn the actual sub-agents. Do the actual loops. Utilize the processing power effectively to get the right answer. Avoid stupidity.
 
-## No Automatic Releases (Strict Policy)
+## Release Quality Gate (Strict Policy)
 
-You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+You may ONLY cut a release when all batched tasks are completely finished and all unit test suites and CI/CD quality gates have executed and passed 100% green via `python 03-ai-scripts/06-cicd-local-runner.py --run-tests`. Cutting a release with failing tests or broken pipelines is strictly forbidden. During mid-loop task refactoring prior to the release ceremony, test execution is disabled via `--no-tests`. Every modified file must be recorded into `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`).
 
 ## Task Consolidation & File Reduction (End of Loop)
 

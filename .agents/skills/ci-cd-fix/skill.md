@@ -317,10 +317,12 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 
 ---
 
-## No Automatic Releases
+## Strictly Avoid: No Automatic Releases & Run All Tests (Strict Policy)
 
 > [!CAUTION]
-> Do NOT bump versions or cut a release unless the user explicitly says so. Use `fix(ci): <description>` commits only.
+> **NO AUTOMATIC RELEASES:** Do NOT bump versions or cut a release unless the user explicitly says so. Use `fix(ci): <description>` commits only.
+> **RUN ALL TESTS & QUALITY GATES (FULL PIPELINE FIDELITY):** `ci-cd-fix` is an explicit CI pipeline repair workflow. It MUST run all CI/CD quality gates, linters, static analysis, and test suites properly (`python 03-ai-scripts/06-cicd-local-runner.py`). NEVER skip or disable tests with `--no-tests` in CI/CD fix workflows; all unit test suites, AST checks, and verification jobs must be executed and diagnosed until they legitimately pass (`exit 0`).
+> **ATOMIC CHANGE TRACKING:** Record all modified files under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
 
 ---
 
@@ -338,7 +340,7 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 ## End of Tunnel Checklist
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
-- [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0.
+- [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0 (with all quality gates and tests passing).
 - [ ] All failures documented in `.lovable/memory/issues/xx-<slug>.md`.
 - [ ] Changes committed: `fix(ci): resolve <summary>`.
 - [ ] Pushed to the current branch.

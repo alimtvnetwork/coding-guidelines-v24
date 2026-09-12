@@ -36,7 +36,14 @@ This skill governs autonomous execution for boolean conventions, semantic naming
    - Files: <= 100 lines coding maximum (recommended <= 80 lines).
    - Zero line compression (no single-line `if/else`, no deleted blank lines).
 
-## Validation Linters
+## Validation Linters & Execution Policies
 
-- Linter: `python linter-scripts/check-enum-and-boolean.py`
-- Local Runner: `python 03-ai-scripts/06-cicd-local-runner.py`
+- **No Releases:** Strictly forbidden from bumping versions or cutting releases.
+- **No Test Execution:** Test execution is disabled unless explicitly commanded by the repository owner.
+- **Atomic Change Tracking:** Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
+- **Linter:** `python linter-scripts/check-enum-and-boolean.py`
+- **Local Runner:** `python 03-ai-scripts/06-cicd-local-runner.py --no-tests`
+
+
+## Routine Execution Policy
+- **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns or micro-batch loops. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.

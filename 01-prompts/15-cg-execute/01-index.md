@@ -20,7 +20,7 @@ N = total self-loop steps budget that the agents will perform.
 5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
-8. [ ] /goal Phase 2 (Step D): Execute local CI quality gates via `python 03-ai-scripts/06-cicd-local-runner.py` with exit code 0 (`exit 0`).
+8. [ ] /goal Phase 2 (Step D): Execute targeted file-level linters and verification on modified files ensuring 0 remaining violations (`exit 0`). DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
 9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
 11. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
@@ -128,7 +128,7 @@ Every prompt in this suite operates using a strict two-phase loop budget:
 
 1. **Autofixer-First Execution:** Run deterministic AST autofixers first on target files (`05-guideline-autofixer.py`, `08-naming-autofixer.py`, `04-newline-fixer.py`, `07-relative-path-fixer.py`) to automatically resolve 80-90% of mechanical violations.
 2. **Cognitive Refactoring:** Agent performs surgical architectural refactoring on the remaining complex logic (<= 8–15 line functions, single return types, `*AppError` envelopes).
-3. **Linter & CI Verification:** Execute the section's dedicated linter and run `python 03-ai-scripts/06-cicd-local-runner.py` ensuring all 19 gates pass 100% green (`exit 0`).
+3. **Linter & CI Verification:** Execute the section's dedicated linter and run `python 03-ai-scripts/06-cicd-local-runner.py --no-tests` ensuring all 19 gates pass 100% green (`exit 0`).
 4. **Automated Plan Consolidation:** Run `python 03-ai-scripts/20-plan-consolidator.py` to archive completed subtasks and update `.lovable/plans/01-index.md`.
 5. **Stage & Commit:** Group changes into clean commits (e.g. `refactor(guidelines): enforce <section> rules`).
 
@@ -144,6 +144,13 @@ Every prompt in this suite enforces that code standards must be mechanically ver
 4. **CI/CD Integration:** The prompt provides the exact configuration snippet to wire the linter script into `.github/workflows/ci.yml` and register it inside `06-cicd-local-runner.py` under the `JOBS` dictionary.
 
 ---
+
+## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
+
+- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
+- **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time and scans unrelated files. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.
+- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
 
 ## STRICT AVOIDANCE: Anti-Compression & Formatting Integrity (No Cheating)
 
@@ -191,4 +198,4 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Failure Memory & Feedback Loop:** If a subagent fails:
   - Rollback dirty working tree and log error details to `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`.
   - The next subagent spawned MUST read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-- Execute local linters and `python 03-ai-scripts/06-cicd-local-runner.py` ensuring `exit 0` before concluding.
+- Execute targeted local linters on modified files ensuring `exit 0` before concluding. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine loops.

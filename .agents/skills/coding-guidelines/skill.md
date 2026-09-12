@@ -620,8 +620,10 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
    - Address remaining non-autofixable violations (R5 param structs, R6 dead params, R7 error context, R8 magic constants) file by file.
    - Respect the 15-line function cap and flatten all nested conditionals.
 4. **Step 4: Local CI/CD Pipeline Quality Gate:**
-   - Execute `python 03-ai-scripts/06-cicd-local-runner.py` ensuring all 19 quality gates pass 100% green (`exit 0`).
-5. **Step 5: File Change Summary:**
+   - Execute targeted file linters / autofixers on modified files ensuring `exit 0`. DO NOT run the full `06-cicd-local-runner.py` during routine guideline turns.
+5. **Step 5: Atomic File Change Tracking:**
+   - Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
+6. **Step 6: File Change Summary:**
    - Output a detailed summary in chat listing exactly which files changed, what changed, and why.
 
 ---
@@ -635,6 +637,15 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 > 1. **Phase 1: Read & Understand (Isolated Loop):** First turn is purely exploratory. Do NOT write code.
 > 2. **Phase 2: Bounded Micro-Tasking:** Fix one file or section at a time.
 > 3. **Phase 3: Multi-Agent Parallelization:** Spawn sub-agents with micro-boundaries (single-file bounding box).
+
+---
+
+## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
+
+- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
+- **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns or micro-batch loops. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.
+- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
 
 ---
 
@@ -660,7 +671,7 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **No Magic Constants (R8):** All magic strings/numbers are extracted to named constants.
 - [ ] **Strict Lowercase Filenames:** All generated or modified files use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
 - [ ] **Tooling Execution:** I ran `03-ai-scripts/05-guideline-autofixer.py` and verified clean output with `python linter-scripts/validate-guidelines.py`.
-- [ ] **Local CI Runner:** All 19 quality gates pass cleanly via `python 03-ai-scripts/06-cicd-local-runner.py` with `exit 0`.
+- [ ] **Targeted Verification:** All modified files pass targeted linters / autofixers cleanly with exit 0. (Full CI runner `06-cicd-local-runner.py` is banned in routine turns).
 - [ ] **File Change Summary:** I provided a detailed summary in chat of what files changed, what changed inside them, and why.
 
 ---

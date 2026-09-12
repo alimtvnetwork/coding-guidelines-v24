@@ -50,19 +50,15 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
 1. **Parallel Dispatch:** Use the `invoke_subagent` tool to spawn exactly 2 execution subagents (max 2 threads each) assigned to disjoint subtasks from `.lovable/plans/subtasks/xx-<slug>/`. Provide subagents with minimal instructions (e.g., "Read `.lovable/plans/subtasks/xx-slug/01-task.md` and execute it").
 2. **Execution & Coding Guidelines:** Subagents refactor code following all coding guidelines (<= 8–15 line functions, single return types, Unix LF line endings).
 3. **Failure Memory & Error Recovery:** If a subagent fails, record the failure log in `.lovable/plan.md` and `.lovable/memory/issues/xx-failure.md`; subsequent agents MUST read the failure log first to remediate root causes.
-4. **Local CI Verification:** Run `python 03-ai-scripts/06-cicd-local-runner.py` and ensure all quality gates exit with code 0 (`exit 0`).
+4. **Atomic Change Tracking:** Append all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.lovable/test-inventory.json`.
+7. **Local Verification:** Run targeted linters on modified files and ensure code compiles / passes lint checks with exit code 0 (`exit 0`). DO NOT run the full CI/CD runner (`06-cicd-local-runner.py`) during routine task steps.
 
-### Phase 3: Task Consolidation & File Reduction (End of Loop)
+## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
 
-> **CRITICAL:** To reduce markdown file count and bloat, you MUST consolidate subtasks when a parent task is 100% complete.
-
-1. Combine all the completed granular subtasks from `.lovable/plans/subtasks/xx-<slug>/*.md` into a single consolidated file at `.lovable/plans/completed/xx-<slug>.md`.
-2. In this single consolidated file, you MUST include a header explicitly referencing how the main task started and documenting exactly how many steps/loops it took.
-3. Delete the original granular `.md` files in `.lovable/plans/subtasks/xx-<slug>/`.
-4. Delete the original parent plan `.lovable/plans/pending/xx-<slug>.md`.
-5. Update `.lovable/plans/01-index.md` to point to the newly consolidated completed file.
-
----
+- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
+- **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time and scans unrelated files. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.
+- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
 
 ## 1. AI Fix Scripts Memory (Reusable Tooling)
 

@@ -233,6 +233,18 @@ def write_output_file(output_path: str, content: str) -> None:
     p.write_text(content, encoding=DEFAULT_ENCODING)
 
 
+def is_test_job(name: str, command: list[str]) -> bool:
+    """Identifies whether a CI quality gate is a test execution suite."""
+    name_lower = name.lower()
+    if "test" in name_lower or "smoke" in name_lower:
+        return True
+    for part in command:
+        part_lower = part.lower()
+        if "test" in part_lower or "pytest" in part_lower:
+            return True
+    return False
+
+
 def run_pipeline(
     jobs: dict[str, list[str]] | None = None,
     max_workers: int | None = None,
@@ -241,9 +253,14 @@ def run_pipeline(
     output_file: str | None = None,
     as_json: bool = False,
     filter_pattern: str | None = None,
+    no_tests: bool = False,
+    run_tests: bool = False,
 ) -> int:
     """Dispatches CI jobs using worker group or sequential runner, with selective reporting."""
     all_jobs = jobs or CI_JOBS_MATRIX
+
+    if no_tests and not run_tests:
+        all_jobs = {k: v for k, v in all_jobs.items() if not is_test_job(k, v)}
 
     if filter_pattern:
         pattern_lower = filter_pattern.lower()
@@ -397,19 +414,84 @@ Examples:
         dest="filter",
         help="Filter jobs matching substring (case-insensitive)."
     )
+    parser.add_argument(
+        "--no-tests", "--skip-tests",
+        action="store_true",
+        dest="no_tests",
+        help="Strictly exclude all test suites and self-tests from execution (for non-release and prompt tasks)."
+    )
+    parser.add_argument(
+        "--run-tests", "--with-tests",
+        action="store_true",
+        dest="run_tests",
+        help="Explicitly enable test suite execution (for release verification or when explicitly requested by owner)."
+    )
     return parser.parse_args()
+
+
+CICD_LAST_RUN_CACHE = Path(".lovable/cicd/last_run_cache.json")
+
+
+def check_recent_run_cache(cache_file: Path, signature: str, normal_ttl: float = 15.0) -> int | None:
+    """Returns cached exit code if an identical runner run occurred within the debounce window."""
+    if not cache_file.exists():
+        return None
+    try:
+        data = json.loads(cache_file.read_text(encoding=DEFAULT_ENCODING))
+        last_time = float(data.get("timestamp", 0.0))
+        elapsed = time.time() - last_time
+        if elapsed < normal_ttl and data.get("signature") == signature:
+            print("================================================================")
+            print("Here is the result from the previous run.")
+            print("================================================================")
+            print(f"⏱️  Cached from previous run {elapsed:.1f}s ago (debounce TTL: {normal_ttl:.0f}s).")
+            status_text = "PASSED (exit 0)" if data.get("exit_code") == 0 else f"FAILED (exit {data.get('exit_code')})"
+            print(f"📋 Status: {status_text}")
+            summary = data.get("summary")
+            if summary:
+                print(f"📊 Summary: {summary}")
+            print("================================================================")
+            return int(data.get("exit_code", 0))
+    except Exception:
+        return None
+    return None
+
+
+def save_recent_run_cache(cache_file: Path, signature: str, exit_code: int, summary: str = "") -> None:
+    """Persists recent run result to debounce cache."""
+    try:
+        cache_file.parent.mkdir(parents=True, exist_ok=True)
+        data = {
+            "timestamp": time.time(),
+            "signature": signature,
+            "exit_code": exit_code,
+            "summary": summary,
+        }
+        cache_file.write_text(json.dumps(data, indent=2), encoding=DEFAULT_ENCODING)
+    except Exception:
+        pass
 
 
 def main():
     args = parse_arguments()
+
+    sig = f"no_tests={getattr(args, 'no_tests', False)},run_tests={getattr(args, 'run_tests', False)},filter={getattr(args, 'filter', '') or ''}"
+    cached_code = check_recent_run_cache(CICD_LAST_RUN_CACHE, sig)
+    if cached_code is not None:
+        sys.exit(cached_code)
+
     exit_code = run_pipeline(
         max_workers=args.workers,
         show_all=args.show_all,
         is_sync=args.is_sync,
         output_file=args.output_file,
         as_json=args.as_json,
-        filter_pattern=args.filter
+        filter_pattern=args.filter,
+        no_tests=args.no_tests,
+        run_tests=args.run_tests,
     )
+    summary_str = f"Result code: {exit_code}"
+    save_recent_run_cache(CICD_LAST_RUN_CACHE, sig, exit_code, summary_str)
     sys.exit(exit_code)
 
 
