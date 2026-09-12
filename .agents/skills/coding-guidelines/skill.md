@@ -69,18 +69,32 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 ### A. Boolean Evaluation & Naming (P1–P6, R3)
 
 - **Rules:** Positive affirmative prefixes ONLY (`is` and `has`). TOTAL BAN on all other prefixes (`can`, `should`, `was`, `will`, `did`, `must` are strictly BANNED). TOTAL BAN on explicit `== true` / `=== true` checks. No mixed polarity (`if a && !b`). No inverted success checks (`!isSuccess`).
+- **Affirmative Parameter & Field Naming (Rule 5):** TOTAL BAN on single-letter parameters (`v bool`, `b bool`, `val bool`, `flag bool`) in function or method signatures (e.g. setters). TOTAL BAN on bare verbs, nouns, or adjectives (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`). Every boolean identifier MUST carry an affirmative prefix (`is*` or `has*`): `stop` -> `isStopped`, `stopOnFail` -> `isStopOnFail` (e.g., `SetStopOnFail(isStopOnFail bool)`), `pause` -> `isPaused`, `dryRun` -> `isDryRun`.
 
 ```go
-// ❌ BAD (Explicit true comparison, negative naming, mixed polarity)
+// ❌ BAD (Explicit true comparison, negative naming, mixed polarity, bare/single-letter parameters)
 if isUserNotActive == true { ... }
 if !response.isSuccess { ... }
 if isReady && !hasToken { ... }
+func (p *Progress) SetStopOnFail(v bool) { p.stopOnFail = v }
+type Worker struct { stop bool }
 
-// ✅ GOOD (Implicit evaluation, affirmative naming, extracted conflict)
+// ✅ GOOD (Implicit evaluation, affirmative naming, extracted conflict, affirmative parameters/fields)
 if !isUserActive { ... }
 if response.isFail { ... }
 isTokenMissing := isReady && !hasToken
 if isTokenMissing { ... }
+
+func (p *Progress) SetStopOnFail(isStopOnFail bool) {
+    p.stopOnFail = isStopOnFail
+}
+
+type Worker struct {
+    isStopped bool
+}
+func (w *Worker) SetStopped(isStopped bool) {
+    w.isStopped = isStopped
+}
 ```
 
 ```typescript
@@ -137,32 +151,32 @@ type ProcessOrderParams struct {
     IsExpedited bool        `json:"IsExpedited"`
 }
 
-func ProcessUserOrder(ctx context.Context, params ProcessOrderParams) (*OrderResult, error) {
+func ProcessUserOrder(ctx context.Context, params ProcessOrderParams) (*OrderResult, *appfault.AppError) {
     if err := validateOrderParams(params); err != nil {
-        return nil, apperror.Wrap(err, "ProcessUserOrder.Validate", nil)
+        return nil, appfault.Wrap(err, "ProcessUserOrder.Validate", nil)
     }
 
     totalAmount, err := calculateOrderTotal(params.Items, params.IsExpedited)
     if err != nil {
-        return nil, apperror.Wrap(err, "ProcessUserOrder.Calculate", nil)
+        return nil, appfault.Wrap(err, "ProcessUserOrder.Calculate", nil)
     }
 
     return buildOrderResult(params.OrderId, totalAmount), nil
 }
 
-func validateOrderParams(params ProcessOrderParams) error {
+func validateOrderParams(params ProcessOrderParams) *appfault.AppError {
     if params.OrderId == "" || len(params.Items) == 0 {
-        return apperror.New("invalid order payload")
+        return appfault.New(appfault.ErrValidation).WithMessage("invalid order payload")
     }
 
     return nil
 }
 
-func calculateOrderTotal(items []OrderItem, isExpedited bool) (int, error) {
+func calculateOrderTotal(items []OrderItem, isExpedited bool) (int, *appfault.AppError) {
     total := 0
     for _, item := range items {
         if item.Price <= 0 {
-            return 0, apperror.New("negative item price detected")
+            return 0, appfault.New(appfault.ErrValidation).WithMessage("negative item price detected")
         }
         total += item.Price
     }
@@ -355,9 +369,9 @@ type RemoteConnectionParams struct {
     TimeoutSeconds int    `json:"TimeoutSeconds"`
 }
 
-func ConnectRemote(ctx context.Context, params RemoteConnectionParams) (*Client, error) {
+func ConnectRemote(ctx context.Context, params RemoteConnectionParams) (*Client, *appfault.AppError) {
     if err := params.Validate(); err != nil {
-        return nil, apperror.Wrap(err, "ConnectRemote.Validate", nil)
+        return nil, appfault.Wrap(err, "ConnectRemote.Validate", nil)
     }
 
     return clientRepo.Connect(ctx, params)
@@ -366,9 +380,9 @@ func ConnectRemote(ctx context.Context, params RemoteConnectionParams) (*Client,
 
 ---
 
-### C. Error Context Wrapping & Universal Envelopes (R7)
+### G. Error Context Wrapping & Universal Envelopes (R7)
 
-- **Rules:** Never swallow errors. Wrap every error with operation context (`apperror.Wrap`). Standardize all API responses to `{ data, errors, meta }`.
+- **Rules:** Never swallow errors. Wrap every error with operation context (`appfault.Wrap`). Functions returning structured errors MUST use `*appfault.AppError` from `04-code/golang/pkg/appfault`. Standardize all API responses to `{ data, errors, meta }`.
 
 ```go
 // ❌ BAD (Swallowing error or bare return without context)
@@ -381,10 +395,10 @@ func GetUser(id string) (*User, error) {
 }
 
 // ✅ GOOD (Universal AppError context wrapping)
-func GetUser(ctx context.Context, userId string) (*User, error) {
+func GetUser(ctx context.Context, userId string) (*User, *appfault.AppError) {
     user, err := db.Find(ctx, userId)
     if err != nil {
-        return nil, apperror.Wrap(err, "GetUser", map[string]any{"UserId": userId})
+        return nil, appfault.Wrap(err, "GetUser", map[string]any{"UserId": userId})
     }
 
     return user, nil
@@ -393,7 +407,37 @@ func GetUser(ctx context.Context, userId string) (*User, error) {
 
 ---
 
-### D. Acronyms & Casing Standards (R1, R2, P8)
+### H. Result Wrapper Types, Collections & Pointer Null-Safety (pkg/appfault)
+
+- **Single Result Containers:** Replace all multi-value error tuples (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) with strongly-typed result wrappers: `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, and `appfault.Result[T]`.
+- **Pointer-Attached Null Safety:** All Result inspection methods MUST be attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards to eliminate nil pointer dereference panics.
+- **The 4 Core Predicate Methods:**
+  - `res.IsCountOtherThan(number int) bool`: Returns `true` if operation failed (or nil receiver) OR `Count() != number`. Replaces compound `err != nil || len(...) != N` or `IsFailure() || Count() != N`.
+  - `res.IsEmpty() bool`: Returns `true` if collection has 0 elements, payload data is empty/null/zero, or receiver is nil.
+  - `res.HasRecord() bool` (and alias `res.HasRecords() bool`): Returns `true` if operation succeeded (no error) AND has **more than 0 records** (`Count() > 0 && !IsFailure()`).
+  - `res.IsDefined() bool`: Returns `true` if operation succeeded (no error) AND `recordCount > 0` (or non-null/non-empty data `T`).
+
+```go
+// ❌ BAD (Multi-value tuple return, raw stdlib error, compound caller condition)
+func (s *Store) QueryUsers(dept string) ([]User, error) { ... }
+
+users, err := store.QueryUsers("engineering")
+if err != nil || len(users) != 1 {
+    return appfault.New(appfault.ErrNotFound).WithMessage("expected exactly 1 user")
+}
+
+// ✅ GOOD (Single ResultSlice return envelope, pointer null-safety, fluent predicate)
+func (s *Store) QueryUsers(dept string) appfault.ResultSlice[User] { ... }
+
+userRes := store.QueryUsers("engineering")
+if userRes.IsCountOtherThan(1) {
+    return appfault.New(appfault.ErrNotFound).WithMessage("expected exactly 1 user")
+}
+```
+
+---
+
+### I. Acronyms & Casing Standards (R1, R2, P8)
 
 - **Acronyms:** Standard PascalCase for acronyms: `Id`, `Url`, `Ip`, `Json`, `Api`, `Rpc` (NEVER all-caps `ID`, `URL`, `IP`, `JSON`).
 - **Enums:** Every enum type name MUST end with `Type` (e.g. `UserRoleType`, `ExitCodeType`).
@@ -443,6 +487,8 @@ interface UserDto {
 18. **No Explicit True Checks (TOTAL BAN):** NEVER evaluate a boolean explicitly against `true` or `false` (e.g., `if isReady == true` is FORBIDDEN; write `if isReady`).
 19. **Enum Naming:** Every enum name MUST end with the suffix `Type` (e.g. `UserRoleType`), except in Rust where PascalCase is used without suffix. In Python, Enum classes use `PascalCase`, variable members use `UPPER_CASE` with underscores, and string values mirror member names exactly (e.g. `RegexPatternType.UPPERCASE = "UPPERCASE"`, `ExitCodeType.SUCCESS = 0`).
 20. **Version Source of Truth:** `version.json` at root is the sole version authority. All languages import or read this file dynamically.
+21. **Affirmative Boolean Parameter & Field Naming (TOTAL BAN on Single-Letter & Bare Names):** Never use single-letter boolean parameters (`v bool`, `b bool`, `val bool`, `flag bool`) or bare verbs/nouns (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`). Always use affirmative prefixes: `isStopOnFail bool`, `isStopped bool`, `isPaused bool`, `isForced bool`, `isDryRun bool`, `hasHeader bool`.
+22. **Result Container Return Types & Pointer Null-Safety (`pkg/appfault`):** Multi-value returns returning errors (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) are strictly banned in Go. Functions MUST return `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, or `appfault.Result[T]`, and side-effects MUST return `*appfault.AppError`. All Result inspection methods MUST attach to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards returning safe defaults. Enforce the 4 core predicates: `IsCountOtherThan(N)`, `IsEmpty()`, `HasRecord()`, `IsDefined()`.
 
 ---
 
@@ -472,14 +518,14 @@ func CalculateTotal(price int, tax int) int {
 }
 
 // Go: Inside conditional blocks
-func FindUser(ctx context.Context, params UserSearchParams) (*User, error) {
+func FindUser(ctx context.Context, params UserSearchParams) (*User, *appfault.AppError) {
     if params.UserId == "" {
-        return nil, apperror.New("empty user id") // Single-statement block: no blank line
+        return nil, appfault.New(appfault.ErrValidation).WithMessage("empty user id") // Single-statement block: no blank line
     }
 
     user, err := repo.GetById(ctx, params.UserId)
     if err != nil {
-        return nil, apperror.Wrap(err, "FindUser", map[string]any{"UserId": params.UserId})
+        return nil, appfault.Wrap(err, "FindUser", map[string]any{"UserId": params.UserId})
     }
 
     return user, nil
@@ -576,7 +622,10 @@ func SwapIp(ctx context.Context, params SwapIpParams) error { ... }
 ## 5. Error Management (`02-spec/03-error-manage/`)
 
 - **Never Swallow Errors:** Every `catch` or error check must log with context and rethrow/return.
-- **Wrap with Context:** Use `apperror.Wrap(err, "operationName", contextMap)` in Go, or `new AppError("message", { cause, op, context })` in TypeScript.
+- **Structured Go AppError:** All Go functions returning structured errors MUST use `*appfault.AppError` from `04-code/golang/pkg/appfault`.
+- **Wrap with Context:** Use `appfault.Wrap(err, "operationName", contextMap)` in Go, or `new AppError("message", { cause, op, context })` in TypeScript.
+- **Single Result Containers:** Replace multi-value error returns with `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, or `appfault.Result[T]`.
+- **Pointer Null Safety & Predicates:** Attach all inspection methods to pointer receivers with line-1 `if r == nil` guards; use `IsCountOtherThan(N)`, `IsEmpty()`, `HasRecord()`, `IsDefined()`.
 - **Universal Response Envelope:** APIs return `{ data, errors[], meta }`.
 - **No Generic Errors:** Never throw base `Error` or `Exception`. Use domain-specific `AppError` classes with registered error codes.
 
@@ -671,11 +720,11 @@ When tasked with auditing, reviewing, or fixing coding guidelines across a codeb
 - [ ] **No Explicit True Checks (P4):** Absolutely zero `== true`, `=== true`, `!= false`, `!== false` comparisons exist.
 - [ ] **No Mixed Polarity (P5):** No mixed positive and negative conditions in `if` statements.
 - [ ] **Acronyms & PascalCase (R1, R2):** All acronyms (`Id`, `Url`, `Ip`, `Json`) and serialization keys use PascalCase.
-- [ ] **Boolean Prefixes (R3):** All booleans start with is or has only (all other prefixes banned). No negative boolean names.
+- [ ] **Boolean Prefixes & Affirmative Parameters (R3):** All booleans start with is or has only (all other prefixes banned). No negative boolean names. Affirmative parameter and field naming enforced (`isStopOnFail`, `isStopped`, no single-letter `v bool` or bare `stop bool`).
 - [ ] **Function Decomposition & Signatures (R4, R5):** All functions <= 15 lines decomposed via 3-Stage Blueprint (Guard -> Core Logic -> Envelope) without logic drift; parameter structs for > 3 arguments.
 - [ ] **Circular Dependency Prevention:** All extracted types/enums reside in leaf packages (`domain/types` or `types/`) with zero circular dependency cycles.
 - [ ] **Polyglot & React Compliance:** Rust match expressions, C# Task/records, PHP BackedEnums, React structuredClone & object hook returns.
-- [ ] **Error Handling (R7):** All errors are wrapped with context (`apperror.Wrap`) and not swallowed.
+- [ ] **Error Handling & Result Envelopes (R7):** All errors are wrapped with context (`appfault.Wrap`) and returned as `*appfault.AppError`. Single Result containers (`ResultMap`, `ResultSlice`, `Result`) with pointer-attached null safety (`*Result[T]`) and 4 core predicates (`IsCountOtherThan`, `IsEmpty`, `HasRecord`, `IsDefined`) enforced without swallowing.
 - [ ] **No Magic Constants (R8):** All magic strings/numbers are extracted to named constants.
 - [ ] **Strict Lowercase Filenames:** All generated or modified files use strictly lowercase naming (`readme.md`, `agents.md`, `skill.md`).
 - [ ] **Tooling Execution:** I ran `03-ai-scripts/05-guideline-autofixer.py` and verified clean output with `python linter-scripts/validate-guidelines.py`.

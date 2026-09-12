@@ -14,10 +14,97 @@ This skill governs autonomous execution for boolean conventions, semantic naming
    - Positive booleans MUST ALWAYS be evaluated implicitly: `if isReady { ... }` or `if !isReady { ... }`.
    - Never compare against boolean literals (`== false`, `!= true`).
 
-2. **Boolean Prefixes (`is`, `has`):**
+2. **Boolean Prefixes (`is`, `has`) & Affirmative Naming:**
    - `is`, `has` as prefix is only acceptable and nothing else acceptable including but not limited to `can`, `should`, `was`, `will`, `did`, `must`, etc.
    - Every boolean identifier must begin with `is` or `has` (e.g. `isValid`, `hasAccess`).
    - No negative boolean identifiers (`isNotValid`, `hasNoData` are banned).
+   - **Total Ban on Single-Letter Parameters:** NEVER use single-letter boolean parameters (`v bool`, `b bool`, `val bool`, `flag bool`) in method and function signatures (e.g. setters).
+   - **Total Ban on Bare Unprefixed Names:** NEVER use bare verbs, nouns, or adjectives (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`).
+   - **Mandatory Affirmative Prefixes:** Every boolean parameter, struct field, property, and variable MUST carry an affirmative prefix (`is*` or `has*`):
+     - `stop` -> `isStopped`
+     - `stopOnFail` -> `isStopOnFail` (e.g. `SetStopOnFail(isStopOnFail bool)`)
+     - `pause` / `paused` -> `isPaused`
+     - `force` -> `isForced` or `isForce`
+     - `enable` / `enabled` -> `isEnabled`
+     - `dryRun` -> `isDryRun`
+     - `debug` -> `isDebug`
+     - `verbose` -> `isVerbose`
+     - `header` -> `hasHeader`
+     - `records` -> `hasRecords`
+
+### Generic Code Patterns (Affirmative Naming)
+
+#### Pattern A: Setter Method Parameter & Field Assignment (`v bool` -> `isStopOnFail bool`)
+
+```go
+// ❌ ANTI-PATTERN: Single-letter parameter `v bool` and un-prefixed field
+func (p *BatchProgress) SetStopOnFail(v bool) {
+    p.mu.Lock()
+    defer p.mu.Unlock()
+    p.stopOnFail = v
+}
+
+// ✅ REQUIRED: Meaningful, affirmative boolean parameter and property
+func (p *BatchProgress) SetStopOnFail(isStopOnFail bool) {
+    p.mu.Lock()
+    defer p.mu.Unlock()
+    p.stopOnFail = isStopOnFail
+}
+```
+
+#### Pattern B: Generic State Flag & Struct Worker (`stop` -> `isStopped`)
+
+```go
+// ❌ ANTI-PATTERN: Bare verb `stop` and lazy `b bool` in stateful worker
+type TaskWorker struct {
+    stop bool
+}
+
+func (w *TaskWorker) SetStop(b bool) {
+    w.stop = b
+}
+
+func (w *TaskWorker) Run() {
+    for {
+        if w.stop {
+            break
+        }
+        processTask()
+    }
+}
+
+// ✅ REQUIRED: Generic affirmative `isStopped` state and parameter
+type TaskWorker struct {
+    isStopped bool
+}
+
+func (w *TaskWorker) SetStopped(isStopped bool) {
+    w.isStopped = isStopped
+}
+
+func (w *TaskWorker) Run() {
+    for {
+        if w.isStopped {
+            break
+        }
+        processTask()
+    }
+}
+```
+
+#### Pattern C: Generic Transformation Reference Table
+
+| Target Category | ❌ Anti-Pattern (Lazy / Bare) | ✅ Required Affirmative Identifier | Context / Description |
+|---|---|---|---|
+| Setter Parameter | `SetStopOnFail(v bool)` | `SetStopOnFail(isStopOnFail bool)` | Early termination flag parameter |
+| State Variable | `stop := false` | `isStopped := false` | Process / loop cancellation state |
+| Method Parameter | `Stop(stop bool)` | `SetStopped(isStopped bool)` | State toggle parameter |
+| Struct Field | `pause bool` | `isPaused bool` | Pause / suspend indicator |
+| CLI / Config Flag | `force bool` | `isForced bool` | Force override flag |
+| Struct Field | `dryRun bool` | `isDryRun bool` | Dry run simulation flag |
+| Option Parameter | `debug bool` | `isDebug bool` | Debug mode toggle |
+| Struct Field | `header bool` | `hasHeader bool` | Header presence indicator |
+| Option Parameter | `records bool` | `hasRecords bool` | Records presence requirement |
 
 3. **No Inverted Success Checks:**
    - Never invert positive success checks (e.g. `!response.isSuccess`).
