@@ -14,9 +14,9 @@ For service methods that return one item or nothing.
 
 ```go
 type Result[T any] struct {
-    value   T
-    err     *AppError
-    defined bool
+    value     T
+    err       *AppError
+    isDefined bool
 }
 ```
 
@@ -184,6 +184,26 @@ When invoked on a `nil` pointer, methods return safe, predictable defaults:
 | `Items()` / `Data` | `nil` | Nil slice / map fallback. |
 | `Get(key)` | `zero, false` | Reports key not found safely. |
 | `Has(key)` | `false` | Nil map contains no keys. |
+
+---
+
+### 6.3 Method Composition & Affirmative Field Naming
+
+1. **Affirmative Boolean Struct Fields (`isDefined bool`):**
+   - All boolean fields in result wrappers MUST use affirmative prefixes (e.g. `isDefined bool`, NEVER bare `defined bool`).
+   - Bare boolean field names violate repository-wide boolean principles.
+
+2. **Method Composition & Reuse (Methods Must Delegate to Existing Predicates):**
+   - Inspection and predicate methods MUST NOT duplicate raw pointer or error-checking logic.
+   - Higher-level predicates MUST compose existing methods (`IsFailure()`, `IsSuccess()`, `Count()`, `HasRecord()`):
+     - `IsFailure()` delegates to `r.IsFailed()`
+     - `IsValid()` delegates to `r.IsSuccess()`
+     - `Count()` guards with `if r.IsFailure() { return 0 }`
+     - `IsCountOtherThan(n)` guards with `if r.IsFailure() { return true } return r.Count() != n`
+     - `IsEmpty()` guards with `if r.IsFailure() { return true } return !r.isDefined || isValueEmpty(r.value)`
+     - `HasRecord()` guards with `if r.IsFailure() { return false } return r.Count() > 0`
+     - `HasRecords()` delegates to `r.HasRecord()`
+     - `IsDefined()` guards with `if r.IsFailure() { return false } return r.isDefined && !isValueEmpty(r.value)` (or `r.Count() > 0` for collections)
 
 ---
 

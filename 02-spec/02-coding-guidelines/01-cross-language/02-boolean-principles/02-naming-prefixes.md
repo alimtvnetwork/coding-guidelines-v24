@@ -90,6 +90,26 @@ func (w *Worker) SetStopped(isStopped bool) {
 }
 ```
 
+### Struct Fields & State Properties: Total Ban on Bare Names (e.g. `defined` -> `isDefined`)
+
+Struct fields, class properties, and state flags representing boolean states MUST ALWAYS use affirmative `is*` or `has*` prefixes. A bare name such as `defined bool`, `ready bool`, `active bool` is strictly FORBIDDEN:
+
+```go
+// ❌ FORBIDDEN: Bare boolean field name in struct
+type Result[T any] struct {
+    value   T
+    err     *AppError
+    defined bool // VIOLATION: bare boolean without is/has prefix
+}
+
+// ✅ REQUIRED: Explicit affirmative boolean prefix
+type Result[T any] struct {
+    value     T
+    err       *AppError
+    isDefined bool // COMPLIANT: starts with affirmative 'is'
+}
+```
+
 ---
 
 ---

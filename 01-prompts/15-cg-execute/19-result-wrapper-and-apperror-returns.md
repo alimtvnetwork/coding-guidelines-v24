@@ -243,9 +243,9 @@ Result envelopes (`ResultSlice[T]`, `ResultMap[K, V]`, `Result[T]`) provide four
   - `IsDefined()` means "no error occurred AND actual data exists" (`recordCount > 0` or payload not null/empty).
 - **Behavior:**
   - If `res == nil` or `res.IsFailure()`: returns `false`.
-  - For `Result[T]`: returns `r.defined && r.err == nil && r.value != nil`.
-  - For `ResultSlice[T]`: returns `len(rs.items) > 0 && rs.err == nil`.
-  - For `ResultMap[K, V]`: returns `len(rm.items) > 0 && rm.err == nil`.
+  - For `Result[T]`: returns `r.isDefined && r.IsSuccess() && !isValueEmpty(r.value)` (delegates error check to `r.IsSuccess()`).
+  - For `ResultSlice[T]`: returns `rs.Count() > 0 && rs.IsSuccess()` (delegates to `rs.Count()` and `rs.IsSuccess()`).
+  - For `ResultMap[K, V]`: returns `rm.Count() > 0 && rm.IsSuccess()` (delegates to `rm.Count()` and `rm.IsSuccess()`).
 - **Example:**
   ```go
   profileRes := userProfileService.GetProfile(userId)
@@ -299,55 +299,105 @@ When any inspection method is invoked on a `nil` pointer (`(*Result[T])(nil)`, `
 
 ### Pointer-Attached Implementation Standard (`pkg/appfault/`)
 
-Every inspection method in `pkg/appfault` MUST follow this pointer-receiver pattern with an immediate `nil` guard:
+Every result wrapper struct and inspection method in `pkg/appfault` MUST follow these two architectural rules:
+1. **Affirmative Boolean Field Naming:** Boolean fields MUST use affirmative prefixes (e.g. `isDefined bool`, NEVER bare `defined bool`).
+2. **Method Composition & Reuse:** Methods MUST delegate to and compose existing inspection methods (`r.IsFailure()`, `r.IsSuccess()`, `r.Count()`) rather than repeating raw pointer and error checks (`r == nil || r.err != nil`).
 
 ```go
+type Result[T any] struct {
+    value     T
+    err       *AppError
+    isDefined bool // ✅ REQUIRED: Affirmative boolean prefix (TOTAL BAN on bare 'defined')
+}
+
+// ✅ POINTER-ATTACHED & NULL-SAFE: Inspecting nil pointer returns false, never panics!
+func (r *Result[T]) IsSuccess() bool {
+    if r == nil {
+        return false
+    }
+
+    return r.err == nil
+}
+
 // ✅ POINTER-ATTACHED & NULL-SAFE: Inspecting nil pointer returns true, never panics!
-func (r *Result[T]) IsFailure() bool {
+func (r *Result[T]) IsFailed() bool {
     if r == nil {
         return true
     }
+
     return r.err != nil
 }
 
+// ✅ METHOD COMPOSITION: Delegates alias directly to IsFailed()
+func (r *Result[T]) IsFailure() bool {
+    return r.IsFailed()
+}
+
+// ✅ METHOD COMPOSITION: Delegates alias directly to IsSuccess()
+func (r *Result[T]) IsValid() bool {
+    return r.IsSuccess()
+}
+
+// ✅ METHOD COMPOSITION: Reuses r.IsFailure() to eliminate redundant null checks
 func (r *Result[T]) Count() int {
-    if r == nil || r.err != nil {
+    if r.IsFailure() {
         return 0
     }
-    if r.defined {
+
+    if r.isDefined {
         return 1
     }
+
     return 0
 }
 
+// ✅ METHOD COMPOSITION: Reuses r.IsFailure() and r.Count()
 func (r *Result[T]) IsCountOtherThan(expected int) bool {
-    if r == nil || r.IsFailure() {
+    if r.IsFailure() {
         return true
     }
+
     return r.Count() != expected
 }
 
+// ✅ METHOD COMPOSITION: Reuses r.IsFailure() and checks affirmative isDefined field
 func (r *Result[T]) IsEmpty() bool {
-    if r == nil || r.err != nil {
+    if r.IsFailure() {
         return true
     }
-    return !r.defined || isValueEmpty(r.value)
+
+    return !r.isDefined || isValueEmpty(r.value)
 }
 
+// ✅ METHOD COMPOSITION: Reuses r.IsFailure() and r.Count()
 func (r *Result[T]) HasRecord() bool {
-    if r == nil || r.err != nil {
+    if r.IsFailure() {
         return false
     }
+
     return r.Count() > 0
 }
 
+// ✅ METHOD COMPOSITION: Delegates alias directly to HasRecord()
+func (r *Result[T]) HasRecords() bool {
+    return r.HasRecord()
+}
+
+// ✅ METHOD COMPOSITION: Reuses r.IsFailure() and checks affirmative isDefined field
 func (r *Result[T]) IsDefined() bool {
-    if r == nil || r.err != nil {
+    if r.IsFailure() {
         return false
     }
-    return r.defined && !isValueEmpty(r.value)
+
+    return r.isDefined && !isValueEmpty(r.value)
 }
 ```
+
+### Dedicated Rule: Affirmative Field Naming (`isDefined bool`) & Method Composition
+
+- **TOTAL BAN on bare `defined bool`:** Struct fields, properties, local variables, and parameters MUST ALWAYS carry an affirmative prefix (`is*` or `has*`). In Result wrappers, the definition state MUST be named `isDefined bool` (NEVER `defined bool`).
+- **TOTAL BAN on bare `Defined()` method:** Predicate methods MUST be named `IsDefined() bool` (NEVER `Defined() bool`).
+- **Method Composition Mandate:** Never write duplicate expressions like `if r == nil || r.err != nil` across 10 different methods. Always call `if r.IsFailure()` or `if !r.IsSuccess()`. Composing methods ensures single-point maintenance, prevents cognitive drift, and enforces consistent null-safety semantics.
 
 ### Go Addressability Rule for Callers
 

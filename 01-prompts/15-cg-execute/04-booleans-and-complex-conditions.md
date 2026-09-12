@@ -71,6 +71,7 @@ Boolean logic must be simple, readable, and unambiguous. Complex boolean chains 
    - **Mandatory Affirmative Prefixes:** Every boolean parameter, struct field, property, and local variable MUST carry an affirmative prefix (`is*` or `has*`):
      - `stop` -> `isStopped`
      - `stopOnFail` -> `isStopOnFail` (e.g. `SetStopOnFail(isStopOnFail bool)`)
+     - `defined` -> `isDefined` (e.g. struct field `isDefined bool`, method `IsDefined() bool`)
      - `pause` / `paused` -> `isPaused`
      - `force` -> `isForced` or `isForce`
      - `enable` / `enabled` -> `isEnabled`
@@ -150,13 +151,37 @@ func (w *TaskWorker) Run() {
 }
 ```
 
-#### Pattern C: Generic Transformation Reference Table
+#### Pattern C: Struct Field Definition State (`defined bool` -> `isDefined bool`)
+
+```go
+// -----------------------------------------------------------------------------
+// ❌ ANTI-PATTERN: Bare field name `defined bool` in wrapper struct
+// -----------------------------------------------------------------------------
+type Result[T any] struct {
+    value   T
+    err     *AppError
+    defined bool // VIOLATION: Bare boolean without is/has prefix
+}
+
+// -----------------------------------------------------------------------------
+// ✅ REQUIRED: Meaningful, affirmative boolean struct field `isDefined bool`
+// -----------------------------------------------------------------------------
+type Result[T any] struct {
+    value     T
+    err       *AppError
+    isDefined bool // REQUIRED: Explicit affirmative boolean prefix
+}
+```
+
+#### Pattern D: Generic Transformation Reference Table
 
 | Target Category | ❌ Anti-Pattern (Lazy / Bare) | ✅ Required Affirmative Identifier | Context / Description |
 |---|---|---|---|
 | Setter Parameter | `SetStopOnFail(v bool)` | `SetStopOnFail(isStopOnFail bool)` | Early termination flag parameter |
 | State Variable | `stop := false` | `isStopped := false` | Process / loop cancellation state |
 | Method Parameter | `Stop(stop bool)` | `SetStopped(isStopped bool)` | State toggle parameter |
+| Struct Field | `defined bool` | `isDefined bool` | Value/record definition presence indicator |
+| Method Name | `Defined() bool` | `IsDefined() bool` | Definition verification predicate |
 | Struct Field | `pause bool` | `isPaused bool` | Pause / suspend indicator |
 | Setter Parameter | `SetPaused(v bool)` | `SetPaused(isPaused bool)` | Pause toggle parameter |
 | Struct Field | `dryRun bool` | `isDryRun bool` | Execution mode indicator |
@@ -169,7 +194,7 @@ func (w *TaskWorker) Run() {
 | Method Parameter | `SetEnabled(v bool)` | `SetEnabled(isEnabled bool)` | Feature toggle parameter |
 | Method Parameter | `SetAsync(flag bool)` | `SetAsync(isAsync bool)` | Asynchronous execution flag |
 
-#### Pattern D: Implicit Checks & Discrete Guard Clauses
+#### Pattern E: Implicit Checks & Discrete Guard Clauses
 
 ```go
 // ❌ FORBIDDEN: Explicit true comparison, negative variable, and mixed polarity

@@ -18,9 +18,11 @@ This skill provides autonomous audit, refactoring, and validation of repository-
    - Functions returning slices MUST return `appfault.ResultSlice[T]`.
    - Functions returning single values MUST return `appfault.Result[T]`.
    - Functions with side-effects only MUST return `*appfault.AppError`.
-4. **Pointer-Attached Null Safety (`*Result[T]`, `*ResultSlice[T]`, `*ResultMap[K, V]`)**:
+   - Result struct fields MUST use affirmative prefixes (e.g. `isDefined bool`, TOTAL BAN on bare `defined bool`).
+4. **Pointer-Attached Null Safety & Method Composition**:
    - All Result inspection methods MUST be attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`).
    - Total ban on value receivers on Result checking methods to eliminate nil pointer dereference panics.
+   - **Method Composition Mandate:** Inspection methods MUST delegate to and compose existing methods (`r.IsFailure()`, `r.IsSuccess()`, `r.Count()`) rather than repeating raw pointer/error checks (`r == nil || r.err != nil`).
    - Line-1 `if r == nil` guards MUST return safe canonical defaults without crashing:
      - `IsFailure()` -> `true`
      - `IsSuccess()` -> `false`
@@ -34,7 +36,7 @@ This skill provides autonomous audit, refactoring, and validation of repository-
    - `res.IsCountOtherThan(number int) bool`: Returns `true` if operation failed (or nil receiver) OR `Count() != number`. Replaces compound checks like `err != nil || len(...) != N` or `IsFailure() || Count() != N`.
    - `res.IsEmpty() bool`: Returns `true` if collection has 0 elements, payload data is empty/null/zero, or receiver is nil.
    - `res.HasRecord() bool` (and alias `res.HasRecords() bool`): Returns `true` if operation succeeded (no error) AND has **more than 0 records** (`Count() > 0 && !IsFailure()`).
-   - `res.IsDefined() bool`: Returns `true` if operation succeeded (no error) AND `recordCount > 0` (or non-null/non-empty data `T`).
+   - `res.IsDefined() bool`: Returns `true` if operation succeeded (no error) AND `recordCount > 0` (or non-null/non-empty data `T`). Delegates error validation to `IsSuccess()`/`IsFailure()`.
 6. **Universal Response Envelope**: All API endpoints return `{ "data": ..., "errors": [...], "meta": ... }`.
 7. **Never Swallow Errors**: Every catch block and error return must be recorded and handled explicitly.
 8. **Targeted Verification**: Continuous verification via `python linter-scripts/check-error-management.py <files>`. DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine fixes.

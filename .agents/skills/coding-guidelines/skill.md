@@ -69,7 +69,7 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 ### A. Boolean Evaluation & Naming (P1–P6, R3)
 
 - **Rules:** Positive affirmative prefixes ONLY (`is` and `has`). TOTAL BAN on all other prefixes (`can`, `should`, `was`, `will`, `did`, `must` are strictly BANNED). TOTAL BAN on explicit `== true` / `=== true` checks. No mixed polarity (`if a && !b`). No inverted success checks (`!isSuccess`).
-- **Affirmative Parameter & Field Naming (Rule 5):** TOTAL BAN on single-letter parameters (`v bool`, `b bool`, `val bool`, `flag bool`) in function or method signatures (e.g. setters). TOTAL BAN on bare verbs, nouns, or adjectives (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`). Every boolean identifier MUST carry an affirmative prefix (`is*` or `has*`): `stop` -> `isStopped`, `stopOnFail` -> `isStopOnFail` (e.g., `SetStopOnFail(isStopOnFail bool)`), `pause` -> `isPaused`, `dryRun` -> `isDryRun`.
+- **Affirmative Parameter & Field Naming (Rule 5):** TOTAL BAN on single-letter parameters (`v bool`, `b bool`, `val bool`, `flag bool`) in function or method signatures (e.g. setters). TOTAL BAN on bare verbs, nouns, or adjectives (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`, `defined bool`). Every boolean identifier MUST carry an affirmative prefix (`is*` or `has*`): `stop` -> `isStopped`, `stopOnFail` -> `isStopOnFail` (e.g., `SetStopOnFail(isStopOnFail bool)`), `defined` -> `isDefined` (e.g. struct field `isDefined bool`, method `IsDefined() bool`), `pause` -> `isPaused`, `dryRun` -> `isDryRun`.
 
 ```go
 // ❌ BAD (Explicit true comparison, negative naming, mixed polarity, bare/single-letter parameters)
@@ -78,6 +78,7 @@ if !response.isSuccess { ... }
 if isReady && !hasToken { ... }
 func (p *Progress) SetStopOnFail(v bool) { p.stopOnFail = v }
 type Worker struct { stop bool }
+type Result[T any] struct { defined bool }
 
 // ✅ GOOD (Implicit evaluation, affirmative naming, extracted conflict, affirmative parameters/fields)
 if !isUserActive { ... }
@@ -94,6 +95,10 @@ type Worker struct {
 }
 func (w *Worker) SetStopped(isStopped bool) {
     w.isStopped = isStopped
+}
+
+type Result[T any] struct {
+    isDefined bool
 }
 ```
 
@@ -410,12 +415,13 @@ func GetUser(ctx context.Context, userId string) (*User, *appfault.AppError) {
 ### H. Result Wrapper Types, Collections & Pointer Null-Safety (pkg/appfault)
 
 - **Single Result Containers:** Replace all multi-value error tuples (`(map[K]V, error)`, `([]T, error)`, `(T, error)`) with strongly-typed result wrappers: `appfault.ResultMap[K, V]`, `appfault.ResultSlice[T]`, and `appfault.Result[T]`.
-- **Pointer-Attached Null Safety:** All Result inspection methods MUST be attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards to eliminate nil pointer dereference panics.
+- **Affirmative Boolean Struct Fields (`isDefined bool`):** Result struct boolean fields MUST use affirmative prefixes (`isDefined bool`, TOTAL BAN on bare `defined bool`).
+- **Pointer-Attached Null Safety & Method Composition:** All Result inspection methods MUST be attached to pointer receivers (`(r *Result[T])`, `(rs *ResultSlice[T])`, `(rm *ResultMap[K, V])`) with line-1 `if r == nil` guards. Methods MUST compose and reuse existing methods (`r.IsFailure()`, `r.IsSuccess()`, `r.Count()`) rather than repeating raw pointer/error checks (`r == nil || r.err != nil`).
 - **The 4 Core Predicate Methods:**
   - `res.IsCountOtherThan(number int) bool`: Returns `true` if operation failed (or nil receiver) OR `Count() != number`. Replaces compound `err != nil || len(...) != N` or `IsFailure() || Count() != N`.
   - `res.IsEmpty() bool`: Returns `true` if collection has 0 elements, payload data is empty/null/zero, or receiver is nil.
   - `res.HasRecord() bool` (and alias `res.HasRecords() bool`): Returns `true` if operation succeeded (no error) AND has **more than 0 records** (`Count() > 0 && !IsFailure()`).
-  - `res.IsDefined() bool`: Returns `true` if operation succeeded (no error) AND `recordCount > 0` (or non-null/non-empty data `T`).
+  - `res.IsDefined() bool`: Returns `true` if operation succeeded (no error) AND `recordCount > 0` (or non-null/non-empty data `T`). Delegates error validation to `IsSuccess()`/`IsFailure()`.
 
 ```go
 // ❌ BAD (Multi-value tuple return, raw stdlib error, compound caller condition)

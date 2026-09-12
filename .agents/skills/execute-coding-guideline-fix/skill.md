@@ -11,10 +11,10 @@ Autonomously refactors code violations against `02-spec/02-coding-guidelines/` i
 
 - **No Line Compression:** Maintain mandatory blank lines before `if`, after `}`, before `return`.
 - **Implicit Booleans:** Never write `== true`. Replace with implicit checks.
-- **Affirmative Boolean Parameters:** Ban single-letter (`v bool`, `b bool`, `val bool`) and bare identifiers (`stop bool`, `pause bool`). Rename to `isStopOnFail bool`, `isStopped bool`, `isPaused bool`.
+- **Affirmative Boolean Parameters & Fields:** Ban single-letter (`v bool`, `b bool`, `val bool`) and bare identifiers (`stop bool`, `pause bool`, `defined bool`). Rename to `isStopOnFail bool`, `isStopped bool`, `isPaused bool`, `isDefined bool`.
 - **Guard Clauses:** Invert early checks to return immediately and flatten nested blocks.
 - **Go Errors & Result Containers:** Return `*appfault.AppError` and replace multi-value error tuples with `appfault.Result[T]`, `appfault.ResultSlice[T]`, `appfault.ResultMap[K, V]`.
-- **Pointer-Attached Null Safety:** All Result inspection methods must attach to pointer receivers (`*Result[T]`) with line-1 `if r == nil` guards returning safe defaults.
+- **Pointer Null Safety & Method Composition:** All Result inspection methods must attach to pointer receivers (`*Result[T]`) with line-1 `if r == nil` guards, composing existing methods (`r.IsFailure()`, `r.IsSuccess()`, `r.Count()`) rather than repeating raw pointer/error checks.
 - **Fluent Predicates:** Enforce `IsCountOtherThan(N)`, `IsEmpty()`, `HasRecord()`, `IsDefined()` at call sites instead of compound checks (`err != nil || len(...) != N`).
 - **No Releases:** Strictly forbidden from bumping versions or cutting releases at the end of this task.
 - **No Test Execution:** Test execution is disabled unless explicitly commanded by the repository owner.
