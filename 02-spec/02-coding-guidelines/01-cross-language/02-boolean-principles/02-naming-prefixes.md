@@ -66,6 +66,30 @@ $user->isAdmin();
 
 This mirrors industry best practices. For example, .NET's `char` type exposes `IsLetter`, `IsDigit`, `IsUpper`, `IsLower`, `IsNumber`, `IsPunctuation`, `IsSeparator`, `IsSymbol`, `IsControl`, `IsLetterOrDigit` — all boolean methods with the `Is` prefix.
 
+### Function & Method Parameters: Total Ban on Single-Letter & Bare Names
+
+Boolean parameters in function and method signatures (such as setters) MUST NEVER use lazy single-letter identifiers (`v bool`, `b bool`, `flag bool`) or bare unprefixed verbs (`stop bool`, `pause bool`). They must always carry an affirmative prefix describing the exact state being set:
+
+```go
+// ❌ FORBIDDEN: Single-letter parameter `v bool` or bare verb `stop bool`
+func (p *BatchProgress) SetStopOnFail(v bool) {
+    p.stopOnFail = v
+}
+
+func (w *Worker) SetStopped(stop bool) {
+    w.stop = stop
+}
+
+// ✅ REQUIRED: Meaningful, affirmative boolean parameter and property
+func (p *BatchProgress) SetStopOnFail(isStopOnFail bool) {
+    p.stopOnFail = isStopOnFail
+}
+
+func (w *Worker) SetStopped(isStopped bool) {
+    w.isStopped = isStopped
+}
+```
+
 ---
 
 ---

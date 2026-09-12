@@ -1,8 +1,8 @@
 # Boolean Principles, Negatives & Complex Conditions — Coding Guideline (must follow)
 
-Trigger Keywords & Aliases: `cg-boolean`, `cg-execute boolean`, `audit boolean`, `fix boolean negatives`, `fix complex conditions`, `affirmative booleans`
+Trigger Keywords & Aliases: `cg-boolean`, `cg-execute boolean`, `audit boolean`, `fix boolean negatives`, `fix complex conditions`, `affirmative booleans`, `boolean-parameter-naming`, `affirmative-boolean-parameters`, `is-stopped`, `fix-v-bool`
 
-> **Prompt Version:** 2.1.0
+> **Prompt Version:** 2.2.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 ```text
@@ -11,15 +11,15 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, plan, refactor, and fix all boolean naming, double negatives, mixed polarity, and complex condition violations across the codebase, modifying source files directly to enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), implicit evaluation (no `== true`), positive framing (no `!isSuccess`), and discrete condition decomposition until 100% green without stopping.
+/goal Autonomously scan, plan, refactor, and fix all boolean naming, double negatives, mixed polarity, single-letter boolean parameters (`v bool`, `b bool`), bare verb/noun identifiers (`stop bool` -> `isStopped bool`, `stopOnFail` -> `isStopOnFail`), and complex condition violations across the codebase, modifying source files directly to enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), implicit evaluation (no `== true`), positive framing (no `!isSuccess`), and discrete condition decomposition until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all architectural violations and anti-patterns.
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using AST and ripgrep to inventory all architectural violations: explicit `== true`/`== false`, negative names (`isNot*`), inverted success (`!isSuccess`), mixed polarity (`&& !`), single-letter boolean parameters (`v bool`, `b bool`), and bare un-prefixed boolean identifiers (`stop`, `pause`, `force`, `dryRun`).
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/` with an exhaustive Violation Ledger.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
-5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring following authoritative guidelines.
+5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring: convert booleans to implicit evaluation, replace single-letter parameters (`v bool`) with affirmative names (`isStopOnFail bool`, `isStopped bool`), transform bare fields to affirmative states (`stop` -> `isStopped`), invert negatives, and split mixed polarity.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
 8. [ ] /goal Phase 2 (Step D): Execute targeted file-level linters and verification on modified files ensuring 0 remaining violations (`exit 0`). DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
@@ -65,7 +65,111 @@ Boolean logic must be simple, readable, and unambiguous. Complex boolean chains 
 4. **No Boolean Flag Parameters on Functions:**
    - Functions must not accept boolean arguments that drastically alter control flow (e.g. `render(true)` is banned; split into `renderExpanded()` and `renderCollapsed()`).
 
+5. **Affirmative Boolean Parameter & Field Naming (Total Ban on Single-Letter & Bare Names):**
+   - **Total Ban on Single-Letter Parameters:** NEVER use lazy single-letter names (`v bool`, `b bool`, `val bool`, `flag bool`) in function or method signatures (e.g. setters).
+   - **Total Ban on Bare Unprefixed Names:** NEVER use bare verbs, nouns, or adjectives (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`).
+   - **Mandatory Affirmative Prefixes:** Every boolean parameter, struct field, property, and local variable MUST carry an affirmative prefix (`is*` or `has*`):
+     - `stop` -> `isStopped`
+     - `stopOnFail` -> `isStopOnFail` (e.g. `SetStopOnFail(isStopOnFail bool)`)
+     - `pause` / `paused` -> `isPaused`
+     - `force` -> `isForced` or `isForce`
+     - `enable` / `enabled` -> `isEnabled`
+     - `dryRun` -> `isDryRun`
+     - `debug` -> `isDebug`
+     - `verbose` -> `isVerbose`
+     - `header` -> `hasHeader`
+     - `records` -> `hasRecords`
+
 ### Generic Code Patterns with Compliant Newline Gaps
+
+#### Pattern A: Setter Method Parameter & Field Assignment (`v bool` -> `isStopOnFail bool`)
+
+```go
+// -----------------------------------------------------------------------------
+// ❌ ANTI-PATTERN: Single-letter parameter `v bool` and un-prefixed field
+// -----------------------------------------------------------------------------
+// SetStopOnFail enables early termination after the first failure
+func (p *BatchProgress) SetStopOnFail(v bool) {
+    p.mu.Lock()
+    defer p.mu.Unlock()
+    p.stopOnFail = v
+}
+
+// -----------------------------------------------------------------------------
+// ✅ REQUIRED: Meaningful, affirmative boolean parameter and property
+// -----------------------------------------------------------------------------
+// SetStopOnFail enables early termination after the first failure
+func (p *BatchProgress) SetStopOnFail(isStopOnFail bool) {
+    p.mu.Lock()
+    defer p.mu.Unlock()
+    p.stopOnFail = isStopOnFail
+}
+```
+
+#### Pattern B: Generic State Flag & Struct Worker (`stop` -> `isStopped`)
+
+```go
+// -----------------------------------------------------------------------------
+// ❌ ANTI-PATTERN: Bare verb `stop` and lazy `b bool` in stateful worker
+// -----------------------------------------------------------------------------
+type TaskWorker struct {
+    stop bool
+}
+
+func (w *TaskWorker) SetStop(b bool) {
+    w.stop = b
+}
+
+func (w *TaskWorker) Run() {
+    for {
+        if w.stop {
+            break
+        }
+        processTask()
+    }
+}
+
+// -----------------------------------------------------------------------------
+// ✅ REQUIRED: Generic affirmative `isStopped` state and parameter
+// -----------------------------------------------------------------------------
+type TaskWorker struct {
+    isStopped bool
+}
+
+func (w *TaskWorker) SetStopped(isStopped bool) {
+    w.isStopped = isStopped
+}
+
+func (w *TaskWorker) Run() {
+    for {
+        if w.isStopped {
+            break
+        }
+        processTask()
+    }
+}
+```
+
+#### Pattern C: Generic Transformation Reference Table
+
+| Target Category | ❌ Anti-Pattern (Lazy / Bare) | ✅ Required Affirmative Identifier | Context / Description |
+|---|---|---|---|
+| Setter Parameter | `SetStopOnFail(v bool)` | `SetStopOnFail(isStopOnFail bool)` | Early termination flag parameter |
+| State Variable | `stop := false` | `isStopped := false` | Process / loop cancellation state |
+| Method Parameter | `Stop(stop bool)` | `SetStopped(isStopped bool)` | State toggle parameter |
+| Struct Field | `pause bool` | `isPaused bool` | Pause / suspend indicator |
+| Setter Parameter | `SetPaused(v bool)` | `SetPaused(isPaused bool)` | Pause toggle parameter |
+| Struct Field | `dryRun bool` | `isDryRun bool` | Execution mode indicator |
+| Method Parameter | `SetDryRun(v bool)` | `SetDryRun(isDryRun bool)` | Dry-run toggle parameter |
+| CLI / Config Flag | `force bool` | `isForced bool` / `isForce bool` | Overwrite / override flag |
+| Struct Field | `verbose bool` | `isVerbose bool` | Verbose logging flag |
+| Struct Field | `debug bool` | `isDebug bool` | Debug mode flag |
+| Struct Field | `header bool` | `hasHeader bool` | Table / CSV header presence |
+| Struct Field | `records bool` | `hasRecords bool` | Data presence flag |
+| Method Parameter | `SetEnabled(v bool)` | `SetEnabled(isEnabled bool)` | Feature toggle parameter |
+| Method Parameter | `SetAsync(flag bool)` | `SetAsync(isAsync bool)` | Asynchronous execution flag |
+
+#### Pattern D: Implicit Checks & Discrete Guard Clauses
 
 ```go
 // ❌ FORBIDDEN: Explicit true comparison, negative variable, and mixed polarity
@@ -178,7 +282,9 @@ Before modifying application code, you MUST thoroughly scan the repository and w
   3. Negative boolean variable declarations (`isNotActive`, `isNotReady`, `disableFeature`).
   4. Mixed polarity condition joins (`&& !`, `|| !`, `and not`).
   5. Functions accepting boolean flag parameters (`process(true)`).
-  6. Functions exceeding 8 lines (hard cap 15 lines) or files exceeding 100 coding lines (recommended <= 80).
+  6. Single-letter boolean parameters in signatures (`v bool`, `b bool`, `val bool`).
+  7. Bare un-prefixed boolean identifiers and fields (`stop bool`, `pause bool`, `force bool`, `dryRun bool`).
+  8. Functions exceeding 8 lines (hard cap 15 lines) or files exceeding 100 coding lines (recommended <= 80).
 - **Where to save it:** Save this master plan into `.lovable/plans/pending/XX-booleans-and-complex-conditions-audit.md` listing every affected file, exact line numbers, and refactoring plans.
 - **Create a Task-Specific Rule Set:** Analyze the specific domain and write 3-5 custom rules inside the spec file.
 - **Subtasks:** Break the plan down into granular subtask files inside `.lovable/plans/subtasks/XX-booleans/` (e.g. `01-implicit-booleans.md`, `02-negative-inversion.md`, `03-split-mixed-polarity.md`).
@@ -223,6 +329,28 @@ Code standards must be mechanically enforced by automated linters. You MUST veri
   2. Negative boolean naming (`isNot`, `hasNo`).
   3. Inverted `!isSuccess` checks.
   4. Mixed polarity chains (`&& !`, `|| !`).
+  5. Single-letter boolean parameters (`v bool`, `b bool`).
+  6. Bare unprefixed boolean parameters/fields (`stop bool`, `pause bool`, `force bool`).
+- [ ] **Automated Scanning Commands (ripgrep):**
+  ```bash
+  # 1. Single-letter boolean parameters in Go functions: e.g. (v bool), (b bool), (val bool)
+  rg --pcre2 "func\s+(?:\([^\)]+\)\s+)?\w+\([^\)]*\b[a-z]\s+bool\b"
+
+  # 2. Bare un-prefixed boolean parameters in Go: e.g. (stop bool), (pause bool), (force bool)
+  rg --pcre2 "func\s+(?:\([^\)]+\)\s+)?\w+\([^\)]*\b(stop|pause|force|verbose|debug|dryRun)\s+bool\b"
+
+  # 3. Bare boolean struct fields in Go: e.g. stop bool, paused bool
+  rg --pcre2 "^\s*(?:stop|pause|paused|force|dryRun|verbose|debug)\s+bool\b"
+
+  # 4. Explicit boolean comparisons:
+  rg --pcre2 "\b(==\s*true|===\s*true|==\s*false|===\s*false)\b"
+
+  # 5. Inverted success checks:
+  rg --pcre2 "!\s*[a-zA-Z0-9_$.->]*\bisSuccess\b"
+
+  # 6. Mixed polarity:
+  rg --pcre2 "(&&\s*!|\|\|\s*!)"
+  ```
 - [ ] **Local Linter Command:** Execute and verify the linter locally:
   ```bash
   python linter-scripts/check-boolean-guidelines.py
@@ -379,6 +507,8 @@ Before you commit code or end your turn, you MUST mechanically check off these i
 
 ## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
 
+- **NO SINGLE-LETTER BOOLEAN PARAMETERS:** NEVER name boolean parameters `v bool`, `b bool`, `val bool`, or `flag bool` in function or method signatures (e.g. setters). Always use descriptive, affirmative parameters like `isStopOnFail bool`, `isStopped bool`, `isEnabled bool`, `isDryRun bool`.
+- **NO BARE VERB OR ADJECTIVE BOOLEANS:** NEVER name a boolean variable, struct field, or parameter with a bare verb or adjective like `stop`, `pause`, `force`, or `dryRun`. Transform them to affirmative states like `isStopped`, `isPaused`, `isForced`, `isStopOnFail`, `isDryRun`.
 - **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
 - **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
 - **NO FULL CI/CD RUNNER (Strict Policy):** DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine coding guideline execution turns. Running the heavy 28-38 gate pipeline across the entire repository wastes massive amounts of time and scans unrelated files. Verify code strictly using targeted file-level linters / autofixers on the specific modified files.
