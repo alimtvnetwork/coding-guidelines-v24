@@ -12,8 +12,8 @@ Executes comprehensive testing, linting verification, and quality gate validatio
 
 ## Checks
 
-1. **TypeScript / React:** `npm run test`, `npm run lint` (when authorized)
-2. **Go:** `go test ./...` (when authorized)
+1. **TypeScript / React:** `npm run test`, `npm run lint`
+2. **Go:** `go test ./...`
 3. **Targeted Verification (Routine):** Run targeted linters on modified files (full `06-cicd-local-runner.py` is strictly banned in routine turns).
 4. **Full Runner (Owner Explicit Command Only):** `python 03-ai-scripts/06-cicd-local-runner.py`
 5. **Pre-Release Full Gates (Release Ceremony Only):** `python 03-ai-scripts/06-cicd-local-runner.py --run-tests`
@@ -22,3 +22,5 @@ Executes comprehensive testing, linting verification, and quality gate validatio
 8. **Consolidated Atomic Commits:** NEVER commit 1-2 files piecemeal. Stage all modified files and plans together as a single atomic unit.
 9. **Immediate Push to GitHub:** ALWAYS push immediately to GitHub (`git push origin <branch>`) after creating any commit.
 10. **No Routine Builds:** NEVER run full builds (`npm run build`, `go build ./...`) during routine tasks.
+11. **Temp & Failure Folder Isolation:** All temporary test files, caches, and scratch directories MUST be isolated strictly to `.lovable/temp/`. Never create `.tmp/` at root. Failed tests/gates write logs strictly to `.lovable/temp/failures/<test-or-job>.log`. Passing tests MUST remain completely silent in output logs and produce zero filesystem artifacts.
+12. **In-Flight ETA Wait Protocol:** When executing CI/CD runner or test suites in the background, the runner emits in-flight heartbeats strictly every 25 seconds or more. Agents MUST sleep/wait for 1 minute (60 seconds) each time, or dynamically sleep for the remaining ETA duration read from `.lovable/temp/runner-eta.json` (or based on previous total approximate delay) instead of busy-polling.

@@ -25,10 +25,12 @@ CLI Options:
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
+import datetime
 from importlib import import_module
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -87,17 +89,49 @@ def resolve_job_command(job_name: str, command: list[str]) -> list[str]:
     return list(command)
 
 
+TMP_CACHE_DIR = Path(".lovable/temp")
+FAILURES_DIR = TMP_CACHE_DIR / "failures"
+RUNNER_ETA_FILE = TMP_CACHE_DIR / "runner-eta.json"
+
+
+def update_runner_eta(status: str, elapsed: float, total_est: float, remaining: float, total_jobs: int, completed: int) -> None:
+    """Updates real-time runner status and ETA for AI sleep/wait protocol."""
+    try:
+        TMP_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        data = {
+            "status": status,
+            "updated_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "elapsed_sec": round(elapsed, 1),
+            "total_estimated_sec": round(total_est, 1),
+            "remaining_eta_sec": max(1 if status == "running" else 0, int(round(remaining))),
+            "total_jobs": total_jobs,
+            "completed_jobs": completed,
+        }
+        RUNNER_ETA_FILE.write_text(json.dumps(data, indent=2), encoding=DEFAULT_ENCODING)
+    except Exception:
+        pass
+
+
 def execute_ci_job(job_name: str, command: list[str]) -> JobResult:
     """Executes a single validation check asynchronously and records output and duration."""
+    TMP_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    FAILURES_DIR.mkdir(parents=True, exist_ok=True)
     start_time = time.perf_counter()
     effective_cmd = resolve_job_command(job_name, command)
+    test_env = os.environ.copy()
+    abs_temp = str(TMP_CACHE_DIR.resolve())
+    test_env["GOTMPDIR"] = abs_temp
+    test_env["TMPDIR"] = abs_temp
+    test_env["TEMP"] = abs_temp
+    test_env["TMP"] = abs_temp
     try:
         res = subprocess.run(
             effective_cmd,
             capture_output=True,
             text=True,
             encoding=DEFAULT_ENCODING,
-            errors="replace"
+            errors="replace",
+            env=test_env,
         )
         duration = time.perf_counter() - start_time
         is_success = (res.returncode == 0)
@@ -111,6 +145,20 @@ def execute_ci_job(job_name: str, command: list[str]) -> JobResult:
             output_parts.append(stderr_clean)
 
         combined_output = LINE_SEPARATOR.join(output_parts)
+        safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', job_name)
+        fail_log = FAILURES_DIR / f"{safe_name}.log"
+        if is_success:
+            if fail_log.exists():
+                try:
+                    fail_log.unlink()
+                except Exception:
+                    pass
+        else:
+            try:
+                fail_log.write_text(combined_output, encoding=DEFAULT_ENCODING, errors="replace")
+            except Exception:
+                pass
+
         return JobResult(
             name=job_name,
             is_success=is_success,
@@ -120,10 +168,16 @@ def execute_ci_job(job_name: str, command: list[str]) -> JobResult:
         )
     except Exception as exc:
         duration = time.perf_counter() - start_time
+        err_msg = f"Failed to execute process: {exc}"
+        safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', job_name)
+        try:
+            (FAILURES_DIR / f"{safe_name}.log").write_text(err_msg, encoding=DEFAULT_ENCODING, errors="replace")
+        except Exception:
+            pass
         return JobResult(
             name=job_name,
             is_success=False,
-            output=f"Failed to execute process: {exc}",
+            output=err_msg,
             duration_sec=duration,
             return_code=-1
         )
@@ -138,12 +192,22 @@ def execute_pipeline(
     """Executes target CI jobs in parallel or sequentially, returning structured summary."""
     effective_workers = 1 if is_sync else max(1, worker_count)
     start_wall_time = time.perf_counter()
+    est_total_duration = max(5.0, len(target_jobs) * 0.8)
+    update_runner_eta("running", 0.0, est_total_duration, est_total_duration, len(target_jobs), 0)
     results: list[JobResult] = []
 
     if is_sync:
         for name, cmd in target_jobs.items():
             res = execute_ci_job(name, cmd)
             results.append(res)
+            update_runner_eta(
+                "running",
+                time.perf_counter() - start_wall_time,
+                est_total_duration,
+                max(1.0, est_total_duration - (time.perf_counter() - start_wall_time)),
+                len(target_jobs),
+                len(results)
+            )
             if on_job_complete:
                 on_job_complete(res, len(results), len(target_jobs))
     else:
@@ -155,6 +219,14 @@ def execute_pipeline(
             for future in as_completed(future_map):
                 res = future.result()
                 results.append(res)
+                update_runner_eta(
+                    "running",
+                    time.perf_counter() - start_wall_time,
+                    est_total_duration,
+                    max(1.0, est_total_duration - (time.perf_counter() - start_wall_time)),
+                    len(target_jobs),
+                    len(results)
+                )
                 if on_job_complete:
                     on_job_complete(res, len(results), len(target_jobs))
 
@@ -167,6 +239,15 @@ def execute_pipeline(
     failed_count = sum(1 for r in results if not r.is_success)
     has_failures = (failed_count > 0)
     exit_code = ExitCodeType.VIOLATIONS_FOUND.value if has_failures else ExitCodeType.SUCCESS.value
+
+    update_runner_eta(
+        "completed" if not has_failures else "failed",
+        total_wall_duration,
+        est_total_duration,
+        0.0,
+        len(target_jobs),
+        len(results)
+    )
 
     return PipelineSummary(
         total_jobs=len(target_jobs),
