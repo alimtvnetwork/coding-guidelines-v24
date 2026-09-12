@@ -55,7 +55,8 @@ function snapshotAll() {
 }
 
 function runSyncPipeline() {
-  const result = spawnSync("npm", ["run", "sync"], {
+  const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+  const result = spawnSync(npmCmd, ["run", "sync"], {
     cwd: ROOT,
     stdio: VERBOSE ? "inherit" : "pipe", shell: process.platform === "win32",
     encoding: "utf8",

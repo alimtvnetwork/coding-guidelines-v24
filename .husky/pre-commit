@@ -12,6 +12,29 @@
 
 set -e
 
+# ── Ensure bash and core unix tools are in PATH (Windows / GitHub Desktop) ──
+if ! command -v bash >/dev/null 2>&1; then
+  for _git_p in \
+    "/c/Program Files/Git/bin" \
+    "/c/Program Files/Git/usr/bin" \
+    "/c/Program Files (x86)/Git/bin" \
+    "/c/Program Files (x86)/Git/usr/bin" \
+    "C:/Program Files/Git/bin" \
+    "C:/Program Files/Git/usr/bin"; do
+    [ -d "$_git_p" ] && PATH="$_git_p:$PATH"
+  done
+  if ! command -v bash >/dev/null 2>&1; then
+    _git_cmd="$(command -v git 2>/dev/null || true)"
+    if [ -n "$_git_cmd" ]; then
+      _git_root="${_git_cmd%/*}"
+      _git_root="${_git_root%/*}"
+      [ -d "$_git_root/bin" ] && PATH="$_git_root/bin:$PATH"
+      [ -d "$_git_root/usr/bin" ] && PATH="$_git_root/usr/bin:$PATH"
+    fi
+  fi
+  export PATH
+fi
+
 node scripts/sync-version.mjs
 
 if ! git diff --quiet -- version.json; then
@@ -19,15 +42,13 @@ if ! git diff --quiet -- version.json; then
   echo "  pre-commit: re-staged version.json (LastCommitSha refreshed)"
 fi
 
-if ! npm run --silent sync:check; then
+if ! node scripts/sync-check.mjs || ! node scripts/sync-guidelines.mjs --check; then
   echo ""
   echo "  pre-commit: sync:check failed — generated files are out of date."
   echo "  Run \`npm run sync\` and stage the regenerated files, then retry the commit."
   exit 1
 fi
 
-# Forbidden-strings gate + linter-scripts guards. Surfaces the rule id
-# and exact matched phrase (e.g. SPEC19-NO-IMPL) before any test noise.
 # Forbidden-strings gate + linter-scripts guards. Surfaces the rule id
 # and exact matched phrase (e.g. SPEC19-NO-IMPL) before any test noise.
 if [ -x scripts/hooks/pre-commit ]; then
@@ -40,5 +61,10 @@ if [ -x scripts/hooks/pre-commit-diagrams.sh ]; then
   bash scripts/hooks/pre-commit-diagrams.sh
 fi
 
-
-npm test
+if command -v npm >/dev/null 2>&1; then
+  npm test
+elif command -v npm.cmd >/dev/null 2>&1; then
+  npm.cmd test
+else
+  node_modules/.bin/vitest run
+fi
