@@ -41,14 +41,17 @@ func FailNew[T any](code, message string) Result[T]
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `HasError()` | `bool` | True if operation failed |
-| `IsSafe()` | `bool` | True if value exists AND no error |
-| `IsDefined()` | `bool` | True if value was set (regardless of error) |
-| `IsEmpty()` | `bool` | True if no value was set |
-| `Value()` | `T` | Returns value; panics if `HasError()` |
+| `HasError()` / `IsFailure()` | `bool` | True if operation failed |
+| `IsSuccess()` / `IsSafe()` | `bool` | True if operation succeeded with no error |
+| `IsDefined()` | `bool` | True if operation succeeded (no error) AND data T is not null/empty (recordCount > 0) |
+| `HasRecord()` / `HasRecords()` | `bool` | True if operation succeeded AND contains more than 0 records |
+| `IsEmpty()` | `bool` | True if no active error and payload has 0 records, or error is empty |
+| `Count()` | `int` | Number of records in payload (0 if failed or empty) |
+| `IsCountOtherThan(n)` | `bool` | True if operation failed OR record count != n |
+| `Value()` / `Data()` | `T` | Returns payload value |
 | `ValueOr(fallback)` | `T` | Returns value if defined, else fallback |
-| `Error()` | `*AppError` | Returns the AppError, or nil |
-| `Unwrap()` | `(T, error)` | Bridges to standard `(T, error)` pattern |
+| `AppError()` / `Fault()` | `*AppError` | Returns structured AppError metadata, or nil |
+| `Unwrap()` | `(T, *AppError)` | Bridges to standard tuple unpacking |
 
 ---
 
@@ -82,16 +85,18 @@ func FailSliceNew[T any](code, message string) ResultSlice[T]
 
 | Category | Method | Returns | Description |
 |----------|--------|---------|-------------|
-| Query | `HasError()` | `bool` | True if operation failed |
-| Query | `IsSafe()` | `bool` | True if no error (items may be empty) |
-| Query | `HasItems()` | `bool` | True if at least one item |
-| Query | `IsEmpty()` | `bool` | True if zero items |
-| Query | `Count()` | `int` | Number of items |
-| Access | `Items()` | `[]T` | Returns the slice (nil if error) |
+| Query | `HasError()` / `IsFailure()` | `bool` | True if operation failed |
+| Query | `IsSuccess()` / `IsSafe()` | `bool` | True if no error (items may be empty) |
+| Query | `IsDefined()` | `bool` | True if operation succeeded (no error) AND contains more than 0 items (recordCount > 0) |
+| Query | `HasRecord()` / `HasRecords()` / `HasItems()` | `bool` | True if operation succeeded AND contains more than 0 items |
+| Query | `IsEmpty()` | `bool` | True if zero items or empty error state |
+| Query | `Count()` | `int` | Number of items (0 if failed) |
+| Query | `IsCountOtherThan(n)` | `bool` | True if operation failed OR item count != n |
+| Access | `Items()` / `Data` | `[]T` | Returns the slice (nil if error) |
 | Access | `First()` | `Result[T]` | Result for first item; empty if none |
 | Access | `Last()` | `Result[T]` | Result for last item; empty if none |
 | Access | `GetAt(index)` | `Result[T]` | Result at index; empty if out of bounds |
-| Access | `Error()` | `*AppError` | Returns the AppError, or nil |
+| Access | `AppError()` / `Fault()` | `*AppError` | Returns structured AppError metadata, or nil |
 | Mutate | `Append(items...)` | — | Adds items; no-op if in error state |
 
 ---
@@ -126,17 +131,19 @@ func FailMapNew[K comparable, V any](code, message string) ResultMap[K, V]
 
 | Category | Method | Returns | Description |
 |----------|--------|---------|-------------|
-| Query | `HasError()` | `bool` | True if operation failed |
-| Query | `IsSafe()` | `bool` | True if no error (map may be empty) |
-| Query | `HasItems()` | `bool` | True if at least one entry |
-| Query | `IsEmpty()` | `bool` | True if zero entries |
-| Query | `Count()` | `int` | Number of entries |
+| Query | `HasError()` / `IsFailure()` | `bool` | True if operation failed |
+| Query | `IsSuccess()` / `IsSafe()` | `bool` | True if no error (map may be empty) |
+| Query | `IsDefined()` | `bool` | True if operation succeeded (no error) AND contains more than 0 entries (recordCount > 0) |
+| Query | `HasRecord()` / `HasRecords()` / `HasItems()` | `bool` | True if operation succeeded AND contains more than 0 entries |
+| Query | `IsEmpty()` | `bool` | True if zero entries or empty error state |
+| Query | `Count()` | `int` | Number of entries (0 if failed) |
+| Query | `IsCountOtherThan(n)` | `bool` | True if operation failed OR entry count != n |
 | Query | `Has(key)` | `bool` | True if key exists |
-| Access | `Items()` | `map[K]V` | Returns the map (nil if error) |
-| Access | `Get(key)` | `Result[V]` | Result for key; empty if not found |
-| Access | `Keys()` | `[]K` | All keys as slice |
+| Access | `Items()` / `Data` | `map[K]V` | Returns the map (nil if error) |
+| Access | `Get(key)` | `(V, bool)` | Safely retrieves entry by key |
+| Access | `Keys()` | `[]K` | All keys as deterministically sorted slice |
 | Access | `Values()` | `[]V` | All values as slice |
-| Access | `Error()` | `*AppError` | Returns the AppError, or nil |
+| Access | `AppError()` / `Fault()` | `*AppError` | Returns structured AppError metadata, or nil |
 | Mutate | `Set(key, value)` | — | Adds/updates entry; no-op if error state |
 | Mutate | `Remove(key)` | — | Deletes key; no-op if error state |
 

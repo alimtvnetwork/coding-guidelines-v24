@@ -33,6 +33,13 @@ type (
 		IsDefined() bool
 	}
 
+	// RecordCountChecker checks record count and count-based predicates.
+	RecordCountChecker interface {
+		Count() int
+		IsCountOtherThan(n int) bool
+		HasRecord() bool
+	}
+
 	// DefinableChecker combines both emptiness and definition predicates.
 	DefinableChecker interface {
 		IsDefinedChecker

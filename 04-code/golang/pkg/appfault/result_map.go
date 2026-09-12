@@ -110,9 +110,27 @@ func (rm ResultMap[K, V]) IsEmpty() bool {
 	return rm.appError.IsEmpty()
 }
 
-// IsDefined returns true if operation succeeded.
+// IsDefined returns true if the operation succeeded and contains more than 0 entries (recordCount > 0).
 func (rm ResultMap[K, V]) IsDefined() bool {
-	return rm.IsSuccess()
+	if rm.IsFailed() {
+		return false
+	}
+
+	return len(rm.Data) > 0
+}
+
+// HasRecord returns true if the operation succeeded and contains more than 0 entries.
+func (rm ResultMap[K, V]) HasRecord() bool {
+	if rm.IsFailed() {
+		return false
+	}
+
+	return len(rm.Data) > 0
+}
+
+// HasRecords is an alias for HasRecord.
+func (rm ResultMap[K, V]) HasRecords() bool {
+	return rm.HasRecord()
 }
 
 // AsSimpleVerifier returns the ResultMap conforming to SimpleVerifier.
@@ -161,6 +179,15 @@ func (rm ResultMap[K, V]) Count() int {
 	}
 
 	return len(rm.Data)
+}
+
+// IsCountOtherThan returns true if the operation failed or its entry count differs from n.
+func (rm ResultMap[K, V]) IsCountOtherThan(n int) bool {
+	if rm.IsFailed() {
+		return true
+	}
+
+	return len(rm.Data) != n
 }
 
 // AppError returns the underlying *AppError.

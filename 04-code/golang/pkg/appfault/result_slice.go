@@ -109,9 +109,27 @@ func (rs ResultSlice[T]) IsEmpty() bool {
 	return rs.appError.IsEmpty()
 }
 
-// IsDefined returns true if operation succeeded.
+// IsDefined returns true if the operation succeeded and contains more than 0 items (recordCount > 0).
 func (rs ResultSlice[T]) IsDefined() bool {
-	return rs.IsSuccess()
+	if rs.IsFailed() {
+		return false
+	}
+
+	return len(rs.Items) > 0
+}
+
+// HasRecord returns true if the operation succeeded and contains more than 0 items.
+func (rs ResultSlice[T]) HasRecord() bool {
+	if rs.IsFailed() {
+		return false
+	}
+
+	return len(rs.Items) > 0
+}
+
+// HasRecords is an alias for HasRecord.
+func (rs ResultSlice[T]) HasRecords() bool {
+	return rs.HasRecord()
 }
 
 // AsSimpleVerifier returns the ResultSlice conforming to SimpleVerifier.
@@ -145,6 +163,15 @@ func (rs ResultSlice[T]) Count() int {
 	}
 
 	return len(rs.Items)
+}
+
+// IsCountOtherThan returns true if the operation failed or its item count differs from n.
+func (rs ResultSlice[T]) IsCountOtherThan(n int) bool {
+	if rs.IsFailed() {
+		return true
+	}
+
+	return len(rs.Items) != n
 }
 
 // Length is an alias for Count.

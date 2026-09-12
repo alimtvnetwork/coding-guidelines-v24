@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "405d94c19d73cab4eef142798409f4fc0b4d5bd8",
+  "LastCommitSha": "978ad98aa0f3c93760c632f3190f903b6ae0b8ed",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -61,15 +61,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "405d94c19d73cab4eef142798409f4fc0b4d5bd8",
-    "shortSha": "405d94c",
+    "sha": "978ad98aa0f3c93760c632f3190f903b6ae0b8ed",
+    "shortSha": "978ad98",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 699,
-    "totalLines": 149231,
+    "totalLines": 149238,
     "totalFolders": 23,
-    "totalBytes": 5323964,
+    "totalBytes": 5325179,
     "rootFiles": 6
   },
   "folders": [
@@ -109,8 +109,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 125,
-      "lineCount": 20237,
-      "byteCount": 752108
+      "lineCount": 20244,
+      "byteCount": 753323
     },
     {
       "path": "04-database-conventions",

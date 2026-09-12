@@ -3,7 +3,34 @@ package appfault
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 )
+
+func valueRecordCount(val any) int {
+	if val == nil {
+		return 0
+	}
+
+	v := reflect.ValueOf(val)
+	switch v.Kind() {
+	case reflect.Slice, reflect.Map, reflect.Array:
+		return v.Len()
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Pointer, reflect.UnsafePointer:
+		if v.IsNil() {
+			return 0
+		}
+
+		return 1
+	case reflect.String:
+		if v.Len() == 0 {
+			return 0
+		}
+
+		return 1
+	default:
+		return 1
+	}
+}
 
 // IsSuccess returns true if no error is present.
 func (r Result[T]) IsSuccess() bool {
@@ -30,9 +57,45 @@ func (r Result[T]) IsValid() bool {
 	return r.IsSuccess()
 }
 
-// IsDefined returns true if the operation succeeded with no error.
+// IsDefined returns true if the operation succeeded (no error) and contains more than 0 records or non-null data T.
 func (r Result[T]) IsDefined() bool {
-	return r.IsSuccess()
+	if r.IsFailed() {
+		return false
+	}
+
+	return r.Count() > 0
+}
+
+// HasRecord returns true if the operation succeeded and contains more than 0 records.
+func (r Result[T]) HasRecord() bool {
+	if r.IsFailed() {
+		return false
+	}
+
+	return r.Count() > 0
+}
+
+// HasRecords is an alias for HasRecord.
+func (r Result[T]) HasRecords() bool {
+	return r.HasRecord()
+}
+
+// Count returns the number of records in the payload (0 if failed or empty, or length if collection).
+func (r Result[T]) Count() int {
+	if r.IsFailed() {
+		return 0
+	}
+
+	return valueRecordCount(r.value)
+}
+
+// IsCountOtherThan returns true if the operation failed or its record count differs from n.
+func (r Result[T]) IsCountOtherThan(n int) bool {
+	if r.IsFailed() {
+		return true
+	}
+
+	return r.Count() != n
 }
 
 // AsSimpleVerifier returns the Result conforming to SimpleVerifier.
@@ -69,10 +132,10 @@ func (r Result[T]) IsSafe() bool {
 	return r.IsSuccess()
 }
 
-// IsEmpty returns true if no active error is present (or error is zero/empty).
+// IsEmpty returns true if no active error is present and payload has 0 records, or error is empty.
 func (r Result[T]) IsEmpty() bool {
 	if r.appError == nil {
-		return true
+		return r.Count() == 0
 	}
 
 	return r.appError.IsEmpty()
