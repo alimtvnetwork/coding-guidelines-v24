@@ -1082,6 +1082,61 @@ python 03-ai-scripts/33-test-inventory-generator.py --query-recent
 
 </details>
 
+<details>
+<summary><strong>34 — <code>34-purge-github-actions-artifacts.py</code>: GitHub Actions Artifact Purger</strong></summary>
+
+#### Why It Exists
+
+Autonomously discovers and deletes stored GitHub Actions artifacts via the GitHub API across target repositories to enforce the Zero-Storage Actions Mandate and keep account storage usage at 0.0 GB (staying well within the 0.5 GB free quota).
+
+#### What It Does
+
+- Queries the GitHub Actions API for uploaded artifacts across repositories (`alimtvnetwork/coding-guidelines-v24`, `alimtvnetwork/gitmap-v28`).
+- Concurrently purges old artifacts using thread pools to avoid quota exhaustion.
+- Enforces zero artifact retention policies without breaking commit statuses.
+
+#### CLI Usage & Examples
+
+```bash
+# Purge artifacts across default repositories
+python 03-ai-scripts/34-purge-github-actions-artifacts.py
+
+# Purge artifacts for a specific repository
+python 03-ai-scripts/34-purge-github-actions-artifacts.py --repo alimtvnetwork/coding-guidelines-v24
+```
+
+</details>
+
+<details>
+<summary><strong>35 — <code>35-db-struct-enum-generator.py</code>: Database Model Struct & Type-Safe Column Enum Generator</strong></summary>
+
+#### Why It Exists
+
+Inspects Go model structs and auto-generates type-safe column enums, `enums/consts.go`, parent package aliases, and strongly-typed repository query builders utilizing `coding-guidelines/common/pkg/dbengine` and `coding-guidelines/common/pkg/appfault`.
+
+#### What It Does
+
+- Parses Go struct definitions, extracting public fields and `db:"column_name"` tags.
+- Automatically resolves Go module root and computes relative package import paths.
+- Generates `enums/<model>.go` with strict O(1) map validation, JSON serialization/deserialization with `appfault.AppError`, and type-safe `.Is<Field>()` predicates.
+- Generates generic `Repository` constructors, row scanners, and CRUD query builder helpers.
+- Formats all generated Go files using `gofmt`.
+
+#### CLI Usage & Examples
+
+```bash
+# Preview generation across target model directory (dry run)
+python 03-ai-scripts/35-db-struct-enum-generator.py --dir 04-code/golang/pkg/dbengine --dry-run
+
+# Generate enums and repositories from specific Go file
+python 03-ai-scripts/35-db-struct-enum-generator.py --file 04-code/golang/pkg/models/item.go
+
+# Generate enums into explicit output directory
+python 03-ai-scripts/35-db-struct-enum-generator.py --file 04-code/golang/pkg/models/item.go --out-dir 04-code/golang/pkg/generated/item
+```
+
+</details>
+
 ---
 
 ## 🏛️ Core Shared Engine Architecture (`02-shared-engine.py`)

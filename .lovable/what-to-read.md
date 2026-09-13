@@ -1,10 +1,11 @@
 # What to Read
 
 > Canonical map of what the AI must read before working on this project.
-> Last updated: 2026-09-09T05:00:00Z
+> Last updated: 2026-09-13T07:00:00Z
 
 ## Changelog
 
+- 2026-09-13T07:00:00Z, Regex Centralization & Generic DbEngine: lazy regex engine audit, core regex harvesting from 03-aukgo/core, gitmap call-site refactoring, generic redistributable dbengine package (pkg/dbengine), and Python database code generator (35-db-struct-enum-generator.py).
 - 2026-09-09T05:30:00Z, Prompt update: added mandatory inspection of last 10 git commits and what-to-read prioritization to read-memory-enhanced prompt and skill.
 - 2026-09-09T05:00:00Z, Memory write: conversation log & context wrapper protocol, prompt staging, split SQLite logging, task retention, errcmd streaming, atomic file writes, and ApiManager spec.
 - 2026-09-04T17:39:00Z, Memory write: parallel multi-worker CI/CD local runner, selective log filtering, streamwriter contracts, and naming standards.
@@ -57,10 +58,7 @@
 - .lovable/plans/pending/09-update-prompts-and-release.md
 - .lovable/plans/pending/11-code-red-refactor-remediation.md
 - .lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md
-- .lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md
-- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
-- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
-- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
-- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
-- .lovable/plans/completed/02-go-core-architecture-primitives-and-applogger.md
-- .lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md
+- .lovable/plans/completed/02-appfault-result-monad-and-verification-systems.md
+- .lovable/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md
+- .lovable/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md
+- .lovable/plans/completed/12-regex-centralization-and-generic-dbengine.md

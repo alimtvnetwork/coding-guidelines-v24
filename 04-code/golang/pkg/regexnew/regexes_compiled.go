@@ -1,0 +1,52 @@
+package regexnew
+
+var (
+	// Core general-purpose pre-instantiated lazy regexes.
+	WhitespaceFinderRegex             = New.Lazy(AllWhitespaces)
+	WhitespaceOrPipeFinderRegex       = New.Lazy(AllWhitespacesOrPipe)
+	HashCommentWithSpaceOptionalRegex = New.Lazy(HashCommentWithSpaceOptional)
+	DollarIdentifierRegex             = New.Lazy(EachWordsWithDollarSymbolDefinition)
+	PercentIdentifierRegex            = New.Lazy(EachWordsWithinPercentSymbolDefinition)
+	PrettyNameRegex                   = New.Lazy(PrettyName)
+	ExactIdFieldMatchingRegex         = New.Lazy(ExactIdFieldMatching)
+	ExactVersionIdFieldMatchingRegex  = New.Lazy(ExactVersionIdFieldMatching)
+	UbuntuNameCheckerRegex            = New.Lazy(UbuntuNameChecker)
+	CentOsNameCheckerRegex            = New.Lazy(CentOsNameChecker)
+	RedHatNameCheckerRegex            = New.Lazy(RedHatNameChecker)
+	FirstNumberAnyWhereCheckerRegex   = New.Lazy(FirstNumberAnyWhere)
+	WindowsVersionNumberCheckerRegex  = FirstNumberAnyWhereCheckerRegex
+	SemverRegex                       = New.Lazy(Semver)
+	UUIDRegex                         = New.Lazy(UUIDAny)
+	UUID4Regex                        = New.Lazy(UUID4)
+	UrlRegex                          = New.Lazy(Url)
+	DateRegex                         = New.Lazy(Date)
+
+	// Common CLI and repository pre-instantiated lazy regexes.
+	NumberPrefixRegex      = New.Lazy(NumberPrefix)
+	SlugSanitizeRegex      = New.Lazy(SlugSanitize)
+	RepoVersionSuffixRegex = New.Lazy(RepoVersionSuffix)
+	RepoVersionCiRegex     = New.Lazy(RepoVersionCi)
+	SemverVersionRegex     = New.Lazy(SemverVersion)
+	SemverLooseRegex       = New.Lazy(SemverLoose)
+	IdentifierExactRegex   = New.Lazy(IdentifierExact)
+	RemoteUrlScpRegex      = New.Lazy(RemoteUrlScp)
+	RemoteUrlHttpRegex     = New.Lazy(RemoteUrlHttp)
+	RemoteUrlSshRegex      = New.Lazy(RemoteUrlSsh)
+	AnsiEscapeRegex        = New.Lazy(AnsiEscape)
+	FileUriRegex           = New.Lazy(FileUri)
+	SecretPatternRegex     = New.Lazy(SecretPattern)
+	MdHeaderRegex          = New.Lazy(MdHeader)
+	MdTableDividerRegex    = New.Lazy(MdTableDivider)
+	MdLinkRegex            = New.Lazy(MdLink)
+	MdBoldRegex            = New.Lazy(MdBold)
+	MdInlineCodeRegex      = New.Lazy(MdInlineCode)
+
+	// FuncIntel pre-instantiated lazy regexes.
+	FuncIntelGoRegex         = New.Lazy(FuncIntelGo)
+	FuncIntelJavaRegex       = New.Lazy(FuncIntelJava)
+	FuncIntelJavascriptRegex = New.Lazy(FuncIntelJavascript)
+	FuncIntelPhpRegex        = New.Lazy(FuncIntelPhp)
+	FuncIntelPythonRegex     = New.Lazy(FuncIntelPython)
+	FuncIntelRustRegex       = New.Lazy(FuncIntelRust)
+	FuncIntelTsRegex         = New.Lazy(FuncIntelTs)
+)

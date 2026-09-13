@@ -63,25 +63,38 @@ func (it *LazyRegex) IsApplicable() bool {
 	return it.isApplicable
 }
 
+func (it *LazyRegex) existingCompiled() *regexp.Regexp {
+	if !it.isCompiled {
+		return nil
+	}
+
+	return it.regex
+}
+
+func (it *LazyRegex) compiledResult() appfault.Result[*regexp.Regexp] {
+	if it.compiledErr != nil {
+		return appfault.Fail[*regexp.Regexp](appfault.NewAppBuilder(errtype.Execution, "lazy regex compilation failed").SetCause(it.compiledErr).Build())
+	}
+
+	return appfault.NewSuccess(it.regex)
+}
+
 // Compile compiles the regular expression using the assigned compiler function or standard regexp.Compile.
 func (it *LazyRegex) Compile() appfault.Result[*regexp.Regexp] {
 	if it == nil {
 		return appfault.Fail[*regexp.Regexp](appfault.NewAppBuilder(errtype.Execution, "nil LazyRegex cannot compile").Build())
 	}
 
-	if it.isCompiled && it.regex != nil {
-		return appfault.NewSuccess(it.regex)
+	existing := it.existingCompiled()
+	if existing != nil {
+		return appfault.NewSuccess(existing)
 	}
 
 	it.locker.Lock()
 	defer it.locker.Unlock()
 
-	if it.isCompiled && it.compiledErr != nil {
-		return appfault.Fail[*regexp.Regexp](appfault.NewAppBuilder(errtype.Execution, "lazy regex compilation failed").SetCause(it.compiledErr).Build())
-	}
-
 	if it.isCompiled {
-		return appfault.NewSuccess(it.regex)
+		return it.compiledResult()
 	}
 
 	if it.expression == "" {
@@ -121,8 +134,9 @@ func (it *LazyRegex) CompileMust() *regexp.Regexp {
 		return nil
 	}
 
-	if it.isCompiled && it.regex != nil {
-		return it.regex
+	existing := it.existingCompiled()
+	if existing != nil {
+		return existing
 	}
 
 	res := it.Compile()
@@ -389,8 +403,9 @@ func (it *LazyRegex) compiledRegex() (*regexp.Regexp, error) {
 		return nil, errors.New("nil LazyRegex")
 	}
 
-	if it.isCompiled && it.regex != nil {
-		return it.regex, nil
+	existing := it.existingCompiled()
+	if existing != nil {
+		return existing, nil
 	}
 
 	res := it.Compile()
@@ -546,4 +561,26 @@ func (it *LazyRegex) CompileBuilder() appfault.Result[*regexp.Regexp] {
 // CompileResult compiles the regex, returning a structured Result wrapper.
 func (it *LazyRegex) CompileResult() appfault.Result[*regexp.Regexp] {
 	return it.Compile()
+}
+
+// Find returns a slice holding the text of the leftmost match in b of the regular expression.
+func (it *LazyRegex) Find(b []byte) []byte {
+	if it == nil {
+		return nil
+	}
+
+	re, err := it.compiledRegex()
+	if err != nil {
+		return nil
+	}
+	if re == nil {
+		return nil
+	}
+
+	return re.Find(b)
+}
+
+// FindBytes is an alias for Find.
+func (it *LazyRegex) FindBytes(b []byte) []byte {
+	return it.Find(b)
 }
