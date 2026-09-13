@@ -515,14 +515,6 @@ jobs:
             --repo-root . \
             --github
 
-      - name: Upload JSON report on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: spec-cross-links-report
-          path: /tmp/spec-cross-links-report.json
-          if-no-files-found: ignore
-
       - name: Suggest auto-fixes for broken links (advisory)
         # Companion step that runs the fuzzy-match suggester. Always exits 0
         # (advisory only — never blocks merge). Surfaces suggestions as
@@ -540,14 +532,6 @@ jobs:
           python3 linter-scripts/suggest-spec-cross-link-fixes.py \
             --root 02-spec \
             --repo-root . || true
-
-      - name: Upload suggestions JSON
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: spec-cross-links-suggestions
-          path: /tmp/spec-cross-links-suggestions.json
-          if-no-files-found: ignore
 
   sync-drift:
     name: Sync Drift Check (all generated files)
@@ -592,13 +576,6 @@ jobs:
         if: always() && hashFiles('/tmp/sync-drift-report/drift.md') != ''
         run: cat /tmp/sync-drift-report/drift.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload sync drift report (JSON + Markdown)
-        if: always() && hashFiles('/tmp/sync-drift-report/drift.json') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: sync-drift-report
-          path: /tmp/sync-drift-report/
-          if-no-files-found: ignore
 
       - name: Check Mermaid diagram drift (PNG vs .mmd; opt-in adoption)
         # Mirror of scripts/lint-ci.sh step 14. Uses node built-ins only,
@@ -719,15 +696,6 @@ jobs:
         # clean. If this fails, the renderer itself is buggy.
         run: node scripts/render-diagrams.mjs --check
 
-      - name: Upload rendered PNGs as artifact
-        if: always() && steps.discover.outputs.count != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: spec-diagrams-png
-          path: 02-spec/**/*.png
-          if-no-files-found: ignore
-          retention-days: 14
-
   runner-dispatch-guard:
     name: Runner Dispatch Guard
     runs-on: ubuntu-latest
@@ -748,11 +716,3 @@ jobs:
           if [ -f reports/runner-guard-report.md ]; then
             cat reports/runner-guard-report.md >> "$GITHUB_STEP_SUMMARY"
           fi
-
-      - name: Upload runner-guard-report.md
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: runner-guard-report
-          path: reports/runner-guard-report.md
-          if-no-files-found: warn

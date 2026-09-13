@@ -46,13 +46,3 @@ jobs:
 
       - name: Run slides a11y scan (axe-core, WCAG 2.1 A/AA)
         run: bunx playwright test slides-app/tests/a11y.spec.ts
-
-      - name: Upload Playwright report on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7

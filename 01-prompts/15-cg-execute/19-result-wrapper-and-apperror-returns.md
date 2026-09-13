@@ -333,8 +333,16 @@ Result envelopes (`ResultSlice[T]`, `ResultMap[K, V]`, `Result[T]`) provide four
   }
   ```
 
-### 4. `res.IsDefined() bool`
+### 4. `res.IsDefined() bool` — Mandatory Replacement for `!res.IsEmpty()`
 
+- **Total Ban on Inverted `!res.IsEmpty()`:** In application and test code, developers frequently write `if !res.IsEmpty() { ... }`. Negating a negative condition violates Affirmative Boolean Principles and Positive Framing.
+- **Mandatory Affirmative Replacement:** ALWAYS use `res.IsDefined()` instead of `!res.IsEmpty()`:
+  - ❌ **FORBIDDEN:** `if !res.IsEmpty() { ... }`, `if !res.Empty() { ... }`
+  - ✅ **REQUIRED:** `if res.IsDefined() { ... }`
+- **Canonical Usage Guide:**
+  - Empty / missing path: use affirmative `if res.IsEmpty() { ... }`.
+  - Populated / valid data path: use affirmative `if res.IsDefined() { ... }`.
+  - NEVER evaluate `if !res.IsEmpty()`!
 - **Exact Semantics:** Returns `true` if the operation succeeded (no error) **AND** has `recordCount > 0` (or the underlying data `T` is non-null/non-empty).
 - **Distinction from `IsSuccess()`:**
   - `IsSuccess()` means "no error occurred" (an empty query returning 0 items succeeds without error).
@@ -346,9 +354,15 @@ Result envelopes (`ResultSlice[T]`, `ResultMap[K, V]`, `Result[T]`) provide four
   - For `ResultMap[K, V]`: returns `rm.Count() > 0 && rm.IsSuccess()` (delegates to `rm.Count()` and `rm.IsSuccess()`).
 - **Example:**
   ```go
+  // ✅ REQUIRED: res.IsDefined() replaces !res.IsEmpty()
   profileRes := userProfileService.GetProfile(userId)
   if profileRes.IsDefined() {
       displayProfileBadge(profileRes.Value())
+  }
+
+  // ✅ Affirmative isEmpty ONLY when handling the empty/missing case
+  if profileRes.IsEmpty() {
+      displayPlaceholderBadge()
   }
   ```
 

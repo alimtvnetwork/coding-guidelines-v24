@@ -68,19 +68,9 @@ jobs:
           header: spec-verification-coverage
           path: /tmp/pr-comment.md
 
-      - name: Upload coverage report artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: spec-verification-coverage
-          path: |
-            reports/spec-verification/coverage.md
-            reports/spec-verification/coverage.json
-          if-no-files-found: warn
-
       # Final gate — fails the job (exit code 3) when expected files are
       # missing a `## Verification` block. Runs LAST so the PR comment
-      # and artifact upload above always execute first.
+      # always executes first.
       - name: Strict gate — fail if any expected file is missing
         run: |
           node scripts/spec-verification/generate-coverage-report.mjs \

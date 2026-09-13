@@ -43,6 +43,7 @@ PHASE_2_STEPS = N / 2  (Steps 151 .. 300: Workflow Generation, Python Linter Ver
 >    - ❌ **BAD:** `[SSH Commands](file:///absolute/path/to/...)`
 >    - ✅ **GOOD:** `[SSH Commands](02-spec/13-generic-cli/01-index.md)`
 > 7. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
+> 8. **Zero-Storage GitHub Actions Mandate (Total Ban on CI Artifact Uploads):** Workflows MUST NOT upload test outputs, coverage files, Playwright reports, or drift summaries via `actions/upload-artifact`. Free-tier accounts have a strict 0.5 GB shared quota across all repositories. All reports, failures, and summaries MUST be emitted directly to `$GITHUB_STEP_SUMMARY`, console stdout (`cat log.txt`), or sticky PR comments with zero storage consumption. Only true GitHub release assets (binaries/tarballs on tagged releases) are permitted.
 
 ---
 
@@ -62,6 +63,6 @@ PHASE_2_STEPS = N / 2  (Steps 151 .. 300: Workflow Generation, Python Linter Ver
 - [ ] All CI/CD specs (`02-spec/12-cicd-pipeline-workflows/`, `02-spec/02-coding-guidelines/06-cicd-integration/`) read and followed.
 - [ ] Python cross-platform runner `03-ai-scripts/06-cicd-local-runner.py` created and verified.
 - [ ] All linters in `linter-scripts/` verified and passing without bypass.
-- [ ] GitHub Actions workflows created in `.github/workflows/`.
+- [ ] GitHub Actions workflows created in `.github/workflows/` (strictly adhering to Zero-Storage mandate — no `actions/upload-artifact` in CI).
 - [ ] Local runner exited with code 0 on all jobs.
 - [ ] All changes committed and pushed to remote repository.

@@ -50,6 +50,7 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 > 8. **Centralized Test Inventory & Incremental Caching:** All unit tests are cataloged in `.lovable/test-inventory.json` with strictly repository-relative paths (`target_file`, `test_file`). First run executes all tests to establish baseline timings; subsequent runs execute incrementally only if target code files or test files change. Slow test threshold defaults to `4.0s` (configurable via `GITMAP_SLOW_TEST_THRESHOLD`).
 > 9. **Dual-Queue Worker Pools:** Slow tests run in a dedicated 4-worker pool running at most 2 tests at a time per batch. Fast tests run in a 4-worker pool running at most 4 tests at a time, pulling in chunks of 100 tests from the test inventory queue until all are complete.
 > 10. **Dynamic ETA Sleep Protocol:** The AI agent reads `.lovable/temp/runner-eta.json`, sleeps for the estimated wait time rather than looping, and if still active upon waking, re-checks remaining ETA and sleeps again to avoid burning tokens.
+> 11. **Zero-Storage GitHub Actions Mandate (Total Ban on CI Artifact Uploads):** Workflows MUST NOT upload test outputs, coverage files, Playwright reports, or drift summaries via `actions/upload-artifact`. Free-tier accounts have a strict 0.5 GB shared quota across all repositories. All reports, failures, and summaries MUST be emitted directly to `$GITHUB_STEP_SUMMARY`, console stdout (`cat log.txt`), or sticky PR comments with zero storage consumption. Only true GitHub release assets (binaries/tarballs on tagged releases) are permitted.
 
 ---
 
@@ -336,10 +337,12 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 ## Non-Negotiable Coding Standards
 
 - [ ] **No Disabling CLI Linting (Zero Bypassing):** All CLI linters and CI/CD quality gates executed fully without `|| true`, `continue-on-error`, or suppression comments. Code was legitimately fixed.
+- [ ] **Zero Actions Storage (Total Ban on CI Artifacts):** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows; all diagnostic outputs stream to `$GITHUB_STEP_SUMMARY` or console logs.
 - [ ] **Legitimate Multi-Step Self-Looping:** If complex errors occurred, I performed dedicated, single-step self-loop iterations to resolve each underlying failure instead of taking shortcuts.
 - [ ] **Return New Line (R13-R16):** Blank line before `return`/`throw` (unless sole statement). Blank line after `}`. Never two blank lines in a row.
 - [ ] **No Explicit True Checks:** Never `== true`. Write `if isReady`.
 - [ ] **No Mixed Polarity:** Never `if isA && !isB`. Extract to a named boolean.
+- [ ] **Affirmative IsDefined:** Use `isDefined` (or `res.IsDefined()`) instead of inverted empty checks (`!isEmpty`).
 - [ ] **Strict Lowercase Files:** All generated/modified files use lowercase naming.
 
 ---
@@ -347,6 +350,7 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 ## End of Tunnel Checklist
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
+- [ ] **Zero Actions Storage:** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows, eliminating quota depletion.
 - [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0 (with all quality gates and tests passing).
 - [ ] All failures documented in `.lovable/memory/issues/xx-<slug>.md`.
 - [ ] Changes committed: `fix(ci): resolve <summary>`.

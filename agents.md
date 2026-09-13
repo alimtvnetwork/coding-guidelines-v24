@@ -50,3 +50,12 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - **Package Naming Convention:** Use package `appfault` (`04-code/golang/pkg/appfault`) with struct `AppError` to eliminate redundant package-stutter (e.g. `appfault.AppError` instead of `apperror.AppError`).
 - **Result Containers:** `Result[T]`, `ResultSlice[T]`, and `ResultMap[K, V]` provide `.AppError()` and `.Fault()` returning `*appfault.AppError`.
 - **AI Migration Rule:** When encountering legacy code or specs referencing `*apperror.AppError` or `*apperror.Fault`, AI agents MUST update the import to `pkg/appfault` and type to `*appfault.AppError`. Package `appfault` provides `type Fault = AppError`, and package `apperror` provides alias forwarders for non-breaking compatibility.
+
+## 7. Zero-Storage GitHub Actions Mandate (Total Ban on CI Artifact Uploads)
+
+- **Total Ban on `actions/upload-artifact`:** GitHub Actions workflows MUST NOT upload routine build artifacts, test results, Playwright reports, coverage files, drift reports, or logs to GitHub Actions storage. Free-tier accounts have a strict 0.5 GB quota across all account repositories; uploading artifacts exhausts this quota rapidly and blocks repository workflows.
+- **Zero-Storage Diagnostic Reporting:**
+  - All test reports, drift summaries, and lint outputs MUST be written directly to `$GITHUB_STEP_SUMMARY` (renders natively with 0 storage cost) or console standard output (`cat file.log`).
+  - Diagnostic failures MUST use GitHub Actions annotations (`::error::` / `::warning::`).
+  - Pull request summaries MUST use sticky PR comments.
+- **Release Assets Exemption:** Distribution binaries and release archives attached directly to GitHub Releases via `gh release create` / `gh release upload` are exempt from this ban because GitHub Release assets do not consume the monthly Actions storage quota.

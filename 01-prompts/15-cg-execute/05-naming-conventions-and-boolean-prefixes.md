@@ -11,15 +11,15 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform.
 
-/goal Autonomously scan, plan, refactor, and fix all variable and boolean naming violations across the codebase, directly modifying source files to replace bare `ok` identifiers, replace awkward `isExists`/`isUserExist` with `isDefined`/`isFound`, eliminate negative boolean variables (`hasNo*`, `isNot*`), enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), decompose compound negative chains (`!a || !b || c`), apply positive framing with inverted `if` guard clauses, and normalize acronym casing until 100% green without stopping.
+/goal Autonomously scan, plan, refactor, and fix all variable and boolean naming violations across the codebase, directly modifying source files to replace bare `ok` identifiers, replace `!isEmpty` with `isDefined`, replace awkward `isExists` with `isDefined`/`isFound`, eliminate negative boolean variables (`hasNo*`, `isNot*`), enforce affirmative prefixes (is and has only (can, should, was, etc. are banned)), decompose compound negative chains (`!a || !b || c`), apply positive framing with inverted `if` guard clauses, and normalize acronym casing until 100% green without stopping.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all architectural violations and anti-patterns: bare `ok`, negative names (`isNot*`), awkward `isExists`/`isUserExist`, and compound negative chains (`!a || !b || c`).
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all architectural violations and anti-patterns: bare `ok`, inverted `!isEmpty`, negative names (`isNot*`), awkward `isExists`, and compound negative chains (`!a || !b || c`).
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/` with an exhaustive Violation Ledger.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
-5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring: rename bare `ok`, replace `isExists` with `isDefined`/`isFound`, decompose compound negatives, and apply positive framing.
+5. [ ] /goal Phase 2 (Step A): Open each target file and perform surgical refactoring: rename bare `ok`, replace `!isEmpty` with `isDefined`, replace `isExists` with `isDefined`/`isFound`, decompose compound negatives, and apply positive framing.
 6. [ ] /goal Phase 2 (Step B): Enforce <= 8–15 line function decomposition, single return types, and clean formatting.
 7. [ ] /goal Phase 2 (Step C): Execute local linters to verify 0 remaining violations across all modified files.
 8. [ ] /goal Phase 2 (Step D): Execute targeted file-level linters and verification on modified files ensuring 0 remaining violations (`exit 0`). DO NOT run the full CI/CD pipeline runner (`06-cicd-local-runner.py`) during routine coding guideline execution turns.
@@ -69,22 +69,29 @@ You MUST replace bare `ok` with a domain-specific boolean starting with `is` or 
 | Context | ❌ FORBIDDEN (Bare `ok`) | ✅ REQUIRED (Affirmative Semantic Boolean) |
 |---|---|---|
 | **Type Assertion** | `appErr, ok := err.(*apperror.AppError)` | `appErr, isAppErr := err.(*apperror.AppError)` |
-| **Map Lookup** | `val, ok := userMap[id]` | `val, isFound := userMap[id]` or `val, isDefined := userMap[id]` |
+| **Map Lookup** | `val, ok := userMap[id]` | `val, isFound := userMap[id]` or `val, isUserExist := userMap[id]` |
 | **Map Key Check** | `_, ok := headers["Authorization"]` | `_, hasAuthHeader := headers["Authorization"]` |
 | **Channel Receive** | `msg, ok := <-msgChan` | `msg, hasMessage := <-msgChan` or `msg, isChannelOpen := <-msgChan` |
 | **Type Switch / Cast** | `str, ok := val.(string)` | `str, isString := val.(string)` |
 | **Status Tuples** | `data, ok := fetch()` | `data, isSuccess := fetch()` |
 
-> **Total Ban on `isExists` / `isUserExist`:** "Exists" is a verb. Combining `is` with a verb is ungrammatical and banned. Always use affirmative `isFound` or `isDefined`.
+### 2.1 Mandatory Standard: Use `IsDefined` Instead of `!isEmpty` (Total Ban on `!isEmpty`)
+
+- **Inverted Negation Ban:** Never check whether a collection, string, slice, or data structure is populated using `!isEmpty` or `!res.IsEmpty()`. Negating an empty check (`!isEmpty`) forces mental double-negation and violates Affirmative Boolean Principles and Positive Framing.
+- **Affirmative Replacement:** Always use `isDefined` (or `res.IsDefined()`) instead of `!isEmpty`:
+  - ❌ **FORBIDDEN:** `if !isEmpty { ... }`, `if !res.IsEmpty() { ... }`, `if !state.IsEmpty { ... }`
+  - ✅ **REQUIRED:** `if isDefined { ... }`, `if res.IsDefined() { ... }`, `if state.IsDefined { ... }`
+- **When `isEmpty` is Allowed:** `isEmpty` is ONLY evaluated positively when explicitly handling the empty or missing path: `if isEmpty { return ErrEmpty }`. When handling the populated, valid data path, ALWAYS use affirmative `isDefined`.
 
 ---
 
-### 3. TOTAL BAN on Negative Boolean Identifiers & Awkward `isExists` (Anti-`hasNo*`, Anti-`isNot*`, Anti-`isExists`)
+### 3. TOTAL BAN on Negative Boolean Identifiers & Awkward `isExists` (Anti-`hasNo*`, Anti-`isNot*`, Anti-`isExists`, Anti-`isUndefined`)
 
-Never name a boolean variable or property with negative prefixes, inverted words, or awkward verb pairings:
+Never name a boolean variable or property with negative prefixes, inverted words, or awkward verb pairings. **Always try `isDefined` / `IsDefined` instead of negatives:**
 
-- ❌ **FORBIDDEN:** `isExists`, `isUserExist`, `hasNoColors`, `hasNoPayload`, `isNotReady`, `isNotDisabled`, `hasNoAccess`, `isNoOp`, `disallowGuest`, `unauthorized`.
-- ✅ **REQUIRED:** `isDefined`, `isFound`, `hasColors`, `hasPayload`, `isReady`, `isEnabled`, `hasAccess`, `isOp`, `allowGuest`, `isAuthorized`.
+- ❌ **FORBIDDEN:** `isExists`, `isUndefined`, `isNotDefined`, `isNotSet`, `hasNoColors`, `hasNoPayload`, `isNotReady`, `isNotDisabled`, `hasNoAccess`, `isNoOp`, `disallowGuest`, `unauthorized`.
+- ✅ **REQUIRED:** `isDefined` / `IsDefined`, `isFound`, `isSet`, `hasColors`, `hasPayload`, `isReady`, `isEnabled`, `hasAccess`, `isOp`, `allowGuest`, `isAuthorized`.
+- **Presence / Missing Inversion:** To check if an element, config, or property is missing or undefined, define the boolean positively (`isDefined := len(val) > 0`) and invert only in the guard condition: `if !isDefined { return ErrUndefined }`.
 
 ---
 

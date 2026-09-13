@@ -47,6 +47,7 @@ The source module `02-spec/12-cicd-pipeline-workflows/` contains 13 root specs +
 | Permissions | Minimum required (`read` for CI, `write` for releases) |
 | Working directory | Use `working-directory:` key, never `cd` |
 | Build-once rule | Compile once, then compress/checksum/publish — no rebuilds |
+| Actions storage | **0 bytes in CI** — total ban on `actions/upload-artifact` steps |
 
 ### Trigger Patterns
 

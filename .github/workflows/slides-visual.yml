@@ -75,21 +75,3 @@ jobs:
       - name: Regenerate baselines
         if: ${{ inputs.update_baselines == 'true' }}
         run: bunx playwright test slides-app/tests/visual.spec.ts --update-snapshots
-
-      - name: Upload updated baselines artifact
-        if: ${{ inputs.update_baselines == 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: updated-visual-baselines
-          path: slides-app/tests/visual.spec.ts-snapshots/
-          retention-days: 14
-
-      - name: Upload Playwright report on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-visual-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7

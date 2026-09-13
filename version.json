@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "6a7e6b37362413b7941abf963b7c10b90999d21f",
+  "LastCommitSha": "50e0b7aba1ddd79f3cbf282cd34a9ec6fecf8544",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -61,15 +61,15 @@
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "6a7e6b37362413b7941abf963b7c10b90999d21f",
-    "shortSha": "6a7e6b3",
+    "sha": "50e0b7aba1ddd79f3cbf282cd34a9ec6fecf8544",
+    "shortSha": "50e0b7a",
     "branch": "main"
   },
   "stats": {
-    "totalFiles": 699,
-    "totalLines": 149409,
+    "totalFiles": 700,
+    "totalLines": 149489,
     "totalFolders": 23,
-    "totalBytes": 5334200,
+    "totalBytes": 5341363,
     "rootFiles": 6
   },
   "folders": [
@@ -95,9 +95,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
-      "fileCount": 216,
-      "lineCount": 34489,
-      "byteCount": 1086671
+      "fileCount": 217,
+      "lineCount": 34572,
+      "byteCount": 1092595
     },
     {
       "path": "03-error-manage",
@@ -226,8 +226,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 46,
-      "lineCount": 8561,
-      "byteCount": 275773
+      "lineCount": 8557,
+      "byteCount": 276923
     },
     {
       "path": "13-generic-cli",
@@ -291,8 +291,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 36,
-      "lineCount": 16905,
-      "byteCount": 621255
+      "lineCount": 16906,
+      "byteCount": 621344
     },
     {
       "path": "18-wp-plugin-how-to",

@@ -161,6 +161,7 @@ jobs:
         with:
           name: test-results-${{ matrix.shard }}
           path: test-output.txt
+          retention-days: 1 # Zero-storage mandate: ephemeral inter-job transfer only
 
   summarize:
     needs: test

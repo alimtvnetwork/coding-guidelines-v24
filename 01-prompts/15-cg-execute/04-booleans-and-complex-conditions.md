@@ -54,8 +54,9 @@ Boolean logic must be simple, readable, and unambiguous. Complex boolean chains 
    - Positive booleans MUST ALWAYS be evaluated implicitly: `if isReady { ... }`.
    - Inverted checks MUST use standard negation or affirmative negative variables: `if !isReady { ... }` or `if isFail { ... }`.
 
-2. **No Double Negatives or Inverted Success Checks:**
-   - NEVER name variables with negative prefixes like `isNotValid`, `isNotReady`, `disableCache`. Use `isValid`, `isReady`, `enableCache`.
+2. **No Double Negatives or Inverted Success Checks — Try `IsDefined` Instead of Negatives:**
+   - NEVER name variables with negative prefixes like `isNotValid`, `isNotReady`, `isUndefined`, `isNotDefined`, `isNotSet`, `hasNoData`, `disableCache`.
+   - **Try `IsDefined` instead of negatives:** When verifying presence, definition, or initialization, always use affirmative `isDefined` / `IsDefined` (or `isValid`, `hasValue`, `isReady`, `isFound`). Invert only once at the callsite guard clause (`if !isDefined { ... }`) if handling the missing case.
    - NEVER check inverted success (`!response.isSuccess` is FORBIDDEN; use `response.isFail`).
 
 3. **No Mixed Polarity in Single If Conditions:**
@@ -81,10 +82,12 @@ Boolean logic must be simple, readable, and unambiguous. Complex boolean chains 
      - `header` -> `hasHeader`
      - `records` -> `hasRecords`
 
-6. **Total Ban on Awkward `IsExists` / `isExists` (Enforce `IsDefined` / `isDefined`):**
-   - **Grammatical Prohibition:** "Exists" is a verb. Combining `is` + verb `exists` (`isExists`, `isUserExist`) is grammatically broken and awkward.
-   - **Mandatory Standard:** Always use `IsDefined` / `isDefined` for existence/presence of structs, records, files, or states (or `isFound` for map lookups).
-   - Struct fields MUST be named `IsDefined bool` or `isDefined bool` (never `IsExists` or `Exists`).
+6. **Mandatory Standard: Use `IsDefined` Instead of `!isEmpty` (Total Ban on `!isEmpty` / `!IsEmpty()`):**
+   - **The Anti-Pattern:** Developers frequently write `if !isEmpty`, `if !res.IsEmpty()`, or `if !state.IsEmpty` to check whether data exists or records are present. This evaluates a negative condition (`isEmpty`) with negation (`!`), violating Affirmative Boolean Principles and Positive Framing.
+   - **The Mandatory Standard:** ALWAYS use `IsDefined` (or `res.IsDefined()`) instead of using `!isEmpty`.
+   - **Rule:** If checking empty state, use affirmative `if isEmpty` / `if res.IsEmpty()`. If checking non-empty / presence state, ALWAYS use affirmative `if isDefined` / `if res.IsDefined()`. NEVER write `if !isEmpty`!
+   - Struct fields for presence/populated records MUST be named `isDefined bool` or `IsDefined bool` (replacing awkward `isExists bool`).
+   - For map lookups, use `val, isFound := userMap[id]` or `val, isDefined := userMap[id]`.
 
 7. **Total Ban on Compound Negative Chains (`!a || !b || c`):**
    - NEVER chain multiple negated conditions in an `if` expression (e.g. `if !state.IsDefined || !state.IsEmpty || state.IsRepo`). Chained inverted conditions create high cognitive load and hide which specific invariant failed.
@@ -203,9 +206,9 @@ type Result[T any] struct {
 | Struct Field | `records bool` | `hasRecords bool` | Data presence flag |
 | Method Parameter | `SetEnabled(v bool)` | `SetEnabled(isEnabled bool)` | Feature toggle parameter |
 | Method Parameter | `SetAsync(flag bool)` | `SetAsync(isAsync bool)` | Asynchronous execution flag |
-| Struct Field | `exists bool` / `isExists bool` | `isDefined bool` | Presence/defined status indicator (ban `isExists`) |
-| Method Name | `Exists() bool` / `IsExists() bool` | `IsDefined() bool` | Presence verification predicate |
-| Map Comma-Ok | `val, ok` / `val, isExists` | `val, isFound` / `val, isDefined` | Map lookup presence boolean |
+| Struct Field | `exists bool` / `isExists bool` | `isDefined bool` | Presence/defined status indicator (replaces `!isEmpty` and `isExists`) |
+| Method Name | `Exists() bool` / `IsExists() bool` | `IsDefined() bool` | Presence verification predicate (replaces `!IsEmpty()`) |
+| Map Comma-Ok | `val, ok` / `val, isExists` | `val, isFound` / `val, isUserExist` | Map lookup presence boolean |
 
 #### Pattern E: Implicit Checks & Discrete Guard Clauses
 
@@ -360,6 +363,47 @@ func dispatchOnExists(params DispatchParams) {
     if isCloneTargetFresh {
         performFreshClone(params)
     }
+}
+```
+
+#### Pattern G: `IsDefined` as Mandatory Replacement for Inverted `!isEmpty`
+
+```go
+// -----------------------------------------------------------------------------
+// ❌ ANTI-PATTERN: Using !isEmpty or !res.IsEmpty() to test for data presence
+// -----------------------------------------------------------------------------
+// Negative check inverted — violates positive framing and affirmative boolean rules
+if !res.IsEmpty() {
+    processPayload(res.Data())
+}
+
+if !users.IsEmpty() {
+    sendNotifications(users)
+}
+
+if !state.IsEmpty {
+    resumeTask()
+}
+
+// -----------------------------------------------------------------------------
+// ✅ REQUIRED: Affirmative IsDefined() / isDefined (Clean, Positive Evaluation)
+// -----------------------------------------------------------------------------
+// Affirmative check: IsDefined means no error AND has records/data
+if res.IsDefined() {
+    processPayload(res.Data())
+}
+
+if users.IsDefined() {
+    sendNotifications(users)
+}
+
+if state.IsDefined {
+    resumeTask()
+}
+
+// ✅ Also permitted: Affirmative isEmpty ONLY when handling the empty/missing case
+if res.IsEmpty() {
+    return appfault.New(appfault.ErrNotFound).WithMessage("no records found")
 }
 ```
 

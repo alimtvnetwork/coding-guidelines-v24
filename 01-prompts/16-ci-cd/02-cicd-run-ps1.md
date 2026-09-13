@@ -40,6 +40,7 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 > 9. **Centralized Test Inventory & Incremental Caching:** All unit tests are cataloged in `.lovable/test-inventory.json` with strictly repository-relative paths (`target_file`, `test_file`). First run executes all tests to establish baseline timings; subsequent runs execute incrementally only if target code files or test files change. Slow test threshold defaults to `4.0s` (configurable via `GITMAP_SLOW_TEST_THRESHOLD`).
 > 10. **Dual-Queue Worker Pools:** Slow tests run in a dedicated 4-worker pool running at most 2 tests at a time per batch. Fast tests run in a 4-worker pool running at most 4 tests at a time, pulling in chunks of 100 tests from the test inventory queue until all are complete.
 > 11. **Dynamic ETA Sleep Protocol:** The AI agent reads `.lovable/temp/runner-eta.json`, sleeps for the estimated wait time rather than looping, and if still active upon waking, re-checks remaining ETA and sleeps again to avoid burning tokens.
+> 12. **Zero-Storage GitHub Actions Mandate (Total Ban on CI Artifact Uploads):** CI workflows MUST NOT upload test outputs, coverage files, Playwright reports, or drift summaries via `actions/upload-artifact`. Free-tier accounts have a strict 0.5 GB shared quota across all repositories. All reports, failures, and summaries MUST be emitted directly to `$GITHUB_STEP_SUMMARY`, console stdout (`cat log.txt`), or sticky PR comments with zero storage consumption. Only true GitHub release assets (binaries/tarballs on tagged releases) are permitted.
 
 ---
 
@@ -98,7 +99,7 @@ When building or fixing the CI/CD pipelines (e.g., `.github/workflows/ci.yml`), 
 - [ ] Linting & Formatting: Run the project's defined linting and formatting commands first. The pipeline must fail immediately if there are style violations, preventing bad code from proceeding to tests.
 - [ ] Type Checking / Static Analysis: If the language supports it (e.g., TypeScript, Python with mypy, Go), run static analysis as a parallel job before or alongside testing.
 - [ ] Test Execution: Execute the project's testing suites (unit, integration, e2e) as defined in the configuration file.
-- [ ] Artifact Generation: (Optional) If it is a release branch, the pipeline should compile/zip the application using rules defined in the run script and attach it as a release artifact.
+- [ ] Artifact Generation & Zero CI Storage: CI workflows MUST NOT upload test reports, logs, or coverage artifacts via `actions/upload-artifact`. Compile/zip release binaries ONLY on tagged release jobs (attached directly to GitHub Releases, not Actions artifact storage). All CI summaries and failure diagnostics MUST stream to `$GITHUB_STEP_SUMMARY` or console stdout.
 
 ---
 
@@ -264,6 +265,7 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 Before finalizing any code modification, you MUST manually verify the following:
 
 - [ ] **No Disabling CLI Linting (Zero Bypassing):** All CLI linters and CI/CD quality gates executed fully without `|| true`, `continue-on-error`, or suppression comments. Code was legitimately fixed.
+- [ ] **Zero Actions Storage (Total Ban on CI Artifacts):** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows; all diagnostic outputs stream to `$GITHUB_STEP_SUMMARY` or console logs.
 - [ ] **Legitimate Multi-Step Self-Looping:** If complex errors occurred, I performed dedicated, single-step self-loop iterations to resolve each underlying failure instead of taking shortcuts.
 - [ ] Function Signatures (R4, R5, R9): If a function has `> 3 parameters` or the signature is `> 100 chars`, you MUST split it so there is exactly one parameter per line.
 - [ ] Error Handling (R7): No silent failures or swallowed errors. Use explicit boolean states (e.g., `isFail`). Never invert success booleans (e.g., avoid `!isSuccess`).
@@ -279,6 +281,7 @@ Before finalizing any code modification, you MUST manually verify the following:
 ## End of Tunnel Checklist
 
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
+- [ ] **Zero Actions Storage:** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows, eliminating quota depletion.
 - [ ] **Local CI Runner Clean:** `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0.
 - [ ] **All Scripts & Workflows Verified:** All tests, builds, and query wrappers run without errors.
 - [ ] **RCA Documented:** Memory files written to `.lovable/cicd-issues/` and `.lovable/memory/issues/`.

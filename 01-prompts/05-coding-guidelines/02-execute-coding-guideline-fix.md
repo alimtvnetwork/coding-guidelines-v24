@@ -24,7 +24,7 @@ Context & References:
   - Functions must be strictly < 8 lines. (NON-NEGOTIABLE)
   - Source files must be ≤ 80 lines.
   - No code mutation – only apply fixes, never introduce new bugs.
-  - Positive boolean naming (`is` / `has`). No `isNot`. Use inverse naming (e.g., `isHonest` / `isDishonest` instead of `isNotHonest`). No nested if statements, no magic values.
+  - Positive boolean naming (`is` / `has`). No `isNot`, `hasNo`, `isUndefined`, or negative prefixes. Always use affirmative positive framing: try `isDefined` / `IsDefined` instead of negatives (e.g., use `isDefined` instead of `isUndefined` or `isNotDefined`, and invert with `!isDefined` in guard clauses; use `isValid` instead of `isNotValid`, `hasValue` instead of `hasNoValue`, `isReady` instead of `isNotReady`). No nested if statements, no magic values.
   - Style: Ensure a blank line before every `return` statement.
   - Mandatory File Path & Variable Context: Any error created or returned when operating on files, paths, or variables must embed the target path via `.WithPath(path)` / `WrapWithPath(..., path)` and variable context via `.WithVar(name, value)` (Rule R7).
   - Golang Single Return & Wrapped Booleans: Strictly return a single parameter (bundle multiple returns into a struct). No raw booleans returned in Go. Return a single Result struct (bundling Data, AppError, and Status together) with two flags (`IsSuccess` and `IsFailed`) managed by a constructor (`NewSuccess`/`NewFailure`).

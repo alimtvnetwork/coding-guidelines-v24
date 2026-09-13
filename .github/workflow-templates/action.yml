@@ -94,10 +94,13 @@ runs:
         fi
         exit "$rc"
 
-    - name: Upload JSON summary
+    - name: Emit JSON summary to GitHub Step Summary
       if: ${{ always() && inputs.json-summary != '' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: ci-guards-summary
-        path: ${{ inputs.json-summary }}
-        if-no-files-found: ignore
+      shell: bash
+      run: |
+        if [ -f "${{ inputs.json-summary }}" ]; then
+          echo "### CI Guards Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "${{ inputs.json-summary }}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+        fi

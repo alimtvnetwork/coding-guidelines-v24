@@ -114,26 +114,4 @@ jobs:
             echo "- validate: ${{ steps.validate.outcome }}"
             echo "- render:   ${{ steps.render.outcome }}"
             echo "- drift:    ${{ steps.drift.outcome }}"
-            echo
-            echo "Full logs are attached as the \`diagrams-ci-logs\` artifact."
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload diagrams CI logs and diff (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: diagrams-ci-logs
-          path: .ci-logs/diagrams/
-          if-no-files-found: warn
-          retention-days: 14
-
-      - name: Upload rendered diagrams (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rendered-diagrams
-          path: |
-            spec/**/diagrams/*.png
-            spec/**/images/*.png
-          if-no-files-found: ignore
-          retention-days: 7

@@ -16,8 +16,10 @@ This skill governs autonomous execution for boolean conventions, semantic naming
 
 2. **Boolean Prefixes (`is`, `has`) & Affirmative Naming:**
    - `is`, `has` as prefix is only acceptable and nothing else acceptable including but not limited to `can`, `should`, `was`, `will`, `did`, `must`, etc.
-   - Every boolean identifier must begin with `is` or `has` (e.g. `isValid`, `hasAccess`).
-   - No negative boolean identifiers (`isNotValid`, `hasNoData` are banned).
+   - No negative boolean identifiers (`isNotValid`, `isUndefined`, `isNotDefined`, `isNotSet`, `hasNoData` are banned).
+   - **Try `IsDefined` instead of negatives:** When verifying presence, definition, or initialization, always use affirmative `isDefined` / `IsDefined` (or `isValid`, `hasValue`, `isReady`, `isFound`). Invert only once at the callsite guard clause (`if !isDefined { ... }`) if handling the missing case.
+   - **Mandatory Replacement for `!isEmpty`:** NEVER use inverted negative empty checks (`!isEmpty`, `!res.IsEmpty()`). Always use affirmative `isDefined` / `res.IsDefined()` when asserting that data or records are present.
+   - **Map Lookups (Canonical):** For map lookups, always use `val, isFound := map[k]` (or `val, isUserExist := map[k]`). Revert any improper usage of `isDefined` for map lookups.
    - **Total Ban on Single-Letter Parameters:** NEVER use single-letter boolean parameters (`v bool`, `b bool`, `val bool`, `flag bool`) in method and function signatures (e.g. setters).
    - **Total Ban on Bare Unprefixed Names:** NEVER use bare verbs, nouns, or adjectives (`stop bool`, `pause bool`, `force bool`, `dryRun bool`, `header bool`).
    - **Mandatory Affirmative Prefixes:** Every boolean parameter, struct field, property, and variable MUST carry an affirmative prefix (`is*` or `has*`):
@@ -133,7 +135,11 @@ type Result[T any] struct {
 | Struct Field | `header bool` | `hasHeader bool` | Header presence indicator |
 | Option Parameter | `records bool` | `hasRecords bool` | Records presence requirement |
 | Struct Field | `exists bool` / `isExists bool` | `isDefined bool` | Presence/definition indicator (ban `isExists`) |
-| Map Comma-Ok | `val, ok` / `val, isExists` | `val, isFound` / `val, isDefined` | Map lookup presence boolean |
+| Missing Check | `isUndefined` / `isNotDefined` | `isDefined` (invert with `!isDefined`) | Try IsDefined instead of negatives |
+| Missing Value | `hasNoValue` / `isMissing` | `hasValue` / `isDefined` | Affirmative presence check |
+| Negative State | `isNotValid` / `isInvalid` | `isValid` (invert with `!isValid`) | Check positive validity |
+| Map Comma-Ok | `val, ok` / `val, isExists` | `val, isFound` / `val, isUserExist` | Map lookup presence boolean (revert original name) |
+| Non-Empty / Data Present | `!isEmpty` / `!res.IsEmpty()` | `isDefined` / `res.IsDefined()` | Mandatory: Affirmative IsDefined instead of inverted !isEmpty |
 
 #### Pattern E: `IsDefined` vs `IsExists` & Compound Negative Decomposition (`execute_idempotent_test.go`)
 

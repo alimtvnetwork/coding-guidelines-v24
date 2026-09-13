@@ -541,7 +541,7 @@ return nil
 ## 3. Boolean Principles (P1–P9)
 
 1. **Prefixes:** Every boolean variable, function, parameter, or struct field MUST start with `is` or `has` ONLY (e.g. `isValid`, `hasAccess`, `isReady`, `hasData`); all other prefixes (`can`, `should`, `was`, `will`, `did`, `must`, etc.) are strictly BANNED.
-2. **Positive Framing:** Never use negative names (`isNotReady`, `disableCache` are banned). Invert to positive equivalents (`isReady`, `isCacheEnabled`).
+2. **Positive Framing — Try `IsDefined` Instead of Negatives:** Never use negative names (`isNotReady`, `isUndefined`, `isNotDefined`, `hasNoData`, `disableCache` are banned). Always use affirmative positive framing: try `isDefined` / `IsDefined` instead of negatives (e.g. use `isDefined` instead of `isUndefined` or `isNotDefined`, and invert with `!isDefined` at the callsite guard; use `isValid` instead of `isNotValid`, `hasValue` instead of `hasNoValue`, `isReady` instead of `isNotReady`, `isCacheEnabled` instead of `disableCache`).
 3. **No Inverted Success:** Never check `!response.isSuccess`. Use `response.isFail`.
 4. **No Explicit True Checks (TOTAL BAN):** Never write `if isReady == true` or `if (hasMatch === true)`. Positive booleans MUST be implicit: `if isReady { ... }`.
 5. **No Mixed Polarity:** Never combine positive and negative checks in the same condition (`if isA && !isB`). Extract to `isConflict := isA && !isB; if isConflict { ... }`.

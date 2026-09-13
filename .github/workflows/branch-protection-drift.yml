@@ -65,12 +65,3 @@ jobs:
               echo '```'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload drift report artifact
-        if: always() && steps.guard.outputs.run == 'true' && hashFiles('artifacts/branch-protection/drift.json') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: branch-protection-drift
-          path: artifacts/branch-protection/
-          if-no-files-found: ignore
-          retention-days: 30
