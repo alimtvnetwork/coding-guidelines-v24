@@ -4,6 +4,13 @@
 
 ---
 
+## v6.39.0 — 2026-09-13 (sync banned operation checklists, os enum detector, and atomic test inventory tracking)
+
+**Scope:** Version bump (`6.38.0` → `6.39.0`). sync banned operation checklists, os enum detector, and atomic test inventory tracking.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
 ## v6.38.0 — 2026-09-10 (Tracer OS temp backup and recycle bin, single-file guideline checklist, audit purge)
 
 **Scope:** Version bump (`6.37.0` → `6.38.0`). Tracer OS temp backup and recycle bin, single-file guideline checklist, audit purge.
