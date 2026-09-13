@@ -507,3 +507,69 @@ Allowed work:
 
 **Why:** Repository linter `check-relative-paths.py` statically scans all tracked files for absolute filesystem paths and file URIs. Literal test fixtures trigger false-positive pre-commit failures.
 
+---
+
+## Writing Memory Without Inspecting Last 30 Commits — TOTAL BAN
+
+🔴 **NEVER author or update memory files without first executing `git log -n 30 --oneline` (and `git log -n 30 --stat` where needed) to inspect the last 30 commits.**
+
+Forbidden:
+- ❌ Writing memory based purely on chat context or ephemeral memory without checking `git log`.
+- ❌ Guessing what code was modified, what fixes were committed, or what directives were applied.
+
+Allowed work:
+- ✅ Execute `git log -n 30 --oneline` at Pre-Flight Step 0 before opening or modifying any memory files.
+- ✅ Explicitly capture recent commit changes, resolved issues, and directives in Phase 1 Internal Session Audit.
+
+**Why:** Ephemeral chat context loses granularity across turns. Ground truth exists in the repository commit history.
+
+---
+
+## Writing Memory Without Verifying the Recent 20-Task Register — TOTAL BAN
+
+🔴 **NEVER author or update memory files without auditing `.lovable/plans/01-index.md` and verifying the Recent Completed Tasks Register (last 20 tasks).**
+
+Forbidden:
+- ❌ Leaving the Recent Completed Tasks Register unmaintained or out of sync with `05-changes-history/`.
+- ❌ Omitting recent completed tasks from the register.
+- ❌ Writing new memory without cross-referencing completed work in `plans/01-index.md` and `what-to-read.md`.
+
+Allowed work:
+- ✅ Maintain the bounded rolling window of the last 20 tasks in `.lovable/plans/01-index.md`.
+- ✅ Cross-reference completed tasks from `05-changes-history/` with dates, titles, and paths.
+
+**Why:** The compact 20-task register guarantees that subsequent AI turns immediately understand recent progress without scanning hundreds of historical records.
+
+---
+
+## Uppercase README.md Filename — TOTAL BAN
+
+🔴 **NEVER allow an uppercase `README.md` to exist at the repository root or in source directories. The root readme MUST be strictly named lowercase `readme.md`.**
+
+Forbidden:
+- ❌ Naming the file `README.md` or `Readme.md`.
+- ❌ Allowing git or operating system casing ambiguity to introduce uppercase letters in documentation filenames.
+
+Allowed work:
+- ✅ Strictly name root file `readme.md`.
+- ✅ If an uppercase variant is detected, rename immediately, delete the uppercase file, commit, and push.
+
+**Why:** Strict lowercase naming is a mandatory meta-repo standard across all documentation, tools, and scripts.
+
+---
+
+## Consolidating or Shrinking Detailed Specifications — TOTAL BAN
+
+🔴 **NEVER consolidate, summarize, resume, or shrink detailed specifications, architectural designs, domain models (e.g. `02-spec/21-app/`), or complex requirement documents.**
+
+Forbidden:
+- ❌ Summarizing detailed specs into high-level bullet points to save space.
+- ❌ Deleting concrete examples, error tables, or domain rules during documentation refactoring.
+
+Allowed work:
+- ✅ Consolidate ephemeral or routine completed simple tasks into master changelogs to prevent file bloat.
+- ✅ Preserve all detailed specifications with 100% fidelity, exact wording, and full granularity.
+
+**Why:** Architectural specs are canonical contracts. Summarizing or shrinking them destroys domain nuance and leads to hallucinations.
+
+
