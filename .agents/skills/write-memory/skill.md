@@ -19,6 +19,8 @@ Persist what happened this turn so the next AI knows everything without guessing
 8. Strict Lowercase File Naming: All files, scripts, documentation, and system files MUST use strictly lowercase naming.
 9. Root `readme.md` and `.lovable/what-to-read.md` stay in sync. Same file list, same order.
 10. Nothing executes this turn beyond writing to `.lovable/`, root `readme.md` lowercase fixing, and `mv`. No application source code changes.
+11. Mandatory 30-Commit Git History Audit: Prior to authoring or updating memory, execute `git log -n 30 --oneline` to inspect recent commits, summarize progress, and extract what was learned.
+12. Recent 20-Task Tracking & Compact Task Register: Maintain and check `.lovable/plans/01-index.md` Recent Completed Tasks Register (last 20 tasks) and `.lovable/what-to-read.md` to guarantee continuous loop memory.
 
 ## Memory Routing Protocol
 

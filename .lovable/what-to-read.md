@@ -5,6 +5,7 @@
 
 ## Changelog
 
+- 2026-09-13T08:15:00Z, Prompt & Memory Write Upgrade (v2.2.0): updated 01-write-antigravity.md, 03-write-memory.md, and skills to mandate 30-commit git history audit and recent 20-task tracking register in .lovable/plans/01-index.md.
 - 2026-09-13T07:45:00Z, Memory Persistence & Learned Standards: recorded institutional memory for regex centralization, generic dbengine architecture, isDefined positive convention, zero-storage GitHub Actions mandate, and pre-commit guard enforcement.
 - 2026-09-13T07:00:00Z, Regex Centralization & Generic DbEngine: lazy regex engine audit, core regex harvesting from 03-aukgo/core, gitmap call-site refactoring, generic redistributable dbengine package (pkg/dbengine), and Python database code generator (35-db-struct-enum-generator.py).
 - 2026-09-09T05:30:00Z, Prompt update: added mandatory inspection of last 10 git commits and what-to-read prioritization to read-memory-enhanced prompt and skill.
@@ -15,7 +16,7 @@
 
 ## Before any task (always)
 
-- `git log -n 10 --stat`, why: inspect the last 10 commits to understand recent file changes, what code/docs were touched, and the latest repository state before starting any task
+- `git log -n 30 --stat` (or `git log -n 30 --oneline`), why: inspect the last 30 commits to understand recent file changes, what code/docs were touched, directives, lessons learned, and the latest repository state before starting any task
 - `.lovable/what-to-read.md`, why: authoritative prioritized reading sequence that must be read and followed before touching any files
 - `version.json`, why: single source of truth for the repository version, backend/frontend sections, and sub-package version tracks. All codebases must import this file for version information.
 - `.lovable/memory/01-index.md`, why: core memory index
@@ -30,7 +31,7 @@
 - `.lovable/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
 - `.lovable/memory/01-index.md`, why: architectural map of version propagation, sync pipeline, and release ceremony
 - `.lovable/coding-guidelines.md`, why: baseline rules and coding standards
-- `.lovable/plans/01-index.md`, why: active roadmap and pending tasks
+- `.lovable/plans/01-index.md`, why: active roadmap, pending tasks, and recent completed tasks register (last 20 completed tasks/plans)
 - `.lovable/strictly-avoid.md`, why: hard constraints and anti-patterns
 - `.lovable/question-and-ambiguity/01-new-ambiguity/`, why: open questions
 - `03-ai-scripts/01-index.md`, why: inventory and usage guidelines for automation tools and local CI runners
