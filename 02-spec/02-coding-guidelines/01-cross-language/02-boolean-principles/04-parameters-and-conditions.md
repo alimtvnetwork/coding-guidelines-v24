@@ -305,6 +305,18 @@ if (isReady && !isExpired) { ... }
 if (isReady && isValid) { ... }
 ```
 
+## Principle 11: Mandatory `IsDefined` Replacement for Inverted `!isEmpty` (Total Ban on `!isEmpty`)
+
+Never check data, collections, or records presence using inverted empty checks (`!isEmpty`, `!res.IsEmpty()`). Negating an empty check forces mental double-negation and violates Affirmative Boolean Principles.
+
+- **The Anti-Pattern:** `if !isEmpty`, `if !res.IsEmpty()`, `if !state.IsEmpty`
+- **The Mandatory Replacement:** Always use `isDefined` or `res.IsDefined()`:
+  - ❌ **FORBIDDEN:** `if !res.IsEmpty() { process(res.Value()) }`
+  - ✅ **REQUIRED:** `if res.IsDefined() { process(res.Value()) }`
+- **When `isEmpty` is Allowed:** `isEmpty` is strictly reserved for affirmative handling of the empty or missing path: `if res.IsEmpty() { return ErrNotFound }`.
+- **Map Lookups vs `isDefined`:** For map lookups, the original canonical names are `val, isFound := userMap[id]` or `val, isUserExist := userMap[id]`. Do NOT use `isDefined` for map lookups; `isDefined` is strictly reserved for replacing inverted `!isEmpty`.
+
+
 ## Principle 9: No Explicit True Checks (TOTAL BAN)
 
 > **CRITICAL RULE:** Never evaluate a boolean variable explicitly against `true` (`== true`, `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly.

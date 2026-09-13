@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generated": "2026-09-13T01:30:40.649Z",
+  "generated": "2026-09-13T01:36:32.433Z",
   "version": "6.38.0",
   "overallScore": 80,
   "grade": "B",
@@ -9,7 +9,7 @@
   "totals": {
     "files": 700,
     "folders": 23,
-    "lines": 149490
+    "lines": 149505
   },
   "blindAiAudit": {
     "version": "v3",

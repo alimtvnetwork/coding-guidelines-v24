@@ -88,7 +88,9 @@ func (c *Config) IsDefinedAndValid() bool {
 
 > **Note:** On `apperror.Result[T]`, `IsDefined()` is already built-in. `IsSafe()` serves the same purpose as `IsDefinedAndValid()` (value exists AND no error).
 >
-> **Total Ban on `IsExists` / `isExists`:** "Exists" is a verb. Combining `is` with a verb (`isExists`, `IsExists`, `isUserExist`) is grammatically malformed and strictly banned. Always name presence indicators `IsDefined()` / `isDefined bool` (or `isFound` for lookup checks).
+> **Mandatory `IsDefined` Replacement for `!isEmpty`:** NEVER use inverted negative empty checks (`!isEmpty`, `!res.IsEmpty()`). Always use affirmative `IsDefined()` / `isDefined` when asserting that data or records are present. Use `isEmpty` ONLY in the affirmative when explicitly handling the empty/missing case (`if isEmpty { return ErrEmpty }`).
+>
+> **Map Lookups vs `isDefined`:** For map lookups, the canonical original names are `val, isFound := userMap[id]` or `val, isUserExist := userMap[id]`. Do NOT use `isDefined` for map lookups; `isDefined` is strictly reserved for replacing inverted `!isEmpty`.
 
 ### 2.3 — Positive Counterpart Variables (Rule P3)
 
@@ -568,7 +570,7 @@ The following patterns are **exempt** from negation elimination:
 
 ### 3.1 — Comma-ok Pattern
 
-The comma-ok return value **must** be renamed to a semantically meaningful positive boolean. The bare `ok` variable name is **prohibited** — always name it to describe what "ok" means in context (e.g., `isDefined`, `isFound`, `isLoaded`). Awkward/ungrammatical names like `isExists` or `isUserExist` are **strictly prohibited**.
+The comma-ok return value **must** be renamed to a semantically meaningful positive boolean. The bare `ok` variable name is **prohibited** — always name it to describe what "ok" means in context (e.g., `isFound`, `isLoaded`, `isUserExist`). Awkward/ungrammatical names like `isExists` are **strictly prohibited**. Never use `isDefined` for map lookups (`isDefined` is reserved for replacing `!isEmpty`).
 
 If the negative case is needed, create a positive counterpart on the next line:
 
@@ -580,17 +582,17 @@ if !ok {
 }
 
 // ✅ REQUIRED — semantic name describes the positive case
-value, isDefined := someMap[key]
-isMissing := !isDefined
+value, isFound := someMap[key]
+isMissing := !isFound
 
 if isMissing {
     return ErrNotFound
 }
 
 // ✅ Also acceptable — positive guard when you only need the positive path
-value, isDefined := someMap[key]
+value, isFound := someMap[key]
 
-if isDefined {
+if isFound {
     process(value)
 }
 ```
@@ -626,7 +628,7 @@ if isCacheMiss {
 }
 ```
 
-> **Note:** The inline comma-ok in `if` conditions (`if v, isDefined := m[k]; isDefined {`) remains exempt from Rule P7 but **must** still use a semantic name instead of `ok` (and never `isExists`).
+> **Note:** The inline comma-ok in `if` conditions (`if v, isFound := m[k]; isFound {`) remains exempt from Rule P7 but **must** still use a semantic name instead of `ok` (and never `isExists`).
 
 ### 3.2 — Handler Guard Returns
 
