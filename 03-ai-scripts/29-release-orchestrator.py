@@ -253,8 +253,18 @@ def stage_and_commit_release(next_version, scope, dry_run=False):
         print(f"[DRY RUN] Would stage changes and commit: '{commit_msg}'")
         return "dryrun_commit_sha"
 
-    # Stage only release-specific files
-    for vf in [VERSION_JSON, PACKAGE_JSON, CHANGELOG_MD, README_MD]:
+    # Stage release-specific and sync-regenerated files
+    release_candidates = [
+        VERSION_JSON,
+        PACKAGE_JSON,
+        CHANGELOG_MD,
+        README_MD,
+        REPO_ROOT / "public" / "health-score.json",
+        REPO_ROOT / "src" / "data" / "specTree.json",
+        REPO_ROOT / "02-spec" / "19-main-worker-service" / "98-changelog.md",
+        REPO_ROOT / "reports" / "spec-verification" / "coverage.md",
+    ]
+    for vf in release_candidates:
         if vf.is_file():
             run_cmd(["git", "add", str(vf)])
 
