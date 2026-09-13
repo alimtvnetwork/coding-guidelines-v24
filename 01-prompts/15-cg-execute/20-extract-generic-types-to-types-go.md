@@ -325,6 +325,7 @@ To survive large codebases without hitting step limits or context loss, execute 
 - **NO RAW `error` RETURNS:** Never leave bare `error` as a return type on domain or store functions; always use `*appfault.AppError` or `Result[T]`.
 - **NO COMPOUND CARDINALITY DISJUNCTIONS:** Never write `if res.IsFailure() || res.Count() != N` when `res.IsCountOtherThan(N)` can express the guard directly.
 - **NO CONFUSING `IsSuccess()` WITH `IsDefined()`:** Do not use `IsSuccess()` when you require actual data records to be present. Use `res.IsDefined()` or `res.HasRecord()`.
+- **NO INVERTED EMPTY CHECKS (`!isEmpty`):** Never write `!isEmpty` or `!res.IsEmpty()` when verifying presence or data. ALWAYS use `res.IsDefined()` or `res.HasRecord()`. Use `isEmpty` ONLY when handling the empty/missing failure branch in the affirmative: `if res.IsEmpty() { ... }`.
 - **NO ABSOLUTE PATHS:** Never write absolute filesystem paths (`C:\...`, `/home/...`) or `file:///` URIs. Use strict relative Git paths starting from the repository root.
 - **NO UPPERCASE FILENAMES:** Every file created or edited must be strictly lowercase.
 - **NO MULTI-VALUE TUPLES:** Eliminate `(T, error)` in favor of `Result[T]`, `ResultMap[K, V]`, or `ResultSlice[T]`.
