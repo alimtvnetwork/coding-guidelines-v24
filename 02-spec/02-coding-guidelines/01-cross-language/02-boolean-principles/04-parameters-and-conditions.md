@@ -316,7 +316,6 @@ Never check data, collections, or records presence using inverted empty checks (
 - **When `isEmpty` is Allowed:** `isEmpty` is strictly reserved for affirmative handling of the empty or missing path: `if res.IsEmpty() { return ErrNotFound }`.
 - **Map Lookups vs `isDefined`:** For map lookups, the original canonical names are `val, isFound := userMap[id]` or `val, isUserExist := userMap[id]`. Do NOT use `isDefined` for map lookups; `isDefined` is strictly reserved for replacing inverted `!isEmpty`.
 
-
 ## Principle 9: No Explicit True Checks (TOTAL BAN)
 
 > **CRITICAL RULE:** Never evaluate a boolean variable explicitly against `true` (`== true`, `=== true`). Positive booleans MUST ALWAYS be evaluated implicitly.

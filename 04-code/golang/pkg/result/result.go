@@ -5,7 +5,6 @@ import (
 	"coding-guidelines/common/pkg/errtype"
 )
 
-
 func WrapSuccess[T any](data T) Wrap[T] {
 	return appfault.NewSuccess(data)
 }

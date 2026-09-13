@@ -277,9 +277,11 @@ func (r *Result[T]) FormatStdout() string {
 	if r == nil {
 		return ""
 	}
+
 	if r.appError != nil {
 		return r.appError.FormatStdout()
 	}
+
 	if r.IsFailed() {
 		return "❌ FAILURE: uninitialized error"
 	}
@@ -292,9 +294,11 @@ func (r *Result[T]) FormatJson() string {
 	if r == nil {
 		return "{}"
 	}
+
 	if r.appError != nil {
 		return r.appError.FormatJson()
 	}
+
 	if r.IsFailed() {
 		return `{"success":false}`
 	}
@@ -312,9 +316,11 @@ func (r *Result[T]) FormatTextLog() string {
 	if r == nil {
 		return ""
 	}
+
 	if r.appError != nil {
 		return r.appError.FormatTextLog()
 	}
+
 	if r.IsFailed() {
 		return "[ERROR] uninitialized failure"
 	}
@@ -359,9 +365,11 @@ func (r *Result[T]) FormatStruct() string {
 	if r == nil {
 		return ""
 	}
+
 	if r.appError != nil {
 		return r.appError.FormatStdout()
 	}
+
 	if r.IsFailed() {
 		return "❌ FAILURE"
 	}

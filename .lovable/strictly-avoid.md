@@ -572,4 +572,3 @@ Allowed work:
 
 **Why:** Architectural specs are canonical contracts. Summarizing or shrinking them destroys domain nuance and leads to hallucinations.
 
-

@@ -53,7 +53,8 @@ IGNORE_TERMS = {
     "src/Enums/", "src/Enums/OrderStatusType.php", "enums/user_role_type.py",
     "cmd/user.go", "src/cli/audit.ts", "scripts/deploy.py",
     "02-spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
-    "01-cross-language/18-code-mutation-avoidance.md", ".lovable/temp/recent-file-changes.lock"
+    "01-cross-language/18-code-mutation-avoidance.md", ".lovable/temp/recent-file-changes.lock",
+    ".lovable/temp/recent-file-changes.json"
 }
 
 STRIP_CHARS = " `\"'(),:;[]{}"

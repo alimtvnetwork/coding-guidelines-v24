@@ -264,7 +264,11 @@ def run_smart_go_tests(
     start_time = time.monotonic()
     repo_root = REPO_ROOT
     inventory = build_or_update_test_inventory(repo_root, force=force)
-    tests = inventory.get("tests", {})
+    all_tests = inventory.get("tests", {})
+    tests = {
+        k: v for k, v in all_tests.items()
+        if v.get("test_file", "").endswith(".go")
+    }
 
     if package_filter:
         queries = [package_filter] if isinstance(package_filter, str) else list(package_filter)

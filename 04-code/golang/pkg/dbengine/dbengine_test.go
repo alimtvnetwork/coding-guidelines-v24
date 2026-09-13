@@ -168,6 +168,7 @@ func TestCompilerSyntaxes(t *testing.T) {
 	if pgComp.Placeholder(1) != "$1" {
 		t.Errorf("pg placeholder mismatch: %s", pgComp.Placeholder(1))
 	}
+
 	if pgComp.Placeholder(2) != "$2" {
 		t.Errorf("pg placeholder mismatch: %s", pgComp.Placeholder(2))
 	}
@@ -244,6 +245,7 @@ func TestQueryCache(t *testing.T) {
 	if !found {
 		t.Errorf("expected found")
 	}
+
 	if val != "SELECT 1" {
 		t.Errorf("expected 'SELECT 1', got %s", val)
 	}
@@ -259,6 +261,7 @@ func TestResultTypes(t *testing.T) {
 	if !uRes.IsSuccess() {
 		t.Errorf("expected success")
 	}
+
 	if uRes.Value() != 42 {
 		t.Errorf("expected 42, got %d", uRes.Value())
 	}
@@ -268,6 +271,7 @@ func TestResultTypes(t *testing.T) {
 	if !uFail.IsFailed() {
 		t.Errorf("expected failed")
 	}
+
 	if uFail.AppError() == nil {
 		t.Errorf("expected app error")
 	}
@@ -333,6 +337,7 @@ func TestQueryBuilder_Compilation(t *testing.T) {
 		if sqlStr != expected {
 			t.Errorf("count sql mismatch:\ngot:  %s\nwant: %s", sqlStr, expected)
 		}
+
 		if len(args) != 1 || args[0] != 1 {
 			t.Errorf("args mismatch: %v", args)
 		}
@@ -345,6 +350,7 @@ func TestQueryBuilder_Compilation(t *testing.T) {
 		if sqlStr != expected {
 			t.Errorf("delete sql mismatch:\ngot:  %s\nwant: %s", sqlStr, expected)
 		}
+
 		if len(args) != 1 || args[0] != "Old" {
 			t.Errorf("args mismatch: %v", args)
 		}
@@ -373,9 +379,11 @@ func TestQueryBuilder_Compilation(t *testing.T) {
 		if !strings.Contains(sqlStr, `GROUP BY "TestItem"."Category"`) {
 			t.Errorf("group by missing: %s", sqlStr)
 		}
+
 		if !strings.Contains(sqlStr, `HAVING COUNT(*) > ?`) {
 			t.Errorf("having count missing: %s", sqlStr)
 		}
+
 		if len(args) != 1 || args[0] != int64(5) {
 			t.Errorf("having args mismatch: %v", args)
 		}
@@ -398,6 +406,7 @@ func TestQueryBuilder_Compilation(t *testing.T) {
 		if !strings.Contains(sqlStr, `WHERE INSTR("TestItem"."ItemName", ?) > 0`) {
 			t.Errorf("locate filter mismatch: %s", sqlStr)
 		}
+
 		if len(args) != 1 || args[0] != "tool" {
 			t.Errorf("locate args mismatch: %v", args)
 		}
@@ -413,6 +422,7 @@ func TestQueryBuilder_Compilation(t *testing.T) {
 		if hash1 != hash2 {
 			t.Errorf("expected deterministic hash: %s vs %s", hash1, hash2)
 		}
+
 		if len(hash1) != 64 {
 			t.Errorf("expected sha256 64 chars, got %d", len(hash1))
 		}
@@ -490,9 +500,11 @@ func TestMockRowScanner(t *testing.T) {
 	if item.ItemId != 10 {
 		t.Errorf("expected ItemId 10, got %d", item.ItemId)
 	}
+
 	if item.ItemName != "Sample" {
 		t.Errorf("expected ItemName 'Sample', got %s", item.ItemName)
 	}
+
 	if !item.IsActive {
 		t.Errorf("expected IsActive true")
 	}

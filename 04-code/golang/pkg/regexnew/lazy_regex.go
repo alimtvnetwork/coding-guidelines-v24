@@ -573,6 +573,7 @@ func (it *LazyRegex) Find(b []byte) []byte {
 	if err != nil {
 		return nil
 	}
+
 	if re == nil {
 		return nil
 	}

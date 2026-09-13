@@ -76,12 +76,20 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 - [ ] Error Handling (AppError): Errors use domain-specific `AppError` or custom `AppException` (for C#/OOP), not generic base `Error`.
 - [ ] Code adheres to explicit booleans, `Type` suffixed Enums, and error wrapper rules.
 - [ ] Formatting & Acronyms: Spacing rules are strictly followed. Acronyms are strictly PascalCase (`SwapIpWindows` not `SwapIPWindows`).
-- [ ] Temp & Failure Folder Isolation: All temporary test files, caches, and runner artifacts are isolated within `.lovable/temp/`. Never create `.tmp/` at root. Failed tests/gates write to `.lovable/temp/failures/`; passing tests remain completely silent and produce zero disk files.
-- [ ] Runner In-Flight ETA Wait Protocol: When executing or checking background runners/tests (with runner heartbeats every 25 seconds), agents MUST sleep/wait for 1 minute (60s) each time, or dynamically sleep for the remaining ETA duration read from `.lovable/temp/runner-eta.json` (or based on previous total approximate delay) instead of busy-polling.
+- [ ] **NO TEST RUNNING (TOTAL BAN):** NEVER run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
+- [ ] **NO BUILD CHECKING (TOTAL BAN):** NEVER run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
+- [ ] **NO RUNNER SCRIPTS (TOTAL BAN):** NEVER launch background test runners, worker pools, or test inventory loops during routine execution.
 - [ ] Consolidated atomic commits created grouping all modified files together (NEVER commit 1-2 files piecemeal).
 - [ ] Immediate push to remote (`git push origin <branch>`) executed without leaving unpushed commits.
-- [ ] Zero full builds (`npm run build`, `go build ./...`) or `06-cicd-local-runner.py` executed during routine turns; atomic file change cache updated in `.lovable/temp/recent-file-changes.json`.
-- [ ] Continuous loop maintained; only pausing to ask for "continue" on critical unrecoverable failures.
+- [ ] Atomic file change cache updated in `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`).
+- [ ] Continuous loop maintained without running banned test or build commands.
+
+## Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] **NO TEST RUNNING (TOTAL BAN):** NEVER run any tests using Python files (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner. Testing will be checked later on in CI/CD.
+- [ ] **NO BUILD CHECKING (TOTAL BAN):** NEVER run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification will be checked later on in CI/CD.
+- [ ] **NO RUNNER SCRIPTS (TOTAL BAN):** NEVER launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] **NO AUTOMATIC RELEASES (TOTAL BAN):** NEVER bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
 
 ## 4. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
@@ -96,12 +104,6 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 - [ ] /learn the section as a /goal (AI Fix Scripts Memory)[#AI Fix Scripts Memory]
 - [ ] Action Summary: I have output a detailed `- [x]` checklist summarizing exactly what I accomplished this turn to prove I did not hallucinate.
 
-## 4. AI Fix Scripts Memory
-
-- [ ] /goal All helper scripts were written to `03-ai-scripts/`, documented in its `03-ai-scripts/01-index.md`, and committed to Git for reuse.
-- [ ] `03-ai-scripts/01-index.md` Should contain details tag, sequence of the script naming and why it is there and what it should do.
-- [ ] Should first scan /learn all from that index.md file what is exist and can be reused.
-
 ## 5. Anti-Hallucination & Blast Radius Checklist (Mandatory for Every Turn)
 
 Before you commit code or end your turn, you MUST mechanically check off these items. If you fail to do this, your work will be rejected.
@@ -112,12 +114,13 @@ Before you commit code or end your turn, you MUST mechanically check off these i
 - [ ] Index Sync Deadman Switch: I have verified that every new file I created this turn is explicitly linked inside `readme.md` and enqueued in `.lovable/what-to-read.md`. I did not leave any orphaned files.
 - [ ] Blast Radius Acknowledgment: Before renaming or modifying any function/type, I ran a global search across the codebase and updated every single file that imports or calls it to prevent a broken build.
 
-## Strictly Avoid: No Automatic Releases, No Test Running & No Full CI/CD Runner in Routine Turns (Strict Policy)
+## Strictly Avoid: Banned Operations (No Test Running, No Build Checking, No Automatic Releases)
 
-- **NO RELEASES (Strict Policy):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
-- **NO TEST RUNNING (Strict Policy):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites unless explicitly commanded by the repository owner.
-- **Targeted Quality Verification:** Execute targeted linters on modified files (`exit 0`). DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` during routine task steps.
-- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are known for future release verification.
+- **NO TEST RUNNING (TOTAL BAN):** Test execution is strictly disabled. You MUST NOT execute unit tests, integration tests, or test suites using Python, Go (`go test`), or any test runner. Testing will be checked later on in CI/CD.
+- **NO BUILD CHECKING (TOTAL BAN):** DO NOT run build commands (`go build`, `npm run build`, compiler invocations). Build compilation will be checked later on in CI/CD.
+- **NO RELEASES (TOTAL BAN):** You MUST NOT bump versions, update changelogs, or cut a release at the end of this task. Commits must remain standard development commits. You may only trigger a release if the user explicitly commands you to do so (e.g., "cut a release" or "bump the version").
+- **Targeted Quality Verification:** Execute targeted fast linters/autofixers on specifically modified files (`exit 0`). DO NOT run `python 03-ai-scripts/06-cicd-local-runner.py` or test runners during routine task steps.
+- **Test Inventory & Recent Changes Tracking:** Whenever any file is modified, append its repository-relative path to `.lovable/temp/recent-file-changes.json` under atomic file lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`), cross-referencing `.lovable/test-inventory.json` so associated tests are recorded for subsequent CI/CD runs.
 
 ## Task Consolidation & File Reduction (End of Loop)
 

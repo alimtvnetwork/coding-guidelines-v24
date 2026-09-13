@@ -63,6 +63,7 @@ func (r *Result[T]) UnmarshalYAML(value *yaml.Node) error {
 func (r *Result[T]) Value() T {
 	if r == nil {
 		var zero T
+
 		return zero
 	}
 
@@ -82,6 +83,7 @@ func (r *Result[T]) ValueAny() any {
 func (r *Result[T]) Data() T {
 	if r == nil {
 		var zero T
+
 		return zero
 	}
 
@@ -92,6 +94,7 @@ func (r *Result[T]) Data() T {
 func (r *Result[T]) Payload() T {
 	if r == nil {
 		var zero T
+
 		return zero
 	}
 
@@ -102,6 +105,7 @@ func (r *Result[T]) Payload() T {
 func (r *Result[T]) Result() T {
 	if r == nil {
 		var zero T
+
 		return zero
 	}
 

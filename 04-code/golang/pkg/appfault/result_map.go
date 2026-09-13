@@ -293,6 +293,7 @@ func (rm *ResultMap[K, V]) Filter(predicate func(key K, val V) bool) ResultMap[K
 	if rm == nil {
 		return ResultMap[K, V]{}
 	}
+
 	if rm.IsFailed() || predicate == nil {
 		return *rm
 	}
@@ -312,6 +313,7 @@ func (rm *ResultMap[K, V]) ForEach(fn func(key K, val V)) ResultMap[K, V] {
 	if rm == nil {
 		return ResultMap[K, V]{}
 	}
+
 	if rm.IsFailed() || fn == nil {
 		return *rm
 	}
@@ -340,12 +342,15 @@ func (rm *ResultMap[K, V]) FormatStruct() string {
 	if rm == nil {
 		return ""
 	}
+
 	if rm.appError != nil {
 		return rm.appError.FormatStdout()
 	}
+
 	if rm.IsFailed() {
 		return "❌ FAILURE"
 	}
+
 	if len(rm.Data) == 0 {
 		return "{}"
 	}
@@ -358,9 +363,11 @@ func (rm *ResultMap[K, V]) String() string {
 	if rm == nil {
 		return ""
 	}
+
 	if rm.appError != nil {
 		return rm.appError.FormatStdout()
 	}
+
 	if rm.IsFailed() {
 		return "❌ FAILURE"
 	}
@@ -373,9 +380,11 @@ func (rm *ResultMap[K, V]) PrettyJson() string {
 	if rm == nil {
 		return "{}"
 	}
+
 	if rm.appError != nil {
 		return rm.appError.FormatJson()
 	}
+
 	if rm.IsFailed() {
 		return `{"success":false}`
 	}

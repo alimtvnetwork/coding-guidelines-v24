@@ -245,6 +245,7 @@ func (rs *ResultSlice[T]) Filter(predicate func(item T) bool) ResultSlice[T] {
 	if rs == nil {
 		return ResultSlice[T]{}
 	}
+
 	if rs.IsFailed() || predicate == nil {
 		return *rs
 	}
@@ -264,6 +265,7 @@ func (rs *ResultSlice[T]) ForEach(fn func(index int, item T)) ResultSlice[T] {
 	if rs == nil {
 		return ResultSlice[T]{}
 	}
+
 	if rs.IsFailed() || fn == nil {
 		return *rs
 	}
@@ -280,6 +282,7 @@ func (rs *ResultSlice[T]) ForEachBreak(fn func(index int, item T) bool) ResultSl
 	if rs == nil {
 		return ResultSlice[T]{}
 	}
+
 	if rs.IsFailed() || fn == nil {
 		return *rs
 	}
@@ -310,12 +313,15 @@ func (rs *ResultSlice[T]) FormatStruct() string {
 	if rs == nil {
 		return ""
 	}
+
 	if rs.appError != nil {
 		return rs.appError.FormatStdout()
 	}
+
 	if rs.IsFailed() {
 		return "❌ FAILURE"
 	}
+
 	if len(rs.Items) == 0 {
 		return "[]"
 	}
@@ -328,9 +334,11 @@ func (rs *ResultSlice[T]) String() string {
 	if rs == nil {
 		return ""
 	}
+
 	if rs.appError != nil {
 		return rs.appError.FormatStdout()
 	}
+
 	if rs.IsFailed() {
 		return "❌ FAILURE"
 	}
@@ -343,9 +351,11 @@ func (rs *ResultSlice[T]) PrettyJson() string {
 	if rs == nil {
 		return "{}"
 	}
+
 	if rs.appError != nil {
 		return rs.appError.FormatJson()
 	}
+
 	if rs.IsFailed() {
 		return `{"success":false}`
 	}
