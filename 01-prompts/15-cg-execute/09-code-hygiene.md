@@ -205,6 +205,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 > 3. **Worker Pool & Log Aggregation Architecture:** All local runners and test orchestrators must use a concurrent worker pool (2–3 workers via `ThreadPoolExecutor`), announce enqueued tasks upfront, show real-time progress, handle failures gracefully without canceling sibling workers, and print a consolidated final summary with full stdout/stderr error logs for failed jobs.
 > 4. **`force` Keyword Support:** If the user wrote `force`, `force rebuild`, or `force create` on top of the prompt or trigger: **ALWAYS recreate/regenerate the Python runner script from scratch**, regardless of whether the file already exists on disk.
 > 5. **No External or Random File Creation:** NEVER write scripts, temporary test scripts, or scratch files to root, `/tmp`, global system paths, or outside the repository boundary.
+> 6. **GitHub Actions Zero Storage (Rule R18):** Never use `actions/upload-artifact` in CI workflows (`ci.yml`, matrix builds, linter runs). Free tier accounts have an account-wide cap of 0.5 GB (500 MB). CI runs must remain completely ephemeral. Releases belong exclusively in GitHub Releases (`release.yml`), never in Actions artifact storage.
 
 ---
 
@@ -252,6 +253,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 - [ ] Master Guidelines: I have fully read and strictly enforced `02-spec/02-coding-guidelines/02-canonical-size-tier.md`, `02-spec/02-coding-guidelines/08-file-folder-naming/`, and `.lovable/coding-guidelines.md`.
 - [ ] LF Line Endings & UTF-8 (No BOM): Verified Unix LF and UTF-8 across all files.
 - [ ] Zero Double Blank Lines: Zero `\n\n\n` in code and markdown files.
+- [ ] GitHub Actions Zero Storage (Rule R18): Never use `actions/upload-artifact` in CI workflows; maintain zero Actions storage usage.
 
 1. [ ] /learn the section as a /goal [AI Fix Scripts Memory](#ai-fix-scripts-memory)
 

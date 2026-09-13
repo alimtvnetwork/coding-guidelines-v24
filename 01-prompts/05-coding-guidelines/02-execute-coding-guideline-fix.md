@@ -96,6 +96,7 @@ Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step
 - [ ] Ensure the git repository starts completely clean.
 - [ ] Complete all work on the current branch only.
 - [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
+- [ ] **GitHub Actions Zero Storage (Rule R18):** Never upload build binaries, logs, test artifacts, or reports in CI workflows (`actions/upload-artifact` is strictly banned in CI). Free tier accounts have an account-wide cap of 0.5 GB (500 MB). Releases belong exclusively in GitHub Releases (`release.yml`), never in Actions artifact storage.
 - [ ] Group all completed work into a single logical commit.
 - [ ] Anti-Hallucination Check: Before finalizing the plan or writing code, you MUST use read/search tools to verify that every file, function, enum, and variable mentioned actually exists in the codebase. Do not guess.
 - [ ] Push the commit to the remote repository.
