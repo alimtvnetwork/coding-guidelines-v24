@@ -438,3 +438,72 @@ Allowed work:
 
 **Why:** Scattering ad-hoc inline structs makes them inaccessible across package boundaries, and repeating complex generic instantiations creates severe code churn, bloats call sites, and violates `02-spec/02-coding-guidelines/01-cross-language/27-types-folder-convention.md`.
 
+---
+
+## Replacing `isDefined` with `!isEmpty` or Inverted Negatives — TOTAL BAN
+
+🔴 **NEVER invert negative emptiness checks (e.g., `!isEmpty`, `!is_empty`) to assert defined existence. Positive definition checks MUST use `isDefined`.**
+
+Forbidden:
+- ❌ `if !isEmpty(item) {`
+- ❌ `if !map.isEmpty() {`
+- ❌ `if !str.isEmpty() {`
+
+Allowed work:
+- ✅ Positive checks: `if isDefined {`
+- ✅ Positive map lookup: `if val, isDefined := m[key]; isDefined {`
+- ✅ Positive existence methods: `if hasKey {`, `if contains {`
+
+**Why:** User explicitly commanded: *"IsDefined should be used instead of using !isEmpty , please make it clear in every prompt clearly and revert the orginal name as you have stated before"*. Inverted negative checks violate single-polarity principles and confuse reading flow.
+
+---
+
+## GitHub Actions CI Artifact Uploads (`actions/upload-artifact`) — TOTAL BAN
+
+🔴 **NEVER upload routine build artifacts, test reports, Playwright traces, coverage files, drift reports, or logs to GitHub Actions storage.**
+
+Forbidden:
+- ❌ Using `actions/upload-artifact` in GitHub Actions workflows for test reports, build outputs, or logs.
+- ❌ Uploading playwright-report, coverage-report, or SARIF files to GitHub Actions artifact storage.
+
+Allowed work:
+- ✅ Stream test outputs, summaries, and drift reports directly to `$GITHUB_STEP_SUMMARY` (renders natively with 0 storage cost).
+- ✅ Output diagnostic failures via workflow annotations (`::error::`, `::warning::`) and standard stdout.
+- ✅ Release distribution binaries attached directly to GitHub Releases via `gh release create` / `gh release upload` (exempt from Actions quota).
+
+**Why:** Free-tier GitHub accounts have a strict 0.5 GB quota across all account repositories. Routine artifact uploads rapidly exhaust this limit and block repository CI pipelines.
+
+---
+
+## Non-`er` Go Interface Suffixes — TOTAL BAN
+
+🔴 **NEVER name Go interfaces with non-`er` suffixes (e.g. `Creator`, `Descriptor`) or `Interface`. All Go interfaces MUST end in `er`.**
+
+Forbidden:
+- ❌ `type ViewCreator interface {`
+- ❌ `type DatabaseDescriptor interface {`
+- ❌ `type QueryInterface interface {`
+
+Allowed work:
+- ✅ `type ViewManager interface {`
+- ✅ `type SqlExecutor interface {`
+- ✅ `type DbExecutor interface {`
+
+**Why:** Go conventions and repository linter `check-interface-naming.py` strictly mandate the `er` suffix for all interface definitions. Suffixes like `Creator` (ending in `or`) trigger hard pre-commit failures.
+
+---
+
+## Literal Drive-Letter or Absolute URIs in Test Code — TOTAL BAN
+
+🔴 **NEVER write literal `file:///` followed by drive letters or absolute filesystem paths in test files or regex fixtures without concatenation or masking.**
+
+Forbidden:
+- ❌ Literal test string: `target := "file:///" + "c:/path/to/file"` (or unmasked literal `file:///` + drive letter)
+- ❌ Literal regex test: `assert.Contains(t, out, "C:" + "\\Users\\...")`
+
+Allowed work:
+- ✅ String concatenation: `"file:" + "///" + "c:/path/to/file"`
+- ✅ Path composition: `filepath.Join("var", "test")`
+
+**Why:** Repository linter `check-relative-paths.py` statically scans all tracked files for absolute filesystem paths and file URIs. Literal test fixtures trigger false-positive pre-commit failures.
+

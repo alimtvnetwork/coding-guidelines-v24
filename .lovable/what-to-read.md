@@ -1,10 +1,11 @@
 # What to Read
 
 > Canonical map of what the AI must read before working on this project.
-> Last updated: 2026-09-13T07:00:00Z
+> Last updated: 2026-09-13T07:45:00Z
 
 ## Changelog
 
+- 2026-09-13T07:45:00Z, Memory Persistence & Learned Standards: recorded institutional memory for regex centralization, generic dbengine architecture, isDefined positive convention, zero-storage GitHub Actions mandate, and pre-commit guard enforcement.
 - 2026-09-13T07:00:00Z, Regex Centralization & Generic DbEngine: lazy regex engine audit, core regex harvesting from 03-aukgo/core, gitmap call-site refactoring, generic redistributable dbengine package (pkg/dbengine), and Python database code generator (35-db-struct-enum-generator.py).
 - 2026-09-09T05:30:00Z, Prompt update: added mandatory inspection of last 10 git commits and what-to-read prioritization to read-memory-enhanced prompt and skill.
 - 2026-09-09T05:00:00Z, Memory write: conversation log & context wrapper protocol, prompt staging, split SQLite logging, task retention, errcmd streaming, atomic file writes, and ApiManager spec.
@@ -25,6 +26,7 @@
 - `.lovable/memory/learned/07-split-sqlite-logging-and-task-db-migration.md`, why: split SQLite logging architecture and task DB migration contracts
 - `.lovable/memory/learned/08-task-retention-streaming-atomic-apimanager.md`, why: task retention, live line streaming, atomic file writes, and ApiManager spec
 - `.lovable/memory/learned/09-conversation-log-and-context-wrapper-protocol.md`, why: conversation log persistence protocol and prompt staging boundary
+- `.lovable/memory/learned/13-regex-centralization-dbengine-and-isdefined-standard.md`, why: canonical regex harvesting from 03-aukgo/core, redistributable dbengine package, isDefined standard, and zero-storage GitHub Actions mandate
 - `.lovable/memory/standards/version-source-of-truth.md`, why: mandatory standard for version.json single source of truth, 'inherit' keyword for sub-packages, and release sync workflow
 - `.lovable/memory/01-index.md`, why: architectural map of version propagation, sync pipeline, and release ceremony
 - `.lovable/coding-guidelines.md`, why: baseline rules and coding standards

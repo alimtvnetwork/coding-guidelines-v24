@@ -58,6 +58,9 @@ Follow this sequence before and during any repository modification task:
 | **30** | `30-enum-generator.py` | Multi-file Go enum scaffolder (variant, vars, test, readme) with byte/int/string & CLI/JSON modes | ~10ms | `go`, `enum`, `scaffolder`, `base-enum`, `generator` |
 | **31** | `31-md-gap-fixer.py` | Fixes multiple consecutive empty lines (3+ newlines) into exactly 1 empty line in markdown files | ~8ms | `markdown`, `formatting`, `newlines`, `gaps`, `cleanup` |
 | **32** | `32-git-history-file-tracer.py` | Traces, pre-flights, restores, or permanently purges removed files from Git history | ~40ms | `git`, `history`, `tracer`, `restore`, `purge`, `filter-repo`, `preflight` |
+| **33** | `33-test-inventory-generator.py` | Centralized test cataloging, duration tracking, and test resolution for releases | ~15ms | `test`, `inventory`, `cache`, `duration`, `release` |
+| **34** | `34-purge-github-actions-artifacts.py` | Purges stored GitHub Actions artifacts to enforce Zero-Storage Mandate | ~25ms | `ci-cd`, `artifacts`, `github-actions`, `quota`, `cleanup` |
+| **35** | `35-db-struct-enum-generator.py` | Inspects Go models, generates column enums and strongly-typed repository builders | ~20ms | `db`, `generator`, `scaffolder`, `repository`, `enums` |
 
 ---
 
@@ -74,7 +77,7 @@ Serves as the central directory, documentation manifest, and AI discovery entry 
 
 #### What It Does
 
-- Catalogs all 31 scripts in sequential numeric order with descriptions, execution speeds, and discovery tags.
+- Catalogs all 35 scripts in sequential numeric order with descriptions, execution speeds, and discovery tags.
 - Outlines the mandatory AI pre-flight checklist guiding agents from topology discovery to local CI gate verification.
 - Houses detailed collapsible `<details>` specifications, architectural summaries of `02-shared-engine.py`, and repository-wide operational coding rules.
 
