@@ -297,11 +297,15 @@ def create_release_branch_and_tag(next_version, commit_sha, dry_run=False):
     return branch_name, tag_name
 
 
-def push_release(branch_name, tag_name, dry_run=False):
-    """Pushes release branch and tag to remote repository."""
+def push_release(branch_name, tag_name, original_branch=None, dry_run=False):
+    """Pushes release branch, tag, and original branch to remote repository."""
     if dry_run:
-        print(f"[DRY RUN] Would push branch '{branch_name}' and tag '{tag_name}' to origin")
+        print(f"[DRY RUN] Would push branch '{branch_name}', tag '{tag_name}', and '{original_branch}' to origin")
         return
+
+    if original_branch:
+        print(f"[*] Pushing original branch '{original_branch}' to origin...")
+        run_cmd(["git", "push", "origin", original_branch])
 
     print(f"[*] Pushing branch '{branch_name}' to origin...")
     run_cmd(["git", "push", "origin", branch_name])
@@ -379,7 +383,7 @@ def orchestrate_release(tier="minor", explicit_version=None, scope=None, dry_run
         # 7. Push branch and tag if enabled
         is_push_enabled = push and not dry_run
         if is_push_enabled:
-            push_release(branch_name, tag_name, dry_run=dry_run)
+            push_release(branch_name, tag_name, original_branch=original_branch, dry_run=dry_run)
 
     finally:
         # 8. Always revert back to the exact starting branch
