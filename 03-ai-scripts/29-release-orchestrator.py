@@ -259,13 +259,15 @@ def stage_and_commit_release(next_version, scope, dry_run=False):
         PACKAGE_JSON,
         CHANGELOG_MD,
         README_MD,
+        NODE_BUMP_SCRIPT,
+        REPO_ROOT / ".gitmap" / "release",
         REPO_ROOT / "public" / "health-score.json",
         REPO_ROOT / "src" / "data" / "specTree.json",
         REPO_ROOT / "02-spec" / "19-main-worker-service" / "98-changelog.md",
         REPO_ROOT / "reports" / "spec-verification" / "coverage.md",
     ]
     for vf in release_candidates:
-        if vf.is_file():
+        if vf.exists():
             run_cmd(["git", "add", str(vf)])
 
     # Commit
