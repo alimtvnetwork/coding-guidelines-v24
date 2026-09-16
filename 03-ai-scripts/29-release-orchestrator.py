@@ -83,7 +83,7 @@ def read_canonical_version():
             with open(VERSION_JSON, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            raw_ver = data.get("version")
+            raw_ver = data.get("Version") or data.get("version")
             if raw_ver:
                 return str(raw_ver).strip()
         except Exception:

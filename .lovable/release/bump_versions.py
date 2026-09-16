@@ -26,7 +26,7 @@ FILES_TO_BUMP = [
 def get_current_version():
     with open("version.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-        return data.get("version", "1.0.0")
+        return data.get("Version") or data.get("version") or "1.0.0"
 
 def set_current_version(new_version):
     with open("version.json", "r+", encoding="utf-8") as f:
@@ -194,7 +194,7 @@ def handle_git_release(new_version):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Bump project versions and optionally create a Git release.")
     parser.add_argument("--type", choices=["major", "minor", "patch"], help="Type of bump")
-    parser.add_argument("--set", type=str, help="Explicitly set a specific version")
+    parser.add_argument("--set", "--version", "-v", dest="set", type=str, help="Explicitly set a specific version")
     parser.add_argument("--create-release", action="store_true", help="Create a git branch, tag, and push a full release via gh/glab CLI")
     args = parser.parse_args()
 
