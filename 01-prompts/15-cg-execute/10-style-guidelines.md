@@ -15,7 +15,7 @@ N = total self-loop steps budget that the agents will perform.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory ALL source code files (`*.go`, `*.ts`, `*.py`, `*.php`, `*.cs`) and discover all squeezed newline violations inside function bodies, loops, guard clauses, and struct instantiations.
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using the fast Python discovery tools (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py` with `--limit`) to inventory all architectural violations and anti-patterns without truncation.
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/XX-style-guidelines-audit.md` with an exhaustive File Inventory Manifest and Violation Ledger.
 3. [ ] /goal Phase 1 (Step C): Decompose ALL source files into granular, bounded subtask batches of **5–8 files each** in `.lovable/plans/subtasks/XX-style/batch-01.md`, `batch-02.md`, etc.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated style autofixer in `03-ai-scripts/05-guideline-autofixer.py` and register in `03-ai-scripts/01-index.md`.
@@ -520,6 +520,30 @@ To guarantee full execution without stopping after planning mode, the master orc
 - **Context Diet:** Provide subagents with minimal instructions (e.g. "Read subtask file `.lovable/plans/subtasks/xx-<parent-slug>/01-<subtask-title>.md` and execute it"). Do not paste huge files into agent prompts.
 
 ### 2. Phase 1: Planning Mode & Micro-Batch Subtask Partitioning (Steps 1 .. N/2)
+
+### Fast File Discovery & Reading via Python Toolchain (Mandatory Acceleration)
+
+To avoid 50-result tool truncation limits and eliminate multi-turn exploratory roundtrips, the AI agent MUST use the repository's dedicated Python discovery scripts first:
+
+1. **Inventory Target Files (with `--limit` option):**
+   ```bash
+   python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts --limit 100 --stats
+   ```
+2. **Fast Cached Grep (<15ms, with `--limit` option):**
+   ```bash
+   python 03-ai-scripts/12-fast-cached-grep.py --pattern "<search-pattern>" --lang go --limit 50
+   ```
+3. **Sub-Millisecond Folder & File Exploration (with `--limit` option):**
+   ```bash
+   python 03-ai-scripts/17-fast-file-reader.py --list-folder <folder-path> --ext .go --limit 50
+   python 03-ai-scripts/17-fast-file-reader.py --read-file <file-path> --max-bytes 100000
+   python 03-ai-scripts/17-fast-file-reader.py --search-pattern "<pattern>" --path <folder-path> --limit 50
+   ```
+4. **Subsystem & Topology Overview:**
+   ```bash
+   python 03-ai-scripts/18-codebase-topology-discoverer.py --summary
+   ```
+Do not rely on standard search tools with 50-item truncation when discovering repository-wide violations.
 
 1. **Comprehensive File Inventory:** Scan and list EVERY single source code file in the repository (`*.go`, `*.ts`, `*.py`, `*.php`).
 2. **Partition into 5–8 File Batches:** Group the file list into numbered subtasks:

@@ -13,7 +13,7 @@ N = total self-loop steps budget that the agents will perform.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase to inventory all architectural violations and anti-patterns.
+1. [ ] /goal Phase 1 (Step A): Deeply scan the target codebase using the fast Python discovery tools (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py` with `--limit`) to inventory all architectural violations and anti-patterns without truncation.
 2. [ ] /goal Phase 1 (Step B): Write the master audit specification in `.lovable/plans/pending/` with an exhaustive Violation Ledger.
 3. [ ] /goal Phase 1 (Step C): Decompose the master plan into granular, atomic subtasks in `.lovable/plans/subtasks/`.
 4. [ ] /goal Phase 1 (Step D): Verify or create the automated quality linter and register in `03-ai-scripts/01-index.md`.
@@ -123,7 +123,7 @@ Every prompt in this suite operates using a strict two-phase loop budget:
 ### Phase 1: Scan, Spec & Subtasks (Steps 1 to N/2)
 
 1. **Memory Ingestion:** Ingest `.lovable/coding-guidelines.md`, `.lovable/strictly-avoid.md`, and recent issues in `.lovable/memory/issues/`.
-2. **High-Speed Violation Scan:** Run `python 03-ai-scripts/11-fast-file-scanner.py --check` and `python 03-ai-scripts/12-fast-cached-grep.py "<pattern>"` to detect AST violations across the codebase in milliseconds.
+2. **High-Speed Violation Scan:** Run `python 03-ai-scripts/11-fast-file-scanner.py --lang <lang> --limit 100 --stats`, `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<pattern>" --limit 50`, `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> --limit 50`, and `python 03-ai-scripts/18-codebase-topology-discoverer.py --summary` to detect AST violations and explore directory topologies in milliseconds without tool truncation.
 3. **Master Spec Creation:** Write `.lovable/plans/pending/xx-<slug>-audit.md` capturing the full violation ledger, affected files, line numbers, and acceptance criteria.
 4. **Subtask Decomposition:** Break down the master plan into granular subtasks in `.lovable/plans/subtasks/xx-<slug>/01-<subtask-title>.md`, `02-<subtask-title>.md`, etc.
 5. **Linter Hook Verification:** Check if the automated linter script exists in `linter-scripts/`. If missing, generate the linter script and connect it to `03-ai-scripts/06-cicd-local-runner.py` and CI/CD pipelines.
