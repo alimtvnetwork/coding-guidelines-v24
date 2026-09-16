@@ -11,7 +11,22 @@ N = 200
 
 N = total self-loop steps budget. The user may override this number when triggering the prompt.
 
-### Master Task Checklist (Atomic Numbered Steps)
+#### Fast File Discovery & Diagnostic Toolchain (Mandatory Acceleration)
+
+To rapidly locate failing pipeline definitions, broken source files, test fixtures, and error logs without hitting 50-result tool caps, the AI agent MUST utilize the Python discovery scripts first:
+- **Scan Source & Test Files:** `python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts,py --limit 100 --stats`
+- **Fast Cached Pattern Search (<15ms):** `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<error-or-symbol>" --limit 50`
+- **Sub-Millisecond Folder Listing & Reader:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder .github/workflows --limit 20`
+- **Read Workflow or Log File:** `python 03-ai-scripts/17-fast-file-reader.py --read-file .github/workflows/ci.yml`
+- **Codebase Topology Overview:** `python 03-ai-scripts/18-codebase-topology-discoverer.py --summary`
+
+> [!IMPORTANT]
+> **EXCLUSIVE TEST EXECUTION & RELEASE AUTHORITY:**
+> This prompt (`04-ci-cd-fix-with-release.md`) IS the designated workflow authorized to run the full unit test suites (`python 03-ai-scripts/06-cicd-local-runner.py --all` or `--run-tests`) and trigger the automated version bump and release. Standard `ci-cd-fix` does NOT run unit tests; only `ci-cd-fix-with-release` runs full tests to verify complete green gates before releasing.
+
+---
+
+## Master Task Checklist (Atomic Numbered Steps)
 
 1. [ ] /goal First `N/2` steps (Phase 1): Review the central CI/CD pipeline definitions (`.github/workflows`, `.gitlab-ci.yml`, etc.) and cross-reference them with the local Python runner (`03-ai-scripts/06-cicd-local-runner.py`).
    - **Condition:** If `03-ai-scripts/06-cicd-local-runner.py` does not exist, you must create it immediately.
@@ -658,3 +673,11 @@ Include: previous version, new version, step number and name, command run, full 
 
 - slug: cicd-fix-with-release
 - status: active
+
+---
+
+## Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] **MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW):** At the conclusion of Phase 4 Release, after version manifests, changelog entries, and release notes are updated, you MUST stage everything (`git add -A`), commit with clean semantic messages, and push directly to the remote repository. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] **TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY):** You MUST NOT create separate git commits for each individual file as you edit them. All modified files across the turn MUST be accumulated in the working tree and committed together in a SINGLE grouped atomic commit at the final step before pushing!
+

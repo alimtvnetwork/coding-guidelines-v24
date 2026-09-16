@@ -342,9 +342,9 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 ## Strictly Avoid: No Automatic Releases & Run All Tests (Strict Policy)
 
 > [!CAUTION]
-> **NO AUTOMATIC RELEASES:** Do NOT bump versions or cut a release unless the user explicitly says so. Use `fix(ci): <description>` commits only.
-> **RUN ALL TESTS & QUALITY GATES (FULL PIPELINE FIDELITY):** `ci-cd-fix` is an explicit CI pipeline repair workflow. It MUST run all CI/CD quality gates, linters, static analysis, and test suites properly (`python 03-ai-scripts/06-cicd-local-runner.py`). NEVER skip or disable tests with `--no-tests` in CI/CD fix workflows; all unit test suites, AST checks, and verification jobs must be executed and diagnosed until they legitimately pass (`exit 0`).
-> **ATOMIC CHANGE TRACKING:** Record all modified files under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
+> **NO AUTOMATIC RELEASES (TOTAL BAN IN STANDARD CI-CD-FIX):** This is a development fix workflow. You MUST NOT bump versions, update changelogs, or cut a release. Releases are exclusively handled by `04-ci-cd-fix-with-release.md` or `release-orchestrator`.
+> **NO ROUTINE UNIT TEST RUNNING (EXCLUSIVE TO CI-CD WITH RELEASE):** Routine heavy unit test execution is STRICTLY RESERVED for `04-ci-cd-fix-with-release.md` and release workflows! In standard `ci-cd-fix`, do NOT run full unit test suites or test runner pools (`go test ./...`, `06-cicd-local-runner.py --run-tests`). Instead, diagnose and verify fixes using targeted file-level linters, AST validators, and syntax checks on the specific modified files. ONLY `04-ci-cd-fix-with-release.md` will execute the full test suite (`--run-tests` / `--all`) before cutting the release!
+> **NO PER-FILE COMMITTING (TOTAL BAN):** Never commit each file individually. All modified files across the turn must be accumulated in the working tree and committed together in a single atomic commit at the final step.
 
 ---
 
@@ -377,3 +377,21 @@ Also append any new forbidden patterns to `.lovable/strictly-avoid.md`.
 
 - slug: cicd-fix
 - status: active
+
+---
+
+## Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] **NO ROUTINE UNIT TEST RUNNING (TOTAL BAN IN STANDARD CI-CD-FIX):** NEVER run heavy unit test suites (`go test ./...`, `06-cicd-local-runner.py --run-tests`, runner scripts) during standard CI/CD fix turns. All full test suite runs are strictly reserved for `04-ci-cd-fix-with-release.md` and release workflows.
+- [ ] **NO ROUTINE BUILD CHECKING (TOTAL BAN):** NEVER run broad build commands (`go build ./...`, `npm run build`) to verify compilation during intermediate micro-refactoring steps.
+- [ ] **NO RUNNER SCRIPTS (TOTAL BAN):** NEVER launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] **NO AUTOMATIC RELEASES (TOTAL BAN IN STANDARD CI-CD-FIX):** NEVER bump versions, update changelogs, or trigger releases in standard `ci-cd-fix`. Releases are exclusively handled by `04-ci-cd-fix-with-release.md` or `release-orchestrator`.
+- [ ] **NO PER-FILE COMMITTING (TOTAL BAN):** NEVER commit each file individually as you work. Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+
+---
+
+## Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] **MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW):** At the FINAL step of the turn, after all targeted files have been refactored and verified with targeted linters, you MUST stage everything (`git add -A`), create a clean, descriptive conventional commit (`git commit -m "fix(ci): <description>"`), and push directly to the remote repository (`git push origin <branch>`). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] **TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY):** You MUST NOT create separate git commits for each individual file as you edit them. All modified files across the turn MUST be accumulated in the working tree and committed together in a SINGLE grouped atomic commit at the final step before pushing!
+
