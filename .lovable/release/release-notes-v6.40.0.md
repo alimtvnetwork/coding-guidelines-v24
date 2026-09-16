@@ -12,7 +12,6 @@ irm https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v6.
 curl -fsSL https://github.com/alimtvnetwork/coding-guidelines-v24/releases/download/v6.40.0/install.sh | bash
 ```
 
-
 ## [6.40.0] - 2026-09-16
 
 ### Changed — Fast discovery toolchain, size reduction prompt 22, and matching skill

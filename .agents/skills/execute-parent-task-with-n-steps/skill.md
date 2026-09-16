@@ -84,6 +84,18 @@ Before doing anything else, you MUST write a highly detailed execution spec.
 - [ ] Atomic file change cache updated in `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <path>`).
 - [ ] Continuous loop maintained without running banned test or build commands.
 
+## Fast File Discovery & Reading via Python Toolchain (Mandatory Acceleration)
+
+To avoid 50-result tool truncation limits and eliminate multi-turn exploratory roundtrips, the AI agent MUST use the repository's dedicated Python discovery scripts first:
+- **Inventory Target Files:** `python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts --limit 100 --stats`
+- **Fast Cached Grep (<15ms):** `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<pattern>" --lang go --limit 50`
+- **Sub-Millisecond Folder Explorer & Reader:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> --ext .go --limit 50`
+- **Read Target File:** `python 03-ai-scripts/17-fast-file-reader.py --read-file <file-path> --max-bytes 100000`
+- **Fast Pattern Search:** `python 03-ai-scripts/17-fast-file-reader.py --search-pattern "<pattern>" --limit 50`
+- **Codebase Topology:** `python 03-ai-scripts/18-codebase-topology-discoverer.py --summary`
+
+---
+
 ## Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
 - [ ] **NO TEST RUNNING (TOTAL BAN):** NEVER run any tests using Python files (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner. Testing will be checked later on in CI/CD.
