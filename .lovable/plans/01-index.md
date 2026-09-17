@@ -17,6 +17,7 @@ Master directory of architectural and execution plans.
 - [04-applogger-taxonomy-streaming-and-task-db.md](completed/04-applogger-taxonomy-streaming-and-task-db.md): Structured AppLogger subsystem, split SQLite logging (`logs.db` + `tasks/<task-id>.db`), rotating file sink, generic `LazyOnce`, errcmd streaming, named writers, and typed streamers.
 - [12-regex-centralization-and-generic-dbengine.md](completed/12-regex-centralization-and-generic-dbengine.md): Lazy regex centralization, core regex harvesting, generic dbengine wrapper, and python struct code generator.
 - [13-os-enum-integration-and-generator-upgrade.md](completed/13-os-enum-integration-and-generator-upgrade.md): OS enum integration, deep OS version detection, and enum generator upgrade.
+- [14-cicd-fix-with-release.md](completed/14-cicd-fix-with-release.md): Release-triggered CI/CD fix loop, full test suite verification, and automated minor release publication (v6.41.0).
 
 ## Recent Completed Tasks Register (Last 20 Tasks)
 

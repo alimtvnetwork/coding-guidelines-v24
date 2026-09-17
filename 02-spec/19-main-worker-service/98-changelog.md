@@ -4,6 +4,13 @@
 
 ---
 
+## v6.41.0 — 2026-09-17 (Nuclear package modularization prompt and 5-day test inventory freshness)
+
+**Scope:** Version bump (`6.40.0` → `6.41.0`). Nuclear package modularization prompt and 5-day test inventory freshness.
+**Sync-regenerated artifacts:** `public/health-score.json`
+
+---
+
 ## v6.39.0 — 2026-09-13 (sync banned operation checklists, os enum detector, and atomic test inventory tracking)
 
 **Scope:** Version bump (`6.38.0` → `6.39.0`). sync banned operation checklists, os enum detector, and atomic test inventory tracking.

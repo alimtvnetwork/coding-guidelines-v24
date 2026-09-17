@@ -5,6 +5,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [6.41.0] - 2026-09-17
+
+### Added — Nuclear Package Modularization, 5-Day Test Inventory Freshness & Verbatim Task Extraction
+
+- Added execution prompt [`25-nuclear-package-modularization-and-unit-test-optimization.md`](01-prompts/15-cg-execute/25-nuclear-package-modularization-and-unit-test-optimization.md) mandating Directed Acyclic Graph (DAG) package architectures, zero-dependency leaf package segregation (`pkg/constants`, `pkg/model`, `pkg/appfault`, `pkg/fsutil`, `pkg/cliexit`), blackbox heavy test isolation (`tests/heavy_test/` under `package heavy_test`), and centralized `.lovable/test-inventory.json` synchronization.
+- Enhanced `03-ai-scripts/33-test-inventory-generator.py` with `--check-age`, `--max-age-days`, and `--json` flags to evaluate test manifest freshness and skip redundant unit test suites on fresh profiles ($\le 5$ days).
+- Updated parent task execution prompts (`02-execute-parent-task-with-n-steps.md`, `06-execute-parent-task-with-n-steps-v2.md`, `07-execute-batched-loop-v2.md`) and skills to mandate Phase 1 Step 0 verbatim prompt capture under `## User Request (Verbatim)` and actionable deliverables extraction under `## Extracted Actionable Task List`.
+- Mandated per-task isolated agent workspaces (`.lovable/temp-agents/xx-<task-name>/`) and progress tracking via `state.md`.
+- Normalized `.agents/skills/nuclear-package-modularization/skill.md` to strictly lowercase filename.
+- Registered Prompt 25 in `01-prompts/15-cg-execute/01-index.md` and regenerated `.lovable/prompts.md` with 96 indexed prompts.
+- Sync-managed artifacts regenerated: `version.json`, `public/health-score.json`, `readme.md`, `src/data/specTree.json`.
+
+---
+
 ## [6.40.0] - 2026-09-16
 
 ### Changed — Fast discovery toolchain, size reduction prompt 22, and matching skill
