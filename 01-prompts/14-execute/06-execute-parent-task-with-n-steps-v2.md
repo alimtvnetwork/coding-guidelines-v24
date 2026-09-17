@@ -59,15 +59,16 @@ To avoid 50-result tool truncation limits and eliminate multi-turn exploratory r
    ```
 Do not rely on standard search tools with 50-item truncation when discovering repository-wide files.
 
-1. **Scan & Discover:** Use the `invoke_subagent` tool to spawn exactly 2 planning subagents. Their role is to deeply scan the codebase for target changes.
-2. **Master Spec Generation:** Save the master architectural plan into `.lovable/plans/pending/xx-<slug>.md`. Write down 3–5 custom rules or constraints unique to this task inside the spec file.
-3. **Lean Subtask Decomposition:** Break down the master plan into granular, single-responsibility subtask files in `.lovable/plans/subtasks/xx-<slug>/01-<subtask>.md`.
+1. **Verbatim Prompt Capture & Task Extraction (First Action):** Directly write the user's prompt verbatim into the planning spec at `.lovable/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section. Extract the specific task list from this prompt as actionable bullet points / checklist items under `## Extracted Actionable Task List`. The AI MUST output this extracted checklist directly in chat confirming: *"Confirmed Task Deliverables: 1. [task 1], 2. [task 2]..."* before taking further actions.
+2. **Scan & Discover:** Use the `invoke_subagent` tool to spawn exactly 2 planning subagents. Their role is to deeply scan the codebase for target changes.
+3. **Master Spec Generation:** Save the master architectural plan into `.lovable/plans/pending/xx-<slug>.md`. Write down 3–5 custom rules or constraints unique to this task inside the spec file.
+4. **Lean Subtask Decomposition:** Break down the master plan into granular, single-responsibility subtask files in `.lovable/plans/subtasks/xx-<slug>/01-<subtask>.md`.
    *Subtasks MUST follow this lean template to prevent bloat:*
    > `# Subtask: [Name]`
    > `**Target Files:** [Relative paths]`
    > `**Action:** [Exact code changes required]`
    > `**Constraints:** [Key rules to follow]`
-4. **MANDATORY AUTO-LOOP (DO NOT STOP):** As soon as Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for permission**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
+5. **MANDATORY AUTO-LOOP (DO NOT STOP):** As soon as Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for permission**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
 
 ### Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
 
@@ -78,6 +79,19 @@ Do not rely on standard search tools with 50-item truncation when discovering re
 5. **TOTAL BAN on Test Running:** DO NOT run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`), Go (`go test`), or any test runner during routine execution turns. All test execution is strictly deferred to CI/CD pipelines and dedicated fix workflows.
 6. **TOTAL BAN on Build Checking:** DO NOT run build verification commands (`go build`, `npm run build`, compiler invocations). Build compilation is checked later on in CI/CD.
 7. **Targeted Quality Linting Only:** Run only targeted, fast file-level linters/autofixers on specifically modified files (`exit 0`). DO NOT run `06-cicd-local-runner.py` or full test suites.
+
+### Per-Task Agent Isolation & Workspace Subfolders (`.lovable/temp-agents/xx-<task-name>/`)
+
+To prevent cross-task pollution and ensure seamless agent communication, every task MUST create a dedicated subfolder in `.lovable/temp-agents/xx-<task-name>/`:
+1. **Per-Task Isolation:** On task start, the assigned subagent creates its isolated directory `.lovable/temp-agents/xx-<task-name>/`.
+2. **State & Progress Tracking:** Create `.lovable/temp-agents/xx-<task-name>/state.md` documenting:
+   - Task sequence and target deliverables.
+   - Files assigned for modification.
+   - Current subtask step and completion percentage.
+3. **Inter-Agent Communication & Scratch Space:**
+   - All intermediate findings, scratch outputs, and dependency handoffs between agents working on this task MUST be written inside `.lovable/temp-agents/xx-<task-name>/`.
+4. **On Error/Crash:** Append the exact error, root cause, and `STATUS: FAILED` to `.lovable/temp-agents/xx-<task-name>/state.md` before exiting.
+5. **On Success:** Mark `STATUS: DONE` in `.lovable/temp-agents/xx-<task-name>/state.md`, aggregate findings to the master plan, and clean up or archive the folder.
 
 ### Phase 3: Task Consolidation & File Reduction (End of Loop)
 
