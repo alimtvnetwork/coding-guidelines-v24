@@ -3,7 +3,7 @@
 > **Directory:** `05-changes-history/21-completed-plans-consolidation/`
 > **Date:** 2026-09-09
 > **Author/Agent:** Antigravity AI
-> **Module Affected:** `.lovable/plans/completed/`, `.lovable/plans/01-index.md`, `readme.md`, `.lovable/memory/01-index.md`
+> **Module Affected:** `.ai-memory/plans/completed/`, `.ai-memory/plans/01-index.md`, `readme.md`, `.ai-memory/memory/01-index.md`
 > **Status:** Completed & Verified
 
 ---
@@ -12,7 +12,7 @@
 
 The user requested execution of the **Memory Consolidation, Safety Backup & Milestone Resequencing** workflow:
 ```text
-Autonomously create a timestamped backup branch, scan, analyze, cluster, consolidate, and re-sequence all completed plan files within .lovable/plans/completed/ into clean, cohesive milestone summaries, while strictly preserving 100% of architectural specifications, root-cause analyses, error contracts, and decision logs with zero data loss or truncation until 100% green without stopping.
+Autonomously create a timestamped backup branch, scan, analyze, cluster, consolidate, and re-sequence all completed plan files within .ai-memory/plans/completed/ into clean, cohesive milestone summaries, while strictly preserving 100% of architectural specifications, root-cause analyses, error contracts, and decision logs with zero data loss or truncation until 100% green without stopping.
 ```
 
 ### Core Objectives

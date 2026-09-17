@@ -29,7 +29,7 @@ HEADING_RE = re.compile(r'^#{1,6}(\s|$)')
 
 IGNORE_DIRS = {
     '.git', 'node_modules', '.github', '.ci-out', 'dist', 'build',
-    'tmp', '.lovable/temp-scripts', '.lovable/temp', '.gitmap', '.gemini', 'brain', 'vendor', 'testdata',
+    'tmp', '.ai-memory/temp-scripts', '.ai-memory/temp', '.gitmap', '.gemini', 'brain', 'vendor', 'testdata',
     'release-artifacts', 'coverage',
 }
 

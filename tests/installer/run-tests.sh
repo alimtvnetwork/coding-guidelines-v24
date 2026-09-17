@@ -18,7 +18,7 @@
 #
 # T2 currently exercises the standalone discover-parallel.sh probe
 # (which is the canonical implementation that Phase 2 of
-# .lovable/plans/installer-behavior-rollout.md will inline into every
+# .ai-memory/plans/installer-behavior-rollout.md will inline into every
 # generated installer). Once Phase 2 lands, T2 will additionally drive
 # the bundle installers themselves.
 #

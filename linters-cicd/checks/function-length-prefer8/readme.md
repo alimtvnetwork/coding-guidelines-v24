@@ -6,7 +6,7 @@
 
 This is the **single, canonical** specification for how the strict 8-line
 function-length rule is measured and enforced. All other surfaces
-(`02-spec/.../06-rules-mapping.md`, `.lovable/coding-guidelines.md`,
+(`02-spec/.../06-rules-mapping.md`, `.ai-memory/coding-guidelines.md`,
 the root `readme.md`, the rule docstrings) link **here**. If you change
 the threshold or counting rules, update this file first; the others must
 follow.
@@ -175,7 +175,7 @@ fixture to 8 lines — it is the canary.
 
 - `02-spec/02-coding-guidelines/06-cicd-integration/06-rules-mapping.md` —
   registry-level mapping table.
-- `.lovable/coding-guidelines.md` — Rule #1
+- `.ai-memory/coding-guidelines.md` — Rule #1
   developer-facing summary.
 - `linters-cicd/checks/function-length-prefer8/_shared.py` — `RULE`
   metadata + `STRICT_LINES` constant (the **executable** source of

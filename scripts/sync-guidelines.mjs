@@ -5,7 +5,7 @@
 // Single source of truth: 02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md
 //
 // Mirrors:
-//   1. .lovable/coding-guidelines.md   (exact body copy + auto-gen banner)
+//   1. .ai-memory/coding-guidelines.md   (exact body copy + auto-gen banner)
 //   2. .cursorrules                                       (Hard Rules block injected between markers)
 //
 // Usage:
@@ -21,7 +21,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
 const CANONICAL = resolve(ROOT, "02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md");
-const LOVABLE_MIRROR = resolve(ROOT, ".lovable/coding-guidelines.md");
+const LOVABLE_MIRROR = resolve(ROOT, ".ai-memory/coding-guidelines.md");
 const CURSORRULES = resolve(ROOT, ".cursorrules");
 
 const BANNER = [

@@ -16,7 +16,7 @@ EXCLUDE_DIRS = {
     '.git', 'node_modules', 'dist', 'build', 'bin', '.next', '.gitmap',
     'vendor', 'coverage', '.gemini', '.system_generated', 'tests/fixtures',
     'scratch', 'temp-scripts', 'temp-agents', 'temp', 'linter-scripts',
-    '.lovable/scratch', '.lovable/temp-agents'
+    '.ai-memory/scratch', '.ai-memory/temp-agents'
 }
 
 # Regex patterns

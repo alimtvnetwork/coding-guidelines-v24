@@ -357,7 +357,7 @@ if os.path.exists(target_ver_file):
     except Exception as e: print(f'  ⚠️  failed to read existing version.json: {e}', file=sys.stderr)
 removed_files = []
 for old_f in old_installed:
-    if old_f not in new_installed_sorted and old_f != 'version.json' and not old_f.startswith(('.lovable/', '.git/')):
+    if old_f not in new_installed_sorted and old_f != 'version.json' and not old_f.startswith(('.ai-memory/', '.git/')):
         old_path = os.path.join(target, old_f)
         if os.path.exists(old_path) and os.path.isfile(old_path):
             try: os.remove(old_path); removed_files.append(old_f); print(f'  🗑️  removed obsolete file: {old_f}')
@@ -409,7 +409,7 @@ with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent
       echo "  ✓ \${src} → \${TARGET}/\${dest} (merged into codingGuideline section)"
       continue
     fi
-    if [[ "\${src}" == *".lovable/strictly-avoid.md"* || "\${src}" == *".lovable/memory"* ]]; then
+    if [[ "\${src}" == *".ai-memory/strictly-avoid.md"* || "\${src}" == *".ai-memory/memory"* ]]; then
       python3 -c "
 import sys, os, shutil
 def merge_file(src, dst):
@@ -433,7 +433,7 @@ merge_path(sys.argv[1], sys.argv[2])
       echo "  ✔️ \${src} -> \${TARGET}/\${dest} (smart merged)"
       continue
     fi
-    if [[ "\${dest}" == *".lovable/plans"* || "\${dest}" == *".lovable/what-to-read.md"* ]]; then
+    if [[ "\${dest}" == *".ai-memory/plans"* || "\${dest}" == *".ai-memory/what-to-read.md"* ]]; then
       if [[ -e "\${TARGET}/\${dest}" ]]; then
         echo "  ℹ️  \${TARGET}/\${dest} already exists (skipping overwrite to preserve project state)"
         continue
@@ -480,7 +480,7 @@ with open(dest_file, 'w', encoding='utf-8') as f: json.dump(dest_data, f, indent
     echo "  ✓ \${src} → \${TARGET}/\${dest}"
   done
 
-  # ── Emit install-summary.json to .lovable/ ──
+  # ── Emit install-summary.json to .ai-memory/ ──
   python3 -c "
 import sys, json, os, datetime
 target, state_file, bundle_name = sys.argv[1:4]
@@ -501,10 +501,10 @@ summary = {
     'installedAt': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
     'filesInstalled': state.get('installedFiles', []), 'filesRemoved': state.get('removedFiles', [])
 }
-lovable_dir = os.path.join(target, '.lovable')
+lovable_dir = os.path.join(target, '.ai-memory')
 os.makedirs(lovable_dir, exist_ok=True)
 with open(os.path.join(lovable_dir, 'install-summary.json'), 'w', encoding='utf-8') as f: json.dump(summary, f, indent=2)
-print('  ✓ install summary written to .lovable/install-summary.json')
+print('  ✓ install summary written to .ai-memory/install-summary.json')
 " "\${TARGET}" "\${install_state_file}" "\${BUNDLE_NAME}"
 }
 
@@ -711,7 +711,7 @@ fi
 
 echo ""
 scaffold_lovable_folders() {
-  for d in ".lovable/prompts" ".lovable/plans" ".lovable/issues" ".lovable/cicd-issues" ".agents/skills" ".agents/scripts"; do
+  for d in ".ai-memory/prompts" ".ai-memory/plans" ".ai-memory/issues" ".ai-memory/cicd-issues" ".agents/skills" ".agents/scripts"; do
     local dp="\${TARGET}/\${d}"
     mkdir -p "\${dp}"
     if [ -z "$(ls -A "\${dp}" 2>/dev/null)" ]; then
@@ -1152,7 +1152,7 @@ function Copy-Mapping {
     $installedFilesSorted = if ($newInstalledFiles.Count -gt 0) { [string[]]($newInstalledFiles | Sort-Object -Unique) } else { @() }
     $removedFiles = [System.Collections.Generic.List[string]]::new()
     foreach ($oldFile in $prevInstalledFiles) {
-        if (-not $newInstalledFiles.Contains($oldFile) -and $oldFile -ne "version.json" -and -not ($oldFile -like ".lovable/*") -and -not ($oldFile -like ".git/*")) {
+        if (-not $newInstalledFiles.Contains($oldFile) -and $oldFile -ne "version.json" -and -not ($oldFile -like ".ai-memory/*") -and -not ($oldFile -like ".git/*")) {
             $oldPath = Join-Path $Target $oldFile
             if (Test-Path $oldPath) {
                 try { Remove-Item -Path $oldPath -Force; $removedFiles.Add($oldFile); Write-Host "  🗑️  removed obsolete file: $oldFile" -ForegroundColor Yellow } catch { Write-Warning "  ⚠️  failed to remove obsolete file $oldFile: $($_.Exception.Message)" }
@@ -1187,7 +1187,7 @@ function Copy-Mapping {
             } catch { Write-Warning "  ⚠️  failed to merge version.json: $($_.Exception.Message)" }
             continue
         }
-        if ($pair.Src -match "\.lovable/strictly-avoid\.md" -or $pair.Src -match "\.lovable/memory") {
+        if ($pair.Src -match "\.ai-memory/strictly-avoid\.md" -or $pair.Src -match "\.ai-memory/memory") {
             function Merge-File { param($srcFile, $dstFile)
                 if (-not (Test-Path $dstFile)) { New-Item -ItemType Directory -Path (Split-Path $dstFile -Parent) -Force | Out-Null; Copy-Item -Path $srcFile -Destination $dstFile -Force; return }
                 $old = @(Get-Content $dstFile -Encoding UTF8); $new = @(Get-Content $srcFile -Encoding UTF8)
@@ -1198,7 +1198,7 @@ function Copy-Mapping {
             } else { Merge-File -srcFile $srcPath -dstFile $destPath }
             Write-Host "  ✔️ $($pair.Src) -> $destPath (smart merged)" -ForegroundColor Green; continue
         }
-        if ($pair.Dest -like "*.lovable/plans*" -or $pair.Dest -like "*.lovable/what-to-read.md*") {
+        if ($pair.Dest -like "*.ai-memory/plans*" -or $pair.Dest -like "*.ai-memory/what-to-read.md*") {
             if (Test-Path $destPath) { Write-Host "  ℹ️  $destPath already exists (skipping overwrite to preserve project state)" -ForegroundColor Yellow; continue }
         }
         if ((Get-Item $srcPath).PSIsContainer) {
@@ -1228,10 +1228,10 @@ function Copy-Mapping {
     }
 
     try {
-        $summaryDir = Join-Path $Target ".lovable"; if (-not (Test-Path $summaryDir)) { New-Item -ItemType Directory -Path $summaryDir -Force | Out-Null }
+        $summaryDir = Join-Path $Target ".ai-memory"; if (-not (Test-Path $summaryDir)) { New-Item -ItemType Directory -Path $summaryDir -Force | Out-Null }
         $summaryData = [ordered]@{ bundle = "${bundle.name}"; version = $finalGuidelineVersion; previousVersion = $prevVersion; installedAt = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"); filesInstalled = @($installedFilesSorted); filesRemoved = @($removedFilesSorted) }
         $summaryData | ConvertTo-Json -Depth 5 | Set-Content -Path (Join-Path $summaryDir "install-summary.json") -Encoding UTF8
-        Write-Host "  ✓ install summary written to .lovable/install-summary.json" -ForegroundColor Green
+        Write-Host "  ✓ install summary written to .ai-memory/install-summary.json" -ForegroundColor Green
     } catch { Write-Warning "  ⚠️  failed to write install-summary.json: $($_.Exception.Message)" }
 }
 
@@ -1390,7 +1390,7 @@ function Verify-Install {
     Write-Host "  ✓ verified $count required path(s) present" -ForegroundColor Green
 }
 function Scaffold-LovableFolders {
-    foreach ($d in @(".lovable/prompts", ".lovable/plans", ".lovable/issues", ".lovable/cicd-issues", ".agents/skills", ".agents/scripts")) {
+    foreach ($d in @(".ai-memory/prompts", ".ai-memory/plans", ".ai-memory/issues", ".ai-memory/cicd-issues", ".agents/skills", ".agents/scripts")) {
         $dp = Join-Path $Target $d
         if (-not (Test-Path -LiteralPath $dp)) {
             New-Item -ItemType Directory -Path $dp -Force | Out-Null

@@ -148,7 +148,7 @@ class IterMarkdownFilesFollowsFileSymlinks(unittest.TestCase):
         # skips directory symlinks. We pin the current contract: an
         # uppercase .MD reachable ONLY through a directory symlink is
         # NOT walked. If we ever flip this, update both the test and
-        # add a memory under .lovable/memory/architecture/ so the
+        # add a memory under .ai-memory/memory/architecture/ so the
         # change is documented.
         outside = self.root / "vendor_dir"
         outside.mkdir()

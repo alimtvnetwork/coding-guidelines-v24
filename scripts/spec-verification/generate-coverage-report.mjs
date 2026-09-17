@@ -44,7 +44,7 @@ const SACRED_BASENAMES = new Set([
 // Spec-only folders are exempt from `## Verification` requirements:
 // they are markdown specs that explicitly forbid implementation work,
 // so there is nothing to "verify" against running code. Keep this list
-// in sync with `.lovable/strictly-avoid.md` and
+// in sync with `.ai-memory/strictly-avoid.md` and
 // `mem://constraints/spec19-no-implementation`.
 const SPEC_ONLY_FOLDERS = new Set([
   "19-main-worker-service",

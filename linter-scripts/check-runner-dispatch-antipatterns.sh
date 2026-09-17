@@ -25,8 +25,8 @@ SH_REL="run.sh"
 PS_REL="run.ps1"
 
 # Findings format (TSV): file<TAB>line<TAB>kind<TAB>reason<TAB>pattern<TAB>match<TAB>snippet
-mkdir -p "$REPO_ROOT/.lovable/temp"
-FINDINGS_FILE="$(mktemp -p "$REPO_ROOT/.lovable/temp" findings.XXXXXX 2>/dev/null || mktemp 2>/dev/null || echo "$REPO_ROOT/.lovable/temp/findings-$$.tsv")"
+mkdir -p "$REPO_ROOT/.ai-memory/temp"
+FINDINGS_FILE="$(mktemp -p "$REPO_ROOT/.ai-memory/temp" findings.XXXXXX 2>/dev/null || mktemp 2>/dev/null || echo "$REPO_ROOT/.ai-memory/temp/findings-$$.tsv")"
 trap 'rm -f "$FINDINGS_FILE"' EXIT
 
 # GitHub Actions annotation values must escape %, \r, \n, : and ,

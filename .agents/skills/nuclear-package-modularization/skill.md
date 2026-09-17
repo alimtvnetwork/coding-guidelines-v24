@@ -7,12 +7,12 @@ description: Autonomously modularize monolithic Go packages into smaller acyclic
 
 ## Purpose & Overview
 
-Autonomously decompose large, monolithic Go packages into small, acyclic packages following a strict Directed Acyclic Graph (DAG) architecture to eliminate compiler bloat and test latency, while isolating heavy subprocess tests into blackbox test packages (`tests/heavy_test/` under `package heavy_test`), maintaining an accurate test inventory (`.lovable/test-inventory.json`), and enforcing the 5-day cache freshness decision engine.
+Autonomously decompose large, monolithic Go packages into small, acyclic packages following a strict Directed Acyclic Graph (DAG) architecture to eliminate compiler bloat and test latency, while isolating heavy subprocess tests into blackbox test packages (`tests/heavy_test/` under `package heavy_test`), maintaining an accurate test inventory (`.ai-memory/test-inventory.json`), and enforcing the 5-day cache freshness decision engine.
 
 ## Core Rules & Execution Flow
 
 1. **Verbatim Prompt Recording & Deliverables Extraction (Phase 1 Step 0):**
-   - Directly capture user prompt verbatim into `.lovable/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`.
+   - Directly capture user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`.
    - Extract actionable deliverables under `## Extracted Actionable Task List`.
    - Output confirmed deliverables in chat before proceeding.
 
@@ -32,12 +32,12 @@ Autonomously decompose large, monolithic Go packages into small, acyclic package
    - Routine package unit tests must be 100% in-memory fast unit tests (< 0.05s).
 
 5. **Per-Task Agent Isolation & Workspace Subfolders:**
-   - Create `.lovable/temp-agents/xx-<task-name>/` on task initialization.
+   - Create `.ai-memory/temp-agents/xx-<task-name>/` on task initialization.
    - Track progress and state in `state.md`.
    - On completion, record `STATUS: DONE` and clean up.
 
 6. **Test Inventory Synchronization & Atomic Change Recording:**
-   - Synchronize `.lovable/test-inventory.json` with test IDs, packages, durations, and tier tags.
+   - Synchronize `.ai-memory/test-inventory.json` with test IDs, packages, durations, and tier tags.
    - Record modified files under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
 
 7. **Coding Guidelines & Quality Gates:**

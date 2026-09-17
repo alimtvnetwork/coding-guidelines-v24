@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Linter: check-prompt-and-spec-paths.py
-Scans 01-prompts/, spec/, .lovable/, and .agents/ for relative file path references
+Scans 01-prompts/, spec/, .ai-memory/, and .agents/ for relative file path references
 in markdown links and backticks, verifying that all referenced paths exist on disk.
 """
 
@@ -42,7 +42,7 @@ IGNORE_TERMS = {
     "src/services/UserService.ts", "app/main.go", "assets/<NN-folder>/<NN-file>.<ext>",
     "assets/01-icons/03-logo.svg", "src/types/", "src/enums/", "domain/types", "domain/types/",
     "types/", "models/", "pkg/types", "cmd/main.go", ".circleci/config.yml",
-    ".lovable/plans/subtasks/01-coding-guideline-fixes/", ".lovable/29-plan.md",
+    ".ai-memory/plans/subtasks/01-coding-guideline-fixes/", ".ai-memory/29-plan.md",
     "src/models/auth.ts", "src/services/auth.ts", "src/services/api.ts",
     "src/state/user.ts", "src/utils/status.ts", "src/task.rs", "pkg/api/order.go",
     "gitmap/cmd/rootusage.go", "gitmap/cmd/clone.go", "gitmap/cloner/runners.go",
@@ -53,8 +53,8 @@ IGNORE_TERMS = {
     "src/Enums/", "src/Enums/OrderStatusType.php", "enums/user_role_type.py",
     "cmd/user.go", "src/cli/audit.ts", "scripts/deploy.py",
     "02-spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
-    "01-cross-language/18-code-mutation-avoidance.md", ".lovable/temp/recent-file-changes.lock",
-    ".lovable/temp/recent-file-changes.json"
+    "01-cross-language/18-code-mutation-avoidance.md", ".ai-memory/temp/recent-file-changes.lock",
+    ".ai-memory/temp/recent-file-changes.json"
 }
 
 STRIP_CHARS = " `\"'(),:;[]{}"
@@ -83,7 +83,7 @@ def is_repo_path(raw: str) -> bool:
         return False
     if "XX-" in s or "xx-" in s or "NN-" in s or "/XX/" in s or "/XX" in s or "vX." in s or "/tmp/" in s or "path/to/" in s:
         return False
-    if s.startswith(("spec/", ".lovable/", ".agents/", "linter-scripts/", "linters-cicd/", "src/", "cmd/", "assets/", "reports/", "scripts/")):
+    if s.startswith(("spec/", ".ai-memory/", ".agents/", "linter-scripts/", "linters-cicd/", "src/", "cmd/", "assets/", "reports/", "scripts/")):
         return True
     if "/" in s and any(s.endswith(ext) for ext in KNOWN_EXTENSIONS):
         return True

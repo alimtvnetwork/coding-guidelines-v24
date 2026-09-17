@@ -20,7 +20,7 @@ export function RuleStatusGrid({ rules }: RuleStatusGridProps) {
           Pass / Fail by Rule
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Every CODE-RED / STYLE rule that has been triggered at least once. Counts come from `.lovable/cicd-issues/`.
+          Every CODE-RED / STYLE rule that has been triggered at least once. Counts come from `.ai-memory/cicd-issues/`.
         </p>
       </CardHeader>
       <CardContent>

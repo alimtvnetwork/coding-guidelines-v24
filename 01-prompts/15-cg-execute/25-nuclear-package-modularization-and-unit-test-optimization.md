@@ -11,7 +11,7 @@ N = 200
 
 N = total self-loop steps budget that the agents will perform (configurable per run).
 
-/goal Autonomously scan, audit, plan, and modularize monolithic packages and optimize unit test execution across the codebase. Enforce a strict Directed Acyclic Graph (DAG) architecture, extract reusable zero-dependency leaf packages, isolate slow or destructive tests (`exec.Command`, git CLI subprocesses, network sockets, `time.Sleep`) into external blackbox test packages (`tests/heavy_test/` under `package heavy_test`), maintain the centralized test inventory manifest (`.lovable/test-inventory.json`), and adhere to the 5-day cache freshness decision engine to achieve ultra-fast sub-0.05s unit test execution loops without circular dependencies.
+/goal Autonomously scan, audit, plan, and modularize monolithic packages and optimize unit test execution across the codebase. Enforce a strict Directed Acyclic Graph (DAG) architecture, extract reusable zero-dependency leaf packages, isolate slow or destructive tests (`exec.Command`, git CLI subprocesses, network sockets, `time.Sleep`) into external blackbox test packages (`tests/heavy_test/` under `package heavy_test`), maintain the centralized test inventory manifest (`.ai-memory/test-inventory.json`), and adhere to the 5-day cache freshness decision engine to achieve ultra-fast sub-0.05s unit test execution loops without circular dependencies.
 
 ---
 
@@ -21,32 +21,32 @@ You MUST execute this task via a strict 3-Phase pipeline governed by the N-step 
 
 ```text
 N = 200  (Total self-loop steps budget, read-only after initialization)
-PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Packages, Cache Freshness Audit, DAG Mapping, Master Plan in .lovable/plans/pending/)
+PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Scan Packages, Cache Freshness Audit, DAG Mapping, Master Plan in .ai-memory/plans/pending/)
 PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Leaf Package Extraction, Domain Modularization, Heavy Test Isolation, Inventory Sync)
 ```
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Step 0 - Verbatim Prompt Recording & Deliverables Extraction): Directly capture the user's prompt verbatim into `.lovable/plans/pending/xx-nuclear-packages.md` under a dedicated `## User Request (Verbatim)` section. Extract the specific task list as actionable bullet points under `## Extracted Actionable Task List`. Output this confirmed checklist directly in chat confirming: *"Confirmed Task Deliverables: 1. [task 1], 2. [task 2]..."* before taking further actions.
-2. [ ] /goal Phase 1 (Step A - Test Inventory Freshness & Duration Audit): Audit test inventory freshness by running `python 03-ai-scripts/33-test-inventory-generator.py --check-age --max-age-days 5`. If `.lovable/test-inventory.json` is missing or older than 5 days (or unprofiled), run an initial profiling pass to record durations. If fresh (`<= 5 days old`), skip re-running all tests and use cached durations directly to make modularization decisions.
+1. [ ] /goal Phase 1 (Step 0 - Verbatim Prompt Recording & Deliverables Extraction): Directly capture the user's prompt verbatim into `.ai-memory/plans/pending/xx-nuclear-packages.md` under a dedicated `## User Request (Verbatim)` section. Extract the specific task list as actionable bullet points under `## Extracted Actionable Task List`. Output this confirmed checklist directly in chat confirming: *"Confirmed Task Deliverables: 1. [task 1], 2. [task 2]..."* before taking further actions.
+2. [ ] /goal Phase 1 (Step A - Test Inventory Freshness & Duration Audit): Audit test inventory freshness by running `python 03-ai-scripts/33-test-inventory-generator.py --check-age --max-age-days 5`. If `.ai-memory/test-inventory.json` is missing or older than 5 days (or unprofiled), run an initial profiling pass to record durations. If fresh (`<= 5 days old`), skip re-running all tests and use cached durations directly to make modularization decisions.
 3. [ ] /goal Phase 1 (Step B - Monolithic Package & Dependency Topology Discovery): Deeply scan the target codebase using fast discovery tools (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `18-codebase-topology-discoverer.py`) to map package dependency graphs, import cycles, bloated packages (>10 files or test runtimes > 2.0s), and candidate leaf packages.
-4. [ ] /goal Phase 1 (Step C - Master Plan Generation & Violation Ledger): Write the master architectural plan into `.lovable/plans/pending/xx-nuclear-packages.md` with an exhaustive Violation Ledger table (Package, Current File Count, Monolithic Anti-Patterns, Target DAG Subpackages, Slow Tests to Isolate, Status).
-5. [ ] /goal Phase 1 (Step D - Lean Subtask Decomposition): Decompose into granular subtasks in `.lovable/plans/subtasks/xx-nuclear-packages/01-<subtask>.md`, etc., with strictly relative Git paths.
+4. [ ] /goal Phase 1 (Step C - Master Plan Generation & Violation Ledger): Write the master architectural plan into `.ai-memory/plans/pending/xx-nuclear-packages.md` with an exhaustive Violation Ledger table (Package, Current File Count, Monolithic Anti-Patterns, Target DAG Subpackages, Slow Tests to Isolate, Status).
+5. [ ] /goal Phase 1 (Step D - Lean Subtask Decomposition): Decompose into granular subtasks in `.ai-memory/plans/subtasks/xx-nuclear-packages/01-<subtask>.md`, etc., with strictly relative Git paths.
 6. [ ] /goal Phase 1 (Step E - Mandatory Auto-Loop): As soon as Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for permission**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
 7. [ ] /goal Phase 2 (Step A - Leaf Package Extraction): Extract zero-dependency leaf packages (`pkg/constants`, `pkg/model`, `pkg/appfault`, `pkg/fsutil`, `pkg/cliexit`). Ensure leaf packages NEVER import parent packages or domain packages.
 8. [ ] /goal Phase 2 (Step B - Domain Subpackage Segregation & DAG Enactment): Decompose monolithic command/service packages into cohesive domain subpackages (e.g. `cmdprompt`, `cmdpurge`, `cloner`). Verify zero circular dependencies (`import cycle not allowed`).
 9. [ ] /goal Phase 2 (Step C - Heavy Test Isolation): Segregate heavy tests invoking `exec.Command`, git CLI processes, network sockets, or `time.Sleep` into `tests/heavy_test/` (or `cli/tests/heavy_test/`) under `package heavy_test`. Ensure routine package unit tests contain only fast in-memory unit tests (< 0.05s).
-10. [ ] /goal Phase 2 (Step D - Test Inventory Manifest Synchronization): Synchronize `.lovable/test-inventory.json` and atomically record all modified files into `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
+10. [ ] /goal Phase 2 (Step D - Test Inventory Manifest Synchronization): Synchronize `.ai-memory/test-inventory.json` and atomically record all modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
 11. [ ] /goal Phase 2 (Step E - Function & File Sizing Compliance): Enforce functions <= 8–15 lines, files <= 80–100 lines, affirmative booleans (`is*`, `has*`), zero explicit `== true`, and guard clauses.
 12. [ ] /goal Phase 2 (Step F - Banned Intermediate Verification): DO NOT run unit test suites or builds during intermediate file edits.
 13. [ ] /goal Phase 2 (Step G - Final Step Build Verification): At the conclusion of all subtasks, execute targeted build checks (`go vet ./...`, `go build ./...`) to verify 0 compiler errors or circular imports.
-14. [ ] /goal Phase 3 (Step A - Task Consolidation): Consolidate completed subtasks into `.lovable/plans/completed/xx-nuclear-packages.md`, delete subtask files, and update `.lovable/plans/01-index.md`.
+14. [ ] /goal Phase 3 (Step A - Task Consolidation): Consolidate completed subtasks into `.ai-memory/plans/completed/xx-nuclear-packages.md`, delete subtask files, and update `.ai-memory/plans/01-index.md`.
 15. [ ] /goal Phase 3 (Step B - Final Step Git Commit & Push): Stage all modified files, inventory updates, and plans (`git add -A`), commit in a single atomic commit, and push to git. Never commit per-file.
-16. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
-17. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
+16. [ ] /learn Ingest `.ai-memory/memory/01-index.md` for project memory index and past learnings.
+17. [ ] /learn Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
 18. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical size tiers.
 19. [ ] /learn Ingest `02-spec/02-coding-guidelines/03-golang/01-index.md` for Go coding standards and package architecture.
-20. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
+20. [ ] /learn Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
 
 ---
 
@@ -101,7 +101,7 @@ Decompose the monolith into clean, acyclic single-responsibility packages organi
 
 ---
 
-## 2. Centralized Test Inventory Manifest (`.lovable/test-inventory.json`)
+## 2. Centralized Test Inventory Manifest (`.ai-memory/test-inventory.json`)
 
 The test inventory manifest serves as the single source of truth for repository test suite health, categorization, and execution durations. Modeled after the GitMap architecture, it enables intelligent test execution, selective running, and duration tracking.
 
@@ -170,7 +170,7 @@ The test inventory manifest serves as the single source of truth for repository 
 
 ## 3. The 5-Day Freshness Decision Engine
 
-To prevent redundant full-test profiling runs that consume precious tokens and CPU cycles, agents MUST evaluate the freshness of `.lovable/test-inventory.json`:
+To prevent redundant full-test profiling runs that consume precious tokens and CPU cycles, agents MUST evaluate the freshness of `.ai-memory/test-inventory.json`:
 
 ```text
                             Check Inventory Freshness
@@ -190,7 +190,7 @@ To prevent redundant full-test profiling runs that consume precious tokens and C
 
 ### Execution Rules:
 1. **Always Audit First:** Run `python 03-ai-scripts/33-test-inventory-generator.py --check-age --max-age-days 5`.
-2. **Fresh Inventory (Exit 0):** The AI agent is STRICTLY FORBIDDEN from running all tests. It MUST read `.lovable/test-inventory.json` directly and use existing test durations to identify slow tests and modularization targets.
+2. **Fresh Inventory (Exit 0):** The AI agent is STRICTLY FORBIDDEN from running all tests. It MUST read `.ai-memory/test-inventory.json` directly and use existing test durations to identify slow tests and modularization targets.
 3. **Stale or Missing Inventory (Exit 1):** The AI agent executes a single baseline inventory generation pass to populate duration metrics, commits the updated manifest, and uses those metrics for subsequent decisions.
 
 ---
@@ -251,19 +251,19 @@ Integration tests that execute external system processes, spawn CLI subprocesses
 
 ---
 
-## 6. Per-Task Agent Isolation & Workspace Subfolders (`.lovable/temp-agents/xx-<task-name>/`)
+## 6. Per-Task Agent Isolation & Workspace Subfolders (`.ai-memory/temp-agents/xx-<task-name>/`)
 
-To prevent cross-task pollution and ensure seamless agent communication, every task MUST create a dedicated subfolder in `.lovable/temp-agents/xx-<task-name>/`:
+To prevent cross-task pollution and ensure seamless agent communication, every task MUST create a dedicated subfolder in `.ai-memory/temp-agents/xx-<task-name>/`:
 
-1. **Per-Task Isolation:** On task start, the assigned subagent creates its isolated directory `.lovable/temp-agents/xx-<task-name>/`.
-2. **State & Progress Tracking:** Create `.lovable/temp-agents/xx-<task-name>/state.md` documenting:
+1. **Per-Task Isolation:** On task start, the assigned subagent creates its isolated directory `.ai-memory/temp-agents/xx-<task-name>/`.
+2. **State & Progress Tracking:** Create `.ai-memory/temp-agents/xx-<task-name>/state.md` documenting:
    - Task sequence and target deliverables.
    - Files assigned for modification.
    - Current subtask step and completion percentage.
 3. **Inter-Agent Communication & Scratch Space:**
-   - All intermediate findings, scratch outputs, and dependency handoffs between agents working on this task MUST be written inside `.lovable/temp-agents/xx-<task-name>/`.
-4. **On Error/Crash:** Append the exact error, root cause, and `STATUS: FAILED` to `.lovable/temp-agents/xx-<task-name>/state.md` before exiting.
-5. **On Success:** Mark `STATUS: DONE` in `.lovable/temp-agents/xx-<task-name>/state.md`, aggregate findings to the master plan, and clean up or archive the folder.
+   - All intermediate findings, scratch outputs, and dependency handoffs between agents working on this task MUST be written inside `.ai-memory/temp-agents/xx-<task-name>/`.
+4. **On Error/Crash:** Append the exact error, root cause, and `STATUS: FAILED` to `.ai-memory/temp-agents/xx-<task-name>/state.md` before exiting.
+5. **On Success:** Mark `STATUS: DONE` in `.ai-memory/temp-agents/xx-<task-name>/state.md`, aggregate findings to the master plan, and clean up or archive the folder.
 
 ---
 
@@ -310,7 +310,7 @@ To maintain high throughput and prevent distracting CI noise during modularizati
 - [ ] Leaf Packages Segregated: `pkg/constants`, `pkg/model`, `pkg/appfault`, `pkg/fsutil` have zero domain dependencies.
 - [ ] Heavy Tests Isolated: Tests with `exec.Command`, git CLI, sockets, or `time.Sleep` placed in `tests/heavy_test/` (`package heavy_test`).
 - [ ] Fast Unit Tests Retained: Routine in-package tests run in < 0.05s using mocks and test doubles.
-- [ ] Test Inventory Synchronized: `.lovable/test-inventory.json` updated with test IDs, packages, and duration categories.
+- [ ] Test Inventory Synchronized: `.ai-memory/test-inventory.json` updated with test IDs, packages, and duration categories.
 - [ ] Cache Freshness Checked: `python 03-ai-scripts/33-test-inventory-generator.py --check-age` evaluated first; zero redundant full runs on fresh cache.
 - [ ] Function Sizing: Functions <= 8 lines preferred (hard cap 15 lines).
 - [ ] File Sizing: Files <= 80 lines preferred (hard cap 100 lines).
@@ -325,12 +325,12 @@ To maintain high throughput and prevent distracting CI noise during modularizati
 ## 11. Task Consolidation & Final Step Git Commit & Push Mandate
 
 ### Task Consolidation & File Reduction (End of Loop)
-When all subtasks for the parent task (`.lovable/plans/pending/xx-nuclear-packages.md`) are finished:
-1. Combine all completed granular subtasks from `.lovable/plans/subtasks/xx-nuclear-packages/*.md` into `.lovable/plans/completed/xx-nuclear-packages.md`.
+When all subtasks for the parent task (`.ai-memory/plans/pending/xx-nuclear-packages.md`) are finished:
+1. Combine all completed granular subtasks from `.ai-memory/plans/subtasks/xx-nuclear-packages/*.md` into `.ai-memory/plans/completed/xx-nuclear-packages.md`.
 2. Include a header explicitly documenting initial and optimized package structures, test duration reductions, and loop step metrics.
-3. Delete the original granular `.md` files in `.lovable/plans/subtasks/xx-nuclear-packages/`.
-4. Delete the original parent plan `.lovable/plans/pending/xx-nuclear-packages.md`.
-5. Update `.lovable/plans/01-index.md` to point to the newly consolidated completed file.
+3. Delete the original granular `.md` files in `.ai-memory/plans/subtasks/xx-nuclear-packages/`.
+4. Delete the original parent plan `.ai-memory/plans/pending/xx-nuclear-packages.md`.
+5. Update `.ai-memory/plans/01-index.md` to point to the newly consolidated completed file.
 
 ### Final Step Git Commit & Push Mandate (Strict Checklist)
 - [ ] **MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW):** At the FINAL step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, you MUST stage everything (`git add -A`), create a clean, descriptive conventional commit (`git commit -m "<type>(<scope>): <summary>"`), and push directly to the remote repository (`git push origin <branch>`). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.

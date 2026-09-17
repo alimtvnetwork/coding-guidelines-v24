@@ -20,7 +20,7 @@ export function IssueLogCard({ issues }: IssueLogCardProps) {
           Tracked Issues
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Sourced from `.lovable/cicd-issues/`. Each entry is a real validator finding plus its fix.
+          Sourced from `.ai-memory/cicd-issues/`. Each entry is a real validator finding plus its fix.
         </p>
       </CardHeader>
       <CardContent>

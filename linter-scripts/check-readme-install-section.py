@@ -13,7 +13,7 @@ the root `readme.md`:
      contains EXACTLY ONE non-empty command line, with NO inline `#`
      comments, NO blank lines, and NO multi-line `\\` continuations.
 
-Spec: `.lovable/memory/constraints/install-command-formatting.md`
+Spec: `.ai-memory/memory/constraints/install-command-formatting.md`
       `02-spec/01-spec-authoring-guide/13-root-readme-conventions.md`
 
 Exit codes:

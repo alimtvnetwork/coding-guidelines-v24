@@ -7,7 +7,7 @@ under `linters-cicd/tests/`.
 
 | Script | Closes | Run locally |
 |---|---|---|
-| `check-bool-neg-001-pipeline.sh` | `.lovable/resolved-issues/01-bool-neg-001-pipeline-untested.md`, suggestion #04 | `npm run test:pipeline:bool-neg` |
+| `check-bool-neg-001-pipeline.sh` | `.ai-memory/resolved-issues/01-bool-neg-001-pipeline-untested.md`, suggestion #04 | `npm run test:pipeline:bool-neg` |
 | `check-orchestrator-flags.sh` | plan item #11, suggestion #13 | `npm run test:pipeline:orchestrator` |
 
 Run both in sequence: `npm run test:pipeline`.

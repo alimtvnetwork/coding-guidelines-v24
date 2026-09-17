@@ -8,7 +8,7 @@
 - [ ] `/goal` **Read and understand** all numbered specifications under `03-error-manage/`.
 - [ ] `/learn` **Skill Creation:** You MUST automatically author or update an Antigravity skill (`.agents/skills/cg-error-management/skill.md`) after reading this specification so this knowledge becomes a reusable capability.
 - [ ] `/learn` **Looping Enforcement:** Take at least 50 distinct steps to self-loop and thoroughly digest all files in this module. Do not skim.
-- [ ] `/learn` Adhere strictly to `.lovable/folder-structure.md` and `.lovable/strictly-avoid.md`.
+- [ ] `/learn` Adhere strictly to `.ai-memory/folder-structure.md` and `.ai-memory/strictly-avoid.md`.
 - [ ] `/goal` Verify zero explicit `true` boolean evaluations and no mixed-polarity conditionals.
 - [ ] `/learn` Run all local verification linters via `python 03-ai-scripts/06-cicd-local-runner.py`.
 

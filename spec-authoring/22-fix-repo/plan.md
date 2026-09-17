@@ -11,7 +11,7 @@ Implementation does not begin until Phase 2.
 - [x] `03-acceptance-criteria.md`
 - [x] `04-examples.md`
 - [x] `29-plan.md` (this file)
-- [x] Memory rule saved: `.lovable/memory/features/fix-repo-url-handling.md`
+- [x] Memory rule saved: `.ai-memory/memory/features/fix-repo-url-handling.md`
 - [x] Open questions resolved (URL handling, flag set, case + scope, backups).
 
 Outputs are documents only. No source code touched yet.

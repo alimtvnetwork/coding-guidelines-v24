@@ -100,7 +100,7 @@ Examples (Current = 3):
 4. **URL handling:** plain substring everywhere. Host stays
    untouched because the host is not part of the token. Both
    modes behave identically wrt URLs (see
-   `.lovable/memory/features/fix-repo-url-handling.md`).
+   `.ai-memory/memory/features/fix-repo-url-handling.md`).
 5. **Replacement order:** ascending by `N`. Idempotent because
    the replacement string contains a different version number
    than any token being matched.

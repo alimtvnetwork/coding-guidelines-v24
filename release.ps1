@@ -14,7 +14,7 @@ $version = $packageJson.version
 $distDir = Join-Path $PSScriptRoot "release-artifacts"
 $releaseName = "coding-guidelines-v$version"
 $stagingDir = Join-Path $distDir $releaseName
-$requiredPaths = @("02-spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1", ".lovable/coding-guidelines", ".lovable/prompts")
+$requiredPaths = @("02-spec", "linters", "linter-scripts", "install.sh", "install.ps1", "install-config.json", "readme.md", "release-install.sh", "release-install.ps1", ".ai-memory/coding-guidelines", ".ai-memory/prompts")
 
 function Test-RequiredPaths {
     $isMissing = $false
@@ -49,9 +49,9 @@ function Copy-ReleaseFiles {
     Copy-Item -Path (Join-Path $PSScriptRoot "install.ps1") -Destination (Join-Path $stagingDir "install.ps1") -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "install-config.json") -Destination (Join-Path $stagingDir "install-config.json") -Force
     Copy-Item -Path (Join-Path $PSScriptRoot "readme.md") -Destination (Join-Path $stagingDir "readme.md") -Force
-    New-Item -ItemType Directory -Path (Join-Path $stagingDir ".lovable") -Force | Out-Null
-    Copy-Item -Path (Join-Path $PSScriptRoot ".lovable/coding-guidelines") -Destination (Join-Path $stagingDir ".lovable/coding-guidelines") -Recurse -Force
-    Copy-Item -Path (Join-Path $PSScriptRoot ".lovable/prompts") -Destination (Join-Path $stagingDir ".lovable/prompts") -Recurse -Force
+    New-Item -ItemType Directory -Path (Join-Path $stagingDir ".ai-memory") -Force | Out-Null
+    Copy-Item -Path (Join-Path $PSScriptRoot ".ai-memory/coding-guidelines") -Destination (Join-Path $stagingDir ".ai-memory/coding-guidelines") -Recurse -Force
+    Copy-Item -Path (Join-Path $PSScriptRoot ".ai-memory/prompts") -Destination (Join-Path $stagingDir ".ai-memory/prompts") -Recurse -Force
 }
 
 function New-ReleaseArchives {

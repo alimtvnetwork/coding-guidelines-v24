@@ -74,7 +74,7 @@
 
 <p align="center"><sub><strong>Problem it solves:</strong> inconsistent code, swallowed errors, and AI-generated diffs that drift from house style. <strong>How:</strong> explicit numeric rules + standalone spec files + ready-to-run installers and CI checks. <strong>Tradeoffs:</strong> opinionated defaults, real adoption cost, best rolled out in waves (see <a href="ci-guards.example.yaml">CI guards example</a>).</sub></p>
 
-<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="quickstart.md">quickstart.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".lovable/coding-guidelines.md"><code>.lovable/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
+<p align="center"><sub><strong>Fastest paths in →</strong> humans: <a href="quickstart.md">quickstart.md</a> · <a href="#-code-red-non-negotiable-rules">10 CODE-RED rules</a> · AI agents: drop <a href=".ai-memory/coding-guidelines.md"><code>.ai-memory/coding-guidelines.md</code></a> into your system prompt, or install just the compact layer with <code>consolidated-install.{sh,ps1}</code> (see <a href="#-bundle-installers">bundle installers</a>).</sub></p>
 
 <h2 align="center">⚡ Install in One Line</h2>
 
@@ -251,16 +251,16 @@ Every installer below copies the listed **folders** (recursively, preserving str
 
 | Installer | Folders copied | Top-level files copied |
 |---|---|---|
-| **`install.{sh,ps1}`** (generic / "s-installer") | `02-spec/`, `linters/`, `linter-scripts/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
-| **`cli-install.{sh,ps1}`** | `02-spec/11-powershell-integration/`, `02-spec/12-cicd-pipeline-workflows/`, `02-spec/13-generic-cli/`, `02-spec/14-update/`, `02-spec/15-distribution-and-runner/`, `02-spec/16-generic-release/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
-| **`consolidated-install.{sh,ps1}`** | `02-spec/01-spec-authoring-guide/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, `.lovable/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`install.{sh,ps1}`** (generic / "s-installer") | `02-spec/`, `linters/`, `linter-scripts/`, `.ai-memory/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`cli-install.{sh,ps1}`** | `02-spec/11-powershell-integration/`, `02-spec/12-cicd-pipeline-workflows/`, `02-spec/13-generic-cli/`, `02-spec/14-update/`, `02-spec/15-distribution-and-runner/`, `02-spec/16-generic-release/`, `.ai-memory/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
+| **`consolidated-install.{sh,ps1}`** | `02-spec/01-spec-authoring-guide/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, `.ai-memory/coding-guidelines.md` | `fix-repo.sh`, `fix-repo.ps1`, `visibility-change.sh`, `visibility-change.ps1` |
 
 > Notes:
 >
 > - **`fix-repo.{sh,ps1}`** rewrite versioned-repo-name tokens across all text files (including inside URLs), host preserved automatically. See [`02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md`](02-spec/15-distribution-and-runner/06-fix-repo-forwarding.md).
 > - **`visibility-change.{sh,ps1}`** toggle repo visibility settings.
 > - **`version.json`** is smartly merged. The installer injects a `codingGuideline` object into the target repo's `version.json` with version tracking and prompt references, rather than overwriting the file.
-> - **`.lovable/coding-guidelines.md`** is the only `.lovable/*` subfolder shipped, other `.lovable/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
+> - **`.ai-memory/coding-guidelines.md`** is the only `.ai-memory/*` subfolder shipped, other `.ai-memory/` subfolders (`prompts/`, `memory/`, `cicd-issues/`, etc.) are intentionally excluded.
 > - **`spec-coding-guideline/`** is an internal-only repository specification folder for `coding-guidelines-v24` (housing internal slide deck specs) and is excluded from bundle exports to prevent collisions in consumer repositories.
 > - Missing top-level files in the source archive emit a warning and are skipped (forward-compatible); missing folders increment the `skippedFolders` summary counter.
 > - Both `install.sh` and `install.ps1` also honor `install-config.json`'s `folders[]` and `files[]` arrays for full override.
@@ -664,7 +664,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | You are… | Start with | Then add |
 |---|---|---|
 | **Solo developer** | The [10 Practical Rules](#-start-here-10-practical-rules) above + the [Consolidated Guidelines bundle](#consolidated-consolidated-guidelines) | [13 Hard Rules](#-compact-rule-set-13-hard-rules) when you want enforcement |
-| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
+| **AI tool user** (Cursor, Copilot, Claude Code, Codex) | Drop [`.ai-memory/coding-guidelines.md`](.ai-memory/coding-guidelines.md) into your system prompt + read the [AI Agent Checklist](#-for-ai-agents) | The condensed CODE-RED layer via `consolidated-install.{sh,ps1}` |
 | **Team lead** | The [Linters bundle](#linters-linters--cicd-linter-pack) + the [Error Management spec](#%EF%B8%8F-error-management-summary) | A staged rollout using [`ci-guards.example.yaml`](ci-guards.example.yaml) |
 | **Production maintainer** | The [Full-Repo Install](#%EF%B8%8F-full-repo-install-scripts) + CI integration | Gradual enforcement via the [Adoption Levels](#-adoption-levels) roadmap |
 | **New contributor / reviewer** | The [10 Practical Rules](#-start-here-10-practical-rules) + the [PR Review Checklist](#-pr-review-checklist) | Skim [CODE-RED rules](#-code-red-non-negotiable-rules) before approving |
@@ -713,7 +713,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 </p>
 
 <p align="center">
-  <strong>Authoritative Read-List:</strong> <a href=".lovable/what-to-read.md"><code>.lovable/what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".lovable/folder-structure.md"><code>.lovable/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="02-spec/01-index.md"><code>02-spec/01-index.md</code></a>
+  <strong>Authoritative Read-List:</strong> <a href=".ai-memory/what-to-read.md"><code>.ai-memory/what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".ai-memory/folder-structure.md"><code>.ai-memory/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="02-spec/01-index.md"><code>02-spec/01-index.md</code></a>
 </p>
 
 ---
@@ -804,7 +804,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 | 3 | **Why the alternative is safer or clearer** | `Nested form mirrors the formal spec in /docs/state-machine.md.` |
 | 4 | **Temporary or permanent** | `Permanent — tied to upstream protocol shape.` |
 
-<p align="center"><sub>Documented exceptions are tracked in <code>.lovable/exceptions/</code> (or your team's equivalent) and surfaced during audits. An undocumented skip is itself a CODE-RED violation. The goal is not zero exceptions — it is zero <em>silent</em> exceptions.</sub></p>
+<p align="center"><sub>Documented exceptions are tracked in <code>.ai-memory/exceptions/</code> (or your team's equivalent) and surfaced during audits. An undocumented skip is itself a CODE-RED violation. The goal is not zero exceptions — it is zero <em>silent</em> exceptions.</sub></p>
 
 ---
 
@@ -812,7 +812,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center">
   Want the <strong>absolute minimum</strong>? The entire ruleset is distilled into one file:<br/>
-  <a href="./.lovable/coding-guidelines.md"><code>.lovable/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
+  <a href="./.ai-memory/coding-guidelines.md"><code>.ai-memory/coding-guidelines.md</code></a> (≈ 50 lines).<br/>
   Drop it into Cursor, Claude, GPT, or any AI tool's memory and you have a working baseline.
 </p>
 
@@ -1487,7 +1487,7 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <a href="02-spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
   <a href="02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
   <a href="02-spec/17-consolidated-guidelines/01-index.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
-  <a href=".lovable/memory/01-index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
+  <a href=".ai-memory/memory/01-index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
   <a href="01-prompts/01-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
 </p>
 
@@ -1503,8 +1503,8 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 2. **Read nearby code** in the same file (and 1-2 sibling files) before editing. Match existing naming and structure.
 3. **Follow existing conventions** — naming, folder layout, import style — over your defaults. The repo's style wins.
 4. **Do not invent** APIs, folders, config keys, file names, environment variables, or library functions. If unsure, search or ask.
-5. **Read the .lovable/prompts.md index** to understand the workflow and execution prompts required for this project.
-6. **Follow AI Execution Rules** from .lovable/coding-guidelines.md if present.
+5. **Read the .ai-memory/prompts.md index** to understand the workflow and execution prompts required for this project.
+6. **Follow AI Execution Rules** from .ai-memory/coding-guidelines.md if present.
 
 **While writing code:**
 
@@ -1579,7 +1579,7 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 
 ## 📚 Documentation & Specifications
 
-The complete specification hierarchy, AI metadata, and institutional memory live in `02-spec/` and `.lovable/`. Full index: [`02-spec/01-index.md`](02-spec/01-index.md) and [`.lovable/01-index.md`](.lovable/01-index.md).
+The complete specification hierarchy, AI metadata, and institutional memory live in `02-spec/` and `.ai-memory/`. Full index: [`02-spec/01-index.md`](02-spec/01-index.md) and [`.ai-memory/01-index.md`](.ai-memory/01-index.md).
 
 | Resource | Purpose / Contents |
 |---|---|
@@ -1589,8 +1589,8 @@ The complete specification hierarchy, AI metadata, and institutional memory live
 | [`02-spec/04-database-conventions/`](02-spec/04-database-conventions/01-index.md) | Database schemas · PascalCase conventions · SQLite & WAL patterns |
 | [`02-spec/14-update/`](02-spec/14-update/01-index.md) | Self-update architecture · installer behaviors · version discovery |
 | [`02-spec/15-distribution-and-runner/`](02-spec/15-distribution-and-runner/01-index.md) | Cross-platform runners · distribution bundles · packaging pipeline |
-| [`.lovable/folder-structure.md`](.lovable/folder-structure.md) | Canonical repository folder structure · sequence IDs · AI metadata |
-| [`.lovable/01-index.md`](.lovable/01-index.md) | Master AI context router · operational guidelines · reading sequence |
+| [`.ai-memory/folder-structure.md`](.ai-memory/folder-structure.md) | Canonical repository folder structure · sequence IDs · AI metadata |
+| [`.ai-memory/01-index.md`](.ai-memory/01-index.md) | Master AI context router · operational guidelines · reading sequence |
 
 Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-spec/health-dashboard.md) · [`consolidated index`](02-spec/17-consolidated-guidelines/01-index.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
@@ -1601,13 +1601,13 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 ### What's new in v5.129.0
 
-- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.lovable/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
+- Coding guideline 31 (Compiled Simple) bumped to v1.5.0. Added "Canonical locations" block naming all three required paths and made mirror sync **Hard Rule #13 (Zero Tolerance)**: source is `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`, mirrors are `.ai-memory/coding-guidelines.md` and `.cursorrules`, `scripts/sync-guidelines.mjs` is the only allowed writer. Closes the recurring "sometimes spec is visible to search, sometimes not" symptom: search indexes the mirror, so a missing mirror made the guideline invisible to AI tooling.
 - React rule #7 rewritten from one line into full guidance. Explains WHY mutation breaks React (reconciler uses referential inequality), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`), when to reach for `structuredClone` (deep copies), when Immer is acceptable, and the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 
 ### What's new in v5.128.0
 
 - Self-tests for the v5.127 `branch-protection:diff` and `:soak` wrappers. `scripts/tests/branch-protection-diff.test.mjs` (12 assertions on set-diff logic incl. duplicates + mixed drift) and `scripts/tests/branch-protection-soak.test.mjs` (10 assertions locking the READY >=0.95 / WATCH >=0.80 / NOT READY thresholds + `sampleSize=0 => NO DATA`). Wired as `lint-ci.sh` steps 21+22 and inside CI `sync-drift`, with mirror-drift guard enforcing both.
-- `.lovable/procedures/branch-protection.md`: `npm run branch-protection:soak` is now a required precondition (step 0) before the promotion ceremony, and `npm run branch-protection:diff` replaces the raw `gh api ... --jq '.contexts'` eyeball diff in step 4. Ceremony is now: soak READY -> edit expected.json -> patch protection -> diff OK -> `--check` OK.
+- `.ai-memory/procedures/branch-protection.md`: `npm run branch-protection:soak` is now a required precondition (step 0) before the promotion ceremony, and `npm run branch-protection:diff` replaces the raw `gh api ... --jq '.contexts'` eyeball diff in step 4. Ceremony is now: soak READY -> edit expected.json -> patch protection -> diff OK -> `--check` OK.
 
 ### What's new in v5.127.0
 
@@ -1621,18 +1621,18 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 ### What's new in v5.125.0
 
-- Backlog cleanup: `.lovable/29-plan.md` "Open Questions (all resolved)" section replaced with a pointer to the Locked Decisions table. Mediocre-AI audits kept re-flagging OQ-A1..A4 despite each having a D-number (D15/D16 + Phase 8/11 resolutions).
-- New `npm run branch-protection:print | :json | :check` wrappers over `scripts/print-required-checks.mjs`, so the `visual` + `smoke` promotion procedure at `.lovable/procedures/branch-protection.md` is one tab-completion away instead of a raw `node scripts/...` invocation.
+- Backlog cleanup: `.ai-memory/29-plan.md` "Open Questions (all resolved)" section replaced with a pointer to the Locked Decisions table. Mediocre-AI audits kept re-flagging OQ-A1..A4 despite each having a D-number (D15/D16 + Phase 8/11 resolutions).
+- New `npm run branch-protection:print | :json | :check` wrappers over `scripts/print-required-checks.mjs`, so the `visual` + `smoke` promotion procedure at `.ai-memory/procedures/branch-protection.md` is one tab-completion away instead of a raw `node scripts/...` invocation.
 
 ### What's new in v5.124.0
 
 - OQ-A1 and OQ-A2 promoted from "default adopted" to locked spec decisions **D15** and **D16**. `02-spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` v1.1.0: §7 rewritten as "Resolved Decisions". D15 locks cascading semantics as simple union (no role hierarchy). D16 locks the cache-bin storage tier as per-process SQLite `:memory:` with the `RoleAccessCache` schema in §4 and the invalidation contract in §5; Redis and plain in-process map stay documented as configurable alternatives against the same four-function contract.
-- `.lovable/29-plan.md`: Locked Decisions table gains D15 and D16. Open Questions section renamed to "all resolved". Root cause this closes: every blind-AI and mediocre-AI audit kept flagging these as legitimately open even though 18+ downstream chapters had already conformed to the defaults; leaving them "open" invited a future implementer to waste a phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
+- `.ai-memory/29-plan.md`: Locked Decisions table gains D15 and D16. Open Questions section renamed to "all resolved". Root cause this closes: every blind-AI and mediocre-AI audit kept flagging these as legitimately open even though 18+ downstream chapters had already conformed to the defaults; leaving them "open" invited a future implementer to waste a phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
 
 ### What's new in v5.123.0
 
 - Testable pre-push visual-hint helper. `scripts/pre-push-visual-hint.sh` extracts the sandbox vs host branching that lived inline in `.husky/pre-push`, and `scripts/tests/pre-push-visual-hint.test.sh` runs 9 cases (both branches recommend the correct target, neither leaks the other, both include the workflow-dispatch fallback, unknown env exits non-zero). Wired as `lint-ci.sh` step 18. Root cause: untested inline shell inside a git hook is how the v5.117 "strict guard, zero baselines" regression happened.
-- Required-checks enumerator + procedure. `scripts/print-required-checks.mjs` parses `.github/workflows/*.yml`, marks each job REQUIRED or advisory against `.github/branch-protection.expected.json`, and prints the exact `gh api PATCH .../required_status_checks` payload ready to copy. `.lovable/procedures/branch-protection.md` documents the 5-step promotion + rollback procedure. Root cause: backlog item 1 (promote `slides-visual` to required) kept getting deferred because the exact `gh api` payload was never captured. It is now a 30-second copy-paste.
+- Required-checks enumerator + procedure. `scripts/print-required-checks.mjs` parses `.github/workflows/*.yml`, marks each job REQUIRED or advisory against `.github/branch-protection.expected.json`, and prints the exact `gh api PATCH .../required_status_checks` payload ready to copy. `.ai-memory/procedures/branch-protection.md` documents the 5-step promotion + rollback procedure. Root cause: backlog item 1 (promote `slides-visual` to required) kept getting deferred because the exact `gh api` payload was never captured. It is now a 30-second copy-paste.
 
 ### What's new in v5.122.0
 
@@ -1658,13 +1658,13 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 ### What's new in v5.118.0
 
-- CI/CD backlog swept. All 7 files under `.lovable/cicd-issues/` were already `✅ Solved` yet kept surfacing in every "remaining work" pass because they sat next to open backlogs. Moved to `.lovable/resolved-issues/` and rewrote `.lovable/cicd-index.md` links so the index still resolves. `cicd-issues/` is now empty and reserved for genuinely open findings; anything landing there again means a real regression.
+- CI/CD backlog swept. All 7 files under `.ai-memory/cicd-issues/` were already `✅ Solved` yet kept surfacing in every "remaining work" pass because they sat next to open backlogs. Moved to `.ai-memory/resolved-issues/` and rewrote `.ai-memory/cicd-index.md` links so the index still resolves. `cicd-issues/` is now empty and reserved for genuinely open findings; anything landing there again means a real regression.
 - Local baseline bake script. New `npm run slides:bake-baselines` runs `playwright test slides-app/tests/visual.spec.ts --update-snapshots --reporter=list` for developers who have working Chromium libs locally (the Lovable sandbox is missing `libglib-2.0.so.0`, so this stays a local/CI-runner path). Complements the existing `slides-visual.yml` workflow_dispatch trigger for teams that can bake in-browser instead.
 
 ### What's new in v5.117.0
 
 - Visual baseline coverage guard. `scripts/validate-visual-baselines.mjs` parses `DECK` in `slides-app/src/deck/registry.ts` and asserts a matching `slide-NN-chromium-linux.png` exists under `slides-app/tests/visual.spec.ts-snapshots/`. First run surfaced the real state: 0 of 70 baselines committed, meaning every previous visual CI run was silently green. Wired advisory into `.husky/pre-push` and `.github/workflows/slides-visual.yml` today; flips to `--strict` (blocking) after the initial baseline set is baked via workflow_dispatch. Npm scripts: `slides:validate-baselines` (advisory) and `slides:validate-baselines:strict`.
-- Plan hygiene. `.lovable/29-plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `02-spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
+- Plan hygiene. `.ai-memory/29-plan.md` OQ-A3 (zip password formula) marked resolved and pointed at `02-spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack). It shipped in Phase 8 but the Open Questions section had not been swept, so it kept showing up in every remaining-work list.
 
 ### What's new in v5.116.0
 
@@ -1902,12 +1902,12 @@ Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-s
 
 ### What's new in v5.50.0
 
-- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.lovable` mirror.
+- **Single source of truth for coding guidelines** — [`scripts/sync-guidelines.mjs`](scripts/sync-guidelines.mjs) now mirrors [`02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) into [`.ai-memory/coding-guidelines.md`](.ai-memory/coding-guidelines.md) and injects the Hard Rules block between `<!-- BEGIN:SYNC-HARD-RULES -->` / `<!-- END:SYNC-HARD-RULES -->` markers inside [`.cursorrules`](.cursorrules). Wired into `npm run sync` (auto-fix) and `npm run sync:check` (CI gate). Fixed 6 pre-existing drift hunks between the canonical file and the `.ai-memory` mirror.
 - **New scripts:** `npm run sync:guidelines` (write) and `npm run sync:guidelines:check` (verify, non-zero exit on drift). Closes Plan SS-01 step 4.
 
 ### What's new in v5.49.0
 
-- **Slides deck now ships with every release** — `scripts/release.mjs` auto-installs `slides-app/` dependencies (via `bun` when available, else `npm`) and runs `bun run build`, producing `slides-app/dist/` + `dist.zip` (0.95 MB) on every `npm run release`. Opt out with `--skip-slides`. Executes Plan SS-01 step 3 and the captured user command at [`.lovable/memory/preferences/01-slides-attached-to-release.md`](.lovable/memory/preferences/01-slides-attached-to-release.md).
+- **Slides deck now ships with every release** — `scripts/release.mjs` auto-installs `slides-app/` dependencies (via `bun` when available, else `npm`) and runs `bun run build`, producing `slides-app/dist/` + `dist.zip` (0.95 MB) on every `npm run release`. Opt out with `--skip-slides`. Executes Plan SS-01 step 3 and the captured user command at [`.ai-memory/memory/preferences/01-slides-attached-to-release.md`](.ai-memory/memory/preferences/01-slides-attached-to-release.md).
 - **Release ceremony help updated** — `node scripts/release.mjs --help` now lists the new `--skip-slides` flag alongside `--tier`, `--version`, `--scope`, `--target`, and `--dry-run`.
 
 ### What's new in v5.45.0
@@ -2006,7 +2006,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
 - For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`02-spec/17-consolidated-guidelines/`](02-spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
-- **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.lovable/coding-guidelines.md`](.lovable/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
+- **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.ai-memory/coding-guidelines.md`](.ai-memory/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`02-spec/17-consolidated-guidelines/`](02-spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
 - **Install just that compact layer** (skip the other 95%) with the dedicated bundle installer:
 
@@ -2133,11 +2133,11 @@ Prompts are authored and maintained directly inside `01-prompts/`. To compile an
 
 This compiles all categorized prompts using `scripts/prompt-sync-config.json` and verifies that the prompt registry index remains 100% in sync.
 
-- [Plan: Slides System Overhaul](.lovable/plans/pending/02-slides-system-overhaul.md)
-- [Plan: Guideline Prompt & Installer Upgrade](.lovable/plans/pending/04-guideline-prompt-and-installer-upgrade.md)
-- [Plan: Update Prompts and Release](.lovable/plans/pending/09-update-prompts-and-release.md)
-- [Plan: Code Red Refactor Remediation](.lovable/plans/pending/11-code-red-refactor-remediation.md)
-- [Milestone 01: Repository Infrastructure, CI/CD Quality Automation & Plan Consolidation](.lovable/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md)
-- [Milestone 02: Go AppFault Result Monad, Dynamic Conversions & Verification Systems](.lovable/plans/completed/02-appfault-result-monad-and-verification-systems.md)
-- [Milestone 03: File Utilities, PathInfo Objects, Constants & Modular Enums](.lovable/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md)
-- [Milestone 04: Structured AppLogger, Rotating SQLite & Writer/Streamer Subsystem](.lovable/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md)
+- [Plan: Slides System Overhaul](.ai-memory/plans/pending/02-slides-system-overhaul.md)
+- [Plan: Guideline Prompt & Installer Upgrade](.ai-memory/plans/pending/04-guideline-prompt-and-installer-upgrade.md)
+- [Plan: Update Prompts and Release](.ai-memory/plans/pending/09-update-prompts-and-release.md)
+- [Plan: Code Red Refactor Remediation](.ai-memory/plans/pending/11-code-red-refactor-remediation.md)
+- [Milestone 01: Repository Infrastructure, CI/CD Quality Automation & Plan Consolidation](.ai-memory/plans/completed/01-repository-infrastructure-cicd-and-consolidation.md)
+- [Milestone 02: Go AppFault Result Monad, Dynamic Conversions & Verification Systems](.ai-memory/plans/completed/02-appfault-result-monad-and-verification-systems.md)
+- [Milestone 03: File Utilities, PathInfo Objects, Constants & Modular Enums](.ai-memory/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md)
+- [Milestone 04: Structured AppLogger, Rotating SQLite & Writer/Streamer Subsystem](.ai-memory/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md)

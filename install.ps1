@@ -258,7 +258,7 @@ if ([string]::IsNullOrEmpty($Branch)) {
 }
 if ([string]::IsNullOrEmpty($Dest)) { $Dest = (Get-Location).Path }
 if ($Folders.Count -eq 0) {
-    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("02-spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".lovable/coding-guidelines", ".lovable/what-to-read.md", "version.json") }
+    $Folders = if ($config -and $config.folders) { @($config.folders) } else { @("02-spec", "linters", "linter-scripts", "scripts/fix-repo", "scripts/visibility-change", ".ai-memory/coding-guidelines", ".ai-memory/what-to-read.md", "version.json") }
 }
 
 $ref = if ($Version) { $Version } else { $Branch }
@@ -453,7 +453,7 @@ try {
             $targetFile = if ($isSrcFile) { Join-Path $Dest $folder } else { Join-Path (Join-Path $Dest $folder) $relativePath }
 
             # Lovable folder protection rules:
-            if ($rel -match "^\.lovable/") {
+            if ($rel -match "^\.ai-memory/") {
                 if (Test-Path $targetFile) {
                     # If target exists, only allow updating coding-guidelines.md
                     if ($rel -notmatch "coding-guidelines\.md$") {

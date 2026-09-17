@@ -33,12 +33,12 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         }
       ],
       "archive": {
@@ -81,12 +81,12 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         }
       ],
       "archive": {
@@ -122,12 +122,12 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         }
       ],
       "archive": {
@@ -183,12 +183,12 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         }
       ],
       "archive": {
@@ -242,12 +242,12 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         }
       ],
       "archive": {
@@ -279,12 +279,12 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         }
       ],
       "archive": {
@@ -323,16 +323,16 @@
           "dest": "version.json"
         },
         {
-          "src": ".lovable/what-to-read.md",
-          "dest": ".lovable/what-to-read.md"
+          "src": ".ai-memory/what-to-read.md",
+          "dest": ".ai-memory/what-to-read.md"
         },
         {
-          "src": ".lovable/memory",
-          "dest": ".lovable/memory"
+          "src": ".ai-memory/memory",
+          "dest": ".ai-memory/memory"
         },
         {
-          "src": ".lovable/coding-guidelines.md",
-          "dest": ".lovable/coding-guidelines.md"
+          "src": ".ai-memory/coding-guidelines.md",
+          "dest": ".ai-memory/coding-guidelines.md"
         },
         {
           "src": "01-prompts",
@@ -343,16 +343,16 @@
           "dest": "03-ai-scripts"
         },
         {
-          "src": ".lovable/plans",
-          "dest": ".lovable/plans"
+          "src": ".ai-memory/plans",
+          "dest": ".ai-memory/plans"
         },
         {
-          "src": ".lovable/issues",
-          "dest": ".lovable/issues"
+          "src": ".ai-memory/issues",
+          "dest": ".ai-memory/issues"
         },
         {
-          "src": ".lovable/cicd-issues",
-          "dest": ".lovable/cicd-issues"
+          "src": ".ai-memory/cicd-issues",
+          "dest": ".ai-memory/cicd-issues"
         },
         {
           "src": ".agents/skills",
@@ -363,8 +363,8 @@
           "dest": ".agents/scripts"
         },
         {
-          "src": ".lovable/strictly-avoid.md",
-          "dest": ".lovable/strictly-avoid.md"
+          "src": ".ai-memory/strictly-avoid.md",
+          "dest": ".ai-memory/strictly-avoid.md"
         }
       ],
       "archive": {

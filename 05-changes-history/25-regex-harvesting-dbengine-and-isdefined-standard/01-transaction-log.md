@@ -9,7 +9,7 @@
   - `coding-guidelines/04-code/golang/pkg/regexnew`
   - `coding-guidelines/04-code/golang/pkg/dbengine`
   - `coding-guidelines/03-ai-scripts`
-  - `coding-guidelines/.lovable`
+  - `coding-guidelines/.ai-memory`
   - `gitmap/cli/lazyregex`
   - `gitmap/cli/cmd`
   - `gitmap/cli/cmdssh`
@@ -50,7 +50,7 @@ The user requested four major operational objectives:
   - `scan_helpers.go`: Row scanning helpers mapping SQL rows to Go structs.
 - `03-ai-scripts/35-db-struct-enum-generator.py`:
   - Scaffolds Go models, column enums, and strongly-typed repository builders from SQL or Go structs.
-- `.lovable/plans/completed/12-regex-centralization-and-generic-dbengine.md`:
+- `.ai-memory/plans/completed/12-regex-centralization-and-generic-dbengine.md`:
   - Milestone plan completion document.
 
 ### Sibling Repo (`gitmap`):

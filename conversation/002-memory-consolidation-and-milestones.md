@@ -24,15 +24,15 @@ Topic: Safety backup branch creation, completed plans consolidation into milesto
 >
 > N = total self-loop steps budget that the agents will perform.
 >
-> /goal Autonomously create a timestamped backup branch, scan, analyze, cluster, consolidate, and re-sequence all completed plan files within `.lovable/plans/completed/` into clean, cohesive milestone summaries, while strictly preserving 100% of architectural specifications, root-cause analyses, error contracts, and decision logs with zero data loss or truncation until 100% green without stopping.
+> /goal Autonomously create a timestamped backup branch, scan, analyze, cluster, consolidate, and re-sequence all completed plan files within `.ai-memory/plans/completed/` into clean, cohesive milestone summaries, while strictly preserving 100% of architectural specifications, root-cause analyses, error contracts, and decision logs with zero data loss or truncation until 100% green without stopping.
 
 ---
 
 ## Assistant Actions Summary (one bullet per turn, no chain-of-thought)
 
 - Created timestamped git backup branch `backup/plans-pre-consolidation-20260909-021000` to guarantee zero data loss.
-- Clustered 29 individual completed plans from `.lovable/plans/completed/` into 6 cohesive, milestone-level summaries (`01-repository-hygiene-scripts-and-versioning.md` through `06-enum-architecture-and-baseenumer-foundation.md`), plus `07-completed-plans-consolidation.md`.
-- Updated `.lovable/plans/01-index.md` and `.lovable/memory/01-index.md` to reflect the consolidated milestone plans.
+- Clustered 29 individual completed plans from `.ai-memory/plans/completed/` into 6 cohesive, milestone-level summaries (`01-repository-hygiene-scripts-and-versioning.md` through `06-enum-architecture-and-baseenumer-foundation.md`), plus `07-completed-plans-consolidation.md`.
+- Updated `.ai-memory/plans/01-index.md` and `.ai-memory/memory/01-index.md` to reflect the consolidated milestone plans.
 - Ran sequence integrity linters (`check-sequence-integrity.py` and `21-sequence-integrity-linter.py`) verifying all 149 documents pass with zero broken references.
 
 ---

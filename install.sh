@@ -283,7 +283,7 @@ fi
 REPO="${REPO:-alimtvnetwork/coding-guidelines-v24}"
 BRANCH="${BRANCH:-main}"
 DEST="${DEST:-$(pwd)}"
-[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("02-spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".lovable/coding-guidelines" ".lovable/what-to-read.md" "version.json")
+[[ ${#FOLDERS[@]} -eq 0 ]] && FOLDERS=("02-spec" "linters" "linter-scripts" "scripts/fix-repo" "scripts/visibility-change" ".ai-memory/coding-guidelines" ".ai-memory/what-to-read.md" "version.json")
 
 # Top-level files always pulled alongside the folders. These are repo-root
 # scripts (not contained in any installed folder) that users need locally to
@@ -540,7 +540,7 @@ merge_folder() {
     local dst="$DEST/$full_rel"
 
     # Lovable folder protection rules:
-    if [[ "$full_rel" == .lovable/* ]]; then
+    if [[ "$full_rel" == .ai-memory/* ]]; then
       if [[ -e "$dst" ]]; then
         # If target exists, only allow updating coding-guidelines.md
         if [[ "$full_rel" != *coding-guidelines.md ]]; then

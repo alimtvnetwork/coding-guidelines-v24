@@ -6,7 +6,7 @@
 #
 #   1. Existing check-*.sh / check-*.py guards
 #   2. Spec-only guards (validate-guidelines + cross-link check)
-#      — run when staged paths touch spec/ or .lovable/
+#      — run when staged paths touch spec/ or .ai-memory/
 #   3. Sync scripts (sync-spec-tree + sync-version) — always run;
 #      if they produce a diff, the changed artifacts are
 #      re-staged automatically so the commit stays consistent.
@@ -90,17 +90,17 @@ done
 shopt -u nullglob
 
 # ------------------------------------------------------------
-# Phase 2 — spec-only guards (skip when no spec/.lovable change)
+# Phase 2 — spec-only guards (skip when no spec/.ai-memory change)
 # ------------------------------------------------------------
 STAGED="$(git diff --cached --name-only --diff-filter=ACMR || true)"
 touched_specs=0
-if echo "$STAGED" | grep -qE '^(spec/|02-spec/|\.lovable/)'; then
+if echo "$STAGED" | grep -qE '^(spec/|02-spec/|\.ai-memory/)'; then
   touched_specs=1
 fi
 
 if [[ "$touched_specs" -eq 1 ]]; then
   echo ""
-  echo "📚 pre-commit: spec/.lovable changes detected — running spec guards..."
+  echo "📚 pre-commit: spec/.ai-memory changes detected — running spec guards..."
   if echo "$STAGED" | grep -qE '^src/.*\.(ts|tsx|js|jsx)$'; then
     if [[ -f linter-scripts/validate-guidelines.py ]]; then
       run_guard "linter-scripts/validate-guidelines.py" "python3"

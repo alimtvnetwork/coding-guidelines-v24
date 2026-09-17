@@ -1,7 +1,7 @@
 {
   "variables": {
     "SOURCE_PREFIX": "01-prompts/01-prompts-category",
-    "TARGET_PREFIX": ".lovable/prompts"
+    "TARGET_PREFIX": ".ai-memory/prompts"
   },
   "mappings": [
     {

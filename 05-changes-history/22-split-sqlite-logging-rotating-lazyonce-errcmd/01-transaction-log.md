@@ -56,9 +56,9 @@ The user required a comprehensive logging and execution architecture addressing:
 
 ### Plans & Tracking
 
-- `.lovable/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md`: Master architectural plan.
-- `.lovable/plans/subtasks/08-split-sqlite-logging-rotating-lazyonce-errcmd/01..06`: Granular subtasks.
-- `.lovable/plans/01-index.md`: Registered completed plan 08.
+- `.ai-memory/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md`: Master architectural plan.
+- `.ai-memory/plans/subtasks/08-split-sqlite-logging-rotating-lazyonce-errcmd/01..06`: Granular subtasks.
+- `.ai-memory/plans/01-index.md`: Registered completed plan 08.
 
 ---
 

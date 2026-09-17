@@ -26,7 +26,7 @@ export function DashboardHeader({ version, generatedAt }: DashboardHeaderProps) 
           </p>
         </div>
         <Button variant="outline" asChild>
-          <Link to="/docs?file=.lovable/cicd-index.md">
+          <Link to="/docs?file=.ai-memory/cicd-index.md">
             View CI/CD index
             <ExternalLink className="ml-2 h-4 w-4" />
           </Link>

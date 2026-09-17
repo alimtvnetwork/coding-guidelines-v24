@@ -4,7 +4,7 @@
 #
 # E2E smoke test for BOOL-NEG-001 through the full
 # linters-cicd/run-all.sh orchestrator (closes pending-issue
-# .lovable/resolved-issues/01-bool-neg-001-pipeline-untested.md).
+# .ai-memory/resolved-issues/01-bool-neg-001-pipeline-untested.md).
 #
 # What it proves:
 #   1. The orchestrator loads BOOL-NEG-001 from registry.json.

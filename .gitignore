@@ -68,7 +68,7 @@ __pycache__/
 *.pyc
 *.pyo
 
-.lovable/temp-scripts/
+.ai-memory/temp-scripts/
 /tmp
 tmp/
 .tmp/
@@ -76,6 +76,6 @@ tmp/
 *.sqlite
 *.sqlite3
 *.code-workspace
-.lovable/temp/
-.lovable/temp-agents/
-.lovable/cicd/
+.ai-memory/temp/
+.ai-memory/temp-agents/
+.ai-memory/cicd/

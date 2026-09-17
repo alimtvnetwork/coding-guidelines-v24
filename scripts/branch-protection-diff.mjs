@@ -9,7 +9,7 @@
  * backlog for 4 releases because operators had no cheap way to verify
  * "is live state already in sync with expected.json?" without opening
  * the GitHub UI. Post-promotion verification in
- * `.lovable/procedures/branch-protection.md` step 4 also required
+ * `.ai-memory/procedures/branch-protection.md` step 4 also required
  * eyeballing a raw JSON array. This makes both a one-command check.
  *
  * Usage:

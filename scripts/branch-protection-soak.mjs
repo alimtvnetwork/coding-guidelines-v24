@@ -145,7 +145,7 @@ function main() {
   console.log("");
   if (notReady.length === 0) {
     console.log("VERDICT: every desired check is READY for promotion.");
-    console.log("Next: run `.lovable/procedures/branch-protection.md` to flip them to REQUIRED.");
+    console.log("Next: run `.ai-memory/procedures/branch-protection.md` to flip them to REQUIRED.");
     return;
   }
   console.log(`VERDICT: ${notReady.length}/${results.length} entr${notReady.length === 1 ? "y" : "ies"} not READY.`);

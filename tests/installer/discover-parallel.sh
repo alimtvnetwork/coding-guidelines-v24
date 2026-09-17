@@ -5,7 +5,7 @@
 # This is the canonical implementation of the discovery algorithm
 # specified in 02-spec/14-update/27-generic-installer-behavior.md §6.
 # The generator will inline this logic into every implicit-mode
-# installer in Phase 2 of .lovable/plans/installer-behavior-rollout.md;
+# installer in Phase 2 of .ai-memory/plans/installer-behavior-rollout.md;
 # until then, the test harness exercises it directly so we have a
 # regression target.
 #

@@ -9,12 +9,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added — Nuclear Package Modularization, 5-Day Test Inventory Freshness & Verbatim Task Extraction
 
-- Added execution prompt [`25-nuclear-package-modularization-and-unit-test-optimization.md`](01-prompts/15-cg-execute/25-nuclear-package-modularization-and-unit-test-optimization.md) mandating Directed Acyclic Graph (DAG) package architectures, zero-dependency leaf package segregation (`pkg/constants`, `pkg/model`, `pkg/appfault`, `pkg/fsutil`, `pkg/cliexit`), blackbox heavy test isolation (`tests/heavy_test/` under `package heavy_test`), and centralized `.lovable/test-inventory.json` synchronization.
+- Added execution prompt [`25-nuclear-package-modularization-and-unit-test-optimization.md`](01-prompts/15-cg-execute/25-nuclear-package-modularization-and-unit-test-optimization.md) mandating Directed Acyclic Graph (DAG) package architectures, zero-dependency leaf package segregation (`pkg/constants`, `pkg/model`, `pkg/appfault`, `pkg/fsutil`, `pkg/cliexit`), blackbox heavy test isolation (`tests/heavy_test/` under `package heavy_test`), and centralized `.ai-memory/test-inventory.json` synchronization.
 - Enhanced `03-ai-scripts/33-test-inventory-generator.py` with `--check-age`, `--max-age-days`, and `--json` flags to evaluate test manifest freshness and skip redundant unit test suites on fresh profiles ($\le 5$ days).
 - Updated parent task execution prompts (`02-execute-parent-task-with-n-steps.md`, `06-execute-parent-task-with-n-steps-v2.md`, `07-execute-batched-loop-v2.md`) and skills to mandate Phase 1 Step 0 verbatim prompt capture under `## User Request (Verbatim)` and actionable deliverables extraction under `## Extracted Actionable Task List`.
-- Mandated per-task isolated agent workspaces (`.lovable/temp-agents/xx-<task-name>/`) and progress tracking via `state.md`.
+- Mandated per-task isolated agent workspaces (`.ai-memory/temp-agents/xx-<task-name>/`) and progress tracking via `state.md`.
 - Normalized `.agents/skills/nuclear-package-modularization/skill.md` to strictly lowercase filename.
-- Registered Prompt 25 in `01-prompts/15-cg-execute/01-index.md` and regenerated `.lovable/prompts.md` with 96 indexed prompts.
+- Registered Prompt 25 in `01-prompts/15-cg-execute/01-index.md` and regenerated `.ai-memory/prompts.md` with 96 indexed prompts.
 - Sync-managed artifacts regenerated: `version.json`, `public/health-score.json`, `readme.md`, `src/data/specTree.json`.
 
 ---
@@ -54,10 +54,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Install Coding Guidelines v6.37.0
 
 Unix/Bash:
-`curl -sL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/v6.37.0/install.sh | bash -s -- ".lovable/prompts" "v6.37.0"`
+`curl -sL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/v6.37.0/install.sh | bash -s -- ".ai-memory/prompts" "v6.37.0"`
 
 PowerShell:
-`Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/v6.37.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "v6.37.0"`
+`Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/v6.37.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".ai-memory/prompts" -Version "v6.37.0"`
 
 ### Added
 
@@ -256,8 +256,8 @@ PowerShell:
 ### Install Prompt Architect v6.21.0
 
 To pin your repository to this exact version, run the following one-liner:
-**Unix/Bash:** `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.21.0/install.sh | bash -s -- ".lovable/prompts" "v6.21.0"`
-**PowerShell:** `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.21.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "v6.21.0"`
+**Unix/Bash:** `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.21.0/install.sh | bash -s -- ".ai-memory/prompts" "v6.21.0"`
+**PowerShell:** `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.21.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".ai-memory/prompts" -Version "v6.21.0"`
 
 ### Added / Changed / Fixed
 
@@ -273,17 +273,17 @@ To pin your repository to this exact version, run the following one-liner:
 ### Install Prompt Architect v6.20.0
 
 To pin your repository to this exact version, run the following one-liner:
-**Unix/Bash:** `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.20.0/install.sh | bash -s -- ".lovable/prompts" "v6.20.0"`
-**PowerShell:** `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.20.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".lovable/prompts" -Version "v6.20.0"`
+**Unix/Bash:** `curl -sL https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.20.0/install.sh | bash -s -- ".ai-memory/prompts" "v6.20.0"`
+**PowerShell:** `Invoke-WebRequest -Uri https://raw.githubusercontent.com/alimtvnetwork/prompt-architect-v2/v6.20.0/install.ps1 -OutFile install.ps1; .\install.ps1 -TargetDir ".ai-memory/prompts" -Version "v6.20.0"`
 
 ### Added / Changed / Fixed
 
 - Added self-explaining `_purpose` and `_instructions` metadata to `version.json` schema and `scripts/sync-version.mjs`.
 - Added multi-package version tracking with `backend`, `frontend`, `linters` sections and the `"inherit"` keyword protocol.
 - Enforced mandatory codebase import protocol requiring Go, TypeScript, Python, PHP, C#, Rust, and shell scripts to read root `version.json`.
-- Enqueued `version.json`, `standards/version-source-of-truth.md`, and `release-architecture-map.md` in `.lovable/what-to-read.md`.
-- Created `.lovable/memory/release-architecture-map.md` and `.lovable/memory/standards/version-source-of-truth.md`.
-- Added `.lovable/memory` to all 7 bundles in `bundles.json` and regenerated 14 bundle installer scripts.
+- Enqueued `version.json`, `standards/version-source-of-truth.md`, and `release-architecture-map.md` in `.ai-memory/what-to-read.md`.
+- Created `.ai-memory/memory/release-architecture-map.md` and `.ai-memory/memory/standards/version-source-of-truth.md`.
+- Added `.ai-memory/memory` to all 7 bundles in `bundles.json` and regenerated 14 bundle installer scripts.
 - Updated Rule 19 in `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` and synced mirrors.
 
 ---
@@ -397,7 +397,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed, coding guideline 31 v1.5.0: hard rule for mirror sync + expanded React mutation guidance
 
-- `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` bumped to v1.5.0. Added a "Canonical locations" block near the top naming all three required paths (`02-spec/17-.../31-*.md` as source, `.lovable/coding-guidelines.md` and `.cursorrules` as mirrors) and pointing at `scripts/sync-guidelines.mjs` as the only allowed writer. This closes the recurring symptom "sometimes the spec folder is visible to search, sometimes it isn't": agent search indexes the mirror, not the spec tree, so a missing mirror made the guideline effectively invisible.
+- `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md` bumped to v1.5.0. Added a "Canonical locations" block near the top naming all three required paths (`02-spec/17-.../31-*.md` as source, `.ai-memory/coding-guidelines.md` and `.cursorrules` as mirrors) and pointing at `scripts/sync-guidelines.mjs` as the only allowed writer. This closes the recurring symptom "sometimes the spec folder is visible to search, sometimes it isn't": agent search indexes the mirror, not the spec tree, so a missing mirror made the guideline effectively invisible.
 - Promoted the mirror requirement to Hard Rule #13 (Zero Tolerance): missing or stale mirrors are a build-fail; never hand-edit mirrors; always edit source and re-run the sync script. Root cause this closes: v1.4.0 documented sync only in the release notes, not inside the guideline itself, so any AI reading only file 31 had no reason to keep the mirrors alive.
 - React rule #7 rewritten from a one-line "never mutate, use spread or structuredClone" into a full guidance paragraph. Explains WHY (React reconciler uses referential inequality, so in-place mutation silently drops updates), states the default posture (read-only + creation, `Readonly<T>`/`ReadonlyArray<T>`, spread, `.map`/`.filter`/`.concat`, `Object.freeze` for constants), when to use `structuredClone` (deep copies for nested state / form drafts), when Immer is acceptable (only when a reducer would otherwise be unreadable, output still a fresh reference), and three concrete rules of thumb including the exact banned APIs (`.push`, `.pop`, `.splice`, `.sort`, `.reverse`, `obj.x =`, `arr[i] =`) on any value from `useState`/`useReducer`/props/context/query hooks.
 - Ran `node scripts/sync-guidelines.mjs`: both mirrors now match source byte-for-byte (198 lines / 66 lines respectively). Verified with `node scripts/sync-version.mjs` at v5.129.0.
@@ -409,7 +409,7 @@ To pin your repository to this exact version, run the following one-liner:
 - `scripts/tests/branch-protection-diff.test.mjs`: 12 assertions on `diff(live, expected)` covering empty sets, identical order, set-equal-with-different-order, missing-on-live, extra-on-live, mixed drift, and duplicate entries on live (must not produce phantom missing). Guards the v5.127 read-only wrapper so it can never silently report "OK" when live GitHub state has drifted from `.github/branch-protection.expected.json`.
 - `scripts/tests/branch-protection-soak.test.mjs`: 10 assertions on `verdict(passRate, sampleSize)` locking the promotion threshold contract: sampleSize=0 => NO DATA (never fake READY on empty windows), >=0.95 READY, >=0.80 WATCH, <0.80 NOT READY, including exact boundary hits at 0.95 and 0.80 and just-below cases at 0.9499 and 0.7999. Prevents "we relaxed the gate to 0.85 for one release" from silently becoming permanent.
 - `scripts/lint-ci.sh` steps 21+22 and `.github/workflows/ci.yml` `sync-drift` job: wired both self-tests. Mirror-drift guard (`scripts/check-lint-ci-drift.mjs`) verifies both are present in both places, matching the pattern established in v5.126 for the parser self-test.
-- `.lovable/procedures/branch-protection.md`: promoted `npm run branch-protection:soak` to a **required precondition** (step 0) before running the promotion ceremony, and replaced the raw `gh api ... --jq '.contexts'` eyeball diff in step 4 with `npm run branch-protection:diff` (raw command kept as fallback for older setups). Turns the ceremony into: soak READY -> edit expected.json -> patch protection -> diff OK -> `--check` OK.
+- `.ai-memory/procedures/branch-protection.md`: promoted `npm run branch-protection:soak` to a **required precondition** (step 0) before running the promotion ceremony, and replaced the raw `gh api ... --jq '.contexts'` eyeball diff in step 4 with `npm run branch-protection:diff` (raw command kept as fallback for older setups). Turns the ceremony into: soak READY -> edit expected.json -> patch protection -> diff OK -> `--check` OK.
 - Root cause this closes: v5.127 shipped two read-only wrappers (`:diff`, `:soak`) without self-tests and without wiring them into the promotion procedure. That would let (a) a regression in `diff()` set logic silently ship "OK" on drifted repos, (b) a threshold typo in `verdict()` silently pass a `WATCH` check as `READY`, and (c) operators keep following the old procedure that skipped the new gates. All three are now blocked at PR-time by CI.
 - Verification: `node scripts/tests/branch-protection-diff.test.mjs` reports 12 ok, 0 fail. `node scripts/tests/branch-protection-soak.test.mjs` reports 10 ok, 0 fail. `bash scripts/lint-ci.sh --list | tail -5` shows steps 21 and 22 registered. `node scripts/check-lint-ci-drift.mjs` reports no drift after mirroring both new steps in `ci.yml`.
 
@@ -417,7 +417,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Added, branch-protection readiness diff + soak report
 
-- `scripts/branch-protection-diff.mjs` + `npm run branch-protection:diff`: read-only diff of LIVE `main` branch protection required_status_checks vs `.github/branch-protection.expected.json`. Uses `gh api` (no admin needed to read), auto-detects repo via `gh repo view`, exits 0 on match / 1 on drift / 2 on missing gh / 3 on repo-detect fail. Turns `.lovable/procedures/branch-protection.md` step 4 verification from "eyeball a raw JSON array" into a one-command check.
+- `scripts/branch-protection-diff.mjs` + `npm run branch-protection:diff`: read-only diff of LIVE `main` branch protection required_status_checks vs `.github/branch-protection.expected.json`. Uses `gh api` (no admin needed to read), auto-detects repo via `gh repo view`, exits 0 on match / 1 on drift / 2 on missing gh / 3 on repo-detect fail. Turns `.ai-memory/procedures/branch-protection.md` step 4 verification from "eyeball a raw JSON array" into a one-command check.
 - `scripts/branch-protection-soak.mjs` + `npm run branch-protection:soak`: read-only soak report for every `desired-but-not-yet-required[]` entry. Queries last N runs on `main` via `gh run list --workflow=<file>` and classifies each candidate READY (>=95% pass), WATCH (>=80%), or NOT READY. Removes the "has it actually soaked?" ambiguity that has deferred `visual` + `smoke` promotion for 4 releases.
 - Root cause this closes: v5.125 exposed npm scripts and v5.126 guarded expected.json against stale names, but neither answered the two questions an admin actually asks before running the promotion ceremony: "is live already in sync?" and "is the desired check stable enough on main to be a merge blocker?". Without those answers the promotion kept being deferred with the same reason ("wait one more cycle") every release. Both scripts are read-only and safe to run without admin, so any dev can run them and post the verdict.
 - Verification: `node scripts/branch-protection-diff.mjs --repo alimtvnetwork/coding-guidelines-v24` exits with a diff or OK line without mutating anything; `node scripts/branch-protection-soak.mjs --runs 20` prints a per-workflow verdict block. Both fall back cleanly with exit code 2 when `gh auth status` fails, so they never fabricate a "READY" verdict from missing data.
@@ -436,9 +436,9 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed, backlog cleanup + branch-protection npm surface
 
-- `.lovable/29-plan.md`: replaced the "Open Questions (all resolved)" section (4 struck-through bullets, zero live content) with a two-line pointer to the Locked Decisions table. Root cause: mediocre-AI audits kept re-flagging OQ-A1..A4 as "open" because they scanned for the `Open Questions:` header, even though every one had a D-number since 2026-07-19 (D15/D16) and Phases 8/11 (OQ-A3/A4).
-- `package.json`: added `npm run branch-protection:print`, `branch-protection:json`, and `branch-protection:check` wrappers over `scripts/print-required-checks.mjs`. Root cause: procedure `.lovable/procedures/branch-protection.md` still required remembering the raw `node scripts/...` invocation, which is why the `visual` + `smoke` promotion has sat in the backlog for 3 releases. `npm run` is discoverable via tab-completion.
-- Verification: `grep -c "OQ-A1\|OQ-A2\|OQ-A3\|OQ-A4" .lovable/29-plan.md` returns only Locked-Decisions row references. `npm run branch-protection:check` exits 0 (no stale entries in `.github/branch-protection.expected.json`).
+- `.ai-memory/29-plan.md`: replaced the "Open Questions (all resolved)" section (4 struck-through bullets, zero live content) with a two-line pointer to the Locked Decisions table. Root cause: mediocre-AI audits kept re-flagging OQ-A1..A4 as "open" because they scanned for the `Open Questions:` header, even though every one had a D-number since 2026-07-19 (D15/D16) and Phases 8/11 (OQ-A3/A4).
+- `package.json`: added `npm run branch-protection:print`, `branch-protection:json`, and `branch-protection:check` wrappers over `scripts/print-required-checks.mjs`. Root cause: procedure `.ai-memory/procedures/branch-protection.md` still required remembering the raw `node scripts/...` invocation, which is why the `visual` + `smoke` promotion has sat in the backlog for 3 releases. `npm run` is discoverable via tab-completion.
+- Verification: `grep -c "OQ-A1\|OQ-A2\|OQ-A3\|OQ-A4" .ai-memory/29-plan.md` returns only Locked-Decisions row references. `npm run branch-protection:check` exits 0 (no stale entries in `.github/branch-protection.expected.json`).
 
 ## [5.124.0] - 2026-07-19
 
@@ -447,9 +447,9 @@ To pin your repository to this exact version, run the following one-liner:
 - `02-spec/19-main-worker-service/18-cascading-roles-and-cache-bin.md` bumped to v1.1.0. §7 rewritten from "Open Questions, Default Proposals Adopted" to "Resolved Decisions". Header `Resolves:` line now cites D15 and D16.
 - D15 (locked): cascading semantics is simple union. No role hierarchy. Every effective grant traces to exactly one `RoleAccessItem` row. Reopening would invalidate `WORKER-900-02 EmptyEffectiveAccessSet` and the JWT `AccessItem.Code[]` embedding in §2.
 - D16 (locked): cache-bin storage tier is per-process SQLite `:memory:` with the `RoleAccessCache` / `RoleCacheCatalogVersion` schema in §4 and the invalidation contract in §5. Redis and plain in-process map remain configurable alternatives against the same four-function contract; they are not defaults and MUST NOT be assumed by Phase 6+ implementers.
-- `.lovable/29-plan.md`: added D15 and D16 rows to the Locked Decisions table. "Open Questions (carried forward)" section renamed to "Open Questions (all resolved)" with OQ-A1/A2 struck through and linked to their new D-numbers. OQ-A3 and OQ-A4 were already resolved (Phase 8 and Phase 11).
+- `.ai-memory/29-plan.md`: added D15 and D16 rows to the Locked Decisions table. "Open Questions (carried forward)" section renamed to "Open Questions (all resolved)" with OQ-A1/A2 struck through and linked to their new D-numbers. OQ-A3 and OQ-A4 were already resolved (Phase 8 and Phase 11).
 - Root cause this closes: the last blind-AI audit and every mediocre-AI gap analysis kept flagging OQ-A1/A2 as legitimately open, even though every downstream chapter (13 error codes, 14 seeds, 07 dashboards, 15 tunables) had already been built against the defaults for 18+ versions. Leaving them "open" was a documentation lie that would cost a future implementer a wasted phase on `Role.ParentRoleId` recursive CTEs or a Redis dependency.
-- Verification: `grep -n "OQ-A1\|OQ-A2" .lovable/29-plan.md` now returns only the two struck-through resolution lines and the two Locked-Decisions rows (no bare open questions). Chapter 17 §7 no longer contains the phrase "Open Questions".
+- Verification: `grep -n "OQ-A1\|OQ-A2" .ai-memory/29-plan.md` now returns only the two struck-through resolution lines and the two Locked-Decisions rows (no bare open questions). Chapter 17 §7 no longer contains the phrase "Open Questions".
 
 ## [5.123.0] - 2026-07-19
 
@@ -463,7 +463,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 - Enumerates every workflow -> job pair under `.github/workflows/*.yml`, marks each as REQUIRED or advisory against a checked-in expectation file, and prints the exact `gh api PATCH .../required_status_checks` payload ready to copy. Modes: human report (default), `--json` (machine payload), `--check` (fails when the expectation file references a job that no longer exists).
 - `.github/branch-protection.expected.json` captures the current 5 required checks (`Linter Scripts Validation`, `Codegen (Rule 9 inverted-fields)`, `Spec Cross-Reference Validation`, `Sync Drift Check (all generated files)`, `Validate version.json schema`) and lists `visual` + `smoke` as `desired-but-not-yet-required` with the promotion criteria (one clean release cycle first).
-- `.lovable/procedures/branch-protection.md` documents the 5-step promotion procedure including verification and rollback. Root cause it addresses: backlog item 1 (promote `slides-visual.yml` to required) has been carried forward for two releases because the exact `gh api` payload was never captured. It is now a copy-paste 30-second operation instead of a hunt through the GitHub UI.
+- `.ai-memory/procedures/branch-protection.md` documents the 5-step promotion procedure including verification and rollback. Root cause it addresses: backlog item 1 (promote `slides-visual.yml` to required) has been carried forward for two releases because the exact `gh api` payload was never captured. It is now a copy-paste 30-second operation instead of a hunt through the GitHub UI.
 
 ### Verified
 
@@ -543,7 +543,7 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed — CI/CD issue backlog swept clean
 
-- Moved all 7 `✅ Solved` files from `.lovable/cicd-issues/` to `.lovable/resolved-issues/` (01-readme-boolean-negatives-and-style, 02-installsection-component-split, 03-fuzzymatch-function-length-negative-guards, 04-usesearchkeyboard-raw-not-operator, 05-markdown-highlighter-newline-violations, 06-version-drift-after-package-bump, 07-cross-spec-missing-file-link-checker). Root cause of noise: solved items stayed co-located with the active-backlog folder, so every remaining-work sweep re-listed them. `.lovable/cicd-index.md` link paths rewritten from `cicd-issues/` to `resolved-issues/`. `cicd-issues/` is now empty and reserved for actual open findings.
+- Moved all 7 `✅ Solved` files from `.ai-memory/cicd-issues/` to `.ai-memory/resolved-issues/` (01-readme-boolean-negatives-and-style, 02-installsection-component-split, 03-fuzzymatch-function-length-negative-guards, 04-usesearchkeyboard-raw-not-operator, 05-markdown-highlighter-newline-violations, 06-version-drift-after-package-bump, 07-cross-spec-missing-file-link-checker). Root cause of noise: solved items stayed co-located with the active-backlog folder, so every remaining-work sweep re-listed them. `.ai-memory/cicd-index.md` link paths rewritten from `cicd-issues/` to `resolved-issues/`. `cicd-issues/` is now empty and reserved for actual open findings.
 
 ### Added — `slides:bake-baselines` npm script
 
@@ -556,7 +556,7 @@ To pin your repository to this exact version, run the following one-liner:
 - Parses `DECK` in `slides-app/src/deck/registry.ts` (top-level object-literal count anchored on `= [` to skip the `SlideEntry[]` type bracket) and cross-checks `slides-app/tests/visual.spec.ts-snapshots/` for one `slide-NN-chromium-linux.png` per entry. Root cause it addresses: the visual regression suite iterates `DECK.length` slides, but a missing baseline PNG causes Playwright to auto-create one on first run and pass, hiding zero-protection cases. First run reported `deck=70 baselines=0 missing=70`, confirming the suite has been silently green since inception.
 - Wired advisory (`node scripts/validate-visual-baselines.mjs`) into `.husky/pre-push` and `.github/workflows/slides-visual.yml` as a pre-Playwright step. Ships with `--strict` mode (exit 1 on any drift, ready to flip once baselines land) and `--list` (enumerate missing baseline names). Exposed as `slides:validate-baselines` and `slides:validate-baselines:strict` npm scripts.
 
-### Fixed — Stale open question in `.lovable/29-plan.md`
+### Fixed — Stale open question in `.ai-memory/29-plan.md`
 
 - OQ-A3 (Zip password "known pattern") was resolved in Phase 8 by `02-spec/19-main-worker-service/21-backup-encryption-and-keys.md` v1.0.0 §2.12 (HKDF-derived per-snapshot password, Pair-RSA + Envelope-AES stack) but the Open Questions block was never swept, so the item kept surfacing in every remaining-work list. Marked resolved with a pointer to the spec section.
 
@@ -1209,8 +1209,8 @@ To pin your repository to this exact version, run the following one-liner:
 
 ### Changed - Reconcile slides-overhaul plan status (SS-01 / SS-02)
 
-- Marked 13 shipped tasks as complete in `.lovable/plans/subtasks/01-slides-system-overhaul/ss-02-slides-70-task-backlog.md` (tasks 8, 15, 45, 63-66, 68-70 plus TOC, per-block review checklists, SRA validator extras). Status changed from `pending` to `in-progress (13/70 shipped)`.
-- Marked steps 3, 4, 5 as done in `.lovable/plans/pending/01-slides-system-overhaul.md`; steps 1 (3-theme audit publication) and 2 (57 remaining backlog tasks) still open.
+- Marked 13 shipped tasks as complete in `.ai-memory/plans/subtasks/01-slides-system-overhaul/ss-02-slides-70-task-backlog.md` (tasks 8, 15, 45, 63-66, 68-70 plus TOC, per-block review checklists, SRA validator extras). Status changed from `pending` to `in-progress (13/70 shipped)`.
+- Marked steps 3, 4, 5 as done in `.ai-memory/plans/pending/01-slides-system-overhaul.md`; steps 1 (3-theme audit publication) and 2 (57 remaining backlog tasks) still open.
 - Root cause of the drift: prior release ceremonies (v5.50-v5.55) bumped code and changelog but skipped plan reconciliation. No code changes in this bump - documentation truth-up only.
 - Bumped `package.json` from `5.55.0` -> `5.56.0`.
 - Sync-managed artifacts regenerated by `npm run sync`.
@@ -1563,7 +1563,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 | `linters-cicd/` | 13 | 52 | `readme.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
 | `src/` | 2 | 47 | `src/components/landing/InstallSection.tsx`, `src/data/specTree.json` |
 | `02-spec/` | 19 | 44 | Spec docs referencing the slug (sarif-contract, ci-templates, distribution, install-contract, install-config, version-pinned-release-installers, install-script-version-probe, repo-major-version-migrator, generic-installer-behavior, distribution-and-runner, lovable-folder-structure, readme-improvement-suggestions, root-readme-conventions, etc.) |
-| `.lovable/` | 8 | 16 | `memory/01-index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `29-plan.md`, `strictly-avoid.md`, `suggestions.md` |
+| `.ai-memory/` | 8 | 16 | `memory/01-index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `29-plan.md`, `strictly-avoid.md`, `suggestions.md` |
 | `docs/` | 2 | 14 | `docs/github-repo-metadata.md`, `docs/slides-installer.md` |
 | `examples/other-repo-integration/` | 7 | 10 | `azure-devops/`, `gitlab/`, `jenkins/` integration recipes and READMEs |
 | `slides-app/` & `spec-slides/` | 4 | 9 | `slides-app/package.json`, `slides-app/scripts/package-zip.mjs`, `slides-app/src/slides/12-closing.tsx`, `spec-slides/05-curriculum.md`, `spec-slides/06-build-and-zip-pipeline.md` |
@@ -1582,12 +1582,12 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 #### Memory & overlay files affected
 
-- `.lovable/memory/01-index.md`
-- `.lovable/memory/sessions/2026-04-24-batch-cleanup-and-rebrand.md`
-- `.lovable/memory/constraints/install-command-formatting.md`
-- `.lovable/memory/suggestions/01-suggestions-tracker.md`
-- `.lovable/memory/workflow/01-plan-tracker.md`
-- `.lovable/29-plan.md`, `.lovable/strictly-avoid.md`, `.lovable/suggestions.md`
+- `.ai-memory/memory/01-index.md`
+- `.ai-memory/memory/sessions/2026-04-24-batch-cleanup-and-rebrand.md`
+- `.ai-memory/memory/constraints/install-command-formatting.md`
+- `.ai-memory/memory/suggestions/01-suggestions-tracker.md`
+- `.ai-memory/memory/workflow/01-plan-tracker.md`
+- `.ai-memory/29-plan.md`, `.ai-memory/strictly-avoid.md`, `.ai-memory/suggestions.md`
 
 #### Skipped (intentional)
 
@@ -1649,7 +1649,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
   `linters-cicd/scripts/check-context-hygiene.py`,
   `tests/release-install/`, the `--gctx-log` flag in
   `linters-cicd/run-all.sh`, and the matching memory file
-  `.lovable/memory/architecture/ai-reliability-spec.md`. Production
+  `.ai-memory/memory/architecture/ai-reliability-spec.md`. Production
   install/release scripts (`release-install.{sh,ps1}` from spec 14)
   remain — they predate spec 19.
 

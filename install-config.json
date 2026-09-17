@@ -9,7 +9,7 @@
     "linters-cicd",
     "scripts/fix-repo",
     "scripts/visibility-change",
-    ".lovable/coding-guidelines"
+    ".ai-memory/coding-guidelines"
   ],
   "files": [
     "fix-repo.sh",

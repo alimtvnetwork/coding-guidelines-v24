@@ -6,7 +6,7 @@ Checks that every markdown heading (lines starting with # outside fenced code bl
   - Exactly one blank line BEFORE the heading (unless it is the very first content line)
   - Exactly one blank line AFTER the heading
 
-Applies to all .md files in 01-general-prompts/ and .lovable/
+Applies to all .md files in 01-general-prompts/ and .ai-memory/
 """
 
 import os
@@ -18,7 +18,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-SCAN_DIRS = ["01-general-prompts", ".lovable"]
+SCAN_DIRS = ["01-general-prompts", ".ai-memory"]
 IGNORE_DIRS = {".git", "node_modules", ".github", "dist", "build", "tmp"}
 
 

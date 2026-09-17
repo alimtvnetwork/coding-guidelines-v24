@@ -22,7 +22,7 @@
 
 | Script | Language | Purpose & Scope | CI Automated |
 |---|---|---|---|
-| [`check-sequence-integrity.py`](check-sequence-integrity.py) | Python 3 | Verifies sequential numbering, broken file links, and prompt references across `01-prompts/`, `.lovable/plans/`, and `.agents/skills/`. | ✅ Yes |
+| [`check-sequence-integrity.py`](check-sequence-integrity.py) | Python 3 | Verifies sequential numbering, broken file links, and prompt references across `01-prompts/`, `.ai-memory/plans/`, and `.agents/skills/`. | ✅ Yes |
 | [`check-relative-paths.py`](check-relative-paths.py) | Python 3 | Enforces strict relative git paths and bans absolute filesystem paths / `file:///` URIs. | ✅ Yes |
 | [`check-boolean-guidelines.py`](check-boolean-guidelines.py) | Python 3 | Audits codebase for boolean naming conventions (`is`, `has`), bans explicit `== true`, and detects inverted success checks. | ✅ Yes |
 | [`check-enum-and-boolean.py`](check-enum-and-boolean.py) | Python 3 | Validates `Type` suffix on enum identifiers and enforces positive implicit guards. | ✅ Yes |

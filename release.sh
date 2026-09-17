@@ -59,8 +59,8 @@ copy_release_files() {
   cp -R 02-spec "$STAGING_DIR/spec"
   if [[ -d "01-prompts" ]]; then
     cp -R 01-prompts "$STAGING_DIR/01-prompts"
-    mkdir -p "$STAGING_DIR/.lovable"
-    cp -R 01-prompts "$STAGING_DIR/.lovable/prompts"
+    mkdir -p "$STAGING_DIR/.ai-memory"
+    cp -R 01-prompts "$STAGING_DIR/.ai-memory/prompts"
   fi
   cp -R linters "$STAGING_DIR/linters"
   cp -R linter-scripts "$STAGING_DIR/linter-scripts"
@@ -68,12 +68,12 @@ copy_release_files() {
   cp install.ps1 "$STAGING_DIR/install.ps1"
   cp install-config.json "$STAGING_DIR/install-config.json"
   cp readme.md "$STAGING_DIR/readme.md"
-  mkdir -p "$STAGING_DIR/.lovable"
-  if [[ -f ".lovable/coding-guidelines.md" ]]; then
-    cp .lovable/coding-guidelines.md "$STAGING_DIR/.lovable/coding-guidelines.md"
+  mkdir -p "$STAGING_DIR/.ai-memory"
+  if [[ -f ".ai-memory/coding-guidelines.md" ]]; then
+    cp .ai-memory/coding-guidelines.md "$STAGING_DIR/.ai-memory/coding-guidelines.md"
   fi
   if [[ -d "02-spec/02-coding-guidelines" ]]; then
-    cp -R 02-spec/02-coding-guidelines "$STAGING_DIR/.lovable/coding-guidelines"
+    cp -R 02-spec/02-coding-guidelines "$STAGING_DIR/.ai-memory/coding-guidelines"
   fi
 }
 

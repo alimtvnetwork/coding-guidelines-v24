@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generated": "2026-04-23T18:47:41.444Z",
-  "source": ".lovable/cicd-issues/ + .lovable/cicd-index.md",
+  "source": ".ai-memory/cicd-issues/ + .ai-memory/cicd-index.md",
   "lastCleanRun": {
     "date": "2026-04-23",
     "version": "3.81.0",
