@@ -1076,6 +1076,9 @@ Maintains a single source of truth for repository test coverage at `.lovable/tes
 # Scan repository and generate / update .lovable/test-inventory.json
 python 03-ai-scripts/33-test-inventory-generator.py
 
+# Check test inventory cache freshness (<= 5 days old and profiled)
+python 03-ai-scripts/33-test-inventory-generator.py --check-age --max-age-days 5
+
 # Safely record modified files under lock and resolve associated tests
 python 03-ai-scripts/33-test-inventory-generator.py --record "04-code/golang/pkg/appfault/appfault.go"
 

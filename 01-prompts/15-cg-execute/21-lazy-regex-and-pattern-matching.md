@@ -26,10 +26,10 @@ N = total self-loop steps budget that the agents will perform.
 9. [ ] /goal Phase 2 (Step E): Execute targeted package tests and linters (`golangci-lint run -c .golangci.yml`) to verify 0 remaining violations. DO NOT run full CI runner during routine turns.
 10. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
 11. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-12. [ ] /learn Ingest `spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
-13. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
-14. [ ] /learn Ingest `spec/02-coding-guidelines/01-cross-language/17-regex-usage-guidelines.md` for lazy regex and pattern caching rules.
-15. [ ] /learn Ingest `spec/03-error-manage/` for error handling architectures and AppError.
+12. [ ] /learn Ingest `02-spec/02-coding-guidelines/02-canonical-size-tier.md` for canonical file and function size tiers.
+13. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/01-index.md` for hallucination prevention and micro-tasking.
+14. [ ] /learn Ingest `02-spec/02-coding-guidelines/01-cross-language/17-regex-usage-guidelines.md` for lazy regex and pattern caching rules.
+15. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
 16. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
 17. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 

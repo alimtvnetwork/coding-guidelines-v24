@@ -56,5 +56,5 @@ Unit tests must be fast, hermetic, and safe. Executing destructive OS commands o
 4. [ ] /goal Phase 2 (Step A): Refactor target production code to introduce injectable executors (`DefaultOSActionExecutor`) and parameter structs.
 5. [ ] /goal Phase 2 (Step B): Refactor unit tests to swap the executor with a mock and assert captured parameters.
 6. [ ] /goal Phase 2 (Step C): Verify all modified files adhere to <= 15 line function limits and affirmative boolean rules.
-7. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
-8. [ ] /learn Ingest `spec/03-error-manage/` for AppError wrapping.
+7. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
+8. [ ] /learn Ingest `02-spec/03-error-manage/` for AppError wrapping.

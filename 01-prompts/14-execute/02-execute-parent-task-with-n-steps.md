@@ -1,6 +1,6 @@
 # Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
 
-> **Prompt Version:** 2.1.0
+> **Prompt Version:** 2.2.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
@@ -13,19 +13,20 @@ N = total self-loop steps budget that the agents will perform.
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1 (Planning & Spec Generation, Steps 1..N/2): Spawn exactly 2 planning subagents (max 2 threads each) to scan the codebase and draft `.lovable/plans/pending/xx-<slug>.md`.
-2. [ ] /goal Phase 1 (Subtask Decomposition): Decompose the plan into a lean set of actionable subtasks. Do not over-prompt or generate excessive markdown files. Keep subtasks focused purely on execution and the domain task itself in `.lovable/plans/subtasks/xx-<slug>/*.md`.
-3. [ ] /goal Phase 1 (Strict Folder Bounding): Restrict all planning logs, active locks, and status reports strictly within `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`).
-4. [ ] /goal Phase 1 (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or stopping.
-5. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Spawn exactly 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
-6. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.lovable/plan.md` and `.lovable/memory/issues/`; subsequent agents MUST read the failure log first to remediate root causes.
-7. [ ] /goal Phase 2 (Change Recording & Quality Linting): Record all modified files into `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) and run targeted file-level linters/autofixers on specifically modified files (`exit 0`). DO NOT run `06-cicd-local-runner.py`, unit tests, or build checks (deferred to CI/CD).
-8. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
-9. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
-10. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
-11. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
-12. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
-13. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
+1. [ ] /goal Phase 1 (Step 0 - Verbatim Prompt Recording & Task Extraction): Immediately capture the user's prompt verbatim into `.lovable/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract actionable bullet-point tasks under `## Extracted Actionable Task List`, and output this confirmed task list directly in chat to confirm understanding.
+2. [ ] /goal Phase 1 (Planning & Spec Generation, Steps 1..N/2): Spawn exactly 2 planning subagents (max 2 threads each) to scan the codebase and draft `.lovable/plans/pending/xx-<slug>.md`.
+3. [ ] /goal Phase 1 (Subtask Decomposition): Decompose the plan into a lean set of actionable subtasks. Do not over-prompt or generate excessive markdown files. Keep subtasks focused purely on execution and the domain task itself in `.lovable/plans/subtasks/xx-<slug>/*.md`.
+4. [ ] /goal Phase 1 (Strict Folder Bounding): Restrict all planning logs, active locks, and status reports strictly within `.lovable/` (`.lovable/plans/`, `.lovable/01-index.md`).
+5. [ ] /goal Phase 1 (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or stopping.
+6. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Spawn exactly 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
+7. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.lovable/plan.md` and `.lovable/memory/issues/`; subsequent agents MUST read the failure log first to remediate root causes.
+8. [ ] /goal Phase 2 (Change Recording & Quality Linting): Record all modified files into `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) and run targeted file-level linters/autofixers on specifically modified files (`exit 0`). DO NOT run `06-cicd-local-runner.py`, unit tests, or build checks (deferred to CI/CD).
+9. [ ] /learn Ingest `.lovable/memory/01-index.md` for project memory index and past learnings.
+10. [ ] /learn Ingest `.lovable/strictly-avoid.md` for banned anti-patterns and strict constraints.
+11. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
+12. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
+13. [ ] /learn Ingest `.lovable/coding-guidelines.md` for master consolidated coding guidelines.
+14. [ ] /goal Create or update agent rules in the repository if missing from agent memory.
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: 2-Agent Planning & Subtask Generation in .lovable/plans/)
@@ -61,12 +62,13 @@ Before executing the tasks below, you must check if this prompt is already insta
 
 Before writing any source code changes, you MUST execute Phase 1:
 
-1. **Scan & Discover:** Spawn 2 planning subagents to deeply scan the codebase for target changes or violations.
-2. **Master Spec Generation:** Save the master architectural plan into `.lovable/plans/pending/xx-<slug>.md`.
-3. **Task-Specific Rule Set:** Write down 3–5 custom rules or constraints unique to this task inside the spec file.
-4. **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/xx-<slug>/01-<subtask-title>.md`, `02-<subtask-title>.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
-5. **Strict Relative Git Paths:** All markdown links and file paths in subtasks MUST be strictly relative to the repository root (e.g. `.lovable/spec/...`, `src/...`). Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
-6. **MANDATORY AUTO-LOOP (DO NOT STOP):** As soon as Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for permission**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
+1. **Verbatim Prompt Capture & Task Extraction (First Action):** Directly write the user's prompt verbatim into the planning spec at `.lovable/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section. Extract the specific task list from this prompt as actionable bullet points / checklist items under `## Extracted Actionable Task List`. The AI MUST output this extracted checklist directly in chat confirming: *"Confirmed Task Deliverables: 1. [task 1], 2. [task 2]..."* before taking further actions.
+2. **Scan & Discover:** Spawn 2 planning subagents to deeply scan the codebase for target changes or violations.
+3. **Master Spec Generation:** Save the master architectural plan into `.lovable/plans/pending/xx-<slug>.md`.
+4. **Task-Specific Rule Set:** Write down 3–5 custom rules or constraints unique to this task inside the spec file.
+5. **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/xx-<slug>/01-<subtask-title>.md`, `02-<subtask-title>.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
+6. **Strict Relative Git Paths:** All markdown links and file paths in subtasks MUST be strictly relative to the repository root (e.g. `.lovable/spec/...`, `src/...`). Zero absolute paths (`/absolute/path/to/...`, `/absolute/path/to/...`) or `file:///` URIs.
+7. **MANDATORY AUTO-LOOP (DO NOT STOP):** As soon as Phase 1 planning completes, the master orchestrator **MUST NOT STOP or ask the user for permission**. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
 
 ---
 
@@ -145,6 +147,7 @@ To guarantee full execution without stopping after planning mode, the master orc
 
 ### 2. Phase 1: Planning Mode & Subtask Generation (Steps 1 .. N/2)
 
+- **Verbatim Prompt Recording & Task Extraction (First Action):** Write the user request verbatim into `.lovable/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract the bulleted actionable deliverables under `## Extracted Actionable Task List`, and output the confirmed task deliverables directly in chat to verify understanding.
 - Spawn 2 planning subagents to scan the codebase for target guideline violations.
 - Write the master architectural specification in `.lovable/plans/pending/xx-audit.md` with an exhaustive Violation Ledger table.
 - **Lean Subtask Decomposition:** Break down the plan into a few highly focused subtask files in `.lovable/plans/subtasks/xx-<parent-slug>/01-<subtask-title>.md`, `02-<subtask-title>.md`, etc. **Task Focus Over Meta-Prompting:** Your goal is to write code and solve the problem, not just generate more AI prompts. Subagent instructions should clearly define the domain task itself.
@@ -161,6 +164,19 @@ To guarantee full execution without stopping after planning mode, the master orc
 - Execute targeted local linters on modified files ensuring `exit 0` before concluding. DO NOT run `06-cicd-local-runner.py`, unit test suites, or build checks during routine loops.
 - **TOTAL BAN on Test Running & Build Checking:** All test runs (`go test`, `pytest`, python runners) and build checks (`go build`, compiler verification) are strictly banned during routine execution. Verification will be checked later on in CI/CD.
 - Record all modified files to `.lovable/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) for subsequent CI/CD runs.
+
+### 4. Per-Task Agent Isolation & Workspace Subfolders (`.lovable/temp-agents/xx-<task-name>/`)
+
+To prevent cross-task pollution and ensure seamless agent communication, every task MUST create a dedicated subfolder in `.lovable/temp-agents/xx-<task-name>/`:
+1. **Per-Task Isolation:** On task start, the assigned subagent creates its isolated directory `.lovable/temp-agents/xx-<task-name>/`.
+2. **State & Progress Tracking:** Create `.lovable/temp-agents/xx-<task-name>/state.md` documenting:
+   - Task sequence and target deliverables.
+   - Files assigned for modification.
+   - Current subtask step and completion percentage.
+3. **Inter-Agent Communication & Scratch Space:**
+   - All intermediate findings, scratch outputs, and dependency handoffs between agents working on this task MUST be written inside `.lovable/temp-agents/xx-<task-name>/`.
+4. **On Error/Crash:** Append the exact error, root cause, and `STATUS: FAILED` to `.lovable/temp-agents/xx-<task-name>/state.md` before exiting.
+5. **On Success:** Mark `STATUS: DONE` in `.lovable/temp-agents/xx-<task-name>/state.md`, aggregate findings to the master plan, and clean up or archive the folder.
 
 ## Task Consolidation & File Reduction (End of Loop)
 
