@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.41.0",
+  "Version": "6.42.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "2b4d71014619c3c8e7d31acaff64a276daf845ea",
+  "LastCommitSha": "dd1bdd0929d2738bcd0465a950821a73132a23e3",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.41.0",
-  "updated": "2026-09-17",
+  "version": "6.42.0",
+  "updated": "2026-09-18",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "2b4d71014619c3c8e7d31acaff64a276daf845ea",
-    "shortSha": "2b4d710",
+    "sha": "dd1bdd0929d2738bcd0465a950821a73132a23e3",
+    "shortSha": "dd1bdd0",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 700,
     "totalLines": 149518,
     "totalFolders": 23,
-    "totalBytes": 5344569,
+    "totalBytes": 5344965,
     "rootFiles": 6
   },
   "folders": [
@@ -84,7 +84,7 @@
       "ambiguity": "None",
       "fileCount": 17,
       "lineCount": 3408,
-      "byteCount": 133310
+      "byteCount": 133462
     },
     {
       "path": "02-coding-guidelines",
@@ -97,7 +97,7 @@
       "ambiguity": null,
       "fileCount": 217,
       "lineCount": 34586,
-      "byteCount": 1094353
+      "byteCount": 1094405
     },
     {
       "path": "03-error-manage",
@@ -110,7 +110,7 @@
       "ambiguity": "None",
       "fileCount": 125,
       "lineCount": 20309,
-      "byteCount": 757476
+      "byteCount": 757480
     },
     {
       "path": "04-database-conventions",
@@ -123,7 +123,7 @@
       "ambiguity": "None",
       "fileCount": 9,
       "lineCount": 2898,
-      "byteCount": 111238
+      "byteCount": 111242
     },
     {
       "path": "05-split-db-architecture",
@@ -136,7 +136,7 @@
       "ambiguity": "Low",
       "fileCount": 16,
       "lineCount": 4218,
-      "byteCount": 175499
+      "byteCount": 175503
     },
     {
       "path": "06-seedable-config-architecture",
@@ -149,7 +149,7 @@
       "ambiguity": "Low",
       "fileCount": 19,
       "lineCount": 4817,
-      "byteCount": 155733
+      "byteCount": 155737
     },
     {
       "path": "07-design-system",
@@ -162,7 +162,7 @@
       "ambiguity": "Low",
       "fileCount": 17,
       "lineCount": 2752,
-      "byteCount": 84505
+      "byteCount": 84509
     },
     {
       "path": "08-docs-viewer-ui",
@@ -175,7 +175,7 @@
       "ambiguity": "10%",
       "fileCount": 14,
       "lineCount": 2047,
-      "byteCount": 65911
+      "byteCount": 65915
     },
     {
       "path": "09-code-block-system",
@@ -188,7 +188,7 @@
       "ambiguity": null,
       "fileCount": 12,
       "lineCount": 2144,
-      "byteCount": 61977
+      "byteCount": 61981
     },
     {
       "path": "10-research",
@@ -201,7 +201,7 @@
       "ambiguity": "None",
       "fileCount": 2,
       "lineCount": 132,
-      "byteCount": 4343
+      "byteCount": 4347
     },
     {
       "path": "11-powershell-integration",
@@ -214,7 +214,7 @@
       "ambiguity": null,
       "fileCount": 12,
       "lineCount": 2745,
-      "byteCount": 76976
+      "byteCount": 76980
     },
     {
       "path": "12-cicd-pipeline-workflows",
@@ -227,7 +227,7 @@
       "ambiguity": "None",
       "fileCount": 46,
       "lineCount": 8557,
-      "byteCount": 276923
+      "byteCount": 276931
     },
     {
       "path": "13-generic-cli",
@@ -240,7 +240,7 @@
       "ambiguity": null,
       "fileCount": 23,
       "lineCount": 4713,
-      "byteCount": 152630
+      "byteCount": 152634
     },
     {
       "path": "14-update",
@@ -253,7 +253,7 @@
       "ambiguity": "None",
       "fileCount": 43,
       "lineCount": 8932,
-      "byteCount": 291801
+      "byteCount": 291809
     },
     {
       "path": "15-distribution-and-runner",
@@ -261,12 +261,12 @@
       "title": "Distribution and Runner",
       "version": "1.0.0",
       "updated": "2026-04-19",
-      "status": "Authoritative — implementation must match this spec.",
+      "status": "Authoritative \u2014 implementation must match this spec.",
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 7,
       "lineCount": 907,
-      "byteCount": 36273
+      "byteCount": 36277
     },
     {
       "path": "16-generic-release",
@@ -279,7 +279,7 @@
       "ambiguity": null,
       "fileCount": 10,
       "lineCount": 2156,
-      "byteCount": 67872
+      "byteCount": 67880
     },
     {
       "path": "17-consolidated-guidelines",
@@ -292,7 +292,7 @@
       "ambiguity": "None",
       "fileCount": 36,
       "lineCount": 16907,
-      "byteCount": 622155
+      "byteCount": 622227
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -305,7 +305,7 @@
       "ambiguity": "None",
       "fileCount": 30,
       "lineCount": 17527,
-      "byteCount": 577908
+      "byteCount": 577912
     },
     {
       "path": "19-main-worker-service",
@@ -318,7 +318,7 @@
       "ambiguity": null,
       "fileCount": 35,
       "lineCount": 8329,
-      "byteCount": 506665
+      "byteCount": 506693
     },
     {
       "path": "21-app",
@@ -331,7 +331,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 76,
-      "byteCount": 3072
+      "byteCount": 3076
     },
     {
       "path": "22-app-issues",
@@ -344,7 +344,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 70,
-      "byteCount": 2759
+      "byteCount": 2763
     },
     {
       "path": "23-app-db",
@@ -357,12 +357,12 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 86,
-      "byteCount": 3086
+      "byteCount": 3090
     },
     {
       "path": "24-app-ui-design-system",
       "name": "App UI Design System",
-      "title": "App UI — Design System",
+      "title": "App UI \u2014 Design System",
       "version": "3.2.0",
       "updated": "2026-04-16",
       "status": null,
@@ -370,7 +370,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 85,
-      "byteCount": 2894
+      "byteCount": 2898
     }
   ],
   "prompts": [
@@ -394,5 +394,6 @@
     "${TARGET_PREFIX}/18-release.md",
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
-  ]
+  ],
+  "releaseDate": "2026-09-18"
 }

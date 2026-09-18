@@ -4,6 +4,13 @@
 
 ---
 
+## v6.42.0 — 2026-09-18 (feat(prompts): integrate GitMap pipeline-ai and dynamic waiting protocol)
+
+**Scope:** Version bump (`6.41.0` → `6.42.0`). feat(prompts): integrate GitMap pipeline-ai and dynamic waiting protocol.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
 ## v6.41.0 — 2026-09-17 (Nuclear package modularization prompt and 5-day test inventory freshness)
 
 **Scope:** Version bump (`6.40.0` → `6.41.0`). Nuclear package modularization prompt and 5-day test inventory freshness.
