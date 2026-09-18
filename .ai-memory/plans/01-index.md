@@ -46,7 +46,6 @@ Compact registry of the last 20 tasks, transaction logs, and milestone plans. Ev
 20. **Task 07:** [Bytes[T] Monadic Wrapper & *appfault.AppError Standard](05-changes-history/07-bytes-wrapper-and-apperror-standard/01-transaction-log.md) (2026-09-04) — Replaced raw ([]byte, error) with monadic Bytes[T] and standardized structured AppError returns.
 
 - [01-rename-lovable-to-ai-memory.md](completed/01-rename-lovable-to-ai-memory.md): Renamed .lovable to .ai-memory everywhere.
-- [03-quiz-feature-implementation.md](completed/03-quiz-feature-implementation.md): Implemented quiz feature frontend and backend scaffold.
 - [05-wp-exam-migration-and-quiz-feature.md](completed/05-wp-exam-migration-and-quiz-feature.md): Migrate guidelines and add quiz feature to WP exam.
 - [07-movie-cli-migration-and-optimization.md](completed/07-movie-cli-migration-and-optimization.md): Migration and DRY optimization of movie-cli-v8.
 - [08-movie-cli-dry-fix.md](completed/08-movie-cli-dry-fix.md): DRY code refactoring for movie-cli-v8.

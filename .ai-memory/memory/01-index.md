@@ -128,3 +128,4 @@ Updated: 2026-04-27
 - [Session 2026-09-10 Memory Retrieval & Git History](learned/10-memory-retrieval-git-history-and-project-context-ingestion.md) — 20 recent commits reviewed, CODE RED rules reaffirmed, 02-spec and .ai-memory directories fully audited.
 - [Learned Database Conventions](learned/02-database-conventions.md): SQLite Split DB, PascalCase tables, {Table}Id PKs, positive booleans.
 - [Learned Enum Standards](learned/03-enum-standards.md): Cross-language enum generator workflow and naming rules.
+- [Session 2026-09-19 Memory Retrieval & Git History v2](learned/15-memory-retrieval-git-history-and-project-context-ingestion-v2.md) — 10 recent commits reviewed (.ai-memory rename, GitMap integration, WP exam quiz feature, code dry optimizations). CODE RED and naming rules re-affirmed.
