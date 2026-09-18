@@ -36,12 +36,12 @@ The `.ai-memory/` folder, specs, and codebase can be massive. To process this in
 - **Sub-Agents for Reading:** You ARE allowed to spawn sub-agents to read items and create memory in parallel.
 - **Specific Titling:** When spawning a sub-agent for reading, you must give it a highly specific title reflecting exactly what it is reading (e.g., `Reading Auth Specs` or `Scanning API Memory`). Do not use generic names. If an agent switches tasks, its title must change.
 - **Micro-Tasking:** Assign sub-agents small, granular folders/files to read rather than asking one agent to read the entire codebase.
-- You are allowed to write to the `.ai-memory/` directory to enhance project memory after reading. This includes:
-  - Writing summaries of what you learned and understood into `.ai-memory/memory/learned/xx-<slug>.md` (or `.ai-memory/01-index.md`), including the number of files read, to maintain context.
-  - Updating `.ai-memory/what-to-read.md` based on your progress to guide future reading workflows.
-  - Documenting any problems or issues you discover in the codebase into `.ai-memory/issues/` or `.ai-memory/suggestions.md`.
-  - Updating existing memory files, capturing open ambiguities, or updating plans.
-- CRITICAL: You MUST NOT refactor, edit, or write any application source code. This is a read and analysis phase only.
+- **TOTAL BAN ON REPOSITORY WRITES:** You are **STRICTLY FORBIDDEN** from modifying, creating, or deleting any files or folders in the repository during reading (no writing to `.ai-memory/`, no creating memory files, no updating indices, no writing skills/rules, no git commit/push).
+- **ISOLATED USER TEMP DIRECTORY (COMMUNICATION ONLY):** If sub-agents or the AI MUST write scratch data, caching, or messages to communicate during reading, it is **STRICTLY AND ONLY** permitted to write in the system **user temp directory** (`$TEMP`, `%TEMP%`, or `os.path.join(tempfile.gettempdir(), ...)`).
+  - Inside the user temp directory, create a dedicated folder named after the repository (e.g. `%TEMP%/<repo-name>/` or `$TEMP/<repo-name>/`), replicating the mirror pattern.
+  - Zero repository files may be created or changed.
+  - If agent communication via files is not strictly required, **DO NOT WRITE ANYTHING AT ALL**.
+- CRITICAL: The entire repository workspace is 100% read-only during this workflow.
 ---
 
 ## Phase 1 - Load the project & git history
@@ -220,7 +220,7 @@ Then stop. No next-step suggestions, no exploratory questions.
 - [ ] Checked whether the repo contains explicit tone, strictly-avoid, or prior-stupidity instructions and applied them without softening
 - [ ] Did not replace hard user wording with polite generic language
 - [ ] Emitted the Completion Confirmation block verbatim, then stopped
-- [ ] Confirmed that self-looping remained strictly read-only regarding the codebase (no source code refactored, only memory updated)
+- [ ] Confirmed that self-looping remained 100% read-only regarding the codebase and repository (zero repository files written, zero folder structure changes; any temporary agent communication isolated to user temp %TEMP%/<repo-name>/)
 
 ## Tone and stance
 

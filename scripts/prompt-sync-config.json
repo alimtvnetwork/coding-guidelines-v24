@@ -21,7 +21,7 @@
       "target": "${TARGET_PREFIX}/04-plan-steps.md"
     },
     {
-      "source": "${SOURCE_PREFIX}/03-read-write/02-read-memory-enhanced.md",
+      "source": "${SOURCE_PREFIX}/03-read-write/03-read-memory-latest.md",
       "target": "${TARGET_PREFIX}/05-read-memory-enhanced.md"
     },
     {
@@ -29,7 +29,7 @@
       "target": "${TARGET_PREFIX}/06-write-antigravity.md"
     },
     {
-      "source": "${SOURCE_PREFIX}/03-read-write/03-write-memory.md",
+      "source": "${SOURCE_PREFIX}/03-read-write/04-write-memory.md",
       "target": "${TARGET_PREFIX}/07-write-memory.md"
     },
     {
