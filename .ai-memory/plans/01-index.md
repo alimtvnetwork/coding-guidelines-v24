@@ -48,3 +48,4 @@ Compact registry of the last 20 tasks, transaction logs, and milestone plans. Ev
 - [01-rename-lovable-to-ai-memory.md](completed/01-rename-lovable-to-ai-memory.md): Renamed .lovable to .ai-memory everywhere.
 - [03-quiz-feature-implementation.md](completed/03-quiz-feature-implementation.md): Implemented quiz feature frontend and backend scaffold.
 - [05-wp-exam-migration-and-quiz-feature.md](completed/05-wp-exam-migration-and-quiz-feature.md): Migrate guidelines and add quiz feature to WP exam.
+- [06-wp-exam-migration-retry.md](completed/06-wp-exam-migration-retry.md): Retry of WP exam migration and quiz feature due to subagent hallucinations.
