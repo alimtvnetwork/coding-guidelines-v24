@@ -48,5 +48,6 @@ Compact registry of the last 20 tasks, transaction logs, and milestone plans. Ev
 - [01-rename-lovable-to-ai-memory.md](completed/01-rename-lovable-to-ai-memory.md): Renamed .lovable to .ai-memory everywhere.
 - [03-quiz-feature-implementation.md](completed/03-quiz-feature-implementation.md): Implemented quiz feature frontend and backend scaffold.
 - [05-wp-exam-migration-and-quiz-feature.md](completed/05-wp-exam-migration-and-quiz-feature.md): Migrate guidelines and add quiz feature to WP exam.
-- [06-wp-exam-migration-retry.md](completed/06-wp-exam-migration-retry.md): Retry of WP exam migration and quiz feature due to subagent hallucinations.
 - [07-movie-cli-migration-and-optimization.md](completed/07-movie-cli-migration-and-optimization.md): Migration and DRY optimization of movie-cli-v8.
+- [08-movie-cli-dry-fix.md](completed/08-movie-cli-dry-fix.md): DRY code refactoring for movie-cli-v8.
+- [15-gitmap-pipeline-waiting-prompts.md](completed/15-gitmap-pipeline-waiting-prompts.md): GitMap pipeline-ai integration and dynamic waiting protocol in prompts and skills.

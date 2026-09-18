@@ -5,6 +5,7 @@
 
 ## Changelog
 
+- 2026-09-18T19:20:00Z, GitMap Pipeline-AI & Dynamic Waiting Protocol: updated execute prompts, fix-with-rca, ci-cd-fix, and ci-cd-fix-with-release prompts and skills to mandate GitMap pipeline AI integration, targeted failure extraction, and dynamic waiting (-t <sec>) to eliminate credit waste from tight-loop polling.
 - 2026-09-13T08:15:00Z, Prompt & Memory Write Upgrade (v2.2.0): updated 01-write-antigravity.md, 03-write-memory.md, and skills to mandate 30-commit git history audit and recent 20-task tracking register in .ai-memory/plans/01-index.md.
 - 2026-09-13T07:45:00Z, Memory Persistence & Learned Standards: recorded institutional memory for regex centralization, generic dbengine architecture, isDefined positive convention, zero-storage GitHub Actions mandate, and pre-commit guard enforcement.
 - 2026-09-13T07:00:00Z, Regex Centralization & Generic DbEngine: lazy regex engine audit, core regex harvesting from 03-aukgo/core, gitmap call-site refactoring, generic redistributable dbengine package (pkg/dbengine), and Python database code generator (35-db-struct-enum-generator.py).
@@ -68,3 +69,6 @@
 - .ai-memory/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md
 - .ai-memory/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md
 - .ai-memory/plans/completed/12-regex-centralization-and-generic-dbengine.md
+- .ai-memory/plans/completed/15-gitmap-pipeline-waiting-prompts.md
+- .agents/skills/gitmap-pipeline-waiting-prompts/skill.md
+- .agents/skills/ci-cd-fix-with-release/skill.md
