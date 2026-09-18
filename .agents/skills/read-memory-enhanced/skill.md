@@ -41,6 +41,10 @@ The `.ai-memory/` folder, specs, and codebase can be massive. To process this in
   - Inside the user temp directory, create a dedicated folder named after the repository (e.g. `%TEMP%/<repo-name>/` or `$TEMP/<repo-name>/`), replicating the mirror pattern.
   - Zero repository files may be created or changed.
   - If agent communication via files is not strictly required, **DO NOT WRITE ANYTHING AT ALL**.
+- **3-TIER READING TOOL HIERARCHY & FALLBACK PROTOCOL:**
+  1. *Tier 1 (Fast Cached Python Tools):* Use `03-ai-scripts/17-fast-file-reader.py` and `03-ai-scripts/12-fast-cached-grep.py` when available for sub-millisecond cached lookups. Do NOT write or recreate scripts if missing.
+  2. *Tier 2 (GitMap Acceleration):* If Python scripts are absent or cannot be run, use GitMap (`gitmap`) if installed to read and explore repository files faster.
+  3. *Tier 3 (Native Agent Process Fallback):* If GitMap is also not installed or available, smoothly fall back to native agent tools and process (`view_file`, `list_dir`, `grep_search`, `find_by_name`, `cat`, `ls`) without halting or writing files.
 - CRITICAL: The entire repository workspace is 100% read-only during this workflow.
 ---
 

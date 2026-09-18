@@ -71,23 +71,17 @@ The `.ai-memory/`, `02-spec/`, and knowledge base folders can be massive. To pro
 > - It is a standalone, dependency-free Python script designed for AI agents that provides sub-millisecond file reading and directory exploration.
 > - It leverages `tmp/cache/` (or `__pycache__` style internal memoization) for instant lookups (<1ms) and automatically falls back to live disk scanning.
 >
-> **If the script is missing (How to recreate it):**
-> If `03-ai-scripts/17-fast-file-reader.py` is not found, you must immediately recreate it using only Python standard libraries (`os`, `sys`, `pathlib`, `re`, `argparse`, `json`).
-> - **Requirements:** Import any shared constants from `03-ai-scripts/02-shared-engine.py` if present. Ensure strict UTF-8 encoding (`sys.stdout.reconfigure(encoding="utf-8")`). Implement 2-tier caching for repeated calls.
-> - **Core CLI Flags to implement:**
->   - `--list-folder <folder_path> [--ext .md,.ts]`: Recursively lists files matching extensions.
->   - `--read-file <file_path> [--max-bytes N]`: Fast content extraction with bounded limits.
->   - `--search-pattern "<regex_term>" [--path <dir>]`: Rapid content searching using compiled regex.
+> **Tool Hierarchy & Fallback Protocol (Strict Zero-Write Mandate):**
+> 1. **Tier 1 (Fast Cached Python Tools):**
+>    - Use `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` and `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>" [--path <dir>]` for sub-millisecond cached exploration when available.
+>    - **DO NOT** recreate or write Python scripts if they are missing. The read workflow is strictly read-only.
+> 2. **Tier 2 (GitMap Acceleration):**
+>    - If Python scripts are absent or cannot run, check if GitMap is installed (`gitmap`) and use GitMap to inspect and read repository files faster.
+> 3. **Tier 3 (Native Agent Process Fallback):**
+>    - If GitMap is also not installed or available, smoothly fall back to the AI agent's native built-in process and tools (`view_file`, `list_dir`, `grep_search`, `find_by_name`, or standard shell commands like `cat`, `ls`, `grep`).
+>    - The AI must seamlessly proceed with reading using its native capabilities without halting, complaining, or writing any files to the repository.
 
-1. Fast Cached Directory Discovery:
-   - Use `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` to enumerate repository structures in <15ms via `tmp/cache/`.
-   - Use `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>" [--path <dir>] [--ext <extensions>]` for parallel multi-threaded content grepping using pre-compiled regexes.
-
-2. Pre-Flight Script Authoring Checklist:
-   - Inspect `03-ai-scripts/02-shared-engine.py` for centralized constants, `RegexPatternType` Enums with PascalCase members, and lazy regex memoization.
-   - Inspect `03-ai-scripts/01-index.md` for tool inventory and performance baselines.
-
-3. Autonomous looping enforcement:
+1. Autonomous looping enforcement:
    - The AI agent MUST take at least 50 distinct steps to autonomously self-loop through all directories and files across `02-spec/`, `.ai-memory/`, and application source trees.
    - Do not stop after one high-level glance. You must deeply explore and learn.
    - Systematically iterate through each directory layer.

@@ -57,6 +57,17 @@ If you cannot do that, keep reading. Do not start work.
 
 ## Reading Strategy: Mandatory Autonomous Looping & Parallel Subagents
 
+> [!TIP]
+> **Tool Hierarchy & 3-Tier Fallback Protocol (Strict Zero-Write Mandate):**
+> 1. **Tier 1 (Fast Cached Python Tools):**
+>    - Use `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` and `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>" [--path <dir>]` for sub-millisecond cached exploration when available.
+>    - **DO NOT** recreate or write Python scripts if they are missing. The read workflow is strictly read-only.
+> 2. **Tier 2 (GitMap Acceleration):**
+>    - If Python scripts are absent or cannot run, check if GitMap is installed (`gitmap`) and use GitMap to inspect and read repository files faster.
+> 3. **Tier 3 (Native Agent Process Fallback):**
+>    - If GitMap is also not installed or available, smoothly fall back to the AI agent's native built-in process and tools (`view_file`, `list_dir`, `grep_search`, `find_by_name`, or standard shell commands like `cat`, `ls`, `grep`).
+>    - The AI must seamlessly proceed with reading using its native capabilities without halting, complaining, or writing any files to the repository.
+
 The `.ai-memory/` folder, specs, and entire codebase can be massive. To process this information with zero blind spots:
 
 1. Autonomous looping enforcement:
