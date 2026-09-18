@@ -15,6 +15,8 @@
 - 2026-08-09T18:21:37Z, Memory write: code red refactor and strict absolute path avoidance.
 
 ## Before any task (always)
+- .ai-memory/memory/learned/02-database-conventions.md, why: SQLite Split DB, PascalCase tables, {Table}Id PKs, positive booleans.
+- .ai-memory/memory/learned/03-enum-standards.md, why: Cross-language enum generator workflow and naming rules.
 
 - `git log -n 30 --stat` (or `git log -n 30 --oneline`), why: inspect the last 30 commits to understand recent file changes, what code/docs were touched, directives, lessons learned, and the latest repository state before starting any task
 - `.ai-memory/what-to-read.md`, why: authoritative prioritized reading sequence that must be read and followed before touching any files

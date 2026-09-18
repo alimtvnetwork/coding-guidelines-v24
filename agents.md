@@ -59,3 +59,9 @@ To survive massive checklists and complex codebases, you MUST operate using thes
   - Diagnostic failures MUST use GitHub Actions annotations (`::error::` / `::warning::`).
   - Pull request summaries MUST use sticky PR comments.
 - **Release Assets Exemption:** Distribution binaries and release archives attached directly to GitHub Releases via `gh release create` / `gh release upload` are exempt from this ban because GitHub Release assets do not consume the monthly Actions storage quota.
+## 8. Essential AI Coding Constraints
+- **Strict Boolean Standard:** is and has only (can, should, was, etc. are banned).
+- **No Bare Void in Go:** Functions must return Result[T] or *appfault.AppError.
+- **Parameter Structs:** Banned loose >2-3 parameters; use *Params structs.
+- **Vertical Line Gaps:** Mandatory blank lines before if, after }, before return, and around multiline struct calls.
+- **5-8 Files Micro-Batching:** All refactors broken into bounded subtasks.

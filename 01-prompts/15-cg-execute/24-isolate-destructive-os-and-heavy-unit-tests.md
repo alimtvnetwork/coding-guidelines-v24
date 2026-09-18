@@ -40,8 +40,8 @@ PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Parallel Subtasks, Injectable Executo
 11. [ ] /goal Phase 2 (Step G - Final Step Build Verification): At the conclusion of all refactoring subtasks, run targeted syntax and quality gate checks to verify clean compilation.
 12. [ ] /goal Phase 3 (Step A - Task Consolidation): Consolidate completed subtasks into `.ai-memory/plans/completed/`, delete granular subtask files, and update `.ai-memory/plans/01-index.md`.
 13. [ ] /goal Phase 3 (Step B - Atomic Git Commit & Push): Stage all modified files (`git add -A`), commit them in a single clean grouped atomic commit, and push to git.
-14. [ ] /learn Ingest `spec/02-coding-guidelines/` for domain-specific architectural specifications.
-15. [ ] /learn Ingest `spec/03-error-manage/` for AppError wrapping.
+14. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
+15. [ ] /learn Ingest `02-spec/03-error-manage/` for AppError wrapping.
 16. [ ] /learn Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
 
 ---
