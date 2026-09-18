@@ -63,7 +63,43 @@ If you cannot do that, keep reading. Do not start work.
 >    - Use `python 03-ai-scripts/17-fast-file-reader.py --list-folder <dir> [--ext <extensions>]` and `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>" [--path <dir>]` for sub-millisecond cached exploration when available.
 >    - **DO NOT** recreate or write Python scripts if they are missing. The read workflow is strictly read-only.
 > 2. **Tier 2 (GitMap Acceleration):**
->    - If Python scripts are absent or cannot run, check if GitMap is installed (`gitmap`) and use GitMap to inspect and read repository files faster.
+>    - If Python scripts are absent or cannot run, check if GitMap is installed (`gitmap`) and leverage GitMap CLI verbs to rapidly inspect, search, and read repository files with zero disk writes:
+>      - **Directory & File Discovery:**
+>        - `gitmap list-files` (alias `lf`) `[pattern] [-ext <extensions>]`: List tracked repository files with optional extension filtering.
+>          - Example: `gitmap list-files "*"` (list all repository files)
+>          - Example: `gitmap lf "*" -ext "md"` (list all markdown files across repository)
+>          - Example: `gitmap list-files "02-spec/*"` (list files in spec directory)
+>        - `gitmap find` (alias `f`) `<wildcard*>`: High-speed wildcard/glob file search.
+>          - Example: `gitmap find "01*" -ext "md"` (find all markdown files starting with 01)
+>          - Example: `gitmap find "*index*"` (find all index files)
+>        - `gitmap find-files` (alias `ff`) `<exact-name>`: Exact filename lookup.
+>          - Example: `gitmap ff "what-to-read.md"` (locate authoritative reading list)
+>          - Example: `gitmap find-files "readme.md"` (locate repository readme)
+>        - `gitmap find-files-any` (alias `ffa`) `<substring>`: Substring filename search.
+>          - Example: `gitmap ffa "guide" -ext "md"` (find all guides)
+>        - `gitmap find-files-startswith` (alias `ffs`) `<prefix>`: Prefix filename search.
+>          - Example: `gitmap ffs "what-"` (find files starting with prefix)
+>        - `gitmap find-files-endswith` (alias `ffe`) `<suffix>`: Suffix filename search.
+>          - Example: `gitmap ffe "avoid.md"` (find strictly-avoid files)
+>      - **File Reading & Content Inspection:**
+>        - `gitmap cat <filepath>`: Stream raw file content directly to stdout without touching disk.
+>          - Example: `gitmap cat .ai-memory/what-to-read.md` (read authoritative reading sequence)
+>          - Example: `gitmap cat 02-spec/01-index.md` (read spec index directly)
+>          - Example: `gitmap cat readme.md` (read project identity and guidelines)
+>      - **Repository Status & Changelog Context:**
+>        - `gitmap status` (alias `st`): Display branch state, clean/dirty working tree, and ahead/behind counts.
+>          - Example: `gitmap status`
+>        - `gitmap changelog` (alias `cl`) `[--latest]`: Read concise release notes and version history.
+>          - Example: `gitmap changelog --latest` (inspect most recent release notes)
+>        - `gitmap list-versions` (alias `lv`): List tagged versions in descending order.
+>          - Example: `gitmap list-versions --limit 5`
+>      - **CI/CD Pipeline & Failure Diagnostics (RCA Context):**
+>        - `gitmap pipeline status` (alias `pl status`): Check live CI/CD pipeline state and remaining ETA.
+>          - Example: `gitmap pipeline status`
+>        - `gitmap pipeline history` (alias `pl history`): Inspect recent commits pipeline execution tree and failure status.
+>          - Example: `gitmap pipeline history`
+>        - `gitmap pipeline errors` (alias `pl errors`): Fetch and inspect failed step error logs for Root Cause Analysis.
+>          - Example: `gitmap pipeline errors` (view latest failed workflow logs)
 > 3. **Tier 3 (Native Agent Process Fallback):**
 >    - If GitMap is also not installed or available, smoothly fall back to the AI agent's native built-in process and tools (`view_file`, `list_dir`, `grep_search`, `find_by_name`, or standard shell commands like `cat`, `ls`, `grep`).
 >    - The AI must seamlessly proceed with reading using its native capabilities without halting, complaining, or writing any files to the repository.

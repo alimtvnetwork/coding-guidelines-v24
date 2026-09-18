@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "dd1bdd0929d2738bcd0465a950821a73132a23e3",
+  "LastCommitSha": "b454acdd6ee43308e30cd5483925820b238d1dfc",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -57,19 +57,19 @@
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
   "version": "6.42.0",
-  "updated": "2026-09-18",
+  "updated": "2026-09-19",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "dd1bdd0929d2738bcd0465a950821a73132a23e3",
-    "shortSha": "dd1bdd0",
+    "sha": "b454acdd6ee43308e30cd5483925820b238d1dfc",
+    "shortSha": "b454acd",
     "branch": "main"
   },
   "stats": {
     "totalFiles": 700,
-    "totalLines": 149518,
+    "totalLines": 149525,
     "totalFolders": 23,
-    "totalBytes": 5344965,
+    "totalBytes": 5345284,
     "rootFiles": 6
   },
   "folders": [
@@ -261,7 +261,7 @@
       "title": "Distribution and Runner",
       "version": "1.0.0",
       "updated": "2026-04-19",
-      "status": "Authoritative \u2014 implementation must match this spec.",
+      "status": "Authoritative — implementation must match this spec.",
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 7,
@@ -317,8 +317,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 35,
-      "lineCount": 8329,
-      "byteCount": 506693
+      "lineCount": 8336,
+      "byteCount": 507012
     },
     {
       "path": "21-app",
@@ -362,7 +362,7 @@
     {
       "path": "24-app-ui-design-system",
       "name": "App UI Design System",
-      "title": "App UI \u2014 Design System",
+      "title": "App UI — Design System",
       "version": "3.2.0",
       "updated": "2026-04-16",
       "status": null,
@@ -394,6 +394,5 @@
     "${TARGET_PREFIX}/18-release.md",
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
-  ],
-  "releaseDate": "2026-09-18"
+  ]
 }
