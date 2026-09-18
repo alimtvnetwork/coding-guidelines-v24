@@ -72,3 +72,4 @@
 - .ai-memory/plans/completed/15-gitmap-pipeline-waiting-prompts.md
 - .agents/skills/gitmap-pipeline-waiting-prompts/skill.md
 - .agents/skills/ci-cd-fix-with-release/skill.md
+- .agents/skills/ai-memory-consolidate-reduce/skill.md

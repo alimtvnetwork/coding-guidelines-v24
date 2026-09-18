@@ -20,7 +20,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `03-read-write` | [`03-read-write/03-write-memory.md`](../01-prompts/03-read-write/03-write-memory.md) | Memory Persistence & Issue Logging — Workflow (must follow) |
 | `03-read-write` | [`03-read-write/04-conversation-log.md`](../01-prompts/03-read-write/04-conversation-log.md) | Conversation Log & Context Wrapper — Engineering Workflow (must follow) |
 | `03-read-write` | [`03-read-write/05-proofread.md`](../01-prompts/03-read-write/05-proofread.md) | Proofreading & Semantic Consistency Verification — Quality Protocol (must follow) |
-| `03-read-write` | [`03-read-write/06-lovable-consolidate-completed-plans.md`](../01-prompts/03-read-write/06-lovable-consolidate-completed-plans.md) | Lovable Memory Consolidation, Safety Backup & Milestone Resequencing — Workflow (must follow) |
+| `03-read-write` | [`03-read-write/06-ai-memory-consolidate-reduce.md`](../01-prompts/03-read-write/06-ai-memory-consolidate-reduce.md) | AI Memory Consolidation, Reduction & Safety Backup — Workflow (must follow) |
 | `03-read-write` | [`03-read-write/07-spec-write-from-reverse-engineering.md`](../01-prompts/03-read-write/07-spec-write-from-reverse-engineering.md) | Reverse Engineering Spec Writer & System Architecture Discovery — Workflow (must follow) |
 | `04-coding-standards` | [`04-coding-standards/01-coding-guidelines.md`](../01-prompts/04-coding-standards/01-coding-guidelines.md) | Standards Compliance & Coding Rules Audit — V2 (Grounded & Multi-Language) |
 | `04-coding-standards` | [`04-coding-standards/02-theming-guidelines.md`](../01-prompts/04-coding-standards/02-theming-guidelines.md) | Theming Architecture & Color Palette Guidelines — Coding Guideline (must follow) |
