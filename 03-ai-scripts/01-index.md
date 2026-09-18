@@ -61,6 +61,7 @@ Follow this sequence before and during any repository modification task:
 | **33** | `33-test-inventory-generator.py` | Centralized test cataloging, duration tracking, and test resolution for releases | ~15ms | `test`, `inventory`, `cache`, `duration`, `release` |
 | **34** | `34-purge-github-actions-artifacts.py` | Purges stored GitHub Actions artifacts to enforce Zero-Storage Mandate | ~25ms | `ci-cd`, `artifacts`, `github-actions`, `quota`, `cleanup` |
 | **35** | `35-db-struct-enum-generator.py` | Inspects Go models, generates column enums and strongly-typed repository builders | ~20ms | `db`, `generator`, `scaffolder`, `repository`, `enums` |
+| **36** | `36-multi-repo-folder-migrator.py` | Migrates child repositories from `.lovable`/`spec` to `.ai-memory`/`02-spec` | ~50ms | `migrator`, `multi-repo`, `structure`, `ai-memory` |
 
 ---
 
