@@ -1,6 +1,6 @@
 # Logo Design & Branding Generation — Lovable Design Workflow
 
-> **Prompt Version:** 3.0.0
+> **Prompt Version:** 3.1.0
 > **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -8,11 +8,21 @@ This prompt instructs Lovable (and similar web design AI environments) to genera
 
 ---
 
-## STRICT BAN: No Website or HTML Generation
+## Strictly Avoid (Critical Negative Constraints)
 
 > [!CAUTION]
-> **DO NOT generate a full website, HTML application, React web pages, or landing pages.**
-> This instruction is exclusively for creating branding assets (SVGs, transparent PNGs, color palettes, and README previews). Generating full HTML pages or mock web applications is strictly forbidden and is an automatic failure.
+> **TOTAL BAN ON HTML, WEBSITES, PAGES, AND APPLICATION CODE (AUTO-REJECT)**
+> The AI MUST strictly avoid generating any web application or frontend/backend code. This prompt is ONLY for branding assets and icons.
+
+1. **NO HTML Files:** NEVER create or output `.html` files (no `index.html`, `app.html`, `test.html`, or any other HTML files).
+2. **NO Web Pages or Mockup Apps:** NEVER build landing pages, homepages, dashboard pages, or mock web applications.
+3. **NO React / Vue / Svelte Components:** NEVER create `.tsx`, `.jsx`, `.vue`, or `.svelte` components.
+4. **NO CSS Stylesheets:** NEVER create external CSS files (`styles.css`, `app.css`). Theme colors must live ONLY in `colors-themes/palette.md`.
+5. **NO Server or Script Code:** NEVER create JavaScript/TypeScript scripts, API routes, or backend servers.
+6. **NO Tokens.json:** NEVER generate `tokens.json` in `colors-themes/` (it has been completely removed as unnecessary; use `palette.md` only).
+7. **NO Solid Backgrounds on PNGs:** NEVER generate PNG icons with solid white, solid black, or solid colored background boxes. All icon PNGs MUST have an alpha-channel transparent background.
+8. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
+9. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
 
 ---
 

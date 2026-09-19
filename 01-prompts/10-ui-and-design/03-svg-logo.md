@@ -1,10 +1,26 @@
 # SVG Icon & Vector Graphic Creation — Design Workflow
 
-> **Prompt Version:** 3.0.0
+> **Prompt Version:** 3.1.0
 > **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 This prompt instructs Lovable (and similar web design AI environments) on the exact technical standards for generating scalable, responsive, and accessible SVG vector icons and graphics.
+
+---
+
+## Strictly Avoid (Critical Negative Constraints)
+
+> [!CAUTION]
+> **TOTAL BAN ON HTML WRAPPERS, EMBEDDED BITMAPS, AND WEB PAGES (AUTO-REJECT)**
+> The AI MUST strictly avoid generating HTML, web pages, or embedding raster bitmaps inside SVGs.
+
+1. **NO HTML Files or Wrappers:** NEVER create `.html` files and NEVER wrap SVG code inside `<html>`, `<body>`, `<div>`, or any HTML container. Output ONLY the raw SVG code inside an `xml` or `svg` code block.
+2. **NO Web Pages or UI Templates:** NEVER generate a website, landing page, mock application, or UI component when asked for an SVG logo/icon.
+3. **NO React / Vue Components:** NEVER generate `.tsx`, `.jsx`, or component files unless explicitly requested.
+4. **NO Base64 Raster Images:** NEVER embed base64-encoded bitmap images (`<image href="data:image/png;base64,...">`). All graphics MUST be pure mathematical vector paths, polygons, and curves.
+5. **NO Hardcoded Fixed Dimensions on Root:** NEVER include hardcoded `width="..."` and `height="..."` attributes on the root `<svg>` tag that prevent responsive scaling; use `viewBox` instead.
+6. **NO Editor Bloat:** NEVER include third-party editor metadata (e.g., `xmlns:inkscape`, `sodipodi:docname`, `adobe:ns`).
+7. **NO Unstyled Elements in Monochrome:** NEVER use hardcoded black/white hex fills on monochrome icons; use `currentColor` so the icon inherits text color dynamically.
 
 ---
 

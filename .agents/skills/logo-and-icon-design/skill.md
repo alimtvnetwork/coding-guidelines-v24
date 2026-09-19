@@ -6,7 +6,7 @@ description: >-
 
 # Logo & Icon Design Workflow — Asset & Branding Standards
 
-> **Skill Version:** 1.0.0
+> **Skill Version:** 1.1.0
 > **Target Environment:** Lovable, Web Design AI Platforms, & Local Design Workflows
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -14,12 +14,25 @@ This skill guides the creation, organization, and validation of production-ready
 
 ---
 
+## Strictly Avoid (Critical Negative Constraints)
+
+> [!CAUTION]
+> **TOTAL BAN ON HTML, WEBSITES, PAGES, AND APPLICATION CODE (AUTO-REJECT)**
+> The AI MUST strictly avoid generating any web application, frontend/backend code, or HTML files. This workflow is exclusively for branding assets and icons.
+
+1. **NO HTML Files:** NEVER create or output `.html` files (no `index.html`, `app.html`, `test.html`, etc.).
+2. **NO Web Pages or Mockup Apps:** NEVER build landing pages, homepages, dashboard pages, or mock web applications.
+3. **NO React / Vue / Svelte Components:** NEVER create `.tsx`, `.jsx`, `.vue`, or `.svelte` components.
+4. **NO CSS Stylesheets:** NEVER create external CSS files (`styles.css`, `app.css`). Theme colors must live ONLY in `colors-themes/palette.md`.
+5. **NO Server or Script Code:** NEVER create JavaScript/TypeScript scripts, API routes, or backend servers.
+6. **NO Tokens.json:** NEVER generate `tokens.json` in `colors-themes/` (use `palette.md` only).
+7. **NO Solid Backgrounds on PNGs:** NEVER generate PNG icons with solid white, solid black, or solid colored background boxes. All icon PNGs MUST have an alpha-channel transparent background.
+8. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
+9. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
+
+---
+
 ## 1. Strict Boundary & Scope
-
-### TOTAL BAN on Website / HTML Generation
-
-- **Never generate full websites, HTML pages, or application code.**
-- This workflow is strictly an asset generator producing vector graphics (SVG), transparent raster icons (PNG), color palettes (Markdown), and preview documentation.
 
 ### Input Capture & Validation
 
@@ -124,7 +137,7 @@ In addition to static assets, generates:
 ## 5. Quality Checklist
 
 - [ ] All file and directory names are strictly lowercase.
-- [ ] No HTML pages or website templates were generated.
+- [ ] No HTML pages, React components, or website templates were generated.
 - [ ] All PNG icons have transparent backgrounds (alpha channel).
 - [ ] SVG files have responsive `viewBox` and no hardcoded `width`/`height`.
 - [ ] Project `readme.md` uses relative paths to render all assets.
