@@ -16,7 +16,8 @@ Execute full automated release orchestration, semantic version bumping, branch m
 4. **Test Inventory Validation:** Cross-reference `.ai-memory/temp/recent-file-changes.json` with `.ai-memory/test-inventory.json` to verify that all test suites covering recently modified files pass completely.
 5. **Mandatory 5-Step Release Branching Lifecycle:**
    - **Step 1:** Create and switch to a dedicated release branch: `git checkout -b release/vX.Y.Z`.
-   - **Step 2:** Bump the version using the dedicated Python bump script (`03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`) on the release branch, adapting it to the target repository.
+   - **Step 2:** Bump the version using the dedicated Python bump script (`03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`) on the release branch.
+     - **CRITICAL REPOSITORY ADAPTATION & SCRIPT REPAIR:** Inspect the target repository architecture to identify where versions are defined (`version.json`, `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, etc.), where and how they will change (`readme.md`, `changelog.md`, install scripts), and post-bump synchronization commands (`npm run sync`, `go generate ./...`). If the bump script is missing, outdated, or lacks support for this repository's version pin sites, **the agent MUST fix or recreate the Python bump script immediately** before executing the release.
    - **Step 3:** Commit version bump changes in the release branch: `release: vX.Y.Z <scope>`.
    - **Step 4:** Create the annotated git tag on the release commit: `git tag -a vX.Y.Z -m "Release vX.Y.Z"`.
    - **Step 5:** Put the release commit back to the `main` branch (`git checkout main && git merge release/vX.Y.Z`), push `main`, `release/vX.Y.Z`, and tag `vX.Y.Z` to `origin`, then restore the starting branch.

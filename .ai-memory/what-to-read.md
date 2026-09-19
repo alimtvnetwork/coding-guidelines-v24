@@ -16,6 +16,7 @@
 - 2026-08-09T18:21:37Z, Memory write: code red refactor and strict absolute path avoidance.
 
 ## Before any task (always)
+
 - .ai-memory/memory/learned/02-database-conventions.md, why: SQLite Split DB, PascalCase tables, {Table}Id PKs, positive booleans.
 - .ai-memory/memory/learned/03-enum-standards.md, why: Cross-language enum generator workflow and naming rules.
 

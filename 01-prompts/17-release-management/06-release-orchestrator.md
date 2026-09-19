@@ -1,6 +1,6 @@
 # Automated Release Orchestrator & Branch Lifecycle — Release Management (must follow)
 
-> **Prompt Version:** 2.1.0
+> **Prompt Version:** 2.2.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
 Trigger phrases: `orchestrate release`, `release orchestrator`, `bump with release branch`, `release and tag`, `automated release`.
@@ -21,6 +21,7 @@ Before any execution, check if this prompt is installed as a native Antigravity 
 
 1. Check if `.agents/skills/release-orchestrator/skill.md` exists.
 2. If it does NOT exist, create it now. Write the core instructions of this prompt to `.agents/skills/release-orchestrator/skill.md` with frontmatter:
+
    ```yaml
    ---
    name: release-orchestrator
@@ -28,6 +29,7 @@ Before any execution, check if this prompt is installed as a native Antigravity 
      Execute full automated release orchestration, semantic version bumping, branch management, and tag creation using Python scripts.
    ---
    ```
+
 3. Once installed, load it on-demand via progressive disclosure for all future runs.
 
 ---
@@ -78,15 +80,24 @@ python 03-ai-scripts/29-release-orchestrator.py --tier <minor|patch|major>
 
 ---
 
-## Standalone Bump-Version Recovery & Repository Adaptation
+## Standalone Bump-Version Recovery & Repository Adaptation Mandate
 
-If the repository does not have a project-level bump version script (such as `03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`):
-1. **Autonomous Bootstrap & Repository Adaptation:** The orchestrator script must not fail or halt. It MUST autonomously create or adapt `03-ai-scripts/37-bump-version.py` (or `.ai-memory/release/bump_versions.py`) based on how the target repository tracks versions and where files need to change.
-2. **In-Place File Updates:** The bump script must update:
-   - `version.json`: Update `"version"` to `next_version` and `"releaseDate"` to today's UTC date (`YYYY-MM-DD`).
-   - `package.json`: Update `"version"` to `next_version`.
-   - `readme.md`: Pin the new release version in badges, install snippets, and header versions.
-   - `changelog.md`: Prepend the release entry under `# Changelog` with the release version, UTC date, and changelog bullets.
+> [!IMPORTANT]
+> **REPOSITORY ARCHITECTURE INSPECTION & SCRIPT REPAIR:**
+> If the repository does not have a project-level bump version script (such as `03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`), or if the existing script is outdated or incomplete:
+>
+> 1. **Inspect Repository Architecture:**
+>    - Determine where versions are defined (`version.json`, `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, etc.).
+>    - Determine where and how versions will change (`readme.md`, `changelog.md`, badges, install scripts).
+>    - Determine post-bump synchronization commands (`npm run sync`, `go generate ./...`).
+> 2. **Fix or Create the Bump Script:**
+>    - The orchestrator script must not fail or halt. It MUST autonomously create, fix, or adapt `03-ai-scripts/37-bump-version.py` (or `.ai-memory/release/bump_versions.py`) based specifically on how the target repository tracks versions and where files need to change.
+> 3. **In-Place File Updates:** The bump script must update:
+>    - `version.json`: Update `"version"` to `next_version` and `"releaseDate"` to today's UTC date (`YYYY-MM-DD`).
+>    - `package.json`: Update `"version"` to `next_version`.
+>    - `readme.md`: Pin the new release version in badges, install snippets, and header versions.
+>    - `changelog.md`: Prepend the release entry under `# Changelog` with the release version, UTC date, and changelog bullets.
+>    - Run synchronization commands (`npm run sync`) to regenerate spec trees and manifests.
 
 ---
 

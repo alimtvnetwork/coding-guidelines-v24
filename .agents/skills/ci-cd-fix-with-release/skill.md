@@ -462,7 +462,8 @@ All release execution MUST strictly enforce the **5-Step Release Branching Lifec
 1. **Step 1: Create & Switch to Release Branch:**
    Create and switch to `release/vX.Y.Z` FIRST before modifying any version files (`git checkout -b release/vX.Y.Z`).
 2. **Step 2: Bump Version on Release Branch via Python Script:**
-   Execute the dedicated Python bump script (`03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`) on the release branch, adapting it to the target repository architecture (`version.json`, `package.json`, `readme.md`, `changelog.md`, install snippets).
+   Execute the dedicated Python bump script (`03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`) on the release branch.
+   - **CRITICAL REPOSITORY ADAPTATION & SCRIPT REPAIR:** Inspect the target repository architecture to identify where versions are defined (`version.json`, `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, etc.), where and how they will change (`readme.md`, `changelog.md`, install scripts), and post-bump synchronization commands (`npm run sync`, `go generate ./...`). If the bump script is missing, outdated, or lacks support for this repository's version pin sites, **the agent MUST fix or recreate the Python bump script immediately** before executing the release.
 3. **Step 3: Commit in Release Branch:**
    Stage and commit all version bump and generated release files on the release branch (`release: vX.Y.Z <scope>`).
 4. **Step 4: Create Annotated Git Tag:**

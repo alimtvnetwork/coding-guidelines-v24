@@ -140,9 +140,9 @@ func (w *WindowsSystemDetail) IsWindows10() bool {
 	}
 
 	isWin10 := w.WindowsVersion == 10
-	isNotWin11 := w.CurrentBuildId < 22000
+	isPreWin11Build := w.CurrentBuildId < 22000
 
-	return isWin10 && isNotWin11
+	return isWin10 && isPreWin11Build
 }
 
 func (w *WindowsSystemDetail) IsWindows8() bool {
