@@ -23,7 +23,7 @@ This prompt instructs Lovable (and similar web design AI environments) to genera
 7. **NO Solid / Opaque Backgrounds on ANY PNG (TOTAL BAN):** NEVER generate ANY PNG icon with a solid background (no solid white, no solid black, no grey, no dark square backdrop). ALL PNG files without exception MUST have a 100% transparent alpha-channel background (`#00000000`). "Dark" and "Light" variants refer ONLY to the color/fill of the icon artwork itself—NEVER the background! The canvas/background is ALWAYS 100% transparent.
 8. **NO Solid Background Shapes in SVGs:** NEVER add a background `<rect>` or container shape (e.g. `<rect fill="#000" .../>` or `<rect fill="#fff" .../>`). The SVG canvas must always be transparent.
 9. **NO Messy Overlapping Lines:** NEVER create tangled, chaotic, or densely overlapping strokes. Overlapping lines make icons look muddy, unreadable at small resolutions, and amateurish. Maintain clean geometric separation, purposeful negative space, or continuous connected paths.
-10. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
+10. **NO Unsequenced or Uppercase Filenames:** ALL generated files and images inside project subfolders MUST use lowercase kebab-case preceded by a two-digit zero-padded sequence number (e.g. `01-logo.svg`, `02-logo-dark.svg`, `01-logo-052.png`, `01-prompt.md`, `02-plan.md`). Unsequenced names like `logo.svg` or uppercase names like `README.md` are strictly BANNED.
 11. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
 
 ---
@@ -87,9 +87,9 @@ When designing, draw inspiration from four proven industry archetypes:
 
 ---
 
-## 4. Directory & File Hierarchy (Strict Lowercase)
+## 4. Directory & File Hierarchy (Strict Lowercase & Two-Digit Sequence)
 
-All generated assets must follow strict lowercase naming and zero-padded sequence numbers. No uppercase letters are permitted in filenames or folder paths.
+All generated assets must follow strict lowercase naming and two-digit zero-padded sequence numbers. No unsequenced or uppercase files are permitted in filenames or folder paths.
 
 ```
 / (repo root)
@@ -98,21 +98,21 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
     ├── 01-{project-name}/
     │   ├── readme.md
     │   ├── prompts/
-    │   │   ├── prompt.md
-    │   │   └── plan.md
+    │   │   ├── 01-prompt.md
+    │   │   └── 02-plan.md
     │   ├── icons-svg/
-    │   │   ├── logo.svg
-    │   │   ├── logo-dark.svg
-    │   │   └── logo-white.svg
+    │   │   ├── 01-logo.svg
+    │   │   ├── 02-logo-dark.svg
+    │   │   └── 03-logo-white.svg
     │   ├── icons-image/
-    │   │   ├── logo-052.png
-    │   │   ├── logo-128.png
-    │   │   ├── logo-256.png
-    │   │   ├── logo-512.png
-    │   │   ├── logo-1024-light.png
-    │   │   └── logo-1024-dark.png
+    │   │   ├── 01-logo-052.png
+    │   │   ├── 02-logo-128.png
+    │   │   ├── 03-logo-256.png
+    │   │   ├── 04-logo-512.png
+    │   │   ├── 05-logo-1024-light.png
+    │   │   └── 06-logo-1024-dark.png
     │   └── colors-themes/
-    │       └── palette.md
+    │       └── 01-palette.md
     └── 02-{project-name}/
 (repo root assets)
 ├── favicon.ico
@@ -125,8 +125,8 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-acme-pay`, `02-cloud-sync`).
 3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, ...).
-4. **Prompt & Plan Preservation (Mandatory):** When formulating the design strategy, every detail of the design plan (goals, composition, color palette, typography, execution steps, and quality checklist) MUST be saved directly to the file system at `prompts/plan.md`. The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
-5. **No Tokens.json:** Do not generate `tokens.json`. Color specifications live exclusively inside `colors-themes/palette.md`.
+4. **Prompt & Plan Preservation (Mandatory):** When formulating the design strategy, every detail of the design plan (goals, composition, color palette, typography, execution steps, and quality checklist) MUST be saved directly to the file system at `prompts/02-plan.md`. The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/01-prompt.md` so designs can be reproduced, audited, and iterated on.
+5. **No Tokens.json:** Do not generate `tokens.json`. Color specifications live exclusively inside `colors-themes/01-palette.md`.
 6. **Favicon Placement:** `favicon.ico` and `favicon.png` are placed at the repository root and regenerated per project.
 7. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths so GitHub renders them natively.
 
@@ -140,9 +140,9 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 - Responsive `viewBox` (e.g., `viewBox="0 0 100 100"`), omitting hardcoded `width` and `height` attributes on the root `<svg>`.
 - Always 100% transparent canvas (never add a background `<rect>`).
 - Standard variants:
-  - `logo.svg`: Primary full-color logo on a transparent canvas.
-  - `logo-dark.svg`: Optimized for dark themes using inverted, lighter, or vibrant strokes/fills—on a **100% transparent canvas** (NO dark background `<rect>`).
-  - `logo-white.svg`: Pure white monochrome icon (`#ffffff`) for dark surfaces or overlays—on a **100% transparent canvas**.
+  - `01-logo.svg`: Primary full-color logo on a transparent canvas.
+  - `02-logo-dark.svg`: Optimized for dark themes using inverted, lighter, or vibrant strokes/fills—on a **100% transparent canvas** (NO dark background `<rect>`).
+  - `03-logo-white.svg`: Pure white monochrome icon (`#ffffff`) for dark surfaces or overlays—on a **100% transparent canvas**.
 
 ### B. Transparent Raster Images (`icons-image/`)
 
@@ -150,16 +150,16 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 - **Understanding "Dark" vs. "Light" Variants:**
   - **"Dark" does NOT mean a dark background!** It means the icon artwork itself uses inverted, lighter, or white strokes and fills so that when the transparent PNG is placed onto a dark website theme, the icon is clearly visible. The canvas/background is 100% transparent.
   - **"Light" means the icon artwork uses standard, darker, or saturated brand colors** intended to be placed on a light website theme. The canvas/background is 100% transparent.
-  - Both `logo-1024-light.png` and `logo-1024-dark.png` are **100% transparent PNGs** with zero background fills.
+  - Both `05-logo-1024-light.png` and `06-logo-1024-dark.png` are **100% transparent PNGs** with zero background fills.
 - **Specification Listing (consecutive with zero blank lines between entries):**
-  - `logo-052.png` — 52x52 px 100% transparent PNG icon
-  - `logo-128.png` — 128x128 px 100% transparent PNG icon
-  - `logo-256.png` — 256x256 px 100% transparent PNG icon
-  - `logo-512.png` — 512x512 px 100% transparent PNG icon
-  - `logo-1024-light.png` — 1024x1024 px 100% transparent PNG with dark/saturated artwork for light themes
-  - `logo-1024-dark.png` — 1024x1024 px 100% transparent PNG with inverted/light artwork for dark themes
+  - `01-logo-052.png` — 52x52 px 100% transparent PNG icon
+  - `02-logo-128.png` — 128x128 px 100% transparent PNG icon
+  - `03-logo-256.png` — 256x256 px 100% transparent PNG icon
+  - `04-logo-512.png` — 512x512 px 100% transparent PNG icon
+  - `05-logo-1024-light.png` — 1024x1024 px 100% transparent PNG with dark/saturated artwork for light themes
+  - `06-logo-1024-dark.png` — 1024x1024 px 100% transparent PNG with inverted/light artwork for dark themes
 
-### C. Color Themes (`colors-themes/palette.md`)
+### C. Color Themes (`colors-themes/01-palette.md`)
 
 - A concise Markdown document listing brand colors with HEX, RGB, and HSL values.
 - Includes clear guidance on primary brand color, secondary accent, neutral dark, neutral light, and feedback/glow shades.
@@ -168,6 +168,11 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 
 - `favicon.ico`: Multi-resolution icon for browser tabs.
 - `favicon.png`: High-resolution 32x32 px or 64x64 px 100% transparent PNG favicon.
+
+### E. Generation Prompt & Plan Archive (`prompts/`)
+
+- `01-prompt.md`: Contains the full generation prompt, model parameters (aspect ratio, style, negative prompts), and exact text strings used for the generation run.
+- `02-plan.md`: Contains the full design plan, geometry breakdown, color palette, typography specification, and verification checklist.
 
 ---
 
@@ -179,9 +184,9 @@ Executes standard branding creation:
 1. Validates user inputs (product name, idea, tone, colors, optional inspiration).
 2. Applies clean geometry principles (anti-overlapping, connected dots, scalability).
 3. Creates the project folder under `02-projects/{seq}-{project-name}/`.
-4. Creates `icons-svg/` with `logo.svg`, `logo-dark.svg`, and `logo-white.svg` (all on transparent canvas).
-5. Creates `icons-image/` with the 6 consecutive 100% transparent PNG sizes (inverted artwork for dark theme).
-6. Creates `colors-themes/palette.md`.
+4. Creates `icons-svg/` with `01-logo.svg`, `02-logo-dark.svg`, and `03-logo-white.svg` (all on transparent canvas).
+5. Creates `icons-image/` with the 6 consecutive 100% transparent PNG sizes (`01-logo-052.png` through `06-logo-1024-dark.png`).
+6. Creates `colors-themes/01-palette.md`.
 7. Generates `favicon.ico` and `favicon.png` at the repository root.
 8. Generates `readme.md` in the project directory displaying all assets in a GitHub-compatible table.
 
@@ -189,7 +194,7 @@ Executes standard branding creation:
 
 Executes static branding creation PLUS animated assets:
 1. Completes all steps from Version 1.
-2. Generates an animated SVG (`logo-animated.svg` in `icons-svg/`) on a transparent canvas using smooth CSS `@keyframes` or SMIL for subtle motion (e.g., stroke-dasharray draw effect, pulsing glow, or rotational geometry).
+2. Generates an animated SVG (`04-logo-animated.svg` in `icons-svg/`) on a transparent canvas using smooth CSS `@keyframes` or SMIL for subtle motion (e.g., stroke-dasharray draw effect, pulsing glow, or rotational geometry).
 3. Generates `gif-animation.gif` placed at the repo root showcasing the animated icon loop (transparent or smooth background, 60–120 frames, seamless loop, 24–30 fps).
 4. Embeds the animated preview into `readme.md`.
 
@@ -197,7 +202,7 @@ Executes static branding creation PLUS animated assets:
 
 ## 7. Concrete Asset Examples
 
-### Example 1: Connected Geometric Logo (`icons-svg/logo.svg`)
+### Example 1: Connected Geometric Logo (`icons-svg/01-logo.svg`)
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="logo-title logo-desc">
@@ -273,7 +278,7 @@ Executes static branding creation PLUS animated assets:
 </svg>
 ```
 
-### Example 6: Animated SVG Logo (`icons-svg/logo-animated.svg`)
+### Example 6: Animated SVG Logo (`icons-svg/04-logo-animated.svg`)
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="anim-title anim-desc">
@@ -304,7 +309,7 @@ Executes static branding creation PLUS animated assets:
 </svg>
 ```
 
-### Example 7: Color Palette (`colors-themes/palette.md`)
+### Example 7: Color Palette (`colors-themes/01-palette.md`)
 
 ```markdown
 # Brand Color Palette: AcmePay
@@ -333,18 +338,18 @@ AcmePay is a modern financial platform designed for effortless developer billing
 ## Vector Logos
 | Primary Logo (Transparent) | Dark Theme (Inverted, Transparent) | Monochrome White (Transparent) |
 |:---:|:---:|:---:|
-| ![Primary](icons-svg/logo.svg) | ![Dark](icons-svg/logo-dark.svg) | ![White](icons-svg/logo-white.svg) |
+| ![Primary](icons-svg/01-logo.svg) | ![Dark](icons-svg/02-logo-dark.svg) | ![White](icons-svg/03-logo-white.svg) |
 
 ## Transparent Icon Sizes
 | 52px | 128px | 256px | 512px |
 |:---:|:---:|:---:|:---:|
-| <img src="icons-image/logo-052.png" width="52" /> | <img src="icons-image/logo-128.png" width="128" /> | <img src="icons-image/logo-256.png" width="256" /> | <img src="icons-image/logo-512.png" width="256" /> |
+| <img src="icons-image/01-logo-052.png" width="52" /> | <img src="icons-image/02-logo-128.png" width="128" /> | <img src="icons-image/03-logo-256.png" width="256" /> | <img src="icons-image/04-logo-512.png" width="256" /> |
 
 ## High-Resolution Transparent Icons (1024px)
 | For Light Themes (Transparent PNG) | For Dark Themes (Inverted, Transparent PNG) |
 |:---:|:---:|
-| <img src="icons-image/logo-1024-light.png" width="300" /> | <img src="icons-image/logo-1024-dark.png" width="300" /> |
+| <img src="icons-image/05-logo-1024-light.png" width="300" /> | <img src="icons-image/06-logo-1024-dark.png" width="300" /> |
 
 ## Color Palette
-See [Color Palette](colors-themes/palette.md) for hex codes, swatches, and usage rules.
+See [Color Palette](colors-themes/01-palette.md) for hex codes, swatches, and usage rules.
 ```

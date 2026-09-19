@@ -23,6 +23,7 @@ This prompt instructs Lovable (and similar web design AI environments) on the ex
 7. **NO Messy Overlapping Lines:** NEVER create tangled, chaotic, or densely overlapping strokes. Overlapping lines make icons look muddy, unreadable at small sizes, and amateurish. Maintain clean geometric separation, purposeful negative space, or continuous connected paths.
 8. **NO Editor Bloat:** NEVER include third-party editor metadata (e.g., `xmlns:inkscape`, `sodipodi:docname`, `adobe:ns`).
 9. **NO Unstyled Elements in Monochrome:** NEVER use hardcoded black/white hex fills on monochrome icons; use `currentColor` so the icon inherits text color dynamically.
+10. **NO Unsequenced or Uppercase Filenames:** ALL generated files and images inside project subfolders MUST use lowercase kebab-case preceded by a two-digit zero-padded sequence number (e.g. `01-logo.svg`, `02-logo-dark.svg`, `03-logo-white.svg`, `01-prompt.md`, `02-plan.md`). Unsequenced names like `logo.svg` or uppercase names are strictly BANNED.
 
 ---
 
@@ -58,9 +59,9 @@ This prompt instructs Lovable (and similar web design AI environments) on the ex
 - **Multi-Color Logos:** Use semantic CSS variables (`var(--primary)`, `var(--accent)`) or clean standard hex codes.
 - **Gradients:** Place `<linearGradient>` and `<radialGradient>` definitions inside `<defs>` with semantic, unique IDs.
 - **Variants (All 100% Transparent Canvas):** When generating brand sets, provide:
-  - Default full-color vector on a transparent canvas.
-  - Dark mode variant (`logo-dark.svg`): Inverted, lighter, or vibrant strokes/fills designed for dark themes—on a **100% transparent canvas** (NO dark background `<rect>`).
-  - Pure white monochrome variant (`logo-white.svg`): Pure white (`#ffffff`) strokes/fills on a **100% transparent canvas**.
+  - `01-logo.svg`: Default full-color vector on a transparent canvas.
+  - `02-logo-dark.svg`: Dark mode variant with inverted, lighter, or vibrant strokes/fills designed for dark themes—on a **100% transparent canvas** (NO dark background `<rect>`).
+  - `03-logo-white.svg`: Pure white monochrome variant (`#ffffff`) strokes/fills on a **100% transparent canvas**.
 
 ---
 
@@ -127,9 +128,9 @@ Generates an interactive or looping animated SVG using self-contained CSS `@keyf
 
 ---
 
-## 5. Directory & File Hierarchy (Strict Lowercase)
+## 5. Directory & File Hierarchy (Strict Lowercase & Two-Digit Sequence)
 
-When generating SVG assets as part of a project, assets must follow strict lowercase naming under `02-projects/{sequence}-{project-name}/`. The AI must persist the design plan to `prompts/plan.md` and the generation prompt to `prompts/prompt.md`:
+When generating SVG assets as part of a project, assets must follow strict lowercase naming under `02-projects/{sequence}-{project-name}/`. The AI must persist the design plan to `prompts/02-plan.md` and the generation prompt to `prompts/01-prompt.md`:
 
 ```
 / (repo root)
@@ -137,12 +138,12 @@ When generating SVG assets as part of a project, assets must follow strict lower
     ├── 01-{project-name}/
     │   ├── readme.md (overview and vector previews)
     │   ├── prompts/
-    │   │   ├── prompt.md (the exact prompt, user inputs, and AI parameters used)
-    │   │   └── plan.md (design plan, geometry breakdown, and verification checklist)
+    │   │   ├── 01-prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   │   └── 02-plan.md (design plan, geometry breakdown, and verification checklist)
     │   └── icons-svg/
-    │       ├── logo.svg (primary full-color vector on transparent canvas)
-    │       ├── logo-dark.svg (inverted vector for dark themes on transparent canvas)
-    │       └── logo-white.svg (pure white monochrome vector on transparent canvas)
+    │       ├── 01-logo.svg (primary full-color vector on transparent canvas)
+    │       ├── 02-logo-dark.svg (inverted vector for dark themes on transparent canvas)
+    │       └── 03-logo-white.svg (pure white monochrome vector on transparent canvas)
     └── 02-{project-name}/
 ```
 
@@ -150,8 +151,8 @@ When generating SVG assets as part of a project, assets must follow strict lower
 
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case.
-3. **Prompt & Plan Preservation (Mandatory):** When formulating the design strategy, every detail of the design plan (geometry, color palette, viewbox, accessibility tags, and verification checklist) MUST be saved directly to the file system at `prompts/plan.md`. The exact prompt given to the generation engine MUST be saved in `prompts/prompt.md`.
-4. **Asset Organization:** All SVG vector files MUST be stored inside `icons-svg/`.
+3. **Prompt & Plan Preservation (Mandatory):** When formulating the design strategy, every detail of the design plan (geometry, color palette, viewbox, accessibility tags, and verification checklist) MUST be saved directly to the file system at `prompts/02-plan.md`. The exact prompt given to the generation engine MUST be saved in `prompts/01-prompt.md`.
+4. **Asset Organization:** All SVG vector files MUST be stored inside `icons-svg/` with zero-padded sequence numbers (`01-`, `02-`, etc.).
 5. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths.
 
 ---
@@ -160,3 +161,4 @@ When generating SVG assets as part of a project, assets must follow strict lower
 
 - Provide strictly the raw SVG code inside a fenced code block with language identifier `xml` or `svg`.
 - Do not output HTML wrappers or surrounding page containers.
+
