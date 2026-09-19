@@ -63,12 +63,14 @@ Before generating any design concepts or layout prompts, capture and validate th
 3. `current_company` / `venture`: Current organization, agency, or brand.
 4. `core_pillars`: 3–4 key focus areas (e.g., `GTM Strategy • Demand Generation • Team Leadership`).
 5. `website_url`: Personal or business website URL (e.g., `https://janedoe.com`).
-6. `contact_or_cta`: Explicit call to action (e.g., "Book a strategy audit at janedoe.com", "DM for speaking inquiries").
-7. `portrait_photo_or_subject`: Visual description of the person or whether a cutout photo will be placed on the right flank.
-8. `brand_colors`: Primary brand palette (e.g., Midnight Navy `#0b0f19`, Vibrant Cyan `#06b6d4`, Pure White `#ffffff`).
+6. `email_address`: Professional contact email address to embed on the banner (e.g., `jane@janedoe.com`).
+7. `qr_code`: Optional scannable QR code destination URL or asset to embed (e.g., linking directly to a calendar booking page, digital vCard, or portfolio).
+8. `contact_or_cta`: Explicit call to action (e.g., "Book a strategy audit at janedoe.com", "DM for speaking inquiries").
+9. `portrait_photo_or_subject`: Visual description of the person or whether a cutout photo will be placed on the right flank.
+10. `brand_colors`: Primary brand palette (e.g., Midnight Navy `#0b0f19`, Vibrant Cyan `#06b6d4`, Pure White `#ffffff`).
 
 > [!IMPORTANT]
-> If `full_name`, `professional_headline`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they want to embed an **email address** or a **scannable QR code** (e.g. for booking or vCard). If `full_name`, `professional_headline`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 

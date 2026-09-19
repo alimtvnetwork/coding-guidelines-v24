@@ -62,12 +62,14 @@ Before generating any design concepts or layout prompts, capture and validate th
 2. `value_proposition`: 1 concise, powerful headline explaining what the company does (e.g., "Automating Enterprise Security at Global Scale").
 3. `core_offerings` / `industry`: Product categories or industry keywords (e.g., `Cloud Compliance • Zero-Trust Access • Real-Time Audit`).
 4. `website_url`: Official company domain (e.g., `https://www.acmecloud.com`).
-5. `call_to_action`: Primary business action (e.g., "Explore the Platform", "Join Our Team", "Start Free 14-Day Trial").
-6. `company_logo_icon`: Description or vector icon of the brand mark to place on the right flank.
-7. `brand_colors`: Corporate color palette (e.g., Deep Slate `#0f172a`, Electric Blue `#2563eb`, Pure White `#ffffff`).
+5. `email_address`: Contact or inquiries email address to embed on the banner (e.g., `contact@acmecloud.com` or `sales@acmecloud.com`).
+6. `qr_code`: Optional scannable QR code destination URL or asset to embed (e.g., linking to a product demo, mobile app download, or newsletter signup).
+7. `call_to_action`: Primary business action (e.g., "Explore the Platform", "Join Our Team", "Start Free 14-Day Trial").
+8. `company_logo_icon`: Description or vector icon of the brand mark to place on the right flank.
+9. `brand_colors`: Corporate color palette (e.g., Deep Slate `#0f172a`, Electric Blue `#2563eb`, Pure White `#ffffff`).
 
 > [!IMPORTANT]
-> If `company_name`, `value_proposition`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they want to embed an **email address** or a **scannable QR code** (e.g. for product demo, app download, or contact inquiries). If `company_name`, `value_proposition`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 

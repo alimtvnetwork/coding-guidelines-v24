@@ -36,12 +36,14 @@ Before generating any design concepts or prompts, capture and validate the follo
 7. `youtube_handle`: Exact channel handle (e.g., `/top1percentPodcast`).
 8. `youtube_url`: Full channel URL (e.g., `https://youtube.com/@top1percentPodcast`).
 9. `website_url`: Creator or brand website URL (e.g., `https://proloyhasan.com`).
-10. `channel_icon_or_avatar`: Profile picture, logo mark, or avatar image description.
-11. `subject_description`: Appearance, pose, clothing, and expression of the person in front.
-12. `color_palette`: Primary brand colors (e.g., Deep Navy Background `#0f172a`, Golden Yellow Highlight `#facc15`, Crisp White `#ffffff`).
+10. `email_address`: Contact or business inquiry email address to embed (e.g., `contact@proloyhasan.com`).
+11. `qr_code`: Optional scannable QR code destination URL or asset to embed (e.g., linking to newsletter, booking calendar, or channel subscribe link).
+12. `channel_icon_or_avatar`: Profile picture, logo mark, or avatar image description.
+13. `subject_description`: Appearance, pose, clothing, and expression of the person in front.
+14. `color_palette`: Primary brand colors (e.g., Deep Navy Background `#0f172a`, Golden Yellow Highlight `#facc15`, Crisp White `#ffffff`).
 
 > [!IMPORTANT]
-> If `channel_name`, `primary_title`, `youtube_handle`, `website_url`, or `subject_description` / `channel_icon_or_avatar` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they want to embed an **email address** or a **scannable QR code**. If `channel_name`, `primary_title`, `youtube_handle`, `website_url`, or `subject_description` / `channel_icon_or_avatar` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
