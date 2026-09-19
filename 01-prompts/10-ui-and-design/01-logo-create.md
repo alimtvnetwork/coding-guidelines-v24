@@ -1,260 +1,226 @@
-# Logo Design & Branding Generation — Design Workflow (must follow)
+# Logo Design & Branding Generation — Lovable Design Workflow
 
-> **Prompt Version:** 2.1.0
+> **Prompt Version:** 3.0.0
+> **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
-Please instruct Lovable to create a logo for me. The instruction should be saved into the project file system as well, so it knows how to create a logo. I will give the product name, a little bit of product idea based on the voice, and a sample color and things like that. It would generate the project name first at the root level. So there should be a folder named `Projects`, and inside that it will have `01`, `02`, `03`, etc., project name folders. Inside a project name folder, it would have an `icons-svg` folder, where all icons will be created as SVG. Also, there would be an `icons-image` folder, where the image of the icon would be there - two or three samples. If the icon is required to have a dark and white version, it should make both versions. The other part is to create the colors and themes, and at the end, it should also create the favicon for the website. That should be on the root of the repo. And there should be an MD file that actually uses all these things and displays them on Git. This is how, any time an icon is asked to be created, it should be done.
+This prompt instructs Lovable (and similar web design AI environments) to generate logo, icon, and branding assets for a given product or brand.
 
-## STRICT AVOIDANCE: Never Disable CI/CD
+---
+
+## STRICT BAN: No Website or HTML Generation
 
 > [!CAUTION]
-> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.**
-> Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
+> **DO NOT generate a full website, HTML application, React web pages, or landing pages.**
+> This instruction is exclusively for creating branding assets (SVGs, transparent PNGs, color palettes, and README previews). Generating full HTML pages or mock web applications is strictly forbidden and is an automatic failure.
 
-## MUST FOLLOW NON-NEGOTIABLE
+---
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+## 1. Input Capture & Clarification
 
-## Coding Guidelines Reminder
+Before generating any assets, capture and validate the following inputs:
 
-Read `.ai-memory/coding-guidelines.md`, plus boolean, language-specific, enum, and error-management guidelines from `/spec/` before any implementation. Apply all hard rules: functions ≤ 8 lines, files ≤ 100 lines, no nested or negative ifs, strict types (no `any` / `unknown` / `interface{}`), no swallowed errors, no magic strings, definitions in their own files, `is` / `has` boolean prefixes, DRY first.
+1. `product_name`: Name of the product, service, or brand.
+2. `product_idea`: Brief explanation of the product, its purpose, target audience, and brand voice/tone (e.g., modern, playful, corporate, technical, minimalist).
+3. `sample_colors`: Target color hints, hex codes, or preferred palette mood (e.g., "deep navy and electric cyan").
+4. `needs_dark_white_variants`: Boolean indicating if dark-mode and white monochrome variants are required (defaults to `true`).
+5. `is_animated`: Boolean indicating whether animated assets (`gif-animation.gif`, animated SVG) are requested (defaults to `false` unless explicitly asked).
 
-## Breakdown
+> [!IMPORTANT]
+> If `product_name`, `product_idea`, or `sample_colors` are not provided, **STOP and ask the user** for clarification before proceeding with asset generation.
 
-1. Inputs (provided by user)
+---
 
-   a. `ProductName`
+## 2. Directory & File Hierarchy (Strict Lowercase)
 
-   b. `ProductIdea` - short product idea, voice, and tone
+All generated assets must follow strict lowercase naming and zero-padded sequence numbers. No uppercase letters are permitted in filenames or folder paths.
 
-   c. `SampleColors[]` - sample color(s) or palette hint
-
-   d. `NeedsDarkWhiteVariants` - optional; defaults to ON
-
-2. Outputs (generated by Lovable)
-
-   a. Project folder under `Projects/`
-
-   b. SVG icons in `icons-svg/`
-
-   c. Raster image samples in `icons-image/`
-
-   d. Dark and white variants when required
-
-   e. Color and theme tokens in `colors-themes/`
-
-   f. Favicon at repo root (per-project regeneration)
-
-   g. `README.md` in the project folder rendering all assets for GitHub preview
-
-## Folder Structure
-
-`````
-
+```
 / (repo root)
-
-└── Projects/
-
-    ├── 01-{PascalCaseProjectName}/
-
-    │   ├── README.md
-
+├── 01-prompts/
+└── 02-projects/
+    ├── 01-{project-name}/
+    │   ├── readme.md
     │   ├── icons-svg/
-
-    │   │   ├── Logo.svg
-
-    │   │   ├── Logo-Dark.svg
-
-    │   │   └── Logo-White.svg
-
+    │   │   ├── logo.svg
+    │   │   ├── logo-dark.svg
+    │   │   └── logo-white.svg
     │   ├── icons-image/
-
-    │   │   ├── Logo-052.png
-
-    │   │   ├── Logo-128.png
-
-    │   │   ├── Logo-256.png
-
-    │   │   ├── Logo-512.png
-
-    │   │   ├── Logo-1024-Light.png
-
-    │   │   └── Logo-1024-Dark.png
-
+    │   │   ├── logo-052.png
+    │   │   ├── logo-128.png
+    │   │   ├── logo-256.png
+    │   │   ├── logo-512.png
+    │   │   ├── logo-1024-light.png
+    │   │   └── logo-1024-dark.png
     │   └── colors-themes/
-
-    │       ├── Palette.md
-
-    │       └── Tokens.json
-
-    ├── 02-{PascalCaseProjectName}/
-
-    └── 03-{PascalCaseProjectName}/
-
-(repo root)
-├── gif-animation.gif (animation for the icon)
-
+    │       └── palette.md
+    └── 02-{project-name}/
+(repo root assets)
 ├── favicon.ico
-
-└── favicon.png
-
-`````
-
-Notes:
-
-1. Project folder naming: `{Sequence}-{PascalCaseProjectName}` (e.g. `01-AcmePay`).
-
-2. Sequence is zero-padded two digits, starting at `01`.
-
-3. All file and folder names use PascalCase where applicable.
-
-4. Favicon lives at repo root and is regenerated per project (per-project scope).
-
-## Actionable Items
-
-1. Input Capture
-
-   a. Accept `ProductName`, `ProductIdea`, `VoiceTone`, `SampleColors[]`, `NeedsDarkWhiteVariants` (boolean, default true)
-
-   b. Validate inputs; ask for clarification if any are missing
-
-2. Project Scaffold
-
-   a. Create or detect `Projects/` at repo root
-
-   b. Determine next zero-padded sequence number (`01`, `02`, ...)
-
-   c. Create `Projects/{Seq}-{PascalCaseProjectName}/`
-
-   d. Never overwrite an existing project folder - always create the next sequence
-
-3. SVG Icon Generation
-
-   a. Create `icons-svg/` inside the project folder
-
-   b. Generate primary `Logo.svg`
-
-   c. If `NeedsDarkWhiteVariants` is true (default), also generate `Logo-Dark.svg` and `Logo-White.svg`
-
-4. Raster Image Samples
-
-   a. Create `icons-image/` inside the project folder
-
-   b. Generate the mixed sample set:
-
-      i. `Logo-052.png` (52 px icon)
-
-      ii. `Logo-128.png` (128 px icon)
-
-      iii. `Logo-256.png` (256 px icon)
-
-      iv. `Logo-512.png` (512 px icon)
-
-      v. `Logo-1024-Light.png` (1024 px mockup on light background)
-
-      vi. `Logo-1024-Dark.png` (1024 px mockup on dark background)
-
-5. Colors and Themes
-
-   a. Create `colors-themes/` inside the project folder
-
-   b. Produce `Palette.md` (human-readable swatches with HEX and HSL)
-
-   c. Produce `Tokens.json` using flat PascalCase keys (e.g. `Primary`, `PrimaryGlow`, `Background`, `Foreground`, `Accent`)
-
-6. Favicon
-
-   a. Generate `favicon.ico` and `favicon.png` at repo root (regenerated per project)
-
-   b. Update `index.html` `` reference accordingly
-
-7. README Generation
-
-   a. Create `README.md` inside the project folder
-
-   b. Embed all SVGs, image samples, palette swatches, and favicon preview using relative paths so GitHub renders them inline
-
-   c. Include sections: Overview, Logo Variants, Image Samples, Color Palette, Theme Tokens, Favicon, Usage
-
-8. Instruction Persistence (file system, not memory store)
-
-   a. Save this instruction to `01-prompts/10-ui-and-design/01-logo-create.md` in the project repo
-
-   b. Add an entry to `.ai-memory/prompts.md` index file with triggers: `create logo`, `make logo`, `logo`, `create icon`
-
-   c. Keep `.ai-memory/prompts.md` as the canonical index for all saved prompt files; update it in place when new prompts are added
-
-   d. Do not write this instruction to any `mem://` memory store - it must live only in the project file system
-
-## Database
-
-Not applicable for this task (asset generation only). If a registry of generated logos is later required, request it explicitly.
-
-## File System References
-
-1. Upload paths: `Projects/{Seq}-{PascalCaseProjectName}/icons-svg/`, `Projects/{Seq}-{PascalCaseProjectName}/icons-image/`, repo root for favicon
-
-2. Prompt paths: `01-prompts/10-ui-and-design/01-logo-create.md` and `.ai-memory/prompts.md` (index)
-
-3. Log paths: not required for this task
-
-## Acceptance Criteria
-
-1. `Projects/{Seq}-{PascalCaseProjectName}/` exists with the exact subfolders: `icons-svg/`, `icons-image/`, `colors-themes/`, plus `README.md`.
-
-2. At least one `Logo.svg` exists; when dark/white is requested (default ON), both `Logo-Dark.svg` and `Logo-White.svg` exist.
-
-3. `icons-image/` contains the mixed raster set: 52, 128, 256, 512, plus 1024 light and 1024 dark mockups.
-
-4. `colors-themes/Palette.md` and `colors-themes/Tokens.json` exist; `Tokens.json` uses flat PascalCase keys.
-
-5. `favicon.ico` and `favicon.png` exist at repo root and are referenced from `index.html`.
-
-6. Project `README.md` renders all assets correctly when viewed on GitHub (relative paths, no broken links).
-
-7. Instruction saved at `01-prompts/10-ui-and-design/01-logo-create.md` and indexed in `.ai-memory/prompts.md`.
-
-8. No entries for this instruction are written to `mem://` memory; project file system is the single source of truth.
-
-## FAQs
-
-1. Favicon scope: per-project only (regenerated each new logo project).
-
-2. `Tokens.json` schema: flat PascalCase.
-
-3. Raster sample sizes: mixed set - 52, 128, 256, one 512 icon, one 1024 light-background mockup, one 1024 dark-background mockup.
-
-4. Dark/white variants default: ON.
-
-## Important
-
-1. Use PascalCase for all folder names, file names (where reasonable), and JSON keys/values.
-
-2. Sequence numbers are zero-padded (`01`, `02`, ...).
-
-3. `README.md` must use relative paths so GitHub renders assets inline.
-
-4. Favicon always lives at repo root, not inside the project folder, and is regenerated per project.
-
-5. Never overwrite an existing project folder - always create the next sequence.
-
-6. Dark + white variants default to ON unless the user explicitly opts out.
-
-7. All prompt instructions live in the project file system under `01-prompts/` with `.ai-memory/prompts.md` as the index - never in `mem://`.
-
-## Finalize
-
-All Animations and designs in one shot as much as possible.
-
-If you have any question and confusion, feel free to ask
-
-## Actionable Items & Checklist
-
-- [ ] Read the overarching main task plan.
-- [ ] Ensure the git repository starts completely clean.
-- [ ] Complete all work on the current branch only.
-- [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
-- [ ] Group all completed work into a single logical commit.
-- [ ] Push the commit to the remote repository.
-
-- [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
+├── favicon.png
+└── gif-animation.gif (generated only when animation is requested)
+```
+
+### Hierarchy Rules
+
+1. **Root Projects Folder:** All projects live under `02-projects/`.
+2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-acme-pay`, `02-cloud-sync`).
+3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, `03`, ...).
+4. **No Tokens.json:** Do not generate `tokens.json`. Color specifications live exclusively inside `colors-themes/palette.md`.
+5. **Favicon Placement:** `favicon.ico` and `favicon.png` are placed at the repository root and regenerated per project.
+6. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths so GitHub renders them natively.
+
+---
+
+## 3. Asset Specifications
+
+### A. Vector Icons (`icons-svg/`)
+
+- Pure, clean XML/SVG vector code without editor junk or base64 embedded bitmaps.
+- Responsive `viewBox` (e.g., `viewBox="0 0 100 100"`), omitting hardcoded `width` and `height` attributes on the root `<svg>`.
+- Standard variants:
+  - `logo.svg`: Primary full-color logo.
+  - `logo-dark.svg`: Optimized for dark backgrounds with light/vibrant strokes and fills.
+  - `logo-white.svg`: Pure white monochrome icon (`#ffffff`) for dark surfaces or overlays.
+
+### B. Transparent Raster Images (`icons-image/`)
+
+- All PNG images MUST have a **transparent alpha-channel background** (no solid white, black, or grey boxes around the icon).
+- Mockups (`logo-1024-light.png` and `logo-1024-dark.png`) provide visual contrast tests on clean light/dark canvas backdrops.
+- **Specification Listing (consecutive with zero blank lines between entries):**
+  - `logo-052.png` — 52x52 px transparent icon
+  - `logo-128.png` — 128x128 px transparent icon
+  - `logo-256.png` — 256x256 px transparent icon
+  - `logo-512.png` — 512x512 px transparent icon
+  - `logo-1024-light.png` — 1024x1024 px icon mockup on light surface
+  - `logo-1024-dark.png` — 1024x1024 px icon mockup on dark surface
+
+### C. Color Themes (`colors-themes/palette.md`)
+
+- A concise Markdown document listing brand colors with HEX, RGB, and HSL values.
+- Includes clear guidance on primary brand color, secondary accent, neutral dark, neutral light, and feedback/glow shades.
+
+### D. Favicons (Repo Root)
+
+- `favicon.ico`: Multi-resolution icon for browser tabs.
+- `favicon.png`: High-resolution 32x32 px or 64x64 px PNG favicon.
+
+---
+
+## 4. Prompt Execution Modes
+
+### Version 1: Static Logo & Branding Generation (Default)
+
+Executes standard branding creation:
+1. Validates user inputs (product name, idea, tone, colors).
+2. Creates the project folder under `02-projects/{seq}-{project-name}/`.
+3. Creates `icons-svg/` with `logo.svg`, `logo-dark.svg`, and `logo-white.svg`.
+4. Creates `icons-image/` with the 6 consecutive transparent PNG sizes.
+5. Creates `colors-themes/palette.md`.
+6. Generates `favicon.ico` and `favicon.png` at the repository root.
+7. Generates `readme.md` in the project directory displaying all assets in a GitHub-compatible table.
+
+### Version 2: Animated Logo & Branding Generation
+
+Executes static branding creation PLUS animated assets:
+1. Completes all steps from Version 1.
+2. Generates an animated SVG (`logo-animated.svg` in `icons-svg/`) using smooth CSS `@keyframes` or SMIL for subtle motion (e.g., stroke-dasharray draw effect, pulsing glow, or rotational geometry).
+3. Generates `gif-animation.gif` placed at the repo root showcasing the animated icon loop (60–120 frames, seamless loop, 24–30 fps).
+4. Embeds the animated preview into `readme.md`.
+
+---
+
+## 5. Concrete Asset Examples
+
+### Example 1: Static SVG Logo (`icons-svg/logo.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">AcmePay Logo</title>
+  <desc id="logo-desc">Geometric hexagon with interlocking forward arrows in cyan and navy.</desc>
+  <defs>
+    <linearGradient id="primary-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+  <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" stroke="url(#primary-grad)" stroke-width="6" fill="none" stroke-linejoin="round" />
+  <path d="M35 50 L50 35 L65 50 M50 35 L50 68" stroke="#06b6d4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+```
+
+### Example 2: Animated SVG Logo (`icons-svg/logo-animated.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="anim-title anim-desc">
+  <title id="anim-title">AcmePay Animated Logo</title>
+  <desc id="anim-desc">Animated geometric hexagon with glowing pulse and rotating core.</desc>
+  <style>
+    @keyframes pulse-glow {
+      0%, 100% { stroke-opacity: 0.6; filter: drop-shadow(0 0 2px #06b6d4); }
+      50% { stroke-opacity: 1; filter: drop-shadow(0 0 8px #06b6d4); }
+    }
+    @keyframes rotate-core {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .hex-pulse {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+    .core-spin {
+      transform-origin: 50px 50px;
+      animation: rotate-core 12s linear infinite;
+    }
+  </style>
+  <polygon class="hex-pulse" points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" stroke="#06b6d4" stroke-width="6" fill="none" stroke-linejoin="round" />
+  <g class="core-spin">
+    <circle cx="50" cy="50" r="16" stroke="#3b82f6" stroke-width="4" stroke-dasharray="6 4" fill="none" />
+    <circle cx="50" cy="34" r="4" fill="#06b6d4" />
+  </g>
+</svg>
+```
+
+### Example 3: Color Palette (`colors-themes/palette.md`)
+
+```markdown
+# Brand Color Palette: AcmePay
+
+## Primary Colors
+| Role | Name | Swatch | HEX | RGB | HSL |
+|---|---|---|---|---|---|
+| Primary | Cyan Glow | ![#06b6d4](https://placehold.co/15x15/06b6d4/06b6d4.png) | `#06b6d4` | `rgb(6, 182, 212)` | `hsl(189, 94%, 43%)` |
+| Accent | Electric Blue | ![#3b82f6](https://placehold.co/15x15/3b82f6/3b82f6.png) | `#3b82f6` | `rgb(59, 130, 246)` | `hsl(217, 91%, 60%)` |
+
+## Neutral & Surface Colors
+| Role | Name | Swatch | HEX | RGB | HSL |
+|---|---|---|---|---|---|
+| Background Dark | Midnight Navy | ![#0f172a](https://placehold.co/15x15/0f172a/0f172a.png) | `#0f172a` | `rgb(15, 23, 42)` | `hsl(222, 47%, 11%)` |
+| Surface Light | Pure White | ![#ffffff](https://placehold.co/15x15/ffffff/ffffff.png) | `#ffffff` | `rgb(255, 255, 255)` | `hsl(0, 0%, 100%)` |
+```
+
+### Example 4: Project README Display (`02-projects/01-acme-pay/readme.md`)
+
+```markdown
+# AcmePay — Branding & Logo Assets
+
+## Overview
+AcmePay is a modern financial platform designed for effortless developer billing.
+
+## Vector Logos
+| Primary Logo | Dark Mode | Monochrome White |
+|:---:|:---:|:---:|
+| ![Primary](icons-svg/logo.svg) | ![Dark](icons-svg/logo-dark.svg) | ![White](icons-svg/logo-white.svg) |
+
+## Transparent Icon Sizes
+| 52px | 128px | 256px | 512px |
+|:---:|:---:|:---:|:---:|
+| <img src="icons-image/logo-052.png" width="52" /> | <img src="icons-image/logo-128.png" width="128" /> | <img src="icons-image/logo-256.png" width="256" /> | <img src="icons-image/logo-512.png" width="256" /> |
+
+## Contrast Mockups
+| Light Surface (1024px) | Dark Surface (1024px) |
+|:---:|:---:|
+| <img src="icons-image/logo-1024-light.png" width="300" /> | <img src="icons-image/logo-1024-dark.png" width="300" /> |
+
+## Color Palette
+See [Color Palette](colors-themes/palette.md) for hex codes, swatches, and usage rules.
+```

@@ -1,50 +1,96 @@
-# SVG Icon & Vector Graphic Creation — Design Workflow (must follow)
+# SVG Icon & Vector Graphic Creation — Design Workflow
 
-> **Prompt Version:** 2.1.0
+> **Prompt Version:** 3.0.0
+> **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
-When generating an SVG logo from a text description:
+This prompt instructs Lovable (and similar web design AI environments) on the exact technical standards for generating scalable, responsive, and accessible SVG vector icons and graphics.
 
-## STRICT AVOIDANCE: Never Disable CI/CD
+---
 
-> [!CAUTION]
-> **NEVER disable any CI/CD checks, GitHub Actions, or validation workflows.**
-> Strictly avoid commenting out, bypassing, or deleting CI/CD steps to force a pipeline to pass. Your job is to fix the underlying code so that the CI/CD pipeline passes legitimately. Disabling CI/CD is an auto-reject failure.
+## 1. Clean SVG Architecture
 
-## MUST FOLLOW NON-NEGOTIABLE
+- **Valid XML & SVG Syntax:** Ensure the output is fully valid XML and well-formed SVG markup.
+- **Responsive `viewBox`:** Always define an appropriate `viewBox` (e.g., `viewBox="0 0 24 24"` for UI icons, `viewBox="0 0 100 100"` for logos/illustrations).
+- **Omit Hardcoded Dimensions:** Remove hardcoded `width` and `height` attributes on the root `<svg>` element so the icon scales responsively within its CSS container.
+- **Minimal Grouping:** Do not wrap elements in redundant `<g>` tags unless needed for shared transforms, styling, or animations.
+- **No Editor Metadata:** Do not include Adobe Illustrator, Inkscape, or Figma metadata/namespaces (`xmlns:inkscape`, `sodipodi:docname`, etc.).
+- **TOTAL BAN on Base64 Images:** NEVER embed base64-encoded raster images (`<image href="data:image/png;base64,...">`). All artwork must be pure vector paths, polygons, circles, and curves.
+- **No HTML Wrapping:** Provide only the raw SVG code inside an `xml` or `svg` code block unless explicitly requested.
 
-Listen, past runs of these turns have been sloppy and stupid as fuck: wrong step counts, partial task lists dumped into chat instead of files, plans and session summaries half-filled with "[N]" placeholders, folders skimmed, open ambiguities ignored, CI/CD issues and `plans/subtasks/` forgotten, user commands dropped, coding guidelines bypassed, detailed specs chopped and summarized into useless junk, uppercase README files left uncorrected, `.ai-memory/memory/` created by accident, `strictly-avoid.md` overwritten, and explicit user instructions softened after being told not to. WTF. How on earth are you reverting to this carelessness, are you stupid?? Stop doing that, you stupid fuck. Read the whole codebase, read every folder in `02-spec/` and `.ai-memory/`, confirm root `readme.md` is strictly lowercase, find the root cause in one sentence, capture commands, issues, and pending tasks without omitting a single item, write the spec files and memory files in the right paths, update every index in the same turn, sync `readme.md` with `what-to-read.md`, preserve detailed specs verbatim with zero truncation, run builds and full unit tests, group commits with clear messages, and push everything to git before ending. Going deep IS the job. If you are not going deep, you are not doing the job. Violating this is auto-reject on the same tier as RULE 0. Avoid stupidity and being careless, you stupid fuck. Where is your attention, are you stupid? Tell me. Your stupidity is going on top of my head. Where did you learn this stupidity? If I could find you, I could slap you.
+---
 
-## 1. Clean SVG Code
+## 2. Accessibility & Semantics
 
-- Ensure the output is valid XML and SVG.
-- Do not use unnecessary grouping (`<g>`) or inline styles unless required. Prefer presentation attributes or minimal CSS.
-- Ensure `viewBox` is set appropriately, and remove fixed `width` and `height` attributes to make the SVG responsive.
+- Always include a `<title>` and `<desc>` element for screen readers.
+- Assign matching `id` attributes to `<title>` and `<desc>` and link them via `aria-labelledby` on the root `<svg>`.
+- Add `role="img"` to the root `<svg>`.
 
-## 2. Accessibility
+---
 
-- Add a `<title>` and `<desc>` element for screen readers.
+## 3. Theming & Color Strategy
 
-## 3. Colors and Theming
+- **Monochrome Icons:** Use `fill="currentColor"` or `stroke="currentColor"` so the icon seamlessly inherits text color from parent CSS.
+- **Multi-Color Logos:** Use semantic CSS variables (`var(--primary)`, `var(--accent)`) or clean standard hex codes.
+- **Gradients:** Place `<linearGradient>` and `<radialGradient>` definitions inside `<defs>` with semantic, unique IDs.
+- **Variants:** When generating brand sets, provide:
+  - Default full-color vector
+  - Dark mode variant (optimized for dark surfaces)
+  - Pure white monochrome variant (`#ffffff`)
 
-- Use `currentColor` for monochrome icons so they inherit text color.
-- If it's a multi-color logo, use standard hex codes or CSS variables if specified.
+---
 
-## 4. Output
+## 4. Execution Modes & Concrete Examples
 
-- Provide only the raw SVG code within an `xml` or `svg` code block. Do not wrap it in HTML unless requested.
+### Version 1: Static Vector SVG Icon (Default)
 
-## Must Follow
+Generates a clean, production-grade vector icon with full responsive scaling, accessibility tags, and `currentColor` support.
 
-Generate clean, scalable, and responsive SVGs. No base64 embedded images inside the SVG.
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="shield-check-title shield-check-desc">
+  <title id="shield-check-title">Security Verified</title>
+  <desc id="shield-check-desc">A shield icon containing a checkmark indicating verified security status.</desc>
+  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  <path d="m9 12 2 2 4-4" />
+</svg>
+```
 
-## Actionable Items & Checklist
+### Version 2: Animated Vector SVG Icon
 
-- [ ] Read the overarching main task plan.
-- [ ] Ensure the git repository starts completely clean.
-- [ ] Complete all work on the current branch only.
-- [ ] Ensure `.gitignore` explicitly excludes test reports, artifacts, and compiled binaries.
-- [ ] Group all completed work into a single logical commit.
-- [ ] Push the commit to the remote repository.
+Generates an interactive or looping animated SVG using self-contained CSS `@keyframes` embedded within a `<style>` block. Ideal for loading states, hero branding, or interactive micro-animations.
 
-- [ ] **File Change Summary:** Provide a highly detailed summary in the chat listing exactly which files were changed, what specific changes were made inside them, and why they were changed. The summary is VERY important.
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="sync-title sync-desc">
+  <title id="sync-title">Syncing Data</title>
+  <desc id="sync-desc">Two rotating curved arrows indicating real-time data synchronization.</desc>
+  <style>
+    @keyframes spin-clockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse-stroke {
+      0%, 100% { stroke-opacity: 0.5; }
+      50% { stroke-opacity: 1; }
+    }
+    .rotating-group {
+      transform-origin: 50px 50px;
+      animation: spin-clockwise 3s linear infinite;
+    }
+    .pulsing-arrow {
+      animation: pulse-stroke 1.5s ease-in-out infinite;
+    }
+  </style>
+  <g class="rotating-group">
+    <path class="pulsing-arrow" d="M50 15 A35 35 0 0 1 85 50 L75 50 L90 65 L95 50 L85 50" stroke="#06b6d4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <path class="pulsing-arrow" d="M50 85 A35 35 0 0 1 15 50 L25 50 L10 35 L5 50 L15 50" stroke="#3b82f6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+  <circle cx="50" cy="50" r="8" fill="#06b6d4" />
+</svg>
+```
+
+---
+
+## 5. Output Format
+
+- Provide strictly the raw SVG code inside a fenced code block with language identifier `xml` or `svg`.
+- Do not output HTML wrappers or surrounding page containers.
