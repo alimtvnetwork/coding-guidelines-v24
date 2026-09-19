@@ -66,11 +66,11 @@ Before generating any design concepts or layout prompts, capture and validate th
 6. `email_address`: Professional contact email address to embed on the banner (e.g., `jane@janedoe.com`).
 7. `qr_code`: Optional scannable QR code destination URL or asset to embed (e.g., linking directly to a calendar booking page, digital vCard, or portfolio).
 8. `contact_or_cta`: Explicit call to action (e.g., "Book a strategy audit at janedoe.com", "DM for speaking inquiries").
-9. `portrait_photo_or_subject`: Visual description of the person or whether a cutout photo will be placed on the right flank.
+9. `portrait_photo_or_avatar`: High-resolution photo cutout of the person, visual description, or avatar image (optional — ask the user if they have an image to provide, or skip if they prefer a typography/minimalist layout).
 10. `brand_colors`: Primary brand palette (e.g., Midnight Navy `#0b0f19`, Vibrant Cyan `#06b6d4`, Pure White `#ffffff`).
 
 > [!IMPORTANT]
-> Always ask the user if they want to embed an **email address** or a **scannable QR code** (e.g. for booking or vCard). If `full_name`, `professional_headline`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they have a **person's photo, portrait cutout, or avatar image** to include on the banner, or if they prefer to **skip** it (using a clean typography or minimalist layout like Version 2). Also ask if they want to embed an **email address** or a **scannable QR code** (e.g. for booking or vCard). If `full_name`, `professional_headline`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
@@ -82,12 +82,12 @@ Ideal for consultants, founders, and executives:
 - **Background:** Deep navy or charcoal gradient with subtle geometric or architectural depth of field.
 - **Left Flank:** Clean, ambient negative space accommodating the profile picture.
 - **Center:** Bold two-line headline in high-contrast white and gold/cyan accent, followed by 3 core pillars separated by bullet dots.
-- **Right Flank:** High-resolution subject portrait cutout or authority proof (e.g. "Featured in Forbes, TechCrunch" or book cover mockup).
+- **Right Flank:** High-resolution subject portrait cutout or avatar (when provided), or authority proof (e.g. "Featured in Forbes, TechCrunch" or book cover mockup).
 - **Lower Band:** Clear website URL and rounded pill call-to-action badge.
 
 ### Version 2: Minimalist Executive Layout
 
-Ideal for enterprise leaders, investors, and board members:
+Ideal for enterprise leaders, investors, and board members, or when the person's photo is skipped:
 - **Background:** Monochromatic dark slate or textured matte finish with subtle linear accent lighting.
 - **Left Flank:** Clean dark negative space.
 - **Center-Right:** Single, powerful positioning statement in elegant modern typography.

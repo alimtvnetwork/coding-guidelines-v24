@@ -38,12 +38,12 @@ Before generating any design concepts or prompts, capture and validate the follo
 9. `website_url`: Creator or brand website URL (e.g., `https://proloyhasan.com`).
 10. `email_address`: Contact or business inquiry email address to embed (e.g., `contact@proloyhasan.com`).
 11. `qr_code`: Optional scannable QR code destination URL or asset to embed (e.g., linking to newsletter, booking calendar, or channel subscribe link).
-12. `channel_icon_or_avatar`: Profile picture, logo mark, or avatar image description.
-13. `subject_description`: Appearance, pose, clothing, and expression of the person in front.
+12. `channel_icon_or_avatar`: Profile picture, logo mark, or avatar image (optional — ask the user if they have one to provide, or skip if none).
+13. `person_photo_or_avatar`: Photo of the creator/host, visual description, or avatar cutout (optional — ask the user if they have an image/photo of the person to include, or skip if they prefer a text/graphics-only design).
 14. `color_palette`: Primary brand colors (e.g., Deep Navy Background `#0f172a`, Golden Yellow Highlight `#facc15`, Crisp White `#ffffff`).
 
 > [!IMPORTANT]
-> Always ask the user if they want to embed an **email address** or a **scannable QR code**. If `channel_name`, `primary_title`, `youtube_handle`, `website_url`, or `subject_description` / `channel_icon_or_avatar` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they have a **person's photo, subject cutout, or avatar image** to include, or if they prefer to **skip** it (for a graphics/typography-focused layout). Also ask if they want to embed an **email address** or a **scannable QR code**. If `channel_name`, `primary_title`, `youtube_handle`, or `website_url` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
@@ -57,11 +57,9 @@ The reference banner layout below demonstrates the target standard for high-auth
 
 ### Layout Anatomy Breakdown
 
-1. **Center Foreground (Hero Subject):**
-   - Professional subject positioned centrally or slightly left-of-center.
-   - Clean subject cutout with sharp contrast against the background.
-   - Professional, grounded pose (hands clasped, natural posture, glasses, eye contact with the viewer).
-   - Crisp lighting highlighting the face, beard, and shoulders.
+1. **Center Foreground (Hero Subject / Person's Photo or Avatar):**
+   - **When Provided:** Professional subject cutout positioned centrally or slightly left-of-center with sharp contrast against the background, crisp lighting on face/shoulders, and natural posture.
+   - **When Skipped:** Adapt the composition to a graphics, typography, or iconography-focused layout; center the primary headline and name, or place a high-contrast 3D icon/badge or thematic illustration in place of the human subject.
 
 2. **Center-Right (Hero Typography & Name):**
    - **Primary Name:** Giant high-contrast lettering:

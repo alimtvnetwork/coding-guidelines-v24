@@ -65,11 +65,11 @@ Before generating any design concepts or layout prompts, capture and validate th
 5. `email_address`: Contact or inquiries email address to embed on the banner (e.g., `contact@acmecloud.com` or `sales@acmecloud.com`).
 6. `qr_code`: Optional scannable QR code destination URL or asset to embed (e.g., linking to a product demo, mobile app download, or newsletter signup).
 7. `call_to_action`: Primary business action (e.g., "Explore the Platform", "Join Our Team", "Start Free 14-Day Trial").
-8. `company_logo_icon`: Description or vector icon of the brand mark to place on the right flank.
+8. `company_logo_or_avatar`: Description or vector icon of the brand mark, avatar, or spokesperson photo to place on the banner (optional — ask the user if they have one to provide, or skip if they prefer an abstract/typographic layout).
 9. `brand_colors`: Corporate color palette (e.g., Deep Slate `#0f172a`, Electric Blue `#2563eb`, Pure White `#ffffff`).
 
 > [!IMPORTANT]
-> Always ask the user if they want to embed an **email address** or a **scannable QR code** (e.g. for product demo, app download, or contact inquiries). If `company_name`, `value_proposition`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they have a **company logo, brand avatar, or spokesperson photo** to include, or if they prefer to **skip** it (using a clean typographic or abstract layout). Also ask if they want to embed an **email address** or a **scannable QR code** (e.g. for product demo, app download, or contact inquiries). If `company_name`, `value_proposition`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
