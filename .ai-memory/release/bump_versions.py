@@ -138,32 +138,40 @@ def build_release_notes_file(new_version):
     print(f"Generated release notes at {notes_path}")
     return notes_path
 
-def handle_git_release(new_version):
+def handle_git_release(current_version, new_version):
     v_string = f"v{new_version}"
     branch_name = f"release/{v_string}"
 
     print(f"\n--- Creating Full Release: {v_string} ---")
 
     try:
-        # 1. Capture current branch to return to it later
+        # Step 1: Capture current branch and create release branch FIRST
         current_branch = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, check=True).stdout.strip()
         if not current_branch:
-            current_branch = "main" # Fallback if detached head
+            current_branch = "main"
 
-        print(f"Current branch is {current_branch}. Creating release branch: {branch_name}")
+        print(f"[*] Step 1: Current branch is {current_branch}. Creating and checking out release branch: {branch_name}")
         subprocess.run(["git", "checkout", "-b", branch_name], check=True)
+
+        # Step 2: Bump files on the release branch
+        print(f"[*] Step 2: Bumping from {current_version} to {new_version} on {branch_name}...")
+        set_current_version(new_version)
+        update_files(current_version, new_version)
 
         # Build release notes with Quick Install one-liners before commit so it is tracked
         notes_path = build_release_notes_file(new_version)
 
-        print("Committing version bump and release notes...")
+        # Step 3: Commit on the release branch
+        print(f"[*] Step 3: Committing version bump and release notes on {branch_name}...")
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"chore(release): bump version to {new_version}"], check=True)
 
-        print(f"Tagging release: {v_string}")
-        subprocess.run(["git", "tag", v_string], check=True)
+        # Step 4: Tag release on the release branch
+        print(f"[*] Step 4: Tagging release: {v_string}")
+        subprocess.run(["git", "tag", "-a", v_string, "-m", f"Release {v_string}"], check=True)
 
-        print("Pushing branch and tags...")
+        # Step 5: Push release branch and tag, return to main, merge, and push
+        print(f"[*] Step 5: Pushing release branch and tag to origin...")
         subprocess.run(["git", "push", "-u", "origin", branch_name], check=True)
         subprocess.run(["git", "push", "origin", v_string], check=True)
 
@@ -180,16 +188,17 @@ def handle_git_release(new_version):
             except (subprocess.CalledProcessError, FileNotFoundError):
                 print("No gh or glab CLI detected. Skipping platform release creation.")
 
-        # 2. Return to original branch, merge, and push
-        print(f"Returning to {current_branch} and merging {branch_name}...")
+        # Step 5 (cont): Return to main branch, merge release branch, and push main
+        print(f"[*] Returning to {current_branch} and merging {branch_name}...")
         subprocess.run(["git", "checkout", current_branch], check=True)
         subprocess.run(["git", "merge", branch_name], check=True)
         subprocess.run(["git", "push", "origin", current_branch], check=True)
-        print("Release loop successfully completed and synced with main branch!")
+        print("[OK] Release loop successfully completed and synced with main branch!")
 
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
         print("Release automation failed.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Bump project versions and optionally create a Git release.")
@@ -208,12 +217,11 @@ if __name__ == "__main__":
         print("Error: Must specify --type or --set")
         exit(1)
 
-    print(f"Bumping from {current_version} to {new_version}...")
-
-    set_current_version(new_version)
-    update_files(current_version, new_version)
-
     if args.create_release:
-        handle_git_release(new_version)
+        handle_git_release(current_version, new_version)
     else:
+        print(f"Bumping from {current_version} to {new_version}...")
+        set_current_version(new_version)
+        update_files(current_version, new_version)
         print(f"Successfully bumped to {new_version} (Standard Mode - No git operations performed).")
+
