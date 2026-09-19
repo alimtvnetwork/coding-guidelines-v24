@@ -1,6 +1,6 @@
 # Logo Design & Branding Generation — Lovable Design Workflow
 
-> **Prompt Version:** 3.1.0
+> **Prompt Version:** 3.2.0
 > **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -20,9 +20,10 @@ This prompt instructs Lovable (and similar web design AI environments) to genera
 4. **NO CSS Stylesheets:** NEVER create external CSS files (`styles.css`, `app.css`). Theme colors must live ONLY in `colors-themes/palette.md`.
 5. **NO Server or Script Code:** NEVER create JavaScript/TypeScript scripts, API routes, or backend servers.
 6. **NO Tokens.json:** NEVER generate `tokens.json` in `colors-themes/` (it has been completely removed as unnecessary; use `palette.md` only).
-7. **NO Solid Backgrounds on PNGs:** NEVER generate PNG icons with solid white, solid black, or solid colored background boxes. All icon PNGs MUST have an alpha-channel transparent background.
-8. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
-9. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
+7. **NO Solid / Opaque Backgrounds on ANY PNG (TOTAL BAN):** NEVER generate ANY PNG icon with a solid background (no solid white, no solid black, no grey, no dark square backdrop). ALL PNG files without exception MUST have a 100% transparent alpha-channel background (`#00000000`). "Dark" and "Light" variants refer ONLY to the color/fill of the icon artwork itself—NEVER the background! The canvas/background is ALWAYS 100% transparent.
+8. **NO Solid Background Shapes in SVGs:** NEVER add a background `<rect>` or container shape (e.g. `<rect fill="#000" .../>` or `<rect fill="#fff" .../>`). The SVG canvas must always be transparent.
+9. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
+10. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
 
 ---
 
@@ -33,7 +34,7 @@ Before generating any assets, capture and validate the following inputs:
 1. `product_name`: Name of the product, service, or brand.
 2. `product_idea`: Brief explanation of the product, its purpose, target audience, and brand voice/tone (e.g., modern, playful, corporate, technical, minimalist).
 3. `sample_colors`: Target color hints, hex codes, or preferred palette mood (e.g., "deep navy and electric cyan").
-4. `needs_dark_white_variants`: Boolean indicating if dark-mode and white monochrome variants are required (defaults to `true`).
+4. `needs_dark_white_variants`: Boolean indicating if dark-theme and white monochrome variants are required (defaults to `true`).
 5. `is_animated`: Boolean indicating whether animated assets (`gif-animation.gif`, animated SVG) are requested (defaults to `false` unless explicitly asked).
 
 > [!IMPORTANT]
@@ -75,7 +76,7 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-acme-pay`, `02-cloud-sync`).
-3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, `03`, ...).
+3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, ...).
 4. **No Tokens.json:** Do not generate `tokens.json`. Color specifications live exclusively inside `colors-themes/palette.md`.
 5. **Favicon Placement:** `favicon.ico` and `favicon.png` are placed at the repository root and regenerated per project.
 6. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths so GitHub renders them natively.
@@ -88,22 +89,26 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 
 - Pure, clean XML/SVG vector code without editor junk or base64 embedded bitmaps.
 - Responsive `viewBox` (e.g., `viewBox="0 0 100 100"`), omitting hardcoded `width` and `height` attributes on the root `<svg>`.
+- Always 100% transparent canvas (never add a background `<rect>`).
 - Standard variants:
-  - `logo.svg`: Primary full-color logo.
-  - `logo-dark.svg`: Optimized for dark backgrounds with light/vibrant strokes and fills.
-  - `logo-white.svg`: Pure white monochrome icon (`#ffffff`) for dark surfaces or overlays.
+  - `logo.svg`: Primary full-color logo on a transparent canvas.
+  - `logo-dark.svg`: Optimized for dark themes using inverted, lighter, or vibrant strokes/fills—on a **100% transparent canvas** (NO dark background `<rect>`).
+  - `logo-white.svg`: Pure white monochrome icon (`#ffffff`) for dark surfaces or overlays—on a **100% transparent canvas**.
 
 ### B. Transparent Raster Images (`icons-image/`)
 
-- All PNG images MUST have a **transparent alpha-channel background** (no solid white, black, or grey boxes around the icon).
-- Mockups (`logo-1024-light.png` and `logo-1024-dark.png`) provide visual contrast tests on clean light/dark canvas backdrops.
+- **100% Transparency Requirement (Zero Solid Backgrounds):** Every single PNG image in `icons-image/` MUST have a **100% transparent alpha-channel background**. NO solid white, solid black, solid grey, or colored background boxes are permitted.
+- **Understanding "Dark" vs. "Light" Variants:**
+  - **"Dark" does NOT mean a dark background!** It means the icon artwork itself uses inverted, lighter, or white strokes and fills so that when the transparent PNG is placed onto a dark website theme, the icon is clearly visible. The canvas/background is 100% transparent.
+  - **"Light" means the icon artwork uses standard, darker, or saturated brand colors** intended to be placed on a light website theme. The canvas/background is 100% transparent.
+  - Both `logo-1024-light.png` and `logo-1024-dark.png` are **100% transparent PNGs** with zero background fills.
 - **Specification Listing (consecutive with zero blank lines between entries):**
-  - `logo-052.png` — 52x52 px transparent icon
-  - `logo-128.png` — 128x128 px transparent icon
-  - `logo-256.png` — 256x256 px transparent icon
-  - `logo-512.png` — 512x512 px transparent icon
-  - `logo-1024-light.png` — 1024x1024 px icon mockup on light surface
-  - `logo-1024-dark.png` — 1024x1024 px icon mockup on dark surface
+  - `logo-052.png` — 52x52 px 100% transparent PNG icon
+  - `logo-128.png` — 128x128 px 100% transparent PNG icon
+  - `logo-256.png` — 256x256 px 100% transparent PNG icon
+  - `logo-512.png` — 512x512 px 100% transparent PNG icon
+  - `logo-1024-light.png` — 1024x1024 px 100% transparent PNG with dark/saturated artwork for light themes
+  - `logo-1024-dark.png` — 1024x1024 px 100% transparent PNG with inverted/light artwork for dark themes
 
 ### C. Color Themes (`colors-themes/palette.md`)
 
@@ -113,7 +118,7 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 ### D. Favicons (Repo Root)
 
 - `favicon.ico`: Multi-resolution icon for browser tabs.
-- `favicon.png`: High-resolution 32x32 px or 64x64 px PNG favicon.
+- `favicon.png`: High-resolution 32x32 px or 64x64 px 100% transparent PNG favicon.
 
 ---
 
@@ -124,8 +129,8 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 Executes standard branding creation:
 1. Validates user inputs (product name, idea, tone, colors).
 2. Creates the project folder under `02-projects/{seq}-{project-name}/`.
-3. Creates `icons-svg/` with `logo.svg`, `logo-dark.svg`, and `logo-white.svg`.
-4. Creates `icons-image/` with the 6 consecutive transparent PNG sizes.
+3. Creates `icons-svg/` with `logo.svg`, `logo-dark.svg`, and `logo-white.svg` (all on transparent canvas).
+4. Creates `icons-image/` with the 6 consecutive 100% transparent PNG sizes (inverted artwork for dark theme).
 5. Creates `colors-themes/palette.md`.
 6. Generates `favicon.ico` and `favicon.png` at the repository root.
 7. Generates `readme.md` in the project directory displaying all assets in a GitHub-compatible table.
@@ -134,8 +139,8 @@ Executes standard branding creation:
 
 Executes static branding creation PLUS animated assets:
 1. Completes all steps from Version 1.
-2. Generates an animated SVG (`logo-animated.svg` in `icons-svg/`) using smooth CSS `@keyframes` or SMIL for subtle motion (e.g., stroke-dasharray draw effect, pulsing glow, or rotational geometry).
-3. Generates `gif-animation.gif` placed at the repo root showcasing the animated icon loop (60–120 frames, seamless loop, 24–30 fps).
+2. Generates an animated SVG (`logo-animated.svg` in `icons-svg/`) on a transparent canvas using smooth CSS `@keyframes` or SMIL for subtle motion (e.g., stroke-dasharray draw effect, pulsing glow, or rotational geometry).
+3. Generates `gif-animation.gif` placed at the repo root showcasing the animated icon loop (transparent or smooth background, 60–120 frames, seamless loop, 24–30 fps).
 4. Embeds the animated preview into `readme.md`.
 
 ---
@@ -217,7 +222,7 @@ Executes static branding creation PLUS animated assets:
 AcmePay is a modern financial platform designed for effortless developer billing.
 
 ## Vector Logos
-| Primary Logo | Dark Mode | Monochrome White |
+| Primary Logo (Transparent) | Dark Theme (Inverted, Transparent) | Monochrome White (Transparent) |
 |:---:|:---:|:---:|
 | ![Primary](icons-svg/logo.svg) | ![Dark](icons-svg/logo-dark.svg) | ![White](icons-svg/logo-white.svg) |
 
@@ -226,8 +231,8 @@ AcmePay is a modern financial platform designed for effortless developer billing
 |:---:|:---:|:---:|:---:|
 | <img src="icons-image/logo-052.png" width="52" /> | <img src="icons-image/logo-128.png" width="128" /> | <img src="icons-image/logo-256.png" width="256" /> | <img src="icons-image/logo-512.png" width="256" /> |
 
-## Contrast Mockups
-| Light Surface (1024px) | Dark Surface (1024px) |
+## High-Resolution Transparent Icons (1024px)
+| For Light Themes (Transparent PNG) | For Dark Themes (Inverted, Transparent PNG) |
 |:---:|:---:|
 | <img src="icons-image/logo-1024-light.png" width="300" /> | <img src="icons-image/logo-1024-dark.png" width="300" /> |
 

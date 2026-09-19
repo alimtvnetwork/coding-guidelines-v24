@@ -6,7 +6,7 @@ description: >-
 
 # Logo & Icon Design Workflow — Asset & Branding Standards
 
-> **Skill Version:** 1.1.0
+> **Skill Version:** 1.2.0
 > **Target Environment:** Lovable, Web Design AI Platforms, & Local Design Workflows
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -26,9 +26,10 @@ This skill guides the creation, organization, and validation of production-ready
 4. **NO CSS Stylesheets:** NEVER create external CSS files (`styles.css`, `app.css`). Theme colors must live ONLY in `colors-themes/palette.md`.
 5. **NO Server or Script Code:** NEVER create JavaScript/TypeScript scripts, API routes, or backend servers.
 6. **NO Tokens.json:** NEVER generate `tokens.json` in `colors-themes/` (use `palette.md` only).
-7. **NO Solid Backgrounds on PNGs:** NEVER generate PNG icons with solid white, solid black, or solid colored background boxes. All icon PNGs MUST have an alpha-channel transparent background.
-8. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
-9. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
+7. **NO Solid / Opaque Backgrounds on ANY PNG (TOTAL BAN):** NEVER generate ANY PNG icon with a solid background (no solid white, no solid black, no grey, no dark square backdrop). ALL PNG files without exception MUST have a 100% transparent alpha-channel background (`#00000000`). "Dark" and "Light" variants refer ONLY to the color/fill of the icon artwork itself—NEVER the background! The canvas/background is ALWAYS 100% transparent.
+8. **NO Solid Background Shapes in SVGs:** NEVER add a background `<rect>` or container shape (e.g. `<rect fill="#000" .../>` or `<rect fill="#fff" .../>`). The SVG canvas must always be transparent.
+9. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
+10. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
 
 ---
 
@@ -91,23 +92,28 @@ All files and folders must follow strict lowercase naming with zero-padded two-d
 
 - Pure, clean XML/SVG vector code.
 - Responsive `viewBox` (e.g., `viewBox="0 0 100 100"`), omitting hardcoded `width` and `height` attributes on `<svg>`.
+- Always 100% transparent canvas (never add a background `<rect>`).
 - Accessibility: `<title>` and `<desc>` linked with `aria-labelledby` and `role="img"`.
 - Theming: `currentColor` for monochrome icons; clean CSS variables or hex codes for multi-color assets.
-- Variants:
-  - `logo.svg`: Primary brand logo.
-  - `logo-dark.svg`: Optimized for dark surfaces.
-  - `logo-white.svg`: Pure white monochrome icon (`#ffffff`).
+- Variants (all on transparent canvas):
+  - `logo.svg`: Primary brand logo on a transparent canvas.
+  - `logo-dark.svg`: Optimized for dark themes using inverted, lighter, or vibrant strokes/fills—on a **100% transparent canvas** (NO dark background `<rect>`).
+  - `logo-white.svg`: Pure white monochrome icon (`#ffffff`) on a **100% transparent canvas**.
 
 ### B. Transparent Raster Icons (`icons-image/`)
 
-- All PNGs MUST have an **alpha-channel transparent background** (no solid white or black box backgrounds).
+- **100% Transparency Requirement (Zero Solid Backgrounds):** Every single PNG image in `icons-image/` MUST have a **100% transparent alpha-channel background**. NO solid white, solid black, solid grey, or colored background boxes are permitted.
+- **Understanding "Dark" vs. "Light" Variants:**
+  - **"Dark" does NOT mean a dark background!** It means the icon artwork itself uses inverted, lighter, or white strokes and fills so that when the transparent PNG is placed onto a dark website theme, the icon is clearly visible. The canvas/background is 100% transparent.
+  - **"Light" means the icon artwork uses standard, darker, or saturated brand colors** intended to be placed on a light website theme. The canvas/background is 100% transparent.
+  - Both `logo-1024-light.png` and `logo-1024-dark.png` are **100% transparent PNGs** with zero background fills.
 - Standard sizes:
-  - `logo-052.png` — 52x52 px transparent icon
-  - `logo-128.png` — 128x128 px transparent icon
-  - `logo-256.png` — 256x256 px transparent icon
-  - `logo-512.png` — 512x512 px transparent icon
-  - `logo-1024-light.png` — 1024x1024 px mockup on light background
-  - `logo-1024-dark.png` — 1024x1024 px mockup on dark background
+  - `logo-052.png` — 52x52 px 100% transparent PNG icon
+  - `logo-128.png` — 128x128 px 100% transparent PNG icon
+  - `logo-256.png` — 256x256 px 100% transparent PNG icon
+  - `logo-512.png` — 512x512 px 100% transparent PNG icon
+  - `logo-1024-light.png` — 1024x1024 px 100% transparent PNG with dark/saturated artwork for light themes
+  - `logo-1024-dark.png` — 1024x1024 px 100% transparent PNG with inverted/light artwork for dark themes
 
 ### C. Color Palette (`colors-themes/palette.md`)
 
@@ -123,12 +129,12 @@ All files and folders must follow strict lowercase naming with zero-padded two-d
 
 ### Mode 1: Static Logo & Branding Generation (Default)
 
-Generates the complete static vector set, transparent PNG sizes, color palette, root favicons, and project `readme.md`.
+Generates the complete static vector set, transparent PNG sizes (with inverted colors for dark theme), color palette, root favicons, and project `readme.md`.
 
 ### Mode 2: Animated Logo & Branding Generation
 
 In addition to static assets, generates:
-- Animated SVG (`icons-svg/logo-animated.svg`) using smooth CSS `@keyframes` (pulse, rotation, draw effect).
+- Animated SVG (`icons-svg/logo-animated.svg`) on a transparent canvas using smooth CSS `@keyframes` (pulse, rotation, draw effect).
 - Seamless looping GIF (`gif-animation.gif`) placed at repo root.
 - Animated asset preview embedded in `readme.md`.
 
@@ -138,6 +144,7 @@ In addition to static assets, generates:
 
 - [ ] All file and directory names are strictly lowercase.
 - [ ] No HTML pages, React components, or website templates were generated.
-- [ ] All PNG icons have transparent backgrounds (alpha channel).
-- [ ] SVG files have responsive `viewBox` and no hardcoded `width`/`height`.
+- [ ] ALL PNG icons have 100% transparent backgrounds (alpha channel) with ZERO solid background fills.
+- [ ] Dark theme variants use inverted/light strokes and fills on a 100% transparent background (NOT a black box).
+- [ ] SVG files have responsive `viewBox`, no hardcoded `width`/`height`, and no background `<rect>`.
 - [ ] Project `readme.md` uses relative paths to render all assets.
