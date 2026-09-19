@@ -42,7 +42,7 @@ Always verify the following inputs before generating assets:
 1. `product_name`: Brand/product name.
 2. `product_idea`: Purpose, target audience, and brand voice/tone (e.g. minimalist, playful, high-tech).
 3. `sample_colors`: Target color palette or mood.
-4. `inspiration_logos`: Optional reference brands or styles (e.g. Apple, Microsoft, OpenAI, Stripe). Prioritize referenced geometric style and simplicity.
+4. `inspiration_logos`: Optional reference brands or styles (e.g. Apple, Microsoft, OpenAI, Sephora, Stripe). Prioritize referenced geometric style and simplicity.
 5. `needs_dark_white_variants`: Boolean for dark and white variants (default: `true`).
 6. `is_animated`: Boolean for animated assets (default: `false` unless requested).
 
@@ -66,6 +66,7 @@ If any core input is missing, prompt the user for clarification before generatin
   - *Silhouette & Cutout (Apple Archetype):* Bold solid mark with distinctive negative space.
   - *Modular Grid (Microsoft Archetype):* Clean, non-overlapping geometric tiles separated by consistent gutters.
   - *Rotational Flow (OpenAI Archetype):* Interlocking, symmetrical curved ribbons forming a continuous loop.
+  - *Fluid Organic Curve (Sephora Archetype):* Single-stroke elongated "S" curve/flame with zero overlapping lines, conveying beauty, elegance, and fluidity.
 
 ---
 

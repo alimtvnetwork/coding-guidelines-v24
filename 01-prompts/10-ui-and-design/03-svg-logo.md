@@ -1,6 +1,6 @@
 # SVG Icon & Vector Graphic Creation — Design Workflow
 
-> **Prompt Version:** 3.3.0
+> **Prompt Version:** 3.4.0
 > **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -36,6 +36,7 @@ This prompt instructs Lovable (and similar web design AI environments) on the ex
   - *Silhouette & Cutout (Apple model):* Bold solid mark with distinctive negative space.
   - *Modular Grid (Microsoft model):* Clean, non-overlapping geometric tiles separated by consistent gutters.
   - *Rotational Flow (OpenAI model):* Interlocking, symmetrical curved ribbons forming a continuous loop.
+  - *Fluid Organic Curve (Sephora model):* Single-stroke elongated "S" curve/flame with zero overlapping lines, conveying beauty, elegance, and fluidity.
 - **Minimal Grouping:** Do not wrap elements in redundant `<g>` tags unless needed for shared transforms, styling, or animations.
 - **No Editor Metadata:** Do not include Adobe Illustrator, Inkscape, or Figma metadata/namespaces (`xmlns:inkscape`, `sodipodi:docname`, etc.).
 - **TOTAL BAN on Base64 Images:** NEVER embed base64-encoded raster images (`<image href="data:image/png;base64,...">`). All artwork must be pure vector paths, polygons, circles, and curves.
@@ -78,7 +79,20 @@ Generates a clean, production-grade vector icon with full responsive scaling, ac
 </svg>
 ```
 
-### Version 2: Animated Vector SVG Icon
+### Version 2: Fluid Organic Curve Archetype (Sephora Inspiration)
+
+Generates an elegant single-stroke curved flame with variable weight and zero overlapping lines.
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="flame-title flame-desc">
+  <title id="flame-title">Fluid Curve Logo</title>
+  <desc id="flame-desc">Elegant single-stroke elongated S-curve flame conveying beauty and fluidity without overlapping lines.</desc>
+  <path d="M52 10 C54 22 42 34 38 46 C34 58 40 70 50 82 C42 74 30 64 32 50 C34 36 48 24 52 10 Z" fill="#06b6d4" />
+  <path d="M58 24 C62 36 54 48 50 58 C46 68 52 76 60 86 C52 78 42 70 44 58 C46 46 56 36 58 24 Z" fill="#3b82f6" />
+</svg>
+```
+
+### Version 3: Animated Vector SVG Icon
 
 Generates an interactive or looping animated SVG using self-contained CSS `@keyframes` embedded within a `<style>` block. Ideal for loading states, hero branding, or interactive micro-animations.
 

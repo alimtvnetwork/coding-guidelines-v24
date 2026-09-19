@@ -1,6 +1,6 @@
 # Logo Design & Branding Generation — Lovable Design Workflow
 
-> **Prompt Version:** 3.3.0
+> **Prompt Version:** 3.4.0
 > **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -22,7 +22,7 @@ This prompt instructs Lovable (and similar web design AI environments) to genera
 6. **NO Tokens.json:** NEVER generate `tokens.json` in `colors-themes/` (it has been completely removed as unnecessary; use `palette.md` only).
 7. **NO Solid / Opaque Backgrounds on ANY PNG (TOTAL BAN):** NEVER generate ANY PNG icon with a solid background (no solid white, no solid black, no grey, no dark square backdrop). ALL PNG files without exception MUST have a 100% transparent alpha-channel background (`#00000000`). "Dark" and "Light" variants refer ONLY to the color/fill of the icon artwork itself—NEVER the background! The canvas/background is ALWAYS 100% transparent.
 8. **NO Solid Background Shapes in SVGs:** NEVER add a background `<rect>` or container shape (e.g. `<rect fill="#000" .../>` or `<rect fill="#fff" .../>`). The SVG canvas must always be transparent.
-9. **NO Messy Overlapping Lines:** NEVER create tangled, chaotic, or densely overlapping strokes. Overlapping lines make icons look muddy, unreadable at small resolutions, and amateurish.
+9. **NO Messy Overlapping Lines:** NEVER create tangled, chaotic, or densely overlapping strokes. Overlapping lines make icons look muddy, unreadable at small resolutions, and amateurish. Maintain clean geometric separation, purposeful negative space, or continuous connected paths.
 10. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`README.md`, `Projects/`, `Logo.svg` are BANNED; use `readme.md`, `02-projects/`, `logo.svg`).
 11. **NO Base64 Images in SVGs:** NEVER embed raster images or base64 data URLs inside SVG files.
 
@@ -35,7 +35,7 @@ Before generating any assets, capture and validate the following inputs:
 1. `product_name`: Name of the product, service, or brand.
 2. `product_idea`: Brief explanation of the product, its purpose, target audience, and brand voice/tone (e.g., modern, playful, corporate, technical, minimalist).
 3. `sample_colors`: Target color hints, hex codes, or preferred palette mood (e.g., "deep navy and electric cyan").
-4. `inspiration_logos`: Optional reference brands or logo styles (e.g., "Apple", "Microsoft", "OpenAI", "Stripe"). If provided, prioritize the visual harmony and geometric simplicity of that reference.
+4. `inspiration_logos`: Optional reference brands or logo styles (e.g., "Apple", "Microsoft", "OpenAI", "Sephora", "Stripe"). If provided, prioritize the visual harmony, silhouette, and geometric simplicity of that reference.
 5. `needs_dark_white_variants`: Boolean indicating if dark-theme and white monochrome variants are required (defaults to `true`).
 6. `is_animated`: Boolean indicating whether animated assets (`gif-animation.gif`, animated SVG) are requested (defaults to `false` unless explicitly asked).
 
@@ -48,7 +48,7 @@ Before generating any assets, capture and validate the following inputs:
 
 ### A. Conveying the Brand Image
 
-- The icon must be an immediate visual metaphor for the brand's core identity (e.g., speed, intelligence, security, simplicity, or interconnectedness).
+- The icon must be an immediate visual metaphor for the brand's core identity (e.g., speed, intelligence, security, luxury, simplicity, or interconnectedness).
 - Design for instant memorability: a user should be able to sketch the basic concept from memory after seeing it once.
 - Ensure micro-to-macro scalability: the icon must remain crystal-clear at 16x16 px (favicon) and 52x52 px (app icon) without losing definition, while looking balanced and elegant at 1024x1024 px.
 
@@ -62,12 +62,12 @@ Before generating any assets, capture and validate the following inputs:
 
 ## 3. Inspirational Archetypes & Code Models
 
-When designing, draw inspiration from three proven industry archetypes:
+When designing, draw inspiration from four proven industry archetypes:
 
 1. **The Silhouette & Negative Space Model (Apple Archetype):**
-   - A single, bold silhouette with a distinctive subtracted shape.
-   - Clean silhouette, zero internal line clutter, immediately recognizable at 16px.
-   - *Example Concept:* A solid geometric fruit, shield, or gem with a single elegant cutout.
+   - A single, bold silhouette with a distinctive subtracted shape or cut.
+   - Clean outline, zero internal line clutter, immediately recognizable at 16px.
+   - *Example Concept:* A solid geometric fruit, shield, or gem with an intentional negative-space cutout mask.
 
 2. **The Modular Grid Model (Microsoft Archetype):**
    - Distinct, non-overlapping geometric shapes organized with harmonious negative-space gutters.
@@ -77,7 +77,13 @@ When designing, draw inspiration from three proven industry archetypes:
 3. **The Continuous Ribbon / Rotational Flow Model (OpenAI Archetype):**
    - Interlocking rotational symmetry formed by a single continuous path or connected ribbon segments.
    - Communicates intelligence, iteration, cycles, and connectivity without cluttered intersections.
-   - *Example Concept:* 6 connected curved segments radiating from a central core in rotational symmetry.
+   - *Example Concept:* Symmetrical curved segments radiating from a central core in rotational flow.
+
+4. **The Fluid Organic Curve / Flame Model (Sephora Archetype):**
+   - An elegant, single-stroke elongated "S" curve or flame motif.
+   - Conveys luxury, beauty, cosmetics, fluidity, and sophistication.
+   - Zero overlapping lines; relies on variable stroke weight, organic taper, and clean curvature.
+   - *Example Concept:* A single tapered bezier curve that flows smoothly from thick to thin without any intersecting lines.
 
 ---
 
@@ -115,7 +121,7 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-acme-pay`, `02-cloud-sync`).
-3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, `03`, ...).
+3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, ...).
 4. **No Tokens.json:** Do not generate `tokens.json`. Color specifications live exclusively inside `colors-themes/palette.md`.
 5. **Favicon Placement:** `favicon.ico` and `favicon.png` are placed at the repository root and regenerated per project.
 6. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths so GitHub renders them natively.
@@ -210,7 +216,22 @@ Executes static branding creation PLUS animated assets:
 </svg>
 ```
 
-### Example 2: Modular Grid Archetype (Microsoft Inspiration)
+### Example 2: Silhouette & Negative Space Archetype (Apple Inspiration)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="sil-title sil-desc">
+  <title id="sil-title">Silhouette with Negative Space</title>
+  <desc id="sil-desc">Bold iconic silhouette with an intentional transparent negative-space cutout.</desc>
+  <mask id="cutout-mask">
+    <rect width="100" height="100" fill="#ffffff" />
+    <circle cx="62" cy="44" r="14" fill="#000000" />
+  </mask>
+  <path d="M50 16 C34 16 22 28 22 46 C22 66 38 84 50 84 C62 84 78 66 78 46 C78 28 66 16 50 16 Z" fill="#06b6d4" mask="url(#cutout-mask)" />
+  <path d="M50 8 C54 12 56 18 52 22 C48 18 46 12 50 8 Z" fill="#3b82f6" />
+</svg>
+```
+
+### Example 3: Modular Grid Archetype (Microsoft Inspiration)
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="mod-title mod-desc">
@@ -223,7 +244,7 @@ Executes static branding creation PLUS animated assets:
 </svg>
 ```
 
-### Example 3: Continuous Rotational Flow (OpenAI Inspiration)
+### Example 4: Continuous Rotational Flow (OpenAI Inspiration)
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="rot-title rot-desc">
@@ -237,7 +258,18 @@ Executes static branding creation PLUS animated assets:
 </svg>
 ```
 
-### Example 4: Animated SVG Logo (`icons-svg/logo-animated.svg`)
+### Example 5: Fluid Organic Curve Archetype (Sephora Inspiration)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="sep-title sep-desc">
+  <title id="sep-title">Fluid Organic Curve Logo</title>
+  <desc id="sep-desc">Elegant single-stroke elongated S-curve flame conveying beauty, luxury, and fluidity without overlapping lines.</desc>
+  <path d="M52 10 C54 22 42 34 38 46 C34 58 40 70 50 82 C42 74 30 64 32 50 C34 36 48 24 52 10 Z" fill="#06b6d4" />
+  <path d="M58 24 C62 36 54 48 50 58 C46 68 52 76 60 86 C52 78 42 70 44 58 C46 46 56 36 58 24 Z" fill="#3b82f6" />
+</svg>
+```
+
+### Example 6: Animated SVG Logo (`icons-svg/logo-animated.svg`)
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="anim-title anim-desc">
@@ -268,7 +300,7 @@ Executes static branding creation PLUS animated assets:
 </svg>
 ```
 
-### Example 5: Color Palette (`colors-themes/palette.md`)
+### Example 7: Color Palette (`colors-themes/palette.md`)
 
 ```markdown
 # Brand Color Palette: AcmePay
@@ -286,7 +318,7 @@ Executes static branding creation PLUS animated assets:
 | Surface Light | Pure White | ![#ffffff](https://placehold.co/15x15/ffffff/ffffff.png) | `#ffffff` | `rgb(255, 255, 255)` | `hsl(0, 0%, 100%)` |
 ```
 
-### Example 6: Project README Display (`02-projects/01-acme-pay/readme.md`)
+### Example 8: Project README Display (`02-projects/01-acme-pay/readme.md`)
 
 ```markdown
 # AcmePay — Branding & Logo Assets
