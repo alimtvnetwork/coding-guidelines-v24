@@ -1,6 +1,6 @@
 # SVG Icon & Vector Graphic Creation — Design Workflow
 
-> **Prompt Version:** 3.2.0
+> **Prompt Version:** 3.3.0
 > **Target Environment:** Lovable & Web Design AI Platforms
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
@@ -20,16 +20,22 @@ This prompt instructs Lovable (and similar web design AI environments) on the ex
 4. **NO Base64 Raster Images:** NEVER embed base64-encoded bitmap images (`<image href="data:image/png;base64,...">`). All graphics MUST be pure mathematical vector paths, polygons, and curves.
 5. **NO Hardcoded Fixed Dimensions on Root:** NEVER include hardcoded `width="..."` and `height="..."` attributes on the root `<svg>` tag that prevent responsive scaling; use `viewBox` instead.
 6. **NO Solid Background Elements:** NEVER insert a background `<rect>` or container shape (e.g. `<rect width="100%" height="100%" fill="#000"/>` or `<rect fill="#fff"/>`). The canvas MUST remain 100% transparent. "Dark mode" SVGs invert the strokes/fills to lighter colors, but the background is ALWAYS transparent.
-7. **NO Editor Bloat:** NEVER include third-party editor metadata (e.g., `xmlns:inkscape`, `sodipodi:docname`, `adobe:ns`).
-8. **NO Unstyled Elements in Monochrome:** NEVER use hardcoded black/white hex fills on monochrome icons; use `currentColor` so the icon inherits text color dynamically.
+7. **NO Messy Overlapping Lines:** NEVER create tangled, chaotic, or densely overlapping strokes. Overlapping lines make icons look muddy, unreadable at small sizes, and amateurish. Maintain clean geometric separation, purposeful negative space, or continuous connected paths.
+8. **NO Editor Bloat:** NEVER include third-party editor metadata (e.g., `xmlns:inkscape`, `sodipodi:docname`, `adobe:ns`).
+9. **NO Unstyled Elements in Monochrome:** NEVER use hardcoded black/white hex fills on monochrome icons; use `currentColor` so the icon inherits text color dynamically.
 
 ---
 
-## 1. Clean SVG Architecture
+## 1. Clean SVG Architecture & Design Principles
 
 - **Valid XML & SVG Syntax:** Ensure the output is fully valid XML and well-formed SVG markup.
 - **Responsive `viewBox`:** Always define an appropriate `viewBox` (e.g., `viewBox="0 0 24 24"` for UI icons, `viewBox="0 0 100 100"` for logos/illustrations).
 - **Omit Hardcoded Dimensions:** Remove hardcoded `width` and `height` attributes on the root `<svg>` element so the icon scales responsively within its CSS container.
+- **Anti-Overlapping & Connected Geometry:** Rather than chaotic overlapping lines, connect visual elements purposefully ("connect the dots"). Use continuous smooth strokes, modular aligned shapes, or balanced negative space.
+- **Inspirational Archetypes:**
+  - *Silhouette & Cutout (Apple model):* Bold solid mark with distinctive negative space.
+  - *Modular Grid (Microsoft model):* Clean, non-overlapping geometric tiles separated by consistent gutters.
+  - *Rotational Flow (OpenAI model):* Interlocking, symmetrical curved ribbons forming a continuous loop.
 - **Minimal Grouping:** Do not wrap elements in redundant `<g>` tags unless needed for shared transforms, styling, or animations.
 - **No Editor Metadata:** Do not include Adobe Illustrator, Inkscape, or Figma metadata/namespaces (`xmlns:inkscape`, `sodipodi:docname`, etc.).
 - **TOTAL BAN on Base64 Images:** NEVER embed base64-encoded raster images (`<image href="data:image/png;base64,...">`). All artwork must be pure vector paths, polygons, circles, and curves.
