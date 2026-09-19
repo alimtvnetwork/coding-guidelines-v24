@@ -127,7 +127,8 @@ All generated LinkedIn profile banner assets must follow strict lowercase naming
     ├── 01-{project-name}/
     │   ├── readme.md (project overview, banner preview, and layout specs)
     │   ├── prompts/
-    │   │   └── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   │   ├── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   │   └── plan.md (design plan, positioning strategy, safe zones, and checklist)
     │   └── linkedin-banners/
     │       ├── banner-1584x396.png (Standard 1x profile banner)
     │       ├── banner-3168x792.png (High-Resolution 2x Retina banner — Recommended)
@@ -140,7 +141,7 @@ All generated LinkedIn profile banner assets must follow strict lowercase naming
 
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-executive-brand`, `02-saas-advisor`).
-3. **Prompt Preservation:** The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
+3. **Prompt & Plan Preservation (Mandatory):** When formulating the profile banner design, every detail of the design plan (positioning statement, visual hierarchy, color palette, bottom gradient fade strategy, safe zone mapping, and verification checklist) MUST be saved directly to the file system at `prompts/plan.md`. The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
 4. **Asset Organization:** All banner raster images and vector overlays MUST be stored inside `linkedin-banners/`.
 5. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths (e.g., `![Banner](linkedin-banners/banner-3168x792.png)`).
 

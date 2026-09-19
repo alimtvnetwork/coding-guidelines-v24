@@ -127,7 +127,36 @@ Generates an interactive or looping animated SVG using self-contained CSS `@keyf
 
 ---
 
-## 5. Output Format
+## 5. Directory & File Hierarchy (Strict Lowercase)
+
+When generating SVG assets as part of a project, assets must follow strict lowercase naming under `02-projects/{sequence}-{project-name}/`. The AI must persist the design plan to `prompts/plan.md` and the generation prompt to `prompts/prompt.md`:
+
+```
+/ (repo root)
+└── 02-projects/
+    ├── 01-{project-name}/
+    │   ├── readme.md (overview and vector previews)
+    │   ├── prompts/
+    │   │   ├── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   │   └── plan.md (design plan, geometry breakdown, and verification checklist)
+    │   └── icons-svg/
+    │       ├── logo.svg (primary full-color vector on transparent canvas)
+    │       ├── logo-dark.svg (inverted vector for dark themes on transparent canvas)
+    │       └── logo-white.svg (pure white monochrome vector on transparent canvas)
+    └── 02-{project-name}/
+```
+
+### Hierarchy Rules
+
+1. **Root Projects Folder:** All projects live under `02-projects/`.
+2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case.
+3. **Prompt & Plan Preservation (Mandatory):** When formulating the design strategy, every detail of the design plan (geometry, color palette, viewbox, accessibility tags, and verification checklist) MUST be saved directly to the file system at `prompts/plan.md`. The exact prompt given to the generation engine MUST be saved in `prompts/prompt.md`.
+4. **Asset Organization:** All SVG vector files MUST be stored inside `icons-svg/`.
+5. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths.
+
+---
+
+## 6. Output Format
 
 - Provide strictly the raw SVG code inside a fenced code block with language identifier `xml` or `svg`.
 - Do not output HTML wrappers or surrounding page containers.

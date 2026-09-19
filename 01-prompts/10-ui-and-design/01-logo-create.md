@@ -98,7 +98,8 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
     ├── 01-{project-name}/
     │   ├── readme.md
     │   ├── prompts/
-    │   │   └── prompt.md
+    │   │   ├── prompt.md
+    │   │   └── plan.md
     │   ├── icons-svg/
     │   │   ├── logo.svg
     │   │   ├── logo-dark.svg
@@ -124,7 +125,7 @@ All generated assets must follow strict lowercase naming and zero-padded sequenc
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-acme-pay`, `02-cloud-sync`).
 3. **Never Overwrite:** Never overwrite an existing project folder; always increment the sequence number (`01`, `02`, ...).
-4. **Prompt Preservation:** The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
+4. **Prompt & Plan Preservation (Mandatory):** When formulating the design strategy, every detail of the design plan (goals, composition, color palette, typography, execution steps, and quality checklist) MUST be saved directly to the file system at `prompts/plan.md`. The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
 5. **No Tokens.json:** Do not generate `tokens.json`. Color specifications live exclusively inside `colors-themes/palette.md`.
 6. **Favicon Placement:** `favicon.ico` and `favicon.png` are placed at the repository root and regenerated per project.
 7. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths so GitHub renders them natively.

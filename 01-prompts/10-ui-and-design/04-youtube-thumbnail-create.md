@@ -147,7 +147,8 @@ All generated YouTube thumbnail, banner, and prompt assets must follow strict lo
     ├── 01-{project-name}/
     │   ├── readme.md (project overview, visual previews, and layout specs)
     │   ├── prompts/
-    │   │   └── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   │   ├── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   │   └── plan.md (design plan, composition strategy, safe zones, and checklist)
     │   └── youtube-thumbnails/
     │       ├── thumbnail-1280x720.png (Standard 16:9 YouTube video thumbnail)
     │       ├── thumbnail-1920x1080.png (Full HD 1080p high-resolution thumbnail)
@@ -161,7 +162,7 @@ All generated YouTube thumbnail, banner, and prompt assets must follow strict lo
 
 1. **Root Projects Folder:** All projects live under `02-projects/`.
 2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-tech-podcast`, `02-coding-insights`).
-3. **Prompt Preservation:** The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
+3. **Prompt & Plan Preservation (Mandatory):** When formulating the thumbnail/banner design, every detail of the design plan (visual composition, color grading, typography pairing, bottom gradient fade strategy, safe zone mapping, and anti-pattern checklist) MUST be saved directly to the file system at `prompts/plan.md`. The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
 4. **Asset Organization:** All thumbnail and banner raster images MUST be stored inside `youtube-thumbnails/`.
 5. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths (e.g., `![Thumbnail](youtube-thumbnails/thumbnail-1280x720.png)`).
 
