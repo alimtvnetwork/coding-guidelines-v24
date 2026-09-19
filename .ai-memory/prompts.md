@@ -44,6 +44,8 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `10-ui-and-design` | [`10-ui-and-design/02-react-ui-fixes-update.md`](../01-prompts/10-ui-and-design/02-react-ui-fixes-update.md) | React Component Modernization & Responsive Styling — Workflow (must follow) |
 | `10-ui-and-design` | [`10-ui-and-design/03-svg-logo.md`](../01-prompts/10-ui-and-design/03-svg-logo.md) | SVG Icon & Vector Graphic Creation — Design Workflow (must follow) |
 | `10-ui-and-design` | [`10-ui-and-design/04-youtube-thumbnail-create.md`](../01-prompts/10-ui-and-design/04-youtube-thumbnail-create.md) | YouTube Thumbnail & Banner Design — Visual Identity & Typography Workflow |
+| `10-ui-and-design` | [`10-ui-and-design/05-linkedin-profile-banner.md`](../01-prompts/10-ui-and-design/05-linkedin-profile-banner.md) | LinkedIn Profile Banner Design — Visual Identity & Authority Workflow |
+| `10-ui-and-design` | [`10-ui-and-design/06-linkedin-company-banner.md`](../01-prompts/10-ui-and-design/06-linkedin-company-banner.md) | LinkedIn Company Page Banner Design — Corporate Branding & Conversion Workflow |
 | `11-content-and-seo` | [`11-content-and-seo/01-jokes-ideas-generate.md`](../01-prompts/11-content-and-seo/01-jokes-ideas-generate.md) | Humor Generation & Content Ideation — Content Workflow (must follow) |
 | `11-content-and-seo` | [`11-content-and-seo/02-lowercase-readme-and-sequence.md`](../01-prompts/11-content-and-seo/02-lowercase-readme-and-sequence.md) | Lowercase Filename Enforcement & Sequence Re-Ordering — Workflow (must follow) |
 | `11-content-and-seo` | [`11-content-and-seo/03-seo-optimization.md`](../01-prompts/11-content-and-seo/03-seo-optimization.md) | SEO Content Optimization & Meta Tag Auditing — Content Workflow (must follow) |

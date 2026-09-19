@@ -34,11 +34,14 @@ Before generating any design concepts or prompts, capture and validate the follo
 5. `tagline`: Supporting tagline (e.g., "Real Stories. Real People. Real Growth.").
 6. `quote_or_callout`: Expressive quote or hook (e.g., `"Better Ideas Bigger Impact"`, `Let's Build Something Great`).
 7. `youtube_handle`: Exact channel handle (e.g., `/top1percentPodcast`).
-8. `subject_description`: Appearance, pose, clothing, and expression of the person in front.
-9. `color_palette`: Primary brand colors (e.g., Deep Navy Background `#0f172a`, Golden Yellow Highlight `#facc15`, Crisp White `#ffffff`).
+8. `youtube_url`: Full channel URL (e.g., `https://youtube.com/@top1percentPodcast`).
+9. `website_url`: Creator or brand website URL (e.g., `https://proloyhasan.com`).
+10. `channel_icon_or_avatar`: Profile picture, logo mark, or avatar image description.
+11. `subject_description`: Appearance, pose, clothing, and expression of the person in front.
+12. `color_palette`: Primary brand colors (e.g., Deep Navy Background `#0f172a`, Golden Yellow Highlight `#facc15`, Crisp White `#ffffff`).
 
 > [!IMPORTANT]
-> If `channel_name`, `primary_title`, or `subject_description` are missing, **STOP and ask the user** before proceeding.
+> If `channel_name`, `primary_title`, `youtube_handle`, `website_url`, or `subject_description` / `channel_icon_or_avatar` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
