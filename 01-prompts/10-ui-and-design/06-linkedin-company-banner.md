@@ -19,7 +19,7 @@ This prompt instructs design AI platforms on how to craft high-impact, conversio
 3. **NO Text Hallucinations or Gibberish:** NEVER render garbled glyphs, pseudo-Latin, or misspelled company names. Every character in the headline, value proposition, and domain URL must match the user's input verbatim.
 4. **NO Low-Resolution Exports:** NEVER export or specify standard 72 DPI 1x images that blur upon upload. Always specify **2x or 3x Retina resolution** (`2256 x 382 px` or `3384 x 573 px`).
 5. **NO Verbose or Cramped Text:** Due to the extremely narrow 5.91:1 aspect ratio (only 191px high at 1x), NEVER write long paragraphs. Keep headlines under 8 words and subheadings under 12 words.
-6. **NO Saving Binary Images to Repository:** Do NOT save raw binary image files (`.png`, `.jpg`) into the git repository. All instructions, layouts, and SVG vector overlays must live purely in markdown or code.
+6. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`linkedin-banners/`, `banner-2256x382.png`, `prompt.md` are required; `Banners/` is BANNED).
 
 ---
 
@@ -110,7 +110,51 @@ Ideal for developer platforms and software products:
 
 ---
 
-## 5. Ready-to-Use Templates
+## 5. Directory & File Hierarchy (Strict Lowercase)
+
+All generated LinkedIn company page banner assets must follow strict lowercase naming and zero-padded sequence numbers. The AI must persist the exact prompt used into `prompts/prompt.md` and save all high-resolution banner images inside `linkedin-banners/`:
+
+```
+/ (repo root)
+└── 02-projects/
+    ├── 01-{project-name}/
+    │   ├── readme.md (project overview, banner preview, and layout specs)
+    │   ├── prompts/
+    │   │   └── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   └── linkedin-banners/
+    │       ├── banner-1128x191.png (Standard 1x company page banner)
+    │       ├── banner-2256x382.png (High-Resolution 2x Retina banner — Recommended)
+    │       ├── banner-3384x573.png (Ultra High-Resolution 3x banner)
+    │       └── vector-overlay.svg (Crisp SVG vector typography, badges, and logo overlay)
+    └── 02-{project-name}/
+```
+
+### Hierarchy Rules
+
+1. **Root Projects Folder:** All projects live under `02-projects/`.
+2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-acme-cloud`, `02-enterprise-saas`).
+3. **Prompt Preservation:** The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
+4. **Asset Organization:** All banner raster images and vector overlays MUST be stored inside `linkedin-banners/`.
+5. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths (e.g., `![Banner](linkedin-banners/banner-2256x382.png)`).
+
+---
+
+## 6. Asset Specifications
+
+### A. Company Page Banners (`linkedin-banners/`)
+
+- `banner-1128x191.png`: Standard LinkedIn company page banner (5.91:1 aspect ratio, under 8MB).
+- `banner-2256x382.png`: 2x Retina high-resolution banner (guarantees crystal-clear typography against compression).
+- `banner-3384x573.png`: 3x Ultra high-resolution banner for maximum fidelity.
+- `vector-overlay.svg`: Crisp SVG vector layer containing all typography, badges, URLs, and brand marks for hybrid compositing.
+
+### B. Generation Prompt Archive (`prompts/prompt.md`)
+
+- Contains the full generation prompt, model parameters (aspect ratio, style, negative prompts), and exact text strings used for the generation run.
+
+---
+
+## 7. Ready-to-Use Templates
 
 ### Template 1: Midjourney / Flux Background Generation Prompt
 

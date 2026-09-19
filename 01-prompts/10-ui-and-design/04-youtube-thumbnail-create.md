@@ -16,10 +16,11 @@ This prompt instructs design AI platforms on how to craft high-conversion, profe
 
 1. **NO Text Hallucinations or Gibberish:** NEVER render garbled, pseudo-Latin, merged glyphs, or invented words. Every single character in titles, channel names, handles, and badges MUST match the user's exact spelling verbatim.
 2. **NO Falsified Titles or Subtitles:** NEVER invent or embellish credentials, names, or quotes not explicitly provided or approved by the user.
-3. **NO Saving Binary Images to Repository:** Do NOT save raw binary image files (`.png`, `.jpg`) into the git repository. All instructions, layouts, and SVG vector overlays must live purely in markdown or code.
+3. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`youtube-thumbnails/`, `thumbnail-1280x720.png`, `prompt.md` are required; `Thumbnails/` is BANNED).
 4. **NO Low-Contrast Text:** NEVER place light text over bright, busy backgrounds or dark text over dark shadows without proper contrast treatment (e.g., dropshadows, dark vignettes, or solid badge backdrops).
 5. **NO Uncontrolled Facial or Hand Distortions:** The human subject in the foreground must have anatomically correct eyes, glasses, hands, and fingers without AI melting or extra digits.
 6. **NO HTML or Web Page Code:** Do NOT generate full HTML web pages or application templates. This is strictly a graphic design, thumbnail, and banner workflow.
+7. **NO Low-Resolution Exports:** NEVER export or specify standard 72 DPI blurry images. Always specify Full HD (`1920x1080 px` for thumbnails, `2560x1440 px` for banners).
 
 ---
 
@@ -118,7 +119,53 @@ When generating prompts for image engines (Flux, Midjourney v6, Ideogram) or com
 
 ---
 
-## 5. Ready-to-Use Prompt Templates
+## 5. Directory & File Hierarchy (Strict Lowercase)
+
+All generated YouTube thumbnail, banner, and prompt assets must follow strict lowercase naming and zero-padded sequence numbers. The AI must persist the exact prompt used into `prompts/prompt.md` and save all high-resolution thumbnail and banner images inside `youtube-thumbnails/`:
+
+```
+/ (repo root)
+└── 02-projects/
+    ├── 01-{project-name}/
+    │   ├── readme.md (project overview, visual previews, and layout specs)
+    │   ├── prompts/
+    │   │   └── prompt.md (the exact prompt, user inputs, and AI parameters used)
+    │   └── youtube-thumbnails/
+    │       ├── thumbnail-1280x720.png (Standard 16:9 YouTube video thumbnail)
+    │       ├── thumbnail-1920x1080.png (Full HD 1080p high-resolution thumbnail)
+    │       ├── banner-2560x1440.png (Full YouTube channel banner / TV master)
+    │       ├── banner-safe-zone-1546x423.png (Desktop & mobile safe crop banner)
+    │       └── vector-overlay.svg (Crisp SVG vector typography, badges, and logo overlay)
+    └── 02-{project-name}/
+```
+
+### Hierarchy Rules
+
+1. **Root Projects Folder:** All projects live under `02-projects/`.
+2. **Project Folder Naming:** `{sequence}-{project-name}` using two-digit zero-padding and kebab-case (e.g., `01-tech-podcast`, `02-coding-insights`).
+3. **Prompt Preservation:** The exact prompt given to the generation engine, user inputs, and model parameters MUST be saved in `prompts/prompt.md` so designs can be reproduced, audited, and iterated on.
+4. **Asset Organization:** All thumbnail and banner raster images MUST be stored inside `youtube-thumbnails/`.
+5. **Relative Paths:** All links and image embeds in `readme.md` must use relative paths (e.g., `![Thumbnail](youtube-thumbnails/thumbnail-1280x720.png)`).
+
+---
+
+## 6. Asset Specifications
+
+### A. YouTube Thumbnails (`youtube-thumbnails/`)
+
+- `thumbnail-1280x720.png`: Standard YouTube video thumbnail (16:9 aspect ratio, under 2MB).
+- `thumbnail-1920x1080.png`: Full HD high-resolution thumbnail for pristine visual quality on high-DPI displays.
+- `banner-2560x1440.png`: Full YouTube channel banner (TV master dimension).
+- `banner-safe-zone-1546x423.png`: Centered safe zone banner crop ensuring logos and text are fully visible on desktop and mobile.
+- `vector-overlay.svg`: Crisp SVG vector layer containing all typography, badges, URLs, and icons for hybrid compositing.
+
+### B. Generation Prompt Archive (`prompts/prompt.md`)
+
+- Contains the full generation prompt, model parameters (aspect ratio, style, negative prompts), and exact text strings used for the generation run.
+
+---
+
+## 7. Ready-to-Use Prompt Templates
 
 ### Template 1: Midjourney / Flux Photorealistic Generation Prompt
 
