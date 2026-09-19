@@ -16,10 +16,13 @@ This prompt instructs design AI platforms on how to craft high-authority, conver
 
 1. **NO HTML Files or Web Code:** NEVER generate `.html` files, React components (`.tsx`, `.jsx`), or CSS stylesheets. This is strictly a banner design and vector layout workflow.
 2. **NO Text in the Avatar Collision Zone:** NEVER place critical text, headlines, contact info, faces, or logos in the bottom-left area (x: 0 to 380px). On both desktop and mobile, LinkedIn's circular profile picture will obscure anything placed there.
-3. **NO Text Hallucinations or Gibberish:** NEVER render garbled glyphs, pseudo-Latin, or misspelled words. Every character in the headline, website URL, and credentials must match the user's input verbatim.
-4. **NO Low-Resolution Exports:** NEVER export or specify standard 72 DPI 1x images that blur upon upload. Always specify **2x or 3x Retina resolution** (`3168 x 792 px` or `4752 x 1188 px`).
-5. **NO Low-Contrast Text:** NEVER place light text over bright, busy backgrounds or dark text over dark shadows without proper contrast treatment (e.g. solid badge backdrops, dark vignettes, or subtle dropshadows).
-6. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`linkedin-banners/`, `banner-3168x792.png`, `prompt.md` are required; `Banners/` is BANNED).
+3. **NO Unblended Subject Cutouts (MANDATORY BOTTOM & EDGE BLEND):** When a photo or avatar cutout is provided, it MUST blend naturally into the bottom edge and surrounding background using soft gradient feathering or dark vignettes. NEVER paste a cutout with hard, abrupt edges.
+4. **NO Tacky Clip-Art, Star Stickers, or Fake Icons (TOTAL BAN):** NEVER generate cartoonish star stickers (e.g. `#01` star badges), clip-art badges, or arbitrary icons. Do NOT invent or create avatars or icons unless explicitly requested by the user. Professional banners rely on typography, authentic photography, and clean minimalist layouts.
+5. **NO Chaotic Overlapping Lines Across Subjects:** NEVER run background lines, graph strokes, or accent geometry across the subject's face, neck, or body. Elements must stay behind the subject or maintain clean negative space.
+6. **NO Text Hallucinations or Gibberish:** NEVER render garbled glyphs, pseudo-Latin, or misspelled words. Every character in the headline, website URL, and credentials must match the user's input verbatim.
+7. **NO Low-Resolution Exports:** NEVER export or specify standard 72 DPI 1x images that blur upon upload. Always specify **2x or 3x Retina resolution** (`3168 x 792 px` or `4752 x 1188 px`).
+8. **NO Low-Contrast Text:** NEVER place light text over bright, busy backgrounds or dark text over dark shadows without proper contrast treatment (e.g. solid badge backdrops, dark vignettes, or subtle dropshadows).
+9. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`linkedin-banners/`, `banner-3168x792.png`, `prompt.md` are required; `Banners/` is BANNED).
 
 ---
 
@@ -70,7 +73,7 @@ Before generating any design concepts or layout prompts, capture and validate th
 10. `brand_colors`: Primary brand palette (e.g., Midnight Navy `#0b0f19`, Vibrant Cyan `#06b6d4`, Pure White `#ffffff`).
 
 > [!IMPORTANT]
-> Always ask the user if they have a **person's photo, portrait cutout, or avatar image** to include on the banner, or if they prefer to **skip** it (using a clean typography or minimalist layout like Version 2). Also ask if they want to embed an **email address** or a **scannable QR code** (e.g. for booking or vCard). If `full_name`, `professional_headline`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they have a **person's photo, portrait cutout, or avatar image** to include on the banner, or if they prefer to **skip** it (using a clean typography or minimalist layout like Version 2). Remember: do NOT generate unsolicited avatars, clip-art icons, or star badges. Also ask if they want to embed an **email address** or a **scannable QR code** (e.g. for booking or vCard). If `full_name`, `professional_headline`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
@@ -82,7 +85,7 @@ Ideal for consultants, founders, and executives:
 - **Background:** Deep navy or charcoal gradient with subtle geometric or architectural depth of field.
 - **Left Flank:** Clean, ambient negative space accommodating the profile picture.
 - **Center:** Bold two-line headline in high-contrast white and gold/cyan accent, followed by 3 core pillars separated by bullet dots.
-- **Right Flank:** High-resolution subject portrait cutout or avatar (when provided), or authority proof (e.g. "Featured in Forbes, TechCrunch" or book cover mockup).
+- **Right Flank:** High-resolution subject portrait cutout or avatar (when provided, with mandatory soft gradient bottom fade / dark feathered vignette), or authority proof (e.g. "Featured in Forbes, TechCrunch" or book cover mockup).
 - **Lower Band:** Clear website URL and rounded pill call-to-action badge.
 
 ### Version 2: Minimalist Executive Layout

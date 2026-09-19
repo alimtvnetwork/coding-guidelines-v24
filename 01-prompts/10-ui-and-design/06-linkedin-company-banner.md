@@ -16,10 +16,12 @@ This prompt instructs design AI platforms on how to craft high-impact, conversio
 
 1. **NO HTML Files or Web Code:** NEVER generate `.html` files, React components (`.tsx`, `.jsx`), or CSS stylesheets. This is strictly a corporate banner design and vector layout workflow.
 2. **NO Text in the Company Logo Collision Zone:** NEVER place critical text, company taglines, or URLs in the bottom-left area (x: 0 to 260px). On desktop, the square company profile logo (300x300 px) overlaps the bottom-left of the banner, obscuring anything behind it.
-3. **NO Text Hallucinations or Gibberish:** NEVER render garbled glyphs, pseudo-Latin, or misspelled company names. Every character in the headline, value proposition, and domain URL must match the user's input verbatim.
-4. **NO Low-Resolution Exports:** NEVER export or specify standard 72 DPI 1x images that blur upon upload. Always specify **2x or 3x Retina resolution** (`2256 x 382 px` or `3384 x 573 px`).
-5. **NO Verbose or Cramped Text:** Due to the extremely narrow 5.91:1 aspect ratio (only 191px high at 1x), NEVER write long paragraphs. Keep headlines under 8 words and subheadings under 12 words.
-6. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`linkedin-banners/`, `banner-2256x382.png`, `prompt.md` are required; `Banners/` is BANNED).
+3. **NO Unblended Photo Cutouts (MANDATORY BOTTOM & EDGE BLEND):** Any spokesperson photo, product cutout, or brand element MUST blend smoothly into the banner background using soft gradient feathering or dark vignettes. NEVER paste a cutout with hard, abrupt edges.
+4. **NO Tacky Clip-Art, Star Badges, or Fake Icons (TOTAL BAN):** NEVER generate cartoonish star stickers (e.g. `#01` star badges), arbitrary geometric badges, or fake icons. Do NOT invent or create avatars or icons unless explicitly requested by the user. Professional corporate banners rely on clean typography, authentic branding, and subtle abstract graphics.
+5. **NO Text Hallucinations or Gibberish:** NEVER render garbled glyphs, pseudo-Latin, or misspelled company names. Every character in the headline, value proposition, and domain URL must match the user's input verbatim.
+6. **NO Low-Resolution Exports:** NEVER export or specify standard 72 DPI 1x images that blur upon upload. Always specify **2x or 3x Retina resolution** (`2256 x 382 px` or `3384 x 573 px`).
+7. **NO Verbose or Cramped Text:** Due to the extremely narrow 5.91:1 aspect ratio (only 191px high at 1x), NEVER write long paragraphs. Keep headlines under 8 words and subheadings under 12 words.
+8. **NO Uppercase Filenames:** NEVER use uppercase letters in folder names or file names (`linkedin-banners/`, `banner-2256x382.png`, `prompt.md` are required; `Banners/` is BANNED).
 
 ---
 
@@ -69,7 +71,7 @@ Before generating any design concepts or layout prompts, capture and validate th
 9. `brand_colors`: Corporate color palette (e.g., Deep Slate `#0f172a`, Electric Blue `#2563eb`, Pure White `#ffffff`).
 
 > [!IMPORTANT]
-> Always ask the user if they have a **company logo, brand avatar, or spokesperson photo** to include, or if they prefer to **skip** it (using a clean typographic or abstract layout). Also ask if they want to embed an **email address** or a **scannable QR code** (e.g. for product demo, app download, or contact inquiries). If `company_name`, `value_proposition`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
+> Always ask the user if they have a **company logo, brand avatar, or spokesperson photo** to include, or if they prefer to **skip** it (using a clean typographic or abstract layout). Remember: do NOT generate unsolicited avatars, clip-art icons, or star badges. Also ask if they want to embed an **email address** or a **scannable QR code** (e.g. for product demo, app download, or contact inquiries). If `company_name`, `value_proposition`, `website_url`, or `brand_colors` are missing or not provided, **STOP and ask the user** before proceeding.
 
 ---
 
