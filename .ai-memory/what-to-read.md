@@ -68,8 +68,10 @@
 - .ai-memory/plans/completed/02-appfault-result-monad-and-verification-systems.md
 - .ai-memory/plans/completed/03-fileutil-pathinfo-and-enum-architecture.md
 - .ai-memory/plans/completed/04-applogger-taxonomy-streaming-and-task-db.md
-- .ai-memory/plans/completed/12-regex-centralization-and-generic-dbengine.md
-- .ai-memory/plans/completed/15-gitmap-pipeline-waiting-prompts.md
+- .ai-memory/plans/completed/07-regex-dbengine-and-enum-generator-architecture.md
+- .ai-memory/plans/completed/08-cicd-fix-release-and-gitmap-waiting-prompts.md
+- .ai-memory/plans/completed/09-multi-repo-folder-structure-and-sync.md
+- .ai-memory/plans/completed/10-completed-plans-consolidation-and-reduction.md
 - .agents/skills/gitmap-pipeline-waiting-prompts/skill.md
 - .agents/skills/ci-cd-fix-with-release/skill.md
 - .agents/skills/ai-memory-consolidate-reduce/skill.md

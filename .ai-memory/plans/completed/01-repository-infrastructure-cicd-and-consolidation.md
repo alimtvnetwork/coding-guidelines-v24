@@ -2,11 +2,11 @@
 
 ## 1. Executive Overview & Consolidated Tasks
 
-- **Milestone Domain:** Repository Hygiene, Encoding Standards, AI Script Registry, CI/CD Quality Automation & Memory Consolidation
-- **Original Tasks Merged:** `01-repository-hygiene-scripts-and-versioning.md`, `02-cicd-pipeline-and-quality-automation.md`, `08-completed-plans-consolidation.md`
+- **Milestone Domain:** Repository Hygiene, Encoding Standards, AI Script Registry, CI/CD Quality Automation, Lovable to AI-Memory Migration & Memory Consolidation
+- **Original Tasks Merged:** `01-rename-lovable-to-ai-memory.md`, `01-repository-hygiene-scripts-and-versioning.md`, `02-cicd-pipeline-and-quality-automation.md`, `08-completed-plans-consolidation.md`
 - **Completion Date:** 2026-09-09
 - **Status:** `COMPLETED`
-- **Core Concept & Rationale:** Establish a deterministic, high-discipline repository foundation across four interconnected pillars: automated file hygiene (LF normalization, strict lowercase naming, BOM removal), exhaustive `<details>` documentation for all reusable AI helper scripts, 12 isolated CI/CD validation guards running concurrently via ThreadPoolExecutor with zero CI disablement, and proactive milestone memory compaction that collapses micro-plan sprawl while preserving 100% of architectural concepts and test verification proofs.
+- **Core Concept & Rationale:** Establish a deterministic, high-discipline repository foundation across five interconnected pillars: complete migration of legacy `.lovable` structures to canonical `.ai-memory`, automated file hygiene (LF normalization, strict lowercase naming, BOM removal), exhaustive `<details>` documentation for all reusable AI helper scripts, 12 isolated CI/CD validation guards running concurrently via ThreadPoolExecutor with zero CI disablement, and proactive milestone memory compaction that collapses micro-plan sprawl while preserving 100% of architectural concepts and test verification proofs.
 
 ## 2. Key Architectural Decisions & Spec Implementations
 

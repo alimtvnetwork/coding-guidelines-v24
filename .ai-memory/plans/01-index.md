@@ -11,15 +11,16 @@ Master directory of architectural and execution plans.
 
 ## Completed Plans
 
-- [16-multi-repo-folder-structure-and-sync.md](completed/16-multi-repo-folder-structure-and-sync.md): Multi-repo folder structure migration and central alignment across 9 connected codebases.
-- [02-multi-repo-folder-structure-and-gitmap-fixes.md](completed/02-multi-repo-folder-structure-and-gitmap-fixes.md): Multi-repo folder structure migration and gitmap AGY pipeline fixes.
-- [01-repository-infrastructure-cicd-and-consolidation.md](completed/01-repository-infrastructure-cicd-and-consolidation.md): Repository hygiene, encoding normalization, lowercase conventions, AI scripts `<details>` documentation, CI/CD quality automation, and plan memory consolidation.
+- [01-repository-infrastructure-cicd-and-consolidation.md](completed/01-repository-infrastructure-cicd-and-consolidation.md): Repository hygiene, encoding normalization, lowercase conventions, AI scripts `<details>` documentation, CI/CD quality automation, Lovable to AI-Memory migration, and plan memory consolidation.
 - [02-appfault-result-monad-and-verification-systems.md](completed/02-appfault-result-monad-and-verification-systems.md): Go `*appfault.AppError` standard, `Result[T]` generic containers, dynamic type conversions, deterministic map sorting, and `ReflectSetTo` fast path.
 - [03-fileutil-pathinfo-and-enum-architecture.md](completed/03-fileutil-pathinfo-and-enum-architecture.md): Modular file operations, cross-platform temp resolution, .NET-style `PathInfo`/`FolderInfo`/`FileInfo` objects, concurrency locking, and 1:1 modular `BaseEnumer` enums.
 - [04-applogger-taxonomy-streaming-and-task-db.md](completed/04-applogger-taxonomy-streaming-and-task-db.md): Structured AppLogger subsystem, split SQLite logging (`logs.db` + `tasks/<task-id>.db`), rotating file sink, generic `LazyOnce`, errcmd streaming, named writers, and typed streamers.
-- [12-regex-centralization-and-generic-dbengine.md](completed/12-regex-centralization-and-generic-dbengine.md): Lazy regex centralization, core regex harvesting, generic dbengine wrapper, and python struct code generator.
-- [13-os-enum-integration-and-generator-upgrade.md](completed/13-os-enum-integration-and-generator-upgrade.md): OS enum integration, deep OS version detection, and enum generator upgrade.
-- [14-cicd-fix-with-release.md](completed/14-cicd-fix-with-release.md): Release-triggered CI/CD fix loop, full test suite verification, and automated minor release publication (v6.41.0).
+- [05-wp-exam-migration-and-quiz-feature.md](completed/05-wp-exam-migration-and-quiz-feature.md): WordPress Exam architecture migration, quiz feature specification, and subagent regression remediation.
+- [06-movie-cli-migration-and-optimization.md](completed/06-movie-cli-migration-and-optimization.md): Movie CLI architecture migration, DRY optimization plan, AppFault refactoring, and boolean flag standardization.
+- [07-regex-dbengine-and-enum-generator-architecture.md](completed/07-regex-dbengine-and-enum-generator-architecture.md): Lazy regex centralization, core regex harvesting, generic DB engine (SQL/NoSQL dialects), OS detection, and Python enum generator upgrade.
+- [08-cicd-fix-release-and-gitmap-waiting-prompts.md](completed/08-cicd-fix-release-and-gitmap-waiting-prompts.md): Release-triggered CI/CD fix loop (v6.41.0), GitMap Pipeline-AI dynamic waiting, and anti-credit-waste polling bans.
+- [09-multi-repo-folder-structure-and-sync.md](completed/09-multi-repo-folder-structure-and-sync.md): Universal multi-repo folder structure migration, GitMap CLI verbs, zero-write read protocol, and cross-repo synchronization across 12 repositories.
+- [10-completed-plans-consolidation-and-reduction.md](completed/10-completed-plans-consolidation-and-reduction.md): Completed plans consolidation, aggressive file reduction, safety backup branch protocol, and monotonic re-sequencing.
 
 ## Recent Completed Tasks Register (Last 20 Tasks)
 
@@ -45,9 +46,3 @@ Compact registry of the last 20 tasks, transaction logs, and milestone plans. Ev
 18. **Task 09:** [Writer Locker Integration & Avoiding Interfacer](05-changes-history/09-writer-locker-and-avoiding-interfacer/01-transaction-log.md) (2026-09-04) — ReentrantMutex deadlock prevention and sync.Locker implementation on writers.
 19. **Task 08:** [Idiomatic -er Go Interface Naming Standard](05-changes-history/08-idiomatic-er-interface-naming/01-transaction-log.md) (2026-09-04) — Banned Interface suffix and enforced mandatory Go -er naming pattern across all packages.
 20. **Task 07:** [Bytes[T] Monadic Wrapper & *appfault.AppError Standard](05-changes-history/07-bytes-wrapper-and-apperror-standard/01-transaction-log.md) (2026-09-04) — Replaced raw ([]byte, error) with monadic Bytes[T] and standardized structured AppError returns.
-
-- [01-rename-lovable-to-ai-memory.md](completed/01-rename-lovable-to-ai-memory.md): Renamed .lovable to .ai-memory everywhere.
-- [05-wp-exam-migration-and-quiz-feature.md](completed/05-wp-exam-migration-and-quiz-feature.md): Migrate guidelines and add quiz feature to WP exam.
-- [07-movie-cli-migration-and-optimization.md](completed/07-movie-cli-migration-and-optimization.md): Migration and DRY optimization of movie-cli-v8.
-- [08-movie-cli-dry-fix.md](completed/08-movie-cli-dry-fix.md): DRY code refactoring for movie-cli-v8.
-- [15-gitmap-pipeline-waiting-prompts.md](completed/15-gitmap-pipeline-waiting-prompts.md): GitMap pipeline-ai integration and dynamic waiting protocol in prompts and skills.
