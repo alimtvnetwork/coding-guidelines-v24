@@ -24,8 +24,12 @@ To rapidly locate failing pipeline definitions, broken source files, test fixtur
 - **Record Modified Files Under Lock:** `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`
 
 > [!IMPORTANT]
-> **EXCLUSIVE TEST EXECUTION & RELEASE AUTHORITY:**
-> This prompt (`04-ci-cd-fix-with-release.md`) IS the designated workflow authorized to run the full unit test suites (`python 03-ai-scripts/06-cicd-local-runner.py --all` or `--run-tests`) and trigger the automated version bump and release. Standard `ci-cd-fix` does NOT run unit tests; only `ci-cd-fix-with-release` runs full tests to verify complete green gates before releasing.
+> **SMART TARGETED TEST EXECUTION & RELEASE AUTHORITY:**
+> This prompt (`06-ci-cd-fix-with-release.md`) authorizes targeted test execution strictly on failed or modified packages to achieve the fastest possible green exit and release. The AI MUST execute tests in the smartest way possible:
+> 1. **Stack Trace Failures:** Run/build ONLY the specific packages and test functions directly cited in the failure stack trace.
+> 2. **Changed Packages from Last Git Hash:** Isolate packages (Go, Rust, TS, Python) that changed between the last git hash and current working tree (`git diff --name-only HEAD~1` or `git status --porcelain`).
+> 3. **File State & Hash Tracking:** Every time a fix is applied, write the modified file list and hash/change state to `.ai-memory/temp/recent-file-changes.json` (or via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) so the build system knows which packages changed since the last run.
+> 4. **Strict Ban on Extraneous Runs:** NEVER run the entire test suite, spellcheckers, or unrelated packages that delay the pipeline. Verify targeted packages via `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`, then proceed immediately to release.
 
 ---
 
@@ -461,7 +465,7 @@ Update `.ai-memory/cicd-index.md` in the same operation. Never delete existing e
 > Phase 3 is a hard gate. The release MUST NOT start until every item below is green.
 > If any item fails, loop back to Phase 2 immediately.
 
-- [ ] **Full Unit Test & CI/CD Verification (MANDATORY Before Release):** Run `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` one final time. All unit test suites, AST checks, and quality gates MUST pass 100% green (`exit 0`). The release MUST NOT start if any test fails.
+- [ ] **Smart Targeted Test & CI/CD Verification (Before Release):** Run targeted verification (`python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <affected_pkg>`) covering all failing stack trace targets and packages changed since the last git hash. All modified/failing package quality gates MUST pass 100% green (`exit 0`). The release MUST NOT start if any targeted test fails.
 - [ ] **Test Inventory Validation:** Check `.ai-memory/temp/recent-file-changes.json` against `.ai-memory/test-inventory.json` and verify all tests associated with modified files pass.
 - [ ] **No open plan tasks from this run:** All `.ai-memory/plans/pending/XX-cicd-*.md` files created in this run are marked `resolved` or closed.
 - [ ] **All RCA files written:** Every failure encountered has a `.ai-memory/memory/issues/xx-<slug>.md` with all 4 sections.
@@ -665,11 +669,13 @@ Include: previous version, new version, step number and name, command run, full 
 
 ---
 
-## Mandatory Pre-Release Full Unit Tests & CI/CD Verification (Strict Policy)
+## Mandatory Targeted Smart Tests & Pre-Release Verification (Strict Policy)
 
 > [!CAUTION]
-> **ALL CI/CD FIXES & RELEASES MUST RUN TESTS PROPERLY:** This workflow repairs CI/CD pipelines and cuts a release. You MUST NOT skip or disable tests with `--no-tests`. All unit test suites, integration tests, AST checks, and quality gates MUST be executed and verified green (`python 03-ai-scripts/06-cicd-local-runner.py --run-tests`).
-> **ATOMIC CHANGE TRACKING:** Record all modified files under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
+> **TARGETED SMART TESTS ONLY — FASTEST PATH TO RELEASE:** You MUST NOT run the full repository test suite, spellcheckers, or unrelated packages during debugging or release preparation.
+> 1. Run builds and tests ONLY for packages failed in the stack trace and packages changed since the last git hash (`git diff --name-only HEAD~1`).
+> 2. Every fix MUST persist modified files and change hash to `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
+> 3. Verify targeted packages strictly via `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <affected_package>`. Once green, proceed directly to the release orchestrator.
 
 ---
 

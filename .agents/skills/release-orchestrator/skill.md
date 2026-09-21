@@ -12,7 +12,7 @@ Execute full automated release orchestration, semantic version bumping, branch m
 
 1. Determine bump tier (MINOR default per Rule 0, reset PATCH to 0).
 2. Verify git clean status before release execution.
-3. **Mandatory Pre-Release Unit Tests & CI/CD Verification:** Execute `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` and verify all unit test suites, AST checks, and quality gates pass 100% green (`exit 0`).
+3. **Mandatory Smart Targeted Pre-Release Verification:** Build and test ONLY packages failed in the stack trace and packages changed between the last git hash and current working tree (`git diff --name-only HEAD~1`), persisting modified files to `.ai-memory/temp/recent-file-changes.json`. Execute targeted verification via `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <affected_pkg>` to verify 100% green passing (`exit 0`) without running extraneous test suites, spellcheckers, or unrelated checks.
 4. **Test Inventory Validation:** Cross-reference `.ai-memory/temp/recent-file-changes.json` with `.ai-memory/test-inventory.json` to verify that all test suites covering recently modified files pass completely.
 5. **Mandatory 5-Step Release Branching Lifecycle:**
    - **Step 1:** Create and switch to a dedicated release branch: `git checkout -b release/vX.Y.Z`.
@@ -34,7 +34,7 @@ To rapidly discover version manifests, changelog entries, release notes, and ins
 - **Read Version Manifest:** `python 03-ai-scripts/17-fast-file-reader.py --read-file version.json`
 
 > [!NOTE]
-> **Release Verification Allowance:** Release workflows are explicitly authorized to execute pre-release quality gates (`python 03-ai-scripts/06-cicd-local-runner.py --run-tests` or `--skip-tests` for emergency runs) and create release branches, tags, and commits.
+> **Release Verification Allowance:** Release workflows are explicitly authorized to execute targeted pre-release quality gates (e.g. `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`) and create release branches, tags, and commits.
 
 ---
 

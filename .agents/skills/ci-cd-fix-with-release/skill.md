@@ -26,8 +26,12 @@ PHASE_2_STEPS = N / 2  (Steps N/2+1 .. N: Singly-Done Self-Loop Fixing, Zero in 
 Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 
 > [!CAUTION]
-> **EXCLUSIVE TEST EXECUTION & RELEASE AUTHORITY:**
-> This skill (`ci-cd-fix-with-release`) IS the designated workflow authorized to run full unit test suites (`python 03-ai-scripts/06-cicd-local-runner.py --all` or `--run-tests`) and trigger automated version bumping, changelog assembly, tagging, and GitHub/GitLab release creation. Standard `ci-cd-fix` does NOT run unit tests; only `ci-cd-fix-with-release` runs full tests to verify complete green gates before releasing.
+> **SMART TARGETED TEST & RELEASE AUTHORITY:**
+> This skill (`ci-cd-fix-with-release`) authorizes targeted test execution strictly on failed or modified packages to achieve the fastest green exit and release. The AI MUST execute tests in the smartest way possible:
+> 1. **Stack Trace Targeting:** Run/build ONLY packages and test functions directly cited in the failure stack trace.
+> 2. **Changed Packages from Last Git Hash:** Compare against the last known git hash (`git diff --name-only HEAD~1`) and isolate packages that actually changed.
+> 3. **File State & Hash Tracking:** Every fix must persist modified files to `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
+> 4. **Strict Ban on Extraneous Runs:** NEVER run the entire test suite, spellcheckers, or unrelated packages. Verify strictly using `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`, then proceed immediately to the automated release ceremony.
 
 ---
 

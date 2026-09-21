@@ -52,8 +52,13 @@ To rapidly discover version manifests, changelog entries, release notes, and ins
 - **Explore Release Artifacts & Folders:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder .ai-memory/release --limit 20`
 - **Read Version Manifest:** `python 03-ai-scripts/17-fast-file-reader.py --read-file version.json`
 
-> [!NOTE]
-> **Release Verification Allowance:** Release workflows are explicitly authorized to execute pre-release quality gates (`python 03-ai-scripts/06-cicd-local-runner.py --run-tests` or `--skip-tests` for emergency runs) and create release branches, tags, and commits.
+> [!IMPORTANT]
+> **SMART TARGETED PRE-RELEASE TESTING (FASTEST PATH TO RELEASE):**
+> When verifying code prior to release, do NOT run heavy full repository test suites, spellcheckers, or unrelated packages.
+> 1. **Failing Stack Trace Targets:** Build and test ONLY packages and functions identified in failing stack traces.
+> 2. **Changed Packages from Last Git Hash:** Isolate packages changed between the previous git hash and current working tree (`git diff --name-only HEAD~1` or `git status --porcelain`).
+> 3. **Change State Persistence:** Record modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) so only modified targets are tested (`python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`).
+> 4. Once targeted checks pass green, trigger `python 03-ai-scripts/29-release-orchestrator.py` immediately without delaying the release.
 
 ---
 
