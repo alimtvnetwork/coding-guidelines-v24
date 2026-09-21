@@ -1,7 +1,7 @@
 # [V2] Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
 
 > [!IMPORTANT]
-> Prompt Version: 2.3.0
+> Prompt Version: 2.4.0
 > Synchronization: Main Meta-Repo & Connected Workspaces
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
@@ -40,14 +40,14 @@ Execute this task via a strict 3-Phase pipeline. Do not skip steps.
 Before executing any file searches, scans, or code changes, you must execute Phase 1A:
 
 1. Verbatim Prompt Capture: Directly write the user prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
-2. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with traceable IDs (`[T-01]`, `[T-02]`, `[T-03]`) under `## Extracted Actionable Task List`.
+2. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`. Do not use hard bracket notation like `[T-01]:`.
 3. Mandatory Chat Output Gate: Output the confirmed deliverables list directly in chat before performing any scans or tool calls:
 
 ```markdown
 ### Confirmed Task Breakdown
-- [ ] [T-01]: [Actionable deliverable description]
-- [ ] [T-02]: [Actionable deliverable description]
-- [ ] [T-03]: [Actionable deliverable description]
+#1. Task-01: [Actionable deliverable description]
+#2. Task-02: [Actionable deliverable description]
+#3. Task-03: [Actionable deliverable description]
 Proceeding directly to Phase 1B: Spec & Subtask Generation.
 ```
 
@@ -83,7 +83,7 @@ Important Rule: Do not write common repository boilerplate, universal coding rul
 Subtasks must follow this lean, unique template:
 ```markdown
 # Subtask [01]: [Descriptive Subtask Name]
-Traceability ID: [T-01]
+Traceability ID: Task-01
 Target Files: [Strict relative paths from repo root]
 Action: [Exact code changes, functions, types, and logic to modify or add]
 Acceptance Criteria: [2-4 specific testable conditions proving completion]
@@ -92,7 +92,7 @@ Targeted Verification: [Specific file-level linter command or exit 0 check]
 
 #### Step 4: Subtask Readiness Audit Gate
 Before transitioning to execution, verify:
-- Every extracted deliverable `[T-xx]` has at least one corresponding subtask file.
+- Every extracted deliverable `Task-xx` has at least one corresponding subtask file.
 - All subtask files are non-empty and specify disjoint target files.
 - All file paths in subtasks use strict relative Git paths (zero absolute paths or `file:///` URIs).
 
@@ -152,6 +152,27 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
 
 ---
 
+### End-of-Turn Verification & Confidence Reporting (Mandatory Output)
+
+At the completion of all tasks and before concluding the turn, you must emit this structured verification summary in the chat response:
+
+```markdown
+### Task Completion Summary
+✅ #1. Task-01: [Task description] — Completed
+✅ #2. Task-02: [Task description] — Completed
+(If any task failed or was deferred, mark with ❌ or ⏳ and explain why)
+
+### Modified Files Summary
+- [relative path to modified file 1]
+- [relative path to modified file 2]
+
+### Implementation Confidence Score
+- Confidence: [e.g. 98% or 100%]
+- Rationale: [Detailed explanation of verified quality gates, passing linters, contract adherence, and zero regressions]
+```
+
+---
+
 ## De-Duplication & Continuous Loop Architecture
 
 To prevent instruction bloat, context exhaustion, and repetitive failure loops, this prompt enforces strict structural de-duplication:
@@ -173,6 +194,9 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
                 │
                 ▼ (On All Subtasks Done)
 [Phase 3: Task Consolidation & Atomic Git Push]
+                │
+                ▼
+[End-of-Turn Verification & Confidence Reporting]
 ```
 
 ---

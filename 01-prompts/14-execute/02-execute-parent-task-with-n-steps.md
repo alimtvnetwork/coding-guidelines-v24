@@ -1,7 +1,7 @@
 # Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
 
 > [!IMPORTANT]
-> Prompt Version: 2.3.0
+> Prompt Version: 2.4.0
 > Synchronization: Main Meta-Repo & Connected Workspaces
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
@@ -23,21 +23,22 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract actionable bullet-point deliverables with traceable IDs (`[T-01]`, `[T-02]`), and output this confirmed task list directly in chat before any file exploration or scanning.
+1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract actionable bullet-point deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task list directly in chat formatted as `#1. Task-01: <details>` without hard brackets before any file exploration or scanning.
 2. [ ] /goal Phase 1B (Step 1 - Master Spec Generation): Write the master architectural plan in `.ai-memory/plans/pending/xx-<slug>.md`, documenting each task in a detailed manner with architectural specifications, constraints, and blast radius.
 3. [ ] /goal Phase 1B (Step 2 - Scan & Discover): Use fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) to inventory files and map call sites without tool truncation limits.
 4. [ ] /goal Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the plan into lean subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md`. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate.
-5. [ ] /goal Phase 1B (Step 4 - Readiness Audit Gate): Confirm all `[T-xx]` deliverables are mapped to subtasks and disjoint files before execution.
+5. [ ] /goal Phase 1B (Step 4 - Readiness Audit Gate): Confirm all `Task-xx` deliverables are mapped to subtasks and disjoint files before execution.
 6. [ ] /goal Phase 1B (Zero-Stop Transition): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 execution mode without pausing or asking for permission.
 7. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Spawn at most 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
 8. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.ai-memory/plan.md` and `.ai-memory/memory/issues/`; subsequent agents must read the failure log first to remediate root causes.
 9. [ ] /goal Phase 2 (Change Recording & Quality Linting): Record all modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) and run targeted file-level linters on specifically modified files (`exit 0`). Do not run `06-cicd-local-runner.py`, unit tests, or build checks (deferred to CI/CD).
 10. [ ] /goal Phase 3 (Consolidation & Atomic Push): Consolidate completed subtasks into `.ai-memory/plans/completed/xx-<slug>.md`, delete granular subtasks and pending plan, stage all changes, and push in a single grouped commit.
-11. [ ] /learn Ingest `.ai-memory/memory/01-index.md` for project memory index and past learnings.
-12. [ ] /learn Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
-13. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
-14. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
-15. [ ] /learn Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
+11. [ ] /goal Phase 3 (Completion & Confidence Reporting): Emit the final Task Completion Summary with green check mark emojis, modified files summary, and implementation confidence score.
+12. [ ] /learn Ingest `.ai-memory/memory/01-index.md` for project memory index and past learnings.
+13. [ ] /learn Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
+14. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
+15. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and AppError.
+16. [ ] /learn Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
 
 ---
 
@@ -67,14 +68,14 @@ Before executing the tasks below, check if this prompt is already installed as a
 Before executing any file searches, scans, or code changes, you must execute Phase 1A:
 
 1. Verbatim Prompt Capture: Directly write the user prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
-2. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with traceable IDs (`[T-01]`, `[T-02]`, `[T-03]`) under `## Extracted Actionable Task List`.
+2. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`. Do not use hard bracket notation like `[T-01]:`.
 3. Mandatory Chat Output Gate: Output the confirmed deliverables list directly in chat before performing any scans or tool calls:
 
 ```markdown
 ### Confirmed Task Breakdown
-- [ ] [T-01]: [Actionable deliverable description]
-- [ ] [T-02]: [Actionable deliverable description]
-- [ ] [T-03]: [Actionable deliverable description]
+#1. Task-01: [Actionable deliverable description]
+#2. Task-02: [Actionable deliverable description]
+#3. Task-03: [Actionable deliverable description]
 Proceeding directly to Phase 1B: Spec & Subtask Generation.
 ```
 
@@ -108,7 +109,7 @@ Important Rule: Do not write common repository boilerplate, universal coding rul
 Subtasks must follow this lean, unique template:
 ```markdown
 # Subtask [01]: [Descriptive Subtask Name]
-Traceability ID: [T-01]
+Traceability ID: Task-01
 Target Files: [Strict relative paths from repo root]
 Action: [Exact code changes, functions, types, and logic to modify or add]
 Acceptance Criteria: [2-4 specific testable conditions proving completion]
@@ -117,7 +118,7 @@ Targeted Verification: [Specific file-level linter command or exit 0 check]
 
 ### Step 4: Subtask Readiness Audit Gate
 Before transitioning to execution, verify:
-- Every extracted deliverable `[T-xx]` has at least one corresponding subtask file.
+- Every extracted deliverable `Task-xx` has at least one corresponding subtask file.
 - All subtask files are non-empty and specify disjoint target files.
 - All file paths in subtasks use strict relative Git paths (zero absolute paths or `file:///` URIs).
 
@@ -179,7 +180,28 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
 
 ---
 
-## 7. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+## 7. End-of-Turn Verification & Confidence Reporting (Mandatory Output)
+
+At the completion of all tasks and before concluding the turn, you must emit this structured verification summary in the chat response:
+
+```markdown
+### Task Completion Summary
+✅ #1. Task-01: [Task description] — Completed
+✅ #2. Task-02: [Task description] — Completed
+(If any task failed or was deferred, mark with ❌ or ⏳ and explain why)
+
+### Modified Files Summary
+- [relative path to modified file 1]
+- [relative path to modified file 2]
+
+### Implementation Confidence Score
+- Confidence: [e.g. 98% or 100%]
+- Rationale: [Detailed explanation of verified quality gates, passing linters, contract adherence, and zero regressions]
+```
+
+---
+
+## 8. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
 - [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
 - [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
@@ -190,7 +212,7 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
 
 ---
 
-## 8. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
+## 9. Non-Negotiable Coding Guidelines Checklist (Auto-Reject on Violation)
 
 /goal You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
@@ -205,7 +227,7 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
 
 ---
 
-## 9. Anti-Hallucination & Blast Radius Checklist
+## 10. Anti-Hallucination & Blast Radius Checklist
 
 - [ ] Echo Back the Spec: Verified Acceptance Criteria from the Spec file verbatim.
 - [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
@@ -217,7 +239,7 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
 
 ---
 
-## 10. Final Step Git Commit & Push Mandate (Strict Checklist)
+## 11. Final Step Git Commit & Push Mandate (Strict Checklist)
 
 - [ ] MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, stage everything (`git add -A`), create a clean, descriptive conventional commit (`git commit -m "<type>(<scope>): <summary>"`), and push directly to the remote repository (`git push origin <branch>`). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
 - [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
