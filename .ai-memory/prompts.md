@@ -97,11 +97,13 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `15-cg-execute` | [`15-cg-execute/26-python-boolean-and-conditional-enhancement.md`](../01-prompts/15-cg-execute/26-python-boolean-and-conditional-enhancement.md) | Python Boolean Enhancement, Clamping & Lookup Tables — Coding Guideline (must follow) |
 | `15-cg-execute` | [`15-cg-execute/27-python-constants-and-magic-number-elimination.md`](../01-prompts/15-cg-execute/27-python-constants-and-magic-number-elimination.md) | Python Constants, Magic Number Elimination & Semantic Decomposition — Coding Guideline (must follow) |
 | `15-cg-execute` | [`15-cg-execute/28-python-array-constants-and-dynamic-enums.md`](../01-prompts/15-cg-execute/28-python-array-constants-and-dynamic-enums.md) | Python Array Constants, Dynamic Enums & Config Compilation — Coding Guideline (must follow) |
-| `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix.md`](../01-prompts/16-ci-cd/01-ci-cd-fix.md) | CI/CD Fix Loop with 4-Part RCA & Local Runner — Workflow (must follow) |
-| `16-ci-cd` | [`16-ci-cd/02-cicd-run-ps1.md`](../01-prompts/16-ci-cd/02-cicd-run-ps1.md) | PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow) |
-| `16-ci-cd` | [`16-ci-cd/03-fix-ci-cd-and-run-scripts.md`](../01-prompts/16-ci-cd/03-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
-| `16-ci-cd` | [`16-ci-cd/04-ci-cd-fix-with-release.md`](../01-prompts/16-ci-cd/04-ci-cd-fix-with-release.md) | Release-Triggered CI/CD Fix Loop — Workflow (must follow) |
-| `16-ci-cd` | [`16-ci-cd/05-cicd-pipeline-create.md`](../01-prompts/16-ci-cd/05-cicd-pipeline-create.md) | Pipeline Architecture & Cross-Platform Python Automation — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix-tweak.md`](../01-prompts/16-ci-cd/01-ci-cd-fix-tweak.md) | CI/CD Fix Tweak with Targeted Smart Testing & RCA — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/02-ci-cd-fix-with-release-tweak.md`](../01-prompts/16-ci-cd/02-ci-cd-fix-with-release-tweak.md) | Release-Triggered CI/CD Fix Tweak with Targeted Smart Testing — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/03-ci-cd-fix.md`](../01-prompts/16-ci-cd/03-ci-cd-fix.md) | CI/CD Fix Loop with 4-Part RCA & Local Runner — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/04-cicd-run-ps1.md`](../01-prompts/16-ci-cd/04-cicd-run-ps1.md) | PowerShell CI/CD Pipeline & Runner Creation — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/05-fix-ci-cd-and-run-scripts.md`](../01-prompts/16-ci-cd/05-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/06-ci-cd-fix-with-release.md`](../01-prompts/16-ci-cd/06-ci-cd-fix-with-release.md) | Release-Triggered CI/CD Fix Loop — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/07-cicd-pipeline-create.md`](../01-prompts/16-ci-cd/07-cicd-pipeline-create.md) | Pipeline Architecture & Cross-Platform Python Automation — Workflow (must follow) |
 | `17-release-management` | [`17-release-management/01-major-bump.md`](../01-prompts/17-release-management/01-major-bump.md) | Major Version Bump — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/02-minor-bump.md`](../01-prompts/17-release-management/02-minor-bump.md) | Minor Version Bump — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/03-patch-bump.md`](../01-prompts/17-release-management/03-patch-bump.md) | Patch Version Bump — Release Management (must follow) |
