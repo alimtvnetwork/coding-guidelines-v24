@@ -54,7 +54,16 @@ IGNORE_TERMS = {
     "cmd/user.go", "src/cli/audit.ts", "scripts/deploy.py",
     "02-spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
     "01-cross-language/18-code-mutation-avoidance.md", ".ai-memory/temp/recent-file-changes.lock",
-    ".ai-memory/temp/recent-file-changes.json"
+    ".ai-memory/temp/recent-file-changes.json",
+    "colors-themes/palette.md", "colors-themes/01-palette.md",
+    "prompts/02-plan.md", "prompts/01-prompt.md",
+    "icons-svg/01-logo.svg", "icons-svg/02-logo-dark.svg", "icons-svg/03-logo-white.svg",
+    "icons-svg/04-logo-animated.svg", "icons-svg/logo-animated.svg",
+    "02-projects/01-acme-pay/readme.md",
+    "youtube-thumbnails/01-thumbnail-1280x720.png",
+    "linkedin-banners/02-banner-3168x792.png", "linkedin-banners/02-banner-2256x382.png",
+    "02-spec/02-coding-guidelines/01-cross-language/14-constants-enums.md",
+    "constants/cors.py"
 }
 
 STRIP_CHARS = " `\"'(),:;[]{}"
@@ -73,6 +82,8 @@ def normalize_path(raw: str) -> str:
 def is_repo_path(raw: str) -> bool:
     s = normalize_path(raw)
     if not s or " " in s or "\n" in s or "\r" in s:
+        return False
+    if s.startswith("!["):
         return False
     for pfx in IGNORE_PREFIXES:
         if s.startswith(pfx):
