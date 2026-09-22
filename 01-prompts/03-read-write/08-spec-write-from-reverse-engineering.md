@@ -20,8 +20,18 @@ N = total self-loop steps budget that the agents will perform (default: 80 steps
 
 1. Start of Run (Initial Task Breakdown Gate - Clearly Indented Markdown & Understanding Check):
    Before writing any code, scanning, or executing tasks, extract all pending deliverables as discrete, ordered items (`Task-01`, `Task-02`).
-   - You MUST format each task clearly with proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`).
-   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block. Output this confirmed breakdown directly in chat:
+   - Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [PENDING]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
+   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block (e.g. NEVER `#1. Task-01: ... #2. Task-02: ...`). Every task must be its own clearly separated markdown item.
+   - Line-by-Line Output Format Structure:
+     - Line 1: Header `### 📋 Confirmed Task Breakdown & Requirement Ingestion`
+     - Line 2: Empty blank line
+     - Line 3: Numbered task title `1. **Task-01: [Descriptive Task Title]**`
+     - Line 4: Indented state bullet (3 spaces) `   - **State:** [PENDING]`
+     - Line 5: Indented understanding check (3 spaces) `   - **Understood:** [YES] — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]`
+     - Line 6: Indented actionable scope bullet (3 spaces) `   - **Actionable Scope:** [Precise technical deliverable and implementation scope]`
+     - Line 7: Indented target files bullet (3 spaces) `   - **Target Files / Area:** [relative/path/or/module]`
+     - Line 8: Empty blank line (vertical gap before next task)
+     - Concluding Line: `Proceeding directly to codebase scan and specification generation.`
 
 ```markdown
 ### 📋 Confirmed Task Breakdown & Requirement Ingestion

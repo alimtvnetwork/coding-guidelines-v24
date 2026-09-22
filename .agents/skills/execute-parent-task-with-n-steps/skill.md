@@ -25,7 +25,7 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`. If screenshot URLs or base64 data URIs are provided, decode/save them as image files (`assets/screenshots/<task-slug>-<NN>.png`) and refer back to them via relative paths in specs. Extract actionable bullet-point deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task list directly in chat formatted as `#1. Task-01: <details>` without hard brackets before any file exploration or scanning.
+1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`. If screenshot URLs or base64 data URIs are provided, decode/save them as image files (`assets/screenshots/<task-slug>-<NN>.png`) and refer back to them via relative paths in specs. Extract actionable deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task breakdown directly in chat in cleanly indented markdown with vertical blank lines, task state (`State: [PENDING]`), and understanding indicator bracket (`Understood: [YES — ...]`) before any file exploration, scanning, or spec writing.
 2. [ ] /goal Phase 1B (Step 1 - Master Spec Generation): Write the master architectural plan in `.ai-memory/plans/pending/xx-<slug>.md`, documenting each task in a detailed manner with architectural specifications, constraints, and blast radius.
 3. [ ] /goal Phase 1B (Step 2 - Scan & Discover): Use fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) to inventory files and map call sites without tool truncation limits.
 4. [ ] /goal Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the plan into lean subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md`. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate.
@@ -57,18 +57,28 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 ## 2. Phase 1A: Verbatim Capture, Task Extraction & Chat Output Gate (Step 0)
 
-Before executing any file searches, scans, or code changes, you must execute Phase 1A:
+Before executing any file searches, scans, spec writing, or code changes, you must execute Phase 1A:
 
 1. Verbatim Prompt Capture: Directly write the user prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
 2. Screenshot & Print Screen Base64 Image Ingestion Protocol: If the user request or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
    - Convert that base64 encoding or downloaded image to the file system immediately, saving it as a persistent file under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
    - Never leave raw, massive base64 strings or external ephemeral URLs in the prompt text, specs, or subtasks.
    - Refer back to this saved image file in the master spec, planning document, subtasks, and UI implementation notes strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
-3. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`.
+3. Actionable Deliverables Extraction: Break down whatever user requirements were given (regardless of how they were formatted) into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`.
 4. Mandatory Chat Output Gate (Clearly Indented Markdown & Understanding Check):
    - You MUST output the confirmed deliverables list directly in chat before performing any scans, tool calls, or spec writing.
-   - Respect whatever user requirements were given and format each task clearly with proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`).
-   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block. Every task must be its own clearly separated markdown item.
+   - Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [PENDING]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
+   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block (e.g. NEVER `#1. Task-01: ... #2. Task-02: ...`). Every task must be its own clearly separated markdown item.
+   - Line-by-Line Output Format Structure:
+     - Line 1: Header `### 📋 Confirmed Task Breakdown & Requirement Ingestion`
+     - Line 2: Empty blank line
+     - Line 3: Numbered task title `1. **Task-01: [Descriptive Task Title]**`
+     - Line 4: Indented state bullet (3 spaces) `   - **State:** [PENDING]`
+     - Line 5: Indented understanding check (3 spaces) `   - **Understood:** [YES] — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]`
+     - Line 6: Indented actionable scope bullet (3 spaces) `   - **Actionable Scope:** [Precise technical deliverable and implementation scope]`
+     - Line 7: Indented target files bullet (3 spaces) `   - **Target Files / Area:** [relative/path/or/module]`
+     - Line 8: Empty blank line (vertical gap before next task)
+     - Concluding Line: `Proceeding directly to Phase 1B: Spec & Subtask Generation.`
 
 ```markdown
 ### 📋 Confirmed Task Breakdown & Requirement Ingestion
@@ -88,7 +98,7 @@ Before executing any file searches, scans, or code changes, you must execute Pha
 Proceeding directly to Phase 1B: Spec & Subtask Generation.
 ```
 
-No tool calls, codebase searches, or subagent spawning may proceed until this breakdown is emitted.
+No tool calls, codebase searches, spec writing, or subagent spawning may proceed until this breakdown is emitted.
 
 ---
 
