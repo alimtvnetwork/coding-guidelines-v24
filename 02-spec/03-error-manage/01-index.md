@@ -115,7 +115,8 @@ All errors use the three-tier architecture documented in [02-error-architecture/
 
 ## 💻 Concrete Go Code Samples (Production Architecture)
 
-The following real-world samples from `04-code/golang/` illustrate the required error management patterns across services:
+> Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](../../04-code/golang/examples/database_query.go) and [`04-code/golang/examples/workflow_service.go`](../../04-code/golang/examples/workflow_service.go).
+> Always inspect those source files as the canonical ground truth.
 
 ### 1. Creating and Wrapping Errors (`pkg/appfault`)
 
@@ -131,27 +132,27 @@ import (
 
 // ReadTenantConfig demonstrates wrapping stdlib errors with appfault.Fault.
 func ReadTenantConfig(configPath string) result.Wrap[[]byte] {
-    // 1. Validation error construction
     if configPath == "" {
         fault := appfault.New(errtype.Validation, "configPath cannot be empty").
             WithOp("service.ReadTenantConfig")
+
         return result.WrapFailure[[]byte](fault)
     }
 
-    // 2. Wrapping standard Go os error into *appfault.AppError
     data, err := os.ReadFile(configPath)
+
     if err != nil {
         fault := appfault.WrapFile(errtype.IO, err, configPath, "failed to read tenant configuration file").
             WithOp("service.ReadTenantConfig")
+
         return result.WrapFailure[[]byte](fault)
     }
 
-    // 3. Return monadic success container
     return result.WrapSuccess(data)
 }
 ```
 
-### 2. Database Queries & Zero Error Swallowing (`pkg/appfault` & `pkg/result`)
+### 2. Database Queries Without Overcomplicated Ifs or Error-Type Branching (See `database_query.go`)
 
 ```go
 package repo
@@ -159,7 +160,6 @@ package repo
 import (
     "context"
     "database/sql"
-    "errors"
     "coding-guidelines/common/pkg/appfault"
     "coding-guidelines/common/pkg/errtype"
     "coding-guidelines/common/pkg/result"
@@ -174,24 +174,22 @@ func (r *UserRepo) FindByEmail(ctx context.Context, email string) result.Wrap[Us
     if email == "" {
         fault := appfault.New(errtype.Validation, "email parameter cannot be empty").
             WithOp("UserRepo.FindByEmail")
+
         return result.WrapFailure[User](fault)
     }
 
-    row := r.db.QueryRowContext(ctx, "SELECT id, email FROM users WHERE email = ?", email)
+    row := r.db.QueryRowContext(ctx, "SELECT id, email FROM users WHERE id = ?", email)
     var user User
-    if err := row.Scan(&user.Id, &user.Email); err != nil {
-        // Zero swallowed errors: sql.ErrNoRows must be mapped explicitly
-        if errors.Is(err, sql.ErrNoRows) {
-            fault := appfault.New(errtype.NotFound, "user record not found").
-                WithOp("UserRepo.FindByEmail").
-                WithVar("email", email)
-            return result.WrapFailure[User](fault)
-        }
 
-        // Wrap raw database driver error
+    err := row.Scan(&user.Id, &user.Email)
+
+    if err != nil {
+        // Direct error typing: select the error type reflecting this layer (errtype.Database).
+        // Attach the ID and variables directly. Never branch on error types or nest ifs!
         fault := appfault.Wrap(errtype.Database, err, "database query execution failed").
             WithOp("UserRepo.FindByEmail").
             WithVar("email", email)
+
         return result.WrapFailure[User](fault)
     }
 
@@ -199,7 +197,7 @@ func (r *UserRepo) FindByEmail(ctx context.Context, email string) result.Wrap[Us
 }
 ```
 
-### 3. Propagating Across Boundaries Without Redundant Re-Wrapping
+### 3. Propagating Across Boundaries Without Redundant Re-Wrapping (See `workflow_service.go`)
 
 ```go
 package workflow
@@ -211,13 +209,16 @@ import (
 
 func (w *UserWorkflow) SynchronizeUser(ctx context.Context, email string) result.Wrap[User] {
     userRes := w.repo.FindByEmail(ctx, email)
+
     if userRes.IsFailed() {
         w.logger.LogError(userRes.Fault())
-        // Propagate the existing fault directly without redundant re-wrapping
+
+        // Propagate existing Fault directly without redundant re-wrapping
         return result.WrapFailureFromWrap[User](userRes)
     }
 
     user := userRes.Value()
+
     return result.WrapSuccess(user)
 }
 ```

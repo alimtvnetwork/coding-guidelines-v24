@@ -109,47 +109,56 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 ---
 
-## 3. Production Go Code Samples: Before vs After
+## 3. Production Go Code Samples (Refer to `04-code/golang/examples/`)
+
+> Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](04-code/golang/examples/database_query.go) and [`04-code/golang/examples/workflow_service.go`](04-code/golang/examples/workflow_service.go).
+> Always inspect those source files as the canonical ground truth.
 
 ### Sample 1: Standard Library File & JSON Handling
 
 ```go
-// ❌ FORBIDDEN: Bare error returns, uninformative errors.New, swallowed errors
+// ❌ FORBIDDEN: Bare error returns, uninformative errors.New, swallowed errors, missing blank lines
 func LoadConfig(path string) (*Config, error) {
     data, err := os.ReadFile(path)
     if err != nil {
         _ = err // ❌ SWALLOWED ERROR
-        return nil, err // ❌ BARE ERROR RETURN
+        return nil, err // ❌ Missing blank line before return, bare error return
     }
 
     var cfg Config
-    if err := json.Unmarshal(data, &cfg); err != nil {
+    if err := json.Unmarshal(data, &cfg); err != nil { // ❌ Semicolon in if
         return nil, errors.New("invalid json") // ❌ BARE ERROR WITHOUT CAUSE
     }
 
     return &cfg, nil
 }
 
-// ✅ REQUIRED: Strict appfault wrapping with errtype and context enrichment
+// ✅ REQUIRED: Strict appfault wrapping with errtype, mandatory blank lines, flat ifs
 func LoadConfig(path string) result.Wrap[*Config] {
     if path == "" {
         fault := appfault.New(errtype.Validation, "config path cannot be empty").
             WithOp("config.LoadConfig")
+
         return result.WrapFailure[*Config](fault)
     }
 
     data, err := os.ReadFile(path)
+
     if err != nil {
         fault := appfault.WrapFile(errtype.IO, err, path, "failed to read configuration file").
             WithOp("config.LoadConfig")
+
         return result.WrapFailure[*Config](fault)
     }
 
     var cfg Config
-    if err := json.Unmarshal(data, &cfg); err != nil {
+    err = json.Unmarshal(data, &cfg)
+
+    if err != nil {
         fault := appfault.Wrap(errtype.Validation, err, "failed to parse configuration json").
             WithOp("config.LoadConfig").
             WithVar("path", path)
+
         return result.WrapFailure[*Config](fault)
     }
 
@@ -157,66 +166,67 @@ func LoadConfig(path string) result.Wrap[*Config] {
 }
 ```
 
-### Sample 2: Database Query with Result Monad
+### Sample 2: Database Query with Result Monad (See `04-code/golang/examples/database_query.go`)
 
 ```go
-// ❌ FORBIDDEN: Bare tuple return, swallowed row errors, missing caller context
+// ❌ FORBIDDEN: Combined if with semicolon, nested if, error-type branching, missing blank lines
 func (r *UserRepository) FindUser(ctx context.Context, id int64) (*User, error) {
-    if id <= 0 {
-        return nil, fmt.Errorf("invalid id: %d", id) // ❌ BARE ERROR, NO STACK
-    }
-
     row := r.db.QueryRowContext(ctx, "SELECT name, email FROM users WHERE id = ?", id)
     var user User
-    if err := row.Scan(&user.Name, &user.Email); err != nil {
-        if err == sql.ErrNoRows {
-            return nil, nil // ❌ SWALLOWED ERROR: Deceptive nil return for not-found!
+
+    if err := row.Scan(&user.Name, &user.Email); err != nil { // ❌ Combined semicolon if
+        if errors.Is(err, sql.ErrNoRows) { // ❌ FORBIDDEN: Nested if and error-type branching
+            return nil, nil // ❌ Deceptive swallowed error
         }
-        return nil, err // ❌ BARE ERROR RETURN
+        return nil, err // ❌ Missing blank line before return
     }
 
-    return &user, nil
+    user.Id = id
+    return &user, nil // ❌ Missing blank line before return
 }
 
-// ✅ REQUIRED: Deterministic errtype variations, monadic result container, zero swallowing
+// ✅ REQUIRED: Flat if guard, direct error typing without branching, blank lines before return
 func (r *UserRepository) FindUser(ctx context.Context, id int64) result.Wrap[User] {
     if id <= 0 {
         fault := appfault.New(errtype.Validation, "user id must be positive").
             WithOp("UserRepository.FindUser").
             WithVar("id", id)
+
         return result.WrapFailure[User](fault)
     }
 
     row := r.db.QueryRowContext(ctx, "SELECT name, email FROM users WHERE id = ?", id)
     var user User
-    if err := row.Scan(&user.Name, &user.Email); err != nil {
-        if errors.Is(err, sql.ErrNoRows) {
-            fault := appfault.New(errtype.NotFound, "user record not found").
-                WithOp("UserRepository.FindUser").
-                WithVar("id", id)
-            return result.WrapFailure[User](fault)
-        }
 
+    err := row.Scan(&user.Name, &user.Email)
+
+    if err != nil {
+        // Direct error typing: select the error type reflecting this layer (errtype.Database)
+        // Attach the ID and variables directly. Never branch on error types or nest ifs!
         fault := appfault.Wrap(errtype.Database, err, "failed to scan user row from database").
             WithOp("UserRepository.FindUser").
             WithVar("id", id)
+
         return result.WrapFailure[User](fault)
     }
 
     user.Id = id
+
     return result.WrapSuccess(user)
 }
 ```
 
-### Sample 3: Propagating Errors Across Boundaries (Zero Re-Wrapping)
+### Sample 3: Propagating Errors Across Boundaries (See `04-code/golang/examples/workflow_service.go`)
 
 ```go
 // ✅ REQUIRED: Propagate downstream Fault directly without redundant nested wrapping
 func (s *UserService) ActivateUser(ctx context.Context, userId int64) result.Wrap[User] {
     userRes := s.repo.FindUser(ctx, userId)
+
     if userRes.IsFailed() {
         s.log.LogError(userRes.Fault())
-        // Propagate existing Fault directly
+
+        // Propagate existing Fault directly with zero re-wrapping
         return result.WrapFailureFromWrap[User](userRes)
     }
 
@@ -224,8 +234,10 @@ func (s *UserService) ActivateUser(ctx context.Context, userId int64) result.Wra
     user.IsActive = true
 
     updateRes := s.repo.UpdateUser(ctx, user)
+
     if updateRes.IsFailed() {
         s.log.LogError(updateRes.Fault())
+
         return result.WrapFailureFromWrap[User](updateRes)
     }
 

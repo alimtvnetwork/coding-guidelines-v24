@@ -6,58 +6,63 @@
 
 ---
 
-## 9. Usage Examples
+## 9. Usage Examples (Canonical Reference: `04-code/golang/examples/`)
 
-### Service Method Returning Result[T]
+> Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](../../../../../04-code/golang/examples/database_query.go) and [`04-code/golang/examples/workflow_service.go`](../../../../../04-code/golang/examples/workflow_service.go).
+
+### Service Method Returning `result.Wrap[T]`
 
 ```go
-func (s *PluginService) GetById(context stdctx.Context, id int64) apperror.Result[Plugin] {
-    plugin, err := s.repo.FindById(context, id)
+func (s *PluginService) GetById(ctx context.Context, id int64) result.Wrap[Plugin] {
+    if id <= 0 {
+        fault := appfault.New(errtype.Validation, "plugin id must be positive").
+            WithOp("PluginService.GetById").
+            WithVar("id", id)
+
+        return result.WrapFailure[Plugin](fault)
+    }
+
+    plugin, err := s.repo.FindById(ctx, id)
 
     if err != nil {
-        return apperror.FailWrap[Plugin](err, apperror.ErrDatabaseQuery, "get plugin by id").
-            WithValue("PluginId", fmt.Sprintf("%d", id))
+        fault := appfault.Wrap(errtype.Database, err, "failed to get plugin by id").
+            WithOp("PluginService.GetById").
+            WithVar("id", id)
+
+        return result.WrapFailure[Plugin](fault)
     }
 
-    if plugin == nil {
-        return apperror.FailNew[Plugin](apperror.ErrNotFound, "plugin not found")
-    }
-
-    return apperror.Ok(*plugin)
+    return result.WrapSuccess(*plugin)
 }
 ```
 
-### Handler Consuming Result[T]
+### Handler Consuming `result.Wrap[T]`
 
 ```go
 func (h *Handler) GetPlugin(w http.ResponseWriter, r *http.Request) {
-    result := h.plugins.GetById(r.Context(), pluginId)
+    res := h.plugins.GetById(r.Context(), pluginId)
 
-    if result.HasError() {
-        writeError(w, result.AppError())
+    if res.IsFailed() {
+        writeErrorEnvelope(w, res.Fault())
 
         return
     }
 
-    writeJson(w, result.Value())
+    writeJsonEnvelope(w, res.Value())
 }
 ```
 
-### Error with Values
+### Direct Error Typing (No Type Branching or Nested Ifs)
 
 ```go
-return apperror.Wrap(err, apperror.ErrFSRead, "failed to read config").
-    WithValue("path", configPath).
-    WithValue("format", "yaml")
+// Direct error typing: select the error type reflecting this layer (errtype.IO).
+// Never branch on error types or nest ifs!
+fault := appfault.WrapFile(errtype.IO, err, relativePath, "failed to read config").
+    WithOp("config.Load").
+    WithVar("format", "yaml")
+
+return result.WrapFailure[Config](fault)
 ```
-
-### Using `apperrtype` Enums (Preferred)
-
-Three escalating levels of type safety — Level 3 is the target for all new code:
-
-```go
-// ❌ Level 1 — raw strings (flagged by CODE-RED-008 lint rule)
-apperror.New("E2010", "site not found")
 
 // ✅ Level 2 — enum code, manual message
 apperror.New(apperrtype.SiteNotFound.Code(), "site not found")
