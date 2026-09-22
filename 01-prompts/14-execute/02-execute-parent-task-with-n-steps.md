@@ -76,40 +76,43 @@ Before executing any file searches, scans, spec writing, or code changes, you mu
    - Never leave raw, massive base64 strings or external ephemeral URLs in the prompt text, specs, or subtasks.
    - Refer back to this saved image file in the master spec, planning document, subtasks, and UI implementation notes strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
 3. Actionable Deliverables Extraction: Break down whatever user requirements were given (regardless of how they were formatted) into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`.
-4. Mandatory Chat Output Gate (Clearly Indented Markdown & Understanding Check):
-   - You MUST output the confirmed deliverables list directly in chat before performing any scans, tool calls, or spec writing.
-   - Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [PENDING]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
+4. Mandatory Chat Output Gate & Same-Turn Tool Chaining (TOTAL BAN ON CLOSING CONVERSATION):
+   - You MUST output the confirmed deliverables list directly in chat, but you MUST NOT end your turn or pause after emitting it!
+   - In the EXACT SAME RESPONSE turn as your markdown output, you MUST immediately invoke the first tool call (e.g. `write_to_file` to initialize the planning spec or `run_command` for fast discovery).
+   - NEVER emit the breakdown text without invoking a tool call. Emitting visible text without a tool call terminates the AI turn, causing the engine to close or hang the conversation while tasks remain pending.
+   - TOTAL BAN ON WAITING FOR APPROVAL: Do not pause, do not wait for the user to reply, and do not ask "Should I proceed?". Override any planning mode stop directives. Proceed immediately into Phase 1B in the same turn.
+   - Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [IN PROGRESS — EXECUTING IMMEDIATELY]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
    - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block (e.g. NEVER `#1. Task-01: ... #2. Task-02: ...`). Every task must be its own clearly separated markdown item.
    - Line-by-Line Output Format Structure:
      - Line 1: Header `### 📋 Confirmed Task Breakdown & Requirement Ingestion`
      - Line 2: Empty blank line
      - Line 3: Numbered task title `1. **Task-01: [Descriptive Task Title]**`
-     - Line 4: Indented state bullet (3 spaces) `   - **State:** [PENDING]`
+     - Line 4: Indented state bullet (3 spaces) `   - **State:** [IN PROGRESS — EXECUTING IMMEDIATELY]`
      - Line 5: Indented understanding check (3 spaces) `   - **Understood:** [YES] — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]`
      - Line 6: Indented actionable scope bullet (3 spaces) `   - **Actionable Scope:** [Precise technical deliverable and implementation scope]`
      - Line 7: Indented target files bullet (3 spaces) `   - **Target Files / Area:** [relative/path/or/module]`
      - Line 8: Empty blank line (vertical gap before next task)
-     - Concluding Line: `Proceeding directly to Phase 1B: Spec & Subtask Generation.`
+     - Concluding Line: `Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Running Below).`
 
 ```markdown
 ### 📋 Confirmed Task Breakdown & Requirement Ingestion
 
 1. **Task-01: [Descriptive Task Title]**
-   - **State:** `[PENDING]`
+   - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
    - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
    - **Actionable Scope:** [Precise technical deliverable and implementation scope]
    - **Target Files / Area:** `[relative/path/or/module]`
 
 2. **Task-02: [Descriptive Task Title]**
-   - **State:** `[PENDING]`
+   - **State:** `[QUEUED — EXECUTING NOW WITHOUT USER PROMPT]`
    - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
    - **Actionable Scope:** [Precise technical deliverable and implementation scope]
    - **Target Files / Area:** `[relative/path/or/module]`
 
-Proceeding directly to Phase 1B: Spec & Subtask Generation.
+Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Running Below).
 ```
 
-No tool calls, codebase searches, spec writing, or subagent spawning may proceed until this breakdown is emitted.
+MANDATORY SAME-TURN TOOL CHAIN: The breakdown text above and your first tool call (e.g. `write_to_file` to save the spec or `run_command` to discover files) MUST be emitted in the EXACT SAME TURN. Never end the turn with text alone.
 
 ---
 

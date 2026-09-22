@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.44.0] - 2026-09-22
+
+### Added
+- fix execute prompt premature turn closure and mandate same-turn tool chaining
+
+---
+
 ## [v6.43.0] - 2026-09-22
 
 ### Added

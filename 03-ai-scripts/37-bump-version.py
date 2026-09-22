@@ -255,9 +255,9 @@ def run_repo_sync_if_available(dry_run=False):
                 print("[DRY RUN] Would run: npm run sync")
                 return
 
-            print("[*] Running npm run sync to regenerate spec trees and manifests...")
             is_win = sys.platform == "win32"
-            run_cmd(["npm", "run", "sync"], check=False)
+            npm_bin = "npm.cmd" if is_win else "npm"
+            run_cmd([npm_bin, "run", "sync"], check=False)
             print("[*] Completed npm run sync.")
     except Exception as e:
         print(f"[!] Warning running npm run sync: {e}")
