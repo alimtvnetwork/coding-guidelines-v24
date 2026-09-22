@@ -111,6 +111,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `17-release-management` | [`17-release-management/04-release.md`](../01-prompts/17-release-management/04-release.md) | Release Deployment & Version Bump — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/05-version-bump-docs.md`](../01-prompts/17-release-management/05-version-bump-docs.md) | Version Bump Documentation Update — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/06-release-orchestrator.md`](../01-prompts/17-release-management/06-release-orchestrator.md) | Automated Release Orchestrator & Branch Lifecycle — Release Management (must follow) |
+| `17-release-management` | [`17-release-management/07-release-now-without-test.md`](../01-prompts/17-release-management/07-release-now-without-test.md) | Release Now Without Test — Fast Release Orchestrator & Branch Lifecycle (must follow) |
 | `18-insults` | [`18-insults/01-raw-insults.md`](../01-prompts/18-insults/01-raw-insults.md) | Uncompromising Quality & Zero-Tolerance Anti-Carelessness — Core Discipline (must follow) |
 | `18-insults` | [`18-insults/02-consolidated-insults-v2.md`](../01-prompts/18-insults/02-consolidated-insults-v2.md) | Consolidated Discipline & Rigorous Code Quality Protocol — Core Discipline (must follow) |
 | `19-old-execute-prompts` | [`19-old-execute-prompts/01-execute-robust-loop.md`](../01-prompts/19-old-execute-prompts/01-execute-robust-loop.md) | Resilient Multi-Agent Loop Execution — Workflow (must follow) |
