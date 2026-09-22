@@ -134,12 +134,26 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 ## Execution Reporting (Mandatory Output Format)
 
-1. Start of Run (Initial Task Breakdown Gate): Before writing any code or executing tasks, extract all pending deliverables as discrete, ordered items (`#1. Task-01:`, `#2. Task-02:`) without hard brackets, and output this confirmed task breakdown directly in chat:
+1. Start of Run (Initial Task Breakdown Gate - Clearly Indented Markdown & Understanding Check):
+   Before writing any code or executing tasks, extract all pending deliverables as discrete, ordered items (`Task-01`, `Task-02`).
+   - You MUST format each task clearly with proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`).
+   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block. Output this confirmed breakdown directly in chat:
 
 ```markdown
-### Confirmed Task Breakdown
-#1. Task-01: [Actionable task description]
-#2. Task-02: [Actionable task description]
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+1. **Task-01: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+2. **Task-02: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
 Proceeding directly to execution.
 ```
 
@@ -234,14 +248,24 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
 
 ### Phase 1: Planning Mode & Subtask Generation FIRST (Steps 1 .. N/2)
 
-1. Verbatim Prompt Capture & Task Extraction (First Action): Directly write the user's prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section. Extract the specific task list from this prompt as actionable items (`Task-01`, `Task-02`) under `## Extracted Actionable Task List`. The AI MUST output this extracted checklist directly in chat confirming:
+1. Verbatim Prompt Capture & Task Extraction (First Action): Directly write the user's prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section. Extract the specific task list from this prompt as actionable items (`Task-01`, `Task-02`) under `## Extracted Actionable Task List`. The AI MUST output this extracted checklist directly in chat before taking further actions, using proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`):
    ```markdown
-   ### Confirmed Task Breakdown
-   #1. Task-01: [Actionable task description]
-   #2. Task-02: [Actionable task description]
+   ### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+   1. **Task-01: [Descriptive Task Title]**
+      - **State:** `[PENDING]`
+      - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+      - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+      - **Target Files / Area:** `[relative/path/or/module]`
+
+   2. **Task-02: [Descriptive Task Title]**
+      - **State:** `[PENDING]`
+      - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+      - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+      - **Target Files / Area:** `[relative/path/or/module]`
+
    Proceeding directly to execution.
    ```
-   before taking further actions.
 2. Scan & Discover: Use the `invoke_subagent` tool to spawn exactly 2 planning subagents. Their role is to deeply scan the codebase for target changes.
 3. Master Spec Generation: Save the master architectural plan into `.ai-memory/plans/pending/xx-<slug>.md`. Write down 3–5 custom rules or constraints unique to this task inside the spec file.
 4. Lean Subtask Decomposition: Break down the master plan into granular, single-responsibility subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`. Do not write common repository boilerplate, universal coding rules, banned operations, or generic guidelines inside subtask files.

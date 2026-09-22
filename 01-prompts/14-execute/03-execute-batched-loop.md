@@ -129,14 +129,28 @@ Every time you return a response or complete a loop iteration, explicitly output
 
 ## Execution Reporting (Mandatory Output Format)
 
-1. Start of Run (Initial Task Breakdown Gate): Before writing any code or executing tasks, extract all pending deliverables as discrete, ordered items (Task-01, Task-02) without hard brackets, and output this confirmed task breakdown directly in chat:
+1. Start of Run (Initial Task Breakdown Gate - Clearly Indented Markdown & Understanding Check):
+   Before writing any code or executing tasks, extract all pending deliverables as discrete, ordered items (`Task-01`, `Task-02`).
+   - You MUST format each task clearly with proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`).
+   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block. Output this confirmed breakdown directly in chat:
 
-`markdown
-### Confirmed Task Breakdown
-#1. Task-01: [Actionable task description]
-#2. Task-02: [Actionable task description]
+```markdown
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+1. **Task-01: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+2. **Task-02: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
 Proceeding directly to execution.
-`
+```
 
 2. End-of-Turn Verification & Confidence Reporting: When all tasks are completed (or if the run concludes), you must output:
 

@@ -10,10 +10,17 @@
 
 > Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](../../../../../04-code/golang/examples/database_query.go) and [`04-code/golang/examples/workflow_service.go`](../../../../../04-code/golang/examples/workflow_service.go).
 
-### Service Method Returning `result.Wrap[T]`
+### Service Method Returning Concrete Result Type (`types.go`)
 
 ```go
-func (s *PluginService) GetById(ctx context.Context, id int64) result.Wrap[Plugin] {
+// -----------------------------------------------------------------------------
+// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
+// -----------------------------------------------------------------------------
+// In types.go:
+// type PluginWrapResult = result.Wrap[Plugin]
+// -----------------------------------------------------------------------------
+
+func (s *PluginService) GetById(ctx context.Context, id int64) PluginWrapResult {
     if id <= 0 {
         fault := appfault.New(errtype.Validation, "plugin id must be positive").
             WithOp("PluginService.GetById").

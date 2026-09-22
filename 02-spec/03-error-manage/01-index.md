@@ -130,8 +130,15 @@ import (
     "coding-guidelines/common/pkg/result"
 )
 
-// ReadTenantConfig demonstrates wrapping stdlib errors with appfault.Fault.
-func ReadTenantConfig(configPath string) result.Wrap[[]byte] {
+// -----------------------------------------------------------------------------
+// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
+// -----------------------------------------------------------------------------
+// In types.go:
+// type ConfigBytesResult = result.Wrap[[]byte]
+// -----------------------------------------------------------------------------
+
+// ReadTenantConfig demonstrates wrapping stdlib errors with appfault.Fault and concrete return type.
+func ReadTenantConfig(configPath string) ConfigBytesResult {
     if configPath == "" {
         fault := appfault.New(errtype.Validation, "configPath cannot be empty").
             WithOp("service.ReadTenantConfig")
@@ -165,12 +172,20 @@ import (
     "coding-guidelines/common/pkg/result"
 )
 
-type User struct {
-    Id    int64
-    Email string
-}
+// -----------------------------------------------------------------------------
+// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
+// -----------------------------------------------------------------------------
+// In types.go:
+// type (
+//     User struct {
+//         Id    int64  `json:"id"`
+//         Email string `json:"email"`
+//     }
+//     UserResult = result.Wrap[User]
+// )
+// -----------------------------------------------------------------------------
 
-func (r *UserRepo) FindByEmail(ctx context.Context, email string) result.Wrap[User] {
+func (r *UserRepo) FindByEmail(ctx context.Context, email string) UserResult {
     if email == "" {
         fault := appfault.New(errtype.Validation, "email parameter cannot be empty").
             WithOp("UserRepo.FindByEmail")
@@ -207,7 +222,8 @@ import (
     "coding-guidelines/common/pkg/result"
 )
 
-func (w *UserWorkflow) SynchronizeUser(ctx context.Context, email string) result.Wrap[User] {
+// SynchronizeUser propagates existing downstream Fault directly using concrete UserResult from types.go.
+func (w *UserWorkflow) SynchronizeUser(ctx context.Context, email string) UserResult {
     userRes := w.repo.FindByEmail(ctx, email)
 
     if userRes.IsFailed() {

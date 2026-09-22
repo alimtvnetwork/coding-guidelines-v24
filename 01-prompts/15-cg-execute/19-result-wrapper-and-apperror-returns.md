@@ -132,32 +132,55 @@ Under Prompt Architect coding guidelines, all multi-value returns are refactored
 ### Modern Refactored Store Implementation
 
 ```go
-// ✅ MODERN PATTERN: Single ResultMap return envelope with structured AppError
-func (s *SQLiteStore) queryAllMacroSteps(db *sql.DB) appfault.ResultMap[string, []MacroStep] {
+// -----------------------------------------------------------------------------
+// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
+// -----------------------------------------------------------------------------
+// In types.go:
+// type (
+//     // MacroStep defines an individual recorded UI action.
+//     MacroStep struct {
+//         Name    string `json:"name"`
+//         Action  string `json:"action"`
+//         Payload string `json:"payload"`
+//     }
+//
+//     // MacroStepsMapResult is the canonical single reusable result envelope for macro step maps.
+//     // RULE: Define concrete type alias in types.go rather than repeating raw generic instantiations.
+//     MacroStepsMapResult = appfault.ResultMap[string, []MacroStep]
+// )
+// -----------------------------------------------------------------------------
+
+// ✅ MODERN PATTERN: Concrete MacroStepsMapResult return envelope with structured AppError and blank line gaps
+func (s *SQLiteStore) queryAllMacroSteps(db *sql.DB) MacroStepsMapResult {
     rows, err := db.Query("SELECT macro_id, step_name, action, payload FROM macro_steps ORDER BY macro_id, step_order")
+
     if err != nil {
-        return appfault.FailMap[string, []MacroStep](
-            appfault.New(appfault.ErrDatabaseQuery).
-                WithCause(err).
-                WithMessage("failed to query macro steps from database"),
-        )
+        fault := appfault.New(appfault.ErrDatabaseQuery).
+            WithCause(err).
+            WithMessage("failed to query macro steps from database")
+
+        return appfault.FailMap[string, []MacroStep](fault)
     }
+
     defer rows.Close()
 
     return scanMacroStepsMap(rows)
 }
 
-// ✅ MODERN PATTERN: Scanner returning strongly-typed ResultMap
-func scanMacroStepsMap(rows *sql.Rows) appfault.ResultMap[string, []MacroStep] {
+// ✅ MODERN PATTERN: Scanner returning strongly-typed concrete MacroStepsMapResult
+func scanMacroStepsMap(rows *sql.Rows) MacroStepsMapResult {
     stepsMap := make(map[string][]MacroStep)
+
     for rows.Next() {
         var macroId, name, action, payload string
-        if err := rows.Scan(&macroId, &name, &action, &payload); err != nil {
-            return appfault.FailMap[string, []MacroStep](
-                appfault.New(appfault.ErrDatabaseScan).
-                    WithCause(err).
-                    WithMessage("failed to scan macro step row"),
-            )
+        err := rows.Scan(&macroId, &name, &action, &payload)
+
+        if err != nil {
+            fault := appfault.New(appfault.ErrDatabaseScan).
+                WithCause(err).
+                WithMessage("failed to scan macro step row")
+
+            return appfault.FailMap[string, []MacroStep](fault)
         }
 
         stepsMap[macroId] = append(stepsMap[macroId], MacroStep{
@@ -167,12 +190,14 @@ func scanMacroStepsMap(rows *sql.Rows) appfault.ResultMap[string, []MacroStep] {
         })
     }
 
-    if err := rows.Err(); err != nil {
-        return appfault.FailMap[string, []MacroStep](
-            appfault.New(appfault.ErrDatabaseIteration).
-                WithCause(err).
-                WithMessage("row iteration failed for macro steps"),
-        )
+    err := rows.Err()
+
+    if err != nil {
+        fault := appfault.New(appfault.ErrDatabaseIteration).
+            WithCause(err).
+            WithMessage("row iteration failed for macro steps")
+
+        return appfault.FailMap[string, []MacroStep](fault)
     }
 
     return appfault.OkMap(stepsMap)
@@ -251,6 +276,7 @@ func parseImportSQLite(filePath string) ScheduleExportBundleResult {
 	}
 
 	bundles, err := readSQLiteBundles(filePath)
+
 	if err != nil {
 		return result.FailSlice[ScheduleExportBundle](
 			appfault.Wrap(appfault.ErrDatabaseQuery, err, "parse imported sqlite").

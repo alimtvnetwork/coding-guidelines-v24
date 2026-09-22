@@ -31,7 +31,7 @@ Before executing the tasks below, check if this prompt is already installed as a
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract actionable bullet-point deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task list directly in chat formatted as `#1. Task-01: <details>` without hard brackets before any file exploration or scanning.
+1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`, extract actionable bullet-point deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task list directly in chat formatted clearly with markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`) before any file exploration or scanning.
 2. [ ] /goal Phase 1B (Step 1 - Master Spec Generation): Write the master architectural plan in `.ai-memory/plans/pending/xx-<slug>.md`, documenting an exhaustive Violation Ledger tracking every bare error return, swallowed error, and missing fault wrapper.
 3. [ ] /goal Phase 1B (Step 2 - Scan & Discover): Use fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py` with `--limit`) to inventory all architectural violations and anti-patterns without truncation.
 4. [ ] /goal Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the master plan into granular, lean subtasks in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md`. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate.
@@ -106,17 +106,39 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
    - Use relative repository paths only (TOTAL BAN on absolute paths or `file:///` URIs).
 6. **Zero Redundant Re-Wrapping:**
    - If a downstream function already returns `*appfault.AppError` or `result.Wrap[T]`, propagate the existing fault directly using `result.WrapFailureFromWrap[T](downstreamRes)` rather than wrapping it again.
+7. **Mandatory Concrete Types in `types.go` (Total Ban on Leaking Raw Generics Across Signatures):**
+   - **No Leaked Raw Generics:** NEVER leak raw generic Result wrappers (`result.Wrap[*Config]`, `result.Wrap[User]`, `result.ResultSlice[T]`) across function signatures, service boundaries, or public packages.
+   - **Convert Reused Types to Concrete Named Types:** Rather than scattering raw generics everywhere, if a result type is used or reused across functions or layers, define a single reusable concrete type alias in `types.go` (e.g. `type ConfigResult = result.Wrap[*Config]`, `type UserResult = result.Wrap[User]`) for Golang (and equivalent leaf type definitions for other languages, e.g. `export type UserResult = Result<User>;`).
+   - **Explanatory Code Comments:** Code examples and implementation files MUST include comments showing how the concrete type is declared in `types.go` and follows through into the function signatures.
 
 ---
 
 ## 3. Production Go Code Samples (Refer to `04-code/golang/examples/`)
 
-> Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](04-code/golang/examples/database_query.go) and [`04-code/golang/examples/workflow_service.go`](04-code/golang/examples/workflow_service.go).
+> Real-world implementations are maintained in [`04-code/golang/examples/database_query.go`](04-code/golang/examples/database_query.go), [`04-code/golang/examples/workflow_service.go`](04-code/golang/examples/workflow_service.go), and [`04-code/golang/examples/types.go`](04-code/golang/examples/types.go).
 > Always inspect those source files as the canonical ground truth.
 
-### Sample 1: Standard Library File & JSON Handling
+### Sample 1: Standard Library File & JSON Handling (Concrete `ConfigResult` in `types.go`)
 
 ```go
+// -----------------------------------------------------------------------------
+// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
+// -----------------------------------------------------------------------------
+// In types.go:
+// type (
+//     // Config contains application configuration fields.
+//     Config struct {
+//         Port int    `json:"port"`
+//         Host string `json:"host"`
+//     }
+//
+//     // ConfigResult is the single reusable concrete result envelope for *Config.
+//     // RULE: Convert raw generic result.Wrap[*Config] to an explicit concrete type
+//     // in types.go so all signatures and callers share the exact same definition!
+//     ConfigResult = result.Wrap[*Config]
+// )
+// -----------------------------------------------------------------------------
+
 // ❌ FORBIDDEN: Bare error returns, uninformative errors.New, swallowed errors, missing blank lines
 func LoadConfig(path string) (*Config, error) {
     data, err := os.ReadFile(path)
@@ -133,8 +155,8 @@ func LoadConfig(path string) (*Config, error) {
     return &cfg, nil
 }
 
-// ✅ REQUIRED: Strict appfault wrapping with errtype, mandatory blank lines, flat ifs
-func LoadConfig(path string) result.Wrap[*Config] {
+// ✅ REQUIRED: Strict appfault wrapping with errtype, concrete ConfigResult from types.go, mandatory blank lines, flat ifs
+func LoadConfig(path string) ConfigResult {
     if path == "" {
         fault := appfault.New(errtype.Validation, "config path cannot be empty").
             WithOp("config.LoadConfig")
@@ -166,9 +188,28 @@ func LoadConfig(path string) result.Wrap[*Config] {
 }
 ```
 
-### Sample 2: Database Query with Result Monad (See `04-code/golang/examples/database_query.go`)
+### Sample 2: Database Query with Result Monad (Concrete `UserResult` in `types.go`)
 
 ```go
+// -----------------------------------------------------------------------------
+// Step 1: Declare Concrete Types in `types.go` (Mandatory Rule)
+// -----------------------------------------------------------------------------
+// In types.go:
+// type (
+//     // User represents the persistent user entity model.
+//     User struct {
+//         Id    int64  `json:"id"`
+//         Name  string `json:"name"`
+//         Email string `json:"email"`
+//     }
+//
+//     // UserResult is the canonical single reusable result envelope for User.
+//     // RULE: Convert raw generic result.Wrap[User] to a concrete named type in types.go.
+//     // Never leak raw generic parameters across package boundaries and service signatures.
+//     UserResult = result.Wrap[User]
+// )
+// -----------------------------------------------------------------------------
+
 // ❌ FORBIDDEN: Combined if with semicolon, nested if, error-type branching, missing blank lines
 func (r *UserRepository) FindUser(ctx context.Context, id int64) (*User, error) {
     row := r.db.QueryRowContext(ctx, "SELECT name, email FROM users WHERE id = ?", id)
@@ -185,8 +226,8 @@ func (r *UserRepository) FindUser(ctx context.Context, id int64) (*User, error) 
     return &user, nil // ❌ Missing blank line before return
 }
 
-// ✅ REQUIRED: Flat if guard, direct error typing without branching, blank lines before return
-func (r *UserRepository) FindUser(ctx context.Context, id int64) result.Wrap[User] {
+// ✅ REQUIRED: Flat if guard, direct error typing without branching, concrete UserResult from types.go, blank lines before return
+func (r *UserRepository) FindUser(ctx context.Context, id int64) UserResult {
     if id <= 0 {
         fault := appfault.New(errtype.Validation, "user id must be positive").
             WithOp("UserRepository.FindUser").
@@ -216,11 +257,11 @@ func (r *UserRepository) FindUser(ctx context.Context, id int64) result.Wrap[Use
 }
 ```
 
-### Sample 3: Propagating Errors Across Boundaries (See `04-code/golang/examples/workflow_service.go`)
+### Sample 3: Propagating Errors Across Boundaries (Concrete `UserResult` Across Services)
 
 ```go
-// ✅ REQUIRED: Propagate downstream Fault directly without redundant nested wrapping
-func (s *UserService) ActivateUser(ctx context.Context, userId int64) result.Wrap[User] {
+// ✅ REQUIRED: Propagate downstream Fault directly without redundant nested wrapping, using concrete UserResult
+func (s *UserService) ActivateUser(ctx context.Context, userId int64) UserResult {
     userRes := s.repo.FindUser(ctx, userId)
 
     if userRes.IsFailed() {

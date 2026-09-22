@@ -9,12 +9,26 @@ This skill governs the creation, organization, and automated validation of archi
 
 ## Pre-Planning Step 0: Task Extraction & Chat Confirmation Gate (Mandatory First Action)
 
-When a large prompt or complex set of requirements is given, the AI cannot understand everything at once. Therefore, before doing any deep planning, codebase searches, or spec writing, the AI MUST first break down the requirements into smaller tasks and a discrete list of ordered items (`#1. Task-01:`, `#2. Task-02:`) without hard brackets, and output this confirmed task breakdown directly in chat:
+When a large prompt or complex set of requirements is given, the AI cannot understand everything at once. Therefore, before doing any deep planning, codebase searches, or spec writing, the AI MUST first break down the requirements into discrete, actionable items (`Task-01`, `Task-02`).
+- You MUST format each task clearly with proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`).
+- Respect whatever requirements the user has given, display them cleanly and properly in chat, and ONLY THEN proceed to write the detailed architectural specification.
+- TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block. Output this confirmed breakdown directly in chat:
 
 ```markdown
-### Confirmed Task Breakdown
-#1. Task-01: [Actionable deliverable description]
-#2. Task-02: [Actionable deliverable description]
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+1. **Task-01: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+2. **Task-02: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
 Proceeding directly to detailed specification and subtask planning.
 ```
 

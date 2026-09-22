@@ -127,6 +127,7 @@ func parseImportSQLite(filePath string) ScheduleExportBundleResult {
 	}
 
 	bundles, err := readSQLiteBundles(filePath)
+
 	if err != nil {
 		return result.FailSlice[ScheduleExportBundle](
 			appfault.Wrap(appfault.ErrDatabaseQuery, err, "parse imported sqlite").

@@ -81,6 +81,9 @@ import (
     "gitmap/model"
 )
 
+// -----------------------------------------------------------------------------
+// In types.go:
+// -----------------------------------------------------------------------------
 // TrackResultParams encapsulates all inputs required for tracking a clone/pull result.
 type TrackResultParams struct {
     Progress   *Progress

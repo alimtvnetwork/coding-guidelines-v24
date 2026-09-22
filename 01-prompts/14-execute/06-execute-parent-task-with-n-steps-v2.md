@@ -44,14 +44,27 @@ Before executing any file searches, scans, or code changes, you must execute Pha
    - Convert that base64 encoding or downloaded image to the file system immediately, saving it as a persistent file under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
    - Never leave raw, massive base64 strings or external ephemeral URLs in the prompt text, specs, or subtasks.
    - Refer back to this saved image file in the master spec, planning document, subtasks, and UI implementation notes strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
-3. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`. Do not use hard bracket notation like `[T-01]:`.
-4. Mandatory Chat Output Gate: Output the confirmed deliverables list directly in chat before performing any scans or tool calls:
+3. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`.
+4. Mandatory Chat Output Gate (Clearly Indented Markdown & Understanding Check):
+   - You MUST output the confirmed deliverables list directly in chat before performing any scans, tool calls, or spec writing.
+   - Respect whatever user requirements were given and format each task clearly with proper markdown indentation, vertical blank lines, task state (`[PENDING]`), and an explicit understanding indicator bracket (`[Understood: YES — ...]`).
+   - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block. Every task must be its own clearly separated markdown item.
 
 ```markdown
-### Confirmed Task Breakdown
-#1. Task-01: [Actionable deliverable description]
-#2. Task-02: [Actionable deliverable description]
-#3. Task-03: [Actionable deliverable description]
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+1. **Task-01: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+2. **Task-02: [Descriptive Task Title]**
+   - **State:** `[PENDING]`
+   - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
 Proceeding directly to Phase 1B: Spec & Subtask Generation.
 ```
 

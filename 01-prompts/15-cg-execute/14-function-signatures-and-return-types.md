@@ -74,25 +74,31 @@ def save_record(label: str, path: str, is_success: bool, error: Optional[str] = 
 #### ✅ REQUIRED (One parameter per line with trailing comma):
 
 ```go
+// In types.go:
+// type BoolResult = result.Result[bool]
+
 // Go
 func SaveRecord(
     label string,
     path string,
     isSuccess bool,
     errMsg string,
-) Result[bool] {
+) BoolResult {
     // ...
 }
 ```
 
 ```typescript
+// In types.ts:
+// export type VoidResult = Result<void>;
+
 // TypeScript
 function saveRecord(
     label: string,
     path: string,
     isSuccess: boolean,
     error?: string,
-): Result<void> {
+): VoidResult {
     // ...
 }
 ```

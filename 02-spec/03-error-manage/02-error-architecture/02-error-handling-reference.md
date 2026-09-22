@@ -213,8 +213,13 @@ Every AI agent modifying or creating Go code MUST ensure `*appfault.AppError` in
 **Example Usage (See `04-code/golang/examples/database_query.go`):**
 
 ```go
-// Creating new structured errors with full context and blank line gaps
-func ProcessFile(relativePath string, maxSize int64) result.Wrap[[]byte] {
+// -----------------------------------------------------------------------------
+// In types.go:
+// type FileDataResult = result.Wrap[[]byte]
+// -----------------------------------------------------------------------------
+
+// Creating new structured errors with full context, concrete types from types.go, and blank line gaps
+func ProcessFile(relativePath string, maxSize int64) FileDataResult {
     if relativePath == "" {
         fault := appfault.New(errtype.Validation, "file path cannot be empty").
             WithOp("processor.ProcessFile").
@@ -239,7 +244,7 @@ func ProcessFile(relativePath string, maxSize int64) result.Wrap[[]byte] {
 }
 ```
 
-> **AI Migration Note:** Package `appfault` (`04-code/golang/pkg/appfault`) is the standard package. `type Fault = AppError`. All functions returning structured failure metadata must use `*appfault.AppError` and `result.Wrap[T]`.
+> **AI Migration Note:** Package `appfault` (`04-code/golang/pkg/appfault`) is the standard package. `type Fault = AppError`. All functions returning structured failure metadata must use `*appfault.AppError` and concrete named Result envelopes declared in `types.go` (e.g. `type FileDataResult = result.Wrap[[]byte]`). Bare generic parameters across signatures are banned.
 
 **Forbidden:** `fmt.Errorf` for errors leaving a service (no stack trace).
 
