@@ -1,5 +1,11 @@
 # Changelog
 
+## [v6.43.0] - 2026-09-22
+
+### Added
+- enforce unconditional zero-question execution mandate and top-instruction priority
+
+
 All notable changes to this project are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 

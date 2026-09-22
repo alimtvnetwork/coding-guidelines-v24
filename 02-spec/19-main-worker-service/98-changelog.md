@@ -1,3 +1,9 @@
+## v6.43.0 — 2026-09-22 (enforce unconditional zero-question execution mandate and top-instruction priority)
+
+**Scope:** Version bump. enforce unconditional zero-question execution mandate and top-instruction priority.
+
+---
+
 # 98 — Changelog
 
 **Spec:** `19-main-worker-service`
