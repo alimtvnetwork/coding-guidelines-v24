@@ -204,7 +204,7 @@ def update_readme_pins(current_ver, next_version, dry_run=False):
 
 def update_changelogs(next_version, scope, today_str, dry_run=False):
     """Prepends release entries to changelog.md and spec19 changelog if present."""
-    entry_header = f"## [v{next_version}] - {today_str}\n\n### Added\n- {scope}\n\n"
+    entry_header = f"## [v{next_version}] - {today_str}\n\n### Added\n- {scope}\n\n---\n\n"
 
     if CHANGELOG_MD.is_file():
         with open(CHANGELOG_MD, "r", encoding="utf-8") as f:

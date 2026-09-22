@@ -1,3 +1,9 @@
+## v6.45.0 — 2026-09-22 (enhance release orchestrator with automated release notes and GitHub release creation)
+
+**Scope:** Version bump. enhance release orchestrator with automated release notes and GitHub release creation.
+
+---
+
 ## v6.44.0 — 2026-09-22 (fix execute prompt premature turn closure and mandate same-turn tool chaining)
 
 **Scope:** Version bump. fix execute prompt premature turn closure and mandate same-turn tool chaining.

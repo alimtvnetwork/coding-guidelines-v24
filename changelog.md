@@ -1,5 +1,13 @@
 # Changelog
 
+## [v6.45.0] - 2026-09-22
+
+### Added
+- enhance release orchestrator with automated release notes and GitHub release creation
+
+---
+
+
 ## [v6.44.0] - 2026-09-22
 
 ### Added

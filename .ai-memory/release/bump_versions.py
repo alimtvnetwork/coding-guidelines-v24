@@ -74,7 +74,8 @@ def update_files(old_version, new_version):
     # Synchronize all generated manifests and spec trees via npm run sync
     try:
         print("[*] Running npm run sync to update spec trees, manifests, and badges...")
-        subprocess.run(["npm", "run", "sync"], check=True)
+        npm_bin = "npm.cmd" if sys.platform == "win32" or os.name == "nt" else "npm"
+        subprocess.run([npm_bin, "run", "sync"], check=True)
     except Exception as e:
         print(f"Warning running npm run sync: {e}")
 
