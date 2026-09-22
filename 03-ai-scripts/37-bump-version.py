@@ -214,10 +214,14 @@ def update_changelogs(next_version, scope, today_str, dry_run=False):
             if dry_run:
                 print(f"[DRY RUN] Would prepend changelog entry to changelog.md for v{next_version}")
             else:
-                if "# Changelog\n" in cl_content:
+                if "# Changelog\n\n" in cl_content:
+                    cl_content = cl_content.replace("# Changelog\n\n", f"# Changelog\n\n{entry_header}", 1)
+                elif "# Changelog\n" in cl_content:
                     cl_content = cl_content.replace("# Changelog\n", f"# Changelog\n\n{entry_header}", 1)
                 else:
                     cl_content = f"# Changelog\n\n{entry_header}{cl_content}"
+
+                cl_content = re.sub(r'\n{3,}', '\n\n', cl_content)
 
                 with open(CHANGELOG_MD, "w", encoding="utf-8", newline="\n") as f:
                     f.write(cl_content)
