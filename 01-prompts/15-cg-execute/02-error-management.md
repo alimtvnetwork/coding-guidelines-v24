@@ -70,6 +70,7 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 > Every error encountered MUST either be completely resolved with structured context logging (operation name, input parameters) or embedded/wrapped into `*appfault.AppError` and returned to the caller.
 
 ### Strict Prohibitions
+
 1. **NO Empty Catch/Except Blocks:**
    - ❌ **BANNED:** `try { ... } catch (e) {}` or `except Exception: pass`
    - ✅ **REQUIRED:** Catch blocks must log operation name, key inputs, and rethrow or return a wrapped `AppError`.
@@ -92,6 +93,7 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 > Whenever ANY Go function encounters, intercepts, or receives an error (from the standard library `os`, `io`, `json`, `sql`, `net`, or downstream services), it MUST be immediately embedded and wrapped into `*appfault.AppError` (`appfault.Fault`).
 
 ### Core Rules for Go Error Handling
+
 1. **Standard Error Return Type:** All domain functions returning failure metadata MUST use `*appfault.AppError` (or `appfault.Fault`).
 2. **Deterministic Enum Taxonomy:** Classify errors using `errtype.Variation uint16` (`errtype.Validation`, `errtype.NotFound`, `errtype.Database`, `errtype.Network`, `errtype.Timeout`, `errtype.IO`, `errtype.Internal`). Redundant string error codes are banned.
 3. **Always Wrap Standard Library Errors:**
@@ -293,11 +295,13 @@ func (s *UserService) ActivateUser(ctx context.Context, userId int64) UserResult
 A function that declares an error or result return type MUST return the actual error instance directly to the caller. It MUST NEVER invoke an exit handler, terminate the process, or panic internally and then return `nil`.
 
 ### Why Dual-Handling & Internal Exit Is Forbidden
+
 1. **Broken Caller Sovereignty:** When a leaf function handles its own exit internally and returns `nil`, the caller is deceived into believing the operation succeeded.
 2. **Impossible Testability:** Unit tests cannot assert returned error types or values if the helper function kills the process or handles errors internally.
 3. **Dual Execution Hazards:** Calling an exit handler inside a helper while returning a result creates race conditions, partial database mutations, and skipped resource cleanups.
 
 ### Mandatory Outer Handling Pattern
+
 - **Leaf/Service Functions:** Construct or wrap `*appfault.AppError` and return it.
 - **Top-Level Root Dispatcher / HTTP Router:** Only the outer controller handles the error, decides the exit code via `ExitCodeType` enum, and writes the Universal Response Envelope:
 

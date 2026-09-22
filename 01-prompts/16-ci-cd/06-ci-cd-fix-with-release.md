@@ -419,6 +419,7 @@ On every ❌ FAIL or ⏱ TIMEOUT, BEFORE applying any code fix, do both:
 # CI/CD Task: <short failure description>
 
 ## Source
+
 - Runner job: <job-name>
 - Error type: FAIL | TIMEOUT
 - Detected at: <timestamp>
@@ -430,10 +431,12 @@ On every ❌ FAIL or ⏱ TIMEOUT, BEFORE applying any code fix, do both:
 <one-sentence description>
 
 ## Acceptance Criteria
+
 - [ ] `06-cicd-local-runner.py` reports ✅ PASS for job `<job-name>`
 - [ ] No regression in any other job
 
 ## Status
+
 - [ ] pending
 ```
 

@@ -191,15 +191,18 @@ At the completion of all tasks and before concluding the turn, you must emit thi
 
 ```markdown
 ### Task Completion Summary
+
 ✅ #1. Task-01: [Task description] — Completed
 ✅ #2. Task-02: [Task description] — Completed
 (If any task failed or was deferred, mark with ❌ or ⏳ and explain why)
 
 ### Modified Files Summary
+
 - [relative path to modified file 1]
 - [relative path to modified file 2]
 
 ### Implementation Confidence Score
+
 - Confidence: [e.g. 98% or 100%]
 - Rationale: [Detailed explanation of verified quality gates, passing linters, contract adherence, and zero regressions]
 ```
@@ -211,6 +214,7 @@ At the completion of all tasks and before concluding the turn, you must emit thi
 To prevent instruction bloat, context exhaustion, and repetitive failure loops, this prompt enforces strict structural de-duplication:
 
 ### 1. Structural De-Duplication Principles
+
 - No Repetitive Sections: The master orchestrator follows a single unified pipeline. Pipeline steps are declared once in chronological order and not duplicated across secondary loop descriptions.
 - No Boilerplate Pollution in Subtasks: Universal guidelines (coding standards, line ending rules, banned operations) exist once in the parent spec. Subtask files contain strictly unique, domain-specific requirements.
 - Zero Redundant Reads: Subagents do not re-read files that were already scanned and summarized in `.ai-memory/plans/pending/xx-<slug>.md`.

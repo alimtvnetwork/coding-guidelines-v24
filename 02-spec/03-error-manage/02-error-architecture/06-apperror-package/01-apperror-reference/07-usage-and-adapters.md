@@ -68,40 +68,31 @@ fault := appfault.WrapFile(errtype.IO, err, relativePath, "failed to read config
     WithOp("config.Load").
     WithVar("format", "yaml")
 
-return result.WrapFailure[Config](fault)
+    return result.WrapFailure[Config](fault)
+}
 ```
 
-// ✅ Level 2 — enum code, manual message
-apperror.New(apperrtype.SiteNotFound.Code(), "site not found")
-
-// ✅✅ Level 3 — enum with built-in message (best)
-apperror.NewType(apperrtype.SiteNotFound)
-```
-
-> **Side note:** `FailBool` is a convenience constructor for `Result[bool]`. It creates a failed
-> `Result[bool]` from an `*AppError` — saving you from writing `apperror.Fail[bool](err)` everywhere.
-> The same pattern applies to `FailSettings`, `FailString`, etc. — each is a type alias shortcut.
-
-### With Convenience Constructors (Type Aliases)
+### Error Construction with Variation Enum & Fluent Builders
 
 ```go
-// ✅ Best practice — enum + type alias + convenience constructor
-return apperror.FailBool(apperror.NewType(apperrtype.SiteNotFound))
-return apperror.FailSettings(apperror.NewType(apperrtype.ConfigKeyMissing))
+// Direct constructor from Variation enum
+fault := appfault.New(errtype.Validation, "site not found").
+    WithOp("site.Find").
+    WithVar("siteId", siteId)
 
-// Equivalent long-form (what FailBool replaces):
-return apperror.Fail[bool](apperror.NewType(apperrtype.SiteNotFound))
+return result.WrapFailure[Site](fault)
 ```
 
-### Error with Diagnostics + Values + ErrorType
+### Error with Diagnostics, Variables, and Fluent Properties
 
 ```go
-return apperror.WrapType(err, apperrtype.WPConnectionFailed).
-    WithValue("url", siteURL).
-    WithValue("plugin", pluginSlug).
-    WithStatusCode(resp.StatusCode).
-    WithMethod("GET").
-    WithEndpoint("/wp-json/wp/v2/plugins")
+fault := appfault.Wrap(errtype.IO, err, "failed during health check").
+    WithOp("site.CheckHealth").
+    WithVar("url", siteURL).
+    WithVar("plugin", pluginSlug).
+    WithVar("statusCode", resp.StatusCode)
+
+return result.WrapFailure[Site](fault)
 ```
 
 ---

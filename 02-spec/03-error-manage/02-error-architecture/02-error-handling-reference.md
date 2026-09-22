@@ -37,7 +37,7 @@ The project implements a **three-tier error handling architecture** spanning the
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        Backend (Go)                                  │
 │  ┌─────────────────┐    ┌──────────────────┐    ┌───────────────┐   │
-│  │ apperror.Wrap() │───▸│ Session Logger    │───▸│ error.log.txt │   │
+│  │ appfault.Wrap() │───▸│ Session Logger    │───▸│ error.log.txt │   │
 │  │ + .WithContext() │    │ (per-request ID)  │    │ (deduped)     │   │
 │  └─────────────────┘    └──────────────────┘    └───────────────┘   │
 │         │                       │                                    │

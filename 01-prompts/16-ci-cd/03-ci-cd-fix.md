@@ -436,6 +436,7 @@ The plan task file MUST contain:
 # CI/CD Task: <short failure description>
 
 ## Source
+
 - Runner job: <job-name>
 - Error type: FAIL | TIMEOUT
 - Detected at: <timestamp>
@@ -447,10 +448,12 @@ The plan task file MUST contain:
 <one-sentence description of the fix needed>
 
 ## Acceptance Criteria
+
 - [ ] `06-cicd-local-runner.py` reports ✅ PASS for job `<job-name>`
 - [ ] No regression in any other job
 
 ## Status
+
 - [ ] pending
 ```
 

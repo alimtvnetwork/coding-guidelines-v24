@@ -166,15 +166,18 @@ Proceeding directly to execution.
 
 ```markdown
 ### Task Completion Summary
+
 ✅ #1. Task-01: [Task description] — Completed
 ✅ #2. Task-02: [Task description] — Completed
 (If any task failed or was deferred, mark with ❌ or ⏳ and explain why)
 
 ### Modified Files Summary
+
 - [relative path to modified file 1]
 - [relative path to modified file 2]
 
 ### Implementation Confidence Score
+
 - Confidence: [e.g. 98% or 100%]
 - Rationale: [Detailed explanation of verified quality gates, passing linters, contract adherence, and zero regressions]
 `

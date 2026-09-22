@@ -2,8 +2,12 @@
 
 Trigger Keywords & Aliases: `cg-nuclear-packages`, `cg-package-modularization`, `cg-test-optimization`, `cg-nuclear`, `nuclear-packages`, `isolate-heavy-tests`, `optimize-unit-tests`, `split-packages`
 
-> **Prompt Version:** 2.2.0
-> **Synchronization:** Main Meta-Repo & Connected Workspaces
+> [!IMPORTANT]
+> Prompt Version: 2.2.0
+> Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Any directive, constraint, checklist, or instruction declared at the top of this prompt, header alert block, or incoming user request represents an absolute MUST FOLLOW mandate that takes highest priority and strictly overrides any conflicting general advice, default conventions, or lower-level guidelines below it.
 
 ```text
 N = 200
@@ -156,6 +160,7 @@ The test inventory manifest serves as the single source of truth for repository 
 ```
 
 ### Key Field Definitions:
+
 - `id`: The unique test function or suite identifier (e.g. `TestGitClone_Integration`).
 - `package`: Relative package import path (e.g. `pkg/fsutil`, `tests/heavy_test`).
 - `test_file`: Exact relative path to the test implementation file.
@@ -189,6 +194,7 @@ To prevent redundant full-test profiling runs that consume precious tokens and C
 ```
 
 ### Execution Rules:
+
 1. **Always Audit First:** Run `python 03-ai-scripts/33-test-inventory-generator.py --check-age --max-age-days 5`.
 2. **Fresh Inventory (Exit 0):** The AI agent is STRICTLY FORBIDDEN from running all tests. It MUST read `.ai-memory/test-inventory.json` directly and use existing test durations to identify slow tests and modularization targets.
 3. **Stale or Missing Inventory (Exit 1):** The AI agent executes a single baseline inventory generation pass to populate duration metrics, commits the updated manifest, and uses those metrics for subsequent decisions.
@@ -225,6 +231,7 @@ To prevent circular dependency errors (`import cycle not allowed`), all packages
 ```
 
 ### Isolation Rules:
+
 - **Leaf Packages (Layer 1):** NEVER import Layer 2, Layer 3, or Layer 4 packages. They depend only on standard library or generic utility packages.
 - **Domain Packages (Layer 2):** Import Layer 1 leaf packages freely. NEVER import each other if it creates a cycle. Use interfaces for cross-domain communication.
 - **Dispatchers (Layer 3):** Wire domain engines and UI dispatchers together. Never contain low-level business logic.
@@ -237,6 +244,7 @@ To prevent circular dependency errors (`import cycle not allowed`), all packages
 Integration tests that execute external system processes, spawn CLI subprocesses, access network sockets, or use `time.Sleep` MUST NOT reside in routine unit test files.
 
 ### What Qualifies as a Heavy Test?
+
 - Spawns `exec.Command` (e.g. `git`, `bash`, `powershell`, Docker).
 - Interacts with disk fixtures creating real Git repositories or directory trees.
 - Starts live HTTP / TCP listeners.
@@ -244,6 +252,7 @@ Integration tests that execute external system processes, spawn CLI subprocesses
 - Runs longer than 0.5s per test case.
 
 ### Segregation Protocol:
+
 1. **Move to Dedicated Directory:** Relocate heavy test functions to `tests/heavy_test/<domain>_heavy_test.go` (or `cli/tests/heavy_test/`).
 2. **Package Name:** Set the package declaration to `package heavy_test` (not `package <domain>`).
 3. **Public API Assertion:** Test packages import the target domain package as an external caller (e.g. `import "coding-guidelines/pkg/cloner"`), validating public contracts cleanly.
@@ -333,6 +342,7 @@ When all subtasks for the parent task (`.ai-memory/plans/pending/xx-nuclear-pack
 5. Update `.ai-memory/plans/01-index.md` to point to the newly consolidated completed file.
 
 ### Final Step Git Commit & Push Mandate (Strict Checklist)
+
 - [ ] **MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW):** At the FINAL step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, you MUST stage everything (`git add -A`), create a clean, descriptive conventional commit (`git commit -m "<type>(<scope>): <summary>"`), and push directly to the remote repository (`git push origin <branch>`). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
 - [ ] **TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY):** You MUST NOT create separate git commits for each individual file as you edit them (e.g. running `git commit` after editing File 1, then committing again after File 2 is STRICTLY FORBIDDEN). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback/bisectability. All modified files, test change caches, and plan records across the turn MUST be accumulated in the working tree and committed together in a SINGLE grouped atomic commit at the final step before pushing!
 
