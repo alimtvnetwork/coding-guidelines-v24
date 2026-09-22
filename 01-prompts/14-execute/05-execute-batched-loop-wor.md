@@ -74,6 +74,10 @@ Before executing the tasks below, you must check if this prompt is already insta
    - Wave 1: DB schemas and query wrappers
    - Wave 2: Business logic and services
    - Wave 3: UI and documentation
+5. Screenshot & Print Screen Base64 Ingestion: If any task or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
+   - Convert that base64 encoding or downloaded image to the local file system immediately under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
+   - Never leave raw base64 strings or ephemeral external URLs in task plans, specs, or subtasks.
+   - Refer back to this saved image file in all specs, plans, and subtasks strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
 
 ## Phase 2: Allocation & Execution (Strict 3x3 Rule & Locking Matrix)
 

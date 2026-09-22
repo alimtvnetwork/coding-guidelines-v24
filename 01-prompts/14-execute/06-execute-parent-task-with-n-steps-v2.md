@@ -40,8 +40,12 @@ Execute this task via a strict 3-Phase pipeline. Do not skip steps.
 Before executing any file searches, scans, or code changes, you must execute Phase 1A:
 
 1. Verbatim Prompt Capture: Directly write the user prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
-2. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`. Do not use hard bracket notation like `[T-01]:`.
-3. Mandatory Chat Output Gate: Output the confirmed deliverables list directly in chat before performing any scans or tool calls:
+2. Screenshot & Print Screen Base64 Image Ingestion Protocol: If the user request or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
+   - Convert that base64 encoding or downloaded image to the file system immediately, saving it as a persistent file under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
+   - Never leave raw, massive base64 strings or external ephemeral URLs in the prompt text, specs, or subtasks.
+   - Refer back to this saved image file in the master spec, planning document, subtasks, and UI implementation notes strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
+3. Actionable Deliverables Extraction: Break down the user prompt into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`. Do not use hard bracket notation like `[T-01]:`.
+4. Mandatory Chat Output Gate: Output the confirmed deliverables list directly in chat before performing any scans or tool calls:
 
 ```markdown
 ### Confirmed Task Breakdown
@@ -60,6 +64,7 @@ No tool calls, codebase searches, or subagent spawning may proceed until this br
 #### Step 1: Master Spec Generation
 Save the master architectural plan into `.ai-memory/plans/pending/xx-<slug>.md`. Provide a detailed breakdown of each task:
 - Architectural context, domain logic, and module interactions.
+- Visual specification references: If screenshots were provided, embed the relative markdown links to the saved image files and specify visual layout, typography, and UX requirements.
 - Input and output data contracts.
 - 3 to 5 custom rules or constraints unique to this task domain.
 - Blast radius analysis identifying all downstream callers.

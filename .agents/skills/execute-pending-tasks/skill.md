@@ -86,6 +86,10 @@ Before executing the tasks below, you must check if this prompt is already insta
    - Wave 3: UI and documentation
 5. [ ] /learn Ingest `.ai-memory/memory/01-index.md`, `.ai-memory/strictly-avoid.md`, `02-spec/02-coding-guidelines/`, and `02-spec/03-error-manage/`, `.ai-memory/coding-guidelines.md` before taking action and also create agent rules in the repo if required to or missing from rules set of agent memory.
 6. [ ] /learn `.ai-memory/coding-guidelines.md` and it is must and /goal apply the guidelines in coding every aspect.
+7. [ ] Screenshot & Print Screen Base64 Ingestion: If any task or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
+   - Immediately decode and persist the image to the filesystem under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
+   - Never leave raw base64 strings or ephemeral external URLs in task plans, specs, or subtasks.
+   - Refer back to this saved image file in all specs, plans, and subtasks strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
 
 ## Phase 2: Allocate & Execute (Continuous Loop & Parallel Agents)
 

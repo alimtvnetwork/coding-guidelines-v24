@@ -22,7 +22,16 @@ After outputting this confirmed breakdown in chat, provide each task into the sp
 - Architectural context, domain logic, and module interactions.
 - Input and output data contracts.
 - Exact symbol signatures and target files.
+- Visual specification references: If screenshot URLs or base64 data URIs are provided, decode and save them locally under `assets/screenshots/<slug>-<NN>.png` and refer back to them via relative paths (e.g. `![Screenshot](assets/screenshots/<slug>-<NN>.png)`).
 - Acceptance criteria and verification checks.
+
+## Screenshot & Print Screen Base64 Ingestion Protocol (Mandatory in Specs)
+
+If the user request or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
+1. Convert & Save Locally: Immediately decode the base64 encoding or download the image from the URL to the local filesystem under `assets/screenshots/<slug>-<NN>.png` or `assets/ui/<slug>-<NN>.png`.
+2. Never Embed Raw Base64 or Remote URLs: Never leave raw base64 strings or ephemeral external URLs inside specification files or plans.
+3. Strict Relative Path Referencing: In the master spec, domain documentation, and subtasks, refer back to the saved image file strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<slug>-<NN>.png)`).
+4. Visual Ground Truth: Use the saved screenshot as the visual ground truth for layout, colors, component hierarchy, spacing, and state transitions during spec authoring and UI task execution.
 
 ## Structure & File Naming Conventions
 

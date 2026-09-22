@@ -130,4 +130,5 @@ Updated: 2026-04-27
 - [Learned Enum Standards](learned/03-enum-standards.md): Cross-language enum generator workflow and naming rules.
 - [Session 2026-09-19 Memory Retrieval & Git History v2](learned/15-memory-retrieval-git-history-and-project-context-ingestion-v2.md) — 10 recent commits reviewed (.ai-memory rename, GitMap integration, WP exam quiz feature, code dry optimizations). CODE RED and naming rules re-affirmed.
 - [Session 2026-09-21 Codebase Comprehension & Skills Set Expansion](learned/16-codebase-comprehension-and-skill-set-generation.md) — Full codebase architectural mapping and authoring of 6 Antigravity skills.
+- [Session 2026-09-22 Screenshot & Base64 Ingestion Protocol](learned/17-screenshot-printscreen-base64-ingestion-protocol.md) — Standardized screenshot/print screen base64 conversion to filesystem image files and relative referencing across execute prompts, spec writing prompts, and UI skills.
 

@@ -41,7 +41,7 @@ Listen, past runs of these turns have been sloppy and careless: wrong step count
 
 ### Execution Reporting (Mandatory Output Format)
 
-1. Start of Run (Initial Task Breakdown Gate): Before writing any code or executing tasks, extract all pending deliverables as discrete, ordered items (`#1. Task-01:`, `#2. Task-02:`) without hard brackets, and output this confirmed task breakdown directly in chat:
+1. Start of Run (Initial Task Breakdown Gate): Before writing any code or executing tasks, extract all pending deliverables as discrete, ordered items (`#1. Task-01:`, `#2. Task-02:`) without hard brackets. If screenshot URLs or base64 print screen data URIs are provided, convert and save them immediately to `assets/screenshots/<task-slug>-<NN>.png` and refer back to them strictly as relative links in generated instruction specs. Output this confirmed task breakdown directly in chat:
 
 ```markdown
 ### Confirmed Task Breakdown
