@@ -12,7 +12,7 @@ Execute full automated release orchestration, semantic version bumping, branch m
 
 1. Determine bump tier (MINOR default per Rule 0, reset PATCH to 0).
 2. Verify git clean status before release execution.
-3. **Mandatory Smart Targeted Pre-Release Verification:** Build and test ONLY packages failed in the stack trace and packages changed between the last git hash and current working tree (`git diff --name-only HEAD~1`), persisting modified files to `.ai-memory/temp/recent-file-changes.json`. Execute targeted verification via `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <affected_pkg>` to verify 100% green passing (`exit 0`) without running extraneous test suites, spellcheckers, or unrelated checks.
+3. **Mandatory Smart Targeted Pre-Release Verification:** Build and test ONLY packages failed in the stack trace and packages changed between the last git hash and current working tree (`git diff --name-only HEAD~1`), persisting modified files to `.ai-memory/temp/recent-file-changes.json`. Execute targeted verification via `python 03-ai-scripts/06-cicd-local-runner.py run-smart` (or alias `--smart`, `-s`), `python 03-ai-scripts/06-cicd-local-runner.py --changed-only`, or `python 03-ai-scripts/06-cicd-local-runner.py --pkg <affected_pkg>` (with optional `--fast` heatmap filtering) to verify 100% green passing (`exit 0`) without running extraneous test suites, spellcheckers, or unrelated checks. In-flight heartbeats emit every 25s (`--heartbeat-interval 25.0`); wait dynamically via `.ai-memory/temp/runner-eta.json` rather than busy-polling.
 4. **Test Inventory Validation:** Cross-reference `.ai-memory/temp/recent-file-changes.json` with `.ai-memory/test-inventory.json` to verify that all test suites covering recently modified files pass completely.
 5. **Mandatory 5-Step Release Branching Lifecycle:**
    - **Step 1:** Create and switch to a dedicated release branch: `git checkout -b release/vX.Y.Z`.
@@ -28,13 +28,17 @@ Execute full automated release orchestration, semantic version bumping, branch m
 ## Fast File Discovery via Python Toolchain (Mandatory Acceleration)
 
 To rapidly discover version manifests, changelog entries, release notes, and install scripts without hitting 50-result tool caps, the AI agent MUST utilize the Python discovery scripts first:
+- **Remote Pipeline AI Status (<50ms):** `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status --json`)
+- **Remote Dynamic Timeout Wait:** `gitmap pipeline-ai status -t <etaSeconds>` (or alias `gitmap pl-ai status -t <sec>`)
+- **Extract Failing Step Error Logs:** `gitmap pipeline error-logs` (or alias `gitmap pe`, clear with `gitmap pe clear -y`)
+- **Pipeline Runner Targets & Cache Table:** `gitmap pipeline details` (or alias `gitmap pd`)
 - **Inventory Manifests & Version Files:** `python 03-ai-scripts/11-fast-file-scanner.py --search "version" --limit 20`
 - **Fast Grep Across Version Pins:** `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<version>" --limit 20`
 - **Explore Release Artifacts & Folders:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder .ai-memory/release --limit 20`
 - **Read Version Manifest:** `python 03-ai-scripts/17-fast-file-reader.py --read-file version.json`
 
 > [!NOTE]
-> **Release Verification Allowance:** Release workflows are explicitly authorized to execute targeted pre-release quality gates (e.g. `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`) and create release branches, tags, and commits.
+> **Release Verification Allowance:** Release workflows are explicitly authorized to execute targeted pre-release quality gates (e.g. `python 03-ai-scripts/06-cicd-local-runner.py run-smart`, `--changed-only`, or `--pkg <target>`) and create release branches, tags, and commits.
 
 ---
 

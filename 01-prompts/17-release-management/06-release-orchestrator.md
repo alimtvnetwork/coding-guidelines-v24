@@ -47,6 +47,10 @@ Before any execution, check if this prompt is installed as a native Antigravity 
 ## Fast File Discovery via Python Toolchain (Mandatory Acceleration)
 
 To rapidly discover version manifests, changelog entries, release notes, and install scripts without hitting 50-result tool caps, the AI agent MUST utilize the Python discovery scripts first:
+- **Remote Pipeline AI Status (<50ms):** `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status --json`)
+- **Remote Dynamic Timeout Wait:** `gitmap pipeline-ai status -t <etaSeconds>` (or alias `gitmap pl-ai status -t <sec>`)
+- **Extract Failing Step Error Logs:** `gitmap pipeline error-logs` (or alias `gitmap pe`, clear with `gitmap pe clear -y`)
+- **Pipeline Runner Targets & Cache Table:** `gitmap pipeline details` (or alias `gitmap pd`)
 - **Inventory Manifests & Version Files:** `python 03-ai-scripts/11-fast-file-scanner.py --search "version" --limit 20`
 - **Fast Grep Across Version Pins:** `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<version>" --limit 20`
 - **Explore Release Artifacts & Folders:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder .ai-memory/release --limit 20`
@@ -55,10 +59,13 @@ To rapidly discover version manifests, changelog entries, release notes, and ins
 > [!IMPORTANT]
 > **SMART TARGETED PRE-RELEASE TESTING (FASTEST PATH TO RELEASE):**
 > When verifying code prior to release, do NOT run heavy full repository test suites, spellcheckers, or unrelated packages.
-> 1. **Failing Stack Trace Targets:** Build and test ONLY packages and functions identified in failing stack traces.
-> 2. **Changed Packages from Last Git Hash:** Isolate packages changed between the previous git hash and current working tree (`git diff --name-only HEAD~1` or `git status --porcelain`).
-> 3. **Change State Persistence:** Record modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) so only modified targets are tested (`python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`).
-> 4. Once targeted checks pass green, trigger `python 03-ai-scripts/29-release-orchestrator.py` immediately without delaying the release.
+> 1. **Priority Incremental Runner:** Execute smart incremental Go tests and gates via `python 03-ai-scripts/06-cicd-local-runner.py run-smart` (or alias `smart`, `--smart`, `-s`), which inspects Git changed files, builds ONLY changed packages into OS temp, and runs the Quad Runner.
+> 2. **Specific Package Targeting:** Isolate and test ONLY packages and functions identified in failing stack traces or modified packages: `python 03-ai-scripts/06-cicd-local-runner.py --pkg <target_package_or_file>`.
+> 3. **Heatmap & Fast-Path Testing:** Use `--fast` to run only hot and warm tests based on `.ai-memory/test-heatmap.json`, skipping cold tests (`python 03-ai-scripts/06-cicd-local-runner.py --fast`).
+> 4. **Changed Packages from Last Git Hash:** Isolate packages changed between the previous git hash and current working tree (`git diff --name-only HEAD~1` or `git status --porcelain`) using `python 03-ai-scripts/06-cicd-local-runner.py --changed-only`.
+> 5. **Change State Persistence:** Record modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
+> 6. **In-Flight Heartbeats & ETA Wait:** The local runner emits heartbeats every 25s (`--heartbeat-interval 25.0`) and writes status to `.ai-memory/temp/runner-eta.json`. Agents must sleep for 60s or remaining ETA rather than busy-polling.
+> 7. Once targeted checks pass green, trigger `python 03-ai-scripts/29-release-orchestrator.py` immediately without delaying the release.
 
 ---
 

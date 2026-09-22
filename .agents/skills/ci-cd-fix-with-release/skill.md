@@ -28,10 +28,14 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 > [!CAUTION]
 > **SMART TARGETED TEST & RELEASE AUTHORITY:**
 > This skill (`ci-cd-fix-with-release`) authorizes targeted test execution strictly on failed or modified packages to achieve the fastest green exit and release. The AI MUST execute tests in the smartest way possible:
-> 1. **Stack Trace Targeting:** Run/build ONLY packages and test functions directly cited in the failure stack trace.
-> 2. **Changed Packages from Last Git Hash:** Compare against the last known git hash (`git diff --name-only HEAD~1`) and isolate packages that actually changed.
-> 3. **File State & Hash Tracking:** Every fix must persist modified files to `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
-> 4. **Strict Ban on Extraneous Runs:** NEVER run the entire test suite, spellcheckers, or unrelated packages. Verify strictly using `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`, then proceed immediately to the automated release ceremony.
+> 1. **Priority Incremental Runner:** Execute smart incremental Go tests and gates via `python 03-ai-scripts/06-cicd-local-runner.py run-smart` (or alias `smart`, `--smart`, `-s`), which inspects Git changed files, builds ONLY changed packages into OS temp, and runs the Quad Runner.
+> 2. **Specific Package Targeting:** Run/build ONLY packages and test functions directly cited in the failure stack trace: `python 03-ai-scripts/06-cicd-local-runner.py --pkg <target_package_or_file>`.
+> 3. **Heatmap & Fast-Path Testing:** Use `--fast` to run only hot and warm tests based on `.ai-memory/test-heatmap.json`, skipping cold tests (`python 03-ai-scripts/06-cicd-local-runner.py --fast`).
+> 4. **Changed Packages from Last Git Hash:** Compare against the last known git hash (`git diff --name-only HEAD~1`) and isolate packages that actually changed using `python 03-ai-scripts/06-cicd-local-runner.py --changed-only`.
+> 5. **Bounded Stack Trace Extraction (RCA 58):** Always extract bounded failure frames (strictly 5 preceding + 20 trailing lines) halting on exit code or job boundary (`gitmap pe`) to prevent clipboard and report bloat.
+> 6. **File State & Hash Tracking:** Every fix must persist modified files to `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`).
+> 7. **In-Flight Heartbeats & ETA Wait:** The local runner emits heartbeats every 25s (`--heartbeat-interval 25.0`) and writes status to `.ai-memory/temp/runner-eta.json`. Agents must sleep for 60s or remaining ETA rather than busy-polling.
+> 8. **Strict Ban on Extraneous Runs:** NEVER run the entire test suite, spellcheckers, or unrelated packages. Verify strictly using `python 03-ai-scripts/06-cicd-local-runner.py run-smart`, `--changed-only`, or `--pkg <target>`, then proceed immediately to the automated release ceremony.
 
 ---
 
@@ -70,6 +74,8 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 To rapidly locate failing pipeline definitions, broken source files, test fixtures, and error logs without hitting 50-result tool caps, the AI agent MUST utilize the diagnostic toolchain:
 - **Remote Pipeline AI Status (<50ms):** `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status --json`)
 - **Remote Dynamic Timeout Wait:** `gitmap pipeline-ai status -t <etaSeconds>` (or alias `gitmap pl-ai status -t <sec>`)
+- **Extract Failing Step Error Logs:** `gitmap pipeline error-logs` (or alias `gitmap pe`, clear with `gitmap pe clear -y`)
+- **Pipeline Runner Targets & Cache Table:** `gitmap pipeline details` (or alias `gitmap pd`)
 - **Scan Source & Test Files:** `python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts,py --limit 100 --stats`
 - **Fast Cached Pattern Search (<15ms):** `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<error-or-symbol>" --limit 50`
 - **Sub-Millisecond Folder Listing & Reader:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder .github/workflows --limit 20`
@@ -96,7 +102,8 @@ Every step must be **singly done** using bounded self-looping turns:
 
 - **Self-Loop Step 1 (Extract Pipeline Name from Screenshot or GitMap):**
   1. Read image or query `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status -t <etaSeconds>`) to extract the pipeline name, failing job name, and targeted failure diagnostics (`##[error]`, `FAIL:`, compile errors).
-  2. Scan `.github/workflows/*.yml` to identify the corresponding shell commands and dependencies.
+  2. Extract failing step logs via `gitmap pipeline error-logs` (`gitmap pe`) using bounded stack trace extraction (5 before + 20 after). Clear stale errors with `gitmap pe clear -y`. Inspect runner jobs via `gitmap pipeline details` (`gitmap pd`).
+  3. Scan `.github/workflows/*.yml` to identify the corresponding shell commands and dependencies.
 
 - **Self-Loop Step 2 (FIRST ACTION: Update Python Runner Script):**
   1. Open `03-ai-scripts/06-cicd-local-runner.py`.
@@ -104,7 +111,7 @@ Every step must be **singly done** using bounded self-looping turns:
   3. Save the runner script and verify syntax.
 
 - **Self-Loop Step 3 (Execute Runner & Establish Baseline Failures):**
-  1. Run `python 03-ai-scripts/06-cicd-local-runner.py`.
+  1. Run `python 03-ai-scripts/06-cicd-local-runner.py run-smart` (or `python 03-ai-scripts/06-cicd-local-runner.py --changed-only` or `--pkg <target>`).
   2. Capture the full output and exit code.
   3. If exit code = 0: All jobs pass! Proceed to Phase 3 (Final Verification Gate) and Phase 4 (Release Publication).
   4. If exit code != 0: Zero in on the first specific failing job and its error output.
@@ -119,7 +126,7 @@ Every step must be **singly done** using bounded self-looping turns:
   3. Record modified files safely under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <modified-files>`.
 
 - **Self-Loop Step 6 (Re-Verify & Loop):**
-  1. Re-run `python 03-ai-scripts/06-cicd-local-runner.py`.
+  1. Re-run `python 03-ai-scripts/06-cicd-local-runner.py run-smart` (or `--pkg <affected_pkg>`).
   2. If resolved and more errors remain, self-loop to Step 4 to zero in on the next error until exit code = 0.
 
 - **Self-Loop Step 7 (Proceed to Release):**
@@ -427,7 +434,7 @@ Update `.ai-memory/cicd-index.md` in the same operation. Never delete existing e
 > Phase 3 is a hard gate. The release MUST NOT start until every item below is green.
 > If any item fails, loop back to Phase 2 immediately.
 
-- [ ] **Full Unit Test & CI/CD Verification (MANDATORY Before Release):** Run `python 03-ai-scripts/06-cicd-local-runner.py --run-tests` one final time. All unit test suites, AST checks, and quality gates MUST pass 100% green (`exit 0`). The release MUST NOT start if any test fails.
+- [ ] **Smart Targeted Test & CI/CD Verification (Before Release):** Run targeted verification via priority shortcuts (`python 03-ai-scripts/06-cicd-local-runner.py run-smart`, `--changed-only`, or `--pkg <affected_pkg>` with optional `--fast` heatmap filtering) covering all failing stack trace targets and packages changed since the last git hash. All modified/failing package quality gates MUST pass 100% green (`exit 0`). The release MUST NOT start if any targeted test fails.
 - [ ] **Test Inventory Validation:** Check `.ai-memory/temp/recent-file-changes.json` against `.ai-memory/test-inventory.json` and verify all tests associated with modified files pass.
 - [ ] **No open plan tasks from this run:** All `.ai-memory/plans/pending/XX-cicd-*.md` files created in this run are marked `resolved` or closed.
 - [ ] **All RCA files written:** Every failure encountered has a `.ai-memory/memory/issues/xx-<slug>.md` with all 4 sections.
