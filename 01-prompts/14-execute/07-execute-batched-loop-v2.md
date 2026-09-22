@@ -295,12 +295,13 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
    Proceeding directly to execution.
    ```
 2. Scan & Discover: Use the `invoke_subagent` tool to spawn exactly 2 planning subagents. Their role is to deeply scan the codebase for target changes.
-3. Master Spec Generation: Save the master architectural plan into `.ai-memory/plans/pending/xx-<slug>.md`. Write down 3–5 custom rules or constraints unique to this task inside the spec file.
+3. Canonical Spec & Execution Plan: First, write the canonical application specification into `02-spec/21-app/xx-<slug>.md` (or directory `02-spec/21-app/xx-<slug>/` for complex features) with lossless verbatim prompt capture, and register it in `02-spec/21-app/01-index.md`. Then initialize the master execution plan in `.ai-memory/plans/pending/xx-<slug>.md` linking back to the canonical spec. Write down 3–5 custom rules or constraints unique to this task inside the spec file.
 4. Lean Subtask Decomposition: Break down the master plan into granular, single-responsibility subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`. Do not write common repository boilerplate, universal coding rules, banned operations, or generic guidelines inside subtask files.
    Subtasks MUST follow this lean template to prevent bloat:
    ```markdown
    # Subtask: [Name]
    Traceability ID: Task-01
+   Spec Reference: [02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)
    Target Files: [Relative paths]
    Action: [Exact code changes required]
    Acceptance Criteria: [2-4 specific testable conditions]
@@ -323,7 +324,7 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
 > To reduce markdown file count and bloat, you MUST consolidate subtasks when a parent task is 100% complete.
 
 1. Combine all the completed granular subtasks from `.ai-memory/plans/subtasks/xx-<slug>/*.md` into a single consolidated file at `.ai-memory/plans/completed/xx-<slug>.md`.
-2. In this single consolidated file, you MUST include a header explicitly referencing how the main task started and documenting exactly how many steps/loops it took.
+2. In this single consolidated file, you MUST include a header explicitly referencing how the main task started, referencing the canonical spec `[02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)`, and documenting exactly how many steps/loops it took. Note: The canonical specification in `02-spec/21-app/` remains permanently intact in the repository as the architectural source of truth; do not delete it during consolidation.
 3. Delete the original granular `.md` files in `.ai-memory/plans/subtasks/xx-<slug>/`.
 4. Delete the original parent plan `.ai-memory/plans/pending/xx-<slug>.md`.
 5. Update `.ai-memory/plans/01-index.md` to point to the newly consolidated completed file.

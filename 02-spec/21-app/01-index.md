@@ -39,9 +39,30 @@ Sibling folders for app-scoped concerns:
 
 ---
 
+## Specification Authoring Standards for AI Prompts & Agents
+
+All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent execution prompts (e.g. `06-execute-parent-task-with-n-steps-v2.md`) MUST author product specifications directly inside this folder (`02-spec/21-app/`):
+
+1. **Pure Spec Authoring Isolation:** Spec creation must focus strictly on architecture, contracts, and requirements. No source code implementation or build execution occurs during the spec phase.
+2. **Authoring Structure Patterns:**
+   - **Focused Feature (Single File):** `02-spec/21-app/xx-<feature-slug>.md` (e.g. `02-spec/21-app/02-auth-session-management.md`).
+   - **Complex Feature (Segmented Subfolder):** `02-spec/21-app/xx-<feature-slug>/` for multi-module features exceeding 3 subtasks or involving UI, database, and backend contracts:
+     - `01-overview.md` — Architectural context, domain logic, and `## User Request (Verbatim)`.
+     - `02-data-contracts.md` — Types, schemas, API request/response structures, and database models.
+     - `03-workflow-and-state.md` — Control flows, state machine transitions, and business validation rules.
+     - `04-ui-ux-spec.md` — Visual layout, typography, design tokens, and embedded relative screenshot links (`assets/screenshots/...`).
+     - `05-acceptance-criteria.md` — Testable verification rules and quality gates.
+3. **Lossless Verbatim Capture:** Every spec authored MUST contain a dedicated `## User Request (Verbatim)` section preserving 100% of the user's prompt text, edge cases, and constraints without summarization or truncation.
+4. **Decoupled Task Planning (`.ai-memory/plans/`):** Actionable execution plans and lean subtasks are placed in `.ai-memory/plans/pending/xx-<slug>.md` and `.ai-memory/plans/subtasks/xx-<slug>/`, and MUST explicitly reference the canonical specification files here (`02-spec/21-app/...`).
+5. **Registry Update:** Every newly authored specification in `21-app/` must be registered below in the `## Contents` table.
+
+---
+
 ## Contents
 
-_No app-specific specs added yet. Add specs as numbered files within this folder._
+| File / Folder | Title | Type | Status |
+|:---|:---|:---|:---|
+| [`01-index.md`](01-index.md) | App Specifications Root Index & Standards | Standard Index | Active |
 
 ---
 

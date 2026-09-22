@@ -26,47 +26,86 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 2. Phase 2: Bounded Micro-Tasking (Sequential Self-Looping): Never attempt to execute the entire checklist in one response. Treat each checklist section or file as a strict, isolated boundary. Execute only the first small portion, verify it, end your turn, and self-loop to process the next portion.
 3. Phase 3: Multi-Agent Parallelization: If tasks are independent, you MUST spawn dedicated sub-agents to handle them concurrently. Give each sub-agent an extremely small, strictly defined bounding box (e.g., "Only edit File X"). Never give a sub-agent a generic or multi-file task.
 
-## Pre-Planning Step 0: Task Extraction & Chat Confirmation Gate (Mandatory First Action)
+## RULE 00 — PURE SPECIFICATION AUTHORING ONLY (TOTAL BAN ON CODE EXECUTION)
+
+> [!CAUTION]
+> **THIS PROMPT IS STRICTLY FOR SPECIFICATION AUTHORING AND SUBTASK PLANNING.**
+> - **NEVER write, edit, compile, or delete application source code files** (`.go`, `.ts`, `.tsx`, `.py`, `.php`, `.cs`, etc.).
+> - **NEVER execute unit tests, integration tests, migrations, or application builds.**
+> - **NEVER run modifying shell commands against application packages.**
+> - All agent tool calls in this turn are strictly restricted to:
+>   1. Reading existing codebase files and specifications for architectural context.
+>   2. Decoding and saving base64 screenshots to `assets/screenshots/`.
+>   3. Authoring canonical product specifications directly inside `02-spec/21-app/`.
+>   4. Generating execution plans and subtasks inside `.ai-memory/plans/`.
+>   5. Updating `02-spec/21-app/01-index.md` and `.ai-memory/plans/01-index.md`.
+> Any attempt to write application code or execute test suites during this planning turn is an automatic failure.
+
+## Pre-Planning Step 0: Task Extraction & Chat Output Gate (Mandatory First Action)
 
 When a large prompt or complex set of requirements is given, the AI cannot understand everything at once. Therefore, before doing any deep planning, codebase searches, or spec writing, the AI MUST first break down whatever requirements the user has given (regardless of formatting) into discrete, actionable items (`Task-01`, `Task-02`).
-- Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [PENDING]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
+- Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [IN PROGRESS — EXECUTING IMMEDIATELY]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
 - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block (e.g. NEVER `#1. Task-01: ... #2. Task-02: ...`). Every task must be its own clearly separated markdown item.
 - Line-by-Line Output Format Structure:
   - Line 1: Header `### 📋 Confirmed Task Breakdown & Requirement Ingestion`
   - Line 2: Empty blank line
   - Line 3: Numbered task title `1. **Task-01: [Descriptive Task Title]**`
-  - Line 4: Indented state bullet (3 spaces) `   - **State:** [PENDING]`
+  - Line 4: Indented state bullet (3 spaces) `   - **State:** [IN PROGRESS — EXECUTING IMMEDIATELY]`
   - Line 5: Indented understanding check (3 spaces) `   - **Understood:** [YES] — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]`
-  - Line 6: Indented actionable scope bullet (3 spaces) `   - **Actionable Scope:** [Precise technical deliverable and implementation scope]`
-  - Line 7: Indented target files bullet (3 spaces) `   - **Target Files / Area:** [relative/path/or/module]`
+  - Line 6: Indented actionable scope bullet (3 spaces) `   - **Actionable Scope:** [Precise technical deliverable and specification scope]`
+  - Line 7: Indented target files bullet (3 spaces) `   - **Target Files / Area:** [02-spec/21-app/relative/path]`
   - Line 8: Empty blank line (vertical gap before next task)
-  - Concluding Line: `Proceeding directly to detailed specification and subtask planning.`
-- Output this confirmed breakdown directly in chat, and ONLY THEN proceed to write the detailed architectural specification.
+  - Concluding Line: `Proceeding directly to specification authoring in 02-spec/21-app/ and subtask planning (Active Tool Call Running Below).`
+- MANDATORY SAME-TURN TOOL CHAIN: You MUST output this confirmed breakdown directly in chat, but you MUST NOT end your turn or pause after emitting it! In the EXACT SAME RESPONSE turn, you MUST immediately invoke your first tool call (e.g. `write_to_file` to initialize the spec in `02-spec/21-app/`). Never emit the breakdown with text alone.
 
 ```markdown
 ### 📋 Confirmed Task Breakdown & Requirement Ingestion
 
 1. **Task-01: [Descriptive Task Title]**
-   - **State:** `[PENDING]`
+   - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
    - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
-   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
-   - **Target Files / Area:** `[relative/path/or/module]`
+   - **Actionable Scope:** [Precise technical deliverable and specification scope]
+   - **Target Files / Area:** `[02-spec/21-app/relative/path]`
 
 2. **Task-02: [Descriptive Task Title]**
-   - **State:** `[PENDING]`
+   - **State:** `[QUEUED — EXECUTING NOW WITHOUT USER PROMPT]`
    - **Understood:** `[YES]` — [Concise 1-sentence verification of user requirement, intent, and verified constraints]
-   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
-   - **Target Files / Area:** `[relative/path/or/module]`
+   - **Actionable Scope:** [Precise technical deliverable and specification scope]
+   - **Target Files / Area:** `[02-spec/21-app/relative/path]`
 
-Proceeding directly to detailed specification and subtask planning.
+Proceeding directly to specification authoring in 02-spec/21-app/ and subtask planning (Active Tool Call Running Below).
 ```
 
-After outputting this confirmed breakdown in chat, provide each task into the spec in a very detailed manner:
-- Architectural context, domain logic, and module interactions.
-- Input and output data contracts.
-- Exact symbol signatures and target files.
-- Visual specification references: If screenshot URLs or base64 print screen data URIs are provided, convert and save them immediately to the filesystem under `assets/screenshots/<plan-slug>-<NN>.png` or `assets/ui/<plan-slug>-<NN>.png`. Refer back to them in the spec using strict relative paths (e.g. `![Screenshot](assets/screenshots/<plan-slug>-<NN>.png)`), never embedding raw base64 or ephemeral URLs.
-- Acceptance criteria and verification checks.
+MANDATORY SAME-TURN TOOL CHAIN: The breakdown text above and your first tool call MUST be emitted in the EXACT SAME TURN. Never end the turn with text alone.
+
+---
+
+## RULE 0S — CANONICAL SPECIFICATION IN FOLDER 21 (`02-spec/21-app/`)
+
+All architectural specifications, feature definitions, data contracts, and product-level documentation generated by this prompt MUST be written inside `02-spec/21-app/`.
+- **Focused Feature (Single File):** If the deliverable is self-contained or under 100 lines, write:
+  `02-spec/21-app/xx-<slug>.md`
+- **Complex Feature (Segmented Subfolder):** If the deliverable exceeds 3 subtasks or spans UI + API + database, create a dedicated sequential directory:
+  `02-spec/21-app/xx-<slug>/` containing:
+  - `01-overview.md` — High-level architecture, module interactions, and the mandatory `## User Request (Verbatim)` section.
+  - `02-data-contracts.md` — Types, schemas, API request/response contracts, and database models.
+  - `03-workflow-and-state.md` — Control flows, state machine transitions, and business validation rules.
+  - `04-ui-ux-spec.md` — Visual layout, design tokens, typography, and embedded relative screenshot links (`assets/screenshots/...`).
+  - `05-acceptance-criteria.md` — Testable verification rules and quality gates.
+- **Mandatory Registry Update:** You MUST register the newly created specification in `02-spec/21-app/01-index.md` under `## Contents`.
+
+---
+
+## RULE 0V — LOSSLESS VERBATIM INGESTION (ZERO-LOSS REQUIREMENT CAPTURE)
+
+> [!IMPORTANT]
+> **VERBATIM CAPTURE IS NON-NEGOTIABLE:**
+> Past runs suffered from lazy summarization, compressed bullet points, and dropped constraints.
+> Every specification authored in `02-spec/21-app/` MUST include a top-level section:
+> `## User Request (Verbatim)`
+> Copy and paste the user's complete prompt text, instructions, parameters, edge cases, and examples character-for-character, word-for-word, without alteration or omission.
+
+---
 
 ### Screenshot / Print Screen Base64 Ingestion Protocol (Mandatory in Specs)
 
@@ -76,30 +115,51 @@ If the user request or prompt contains a screenshot URL, print screen link, or b
 3. Strict Relative Path Referencing: In the master spec, domain documentation, and subtasks, refer back to the saved image file strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<plan-slug>-<NN>.png)`).
 4. Visual Ground Truth: Use the saved screenshot as the visual ground truth for layout, colors, component hierarchy, spacing, and state transitions during spec authoring and UI task execution.
 
-### Lean Subtasks Mandate (No Common Boilerplate in Subtasks)
+---
 
-Subtasks in `.ai-memory/plans/subtasks/<plan-slug>/` MUST NOT repeat common repository boilerplate, universal coding rules, banned operations, or generic guidelines. Universal rules exist in the root guidelines and parent spec. Subtasks must contain strictly the unique, task-specific details, exact file paths, symbol modifications, and runnable verification checks.
+### Actionable Subtask Generation in `.ai-memory/plans/` (Decoupled Planning)
 
-### End-of-Turn Verification & Confidence Reporting (Mandatory Output)
+Even though this prompt is strictly for specification authoring, it MUST generate the actionable subtasks in `.ai-memory/plans/` so execution agents can execute them later:
+1. **Parent Plan File:** `.ai-memory/plans/pending/xx-<plan-slug>.md`
+2. **Lean Subtasks Directory:** `.ai-memory/plans/subtasks/xx-<plan-slug>/`
+   - Files named `001-<task-name>.md`, `002-<task-name>.md`, etc.
+   - **MANDATORY SPEC LINK:** Every subtask MUST include a prominent relative markdown link back to the canonical spec file in `02-spec/21-app/`:
+     ```markdown
+     Spec Reference: [02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)
+     ```
+3. **Lean Subtasks Mandate:** Subtasks in `.ai-memory/plans/subtasks/<plan-slug>/` MUST NOT repeat common repository boilerplate, universal coding rules, banned operations, or generic guidelines. Universal rules exist in root guidelines and the canonical spec. Subtasks must contain strictly the unique, task-specific details, exact file paths, symbol modifications, and runnable verification checks.
+4. **Register in Index:** Register the plan in `.ai-memory/plans/01-index.md`.
 
-When all tasks or planning phases are completed (or if the run concludes), you MUST output:
+---
+
+### End-of-Run Comprehensive Summary & Traceability Report (Mandatory Output)
+
+At the conclusion of the specification turn, you MUST output the following structured summary in chat:
 
 ```markdown
-### Task Completion Summary
+### 📑 Specifications Created in Folder 21 (`02-spec/21-app/`)
 
-✅ #1. Task-01: [Task description] — Completed
-✅ #2. Task-02: [Task description] — Completed
-(If any task failed or was deferred, mark with ❌ or ⏳ and explain why)
+- [02-spec/21-app/xx-<slug>.md](02-spec/21-app/xx-<slug>.md) (Lines: <count>) — [Short description of scope]
+  *(or list files in 02-spec/21-app/xx-<slug>/ if segmented)*
 
-### Modified Files Summary
+### 📋 Actionable Tasks & Subtasks Created (`.ai-memory/plans/`)
 
-- [relative path to modified file 1]
-- [relative path to modified file 2]
+- Parent Plan: [.ai-memory/plans/pending/xx-<slug>.md](.ai-memory/plans/pending/xx-<slug>.md)
+- Subtask Count: <count> subtasks in `.ai-memory/plans/subtasks/xx-<slug>/`
+  1. `001-<task>.md`: [Title] -> Target: `[relative/path]` | State: `[QUEUED]`
+  2. `002-<task>.md`: [Title] -> Target: `[relative/path]` | State: `[QUEUED]`
 
-### Implementation Confidence Score
+### 🔗 Requirements Traceability Matrix
 
-- Confidence: [e.g. 98% or 100%]
-- Rationale: [Detailed explanation of verified quality gates, passing linters, contract adherence, and zero regressions]
+| Requirement / Prompt Item | Canonical Spec File (`02-spec/21-app/`) | Subtask File (`.ai-memory/plans/subtasks/`) | Target Code Files |
+|:---|:---|:---|:---|
+| [User Requirement 1] | `02-spec/21-app/xx-<slug>.md` | `.ai-memory/plans/subtasks/xx-<slug>/001-<task>.md` | `path/to/file.go` |
+| [User Requirement 2] | `02-spec/21-app/xx-<slug>.md` | `.ai-memory/plans/subtasks/xx-<slug>/002-<task>.md` | `path/to/file.ts` |
+
+### 🚀 Next Steps: Execution Command
+
+To execute these generated subtasks in continuous sequence with 2-agent concurrency:
+> Run: `06-execute-parent-task-with-n-steps-v2.md` with plan slug `xx-<slug>`
 ```
 
 ## Variables — check if you are confused only.
@@ -410,6 +470,8 @@ RULE 0A gives the naming law; this is the layout it applies to. Authored paths
 match this exactly:
 
 ```text
+02-spec/21-app/01-index.md
+02-spec/21-app/xx-<plan-slug>.md (or 02-spec/21-app/xx-<plan-slug>/01-overview.md)
 .ai-memory/plans/pending/01-<plan-slug>.md
 .ai-memory/plans/subtasks/<plan-slug>/index.md
 .ai-memory/plans/subtasks/<plan-slug>/001-<subtask-title>.md

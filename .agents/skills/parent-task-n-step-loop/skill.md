@@ -47,7 +47,7 @@ Execute this task via a strict 3-Phase pipeline. Do not skip steps.
 
 Before executing any file searches, scans, spec writing, or code changes, you must execute Phase 1A:
 
-1. Verbatim Prompt Capture: Directly write the user prompt verbatim into the planning spec at `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
+1. Verbatim Prompt Capture: Capture the incoming user request verbatim. It will be recorded losslessly in both the canonical spec under `02-spec/21-app/` and the master execution plan under `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
 2. Screenshot & Print Screen Base64 Image Ingestion Protocol: If the user request or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
    - Convert that base64 encoding or downloaded image to the file system immediately, saving it as a persistent file under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
    - Never leave raw, massive base64 strings or external ephemeral URLs in the prompt text, specs, or subtasks.
@@ -95,13 +95,18 @@ MANDATORY SAME-TURN TOOL CHAIN: The breakdown text above and your first tool cal
 
 ### Phase 1B: Planning Mode, Detailed Spec Generation & Lean Subtasks (Steps 1 .. N/2)
 
-#### Step 1: Master Spec Generation
-Save the master architectural plan into `.ai-memory/plans/pending/xx-<slug>.md`. Provide a detailed breakdown of each task:
-- Architectural context, domain logic, and module interactions.
-- Visual specification references: If screenshots were provided, embed the relative markdown links to the saved image files and specify visual layout, typography, and UX requirements.
-- Input and output data contracts.
-- 3 to 5 custom rules or constraints unique to this task domain.
-- Blast radius analysis identifying all downstream callers.
+#### Step 1: Canonical Application Spec Generation (Folder 21 Standard)
+First, write the canonical application specification into `02-spec/21-app/` before creating execution plans or modifying code:
+- **Location & Sizing Standard:**
+  - Concise / single-domain specs (<= 150 lines): Write to `02-spec/21-app/xx-<slug>.md`.
+  - Large / multi-domain features: Write to a segmented directory `02-spec/21-app/xx-<slug>/` with sequential sub-files:
+    - `01-overview.md` (Domain architecture, system context, verbatim user request)
+    - `02-data-contracts.md` (Models, schemas, interfaces, error types)
+    - `03-visual-and-ux.md` (Component hierarchy, visual layout, screenshots)
+    - `04-verification-gates.md` (Quality gates, test invariants, acceptance criteria)
+- **Lossless Verbatim Capture:** Under `## User Request (Verbatim)`, preserve the exact prompt text and constraints without truncation.
+- **Visual Assets & Base64 Screenshots:** If screenshot URLs or base64 images were provided, verify they were decoded and saved to `assets/screenshots/<task-slug>-<NN>.png` and reference them strictly via relative markdown links.
+- **Spec Registry Registration:** Register the new spec entry in `02-spec/21-app/01-index.md` with status `draft` or `active`.
 
 #### Step 2: Scan & Discover (Python Toolchain Acceleration)
 To avoid 50-result tool truncation limits and eliminate multi-turn exploratory roundtrips, use the repository's dedicated Python discovery scripts:
@@ -114,26 +119,32 @@ To avoid 50-result tool truncation limits and eliminate multi-turn exploratory r
 
 Spawn at most 2 planning subagents to perform deep scanning if necessary.
 
-#### Step 3: Lean Subtask Decomposition (No Common Boilerplate in Subtasks)
-Break down the master plan into granular subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`, `02-<subtask>.md`, etc. Complete all spec and subtask writing within 50% of the steps budget (`PHASE_1_STEPS = N / 2`).
-
-Important Rule: Do not write common repository boilerplate, universal coding rules, banned operations, or generic guidelines inside subtask files. Common rules belong in the parent plan and root guidelines. Subtasks must contain only the unique, non-common items required for that specific subtask.
+#### Step 3: Actionable Execution Plan & Lean Subtask Decomposition
+With the canonical spec established in `02-spec/21-app/`, initialize the execution plan and decompose it into subtasks in `.ai-memory/plans/`:
+- **Parent Plan:** Write `.ai-memory/plans/pending/xx-<slug>.md` containing:
+  - Strict relative link to the canonical spec: `Spec Reference: [02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)`
+  - Architectural context, custom domain constraints, and blast radius analysis.
+  - Complete mapping of deliverables (`Task-01`, `Task-02`, etc.) to subtask files.
+- **Subtask Files:** Break down the plan into granular subtasks in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`, `02-<subtask>.md`, etc. Complete all spec and subtask writing within 50% of the steps budget (`PHASE_1_STEPS = N / 2`).
+- **No Common Boilerplate:** Do not write common repository boilerplate, universal coding rules, banned operations, or generic guidelines inside subtask files. Common rules belong in the parent plan and root guidelines. Subtasks must contain only the unique, non-common items required for that specific subtask.
 
 Subtasks must follow this lean, unique template:
 ```markdown
 # Subtask [01]: [Descriptive Subtask Name]
 Traceability ID: Task-01
+Spec Reference: [02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)
 Target Files: [Strict relative paths from repo root]
 Action: [Exact code changes, functions, types, and logic to modify or add]
-Accept Criteria: [2-4 specific testable conditions proving completion]
+Acceptance Criteria: [2-4 specific testable conditions proving completion]
 Targeted Verification: [Specific file-level linter command or exit 0 check]
 ```
 
 #### Step 4: Subtask Readiness Audit Gate
 
 Before transitioning to execution, verify:
+- Canonical spec is authored in `02-spec/21-app/` and registered in `02-spec/21-app/01-index.md`.
 - Every extracted deliverable `Task-xx` has at least one corresponding subtask file.
-- All subtask files are non-empty and specify disjoint target files.
+- All subtask files are non-empty, link back to the spec, and specify disjoint target files.
 - All file paths in subtasks use strict relative Git paths (zero absolute paths or `file:///` URIs).
 
 #### Step 5: Unconditional Zero-Question Execution Mandate (Total Ban on Stopping After Spec Writing)
@@ -187,7 +198,7 @@ To prevent cross-task pollution and ensure seamless agent communication, every t
 To reduce markdown file count and bloat, consolidate subtasks when a parent task is 100% complete:
 
 1. Combine all completed granular subtasks from `.ai-memory/plans/subtasks/xx-<slug>/*.md` into a single consolidated file at `.ai-memory/plans/completed/xx-<slug>.md`.
-2. In this single consolidated file, include a header explicitly referencing how the main task started and documenting exactly how many steps or loops it took.
+2. In this single consolidated file, include a header explicitly referencing how the main task started, referencing the canonical spec `[02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)`, and documenting exactly how many steps or loops it took. Note: The canonical specification in `02-spec/21-app/` remains permanently intact in the repository as the architectural source of truth; do not delete it during consolidation.
 3. Delete the original granular `.md` files in `.ai-memory/plans/subtasks/xx-<slug>/`.
 4. Delete the original parent plan `.ai-memory/plans/pending/xx-<slug>.md`.
 5. Update `.ai-memory/plans/01-index.md` to point to the newly consolidated completed file.
