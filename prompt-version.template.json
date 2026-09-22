@@ -17,5 +17,6 @@
         "target": "<destination path in target repository>"
       }
     ]
-  }
+  },
+  "version": "6.43.0"
 }
