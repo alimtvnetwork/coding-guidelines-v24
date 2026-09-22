@@ -1,8 +1,11 @@
 # [V2] Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
 
 > [!IMPORTANT]
-> Prompt Version: 2.4.0
+> Prompt Version: 2.5.0
 > Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Any directive, constraint, checklist, or instruction declared at the top of this prompt, in a header alert block, or in the incoming user request represents an absolute MUST FOLLOW mandate that takes highest priority and strictly overrides any conflicting general advice, default conventions, or lower-level guidelines below it.
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
 
@@ -104,7 +107,7 @@ To avoid 50-result tool truncation limits and eliminate multi-turn exploratory r
 Spawn at most 2 planning subagents to perform deep scanning if necessary.
 
 #### Step 3: Lean Subtask Decomposition (No Common Boilerplate in Subtasks)
-Break down the master plan into granular subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`, `02-<subtask>.md`, etc.
+Break down the master plan into granular subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`, `02-<subtask>.md`, etc. Complete all spec and subtask writing within 50% of the steps budget (`PHASE_1_STEPS = N / 2`).
 
 Important Rule: Do not write common repository boilerplate, universal coding rules, banned operations, or generic guidelines inside subtask files. Common rules belong in the parent plan and root guidelines. Subtasks must contain only the unique, non-common items required for that specific subtask.
 
@@ -114,24 +117,28 @@ Subtasks must follow this lean, unique template:
 Traceability ID: Task-01
 Target Files: [Strict relative paths from repo root]
 Action: [Exact code changes, functions, types, and logic to modify or add]
-Acceptance Criteria: [2-4 specific testable conditions proving completion]
+Accept Criteria: [2-4 specific testable conditions proving completion]
 Targeted Verification: [Specific file-level linter command or exit 0 check]
 ```
 
 #### Step 4: Subtask Readiness Audit Gate
+
 Before transitioning to execution, verify:
 - Every extracted deliverable `Task-xx` has at least one corresponding subtask file.
 - All subtask files are non-empty and specify disjoint target files.
 - All file paths in subtasks use strict relative Git paths (zero absolute paths or `file:///` URIs).
 
-#### Step 5: Mandatory Auto-Loop (Do Not Stop)
-As soon as Phase 1 planning completes, the master orchestrator must not stop or ask the user for permission. It must immediately self-loop and transition directly into Phase 2 execution mode.
+#### Step 5: Unconditional Zero-Question Execution Mandate (Total Ban on Stopping After Spec Writing)
+
+- **Strict 50/50 Time & Step Budget Allocation:** Spec writing and subtask generation MUST strictly complete within the first 50% of the budget (`PHASE_1_STEPS = N / 2`).
+- **Zero Questions / Unconditional Execution:** As soon as Phase 1 planning completes, the master orchestrator MUST NOT pause, stop, or ask the user "Should I proceed?", "Would you like me to start execution?", or any confirmation question. There is NO question. It must immediately, unconditionally self-loop and transition directly into Phase 2 execution mode.
+- **Spec Writing is Only Half the Task:** Generating specs without executing code changes is an INCOMPLETE FAILURE. The remaining 50% of the budget (`PHASE_2_STEPS = N / 2`) is dedicated strictly to modifying code, running targeted quality linters, consolidating subtasks, and completing the deliverables.
 
 ---
 
 ### Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
 
-1. Parallel Dispatch: Use `invoke_subagent` to spawn at most 2 execution subagents (max 2 threads each) assigned to disjoint subtasks from `.ai-memory/plans/subtasks/xx-<slug>/`. Provide subagents with minimal instructions (e.g., "Read `.ai-memory/plans/subtasks/xx-slug/01-task.md` and execute it").
+1. Parallel Dispatch & Unconditional Execution: Unconditionally execute code refactoring across target files in the remaining 50% of the steps budget (`PHASE_2_STEPS = N / 2`). Use `invoke_subagent` to spawn at most 2 execution subagents (max 2 threads each) assigned to disjoint subtasks from `.ai-memory/plans/subtasks/xx-<slug>/`. Provide subagents with minimal instructions (e.g., "Read `.ai-memory/plans/subtasks/xx-slug/01-task.md` and execute it").
 2. File Locking & Disjoint Files: Verify subagents operate on distinct files using `.ai-memory/01-index.md`.
 3. Execution & Coding Guidelines: Subagents refactor code following all coding guidelines (<= 8-15 line functions, single return types, Unix LF line endings).
 4. Failure Memory & Error Recovery: If a subagent fails, record the failure log in `.ai-memory/plan.md` and `.ai-memory/memory/issues/xx-failure.md`; subsequent agents must read the failure log first to remediate root causes.
@@ -251,6 +258,7 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
 - [ ] NO AUTOMATIC RELEASES (TOTAL BAN): Never bump versions, update changelogs, or trigger releases unless explicitly commanded by the user.
 - [ ] NO PER-FILE COMMITTING (TOTAL BAN): Never commit each file individually as you work (e.g. running `git commit` after editing File 1, then another commit after File 2). Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
 - [ ] NO RAPID CI/CD POLLING (TOTAL BAN): Never query or loop rapidly (`gh run view` in tight loops) when inspecting remote CI/CD pipelines. Agents must query pipeline state using GitMap Pipeline-AI (`gitmap pipeline-ai status --json` or `gitmap pl-ai status -t <sec>`) and strictly wait or sleep based on `etaSeconds` to eliminate credit waste.
+- [ ] NO STOPPING AFTER SPEC WRITING (TOTAL BAN): Never halt execution, conclude the turn, or ask the user for permission after generating specs or subtasks. Planning constitutes only 50% of the task budget; you must proceed unconditionally to Phase 2 code execution.
 
 ---
 
@@ -259,7 +267,8 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
 /goal You must verify every item on this checklist before committing any code. If a subagent violated one of these rules, you must reject their work.
 
 - [ ] Master Guidelines: Fully enforced every file in `02-spec/02-coding-guidelines/` and `.ai-memory/coding-guidelines.md`.
-- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `AppError`, never generic error.
+- [ ] Concrete Types Centralization (`types.go`): Extracted domain structs, raw generic instantiations, and Result wrappers into dedicated `types.go` files as single reusable named types with follow-through comments (never leak raw generics like `result.Result[*Config]`).
+- [ ] Error Management: Enforced `02-spec/03-error-manage/` using domain-specific `*appfault.AppError`, never generic error.
 - [ ] Boolean Conventions: All booleans begin with is or has only (all other prefixes like can, should, was, will, did, must are banned). No negatives (`!isSuccess` is banned; use `isFail`).
 - [ ] Semantic Naming: Zero generic garbage names (`temp`, `data`, `obj`). Behavior-driven unit test names.
 - [ ] Multi-Line Arguments (Rule 9a/9b): Signatures and call sites with >2 arguments formatted one argument per line with trailing commas.

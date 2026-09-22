@@ -1,8 +1,11 @@
 # [V2] Batched Loop & Execution Wave Orchestration — Workflow (must follow)
 
 > [!IMPORTANT]
-> Prompt Version: 2.4.0
+> Prompt Version: 2.5.0
 > Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Any directive, constraint, checklist, or instruction declared at the top of this prompt, in a header alert block, or in the incoming user request represents an absolute MUST FOLLOW mandate that takes highest priority and strictly overrides any conflicting general advice, default conventions, or lower-level guidelines below it.
 
 /goal Autonomously orchestrate and execute the pending tasks by decomposing them into subtasks and running a continuous N-step self-loop until completion without a single failure.
 
@@ -303,7 +306,7 @@ PHASE_2_STEPS = N / 2   (Parallel Execution & QA)
    Acceptance Criteria: [2-4 specific testable conditions]
    Targeted Verification: [Specific file-level linter command or exit 0 check]
    ```
-5. MANDATORY AUTO-LOOP (DO NOT STOP): As soon as Phase 1 planning completes, the master orchestrator MUST NOT STOP or ask the user for permission. It MUST immediately self-loop and transition directly into Phase 2 execution mode.
+5. UNCONDITIONAL ZERO-QUESTION EXECUTION MANDATE (TOTAL BAN ON STOPPING AFTER SPEC WRITING): Spec writing and subtask generation MUST strictly complete within the first 50% of the budget. As soon as Phase 1 planning completes, the master orchestrator MUST NOT STOP, pause, or ask the user "Should I proceed?", "Would you like me to start execution?", or any confirmation question. There is NO question. It MUST immediately, unconditionally self-loop and transition directly into Phase 2 execution mode. Generating specs without executing code changes is an INCOMPLETE FAILURE. The remaining 50% of the budget is dedicated strictly to modifying code, running targeted quality linters, consolidating subtasks, and completing the deliverables.
 
 ### Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
 
