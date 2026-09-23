@@ -5,7 +5,7 @@
 > Synchronization: Main Meta-Repo & Connected Workspaces
 > 
 > **Top-Instruction Priority Mandate (Preamble Precedence):**
-> Any directive, constraint, checklist, or instruction declared at the top of this prompt, in a header alert block, or in the incoming user request represents an absolute MUST FOLLOW mandate that takes highest priority and strictly overrides any conflicting general advice, default conventions, or lower-level guidelines below it.
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
 Trigger phrases: `release now without test`, `release now`, `release without test`, `instant release`, `fast release`, `publish now without test`, `emergency release without test`.
 
@@ -153,6 +153,7 @@ The release orchestrator and all release triggers MUST strictly execute this 5-s
 
 ## Hard Rules & Pre-Flight Checks
 
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
 - [ ] Clean Working Tree Check: You MUST commit any outstanding/current files on the working branch BEFORE running the orchestrator script. Never branch with uncommitted edits.
 - [ ] NO BUILDING (TOTAL BAN): Never build the code or verify compilation before, during, or after release.
 - [ ] NO LOCAL CI/CD (TOTAL BAN): Never run `06-cicd-local-runner.py` or unit tests before releasing.
@@ -172,15 +173,16 @@ The release orchestrator and all release triggers MUST strictly execute this 5-s
 
 ## Actionable Execution Checklist
 
-1. [ ] Identify starting branch: `git rev-parse --abbrev-ref HEAD`.
-2. [ ] Commit any outstanding/current files on the working branch before proceeding.
-3. [ ] Check for `03-ai-scripts/29-release-orchestrator.py` and bump version script (`03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`).
-4. [ ] Run `python 03-ai-scripts/29-release-orchestrator.py --tier <tier> --scope "<scope>" --skip-tests`.
-5. [ ] Verify Step 1: Release branch created and checked out (`release/vX.Y.Z`).
-6. [ ] Verify Step 2: Version bumped across `version.json`, `package.json`, `readme.md`, `changelog.md`.
-7. [ ] Verify Step 3: Committed on release branch (`release: vX.Y.Z <scope>`).
-8. [ ] Verify Step 4: Tag `vX.Y.Z` created on release commit.
-9. [ ] Verify Step 5: Merged to `main`, and pushed `main`, `release/vX.Y.Z`, and `vX.Y.Z` tag to `origin`.
-10. [ ] Verify Step 6: Working tree restored to starting branch (`git branch --show-current`).
-11. [ ] DO NOT run any builds, local CI/CD tests, or post-publish pipeline monitoring.
-12. [ ] Output release summary detailing starting branch, version bump, release branch, tag, and restored active branch.
+1. [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+2. [ ] Identify starting branch: `git rev-parse --abbrev-ref HEAD`.
+3. [ ] Commit any outstanding/current files on the working branch before proceeding.
+4. [ ] Check for `03-ai-scripts/29-release-orchestrator.py` and bump version script (`03-ai-scripts/37-bump-version.py` or `.ai-memory/release/bump_versions.py`).
+5. [ ] Run `python 03-ai-scripts/29-release-orchestrator.py --tier <tier> --scope "<scope>" --skip-tests`.
+6. [ ] Verify Step 1: Release branch created and checked out (`release/vX.Y.Z`).
+7. [ ] Verify Step 2: Version bumped across `version.json`, `package.json`, `readme.md`, `changelog.md`.
+8. [ ] Verify Step 3: Committed on release branch (`release: vX.Y.Z <scope>`).
+9. [ ] Verify Step 4: Tag `vX.Y.Z` created on release commit.
+10. [ ] Verify Step 5: Merged to `main`, and pushed `main`, `release/vX.Y.Z`, and `vX.Y.Z` tag to `origin`.
+11. [ ] Verify Step 6: Working tree restored to starting branch (`git branch --show-current`).
+12. [ ] DO NOT run any builds, local CI/CD tests, or post-publish pipeline monitoring.
+13. [ ] Output release summary detailing starting branch, version bump, release branch, tag, and restored active branch.

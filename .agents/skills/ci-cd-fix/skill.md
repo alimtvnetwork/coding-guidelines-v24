@@ -6,6 +6,13 @@ description: >-
 
 # Instruction (must follow): Autonomous CI/CD Fix Loop (with Local Runner & RCA)
 
+> [!IMPORTANT]
+> Prompt Version: 2.5.0
+> Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
+
 Trigger Keywords & Aliases: `fix with RCA`, `fix`, `fix, fix`, `CI/CD fix`, `cicd fix`
 
 /goal Autonomously diagnose, update or create the local Python CI/CD runner script (`03-ai-scripts/06-cicd-local-runner.py`) from repository workflows or screenshot pipeline names, and fix all failures by executing a singly-done self-looping sequence (zeroing in on one failure at a time) until the runner exits with code 0 without stopping.
@@ -375,7 +382,7 @@ Also append any new forbidden patterns to `.ai-memory/strictly-avoid.md`.
 - [ ] **Zero Linting/CI/CD Bypass:** Confirmed that NO CLI linters, static analysis tools, or test scripts were disabled, commented out, skipped, or bypassed with `|| true`.
 - [ ] **Zero Actions Storage:** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows, eliminating quota depletion.
 - [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0 (with all quality gates and tests passing).
-- [ ] All failures documented in `.ai-memory/memory/issues/xx-<slug>.md`.
+- [ ] All failures documented in `.ai-memory/cicd-issues/xx-<slug>.md` (or `02-spec/22-app-issues/` for non-CI/CD issues).
 - [ ] **Modified Files Recorded:** Confirmed all modified files were tracked via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
 - [ ] Changes committed: `fix(ci): resolve <summary>`.
 - [ ] Pushed to the current branch.
@@ -392,6 +399,9 @@ Also append any new forbidden patterns to `.ai-memory/strictly-avoid.md`.
 
 ## Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
+- [ ] **TOP-INSTRUCTION PRIORITY MANDATE:** Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] **ISSUE & RCA DESTINATION ROUTING:** Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
+- [ ] **NO STOPPING AFTER RCA (TOTAL BAN):** Never halt execution or ask user permission after writing the RCA. Proceed unconditionally to Phase 2 code execution.
 - [ ] **NO ROUTINE UNIT TEST RUNNING (TOTAL BAN IN STANDARD CI-CD-FIX):** NEVER run heavy unit test suites (`go test ./...`, `06-cicd-local-runner.py --run-tests`, runner scripts) during standard CI/CD fix turns. All full test suite runs are strictly reserved for `04-ci-cd-fix-with-release.md` and release workflows.
 - [ ] **NO ROUTINE BUILD CHECKING (TOTAL BAN):** NEVER run broad build commands (`go build ./...`, `npm run build`) to verify compilation during intermediate micro-refactoring steps.
 - [ ] **NO RUNNER SCRIPTS (TOTAL BAN):** NEVER launch background test runners, worker pools, or test inventory loops during routine execution.

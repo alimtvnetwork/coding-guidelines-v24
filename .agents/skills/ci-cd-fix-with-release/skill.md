@@ -6,6 +6,13 @@ description: >-
 
 # Instruction (must follow): Release-Triggered CI/CD Fix Loop & Release Orchestration
 
+> [!IMPORTANT]
+> Prompt Version: 2.5.0
+> Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
+
 Trigger Keywords & Aliases: `fix and release`, `ci release`, `fix CI/CD and release`, `cicd fix release`
 
 /goal Autonomously diagnose and repair CI/CD pipeline issues, execute full unit test suites and quality gates to verify green status, and perform complete automated release publication with version bump and changelog sync.
@@ -651,6 +658,9 @@ Include: previous version, new version, step number and name, command run, full 
 
 ## Non-Negotiable Coding Standards
 
+- [ ] **Top-Instruction Priority Mandate:** Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] **Issue & RCA Destination Routing:** Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
+- [ ] **No Stopping After RCA:** Never halt execution or ask user permission after writing the RCA. Proceed unconditionally to code execution.
 - [ ] **GitMap Pipeline-AI & Dynamic Waiting:** If inspecting remote pipeline status, used `gitmap pipeline-ai status --json` / `gitmap pl-ai status -t <sec>` with adaptive sleep to prevent credit waste, and extracted targeted diagnostics (`##[error]`, `FAIL:`, compile errors).
 - [ ] **Atomic Change Tracking:** All modified files were recorded safely under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
 - [ ] **No Disabling CLI Linting (Zero Bypassing):** All CLI linters and CI/CD quality gates executed fully without `|| true`, `continue-on-error`, or suppression comments. Code was legitimately fixed.

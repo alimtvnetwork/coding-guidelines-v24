@@ -11,7 +11,7 @@ description: >-
 > Synchronization: Main Meta-Repo & Connected Workspaces
 > 
 > **Top-Instruction Priority Mandate (Preamble Precedence):**
-> Any directive, constraint, checklist, or instruction declared at the top of this prompt, in a header alert block, or in the incoming user request represents an absolute MUST FOLLOW mandate that takes highest priority and strictly overrides any conflicting general advice, default conventions, or lower-level guidelines below it.
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
 
@@ -32,22 +32,23 @@ N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never mo
 
 ### Master Task Checklist (Atomic Numbered Steps)
 
-1. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`. If screenshot URLs or base64 data URIs are provided, decode/save them as image files (`assets/screenshots/<task-slug>-<NN>.png`) and refer back to them via relative paths in specs. Extract actionable deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task breakdown directly in chat in cleanly indented markdown with vertical blank lines, task state (`State: [PENDING]`), and understanding indicator bracket (`Understood: [YES — ...]`) before any file exploration, scanning, or spec writing.
-2. [ ] /goal Phase 1B (Step 1 - Canonical Spec Generation in Folder 21): Write the canonical specification in `02-spec/21-app/xx-<slug>.md` (or directory `02-spec/21-app/xx-<slug>/` for complex features) with lossless verbatim prompt capture and visual assets, register it in `02-spec/21-app/01-index.md`, and initialize the execution plan in `.ai-memory/plans/pending/xx-<slug>.md` linking back to the spec.
-3. [ ] /goal Phase 1B (Step 2 - Scan & Discover): Use fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) to inventory files and map call sites without tool truncation limits.
-4. [ ] /goal Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the plan into lean subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md` cross-referencing the canonical spec. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate. Complete all spec and subtask writing within 50% of the steps budget (`PHASE_1_STEPS = N / 2`).
-5. [ ] /goal Phase 1B (Step 4 - Readiness Audit Gate): Confirm canonical spec is registered in `02-spec/21-app/01-index.md`, all `Task-xx` deliverables are mapped to subtasks linking back to the spec, and disjoint files are assigned before execution.
-6. [ ] /goal Phase 1B (Step 5 - Unconditional Zero-Question Execution Mandate): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 code execution without pausing, asking questions, or seeking user confirmation. Stopping after spec writing is strictly banned and constitutes an auto-reject failure.
-7. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Unconditionally execute the code refactoring in the remaining 50% of the steps budget (`PHASE_2_STEPS = N / 2`). Spawn at most 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
-8. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.ai-memory/plan.md` and `.ai-memory/memory/issues/`; subsequent agents must read the failure log first to remediate root causes.
-9. [ ] /goal Phase 2 (Change Recording & Quality Linting): Record all modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) and run targeted file-level linters on specifically modified files (`exit 0`). Do not run `06-cicd-local-runner.py`, unit tests, or build checks (deferred to CI/CD).
-10. [ ] /goal Phase 3 (Consolidation & Atomic Push): Consolidate completed subtasks into `.ai-memory/plans/completed/xx-<slug>.md` preserving the canonical spec reference (canonical spec in `02-spec/21-app/` remains permanently intact), delete granular subtasks and pending plan, stage all changes, and push in a single grouped commit.
-11. [ ] /goal Phase 3 (Completion & Confidence Reporting): Emit the final Task Completion Summary with green check mark emojis, modified files summary, and implementation confidence score.
-12. [ ] /learn Ingest `.ai-memory/memory/01-index.md` for project memory index and past learnings.
-13. [ ] /learn Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
-14. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
-15. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and *appfault.AppError.
-16. [ ] /learn Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
+1. [ ] /goal Preamble Precedence Verification: Whatever is given before this section or prompt (user preamble, header constraints, prior instructions) has been verified as highest priority and non-negotiable, and is strictly incorporated into the task scope ahead of all other guidelines.
+2. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`. If screenshot URLs or base64 data URIs are provided, decode/save them as image files (`assets/screenshots/<task-slug>-<NN>.png`) and refer back to them via relative paths in specs. Extract actionable deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task breakdown directly in chat in cleanly indented markdown with vertical blank lines, task state (`State: [PENDING]`), and understanding indicator bracket (`Understood: [YES — ...]`) before any file exploration, scanning, or spec writing.
+3. [ ] /goal Phase 1B (Step 1 - Canonical Spec Generation in Folder 21): Write the canonical specification in `02-spec/21-app/xx-<slug>.md` (or directory `02-spec/21-app/xx-<slug>/` for complex features) with lossless verbatim prompt capture and visual assets, register it in `02-spec/21-app/01-index.md`, and initialize the execution plan in `.ai-memory/plans/pending/xx-<slug>.md` linking back to the spec.
+4. [ ] /goal Phase 1B (Step 2 - Scan & Discover): Use fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) to inventory files and map call sites without tool truncation limits.
+5. [ ] /goal Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the plan into lean subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md` cross-referencing the canonical spec. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate. Complete all spec and subtask writing within 50% of the steps budget (`PHASE_1_STEPS = N / 2`).
+6. [ ] /goal Phase 1B (Step 4 - Readiness Audit Gate): Confirm canonical spec is registered in `02-spec/21-app/01-index.md`, all `Task-xx` deliverables are mapped to subtasks linking back to the spec, and disjoint files are assigned before execution.
+7. [ ] /goal Phase 1B (Step 5 - Unconditional Zero-Question Execution Mandate): Immediately upon completing Phase 1, self-loop and transition directly into Phase 2 code execution without pausing, asking questions, or seeking user confirmation. Stopping after spec writing is strictly banned and constitutes an auto-reject failure.
+8. [ ] /goal Phase 2 (Execution & Code Refactoring, Steps N/2+1..N): Unconditionally execute the code refactoring in the remaining 50% of the steps budget (`PHASE_2_STEPS = N / 2`). Spawn at most 2 execution subagents (max 2 threads each) to execute subtasks on disjoint files in parallel.
+9. [ ] /goal Phase 2 (Failure Memory & Error Recovery): If a subagent fails, record the failure log in `.ai-memory/plan.md` and `.ai-memory/memory/issues/`; subsequent agents must read the failure log first to remediate root causes.
+10. [ ] /goal Phase 2 (Change Recording & Quality Linting): Record all modified files into `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`) and run targeted file-level linters on specifically modified files (`exit 0`). Do not run `06-cicd-local-runner.py`, unit tests, or build checks (deferred to CI/CD).
+11. [ ] /goal Phase 3 (Consolidation & Atomic Push): Consolidate completed subtasks into `.ai-memory/plans/completed/xx-<slug>.md` preserving the canonical spec reference (canonical spec in `02-spec/21-app/` remains permanently intact), delete granular subtasks and pending plan, stage all changes, and push in a single grouped commit.
+12. [ ] /goal Phase 3 (Completion & Confidence Reporting): Emit the final Task Completion Summary with green check mark emojis, modified files summary, and implementation confidence score.
+13. [ ] /learn Ingest `.ai-memory/memory/01-index.md` for project memory index and past learnings.
+14. [ ] /learn Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
+15. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
+16. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and *appfault.AppError.
+17. [ ] /learn Ingest `.ai-memory/coding-guidelines.md` for master consolidated coding guidelines.
 
 ---
 
@@ -249,8 +250,26 @@ At the completion of all tasks and before concluding the turn, you must emit thi
 
 ---
 
+## Issue Destination & Root Cause Analysis (RCA) Routing Mandate
+
+Whenever the task involves fixing an issue, bug, pipeline failure, or performing a fix with RCA (e.g., user reports a failure, provides a CI/CD error log, or commands "fix with RCA"):
+1. **CI/CD Issues & Pipeline Failures:**
+   - **Target Folder:** `.ai-memory/cicd-issues/`
+   - **File Pattern:** `.ai-memory/cicd-issues/NN-<issue-slug>.md`
+   - **Registry:** Index the issue in `.ai-memory/cicd-index.md`.
+   - **Scope:** CI/CD workflows, GitHub Actions, local runner failures (`06-cicd-local-runner.py`), test runner errors, lint gate failures, or build pipeline failures.
+2. **Non-CI/CD Issues (Application Bugs, Feature Defects, Logic/Runtime Errors):**
+   - **Target Folder:** `02-spec/22-app-issues/` (canonical spec hierarchy Tier 22)
+   - **File Pattern:** `02-spec/22-app-issues/NN-<issue-slug>.md`
+   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/01-index.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
+   - **Scope:** Application business logic, UI bugs, CLI command errors, API crashes, and domain defects.
+
+---
+
 ## 8. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
 - [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
 - [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
 - [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.

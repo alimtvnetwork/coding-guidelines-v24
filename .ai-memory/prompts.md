@@ -105,6 +105,8 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `16-ci-cd` | [`16-ci-cd/05-fix-ci-cd-and-run-scripts.md`](../01-prompts/16-ci-cd/05-fix-ci-cd-and-run-scripts.md) | Cross-Platform CI/CD & Run Scripts Fix — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/06-ci-cd-fix-with-release.md`](../01-prompts/16-ci-cd/06-ci-cd-fix-with-release.md) | Release-Triggered CI/CD Fix Loop — Workflow (must follow) |
 | `16-ci-cd` | [`16-ci-cd/07-cicd-pipeline-create.md`](../01-prompts/16-ci-cd/07-cicd-pipeline-create.md) | Pipeline Architecture & Cross-Platform Python Automation — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/08-ci-cd-fix-with-n-steps.md`](../01-prompts/16-ci-cd/08-ci-cd-fix-with-n-steps.md) | [V2] CI/CD Fix N-Step Continuous Loop & 4-Part RCA Orchestration — Workflow (must follow) |
+| `16-ci-cd` | [`16-ci-cd/09-ci-cd-fix-with-release-n-steps.md`](../01-prompts/16-ci-cd/09-ci-cd-fix-with-release-n-steps.md) | [V2] Release-Triggered CI/CD Fix N-Step Continuous Loop & Automated Release Ceremony — Workflow (must follow) |
 | `17-release-management` | [`17-release-management/01-major-bump.md`](../01-prompts/17-release-management/01-major-bump.md) | Major Version Bump — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/02-minor-bump.md`](../01-prompts/17-release-management/02-minor-bump.md) | Minor Version Bump — Release Management (must follow) |
 | `17-release-management` | [`17-release-management/03-patch-bump.md`](../01-prompts/17-release-management/03-patch-bump.md) | Patch Version Bump — Release Management (must follow) |

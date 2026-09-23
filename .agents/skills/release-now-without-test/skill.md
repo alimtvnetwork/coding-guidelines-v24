@@ -6,7 +6,12 @@ description: >-
 
 # Release Now Without Test (Instant Release Orchestrator)
 
-Execute fast, automated release orchestration, semantic version bumping, release branching, git tagging, and remote pushing while strictly avoiding all building, local CI/CD testing, and post-publish pipeline monitoring.
+> [!IMPORTANT]
+> Prompt Version: 2.5.0
+> Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
 ## Core Directives & 5-Step Release Branching Mandate
 
@@ -57,6 +62,7 @@ To rapidly discover version manifests, changelog entries, release notes, and ins
 
 ## Final Step Git Commit & Push Mandate (Strict Checklist)
 
+- [ ] **TOP-INSTRUCTION PRIORITY MANDATE:** Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
 - [ ] **MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW):** At the completion of the release workflow, verify that the release branch, release tag, and updated main branch are all pushed to `origin`.
 - [ ] **TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY):** All modified version files across the turn MUST be committed together in a single atomic commit on the release branch before merging and pushing!
 - [ ] **RESTORE STARTING BRANCH:** The active branch MUST be restored to the starting branch before concluding the turn.

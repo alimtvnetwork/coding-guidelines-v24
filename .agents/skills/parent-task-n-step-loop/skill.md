@@ -10,7 +10,7 @@ description: Autonomously orchestrate and execute the parent task by decomposing
 > Synchronization: Main Meta-Repo & Connected Workspaces
 > 
 > **Top-Instruction Priority Mandate (Preamble Precedence):**
-> Any directive, constraint, checklist, or instruction declared at the top of this prompt, in a header alert block, or in the incoming user request represents an absolute MUST FOLLOW mandate that takes highest priority and strictly overrides any conflicting general advice, default conventions, or lower-level guidelines below it.
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
 
@@ -47,13 +47,14 @@ Execute this task via a strict 3-Phase pipeline. Do not skip steps.
 
 Before executing any file searches, scans, spec writing, or code changes, you must execute Phase 1A:
 
-1. Verbatim Prompt Capture: Capture the incoming user request verbatim. It will be recorded losslessly in both the canonical spec under `02-spec/21-app/` and the master execution plan under `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
-2. Screenshot & Print Screen Base64 Image Ingestion Protocol: If the user request or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
+1. Top-Instruction Priority Verification: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) must be verified as highest priority and non-negotiable, and strictly incorporated ahead of all other guidelines.
+2. Verbatim Prompt Capture: Capture the incoming user request verbatim. It will be recorded losslessly in both the canonical spec under `02-spec/21-app/` and the master execution plan under `.ai-memory/plans/pending/xx-<slug>.md` under a dedicated `## User Request (Verbatim)` section.
+3. Screenshot & Print Screen Base64 Image Ingestion Protocol: If the user request or prompt contains a screenshot URL, print screen link, or base64 data URI (e.g. `data:image/png;base64,...`):
    - Convert that base64 encoding or downloaded image to the file system immediately, saving it as a persistent file under `assets/screenshots/<task-slug>-<NN>.png` or `assets/ui/<task-slug>-<NN>.png`.
    - Never leave raw, massive base64 strings or external ephemeral URLs in the prompt text, specs, or subtasks.
    - Refer back to this saved image file in the master spec, planning document, subtasks, and UI implementation notes strictly as a relative markdown link (e.g. `![Screenshot](assets/screenshots/<task-slug>-<NN>.png)`).
-3. Actionable Deliverables Extraction: Break down whatever user requirements were given (regardless of how they were formatted) into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`.
-4. Mandatory Chat Output Gate & Same-Turn Tool Chaining (TOTAL BAN ON CLOSING CONVERSATION):
+4. Actionable Deliverables Extraction: Break down whatever user requirements were given (regardless of how they were formatted) into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, `Task-03`) under `## Extracted Actionable Task List`.
+5. Mandatory Chat Output Gate & Same-Turn Tool Chaining (TOTAL BAN ON CLOSING CONVERSATION):
    - You MUST output the confirmed deliverables list directly in chat, but you MUST NOT end your turn or pause after emitting it!
    - In the EXACT SAME RESPONSE turn as your markdown output, you MUST immediately invoke the first tool call (e.g. `write_to_file` to initialize the planning spec or `run_command` for fast discovery).
    - NEVER emit the breakdown text without invoking a tool call. Emitting visible text without a tool call terminates the AI turn, causing the engine to close or hang the conversation while tasks remain pending.
@@ -259,6 +260,22 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
 
 ---
 
+## Issue Destination & Root Cause Analysis (RCA) Routing Mandate
+
+Whenever the task involves fixing an issue, bug, pipeline failure, or performing a fix with RCA (e.g., user reports a failure, provides a CI/CD error log, or commands "fix with RCA"):
+1. **CI/CD Issues & Pipeline Failures:**
+   - **Target Folder:** `.ai-memory/cicd-issues/`
+   - **File Pattern:** `.ai-memory/cicd-issues/NN-<issue-slug>.md`
+   - **Registry:** Index the issue in `.ai-memory/cicd-index.md`.
+   - **Scope:** CI/CD workflows, GitHub Actions, local runner failures (`06-cicd-local-runner.py`), test runner errors, lint gate failures, or build pipeline failures.
+2. **Non-CI/CD Issues (Application Bugs, Feature Defects, Logic/Runtime Errors):**
+   - **Target Folder:** `02-spec/22-app-issues/` (canonical spec hierarchy Tier 22)
+   - **File Pattern:** `02-spec/22-app-issues/NN-<issue-slug>.md`
+   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/01-index.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
+   - **Scope:** Application business logic, UI bugs, CLI command errors, API crashes, and domain defects.
+
+---
+
 ## 1. AI Fix Scripts Memory (Reusable Tooling)
 
 - [ ] /goal Reuse First: Scanned and learned `03-ai-scripts/01-index.md` before writing temporary code.
@@ -271,6 +288,8 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
 
 ## 2. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
 - [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
 - [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
 - [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.

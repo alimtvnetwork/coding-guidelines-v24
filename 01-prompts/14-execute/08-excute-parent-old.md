@@ -1,8 +1,11 @@
 # [V2] Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow)
 
 > [!IMPORTANT]
-> Prompt Version: 2.4.0
+> Prompt Version: 2.5.0
 > Synchronization: Main Meta-Repo & Connected Workspaces
+> 
+> **Top-Instruction Priority Mandate (Preamble Precedence):**
+> Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
 /goal Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure.
 
@@ -214,6 +217,22 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
 
 ---
 
+## Issue Destination & Root Cause Analysis (RCA) Routing Mandate
+
+Whenever the task involves fixing an issue, bug, pipeline failure, or performing a fix with RCA (e.g., user reports a failure, provides a CI/CD error log, or commands "fix with RCA"):
+1. **CI/CD Issues & Pipeline Failures:**
+   - **Target Folder:** `.ai-memory/cicd-issues/`
+   - **File Pattern:** `.ai-memory/cicd-issues/NN-<issue-slug>.md`
+   - **Registry:** Index the issue in `.ai-memory/cicd-index.md`.
+   - **Scope:** CI/CD workflows, GitHub Actions, local runner failures (`06-cicd-local-runner.py`), test runner errors, lint gate failures, or build pipeline failures.
+2. **Non-CI/CD Issues (Application Bugs, Feature Defects, Logic/Runtime Errors):**
+   - **Target Folder:** `02-spec/22-app-issues/` (canonical spec hierarchy Tier 22)
+   - **File Pattern:** `02-spec/22-app-issues/NN-<issue-slug>.md`
+   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/01-index.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
+   - **Scope:** Application business logic, UI bugs, CLI command errors, API crashes, and domain defects.
+
+---
+
 ## 1. AI Fix Scripts Memory (Reusable Tooling)
 
 - [ ] /goal Reuse First: Scanned and learned `03-ai-scripts/01-index.md` before writing temporary code.
@@ -226,6 +245,8 @@ To prevent instruction bloat, context exhaustion, and repetitive failure loops, 
 
 ## 2. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
+- [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
 - [ ] NO TEST RUNNING (TOTAL BAN): Never run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`, runner scripts), Go (`go test ./...`), or any test runner during routine execution turns. Testing is strictly checked later on in CI/CD.
 - [ ] NO BUILD CHECKING (TOTAL BAN): Never run build commands (`go build`, `npm run build`, compiler checks) to verify compilation. Build verification is checked later on in CI/CD.
 - [ ] NO RUNNER SCRIPTS (TOTAL BAN): Never launch background test runners, worker pools, or test inventory loops during routine execution.
