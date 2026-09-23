@@ -119,6 +119,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `19-old-execute-prompts` | [`19-old-execute-prompts/01-execute-robust-loop.md`](../01-prompts/19-old-execute-prompts/01-execute-robust-loop.md) | Resilient Multi-Agent Loop Execution — Workflow (must follow) |
 | `19-old-execute-prompts` | [`19-old-execute-prompts/02-fix-subtask-naming-convention.md`](../01-prompts/19-old-execute-prompts/02-fix-subtask-naming-convention.md) | Subtask Naming Normalization & Sequence Repair — Workflow (must follow) |
 | `20-ai-fix-script-prompts` | [`20-ai-fix-script-prompts/01-python-file-manipulator.md`](../01-prompts/20-ai-fix-script-prompts/01-python-file-manipulator.md) | Python File Manipulator CLI Specification — Tooling Spec (must follow) |
+| `21-temp-end-to-end-tests` | [`21-temp-end-to-end-tests/01-temp-end-to-end-test.md`](../01-prompts/21-temp-end-to-end-tests/01-temp-end-to-end-test.md) | Temporary End-to-End Tests & Isolated On-Demand Validation — Workflow (must follow) |
 
 ## Maintenance
 

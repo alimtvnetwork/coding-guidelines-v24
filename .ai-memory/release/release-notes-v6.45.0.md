@@ -17,4 +17,5 @@ curl -sL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/v
 ## What's Changed in v6.45.0
 
 ### Added
+
 - enhance release orchestrator with automated release notes and GitHub release creation
