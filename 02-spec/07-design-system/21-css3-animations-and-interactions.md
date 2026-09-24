@@ -199,6 +199,183 @@ LESS is the preferred styling framework across this repository due to parametric
 }
 ```
 
+### 4.3 Infinite Marquee Ribbon (Infinite Horizontal Ticker)
+
+```less
+// ============================================================================
+// INFINITE MARQUEE TICKER (LESS PREFERRED)
+// ============================================================================
+
+@keyframes marquee-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-container {
+  overflow: hidden;
+  display: flex;
+  user-select: none;
+  gap: 2rem;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 1) 90%,
+    transparent 100%
+  );
+
+  .marquee-track {
+    display: flex;
+    flex-shrink: 0;
+    gap: 2rem;
+    animation: marquee-drift 35s infinite linear;
+    will-change: transform;
+
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+}
+```
+
+### 4.4 Fluid Accordion Height Animation (Zero-JS)
+
+Traditional web accordions required calculating pixel heights with JavaScript. Modern CSS allows pure declarative height animations through CSS Grid fractions or `interpolate-size`:
+
+```less
+// ============================================================================
+// ZERO-JS FLUID ACCORDION (LESS PREFERRED)
+// ============================================================================
+
+.accordion-item {
+  border-bottom: 1px solid #e2e8f0;
+
+  .accordion-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 0;
+    background: none;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0f172a;
+    cursor: pointer;
+
+    .chevron-icon {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-right: 2px solid #64748b;
+      border-bottom: 2px solid #64748b;
+      transform: rotate(45deg);
+      transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+
+  // Smooth height transition container
+  .accordion-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    .accordion-inner {
+      overflow: hidden;
+    }
+  }
+
+  // Expanded State
+  &[aria-expanded="true"],
+  &.is-open {
+    .chevron-icon {
+      transform: rotate(-135deg);
+    }
+
+    .accordion-collapse {
+      grid-template-rows: 1fr;
+    }
+  }
+}
+```
+
+### 4.5 Rotating Neon Border Gradient Sweep
+
+```less
+// ============================================================================
+// CONTINUOUS ROTATING BORDER GRADIENT (LESS PREFERRED)
+// ============================================================================
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate-border {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+.neon-sweep-card {
+  position: relative;
+  border-radius: 1.25rem;
+  background: #0b1329;
+  padding: 2rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--gradient-angle),
+      #8b5cf6 0%,
+      #38bdf8 25%,
+      transparent 50%,
+      #8b5cf6 100%
+    );
+    z-index: -1;
+    animation: rotate-border 6s linear infinite;
+  }
+}
+```
+
+### 4.6 Masked Text Reveal Grammar
+
+```less
+// ============================================================================
+// MASKED TEXT ENTRANCE (LESS PREFERRED)
+// ============================================================================
+
+@keyframes text-reveal-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+.reveal-heading {
+  display: inline-block;
+  overflow: hidden;
+
+  .reveal-line {
+    display: inline-block;
+    animation: text-reveal-up 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+```
+
 ---
 
 ## 5. Accessibility & Reduced Motion

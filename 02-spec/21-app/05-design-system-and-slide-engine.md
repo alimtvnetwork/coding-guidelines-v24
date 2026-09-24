@@ -37,7 +37,7 @@ I want you to understand this website, get the color grading, how the sections a
 
 - **Task-02: CSS3 Keyframe Animations & Hover Transition Specifications**
   - Author `02-spec/07-design-system/21-css3-animations-and-interactions.md`.
-  - Detail physics-based cubic-bezier easing curves (`cubic-bezier(0.16, 1, 0.3, 1)`), line hover highlight effects, border glow animations, and strict `prefers-reduced-motion` fallbacks.
+  - Detail physics-based cubic-bezier easing curves (`cubic-bezier(0.16, 1, 0.3, 1)`), line hover highlight effects, border glow animations, infinite marquee ribbons, zero-JS fluid accordions, rotating neon borders, and strict `prefers-reduced-motion` fallbacks.
 
 - **Task-03: Modern CSS Capabilities — Native Select & Border Shapes**
   - Author `02-spec/07-design-system/22-native-css-select-and-border-shapes.md`.
@@ -45,7 +45,8 @@ I want you to understand this website, get the color grading, how the sections a
 
 - **Task-04: Building Blocks Component Architecture with Standalone SVGs**
   - Author `02-spec/07-design-system/23-building-block-components.md` explaining component anatomy like explaining to a five-year-old child.
-  - Generate standalone SVG visual diagrams in `02-spec/07-design-system/svgs/` illustrating card structures, grid layouts, and hover mechanics without external screenshots.
+  - Generate standalone SVG visual diagrams in `02-spec/07-design-system/svgs/` illustrating card structures (`card-anatomy.svg`), hover mechanics (`hover-elevation.svg`), curriculum modules (`curriculum-card.svg`), 3-tier pricing tables (`pricing-tiers.svg`), and slide layouts (`slide-layout.svg`) without external screenshots.
+  - Detail high-trust editorial whiteness and floating containers inspired by clean digital agency portals.
 
 - **Task-05: Slide Presentation Engine Architecture**
   - Author `02-spec/07-design-system/24-slide-presentation-system.md` synthesizing patterns from `presentations-repos` (16:9 responsive canvas, draggable webcam PIP overlay, incremental step reveals, dual-screen presenter mode).
@@ -54,6 +55,9 @@ I want you to understand this website, get the color grading, how the sections a
   - Fix frontmatter in `.agents/skills/fix-spec-from-audit/skill.md`.
   - Rename uppercase `SKILL.md` to `skill.md` in `gitmap` and `movie-cli-migration-and-optimization`.
   - Author `.agents/skills/prompts-and-skills-sync/skill.md` for synchronization across connected repositories.
+
+- **Task-07: Master Index Enrichment & Multi-Theme Cataloging**
+  - Update `02-spec/07-design-system/01-index.md` with action-oriented AI reading checklists, 8 standardized short-form theme identifiers (`LIGHT-TRUST`, `DARK-NAVY`, `RISEUP-CORP`, `CYBER-INDIGO`, `VSCODE-DARK`, `TOKYO-NIGHT`, `ONEDARK-PRO`, `WARM-PAPER`), CSS3 animations roster, and direct HTML/LESS live code samples.
 
 ---
 

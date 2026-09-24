@@ -43,15 +43,16 @@ The user requested:
   - `02-spec/07-design-system/svgs/card-anatomy.svg`
   - `02-spec/07-design-system/svgs/hover-elevation.svg`
   - `02-spec/07-design-system/svgs/curriculum-card.svg`
+  - `02-spec/07-design-system/svgs/pricing-tiers.svg`
   - `02-spec/07-design-system/svgs/slide-layout.svg`
   - `02-spec/07-design-system/21-css3-animations-and-interactions.md`
   - `02-spec/07-design-system/22-native-css-select-and-border-shapes.md`
   - `02-spec/07-design-system/23-building-block-components.md`
 - **Accomplishments:**
-  - Created standalone SVG diagrams illustrating component structure, resting vs elevated states, curriculum cards, and slide canvas layouts.
-  - Specified physics-based cubic-bezier easing (`cubic-bezier(0.16, 1, 0.3, 1)`), line hover sliding indicators, and keyframes.
+  - Created standalone SVG diagrams illustrating component structure, resting vs elevated states, curriculum cards, 3-tier pricing models, and slide canvas layouts.
+  - Specified physics-based cubic-bezier easing (`cubic-bezier(0.16, 1, 0.3, 1)`), line hover sliding indicators, infinite marquees, fluid zero-JS accordions, rotating neon border sweeps, and masked text reveals.
   - Documented `appearance: base-select`, `::picker(select)`, `<selectedcontent>`, and CSS `border-shape` organic geometries.
-  - Explained building block anatomy in clear, foundational language.
+  - Explained building block anatomy, 3-tier pricing tables, and high-trust editorial whiteness in clear, foundational language.
 
 ### Subtask 04: Slide Presentation System Specification
 - **Target Files:**
@@ -72,6 +73,14 @@ The user requested:
   - Added missing YAML frontmatter to `fix-spec-from-audit/skill.md`.
   - Renamed uppercase `SKILL.md` files to strictly lowercase `skill.md`.
   - Authored `prompts-and-skills-sync/skill.md` to automate cross-repo prompt and skill synchronization across all 9 connected repos.
+
+### Subtask 06: Master Index Enrichment & Multi-Theme Cataloging
+- **Target File:** `02-spec/07-design-system/01-index.md`
+- **Accomplishments:**
+  - Enhanced top section with action-oriented AI learning checklists (`/learn` Phases 1 to 6).
+  - Catalogs 8 standardized short-form theme identifiers (`LIGHT-TRUST`, `DARK-NAVY`, `RISEUP-CORP`, `CYBER-INDIGO`, `VSCODE-DARK`, `TOKYO-NIGHT`, `ONEDARK-PRO`, `WARM-PAPER`).
+  - Added CSS3 animation roster with timings, visual effects, and reduced-motion mandates.
+  - Provided direct live HTML and LESS code samples, explicitly establishing that **LESS is preferred over CSS**.
 
 ---
 
