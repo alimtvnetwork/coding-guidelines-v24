@@ -29,6 +29,9 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`23-building-block-components.md`](./23-building-block-components.md) — Curriculum cards, 4-cell subgrids, 3-tier pricing tables, SVGs.
 - [ ] `/learn` **Phase 6: Slide Presentation Engine**
   - Read [`24-slide-presentation-system.md`](./24-slide-presentation-system.md) — 16:9 virtual canvas, draggable webcam PIP, step reveals.
+- [ ] `/learn` **Phase 7: AI-Adaptable Modern SaaS Design System**
+  - Read [`25-ai-adaptable-design-system/00-index.md`](./25-ai-adaptable-design-system/00-index.md) — Variable-driven theme swapping (Pink to Green), sticky nav, search module, "Join Us" CSS3 text-slide animation, "Climate AI" highlight, and "Team Greenhouse" section.
+
 
 ---
 
