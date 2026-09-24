@@ -11,14 +11,30 @@ Trigger Keywords & Aliases: `temp e2e`, `temp end to end`, `local e2e test`, `is
 
 /goal Autonomously design, implement, and execute temporary end-to-end integration tests combining complete subsystem flows locally, strictly isolating them with skip-by-default tags and environment guards so they NEVER execute in automated CI/CD pipelines or standard local test suites.
 
+## N-Step Budget & 2-Half Lifecycle Mandate (must follow)
+
+```text
+N = 300
+```
+
+N = total self-loop steps budget that the agents will perform.
+
+```text
+PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Task Verification, Canonical Spec in 02-spec/21-app/, Issue Authoring in 02-spec/22-app-issues/ or .ai-memory/cicd-issues/, Enqueuing to .ai-memory/plans/, Writing Isolated E2E Tests)
+PHASE_2_STEPS = N / 2   (Steps N/2+1 .. N: Running Isolated Tests Locally, 4-Part RCA & Defect Fixing, Test Verification, Consolidation, and Release Ceremony)
+```
+
+N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Never modify them mid-execution.
+
 ---
 
-## Sequential Single-Agent Execution Mandate (No Step Budgets, No Parallelism)
+## Must-Follow Bullet Points for AI Agents (Strict Invariants)
 
-Unlike multi-agent parallel workflows, temporary end-to-end test development enforces strict linear determinism:
-
-1. **Zero Step Budgeting:** Do not track or calculate artificial step budgets (no `N = 200`, no `PHASE_1_STEPS = N / 2`, no step decrement equations). Work proceeds linearly through distinct phases until all verification gates pass cleanly.
-2. **Zero Parallel Dispatch (Strictly Sequential):** Never spawn parallel execution subagents, multi-threaded worker pools, or concurrent dispatch routines. End-to-end tests touch shared resources, local databases, ports, and subprocess state; concurrency introduces race conditions, port collisions, and fixture corruption. All actions are executed sequentially by a single dedicated agent.
+1. **Strict Tag Isolation (`//go:build e2e`):** Every temporary or on-demand end-to-end test file MUST begin with `//go:build e2e` on line 1 so that CI/CD, local runners (`06-cicd-local-runner.py`), and standard `go test ./...` invocations skip them completely.
+2. **Never Run in Automated CI/CD:** End-to-end tests are strictly reserved for local on-demand verification when explicitly commanded by the user. They must NEVER be scheduled or triggered in automated CI/CD workflows.
+3. **Zero Secrets in Repository (Total Ban):** NEVER hardcode passwords, secret keys, or private tokens in test files or fixtures. All sensitive test parameters (e.g. VM passwords) MUST be loaded from a local, gitignored file (e.g. `tests/config/vmpass.json`).
+4. **Zero Hardcoded Paths:** Dynamic paths only; calculate paths using environment variables (`$env:APPDATA`, `os.UserHomeDir()`, `os.Getenv()`). Hardcoded drive letters (`D:\`) are strictly banned.
+5. **2-Agent Orchestration Mandate:** The runtime should spawn 2 agents all the time for executing tasks, and during the writing of the spec each agent can handle 3 to 4 parallel tasks depending on context.
 
 ---
 

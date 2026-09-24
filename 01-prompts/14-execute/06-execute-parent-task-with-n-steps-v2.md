@@ -113,7 +113,7 @@ To avoid 50-result tool truncation limits and eliminate multi-turn exploratory r
 - Fast Pattern Search: `python 03-ai-scripts/17-fast-file-reader.py --search-pattern "<pattern>" --limit 50`
 - Subsystem & Topology Overview: `python 03-ai-scripts/18-codebase-topology-discoverer.py --summary`
 
-Spawn at most 2 planning subagents to perform deep scanning if necessary.
+**2-Agent Orchestration Mandate:** The running time must spawn 2 agents all the time for executing tasks. During the writing of the specification, each agent can handle 3 to 4 parallel tasks concurrently depending on the context.
 
 #### Step 3: Actionable Execution Plan & Lean Subtask Decomposition
 With the canonical spec established in `02-spec/21-app/`, initialize the execution plan and decompose it into subtasks in `.ai-memory/plans/`:
