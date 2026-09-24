@@ -91,7 +91,7 @@ this func hsould take the current object in the func to proceed with so that we 
 | `04-code/golang/examples/database_query.go` | Modified | Updated `PluginSummary.ID` to `Id`. |
 | `04-code/golang/examples/remote_client.go` | Modified | Updated `RemoteActivationResponse.Success` to `IsSuccess`. |
 | `05-changes-history/16-boolean-prefixes-id-standard-and-writer-context/01-transaction-log.md` | Created | This transaction log. |
-| `05-changes-history/01-index.md` | Modified | Registered Task 16 in change history index. |
+| `05-changes-history/readme.md` | Modified | Registered Task 16 in change history index. |
 
 ---
 

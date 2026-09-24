@@ -26,9 +26,9 @@ The user requested standardization of byte wrapping envelopes with:
 | `04-code/golang/pkg/streamwriter/json_result.go` | Created | Implemented `WrappedJSON[T]` interface, `JSONResult[T]`, constructors, and JSON helpers |
 | `04-code/golang/pkg/streamwriter/streamwriter_test.go` | Modified | Added `TestJSONResult_WrappedBytesFlow` and verified `WrappedBytes` contract |
 | `research/10-wrapped-bytes-interface-and-json-result.md` | Created | Research documentation and architectural specifications |
-| `research/01-index.md` | Modified | Registered document 10 in index |
+| `research/readme.md` | Modified | Registered document 10 in index |
 | `05-changes-history/10-wrapped-bytes-interface-and-json-result/01-transaction-log.md` | Created | This transaction log |
-| `05-changes-history/01-index.md` | Modified | Registered task 10 in index |
+| `05-changes-history/readme.md` | Modified | Registered task 10 in index |
 
 ---
 

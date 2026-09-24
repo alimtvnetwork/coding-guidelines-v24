@@ -7,7 +7,7 @@ Adds repo-relative file paths to the ``allowlist`` of a specific
 ``[[rule]]`` block in ``linter-scripts/forbidden-strings.toml``.
 
 Use this when a forbidden-strings violation is **legitimate** — for
-example, a historical session log that must literally cite the old
+example, a historical session log that must verbatim cite the old
 slug, or a changelog entry quoting a deprecated module path.
 
 Guard rails (every one is intentional — do NOT bypass):

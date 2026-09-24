@@ -55,7 +55,7 @@ The examples needed to showcase:
 | `04-code/golang/examples/streamwriter_examples_test.go` | Created | Unit tests asserting output fidelity and correctness. |
 | `04-code/golang/cmd/streamwriter-demo/main.go` | Created | Standalone demonstration CLI entrypoint. |
 | `05-changes-history/15-full-examples-logger-json-streamer/01-transaction-log.md` | Created | This transaction log. |
-| `05-changes-history/01-index.md` | Modified | Registered Task 15 in change history index. |
+| `05-changes-history/readme.md` | Modified | Registered Task 15 in change history index. |
 
 ---
 

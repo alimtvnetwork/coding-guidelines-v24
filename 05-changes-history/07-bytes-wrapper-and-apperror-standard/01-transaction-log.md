@@ -35,12 +35,12 @@
 
 ### Research & Documentation
 
-- `research/01-index.md`: Registered research topic 07.
+- `research/readme.md`: Registered research topic 07.
 - `research/07-bytes-wrapper-and-apperror-standard.md`: Complete specification of `Bytes[T]` and `*appfault.AppError`.
 
 ### Transaction History Updates
 
-- `05-changes-history/01-index.md`: Registered Task 07.
+- `05-changes-history/readme.md`: Registered Task 07.
 - `05-changes-history/07-bytes-wrapper-and-apperror-standard/01-transaction-log.md`: This file.
 
 ---

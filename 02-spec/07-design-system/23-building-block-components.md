@@ -49,10 +49,10 @@ To help an AI understand interface construction without confusion, think of a mo
 
 The visual architecture is detailed in standalone SVG files within this repository:
 
-- **[Card Anatomy & Subgrid Diagram](svgs/card-anatomy.svg):** Deconstructs the category badge, title, 4-block inner grid, and hairline borders.
-- **[Hover Mechanics & Darkish Shade Diagram](svgs/hover-elevation.svg):** Compares the resting container against the elevated hover container and illustrates non-white-blended interactive rows.
-- **[Curriculum Card Architecture](svgs/curriculum-card.svg):** Detailed multi-module syllabus card layout in dark obsidian navy mode.
-- **[3-Tier Pricing Table Diagram](svgs/pricing-tiers.svg):** Illustrates optical weight hierarchy, center card elevation, feature bullets, and gold badge.
+- **[Card Anatomy & Subgrid Diagram](01-svg/card-anatomy.svg):** Deconstructs the category badge, title, 4-block inner grid, and hairline borders.
+- **[Hover Mechanics & Darkish Shade Diagram](01-svg/hover-elevation.svg):** Compares the resting container against the elevated hover container and illustrates non-white-blended interactive rows.
+- **[Curriculum Card Architecture](01-svg/curriculum-card.svg):** Detailed multi-module syllabus card layout in dark obsidian navy mode.
+- **[3-Tier Pricing Table Diagram](01-svg/pricing-tiers.svg):** Illustrates optical weight hierarchy, center card elevation, feature bullets, and gold badge.
 
 ---
 
@@ -524,4 +524,4 @@ Inspired by clean, minimalist digital portals, this pattern pairs pure white can
 1. **Hierarchy First:** Always establish the container boundary before nesting internal content items.
 2. **Predictable Ratios:** Card padding should scale proportionally (`1.5rem` on mobile, `2rem` to `2.5rem` on desktop).
 3. **Darkish Shade Preservation:** Never use light gray `#fafafa` alone for light surface hover states; combine with low-alpha slate `rgba(15, 23, 42, 0.05)` to maintain visible dark contrast.
-4. **Standalone SVGs:** Reference local SVGs (`svgs/*.svg`) for visual documentation rather than external image URLs.
+4. **Standalone SVGs:** Reference local SVGs (`01-svg/*.svg`) for visual documentation rather than external image URLs.

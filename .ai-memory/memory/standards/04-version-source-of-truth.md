@@ -8,7 +8,7 @@ type: standard
 
 **Canonical spec:** `02-spec/01-spec-authoring-guide/14-version-schema.md`
 **Rule:** Hard Rule 19 in `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`
-**Reading Queue:** Enqueued in `.ai-memory/what-to-read.md` and `.ai-memory/memory/01-index.md`
+**Reading Queue:** Enqueued in `.ai-memory/what-to-read.md` and `.ai-memory/memory/readme.md`
 
 ## 1. Single Source of Truth at Repository Root
 

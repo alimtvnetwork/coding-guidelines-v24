@@ -50,7 +50,7 @@ To satisfy this requirement:
 - `04-code/golang/pkg/applogger/sqlitelogger/sqlitelogger_test.go`:
   - Expanded test suite to 20 comprehensive unit tests covering 88.5% of statements.
   - Added tests for concurrent task writes, limits, incremental migrations, simulated execution/query errors, corrupt database detection, and validation errors.
-- `05-changes-history/01-index.md`:
+- `05-changes-history/readme.md`:
   - Registered Task 23 transaction log.
 
 ---

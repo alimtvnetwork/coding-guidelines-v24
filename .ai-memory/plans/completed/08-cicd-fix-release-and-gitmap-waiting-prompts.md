@@ -11,8 +11,8 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/12-cicd-pipeline-workflows/01-index.md`](02-spec/12-cicd-pipeline-workflows/01-index.md) — Local runner synchronization and zero CI disablement rules.
-  - [`02-spec/16-generic-release/01-index.md`](02-spec/16-generic-release/01-index.md) — Release ceremony, tag generation, and changelog synchronization.
+  - [`02-spec/12-cicd-pipeline-workflows/readme.md`](02-spec/12-cicd-pipeline-workflows/readme.md) — Local runner synchronization and zero CI disablement rules.
+  - [`02-spec/16-generic-release/readme.md`](02-spec/16-generic-release/readme.md) — Release ceremony, tag generation, and changelog synchronization.
 - **Core Architecture Contracts:**
   - **Dynamic Timeout Waiting Mandate:** Mandatory dynamic intervals based on `etaSeconds`:
     - `ETA > 120s`: sleep 20s–30s.

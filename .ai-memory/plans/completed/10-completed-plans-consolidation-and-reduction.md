@@ -11,8 +11,8 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md`](02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md) — Monotonic continuous sequential numbering (`01-` to `10-`) and strictly lowercase filenames.
-  - [`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md) — Strict relative Git paths mandate (zero absolute paths and `file:///` URIs).
+  - [`02-spec/02-coding-guidelines/08-file-folder-naming/readme.md`](02-spec/02-coding-guidelines/08-file-folder-naming/readme.md) — Monotonic continuous sequential numbering (`01-` to `10-`) and strictly lowercase filenames.
+  - [`02-spec/02-coding-guidelines/01-cross-language/readme.md`](02-spec/02-coding-guidelines/01-cross-language/readme.md) — Strict relative Git paths mandate (zero absolute paths and `file:///` URIs).
   - [`.ai-memory/strictly-avoid.md`](.ai-memory/strictly-avoid.md) — Banned anti-patterns, zero CI/CD disablement, and no per-file git commits.
 - **Core Architecture Contracts:**
   - **Safety Backup Branch:** `backup/plans-consolidation-20260919-092927` generated and pushed to GitHub prior to modifying plans.
@@ -37,7 +37,7 @@
 | 8 | CI/CD & GitMap Prompts Merge | Merged `14-cicd-fix...` and `15-gitmap-waiting...` into single file | `08-cicd-fix-release...` | DONE |
 | 9 | Multi-Repo Migration Merge | Merged `02-multi-repo...` and `16-multi-repo...` into single file | `09-multi-repo-folder...` | DONE |
 | 10 | Clean Removal of Superseded Files | Executed `git rm` on all 6 superseded micro-plan files | Git index | DONE |
-| 11 | Master Index Synchronization | Updated `.ai-memory/plans/01-index.md` and `.ai-memory/what-to-read.md` | Master indexes | DONE |
+| 11 | Master Index Synchronization | Updated `.ai-memory/plans/readme.md` and `.ai-memory/what-to-read.md` | Master indexes | DONE |
 | 12 | Linters & CI Quality Verification | Ran sequence integrity, doc path linters, gap fixer, and CI runner | All gates green | DONE |
 
 *(Note: Pure coding guideline tasks with zero business logic were pruned from this ledger)*

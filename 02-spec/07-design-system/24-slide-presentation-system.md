@@ -19,7 +19,7 @@ Web-based presentation decks combine the interactivity and fluidity of the brows
 2. **Floating Draggable Webcam PIP (`PresenterWebcamOverlay`):** Video stream with circular boundary, glowing accent perimeter, draggable coordinate snapping, mirror toggle, and customizable opacity.
 3. **Step-by-Step Progressive Reveals:** Sub-slide animations where individual bullets, code blocks, or diagram nodes reveal on subsequent arrow key presses before advancing slides.
 4. **Presenter Dual-Screen Console:** Broadcast channel sync communicating between audience display and presenter control view (notes, elapsed timer, next slide preview).
-5. **Standalone Vector Layouts:** System illustrated via standalone SVG diagrams in `svgs/slide-layout.svg`.
+5. **Standalone Vector Layouts:** System illustrated via standalone SVG diagrams in `01-svg/slide-layout.svg`.
 
 ---
 

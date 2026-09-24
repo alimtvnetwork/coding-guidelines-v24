@@ -86,7 +86,7 @@ class JobResult:
 | `03-ai-scripts/06-cicd-local-runner.py` | Modified | Refactored with `ThreadPoolExecutor`, `JobResult` dataclass, selective logging (`--all`, `--failed`), and duration metrics. |
 | `04-code/golang/pkg/streamwriter/*.go` | Modified | Adjusted newline styling (blank line before return / after `}`) satisfying repository style linters. |
 | `05-changes-history/17-parallel-cicd-local-runner-and-log-filtering/01-transaction-log.md` | Created | This transaction log. |
-| `05-changes-history/01-index.md` | Modified | Registered Task 17 in change history index. |
+| `05-changes-history/readme.md` | Modified | Registered Task 17 in change history index. |
 
 ---
 

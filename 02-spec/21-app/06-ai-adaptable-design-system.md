@@ -220,7 +220,7 @@ To fulfill the modular specification standard without bloated monolithic documen
 
 ```text
 02-spec/07-design-system/25-ai-adaptable-design-system/
-├── 00-index.md                                    # Master index, AI /learn checklist, token flow diagrams
+├── readme.md                                    # Master index, AI /learn checklist, token flow diagrams
 ├── 01-colors-themes/
 │   └── 01-color-and-theme-system.md              # Centralized token architecture, Pink/Green themes, CSS/LESS variables
 ├── 02-menu/

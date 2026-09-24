@@ -60,13 +60,13 @@ The user requested an enhancement to the design system in `02-spec/07-design-sys
 
 ### Subtask 06: Core Design System Spec Synchronization
 - **Target Files:**
-  - `02-spec/07-design-system/01-index.md` (Updated version 4.0.0, keywords, file inventory)
+  - `02-spec/07-design-system/readme.md` (Updated version 4.0.0, keywords, file inventory)
   - `02-spec/07-design-system/02-design-principles.md` (Added 60/30/10 balance, 4-plane depth, anti-slop)
   - `02-spec/07-design-system/03-theme-variable-architecture.md` (Added multi-theme ecosystem mapping)
   - `02-spec/07-design-system/04-typography.md` (Added fluid `clamp()` scale, tracking rules, tabular figures)
   - `02-spec/07-design-system/08-motion-transitions.md` (Added sliding carousel tokens, entrance grammar)
   - `02-spec/07-design-system/13-section-patterns.md` (Added asymmetric hero, sliding carousel, and pinned funnel patterns)
-  - `02-spec/21-app/01-index.md` (Registered canonical spec `12-modern-design-system-and-themes.md`)
+  - `02-spec/21-app/readme.md` (Registered canonical spec `12-modern-design-system-and-themes.md`)
 
 ---
 

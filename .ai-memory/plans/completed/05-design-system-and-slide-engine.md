@@ -27,7 +27,7 @@ The user requested:
 - **Accomplishments:**
   - Preserved lossless verbatim user requirements with sanitized external references.
   - Formulated architectural contracts for multi-theme tokens, LESS preference, CSS3 animations, and slide engine.
-  - Registered spec in `02-spec/21-app/01-index.md`.
+  - Registered spec in `02-spec/21-app/readme.md`.
 
 ### Subtask 02: Multi-Theme Tokens & LESS Palette
 - **Target Files:**
@@ -57,11 +57,11 @@ The user requested:
 ### Subtask 04: Slide Presentation System Specification
 - **Target Files:**
   - `02-spec/07-design-system/24-slide-presentation-system.md`
-  - `02-spec/07-design-system/01-index.md`
+  - `02-spec/07-design-system/readme.md`
 - **Accomplishments:**
   - Synthesized architecture from local presentation repositories in `presentations-repos`.
   - Detailed 16:9 virtual canvas scaling (`1920x1080`), draggable webcam PIP overlay (`PresenterWebcamOverlay`), incremental step motion reveals (`stepMotionOverride`), and dual-screen presenter consoles.
-  - Registered specifications 21 through 24 in `02-spec/07-design-system/01-index.md`.
+  - Registered specifications 21 through 24 in `02-spec/07-design-system/readme.md`.
 
 ### Subtask 05: Antigravity Skills Hygiene & Expansion
 - **Target Files:**
@@ -75,7 +75,7 @@ The user requested:
   - Authored `prompts-and-skills-sync/skill.md` to automate cross-repo prompt and skill synchronization across all 9 connected repos.
 
 ### Subtask 06: Master Index Enrichment & Multi-Theme Cataloging
-- **Target File:** `02-spec/07-design-system/01-index.md`
+- **Target File:** `02-spec/07-design-system/readme.md`
 - **Accomplishments:**
   - Enhanced top section with action-oriented AI learning checklists (`/learn` Phases 1 to 6).
   - Catalogs 8 standardized short-form theme identifiers (`LIGHT-TRUST`, `DARK-NAVY`, `RISEUP-CORP`, `CYBER-INDIGO`, `VSCODE-DARK`, `TOKYO-NIGHT`, `ONEDARK-PRO`, `WARM-PAPER`).

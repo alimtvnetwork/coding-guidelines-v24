@@ -41,7 +41,7 @@ Okay, now that you have understood the design concepts, UI, UX, and everything, 
 - **Task-06: AI Training & Anti-Slop Checklist Guide (`20-ai-training-and-checklist-guide.md`)**
   - Step-by-step train-and-learn rules for AI models, the 5-question above-the-fold contract, golden ratio composition, and the anti-AI-slop rubric.
 - **Task-07: Core Design System Updates & Integration**
-  - Synchronize `01-index.md`, `02-design-principles.md`, `03-theme-variable-architecture.md`, `04-typography.md`, `08-motion-transitions.md`, and `13-section-patterns.md`.
+  - Synchronize `readme.md`, `02-design-principles.md`, `03-theme-variable-architecture.md`, `04-typography.md`, `08-motion-transitions.md`, and `13-section-patterns.md`.
 
 ---
 
@@ -49,7 +49,7 @@ Okay, now that you have understood the design concepts, UI, UX, and everything, 
 
 ```text
 02-spec/07-design-system/
-├── 01-index.md                                (Master Index updated with new specs)
+├── readme.md                                (Master Index updated with new specs)
 ├── 02-design-principles.md                    (Enhanced with 60/30/10, 4-plane depth)
 ├── 03-theme-variable-architecture.md          (Updated multi-theme variable registry)
 ├── 04-typography.md                           (Updated fluid clamp scale & tracking rules)

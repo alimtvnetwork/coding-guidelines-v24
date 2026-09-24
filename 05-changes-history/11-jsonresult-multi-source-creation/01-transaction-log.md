@@ -35,9 +35,9 @@ Specific requirements achieved:
 | `04-code/golang/pkg/streamwriter/json_result.go` | Modified | Added multi-source factories, top-level generic constructors, `JSONSourceOf[T]()`, and `Cast[Target, Source]` |
 | `04-code/golang/pkg/streamwriter/streamwriter_test.go` | Modified | Added `TestJSONSource_MultiSourceCreation` verifying all 10 creation sources |
 | `research/11-jsonresult-multi-source-creation-and-aukgo-architecture.md` | Created | Full research document detailing AUK Go architecture and multi-source blueprints |
-| `research/01-index.md` | Modified | Registered document 11 in research index |
+| `research/readme.md` | Modified | Registered document 11 in research index |
 | `05-changes-history/11-jsonresult-multi-source-creation/01-transaction-log.md` | Created | This transaction log |
-| `05-changes-history/01-index.md` | Modified | Registered task 11 in index |
+| `05-changes-history/readme.md` | Modified | Registered task 11 in index |
 
 ---
 

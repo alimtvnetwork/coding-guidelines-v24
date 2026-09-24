@@ -34,12 +34,12 @@
 
 ### Research & Documentation
 
-- `research/01-index.md`: Registered research topic 06.
+- `research/readme.md`: Registered research topic 06.
 - `research/06-generic-payload-and-ordered-compilation.md`: Comprehensive design blueprint and code examples.
 
 ### Transaction History Updates
 
-- `05-changes-history/01-index.md`: Registered Task 06.
+- `05-changes-history/readme.md`: Registered Task 06.
 - `05-changes-history/06-generic-t-payload-and-recursive-compile/01-transaction-log.md`: This file.
 
 ---

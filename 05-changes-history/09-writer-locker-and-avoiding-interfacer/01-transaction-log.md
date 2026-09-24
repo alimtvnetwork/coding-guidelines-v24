@@ -36,9 +36,9 @@ The user posed two direct requirements:
 | `04-code/golang/pkg/streamwriter/writer.go` | Modified | Replaced `AsInterfacer` with `Lock()` and `Unlock()`, using `ReentrantMutex` and separate `configMu` |
 | `04-code/golang/pkg/streamwriter/streamwriter_test.go` | Modified | Tested `sync.Locker` contract and added concurrent compound batch test |
 | `research/09-writer-locker-and-avoiding-interfacer.md` | Created | Research analysis on `Interfacer` deprecation and `sync.Locker` benefits |
-| `research/01-index.md` | Modified | Registered document 09 in index |
+| `research/readme.md` | Modified | Registered document 09 in index |
 | `05-changes-history/09-writer-locker-and-avoiding-interfacer/01-transaction-log.md` | Created | This transaction log |
-| `05-changes-history/01-index.md` | Modified | Registered task 09 in index |
+| `05-changes-history/readme.md` | Modified | Registered task 09 in index |
 
 ---
 

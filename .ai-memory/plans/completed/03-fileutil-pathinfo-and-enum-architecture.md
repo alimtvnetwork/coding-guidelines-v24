@@ -12,7 +12,7 @@
 
 - **Authoritative Specifications Implemented:**
   - [`02-spec/02-coding-guidelines/01-cross-language/01-cross-language.md`](02-spec/02-coding-guidelines/01-cross-language/01-cross-language.md) — Universal naming conventions, positive boolean prefixes, and strict relative paths.
-  - [`02-spec/02-coding-guidelines/06-constants-and-enums/01-index.md`](02-spec/02-coding-guidelines/06-constants-and-enums/01-index.md) — Centralized constants, modular enum packages, and BaseEnumer interfaces.
+  - [`02-spec/02-coding-guidelines/06-constants-and-enums/readme.md`](02-spec/02-coding-guidelines/06-constants-and-enums/readme.md) — Centralized constants, modular enum packages, and BaseEnumer interfaces.
   - [`02-spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md`](02-spec/02-coding-guidelines/01-cross-language/24-boolean-flag-methods.md) — Exhaustive enum typing, predicates, and single-responsibility isolation.
   - [`02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`](02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md) — Unified file writing, path-level mutex concurrency locking, and zero-panic error returns.
 - **Core Architecture Contracts:**
@@ -56,4 +56,4 @@
 
 - [`.ai-memory/memory/learned/04-streamwriter-contracts-and-naming-standards.md`](.ai-memory/memory/learned/04-streamwriter-contracts-and-naming-standards.md) — Re-entrant locker synchronization and atomic file write patterns.
 - [`.ai-memory/memory/learned/06-leaf-enums-and-baseenumer-parse-helpers.md`](.ai-memory/memory/learned/06-leaf-enums-and-baseenumer-parse-helpers.md) — Leaf enum parsing, cycle elimination, and BaseEnumer architecture.
-- [`.ai-memory/memory/01-index.md`](.ai-memory/memory/01-index.md) — Master index of learned patterns and coding standards.
+- [`.ai-memory/memory/readme.md`](.ai-memory/memory/readme.md) — Master index of learned patterns and coding standards.

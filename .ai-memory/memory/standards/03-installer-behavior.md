@@ -7,7 +7,7 @@ type: standard
 # Generic Installer Behavior (Cross-Repo Standard)
 
 **Canonical spec:** `02-spec/14-update/27-generic-installer-behavior.md` v1.0.0
-**Plan:** `.ai-memory/plans/01-index.md`
+**Plan:** `.ai-memory/plans/readme.md`
 
 Applies to EVERY installer in EVERY repo: `install.*`, `release-install.*`,
 `quick-install.*`, `error-manage-install.*`, `linters-install.*`,

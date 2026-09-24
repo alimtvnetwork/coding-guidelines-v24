@@ -69,8 +69,11 @@ function deriveName(slug) {
 }
 
 function deriveFileName(filename) {
-  // "01-index.md" -> "Overview"
-  return deriveName(filename.replace(/\.md$/, ""));
+  const base = filename.replace(/\.md$/, "");
+  if (base.toLowerCase() === "readme" || base === "01-index" || base === "00-index") {
+    return "Overview";
+  }
+  return deriveName(base);
 }
 
 function naturalSort(a, b) {

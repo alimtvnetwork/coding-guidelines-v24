@@ -32,7 +32,7 @@ Topic: Safety backup branch creation, completed plans consolidation into milesto
 
 - Created timestamped git backup branch `backup/plans-pre-consolidation-20260909-021000` to guarantee zero data loss.
 - Clustered 29 individual completed plans from `.ai-memory/plans/completed/` into 6 cohesive, milestone-level summaries (`01-repository-hygiene-scripts-and-versioning.md` through `06-enum-architecture-and-baseenumer-foundation.md`), plus `07-completed-plans-consolidation.md`.
-- Updated `.ai-memory/plans/01-index.md` and `.ai-memory/memory/01-index.md` to reflect the consolidated milestone plans.
+- Updated `.ai-memory/plans/readme.md` and `.ai-memory/memory/readme.md` to reflect the consolidated milestone plans.
 - Ran sequence integrity linters (`check-sequence-integrity.py` and `21-sequence-integrity-linter.py`) verifying all 149 documents pass with zero broken references.
 
 ---

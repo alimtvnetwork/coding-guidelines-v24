@@ -25,7 +25,7 @@
 
 ### Phase 2: Memory & Guidelines Audit
 
-1. Read `.ai-memory/memory/01-index.md` and check for missing standard pointers (`.ai-memory/coding-guidelines.md`, `.ai-memory/plan.md`, `mem://workflow/conversation-log`).
+1. Read `.ai-memory/memory/readme.md` and check for missing standard pointers (`.ai-memory/coding-guidelines.md`, `.ai-memory/plan.md`, `mem://workflow/conversation-log`).
 2. Identify proposed memory writes without modifying memory silently.
 
 ### Phase 3: Instruction Rewriting & Staging

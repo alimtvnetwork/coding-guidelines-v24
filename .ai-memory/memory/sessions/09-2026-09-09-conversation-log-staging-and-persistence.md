@@ -42,7 +42,7 @@ This session spanned:
   - `.ai-memory/memory/standards/06-coding-guidelines-mirror.md`
   - `.ai-memory/memory/workflow/03-conversation-log-and-context-wrapper.md`
 - Appended non-duplicate rules to `.ai-memory/strictly-avoid.md`.
-- Updated `.ai-memory/memory/01-index.md` and `.ai-memory/what-to-read.md`.
+- Updated `.ai-memory/memory/readme.md` and `.ai-memory/what-to-read.md`.
 - Verified root `readme.md` is strictly lowercase and synced.
 
 ---

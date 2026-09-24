@@ -22,12 +22,12 @@
 
 ### Research Documents
 
-- `research/01-index.md`: Registered research topic 04.
+- `research/readme.md`: Registered research topic 04.
 - `research/04-locked-and-lockless-streamers-with-self-binding-interfacer.md`: Complete specification with `LockedStreamer`, `LocklessStreamer`, `streamcontract`, and `AsInterfacer()` implementation.
 
 ### Transaction History Updates
 
-- `05-changes-history/01-index.md`: Registered Task 04.
+- `05-changes-history/readme.md`: Registered Task 04.
 - `05-changes-history/04-locked-and-lockless-streamers-research/01-transaction-log.md`: This file.
 
 ---

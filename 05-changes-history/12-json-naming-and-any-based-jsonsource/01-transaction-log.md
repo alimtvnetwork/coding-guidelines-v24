@@ -50,7 +50,7 @@ Therefore, the two-tier architectural pattern solves this cleanly:
 | `04-code/golang/pkg/streamwriter/streamwriter_test.go` | Modified | Updated tests to `TestJsonResult_WrappedBytesFlow` and `TestJsonSource_MultiSourceCreation`. Thoroughly verified `any`-based `JsonSource`, `typedJsonSource[T]`, pointer unmarshaling `Cast`, and alias compatibility. |
 | `research/11-jsonresult-multi-source-creation-and-aukgo-architecture.md` | Modified | Updated all references to `Json` naming and documented rationale for `any`-based `JsonSource`. |
 | `05-changes-history/12-json-naming-and-any-based-jsonsource/01-transaction-log.md` | Created | This transaction record. |
-| `05-changes-history/01-index.md` | Modified | Registered Task 12 in canonical change history index. |
+| `05-changes-history/readme.md` | Modified | Registered Task 12 in canonical change history index. |
 
 ---
 

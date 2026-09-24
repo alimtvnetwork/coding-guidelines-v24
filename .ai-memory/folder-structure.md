@@ -31,7 +31,7 @@ To maintain deterministic sorting and avoid ambiguity across operating systems, 
 ├── 06-what-to-read.md                   # AI reading order and entrypoint router
 │
 ├── ai-fix-scripts/                      # Persistent high-speed Python automation toolchain
-│   ├── 01-index.md                      # Master catalog, command syntax, and tag registry
+│   ├── readme.md                      # Master catalog, command syntax, and tag registry
 │   ├── 02-shared-engine.py              # Central engine: constants, regex registry, locks, cache
 │   ├── 03-file-manipulator.py           # Case conversion, re-sequencing, and UTF-8 LF fixer
 │   ├── 04-newline-fixer.py              # Newline normalizer & trailing whitespace stripper
@@ -53,14 +53,14 @@ To maintain deterministic sorting and avoid ambiguity across operating systems, 
 │   └── 20-plan-consolidator.py          # Lovable plan consolidator and backup generator
 │
 ├── plans/                               # Micro-task execution center
-│   ├── 01-index.md                      # Master registry of active and completed plans
+│   ├── readme.md                      # Master registry of active and completed plans
 │   ├── pending/                         # High-level active parent plans (e.g., 01-auth.md)
 │   ├── subtasks/                        # Bounded micro-tasks grouped by parent slug
 │   │   └── XX-<parent-slug>/            # Sequential subtasks (01-step.md, 02-step.md)
 │   └── completed/                       # Archived completed parent plans & subtasks
 │
 ├── memory/                              # Institutional knowledge base (SINGULAR: memory/)
-│   ├── 01-index.md                      # Master memory table of contents & CODE RED rules
+│   ├── readme.md                      # Master memory table of contents & CODE RED rules
 │   ├── architecture/                    # System architecture decisions and split-DB patterns
 │   ├── constraints/                     # Non-negotiable technical constraints
 │   ├── done/                            # Historical milestone logs
@@ -104,7 +104,7 @@ To maintain deterministic sorting and avoid ambiguity across operating systems, 
 │   └── task-counter.md                  # Task iteration metrics
 │
 ├── suggestions/                         # Detailed suggestion proposals
-│   ├── 01-index.md                      # Index of active suggestions
+│   ├── readme.md                      # Index of active suggestions
 │   └── completed/                       # Archived implemented proposals
 │
 ├── cicd-issues/                         # CI pipeline failure diagnostics and RCAs
@@ -147,7 +147,7 @@ The `02-spec/` directory is organized into numbered tiers:
 
 ## 4. Governance & Synchronization Invariants
 
-1. **Strict Relative Paths:** All internal markdown links, citations, and subtask paths MUST use relative paths starting from the repository root (e.g. `.ai-memory/plans/pending/01-task.md`, `02-spec/02-coding-guidelines/01-index.md`). Absolute filesystem paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
+1. **Strict Relative Paths:** All internal markdown links, citations, and subtask paths MUST use relative paths starting from the repository root (e.g. `.ai-memory/plans/pending/01-task.md`, `02-spec/02-coding-guidelines/readme.md`). Absolute filesystem paths (`C:\...`, `/home/...`, `file:///...`) are strictly prohibited.
 2. **Strict Lowercase:** All generated files and directories MUST be lowercase.
 3. **Plurality Invariants:** Always `.ai-memory/memory/` (singular), `.ai-memory/plans/` (plural), `01-prompts/` (plural), `.ai-memory/suggestions/` (plural).
 4. **Mirror Parity:** Every script in `03-ai-scripts/` MUST have an exact mirror in `.agents/scripts/`.

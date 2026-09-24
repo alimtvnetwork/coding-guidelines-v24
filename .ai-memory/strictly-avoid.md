@@ -527,15 +527,15 @@ Allowed work:
 
 ## Writing Memory Without Verifying the Recent 20-Task Register — TOTAL BAN
 
-🔴 **NEVER author or update memory files without auditing `.ai-memory/plans/01-index.md` and verifying the Recent Completed Tasks Register (last 20 tasks).**
+🔴 **NEVER author or update memory files without auditing `.ai-memory/plans/readme.md` and verifying the Recent Completed Tasks Register (last 20 tasks).**
 
 Forbidden:
 - ❌ Leaving the Recent Completed Tasks Register unmaintained or out of sync with `05-changes-history/`.
 - ❌ Omitting recent completed tasks from the register.
-- ❌ Writing new memory without cross-referencing completed work in `plans/01-index.md` and `what-to-read.md`.
+- ❌ Writing new memory without cross-referencing completed work in `plans/readme.md` and `what-to-read.md`.
 
 Allowed work:
-- ✅ Maintain the bounded rolling window of the last 20 tasks in `.ai-memory/plans/01-index.md`.
+- ✅ Maintain the bounded rolling window of the last 20 tasks in `.ai-memory/plans/readme.md`.
 - ✅ Cross-reference completed tasks from `05-changes-history/` with dates, titles, and paths.
 
 **Why:** The compact 20-task register guarantees that subsequent AI turns immediately understand recent progress without scanning hundreds of historical records.

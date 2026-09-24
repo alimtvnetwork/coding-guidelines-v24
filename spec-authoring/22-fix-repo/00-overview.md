@@ -16,7 +16,7 @@ P1 bug and bring them back into alignment with this folder.
 
 | File | Purpose |
 |------|---------|
-| `01-index.md` | This file. Top-level map. |
+| `readme.md` | This file. Top-level map. |
 | `01-spec.md` | Full normative spec — detection, flags, replacement, traversal, exit codes. |
 | `02-edge-cases.md` | Enumerated edge cases with expected behavior for each. |
 | `03-acceptance-criteria.md` | Checkable list used to verify the implementation. |
@@ -33,7 +33,7 @@ P1 bug and bring them back into alignment with this folder.
    - `-all` → every version `1` through `Current-1`
 3. For every file returned by `git ls-files` that is not binary
    (NUL-byte sniff in first 8KB), replace each token
-   `{RepoBase}-v{N}` with `{RepoBase}-v{Current}` literally —
+   `{RepoBase}-v{N}` with `{RepoBase}-v{Current}` verbatim —
    including inside URLs. Host and rest-of-path are preserved
    because they are not part of the token.
 4. Print summary; exit `0` on success (including dry-run with no

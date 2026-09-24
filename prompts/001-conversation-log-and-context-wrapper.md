@@ -5,7 +5,7 @@
 This prompt defines the execution workflow for persisting session conversation histories, auditing project memory against coding standards, staging follow-up instructions into `prompts/`, and generating comprehensive audit reports without prematurely executing unconfirmed work.
 
 - **Roadmap Source of Truth:** `.ai-memory/plan.md`
-- **Memory Index:** `mem://01-index.md` (`.ai-memory/memory/01-index.md`)
+- **Memory Index:** `mem://readme.md` (`.ai-memory/memory/readme.md`)
 - **Coding Guidelines:** `.ai-memory/coding-guidelines.md` and `02-spec/02-coding-guidelines/`
 - **Error Management Standard:** `02-spec/03-error-manage/`
 
@@ -34,7 +34,7 @@ This prompt defines the execution workflow for persisting session conversation h
 
 ### Phase 2: Memory & Standards Verification
 
-- [ ] Inspect `mem://01-index.md` (`.ai-memory/memory/01-index.md`).
+- [ ] Inspect `mem://readme.md` (`.ai-memory/memory/readme.md`).
 - [ ] Verify reference to `.ai-memory/coding-guidelines.md`; if missing, stage a proposed write for `mem://standards/coding-guidelines.md`.
 - [ ] Verify reference to `.ai-memory/plan.md`; if missing or referencing legacy paths, stage a proposed update.
 - [ ] Verify reference to `mem://workflow/conversation-log`; if missing, stage a proposed write.
@@ -62,6 +62,6 @@ This prompt defines the execution workflow for persisting session conversation h
 
 ## 5. Mandatory Self-Instructions
 
-> **Self-Instruction:** Before acting, re-read `mem://01-index.md` and `.ai-memory/coding-guidelines.md`; restate which rules apply.
+> **Self-Instruction:** Before acting, re-read `mem://readme.md` and `.ai-memory/coding-guidelines.md`; restate which rules apply.
 >
 > **Continuous Improvement:** After executing this task, analyze the workflow and suggest further structural improvements to this instruction file.

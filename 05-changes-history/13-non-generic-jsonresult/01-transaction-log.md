@@ -49,7 +49,7 @@ In previous iterations, `JsonResult[T any]` and `WrappedJson[T any]` were generi
 | `04-code/golang/pkg/streamwriter/streamwriter_test.go` | Modified | Updated test suite to verify non-generic `JsonResult`, `WrappedBytes[any]`, `UnmarshalAs`, and multi-source creation. |
 | `research/11-jsonresult-multi-source-creation-and-aukgo-architecture.md` | Modified | Documented rationale and AI guidelines for non-generic `JsonResult`. |
 | `05-changes-history/13-non-generic-jsonresult/01-transaction-log.md` | Created | This transaction log. |
-| `05-changes-history/01-index.md` | Modified | Registered Task 13 in the change history index. |
+| `05-changes-history/readme.md` | Modified | Registered Task 13 in the change history index. |
 
 ---
 

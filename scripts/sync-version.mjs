@@ -279,7 +279,7 @@ function listSpecFolders() {
 }
 
 function buildFolderEntry({ slug, abs }) {
-  const overview = parseOverview(join(abs, "01-index.md"));
+  const overview = parseOverview(join(abs, "readme.md"));
   const stats = walkStats(abs);
   return {
     path:         slug,
@@ -304,7 +304,7 @@ function buildFolderEntries() {
 
 function rootFileStats() {
   // Top-level .md files in spec/ that don't belong to any NN-* folder
-  // (e.g. 02-02-spec/01-index.md, 02-spec/spec-index.md, 02-spec/health-dashboard.md).
+  // (e.g. 02-02-spec/readme.md, 02-spec/spec-index.md, 02-spec/health-dashboard.md).
   let entries;
   try { entries = readdirSync(SPEC_ROOT); } catch { return { fileCount: 0, lineCount: 0, byteCount: 0 }; }
 
@@ -449,7 +449,7 @@ function logSummary(manifest) {
     const versioned = manifest.folders.filter((f) => f.version).length;
     const missing = manifest.folders.length - versioned;
     if (missing > 0) {
-      console.log(`     !! ${missing} folder(s) missing **Version:** in 01-index.md`);
+      console.log(`     !! ${missing} folder(s) missing **Version:** in readme.md`);
     }
   }
 }

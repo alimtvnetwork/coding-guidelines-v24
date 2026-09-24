@@ -3,7 +3,7 @@
 > **Directory:** `05-changes-history/21-completed-plans-consolidation/`
 > **Date:** 2026-09-09
 > **Author/Agent:** Antigravity AI
-> **Module Affected:** `.ai-memory/plans/completed/`, `.ai-memory/plans/01-index.md`, `readme.md`, `.ai-memory/memory/01-index.md`
+> **Module Affected:** `.ai-memory/plans/completed/`, `.ai-memory/plans/readme.md`, `readme.md`, `.ai-memory/memory/readme.md`
 > **Status:** Completed & Verified
 
 ---
@@ -20,7 +20,7 @@ Autonomously create a timestamped backup branch, scan, analyze, cluster, consoli
 1. **Safety First:** Create and push timestamped backup branch `backup/plans-consolidation-20260909-022237` to origin, recording rollback commit SHA `b16a0d9da105705535a4599980d8a7b957f7fa78`.
 2. **Domain Clustering & Consolidation:** Cluster 31 completed micro-task plans into 6 authoritative, cohesive milestone summaries with zero data loss.
 3. **Monotonic Resequencing:** Number completed milestones continuously (`01-` to `07-`) with strictly lowercase naming.
-4. **Link & Sequence Integrity:** Update `01-index.md`, `readme.md`, and affected subtasks to point cleanly to consolidated milestones.
+4. **Link & Sequence Integrity:** Update `readme.md`, `readme.md`, and affected subtasks to point cleanly to consolidated milestones.
 5. **Quality Verification:** Ensure 100% passing tests and all 36 quality gates green in `python 03-ai-scripts/06-cicd-local-runner.py`.
 
 ---

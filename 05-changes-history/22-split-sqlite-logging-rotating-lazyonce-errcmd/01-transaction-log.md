@@ -58,7 +58,7 @@ The user required a comprehensive logging and execution architecture addressing:
 
 - `.ai-memory/plans/completed/08-split-sqlite-logging-rotating-lazyonce-errcmd.md`: Master architectural plan.
 - `.ai-memory/plans/subtasks/08-split-sqlite-logging-rotating-lazyonce-errcmd/01..06`: Granular subtasks.
-- `.ai-memory/plans/01-index.md`: Registered completed plan 08.
+- `.ai-memory/plans/readme.md`: Registered completed plan 08.
 
 ---
 

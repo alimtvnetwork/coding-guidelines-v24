@@ -125,7 +125,7 @@ Write the canonical specification into `02-spec/21-app/` before creating executi
     - `03-e2e-scenarios.md` (Multi-component flow scenarios, assertions, teardown lifecycle)
     - `04-verification-gates.md` (Skip tags, environment guards, execution commands)
 - **Lossless Verbatim Capture:** Under `## User Request (Verbatim)`, preserve the exact prompt text and constraints without truncation.
-- **Spec Registry Registration:** Register the new spec entry in `02-spec/21-app/01-index.md` with status `draft` or `active`.
+- **Spec Registry Registration:** Register the new spec entry in `02-spec/21-app/readme.md` with status `draft` or `active`.
 
 #### Step 2: Actionable Execution Plan & Lean Subtasks
 
@@ -271,7 +271,7 @@ To reduce markdown file count and bloat, consolidate subtasks when all deliverab
 2. Explicitly reference the canonical spec `[02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)` in the consolidated header. The canonical spec remains permanently intact.
 3. Delete the original granular `.md` files in `.ai-memory/plans/subtasks/xx-<slug>/`.
 4. Delete the original parent plan `.ai-memory/plans/pending/xx-<slug>.md`.
-5. Update `.ai-memory/plans/01-index.md` to point to the newly consolidated completed file.
+5. Update `.ai-memory/plans/readme.md` to point to the newly consolidated completed file.
 6. **Final Step Git Commit & Push (Mandatory):** Stage all modified files, consolidated plans, and memory records (`git add -A`), commit them in a single clean grouped atomic commit (`git commit -m "<type>(<scope>): <summary>"`), and push to git (`git push origin <branch>`). Under no circumstances commit each file individually.
 
 ---
@@ -319,14 +319,14 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 2. **Non-CI/CD Issues (Application Bugs, Feature Defects, Logic/Runtime Errors):**
    - **Target Folder:** `02-spec/22-app-issues/` (canonical spec hierarchy Tier 22)
    - **File Pattern:** `02-spec/22-app-issues/NN-<issue-slug>.md`
-   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/01-index.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
+   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/readme.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
    - **Scope:** Application business logic, UI bugs, CLI command errors, API crashes, and domain defects.
 
 ---
 
 ## 1. AI Fix Scripts Memory (Reusable Tooling)
 
-- [ ] /goal Reuse First: Scanned and learned `03-ai-scripts/01-index.md` before writing temporary code.
+- [ ] /goal Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
 - [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
 - [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
 - [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
@@ -337,7 +337,7 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 ## 2. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
 - [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
-- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
 - [ ] NO UNISOLATED TEMP E2E TESTS (TOTAL BAN): Never create or commit temporary E2E tests without mandatory build tags (`//go:build tempe2e`), markers (`@pytest.mark.temp_e2e`), or runtime skip guards (`RUN_TEMP_E2E`). Every temporary E2E test must skip by default.
 - [ ] NO ENABLING IN CI/CD WORKFLOWS (TOTAL BAN): Never modify GitHub Actions workflows (`.github/workflows/*.yml`) or pipeline definitions to execute temporary E2E tests.
 - [ ] NO ROUTINE LOCAL TEST EXECUTION (TOTAL BAN): Never run `06-cicd-local-runner.py` or standard unflagged test commands (`go test ./...` without tags). Only run the targeted on-demand command with explicit isolation flags.

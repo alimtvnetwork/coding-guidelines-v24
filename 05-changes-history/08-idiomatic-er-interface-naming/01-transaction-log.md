@@ -36,9 +36,9 @@ The user mandated a strict correction to the streamwriter interface naming conve
 | `04-code/golang/pkg/streamwriter/logger.go` | Modified | Updated `Logger[T]` writer slice, `AddWriter`, `AddWriters`, `AddStreamer`, and internal dispatch |
 | `04-code/golang/pkg/streamwriter/streamwriter_test.go` | Modified | Updated contract assertions and tests to use `Writer[T]` and `Streamer[T]` |
 | `research/08-idiomatic-er-interface-naming.md` | Created | Comprehensive architectural blueprint and reference specification |
-| `research/01-index.md` | Modified | Registered document 08 in research index |
+| `research/readme.md` | Modified | Registered document 08 in research index |
 | `05-changes-history/08-idiomatic-er-interface-naming/01-transaction-log.md` | Created | This transaction log |
-| `05-changes-history/01-index.md` | Modified | Registered task 08 in transaction log index |
+| `05-changes-history/readme.md` | Modified | Registered task 08 in transaction log index |
 
 ---
 

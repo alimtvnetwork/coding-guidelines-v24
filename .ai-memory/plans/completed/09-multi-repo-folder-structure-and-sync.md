@@ -11,8 +11,8 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md`](02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md) — Lowercase filenames, numeric prefixes, and directory standard.
-  - [`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md) — Strict relative Git paths and zero-write read protocol.
+  - [`02-spec/02-coding-guidelines/08-file-folder-naming/readme.md`](02-spec/02-coding-guidelines/08-file-folder-naming/readme.md) — Lowercase filenames, numeric prefixes, and directory standard.
+  - [`02-spec/02-coding-guidelines/01-cross-language/readme.md`](02-spec/02-coding-guidelines/01-cross-language/readme.md) — Strict relative Git paths and zero-write read protocol.
 - **Core Architecture Contracts:**
   - **Universal Folder Standard:** `02-spec/` (central specifications), `.ai-memory/` (institutional memory), `01-prompts/` (workflow prompts), `.agents/` (skills and rules), and root lowercase `readme.md` + `AGENTS.md`.
   - **Zero-Write Read Protocol:** Strictly forbids writing or modifying repository files during read workflows; all agent scratch communications are isolated strictly to `%TEMP%/<repo-name>/`.

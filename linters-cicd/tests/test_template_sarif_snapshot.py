@@ -109,7 +109,7 @@ def _build_snapshot(case: SnapshotCase) -> dict:
     findings = mod.scan(case.fixture, str(fixture_dir))
     # Discover the tool name + version the same way main() does, but
     # without invoking argparse/CLI side effects. We read them from
-    # the constructor call literally embedded in main().
+    # the constructor call verbatim embedded in main().
     tool_name, tool_version = _extract_tool_identity(case.script)
     return {
         "tool": {"name": tool_name, "version": tool_version},

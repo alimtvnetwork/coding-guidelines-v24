@@ -1,7 +1,7 @@
 # Master Execution Plan: AI-Adaptable Design System & Modern SaaS UI
 
 Spec Reference: [02-spec/21-app/06-ai-adaptable-design-system.md](../../../02-spec/21-app/06-ai-adaptable-design-system.md)
-Design System Reference: [02-spec/07-design-system/25-ai-adaptable-design-system/00-index.md](../../../02-spec/07-design-system/25-ai-adaptable-design-system/00-index.md)
+Design System Reference: [02-spec/07-design-system/25-ai-adaptable-design-system/readme.md](../../../02-spec/07-design-system/25-ai-adaptable-design-system/readme.md)
 
 ## 1. Architectural Context & Objective
 

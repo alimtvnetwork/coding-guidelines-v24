@@ -57,7 +57,7 @@ I want you to understand this website, get the color grading, how the sections a
   - Author `.agents/skills/prompts-and-skills-sync/skill.md` for synchronization across connected repositories.
 
 - **Task-07: Master Index Enrichment & Multi-Theme Cataloging**
-  - Update `02-spec/07-design-system/01-index.md` with action-oriented AI reading checklists, 8 standardized short-form theme identifiers (`LIGHT-TRUST`, `DARK-NAVY`, `RISEUP-CORP`, `CYBER-INDIGO`, `VSCODE-DARK`, `TOKYO-NIGHT`, `ONEDARK-PRO`, `WARM-PAPER`), CSS3 animations roster, and direct HTML/LESS live code samples.
+  - Update `02-spec/07-design-system/readme.md` with action-oriented AI reading checklists, 8 standardized short-form theme identifiers (`LIGHT-TRUST`, `DARK-NAVY`, `RISEUP-CORP`, `CYBER-INDIGO`, `VSCODE-DARK`, `TOKYO-NIGHT`, `ONEDARK-PRO`, `WARM-PAPER`), CSS3 animations roster, and direct HTML/LESS live code samples.
 
 ---
 

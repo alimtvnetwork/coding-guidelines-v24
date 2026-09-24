@@ -9,7 +9,7 @@
 
 ## 1. Executive Overview
 
-This document formalizes the architectural decisions, user directives, and operational protocols governing the upgrade of the memory-writing workflows (`01-write-antigravity.md` and `03-write-memory.md`) to Version 2.2.0. The upgrade mandates an audit of the last 30 Git commits before authoring memory, institutes a compact 20-task recent completion register in `.ai-memory/plans/01-index.md`, and establishes a 19-box verification checklist before turn completion.
+This document formalizes the architectural decisions, user directives, and operational protocols governing the upgrade of the memory-writing workflows (`01-write-antigravity.md` and `03-write-memory.md`) to Version 2.2.0. The upgrade mandates an audit of the last 30 Git commits before authoring memory, institutes a compact 20-task recent completion register in `.ai-memory/plans/readme.md`, and establishes a 19-box verification checklist before turn completion.
 
 ---
 
@@ -38,7 +38,7 @@ This document formalizes the architectural decisions, user directives, and opera
 ### 2.2. Recent 20-Task Tracking & Compact Task Register
 
 - **Problem:** As codebases grow, the number of historical tasks and completed plans multiplies into hundreds of files. Scanning every historical file overwhelms context tokens, while skimming produces blind spots.
-- **Solution:** A rolling, compact **Recent Completed Tasks Register (Last 20 Tasks)** embedded directly in `.ai-memory/plans/01-index.md`.
+- **Solution:** A rolling, compact **Recent Completed Tasks Register (Last 20 Tasks)** embedded directly in `.ai-memory/plans/readme.md`.
 - **Requirements:**
   1. The register tracks the 20 most recent tasks and completed plans, sorted in reverse chronological order.
   2. Each entry includes the task number, title, relative path link to `05-changes-history/` or `plans/completed/`, completion date, and a concise summary.
@@ -61,17 +61,17 @@ Step 0 executes *before* opening or modifying any file, ensuring the agent's int
 
 Phase 1 (Internal Session Audit) now explicitly requires answering:
 - **Git History Audit (Last 30 Commits):** Trajectory, recent bug fixes, directives, and learned patterns.
-- **Recent Tasks Status (Last 20 Tasks):** Compact review of the 20 tasks in `.ai-memory/plans/01-index.md` vs remaining pending tasks.
+- **Recent Tasks Status (Last 20 Tasks):** Compact review of the 20 tasks in `.ai-memory/plans/readme.md` vs remaining pending tasks.
 - **Done / Pending / Learned / Avoid / Ambiguities / Suggestions / User Commands.**
 
 ### 3.3. Standardized 19-Box Verification Checklist
 
 Both write prompts enforce an identical 19-box verification checklist covering:
 1. 30-commit git history audit execution.
-2. 20-task status register audit in `.ai-memory/plans/01-index.md`.
+2. 20-task status register audit in `.ai-memory/plans/readme.md`.
 3. Pre-flight recursive walk of `.ai-memory/`.
 4. Topic folder nesting (no memory files at memory root).
-5. Synchronized index updates (`01-index.md`).
+5. Synchronized index updates (`readme.md`).
 6. Plan lifecycle transitions (`pending/` -> `completed/` via `mv`).
 7. Append-only `strictly-avoid.md`.
 8. Verbatim capture of user directives without softening.
@@ -83,8 +83,8 @@ Both write prompts enforce an identical 19-box verification checklist covering:
 
 ## 4. Cross-Reference Map
 
-- **Master Memory Index:** `.ai-memory/memory/01-index.md`
-- **Master Plans Index:** `.ai-memory/plans/01-index.md`
+- **Master Memory Index:** `.ai-memory/memory/readme.md`
+- **Master Plans Index:** `.ai-memory/plans/readme.md`
 - **Canonical Reading Sequence:** `.ai-memory/what-to-read.md`
 - **Write Antigravity Prompt:** `01-prompts/03-read-write/01-write-antigravity.md`
 - **Write Memory Prompt:** `01-prompts/03-read-write/03-write-memory.md`

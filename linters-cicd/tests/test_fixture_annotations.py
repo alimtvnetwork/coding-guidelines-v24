@@ -21,7 +21,7 @@ This test re-parses the annotations on every CI run and asserts:
     same rule_id and level
   * no extra findings appear on lines that aren't annotated
   * lines tagged `← NO-FINDING` are silent
-  * the line number embedded in the annotation literally equals the
+  * the line number embedded in the annotation verbatim equals the
     line the annotation sits on (catches stale "line 6" comments
     after lines move)
 

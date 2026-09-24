@@ -50,7 +50,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Updated parent task execution prompts (`02-execute-parent-task-with-n-steps.md`, `06-execute-parent-task-with-n-steps-v2.md`, `07-execute-batched-loop-v2.md`) and skills to mandate Phase 1 Step 0 verbatim prompt capture under `## User Request (Verbatim)` and actionable deliverables extraction under `## Extracted Actionable Task List`.
 - Mandated per-task isolated agent workspaces (`.ai-memory/temp-agents/xx-<task-name>/`) and progress tracking via `state.md`.
 - Normalized `.agents/skills/nuclear-package-modularization/skill.md` to strictly lowercase filename.
-- Registered Prompt 25 in `01-prompts/15-cg-execute/01-index.md` and regenerated `.ai-memory/prompts.md` with 96 indexed prompts.
+- Registered Prompt 25 in `01-prompts/15-cg-execute/readme.md` and regenerated `.ai-memory/prompts.md` with 96 indexed prompts.
 - Sync-managed artifacts regenerated: `version.json`, `public/health-score.json`, `readme.md`, `src/data/specTree.json`.
 
 ---
@@ -1599,7 +1599,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 | `linters-cicd/` | 13 | 52 | `readme.md`, `install.sh`, `install.ps1`, all `ci/*` templates (Jenkinsfile, azure-pipelines.yml, github-actions.yml, gitlab-ci.yml, bitbucket-pipelines.yml, pre-commit-hook.sh), `coding-guidelines.sarif`, `checks/_lib/sarif.py`, `scripts/{emit-timeout,post-process}.py` |
 | `src/` | 2 | 47 | `src/components/landing/InstallSection.tsx`, `src/data/specTree.json` |
 | `02-spec/` | 19 | 44 | Spec docs referencing the slug (sarif-contract, ci-templates, distribution, install-contract, install-config, version-pinned-release-installers, install-script-version-probe, repo-major-version-migrator, generic-installer-behavior, distribution-and-runner, lovable-folder-structure, readme-improvement-suggestions, root-readme-conventions, etc.) |
-| `.ai-memory/` | 8 | 16 | `memory/01-index.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `29-plan.md`, `strictly-avoid.md`, `suggestions.md` |
+| `.ai-memory/` | 8 | 16 | `memory/readme.md`, `memory/sessions/*`, `memory/constraints/install-command-formatting.md`, `memory/suggestions/*`, `memory/workflow/*`, `29-plan.md`, `strictly-avoid.md`, `suggestions.md` |
 | `docs/` | 2 | 14 | `docs/github-repo-metadata.md`, `docs/slides-installer.md` |
 | `examples/other-repo-integration/` | 7 | 10 | `azure-devops/`, `gitlab/`, `jenkins/` integration recipes and READMEs |
 | `slides-app/` & `spec-slides/` | 4 | 9 | `slides-app/package.json`, `slides-app/scripts/package-zip.mjs`, `slides-app/src/slides/12-closing.tsx`, `spec-slides/05-curriculum.md`, `spec-slides/06-build-and-zip-pipeline.md` |
@@ -1618,7 +1618,7 @@ Full per-file audit: [`rename-audit-v15-v16-to-v17.md`](rename-audit-v15-v16-to-
 
 #### Memory & overlay files affected
 
-- `.ai-memory/memory/01-index.md`
+- `.ai-memory/memory/readme.md`
 - `.ai-memory/memory/sessions/2026-04-24-batch-cleanup-and-rebrand.md`
 - `.ai-memory/memory/constraints/install-command-formatting.md`
 - `.ai-memory/memory/suggestions/01-suggestions-tracker.md`

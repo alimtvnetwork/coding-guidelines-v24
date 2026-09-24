@@ -11,9 +11,9 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/02-coding-guidelines/07-database-conventions/01-index.md`](02-spec/02-coding-guidelines/07-database-conventions/01-index.md) — Multi-dialect database abstraction and SQL operator typing.
-  - [`02-spec/02-coding-guidelines/06-enum-standards/01-index.md`](02-spec/02-coding-guidelines/06-enum-standards/01-index.md) — 1:1 enum package isolation and canonical parse signatures.
-  - [`02-spec/03-error-manage/01-index.md`](02-spec/03-error-manage/01-index.md) — Structured `*appfault.AppError` and typed monadic result envelopes.
+  - [`02-spec/02-coding-guidelines/07-database-conventions/readme.md`](02-spec/02-coding-guidelines/07-database-conventions/readme.md) — Multi-dialect database abstraction and SQL operator typing.
+  - [`02-spec/02-coding-guidelines/06-enum-standards/readme.md`](02-spec/02-coding-guidelines/06-enum-standards/readme.md) — 1:1 enum package isolation and canonical parse signatures.
+  - [`02-spec/03-error-manage/readme.md`](02-spec/03-error-manage/readme.md) — Structured `*appfault.AppError` and typed monadic result envelopes.
 - **Core Architecture Contracts:**
   - **LazyRegex Engine:** Lazy compiled instances (`UUIDAny`, `UbuntuNameCheckerRegex`, etc.) with `FindBytes` and `IsMatchBytes` methods to prevent runtime re-compilations.
   - **Generic DBEngine:** Built solely on `database/sql` without external ORM dependencies. Exposes `SqlExecutor`, `TxWrapper`, typed result containers (`EntityResult[T]`, `ListResult[T]`), and deterministic SHA-256 query caching.

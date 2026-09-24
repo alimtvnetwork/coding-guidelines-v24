@@ -318,7 +318,7 @@ irm https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/s
 curl -fsSL https://raw.githubusercontent.com/alimtvnetwork/coding-guidelines-v24/main/slides-install.sh | bash
 ```
 
-Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full specification: [`02-spec/15-distribution-and-runner/01-index.md`](02-spec/15-distribution-and-runner/01-index.md).
+Installs: `spec-slides/`, `slides-app/` (with prebuilt `dist/`). Auto-opens `slides-app/dist/index.html`. Unique flag: `--no-open` (Bash) / `-NoOpen` (PowerShell). Full specification: [`02-spec/15-distribution-and-runner/readme.md`](02-spec/15-distribution-and-runner/readme.md).
 
 <details>
 <summary>⚠️ <strong>Troubleshooting:</strong> banner shows an older version, or "Install verification FAILED"</summary>
@@ -419,7 +419,7 @@ Installs: `02-spec/17-consolidated-guidelines`.
 
 </details>
 
-> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[02-spec/14-update/27-generic-installer-behavior.md](02-spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior and flags, see **[02-spec/15-distribution-and-runner/01-index.md](02-spec/15-distribution-and-runner/01-index.md)**.
+> **📖 Installer behavior contract:** Every installer in this repo (root `install.{sh,ps1}`, the 14 bundle installers, `linters-cicd/install.sh`, and the release-pinned `release-install.{sh,ps1}`) conforms to **[02-spec/14-update/27-generic-installer-behavior.md](02-spec/14-update/27-generic-installer-behavior.md)**, flags (`--no-discovery`, `--no-main-fallback`, `--offline`/`--use-local-archive`), the §7 startup banner with `mode:` / `source:` lines, and the §8 exit-code contract (0 = ok · 1 = generic · 2 = offline · 3 = pinned-asset-missing · 4 = verification · 5 = handoff). For the slides bundle's behavior and flags, see **[02-spec/15-distribution-and-runner/readme.md](02-spec/15-distribution-and-runner/readme.md)**.
 
 ---
 
@@ -713,7 +713,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 </p>
 
 <p align="center">
-  <strong>Authoritative Read-List:</strong> <a href=".ai-memory/what-to-read.md"><code>.ai-memory/what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".ai-memory/folder-structure.md"><code>.ai-memory/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="02-spec/01-index.md"><code>02-spec/01-index.md</code></a>
+  <strong>Authoritative Read-List:</strong> <a href=".ai-memory/what-to-read.md"><code>.ai-memory/what-to-read.md</code></a> · <strong>Folder Structure:</strong> <a href=".ai-memory/folder-structure.md"><code>.ai-memory/folder-structure.md</code></a> · <strong>Master Specs:</strong> <a href="02-spec/readme.md"><code>02-spec/readme.md</code></a>
 </p>
 
 ---
@@ -722,7 +722,7 @@ Help-flag invocations (`-Help`, `-h`, `--help`) **never** print the warning bann
 
 <p align="center">
   Nine non-negotiables. Every spec, every linter, every PR enforces them.<br/>
-  Full reference: <a href="02-spec/02-coding-guidelines/01-cross-language/01-index.md"><code>02-spec/02-coding-guidelines/01-cross-language/01-index.md</code></a>.
+  Full reference: <a href="02-spec/02-coding-guidelines/01-cross-language/readme.md"><code>02-spec/02-coding-guidelines/01-cross-language/readme.md</code></a>.
 </p>
 
 | # | Principle | One-line rule |
@@ -1017,7 +1017,7 @@ function processUser(user: User | null): Result<void> {
 }
 ```
 
-Full case study with five more violations: [`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md).
+Full case study with five more violations: [`02-spec/02-coding-guidelines/01-cross-language/readme.md`](02-spec/02-coding-guidelines/01-cross-language/readme.md).
 
 ---
 
@@ -1416,7 +1416,7 @@ Quick-navigation index of every spec and linter file referenced in the CODE-RED 
 | **Log structurally** | One `Log.Error(err, fields)` per boundary, no console spam. | `structured-logging` spec |
 | **Map to UI** | UI translates `Code` → user-visible message. Error `Code` is the contract. | `error-code` registry |
 
-Full architecture: [`02-spec/03-error-manage/01-index.md`](02-spec/03-error-manage/01-index.md) · spec: [`02-spec/02-coding-guidelines/03-error-handling/`](02-spec/02-coding-guidelines/03-error-handling/).
+Full architecture: [`02-spec/03-error-manage/readme.md`](02-spec/03-error-manage/readme.md) · spec: [`02-spec/02-coding-guidelines/03-error-handling/`](02-spec/02-coding-guidelines/03-error-handling/).
 
 ---
 
@@ -1458,9 +1458,9 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
 > It is published openly **not** as a general-purpose framework recommendation, but because the same rules that keep Alim's team shipping reliably can help **any team or solo developer** who wants the same discipline. If something here saves you a production incident or a debugging night, that's the bonus — the primary audience is still the team it was written for.
 
 <p align="center">
-  <a href="02-spec/02-coding-guidelines/01-cross-language/01-index.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
-  <a href="02-spec/01-spec-authoring-guide/01-index.md"><img alt="Spec author, read guide" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20authoring%20guide-8B5CF6?style=for-the-badge"/></a>
-  <a href="02-spec/18-wp-plugin-how-to/01-index.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
+  <a href="02-spec/02-coding-guidelines/01-cross-language/readme.md"><img alt="Developer, start with principles" src="https://img.shields.io/badge/%F0%9F%A7%91%E2%80%8D%F0%9F%92%BB%20Developer-Start%20with%20principles-3B82F6?style=for-the-badge"/></a>
+  <a href="02-spec/01-spec-authoring-guide/readme.md"><img alt="Spec author, read guide" src="https://img.shields.io/badge/%E2%9C%8D%EF%B8%8F%20Spec%20Author-Read%20authoring%20guide-8B5CF6?style=for-the-badge"/></a>
+  <a href="02-spec/18-wp-plugin-how-to/readme.md"><img alt="WordPress dev, wp bundle" src="https://img.shields.io/badge/%F0%9F%90%98%20WordPress%20Dev-Use%20the%20wp%20bundle-21759B?style=for-the-badge"/></a>
   <a href="#-for-ai-agents"><img alt="AI agent, canonical entry points" src="https://img.shields.io/badge/%F0%9F%A4%96%20AI%20Agent-Canonical%20entry%20points-FF6E3C?style=for-the-badge"/></a>
 </p>
 
@@ -1486,9 +1486,9 @@ Why this matters: callers ALWAYS see the same shape, so guard helpers (`HasError
   <a href="version.json"><img alt="version.json, live counts" src="https://img.shields.io/badge/version.json-Live%20counts-F59E0B?style=for-the-badge&logo=semver&logoColor=white"/></a>
   <a href="02-spec/02-coding-guidelines/06-ai-optimization/05-condensed-master-guidelines.md"><img alt="Condensed master guidelines" src="https://img.shields.io/badge/Condensed%20Master-Load%20this%20first-FF6E3C?style=for-the-badge"/></a>
   <a href="02-spec/02-coding-guidelines/06-ai-optimization/01-anti-hallucination-rules.md"><img alt="Anti-hallucination rules" src="https://img.shields.io/badge/Anti--hallucination-34%20rules-EF4444?style=for-the-badge"/></a>
-  <a href="02-spec/17-consolidated-guidelines/01-index.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
-  <a href=".ai-memory/memory/01-index.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
-  <a href="01-prompts/01-index.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
+  <a href="02-spec/17-consolidated-guidelines/readme.md"><img alt="Consolidated guidelines index" src="https://img.shields.io/badge/Consolidated-Master%20index-8B5CF6?style=for-the-badge"/></a>
+  <a href=".ai-memory/memory/readme.md"><img alt="Project memory index" src="https://img.shields.io/badge/Project%20Memory-Naming%20%C2%B7%20DB%20%C2%B7%20rules-14B8A6?style=for-the-badge"/></a>
+  <a href="01-prompts/readme.md"><img alt="Reusable prompts" src="https://img.shields.io/badge/Prompts-blind%20audit%20%C2%B7%20gap-EC4899?style=for-the-badge"/></a>
 </p>
 
 <p align="center"><strong>"Which bundle?"</strong>, fetch <code>bundles.json</code>, match <code>intent</code>+<code>audience</code> to a bundle <code>name</code>, return its one-liner.</p>
@@ -1579,20 +1579,20 @@ When you pass `--run-fix-repo` (PS: `-RunFixRepo`), the installer executes the f
 
 ## 📚 Documentation & Specifications
 
-The complete specification hierarchy, AI metadata, and institutional memory live in `02-spec/` and `.ai-memory/`. Full index: [`02-spec/01-index.md`](02-spec/01-index.md) and [`.ai-memory/01-index.md`](.ai-memory/01-index.md).
+The complete specification hierarchy, AI metadata, and institutional memory live in `02-spec/` and `.ai-memory/`. Full index: [`02-spec/readme.md`](02-spec/readme.md) and [`.ai-memory/readme.md`](.ai-memory/readme.md).
 
 | Resource | Purpose / Contents |
 |---|---|
-| [`02-spec/01-spec-authoring-guide/`](02-spec/01-spec-authoring-guide/01-index.md) | Spec authoring standards · templates · validation rules · metrics |
-| [`02-spec/02-coding-guidelines/`](02-spec/02-coding-guidelines/01-cross-language/01-index.md) | 9 core principles · 10 CODE RED rules · cross-language coding rules |
-| [`02-spec/03-error-manage/`](02-spec/03-error-manage/01-index.md) | Universal error handling · `apperror` package · response envelopes |
-| [`02-spec/04-database-conventions/`](02-spec/04-database-conventions/01-index.md) | Database schemas · PascalCase conventions · SQLite & WAL patterns |
-| [`02-spec/14-update/`](02-spec/14-update/01-index.md) | Self-update architecture · installer behaviors · version discovery |
-| [`02-spec/15-distribution-and-runner/`](02-spec/15-distribution-and-runner/01-index.md) | Cross-platform runners · distribution bundles · packaging pipeline |
+| [`02-spec/01-spec-authoring-guide/`](02-spec/01-spec-authoring-guide/readme.md) | Spec authoring standards · templates · validation rules · metrics |
+| [`02-spec/02-coding-guidelines/`](02-spec/02-coding-guidelines/01-cross-language/readme.md) | 9 core principles · 10 CODE RED rules · cross-language coding rules |
+| [`02-spec/03-error-manage/`](02-spec/03-error-manage/readme.md) | Universal error handling · `apperror` package · response envelopes |
+| [`02-spec/04-database-conventions/`](02-spec/04-database-conventions/readme.md) | Database schemas · PascalCase conventions · SQLite & WAL patterns |
+| [`02-spec/14-update/`](02-spec/14-update/readme.md) | Self-update architecture · installer behaviors · version discovery |
+| [`02-spec/15-distribution-and-runner/`](02-spec/15-distribution-and-runner/readme.md) | Cross-platform runners · distribution bundles · packaging pipeline |
 | [`.ai-memory/folder-structure.md`](.ai-memory/folder-structure.md) | Canonical repository folder structure · sequence IDs · AI metadata |
-| [`.ai-memory/01-index.md`](.ai-memory/01-index.md) | Master AI context router · operational guidelines · reading sequence |
+| [`.ai-memory/readme.md`](.ai-memory/readme.md) | Master AI context router · operational guidelines · reading sequence |
 
-Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-spec/health-dashboard.md) · [`consolidated index`](02-spec/17-consolidated-guidelines/01-index.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
+Live spec tree: [`02-spec/`](02-spec/) (23 folders) · [`health-dashboard`](02-spec/health-dashboard.md) · [`consolidated index`](02-spec/17-consolidated-guidelines/readme.md). The built-in **Spec Documentation Viewer** ([screenshot](public/images/spec-viewer-preview.png)) renders everything with syntax highlighting and keyboard navigation. Changes: [`changelog.md`](changelog.md).
 
 ### What's new in v5.131.0
 
@@ -2004,7 +2004,7 @@ External AI reviewers consistently flag the same handful of "concerns." Here is 
 **Fair observation, and intentional:**
 
 - The repo serves **two audiences simultaneously**: human developers (who need a *Start Here* path) and **AI coding agents** (which benefit from exhaustive, machine-parseable rules).
-- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`02-spec/02-coding-guidelines/01-cross-language/01-index.md`](02-spec/02-coding-guidelines/01-cross-language/01-index.md)** form a < 30-minute on-ramp.
+- For humans: the **[quickstart.md](quickstart.md)**, the **10 CODE-RED rules**, and **[`02-spec/02-coding-guidelines/01-cross-language/readme.md`](02-spec/02-coding-guidelines/01-cross-language/readme.md)** form a < 30-minute on-ramp.
 - For AI: every file in **[`02-spec/17-consolidated-guidelines/`](02-spec/17-consolidated-guidelines/)** is **standalone**, an agent can load a single file and enforce that rule class without reading 622 files.
 - **Want the absolute minimum?** The entire ruleset is distilled into **one file**, **[`.ai-memory/coding-guidelines.md`](.ai-memory/coding-guidelines.md)** (≈ 50 lines, 13 hard rules + schema + error rules). Drop it into any AI tool's memory or system prompt and you have a working baseline. The 13 rules are listed verbatim under **[Compact Rule Set](#-compact-rule-set-13-hard-rules)** below.
 - **Compact by design:** the consolidated layer is small. **[`02-spec/17-consolidated-guidelines/`](02-spec/17-consolidated-guidelines/)** is **33 files** total, each one self-contained. That's ~5% of the repo's file count covering 100% of the enforceable rule classes.
@@ -2071,7 +2071,7 @@ The result: when an AI agent operates inside a repo following these rules, the g
 ## 🤝 Contributing
 
 1. Pick the correct parent folder (numeric prefix decides position).
-2. Use the [Non-CLI Module Template](02-spec/01-spec-authoring-guide/05-non-cli-module-template.md) and include `01-index.md` + `99-consistency-report.md`.
+2. Use the [Non-CLI Module Template](02-spec/01-spec-authoring-guide/05-non-cli-module-template.md) and include `readme.md` + `99-consistency-report.md`.
 3. Bump the version, add a changelog entry, then run `npm run sync` to refresh `version.json`, `specTree.json`, and the README stamps.
 4. Run all local quality gates via `python 03-ai-scripts/03-cicd-local-runner.py`.
 5. Pre-warm repository file caches via `python 03-ai-scripts/08-fast-file-scanner.py` for sub-millisecond AI file lookups.

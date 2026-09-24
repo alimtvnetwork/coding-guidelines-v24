@@ -19,7 +19,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - MERGE: 02-spec/09-pipeline\10-known-issues-and-fixes.md -> 02-spec/12-cicd-pipeline-workflows\22-known-issues-and-fixes.md
 - MERGE: 02-spec/09-pipeline\11-lint-gating-rules.md -> 02-spec/12-cicd-pipeline-workflows\23-lint-gating-rules.md
 - DELETE: Removed directory 02-spec/09-pipeline/ after merging into 02-spec/12-cicd-pipeline-workflows/
-- DELETE: Removed 02-spec/12-cicd-pipeline-workflows/readme.md (Consolidated into 01-index.md)
+- DELETE: Removed 02-spec/12-cicd-pipeline-workflows/readme.md (Consolidated into readme.md)
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/01-spec-authoring-guide/02-folder-structure.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/01-spec-authoring-guide/03-naming-conventions.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/01-spec-authoring-guide/04-required-files.md`
@@ -35,7 +35,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/01-spec-authoring-guide/14-version-schema.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/02-coding-guidelines/02-canonical-size-tier.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/02-coding-guidelines/03-03-coding-style-checklist.md`
-- RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/02-coding-guidelines/01-cross-language/01-index.md`
+- RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/02-coding-guidelines/01-cross-language/readme.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/02-coding-guidelines/05-05-consolidated-review-guide.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/03-error-manage/02-improvements.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/03-error-manage/03-03-structure.md`
@@ -101,7 +101,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/17-release-pipeline-issues-rca.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/18-blue-green-deployment.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/19-flaky-test-quarantine.md`
-- RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/01-index.md`
+- RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/readme.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/21-e2e-testing-pattern.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/22-known-issues-and-fixes.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/12-cicd-pipeline-workflows/23-lint-gating-rules.md`
@@ -229,36 +229,36 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/19-main-worker-service/27-trust-boundaries-and-isolation.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/19-main-worker-service/28-git-backup-targets.md`
 - RENAME: `02-spec/19-main-worker-service/29-29-plan.md` -> `02-spec/19-main-worker-service/29-29-plan.md`
-- DELETE: Removed `02-spec/11-powershell-integration/readme.md` (Consolidated into 01-index.md)
-- DELETE: Removed `02-spec/14-update/readme.md` (Consolidated into 01-index.md)
-- DELETE: Removed `02-spec/18-wp-plugin-how-to/readme.md` (Consolidated into 01-index.md)
-- DELETE: Removed `02-spec/19-main-worker-service/diagrams/readme.md` (Consolidated into 01-index.md)
-- DELETE: Removed `02-spec/19-main-worker-service/fixtures/readme.md` (Consolidated into 01-index.md)
-- DELETE: Removed `02-spec/19-main-worker-service/images/readme.md` (Consolidated into 01-index.md)
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\01-spec-authoring-guide\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\02-coding-guidelines\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\03-error-manage\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\04-database-conventions\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\05-split-db-architecture\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\06-seedable-config-architecture\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\07-design-system\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\08-docs-viewer-ui\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\09-code-block-system\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\10-research\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\11-powershell-integration\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\12-cicd-pipeline-workflows\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\13-generic-cli\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\14-update\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\15-distribution-and-runner\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\16-generic-release\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\17-consolidated-guidelines\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\18-wp-plugin-how-to\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\19-main-worker-service\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\21-app\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\22-app-issues\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\23-app-db\01-index.md`
-- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\24-app-ui-design-system\01-index.md`
-- CREATE: `spec-coding-guideline/01-index.md` & `spec-coding-guideline/02-slides-app-spec.md` (Internal repo specs)
+- DELETE: Removed `02-spec/11-powershell-integration/readme.md` (Consolidated into readme.md)
+- DELETE: Removed `02-spec/14-update/readme.md` (Consolidated into readme.md)
+- DELETE: Removed `02-spec/18-wp-plugin-how-to/readme.md` (Consolidated into readme.md)
+- DELETE: Removed `02-spec/19-main-worker-service/diagrams/readme.md` (Consolidated into readme.md)
+- DELETE: Removed `02-spec/19-main-worker-service/fixtures/readme.md` (Consolidated into readme.md)
+- DELETE: Removed `02-spec/19-main-worker-service/images/readme.md` (Consolidated into readme.md)
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\01-spec-authoring-guide\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\02-coding-guidelines\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\03-error-manage\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\04-database-conventions\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\05-split-db-architecture\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\06-seedable-config-architecture\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\07-design-system\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\08-docs-viewer-ui\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\09-code-block-system\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\10-research\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\11-powershell-integration\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\12-cicd-pipeline-workflows\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\13-generic-cli\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\14-update\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\15-distribution-and-runner\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\16-generic-release\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\17-consolidated-guidelines\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\18-wp-plugin-how-to\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\19-main-worker-service\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\21-app\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\22-app-issues\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\23-app-db\readme.md`
+- ENHANCE: Injected `/goal` and `/learn` actionable checklist in `spec\24-app-ui-design-system\readme.md`
+- CREATE: `spec-coding-guideline/readme.md` & `spec-coding-guideline/02-slides-app-spec.md` (Internal repo specs)
 - MOVE: spec-slides\01-architecture.md -> spec-coding-guideline\01-architecture.md
 - MOVE: spec-slides\02-slide-authoring.md -> spec-coding-guideline\02-slide-authoring.md
 - MOVE: spec-slides\03-design-tokens.md -> spec-coding-guideline\03-design-tokens.md
@@ -279,10 +279,10 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `02-spec/12-cicd-pipeline-workflows/23-lint-gating-rules.md` -> `02-spec/12-cicd-pipeline-workflows/18-lint-gating-rules.md`
 - RENAME: `02-spec/12-cicd-pipeline-workflows/18-blue-green-deployment.md` -> `02-spec/12-cicd-pipeline-workflows/19-blue-green-deployment.md`
 - RENAME: `02-spec/12-cicd-pipeline-workflows/19-flaky-test-quarantine.md` -> `02-spec/12-cicd-pipeline-workflows/20-flaky-test-quarantine.md`
-- RENAME: `02-spec/12-cicd-pipeline-workflows/01-index.md` -> `02-spec/12-cicd-pipeline-workflows/21-contract-testing.md`
+- RENAME: `02-spec/12-cicd-pipeline-workflows/readme.md` -> `02-spec/12-cicd-pipeline-workflows/21-contract-testing.md`
 - RENAME: `02-spec/12-cicd-pipeline-workflows/21-e2e-testing-pattern.md` -> `02-spec/12-cicd-pipeline-workflows/22-e2e-testing-pattern.md`
-- UPDATE: Updated `02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/01-index.md`
-- UPDATE: Updated `02-spec/12-cicd-pipeline-workflows/01-index.md` with consolidated 22-item inventory
+- UPDATE: Updated `02-spec/12-cicd-pipeline-workflows/03-reusable-ci-guards/readme.md`
+- UPDATE: Updated `02-spec/12-cicd-pipeline-workflows/readme.md` with consolidated 22-item inventory
 - RESOLVE: Marked OQ-1 as resolved in `02-spec/19-main-worker-service/29-plan.md`
 - RENAME: `02-spec/_template.md` -> `02-02-spec/02-_template.md`
 - RENAME: `02-spec/folder-structure-root.md` -> `02-spec/03-folder-structure-root.md`
@@ -497,7 +497,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `spec\08-docs-viewer-ui\02-features/06-shortcuts-overlay.md` -> `spec\08-docs-viewer-ui\02-features/07-shortcuts-overlay.md`
 - RENAME: `spec\08-docs-viewer-ui\02-features/06-ui-theme-animations.md` -> `spec\08-docs-viewer-ui\02-features/08-ui-theme-animations.md`
 - RENAME: `spec\08-docs-viewer-ui\02-features/07-visual-rendering-guide.md` -> `spec\08-docs-viewer-ui\02-features/09-visual-rendering-guide.md`
-- HEADER_SYNC: `spec\09-code-block-system\01-index.md`: changed #08 to #01
+- HEADER_SYNC: `spec\09-code-block-system\readme.md`: changed #08 to #01
 - HEADER_SYNC: `spec\09-code-block-system\10-tree-structure-rendering.md`: changed #09 to #10
 - HEADER_SYNC: `spec\12-cicd-pipeline-workflows\17-release-pipeline-issues-rca.md`: changed #10 to #17
 - RENAME: `spec\12-cicd-pipeline-workflows\01-browser-extension-deploy/01-ci-pipeline.md` -> `spec\12-cicd-pipeline-workflows\01-browser-extension-deploy/02-ci-pipeline.md`
@@ -542,7 +542,7 @@ This log records all atomic file moves, renames, merges, and index normalization
 - RENAME: `spec\18-wp-plugin-how-to\02-enums-and-coding-style/02-enum-metadata-pattern.md` -> `spec\18-wp-plugin-how-to\02-enums-and-coding-style/03-enum-metadata-pattern.md`
 - RENAME: `spec\18-wp-plugin-how-to\02-enums-and-coding-style/03-self-update-status-enum.md` -> `spec\18-wp-plugin-how-to\02-enums-and-coding-style/04-self-update-status-enum.md`
 - RENAME: `spec\18-wp-plugin-how-to\02-enums-and-coding-style/04-action-type-enum.md` -> `spec\18-wp-plugin-how-to\02-enums-and-coding-style/05-action-type-enum.md`
-- HEADER_SYNC: `spec\19-main-worker-service\01-index.md`: changed #00 to #01
+- HEADER_SYNC: `spec\19-main-worker-service\readme.md`: changed #00 to #01
 - HEADER_SYNC: `spec\19-main-worker-service\02-architecture.md`: changed #01 to #02
 - HEADER_SYNC: `spec\19-main-worker-service\03-glossary.md`: changed #02 to #03
 - HEADER_SYNC: `spec\19-main-worker-service\04-main-db-schema.md`: changed #03 to #04

@@ -11,7 +11,7 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/03-error-manage/01-index.md`](02-spec/03-error-manage/01-index.md) — Standardized `*appfault.AppError` return types.
+  - [`02-spec/03-error-manage/readme.md`](02-spec/03-error-manage/readme.md) — Standardized `*appfault.AppError` return types.
   - [`02-spec/02-coding-guidelines/04-naming-conventions/02-booleans.md`](02-spec/02-coding-guidelines/04-naming-conventions/02-booleans.md) — Implicit booleans with positive naming.
   - [`02-spec/02-coding-guidelines/09-clean-code/02-dry-principle.md`](02-spec/02-coding-guidelines/09-clean-code/02-dry-principle.md) — Elimination of duplicate command handling and argument parsing.
 - **Core Architecture Contracts:**

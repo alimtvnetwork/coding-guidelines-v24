@@ -30,17 +30,17 @@ Unlike multi-agent parallel workflows, temporary end-to-end test development enf
 
 1. [ ] /goal Preamble Precedence Verification: Whatever is given before this section or prompt (user preamble, header constraints, prior instructions) has been verified as highest priority and non-negotiable, and is strictly incorporated into the task scope ahead of all other guidelines.
 2. [ ] /goal Phase 1A (Step 0 - Verbatim Prompt Recording & Task Extraction Gate): Immediately capture the user prompt verbatim into `.ai-memory/plans/pending/xx-<slug>.md` under `## User Request (Verbatim)`. Extract actionable deliverables with traceable IDs (`Task-01`, `Task-02`), and output this confirmed task breakdown directly in chat in cleanly indented markdown with vertical blank lines, task state (`State: [IN PROGRESS — EXECUTING IMMEDIATELY]`), and understanding indicator bracket (`Understood: [YES — ...]`) before any file exploration, scanning, or spec writing. Same-turn tool chaining is mandatory (never terminate turn with text alone).
-3. [ ] /goal Phase 1B (Step 1 - Canonical Spec Generation in Folder 21): Write the canonical specification in `02-spec/21-app/xx-<slug>.md` (or directory `02-spec/21-app/xx-<slug>/` for complex features) with lossless verbatim prompt capture, register it in `02-spec/21-app/01-index.md`, and initialize the execution plan in `.ai-memory/plans/pending/xx-<slug>.md` linking back to the spec.
+3. [ ] /goal Phase 1B (Step 1 - Canonical Spec Generation in Folder 21): Write the canonical specification in `02-spec/21-app/xx-<slug>.md` (or directory `02-spec/21-app/xx-<slug>/` for complex features) with lossless verbatim prompt capture, register it in `02-spec/21-app/readme.md`, and initialize the execution plan in `.ai-memory/plans/pending/xx-<slug>.md` linking back to the spec.
 4. [ ] /goal Phase 1B (Step 2 - Scan & Discover): Use fast Python discovery scripts (`11-fast-file-scanner.py`, `12-fast-cached-grep.py`, `17-fast-file-reader.py`) to inventory target integration files and fixtures without tool truncation limits.
 5. [ ] /goal Phase 1B (Step 3 - Lean Subtask Decomposition): Decompose the plan into lean subtask files in `.ai-memory/plans/subtasks/xx-<slug>/01-<subslug>.md` cross-referencing the canonical spec. Subtasks must focus purely on unique task deliverables without repeating common repository boilerplate.
-6. [ ] /goal Phase 1B (Step 4 - Readiness Audit Gate): Confirm canonical spec is registered in `02-spec/21-app/01-index.md`, and all `Task-xx` deliverables are mapped to subtasks linking back to the spec before execution.
+6. [ ] /goal Phase 1B (Step 4 - Readiness Audit Gate): Confirm canonical spec is registered in `02-spec/21-app/readme.md`, and all `Task-xx` deliverables are mapped to subtasks linking back to the spec before execution.
 7. [ ] /goal Phase 1B (Step 5 - Unconditional Zero-Question Execution Mandate): Immediately upon completing Phase 1, transition directly into Phase 2 execution mode without pausing, asking questions, or seeking user confirmation.
 8. [ ] /goal Phase 2 (Execution & Sequential Implementation): Unconditionally implement code refactoring and test fixtures sequentially following all repository coding guidelines (boolean standards, concrete types in `types.go`, `*appfault.AppError`, function lengths <= 8-15 lines, Unix LF).
 9. [ ] /goal Phase 2 (Strict Skip-by-Default Isolation): Tag all temporary E2E test files with mandatory build tags (`//go:build tempe2e`), pytest markers (`@pytest.mark.temp_e2e`), or Vitest/Jest skip guards (`describe.skipIf(!isTempE2EActive)`), and apply runtime guards (`RUN_TEMP_E2E`).
 10. [ ] /goal Phase 2 (Targeted On-Demand Verification ONLY): Run ONLY the specific isolated temporary E2E test using the explicit on-demand command (e.g. `RUN_TEMP_E2E=1 go test -tags=tempe2e -v ...`). Do not run `06-cicd-local-runner.py` or standard unflagged test commands.
 11. [ ] /goal Phase 3 (Consolidation & Atomic Push): Consolidate completed subtasks into `.ai-memory/plans/completed/xx-<slug>.md` preserving the canonical spec reference (canonical spec in `02-spec/21-app/` remains permanently intact), delete granular subtasks and pending plan, stage all changes, and push in a single grouped commit.
 12. [ ] /goal Phase 3 (Completion & Confidence Reporting): Emit the final Task Completion Summary with green check mark emojis, isolation verification summary, modified files summary, and implementation confidence score.
-13. [ ] /learn Ingest `.ai-memory/memory/01-index.md` for project memory index and past learnings.
+13. [ ] /learn Ingest `.ai-memory/memory/readme.md` for project memory index and past learnings.
 14. [ ] /learn Ingest `.ai-memory/strictly-avoid.md` for banned anti-patterns and strict constraints.
 15. [ ] /learn Ingest `02-spec/02-coding-guidelines/` for domain-specific architectural specifications.
 16. [ ] /learn Ingest `02-spec/03-error-manage/` for error handling architectures and *appfault.AppError.
@@ -165,7 +165,7 @@ To reduce markdown file count and bloat, consolidate subtasks when all deliverab
 2. Explicitly reference the canonical spec `[02-spec/21-app/xx-<slug>.md](../../../02-spec/21-app/xx-<slug>.md)` in the consolidated header. The canonical spec remains permanently intact.
 3. Delete the original granular `.md` files in `.ai-memory/plans/subtasks/xx-<slug>/`.
 4. Delete the original parent plan `.ai-memory/plans/pending/xx-<slug>.md`.
-5. Update `.ai-memory/plans/01-index.md` to point to the newly consolidated completed file.
+5. Update `.ai-memory/plans/readme.md` to point to the newly consolidated completed file.
 6. **Final Step Git Commit & Push (Mandatory):** Stage all modified files, consolidated plans, and memory records (`git add -A`), commit them in a single clean grouped atomic commit (`git commit -m "<type>(<scope>): <summary>"`), and push to git (`git push origin <branch>`). Under no circumstances commit each file individually.
 
 ---
@@ -213,14 +213,14 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 2. **Non-CI/CD Issues (Application Bugs, Feature Defects, Logic/Runtime Errors):**
    - **Target Folder:** `02-spec/22-app-issues/` (canonical spec hierarchy Tier 22)
    - **File Pattern:** `02-spec/22-app-issues/NN-<issue-slug>.md`
-   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/01-index.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
+   - **Structure & Registry:** Follow the 4-part structure (Reproduction / Cause / Fix / Prevention per AC-AI-001 or Why / How / Root Cause / Code Fix) and index in `02-spec/22-app-issues/readme.md` (cross-referencing in `.ai-memory/memory/issues/` for institutional memory).
    - **Scope:** Application business logic, UI bugs, CLI command errors, API crashes, and domain defects.
 
 ---
 
 ## 1. AI Fix Scripts Memory (Reusable Tooling)
 
-- [ ] /goal Reuse First: Scanned and learned `03-ai-scripts/01-index.md` before writing temporary code.
+- [ ] /goal Reuse First: Scanned and learned `03-ai-scripts/readme.md` before writing temporary code.
 - [ ] Strict In-Repository Execution: All Python scripts executed strictly within the codebase repository root.
 - [ ] Strict .ai-memory/ Folder Storage: All helper scripts, local runners, and linters stored in `03-ai-scripts/`.
 - [ ] Native File Manipulator: Use `python 03-ai-scripts/03-file-manipulator.py <command>` for mass file operations.
@@ -231,7 +231,7 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 ## 2. Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
 
 - [ ] TOP-INSTRUCTION PRIORITY MANDATE: Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) are verified as highest priority and non-negotiable, overriding all lower-level guidelines below.
-- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/01-index.md).
+- [ ] ISSUE & RCA DESTINATION ROUTING: Whenever resolving an issue or performing a fix with RCA, verified that CI/CD failures are documented in .ai-memory/cicd-issues/NN-<slug>.md (indexed in .ai-memory/cicd-index.md), while non-CI/CD issues (application bugs, logic/runtime defects) are documented in 02-spec/22-app-issues/NN-<slug>.md (indexed in 02-spec/22-app-issues/readme.md).
 - [ ] NO UNISOLATED TEMP E2E TESTS (TOTAL BAN): Never create or commit temporary E2E tests without mandatory build tags (`//go:build tempe2e`), markers (`@pytest.mark.temp_e2e`), or runtime skip guards (`RUN_TEMP_E2E`). Every temporary E2E test must skip by default.
 - [ ] NO ENABLING IN CI/CD WORKFLOWS (TOTAL BAN): Never modify GitHub Actions workflows (`.github/workflows/*.yml`) or pipeline definitions to execute temporary E2E tests.
 - [ ] NO ROUTINE LOCAL TEST EXECUTION (TOTAL BAN): Never run `06-cicd-local-runner.py` or standard unflagged test commands (`go test ./...` without tags). Only run the targeted on-demand command with explicit isolation flags.

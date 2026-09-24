@@ -12,7 +12,7 @@
 
 - **Authoritative Specifications Implemented:**
   - [`02-spec/21-app/04-quiz-feature/00-overview.md`](02-spec/21-app/04-quiz-feature/00-overview.md) — Quiz creation schema, REST endpoints, and admin UI contracts.
-  - [`02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md`](02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md) — Standardized folder hierarchies and naming rules.
+  - [`02-spec/02-coding-guidelines/08-file-folder-naming/readme.md`](02-spec/02-coding-guidelines/08-file-folder-naming/readme.md) — Standardized folder hierarchies and naming rules.
 - **Core Architecture Contracts:**
   - **Directory Synchronization:** Synchronized `02-spec/`, `.ai-memory/`, `01-prompts/`, and `03-ai-scripts/` into `wp-exam`.
   - **Clean Deprecation:** Removed legacy `.lovable/` and `spec/` directories from `wp-exam` with zero residual traces.

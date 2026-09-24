@@ -11,7 +11,7 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/03-error-manage/01-index.md`](02-spec/03-error-manage/01-index.md) — Universal `*appfault.AppError` return type, structured failure metadata, and error codes.
+  - [`02-spec/03-error-manage/readme.md`](02-spec/03-error-manage/readme.md) — Universal `*appfault.AppError` return type, structured failure metadata, and error codes.
   - [`02-spec/02-coding-guidelines/05-type-safety/01-type-safety.md`](02-spec/02-coding-guidelines/05-type-safety/01-type-safety.md) — Type safety, generic containers, and monadic error unwrapping.
   - [`02-spec/02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md`](02-spec/02-coding-guidelines/01-cross-language/03-casting-elimination-patterns.md) — Safe typing and high-performance reflection fast-paths.
   - [`02-spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md`](02-spec/02-coding-guidelines/01-cross-language/18-code-mutation-avoidance.md) — Immutability, pure value transformations, and deterministic outputs.
@@ -51,4 +51,4 @@
 ## 5. Root Cause Analyses & Bug Fixes Referenced
 
 - [`.ai-memory/memory/learned/04-streamwriter-contracts-and-naming-standards.md`](.ai-memory/memory/learned/04-streamwriter-contracts-and-naming-standards.md) — Monadic `Bytes[T]`, `WrappedBytes`, and error wrapping conventions.
-- [`.ai-memory/memory/01-index.md`](.ai-memory/memory/01-index.md) — Master index of learned patterns and coding standards.
+- [`.ai-memory/memory/readme.md`](.ai-memory/memory/readme.md) — Master index of learned patterns and coding standards.

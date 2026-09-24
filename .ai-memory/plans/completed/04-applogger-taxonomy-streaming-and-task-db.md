@@ -51,4 +51,4 @@
 - [`.ai-memory/memory/learned/07-split-sqlite-logging-and-task-db-migration.md`](.ai-memory/memory/learned/07-split-sqlite-logging-and-task-db-migration.md) — Architecture of split SQLite logging and migration safety.
 - [`.ai-memory/memory/learned/08-task-retention-streaming-atomic-apimanager.md`](.ai-memory/memory/learned/08-task-retention-streaming-atomic-apimanager.md) — Task retention pruning and atomic file writes.
 - [`.ai-memory/memory/learned/04-streamwriter-contracts-and-naming-standards.md`](.ai-memory/memory/learned/04-streamwriter-contracts-and-naming-standards.md) — Re-entrant locker synchronization and idiomatic `-er` interface naming.
-- [`.ai-memory/memory/01-index.md`](.ai-memory/memory/01-index.md) — Master index of learned patterns and coding standards.
+- [`.ai-memory/memory/readme.md`](.ai-memory/memory/readme.md) — Master index of learned patterns and coding standards.

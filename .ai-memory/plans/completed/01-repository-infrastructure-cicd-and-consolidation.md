@@ -11,7 +11,7 @@
 ## 2. Key Architectural Decisions & Spec Implementations
 
 - **Authoritative Specifications Implemented:**
-  - [`02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md`](02-spec/02-coding-guidelines/08-file-folder-naming/01-index.md) — Strictly lowercase filenames, no spaces, continuous sequential prefixes (`01-`, `02-`).
+  - [`02-spec/02-coding-guidelines/08-file-folder-naming/readme.md`](02-spec/02-coding-guidelines/08-file-folder-naming/readme.md) — Strictly lowercase filenames, no spaces, continuous sequential prefixes (`01-`, `02-`).
   - [`02-spec/02-coding-guidelines/02-canonical-size-tier.md`](02-spec/02-coding-guidelines/02-canonical-size-tier.md) — Canonical file size limits (<= 300 lines) and function size tiers (<= 15 lines).
   - [`02-spec/02-coding-guidelines/01-cross-language/01-cross-language.md`](02-spec/02-coding-guidelines/01-cross-language/01-cross-language.md) — Strict relative Git paths mandate (total ban on absolute paths and `file:///` URIs).
   - [`02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md`](02-spec/03-error-manage/02-error-architecture/02-error-handling-reference.md) — Universal AppError wrapping, error codes, and strict typed envelopes.
@@ -22,7 +22,7 @@
   - **CI/CD Quality Guard Architecture:**
     - 36 automated quality gates executing in parallel via `ThreadPoolExecutor` with thread-safe log capture.
     - Zero CI disablement policy: comment-outs or workflow bypasses strictly rejected.
-    - Script directory consolidation under `03-ai-scripts/` with sequential naming and `<details>` collapsible tags in `03-ai-scripts/01-index.md`.
+    - Script directory consolidation under `03-ai-scripts/` with sequential naming and `<details>` collapsible tags in `03-ai-scripts/readme.md`.
   - **Aggressive Compaction Doctrine:**
     - Folded 131 micro-subtask files across 41 directories into dense, high-clarity milestone summaries.
     - Cleanly eliminated superseded files from disk and Git index via `git rm`.
@@ -32,7 +32,7 @@
 | Task / Step | Scope & Description | Key Files Created / Modified | Verified Outcome | Status |
 |:---:|---|---|---|:---:|
 | 1 | File Hygiene & Line Endings | Normalized LF, UTF-8 without BOM, strictly lowercase naming | `.gitattributes`, root files | DONE |
-| 2 | Script Indexing & Registry | Added `<details>` collapsible documentation for all scripts | `03-ai-scripts/01-index.md` | DONE |
+| 2 | Script Indexing & Registry | Added `<details>` collapsible documentation for all scripts | `03-ai-scripts/readme.md` | DONE |
 | 3 | Version Sync & Manifests | Created unified prompt sync and version bump validators | `scripts/`, `package.json` | DONE |
 | 4 | CI/CD Pipeline Modernization | Implemented 12 parallel quality gates with worker pools | `03-ai-scripts/06-cicd-local-runner.py` | DONE |
 | 5 | Local Quality Guard Linters | Built gap linter, sequence integrity linter, and path linter | `03-ai-scripts/21-sequence-integrity-linter.py` | DONE |
@@ -43,7 +43,7 @@
 | 10 | Milestone Summaries Authoring | Authored high-density milestone files matching template | `.ai-memory/plans/completed/` | DONE |
 | 11 | Subtask Collapse & Deletion | Folded subtasks into milestones and removed old files via `git rm` | `.ai-memory/plans/subtasks/` | DONE |
 | 12 | Monotonic Resequencing | Re-sequenced completed plan files contiguously (`01-` to `04-`) | `.ai-memory/plans/completed/` | DONE |
-| 13 | Index Synchronization | Updated `.ai-memory/plans/01-index.md` and `.ai-memory/what-to-read.md` | `.ai-memory/` indexes | DONE |
+| 13 | Index Synchronization | Updated `.ai-memory/plans/readme.md` and `.ai-memory/what-to-read.md` | `.ai-memory/` indexes | DONE |
 | 14 | Linters & CI Verification | Ran sequence integrity, doc path linters, and full CI runner | Quality gates | DONE |
 
 ## 4. Unified Quality Gates & Verification Checklist
@@ -60,4 +60,4 @@
 
 - [`.ai-memory/memory/learned/03-parallel-cicd-runner-and-log-filtering.md`](.ai-memory/memory/learned/03-parallel-cicd-runner-and-log-filtering.md) — Multi-process concurrency and selective log capture architecture.
 - [`.ai-memory/memory/standards/01-prompt-synchronization-architecture.md`](.ai-memory/memory/standards/01-prompt-synchronization-architecture.md) — Prompt synchronization and config variable substitution standards.
-- [`.ai-memory/memory/01-index.md`](.ai-memory/memory/01-index.md) — Memory catalog of safety backups, file count reduction doctrines, and documentation hygiene standards.
+- [`.ai-memory/memory/readme.md`](.ai-memory/memory/readme.md) — Memory catalog of safety backups, file count reduction doctrines, and documentation hygiene standards.

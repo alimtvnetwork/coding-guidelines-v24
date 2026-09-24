@@ -87,7 +87,7 @@
 
 ### Updates to Index
 
-- `05-changes-history/01-index.md`: Registered Task 05.
+- `05-changes-history/readme.md`: Registered Task 05.
 
 ---
 
