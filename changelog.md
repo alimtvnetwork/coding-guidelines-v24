@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.46.0] - 2026-09-24
+
+### Added
+- add ai-adaptable design system specification and gitmap skill update
+
+---
+
 ## [v6.45.0] - 2026-09-22
 
 ### Added

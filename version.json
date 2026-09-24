@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.45.0",
+  "Version": "6.46.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "30d0e56f32ad3a79d44b75db0c073d1a0ae28304",
+  "LastCommitSha": "d536ea27d2107e800a030784638d64f7a7a71003",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.45.0",
-  "updated": "2026-09-22",
+  "version": "6.46.0",
+  "updated": "2026-09-24",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "30d0e56f32ad3a79d44b75db0c073d1a0ae28304",
-    "shortSha": "30d0e56",
-    "branch": "release/v6.45.0"
+    "sha": "d536ea27d2107e800a030784638d64f7a7a71003",
+    "shortSha": "d536ea2",
+    "branch": "release/v6.46.0"
   },
   "stats": {
-    "totalFiles": 700,
-    "totalLines": 149779,
+    "totalFiles": 718,
+    "totalLines": 154126,
     "totalFolders": 23,
-    "totalBytes": 5356897,
+    "totalBytes": 5549935,
     "rootFiles": 6
   },
   "folders": [
@@ -155,14 +155,14 @@
       "path": "07-design-system",
       "name": "Design System",
       "title": "AI-Adaptable Design System",
-      "version": "3.2.0",
-      "updated": "2026-04-16",
+      "version": "4.1.0",
+      "updated": "2026-09-24",
       "status": "Active",
       "aiConfidence": "Production-Ready",
-      "ambiguity": "Low",
-      "fileCount": 17,
-      "lineCount": 2752,
-      "byteCount": 84509
+      "ambiguity": "None",
+      "fileCount": 32,
+      "lineCount": 6625,
+      "byteCount": 248186
     },
     {
       "path": "08-docs-viewer-ui",
@@ -317,8 +317,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 35,
-      "lineCount": 8354,
-      "byteCount": 507689
+      "lineCount": 8360,
+      "byteCount": 507888
     },
     {
       "path": "21-app",
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 1,
-      "lineCount": 76,
-      "byteCount": 3076
+      "fileCount": 4,
+      "lineCount": 544,
+      "byteCount": 32238
     },
     {
       "path": "22-app-issues",
