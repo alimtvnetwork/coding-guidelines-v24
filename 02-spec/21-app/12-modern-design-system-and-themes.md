@@ -3,18 +3,18 @@
 > **/goal** Provide a comprehensive, portable, high-craft design system and multi-theme architecture inside `02-spec/07-design-system/`, equipped with machine-readable theme JSON, dark background principles, modern sliding/carousel interactions, and an exhaustive step-by-step train-and-learn checklist for AI assistants.
 > **/learn** Master the 4-plane dark materiality, 60/30/10 visual balance, single-accent Von Restorff discipline, fluid typography hierarchy, and multi-theme palette models (Navy Blue & Purple, VS Code themes, heatmaps, and warm editorial).
 
-**Version:** 4.0.0  
-**Updated:** 2026-09-24  
-**Status:** Active  
-**AI Confidence:** High  
-**Ambiguity:** None  
+**Version:** 4.0.0
+**Updated:** 2026-09-24
+**Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 
 ## User Request (Verbatim)
 
 ```text
-D:\work\coding-guidelines\02-spec\07-design-system
+02-spec/07-design-system
 
 
 Okay, now that you have understood the design concepts, UI, UX, and everything, I don't want you to modify anything in this site, but I want you to update the coding guideline. So first pull the coding guideline, and then whatever the design concepts that you learn, the sliding and things like that, you put this into the design system, okay? Along with the other aspects, and you improve the design system section inside the coding guideline with the modern approaches, just like from this, so that any AI can follow through and make nice UI interfaces. So you go through in many steps so that you can fine-tune it and any AI can be trained on navy blue and purple color themes. So it's not based on the Rise Up theme, but add different themes, like VS Code themes, color themes, heat map themes and colors as well. So you take most of these that we have, and you try to name these themes and put it inside the coding guideline spec folder, which is zero to spec folder, and then inside the design system, which is zero seven. You mention those design systems properly so that any AI can follow through these slides, specs. Okay? So try to have more information so that it's easier for a blind or low-quality AI to follow through. So write more, accurately write it, write it as a checklist, write it like a train and learn, put some goals into this, and AI should know which themes are available. Things like that. Do you understand? Also, for themes and colors, you can put a JSON there as well so that it's easier to understand what is what, and also a theme, why, what is used. With the dark background, why and how we should use it, typography information, how it needs to be used. So you get influence from this Rise Up Asia website. Do you understand? So I want you to go deep and improve the suspect inside the design system of the coding guideline. First things first, you should pull the code base for the coding guideline. Is it clear?
@@ -25,7 +25,7 @@ Okay, now that you have understood the design concepts, UI, UX, and everything, 
 ## Actionable Extracted Deliverables
 
 - **Task-01: Pull & Inspect Coding Guidelines Codebase**
-  - Verify git status in `D:\work\coding-guidelines`, ensure clean working branch, pull latest upstream commits.
+  - Verify git status in repository root, ensure clean working branch, pull latest upstream commits.
 - **Task-02: Comprehensive Theme Catalogue & Palette Specification (`16-theme-catalogue-and-palettes.md`)**
   - Define complete theme families:
     1. Navy Blue & Purple Theme (Deep midnight navy ground, electric violet accent, cyan/ice highlights, subtle indigo depth).
@@ -66,8 +66,8 @@ Okay, now that you have understood the design concepts, UI, UX, and everything, 
 
 ## Verification & Acceptance Gates
 
-1. Zero modifications to `d:\work\riseup-asia-website-project`.
-2. All additions and modifications reside strictly in `D:\work\coding-guidelines\02-spec\07-design-system/` and planning files.
+1. Zero modifications to `riseup-asia-website-project`.
+2. All additions and modifications reside strictly in `02-spec/07-design-system/` and planning files.
 3. Every theme family contains exact Hex, HSL, and semantic usage rules with explicit contrast verification.
 4. `17-theme-tokens.json` parses as valid JSON with complete structural coverage.
 5. All markdown files adhere to coding guideline standards (headings, checklists, zero banned operations, clean table formatting).

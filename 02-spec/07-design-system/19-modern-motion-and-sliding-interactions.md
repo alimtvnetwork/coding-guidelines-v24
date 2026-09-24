@@ -3,11 +3,11 @@
 > **/goal** Master the construction of modern, production-grade sliding carousels, scroll-linked choreography, entrance grammars, and section pacing without layout thrashing, maintaining strict 60fps performance and full accessibility.
 > **/learn** Implement controlled multi-card carousels with invisible wrap resets, direction-aware entrance choreography (`maskUp`, `rise`, `drawRule`), section density alternation, and instant zero-movement fallbacks under `prefers-reduced-motion: reduce`.
 
-**Version:** 4.0.0  
-**Updated:** 2026-09-24  
-**Status:** Active  
-**AI Confidence:** High  
-**Ambiguity:** None  
+**Version:** 4.0.0
+**Updated:** 2026-09-24
+**Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 

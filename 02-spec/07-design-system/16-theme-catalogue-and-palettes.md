@@ -3,11 +3,11 @@
 > **/goal** Provide a comprehensive, standardized catalogue of production-grade color themes (Navy Blue & Purple, VS Code themes, heatmaps, and warm editorial) with exact color formulas, semantic token mappings, contrast verification, and explicit guidance for AI models on selecting and applying the optimal visual identity.
 > **/learn** Master the exact Hex, HSL, and semantic usage rules for each theme family, understand why and when each theme is deployed, and enforce the single-accent Von Restorff rule and 60/30/10 weight balance across all interface states.
 
-**Version:** 4.0.0  
-**Updated:** 2026-09-24  
-**Status:** Active  
-**AI Confidence:** High  
-**Ambiguity:** None  
+**Version:** 4.0.0
+**Updated:** 2026-09-24
+**Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 

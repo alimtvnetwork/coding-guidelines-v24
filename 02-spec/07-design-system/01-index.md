@@ -91,6 +91,10 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 16 | [18-dark-mode-and-materiality.md](./18-dark-mode-and-materiality.md) | Materiality | 4-plane depth hierarchy, hairlines over shadows, progressive blur, grain, 60/30/10 |
 | 17 | [19-modern-motion-and-sliding-interactions.md](./19-modern-motion-and-sliding-interactions.md) | Motion | Controlled sliding carousels, entrance grammar, section rhythm, reduced motion |
 | 18 | [20-ai-training-and-checklist-guide.md](./20-ai-training-and-checklist-guide.md) | AI Training | Anti-slop rubric, 5-question above-the-fold contract, step-by-step design checklist |
+| 19 | [21-css3-animations-and-interactions.md](./21-css3-animations-and-interactions.md) | Motion & Hover | CSS3 keyframes, cubic-bezier easing, darkish hover shades, line hover highlights |
+| 20 | [22-native-css-select-and-border-shapes.md](./22-native-css-select-and-border-shapes.md) | Native Controls | Modern base-select, ::picker(select), and organic border-shape geometry |
+| 21 | [23-building-block-components.md](./23-building-block-components.md) | Components | Curriculum card anatomy, 4-cell subgrids, standalone SVGs, LESS mixins |
+| 22 | [24-slide-presentation-system.md](./24-slide-presentation-system.md) | Presentation | 16:9 virtual canvas, draggable webcam PIP, step reveals, dual-screen console |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | Testing | Testable criteria for design system compliance |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency validation report |
 

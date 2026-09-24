@@ -1,14 +1,14 @@
 # Consolidated Plan: Modern Design System, Theme Architecture & AI Training Guide
 
-**Spec Reference:** [02-spec/21-app/12-modern-design-system-and-themes.md](../../../02-spec/21-app/12-modern-design-system-and-themes.md)  
-**Status:** Completed ✅  
-**Executed In:** 6 Granular Subtasks across 1 Autonomous Orchestration Loop  
-**Completed Date:** 2026-09-24  
+**Spec Reference:** [02-spec/21-app/12-modern-design-system-and-themes.md](../../../02-spec/21-app/12-modern-design-system-and-themes.md)
+**Status:** Completed ✅
+**Executed In:** 6 Granular Subtasks across 1 Autonomous Orchestration Loop
+**Completed Date:** 2026-09-24
 
 ---
 
 ## Task Genesis & User Context
-The user requested an enhancement to the design system in `D:\work\coding-guidelines\02-spec\07-design-system/` incorporating the high-craft design and interaction principles observed in modern award-winning sites (specifically synthesized from the Rise Up Asia study), while maintaining complete isolation from the Rise Up site code. The goals were:
+The user requested an enhancement to the design system in `02-spec/07-design-system/` incorporating the high-craft design and interaction principles observed in modern award-winning sites (specifically synthesized from the Rise Up Asia study), while maintaining complete isolation from the Rise Up site code. The goals were:
 1. Provide rich multi-theme architectures (specifically Navy Blue & Purple, VS Code themes, heatmaps, and warm editorial).
 2. Author machine-readable tokens in JSON.
 3. Establish dark background materiality rules (4-plane depth, hairlines over shadows, progressive blur, subtle grain, 60/30/10 weight balance, single-accent Von Restorff).
@@ -73,4 +73,4 @@ The user requested an enhancement to the design system in `D:\work\coding-guidel
 ## Verification & Integrity
 - All newly created files exist and are verified.
 - `17-theme-tokens.json` validated as 100% syntactically valid JSON.
-- Rise Up Asia website repository (`d:\work\riseup-asia-website-project`) remained strictly unmodified.
+- Rise Up Asia website repository (`riseup-asia-website-project`) remained strictly unmodified.

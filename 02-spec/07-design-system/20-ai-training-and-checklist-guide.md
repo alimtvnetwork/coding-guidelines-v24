@@ -3,11 +3,11 @@
 > **/goal** Train any AI model (including lower-capability, blind, or prompt-following agents) to construct world-class, human-grade web interfaces without falling into generic AI template tropes.
 > **/learn** Execute the non-negotiable 5-question above-the-fold contract, apply golden ratio asymmetry, enforce the single-accent Von Restorff law, eliminate all 10 AI-slop failure modes, and follow a deterministic step-by-step design sequence.
 
-**Version:** 4.0.0  
-**Updated:** 2026-09-24  
-**Status:** Active  
-**AI Confidence:** High  
-**Ambiguity:** None  
+**Version:** 4.0.0
+**Updated:** 2026-09-24
+**Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 

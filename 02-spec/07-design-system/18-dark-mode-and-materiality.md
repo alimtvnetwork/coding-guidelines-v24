@@ -3,11 +3,11 @@
 > **/goal** Master the architectural principles of high-craft dark mode design: 4-plane neutral depth hierarchy, hairline lighting over drop shadows, progressive blur masking, subtle grain texture, 60/30/10 visual balance, and single-accent Von Restorff discipline.
 > **/learn** Eliminate common AI dark mode failure modes (pure black #000000, purple-blue gradient soup, low-contrast text, uniform flat cards) by constructing interfaces with tangible visual depth, deliberate optical layering, and WCAG AA/AAA verified contrast.
 
-**Version:** 4.0.0  
-**Updated:** 2026-09-24  
-**Status:** Active  
-**AI Confidence:** High  
-**Ambiguity:** None  
+**Version:** 4.0.0
+**Updated:** 2026-09-24
+**Status:** Active
+**AI Confidence:** High
+**Ambiguity:** None
 
 ---
 
@@ -89,7 +89,7 @@ In dark mode, physical materials catch ambient overhead light along their top ch
   background-color: hsl(var(--surface));
   border: 1px solid rgba(255, 255, 255, 0.08); /* 8% white hairline */
   border-radius: var(--radius-lg, 16px);
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),    /* Top edge chamfer catch */
     0 8px 24px -12px rgba(0, 0, 0, 0.6);        /* Soft ambient occlusion */
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
@@ -102,7 +102,7 @@ In dark mode, physical materials catch ambient overhead light along their top ch
   background-color: hsl(var(--surface-hover));
   border-color: rgba(255, 255, 255, 0.16);
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.20),
     0 16px 36px -12px rgba(0, 0, 0, 0.7),
     0 0 0 1px hsl(var(--primary) / 0.12);       /* Subtle primary aura */
@@ -120,7 +120,7 @@ Hard rectangular cutouts of photographs, charts, or avatars on dark surfaces loo
 ```html
 <div class="progressive-media-wrapper">
   <img src="asset.webp" alt="Subject" class="w-full h-full object-cover" />
-  
+
   <!-- Stepped backdrop blur layers create physical optical depth -->
   <div class="blur-layer layer-1"></div>
   <div class="blur-layer layer-2"></div>

@@ -63,6 +63,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | File / Folder | Title | Type | Status |
 |:---|:---|:---|:---|
 | [`01-index.md`](01-index.md) | App Specifications Root Index & Standards | Standard Index | Active |
+| [`05-design-system-and-slide-engine.md`](05-design-system-and-slide-engine.md) | Design System, CSS3 Building Blocks & Slide Presentation Engine | Application Spec | Active |
 | [`12-modern-design-system-and-themes.md`](12-modern-design-system-and-themes.md) | Modern Design System, Theme Architecture & AI Training Guide | Application Spec | Active |
 
 ---

@@ -1,3 +1,8 @@
+---
+name: fix-spec-from-audit
+description: Autonomously ingest the latest specification audit file from 02-spec/25-app-spec-audit/, decompose every finding into an exhaustive 1:1 remediation checklist, spawn parallel subagents to fix the specifications, verify 100% compliance, and remove the audit gap at the final stage.
+---
+
 # Specification Remediation from Audit Findings — Execution Spec (must follow)
 
 > **Prompt Version:** 2.2.0
