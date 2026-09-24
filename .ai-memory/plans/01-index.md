@@ -21,6 +21,7 @@ Master directory of architectural and execution plans.
 - [08-cicd-fix-release-and-gitmap-waiting-prompts.md](completed/08-cicd-fix-release-and-gitmap-waiting-prompts.md): Release-triggered CI/CD fix loop (v6.41.0), GitMap Pipeline-AI dynamic waiting, and anti-credit-waste polling bans.
 - [09-multi-repo-folder-structure-and-sync.md](completed/09-multi-repo-folder-structure-and-sync.md): Universal multi-repo folder structure migration, GitMap CLI verbs, zero-write read protocol, and cross-repo synchronization across 12 repositories.
 - [10-completed-plans-consolidation-and-reduction.md](completed/10-completed-plans-consolidation-and-reduction.md): Completed plans consolidation, aggressive file reduction, safety backup branch protocol, and monotonic re-sequencing.
+- [12-modern-design-system-and-themes.md](completed/12-modern-design-system-and-themes.md): Modern design system, multi-theme architecture (Navy & Purple, VS Code, heatmaps, warm editorial), JSON tokens, 4-plane dark materiality, sliding carousels, and AI training guide.
 
 ## Recent Completed Tasks Register (Last 20 Tasks)
 

@@ -12,26 +12,26 @@
 
 . **CRITICAL AI INSTRUCTION:** This `01-index.md` file is the primary entry point for this directory. AI agents MUST read this file first before exploring other files in this folder.
 
-**Version:** 3.2.0
-**Updated:** 2026-04-16
+**Version:** 4.0.0
+**Updated:** 2026-09-24
 **Status:** Active
 **AI Confidence:** Production-Ready
-**Ambiguity:** Low
+**Ambiguity:** None
 
 ---
 
 ## Overview
 
-This is the **canonical design system specification** for the project. It defines all visual behavior, interaction patterns, color tokens, motion rules, and component construction guidance in a single, portable reference. Any AI agent or human contributor reading this specification should be able to:
+This is the **canonical design system specification** for the project. It defines all visual behavior, interaction patterns, multi-theme architecture, color tokens, motion rules, and component construction guidance in a single, portable reference. Any AI agent or human contributor reading this specification should be able to:
 
 1. **Reproduce** the current visual language on a new website
 2. **Extend** the system with new pages and components that remain visually consistent
-3. **Re-theme** the entire design by changing centralized CSS custom property values
+3. **Re-theme** the entire design by selecting from the standardized multi-theme catalog (Navy & Purple, VS Code themes, Heatmaps, or Warm Editorial)
 4. **Migrate** the system to WordPress or any other CMS without rewriting component logic
 
-The design system follows a **variable-driven architecture**: all colors, spacing, borders, and visual tokens are defined as CSS custom properties (HSL format) in a single root file. Components never use hardcoded color values — they reference semantic tokens. Changing a token propagates to every component that uses it.
+The design system follows a **variable-driven architecture**: all colors, spacing, borders, and visual tokens are defined as CSS custom properties (HSL and OKLCH formats) in a single root file. Components never use hardcoded color values — they reference semantic tokens. Changing a token propagates to every component that uses it.
 
-All animations and transitions use **CSS3 only** — no JavaScript-driven animation libraries. This ensures portability, performance, and CMS compatibility.
+All animations and transitions prioritize **GPU-composited CSS3 transforms and opacity** — no heavy runtime libraries gating initial content paints.
 
 ---
 
@@ -41,11 +41,14 @@ All animations and transitions use **CSS3 only** — no JavaScript-driven animat
 |-----------|-------------|
 | **Variable-First** | Every color, spacing, and visual property comes from a CSS custom property. No hardcoded values in components. |
 | **Semantic Tokens** | Colors are named by purpose (`--primary`, `--accent`, `--muted`), not by value (`--purple`, `--pink`). |
-| **HSL Color Model** | All colors use HSL format for easy theme derivation (adjust lightness/saturation without changing hue). |
-| **CSS3 Motion** | All transitions and animations use CSS transitions, transforms, and keyframes. No JS animation libraries. |
-| **Dark/Light Parity** | Every token has both `:root` (light) and `.dark` (dark) values. Components never branch on theme — tokens handle it. |
-| **Progressive Enhancement** | Hover effects, transforms, and animations enhance but never gate functionality. |
-| **Portability** | The system is platform-agnostic. It works with React, WordPress, static HTML, or any CSS-capable framework. |
+| **HSL & OKLCH Color Models** | All colors use HSL space-separated format with OKLCH depth calculations for seamless lightness/saturation adjustments. |
+| **4-Plane Depth Hierarchy** | Clear optical elevation: Base (Plane 0), Raised (Plane 1), Surface (Plane 2), and Elevated (Plane 3). |
+| **60 / 30 / 10 Balance** | 60% dominant neutral, 30% structural surfaces/text, 10% purposeful accent. |
+| **Single-Accent Von Restorff** | Exactly one prominent accent action per viewport to maintain unmistakable conversion focus. |
+| **CSS3 Motion & Carousels** | High-performance transforms, controlled multi-card sliding loops, and instant reduced-motion fallbacks. |
+| **Dark/Light Parity** | Every token has both light and dark values. Components never branch on theme — tokens handle it. |
+| **Anti-AI-Slop Governance** | Concrete rejection rubrics that ban generic 3-card grids, unanchored heroes, and purple gradient soup. |
+| **Portability** | Platform-agnostic. Works natively with React, Tailwind v4, static HTML, WordPress, or modern SSR frameworks. |
 
 ---
 
@@ -54,14 +57,14 @@ All animations and transitions use **CSS3 only** — no JavaScript-driven animat
 | Metric | Value |
 |--------|-------|
 | AI Confidence | Production-Ready ✅ |
-| Ambiguity | Low 🟢 |
+| Ambiguity | None 🟢 |
 | Health Score | 100/100 |
 
 ---
 
 ## Keywords
 
-`design-system` · `css-variables` · `theme-tokens` · `hsl-colors` · `dark-mode` · `css3-animations` · `code-blocks` · `typography` · `motion-system` · `component-patterns` · `wordpress-migration` · `ai-adaptable`
+`design-system` · `multi-theme` · `navy-purple` · `vscode-themes` · `heatmaps` · `css-variables` · `4-plane-depth` · `sliding-carousels` · `anti-ai-slop` · `60-30-10-rule` · `von-restorff` · `typography` · `motion-system` · `ai-training`
 
 ---
 
@@ -83,6 +86,11 @@ All animations and transitions use **CSS3 only** — no JavaScript-driven animat
 | 11 | [13-section-patterns.md](./13-section-patterns.md) | Patterns | Reusable section templates (hero, feature, team, CTA) |
 | 12 | [14-page-creation-rules.md](./14-page-creation-rules.md) | Guide | Rules for building new pages from the design language |
 | 13 | [15-wordpress-migration.md](./15-wordpress-migration.md) | Migration | CMS compatibility notes, block theme mapping, admin theming |
+| 14 | [16-theme-catalogue-and-palettes.md](./16-theme-catalogue-and-palettes.md) | Multi-Theme | Navy & Purple, VS Code ecosystem, Heatmaps, and Warm Editorial palettes |
+| 15 | [17-theme-tokens.json](./17-theme-tokens.json) | Token Data | Machine-readable theme JSON for programmatic consumption |
+| 16 | [18-dark-mode-and-materiality.md](./18-dark-mode-and-materiality.md) | Materiality | 4-plane depth hierarchy, hairlines over shadows, progressive blur, grain, 60/30/10 |
+| 17 | [19-modern-motion-and-sliding-interactions.md](./19-modern-motion-and-sliding-interactions.md) | Motion | Controlled sliding carousels, entrance grammar, section rhythm, reduced motion |
+| 18 | [20-ai-training-and-checklist-guide.md](./20-ai-training-and-checklist-guide.md) | AI Training | Anti-slop rubric, 5-question above-the-fold contract, step-by-step design checklist |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | Testing | Testable criteria for design system compliance |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency validation report |
 
