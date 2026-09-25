@@ -17,13 +17,17 @@ description: >-
 
 ```text
 N = 200 (Total self-loop steps budget)
-A = 2   (Number of spawned autonomous subagents, default: 2)
-H = 2   (Number of hands / parallel operations per agent, default: 2)
+A = 2   (Number of spawned autonomous subagents running concurrently, default: 2)
+H = 2   (Operational hands per agent: dual-task batch capacity & parallel tool dispatch, default: 2)
+
+System Concurrency Capacity = A × H = 2 agents × 2 hands = 4 concurrent subtask operations
 ```
 
-N = total self-loop steps budget that the agents will perform.
-A = count of autonomous subagents running concurrently (default: 2).
-H = number of hands / parallel operations per agent (default: 2).
+- **N = 200:** Total self-loop steps budget that the agents will perform.
+- **A = 2:** Count of autonomous subagents running concurrently (`invoke_subagent` launches up to 2 subagents).
+- **H = 2 (Hands / Parallel Operations):** Concrete operational capacity defined across two execution axes:
+  1. **Workload Hands ($H_{batch} = 2$):** Each subagent is assigned a bounded batch of up to 2 tightly coupled subtasks from `.ai-memory/plans/subtasks/` (e.g., Subagent 1 executes Subtasks 01 & 02; Subagent 2 executes Subtasks 03 & 04).
+  2. **Tool-Dispatch Hands ($H_{tool} = 2$):** Within any execution step, each agent or subagent executes up to 2 parallel tool calls in a single response turn (e.g. calling two `view_file` or two `run_command` operations simultaneously).
 
 ```text
 PHASE_1_STEPS = N / 2   (Steps 1 .. N/2: Planning, Detailed Spec, and Lean Subtask Generation)
@@ -66,9 +70,13 @@ N, A, H, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after initialization. Ne
 - **Most Useful Parallel Tasks (Reading Files & Writing Modular Specs):**
   - When multiple agents are present (A >= 2, H >= 2), the most effective parallel tasks are reading files and authoring modular specs.
   - Subagents execute parallel disjoint tasks: reading dependencies/callers, authoring modular spec sub-files, and refactoring disjoint files.
-- **Strict Concurrency Limits (A = 2, H = 2):** When dispatching work in Phase 1 (planning) or Phase 2 (execution), spawn at most A = 2 sub-agents concurrently, with H = 2 parallel operations per agent.
-- **Strict Folder Bounding (`.ai-memory/`):** Subagents are strictly restricted to writing planning files, subtasks, status reports, and logs inside `.ai-memory/` (`.ai-memory/plans/`, `.ai-memory/readme.md`, `.ai-memory/memory/issues/`).
-- **Context Diet:** When spawning a subagent, do not paste file contents, memory logs, or the entire plan into its prompt. Give it the absolute minimal instruction (e.g., "Read subtask file `.ai-memory/plans/subtasks/xx-slug/01-<subtask-title>.md` and execute it"). The subagent must read the necessary files itself.
+- **Strict Concurrency Limits (A = 2, H = 2):** When dispatching work in Phase 1 (planning) or Phase 2 (execution), spawn at most A = 2 sub-agents concurrently, each handling H = 2 operations (a batch of up to 2 subtasks).
+- **Strict Disjoint Target File Bounding:** Each subagent is strictly bounded to the target files specified in its assigned subtask (e.g. File A and File B only). Subagents MUST NEVER touch files assigned to other subagents.
+- **Self-Contained Subagent Prompt Envelope:** Never spawn subagents with starved one-liner instructions (e.g., NEVER just "Read 01-task.md and execute it"). Subagents spawn in an isolated context and must receive a complete, self-contained **Prompt Envelope** containing: assigned subtasks, strict target file bounds, core architectural rules (implicit booleans, `*appfault.AppError`, no tests/builds), and completion reporting instructions.
+- **Mandatory Tool Schema (`TypeName: "self"`):** Subagents performing code refactoring or spec authoring MUST use `TypeName: "self"` so they inherit write and command tools (`write_to_file`, `replace_file_content`, `run_command`).
+- **Reactive Wakeup & Turn Yielding Protocol:**
+  - After invoking `invoke_subagent`, the parent orchestrator MUST output a brief progress note to the user and **STOP CALLING TOOLS** to yield the turn.
+  - DO NOT run busy-polling loops. The platform automatically wakes up the parent agent with a `<SYSTEM_MESSAGE>` when subagents complete or send messages.
 - **Fail Fast & Kill Stalls:** If a sub-agent stalls or provides garbage code, kill it immediately, rollback its dirty working tree, and spawn a new one.
 
 ---
@@ -192,16 +200,71 @@ Before transitioning to execution, verify:
 
 ## 4. Phase 2: Execution Mode & Parallel Refactoring (Steps N/2+1 .. N)
 
-1. Parallel Dispatch: Spawn up to A = 2 execution subagents (H = 2 operations per agent) assigned to disjoint subtasks from `.ai-memory/plans/subtasks/xx-<slug>/`. Provide minimal instructions referencing the subtask path.
-2. File Locking & Disjoint Files: Verify subagents operate on distinct files using `.ai-memory/readme.md`.
-3. Execution & Coding Guidelines: Subagents refactor code following all coding guidelines (<= 8-15 line functions, single return types, universal `*appfault.AppError` wrapping, Unix LF line endings).
-4. Failure Memory & Error Recovery: If a subagent fails:
-   - Rollback dirty changes and write the failure error log to `.ai-memory/plan.md` and `.ai-memory/memory/issues/xx-failure.md`.
-   - The next subagent spawned must read the previous failure log first, record it as a pending memory task, and implement the necessary fix.
-5. Atomic Change Tracking: Append all modified files to `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.ai-memory/test-inventory.json`.
-6. Total Ban on Test Running: Do not run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`), Go (`go test`), or any test runner during routine execution turns. All test execution is strictly deferred to CI/CD pipelines.
-7. Total Ban on Build Checking: Do not run build verification commands (`go build`, `npm run build`, compiler invocations). Build compilation is checked later on in CI/CD.
-8. Targeted Quality Linting Only: Run only targeted, fast file-level linters or autofixers on specifically modified files (`exit 0`). Do not run `06-cicd-local-runner.py` or full test suites.
+1. **Parallel Dispatch & Concrete Subagent Schema (A = 2, H = 2):**
+   - Unconditionally execute code refactoring across target files in the remaining 50% of the steps budget (`PHASE_2_STEPS = N / 2`).
+   - Use `invoke_subagent` to spawn up to A = 2 execution subagents concurrently, each handling H = 2 operations (a batch of up to 2 subtasks from `.ai-memory/plans/subtasks/xx-<slug>/`).
+   - **Mandatory Tool Schema (`TypeName: "self"`):** Subagents executing code changes MUST use `TypeName: "self"` to inherit the parent agent's write and command tools (`write_to_file`, `replace_file_content`, `run_command`).
+   - **Invocation Payload Template:**
+     ```json
+     {
+       "Subagents": [
+         {
+           "TypeName": "self",
+           "Role": "Subtask Worker 01: [Feature/Module A]",
+           "Model": "inherit",
+           "Prompt": "[Subagent Prompt Envelope Below]"
+         },
+         {
+           "TypeName": "self",
+           "Role": "Subtask Worker 02: [Feature/Module B]",
+           "Model": "inherit",
+           "Prompt": "[Subagent Prompt Envelope Below]"
+         }
+       ]
+     }
+     ```
+
+2. **Self-Contained Subagent Prompt Envelope:**
+   - NEVER spawn subagents with starved one-liner instructions. Subagents spawn in an isolated context and must receive a complete, self-contained **Prompt Envelope**:
+     ```markdown
+     You are Subagent Worker [NN].
+     
+     ### Assigned Subtasks (H = 2 Batch Capacity):
+     - Subtask 1: `.ai-memory/plans/subtasks/xx-<slug>/01-<name>.md`
+     - Subtask 2: `.ai-memory/plans/subtasks/xx-<slug>/02-<name>.md` (if assigned)
+     
+     ### Strict Target File Bounding Box (Disjoint Files Only):
+     - Allowed Target Files: `[path/to/file1.go, path/to/file2.go]`
+     - TOTAL BAN: You are strictly banned from touching or modifying ANY other files in the workspace.
+     
+     ### Non-Negotiable Coding Rules:
+     1. Positive booleans only (`isReady`, `hasPermission`), NO explicit `== true`.
+     2. Structured Go errors: return `*appfault.AppError`, never bare `error`.
+     3. Function sizing: <= 8 lines preferred (hard cap 15 lines).
+     4. Zero tests or builds: NEVER run `go test`, `pytest`, or build commands.
+     5. Targeted quality check: Run only targeted file-level linters (`python 03-ai-scripts/05-guideline-autofixer.py <file>`).
+     
+     ### Completion & Reporting Contract:
+     When finished, emit a structured completion summary detailing:
+     - Exact files modified
+     - Verification status
+     - Any blockers encountered
+     Conclude your response cleanly. Your output will be delivered back to the parent orchestrator via the reactive messaging system.
+     ```
+
+3. **Reactive Wakeup & Turn-Yielding Protocol (Deadlock Prevention):**
+   - In Google Antigravity, background subagents run asynchronously in the platform runtime. The parent agent receives subagent completions via the **Reactive Wakeup** messaging system (`<SYSTEM_MESSAGE>`).
+   - **MANDATORY YIELD RULE:** Immediately after issuing the `invoke_subagent` tool call, the parent orchestrator MUST output a brief progress note to the user (e.g. `Dispatched Subagents [01] and [02] to execute subtasks in parallel. Yielding turn to await completion...`) and **STOP CALLING TOOLS**.
+   - **NO BUSY-POLLING (TOTAL BAN):** NEVER run tight-polling loops using `manage_task` or filesystem checks to wait for subagents. Ending the tool-call chain allows the platform scheduler to execute the background subagents and deliver their completion messages into the parent's inbox upon wakeup.
+   - When the subagents finish, the engine wakes up the parent agent automatically with a `<SYSTEM_MESSAGE>`. The parent inspects the results, verifies acceptance criteria, and transitions to consolidation.
+
+4. **File Locking & Disjoint Files:** Verify subagents operate on strictly distinct files using `.ai-memory/readme.md`.
+5. **Execution & Coding Guidelines:** Subagents refactor code following all coding guidelines (<= 8-15 line functions, single return types, universal `*appfault.AppError` wrapping, Unix LF line endings).
+6. **Failure Memory & Error Recovery:** If a subagent fails or times out, the parent logs the root cause in `.ai-memory/memory/issues/xx-failure.md` and either executes the subtask directly or dispatches a targeted remediation subagent.
+7. **Atomic Change Tracking:** Append all modified files to `.ai-memory/temp/recent-file-changes.json` under lock (`python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`), mapping to associated tests in `.ai-memory/test-inventory.json`.
+8. **Total Ban on Test Running:** Do not run any tests using Python scripts (`06-cicd-local-runner.py`, `pytest`), Go (`go test`), or any test runner during routine execution turns. All test execution is strictly deferred to CI/CD pipelines.
+9. **Total Ban on Build Checking:** Do not run build verification commands (`go build`, `npm run build`, compiler invocations). Build compilation is checked later on in CI/CD.
+10. **Targeted Quality Linting Only:** Run only targeted, fast file-level linters or autofixers on specifically modified files (`exit 0`). Do not run `06-cicd-local-runner.py` or full test suites.
 
 ### Remote CI/CD Pipeline Monitoring & Dynamic Waiting Protocol (GitMap Pipeline-AI)
 
