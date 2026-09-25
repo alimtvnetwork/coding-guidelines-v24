@@ -63,6 +63,8 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | File / Folder | Title | Type | Status |
 |:---|:---|:---|:---|
 | [`readme.md`](readme.md) | App Specifications Root Index & Standards | Standard Index | Active |
+| [`02-prompts-v1-v2-and-gitmap-benchmarks.md`](02-prompts-v1-v2-and-gitmap-benchmarks.md) | AI Prompts V1/V2 Architecture & GitMap Discovery Benchmarks | Application Spec | Active |
+| [`03-multi-repo-prompts-skills-sync-audit.md`](03-multi-repo-prompts-skills-sync-audit.md) | Multi-Repository Prompts V1/V2 & Skills Synchronization Audit | Application Spec | Active |
 | [`05-design-system-and-slide-engine.md`](05-design-system-and-slide-engine.md) | Design System, CSS3 Building Blocks & Slide Presentation Engine | Application Spec | Active |
 | [`06-ai-adaptable-design-system.md`](06-ai-adaptable-design-system.md) | AI-Adaptable Design System & Modern SaaS UI Architecture | Application Spec | Active |
 | [`12-modern-design-system-and-themes.md`](12-modern-design-system-and-themes.md) | Modern Design System, Theme Architecture & AI Training Guide | Application Spec | Active |
