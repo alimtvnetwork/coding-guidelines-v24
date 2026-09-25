@@ -6,12 +6,12 @@ and AI scripts (03-ai-scripts/ and .agents/scripts/) from coding-guidelines-v24
 across 13 connected repositories.
 
 Performs the complete, safe multi-branch release ceremony per repo:
-1. Fetch and pull latest main/master.
-2. Create and push backup branch (backup/pre-sync-prompts-v1-v2-<timestamp>).
+1. Pull latest base branch.
+2. Create and push backup branch (backup/sync-prompts-v1-v2-<timestamp>).
 3. Create feature branch (feat/sync-prompts-v1-v2-gitmap).
 4. Mirror directories cleanly with stale-file removal.
-5. Commit changes atomically.
-6. Push feature branch.
+5. Commit changes atomically to feature branch.
+6. Push feature branch to origin.
 7. Create release branch (release/vX.Y.Z) and tag (vX.Y.Z).
 8. Push release branch, tag, and backup branch.
 9. Merge back into base branch and push.
@@ -26,6 +26,9 @@ import re
 import shutil
 import subprocess
 import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 SOURCE_ROOT = Path(__file__).resolve().parent.parent
 
@@ -226,30 +229,30 @@ def sync_repo(target: Path, dry_run: bool = False, no_push: bool = False) -> dic
         result["error"] = err
         return result
 
-    # 1. Base branch & git pull
     base_branch = detect_base_branch(target)
     result["base_branch"] = base_branch
-    print(f"[1/7] Switching to {base_branch} and pulling latest...")
-    run_cmd(f"git checkout {base_branch}", target)
-    code, out, err = run_cmd(f"git pull origin {base_branch}", target)
-    if code != 0:
-        print(f"Pull warning (continuing): {err or out}")
 
-    # 2. Create and push backup branch
+    # 1. Switch to feature branch to preserve working changes
+    feat_branch = "feat/sync-prompts-v1-v2-gitmap"
+    result["feat_branch"] = feat_branch
+    print(f"[1/7] Checking out feature branch: {feat_branch}...")
+    run_cmd(f"git checkout -B {feat_branch}", target)
+
+    # 2. Create and push backup branch from HEAD
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     backup_branch = f"backup/sync-prompts-v1-v2-{timestamp}"
     result["backup_branch"] = backup_branch
-    print(f"[2/7] Creating backup branch: {backup_branch}")
-    run_cmd(f"git branch {backup_branch}", target)
+    print(f"[2/7] Creating backup branch: {backup_branch}...")
+    run_cmd(f"git branch {backup_branch} HEAD", target)
     if not no_push and not dry_run:
         print(f"      Pushing {backup_branch} to origin...")
         run_cmd(f"git push origin {backup_branch}", target)
 
-    # 3. Create and checkout feature branch
-    feat_branch = "feat/sync-prompts-v1-v2-gitmap"
-    result["feat_branch"] = feat_branch
-    print(f"[3/7] Checking out feature branch: {feat_branch}")
-    run_cmd(f"git checkout -B {feat_branch}", target)
+    # 3. Pull latest base branch into feature branch
+    print(f"[3/7] Pulling latest changes from {base_branch}...")
+    code, out, err = run_cmd(f"git pull origin {base_branch}", target)
+    if code != 0:
+        print(f"Pull warning (continuing): {err or out}")
 
     # 4. Mirror directories
     print("[4/7] Mirroring prompts, skills, and AI scripts...")
@@ -289,7 +292,6 @@ def sync_repo(target: Path, dry_run: bool = False, no_push: bool = False) -> dic
 
     if dry_run:
         print("Dry run requested; skipping commit and release.")
-        run_cmd(f"git checkout {base_branch}", target)
         return result
 
     # 6. Commit and push feature branch
@@ -332,9 +334,11 @@ def sync_repo(target: Path, dry_run: bool = False, no_push: bool = False) -> dic
     run_cmd(f'git merge {release_branch} -m "chore(release): merge {release_tag} [skip ci]"', target)
     if not no_push:
         run_cmd(f"git push origin {base_branch}", target)
+        # Ensure backup branch is confirmed pushed
+        run_cmd(f"git push origin {backup_branch}", target)
         result["pushed"] = True
 
-    print(f"✔ Completed sync & release for {target.name} ({release_tag}).")
+    print(f"[OK] Completed sync & release for {target.name} ({release_tag}).")
     return result
 
 
