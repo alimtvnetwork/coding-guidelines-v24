@@ -1,14 +1,14 @@
 # Canonical Specification: Multi-Repository Prompts V1/V2 & Skills Synchronization Audit
 
-> **Document Version:** 1.0.0  
+> **Document Version:** 1.1.0  
 > **Status:** APPROVED & ACTIVE  
-> **Target Scope:** Meta-Repository (`alimtvnetwork/coding-guidelines-v24`) & 13 Connected Repositories
+> **Target Scope:** Meta-Repository (`alimtvnetwork/coding-guidelines-v24`) & 14 Connected Repositories
 
 ---
 
 ## 1. Executive Summary & Architectural Mandate
 
-This specification formalizes the enterprise-wide modernization, prompt segregation (V1/V2), GitMap AUM acceleration, and atomic multi-repository release ceremony across the meta-repository `coding-guidelines` and all 13 connected codebases in `d:/work`.
+This specification formalizes the enterprise-wide modernization, prompt segregation (V1/V2), GitMap AUM acceleration, and atomic multi-repository release ceremony across the meta-repository `coding-guidelines` and all 14 connected codebases in `d:/work`.
 
 ### 1.1 Core Architecture Principles
 
@@ -51,12 +51,13 @@ Can you please update all these prompts to these repositories and update these s
 | `wp-html-automate` | `../wp-html-automate` | `v6.17.1` | 148 | 148 | 57 | Clean (`main`) |
 | `wp-link-manager` | `../wp-link-manager` | `v0.2.1` | 148 | 148 | 57 | Clean (`main`) |
 | `wp-onboarding` | `../wp-onboarding` | `v0.2.1` | 148 | 148 | 57 | Clean (`main`) |
+| `cat-my` | `../cat-my` | `v4.112.1` | 148 | 148 | 57 | Clean (`main`) |
 
 ---
 
 ## 4. Verification Protocol
 
-The multi-repository audit script `03-ai-scripts/41-audit-all-repos.py` verifies the following invariants across all 14 repositories:
+The multi-repository audit script `03-ai-scripts/41-audit-all-repos.py` verifies the following invariants across all 15 repositories:
 1. `Branch`: Active branch is strictly `main`.
 2. `Clean`: Working tree has zero uncommitted changes (`git status --porcelain` is empty).
 3. `Tag`: Latest SemVer tag is bumped and pushed.

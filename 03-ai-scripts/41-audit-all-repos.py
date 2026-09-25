@@ -37,6 +37,7 @@ REPOS = [
     "wp-html-automate",
     "wp-link-manager",
     "wp-onboarding",
+    "cat-my",
 ]
 
 BASE_DIR = Path("d:/work")
