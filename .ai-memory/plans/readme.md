@@ -24,6 +24,7 @@ Master directory of architectural and execution plans.
 - [10-completed-plans-consolidation-and-reduction.md](completed/10-completed-plans-consolidation-and-reduction.md): Completed plans consolidation, aggressive file reduction, safety backup branch protocol, and monotonic re-sequencing.
 - [12-modern-design-system-and-themes.md](completed/12-modern-design-system-and-themes.md): Modern design system, multi-theme architecture (Navy & Purple, VS Code, heatmaps, warm editorial), JSON tokens, 4-plane dark materiality, sliding carousels, and AI training guide.
 - [13-multi-repo-prompts-skills-sync-audit.md](completed/13-multi-repo-prompts-skills-sync-audit.md): Multi-repository prompts V1/V2 architecture, skills synchronization, and 14-repository audit verification.
+- [60-multi-repo-prompts-skills-sync.md](completed/60-multi-repo-prompts-skills-sync.md): Multi-repository prompts V1/V2 architecture, skills synchronization, and 16-repository audit verification (Canonical).
 
 ## Recent Completed Tasks Register (Last 20 Tasks)
 
