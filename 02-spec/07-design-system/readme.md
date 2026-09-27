@@ -35,7 +35,6 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`03-sweet-digs-design-system/readme.md`](./03-sweet-digs-design-system/readme.md) — Master index and token flow for the Sweet Digs system.
   - Explore interactive demo: [`theme-tester/index.html`](../../theme-tester/index.html) — Live interactive theme tester with theme switcher, split hero, search card, filter chips, expanding underline menu, and interactive buttons.
 
-
 ---
 
 ## Offered Design Systems & Multi-Theme Catalog

@@ -101,7 +101,7 @@ func WriteAtomic(path string, data []byte, perm FilePermType) BoolResult {
 	}
 
 	dir := filepath.Dir(path)
-	if ensureRes := EnsureDir(dir, filepermtype.Standard); ensureRes.IsFailed() {
+	if ensureRes := EnsureDir(dir, filepermtype.Executable); ensureRes.IsFailed() {
 		return result.WrapFailure[bool](ensureRes.Fault())
 	}
 

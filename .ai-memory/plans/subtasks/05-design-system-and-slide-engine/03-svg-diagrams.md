@@ -9,7 +9,7 @@ Target:
 - `02-spec/07-design-system/22-native-css-select-and-border-shapes.md`
 - `02-spec/07-design-system/23-building-block-components.md`
 Status: completed
-Parent Plan: `.ai-memory/plans/pending/05-design-system-and-slide-engine.md`
+Parent Plan: `.ai-memory/plans/completed/05-design-system-and-slide-engine.md`
 
 ---
 

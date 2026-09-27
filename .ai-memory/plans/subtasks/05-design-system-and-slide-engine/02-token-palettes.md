@@ -4,7 +4,7 @@ Target:
 - `02-spec/07-design-system/tokens/design-tokens.json`
 - `02-spec/07-design-system/tokens/theme-palette.less`
 Status: completed
-Parent Plan: `.ai-memory/plans/pending/05-design-system-and-slide-engine.md`
+Parent Plan: `.ai-memory/plans/completed/05-design-system-and-slide-engine.md`
 
 ---
 

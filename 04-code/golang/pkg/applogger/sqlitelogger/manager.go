@@ -93,7 +93,7 @@ func (m *SplitDBManager) Init() *appfault.AppError {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
-	dirRes := fileutil.EnsureDir(m.tasksDir, filepermtype.Standard)
+	dirRes := fileutil.EnsureDir(m.tasksDir, filepermtype.Executable)
 	if dirRes.IsFailed() {
 		return dirRes.Fault()
 	}
@@ -149,7 +149,7 @@ func (m *SplitDBManager) SetTasksDir(customDir string) *appfault.AppError {
 	}
 
 	m.tasksDir = customDir
-	dirRes := fileutil.EnsureDir(customDir, filepermtype.Standard)
+	dirRes := fileutil.EnsureDir(customDir, filepermtype.Executable)
 	if dirRes.IsFailed() {
 		return dirRes.Fault()
 	}
@@ -235,7 +235,7 @@ func (m *SplitDBManager) GetTaskDb(taskId string) (*sql.DB, *appfault.AppError) 
 	}
 
 	taskPath := m.resolveTaskDbPathUnsafe(taskId)
-	_ = fileutil.EnsureDir(filepath.Dir(taskPath), filepermtype.Standard)
+	_ = fileutil.EnsureDir(filepath.Dir(taskPath), filepermtype.Executable)
 
 	db, fault := m.openDbInternal(taskPath)
 	if fault != nil {

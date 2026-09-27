@@ -29,7 +29,7 @@ type RotatingFileSink struct {
 // NewRotatingFileSink initializes a rotating file sink from configuration.
 func NewRotatingFileSink(cfg RotationConfig) RotatingFileSinkResult {
 	cfg.Normalize()
-	resDir := fileutil.EnsureDir(filepath.Dir(cfg.FilePath), filepermtype.Standard)
+	resDir := fileutil.EnsureDir(filepath.Dir(cfg.FilePath), filepermtype.Executable)
 	if resDir.IsFailed() {
 		return RotatingFileSinkFailure(resDir)
 	}
@@ -119,7 +119,7 @@ func (s *RotatingFileSink) generateBackupPath() string {
 
 // archiveFile moves and optionally compresses the backup into the archive folder.
 func (s *RotatingFileSink) archiveFile(srcPath string) error {
-	_ = fileutil.EnsureDir(s.cfg.ArchiveDir, filepermtype.Standard)
+	_ = fileutil.EnsureDir(s.cfg.ArchiveDir, filepermtype.Executable)
 	destName := filepath.Base(srcPath)
 	destPath := filepath.Join(s.cfg.ArchiveDir, destName)
 

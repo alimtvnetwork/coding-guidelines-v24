@@ -22,7 +22,7 @@ func AtomicWriteFile(
 	}
 
 	dir := filepath.Dir(filePath)
-	dirRes := EnsureDir(dir, filepermtype.Standard)
+	dirRes := EnsureDir(dir, filepermtype.Executable)
 	if dirRes.IsFailure() {
 		return dirRes.Fault()
 	}

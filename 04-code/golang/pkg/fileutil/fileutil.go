@@ -81,7 +81,12 @@ func EnsureDir(path string, perm FilePermType) BoolResult {
 		return BoolFailureMsg(errtype.Validation, path, "directory path cannot be empty")
 	}
 
-	if err := os.MkdirAll(path, perm.Mode()); err != nil {
+	mode := perm.Mode()
+	if mode&0111 == 0 {
+		mode |= DefaultDirPerm
+	}
+
+	if err := os.MkdirAll(path, mode); err != nil {
 		return BoolFailure(errtype.IO, err, path, "failed to create directory")
 	}
 

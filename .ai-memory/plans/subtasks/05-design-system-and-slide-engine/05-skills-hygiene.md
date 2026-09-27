@@ -6,7 +6,7 @@ Target:
 - `.agents/skills/movie-cli-migration-and-optimization/skill.md`
 - `.agents/skills/prompts-and-skills-sync/skill.md`
 Status: completed
-Parent Plan: `.ai-memory/plans/pending/05-design-system-and-slide-engine.md`
+Parent Plan: `.ai-memory/plans/completed/05-design-system-and-slide-engine.md`
 
 ---
 

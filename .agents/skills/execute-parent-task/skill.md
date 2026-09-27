@@ -249,7 +249,6 @@ To maximize developer velocity, avoid slow generic shells, and ensure atomic con
    - Never run `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine execution loops. Checking dozens of repos introduces latency.
    - Run pull-all ONLY when explicitly requested by the user, and use JSON mode (`gitmap pae --json`) to suppress visual tabular overhead.
 
-
 ---
 
 ## 5. Per-Task Agent Isolation & Workspace Subfolders (`.ai-memory/temp-agents/xx-<task-name>/`)

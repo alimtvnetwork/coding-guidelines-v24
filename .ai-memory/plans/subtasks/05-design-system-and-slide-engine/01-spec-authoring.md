@@ -2,7 +2,7 @@
 
 Target: `02-spec/21-app/05-design-system-and-slide-engine.md`
 Status: completed
-Parent Plan: `.ai-memory/plans/pending/05-design-system-and-slide-engine.md`
+Parent Plan: `.ai-memory/plans/completed/05-design-system-and-slide-engine.md`
 
 ---
 

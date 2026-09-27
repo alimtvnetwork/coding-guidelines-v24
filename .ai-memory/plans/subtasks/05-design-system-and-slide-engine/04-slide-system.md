@@ -4,7 +4,7 @@ Target:
 - `02-spec/07-design-system/24-slide-presentation-system.md`
 - `02-spec/07-design-system/readme.md`
 Status: completed
-Parent Plan: `.ai-memory/plans/pending/05-design-system-and-slide-engine.md`
+Parent Plan: `.ai-memory/plans/completed/05-design-system-and-slide-engine.md`
 
 ---
 

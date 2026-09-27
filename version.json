@@ -11,7 +11,7 @@
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "d536ea27d2107e800a030784638d64f7a7a71003",
+  "LastCommitSha": "ab12d67743fd20a78a565feee2386112d6e2cad9",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -57,19 +57,19 @@
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
   "version": "6.46.0",
-  "updated": "2026-09-24",
+  "updated": "2026-09-27",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "d536ea27d2107e800a030784638d64f7a7a71003",
-    "shortSha": "d536ea2",
-    "branch": "release/v6.46.0"
+    "sha": "ab12d67743fd20a78a565feee2386112d6e2cad9",
+    "shortSha": "ab12d67",
+    "branch": "main"
   },
   "stats": {
-    "totalFiles": 718,
-    "totalLines": 154126,
+    "totalFiles": 726,
+    "totalLines": 155440,
     "totalFolders": 23,
-    "totalBytes": 5549935,
+    "totalBytes": 5601891,
     "rootFiles": 6
   },
   "folders": [
@@ -84,7 +84,7 @@
       "ambiguity": "None",
       "fileCount": 17,
       "lineCount": 3408,
-      "byteCount": 133462
+      "byteCount": 133132
     },
     {
       "path": "02-coding-guidelines",
@@ -97,7 +97,7 @@
       "ambiguity": null,
       "fileCount": 217,
       "lineCount": 34586,
-      "byteCount": 1094417
+      "byteCount": 1093585
     },
     {
       "path": "03-error-manage",
@@ -110,7 +110,7 @@
       "ambiguity": "None",
       "fileCount": 125,
       "lineCount": 20545,
-      "byteCount": 768404
+      "byteCount": 767954
     },
     {
       "path": "04-database-conventions",
@@ -123,7 +123,7 @@
       "ambiguity": "None",
       "fileCount": 9,
       "lineCount": 2898,
-      "byteCount": 111242
+      "byteCount": 111200
     },
     {
       "path": "05-split-db-architecture",
@@ -136,7 +136,7 @@
       "ambiguity": "Low",
       "fileCount": 16,
       "lineCount": 4218,
-      "byteCount": 175503
+      "byteCount": 175435
     },
     {
       "path": "06-seedable-config-architecture",
@@ -149,7 +149,7 @@
       "ambiguity": "Low",
       "fileCount": 19,
       "lineCount": 4817,
-      "byteCount": 155737
+      "byteCount": 155669
     },
     {
       "path": "07-design-system",
@@ -160,9 +160,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 32,
-      "lineCount": 6625,
-      "byteCount": 248186
+      "fileCount": 37,
+      "lineCount": 7681,
+      "byteCount": 284548
     },
     {
       "path": "08-docs-viewer-ui",
@@ -175,7 +175,7 @@
       "ambiguity": "10%",
       "fileCount": 14,
       "lineCount": 2047,
-      "byteCount": 65915
+      "byteCount": 65897
     },
     {
       "path": "09-code-block-system",
@@ -188,7 +188,7 @@
       "ambiguity": null,
       "fileCount": 12,
       "lineCount": 2144,
-      "byteCount": 61981
+      "byteCount": 61977
     },
     {
       "path": "10-research",
@@ -201,7 +201,7 @@
       "ambiguity": "None",
       "fileCount": 2,
       "lineCount": 132,
-      "byteCount": 4347
+      "byteCount": 4335
     },
     {
       "path": "11-powershell-integration",
@@ -214,7 +214,7 @@
       "ambiguity": null,
       "fileCount": 12,
       "lineCount": 2745,
-      "byteCount": 76980
+      "byteCount": 76968
     },
     {
       "path": "12-cicd-pipeline-workflows",
@@ -227,7 +227,7 @@
       "ambiguity": "None",
       "fileCount": 46,
       "lineCount": 8557,
-      "byteCount": 276931
+      "byteCount": 276841
     },
     {
       "path": "13-generic-cli",
@@ -240,7 +240,7 @@
       "ambiguity": null,
       "fileCount": 23,
       "lineCount": 4713,
-      "byteCount": 152634
+      "byteCount": 152620
     },
     {
       "path": "14-update",
@@ -253,7 +253,7 @@
       "ambiguity": "None",
       "fileCount": 43,
       "lineCount": 8932,
-      "byteCount": 291809
+      "byteCount": 291725
     },
     {
       "path": "15-distribution-and-runner",
@@ -266,7 +266,7 @@
       "ambiguity": null,
       "fileCount": 7,
       "lineCount": 907,
-      "byteCount": 36277
+      "byteCount": 36243
     },
     {
       "path": "16-generic-release",
@@ -279,7 +279,7 @@
       "ambiguity": null,
       "fileCount": 10,
       "lineCount": 2156,
-      "byteCount": 67880
+      "byteCount": 67876
     },
     {
       "path": "17-consolidated-guidelines",
@@ -292,7 +292,7 @@
       "ambiguity": "None",
       "fileCount": 36,
       "lineCount": 16907,
-      "byteCount": 622227
+      "byteCount": 622107
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -305,7 +305,7 @@
       "ambiguity": "None",
       "fileCount": 30,
       "lineCount": 17527,
-      "byteCount": 577912
+      "byteCount": 577854
     },
     {
       "path": "19-main-worker-service",
@@ -318,7 +318,7 @@
       "ambiguity": null,
       "fileCount": 35,
       "lineCount": 8360,
-      "byteCount": 507888
+      "byteCount": 507860
     },
     {
       "path": "21-app",
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 4,
-      "lineCount": 544,
-      "byteCount": 32238
+      "fileCount": 7,
+      "lineCount": 802,
+      "byteCount": 50358
     },
     {
       "path": "22-app-issues",
@@ -344,7 +344,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 70,
-      "byteCount": 2763
+      "byteCount": 2753
     },
     {
       "path": "23-app-db",
@@ -357,7 +357,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 86,
-      "byteCount": 3090
+      "byteCount": 3080
     },
     {
       "path": "24-app-ui-design-system",
@@ -370,7 +370,7 @@
       "ambiguity": "None",
       "fileCount": 1,
       "lineCount": 85,
-      "byteCount": 2898
+      "byteCount": 2890
     }
   ],
   "prompts": [
