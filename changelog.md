@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.47.0] - 2026-09-27
+
+### Added
+- upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions
+
+---
+
 ## [v6.46.0] - 2026-09-24
 
 ### Added

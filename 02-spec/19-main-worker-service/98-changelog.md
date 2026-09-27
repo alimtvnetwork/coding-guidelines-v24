@@ -1,3 +1,9 @@
+## v6.47.0 — 2026-09-27 (upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions)
+
+**Scope:** Version bump. upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions.
+
+---
+
 ## v6.46.0 — 2026-09-24 (add ai-adaptable design system specification and gitmap skill update)
 
 **Scope:** Version bump. add ai-adaptable design system specification and gitmap skill update.
