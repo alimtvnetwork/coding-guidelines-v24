@@ -1,4 +1,4 @@
-# 30. Special Default Repositories (`repo-secrets` = `rs` & `repo-cache` = `rc`)
+# 31. Special Default Repositories (`repo-secrets` = `rs` & `repo-cache` = `rc`)
 
 ## 1. Purpose & Architecture
 
