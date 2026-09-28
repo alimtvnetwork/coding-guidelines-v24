@@ -98,6 +98,24 @@ All dates are UTC. All filenames are lowercase kebab-case with a two-digit zero-
 
 ---
 
+## Special Default Companion Repositories (`repo-secrets` = `rs` & `repo-cache` = `rc`)
+
+Every workspace operates alongside two fixed special repositories in the work directory (`gitmap settings`):
+
+1. **`repo-secrets` (shortcut: `rs` / `gitmap cd rs`):**
+   - Stores all repository secrets, `.env` files, tokens, and passwords under `XX-<repo-name>/01-<slug>.ext` (`01-gitmap/01-env.txt`, `02-coding-guidelines/01-api-keys.json`) so standard repositories remain 100% free of secrets and safe to open-source.
+   - Commands (`auto-commits & pushes` automatically):
+     - `gitmap rs file <filepath>`
+     - `gitmap rs folder <folderpath>`
+     - `gitmap rs text "<secret-text>" [--slug <slug>]`
+2. **`repo-cache` / `repo-storage` (shortcut: `rc` / `gitmap cd rc`):**
+   - Stores reusable temporary scripts (`.ps1` PowerShell scripts, shell utilities, diagnostic test items, and benchmark harnesses) under `XX-<repo-name>/01-<slug>.ps1` so any project can reuse them without leaving temporary files in application repositories.
+   - Commands (`auto-commits & pushes` automatically):
+     - `gitmap rc file <script.ps1>`
+     - `gitmap rc folder <folderpath>`
+     - `gitmap rc text "<script-body>" --slug <slug> --ext .ps1`
+
+
 ## Hard Rules & Prohibitions
 
 - **Single Authority:** [`.ai-memory/folder-structure.md`](.ai-memory/folder-structure.md) is the absolute single source of truth.

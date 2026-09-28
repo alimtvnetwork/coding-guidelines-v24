@@ -58,6 +58,9 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | **Global Rules** | `agents.md` | Always-on workspace constraints for Antigravity agents |
 | **Version Truth** | `version.json` | Root version source of truth dynamically read across all languages |
 | **Antigravity Skills** | `.agents/skills/` | On-demand skill runbooks for progressive disclosure |
+| **Special Secrets Repo** | `repo-secrets` (`gitmap rs` / `gitmap cd rs`) | Sequenced `XX-<repo>/01-<slug>.ext` storage for `.env` files, secrets, and passwords (auto-commits & pushes) |
+| **Special Cache Repo** | `repo-cache` (`gitmap rc` / `gitmap cd rc`) | Sequenced `XX-<repo>/01-<slug>.ps1` storage for reusable temporary `.ps1` scripts and test items (auto-commits & pushes) |
+
 
 ---
 

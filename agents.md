@@ -67,3 +67,17 @@ To survive massive checklists and complex codebases, you MUST operate using thes
 - **Parameter Structs:** Banned loose >2-3 parameters; use *Params structs.
 - **Vertical Line Gaps:** Mandatory blank lines before if, after }, before return, and around multiline struct calls.
 - **5-8 Files Micro-Batching:** All refactors broken into bounded subtasks.
+
+## 9. Special Default Repositories (`repo-secrets` / `rs` & `repo-cache` / `rc`)
+
+- **Zero Secrets in Standard Repositories (`repo-secrets` / `rs`):** NEVER store `.env` files, API keys, passwords, tokens, or sensitive credentials inside standard or public repositories. Always offload and store secrets in `repo-secrets` using `gitmap rs`:
+  - `gitmap cd rs` — Navigate directly to `repo-secrets`.
+  - `gitmap rs file <filepath> [--repo <repo-name>]` — Copies `<filepath>` into `repo-secrets/<XX-repo-name>/<01-filename>` and automatically commits & pushes.
+  - `gitmap rs folder <folderpath> [--repo <repo-name>]` — Copies `<folderpath>` into `repo-secrets/<XX-repo-name>/<01-foldername>` and automatically commits & pushes.
+  - `gitmap rs text "<secret-or-password>" [--slug <slug>]` — Writes `<secret-or-password>` into `repo-secrets/<XX-repo-name>/<01-slug>.txt` and automatically commits & pushes.
+- **Reusable Temporary Scripts & Test Harnesses (`repo-cache` / `rc`):** Whenever temporary scripts (such as PowerShell `.ps1` scripts, diagnostic harnesses, or reusable test fixtures) are created during development or debugging, store them in `repo-cache` (`repo-storage`) via `gitmap rc` so any repository can reuse them cleanly without polluting standard git worktrees:
+  - `gitmap cd rc` — Navigate directly to `repo-cache`.
+  - `gitmap rc file <script.ps1> [--repo <repo-name>]` — Copies `<script.ps1>` into `repo-cache/<XX-repo-name>/<01-script.ps1>` and automatically commits & pushes.
+  - `gitmap rc folder <folderpath> [--repo <repo-name>]` — Copies `<folderpath>` into `repo-cache/<XX-repo-name>/<01-foldername>` and automatically commits & pushes.
+  - `gitmap rc text "<script-content>" --slug <slug> --ext .ps1` — Writes `<script-content>` into `repo-cache/<XX-repo-name>/<01-slug>.ps1` and automatically commits & pushes.
+
