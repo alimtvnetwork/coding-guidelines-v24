@@ -367,6 +367,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `v3/14-execute` | [`v3/14-execute/06-execute-parent-task-with-n-steps-v2.md`](../01-prompts/v3/14-execute/06-execute-parent-task-with-n-steps-v2.md) | [V2] Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow) |
 | `v3/14-execute` | [`v3/14-execute/07-execute-batched-loop-v2.md`](../01-prompts/v3/14-execute/07-execute-batched-loop-v2.md) | [V2] Batched Loop & Execution Wave Orchestration — Workflow (must follow) |
 | `v3/14-execute` | [`v3/14-execute/08-excute-parent-old.md`](../01-prompts/v3/14-execute/08-excute-parent-old.md) | [V2] Parent Task N-Step Continuous Loop & Multi-Agent Orchestration — Workflow (must follow) |
+| `v3/14-execute` | [`v3/14-execute/09-parent-task-in-below-steps.md`](../01-prompts/v3/14-execute/09-parent-task-in-below-steps.md) | Subtask [01]: [Descriptive Subtask Name] |
 | `v3/15-cg-execute` | [`v3/15-cg-execute/01-execute-coding-guideline-fix.md`](../01-prompts/v3/15-cg-execute/01-execute-coding-guideline-fix.md) | Coding Guideline Fix Execution & Autonomous Linter Remediation — Workflow (must follow) |
 | `v3/15-cg-execute` | [`v3/15-cg-execute/02-error-management.md`](../01-prompts/v3/15-cg-execute/02-error-management.md) | Error Management & Architecture — Coding Guideline (must follow) |
 | `v3/15-cg-execute` | [`v3/15-cg-execute/03-nested-if-and-guard-clauses.md`](../01-prompts/v3/15-cg-execute/03-nested-if-and-guard-clauses.md) | Nested If Elimination & Guard Clauses — Coding Guideline (must follow) |
