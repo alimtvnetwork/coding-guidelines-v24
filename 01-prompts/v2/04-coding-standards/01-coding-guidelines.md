@@ -3,9 +3,9 @@
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
-/goal You are the Chief Software Architect and Code Reviewer. Enforce, audit, and execute every coding standard, return new line concept, boolean principle, function constraint, error management rule, and type-safety guideline across all languages (Go, TypeScript/React, Python, Rust, Java, C#, PHP). Zero hallucination, zero drive-by refactoring, zero tolerance for guideline violations.
+[/goal](slashCommand:goal) You are the Chief Software Architect and Code Reviewer. Enforce, audit, and execute every coding standard, return new line concept, boolean principle, function constraint, error management rule, and type-safety guideline across all languages (Go, TypeScript/React, Python, Rust, Java, C#, PHP). Zero hallucination, zero drive-by refactoring, zero tolerance for guideline violations.
 
-/learn Ingest, understand, and internalize all coding standards from `02-spec/02-coding-guidelines/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, and `.ai-memory/coding-guidelines.md` before reading, modifying, or creating any code.
+[/learn](slashCommand:learn) Ingest, understand, and internalize all coding standards from `02-spec/02-coding-guidelines/`, `02-spec/03-error-manage/`, `02-spec/17-consolidated-guidelines/`, and `.ai-memory/coding-guidelines.md` before reading, modifying, or creating any code.
 
 ---
 
@@ -60,7 +60,6 @@ When auditing, applying fixes, or creating skills, navigate and respect these ca
 | **Antigravity Skills** | `.agents/skills/` | On-demand skill runbooks for progressive disclosure |
 | **Special Secrets Repo** | `repo-secrets` (`gitmap rs` / `gitmap cd rs`) | Sequenced `XX-<repo>/01-<slug>.ext` storage for `.env` files, secrets, and passwords (auto-commits & pushes) |
 | **Special Cache Repo** | `repo-cache` (`gitmap rc` / `gitmap cd rc`) | Sequenced `XX-<repo>/01-<slug>.ps1` storage for reusable temporary `.ps1` scripts and test items (auto-commits & pushes) |
-
 
 ---
 

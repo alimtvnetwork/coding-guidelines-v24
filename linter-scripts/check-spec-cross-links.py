@@ -24,7 +24,7 @@ from typing import Iterable
 MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+?)(?:\s+\"[^\"]*\")?\)")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "ftp://", "#")
-SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://")
+SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://", "slashCommand:")
 # Same schemes may appear after a relative-path prefix like ``../mem://...``
 # when authors quote a memory URI in prose. Detect those as well.
 SKIP_SCHEME_SUBSTRINGS = tuple(SKIP_SCHEMES)

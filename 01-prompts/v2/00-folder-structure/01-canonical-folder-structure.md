@@ -115,7 +115,6 @@ Every workspace operates alongside two fixed special repositories in the work di
      - `gitmap rc folder <folderpath>`
      - `gitmap rc text "<script-body>" --slug <slug> --ext .ps1`
 
-
 ## Hard Rules & Prohibitions
 
 - **Single Authority:** [`.ai-memory/folder-structure.md`](.ai-memory/folder-structure.md) is the absolute single source of truth.

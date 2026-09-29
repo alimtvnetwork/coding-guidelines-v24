@@ -37,6 +37,8 @@ _EXTERNAL_PREFIXES = (
     "http://", "https://", "mailto:", "tel:", "ftp://", "ftps://", "javascript:",
     # Lovable memory pseudo-protocol — referenced from prose, never resolved on disk.
     "mem://",
+    # Antigravity slash command URI protocol
+    "slashCommand:",
 )
 # Heuristic: targets that look like inline code identifiers (no path separator,
 # no extension, no hash) are almost always prose patterns like `[err](err)`

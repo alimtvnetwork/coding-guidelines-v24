@@ -49,7 +49,7 @@ if hasattr(sys.stderr, "reconfigure"):
 MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)\s]+?)(?:\s+\"[^\"]*\")?\)")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "ftp://", "#")
-SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://")
+SKIP_SCHEMES = ("mem://", "user-uploads://", "knowledge://", "slashCommand:")
 
 DEFAULT_MIN_CONFIDENCE = 0.82
 
