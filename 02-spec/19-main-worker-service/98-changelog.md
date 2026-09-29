@@ -4,6 +4,13 @@
 
 ---
 
+## v6.47.1 — 2026-09-29 (add branch immutability and pointer reduction guidelines, prompts, and skills)
+
+**Scope:** Version bump (`6.47.0` → `6.47.1`). add branch immutability and pointer reduction guidelines, prompts, and skills.
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
 ## v6.46.0 — 2026-09-24 (add ai-adaptable design system specification and gitmap skill update)
 
 **Scope:** Version bump. add ai-adaptable design system specification and gitmap skill update.
