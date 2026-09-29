@@ -7,7 +7,7 @@
 > **Top-Instruction Priority Mandate (Preamble Precedence):**
 > Whatever directives, constraints, checklists, or instructions are given before this section or prompt (including in the prompt preamble, header blocks, or incoming user request) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below.
 
-[/goal](slashCommand:goal) Autonomously orchestrate and apply concrete, surgical refactoring fixes for all coding guideline violations across the target codebase in bounded 5-8 file micro-batches until 100% green without stopping.
+/goal Autonomously orchestrate and apply concrete, surgical refactoring fixes for all coding guideline violations across the target codebase in bounded 5-8 file micro-batches until 100% green without stopping.
 
 ```text
 N = 200 (Total self-loop steps budget)

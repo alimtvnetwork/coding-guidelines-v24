@@ -3,7 +3,7 @@
 > **Prompt Version:** 2.1.0
 > **Synchronization:** Main Meta-Repo & Connected Workspaces
 
-[/goal](slashCommand:goal) Perform a strictly read-only scan of the entire repository, `02-spec/`, and `.ai-memory/` directory to compile a comprehensive, deduplicated inventory of every pending task, subtask, unresolved issue, and open requirement structured into Execution Waves.
+/goal Perform a strictly read-only scan of the entire repository, `02-spec/`, and `.ai-memory/` directory to compile a comprehensive, deduplicated inventory of every pending task, subtask, unresolved issue, and open requirement structured into Execution Waves.
 
 CRITICAL CONSTRAINT: This prompt is strictly for inventorying, structuring, and sequencing pending work. It MUST NOT execute code modifications, build changes, or launch the execution loop. Batch execution is handled by dedicated execution prompts.
 
