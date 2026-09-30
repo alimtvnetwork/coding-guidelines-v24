@@ -1,3 +1,9 @@
+## v6.48.0 — 2026-09-30 (Release v6.48.0)
+
+**Scope:** Version bump. Release v6.48.0.
+
+---
+
 ## v6.47.0 — 2026-09-27 (upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions)
 
 **Scope:** Version bump. upgrade prompts to v1/v2, elevate gitmap aum, sync skills, and fix linux directory permissions.

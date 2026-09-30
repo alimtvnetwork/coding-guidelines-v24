@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.47.2",
+  "Version": "6.48.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "c1ed58f32bf298ba4b6d9b29e4003ff0c5e2b983",
+  "LastCommitSha": "3d652a8386bc6afcd0b999166084373dbe6a65a2",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.47.2",
+  "version": "6.48.0",
   "updated": "2026-09-30",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "c1ed58f32bf298ba4b6d9b29e4003ff0c5e2b983",
-    "shortSha": "c1ed58f",
-    "branch": "main"
+    "sha": "3d652a8386bc6afcd0b999166084373dbe6a65a2",
+    "shortSha": "3d652a8",
+    "branch": "release/v6.48.0"
   },
   "stats": {
-    "totalFiles": 728,
-    "totalLines": 155868,
+    "totalFiles": 734,
+    "totalLines": 157759,
     "totalFolders": 23,
-    "totalBytes": 5620717,
+    "totalBytes": 5743142,
     "rootFiles": 6
   },
   "folders": [
@@ -160,9 +160,9 @@
       "status": "Active",
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 37,
-      "lineCount": 7681,
-      "byteCount": 284548
+      "fileCount": 42,
+      "lineCount": 9458,
+      "byteCount": 392887
     },
     {
       "path": "08-docs-viewer-ui",
@@ -291,8 +291,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 36,
-      "lineCount": 16907,
-      "byteCount": 622107
+      "lineCount": 16935,
+      "byteCount": 625671
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -317,8 +317,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 35,
-      "lineCount": 8380,
-      "byteCount": 508681
+      "lineCount": 8386,
+      "byteCount": 508774
     },
     {
       "path": "21-app",
@@ -329,9 +329,9 @@
       "status": null,
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
-      "fileCount": 7,
-      "lineCount": 802,
-      "byteCount": 50358
+      "fileCount": 8,
+      "lineCount": 882,
+      "byteCount": 60787
     },
     {
       "path": "22-app-issues",
