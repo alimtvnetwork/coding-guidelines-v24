@@ -4,6 +4,13 @@
 
 ---
 
+## v6.47.2 — 2026-09-30 (Routine patch ceremony (one-shot))
+
+**Scope:** Version bump (`6.47.1` → `6.47.2`). Routine patch ceremony (one-shot).
+**Sync-regenerated artifacts:** `version.json`, `public/health-score.json`, `readme.md`
+
+---
+
 ## v6.47.1 — 2026-09-29 (add branch immutability and pointer reduction guidelines, prompts, and skills)
 
 **Scope:** Version bump (`6.47.0` → `6.47.1`). add branch immutability and pointer reduction guidelines, prompts, and skills.
