@@ -1,6 +1,6 @@
 ---
-name: execute-parent-task-with-n-steps
-description: "Executes the [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration prompt (N = 300 top header, A = 2, H = 2 mandatory invoke_subagent gate). Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure with strict no-build and no-test execution. Use when the user asks to run execute-parent-task-with-n-steps, or the task is about executing pending tasks, a parent task, or a batched loop."
+name: execute-parent-task-with-n-steps-v3
+description: "Executes the [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration prompt (N = 300 top header, A = 2, H = 2 mandatory invoke_subagent gate). Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure with strict no-build and no-test execution."
 ---
 
 # [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow)

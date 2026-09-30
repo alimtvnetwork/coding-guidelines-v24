@@ -1,7 +1,7 @@
 # Canonical Specification: Multi-Repository Prompts V1/V2 & Skills Synchronization Audit
 
-> **Document Version:** 1.2.0  
-> **Status:** APPROVED & ACTIVE  
+> **Document Version:** 1.2.0
+> **Status:** APPROVED & ACTIVE
 > **Target Scope:** Meta-Repository (`alimtvnetwork/coding-guidelines-v24`) & 16 Connected Repositories
 
 ---

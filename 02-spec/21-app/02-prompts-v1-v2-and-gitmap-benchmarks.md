@@ -1,7 +1,7 @@
 # Canonical Specification: AI Prompts V1/V2 Architecture & GitMap Discovery Benchmarks
 
-> **Document Version:** 1.0.0  
-> **Status:** APPROVED & ACTIVE  
+> **Document Version:** 1.0.0
+> **Status:** APPROVED & ACTIVE
 > **Target Scope:** Meta-Repository (`alimtvnetwork/coding-guidelines-v24`) & All Connected Repositories
 
 ---

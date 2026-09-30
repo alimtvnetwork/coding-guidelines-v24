@@ -1,7 +1,7 @@
 ---
-name: execute-parent-task-with-n-steps
+name: execute-parent-task-with-n-steps-v3
 description: >-
-  Use this skill when the user asks you to execute a parent task broken down into N specific steps (N = 300 top header and mandatory A = 2, H = 2 invoke_subagent orchestration).
+  Use this skill when the user asks you to execute a parent task with N steps (V3: N = 300 top header and mandatory A = 2, H = 2 invoke_subagent orchestration).
 ---
 
 # [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow)

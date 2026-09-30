@@ -1,10 +1,11 @@
 # What to Read
 
 > Canonical map of what the AI must read before working on this project.
-> Last updated: 2026-09-13T08:15:00Z
+> Last updated: 2026-09-30T14:00:00Z
 
 ## Changelog
 
+- 2026-09-30T14:00:00Z, White Blue Theme Design System (`04-white-blue-theme`), Parent Task N-Steps V3 Prompt (`10-execute-parent-task-with-n-steps-v3.md` with `N = 300` top header and mandatory `invoke_subagent` `A = 2, H = 2`), skills sync, and 43-repository backup/release/sync/release orchestration.
 - 2026-09-18T19:20:00Z, GitMap Pipeline-AI & Dynamic Waiting Protocol: updated execute prompts, fix-with-rca, ci-cd-fix, and ci-cd-fix-with-release prompts and skills to mandate GitMap pipeline AI integration, targeted failure extraction, and dynamic waiting (-t <sec>) to eliminate credit waste from tight-loop polling.
 - 2026-09-13T08:15:00Z, Prompt & Memory Write Upgrade (v2.2.0): updated 01-write-antigravity.md, 03-write-memory.md, and skills to mandate 30-commit git history audit and recent 20-task tracking register in .ai-memory/plans/readme.md.
 - 2026-09-13T07:45:00Z, Memory Persistence & Learned Standards: recorded institutional memory for regex centralization, generic dbengine architecture, isDefined positive convention, zero-storage GitHub Actions mandate, and pre-commit guard enforcement.

@@ -23,6 +23,8 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `03-read-write` | [`03-read-write/06-proofread.md`](../01-prompts/03-read-write/06-proofread.md) | Proofreading & Semantic Consistency Verification — Quality Protocol (must follow) |
 | `03-read-write` | [`03-read-write/07-ai-memory-consolidate-reduce.md`](../01-prompts/03-read-write/07-ai-memory-consolidate-reduce.md) | AI Memory Consolidation, Reduction & Safety Backup — Workflow (must follow) |
 | `03-read-write` | [`03-read-write/08-spec-write-from-reverse-engineering.md`](../01-prompts/03-read-write/08-spec-write-from-reverse-engineering.md) | Reverse Engineering Spec Writer & System Architecture Discovery — Workflow (must follow) |
+| `03-read-write` | [`03-read-write/09-proofread-v2.md`](../01-prompts/03-read-write/09-proofread-v2.md) | Proofread V2 (On the Fly) Instruction |
+| `03-read-write` | [`03-read-write/10-proofread-repo-create.md`](../01-prompts/03-read-write/10-proofread-repo-create.md) | Proofread Repo Create Instruction |
 | `04-coding-standards` | [`04-coding-standards/01-coding-guidelines.md`](../01-prompts/04-coding-standards/01-coding-guidelines.md) | Standards Compliance & Coding Rules Audit — V2 (Grounded & Multi-Language) |
 | `04-coding-standards` | [`04-coding-standards/02-theming-guidelines.md`](../01-prompts/04-coding-standards/02-theming-guidelines.md) | Theming Architecture & Color Palette Guidelines — Coding Guideline (must follow) |
 | `04-coding-standards` | [`04-coding-standards/03-update-theming.md`](../01-prompts/04-coding-standards/03-update-theming.md) | Theme System Refactoring & CSS Variables Update — Workflow (must follow) |
@@ -71,6 +73,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `14-execute` | [`14-execute/07-execute-batched-loop-v2.md`](../01-prompts/14-execute/07-execute-batched-loop-v2.md) | 07-execute-batched-loop-v2.md |
 | `14-execute` | [`14-execute/08-excute-parent-old.md`](../01-prompts/14-execute/08-excute-parent-old.md) | Subtask [01]: [Descriptive Subtask Name] |
 | `14-execute` | [`14-execute/09-parent-task-in-below-steps.md`](../01-prompts/14-execute/09-parent-task-in-below-steps.md) | Subtask [01]: [Descriptive Subtask Name] |
+| `14-execute` | [`14-execute/10-execute-parent-task-with-n-steps-v3.md`](../01-prompts/14-execute/10-execute-parent-task-with-n-steps-v3.md) | [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
 | `15-cg-execute` | [`15-cg-execute/01-execute-coding-guideline-fix.md`](../01-prompts/15-cg-execute/01-execute-coding-guideline-fix.md) | 01-execute-coding-guideline-fix.md |
 | `15-cg-execute` | [`15-cg-execute/02-error-management.md`](../01-prompts/15-cg-execute/02-error-management.md) | 02-error-management.md |
 | `15-cg-execute` | [`15-cg-execute/03-nested-if-and-guard-clauses.md`](../01-prompts/15-cg-execute/03-nested-if-and-guard-clauses.md) | 03-nested-if-and-guard-clauses.md |
@@ -104,6 +107,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `15-cg-execute` | [`15-cg-execute/31-cg-execute-in-below-steps.md`](../01-prompts/15-cg-execute/31-cg-execute-in-below-steps.md) | 31-cg-execute-in-below-steps.md |
 | `15-cg-execute` | [`15-cg-execute/32-cg-follow-other-prompts.md`](../01-prompts/15-cg-execute/32-cg-follow-other-prompts.md) | 32-cg-follow-other-prompts.md |
 | `15-cg-execute` | [`15-cg-execute/33-branch-immutability-and-clean-construction.md`](../01-prompts/15-cg-execute/33-branch-immutability-and-clean-construction.md) | 33-branch-immutability-and-clean-construction.md |
+| `15-cg-execute` | [`15-cg-execute/34-clean-work-artifacts-and-os-caches.md`](../01-prompts/15-cg-execute/34-clean-work-artifacts-and-os-caches.md) | Automatic execution after displaying the Plan table: |
 | `15-cg-execute` | [`15-cg-execute/34-golang-pointer-reduction-and-value-semantics.md`](../01-prompts/15-cg-execute/34-golang-pointer-reduction-and-value-semantics.md) | 34-golang-pointer-reduction-and-value-semantics.md |
 | `15-cg-execute` | [`15-cg-execute/readme.md`](../01-prompts/15-cg-execute/readme.md) | Coding Guideline Execution Suite (`cg-execute`) — Index & Catalog (must follow) |
 | `16-ci-cd` | [`16-ci-cd/01-ci-cd-fix-tweak.md`](../01-prompts/16-ci-cd/01-ci-cd-fix-tweak.md) | CI/CD Fix Tweak with Targeted Smart Testing & RCA — Workflow (must follow) |

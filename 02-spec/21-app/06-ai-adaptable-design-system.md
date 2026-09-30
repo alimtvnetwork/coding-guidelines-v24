@@ -190,7 +190,7 @@ Create a detailed design system specification inside the spec folder at root (//
 /02-spec/07-design-system/xx-ai-adaptable-design-system
 ../01-colors-themes/...  -- all color and theme related
 ../02-menu/...  -- all menu related
-../03-hero-section/...  -- 
+../03-hero-section/...  --
 use more if needed
 
 The design system should be general enough that any AI can use it to build a website following the same design language. If this specification is shared, another AI should be able to understand how to recreate similar menus, animation effects, color effects, transitions, hover behavior, borders, and interaction patterns. It should describe how one state transforms into another so the same design language can be reproduced consistently across future pages and websites.

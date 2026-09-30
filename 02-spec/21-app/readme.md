@@ -69,6 +69,7 @@ All specification writing prompts (e.g. `02-plan-spec-steps-v2.md`) and parent e
 | [`05-design-system-and-slide-engine.md`](05-design-system-and-slide-engine.md) | Design System, CSS3 Building Blocks & Slide Presentation Engine | Application Spec | Active |
 | [`06-ai-adaptable-design-system.md`](06-ai-adaptable-design-system.md) | AI-Adaptable Design System & Modern SaaS UI Architecture | Application Spec | Active |
 | [`12-modern-design-system-and-themes.md`](12-modern-design-system-and-themes.md) | Modern Design System, Theme Architecture & AI Training Guide | Application Spec | Active |
+| [`14-white-blue-theme-v3-prompt-and-multi-repo-sync.md`](14-white-blue-theme-v3-prompt-and-multi-repo-sync.md) | White Blue Theme Design System, Parent Task N-Steps V3 Prompt & Multi-Repo Sync | Application Spec | Active |
 
 ---
 
