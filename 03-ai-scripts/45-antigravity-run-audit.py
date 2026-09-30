@@ -28,7 +28,10 @@ EVENT_RESULT = "result"
 TOOL_STEP_TYPES = frozenset({"tool", "subagent"})
 STATE_DONE = "DONE"
 STATUS_SUCCESS = "SUCCESS"
-SUBAGENT_TOOL_PATTERN = re.compile(r"invoke_subagent|subagent", re.IGNORECASE)
+SUBAGENT_TOOL_NAME = "invoke_subagent"
+AGENT_STATE_MARKER = "\\.gemini\\antigravity"
+FILE_URI_PREFIX = "file:///"
+STATUS_ERROR = "ERROR"
 LEDGER_GLOB = ".ai-memory/temp-agents/*/ledger.md"
 ABSOLUTE_PATH_PATTERN = re.compile(r"[A-Za-z]:\\[^\"'\s]+")
 BANNED_COMMANDS = {
@@ -81,13 +84,29 @@ def banned_command_hits(steps: list) -> dict:
 
 
 def outside_workspace_paths(steps: list, workspace: Path) -> list:
-    """Returns absolute paths in tool parameters that point outside the workspace."""
+    """Returns absolute paths in tool parameters outside the workspace and Antigravity's own state folder."""
     root = str(workspace.resolve()).lower()
     paths = [path for step in steps for path in ABSOLUTE_PATH_PATTERN.findall(parameter_text(step))]
     normalized = [path.replace("\\\\", "\\").rstrip("\\") for path in paths]
-    is_outside = lambda path: path.lower().startswith(root) is False
+    is_allowed = lambda path: path.lower().startswith(root) or AGENT_STATE_MARKER in path.lower()
 
-    return sorted({path for path in normalized if is_outside(path)})
+    return sorted({path for path in normalized if is_allowed(path) is False})
+
+
+def worker_logs(events: list) -> list:
+    """Returns the transcript paths of every subagent the run launched."""
+    infos = [event[EVENT_STEP].get("subagent_info") or {} for event in events if EVENT_STEP in event]
+    uris = {agent.get("log_uri", "") for info in infos for agent in info.get("subagents", [])}
+
+    return sorted(Path(uri.removeprefix(FILE_URI_PREFIX)) for uri in uris if uri.startswith(FILE_URI_PREFIX))
+
+
+def worker_errors(events: list) -> dict:
+    """Maps each subagent transcript name to its failed steps' error messages."""
+    logs = [path for path in worker_logs(events) if path.is_file()]
+    records = {path.parent.parent.parent.name: read_events(path) for path in logs}
+
+    return {name: [row.get("error", "") for row in rows if row.get("status") == STATUS_ERROR] for name, rows in records.items()}
 
 
 def git_lines(repo: Path, *args: str) -> list:
@@ -106,7 +125,8 @@ def collect_facts(events: list, repo: Path, base: str) -> dict:
     return {
         "result": result,
         "tool_counts": tool_counts,
-        "subagent_calls": sum(count for name, count in tool_counts.items() if SUBAGENT_TOOL_PATTERN.search(name)),
+        "subagent_calls": tool_counts[SUBAGENT_TOOL_NAME],
+        "worker_errors": worker_errors(events),
         "banned": banned_command_hits(steps),
         "outside_paths": outside_workspace_paths(steps, repo),
         "commits": git_lines(repo, "log", "--oneline", f"{base}..HEAD"),
@@ -121,10 +141,12 @@ def build_checks(facts: dict) -> list:
     result = facts["result"]
     is_success = result.get("status") == STATUS_SUCCESS
     commit_count = len(facts["commits"])
+    error_count = sum(len(errors) for errors in facts["worker_errors"].values())
 
     return [
         (PASS_LABEL if is_success else FAIL_LABEL, "Run finished", result.get("status", "no result event")),
         (PASS_LABEL if facts["subagent_calls"] else FAIL_LABEL, "Subagents used (R5)", f"{facts['subagent_calls']} calls"),
+        (FAIL_LABEL if error_count else PASS_LABEL, "Worker steps without errors", f"{error_count} failed steps in {len(facts['worker_errors'])} workers"),
         (FAIL_LABEL if facts["banned"] else PASS_LABEL, "No banned commands (R1, R8, R10, R15)", ", ".join(facts["banned"]) or "none"),
         (FAIL_LABEL if facts["outside_paths"] else PASS_LABEL, "No paths outside the workspace", f"{len(facts['outside_paths'])} found"),
         (PASS_LABEL if facts["ledgers"] else FAIL_LABEL, "Ledger written", ", ".join(facts["ledgers"]) or "none"),
@@ -145,6 +167,7 @@ def render_report(facts: dict, checks: list) -> str:
     lines += ["", "## Uncommitted", ""] + [f"- `{line}`" for line in facts["uncommitted"] or ["none"]]
     lines += ["", "## Banned command hits", ""] + [f"- {name}: `{text[:200]}`" for name, texts in facts["banned"].items() for text in texts]
     lines += ["", "## Paths outside the workspace", ""] + [f"- `{path}`" for path in facts["outside_paths"] or ["none"]]
+    lines += ["", "## Worker errors", ""] + [f"- `{name}`: {len(errors)} x `{sorted(set(errors))[:3]}`" for name, errors in facts["worker_errors"].items() if errors]
 
     return "\n".join(lines) + "\n"
 
