@@ -20,7 +20,7 @@ SCAN_DIRS = [
 EXCLUDE_PARTS = {
     '.git', 'node_modules', 'dist', 'build', '.venv', 'tmp',
     '.gemini', '__pycache__', 'release-artifacts', 'old-coding-guidelines',
-    'old-plan-prompts', '21-old-execute-prompts'
+    'old-plan-prompts', '21-old-execute-prompts', '19-old-execute-prompts'
 }
 
 KNOWN_EXTENSIONS = (
@@ -30,7 +30,7 @@ KNOWN_EXTENSIONS = (
 
 IGNORE_PREFIXES = (
     "http://", "https://", "mailto:", "conversation:", "file:///",
-    "git://", "ssh://", "npm:", "cargo:", "cli/"
+    "git://", "ssh://", "npm:", "cargo:", "cli/", "mem://"
 )
 
 IGNORE_TERMS = {
@@ -64,7 +64,9 @@ IGNORE_TERMS = {
     "youtube-thumbnails/01-thumbnail-1280x720.png",
     "linkedin-banners/02-banner-3168x792.png", "linkedin-banners/02-banner-2256x382.png",
     "02-spec/02-coding-guidelines/01-cross-language/14-constants-enums.md",
-    "constants/cors.py"
+    "constants/cors.py",
+    "01-gitmap/01-env.txt", "02-coding-guidelines/01-api-keys.json",
+    "linter-scripts/check-go-pointers.py", "tests/config/vmpass.json"
 }
 
 STRIP_CHARS = " `\"'(),:;[]{}"
