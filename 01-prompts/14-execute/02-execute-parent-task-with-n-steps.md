@@ -1,3 +1,6 @@
+> [!NOTE]
+> For Antigravity runs, use [V4](11-execute-parent-task-with-n-steps-v4.md), which supersedes this version. This file is kept for existing users.
+
 [/goal](slashCommand:goal) Autonomously orchestrate and execute the parent task by decomposing it into subtasks and running a continuous N-step self-loop until completion without a single failure with strict no-build and no-test execution (NEVER run build commands like `go build` or `npm run build`, and NEVER run test suites like `go test ./...` or `pytest` during routine execution turns; all compilation and testing are strictly verified later in CI/CD). Spawn autonomous subagents (A = 2, H = 2) for parallel reading and modular spec generation, use GitMap high-speed commands as primary, establish a single-agent blueprint in Phase 1 (first 50% steps budget), and execute disjoint refactoring in Phase 2 (remaining 50% steps budget) with continuous self-looping until 100% complete and finalized with an atomic push.
 
 [/learn](slashCommand:learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt (in the user preamble or header above) are HIGHEST PRIORITY and strictly NON-NEGOTIABLE. Ingest and execute the top instructions ahead of all default conventions below, internalize the single-agent architectural blueprint, and persist all progress into `.ai-memory/plans/` and memory logs.
@@ -94,7 +97,7 @@ Before executing the tasks below, check if this prompt is already installed as a
 - **Mandatory Tool Schema (`TypeName: "self"`):** Subagents performing code refactoring or spec authoring MUST use `TypeName: "self"` so they inherit write and command tools (`write_to_file`, `replace_file_content`, `run_command`).
 - **Reactive Wakeup & Turn Yielding Protocol:**
   - After invoking `invoke_subagent`, the parent orchestrator MUST output a brief progress note to the user and **STOP CALLING TOOLS** to yield the turn.
-  - DO NOT run busy-polling loops. The platform automatically wakes up the parent agent with a `<SYSTEM_MESSAGE>` when subagents complete or send messages.
+  - DO NOT run busy-polling loops. Subagent results and messages arrive in the parent agent's conversation automatically.
 - **Fail Fast & Kill Stalls:** If a sub-agent stalls or provides garbage code, kill it immediately, rollback its dirty working tree, and spawn a new one.
 
 ---
@@ -113,7 +116,7 @@ Before executing any file searches, scans, spec writing, or code changes, you mu
    - You MUST output the confirmed deliverables list directly in chat, but you MUST NOT end your turn or pause after emitting it!
    - In the EXACT SAME RESPONSE turn as your markdown output, you MUST immediately invoke the first tool call (e.g. `write_to_file` to initialize the planning spec or `run_command` for fast discovery).
    - NEVER emit the breakdown text without invoking a tool call. Emitting visible text without a tool call terminates the AI turn, causing the engine to close or hang the conversation while tasks remain pending.
-   - TOTAL BAN ON WAITING FOR APPROVAL: Do not pause, do not wait for the user to reply, and do not ask "Should I proceed?". Override any planning mode stop directives. Proceed immediately into Phase 1B in the same turn.
+   - TOTAL BAN ON WAITING FOR APPROVAL: Do not pause, do not wait for the user to reply, and do not ask "Should I proceed?". Add no stops of your own; the only allowed pause is the one the Artifact Review Policy (a user setting) imposes. Proceed immediately into Phase 1B in the same turn.
    - Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [IN PROGRESS — EXECUTING IMMEDIATELY]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
    - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block (e.g. NEVER `#1. Task-01: ... #2. Task-02: ...`). Every task must be its own clearly separated markdown item.
    - Line-by-Line Output Format Structure:
@@ -237,13 +240,11 @@ Before transitioning to execution, verify:
          {
            "TypeName": "self",
            "Role": "Subtask Worker 01: [Feature/Module A]",
-           "Model": "inherit",
            "Prompt": "[Subagent Prompt Envelope Below]"
          },
          {
            "TypeName": "self",
            "Role": "Subtask Worker 02: [Feature/Module B]",
-           "Model": "inherit",
            "Prompt": "[Subagent Prompt Envelope Below]"
          }
        ]
@@ -268,7 +269,7 @@ Before transitioning to execution, verify:
      2. Structured Go errors: return `*appfault.AppError`, never bare `error`.
      3. Function sizing: <= 8 lines preferred (hard cap 15 lines).
      4. Zero tests or builds: NEVER run `go test`, `pytest`, or build commands.
-     5. Targeted quality check: Run only targeted file-level linters (`python 03-ai-scripts/05-guideline-autofixer.py <file>`).
+     5. Targeted quality check: Run only targeted file-level linters (`python 03-ai-scripts/05-guideline-autofixer.py <folder> --check-only --ext <.ext>`). Pass the folder that holds the file: a single new file scans 0 files and still exits 0, which counts as a FAIL.
 
      ### Completion & Reporting Contract:
      When finished, emit a structured completion summary detailing:
@@ -279,10 +280,10 @@ Before transitioning to execution, verify:
      ```
 
 3. **Reactive Wakeup & Turn-Yielding Protocol (Deadlock Prevention):**
-   - In Google Antigravity, background subagents run asynchronously in the platform runtime. The parent agent receives subagent completions via the **Reactive Wakeup** messaging system (`<SYSTEM_MESSAGE>`).
+   - In Google Antigravity, background subagents run asynchronously in the platform runtime. Subagent results arrive in the parent agent's conversation as messages (**Reactive Wakeup**).
    - **MANDATORY YIELD RULE:** Immediately after issuing the `invoke_subagent` tool call, the parent orchestrator MUST output a brief progress note to the user (e.g. `Dispatched Subagents [01] and [02] to execute subtasks in parallel. Yielding turn to await completion...`) and **STOP CALLING TOOLS**.
    - **NO BUSY-POLLING (TOTAL BAN):** NEVER run tight-polling loops using `manage_task` or filesystem checks to wait for subagents. Ending the tool-call chain allows the platform scheduler to execute the background subagents and deliver their completion messages into the parent's inbox upon wakeup.
-   - When the subagents finish, the engine wakes up the parent agent automatically with a `<SYSTEM_MESSAGE>`. The parent inspects the results, verifies acceptance criteria, and transitions to consolidation.
+   - When the subagents finish, their results arrive as messages and wake the parent agent automatically. The parent inspects the results, verifies acceptance criteria, and transitions to consolidation.
 
 4. **File Locking & Disjoint Files:** Verify subagents operate on strictly distinct files using `.ai-memory/readme.md`.
 5. **Execution & Coding Guidelines:** Subagents refactor code following all coding guidelines (<= 8-15 line functions, single return types, universal `*appfault.AppError` wrapping, Unix LF line endings).
@@ -353,7 +354,7 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
      - For fixes/bugs: `gitmap cpb "<summary>"` (automatically stages all files, prefixes `Bug: `, commits, and pushes).
      - For releases: `gitmap cpr "<summary>"` (automatically stages all files, prefixes `Release: `, commits, and pushes).
      - For safe pull-commit-push: `gitmap pcp "<summary>"`.
-   - If GitMap CLI is unavailable, fallback to raw git: `git add -A && git commit -m "<summary>" && git push origin <branch>`.
+   - If GitMap CLI is unavailable, fallback to raw git: `git add -- <paths this task changed> && git commit -m "<summary>" && git push origin <branch>`.
    - Under no circumstances commit each file individually.
 
 ---
@@ -487,11 +488,11 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 - [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
 - [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
 - [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
-- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+- [ ] Final Step Commit & Push Verified: Staged only the files this task changed, by explicit path (`git add -- <paths>`), committed them in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
 
 ---
 
 ## 11. Final Step Git Commit & Push Mandate (Strict Checklist)
 
-- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. These GitMap commands stage every file, so use them only when `git status --porcelain` was clean before the task started; otherwise, or if GitMap CLI is unavailable, run `git add -- <paths this task changed> && git commit && git push`. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
 - [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.

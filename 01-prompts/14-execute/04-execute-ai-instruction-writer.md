@@ -121,7 +121,7 @@ Before doing anything else, you MUST write a highly detailed, generic AI Instruc
 - [ ] Strict In-Repository Execution: All Python scripts (`03-ai-scripts/*.py`) MUST be executed strictly within the codebase repository root, NEVER outside the codebase.
 - [ ] Strict 03-ai-scripts/ Tooling Storage: All AI scripts, local runners, autofixers, and helper utilities MUST be created inside `03-ai-scripts/`. NEVER create scripts in root or external paths.
 - [ ] Native File Manipulator: If you need to perform mass file renaming, `.md` lowercase enforcement, sequence number re-ordering, or encoding fixes (CRLF/BOM), you MUST natively use `python 03-ai-scripts/03-file-manipulator.py <command>` rather than writing a new script from scratch.
-- [ ] Go Generate Sync: If you modify Go constants, enums, or stringers, you MUST run `go generate ./...` in the relevant directory (e.g., `cd gitmap && go generate ./...`) and commit the resulting generated files to prevent CI drift.
+- [ ] Go Generate Sync: If you modify Go constants, enums, or stringers, run `go generate ./...` in the relevant package. Commit the regenerated files only if `git ls-files` shows the repo already tracks them (so CI sees no drift); otherwise never commit generated files (Hard Rule 1).
 - [ ] Commit & Track: All new helper scripts were written strictly to `03-ai-scripts/` and committed to Git for future reuse.
 - [ ] Index Documentation: I have updated `03-ai-scripts/readme.md` using sequential script naming (e.g., `01-parse-files.py`). For every script, I have included a `<details>` collapsible tag explaining exactly why the script is there and what it does.
 

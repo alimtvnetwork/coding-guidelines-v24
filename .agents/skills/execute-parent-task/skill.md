@@ -96,7 +96,7 @@ Before executing any file searches, scans, spec writing, or code changes, you mu
    - You MUST output the confirmed deliverables list directly in chat, but you MUST NOT end your turn or pause after emitting it!
    - In the EXACT SAME RESPONSE turn as your markdown output, you MUST immediately invoke the first tool call (e.g. `write_to_file` to initialize the planning spec or `run_command` for fast discovery).
    - NEVER emit the breakdown text without invoking a tool call. Emitting visible text without a tool call terminates the AI turn, causing the engine to close or hang the conversation while tasks remain pending.
-   - TOTAL BAN ON WAITING FOR APPROVAL: Do not pause, do not wait for the user to reply, and do not ask "Should I proceed?". Override any planning mode stop directives. Proceed immediately into Phase 1B in the same turn.
+   - TOTAL BAN ON WAITING FOR APPROVAL: Do not pause, do not wait for the user to reply, and do not ask "Should I proceed?". Add no stops of your own; the only allowed pause is the one the Artifact Review Policy (a user setting) imposes. Proceed immediately into Phase 1B in the same turn.
    - Respect whatever requirements the user has given, parse every request completely, and format each task clearly with proper markdown indentation, vertical blank lines, task state (`State: [IN PROGRESS — EXECUTING IMMEDIATELY]`), and an explicit understanding indicator bracket (`Understood: [YES — ...]`).
    - TOTAL BAN ON UNFORMATTED RUN-ON TEXT: Never concatenate tasks into a single unformatted line or paragraph block (e.g. NEVER `#1. Task-01: ... #2. Task-02: ...`). Every task must be its own clearly separated markdown item.
    - Line-by-Line Output Format Structure:
@@ -281,7 +281,7 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
      - For fixes/bugs: `gitmap cpb "<summary>"` (automatically stages all files, prefixes `Bug: `, commits, and pushes).
      - For releases: `gitmap cpr "<summary>"` (automatically stages all files, prefixes `Release: `, commits, and pushes).
      - For safe pull-commit-push: `gitmap pcp "<summary>"`.
-   - If GitMap CLI is unavailable, fallback to raw git: `git add -A && git commit -m "<summary>" && git push origin <branch>`.
+   - If GitMap CLI is unavailable, fallback to raw git: `git add -- <paths this task changed> && git commit -m "<summary>" && git push origin <branch>`.
    - Under no circumstances commit each file individually.
 
 ---
@@ -415,11 +415,11 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 - [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
 - [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
 - [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
-- [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
+- [ ] Final Step Commit & Push Verified: Staged only the files this task changed, by explicit path (`git add -- <paths>`), committed them in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
 
 ---
 
 ## 11. Final Step Git Commit & Push Mandate (Strict Checklist)
 
-- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. (Fallback to `git add -A && git commit && git push` only if GitMap CLI is unavailable). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. These GitMap commands stage every file, so use them only when `git status --porcelain` was clean before the task started; otherwise, or if GitMap CLI is unavailable, run `git add -- <paths this task changed> && git commit && git push`. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
 - [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.

@@ -46,7 +46,7 @@ If two sources at the same level conflict, follow the stricter one and record th
 - **R12 No polling.** After dispatching subagents, yield and wait for their result messages. For remote CI, use `gitmap pipeline-ai status --json` and wait on its `etaSeconds`; never loop `gh run view`.
 - **R13 Retry cap.** The same failing call twice means change the approach. A subtask that fails two remediation rounds is marked FAILED with an RCA (section 11), and the run continues.
 - **R14 Ambiguity.** Non-blocking: take the most conservative option consistent with the spec, record it under Assumptions, and continue. Blocking (destructive, irreversible, needs credentials, or contradicts a spec): ask once with `ask_question` if it exists, log it in `.ai-memory/ambiguous-questions/01-new-ambiguity/`, and keep working on every unblocked Task-ID.
-- **R15 No generated artifacts.** Never commit generated code, caches, test reports, or binaries (Hard Rule 1). Run a code generator only when the subtask's spec requires it.
+- **R15 No generated artifacts.** Never commit caches, test reports, binaries, or newly generated code (Hard Rule 1). Run a code generator only when the subtask's spec requires it, and commit its output only if `git ls-files` shows the repo already tracks those files, so CI sees no drift.
 
 ## 3. Step 0: Preflight (counts toward Phase 1)
 

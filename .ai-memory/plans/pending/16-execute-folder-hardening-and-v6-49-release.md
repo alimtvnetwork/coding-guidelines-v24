@@ -1,6 +1,6 @@
 # Plan 16: Minor Release v6.49.0, then Harden the Execute Folder Prompts
 
-- **Status:** IN PROGRESS
+- **Status:** IMPLEMENTED (S1 to S6 done). It stays pending until the follow-ups in section 8 are done.
 - **Created:** 2026-10-01
 - **Builds on:** [15-execute-parent-task-v4-antigravity.md](15-execute-parent-task-v4-antigravity.md) (the V3 audit, defects D1 to D14, and the V4 fixes reused here)
 - **Folder in scope:** `01-prompts/14-execute/` and the `.agents/skills/` copies of its prompts
@@ -89,32 +89,34 @@ Each template replaces one exact sentence. Nothing else in the prompts changes.
 
 - **Owned files:** the files `37-bump-version.py` and `npm run sync` change, plus the release notes file (`.ai-memory/release/release-notes-vX.Y.Z.md`)
 - **Acceptance:** tag `v6.49.0` and branch `release/v6.49.0` exist on origin, `main` contains the release commit, and the GitHub release has the install one-liners.
-- **Status:** PENDING
+- **Status:** DONE. Evidence: the orchestrator's pre-release gate first failed on a duplicate `34-` number in `01-prompts/15-cg-execute/`, fixed on `main` in `3ade9ab5` and `396a17da`. The lifecycle then ran by hand with the repo's scripts so the stale bundle installers could be regenerated before tagging: `release/v6.49.0` was created, `37-bump-version.py` bumped 6.48.0 to 6.49.0, `generate-bundle-installers.mjs` moved 21 installer pins from v6.46.0 to v6.49.0, the gate passed 36 of 36 with tests, `npm run sync:check` passed, release commit `aa2659ce` was tagged `v6.49.0`, fast-forwarded into `main`, and `main`, the branch, and the tag were pushed. The GitHub release was published with `--notes-file`, and its body starts with the install one-liners. Both issues are logged in `.ai-memory/release/issues/` and linked from the changelog.
 
 ### S3: Fix prompts 01 to 09 (T1 to T8)
 
 - **Owned files:** `01-prompts/14-execute/01-execute-pending-tasks.md` through `01-prompts/14-execute/09-parent-task-in-below-steps.md`
-- **Status:** PENDING
+- **Status:** DONE. Evidence: a recount over prompts 01 to 09 finds 0 `"Model"` fields, 0 `git add -A`, 0 autofixer calls without `--check-only`, 0 `<SYSTEM_MESSAGE>`, 0 "Override any planning", and 0 unrevised closing clauses; the new `go generate` rule appears once in every prompt that had the old one. The edited payload in 02 is still valid JSON.
 
 ### S4: Fix the six skill copies (same templates)
 
 - **Owned files:** `skill.md` in `.agents/skills/execute-pending-tasks/`, `execute-batched-loop/`, `execute-ai-instruction-writer/`, `execute-batched-loop-wor/`, `execute-parent-task/`, and `parent-task-in-below-steps/`
-- **Status:** PENDING
+- **Status:** DONE. Evidence: the same recount over the six skill copies finds 0 of every defect pattern. The `execute-ai-instruction-writer` copy had its own staging variant ("stage everything"), which is fixed as well.
 
 ### S5: Align V4 R15 with T6
 
 - **Owned files:** `01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md`
-- **Status:** PENDING
+- **Status:** DONE. Evidence: R15 now commits generator output only when `git ls-files` shows the repo already tracks it; V4 is still 263 lines.
 
 ### S6: Indexes, verification, commit, push
 
 - **Owned files:** `.ai-memory/what-to-read.md` (changelog line), this plan (statuses)
 - **Acceptance:** section 6 passes; one `Feature:` commit on `main`, pushed.
-- **Status:** PENDING
+- **Status:** DONE. Evidence: the four prompt linters exit 0, and the routine gate (`06-cicd-local-runner.py --no-tests`) passes 30 of 30. The commit holds only the files in S3 to S6; `git log origin/main -1` records it.
 
 ## 8. Follow-ups
 
 1. Apply T2 to T6 to the non-execute skills listed in section 4.
 2. Change `03-ai-scripts/29-release-orchestrator.py` to stage the release files by path.
 3. Rename `08-excute-parent-old.md` and update its index entries and pointer skills.
-4. Everything still open in plan 15 section 10 (live Antigravity run, alias skills, sibling-repo rollout).
+4. Make the version bump regenerate the bundle installers (see `.ai-memory/release/issues/02-6.49.0-stale-installer-version-pins.md`).
+5. The routine gate rewrites the tracked `reports/spec-verification/coverage.md` on every run; decide whether that report should stay tracked (Hard Rule 1).
+6. Everything still open in plan 15 section 10 (live Antigravity run, alias skills, sibling-repo rollout).

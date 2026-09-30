@@ -1,10 +1,11 @@
 # What to Read
 
 > Canonical map of what the AI must read before working on this project.
-> Last updated: 2026-09-30T16:18:00Z
+> Last updated: 2026-09-30T16:39:00Z
 
 ## Changelog
 
+- 2026-09-30T16:39:00Z, Release v6.49.0 and Execute-Folder Hardening (plan 16): execute prompts 01 to 09 and their six Antigravity skill copies now stage by explicit path, drop the invalid `"Model"` payload field and the undocumented `<SYSTEM_MESSAGE>` tag, run the autofixer with `--check-only` on folders, and commit `go generate` output only when the repo already tracks it; prompts 02 and 06 point to V4.
 - 2026-09-30T16:18:00Z, Parent Task N-Steps V4 Prompt (`11-execute-parent-task-with-n-steps-v4.md`): Antigravity-native rewrite of V3 with rules R1 to R15, a capability preflight, a resumable ledger, a corrected `invoke_subagent` payload, explicit-path staging, and evidence-gated checks; plan 15 and thin pointer skills for Antigravity and Cursor.
 - 2026-09-30T14:00:00Z, White Blue Theme Design System (`04-white-blue-theme`), Parent Task N-Steps V3 Prompt (`10-execute-parent-task-with-n-steps-v3.md` with `N = 300` top header and mandatory `invoke_subagent` `A = 2, H = 2`), skills sync, and 43-repository backup/release/sync/release orchestration.
 - 2026-09-18T19:20:00Z, GitMap Pipeline-AI & Dynamic Waiting Protocol: updated execute prompts, fix-with-rca, ci-cd-fix, and ci-cd-fix-with-release prompts and skills to mandate GitMap pipeline AI integration, targeted failure extraction, and dynamic waiting (-t <sec>) to eliminate credit waste from tight-loop polling.
