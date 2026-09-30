@@ -1,3 +1,9 @@
+## v6.49.0 — 2026-09-30 (Add V4 Antigravity-native execute-parent-task prompt with skill pointers, open-conventions note, and plans 15 and 16)
+
+**Scope:** Version bump. Add V4 Antigravity-native execute-parent-task prompt with skill pointers, open-conventions note, and plans 15 and 16.
+
+---
+
 ## v6.48.0 — 2026-09-30 (Release v6.48.0)
 
 **Scope:** Version bump. Release v6.48.0.
