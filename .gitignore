@@ -79,3 +79,7 @@ tmp/
 .ai-memory/temp/
 .ai-memory/temp-agents/
 .ai-memory/cicd/
+antigravity-resume_task.json
+.antigravity_resume_task.json
+antigravity_resume_task.json
+.antigravity-resume_task.json
