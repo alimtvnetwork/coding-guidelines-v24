@@ -1,12 +1,7 @@
 {
   "schemaVersion": 1,
-<<<<<<< HEAD
-  "generated": "2026-09-30T02:08:06.776Z",
+  "generated": "2026-09-30T02:09:04.426Z",
   "version": "6.47.2",
-=======
-  "generated": "2026-09-30T02:07:32.278Z",
-  "version": "6.47.1",
->>>>>>> 8ab02e1bff728e2188a3b6692e34835e71897098
   "overallScore": 80,
   "grade": "B",
   "effectiveScore": 100,
