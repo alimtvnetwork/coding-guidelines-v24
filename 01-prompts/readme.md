@@ -36,6 +36,10 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
    - Top-header editable step budget (`N = 300`, `PHASE_1_STEPS = 150`, `PHASE_2_STEPS = 150`) and concurrency parameters (`A = 2`, `H = 2`).
    - **Mandatory Subagent Spawning Gate (`invoke_subagent`, Zero Solo Execution):** Requires spawning `A = 2` concurrent subagents (`H = 2` disjoint tasks per subagent, `TypeName: "self"` in Phase 2) across both Phase 1 discovery/spec generation and Phase 2 code execution.
 
+7. **V4 Antigravity-Native Parent Task N-Steps (`14-execute/11-execute-parent-task-with-n-steps-v4.md`):**
+   - Rewrite of V3 for Google Antigravity 2.0: every rule stated once (R1 to R15), a capability preflight, and a resumable gitignored ledger.
+   - Corrected `invoke_subagent` payload (`research` subagents for discovery, `self` subagents for edits, no `Model` field), lead verification of every worker report, explicit-path staging, and evidence-based confidence.
+
 ---
 
 ## Directory Index

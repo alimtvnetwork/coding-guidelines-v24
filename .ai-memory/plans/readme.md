@@ -8,6 +8,7 @@ Master directory of architectural and execution plans.
 - [04-guideline-prompt-and-installer-upgrade.md](pending/04-guideline-prompt-and-installer-upgrade.md): Guideline prompt and installer enhancements.
 - [09-update-prompts-and-release.md](pending/09-update-prompts-and-release.md): Update prompts and release lifecycle (deferred under WOR policy).
 - [11-code-red-refactor-remediation.md](pending/11-code-red-refactor-remediation.md): Remediate Code Red enum, boolean, and query wrapper violations across the codebase.
+- [15-execute-parent-task-v4-antigravity.md](pending/15-execute-parent-task-v4-antigravity.md): V4 Antigravity-native rewrite of the execute-parent-task-with-n-steps prompt, with the V3 audit, Approaches A to E, execute-folder options, and follow-ups (live Antigravity run pending).
 
 ## Completed Plans
 
