@@ -1,3 +1,9 @@
+## v6.58.0 — 2026-10-01 (Release v6.58.0)
+
+**Scope:** Version bump. Release v6.58.0.
+
+---
+
 ## v6.57.0 — 2026-10-01 (Release v6.57.0)
 
 **Scope:** Version bump. Release v6.57.0.
