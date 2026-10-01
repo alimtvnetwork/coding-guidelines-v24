@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.64.0] - 2026-10-01
+
+### Added
+- CBF - synchronize all 167 prompts to skills and sync 43 repositories
+
+---
+
 ## [v6.63.0] - 2026-10-01
 
 ### Added

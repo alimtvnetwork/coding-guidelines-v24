@@ -1,3 +1,9 @@
+## v6.64.0 — 2026-10-01 (CBF - synchronize all 167 prompts to skills and sync 43 repositories)
+
+**Scope:** Version bump. CBF - synchronize all 167 prompts to skills and sync 43 repositories.
+
+---
+
 ## v6.63.0 — 2026-10-01 (CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6)
 
 **Scope:** Version bump. CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6.
