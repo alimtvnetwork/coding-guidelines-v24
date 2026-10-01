@@ -7,11 +7,11 @@
     "inheritanceRule": "When a section is set to 'inherit', all tooling and codebases resolving that sub-package must inherit the root global Version.",
     "prohibition": "Never hardcode version numbers in code, scripts, or documentation. Always read from or sync with version.json."
   },
-  "Version": "6.50.0",
+  "Version": "6.51.0",
   "Title": "Coding Guidelines",
   "RepoSlug": "coding-guidelines-v24",
   "RepoUrl": "https://github.com/alimtvnetwork/coding-guidelines-v24",
-  "LastCommitSha": "222c928c050de475d979f355bf10e9189e018bca",
+  "LastCommitSha": "80614fdddeae02e00558c15e7a2c8829ab99ee41",
   "Description": "Coding Guidelines written by MD ALIM UL KARIM (one of the greatest programmar ever lived), sponsored by RISEUP ASIA LLC. An opinionated, AI-first engineering standards framework for Go, TypeScript, PHP, Rust, and C#, with zero-nesting enforcement and a spec architecture optimized for AI-assisted development. Focus on developer tooling, spec-first workflows, clear errors, shallow control flow, consistent naming, testable code, and predictable AI-assisted development.",
   "Authors": [
     {
@@ -56,20 +56,20 @@
     "${TARGET_PREFIX}/19-plan-spec-steps-v2.md",
     "${TARGET_PREFIX}/20-audit-app-spec.md"
   ],
-  "version": "6.50.0",
+  "version": "6.51.0",
   "updated": "2026-10-01",
   "name": "coding-guidelines",
   "description": "Cross-language coding standards, error handling, CI/CD, and self-update specifications. Synced from package.json by scripts/sync-version.mjs.",
   "git": {
-    "sha": "222c928c050de475d979f355bf10e9189e018bca",
-    "shortSha": "222c928",
-    "branch": "release/v6.50.0"
+    "sha": "80614fdddeae02e00558c15e7a2c8829ab99ee41",
+    "shortSha": "80614fd",
+    "branch": "release/v6.51.0"
   },
   "stats": {
     "totalFiles": 734,
-    "totalLines": 157771,
+    "totalLines": 157781,
     "totalFolders": 23,
-    "totalBytes": 5743530,
+    "totalBytes": 5745010,
     "rootFiles": 6
   },
   "folders": [
@@ -96,8 +96,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": null,
       "fileCount": 219,
-      "lineCount": 34994,
-      "byteCount": 1111590
+      "lineCount": 34997,
+      "byteCount": 1112709
     },
     {
       "path": "03-error-manage",
@@ -291,8 +291,8 @@
       "aiConfidence": "Production-Ready",
       "ambiguity": "None",
       "fileCount": 36,
-      "lineCount": 16935,
-      "byteCount": 625671
+      "lineCount": 16936,
+      "byteCount": 625939
     },
     {
       "path": "18-wp-plugin-how-to",
@@ -317,8 +317,8 @@
       "aiConfidence": null,
       "ambiguity": null,
       "fileCount": 35,
-      "lineCount": 8398,
-      "byteCount": 509162
+      "lineCount": 8404,
+      "byteCount": 509255
     },
     {
       "path": "21-app",
