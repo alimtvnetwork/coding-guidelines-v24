@@ -33,7 +33,7 @@ Always prefer native GitMap commands over slow generic shell pipelines:
    - **List Indexed Repo Files:** `gitmap list-files [pattern] [-ext <ext>]` (alias `gitmap lf`)
    - **Directory Tree & Scaffolding:** `gitmap folder-tree` (alias `gitmap ft`)
    - **Zero-Write File Stream:** `gitmap cat <filepath>`
-   - **Instant Multi-Core Regex Search:** `gitmap search "<term>"` or `gitmap aum search "<query>" [dir] --ext <ext>`
+   - **Instant Multi-Core Regex Search:** `gitmap aum search "<query>" [dir] [-e <.ext>] [-r] [-i]` (alias `gitmap aum grep`) or `gitmap search "<term>"`. TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.`
 2. **Fast Repository Hygiene, Lowercase & Symlink Repair:**
    - **Auto-Lowercase Files (Safe 2-Step `git mv`):** `gitmap lowercase` (alias `gitmap lcf [--dry-run]`)
    - **Lowercase Root Readme:** `gitmap lowercase-readme`

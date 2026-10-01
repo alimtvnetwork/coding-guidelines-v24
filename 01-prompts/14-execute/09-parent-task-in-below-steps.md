@@ -36,7 +36,7 @@ When multiple autonomous agents are present (A >= 2, H >= 2):
    - Never allow multiple agents to author disjoint or competing initial plans simultaneously. A single coherent architectural vision must lead.
 2. **Most Useful Parallel Tasks (Reading Files & Writing Modular Specs):**
    - Once the unified blueprint is authored by the lead agent, the most effective parallel tasks for subagents (A = 2, H = 2) are:
-     - **Reading Files:** Fast exploratory reading, scanning dependencies, mapping call sites, and inspecting types in parallel using GitMap AUM (`gitmap find`, `gitmap lf`, `gitmap cat`, `gitmap search`) as primary and Python scripts (`03-ai-scripts/17-fast-file-reader.py`, `03-ai-scripts/11-fast-file-scanner.py`) as fallback.
+     - **Reading Files:** Fast exploratory reading, scanning dependencies, mapping call sites, and inspecting types in parallel using GitMap AUM (`gitmap aum search "<symbol>" [dir] [-e <.ext>]`, `gitmap find`, `gitmap lf`, `gitmap cat`) as primary and Python scripts (`03-ai-scripts/17-fast-file-reader.py`, `03-ai-scripts/11-fast-file-scanner.py`) as fallback. TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.
      - **Writing Modular Specs:** Authoring modular, segmented spec sub-files in parallel (e.g. `02-data-contracts.md`, `03-visual-and-ux.md`, `04-verification-gates.md`) adhering to the lead agent's blueprint.
 3. **Spec Writing & Spec Audit Emphasis:**
    - **Spec Writing Section:** The lead agent defines the parent spec overview and data boundaries first; subagents are then spawned in parallel to flesh out disjoint spec modules and verification gates concurrently.
@@ -274,7 +274,7 @@ Always prefer native GitMap commands over slow generic shell pipelines:
    - **List Indexed Repo Files:** `gitmap list-files [pattern] [-ext <ext>]` (alias `gitmap lf`)
    - **Directory Tree & Scaffolding:** `gitmap folder-tree` (alias `gitmap ft`)
    - **Zero-Write File Stream:** `gitmap cat <filepath>`
-   - **Instant Multi-Core Regex Search:** `gitmap search "<term>"` or `gitmap aum search "<query>" [dir] --ext <ext>`
+   - **Instant Multi-Core Regex Search:** `gitmap aum search "<query>" [dir] [-e <.ext>] [-r] [-i]` (alias `gitmap aum grep`) or `gitmap search "<term>"`. TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.`
 2. **Fast Repository Hygiene, Lowercase & Symlink Repair:**
    - **Auto-Lowercase Files (Safe 2-Step `git mv`):** `gitmap lowercase` (alias `gitmap lcf [--dry-run]`)
    - **Lowercase Root Readme:** `gitmap lowercase-readme`
@@ -292,7 +292,7 @@ Always prefer native GitMap commands over slow generic shell pipelines:
 To maximize developer velocity, avoid slow generic shells, and ensure atomic consistency, heavily leverage native GitMap commands:
 1. Fast Code Search & File Discovery:
    - File finding: `gitmap find "<pattern>" [-ext <ext>]` or `gitmap lf [pattern]`
-   - Multi-core regex & text search: `gitmap search "<query>"` or scoped streaming `gitmap aum search "<query>" [dir] --ext <ext>`
+   - Multi-core regex & text search: `gitmap aum search "<query>" [dir] [-e <.ext>] [-r] [-i]` (alias `gitmap aum grep`) or `gitmap search "<query>"`. NEVER run PowerShell `Select-String` or `git grep`.`
    - Inspecting file content: `gitmap cat <filepath>`
 2. Semantic Atomic Commits & Pushes (Replaces Raw Multi-Command Git Chains):
    - Feature commits: `gitmap cpf "<summary>"` (stages all files, adds `Feature: `, commits, and pushes).
@@ -492,6 +492,7 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 - [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
 - [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
 - [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
+- [ ] NO POWERSHELL OR SHELL SEARCHES (TOTAL BAN): Never run `Select-String`, `Get-ChildItem -Recurse`, `grep`, `git grep`, `findstr`, or slow shell search pipelines to search code. All code searching and symbol discovery MUST use GitMap high-speed search tools: `gitmap aum search "<query>" [dir] [-e <.ext>] [-r]` (streaming multi-core text/regex search) or `gitmap search "<query>"` (indexed symbol search). Running `Select-String` or `git grep` is an immediate auto-reject failure.
 
 ---
 
@@ -517,7 +518,7 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 - [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
 - [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
 - [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
-- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed via `gitmap aum search "<symbol>" [dir]` to update all callers of modified symbols (never `Select-String` or `git grep`).
 - [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
 - [ ] Final Step Commit & Push Verified: Staged only the files this task changed, by explicit path (`git add -- <paths>`), committed them in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
 

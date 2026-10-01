@@ -232,7 +232,7 @@ Confirm that each script exists before using it (R4), and scope each check to wh
 
 ## 10. Discovery Tools
 
-- **GitMap (when preflight found it):** `gitmap find "<pattern>" -ext <ext>`, `gitmap lf <pattern>`, `gitmap cat <file>`, `gitmap search "<term>"`.
+- **GitMap (when preflight found it):** `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r]` (streaming live search; replaces `Select-String` / `git grep`), `gitmap search "<term>"`, `gitmap find "<pattern>" -ext <ext>`, `gitmap lf <pattern>`, `gitmap cat <file>`. TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.
 - **Python fallback:** `python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts --limit 100 --stats`, `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>" --limit 50`, `python 03-ai-scripts/17-fast-file-reader.py --read-file <file> --max-bytes 100000`, `python 03-ai-scripts/18-codebase-topology-discoverer.py --summary`.
 - Before writing a helper script, check `03-ai-scripts/readme.md` for an existing one. Put independent reads in the same response. Never run `gitmap pa` or `gitmap pae` unless the user asks.
 
@@ -253,7 +253,7 @@ Each item needs evidence in the ledger; an item without evidence counts as faile
 - [ ] R3: every Task-ID has evidence, and no template tokens such as `[Descriptive Task Title]`, `<slug>`, or `TODO` remain in changed files.
 - [ ] The spec, plan, subtasks, and indexes were written and registered during this run.
 - [ ] Changed code follows `.ai-memory/coding-guidelines.md`, and every worker violation was rejected.
-- [ ] Blast radius: callers of every changed symbol were searched and updated.
+- [ ] Blast radius: callers of every changed symbol were searched via `gitmap aum search "<symbol>" [dir]` and updated (never `Select-String` or `git grep`).
 - [ ] R8 and R9: the staged list equals the stage list, there is one commit, and it was pushed according to `COMMIT`.
 - [ ] R10 and R15: no release, no version edit, and no generated artifacts committed.
 - [ ] The final report lists tasks line by line, modified files from git, step counts from the ledger, and the audit prompt.

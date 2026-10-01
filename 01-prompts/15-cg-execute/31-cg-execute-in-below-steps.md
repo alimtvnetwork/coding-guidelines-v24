@@ -66,7 +66,7 @@ Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Run
 
 1. **High-Speed GitMap Discovery (PRIMARY):**
    - `gitmap find "<wildcard*>" [-ext <ext>]` (`gitmap f`), `gitmap find-files <name>` (`gitmap ff`), `gitmap find-files-any <str>` (`gitmap ffa`), `gitmap find-files-startswith <prefix>` (`gitmap ffs`), `gitmap find-files-endswith <suffix>` (`gitmap ffe`)
-   - `gitmap list-files [pattern] [-ext <ext>]` (`gitmap lf`), `gitmap cat <filepath>`, `gitmap search "<term>"`, `gitmap aum search "<query>" [dir] --ext <ext>`, `gitmap folder-tree` (`gitmap ft`)
+   - `gitmap aum search "<query>" [dir] [-e <.ext>] [-r] [-i]` (alias `gitmap aum grep`), `gitmap list-files [pattern] [-ext <ext>]` (`gitmap lf`), `gitmap cat <filepath>`, `gitmap search "<term>"`, `gitmap folder-tree` (`gitmap ft`). TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.
 2. **Actionable Execution Plan & Lean Subtasks:**
    - Write parent plan `.ai-memory/plans/pending/xx-<slug>.md` and lean, disjoint subtasks in `.ai-memory/plans/subtasks/xx-<slug>/01-<subtask>.md`.
    - Complete all spec and subtask writing within the first 50% budget (`PHASE_1_STEPS = N / 2`) and unconditionally transition to Phase 2 without stopping.
@@ -99,7 +99,7 @@ Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Run
 - [ ] BOTTOM-INSTRUCTION PRIORITY MANDATE: Followed all instructions below the `--` divider with absolute precedence.
 - [ ] NO TEST RUNNING OR BUILD CHECKING: Never ran test suites or build commands during routine turns.
 - [ ] NO PER-FILE COMMITTING: Committed once atomically at the final step via GitMap.
-- [ ] GITMAP ACCELERATION: Leveraged `gitmap f`, `ff`, `ffa`, `lf`, `cat`, `search`, `lcf`, `pwsh`, `cpf`/`cpb`.
+- [ ] GITMAP ACCELERATION: Leveraged `gitmap aum search`, `f`, `ff`, `ffa`, `lf`, `cat`, `search`, `lcf`, `pwsh`, `cpf`/`cpb`. TOTAL BAN on PowerShell `Select-String` and `git grep`.
 
 ---
 
@@ -128,6 +128,7 @@ Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Run
 - [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
 - [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
 - [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
+- [ ] NO POWERSHELL OR SHELL SEARCHES (TOTAL BAN): Never run `Select-String`, `Get-ChildItem -Recurse`, `grep`, `git grep`, `findstr`, or slow shell search pipelines to search code. All code searching and symbol discovery MUST use GitMap high-speed search tools: `gitmap aum search "<query>" [dir] [-e <.ext>] [-r]` (streaming multi-core text/regex search) or `gitmap search "<query>"` (indexed symbol search). Running `Select-String` or `git grep` is an immediate auto-reject failure.
 
 ---
 
@@ -153,7 +154,7 @@ Proceeding directly to Phase 1B: Spec & Subtask Generation (Active Tool Call Run
 - [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
 - [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
 - [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
-- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed via `gitmap aum search "<symbol>" [dir]` to update all callers of modified symbols (never `Select-String` or `git grep`).
 - [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
 - [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
 

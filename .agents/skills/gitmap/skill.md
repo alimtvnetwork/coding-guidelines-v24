@@ -15,7 +15,8 @@ GitMap is an ultra-fast developer companion and autonomous CLI engine designed f
 ## Essential Command Cheat Sheet
 
 ### 1. High-Performance Automation (AUM)
-- `gitmap aum search <pattern> [dir] [--ext <ext>]` — Multi-core streaming search with lazy regex and binary filtering. ALWAYS scope with target `[dir]` and `--ext`. NEVER run unscoped generic searches like `gitmap aum search "train"` across entire repos.
+- `gitmap aum search <pattern> [dir] [--ext <ext>] [-r] [-i]` (alias: `gitmap aum grep`) — Multi-core streaming live search with lazy regex and binary filtering. ALWAYS scope with target `[dir]` and `--ext`. Replaces slow PowerShell `Select-String`, `Get-ChildItem -Recurse`, and `git grep`. TOTAL BAN on PowerShell `Select-String` and `git grep`.
+- `gitmap search <query> [--limit <n>]` — Instant SQLite cached symbol & keyword search across scanned repositories.
 - `gitmap aum guard` — Enforces 500 KB limit, large JSON exclusion, and binary null-byte probe
 - `gitmap aum sequence` — Markdown sequence gap detector and # XX Title autofixer
 - `gitmap aum exclude list` — Query persistent search exclusions from SQLite

@@ -114,7 +114,7 @@ If sources conflict, follow stricter one and record under `Conflicts:` in ledger
   - *Secrets Gate (lead, before GitMap call):*
     1. Check changed/new files via `git status --porcelain`.
     2. Run `python linter-scripts/check-forbidden-strings.py`.
-    3. Search files via `git grep -nE` for private keys (`BEGIN [A-Z ]*PRIVATE KEY`), AWS (`AKIA[0-9A-Z]{16}`), GitHub (`gh[pousr]_[A-Za-z0-9]{36}`), OpenAI (`sk-[A-Za-z0-9]{20,}`), Slack (`xox[baprs]-[A-Za-z0-9-]{10,}`), or secret/token assignments.
+    3. Search files via `gitmap aum search -r "(BEGIN [A-Z ]*PRIVATE KEY|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36}|sk-[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,})"` for private keys, AWS, GitHub, OpenAI, Slack tokens, or secret/token assignments (NEVER run `git grep` or `Select-String`), AWS (`AKIA[0-9A-Z]{16}`), GitHub (`gh[pousr]_[A-Za-z0-9]{36}`), OpenAI (`sk-[A-Za-z0-9]{20,}`), Slack (`xox[baprs]-[A-Za-z0-9-]{10,}`), or secret/token assignments.
     4. On hit: if `repo-secrets` exists in default work directory, store via `gitmap rs text "<value>" --slug <slug>` (or `gitmap rs file <path>`) and replace with env var/placeholder; if not, remove value and `ask_question` once. Log `SECRET_OFFLOADED: <file>:<line>` without value.
     5. Never print secrets in chat/logs; refer to file:line only. Workers finding a secret report `BLOCKED: secret at <file>:<line>`. Never put repository URLs or absolute paths into secrets instructions (`AGENTS.md` section 9).
 
@@ -122,10 +122,29 @@ If sources conflict, follow stricter one and record under `Conflicts:` in ledger
 
 ## 3. GitMap High-Speed Command Primacy (Run Everything Faster)
 
-GitMap is your **PRIMARY** acceleration engine:
+GitMap is your **PRIMARY** acceleration engine. NEVER use generic PowerShell search cmdlets (`Select-String`, `Get-ChildItem`), `git grep`, `grep`, or `findstr`. Execute all searches and operations through GitMap:
 
-| Operation | Command | Alias | Purpose |
-| :
+| Operation | Primary GitMap Command | High-Speed Alias | Purpose & Advantage |
+| :--- | :--- | :--- | :--- |
+| **Live Streaming Search** | `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` | `gitmap aum grep "<pat>"` | Multi-core streaming live file search (replaces `Select-String`, `git grep`) |
+| **Indexed Symbol Search** | `gitmap search "<query>" [--limit <n>]` | `gitmap search` | Instant SQLite cached keyword/symbol search across indexed repos |
+| **Wildcard File Search** | `gitmap find "<pattern>" [-ext <ext>]` | `gitmap f "<pat>"` | Index-accelerated multi-core glob filename finder |
+| **Directory Inventory** | `gitmap list-files [pattern] [-ext <ext>]` | `gitmap lf [pat]` | Instant indexed repository inventory |
+| **Substring File Search** | `gitmap find-files-any "<substring>"` | `gitmap ffa "<str>"` | High-speed partial filename matcher |
+| **Stream File** | `gitmap cat <filepath>` | `gitmap cat` | Zero-disk memory streaming to stdout |
+| **PowerShell Runner** | `gitmap pwsh "<command>"` | `gitmap ps "<cmd>"` | High-speed PowerShell execution with `-NoProfile` |
+| **Bash Runner** | `gitmap bash "<command>"` | `gitmap sh "<cmd>"` | Standard cross-platform Bash command execution |
+| **Offload Secrets** | `gitmap rs file <filepath>` / `folder` / `text` | `gitmap rs` | Auto-commits into `repo-secrets` in work directory |
+| **Offload Scripts** | `gitmap rc file <file.ps1>` / `text` | `gitmap rc` | Auto-commits reusable scripts into `repo-cache` |
+| **Atomic Commits** | `gitmap cpf "<summary>"` (Feature) / `cpb` (Bug) | `gitmap cpf` | Stages, commits with prefix, and pushes atomically |
+| **Pipeline Waiting** | `gitmap pipeline-ai status --json` | `gitmap pl-ai` | Non-polling dynamic ETA CI/CD monitor |
+
+### 🔍 Code & Symbol Search Protocol (TOTAL BAN ON `Select-String` & `git grep`)
+- **Live Disk Search (Default for discovery, symbol tracking & blast radius):**
+  - Search string/symbol: `gitmap aum search "<symbol>" [dir] [-e <.ext>]` (e.g. `gitmap aum search "RunFleetPASCommand" cli -e .go`)
+  - Search regex: `gitmap aum search -r "<regex>" [dir] [-e <.ext>]` (e.g. `gitmap aum search -r "("pas"|"pa")" cli/cmd -e .go`)
+  - Case-insensitive: `gitmap aum search -i "<query>" [dir]`
+- **TOTAL BAN:** NEVER run PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`. Running generic shell searches wastes execution steps, slows turns, and violates GitMap primacy.
 
 ---
 
@@ -153,7 +172,11 @@ Commits: none    Pushed: no
 Branch: <branch> | Tree at start: clean (or dirty with <paths>)
 Tools: invoke_subagent=yes send_message=yes ask_question=yes gitmap=yes
 | Task-ID | Subtask | Owner | Owned files | Status | Evidence |
-|
+|---|---|---|---|---|---|
+| Task-01 | 01-<name> | Worker 01 | <paths> | PENDING | - |
+Assumptions: <list or none>
+Conflicts: <list or none>
+Stage list: <every path this run creates or modifies>
 
 ---
 
@@ -161,7 +184,7 @@ Tools: invoke_subagent=yes send_message=yes ask_question=yes gitmap=yes
 
 You must use `invoke_subagent` to delegate both planning and spec writing.
 
-1. **Planning Step (A = 2 Agents):** Lead agent calls `invoke_subagent` to spawn 2 subagents (e.g., `Research 01`, `Research 02`). Their prompt MUST instruct them to research the codebase, define the boundaries, and write the Execution Plan (`.ai-memory/plans/pending/NN-<slug>.md`) and the Root Task JSON Manifest.
+1. **Planning Step (A = 2 Agents):** Lead agent calls `invoke_subagent` to spawn 2 subagents (e.g., `Research 01`, `Research 02`). Their prompt MUST instruct them to research the codebase using GitMap high-speed search (`gitmap aum search "<symbol>" [dir] [-e <.ext>]`, `gitmap find`, `gitmap lf`, `gitmap cat`) — NEVER PowerShell `Select-String` or `git grep` — define the boundaries, and write the Execution Plan (`.ai-memory/plans/pending/NN-<slug>.md`) and the Root Task JSON Manifest.
    - *Tool Call:* Lead must actually execute the `invoke_subagent` tool, then print `Dispatched Planning Agents`, and then END TURN to wait for `<SYSTEM_MESSAGE>`.
 2. **Spec Step (A = 2 Agents):** Once planning is done, the lead agent calls `invoke_subagent` again to spawn 2 subagents. Their prompt MUST instruct them to write the Canonical Spec (`02-spec/21-app/NN-<slug>.md` or folder) and decompose subtasks into `.ai-memory/plans/subtasks/`.
    - *Tool Call:* Lead must actually execute the `invoke_subagent` tool, then print `Dispatched Spec Agents`, and then END TURN to wait for `<SYSTEM_MESSAGE>`.
@@ -209,6 +232,7 @@ You are Worker <NN> for task NN-<slug>. You have no prior chat context; this bri
 
 ### Boundaries:
 - Read any file in the workspace; edit only your Owned Files: <relative paths>.
+- Code & Symbol Search: Use GitMap exclusively: `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` or `gitmap search`. TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.
 - After C tool calls, stop and report what you have.
 - A tool failing twice: reply "STATUS: BLOCKED" with exact error and stop. Never guess paths and never troubleshoot machine.
 - Workers that find a secret stop and report "BLOCKED: secret at <file>:<line>". They do not handle it themselves.
@@ -226,6 +250,7 @@ You are Worker <NN> for task NN-<slug>. You have no prior chat context; this bri
 5. Repo Secrets: if any credentials or private tokens are needed, store them in the `repo-secrets` folder in the default work directory (via `gitmap rs`). Never commit secrets.
 6. Zero Builds or Tests: NEVER run `go build`, `npm run build`, `go test`, or `pytest`.
 7. Targeted Verification: Run only fast file-scoped linters (e.g. `python 03-ai-scripts/05-guideline-autofixer.py <folder> --check-only`). A check scanning 0 files is a FAIL.
+8. GitMap Search Primacy (TOTAL BAN on Select-String / git grep): NEVER execute PowerShell `Select-String`, `Get-ChildItem`, `git grep`, `grep`, or `findstr`. Always use `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r]` for live symbol/regex discovery.
 
 ### Output Contract:
 Write your subtask output to .ai-memory/plans/subtasks/NN-<slug>/01-<name>.json and reply with this JSON block, once per subtask, then stop:
@@ -330,6 +355,7 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 - [ ] NO HORIZONTAL TASK CONCATENATION (TOTAL BAN): Never concatenate tasks horizontally in the Task Completion Summary (e.g. NEVER `✅ #1... ✅ #2...` run-on). Every completed task MUST be rendered on its OWN SEPARATE LINE starting with an individual markdown list bullet (`- ✅`).
 - [ ] INDEPENDENT AI VERIFICATION PROMPT MANDATE: Emitted the self-contained independent AI verification and audit prompt linking to the canonical spec, consolidated plan, and modified files with verbatim score audit criteria.
 - [ ] GITMAP HEAVY USAGE & ROUTINE PULL BAN: Heavily leveraged GitMap commands (`cpf`, `cpb`, `cpr`, `search`, `find`, `pwsh`) for discovery, execution, and commits. Never ran `pull-all` (`gitmap pa` or `gitmap pae`) unconditionally during routine turns; only ran `gitmap pae --json` when explicitly commanded by the user.
+- [ ] NO POWERSHELL OR SHELL SEARCHES (TOTAL BAN): Never run `Select-String`, `Get-ChildItem -Recurse`, `grep`, `git grep`, `findstr`, or slow shell search pipelines to search code. All code searching and symbol discovery MUST use GitMap high-speed search tools: `gitmap aum search "<query>" [dir] [-e <.ext>] [-r]` (streaming multi-core text/regex search) or `gitmap search "<query>"` (indexed symbol search). Running `Select-String` or `git grep` is an immediate auto-reject failure.
 
 ---
 
@@ -355,7 +381,7 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 - [ ] Pre-Commit Diff Proof: Verified `git status` shows actual modified files before committing.
 - [ ] No Placeholder Search: Confirmed zero `TODO` or `\[.*\]` placeholders remain in modified files.
 - [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
-- [ ] Blast Radius Acknowledgment: Global search across codebase performed to update all callers of modified symbols.
+- [ ] Blast Radius Acknowledgment: Global search across codebase performed via `gitmap aum search "<symbol>" [dir]` to update all callers of modified symbols (never `Select-String` or `git grep`).
 - [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
 - [ ] Final Step Commit & Push Verified: Staged all changes (`git add -A`), committed everything in a single grouped atomic commit, and pushed to git before ending the turn (no per-file commits).
 

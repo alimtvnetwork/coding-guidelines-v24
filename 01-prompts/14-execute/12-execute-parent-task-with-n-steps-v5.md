@@ -71,17 +71,25 @@ GitMap is your **PRIMARY** acceleration engine. Avoid slow generic shell pipelin
 
 | Operation | Primary GitMap Command | High-Speed Alias | Purpose & Advantage |
 | :--- | :--- | :--- | :--- |
+| **Live Streaming Search** | `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` | `gitmap aum grep "<pat>"` | Multi-core streaming live file search (replaces `Select-String`, `git grep`) |
+| **Indexed Symbol Search** | `gitmap search "<query>" [--limit <n>]` | `gitmap search` | Instant SQLite cached keyword/symbol search across indexed repos |
 | **Wildcard Search** | `gitmap find "<pattern>" [-ext <ext>]` | `gitmap f "<pat>"` | Index-accelerated multi-core file finding |
 | **File Listing** | `gitmap list-files [pattern] [-ext <ext>]` | `gitmap lf [pat]` | Instant indexed repository inventory |
 | **Substring Search** | `gitmap find-files-any "<substring>"` | `gitmap ffa "<str>"` | High-speed partial filename matcher |
 | **Stream File** | `gitmap cat <filepath>` | `gitmap cat` | Zero-disk memory streaming to stdout |
-| **Regex Search** | `gitmap search "<query>"` | `gitmap search` | Multi-core parallel filesystem text scanner |
 | **PowerShell Runner** | `gitmap pwsh "<command>"` | `gitmap ps "<cmd>"` | High-speed PowerShell execution with `-NoProfile` |
 | **Bash Runner** | `gitmap bash "<command>"` | `gitmap sh "<cmd>"` | Standard cross-platform Bash command execution |
 | **Offload Secrets** | `gitmap rs file <filepath>` / `folder` / `text` | `gitmap rs` | Auto-commits into `repo-secrets` in work directory |
 | **Offload Scripts** | `gitmap rc file <file.ps1>` / `text` | `gitmap rc` | Auto-commits reusable scripts into `repo-cache` |
 | **Atomic Commits** | `gitmap cpf "<summary>"` (Feature) / `cpb` (Bug) | `gitmap cpf` | Stages, commits with prefix, and pushes atomically |
 | **Pipeline Waiting** | `gitmap pipeline-ai status --json` | `gitmap pl-ai` | Non-polling dynamic ETA CI/CD monitor |
+
+### 🔍 Code & Symbol Search Protocol (TOTAL BAN ON `Select-String` & `git grep`)
+- **Live Disk Search (Default for discovery, symbol tracking & blast radius):**
+  - Search string/symbol: `gitmap aum search "<symbol>" [dir] [-e <.ext>]` (e.g. `gitmap aum search "RunFleetPASCommand" cli -e .go`)
+  - Search regex: `gitmap aum search -r "<regex>" [dir] [-e <.ext>]` (e.g. `gitmap aum search -r "(\"pas\"|\"pa\")" cli/cmd -e .go`)
+  - Case-insensitive: `gitmap aum search -i "<query>" [dir]`
+- **TOTAL BAN:** NEVER run PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`. All code searches MUST use GitMap high-speed search tools.
 
 *Rule:* Never run `gitmap pa` or `gitmap pae` (pull-all) unless the user explicitly requested it.
 
@@ -146,7 +154,7 @@ Proceeding directly to Phase 1B (Tool Call Running Below).
 ## 6. Phase 1B: Spec, Plan & Lean Subtasks (Steps 1 .. N/2)
 
 1. **Single-Agent Unified Blueprint:** The lead orchestrator alone authors the initial spec overview and planning skeleton. Subagents never write competing master plans.
-2. **Parallel Discovery Subagents (`A = 2, H = 2`):** Dispatch `A = 2` `research` subagents via `invoke_subagent` on disjoint folders to map symbols, dependencies, and call sites using GitMap commands (`gitmap f`, `gitmap lf`, `gitmap search`, `gitmap cat`). Yield turn to await completion.
+2. **Parallel Discovery Subagents (`A = 2, H = 2`):** Dispatch `A = 2` `research` subagents via `invoke_subagent` on disjoint folders to map symbols, dependencies, and call sites using GitMap commands (`gitmap aum search "<query>" [dir] [-e <.ext>]`, `gitmap find`, `gitmap lf`, `gitmap cat`). Their prompt MUST strictly ban PowerShell `Select-String`, `Get-ChildItem`, and `git grep`. Yield turn to await completion.
 3. **Canonical Spec Authoring (`02-spec/21-app/`):**
    - Single-domain features (<= 150 lines): Write `02-spec/21-app/NN-<slug>.md`.
    - Large / multi-domain features: Write `02-spec/21-app/NN-<slug>/` (`01-overview.md`, `02-data-contracts.md`, `03-visual-and-ux.md`, `04-verification-gates.md`).
@@ -211,6 +219,7 @@ You are Worker [NN] for task NN-<slug>. You have no prior chat context; this bri
 ### Strict Bounding Box (Disjoint Files Only):
 - Owned Files (EDIT ONLY THESE): <relative paths>.
 - TOTAL BAN: You are strictly forbidden from reading or modifying any other files.
+- Code & Symbol Search: Use GitMap exclusively: `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` or `gitmap search`. TOTAL BAN on PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.
 
 ### 100% Non-Negotiable Coding Guidelines (AUTO-REJECT ON VIOLATION):
 1. Positive booleans ONLY: use `is` and `has` prefixes exclusively. NEVER evaluate explicit `== true`. NEVER combine positive and negative checks in the same condition (`if isA && !isB` is BANNED).
@@ -220,6 +229,7 @@ You are Worker [NN] for task NN-<slug>. You have no prior chat context; this bri
 5. Repo Secrets: if any credentials or private tokens are needed, store them in the `repo-secrets` folder in the default work directory (via `gitmap rs`). Never commit secrets.
 6. Zero Builds or Tests: NEVER run `go build`, `npm run build`, `go test`, or `pytest`.
 7. Targeted Verification: Run only fast file-scoped linters (e.g. `python 03-ai-scripts/05-guideline-autofixer.py <folder> --check-only`). A check scanning 0 files is a FAIL.
+8. GitMap Search Primacy (TOTAL BAN on Select-String / git grep): NEVER execute PowerShell `Select-String`, `Get-ChildItem`, `git grep`, `grep`, or `findstr`. Always use `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r]` for live symbol/regex discovery.
 
 ### Output Contract:
 Reply with exactly this block, once per subtask, then stop:
@@ -298,9 +308,11 @@ Confirm scripts exist before invoking (R4). Run on changed files/folders only:
 
 ---
 
-## 11. Discovery Toolchain (GitMap Primary)
+## 11. Discovery Toolchain (GitMap Primary — Ban on Select-String & git grep)
 
-- **GitMap:** `gitmap f "<pattern>"`, `gitmap lf [pat]`, `gitmap ffa "<str>"`, `gitmap cat <file>`, `gitmap search "<term>"`.
+- **GitMap Live Search:** `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r] [-i]` (alias: `gitmap aum grep`) — streaming live disk search.
+- **GitMap Indexed Search & Files:** `gitmap search "<term>"`, `gitmap f "<pattern>"`, `gitmap lf [pat]`, `gitmap ffa "<str>"`, `gitmap cat <file>`.
+- **TOTAL BAN:** NEVER run PowerShell `Select-String`, `Get-ChildItem -Recurse`, `git grep`, `grep`, or `findstr`.
 - **Python Fallback:** `python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts --stats`, `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<text>"`, `python 03-ai-scripts/17-fast-file-reader.py --read-file <file>`.
 
 ---
