@@ -38,6 +38,7 @@ Before authoring components or generating code, AI agents MUST read and master t
 - [ ] `/learn` **Phase 6b: White Blue pages and the visual builder**
   - Read [`25-page-assembly.md`](./25-page-assembly.md) — site and blog shells. Menu components are [`33-mega-menu-components.md`](./33-mega-menu-components.md). Color tokens stay in [`04-white-blue-theme/02-header-mega-menu-and-footer.md`](./04-white-blue-theme/02-header-mega-menu-and-footer.md).
   - Read [`26-visual-builder.md`](./26-visual-builder.md) — review overlay for wording, images, and menu labels. Not the slide builder.
+  - To create or enhance any file in this folder, follow [`01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md`](../../01-prompts/10-ui-and-design/09-write-and-enhance-design-spec.md) and pass its completion gate.
 - [ ] `/learn` **Phase 7: AI-Adaptable Modern SaaS Design System**
   - Read [`02-ai-system-design/readme.md`](./02-ai-system-design/readme.md) — Variable-driven theme swapping (Pink to Green), sticky nav, search module, "Join Us" CSS3 text-slide animation, "Climate AI" highlight, and "Team Greenhouse" section.
 - [ ] `/learn` **Phase 8: Sweet Digs Design System & Interactive Theme Tester**
