@@ -41,6 +41,11 @@
 | 32 | 31-slide-controller-buttons.md | ✅ | ✅ |
 | 33 | 32-slide-color-options.md | ✅ | ✅ |
 | 34 | 33-mega-menu-components.md | ✅ | ✅ |
+| 35 | 34-slide-layout-catalog.md | ✅ | ✅ |
+| 36 | 35-slide-builder-canvas-inspector.md | ✅ | ✅ |
+| 37 | 36-website-content-builder-mode.md | ✅ | ✅ |
+| 38 | 37-image-specifications.md | ✅ | ✅ |
+| 39 | 38-card-and-pricing-components.md | ✅ | ✅ |
 | 28 | 02-ai-system-design/readme.md | ✅ | ✅ |
 | 29 | 03-sweet-digs-design-system/readme.md | ✅ | ✅ |
 | 30 | 04-white-blue-theme/readme.md | ✅ | ✅ |
@@ -80,6 +85,11 @@
 | `./31-slide-controller-buttons.md` | Controller buttons and dots | ✅ |
 | `./32-slide-color-options.md` | Pill colors | ✅ |
 | `./33-mega-menu-components.md` | Mega menu components | ✅ |
+| `./34-slide-layout-catalog.md` | Master slide layout catalog | ✅ |
+| `./35-slide-builder-canvas-inspector.md` | Slide builder & inspector | ✅ |
+| `./36-website-content-builder-mode.md` | Website content builder | ✅ |
+| `./37-image-specifications.md` | Image specs & canvas geometries | ✅ |
+| `./38-card-and-pricing-components.md` | Pricing & editorial components | ✅ |
 | `./03-sweet-digs-design-system/readme.md` | Sweet Digs Theme suite (`01`..`04`) | ✅ |
 | `src/index.css` | Project source | ✅ |
 | `tailwind.config.ts` | Project source | ✅ |

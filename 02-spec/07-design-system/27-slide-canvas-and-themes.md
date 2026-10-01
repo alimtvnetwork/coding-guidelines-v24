@@ -102,3 +102,11 @@ Background, ember, foreground, and type stay shared. Titles use Ubuntu Bold. Bod
 ## 5. Separation from marketing UI
 
 White Blue navy `#0D2975`, cobalt `#2563EB`, and violet `#822EE8` are page tokens. They are not slide accents. A slide must not import `04-white-blue-theme` color ramps to fill the stage.
+ 
+---
+ 
+## 6. Sibling References
+ 
+- Standalone marketing images, social cards, and thumbnail specs: [`37-image-specifications.md`](./37-image-specifications.md)
+- Slide layouts and constraints: [`28-slide-layouts.md`](./28-slide-layouts.md)
+- 10 Master slide layouts: [`34-slide-layout-catalog.md`](./34-slide-layout-catalog.md)

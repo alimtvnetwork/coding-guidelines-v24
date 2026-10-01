@@ -115,7 +115,14 @@ Column templates stay as specified there:
 
 ---
 
-## 6. Refusal list
+## 6. Sibling References
+
+- Standalone marketing images, banners, and thumbnails: [`37-image-specifications.md`](./37-image-specifications.md)
+- Detailed 3-tier pricing table and floating editorial card components: [`38-card-and-pricing-components.md`](./38-card-and-pricing-components.md)
+
+---
+
+## 7. Refusal list
 
 - Do not add a section id that is not in section 3.
 - Menu parts that are not in `33-mega-menu-components.md` do not exist.
