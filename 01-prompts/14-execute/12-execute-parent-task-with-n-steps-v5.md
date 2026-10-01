@@ -1,5 +1,8 @@
 # [V5] Parent Task N-Step Loop: Antigravity-Native Ultra-Orchestrator — Workflow (must follow)
 
+> [!NOTE]
+> For Antigravity runs, use [V6](13-execute-parent-task-with-n-steps-v6.md), which supersedes this version. This file is kept for existing users.
+
 ```text
 N = 300         Step ceiling for the whole run (edit before running, default: 300)
 A = 2           Worker subagents per wave (invoke_subagent, default: 2)
