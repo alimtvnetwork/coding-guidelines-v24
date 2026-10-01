@@ -54,7 +54,7 @@ IGNORE_TERMS = {
     "cmd/user.go", "src/cli/audit.ts", "scripts/deploy.py",
     "02-spec/25-app-spec-audit/", "04-php/00-overview.md", "02-typescript/08-typescript-standards-reference.md",
     "01-cross-language/18-code-mutation-avoidance.md", ".ai-memory/temp/recent-file-changes.lock",
-    ".ai-memory/temp/recent-file-changes.json", ".ai-memory/test-heatmap.json",
+    ".ai-memory/temp/recent-file-changes.json", ".ai-memory/temp/design-spec-ledger.md", ".ai-memory/test-heatmap.json",
     ".ai-memory/ambiguous-questions/02-ambiguity-resolved/02-macro-step-open-command-behavior.md",
     "colors-themes/palette.md", "colors-themes/01-palette.md",
     "prompts/02-plan.md", "prompts/01-prompt.md",
