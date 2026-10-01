@@ -38,7 +38,10 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
 
 7. **V4 Antigravity-Native Parent Task N-Steps (`14-execute/11-execute-parent-task-with-n-steps-v4.md`):**
    - Rewrite of V3 for Google Antigravity 2.0: every rule stated once (R1 to R15), a capability preflight, and a resumable gitignored ledger.
-   - Corrected `invoke_subagent` payload (`research` subagents for discovery, `self` subagents for edits, no `Model` field), lead verification of every worker report, explicit-path staging, and evidence-based confidence.
+   - Lead verification of every worker report, explicit-path staging, and evidence-based confidence.
+
+8. **V5 Antigravity-Native Ultra-Orchestrator (`14-execute/12-execute-parent-task-with-n-steps-v5.md`):**
+   - Ultimate synthesis of V4's rule-indexed efficiency (R1–R16), resumable ledger (`ledger.md`), explicit path staging (R8), and evidence-gating with 100% GitMap command primacy, in-brief coding guideline injection (positive booleans, `*appfault.AppError`, <=8-15 lines), corrected Antigravity 2.0 tool schemas (`Model: "inherit"`), repo-secrets default work directory governance (R16), and non-negotiable wake-up urgency.
 
 ---
 
