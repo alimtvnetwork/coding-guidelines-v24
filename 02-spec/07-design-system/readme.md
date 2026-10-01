@@ -28,7 +28,13 @@ Before authoring components or generating code, AI agents MUST read and master t
   - Read [`22-native-css-select-and-border-shapes.md`](./22-native-css-select-and-border-shapes.md) — `base-select`, `::picker(select)`, `border-shape`.
   - Read [`23-building-block-components.md`](./23-building-block-components.md) — Curriculum cards, 4-cell subgrids, 3-tier pricing tables, SVGs.
 - [ ] `/learn` **Phase 6: Slide Presentation Engine**
-  - Read [`24-slide-presentation-system.md`](./24-slide-presentation-system.md) — 16:9 virtual canvas, draggable webcam PIP, step reveals.
+  - Read [`24-slide-presentation-system.md`](./24-slide-presentation-system.md) — webcam PIP, step reveals, dual-screen console.
+  - Read [`27-slide-canvas-and-themes.md`](./27-slide-canvas-and-themes.md) — `1920×1080` scale, amber and JSON themes.
+  - Read [`28-slide-layouts.md`](./28-slide-layouts.md) — closed layout union.
+  - Read [`29-slide-navigation-and-builder.md`](./29-slide-navigation-and-builder.md) — HUD, transitions, keys, slide builder.
+- [ ] `/learn` **Phase 6b: White Blue pages and the visual builder**
+  - Read [`25-page-assembly.md`](./25-page-assembly.md) — site and blog shells. Menu motion stays in [`04-white-blue-theme/02-header-mega-menu-and-footer.md`](./04-white-blue-theme/02-header-mega-menu-and-footer.md).
+  - Read [`26-visual-builder.md`](./26-visual-builder.md) — review overlay for wording, images, and menu labels. Not the slide builder.
 - [ ] `/learn` **Phase 7: AI-Adaptable Modern SaaS Design System**
   - Read [`02-ai-system-design/readme.md`](./02-ai-system-design/readme.md) — Variable-driven theme swapping (Pink to Green), sticky nav, search module, "Join Us" CSS3 text-slide animation, "Climate AI" highlight, and "Team Greenhouse" section.
 - [ ] `/learn` **Phase 8: Sweet Digs Design System & Interactive Theme Tester**
@@ -51,7 +57,7 @@ We offer 9 production-grade theme families available in both light and dark vari
 | `WHITE-BLUE` | White Blue Enterprise Editorial | `#FFFFFF` / `rgb(255, 255, 255)` / `hsl(0, 0%, 100%)` | `#2563EB` (`rgb(37, 99, 235)`, `hsl(221, 83%, 53%)`) / `#822EE8` | Light-first B2B SaaS, cloud ERP/CRM platforms, enterprise consulting |
 | `LIGHT-TRUST` | Light High-Trust Editorial | `#ffffff` | `#6366f1` / `#f43f5e` | Clean SaaS, education, agency, certification portals |
 | `DARK-NAVY` | Dark Obsidian Navy | `#0b1329` | `#8b5cf6` (Electric Violet) | AI engineering, developer tools, technical infrastructure |
-| `RISEUP-CORP` | Riseup Asia Corporate | `#0f172a` | `#facc15` (Gold) / `#10b981` | High-authority corporate events, keynote presentations |
+| `CORP-GOLD` | Corporate Gold | `#0f172a` | `#facc15` (Gold) / `#10b981` | High-authority corporate events, keynote presentations |
 | `CYBER-INDIGO`| Cyber Indigo Slate | `#030712` | `#6366f1` (Neon Indigo) | Dark-first developer dashboards, cyber security |
 | `VSCODE-DARK` | VS Code Modern Dark | `#1e1e1e` | `#007acc` (Editor Blue) | Code-heavy developer tools, IDE extensions |
 | `TOKYO-NIGHT` | Tokyo Night Storm | `#1a1b26` | `#bb9af7` (Magenta) | Modern developer portals, aesthetic CLI docs |
@@ -291,10 +297,15 @@ All animations and transitions prioritize **GPU-composited CSS3 transforms and o
 | 19 | [21-css3-animations-and-interactions.md](./21-css3-animations-and-interactions.md) | Motion & Hover | CSS3 keyframes, cubic-bezier easing, darkish hover shades, line hover highlights |
 | 20 | [22-native-css-select-and-border-shapes.md](./22-native-css-select-and-border-shapes.md) | Native Controls | Modern base-select, ::picker(select), and organic border-shape geometry |
 | 21 | [23-building-block-components.md](./23-building-block-components.md) | Components | Curriculum card anatomy, 4-cell subgrids, standalone SVGs, LESS mixins |
-| 22 | [24-slide-presentation-system.md](./24-slide-presentation-system.md) | Presentation | 16:9 virtual canvas, draggable webcam PIP, step reveals, dual-screen console |
-| 23 | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
-| 24 | [03-sweet-digs-design-system/readme.md](./03-sweet-digs-design-system/readme.md) | Sub-System | Sweet Digs HSL multi-theme architecture and zoom-free interaction suite |
-| 25 | [04-white-blue-theme/readme.md](./04-white-blue-theme/readme.md) | Sub-System | White Blue Theme 3-format color architecture (`HEX`, `RGB`/`RGBA`, `HSL` + `OKLCH`), 3D flip Mega-Menu, `WhiteBlueButton`, and enterprise section library |
+| 22 | [24-slide-presentation-system.md](./24-slide-presentation-system.md) | Presentation | Webcam PIP, step reveals, dual-screen console |
+| 23 | [25-page-assembly.md](./25-page-assembly.md) | Guide | Site and blog shells from the White Blue section library |
+| 24 | [26-visual-builder.md](./26-visual-builder.md) | Builder | Review overlay for text, images, menu labels, in-group order |
+| 25 | [27-slide-canvas-and-themes.md](./27-slide-canvas-and-themes.md) | Presentation | `1920×1080` canvas, amber tokens, JSON themes, noir-gold |
+| 26 | [28-slide-layouts.md](./28-slide-layouts.md) | Presentation | Closed slide layout union |
+| 27 | [29-slide-navigation-and-builder.md](./29-slide-navigation-and-builder.md) | Presentation | HUD, transition families, keys, slide builder |
+| 28 | [02-ai-system-design/readme.md](./02-ai-system-design/readme.md) | Sub-System | AI-adaptable modern SaaS theme swapping and section blueprints |
+| 29 | [03-sweet-digs-design-system/readme.md](./03-sweet-digs-design-system/readme.md) | Sub-System | Sweet Digs HSL multi-theme architecture and zoom-free interaction suite |
+| 30 | [04-white-blue-theme/readme.md](./04-white-blue-theme/readme.md) | Sub-System | White Blue Theme 3-format color architecture (`HEX`, `RGB`/`RGBA`, `HSL` + `OKLCH`), 3D flip Mega-Menu, `WhiteBlueButton`, and enterprise section library |
 | 97 | [97-acceptance-criteria.md](./97-acceptance-criteria.md) | Testing | Testable criteria for design system compliance |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Meta | Consistency validation report |
 

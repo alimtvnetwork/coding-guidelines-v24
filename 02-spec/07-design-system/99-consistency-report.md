@@ -32,9 +32,14 @@
 | 20 | 22-native-css-select-and-border-shapes.md | ✅ | ✅ |
 | 21 | 23-building-block-components.md | ✅ | ✅ |
 | 22 | 24-slide-presentation-system.md | ✅ | ✅ |
-| 23 | 02-ai-system-design/readme.md | ✅ | ✅ |
-| 24 | 03-sweet-digs-design-system/readme.md | ✅ | ✅ |
-| 25 | 04-white-blue-theme/readme.md | ✅ | ✅ |
+| 23 | 25-page-assembly.md | ✅ | ✅ |
+| 24 | 26-visual-builder.md | ✅ | ✅ |
+| 25 | 27-slide-canvas-and-themes.md | ✅ | ✅ |
+| 26 | 28-slide-layouts.md | ✅ | ✅ |
+| 27 | 29-slide-navigation-and-builder.md | ✅ | ✅ |
+| 28 | 02-ai-system-design/readme.md | ✅ | ✅ |
+| 29 | 03-sweet-digs-design-system/readme.md | ✅ | ✅ |
+| 30 | 04-white-blue-theme/readme.md | ✅ | ✅ |
 | 26 | 04-white-blue-theme/01-colors-typography-and-tokens.md | ✅ | ✅ |
 | 27 | 04-white-blue-theme/02-header-mega-menu-and-footer.md | ✅ | ✅ |
 | 28 | 04-white-blue-theme/03-buttons-motion-and-interactions.md | ✅ | ✅ |
@@ -62,6 +67,11 @@
 |------|--------|--------|
 | All `[NN-file.md]` references | Within `07-design-system/` | ✅ |
 | `./04-white-blue-theme/readme.md` | White Blue Theme suite (`01`..`04`) | ✅ |
+| `./25-page-assembly.md` | Site and blog shells | ✅ |
+| `./26-visual-builder.md` | Review overlay | ✅ |
+| `./27-slide-canvas-and-themes.md` | Slide canvas and themes | ✅ |
+| `./28-slide-layouts.md` | Closed slide layouts | ✅ |
+| `./29-slide-navigation-and-builder.md` | HUD and slide builder | ✅ |
 | `./03-sweet-digs-design-system/readme.md` | Sweet Digs Theme suite (`01`..`04`) | ✅ |
 | `src/index.css` | Project source | ✅ |
 | `tailwind.config.ts` | Project source | ✅ |

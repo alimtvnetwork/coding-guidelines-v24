@@ -1,6 +1,6 @@
 # 24 — Slide Presentation System & Presenter Engine Architecture
 
-> **/goal** Specify the comprehensive architecture for web-based slide presentations, 16:9 responsive canvas scaling, draggable webcam picture-in-picture (PIP) overlays, incremental step reveals, and multi-deck routing synthesized from local presentation repositories.
+> **/goal** Specify webcam picture-in-picture, step reveals, and the dual-screen presenter console. Canvas, themes, layouts, HUD, and the slide builder are in `27-slide-canvas-and-themes.md`, `28-slide-layouts.md`, and `29-slide-navigation-and-builder.md`.
 > **/learn** Master the responsive coordinate transforms (`1920x1080` canvas), `PresenterWebcamOverlay` webcam stream integration, `stepMotionOverride` state tracking, dual-screen presenter consoles, and modular LESS slide styling.
 
 **Version:** 1.0.0
@@ -13,7 +13,7 @@
 
 ## 1. System Overview & Presentation Repositories Synthesis
 
-Web-based presentation decks combine the interactivity and fluidity of the browser with the structured delivery of professional slide software. Based on architectural patterns synthesized across active presentation systems (e.g. `remix-of-presentation-riseup-asia`, `flat-slide-show`, and `slides-app`), modern presentation systems operate on five core pillars:
+Web-based decks use one `1920×1080` stage, scaled as specified in `27-slide-canvas-and-themes.md`. This file keeps five presenter pillars. It does not define themes or layout ids.
 
 1. **Fixed-Aspect Ratio Virtual Canvas:** Standard `1920x1080` coordinate space scaled down dynamically using CSS `transform: scale(min(w/1920, h/1080))` so layouts never shift or distort across screens.
 2. **Floating Draggable Webcam PIP (`PresenterWebcamOverlay`):** Video stream with circular boundary, glowing accent perimeter, draggable coordinate snapping, mirror toggle, and customizable opacity.
@@ -178,3 +178,17 @@ slides-app/
 Decks are accessible via hash or path routing:
 - Audience View: `/deck/01-agentic-ai/#/4` (Slide 4)
 - Presenter Console: `/deck/01-agentic-ai/presenter#/4` (Slide 4 with notes & timer)
+
+---
+
+## 6. Where the rest of the slide system lives
+
+Do not duplicate those rules in this file.
+
+| Topic | File |
+|---|---|
+| Canvas scale, amber tokens, JSON themes, noir-gold | `27-slide-canvas-and-themes.md` |
+| Closed layout union | `28-slide-layouts.md` |
+| HUD, transitions, keys, slide builder | `29-slide-navigation-and-builder.md` |
+
+A marketing page or a blog uses `25-page-assembly.md` and `04-white-blue-theme/`. It does not use this canvas.
