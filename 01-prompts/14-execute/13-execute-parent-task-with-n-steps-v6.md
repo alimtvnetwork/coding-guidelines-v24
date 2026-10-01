@@ -9,9 +9,24 @@ PHASE_2_BUDGET = N / 2
 WAVES = ceil(subtasks / (A x H))
 ```
 
-[/goal](slashCommand:goal) Autonomously orchestrate and execute the parent task end-to-end: capture it verbatim, plan it in the repo, run it through A workers in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish with one atomic GitMap commit that holds strictly this task's files.
+[/goal](slashCommand:goal) Autonomously orchestrate and execute the parent task end-to-end: FIRST showcase and list out the given task in visible chat during Turn 1, capture it verbatim, plan it in the repo, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution without calling `invoke_subagent` is an auto-reject failure) in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish with one atomic GitMap commit that holds strictly this task's files.
 
-[/learn](slashCommand:learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Each rule is stated once (R1 to R16) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
+[/learn](slashCommand:learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Turn 1 MUST showcase the given task list in visible chat before any background execution. Each rule is stated once (R1 to R16) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
+
+---
+
+### 🚨 MANDATORY TURN 1 TASK SHOWCASE & SUBAGENT SPAWNING GATES
+
+#### 1. Turn 1 Mandatory Task Showcase (First Action — Zero Silent Execution)
+- **ABSOLUTE FIRST ACTION:** In your VERY FIRST response turn upon receiving the prompt, you MUST showcase and list out the given task directly in visible chat before any silent background execution.
+- **Mandatory Breakdown Rendering:** Render the full `### 📋 Confirmed Task Breakdown & Requirement Ingestion` block in visible chat, breaking down the user request into ordered `Task-01`, `Task-02`, etc., with `State`, `Understood: [YES]`, `Actionable Scope`, and `Target Files`.
+- **Mandatory Same-Turn Tool Chaining:** Emit the visible task list in chat and trigger your initial tool call in the **EXACT SAME TURN**. Never output text alone (which ends the turn prematurely), and never execute tools silently without displaying the task list to the user first.
+
+#### 2. Mandatory Subagent Spawning Gate (A = 2, H = 2 — Zero Solo Execution)
+- **ABSOLUTE, NON-NEGOTIABLE MUST:** Spawning subagents via the `invoke_subagent` tool (`A = 2`, `H = 2`) is an **ABSOLUTE, NON-NEGOTIABLE MUST** in both **Phase 1** (parallel codebase discovery reading and modular spec authoring) and **Phase 2** (parallel subtask code execution with `TypeName: "self"`).
+- **SOLO EXECUTION IS AN AUTO-REJECT FAILURE:** The lead orchestrator is **STRICTLY FORBIDDEN** from executing all discovery reads or all subtask code modifications by itself without invoking `invoke_subagent`. Failing to call `invoke_subagent` when `A >= 2` is a critical protocol violation on the same tier as Rule 0.
+- **Phase 1 Mandatory Subagent Dispatch:** Immediately after establishing the Confirmed Task Breakdown (Phase 1A) and single-agent blueprint skeleton, the lead agent MUST call `invoke_subagent` to spawn `A = 2` subagents in parallel for codebase discovery/reading or modular spec sections and yield the turn to await `<SYSTEM_MESSAGE>`.
+- **Phase 2 Mandatory Subagent Dispatch (`TypeName: "self"`):** Once subtasks are generated in `.ai-memory/plans/subtasks/NN-<slug>/`, the lead agent MUST call `invoke_subagent` with `TypeName: "self"` to dispatch `A = 2` worker subagents (`H = 2` disjoint subtasks per worker) and yield the turn to await `<SYSTEM_MESSAGE>`.
 
 ---
 
@@ -25,12 +40,13 @@ WAVES = ceil(subtasks / (A x H))
 If sources conflict, follow stricter one and record under `Conflicts:` in ledger.
 
 ### Scope Control Rules
+- **Turn 1 Task Showcase:** In your very first response turn, you MUST showcase and list out the given task in visible chat. Running tools silently without presenting the task breakdown is strictly banned.
 - **Read budget:** Read only requested paths, search hits, and Step 0 context.
 - **History read-only:** Never edit past events, changelogs, completed plans, release notes, or `06-old-prompts/` and `19-old-execute-prompts/`.
 - **Out-of-scope:** Log under `Follow-ups:` in plan; never fix in this run.
 - **Minimal diff:** Change only lines required; never reflow unaffected lines.
 - **Indexes:** Update `01-prompts/readme.md` and `.ai-memory/prompts.md` only when adding/modifying prompts. Update `.ai-memory/plans/readme.md` and `02-spec/21-app/readme.md` every run. Register recent completed tasks before push.
-- **Lean mode:** If touching <= 3 files, skip subtasks, write one-file spec, spawn one worker, log `A_REDUCED: lean`.
+- **Mandatory Multi-Agent Partitioning:** Even for tasks touching few files, work MUST be partitioned across A workers (e.g. Worker 01 implements changes, Worker 02 implements verification/linters/companion tests). Solo execution is strictly banned.
 - **Finish early:** When all Task-IDs are `DONE`, proceed directly to consolidation.
 - **Zero releases:** Never bump versions or edit changelogs unless requested (R10).
 
@@ -42,7 +58,7 @@ If sources conflict, follow stricter one and record under `Conflicts:` in ledger
 - **R2 Targeted Checks Only.** Run only fast, file-scoped checks on specifically modified files (see Section 10). A check scanning 0 files is a **FAIL**.
 - **R3 Evidence or It Did Not Happen.** Every `DONE`, `PASS`, or "verified" claim MUST cite a concrete file path, git diffstat, or command exit code (`exit 0`). Vague assurances are auto-rejected.
 - **R4 Never Invent Commands, Flags, or Paths.** Verify commands with a harmless call (`gitmap lf readme.md`), not `--help`. Use documented fallbacks and log in ledger.
-- **R5 Mandatory Subagents (`invoke_subagent`).** Spawning subagents is an **ABSOLUTE MUST** when `invoke_subagent` exists (`research` for discovery, `self` for edits). If tool is absent, run waves yourself one subtask at a time and log `SOLO_FALLBACK: invoke_subagent absent`.
+- **R5 Mandatory Subagents (`invoke_subagent`).** Spawning subagents via `invoke_subagent` (`A = 2`, `H = 2`) is an **ABSOLUTE MUST** (`research` for discovery in Phase 1, `self` for edits in Phase 2). The lead agent is STRICTLY FORBIDDEN from executing all reads or edits solo. Solo execution without calling `invoke_subagent` is an auto-reject failure on the same tier as Rule 0.
 - **R6 One Owner Per File (Disjoint Bounding Boxes).** Within every worker wave, each file has exactly one owner. Shared indexes (`.ai-memory/plans/readme.md`, `.ai-memory/prompts.md`, `.ai-memory/what-to-read.md`, `02-spec/21-app/readme.md`, directory `readme.md`) belong exclusively to lead.
 - **R7 Git Safety & Isolation.** Subagents never run git commands or alter git state. Nobody runs `git reset --hard`, `git checkout --`, `git clean`, `git stash`, or force pushes.
 - **R8/R9 Atomic Commit & Push via GitMap.** The run ends with one GitMap call: `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes). GitMap stages, commits, and pushes. Never commit file-by-file. Before GitMap, all push gates must pass (targeted checks, secrets gate, and `.gitignore` hygiene; untrack any ignored files: `git rm --cached`). Push rejected: `git pull --rebase`, re-run command. Miss after push: allow one follow-up `gitmap cpb "<summary>"`, logged as `FOLLOW_UP_PUSH: <sha>`. Never amend pushed commits. Workers never run git commands or GitMap commit tools; only lead does.
@@ -84,7 +100,37 @@ GitMap is your **PRIMARY** acceleration engine:
 
 ---
 
-## 4. Step 0: Preflight & Antigravity Platform Handshake (Phase 1 Budget)
+## 4. Phase 1A: Verbatim Capture, Task Showcase & Chat Output Gate (TURN 1 MANDATORY)
+
+Before executing any file searches, scans, spec writing, or code changes, you must execute Phase 1A:
+
+1. **Showcase Given Task First (Turn 1 Action):** In your VERY FIRST response turn upon receiving the prompt, you MUST output the confirmed task breakdown directly in visible chat. Never execute tools silently without displaying the task breakdown to the user first!
+2. **Lossless Verbatim Capture:** Store incoming prompt losslessly under `## User Request (Verbatim)` in canonical spec and parent plan.
+3. **Screenshots & Media:** Decode base64/screenshots immediately into `assets/screenshots/<slug>-<NN>.png`. Reference via relative markdown links (`![Screenshot](assets/screenshots/<slug>-<NN>.png)`).
+4. **Discrete Deliverables Extraction:** Decompose whatever user requirements were given into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, ...).
+5. **Mandatory Same-Turn Tool Chaining (TOTAL BAN ON TURNING OFF):** Emit the breakdown in chat with clean vertical formatting, and in the **EXACT SAME TURN**, invoke your first tool call (e.g. `write_to_file` to initialize ledger/spec, or run preflight). NEVER emit text alone (which ends the turn prematurely), and never ask "Should I proceed?".
+
+```markdown
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+1. **Task-01: [Descriptive Task Title]**
+   - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
+   - **Understood:** `[YES]` — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+2. **Task-02: [Descriptive Task Title]**
+   - **State:** `[QUEUED — EXECUTING NOW WITHOUT USER PROMPT]`
+   - **Understood:** `[YES]` — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+Proceeding directly to Preflight & Phase 1B Spec Generation (Active Tool Call Running Below).
+```
+
+---
+
+## 5. Step 0: Preflight, Platform Handshake & Ledger Creation (Phase 1 Budget)
 
 1. **Platform Handshake:** Confirm tools (`invoke_subagent`, `send_message`, `manage_subagents`, `ask_question`, `write_to_file`, `replace_file_content`, `run_command`). If `task_boundary` exists: set `PLANNING` (Phase 1), `EXECUTION` (Phase 2), `VERIFICATION` (Phase 3).
 2. **Commands & Directory:** Confirm `gitmap --version` and `python --version` exit 0. Verify GitMap with harmless call (`gitmap lf readme.md`), not `--help`. `run_command` uses `Cwd` in workspace root, paths relative. Never cd to other drives or tool folders.
@@ -101,8 +147,8 @@ Request slug: <slug>
 Request first line: <verbatim first line>
 Status: ACTIVE
 Phase: 1    Wave: 0 / WAVES    Step: 1 / N
-Last completed action: Step 0 Preflight
-Next action: Phase 1A Capture
+Last completed action: Phase 1A Capture & Task Breakdown
+Next action: Phase 1B Spec & Plan
 Workers in flight: none
 Commits: none    Pushed: no
 Branch: <branch> | Tree at start: clean (or dirty with <paths>)
@@ -118,31 +164,10 @@ Conflicts: <list or none>
 
 ---
 
-## 5. Phase 1A: Verbatim Capture, Deliverables Breakdown & Chat Output Gate
-
-1. **Capture Verbatim Request:** Store incoming prompt losslessly under `## User Request (Verbatim)` in spec and plan.
-2. **Screenshots:** Decode base64/screenshots immediately into `assets/screenshots/<slug>-<NN>.png`. Reference via relative markdown links (`![Screenshot](assets/screenshots/<slug>-<NN>.png)`).
-3. **Discrete Deliverables:** Decompose request into ordered Task-IDs (`Task-01`, `Task-02`, ...).
-4. **Mandatory Same-Turn Tool Chaining (TOTAL BAN ON TURNING OFF):** Emit breakdown in chat with vertical line formatting, and in **EXACT SAME TURN**, invoke first tool call (`write_to_file` or `invoke_subagent`). NEVER emit text alone. Never ask "Should I proceed?".
-
-```markdown
-### 📋 Confirmed Task Breakdown & Requirement Ingestion
-
-1. **Task-01: [Descriptive Task Title]**
-   - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
-   - **Understood:** `[YES]` — [one sentence proving understanding of intent and scope]
-   - **Actionable Scope:** [precise deliverable]
-   - **Target Files / Area:** `[relative/path/or/module]`
-
-Proceeding directly to Phase 1B (Tool Call Running Below).
-```
-
----
-
 ## 6. Phase 1B: Spec, Plan & Lean Subtasks (Steps 1 .. PHASE_1_BUDGET)
 
 1. **Single-Agent Blueprint:** Lead orchestrator alone authors initial spec overview and planning skeleton.
-2. **Parallel Discovery Subagents (A workers):** Dispatch A `research` subagents (`Research 01 .. Research <A>`) via `invoke_subagent` on disjoint folders to map symbols and dependencies using GitMap commands (`gitmap f`, `gitmap lf`, `gitmap search`, `gitmap cat`).
+2. **Mandatory Parallel Discovery Subagents (A workers):** You MUST dispatch A research subagents (`Research 01 .. Research <A>`) via `invoke_subagent` on disjoint folders to map symbols and dependencies using GitMap commands (`gitmap f`, `gitmap lf`, `gitmap search`, `gitmap cat`) and yield the turn. Do not perform all discovery solo in the main agent.
    - *Research Contract:* Reply with one line per hit formatted as `path:line: text`, then `SUMMARY: <one line>`, then stop.
 3. **Canonical Spec Authoring (`02-spec/21-app/`):** Single-domain (<= 150 lines): Write `02-spec/21-app/NN-<slug>.md`. Multi-domain: Write `02-spec/21-app/NN-<slug>/` (`01-overview.md` .. `04-verification-gates.md`). Register in `02-spec/21-app/readme.md`.
 4. **Execution Plan:** Write `.ai-memory/plans/pending/NN-<slug>.md` linking to spec and mapping Task-IDs to subtasks. Register in `.ai-memory/plans/readme.md`.
@@ -151,7 +176,7 @@ Proceeding directly to Phase 1B (Tool Call Running Below).
      `{"taskSlug":"NN-<slug>","status":"IN_PROGRESS","subtasks":[{"id":"Task-01","file":"01-<name>.json","owner":"Worker 01","status":"PENDING"}]}`
    - Each subagent creates and updates its assigned subtask in structured JSON format (`.ai-memory/plans/subtasks/NN-<slug>/01-<name>.json`), referenced directly from root JSON manifest.
    - Lean subtask companion: `.ai-memory/plans/subtasks/NN-<slug>/01-<name>.md` (Traceability ID, Spec Reference, Owned Files, Action, Acceptance Criteria, Targeted Verification).
-6. **Lean Mode:** If task touches <= 3 files, skip subtask files, write one-file spec, spawn one worker, log `A_REDUCED: lean`.
+6. **Parallel Subtask Decomposition:** Decompose deliverables across A workers so each worker receives disjoint target files. Solo execution without calling `invoke_subagent` is strictly banned.
 7. **Readiness Gate:** Complete Phase 1 planning within `PHASE_1_BUDGET` steps, then proceed **UNCONDITIONALLY** into Phase 2.
 
 ---
@@ -160,18 +185,25 @@ Proceeding directly to Phase 1B (Tool Call Running Below).
 
 > [!CRITICAL]
 > **MANDATORY `invoke_subagent` DISPATCH (ZERO SOLO EXECUTION):**
-> You MUST spawn A workers (`TypeName: "self"`, up to H subtasks per worker) in parallel via `invoke_subagent`. Executing all subtasks solo in main agent when `invoke_subagent` exists is an auto-reject failure on same tier as Rule 0. If fewer disjoint file groups than A, spawn one worker per group and log `A_REDUCED: <groups> groups` in ledger.
+> You MUST spawn A workers (`TypeName: "self"`, up to H subtasks per worker) in parallel via `invoke_subagent`. Executing all subtasks solo in main agent without calling `invoke_subagent` is an immediate auto-reject failure on the same tier as Rule 0. Work MUST be partitioned across A workers.
 
 ### 7.1 Dispatch Payload (`invoke_subagent`)
 
-The `invoke_subagent` payload holds exactly A entries, built by repeating this entry template A times (for `Worker 01 .. Worker <A>`):
+The `invoke_subagent` payload holds A entries (`Worker 01 .. Worker <A>`):
 
 ```json
 {
   "Subagents": [
     {
       "TypeName": "self",
-      "Role": "Worker <NN>: [Assigned Feature/Module]",
+      "Role": "Worker 01: [Assigned Feature/Module A]",
+      "Model": "inherit",
+      "Workspace": "inherit",
+      "Prompt": "<Worker Brief Below>"
+    },
+    {
+      "TypeName": "self",
+      "Role": "Worker 02: [Assigned Feature/Module B]",
       "Model": "inherit",
       "Workspace": "inherit",
       "Prompt": "<Worker Brief Below>"
