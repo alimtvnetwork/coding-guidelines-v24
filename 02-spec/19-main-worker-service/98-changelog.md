@@ -1,3 +1,9 @@
+## v6.53.0 — 2026-10-01 (add V6 execute-parent-task prompt with parameter-driven orchestration)
+
+**Scope:** Version bump. add V6 execute-parent-task prompt with parameter-driven orchestration.
+
+---
+
 ## v6.52.0 — 2026-10-01 (add V6 parent task orchestrator prompt, skills, and benchmark audit)
 
 **Scope:** Version bump. add V6 parent task orchestrator prompt, skills, and benchmark audit.

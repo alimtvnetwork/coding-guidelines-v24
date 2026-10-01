@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.53.0] - 2026-10-01
+
+### Added
+- add V6 execute-parent-task prompt with parameter-driven orchestration
+
+---
+
 ## [v6.52.0] - 2026-10-01
 
 ### Added
