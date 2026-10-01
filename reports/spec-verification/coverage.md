@@ -1,21 +1,21 @@
 # Spec Verification Coverage Report
 
 - **Mode:** `overview-only`
-- **Generated:** 2026-10-01T18:11:48.992Z
+- **Generated:** 2026-10-01T19:41:33.309Z
 - **Coverage:** 0 / 0 expected files (0%)
 
 ## Totals
 
 | Bucket | Count |
 |---|---:|
-| Scanned | 734 |
+| Scanned | 743 |
 | Expected | 0 |
 | Updated (has `## Verification`) | 0 |
 | **Missing (still need `## Verification`)** | **0** |
 | Skipped — sacred (readme/changelog/97/99) | 164 |
 | Skipped — spec root files | 6 |
 | Skipped — spec-only folders (no implementation) | 31 |
-| Out of scope under current mode | 533 |
+| Out of scope under current mode | 542 |
 | Stray blocks (out-of-scope yet present) | 3 |
 | IO errors | 0 |
 
