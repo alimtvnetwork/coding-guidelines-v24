@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.61.0] - 2026-10-01
+
+### Added
+- Add SQLite multi-agent task manager and standardize GitMap commit syntax
+
+---
+
 ## [v6.60.0] - 2026-10-01
 
 ### Added

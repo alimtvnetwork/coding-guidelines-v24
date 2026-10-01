@@ -1,3 +1,9 @@
+## v6.61.0 — 2026-10-01 (Add SQLite multi-agent task manager and standardize GitMap commit syntax)
+
+**Scope:** Version bump. Add SQLite multi-agent task manager and standardize GitMap commit syntax.
+
+---
+
 ## v6.60.0 — 2026-10-01 (Release v6.60.0)
 
 **Scope:** Version bump. Release v6.60.0.
