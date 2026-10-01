@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.63.0] - 2026-10-01
+
+### Added
+- CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6
+
+---
+
 ## [v6.62.0] - 2026-10-01
 
 ### Added

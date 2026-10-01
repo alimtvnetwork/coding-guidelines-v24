@@ -1,3 +1,9 @@
+## v6.63.0 — 2026-10-01 (CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6)
+
+**Scope:** Version bump. CBF - clarify hyphen format and omit colon in gitmap commit syntax for v6.
+
+---
+
 ## v6.62.0 — 2026-10-01 (CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill)
 
 **Scope:** Version bump. CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill.
