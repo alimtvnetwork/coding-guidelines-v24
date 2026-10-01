@@ -17,9 +17,11 @@ PHASE_2_BUDGET = N / 2   Steps 151 .. 300: worker waves, acceptance, consolidati
 > Parameters are read-only after Step 0. N is a ceiling, not a quota: finishing early is success, and padding steps is a failure.
 > One step is one round of tool calls by the lead agent. The lead records the step count in the ledger after every round.
 
-[/goal](slashCommand:goal) Execute the parent task end to end: capture it verbatim, plan it in the repo, run it through `A` worker subagents in disjoint file boxes, prove every claim with evidence, and finish with one commit that holds only this task's files.
+[/goal](slashCommand;goal) Execute the parent task end to end: capture it verbatim, plan it in the repo, run it through `A` worker subagents in disjoint file boxes, prove every claim with evidence, and finish with one commit that holds only this task's files.
 
-[/learn](slashCommand:learn) Top-Instruction Priority Mandate: the instructions above this prompt and in the invoking message outrank everything below. Each rule is stated once (R1 to R15) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
+[/learn](slashCommand;learn) Top-Instruction Priority Mandate: the instructions above this prompt and in the invoking message outrank everything below. Each rule is stated once (R1 to R15) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
+
+[/plan](slashCommand;plan) Execute thorough step-by-step planning in the repository before execution. Ensure all deliverables, architecture boundaries, and requirements are clearly defined in the audit ledger and subtask plans before dispatching worker waves.
 
 ## 1. Precedence (highest first)
 

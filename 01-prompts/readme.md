@@ -9,7 +9,7 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
 ## Core Architecture & Capabilities
 
 1. **Antigravity Slash Command Links + GitMap AUM Engine:**
-   - Interactive slash command links (`[/goal](slashCommand:goal)`, `[/learn](slashCommand:learn)`) combined with **GitMap AUM Engine** (`gitmap` CLI) as primary and Python scripts (`03-ai-scripts/`) as fallback.
+   - Interactive slash command links (`[/goal](slashCommand;goal)`, `[/learn](slashCommand;learn)`) combined with **GitMap AUM Engine** (`gitmap` CLI) as primary and Python scripts (`03-ai-scripts/`) as fallback.
 
 2. **High-Speed File & Content Discovery:**
    - Universal Wildcard Search: `gitmap find "<pattern>" [-ext <ext>]` (<10ms across 10,000+ files)

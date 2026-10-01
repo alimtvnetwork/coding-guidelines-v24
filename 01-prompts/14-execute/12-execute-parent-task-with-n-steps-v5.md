@@ -20,9 +20,11 @@ PHASE_2_BUDGET = N / 2   Steps 151 .. 300: Worker Waves, Acceptance, Consolidati
 > Parameters are read-only after Step 0. N is a hard ceiling, not a quota: finishing early is success, and padding steps is failure.
 > One step is one round of tool calls by the lead agent. The lead records the real step count in the ledger after every round.
 
-[/goal](slashCommand:goal) Autonomously orchestrate and execute the parent task end-to-end: capture it verbatim, plan it in the repo, run it through `A = 2` worker subagents in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish with one atomic commit that holds strictly this task's files.
+[/goal](slashCommand;goal) Autonomously orchestrate and execute the parent task end-to-end: capture it verbatim, plan it in the repo, run it through `A = 2` worker subagents in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish with one atomic commit that holds strictly this task's files.
 
-[/learn](slashCommand:learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Each rule is stated once (R1 to R16) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
+[/learn](slashCommand;learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Each rule is stated once (R1 to R16) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
+
+[/plan](slashCommand;plan) Execute thorough step-by-step planning in the repository before execution. Ensure all deliverables, architecture boundaries, and requirements are clearly defined in the audit ledger and subtask plans before dispatching worker waves.
 
 ---
 
