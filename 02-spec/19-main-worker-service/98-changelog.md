@@ -1,3 +1,9 @@
+## v6.56.0 — 2026-10-01 (Release v6.56.0)
+
+**Scope:** Version bump. Release v6.56.0.
+
+---
+
 ## v6.55.0 — 2026-10-01 (pre-cg-execute prompts optimization snapshot)
 
 **Scope:** Version bump. pre-cg-execute prompts optimization snapshot.
