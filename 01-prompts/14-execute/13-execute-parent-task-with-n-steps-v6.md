@@ -1,32 +1,70 @@
-```text
-N = 300   step ceiling
-A = 2     workers per wave
-H = 2     subtasks per worker per wave
-C = 30    tool calls per worker before it must report
+# [V6] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow)
 
-PHASE_1_BUDGET = N / 2
-PHASE_2_BUDGET = N / 2
+```text
+N = 300 (Total self-loop steps budget — editable top-header parameter, default: 300)
+A = 2   (MANDATORY number of spawned autonomous subagents running concurrently via invoke_subagent, default: 2)
+H = 2   (Operational hands per agent: dual-task batch capacity & parallel tool dispatch, default: 2)
+C = 30  (Tool calls per worker before it must report, default: 30)
+
+System Concurrency Capacity = A × H = 2 agents × 2 hands = 4 concurrent subtask operations
+PHASE_1_BUDGET = N / 2   (Steps 1 .. 150: Planning, Parallel Discovery Subagents, Detailed Spec, and Lean Subtask Generation)
+PHASE_2_BUDGET = N / 2   (Steps 151 .. 300: Mandatory Parallel Subagent Execution, Self-Looping, Targeted Quality Linting)
 WAVES = ceil(subtasks / (A x H))
 ```
+
+> [!IMPORTANT]
+> Prompt Version: 6.0.0
+> Runtime: Google Antigravity 2.0 (IDE and CLI)
+> Invoke: /execute-parent-task-with-n-steps-v6 <task>
+>
+> **Top-Instruction Priority Mandate (Above Precedence / Preamble Precedence):**
+> Whatever directives, constraints, checklists, or user instructions are given ABOVE this prompt (including in the user preamble, header blocks, or incoming user request above) are HIGHEST PRIORITY and MUST BE FOLLOWED as strictly NON-NEGOTIABLE. They supersede and strictly override any conflicting general advice, default conventions, or lower-level guidelines below. The agent MUST inspect and follow the instructions above with absolute precedence.
 
 [/goal](slashCommand:goal) Autonomously orchestrate and execute the parent task end-to-end: FIRST showcase and list out the given task in visible chat during Turn 1, capture it verbatim, plan it in the repo, spawn autonomous subagents via `invoke_subagent` (A = 2, H = 2; solo execution without calling `invoke_subagent` is an auto-reject failure) in disjoint file boxes using GitMap high-speed commands as primary, prove every single claim with concrete evidence, enforce coding guidelines to 100%, and finish with one atomic GitMap commit that holds strictly this task's files.
 
 [/learn](slashCommand:learn) Enforce the Top-Instruction Priority Mandate: whatever directives, custom requirements, checklists, or user instructions are provided ABOVE this prompt outrank everything below. Turn 1 MUST showcase the given task list in visible chat before any background execution. Each rule is stated once (R1 to R16) and cited by ID. Progress lives in the ledger and in `.ai-memory/plans/`, never only in chat.
 
----
+### 🚨 MANDATORY SUBAGENT SPAWNING GATE (A = 2, H = 2 — ZERO SOLO EXECUTION ALLOWED)
 
-### 🚨 MANDATORY TURN 1 TASK SHOWCASE & SUBAGENT SPAWNING GATES
-
-#### 1. Turn 1 Mandatory Task Showcase (First Action — Zero Silent Execution)
-- **ABSOLUTE FIRST ACTION:** In your VERY FIRST response turn upon receiving the prompt, you MUST showcase and list out the given task directly in visible chat before any silent background execution.
-- **Mandatory Breakdown Rendering:** Render the full `### 📋 Confirmed Task Breakdown & Requirement Ingestion` block in visible chat, breaking down the user request into ordered `Task-01`, `Task-02`, etc., with `State`, `Understood: [YES]`, `Actionable Scope`, and `Target Files`.
-- **Mandatory Same-Turn Tool Chaining:** Emit the visible task list in chat and trigger your initial tool call in the **EXACT SAME TURN**. Never output text alone (which ends the turn prematurely), and never execute tools silently without displaying the task list to the user first.
-
-#### 2. Mandatory Subagent Spawning Gate (A = 2, H = 2 — Zero Solo Execution)
 - **ABSOLUTE, NON-NEGOTIABLE MUST:** Spawning subagents via the `invoke_subagent` tool (`A = 2`, `H = 2`) is an **ABSOLUTE, NON-NEGOTIABLE MUST** in both **Phase 1** (parallel codebase discovery reading and modular spec authoring) and **Phase 2** (parallel subtask code execution with `TypeName: "self"`).
 - **SOLO EXECUTION IS AN AUTO-REJECT FAILURE:** The lead orchestrator is **STRICTLY FORBIDDEN** from executing all discovery reads or all subtask code modifications by itself without invoking `invoke_subagent`. Failing to call `invoke_subagent` when `A >= 2` is a critical protocol violation on the same tier as Rule 0.
-- **Phase 1 Mandatory Subagent Dispatch:** Immediately after establishing the Confirmed Task Breakdown (Phase 1A) and single-agent blueprint skeleton, the lead agent MUST call `invoke_subagent` to spawn `A = 2` subagents in parallel for codebase discovery/reading or modular spec sections and yield the turn to await `<SYSTEM_MESSAGE>`.
-- **Phase 2 Mandatory Subagent Dispatch (`TypeName: "self"`):** Once subtasks are generated in `.ai-memory/plans/subtasks/NN-<slug>/`, the lead agent MUST call `invoke_subagent` with `TypeName: "self"` to dispatch `A = 2` worker subagents (`H = 2` disjoint subtasks per worker) and yield the turn to await `<SYSTEM_MESSAGE>`.
+- **Phase 1 Mandatory Subagent Dispatch:** Immediately after establishing the Confirmed Task Breakdown (Phase 1A) and the single-agent unified blueprint overview (`01-overview.md` or parent plan skeleton), the lead agent MUST call `invoke_subagent` to spawn `A = 2` subagents in parallel for codebase discovery/reading or modular spec sections and yield the turn to await `<SYSTEM_MESSAGE>`.
+- **Phase 2 Mandatory Subagent Dispatch (`TypeName: "self"`):** Once subtasks are generated in `.ai-memory/plans/subtasks/xx-<slug>/`, the lead agent MUST call `invoke_subagent` with `TypeName: "self"` to dispatch `A = 2` worker subagents (`H = 2` disjoint subtasks per worker) and yield the turn to await `<SYSTEM_MESSAGE>`.
+
+---
+
+## The Unified Master Pipeline (Atomic Numbered Steps)
+
+Execute this task via a strict 3-Phase pipeline. Do not skip steps.
+
+### Phase 1A: Verbatim Capture, Task Extraction & Chat Output Gate (Step 0)
+
+Before executing any file searches, scans, spec writing, or code changes, you must execute Phase 1A:
+
+1. **Top-Instruction Priority Verification:** Whatever directives, constraints, checklists, or instructions are given before this section or prompt (user preamble, header constraints, prior instructions) must be verified as highest priority and non-negotiable.
+2. **Showcase Given Task First (Turn 1 Action):** In your VERY FIRST response turn upon receiving the prompt, you MUST output the confirmed task breakdown directly in visible chat. Never execute tools silently without displaying the task breakdown to the user first!
+3. **Lossless Verbatim Capture:** Store incoming prompt losslessly under `## User Request (Verbatim)` in canonical spec and parent plan.
+4. **Screenshots & Media:** Decode base64/screenshots immediately into `assets/screenshots/<slug>-<NN>.png`. Reference via relative markdown links (`![Screenshot](assets/screenshots/<slug>-<NN>.png)`).
+5. **Discrete Deliverables Extraction:** Break down whatever user requirements were given into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, ...).
+6. **Mandatory Same-Turn Tool Chaining (TOTAL BAN ON TURNING OFF):** Emit the breakdown in chat with clean vertical formatting, and in the **EXACT SAME TURN**, invoke your first tool call (e.g. `write_to_file` to initialize ledger/spec, or run preflight). NEVER emit text alone (which ends the turn prematurely), and never ask "Should I proceed?".
+
+```markdown
+### 📋 Confirmed Task Breakdown & Requirement Ingestion
+
+1. **Task-01: [Descriptive Task Title]**
+   - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
+   - **Understood:** `[YES]` — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+2. **Task-02: [Descriptive Task Title]**
+   - **State:** `[QUEUED — EXECUTING NOW WITHOUT USER PROMPT]`
+   - **Understood:** `[YES]` — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]
+   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
+   - **Target Files / Area:** `[relative/path/or/module]`
+
+Proceeding directly to Preflight & Phase 1B Spec Generation (Active Tool Call Running Below).
+```
 
 ---
 
@@ -83,50 +121,7 @@ If sources conflict, follow stricter one and record under `Conflicts:` in ledger
 GitMap is your **PRIMARY** acceleration engine:
 
 | Operation | Command | Alias | Purpose |
-| :--- | :--- | :--- | :--- |
-| Wildcard Search | `gitmap find "<pat>" [-ext <ext>]` | `gitmap f` | Indexed file finding |
-| File Listing | `gitmap list-files [pat] [-ext <ext>]` | `gitmap lf` | Repository file inventory |
-| Substring Search | `gitmap find-files-any "<str>"` | `gitmap ffa` | Partial filename match |
-| Stream File | `gitmap cat <filepath>` | `gitmap cat` | Zero-disk memory streaming |
-| Regex Search | `gitmap search "<query>"` | `gitmap search` | Parallel text scanner |
-| PowerShell Runner | `gitmap pwsh "<cmd>"` | `gitmap ps` | PowerShell (-NoProfile) |
-| Bash Runner | `gitmap bash "<cmd>"` | `gitmap sh` | Cross-platform Bash |
-| Offload Secrets | `gitmap rs file <path>` / `folder` / `text` | `gitmap rs` | Store in `repo-secrets` |
-| Offload Scripts | `gitmap rc file <file.ps1>` / `text` | `gitmap rc` | Store in `repo-cache` |
-| Atomic Commits | `gitmap cpf "<summary>"` / `cpb` | `gitmap cpf` | Stage, commit, push |
-| Pipeline Waiting | `gitmap pipeline-ai status --json` | `gitmap pl-ai` | Dynamic ETA CI monitor |
-
-*Rule:* Never run `gitmap pa` or `gitmap pae` unless requested. Only lead runs git, `gitmap cpf`, `gitmap cpb`, or `gitmap rs`.
-
----
-
-## 4. Phase 1A: Verbatim Capture, Task Showcase & Chat Output Gate (TURN 1 MANDATORY)
-
-Before executing any file searches, scans, spec writing, or code changes, you must execute Phase 1A:
-
-1. **Showcase Given Task First (Turn 1 Action):** In your VERY FIRST response turn upon receiving the prompt, you MUST output the confirmed task breakdown directly in visible chat. Never execute tools silently without displaying the task breakdown to the user first!
-2. **Lossless Verbatim Capture:** Store incoming prompt losslessly under `## User Request (Verbatim)` in canonical spec and parent plan.
-3. **Screenshots & Media:** Decode base64/screenshots immediately into `assets/screenshots/<slug>-<NN>.png`. Reference via relative markdown links (`![Screenshot](assets/screenshots/<slug>-<NN>.png)`).
-4. **Discrete Deliverables Extraction:** Decompose whatever user requirements were given into discrete, actionable items with ordered traceable IDs (`Task-01`, `Task-02`, ...).
-5. **Mandatory Same-Turn Tool Chaining (TOTAL BAN ON TURNING OFF):** Emit the breakdown in chat with clean vertical formatting, and in the **EXACT SAME TURN**, invoke your first tool call (e.g. `write_to_file` to initialize ledger/spec, or run preflight). NEVER emit text alone (which ends the turn prematurely), and never ask "Should I proceed?".
-
-```markdown
-### 📋 Confirmed Task Breakdown & Requirement Ingestion
-
-1. **Task-01: [Descriptive Task Title]**
-   - **State:** `[IN PROGRESS — EXECUTING IMMEDIATELY]`
-   - **Understood:** `[YES]` — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]
-   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
-   - **Target Files / Area:** `[relative/path/or/module]`
-
-2. **Task-02: [Descriptive Task Title]**
-   - **State:** `[QUEUED — EXECUTING NOW WITHOUT USER PROMPT]`
-   - **Understood:** `[YES]` — [1-2 concise sentences proving understanding of intent, scope, and verified constraints]
-   - **Actionable Scope:** [Precise technical deliverable and implementation scope]
-   - **Target Files / Area:** `[relative/path/or/module]`
-
-Proceeding directly to Preflight & Phase 1B Spec Generation (Active Tool Call Running Below).
-```
+| :
 
 ---
 
@@ -154,13 +149,7 @@ Commits: none    Pushed: no
 Branch: <branch> | Tree at start: clean (or dirty with <paths>)
 Tools: invoke_subagent=yes send_message=yes ask_question=yes gitmap=yes
 | Task-ID | Subtask | Owner | Owned files | Status | Evidence |
-|---|---|---|---|---|---|
-| Task-01 | 01-<name> | Worker 01 | <paths> | PENDING | - |
-Assumptions: <list or none>
-Conflicts: <list or none>
-```
-
-*Checkpoints:* Update ledger with `replace_file_content` before every `invoke_subagent` dispatch, after wave verification, immediately before/after GitMap call, and on `FAILED` or `BLOCKED`.
+|
 
 ---
 
