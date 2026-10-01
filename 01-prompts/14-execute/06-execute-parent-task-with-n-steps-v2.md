@@ -276,9 +276,9 @@ To maximize developer velocity, avoid slow generic shells, and ensure atomic con
    - Multi-core regex & text search: `gitmap search "<query>"` or scoped streaming `gitmap aum search "<query>" [dir] --ext <ext>`
    - Inspecting file content: `gitmap cat <filepath>`
 2. Semantic Atomic Commits & Pushes (Replaces Raw Multi-Command Git Chains):
-   - Feature commits: `gitmap cpf "<summary>"` (stages all files, adds `Feature: `, commits, and pushes).
-   - Bug/fix commits: `gitmap cpb "<summary>"` (stages all files, adds `Bug: `, commits, and pushes).
-   - Release commits: `gitmap cpr "<summary>"` (stages all files, adds `Release: `, commits, and pushes).
+   - Feature commits: `gitmap cpf "<module>-<slug>: <feature summary>"` (e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine"`). GitMap automatically adds `Feature: `, so NEVER include `feat(...)` or `feature:` in your string.
+   - Bug/fix commits: `gitmap cpb "<module>-<slug>: <fix summary>"` (e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`). GitMap automatically adds `Bug: `, so NEVER include `fix(...)` or `bug:` in your string.
+   - Release commits: `gitmap cpr "<version> <summary>"` (stages all files, adds `Release: `, commits, and pushes).
    - Safe pull-commit-push: `gitmap pcp "<summary>"`.
 3. Cross-Platform Script Execution:
    - PowerShell runner: `gitmap pwsh "<command>"` or `gitmap ps "<command>"` (executes with `-NoProfile` and auto-fallback).
@@ -315,9 +315,9 @@ To reduce markdown file count and bloat, consolidate subtasks when a parent task
 5. Update `.ai-memory/plans/readme.md` to point to the newly consolidated completed file.
 6. Final Step Git Commit & Push via GitMap Semantic Commit Commands (Mandatory):
    - Heavily leverage GitMap semantic commit & push commands rather than raw multiline git chains:
-     - For features/tasks: `gitmap cpf "<summary>"` (automatically stages all files, prefixes `Feature: `, commits, and pushes to remote).
-     - For fixes/bugs: `gitmap cpb "<summary>"` (automatically stages all files, prefixes `Bug: `, commits, and pushes).
-     - For releases: `gitmap cpr "<summary>"` (automatically stages all files, prefixes `Release: `, commits, and pushes).
+     - For features/tasks: `gitmap cpf "<module>-<slug>: <feature summary>"` (e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine"`). GitMap automatically prefixes `Feature: `, so NEVER include `feat(...)` or `feature:` in your message.
+     - For fixes/bugs: `gitmap cpb "<module>-<slug>: <fix summary>"` (e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`). GitMap automatically prefixes `Bug: `, so NEVER include `fix(...)` or `bug:` in your message.
+     - For releases: `gitmap cpr "<version> <summary>"` (automatically stages all files, prefixes `Release: `, commits, and pushes).
      - For safe pull-commit-push: `gitmap pcp "<summary>"`.
    - If GitMap CLI is unavailable, fallback to raw git: `git add -- <paths this task changed> && git commit -m "<summary>" && git push origin <branch>`.
    - Under no circumstances commit each file individually.
@@ -507,7 +507,7 @@ Whenever the task involves fixing an issue, bug, pipeline failure, or performing
 
 ## 5. Final Step Git Commit & Push Mandate (Strict Checklist)
 
-- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands: `gitmap cpf "<summary>"` (features), `gitmap cpb "<summary>"` (bugs), or `gitmap cpr "<summary>"` (releases) which automatically stage, commit with standardized prefixes, and push directly to the remote repository. These GitMap commands stage every file, so use them only when `git status --porcelain` was clean before the task started; otherwise, or if GitMap CLI is unavailable, run `git add -- <paths this task changed> && git commit && git push`. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands exclusively: `gitmap cpf "<module>-<slug>: <feature summary>"` (e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine"`) or `gitmap cpb "<module>-<slug>: <fix summary>"` (e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`). GitMap automatically adds `Feature: ` or `Bug: `, so NEVER include redundant conventional prefixes (`feat(...)`, `fix(...)`, `docs(...)`) in your commit string. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
 - [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE

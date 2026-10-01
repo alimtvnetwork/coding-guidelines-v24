@@ -259,7 +259,10 @@ BLOCKERS: <list or none>
 1. **Consolidate Subtasks:** Merge completed subtasks into `.ai-memory/plans/completed/nn-<slug>.md`. Document real steps used from the ledger and link to the canonical spec. Delete `.ai-memory/plans/subtasks/nn-<slug>/` and the pending plan file. Keep the canonical spec in `02-spec/21-app/` permanently intact.
 2. **Update Index Registers:** Update `.ai-memory/plans/readme.md`, `01-prompts/readme.md`, and `.ai-memory/prompts.md`.
 3. **Explicit Staging (R8):** Stage intended files and verify with `git status --porcelain`.
-4. **Atomic Commit & Push (R9):** TOTAL BAN on raw git commits (`git commit -m "..."`, `git add -A`, raw `git push`) and conventional prefixes (`feat:`, `fix:`, `docs:`, `chore:`). Commits MUST be executed exclusively via GitMap: `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes). GitMap stages, formats, and pushes atomically. Never commit mid-turn or per-file.
+4. **Atomic Commit & Push (R9):** TOTAL BAN on raw git commits (`git commit -m "..."`, `git add -A`, raw `git push`) and conventional prefixes (`feat:`, `fix:`, `docs:`, `chore:`). Commits MUST be executed exclusively via GitMap:
+   - For bug fixes: `gitmap cpb "<module>-<slug>: <fix summary>"` (e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`). GitMap automatically prepends `Bug: `, so NEVER include `fix(...)` or `bug:` in your message.
+   - For features: `gitmap cpf "<module>-<slug>: <feature summary>"` (e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine for multi-agent coordination"`). GitMap automatically prepends `Feature: `, so NEVER include `feat(...)` or `feature:` in your message.
+   GitMap stages, formats, and pushes atomically. Never commit mid-turn or per-file.
 
 ---
 

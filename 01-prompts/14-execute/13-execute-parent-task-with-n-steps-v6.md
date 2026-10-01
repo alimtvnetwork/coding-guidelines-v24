@@ -113,7 +113,10 @@ If sources conflict, follow stricter one and record under `Conflicts:` in ledger
 - **R5 Mandatory Subagents (`invoke_subagent`).** Spawning subagents via `invoke_subagent` (`A = 2`, `H = 2`) is an **ABSOLUTE MUST** (`research` for discovery in Phase 1, `self` for edits in Phase 2). The lead agent is STRICTLY FORBIDDEN from executing all reads or edits solo. Solo execution without calling `invoke_subagent` is an auto-reject failure on the same tier as Rule 0.
 - **R6 One Owner Per File (Disjoint Bounding Boxes).** Within every worker wave, each file has exactly one owner. Shared indexes (`.ai-memory/plans/readme.md`, `.ai-memory/prompts.md`, `.ai-memory/what-to-read.md`, `02-spec/21-app/readme.md`, directory `readme.md`) belong exclusively to lead.
 - **R7 Git Safety & Isolation (Worker Git Ban).** Subagents NEVER run git commands (`git add`, `git commit`, `git push`, `git status`, `git diff`, `git checkout`). In shared workspaces (`Workspace: "inherit"`), worker git calls create `.git/index.lock` collisions that immediately crash parallel agents. Nobody runs `git reset --hard`, `git checkout --`, `git clean`, `git stash`, or force pushes.
-- **R8/R9 Atomic Commit & Push via GitMap (TOTAL BAN ON RAW GIT COMMITS).** The run ends with ONE GitMap call: `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes). GitMap stages, formats, commits, and pushes atomically. TOTAL BAN on raw git commits (`git commit`, `git commit -m "..."`, `git add -A`, raw `git push`) and conventional prefixes (`docs(...)`, `feat(...)`, `fix(...)`, `chore(...)`). ZERO intermediate commits: never commit during Phase 1 (plans/specs) or Phase 2; all files across the turn MUST be committed together at the final step of Phase 3. Before GitMap, all push gates must pass (targeted checks, secrets gate, and `.gitignore` hygiene; untrack any ignored files: `git rm --cached`). Push rejected: `git pull --rebase`, re-run command. Miss after push: allow one follow-up `gitmap cpb "<summary>"`, logged as `FOLLOW_UP_PUSH: <sha>`. Never amend pushed commits. Workers never run git commands or GitMap commit tools; only lead does.
+- **R8/R9 Atomic Commit & Push via GitMap (TOTAL BAN ON RAW GIT COMMITS).** The run ends with ONE GitMap call:
+  - For features: `gitmap cpf "<module>-<slug>: <feature summary>"` (e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine"`). GitMap automatically prepends `Feature: `, so NEVER include `feat(...)` or `feature:` in your message.
+  - For bug fixes: `gitmap cpb "<module>-<slug>: <fix summary>"` (e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`). GitMap automatically prepends `Bug: `, so NEVER include `fix(...)` or `bug:` in your message.
+  GitMap stages, formats, commits, and pushes atomically. TOTAL BAN on raw git commits (`git commit`, `git commit -m "..."`, `git add -A`, raw `git push`) and conventional prefixes (`docs(...)`, `feat(...)`, `fix(...)`, `chore(...)`). ZERO intermediate commits: never commit during Phase 1 (plans/specs) or Phase 2; all files across the turn MUST be committed together at the final step of Phase 3. Before GitMap, all push gates must pass (targeted checks, secrets gate, and `.gitignore` hygiene; untrack any ignored files: `git rm --cached`). Push rejected: `git pull --rebase`, re-run command. Miss after push: allow one follow-up `gitmap cpb "<module>-<slug>: <fix summary>"`, logged as `FOLLOW_UP_PUSH: <sha>`. Never amend pushed commits. Workers never run git commands or GitMap commit tools; only lead does.
 - **R10 Zero Unauthorized Releases.** Never bump versions, edit `version.json`, update changelogs, or trigger release scripts unless user explicitly requested release.
 - **R11 Strict Relative Git Paths & Lowercase Hygiene.** Strict ban on absolute paths (`C:\...`, `/home/...`) and `file:///` URIs. Paths relative from git root. All filenames, documentation, and specs strictly lowercase (e.g. `readme.md`, `agents.md`, `skill.md`).
 - **R12 No Polling / Immediate Turn Yielding.** When calling `invoke_subagent`, make it the sole tool action at turn end, print progress line (`Dispatched Worker 01 .. Worker <A> (wave k / WAVES); waiting for their results.`) and **STOP CALLING TOOLS**. Never poll in loop. Check `manage_subagents` once if wave runs long.
@@ -146,7 +149,7 @@ GitMap is your **PRIMARY** acceleration engine. NEVER use generic PowerShell sea
 | **Bash Runner** | `gitmap bash "<command>"` | `gitmap sh "<cmd>"` | Standard cross-platform Bash command execution |
 | **Offload Secrets** | `gitmap rs file <filepath>` / `folder` / `text` | `gitmap rs` | Auto-commits into `repo-secrets` in work directory |
 | **Offload Scripts** | `gitmap rc file <file.ps1>` / `text` | `gitmap rc` | Auto-commits reusable scripts into `repo-cache` |
-| **Atomic Commits** | `gitmap cpf "<summary>"` (Feature) / `cpb` (Bug) | `gitmap cpf` | Stages, commits with prefix, and pushes atomically |
+| **Atomic Commits** | `gitmap cpf "<module>-<slug>: <msg>"` (Feature) / `cpb` (Bug) | `gitmap cpf` | Stages, commits with prefix, and pushes atomically |
 | **Pipeline Waiting** | `gitmap pipeline-ai status --json` | `gitmap pl-ai` | Non-polling dynamic ETA CI/CD monitor |
 
 ### 🔍 Code & Symbol Search Protocol (TOTAL BAN ON `Select-String` & `git grep`)
@@ -158,19 +161,21 @@ GitMap is your **PRIMARY** acceleration engine. NEVER use generic PowerShell sea
 
 ---
 
-## 5. Step 0: Preflight, Platform Handshake & Ledger Creation (Phase 1 Budget)
+## 5. Step 0: Preflight, Platform Handshake & SQLite Task DB Initialization (Phase 1 Budget)
 
 1. **Platform Handshake:** Confirm tools (`invoke_subagent`, `send_message`, `manage_subagents`, `ask_question`, `write_to_file`, `replace_file_content`, `run_command`). If `task_boundary` exists: set `PLANNING` (Phase 1), `EXECUTION` (Phase 2), `VERIFICATION` (Phase 3).
 2. **Commands & Directory:** Confirm `gitmap --version` and `python --version` exit 0. Verify GitMap with harmless call (`gitmap lf readme.md`), not `--help`. `run_command` uses `Cwd` in workspace root, paths relative. Never cd to other drives or tool folders.
 3. **Working Tree Cleanliness:** Run `git status --porcelain`. Record modified files in ledger; never touch them. Confirm root `readme.md` is lowercase. Read `.ai-memory/what-to-read.md`, `strictly-avoid.md`, `coding-guidelines.md`.
-4. **Resume Procedure (Check Before Creating):**
-   - Match `.ai-memory/temp-agents/*/ledger.md` on `Request slug:` and `Request first line:`. No match: start fresh.
-   - Status `COMPLETE`: verify commit in `git log`, report "Already complete: <sha>", stop.
-   - Status `ACTIVE`: log `RESUMED_FROM: step x, phase p, wave k`; if `Pushed: yes`, proceed to final report; if workers in flight, re-dispatch; if subtask has diff, verify and mark `DONE` or re-dispatch; subtasks marked `DONE` are never redone. Continue from `Next action:`. Never run `git reset`, `git stash`, `git clean`, or `git checkout --`.
-5. **Ledger Creation:** If not resuming, create `.ai-memory/temp-agents/NN-<slug>/ledger.md`:
+4. **SQLite Task DB & Deterministic Slug Initialization (Check Before Creating):**
+   - Initialize or inspect task state via the Antigravity SQLite task manager:
+     `python 03-ai-scripts/46-agent-sqlite-task-manager.py init --name "<task name>" --budget 300`
+   - Output Analysis & Crash Forensics:
+     - If `action: "RESUME_FOUND"`: A matching or similar slug exists in `.ai-memory/temp-agents/`! If `diagnostics.hasCrashesDetected: true`, inspect the forensic report (`diagnostics.crashedAgents`) to identify which agent crashed, what file it was touching, and the last logged action. Resume execution from the uncompleted subtask.
+     - If `action: "INITIALIZED"`: Created dedicated run directory `.ai-memory/temp-agents/<nn>-<slug>/` and SQLite database `agent-task.db` with WAL mode (`PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;`).
+5. **Ledger Creation:** Also create `.ai-memory/temp-agents/<nn>-<slug>/ledger.md` mirroring the DB initialization for human readability:
 
 ```markdown
-# Ledger: NN-<slug>
+# Ledger: nn-<slug>
 Request slug: <slug>
 Request first line: <verbatim first line>
 Status: ACTIVE
@@ -180,7 +185,7 @@ Next action: Phase 1B Spec & Plan
 Workers in flight: none
 Commits: none    Pushed: no
 Branch: <branch> | Tree at start: clean (or dirty with <paths>)
-Tools: invoke_subagent=yes send_message=yes ask_question=yes gitmap=yes
+Tools: invoke_subagent=yes send_message=yes ask_question=yes gitmap=yes sqlite_db=<databasePath>
 | Task-ID | Subtask | Owner | Owned files | Status | Evidence |
 |---|---|---|---|---|---|
 | Task-01 | 01-<name> | Worker 01 | <paths> | PENDING | - |
@@ -211,7 +216,9 @@ You must use `invoke_subagent` to delegate both planning discovery and spec auth
    - Subagent 2 writes `02-spec/21-app/nn-<slug>/02-component-spec.md` and subtasks `.ai-memory/plans/subtasks/nn-<slug>/02-<name>.md`.
    - NEVER have both subagents write to the same file path!
    - *Tool Call:* Lead must execute the `invoke_subagent` tool as the final action in the turn, print `Dispatched Spec Agents`, and then STOP CALLING TOOLS to wait for `<SYSTEM_MESSAGE>` reactive wakeup.
-3. **Readiness Gate:** Complete Phase 1 planning and spec authoring within `PHASE_1_BUDGET` steps, then proceed **UNCONDITIONALLY** into Phase 2. ZERO intermediate git commits during Phase 1!
+3. **Populate Subtasks in SQLite Task DB:** Once subtasks are decomposed, populate them into the SQLite database for atomic worker claiming:
+   `python 03-ai-scripts/46-agent-sqlite-task-manager.py add-subtasks --db <databasePath> --tasks-json '[{"code": "Task-01", "title": "<title>", "owned_files": ["<paths>"], "agent_role": "Worker 01"}]'`
+4. **Readiness Gate:** Complete Phase 1 planning and spec authoring within `PHASE_1_BUDGET` steps, then proceed **UNCONDITIONALLY** into Phase 2. ZERO intermediate git commits during Phase 1!
 
 ---
 
@@ -298,6 +305,18 @@ You are Worker <NN> for task nn-<slug>. You have no prior chat context; this bri
 7. Targeted Verification: Run only fast file-scoped linters (e.g. `python 03-ai-scripts/05-guideline-autofixer.py <folder> --check-only`). A check scanning 0 files is a FAIL.
 8. GitMap Search Primacy (TOTAL BAN on Select-String / git grep): NEVER execute PowerShell `Select-String`, `Get-ChildItem`, `git grep`, `grep`, or `findstr`. Always use `gitmap aum search "<pattern>" [dir] [-e <.ext>] [-r]` for live symbol/regex discovery.
 
+### Concurrency-Safe SQLite Action Logging (CRASH FORENSICS MANDATE):
+- Worker subtasks are tracked in the run database: `<databasePath>`.
+- Claim assigned subtask atomically:
+  `python 03-ai-scripts/46-agent-sqlite-task-manager.py claim --db <databasePath> --agent "Worker <NN>"`
+- BEFORE touching or modifying any owned file, you MUST log your in-flight action:
+  `python 03-ai-scripts/46-agent-sqlite-task-manager.py log-action --db <databasePath> --subtask-id <id> --agent "Worker <NN>" --action "write_to_file" --file "<path>" --details "<action description>"`
+  *(Note: This guarantees that if a tool execution crashes or the session is interrupted, the database permanently records the exact file you were touching and what caused the crash!)*
+- When your subtask passes targeted checks, mark completion in the database:
+  `python 03-ai-scripts/46-agent-sqlite-task-manager.py complete --db <databasePath> --subtask-id <id> --agent "Worker <NN>" --evidence "PASS exit 0, <files>"`
+- If blocked or failing, record the failure:
+  `python 03-ai-scripts/46-agent-sqlite-task-manager.py fail --db <databasePath> --subtask-id <id> --agent "Worker <NN>" --reason "<reason>"`
+
 ### Output Contract:
 Write your subtask output to .ai-memory/plans/subtasks/nn-<slug>/01-<name>.json and reply with this JSON block, once per subtask, then stop:
 {
@@ -311,13 +330,19 @@ Write your subtask output to .ai-memory/plans/subtasks/nn-<slug>/01-<name>.json 
 }
 ```
 
-### 7.3 Turn-Yielding & Verification Protocol
+### 7.3 Turn-Yielding, Verification & Crash Forensics Protocol
 
 1. **Invoke & Yield:** You must ACTUALLY CALL the `invoke_subagent` tool as the final action in your turn. Print the progress line (`Dispatched Worker 01 .. Worker <A> (wave k / WAVES); waiting for their results.`) and **STOP CALLING TOOLS** to end your turn.
-2. **Verify Worker Reports Independently:** Confirm `git diff --stat -- <owned files>` matches `filesChanged`, no files outside owned files modified, re-run targeted checks for `exit 0` on non-zero files.
-3. **Reject Violations:** Send failures via `send_message`. On `BLOCKED`, lead does work and logs `LEAD_FALLBACK: <reason>`. After two failed rounds, mark `FAILED`, write RCA, continue (R13).
-4. **Update Ledger:** Record status, evidence, changed paths in `ledger.md` via `replace_file_content`.
-5. **Loop:** Dispatch subsequent waves via `invoke_subagent` until all subtasks are `DONE` or `FAILED`.
+2. **Automated Crash Forensics & Status Inspection:**
+   - If any worker fails to report, crashes, or times out, lead immediately runs:
+     `python 03-ai-scripts/46-agent-sqlite-task-manager.py diagnose --db <databasePath>`
+     This pinpoints the autopsy: which agent crashed, on which subtask, targeting which file, and the exact action that was executing when it failed.
+   - Lead inspects overall completion status at any time:
+     `python 03-ai-scripts/46-agent-sqlite-task-manager.py status --db <databasePath>`
+3. **Verify Worker Reports Independently:** Confirm `git diff --stat -- <owned files>` matches `filesChanged`, no files outside owned files modified, re-run targeted checks for `exit 0` on non-zero files.
+4. **Reject Violations:** Send failures via `send_message`. On `BLOCKED`, lead does work and logs `LEAD_FALLBACK: <reason>`. After two failed rounds, mark `FAILED`, write RCA, continue (R13).
+5. **Update Ledger:** Record status, evidence, changed paths in `ledger.md` via `replace_file_content`.
+6. **Loop:** Dispatch subsequent waves via `invoke_subagent` until all subtasks are `DONE` or `FAILED`.
 
 ---
 
@@ -326,7 +351,7 @@ Write your subtask output to .ai-memory/plans/subtasks/nn-<slug>/01-<name>.json 
 1. **Consolidate Subtasks:** Merge completed subtasks into `.ai-memory/plans/completed/nn-<slug>.md`, logging real steps from ledger; link to canonical spec. Delete `.ai-memory/plans/subtasks/nn-<slug>/` and pending plan. Canonical spec in `02-spec/21-app/` stays permanently.
 2. **Update Registers:** Update `.ai-memory/plans/readme.md` and `02-spec/21-app/readme.md`. Update `01-prompts/readme.md` and `.ai-memory/prompts.md` only when adding/modifying prompts. Register recent completed tasks before push gate.
 3. **Push Gate Verification:** Before GitMap call, verify: (a) targeted checks exit 0 (>0 files), (b) secrets gate clean, (c) `.gitignore` covers caches, build outputs, logs, reports, `.env*` (untrack any tracked ignored files via `git rm --cached <file>` or `git rm -r --cached <dir>`). On failure: abort GitMap call; mark task `FAILED` with RCA.
-4. **Atomic Commit & Push:** Call `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes). Push rejected: `git pull --rebase` and re-run. Miss after push: allow one follow-up `gitmap cpb "<summary>"`, logged as `FOLLOW_UP_PUSH: <sha>`. Never amend pushed commits.
+4. **Atomic Commit & Push:** Call `gitmap cpf "<module>-<slug>: <feature summary>"` (features) or `gitmap cpb "<module>-<slug>: <fix summary>"` (fixes). GitMap automatically adds `Feature: ` or `Bug: `, so NEVER include redundant conventional prefixes (`feat(...)`, `fix(...)`, `docs(...)`) in the commit string. Push rejected: `git pull --rebase` and re-run. Miss after push: allow one follow-up `gitmap cpb "<module>-<slug>: <fix summary>"`, logged as `FOLLOW_UP_PUSH: <sha>`. Never amend pushed commits.
 
 ---
 
@@ -433,13 +458,13 @@ Confirm scripts exist via harmless workspace call before invoking (R4). Run on c
 - [ ] Index Sync Deadman Switch: Every new file is explicitly linked in `readme.md` and enqueued in `.ai-memory/what-to-read.md`.
 - [ ] Blast Radius Acknowledgment: Global search across codebase performed via `gitmap aum search "<symbol>" [dir]` to update all callers of modified symbols (never `Select-String` or `git grep`).
 - [ ] Continuous Loop Maintained: Continuous self-loop executed until 100% complete without running banned test/build commands.
-- [ ] Final Step Commit & Push Verified: Staged and committed all changes atomically via `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes), and pushed to remote via GitMap in a single final command (TOTAL BAN on `git add -A` and raw `git commit`).
+- [ ] Final Step Commit & Push Verified: Staged and committed all changes atomically via GitMap semantic commit commands using `<module>-<slug>: <summary>` format: `gitmap cpf "<module>-<slug>: <summary>"` (features, e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine"`) or `gitmap cpb "<module>-<slug>: <summary>"` (bug fixes, e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`). TOTAL BAN on `fix(...)` / `feat(...)` / `docs(...)` conventional prefixes inside GitMap arguments (because GitMap automatically prepends `Bug: ` / `Feature: `), and TOTAL BAN on raw `git add -A` and `git commit`. Pushed to remote via GitMap in a single final command.
 
 ---
 
 ## 15. Final Step Git Commit & Push Mandate (Strict Checklist)
 
-- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands exclusively: `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes) which automatically stage, format commit messages, and push directly to remote. TOTAL BAN on raw `git commit`, `git commit -m`, `git add -A`, or conventional prefixes (`docs(...)`, `feat(...)`, `fix(...)`). ZERO intermediate commits during Phase 1 or Phase 2; all files across the run are committed together at the final step. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] MANDATORY FINAL COMMIT & PUSH VIA GITMAP (ANYHOW): At the final step of the turn, after all targeted files have been refactored, verified with targeted linters, and plans/subtasks consolidated, use GitMap semantic commit commands exclusively: `gitmap cpf "<module>-<slug>: <summary>"` (features, e.g. `gitmap cpf "aum-agent-db: implement sqlite task tracking engine"`) or `gitmap cpb "<module>-<slug>: <summary>"` (bug fixes, e.g. `gitmap cpb "aum-validate-regex: prevent nil fallback on malformed patterns"`), which automatically stage, format commit messages, and push directly to remote. TOTAL BAN on raw `git commit`, `git commit -m`, `git add -A`, or conventional prefixes inside GitMap arguments (`docs(...)`, `feat(...)`, `fix(...)` — GitMap already prefixes `Feature: ` or `Bug: `). ZERO intermediate commits during Phase 1 or Phase 2; all files across the run are committed together at the final step. Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
 - [ ] TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY): You must not create separate git commits for each individual file as you edit them (e.g. running `git commit` or `gitmap cpf` after editing File 1, then committing again after File 2 is strictly forbidden). Committing file-by-file pollutes git log history, creates subagent lock collisions, and breaks atomic rollback. All modified files, test change caches, and plan records across the turn must be accumulated in the working tree and committed together in a single grouped atomic commit at the final step before pushing.
 
 ## MUST FOLLOW NON-NEGOTIABLE
