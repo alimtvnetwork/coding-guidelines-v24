@@ -1,3 +1,9 @@
+## v6.52.0 — 2026-10-01 (add V6 parent task orchestrator prompt, skills, and benchmark audit)
+
+**Scope:** Version bump. add V6 parent task orchestrator prompt, skills, and benchmark audit.
+
+---
+
 ## v6.51.0 — 2026-10-01 (Release v6.51.0)
 
 **Scope:** Version bump. Release v6.51.0.

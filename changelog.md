@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.52.0] - 2026-10-01
+
+### Added
+- add V6 parent task orchestrator prompt, skills, and benchmark audit
+
+---
+
 ## [v6.51.0] - 2026-10-01
 
 ### Added
