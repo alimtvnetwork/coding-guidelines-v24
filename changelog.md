@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.50.0] - 2026-10-01
+
+### Added
+- Release v6.50.0
+
+---
+
 ## [v6.49.0] - 2026-09-30
 
 ### Install Coding Guidelines v6.49.0
