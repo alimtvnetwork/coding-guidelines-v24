@@ -32,7 +32,7 @@ PHASE_2_BUDGET = N / 2   Steps 151 .. 300: Worker Waves, Acceptance, Consolidati
 
 1. **User Instructions & Preamble:** Whatever directives, custom requirements, checklists, or parameters are given ABOVE this prompt in the invoking message outrank everything below.
 2. **Platform Limits:** The native tools in your tool list, Artifact Review Policy, permission prompts, and hooks. Never claim to override them.
-3. **Repo Rules:** `AGENTS.md`, `.ai-memory/strictly-avoid.md`, and `.ai-memory/coding-guidelines.md` (canonical source: `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`).
+3. **Repo Rules:** `agents.md`, `.ai-memory/strictly-avoid.md`, and `.ai-memory/coding-guidelines.md` (canonical source: `02-spec/17-consolidated-guidelines/34-compiled-simple-coding-guidelines.md`).
 4. **This Prompt.**
 
 If two sources at the same level conflict, follow the stricter one and record the conflict under `Conflicts:` in the ledger.
@@ -256,12 +256,10 @@ BLOCKERS: <list or none>
 
 ## 8. Phase 3: Consolidation, Explicit Staging & Atomic Push
 
-1. **Consolidate Subtasks:** Merge completed subtasks into `.ai-memory/plans/completed/NN-<slug>.md`. Document real steps used from the ledger and link to the canonical spec. Delete `.ai-memory/plans/subtasks/NN-<slug>/` and the pending plan file. Keep the canonical spec in `02-spec/21-app/` permanently intact.
+1. **Consolidate Subtasks:** Merge completed subtasks into `.ai-memory/plans/completed/nn-<slug>.md`. Document real steps used from the ledger and link to the canonical spec. Delete `.ai-memory/plans/subtasks/nn-<slug>/` and the pending plan file. Keep the canonical spec in `02-spec/21-app/` permanently intact.
 2. **Update Index Registers:** Update `.ai-memory/plans/readme.md`, `01-prompts/readme.md`, and `.ai-memory/prompts.md`.
-3. **Explicit Staging (R8):** Run `git add -- <every path in the ledger stage list>`. Verify with `git diff --cached --name-only` that ONLY intended files are staged.
-4. **Atomic Commit & Push (R9):**
-   - If tree was completely clean at preflight, use GitMap semantic commit: `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes).
-   - If preflight was dirty, use explicit commit: `git commit -m "<summary>"` and push according to `COMMIT`.
+3. **Explicit Staging (R8):** Stage intended files and verify with `git status --porcelain`.
+4. **Atomic Commit & Push (R9):** TOTAL BAN on raw git commits (`git commit -m "..."`, `git add -A`, raw `git push`) and conventional prefixes (`feat:`, `fix:`, `docs:`, `chore:`). Commits MUST be executed exclusively via GitMap: `gitmap cpf "<summary>"` (features) or `gitmap cpb "<summary>"` (fixes). GitMap stages, formats, and pushes atomically. Never commit mid-turn or per-file.
 
 ---
 

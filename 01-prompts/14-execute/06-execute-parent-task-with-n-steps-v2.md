@@ -55,8 +55,8 @@ Always prefer native GitMap commands over slow generic shell pipelines:
 
 Before executing the tasks below, check if this prompt is already installed as a native Antigravity Skill.
 
-1. If `.agents/skills/<slug>/SKILL.md` does not exist in the workspace, create it now.
-2. Extract the core instructions of this prompt and save it into that `SKILL.md` using the standard YAML frontmatter (with `name` and `description`).
+1. If `.agents/skills/<slug>/skill.md` does not exist in the workspace, create it now.
+2. Extract the core instructions of this prompt and save it into that `skill.md` using the standard YAML frontmatter (with `name` and `description`).
 3. Once installed, rely on progressive disclosure for future runs. Do not keep the entire prompt in active memory if not needed.
 
 ---

@@ -234,7 +234,7 @@ Whenever the AI agent reads prompts or coding guidelines during memory ingestion
    - Ensures any agent in the ecosystem can activate the skill on demand.
 
 2. **Auto-Generate Antigravity Rules for Coding Guidelines:**
-   - For all coding guidelines ingested from `.ai-memory/coding-guidelines.md` or `02-spec/02-coding-guidelines/`, synthesize and write authoritative agent rules into `.agents/rules/<slug>.md` and inject essential constraints into `AGENTS.md`.
+   - For all coding guidelines ingested from `.ai-memory/coding-guidelines.md` or `02-spec/02-coding-guidelines/`, synthesize and write authoritative agent rules into `.agents/rules/<slug>.md` and inject essential constraints into `agents.md`.
    - Core rules enforced:
      - **Strict Boolean Standard:** `is, has as prefix is only acceptable and nothing else acceptable including but not limited to can, should etc`.
      - **No Bare Void in Go:** Functions must return `Result[T]` or `*apperror.AppError`.
