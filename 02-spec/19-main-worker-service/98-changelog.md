@@ -1,3 +1,9 @@
+## v6.55.0 — 2026-10-01 (pre-cg-execute prompts optimization snapshot)
+
+**Scope:** Version bump. pre-cg-execute prompts optimization snapshot.
+
+---
+
 ## v6.54.0 — 2026-10-01 (remove deprecated fix-repo and fix-except scripts from root)
 
 **Scope:** Version bump. remove deprecated fix-repo and fix-except scripts from root.

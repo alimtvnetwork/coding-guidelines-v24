@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.55.0] - 2026-10-01
+
+### Added
+- pre-cg-execute prompts optimization snapshot
+
+---
+
 ## [v6.54.0] - 2026-10-01
 
 ### Added
