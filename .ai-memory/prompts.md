@@ -76,6 +76,7 @@ It is referenced from `.ai-memory/coding-guidelines.md` as a required read befor
 | `14-execute` | [`14-execute/10-execute-parent-task-with-n-steps-v3.md`](../01-prompts/14-execute/10-execute-parent-task-with-n-steps-v3.md) | [V3] Parent Task N-Step Continuous Loop & Mandatory Multi-Agent Subagent Orchestration — Workflow (must follow) |
 | `14-execute` | [`14-execute/11-execute-parent-task-with-n-steps-v4.md`](../01-prompts/14-execute/11-execute-parent-task-with-n-steps-v4.md) | [V4] Parent Task N-Step Loop: Antigravity-Native Orchestrator (must follow) |
 | `14-execute` | [`14-execute/12-execute-parent-task-with-n-steps-v5.md`](../01-prompts/14-execute/12-execute-parent-task-with-n-steps-v5.md) | [V5] Parent Task N-Step Loop: Antigravity-Native Ultra-Orchestrator — Workflow (must follow) |
+| `14-execute` | [`14-execute/13-execute-parent-task-with-n-steps-v6.md`](../01-prompts/14-execute/13-execute-parent-task-with-n-steps-v6.md) | [V6] Parent Task N-Step Loop: Antigravity-Native Ultra-Orchestrator — Workflow (must follow) |
 | `15-cg-execute` | [`15-cg-execute/01-execute-coding-guideline-fix.md`](../01-prompts/15-cg-execute/01-execute-coding-guideline-fix.md) | 01-execute-coding-guideline-fix.md |
 | `15-cg-execute` | [`15-cg-execute/02-error-management.md`](../01-prompts/15-cg-execute/02-error-management.md) | 02-error-management.md |
 | `15-cg-execute` | [`15-cg-execute/03-nested-if-and-guard-clauses.md`](../01-prompts/15-cg-execute/03-nested-if-and-guard-clauses.md) | 03-nested-if-and-guard-clauses.md |

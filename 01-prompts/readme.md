@@ -43,6 +43,10 @@ This directory hosts the canonical, production-grade prompts library (V4 archite
 8. **V5 Antigravity-Native Ultra-Orchestrator (`14-execute/12-execute-parent-task-with-n-steps-v5.md`):**
    - Ultimate synthesis of V4's rule-indexed efficiency (R1–R16), resumable ledger (`ledger.md`), explicit path staging (R8), and evidence-gating with 100% GitMap command primacy, in-brief coding guideline injection (positive booleans, `*appfault.AppError`, <=8-15 lines), corrected Antigravity 2.0 tool schemas (`Model: "inherit"`), repo-secrets default work directory governance (R16), and non-negotiable wake-up urgency.
 
+9. **V6 Variable-Driven Ultra-Orchestrator (`14-execute/13-execute-parent-task-with-n-steps-v6.md`):**
+   - Dynamic parameterization driven entirely by variables (`N_TOTAL_COUNT_OF_ITERATION`, `A_AGENTS`, `H_AGENT_HANDS`, `PHASE_1_BUDGET`, `PHASE_2_BUDGET`) with zero hardcoded literal step or agent counts.
+   - 100% GitMap commit primacy via atomic `gitmap cpf` / `gitmap cpb` (eliminating manual `git add` and `git commit`), upstream `.gitignore` hygiene gate (R8), single-entry repeating subagent payload templates, self-contained worker briefs with language-specific rules and mandatory autofocus checks, and <= 2,600-word footprint.
+
 ---
 
 ## Directory Index
