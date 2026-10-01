@@ -1,3 +1,9 @@
+## v6.62.0 — 2026-10-01 (CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill)
+
+**Scope:** Version bump. CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill.
+
+---
+
 ## v6.61.0 — 2026-10-01 (Add SQLite multi-agent task manager and standardize GitMap commit syntax)
 
 **Scope:** Version bump. Add SQLite multi-agent task manager and standardize GitMap commit syntax.

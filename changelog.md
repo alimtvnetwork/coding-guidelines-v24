@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.62.0] - 2026-10-01
+
+### Added
+- CBF - enforce hyphen format in gitmap commit syntax and generate v6 skill
+
+---
+
 ## [v6.61.0] - 2026-10-01
 
 ### Added
